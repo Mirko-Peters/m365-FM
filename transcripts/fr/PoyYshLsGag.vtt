@@ -1,0 +1,928 @@
+WEBVTT
+
+00:00:00.220 --> 00:00:02.180
+Imaginez un poste de sécurité à l'entrée d'un immeuble de bureau.
+
+00:00:02.540 --> 00:00:05.660
+Quelqu'un entre, montre son badge, et le gardien le vérifie sur une liste.
+
+00:00:06.020 --> 00:00:07.620
+Il signe le registre et reçoit peut-être un badge visiteur.
+
+00:00:08.000 --> 00:00:09.840
+Maintenant, imaginez que ce même bâtiment n'est ni porte ni mur.
+
+00:00:10.460 --> 00:00:12.640
+N'importe qui pourrait y entrer depuis n'importe où dans le monde, à toute heure.
+
+00:00:13.320 --> 00:00:15.480
+C'est la différence entre un réseau traditionnel et un réseau cloud.
+
+00:00:16.760 --> 00:00:20.220
+A la fin de cet épisode, vous comprendrez ce qu'est réellement Azure Firewall,
+
+00:00:20.480 --> 00:00:23.480
+pourquoi les pare-feux cloud fonctionnent différemment des boîtiers physiques,
+
+00:00:23.480 --> 00:00:27.780
+et comment ce service inspecte et contrôle le trafic de votre environnement Azure.
+
+00:00:29.040 --> 00:00:29.700
+Analysons cela.
+
+00:00:30.000 --> 00:00:32.360
+D'abord, ce qu'est un pare-feu, son jargon technique.
+
+00:00:32.740 --> 00:00:35.340
+Ensuite, pourquoi le cloud change tout au fonctionnement des pare-feux.
+
+00:00:35.920 --> 00:00:39.640
+Et enfin, comment Azure Firewall assemble tout cela en un seul système utilisable.
+
+00:00:40.340 --> 00:00:41.760
+Prenez votre café. Commençons.
+
+00:00:42.380 --> 00:00:43.820
+Qu'est-ce qu'un pare-feu ?
+
+00:00:43.820 --> 00:00:45.820
+La plupart des gens ont entendu ce mot mille fois,
+
+00:00:46.080 --> 00:00:49.540
+mais si on leur demande ce qu'il fait vraiment, ils deviennent souvent vagues.
+
+00:00:49.960 --> 00:00:50.140
+D'aie.
+
+00:00:50.660 --> 00:00:51.340
+Alors, restons simple.
+
+00:00:51.620 --> 00:00:53.540
+Un pare-feu est un gardien à la porte du réseau.
+
+00:00:54.260 --> 00:00:56.560
+Chaque donnée qui tente d'entrer ou de sortir doit passer par lui,
+
+00:00:56.880 --> 00:00:59.380
+et le pare-feu inspecte chaque paquet pour décider de le laisser passer,
+
+00:00:59.380 --> 00:01:00.920
+ou de le bloquer, ou de le bloquer.
+
+00:01:01.360 --> 00:01:03.540
+Pendant longtemps, les pare-feu étaient des boîtiers physiques.
+
+00:01:04.200 --> 00:01:05.900
+Vous en achetiez un, vous le branchez dans votre seul serveur,
+
+00:01:05.940 --> 00:01:07.620
+le configurez et l'entreteniez pendant des années.
+
+00:01:08.340 --> 00:01:11.080
+Ces boîtiers fonctionnaient bien quand votre réseau avait une frontière claire.
+
+00:01:11.760 --> 00:01:14.440
+Un bureau, une connexion Internet, une seule porte d'entrée.
+
+00:01:15.020 --> 00:01:16.060
+Et le cloud ne fonctionne pas ainsi.
+
+00:01:16.060 --> 00:01:17.900
+Vos applications peuvent tourner dans une région,
+
+00:01:18.000 --> 00:01:19.080
+votre base de données dans une autre,
+
+00:01:19.180 --> 00:01:20.800
+et vos utilisateurs sont dispersés dans le monde.
+
+00:01:21.520 --> 00:01:23.440
+Certains services sont sur Azure, d'autres ailleurs.
+
+00:01:23.840 --> 00:01:24.620
+Il n'y a pas de dente d'entrée unie.
+
+00:01:25.080 --> 00:01:25.620
+Voici le problème.
+
+00:01:26.160 --> 00:01:29.260
+Vous ne pouvez pas installer un boîtier physique dans un centre de données qui ne vous appartient pas.
+
+00:01:29.600 --> 00:01:29.760
+Pas.
+
+00:01:30.260 --> 00:01:31.920
+Et même si vous pouviez, cela ne servirait à rien.
+
+00:01:32.240 --> 00:01:33.600
+Car il n'y a plus de porte unique à surveiller.
+
+00:01:34.540 --> 00:01:36.440
+Pourquoi les pare-feu cloud sont différents ?
+
+00:01:36.440 --> 00:01:37.960
+Dans Azure, vous créez des réseaux virtuels.
+
+00:01:38.460 --> 00:01:41.040
+Considérez-les comme des quartiers privés dans le cloud où vivent vos applications.
+
+00:01:41.900 --> 00:01:43.240
+Ils ne sont pas liés à un bâtiment physique.
+
+00:01:43.880 --> 00:01:44.920
+Ce sont juste des espaces logiques.
+
+00:01:45.400 --> 00:01:46.160
+Analysons le flux de trafic.
+
+00:01:46.520 --> 00:01:48.680
+Le trafic dans ces réseaux virtuels se déplace dans deux directions.
+
+00:01:49.120 --> 00:01:51.980
+Le trafic nord-sud représente les données venant d'Internet vers votre réseau
+
+00:01:51.980 --> 00:01:53.740
+ou allant de votre réseau vers Internet.
+
+00:01:54.500 --> 00:01:58.100
+Voyez cela comme des visiteurs arrivant dans votre bâtiment ou des colis envoyés à l'extérieur ?
+
+00:01:58.100 --> 00:01:59.200
+Ensuite, il y a le trafic head-west,
+
+00:01:59.200 --> 00:02:02.020
+c'est-à-dire les données qui circulent entre vos propres charges de travail dans Azure,
+
+00:02:02.420 --> 00:02:04.760
+entre les applications, les bases de données et les comptes de stockage.
+
+00:02:04.760 --> 00:02:07.680
+C'est comme des employés qui circulent entre les différents services d'une entreprise.
+
+00:02:08.220 --> 00:02:09.540
+Les deux directions doivent être inspectées.
+
+00:02:10.100 --> 00:02:11.840
+Si un pirate informatique accède à une charge de travail,
+
+00:02:11.960 --> 00:02:13.440
+vous ne voulez pas qu'il puisse librement passer aux autres.
+
+00:02:14.040 --> 00:02:15.100
+C'est ainsi que les feuilles se propagent.
+
+00:02:15.540 --> 00:02:17.620
+Vos applications se connectent également à d'autres services,
+
+00:02:18.000 --> 00:02:20.500
+comptes de stockage, services de messagerie et API tierces.
+
+00:02:21.080 --> 00:02:23.120
+Le pare-feu contrôle aussi ses connexions sortantes.
+
+00:02:24.020 --> 00:02:26.060
+Il détermine avec quoi vos applications peuvent communiquer ou non.
+
+00:02:26.500 --> 00:02:27.120
+Voici le point important.
+
+00:02:27.260 --> 00:02:28.940
+Ce pare-feu n'est pas un boîtier que vous devez gérer.
+
+00:02:29.400 --> 00:02:31.900
+Vous n'avez pas à le corriger, à le mettre à jour ou à craindre qu'il manque de capacité.
+
+00:02:32.260 --> 00:02:32.780
+C'est un service.
+
+00:02:32.780 --> 00:02:34.560
+Microsoft s'occupe de toute l'infrastructure.
+
+00:02:34.940 --> 00:02:36.220
+Vous définissez simplement les règles
+
+00:02:36.220 --> 00:02:38.700
+et le service les applique automatiquement à grande échelle.
+
+00:02:39.220 --> 00:02:41.260
+Ainsi, si votre trafic augmente à 15h01 mardi,
+
+00:02:41.340 --> 00:02:42.420
+le pare-feu s'adapte en conséquence.
+
+00:02:42.940 --> 00:02:44.420
+Si Microsoft publie un correctif de sécurité,
+
+00:02:44.700 --> 00:02:46.160
+il est appliqué sans même que vous vous en aperceviez.
+
+00:02:46.580 --> 00:02:47.440
+C'est toute la différence du cloud.
+
+00:02:47.920 --> 00:02:49.740
+Le pare-feu devient une infrastructure invisible.
+
+00:02:50.860 --> 00:02:51.840
+Présentation d'Azure Firewall.
+
+00:02:52.200 --> 00:02:54.040
+Alors qu'est-ce qu'Azure Firewall exactement ?
+
+00:02:54.040 --> 00:02:56.520
+C'est un pare-feu native cloud, entièrement géré en tant que service.
+
+00:02:56.880 --> 00:02:58.620
+Un terme complexe, mais voici ce que cela signifie après.
+
+00:02:58.620 --> 00:03:01.260
+Vous le déployez via le portail Azure en quelques minutes.
+
+00:03:02.140 --> 00:03:04.500
+Pas de matériel à commander, pas de machine virtuelle à configurer,
+
+00:03:04.860 --> 00:03:06.180
+pas de système d'exploitation à mettre à jour.
+
+00:03:06.840 --> 00:03:09.900
+Quelques clics, vous définissez votre réseau et le pare-feu est opérationnel.
+
+00:03:10.400 --> 00:03:12.020
+Il est doté d'une haute disponibilité intégrée.
+
+00:03:12.440 --> 00:03:14.680
+Si une instance tombe en panne, une autre on le relaie instantanément.
+
+00:03:15.320 --> 00:03:16.520
+Il évolue également automatiquement.
+
+00:03:17.060 --> 00:03:19.380
+Si votre trafic double, le pare-feu s'agrandit avec lui.
+
+00:03:19.900 --> 00:03:21.740
+Vous n'avez jamais à deviner la capacité dont vous aurez besoin.
+
+00:03:21.740 --> 00:03:24.940
+La manière la plus simple de l'envisager est de le comparer à une équipe de sécurité
+
+00:03:24.940 --> 00:03:26.120
+pour votre immeuble de bureau dans le cloud.
+
+00:03:26.720 --> 00:03:29.700
+Vous ne gérez pas chaque garde individuellement, ne les formez pas et ne planifiez pas leur shift.
+
+00:03:30.580 --> 00:03:32.760
+Vous définissez les politiques, qui est autorisé à entrer,
+
+00:03:32.980 --> 00:03:34.660
+quels colis sont permis et ils appliquent ces règles.
+
+00:03:37.000 --> 00:03:40.600
+Azure Firewall se place au centre de votre réseau et inspecte tout ce qui transite.
+
+00:03:41.440 --> 00:03:43.320
+Il vérifie le trafic par rapport à trois types de règles.
+
+00:03:43.640 --> 00:03:46.580
+Règle NAT, règle réseau et règle d'application et règle d'application.
+
+00:03:46.760 --> 00:03:48.200
+Nous détaillerons chacune d'elles dans un instant.
+
+00:03:48.620 --> 00:03:50.740
+Voici quelque chose que la plupart des gens ignorent.
+
+00:03:50.740 --> 00:03:53.120
+Azure Firewall est doté d'une intelligence contre les menaces intégrées.
+
+00:03:53.880 --> 00:03:56.140
+Microsoft surveille en permanence les modèles d'attaques mondiaux,
+
+00:03:56.460 --> 00:03:59.780
+les adresses IP malveillantes connues, les domaines dangereux et les menaces émergentes
+
+00:03:59.780 --> 00:04:01.560
+sont transmis automatiquement à votre pare-feu.
+
+00:04:02.500 --> 00:04:05.700
+Ainsi, si un groupe de pirates dans un autre pays commence à cibler des clients Azure,
+
+00:04:06.140 --> 00:04:09.020
+votre pare-feu sait déjà qu'il doit les bloquer avant même qu'ils n'atteignent votre réseau.
+
+00:04:09.620 --> 00:04:12.300
+La protection s'améliore continuellement sans aucune intervention de votre part.
+
+00:04:12.580 --> 00:04:15.140
+Pas de mise à jour manuelle, pas de téléchargement de signature, cela se fait automatiquement.
+
+00:04:15.420 --> 00:04:16.880
+Tout le monde n'a pas besoin du même niveau de protection.
+
+00:04:16.880 --> 00:04:21.400
+Une petite entreprise utilisant une seule application a des besoins différents d'une banque traitant des transactions financières.
+
+00:04:22.160 --> 00:04:24.100
+C'est pourquoi Azure Firewall se décline en trois versions.
+
+00:04:25.020 --> 00:04:27.820
+Les trois références, Basic, Standard et Premium.
+
+00:04:28.500 --> 00:04:33.200
+Commençons par Azure Firewall Basic, l'option d'entrée de gamme conçue pour les petites entreprises et les environnements simples.
+
+00:04:33.200 --> 00:04:39.700
+Il gère jusqu'à environ 250 Mbps de trafic, suffisant pour une application modeste ou un environnement développement.
+
+00:04:40.340 --> 00:04:45.100
+Basic inclut un filtrage réseau essentiel qui inspecte le trafic et applique des règles basées sur les adresses IP et les ports,
+
+00:04:45.200 --> 00:04:48.240
+ainsi qu'une veille sur les menaces en mode alerte uniquement 1.
+
+00:04:48.760 --> 00:04:51.880
+Il vous prévient donc en cas d'élément suspect, mais ne le bloquera pas automatiquement.
+
+00:04:52.720 --> 00:04:55.660
+Considérez Basic comme un agent de sécurité qui surveille attentivement l'entrée,
+
+00:04:55.940 --> 00:04:58.660
+repère le problème, le signal, mais a besoin d'une autorisation avant d'intervenir.
+
+00:04:58.660 --> 00:05:03.520
+Vient ensuite Azure Firewall Standard, le choix le plus courant pour les charges de travail d'entreprise, et ce n'est pas sans raison.
+
+00:05:04.360 --> 00:05:09.120
+Il s'adapte jusqu'à environ 30 Gbps, gérant confortablement le trafic de production de la plupart des organisations.
+
+00:05:10.440 --> 00:05:13.120
+Avec Standard, la veille sur les menaces fonctionne en mode alerte et refus,
+
+00:05:13.220 --> 00:05:16.780
+permettant au pare-feu de bloquer automatiquement les acteurs malveillés en connus sans attendre votre intervention.
+
+00:05:17.740 --> 00:05:19.320
+Il ajoute également le filtrage par catégorie web.
+
+00:05:19.620 --> 00:05:22.980
+Vous pouvez bloquer des catégories entières comme les réseaux sociaux ou les jeux d'argent sur tout votre réseau,
+
+00:05:23.240 --> 00:05:25.140
+et il prend en charge la configuration DNS personnalisée.
+
+00:05:25.700 --> 00:05:28.480
+Standard est votre équipe de sécurité parfaitement équipée et habilité à agir.
+
+00:05:28.780 --> 00:05:31.020
+Il détecte un problème et le traite sans attendre d'approbation.
+
+00:05:32.040 --> 00:05:35.380
+Enfin, il y a Azure Firewall Premium, conçu pour les environnements hautement sensibles
+
+00:05:35.380 --> 00:05:38.800
+comme la finance, la santé, le gouvernement ou tout ce qui traite des données réglementées.
+
+00:05:39.660 --> 00:05:43.000
+Il atteint 100 Gbps par seconde, mais la vraie différence réside dans ce qu'il peut inspecter.
+
+00:05:43.500 --> 00:05:48.740
+Premium ajoute l'inspection TLS, qui déchiffre le trafic, inspecte le contenu et le rechiffre avant de l'envoyer.
+
+00:05:48.740 --> 00:05:53.280
+Et c'est important car la majeure partie du trafic malveillant actuel se cache dans des connexions chiffrées.
+
+00:05:53.740 --> 00:05:55.400
+Sans inspection TLS, vous naviguez à l'aveugle.
+
+00:05:55.760 --> 00:05:59.180
+Premium ajoute également l'IDPS, un système de détection et de prévention des intrusions,
+
+00:05:59.560 --> 00:06:03.580
+avec plus de 67 000 signatures réparties dans plus de 50 catégories mises à jour en temps réel.
+
+00:06:04.120 --> 00:06:07.180
+Il vérifie chaque paquet pour détecter les modèles d'attaques connus tels que l'injection SQL,
+
+00:06:07.420 --> 00:06:10.320
+les rappels de logiciels malveillants et le scan de port et rejette immédiatement le trafic suspect.
+
+00:06:11.180 --> 00:06:15.240
+Premium ajoute aussi le filtrage d'URL, vous permettant d'autoriser ou de bloquer des adresses web spécifiques
+
+00:06:15.240 --> 00:06:18.000
+au lieu de catégories entières pour un contrôle granulaire au niveau de la page.
+
+00:06:18.000 --> 00:06:19.860
+C'est une protection de niveau militaire.
+
+00:06:20.200 --> 00:06:21.120
+Mais voici l'approche intelligente.
+
+00:06:21.740 --> 00:06:23.220
+Faites correspondre l'offre à vos besoins réels.
+
+00:06:23.860 --> 00:06:25.760
+Standard couvre la plupart des cas d'usage en entreprise.
+
+00:06:26.440 --> 00:06:29.580
+Utilisez Premium uniquement lorsque des données sensibles nécessitent une inspection approfondie,
+
+00:06:29.660 --> 00:06:31.540
+basic pour les petits environnements ou le développement et les tests,
+
+00:06:31.660 --> 00:06:33.220
+et ne payez pas pour des capacités inutiles.
+
+00:06:34.520 --> 00:06:35.340
+Architecture et flux de trafic
+
+00:06:35.340 --> 00:06:37.200
+Une fois votre référence et ce qu'a eu choisi,
+
+00:06:37.280 --> 00:06:40.880
+la question suivante est de savoir comment structurer votre réseau pour que le pare-feu puisse inspecter le trafic.
+
+00:06:41.220 --> 00:06:41.900
+Car voici le point crucial.
+
+00:06:41.900 --> 00:06:45.160
+Un pare-feu ne fonctionne que si le trafic passe réellement par lui.
+
+00:06:45.880 --> 00:06:48.200
+Si vous le placez au mauvais endroit, il est inutile.
+
+00:06:49.000 --> 00:06:51.560
+L'approche la plus courante est l'architecture en étoile, ou Hub & Spock.
+
+00:06:52.260 --> 00:06:53.000
+Imaginez une roue de vélo.
+
+00:06:53.800 --> 00:06:56.040
+Le moyeu est le centre, avec les rayons qui rayonnent vers l'extérieur.
+
+00:06:57.120 --> 00:06:58.900
+Dans Azure, vous créez un réseau virtuel central.
+
+00:06:59.780 --> 00:07:01.560
+C'est le Hub où réside votre Azure Firewall.
+
+00:07:02.140 --> 00:07:05.300
+Ensuite, vous créez plusieurs réseaux Spock, chacun dédié à une charge de travail ou un environnement distinct.
+
+00:07:05.700 --> 00:07:08.400
+Peut-être un Spock pour votre application web, un autre pour votre base de données,
+
+00:07:08.400 --> 00:07:10.080
+un troisième pour votre environnement de développement.
+
+00:07:10.080 --> 00:07:14.660
+Tout le trafic entre les Spock, et entre les Spock et Internet, passe par le Hub pour inspection.
+
+00:07:15.420 --> 00:07:17.720
+Vous obtenez un point de contrôle unique pour tout votre réseau,
+
+00:07:18.140 --> 00:07:21.640
+efficace, cohérent et bien plus facile à gérer que de mettre un pare-feu dans chaque Spock.
+
+00:07:22.940 --> 00:07:26.020
+Pour les grandes organisations, il existe aussi Virtual One, un service réseau
+
+00:07:26.020 --> 00:07:29.040
+managé avec Azure Firewall intégré directement dans le Hub.
+
+00:07:30.460 --> 00:07:31.760
+Le gros avantage est l'automatisation.
+
+00:07:32.380 --> 00:07:34.020
+Virtual One gère le routage pour vous,
+
+00:07:34.020 --> 00:07:37.040
+donc le trafic des agences, des utilisateurs distants et des réseaux Spock
+
+00:07:37.040 --> 00:07:39.900
+passe par le pare-feu sans configuration manuelle, NEL.
+
+00:07:40.660 --> 00:07:43.060
+C'est plus automatisé, mais cela passe mieux à l'échelle pour des déploiements mondiaux.
+
+00:07:43.380 --> 00:07:45.400
+Maintenant, qu'est-ce que le pare-feu inspecte réellement ?
+
+00:07:45.400 --> 00:07:48.560
+Trois choses, le trafic entrant depuis Internet, le trafic sortant vers Internet,
+
+00:07:49.000 --> 00:07:51.380
+et le trafic est-ouest entre vos propres charges de travail dans Azure.
+
+00:07:51.860 --> 00:07:52.800
+Ce troisième point est critique.
+
+00:07:53.460 --> 00:07:54.940
+Si une brèche survient dans une charge de travail,
+
+00:07:55.180 --> 00:07:57.180
+l'inspection est-ouest empêche la propagation aux autres.
+
+00:07:57.660 --> 00:08:01.020
+Sans cela, un pirate qui accède à votre serveur web peut librement atteindre votre base de données.
+
+00:08:01.380 --> 00:08:02.700
+Avec cela, ce mouvement est bloqué.
+
+00:08:02.700 --> 00:08:04.100
+Voici le point clé.
+
+00:08:04.320 --> 00:08:06.340
+Le trafic n'est inspecté que s'il passe par le pare-feu.
+
+00:08:06.680 --> 00:08:09.340
+L'architecture doit donc forcer le trafic à passer par ce point central.
+
+00:08:09.800 --> 00:08:11.980
+Vous concevez votre réseau de sorte qu'il n'y ait aucun chemin alternatif.
+
+00:08:12.440 --> 00:08:15.080
+C'est pourquoi la conception du déploiement compte tout autant que les règles elles-mêmes.
+
+00:08:15.720 --> 00:08:19.280
+Un ensemble de règles parfaites ne signifie rien si le trafic peut contourner totalement le pare-feu.
+
+00:08:20.180 --> 00:08:20.840
+Analyse approfondie.
+
+00:08:20.840 --> 00:08:22.720
+Parlons maintenant des règles elles-mêmes.
+
+00:08:23.240 --> 00:08:24.960
+Car c'est ainsi que vous contrôlez ce qui passe.
+
+00:08:26.060 --> 00:08:29.080
+Azure Firewall utilise trois types de règles et chacune a une fonction différente.
+
+00:08:30.200 --> 00:08:32.160
+Commençons par les règles NAT et la traduction d'adresse réseau.
+
+00:08:32.920 --> 00:08:36.820
+Voyez cela comme une réception qui cache vos serveurs internes derrière l'adresse IP publique du pare-feu.
+
+00:08:37.860 --> 00:08:39.900
+Quelqu'un sur Internet se connecte à l'IP du pare-feu
+
+00:08:39.900 --> 00:08:43.580
+et celui-ci traduit cette adresse publique en adresse privée de votre serveur dorsal.
+
+00:08:44.280 --> 00:08:46.380
+Le monde extérieur ne voit jamais votre réseau interne.
+
+00:08:46.760 --> 00:08:47.720
+Vos serveurs restent invisibles.
+
+00:08:48.220 --> 00:08:49.280
+Ensuite, vous avez les règles réseau.
+
+00:08:49.280 --> 00:08:51.760
+Elles sont basées sur les adresses IP, les ports et les protocoles.
+
+00:08:52.400 --> 00:08:54.960
+Filtrage de couches 3 et 4 si vous vous intéressez aux termes techniques.
+
+00:08:55.600 --> 00:08:59.580
+Vous pouvez dire autoriser le trafic depuis cette adresse IP sur le port 4.43 vers cette autre adresse IP
+
+00:08:59.580 --> 00:09:00.700
+et bloquer tout le reste.
+
+00:09:01.460 --> 00:09:02.180
+Simple et puissant.
+
+00:09:03.200 --> 00:09:03.860
+Mais voici la limite.
+
+00:09:04.060 --> 00:09:06.180
+Les règles réseau ne comprennent pas quel type de trafic il s'agit.
+
+00:09:06.780 --> 00:09:08.420
+Elles savent seulement où il va et quel port il utilise.
+
+00:09:09.060 --> 00:09:11.400
+Troisièmement, les règles d'application sont plus intelligentes.
+
+00:09:11.680 --> 00:09:14.220
+Elles filtrent en fonction des noms de domaines complets et des modèles d'URL.
+
+00:09:14.980 --> 00:09:17.000
+Ainsi, au lieu d'autoriser le trafic vers une IP spécifique,
+
+00:09:17.000 --> 00:09:18.960
+vous dites autorisez le trafic vers Microsoft.com
+
+00:09:18.960 --> 00:09:20.840
+ou autorisez le trafic de mise à jour Windows.
+
+00:09:21.460 --> 00:09:23.100
+Désormais, le pare-feu comprend la couche application.
+
+00:09:23.720 --> 00:09:25.780
+Il peut bloquer ou autoriser en fonction de la nature réelle du trafic
+
+00:09:25.780 --> 00:09:26.680
+et non seulement de sa destination.
+
+00:09:27.300 --> 00:09:29.160
+Les règles ne sont pas simplement jetées dans une liste plate.
+
+00:09:29.580 --> 00:09:32.140
+Elles sont organisées en groupes de collection de règles et en collection de règles.
+
+00:09:32.860 --> 00:09:34.400
+Considérez-les comme des dossiers et des sous-dossiers.
+
+00:09:34.740 --> 00:09:36.160
+On pourrait y avoir un groupe pour les systèmes RH,
+
+00:09:36.260 --> 00:09:38.380
+un autre pour la finance, chacun avec sa propre priorité.
+
+00:09:39.120 --> 00:09:41.740
+Cela permet de rester organisé lorsque vous avez des dizaines ou des centaines de règles.
+
+00:09:42.380 --> 00:09:43.240
+L'ordre a une grande importance.
+
+00:09:43.240 --> 00:09:45.860
+Le pare-feu traite les règles dans une séquence spécifique.
+
+00:09:46.700 --> 00:09:49.100
+Règle NAT d'abord, puis règle réseau, puis règle d'application.
+
+00:09:49.860 --> 00:09:52.020
+Au sein de chaque type, les règles sont traitées par priorité.
+
+00:09:52.580 --> 00:09:53.980
+Les nombres les plus bas sont évalués en premier.
+
+00:09:54.400 --> 00:09:57.700
+C'est important car les règles réseau large qui autorisent tout le trafic seront atteintes en premier.
+
+00:09:58.400 --> 00:09:59.800
+Si une règle réseau autorise tout,
+
+00:10:00.040 --> 00:10:03.080
+les règles d'application situées plus bas pourraient ne jamais être évaluées.
+
+00:10:03.580 --> 00:10:06.060
+Toutes vos règles d'application soigneusement élaborées deviennent inutiles.
+
+00:10:06.720 --> 00:10:08.480
+Les groupes IP sont un autre outil qui mérite d'être connu.
+
+00:10:08.480 --> 00:10:12.740
+Vous créez un groupe d'adresse IP, vous lui donnez un nom et vous le référencez dans plusieurs règles.
+
+00:10:13.440 --> 00:10:16.280
+Modifiez un groupe IP et chaque règle qu'il utilise se met à jour automatiquement.
+
+00:10:16.920 --> 00:10:19.000
+Cela permet de gagner du temps et de réduire les erreurs.
+
+00:10:19.180 --> 00:10:22.540
+Surtout lorsque le même ensemble d'IP apparaît dans plusieurs règles.
+
+00:10:23.820 --> 00:10:24.920
+Fonctionnalité de protection avancée.
+
+00:10:25.300 --> 00:10:28.460
+Les règles gèrent les bases, mais Azure Firewall Premium va beaucoup plus loin.
+
+00:10:28.960 --> 00:10:30.220
+Commençons par le renseignement sur les menaces.
+
+00:10:30.860 --> 00:10:35.680
+Il s'agit d'un flux constamment mis à jour par Microsoft contenant des IP domaines et URL malveillants connus.
+
+00:10:35.680 --> 00:10:39.220
+Chaque connexion traitée par votre pare-feu est vérifiée par rapport à ce flux.
+
+00:10:39.740 --> 00:10:42.020
+Lorsqu'il trouve une correspondance, il peut vous alerter ou bloquer automatiquement.
+
+00:10:42.520 --> 00:10:44.360
+Aucune règle manuelle à écrire, aucune liste à maintenir.
+
+00:10:44.960 --> 00:10:47.340
+L'équipe de sécurité mondiale de Microsoft fait ce travail pour vous.
+
+00:10:47.760 --> 00:10:50.580
+Ensuite, il y a l'IDPS, le système de détection et de prévention des intrusions.
+
+00:10:51.020 --> 00:10:54.780
+Il s'agit de plus de 67 000 signatures vérifiant chaque paquet à la recherche de modèles d'attaques connus.
+
+00:10:55.440 --> 00:10:56.860
+Des choses comme les tentatives d'injection SQL,
+
+00:10:56.860 --> 00:10:59.820
+où quelqu'un essaye d'injecter des commandes de base de données malveillantes via un formulaire web.
+
+00:11:00.360 --> 00:11:03.160
+Le scan de port où les attaquants sentent votre réseau à la recherche de portes ouvertes.
+
+00:11:03.160 --> 00:11:06.720
+Les rappels de logiciels malveillants, où les systèmes infectés tentent de contacter un serveur de commande.
+
+00:11:07.300 --> 00:11:10.840
+Le pare-feu reconnaît le modèle et bloque le trafic avant qu'il n'atteigne sa cible.
+
+00:11:11.580 --> 00:11:13.160
+Ses signatures sont mises à jour en temps réel.
+
+00:11:13.600 --> 00:11:17.280
+Dès que les équipes de sécurité Microsoft identifient un nouveau modèle d'attaque, il est ajouté au flux.
+
+00:11:17.860 --> 00:11:19.560
+Notre pare-feu commence à le bloquer immédiatement.
+
+00:11:20.040 --> 00:11:21.180
+Pas besoin d'attendre le patchus d'écu.
+
+00:11:21.380 --> 00:11:22.360
+Passons à l'inspection TLS.
+
+00:11:22.360 --> 00:11:24.480
+C'est un point majeur pour les environnements réglementés.
+
+00:11:24.740 --> 00:11:28.380
+Le trafic chiffré est idéal pour la confidentialité, mais aussi pour dissimuler des données malveillantes.
+
+00:11:28.780 --> 00:11:29.460
+Les attaquants le savent.
+
+00:11:29.460 --> 00:11:33.860
+Ils enveloppent leur charge utile dans des connexions HTTPS car la plupart des pare-feu ne peuvent pas les inspecter.
+
+00:11:34.500 --> 00:11:38.660
+La version premium elle le déchiffe le trafic, inspecte la charge utile, le rechiffre et l'envoie vers sa destination.
+
+00:11:39.000 --> 00:11:40.560
+L'ensemble du processus ne prend que quelques millisounes.
+
+00:11:40.840 --> 00:11:43.540
+Sans cela, les attaques chiffrées passent sans être détectées.
+
+00:11:43.940 --> 00:11:45.700
+Le filtrage d'URL va bien au-là des simples noms de domaine.
+
+00:11:45.980 --> 00:11:48.200
+Vous pouvez autoriser ou bloquer des chemins spécifiques sur un site web.
+
+00:11:48.340 --> 00:11:51.620
+Par exemple, autoriser l'accès à Microsoft tout en bloquant la page de téléchargement
+
+00:11:51.620 --> 00:11:55.200
+ou permettre un point de terminaison API spécifique tout en bloquant le reste du domaine.
+
+00:11:55.720 --> 00:11:56.720
+Tout cela fonctionne de conseil.
+
+00:11:56.720 --> 00:11:59.640
+Le renseignement sur les menaces détecte les acteurs malveillants connus.
+
+00:11:59.840 --> 00:12:01.360
+L'IDPS identifie les modèles d'attaque.
+
+00:12:01.440 --> 00:12:02.900
+L'inspection TLS révèle les charges cachées.
+
+00:12:03.000 --> 00:12:04.740
+Plusieurs couches de défense formant un système unique.
+
+00:12:05.560 --> 00:12:07.820
+Comment tout cela s'articule et des recommandations concrètes.
+
+00:12:08.380 --> 00:12:09.400
+Voici comment tout s'assemble.
+
+00:12:10.600 --> 00:12:12.460
+Azure Firewall n'est pas qu'un simple service.
+
+00:12:13.020 --> 00:12:14.680
+C'est un ensemble de composants travaillant en équipe.
+
+00:12:15.460 --> 00:12:17.520
+L'architecture canalise tout le trafic via un point central.
+
+00:12:18.100 --> 00:12:19.980
+Ensuite, les règles déterminent ce qui est autorisé.
+
+00:12:20.100 --> 00:12:23.280
+Tandis que le renseignement sur les menaces et l'IDPS détectent toute activité suspecte
+
+00:12:23.280 --> 00:12:25.720
+et l'inspection TLS révèle ce qui se cache dans les connexions chiffrées.
+
+00:12:26.720 --> 00:12:29.840
+Chaque couche ajoute un contrôle supplémentaire, illustrant la défense en profondeur.
+
+00:12:30.440 --> 00:12:32.340
+Si vous gérez plusieurs pare-feux dans différentes régions,
+
+00:12:32.500 --> 00:12:34.620
+Azure Firewall Manager et votre outil de prédilection.
+
+00:12:35.500 --> 00:12:38.120
+C'est gratuit, vous créez des stratégies une fois et les appliquez partout.
+
+00:12:38.940 --> 00:12:40.880
+Vous pouvez définir des stratégies globales pour tous les pare-feux
+
+00:12:40.880 --> 00:12:43.540
+puis personnaliser des stratégies locales par équipe ou par région.
+
+00:12:44.280 --> 00:12:46.240
+Un outil unique pour gouverner l'ensemble de votre parc de pare-feux.
+
+00:12:46.560 --> 00:12:48.880
+Parlons maintenant des coûts, car les pare-feux tournent 24h24,
+
+00:12:49.020 --> 00:12:50.460
+cette J7 est très un volume important de données.
+
+00:12:50.920 --> 00:12:54.200
+Un moyen simple de réduire les coûts consiste à utiliser le plan de table de base Log Analytics
+
+00:12:54.200 --> 00:12:55.100
+pour vos journaux de pare-feux.
+
+00:12:55.100 --> 00:12:58.040
+Vous pouvez économiser jusqu'à 80% sur les coûts d'ingestion.
+
+00:12:58.380 --> 00:13:00.640
+C'est la différence entre une facture raisonnable et une mauvaise surprise.
+
+00:13:01.080 --> 00:13:02.280
+Pour les environnements hors production,
+
+00:13:02.520 --> 00:13:05.540
+utilisez Azure Automation pour arrêter le pare-feu en dehors des heures de travail
+
+00:13:05.540 --> 00:13:06.580
+et le redémarrer le matin.
+
+00:13:07.280 --> 00:13:09.140
+Les environnements de développement et de tests n'ont pas besoin de protection
+
+00:13:09.140 --> 00:13:11.440
+à 2h du matin, ce qui représente des économies significatives sur la durée.
+
+00:13:11.880 --> 00:13:13.200
+Pour réduire les frais de traitement des données,
+
+00:13:13.480 --> 00:13:16.800
+vérifiez votre routage et assurez-vous que seul le trafic nécessaire passe par le pare-feu.
+
+00:13:17.680 --> 00:13:20.380
+Utilisez des points de terminaison privés pour les services Azure lorsque c'est possible,
+
+00:13:20.380 --> 00:13:23.600
+afin que les services de confiance communiquent directement au lieu de tout acheminer par inspection.
+
+00:13:25.100 --> 00:13:27.320
+La mesure la plus efficace que vous puissiez prendre aujourd'hui
+
+00:13:27.320 --> 00:13:30.180
+est de commencer avec une référence standard dans une architecture hub-and-spoke.
+
+00:13:31.020 --> 00:13:33.520
+Activez les journaux structurés avec le plan de table de base et configurez.
+
+00:13:33.720 --> 00:13:35.640
+D'abord, l'intelligence des menaces en mode alerte.
+
+00:13:36.000 --> 00:13:38.780
+Observez ce qui atteint votre réseau avant de passer à une prévention totale.
+
+00:13:39.260 --> 00:13:41.140
+Cela vous offre une visibilité sans mauvaise surprise.
+
+00:13:41.980 --> 00:13:43.020
+Voici donc Azure Firewall,
+
+00:13:43.140 --> 00:13:45.420
+un service de sécurité cloud natif qui inspecte le trafic,
+
+00:13:45.580 --> 00:13:47.160
+bloque les menaces et s'adapte à votre réseau
+
+00:13:47.160 --> 00:13:48.940
+sans que vous ayez à gérer un seul serveur.
+
+00:13:49.340 --> 00:13:51.260
+Commencez avec la version standard dans une configuration mobile.
+
+00:13:51.260 --> 00:13:52.920
+C'est votre étape la plus marquante aujourd'hui.
+
+00:13:53.300 --> 00:13:55.020
+Abonnez-vous sur votre plateforme de podcast préférée
+
+00:13:55.020 --> 00:13:57.460
+et partagez cet épisode avec quelqu'un qui débute son parcours Azure.

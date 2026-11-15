@@ -1,0 +1,832 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.600
+Het onderwerp van vandaag is iets waar bijna iedereen van gehoord heeft, maar weinigen echt begrijpen.
+
+00:00:03.760 --> 00:00:05.440
+Co-pilot in Microsoft Entra ID.
+
+00:00:05.720 --> 00:00:08.980
+Je hebt de naam waarschijnlijk gezien in je admin center of horen noemen op een conferentie.
+
+00:00:09.140 --> 00:00:10.260
+Dus, wat doet het nu eigenlijk?
+
+00:00:10.460 --> 00:00:13.400
+Is het alleen een chatbot die basisvragen beantwoord, of is het iets veel groters?
+
+00:00:13.580 --> 00:00:15.500
+Dit is de eenvoudigste manier om erover na te denken.
+
+00:00:15.740 --> 00:00:19.860
+Stel je voor dat je een IT-beheerder bent en een gebruiker belt gefrustreerd de helpdesk omdat diegene geen toegang krijgt tot het CRM.
+
+00:00:20.020 --> 00:00:21.800
+Ze verliezen tijd en hebben nu een antwoord nodig.
+
+00:00:22.040 --> 00:00:23.400
+Jouw taak is om uit te zoeken waarom.
+
+00:00:23.400 --> 00:00:31.780
+Je opent het Entra admin center, navigeert naar aanmeldingslogboeken, filtert op gebruikersnaam en staart naar een spreadsheet met ruwe data, correlatie-idees, foutcodes, tijdstempels en JSON-blobs.
+
+00:00:31.960 --> 00:00:34.820
+Ergens in die chaos staat het antwoord, maar het vinden ervan kost tijd.
+
+00:00:35.020 --> 00:00:38.300
+Als je een junior-beheerder bent of nieuw bent met Entra, weet je niet waar je moet beginnen.
+
+00:00:38.540 --> 00:00:40.280
+Dat is het probleem dat Co-pilot oplost.
+
+00:00:40.460 --> 00:00:48.040
+Aan het einde van deze kennissessie begrijp je wat Co-pilot in Entra ID echt is, hoe het complexe logboeken omzet in begrijpelijke antwoorden en waarom het identiteitsbeheer verandert.
+
+00:00:48.240 --> 00:00:52.480
+Geen marketing praat, alleen de fundamenten van het probleemoplossend vermogen bij identiteitsbeheer.
+
+00:00:52.480 --> 00:01:00.600
+Laten we kijken naar het probleem dat Co-pilot oplost, want om te begrijpen waarom een AI-assistent belangrijk is, moet je eerst inzien hoe moeilijk het oplossen van identiteitsproblemen kan zijn.
+
+00:01:00.840 --> 00:01:02.720
+Denk aan de schaal van moderne identiteit.
+
+00:01:02.940 --> 00:01:06.180
+In een typische organisatie vinden er elke dag duizenden aanmeldingen plaats.
+
+00:01:06.420 --> 00:01:09.400
+Sommige slagen, sommige mislukken, sommige worden geblokkeerd door beleid.
+
+00:01:09.540 --> 00:01:17.800
+Je hebt honderden beleidsregels voor voorwaardelijke toegang die op onvoorspelbare manieren op elkaar inwerken en bovendien genereert identiteitsbeveiliging risicosignalen voor gebruikers die mogelijk gecompromitteerd zijn.
+
+00:01:18.000 --> 00:01:19.960
+Dat is veel data van veel verschillende plekken.
+
+00:01:19.960 --> 00:01:23.600
+Stel je nu voor dat je probeert uit te zoeken waarom een specifieke gebruiker werd geblokkeerd.
+
+00:01:23.740 --> 00:01:28.660
+Je begint bij de aanmeldingslogboeken en vindt de gebeurtenis, maar die vertelt je alleen dat de aanmelding is mislukt, niet waarom.
+
+00:01:28.800 --> 00:01:35.240
+Dus ga je naar het tabblad voor voorwaardelijke toegang, controleer je de apparaat compliance van de gebruiker, daarna de auditlogboeken om te zien of er onlangs beleid is gewijzigd,
+
+00:01:35.380 --> 00:01:38.220
+en open je vervolgens identiteitsbeveiliging om te controleren op risicodetecties.
+
+00:01:38.400 --> 00:01:41.380
+Elk van deze is een apart venster met zijn eigen weergave en filters.
+
+00:01:41.660 --> 00:01:45.380
+Tegen de tijd dat je alle puntjes met elkaar hebt verbonden, zijn er 15 of 20 minuten voorbij.
+
+00:01:45.380 --> 00:01:49.620
+De taalbarrière maakt het nog erger. Ruwe logboeken spreken geen gewone mensentaal.
+
+00:01:49.800 --> 00:01:58.100
+Ze spreken in technische codes, correlatie-idees die lijken op willekeurige reeksen, foutnummers die je moet opzoeken en JSON-blobs met geneste velden die lastig te ontleden zijn.
+
+00:01:58.300 --> 00:02:04.480
+Als je een juniorbeheerder bent of bij de helpdesk werkt, weet je vaak niet waar je moet kijken en escaleer je naar een seniorbeheerder die het al te druk heeft.
+
+00:02:04.660 --> 00:02:05.960
+Hier is een concreet voorbeeld.
+
+00:02:06.160 --> 00:02:09.380
+Een gebruiker belt de helpdesk en zegt dat hij geen toegang heeft tot Microsoft Teams.
+
+00:02:09.620 --> 00:02:11.900
+Dat is alles. Dat is alle informatie die je hebt.
+
+00:02:11.900 --> 00:02:17.980
+Waar begin je dan? Controleer je de licentie van de gebruiker, de naleving van het apparaat, het voorwaardelijk toegangsbeleid, de aanmeldingslogboeken of de risicoscore?
+
+00:02:18.160 --> 00:02:21.180
+Zonder diepgaande kennis van Entra ben je eigenlijk aan het gokken en gokken kost tijd.
+
+00:02:21.400 --> 00:02:23.260
+Dit is precies waar Copilot van pas komt.
+
+00:02:23.480 --> 00:02:28.060
+Wat is Security Copilot in Entra ID? Dus, wat is Security Copilot in Entra ID nu precies?
+
+00:02:28.220 --> 00:02:29.840
+Hier is de eenvoudigste definitie.
+
+00:02:30.020 --> 00:02:35.560
+Het is een AI-assistent die rechtstreeks in het Entra-beheercentrum is ingebouwd, geen aparte website of portal waar je apart op moet inloggen.
+
+00:02:35.560 --> 00:02:41.540
+Het is geïntegreerd in je werkomgeving, alsof je een beveiliger hebt die elk logboek, elk beleid en elke gebruiker in het gebouw kent.
+
+00:02:41.700 --> 00:02:45.200
+Je hoeft niet langer zelf naar informatie te zoeken. Je stelt gewoon een vraag.
+
+00:02:45.460 --> 00:02:48.100
+Zo werkt het. Je typt een vraag in gewone taal, zoals
+
+00:02:48.100 --> 00:02:50.360
+Toon mij gebruikers met een hoog risico in mijn tenant.
+
+00:02:50.620 --> 00:02:52.380
+Of, waarom is deze aanmelding mislukt?
+
+00:02:52.540 --> 00:02:56.020
+Of, vat de aanmeldingsactiviteit van de afgelopen 24 uur samen.
+
+00:02:56.220 --> 00:03:00.300
+Copilot neemt die vraag, doorzoekt je Entra gegevens en geeft je een antwoord in natuurlijke taal.
+
+00:03:00.300 --> 00:03:05.980
+Het maakt verbinding met aanmeldingslogboeken, auditlogboeken, beleid voor voorwaardelijke toegang, identiteitsbeveiliging en gebruikersgegevens.
+
+00:03:06.160 --> 00:03:10.020
+Al die gegevens staan al in Entra, maar Copilot brengt ze samen in seconden in plaats van minuten.
+
+00:03:10.180 --> 00:03:11.580
+En dit is het belangrijkste punt.
+
+00:03:11.840 --> 00:03:13.900
+Copilot overspoelt je niet zomaar met ruwe data.
+
+00:03:14.120 --> 00:03:16.660
+Het geeft je een samenvatting, een verhaal, een uitleg.
+
+00:03:16.820 --> 00:03:19.680
+In plaats van naar een tabel met foutcodes te staren, krijg je zoiets als
+
+00:03:19.680 --> 00:03:25.520
+Deze gebruiker werd geblokkeerd omdat beleid X voor voorwaardelijke toegang een compatibel apparaat vereiste en hun apparaat was niet compatibel.
+
+00:03:25.760 --> 00:03:27.820
+Dat is iets waar je direct actie op kunt ondernemen.
+
+00:03:27.820 --> 00:03:31.060
+Copilot stelt ook vervolgvragen voor op basis van de context.
+
+00:03:31.300 --> 00:03:37.460
+Na het beantwoorden van je eerste vraag kan het zeggen, wil je alle mislukte aanmeldingen voor deze gebruiker van de afgelopen zeven dagen zien?
+
+00:03:37.640 --> 00:03:40.600
+Of wil je weten welke andere beleidsregels van toepassing zijn?
+
+00:03:40.800 --> 00:03:44.260
+Het begeleid je stap voor stap in plaats van je alleen je volgende zet te laten uitzoeken.
+
+00:03:44.440 --> 00:03:45.500
+Hier is een vergelijking.
+
+00:03:45.720 --> 00:03:49.400
+Entra data is de bibliotheek, vol informatie, maar het juiste boek vinden kost tijd.
+
+00:03:49.580 --> 00:03:52.240
+Copilot is de bibliothecaris die precies weet waar alles staat.
+
+00:03:52.400 --> 00:03:54.400
+Je vertelt wat je nodig hebt en diegene brengt het naar je toe.
+
+00:03:54.400 --> 00:03:57.740
+Niet dwalen door de gangpaden, niet gokken bij de schappen, gewoon het antwoord wanneer je het nodig hebt.
+
+00:03:57.940 --> 00:04:00.080
+Use Case 1 Problemen met aanmelden oplossen
+
+00:04:00.080 --> 00:04:02.260
+Laten we dit concreet maken met een echt voorbeeld.
+
+00:04:02.440 --> 00:04:05.040
+Een medewerker meldt dat hij geen toegang krijgt tot Microsoft Teams.
+
+00:04:05.240 --> 00:04:08.340
+Hij probeert het al een uur, heeft zijn computer opnieuw opgestart en niets werkt.
+
+00:04:08.500 --> 00:04:09.840
+Dus belt hij de helpdesk.
+
+00:04:09.940 --> 00:04:15.500
+De oude manier, je opent de aanmeldlogboeken, filtert op de naam van de gebruiker en moet dan gokken welk tijdstip het juiste is.
+
+00:04:15.720 --> 00:04:18.460
+Probeerde hij tien minuten geleden aan te melden, of twintig.
+
+00:04:18.460 --> 00:04:25.220
+Je scrolt door de gebeurtenissen op zoek naar de mislukte poging en als je die vindt, sta je naar een foutcode met een status die alleen mislukt, zegt.
+
+00:04:25.360 --> 00:04:27.180
+Geen uitleg, alleen een nummer dat je moet opzoeken.
+
+00:04:27.180 --> 00:04:34.440
+Daarna klik je op het tabblad voor voorwaardelijke toegang om te zien of een beleid de aanmelding heeft geblokkeerd, controleer je de apparaatdetails op naleving en check je het risiconiveau van de gebruiker.
+
+00:04:34.580 --> 00:04:38.940
+Elke stap is een aparte klik, een apart scherm, een aparte mentale contextschakeling.
+
+00:04:39.160 --> 00:04:42.380
+Vijftien minuten later heb je misschien een antwoord of ben je nog meer in de war.
+
+00:04:42.580 --> 00:04:44.060
+Dit is nu de manier van Copilot.
+
+00:04:44.300 --> 00:04:46.740
+Je opent het entrabeheercentrum en typt eens in.
+
+00:04:46.960 --> 00:04:49.140
+Waarom kon deze gebruiker niet aanmelden bij Teams?
+
+00:04:49.420 --> 00:04:50.120
+Dat is alles.
+
+00:04:50.380 --> 00:04:52.840
+Geen filters, geen gegok, geen gashakel tussen tabbladen.
+
+00:04:52.840 --> 00:04:55.880
+Onder de motorkap doet Copilot het werk dat je voorheen handmatig deed.
+
+00:04:56.020 --> 00:05:04.460
+Het haalt de recente aanmeldlogboeken van de gebruiker op, controleert de evaluatie van voorwaardelijke toegang, bekijkt en al evens status van het apparaat en identificeert de reden van de fout.
+
+00:05:04.980 --> 00:05:06.640
+Vervolgens krijg je iets als dit terug.
+
+00:05:06.840 --> 00:05:10.700
+Aanmelding mislukt omdat het beleid voor voorwaardelijke toegang, apparaat naleving vereist.
+
+00:05:10.860 --> 00:05:11.920
+De sessie heeft geblokkeerd.
+
+00:05:12.100 --> 00:05:14.640
+Het apparaat van de gebruiker was gemarkeerd als niet conform.
+
+00:05:14.920 --> 00:05:16.440
+Dat is het hele verhaal in één zin.
+
+00:05:16.640 --> 00:05:18.940
+Je weet precies wat er is gebeurd en wat er moet veranderen.
+
+00:05:19.120 --> 00:05:23.140
+Het apparaat van de gebruiker moet voldoen aan de vereisten of je moet een uitzondering maken.
+
+00:05:23.360 --> 00:05:25.440
+Hoe dan ook, je hebt een duidelijk pad vooruit.
+
+00:05:25.640 --> 00:05:26.960
+Maar Copilot stopt daar niet.
+
+00:05:27.140 --> 00:05:28.920
+Het kan ook aanvullende context bieden.
+
+00:05:29.100 --> 00:05:33.880
+Het apparaat platform, de OS-versie, browser, IP-adres, locatie en verificatie methode.
+
+00:05:33.880 --> 00:05:36.600
+Al die informatie is beschikbaar met een eenvoudige vervolgvraag zoals
+
+00:05:36.600 --> 00:05:39.860
+laat me alle aanmeldingsfouten voor deze gebruiker van de afgelopen zeven dagen zien.
+
+00:05:40.080 --> 00:05:42.260
+Of welke andere beleidsregels zijn van toepassing.
+
+00:05:42.480 --> 00:05:44.080
+De tijdsbesparing is aanzienlijk.
+
+00:05:44.300 --> 00:05:47.240
+Wat voorheen 15 minuten duurde, kost nu ongeveer 30 seconden.
+
+00:05:47.360 --> 00:05:48.500
+En dit is het echte voordeel.
+
+00:05:48.620 --> 00:05:51.600
+Junior medewerkers kunnen deze problemen oplossen zonder escalatie.
+
+00:05:51.820 --> 00:05:54.280
+Iemand bij de helpdesk die geen diepgaande kennis van Entra heeft,
+
+00:05:54.380 --> 00:05:57.360
+kan Copilot dezelfde vraag stellen en krijgt hetzelfde duidelijke antwoord.
+
+00:05:57.560 --> 00:06:01.420
+Dat betekent dat seniorbeheerders minder tijd kwijt zijn aan routinematige probleemoplossing
+
+00:06:01.420 --> 00:06:04.480
+en meer tijd hebben voor complexe vraagstukken die echt hun expertise vereisen.
+
+00:06:04.680 --> 00:06:07.480
+Use case 2. Het onderzoeken van risicovolle gebruikers.
+
+00:06:08.100 --> 00:06:11.480
+Aanmeldingsfouten zijn één ding, maar identiteitsrisico's, dat is een heel ander niveau.
+
+00:06:11.740 --> 00:06:15.380
+De identiteitsbeveiliging van Entra ID genereert risicoscores voor gebruikers
+
+00:06:15.380 --> 00:06:19.840
+en hoewel dat eenvoudig klinkt, is het achterhalen waarom iemand als hoog risico is gemarkeerd een hele uitdaging.
+
+00:06:20.020 --> 00:06:23.920
+De onbewerkte gegevens van identiteitsbeveiliging kunnen aanvoelen als drinken uit een brandslang.
+
+00:06:23.920 --> 00:06:28.620
+Je ziet een risicoscore en een lijst met detecties, maar het leggen van de link naar het werkelijke gebruikersgedrag kost tijd.
+
+00:06:28.800 --> 00:06:32.860
+Je moet elke detectie afzonderlijk controleren, tijdstippen vergelijken, aanmeldingsactiviteiten,
+
+00:06:32.960 --> 00:06:34.600
+kruislinks toetsen en dan beslissen wat je moet doen.
+
+00:06:34.740 --> 00:06:36.260
+Het is te doen, maar het is traag.
+
+00:06:36.380 --> 00:06:39.540
+En als je met honderden gebruikers te maken hebt, is die snelheid belangrijk.
+
+00:06:39.800 --> 00:06:43.360
+Copilot verandert de boel met iets wat samenvatting van risicovolle gebruikers heet.
+
+00:06:43.520 --> 00:06:47.700
+Dit is een van de meest praktische functies in de ingebedde copilot ervaring en dit is hoe het werkt.
+
+00:06:47.840 --> 00:06:52.840
+Je opent het rapport voor risicovolle gebruikers in identiteitsbeveiliging en ziet een gebruiker met een hoge risicoscore.
+
+00:06:52.840 --> 00:06:59.140
+In plaats van handmatig elke detectie door te spitten, vraag je copilot gewoon wat de risicoactiviteit voor deze gebruiker samen.
+
+00:06:59.380 --> 00:07:00.100
+Dat is alles.
+
+00:07:00.340 --> 00:07:07.200
+Copilot haalt de risico detecties op, zoals onbekende aanmeldings-eigenschappen, gelekte inloggegevens of verdachte IP-adressen
+
+00:07:07.200 --> 00:07:10.720
+en correleert deze met de recente aanmeldingsactiviteit van de gebruiker.
+
+00:07:10.980 --> 00:07:13.240
+Vervolgens presenteert het alles als een verhaal.
+
+00:07:13.440 --> 00:07:15.240
+De output ziet er ongeveer zo uit.
+
+00:07:15.500 --> 00:07:18.880
+Deze gebruiker is gemarkeerd als hoog risico vanwege twee detecties,
+
+00:07:18.880 --> 00:07:23.020
+een aanmelding vanaf een onbekende locatie in een land waar ze nog nooit eerder toegang hadden
+
+00:07:23.020 --> 00:07:26.880
+en activiteit die overeenkomt met bekende gelekte inloggegevens op het darkweb.
+
+00:07:27.000 --> 00:07:27.800
+Dat is krachtig.
+
+00:07:27.960 --> 00:07:30.440
+In plaats van een lijst met gebeurtenissen krijg je een verhaal.
+
+00:07:30.580 --> 00:07:33.600
+Je begrijpt wat er is gebeurd, waarom het verdacht is en hoe ernstig het is.
+
+00:07:33.780 --> 00:07:35.720
+Maar copilot stopt niet bij de samenvatting.
+
+00:07:35.880 --> 00:07:39.020
+Het geeft je ook aanbevelingen voor de volgende stappen, het wachtwoord opnieuw instellen,
+
+00:07:39.240 --> 00:07:42.020
+verdere aanmeldingen blokkeren of bevestigen of de activiteit legitiem was.
+
+00:07:42.160 --> 00:07:46.120
+De aanbevelingen zijn afgestemd op de specifieke risico detecties, niet op algemeen advies.
+
+00:07:46.120 --> 00:07:47.940
+Dit verandert het gesprek volledig.
+
+00:07:48.060 --> 00:07:50.940
+In plaats van jezelf af te vragen, is deze gebruiker gecompromitteerd.
+
+00:07:51.080 --> 00:07:52.640
+Kun je vragen, hoe reageer ik?
+
+00:07:52.800 --> 00:07:57.560
+Copilot geeft je een duidelijk pad vooruit, zodat identiteitsteams sneller en met meer vertrouwen kunnen reageren.
+
+00:07:57.720 --> 00:07:59.400
+De impact in de echte wereld is enorm.
+
+00:07:59.640 --> 00:08:03.700
+In plaats van 20 minuten te besteden aan het onderzoeken van een risicovolle gebruiker en nog steeds onzeker te zijn,
+
+00:08:03.840 --> 00:08:06.660
+krijg je in seconden een compleet beeld, inclusief uitvoerbare volgende stappen.
+
+00:08:06.820 --> 00:08:12.320
+Voor organisaties die met duizenden gebruikers en constante risicosignalen werken, is dat niet alleen handig, maar essentieel.
+
+00:08:12.520 --> 00:08:14.820
+Use Case 3 Inzichten in voorwaardelijke toegang
+
+00:08:14.820 --> 00:08:17.720
+Voorwaardelijke toegang is een van de krachtigste functies in Entra ID.
+
+00:08:18.020 --> 00:08:19.640
+Het is ook een van de meest complexe.
+
+00:08:19.840 --> 00:08:22.140
+Wanneer je tientallen of zelfs honderden beleidsregels hebt,
+
+00:08:22.300 --> 00:08:25.500
+kan het verrassend lastig zijn om te begrijpen wat er precies is gebeurd tijdens een aanmelding.
+
+00:08:25.720 --> 00:08:26.940
+Dit is de handmatige route.
+
+00:08:27.200 --> 00:08:31.060
+Je zoekt het aanmeldingsrecord op, scrolt omlaag naar het tabblad voor voorwaardelijke toegang
+
+00:08:31.060 --> 00:08:35.440
+en je ziet een lijst met beleidsnamen en de resultaten, geslaagd, mislukt, niet toegepast.
+
+00:08:35.660 --> 00:08:38.120
+Dat is nuttig, maar het vertelt slechts een deel van het verhaal.
+
+00:08:38.120 --> 00:08:41.060
+Je moet nog steeds uitzoeken welke voorwaarden het beleid hebben geactiveerd,
+
+00:08:41.280 --> 00:08:44.660
+waarom het op de specifieke gebruiker van toepassing was en of het resultaat logisch is.
+
+00:08:44.820 --> 00:08:46.120
+Dit is nu de Copilot route.
+
+00:08:46.360 --> 00:08:49.660
+Je stelt één vraag, welke beleidsregels voor voorwaardelijke toegang waren van toepassing
+
+00:08:49.660 --> 00:08:51.020
+op deze aanmelding en wat deden ze?
+
+00:08:51.140 --> 00:08:53.980
+Copilot geeft een helder overzicht van de geëvalueerde beleidsregels,
+
+00:08:54.100 --> 00:08:56.560
+hun resultaten en de specifieke voorwaarden die ze actief eerden.
+
+00:08:56.700 --> 00:08:59.100
+In plaats van een tabel door te spitten, krijg je een uitleg.
+
+00:08:59.300 --> 00:09:03.220
+Beleid X vereiste MFA omdat de aanmelding afkomstig was van een niet vertrouwde locatie.
+
+00:09:03.220 --> 00:09:06.740
+Beleid Y blokkeerde de sessie omdat het apparaat niet aan de verrijste voldeed.
+
+00:09:06.940 --> 00:09:09.720
+Dat is het soort inzicht dat tijd bespaart en fouten vermindert.
+
+00:09:09.900 --> 00:09:12.180
+Want als je precies begrijpt waarom een beleid werd toegepast,
+
+00:09:12.400 --> 00:09:14.840
+kun je betere beslissingen nemen over eventuele aanpassingen.
+
+00:09:15.020 --> 00:09:16.940
+Copilot kan ook op een hoger niveau helpen.
+
+00:09:17.120 --> 00:09:20.440
+Je kunt vragen, laat me de beleidsregels zien die aanmeldingen het vaakst blokkeren.
+
+00:09:20.640 --> 00:09:25.220
+Dit is ontzettend nuttig voor het identificeren van te strikte beleidsregels of onjuiste configuraties.
+
+00:09:25.440 --> 00:09:29.160
+Misschien blokkeert een beleid te veel legitieme gebruikers omdat de voorwaarden te ruim zijn
+
+00:09:29.160 --> 00:09:32.500
+of heeft een beleid te veel uitsluitingen waardoor er hiaten in de dekking ontstaan.
+
+00:09:32.500 --> 00:09:34.400
+Copilot brengt deze patronen aan het licht,
+
+00:09:34.640 --> 00:09:37.980
+zodat je ze proactief kunt aanpakken in plaats van te wachten tot gebruikers klagen.
+
+00:09:38.140 --> 00:09:40.200
+Er is een nieuwe ontwikkeling die het vermelden waard is.
+
+00:09:40.420 --> 00:09:45.060
+Microsoft heeft een optimalisatieagent voor voorwaardelijke toegang geïntroduceerd die samenwerkt met Copilot.
+
+00:09:45.300 --> 00:09:48.460
+Deze agent analyseert je bestaande beleidsregels en stelt wijzigingen voor.
+
+00:09:48.640 --> 00:09:51.400
+Hij zou bijvoorbeeld kunnen zeggen, dit beleid heeft te veel uitsluitingen.
+
+00:09:51.520 --> 00:09:52.600
+Overweeg om de scoop te verkleinen.
+
+00:09:53.060 --> 00:09:55.400
+Aanhalingsteken, of deze twee beleidsregels overlappen elkaar.
+
+00:09:55.620 --> 00:09:56.620
+Overweeg om ze samen te voegen.
+
+00:09:57.180 --> 00:10:01.460
+Aanhalingsteken, de suggesties zijn gebaseerd op echte gegevens uit jouw tenant, niet op algemene best practices.
+
+00:10:01.460 --> 00:10:04.120
+Dat maakt beleidsaanpassingen veiliger en gerichter.
+
+00:10:04.280 --> 00:10:08.800
+De essentie is dit, voorwaardelijke toegang is krachtig, maar ook makkelijk verkeerd te configureren.
+
+00:10:09.000 --> 00:10:12.000
+Copilot geeft je inzicht in hoe je beleid zich werkelijk gedraagt,
+
+00:10:12.280 --> 00:10:15.140
+zodat je het vol vertrouwen kunt afstemmen in plaats van te gokken.
+
+00:10:15.520 --> 00:10:17.000
+Het bewijs helpt het echt.
+
+00:10:17.240 --> 00:10:20.300
+Copilot klinkt in theorie geweldig, maar werkt het ook in de praktijk.
+
+00:10:20.440 --> 00:10:24.260
+Microsoft heeft een onderzoek uitgevoerd naar Copilot in Entra en de cijfers zijn het bekijken waard.
+
+00:10:24.440 --> 00:10:25.020
+Dit is wat ze vonden.
+
+00:10:25.120 --> 00:10:29.320
+Beheerders die Copilot gebruikten, voltooide taken voor het oplossen van aanmeldingsproblemen 46% sneller.
+
+00:10:29.320 --> 00:10:30.900
+Dat is bijna de helft van de tijd.
+
+00:10:31.060 --> 00:10:35.240
+In plaats van 15 minuten in logbestanden te zoeken, hadden ze de antwoorden binnen minuten of zelfs seconden.
+
+00:10:35.360 --> 00:10:37.160
+En dit is het punt, ze waren ook nauwkeuriger.
+
+00:10:37.340 --> 00:10:39.880
+De nauwkeurigheid verbeterde met 46,8%.
+
+00:10:39.880 --> 00:10:42.740
+Dus ze waren niet alleen sneller, ze kwamen ook vaker met het juiste antwoord.
+
+00:10:42.920 --> 00:10:46.340
+Dat is belangrijk als een fout een legitieme gebruiker kan buitensluiten of een echte dreiging kan missen.
+
+00:10:46.500 --> 00:10:49.760
+95% van de beheerders zei dat Copilot de kwaliteit van hun werk verbeterde.
+
+00:10:49.940 --> 00:10:52.780
+Dat is een behoorlijk krachtig compliment van de mensen die het dagelijks gebruiken.
+
+00:10:52.940 --> 00:10:56.500
+En 96,7% zei dat ze het willen blijven gebruiken in hun werkstromen.
+
+00:10:56.500 --> 00:10:59.560
+Als bijna iedereen die het probeert het wil houden, zegt dat wel iets.
+
+00:10:59.800 --> 00:11:01.880
+Wat betekenen die cijfers nu eigenlijk in de praktijk?
+
+00:11:02.060 --> 00:11:07.180
+Minder escalaties naar senior beheerders, snellere responstijden bij incidenten, minder stress voor identiteitsteams.
+
+00:11:07.360 --> 00:11:12.560
+In plaats van uren te besteden aan routineonderzoek, kunnen beheerders zich richten op problemen die hun expertise echt vereisen.
+
+00:11:12.740 --> 00:11:15.680
+Een kanttekening, deze cijfers komen uit gecontroleerde onderzoeken.
+
+00:11:15.900 --> 00:11:20.920
+De resultaten kunnen variëren op basis van uw omgeving, de kwaliteit van uw data en hoe u team de tool adopteert.
+
+00:11:20.920 --> 00:11:27.520
+Maar de richting is duidelijk. AI maakt identiteitsbeheer toegankelijker en efficiënter, en die trend versnelt alleen maar.
+
+00:11:27.960 --> 00:11:30.280
+Is het veilig? Governance en beveiliging.
+
+00:11:30.500 --> 00:11:32.840
+Nu, een vraag die ik constant hoor, is het veilig?
+
+00:11:32.980 --> 00:11:34.920
+Omzelt Copilot uw beveiligings- en toegangscontroles.
+
+00:11:35.800 --> 00:11:41.020
+Terechte zorg. U geeft een AI-assistent toegang tot uw aanmeldlogboeken, uw beleid voor voorwaardelijke toegang en uw gebruikersgegevens.
+
+00:11:41.240 --> 00:11:43.440
+Dat klinkt als veel vertrouwen. Dit is het antwoord.
+
+00:11:43.580 --> 00:11:47.220
+Copilot neemt uw bestaande entra-rollen en rechten over. Dat is het belangrijkste punt.
+
+00:11:47.220 --> 00:11:51.100
+Als u geen rechten heeft om een specifiek logboek of resource te bekijken, kan Copilot dat ook niet.
+
+00:11:51.280 --> 00:11:55.420
+Geen achterdeurtjes, geen verhoging van bevoegdheden. Het werkt binnen de kaders die u al heeft ingesteld.
+
+00:11:55.740 --> 00:11:57.720
+Voorwaardelijke toegang is ook van toepassing op Copilot.
+
+00:11:57.900 --> 00:12:01.060
+Als uw beleid MFA vereist voor het beheerscentrum, respecteert Copilot dat.
+
+00:12:01.200 --> 00:12:04.800
+Als u aanmeldingen vanaf niet vertrouwde locaties blokkeert, respecteert Copilot dat ook.
+
+00:12:04.980 --> 00:12:06.720
+Dezelfde regels, hetzelfde raamwerk.
+
+00:12:06.920 --> 00:12:10.120
+Alle Copilot-proms en antwoorden worden gelogd in standaard entra-auditlogboeken.
+
+00:12:10.320 --> 00:12:13.720
+Dus als iemand een vraag stelt die niet gesteld had mogen worden, wordt die interactie vastgelegd.
+
+00:12:13.720 --> 00:12:17.320
+Beveiligingsteams kunnen die logboeken controleren zoals elke andere beheerdersactiviteit.
+
+00:12:17.480 --> 00:12:18.280
+Geen blinde vlek.
+
+00:12:18.920 --> 00:12:20.000
+Gegevensresidentie is een ander punt.
+
+00:12:20.160 --> 00:12:21.580
+Copilot opereert binnen uw tenant.
+
+00:12:21.800 --> 00:12:23.160
+Uw gegevens blijven waar ze horen.
+
+00:12:23.340 --> 00:12:25.940
+De AI werkt met uw gegevens binnen uw tenant onder uw controle.
+
+00:12:26.160 --> 00:12:27.880
+En dit is het principe dat er echt toe doet.
+
+00:12:28.080 --> 00:12:30.900
+Copilot suggereert acties, maar voert ze niet automatisch uit.
+
+00:12:31.100 --> 00:12:34.360
+Het kan adviseren om een wachtwoord te resetten of een aanmelding te blokkeren,
+
+00:12:34.620 --> 00:12:36.600
+maar het doet dit niet zonder goedkeuring van een beheerder.
+
+00:12:36.800 --> 00:12:38.040
+De mens behoudt de controle.
+
+00:12:38.040 --> 00:12:44.100
+Een praktijkvoorbeeld, een servicedesk medewerker met beperkte rechten kan Copilot vragen stellen over de gebruikers die zij ondersteunen.
+
+00:12:44.240 --> 00:12:47.440
+Ze krijgen samenvattingen van aanmeldingsfouten en gedetecteerde risico's,
+
+00:12:47.560 --> 00:12:51.360
+maar kunnen niets vragen over globale beheerdersaccounts of gevoelige bronnen waarvoor ze geen rechten hebben.
+
+00:12:51.540 --> 00:12:53.040
+Copilot handhaaft die grenzen automatisch.
+
+00:12:53.860 --> 00:12:55.520
+Dit is governance-first ontwerp.
+
+00:12:55.600 --> 00:12:59.300
+Microsoft heeft Copilot gebouwd om binnen uw bestaande beveiligingsmodel te werken, niet eromheen.
+
+00:12:59.460 --> 00:13:01.040
+En dat maakt het veilig voor gebruik in productieomgevingen.
+
+00:13:01.820 --> 00:13:02.920
+Voor wie is dit echt bedoeld?
+
+00:13:02.920 --> 00:13:05.480
+Dus, wie profiteert er nu werkelijk van Copilot in Entra ID?
+
+00:13:05.740 --> 00:13:07.080
+Niet alleen de senior beheerders.
+
+00:13:07.540 --> 00:13:09.140
+Identiteitsbeheerders krijgen de meest voor de hand liggende hulp.
+
+00:13:09.320 --> 00:13:11.140
+Zij lossen dagelijks problemen met beleidsregels op.
+
+00:13:11.220 --> 00:13:13.560
+Nu wordt een onderzoek van 15 minuten een antwoord van 30 seconden.
+
+00:13:13.680 --> 00:13:15.900
+Copilot brengt patronen aan het licht die ze misschien hadden gemist.
+
+00:13:16.060 --> 00:13:18.440
+Het helpt hen de complexiteit te beheren zonder erin te verdrinken.
+
+00:13:18.660 --> 00:13:20.460
+Service desk teams hebben er net zoveel aan.
+
+00:13:20.660 --> 00:13:24.380
+Eerstelijns support medewerkers kunnen aanmeldingsproblemen zelf oplossen zonder ze te hoeven escaleren.
+
+00:13:24.560 --> 00:13:27.540
+Ze stellen Copilot dezelfde vraag en krijgen hetzelfde duidelijke antwoord.
+
+00:13:27.540 --> 00:13:30.660
+Dat betekent minder tickets in een wachtrij die wachten op een senior beheerder.
+
+00:13:30.820 --> 00:13:32.880
+Het is alsof er een expert direct bij het bureau zit.
+
+00:13:33.080 --> 00:13:35.620
+Security analisten profiteren ook van snellere reactietijden.
+
+00:13:35.820 --> 00:13:38.660
+Wanneer een mogelijke inbreuk optreedt, kunnen ze Copilot vragen om het volledige plaatje,
+
+00:13:38.820 --> 00:13:41.360
+gebruikersactiviteit, risico-detectisch en aanbevolen volgende stappen.
+
+00:13:41.480 --> 00:13:45.540
+In plaats van een uur te besteden aan gegevensverzameling, besteden ze enkele minuten aan het begrijpen ervan.
+
+00:13:45.720 --> 00:13:48.160
+App-eigenaren en citizen-developers winnen er ook bij.
+
+00:13:48.380 --> 00:13:51.920
+Wanneer hun eigen app niet kan verifiëren of tegen een onbekende beleidsregel aanloopt,
+
+00:13:52.180 --> 00:13:53.540
+vragen ze Copilot gewoon waarom.
+
+00:13:53.540 --> 00:13:58.040
+Ze hoeven geen identiteitsexpert te zijn, ze hoeven alleen te weten wat er misging en hoe ze dit kunnen oplossen.
+
+00:13:58.260 --> 00:14:01.580
+Nu is er een groep die mensen vaak vergeten, managers en niet-technische rollen.
+
+00:14:01.740 --> 00:14:05.840
+Zij moeten de beveiligingsstatus van hun afdeling begrijpen, maar hebben geen tijd om logboeken door te spitten.
+
+00:14:06.060 --> 00:14:08.300
+Copilot geeft hen samenvattingen in begrijpelijke taal.
+
+00:14:08.460 --> 00:14:10.120
+Dit zijn uw gebruikers met een hoog risico.
+
+00:14:10.360 --> 00:14:11.540
+Dit is wat wij aanbevelen.
+
+00:14:11.720 --> 00:14:13.760
+Dat is nuttige informatie waar ze ook echt iets mee kunnen.
+
+00:14:13.940 --> 00:14:16.900
+De essentie is dit, Copilot maakt identiteitsbeheer makkelijker voor iedereen.
+
+00:14:17.100 --> 00:14:19.840
+Het vervangt geen expertise, het verspreidt het over het hele team.
+
+00:14:19.840 --> 00:14:23.540
+Identiteitsbeheer was voorheen een gespecialiseerde vaardigheid voor een kleine groep.
+
+00:14:23.600 --> 00:14:27.200
+Nu kunnen meer mensen meedoen omdat ze een AI-assistent hebben die hun taal spreekt.
+
+00:14:27.900 --> 00:14:29.240
+Identiteitsbeheer is nu ieders taak.
+
+00:14:29.400 --> 00:14:31.000
+Copilot maakt het ieders instrument.
+
+00:14:31.400 --> 00:14:33.580
+Dat is Copilot in Microsoft en Traidee.
+
+00:14:33.720 --> 00:14:36.800
+Het verandert een complexe directory in iets waar je daadwerkelijk mee kunt praten.
+
+00:14:37.000 --> 00:14:41.300
+Als dit je hielp het grote plaatje te zien, deel het dan met iemand die net aan hun identiteitsreis begint.
+
+00:14:41.560 --> 00:14:45.680
+Abonneer je op je favoriete podcast platform en ik zie je bij het volgende kennisfragment.
+
+00:14:45.680 --> 00:14:46.680
+***
+
+00:14:46.680 --> 00:14:47.680
+***
+
+00:14:47.680 --> 00:14:48.680
+***
+
+00:14:48.680 --> 00:14:49.680
+***
+
+00:14:49.680 --> 00:14:50.680
+***

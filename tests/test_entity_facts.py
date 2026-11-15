@@ -118,7 +118,7 @@ class Logo(unittest.TestCase):
 
 class Schema(unittest.TestCase):
     def test_org(self):
-        n = E.ent_ld(BASE, E.ENTS["ifakt"], "en", set(), {})
+        n = E.ent_ld(BASE, dict(RAW["ifakt"]), "en", set(), {})   # Repo-Stand (data/entities.json): ENTS mischt in CI den Live-Stand der Datenbank dazu
         self.assertEqual(n["legalName"], "iFAKT GmbH")
         self.assertEqual(n["identifier"]["value"], "HRB 22661, Amtsgericht Stuttgart")
         self.assertEqual(n["numberOfEmployees"]["@type"], "QuantitativeValue"); self.assertEqual(n["numberOfEmployees"]["value"], 25)

@@ -70,6 +70,24 @@ class Overlay(unittest.TestCase):
         self.assertEqual(ents["mirko-peters"]["company"], "iFAKT GmbH")
         self.assertEqual(ents["mirko-peters"]["desc"]["en"], "x" * 30, "Rest kommt weiter aus D1")
 
+    def test_wikidata_nummer_aus_repo_gilt_bei_leerem_formularfeld(self):
+        item = {"id": "ifakt", "data": {"name": "iFAKT GmbH", "type": "org", "wikidata": "", "desc": {"en": "x" * 30, "de": ""}}, "created": 1}
+        with mock.patch.object(SL, "_fetch_json", return_value={"items": [item]}):
+            ents = SL.load_entities("https://api.example.test")
+        self.assertEqual(ents["ifakt"]["wikidata"], "Q142098400")
+
+    def test_wikidata_nummer_aus_dem_formular_gewinnt(self):
+        item = {"id": "ifakt", "data": {"name": "iFAKT GmbH", "type": "org", "wikidata": "Q1", "desc": {"en": "x" * 30, "de": ""}}, "created": 1}
+        with mock.patch.object(SL, "_fetch_json", return_value={"items": [item]}):
+            ents = SL.load_entities("https://api.example.test")
+        self.assertEqual(ents["ifakt"]["wikidata"], "Q1")
+
+    def test_alle_zehn_ifakt_entitaeten_haben_eine_wikidata_nummer(self):
+        ids = ["ifakt", "jorg-drees", "polaris", "polaris-vsm", "polaris-bsm", "polaris-designer", "polaris-simulator", "polaris-optimizer", "polaris-operator", "polaris-analyzer"]
+        nums = [E.ENTS[i].get("wikidata", "") for i in ids]
+        self.assertTrue(all(__import__("re").fullmatch(r"Q\d{6,10}", n) for n in nums), nums)
+        self.assertEqual(len(set(nums)), 10)
+
 
 class Folgen(unittest.TestCase):
     def test_extraktionen_verweisen_auf_ifakt(self):

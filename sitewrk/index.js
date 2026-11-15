@@ -24,13 +24,17 @@ function notModified(request, etag, lastMod) {
   return !!(ims && lastMod && Date.parse(lastMod) <= Date.parse(ims));
 }
 
-// Seite aus dem R2-Bucket (pages/<pfad>/index.html) mit Kanten-Cache; null, wenn es sie dort nicht gibt (auch das wird kurz gemerkt)
+// Seite aus dem R2-Bucket (pages/<pfad>/index.html) mit Kanten-Cache; null, wenn es sie dort nicht gibt (auch das wird kurz gemerkt).
+// /a/index.html gilt wie /a/ (wie GitHub Pages). Schluessel im Bucket sind UTF-8 (z. B. pages/ru/tag/облако/index.html), die Adresse kommt
+// prozent-kodiert: fuer den Bucket dekodieren, der Cache-Schluessel bleibt kodiert (tools/purge_changed.py leert kodierte Adressen).
 async function r2Page(request, env, ctx, url, p) {
-  const cache = caches.default, ck = new Request(url.origin + "/__r2c" + r2Path(p));
+  const d = p.replace(/\/index\.html$/i, "/");
+  let dp = d; try { dp = decodeURIComponent(d); } catch { /* ungueltige Kodierung: wie angefragt */ }
+  const cache = caches.default, ck = new Request(url.origin + "/__r2c" + r2Path(d));
   let hit = await cache.match(ck).catch(() => null), state = "HIT";
   if (!hit) {
     state = "MISS";
-    const obj = await env.PAGES.get("pages" + r2Path(p) + "index.html").catch(() => null);
+    const obj = await env.PAGES.get("pages" + r2Path(dp) + "index.html").catch(() => null);
     const cm = (obj && obj.customMetadata) || {};
     if (!obj || cm.gone === "1" || cm.src === "docs") {   // fehlt, vom Seitenbau als entfernt markiert oder nur Spiegel von GitHub Pages (dort 404 = wirklich weg)
       ctx.waitUntil(cache.put(ck, new Response("", { headers: { "cache-control": `public, max-age=${R2_MISS_TTL}`, "x-r2-miss": "1" } })).catch(() => {}));
@@ -109,8 +113,10 @@ async function r2First(request, env, ctx, url, p, key, build) {
   if (notModified(request, h.get("etag"), h.get("last-modified"))) return new Response(null, { status: 304, headers: h });
   return new Response(request.method === "HEAD" ? null : hit.body, { status: 200, headers: h });
 }
-// Datenexporte des Seitenbaus: fuer Programme da, nicht fuer die Suche (Allowlist - .well-known, openapi.json, agent.json, episodes.json, llms*.txt bleiben sichtbar)
+// Datenexporte des Seitenbaus: fuer Programme da, nicht fuer die Suche; jede .json bekommt noindex, ausser den oeffentlichen API-Beschreibungen
+// und Datenfeeds (agent.json, episodes.json, openapi.json, /.well-known/). llms*.txt, Feeds (.xml) und HTML bleiben sichtbar.
 const NOINDEX = /^\/(search\/|entities\.json|entities-src\.json|entities\.jsonld|og-manifest\.json|seo-report\.json|top\.json|show\/redirects\.json|show\/transcripts\.json|show-notes\/|blog-import\/|blog-content\/)|\.jsonld$/i;
+const noindexPath = (p) => !p.startsWith("/.well-known/") && !/^\/(?:agent|episodes|openapi)\.json$/i.test(p) && (NOINDEX.test(p) || /\.json$/i.test(p));
 // #266: Transkript-Dateien je Folge (Hauptshow, Dub-Folge, Sprachfassung) liegen im R2-Bucket (r2out/): fuer Podcast-Apps (CORS) und Programme,
 // nicht fuer die Suche (der Text steht schon auf der Folgenseite). Gleiche Regel wie site_transcripts.PATH_RX.
 export const TRANSCRIPT = /^(?:\/[a-z]{2})?(?:\/show\/episodes)?\/[a-z0-9-]+\/transcript\.(txt|vtt)$/;
@@ -156,6 +162,40 @@ async function legacyTarget(p0) {
   return /^\/(blog|videos|p)\//.test(p0) ? "/show/" : "";
 }
 
+// ---------- Blog auf der eigenen Domain (BYOD, BLOG_OWN_DOMAIN.md) ----------
+// Nur mit BYOD="1" (Standard "0": diese Weiche ist dann nie aktiv). Eigene Hosts (m365.fm, *.m365.fm, m365con.net) gehen unveraendert den alten Weg.
+// Jeder andere Host muss streng wie ein Hostname aussehen UND mit dem Host-Header uebereinstimmen (kein Host-Header-Trick); ob er einer aktiven
+// Mitglieds-Domain gehoert, entscheidet allein der Community-Worker (D1, Status 'active', oeffentliches Profil). Sonst neutrales 404, nie eine Weiterleitung.
+const OWN_HOST = /(^|\.)(m365\.fm|m365con\.net)$/;
+const HOSTNAME = /^(?=.{4,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+(?:[a-z]{2,24}|xn--[a-z0-9-]{2,59})$/;
+// -> "" (Weiche nicht aktiv oder eigener Host), "bad" (Host verdaechtig) oder der geprüfte Host
+export function foreignHost(env, request, url) {
+  if (env.BYOD !== "1") return "";
+  const u = url.hostname.toLowerCase();
+  if (OWN_HOST.test(u)) return "";
+  const hh = (request.headers.get("host") || "").trim().toLowerCase().replace(/:\d+$/, "");
+  if (!HOSTNAME.test(u) || (hh && hh !== u)) return "bad";
+  return u;
+}
+const FSEC = { "strict-transport-security": "max-age=31536000", "x-content-type-options": "nosniff", "referrer-policy": "strict-origin-when-cross-origin", "permissions-policy": "camera=(), microphone=(), geolocation=(), payment=(), interest-cohort=()", "x-frame-options": "DENY" };   // HSTS ohne includeSubDomains: die Domain gehoert dem Mitglied
+const PASS = ["content-type", "cache-control", "content-language", "x-robots-tag", "content-security-policy"];
+const plain = (status, msg, extra = {}) => new Response(msg, { status, headers: { "content-type": "text/plain; charset=utf-8", "x-robots-tag": "noindex", "cache-control": "public, max-age=60", ...FSEC, ...extra } });
+async function byodServe(request, env, url, host) {
+  if (request.method !== "GET" && request.method !== "HEAD") return plain(405, "Method not allowed", { allow: "GET, HEAD" });
+  if (url.protocol === "http:") return new Response(null, { status: 301, headers: { location: "https://" + host + url.pathname + url.search, "cache-control": "public, max-age=3600", ...FSEC } });   // gleicher, geprüfter Host
+  const q = "/api/byod/serve?host=" + encodeURIComponent(host) + "&path=" + encodeURIComponent(url.pathname);
+  let res;
+  try {
+    res = env.COMMUNITY ? await env.COMMUNITY.fetch(new Request("https://community.internal" + q)) : await fetch((env.API || "https://api-dub.m365.fm") + q, { cf: { cacheEverything: true, cacheTtl: 300 } });
+  } catch { return plain(503, "Temporarily unavailable", { "cache-control": "no-store" }); }
+  if (res.status >= 500) return plain(503, "Temporarily unavailable", { "cache-control": "no-store" });
+  const h = new Headers(FSEC);
+  for (const k of PASS) { const v = res.headers.get(k); if (v) h.set(k, v); }
+  const loc = res.headers.get("location");
+  if (loc) { if (!/^\/(?![\\/])/.test(loc)) return plain(404, "Not found"); h.set("location", "https://" + host + loc); }   // nur Pfad auf derselben Domain
+  return new Response(request.method === "HEAD" || res.status === 301 ? null : res.body, { status: res.status, headers: h });
+}
+
 // Header fuer Antworten von GitHub Pages und aus R2 (gleiche Regeln, egal woher die Datei kommt)
 function finishHeaders(h, p) {
   const isImg = IMG.test(p), isStatic = STATIC.test(p) || FONT.test(p);
@@ -163,7 +203,7 @@ function finishHeaders(h, p) {
   // T41: Schriften aendern sich unter gleichem Namen nicht (1 Jahr), Bilder 1 Tag, Skripte/Stile 1 h und danach im Hintergrund pruefen
   h.set("cache-control", HASHED.test(p) || FONT.test(p) ? "public, max-age=31536000, immutable" : isImg ? "public, max-age=86400, stale-while-revalidate=604800"
     : isStatic ? "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400" : HTML_CC);
-  if (NOINDEX.test(p)) h.set("x-robots-tag", "noindex");
+  if (noindexPath(p)) h.set("x-robots-tag", "noindex");
   const tm = TRANSCRIPT.exec(p);
   if (tm) { h.set("content-type", CT[tm[1]]); h.set("x-robots-tag", "noindex"); h.set("access-control-allow-origin", "*"); }   // #266
   if (isImg) h.set("vary", "accept");
@@ -228,6 +268,10 @@ function redirect(request, origin, path, search, status = 301) {
 const GONE_LANG = /^\/(pa|hi|ml|ta|te)(\/|$)/, MIRKO = /^(\/[a-z]{2})?\/community\/u\/mirko-peters(\/.*)?$/, EN_PREFIX = /^\/en(\/.*)?$/;
 const LANG_EP = /^\/(de|es|fr|it|pt|nl|pl|id|ru|uk|ar|he|ja|ko)\/show\/episodes\/([a-z0-9-]+)\/?$/;
 const INVITE = /^\/einladung\/([a-z0-9][a-z0-9-]{1,38})\/?$/;   // Profilkuerzel wie im Community-Worker (worker/src/inviter.js)
+// Eigene Seite eines Events, Profils oder einer Firma (site_events.py, site_members.py): entsteht erst mit dem naechsten Seitenbau. Listen zeigen nur
+// Eintraege mit Seite; ein Link von anderswo (Mail, Admin, Profil-Bereich) auf eine noch fehlende Seite fuehrt zur Liste der Sprache statt auf ein 404.
+export const EVENT_PAGE = /^(\/[a-z]{2})?\/community\/events\/([a-z0-9][a-z0-9-]{2,39})\/?$/;
+export const PROFILE_PAGE = /^(\/[a-z]{2})?\/community\/(u|c)\/([a-z0-9][a-z0-9-]{1,38})\/?$/;   // nur die Profilseite selbst (Unterseiten wie /blog/ nicht)
 // Reine Adressregeln (ohne Ursprung) - ein Schritt: Ziel oder "". site_links.py rule_target() ist der Nachbau.
 async function ruleStep(p, migrated) {
   const p0 = p.replace(/\/+$/, "") || "/";
@@ -246,6 +290,68 @@ export async function finalTarget(p, migrated) {
     seen.add(nx); cur = nx; n++;
   }
   return n ? cur : "";
+}
+
+// Profilseite eines neuen Mitglieds, solange der Seitenbau sie noch nicht erzeugt hat: /community/u/<handle>/ und /<sprache>/community/u/<handle>/
+// entstehen nur beim statischen Seitenbau (site_members.py, Stunden). Fehlt die Seite (404 vom Ursprung), baut der Worker eine einfache Live-Seite aus
+// dem oeffentlichen Profil-Endpunkt der Community-API (GET /api/profile/<handle>, ohne Anmeldung nur fuer oeffentliche Profile, sonst 404).
+// 200 nur bei einem oeffentlichen Profil; sonst und bei jedem API-Fehler greift die 302-Weiterleitung zur Mitgliederliste (PROFILE_PAGE, nie eine
+// 5xx-Seite). Die Seite ist noindex und no-store: nach dem Bau gilt sofort die feste Seite (die kanonische). Nur Felder, die auch die statische Seite
+// zeigt (ohne Kontaktdaten). Nur Personen (/u/); Firmen (/c/) gehen direkt zur Firmenliste.
+export const LIVE_PROFILE_PAGE = /^(?:\/(de|fr|es|it|nl|pt|pl|id|ru|uk|ar|he|ja|ko))?\/community\/u\/([a-z0-9][a-z0-9-]{2,29})\/?(?:index\.html)?$/;   // Kuerzel wie HANDLE in worker/src/profiles.js
+const COMMUNITY_API = "https://api-dub.m365.fm", PROFILE_MISS_TTL = 60;
+const esc = (x) => String(x ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const str = (x, max) => (typeof x === "string" ? x.trim().slice(0, max) : "");
+function safeUrl(u) {   // nur http/https; der Wert kommt aus dem normalisierten URL-Objekt
+  try { const x = new URL(String(u)); return (x.protocol === "http:" || x.protocol === "https:") && x.hostname ? x.href : ""; } catch { return ""; }
+}
+const PROFILE_TXT = {
+  en: { members: "Members", about: "About", company: "Company", country: "Country", channels: "Channels", fresh: "This profile is new. The full page follows with the next site update.", followers: "followers", photo: "Profile photo of" },
+  de: { members: "Mitglieder", about: "Über mich", company: "Firma", country: "Land", channels: "Kanäle", fresh: "Dieses Profil ist neu. Die vollständige Seite folgt mit dem nächsten Seitenbau.", followers: "Follower", photo: "Profilfoto von" },
+};
+const CHANNEL_KIND = { linkedin: "LinkedIn", youtube: "YouTube", github: "GitHub", x: "X", twitter: "X", mastodon: "Mastodon", bluesky: "Bluesky", website: "Website", blog: "Blog", podcast: "Podcast", facebook: "Facebook", instagram: "Instagram", tiktok: "TikTok", twitch: "Twitch" };
+export function profileHtml(v, lang, handle, api) {
+  const L = PROFILE_TXT[lang] || PROFILE_TXT.en, de = lang === "de", pre = lang && lang !== "en" ? "/" + lang : "";
+  const tr = (v.i18n && typeof v.i18n === "object" && v.i18n[lang]) || {};   // Profiltexte in der Sprache der Seite, sonst Original (wie site_members.py)
+  const name = str(v.name, 120) || handle, headline = str(tr.headline, 200) || str(v.headline, 200), about = str(tr.about, 3000) || str(v.about, 3000);
+  const tl = lang && lang !== "en" && lang !== "de" ? ` lang="${esc(lang)}" dir="auto"` : ' dir="auto"';   // Nutzertext kann in einer anderen Sprache stehen als die Oberflaeche
+  const facts = [];
+  const org = v.org && typeof v.org === "object" ? str(v.org.name, 120) : "", job = str(v.job, 100), company = str(v.company, 100);
+  const comp = [job, org || company].filter(Boolean).join(" · ");
+  if (comp) facts.push([L.company, esc(comp)]);
+  if (str(v.country, 80)) facts.push([L.country, esc(str(v.country, 80))]);
+  const chans = (Array.isArray(v.channels) ? v.channels : []).slice(0, 12).map((c) => {
+    const href = c && safeUrl(c.url); if (!href) return "";
+    const kind = CHANNEL_KIND[String(c.kind || "").toLowerCase()] || str(c.kind, 30) || "Link", fol = Number.isFinite(+c.followers) && +c.followers > 0 ? ` · ${Math.floor(+c.followers).toLocaleString("en-US")} ${L.followers}` : "";
+    return `<li><a href="${esc(href)}" rel="me nofollow ugc noopener" target="_blank">${esc(kind)}</a> <span class="mut">${esc(href.replace(/^https?:\/\//, "").replace(/\/$/, "").slice(0, 60))}${fol}</span></li>`;
+  }).filter(Boolean);
+  const img = Number.isInteger(v.img) && v.img > 0 ? `<img src="${esc(api + "/api/img/u/" + handle + ".jpg?v=" + v.img)}" alt="${esc(L.photo + " " + name)}" width="128" height="128" style="border-radius:50%;object-fit:cover">` : "";
+  const title = `${name}${headline ? " – " + headline : ""} | M365.FM`;
+  return `<!doctype html><html lang="${de ? "de" : "en"}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>${esc(title)}</title>` +
+    `<style>body{font-family:system-ui,sans-serif;max-width:42em;margin:2.5em auto;padding:0 1em;line-height:1.5}.mut{color:#666}th{text-align:left;padding-right:1em;font-weight:600}</style></head><body>` +
+    `<nav aria-label="breadcrumb"><a href="${pre}/community/members/">${esc(L.members)}</a></nav>${img}<h1${tl}>${esc(name)}</h1>` +
+    (headline ? `<p style="font-size:1.1em"${tl}>${esc(headline)}</p>` : "") +
+    (facts.length ? `<table><tbody>${facts.map(([a, b]) => `<tr><th scope="row">${esc(a)}</th><td>${b}</td></tr>`).join("")}</tbody></table>` : "") +
+    (about ? `<h2>${esc(L.about)}</h2><p style="white-space:pre-line"${tl}>${esc(about)}</p>` : "") +
+    (chans.length ? `<h2>${esc(L.channels)}</h2><ul>${chans.join("")}</ul>` : "") +
+    `<p class="mut"><small>${esc(L.fresh)}</small></p></body></html>`;
+}
+// null = kein Live-Profil (unbekannt, nicht oeffentlich, API-Fehler): der Aufrufer leitet dann per 302 zur Mitgliederliste weiter
+async function profileLive(request, env, ctx, url, m) {
+  const handle = m[2], lang = m[1] || "", api = (env && typeof env.COMMUNITY_API === "string" && /^https:\/\/[a-z0-9.-]+$/i.test(env.COMMUNITY_API) ? env.COMMUNITY_API : COMMUNITY_API);
+  const cache = caches.default, ck = new Request(url.origin + "/__live/u/" + handle);
+  if (await cache.match(ck).catch(() => null)) return null;   // kurz gemerkt: eindeutig kein oeffentliches Profil (schuetzt die API vor Abfragen erfundener Kuerzel)
+  let r;
+  try { r = await fetch(api + "/api/profile/" + handle, { headers: { accept: "application/json" }, signal: AbortSignal.timeout(3000), cf: { cacheTtl: 0 } }); } catch { return null; }
+  if (r.status === 404) { ctx.waitUntil(cache.put(ck, new Response("", { headers: { "cache-control": `public, max-age=${PROFILE_MISS_TTL}` } })).catch(() => {})); return null; }
+  if (!r.ok) return null;
+  let j; try { j = await r.json(); } catch { return null; }
+  const v = j && j.profile;
+  if (!v || typeof v !== "object" || v.type !== "u" || v.handle !== handle || v.public !== true) return null;   // nur oeffentliche Profile mit genau diesem Kuerzel
+  const html = profileHtml(v, lang || "en", handle, api);
+  const h = new Headers({ "content-type": "text/html; charset=utf-8", "cache-control": "no-store", "x-robots-tag": "noindex", "x-m365-live": "profile" });
+  for (const [k, x] of Object.entries(SEC)) h.set(k, x);
+  return new Response(request.method === "HEAD" ? null : html, { status: 200, headers: h });
 }
 
 // ---------------------------------------------------------------- partner.m365.fm: Sponsor-Dashboard auf eigener Subdomain
@@ -294,6 +400,9 @@ async function partnerRequest(request, env, ctx, url) {
 const worker = {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    const fh = foreignHost(env, request, url);   // BYOD: Fremd-Domain eines Mitglieds (nur mit Schalter)
+    if (fh === "bad") return plain(421, "Misdirected request");
+    if (fh) return byodServe(request, env, url, fh);
     // img.m365.fm ist die oeffentliche Adresse des R2-Buckets: Spiegel- und Sprachseiten (pages/) und Verwaltungsdateien (meta/) sind dort nicht
     // gedacht (doppelte Inhalte, als entfernt markierte Seiten). Nur diese Pfade sind hierher geroutet; Bilder (i/, og/) kommen weiter direkt aus R2.
     if (url.hostname === "img.m365.fm") return new Response("Not found", { status: 404, headers: { "content-type": "text/plain; charset=utf-8", "x-robots-tag": "noindex", "cache-control": "public, max-age=3600" } });
@@ -362,7 +471,7 @@ const worker = {
       if (obj) {
         const h = new Headers({ "content-type": "application/json; charset=utf-8", "cache-control": HTML_CC });
         for (const [k, v] of Object.entries(SEC)) h.set(k, v);
-        if (NOINDEX.test(p)) h.set("x-robots-tag", "noindex");
+        if (noindexPath(p)) h.set("x-robots-tag", "noindex");
         return new Response(request.method === "HEAD" ? null : obj.body, { headers: h });
       }
     }
@@ -379,9 +488,18 @@ const worker = {
     }
     if (res.status === 404 && env.PAGES && !IMG.test(p) && (request.method === "GET" || request.method === "HEAD")) {
       const r2 = await r2Page(rq, env, ctx, url, p);
+      if (r2 && !p.endsWith("/") && !/\.[a-z0-9]{1,8}$/i.test(p)) return new Response(null, { status: 301, headers: { ...SEC, location: url.origin + p + "/" + url.search, "cache-control": "public, max-age=600" } });   // wie GitHub Pages: Verzeichnis ohne "/" -> 301 auf "/"
       if (r2) return r2;
       const m = LANG_EP.exec(p);   // noch nicht hochgeladen: englisches Original statt 404 - umbenannt gleich auf den neuen Slug (ein Schritt)
       if (m) return Response.redirect(url.origin + ((migrated && (await redirectMap())["/show/episodes/" + m[2]]) || "/show/episodes/" + m[2] + "/") + url.search, 301);
+    }
+    if (res.status === 404 && (request.method === "GET" || request.method === "HEAD")) {   // nach dem R2-Rueckfall: eine Sprachfassung im Bucket gilt
+      const pm = LIVE_PROFILE_PAGE.exec(p);   // Profil eines neuen Mitglieds vor dem naechsten Seitenbau (s. profileLive); sonst die 302 unten
+      if (pm) { const live = await profileLive(request, env, ctx, url, pm); if (live) return live; }
+      const ev = EVENT_PAGE.exec(p);   // 302 und ohne Cache, weil die Seite spaeter entsteht
+      const pf = ev ? null : PROFILE_PAGE.exec(p);
+      const to = ev ? (ev[1] || "") + "/community/events/" : pf ? (pf[1] || "") + "/community/" + (pf[2] === "u" ? "members" : "companies") + "/" : "";
+      if (to) return new Response(null, { status: 302, headers: { ...SEC, location: url.origin + to, "cache-control": "no-store", "x-robots-tag": "noindex" } });
     }
     if (res.status === 404 && FEED_ITEM.test(p) && (request.method === "GET" || request.method === "HEAD")) return feedGone(request, p);
     const h = new Headers(res.headers);

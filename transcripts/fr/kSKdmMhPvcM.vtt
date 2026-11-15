@@ -1,0 +1,1240 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.220
+Avez-vous parfois l'impression que vos conversations dans Microsoft 365 BizChat ne font qu'effleurer la surface ?
+
+00:00:04.220 --> 00:00:06.180
+Vous demandez à un outil d'orienter des décisions importantes,
+
+00:00:06.320 --> 00:00:09.580
+mais il ne peut pas accéder à vos données propriétaires ou à vos applications métiers ?
+
+00:00:09.580 --> 00:00:10.640
+Cet écart n'est pas négligeable.
+
+00:00:11.060 --> 00:00:15.220
+C'est la différence entre des réponses génériques et des perspectives ancrées dans la réalité de votre entreprise.
+
+00:00:15.940 --> 00:00:17.920
+Dans ce podcast, je vais vous montrer comment combler ce fossé.
+
+00:00:18.620 --> 00:00:24.080
+Vous apprendrez à identifier les systèmes, à connecter, à créer un connecteur copaylot et à le sécuriser avec Teams Toolkit.
+
+00:00:25.080 --> 00:00:28.160
+Ceci s'adresse aux créateurs et aux développeurs qui connaissent Microsoft 365
+
+00:00:28.160 --> 00:00:30.600
+et souhaitent que BizChat fonctionne avec leurs applications essentielles.
+
+00:00:31.080 --> 00:00:35.280
+Car avant de résoudre le problème, nous devons comprendre pourquoi BizChat semble si souvent à moitié aveugle.
+
+00:00:36.540 --> 00:00:38.420
+Pourquoi BizChat semble à moitié aveugle ?
+
+00:00:38.420 --> 00:00:41.520
+La plupart des gens utilisent BizChat en attendant qu'il agisse comme un stratège chevronné,
+
+00:00:41.680 --> 00:00:44.080
+prêt avec des réponses ancrées dans la réalité de leur métier.
+
+00:00:44.740 --> 00:00:46.540
+Mais la raison pour laquelle il déçoit si souvent est simple.
+
+00:00:46.900 --> 00:00:47.940
+Il ne peut pas voir l'image complète.
+
+00:00:48.720 --> 00:00:52.580
+Par défaut, il gère bien les informations déjà présentes dans Microsoft 365.
+
+00:00:54.200 --> 00:00:57.900
+Message Outlook, discussion Teams, fichier OneDrive, bibliothèque SharePoint,
+
+00:00:58.920 --> 00:01:01.740
+Le problème survient lorsque les utilisateurs interrogent des données situées ailleurs.
+
+00:01:02.260 --> 00:01:05.060
+Le CRM qui gère les ventes, le RP qui suit les stocks et les factures,
+
+00:01:05.220 --> 00:01:07.540
+ou l'outil de projet qui surveille les échéances.
+
+00:01:08.480 --> 00:01:10.360
+Dès que BizChat ne peut pas accéder à ces systèmes,
+
+00:01:10.460 --> 00:01:13.260
+il donne des réponses partielles qui ressemblent plus à des suppositions qu'à des conseils.
+
+00:01:14.280 --> 00:01:15.280
+Prenons un exemple courant.
+
+00:01:15.920 --> 00:01:19.660
+Un responsable commercial commence une réunion du lundi en interrogeant BizChat sur le pipeline actuel.
+
+00:01:20.340 --> 00:01:22.800
+Bien sûr, BizChat puisera dans les fises de discussion récents,
+
+00:01:22.980 --> 00:01:24.860
+les documents de proposition, voire les notes de réunion.
+
+00:01:24.860 --> 00:01:28.000
+Mais sans accès au CRM, ces chiffres sont incomplets.
+
+00:01:28.540 --> 00:01:31.460
+Au lieu d'une prévision fiable, la réponse est vague, manque de données réelles,
+
+00:01:31.760 --> 00:01:35.060
+et est largement inutilisable pour une décision à enjeu élevé.
+
+00:01:35.920 --> 00:01:38.080
+Ce qui aurait dû être une information rapide devient un travail supplémentaire.
+
+00:01:38.840 --> 00:01:40.720
+Le responsable doit maintenant ouvrir un autre système,
+
+00:01:41.060 --> 00:01:43.060
+récupérer les vrais chiffres et expliquer le manque à l'équipe.
+
+00:01:43.940 --> 00:01:45.520
+En un instant, la confiance dans l'outil chute.
+
+00:01:46.000 --> 00:01:47.500
+Ce modèle se répète dans d'autres départements.
+
+00:01:47.500 --> 00:01:50.260
+Un directeur financier demande le total des factures impayées,
+
+00:01:50.400 --> 00:01:53.980
+mais sans visibilité sur le RP, BizChat fournit un rapport vide-vide.
+
+00:01:54.500 --> 00:01:57.560
+Un chef de projet demande les dates délivrables, mais sans accès au système de suivi.
+
+00:01:57.940 --> 00:01:59.100
+BizChat ne sait pas quoi répondre.
+
+00:02:00.100 --> 00:02:01.700
+Chaque scénario se termine de la même façon,
+
+00:02:01.860 --> 00:02:04.980
+jongler entre BizChat et le système réel en comblant manuellement les pièces manquantes.
+
+00:02:05.400 --> 00:02:08.880
+Posez-vous la question, si votre équipe devait vérifier chaque réponse de BizChat avec un autre outil,
+
+00:02:09.020 --> 00:02:11.700
+continuerait-il à l'utiliser en priorité qu'en priorité ?
+
+00:02:11.700 --> 00:02:14.440
+C'est le coup pratique ? Un changement de contexte constant ?
+
+00:02:14.440 --> 00:02:17.040
+Le personnel navigue dans BizChat, copiant des chiffres dans le fil de discussion,
+
+00:02:17.200 --> 00:02:18.580
+collant des captures d'écran de tableau de bord
+
+00:02:18.580 --> 00:02:20.380
+ou recréant des analyses qui auraient dû être automatiques.
+
+00:02:21.880 --> 00:02:23.880
+Au lieu d'un flux de travail rationalisé par l'IA,
+
+00:02:24.180 --> 00:02:26.640
+l'expérience régresse vers un travail manuel fragmenté.
+
+00:02:27.600 --> 00:02:30.260
+Avec le temps, les utilisateurs apprennent à ne pas l'interroger sur ce qui compte vraiment,
+
+00:02:30.380 --> 00:02:32.100
+surtout lorsque les enjeux sont élevés, sont élevés.
+
+00:02:32.620 --> 00:02:33.660
+Ils reprennent leurs vieilles habitudes,
+
+00:02:33.940 --> 00:02:36.840
+téléchargement au tableau croisé dynamique ou recherche de données à travers de multiples applications.
+
+00:02:38.020 --> 00:02:39.980
+Finalement, BizChat est relégué à des tâches superficielles,
+
+00:02:40.080 --> 00:02:41.400
+non pas parce que ses algorithmes sont faibles,
+
+00:02:41.480 --> 00:02:43.420
+mais parce qu'il n'est pas connecté aux sources des vraies réponses.
+
+00:02:44.440 --> 00:02:45.780
+La direction envoie les répercussions.
+
+00:02:46.440 --> 00:02:49.440
+Lorsque l'adoption semble inégale, il se demande si le déploiement en valait la peine.
+
+00:02:50.680 --> 00:02:51.940
+Le service informatique reçoit des plaintes
+
+00:02:51.940 --> 00:02:54.400
+qui ne pointent pas des bugs de la plateforme et des angles morts dans son champ d'action.
+
+00:02:55.080 --> 00:02:57.320
+Les employés, arrivés avec l'idée d'un copilote plus intelligent,
+
+00:02:57.480 --> 00:02:59.940
+finissent par le traiter comme un chatbot limité, comme un chatbot.
+
+00:03:00.560 --> 00:03:04.300
+Ce décalage entre l'attente et la réalité crée une lente érosion de la confiance.
+
+00:03:05.220 --> 00:03:06.780
+Une fois la confiance érodée, les lancers sont.
+
+00:03:07.740 --> 00:03:10.180
+Et lorsque les résultats de productivité sont en deçà des promesses,
+
+00:03:10.260 --> 00:03:11.700
+le soutien organisationnel s'affaiblit.
+
+00:03:11.700 --> 00:03:15.160
+La vérité est que rien de tout cela n'arrive parce que BizChat manque d'intelligence.
+
+00:03:15.560 --> 00:03:17.080
+Cela arrive parce qu'il manque de visibilité.
+
+00:03:17.420 --> 00:03:19.820
+Le modèle travaille avec ce qu'il a, mais avec seulement la moitié des données.
+
+00:03:20.080 --> 00:03:21.560
+Il produit des résultats incomplets.
+
+00:03:22.140 --> 00:03:23.500
+La bonne nouvelle, c'est que ce fossé peut être comblé.
+
+00:03:23.980 --> 00:03:27.260
+Avec la bonne approche, vous pouvez donner à BizChat un accès contrôlé au système qui compte.
+
+00:03:27.740 --> 00:03:30.000
+Ainsi, les réponses deviennent spécifiques plutôt que génériques,
+
+00:03:30.340 --> 00:03:32.520
+et la prise de décision s'accélère au lieu de ralentir.
+
+00:03:32.920 --> 00:03:35.100
+Et cela soulève une question plus vaste.
+
+00:03:35.100 --> 00:03:40.560
+Qu'est-ce qui distingue un outil utile d'un outil qui génère réellement des résultats pour l'entreprise ?
+
+00:03:40.560 --> 00:03:43.040
+La différence entre un assistant et un copilote ?
+
+00:03:43.040 --> 00:03:44.980
+Ce qui rend BizChat limité pour beaucoup d'équipes,
+
+00:03:45.060 --> 00:03:48.580
+c'est qu'au fond, il agit toujours davantage comme un assistant que comme un copilote.
+
+00:03:49.440 --> 00:03:51.700
+Par lui-même, il fait du bon travail pour répondre aux questions,
+
+00:03:51.820 --> 00:03:55.480
+résumer des emails et extraire des notes rapides de votre environnement Microsoft 365.
+
+00:03:56.200 --> 00:03:58.920
+Mais ce sont des tâches superficielles, basées uniquement sur ce qui est déjà accessible.
+
+00:03:59.600 --> 00:04:01.040
+Un assistant vous donne des commentaires,
+
+00:04:01.540 --> 00:04:03.940
+un copilote travaille à vos côtés pour façonner de vraies décisions,
+
+00:04:04.440 --> 00:04:07.600
+et ce changement n'est possible que si l'outil a un accès contrôlé à vos systèmes de gestion,
+
+00:04:07.960 --> 00:04:11.280
+aux données et flux de travail qui définissent le fonctionnement réel de votre entreprise.
+
+00:04:12.280 --> 00:04:15.420
+C'est la distinction clé que la plupart des organisations oublient lors du déploiement.
+
+00:04:16.120 --> 00:04:18.460
+Elles attendent de BizChat qu'ils fournissent des analyses approfondies immédiatement,
+
+00:04:18.660 --> 00:04:21.220
+mais les résumés conversationnels ne suffisent pas à en faire un copilote.
+
+00:04:21.800 --> 00:04:25.380
+Sans connecteur alimenté par les informations de votre CRM, ERP ou application personnalisée,
+
+00:04:25.600 --> 00:04:27.440
+il reste essentiellement un preneur de notes sophistiquées.
+
+00:04:27.440 --> 00:04:32.080
+Avec ces liens en place, on a vraiment l'impression qu'ils participent au processus décisionnel,
+
+00:04:32.320 --> 00:04:35.380
+en renvoyant des chiffres réels, des approbations en temps réel ou des calendriers précis,
+
+00:04:35.480 --> 00:04:37.060
+plutôt que de reformuler ce qui est déjà visible.
+
+00:04:38.420 --> 00:04:42.360
+Voici un modèle mental simple que vous pouvez utiliser pour déterminer si vous avez affaire à un assistant ou à un copilote.
+
+00:04:43.240 --> 00:04:45.260
+Premièrement, l'IA a-t-elle accès au système en temps réel,
+
+00:04:45.560 --> 00:04:47.520
+aux endroits où se trouvent réellement les enregistrements critiques,
+
+00:04:47.660 --> 00:04:49.460
+et pas seulement aux fiches de discussion ou aux fichiers ?
+
+00:04:49.460 --> 00:04:52.720
+Deuxièmement, respecte-t-elle les permissions basées sur les rôles afin que les informations renvoyées
+
+00:04:52.720 --> 00:04:55.720
+soient à la fois sécurisées et adaptées à la personne qui les utilise ?
+
+00:04:55.720 --> 00:04:57.660
+Et troisièmement, peut-elle réellement conduire à des résultats,
+
+00:04:57.720 --> 00:05:00.400
+c'est-à-dire que ces réponses permettent de résoudre des tâches ou d'accélérer les prises de décision,
+
+00:05:00.680 --> 00:05:02.540
+au lieu de vous envoyer ailleurs pour confirmer ?
+
+00:05:02.540 --> 00:05:05.260
+Si vous pouvez cocher ces trois cases, alors vous bénéficiez de l'expérience du copilote.
+
+00:05:06.060 --> 00:05:08.620
+Sinon, vous êtes toujours dans le domaine de l'assistant ?
+
+00:05:08.620 --> 00:05:10.500
+Des exemples concrets rendent cette distinction plus claire.
+
+00:05:10.880 --> 00:05:13.380
+Imaginez une équipe financière demandant à Bichat des tendances en matière de dépense.
+
+00:05:13.980 --> 00:05:15.960
+En tant qu'assistant, il fouille dans les pièces jointes des e-mails
+
+00:05:15.960 --> 00:05:18.780
+et les dossiers partagés pour produire une image approximative des frais de déplacement.
+
+00:05:19.320 --> 00:05:20.180
+C'est pratique, mais incomplet.
+
+00:05:20.780 --> 00:05:24.160
+En tant que copilote doté de connecteurs vers l'application de gestion des dépenses ou le grand livre,
+
+00:05:24.600 --> 00:05:27.820
+il fournit des prévisions précises et signale même les écarts de trésorerie à venir.
+
+00:05:28.760 --> 00:05:30.000
+Le même changement s'applique aux ventes.
+
+00:05:30.660 --> 00:05:32.240
+Au lieu de résumer des ébauches de propositions,
+
+00:05:32.560 --> 00:05:35.160
+un vrai copilote extrait les chiffres réels du pipeline depuis le CRM
+
+00:05:35.160 --> 00:05:36.720
+et montre où les affaires stagnent.
+
+00:05:37.780 --> 00:05:41.340
+Une version vous fait gagner quelques clics, l'autre change la façon dont les décisions sont prises.
+
+00:05:42.340 --> 00:05:43.980
+Il vaut également la peine d'être clair sur la mise en œuvre.
+
+00:05:43.980 --> 00:05:45.920
+Les équipes ne sont pas obligées de choisir une seule approche.
+
+00:05:46.340 --> 00:05:48.840
+Les connecteurs couvrent tout le spectre du no-code, du low-code et du pro-code.
+
+00:05:49.300 --> 00:05:53.400
+Un analyste métier peut souvent configurer un connecteur vers une application SAS courante sans écrire beaucoup de code.
+
+00:05:53.880 --> 00:05:57.820
+Un développeur peut aller plus loin et étendre la logique personnalisée via le kit d'outils Teams ou des API.
+
+00:05:59.040 --> 00:06:02.320
+La bonne voie dépend de vos compétences internes et de votre tolérance à la complexité
+
+00:06:02.320 --> 00:06:05.120
+et non d'une affirmation générale selon laquelle l'une est plus facile.
+
+00:06:06.200 --> 00:06:10.180
+L'essentiel est qu'il existe une voie à suivre, quel que soit le niveau de technicité de votre équipe.
+
+00:06:10.180 --> 00:06:14.500
+Ce qui freine souvent les progrès, c'est l'hypothèse que Copilot apprendra d'une manière ou d'une autre
+
+00:06:14.500 --> 00:06:17.120
+les données uniques d'une entreprise sans qu'on lui donne un accès structuré.
+
+00:06:17.600 --> 00:06:18.240
+Ce n'est jamais le cas.
+
+00:06:18.920 --> 00:06:21.600
+Sans connecteur, BizChat n'a aucune visibilité sur les enregistrements de transactions,
+
+00:06:21.720 --> 00:06:23.780
+les catalogues de produits ou les flux d'approbation ou les flux d'approbation.
+
+00:06:24.340 --> 00:06:26.140
+Par conséquent, il revient à des réponses génériques,
+
+00:06:26.440 --> 00:06:29.500
+même si l'intelligence nécessaire pour traiter ces données est déjà là, en attente.
+
+00:06:30.260 --> 00:06:32.500
+Construire ce pont est ce qui libère le plus haut niveau de valeur.
+
+00:06:33.300 --> 00:06:35.600
+Une fois ce changement effectué, l'expérience quotidienne se transforme.
+
+00:06:35.600 --> 00:06:38.860
+Les utilisateurs ne jonglent plus entre BizChat et d'autres applications simplement
+
+00:06:38.860 --> 00:06:40.360
+pour compléter ce qu'ils ne pouvaient pas fournir.
+
+00:06:40.900 --> 00:06:42.920
+Ils obtiennent ce dont ils ont besoin directement au fil de la conversation.
+
+00:06:43.460 --> 00:06:45.180
+Avec le temps, cela renforce la confiance et la crédibilité.
+
+00:06:45.580 --> 00:06:46.600
+Les questions deviennent plus approfondies.
+
+00:06:47.380 --> 00:06:50.240
+Les taux d'adoption augmentent car les utilisateurs voient BizChat comme un système fiable
+
+00:06:50.240 --> 00:06:51.540
+et non comme un simple outil pratique.
+
+00:06:52.380 --> 00:06:53.960
+La direction perçoit aussi la différence,
+
+00:06:54.400 --> 00:06:55.920
+car les équipes prennent des décisions plus rapidement
+
+00:06:55.920 --> 00:06:57.840
+avec des données claires et justifiables sous la main.
+
+00:06:58.380 --> 00:07:01.620
+La différence entre un assistant et un copilote ne réside pas dans le style,
+
+00:07:01.920 --> 00:07:03.160
+mais dans l'intégration.
+
+00:07:03.860 --> 00:07:04.940
+Les assistants répètent ce qu'ils voient.
+
+00:07:05.600 --> 00:07:08.560
+Les copilotes se connectent à l'essentiel pour vous aider à piloter en fonction de ces éléments.
+
+00:07:09.360 --> 00:07:12.340
+Saisir ce contraste est crucial car votre prochaine décision déterminera
+
+00:07:12.340 --> 00:07:14.800
+si vous continuez à utiliser BizChat en mode assistant
+
+00:07:14.800 --> 00:07:17.560
+ou si vous lui permettez d'agir comme un véritable copilote.
+
+00:07:18.900 --> 00:07:20.540
+Cela commence par une étape pratique,
+
+00:07:20.840 --> 00:07:22.600
+décider quel système connecter en priorité
+
+00:07:22.600 --> 00:07:24.860
+et identifier les bons points d'intégration.
+
+00:07:25.800 --> 00:07:27.520
+Pour obtenir des résultats concrets avec BizChat,
+
+00:07:27.640 --> 00:07:28.900
+la question n'est pas de savoir quoi connecter,
+
+00:07:29.000 --> 00:07:31.540
+mais quelles connexions transformeront le travail de mes équipes.
+
+00:07:31.540 --> 00:07:34.860
+L'écosystème Microsoft est vaste,
+
+00:07:35.000 --> 00:07:37.840
+offrant la possibilité de relier des dizaines d'applications et de sources de données,
+
+00:07:38.280 --> 00:07:41.340
+mais aucune équipe n'a le temps ou les ressources pour tout connecter à la fois.
+
+00:07:41.880 --> 00:07:44.820
+C'est pourquoi la stratégie la plus intelligente consiste à se concentrer sur les intégrations
+
+00:07:44.820 --> 00:07:46.240
+qui apportent un impact visible dès le début.
+
+00:07:46.240 --> 00:07:49.340
+Réussissez-les et la confiance envers BizChat augmentera.
+
+00:07:50.040 --> 00:07:51.580
+Ratez-les et l'adoption stagnera.
+
+00:07:52.180 --> 00:07:54.720
+L'erreur la plus courante est de commencer par des victoires faciles mais sans importance.
+
+00:07:55.140 --> 00:07:57.240
+Connecter une source de données mineure donne l'impression d'être productif
+
+00:07:57.240 --> 00:07:58.500
+juste pour montrer que le système fonctionne.
+
+00:07:59.280 --> 00:08:02.300
+Mais les intégrations à faible valeur ajoutée ne résolvent pas les difficultés réelles des utilisateurs.
+
+00:08:02.680 --> 00:08:04.220
+Résultat, les flux de travail restent fragmentés,
+
+00:08:04.280 --> 00:08:07.140
+les employés considèrent l'outil davantage comme un gadget que comme une nécessité.
+
+00:08:07.980 --> 00:08:08.880
+Ne cherchez pas démonstration.
+
+00:08:09.200 --> 00:08:10.520
+Vous cherchez des victoires opérationnelles.
+
+00:08:11.000 --> 00:08:12.100
+C'est comme l'installation électrique d'une nuit.
+
+00:08:12.100 --> 00:08:14.840
+Les premières prises que vous installez déterminent si les pièces les plus fréquentées
+
+00:08:14.840 --> 00:08:16.420
+seront fonctionnelles ou plongées dans l'obscurité.
+
+00:08:17.180 --> 00:08:18.800
+Alors comment se concentrer sur Sikondram ?
+
+00:08:18.800 --> 00:08:21.460
+Une méthode rapide consiste à utiliser un filtre simple composé de trois questions.
+
+00:08:22.080 --> 00:08:24.540
+Premièrement, à quelle fréquence ces données sont-elles nécessaires au quotidien ?
+
+00:08:24.540 --> 00:08:27.960
+Deuxièmement, la connexion élimine-t-elle un changement de contexte fastidieux ?
+
+00:08:27.960 --> 00:08:30.500
+C'est moment où les utilisateurs quittent BizChat pour fouiller dans un autre système.
+
+00:08:31.240 --> 00:08:33.080
+Troisièmement, quel est le risque d'exposition ?
+
+00:08:33.080 --> 00:08:37.240
+Les données sont-elles suffisamment sensibles pour exiger une gouvernance renforcée avant toute intégration ?
+
+00:08:37.240 --> 00:08:39.480
+Si vous obtenez des réponses claires sur la fréquence et la fluidité,
+
+00:08:39.480 --> 00:08:42.340
+ainsi que des risques maîtrisés, vous avez trouvé une priorité.
+
+00:08:43.080 --> 00:08:45.140
+Pas besoin d'une analyse intensive pour savoir par où commencer.
+
+00:08:45.980 --> 00:08:47.980
+Essayez cet exercice de 60 secondes avec n'importe quel collaborateur.
+
+00:08:48.740 --> 00:08:51.780
+Quand BizChat ne répond pas à vos besoins, vers quel outil vous tournez-vous ?
+
+00:08:51.780 --> 00:08:56.540
+Les réponses, qu'il s'agisse d'un catalogue produit, d'un outil de projet ou d'une bibliothèque de documents partagés,
+
+00:08:56.940 --> 00:08:58.740
+mettront en lumière les difficultés que tout le monde connaît déjà.
+
+00:08:59.780 --> 00:09:01.900
+Ces moments de rupture sont des points de départ idéaux,
+
+00:09:02.500 --> 00:09:05.940
+car les intégrés éliminent les interruptions constantes et renforcent la confiance envers la plateforme.
+
+00:09:05.940 --> 00:09:09.880
+Une victoire initiale évidente consiste à cibler les requêtes à haute fréquence et fort impact.
+
+00:09:10.620 --> 00:09:13.340
+Par exemple, au lieu de chercher les délais de projet, dans un outil de suivi séparé,
+
+00:09:13.420 --> 00:09:16.180
+les équipes peuvent demander directement au chat professionnel le statut le plus récent.
+
+00:09:17.380 --> 00:09:19.320
+C'est le genre d'interaction que les gens répètent chaque jour,
+
+00:09:19.440 --> 00:09:22.460
+ou réduire les changements de contexte à un effet cumulatif, immédiat.
+
+00:09:23.660 --> 00:09:24.900
+Comparez cela à un rapport mensuel,
+
+00:09:25.000 --> 00:09:29.320
+et vous comprendrez pourquoi prioriser selon la fréquence et la fluidité du travail est la stratégie la plus intelligente.
+
+00:09:29.660 --> 00:09:33.900
+Il est tout aussi important d'éviter de poursuivre des intégrations simplement parce qu'elles sont techniquement réalisables ?
+
+00:09:33.900 --> 00:09:35.940
+Presque n'importe quel système peut être connecté d'une manière ou d'une autre,
+
+00:09:36.020 --> 00:09:37.640
+mais chaque connexion ne change pas nécessairement les habitudes.
+
+00:09:38.440 --> 00:09:41.900
+Les bonnes intégrations sont celles qui améliorent directement les points de décision à fort trafic.
+
+00:09:43.500 --> 00:09:46.080
+Dès que le chat professionnel peut afficher des données réelles en temps réel,
+
+00:09:46.200 --> 00:09:48.760
+des prévisions chiffrées, des jalons de projets mis à jour ou des statuts,
+
+00:09:48.960 --> 00:09:52.320
+il cesse d'être un assistant pour devenir un élément de confiance du processus.
+
+00:09:53.640 --> 00:09:56.880
+C'est pourquoi définir les points d'intégration n'est plus qu'une simple étape de planification technique.
+
+00:09:57.500 --> 00:09:58.540
+Il s'agit de façonner les perceptions.
+
+00:09:59.040 --> 00:10:01.180
+Les employés se soucient peu de savoir si le connecteur était facile à créer.
+
+00:10:01.180 --> 00:10:05.280
+Il se soucie du fait que le chat professionnel fournisse enfin des réponses utiles sans qu'ils aient à quitter la conversation.
+
+00:10:06.400 --> 00:10:08.140
+Et une fois qu'ils voient qu'ils gèrent les requêtes de manière fiable,
+
+00:10:08.220 --> 00:10:10.360
+ils continuent de l'utiliser, ce qui favorise l'adoption.
+
+00:10:11.040 --> 00:10:13.700
+Bien sûr, la priorisation ne signifie pas ignorer les opportunités à long terme.
+
+00:10:14.640 --> 00:10:16.380
+Les systèmes moins sollicités pourront être connectés plus tard,
+
+00:10:16.620 --> 00:10:19.320
+une fois que les cibles à haute valeur auront prouvé l'utilité du chat professionnel.
+
+00:10:19.920 --> 00:10:22.200
+Mais au début, l'essentiel est de réduire les sources de frictions majeures.
+
+00:10:22.940 --> 00:10:25.660
+C'est ce qui indique aux employés et à la direction que le déploiement fonctionne
+
+00:10:25.660 --> 00:10:28.700
+et que l'intégration d'autres systèmes mérite le temps et les efforts investis.
+
+00:10:29.460 --> 00:10:32.700
+Le véritable filtre ne repose donc pas sur la possibilité technique et sur l'impact.
+
+00:10:33.680 --> 00:10:36.280
+Quelles intégrations introduites dès maintenant donnent au chat professionnel
+
+00:10:36.280 --> 00:10:40.580
+le pouvoir de fournir des réponses claires et fiables au moment précis où une décision doit être prise ?
+
+00:10:40.580 --> 00:10:43.700
+Identifiez-les et vous aurez posé les bases pour transformer les interactions quotidiennes.
+
+00:10:44.260 --> 00:10:45.640
+Une fois que vous connaissez ces opportunités,
+
+00:10:45.760 --> 00:10:49.060
+l'étape suivante consiste à comprendre le mécanisme réel qui rend l'intégration possible.
+
+00:10:49.060 --> 00:10:56.540
+Les connecteurs copilotes sont l'élément qui transforme le chat professionnel d'un assistant superficiel
+
+00:10:56.540 --> 00:10:58.900
+en un outil réellement utile pour la prise de décision au quotidien.
+
+00:10:59.980 --> 00:11:02.720
+A la base, un connecteur est une intégration contrôlée qui permet au chat professionnel
+
+00:11:02.720 --> 00:11:04.960
+d'interroger un système de référence et de renvoyer des réponses ciblées.
+
+00:11:05.760 --> 00:11:10.340
+C'est là son rôle ? Créer un pont géré entre l'IA et les sources de confiance au sein de votre entreprise.
+
+00:11:11.040 --> 00:11:12.200
+Deux faits méritent d'être gardés à l'esprit.
+
+00:11:13.040 --> 00:11:14.640
+Les connecteurs ne modifient pas le modèle lui-même,
+
+00:11:14.640 --> 00:11:18.380
+ils l'alimentent en contexte et peuvent être conçus sur un spectre allant de configuration sans code,
+
+00:11:18.380 --> 00:11:20.280
+à des implémentations pro-code complètes.
+
+00:11:21.380 --> 00:11:23.000
+Pensez à la façon dont vos données sont stockées aujourd'hui,
+
+00:11:23.100 --> 00:11:25.260
+dispersées dans des bibliothèques de documents, des bases de données structurées,
+
+00:11:25.320 --> 00:11:27.340
+des systèmes cloud, des systèmes cloud, des systèmes cloud, des systèmes cloud, des systèmes cloud.
+
+00:11:28.440 --> 00:11:30.740
+BizChat ne dispose pas naturellement d'un accès à ces environnements.
+
+00:11:31.240 --> 00:11:33.900
+Un connecteur ouvre cette porte, mais de manière sécurisée et gouvernée.
+
+00:11:34.960 --> 00:11:38.340
+Lorsque vous posez une question à BizChat, le connecteur détermine où la requête doit être envoyée.
+
+00:11:38.560 --> 00:11:40.820
+Qu'il s'agisse de trouver des chiffres de vente en temps réel dans le CRM,
+
+00:11:40.820 --> 00:11:43.640
+des factures dans l'ERP ou des projets actifs dans un outil de planification,
+
+00:11:44.280 --> 00:11:46.440
+puis il renvoie les informations ciblées dont vous avez réellement besoin.
+
+00:11:47.180 --> 00:11:47.960
+La différence est visible.
+
+00:11:48.760 --> 00:11:52.540
+Sans connecteur, BizChat vous donne des approximations extraites de mentions dans des discussions ou des documents.
+
+00:11:54.100 --> 00:11:56.100
+Avec un connecteur, vous obtenez des données réelles et fiables
+
+00:11:56.100 --> 00:11:58.100
+qui reflètent ce que dit le système de référence à l'instant T.
+
+00:11:58.220 --> 00:12:01.060
+Il existe une idée reçue, selon laquelle les connecteurs sont réservés aux développeurs
+
+00:12:01.060 --> 00:12:02.320
+écrivant des centaines de lignes de code.
+
+00:12:03.360 --> 00:12:04.560
+La réalité est plus nuancée.
+
+00:12:04.920 --> 00:12:07.640
+Pour les cas simples, les utilisateurs métiers peuvent configurer des intégrations
+
+00:12:07.640 --> 00:12:09.260
+via des options sans code ou à faible code.
+
+00:12:10.000 --> 00:12:12.540
+Pour les scénarios complexes ou nécessitant une gouvernance stricte,
+
+00:12:12.820 --> 00:12:15.120
+les développeurs interviennent avec des constructions plus avancées.
+
+00:12:15.540 --> 00:12:16.260
+Les deux rôles sont importants.
+
+00:12:16.600 --> 00:12:18.060
+C'est là que Copilot Studio rentre en jeu.
+
+00:12:18.680 --> 00:12:21.440
+C'est l'environnement conçu pour étendre Microsoft Copilot avec des agents,
+
+00:12:21.560 --> 00:12:23.240
+des actions et des intégrations personnalisées,
+
+00:12:23.380 --> 00:12:26.340
+offrant aux équipes un moyen de concevoir les expériences dont elles ont réellement besoin.
+
+00:12:26.920 --> 00:12:29.100
+Pour les scénarios basés sur des plugins API nécessitant beaucoup de code,
+
+00:12:29.240 --> 00:12:30.280
+TeamStoolkit est également pris en jeu.
+
+00:12:31.340 --> 00:12:33.760
+Les développeurs peuvent l'utiliser pour exposer des API sécurisées
+
+00:12:33.760 --> 00:12:35.440
+qui font remonter les données d'applications propriétaires
+
+00:12:35.440 --> 00:12:37.640
+directement dans BizChat avec les autorisations appropriées.
+
+00:12:38.760 --> 00:12:40.580
+Cette flexibilité permet aux intégrations de s'adapter,
+
+00:12:40.720 --> 00:12:42.440
+au niveau de compétences et à la complexité.
+
+00:12:42.760 --> 00:12:45.560
+Il nous rappelle aussi que certaines intégrations nécessiteront une implication importante
+
+00:12:45.560 --> 00:12:47.600
+des développeurs et une gouvernance appropriée pour être réussis.
+
+00:12:49.140 --> 00:12:51.460
+Il est tout aussi important de clarifier la manière dont les connecteurs interagissent
+
+00:12:51.460 --> 00:12:52.700
+avec l'intelligence intégrée de BizChat.
+
+00:12:53.440 --> 00:12:55.320
+Ils ne remplacent pas l'IA qui génère les réponses.
+
+00:12:55.900 --> 00:12:58.600
+Ils améliorent simplement les éléments sur lesquels l'IA travaille.
+
+00:12:58.600 --> 00:13:01.080
+Imaginez que vous posez une question sur les bons de commandant.
+
+00:13:01.940 --> 00:13:04.480
+Sans connecteur, BizChat collecte des mentions éparses dans les emails
+
+00:13:04.480 --> 00:13:06.100
+ou les réunions et formule une réponse vague.
+
+00:13:07.200 --> 00:13:09.980
+Ajoutez un connecteur et BizChat interroge soudainement l'ERP,
+
+00:13:10.240 --> 00:13:12.940
+récupérant les chiffres et statuts exacts et les présente en langage naturel.
+
+00:13:13.840 --> 00:13:16.540
+Le moteur reste le modèle, mais la précision provient du connecteur.
+
+00:13:17.440 --> 00:13:20.100
+Ce qui rend cela puissant, c'est que ce n'est pas limité au système Microsoft.
+
+00:13:21.120 --> 00:13:23.680
+Oui, vous pouvez établir des liens avec les services Microsoft 365,
+
+00:13:24.020 --> 00:13:25.140
+mais vous pouvez tout aussi facilement.
+
+00:13:25.140 --> 00:13:28.180
+Connecter des plateformes RH, des outils logistiques ou des bases de données personnalisées
+
+00:13:28.180 --> 00:13:29.040
+dont dépend votre entreprise,
+
+00:13:29.420 --> 00:13:32.080
+l'aspect crucial est que chacun de ces transferts s'effectue via un connecteur.
+
+00:13:33.100 --> 00:13:35.020
+BizChat ne récupère pas aveuglément des données en arrière-plan.
+
+00:13:35.360 --> 00:13:36.480
+Il achemine les questions de manière gérée,
+
+00:13:36.540 --> 00:13:38.820
+en respectant les autorisations et en renvoyant des résultats ciblés.
+
+00:13:39.760 --> 00:13:41.560
+C'est ainsi que la gouvernance est assurée tout en restant utile.
+
+00:13:42.200 --> 00:13:43.500
+Un autre aspect souvent négligé,
+
+00:13:44.040 --> 00:13:46.580
+les connecteurs concernent autant l'alignement métier que la technologie.
+
+00:13:47.560 --> 00:13:50.140
+La mise en place de l'un d'eux force le dialogue entre l'IT et les équipes métiers
+
+00:13:50.140 --> 00:13:52.020
+sur les questions qui importent vraiment.
+
+00:13:52.520 --> 00:13:53.920
+Les managers ont-ils besoin de mise à jour des ventes en temps.
+
+00:13:53.920 --> 00:13:57.160
+Les responsables financiers ont-ils besoin d'une visibilité sur les factures impédiées ?
+
+00:13:57.160 --> 00:14:00.500
+Les équipes projet ont-elles besoin d'avoir les jalons de livraison sous les yeux en réunion ?
+
+00:14:00.500 --> 00:14:03.000
+Les connecteurs mettent ces priorités en lumière et les rendent opérationnels.
+
+00:14:03.480 --> 00:14:04.480
+C'est l'une de leurs valeurs cachées.
+
+00:14:04.960 --> 00:14:06.620
+Il ne s'agit pas seulement de relier des systèmes,
+
+00:14:06.820 --> 00:14:08.660
+mais de révéler quel workflow mérite d'être soutenu.
+
+00:14:09.340 --> 00:14:11.160
+A ce stade, le rôle d'un connecteur devrait être clair.
+
+00:14:11.780 --> 00:14:14.340
+Ce n'est pas un module complémentaire ou un projet de développement de niche.
+
+00:14:15.080 --> 00:14:17.860
+C'est le mécanisme qui transforme Bichek de simple résumé intelligent
+
+00:14:17.860 --> 00:14:20.180
+en un copilote de confiance accédant à des données précises.
+
+00:14:20.980 --> 00:14:21.920
+Sans eux, l'adoption piétine,
+
+00:14:21.920 --> 00:14:24.440
+car l'outil ne répond pas aux questions qui intéressent les utilisateurs.
+
+00:14:25.280 --> 00:14:26.980
+Avec eux, il adopte un nouveau rôle,
+
+00:14:27.280 --> 00:14:30.800
+suffisamment fiable pour être utilisé devant ses pairs lors de prises de décisions réelles
+
+00:14:30.800 --> 00:14:32.860
+et aligné sur le fonctionnement de l'entreprise.
+
+00:14:33.460 --> 00:14:35.820
+L'étape suivante consiste tout naturellement à passer de la théorie à la pratique.
+
+00:14:36.700 --> 00:14:38.060
+Comprendre ce que sont les connecteurs est important,
+
+00:14:38.220 --> 00:14:41.380
+mais leur valeur réside dans leur création et la garantie qui sont correctement sécurisées.
+
+00:14:41.380 --> 00:14:44.220
+Créer et sécuriser votre premier connecteur
+
+00:14:44.220 --> 00:14:47.620
+Créer et sécuriser votre premier connecteur relève moins des compétences en codage
+
+00:14:47.620 --> 00:14:49.280
+que de la rigueur dans la conception des accès.
+
+00:14:50.460 --> 00:14:51.640
+Certes, cela implique du développement,
+
+00:14:51.900 --> 00:14:53.980
+mais l'essentiel est de décider ce que Bichek doit voir,
+
+00:14:54.100 --> 00:14:57.240
+à quel point ce périmètre est restreint et comment les permissions sont appliquées.
+
+00:14:57.240 --> 00:14:59.840
+Si le cadre n'est pas prévu dès le départ,
+
+00:15:00.000 --> 00:15:02.260
+vous risquez soit de laisser fuiter des données sensibles,
+
+00:15:02.380 --> 00:15:05.060
+soit de créer un système si verrouillé qu'il n'aide personne.
+
+00:15:05.720 --> 00:15:07.440
+La sécurité n'est pas une couche que l'on ajoute après.
+
+00:15:07.880 --> 00:15:09.040
+C'est la structure sur laquelle vous bâtissez.
+
+00:15:09.580 --> 00:15:11.720
+L'outil principal avec lequel la plupart des équipes commencent, l'outil MISM.
+
+00:15:12.200 --> 00:15:14.020
+Il fournit des outils de développement et des modèles
+
+00:15:14.020 --> 00:15:16.220
+pour accélérer la création de plugins API pour copilote
+
+00:15:16.220 --> 00:15:18.340
+et l'intégration avec vos ressources Azure.
+
+00:15:19.120 --> 00:15:20.860
+Il vous permet de démarrer rapidement sur le plan technique,
+
+00:15:21.040 --> 00:15:22.920
+mais il ne prend pas les décisions de conception à votre place.
+
+00:15:23.940 --> 00:15:25.460
+Vous devez toujours définir les bons points d'entrée,
+
+00:15:25.640 --> 00:15:26.780
+les aligner sur les besoins métiers
+
+00:15:26.780 --> 00:15:29.400
+et vous assurer que chaque appel reste dans des limites strictement définies.
+
+00:15:30.720 --> 00:15:33.220
+La tentation est grande de précipiter un connecteur de démonstration
+
+00:15:33.220 --> 00:15:34.760
+pour montrer des données en direct
+
+00:15:34.760 --> 00:15:37.440
+pour découvrir plus tard qu'il expose plus d'informations que prévu.
+
+00:15:38.640 --> 00:15:40.000
+Ces victoires rapides sont séduisantes,
+
+00:15:40.200 --> 00:15:42.040
+mais si les frontières basées sur les rôles disparaissent,
+
+00:15:42.100 --> 00:15:43.480
+vous allez créer un problème au lieu d'une solution.
+
+00:15:44.260 --> 00:15:46.880
+Une meilleure approche consiste à traiter la construction comme une séquence structurée.
+
+00:15:47.300 --> 00:15:49.500
+Voici une liste de contrôle en 6 étapes pour garder le processus bien engrés.
+
+00:15:49.880 --> 00:15:51.960
+Première étape, définissez le cas d'usage en termes simples.
+
+00:15:52.600 --> 00:15:55.500
+Quelle est la question métier réelle à laquelle vous voulez que Bichak réponde ?
+
+00:15:55.500 --> 00:15:58.900
+Deuxième étape, cartographiez les requêtes exactes et le jeu de données minimale nécessaire.
+
+00:15:59.460 --> 00:16:02.120
+Ne donnez pas tout si seul quelques champs sont importants.
+
+00:16:02.340 --> 00:16:04.200
+Troisième étape, concevoir la surface du connecteur
+
+00:16:04.200 --> 00:16:06.340
+en choisissant les champs exposés et ceux qui sont interdits.
+
+00:16:07.100 --> 00:16:09.560
+Quatrième étape, implémenter l'authentification et le périmètre
+
+00:16:09.560 --> 00:16:11.280
+via des contrôles d'accès basés sur l'identité
+
+00:16:11.280 --> 00:16:13.500
+pour définir qui peut demander quoi et qui peut voir quels résultats.
+
+00:16:13.500 --> 00:16:17.480
+Cinquième étape, tester avec l'IT et les responsables métiers,
+
+00:16:17.700 --> 00:16:20.360
+idéalement avec un petit groupe d'utilisateurs effectuant de vraies requêtes
+
+00:16:20.360 --> 00:16:23.520
+pour valider que les permissions fonctionnent et que les résultats facilitent la prise de décision.
+
+00:16:24.780 --> 00:16:27.360
+Sixième étape, déployer avec une surveillance et une gouvernance en place
+
+00:16:27.360 --> 00:16:29.320
+pour suivre l'utilisation et ajuster si nécessaire.
+
+00:16:30.480 --> 00:16:34.120
+Lisez cela à voix haute et vous avez presque un guide pour concevoir n'importe quelle intégration sécurisée.
+
+00:16:35.120 --> 00:16:36.980
+Pour rendre cela concret, prenons un exemple hypothétique.
+
+00:16:37.700 --> 00:16:40.380
+Supposons que votre équipe souhaite que BizChat résume la santé du pipeline CRM.
+
+00:16:41.020 --> 00:16:44.600
+La demande semble simple, extraire la taille, le stade et les propriétaires des opportunités à venir.
+
+00:16:45.300 --> 00:16:47.660
+Mais les enregistrements CRM bruts contiennent aussi des notes libres,
+
+00:16:47.800 --> 00:16:49.400
+incluant souvent des détails clients sensibles.
+
+00:16:50.780 --> 00:16:53.300
+Dans ce scénario, le connecteur doit afficher les champs structurés
+
+00:16:53.300 --> 00:16:55.420
+comme le stade, la valeur et le propriétaire,
+
+00:16:55.520 --> 00:16:57.720
+tout en excluant explicitement ces notes non structurées.
+
+00:16:58.540 --> 00:17:00.640
+Si vous connectez tous en filtre, vous exposez trop de données.
+
+00:17:01.260 --> 00:17:03.040
+Si vous définissez le périmètre avec précision,
+
+00:17:03.040 --> 00:17:06.960
+vous obtenez les informations nécessaires sans enfreindre la confidentialité ou la conformité.
+
+00:17:07.960 --> 00:17:10.460
+Ce n'est pas seulement une protection technique, c'est un principe de conception.
+
+00:17:11.280 --> 00:17:13.460
+L'authentification est ce qui rend l'application du périmètre réel.
+
+00:17:14.040 --> 00:17:16.060
+Une gestion rigoureuse des identités et des accès garantis
+
+00:17:16.060 --> 00:17:17.880
+qu'un utilisateur ne voit que ce qui lui est autorisé.
+
+00:17:18.560 --> 00:17:21.000
+Les contrôles basés sur les roules étendent les règles métiers au connecteur.
+
+00:17:21.760 --> 00:17:24.520
+Un responsable commercial régional peut voir le pipeline de son territoire,
+
+00:17:24.760 --> 00:17:26.460
+mais ne peut pas extraire les détails d'autres régions.
+
+00:17:27.260 --> 00:17:30.840
+Un appel authentifié valide à la fois l'identité et les droits avant d'afficher un enregistrement.
+
+00:17:31.200 --> 00:17:32.720
+Ce ne sont pas des mécanismes optionnels,
+
+00:17:32.940 --> 00:17:35.140
+ce sont des étapes essentielles pour maintenir les limites existantes
+
+00:17:35.140 --> 00:17:37.100
+et éviter que des données sensibles ne fuitent dans une conversation,
+
+00:17:37.280 --> 00:17:38.100
+ne fuitent dans une conversation.
+
+00:17:38.460 --> 00:17:40.760
+C'est aussi une erreur de laisser un seul groupe gérer le processus.
+
+00:17:41.340 --> 00:17:42.460
+L'IT connaît l'architecture,
+
+00:17:42.640 --> 00:17:44.460
+mais les responsables métiers savent quelles données sont critiques
+
+00:17:44.460 --> 00:17:46.060
+et lesquelles ne doivent jamais être exposées.
+
+00:17:47.260 --> 00:17:49.540
+Oubliez l'une des parties mène à un déséquilibre trop restrictif.
+
+00:17:49.800 --> 00:17:51.940
+Pour être utile ou trop ouvert, pour être sûr.
+
+00:17:52.980 --> 00:17:55.320
+Inclure les deux perspectives dès le début permet d'éviter ce piège.
+
+00:17:55.980 --> 00:17:59.240
+Et lors des tests, assurez-vous que les utilisateurs réels effectuent leurs propres requêtes.
+
+00:17:59.240 --> 00:18:03.220
+C'est ainsi que vous confirmez que les résultats sont précis et correctement cadrés
+
+00:18:03.220 --> 00:18:04.620
+avant un déploiement plus large.
+
+00:18:05.620 --> 00:18:08.820
+Avec du recul, créer un connecteur ne repose pas tant sur des astuces de code
+
+00:18:08.820 --> 00:18:10.220
+que sur une discipline appliquée.
+
+00:18:11.020 --> 00:18:12.740
+Définissez exactement la question à résoudre,
+
+00:18:13.180 --> 00:18:14.660
+donnez à BizChat juste assez d'accès
+
+00:18:14.660 --> 00:18:18.000
+et appliquez les permissions auxquelles votre entreprise fait déjà confiance.
+
+00:18:19.680 --> 00:18:22.600
+Cette combinaison, contrôle de portée, authentification et test conjoints
+
+00:18:22.600 --> 00:18:24.640
+fait toute la différence entre une démonstration tape à l'œil
+
+00:18:24.640 --> 00:18:26.060
+et un outil métier fiable.
+
+00:18:26.060 --> 00:18:29.720
+Une fois ces fondamentaux en place, BizChat gagne en crédibilité.
+
+00:18:30.460 --> 00:18:32.340
+Il cesse d'être perçu comme une expérience intéressante
+
+00:18:32.340 --> 00:18:34.140
+pour devenir un élément sur lequel s'appuyer au quotidien.
+
+00:18:34.940 --> 00:18:37.860
+Le vrai gain n'est pas seulement que le système puisse techniquement fournir des réponses,
+
+00:18:37.940 --> 00:18:40.860
+mais que ces réponses soient précises, sécurisées et fiables.
+
+00:18:42.240 --> 00:18:44.900
+Avec ces bases, vous êtes prêts à adopter une perspective plus large
+
+00:18:44.900 --> 00:18:47.260
+sur ce que tout cela apporte réellement à votre organisation.
+
+00:18:48.500 --> 00:18:50.420
+La leçon à retenir n'est pas théorique, elle porte sur l'action.
+
+00:18:51.540 --> 00:18:53.460
+L'étape suivante la plus cruciale est la suivante.
+
+00:18:53.460 --> 00:18:57.060
+Choisissez un flux de travail fréquent, définissez les champs précis dont Biskwiz a besoin
+
+00:18:57.060 --> 00:18:58.860
+et créez un connecteur ciblé.
+
+00:18:59.920 --> 00:19:01.520
+Restez simple, prouvez la valeur une première fois
+
+00:19:01.520 --> 00:19:03.760
+et vous aurez une base sur laquelle votre équipe pourra s'appuyer et évoluer.
+
+00:19:04.540 --> 00:19:07.080
+J'aimerais avoir votre avis, quel est le premier système que vous connecteriez ?
+
+00:19:07.080 --> 00:19:09.140
+CRM, ERP, catalogue, produits et outils de suivi de projet.
+
+00:19:09.540 --> 00:19:10.240
+Dites-le dans les commentaires.
+
+00:19:10.960 --> 00:19:14.220
+Et si vous souhaitez plus de guides étape par étape pour construire et sécuriser vos connecteurs,
+
+00:19:14.420 --> 00:19:15.320
+n'oubliez pas de vous abonner.
+
+00:19:15.320 --> 00:19:16.320
+Merci.
+
+00:19:16.320 --> 00:19:17.320
+Merci.
+
+00:19:17.320 --> 00:19:18.320
+Merci.

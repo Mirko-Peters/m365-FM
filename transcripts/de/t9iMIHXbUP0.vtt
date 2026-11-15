@@ -1,0 +1,1153 @@
+WEBVTT
+
+00:00:00.080 --> 00:00:03.020
+Willkommen zu einer weiteren Episode von Microsoft Knowledge Nuggets zu M3B.
+
+00:00:03.160 --> 00:00:04.480
+FM, ich bin Ihr Gastgeber Marco Peters.
+
+00:00:04.960 --> 00:00:07.000
+Das heutige Thema ist etwas, von dem fast jeder schon gehört hat,
+
+00:00:07.220 --> 00:00:08.500
+aber das nur wenige wirklich erklären können.
+
+00:00:08.760 --> 00:00:09.700
+Was genau ist Azure DevOps?
+
+00:00:10.080 --> 00:00:12.280
+Ist es nur ein Tool für Entwickler oder etwas viel Größeres?
+
+00:00:12.760 --> 00:00:13.760
+Sie möchten also Software entwickeln.
+
+00:00:14.140 --> 00:00:16.360
+Vielleicht ist es eine Website, eine mobile App oder etwas,
+
+00:00:16.440 --> 00:00:17.980
+das Ihrem Unternehmen hilft, besser zu laufen.
+
+00:00:18.600 --> 00:00:19.900
+Und Sie setzen sich hin, um alles zu planen.
+
+00:00:20.120 --> 00:00:22.880
+Sie brauchen ein Tool zur Aufgabenverfolgung, einen Ort für Ihren Code,
+
+00:00:23.300 --> 00:00:26.160
+eine Methode zum Testen und eine Möglichkeit, die Software an die Leute zu bringen.
+
+00:00:26.940 --> 00:00:29.240
+Bevor Sie sich versehen, jonglieren Sie mit fünf verschiedenen Tools
+
+00:00:29.240 --> 00:00:30.200
+von fünf verschiedenen Firmen.
+
+00:00:30.900 --> 00:00:33.460
+Eines für das Aufgabenmanagement, eines für Code, eines für Tests,
+
+00:00:33.540 --> 00:00:35.940
+eines für die Bereitstellung und keines davon kommuniziert mit den anderen.
+
+00:00:36.720 --> 00:00:37.220
+Es ist ein Chaos.
+
+00:00:38.020 --> 00:00:40.260
+Microsoft hat dieses Chaos gesehen und eine Lösung dafür entwickelt.
+
+00:00:40.740 --> 00:00:43.860
+Es heißt Azure DevOps und ist nicht einfach nur ein weiteres Tool für Ihre Sammlung.
+
+00:00:44.260 --> 00:00:47.920
+Es ist eine vernetzte Plattform, die den gesamten Softwareentwicklungszyklus abdeckt.
+
+00:00:48.160 --> 00:00:50.840
+Planung, Programmierung, Testen und Bereitstellung, alles an einem Ort.
+
+00:00:51.320 --> 00:00:51.940
+Alles an einem Ort.
+
+00:00:52.360 --> 00:00:55.280
+Am Ende dieser Folge werden Sie verstehen, was Azure DevOps wirklich ist
+
+00:00:55.280 --> 00:00:57.120
+und wie die fünf Kernkomponenten zusammenpassen.
+
+00:00:57.120 --> 00:00:59.840
+Stellen Sie es sich wie ein modernes Bürogebäude vor.
+
+00:01:00.340 --> 00:01:02.200
+Word und Excel sind einzelne Räume, in denen Sie arbeiten.
+
+00:01:02.840 --> 00:01:06.160
+Microsoft 365 ist das gesamte Gebäude mit Sicherheits- und Ablagesystem.
+
+00:01:06.740 --> 00:01:07.960
+Azure DevOps folgt derselben Idee.
+
+00:01:08.640 --> 00:01:11.380
+Es ist das komplette Gebäude für die Softwareentwicklung, nicht nur ein einzelner Raum.
+
+00:01:11.860 --> 00:01:13.140
+Was also genau ist Azure DevOps?
+
+00:01:14.100 --> 00:01:15.260
+Hier ist die einfachste Definition.
+
+00:01:15.780 --> 00:01:19.020
+Azure DevOps ist eine vernetzte Plattform für den gesamten Softwareentwicklungszyklus.
+
+00:01:19.480 --> 00:01:20.960
+Das klingt kompliziert, also lassen Sie sonst was auf.
+
+00:01:20.960 --> 00:01:24.820
+Vor 20 Jahren musste man für alles separate Produkte kaufen, wenn man Software entwickeln wollte.
+
+00:01:25.720 --> 00:01:31.200
+Ein Tool für die Fehlerverfolgung, eines für den Quellcode, eines für automatisierte Builds, eines für Tests, eines für die Bereitstellung.
+
+00:01:31.500 --> 00:01:34.480
+Und die halbe Zeit verbrachte man damit, die Daten zwischen ihnen abzugleichen.
+
+00:01:35.600 --> 00:01:39.840
+Microsoft sah diese Komplexität und dachte, was, wenn all diese Dienste unter einem Dach zusammenarbeiten würden?
+
+00:01:40.300 --> 00:01:41.280
+Also bauten Sie Azure DevOps.
+
+00:01:41.540 --> 00:01:43.680
+Es ist kein einzelnes Tool, sondern fünf Dienste, die zusammenarbeiten.
+
+00:01:44.120 --> 00:01:50.880
+Azure Boards für die Planung, Azure Repos für den Code, Azure Pipelines für die Automatisierung, Azure Testplans für die Qualität, Azure Artefacts für die Paketfrage.
+
+00:01:51.060 --> 00:01:53.080
+Jeder übernimmt seine eigene Aufgabe, aber Sie sind alle miteinander verbunden.
+
+00:01:53.320 --> 00:01:54.920
+Kommen wir zurück zum Vergleich mit dem Bürogebäude.
+
+00:01:55.480 --> 00:01:56.920
+Der Empfang verwaltet, wer das Gebäude betrifft.
+
+00:01:57.320 --> 00:01:58.640
+Das entspricht Ihrem Identitätsdienst.
+
+00:01:58.940 --> 00:02:00.140
+Die Büros sind dort, wo die Leute arbeiten.
+
+00:02:00.720 --> 00:02:01.500
+Das sind Boards und Repos.
+
+00:02:02.080 --> 00:02:03.260
+Die Poststelle kümmert sich um Pakete.
+
+00:02:03.780 --> 00:02:04.420
+Das sind Artefakte.
+
+00:02:04.840 --> 00:02:06.180
+Das Sicherheitsteam schützt das Gebäude.
+
+00:02:06.640 --> 00:02:08.320
+Das sind Ihre Zugriffssteuerungen und Richtlinien.
+
+00:02:08.320 --> 00:02:10.400
+Jeder hat eine Aufgabe, aber alle sind unter einem Dach.
+
+00:02:10.760 --> 00:02:11.660
+Sie tauschen Informationen aus.
+
+00:02:12.000 --> 00:02:12.660
+Sie arbeiten zusammen.
+
+00:02:13.040 --> 00:02:13.760
+Genau darum geht es.
+
+00:02:14.160 --> 00:02:15.340
+Und hier ist das Beste für Einsteiger.
+
+00:02:15.700 --> 00:02:17.200
+Azure DevOps bietet ein kostenloses Kontinent.
+
+00:02:17.480 --> 00:02:20.980
+Sie können ein Konto erstellen, ein Projekt starten und die Kernfunktionen kostenlos nutzen.
+
+00:02:21.360 --> 00:02:22.720
+Fünf kostenlose Benutzer erhalten vollen Zugriff.
+
+00:02:23.020 --> 00:02:25.240
+Unbegrenzte Stakeholder erhalten kostenlos begrenzten Zugriff.
+
+00:02:25.520 --> 00:02:28.580
+Sie können also buchstäblich heute ohne Kosten starten und herausfinden, ob es für Sie funktioniert.
+
+00:02:29.020 --> 00:02:29.880
+Eine Kreditkarte erfordert.
+
+00:02:30.360 --> 00:02:31.060
+Kein Verkaufsanruf.
+
+00:02:31.320 --> 00:02:33.480
+Gehen Sie einfach auf devdeshaar.com und erstellen Sie ein Konto.
+
+00:02:33.900 --> 00:02:36.200
+Lassen Sie uns die fünf Dienste nacheinander durchgehen.
+
+00:02:36.200 --> 00:02:38.540
+Sie beginnt mit dem Ort, an dem Ihre Arbeit beginnt.
+
+00:02:39.340 --> 00:02:41.480
+Azure Boards, die Kommandozentrale Ihres Projekts.
+
+00:02:42.140 --> 00:02:44.380
+Azure Boards ist also der Ort, an dem Sie Ihre Arbeit planen und nachfragen.
+
+00:02:44.840 --> 00:02:46.540
+Betrachten Sie es als die Kommandozentrale Ihres Projekts.
+
+00:02:47.200 --> 00:02:50.180
+Wenn Sie schon einmal Haftnotizen an einer Wand verwendet haben, um Aufgaben zu verfolgen,
+
+00:02:50.240 --> 00:02:51.320
+kennen Sie das Grundkonzept bereits.
+
+00:02:51.980 --> 00:02:54.360
+Aber anstatt physischer Haftnotizen, die abfallen und verloren gehen,
+
+00:02:54.520 --> 00:02:58.360
+bietet Boards Ihnen ein digitales Kanban-Board, das jeder in Ihrem Team in Echtzeit sehen und aktualisieren kann.
+
+00:02:58.780 --> 00:02:59.400
+Lassen Sie es aufschauen.
+
+00:02:59.800 --> 00:03:01.380
+Sie beginnen mit der Erstellung von Arbeitselementen.
+
+00:03:01.380 --> 00:03:03.380
+Ein Arbeitselement ist alles, was Sie nachverfolgen.
+
+00:03:03.840 --> 00:03:07.360
+Eine User Story, ein Feature, ein Epic, eine Aufgabe oder ein Bug oder ein Bug.
+
+00:03:08.320 --> 00:03:11.360
+Jedes hat Felder für Beschreibung, Priorität, Status und die Zuweisung.
+
+00:03:12.220 --> 00:03:16.820
+Sie organisieren diese Arbeitselemente in einem Backlog, einer priorisierten Liste aller anstehenden Aufgaben.
+
+00:03:17.500 --> 00:03:18.600
+Sie können sie in Hierarchien gruppieren.
+
+00:03:19.060 --> 00:03:22.400
+Epics oben, Features darunter, User Stories darunter und Aufgaben unter den Stories.
+
+00:03:23.240 --> 00:03:25.600
+Das gibt Ihnen ein klares Bild davon, was Sie bauen und warum.
+
+00:03:26.420 --> 00:03:27.160
+Dann planen Sie Sprints.
+
+00:03:27.660 --> 00:03:32.660
+Ein Sprint ist ein fester Zeitraum, meist zwei Wochen, in dem sich Ihr Team verpflichtet, eine Reihe von Arbeitselementen fertigzustellen.
+
+00:03:33.700 --> 00:03:36.760
+Sie ziehen Elemente aus Ihrem Backlog in einen Sprint und schon haben Sie einen Plan.
+
+00:03:37.580 --> 00:03:39.440
+Jeder weiß, woran er arbeitet und wann es fällig ist.
+
+00:03:39.940 --> 00:03:40.620
+Sie haben auch Abfragen.
+
+00:03:41.040 --> 00:03:42.740
+Mit Abfragen können Sie Ihre Arbeitselemente suchen.
+
+00:03:43.360 --> 00:03:46.020
+Zeige mir alle Bugs, die Sarah zugewiesen sind und eine hohe Priorität haben.
+
+00:03:46.380 --> 00:03:48.600
+Zeige mir alle User Stories im aktuellen Sprint, die noch aktiv sind.
+
+00:03:49.060 --> 00:03:51.580
+Abfragen sind leistungsstark, weil Sie Ihre Daten in Antworten verwandeln.
+
+00:03:51.800 --> 00:03:54.460
+Sie können sie speichern, teilen und zum Erstellen von Dashboards verwenden.
+
+00:03:54.460 --> 00:03:56.500
+Und Dashboards sind der Ort, an dem alles zusammenläuft.
+
+00:03:56.760 --> 00:04:01.620
+Sie können benutzerdefinierte Dashboards mit Widgets erstellen, die Burndown, Diagramme, Velocity, Arbeitsaufgaben anzahlen und mehr Anzeigen.
+
+00:04:01.800 --> 00:04:05.180
+Ihr Team erhält eine Live-Ansicht des Fortschritts, ohne dass jemand einen Statusbericht schreiben muss.
+
+00:04:05.700 --> 00:04:06.880
+Lassen Sie mich Ihnen ein kurzes Beispiel geben.
+
+00:04:07.260 --> 00:04:08.900
+Stellen Sie sich ein kleines Team vor, das eine Website erstellt.
+
+00:04:09.220 --> 00:04:11.440
+Der Product Owner erstellt ein Epic namens Kundenportal.
+
+00:04:12.720 --> 00:04:15.780
+Darunter erstellen Sie Funktionen wie Benutzerregistrierung und Bestellhistorie.
+
+00:04:16.960 --> 00:04:20.020
+Unter Benutzerregistrierung erstellen Sie User Stories wie als Kunde.
+
+00:04:20.440 --> 00:04:22.460
+Möchte ich ein Konto mit meiner E-Mail-Adresse erstellen?
+
+00:04:22.460 --> 00:04:25.840
+Unter dieser Story erstellen Entwickler Aufgaben.
+
+00:04:26.960 --> 00:04:27.700
+Registrierungsformular bauen.
+
+00:04:28.140 --> 00:04:29.400
+E-Mail-Verifizierung einrichten.
+
+00:04:29.900 --> 00:04:30.640
+Unit-Test schreiben.
+
+00:04:31.420 --> 00:04:32.840
+Jede Aufgabe wird jemandem zugewiesen.
+
+00:04:33.300 --> 00:04:35.040
+Das Team verfolgt den Fortschritt auf dem Camerboard.
+
+00:04:35.400 --> 00:04:38.340
+Jeder kann sehen, was erledigt ist, was in Arbeit ist und was als nächstes ansteht.
+
+00:04:38.820 --> 00:04:40.940
+Vergleichen Sie das nun mit der Verwendung von Excel oder einem Whiteboard.
+
+00:04:41.340 --> 00:04:41.980
+Excel ist statisch.
+
+00:04:42.440 --> 00:04:43.260
+Sie mailen eine Tabelle.
+
+00:04:43.720 --> 00:04:45.320
+Jemand aktualisiert sie, mailt sie zurück.
+
+00:04:45.600 --> 00:04:47.080
+Und wenn Sie sie erhalten, ist sie veraltet.
+
+00:04:47.660 --> 00:04:50.280
+Ein Whiteboard ist besser für Brainstorming, aber nicht durchsuchbar.
+
+00:04:50.280 --> 00:04:53.360
+Es ist mit nichts verbunden und wenn jemand etwas löscht, ist es weg.
+
+00:04:53.840 --> 00:04:54.420
+Boards ist live.
+
+00:04:54.780 --> 00:04:55.280
+Es ist durchsucht.
+
+00:04:55.620 --> 00:04:57.800
+Es ist mit Ihrem Code, Ihren Tests und Ihren Bereitstellungen verboten.
+
+00:04:58.120 --> 00:05:00.320
+Wenn jemand eine Arbeitsaufgabe aktualisiert, sieht es jeder sofort.
+
+00:05:00.760 --> 00:05:03.560
+Sie haben also Ihre Arbeit geplant und wissen, was gebaut werden muss, aber Sie brauchen
+
+00:05:03.560 --> 00:05:05.120
+einen Ort, um den eigentlichen Code zu speichern.
+
+00:05:05.480 --> 00:05:06.620
+Da kommt Azure Repos ins Spiel.
+
+00:05:07.140 --> 00:05:08.900
+Azure Repos ist das dauerhafte Zuhause für Ihren Code.
+
+00:05:09.300 --> 00:05:11.500
+Sie haben also Ihre Arbeit geplant und wissen, was gebaut werden muss.
+
+00:05:11.760 --> 00:05:13.660
+Aber Sie brauchen einen Ort, um den eigentlichen Code zu speichern.
+
+00:05:13.660 --> 00:05:15.040
+Da kommt Azure Repos ins Spiel.
+
+00:05:15.500 --> 00:05:17.880
+Azure Repos ist eine Versionsverwaltung für Ihren Code mit Git.
+
+00:05:17.880 --> 00:05:21.240
+Git ist der Industriestandard und die meisten Entwickler nutzen es bereits.
+
+00:05:21.800 --> 00:05:25.540
+Repos bietet Ihnen einen Ort, um Ihre Git-Repositories direkt in Azure DevOps zu hosten.
+
+00:05:25.900 --> 00:05:27.080
+Hier ist die Analogie zum Bücherschreiben.
+
+00:05:27.520 --> 00:05:29.300
+Dellen Sie sich vor, Sie schreiben ein Buch mit einem Team von Otto.
+
+00:05:29.800 --> 00:05:31.100
+Sie könnten Kapitel hin und her meilen.
+
+00:05:31.720 --> 00:05:32.940
+Jemand bearbeitet Kapitel 3.
+
+00:05:33.200 --> 00:05:34.780
+Mailed es, jemand anderes bearbeitet es wieder.
+
+00:05:35.080 --> 00:05:40.060
+Und schon bald haben Sie Dateien mit Namen wie Endfassung Kapitel 3 V2 gesendet aktuell.docxx.
+
+00:05:40.220 --> 00:05:42.820
+Und niemand weiß mehr, welche Version die richtige ist.
+
+00:05:43.340 --> 00:05:45.420
+So sah Softwareentwicklung vor der Versionsverwaltung aus.
+
+00:05:47.880 --> 00:05:49.560
+Vom selben zentralen Repository aus.
+
+00:05:50.200 --> 00:05:50.900
+Sie erstellen Brunch.
+
+00:05:51.340 --> 00:05:55.240
+Betrachten Sie ihn als Ihre eigene Kopie des Buches, in der Sie Änderungen vornehmen können, ohne andere zu beeinträchtigen.
+
+00:05:55.640 --> 00:05:56.960
+Sie schreiben Ihr Kapitel, testen es.
+
+00:05:57.180 --> 00:05:58.680
+Und wenn Sie fertig sind, erstellen Sie ein Pull-Request.
+
+00:05:59.020 --> 00:06:01.580
+Das ist eine Anfrage, Ihre Änderungen wieder in das Hauptbuch zusammenzuführen.
+
+00:06:02.400 --> 00:06:04.680
+Andere Autoren prüfen Ihre Änderungen, hinterlassen Kommentare.
+
+00:06:05.360 --> 00:06:07.500
+Sobald alle zustimmen, werden Ihre Änderungen zusammengeführt.
+
+00:06:07.940 --> 00:06:09.060
+Und die Historie wird nachverfolgt.
+
+00:06:09.400 --> 00:06:11.360
+Sie sehen genau, wer was, wann und warum geändert hat.
+
+00:06:11.780 --> 00:06:13.180
+Deshalb sollten Sie Ihre Anfänger dafür interessieren.
+
+00:06:13.500 --> 00:06:16.580
+Keine unübersichtlichen Dateinamen mehr oder die Frage, ob Sie an der neuesten Version arbeiten.
+
+00:06:16.580 --> 00:06:18.940
+Kein versehentliches Überschreiben der Arbeit anderer mehr.
+
+00:06:19.280 --> 00:06:20.380
+Bietet Ihnen ein Sicherheitsnetz.
+
+00:06:20.580 --> 00:06:23.360
+Sie können experimentieren, Fehler machen und alles rückgängig machen, falls etwas kaputt geht.
+
+00:06:23.680 --> 00:06:25.740
+Es ist wie eine Rückgängigtaste für Ihr gesamtes Projekt.
+
+00:06:26.360 --> 00:06:27.880
+Und hier kommt die Verbindung zu Boards ins Spiel.
+
+00:06:28.640 --> 00:06:31.340
+Sie können Ihre Commits und Pull-Request direkt mit Arbeitselementen verknüpfen.
+
+00:06:32.060 --> 00:06:35.060
+Wenn ein Entwickler einen Bug behebt, fügt er die Bug-ID in die Commit-Nachricht ein
+
+00:06:35.060 --> 00:06:37.380
+und der Commit wird mit dem Arbeitselement in Boards verknüpft.
+
+00:06:37.880 --> 00:06:39.400
+Plötzlich haben Sie eine lückenlose Nachvollziehbarkeit.
+
+00:06:39.400 --> 00:06:43.040
+Sie sehen genau, welche Code-Änderungen für jedes Feature oder jede Fehlerbehebung vorgenommen wurden.
+
+00:06:43.740 --> 00:06:46.520
+Produktmanager können auf ein Arbeitselement klicken und den tatsächlich geschriebenen Code sehen.
+
+00:06:47.000 --> 00:06:49.700
+Entwickler können sich ein Commit ansehen und wissen, zu welcher User-Story er gehört.
+
+00:06:50.220 --> 00:06:51.180
+Alles miteinander verbunden.
+
+00:06:51.620 --> 00:06:53.200
+Ihr Code ist also nun gespeichert und nachverfolgbar.
+
+00:06:53.500 --> 00:06:53.860
+Ist sicher.
+
+00:06:54.180 --> 00:06:54.700
+Ist versioniert.
+
+00:06:54.980 --> 00:06:55.760
+Aber er liegt dort nur herum.
+
+00:06:56.040 --> 00:06:57.120
+Wie bringen Sie ihn tatsächlich zum Laufen?
+
+00:06:57.660 --> 00:07:00.600
+Wie machen Sie aus diesem Code eine funktionierende Anwendung, die Leute nutzen können?
+
+00:07:01.020 --> 00:07:02.260
+Hier kommt Azure Pipelines ins Spiel.
+
+00:07:03.140 --> 00:07:04.780
+Azure Pipelines, die Automatisierungs-Engine.
+
+00:07:05.200 --> 00:07:09.240
+Azure Pipelines ist die Automatisierungs-Engine, die Ihren Code automatisch erstellt, testet und bereitstellt.
+
+00:07:09.780 --> 00:07:14.020
+Einfach ausgedrückt, es nimmt Ihren Code und verwandelt ihn in eine laufende Anwendung, ohne dass Sie dies manuell tun müssen.
+
+00:07:14.360 --> 00:07:15.340
+Stellen Sie es sich wie eine Bäckerei vor.
+
+00:07:15.340 --> 00:07:19.540
+Stellen Sie sich vor, Sie betreiben eine Bäckerei und backen jedes Brot für jede einzelne Kundenbestellung von Hand.
+
+00:07:19.920 --> 00:07:21.300
+So sieht eine manuelle Bereitstellung aus.
+
+00:07:21.700 --> 00:07:26.020
+Jemand schreibt Code, Sie kopieren ihn manuell auf einen Server, Sie führen manuell den Bild aus und prüfen manuell, ob er funktioniert.
+
+00:07:26.500 --> 00:07:30.040
+Das ist langsam fehleranfällig und bei vielen Aufträgen kommen Sie einfach nicht hinterher.
+
+00:07:30.620 --> 00:07:31.780
+Hier kommt Azure Pipelines ins Spiel.
+
+00:07:32.260 --> 00:07:33.680
+Sie automatisieren den gesamten Prozess.
+
+00:07:34.180 --> 00:07:37.560
+Sie richten es einmal ein und es läuft automatisch jedes Mal, wenn jemand den Code ändert.
+
+00:07:37.560 --> 00:07:39.380
+Das nennt man CICD.
+
+00:07:39.960 --> 00:07:41.720
+Continuous Integration und Continuous Delivery.
+
+00:07:42.340 --> 00:07:43.880
+Hier ist die Bedeutung von Continuous Integration.
+
+00:07:44.560 --> 00:07:50.100
+Jedes Mal, wenn ein Entwicklercode in das Repository überträgt, erstellt die Pipeline automatisch die Anwendung und führt Tests durch.
+
+00:07:50.600 --> 00:07:54.760
+Wenn etwas kaputt geht, wissen Sie es sofort, nicht erst zwei Wochen später bei der Bereitstellung, sondern direkt.
+
+00:07:54.760 --> 00:07:58.140
+Der Entwickler wird benachrichtigt, behebt den Fehler und überträgt den Code erneut.
+
+00:07:58.800 --> 00:08:01.900
+Fehler werden früh erkannt, wenn sie günstig zu beheben sind, nicht spät, wenn sie teuer sind.
+
+00:08:02.720 --> 00:08:06.540
+Continuous Delivery bedeutet, dass gebaute und getesteter Code automatisch in ihren Umgebungen bereitgestellt wird.
+
+00:08:07.320 --> 00:08:13.760
+Zuerst in eine Testumgebung zur QR-Verifizierung, dann in Staging für letzte Prüfungen und schließlich in die Produktion für echte Nutzer.
+
+00:08:14.320 --> 00:08:16.120
+Jede Phase kann integrierte Genehmigungsprozesse haben.
+
+00:08:16.540 --> 00:08:18.700
+Vielleicht muss ein Manager die Produktionsbereitstellung genehmigen.
+
+00:08:19.100 --> 00:08:20.980
+Vielleicht muss ein QR-Leiter die Testergebnisse abzeichnen.
+
+00:08:20.980 --> 00:08:22.560
+Die Pipeline regelt all das.
+
+00:08:22.980 --> 00:08:24.340
+Lassen Sie uns die wichtigsten Funktionen aufschlüsse.
+
+00:08:24.340 --> 00:08:26.780
+Sie haben YAML-Dateien, Phasen, Genehmigungen und Agents.
+
+00:08:27.140 --> 00:08:29.600
+YAML ist eine einfache Textdatei, in der Sie Ihre Pipeline definieren.
+
+00:08:30.220 --> 00:08:34.420
+Sie liegt zusammen mit Ihrem Code im Repository, was bedeutet, dass Ihre Pipeline genauso versioniert wird wie Ihr Code.
+
+00:08:35.140 --> 00:08:36.920
+Sie können sehen, wer Sie wann und warum geändert hat.
+
+00:08:37.500 --> 00:08:39.800
+Phasen ermöglichen es Ihnen, Ihre Pipeline in logische Abschnitte zu zeigen.
+
+00:08:40.460 --> 00:08:41.520
+Bauen, Testen, Bereitstellen.
+
+00:08:42.300 --> 00:08:45.620
+Genehmigungen erlauben es, Bereitstellungen zu steuern, sodass nur autorisierte Personen in die Produktion tragen können.
+
+00:08:46.200 --> 00:08:47.980
+Agents sind die Maschinen, die Ihre Builds tatsächlich ausführen.
+
+00:08:48.500 --> 00:08:51.260
+Microsoft bietet gehostete Agents an oder sie betreiben ihre eigenen.
+
+00:08:51.700 --> 00:08:52.760
+Warum ist das für Anfänger wichtig?
+
+00:08:52.760 --> 00:08:56.200
+Weil manuelle Bereitstellungen die Hauptursache für Produktionsvorfälle sind.
+
+00:08:57.000 --> 00:09:00.400
+Jemand vergisst einen Schritt, kopiert die falsche Datei oder stellt in der falschen Umgebung bereit.
+
+00:09:01.000 --> 00:09:01.960
+Pipelines eliminieren all das.
+
+00:09:02.360 --> 00:09:03.800
+Sie laufen jedes Mal exakt gleich ab.
+
+00:09:04.260 --> 00:09:06.540
+Keine menschlichen Fehler, keine vergessenen Schritte und sie sind schnell.
+
+00:09:06.880 --> 00:09:09.880
+Ein Team, von dem ich gelesen habe, reduzierte seine manuellen Bereitstellungen von mehreren Stunden
+
+00:09:09.880 --> 00:09:12.320
+nach der 10 bis 15 Minuten nach der Einrichtung von Azure Pipelines.
+
+00:09:12.980 --> 00:09:14.000
+Das ist keine kleine Verbesserung.
+
+00:09:14.420 --> 00:09:15.140
+Das ist eine Transformation.
+
+00:09:15.680 --> 00:09:17.500
+Ihr Code wird also gebaut, getestet und bereitgestellt.
+
+00:09:17.500 --> 00:09:20.540
+Doch bevor Sie ihn an Kunden ausliefern, müssen Sie sicherstellen, dass er wirklich funktioniert.
+
+00:09:20.900 --> 00:09:23.120
+Nicht nur, dass er kompiliert, sondern dass er auch tut, was er tun soll.
+
+00:09:23.680 --> 00:09:24.920
+Hier kommen Azure Test Plans ins Spiel.
+
+00:09:25.860 --> 00:09:26.640
+Azure Test Plans.
+
+00:09:26.900 --> 00:09:28.020
+Qualität ohne Rätselraten.
+
+00:09:28.300 --> 00:09:30.640
+Ihr Code wird also gebaut und bereitgestellt, aber funktioniert er wirklich?
+
+00:09:31.040 --> 00:09:32.940
+Nicht nur auf Ihrem Rechner, nicht nur im Idealfall.
+
+00:09:33.700 --> 00:09:36.440
+Funktioniert er, wenn jemand etwas Falsches eingibt, wenn das Netzwerk langsam ist
+
+00:09:36.440 --> 00:09:38.320
+oder wenn tausend Leute ihn gleichzeitig nutzen?
+
+00:09:39.220 --> 00:09:40.680
+Wir kommen Azure Test Plans ins Spiel.
+
+00:09:41.300 --> 00:09:44.420
+Test Plans ermöglicht strukturiertes, manuelles und exploratives Testen.
+
+00:09:44.940 --> 00:09:46.740
+Dellen Sie sich wie eine Checkliste vor dem Flug eines Piloten.
+
+00:09:47.140 --> 00:09:49.120
+Piloten steigen nicht einfach in das Flugzeug und hoffen auf das Web.
+
+00:09:49.460 --> 00:09:50.220
+Sie haben eine Checkliste.
+
+00:09:50.600 --> 00:09:53.140
+Klappen prüfen, Kraftstoff prüfen, Instrumente prüfen jedes Mal.
+
+00:09:53.220 --> 00:09:55.340
+Denn eine einzige fehlende Sache kann katastrophal sein.
+
+00:09:55.600 --> 00:09:56.380
+Bei Software ist es genauso.
+
+00:09:56.820 --> 00:09:59.560
+Ein Fehler in der Produktion kann Sie Geld, Kunden und Ihren Ruf kosten.
+
+00:10:00.180 --> 00:10:01.640
+Test Plans liefert Ihnen genau diese Checkliste.
+
+00:10:01.920 --> 00:10:02.460
+So funktioniert es.
+
+00:10:02.460 --> 00:10:03.620
+Sie erstellen Testfälle.
+
+00:10:04.180 --> 00:10:06.680
+Jeder Testfall beschreibt eine spezifische Sache, die getestet werden soll.
+
+00:10:07.040 --> 00:10:08.820
+Anmeldung mit einem gültigen Benutzernamen und Passwort.
+
+00:10:09.540 --> 00:10:11.180
+Versucht der Anmeldung mit einem ungültigen Passwort.
+
+00:10:11.840 --> 00:10:14.240
+Versucht, das Formular abzusenden, ohne die Pflichtfelder auszufüllen.
+
+00:10:14.860 --> 00:10:17.360
+Jeder Testfall hat Schritte, die befolgt werden müssen, sowie erwartete Ergebnisse.
+
+00:10:18.000 --> 00:10:21.540
+Ihr Tester geht diese Fälle Schritt für Schritt durch und markiert jeden als bestanden oder nicht bestanden.
+
+00:10:22.120 --> 00:10:24.780
+Wenn ein Test fehlschlägt, kann direkt aus dem Testfall ein Bug protokolliert werden.
+
+00:10:25.420 --> 00:10:28.980
+Dieser Bug wird als Arbeitselement in Boards erstellt, dem zuständigen Entwickler zugewiesen
+
+00:10:28.980 --> 00:10:31.240
+und für vollständige Rückverfolgbarkeit mit dem Test verknüpft.
+
+00:10:31.240 --> 00:10:33.440
+Sie können Testfälle in Testsuiten gruppieren.
+
+00:10:34.000 --> 00:10:38.640
+Vielleicht haben Sie eine Testsuite für den Checkout-Prozess, eine andere für die Benutzerregistrierung und eine für das Admin-Panel.
+
+00:10:39.420 --> 00:10:42.300
+Dann organisieren Sie diese Suiten in Testplänen für verschiedene Releases oder Sprints.
+
+00:10:42.900 --> 00:10:46.500
+Sie sehen genau, was getestet wurde, was bestanden wurde, was fehlschlug und was noch nicht getestet wurde.
+
+00:10:46.500 --> 00:10:48.760
+Die Verbindung zu Boards macht es so leistungsfähig.
+
+00:10:49.200 --> 00:10:51.560
+Wenn ein Test fehlschlägt, wird direkt in Boards ein Bug erstellt.
+
+00:10:52.140 --> 00:10:55.920
+Der Entwickler sieht ihn, behebt ihn, pusht ihn fix und die Pipeline baut und stellt die neue Version bereit.
+
+00:10:56.460 --> 00:10:57.640
+Der Tester führt den Test erneut aus.
+
+00:10:57.960 --> 00:10:58.340
+Es bestand.
+
+00:10:58.720 --> 00:10:59.260
+Der Bug geschlossen.
+
+00:10:59.820 --> 00:11:01.260
+All das geschieht innerhalb einer einzigen Plattform.
+
+00:11:01.600 --> 00:11:04.300
+Kein E-Mail-Versand von Tabellen, kein Kopieren von Bug-Reports zwischen Systemen.
+
+00:11:04.380 --> 00:11:05.060
+Alles ist miteinander verbunden.
+
+00:11:05.620 --> 00:11:06.200
+Bin ehrlich zu Ihnen.
+
+00:11:06.200 --> 00:11:08.160
+Anfänger übersehen Testplans oft.
+
+00:11:08.540 --> 00:11:10.040
+Testen fühlt sich wie zusätzliche Arbeit an.
+
+00:11:10.380 --> 00:11:11.600
+Sie wollen einfach nur Ihren Code veröffentlichen.
+
+00:11:11.960 --> 00:11:12.680
+Sie wollen ihn live sehen.
+
+00:11:13.080 --> 00:11:13.620
+Aber hier ist der Punkt.
+
+00:11:14.080 --> 00:11:18.620
+Jeder Entwickler, mit dem ich gesprochen habe, hat eine Geschichte über einen Bug, der in die Produktion gelangte und ein Desaster verursachte.
+
+00:11:19.320 --> 00:11:21.200
+Ein Zahlungssystem, das Kunden doppelt belastet hat.
+
+00:11:21.760 --> 00:11:23.340
+Eine Login-Seite, die unter Last abstürzt.
+
+00:11:23.720 --> 00:11:25.660
+Eine Funktion, die Daten löschst, dann schadet sie zu speichern.
+
+00:11:25.780 --> 00:11:28.860
+Das sind immer genau die Bugs, die mit einem einfachen Test hätten abgefangen werden können.
+
+00:11:29.360 --> 00:11:30.520
+Testplans ist eine günstige Versicherung.
+
+00:11:31.000 --> 00:11:33.400
+Es kostet anfangs etwas Zeit, erspart Ihnen aber später viel Ärger.
+
+00:11:33.400 --> 00:11:36.260
+Wenn Ihr Team wächst, werden Sie auf ein weiteres Problem stoßen.
+
+00:11:36.920 --> 00:11:38.400
+Sie werden anfangen, denselben Code immer wieder zu schreiben.
+
+00:11:38.940 --> 00:11:41.020
+Utility-Funktionen, Login-Komponenten, API-Wrapper.
+
+00:11:41.400 --> 00:11:47.580
+Sie kopieren und fügen Code zwischen Projekten ein und schon bald haben Sie fünf verschiedene Versionen des selben Dings, alle leicht unterschiedlich, alle potenziell fehlerhaft.
+
+00:11:48.320 --> 00:11:49.520
+Da kommt Azure Artifacts ins Spiel.
+
+00:11:50.160 --> 00:11:51.720
+Azure Artifacts teilt Ihre Bausteine.
+
+00:11:52.500 --> 00:11:57.160
+Azure Artifacts ist ein Paketmanager für Ihre Code-Bibliotheken und am besten lässt er sich mit Lego-Bausteinen vergleichen.
+
+00:11:57.980 --> 00:12:01.800
+Anstatt jedes Mal vom Grund auf neu zu bauen, nehmen Sie vorgefertigte Bausteine und stecken diese zusammen.
+
+00:12:01.800 --> 00:12:08.320
+Wenn jemand aus Ihrem Team eine Login-Bibliothek erstellt, veröffentlicht er sie in Artifacts und alle anderen können Sie mit nur einer Codezeile in Ihre Projekte einbinden.
+
+00:12:09.040 --> 00:12:13.140
+Kein Kopieren von Dateien, kein Versenden von ZIP-Archiven per E-Mail und kein Rätselraten, welches die neueste Version ist.
+
+00:12:13.420 --> 00:12:15.020
+Hier ist die Lego-Analogie etwas detaillierter.
+
+00:12:15.500 --> 00:12:16.640
+Stellen Sie sich vor, Sie bauen eine Burg.
+
+00:12:17.120 --> 00:12:20.340
+Sie könnten jeden einzelnen Stein von Hand meißeln, was dem Schreiben von Grund auf entspräche.
+
+00:12:20.780 --> 00:12:24.080
+Oder Sie nehmen vorgefertigte Steine und konzentrieren sich auf die einzigartigen Teile Ihrer Burg.
+
+00:12:24.160 --> 00:12:25.240
+Genau das leistet Artifacts.
+
+00:12:25.240 --> 00:12:28.580
+Die Steine sind Ihre gemeinsam genutzten Bibliotheken, die Burg ist Ihre Anwendung.
+
+00:12:28.620 --> 00:12:30.320
+Die einzigartigen Teile müssen Sie immer noch selbst bauen.
+
+00:12:30.620 --> 00:12:32.100
+Aber Sie müssen das Rad nicht jedes Mal neu erfinden.
+
+00:12:33.220 --> 00:12:35.080
+Artifacts unterstützt verschiedene Pakettypen.
+
+00:12:35.460 --> 00:12:41.880
+NewGit für .NET, NPM für JavaScript, Maven für Java, Python-Pakete und universelle Pakete für alles weitere.
+
+00:12:42.480 --> 00:12:46.280
+Sie erstellen ein Feed, das ist Ihr privates Paket-Repository, und veröffentlichen dort Ihre Pakete.
+
+00:12:46.740 --> 00:12:50.100
+Sie richten Upstream-Quellen ein, sodass Sie auch öffentliche Pakete von NewGit beziehen können.
+
+00:12:50.560 --> 00:12:52.600
+Org oder npmgs.com über denselben Feed.
+
+00:12:52.600 --> 00:12:54.600
+Alles an einem Ort. Warum ist das wichtig?
+
+00:12:55.060 --> 00:12:57.360
+Er spart Zeit, zorgt für Konsistenz und verwaltet Versionen.
+
+00:12:58.120 --> 00:13:01.360
+Wenn Sie eine gemeinsam genutzte Bibliothek aktualisieren, veröffentlichen Sie eine neue Version.
+
+00:13:01.500 --> 00:13:03.740
+Projekte, die Sie verwenden, können ein Upgrade durchführen, wenn Sie bereit sind.
+
+00:13:03.960 --> 00:13:07.840
+Sie werden nicht zum Update gezwungen und bleiben auch nicht auf einer alten Version sitzen, weil niemand die neueste Kopie findet.
+
+00:13:08.120 --> 00:13:09.360
+Es ist kontrolliert und organisiert.
+
+00:13:09.600 --> 00:13:10.580
+Und es ist kein Pipeline so.
+
+00:13:10.940 --> 00:13:13.780
+Ihre Build-Pipeline kann Pakete automatisch in Artifacts veröffentlichen,
+
+00:13:14.100 --> 00:13:18.260
+und Ihre Deployment-Pipeline kann Pakete aus Artifacts beziehen, sodass der gesamte Ablauf automatisiert ist.
+
+00:13:18.260 --> 00:13:24.300
+Code wird erstellt, getestet, verpackt, veröffentlicht und konsumiert, ganz ohne, dass jemand Dateien manuell hin und her kopieren muss.
+
+00:13:25.000 --> 00:13:26.540
+Sie haben jetzt alle fünf Dienste kennengelernt.
+
+00:13:26.940 --> 00:13:32.140
+Boards für die Planung, Repos für den Code, Pipelines für die Automatisierung, Testplans für die Qualität und Artifacts für die gemeinsame Nutzung.
+
+00:13:32.500 --> 00:13:34.520
+Doch die wahre Magie liegt nicht in einem einzelnen Dienst.
+
+00:13:35.280 --> 00:13:36.420
+Sie liegt in Ihrem Zusammenspiel.
+
+00:13:36.420 --> 00:13:38.800
+Lassen Sie mich zeigen, wie das in der Praxis aussieht.
+
+00:13:39.580 --> 00:13:41.460
+Das Gesamtbild, wie alles zusammenpasst.
+
+00:13:42.100 --> 00:13:46.280
+Lassen Sie mich anhand eines realen Szenarios zeigen, wie das aussieht, wenn ein Team ein neues Feature entwickelt.
+
+00:13:47.780 --> 00:13:48.260
+Schritt 1
+
+00:13:48.260 --> 00:13:51.960
+Der Product Owner öffnet Azure Boards und erstellt eine User Story wie zum Beispiel
+
+00:13:51.960 --> 00:13:54.160
+Als Kunde möchte ich mein Passwort zurücksetzen können.
+
+00:13:55.180 --> 00:13:58.200
+Akzeptanzkriterien hinzufügen, dem aktuellen Sprint zuweisen, Priorität festlegen.
+
+00:13:58.680 --> 00:14:00.240
+Und schon existiert das Arbeitselement im System.
+
+00:14:00.760 --> 00:14:01.200
+Schritt 2
+
+00:14:01.200 --> 00:14:05.840
+Der Entwickler öffnet Azure Repos, lädt den aktuellen Code und erstellt einen neuen Branche aus dem Arbeitselement.
+
+00:14:06.420 --> 00:14:08.220
+Boards erlaubt dies sogar direkt aus der Story heraus.
+
+00:14:08.660 --> 00:14:11.220
+Der Branch-Name enthält automatisch die ID des Arbeitselements.
+
+00:14:11.940 --> 00:14:15.700
+Sie schreiben den Code, committen ihn und fügen in der Commit-Nachricht fix das Number von der Story hinzu.
+
+00:14:16.520 --> 00:14:17.380
+Das ist hier nun mal das Arbeitselement.
+
+00:14:17.900 --> 00:14:19.720
+Der Commit ist nun mit der User Story in Boards verknüpft.
+
+00:14:20.440 --> 00:14:20.860
+Schritt 3
+
+00:14:20.860 --> 00:14:23.060
+Der Commit löst automatisch Azure Pipelines aus.
+
+00:14:23.720 --> 00:14:27.460
+Die Pipeline nimmt den Code auf, stellt Abhängigkeiten wieder her für den Bild- und Unit-Tests aus.
+
+00:14:28.180 --> 00:14:31.360
+Wenn ein Test fehlschlägt, stoppt die Pipeline und der Entwickler wird benachrichtigt.
+
+00:14:31.880 --> 00:14:35.140
+Wenn alles erfolgreich ist, stellt die Pipeline in eine Testumgebung bereit
+
+00:14:35.140 --> 00:14:37.960
+und der Entwickler sieht seinen Code live, bevor ihn jemand anderes berührt.
+
+00:14:39.440 --> 00:14:40.160
+Schritt 4
+
+00:14:40.160 --> 00:14:44.880
+Der QA-Engineer öffnet Azure Test Plans, findet die Test-Suite für das Passwort zurücksetzen,
+
+00:14:45.260 --> 00:14:48.860
+führt die manuellen Testfälle aus und verifiziert die Funktion dies.
+
+00:14:49.860 --> 00:14:50.600
+Doch Sie finden einen Fehler.
+
+00:14:51.400 --> 00:14:52.560
+Die Fehlermeldung ist falsch geschrieben.
+
+00:14:53.000 --> 00:14:54.880
+Sie klicken direkt aus dem Testfall auf Bug erstellen
+
+00:14:54.880 --> 00:14:58.040
+und ein neues Arbeitselement erscheint in Boards verknüpft mit der ursprünglichen User Story.
+
+00:14:58.040 --> 00:15:01.160
+Der Entwickler sieht es, behebt es, pusht den Code, die Pipeline läuft erneut,
+
+00:15:01.240 --> 00:15:03.920
+der Tester wiederholt den Test und er ist erfolgreich und er ist erfolgreich.
+
+00:15:04.400 --> 00:15:04.900
+Schritt 5
+
+00:15:04.900 --> 00:15:09.560
+Das Feature ist fertig und das Team veröffentlicht die gemeinsame Authentifizierungsbibliothek in Azure Artifacts.
+
+00:15:09.920 --> 00:15:11.460
+Jetzt können andere Teams sie in ihrem Projekt nutzen.
+
+00:15:11.900 --> 00:15:14.540
+Die Komponente zum Zurücksetzen des Passworts ist als Paket verfügbar,
+
+00:15:14.620 --> 00:15:18.060
+sodass jedes Team, das eine neue Funktion mit Authentifizierung baut, sie mit der Zeile Code einbinden kann.
+
+00:15:18.380 --> 00:15:20.100
+Kein Umschreiben, kein Kopieren, nur eine Referenz.
+
+00:15:20.440 --> 00:15:21.580
+Das ist das Vernetztegebäude in Aktion.
+
+00:15:22.160 --> 00:15:23.040
+Jeder Dienst ist an Raum.
+
+00:15:23.860 --> 00:15:25.100
+Boards ist der Planungsraum.
+
+00:15:25.100 --> 00:15:31.660
+Repos, die Code-Bibliothek, Pipelines, die Werkshalle, Tests, Plans, die Qualitätsprüfung und Artifacts, das Lager.
+
+00:15:33.100 --> 00:15:34.940
+Doch die wahre Stärke liegt nicht in einem einzelnen Raum.
+
+00:15:35.360 --> 00:15:36.500
+Es sind die Flure, die sie verbinden.
+
+00:15:37.440 --> 00:15:38.800
+Das Arbeits-Element verlinkt zum Code.
+
+00:15:38.880 --> 00:15:41.060
+Der Code startet die Pipeline, die Pipeline stellt für Tests bereit.
+
+00:15:41.120 --> 00:15:43.680
+Der Test erstellt Bugs und Boards, das fertige Paket geht an Artifacts.
+
+00:15:44.580 --> 00:15:45.620
+Alles kommuniziert mit allen.
+
+00:15:46.060 --> 00:15:46.940
+Und hier wird es interessant.
+
+00:15:47.440 --> 00:15:48.600
+KI kommt in Azure DevOps.
+
+00:15:49.260 --> 00:15:51.560
+Microsoft führt bereits Co-Pilot-Integrationen ein,
+
+00:15:51.560 --> 00:15:54.300
+wie die Unterstützung bei Arbeitselementen für bessere User Stories,
+
+00:15:54.300 --> 00:15:59.900
+KI zur Zusammenfassung langer Diskussionen und Co-Pilot-Code-Review zur automatischen Überprüfung von Pull-Requests.
+
+00:16:00.720 --> 00:16:02.040
+Es ist noch früh, aber die Richtung ist klar.
+
+00:16:02.900 --> 00:16:05.980
+Azure DevOps entwickelt sich zu einer intelligenten Plattform, nicht nur einer Sammlung von Tools.
+
+00:16:06.480 --> 00:16:07.820
+Was ist also der beste Weg, um anzufangen?
+
+00:16:08.160 --> 00:16:09.740
+Sie müssen nicht alle fünf Dienste auf einmal nutzen.
+
+00:16:10.380 --> 00:16:10.920
+Suchen Sie sich ein.
+
+00:16:11.500 --> 00:16:15.800
+Beginnen Sie mit Boards, stellen Sie ein Projekt, verfolgen Sie ein paar Aufgaben und sehen Sie, wie es sich anfühlt.
+
+00:16:16.940 --> 00:16:19.560
+Fügen Sie dann Repos hinzu, wenn Sie bereit sind und danach Pipelines Schritt für Schritt.
+
+00:16:20.000 --> 00:16:20.840
+Ihr erster Schritt.
+
+00:16:21.220 --> 00:16:21.980
+Hier ist der Kerngedanke.
+
+00:16:21.980 --> 00:16:25.440
+Azure DevOps sind nicht fünf separate Tools, es ist eine vernetzte Plattform.
+
+00:16:26.360 --> 00:16:29.700
+Boards, Repos, Pipelines, Testplans und Artifacts arbeiten alle zusammen.
+
+00:16:30.160 --> 00:16:32.240
+Der Wert liegt nicht in einem einzelnen Teil, sondern darin, wie sie zusammenpassen.
+
+00:16:32.540 --> 00:16:33.300
+Hier ist der erste Schritt.
+
+00:16:33.660 --> 00:16:36.260
+Gehen Sie auf dev.azure.com und erstellen Sie ein kostenloses Konto.
+
+00:16:36.680 --> 00:16:37.620
+Daten Sie dann ein neues Projekt.
+
+00:16:37.960 --> 00:16:38.640
+Erkunden Sie Boards.
+
+00:16:38.860 --> 00:16:39.780
+Erstellen Sie eine User Story.
+
+00:16:40.080 --> 00:16:42.040
+Ziehen Sie sie über das Kanban-Board und sehen Sie, wie es funktioniert.
+
+00:16:42.380 --> 00:16:43.160
+Es ist Ihre Herausforderung.
+
+00:16:43.540 --> 00:16:44.420
+Wählen Sie ein kleines Projekt.
+
+00:16:44.540 --> 00:16:45.480
+Irgendetwas reicht völlig aus.
+
+00:16:45.800 --> 00:16:47.120
+Verfolgen Sie es eine Woche lang in Boards.
+
+00:16:47.120 --> 00:16:48.040
+Fügen Sie Aufgaben hinzu.
+
+00:16:48.280 --> 00:16:51.240
+Aktualisieren Sie den Status und erleben Sie, wie es ist, wenn Ihre Arbeit sichtbar und organisiert ist.
+
+00:16:51.980 --> 00:16:53.220
+In dieser nächsten Episode tauchen wir in Azure Pipelines ein.
+
+00:16:53.660 --> 00:16:58.580
+Wir bauen Schritt für Schritt Ihre erste CICD-Pipeline und Sie sehen, wie man Builds und Deployments von Grund auf automatisiert.
+
+00:16:59.640 --> 00:17:03.880
+Abonnieren Sie auf Ihrer Lieblings-Podcast-Plattform und teilen Sie diese Folge mit jemandem, der seine DevOps-Reise beginnt.

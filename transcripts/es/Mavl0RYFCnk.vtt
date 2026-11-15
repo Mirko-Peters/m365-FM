@@ -1,0 +1,883 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.780
+El tema de hoy es uno del que casi todo el mundo ha oído hablar, pero que casi nadie puede explicar.
+
+00:00:04.180 --> 00:00:05.540
+Sin servidor, ¿qué es exactamente?
+
+00:00:05.960 --> 00:00:08.500
+¿Es realmente solo código que se ejecuta en la nada o es algo mucho más grande?
+
+00:00:08.820 --> 00:00:09.700
+Dejemos una cosa clara.
+
+00:00:10.460 --> 00:00:11.820
+Sin servidor no significa que no haya servidor.
+
+00:00:12.180 --> 00:00:13.460
+Significa que no piensas en ellos.
+
+00:00:13.700 --> 00:00:16.000
+Y esa distinción cambia por completo la forma en que creas software.
+
+00:00:16.560 --> 00:00:18.900
+Al final de este episodio entenderás que son realmente las Azure Functions,
+
+00:00:19.000 --> 00:00:21.280
+cómo funcionan realmente los precios y cuándo deberías usarlas.
+
+00:00:22.040 --> 00:00:24.840
+Desglosaremos esto en los componentes básicos, empezando por el mito más grande.
+
+00:00:25.180 --> 00:00:26.780
+¿Qué significa realmente sin servidor?
+
+00:00:27.320 --> 00:00:28.560
+Vamos a aclarar unos mitos de inmediato.
+
+00:00:28.560 --> 00:00:32.240
+El nombre sin servidor es el peor término de marketing que se le ha ocurrido a Microsoft.
+
+00:00:32.840 --> 00:00:34.980
+Así que la gente crea que literalmente no hay servidores de por medio.
+
+00:00:35.300 --> 00:00:35.640
+Eso no es cierto.
+
+00:00:36.100 --> 00:00:36.620
+Hay servidores.
+
+00:00:37.200 --> 00:00:38.200
+Simplemente no tienes que tocarlos.
+
+00:00:38.660 --> 00:00:42.340
+Hace 20 años, si querías ejecutar un fragmento de código en Internet, tenías que trabajar mucho.
+
+00:00:42.840 --> 00:00:45.260
+Alquilarías una máquina virtual, instalarías un sistema operativo,
+
+00:00:45.500 --> 00:00:47.600
+configurarías un servidor web, implementarías tu aplicación.
+
+00:00:47.900 --> 00:00:50.360
+Luego pasarías cada fin de semana aplicando parches de seguridad
+
+00:00:50.360 --> 00:00:52.520
+y asegurándote de que el sistema no se bloqueara a las 3 de la mañana.
+
+00:00:52.680 --> 00:00:53.200
+Aquí está la cuestión.
+
+00:00:53.680 --> 00:00:56.180
+Pagabas por ese servidor tanto si tu código se estaba ejecutando como si.
+
+00:00:56.180 --> 00:00:58.860
+Se quedaba allí zumbando, quemando dinero mientras dormía.
+
+00:00:59.160 --> 00:01:01.320
+La tecnología sin servidor pone todo este modelo patas arriba.
+
+00:01:01.780 --> 00:01:04.820
+Escribes tu código, lo subes y la plataforma se encarga de todo lo demás.
+
+00:01:05.340 --> 00:01:08.120
+El sistema operativo, los parches de seguridad, el escalado y disponibilidad.
+
+00:01:08.840 --> 00:01:10.740
+Tu trabajo es simplemente escribir la lógica que importa.
+
+00:01:11.380 --> 00:01:14.000
+Piensa en ello como la diferencia entre gestionar la cocina de un restaurante
+
+00:01:14.000 --> 00:01:15.180
+y utilizar una máquina expendedora.
+
+00:01:15.640 --> 00:01:18.940
+La cocina de un restaurante necesita personal completo, suministros constantes y mantenimiento.
+
+00:01:19.420 --> 00:01:22.060
+Cuesta dinero todos los días, incluso si nadie entra por la puerta.
+
+00:01:22.060 --> 00:01:26.900
+Una máquina expendedora está ahí en la esquina sin hacer nada hasta que alguien pulsa un botón.
+
+00:01:27.560 --> 00:01:29.560
+Entonces cobra vida, hace su trabajo y vuelve a dormir.
+
+00:01:30.240 --> 00:01:32.300
+Solo pagas la electricidad cuando realmente está funcionando.
+
+00:01:32.500 --> 00:01:33.540
+Ese es sin servidor en poca palabra.
+
+00:01:33.980 --> 00:01:35.560
+Azure Functions es la versión de Microsoft Edge.
+
+00:01:36.000 --> 00:01:38.280
+Ejecuta pequeños fragmentos de código en respuesta a eventos.
+
+00:01:38.820 --> 00:01:40.880
+Su código permanece inactivo hasta que algo lo activa.
+
+00:01:41.020 --> 00:01:42.860
+Luego se ejecuta, finaliza y vuelve a dormirse.
+
+00:01:43.280 --> 00:01:44.540
+Entonces, ¿cómo se ve realmente ese código?
+
+00:01:45.260 --> 00:01:46.180
+¿Qué son Azure Functions?
+
+00:01:46.180 --> 00:01:49.800
+Una función es un único fragmento de código que realiza una tarea específica.
+
+00:01:49.980 --> 00:01:50.380
+Eso es todo.
+
+00:01:50.600 --> 00:01:54.040
+No es una aplicación completa con una página de inicio de sesión, una base de datos y 20 pantallas.
+
+00:01:54.460 --> 00:01:55.660
+Es una tarea específica.
+
+00:01:56.180 --> 00:01:57.620
+Piensa en ello como el interruptor de su casa.
+
+00:01:57.800 --> 00:02:00.340
+Se apaga o se enciende para trabajar y luego vuelve a apagarse.
+
+00:02:01.500 --> 00:02:05.220
+Un servidor web tradicional es lo opuesto, como dejar las luces de casa encendidas 24-7
+
+00:02:05.220 --> 00:02:07.740
+incluso durante los momentos en que no hay nadie en el hogar.
+
+00:02:08.580 --> 00:02:11.240
+Azure Functions admite varios lenguajes de programación diferentes.
+
+00:02:11.240 --> 00:02:15.540
+Puede usar el que le resulte más cómodo, JavaScript, Python, C, Java, PowerShell.
+
+00:02:16.140 --> 00:02:17.040
+Tiene una respuesta correcta.
+
+00:02:17.280 --> 00:02:18.240
+Elige el lenguaje que ya conozca.
+
+00:02:18.840 --> 00:02:20.180
+Ahora, aclaremos una confusión común.
+
+00:02:20.840 --> 00:02:22.600
+Una aplicación de funciones no es lo mismo que una función.
+
+00:02:23.160 --> 00:02:24.780
+La aplicación de funciones es el contenedor.
+
+00:02:25.060 --> 00:02:26.080
+Piensa que es una caja de herramientas.
+
+00:02:26.420 --> 00:02:29.840
+Creas una aplicación de funciones y dentro de esa caja de herramientas agregas varias funciones.
+
+00:02:30.300 --> 00:02:32.300
+Cada función es una herramienta aparte que hace su propio trabajo.
+
+00:02:32.860 --> 00:02:34.880
+Puedes tener una función que gestione los registros de usuarios,
+
+00:02:35.100 --> 00:02:38.420
+otra que procese las imágenes cargadas y una tercera que envíe informes nocturnos.
+
+00:02:38.760 --> 00:02:41.120
+Viven en la misma caja de herramientas pero operan por separado.
+
+00:02:42.040 --> 00:02:44.440
+Otra cosa sobre las funciones es que no tienen estado por diseño.
+
+00:02:44.760 --> 00:02:46.420
+Eso significa que no recuerda nada entre ejecución.
+
+00:02:46.680 --> 00:02:49.400
+Si tu función procesa un archivo y finaliza, eso es todo.
+
+00:02:49.840 --> 00:02:52.160
+La próxima vez que se ejecute comenzará de cero sin recordar el timón.
+
+00:02:52.520 --> 00:02:55.620
+Esto parece una limitación, pero en realidad es la característica que las hace tan eficaces.
+
+00:02:56.200 --> 00:02:58.160
+Dado que las funciones no conservan la memoria ni el estado,
+
+00:02:58.480 --> 00:03:01.580
+Azure puede poner en marcha 100 copias de tu función al instante cuando hay picos de tráfico
+
+00:03:01.580 --> 00:03:03.660
+y cerrarlas con la misma rapidez cuando el tráfico disminuye.
+
+00:03:03.860 --> 00:03:06.700
+Así es como obtienes escalabilidad sin pagar por servidores inactivos.
+
+00:03:07.080 --> 00:03:07.780
+Aquí está la pregunta.
+
+00:03:07.780 --> 00:03:10.860
+Si una función simplemente permanece ahí sin hacer nada hasta que algo la despierta
+
+00:03:10.860 --> 00:03:13.540
+que la despierta realmente, ahí es donde entran los disparadores.
+
+00:03:13.800 --> 00:03:14.820
+Los disparadores y el cuándo.
+
+00:03:15.420 --> 00:03:17.980
+Cada función debe tener exactamente un disparador y eso no es opcional.
+
+00:03:18.360 --> 00:03:20.100
+El disparador es el evento que despierta tu función.
+
+00:03:20.700 --> 00:03:23.620
+Sin él, tu código simplemente permanece ahí sin hacer absolutamente nada.
+
+00:03:23.840 --> 00:03:24.940
+Piensa en los disparadores como un tiempo.
+
+00:03:25.380 --> 00:03:26.840
+Tu función está dentro de la casa esperando.
+
+00:03:27.300 --> 00:03:28.020
+Podría esperar para siempre.
+
+00:03:28.580 --> 00:03:30.200
+No pasa nada hasta que alguien llama al timbre.
+
+00:03:31.040 --> 00:03:34.400
+Entonces la función entra en acción, abre la puerta, hace su trabajo y vuelve a esperar.
+
+00:03:34.400 --> 00:03:37.320
+Hay cuatro detonantes con los que los principiantes se topan seguido.
+
+00:03:37.960 --> 00:03:40.100
+Disparador HTTP es el punto de partida más común.
+
+00:03:40.800 --> 00:03:44.020
+Alguien visita una URL o realiza una llamada a la API y tu función se activa.
+
+00:03:44.340 --> 00:03:47.620
+Si es como se crean API ligeras sin configurar un servidor web completo,
+
+00:03:48.280 --> 00:03:50.280
+luego está el disparador de tiempo que se ejecuta por horario.
+
+00:03:50.960 --> 00:03:55.180
+Estableces una expresión Chrome, algo como ejecutar cada hora o ejecutar a medianoche todas las noches,
+
+00:03:55.540 --> 00:03:57.520
+y tu función se activa a esas horas exactas.
+
+00:03:58.280 --> 00:04:01.820
+Perfecto para tareas de mantenimiento, trabajos de limpieza o generación de informes nocturnos.
+
+00:04:01.820 --> 00:04:05.020
+El desencadenador de blobs se activa cuando se carga un archivo en Azure Storage.
+
+00:04:05.460 --> 00:04:07.660
+Digamos que alguien cargue un PDF en una carpeta específica.
+
+00:04:08.020 --> 00:04:10.900
+El desencadenador de blobs detecta esa carga y ejecuta la función automáticamente.
+
+00:04:11.400 --> 00:04:14.740
+Esto es clave para el procesamiento de imágenes, la conversión de documentos y la validación de archivos.
+
+00:04:15.180 --> 00:04:17.700
+Y el desencadenador de colas se activa cuando aparece un mensaje en una cola.
+
+00:04:18.200 --> 00:04:20.460
+Las colas son una forma de desacoplar diferentes partes del sistema.
+
+00:04:20.900 --> 00:04:25.080
+Un servicio coloca un mensaje en una cola y la función lo recoge y lo procesa cuando está listo.
+
+00:04:25.780 --> 00:04:28.040
+Esto evita que un servicio lento bloquee todo lo demás.
+
+00:04:28.720 --> 00:04:29.960
+Este es el punto clave.
+
+00:04:29.960 --> 00:04:33.180
+Cuando se activa un desencadenador, pasa datos a la función automáticamente.
+
+00:04:34.020 --> 00:04:35.880
+No es necesario que la sondeen y que compruebe si ha ocurrido algo.
+
+00:04:36.340 --> 00:04:39.360
+El desencadenador le proporciona todo lo que necesite y la función simplemente lo procesa.
+
+00:04:39.600 --> 00:04:42.280
+Una función sin desencadenador es simplemente código que no hace nada.
+
+00:04:43.060 --> 00:04:44.120
+Desencadenador es lo que le da un propósito.
+
+00:04:44.640 --> 00:04:46.420
+El desencadenador le indica tu función cuando ejecuta.
+
+00:04:46.820 --> 00:04:48.500
+Pero ¿de dónde provienen los datos y a dónde van?
+
+00:04:48.980 --> 00:04:49.760
+Ahí es donde entra en juegos.
+
+00:04:49.760 --> 00:04:52.680
+Enlaces, entrada de datos, salida de datos.
+
+00:04:52.980 --> 00:04:58.320
+Los enlaces son una forma de indicarle a tu función qué datos leer y dónde enviar los resultados sin escribir todo el código adicional.
+
+00:04:58.900 --> 00:05:00.400
+Es un trabalenguas, así que permíteme simplificar.
+
+00:05:00.900 --> 00:05:01.540
+Existen dos tipos.
+
+00:05:01.920 --> 00:05:03.620
+Los enlaces de entrada introducen datos en tu función.
+
+00:05:03.920 --> 00:05:05.660
+Los enlaces de salida envían datos.
+
+00:05:05.660 --> 00:05:11.500
+Sin enlaces, tendrías que escribir código SDK cada vez que quisieras comunicarte con una cuenta de almacenamiento, una base de datos o una cola.
+
+00:05:12.240 --> 00:05:16.860
+Gestionarías cadenas de conexión, administrarías reintentos, serializarías datos y deserializarías respuestas.
+
+00:05:17.220 --> 00:05:18.980
+Es mucho código repetitivo solo para leer un archivo.
+
+00:05:19.220 --> 00:05:21.060
+Con los enlaces, solo declaras lo que necesitas.
+
+00:05:21.560 --> 00:05:24.500
+Dices, quiero leer de este contenedor de blobs o quiero escribir en esta cola.
+
+00:05:25.460 --> 00:05:26.520
+El entorno de ejecución se encarga.
+
+00:05:26.900 --> 00:05:30.520
+Abre la conexión, lee los datos y se los pasa a tu función como parámetro.
+
+00:05:30.980 --> 00:05:34.520
+Cuando tu función finaliza, toma el valor de retorno y lo escribe donde hayas especificado.
+
+00:05:35.660 --> 00:05:37.000
+Piensa en los enlaces como si fueran tubería.
+
+00:05:37.520 --> 00:05:40.360
+Conectas tu función a una cuenta de almacenamiento, una base de datos o una cola.
+
+00:05:40.580 --> 00:05:42.720
+Los datos fluyen a través de esas canalizaciones automáticamente.
+
+00:05:43.380 --> 00:05:45.180
+Tu función no necesita saber cómo funciona la canalización.
+
+00:05:45.820 --> 00:05:48.020
+Simplemente recibe lo que llega y envía todo lo que debe salir.
+
+00:05:48.380 --> 00:05:49.300
+Aquí tienes un ejemplo concreto.
+
+00:05:49.740 --> 00:05:51.040
+Imagina que tienes un enlace de entrada de blobs.
+
+00:05:51.520 --> 00:05:55.640
+Cuando tu función se inicia, lee automáticamente un archivo del almacenamiento de blobs y te lo entrega como parámetro.
+
+00:05:55.640 --> 00:05:57.720
+No escribes ningún código de LCD de almacenamiento.
+
+00:05:58.100 --> 00:05:59.460
+Solo obtienes los datos y los procesos.
+
+00:05:59.720 --> 00:06:01.240
+Otro ejemplo es un enlace de salida de cola.
+
+00:06:01.620 --> 00:06:04.340
+Tu función procesa algo y al final devuelves un valor.
+
+00:06:04.340 --> 00:06:08.100
+El entorno de ejecución toma ese valor, lo serializa y lo coloca en la cola.
+
+00:06:08.600 --> 00:06:09.660
+No escribes ningún código de cola.
+
+00:06:10.000 --> 00:06:10.760
+Solo devuelves un valor.
+
+00:06:11.100 --> 00:06:12.060
+Los enlaces son opcionales.
+
+00:06:12.300 --> 00:06:13.720
+Puedes tener cero, uno o muchos.
+
+00:06:14.540 --> 00:06:16.940
+Algunas funciones solo necesitan un desencadenador sin ningún enlace.
+
+00:06:17.540 --> 00:06:20.180
+Otras pueden tener tres o cuatro enlaces que se conectan a diferentes servicios.
+
+00:06:20.780 --> 00:06:23.820
+La combinación de desencadenadores y enlaces es lo que hace que Azure Function sea tan eficaz.
+
+00:06:24.280 --> 00:06:28.780
+Escribes la lógica empresarial, el código de toma de decisiones real, la plataforma gestiona integración.
+
+00:06:29.500 --> 00:06:32.180
+Tu función se mantiene pequeña, centrada y fácil de entender.
+
+00:06:32.180 --> 00:06:34.820
+La historia de los precios.
+
+00:06:35.140 --> 00:06:36.680
+El precio es lo que más sorprende a los principiantes.
+
+00:06:37.420 --> 00:06:41.680
+Para la mayoría de las personas, el plan de consumo es la opción predeterminada y deberías empezar con él el 90% de las veces.
+
+00:06:42.180 --> 00:06:42.860
+Así es como funciona.
+
+00:06:43.320 --> 00:06:44.940
+Pagas o loco de tu función se ejecuta realmente.
+
+00:06:45.620 --> 00:06:46.900
+Cuando está inactiva no pagas nada.
+
+00:06:47.320 --> 00:06:48.140
+Cero ni un céntimo.
+
+00:06:49.040 --> 00:06:50.480
+La factura está compuesta por dos componentes.
+
+00:06:50.480 --> 00:06:51.880
+Primero, el número de ejecuciones.
+
+00:06:52.040 --> 00:06:53.420
+¿Cuántas veces se activa tu función?
+
+00:06:54.120 --> 00:06:55.460
+Segundo, el tiempo de ejecución.
+
+00:06:55.800 --> 00:06:57.440
+Medido en algo llamado GB segundos.
+
+00:06:58.040 --> 00:07:01.060
+Básicamente es el tiempo que se ejecutó tu función multiplicado por la cantidad de nubes que tienes.
+
+00:07:01.300 --> 00:07:02.440
+¿La subvención gratuita es género?
+
+00:07:02.860 --> 00:07:06.940
+Obtienes un millón de ejecuciones al mes y 400.000 GB segundos completamente gratis.
+
+00:07:07.580 --> 00:07:11.260
+Para la mayoría de los proyectos pequeños, aplicaciones de pasatiempos y prototipos, nunca pagarás un céntimo.
+
+00:07:11.620 --> 00:07:11.840
+Nunca.
+
+00:07:12.480 --> 00:07:15.220
+Si superas la subvención gratuita, las tarifas siguen siendo increíblemente baratas.
+
+00:07:15.400 --> 00:07:16.680
+20 céntimos por millón de ejecución.
+
+00:07:17.000 --> 00:07:17.420
+No es un error.
+
+00:07:17.420 --> 00:07:19.180
+20 centavos por millón de ejecución.
+
+00:07:19.480 --> 00:07:22.460
+Piensa en ello como si pagaras la electricidad solo cuando enciendes el interruptor.
+
+00:07:22.860 --> 00:07:25.200
+No hay una cuota mensual básica por tener el cableado en las paredes.
+
+00:07:25.800 --> 00:07:27.360
+Solo pagas por la energía que realmente usa.
+
+00:07:27.820 --> 00:07:28.760
+Ahora bien, existen los planes.
+
+00:07:29.280 --> 00:07:31.200
+Flex Consumption es más nuevo y te ofrece su parte virtual.
+
+00:07:31.860 --> 00:07:34.840
+Premium mantiene tus funciones siempre activas, por lo que no hay demoras de inicio en frío.
+
+00:07:35.340 --> 00:07:38.220
+Dedicated te ofrece capacidad fija en un plan de App Service tradicional.
+
+00:07:38.880 --> 00:07:41.220
+Pero para empezar, Consumption es la opción correcta casi siempre.
+
+00:07:41.740 --> 00:07:42.500
+Sin embargo, una adverte.
+
+00:07:42.500 --> 00:07:46.100
+La conciación gratuita se comparte entre todas tus aplicaciones de funciones en la misma suzco.
+
+00:07:46.100 --> 00:07:49.900
+Si tienes 10 aplicaciones de funciones, todas ellas utilizan el mismo millón de ejecuciones gratuitas.
+
+00:07:50.300 --> 00:07:53.660
+Así que te lo encuentras si empiezas a sacar más de unas cuantas, el precio es genial.
+
+00:07:54.180 --> 00:07:55.980
+Pero vamos a ponerlo en práctica con un ejemplo concreto.
+
+00:07:56.800 --> 00:07:57.800
+Un escenario del mundo real.
+
+00:07:58.280 --> 00:08:00.840
+Imagina que tienes un sitio web en el que los usuarios suben fotos de perfil.
+
+00:08:01.180 --> 00:08:03.540
+Esas imágenes son enormes, como 10 megabytes cada una.
+
+00:08:04.000 --> 00:08:05.220
+Y eso causa algunos problemas reales.
+
+00:08:05.840 --> 00:08:09.720
+Los archivos grandes cuestan más de almacenar, ralentizan tu sitio web cada vez que alguien cargue una página.
+
+00:08:09.720 --> 00:08:12.200
+Y frustran a los usuarios que tienen que esperar a que aparezcan las fotos.
+
+00:08:12.840 --> 00:08:15.740
+Por lo tanto, necesitas una forma de reducir esas imágenes automáticamente.
+
+00:08:16.260 --> 00:08:19.400
+Sin Azure Functions, tendrías que crear un trabajador en segundo plano desde cero.
+
+00:08:19.860 --> 00:08:25.780
+Eso significa obtener un servidor independiente, configurar una cola para administrar la carga de trabajo y escribir código para gestionar todas las piezas móviles.
+
+00:08:26.040 --> 00:08:29.340
+Es una complejidad innecesaria para algo tan sencillo como reducir una imagen.
+
+00:08:30.000 --> 00:08:33.080
+Con Azure Functions, todo lo que necesitas es un desencadenador de blobs y una función.
+
+00:08:33.620 --> 00:08:34.820
+No hay servidores de los que preocuparse.
+
+00:08:35.260 --> 00:08:36.540
+Deja que te explique cómo funciona.
+
+00:08:36.980 --> 00:08:40.720
+Un usuario carga una foto a través de tu sitio web y se archivó y llega al almacenamiento de blobs de Azure.
+
+00:08:41.120 --> 00:08:43.340
+Al llegar, se activa automáticamente un desencadenador de blobs.
+
+00:08:43.660 --> 00:08:47.980
+Tu función se activa, ejecuta el código de compresión y guarda la versión más pequeña en el almacenamiento.
+
+00:08:48.580 --> 00:08:49.740
+Todo esto ocurre en cuestión de segundos.
+
+00:08:50.320 --> 00:08:54.020
+El usuario nunca espera porque todo el proceso se ejecuta en segundo plano, completamente invisible.
+
+00:08:54.860 --> 00:08:56.060
+Aquí tienes otro ejemplo cotidiano.
+
+00:08:56.480 --> 00:08:58.940
+Enviar un correo electrónico de bienvenido cuando alguien se registra en tu servicio.
+
+00:08:59.620 --> 00:09:02.020
+Desencadenador HTTP captura la solicitud de registro de tu sitio web.
+
+00:09:02.300 --> 00:09:04.480
+Tu función se activa y obtiene la dirección de correo electrónico del usuario.
+
+00:09:04.480 --> 00:09:06.780
+Envía un mensaje de bienvenida a través de SendGrid y listo.
+
+00:09:07.180 --> 00:09:08.880
+El usuario recibe su correo electrónico casi alista.
+
+00:09:09.320 --> 00:09:11.700
+Sin servidores de correo que configurar ni con las que gestionar.
+
+00:09:12.080 --> 00:09:13.780
+Solo una función, una tarea y listo.
+
+00:09:14.180 --> 00:09:16.540
+Estas son las tareas exactas para las que se diseñó Azure Functions.
+
+00:09:16.940 --> 00:09:18.700
+Tareas pequeñas, centradas, controladas por eventos.
+
+00:09:18.980 --> 00:09:21.080
+No aplicaciones masivas ni flujos de trabajo complejos.
+
+00:09:21.220 --> 00:09:23.760
+Solo una cosa bien hecha, activada por algo que ocurre en otro lugar.
+
+00:09:24.920 --> 00:09:26.100
+¿Cuándo usar Azure Functions?
+
+00:09:26.780 --> 00:09:29.540
+Entonces, ¿cuándo deberías recurrir a una función y cuándo deberías usar otra cosa?
+
+00:09:30.200 --> 00:09:31.380
+Esta es una forma rápida de decidir.
+
+00:09:31.380 --> 00:09:35.440
+Pregúntate si la tarea es corta, si está controlada por eventos y si no tiene estado.
+
+00:09:36.240 --> 00:09:39.500
+Si he respondido sí a las tres, entonces Azure Functions es probablemente la herramienta adecuada.
+
+00:09:40.200 --> 00:09:41.460
+Empecemos por los buenos casos de uso.
+
+00:09:41.960 --> 00:09:43.820
+SAP y los webhooks, una combinación perfecta.
+
+00:09:44.700 --> 00:09:47.380
+Necesitas un punto final ligero que responda a una solicitud HTTP.
+
+00:09:47.680 --> 00:09:48.960
+Haga una cosa y devuelva un resultado.
+
+00:09:49.140 --> 00:09:50.860
+Y para eso están diseñados los activadores HTTP.
+
+00:09:50.860 --> 00:09:53.980
+Procesar archivos e imágenes es otro punto importante.
+
+00:09:54.520 --> 00:09:59.160
+Un archivo llega al almacenamiento, tu función se activa, lo transforma y guarda el resultado, todo, sin un servidor.
+
+00:10:00.240 --> 00:10:04.260
+Tareas como la limpieza nocturna o generar informes funcionan muy bien con activadores de temporizador.
+
+00:10:05.140 --> 00:10:07.320
+Transformar datos para tuberías CTL también es muy común.
+
+00:10:08.120 --> 00:10:12.920
+Las funciones son el pegamento perfecto para la integración, ya que conectan dos servicios que no se comunican entre sí de forma natural.
+
+00:10:13.300 --> 00:10:15.320
+Ahora, hablemos de cuando las funciones no son una buena opción.
+
+00:10:15.320 --> 00:10:23.160
+Los procesos de ejecución son un problema, porque en el plan de consumo las funciones tienen un límite de tiempo de espera de 5 minutos de forma predeterminada, hasta ahí si lo configuras.
+
+00:10:23.500 --> 00:10:26.200
+E. Si tu trabajo tarda más que eso, necesitas algo más.
+
+00:10:26.700 --> 00:10:28.380
+Las aplicaciones con estado son otro desajuste.
+
+00:10:28.960 --> 00:10:30.760
+Las funciones no recuerdan nada entre ejecuciones.
+
+00:10:31.400 --> 00:10:35.380
+Si necesitan mantener el estado de la sesión o revisar un seguimiento del progreso en los pasos, estás yendo en contra de la sesión.
+
+00:10:35.840 --> 00:10:37.440
+Las cargas de cómputo pesadas también fallan.
+
+00:10:38.020 --> 00:10:42.300
+Si necesitas una CPU sostenida durante minutos u horas, una máquina virtual o un contenedor son una mejor opción.
+
+00:10:42.300 --> 00:10:47.860
+Y los flujos de trabajo complejos, en los que una tarea depende de otra, se gestionan mejor con funciones duraderas o aplicaciones lógicas.
+
+00:10:48.360 --> 00:10:49.880
+Aquí tienes una descripción general rápida de la salida.
+
+00:10:50.480 --> 00:10:53.180
+Azure Logic Apps es la opción sin código para conectar servicios.
+
+00:10:53.620 --> 00:10:57.060
+Si no necesitas escribir código personalizado, Logic Apps puede hacer el trabajo con diseñador visual.
+
+00:10:57.600 --> 00:11:00.880
+Azure App Services es para aplicaciones web completas que se ejecutan las 24 horas de la semana.
+
+00:11:01.520 --> 00:11:04.440
+Si necesitas una web o API completa que esté siempre activa, esa es tu herramienta.
+
+00:11:05.020 --> 00:11:08.640
+Azure Container Apps te ofrece microservicios en contenedores con más control sobre el tiempo de ejecución.
+
+00:11:08.640 --> 00:11:12.280
+Y Azure Virtual Machines te ofrece control total sobre el sistema operativo si lo necesitas.
+
+00:11:12.980 --> 00:11:14.260
+Aquí tienes una regla general sencilla.
+
+00:11:14.500 --> 00:11:18.600
+Si puedes describir el trabajo en una frase, probablemente sea un buen candidato para una función.
+
+00:11:19.440 --> 00:11:20.740
+Comprime las imágenes cuando se cargue.
+
+00:11:21.460 --> 00:11:23.080
+Ve un correo de bienvenida cuando alguien se registra.
+
+00:11:24.040 --> 00:11:25.820
+Que ejecuta un proceso de limpieza cada noche a mediano.
+
+00:11:26.300 --> 00:11:27.780
+Una frase, un trabajo, una función.
+
+00:11:28.800 --> 00:11:30.280
+Errores comunes de principiante que debes evitar.
+
+00:11:30.840 --> 00:11:32.520
+Ahora, hablemos de algunas cosas a tener en cuenta.
+
+00:11:33.080 --> 00:11:35.580
+Estos son los errores en los que casi todo el mundo comete el error de empezar.
+
+00:11:35.740 --> 00:11:38.620
+Un error común de principiante es creer que las funciones son siempre gratis.
+
+00:11:39.020 --> 00:11:40.360
+La concesión de funciones gratuitas se generó.
+
+00:11:40.360 --> 00:11:47.120
+Sé que un millón de ejecuciones parece mucho, pero si tu función se vuelve viral o la ataca un bot, esas ejecuciones se acumulan rápidamente.
+
+00:11:47.920 --> 00:11:52.360
+Por lo tanto, supervisa tu uso, configura una alerta de presupuesto en Azure y no recibas una factura sorpresa a final de mes.
+
+00:11:52.800 --> 00:11:54.560
+Otro error es ignorar los arranques en fin.
+
+00:11:54.560 --> 00:11:57.780
+La primera vez que tu función se ejecuta después de estar inactiva, tarda más.
+
+00:11:58.340 --> 00:12:00.000
+En el plan de consumo se puede ser unos segundos.
+
+00:12:00.400 --> 00:12:01.460
+Para casi todo uso está bien.
+
+00:12:02.060 --> 00:12:08.580
+Pero si estás creando una API sensible a la latencia en la que cada milisegundo importa, considera el plan premium o habilita instancias siempre listas.
+
+00:12:09.280 --> 00:12:11.060
+Luego está escribir funciones que se ejecutan durante la ansiedad.
+
+00:12:11.700 --> 00:12:14.960
+Plan de consumo tiene un tiempo de espera de 5 minutos por defecto y 10 minutos como máximo.
+
+00:12:14.960 --> 00:12:19.880
+Si tu función tarda 15 minutos en procesar un archivo, se cerrará a mitad de camino.
+
+00:12:20.460 --> 00:12:23.060
+Vive ese trabajo en partes más pequeñas o usa un plan de alojamiento diferente.
+
+00:12:23.700 --> 00:12:26.580
+Otro error común es no usar la implementación de ejecución de este paquete.
+
+00:12:27.000 --> 00:12:31.040
+Es un simple cambio de configuración que mejora los arranques en frío y hace que las implementaciones sean más confiables.
+
+00:12:31.900 --> 00:12:34.900
+En lugar de copiar archivos individuales, implementa un paquete zip.
+
+00:12:35.300 --> 00:12:36.820
+Es una casilla de verificación en el portalado.
+
+00:12:37.540 --> 00:12:40.380
+Exponer puntos de conexión HTTP sin autenticación es otra trampa.
+
+00:12:40.380 --> 00:12:44.460
+Es fácil dejar una función en anónimo mientras estás haciendo pruebas y luego olvidarte bloquearla.
+
+00:12:45.060 --> 00:12:47.040
+Establece tu nivel de autorización correctamente desde el principio.
+
+00:12:47.320 --> 00:12:48.580
+Usa claves de función o de administración.
+
+00:12:48.760 --> 00:12:49.600
+No dejes la puerta abierta.
+
+00:12:50.020 --> 00:12:52.840
+Reutilizar cuentas de almacenamiento en varias aplicaciones de función también es un problema.
+
+00:12:53.100 --> 00:12:54.280
+En desarrollo está bien compartir.
+
+00:12:54.720 --> 00:12:57.620
+En producción, cada aplicación de función debe tener su propia cuenta de almacenamiento.
+
+00:12:58.000 --> 00:13:01.720
+De lo contrario, tendrás problemas de vecinos ruidosos donde el tráfico de una función ralentiza a otra.
+
+00:13:02.260 --> 00:13:04.060
+Y por último, no habilitar Application Insights.
+
+00:13:04.540 --> 00:13:05.560
+Sin él estás volando a ciegas.
+
+00:13:06.040 --> 00:13:08.120
+No verás fallos, errores o problemas de rendimiento.
+
+00:13:08.120 --> 00:13:11.360
+No sabrás si tu función se está ejecutando demasiado tiempo o falla silenciosamente.
+
+00:13:11.800 --> 00:13:12.740
+Habilítalo desde el primer día.
+
+00:13:13.140 --> 00:13:14.900
+Tarda 30 segundos y ahorra horas de depuración.
+
+00:13:15.760 --> 00:13:19.260
+La regla de oro para todo esto es mantener las funciones pequeñas, centradas y sin estado.
+
+00:13:19.940 --> 00:13:21.540
+Un trabajo por función, nada más.
+
+00:13:22.020 --> 00:13:22.560
+Hacia el sistema.
+
+00:13:23.040 --> 00:13:27.000
+Azure Functions es un proceso sin servidor que ejecuta pequeños fragmentos de código en respuesta a eventos.
+
+00:13:27.620 --> 00:13:28.800
+Solo paga cuando se ejecuta el código.
+
+00:13:29.200 --> 00:13:31.320
+Los desencadenadores indican a la función cuando activarse.
+
+00:13:31.400 --> 00:13:35.480
+Los enlaces la conectan a los datos que necesita y el plan de consumo la mantiene casi gratuita para proyectos pequeños.
+
+00:13:35.480 --> 00:13:40.240
+La mejor opción ahora mismo es crear una función desencadenada por HTTP simple en Azure Portal.
+
+00:13:41.100 --> 00:13:42.480
+Tarda 5 minutos y no cuesta nada.
+
+00:13:43.020 --> 00:13:46.140
+Suscríbase a Microsoft Knowledge Nuggets para obtener más desgloses en un lenguaje sencillo.
+
+00:13:46.280 --> 00:13:48.520
+Y comparta esto con alguien que no deja de preguntar qué significa sin servidor.
+
+00:13:49.280 --> 00:13:49.640
+Señora.

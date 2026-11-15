@@ -1,0 +1,2845 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.940
+Anda masih menyeret tugas di Microsoft Planner?
+
+00:00:02.600 --> 00:00:03.140
+Menarik sekali.
+
+00:00:03.560 --> 00:00:06.400
+Melihat Anda mengeklik, mengetik, dan menyeret kotak satu persatu itu
+
+00:00:06.400 --> 00:00:09.360
+seperti melihat seseorang menulis alamat surat secara manual di era email?
+
+00:00:09.780 --> 00:00:12.020
+Itu adalah kesibukan digital yang disamarkan sebagai produktivitas.
+
+00:00:12.500 --> 00:00:14.040
+Planner seharusnya mengelola proyek Anda,
+
+00:00:14.260 --> 00:00:15.840
+bukan menjadi tugas tambahan itu sendiri.
+
+00:00:16.620 --> 00:00:17.620
+Inilah Copilot Studio,
+
+00:00:18.200 --> 00:00:20.540
+bagian dari power platform Microsoft yang memungkinkan Anda
+
+00:00:20.540 --> 00:00:22.940
+membuat agen AI yang mampu menalar permintaan Anda.
+
+00:00:23.760 --> 00:00:25.540
+Perintahkan untuk membuat tiga tugas minggu depan,
+
+00:00:25.660 --> 00:00:27.740
+dan ia tidak hanya menganggup sopan, ia langsung membuatnya.
+
+00:00:27.740 --> 00:00:31.020
+Ia bisa mencantumkan, memperbarui, bahkan memprioritaskan
+
+00:00:31.020 --> 00:00:32.520
+tanpa Anda perlu mengangkat jari lagi.
+
+00:00:32.980 --> 00:00:36.060
+Di akhir video ini, Anda akan membuat agen Planner Anda sendiri dari NOC.
+
+00:00:36.480 --> 00:00:37.560
+Bukan sihir, hanya logika.
+
+00:00:37.940 --> 00:00:40.100
+Kita akan membahas cara membangun agen yang terhubung ke Planner,
+
+00:00:40.300 --> 00:00:43.280
+mengajarinya mengalar, dan mengujinya di dalam Microsoft 365 Copilot.
+
+00:00:43.780 --> 00:00:45.680
+Anda yang menentukan kejelasan, ia menaikkan kerjaannya.
+
+00:00:46.240 --> 00:00:47.660
+Memahami koneksi Planner-Copilot.
+
+00:00:48.400 --> 00:00:49.820
+Microsoft Planner adalah papan tugas Anda.
+
+00:00:50.460 --> 00:00:53.380
+Kartu, daftar, tenggat waktu, ilusi keteraturan.
+
+00:00:53.980 --> 00:00:56.560
+Namun, keteraturan yang dijaga dengan upaya manual tetap kekacauan,
+
+00:00:56.560 --> 00:00:57.840
+hanya saja disusun rapi menurut tab.
+
+00:00:58.100 --> 00:01:00.240
+Planner tidak pernah dimaksudkan untuk memperluas tenaga kerja manusia.
+
+00:01:00.540 --> 00:01:01.540
+Planner dimasukkan untuk menstruktur.
+
+00:01:02.220 --> 00:01:03.700
+Masalahnya adalah Anda terus menjadi hambatan.
+
+00:01:04.420 --> 00:01:06.480
+Setiap tenggat waktu, setiap syarat, dan lepas bergantung pada Anda
+
+00:01:06.480 --> 00:01:08.020
+yang mengeklik seperti merpati mekanis.
+
+00:01:08.860 --> 00:01:10.720
+Copilot Studio memperbaikinya bukan dengan memberi Anda
+
+00:01:10.720 --> 00:01:11.940
+lebih banyak tombol untuk ditekan,
+
+00:01:12.280 --> 00:01:14.500
+melainkan dengan menghilangkan kebutuhan untuk menekannya sama sekali.
+
+00:01:14.940 --> 00:01:17.140
+Ini adalah lapisan percakapan yang mengubah bahasa manusia
+
+00:01:17.140 --> 00:01:18.300
+menjadi tindakan otomatis.
+
+00:01:18.900 --> 00:01:21.080
+Anda meminta tambahkan tugas untuk menguji prototipe,
+
+00:01:21.520 --> 00:01:22.980
+dan agen tersebut memahami konteksnya,
+
+00:01:22.980 --> 00:01:25.400
+proyek mana, rencana mana, dan bagaimana itu cocok di papan.
+
+00:01:26.160 --> 00:01:28.680
+Bandingkan dengan Power Automate yang menangani logika back-end
+
+00:01:28.680 --> 00:01:30.700
+dipata terli alur kerja berbasis peristiwa,
+
+00:01:31.440 --> 00:01:32.840
+Power Automate menunggu pemicu,
+
+00:01:33.020 --> 00:01:34.580
+menjalankan alur, mengikuti aturan.
+
+00:01:35.340 --> 00:01:36.420
+Namun Copilot Studio mendengarkan.
+
+00:01:37.000 --> 00:01:37.440
+Ia menalak.
+
+00:01:37.820 --> 00:01:39.520
+Ia memutuskan kapan harus memanggil konektor yang lalu.
+
+00:01:39.940 --> 00:01:42.020
+Anggap Power Automate sebagai ban berjalan di gudang.
+
+00:01:42.660 --> 00:01:43.900
+Copilot Studio adalah mandor,
+
+00:01:44.080 --> 00:01:45.620
+yang memberitahunya kapan harus mulai bergerak.
+
+00:01:45.980 --> 00:01:48.920
+Keduanya adalah spesies pelengkap dalam ekosistem otomatisasi Microsoft.
+
+00:01:49.360 --> 00:01:50.600
+Power Automate menjalankan aturan.
+
+00:01:50.980 --> 00:01:52.520
+Copilot Studio menafsirkan niat.
+
+00:01:52.980 --> 00:01:54.560
+Bersama-sama, mereka adalah perbedaan
+
+00:01:54.560 --> 00:01:56.460
+antara makro yang kaku dan asisten yang responsif.
+
+00:01:57.000 --> 00:01:58.620
+Di balik layar, Copilot Studio menggunakan
+
+00:01:58.620 --> 00:02:00.400
+apa yang disebut Microsoft dengan istilah menarik,
+
+00:02:00.460 --> 00:02:01.100
+yaitu orkestrasi.
+
+00:02:01.680 --> 00:02:03.620
+Ini bukan sihir acak, ini adalah LM,
+
+00:02:04.040 --> 00:02:05.520
+model bahasa besar yang memilih alat
+
+00:02:05.520 --> 00:02:07.240
+yang tepat berdasarkan konteks instruksi Anda.
+
+00:02:08.120 --> 00:02:09.220
+Alatnya adalah konektor,
+
+00:02:09.380 --> 00:02:10.780
+seperti planner, outlook, sharepoint.
+
+00:02:11.460 --> 00:02:12.680
+Saat Anda memberikan perintah,
+
+00:02:12.780 --> 00:02:14.380
+model tersebut meneruskan permintaan Anda,
+
+00:02:14.560 --> 00:02:15.840
+memeriksa deskripsi alat yang tersedia,
+
+00:02:16.220 --> 00:02:18.020
+dan memilih yang paling sesuai dengan niat Anda.
+
+00:02:18.700 --> 00:02:19.580
+Misalnya Anda berkata,
+
+00:02:19.580 --> 00:02:21.720
+tampilkan daftar tugas saya yang terbuka untuk proyek desain.
+
+00:02:21.720 --> 00:02:23.480
+Model mengidentifikasi ini
+
+00:02:23.480 --> 00:02:25.280
+sebagai kebutuhan alat daftar tugas di planner,
+
+00:02:25.440 --> 00:02:27.720
+mengisi parameter seperti ID rencana dan mengeksekusinya.
+
+00:02:28.100 --> 00:02:30.040
+Anda mendapatkan jawaban bukan karena ia menebak,
+
+00:02:30.140 --> 00:02:31.420
+tetapi karena Anda melatihnya untuk tahu
+
+00:02:31.420 --> 00:02:32.300
+kapan setiap alat rela.
+
+00:02:32.580 --> 00:02:33.880
+Sekarang bayangkan alur kerjaan dasar.
+
+00:02:34.380 --> 00:02:35.820
+Anda membuka planner secara manual,
+
+00:02:35.960 --> 00:02:36.720
+membaca setiap tugas,
+
+00:02:36.800 --> 00:02:37.560
+memperbarui tenggat waktu,
+
+00:02:37.660 --> 00:02:39.020
+berpindah tab, mungkin melewatkan satu,
+
+00:02:39.140 --> 00:02:39.820
+lalu mengulanginya.
+
+00:02:40.320 --> 00:02:41.660
+Ini adalah ketidakkefisienan terstruktur,
+
+00:02:41.780 --> 00:02:42.580
+konsisten namun bawa.
+
+00:02:43.000 --> 00:02:44.220
+Dengan Copilot Studio,
+
+00:02:44.520 --> 00:02:46.180
+gesekan mental itu berpindah di otak Anda
+
+00:02:46.180 --> 00:02:47.580
+ke mesin penalaran model.
+
+00:02:48.460 --> 00:02:49.460
+Ia mengingat konteks,
+
+00:02:49.460 --> 00:02:50.580
+mengenali pola,
+
+00:02:50.700 --> 00:02:52.640
+dan memindahkan data tepat ke tempat yang seharusnya.
+
+00:02:53.600 --> 00:02:55.080
+Berikut adalah metafora untuk diingat
+
+00:02:55.080 --> 00:02:56.380
+dalam konteks produktivitas Anda.
+
+00:02:56.780 --> 00:02:58.040
+Liner adalah lemari arsip.
+
+00:02:58.260 --> 00:02:59.720
+Copilot Studio adalah staff magang
+
+00:02:59.720 --> 00:03:01.640
+yang benar-benar merapikan dokumen untuk Anda
+
+00:03:01.640 --> 00:03:02.960
+tanpa gaji, sikap,
+
+00:03:03.100 --> 00:03:04.340
+atau perlu istirahat kopi.
+
+00:03:05.440 --> 00:03:07.100
+Setelah dikonfigurasi juru tulis digital,
+
+00:03:07.220 --> 00:03:08.860
+baru Anda memahami instruksi alami seperti
+
+00:03:08.860 --> 00:03:10.820
+buat tugas untuk sprint minggu depan,
+
+00:03:11.260 --> 00:03:13.320
+atau perbarui status tugas yang jatuh tempoh hari ini.
+
+00:03:14.020 --> 00:03:15.160
+Tak ada berbicara, ia mengatur.
+
+00:03:15.560 --> 00:03:17.480
+Lapisan orkestrasi memastikan instruksi Anda
+
+00:03:17.480 --> 00:03:19.580
+tidak hanya diproses, tetapi juga diinterpretasikan.
+
+00:03:20.000 --> 00:03:21.140
+Dan itulah perbedaannya sangat penting.
+
+00:03:21.520 --> 00:03:23.260
+Otomatisasi tanpa penalaran hanyalah kecepatan input.
+
+00:03:23.760 --> 00:03:26.000
+Otomatisasi dengan penalaran menjadi kecerdasan yang adaptif.
+
+00:03:26.240 --> 00:03:27.800
+Kebanyakan orang melakukan otomatisasi dengan cerah-cerah.
+
+00:03:28.100 --> 00:03:28.980
+Mereka mulai dengan alat,
+
+00:03:29.060 --> 00:03:31.540
+lalu bertanya-tanya mengapa alur kerjanya masih terasa kaku seperti robot.
+
+00:03:31.820 --> 00:03:33.640
+Urutan yang benar adalah penalaran terlebih dahulu,
+
+00:03:33.760 --> 00:03:34.260
+alat kemudian.
+
+00:03:34.920 --> 00:03:37.360
+Ajari agen mengapa suatu tugas ada sebelum mengajarinya,
+
+00:03:37.400 --> 00:03:38.060
+cara melakukannya.
+
+00:03:38.860 --> 00:03:40.800
+Setelah Anda memahami hirarki mental itu dengan benar,
+
+00:03:40.800 --> 00:03:43.200
+Anda berhenti menulis klip dan mulai merancang perilaku.
+
+00:03:43.200 --> 00:03:45.700
+Sekarang setelah Anda memahami arsitekturnya,
+
+00:03:45.860 --> 00:03:47.800
+hubungan antara planer, alur power automate,
+
+00:03:47.900 --> 00:03:50.320
+dan antarmuka percakapan Anda saatnya untuk praktek langsung.
+
+00:03:51.280 --> 00:03:53.360
+Kita akan membangun agen Copilot Studio pertama Anda,
+
+00:03:53.540 --> 00:03:54.560
+menentukan kepribadiannya,
+
+00:03:54.860 --> 00:03:55.680
+membatasi impulsnya,
+
+00:03:55.800 --> 00:03:57.600
+dan membuatnya melakukan pekerjaan yang selama ini
+
+00:03:57.600 --> 00:03:58.820
+membuang waktu otak manusia Anda.
+
+00:04:00.040 --> 00:04:02.320
+Bersiaplah untuk beralih dari seret dan lepas menjadi buat dan jalan.
+
+00:04:03.120 --> 00:04:04.480
+Membangun agen di Copilot Studio.
+
+00:04:05.100 --> 00:04:05.820
+Buka Copilot Studio.
+
+00:04:06.200 --> 00:04:07.900
+Jangan berkedip, jangan melamun.
+
+00:04:08.480 --> 00:04:10.200
+Dan mohon tahan keinginan untuk mengklik sana-sini
+
+00:04:10.200 --> 00:04:12.640
+tanpa tujuan seperti rata-rata pengguna yang menemukan tombol baru.
+
+00:04:13.200 --> 00:04:14.640
+Kita akan melakukan sesuatu yang disengaja.
+
+00:04:15.020 --> 00:04:15.640
+Klik agen baru.
+
+00:04:16.020 --> 00:04:17.760
+Beri nama yang masuk akal, perencana tugas.
+
+00:04:18.120 --> 00:04:20.120
+Bukan buat perencana 300, bukan benda AI.
+
+00:04:21.060 --> 00:04:23.340
+Nama agen menentukan seberapa muda Anda menemukannya nanti
+
+00:04:23.340 --> 00:04:24.860
+dan Anda pasti akan lupa apa yang Anda namakan.
+
+00:04:25.340 --> 00:04:27.860
+Sekarang, sebelum Anda mulai membayangkan asisten kantor yang sadar,
+
+00:04:27.960 --> 00:04:30.160
+ingatlah bahwa ini adalah juru tulis AI, bukan paranormal.
+
+00:04:30.500 --> 00:04:31.640
+Ia perlu diberitahu siapa dirinya,
+
+00:04:31.800 --> 00:04:32.560
+apa yang bisa dilakukannya,
+
+00:04:32.700 --> 00:04:33.720
+dan yang lebih penting apa yang tidak bisa.
+
+00:04:33.980 --> 00:04:34.880
+Disitulah peran instruksi.
+
+00:04:35.380 --> 00:04:37.180
+Anggaplah itu sebagai filosofi operasi agen,
+
+00:04:37.180 --> 00:04:39.060
+seperti hukum Asimov, namun kurang sastrawi
+
+00:04:39.060 --> 00:04:40.440
+dan lebih bersifat birokratis.
+
+00:04:40.880 --> 00:04:42.160
+Anda menentukan lingkup penalaran,
+
+00:04:42.420 --> 00:04:44.280
+membuat, mencantumkan, memperbarui tugas planner,
+
+00:04:44.480 --> 00:04:45.360
+dan tidak lebih dari itu.
+
+00:04:45.860 --> 00:04:47.680
+Editor instruksi memungkinkan paragraf panduan
+
+00:04:47.680 --> 00:04:49.700
+mengenai nada, tujuan, dan batasan.
+
+00:04:50.200 --> 00:04:50.620
+Jadilah jelas.
+
+00:04:51.100 --> 00:04:53.180
+Anda adalah asisten planner yang dapat membuat tugas,
+
+00:04:53.280 --> 00:04:54.000
+mencantumkan tugas,
+
+00:04:54.080 --> 00:04:55.300
+dan menetapkan tanggal jatuh tempo
+
+00:04:55.300 --> 00:04:56.300
+menggunakan alat planner.
+
+00:04:56.900 --> 00:04:58.460
+Jawablah dengan ringkas, jangan berbespekulasi.
+
+00:04:59.140 --> 00:05:00.700
+Kejelasan di sini secara langsung menghasilkan
+
+00:05:00.700 --> 00:05:01.860
+orkestrasi yang lebih baik nanti.
+
+00:05:02.500 --> 00:05:03.860
+Ambiguitas membingungkan model bahasa
+
+00:05:03.860 --> 00:05:06.100
+seperti undangan rapat yang tidak jelas membingungkan manusia.
+
+00:05:06.740 --> 00:05:08.540
+Setelah itu ditulis, Anda akan melihat panel uji
+
+00:05:08.540 --> 00:05:10.160
+di sebelah kanan kotak pasir yang tampak ceria
+
+00:05:10.160 --> 00:05:11.000
+dan memohon perhatian.
+
+00:05:11.340 --> 00:05:11.720
+Abaikan itu.
+
+00:05:12.580 --> 00:05:14.380
+Saya tahu mengeklik uji terasa seperti kemajuan,
+
+00:05:14.820 --> 00:05:16.700
+tetapi saat ini agen tidak memiliki apapun untuk diuji.
+
+00:05:17.140 --> 00:05:19.340
+Itu seperti menyalakan penyedot debu tanpa listrik.
+
+00:05:20.120 --> 00:05:21.480
+Model tersebut bisa meniru skrip,
+
+00:05:21.660 --> 00:05:23.100
+tetapi belum bisa melakukan tindakan
+
+00:05:23.100 --> 00:05:24.900
+karena kekurangan alat otot fungsional
+
+00:05:24.900 --> 00:05:26.320
+di balik rangka percakapannya menawan.
+
+00:05:27.100 --> 00:05:29.400
+Ini membawa kita ke inti filosofis dari Copilot Studio,
+
+00:05:30.040 --> 00:05:30.700
+Instruksi Fasalat.
+
+00:05:30.700 --> 00:05:32.240
+Instruksi adalah logika,
+
+00:05:32.340 --> 00:05:33.100
+alat adalah eksekusi.
+
+00:05:33.500 --> 00:05:35.340
+Instruksi memberitahunya agen seperti apa dia,
+
+00:05:35.740 --> 00:05:37.540
+alat memberitahunya cara melakukan apa yang diklaimnya.
+
+00:05:38.280 --> 00:05:39.420
+Satu, mendefinisikan karakter,
+
+00:05:39.620 --> 00:05:40.560
+yang lain, menyediakan kemampu.
+
+00:05:41.140 --> 00:05:42.640
+Banyak orang tidak pernah membuat perbedaan ini
+
+00:05:42.640 --> 00:05:43.860
+dan kemudian mengeluh bahwa Copilot
+
+00:05:43.860 --> 00:05:44.980
+tidak melakukan apa yang saya katakan.
+
+00:05:45.520 --> 00:05:47.280
+Itu tidak terjadi karena mereka tidak pernah menghubungkan
+
+00:05:47.280 --> 00:05:48.300
+alat yang membuat kebatuan menjadi.
+
+00:05:48.920 --> 00:05:50.180
+Sekarang, buka panel alat.
+
+00:05:50.280 --> 00:05:51.540
+Anda akan melihat pustaka konektor,
+
+00:05:51.660 --> 00:05:53.900
+planner, outlook, teams, sharepoint, dan banyak lainnya.
+
+00:05:54.740 --> 00:05:56.800
+Dunia integrasi Microsoft terhampar di depan Anda
+
+00:05:56.800 --> 00:05:57.680
+seperti prasmanan,
+
+00:05:57.680 --> 00:05:59.660
+namun sebagian besar pengguna membuku saat melihatnya.
+
+00:06:00.100 --> 00:06:01.440
+Paradoks pilihan yang tak terbatas.
+
+00:06:01.880 --> 00:06:02.800
+Disitulah kebanyakan orang itu.
+
+00:06:03.200 --> 00:06:04.140
+Seperti yang sering saya katakan,
+
+00:06:04.320 --> 00:06:05.500
+Microsoft memberi Anda kotak rala.
+
+00:06:05.860 --> 00:06:06.900
+Kebanyakan orang hanya menatap.
+
+00:06:07.300 --> 00:06:08.240
+Namun kita tidak akan melakukan.
+
+00:06:08.660 --> 00:06:10.140
+Kita akan memfilter berdasarkan planner
+
+00:06:10.140 --> 00:06:11.520
+dan memilih tindakan yang sesuai nanti,
+
+00:06:11.620 --> 00:06:13.280
+tetapi pertama-tama perhatikan apa yang mungkin dilakukan.
+
+00:06:13.600 --> 00:06:15.300
+Setiap konektor mewakili titik akhir API
+
+00:06:15.300 --> 00:06:16.660
+yang dikemas dalam bahasa yang sederhana.
+
+00:06:17.460 --> 00:06:18.540
+Buat tugas perbaru catatan,
+
+00:06:18.740 --> 00:06:19.140
+kirim email,
+
+00:06:19.500 --> 00:06:19.760
+email,
+
+00:06:20.460 --> 00:06:22.160
+Copilot Studio mendelegasikan kemampuan ini
+
+00:06:22.160 --> 00:06:23.580
+ke lapisan penalaran agen Anda.
+
+00:06:23.580 --> 00:06:25.760
+Model ini tidak memiliki kekuatan mistik.
+
+00:06:26.180 --> 00:06:27.200
+Ia hanyalah pustakawan terhati
+
+00:06:27.200 --> 00:06:28.700
+yang mengambil buku yang tepat dari rakyat yang tepat.
+
+00:06:29.380 --> 00:06:30.940
+Sebelum menambahkan alat planner apapun,
+
+00:06:31.180 --> 00:06:32.400
+tinjau pengaturan konfigurasi.
+
+00:06:33.200 --> 00:06:34.760
+Koneksi memerlukan akun terautentikasi
+
+00:06:34.760 --> 00:06:37.140
+yang biasanya terikat dengan identitas Microsoft 365 Anda.
+
+00:06:37.820 --> 00:06:38.700
+Gunakan akun yang memiliki
+
+00:06:38.700 --> 00:06:40.400
+atau mengelola rencana yang akan Anda otomatisasi.
+
+00:06:40.800 --> 00:06:41.240
+Jika tidak,
+
+00:06:41.380 --> 00:06:42.760
+sesi pengujian Anda di masa mendatang
+
+00:06:42.760 --> 00:06:44.280
+akan gagal dengan kesalahan autentikasi
+
+00:06:44.280 --> 00:06:46.120
+yang membuat Anda mempertanyakan pilihan hidup Anda.
+
+00:06:46.940 --> 00:06:48.140
+Konfigurasi disimpan per agen.
+
+00:06:48.800 --> 00:06:50.740
+Artinya, jika Anda menginginkan beberapa agen,
+
+00:06:50.840 --> 00:06:51.680
+misalnya satu untuk planner,
+
+00:06:51.680 --> 00:06:53.800
+satu untuk Teams, Anda harus mengotorisasi masing-masing serata.
+
+00:06:54.220 --> 00:06:55.560
+Microsoft menyebut ini keamanan.
+
+00:06:56.480 --> 00:06:58.080
+Saya menyebutnya hambatan kecil bagi efisiensi.
+
+00:06:58.580 --> 00:06:59.060
+Bagaimanapun,
+
+00:06:59.260 --> 00:07:00.060
+lakukan dengan benar sekarang
+
+00:07:00.060 --> 00:07:01.300
+agar Anda terindar dari pendidikanan.
+
+00:07:01.920 --> 00:07:03.920
+Setelah identitas dan instruksi agen terkunci,
+
+00:07:04.120 --> 00:07:05.540
+ia resmi ada di dalam penyewa Anda.
+
+00:07:05.940 --> 00:07:06.340
+Nyewa.
+
+00:07:06.640 --> 00:07:08.580
+Selamat, Anda baru saja membangun cangkang kosong
+
+00:07:08.580 --> 00:07:09.520
+yang sangat sadar diri.
+
+00:07:10.120 --> 00:07:11.800
+Ia tahu ia seharusnya mengelola tugas planner,
+
+00:07:11.960 --> 00:07:12.940
+tetapi tanpa konektivitas,
+
+00:07:13.040 --> 00:07:13.920
+ia seperti bekerja magang,
+
+00:07:14.000 --> 00:07:14.780
+tanpa akses jaringan,
+
+00:07:14.820 --> 00:07:15.460
+berpenampilan rapi,
+
+00:07:15.520 --> 00:07:16.160
+namun tidak berguna.
+
+00:07:16.360 --> 00:07:17.100
+Berpenamun tidak berguna.
+
+00:07:17.100 --> 00:07:18.200
+Di sinilah pengendian diri tertutup.
+
+00:07:18.580 --> 00:07:20.020
+Banyak orang terburu-buru melakukan debagi.
+
+00:07:20.680 --> 00:07:20.920
+Hangan.
+
+00:07:21.400 --> 00:07:23.440
+Tujuan Anda adalah memahami arsitektur sebelum fungsinya.
+
+00:07:23.700 --> 00:07:25.980
+Kita telah menentukan kepribadian batasan dan struktur ini.
+
+00:07:26.320 --> 00:07:27.540
+Selanjutnya, kita perlu memberinya takih.
+
+00:07:28.700 --> 00:07:30.200
+Itu dilakukan dengan menambahkan alat,
+
+00:07:30.520 --> 00:07:33.000
+khususnya tindakan planner yang benar-benar menghasilkan hasil,
+
+00:07:33.180 --> 00:07:34.340
+bukan sekadar responsopan.
+
+00:07:35.040 --> 00:07:36.940
+Tahap mendatang akan menghubungkan tiga alat penting,
+
+00:07:37.180 --> 00:07:37.720
+membuat tugas,
+
+00:07:37.820 --> 00:07:38.600
+mencantumkan tugas,
+
+00:07:38.680 --> 00:07:39.500
+dan memperberui tugas.
+
+00:07:39.960 --> 00:07:41.680
+Masing-masing melakukan interaksi tingkat API
+
+00:07:41.680 --> 00:07:42.560
+dengan Microsoft Planner,
+
+00:07:42.740 --> 00:07:44.620
+tetapi melalui penawaran bahasa alami,
+
+00:07:44.620 --> 00:07:46.460
+bukan pemicu yang telah ditentukan sebelumnya.
+
+00:07:47.780 --> 00:07:48.600
+Saat rangkaian ini selesai,
+
+00:07:48.680 --> 00:07:50.280
+agen perencanaan tugas Anda tidak hanya akan menjawab,
+
+00:07:50.400 --> 00:07:51.040
+ia akan bertindak.
+
+00:07:51.500 --> 00:07:52.800
+Jadi, untuk saat ini simpan pekerjaan Anda
+
+00:07:52.800 --> 00:07:54.320
+dan biarkan ia mikirkan identitasnya senyata.
+
+00:07:54.580 --> 00:07:56.680
+Apa yang telah Anda bangun adalah kerangka sistem saraf
+
+00:07:56.680 --> 00:07:57.840
+dan sedikit sentuhan kepribadian.
+
+00:07:58.800 --> 00:08:00.500
+Selanjutnya, kita menambahkan fungsionalitas.
+
+00:08:00.660 --> 00:08:02.440
+Otot untuk membuat filsuf sopan ini menjadi berguna.
+
+00:08:03.220 --> 00:08:04.520
+Setelah alat planner tersebut terhubung,
+
+00:08:04.620 --> 00:08:06.740
+agen Anda berhenti berpura-pura-pura dan mulai bekerja.
+
+00:08:07.440 --> 00:08:08.200
+Anda telah mempunyai pikiran.
+
+00:08:08.560 --> 00:08:09.720
+Selanjutnya, kita membangun gerakannya.
+
+00:08:09.720 --> 00:08:11.660
+Tambahkan alat planner.
+
+00:08:12.000 --> 00:08:13.220
+Buat daftar perbarui.
+
+00:08:13.900 --> 00:08:15.980
+Sekarang saatnya membuat agen ini menjadi lebih dari
+
+00:08:15.980 --> 00:08:17.400
+sekedar uap eksistensial yang sopan.
+
+00:08:17.960 --> 00:08:19.260
+Kita akan menginstall alat planner.
+
+00:08:19.820 --> 00:08:21.500
+Kata kerja yang memungkinkan perencanaan tugas Anda
+
+00:08:21.500 --> 00:08:22.660
+benar-benar melakukan sesuatu.
+
+00:08:23.600 --> 00:08:24.680
+Ini adalah tiga otot penting.
+
+00:08:25.100 --> 00:08:26.980
+Buat tugas, daftar tugas, dan perbarui tugas.
+
+00:08:27.420 --> 00:08:28.060
+Setelah terhubung,
+
+00:08:28.280 --> 00:08:30.280
+agen Anda akan berubah dari chatbot filosofis
+
+00:08:30.280 --> 00:08:31.540
+menjadi asisten operasional.
+
+00:08:32.080 --> 00:08:33.260
+Mari kita mulai dengan membuat tugas.
+
+00:08:33.460 --> 00:08:35.500
+Ini adalah tindakan produktivitas atomik
+
+00:08:35.500 --> 00:08:36.700
+yang menghasilkan unit pekerjaan.
+
+00:08:36.700 --> 00:08:38.620
+Tanpanya, agen Anda hanya bisa mengomentari
+
+00:08:38.620 --> 00:08:39.940
+kemalasan Anda, bukan memperbaikinya.
+
+00:08:40.260 --> 00:08:41.340
+Jadi, panel alat cari planner.
+
+00:08:42.220 --> 00:08:43.520
+Anda akan melihat daftar tindak.
+
+00:08:44.000 --> 00:08:44.760
+Pilih buat tugas.
+
+00:08:45.420 --> 00:08:46.240
+Tambahkan ke agen Anda.
+
+00:08:46.700 --> 00:08:47.960
+Ia mungkin meminta untuk membuat koneksi.
+
+00:08:48.380 --> 00:08:50.200
+Setuju, menggunakan akun yang memiliki grup
+
+00:08:50.200 --> 00:08:51.700
+dan rencana yang Anda inginkan di planner.
+
+00:08:53.100 --> 00:08:54.260
+Tiga parameter muncul.
+
+00:08:54.880 --> 00:08:56.340
+ID group, ID rencana, dan judul.
+
+00:08:56.800 --> 00:08:58.580
+Ini adalah koordinat setiap tugas di planner.
+
+00:08:58.700 --> 00:09:00.440
+Siapa, di mana, dan apa.
+
+00:09:01.480 --> 00:09:02.160
+Secara default,
+
+00:09:02.160 --> 00:09:03.740
+agen mencoba mengisinya secara dinamis
+
+00:09:03.740 --> 00:09:05.560
+menggunakan AI, tapi itu tidak selalu bijak.
+
+00:09:05.560 --> 00:09:07.940
+ID group dan rencana jarang berubah,
+
+00:09:08.080 --> 00:09:10.300
+dan agen tidak bisa menebak struktur organisasi Anda.
+
+00:09:10.900 --> 00:09:12.160
+Ubah keduanya ke nilai khusus,
+
+00:09:12.480 --> 00:09:14.260
+pilih grup Microsoft 365 yang benar,
+
+00:09:14.440 --> 00:09:15.500
+lalu rencana di bawahnya.
+
+00:09:16.240 --> 00:09:17.480
+Itu mengunci koordinat peta,
+
+00:09:17.900 --> 00:09:19.900
+sehingga agen Anda membuat tugas di tempat yang tepat,
+
+00:09:20.180 --> 00:09:22.020
+bukan di ruang hampa lingkungan pengujian Anda.
+
+00:09:22.580 --> 00:09:23.740
+Biarkan judul tetap dinamis,
+
+00:09:23.880 --> 00:09:25.940
+itulah yang ingin Anda tangani oleh AI dari bahasa alam.
+
+00:09:26.400 --> 00:09:28.360
+Namun, jangan lewatkan kolom yang diberi label deskripsi.
+
+00:09:29.060 --> 00:09:29.800
+Kelihatannya sepele,
+
+00:09:29.800 --> 00:09:31.900
+namun mainkan peran besar dalam cara model bahasa menalar.
+
+00:09:32.580 --> 00:09:33.660
+Model membaca deskripsi ini
+
+00:09:33.660 --> 00:09:35.880
+saat memutuskan alat mana yang sesuai dengan permintaan pengguna.
+
+00:09:36.880 --> 00:09:38.540
+Buat tugas baru di planner secara teknis baik,
+
+00:09:38.660 --> 00:09:39.600
+tetapi terlalu umum.
+
+00:09:40.440 --> 00:09:42.940
+Anda bisa membantu mesin penalaran dengan memberikan antara yang lebih.
+
+00:09:43.740 --> 00:09:45.100
+Buat satu beberapa tugas planner,
+
+00:09:45.240 --> 00:09:46.400
+berdasarkan permintaan pengguna.
+
+00:09:46.880 --> 00:09:47.820
+Ringkas judul yang panjang,
+
+00:09:48.000 --> 00:09:49.720
+dan jangan meminta judul secara eksklusif.
+
+00:09:50.260 --> 00:09:52.680
+Satu kalimat itu mencegah agen terus meminta klarifikasi
+
+00:09:52.680 --> 00:09:54.580
+setiap kali Anda meminta banyak tugas.
+
+00:09:54.580 --> 00:09:58.240
+Sekarang, ia bisa menyimpulkan judul langsung dari teks permintaan.
+
+00:09:58.740 --> 00:10:00.740
+Jadi, jika Anda berkata buat tiga tugas,
+
+00:10:00.860 --> 00:10:02.040
+satu untuk meninjau desain,
+
+00:10:02.180 --> 00:10:03.320
+satu untuk memperbarui harga,
+
+00:10:03.440 --> 00:10:04.920
+dan satu untuk menyiapkan demo,
+
+00:10:05.060 --> 00:10:06.500
+model akan memproses item tersebut
+
+00:10:06.500 --> 00:10:08.200
+dan menjalankan aksi buat tugas tiga kali,
+
+00:10:08.520 --> 00:10:09.440
+tanpa bertanya lagi.
+
+00:10:10.360 --> 00:10:10.860
+Pada tahap ini,
+
+00:10:10.940 --> 00:10:13.520
+kerangka filosofis agen Anda sekarang memiliki anggota tubuh yang berfungsi.
+
+00:10:14.520 --> 00:10:17.220
+Selamat, ia bisa membuat pekerjaan lebih cepat daripada kebanyakan amaga.
+
+00:10:18.020 --> 00:10:19.160
+Selanjutnya, daftar tugas.
+
+00:10:20.060 --> 00:10:21.020
+Anda pikir ini jelas,
+
+00:10:21.140 --> 00:10:23.700
+namun ini adalah pahlawan tanpa tanda jasa dalam manajemen konteks.
+
+00:10:23.700 --> 00:10:26.100
+Tanpa kemampuan untuk mencantumkan tugas yang ada,
+
+00:10:26.320 --> 00:10:27.520
+model beroperasi dengan mata tertutup.
+
+00:10:27.920 --> 00:10:29.620
+Ia tidak bisa meriksa apa yang sudah selesai atau terbuka.
+
+00:10:30.000 --> 00:10:32.080
+Tambahkan aksi daftar tugas dari konektor planner Anda.
+
+00:10:32.720 --> 00:10:35.060
+Konfigurasikan dengan ID group dan rencana yang sama seperti sebelumnya,
+
+00:10:35.180 --> 00:10:36.160
+keduanya sebagai nilai khusus.
+
+00:10:37.020 --> 00:10:39.780
+Deskripsinya mungkin mengatakan daftar tugas di rencana yang berfungsi,
+
+00:10:39.840 --> 00:10:40.940
+tetapi kita bisa meningkatkannya lagi.
+
+00:10:41.520 --> 00:10:43.980
+Cobalah ambil semua tugas dari rencana planner yang ditentukan
+
+00:10:43.980 --> 00:10:46.440
+agar agen bisa merujuk atau memvalidasinya dalam respons.
+
+00:10:47.180 --> 00:10:49.140
+Frasa ini menandakan bahwa aksi tersebut
+
+00:10:49.140 --> 00:10:50.520
+bukan hanya untuk dilihat manusia,
+
+00:10:50.640 --> 00:10:52.660
+tetapi juga data konteksual untuk penalaran.
+
+00:10:52.660 --> 00:10:54.500
+Sekarang buka panel pengujian,
+
+00:10:54.620 --> 00:10:55.880
+tapi kali ini pengujian itu sepadan.
+
+00:10:56.760 --> 00:10:58.540
+Tanyakan apa saja tugas yang saya miliki di rencana saya.
+
+00:11:00.180 --> 00:11:01.760
+Model akan memanggil daftar tugas,
+
+00:11:01.960 --> 00:11:02.660
+mengambil hasil,
+
+00:11:02.760 --> 00:11:04.320
+dan mengembalikannya secara percakapan
+
+00:11:04.320 --> 00:11:07.800
+seperti Anda saat ini memiliki tugas berjudul X, Y, dan Z.
+
+00:11:08.620 --> 00:11:09.860
+Keindahannya ada di balik layar.
+
+00:11:10.460 --> 00:11:12.640
+Hasil tersebut kini bisa digunakan untuk permintaan di masa mendatang.
+
+00:11:13.220 --> 00:11:14.060
+Saat Anda berkata,
+
+00:11:14.220 --> 00:11:16.320
+ubah tengkat waktu tugas tinjauan desain menjadi besok,
+
+00:11:16.880 --> 00:11:18.680
+model orkestrasi melihat kembali daftar tersebut,
+
+00:11:19.200 --> 00:11:20.300
+mengidentifikasi ID yang tepat,
+
+00:11:20.480 --> 00:11:22.100
+dan memanggil alat berikutnya yang akan kita lampirkan.
+
+00:11:22.100 --> 00:11:23.620
+Itu membawa kita ke bagian ketiga,
+
+00:11:23.820 --> 00:11:24.500
+memperbarui tugas.
+
+00:11:25.240 --> 00:11:27.700
+Fungsi yang mengubah catatan statis menjadi progres dinamis.
+
+00:11:28.220 --> 00:11:30.060
+Tambahkan alat pembaruan tugas ke agen Anda.
+
+00:11:30.800 --> 00:11:31.820
+Anda akan melihat kolom,
+
+00:11:32.320 --> 00:11:33.700
+ID tugas, tanggal chat to tempo,
+
+00:11:34.180 --> 00:11:35.440
+dan menu parameter opsional lagi.
+
+00:11:36.300 --> 00:11:37.320
+ID tugas harus tetap dinamis.
+
+00:11:37.660 --> 00:11:39.480
+Akan mencocokkan ID yang tepat berdasarkan nama
+
+00:11:39.480 --> 00:11:40.640
+dari tindakan daftar sebelumnya.
+
+00:11:40.640 --> 00:11:42.160
+Untuk tanggal chat to tempo,
+
+00:11:42.160 --> 00:11:46.400
+Anda juga bisa membiarkannya dinamis karena manusia jarang menyebutkan tanggal dalam format isola percakapan santai.
+
+00:11:47.040 --> 00:11:47.480
+Untungnya,
+
+00:11:47.700 --> 00:11:51.040
+model yang mendasarinya mengubah kata besok menjadi stempel waktu dengan format yang tepat.
+
+00:11:51.520 --> 00:11:51.720
+Namun,
+
+00:11:51.800 --> 00:11:53.160
+berikan petunjuk deskripsi pada model tersebut.
+
+00:11:53.460 --> 00:11:53.900
+Sayang sekali,
+
+00:11:54.040 --> 00:11:56.900
+banyak agen gagal karena pembuatnya mengabaikan kolom dokumentasi.
+
+00:11:57.500 --> 00:11:57.860
+Tambahkan,
+
+00:11:57.940 --> 00:12:00.740
+gunakan ini untuk mengubah tanggal chat to tempo atau detail tugas yang ada.
+
+00:12:01.240 --> 00:12:03.340
+Terima tanggal dalam bahasa alamis pada Jumat depan atau besok.
+
+00:12:03.340 --> 00:12:07.640
+Saran tersebut memberi tahu lapisan penalaran apa yang mungkin dilakukan
+
+00:12:07.640 --> 00:12:11.260
+meningkatkan kemampuannya menerjemahkan permintaan pengguna yang santai menjadi pemberonan terstruktur.
+
+00:12:11.880 --> 00:12:12.440
+Setelah disimpan,
+
+00:12:12.520 --> 00:12:12.920
+uji kembali.
+
+00:12:13.520 --> 00:12:13.920
+Tanyakan,
+
+00:12:14.200 --> 00:12:16.780
+atur tanggal jatuh tempo tugas tinjauan desain menjadi hari Jumat.
+
+00:12:17.380 --> 00:12:18.360
+Setelah pertama kali melakukannya,
+
+00:12:18.500 --> 00:12:21.200
+Copilot Studio meminta Anda memberikan izin untuk koneksi planner tersebut.
+
+00:12:21.540 --> 00:12:21.920
+Bersetuju ini.
+
+00:12:22.340 --> 00:12:23.000
+Dalam hitungan detik,
+
+00:12:23.080 --> 00:12:23.740
+rencanaan diperperk.
+
+00:12:23.860 --> 00:12:24.760
+Hangannya selaras dengan sempur.
+
+00:12:25.040 --> 00:12:25.980
+Anda tidak perlu menarik apa.
+
+00:12:26.320 --> 00:12:26.660
+Sekarang,
+
+00:12:26.740 --> 00:12:28.560
+untuk demonstrasi kecil tentang multitasking AI,
+
+00:12:28.560 --> 00:12:31.420
+cobalah mendiktir melalui Windows Plus H atau gunakan mikrofon Teams.
+
+00:12:31.960 --> 00:12:32.260
+Katakan,
+
+00:12:32.380 --> 00:12:34.320
+atur semua tugas yang minggu ini menjadi selasa depan.
+
+00:12:35.240 --> 00:12:36.820
+Model tersebut akan mencantumkan tugas.
+
+00:12:37.020 --> 00:12:37.300
+Saat ini,
+
+00:12:37.440 --> 00:12:38.580
+mendeteksi mana yang menuhi kondisi,
+
+00:12:38.740 --> 00:12:40.780
+lalu melakukan perulangan melalui tindakan pembaru tugas.
+
+00:12:41.100 --> 00:12:41.980
+Aku saja Anda teruksan.
+
+00:12:42.540 --> 00:12:45.200
+Apa yang butuhkan 15 klik sekarang terjadi dengan satu kalimat yang diucapkan.
+
+00:12:45.880 --> 00:12:47.020
+Dengan ketiga alat tersebut,
+
+00:12:47.220 --> 00:12:47.360
+buat,
+
+00:12:47.640 --> 00:12:48.000
+daftar,
+
+00:12:48.060 --> 00:12:48.620
+dan perbarui.
+
+00:12:48.800 --> 00:12:51.400
+Anda telah membekali agen Anda dengan kemampuan cairut penuh,
+
+00:12:51.500 --> 00:12:52.840
+dikurangi deh untuk menghapus karena
+
+00:12:52.840 --> 00:12:55.500
+manusia masih panik dengan tindakan yang tidak bisa dibatalkan.
+
+00:12:55.500 --> 00:13:00.120
+Trifecta ini mencakup hampir setiap skenario planner yang menghemat waktu manusia secara terukur.
+
+00:13:01.380 --> 00:13:02.580
+Inilah pembagian kerja yang etis.
+
+00:13:03.360 --> 00:13:04.280
+Anda memberikan kejelasan,
+
+00:13:04.380 --> 00:13:05.280
+AI memberikan ketepatan.
+
+00:13:05.760 --> 00:13:06.800
+Anda beritahu apa yang perlu dilakukan,
+
+00:13:06.920 --> 00:13:07.700
+AI membutuhkan cara melakukan.
+
+00:13:08.020 --> 00:13:09.660
+Berhentilah melakukan mikromanajemen pada perangkat Anda.
+
+00:13:09.940 --> 00:13:10.880
+Saat Anda menjelaskan niat,
+
+00:13:10.980 --> 00:13:13.100
+Anda dengan jelas modal orkestrasi menyelesaikan sisanya,
+
+00:13:13.300 --> 00:13:13.860
+mengisi ID,
+
+00:13:14.120 --> 00:13:14.780
+memformat tanggal,
+
+00:13:14.940 --> 00:13:15.740
+dan menjalankan panggilan.
+
+00:13:15.740 --> 00:13:16.600
+Jika Anda samar,
+
+00:13:16.700 --> 00:13:17.940
+AI akan dengan patuh menebak dengan salah.
+
+00:13:18.240 --> 00:13:18.640
+Yang terpenting,
+
+00:13:18.760 --> 00:13:20.280
+jangan terobsesi dengan antara-antara logika yang sempurna.
+
+00:13:20.760 --> 00:13:21.900
+Modal orkestrasi akan beradabat.
+
+00:13:22.300 --> 00:13:23.620
+Anda tidak sedang memprogram dengan kode,
+
+00:13:23.720 --> 00:13:24.980
+Anda sedang memprogram dengan expectas.
+
+00:13:25.340 --> 00:13:27.960
+Ajarkan perilaku yang baik kepadanya melalui deskripsi yang jelas ini.
+
+00:13:28.540 --> 00:13:29.120
+Pada akhirnya,
+
+00:13:29.280 --> 00:13:31.480
+ia akan menebak maksud Anda seperti rekan kerja yang sopan,
+
+00:13:31.700 --> 00:13:32.380
+namun sedikit sombong.
+
+00:13:33.120 --> 00:13:33.580
+Dan dengan itu,
+
+00:13:33.700 --> 00:13:35.160
+transformasi agen Anda telah selesai.
+
+00:13:35.720 --> 00:13:36.240
+Ia bertindak.
+
+00:13:36.840 --> 00:13:37.760
+Setiap perintah di masa depan,
+
+00:13:38.080 --> 00:13:38.740
+baik yang diucapkan,
+
+00:13:38.820 --> 00:13:39.100
+diketik,
+
+00:13:39.200 --> 00:13:40.120
+atau diteriakkan di kantor,
+
+00:13:40.120 --> 00:13:41.620
+akan diproses melalui penalaran,
+
+00:13:41.700 --> 00:13:42.740
+menemukan alat perencanaan yang tepat,
+
+00:13:42.840 --> 00:13:43.940
+dan mengeksekusinya tanpa keluhan.
+
+00:13:43.940 --> 00:13:46.120
+Hasilnya lebih sedikit menarik kursor lebih banyak ke pekerjaan.
+
+00:13:46.440 --> 00:13:46.740
+Sekarang,
+
+00:13:46.840 --> 00:13:50.100
+kita bisa membawa asisten digital ini keluar dari kotak pasirnya menuju pekerjaan harian Anda.
+
+00:13:50.480 --> 00:13:51.640
+Mari lanjut ke penyebaran.
+
+00:13:52.220 --> 00:13:53.940
+Menyebarkan ke Microsoft 365 Copilot.
+
+00:13:54.540 --> 00:13:56.660
+Sekarang setelah agen Anda bisa berpikir dan bertindak,
+
+00:13:56.780 --> 00:13:58.360
+saatnya melepaskannya ke tempat kerja nyata,
+
+00:13:58.540 --> 00:14:00.400
+di dalam Microsoft 365 Copilot.
+
+00:14:01.000 --> 00:14:02.800
+Membiarkannya terkunci di Copilot Studio Barat,
+
+00:14:02.800 --> 00:14:03.880
+mengajari robot mengepel,
+
+00:14:04.020 --> 00:14:05.240
+lalu menguncinya di dalam kelas.
+
+00:14:05.880 --> 00:14:06.400
+Manfaatnya,
+
+00:14:06.520 --> 00:14:08.940
+baru terasa saat ia beroperasi di lingkungan kerja nyata Anda.
+
+00:14:09.500 --> 00:14:10.320
+Di Teams Outlook,
+
+00:14:10.420 --> 00:14:12.600
+atau antarmuka Microsoft 365 itu sendiri.
+
+00:14:12.600 --> 00:14:14.560
+Inilah alasan mengapa penyebaran kemudian.
+
+00:14:14.880 --> 00:14:16.200
+Copilot Studio adalah pengembangan.
+
+00:14:16.900 --> 00:14:18.060
+Microsoft 300 tamper produksi,
+
+00:14:18.380 --> 00:14:18.840
+tempat produksi.
+
+00:14:19.260 --> 00:14:20.400
+Disitulah percakapan terjadi,
+
+00:14:20.580 --> 00:14:21.760
+dan disitulah permintaan berasal.
+
+00:14:22.380 --> 00:14:23.500
+Menyematkan agen Anda di sana,
+
+00:14:23.600 --> 00:14:24.380
+berarti Anda bisa berkata,
+
+00:14:24.520 --> 00:14:26.200
+buat dua tugas untuk sepuluh minggu depan.
+
+00:14:26.940 --> 00:14:27.720
+Langsung diobrolan tim,
+
+00:14:27.800 --> 00:14:28.940
+sementara semua orang melihatnya terjadi.
+
+00:14:29.480 --> 00:14:30.340
+Tanpa tab terpisah,
+
+00:14:30.480 --> 00:14:31.420
+tanpa berpindah konteks,
+
+00:14:31.420 --> 00:14:32.360
+tanpa klik yang sia-sia.
+
+00:14:32.700 --> 00:14:34.360
+Ikan mengeksekusi sementara Anda beralih ke hal lain.
+
+00:14:34.900 --> 00:14:35.520
+Di Copilot Studio,
+
+00:14:35.620 --> 00:14:36.980
+pilih kasihkan di sudut kanan atas.
+
+00:14:37.740 --> 00:14:38.360
+Anda akan lihat saluran.
+
+00:14:38.360 --> 00:14:39.760
+Ini adalah titik akhir penyebaran Anda.
+
+00:14:40.080 --> 00:14:41.600
+Pilih Microsoft 365 atau Teams.
+
+00:14:42.040 --> 00:14:42.540
+Pertama kali,
+
+00:14:42.660 --> 00:14:43.420
+ia akan meminta Anda
+
+00:14:43.420 --> 00:14:44.880
+untuk melakukan otentikasi dan menyetujui.
+
+00:14:45.180 --> 00:14:45.580
+Artinya,
+
+00:14:46.060 --> 00:14:47.080
+Anda memberitahu Microsoft
+
+00:14:47.080 --> 00:14:48.160
+bahwa agen ini diizinkan
+
+00:14:48.160 --> 00:14:49.660
+untuk mengakses planner atas nama Anda.
+
+00:14:50.280 --> 00:14:51.560
+Ini adalah jabatan kepercayaan yang kosik.
+
+00:14:51.840 --> 00:14:53.420
+Abaikan gedaan untuk melewati detailnya.
+
+00:14:53.960 --> 00:14:54.880
+Tim tata kelola perusahaan
+
+00:14:54.880 --> 00:14:56.580
+sangat suka menolak permintaan otomatisasi
+
+00:14:56.580 --> 00:14:57.820
+yang tidak memiliki izin terdokumentasi.
+
+00:14:58.240 --> 00:14:59.060
+Setelah dipublikasikan,
+
+00:14:59.240 --> 00:15:00.820
+agen Anda muncul sebagai ekstensi Copilot
+
+00:15:00.820 --> 00:15:02.480
+yang tersedia di dalam Microsoft 365.
+
+00:15:02.480 --> 00:15:04.660
+Buka Teams dan mulai obrolan baru.
+
+00:15:05.080 --> 00:15:06.280
+Panggil agen perencanaan tugas Anda
+
+00:15:06.280 --> 00:15:07.320
+berdasarkan nama atau pilih
+
+00:15:07.320 --> 00:15:08.220
+di panel Copilot.
+
+00:15:09.080 --> 00:15:09.560
+Dari sini,
+
+00:15:09.720 --> 00:15:11.160
+perintah Anda menjadi operasi langsung.
+
+00:15:12.000 --> 00:15:12.400
+Mari kita uji.
+
+00:15:13.080 --> 00:15:14.160
+Ketik atau dikti
+
+00:15:14.160 --> 00:15:15.500
+jika Anda suka gaya dramatis,
+
+00:15:15.940 --> 00:15:16.600
+buat dua tugas.
+
+00:15:17.040 --> 00:15:17.740
+Draft laporan klien
+
+00:15:17.740 --> 00:15:18.840
+dan atur tinjauan backlog.
+
+00:15:20.120 --> 00:15:21.360
+Saksikan saat yang memproses,
+
+00:15:21.480 --> 00:15:21.780
+menalar,
+
+00:15:21.940 --> 00:15:22.720
+dan mengonfirmasi.
+
+00:15:23.480 --> 00:15:24.820
+Jika Anda beralih ke papan planner,
+
+00:15:24.820 --> 00:15:25.600
+Anda akan melihat
+
+00:15:25.600 --> 00:15:27.020
+kedua tugas muncul hampir seketika.
+
+00:15:27.640 --> 00:15:28.340
+Kepuasan luar biasa
+
+00:15:28.340 --> 00:15:29.100
+karena tidak perlu menarik
+
+00:15:29.100 --> 00:15:29.820
+satu kartu pun sulit
+
+00:15:29.820 --> 00:15:30.640
+untuk diungkapkan dengan kata.
+
+00:15:30.640 --> 00:15:31.980
+Terus selanjutnya adalah pencatatan.
+
+00:15:32.300 --> 00:15:32.680
+Tanyakan,
+
+00:15:32.840 --> 00:15:33.780
+apa saja tugas yang terbuka
+
+00:15:33.780 --> 00:15:34.560
+di rencana gepesahat?
+
+00:15:35.200 --> 00:15:36.600
+Copilot meminta data ke planner
+
+00:15:36.600 --> 00:15:37.540
+melalui agen Anda
+
+00:15:37.540 --> 00:15:38.260
+mengambil data
+
+00:15:38.260 --> 00:15:39.520
+menggunakan alat daftar tugas
+
+00:15:39.520 --> 00:15:40.860
+dan memformat respons percakapan.
+
+00:15:41.620 --> 00:15:42.540
+Ini bukan sekadar teks.
+
+00:15:42.980 --> 00:15:43.920
+Ini adalah hasil penalar
+
+00:15:43.920 --> 00:15:45.740
+yang didukung oleh aktivitas api langsung.
+
+00:15:46.480 --> 00:15:47.760
+Kemudian berikan tantangan untuknya.
+
+00:15:48.180 --> 00:15:49.180
+Atur tugas peninjauan backlog
+
+00:15:49.180 --> 00:15:50.000
+agar selesai hari Rabu.
+
+00:15:50.740 --> 00:15:52.560
+Ini mengidentifikasi catatan yang tepat
+
+00:15:52.560 --> 00:15:53.500
+dengan mencocokkan judul
+
+00:15:53.500 --> 00:15:54.980
+dari panggilan daftar sebelumnya
+
+00:15:54.980 --> 00:15:55.980
+mengubah hari Rabu depan
+
+00:15:55.980 --> 00:15:56.700
+menjadi tanggal isu
+
+00:15:56.700 --> 00:15:57.920
+yang diperlukan oleh back-end planner
+
+00:15:57.920 --> 00:15:59.040
+lalu melakukan pembaruan.
+
+00:15:59.540 --> 00:16:00.500
+Selamat Anda baru saja
+
+00:16:00.500 --> 00:16:01.760
+melakukan transaksi percakapan
+
+00:16:01.760 --> 00:16:02.580
+penuh lintas AI,
+
+00:16:02.720 --> 00:16:03.280
+API planner,
+
+00:16:03.480 --> 00:16:03.820
+dan teams
+
+00:16:03.820 --> 00:16:05.340
+tanpa meninggalkan kanvas obrolan.
+
+00:16:05.940 --> 00:16:07.300
+Berikut adalah model mental yang penting
+
+00:16:07.300 --> 00:16:08.580
+yaitu loop penalaran Copilot.
+
+00:16:09.100 --> 00:16:09.800
+Setiap pesan pengguna
+
+00:16:09.800 --> 00:16:10.700
+memicu interpretasi,
+
+00:16:10.820 --> 00:16:11.560
+pemanggilan konteks,
+
+00:16:11.640 --> 00:16:12.380
+dan pemanggilan alat.
+
+00:16:13.020 --> 00:16:13.680
+Setiap Anda berkata
+
+00:16:13.680 --> 00:16:15.040
+perbarui tugas saya yang terlambat,
+
+00:16:15.300 --> 00:16:16.100
+orkestrasi Copilot
+
+00:16:16.100 --> 00:16:17.180
+tidak hanya mencari aturan.
+
+00:16:18.020 --> 00:16:19.220
+Ia memutuskan rantai tindakan
+
+00:16:19.220 --> 00:16:20.480
+mana yang sesuai dengannya tersebut
+
+00:16:20.480 --> 00:16:21.180
+mencantumkan tugas
+
+00:16:21.180 --> 00:16:22.020
+memfilter yang terlambat
+
+00:16:22.020 --> 00:16:23.120
+memperbarui tanggal jatuh tempo
+
+00:16:23.120 --> 00:16:24.280
+dan mengekskusinya secara berutama.
+
+00:16:25.080 --> 00:16:25.540
+Sementara itu,
+
+00:16:25.620 --> 00:16:26.220
+Anda menyurutku.
+
+00:16:26.820 --> 00:16:28.180
+Anda juga dapat mendiktakan perintah
+
+00:16:28.180 --> 00:16:29.000
+melalui Windows Plus H
+
+00:16:29.000 --> 00:16:30.100
+atau ikon mikrofon Teams.
+
+00:16:30.960 --> 00:16:31.940
+Suara bukan sekadar hal baru,
+
+00:16:32.040 --> 00:16:33.280
+ini adalah aksesibilitas dengan gaya.
+
+00:16:34.000 --> 00:16:34.420
+Mengatakan,
+
+00:16:34.560 --> 00:16:35.780
+tandai tugas terbuka saya minggu ini
+
+00:16:35.780 --> 00:16:36.600
+untuk hari Senin depan
+
+00:16:36.600 --> 00:16:37.580
+menerapkan frasa alami
+
+00:16:37.580 --> 00:16:38.720
+ke dalam otomatisasi terstruktur.
+
+00:16:39.600 --> 00:16:40.880
+Copilot menafsirkan nada,
+
+00:16:41.080 --> 00:16:41.940
+mengurai bahasa temporal,
+
+00:16:42.200 --> 00:16:43.020
+dan mengubahnya menjadi
+
+00:16:43.020 --> 00:16:44.340
+data planner yang deterministik.
+
+00:16:44.900 --> 00:16:45.740
+Bagi yang tidak terbiasa,
+
+00:16:45.800 --> 00:16:46.280
+ini adalah sihir.
+
+00:16:46.740 --> 00:16:47.140
+Bagi Anda,
+
+00:16:47.400 --> 00:16:48.820
+ini adalah kepuasan dari loop penalaran
+
+00:16:48.820 --> 00:16:49.600
+yang dilancang dengan baik.
+
+00:16:50.060 --> 00:16:50.760
+Peringatan teknis,
+
+00:16:50.760 --> 00:16:52.240
+pertama kali setiap alat berjalan
+
+00:16:52.240 --> 00:16:53.140
+di dalam 365,
+
+00:16:53.500 --> 00:16:54.520
+Anda perlu menyetujui kembali
+
+00:16:54.520 --> 00:16:55.260
+izin konektornya.
+
+00:16:55.820 --> 00:16:56.960
+Ini adalah gagasan Microsoft
+
+00:16:56.960 --> 00:16:58.500
+tentang konsistensi keamanan.
+
+00:16:58.640 --> 00:16:59.500
+Perlebihan namun perlu.
+
+00:17:00.120 --> 00:17:00.700
+Tujui sekali,
+
+00:17:00.940 --> 00:17:02.100
+dan itu tidak akan mengganggu Anda lagi
+
+00:17:02.100 --> 00:17:03.080
+kecuali sesi Anda berakhir.
+
+00:17:03.640 --> 00:17:05.100
+Sekarang ujicapan ditambah penalaran
+
+00:17:05.100 --> 00:17:05.900
+berantai secara bersamaan.
+
+00:17:06.460 --> 00:17:06.760
+Katakan,
+
+00:17:07.120 --> 00:17:08.120
+daftar tugas saya yang tertunda
+
+00:17:08.120 --> 00:17:09.720
+mengatur semuanya ke hari Jumat.
+
+00:17:13.670 --> 00:17:14.750
+Mesin orkestrasi melewati
+
+00:17:14.750 --> 00:17:15.590
+frasa konjuntif,
+
+00:17:15.750 --> 00:17:16.510
+lalu atur semuanya.
+
+00:17:17.610 --> 00:17:18.690
+Cara logis menyimpulkan bahwa
+
+00:17:18.690 --> 00:17:19.850
+ia memerlukan tindakan daftar
+
+00:17:19.850 --> 00:17:20.350
+dan pembaruan
+
+00:17:20.350 --> 00:17:21.390
+memanggilnya secara berurutan
+
+00:17:21.390 --> 00:17:22.810
+dan menyegarkan konteksnya.
+
+00:17:23.510 --> 00:17:24.690
+Hasilnya muncul beberapa detik kemudian.
+
+00:17:25.350 --> 00:17:26.290
+Itu omong-omong adalah titik
+
+00:17:26.290 --> 00:17:27.770
+di mana otomatisasi tradisional gagal.
+
+00:17:28.290 --> 00:17:29.390
+Beberapa tindakan dipicu oleh
+
+00:17:29.390 --> 00:17:30.050
+satu kalimat aman.
+
+00:17:30.830 --> 00:17:31.650
+Kopilot menanganinya
+
+00:17:31.650 --> 00:17:32.890
+karena ia tidak mengikuti aturan
+
+00:17:32.890 --> 00:17:33.750
+ia menamar mulai tersebut.
+
+00:17:34.490 --> 00:17:36.090
+Setelah Anda memvalidasi alur buat,
+
+00:17:36.250 --> 00:17:37.170
+daftar, dan perbarui,
+
+00:17:37.370 --> 00:17:39.030
+tutup tab studio dengan percaya diri.
+
+00:17:39.450 --> 00:17:40.470
+Agen Anda tidak tinggal di sana.
+
+00:17:41.030 --> 00:17:42.510
+Ini ia berkelialan di Teams
+
+00:17:42.510 --> 00:17:44.290
+dan 365 sebagai operator otonom.
+
+00:17:45.150 --> 00:17:45.750
+Mulai saat ini,
+
+00:17:45.870 --> 00:17:46.450
+setiap anggota tim
+
+00:17:46.450 --> 00:17:47.410
+dengan izin dapat memanggil.
+
+00:17:48.050 --> 00:17:48.390
+Dan ya,
+
+00:17:48.490 --> 00:17:49.330
+saat seseorang menyadari
+
+00:17:49.330 --> 00:17:50.370
+bahwa mereka bisa mengucapkan
+
+00:17:50.370 --> 00:17:51.230
+tambah tiga tugas,
+
+00:17:51.470 --> 00:17:52.530
+alih-alih mengklik 14 kali
+
+00:17:52.530 --> 00:17:53.350
+Anda akan mendapatkan
+
+00:17:53.350 --> 00:17:54.270
+status dewa kecil.
+
+00:17:54.850 --> 00:17:55.750
+Penyebaran Anda selesai.
+
+00:17:56.290 --> 00:17:57.050
+Pekerja digital kini
+
+00:17:57.050 --> 00:17:58.030
+bekerja di tempat Anda bekerja.
+
+00:17:58.590 --> 00:17:59.290
+Anda telah mengganti
+
+00:17:59.290 --> 00:18:00.230
+kebosan seret dan lepas
+
+00:18:00.230 --> 00:18:01.450
+dengan eksekusi berbasis bahasa.
+
+00:18:02.070 --> 00:18:02.710
+Mari kita bahas
+
+00:18:02.710 --> 00:18:03.410
+cara menjaganya
+
+00:18:03.410 --> 00:18:04.690
+agar tetap efisien, patuh,
+
+00:18:04.750 --> 00:18:05.370
+dan dapat diperluas
+
+00:18:05.370 --> 00:18:06.190
+sebelum kebaruan menunggu.
+
+00:18:06.850 --> 00:18:08.250
+Strategi dan Batasan Otomatisasi
+
+00:18:08.250 --> 00:18:09.310
+Sekarang,
+
+00:18:09.410 --> 00:18:10.190
+setelah Anda menikmati
+
+00:18:10.190 --> 00:18:11.330
+keberhasilan otomatisasi
+
+00:18:11.330 --> 00:18:11.930
+yang berfungsi penuh,
+
+00:18:12.070 --> 00:18:13.110
+mari kita sedikit mengganggunya
+
+00:18:13.110 --> 00:18:14.010
+dengan membahas realitas,
+
+00:18:14.010 --> 00:18:15.190
+strategi dan keterbatasan.
+
+00:18:16.470 --> 00:18:17.310
+Setiap sistem cerdas
+
+00:18:17.310 --> 00:18:18.270
+memerlukan pemeliharaan,
+
+00:18:18.350 --> 00:18:18.770
+tata kelola,
+
+00:18:18.930 --> 00:18:20.150
+dan diskusi batasan sesekali.
+
+00:18:20.670 --> 00:18:21.350
+Ini adalah kebenaran pertama.
+
+00:18:21.790 --> 00:18:22.310
+Copilot Studio
+
+00:18:22.310 --> 00:18:22.910
+tidak menggantikan
+
+00:18:22.910 --> 00:18:23.470
+power automate
+
+00:18:23.470 --> 00:18:24.290
+tetapi melengkapinya.
+
+00:18:25.090 --> 00:18:25.710
+Power automate
+
+00:18:25.710 --> 00:18:27.090
+tetap menjadi mesin latar belakang
+
+00:18:27.090 --> 00:18:28.210
+untuk alur kerja terstruktur,
+
+00:18:28.350 --> 00:18:28.970
+mesin tak terlihat
+
+00:18:28.970 --> 00:18:30.030
+yang menangani pemicu rutin.
+
+00:18:30.770 --> 00:18:31.450
+Copilot Studio
+
+00:18:31.450 --> 00:18:32.770
+adalah antarmuka percakapan,
+
+00:18:33.170 --> 00:18:33.990
+cangkang penalaran
+
+00:18:33.990 --> 00:18:34.650
+yang menerjemahkan
+
+00:18:34.650 --> 00:18:35.410
+permintaan manusia
+
+00:18:35.410 --> 00:18:36.170
+yang berantakan menjadi
+
+00:18:36.170 --> 00:18:36.970
+logika terstruktur.
+
+00:18:37.670 --> 00:18:38.410
+Ketika digabungkan,
+
+00:18:38.490 --> 00:18:39.530
+keduanya bentuk siklus tertutup.
+
+00:18:40.190 --> 00:18:41.370
+Copilot berbicara dengan orang,
+
+00:18:41.370 --> 00:18:42.170
+power automate
+
+00:18:42.170 --> 00:18:42.990
+berbicara dengan sistem.
+
+00:18:43.690 --> 00:18:44.290
+Bersama-sama mereka
+
+00:18:44.290 --> 00:18:45.250
+menyingkirkan Anda dari tengah.
+
+00:18:45.710 --> 00:18:46.490
+Gunakan alat yang tepat
+
+00:18:46.490 --> 00:18:47.090
+untuk ke dalamnya.
+
+00:18:47.770 --> 00:18:48.550
+Saat Anda memerlukan
+
+00:18:48.550 --> 00:18:49.310
+alur deterministik,
+
+00:18:49.410 --> 00:18:50.290
+katakan setiap kali
+
+00:18:50.290 --> 00:18:51.110
+ada tanggapan formulir
+
+00:18:51.110 --> 00:18:51.950
+masuk buat tugas.
+
+00:18:52.550 --> 00:18:53.270
+Itu adalah wilayah
+
+00:18:53.270 --> 00:18:53.770
+power automate.
+
+00:18:54.230 --> 00:18:54.890
+Saat Anda memerlukan
+
+00:18:54.890 --> 00:18:56.130
+fleksibilitas interpretatif
+
+00:18:56.130 --> 00:18:57.290
+seperti tambahkan tugas
+
+00:18:57.290 --> 00:18:57.910
+apapun yang muncul
+
+00:18:57.910 --> 00:18:58.630
+dalam rapat hari ini.
+
+00:18:59.250 --> 00:18:59.990
+Itu adalah ranak Copilot.
+
+00:19:00.810 --> 00:19:01.910
+Ahli strategi otomatisasi
+
+00:19:01.910 --> 00:19:02.550
+yang matang memahami
+
+00:19:02.550 --> 00:19:03.730
+sinergi di atas redundansi.
+
+00:19:04.450 --> 00:19:05.590
+Kedua, perbaiki deskripsi Anda.
+
+00:19:06.390 --> 00:19:07.390
+Kolom teks yang Anda abaikan
+
+00:19:07.390 --> 00:19:08.270
+saat menambahkan alat
+
+00:19:08.270 --> 00:19:08.990
+itu adalah perintah
+
+00:19:11.370 --> 00:19:12.250
+memperbaruinya dengan
+
+00:19:12.250 --> 00:19:13.150
+frasa niat yang jelas
+
+00:19:13.150 --> 00:19:14.790
+seperti gunakan tindakan ini
+
+00:19:14.790 --> 00:19:15.430
+saat pengguna ingin
+
+00:19:15.430 --> 00:19:16.190
+menetapkan tanggal
+
+00:19:16.190 --> 00:19:17.410
+secara dramatis
+
+00:19:17.410 --> 00:19:18.190
+meningkatkan kehandalan.
+
+00:19:18.770 --> 00:19:19.750
+Deskripsi yang buruk adalah
+
+00:19:19.750 --> 00:19:20.590
+alasan utama agen
+
+00:19:20.590 --> 00:19:21.310
+tidak berfungsi dengan
+
+00:19:21.310 --> 00:19:22.590
+ketiga tata kelola.
+
+00:19:23.130 --> 00:19:24.090
+Setiap koneksi yang digunakan
+
+00:19:24.090 --> 00:19:24.950
+agent Anda, planner,
+
+00:19:25.150 --> 00:19:25.770
+tim SharePoint,
+
+00:19:25.850 --> 00:19:26.510
+beroperasi di bawah
+
+00:19:26.510 --> 00:19:27.910
+izin Microsoft 365 Anda,
+
+00:19:28.090 --> 00:19:29.010
+hargai batasan.
+
+00:19:29.790 --> 00:19:30.410
+Jangan sembarangan
+
+00:19:30.410 --> 00:19:31.190
+memberi otorisasi
+
+00:19:31.190 --> 00:19:31.930
+pada penyawab pribadi
+
+00:19:31.930 --> 00:19:32.770
+jika rencana tersebut
+
+00:19:32.770 --> 00:19:33.550
+milik tim perusahaan.
+
+00:19:33.950 --> 00:19:34.930
+Audit koneksi secara teratur.
+
+00:19:35.370 --> 00:19:36.370
+Diri Anda di masa depannya
+
+00:19:36.370 --> 00:19:37.210
+yang ditugaskan dengan
+
+00:19:37.210 --> 00:19:37.870
+kepatuhan keamanan
+
+00:19:37.870 --> 00:19:38.910
+akan berterima kasih kepada Anda.
+
+00:19:39.190 --> 00:19:39.850
+Pemantauan adalah
+
+00:19:39.850 --> 00:19:40.850
+lapisan kematangan berikut.
+
+00:19:41.570 --> 00:19:42.490
+Di tampilan analitik
+
+00:19:42.490 --> 00:19:43.150
+Copilot Studio
+
+00:19:43.150 --> 00:19:44.350
+ajak tingkat pemanggilan,
+
+00:19:44.610 --> 00:19:45.290
+latensi respons,
+
+00:19:45.410 --> 00:19:46.070
+dan panggilan alat.
+
+00:19:46.450 --> 00:19:47.210
+Jika satu tindakan
+
+00:19:47.210 --> 00:19:48.170
+terus gagal kemungkinan
+
+00:19:48.170 --> 00:19:48.830
+besar kredensial
+
+00:19:48.830 --> 00:19:49.710
+salah dikonfigurasi
+
+00:19:49.710 --> 00:19:50.550
+atau izin ke deluarsa.
+
+00:19:50.950 --> 00:19:51.850
+Perbaiki terbitkan ulang.
+
+00:19:51.950 --> 00:19:52.270
+Lanjutkan.
+
+00:19:52.790 --> 00:19:53.870
+Sekarang bagian yang menyenangkan.
+
+00:19:54.670 --> 00:19:55.190
+Keterbatasan
+
+00:19:55.190 --> 00:19:56.210
+atau seperti yang disukai
+
+00:19:56.210 --> 00:19:57.190
+pemasaran Microsoft
+
+00:19:57.190 --> 00:19:58.550
+pertimbangan penggunaan
+
+00:19:58.550 --> 00:20:00.790
+jendela konteks Copilot
+
+00:20:00.790 --> 00:20:01.370
+dapat menangani
+
+00:20:01.370 --> 00:20:02.210
+sekitar 3.000 kata
+
+00:20:02.210 --> 00:20:02.790
+untuk penalaran.
+
+00:20:03.450 --> 00:20:04.270
+Itu berarti jika Anda
+
+00:20:04.270 --> 00:20:05.310
+menempelkan seluruh riwayat
+
+00:20:05.310 --> 00:20:05.990
+proyek Anda ke dalam
+
+00:20:05.990 --> 00:20:06.650
+satu obrolan,
+
+00:20:06.950 --> 00:20:07.890
+ia akan melupakan awalnya
+
+00:20:07.890 --> 00:20:09.050
+sebelum mencapai ringkasan.
+
+00:20:09.650 --> 00:20:10.230
+Jaga permintaan
+
+00:20:10.230 --> 00:20:10.590
+atau peringkat
+
+00:20:10.590 --> 00:20:11.430
+satu niat pada satu orang.
+
+00:20:12.130 --> 00:20:12.610
+Selain itu,
+
+00:20:12.730 --> 00:20:13.210
+lingkungan Teams
+
+00:20:13.210 --> 00:20:14.050
+memperlakukan sekitar
+
+00:20:14.050 --> 00:20:14.910
+10 sesi Copilot
+
+00:20:14.910 --> 00:20:16.230
+per pengguna setiap 24 jam
+
+00:20:16.230 --> 00:20:16.990
+kecuali Anda berada
+
+00:20:16.990 --> 00:20:17.930
+di penyewa perusahaan penuh,
+
+00:20:18.430 --> 00:20:19.090
+capai batasnya,
+
+00:20:19.250 --> 00:20:19.790
+dan agen Anda
+
+00:20:19.790 --> 00:20:20.610
+dengan sopan menolak
+
+00:20:20.610 --> 00:20:21.070
+untuk melayani
+
+00:20:21.070 --> 00:20:21.850
+hingga hari berikutnya.
+
+00:20:22.470 --> 00:20:22.970
+Anggap saja itu
+
+00:20:22.970 --> 00:20:23.710
+sebagai istirahat paksa.
+
+00:20:24.090 --> 00:20:24.630
+Robot juga berharap
+
+00:20:24.630 --> 00:20:25.270
+mendapatkan batasan.
+
+00:20:25.810 --> 00:20:26.470
+Resensi itu penting.
+
+00:20:27.170 --> 00:20:27.870
+Penyewa pengembang
+
+00:20:27.870 --> 00:20:28.690
+seringkali kekurangan
+
+00:20:28.690 --> 00:20:29.590
+fitur indeks semantik
+
+00:20:29.590 --> 00:20:30.530
+yang berarti tidak ada
+
+00:20:30.530 --> 00:20:31.150
+dasar yang kaya
+
+00:20:31.150 --> 00:20:32.130
+dalam data SharePoint.
+
+00:20:32.990 --> 00:20:33.690
+Lingkungan produksi
+
+00:20:33.690 --> 00:20:35.110
+membuka integrasi canggih tersebut.
+
+00:20:35.910 --> 00:20:36.310
+Terjemahan,
+
+00:20:36.710 --> 00:20:37.270
+prototipe mungkin
+
+00:20:37.270 --> 00:20:37.830
+terlebih bodoh
+
+00:20:37.830 --> 00:20:38.790
+daripada agen produksi.
+
+00:20:39.270 --> 00:20:39.930
+Ini bukan salah Anda,
+
+00:20:40.050 --> 00:20:40.690
+itu karena lisensi.
+
+00:20:41.290 --> 00:20:42.330
+Kombinasikan Copilot Studio
+
+00:20:42.330 --> 00:20:43.150
+dengan Power Automate
+
+00:20:43.150 --> 00:20:44.190
+untuk dependensi yang kompleks.
+
+00:20:44.710 --> 00:20:45.270
+Contohnya,
+
+00:20:45.490 --> 00:20:46.210
+biarkan Copilot
+
+00:20:46.210 --> 00:20:47.070
+mengumpulkan konteks
+
+00:20:47.070 --> 00:20:47.910
+secara percakapan,
+
+00:20:48.090 --> 00:20:48.770
+menetapkan tugas
+
+00:20:48.770 --> 00:20:49.970
+kepada setiap peserta rapat,
+
+00:20:50.770 --> 00:20:52.010
+dan mengirimkan data tersebut
+
+00:20:52.010 --> 00:20:53.030
+ke alur Power Automate
+
+00:20:53.030 --> 00:20:54.270
+yang memproses setiap peserta
+
+00:20:54.270 --> 00:20:54.890
+untuk membuat
+
+00:20:54.890 --> 00:20:56.370
+tugas planner individual.
+
+00:20:57.870 --> 00:20:58.990
+Biarkan manusia mengobrol,
+
+00:20:59.090 --> 00:21:00.250
+biarkan alur memproses logika,
+
+00:21:00.590 --> 00:21:01.150
+praktek terbaik.
+
+00:21:01.690 --> 00:21:02.630
+Dokumentasikan kursi Anda.
+
+00:21:03.350 --> 00:21:04.010
+Anda di masa depan
+
+00:21:04.010 --> 00:21:04.950
+akan lupa ID group mana
+
+00:21:04.950 --> 00:21:05.570
+yang memiliki rencana.
+
+00:21:06.350 --> 00:21:07.470
+Pertahankan tabel sederhana
+
+00:21:07.470 --> 00:21:08.470
+di OneNote atau SharePoint.
+
+00:21:09.330 --> 00:21:09.810
+Nama agen,
+
+00:21:09.930 --> 00:21:10.430
+jenis konektor,
+
+00:21:10.550 --> 00:21:11.290
+pemilik autentikasi,
+
+00:21:11.390 --> 00:21:12.430
+tanggal publikasi terakhir.
+
+00:21:13.250 --> 00:21:14.430
+Administrasi melalui spreadsheet
+
+00:21:14.430 --> 00:21:15.210
+ironisnya mencegah
+
+00:21:15.210 --> 00:21:15.950
+kekacauan oleh AI.
+
+00:21:16.410 --> 00:21:17.130
+Sebuah cerita singkat
+
+00:21:17.130 --> 00:21:18.010
+untuk menggambarkan hasil.
+
+00:21:18.490 --> 00:21:19.130
+Tim produks kecil
+
+00:21:19.130 --> 00:21:19.730
+membangun agen
+
+00:21:19.730 --> 00:21:20.730
+pengingat spread mereka sendiri
+
+00:21:20.730 --> 00:21:21.730
+mengikuti langkah-langkah ini.
+
+00:21:22.510 --> 00:21:23.270
+Agen ini menangani
+
+00:21:23.270 --> 00:21:24.230
+pembuatan tugas rutin,
+
+00:21:27.870 --> 00:21:29.250
+memakan 15 menit per rapat
+
+00:21:29.250 --> 00:21:29.830
+menyusur menjadi
+
+00:21:29.830 --> 00:21:30.670
+satu instruksi lisan.
+
+00:21:31.090 --> 00:21:31.830
+Kalikan itu dengan
+
+00:21:31.830 --> 00:21:33.210
+50 rapat per kuartal
+
+00:21:33.210 --> 00:21:34.130
+dan secara mengejutkan
+
+00:21:34.130 --> 00:21:35.010
+mereka mendapatkan kembali
+
+00:21:35.010 --> 00:21:35.930
+waktu berhari-hari per tahun
+
+00:21:35.930 --> 00:21:36.990
+tanpa menulis satu balis kodip.
+
+00:21:37.330 --> 00:21:38.310
+Namun, sesuaikan ekspektasi.
+
+00:21:38.910 --> 00:21:39.670
+Kecerdasan copy-load
+
+00:21:39.670 --> 00:21:40.630
+dibatasi oleh konteks
+
+00:21:40.630 --> 00:21:41.450
+dan kejelasan.
+
+00:21:42.110 --> 00:21:43.170
+Sangat cerdas dalam konversi
+
+00:21:43.170 --> 00:21:44.070
+mengubah ungkapan manusia
+
+00:21:44.070 --> 00:21:44.530
+yang us menjadi
+
+00:21:44.530 --> 00:21:45.130
+tindakan terstruk.
+
+00:21:45.490 --> 00:21:46.730
+Sangat biasa sejadam hal filosofi.
+
+00:21:47.070 --> 00:21:47.590
+Ketika ia ragu,
+
+00:21:47.670 --> 00:21:48.530
+itu masalah desain perintah,
+
+00:21:48.650 --> 00:21:49.610
+bukan pemberontakan mesin.
+
+00:21:50.370 --> 00:21:51.510
+Untuk merangkum strategi Anda,
+
+00:21:51.770 --> 00:21:52.550
+bernalat di copy-load,
+
+00:21:57.870 --> 00:21:58.550
+efisien dan patuh,
+
+00:21:58.970 --> 00:21:59.710
+Anda telah membangun
+
+00:21:59.710 --> 00:22:01.010
+bukan hanya pekerja magang digital
+
+00:22:01.010 --> 00:22:01.810
+tetapi kerangga kerja
+
+00:22:01.810 --> 00:22:02.710
+untuk meskalakan pekerjaan
+
+00:22:02.710 --> 00:22:03.530
+kognitif yang repetit.
+
+00:22:04.070 --> 00:22:04.490
+Singkatnya,
+
+00:22:04.590 --> 00:22:05.370
+biarkan saya menangani hal
+
+00:22:05.370 --> 00:22:06.130
+yang membosankan Anda
+
+00:22:06.130 --> 00:22:06.770
+tangan yang bermakna.
+
+00:22:07.370 --> 00:22:08.710
+Sekarang tajamkan permintaan Anda berikut.
+
+00:22:09.250 --> 00:22:10.030
+Seluruh alur kerja
+
+00:22:10.030 --> 00:22:10.730
+menunggu perintah
+
+00:22:10.730 --> 00:22:12.430
+dari penyulap tugas
+
+00:22:12.430 --> 00:22:13.370
+menjadi komandan tugas.
+
+00:22:13.830 --> 00:22:14.590
+Jadi, seperti inilah
+
+00:22:14.590 --> 00:22:15.350
+rasanya kemajuan,
+
+00:22:15.530 --> 00:22:16.110
+mewujudkan tugas
+
+00:22:16.110 --> 00:22:16.970
+lewat ucapan alih-alih
+
+00:22:16.970 --> 00:22:17.610
+menyeretnya seperti
+
+00:22:17.610 --> 00:22:18.210
+pecandu spreadsheet
+
+00:22:18.210 --> 00:22:19.130
+seharga $1.99.
+
+00:22:19.830 --> 00:22:20.750
+Anda telah beralih
+
+00:22:20.750 --> 00:22:21.470
+dari mengurusi planner
+
+00:22:21.470 --> 00:22:22.110
+menjadi memandani.
+
+00:22:22.110 --> 00:22:23.490
+Agen Copa Load Studio
+
+00:22:23.490 --> 00:22:24.490
+baru Anda mendengarkan,
+
+00:22:24.710 --> 00:22:25.050
+bernalar,
+
+00:22:25.130 --> 00:22:25.750
+dan mengeksekusi
+
+00:22:25.750 --> 00:22:26.290
+sementara Anda
+
+00:22:26.290 --> 00:22:27.450
+tetap berada di level pemikiran.
+
+00:22:28.090 --> 00:22:28.930
+Ini bukan otomatisasi
+
+00:22:28.930 --> 00:22:29.670
+demi otomatisasi.
+
+00:22:30.390 --> 00:22:30.770
+Ini adalah
+
+00:22:30.770 --> 00:22:31.750
+penderagasian yang dijalankan
+
+00:22:31.750 --> 00:22:32.450
+kecepatan mesin.
+
+00:22:32.950 --> 00:22:33.830
+Ingat, Anda tidak hanya
+
+00:22:33.830 --> 00:22:34.570
+menghubungkan api,
+
+00:22:34.650 --> 00:22:35.490
+Anda membangun lapisan
+
+00:22:35.490 --> 00:22:36.370
+penalaran yang menafsirkan
+
+00:22:36.370 --> 00:22:36.910
+niat manusia.
+
+00:22:37.470 --> 00:22:38.110
+Itu berarti setiap
+
+00:22:38.110 --> 00:22:38.710
+catatan rapat,
+
+00:22:38.790 --> 00:22:39.430
+setiap ucapan selamar
+
+00:22:39.430 --> 00:22:40.270
+kita harus lakukan itu
+
+00:22:40.270 --> 00:22:40.830
+minggu depan kini
+
+00:22:40.830 --> 00:22:41.910
+bisa menjadi tugas terstruktur
+
+00:22:41.910 --> 00:22:43.230
+tanpa pendidikan administratif.
+
+00:22:43.730 --> 00:22:44.670
+Perbedaan antara proyek
+
+00:22:44.670 --> 00:22:45.150
+yang tenggelam
+
+00:22:45.150 --> 00:22:45.990
+dalam pembaruan manual
+
+00:22:45.990 --> 00:22:46.830
+dan proyek yang tetap
+
+00:22:46.830 --> 00:22:47.650
+mutakir secara otomatis
+
+00:22:47.650 --> 00:22:48.370
+adalah terus terang
+
+00:22:48.370 --> 00:22:49.010
+apakah seseorang
+
+00:22:49.010 --> 00:22:49.470
+seperti Anda
+
+00:22:49.470 --> 00:22:50.130
+memeluangkan waktu
+
+00:22:50.130 --> 00:22:50.830
+untuk mengaturnya.
+
+00:22:51.450 --> 00:22:52.070
+Pada intinya,
+
+00:22:52.490 --> 00:22:53.230
+inilah janji nyata
+
+00:22:53.230 --> 00:22:54.890
+Microsoft 365 Copy Load
+
+00:22:54.890 --> 00:22:56.150
+bukan lebih banyak alat
+
+00:22:56.150 --> 00:22:56.990
+melainkan orkestrasi
+
+00:22:56.990 --> 00:22:57.550
+yang lebih cerdas
+
+00:22:57.550 --> 00:22:58.150
+di antaranya.
+
+00:22:58.750 --> 00:22:59.370
+Liner tetap lemer.
+
+00:22:59.830 --> 00:23:00.810
+Anda hanya mempromosikannya
+
+00:23:00.810 --> 00:23:01.370
+dari papan tulis
+
+00:23:01.370 --> 00:23:02.050
+menjadi tenaga kerja.
+
+00:23:02.590 --> 00:23:02.910
+Jadi ya,
+
+00:23:03.170 --> 00:23:03.790
+berhentilah menyeret,
+
+00:23:03.870 --> 00:23:04.750
+berhentilah mengeklik menu
+
+00:23:04.750 --> 00:23:05.850
+yang menghina kecerdasan Anda.
+
+00:23:06.250 --> 00:23:07.330
+Anda membangun juru tulis AI
+
+00:23:07.330 --> 00:23:08.030
+untuk suatu alasan
+
+00:23:08.030 --> 00:23:08.790
+biarkan ia berkerja.
+
+00:23:08.990 --> 00:23:09.850
+Anda menangani penilaian
+
+00:23:09.850 --> 00:23:10.690
+kepemimpinan kreatif
+
+00:23:10.690 --> 00:23:11.330
+hal-hal yang masih
+
+00:23:11.330 --> 00:23:12.370
+membingungkan silikon.
+
+00:23:13.290 --> 00:23:14.110
+Jika ini menghemat
+
+00:23:14.110 --> 00:23:14.650
+10 menit
+
+00:23:14.650 --> 00:23:15.870
+atau sedikit kewarasan Anda,
+
+00:23:16.350 --> 00:23:16.870
+balas semesta
+
+00:23:16.870 --> 00:23:17.810
+dengan berlangganan.
+
+00:23:18.610 --> 00:23:19.550
+Masih banyak yang akan datang
+
+00:23:19.550 --> 00:23:20.210
+power platform
+
+00:23:20.210 --> 00:23:21.010
+ekspansi Copilot
+
+00:23:21.010 --> 00:23:22.170
+kecanduan otomatisasi
+
+00:23:22.170 --> 00:23:22.850
+yang positif.
+
+00:23:23.430 --> 00:23:23.930
+Ketuk ikuti,
+
+00:23:24.070 --> 00:23:24.970
+aktifkan notifikasi
+
+00:23:24.970 --> 00:23:25.970
+dan biarkan peningkatan
+
+00:23:25.970 --> 00:23:27.530
+berikutnya terpasang otomatis.
+
+00:23:28.070 --> 00:23:28.690
+Efisiensi adalah
+
+00:23:28.690 --> 00:23:29.830
+kebiasaan pasangan secara permas.

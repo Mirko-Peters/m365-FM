@@ -278,5 +278,99 @@ class Safety(unittest.TestCase):
             U.STATE, U.LOG, U.BACKUP = old
 
 
+class ScheduledAndIndex(unittest.TestCase):
+    """E2: geplante/private Folgen ohne Seite sind skipped, nicht missing; A: jeder Lauf schreibt den Index der Hauptshow (data/spreaker_index.json)."""
+    def w(self):
+        w = world()
+        w["6"] = dict(ep("6", 6704921, "", "x", title="Geplant"), published_at="2099-01-01 10:00:00")   # geplant, keine Seite
+        w["7"] = ep("7", 6704921, "", "x", vis="PRIVATE", title="Privat")                                 # privat, keine Seite
+        w["8"] = ep("8", 6704921, "", "x", title="Alte Folge")                                            # veroeffentlicht, keine Seite
+        return w
+
+    def test_classify_order(self):
+        rows = U.run_plan(Fake(self.w()), PAGES, res(), [6704921], out=lambda *_: 0)
+        self.assertEqual({r["id"]: r["status"] for r in rows}, {"1": "differs", "6": "skipped", "7": "skipped", "8": "missing"})
+        self.assertEqual(U.classify(6704921, {"episode_id": "9"}, None, res())["status"], "missing")   # Veroeffentlichung unbekannt: wie bisher
+        self.assertEqual(U.classify(6704921, {"episode_id": "9", "published_at": "2099-01-01 10:00:00"}, None, res())["status"], "skipped")
+
+    def test_list_item_complete_needs_no_get(self):
+        class ListFull(Fake):
+            def paged(self, path):
+                return [{k: v for k, v in e.items() if k != "show"} for e in self.eps.values() if e["show"] == int(path.split("/")[2])]
+            def req(self, method, path, **kw):
+                if method == "GET" and path.rsplit("/", 1)[1] in ("6", "7", "8"): raise AssertionError("Einzelabfrage unnoetig")
+                return super().req(method, path, **kw)
+        rows = U.run_plan(ListFull(self.w()), PAGES, res(), [6704921], out=lambda *_: 0)
+        self.assertEqual({r["id"]: r["status"] for r in rows}["6"], "skipped")
+
+    def test_get_only_while_api_gives_visibility(self):
+        """Nennt auch die Einzelabfrage keine Sichtbarkeit, fragt der Lauf Folgen ohne Seite mit vergangenem Datum nicht mehr einzeln ab
+        (eine Abfrage je Lauf statt je Folge); Folgen ohne Datum weiter, geplante (Datum in der Zukunft) nie."""
+        w = self.w(); w["9"] = ep("9", 6704921, "", "x", title="Noch eine alte"); w["10"] = ep("10", 6704921, "", "x", title="Ohne Datum")
+        def mk(api_vis):
+            class NoVis(Fake):
+                gets = []
+                def paged(self, path):   # Liste: Datum (ausser Folge 10), nie Sichtbarkeit
+                    return [{k: v for k, v in e.items() if k not in ("show", "visibility") and not (k == "published_at" and e["episode_id"] == "10")}
+                            for e in self.eps.values() if e["show"] == int(path.split("/")[2])]
+                def req(self, method, path, **kw):
+                    r = super().req(method, path, **kw)
+                    if method == "GET": self.gets.append(path.rsplit("/", 1)[1])
+                    if method == "GET" and not api_vis: r["episode"].pop("visibility", None)
+                    return r
+            return NoVis(w)
+        sp = mk(False); rows = {r["id"]: r["status"] for r in U.run_plan(sp, PAGES, res(), [6704921], out=lambda *_: 0)}
+        self.assertEqual([g for g in sp.gets if g in ("6", "7", "8", "9", "10")], ["7", "10"])   # 6 geplant: keine Abfrage; nach 7 keine fuer 8, 9
+        self.assertEqual((rows["6"], rows["8"], rows["9"], rows["10"]), ("skipped", "missing", "missing", "missing"))
+        sp = mk(True); rows = {r["id"]: r["status"] for r in U.run_plan(sp, PAGES, res(), [6704921], out=lambda *_: 0)}
+        self.assertEqual([g for g in sp.gets if g in ("6", "7", "8", "9", "10")], ["7", "8", "9", "10"])   # API nennt die Sichtbarkeit: weiter einzeln
+        self.assertEqual((rows["6"], rows["7"], rows["8"]), ("skipped", "skipped", "missing"))
+
+    def test_save_index_malformed_old_file(self):
+        d = Path(tempfile.mkdtemp()); f = d / "spreaker_index.json"
+        for raw in ("[1]", '"abc"', '{"episodes": [1, 2]}', '{"episodes": {"1": "x", "2": [3]}}', "{kaputt"):
+            f.write_text(raw, "utf-8")
+            self.assertTrue(U.save_index({"1": {"t": "A", "p": "2025-01-01 10:00:00"}, "2": {"t": "B"}}, f, out=lambda *_: 0), raw)
+            self.assertEqual(json.loads(f.read_text())["episodes"], {"1": {"t": "A", "p": "2025-01-01 10:00:00"}, "2": {"t": "B"}}, raw)
+
+    def test_get_error_stays_missing(self):
+        rows = U.run_plan(Fake(self.w(), fail={"6": RuntimeError("503")}), PAGES, res(), [6704921], out=lambda *_: 0)
+        self.assertEqual({r["id"]: r["status"] for r in rows}["6"], "missing")
+
+    def test_main_writes_index(self):
+        d = Path(tempfile.mkdtemp()); m = d / "map.json"
+        m.write_text(json.dumps({"items": [dict(v, spreaker_episode_id=k) for k, v in PAGES.items()]}))
+        old = U.STATE; U.STATE = d / "s.json"
+        try:
+            U.main(["plan", "--ids", "1,6,7,8", "--map", str(m), "--redirects", "", "--read-pause", "0"], sp=Fake(self.w()))
+            ix = json.loads((d / "spreaker_index.json").read_text())
+            self.assertEqual(ix["show_id"], 6704921)
+            self.assertEqual(sorted(ix["episodes"], key=int), ["1", "6", "7", "8"])   # nur Hauptshow; Fake-Liste ohne Felder: Titel/Zeit aus den Einzelabfragen
+            self.assertEqual(ix["episodes"]["8"], {"t": "Alte Folge", "p": "2025-01-01 10:00:00"})
+            mt = (d / "spreaker_index.json").stat().st_mtime_ns
+            U.main(["plan", "--ids", "3", "--map", str(m), "--redirects", "", "--read-pause", "0"], sp=Fake(self.w()))
+            self.assertEqual((d / "spreaker_index.json").stat().st_mtime_ns, mt)   # unveraendert (--ids: alle IDs der Liste, Felder aus dem alten Index): nicht neu schreiben
+            U.main(["plan", "--map", str(m), "--redirects", "", "--read-pause", "0", "--ids", "3", "--no-state"], sp=Fake(world()))
+            self.assertEqual(len(json.loads((d / "spreaker_index.json").read_text())["episodes"]), 4)   # --no-state: kein Index
+            self.assertFalse(U.save_index({"1": {"t": "x"}}, d / "spreaker_index.json", out=lambda *_: 0))   # deutlich kleiner: nicht schreiben
+            U.main(["plan", "--ids", "3", "--map", str(m), "--redirects", "", "--read-pause", "0"], sp=Fake(self.w(), fail_show=6704921))
+            self.assertEqual(len(json.loads((d / "spreaker_index.json").read_text())["episodes"]), 4)   # Liste nicht lesbar: alter Index bleibt
+            (d / "spreaker_index.json").unlink()
+            self.assertEqual(U.main(["export", "--ids", "1", "--map", str(m), "--redirects", "", "--out", str(d / "e.json")], sp=Fake(self.w())), 0)
+            self.assertEqual(len(json.loads((d / "spreaker_index.json").read_text())["episodes"]), 4)   # export frischt den Index auf
+        finally:
+            U.STATE = old
+
+    def test_site_reads_index(self):
+        """Vertrag Werkzeug -> Seitenbau: das Format von save_index liest site_podpage.spreaker_match."""
+        from unittest.mock import patch
+        with patch("site_fetch.fetch", return_value={}):
+            import site_podpage as P
+        d = Path(tempfile.mkdtemp()); (d / "show_notes").mkdir()
+        U.save_index({"67289366": {"t": "Azure DevOps Pipelines for Power Platform Deployments", "p": "2025-08-07 00:49:00"}}, d / "spreaker_index.json")
+        with patch.object(P, "D", d), patch.object(P, "_SIDS", {}):
+            self.assertEqual(P.spreaker_id({"name": "Pipelines (umbenannt)", "slug": "azure-devops-pipelines", "published": "2025-08-06T17:49:00-07:00"}), "67289366")
+
+
 if __name__ == "__main__":
     unittest.main()

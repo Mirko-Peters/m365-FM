@@ -32,6 +32,19 @@ class SponsorMetricTests(unittest.TestCase):
         self.assertNotIn("/de/../outside/", paths)
         self.assertFalse(any("evil.test" in path for path in paths))
 
+    def test_ended_placements_keep_episodes_and_posts_entity_pages_only_until_grace_end(self):
+        # Mirko 11.11.2026: Folgen und Beitraege bleiben dauerhaft gekennzeichnet -> weiter erfassen; Entitaets-/Themenseiten nur bis end + 182 Tage
+        record = {"end": "2027-01-16", "entities": ["cognillo"], "topics": ["oversharing"], "posts": ["/community/story/"], "episodes": ["some-episode"]}
+        placement = {"langs": "en", "refs": '{"page_paths":["/sponsor/cognillo/"]}'}
+        for day in ("2027-01-16", "2027-07-17"):
+            self.assertIn("/entity/cognillo/", metrics.page_paths(record, placement, day))
+            self.assertIn("/entity/oversharing/", metrics.page_paths(record, placement, day))
+        later = metrics.page_paths(record, placement, "2027-07-18")
+        self.assertEqual(later, ["/community/story/", "/show/episodes/some-episode/", "/sponsor/cognillo/"])
+        self.assertEqual(metrics.page_paths(record, placement, "2030-01-01"), later, "Jahre spaeter weiter erfasst")
+        self.assertIn("/entity/cognillo/", metrics.page_paths(dict(record, end=None), placement, "2030-01-01"), "unbefristet")
+        self.assertIn("/entity/cognillo/", metrics.page_paths(record, placement), "ohne Tag wie bisher")
+
     def test_dub_episode_paths_and_spreaker_ids_use_published_language_episode(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

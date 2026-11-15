@@ -21,7 +21,9 @@ Modi
 Quelle der kanonischen Adresse: spreaker-urls.json des Seitenbaus (generate_site.py -> site_episode_urls.episode_url, dieselbe Funktion wie
 die Seiten selbst); alte Adressen werden mit site_links.Resolver und show/redirects.json (derselben Tabelle wie der Site-Worker) in einem
 Schritt aufgeloest. Folgen ohne Seite (noch nicht gebaut) werden uebersprungen und aufgelistet. Zustand je Folge fuer den Admin-Bereich:
-data/spreaker_urls_state.json (ok / differs / missing / skipped / error).
+data/spreaker_urls_state.json (ok / differs / missing / skipped / error). Jeder Lauf, der die Folgenliste der Hauptshow liest (plan, apply, auto;
+export, wenn ein Zugang da ist), schreibt dazu data/spreaker_index.json: ID, Titel und Veroeffentlichungszeit aller Folgen der Hauptshow - auch
+der alten ausserhalb des RSS-Fensters. Der Seitenbau ordnet damit Podpage-Seiten ihrer Spreaker-ID zu (site_podpage.spreaker_match).
 Aufruf: python tools/spreaker_urls.py plan|apply|auto|export [--link-only] [--limit N] [--ids 1,2] [--show 7393187] [--map PFAD|URL] [--redirects PFAD|URL]"""
 import argparse, json, os, re, sys, time, urllib.request
 from datetime import datetime, timezone
@@ -34,6 +36,7 @@ import site_episode_urls as SEU
 
 LOG = ROOT / "data" / "spreaker_urls.tsv"
 STATE = ROOT / "data" / "spreaker_urls_state.json"
+INDEX = None   # Index der Hauptshow; Standard: data/spreaker_index.json neben STATE (Tests, die STATE umlenken, schreiben ihn so nicht ins Repo)
 APPROVED = ROOT / "data" / "SPREAKER_URLS_APPROVED"   # Freigabe fuer den Zeitplan (auto -> apply nur Feld Website); legt Mirko nach einem geprueften Probelauf an
 BACKUP = Path(os.environ.get("SHOWNOTES_DIR") or (ROOT / "shownotes")) / "spreaker_backup"   # alte Werte vor jedem Schreiben (wie apply_shownotes.py)
 MAP_URL = "https://www.m365.fm/spreaker-urls.json"
@@ -200,10 +203,40 @@ def full_episode(sp, item):
     return sp.req("GET", f"/episodes/{item['episode_id']}")["episode"], True
 
 
-def scan(sp, pages, show_ids, only_ids=None, pause=0.0, out=print):
+def index_add(index, item):
+    """Nur oeffentliche Metadaten der Folge fuer den Index (data/spreaker_index.json): Titel (t) und Veroeffentlichungszeit in UTC (p)."""
+    e = index.setdefault(str(item["episode_id"]), {})
+    if item.get("title"): e["t"] = str(item["title"])
+    if item.get("published_at"): e["p"] = str(item["published_at"])[:19]
+
+
+def save_index(index, path=None, out=print):
+    """Index der Hauptshow schreiben: {version, generated, show_id, episodes: {ID: {t, p}}}. Nur, wenn sich die Folgen geaendert haben (sonst
+    bliebe jeder Lauf ein Commit), und nicht, wenn die neue Liste deutlich kleiner ist als die alte (unvollstaendige Antwort der API)."""
+    p = path or INDEX or STATE.with_name("spreaker_index.json")
+    if not index: return False
+    try: old = json.loads(p.read_text("utf-8")) if p.exists() else {}
+    except ValueError: old = {}
+    old = old.get("episodes") if isinstance(old, dict) else None   # falsche Form: wie ohne alten Index
+    old = {k: v for k, v in old.items() if isinstance(v, dict)} if isinstance(old, dict) else {}
+    new = {k: {**old.get(k, {}), **index[k]} for k in sorted(index, key=int)}   # Felder, die die Liste nicht nennt, bleiben aus dem alten Index
+    if new == old: return False
+    if len(new) < 0.9 * len(old):
+        out(f"::warning::Spreaker-Index nicht geschrieben: {len(new)} Folgen statt bisher {len(old)}"); return False
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps({"version": 1, "generated": now()[:10], "show_id": SEU.EN_SHOW_ID, "episodes": new}, ensure_ascii=False, indent=1) + "\n", "utf-8")
+    return True
+
+
+def scan(sp, pages, show_ids, only_ids=None, pause=0.0, out=print, index=None):
     """Je Show alle Folgen lesen. Erzeugt (show_id, ep, page|None, fehler|None) fuer jede Folge. Ein Lesefehler einer Folge (oder der Liste
     einer Show) bricht den Lauf nicht ab: die Folge kommt als Fehler zurueck, es geht mit der naechsten weiter. Nur 401 (PermissionError)
-    bricht ab - dann scheitert jeder weitere Aufruf. pause: Wartezeit nach jeder Einzelabfrage (schont die Spreaker-API)."""
+    bricht ab - dann scheitert jeder weitere Aufruf. pause: Wartezeit nach jeder Einzelabfrage (schont die Spreaker-API). index (Dict): nimmt
+    alle Folgen der Hauptshow auf (vor dem Filter --ids, also immer vollstaendig). Folgen ohne Seite werden einzeln abgefragt, wenn der
+    Listeneintrag die Veroeffentlichung nicht nennt, oder bei vergangenem Datum die Sichtbarkeit nicht - classify() meldet geplante/private
+    Folgen dann als skipped statt missing. Nennt auch die Einzelabfrage keine Sichtbarkeit (die API liefert sie nicht immer), fragt der Lauf
+    danach nur noch Folgen ohne Datum einzeln ab: sonst kostete jede Folge ohne Seite in jedem Lauf eine Abfrage ohne neue Auskunft."""
+    vis = True   # liefert die Einzelabfrage die Sichtbarkeit? (bis zur ersten Antwort ohne sie)
     for sid in show_ids:
         try:
             items = episodes_of_show(sp, sid)
@@ -212,12 +245,23 @@ def scan(sp, pages, show_ids, only_ids=None, pause=0.0, out=print):
         except Exception as e:
             out(f"::warning::Show {sid}: Folgenliste nicht lesbar ({str(e)[:160]})")
             yield sid, None, None, f"Liste: {str(e)[:160]}"; continue
+        if index is not None and int(sid) == SEU.EN_SHOW_ID:
+            for item in items: index_add(index, item)
         for item in items:
             eid = str(item["episode_id"])
             if only_ids and eid not in only_ids:
                 continue
             page = pages.get(eid)
             if not page:
+                if not item.get("published_at") or (vis and "visibility" not in item and published(item)):   # geplant/privat? steht nur in der Einzelabfrage
+                    try:
+                        item = sp.req("GET", f"/episodes/{eid}")["episode"]; vis = vis and "visibility" in item
+                        if index is not None and int(sid) == SEU.EN_SHOW_ID: index_add(index, item)
+                    except PermissionError:
+                        raise
+                    except Exception:
+                        pass   # wie bisher: ohne Einzelabfrage zaehlt die Folge als ohne Seite
+                    if pause: time.sleep(pause)
                 yield sid, item, None, None; continue
             try:
                 ep, fetched = full_episode(sp, item)
@@ -225,6 +269,7 @@ def scan(sp, pages, show_ids, only_ids=None, pause=0.0, out=print):
                 raise
             except Exception as e:
                 yield sid, item, page, f"GET {str(e)[:160]}"; time.sleep(pause); continue
+            if fetched and index is not None and int(sid) == SEU.EN_SHOW_ID: index_add(index, ep)
             yield sid, ep, page, None
             if fetched and pause: time.sleep(pause)
 
@@ -235,9 +280,9 @@ def classify(sid, ep, page, res, err=None):
     eid = str(ep["episode_id"])
     if err:
         return {"id": eid, "show": sid, "status": "error", "plan": None, "link": ep.get("episode_link") or "", "note": err, "title": ep.get("title", "")}
-    if page is None:
+    if page is None and ("published_at" not in ep or published(ep)):   # Veroeffentlichung unbekannt (Einzelabfrage fehlgeschlagen): wie bisher missing
         return {"id": eid, "show": sid, "status": "missing", "plan": None, "title": ep.get("title", "")}
-    if not published(ep):
+    if not published(ep):   # vor "ohne Seite": geplante oder private Folgen haben bewusst (noch) keine Seite
         return {"id": eid, "show": sid, "status": "skipped", "plan": None, "link": ep.get("episode_link") or "", "title": ep.get("title", "")}
     pl = plan_episode(ep, page, res)
     return {"id": eid, "show": sid, "status": "differs" if pl["fields"] else "ok", "plan": pl, "link": pl["old_link"], "title": ep.get("title", "")}
@@ -280,11 +325,11 @@ def show_error(sid, ep, err, show_errors):
     if ep is None and err and show_errors is not None: show_errors[str(sid)] = err
 
 
-def run_plan(sp, pages, res, show_ids, only_ids=None, examples=10, out=print, rows=None, pause=0.0, show_errors=None):
+def run_plan(sp, pages, res, show_ids, only_ids=None, examples=10, out=print, rows=None, pause=0.0, show_errors=None, index=None):
     rows = [] if rows is None else rows
     show_errors = {} if show_errors is None else show_errors
     try:
-        for s, e, p, err in scan(sp, pages, show_ids, only_ids, pause, out):
+        for s, e, p, err in scan(sp, pages, show_ids, only_ids, pause, out, index):
             show_error(s, e, err, show_errors)
             r = classify(s, e, p, res, err)
             if r: rows.append(r)
@@ -306,13 +351,13 @@ def run_plan(sp, pages, res, show_ids, only_ids=None, examples=10, out=print, ro
 
 
 def run_apply(sp, pages, res, show_ids, only_ids=None, limit=300, pause=0.4, log_path=None, out=print, link_only=False, rows=None,
-              read_pause=0.0, check=SEU.page_status, backup_dir=None, show_errors=None):
+              read_pause=0.0, check=SEU.page_status, backup_dir=None, show_errors=None, index=None):
     """Schreibt die Abweichungen zu Spreaker (hoechstens limit Folgen). link_only: nur das Feld Website (episode_link), die Beschreibung bleibt
     (Zeitplan; Beschreibungen nur in einem von Hand gestarteten Lauf). Vor jedem Schreiben: Zielseite muss mit 200 antworten (check), alte Werte
     werden gesichert (backup). rows sammelt die Ergebnisse laufend, damit main() den Zustand auch nach einem Abbruch speichert; show_errors (Dict
     Show-ID -> Fehler) die Shows, deren Folgenliste nicht lesbar war."""
     rows, n = ([] if rows is None else rows), 0
-    for sid, ep, page, err in scan(sp, pages, show_ids, only_ids, read_pause, out):
+    for sid, ep, page, err in scan(sp, pages, show_ids, only_ids, read_pause, out, index):
         show_error(sid, ep, err, show_errors)
         r = classify(sid, ep, page, res, err)
         if r is None:
@@ -384,7 +429,19 @@ def main(argv=None, sp=None):
         print(f"::error::Zuordnung zu klein ({len(pages)}) - Abbruch"); return 1
     res = make_resolver(a.redirects)
     if mode == "export":
-        print(f"{export_mapping(pages, res, a.out)} Folgen nach {a.out}"); return 0
+        print(f"{export_mapping(pages, res, a.out)} Folgen nach {a.out}")
+        if not a.no_state and (sp is not None or os.environ.get("SPREAKER_TOKEN") or os.environ.get("SPREAKER_CLIENT_SECRET")):
+            try:   # Index der Hauptshow auffrischen; ohne Zugang oder bei Fehlern bleibt der Export erfolgreich
+                if sp is None:
+                    import apply_shownotes as A
+                    sp = A.Spreaker()
+                    if not sp.login(): raise RuntimeError("keine Anmeldung")
+                idx = {}
+                for it in episodes_of_show(sp, SEU.EN_SHOW_ID): index_add(idx, it)
+                if save_index(idx): print(f"Spreaker-Index: {len(idx)} Folgen der Hauptshow")
+            except Exception as e:
+                print(f"::warning::Spreaker-Index nicht aufgefrischt ({str(e)[:160]})")
+        return 0
     only = {x for x in re.findall(r"\d+", a.ids)}
     show_ids = sorted({int(p["show_id"]) for p in pages.values()})
     if a.show: show_ids = [s for s in show_ids if str(s) in re.findall(r"\d+", a.show)]
@@ -393,19 +450,21 @@ def main(argv=None, sp=None):
         sp = A.Spreaker()
         if not sp.login(): return 1
     run = {"at": now(), "mode": mode, "limit": a.limit, "link_only": link_only}
-    rows, n, aborted, shows_bad = [], 0, False, {}
+    rows, n, aborted, shows_bad, idx = [], 0, False, {}, {}
     try:
         if mode == "plan":
-            run_plan(sp, pages, res, show_ids, only, rows=rows, pause=a.read_pause, show_errors=shows_bad)
+            run_plan(sp, pages, res, show_ids, only, rows=rows, pause=a.read_pause, show_errors=shows_bad, index=idx)
         else:
-            _, n = run_apply(sp, pages, res, show_ids, only, a.limit, a.pause, link_only=link_only, rows=rows, read_pause=a.read_pause, show_errors=shows_bad)
+            _, n = run_apply(sp, pages, res, show_ids, only, a.limit, a.pause, link_only=link_only, rows=rows, read_pause=a.read_pause, show_errors=shows_bad, index=idx)
             wait = sum(1 for r in rows if r["status"] == "differs")
             print(f"{n} Folgen geaendert" + (f", {wait} weichen noch ab (Limit {a.limit}" + (", Beschreibungen nur in einem Lauf von Hand" if link_only else "") + ")" if wait else ""))
     except PermissionError:
         aborted = True; raise
     finally:   # Zustand auch nach einem Abbruch sichern (bis dahin gelesene Folgen)
         run.update(changed=n, checked=len(rows), aborted=aborted, show_errors=sorted(shows_bad, key=int), **{k: sum(1 for r in rows if r["status"] == k) for k in ("ok", "differs", "missing", "skipped", "error")})
-        if not a.no_state: save_state(rows, run)
+        if not a.no_state:
+            save_state(rows, run)
+            if idx and str(SEU.EN_SHOW_ID) not in shows_bad and save_index(idx): print(f"Spreaker-Index: {len(idx)} Folgen der Hauptshow")
     if run["error"] or shows_bad:   # Zusammenfassung (Step-Summary): nicht lesbare Folgen und ganze Shows, deren Liste fehlte
         print(f"Fehler: {run['error']} Folgen nicht lesbar/geschrieben" + (f", Folgenliste nicht lesbar bei Show {', '.join(run['show_errors'])} (Show nicht geprueft)" if shows_bad else ""))
     return 1 if (run["error"] or shows_bad) and mode == "apply" else 0

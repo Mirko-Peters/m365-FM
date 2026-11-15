@@ -1,0 +1,1291 @@
+WEBVTT
+
+00:00:00.370 --> 00:00:06.930
+Siap untuk 10 hari pembahasan Microsoft 365, Copilot, AI, Azure, dan para tokoh yang membentuk masa depan dunia kerja.
+
+00:00:07.730 --> 00:00:11.990
+Januari ini, M365 Con kembali hadir dengan skala yang lebih besar.
+
+00:00:12.770 --> 00:00:18.310
+Bergabunglah bersama kami dalam sesi langsung demo nyata dan pengetahuan praktis dari para MVP serta pakar industri di seluruh dunia.
+
+00:00:18.870 --> 00:00:21.130
+Tanpa slide umum, tanpa jargon yang berlebihan.
+
+00:00:22.090 --> 00:00:28.550
+Kami membahas tantangan nyata, Copilot Studio, agen AI, Fabric, keamanan, tata kelola, dan otomatisasi.
+
+00:00:28.550 --> 00:00:34.430
+Baik Anda seorang profesional IT, pengembang, atau pemimpin bisnis, ada sesi yang dirancang khusus untuk Anda.
+
+00:00:35.470 --> 00:00:40.130
+Selama 10 hari penuh, Anda dapat mengeksplorasi berbagai teknologi dan terhubung dengan komunitas global.
+
+00:00:40.930 --> 00:00:44.270
+Tonton secara langsung, dan bawa wawasan praktis kembali ke organisasi Anda.
+
+00:00:45.190 --> 00:00:48.810
+Januari 2027, 10 hari, satu komunitas Microsoft.
+
+00:00:49.450 --> 00:00:50.510
+Pendaturan sudah dibuka sekarang.
+
+00:00:51.830 --> 00:00:55.430
+Kunjungi M365 Con.net dan amankan tempat Anda hari ini.
+
+00:00:55.430 --> 00:00:58.610
+Itu adalah M365 Con.net.
+
+00:01:00.170 --> 00:01:04.830
+Bergabunglah sekarang di M365 Con.net dan sampai jumpa secara langsung di bulan Januari.
+
+00:01:05.450 --> 00:01:07.630
+Bagaimana jika alasan aplikasi Dataverse Anda melambat?
+
+00:01:08.070 --> 00:01:10.090
+Bukan karena ukuran data, melainkan cara hubungan.
+
+00:01:10.530 --> 00:01:11.430
+Antara data Anda terhubung.
+
+00:01:12.890 --> 00:01:17.370
+Hari ini, kita akan membedah hubungan tersembunyi antara desain skema dan responsivitas nyata,
+
+00:01:17.570 --> 00:01:23.310
+serta mengapa banyak membuat power platform tanpa sadar terjebak dalam performa buruk sejak hari pertama.
+
+00:01:23.310 --> 00:01:27.150
+Ha, jebakan performa tersembunyi dalam tabel Anda.
+
+00:01:27.710 --> 00:01:32.610
+Pernah bertanya-tanya mengapa tabel dengan hanya beberapa ribu baris terasa lebih lambat daripada tabel dengan jutaan baris?
+
+00:01:33.310 --> 00:01:36.250
+Ini adalah saat di mana Firasat Anda mengatakan semuanya baik-baik saja,
+
+00:01:36.690 --> 00:01:39.070
+namun Dataverse terasa seperti bergerak di dalam semen basah.
+
+00:01:40.090 --> 00:01:43.350
+Kebenaran yang mengejutkan adalah bukan ukuran mentah yang memperlambat aplikasi Anda,
+
+00:01:43.490 --> 00:01:45.570
+melainkan cara tabel tersebut dirancang sejak awal.
+
+00:01:45.570 --> 00:01:51.350
+Dan keputusan desain tersebut mulai menimbulkan masalah jauh sebelum Anda mencapai batas platform yang sebenarnya.
+
+00:01:52.290 --> 00:01:53.850
+Banyak pembuat aplikasi menyalahkan faktor ekstern.
+
+00:01:54.290 --> 00:01:56.070
+Mereka berasumsi tenang mereka dibatasi,
+
+00:01:56.550 --> 00:01:59.850
+jaringan tidak stabil atau ada hambatan penyimpanan tersembunyi di dalam layanan.
+
+00:02:00.910 --> 00:02:02.130
+Namun, dalam banyak kasus,
+
+00:02:02.250 --> 00:02:04.090
+formulir yang lambat, pencarian yang tertunda,
+
+00:02:04.290 --> 00:02:06.950
+dan alur power automate yang terus kehabisan waktu semuanya
+
+00:02:06.950 --> 00:02:10.190
+dapat dilacak ke skema yang tampak sempurna di fase pembangunan,
+
+00:02:10.190 --> 00:02:13.610
+namun disusun dengan cara yang memperlambat setiap query yang mengaksesnya.
+
+00:02:14.970 --> 00:02:16.930
+Jika Anda pernah mendapat keluhan dari pengguna,
+
+00:02:17.050 --> 00:02:18.870
+bahwa Dataverse lambat tanpa penjelasan tambahan,
+
+00:02:18.970 --> 00:02:20.650
+kemungkinan besar penyebab sebenarnya adalah
+
+00:02:20.650 --> 00:02:24.430
+tata letak tabel Anda bayangkan seperti lemari arsit.
+
+00:02:25.010 --> 00:02:27.490
+Jika setiap laci penuh sesak dengan kertas dan tidak ada label,
+
+00:02:27.610 --> 00:02:28.070
+tidak masalah.
+
+00:02:28.210 --> 00:02:29.810
+Jika hanya ada 50 file di dalamnya,
+
+00:02:29.930 --> 00:02:32.070
+Anda tetap akan membuang waktu untuk mencarinya.
+
+00:02:33.170 --> 00:02:34.590
+Tabel Dataverse bekerja dengan cara yang sama.
+
+00:02:35.150 --> 00:02:36.630
+Dipenuhi dengan kolom yang jarang Anda gunakan,
+
+00:02:36.730 --> 00:02:38.050
+disatukan dengan hubungan yang tidak perlu,
+
+00:02:38.050 --> 00:02:41.170
+itu bisa membuat operasi data yang sederhana sekalipun menjadi sangat lambat.
+
+00:02:42.050 --> 00:02:43.530
+Dan tidak seperti lemar yang berantakan,
+
+00:02:43.650 --> 00:02:45.950
+kekacauan di sini tidak langsung terlihat oleh Anda atau pengguna.
+
+00:02:46.850 --> 00:02:49.190
+Satu-satunya gejalanya adalah penurunan performa yang terus bertambah.
+
+00:02:49.550 --> 00:02:51.370
+Saya pernah melihat proyek di mana skema tabelnya
+
+00:02:51.370 --> 00:02:52.870
+seperti kumpulan semua permintaan
+
+00:02:52.870 --> 00:02:54.910
+dari setiap pemangku kepentingan.
+
+00:02:55.730 --> 00:02:57.670
+Butuh catatan internal dan tiga format berbeda.
+
+00:02:58.210 --> 00:02:58.430
+Selesai.
+
+00:02:58.970 --> 00:03:00.450
+Solusian variasi dari pencarian yang sama
+
+00:03:00.450 --> 00:03:01.790
+kalau seseorang membutuhkannya nanti,
+
+00:03:02.410 --> 00:03:02.950
+tambahkan saja.
+
+00:03:03.390 --> 00:03:05.130
+Siring waktu, kolom-kolom ini menjadi beban mati.
+
+00:03:05.130 --> 00:03:08.870
+Kolom ini terindeks padahal tidak perlu memperlambat penyisipan dan pembaruan
+
+00:03:08.870 --> 00:03:11.930
+serta membuat UI formulir lebih berat dari seharusnya.
+
+00:03:13.030 --> 00:03:16.310
+Satu contoh nyata melibatkan tabel pelanggan dengan lebih dari 250 kolom
+
+00:03:16.310 --> 00:03:18.650
+yang sebagian besar dibuat hanya untuk berjaga-jaga.
+
+00:03:19.530 --> 00:03:22.050
+Hasilnya, formulir membutuhkan waktu lebih dari 12 detik
+
+00:03:22.050 --> 00:03:23.850
+untuk dimuat pada koneksi berkecepatan tinggi.
+
+00:03:24.350 --> 00:03:26.130
+Dan itu terjadi sebelum otomatisasi apapun dimuat.
+
+00:03:26.470 --> 00:03:29.510
+Dokumentasi Microsoft sendiri menjelaskan tentang pertukaran dalam normalisasi.
+
+00:03:30.250 --> 00:03:30.850
+Secara teori,
+
+00:03:30.850 --> 00:03:34.710
+memecah data menjadi banyak tabel terkait yang lebih kecil melindungi dari redundansi.
+
+00:03:35.130 --> 00:03:36.250
+Dalam prakteknya,
+
+00:03:36.490 --> 00:03:38.730
+normalisasi berlebih dapat merusak performa data first
+
+00:03:38.730 --> 00:03:41.890
+jika operasi normal memerlukan terlalu banyak join antar tabel tersebut.
+
+00:03:42.870 --> 00:03:44.850
+Tiap join adalah pekerjaan tambahan bagi mesin query.
+
+00:03:46.010 --> 00:03:47.790
+Dan jika Anda memiliki kolom yang jarang berubah
+
+00:03:47.790 --> 00:03:49.570
+namun disimpan di tabel terkait yang terpisah,
+
+00:03:49.730 --> 00:03:51.650
+Anda membayar pihak pemprosesan tanpa manfaat nyata.
+
+00:03:53.010 --> 00:03:55.170
+Memangkas kolom yang tidak penting memang bukan pekerjaan menarik,
+
+00:03:55.290 --> 00:03:56.270
+tetapi hasilnya cepat terlihat.
+
+00:03:56.270 --> 00:04:01.190
+Identifikasi atribut yang tidak digunakan dalam pelaporan jarang berubah atau menduplikasi informasi di tempat lain.
+
+00:04:02.610 --> 00:04:05.790
+Simpan saja apa yang melayani proses nyata hari ini, bukan apa yang mungkin dibutuhkan suatu hari nanti.
+
+00:04:06.530 --> 00:04:07.430
+Begitu pula dengan normalisasi.
+
+00:04:07.830 --> 00:04:11.910
+Sekarang perlu meninjau di mana Anda dapat menggabungkan data terkait namun beraktifitas rendah untuk mengurangi join.
+
+00:04:12.550 --> 00:04:14.510
+Tujuannya bukan untuk membawang prinsip desain yang baik,
+
+00:04:14.650 --> 00:04:18.370
+melainkan mencari keseimbangan antara teori dan cara aplikasi Anda berjalan di bawah beban.
+
+00:04:18.370 --> 00:04:23.610
+Dan kenyataannya adalah performa yang dapat ditingkatkan tidak datang dari menambah lebih banyak sumber daya ke data first.
+
+00:04:24.310 --> 00:04:25.910
+Dibulai dengan skema yang dilancang sesuai tujuan.
+
+00:04:26.590 --> 00:04:28.190
+Tabel yang ramping berjalan lebih cepat,
+
+00:04:28.590 --> 00:04:29.910
+formulir dimuat lebih konsisten,
+
+00:04:30.070 --> 00:04:33.190
+dan otomatisasi terpicu tepat waktu bahkan saat lingkungan Anda berkembang.
+
+00:04:34.130 --> 00:04:40.550
+Setiap kolom yang tidak perlu atau pilihan normalisasi yang kurang matang menambah hambatan pada setiap query.
+
+00:04:41.170 --> 00:04:44.170
+Ciri waktu hambatan itu bertambah hingga menimbulkan kelambatan yang nyata.
+
+00:04:44.670 --> 00:04:47.050
+Sekarang setelah faktor kekacauan terungkap tantangan berikutnya,
+
+00:04:47.050 --> 00:04:49.730
+tersembunyi pada bagaimana tabel Anda berinteraksi,
+
+00:04:49.890 --> 00:04:53.450
+dan disitulah, disitulah desain relasi melentukan performa.
+
+00:04:54.890 --> 00:04:56.690
+Saat relasi berubah menjadi penghalang,
+
+00:04:56.810 --> 00:04:58.930
+beberapa relasi data first ibarat persimpangan di jam sibuk.
+
+00:05:00.190 --> 00:05:03.410
+Semuanya macet di satu titik dan seluruh alur melambat hingga ambil berhenti.
+
+00:05:04.670 --> 00:05:06.910
+Di atas kertas, struktur data terlihat bersih dan logis,
+
+00:05:07.230 --> 00:05:08.210
+tetapi dalam prakteknya,
+
+00:05:08.510 --> 00:05:11.870
+satu titik join yang kelebihan beban dapat melumpuhkan seluruh aplikasi berbasis model.
+
+00:05:12.810 --> 00:05:15.330
+Ini bukan tentang data yang buruk atau volume yang besar,
+
+00:05:15.330 --> 00:05:17.930
+melainkan tentang bagaimana relasi dirancang di balik layar.
+
+00:05:18.970 --> 00:05:21.570
+Desain relasi dapat secara diam-diam menimbulkan masalah performa
+
+00:05:21.570 --> 00:05:23.510
+yang baru muncul saat mencapai skala dunia nyata.
+
+00:05:23.990 --> 00:05:25.330
+Di lingkungan uji coba yang lebih kecil,
+
+00:05:25.470 --> 00:05:26.970
+join yang tidak efisien sekalipun tetap berjalan.
+
+00:05:27.350 --> 00:05:28.530
+Terapkan desain yang sama,
+
+00:05:28.890 --> 00:05:29.890
+kelingkungan perusahaan,
+
+00:05:30.170 --> 00:05:32.550
+dengan ribuan pengguna aktif dan proses yang saling terhubung,
+
+00:05:32.670 --> 00:05:35.210
+maka formulir tiba-tiba butuh waktu lama untuk dimuat,
+
+00:05:35.330 --> 00:05:35.650
+subgrid,
+
+00:05:36.070 --> 00:05:36.770
+mengalami time out,
+
+00:05:37.090 --> 00:05:37.710
+dan apapun.
+
+00:05:37.710 --> 00:05:39.990
+yang menyentuh tabel tertau tersebut terasa lambat.
+
+00:05:42.160 --> 00:05:43.840
+Ini bukanlah perlambatan cloud yang misterius,
+
+00:05:44.120 --> 00:05:46.360
+melainkan hasil alami dari relasi yang dirancang
+
+00:05:46.360 --> 00:05:49.420
+demi kejelasan tanpa mempertimbangkan bagaimana data force sebenarnya
+
+00:05:49.420 --> 00:05:50.560
+menjalankan query.
+
+00:05:52.040 --> 00:05:54.220
+Saya melihat ini secara langsung dalam sebuah proyek
+
+00:05:54.220 --> 00:05:55.720
+yang menggunakan relasi many-to-many
+
+00:05:55.720 --> 00:05:57.920
+untuk menautkan kontak ke beberapa paket layanan.
+
+00:05:57.920 --> 00:05:59.960
+Pada pengujian awal,
+
+00:06:00.060 --> 00:06:01.120
+dengan beberapa ratus catatan,
+
+00:06:01.280 --> 00:06:02.100
+semuanya berjalan mulus.
+
+00:06:03.480 --> 00:06:03.780
+Namun,
+
+00:06:03.940 --> 00:06:05.420
+saat kumpulan data langsung berkembang
+
+00:06:05.420 --> 00:06:06.900
+hingga ratusan ribu dan pengguna,
+
+00:06:07.300 --> 00:06:09.600
+melakukan query pada tautan tersebut setiap hari,
+
+00:06:09.800 --> 00:06:12.980
+tabel many-to-many itu berubah menjadi bagian paling lambat dari sistem.
+
+00:06:14.300 --> 00:06:16.800
+Setiap pemuatan formulir memicu join kompleks di tiga tabel,
+
+00:06:16.980 --> 00:06:18.740
+di mana setiap join menambah beban kerja
+
+00:06:18.740 --> 00:06:20.780
+hingga operasi dasar memakan waktu jauh lebih lama
+
+00:06:20.780 --> 00:06:21.920
+dari yang diperkirakan.
+
+00:06:22.780 --> 00:06:24.720
+Biaya tersembunyi tidak hanya ada pada join itu sendiri.
+
+00:06:25.600 --> 00:06:26.200
+Bidang pencarian,
+
+00:06:26.300 --> 00:06:27.200
+look-up di Dataverse
+
+00:06:27.200 --> 00:06:28.740
+dapat membawa perilaku berjenjang
+
+00:06:28.740 --> 00:06:30.280
+seperti penugasan ulang penghapusan
+
+00:06:30.280 --> 00:06:31.700
+atau pembaruan rekaman otomatis
+
+00:06:31.700 --> 00:06:34.080
+yang berjalan setiap kali rekaman tertaut berubah.
+
+00:06:35.100 --> 00:06:37.600
+Meskipun sangat bagus untuk menjaga data tetap sinkron,
+
+00:06:38.100 --> 00:06:40.460
+hal ini juga berarti lebih banyak pemrosesan latar belakang
+
+00:06:40.460 --> 00:06:41.780
+setiap kali pembaruan terjadi,
+
+00:06:42.180 --> 00:06:44.220
+bahkan untuk bidang yang tidak terkait dengan operasi utama.
+
+00:06:45.120 --> 00:06:45.620
+Pada tabel,
+
+00:06:45.780 --> 00:06:46.580
+dengan aktivitas tinggi,
+
+00:06:46.760 --> 00:06:48.220
+jenjang tersebut dapat menumpuk dengan cepat,
+
+00:06:48.320 --> 00:06:48.920
+mengurangi throughput,
+
+00:06:49.120 --> 00:06:52.280
+dan memperlambat interaksi tanpa pemicu yang terlihat jelas.
+
+00:06:53.520 --> 00:06:55.180
+Panduan dari Microsoft sendiri menyarankan
+
+00:06:55.180 --> 00:06:56.820
+untuk menghindari join kompleks yang tidak perlu,
+
+00:06:56.820 --> 00:06:57.740
+dan itu ada alasannya.
+
+00:06:58.540 --> 00:06:59.600
+Setiap join tambahan dalam query,
+
+00:06:59.700 --> 00:07:01.720
+memaksa mesin Dataverse untuk bekerja lebih keras,
+
+00:07:01.860 --> 00:07:03.100
+menerjemahkan lebih banyak data,
+
+00:07:03.360 --> 00:07:04.800
+dan menyempar lebih banyak informasi
+
+00:07:04.800 --> 00:07:06.540
+dalam memori saat mengevaluasi kondisi.
+
+00:07:06.900 --> 00:07:08.700
+Dalam memori saat mengevaluasi kondisi,
+
+00:07:08.980 --> 00:07:10.820
+hal ini dapat dikelola dalam dosis kecil.
+
+00:07:11.040 --> 00:07:11.300
+Tetapi,
+
+00:07:11.360 --> 00:07:13.480
+begitu Anda mulai melapisi beberapa relasi
+
+00:07:13.480 --> 00:07:15.900
+many-to-many dan jenjang ke dalam proses yang sama,
+
+00:07:16.120 --> 00:07:18.320
+waktu eksekusi akan meningkat jauh lebih cepat
+
+00:07:18.320 --> 00:07:19.440
+dari yang Anda duga.
+
+00:07:20.160 --> 00:07:21.680
+Salah satu kasus yang sangat membuka mata
+
+00:07:21.680 --> 00:07:23.620
+melibatkan perubahan relasi dari many-to-many
+
+00:07:23.620 --> 00:07:24.760
+menjadi satu lukap tunggal
+
+00:07:24.760 --> 00:07:25.940
+dengan bidang pilihan pendukung.
+
+00:07:27.040 --> 00:07:28.240
+Logika bisnis sedikit diubah
+
+00:07:28.240 --> 00:07:29.600
+sehingga tidak perlu menyelesaikan
+
+00:07:29.600 --> 00:07:31.580
+beberapa rekaman tertaut secara dinamis
+
+00:07:31.580 --> 00:07:33.300
+dan hasilnya adalah pengurangan
+
+00:07:33.300 --> 00:07:37.260
+waktu muat formulir sebesar 80% secara langsung.
+
+00:07:37.260 --> 00:07:40.500
+Peningkatan itu bukan karena kumpulan data menyusut
+
+00:07:40.500 --> 00:07:41.980
+atau perangkat keras menjadi lebih baik.
+
+00:07:42.800 --> 00:07:44.080
+Itu sepenuhnya karena memberikan data
+
+00:07:44.080 --> 00:07:45.360
+first calur yang lebih sederhana
+
+00:07:45.360 --> 00:07:47.440
+dan lebih langsung ke informasi yang dibutuhkannya.
+
+00:07:48.240 --> 00:07:50.040
+Design alternatif seperti struktur yang diratakan,
+
+00:07:50.140 --> 00:07:51.340
+flattening juga bisa membuahkan hasil.
+
+00:07:51.880 --> 00:07:54.200
+Terkadang, suatu data tidak perlu berada di tabel
+
+00:07:54.200 --> 00:07:55.540
+terkaitnya sendiri yang khusus.
+
+00:07:56.740 --> 00:07:58.660
+Jika datanya jarang dirawat dan jarang berubah,
+
+00:07:58.900 --> 00:08:00.420
+menyimpannya langsung direkaman utama
+
+00:08:00.420 --> 00:08:01.720
+sebagai bidang pilihan berarti
+
+00:08:01.720 --> 00:08:03.760
+mengurangi satu join saat pengambilan data.
+
+00:08:03.760 --> 00:08:07.280
+Demikian pula, beberapa tabel tautan
+
+00:08:07.280 --> 00:08:09.360
+dapat diganti dengan kolom kalkulasi atau row up
+
+00:08:09.360 --> 00:08:11.460
+jika tabel tersebut utamanya digunakan
+
+00:08:11.460 --> 00:08:12.980
+untuk menampilkan informasi ringkasan.
+
+00:08:13.540 --> 00:08:15.000
+Dan itu menjaga lapisan presentasi
+
+00:08:15.000 --> 00:08:16.220
+tetap cepat sekaligus menghindari
+
+00:08:16.220 --> 00:08:17.660
+operasi query berat di latar belakang.
+
+00:08:18.940 --> 00:08:20.100
+Poin penting di sini adalah bahwa
+
+00:08:20.100 --> 00:08:22.680
+desain relasi bukan sekadar tentang kejelasan logika
+
+00:08:22.680 --> 00:08:24.640
+atau memenuhi standar normalisasi.
+
+00:08:25.380 --> 00:08:27.600
+Ini juga tentang memahami biaya eksekusi.
+
+00:08:28.400 --> 00:08:29.800
+Setiap jenis relasi yang Anda pilih
+
+00:08:29.800 --> 00:08:31.340
+mengubah cara data first mengambil,
+
+00:08:31.620 --> 00:08:33.320
+menggabungkan, dan memproses data Anda.
+
+00:08:33.760 --> 00:08:36.420
+Berfokus hanya pada tampilan skema
+
+00:08:36.420 --> 00:08:38.100
+tanpa mempertimbangkan cara kerjanya.
+
+00:08:38.900 --> 00:08:40.600
+Bisa menghasilkan struktur yang masuk akal
+
+00:08:40.600 --> 00:08:42.660
+di atas kertas, tetapi terasa sangat lambat
+
+00:08:42.660 --> 00:08:43.580
+dalam produksi.
+
+00:08:45.140 --> 00:08:46.660
+Dan meskipun menyederhanakan relasi
+
+00:08:46.660 --> 00:08:47.860
+menghilangkan sebagian besar
+
+00:08:47.860 --> 00:08:49.400
+beban pemrosesan tersebut,
+
+00:08:49.560 --> 00:08:50.760
+masih ada faktor lain yang menentukan
+
+00:08:50.760 --> 00:08:52.360
+seberapa cepat data first merespons,
+
+00:08:52.480 --> 00:08:53.760
+yaitu strategi pengindeksannya
+
+00:08:53.760 --> 00:08:55.600
+menggerakkan query tersebut sejak awal.
+
+00:08:57.140 --> 00:08:59.000
+Pengindeksan pengganda performa yang tenang.
+
+00:08:59.940 --> 00:09:01.900
+Query hanya secepat jalur yang bisa mereka tempuh.
+
+00:09:01.900 --> 00:09:04.100
+Dan di data first, pengindeksanlah yang menentukan
+
+00:09:04.100 --> 00:09:04.640
+caru tersebut.
+
+00:09:05.500 --> 00:09:06.800
+Kebanyakan pembuat aplikasi sadar
+
+00:09:06.800 --> 00:09:07.560
+bahwa indeks itu ada,
+
+00:09:07.720 --> 00:09:08.600
+tetapi dalam prakteknya,
+
+00:09:08.800 --> 00:09:10.700
+ini adalah salah satu bagian yang paling kurang dipahami
+
+00:09:10.700 --> 00:09:11.900
+dalam penyetelan performa.
+
+00:09:12.700 --> 00:09:14.380
+Anda bisa memiliki struktur tabel yang bersih
+
+00:09:14.380 --> 00:09:15.240
+dan relasi yang efisien,
+
+00:09:15.360 --> 00:09:17.780
+tetapi jika data first tidak dapat menemukan catatan
+
+00:09:17.780 --> 00:09:18.740
+yang dibutuhkan dengan cepat,
+
+00:09:18.840 --> 00:09:20.320
+segalanya akan melambat mengikuti pencarian
+
+00:09:20.320 --> 00:09:21.140
+yang paling lambat.
+
+00:09:21.620 --> 00:09:22.180
+Segaling lambat.
+
+00:09:22.180 --> 00:09:24.480
+Bayangkan seperti mencoba menemukan satu kotak
+
+00:09:24.480 --> 00:09:25.360
+di gudang yang sangat besar.
+
+00:09:26.320 --> 00:09:27.200
+Tanpa pengindeksan,
+
+00:09:27.660 --> 00:09:29.180
+Anda berjalan dari lorong ke lorong
+
+00:09:29.180 --> 00:09:30.720
+memeriksa setiap rak sampai Anda
+
+00:09:30.720 --> 00:09:32.220
+menemukan kotak yang tepat.
+
+00:09:33.160 --> 00:09:34.640
+Cara itu berhasil set gudang masih kecil,
+
+00:09:34.780 --> 00:09:36.500
+tetapi begitu skala meningkat menjadi jutaan barang,
+
+00:09:36.580 --> 00:09:37.800
+hal itu menjadi tidak masuk akal.
+
+00:09:38.740 --> 00:09:40.500
+Pengindeksan setara dengan memiliki peta yang tepat
+
+00:09:40.500 --> 00:09:42.140
+dan rute langsung gerak yang spesifik.
+
+00:09:43.400 --> 00:09:45.440
+Semakin sedikit pekerjaannya harus dilakukan data first
+
+00:09:45.440 --> 00:09:46.320
+untuk menemukan catatan,
+
+00:09:46.320 --> 00:09:48.780
+semakin cepat setiap tampilan, filter, dan otomatisasi berjalan.
+
+00:09:49.700 --> 00:09:51.780
+Data first secara otomatis membuat indeks tertentu untuk Anda.
+
+00:09:51.780 --> 00:09:54.300
+Terutama pada kunci utama,
+
+00:09:54.500 --> 00:09:56.440
+pencarian, lookups, dan beberapa kolom sistem.
+
+00:09:57.220 --> 00:09:59.300
+Itulah sebabnya lingkungan baru seringkali berkinerja baik
+
+00:09:59.300 --> 00:10:00.280
+tanpa pengindeksan manual,
+
+00:10:00.460 --> 00:10:02.240
+tetapi pengindeksan otomatis memiliki batasan.
+
+00:10:02.680 --> 00:10:04.400
+Query kompleks dengan beberapa kondisi,
+
+00:10:04.620 --> 00:10:05.800
+terutama pada kolom kustom,
+
+00:10:06.260 --> 00:10:08.680
+mungkin berakhir dengan memindai sebagian besar tabel
+
+00:10:08.680 --> 00:10:10.960
+karena tidak ada indeks target yang memandu mereka.
+
+00:10:12.180 --> 00:10:14.420
+Itulah titik di mana Anda mulai melihat dashboard lambat,
+
+00:10:14.420 --> 00:10:15.220
+laporan tertunda,
+
+00:10:15.420 --> 00:10:17.520
+dan tampilan daftar yang tidak dimuat dengan lancar.
+
+00:10:18.100 --> 00:10:18.760
+Ekstrem lainnya,
+
+00:10:18.860 --> 00:10:20.560
+pengindeksan berlebihan bisa sama buruknya.
+
+00:10:20.560 --> 00:10:22.420
+Setiap kali Anda menyisipkan,
+
+00:10:22.520 --> 00:10:22.940
+memperbarui,
+
+00:10:23.080 --> 00:10:23.780
+atau menghapus catatan,
+
+00:10:24.020 --> 00:10:26.300
+data first harus memelihara semua indeks yang relevan.
+
+00:10:27.360 --> 00:10:30.000
+Terlalu banyak indeks kustom dapat meningkatkan waktu tulis
+
+00:10:30.000 --> 00:10:31.640
+dan memperlambat pemberuan masal.
+
+00:10:33.480 --> 00:10:36.000
+Seni di sini adalah mengetahui kolom mana yang layak di indeks
+
+00:10:36.000 --> 00:10:36.940
+dan sama pentingnya,
+
+00:10:37.380 --> 00:10:38.080
+mana yang tidak.
+
+00:10:38.800 --> 00:10:40.760
+Indeks paling berharga pada kolom yang sering digunakan
+
+00:10:40.760 --> 00:10:42.820
+dalam filter pengurutan atau penggabungan,
+
+00:10:42.820 --> 00:10:44.480
+bukan pada kolom yang hanya penting
+
+00:10:44.480 --> 00:10:46.500
+dalam tampilan formulir sesekali.
+
+00:10:46.500 --> 00:10:49.540
+Sebagai contoh, pada satu tabel permintaan layanan bervolume tinggi,
+
+00:10:49.640 --> 00:10:51.100
+laporan memakan waktu hingga 6 detik
+
+00:10:51.100 --> 00:10:53.340
+hanya untuk menampilkan daftar terpilter bagi manajer.
+
+00:10:54.060 --> 00:10:55.240
+Masalah utamanya adalah
+
+00:10:55.240 --> 00:10:57.840
+pemfilteran dilakukan pada kolom jenis permintaan kustom
+
+00:10:57.840 --> 00:10:59.120
+tanpa indeks khusus,
+
+00:10:59.620 --> 00:10:59.920
+SOS.
+
+00:11:00.520 --> 00:11:02.420
+Menambahkan indeks non-cluster pada kolom tersebut
+
+00:11:02.420 --> 00:11:05.680
+langsung memangkas waktu query menjadi di bawah 200 milidetik.
+
+00:11:06.220 --> 00:11:07.220
+Itu bukan peningkatan yang kecil.
+
+00:11:07.220 --> 00:11:10.480
+Hal itu benar-benar mengubah pengalaman aplikasi bagi pengguna harian.
+
+00:11:11.000 --> 00:11:11.900
+Dan bagian terbaiknya,
+
+00:11:12.040 --> 00:11:14.020
+itu tidak perlu mengubah model data atau logika UI
+
+00:11:14.020 --> 00:11:15.740
+hanya jalur pengambilan yang lebih cerdas.
+
+00:11:16.800 --> 00:11:19.440
+Namun, dapatkan manfaat itu setelah masalah terjadi, bukanlah.
+
+00:11:20.380 --> 00:11:22.900
+Memasang indeks pada sistem yang sedang berjalan membawa risiko.
+
+00:11:24.320 --> 00:11:25.940
+Anda perlu menguji dampak penulisan,
+
+00:11:26.080 --> 00:11:28.000
+menjadwalkan perubahan saat penggunaan rendah,
+
+00:11:28.120 --> 00:11:31.600
+dan terkadang menangani beban migrasi jika tabel sangat besar.
+
+00:11:32.880 --> 00:11:33.480
+Sebaliknya,
+
+00:11:33.480 --> 00:11:35.400
+merencanakan strategi indeks sebelum peluncuran
+
+00:11:35.400 --> 00:11:37.480
+membuat seluruh sistem lebih tangguh.
+
+00:11:38.280 --> 00:11:40.380
+Anda dapat memadukan indeks dengan query paling umum
+
+00:11:40.380 --> 00:11:41.140
+sejak hari pertama,
+
+00:11:41.320 --> 00:11:43.780
+mengurangi kebutuhan perbaikan performa darurat nantinya.
+
+00:11:44.660 --> 00:11:46.240
+Pemikatan yang baik saat pencanaan skema adalah
+
+00:11:46.240 --> 00:11:47.740
+membetakan query dengan trafik tertinggi
+
+00:11:47.740 --> 00:11:49.580
+dan mengidentifikasi kolom yang sering mereka filter.
+
+00:11:50.880 --> 00:11:52.720
+Jika Anda tahu tampilan atau layar aplikasi,
+
+00:11:52.780 --> 00:11:54.560
+akan selalu diurutkan berdasarkan kolom tertentu
+
+00:11:54.560 --> 00:11:56.140
+pertimbangkan untuk mengindeksnya sejak awal.
+
+00:11:56.920 --> 00:11:58.580
+Begitu pula untuk kondisi gabungan dalam relasi
+
+00:11:58.580 --> 00:12:00.440
+yang Anda tahu penting bagi alur kerja aplikasi.
+
+00:12:01.120 --> 00:12:03.720
+Kemudian tinjau secara berkala statistik penggunaan indeks
+
+00:12:03.720 --> 00:12:05.600
+untuk menemukan kandidat yang bisa dihapus
+
+00:12:05.600 --> 00:12:07.400
+karena jarang digunakan dalam query nyata.
+
+00:12:08.700 --> 00:12:10.140
+Pengindeksan tidak mencolok dan
+
+00:12:10.140 --> 00:12:12.980
+tidak muncul di UI seperti formulir atau dashboard baru,
+
+00:12:12.980 --> 00:12:14.680
+tetapi ia adalah pengganda yang tenang.
+
+00:12:16.000 --> 00:12:18.240
+Setiap query yang dioptimalkan akan mendapat manfaat darinya
+
+00:12:18.240 --> 00:12:19.880
+dan setiap query yang diindeks dengan buruk
+
+00:12:19.880 --> 00:12:21.600
+menjadi beban seiring pertumbuhan data Anda.
+
+00:12:22.320 --> 00:12:24.440
+Strategi indeks yang efektif mengunci romperforma
+
+00:12:24.440 --> 00:12:26.820
+dan mengubah eksekusi query dari potensi hambatan
+
+00:12:26.820 --> 00:12:28.540
+menjadi kekuatan yang andal.
+
+00:12:29.480 --> 00:12:30.960
+Namun masih ada satu tuas lagi untuk ditarik.
+
+00:12:31.580 --> 00:12:34.380
+Untuk menjaga data first tetap cepat dalam skala besar,
+
+00:12:34.600 --> 00:12:36.900
+Anda harus beralih dari memperbaiki hambatan
+
+00:12:36.900 --> 00:12:38.480
+setelah muncul menjadi merancang cara
+
+00:12:38.480 --> 00:12:40.140
+untuk mencegahnya sejak awal.
+
+00:12:41.520 --> 00:12:43.500
+Dari perbaikan reaktif menuju arsitektur proaktif.
+
+00:12:44.180 --> 00:12:45.660
+Sebagian besar perbaikan performa di data first
+
+00:12:45.660 --> 00:12:46.760
+terasa seperti pemandang keberan.
+
+00:12:47.120 --> 00:12:48.600
+Pengguna melaporkan formulir lambat,
+
+00:12:48.720 --> 00:12:49.900
+Anda menjalankan pemeriksaan,
+
+00:12:50.040 --> 00:12:50.940
+melakukan perubahan bedah,
+
+00:12:51.000 --> 00:12:52.200
+dan berharap masalah teratasi.
+
+00:12:52.760 --> 00:12:54.360
+Namun bagaimana jika Anda bisa membangun
+
+00:12:54.360 --> 00:12:55.720
+dengan cara yang mencegah masalah tersebut
+
+00:12:55.720 --> 00:12:56.440
+muncul sama sekali?
+
+00:12:57.260 --> 00:12:58.500
+Kebenaran yang tenang adalah bahwa
+
+00:12:58.500 --> 00:13:00.200
+aplikasi data first tercepat dan paling stabil
+
+00:13:00.200 --> 00:13:01.320
+tidak hanya disetel dengan baik.
+
+00:13:01.900 --> 00:13:03.680
+Aplikasi tersebut dirancang sejak hari pertama
+
+00:13:03.680 --> 00:13:04.860
+dengan mempertimbangkan skalabilitas.
+
+00:13:05.400 --> 00:13:06.920
+Perencanaan arsitektur sejak dini adalah
+
+00:13:06.920 --> 00:13:08.920
+peningkatan performa termurah yang pernah Anda terapkan.
+
+00:13:10.140 --> 00:13:12.160
+Ini bukan tentang menambahkan lapisan ekstra di awal
+
+00:13:12.160 --> 00:13:12.820
+sebagai cadangan,
+
+00:13:13.160 --> 00:13:14.940
+melainkan tentang memikirkan bagaimana tabel,
+
+00:13:15.060 --> 00:13:16.700
+relasi, dan indeks Anda berperilaku
+
+00:13:16.700 --> 00:13:19.300
+saat aplikasi menangani beban produksi penuh.
+
+00:13:19.300 --> 00:13:21.640
+Pada fase pembangunan,
+
+00:13:21.720 --> 00:13:23.380
+setiap keputusan berpihaya rendah untuk diubah.
+
+00:13:24.200 --> 00:13:25.120
+Setelah aplikasi aktif,
+
+00:13:25.260 --> 00:13:26.420
+perubahan yang sama mungkin berarti
+
+00:13:26.420 --> 00:13:27.320
+merombak banyak alur,
+
+00:13:27.560 --> 00:13:29.240
+dashboard, dan formulir berbasis model.
+
+00:13:30.080 --> 00:13:31.460
+Perbedaan upayanya sangatlah jauh.
+
+00:13:31.860 --> 00:13:32.840
+Saya pernah bekerja dengan tim
+
+00:13:32.840 --> 00:13:34.540
+yang baru melakukan pengujian performa tepat
+
+00:13:34.540 --> 00:13:35.260
+sebelum peluncuran.
+
+00:13:36.140 --> 00:13:37.660
+Semuanya telah dibangun secara logis,
+
+00:13:37.860 --> 00:13:38.860
+tampak rapi dalam skema,
+
+00:13:39.020 --> 00:13:40.680
+dan berfungsi baik dalam UAT.
+
+00:13:41.760 --> 00:13:42.500
+Namun kemudian,
+
+00:13:42.680 --> 00:13:44.300
+laporan analitik mulai butuh waktu menit
+
+00:13:44.300 --> 00:13:44.900
+untuk dimuat,
+
+00:13:45.140 --> 00:13:46.880
+alur power automat mengalami time out,
+
+00:13:47.180 --> 00:13:48.940
+dan formulir tertentu hanya terbuka sesekali.
+
+00:13:49.940 --> 00:13:50.740
+Dalam satu kasus,
+
+00:13:50.900 --> 00:13:52.740
+aplikasi penjadwalan inti harus dibongkar
+
+00:13:52.740 --> 00:13:53.500
+dan dibangun ulang
+
+00:13:53.500 --> 00:13:55.140
+karena banyak query utama bergantung
+
+00:13:55.140 --> 00:13:56.520
+pada bidang yang tidak terindeks
+
+00:13:56.520 --> 00:13:58.500
+dalam join many-to-many-many.
+
+00:13:59.220 --> 00:14:00.080
+Pembangunan ulang tersebut
+
+00:14:00.080 --> 00:14:01.520
+menunda peluncuran selama 3 bulan
+
+00:14:01.520 --> 00:14:02.680
+dan menghabiskan waktu pengembang
+
+00:14:02.680 --> 00:14:04.220
+serta pengujian selama berminggu-minggu.
+
+00:14:05.340 --> 00:14:06.720
+Kunci untuk menghindari skenario itu
+
+00:14:06.720 --> 00:14:07.780
+adalah menjadikan performa
+
+00:14:07.780 --> 00:14:08.700
+sebagai syarat desain,
+
+00:14:08.820 --> 00:14:09.840
+bukan pemikiran tambahan.
+
+00:14:10.820 --> 00:14:12.200
+Itu berarti merencanakan pengindexan
+
+00:14:12.200 --> 00:14:13.400
+saat Anda mendesain tabel,
+
+00:14:13.540 --> 00:14:14.820
+mengetahui bidang mana yang akan ada
+
+00:14:14.820 --> 00:14:15.460
+di setiap filter,
+
+00:14:15.640 --> 00:14:17.600
+dan memastikannya siap dicari secara efisien.
+
+00:14:17.600 --> 00:14:19.880
+Itu berarti menahan godaan
+
+00:14:19.880 --> 00:14:21.020
+untuk menambah puluhan bidang
+
+00:14:21.020 --> 00:14:21.940
+sekadar untuk jaga-jaga
+
+00:14:21.940 --> 00:14:22.980
+saat pembuatan prototipe
+
+00:14:22.980 --> 00:14:24.380
+karena setiap bidang menambah beban
+
+00:14:24.380 --> 00:14:25.740
+pada formulir dan transaksi.
+
+00:14:27.340 --> 00:14:28.740
+Dan itu berarti memodelkan hubungan
+
+00:14:28.740 --> 00:14:30.140
+untuk performanya dalam skala besar,
+
+00:14:30.340 --> 00:14:31.700
+bukan hanya agar terlihat rapi
+
+00:14:31.700 --> 00:14:33.140
+dalam diagram sesi loka karya.
+
+00:14:33.140 --> 00:14:35.340
+Saat Anda memperlakukan performa
+
+00:14:35.340 --> 00:14:36.600
+sebagai bagian dari arsitektur,
+
+00:14:36.700 --> 00:14:37.800
+Anda jauh lebih tidak bergantung
+
+00:14:37.800 --> 00:14:39.340
+pada pemecahan masalah pasca penyebaran.
+
+00:14:39.860 --> 00:14:41.140
+Anda menemukan potensi hambatan
+
+00:14:41.140 --> 00:14:42.820
+saat masih mudah untuk mengubah arah.
+
+00:14:43.740 --> 00:14:44.840
+Jika model hubungan tertentu
+
+00:14:44.840 --> 00:14:46.640
+memperlambat join dalam kumpulan data besar,
+
+00:14:47.000 --> 00:14:48.400
+Anda mencari struktur alternatif
+
+00:14:48.400 --> 00:14:49.780
+sebelum sistem tersebut aktif.
+
+00:14:50.560 --> 00:14:51.640
+Jika indeks dapat membuat tampilan
+
+00:14:51.640 --> 00:14:53.140
+dengan laklonitas tinggi menjadi instan,
+
+00:14:53.240 --> 00:14:54.820
+Anda menambahkan sebelum tampilan itu menjadi sahabat.
+
+00:14:55.200 --> 00:14:55.980
+Itu jauh lebih mudah
+
+00:14:55.980 --> 00:14:57.760
+daripada menjelaskan kepada pengguna bisnis
+
+00:14:57.760 --> 00:14:59.700
+mengapa aplikasi mereka bekerja berbeda sekarang
+
+00:14:59.700 --> 00:15:01.080
+karena Anda harus memperbaiki sesuatu
+
+00:15:01.080 --> 00:15:02.100
+yang tidak mereka sadari rusak.
+
+00:15:02.820 --> 00:15:04.240
+Ada alat dalam ekosistem Microsoft
+
+00:15:04.240 --> 00:15:05.660
+yang membuat pola pikir proaktif ini
+
+00:15:05.660 --> 00:15:06.840
+jauh lebih mudah diterapkan.
+
+00:15:08.040 --> 00:15:09.860
+Pemeriksa solusi akan memindai lingkungan Anda
+
+00:15:09.860 --> 00:15:11.320
+dan menunjukkan pola yang diketahui
+
+00:15:11.320 --> 00:15:12.880
+dapat menyebabkan penurunan performa.
+
+00:15:13.700 --> 00:15:15.600
+Lawasan performa di pusat admin power platform
+
+00:15:15.600 --> 00:15:17.480
+dapat membantu Anda menemukan query lambat,
+
+00:15:17.620 --> 00:15:18.820
+melacak waktu muat formulir,
+
+00:15:19.020 --> 00:15:20.940
+dan mengidentifikasi di mana pengambilan
+
+00:15:20.940 --> 00:15:23.480
+atau perenderan terhambat di...
+
+00:15:23.480 --> 00:15:25.080
+Menjalankan alat ini selama pembangunan
+
+00:15:25.080 --> 00:15:26.880
+dan sebelum rilis besar adalah cara terbaik
+
+00:15:26.880 --> 00:15:27.900
+untuk memastikan performa
+
+00:15:27.900 --> 00:15:30.300
+tanpa harus menjadikan pengguna sebagai penguji.
+
+00:15:31.080 --> 00:15:33.000
+Hasil dari bekerja dengan cara ini sangat sederhana.
+
+00:15:34.000 --> 00:15:36.280
+Aplikasi yang dibangun dengan pemikiran performa proaktif
+
+00:15:36.280 --> 00:15:37.700
+cenderung berskala dengan lancar
+
+00:15:37.700 --> 00:15:38.700
+dengan penyesuaian minimal.
+
+00:15:39.620 --> 00:15:40.260
+Setelah volume data tumbuh,
+
+00:15:40.340 --> 00:15:42.320
+aplikasi tidak tiba-tiba mencapai batas yang tidak terduga.
+
+00:15:43.160 --> 00:15:44.260
+Saat fitur baru ditambahkan,
+
+00:15:44.340 --> 00:15:44.940
+tidak ada yang terhenti
+
+00:15:44.940 --> 00:15:46.360
+karena desain aslinya menyisakan ruang
+
+00:15:46.360 --> 00:15:47.060
+bagi model tersebut.

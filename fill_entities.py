@@ -739,7 +739,7 @@ def report(ents, todo, skipped, types, lang_missing, by_type_write, est):
          "- Sprachen ausser en/de: Entitaetsseite immer noindex (`lang not in (en, de)`), bis Uebersetzungen angezeigt werden - betrifft 13 Sprachen x " + f"{n} = {13 * n} Seiten (Absicht, bis Text da ist).",
          "- de: noindex, wenn kein echter deutscher Text (`desc.de` fehlt/gleich en, kein `long.de`, kein GENTEXT.de).",
          "- Personen (ausser Autor): noindex, wenn `desc.en` <= 80 Zeichen oder Speaker-Schablone, kein `long.en`, keine Zitate und < 2 Auftritte (`_thin`; gilt fuer en und de).",
-         "- Ohne Index (Absicht, nicht angefasst): Blogbeitraege unter 10 Upvotes, Tag-/Suche-/Rechts-/Community-Seiten, Profile ausser en, Gaeste-Verzeichnis ausser en/de.",
+         "- Ohne Index (Absicht, nicht angefasst): Tag-/Suche-/Rechts-/Community-Seiten, Profile ausser en, Gaeste-Verzeichnis ausser en/de.",
          "- Verzeichnis-Seiten (site_directory.py `_indexable`): Land/Stadt/Thema brauchen >= 3 bzw. 5 Eintraege und >= 150 Woerter eigenen Text; data/directory_intros.json hat 1 Seite (country:de, nicht freigegeben, 4 Eintraege), members_export.json 3 Personen + 3 Firmen -> alle Detailseiten noindex. Nicht Teil dieser Pipeline (eigene Mitglieder-Daten).",
          "- Profile (site_members.py): ausser en immer noindex (Absicht).", "",
          "## Zahlen je Typ (en)", "", "| Typ | Anzahl | desc.en fehlt | desc.en <80 | desc.de fehlt | long fehlt | nur KI-Ueberblick (GENTEXT) | Person duenn/noindex |", "|---|---|---|---|---|---|---|---|"]

@@ -49,7 +49,7 @@ nav.langs{font-family:"Barlow Condensed","Barlow Condensed FB0","Barlow Condense
 .panel{background:var(--ink)}.band{background:var(--ink)}
 .tile,.thumb{position:relative}
 .tile{padding:28px 18px 18px;border:1px solid var(--bd);margin:-1px 0 0 -1px}.grid{border:0}
-.tile:before,.tile:after{content:"+";position:absolute;top:-10px;font:300 19px/1 "Barlow","Barlow FB0","Barlow FB1","Barlow FB2",sans-serif;color:var(--mut)}.tile:before{left:-5px}.tile:after{right:-5px}
+.tile:before,.tile:after{content:"+";position:absolute;top:-10px;font:300 19px/1 "Barlow","Barlow FB0","Barlow FB1","Barlow FB2",sans-serif;color:var(--mut)}.tile:before{inset-inline-start:-5px}.tile:after{inset-inline-end:-5px}
 .tile b{font-weight:600;font-size:1.7rem}.tile:hover,.tile:focus-visible{background:var(--ink);color:var(--onink)}.tile:hover .mut,.tile:focus-visible .mut{color:var(--onink);opacity:.85}
 .stats{border-color:var(--bd)}.stats b{color:var(--ac);font-weight:600}.points,.list{border-top:1px solid var(--bd)}.points li:before{color:var(--ac);font-weight:600}
 .author,.share,footer{border-color:var(--bd)}.author .badge{background:var(--ac);color:var(--onac)}
@@ -57,23 +57,23 @@ nav.langs{font-family:"Barlow Condensed","Barlow Condensed FB0","Barlow Condense
 .chip{display:inline-block;padding:2px 10px;border:1px solid var(--bd);font:600 .8rem/1.7 "Barlow Condensed","Barlow Condensed FB0","Barlow Condensed FB1","Barlow Condensed FB2",sans-serif;letter-spacing:.09em;text-transform:uppercase;text-decoration:none;color:var(--mut)}
 .chip.cat{border-color:var(--ac);color:var(--ac)}.chip:hover{background:var(--ac);border-color:var(--ac);color:var(--onac)}
 .ilink{text-decoration:underline;text-decoration-color:var(--ac);text-decoration-thickness:2px;text-underline-offset:3px}
-.info{background:var(--card)}.isteps i{border-radius:0;background:var(--ac)}.icol{border-top-color:var(--ac)}.ifacts div{border-left-color:var(--ac)}
+.info{background:var(--card)}.isteps i{border-radius:0;background:var(--ac)}.icol{border-top-color:var(--ac)}.ifacts div{border-inline-start-color:var(--ac)}
 
 /* ---- Design-Modul: Komponenten nach "SEO-Design fuer dub.m365.fm" ---- */
 .top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:14px;padding-bottom:14px;flex-wrap:wrap}
-.brand{font-size:1.25rem}.brand i{font-style:normal}.brand .dub{color:var(--ac);margin-left:6px}
+.brand{font-size:1.25rem}.brand i{font-style:normal}.brand .dub{color:var(--ac);margin-inline-start:6px}
 .hero{padding:54px 0 12px}.hero h1{font-size:clamp(2.6rem,8vw,5.4rem);line-height:.98;margin:0 0 .35em}.hero h1 em{font-style:normal;color:var(--ac);display:block}
 .hero .lede{color:var(--mut);font-size:1.12rem;max-width:34em}
 .xbox{position:relative;border:1px solid var(--bd);margin:34px 0;padding:18px 20px}
 .xbox:before,.xbox:after,.xbox>.x1,.xbox>.x2{content:"+";position:absolute;font:300 19px/1 "Barlow","Barlow FB0","Barlow FB1","Barlow FB2",sans-serif;color:var(--mut);background:var(--bg)}
-.xbox:before{left:-6px;top:-10px}.xbox:after{right:-6px;top:-10px}.xbox>.x1{left:-6px;bottom:-10px}.xbox>.x2{right:-6px;bottom:-10px}
+.xbox:before{inset-inline-start:-6px;top:-10px}.xbox:after{inset-inline-end:-6px;top:-10px}.xbox>.x1{inset-inline-start:-6px;bottom:-10px}.xbox>.x2{inset-inline-end:-6px;bottom:-10px}
 .sbox .hd{display:flex;justify-content:space-between;font:500 .78rem "Barlow","Barlow FB0","Barlow FB1","Barlow FB2",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);padding-bottom:10px;border-bottom:1px solid var(--bd)}
 .sbox a{display:grid;grid-template-columns:3rem 1fr auto;gap:10px;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--bd);text-decoration:none}.sbox a:last-of-type{border:0}
 .sbox a i{font:600 .78rem "Barlow","Barlow FB0","Barlow FB1","Barlow FB2",sans-serif;letter-spacing:.12em;color:var(--ac);font-style:normal;text-transform:uppercase}.sbox a b{font:600 1.15rem "Barlow Condensed","Barlow Condensed FB0","Barlow Condensed FB1","Barlow Condensed FB2",sans-serif}.sbox a span{font-size:.78rem;color:var(--mut)}
 .sec{margin:78px 0 0}.sec .kicker{font-size:.8rem;margin-bottom:22px}
 .lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
 .lt{position:relative;display:flex;flex-direction:column;gap:18px;padding:20px 20px 16px;border:1px solid var(--bd);text-decoration:none;color:var(--fg)}
-.lt:before,.lt:after{content:"+";position:absolute;top:-10px;font:300 19px/1 "Barlow","Barlow FB0","Barlow FB1","Barlow FB2",sans-serif;color:var(--mut);background:var(--bg)}.lt:before{left:-6px}.lt:after{right:-6px}
+.lt:before,.lt:after{content:"+";position:absolute;top:-10px;font:300 19px/1 "Barlow","Barlow FB0","Barlow FB1","Barlow FB2",sans-serif;color:var(--mut);background:var(--bg)}.lt:before{inset-inline-start:-6px}.lt:after{inset-inline-end:-6px}
 .lt .m{display:flex;justify-content:space-between;font:500 .78rem "Barlow","Barlow FB0","Barlow FB1","Barlow FB2",sans-serif;color:var(--mut)}.lt .m i{font-style:normal;font-weight:600;letter-spacing:.12em;color:var(--ac);text-transform:uppercase}
 .lt b{font:600 1.9rem/1.1 "Barlow Condensed","Barlow Condensed FB0","Barlow Condensed FB1","Barlow Condensed FB2",sans-serif}.lt .go{font:600 .78rem "Barlow Condensed","Barlow Condensed FB0","Barlow Condensed FB1","Barlow Condensed FB2",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--ac)}
 .lt:hover{background:var(--ink);color:var(--onink)}.lt:hover .go,.lt:hover .m i{color:#9fc0ea}.lt.orig{border-style:dashed}
@@ -151,13 +151,14 @@ footer{margin-top:80px}
 .sub{font:500 1.35rem/1.35 "Barlow Condensed","Barlow Condensed FB0","Barlow Condensed FB1","Barlow Condensed FB2",sans-serif;color:var(--mut);letter-spacing:.02em;margin:-.3em 0 1em;max-width:34em}
 .chip{background:transparent;color:var(--fg)}
 button.btn{background:transparent;color:var(--fg);font-size:.88rem;cursor:pointer}button.btn:hover{background:var(--ac);border-color:var(--ac);color:var(--onac)}
+/* Die Teilen-Leiste bleibt physisch am linken Bildschirmrand fixiert. */
 .fshare{position:fixed;z-index:40;display:flex;gap:0;background:var(--bg);border:1px solid var(--bd);left:0;top:50%;transform:translateY(-50%);flex-direction:column;border-left:0}
 .fshare b{font:600 .65rem "Barlow Condensed","Barlow Condensed FB0","Barlow Condensed FB1","Barlow Condensed FB2",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);padding:8px 0 6px;text-align:center;writing-mode:horizontal-tb}
 .fshare a,.fshare button{display:block;width:44px;height:44px;line-height:44px;text-align:center;border:0;border-top:1px solid var(--bd);background:transparent;color:var(--fg);font:600 .9rem "Barlow Condensed","Barlow Condensed FB0","Barlow Condensed FB1","Barlow Condensed FB2",sans-serif;letter-spacing:.04em;text-decoration:none;cursor:pointer;padding:0}
 .fshare a:hover,.fshare button:hover{background:transparent;color:var(--bc,var(--ac))}
 .fshare .ic,footer .ic{display:block;margin:auto;transition:color .15s}.fshare a,.fshare button{display:flex;align-items:center;justify-content:center;color:var(--mut)}.fshare a:hover .ic,.fshare button:hover .ic{color:var(--bc)}
 footer a.soc{display:inline-flex;align-items:center;gap:6px;color:var(--mut)}footer a.soc .ic{width:18px;height:18px;margin:0;color:currentColor}footer a.soc:hover{color:var(--bc)}footer a.soc:hover .ic{color:var(--bc)}
-@media(max-width:1180px){.fshare{top:auto;bottom:0;left:0;right:0;transform:none;flex-direction:row;border:0;border-top:1px solid var(--bd)}.fshare b{display:none}.fshare a,.fshare button{flex:1;width:auto;border-top:0;border-left:1px solid var(--bd)}body{padding-bottom:46px}}
+@media(max-width:1180px){.fshare{top:auto;bottom:0;inset-inline:0;transform:none;flex-direction:row;border:0;border-top:1px solid var(--bd)}.fshare b{display:none}.fshare a,.fshare button{flex:1;width:auto;border-top:0;border-inline-start:1px solid var(--bd)}body{padding-bottom:46px}}
 
 .pnav{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:2.2em 0 1.4em}.pnav a{display:block;border:1px solid var(--bd);background:var(--card);padding:12px 14px;color:var(--fg);text-decoration:none;min-height:44px}.pnav a:hover,.pnav a:focus-visible{border-color:var(--ac)}.pnav a:hover b{color:var(--ac)}.pnav small{display:block;color:var(--mut);font:600 .78rem/1.3 "Barlow Condensed","Barlow Condensed FB0","Barlow Condensed FB1","Barlow Condensed FB2",sans-serif;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}.pnav b{display:block;font-weight:600;line-height:1.3;overflow-wrap:anywhere}.pnav .nx{grid-column:2;text-align:end}@media(max-width:560px){.pnav{grid-template-columns:1fr}.pnav .nx{grid-column:auto}}
 """

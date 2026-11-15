@@ -1,0 +1,1642 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.820
+Um 0347 UTC habe ich ein Muster erkannt.
+
+00:00:04.020 --> 00:00:07.360
+Gleichzeitige Flow-Fehler, Berechtigungsänderungen ohne Tickets
+
+00:00:07.360 --> 00:00:11.580
+und drei neue SharePoint-Listen mit dem Namen Test, erstellt innerhalb von vier Minuten.
+
+00:00:12.300 --> 00:00:14.800
+Kein Ausfall, Eingriff gegen die Entropie autorisiert.
+
+00:00:15.480 --> 00:00:18.320
+Ich zeige Ihnen die genauen Kontrollen, um die Ausrichtung wiederherzustellen.
+
+00:00:19.020 --> 00:00:22.500
+Disziplinierte SharePoint-Schemas, berechenbares Power-Apps-Verhalten,
+
+00:00:23.000 --> 00:00:27.980
+robuste Flows und KI, die Grenzen einhält, statt sie zu ignorieren, statt sie zu ignorieren.
+
+00:00:27.980 --> 00:00:32.280
+Sie erhalten eine Governance-Checkliste, die eine Wiederholung dieses Fehlers verhindert.
+
+00:00:33.140 --> 00:00:37.400
+Ich bin nicht hier umzutaden. Ich bin hier, um das schleichende Leck zu stoppen, bevor es zur Flut wird.
+
+00:00:38.520 --> 00:00:40.260
+Beginnen wir mit dem Substrat SharePoint.
+
+00:00:41.460 --> 00:00:45.360
+Säule 1, SharePoint. Fehlerhaftes Substrat, erzwingen Sie Disziplin.
+
+00:00:45.980 --> 00:00:48.940
+SharePoint ist in Ordnung, solange man es nicht an ein und demselben Dienstag
+
+00:00:48.940 --> 00:00:51.780
+als Datenbank, Dateifreigabe und Workflow-Engine zugleich behandelt.
+
+00:00:52.600 --> 00:00:56.420
+Es ist eine Kollaborationsplattform mit Listen, die wie leichtgewichtige Tabellen funktionieren
+
+00:00:56.420 --> 00:00:59.300
+und Dokumentbibliotheken, die wie Contentspeicher agieren.
+
+00:01:00.320 --> 00:01:03.640
+Diese Dualität ist der Grund, warum es mächtig und zugleich fragil ist.
+
+00:01:04.300 --> 00:01:05.820
+Wenn Sie die Grenze nicht ziehen, tun es die Anwender.
+
+00:01:06.540 --> 00:01:10.260
+Sie ziehen sie mit einem Textmarker und einer willkürlichen Auswahlspalte namens Status 2U.
+
+00:01:10.960 --> 00:01:12.500
+Was die meisten Leute übersehen, ist Folgendes.
+
+00:01:12.940 --> 00:01:14.100
+SharePoint ist nicht der Bösewicht.
+
+00:01:14.920 --> 00:01:16.020
+Inkonsistentes Design ist es.
+
+00:01:16.980 --> 00:01:22.500
+Listen skalieren akzeptabel für tausende Elemente, wenn Abfragen delegierbar und indiziert sind.
+
+00:01:22.500 --> 00:01:30.560
+Aber Sie fühlen sich an wie nasse Pappe, wenn man 347 Spalten, 5 Nachschlageketten und eine Galerie dranhängt,
+
+00:01:30.660 --> 00:01:32.800
+die versucht, über nicht indizierten Text zu filtern.
+
+00:01:33.900 --> 00:01:35.340
+Glauben Sie, Sie brauchen mehr Leistung.
+
+00:01:35.880 --> 00:01:37.360
+Sie brauchen eigentlich weniger Antipatterns.
+
+00:01:37.780 --> 00:01:39.140
+Hier ist also die durchgesetzte Disziplin.
+
+00:01:39.560 --> 00:01:40.120
+Erstens Schema.
+
+00:01:40.920 --> 00:01:44.260
+Benennen Sie die Liste nach dem geschäftlichen Substantiv, nicht nach dem Projektnamen.
+
+00:01:45.020 --> 00:01:47.360
+Vorfälle, nicht Jens Testtracker.
+
+00:01:47.360 --> 00:01:52.120
+Vergeben Sie Spaltennamen, die niemals Leerzeichen, Satzzeichen oder zukünftigen Ärger enthalten.
+
+00:01:52.840 --> 00:01:54.920
+Sie können die Bezeichnungen für Menschen in Power-Apps anpassen.
+
+00:01:55.440 --> 00:01:57.520
+Sie können die API später nicht mehr neu verhandeln.
+
+00:01:58.320 --> 00:02:01.440
+Verwenden Sie für die meisten Felder einzeiliger Textzeile, Üdatum und Yassel.
+
+00:02:02.020 --> 00:02:04.540
+Verwenden Sie Auswahlsparsam, wenn Sie das Vokabular kontrollieren.
+
+00:02:05.420 --> 00:02:07.960
+Verwenden Sie Nachschlagen nur, wenn Sie eine echte Beziehung benötigen.
+
+00:02:08.140 --> 00:02:10.200
+Nicht, weil Sie zu faul sind, eine Auswahlliste zu pflegen.
+
+00:02:11.020 --> 00:02:11.960
+Zweitens Beziehungen.
+
+00:02:12.960 --> 00:02:14.780
+SharePoint-Nachschlagefelder sind für einen Sprung in Ordnung.
+
+00:02:14.980 --> 00:02:15.580
+Mit Glück für zwei.
+
+00:02:15.580 --> 00:02:18.820
+Danach schreien die Galerien und die Delegation bricht zusammen.
+
+00:02:19.600 --> 00:02:23.180
+Wenn Ihr Design mehrstufige Joints oder transaktionale Integrität erfordert, stoppen Sie.
+
+00:02:23.900 --> 00:02:25.740
+Das ist ein Thema für Dataverse oder SQL.
+
+00:02:26.840 --> 00:02:27.160
+Die Regel.
+
+00:02:27.440 --> 00:02:29.800
+Ein Nachschlagefeld pro Listenansicht, auf die Ihre App angewiesen ist.
+
+00:02:30.240 --> 00:02:32.720
+Indizieren Sie die Nachschlagespalte und die primäre Filterspalte.
+
+00:02:33.160 --> 00:02:36.980
+Wenn nach zwei Feldern gefiltert werden muss, indizieren Sie beide und verwenden Sie eine zusammengesetzte Ansicht.
+
+00:02:37.560 --> 00:02:39.720
+Verlassen Sie sich nicht auf Hoffnung, verlassen Sie sich auf Indizes.
+
+00:02:40.580 --> 00:02:42.540
+Drittens Versionierung und Aufbewahrung.
+
+00:02:42.540 --> 00:02:46.540
+Aktivieren Sie die Hauptversionierung für Listen, in denen Menschen Daten bearbeiten.
+
+00:02:47.720 --> 00:02:53.200
+Setzen Sie ein sinnvolles Limit 50 oder 100, damit Sie ein Rollbackfenster haben, ohne den Speicher zu sprengen.
+
+00:02:53.200 --> 00:02:58.480
+Erzwingen Sie das Auschecken für Dokumentbibliotheken mit häufigen und sensiblen Änderungen
+
+00:02:58.480 --> 00:03:03.600
+und legen Sie Inhaltstypen fest, falls Sie unterschiedliche Schemata benötigen.
+
+00:03:03.940 --> 00:03:08.260
+Hier stoppen Sie Final V7 endgültig, bevor es sich weiter vermehrt.
+
+00:03:09.100 --> 00:03:09.880
+Viertens Berechtigung.
+
+00:03:10.360 --> 00:03:12.720
+Unterbrechen Sie die Vererbung auf Website-Ebene, nicht auf Element-Ebene.
+
+00:03:13.060 --> 00:03:14.900
+Berechtigungen auf Element-Ebene sind ein Fass ohne Boden.
+
+00:03:15.200 --> 00:03:15.780
+Sie werden scheitern.
+
+00:03:16.200 --> 00:03:19.720
+Wenn Sie Zeilen schützen müssen, entwerfen Sie separate Listen mit unterschiedlichen Bereichen
+
+00:03:19.720 --> 00:03:23.020
+und führen Sie diese via Power-Apps mit einer Benutzerzugangskontrolle zusammen.
+
+00:03:23.200 --> 00:03:26.000
+Oder wechseln Sie auf eine Plattform mit echter Zeilensicherheit.
+
+00:03:27.220 --> 00:03:29.620
+Besitzer, Mitglieder, Besucher nutzen Sie diese Rollen sauber.
+
+00:03:30.480 --> 00:03:33.060
+Hören Sie auf, einzelnen Personen direkten Zugriff zu gewähren.
+
+00:03:33.960 --> 00:03:34.940
+Existieren aus einem bestimmten Grund.
+
+00:03:35.660 --> 00:03:37.100
+Fünftens Ansichten und Schwellenwerte.
+
+00:03:37.820 --> 00:03:40.720
+Der Schwellenwert von 5000 Elementen in Listenansichten ist kein Mythos.
+
+00:03:41.040 --> 00:03:41.800
+Es ist die Leitplanke.
+
+00:03:41.800 --> 00:03:48.260
+Sie können weit mehr speichern, müssen die Daten aber über indizierte Filter in Standardansichten unterteilen.
+
+00:03:49.740 --> 00:03:52.860
+Erstellen Sie eine sichere Filteransicht, die jede App als Basis verwendet.
+
+00:03:53.460 --> 00:03:55.500
+Filtern Sie nach Status oder geändert minus 30 Uhr.
+
+00:03:55.600 --> 00:03:56.820
+Indiziert. Indiziert.
+
+00:03:57.360 --> 00:03:58.660
+Bringen Sie Entwicklern bei, dies zu respektieren.
+
+00:03:59.080 --> 00:04:03.080
+Wenn Sie den vollständigen Verlauf benötigen, sollten Sie einen geplanten Export in ein Data Lake ausführen,
+
+00:04:03.180 --> 00:04:05.080
+statt live Abfragen auf das ganze Universum zu starten.
+
+00:04:05.480 --> 00:04:07.240
+Sechstens Dateien versus Anhänge.
+
+00:04:07.800 --> 00:04:09.120
+Anhänge sind eine Steuer auf Bequemlichkeit.
+
+00:04:09.640 --> 00:04:11.620
+Verwenden Sie Dokumentbibliotheken für echte Dateien.
+
+00:04:12.200 --> 00:04:14.760
+Speichern Sie die Listen-Element-ID als Metadaten an der Datei
+
+00:04:14.760 --> 00:04:18.520
+oder verwenden Sie einen Ordner, der nach der ID benannt ist, falls Sie Schmerzen mögen.
+
+00:04:20.100 --> 00:04:23.000
+Bibliotheken bieten Co-Authoring auf Bewahrungsbezeichnungen und Vorschauen.
+
+00:04:23.600 --> 00:04:24.600
+Anhänge bieten Ihnen Ärger.
+
+00:04:25.740 --> 00:04:27.160
+Siebtens ALM-Realität.
+
+00:04:28.160 --> 00:04:29.880
+SharePoint ist bei ALM starkköpfig.
+
+00:04:30.800 --> 00:04:34.860
+Listen lassen sich nicht sauber zwischen Umgebungen verschieben, daher standardisieren Sie
+
+00:04:34.860 --> 00:04:39.380
+Bereitstellungsskripte, JSON-Siteskripte oder PNP-Vorlagen.
+
+00:04:39.380 --> 00:04:43.920
+Erstellen Sie Websites, Inhaltstypen, Listen, Spalten, Ansichten und Indizes.
+
+00:04:44.380 --> 00:04:45.520
+Die App erstellt niemals Schemata.
+
+00:04:46.060 --> 00:04:47.600
+Menschen erstellen niemals Schemata in der Produktion.
+
+00:04:47.940 --> 00:04:48.860
+Wenn das streng klingt, gut so.
+
+00:04:49.480 --> 00:04:50.840
+Es ist billiger als eine Rekonstruktion.
+
+00:04:50.840 --> 00:04:52.560
+Achtens Delegierbare Logik.
+
+00:04:53.520 --> 00:04:57.780
+Power-Apps können SharePoint effizient abfragen, wenn Sie delegierbare Formeln schreiben.
+
+00:04:58.860 --> 00:05:01.260
+Das bedeutet Filtern, Sortieren, Suchen mit indizierten Spalten.
+
+00:05:01.820 --> 00:05:03.000
+Kein For-All über ganze Listen.
+
+00:05:03.740 --> 00:05:05.740
+Keine riesigen Widthketten als Pseudo-Abfragen.
+
+00:05:06.220 --> 00:05:08.680
+Wenn Sie Fuzzy-Matching und zusammengesetzte Werte benötigen,
+
+00:05:09.000 --> 00:05:12.720
+erstellen Sie eine Hilfsspalte, die normalisierte Schlüssel zum richtigen Zeitpunkt verkettet.
+
+00:05:13.200 --> 00:05:13.440
+True.
+
+00:05:13.440 --> 00:05:14.780
+Das ist zwar unschön.
+
+00:05:14.980 --> 00:05:19.540
+Hält die Abfrage aber auf dem Server, anstatt 25.000 Zeilen zum Client zu ziehen.
+
+00:05:20.060 --> 00:05:20.220
+True.
+
+00:05:20.980 --> 00:05:22.200
+Neuntens Dateneigentum.
+
+00:05:22.800 --> 00:05:25.160
+Jede Liste hat einen verantwortlichen Eigentümer, nicht die IT.
+
+00:05:26.660 --> 00:05:28.220
+Eigentümerüberprüfungen laufen vierteljährlich ab.
+
+00:05:28.860 --> 00:05:32.820
+Wenn der Eigentümer die Website verlässt, wird ein zweiter Eigentümer benachrichtigt und die App neu zugeordnet.
+
+00:05:33.320 --> 00:05:34.060
+Keine Waisenkinder.
+
+00:05:34.980 --> 00:05:38.400
+Keine mysteriösen Listen mit geschäftskritischen Daten und einem toten Postfach.
+
+00:05:38.400 --> 00:05:40.960
+Zum Schluss eine Vernunftregel.
+
+00:05:41.640 --> 00:05:46.540
+Wenn Ihre Liste mehr als ein mehrzeiliges Rich-Text-Feld mehrere Nachschlagefelder und Personenauswahlfelder benötigt,
+
+00:05:46.660 --> 00:05:48.320
+halten Sie eine und prüfen Sie neu.
+
+00:05:49.240 --> 00:05:51.900
+Sie entwerfen ein relationales Modell mit einem Collaboration-Tool.
+
+00:05:52.740 --> 00:05:54.280
+Verschieben Sie die Kerndaten in Dataverse.
+
+00:05:54.840 --> 00:05:58.740
+Behalten Sie SharePoint für Dateien und einfache Referenztabellen bei und verbinden Sie diese.
+
+00:05:59.340 --> 00:06:00.640
+Hybrid ist besser als hier rurische Hacks.
+
+00:06:01.220 --> 00:06:03.060
+Erzwungene Disziplin ist nicht glamourös.
+
+00:06:03.060 --> 00:06:09.200
+Sie ist der Unterschied zwischen vorhersehbarer Leistung und schleichendem Zusammenbruch.
+
+00:06:09.700 --> 00:06:12.680
+Stabilisieren Sie das Fundament, sonst erbt alles darüber die Instabilität.
+
+00:06:13.460 --> 00:06:14.480
+Jetzt gehen wir den Stack hinauf.
+
+00:06:15.860 --> 00:06:16.460
+Säule 2.
+
+00:06:16.820 --> 00:06:19.300
+Power-Apps, deterministische Canvas, kein Sammelalbum.
+
+00:06:20.180 --> 00:06:22.900
+Stabilisieren Sie SharePoint, dann sorgen Sie für ein stabiles App-Verhalten.
+
+00:06:23.420 --> 00:06:27.040
+Eine Canvas-App ist entweder deterministisch oder ein Chaos mit einer speicherten Schaltfläche.
+
+00:06:27.560 --> 00:06:31.960
+Wir richten jede Entscheidung auf Vorhersehbarkeit, Wiederholbarkeit und klare Fehler Modi aus.
+
+00:06:31.960 --> 00:06:35.500
+Keine Improvisation, keine zusammengewürfelte Benutzeroberfläche.
+
+00:06:36.160 --> 00:06:37.460
+Fangen Sie beim Connector an.
+
+00:06:38.360 --> 00:06:43.220
+Fügen Sie SharePoint als Datenquelle hinzu, aber lassen Sie Steuerelementelisten niemals direkt abfragen.
+
+00:06:43.980 --> 00:06:45.360
+Zentralisieren Sie Lese- und Schreibvorgänge.
+
+00:06:46.000 --> 00:06:51.280
+Definieren Sie beim Start der App einen Konfigurationsdatensatz und berechnen Sie die benötigten Abfragen vor.
+
+00:06:52.240 --> 00:06:56.060
+Nicht alles lädt beim Start, nur Startdaten und Benutzerkontext.
+
+00:06:56.060 --> 00:06:59.460
+Beispiel, Setwar-User, User, Tö.
+
+00:07:00.660 --> 00:07:02.480
+Setwar-Today, Today, Mö.
+
+00:07:03.580 --> 00:07:07.160
+Clear-Collect, Call-My-Filter, Filter, Status, Eklaktiv.
+
+00:07:08.780 --> 00:07:14.400
+Verschieben Sie dann das Laden umfangreicher Listen auf die Bildschirmebene bei Onvisible mit kontrollierten Filtern, mit kontrollierten Filtern.
+
+00:07:14.400 --> 00:07:21.380
+Dies verhindert die Verzögerung beim ersten Laden, die man SharePoint zuschreibt, obwohl Ihre App die Listen an sich ausbremst.
+
+00:07:22.040 --> 00:07:24.340
+Galerien gegenüber Formularen sind keine Stilfrage.
+
+00:07:24.960 --> 00:07:25.760
+Galerien zeigen an.
+
+00:07:26.720 --> 00:07:27.520
+Formulare übermitteln.
+
+00:07:28.840 --> 00:07:32.940
+Verwenden Sie eine Galerie zum Durchsuchen von Listen mit einer streng delegierbaren Items-Formel.
+
+00:07:34.340 --> 00:07:40.760
+Filter, Incidence, Status ist gleich Aktiv, End, Modified ist gleich War-Today-30.
+
+00:07:40.760 --> 00:07:44.440
+Sowohl Status als auch Modified müssen indexiert sein.
+
+00:07:44.800 --> 00:07:48.240
+Stellen Sie Daten innerhalb der Galerie, nicht mit If-Ketten und Look-Up-Aufrufen zusammen.
+
+00:07:48.980 --> 00:07:54.100
+Berechnen Sie Look-Ups beim App-Start in einfache Sammlungen vor, wenn Sie Anzeigenamen anzeigen müssen.
+
+00:07:54.660 --> 00:07:54.860
+Wenn.
+
+00:07:55.800 --> 00:07:58.880
+Das Ziel ist eine delegierbare Serverabfrage, keine zehn Client-Tricks.
+
+00:08:00.060 --> 00:08:03.220
+Verwenden Sie zum Bearbeiten standardmäßig ein Edit-Formular mit Submitform,
+
+00:08:03.600 --> 00:08:06.300
+wenn Ihr Schema einfach ist und Sie mit dessen Lebenszyklus arbeiten können.
+
+00:08:06.300 --> 00:08:12.220
+Submitform handhabt die Validierung für Datenkarten, patcht Anhänge im Hintergrund
+
+00:08:12.220 --> 00:08:16.320
+und verwaltet die optimistische Nebenläufigkeit gemäß SharePoint-Vorgaben,
+
+00:08:16.420 --> 00:08:19.220
+behandeln Sie es aber als atomaren Vorgang.
+
+00:08:20.400 --> 00:08:22.800
+Packen Sie es nicht in fünf weitere Schritte und hoffen Sie auf das Beste.
+
+00:08:23.080 --> 00:08:25.460
+Verwenden Sie OnSuccess und OnFailure explizit.
+
+00:08:26.160 --> 00:08:28.620
+OnSuccess protokolliert die Änderungen und navigiert weiter.
+
+00:08:29.460 --> 00:08:32.420
+OnFailure zeigt den Fehler mit einer aussagekräftigen Meldung an.
+
+00:08:32.420 --> 00:08:37.180
+Notify, speichern, fehlgeschlagen, Pflichtfelder oder Nebenläufigkeit prüfen.
+
+00:08:38.460 --> 00:08:39.700
+Notification-Type.error
+
+00:08:39.700 --> 00:08:41.600
+Nun die harte Wahrheit.
+
+00:08:42.340 --> 00:08:45.120
+Das, was die meisten übersehen, ist zu wissen, wann man das Formular verlassen muss.
+
+00:08:45.880 --> 00:08:48.920
+Wenn Sie Teilaktualisierungen, Transformationen vor dem Schreiben
+
+00:08:48.920 --> 00:08:52.680
+oder entitätsübergreifende Koordination benötigen, ist Patch das richtige Werkzeug.
+
+00:08:53.080 --> 00:08:55.660
+Patch schreibt genau das, was Sie vorgeben und sonst nichts.
+
+00:08:56.180 --> 00:08:57.020
+Das ist gut und gefällig zugleich.
+
+00:08:57.440 --> 00:08:57.960
+Seien Sie vorsichtig.
+
+00:08:58.420 --> 00:09:01.880
+Verwenden Sie einen typisierten Vorlagendatensatz, um Patch lesbar und wartbar zu machen.
+
+00:09:01.880 --> 00:09:04.000
+Patch-Incidence-ID
+
+00:09:04.000 --> 00:09:05.020
+War-Edited
+
+00:09:05.020 --> 00:09:05.960
+Odata
+
+00:09:05.960 --> 00:09:07.140
+E-Tag
+
+00:09:07.140 --> 00:09:07.880
+War
+
+00:09:07.880 --> 00:09:09.380
+E-Tag
+
+00:09:09.380 --> 00:09:11.220
+Status
+
+00:09:11.220 --> 00:09:12.880
+DRP-Status
+
+00:09:13.400 --> 00:09:15.780
+Selected
+
+00:09:15.780 --> 00:09:18.020
+Value Priority
+
+00:09:18.020 --> 00:09:19.880
+DRP Priority
+
+00:09:20.640 --> 00:09:21.880
+Selected
+
+00:09:22.400 --> 00:09:23.880
+Value
+
+00:09:23.880 --> 00:09:24.800
+Title
+
+00:09:24.800 --> 00:09:25.760
+Text
+
+00:09:25.760 --> 00:09:27.380
+Title Text
+
+00:09:27.380 --> 00:09:31.940
+Fügen Sie immer das E-Tag für grundlegenden Schutz bei Nebenläufigkeit hinzu.
+
+00:09:33.040 --> 00:09:37.820
+Wenn SharePoint einen Konflikt meldet, erhalten Sie einen klaren Fehler statt eines stillen Überschreibens.
+
+00:09:38.860 --> 00:09:43.080
+Behandeln Sie dies mit einem Wiederholungsmuster, einer erneuten Abfrage und einer Zusammenführungsaufforderung.
+
+00:09:43.340 --> 00:09:44.400
+Nicht durch bloßes Überschreiben.
+
+00:09:45.240 --> 00:09:46.420
+Patchen Sie niemals Anhänge.
+
+00:09:47.340 --> 00:09:50.320
+Verwenden Sie eine Dokumentbibliothek, die an die Element-ID gebunden ist.
+
+00:09:50.320 --> 00:09:54.540
+Speichern Sie die Datei in der Bibliothek mit der Metadaten-Element-ID gleich dieser Element-ID
+
+00:09:54.540 --> 00:09:57.140
+und zeigen Sie sie dann über eine verschachtelte Galerie an.
+
+00:09:57.980 --> 00:10:01.300
+Das bietet Ihnen Co-Authoring-Vorschauen, Bezeichnungen und absolute Klarheit.
+
+00:10:02.300 --> 00:10:05.660
+Die Abkürzung einfach Anhang hinzufügen ist der Grund, warum Ihre Benutzer weiterhin
+
+00:10:05.660 --> 00:10:07.380
+Kopien als Referenz per E-Mail versenden.
+
+00:10:07.380 --> 00:10:09.900
+Kontrollieren Sie den Status explizit.
+
+00:10:10.400 --> 00:10:13.420
+Apps driften ab, wenn jedes Steuerelement globale Variablen setzt.
+
+00:10:14.480 --> 00:10:15.420
+Bevorzugen Sie Kontext.
+
+00:10:15.940 --> 00:10:20.680
+Aktualisieren Sie den Kontext für bildschirmspezifische Flex und einen kleinen Satz globaler Variablen
+
+00:10:20.680 --> 00:10:24.820
+für appübergreifende Konzepte wie V-User und Feature-Toggles und Feature-Toggles.
+
+00:10:25.180 --> 00:10:27.180
+Erstellen Sie einen einzelnen Datensatz für den Bearbeitungsprozess.
+
+00:10:27.540 --> 00:10:29.380
+Setzen Sie V-Edit auf die Standardwerte für Inzidenz.
+
+00:10:29.740 --> 00:10:32.780
+Schreiben Sie dann Formulare und Steuerelemente, die an die Felder von V-Edit gebunden sind.
+
+00:10:33.120 --> 00:10:35.000
+Wenn Sie speichern, bilden Sie V-Edit auf Patch-Up.
+
+00:10:35.000 --> 00:10:39.740
+Das trennt UI-Zuckungen von der Datenintegrität und macht rückgängig machen trivial.
+
+00:10:41.240 --> 00:10:44.000
+Setzen Sie V-Edit auf leer oder laden Sie es aus der Quelle neu.
+
+00:10:45.540 --> 00:10:47.620
+Validierung gehört in dieser Reihenfolge an drei Stellen.
+
+00:10:48.440 --> 00:10:50.960
+Erstens, serverseitige Regeln in SharePoint, wo immer möglich.
+
+00:10:51.960 --> 00:10:55.940
+Erforderliche Spalten, Maximallängen, eindeutige Einschränkungen über berechnete Schlüssel.
+
+00:10:57.300 --> 00:11:01.180
+Zweitens, Datenkarteneigenschaften für erforderlich und gültig, die auf diese Regeln abgestimmt sind,
+
+00:11:01.240 --> 00:11:02.300
+statt sie spontan zu erfinden.
+
+00:11:02.300 --> 00:11:05.040
+Drittens, Sicherheitsmechanismen von dem Absenden.
+
+00:11:05.740 --> 00:11:13.380
+Wenn Form Inzidenz gültig ist, benachrichtigen Sie, Validierungsfehler beheben, Warnung, Warnung, zurückgeben.
+
+00:11:14.440 --> 00:11:19.840
+Dies funktioniert, weil Sie die Validierung der Engine wiederverwenden, anstatt sie zwölfmal neu zu erfinden, erfinden.
+
+00:11:19.840 --> 00:11:23.280
+Navigationsmuster sollten linear und idempotent sein.
+
+00:11:23.940 --> 00:11:29.180
+Benutzer beginnen bei einer gefilterten Liste, wählen einen Datensatz aus, bearbeiten ihn auf einem separaten Bildschirm,
+
+00:11:29.700 --> 00:11:32.840
+führen ein Commit aus und kehren mit derselben Scrollposition zum Filter zurück.
+
+00:11:33.440 --> 00:11:35.740
+Bauen Sie nicht bei jedem Navigationsvorgang das Universum neu auf.
+
+00:11:36.280 --> 00:11:38.960
+Speichern Sie den Startwert der Listenabfrage in einer Variablen.
+
+00:11:38.960 --> 00:11:45.980
+Wenn Sie speichern, aktualisieren Sie nur die geänderte Zeile mit einem gezielten Update in eine lokale Sammlung, die an die Galerie gebunden ist.
+
+00:11:46.740 --> 00:11:49.440
+Das vermeidet vollständige Roundtrips und bewahrt den Kontext.
+
+00:11:50.180 --> 00:11:52.540
+Styling ist ein Governance-Problem, das sich als Geschmack tarnt.
+
+00:11:53.140 --> 00:11:54.780
+Definieren Sie einen Themendatensatz in der App.
+
+00:11:54.780 --> 00:12:06.760
+Setzen Sie beim Start War Theme Primary auf 004578, Text auf 108, Text auf 111, Danger auf C50F1.
+
+00:12:07.700 --> 00:12:09.120
+Alle Steuerelemente verweisen auf War Theme.
+
+00:12:09.580 --> 00:12:10.720
+Sperren Sie Schriftarten und Größen.
+
+00:12:11.100 --> 00:12:12.880
+Wenn jemand einen Verlauf fordert, lehnen Sie ab.
+
+00:12:13.700 --> 00:12:15.720
+Konsistenz ist nicht hübsch, sie ist wartbar.
+
+00:12:16.820 --> 00:12:18.220
+Die App sollte schlicht aussehen und schnell laufen.
+
+00:12:18.740 --> 00:12:19.760
+Offline ist kein bloßes Häkchen.
+
+00:12:19.760 --> 00:12:25.160
+Wenn Sie kein getestetes Ladespeichermuster mit JSON-Serialisierung und Konfliktlösung haben, haben Sie kein Offline.
+
+00:12:25.480 --> 00:12:26.260
+Haben Sie kein Offline.
+
+00:12:26.640 --> 00:12:28.140
+Sagen Sie Nein, bis Sie fundiert ja sagen können.
+
+00:12:28.600 --> 00:12:30.660
+Halbherziges Offline erzeugt vollumfängliche Vorfälle.
+
+00:12:31.300 --> 00:12:32.440
+Kommen wir zur Instrumentierung.
+
+00:12:32.900 --> 00:12:34.480
+Die App protokolliert Ihr eigenes Verhalten.
+
+00:12:35.060 --> 00:12:36.580
+Beim Start wird ein Sitzungsdatensatz geschrieben.
+
+00:12:37.320 --> 00:12:45.040
+Bei jedem Speichern loggen Sie den Patch mit Request-ID, Benutzer, Datensatz-ID, Operation, Dauer, Erfolg und Fehler.
+
+00:12:45.040 --> 00:12:50.100
+Ist ein Flow beteiligt, korrelieren Sie diesen mit einer GYD, die an den Trigger übergeben wird.
+
+00:12:50.760 --> 00:12:54.140
+Wenn der Peak um 03740 wieder auftritt, müssen Sie nicht raten, sondern sehen es.
+
+00:12:55.260 --> 00:12:58.380
+Deterministische Apps sagen Ihnen, was Sie getan haben, nicht was Sie tun wollten.
+
+00:12:59.860 --> 00:13:00.560
+Frau Schmidt.
+
+00:13:00.560 --> 00:13:19.630
+Ich will, wo ich und wenn, stolz sein, sein, sowas wofür ich brenne, und ich lieb mir mache, Erfolge, klar, auch, nie, nie, nie, naja.
+
+00:13:20.110 --> 00:13:20.670
+Also hören Sie mal.
+
+00:13:21.190 --> 00:13:22.290
+Ich einfach fühlen.
+
+00:13:22.970 --> 00:13:23.810
+Sowas gibt's doch gar nicht.
+
+00:13:24.410 --> 00:13:29.510
+Gibt's doch, im Handwerk, wir machen Karriere, mit Gefühl, das Handwerk.
+
+00:13:29.510 --> 00:14:31.600
+Dritte Säule, Power Automate.
+
+00:14:32.500 --> 00:14:34.460
+Zeitbomben entschärfen durch Protokolle.
+
+00:14:35.220 --> 00:14:39.740
+Flows versagen wie brennende Gebäude erst leise, dann plötzlich lichterloh.
+
+00:14:40.880 --> 00:14:43.000
+Der Peak um 0347 war kein Mysterium.
+
+00:14:43.640 --> 00:14:46.820
+Eine Sharepoint-Spalte wurde umbenannt, ein Genehmigender war im Urlaub,
+
+00:14:46.820 --> 00:14:51.340
+und ein Flow mit 47 ungeschützten Schritten lief in Nullwerte und blieb dort hängen.
+
+00:14:51.860 --> 00:14:52.440
+Und blieb dort hängen.
+
+00:14:53.140 --> 00:14:54.180
+Das beheben wir nicht mit Hoffnung.
+
+00:14:54.620 --> 00:14:58.440
+Wir beheben es mit Protokollen, die Fehler laut, eingegrenzt und umkehrbar machen.
+
+00:14:59.160 --> 00:15:00.320
+Fangen Sie bei dem Triggern an.
+
+00:15:01.460 --> 00:15:05.480
+Wenn ein Element erstellt oder geändert wird, ist keine Strategie, sondern ein Schleusentor.
+
+00:15:06.240 --> 00:15:06.940
+Grenzen Sie es ein.
+
+00:15:07.480 --> 00:15:11.080
+Fügen Sie im Trigger Filter Abfragen hinzu, die zu Ihrer delegierbaren Datenbasis passen.
+
+00:15:11.980 --> 00:15:15.280
+Status gleich Pending und Modified größer gleich UTC-Zeit minus 1.
+
+00:15:16.560 --> 00:15:17.960
+Indizieren Sie diese Spalten in der Liste.
+
+00:15:18.440 --> 00:15:21.240
+Wenn Sie eine Änderungskennung brauchen, nutzen Sie eine berechnete Hash-Spalte.
+
+00:15:21.820 --> 00:15:24.420
+Die App aktualisiert nur, wenn sich ein relevantes Feld ändert.
+
+00:15:25.120 --> 00:15:27.600
+Ihr Trigger reagiert auf Absicht, nicht auf Hintergrundrauschen.
+
+00:15:27.600 --> 00:15:29.340
+Weiter geht's mit Nebenläufigkeit.
+
+00:15:30.120 --> 00:15:37.560
+Aktivieren Sie die Trigger Parallelitätssteuerung und begrenzen Sie Workflows, die denselben Datensatz bearbeiten, sonst verursachen Sie Konflikte durch Race Conditions.
+
+00:15:38.760 --> 00:15:44.440
+Gruppieren Sie bei Massenverarbeitung nach Partitionsschlüsseln wie Standort oder Abteilung mit einem Grad von 5 bis 10.
+
+00:15:44.440 --> 00:15:48.500
+Unbegrenzte Parallelität verwandelt einen Schluckauf in ein Massenchaos.
+
+00:15:49.020 --> 00:15:50.320
+Bedingungen sind keine Dekoration.
+
+00:15:51.400 --> 00:15:53.200
+Nutzen Sie Guard-Closures früh und oft.
+
+00:15:54.120 --> 00:15:57.680
+Der erste Zweig im Flow sollte beantworten, sollte ich überhaupt laufen?
+
+00:15:58.900 --> 00:16:02.100
+Ist der Status nicht Pending, beenden Sie den Flow als erfolgreich mit einer Begründung.
+
+00:16:02.880 --> 00:16:07.020
+Sind erforderliche Felder leer, beenden Sie den Flow als fehlgeschlagen mit einem spezifischen Code.
+
+00:16:07.020 --> 00:16:10.660
+Leise in einer Sackgasse landen ist keine Resilienz, es ist Vertuschung.
+
+00:16:11.940 --> 00:16:13.960
+Genehmigungsprozesse wirken einfach, bis jemand in den Urlaub geht.
+
+00:16:14.760 --> 00:16:18.420
+Nutzen Sie die integrierte Funktion zum Starten und Warten auf eine Genehmigung für menschliche Entscheidungen.
+
+00:16:18.660 --> 00:16:19.960
+Wofür sehen Sie diese mit Realitätsbezug?
+
+00:16:20.400 --> 00:16:23.700
+Setzen Sie ein geschäftlich realistisches Timeout, 72 Stunden, nicht für immer.
+
+00:16:24.460 --> 00:16:27.020
+Verzweigen Sie bei Zeitüberschreitung auf einen Eskalationspfad.
+
+00:16:27.020 --> 00:16:33.060
+Benachrichtigen Sie den Antragsteller, informieren Sie eine Backup-Genehmigungsgruppe und protokollieren Sie ein Governance-Ereignis.
+
+00:16:33.640 --> 00:16:39.500
+Wenn Ihre Kultur Neuzuweisungen erfordert, nutzen Sie Gruppen statt Einzelpersonen, damit die Zuständigkeit ohne Bearbeitung wechselt.
+
+00:16:40.420 --> 00:16:43.200
+Das, was die meisten übersehen, ist, dass Genehmigungen Zustandsautomaten sind.
+
+00:16:43.680 --> 00:16:45.600
+Ihr Listen-Element sollte diesen Zustand widerspiegeln.
+
+00:16:46.360 --> 00:16:52.360
+Schreiben Sie einen Status wie Wartet auf Genehmigung, dann genehmigt oder abgelehnt, sowie ein Feld für die entscheidende Person.
+
+00:16:52.360 --> 00:16:57.640
+Der Flow liest und schreibt diesen Status explizit, um Wiederholungen und menschliche Abweichungen zu überstehen.
+
+00:16:58.840 --> 00:17:00.640
+Datenoperationen sind der Ort, an dem Versprechen sterben.
+
+00:17:00.960 --> 00:17:02.920
+Analysieren Sie JSON überall dort, wo die Struktur eine Rolle spielt.
+
+00:17:03.320 --> 00:17:04.960
+Hören Sie auf, bei dynamischen Inhalten zu raten.
+
+00:17:05.420 --> 00:17:08.960
+Definieren Sie einen Vertrag für jede Connector-Antwort und schlagen Sie bei Änderung sofort fehl.
+
+00:17:09.900 --> 00:17:12.180
+Verwenden Sie Try-Catch-Muster mit Bereichsaktionen.
+
+00:17:13.560 --> 00:17:20.640
+Ein Try-Bereich für Ihre Hauptlogik, dann ein Catch-Bereich, der bei Fehler, Timeout oder Überspringung konfiguriert ist, um den Kontext zu erfassen.
+
+00:17:22.360 --> 00:17:29.200
+Flow-Run-ID, Element-ID, E-Tag, Korrelations-ID aus der App und senden Sie einen einzigen, konsolidierten Alarm.
+
+00:17:30.140 --> 00:17:32.460
+Der entscheidende Faktor, über den jemand spricht, ist die Korrelation.
+
+00:17:33.080 --> 00:17:38.380
+Geben Sie eine GUID aus der App in den Flow-Trigger ein und schreiben Sie sie in jedes Protokoll, jeden E-Mail-Betreff und jede Teams-Karte.
+
+00:17:39.800 --> 00:17:44.400
+Wenn der Fehler auftritt, folgen Sie einer ID durch App, Flow und SharePoint-Updates, ohne raten zu müssen.
+
+00:17:45.520 --> 00:17:48.000
+SharePoint-Schreibvorgänge erfordern Optimismus mit Beweis.
+
+00:17:48.000 --> 00:17:52.420
+Bevor Sie ein Element aktualisieren, rufen Sie das aktuelle Element ab, um das E-Tag zu haben.
+
+00:17:52.920 --> 00:18:00.120
+Schreiben Sie mit IF-Match-Header zurück, wo verfügbar, oder verwenden Sie die Update-Aktion und prüfen Sie auf den Fehler 412 Precondition-Failed.
+
+00:18:00.960 --> 00:18:04.780
+Wenn jemand den Datensatz zwischen Trigger und Schreibvorgang geändert hat, überschreiben Sie ihn nicht einfach.
+
+00:18:06.060 --> 00:18:13.140
+Verzweigen Sie zu einem Zusammenführungspfad, lesen Sie erneut, vergleichen Sie geänderte Felder und wenden Sie sie entweder neu an oder bitten Sie den Antragsteller um Klärung.
+
+00:18:13.140 --> 00:18:16.020
+Stille Überschreibungen führen zu Vertrauensverlusten.
+
+00:18:16.480 --> 00:18:18.240
+Lange Flows benötigen Checkpoints.
+
+00:18:19.440 --> 00:18:29.620
+Speichern Sie nach jeder kritischen Änderung ein Feld für den zuletzt verarbeiteten Schritt in der Liste oder eine Schattentracking-Liste, indiziert durch Element-ID und Korrelations-Q-ID, NC.
+
+00:18:30.520 --> 00:18:34.500
+Beim erneuten Ausführen liest die erste Aktion diesen Checkpoint und springt zum nächsten Block.
+
+00:18:35.140 --> 00:18:36.460
+Das macht Ihren Flow idempotent.
+
+00:18:37.260 --> 00:18:40.420
+Wiederholungen führen nicht zu doppelten Abbuchungen oder zwei E-Mails an den CFO.
+
+00:18:40.420 --> 00:18:42.240
+Dateien sind Ihre eigene Fälle.
+
+00:18:42.800 --> 00:18:48.400
+Wenn der Flow-Dokumente verarbeitet, verwenden Sie Dokumentbibliotheken und Inhaltstypen, nicht Listenanhänger.
+
+00:18:49.580 --> 00:18:52.900
+Verwenden Sie Dateienhalt abrufen mit FATO, nur wenn es unbedingt notwendig ist.
+
+00:18:54.400 --> 00:18:56.580
+Bevorzugen Sie IDs, um FAT-Abweichungen zu vermeiden.
+
+00:18:57.360 --> 00:19:03.600
+Wenn Sie Dateien generieren, schreiben Sie erst die Metadaten, dann laden Sie den Inhalt hoch und aktualisieren Sie danach die Metadaten, die von der Dateiversion abhängen.
+
+00:19:04.920 --> 00:19:07.900
+Es ist zwar langweilig, hält aber Vorschau, Aufbewahrung und Bezeichnung intakt.
+
+00:19:07.900 --> 00:19:10.240
+Fehlerbehandlung ist mehr als nur im Catch-Bereich.
+
+00:19:10.700 --> 00:19:11.560
+Es geht um Klassifizierung.
+
+00:19:12.000 --> 00:19:13.040
+Nicht alle Fehler sind gleich.
+
+00:19:13.760 --> 00:19:14.740
+Erstellen Sie drei Pfade.
+
+00:19:14.960 --> 00:19:16.380
+Wiederholbar, permanent und unbekannt.
+
+00:19:17.080 --> 00:19:20.900
+Wiederholbare Fehler umfassen 429 und 5 Gigs Antworten.
+
+00:19:21.960 --> 00:19:23.920
+Da sehen Sie diese mit exponentieller Verzögerung.
+
+00:19:24.120 --> 00:19:25.060
+Maximal drei Versuche.
+
+00:19:25.920 --> 00:19:30.480
+Permanente Fehler umfassen Validierungsfehler der 400R-Ebene.
+
+00:19:30.480 --> 00:19:34.700
+Benachrichtigen Sie den Ersteller mit exakten Feldnamen und Werten.
+
+00:19:35.660 --> 00:19:42.300
+Unbekannte Fehler speichern den Rohdatentext und Header in einem sicheren Protokoll mit Korrelations-SQ-ID und Umgebung.
+
+00:19:42.860 --> 00:19:44.380
+Fügen Sie keine Geheimnisse in Teams ein.
+
+00:19:44.980 --> 00:19:46.240
+Maskieren Sie Payloads standardmäßig.
+
+00:19:46.880 --> 00:19:48.680
+Benachrichtigungen müssen diskret und nützlich sein.
+
+00:19:49.200 --> 00:19:51.060
+Eine Nachricht pro Vorfall, nicht pro Aktion.
+
+00:19:51.900 --> 00:19:56.620
+Verwenden Sie adaptive Karten mit Korrelations-SQ-ID, Element-Link, fehlgeschlagenem Schritt und nächste Aktion.
+
+00:19:56.620 --> 00:19:59.960
+Senden Sie diese an einen überwachten Kanal, nicht an eine Person.
+
+00:20:00.940 --> 00:20:05.500
+Der Kanal hat eine Statusanzeige, die bei unbekannten Fehlern von grün auf gelb wechselt.
+
+00:20:06.720 --> 00:20:12.300
+Zurück auf grün, wenn ein Bearbeiter bestätigt und das System den Erfolg des nächsten Durchlaufs meldet.
+
+00:20:13.620 --> 00:20:16.060
+Apropos nächste Durchläufe, bauen Sie eine manuelle Wiederholung ein.
+
+00:20:17.460 --> 00:20:21.360
+Fügen Sie einen HTTP-getriggerten Flow oder einem Power-App-Admin-Bildschirm hinzu,
+
+00:20:21.360 --> 00:20:26.700
+der die Korrelations-GUI nutzt, das Element sucht und ab dem letzten sicheren Prüfpunkt neu startet.
+
+00:20:27.460 --> 00:20:29.360
+Protokollieren Sie, wer die Wiederholung herumdurchgeführt hat.
+
+00:20:29.780 --> 00:20:30.680
+Menschen werden eingreifen.
+
+00:20:31.200 --> 00:20:32.000
+Machen Sie es nachvollziehbar.
+
+00:20:33.000 --> 00:20:35.360
+Dokumentieren Sie den Vertrag in der Listenbeschreibung.
+
+00:20:36.200 --> 00:20:43.640
+Link zum Runbook, Trigger-Filter, Pflichtfelder, Freigabe, SLAs, Fehlerklassen, Prüfpunkte und Wiederholungsschritte.
+
+00:20:44.400 --> 00:20:45.100
+Ersteller kommen und gehen.
+
+00:20:45.660 --> 00:20:46.720
+Protokolle bleiben bestehen.
+
+00:20:47.460 --> 00:20:50.300
+Wenn jemand mitten in der Nacht eine Spalte umbenennt, stürzt der Flow nicht ab.
+
+00:20:50.300 --> 00:20:52.720
+Er meldet sich lautstark mit einem Lageplan.
+
+00:20:53.240 --> 00:20:55.980
+Das ist der Unterschied zwischen einer Zeitbombe und einem kontrollierten Abbremnen.
+
+00:20:56.640 --> 00:20:57.220
+Vierte Säule.
+
+00:20:57.640 --> 00:20:58.660
+AI-Bilder-Dokumente.
+
+00:20:59.040 --> 00:21:00.960
+Mit einem besonnenen Menschen im Prozess.
+
+00:21:01.720 --> 00:21:03.240
+Die Fehlerspitze begann nicht mit Code.
+
+00:21:03.900 --> 00:21:04.740
+Sie begann mit einem PDF.
+
+00:21:05.540 --> 00:21:11.120
+Rechnungen kamen an, jemand tippte Positionen von Hand ab und ein Flow versuchte zu erraten, welche Summen wichtig waren.
+
+00:21:12.260 --> 00:21:13.780
+Raten führt zu nächtlichen Vorfällen.
+
+00:21:13.780 --> 00:21:21.700
+Wir extrahieren Daten professionell mit einem trainierten Modell, einem stabilen Schema und einem Prüfpunkt, an dem ein Mensch bestätigt, ja, nicht.
+
+00:21:22.340 --> 00:21:23.700
+Hier ist das disziplinierte Muster.
+
+00:21:25.140 --> 00:21:32.460
+Nutzen Sie das Dokumentverarbeitungsmodell von AI-Bilder für strukturierte Formulare, Rechnungen, Aufnahmeformulare, Prüfberichte.
+
+00:21:32.460 --> 00:21:36.780
+Trainieren Sie das Modell mit fünf bis zehn sauberen Beispielen, die dem Layout entsprechen.
+
+00:21:37.720 --> 00:21:40.720
+Definieren Sie die exakten Felder, die Ihr System benötigt.
+
+00:21:41.260 --> 00:21:51.420
+Anbietername, Rechnungsnummer, Rechnungsdatum, Zwischensumme, Steuer, Gesamtbetrag, Bestellung und einen berechneten Hash zur Duplikaterkennung.
+
+00:21:53.060 --> 00:21:54.780
+Halten Sie die Feldnamen langweilig und beständig.
+
+00:21:55.300 --> 00:21:56.400
+Langeweile verhindert Abweichung.
+
+00:21:56.400 --> 00:22:01.860
+In Power Automate tippern Sie bei Eintreffen eines Dokuments in einer dedizierten Bibliothek mit einem Inhaltstyp wie Rechnung.
+
+00:22:02.460 --> 00:22:04.680
+Übergeben Sie den Dateienhalt an die Vorhersageaktion.
+
+00:22:05.180 --> 00:22:09.500
+Analysieren Sie sofort jedes Feld mittels ParseJSON unter Verwendung eines von Ihnen kontrollierten Vertrags.
+
+00:22:10.340 --> 00:22:12.000
+Kein Roulette mit dynamischen Inhalten.
+
+00:22:13.220 --> 00:22:17.480
+Berechnen Sie Ihre eigene Summe als Zwischensumme plus Steuer und vergleichen Sie diese mit dem Modellwert.
+
+00:22:18.420 --> 00:22:21.300
+Bei einer Abweichung zweigen Sie den Prozess zur manuellen Überprüfung ab.
+
+00:22:21.860 --> 00:22:24.400
+Die menschliche Komponente ist keine Entschuldigung, sondern Kontrollmechanismus.
+
+00:22:25.200 --> 00:22:31.220
+Erstellen Sie einen Freigabe- oder Prüfbildschirm in einer einfachen Admin-App, die an eine Warteschlange angebunden ist.
+
+00:22:32.460 --> 00:22:39.200
+Speichern Sie extrahierte Felder, einen Konfidenzwert, einen Datei-Link und eine Korrelations-ID aus der App oder der Erfassung.
+
+00:22:40.260 --> 00:22:42.740
+Der Prüfer bearbeitet bei Bedarf die Felder und klickt auf Bestätigen.
+
+00:22:43.680 --> 00:22:50.060
+Erst dann schreibt der Flow das System of Record fort und verschiebt die Datei mit Aufbewahrungs-Label in einen Ordner.
+
+00:22:50.760 --> 00:22:54.240
+Was die meisten übersehen, ist die Absicherung des Modells durch deterministische Prüfungen.
+
+00:22:54.240 --> 00:22:57.760
+Validieren Sie den Lieferantennamen gegen die Lieferantentabelle.
+
+00:22:58.420 --> 00:23:00.700
+Validieren Sie die Eindeutigkeit der Rechnungsnummer pro Lieferant.
+
+00:23:01.320 --> 00:23:03.940
+Validieren Sie das Rechnungsdatum innerhalb eines plausiblen Bereichen.
+
+00:23:04.300 --> 00:23:06.840
+Wenn eine Validierung fehlschlägt, hoffen Sie nicht einfach darauf, dass alles passt.
+
+00:23:07.980 --> 00:23:12.000
+Sie leiten den Vorgang zur Prüfung weiter und markieren den Vorfall mit einem Grundcode für die Telemetrie.
+
+00:23:12.940 --> 00:23:16.240
+Geringe Konfidenz, Rechenfehler, unbekannter Lieferant, Duplikat.
+
+00:23:16.240 --> 00:23:19.840
+Das macht aus zufälliger Durchsicht eine messbare Arbeitsaufgabe.
+
+00:23:20.480 --> 00:23:21.160
+Speicher definiert.
+
+00:23:21.600 --> 00:23:23.240
+Speichern Sie Geschäftsdateien nicht als Listenanhänger.
+
+00:23:24.540 --> 00:23:28.440
+Das Dokument gehört in eine Bibliothek mit Inhaltstypen, Labels und Versionierung.
+
+00:23:29.180 --> 00:23:35.020
+Extrahierte Felder liegen in einer Liste- oder Dataverse-Tabelle, verknüpft mit Dokument-ID und Korrelations-GUI-ID.
+
+00:23:36.100 --> 00:23:39.500
+Wenn die Buchhaltung Exporte wünscht, planen Sie einen Abzug in einen Data Lake.
+
+00:23:40.200 --> 00:23:43.140
+Lassen Sie sie keine wilden Abfragen gegen aktive Bibliotheken ausführen.
+
+00:23:43.600 --> 00:23:45.420
+Nachschulungen sind periodisch nicht impulsiv.
+
+00:23:45.420 --> 00:23:52.020
+Bei wiederholt niedriger Konfidenz für eine neue Vorlage fügen Sie zwei frische Beispiele hinzu, trainieren nach und versionieren das Modell.
+
+00:23:53.400 --> 00:23:59.840
+Schalten Sie den Produktionsfluss erst dann auf die neue Modell-ID um, wenn ein Test mit neuen Dokumenten alle Prüfungen besteht.
+
+00:24:00.660 --> 00:24:02.600
+Modell unterliegende Änderungskontrolle wie Software-Ko.
+
+00:24:02.900 --> 00:24:05.420
+Schließlich wird jeder Schritt mit der Korrelations-ID protokolliert.
+
+00:24:06.700 --> 00:24:13.200
+Datei erfasst, Vorhersage abgeschlossen, Validierung bestanden oder fehlgeschlagen, menschliche Entscheidungsschreibvorgang bestätigt.
+
+00:24:13.200 --> 00:24:18.080
+Wenn das 0347-Muster wieder auftritt, verfolgen Sie es per GUID und nicht nach Hörensagen.
+
+00:24:19.340 --> 00:24:22.260
+KI hilft dann, wenn sie eingegrenzt, messbar und bescheiden ist.
+
+00:24:22.760 --> 00:24:24.240
+Die Begrenzung ist der menschliche Kontrollpunkt.
+
+00:24:24.660 --> 00:24:27.500
+Die Messung erfolgt durch Validierung und Telemetrie.
+
+00:24:28.520 --> 00:24:31.140
+Die Bescheidenheit liegt darin, zu wissen, wann man fragen muss.
+
+00:24:31.140 --> 00:24:36.280
+Säule 5, Co-Pilot Studio. Chatten mit Grenzen, nicht mit einem Megafon.
+
+00:25:37.940 --> 00:25:43.480
+Bereit für 10 Tage Microsoft 365 Co-Pilot, KI, Azure und die Menschen, die die Zukunft der Arbeit gestalten?
+
+00:25:44.760 --> 00:25:48.940
+Diesen Januar ist die M355 Rejection zurück und wir legen noch eine Schippe drauf und
+
+00:25:48.940 --> 00:25:55.020
+Besuchen Sie Live-Sessions, Praxis-Demos und erhalten Sie Expertenwissen von MVPs und Branchen-Experten weltweit, weltweit.
+
+00:25:55.740 --> 00:25:57.960
+Keine generischen Folien. Keine endlosen Schlagworte.
+
+00:25:59.020 --> 00:26:00.600
+Wir gehen die echten Herausforderungen an.
+
+00:26:00.720 --> 00:26:05.460
+Co-Pilot Studio, KI-Agenten, Fabric, Sicherheit, Governance und Automatisierung.
+
+00:26:05.460 --> 00:26:10.520
+Ob IT-Profi, Entwickler oder Führungskraft, wir haben die passenden Sessions für Sie.
+
+00:26:10.920 --> 00:26:11.080
+Sie.
+
+00:26:11.080 --> 00:26:16.880
+An 10 vollen Tagen können Sie zahlreiche Technologien erkunden und sich mit der globalen Community vernetzen.
+
+00:26:17.860 --> 00:26:21.160
+Seien Sie live dabei und nehmen Sie praxisnahe Erkenntnisse mit in Ihr Unternehmen.
+
+00:26:22.080 --> 00:26:25.800
+Januar 2027. 10 Tage. Eine Microsoft Community.
+
+00:26:26.360 --> 00:26:27.520
+Die Registrierung ist jetzt geöffnet.
+
+00:26:28.780 --> 00:26:32.240
+Gehen Sie auf M355.net und sichern Sie sich noch heute Ihren Platz.
+
+00:26:33.260 --> 00:26:35.340
+Das ist M365.net.
+
+00:26:37.420 --> 00:26:39.940
+Melden Sie sich jetzt auf M365.net an.
+
+00:26:39.940 --> 00:26:41.160
+Wir sehen uns im Januar live.
+
+00:26:42.100 --> 00:26:44.640
+Der andere Anstieg kam durch Worte, nicht durch Zahlen.
+
+00:26:45.240 --> 00:26:48.080
+Ein Chat-Agent hat eine sensible Frage etwas zu gut beantwortet.
+
+00:26:48.540 --> 00:26:49.320
+Das ist keine Intelligenz.
+
+00:26:49.680 --> 00:26:51.180
+Das ist ein Megafon ohne Lautstärkeregler.
+
+00:26:51.740 --> 00:26:55.040
+Wir entwickeln Agenten, die ihre Grenzen kennen, Quellen nennen und schweigen,
+
+00:26:55.360 --> 00:26:57.300
+wenn eine Frage diese Grenzen überschreitet.
+
+00:26:58.100 --> 00:26:59.060
+Beginnen Sie mit einem Planziel.
+
+00:26:59.840 --> 00:27:00.800
+Der Agent tut nur eines.
+
+00:27:01.200 --> 00:27:04.740
+Fragen zu Abläufen und Richtlinien in einem begrenzten Bereich klären, wie Zorn.
+
+00:27:05.520 --> 00:27:06.480
+B-Spesen-Richtlinien.
+
+00:27:06.480 --> 00:27:12.280
+Wissensquellen sind freigegebene Sharepoint-Seiten mit aktuellen Richtlinien und einer FAQ-Liste.
+
+00:27:13.220 --> 00:27:14.380
+Keine allgemeine Web-Suche.
+
+00:27:15.220 --> 00:27:16.000
+Sie schalten diese aus.
+
+00:27:16.620 --> 00:27:18.580
+Der Agent liest ausschließlich aus kuratierten Inhalten.
+
+00:27:19.300 --> 00:27:22.300
+Jede Antwort enthält Verweise auf die genaue Seite oder den Listeneintrag.
+
+00:27:22.800 --> 00:27:24.320
+Wenn er keine Quelle nennen kann, antwortet er nicht.
+
+00:27:24.760 --> 00:27:25.700
+Als nächster Sicherheitsvorgang.
+
+00:27:26.080 --> 00:27:28.580
+Sie definieren Anweisungsregeln, die auch raffinierten Prompt standhalten.
+
+00:27:29.220 --> 00:27:30.600
+Er beantwortet operative Fragen.
+
+00:27:30.600 --> 00:27:36.400
+Er generiert oder fasst keine personenbezogenen Daten, Kundendatensätze oder als vertraulich gekennzeichnete Informationen zusammen.
+
+00:27:36.740 --> 00:27:37.040
+Zusammen.
+
+00:27:37.880 --> 00:27:41.700
+Er lehnt Anfragen ab, die ein Eingreifen von HR, Rechtsabteilung oder Sicherheit erfordern.
+
+00:27:42.080 --> 00:27:45.480
+Er leitet diese mit einer Vorlagennachricht und einem Link an eine menschliche Warteschlange weiter.
+
+00:27:45.800 --> 00:27:47.660
+Was die meisten übersehen, sind die Ausgabebeschränkungen.
+
+00:27:48.860 --> 00:27:50.600
+Sie legen die maximale Antwortlänge fest.
+
+00:27:51.040 --> 00:27:51.920
+Erforderliche Abschnitte.
+
+00:27:52.380 --> 00:27:55.840
+Antwortquelle nächsten Schritt sowie einen prägnanten, neutralen und sachlichen Ton.
+
+00:27:57.040 --> 00:27:58.600
+Keine kreativen Ausschmückungen.
+
+00:27:58.600 --> 00:28:00.860
+Tools werden chirurgisch präzise eingesetzt.
+
+00:28:01.220 --> 00:28:03.840
+Wenn Sie Outlook anbinden, beschränken Sie es auf eine Aktion.
+
+00:28:04.240 --> 00:28:07.220
+E-Mails mit Zusammenfassung und Links an den authentifizierten Nutzer.
+
+00:28:07.640 --> 00:28:08.580
+Niemals an Dritte.
+
+00:28:10.120 --> 00:28:16.080
+Bei der Anbindung eines Power Automate Flows muss dieser eine Korrelations-GUID und ein Aktionstoken für die Ideenpotenz akzeptieren.
+
+00:28:17.060 --> 00:28:18.780
+Der Agent verändert Daten nicht direkt.
+
+00:28:19.860 --> 00:28:22.500
+Er fordert einen Workflow an und meldet das Ergebnis zurück.
+
+00:28:23.680 --> 00:28:26.060
+Diese Trennung verhindert, dass ein Chat zur Administrator Konsole wird.
+
+00:28:26.760 --> 00:28:28.120
+Datenschutz ist explizit geregelt.
+
+00:28:28.600 --> 00:28:32.140
+Der Agent arbeitet mit der Identität des Benutzers und hält die LP-Richtlinien ein.
+
+00:28:32.780 --> 00:28:35.060
+Er kann keine Inhalte sehen, auf die der Benutzer keinen Zugriff hat.
+
+00:28:35.060 --> 00:28:39.620
+Er speichert keine Chat-Protokolle mit sensiblen Inhalten über die Aufbewahrungsfrist hinaus.
+
+00:28:39.620 --> 00:28:49.080
+Sie konfigurieren das Logging so, dass Absicht, Route und Entscheidung aufgezeichnet, aber Werte wie E-Mails, IDs oder Beträge maskiert werden.
+
+00:28:50.080 --> 00:28:56.320
+Die Protokolle enthalten die Korrelations-GUID verwendeten Wissensquellen-IDs und gegebenenfalls die Gründe für eine Ablehnung.
+
+00:28:56.320 --> 00:29:03.920
+Wenn jemand nach allen Gehältern fragt, verweigert der Agent dies, protokolliert die Ablehnungsrichtlinie und verlinkt die Seite zur Verbütungsrichtlinie.
+
+00:29:04.780 --> 00:29:06.120
+Sie verheimlichen die Ablehnung nicht.
+
+00:29:06.600 --> 00:29:08.020
+Sie gestalten sie langweilig und konsistent.
+
+00:29:08.740 --> 00:29:10.380
+Eskalation ist im Prozess, kein Achselzucken.
+
+00:29:10.380 --> 00:29:21.300
+Wenn der Agent das Problem nicht lösen kann, erstellt er ein Ticket mit strukturierten Feldern aus dem Chat, äh, Kategorie, Benutzer, Quellseite, letzte Antwort, Korrelations-GUID.
+
+00:29:22.420 --> 00:29:26.580
+Er teilt dem Benutzer genau mit, was passiert ist und wie das erwartete Zeitfenster für eine Antwort aussieht.
+
+00:29:27.420 --> 00:29:30.620
+Der menschliche Bearbeiter sieht den Chat-Kontext und die herangezogenen Quellen.
+
+00:29:31.440 --> 00:29:32.820
+Kein Abtippen, kein stille Pusteffekt.
+
+00:29:33.840 --> 00:29:34.740
+Änderungsmanagement gilt auch hier.
+
+00:29:34.740 --> 00:29:40.580
+Wenn Sie Richtlinien aktualisieren, veröffentlichen Sie die Wissensdatenbank neu und lassen Test-Proms durch eine Regressionsprüfung laufen.
+
+00:29:41.200 --> 00:29:44.140
+Wenn Antworten abweichen, passen Sie die Anweisungen an, nicht die Stimmung.
+
+00:29:44.700 --> 00:29:47.780
+Wenn das Unternehmen einen breiteren Umfang wünscht, fügen Sie Quellen hinzu und testen erneut.
+
+00:29:48.540 --> 00:29:50.500
+Funktionserweiterungen ohne Kontrolle sind ein Sicherheitsrisiko.
+
+00:29:51.440 --> 00:29:53.920
+Kurz gesagt, Co-Pilot ist ein Bibliothekar, kein Orakel.
+
+00:29:54.860 --> 00:29:56.800
+Er findet, zitiert und bleibt innerhalb der Grenzen.
+
+00:29:57.520 --> 00:29:59.640
+Wenn die Frage außerhalb des Bereichs liegt, verweist er darauf.
+
+00:30:00.240 --> 00:30:04.260
+So bewahrt KI sie vor negativen Schlagzeilen und hält ihre SLAs ein.
+
+00:30:05.620 --> 00:30:06.180
+Säule 6.
+
+00:30:06.840 --> 00:30:07.820
+Die Unverhandelbaren.
+
+00:30:08.180 --> 00:30:09.220
+Das Rückgrat der Governance.
+
+00:30:09.940 --> 00:30:11.880
+Entropie beginnt dort, wo Protokolle enden.
+
+00:30:13.100 --> 00:30:16.360
+Dies sind die Kontrollen, die nicht zögern, nicht debattieren und nicht auf Konsens warten.
+
+00:30:16.940 --> 00:30:19.720
+Sie werden erzwungen, weil sie das 03347-Muster verhindern.
+
+00:30:20.100 --> 00:30:20.320
+Boah.
+
+00:30:21.280 --> 00:30:22.040
+Zuerst DLP.
+
+00:30:22.780 --> 00:30:23.980
+Sie definieren Connector-Gruppen.
+
+00:30:24.320 --> 00:30:25.760
+Geschäftlich, nicht geschäftlich blockiert.
+
+00:30:26.420 --> 00:30:28.840
+SharePoint-Teams und Outlook gehören zum geschäftlichen Bereich.
+
+00:30:29.740 --> 00:30:33.660
+Twitter, privates Dropbox und alles, was Sie nicht der Rechtsabteilung mailen würden, landet in Blockiert.
+
+00:30:33.660 --> 00:30:37.400
+Keine App darf geschäftliche und nicht geschäftliche Daten über Umgebungen wegmischen.
+
+00:30:37.940 --> 00:30:38.800
+Die Regel ist absolut.
+
+00:30:39.360 --> 00:30:40.880
+Benötigt ein Ersteller eine Ausnahme?
+
+00:30:41.100 --> 00:30:41.900
+Stellt er einen Antrag?
+
+00:30:42.340 --> 00:30:45.240
+Dieser ist zeitlich begrenzt, protokolliert und läuft automatisch ab.
+
+00:30:45.960 --> 00:30:47.480
+Der Grund, warum das funktioniert, ist einfach.
+
+00:30:47.980 --> 00:30:50.760
+Daten bewegen sich nur auf erlaubten Schienen oder sie bewegen sich gar nicht.
+
+00:30:50.760 --> 00:30:53.320
+Als nächstes kommt die Umgebungsstrategie.
+
+00:30:53.680 --> 00:30:55.420
+Sie erhalten Dev, Test, Prod und Personal.
+
+00:30:56.820 --> 00:30:59.700
+Dev ist unruhig, offen für Ersteller und mit falschen Daten gefüllt.
+
+00:31:00.420 --> 00:31:02.560
+Test spiegelt die Form von Prod mit maskierten Daten wieder.
+
+00:31:03.240 --> 00:31:06.020
+Prod ist durch Änderungsmanagement und Lösungsimporte geschützt.
+
+00:31:06.720 --> 00:31:09.800
+Personal ist in der Sandbox bei der DLP so eingestellt, dass sie mit nichts harmoniert.
+
+00:31:11.280 --> 00:31:14.340
+Nicht verwaltete Erstellungen in Prod werden gelöscht oder vor Ort migriert.
+
+00:31:14.340 --> 00:31:18.220
+Neue Umgebungen benötigen einen Zweck, einen Besitzer und ein Enddatum.
+
+00:31:19.420 --> 00:31:21.080
+Ablaufbenachrichtigungen gehen monatlich an die Besitzer.
+
+00:31:21.940 --> 00:31:24.520
+Ohne Reaktion wird die Umgebung pausiert und dann archiviert.
+
+00:31:25.280 --> 00:31:26.600
+Sie verhandeln nicht mit unkontrolliertem Wildwut.
+
+00:31:27.040 --> 00:31:29.760
+Lösungen und ALM-Pipelines steuern die Änderungen.
+
+00:31:30.760 --> 00:31:32.600
+Alles Echte wird als verwaltete Lösung bereitgestellt.
+
+00:31:33.080 --> 00:31:34.280
+Keine manuellen Bearbeitungen in Prod.
+
+00:31:34.280 --> 00:31:38.300
+Sie paketieren Power-Apps, Flows, Umgebungsvariablen und Verbindungen.
+
+00:31:39.240 --> 00:31:41.380
+Sie kaufen niemals Verbindungen für namentlich genannte Benutzer.
+
+00:31:41.380 --> 00:31:45.160
+Nur Dienstprinzipale oder Dienstkonten mit minimaler Berechtigung.
+
+00:31:46.020 --> 00:31:53.680
+Pipelines validieren, Lösungen bauen, Lösungsprüfer bestehen, Komponententests laufen und Verbindungsreferenzen werden aufgelöst.
+
+00:31:54.820 --> 00:31:56.720
+Eine fehlgeschlagene Prüfung stoppt die Bereitstellung.
+
+00:31:57.280 --> 00:32:01.100
+Manuelle Eingriffe werden mit Änderungsnummer, Grund und Genehmiger protokolliert.
+
+00:32:01.720 --> 00:32:05.420
+Wenn Sie um Mitternacht im Designer auf Weiter klicken, machen Sie es falsch.
+
+00:32:07.240 --> 00:32:08.300
+Eigentümerschaft wird durchgesetzt.
+
+00:32:08.300 --> 00:32:13.540
+Jede App, jeder Flow, jede Liste und Umgebung hat einen verantwortlichen Eigentümer und einen Backup-Eigentümer.
+
+00:32:14.040 --> 00:32:15.100
+Die Erkennung verweist ob wirklich.
+
+00:32:15.680 --> 00:32:17.420
+Weisen werden neu zugewiesen oder stillgelegt.
+
+00:32:17.960 --> 00:32:22.060
+Wenn jemand geht, werden Assets per Richtlinie automatisch an das Backup übertragen, nicht aus Nettigkeit.
+
+00:32:22.860 --> 00:32:25.300
+Wenn ein Asset keinen geschäftlichen Eigentümer hat, hat es keine Daseinsberechtigung.
+
+00:32:26.320 --> 00:32:28.540
+Benennung und Tagging sind kein Stil, sondern Suchschlüsse.
+
+00:32:28.540 --> 00:32:33.160
+Sie definieren Präfixe für Lösungen, Apps und Flows pro Domäne.
+
+00:32:34.000 --> 00:32:35.960
+Finanzen, Personal, Betrieb.
+
+00:32:37.040 --> 00:32:37.840
+Alles erhält tags.
+
+00:32:38.460 --> 00:32:41.460
+Datenklasse, Eigentümerabteilung, Kritikalität, Ablaufdatum.
+
+00:32:42.200 --> 00:32:44.120
+Ihr Inventar ist kein Gerücht, es ist eine Abfrage.
+
+00:32:44.840 --> 00:32:45.980
+Telemetrie ist verpflichtend.
+
+00:32:45.980 --> 00:32:55.860
+Jede App und jeder Flow sendet eine Korrelations-ID pro Transaktion und schreibt in ein zentrales Protokoll mit Umgebung, Lösungsversion, Benutzer, Dauer- und Fehlerklasse.
+
+00:32:57.660 --> 00:33:01.580
+Spitzen bei Dashboard-Aufrufen riskieren oft DLP-Vorfälle und Umgebungsdrift.
+
+00:33:02.860 --> 00:33:04.920
+Warnungen gehen an Kanäle, nicht an Posteingang.
+
+00:33:05.360 --> 00:33:07.020
+Grün, Gelb, Rot, Sichtbar und Langweilig.
+
+00:33:07.420 --> 00:33:08.520
+Der Zugriff ist rollenbasiert.
+
+00:33:09.060 --> 00:33:11.440
+Macher erhalten Maker-Rechte, Genehmiger erhalten Approver-Rechte.
+
+00:33:12.200 --> 00:33:13.520
+Administratoren führen keine Apps aus.
+
+00:33:13.520 --> 00:33:16.780
+Notfallkonten existieren, werden überwacht und laufen ab.
+
+00:33:17.740 --> 00:33:19.620
+Geheimnisse dürfen niemals im Klartext übertragen werden.
+
+00:33:20.100 --> 00:33:21.800
+Nur Key Vault oder Umgebungsvariablen.
+
+00:33:23.120 --> 00:33:26.740
+Schließlich Änderungskontrollrichtlinien, Modelle und Connector-Versionierung.
+
+00:33:27.660 --> 00:33:30.680
+Sie testen in dev validierenden Tests, veröffentlichen im Propel-M-Rollback-Plan.
+
+00:33:31.580 --> 00:33:32.540
+Keine stillen Austausche.
+
+00:33:32.900 --> 00:33:34.000
+Nein, wir haben es nur kurz angepasst.
+
+00:33:34.700 --> 00:33:36.660
+Die Wirbelsäule hält oder der Körper bricht zusammen.
+
+00:33:38.300 --> 00:33:40.700
+Fazit, Ausrichtung oder Entropie.
+
+00:33:41.440 --> 00:33:42.720
+Sie stabilisieren SharePoint.
+
+00:33:42.720 --> 00:33:48.220
+machen Apps deterministisch, begrenzen Flows durch Protokolle und zäunen KI mit Zweck ein.
+
+00:33:48.680 --> 00:33:49.440
+Das ist Ausrichtung.
+
+00:33:49.960 --> 00:33:52.380
+Alles andere ist Entropie mit einer benutzerfreundlichen Oberfläche.
+
+00:33:53.000 --> 00:33:53.840
+Ihr Fazit ist simpel.
+
+00:33:54.740 --> 00:33:59.260
+Implementieren Sie DLP, eine Umgebungsstrategie und lösungsbasiertes ALM, E.
+
+00:33:59.940 --> 00:34:02.340
+Oder rechnen Sie damit, dass 0347 zurückkehrt.
+
+00:34:03.340 --> 00:34:06.940
+Für die Checkliste und Referenzarchitektur abonnieren Sie und öffnen die nächste Episode.
+
+00:34:06.940 --> 00:34:10.340
+Wenn Sie es ignorieren, bin ich wieder da, sobald Ihre Warnungen gelb werden.
+
+00:34:11.300 --> 00:34:14.260
+Frau Schmidt, was stellen Sie sich denn vor für Ihre berufliche Zukunft?
+
+00:34:14.260 --> 00:34:17.700
+Was Echtes machen, wo ich mich voll reinhänge und dann...

@@ -1,0 +1,967 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.720
+Witajcie w kolejnym odcinku Microsoft Knowledge Nugget na M365FM.
+
+00:00:03.900 --> 00:00:06.020
+Nazywam się Mirco Peters i jestem Waszym gospodarzem.
+
+00:00:06.220 --> 00:00:10.580
+Dzisiejszy temat to coś, o czym prawie każdy słyszał, ale mało kto naprawdę rozumie, inżynieria platformy.
+
+00:00:10.760 --> 00:00:14.940
+Prawdopodobnie słyszeliście o DevOps, idei płynnej współpracy programistów i zespołów operacyjnych,
+
+00:00:15.060 --> 00:00:17.080
+ale po drodze ta obietnica stała się problematyczna.
+
+00:00:17.260 --> 00:00:20.560
+Programiści zaczęli wykonywać pracę operacyjną, co doprowadziło do załamania systemu.
+
+00:00:20.700 --> 00:00:23.260
+Pod koniec tego odcinka zrozumiecie, co poszło nie tak z DevOps,
+
+00:00:23.440 --> 00:00:25.660
+czym właściwie jest wewnętrzna platforma programistyczna,
+
+00:00:25.660 --> 00:00:30.780
+jak złote ścieżki wyznaczają zespołom jasny kierunek i dlaczego najzdolniejsze zespoły inżynierskie już je tworzą.
+
+00:00:31.000 --> 00:00:33.040
+Bałagan, który pozostawił po sobie DevOps.
+
+00:00:33.300 --> 00:00:34.340
+Wróćmy do początków.
+
+00:00:34.520 --> 00:00:38.720
+DevOps był świetnym pomysłem z prostym celem zburzyć mury między programistami a zespołami operacyjnymi.
+
+00:00:38.920 --> 00:00:41.400
+Koniec z przerzucaniem kodu przez płot i liczeniem na najlepsze.
+
+00:00:41.560 --> 00:00:45.040
+Przesunięcie w lewo, wdrożenie testów bezpieczeństwa i operacji na wcześniejszy etap procesu.
+
+00:00:45.220 --> 00:00:48.060
+Szybsze dostarczanie, mniej przekazywania zadań, większa odpowiedzialność.
+
+00:00:48.220 --> 00:00:49.820
+Na papierze wyglądało to idealnie.
+
+00:00:50.020 --> 00:00:51.440
+W praktyce coś poszło nie tak.
+
+00:00:51.440 --> 00:00:55.400
+Przesunięcie w lewo nie tylko zmieniło zakres obowiązków, ale wręcz je przytłoczyło.
+
+00:00:55.580 --> 00:01:06.700
+Programista, który kiedyś pisał kod i zgłaszał ticket, teraz odpowiada za infrastrukturę, bezpieczeństwo, monitoring, kubernetes, potoki C, CD, zarządzanie sekretami i około 15 usług chmurowych, o których wcześniej nie słyszał.
+
+00:01:06.880 --> 00:01:10.240
+Jedna osoba zajmuje się tym wszystkim, jednocześnie tworząc właściwy produkt.
+
+00:01:10.440 --> 00:01:12.100
+Oto jak wygląda to w prawdziwym życiu.
+
+00:01:12.340 --> 00:01:15.220
+Zespół chce uruchomić nowe środowisko, aby przetestować funkcje.
+
+00:01:15.420 --> 00:01:17.440
+Przed DevOps zgłosiliby ticket i czekali.
+
+00:01:17.440 --> 00:01:29.280
+Po DevOps zajmują się tym sami, co w teorii brzmi świetnie, ale teraz muszą pisać moduły Terraform, konfigurować klaster kubernetes, ustawiać reguły sieciowe, podłączać monitoring, ogarniać zarządzanie sekretami i pilnować stosowania polityk bezpieczeństwa.
+
+00:01:29.420 --> 00:01:33.920
+To, co kiedyś było zgłoszeniem zajmującym komuś godzinę, teraz pochłania trzy dni pracy programisty.
+
+00:01:34.140 --> 00:01:36.460
+Trzy dni, podczas których nie piszą kodu produktu.
+
+00:01:36.640 --> 00:01:40.820
+Walczą z plikami YAML i debugują, dlaczego load balancer nie kieruje ruchu prawidłowo.
+
+00:01:41.000 --> 00:01:42.620
+Obciążenie psychiczne jest ogromne.
+
+00:01:42.840 --> 00:01:46.560
+Każdy zespół kończy budowaniem własnych potoków, skryptów wdrożeniowych i pulpitów monitoringu.
+
+00:01:46.560 --> 00:01:49.340
+A ponieważ wszyscy są przeciążeni, zaczynają iść na skróty.
+
+00:01:49.700 --> 00:01:52.020
+Bezpieczeństwo jest pomijane, bo termin mija w piątek.
+
+00:01:52.180 --> 00:01:56.160
+Rachunki za chmurę podwajają się niezauważenie, bo nikt nie pamiętał o wyłączeniu środowiska testowego.
+
+00:01:56.340 --> 00:02:00.420
+A gdy coś zepsuje się o drugiej w nocy, tylko programista, który to zbudował, jest w stanie to naprawić.
+
+00:02:00.540 --> 00:02:03.820
+To nie jest zrównoważone i oto, dlaczego ma to dziś większe znaczenie niż kiedykolwiek.
+
+00:02:04.120 --> 00:02:05.540
+Złożoność chmury stale rośnie.
+
+00:02:05.800 --> 00:02:08.760
+Z każdym rokiem przybywa usług, narzędzi i decyzji do podjęcia.
+
+00:02:08.760 --> 00:02:14.840
+Narzędzia i pozwalają programistom tworzyć kod szybciej niż kiedykolwiek, 10, 20, a nawet 30 razy szybciej każdego dnia.
+
+00:02:15.080 --> 00:02:18.460
+Jednak cały ten kod nadal wymaga infrastruktury, bezpieczeństwa i monitorowania.
+
+00:02:18.720 --> 00:02:21.460
+Więcej kodu bez lepszego systemu oznacza tylko szybszy chaos.
+
+00:02:21.680 --> 00:02:24.920
+Jeśli czujesz, że toniesz w plikach YAML i Terraform, nie jesteś sam.
+
+00:02:25.060 --> 00:02:26.680
+To nie jest Twoja osobista porażka.
+
+00:02:26.820 --> 00:02:27.860
+To problem systemowy.
+
+00:02:28.040 --> 00:02:30.860
+Ten model zepsuł to, czym faktycznie jest inżynieria platformy.
+
+00:02:30.980 --> 00:02:31.960
+Więc jak to naprawić?
+
+00:02:32.260 --> 00:02:35.700
+Rozwiązaniem jest inżynieria platformy, a oto najprostszy sposób, by o tym myśleć.
+
+00:02:35.800 --> 00:02:39.460
+Ta dyscyplina tworzy wewnętrzną warstwę, która przejmuje złożoność za programistów.
+
+00:02:39.640 --> 00:02:41.680
+Wyobraź sobie, że wchodzisz do dużego biurowca.
+
+00:02:41.900 --> 00:02:46.820
+Nie musisz się martwić, kto ma dostęp do którego piętra, która karta dostępu działa, ani gdzie są wyjścia ewakuacyjne.
+
+00:02:47.020 --> 00:02:50.220
+Recepcja zajmuje się tym za Ciebie, a Ty po prostu wchodzisz i bierzesz się do pracy.
+
+00:02:50.480 --> 00:02:53.220
+Dokładnie to inżynieria platformy robi dla Twoich programistów.
+
+00:02:53.220 --> 00:02:58.720
+Zamiast wymagać od każdego programisty bycia ekspertem od Kubernetes, Terraform, sieci i bezpieczeństwa,
+
+00:02:58.720 --> 00:03:02.000
+centralny zespół tworzy warstwę zarządzającą tą złożonością.
+
+00:03:02.220 --> 00:03:08.200
+Programista otrzymuje prosty interfejs, klika przycisk, uruchamia polecenie, wypełnia formularz, a platforma zajmuje się resztą.
+
+00:03:08.380 --> 00:03:10.480
+Ale jest pewien haczyk, to nie to samo co DevOps.
+
+00:03:10.700 --> 00:03:15.760
+DevOps zakładał, że każdy zespół odpowiada za własną infrastrukturę, ale inżynieria platformy ostrzega, że to prosta droga do wypalenia.
+
+00:03:15.760 --> 00:03:21.300
+Zamiast tego zespół platformowy zapewnia wybrukowane ścieżki, standardowe, przetestowane i bezpieczne sposoby obsługi typowych zadań.
+
+00:03:21.440 --> 00:03:24.680
+Oni budują i utrzymują drogę, a zespoły produktowe po prostu nią jadą.
+
+00:03:24.680 --> 00:03:30.120
+Głównym efektem inżynierii platformy jest tak zwana wewnętrzna platforma programistyczna, w skrócie IDP.
+
+00:03:30.320 --> 00:03:34.420
+Pomyśl o niej jako o samoobsługowym systemie, który automatyzuje powtarzalną pracę.
+
+00:03:34.560 --> 00:03:40.560
+Provisioning infrastruktury, potoki C, CD, testy bezpieczeństwa, monitoring, wszystko wbudowane i ustandaryzowane.
+
+00:03:40.560 --> 00:03:48.860
+Oto konkretny przykład, gdy programista chce wdrożyć nową usługę bez platformy, spędza dni na konfiguracji infrastruktury, pisaniu potoków i ustawianiu monitoringu.
+
+00:03:49.440 --> 00:03:58.480
+Dzięki IDP wystarczy kliknąć wdroż lub wpisać jedno polecenie, a platforma zajmuje się wszystkim provisioningiem, testami i deploymentem w minuty zamiast dni.
+
+00:03:58.680 --> 00:03:59.840
+Co to oznacza dla Ciebie?
+
+00:04:00.020 --> 00:04:04.460
+Przestajesz być specem od wszystkiego w infrastrukturze i stajesz się specjalistą od swojego produktu.
+
+00:04:04.620 --> 00:04:09.480
+Twoja praca wraca do tworzenia funkcji ważnych dla klientów zamiast debugowania błędów w plikach Terraform.
+
+00:04:09.480 --> 00:04:11.180
+Oto właśnie w tym wszystkim chodzi.
+
+00:04:11.440 --> 00:04:13.540
+Wewnętrzna platforma programistyczna w prostych słowach.
+
+00:04:13.680 --> 00:04:16.680
+Rozbijmy więc na części pierwsze, czym właściwie jest wewnętrzna platforma programistyczna.
+
+00:04:16.820 --> 00:04:18.900
+To silnik, który łączy wszystko w jeden system.
+
+00:04:19.120 --> 00:04:23.520
+Twoje potoki C, CD, szablony infrastruktury, zasady bezpieczeństwa, monitoring i logowanie.
+
+00:04:23.780 --> 00:04:26.280
+Zamiast sześciu osobnych narzędzi, które musisz łączyć.
+
+00:04:26.460 --> 00:04:27.440
+Oto pewna analogia.
+
+00:04:27.640 --> 00:04:30.940
+Pomyśl o tym, jak o gotowaniu od podstaw w porównaniu do korzystania z automatu z przekąskami.
+
+00:04:31.140 --> 00:04:35.420
+Gotowanie od podstaw to kupowanie składników, krojenie warzyw, odmierzanie przypraw, pilnowanie kuchenki.
+
+00:04:35.420 --> 00:04:38.560
+Mnóstwo decyzji, mnóstwo kroków, mnóstwo sposobów, by coś zepsuć.
+
+00:04:38.660 --> 00:04:41.580
+Automat z przekąskami daje Ci wynik za naciśnięciem jednego przycisku.
+
+00:04:41.800 --> 00:04:44.220
+Mniej decyzji, szybszy rezultat, stała jakość.
+
+00:04:44.360 --> 00:04:45.900
+IDP to właśnie taki automat.
+
+00:04:46.120 --> 00:04:50.260
+Deweloper nie musi wiedzieć, jak udostępniana jest infrastruktura, ani gdzie przechowywane są sekrety.
+
+00:04:50.420 --> 00:04:51.840
+Po prostu naciska przycisk.
+
+00:04:51.980 --> 00:04:53.420
+Co znajduje się w tym automacie?
+
+00:04:53.660 --> 00:04:55.620
+Główne komponenty są dość standardowe.
+
+00:04:55.620 --> 00:05:07.540
+Szablony Ci, CD dla spójnych kompilacji, udostępnianie infrastruktury do automatycznego tworzenia środowisk, bezpieczne przechowywanie danych, by hasła nie krążyły w plikach konfiguracyjnych oraz logowanie z wbudowaną obserwowalnością, dzięki czemu możesz rozwiązywać problemy bez paniki.
+
+00:05:07.780 --> 00:05:11.460
+Wszystko to jest wstępnie skonfigurowane, przetestowane i utrzymywane przez zespół platformy.
+
+00:05:11.580 --> 00:05:12.660
+Oto konkretny przykład.
+
+00:05:12.940 --> 00:05:17.280
+Deweloper wpisuje utwórz nową usługę w wierszu poleceń lub klika przycisk w portalu.
+
+00:05:17.280 --> 00:05:28.120
+W tle IDP uruchamia nowe repozytorium z odpowiednią strukturą, ustawia potok kompilacji, który automatycznie uruchamia testy, wdraża usługę w środowisku programistycznym i dodaje punkty końcowe kontroli stanu z logowaniem.
+
+00:05:28.340 --> 00:05:29.860
+Wszystko to dzieje się w kilka minut.
+
+00:05:30.100 --> 00:05:33.620
+Deweloper nie dotknął ani jednego pliku Terraform, ani nie skonfigurował manifestu Kubernetes.
+
+00:05:33.920 --> 00:05:36.320
+Po prostu wpisał polecenie i otrzymał działającą usługę.
+
+00:05:36.520 --> 00:05:37.480
+Dlaczego to jest ważne?
+
+00:05:37.700 --> 00:05:39.280
+Kluczowym powodem jest spójność.
+
+00:05:39.520 --> 00:05:44.640
+Kiedy każdy zespół buduje własne potoki i pisze własne skrypty wdrożeniowe, kończysz z unikalnymi konfiguracjami.
+
+00:05:44.640 --> 00:05:47.680
+50 różnych usług, 50 różnych sposobów działania.
+
+00:05:47.920 --> 00:05:51.360
+Gdy coś się psuje, nikt nie może tego naprawić poza osobą, która to stworzyła.
+
+00:05:51.500 --> 00:05:53.900
+A jeśli ta osoba odeszła z firmy, życzymy powodzenia.
+
+00:05:54.120 --> 00:06:00.920
+IDP eliminuje to, sprawiając, że każda usługa podąża za tymi samymi wzorcami, każde wdrożenie używa tego samego potoku, a każdy zespół otrzymuje te same ustawienia domyślne.
+
+00:06:01.060 --> 00:06:03.640
+Kiedy coś się psuje, wzorce są znane, a rozwiązanie jest udokumentowane.
+
+00:06:04.360 --> 00:06:05.860
+Więc oto co to oznacza dla Ciebie.
+
+00:06:06.080 --> 00:06:10.140
+Jeśli Twoja organizacja ma 50 zespołów robiących wdrożenia na 50 różnych sposobów, IDP jest rozwiązaniem.
+
+00:06:10.140 --> 00:06:17.600
+Nie oznacza to, że zespoły tracą autonomię. Oznacza to, że nudne, powtarzalne i podatne na błędy elementy są standaryzowane, więc interesująca, kreatywna praca może być zróżnicowana.
+
+00:06:17.780 --> 00:06:19.420
+To kompromis, który warto podjąć.
+
+00:06:19.620 --> 00:06:21.480
+Złote ścieżki to kierunek, a nie klatka.
+
+00:06:21.840 --> 00:06:23.220
+Porozmawiajmy o złotych ścieżkach.
+
+00:06:23.460 --> 00:06:25.800
+Prawdopodobnie słyszałeś tę nazwę, ale idea jest prosta.
+
+00:06:26.060 --> 00:06:30.820
+Złota ścieżka to zalecany, gotowy przepływ pracy, który sprawia, że właściwe działanie jest najłatwiejsze do wykonania.
+
+00:06:31.020 --> 00:06:33.880
+Twój zespół platformy mówi o to, jak sugerujemy to zrobić.
+
+00:06:33.880 --> 00:06:37.480
+Przetestowaliśmy to, działa i usprzemy Cię, jeśli coś pójdzie nie tak.
+
+00:06:37.680 --> 00:06:39.400
+Zwróć uwagę na słowo, sugerujemy.
+
+00:06:39.700 --> 00:06:41.400
+Złote ścieżki nie są obowiązkowe.
+
+00:06:41.560 --> 00:06:45.480
+Programiści mogą zejść ze ścieżki, jeśli muszą, ale to ona jest szybkim i bezpiecznym domyślnym wyborem.
+
+00:06:45.720 --> 00:06:47.880
+Jest już uruchomiona, wspierana i udokumentowana.
+
+00:06:48.100 --> 00:06:49.740
+Nie musisz wymyślać wszystkiego od zera.
+
+00:06:49.960 --> 00:06:52.640
+Pomyśl o tym, jak o torach kolejowych, a nie barierkach ochronnych.
+
+00:06:52.880 --> 00:06:54.640
+Barierki łapią Cię, gdy masz wypadek.
+
+00:06:54.800 --> 00:06:57.980
+Reagują, chronią przed upadkiem w przepaść, ale nie pomagają w sterowaniu.
+
+00:06:57.980 --> 00:07:02.060
+Tory kolejowe prowadzą Cię płynnie wzdłuż trasy, więc nie musisz decydować, gdzie skręcić.
+
+00:07:02.280 --> 00:07:03.760
+Złote ścieżki to właśnie te tory.
+
+00:07:03.920 --> 00:07:06.640
+Popychają Cię do przodu, zamiast tylko łapać, gdy popełnisz błąd.
+
+00:07:06.720 --> 00:07:08.760
+W tym miejscu wiele zespołów popełnia błąd.
+
+00:07:08.860 --> 00:07:11.600
+Tworzą złote ścieżki dla zespołu platformy, a nie dla programistów.
+
+00:07:11.800 --> 00:07:15.740
+Optymalizują pod kątem czystości architektury, zgodności z wymogami bezpieczeństwa lub wewnętrznych zasad,
+
+00:07:15.880 --> 00:07:17.560
+których nikt spoza zespołu platformy nie rozumie.
+
+00:07:17.740 --> 00:07:20.520
+Efekt wygląda świetnie na tablicy, ale używa się go fatalnie.
+
+00:07:20.520 --> 00:07:24.220
+Programiści po cichu szukają obejść adopcja, spada, a zespół platformy zastanawia się,
+
+00:07:24.320 --> 00:07:25.760
+dlaczego nikt nie docenia ich wysiłku.
+
+00:07:25.980 --> 00:07:27.960
+Rozwiązanie jest proste, ale trudne do wdrożenia.
+
+00:07:28.180 --> 00:07:29.500
+Potrzebujesz wyjść awaryjnych.
+
+00:07:29.720 --> 00:07:32.720
+Jeśli ścieżka nie pasuje do potrzeb programisty, musi mieć on drogę ucieczki.
+
+00:07:32.960 --> 00:07:37.160
+Sposób na nadpisanie ustawień domyślnych, użycie własnego potoku lub całkowite wyjście poza platformę.
+
+00:07:37.300 --> 00:07:38.620
+I to jest najważniejsza część.
+
+00:07:38.620 --> 00:07:41.420
+Kiedy ktoś schodzi ze ścieżki, to nie porażka, to informacja zwrotna.
+
+00:07:41.600 --> 00:07:44.560
+Za każdym razem, gdy programista opuszcza złotą ścieżkę, mówi Ci coś istotnego.
+
+00:07:44.780 --> 00:07:48.920
+Albo ścieżce brakuje funkcji, którą powinna mieć, albo dany przypadek użycia tam po prostu nie pasuje.
+
+00:07:49.100 --> 00:07:50.580
+Oba sygnały są wartościowe.
+
+00:07:50.820 --> 00:07:52.780
+Dobra złota ścieżka w praktyce wygląda tak.
+
+00:07:52.960 --> 00:07:55.160
+Zespół chce wdrożyć nową usługę back-endową.
+
+00:07:55.380 --> 00:07:56.460
+Korzystają ze ścieżki.
+
+00:07:56.700 --> 00:08:00.320
+Dostają repozytorium z szablonem o właściwej strukturze, standardowy potok C-CD,
+
+00:08:00.320 --> 00:08:05.200
+który jest już przetestowany, wbudowane logowanie i monitorowanie oraz wycofywanie zmian jednym kliknięciem.
+
+00:08:05.320 --> 00:08:09.020
+Całość zajmuje minuty zamiast dni, a ponieważ zespół platformy utrzymuje ścieżkę,
+
+00:08:09.140 --> 00:08:10.740
+gdy coś się zepsuje, oni to naprawiają.
+
+00:08:10.980 --> 00:08:13.860
+Programista nie musi stawać się ekspertem od debugowania potoków.
+
+00:08:13.860 --> 00:08:15.040
+Co to oznacza dla Ciebie?
+
+00:08:15.280 --> 00:08:16.200
+Mniej niespodzianek.
+
+00:08:16.380 --> 00:08:18.380
+Dostarczasz szybciej, ponieważ ścieżka jest przetestowana.
+
+00:08:18.620 --> 00:08:21.180
+Dostarczasz bezpieczniej, ponieważ bezpieczeństwo i monitorowanie są wbudowane.
+
+00:08:21.420 --> 00:08:24.040
+Dostarczasz z pewnością, ponieważ wycofanie zmian to jedno kliknięcie.
+
+00:08:24.260 --> 00:08:26.660
+Ścieżka istnieje, by Ci pomóc, a nie Cię ograniczać.
+
+00:08:26.820 --> 00:08:27.460
+Używaj jej.
+
+00:08:27.700 --> 00:08:29.240
+Zmniejszenie obciążenia poznawczego.
+
+00:08:29.440 --> 00:08:31.080
+Tutaj pojawiają się prawdziwe korzyści.
+
+00:08:31.320 --> 00:08:34.680
+Kiedy platforma przejmuje najcięższą pracę, programiści mogą wreszcie skupić się na kodzie.
+
+00:08:34.880 --> 00:08:37.460
+Nie muszą wiedzieć, jaka wersja Kubernetes jest aktualnie uruchomiona.
+
+00:08:37.460 --> 00:08:41.000
+Nie muszą aktualizować modułów Terraform za każdym razem, gdy dostawca chmury zmienia API.
+
+00:08:41.180 --> 00:08:42.580
+Po prostu tworzą funkcjonalności.
+
+00:08:42.780 --> 00:08:44.720
+Inżynierowie platformy przejmują na siebie tę złożoność.
+
+00:08:44.880 --> 00:08:47.280
+Decydują, co programiści muszą widzieć, a co powinno pozostać ukryte.
+
+00:08:47.400 --> 00:08:49.600
+To świadoma decyzja projektowa, a nie tylko techniczna.
+
+00:08:49.820 --> 00:08:54.340
+Chodzi o ustalenie, które szczegóły są ważne dla użytkownika platformy, a które tylko wprowadzają zamęt.
+
+00:08:54.480 --> 00:08:55.580
+Oto konkretny przykład.
+
+00:08:55.820 --> 00:08:59.420
+Programista wdrażający nową usługę nie przejmuje się rozmiarem węzłów klastra,
+
+00:08:59.520 --> 00:09:01.600
+typami instancji czy progami autoskalowania.
+
+00:09:01.880 --> 00:09:05.080
+Interesuje go tylko to, czy jego usługa działa i jak szybko odpowiada.
+
+00:09:05.320 --> 00:09:08.220
+Dlatego platforma wstępnie konfiguruje to wszystko w oparciu o poziom aplikacji.
+
+00:09:08.440 --> 00:09:10.240
+Mała usługa oto odpowiednia konfiguracja.
+
+00:09:10.420 --> 00:09:12.740
+Usługa o dużym natężeniu ruchu oto inna konfiguracja.
+
+00:09:12.940 --> 00:09:15.340
+Programista nie dokonuje tych wyborów, bo po prostu nie musi.
+
+00:09:15.580 --> 00:09:16.560
+Dlaczego to jest ważne?
+
+00:09:16.760 --> 00:09:20.780
+Ponieważ ryzyko wypalenia spada, gdy programiści nie muszą żonglować 15 sprawami naraz.
+
+00:09:20.780 --> 00:09:24.280
+Niektóre dojrzałe zespoły platformowe zmniejszyły obciążenie poznawcze o prawie połowę.
+
+00:09:24.420 --> 00:09:26.960
+O 40-50% mniejszy wysiłek umysłowy.
+
+00:09:27.100 --> 00:09:28.000
+To ogromna zmiana.
+
+00:09:28.000 --> 00:09:33.780
+To różnica między wyjściem z pracy z energią, a wpatrywaniem się w terminal o 22 i zastanawianiem się, dlaczego potok zawiódł.
+
+00:09:33.880 --> 00:09:34.540
+Ale uwaga!
+
+00:09:34.760 --> 00:09:35.720
+Nie twórzcie iluzji.
+
+00:09:35.940 --> 00:09:38.140
+Niektóre zespoły platformowe wpadają w pułapkę.
+
+00:09:38.340 --> 00:09:42.740
+Ukrywają ustawienia, nie dając programistom żadnego sposobu na zrozumienie tego, co dzieje się pod maską.
+
+00:09:42.900 --> 00:09:43.900
+To nie jest abstrakcja.
+
+00:09:44.020 --> 00:09:46.600
+To sztuczka, która mści się, gdy tylko coś pójdzie nie tak.
+
+00:09:46.780 --> 00:09:51.360
+Programiści trafiają na mur, przez który nie widzą i nagle platforma staje się czarną skrzynką działającą przeciwko nim.
+
+00:09:51.540 --> 00:09:53.360
+Termin na to to nieszczelna abstrakcja.
+
+00:09:53.360 --> 00:09:56.400
+Ukrywasz złożoność, ale w końcu ta złożoność i tak wypływa na wierzch.
+
+00:09:56.520 --> 00:10:00.780
+Baza danych zwalnia, wdrożenie kończy się niepowodzeniem, polityka bezpieczeństwa blokuje coś niespodziewanego.
+
+00:10:00.920 --> 00:10:04.680
+A programista nie ma modelu mentalnego tego, co się dzieje, bo platforma nigdy mu go nie dostarczyła.
+
+00:10:05.080 --> 00:10:06.020
+Przejrzystość ma znaczenie.
+
+00:10:06.260 --> 00:10:08.960
+Pokazuj programistom to, co muszą wiedzieć dokładnie wtedy, gdy muszą to wiedzieć.
+
+00:10:09.160 --> 00:10:11.120
+Nie ukrywaj wszystkiego, licząc na łód szczęścia.
+
+00:10:11.280 --> 00:10:12.320
+Co to oznacza dla ciebie?
+
+00:10:12.560 --> 00:10:14.860
+Mniej przełączania kontekstu i więcej stanu flowu.
+
+00:10:14.860 --> 00:10:20.240
+Nie zaczynasz dnia od zastanawiania się, czy klaster Kubernetes wymaga aktualizacji, tylko pracujesz nad funkcją, która ma być gotowa za tydzień.
+
+00:10:20.380 --> 00:10:22.820
+Twoja praca staje się na powrót twoją prawdziwą pracą.
+
+00:10:23.040 --> 00:10:24.780
+Traktowanie platformy jak produktu.
+
+00:10:24.980 --> 00:10:28.320
+Dzisiaj rozmawiamy o czymś, co zmienia sposób działania wewnętrznych narzędzi.
+
+00:10:28.520 --> 00:10:31.600
+Większość ludzi myśli, że zespół platformowy to tylko zespół infrastruktury.
+
+00:10:31.760 --> 00:10:32.380
+Tak nie jest.
+
+00:10:32.600 --> 00:10:37.520
+Zespół platformowy to zespół produktowy, a programiści korzystający z tej platformy to ich klienci, a nie osoby zgłaszające tikety.
+
+00:10:37.700 --> 00:10:38.540
+To zmienia wszystko.
+
+00:10:38.540 --> 00:10:47.000
+Zespół produktowy rozmawia ze swoimi klientami, odkrywa co jest dla nich prawdziwym problemem, priorytetyzuje funkcje w oparciu o realne potrzeby, mierzy adopcję, nie budują czegoś, by potem o tym zapomnieć.
+
+00:10:47.080 --> 00:10:47.840
+Oni ciągle iterują.
+
+00:10:48.060 --> 00:10:50.260
+Jak więc zespół produktowy wygląda w praktyce?
+
+00:10:50.480 --> 00:10:52.000
+Nie działają jak helpdesk.
+
+00:10:52.100 --> 00:10:55.460
+Programista wysyła zgłoszenie, a zespół platformy wykonuje je ręcznie.
+
+00:10:55.640 --> 00:10:59.120
+To nie jest inżynieria platformy, to tylko scentralizowane operacje pod nową nazwą.
+
+00:10:59.300 --> 00:11:03.440
+To się nie skaluje, nie zmniejsza obciążenia poznawczego, jedynie przenosi wąskie gardło z jednego zespołu do drugiego.
+
+00:11:03.440 --> 00:11:04.880
+Oto co robią zamiast tego.
+
+00:11:05.120 --> 00:11:06.200
+Mierzą właściwe rzeczy.
+
+00:11:06.200 --> 00:11:10.980
+Czas do pierwszego wdrożenia, szybkość onboardingu nowych członków zespołu, wskaźniki satysfakcji programistów.
+
+00:11:11.080 --> 00:11:15.560
+To metryki, które mówią, czy platforma faktycznie pomaga ludziom, czy tylko dodaje kolejną warstwę złożoności.
+
+00:11:15.780 --> 00:11:17.400
+Spotify jest dobrym przykładem.
+
+00:11:17.560 --> 00:11:20.200
+Ich zespół platformy działa jak prawdziwa organizacja produktowa.
+
+00:11:20.420 --> 00:11:24.420
+Mają mapy drogowe, cele okr, rozmawiają z programistami o tym, co działa, a co nie.
+
+00:11:24.620 --> 00:11:29.540
+Traktują platformę jako coś, co musi zasłużyć na adopcję każdego dnia i to jest główna idea.
+
+00:11:29.880 --> 00:11:33.740
+Platforma, której nikt nie używa, to tylko projekt, który zbiera kurz w koncie.
+
+00:11:33.960 --> 00:11:35.880
+Adopcja jest ostatecznym sprawdzianem.
+
+00:11:35.880 --> 00:11:40.020
+Jeśli programiści wybierają Twoją platformę, zamiast tworzyć własne narzędzia, udało Ci się.
+
+00:11:40.220 --> 00:11:43.400
+Jeśli jej unikają, żadna techniczna doskonałość tego nie naprawi.
+
+00:11:43.540 --> 00:11:44.640
+Co to oznacza dla Ciebie?
+
+00:11:44.840 --> 00:11:49.740
+Oznacza to, że jeśli budujesz platformę, nie zaczynaj od diagramów architektury, plastrów Kubernetes czy modułów Terraform.
+
+00:11:49.920 --> 00:11:53.700
+Zacznij od wywiadów z użytkownikami, porozmawiaj z programistami, którzy będą z niej korzystać.
+
+00:11:53.860 --> 00:11:55.540
+Dowiedz się, co jest naprawdę bolesne.
+
+00:11:55.760 --> 00:11:58.560
+Zbuduj jedną rzecz, która rozwiązuje realny problem, a potem iteruj.
+
+00:11:58.720 --> 00:12:01.300
+W ten sposób buduje się coś, czego ludzie rzeczywiście chcą używać.
+
+00:12:01.500 --> 00:12:02.500
+Dlaczego właśnie teraz?
+
+00:12:02.700 --> 00:12:03.240
+Fala AI.
+
+00:12:03.240 --> 00:12:05.140
+Dlaczego więc rozmawiamy o tym właśnie teraz?
+
+00:12:05.340 --> 00:12:06.360
+Dlaczego nie 5 lat temu?
+
+00:12:06.540 --> 00:12:08.060
+Odpowiedzią jest sztuczna inteligencja.
+
+00:12:08.260 --> 00:12:13.040
+Narzędzia AI do kodowania, jak GitHub Copilot, pozwalają programistom dostarczać kod w tempie, którego nigdy wcześniej nie widzieliśmy.
+
+00:12:13.240 --> 00:12:16.740
+10-20 razy więcej kodu dziennie niż to, co było możliwe jeszcze kilka lat temu.
+
+00:12:16.980 --> 00:12:18.480
+Brzmi to niesamowicie i tak jest.
+
+00:12:18.620 --> 00:12:19.480
+Ale jest haczyk.
+
+00:12:19.600 --> 00:12:21.520
+Cały ten kod wciąż potrzebuje infrastruktury.
+
+00:12:21.700 --> 00:12:23.080
+Wciąż potrzebuje bezpieczeństwa.
+
+00:12:23.280 --> 00:12:25.560
+Wciąż musi być wdrażany, testowany i obsługiwany.
+
+00:12:25.560 --> 00:12:28.220
+Więcej kodu bez lepszego systemu nie czyni Cię szybszym.
+
+00:12:28.380 --> 00:12:29.700
+Po prostu przyspiesza chaos.
+
+00:12:29.920 --> 00:12:34.020
+Jeśli Twoi programiści już toną w plikach YAML i Terraform, a i tego nie naprawi.
+
+00:12:34.160 --> 00:12:38.040
+Oznacza to tylko, że toną szybciej, tworząc jednocześnie więcej kodu, który wymaga wsparcia.
+
+00:12:38.260 --> 00:12:42.760
+Obecnie około 55% organizacji wdrożyło już inżynierię platform w jakiejś formie.
+
+00:12:42.980 --> 00:12:46.980
+Gartner przewiduje, że do końca 2026 roku Litbata osiągnie 80%.
+
+00:12:46.980 --> 00:12:48.220
+To nie jest powolny trend.
+
+00:12:48.380 --> 00:12:50.100
+To zmiana, która dzieje się właśnie teraz.
+
+00:12:50.340 --> 00:12:54.040
+Firmy zdają sobie sprawę, że nie mogą skalować zespołów inżynierskich bez warstwy platformowej.
+
+00:12:54.040 --> 00:12:58.400
+Stare podejście, w którym każdy zespół robi wszystko sam, nie sprawdza się przy dostarczaniu kodu w tempie AI.
+
+00:12:58.580 --> 00:13:00.120
+Oto coś, co wielu ludziom umyka.
+
+00:13:00.320 --> 00:13:02.280
+AI nie tylko stwarza potrzebę posiadania platform.
+
+00:13:02.560 --> 00:13:03.880
+Pomaga też w ich budowaniu.
+
+00:13:04.120 --> 00:13:09.060
+Zespoły platformowe używają AI do generowania modułów Terraform, pisania dokumentacji i debugowania potoków.
+
+00:13:09.180 --> 00:13:13.200
+Ta sama technologia, która wywołuje pilną potrzebę, dostarcza też narzędzi do jej zaspokojenia.
+
+00:13:13.380 --> 00:13:14.580
+Teraz słowo ostrzeżenia.
+
+00:13:14.820 --> 00:13:16.940
+AI wzmacnia wszystko, co już posiadasz.
+
+00:13:17.060 --> 00:13:21.260
+Jeśli Twoje fundamenty są solidne, jak dobra architektura i dobrze zaprojektowana platforma,
+
+00:13:21.260 --> 00:13:23.220
+AI zwiększa produktywność dwu- lub trzykrotnie.
+
+00:13:23.220 --> 00:13:26.980
+Ale jeśli fundamenty są słabe, AI tylko pomaga szybciej popełniać większe błędy.
+
+00:13:27.180 --> 00:13:31.580
+Złe konfiguracje, luki w zabezpieczeniach, niedziałająca infrastruktura, wszystko trafia na produkcję, zanim ktokolwiek to zauważy.
+
+00:13:31.760 --> 00:13:33.480
+AI nie naprawia słabych fundamentów.
+
+00:13:33.620 --> 00:13:34.460
+Ona je obnaża.
+
+00:13:34.660 --> 00:13:35.680
+Oto prawdziwy przykład.
+
+00:13:35.940 --> 00:13:40.380
+Firma z dobrą wewnętrzną platformą programistyczną pozwala nieinżynierom bezpiecznie wdrażać narzędzia AI.
+
+00:13:40.580 --> 00:13:42.180
+Platforma zapewnia zabezpieczenia.
+
+00:13:42.440 --> 00:13:43.900
+Wymusza politykę bezpieczeństwa.
+
+00:13:44.140 --> 00:13:45.340
+Zarządza infrastrukturą.
+
+00:13:45.340 --> 00:13:51.140
+Dzięki temu Product Manager może uruchomić prototyp oparty na AI bez potrzeby rozumienia Kubernetes czy sieci chmurowych.
+
+00:13:51.280 --> 00:13:52.400
+To potężne narzędzie.
+
+00:13:52.740 --> 00:13:56.780
+To właśnie odróżnia zespoły gotowe na era i od tych, które zostaną w tyle.
+
+00:13:57.500 --> 00:13:58.740
+Co to oznacza dla Ciebie?
+
+00:13:58.920 --> 00:14:01.260
+Okazja do zbudowania platformy właśnie się zamyka.
+
+00:14:01.480 --> 00:14:07.200
+Nie dlatego, że technologia znika, ale dlatego, że przepaść między zespołami z platformami, a tymi bez nich szybko się powiększa.
+
+00:14:07.200 --> 00:14:11.560
+Z każdym miesiącem zwłoki zespoły posiadające platformy zyskują coraz większą przewagę.
+
+00:14:11.800 --> 00:14:15.220
+Wdrażają szybciej, mniej się wypalają i szybciej adaptują nowe narzędzia.
+
+00:14:15.460 --> 00:14:17.680
+Zespoły bez platform zostają coraz dalej w tyle.
+
+00:14:17.980 --> 00:14:19.040
+Wybór należy do Ciebie.
+
+00:14:19.300 --> 00:14:20.980
+Zacznij od jednej, złotej ścieżki.
+
+00:14:21.200 --> 00:14:22.600
+Więc od czego właściwie zacząć?
+
+00:14:22.760 --> 00:14:26.980
+Jeśli myślisz, że musisz zbudować całą wewnętrzną platformę programistyczną od zera, przestań.
+
+00:14:27.100 --> 00:14:29.700
+To najszybszy sposób, by zabić projekt, zanim się zacznie.
+
+00:14:29.940 --> 00:14:32.880
+Największym błędem zespołów jest próba zbudowania wszystkiego naraz.
+
+00:14:32.880 --> 00:14:36.940
+Spędzają miesiące na projektowaniu idealnej platformy, upychając w niej każdą możliwą funkcję.
+
+00:14:37.100 --> 00:14:39.000
+Potem ją uruchamiają i panuje cisza.
+
+00:14:39.220 --> 00:14:40.140
+Nikt jej nie używa.
+
+00:14:40.360 --> 00:14:40.680
+Dlaczego?
+
+00:14:40.960 --> 00:14:45.180
+Bo rozwiązuje problemy, o które nikt nie prosił, a rozpoczęcie pracy wymaga przeczytania małego podręcznika.
+
+00:14:45.360 --> 00:14:46.480
+Oto rada, nie rób tego.
+
+00:14:46.740 --> 00:14:48.340
+Zamiast tego zacznij od małych kroków.
+
+00:14:48.540 --> 00:14:51.760
+Rozmawiaj z programistami, nie z architektami, menedżerami czy własnymi założeniami.
+
+00:14:52.020 --> 00:14:54.200
+Znajdź osoby, które każdego dnia tworzą nowe funkcje.
+
+00:14:54.420 --> 00:14:56.060
+Zapytaj ich, co sprawia im trudność.
+
+00:14:56.060 --> 00:15:00.460
+Znajdź proces, który trwa najdłużej i rytuje najwięcej osób lub jest zbyt często pomijany.
+
+00:15:00.660 --> 00:15:03.540
+Następnie zbuduj jedną, w pełni funkcjonalną, złotą ścieżkę.
+
+00:15:03.780 --> 00:15:06.040
+Może to tworzenie i wdrażanie nowego mikroserwisu.
+
+00:15:06.320 --> 00:15:09.000
+Może to konfiguracja środowiska programistycznego od zera.
+
+00:15:09.260 --> 00:15:12.120
+Może to szybka poprawka na produkcji bez psucia czegokolwiek.
+
+00:15:12.340 --> 00:15:15.880
+Wybierz to, co najbardziej doskwiera i zbuduj ścieżkę, która usunie ten problem.
+
+00:15:16.140 --> 00:15:19.340
+Zbuduj to, przetestuj z użytkownikami, zbierz opinię i ulepszaj.
+
+00:15:19.500 --> 00:15:21.720
+Potem dodaj kolejną ścieżkę i następną po niej.
+
+00:15:21.840 --> 00:15:23.800
+Nie próbuj rozwiązywać wszystkich problemów naraz.
+
+00:15:23.800 --> 00:15:26.840
+Rozwiąż jeden problem naprawdę dobrze i pozwól, by rozpęd poniósł cię dalej.
+
+00:15:27.080 --> 00:15:28.280
+Skąd wiadomo, że to działa?
+
+00:15:28.540 --> 00:15:29.540
+Mierz właściwe rzeczy.
+
+00:15:29.800 --> 00:15:34.380
+Czas od pomysłu do wdrożenia, liczbę wyeliminowanych kroków ręcznych i wskaźniki dobrowolnej adopcji.
+
+00:15:34.640 --> 00:15:37.940
+Jeśli programiści wybierają twoją ścieżkę zamiast własnych rozwiązań, wygrywasz.
+
+00:15:38.120 --> 00:15:40.440
+Jeśli jej unikają, posłuchaj ich i zmień kierunek.
+
+00:15:40.580 --> 00:15:42.200
+Oto pułapka, której należy unikać.
+
+00:15:42.340 --> 00:15:44.020
+Nie sprawiaj, by platforma była obowiązkowa.
+
+00:15:44.220 --> 00:15:46.380
+Zmuszaj programistów do korzystania ze ścieżki, a poczują niechęć.
+
+00:15:46.580 --> 00:15:47.880
+Znajdą sposoby, by ją obejść.
+
+00:15:47.880 --> 00:15:49.980
+Stworzą własne skrypty i będą je przed tobą ukrywać.
+
+00:15:50.160 --> 00:15:51.880
+Zamiast tego spraw, by ścieżka była łatwa.
+
+00:15:52.060 --> 00:15:53.600
+Niech będzie szybsza niż alternatywy.
+
+00:15:53.840 --> 00:15:56.120
+Spraw, by była oczywistym wyborem, ale nigdy jedynym.
+
+00:15:56.280 --> 00:15:58.220
+Pierwsza ścieżka jest zawsze najtrudniejsza.
+
+00:15:58.440 --> 00:16:00.200
+Uczy cię wszystkiego o myśleniu produktowym.
+
+00:16:00.420 --> 00:16:02.900
+Uczysz się rozmawiać z użytkownikami, priorytetyzować i rozumiesz,
+
+00:16:03.020 --> 00:16:06.640
+że tworzenie czegoś, czego ludzie chcą, jest trudniejsze niż tworzenie czegoś, co po prostu działa.
+
+00:16:06.880 --> 00:16:10.100
+Gdy zrobisz to raz, druga ścieżka będzie łatwiejsza, a trzecia jeszcze bardziej.
+
+00:16:10.340 --> 00:16:12.160
+Nie budujesz platformy za jednym zamachem.
+
+00:16:12.380 --> 00:16:14.480
+Budujesz ją krok po kroku, ścieżka po ścieżce.
+
+00:16:14.480 --> 00:16:17.840
+Oto cały system. Inżynieria platformy polega na utwardzaniu drogi,
+
+00:16:17.920 --> 00:16:20.540
+by programiści mogli skupić się na jeździe, a nie na łataniu dziur.
+
+00:16:20.720 --> 00:16:25.440
+Jeśli masz dość walki z infrastrukturą, zacznij od znalezienia jednej złotej ścieżki w swoim zespole, tylko jednej.
+
+00:16:25.660 --> 00:16:29.780
+Udostępnij to komuś, kto musi to usłyszeć i zasubskrybuj, aby otrzymywać więcej takich analiz.

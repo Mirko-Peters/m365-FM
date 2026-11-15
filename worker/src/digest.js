@@ -134,7 +134,7 @@ async function topicItems(db, ids, since, until, site) {
     FROM recipients r JOIN email_topics f ON f.user_id=r.user_id AND f.kind='entity'
     JOIN content_topic ct ON ct.eid=f.topic_id AND ct.kind='session'
     JOIN event_sessions s ON CAST(s.id AS TEXT)=ct.item_id AND s.status='live'
-    JOIN events e ON e.id=s.event_id
+    JOIN events e ON e.id=s.event_id AND e.public=1
     WHERE s.created>=? AND s.created<=?
   ), ranked AS (
     SELECT *,ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY published DESC,title) rn FROM matches
@@ -192,7 +192,7 @@ async function loadPersonal(db, users, since, until, site) {
     }
     const profiles = (await db.prepare(`SELECT user_id,handle FROM profiles WHERE user_id IN (${eventSql}) AND public=1 AND handle IS NOT NULL`).bind(...eventIds).all()).results || [];
     const handleByUser = new Map(profiles.map((x) => [x.user_id, x.handle]));
-    const sessions = (await db.prepare("SELECT s.title,s.speakers,e.handle FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.status='live' AND s.created>=? AND s.created<=? LIMIT 500").bind(since, until).all()).results || [];
+    const sessions = (await db.prepare("SELECT s.title,s.speakers,e.handle FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.status='live' AND e.public=1 AND s.created>=? AND s.created<=? LIMIT 500").bind(since, until).all()).results || [];
     for (const session of sessions) {
       let speakers = [];
       try { speakers = JSON.parse(session.speakers || "[]"); } catch { /* Ungueltige Sprecherliste ueberspringen. */ }

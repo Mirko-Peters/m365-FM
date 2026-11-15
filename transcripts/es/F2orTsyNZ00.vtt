@@ -1,0 +1,2491 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:00.660
+Imagínate esto.
+
+00:00:00.940 --> 00:00:02.480
+Estás trabajando en una aplicación de tu empresa.
+
+00:00:02.700 --> 00:00:04.140
+Tal vez sea el portal de recursos humanos,
+
+00:00:04.240 --> 00:00:05.720
+una base de datos de atención al cliente
+
+00:00:05.720 --> 00:00:07.840
+o la wiki interna con todas esas políticas que debes seguir.
+
+00:00:07.980 --> 00:00:09.220
+¿Qué es una pregunta en la barra de búsqueda?
+
+00:00:09.760 --> 00:00:11.560
+Algo como, ¿cómo presenta un informe de gastos
+
+00:00:11.560 --> 00:00:12.580
+para una cena con un cliente?
+
+00:00:13.120 --> 00:00:14.320
+Presiona Enter y ¿qué obtienes?
+
+00:00:14.740 --> 00:00:14.960
+Nada.
+
+00:00:15.460 --> 00:00:17.480
+Peor aún, una lista de archivos PDF aleatorios
+
+00:00:17.480 --> 00:00:18.880
+de hace tres años que coinciden más o menos
+
+00:00:18.880 --> 00:00:19.760
+con las palabras que escribiste.
+
+00:00:20.000 --> 00:00:21.520
+La búsqueda es algo que usamos todos los días.
+
+00:00:22.120 --> 00:00:23.480
+Y la mayor parte del tiempo es terrible.
+
+00:00:23.920 --> 00:00:25.280
+Pero aquí está el detalle, no tiene por qué ser así.
+
+00:00:25.600 --> 00:00:27.180
+¿Qué pasaría si tus aplicaciones realmente
+
+00:00:27.180 --> 00:00:28.320
+pudieran entender lo que estás preguntando?
+
+00:00:28.320 --> 00:00:30.280
+¿Qué pasaría si pudieran buscar como lo hace Google
+
+00:00:30.280 --> 00:00:31.640
+encontrando la respuesta correcta
+
+00:00:31.640 --> 00:00:33.240
+incluso cuando no usas las palabras perfectas?
+
+00:00:33.600 --> 00:00:35.200
+Hoy vamos a hablar de Azure AI Search.
+
+00:00:35.540 --> 00:00:37.400
+¿Qué es realmente y cómo funciona internamente
+
+00:00:37.400 --> 00:00:38.460
+y por qué es el motor de búsqueda
+
+00:00:38.460 --> 00:00:40.240
+sobre el que se crean las aplicaciones modernas?
+
+00:00:40.900 --> 00:00:41.920
+Toma tu café y comencemos.
+
+00:00:42.780 --> 00:00:43.560
+¿Por qué la búsqueda no funciona?
+
+00:00:44.020 --> 00:00:45.360
+Para entender por qué la búsqueda suele fallar
+
+00:00:45.360 --> 00:00:46.640
+tenemos que ver cómo lo hacen realmente
+
+00:00:46.640 --> 00:00:47.520
+la mayoría de las aplicaciones.
+
+00:00:47.980 --> 00:00:49.180
+La forma tradicional se llama búsqueda
+
+00:00:49.180 --> 00:00:50.600
+por palabras clave o búsqueda lexica.
+
+00:00:51.440 --> 00:00:53.180
+Escribes la palabra laptop en el cuadro
+
+00:00:53.180 --> 00:00:55.160
+y el sistema busca y encuentra cada documento
+
+00:00:55.160 --> 00:00:56.540
+que contiene esa palabra exacta.
+
+00:00:56.540 --> 00:00:58.660
+Internamente, muchos de estos sistemas
+
+00:00:58.660 --> 00:01:00.980
+usan un algoritmo llamado BM25.
+
+00:01:01.360 --> 00:01:03.260
+No es complicado, pero es ingenioso de su manera.
+
+00:01:04.400 --> 00:01:06.160
+BM25 clasificados basándose en más cosas.
+
+00:01:06.880 --> 00:01:08.520
+¿Con qué frecuencia aparece tu término de búsqueda
+
+00:01:08.520 --> 00:01:09.060
+en un documento?
+
+00:01:09.120 --> 00:01:10.060
+¿Qué tan largo es el documento
+
+00:01:10.060 --> 00:01:11.820
+y qué tan raro es el término en tu conjunto de datos?
+
+00:01:12.820 --> 00:01:14.220
+Piénsalo como un contador de palabras
+
+00:01:14.220 --> 00:01:15.220
+realmente sofisticado
+
+00:01:15.220 --> 00:01:17.280
+que determina qué documentos son más relevantes
+
+00:01:17.280 --> 00:01:18.180
+según esos factores.
+
+00:01:18.700 --> 00:01:19.440
+Aquí es donde falla.
+
+00:01:19.780 --> 00:01:20.800
+El lenguaje humano complejo.
+
+00:01:21.120 --> 00:01:22.020
+La gente no hace preguntas
+
+00:01:22.020 --> 00:01:23.700
+usando la misma palabra que usan los documentos.
+
+00:01:24.060 --> 00:01:25.200
+Déjame darte un ejemplo concreto.
+
+00:01:25.200 --> 00:01:27.360
+Un usuario escribe esto en un portal de soporte.
+
+00:01:28.200 --> 00:01:29.620
+Mi laptop se sigue congelando
+
+00:01:29.620 --> 00:01:30.360
+durante las videollamadas.
+
+00:01:31.200 --> 00:01:32.440
+La búsqueda por palabras clave
+
+00:01:32.440 --> 00:01:33.780
+buscará diligentemente documentos
+
+00:01:33.780 --> 00:01:34.740
+que contengan laptop C.
+
+00:01:35.080 --> 00:01:36.400
+Sigue congelando durante las
+
+00:01:36.400 --> 00:01:38.280
+y videollamadas y videollamadas.
+
+00:01:38.900 --> 00:01:40.540
+¿Pero qué pasa si el mejor artículo sobre el tema
+
+00:01:40.540 --> 00:01:41.000
+se titula
+
+00:01:41.000 --> 00:01:42.240
+Solución de bloqueos del sistema
+
+00:01:42.240 --> 00:01:43.220
+durante reuniones de Teams
+
+00:01:43.220 --> 00:01:45.240
+o Administración de la limitación de la CPU
+
+00:01:45.240 --> 00:01:46.480
+en laptops conectadas en...
+
+00:01:46.480 --> 00:01:47.280
+La búsqueda por palabras clave
+
+00:01:47.280 --> 00:01:47.960
+emite sus resultados.
+
+00:01:48.480 --> 00:01:48.760
+¿Por qué?
+
+00:01:48.960 --> 00:01:50.000
+Porque las palabras no coinciden.
+
+00:01:50.300 --> 00:01:51.240
+El problema principal es este.
+
+00:01:51.560 --> 00:01:52.500
+La búsqueda por palabras clave
+
+00:01:52.500 --> 00:01:53.140
+en Tender Ortógrafo.
+
+00:01:53.140 --> 00:01:54.800
+Entiende los patrones de caracteres
+
+00:01:54.800 --> 00:01:55.960
+pero no entiende el significado.
+
+00:01:56.560 --> 00:01:58.320
+Tiene resultados que tienen las letras correctas
+
+00:01:58.320 --> 00:01:59.540
+pero a menudo el contenido equivocado.
+
+00:01:59.720 --> 00:02:00.920
+Entonces, si la coincidencia exacta
+
+00:02:00.920 --> 00:02:02.140
+de palabras deja tantos vacíos,
+
+00:02:02.300 --> 00:02:02.860
+¿cuál es la alternativa?
+
+00:02:03.760 --> 00:02:04.300
+La nueva forma.
+
+00:02:04.400 --> 00:02:05.060
+Búsqueda vectorial.
+
+00:02:05.540 --> 00:02:06.440
+Así que la búsqueda vectorial
+
+00:02:06.440 --> 00:02:07.560
+es una forma completamente distinta
+
+00:02:07.560 --> 00:02:08.200
+de hacer las cosas.
+
+00:02:08.560 --> 00:02:09.240
+En lugar de coincidir
+
+00:02:09.240 --> 00:02:10.020
+palabras exactas
+
+00:02:10.020 --> 00:02:11.240
+coincide el significado.
+
+00:02:11.360 --> 00:02:12.080
+Eso suena abstracto
+
+00:02:12.080 --> 00:02:12.740
+así que vamos a analizar.
+
+00:02:13.140 --> 00:02:13.980
+La definición más simple
+
+00:02:13.980 --> 00:02:14.880
+que debes saber es esta.
+
+00:02:15.200 --> 00:02:16.620
+Un vector es solo una lista de números
+
+00:02:16.620 --> 00:02:17.360
+que representa algo
+
+00:02:17.360 --> 00:02:18.520
+que una computadora puede procesar.
+
+00:02:19.080 --> 00:02:19.460
+Eso es todo.
+
+00:02:19.540 --> 00:02:20.060
+Una lista de números.
+
+00:02:20.060 --> 00:02:21.940
+Un embedding es un tipo especial
+
+00:02:21.940 --> 00:02:22.820
+de vector que captura
+
+00:02:22.820 --> 00:02:23.680
+el significado del texto.
+
+00:02:24.080 --> 00:02:24.660
+Toma una oración,
+
+00:02:24.740 --> 00:02:25.160
+un párrafo,
+
+00:02:25.240 --> 00:02:26.340
+incluso un documento entero
+
+00:02:26.340 --> 00:02:27.060
+y lo convierte
+
+00:02:27.060 --> 00:02:28.160
+en una larga lista de números.
+
+00:02:28.820 --> 00:02:29.760
+La computadora no entiende
+
+00:02:29.760 --> 00:02:30.240
+las palabras
+
+00:02:30.240 --> 00:02:31.340
+pero entiende los números.
+
+00:02:31.920 --> 00:02:32.780
+Aquí hay una analogía que ayuda.
+
+00:02:33.200 --> 00:02:33.840
+Piénsale los vectores
+
+00:02:33.840 --> 00:02:34.840
+como coordenadas en un mundo.
+
+00:02:35.160 --> 00:02:35.560
+En un mapa,
+
+00:02:35.620 --> 00:02:36.160
+los lugares similares
+
+00:02:36.160 --> 00:02:36.860
+están cerca unos de otros.
+
+00:02:37.140 --> 00:02:38.040
+En el espacio vectorial,
+
+00:02:38.100 --> 00:02:38.880
+los conceptos similares
+
+00:02:38.880 --> 00:02:39.780
+terminan cerca unos de otros.
+
+00:02:39.780 --> 00:02:40.780
+El vector de rey
+
+00:02:40.780 --> 00:02:41.460
+y el vector de reina
+
+00:02:41.460 --> 00:02:42.040
+están cerca
+
+00:02:42.040 --> 00:02:42.860
+porque representan
+
+00:02:42.860 --> 00:02:43.920
+ideas relacionadas,
+
+00:02:44.160 --> 00:02:44.700
+relacionadas.
+
+00:02:45.080 --> 00:02:45.720
+El vector de rey
+
+00:02:45.720 --> 00:02:46.560
+y el vector de manzana
+
+00:02:46.560 --> 00:02:47.700
+están muy alejados.
+
+00:02:48.280 --> 00:02:49.160
+La computadora no sabe
+
+00:02:49.160 --> 00:02:50.040
+qué significa rey
+
+00:02:50.040 --> 00:02:50.760
+en un sentido humano
+
+00:02:50.760 --> 00:02:51.560
+pero puede medir
+
+00:02:51.560 --> 00:02:52.040
+la distancia
+
+00:02:52.040 --> 00:02:52.880
+entre sus coordenadas
+
+00:02:52.880 --> 00:02:53.800
+y las de cualquier otra
+
+00:02:53.800 --> 00:02:54.900
+palabra o documento.
+
+00:02:55.500 --> 00:02:56.240
+Es como tener un GPS
+
+00:02:56.240 --> 00:02:56.920
+para las ideas.
+
+00:02:57.580 --> 00:02:58.060
+El sistema sabe
+
+00:02:58.060 --> 00:02:58.680
+qué tan alejados
+
+00:02:58.680 --> 00:02:59.440
+están los conceptos
+
+00:02:59.440 --> 00:03:00.200
+simplemente observando
+
+00:03:00.200 --> 00:03:00.540
+los números.
+
+00:03:01.020 --> 00:03:01.420
+Cuando buscas
+
+00:03:01.420 --> 00:03:02.120
+usando vectores,
+
+00:03:02.240 --> 00:03:02.580
+el sistema
+
+00:03:02.580 --> 00:03:04.020
+convierte tu consulta
+
+00:03:04.020 --> 00:03:04.740
+en un embedding.
+
+00:03:05.280 --> 00:03:06.300
+Luego encuentra los documentos
+
+00:03:06.300 --> 00:03:06.860
+cuyos embeddings
+
+00:03:06.860 --> 00:03:08.120
+están más cerca de los tuyos.
+
+00:03:08.120 --> 00:03:08.960
+Encuentra cosas
+
+00:03:08.960 --> 00:03:10.280
+que son semánticamente similares
+
+00:03:10.280 --> 00:03:11.380
+que comparten significado,
+
+00:03:11.520 --> 00:03:12.340
+no solo vocabulario.
+
+00:03:12.940 --> 00:03:13.500
+Meina que busques
+
+00:03:13.500 --> 00:03:14.060
+un documento
+
+00:03:14.060 --> 00:03:14.820
+sobre cómo solucionar
+
+00:03:14.820 --> 00:03:15.560
+una laptop bloqueada.
+
+00:03:15.760 --> 00:03:16.160
+Con la búsqueda
+
+00:03:16.160 --> 00:03:16.880
+por palabra clave
+
+00:03:16.880 --> 00:03:17.500
+tendrías que escribir
+
+00:03:17.500 --> 00:03:18.500
+bloqueada o congelada
+
+00:03:18.500 --> 00:03:18.920
+exactamente.
+
+00:03:19.540 --> 00:03:20.600
+Pero con la búsqueda vectorial
+
+00:03:20.600 --> 00:03:21.180
+puedes escribir
+
+00:03:21.180 --> 00:03:22.380
+mi computadora se queda trabada
+
+00:03:22.380 --> 00:03:23.700
+y encuentra el documento correcto.
+
+00:03:24.120 --> 00:03:24.660
+Ese es el poder
+
+00:03:24.660 --> 00:03:25.700
+de entender el significado.
+
+00:03:26.280 --> 00:03:27.120
+Volvamos a nuestro ejemplo
+
+00:03:27.120 --> 00:03:27.840
+de búsqueda fallida.
+
+00:03:28.380 --> 00:03:29.020
+Un usuario escribe
+
+00:03:29.020 --> 00:03:30.300
+mi laptop se sigue congelando.
+
+00:03:30.940 --> 00:03:31.820
+Con la búsqueda vectorial
+
+00:03:31.820 --> 00:03:32.940
+el sistema puede devolver
+
+00:03:32.940 --> 00:03:33.380
+el artículo
+
+00:03:33.380 --> 00:03:34.360
+sobre bloqueos del sistema
+
+00:03:34.360 --> 00:03:35.420
+durante reuniones de Teams
+
+00:03:35.420 --> 00:03:36.400
+aunque ninguna de esas palabras
+
+00:03:36.400 --> 00:03:37.340
+aparezca en la consulta.
+
+00:03:37.940 --> 00:03:38.220
+¿Por qué?
+
+00:03:38.560 --> 00:03:39.220
+Porque el significado
+
+00:03:39.220 --> 00:03:39.900
+del bloqueo del sistema
+
+00:03:39.900 --> 00:03:40.500
+está muy cerca
+
+00:03:40.500 --> 00:03:41.480
+de computadora congelada
+
+00:03:41.480 --> 00:03:42.340
+en el espacio vectorial.
+
+00:03:43.240 --> 00:03:43.920
+Estos conceptos
+
+00:03:43.920 --> 00:03:44.420
+viven cerca
+
+00:03:44.420 --> 00:03:44.940
+el uno del otro
+
+00:03:44.940 --> 00:03:45.440
+en ese mapa.
+
+00:03:45.940 --> 00:03:46.920
+Al sistema no le importan
+
+00:03:46.920 --> 00:03:47.760
+las palabras exactas,
+
+00:03:47.840 --> 00:03:48.760
+le importa lo que quieres decir.
+
+00:03:49.180 --> 00:03:50.000
+Este es el gran avance.
+
+00:03:50.420 --> 00:03:51.040
+Las computadoras
+
+00:03:51.040 --> 00:03:51.640
+empiezan a entender
+
+00:03:51.640 --> 00:03:52.100
+la intención,
+
+00:03:52.200 --> 00:03:52.900
+no solo el autógrafo.
+
+00:03:53.300 --> 00:03:53.920
+Encuentran respuestas
+
+00:03:53.920 --> 00:03:54.380
+que la búsqueda
+
+00:03:54.380 --> 00:03:54.960
+por palabras clave
+
+00:03:54.960 --> 00:03:55.760
+pasaría por el completo.
+
+00:03:56.160 --> 00:03:56.820
+Pero la búsqueda vectorial
+
+00:03:56.820 --> 00:03:57.540
+también tiene una debilidad.
+
+00:03:58.000 --> 00:03:59.440
+Puede perder coincidencias exactas
+
+00:03:59.440 --> 00:04:00.620
+que son absolutamente críticas.
+
+00:04:01.720 --> 00:04:02.340
+Si un técnico
+
+00:04:02.340 --> 00:04:02.900
+busca un código
+
+00:04:02.900 --> 00:04:03.820
+de error específico
+
+00:04:03.820 --> 00:04:06.340
+como el X8077570,
+
+00:04:06.560 --> 00:04:07.380
+una búsqueda vectorial
+
+00:04:07.380 --> 00:04:08.600
+podría priorizar documentos
+
+00:04:08.600 --> 00:04:09.380
+sobre errores de disco
+
+00:04:09.380 --> 00:04:10.640
+o corrupción de archivos
+
+00:04:10.640 --> 00:04:12.280
+en lugar del documento exacto
+
+00:04:12.280 --> 00:04:13.740
+que analiza ese código.
+
+00:04:14.960 --> 00:04:15.740
+Sacrifica la precisión
+
+00:04:15.740 --> 00:04:16.080
+por exención.
+
+00:04:16.620 --> 00:04:17.580
+Así que tenemos dos métodos.
+
+00:04:17.860 --> 00:04:18.140
+La búsqueda
+
+00:04:18.140 --> 00:04:18.780
+por palabras claves
+
+00:04:18.780 --> 00:04:19.200
+exención.
+
+00:04:19.600 --> 00:04:20.700
+Acierta con términos exactos
+
+00:04:20.700 --> 00:04:21.700
+identificadores de productos
+
+00:04:21.700 --> 00:04:22.360
+y números de contrato.
+
+00:04:22.680 --> 00:04:23.400
+La búsqueda vectorial
+
+00:04:23.400 --> 00:04:24.000
+es exenificada.
+
+00:04:24.440 --> 00:04:25.480
+Encuentra la respuesta correcta
+
+00:04:25.480 --> 00:04:26.180
+incluso cuando no usas
+
+00:04:26.180 --> 00:04:26.860
+las palabras correctas.
+
+00:04:27.260 --> 00:04:28.280
+Cada una tiene puntos ciegos.
+
+00:04:28.760 --> 00:04:29.240
+Y eso plantea
+
+00:04:29.240 --> 00:04:29.900
+una pregunta obvia.
+
+00:04:30.380 --> 00:04:30.820
+¿Qué pasaría
+
+00:04:30.820 --> 00:04:31.480
+si pudieras combinar
+
+00:04:31.480 --> 00:04:32.020
+ambos enfoques
+
+00:04:32.020 --> 00:04:32.620
+y obtener lo mejor
+
+00:04:32.620 --> 00:04:33.140
+de ambos mundos?
+
+00:04:33.680 --> 00:04:34.500
+El avance híbrido.
+
+00:04:34.860 --> 00:04:35.580
+La búsqueda híbrida
+
+00:04:35.580 --> 00:04:35.960
+es lo mejor
+
+00:04:35.960 --> 00:04:36.600
+de ambos mundos.
+
+00:04:36.960 --> 00:04:37.720
+Ejecuta la búsqueda
+
+00:04:37.720 --> 00:04:38.500
+por palabras clave
+
+00:04:38.500 --> 00:04:39.080
+y la vectorial
+
+00:04:39.080 --> 00:04:39.640
+al mismo tiempo
+
+00:04:39.640 --> 00:04:40.720
+luego combina los resultados
+
+00:04:40.720 --> 00:04:42.020
+en una sola lista clasificada.
+
+00:04:42.400 --> 00:04:42.980
+En lugar de elegir
+
+00:04:42.980 --> 00:04:43.860
+un enfoque sobre el otro
+
+00:04:43.860 --> 00:04:44.640
+el sistema utiliza
+
+00:04:44.640 --> 00:04:45.300
+un método llamado
+
+00:04:45.300 --> 00:04:46.420
+fusión de rango recíproco
+
+00:04:46.420 --> 00:04:46.940
+o RF.
+
+00:04:47.440 --> 00:04:48.040
+Así como funciona.
+
+00:04:48.520 --> 00:04:49.260
+El RF observa
+
+00:04:49.260 --> 00:04:49.940
+dónde se clasifica
+
+00:04:49.940 --> 00:04:50.600
+cada documento
+
+00:04:50.600 --> 00:04:50.980
+en los resultados
+
+00:04:50.980 --> 00:04:51.640
+de palabras clave
+
+00:04:51.640 --> 00:04:52.300
+y dónde se clasifican
+
+00:04:52.300 --> 00:04:53.320
+los resultados vectoriales.
+
+00:04:53.400 --> 00:04:54.220
+Luego la puntuación combina.
+
+00:04:54.600 --> 00:04:55.160
+Si un documento
+
+00:04:55.160 --> 00:04:55.740
+es bueno en ambos
+
+00:04:55.740 --> 00:04:56.460
+recibe un impulso.
+
+00:04:56.460 --> 00:04:57.920
+Es como tomar dos opiniones
+
+00:04:57.920 --> 00:04:58.360
+de expertos
+
+00:04:58.360 --> 00:04:58.920
+y promediarla.
+
+00:04:59.480 --> 00:05:00.160
+La respuesta final
+
+00:05:00.160 --> 00:05:00.820
+es más confiable
+
+00:05:00.820 --> 00:05:01.520
+que cualquier elevador
+
+00:05:01.520 --> 00:05:02.020
+por sí sola.
+
+00:05:02.440 --> 00:05:02.920
+Esto es importante
+
+00:05:02.920 --> 00:05:03.520
+porque la búsqueda
+
+00:05:03.520 --> 00:05:04.240
+por palabras clave
+
+00:05:04.240 --> 00:05:04.760
+y la vectorial
+
+00:05:04.760 --> 00:05:05.440
+tienen fortalezas
+
+00:05:05.440 --> 00:05:06.160
+fundamentales diferentes.
+
+00:05:06.580 --> 00:05:07.460
+La búsqueda por palabras clave
+
+00:05:07.460 --> 00:05:08.360
+destaca en las coincidencias.
+
+00:05:08.800 --> 00:05:09.380
+Es tu opción ideal
+
+00:05:09.380 --> 00:05:10.020
+para identificadores
+
+00:05:10.020 --> 00:05:10.420
+de productos,
+
+00:05:10.520 --> 00:05:11.100
+números de contrato,
+
+00:05:11.320 --> 00:05:11.920
+nombres específicos
+
+00:05:11.920 --> 00:05:12.420
+y códigos de error.
+
+00:05:12.740 --> 00:05:13.720
+Desprecisa y predecible.
+
+00:05:14.280 --> 00:05:15.020
+La búsqueda vectorial
+
+00:05:15.020 --> 00:05:16.480
+destaca en la similitud semántica
+
+00:05:16.480 --> 00:05:17.580
+encontrando documentos
+
+00:05:17.580 --> 00:05:18.600
+que comparten significado
+
+00:05:18.600 --> 00:05:19.200
+con tu consulta
+
+00:05:19.200 --> 00:05:19.940
+incluso cuando las palabras
+
+00:05:19.940 --> 00:05:20.800
+exactas no aparecen.
+
+00:05:21.220 --> 00:05:21.720
+Cum descubren
+
+00:05:21.720 --> 00:05:22.680
+los puntos y dos de la otra.
+
+00:05:22.680 --> 00:05:24.060
+El sistema captura
+
+00:05:24.060 --> 00:05:25.100
+coincidencias exactas
+
+00:05:25.100 --> 00:05:25.720
+y conceptuales
+
+00:05:25.720 --> 00:05:26.740
+en una sola consulta.
+
+00:05:26.840 --> 00:05:27.600
+Ese es el verdadero poder.
+
+00:05:27.960 --> 00:05:28.980
+Y esto no es solo teórico.
+
+00:05:29.760 --> 00:05:30.160
+La investigación
+
+00:05:30.160 --> 00:05:31.020
+sobre búsqueda híbrida
+
+00:05:31.020 --> 00:05:31.720
+empresarial muestra
+
+00:05:31.720 --> 00:05:32.520
+que ofrece entre un 70
+
+00:05:32.520 --> 00:05:33.580
+y 80% de precisión
+
+00:05:33.580 --> 00:05:34.080
+de recuperación
+
+00:05:34.080 --> 00:05:35.020
+de precisión de recuperación
+
+00:05:35.020 --> 00:05:35.940
+dependiendo del conjunto de datos.
+
+00:05:36.060 --> 00:05:36.680
+Eso es aproximadamente
+
+00:05:36.680 --> 00:05:38.120
+de 15 a 20 puntos porcentuales
+
+00:05:38.120 --> 00:05:38.940
+más alto que lo que obtienes
+
+00:05:38.940 --> 00:05:39.620
+con la búsqueda vectorial.
+
+00:05:39.740 --> 00:05:41.140
+La diferencia es significativa
+
+00:05:41.140 --> 00:05:41.740
+y se nota
+
+00:05:41.740 --> 00:05:42.940
+en resultados comerciales reales.
+
+00:05:43.360 --> 00:05:44.000
+Tomemos la plataforma
+
+00:05:44.000 --> 00:05:44.400
+de Contabay.
+
+00:05:45.260 --> 00:05:46.320
+Elementaron la búsqueda híbrida
+
+00:05:46.320 --> 00:05:46.860
+en su experiencia
+
+00:05:46.860 --> 00:05:47.700
+de atención al cliente
+
+00:05:47.700 --> 00:05:48.420
+a través de una empresa
+
+00:05:48.420 --> 00:05:49.120
+llamada Coveo.
+
+00:05:49.120 --> 00:05:50.440
+En tres meses
+
+00:05:50.440 --> 00:05:51.120
+vieron un aumento
+
+00:05:51.120 --> 00:05:51.820
+del 20%
+
+00:05:51.820 --> 00:05:52.460
+en la resolución
+
+00:05:52.460 --> 00:05:53.140
+de autoservicio.
+
+00:05:53.700 --> 00:05:54.160
+Los clientes
+
+00:05:54.160 --> 00:05:54.880
+encontraron respuestas
+
+00:05:54.880 --> 00:05:55.340
+por su cuenta
+
+00:05:55.340 --> 00:05:55.940
+con más frecuencia
+
+00:05:55.940 --> 00:05:56.440
+sin necesidad
+
+00:05:56.440 --> 00:05:57.160
+de contactar el soporte.
+
+00:05:57.800 --> 00:05:58.320
+Otros clientes
+
+00:05:58.320 --> 00:05:59.160
+en el mismo estudio de caso
+
+00:05:59.160 --> 00:06:00.160
+vieron hasta una reducción
+
+00:06:00.160 --> 00:06:00.880
+del 40%
+
+00:06:00.880 --> 00:06:02.000
+en el tiempo de resolución
+
+00:06:02.000 --> 00:06:02.820
+para casos de soporte.
+
+00:06:03.340 --> 00:06:03.740
+Eso significa
+
+00:06:03.740 --> 00:06:04.260
+que los agentes
+
+00:06:04.260 --> 00:06:05.020
+encontraron la información
+
+00:06:05.020 --> 00:06:05.780
+correcta más rápido,
+
+00:06:05.880 --> 00:06:06.520
+los clientes obtuvieron
+
+00:06:06.520 --> 00:06:07.280
+respuestas más pronto
+
+00:06:07.280 --> 00:06:08.060
+y el costo de soportes
+
+00:06:08.060 --> 00:06:08.860
+más pronto disminuyó.
+
+00:06:09.120 --> 00:06:09.500
+Eso no es solo
+
+00:06:09.500 --> 00:06:10.580
+una característica agradable,
+
+00:06:10.680 --> 00:06:11.360
+es un impacto medible
+
+00:06:11.360 --> 00:06:12.300
+en los resultados financieros.
+
+00:06:12.640 --> 00:06:13.260
+Es el punto clave.
+
+00:06:13.620 --> 00:06:14.260
+La búsqueda de híbrida
+
+00:06:14.260 --> 00:06:14.840
+no es solo una buena
+
+00:06:14.840 --> 00:06:15.280
+actualización
+
+00:06:15.280 --> 00:06:15.680
+en una casilla
+
+00:06:15.680 --> 00:06:16.440
+en una lista de funciones,
+
+00:06:16.620 --> 00:06:17.580
+es cuantificablemente mejor,
+
+00:06:18.020 --> 00:06:18.820
+ofrece mayor precisión,
+
+00:06:18.940 --> 00:06:19.500
+mayor recuperación
+
+00:06:19.500 --> 00:06:20.080
+y mejores resultados
+
+00:06:20.080 --> 00:06:20.640
+para el usuario.
+
+00:06:21.220 --> 00:06:21.880
+Y esta combinación
+
+00:06:21.880 --> 00:06:22.320
+de enfoques
+
+00:06:22.320 --> 00:06:22.840
+es lo que hace
+
+00:06:22.840 --> 00:06:23.780
+que Azure AI Search
+
+00:06:23.780 --> 00:06:24.440
+sea tan potente
+
+00:06:24.440 --> 00:06:25.700
+para las aplicaciones modernas.
+
+00:06:26.580 --> 00:06:27.320
+Hay otra tecnología
+
+00:06:27.320 --> 00:06:27.920
+que esta combinación
+
+00:06:27.920 --> 00:06:28.360
+desbloquea,
+
+00:06:28.480 --> 00:06:29.100
+una que está recibiendo
+
+00:06:29.100 --> 00:06:29.640
+mucha atención
+
+00:06:29.640 --> 00:06:30.380
+en este momento.
+
+00:06:31.040 --> 00:06:31.760
+Se llama RAC,
+
+00:06:32.000 --> 00:06:32.800
+la conexión RAC.
+
+00:06:33.120 --> 00:06:34.020
+Así que hablemos de RAC.
+
+00:06:34.660 --> 00:06:35.240
+RAC significa
+
+00:06:35.240 --> 00:06:35.960
+generación aumentada
+
+00:06:35.960 --> 00:06:36.460
+por recuperación.
+
+00:06:36.820 --> 00:06:37.640
+Es un término complejo,
+
+00:06:37.740 --> 00:06:38.100
+pero aquí tienen
+
+00:06:38.100 --> 00:06:39.040
+la definición más sencilla.
+
+00:06:39.520 --> 00:06:40.340
+Es un marco de trabajo
+
+00:06:40.340 --> 00:06:40.720
+que brinda
+
+00:06:40.720 --> 00:06:41.280
+a los asistentes
+
+00:06:41.280 --> 00:06:41.720
+de IACS
+
+00:06:41.720 --> 00:06:42.180
+o información
+
+00:06:42.180 --> 00:06:43.000
+con la que no fueron detenidos.
+
+00:06:44.020 --> 00:06:44.600
+Los modelos
+
+00:06:44.600 --> 00:06:45.400
+de lenguaje grandes
+
+00:06:45.400 --> 00:06:46.040
+como GPT
+
+00:06:46.040 --> 00:06:46.540
+saben mucho
+
+00:06:46.540 --> 00:06:47.140
+sobre historia,
+
+00:06:47.320 --> 00:06:48.220
+ciencia y programación,
+
+00:06:48.620 --> 00:06:49.200
+pero no conocen
+
+00:06:49.200 --> 00:06:50.260
+los documentos internos,
+
+00:06:50.440 --> 00:06:50.760
+políticas,
+
+00:06:51.080 --> 00:06:51.920
+historial de clientes
+
+00:06:51.920 --> 00:06:53.460
+o procedimientos específicos
+
+00:06:53.460 --> 00:06:54.220
+de tu empresa.
+
+00:06:55.360 --> 00:06:55.940
+La mayoría cree
+
+00:06:55.940 --> 00:06:57.040
+que puedes simplemente
+
+00:06:57.040 --> 00:06:58.120
+volcar todo ese conocimiento
+
+00:06:58.120 --> 00:06:58.460
+interno
+
+00:06:58.460 --> 00:06:59.140
+en el propio modelo.
+
+00:06:59.500 --> 00:07:00.000
+Eso no funciona.
+
+00:07:00.380 --> 00:07:00.740
+Es costoso
+
+00:07:00.740 --> 00:07:01.520
+y difícil de actualizar.
+
+00:07:02.020 --> 00:07:02.420
+Resuelve esto
+
+00:07:02.420 --> 00:07:03.100
+de manera inteligente.
+
+00:07:03.680 --> 00:07:04.420
+En lugar de abarrotar
+
+00:07:04.420 --> 00:07:05.020
+todo en el modelo,
+
+00:07:05.260 --> 00:07:05.920
+recuperas la información
+
+00:07:05.920 --> 00:07:06.440
+relevante
+
+00:07:06.440 --> 00:07:07.420
+de una base de conocimiento
+
+00:07:07.420 --> 00:07:07.800
+en el momento
+
+00:07:07.800 --> 00:07:08.380
+en que alguien
+
+00:07:08.380 --> 00:07:09.140
+hace una pregunta.
+
+00:07:10.020 --> 00:07:10.700
+Toma la consulta
+
+00:07:10.700 --> 00:07:11.120
+al usuario,
+
+00:07:11.380 --> 00:07:12.440
+buscas en tus datos internos,
+
+00:07:12.540 --> 00:07:13.340
+encuentras los documentos
+
+00:07:13.340 --> 00:07:14.040
+más relevantes
+
+00:07:14.040 --> 00:07:15.000
+y alimentas al LM
+
+00:07:15.000 --> 00:07:15.760
+con ese contexto
+
+00:07:15.760 --> 00:07:16.820
+junto con la pregunta original.
+
+00:07:17.680 --> 00:07:18.260
+Luego el LM
+
+00:07:18.260 --> 00:07:18.980
+genera una respuesta
+
+00:07:18.980 --> 00:07:19.700
+basada en tus datos.
+
+00:07:20.240 --> 00:07:20.980
+Esa es la magia de esto.
+
+00:07:21.260 --> 00:07:21.560
+Ahora bien,
+
+00:07:21.680 --> 00:07:22.460
+Azure AI Search
+
+00:07:22.460 --> 00:07:23.620
+es la mitad de recuperación
+
+00:07:23.620 --> 00:07:24.180
+de esa ecuación.
+
+00:07:24.740 --> 00:07:25.180
+Es el motor
+
+00:07:25.180 --> 00:07:25.560
+que encuentra
+
+00:07:25.560 --> 00:07:26.500
+los documentos correctos
+
+00:07:26.500 --> 00:07:27.140
+para que el LM
+
+00:07:27.140 --> 00:07:28.320
+pueda responder con precisión.
+
+00:07:29.060 --> 00:07:29.480
+Sin una capa
+
+00:07:29.480 --> 00:07:30.380
+de recuperación sólida,
+
+00:07:30.480 --> 00:07:31.080
+un sistema RAC
+
+00:07:31.080 --> 00:07:31.580
+es tan bueno
+
+00:07:31.580 --> 00:07:32.280
+como los documentos
+
+00:07:32.280 --> 00:07:32.780
+que encuentre.
+
+00:07:33.340 --> 00:07:33.920
+Y aquí es donde
+
+00:07:33.920 --> 00:07:34.600
+la búsqueda de hibridad
+
+00:07:34.600 --> 00:07:35.300
+realmente brilla
+
+00:07:35.300 --> 00:07:36.260
+porque las consultas RAC
+
+00:07:36.260 --> 00:07:36.960
+suelen ser preguntas
+
+00:07:36.960 --> 00:07:37.660
+en lenguaje natural.
+
+00:07:37.840 --> 00:07:38.200
+Las respuestas
+
+00:07:38.200 --> 00:07:39.040
+suelen estar en documentos
+
+00:07:39.040 --> 00:07:39.760
+que son tecnologías
+
+00:07:39.760 --> 00:07:41.240
+totalmente distintas.
+
+00:07:41.420 --> 00:07:42.300
+Déjame darte algunas cifras
+
+00:07:42.300 --> 00:07:42.920
+que realmente muestran
+
+00:07:42.920 --> 00:07:43.240
+lo diferente.
+
+00:07:44.020 --> 00:07:45.140
+Un estudio sobre búsqueda
+
+00:07:45.140 --> 00:07:46.360
+en aplicaciones empresariales
+
+00:07:46.360 --> 00:07:47.780
+encontró que un marco RAC híbrido
+
+00:07:47.780 --> 00:07:48.700
+mejoró la precisión
+
+00:07:48.700 --> 00:07:49.240
+de recuperación
+
+00:07:49.240 --> 00:07:50.700
+top cada 18 a 25 veces
+
+00:07:50.700 --> 00:07:51.580
+comparado con la búsqueda
+
+00:07:51.580 --> 00:07:52.400
+por palabras clave sola.
+
+00:07:53.020 --> 00:07:53.600
+La precisión
+
+00:07:53.600 --> 00:07:54.220
+en la finalización
+
+00:07:54.220 --> 00:07:55.240
+de tareas de flujo de trabajo
+
+00:07:55.240 --> 00:07:56.000
+mejoró 21 veces.
+
+00:07:56.460 --> 00:07:56.980
+Eso significa
+
+00:07:56.980 --> 00:07:57.560
+que los usuarios
+
+00:07:57.560 --> 00:07:58.740
+tenían muchas más probabilidades
+
+00:07:58.740 --> 00:07:59.680
+de completar con éxito
+
+00:07:59.680 --> 00:08:00.380
+tareas complejas
+
+00:08:00.380 --> 00:08:01.360
+cuando contaban con el soporte
+
+00:08:01.360 --> 00:08:01.960
+de un sistema RAC
+
+00:08:01.960 --> 00:08:02.420
+usando búsqueda.
+
+00:08:02.840 --> 00:08:03.480
+En general,
+
+00:08:03.580 --> 00:08:04.140
+los sistemas RAC
+
+00:08:04.140 --> 00:08:04.900
+bien implementados
+
+00:08:04.900 --> 00:08:05.420
+pueden aumentar
+
+00:08:05.420 --> 00:08:06.340
+la precisión de búsqueda
+
+00:08:06.340 --> 00:08:07.800
+en un promedio del 85%,
+
+00:08:07.800 --> 00:08:08.620
+con algunos dominios
+
+00:08:08.620 --> 00:08:09.180
+especializados
+
+00:08:09.180 --> 00:08:10.560
+acercándose al 99% de precisión.
+
+00:08:11.140 --> 00:08:12.080
+Y debido a que el LLM
+
+00:08:12.080 --> 00:08:12.740
+genera respuestas
+
+00:08:12.740 --> 00:08:13.680
+basadas en el contexto
+
+00:08:13.680 --> 00:08:14.180
+recuperado
+
+00:08:14.180 --> 00:08:15.000
+en lugar de sus propias
+
+00:08:15.000 --> 00:08:15.520
+suposiciones,
+
+00:08:15.760 --> 00:08:16.340
+los sistemas RAC
+
+00:08:16.340 --> 00:08:17.140
+mostraron una reducción
+
+00:08:17.140 --> 00:08:18.100
+de cerca del 40%
+
+00:08:18.100 --> 00:08:19.080
+en respuestas alucinatorias.
+
+00:08:19.560 --> 00:08:20.720
+Es por esto que Azure AI Search
+
+00:08:20.720 --> 00:08:21.180
+es fundamental
+
+00:08:21.180 --> 00:08:21.980
+para construir agentes
+
+00:08:21.980 --> 00:08:22.820
+de AI y copilotos.
+
+00:08:23.620 --> 00:08:24.600
+Proporciona la recuperación
+
+00:08:24.600 --> 00:08:25.660
+basada en hechos concretos
+
+00:08:25.660 --> 00:08:26.480
+que hace que los LLM
+
+00:08:26.480 --> 00:08:27.100
+sean confiables
+
+00:08:27.100 --> 00:08:28.020
+en un entorno empresarial.
+
+00:08:28.640 --> 00:08:29.240
+Si estás creando
+
+00:08:29.240 --> 00:08:29.740
+un asistente
+
+00:08:29.740 --> 00:08:30.460
+que necesita responder
+
+00:08:30.460 --> 00:08:31.360
+preguntas con precisión
+
+00:08:31.360 --> 00:08:32.220
+y citar sus fuentes,
+
+00:08:32.220 --> 00:08:33.220
+la búsqueda híbrida
+
+00:08:33.220 --> 00:08:33.580
+más RAC
+
+00:08:33.580 --> 00:08:34.360
+es la arquitectura
+
+00:08:34.360 --> 00:08:35.340
+a la que recurrirás,
+
+00:08:35.740 --> 00:08:36.400
+así que la búsqueda
+
+00:08:36.400 --> 00:08:37.100
+híbrida más RAC
+
+00:08:37.100 --> 00:08:38.180
+es una combinación poderosa.
+
+00:08:38.760 --> 00:08:39.500
+Pero, ¿cómo se ve esto
+
+00:08:39.500 --> 00:08:40.320
+realmente en la práctica?
+
+00:08:41.560 --> 00:08:42.700
+El impacto en el mundo real.
+
+00:08:42.960 --> 00:08:43.560
+Entonces, ¿dónde aparece
+
+00:08:43.560 --> 00:08:44.540
+esto realmente en la práctica?
+
+00:08:44.900 --> 00:08:45.480
+Permíteme darte
+
+00:08:45.480 --> 00:08:46.080
+algunos ejemplos.
+
+00:08:46.320 --> 00:08:47.040
+El comercio electrónico
+
+00:08:47.040 --> 00:08:47.480
+es probablemente
+
+00:08:47.480 --> 00:08:47.940
+el más familiar.
+
+00:08:48.620 --> 00:08:49.300
+Un cliente escribe
+
+00:08:49.300 --> 00:08:50.040
+zapatillas de correr
+
+00:08:50.040 --> 00:08:51.020
+cómodas en la barra de búsqueda.
+
+00:08:51.520 --> 00:08:52.220
+La lista de productos
+
+00:08:52.220 --> 00:08:52.620
+podría decir
+
+00:08:52.620 --> 00:08:53.320
+calzado deportivo
+
+00:08:53.320 --> 00:08:53.760
+amortiguado
+
+00:08:53.760 --> 00:08:54.660
+porque el equipo de marketing
+
+00:08:54.660 --> 00:08:55.700
+eligió otras palabras.
+
+00:08:55.940 --> 00:08:56.240
+Palabra.
+
+00:08:56.620 --> 00:08:57.420
+La búsqueda por palabras
+
+00:08:57.420 --> 00:08:58.080
+clave por sí solo
+
+00:08:58.080 --> 00:08:58.880
+a partir de la coincidencia.
+
+00:08:59.440 --> 00:09:00.700
+Con Azure AI Search
+
+00:09:00.700 --> 00:09:01.420
+el sistema entiende
+
+00:09:01.420 --> 00:09:02.540
+que cómodo y amortiguado
+
+00:09:02.540 --> 00:09:03.720
+significan casi lo mismo
+
+00:09:03.720 --> 00:09:04.620
+en este contexto.
+
+00:09:05.420 --> 00:09:06.360
+Muestra el producto correcto
+
+00:09:06.360 --> 00:09:07.240
+incluso cuando las palabras
+
+00:09:07.240 --> 00:09:07.900
+no coinciden.
+
+00:09:08.420 --> 00:09:09.140
+Eso es un cliente
+
+00:09:09.140 --> 00:09:10.060
+que encuentra lo que quiere
+
+00:09:10.060 --> 00:09:11.000
+en lugar de abandonar
+
+00:09:11.000 --> 00:09:11.740
+el sitio frustrado.
+
+00:09:12.120 --> 00:09:12.820
+Los portales de atención
+
+00:09:12.820 --> 00:09:13.700
+al cliente funcionan de manera.
+
+00:09:14.260 --> 00:09:15.140
+Imagina que un cliente escribe
+
+00:09:15.140 --> 00:09:16.700
+¿Cómo cancelo mi suscripción?
+
+00:09:17.420 --> 00:09:18.320
+La política relevante
+
+00:09:18.320 --> 00:09:19.040
+podría titularse
+
+00:09:19.040 --> 00:09:20.380
+terminación del acuerdo de servicio.
+
+00:09:20.840 --> 00:09:21.620
+La búsqueda híbrida
+
+00:09:21.620 --> 00:09:23.040
+encuentra ese documento exacto
+
+00:09:23.040 --> 00:09:24.060
+mediante la coincidencia
+
+00:09:24.060 --> 00:09:24.720
+de palabras clave
+
+00:09:24.720 --> 00:09:25.480
+en terminología legal
+
+00:09:25.480 --> 00:09:26.180
+pero también muestra
+
+00:09:26.180 --> 00:09:26.960
+una pregunta frecuente
+
+00:09:26.960 --> 00:09:27.660
+relacionada sobre
+
+00:09:27.660 --> 00:09:28.800
+¿Cómo finalizar tu plan
+
+00:09:28.800 --> 00:09:29.400
+antes de tiempo
+
+00:09:29.400 --> 00:09:30.620
+mediante similitud semántica?
+
+00:09:31.440 --> 00:09:32.440
+El cliente obtiene
+
+00:09:32.440 --> 00:09:33.280
+una respuesta integral
+
+00:09:33.280 --> 00:09:33.980
+en lugar de buscar
+
+00:09:33.980 --> 00:09:35.300
+entre cinco artículos diferentes.
+
+00:09:36.240 --> 00:09:36.760
+La recuperación
+
+00:09:36.760 --> 00:09:37.360
+de documentos legal
+
+00:09:37.360 --> 00:09:37.940
+es otro ejemplo.
+
+00:09:38.480 --> 00:09:39.220
+Los abogados necesitan
+
+00:09:39.220 --> 00:09:39.880
+buscar contratos
+
+00:09:39.880 --> 00:09:40.700
+por número de cláusulas
+
+00:09:40.700 --> 00:09:41.560
+exactos y referencias
+
+00:09:41.560 --> 00:09:42.120
+de secciones.
+
+00:09:42.880 --> 00:09:43.700
+Ese es terreno exclusivo
+
+00:09:43.700 --> 00:09:44.440
+de palabras clave
+
+00:09:44.440 --> 00:09:45.380
+pero también necesitan
+
+00:09:45.380 --> 00:09:46.200
+encontrar lenguaje similar
+
+00:09:46.200 --> 00:09:47.000
+en diferentes acuerdos
+
+00:09:47.000 --> 00:09:48.140
+incluso cuando la redacción varía.
+
+00:09:48.920 --> 00:09:49.580
+La búsqueda híbrida
+
+00:09:49.580 --> 00:09:50.160
+maneja a ambos
+
+00:09:50.160 --> 00:09:51.100
+en una sola consulta
+
+00:09:51.100 --> 00:09:52.100
+y en industrias reguladas
+
+00:09:52.100 --> 00:09:53.280
+poder rastrear exactamente
+
+00:09:53.280 --> 00:09:53.860
+por qué apareció
+
+00:09:53.860 --> 00:09:54.320
+un resultado
+
+00:09:54.320 --> 00:09:55.740
+es crítico para el cumplimiento.
+
+00:09:55.740 --> 00:09:56.820
+Las bases de conocimiento
+
+00:09:56.820 --> 00:09:57.840
+internas también se benefician.
+
+00:09:58.720 --> 00:09:59.120
+Un ampliado
+
+00:09:59.120 --> 00:09:59.860
+que busca la política
+
+00:09:59.860 --> 00:10:00.320
+de vacaciones
+
+00:10:00.320 --> 00:10:01.040
+obtiene el documento
+
+00:10:01.040 --> 00:10:01.700
+oficial de RR,
+
+00:10:02.060 --> 00:10:03.260
+pero también un correo
+
+00:10:03.260 --> 00:10:04.100
+electrónico relacionado
+
+00:10:04.100 --> 00:10:04.700
+al equipo legal
+
+00:10:04.700 --> 00:10:05.780
+sobre días acumulables
+
+00:10:05.780 --> 00:10:06.580
+y una actualización
+
+00:10:06.580 --> 00:10:07.340
+reciente publicada
+
+00:10:07.340 --> 00:10:07.700
+en la internet
+
+00:10:07.700 --> 00:10:08.180
+de la empresa.
+
+00:10:09.380 --> 00:10:10.080
+La búsqueda entiende
+
+00:10:10.080 --> 00:10:10.660
+que todos estos
+
+00:10:10.660 --> 00:10:11.260
+están conectados
+
+00:10:11.260 --> 00:10:11.860
+a la misma pregunta.
+
+00:10:12.660 --> 00:10:13.140
+La fabricación
+
+00:10:13.140 --> 00:10:13.600
+es un ejemplo
+
+00:10:13.600 --> 00:10:14.180
+menos obvio
+
+00:10:14.180 --> 00:10:14.980
+pero poderoso.
+
+00:10:15.820 --> 00:10:16.500
+Un técnico escribe
+
+00:10:16.500 --> 00:10:17.740
+reparación de sobrecalentamiento
+
+00:10:17.740 --> 00:10:18.040
+del motor
+
+00:10:18.040 --> 00:10:18.860
+en la interfaz de búsqueda.
+
+00:10:19.600 --> 00:10:20.280
+El sistema devuelve
+
+00:10:20.280 --> 00:10:21.060
+la sección de solución
+
+00:10:21.060 --> 00:10:21.820
+de problemas del manual
+
+00:10:21.820 --> 00:10:22.220
+del equipo
+
+00:10:22.220 --> 00:10:23.000
+además de un diagrama
+
+00:10:23.000 --> 00:10:23.360
+escaneado
+
+00:10:23.360 --> 00:10:23.740
+que muestra
+
+00:10:23.740 --> 00:10:24.820
+las piezas relevantes.
+
+00:10:25.620 --> 00:10:26.180
+Aunque el diagrama
+
+00:10:26.180 --> 00:10:26.800
+es una imagen
+
+00:10:26.800 --> 00:10:27.860
+Azure AI Search
+
+00:10:27.860 --> 00:10:28.440
+puede extraer
+
+00:10:28.440 --> 00:10:28.840
+e indexar
+
+00:10:28.840 --> 00:10:29.660
+su contenido de texto
+
+00:10:29.660 --> 00:10:30.380
+por lo que aparecen
+
+00:10:30.380 --> 00:10:31.400
+los resultados de búsqueda.
+
+00:10:31.900 --> 00:10:32.480
+El hilo conductor
+
+00:10:32.480 --> 00:10:33.480
+en todos estos ejemplos
+
+00:10:33.480 --> 00:10:33.940
+son los datos
+
+00:10:33.940 --> 00:10:34.640
+no estructurados,
+
+00:10:35.420 --> 00:10:36.140
+documentos de Word
+
+00:10:36.140 --> 00:10:36.680
+y que es de soporte
+
+00:10:36.680 --> 00:10:37.400
+por correo electrónico
+
+00:10:37.400 --> 00:10:38.080
+o imágenes escaneadas,
+
+00:10:38.540 --> 00:10:39.040
+las consultas
+
+00:10:39.040 --> 00:10:39.600
+de bases de datos
+
+00:10:39.600 --> 00:10:40.140
+tradicionales
+
+00:10:40.140 --> 00:10:40.520
+y la búsqueda
+
+00:10:40.520 --> 00:10:41.160
+por palabras clave
+
+00:10:41.160 --> 00:10:41.780
+en el que fueron diseñadas
+
+00:10:41.780 --> 00:10:42.160
+para este video.
+
+00:10:42.600 --> 00:10:43.500
+Azure AI Search
+
+00:10:43.500 --> 00:10:44.560
+está creada específicamente
+
+00:10:44.560 --> 00:10:45.160
+para este mundo
+
+00:10:45.160 --> 00:10:46.200
+y cuanto más lo analizas
+
+00:10:46.200 --> 00:10:46.800
+más claro queda
+
+00:10:46.800 --> 00:10:47.300
+que la búsqueda
+
+00:10:47.300 --> 00:10:47.580
+de híbrida
+
+00:10:47.580 --> 00:10:47.940
+no es solo
+
+00:10:47.940 --> 00:10:49.000
+una característica agradable,
+
+00:10:49.360 --> 00:10:50.180
+es una pieza fundamental
+
+00:10:50.180 --> 00:10:51.160
+de cómo se construyen
+
+00:10:51.160 --> 00:10:52.060
+las aplicaciones moderadas.
+
+00:10:52.740 --> 00:10:53.540
+¿Cómo encajan las piezas?
+
+00:10:54.180 --> 00:10:54.420
+Entonces,
+
+00:10:54.540 --> 00:10:55.160
+¿cómo funciona esto
+
+00:10:55.160 --> 00:10:55.920
+realmente bajo el capo?
+
+00:10:56.380 --> 00:10:57.240
+Azure AI Search
+
+00:10:57.240 --> 00:10:57.980
+tiene tres bloques
+
+00:10:57.980 --> 00:10:59.100
+de construcción principales,
+
+00:10:59.200 --> 00:10:59.860
+el origen de datos,
+
+00:11:00.100 --> 00:11:00.640
+el indexador
+
+00:11:00.640 --> 00:11:01.660
+y el índice de búsqueda.
+
+00:11:02.380 --> 00:11:03.040
+El origen de datos
+
+00:11:03.040 --> 00:11:03.960
+es donde vive su información.
+
+00:11:04.460 --> 00:11:04.820
+Podría ser
+
+00:11:04.820 --> 00:11:05.660
+almacenamiento de blobs,
+
+00:11:05.800 --> 00:11:06.380
+una base de datos
+
+00:11:06.380 --> 00:11:07.140
+SQL de Azure,
+
+00:11:07.340 --> 00:11:07.760
+Cosmos DB
+
+00:11:07.760 --> 00:11:08.860
+o incluso SharePoint
+
+00:11:08.860 --> 00:11:10.300
+es la materia prima
+
+00:11:10.300 --> 00:11:11.340
+que necesita ser buscable.
+
+00:11:11.960 --> 00:11:12.420
+Piensa en ello
+
+00:11:12.420 --> 00:11:13.460
+como la pila de documentos
+
+00:11:13.460 --> 00:11:14.260
+esperando a ser organista.
+
+00:11:14.960 --> 00:11:15.520
+El indexador
+
+00:11:15.520 --> 00:11:16.140
+es la tubería
+
+00:11:16.140 --> 00:11:16.940
+que lee los datos
+
+00:11:16.940 --> 00:11:17.560
+de esa fuente,
+
+00:11:18.020 --> 00:11:18.720
+extrae el contenido,
+
+00:11:18.940 --> 00:11:19.780
+aplica el enriquecimiento
+
+00:11:19.780 --> 00:11:20.560
+de ya configurado
+
+00:11:20.560 --> 00:11:21.380
+y luego construye
+
+00:11:21.380 --> 00:11:22.500
+el índice de búsqueda.
+
+00:11:23.380 --> 00:11:23.900
+Aquí hay una manera
+
+00:11:23.900 --> 00:11:24.480
+sencilla de visor.
+
+00:11:25.320 --> 00:11:26.440
+Imagina a un bibliotecario
+
+00:11:26.440 --> 00:11:27.420
+entrando en un almacén
+
+00:11:27.420 --> 00:11:28.120
+lleno de libros.
+
+00:11:28.800 --> 00:11:29.660
+Lee cada uno de ellos,
+
+00:11:29.820 --> 00:11:30.660
+toma notas detalladas,
+
+00:11:30.860 --> 00:11:31.500
+identifica temas
+
+00:11:31.500 --> 00:11:32.240
+y entidades clave
+
+00:11:32.240 --> 00:11:33.120
+y organiza todo
+
+00:11:33.120 --> 00:11:34.320
+en un catálogo de fichas.
+
+00:11:34.760 --> 00:11:35.840
+Esa lectura y toma de notas
+
+00:11:35.840 --> 00:11:36.940
+es el proceso de indexación.
+
+00:11:37.320 --> 00:11:37.940
+El índice de búsqueda
+
+00:11:37.940 --> 00:11:38.780
+es ese catálogo de fichas.
+
+00:11:39.200 --> 00:11:40.080
+No son los libros en sí.
+
+00:11:40.860 --> 00:11:41.880
+Es el sistema estructurado
+
+00:11:41.880 --> 00:11:42.420
+y optimizado
+
+00:11:42.420 --> 00:11:43.360
+que le permite encontrar
+
+00:11:43.360 --> 00:11:44.540
+exactamente lo que necesita
+
+00:11:44.540 --> 00:11:45.160
+en milisegundos.
+
+00:11:45.980 --> 00:11:46.880
+Cuando escribe una consulta,
+
+00:11:46.940 --> 00:11:47.700
+el sistema no vuelve
+
+00:11:47.700 --> 00:11:48.680
+a los documentos originales
+
+00:11:48.680 --> 00:11:49.340
+para escanearlos.
+
+00:11:50.180 --> 00:11:50.540
+En cambio,
+
+00:11:50.680 --> 00:11:51.360
+buscan el índice
+
+00:11:51.360 --> 00:11:52.560
+que ya sabe exactamente
+
+00:11:52.560 --> 00:11:53.640
+dónde está ubicado todo.
+
+00:11:54.660 --> 00:11:55.360
+Esta proorganización
+
+00:11:55.360 --> 00:11:56.600
+se llama índice invertido.
+
+00:11:57.160 --> 00:11:57.900
+En lugar de almacenar
+
+00:11:57.900 --> 00:11:58.800
+documentos con una lista
+
+00:11:58.800 --> 00:11:59.640
+de palabras que contienen,
+
+00:11:59.760 --> 00:12:00.460
+usted almacena palabras
+
+00:12:00.460 --> 00:12:01.300
+con una lista de documentos
+
+00:12:01.300 --> 00:12:01.620
+que la tiene.
+
+00:12:02.040 --> 00:12:02.620
+Eso significa que
+
+00:12:02.620 --> 00:12:03.460
+cuando busca un término,
+
+00:12:03.540 --> 00:12:04.200
+salta directamente
+
+00:12:04.200 --> 00:12:05.040
+al lugar correcto,
+
+00:12:05.160 --> 00:12:06.180
+sin pasar página por página.
+
+00:12:06.680 --> 00:12:07.640
+El resultado es una mejora
+
+00:12:07.640 --> 00:12:08.220
+masiva en la velocidad.
+
+00:12:08.660 --> 00:12:09.660
+En lugar de tener que escanear
+
+00:12:09.660 --> 00:12:10.280
+cada documento,
+
+00:12:10.320 --> 00:12:11.240
+lo cual toma más tiempo
+
+00:12:11.240 --> 00:12:12.240
+a medida que crecen sus datos,
+
+00:12:12.400 --> 00:12:12.980
+salta directamente
+
+00:12:12.980 --> 00:12:14.080
+a la ubicación correcta.
+
+00:12:14.620 --> 00:12:15.660
+Con millones de documentos,
+
+00:12:15.780 --> 00:12:16.520
+esa diferencia es la que
+
+00:12:16.520 --> 00:12:17.180
+separa una búsqueda
+
+00:12:17.180 --> 00:12:17.940
+que toma segundos
+
+00:12:17.940 --> 00:12:19.360
+de una que toma milisegundos
+
+00:12:19.360 --> 00:12:20.340
+de una que toma milisegundos.
+
+00:12:20.460 --> 00:12:20.700
+Entonces,
+
+00:12:20.840 --> 00:12:21.340
+ahora comprende
+
+00:12:21.340 --> 00:12:22.360
+qué es Azure AI Search,
+
+00:12:22.460 --> 00:12:22.840
+cómo encajan
+
+00:12:22.840 --> 00:12:23.820
+los componentes principales
+
+00:12:23.820 --> 00:12:24.800
+y por qué la búsqueda híbrida
+
+00:12:24.800 --> 00:12:25.720
+cambia las reglas del juego.
+
+00:12:26.240 --> 00:12:27.120
+Terminemos con algunas cosas
+
+00:12:27.120 --> 00:12:28.240
+que realmente puede hacer con esto.
+
+00:12:29.020 --> 00:12:29.380
+Primero,
+
+00:12:29.500 --> 00:12:30.200
+entienda sus datos.
+
+00:12:30.660 --> 00:12:31.660
+Si ya están estructurados,
+
+00:12:31.920 --> 00:12:32.780
+piensa en tablas de productos
+
+00:12:32.780 --> 00:12:33.180
+en SQL,
+
+00:12:33.460 --> 00:12:34.240
+registros de clientes
+
+00:12:34.240 --> 00:12:34.920
+en una base de datos,
+
+00:12:35.300 --> 00:12:36.120
+cualquier cosa con filas
+
+00:12:36.120 --> 00:12:36.860
+y columnas limpias,
+
+00:12:37.200 --> 00:12:37.960
+puede consultarlo directamente
+
+00:12:37.960 --> 00:12:38.420
+con SQL.
+
+00:12:39.380 --> 00:12:40.080
+Azure AI Search
+
+00:12:40.080 --> 00:12:40.980
+está diseñado para texto
+
+00:12:40.980 --> 00:12:41.520
+no estructurado.
+
+00:12:41.840 --> 00:12:42.520
+Eso de archivos PDF,
+
+00:12:42.680 --> 00:12:43.240
+correos electrónicos,
+
+00:12:43.340 --> 00:12:43.880
+documentos de Word,
+
+00:12:43.920 --> 00:12:44.380
+tickets o poco.
+
+00:12:44.800 --> 00:12:45.360
+Ahí es donde ofrece
+
+00:12:45.360 --> 00:12:45.920
+un valor real.
+
+00:12:46.780 --> 00:12:47.180
+Segundo,
+
+00:12:47.360 --> 00:12:47.920
+si está creando
+
+00:12:47.920 --> 00:12:48.740
+una aplicación RAG
+
+00:12:48.740 --> 00:12:49.780
+o un asistente de AI,
+
+00:12:50.020 --> 00:12:50.860
+Azure AI Search
+
+00:12:50.860 --> 00:12:51.660
+con búsqueda híbrida
+
+00:12:51.660 --> 00:12:52.820
+es el motor de recuperación
+
+00:12:52.820 --> 00:12:53.660
+que desea detrás.
+
+00:12:54.160 --> 00:12:55.500
+Le ofrece coincidencias exactas
+
+00:12:55.500 --> 00:12:56.180
+de palabras clave
+
+00:12:56.180 --> 00:12:56.800
+para precisión
+
+00:12:56.800 --> 00:12:57.620
+y comprensión semántica
+
+00:12:57.620 --> 00:12:58.060
+para el contexto.
+
+00:12:58.480 --> 00:12:59.060
+Esa combinación
+
+00:12:59.060 --> 00:13:00.260
+genera respuestas más fiables
+
+00:13:00.260 --> 00:13:01.100
+y fáciles de citar
+
+00:13:01.100 --> 00:13:01.940
+que cualquiera de los dos
+
+00:13:01.940 --> 00:13:02.760
+enfoques por separado.
+
+00:13:03.640 --> 00:13:03.960
+Tercero,
+
+00:13:04.000 --> 00:13:04.780
+no compliques demasiado
+
+00:13:04.780 --> 00:13:05.380
+la configuración.
+
+00:13:05.840 --> 00:13:06.420
+El portal de Azure
+
+00:13:06.420 --> 00:13:07.040
+tiene un asistente
+
+00:13:07.040 --> 00:13:07.680
+para importar datos.
+
+00:13:08.020 --> 00:13:08.840
+Conecta tu almacenamiento
+
+00:13:08.840 --> 00:13:09.180
+de blobs,
+
+00:13:09.320 --> 00:13:10.220
+configura algunos ajustes
+
+00:13:10.220 --> 00:13:11.160
+y deja que el indexador
+
+00:13:11.160 --> 00:13:11.940
+cree tu primer índice.
+
+00:13:12.240 --> 00:13:13.040
+Puedes realizar tu primera
+
+00:13:13.040 --> 00:13:13.900
+búsqueda a menos de una hora.
+
+00:13:14.260 --> 00:13:14.640
+Así que eso es
+
+00:13:14.640 --> 00:13:15.360
+Azure AI Search
+
+00:13:15.360 --> 00:13:15.980
+en palabras sencillas.
+
+00:13:16.240 --> 00:13:17.360
+Toma información desordenada
+
+00:13:17.360 --> 00:13:18.120
+y no estructurada
+
+00:13:18.120 --> 00:13:19.000
+y la convierte
+
+00:13:19.000 --> 00:13:19.940
+en conocimiento buscable
+
+00:13:19.940 --> 00:13:20.840
+y listo para la AI.
+
+00:13:21.260 --> 00:13:22.100
+Gracias por acompañarme.
+
+00:13:22.660 --> 00:13:23.020
+Suscríbete
+
+00:13:23.020 --> 00:13:23.360
+y nos vemos
+
+00:13:23.360 --> 00:13:24.240
+en el próximo episodio.

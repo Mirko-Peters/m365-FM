@@ -1,0 +1,739 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.240
+En réalité, la plupart des gens pensent qu'une identité se résume à un nom d'utilisateur et un mot de passe.
+
+00:00:03.460 --> 00:00:05.000
+Vous les saisissez, vous accédez au service et c'est tout.
+
+00:00:05.480 --> 00:00:08.720
+Mais quand vous êtes une entreprise au service de clients, l'identité devient bien plus complexe.
+
+00:00:09.420 --> 00:00:12.360
+Que se passe-t-il quand votre application doit permettre à des milliers de personnes de s'inscrire ?
+
+00:00:12.360 --> 00:00:15.820
+Ou de se connecter avec leur compte Google plutôt que de créer un énième mot de passe ?
+
+00:00:15.820 --> 00:00:20.120
+Et comment sécuriser toutes ces données clients sans les mélanger à l'annuaire de vos employés ?
+
+00:00:20.120 --> 00:00:23.420
+C'est précisément le problème que Microsoft Antra External ID a été conçu pour réseau.
+
+00:00:23.700 --> 00:00:24.360
+Voici le point important.
+
+00:00:24.680 --> 00:00:26.560
+Il remplace entièrement Azure AD B2C.
+
+00:00:26.560 --> 00:00:33.740
+A la fin de cet épisode, vous comprendrez ce qu'est réellement External ID, les trois façons principales de l'utiliser et pourquoi il est crucial pour toute application destinée aux clients.
+
+00:00:35.040 --> 00:00:37.480
+L'ancienne méthode, des silos d'identité séparés.
+
+00:00:38.260 --> 00:00:40.460
+Imaginez qu'il y a 20 ans, vous ayez créé une application pour des clients.
+
+00:00:41.280 --> 00:00:48.420
+A l'époque, vous deviez concevoir votre propre système de connexion, coder la gestion des mots de passe, configurer une base de données, créer le flux de réinitialisation tout en partant de zéro.
+
+00:00:49.140 --> 00:00:53.780
+Cela fonctionnait pour une petite application avec quelques centaines d'utilisateurs, mais à mesure que les apps grandissaient, tout devenait vite compliqué.
+
+00:00:53.780 --> 00:01:00.780
+Les entreprises devaient permettre des connexions via Google ou Facebook, exiger l'authentification multifacteur et gérer des millions de comptes sans subir de pannes.
+
+00:01:01.660 --> 00:01:03.400
+Tout construire soi-même était devenu un cauchemar.
+
+00:01:04.100 --> 00:01:06.120
+La première réponse de Microsoft fut Azure AD B2C.
+
+00:01:06.880 --> 00:01:09.840
+C'est un service d'identité client qui, à l'époque, résolvait un vrai problème.
+
+00:01:10.400 --> 00:01:11.600
+Mais c'est là que les difficultés ont commencé.
+
+00:01:12.100 --> 00:01:16.440
+Le problème majeur résidait dans ce qu'on appelait les stratégies personnalisées, rédigées en XML, XML.
+
+00:01:16.440 --> 00:01:20.780
+Si vous avez déjà travaillé sur des fichiers XML de plusieurs centaines de lignes, vous savez à quel point c'est pénible.
+
+00:01:21.100 --> 00:01:21.640
+C'est pénible.
+
+00:01:22.200 --> 00:01:25.560
+Difficile à configurer, difficile à déboguer, et en cas de panne, bon courage pour en trouver la cause.
+
+00:01:26.360 --> 00:01:29.700
+De plus, Azure AD B2C était séparé de la plateforme d'identité principale de Microsoft.
+
+00:01:30.480 --> 00:01:37.040
+Donc si vous utilisiez déjà Microsoft 365 ou Azure AD pour vos employés, B2C imposait l'apprentissage d'un tout nouveau produit.
+
+00:01:37.760 --> 00:01:41.580
+Comme on pouvait s'y attendre, les équipes IT peinaient à la maintenance, les développeurs redoutaient son usage,
+
+00:01:41.580 --> 00:01:44.840
+et les clients subissaient une expérience d'inscription maladroite qui les incitait à partir.
+
+00:01:45.880 --> 00:01:50.500
+Microsoft a compris qu'il fallait quelque chose de plus simple et unifié, et c'est devenu Microsoft Entra External ID.
+
+00:01:51.780 --> 00:01:54.620
+Ce qui est réellement Microsoft Entra External ID ?
+
+00:01:54.620 --> 00:01:57.020
+Alors qu'est-ce que Microsoft Entra External ID exactement ?
+
+00:01:57.020 --> 00:01:58.060
+Voici la définition la plus simple.
+
+00:01:58.500 --> 00:02:03.640
+C'est un service d'identité cloud pour les utilisateurs externes, clients, partenaires et invités, et non pour les employés.
+
+00:02:03.860 --> 00:02:04.500
+Voyez les choses ainsi.
+
+00:02:04.780 --> 00:02:06.420
+Imaginez que votre entreprise possède un immeuble de B2.
+
+00:02:06.780 --> 00:02:07.840
+C'est votre tenant pour vos collaborateurs.
+
+00:02:07.840 --> 00:02:11.040
+C'est là que travaillent vos employés, où se trouve leur bureau et où leur badge leur permet d'entrer.
+
+00:02:11.820 --> 00:02:12.820
+Entra ID gère ce bâtiment.
+
+00:02:13.580 --> 00:02:18.840
+Maintenant imaginez que vous ouvriez une boutique pour les clients, un espace séparé, avec sa propre entrée, ses propres règles et sa propre sécurité.
+
+00:02:19.380 --> 00:02:23.840
+Les clients ne s'égarent pas dans la salle de poste des employés, et les employés n'accèdent pas accidentellement au compte client.
+
+00:02:24.500 --> 00:02:25.280
+C'est ça, External ID.
+
+00:02:25.820 --> 00:02:28.380
+Il fait partie de la famille Microsoft Entra, mais sous une forme différente.
+
+00:02:29.120 --> 00:02:34.700
+Il est conçu pour la sienne, la gestion des identités et des accès clients, et il gère tout le cycle de vie d'un utilisateur externe.
+
+00:02:35.800 --> 00:02:39.460
+Inscription, connexion, réinitialisation de mot de passe, gestion de profil, MFA, émission de jetons.
+
+00:02:39.460 --> 00:02:45.880
+Il fonctionne avec des protocoles standards comme OOS 2.0, OpenID Connect et SAML, donc presque n'importe quelle application que vous créez peut s'y connecter.
+
+00:02:46.420 --> 00:02:48.660
+Mais voici la grande différence avec l'ancien Azure AD B2C.
+
+00:02:49.200 --> 00:02:51.820
+External ID est plus sain. Fini les politiques SAML personnalisées.
+
+00:02:52.220 --> 00:02:54.980
+Au lieu de cela, vous configurez les flux d'utilisateurs directement dans le centre d'administration.
+
+00:02:55.540 --> 00:02:59.580
+Bien, vous utilisez des extensions d'authentification personnalisées, qui s'intègrent à votre logique backend existante.
+
+00:02:59.920 --> 00:03:01.080
+Même puissance, moins de casse-tête.
+
+00:03:01.980 --> 00:03:03.060
+Les trois cas d'usage principaux.
+
+00:03:03.060 --> 00:03:05.520
+Alors, comment utilisez-vous réellement External ID ?
+
+00:03:05.520 --> 00:03:06.700
+Il existe trois scénarios principaux.
+
+00:03:07.080 --> 00:03:10.000
+Ils couvrent presque toutes les situations où vous devez gérer quelqu'un qui n'est pas un employé.
+
+00:03:11.220 --> 00:03:14.120
+Commençons par le plus courant, identité client ou B2C.
+
+00:03:14.920 --> 00:03:16.520
+Imaginez que vous créez une application de commande de pizza.
+
+00:03:17.120 --> 00:03:19.980
+Vous avez besoin que les gens s'inscrivent, passent des commandes et reviennent la semaine suivante.
+
+00:03:20.660 --> 00:03:24.200
+Vous voulez qu'ils se connectent avec leur compte Google plutôt que de créer un nouveau mot de passe et vous devez recueillir.
+
+00:03:24.400 --> 00:03:26.740
+Leur nom, numéro de téléphone et préférence de livraison.
+
+00:03:27.460 --> 00:03:28.480
+External ID gère tout cela.
+
+00:03:29.100 --> 00:03:31.000
+Vous bénéficiez de flux d'inscriptions et de connexions préconstrées.
+
+00:03:31.000 --> 00:03:35.340
+Vous configurez les attributs à collecter, nom, téléphone, tout ce dont vous avez besoin.
+
+00:03:36.140 --> 00:03:38.840
+Vous configurez la connexion sociale avec Google, Facebook ou Apple.
+
+00:03:39.920 --> 00:03:44.780
+Et lorsqu'un utilisateur s'authentifie, External ID émet un jeton vers votre application pour qu'elle sache qui est cette personne.
+
+00:03:46.040 --> 00:03:49.560
+C'est le remplaçant d'Azure AD B2C et c'est là que la plupart des organisations commencent.
+
+00:03:50.200 --> 00:03:53.120
+Un autre scénario est la collaboration inter-entreprise ou B2B.
+
+00:03:53.680 --> 00:03:57.040
+C'est lorsque vous devez donner à des partenaires ou des fournisseurs accès à vos applications internes.
+
+00:03:57.040 --> 00:04:04.500
+Peut-être avez-vous un site SharePoint que votre partenaire logistique externe doit avoir ou un outil de gestion de projet que votre designer indépendant utilise.
+
+00:04:05.260 --> 00:04:08.520
+Dans ce scénario, vous les invitez en tant qu'utilisateur invité dans votre locataire de travail.
+
+00:04:09.380 --> 00:04:15.540
+External ID gère l'email d'invitation, le processus d'acceptation où ils valident l'invitation et les politiques d'accès qui contrôlent ce qu'ils peuvent voir.
+
+00:04:15.540 --> 00:04:20.640
+Cela existe en fait depuis des années sous le nom de collaboration B2B au sein d'Azure AD.
+
+00:04:21.500 --> 00:04:25.320
+Mais désormais cela fait partie de l'offre External ID, vous gérez donc tout au même endroit qu'aux identités clients.
+
+00:04:26.160 --> 00:04:27.880
+Ensuite il y a le Machine to Machine ou M2M.
+
+00:04:28.360 --> 00:04:30.960
+Celui-ci est moins visible pour les utilisateurs finaux, mais tout aussi important.
+
+00:04:31.200 --> 00:04:38.020
+Parfois votre service back-end doit communiquer avec une autre API, un processeur de paiement, un service d'analyse de données ou un microservice interne ou un microservice interne.
+
+00:04:38.120 --> 00:04:40.560
+Aucune intervention humaine, c'est juste une application qui en appelle une autre.
+
+00:04:41.440 --> 00:04:44.540
+External ID utilise le flux OAuth 2.0 Client Credentials.
+
+00:04:44.540 --> 00:04:50.040
+Votre service s'authentifie à l'aide d'un identifiant client et d'un secret et obtient un jeton pour appeler l'API en aval.
+
+00:04:50.880 --> 00:04:57.220
+Cela nécessite le module complémentaire M2M Premium, il y a donc un coût, mais pour sécuriser une communication API à API, c'est intégré.
+
+00:04:57.820 --> 00:05:01.800
+Ces trois scénarios couvrent presque toutes les situations d'identité externe que vous rencontrerez.
+
+00:05:02.440 --> 00:05:05.760
+Mais vous devez prendre une décision importante où ces utilisateurs vont-ils résider concrètement.
+
+00:05:05.920 --> 00:05:08.820
+Car External ID peut fonctionner dans deux environnements très différents.
+
+00:05:09.400 --> 00:05:10.820
+Le tenant Workforce et le tenant External.
+
+00:05:11.460 --> 00:05:12.400
+Analysons ces deux options.
+
+00:05:12.400 --> 00:05:17.180
+External ID peut fonctionner au sein de votre tenant Workforce existant ou comme un tenant external totalement séparé.
+
+00:05:17.720 --> 00:05:18.460
+Ce n'est pas la même chose.
+
+00:05:18.560 --> 00:05:20.800
+Et faire le mauvais choix peut poser problème par la suite.
+
+00:05:21.420 --> 00:05:22.660
+Commençons par l'option du tenant Workforce.
+
+00:05:23.320 --> 00:05:25.700
+Votre entreprise possède déjà un tenant Entra ID pour vos employés.
+
+00:05:26.280 --> 00:05:27.260
+C'est votre tenant Workforce.
+
+00:05:27.260 --> 00:05:34.440
+Si vous activez l'inscription en libre-service des invités dans ce tenant, des utilisateurs externes peuvent s'inscrire et arriver dans le même répertoire que vos employés.
+
+00:05:35.080 --> 00:05:37.060
+Leur compte se retrouve juste à côté de celui de votre PDG.
+
+00:05:37.740 --> 00:05:43.480
+Pour des scénarios B2B simples, comme inviter quelques partenaires sur un site SharePoint, mélanger les comptes dans le même répertoire est parfaitement acceptable.
+
+00:05:44.320 --> 00:05:46.600
+C'est simple à mettre en place et vous n'avez pas besoin de gérer un tenant séparé.
+
+00:05:47.220 --> 00:05:53.660
+Mais attention, si vous créez une application client avec des milliers d'utilisateurs, vous ne voulez pas qu'il réside dans le même répertoire que vos employés.
+
+00:05:54.400 --> 00:05:55.280
+C'est un risque de sécurité.
+
+00:05:55.680 --> 00:05:57.580
+Un employé pourrait accéder accidentellement à des données clients.
+
+00:05:58.180 --> 00:06:00.980
+Un changement de configuration destiné aux employés pourrait affecter l'accès des clients.
+
+00:06:01.900 --> 00:06:05.360
+De plus, votre image de marque pour les pages de connexion client serait liée à celle de votre entreprise.
+
+00:06:05.920 --> 00:06:06.480
+Ce n'est pas d'idéal.
+
+00:06:07.180 --> 00:06:08.600
+Alternative est l'option du tenant external.
+
+00:06:08.880 --> 00:06:12.380
+Vous créez un tout nouveau répertoire isolé dédié spécifiquement aux identités des clients.
+
+00:06:12.880 --> 00:06:13.640
+Aucun employé n'y réside.
+
+00:06:13.940 --> 00:06:14.900
+C'est un espace totalement distinct.
+
+00:06:14.900 --> 00:06:17.380
+Vous vous souvenez de l'analogie avec l'immeuble de bureau tout à l'heure ?
+
+00:06:17.380 --> 00:06:18.880
+Le tenant workforce est votre siège social.
+
+00:06:19.540 --> 00:06:22.560
+Le tenant external est la vitrine dédiée que vous ouvrez à vos clients.
+
+00:06:23.240 --> 00:06:26.240
+Ils ont leur propre entrée, leurs propres règles et leur propre sécurité.
+
+00:06:26.960 --> 00:06:27.580
+Rien n'est mélangé.
+
+00:06:27.980 --> 00:06:30.140
+Alors, quels sont les avantages d'un tenant external ?
+
+00:06:30.140 --> 00:06:32.060
+Tout d'abord, vous bénéficiez d'un répertoire d'utilisateurs isolés.
+
+00:06:32.900 --> 00:06:37.260
+Les données clients restent totalement séparées des données des employés, ce qui réduit les risques et simplifie la conformité.
+
+00:06:37.820 --> 00:06:39.120
+Deuxièmement, vous profitez d'une identité visuelle.
+
+00:06:39.520 --> 00:06:44.580
+Vous pouvez personnaliser l'apparence des pages de connexion spécifiquement pour vos clients sans rien modifier dans votre tenant d'entreprise.
+
+00:06:45.660 --> 00:06:52.020
+Troisièmement, vous disposez d'une API d'authentification native pour les applications mobiles, vous permettant de créer des écrans de connexion entièrement personnalisés dans vos applications iOS ou Android.
+
+00:06:52.520 --> 00:06:54.800
+Fini les redirections vers le navigateur et les vues web peu ergonomiques.
+
+00:06:55.040 --> 00:06:58.160
+Et quatrièmement, vous bénéficiez d'une tarification basée sur le MAU, le nombre d'utilisateurs actifs mensuels.
+
+00:06:58.460 --> 00:07:03.620
+Vous ne payez que pour les utilisateurs qui s'authentifient réellement au cours d'un mois donné, ce qui évolue naturellement avec la croissance de votre clientèle.
+
+00:07:04.320 --> 00:07:05.740
+Alors, comment choisir entre les deux ?
+
+00:07:05.740 --> 00:07:06.300
+C'est assez simple.
+
+00:07:06.720 --> 00:07:10.440
+Si vous développez une application B2C avec des milliers de clients, optez pour un tenant externe.
+
+00:07:10.440 --> 00:07:13.700
+C'est l'approche recommandée, celle pour laquelle External ID a été conçue.
+
+00:07:14.220 --> 00:07:18.480
+Si vous invitez simplement des partenaires à accéder à des ressources internes, l'option tenant Workforce convient très bien.
+
+00:07:19.200 --> 00:07:23.960
+L'essentiel est de comprendre la différence avant de commencer à bâtir, car migrer de l'un à l'autre plus tard n'est pas chose aisée.
+
+00:07:23.960 --> 00:07:27.400
+Sécurité, MFA et accès conditionnel
+
+00:07:27.400 --> 00:07:28.980
+Parlons maintenant de la sécurité.
+
+00:07:29.820 --> 00:07:33.600
+Si vous autorisez des clients à accéder à votre application, vous devez vous assurer que les personnes non autorisées ne puissent pas entrer.
+
+00:07:34.260 --> 00:07:38.620
+External ID inclut les mêmes fonctionnalités de sécurité de niveau entreprise qu'Entra ID propose pour les employés.
+
+00:07:39.700 --> 00:07:43.620
+Cela inclut l'authentification multifacteur, l'accès conditionnel et les politiques basées sur les risques.
+
+00:07:44.300 --> 00:07:45.800
+Pour le MFA, vous avez actuellement deux options.
+
+00:07:46.640 --> 00:07:47.940
+Le code d'accès unique par email est gratuit.
+
+00:07:48.240 --> 00:07:51.440
+Le système envoie un code à l'adresse email de l'utilisateur, il le saisit et c'est terminé.
+
+00:07:51.440 --> 00:07:55.800
+Le code d'accès unique par SMS fonctionne de la même manière, mais via le téléphone, avec des coulis à l'opérateur.
+
+00:07:56.280 --> 00:07:58.840
+Un point à noter, il n'y a pas encore de prise en charge de Microsoft Authenticator.
+
+00:07:59.440 --> 00:08:04.020
+C'est une limitation actuelle, sur laquelle Microsoft travaille probablement, mais pour l'instant, c'est email ou SMS.
+
+00:08:04.620 --> 00:08:06.560
+L'accès conditionnel est là où les choses deviennent intéressantes.
+
+00:08:07.080 --> 00:08:11.460
+Vous pouvez définir des règles exigeant, par exemple le MFA lorsque le niveau de risque de connexion est moyen ou élevé,
+
+00:08:11.600 --> 00:08:13.760
+ou bloquer l'accès depuis des pays où vous ne travaillez pas.
+
+00:08:14.680 --> 00:08:17.400
+Le système évalue chaque tentative de connexion en temps réel.
+
+00:08:17.400 --> 00:08:21.560
+Si quelqu'un tente de se connecter depuis un emplacement ou un appareil suspect,
+
+00:08:21.700 --> 00:08:26.560
+il peut automatiquement renforcer les exigences de sécurité sans que vous ayez à développer cette logique vous-même.
+
+00:08:27.240 --> 00:08:30.260
+Mais il existe une fonctionnalité qui se démarque vraiment, l'authentification renforcée, c'est un peu potentiel.
+
+00:08:30.480 --> 00:08:31.340
+Voici comment cela fonctionne.
+
+00:08:31.540 --> 00:08:35.160
+Imaginez qu'un utilisateur se connecte à votre application avec juste un mot de passe pour parcourir votre catalogue de produits.
+
+00:08:35.560 --> 00:08:37.160
+C'est suffisant pour des activités à faible risque.
+
+00:08:37.220 --> 00:08:41.880
+Mais lorsqu'il essaie de consulter son historique de paiement ou de télécharger une facture, vous souhaitez une vérification supplémentaire.
+
+00:08:42.500 --> 00:08:46.160
+Avec l'authentification renforcée, vous pouvez exiger les MFA uniquement pour certaines sections de votre application.
+
+00:08:46.160 --> 00:08:49.260
+L'utilisateur n'est pas sollicité tant qu'il n'essaie pas d'accéder à une ressource sensible.
+
+00:08:50.080 --> 00:08:54.120
+Tout est géré en arrière-plan par External ID à l'aide de ce qu'on appelle le contexte d'authentification.
+
+00:08:55.240 --> 00:08:59.280
+Vous définissez les parties de votre application, nécessitant une sécurité accrue et le système s'occupe du reste.
+
+00:09:00.080 --> 00:09:03.760
+L'utilisateur bénéficie d'une navigation fluide tout en protégeant les données sensibles.
+
+00:09:05.140 --> 00:09:06.360
+Image de marque et expérience utilisateur
+
+00:09:06.360 --> 00:09:11.780
+Le contrôle de l'image de marque est l'une des principales raisons pour lesquelles les entreprises choisissent External ID plutôt que de créer leur propre système.
+
+00:09:12.820 --> 00:09:16.120
+Vous avez un contrôle total sur l'apparence de vos pages d'inscription et de connexion.
+
+00:09:16.480 --> 00:09:23.100
+Importez votre logo, définissez les couleurs d'arrière-plan, ajoutez un favicon et personnalisez l'entête et le pied de page avec vos liens Lego.
+
+00:09:24.140 --> 00:09:28.540
+Pour plus de contrôle, vous pouvez charger un fichier CSS personnalisé afin de modifier les polices, les couleurs des boutons et la mise en page.
+
+00:09:29.260 --> 00:09:31.320
+C'est votre marque, vos couleurs, c'est vous qui décidez de tout.
+
+00:09:31.980 --> 00:09:33.120
+C'est là que les choses se compliquent un peu.
+
+00:09:33.840 --> 00:09:35.940
+Image de marque est globale par locataire et non par application.
+
+00:09:36.580 --> 00:09:41.420
+Ainsi, si vous avez plusieurs applications, comme un portail client et une application mobile, elles partagent toutes les mêmes pages personnalisées.
+
+00:09:42.040 --> 00:09:43.480
+Vous ne pouvez pas donner à chaque application son propre.
+
+00:09:43.900 --> 00:09:48.540
+L'ancien Azure ID B2C permettait une personnalisation par application, mais External ID ne le permet pas encore.
+
+00:09:49.580 --> 00:09:52.560
+Autre limitation, les messages d'erreur sur les pages de connexion ne sont pas personnalisables.
+
+00:09:52.860 --> 00:09:56.280
+Si quelqu'un saisit une adresse email inexistante, il verra un message du type PECS,
+
+00:09:56.360 --> 00:09:59.360
+ils ne vont pas trouver de compte avec cette adresse email, et vous ne pouvez pas modifier ce texte.
+
+00:09:59.360 --> 00:10:05.480
+Pour certaines organisations, cela convient, mais pour d'autres, notamment dans les secteurs réglementés ou avec une charte graphique stricte, c'est un vrai problème.
+
+00:10:06.680 --> 00:10:08.000
+Les applications mobiles bénéficient d'une Europe.
+
+00:10:08.300 --> 00:10:11.500
+External ID dispose d'une API d'authentification native pour iOS et Android.
+
+00:10:12.000 --> 00:10:16.920
+Au lieu de rediriger les utilisateurs vers une page de connexion web, vous pouvez créer des écrans de connexion entièrement personnalisés dans votre application.
+
+00:10:18.100 --> 00:10:20.160
+Pas de redirection de navigateur ni de vue web plus ergonomique.
+
+00:10:20.560 --> 00:10:23.360
+L'utilisateur reste dans votre application tout du long et vous contrôlez chaque pixel.
+
+00:10:23.560 --> 00:10:27.580
+L'expérience est beaucoup plus fluide et c'est une fonctionnalité qu'Azure AD B2C n'a jamais eue.
+
+00:10:27.580 --> 00:10:30.680
+Migration depuis Azure AD B2C
+
+00:10:30.680 --> 00:10:34.640
+Si vous utilisez déjà Azure AD B2C, vous vous demandez probablement ce que cela signifie pour vous.
+
+00:10:35.020 --> 00:10:35.560
+Voici la situation.
+
+00:10:35.940 --> 00:10:38.540
+Microsoft continuera de prendre en charge B2C au moins jusqu'en 2030.
+
+00:10:39.040 --> 00:10:42.540
+Vos locataires actuels ne cesseront pas de fonctionner demain, mais aucune nouvelle fonctionnalité n'y sera ajoutée.
+
+00:10:43.220 --> 00:10:47.960
+Toutes les innovations, comme les passes key, l'authentification native et la protection de la fraude, sont exclusives à External ID.
+
+00:10:48.620 --> 00:10:50.220
+Vous utilisez une plateforme qui est par essence figée.
+
+00:10:50.220 --> 00:10:52.960
+Microsoft a publié des outils et des guides de migration officiels.
+
+00:10:53.320 --> 00:10:55.100
+Il existe deux voies selon votre envergure.
+
+00:10:55.900 --> 00:10:59.820
+Pour les tenants comptant moins de 5 millions d'objets d'annuaire, utilisateurs, groupes et attributs personnalisés,
+
+00:11:00.520 --> 00:11:02.680
+la migration standard est assez directe.
+
+00:11:03.200 --> 00:11:04.600
+Cela fonctionne comme un transfert entre tenants.
+
+00:11:05.440 --> 00:11:10.360
+Vous créez un nouveau tenant External ID, migrez vos utilisateurs et leurs identifiants, puis basculez vos applications.
+
+00:11:11.320 --> 00:11:14.000
+Microsoft fournit des outils d'exportation et d'importation en masse,
+
+00:11:14.320 --> 00:11:18.080
+et vous pouvez utiliser la migration de mots de passe key, juste attendez pour limiter les interruptions.
+
+00:11:19.160 --> 00:11:23.580
+Pour les tenants plus importants de plus de 5 millions d'objets, il existe le mode de compatibilité à grande échelle, ou HSC.
+
+00:11:24.240 --> 00:11:28.300
+Dans ce mode, Azure AD B2C et External ID fonctionnent côte à côte dans le même tenant.
+
+00:11:29.360 --> 00:11:33.260
+Vos endpoints B2C existants restent actifs pendant que vous déplacez progressivement vos applications.
+
+00:11:34.220 --> 00:11:37.560
+Il est conçu pour les organisations qui ne peuvent migrer des millions d'utilisateurs du jour au lendemain,
+
+00:11:37.920 --> 00:11:38.840
+mais il impose des compromis.
+
+00:11:38.840 --> 00:11:42.300
+Pas de fournisseur d'identité sociale, pas de passe keys, un accès conditionnel limité,
+
+00:11:42.400 --> 00:11:44.320
+et certaines fonctionnalités ne sont tout simplement pas disponibles.
+
+00:11:45.000 --> 00:11:47.200
+Considérez cela comme une stratégie de transition, pas comme une solution permanente.
+
+00:11:47.500 --> 00:11:48.300
+Maintenant un changement majeur.
+
+00:11:48.660 --> 00:11:49.780
+Les stratégies personnalisées ont disparu.
+
+00:11:50.660 --> 00:11:54.680
+Si vous avez construit des flux d'authentification complexes avec le framework XML d'Azure AD B2C,
+
+00:11:54.800 --> 00:11:56.220
+ils ne fonctionneront pas dans External ID.
+
+00:11:57.280 --> 00:12:01.380
+Vous devrez reconstruire cette logique en utilisant des flux d'utilisateurs et des extensions d'authentification personnalisées.
+
+00:12:01.660 --> 00:12:04.380
+Il n'existe aucun outil magique pour convertir votre XML dans le nouveau format.
+
+00:12:04.800 --> 00:12:05.780
+Vous devez simplement faire le travail.
+
+00:12:06.060 --> 00:12:07.220
+Alors voici ce qu'il en ressort.
+
+00:12:07.220 --> 00:12:09.660
+Si vous repartez de zéro aujourd'hui, utilisez External ID.
+
+00:12:10.140 --> 00:12:11.600
+Il n'y a aucune raison de s'intéresser à B2C.
+
+00:12:12.180 --> 00:12:15.100
+Si vous avez déjà un tenant B2C, commencez à planifier votre migration dès maintenant.
+
+00:12:15.460 --> 00:12:19.840
+Vous avez jusqu'en 2030, mais attendre la dernière minute signifie que vous devrez précipiter une migration complexe
+
+00:12:19.840 --> 00:12:22.420
+tout en maintenant vos applications actives, actives.
+
+00:12:22.840 --> 00:12:23.260
+Bon c'est petit.
+
+00:12:23.260 --> 00:12:27.100
+Foisissez une application, migrez-la, testez-la, apprenez du processus, puis faites le reste.
+
+00:12:28.220 --> 00:12:29.500
+Expérience développeur et automatisation.
+
+00:12:30.100 --> 00:12:33.260
+Microsoft est vraiment concentré sur la simplicité d'External ID pour les développeurs.
+
+00:12:33.400 --> 00:12:35.820
+Un immense changement par rapport aux anciennes stratégies B2C.
+
+00:12:36.240 --> 00:12:36.340
+Oui.
+
+00:12:37.300 --> 00:12:41.640
+Vous vous souvenez de ces fichiers XML qui s'étalaient sur des centaines de lignes et plantaient à la moindre erreur de parenthèse ?
+
+00:12:41.640 --> 00:12:42.060
+C'est terminé.
+
+00:12:42.580 --> 00:12:45.800
+Il existe une extension Visual Studio Code appelée Microsoft Entra External ID.
+
+00:12:46.500 --> 00:12:53.640
+Après authentification, vous pouvez parcourir votre tenant, voir les flux, les télécharger en JSON et prévisualiser votre image de marque, sans quitter l'éditeur.
+
+00:12:54.620 --> 00:12:56.820
+Voyez à quoi ressemble votre page de connexion avant même de la publier.
+
+00:12:57.560 --> 00:12:59.220
+Ensuite, il y a l'API Microsoft Graph.
+
+00:12:59.900 --> 00:13:04.660
+Presque chaque ressource External ID, flux, enregistrement d'application, image de marque peut être géré par programme.
+
+00:13:05.360 --> 00:13:10.080
+Cela signifie que vous automatisez la configuration de votre tenant dans vos pipelines CI CCD via PowerShell ou des appels REST.
+
+00:13:10.080 --> 00:13:15.280
+Créer un nouveau tenant, configurer les flux d'utilisateurs, enregistrer votre application, personnaliser la marque le tout via un script.
+
+00:13:15.820 --> 00:13:18.240
+Si vous gérez plusieurs environnements, cela permet de gagner un temps précieux.
+
+00:13:18.840 --> 00:13:21.260
+Les extensions d'authentification personnalisées sont là au résil de la vérité plus.
+
+00:13:21.540 --> 00:13:25.880
+Au lieu de XML complexe, vous étendez les flux d'authentification avec de simples appels HTTP vers Azure Functions.
+
+00:13:26.600 --> 00:13:28.360
+Il existe quatre événements sur lesquels vous pouvez vous gréver.
+
+00:13:28.860 --> 00:13:33.480
+Les missions de jetons permettent d'ajouter des revendications personnalisées aux jetons, comme des rôles ou des niveaux de fidélité.
+
+00:13:34.260 --> 00:13:39.220
+La collecte d'attributs permet de valider ou de pré-remplir les données d'inscription en appelant votre propre back-end.
+
+00:13:40.080 --> 00:13:43.100
+Et l'envoi d'OTP par email vous permet de personnaliser les emails de vérification.
+
+00:13:43.620 --> 00:13:46.700
+C'est la même flexibilité que B2C, mais dans un modèle accessible à tout développeur.
+
+00:13:47.220 --> 00:13:48.080
+Il y a des limites à connaître.
+
+00:13:48.820 --> 00:13:53.500
+Pas encore de notification Microsoft Graph, vous ne pouvez donc pas déclencher automatiquement un flux lors d'une inscription.
+
+00:13:54.360 --> 00:13:58.340
+Certaines configurations restent manuelles dans le centre et il n'y a pas de page de profil intégrée.
+
+00:13:58.340 --> 00:14:03.880
+Si vous voulez que les utilisateurs modifient leurs informations, créez la page dans votre application et appelez l'API Graph vous-même.
+
+00:14:04.500 --> 00:14:05.260
+Mais la direction est claire.
+
+00:14:05.680 --> 00:14:08.200
+Microsoft veut que l'identifiant externe soit entièrement automatisable.
+
+00:14:08.720 --> 00:14:10.040
+Cela facilite la gestion à grande échelle.
+
+00:14:11.880 --> 00:14:16.920
+Vous savez désormais que Microsoft Entra External ID et le remplaçant moderne d'Azure ADBIT aussi unifié sous la marque Entra.
+
+00:14:16.920 --> 00:14:25.280
+Les trois cas d'usage, identité client, collaboration partenaire et machine à machine, couvrent presque tous vos besoins externes.
+
+00:14:26.080 --> 00:14:29.520
+La décision clé est d'utiliser votre tenant workforce ou d'en créer un externe distinct.
+
+00:14:30.440 --> 00:14:33.320
+Pour les applications clients, une séparation est presque toujours préférable.
+
+00:14:33.760 --> 00:14:35.420
+L'identité est la porte d'entrée de votre application.
+
+00:14:35.860 --> 00:14:41.400
+La rendre fiable, sécurisée, personnalisée et simple impacte directement la confiance des utilisateurs et la croissance et la croissance.
+
+00:14:41.400 --> 00:14:47.600
+Votre devoir, allez sur Entra.Microsoft.com, créez un tenant externe et essayez le guide de démarrage.
+
+00:14:48.620 --> 00:14:51.020
+Il vous guidera dans la configuration d'une application exemple en quelques minutes.
+
+00:14:51.660 --> 00:14:54.260
+Abonnez-vous pour plus d'analyse simple sur la plateforme d'identité de Microsoft.
