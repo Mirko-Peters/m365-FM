@@ -113,8 +113,10 @@ async function r2First(request, env, ctx, url, p, key, build) {
   if (notModified(request, h.get("etag"), h.get("last-modified"))) return new Response(null, { status: 304, headers: h });
   return new Response(request.method === "HEAD" ? null : hit.body, { status: 200, headers: h });
 }
-// Datenexporte des Seitenbaus: fuer Programme da, nicht fuer die Suche (Allowlist - .well-known, openapi.json, agent.json, episodes.json, llms*.txt bleiben sichtbar)
+// Datenexporte des Seitenbaus: fuer Programme da, nicht fuer die Suche; jede .json bekommt noindex, ausser den oeffentlichen API-Beschreibungen
+// und Datenfeeds (agent.json, episodes.json, openapi.json, /.well-known/). llms*.txt, Feeds (.xml) und HTML bleiben sichtbar.
 const NOINDEX = /^\/(search\/|entities\.json|entities-src\.json|entities\.jsonld|og-manifest\.json|seo-report\.json|top\.json|show\/redirects\.json|show\/transcripts\.json|show-notes\/|blog-import\/|blog-content\/)|\.jsonld$/i;
+const noindexPath = (p) => !p.startsWith("/.well-known/") && !/^\/(?:agent|episodes|openapi)\.json$/i.test(p) && (NOINDEX.test(p) || /\.json$/i.test(p));
 // #266: Transkript-Dateien je Folge (Hauptshow, Dub-Folge, Sprachfassung) liegen im R2-Bucket (r2out/): fuer Podcast-Apps (CORS) und Programme,
 // nicht fuer die Suche (der Text steht schon auf der Folgenseite). Gleiche Regel wie site_transcripts.PATH_RX.
 export const TRANSCRIPT = /^(?:\/[a-z]{2})?(?:\/show\/episodes)?\/[a-z0-9-]+\/transcript\.(txt|vtt)$/;
@@ -201,7 +203,7 @@ function finishHeaders(h, p) {
   // T41: Schriften aendern sich unter gleichem Namen nicht (1 Jahr), Bilder 1 Tag, Skripte/Stile 1 h und danach im Hintergrund pruefen
   h.set("cache-control", HASHED.test(p) || FONT.test(p) ? "public, max-age=31536000, immutable" : isImg ? "public, max-age=86400, stale-while-revalidate=604800"
     : isStatic ? "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400" : HTML_CC);
-  if (NOINDEX.test(p)) h.set("x-robots-tag", "noindex");
+  if (noindexPath(p)) h.set("x-robots-tag", "noindex");
   const tm = TRANSCRIPT.exec(p);
   if (tm) { h.set("content-type", CT[tm[1]]); h.set("x-robots-tag", "noindex"); h.set("access-control-allow-origin", "*"); }   // #266
   if (isImg) h.set("vary", "accept");
@@ -357,7 +359,7 @@ export default {
       if (obj) {
         const h = new Headers({ "content-type": "application/json; charset=utf-8", "cache-control": HTML_CC });
         for (const [k, v] of Object.entries(SEC)) h.set(k, v);
-        if (NOINDEX.test(p)) h.set("x-robots-tag", "noindex");
+        if (noindexPath(p)) h.set("x-robots-tag", "noindex");
         return new Response(request.method === "HEAD" ? null : obj.body, { headers: h });
       }
     }

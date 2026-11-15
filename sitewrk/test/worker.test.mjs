@@ -54,7 +54,7 @@ test("R2-Seite: Cache, 304 per ETag und Last-Modified, gleich fuer alle Laender"
   const r2b = await run(req("/pl/x/", "PL", { "if-modified-since": "Sun, 01 Nov 2026 20:00:00 GMT" })); assert.equal(r2b.status, 304);
   const r3 = await run(req("/pl/x/", "PL", { "if-none-match": 'W/"r2e.r1"' })); assert.equal(r3.status, 200);
 });
-test("R2-Datenexporte: gleiche Pfade, JSON- und Cache-Header, Blog-Import bleibt noindex", async () => {
+test("R2-Datenexporte: gleiche Pfade, JSON- und Cache-Header, Blog-Import und Uebersetzungsliste noindex", async () => {
   const blog = await run(req("/blog-import/index.json", "US"));
   assert.equal(blog.status, 200); assert.equal(await blog.text(), '{"total":7}');
   assert.equal(blog.headers.get("content-type"), "application/json; charset=utf-8");
@@ -64,11 +64,19 @@ test("R2-Datenexporte: gleiche Pfade, JSON- und Cache-Header, Blog-Import bleibt
   assert.equal(translations.status, 200); assert.equal(await translations.text(), '{"count":3}');
   assert.equal(translations.headers.get("content-type"), "application/json; charset=utf-8");
   assert.equal(translations.headers.get("cache-control"), "public, max-age=0, s-maxage=600, stale-while-revalidate=86400");
-  assert.equal(translations.headers.get("x-robots-tag"), null);
+  assert.equal(translations.headers.get("x-robots-tag"), "noindex");   // R2-Rueckfall nutzt dieselbe Regel wie finishHeaders (noindexPath)
 });
 test("Dateien (JSON) und Assets unveraendert", async () => {
   const j = await run(req("/feed.json", "DE")); assert.equal(j.headers.get("etag"), '"j1"'); assert.equal(j.headers.get("last-modified"), LM); assert.equal(j.headers.get("x-m365-cr"), null);
   const j2 = await run(req("/feed.json", "DE", { "if-modified-since": LM })); assert.equal(j2.status, 304); assert.equal(lastOrigin.headers.get("if-modified-since"), LM);
+});
+test("Maschinelle JSON-Exporte erhalten noindex; oeffentliche JSON-Dateien, Feeds und HTML bleiben ausgenommen", async () => {
+  for (const p of ["/articles.json", "/topics.json", "/translation-status.json", "/hub-more.json", "/search/manifest.json", "/quotes.json", "/entities.jsonld"]) {
+    const r = await run(req(p, "US")); assert.equal(r.headers.get("x-robots-tag"), "noindex", p);
+  }
+  for (const p of ["/agent.json", "/episodes.json", "/openapi.json", "/.well-known/agent.json", "/llms.txt", "/feed.xml", "/de/entity/example/"]) {
+    const r = await run(req(p, "US")); assert.equal(r.headers.get("x-robots-tag"), null, p);
+  }
 });
 test("HEAD ohne Body; Assets und 404 unveraendert", async () => {
   const h = await run(req("/", "US", {}, "HEAD")); assert.equal(h.status, 200); assert.equal(h.body, null); assert.equal(h.headers.get("x-m365-cr"), null);

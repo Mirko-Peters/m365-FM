@@ -1758,7 +1758,10 @@ def build():
     import site_quotes as _SQ
     write("sponsors.json", json.dumps({"version": 1, "generated": TODAY, **SPM.sponsors_json(TODAY, LRN.ENTS)}, ensure_ascii=False))   # aktive Sponsor-Firmen inkl. 182 Tage Karenzzeit (ids, Namen): der Worker nimmt Leads fuer sie ohne Werbebuchung an (ads.js sponsor-lead)
     write("quotes.json", json.dumps({"version": 1, "generated": TODAY, "quotes": _SQ.ALL}, ensure_ascii=False))   # Quotes an Personen-Entitaeten; der Worker uebernimmt sie in D1 (importQuotesFromSite)
-    write("robots.txt", f"User-agent: *\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\nAllow: /\n\n# KI-Suchen und Assistenten ausdrücklich erlaubt\n" + "".join(f"User-agent: {b}\nAllow: /\n\n" for b in ("GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-User", "Claude-SearchBot", "PerplexityBot", "Google-Extended", "Applebot-Extended", "Bingbot")) + f"Sitemap: {BASE}/sitemap.xml\n")
+    _robots_rules = "Allow: /\nDisallow: /admin/\nDisallow: /callback/\n"   # JSON bleibt fuer Crawler erlaubt (Entscheidung Mirko); Datenexporte bekommen x-robots-tag: noindex im Site-Worker
+    _robots_bots = ("GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-User", "Claude-SearchBot", "PerplexityBot", "Google-Extended", "Applebot-Extended", "Bingbot")
+    write("robots.txt", f"User-agent: *\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\n{_robots_rules}\n# KI-Suchen und Assistenten ausdrücklich erlaubt\n" +
+          "".join(f"User-agent: {b}\n{_robots_rules}\n" for b in _robots_bots) + f"Sitemap: {BASE}/sitemap.xml\n")
     # llms.txt (Überblick), llms-full.txt (alle Folgen), agent.json (Maschinen-Beschreibung), episodes.json (Datenfeed)
     summ = (f"AI-dubbed podcast episodes about Microsoft 365, Copilot, Azure, Power Platform and AI governance by Microsoft MVP Mirko Peters, "
             f"in {len(active)} languages. Each episode has its own page with player, YouTube video, key points, transcript link and links to Spotify, Amazon Music, Deezer and more.")
