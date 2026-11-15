@@ -1,6 +1,7 @@
 """Gaeste-Boerse: oeffentliche Liste der Speaker (als Gast verfuegbar) und der Hosts (Show/Kanal/Event sucht Gaeste)."""
 from site_i18n import COMM_LANGS, pfx, pfx2, T
 from site_learn import ENTS, esc, _fetch_json, LCSS
+import site_meta_community as PM   # Titel/Description (Suchabsicht)
 
 FM = {"podcast": "Podcast", "youtube": "YouTube", "event": "Event", "webinar": "Webinar", "article": "Blog"}
 
@@ -29,6 +30,6 @@ def build(g, items, people):
              f'<p><a class="btn main" href="{croot}#c-guests">{esc(T(lang, "Add your listing", "Eintrag anlegen"))}</a></p>'
              f'{sec(T(lang, "Available as guest or speaker", "Als Gast oder Speaker verfügbar"), sp)}{sec(T(lang, "Shows, channels and events looking for guests", "Shows, Kanäle und Events suchen Gäste"), ho)}</main>{footer(lang) if lang in LANGS else footer_en()}')
         u = f"{croot}guests/"; noidx = lang not in ("en", "de")
-        write(f"{pfx2(lang)}community/guests/index.html", page(lang, f"{ttl} – M365.FM", intro, u, b, None, [{"@context": "https://schema.org", "@type": "CollectionPage", "name": ttl, "url": u}], og_type="website", extra_head=LCSS, noindex=noidx))
+        write(f"{pfx2(lang)}community/guests/index.html", page(lang, *(PM.hub_meta("guests", lang) or (f"{ttl} – M365.FM", intro)), u, b, None, [{"@context": "https://schema.org", "@type": "CollectionPage", "name": ttl, "url": u}], og_type="website", extra_head=LCSS, noindex=noidx))
         if not noidx:
             sitemap.append((u, TODAY, None))

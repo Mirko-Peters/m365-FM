@@ -1374,8 +1374,8 @@ def build():
 {section(4, "Topics", f'<h2 style="margin-top:0">The Microsoft cloud, one concept at a time</h2><div class="chips">{topics_root}</div>')}</main>
 {m365con_band()}
 <main class="wrap">{faq_html('en', 'FAQ')}{cta_box(HT("en", "cta_h"), HT("en", "cta_p"), HT("en", "cta_btn"), f"{BASE}/show/")}{author_box('en')}</main>{footer_en()}"""
-    write("index.html", page("en", "M365.FM – Microsoft community: blog, podcast, events & explainers | Mirko Peters",
-          "Blog posts, podcasts and events from the Microsoft community plus animated explainers on Microsoft 365, Copilot, Azure and Power Platform by Microsoft MVP Mirko Peters – in 14 languages.",
+    write("index.html", page("en", "M365.FM: Microsoft 365 Podcast, Blog & Explainers",   # Suchabsicht (12.11.2026); eigener Wortlaut, damit / und /en/ (data/home_i18n.json) keinen doppelten Titel haben
+          f"Microsoft 365, Copilot, Azure and Power Platform explained: podcast, blog, events and animated videos by Microsoft MVP Mirko Peters, in {len(active)} languages.",
           f"{BASE}/", root_body, alts_home, [person_ld(), org_ld(), event_ld(), faq_ld("en"), {"@context": "https://schema.org", "@type": "WebSite", "@id": f"{BASE}/#website", "name": "M365.FM international", "url": f"{BASE}/",
            "potentialAction": {"@type": "SearchAction", "target": {"@type": "EntryPoint", "urlTemplate": f"{BASE}/search/?q={{search_term_string}}"}, "query-input": "required name=search_term_string"}, "inLanguage": [LANGS[x][1] for x in active], "publisher": {"@id": f"{BASE}/#org"}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}], og_type="website"))
     sitemap.append((f"{BASE}/", TODAY, alts_home))   # T42: wie im HTML
