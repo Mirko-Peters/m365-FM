@@ -1,8 +1,8 @@
 ---
 title: "Microsoft Teams Collaboration Tips for Remote and Hybrid Teams"
 summary: "Practical Microsoft Teams collaboration tips for remote and hybrid teams: chat and channel habits, mentions and tags, Loop components, meeting preparation and recap, and how to cut noise."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-16
 topics: [teams, teams-channels, teams-premium]

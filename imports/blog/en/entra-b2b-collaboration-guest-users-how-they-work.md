@@ -1,10 +1,10 @@
 ---
 title: "Entra B2B Collaboration and Guest Users: How They Work and How to Manage Them"
 summary: "What Microsoft Entra B2B collaboration is, how guests are invited and redeem access, what a guest user object looks like, which settings control who can invite whom, and how guests are billed."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-17
+date: 2026-11-16
 topics: [b2b-collaboration, guest-access, entra-external-id, cross-tenant-access-settings]
 keypoints:
   - "B2B collaboration lets partners sign in with their own identities. You do not manage their passwords or account lifecycle."

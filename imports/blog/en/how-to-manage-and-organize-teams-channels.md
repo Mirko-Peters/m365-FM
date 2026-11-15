@@ -1,8 +1,8 @@
 ---
 title: "How to Manage and Organize Teams Channels Effectively: Types, Limits, Moderation"
 summary: "How to manage Teams channels: choose between standard, private and shared channels, set who can create them, name and rename them, moderate posts, delete and restore them, and respect the limits."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-16
 topics: [teams-channels, teams, private-channels, shared-channels]

@@ -1,8 +1,8 @@
 ---
 title: "AADSTS900561 and AADSTS50126 Sign-in Errors Explained: Causes and Checks"
 summary: "What AADSTS900561 (endpoint only accepts POST, received GET) and AADSTS50126 (invalid username or password) mean in Microsoft Entra ID, with the documented causes and the checks to run in order."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-16
 topics: [entra-id, microsoft-entra-sign-in-logs, mfa]

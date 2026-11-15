@@ -1,8 +1,8 @@
 ---
 title: "How to Create and Use Microsoft Forms in Teams: Polls, Surveys and Quizzes"
 summary: "How to use Microsoft Forms in Teams: add a Forms tab to a channel, post a poll in chat, run polls in meetings, create quizzes and choose who can respond. Steps, limits and common problems."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-16
 topics: [microsoft-forms, teams, teams-channels]

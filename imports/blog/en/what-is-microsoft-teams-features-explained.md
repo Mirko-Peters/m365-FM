@@ -1,8 +1,8 @@
 ---
 title: "What Is Microsoft Teams? Features Explained for Beginners"
 summary: "What Microsoft Teams is and what it does: chat, teams and channels, meetings, calls, files and apps. A beginner overview of how Teams fits into Microsoft 365, who owns what and the main limits."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-16
 topics: [teams, teams-channels, teams-phone]

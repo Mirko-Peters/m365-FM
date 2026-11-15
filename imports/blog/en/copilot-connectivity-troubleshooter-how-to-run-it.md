@@ -1,10 +1,10 @@
 ---
 title: "Copilot Connectivity Troubleshooter: How to Run It and Read the Results"
 summary: "How to run the Copilot connectivity troubleshooter in the Get Help app, what it checks, and how to read the related Microsoft 365 network connectivity test results for HTTP, WebSocket and latency."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-17
+date: 2026-11-16
 topics: [copilot, microsoft-365-apps, copilot-governance]
 keypoints:
   - "Open the Get Help app, search for 'Copilot connectivity troubleshooter' and follow the steps. Microsoft says it checks for firewall rules and other things that could block the connection."

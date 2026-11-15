@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Purview Audit: How to Search, Export and Understand Retention"
 summary: "How Microsoft Purview Audit works: required roles, the search steps in the Purview portal, search limits, CSV export caps, and how long audit records are kept in Audit Standard versus Audit Premium."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-17
+date: 2026-11-16
 topics: [microsoft-purview-audit, audit-logs, purview]
 keypoints:
   - "Audit is enabled by default. To search you need the Audit Logs or View-Only Audit Logs role in the Microsoft Purview portal."

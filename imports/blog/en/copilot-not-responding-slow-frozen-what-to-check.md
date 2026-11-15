@@ -1,10 +1,10 @@
 ---
 title: "Copilot Not Responding, Slow or Frozen: What to Check"
 summary: "Microsoft 365 Copilot opens but never answers, stays on processing or feels slow? Work through the checks Microsoft documents: license, WebSocket access, proxy timeouts, cookies and the connectivity tests."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-17
+date: 2026-11-16
 topics: [copilot, copilot-chat, microsoft-365-apps]
 keypoints:
   - "When Copilot Chat opens but never answers, Microsoft names blocked WebSocket Secure traffic, TLS inspection and aggressive proxy timeouts as the common network causes."

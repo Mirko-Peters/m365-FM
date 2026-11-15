@@ -1,10 +1,10 @@
 ---
 title: "OneDrive Storage: Limits, How to Check Usage and Free Up Space"
 summary: "OneDrive storage limits for personal and work or school accounts, how to check what you use, what happens when you go over, and how to free up cloud space versus local disk space with Files On-Demand."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-17
+date: 2026-11-16
 topics: [onedrive, onedrive-files-on-demand, microsoft-365-admin-center]
 keypoints:
   - "Personal accounts: 5 GB free, 100 GB Basic, 1 TB Personal. Newer Family, Premium and Pro quotas change from October 8, 2026, per Microsoft Support."

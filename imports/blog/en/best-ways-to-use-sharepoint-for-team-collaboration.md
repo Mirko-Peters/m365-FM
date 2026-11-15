@@ -1,8 +1,8 @@
 ---
 title: "Best Ways to Use SharePoint for Team Collaboration: A Setup Guide"
 summary: "How to use SharePoint for collaboration: pick a team site, connect it to a Microsoft 365 group and Teams, manage access with groups, co-author files and share links safely."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-16
 topics: [sharepoint, teams, sharepoint-document-libraries]

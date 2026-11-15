@@ -1,8 +1,8 @@
 ---
 title: "What Is Teams Phone? Licenses, Setup Steps and Calling Options"
 summary: "What Microsoft Teams Phone is, which licenses users need, how the four PSTN options differ (Calling Plans, Operator Connect, Teams Phone Mobile, Direct Routing) and the setup order for admins."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-16
 topics: [teams-phone, pstn, teams-calling-plans, teams-admin-center]

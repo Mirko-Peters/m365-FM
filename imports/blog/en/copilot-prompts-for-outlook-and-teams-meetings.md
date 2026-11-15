@@ -1,10 +1,10 @@
 ---
 title: "Copilot Prompts for Outlook and Teams Meetings: Practical Examples"
 summary: "Example Copilot prompts for Outlook and Teams meetings, based on Microsoft's own examples and the goal, context, source and expectations structure, plus the transcription and license requirements that decide whether they work."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-17
+date: 2026-11-16
 topics: [copilot, copilot-chat, outlook, copilot-prompt-gallery]
 keypoints:
   - "Microsoft's prompt structure has four parts: goal, context, source and expectations. Only a clear goal is required."

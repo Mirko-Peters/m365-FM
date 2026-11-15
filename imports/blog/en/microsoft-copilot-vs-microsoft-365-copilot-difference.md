@@ -1,8 +1,8 @@
 ---
 title: "Microsoft Copilot vs Microsoft 365 Copilot: What Is the Difference?"
 summary: "The difference between Microsoft Copilot and Microsoft 365 Copilot: personal versus work accounts, Copilot Chat versus the licensed add-on, what data each can use, and how Microsoft's naming is changing."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-16
 topics: [copilot, copilot-chat, enterprise-data-protection]

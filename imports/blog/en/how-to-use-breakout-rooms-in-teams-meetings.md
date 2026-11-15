@@ -1,8 +1,8 @@
 ---
 title: "How to Use Breakout Rooms in Microsoft Teams Meetings: Create, Assign, Manage"
 summary: "How breakout rooms work in Teams meetings: who can create them, how to create and assign rooms before or during a meeting, time limits, managers, joining, attendance reports, limits and fixes."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-16
 topics: [teams, teams-meeting-apps, teams-admin-center]
