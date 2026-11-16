@@ -379,7 +379,7 @@ jobs:
           done
           echo "::error::Der Site-Worker liefert die Sitemaps der Sprachen ausser en/de oder die Datenexporte (Register, og-manifest.json, seo-report.json) noch nicht aus R2 (Merker x-m365-sitemaps bzw. x-m365-exports fehlt auf /sitemap.xml). Erst den Workflow sitewrk.yml erfolgreich veroeffentlichen, dann diesen Lauf wiederholen - sonst antworteten diese Dateien mit 404."
           exit 1
-      # deploy-pages@v4 wartet hoechstens 10 min (MAX_TIMEOUT = 600000 im Code der Action, ein groesserer timeout wird ignoriert). GitHub Pages
+      # deploy-pages wartet hoechstens 10 min (MAX_TIMEOUT = 600000 im Code der Action, auch in v5; ein groesserer timeout wird ignoriert). GitHub Pages
       # haengt bei unserer Groesse ab und zu laenger in "syncing_files"/"updating_pages" (Laeufe 529, 616, 627): dann bis zu zwei weitere Versuche
       # mit demselben Artefakt. Erst wenn auch der dritte scheitert, schlaegt der Job fehl (die folgenden Schritte laufen nur nach einem Erfolg).
       - id: deployment
