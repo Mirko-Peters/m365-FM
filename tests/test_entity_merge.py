@@ -62,6 +62,26 @@ class Daten(unittest.TestCase):
                         self.assertTrue(keep.get(k), f"{v['to']}: {k} fehlt")
         self.assertEqual(ids["oee"]["wikipedia"], "https://en.wikipedia.org/wiki/Overall_equipment_effectiveness")
 
+    def test_gast_ziel_behaelt_rel_und_firma(self):
+        """Personen-Ziel ist ein Gast: data/guest_entities.json wird von site_podpage.make_guest_entities neu geschrieben - die rel-Kanten,
+        Firma und abweichende Namen der Altfassung muessen dort hineinfliessen (sonst gehen sie beim naechsten Seitenbau verloren)."""
+        raw = json.loads((D / "guest_merge.json").read_text("utf-8"))["entities"]
+        gents = {e["id"]: e for e in json.loads((D / "guest_entities.json").read_text("utf-8"))}
+        for old, v in raw.items():
+            g = gents.get(v["to"])
+            if not g:
+                continue
+            w = v["was"]
+            self.assertTrue({tuple(r) for r in w.get("rel") or []} <= {tuple(r) for r in g["rel"]}, old)
+            if w.get("company"):
+                self.assertTrue(g.get("company"), old)
+            if w["name"] != g["name"]:
+                self.assertIn(w["name"], g["aliases"])
+        js = gents["jean-sebastien-duche"]
+        self.assertIn(["related_to", "entra-id"], js["rel"])
+        self.assertEqual(js["company"], "Magellan")
+        self.assertEqual(js["job"], "Security Solution Lead / Microsoft MVP", "Gast-Angaben gehen vor")
+
     def test_speaker_zeigt_auf_den_gast(self):
         sp = {s["name"]: s for s in json.loads((D / "speakers.json").read_text("utf-8"))["speakers"]}
         self.assertEqual(sp["Jean-Sébastien DUCHÊNE"]["id"], "jean-sebastien-duche")
