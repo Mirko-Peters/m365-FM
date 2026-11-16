@@ -161,7 +161,7 @@
     var tok = (/[?&]invite=([a-f0-9]{36})/.exec(location.search) || [])[1];
     if (tok) fetch(X.api + "/api/speaker/invite/" + tok).then(function (r) { return r.json(); }).then(function (j) {
       if (!j.invite) return; var i = j.invite, box = h("div", { class: "ccard" }, [h("h3", { text: Q.invt }), h("p", { text: Q.invtxt.replace("{s}", i.title).replace("{e}", i.ev) })]), m2 = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" });
-      if (!me) { var ret = encodeURIComponent(location.href.split("#")[0]), lg = h("div", { class: "btns" }); box.appendChild(h("p", { text: Q.needlogin })); box.appendChild(lg);
+      if (!me) { var ret = encodeURIComponent(location.href.split("#")[0] + "#c-events"), lg = h("div", { class: "btns" }); box.appendChild(h("p", { text: Q.needlogin })); box.appendChild(lg);
         fetch(X.api + "/api/providers").then(function (r) { return r.json(); }).catch(function () { return {}; }).then(function (pj) { var pv = (pj && pj.providers) || ["linkedin", "microsoft", "google"]; if (!Array.isArray(pv)) pv = Object.keys(pv);
           [["linkedin", "LinkedIn"], ["microsoft", "Microsoft"], ["google", "Google"], ["github", "GitHub"]].forEach(function (x) { if (pv.indexOf(x[0]) >= 0) lg.appendChild(h("a", { class: "btn" + (x[0] === "linkedin" ? " main" : ""), href: X.api + "/auth/login/" + x[0] + "?return=" + ret, rel: "nofollow", text: Q.signin + " " + x[1] })); }); }); }
       else box.appendChild(h("div", { class: "btns" }, [

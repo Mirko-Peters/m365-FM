@@ -256,4 +256,8 @@ test("Reiter: der Import-Kasten (#c-events-import, ohne eigenen Reiter) gehoert 
   assert.equal(el(main, "c-events").hidden, false); assert.equal(el(main, "c-events-import").hidden, false, "auf dem Reiter Events sichtbar");
   ({ main } = await bootProfile(env, { search: "", hash: "" }));
   assert.equal(el(main, "c-page").hidden, false); assert.equal(el(main, "c-events-import").hidden, true, "Startreiter Konto");
+  let replaced;   // Link ?claim=<e>#c-events-import (site_events.py, ohne Anmeldung): Reiter Events offen, ?claim= bleibt fuer events-import.js
+  ({ main, replaced } = await bootProfile(env, { search: "?claim=ev-1", hash: "#c-events-import" }));
+  assert.equal(el(main, "c-events").hidden, false); assert.equal(el(main, "c-events-import").hidden, false); assert.equal(el(main, "c-page").hidden, true);
+  assert.deepEqual(replaced, ["#c-events"]);
 });

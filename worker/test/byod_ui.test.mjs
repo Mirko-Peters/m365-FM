@@ -103,8 +103,8 @@ test("blogdomain.js: deutsche und englische Texte haben dieselben Schluessel; di
   for (const k of Object.keys(seen.a)) assert.ok(String(seen.a[k]).length > 0 && String(seen.b[k]).length > 0, k);
 });
 
-test("Seite: Platz und Skript im Community-Bereich (generate_site.py)", () => {
-  const g = readFileSync(new URL("../../generate_site.py", import.meta.url), "utf8");
-  assert.ok(g.includes('<div id="c-blogdomain"></div>') && g.includes("/assets/blogdomain.js"));
-  assert.ok(g.indexOf("/assets/events.js") < g.indexOf("/assets/blogdomain.js"));
+test("Seite: Platz und Skript im Community-Bereich (site_community_page.py)", () => {
+  const g = readFileSync(new URL("../../site_community_page.py", import.meta.url), "utf8");
+  assert.ok(g.includes('"c-blogdomain"') && g.includes('(("c-blogdomain",), ("blogdomain.js",)'));
+  assert.ok(g.indexOf('"events.js", "events-import.js"') < g.indexOf('"blogdomain.js"'));
 });
