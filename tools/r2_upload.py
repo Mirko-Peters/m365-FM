@@ -3,13 +3,20 @@
 
 Standard ist ein Testlauf (zaehlt nur). Mit --apply wird geladen/hochgeladen und
 data/r2_map.json geschrieben (Original-URL -> https://img.m365.fm/<key>).
+Beim Kopieren werden JPEG/PNG/WebP auf hoechstens MAX_SIDE x MAX_SIDE Pixel verkleinert; GIF, SVG, AVIF, PDF und
+animierte Bilder bleiben unveraendert. JPEG/PNG werden als WebP gespeichert, wenn das kleiner ist.
+
+--shrink verkleinert schon kopierte Bilder, die laut data/r2_dims.json breiter als MAX_SIDE sind: Laden ueber img.m365.fm,
+Ablage unter einem NEUEN Schluessel mit Endung -w<MAX_SIDE> (alte Schluessel sind ein Jahr lang unveraenderlich gecacht),
+alle Eintraege in data/r2_map.json zeigen danach auf die neue URL, data/r2_dims.json bekommt die neuen Masse.
+Alte Objekte bleiben im Bucket (nichts wird geloescht). Ohne --apply nur Testlauf.
 Zugang ueber R2_ACCOUNT_ID, R2_BUCKET, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY.
 """
-import gzip, hashlib, io, json, os, re, sys, urllib.request
+import gzip, hashlib, html, io, json, os, re, sys, urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageOps
 
 ROOT = Path(__file__).resolve().parent.parent
 MAP = ROOT / "data" / "r2_map.json"
@@ -17,6 +24,8 @@ DIMS = ROOT / "data" / "r2_dims.json"
 LOCAL = ROOT / "data" / "r2_local.json"   # {"<Repo-Pfad>": "<Schluessel im Bucket>"}: eigene Bilder aus dem Repo (z. B. design/listen/listen-banner.webp)
 LOCAL_TYPES = {".webp": "image/webp", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".gif": "image/gif", ".svg": "image/svg+xml", ".avif": "image/avif"}
 PUBLIC = "https://img.m365.fm"
+MAX_SIDE = 1600   # groesste gespeicherte Kantenlaenge: reicht fuer die Inhaltsbreite auf hochaufloesenden Bildschirmen
+SHRINK_TYPES = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp"}
 EXT = {"image/jpeg": ".jpg", "image/png": ".png", "image/gif": ".gif", "image/webp": ".webp", "image/svg+xml": ".svg", "image/avif": ".avif",
        "application/pdf": ".pdf"}   # PDFs: Podpage-Downloads (Archiv vor der Kuendigung)
 HOSTS = ("statics.mylandingpages.co", "roundups-inarticle-public.s3", "m.media-amazon.com", "img.podpage.com",
@@ -88,6 +97,172 @@ def image_dimensions(data):
         return None
 
 
+def fetch_url(u):
+    """URL zum Laden. Schluessel in data/r2_map.json stehen so, wie sie im HTML vorkommen (site_r2.rewrite ersetzt Rohtext),
+    also teils HTML-maskiert ('&amp;'); geladen wird die echte URL."""
+    return html.unescape(u)
+
+
+def _encode(im, fmt):
+    buf = io.BytesIO()
+    if fmt == "WEBP":
+        im.save(buf, "WEBP", quality=82, method=6)
+    elif fmt == "JPEG":
+        im.save(buf, "JPEG", quality=85, optimize=True, progressive=True)
+    else:
+        im.save(buf, "PNG", optimize=True)
+    return buf.getvalue()
+
+
+def optimize(data, ct):
+    """JPEG/PNG/WebP auf hoechstens MAX_SIDE x MAX_SIDE verkleinern (Seitenverhaeltnis bleibt) und JPEG/PNG als WebP speichern,
+    wenn das kleiner ist. GIF, SVG, AVIF, PDF und animierte Bilder bleiben unveraendert. Gibt (Bytes, Inhaltstyp) zurueck."""
+    if ct not in ("image/jpeg", "image/png", "image/webp"):
+        return data, ct
+    try:
+        im = Image.open(io.BytesIO(data))
+        if getattr(im, "is_animated", False):
+            return data, ct
+        big = im.width > MAX_SIDE or im.height > MAX_SIDE
+        if ct == "image/webp" and not big:
+            return data, ct   # WebP in passender Groesse: unveraendert
+        im = ImageOps.exif_transpose(im)   # Drehung aus EXIF anwenden: das WebP uebernimmt die EXIF-Angabe nicht
+        if big:
+            im.thumbnail((MAX_SIDE, MAX_SIDE), Image.LANCZOS)
+        im = im.convert("RGBA" if im.mode in ("RGBA", "LA", "P", "PA") else "RGB")
+        webp = _encode(im, "WEBP")
+        if ct == "image/webp":
+            return webp, ct
+        # Vergleich: WebP nur, wenn kleiner als das Original bzw. (bei verkleinerten Bildern) als das verkleinerte Bild im Originalformat
+        other = (_encode(im, "PNG") if ct == "image/png" else _encode(im.convert("RGB"), "JPEG")) if big else data
+        return (webp, "image/webp") if len(webp) < len(other) else (other, ct)
+    except Exception:
+        return data, ct
+
+
+def http_get(u, ua="Mozilla/5.0 (m365.fm image copy)"):
+    """-> (Bytes, Inhaltstyp); hoechstens 15 MB + 1 Byte, damit zu grosse Dateien auffallen."""
+    req = urllib.request.Request(u, headers={"User-Agent": ua})
+    with urllib.request.urlopen(req, timeout=40) as r:
+        return r.read(15_000_001), r.headers.get_content_type()
+
+
+def copy_one(s3, bucket, u, done, dims, get=None):
+    """Ein fremdes Bild laden (echte URL, ohne HTML-Maskierung), verkleinern/umwandeln, unter i/<sha1(Schluessel)> ablegen
+    und done[u] (Schluessel wie gespeichert) sowie die Masse eintragen."""
+    data, ct = (get or http_get)(fetch_url(u))
+    if ct not in EXT or len(data) < 100 or len(data) > 15_000_000:
+        raise ValueError(f"kein Bild ({ct}, {len(data)} Byte)")
+    data, ct = optimize(data, ct)
+    size = image_dimensions(data)
+    key = "i/" + hashlib.sha1(u.encode()).hexdigest()[:20] + EXT[ct]
+    s3.put_object(Bucket=bucket, Key=key, Body=data, ContentType=ct, CacheControl="public, max-age=31536000, immutable")
+    done[u] = f"{PUBLIC}/{key}"
+    if size:
+        dims[done[u]] = size
+
+
+def shrink_candidates(mapping, dims):
+    """R2-URLs, die laut dims breiter als MAX_SIDE sind und von fremden Bildern (Schluessel http...) genutzt werden.
+    Lokale Repo-Dateien bleiben aussen vor: upload_local setzt ihren Schluessel bei jedem --apply neu."""
+    used, local = set(), set()
+    for k, v in mapping.items():
+        if isinstance(v, str) and v.startswith(PUBLIC + "/"):
+            (used if k.startswith("http") else local).add(v)
+    out = []
+    for v in sorted(used - local):
+        size = dims.get(v)
+        p = Path(v)
+        if size and size[0] > MAX_SIDE and p.suffix.lower() in SHRINK_TYPES and not p.stem.endswith(f"-w{MAX_SIDE}"):
+            out.append(v)
+    return out
+
+
+def shrunk_key(url, ct):
+    """https://img.m365.fm/i/abc.webp -> i/abc-w1600.webp (neuer Schluessel; der alte bleibt unveraendert im Bucket)."""
+    key = url[len(PUBLIC) + 1:]
+    head, _, name = key.rpartition("/")
+    stem = name.rsplit(".", 1)[0] if "." in name else name
+    return (head + "/" if head else "") + f"{stem}-w{MAX_SIDE}{EXT[ct]}"
+
+
+def shrink_one(s3, bucket, url, get=None):
+    """Vorhandenes R2-Bild laden, verkleinern und unter neuem Schluessel ablegen -> (neue URL, [Breite, Hoehe])."""
+    data, ct = (get or http_get)(url)
+    if ct not in SHRINK_TYPES.values():
+        ct = SHRINK_TYPES[Path(url).suffix.lower()]   # Typ aus der Endung, falls der Server keinen Bildtyp meldet
+    if len(data) < 100 or len(data) > 15_000_000:
+        raise ValueError(f"unerwartete Groesse ({len(data)} Byte)")
+    new, nct = optimize(data, ct)
+    size = image_dimensions(new)
+    if not size or max(size) > MAX_SIDE:
+        raise ValueError(f"nicht verkleinert ({size})")
+    key = shrunk_key(url, nct)
+    s3.put_object(Bucket=bucket, Key=key, Body=new, ContentType=nct, CacheControl="public, max-age=31536000, immutable")
+    return f"{PUBLIC}/{key}", size
+
+
+def repoint(mapping, moved):
+    """Alle Eintraege, die auf eine verschobene URL zeigen, auf die neue URL umstellen -> Zahl der umgestellten Eintraege."""
+    n = 0
+    for k, v in mapping.items():
+        if v in moved:
+            mapping[k] = moved[v]
+            n += 1
+    return n
+
+
+def shrink(s3, bucket, done, dims, get=None, workers=8):
+    """Zu breite R2-Bilder verkleinern, Zuordnung umstellen, neue Masse eintragen. Die alten Masse bleiben stehen,
+    weil das alte Objekt weiter existiert. -> (alt->neu, Zahl umgestellter Eintraege, Fehlerliste)."""
+    moved, failed = {}, []
+
+    def one(u):
+        try:
+            new, size = shrink_one(s3, bucket, u, get)
+            dims[new] = size
+            moved[u] = new
+        except Exception as e:
+            failed.append((u, str(e)[:80]))
+
+    with ThreadPoolExecutor(workers) as ex:
+        list(ex.map(one, shrink_candidates(done, dims)))
+    return moved, repoint(done, moved), failed
+
+
+def load_data():
+    done = json.load(open(MAP, encoding="utf-8")) if MAP.exists() else {}
+    dims = json.load(open(DIMS, encoding="utf-8")) if DIMS.exists() else {}
+    return done, dims
+
+
+def write_data(done, dims):
+    MAP.write_text(json.dumps(dict(sorted(done.items())), indent=0, ensure_ascii=False), encoding="utf-8")
+    DIMS.write_text(json.dumps(dict(sorted(dims.items())), separators=(",", ":"), ensure_ascii=False), encoding="utf-8")
+
+
+def s3_client():
+    import boto3
+    return boto3.client("s3", endpoint_url=f"https://{os.environ['R2_ACCOUNT_ID']}.r2.cloudflarestorage.com",
+                        aws_access_key_id=os.environ["R2_ACCESS_KEY_ID"], aws_secret_access_key=os.environ["R2_SECRET_ACCESS_KEY"], region_name="auto")
+
+
+def main_shrink(apply):
+    done, dims = load_data()
+    todo = shrink_candidates(done, dims)
+    print(f"{len(todo)} R2-Bilder breiter als {MAX_SIDE} px (laut data/r2_dims.json)")
+    if not apply:
+        for u in sorted(todo, key=lambda x: -dims[x][0])[:15]:
+            print("  ", dims[u], u)
+        print("Testlauf, nichts hochgeladen. Mit --shrink --apply ausfuehren.")
+        return
+    moved, n, failed = shrink(s3_client(), os.environ["R2_BUCKET"], done, dims)
+    write_data(done, dims)
+    print(f"{len(moved)} verkleinert, {n} Zuordnungen umgestellt, {len(failed)} fehlgeschlagen (bleiben bei der alten URL)")
+    for u, e in failed[:20]:
+        print("  FEHLER", u[:90], e)
+
+
 def fill_dimensions(mapping, dims):
     missing = [u for u in mapping.values() if u.startswith(PUBLIC + "/") and u not in dims]
     original_count = len(dims)
@@ -123,9 +298,11 @@ def main():
         dims = json.load(open(DIMS, encoding="utf-8")) if DIMS.exists() else {}
         fill_dimensions(done, dims)
         return
+    if "--shrink" in sys.argv:
+        main_shrink(apply)
+        return
     todo = urls()
-    done = json.load(open(MAP, encoding="utf-8")) if MAP.exists() else {}
-    dims = json.load(open(DIMS, encoding="utf-8")) if DIMS.exists() else {}
+    done, dims = load_data()
     todo = [u for u in todo if u not in done]
     print(f"{len(todo)} Bilder offen, {len(done)} schon in R2, {len(local_files())} lokale Dateien (data/r2_local.json)")
     if not apply:
@@ -133,43 +310,20 @@ def main():
             print("  ", u[:110])
         print("Testlauf, nichts hochgeladen. Mit --apply ausfuehren.")
         return
-    import boto3
-    s3 = boto3.client("s3", endpoint_url=f"https://{os.environ['R2_ACCOUNT_ID']}.r2.cloudflarestorage.com",
-                      aws_access_key_id=os.environ["R2_ACCESS_KEY_ID"], aws_secret_access_key=os.environ["R2_SECRET_ACCESS_KEY"], region_name="auto")
+    s3 = s3_client()
     bucket = os.environ["R2_BUCKET"]
     failed = []
     print(f"{upload_local(s3, bucket, done, dims)} lokale Dateien hochgeladen")
 
     def one(u):
         try:
-            req = urllib.request.Request(u, headers={"User-Agent": "Mozilla/5.0 (m365.fm image copy)"})
-            with urllib.request.urlopen(req, timeout=40) as r:
-                data, ct = r.read(), r.headers.get_content_type()
-            if ct not in EXT or len(data) < 100 or len(data) > 15_000_000:
-                raise ValueError(f"kein Bild ({ct}, {len(data)} Byte)")
-            if ct in ("image/jpeg", "image/png"):   # als WebP speichern, wenn es kleiner wird
-                try:
-                    im = Image.open(io.BytesIO(data))
-                    im = im.convert("RGBA" if im.mode in ("RGBA", "LA", "P") else "RGB")
-                    buf = io.BytesIO()
-                    im.save(buf, "WEBP", quality=82, method=6)
-                    if len(buf.getvalue()) < len(data):
-                        data, ct = buf.getvalue(), "image/webp"
-                except Exception:
-                    pass
-            size = image_dimensions(data)
-            key = "i/" + hashlib.sha1(u.encode()).hexdigest()[:20] + EXT[ct]
-            s3.put_object(Bucket=bucket, Key=key, Body=data, ContentType=ct, CacheControl="public, max-age=31536000, immutable")
-            done[u] = f"{PUBLIC}/{key}"
-            if size:
-                dims[done[u]] = size
+            copy_one(s3, bucket, u, done, dims)
         except Exception as e:
             failed.append((u, str(e)[:80]))
 
     with ThreadPoolExecutor(8) as ex:
         list(ex.map(one, todo))
-    MAP.write_text(json.dumps(dict(sorted(done.items())), indent=0, ensure_ascii=False), encoding="utf-8")
-    DIMS.write_text(json.dumps(dict(sorted(dims.items())), separators=(",", ":"), ensure_ascii=False), encoding="utf-8")
+    write_data(done, dims)
     print(f"{len(todo) - len(failed)} hochgeladen, {len(failed)} fehlgeschlagen (bleiben beim Original)")
     for u, e in failed[:20]:
         print("  FEHLER", u[:90], e)
