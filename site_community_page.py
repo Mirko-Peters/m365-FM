@@ -12,7 +12,8 @@ Jetzt:
   des Bildschirms kommt (IntersectionObserver mit Vorlauf); Abhaengigkeiten stehen vorn in der Liste (M365U aus events.js, dazu
   editor/seo/credits), jedes Skript laeuft einmal und in Listenreihenfolge;
 - "idle": Bereiche ohne Reiter (immer sichtbar, aber nur angemeldet und mit eingeschalteter Funktion gefuellt) nach dem Laden der Seite.
-- mvp-tracker.css kommt mit dem MVP-Tracker (vor dessen Skript), nicht mehr renderblockierend im <head>.
+- mvp-tracker.css kommt mit dem MVP-Tracker (vor dessen Skript), nicht mehr renderblockierend im <head>; dessen Druckregel fuer Kopf,
+  Fuss und Reiterleiste steht als kleines <style> im <head> (PRINT_CSS), damit jeder Reiter wie vorher ohne sie gedruckt wird.
 - <main> hat min-height:100vh: Reiterleiste und Inhalt von #c-page entstehen per Skript ueber der Fusszeile; so liegt die Fusszeile beim
   ersten Bild schon unter dem Bildschirm und verschiebt sich nicht sichtbar (CLS).
 """
@@ -49,6 +50,7 @@ GROUPS = (
     (("c-messages",), ("messages.js",), (), "view"),
 )
 LOADER = "community-lazy.js"
+PRINT_CSS = "@media print{header,footer,.ctabs{display:none!important}}"
 
 
 def asset(base, cv, name):
@@ -71,5 +73,6 @@ def build(lang, title_html, *, base, api, cv, header, footer, community_tags):
             f'<script>window.M365LZ={cfg}</script><script defer src="{asset(base, cv, LOADER)}"></script>')
     # community.js fragt beim Laden /api/me (Anmeldung, LCP-Inhalt): Verbindung zur API frueh aufbauen. Ohne crossorigin, weil die
     # Abfragen mit credentials:"include" laufen (der Browser nutzt dafuer die Verbindung ohne crossorigin-Kennzeichen).
-    extra_head = f'<link rel="preconnect" href="{api}">'
+    # Druck: Kopf, Fuss und Reiterleiste ausblenden (stand vorher nur in mvp-tracker.css, das jetzt erst mit dem Reiter MVP laedt)
+    extra_head = f'<link rel="preconnect" href="{api}"><style>{PRINT_CSS}</style>'
     return body, extra_head

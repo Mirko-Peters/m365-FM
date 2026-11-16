@@ -124,7 +124,9 @@ class CommunityPage(unittest.TestCase):
 
     def test_mvp_css_comes_with_the_tracker_and_preconnect_to_api(self):
         body, head = build()
-        self.assertEqual(head, f'<link rel="preconnect" href="{API}">')
+        self.assertEqual(head, f'<link rel="preconnect" href="{API}"><style>@media print{{header,footer,.ctabs{{display:none!important}}}}</style>')
+        # Druckregel aus mvp-tracker.css (Kopf, Fuss, Reiterleiste) gilt weiter auf jedem Reiter, nicht erst nach dem Reiter MVP
+        self.assertIn("header,footer,.ctabs{display:none!important}", src("mvp-tracker.css"))
         self.assertNotIn("mvp-tracker.css", head)
         self.assertNotIn('rel="stylesheet"', body)
         mvp = [g for g in config(body) if g["ids"] == ["c-mvp"]][0]
