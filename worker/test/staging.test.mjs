@@ -163,7 +163,7 @@ test("stagingResponse: wandelt auch unveraenderliche Antworten", () => {
 test("jeder Host im Quelltext des Workers ist klassifiziert (gesperrt oder erlaubt)", () => {
   const ALLOWED = new Set([
     // eigene Adressen
-    "www.m365.fm", "m365.fm", "img.m365.fm", "dedupe.m365.fm", "m365.show", "m365con.net", "www.m365con.net", "de.m365con.net", "2026.m365con.net", "c.m365.fm", "partner.m365.fm", "admin.m365.fm", "profil.m365.fm",
+    "www.m365.fm", "m365.fm", "img.m365.fm", "dedupe.m365.fm", "m365.show", "m365con.net", "www.m365con.net", "de.m365con.net", "2026.m365con.net", "c.m365.fm", "partner.m365.fm", "admin.m365.fm", "profile.m365.fm",
     // Anmeldung: liest nur eine Identitaet
     "accounts.google.com", "oauth2.googleapis.com", "openidconnect.googleapis.com", "login.microsoftonline.com", "graph.microsoft.com", "github.com", "api.github.com",
     "raw.githubusercontent.com", "challenges.cloudflare.com", "api-m.sandbox.paypal.com",

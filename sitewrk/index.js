@@ -417,12 +417,12 @@ export function partnerToWww(path) {
 const WWW_ADMIN = /^\/admin\/?$/;
 export function wwwToAdmin(path) { return WWW_ADMIN.test(path) ? "/" : ""; }
 export function adminToWww(path) { return path === "/" || WWW_ADMIN.test(path) ? "/admin/" : ""; }
-// profil.m365.fm: Konto und Profil (die Community-App /community/ mit allen Reitern) auf eigener Subdomain; "/" = /community/, "/de/" = /de/community/.
+// profile.m365.fm: Konto und Profil (die Community-App /community/ mit allen Reitern) auf eigener Subdomain; "/" = /community/, "/de/" = /de/community/.
 // Nur die App selbst zieht um: oeffentliche Profile (/community/u/<kuerzel>/), Blog, Podcast, Gaeste und die Einstiegsseiten bleiben auf www.m365.fm.
-const WWW_PROFIL = new RegExp(`^(?:/(${PARTNER_LANG}))?/community/?$`);
-const PROFIL_ROOT = new RegExp(`^(?:/(${PARTNER_LANG}))?/?$`);
-export function wwwToProfil(path) { const m = WWW_PROFIL.exec(path); return m ? (m[1] ? "/" + m[1] : "") + "/" : ""; }
-export function profilToWww(path) { const m = PROFIL_ROOT.exec(path) || WWW_PROFIL.exec(path); return m ? (m[1] ? "/" + m[1] : "") + "/community/" : ""; }
+const WWW_PROFILE = new RegExp(`^(?:/(${PARTNER_LANG}))?/community/?$`);
+const PROFILE_ROOT = new RegExp(`^(?:/(${PARTNER_LANG}))?/?$`);
+export function wwwToProfile(path) { const m = WWW_PROFILE.exec(path); return m ? (m[1] ? "/" + m[1] : "") + "/" : ""; }
+export function profileToWww(path) { const m = PROFILE_ROOT.exec(path) || WWW_PROFILE.exec(path); return m ? (m[1] ? "/" + m[1] : "") + "/community/" : ""; }
 const WWW_HOSTS = new Set(["www.m365.fm", "m365.fm", "dub.m365.fm"]);
 const PARTNER_NOINDEX = { "x-robots-tag": "noindex, nofollow" };
 
@@ -522,12 +522,12 @@ const site = {
     // partner.m365.fm (PARTNER_HOST): Sponsor-Dashboard auf eigener Subdomain, noindex, nicht in der Sitemap
     const partnerHost = env.PARTNER_HOST || "";
     if (partnerHost && url.hostname === partnerHost) return partnerRequest(request, env, ctx, url);
-    // admin.m365.fm (ADMIN_HOST) und profil.m365.fm (PROFIL_HOST): gleiche Technik wie partner, immer noindex; leer = keine Subdomain, keine Umleitung
-    const adminHost = env.ADMIN_HOST || "", profilHost = env.PROFIL_HOST || "";
+    // admin.m365.fm (ADMIN_HOST) und profile.m365.fm (PROFILE_HOST): gleiche Technik wie partner, immer noindex; leer = keine Subdomain, keine Umleitung
+    const adminHost = env.ADMIN_HOST || "", profileHost = env.PROFILE_HOST || "";
     if (adminHost && url.hostname === adminHost) return partnerRequest(request, env, ctx, url, adminToWww, wwwToAdmin);
-    if (profilHost && url.hostname === profilHost) return partnerRequest(request, env, ctx, url, profilToWww, wwwToProfil);
+    if (profileHost && url.hostname === profileHost) return partnerRequest(request, env, ctx, url, profileToWww, wwwToProfile);
     if (WWW_HOSTS.has(url.hostname) && !request.headers.has("x-partner-rewrite") && (request.method === "GET" || request.method === "HEAD")) {
-      for (const [host, flag, map] of [[partnerHost, env.PARTNER_REDIRECT, wwwToPartner], [adminHost, env.ADMIN_REDIRECT, wwwToAdmin], [profilHost, env.PROFIL_REDIRECT, wwwToProfil]]) {
+      for (const [host, flag, map] of [[partnerHost, env.PARTNER_REDIRECT, wwwToPartner], [adminHost, env.ADMIN_REDIRECT, wwwToAdmin], [profileHost, env.PROFILE_REDIRECT, wwwToProfile]]) {
         if (!host || flag !== "1") continue;
         const to = map(url.pathname);   // alte Adresse (/sponsor/dashboard/..., /admin/, /community/) -> 301 in einem Schritt (auch von m365.fm, dub.m365.fm und http://)
         if (to) return new Response(null, { status: 301, headers: { ...SEC, location: "https://" + host + to + url.search, "cache-control": "public, max-age=3600" } });

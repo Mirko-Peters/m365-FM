@@ -12,10 +12,10 @@ workers_dev = false
 routes = [{ pattern = "dub.m365.fm/*", zone_name = "m365.fm" }, { pattern = "www.m365.fm/*", zone_name = "m365.fm" }, { pattern = "m365.fm/*", zone_name = "m365.fm" },
   { pattern = "img.m365.fm/pages/*", zone_name = "m365.fm" }, { pattern = "img.m365.fm/meta/*", zone_name = "m365.fm" },
   { pattern = "partner.m365.fm", custom_domain = true, zone_name = "m365.fm" },
-  # admin.m365.fm (Verwaltung) und profil.m365.fm (Konto und Profil): wie partner eigene Subdomains, noindex. Cloudflare legt die DNS-Eintraege "admin" und "profil"
+  # admin.m365.fm (Verwaltung) und profile.m365.fm (Konto und Profil): wie partner eigene Subdomains, noindex. Cloudflare legt die DNS-Eintraege "admin" und "profil"
   # selbst an; vorhandene Eintraege mit diesen Namen blockieren den Deploy (vorher im DNS loeschen).
   { pattern = "admin.m365.fm", custom_domain = true, zone_name = "m365.fm" },
-  { pattern = "profil.m365.fm", custom_domain = true, zone_name = "m365.fm" }]
+  { pattern = "profile.m365.fm", custom_domain = true, zone_name = "m365.fm" }]
 
 [vars]
 ORIGIN = "https://www.m365.fm"
@@ -24,12 +24,12 @@ PARTNER_HOST = "partner.m365.fm"   # leer = keine Subdomain, keine Umleitung
 # "1" = www.m365.fm/sponsor/dashboard/... leitet per 301 auf partner.m365.fm um; "0" = nur die Subdomain, keine Umleitung (Notschalter).
 # Seit 15.11.2026 "1": https://partner.m365.fm/ antwortet nach dem Deploy (Zertifikat aktiv). Zurueck auf "0" nur als Notschalter.
 PARTNER_REDIRECT = "1"
-# admin.m365.fm und profil.m365.fm (leer = keine Subdomain). *_REDIRECT: "1" = die alte Adresse auf www.m365.fm (/admin/, /community/ und /<sprache>/community/) leitet
+# admin.m365.fm und profile.m365.fm (leer = keine Subdomain). *_REDIRECT: "1" = die alte Adresse auf www.m365.fm (/admin/, /community/ und /<sprache>/community/) leitet
 # per 301 um; "0" = nur die Subdomain, keine Umleitung. Reihenfolge beim Umzug: erst deployen mit "0", Subdomain und Anmeldung pruefen, dann hier auf "1" und mergen.
 ADMIN_HOST = "admin.m365.fm"
 ADMIN_REDIRECT = "0"
-PROFIL_HOST = "profil.m365.fm"
-PROFIL_REDIRECT = "0"
+PROFILE_HOST = "profile.m365.fm"
+PROFILE_REDIRECT = "0"
 # Hier aendern, nicht im Dashboard (wrangler deploy ueberschreibt Dashboard-Variablen).
 # R2 als Ursprung: "1" = Seiten und Dateien zuerst aus dem Bucket (pages/<pfad>, Spiegel der Website aus dem Deploy-Job, tools/r2_site_sync.py),
 # aber nur solange pages/r2-build.txt mit /r2-build.txt auf GitHub Pages uebereinstimmt - sonst automatisch GitHub Pages.
