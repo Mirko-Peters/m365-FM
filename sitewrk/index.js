@@ -426,7 +426,23 @@ export function profileToWww(path) { const m = PROFILE_ROOT.exec(path) || WWW_PR
 const WWW_HOSTS = new Set(["www.m365.fm", "m365.fm", "dub.m365.fm"]);
 const PARTNER_NOINDEX = { "x-robots-tag": "noindex, nofollow" };
 
-async function partnerRequest(request, env, ctx, url, toWww = partnerToWww, fromWww = wwwToPartner) {   // Standard: Sponsor-Dashboard; admin und profil rufen es mit ihren Zuordnungen auf
+// Anmelde-Sperre auf admin.m365.fm und profile.m365.fm: wer nicht angemeldet ist (bei admin: kein Admin), sieht NUR die Anmelde-Knoepfe (Google, Microsoft, LinkedIn, GitHub),
+// sonst nichts von der Seite. Der Worker setzt das Skript in den <head> der ausgelieferten Seite; Cookie und Pruefung bleiben bei api-dub.m365.fm
+// (/api/me mit Cookie, CORS erlaubt beide Adressen). Sicherer Standard: bis die Antwort da ist, ist die Seite ausgeblendet; bei Fehler gilt "nicht angemeldet".
+export function gateSnippet(kind, api) {
+  const A = JSON.stringify(String(api || "https://api-dub.m365.fm").replace(/\/+$/, "")), K = JSON.stringify(kind === "admin" ? "admin" : "profile");
+  return `<style id="m365-gate-css">html.m365g body>*:not(#m365-gate){display:none!important}#m365-gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}#m365-gate .gbox{display:flex;flex-direction:column;gap:12px;width:100%;max-width:320px}#m365-gate .gbox a{text-align:center;text-decoration:none}</style>` +
+    `<script id="m365-gate-js">(function(){var d=document,r=d.documentElement,A=${A},K=${K};r.className+=" m365g";` +
+    `function ok(){r.className=r.className.split(" m365g").join("");var g=d.getElementById("m365-gate");if(g&&g.parentNode)g.parentNode.removeChild(g)}` +
+    `function card(){if(d.getElementById("m365-gate"))return;if(!d.body){d.addEventListener("DOMContentLoaded",card);return}` +
+    `var g=d.createElement("main");g.id="m365-gate";var b=d.createElement("div");b.className="gbox";var ret=encodeURIComponent(location.href.split("#")[0]);` +
+    `[["google","Google"],["microsoft","Microsoft"],["linkedin","LinkedIn"],["github","GitHub"]].forEach(function(p,i){var a=d.createElement("a");a.className="btn"+(i?"":" main");a.rel="nofollow";a.setAttribute("data-p",p[0]);a.href=A+"/auth/login/"+p[0]+"?return="+ret;a.textContent=p[1];b.appendChild(a)});` +
+    `g.appendChild(b);d.body.appendChild(g);` +
+    `fetch(A+"/api/providers").then(function(x){return x.json()}).then(function(j){if(!j||!j.providers)return;[].slice.call(b.querySelectorAll("a")).forEach(function(a){if(j.providers.indexOf(a.getAttribute("data-p"))<0)a.parentNode.removeChild(a)})}).catch(function(){})}` +
+    `fetch(A+"/api/me",{credentials:"include"}).then(function(x){return x.ok?x.json():null}).then(function(j){var u=j&&j.user;if(u&&(K!=="admin"||u.admin))ok();else card()}).catch(card)})();</script>`;
+}
+
+async function partnerRequest(request, env, ctx, url, toWww = partnerToWww, fromWww = wwwToPartner, gate = "") {   // Standard: Sponsor-Dashboard; admin und profil rufen es mit ihren Zuordnungen auf
   const quiet = (status, extra = {}) => new Response(status === 405 ? "Method not allowed" : null, { status, headers: { ...SEC, ...PARTNER_NOINDEX, "cache-control": "no-store", ...extra } });
   const p = url.pathname;
   if (p === "/robots.txt") return new Response("User-agent: *\nDisallow: /\n", { headers: { ...SEC, "content-type": "text/plain; charset=utf-8", "cache-control": "public, max-age=3600" } });
@@ -445,6 +461,12 @@ async function partnerRequest(request, env, ctx, url, toWww = partnerToWww, from
   const loc = h.get("location");
   if (loc && res.status >= 300 && res.status < 400) {
     try { const l = new URL(loc, target); const back = l.origin === new URL(origin).origin ? fromWww(l.pathname) : ""; if (back) h.set("location", url.origin + back + l.search); } catch { /* Ziel bleibt wie geliefert */ }
+  }
+  if (gate && www && res.status === 200 && /text\/html/i.test(h.get("content-type") || "")) {   // Anmelde-Sperre: nur die Seite selbst, nie Skripte, Stile, Bilder
+    const html = (await res.text()).replace(/<\/head>/i, () => gateSnippet(gate, env.API) + "</head>");
+    for (const k of ["content-length", "content-encoding", "etag"]) h.delete(k);
+    h.set("cache-control", "no-store");
+    return new Response(request.method === "HEAD" ? null : html, { status: 200, headers: h });
   }
   return new Response(request.method === "HEAD" ? null : res.body, { status: res.status, statusText: res.statusText, headers: h });
 }
@@ -524,8 +546,8 @@ const site = {
     if (partnerHost && url.hostname === partnerHost) return partnerRequest(request, env, ctx, url);
     // admin.m365.fm (ADMIN_HOST) und profile.m365.fm (PROFILE_HOST): gleiche Technik wie partner, immer noindex; leer = keine Subdomain, keine Umleitung
     const adminHost = env.ADMIN_HOST || "", profileHost = env.PROFILE_HOST || "";
-    if (adminHost && url.hostname === adminHost) return partnerRequest(request, env, ctx, url, adminToWww, wwwToAdmin);
-    if (profileHost && url.hostname === profileHost) return partnerRequest(request, env, ctx, url, profileToWww, wwwToProfile);
+    if (adminHost && url.hostname === adminHost) return partnerRequest(request, env, ctx, url, adminToWww, wwwToAdmin, "admin");
+    if (profileHost && url.hostname === profileHost) return partnerRequest(request, env, ctx, url, profileToWww, wwwToProfile, "profile");
     if (WWW_HOSTS.has(url.hostname) && !request.headers.has("x-partner-rewrite") && (request.method === "GET" || request.method === "HEAD")) {
       for (const [host, flag, map] of [[partnerHost, env.PARTNER_REDIRECT, wwwToPartner], [adminHost, env.ADMIN_REDIRECT, wwwToAdmin], [profileHost, env.PROFILE_REDIRECT, wwwToProfile]]) {
         if (!host || flag !== "1") continue;
