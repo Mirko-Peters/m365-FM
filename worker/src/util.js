@@ -75,12 +75,16 @@ export function cookie(name, value, maxAge) {
 // das Mediadaten-Formular der M365Con im HeySummit-Pagebuilder (m365con.net und Ausgaben-Subdomains, #260)
 export const CON_ORIGINS = ["https://m365con.net", "https://www.m365con.net", "https://de.m365con.net", "https://2026.m365con.net"];
 export const ROUTE_ORIGINS = { "/api/mediakit": CON_ORIGINS, "/api/mediakit/summary": CON_ORIGINS };
-// Eigene Seiten, die mit Cookie anfragen und nach der Anmeldung zurueckkehren duerfen: SITE und (falls gesetzt) PARTNER_SITE
-// (Sponsor-Dashboard auf https://partner.m365.fm). Nur ein reiner https-Ursprung ohne Pfad zaehlt; sonst bleibt es bei SITE.
-export function partnerOrigin(env) {
-  try { const u = new URL(String(env.PARTNER_SITE || "").trim()); return u.protocol === "https:" && u.pathname === "/" && !u.search && !u.hash && !u.username ? u.origin : ""; } catch { return ""; }
-}
-export const isOwnSite = (env, origin) => !!origin && (origin === env.SITE || (!!partnerOrigin(env) && origin === partnerOrigin(env)));
+// Eigene Seiten, die mit Cookie anfragen und nach der Anmeldung zurueckkehren duerfen: SITE und (falls gesetzt) PARTNER_SITE (Sponsor-Dashboard auf
+// https://partner.m365.fm), ADMIN_SITE (Verwaltung auf https://admin.m365.fm) und PROFIL_SITE (Konto und Profil auf https://profil.m365.fm).
+// Nur ein reiner https-Ursprung ohne Pfad zaehlt (kein http, kein Pfad, keine Zugangsdaten); sonst bleibt es bei SITE. Die Sitzung ist ein Cookie nur
+// auf api-dub.m365.fm (HttpOnly, Secure, SameSite=Lax, ohne Domain=): die Unterseiten sind "same-site" und duerfen es mit credentials: include nutzen,
+// fremde Seiten nie.
+const pureOrigin = (v) => { try { const u = new URL(String(v || "").trim()); return u.protocol === "https:" && u.pathname === "/" && !u.search && !u.hash && !u.username && !u.password ? u.origin : ""; } catch { return ""; } };
+export const partnerOrigin = (env) => pureOrigin(env.PARTNER_SITE);
+export const adminOrigin = (env) => pureOrigin(env.ADMIN_SITE);
+export const profilOrigin = (env) => pureOrigin(env.PROFIL_SITE);
+export const isOwnSite = (env, origin) => !!origin && (origin === env.SITE || [partnerOrigin(env), adminOrigin(env), profilOrigin(env)].some((o) => !!o && origin === o));
 export function cors(env, request) {
   const origin = request.headers.get("origin");
   const h = { "vary": "Origin" };
