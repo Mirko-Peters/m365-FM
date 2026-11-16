@@ -166,6 +166,9 @@
   "/api/admin/feed-hide": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
   },
+  "/api/admin/hardware": {
+   "skip": "Hersteller-Kontaktdaten werden ausschließlich im geschützten Admin-Panel verwaltet, bewusst nicht per KI-Token"
+  },
   "/api/admin/mail": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
   },
@@ -1042,6 +1045,9 @@
   "/api/admin/sponsor-links": {
    "skip": "Admin-only Sponsorlinks werden ausschließlich im geschützten Admin-Bereich verwaltet"
   },
+  "/api/hardware": {
+   "skip": "Hersteller-Anfragen enthalten personenbezogene Daten und Einwilligungen; Einreichung nur über das Website-Formular, nicht per KI-Token"
+  },
   "/api/sponsor/dashboard": {
    "skip": "Browser-Dashboard mit CSV-/PDF-Export; Event-Partnerschaften sind über list_my_event_partners abrufbar"
   },
@@ -1391,6 +1397,9 @@
   },
   "/api/profile/business": {
    "skip": "Private Geschäftsadresse je Firma (nie öffentlich): nur angemeldet im Browser, bewusst nicht per KI-Token"
+  },
+  "/api/admin/spreaker-exchange": {
+   "skip": "Einmalige Spreaker-Verbindung (Code-Tausch) nur mit Browser-Sitzung eines Admins von www.m365.fm/callback, bewusst nicht per KI-Token"
   }
  }
 }

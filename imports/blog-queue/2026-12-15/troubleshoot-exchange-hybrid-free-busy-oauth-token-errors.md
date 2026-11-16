@@ -5,7 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-12-15
-topics: [exchange-online, exchange-server, oauth, microsoft-365]
+topics: [exchange-online, exchange-server, oauth-2-0, microsoft-365]
 keypoints:
   - "Identify which direction fails first, then run the Hybrid Free/Busy Checker. It checks OAuth and DAuth settings and changes nothing."
   - "Use Test-OAuthConnectivity to find the error. Invalid signature, key not found and missing signing certificate each have a different fix."
@@ -88,7 +88,7 @@ If the checker, the connectivity test and the logs do not explain the failure, c
 
 - [Exchange Online](https://www.m365.fm/entity/exchange-online/)
 - [Exchange Server](https://www.m365.fm/entity/exchange-server/)
-- [OAuth](https://www.m365.fm/entity/oauth/)
+- [OAuth](https://www.m365.fm/entity/oauth-2-0/)
 
 ## Sources
 
