@@ -41,6 +41,8 @@ class RedirectsExtraTest(unittest.TestCase):
     def test_every_target_is_built(self):
         eps, ents, blog, pages = built_targets()
         merged = {f"/entity/{k}" for k in (json.loads((D / "guest_merge.json").read_text("utf-8")).get("merge") or {})} if (D / "guest_merge.json").exists() else set()
+        import site_learn as SLN
+        merged |= {f"/entity/{k}" for k in SLN.entity_merges()}   # zusammengefuehrte Entitaets-Dubletten ("entities")
         for old, to in EXTRA.items():
             m = re.fullmatch(r"/show/episodes/([a-z0-9-]+)/", to)
             if m: self.assertIn(m.group(1), eps, f"{old} -> {to}: Folge fehlt"); continue
