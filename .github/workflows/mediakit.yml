@@ -97,15 +97,15 @@ jobs:
           if os.path.exists("out/mediakit/latest.json"):
               d = json.load(open("out/mediakit/latest.json"))
               print("### Mediadaten", d["generated"])
-              for k in ("youtube", "cloudflare", "bing", "local", "yt_search"): print(f"- {k}: {d.get(k)}")
+              # Oeffentliches Repo: die Zusammenfassung sieht jeder. Nur ob eine Quelle Daten lieferte, keine Werte und keine Suchanfragen
+              for k in ("youtube", "cloudflare", "bing", "local", "yt_search"): print(f"- {k}: {'ok' if d.get(k) else 'keine Daten'}")
           if os.path.exists("out/mediakit-con/latest.json"):
               c = json.load(open("out/mediakit-con/latest.json"))
               print("\n### M365Con-Sponsordeck", c["generated"])
               print("- Abschnitte:", ", ".join(f"{k} {'ja' if v else 'nein'}" for k, v in c["sections"].items()))
-              for k in c["kpis"]: print(f"- {k['label']['de']}: {k['value']:,} ({k['source']['de']}, {k['period']['de']})")
+              print("- Kennzahlen:", len(c["kpis"]))
           else:
               print("\n### M365Con-Sponsordeck: keine Kennzahlen - nichts hochgeladen (Log des Schritts pruefen)")
           PY
-      - uses: actions/upload-artifact@v7
-        if: always()
-        with: { name: mediakit, path: "out/mediakit*", retention-days: 14 }
+      # Kein Artefakt: Artefakte oeffentlicher Repos laedt jedes angemeldete GitHub-Konto herunter. Die PDFs gibt es nur ueber das
+      # Formular (/api/mediakit, Mail-Anhang); die Admin-Kopie liegt im Bucket unter mediakit/archive/ (siehe Upload-Schritte oben).
