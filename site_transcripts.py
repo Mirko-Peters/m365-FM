@@ -139,8 +139,9 @@ class Registry:
 REG = Registry()
 
 
-def links_html(urls, label="Transcript"):
-    """Sichtbare Links auf die Dateien ("Transcript (TXT)" und "VTT")."""
+def links_html(urls, label="Transcript", lang="en"):
+    """Sichtbare Links auf die Dateien ("Transcript (TXT)" und "Subtitles (WebVTT)" in der Seitensprache; Linktexte F2: nicht nur "VTT")."""
     if not urls or not urls.get("txt"): return ""
-    v = f' · <a href="{html.escape(urls["vtt"])}" type="text/vtt" rel="nofollow">VTT</a>' if urls.get("vtt") else ""
-    return f'<p class="mut trfiles">📄 <a href="{html.escape(urls["txt"])}" type="text/plain" rel="nofollow">{html.escape(label)} (TXT)</a>{v}</p>'
+    from site_i18n import T
+    v = f' · <a href="{html.escape(urls["vtt"])}" type="text/vtt" rel="nofollow">{html.escape(T(lang, "Subtitles (WebVTT)", "Untertitel (WebVTT)"))}</a>' if urls.get("vtt") else ""
+    return f'<p class="mut trfiles"><span aria-hidden="true">📄</span> <a href="{html.escape(urls["txt"])}" type="text/plain" rel="nofollow">{html.escape(label)} (TXT)</a>{v}</p>'

@@ -44,6 +44,16 @@ def is_indexable(p):
     return IR.index_or_long(p.get("votes", 0) >= INDEX_VOTES, p.get("summary"), None if code else p.get("body"))
 
 
+def open_link(lang, p):
+    """Linktexte F4: Knopf "Link öffnen" mit Ziel im aria-label ("Link öffnen: {Titel} – {Domain}, neuer Tab"), Pfeil fuer Screenreader versteckt."""
+    if not str(p.get("link") or "").startswith("https://"):
+        return ""
+    import site_linktext as LT
+    v = T(lang, "Open link", "Link öffnen")
+    lab = LT.aria(v, f'{p.get("title") or ""} – {LT.host(p["link"])}, {T(lang, "new tab", "neuer Tab")}'.lstrip(" –"))
+    return f'<p><a class="btn" rel="nofollow ugc noopener" target="_blank" href="{esc(p["link"])}"{LT.a_attr(lab)}>{esc(v)}{LT.arrow("↗")}</a></p>'
+
+
 def build(g, items, people, api):
     BASE, write, page, header, footer, footer_en, LANGS = g["BASE"], g["write"], g["page"], g["header"], g["footer"], g["footer_en"], g["LANGS"]
     ctags, sitemap, TODAY = g.get("community_tags"), g["sitemap"], g["TODAY"]
@@ -68,7 +78,7 @@ def build(g, items, people, api):
             vote = f'<button type="button" class="bl-vote" data-i="{p["id"]}" aria-pressed="false" aria-label="Upvote">▲ <span class="n">{p.get("votes", 0)}</span></button>'
             b = shell(lang, f'{CSS}<p class="mut"><a href="{ru}">{esc(t0)}</a> · {esc(kl(lang, p["kind"]))}</p><article><h1>{esc(p["title"])}</h1>'
                             f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{p["handle"]}/">{esc(a["name"])}</a> · {iso(p["published"])} · {esc(T(lang, "Version", "Version"))} {p.get("version", 1)}</p>'
-                            f'{("<p>" + esc(p["summary"]) + "</p>") if p.get("summary") else ""}{("<p><a class=\"btn\" rel=\"nofollow ugc noopener\" target=\"_blank\" href=\"" + esc(p["link"]) + "\">" + esc(T(lang, "Open link", "Link öffnen")) + " ↗</a></p>") if str(p.get("link") or "").startswith("https://") else ""}<pre class="lib-code" id="lib-code">{esc(p["body"])}</pre></article>'
+                            f'{("<p>" + esc(p["summary"]) + "</p>") if p.get("summary") else ""}{open_link(lang, p)}<pre class="lib-code" id="lib-code">{esc(p["body"])}</pre></article>'
                             f'<p><button type="button" class="btn main" id="lib-copy" data-ok="{esc(T(lang, "Copied", "Kopiert"))}">{esc(T(lang, "Copy", "Kopieren"))}</button> {vote}</p><p>{tl}</p><section id="c-comments"></section>'
                             f'<script>{JS.replace("%API%", api)}</script>' + (ctags(lang, "lib%d" % p["id"]) if ctags else ""))
             lang_code = KINDS.get(p["kind"], KINDS["other"])[2]
