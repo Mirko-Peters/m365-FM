@@ -16,7 +16,9 @@ Rangfolge: schlechteste Bewertung (ueber LCP/INP/CLS) zuerst, darin hoeheres p75
 
 Ausgabe (stdout): Markdown-Tabellen (Seiten, gleiche Seite ueber alle Sprachen, Seitentypen), letzte Zeile "CRP_PATHS: <Pfade>"
 (Top N, nur ueber "gut", bei gleicher Bewertung mobil zuerst). Hat keine einzelne Seite genug Messungen (bei 10-%-Stichprobe der
-Normalfall), kommen die Pfade aus den langsamen Seitentypen: je Typ die meistgemessene Seite. /admin und /cdn-cgi bleiben aussen vor.
+Normalfall), kommen die Pfade aus den langsamen Seitentypen: je Typ die meistgemessene Seite. /admin und /cdn-cgi bleiben aussen vor,
+Pfade mit Leerzeichen oder * ? [ ] kommen nie in CRP_PATHS (crp-check.yml zerlegt "paths" unquotiert). Erreicht die Abfrage --limit
+Gruppen, warnt der Bericht (seltene Pfade abgeschnitten).
 Lauf: python tools/slow_pages.py [--days 7] [--top 3] [--min-samples 20]
 """
 import argparse
@@ -46,6 +48,8 @@ LANGS = ("de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he",
 LANG_RE = re.compile(r"^/(%s)(?=/|$)" % "|".join(LANGS))
 DEVICE_ORDER = {"mobile": 0, "tablet": 1, "desktop": 2}
 EXCLUDE_RE = re.compile(r"^/(admin|cdn-cgi)(/|$)")   # nicht oeffentlich / Cloudflare-intern: kein Ziel fuer den Labortest
+# crp-check.yml zerlegt die Eingabe "paths" unquotiert ("for p in $PATHS_IN"): Leerzeichen trennen, * ? [ ] wuerden als Glob erweitert
+UNSAFE_RE = re.compile(r"[\s*?\[\]]")
 
 
 # ---------- Schema ----------
@@ -204,16 +208,20 @@ def _worst_first(rows):
 def crp_paths(ranked, top, types=(), rows=()):
     """Top-N-Pfade fuer den Labortest -> [(pfad, grund)], jeder Pfad einmal.
     1. einzelne Seiten mit genug Messungen ueber 'gut' (ranked);
-    2. reicht das nicht (wenig Verkehr je Seite), je langsamem Seitentyp die meistgemessene Seite dieses Typs und Geraets."""
+    2. reicht das nicht (wenig Verkehr je Seite), je langsamem Seitentyp die meistgemessene Seite dieses Typs und Geraets.
+    Pfade mit Leerzeichen oder Glob-Zeichen (UNSAFE_RE) bleiben aussen vor - sie wuerden die Eingabe "paths" von crp-check.yml zerlegen."""
     out = []
     for r in _worst_first(ranked):
         if len(out) >= top: break
-        if r["path"] not in (p for p, _ in out): out.append((r["path"], f"Seite: {r['rating']}, {r['device']}"))
+        if r["path"] not in (p for p, _ in out) and not UNSAFE_RE.search(r["path"]):
+            out.append((r["path"], f"Seite: {r['rating']}, {r['device']}"))
     for t in _worst_first(types):
         if len(out) >= top: break
         cands = sorted((r for r in rows if page_type(r["path"]) == t["path"] and r["device"] == t["device"]
-                        and r["path"] not in (p for p, _ in out)), key=lambda r: (-r["samples"], -(r.get("lcp") or 0), r["path"]))
-        if cands: out.append((cands[0]["path"], f"Seitentyp {t['path']}: {t['rating']}, {t['device']} (meistgemessene Seite, {cands[0]['samples']} Messungen)"))
+                        and r["path"] not in (p for p, _ in out) and not UNSAFE_RE.search(r["path"])),
+                       key=lambda r: (-r["samples"], -(r.get("lcp") or 0), r["path"]))
+        if cands: out.append((cands[0]["path"], f"Seitentyp {t['path']}: {t['rating']}, {t['device']} "
+                                                f"(meistgemessene Seite, {cands[0]['samples']} von {t['samples']} Messungen des Typs)"))
     return out
 
 
@@ -242,7 +250,7 @@ def _table(rows, fields, first_col="Seite", extra=None):
     return lines
 
 
-def report(rows, fields, device, confirmed, since, until, clamped, min_samples, top, max_rows=25, sampling=True):
+def report(rows, fields, device, confirmed, since, until, clamped, min_samples, top, max_rows=25, sampling=True, truncated=0):
     out = ["## Langsame Seiten bei echten Nutzern (Cloudflare Web Analytics)", ""]
     n = (until - since).days + 1
     out.append(f"Zeitraum: {since} bis {until} ({n} {'Tag' if n == 1 else 'Tage'}, UTC)"
@@ -253,6 +261,9 @@ def report(rows, fields, device, confirmed, since, until, clamped, min_samples, 
     out.append(f"Felder: {', '.join(fields.values())} "
                + ("(per Schema-Introspektion bestätigt)" if confirmed else "(Introspektion nicht möglich – öffentlich belegte Feldnamen)"))
     if not sampling: out.append("Hinweis: avg.sampleInterval fehlt im Schema – Messungen = hochgerechnete Aufrufe (Stichprobe nicht herausrechenbar).")
+    if truncated:
+        out.append(f"**Achtung: Abfragegrenze erreicht ({truncated} Gruppen).** Die seltensten Pfade fehlen, Seitentypen und Sprachsummen "
+                   "sind dadurch verzerrt – `--limit` erhöhen oder `--days` senken.")
     out.append("")
     total, beacons = sum(r["count"] for r in rows), sum(r["samples"] for r in rows)
     kept = sorted((r for r in rows if r["samples"] >= min_samples), key=rank_key)
@@ -290,6 +301,7 @@ def report(rows, fields, device, confirmed, since, until, clamped, min_samples, 
 
 
 def run(days=7, top=3, min_samples=20, limit=5000, today=None, rum=None):
+    """limit = max. Gruppen (Pfad x Geraet, orderBy count_DESC); wird es erreicht, warnt der Bericht (seltene Pfade abgeschnitten)."""
     today = today or dt.datetime.now(dt.timezone.utc).date()
     until = today - dt.timedelta(days=1)                      # nur abgeschlossene Tage
     since, until, clamped = cf_rum.clamp(until - dt.timedelta(days=max(1, days) - 1), until)
@@ -298,7 +310,10 @@ def run(days=7, top=3, min_samples=20, limit=5000, today=None, rum=None):
     rum = rum or cf_rum.Rum.connect()
     fields, device, sampling, confirmed = pick_fields(schema(rum))
     acc = rum.query(build_query(fields, device, limit, sampling), since, until)
-    return report(parse(acc, fields), fields, device, confirmed, since, until, clamped, min_samples, top, sampling=sampling)
+    n = len(acc.get(DATASET) or [])
+    if n >= limit: cf_rum.warn(f"Abfragegrenze erreicht: {n} Gruppen (limit {limit}) - seltene Pfade fehlen, Seitentypen verzerrt")
+    return report(parse(acc, fields), fields, device, confirmed, since, until, clamped, min_samples, top, sampling=sampling,
+                  truncated=n if n >= limit else 0)
 
 
 def main(argv=None):

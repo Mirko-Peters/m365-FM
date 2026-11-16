@@ -130,7 +130,7 @@ class SlowPagesTests(unittest.TestCase):
         paths = out.splitlines()[-1].split(" ", 1)[1].split()
         self.assertEqual(paths, ["/show/episodes/a/", "/de/show/episodes/a/", "/entity/copilot/", "/show/episodes/b/"],
                          "Seiten: schlecht mobil, dann verbesserungswuerdig Desktop; danach Seitentyp /show/episodes/* (mobil, schlecht)")
-        self.assertIn("Seitentyp /show/episodes/*: schlecht (LCP), mobile (meistgemessene Seite, 30 Messungen)", out)
+        self.assertIn("Seitentyp /show/episodes/*: schlecht (LCP), mobile (meistgemessene Seite, 30 von 210 Messungen des Typs)", out)
         self.assertNotIn("/community/` | mobile", out)
 
     def test_crp_paths_worst_first_then_mobile(self):
@@ -149,6 +149,30 @@ class SlowPagesTests(unittest.TestCase):
         self.assertIn("Keine Seite erreicht 20 Messungen", out)
         self.assertIn("| 1 | `/ (Startseite)` | desktop | 22 | 220 | 5,91 s", out)
         self.assertEqual(out.splitlines()[-1], "CRP_PATHS: / /entity/e5/", "Startseite (schlecht) vor /entity/* (verbesserungswuerdig)")
+
+    def test_unsafe_paths_skipped_for_crp(self):
+        """crp-check.yml zerlegt "paths" unquotiert: Pfade mit Leerzeichen oder Glob-Zeichen nie in CRP_PATHS."""
+        groups = [g("/a b/", "mobile", 100, 9000), g("/x*/", "mobile", 90, 8800), g("/r[1]/", "mobile", 70, 8400),
+                  g("/ok/", "mobile", 60, 5000)]
+        out = run(FakeCF(groups=groups))
+        self.assertIn("`/a b/`", out, "in der Rangliste weiter sichtbar")
+        self.assertEqual(out.splitlines()[-1], "CRP_PATHS: /ok/")
+        self.assertEqual(SP.norm_path("/q?/"), "/q", "? beginnt immer die Query")
+        # Seitentyp-Fallback: die meistgemessene Seite des Typs wird uebersprungen, wenn sie unsicher ist
+        rows = [SP.finish({"path": p, "device": "mobile", "count": n, "samples": n, "lcp": 6000})
+                for p, n in (("/t/a b/", 50), ("/t/c?/", 40), ("/t/ok/", 5))]
+        types = [SP.finish({"path": "/t/*", "device": "mobile", "count": 95, "samples": 95, "lcp": 6000})]
+        picks = SP.crp_paths([], 3, types, rows)
+        self.assertEqual([p for p, _ in picks], ["/t/ok/"])
+        self.assertIn("5 von 95 Messungen des Typs", picks[0][1])
+
+    def test_limit_reached_warns(self):
+        groups = [g(f"/p{i}/", "mobile", 30, 5000) for i in range(4)]
+        with patch("sys.stdout") as so:
+            out = run(FakeCF(groups=groups), limit=4)
+        self.assertIn("Abfragegrenze erreicht (4 Gruppen)", out)
+        self.assertIn("Abfragegrenze erreicht", "".join(str(c.args[0]) for c in so.write.call_args_list if c.args))
+        self.assertNotIn("Abfragegrenze", run(FakeCF(groups=groups), limit=5))
 
     def test_empty_and_all_good(self):
         out = run(FakeCF(groups=[]))
