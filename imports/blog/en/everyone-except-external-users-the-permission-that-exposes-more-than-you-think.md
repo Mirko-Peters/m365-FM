@@ -1,8 +1,8 @@
 ---
 title: "“Everyone except external users”: the permission that exposes more than you think"
 summary: "The 'Everyone except external users' claim can quietly make SharePoint sites and libraries visible to your whole organization. Learn how it differs from group-based access, why it matters for Copilot, and how to review it."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-16
 topics: [everyone-except-external-users, oversharing, sharepoint-permissions]
