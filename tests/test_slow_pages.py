@@ -15,9 +15,9 @@ from tools import cf_rum, slow_pages as SP  # noqa: E402
 TODAY = dt.date(2026, 11, 17)   # Dienstag
 
 
-def g(path, device, count, lcp_ms, inp_ms=100, cls=0.01, fcp_ms=900):
-    """Gruppe wie von Cloudflare: Zeiten in Mikrosekunden."""
-    return {"count": count, "dimensions": {"requestPath": path, "deviceType": device},
+def g(path, device, count, lcp_ms, inp_ms=100, cls=0.01, fcp_ms=900, si=1):
+    """Gruppe wie von Cloudflare: count hochgerechnet (Beacons x sampleInterval), Zeiten in Mikrosekunden."""
+    return {"count": count, "avg": {"sampleInterval": si}, "dimensions": {"requestPath": path, "deviceType": device},
             "quantiles": {"largestContentfulPaintP75": lcp_ms * 1000, "interactionToNextPaintP75": inp_ms * 1000,
                           "cumulativeLayoutShiftP75": cls, "firstContentfulPaintP75": fcp_ms * 1000}}
 
@@ -33,6 +33,8 @@ GROUPS = [
     g("/show/episodes/b/index.html", "mobile", 15, 4200),          # + Query-Variante -> zusammen 30 Messungen
     g("/show/episodes/b/?utm=x", "mobile", 15, 4400),
     g("/pl/", "tablet", 25, -1, inp_ms=-1, cls=-1),                # nichts gemessen
+    g("/sampled/", "mobile", 100, 9000, si=10),                    # hochgerechnet 100, aber nur 10 echte Beacons
+    g("/admin/x/", "desktop", 400, 9000),                          # nicht oeffentlich -> ausgelassen
 ]
 
 QUANT_FIELDS = ["largestContentfulPaintP75", "interactionToNextPaintP75", "cumulativeLayoutShiftP75", "firstContentfulPaintP75",
@@ -45,7 +47,7 @@ def _t(name, fields):
 
 
 TYPES = {"Query": {"viewer": "viewer"}, "viewer": {"accounts": "account"}, "account": {SP.DATASET: "grp", "rumPageloadEventsAdaptiveGroups": "x"},
-         "grp": {"count": "uint64", "quantiles": "q", "dimensions": "d"}, "q": {f: "float64" for f in QUANT_FIELDS},
+         "grp": {"count": "uint64", "quantiles": "q", "dimensions": "d", "avg": "a"}, "a": {"sampleInterval": "float64"}, "q": {f: "float64" for f in QUANT_FIELDS},
          "d": {"requestPath": "string", "deviceType": "string", "date": "Date"}}
 
 
@@ -85,6 +87,9 @@ class SlowPagesTests(unittest.TestCase):
         self.assertEqual(SP.strip_lang("/design/"), ("/design/", "en"), "nur echte Sprachpraefixe")
         self.assertEqual(SP.page_type("/pl/show/episodes/a/"), "/show/episodes/*")
         self.assertEqual(SP.page_type("/de/"), "/ (Startseite)")
+        self.assertEqual(SP.page_type("/de/entity/"), "/entity/")
+        self.assertEqual(SP.page_type("/entity/smed/"), "/entity/*")
+        self.assertEqual(SP.page_type("/community/u/mirko-p/blog/x/"), "/community/u/*")
 
     def test_thresholds(self):
         self.assertEqual([SP.rate("lcp", v) for v in (2500, 2501, 4000, 4001)], [0, 1, 1, 2])
@@ -102,13 +107,16 @@ class SlowPagesTests(unittest.TestCase):
         rank = [l for l in lines if l.startswith("| ") and l[2].isdigit()]
         first = rank[:6]
         # schlecht vor verbesserungswuerdig vor gut; innerhalb gleicher Bewertung hoeheres LCP zuerst
-        self.assertIn("`/show/episodes/a/` | mobile | 120 | 5,20 s", first[0])
+        self.assertIn("`/show/episodes/a/` | mobile | 120 | 120 | 5,20 s", first[0])
         self.assertIn("`/de/show/episodes/a/`", first[1])
-        self.assertIn("`/show/episodes/b/` | mobile | 30 | 4,30 s", first[2], "index.html und Query zusammengelegt, LCP gewichtet")
+        self.assertIn("`/show/episodes/b/` | mobile | 30 | 30 | 4,30 s", first[2], "index.html und Query zusammengelegt, LCP gewichtet")
         self.assertIn("schlecht (CLS)", first[3]); self.assertIn("schlecht (INP)", first[4])
         self.assertIn("verbesserungswürdig (LCP)", first[5])
         self.assertNotIn("/rare/", out, "unter Mindestmessungen")
-        self.assertIn("`/pl/` | tablet | 25 | – | – | – |", out, "nicht gemessen -> Strich")
+        self.assertNotIn("/sampled/", out, "Mindestmessungen gelten fuer echte Beacons, nicht fuer hochgerechnete Aufrufe")
+        self.assertNotIn("admin", out)
+        self.assertIn("`/pl/` | tablet | 25 | 25 | – | – | – |", out, "nicht gemessen -> Strich")
+        self.assertIn("avg{sampleInterval}", fake.queries[0]["query"])
         self.assertIn("timeToFirstByteP75", out); self.assertIn("TTFB p75", out); self.assertIn("bestätigt", out)
         q = fake.queries[0]
         self.assertIn("rumWebVitalsEventsAdaptiveGroups", q["query"]); self.assertIn("requestPath deviceType", q["query"])
@@ -122,6 +130,13 @@ class SlowPagesTests(unittest.TestCase):
         paths = out.splitlines()[-1].split(" ", 1)[1].split()
         self.assertEqual(paths, ["/show/episodes/a/", "/de/show/episodes/a/", "/entity/copilot/"], "mobil zuerst, dann Desktop; nur > gut")
         self.assertNotIn("/community/` | mobile", out)
+
+    def test_crp_paths_worst_first_then_mobile(self):
+        rows = sorted([SP.finish({"path": p, "device": d, "count": 50, "samples": 50, "lcp": l}) for p, d, l in
+                       (("/m-ni/", "mobile", 3500), ("/d-poor/", "desktop", 6000), ("/m-poor/", "mobile", 4500), ("/d-ni/", "desktop", 3900),
+                        ("/good/", "mobile", 1000))], key=SP.rank_key)
+        self.assertEqual(SP.crp_paths(rows, 3), ["/m-poor/", "/d-poor/", "/m-ni/"])
+        self.assertEqual(SP.crp_paths(rows, 10), ["/m-poor/", "/d-poor/", "/m-ni/", "/d-ni/"], "gute Seiten nie")
 
     def test_empty_and_all_good(self):
         out = run(FakeCF(groups=[]))
@@ -142,12 +157,17 @@ class SlowPagesTests(unittest.TestCase):
         out = run(fake)
         self.assertIn("Introspektion nicht möglich", out)
         self.assertNotIn("timeToFirstByteP75", fake.queries[0]["query"], "TTFB nur nach Bestaetigung im Schema")
+        self.assertIn("avg{sampleInterval}", fake.queries[0]["query"], "oeffentlich belegt")
         types = dict(TYPES, q={f: "float64" for f in QUANT_FIELDS if f != "interactionToNextPaintP75"}, d={"requestPath": "string"})
         fake = FakeCF(types=types, groups=[{"count": 50, "dimensions": {"requestPath": "/x/"},
                                             "quantiles": {"largestContentfulPaintP75": 4_500_000, "firstInputDelayP75": 50_000}}])
         out = run(fake)
         self.assertIn("firstInputDelayP75", fake.queries[0]["query"]); self.assertIn("FID p75", out)
         self.assertNotIn("deviceType", fake.queries[0]["query"]); self.assertIn("ohne Geräte-Aufteilung", out)
+        self.assertIn("avg{sampleInterval}", fake.queries[0]["query"])
+        nosi = FakeCF(types=dict(TYPES, grp={"count": "uint64", "quantiles": "q", "dimensions": "d"}))
+        out2 = run(nosi)
+        self.assertNotIn("avg{", nosi.queries[0]["query"]); self.assertIn("sampleInterval fehlt", out2)
         self.assertEqual(out.splitlines()[-1], "CRP_PATHS: /x/")
 
     def test_errors(self):

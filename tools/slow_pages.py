@@ -6,7 +6,7 @@ nur diese wenigen Pfade gehen danach in den CRP-Check (.github/workflows/crp-che
 
 Datenquelle: GraphQL auf Kontoebene, viewer.accounts(filter:{accountTag}).rumWebVitalsEventsAdaptiveGroups, gefiltert auf den siteTag
 (Zugang, Token, Konto und siteTag aus tools/cf_rum.py). Felder:
-  dimensions { requestPath deviceType }, count (= Messungen), quantiles { largestContentfulPaintP75 interactionToNextPaintP75
+  dimensions { requestPath deviceType }, count (hochgerechnet), avg { sampleInterval } (Messungen = count / sampleInterval), quantiles { largestContentfulPaintP75 interactionToNextPaintP75
   cumulativeLayoutShiftP75 firstContentfulPaintP75 } - Zeiten in MIKROSEKUNDEN, negativ = nicht gemessen; CLS ohne Einheit.
 Die Feldnamen werden vor der Abfrage per GraphQL-Introspektion geprueft (INP faellt auf firstInputDelayP75 zurueck, TTFB nur, wenn
 timeToFirstByteP75 im Schema steht); ist die Introspektion gesperrt, gelten die oeffentlich belegten Felder oben (Hinweis in der Ausgabe).
@@ -14,7 +14,8 @@ timeToFirstByteP75 im Schema steht); ist die Introspektion gesperrt, gelten die 
 Bewertung nach Google (p75): LCP gut <= 2500 ms, schlecht > 4000 ms; INP gut <= 200 ms, schlecht > 500 ms; CLS gut <= 0,1, schlecht > 0,25.
 Rangfolge: schlechteste Bewertung (ueber LCP/INP/CLS) zuerst, darin hoeheres p75-LCP zuerst.
 
-Ausgabe (stdout): Markdown-Tabellen, letzte Zeile "CRP_PATHS: <Pfade>" (Top N, mobil zuerst, nur Seiten ueber "gut").
+Ausgabe (stdout): Markdown-Tabellen, letzte Zeile "CRP_PATHS: <Pfade>" (Top N, nur Seiten ueber "gut", bei gleicher Bewertung
+mobil zuerst). /admin und /cdn-cgi bleiben aussen vor.
 Lauf: python tools/slow_pages.py [--days 7] [--top 3] [--min-samples 20]
 """
 import argparse
@@ -43,6 +44,7 @@ RATING = {0: "gut", 1: "verbesserungswürdig", 2: "schlecht"}
 LANGS = ("de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko")
 LANG_RE = re.compile(r"^/(%s)(?=/|$)" % "|".join(LANGS))
 DEVICE_ORDER = {"mobile": 0, "tablet": 1, "desktop": 2}
+EXCLUDE_RE = re.compile(r"^/(admin|cdn-cgi)(/|$)")   # nicht oeffentlich / Cloudflare-intern: kein Ziel fuer den Labortest
 
 
 # ---------- Schema ----------
@@ -63,7 +65,7 @@ def _fields(rum, name):
 
 
 def schema(rum):
-    """{'quantiles': set, 'dimensions': set} des Web-Vitals-Datensatzes per Introspektion; None, wenn Introspektion nicht geht.
+    """{'quantiles': set, 'dimensions': set, 'avg': set} des Web-Vitals-Datensatzes per Introspektion; None, wenn Introspektion nicht geht.
     Wirft RumError, wenn der Datensatz im Schema fehlt."""
     try:
         st, d = rum.graphql("{__schema{queryType{name}}}")
@@ -75,8 +77,7 @@ def schema(rum):
         if account and not grp: raise LookupError
         if not grp: return None
         g = _fields(rum, grp)
-        return {"quantiles": set(_fields(rum, g["quantiles"])) if g.get("quantiles") else set(),
-                "dimensions": set(_fields(rum, g["dimensions"])) if g.get("dimensions") else set()}
+        return {k: set(_fields(rum, g[k])) if g.get(k) else set() for k in ("quantiles", "dimensions", "avg")}
     except LookupError:
         raise cf_rum.RumError(f"Datensatz {DATASET} fehlt im GraphQL-Schema des Kontos")
     except cf_rum.RumError:
@@ -84,7 +85,7 @@ def schema(rum):
 
 
 def pick_fields(sch):
-    """-> ({kennzahl: feldname}, device_dimension: bool, bestaetigt: bool)."""
+    """-> ({kennzahl: feldname}, device_dimension: bool, sampling: bool, bestaetigt: bool)."""
     avail = sch["quantiles"] if sch else VERIFIED
     fields = {}
     for key, cands, _ in METRICS:
@@ -92,14 +93,15 @@ def pick_fields(sch):
         if f: fields[key] = f
     if "lcp" not in fields: raise cf_rum.RumError("largestContentfulPaintP75 fehlt in den Quantilen des Web-Vitals-Datensatzes")
     device = ("deviceType" in sch["dimensions"]) if sch else True
-    return fields, device, sch is not None
+    sampling = ("sampleInterval" in sch.get("avg", set())) if sch else True
+    return fields, device, sampling, sch is not None
 
 
-def build_query(fields, device, limit):
+def build_query(fields, device, limit, sampling=True):
     dims = "requestPath deviceType" if device else "requestPath"
     return ("query($a:String!,$t:String!,$s:Time!,$u:Time!){viewer{accounts(filter:{accountTag:$a}){"
             f"{DATASET}(limit:{int(limit)},orderBy:[count_DESC],filter:{{siteTag:$t,datetime_geq:$s,datetime_lt:$u}})"
-            f"{{count dimensions{{{dims}}} quantiles{{{' '.join(fields.values())}}}}}"
+            f"{{count {'avg{sampleInterval} ' if sampling else ''}dimensions{{{dims}}} quantiles{{{' '.join(fields.values())}}}}}"
             "}}}")
 
 
@@ -136,12 +138,12 @@ def rate(key, v):
 
 
 def _merge(rows, keyf):
-    """Zeilen mit gleichem Schluessel zusammenlegen: Messungen addiert, p75 messungsgewichtet gemittelt (Naeherung)."""
+    """Zeilen mit gleichem Schluessel zusammenlegen: Messungen addiert, p75 nach hochgerechneten Aufrufen gewichtet gemittelt (Naeherung)."""
     out = {}
     for r in rows:
         k = keyf(r)
-        m = out.setdefault(k, {"path": r["path"], "device": r["device"], "count": 0, "langs": set(), "_w": {}, "_n": {}})
-        m["count"] += r["count"]; m["langs"] |= r.get("langs") or set()
+        m = out.setdefault(k, {"path": r["path"], "device": r["device"], "count": 0, "samples": 0, "langs": set(), "_w": {}, "_n": {}})
+        m["count"] += r["count"]; m["samples"] += r["samples"]; m["langs"] |= r.get("langs") or set()
         for key, *_ in METRICS:
             if r.get(key) is not None:
                 m["_w"][key] = m["_w"].get(key, 0.0) + r[key] * r["count"]; m["_n"][key] = m["_n"].get(key, 0) + r["count"]
@@ -161,7 +163,7 @@ def finish(r):
 
 
 def rank_key(r):
-    return (-r["severity"], -(r.get("lcp") or 0), -r["count"], DEVICE_ORDER.get(r["device"], 9), r["path"])
+    return (-r["severity"], -(r.get("lcp") or 0), -r["samples"], DEVICE_ORDER.get(r["device"], 9), r["path"])
 
 
 def parse(acc, fields):
@@ -171,25 +173,32 @@ def parse(acc, fields):
     for g in acc.get(DATASET) or []:
         dims, q = g.get("dimensions") or {}, g.get("quantiles") or {}
         path = norm_path(dims.get("requestPath"))
-        r = {"path": path, "device": str(dims.get("deviceType") or "alle").lower(), "count": int(g.get("count") or 0),
-             "langs": {strip_lang(path)[1]}}
+        if EXCLUDE_RE.match(strip_lang(path)[0]): continue
+        count = int(g.get("count") or 0)
+        try: si = max(1.0, float((g.get("avg") or {}).get("sampleInterval") or 1))
+        except (TypeError, ValueError): si = 1.0
+        # count ist bei Adaptive-Datensaetzen hochgerechnet (count = Beacons x sampleInterval); Mindestmessungen gelten fuer echte Beacons
+        r = {"path": path, "device": str(dims.get("deviceType") or "alle").lower(), "count": count,
+             "samples": max(1, round(count / si)) if count else 0, "langs": {strip_lang(path)[1]}}
         for key, f in fields.items(): r[key] = _val(q.get(f), units[key])
         if r["count"] > 0: raw.append(r)
     return _merge(raw, lambda r: (r["path"], r["device"]))
 
 
 def page_type(path):
-    """Seitentyp ohne Sprachpraefix: '/' -> Startseite, sonst die ersten zwei Segmente (bei tieferen Pfaden mit /*)."""
+    """Seitentyp ohne Sprachpraefix: '/' -> Startseite; '/entity/' bleibt; '/entity/x/' -> '/entity/*';
+    ab drei Segmenten die ersten zwei: '/show/episodes/x/' -> '/show/episodes/*', '/community/u/a/blog/b/' -> '/community/u/*'."""
     p, _ = strip_lang(path)
     seg = [s for s in p.split("/") if s]
     if not seg: return "/ (Startseite)"
-    return "/" + "/".join(seg[:2]) + ("/*" if len(seg) > 2 else "/")
+    if len(seg) == 1: return f"/{seg[0]}/"
+    return "/" + "/".join(seg[:1 if len(seg) == 2 else 2]) + "/*"
 
 
 def crp_paths(ranked, top):
-    """Top-N-Pfade fuer den Labortest: nur Seiten ueber 'gut', mobil zuerst, jeder Pfad einmal."""
-    bad = [r for r in ranked if r["severity"] >= 1]
-    order = [r for r in bad if r["device"] == "mobile"] + [r for r in bad if r["device"] != "mobile"]
+    """Top-N-Pfade fuer den Labortest: nur Seiten ueber 'gut'; schlechteste Bewertung zuerst, bei gleicher Bewertung mobil zuerst
+    (dann nach Rang), jeder Pfad einmal."""
+    order = sorted((r for r in ranked if r["severity"] >= 1), key=lambda r: (-r["severity"], r["device"] != "mobile"))  # stabil: Rang bleibt
     out = []
     for r in order:
         if r["path"] not in out: out.append(r["path"])
@@ -212,34 +221,36 @@ def _table(rows, fields, first_col="Seite", extra=None):
     cols = [("lcp", "LCP p75", _ms), ("inp", "INP p75" if fields.get("inp", "").startswith("interaction") else "FID p75", _ms),
             ("cls", "CLS p75", _cls), ("fcp", "FCP p75", _ms), ("ttfb", "TTFB p75", _ms)]
     cols = [c for c in cols if c[0] in fields]
-    head = ["#", first_col, "Gerät", "Messungen"] + [c[1] for c in cols] + ([extra[0]] if extra else []) + ["Bewertung"]
+    head = ["#", first_col, "Gerät", "Messungen", "Aufrufe (hochger.)"] + [c[1] for c in cols] + ([extra[0]] if extra else []) + ["Bewertung"]
     lines = ["| " + " | ".join(head) + " |", "|" + "---|" * len(head)]
     for i, r in enumerate(rows, 1):
-        cells = [str(i), f"`{r['path']}`", r["device"], str(r["count"])] + [f(r.get(k)) for k, _, f in cols]
+        cells = [str(i), f"`{r['path']}`", r["device"], str(r["samples"]), str(r["count"])] + [f(r.get(k)) for k, _, f in cols]
         if extra: cells.append(extra[1](r))
         cells.append(r["rating"])
         lines.append("| " + " | ".join(cells) + " |")
     return lines
 
 
-def report(rows, fields, device, confirmed, since, until, clamped, min_samples, top, max_rows=25):
+def report(rows, fields, device, confirmed, since, until, clamped, min_samples, top, max_rows=25, sampling=True):
     out = ["## Langsame Seiten bei echten Nutzern (Cloudflare Web Analytics)", ""]
     n = (until - since).days + 1
     out.append(f"Zeitraum: {since} bis {until} ({n} {'Tag' if n == 1 else 'Tage'}, UTC)"
                + (f" – gekürzt auf den Start von Web Analytics am {cf_rum.RUM_START}" if clamped else "")
-               + f" · mindestens {min_samples} Messungen je Seite und Gerät"
+               + f" · mindestens {min_samples} Messungen (echte Beacons) je Seite und Gerät"
                + ("" if device else " · ohne Geräte-Aufteilung (Dimension deviceType fehlt im Schema)"))
     out.append("Grenzwerte (Google, p75): LCP gut ≤ 2,5 s, schlecht > 4 s · INP gut ≤ 200 ms, schlecht > 500 ms · CLS gut ≤ 0,1, schlecht > 0,25")
     out.append(f"Felder: {', '.join(fields.values())} "
                + ("(per Schema-Introspektion bestätigt)" if confirmed else "(Introspektion nicht möglich – öffentlich belegte Feldnamen)"))
+    if not sampling: out.append("Hinweis: avg.sampleInterval fehlt im Schema – Messungen = hochgerechnete Aufrufe (Stichprobe nicht herausrechenbar).")
     out.append("")
-    total = sum(r["count"] for r in rows)
-    kept = sorted((r for r in rows if r["count"] >= min_samples), key=rank_key)
+    total, beacons = sum(r["count"] for r in rows), sum(r["samples"] for r in rows)
+    kept = sorted((r for r in rows if r["samples"] >= min_samples), key=rank_key)
     if not rows:
         out += ["**Keine Web-Vitals-Messungen im Zeitraum.** (Datensatz leer – Web Analytics aktiv? Beacon auf den Seiten?)", "", "CRP_PATHS:"]
         return "\n".join(out)
-    out.append(f"{total} Messungen auf {len({r['path'] for r in rows})} Pfaden; {len(kept)} Zeilen (Pfad × Gerät) mit genug Messungen, "
-               f"{sum(1 for r in rows if r['count'] < min_samples)} ausgelassen.")
+    out.append(f"{beacons} Messungen (hochgerechnet {total} Aufrufe) auf {len({r['path'] for r in rows})} Pfaden; "
+               f"{len(kept)} Zeilen (Pfad × Gerät) mit genug Messungen, {sum(1 for r in rows if r['samples'] < min_samples)} ausgelassen. "
+               "p75 einer Seite ist erst ab einigen Dutzend Messungen belastbar.")
     out.append("")
     if kept:
         out += [f"### Rangliste (Top {min(max_rows, len(kept))} von {len(kept)})", ""] + _table(kept[:max_rows], fields) + [""]
@@ -247,16 +258,16 @@ def report(rows, fields, device, confirmed, since, until, clamped, min_samples, 
         out += [f"Keine Seite erreicht {min_samples} Messungen – `--min-samples` senken oder `--days` erhöhen.", ""]
     # Nur Anzeige: gleiche Seite ueber alle Sprachen zusammengefasst
     merged = _merge([dict(r, path=strip_lang(r["path"])[0]) for r in rows], lambda r: (r["path"], r["device"]))
-    merged = sorted((m for m in merged if m["count"] >= min_samples and len(m["langs"]) > 1), key=rank_key)
+    merged = sorted((m for m in merged if m["samples"] >= min_samples and len(m["langs"]) > 1), key=rank_key)
     if merged:
-        out += ["### Gleiche Seite, alle Sprachen zusammen (nur Anzeige, p75 messungsgewichtet genähert)", ""]
+        out += ["### Gleiche Seite, alle Sprachen zusammen (nur Anzeige, p75 gewichtet genähert)", ""]
         out += _table(merged[:10], fields, "Seite ohne Sprachpräfix", ("Sprachen", lambda r: " ".join(sorted(r["langs"])))) + [""]
     types = sorted((m for m in _merge([dict(r, path=page_type(r["path"])) for r in rows], lambda r: (r["path"], r["device"]))
-                    if m["count"] >= min_samples), key=rank_key)
+                    if m["samples"] >= min_samples), key=rank_key)
     if types:
-        out += ["### Seitentypen (alle Sprachen, p75 messungsgewichtet genähert)", ""] + _table(types[:15], fields, "Seitentyp") + [""]
+        out += ["### Seitentypen (alle Sprachen, p75 gewichtet genähert)", ""] + _table(types[:15], fields, "Seitentyp") + [""]
     paths = crp_paths(kept, top)
-    out.append(f"Für den CRP-Check (crp-check.yml, Eingabe „paths“): {len(paths)} Pfad(e), mobil zuerst, nur Seiten über „gut“."
+    out.append(f"Für den CRP-Check (crp-check.yml, Eingabe „paths“): {len(paths)} Pfad(e), schlechteste zuerst (bei gleicher Bewertung mobil zuerst), nur Seiten über „gut“."
                if paths else "Keine Seite mit genug Messungen liegt über „gut“ – diese Woche ist kein Labortest nötig.")
     out += ["", "CRP_PATHS: " + " ".join(paths)]
     return "\n".join(out)
@@ -269,9 +280,9 @@ def run(days=7, top=3, min_samples=20, limit=5000, today=None, rum=None):
     if since is None:
         return (f"## Langsame Seiten\n\nZeitraum liegt vollständig vor dem Start von Web Analytics ({cf_rum.RUM_START}) – keine Daten.\n\nCRP_PATHS:")
     rum = rum or cf_rum.Rum.connect()
-    fields, device, confirmed = pick_fields(schema(rum))
-    acc = rum.query(build_query(fields, device, limit), since, until)
-    return report(parse(acc, fields), fields, device, confirmed, since, until, clamped, min_samples, top)
+    fields, device, sampling, confirmed = pick_fields(schema(rum))
+    acc = rum.query(build_query(fields, device, limit, sampling), since, until)
+    return report(parse(acc, fields), fields, device, confirmed, since, until, clamped, min_samples, top, sampling=sampling)
 
 
 def main(argv=None):
