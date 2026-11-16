@@ -1,5 +1,6 @@
 """Groessenpruefung des GitHub-Pages-Builds."""
 import json
+import re
 import time
 from pathlib import Path
 
@@ -13,10 +14,24 @@ def r2_only(rel, langs):
     Seit 11.11.2026 (Bau 642: docs/ 993 MB, Grenze 980 MB) gilt das fuer ALLE Seiten (index.html) der Sprachen ausser en/de: Dub-Folgen,
     Tag-/Kategorie-/Lernseiten, Verzeichnis, Events, Profile, Blog- und Folgenlisten usw. (~350 MB; Blog- und Show-Sprachfassungen,
     Entitaeten und Landingpages lagen schon dort). In GitHub Pages bleiben die Startseite der Sprache (<l>/index.html, Ziel der Sprachwahl
-    auf "/", ohne Umweg ueber den R2-Rueckfall) und Dateien neben den Seiten (feed.xml, event.ics, llms.txt, sw.js): der Rueckfall liefert nur HTML."""
+    auf "/", ohne Umweg ueber den R2-Rueckfall) und Dateien neben den Seiten (feed.xml, event.ics, llms.txt, sw.js): der Rueckfall liefert nur HTML.
+    Seit 16.11.2026 auch die Sitemaps dieser Sprachen im Wurzelverzeichnis (sitemap-<l>-<typ>[-<n>].xml, site_sitemaps.write_all; allein die
+    Blog-Sitemaps ~6 MB je Sprache wegen der hreflang-Alternates): der Site-Worker liefert sie nach dem 404 als application/xml (SITEMAP_R2 in
+    sitewrk/index.js). Der Index sitemap.xml und die Sitemaps von en/de bleiben in GitHub Pages."""
     if rel == "translations-blog.json" or rel.startswith("blog-import/"): return True
+    l = sitemap_lang(rel)
+    if l: return l in langs and l not in PAGES_LANGS
     p = rel.split("/")
     return len(p) > 2 and p[0] in langs and p[0] not in PAGES_LANGS and p[-1] == "index.html"
+
+
+SITEMAP_RX = re.compile(r"^sitemap-([a-z]{2})-[a-z][a-z0-9-]*\.xml$")   # Name aus site_sitemaps.write_all; gleiche Regel wie SITEMAP_R2 im Site-Worker
+
+
+def sitemap_lang(rel):
+    """Sprache einer Sitemap-Datei im Wurzelverzeichnis (sitemap-<l>-<typ>[-<n>].xml) oder "" (keine solche Datei, auch nicht der Index sitemap.xml)."""
+    m = SITEMAP_RX.match(rel)
+    return m.group(1) if m else ""
 
 
 def writers(out, r2out, rewrite, langs):

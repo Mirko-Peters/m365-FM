@@ -230,6 +230,10 @@ jobs:
           # Erst als Repo-Variable PARTNER_BASE eintragen, wenn partner.m365.fm ausgeliefert wird (Site-Worker-Deploy mit Route partner.m365.fm).
           PARTNER_BASE: ${{ vars.PARTNER_BASE }}
           GOOGLE_MAPS_API_KEY: ${{ vars.GOOGLE_MAPS_API_KEY || secrets.GOOGLE_MAPS_API_KEY }}
+      # Sitemaps der Sprachen ausser en/de liegen seit 16.11.2026 nur in r2out/ (R2-Bucket), Index und en/de in docs/: geprueft werden alle, und zwar
+      # VOR dem Upload - was in den Bucket geht, ist sofort live (der Site-Worker liefert es nach dem 404 von GitHub Pages), auch ohne Deploy
+      - name: Sitemaps prüfen (docs/ + r2out/, blockierend, vor dem R2-Upload)
+        run: python check_sitemaps.py docs r2out
       # Pruefsummenliste der R2-Seiten in einem eigenen Cache: wird direkt nach dem Upload gesichert (auch wenn spaeter eine blockierende Pruefung
       # scheitert oder der Lauf abgebrochen wird). Vorher ging sie dann verloren und der naechste Lauf lud dieselben Seiten noch einmal hoch.
       - name: Pruefsummenliste der R2-Seiten (letzter Stand)
@@ -240,7 +244,7 @@ jobs:
           restore-keys: r2pages-
       # Blockierend (11.11.2026): alle Sprachseiten ausser en/de liegen nur im Bucket. tools/r2_pages_upload.py endet nur dann mit 1, wenn eine Seite
       # dort noch ganz fehlt (sonst 404 nach dem Deploy); einzelne Fehler bei schon vorhandenen Seiten und bei Export-Dateien bleiben Warnungen.
-      - name: Seiten in den R2-Bucket laden (Sprachseiten ausser en/de, Sprachfassungen, Exporte; GitHub Pages bleibt klein, nichts wird geloescht)
+      - name: Seiten in den R2-Bucket laden (Sprachseiten und Sitemaps ausser en/de, Sprachfassungen, Exporte; GitHub Pages bleibt klein, nichts wird geloescht)
         env:
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
@@ -287,8 +291,6 @@ jobs:
         run: python check_redirect_links.py
       - name: Schema.org (JSON-LD) prüfen (blockierend seit T7, Integrationsbau 1.11. ohne Fehler)
         run: python check_schema.py
-      - name: Sitemaps prüfen (blockierend)
-        run: python check_sitemaps.py
       - name: Encoding prüfen (Mojibake blockierend)
         run: python check_encoding.py
       - name: Titel und Beschreibungen prüfen (T7, blockierend)
