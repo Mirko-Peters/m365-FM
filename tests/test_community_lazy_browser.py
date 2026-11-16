@@ -145,6 +145,13 @@ class CommunityLazyBrowser(unittest.TestCase):
         pg.wait_for_function("(window.__L||[]).indexOf('events-import.js')>-1", timeout=3000)
         pg.close()
 
+    def test_fragment_without_tab_stays_in_address(self):
+        # z. B. /community/#c-msg aus expert-connect.js: beim Laden nicht auf #c-page umschreiben (sonst Sprung zu #c-page und Verschiebung)
+        pg = self.open("#c-msg")
+        self.assertEqual(pg.evaluate("location.hash"), "#c-msg")
+        self.assertFalse(pg.evaluate("document.getElementById('c-page').hidden"))
+        pg.close()
+
     def test_print_hides_header_footer_tabs_on_every_tab(self):
         pg = self.open("#c-library")
         self.assertNotIn("mvp-tracker.js", self.loaded(pg))
