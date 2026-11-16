@@ -28,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
-        with: { node-version: 22 }
+        with: { node-version: 24 }
       - name: Community-API - Syntax und Tests (node --test)
         working-directory: worker
         run: |
@@ -62,7 +62,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
-        with: { node-version: 22 }
+        with: { node-version: 24 }
       # Ohne MCP_URL: nur der Quelltext wird abgeglichen (jede API-Route hat ein Tool oder eine Begründung), kein Aufruf des Live-Servers
       - run: node tools/check_mcp_coverage.mjs
 
@@ -141,7 +141,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
-        with: { node-version: 22 }
+        with: { node-version: 24 }
       - name: Auf die Staging-Deploys für diesen Stand warten
         env:
           GH_TOKEN: ${{ github.token }}
