@@ -37,7 +37,7 @@ def cand_text(ents):
 
 def ask(batch, ctext):
     body = {"model": MODEL, "max_tokens": 4000, **thinking_off(MODEL), "system": SYSTEM + "\n\nCandidate parents (id|name):\n" + ctext,
-            "messages": [{"role": "user", "content": json.dumps([{"id": e["id"], "name": e["name"], "desc": (e["desc"].get("en") or "")[:200]} for e in batch], ensure_ascii=False)}]}
+            "messages": [{"role": "user", "content": json.dumps([{"id": e["id"], "name": e["name"], "desc": ((e.get("desc") or {}).get("en") or "")[:200]} for e in batch], ensure_ascii=False)}]}
     req = anthropic_request("/v1/messages", body, job=JOB, model=MODEL, api_key=os.environ["ANTHROPIC_API_KEY"])
     with urlopen(req, timeout=180) as r:
         d = json.loads(r.read().decode())
