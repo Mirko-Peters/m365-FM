@@ -1,0 +1,49 @@
+name: Langsame Seiten (echte Nutzer, nur lesen)
+# Woechentliche Routine (Dienstag, gestartet von einer Claude-Aufgabe): Cloudflare Web Analytics (Web Vitals, p75 je Pfad und Geraet)
+# zeigt, welche Seiten fuer echte Besucher langsam sind (tools/slow_pages.py). Die letzte Zeile "CRP_PATHS: …" geht als Eingabe "paths"
+# in crp-check.yml (Lighthouse nur fuer diese wenigen Seiten). Aendert nichts; bewusst kein Zeitplan hier.
+on:
+  workflow_dispatch:
+    inputs:
+      days:
+        description: "Zeitraum in Tagen (abgeschlossene Tage, UTC)"
+        required: false
+        default: "7"
+      top:
+        description: "Anzahl Pfade fuer CRP_PATHS (mobil zuerst)"
+        required: false
+        default: "3"
+      min_samples:
+        description: "Mindestzahl Messungen je Seite und Geraet"
+        required: false
+        default: "20"
+permissions:
+  contents: read
+concurrency:
+  group: slow-pages
+  cancel-in-progress: false
+jobs:
+  slow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Web Vitals je Seite abfragen
+        env:
+          CF_ANALYTICS_TOKEN: ${{ secrets.CF_ANALYTICS_TOKEN }}   # bevorzugt: Lese-Token "Read analytics and logs"
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}   # Fallback, falls CF_ANALYTICS_TOKEN fehlt
+          # wie mediakit.yml/sponsor-metrics.yml: Konto-ID aus vorhandenen Secrets, siteTag optional (sonst automatisch gesucht)
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID || secrets.CLOUDFLARE_ACCOUNT_ID || secrets.R2_ACCOUNT_ID }}
+          CF_RUM_SITE_TAG: ${{ vars.CF_RUM_SITE_TAG || secrets.CF_RUM_SITE_TAG }}
+          DAYS: ${{ github.event.inputs.days || '7' }}
+          TOP: ${{ github.event.inputs.top || '3' }}
+          MIN_SAMPLES: ${{ github.event.inputs.min_samples || '20' }}
+        run: |
+          set -o pipefail
+          rc=0
+          python tools/slow_pages.py --days "$DAYS" --top "$TOP" --min-samples "$MIN_SAMPLES" | tee out.md || rc=$?
+          cat out.md >> "$GITHUB_STEP_SUMMARY"   # auch bei Fehler: die Meldung steht dann in der Zusammenfassung
+          exit $rc
