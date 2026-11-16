@@ -36,6 +36,22 @@ def main():
     for key, f in keys.items():
         h = hashlib.md5(f.read_bytes()).hexdigest()
         if man.get(key) != h or key in gone: todo.append((key, f, h))
+    # Sitemaps (wenige Schluessel) im Bucket nachsehen, auch wenn das Manifest sie als geladen fuehrt: der Spiegel des vorigen Laufs
+    # (tools/r2_site_sync.py im Deploy-Job, Metadaten src=docs) kann sie nach diesem Upload noch mit seiner docs/-Fassung ueberschreiben, solange er
+    # parallel laeuft. Ein src=docs-Objekt liefert der Site-Worker nicht aus (404, waehrend sitemap.xml darauf verweist), und ohne Inhaltsaenderung
+    # luede es kein spaeterer Lauf neu. Fehlt das Objekt ganz, ebenso neu laden.
+    queued = {t[0] for t in todo}
+    for key, f in keys.items():
+        if key in queued or not SITEMAP.match(key): continue
+        try: md = s3.head_object(Bucket=bucket, Key=key).get("Metadata") or {}
+        except Exception as e:
+            code = str(((getattr(e, "response", None) or {}).get("Error") or {}).get("Code", ""))
+            if code in ("NoSuchKey", "404", "NotFound") or "NoSuchKey" in type(e).__name__ or "NotFound" in type(e).__name__: md = {"missing": "1"}
+            else: print("Sitemap im Bucket nicht pruefbar:", key, type(e).__name__); continue
+        if md.get("src") == "docs" or md.get("missing") == "1":
+            print("Sitemap neu laden:", key, "(nur Spiegel aus docs/)" if md.get("src") == "docs" else "(fehlt im Bucket)")
+            man.pop(key, None); served.discard(key)   # gilt als nicht ausgeliefert: scheitert der Upload, Ende 1 wie bei einer fehlenden Sitemap
+            todo.append((key, f, hashlib.md5(f.read_bytes()).hexdigest()))
     print(f"{len(files)} Dateien, {len(todo)} neu, geaendert oder wieder erzeugt")
     def save_man():   # atomar schreiben: ein abgebrochener Lauf hinterlaesst nie eine halbe Liste
         MAN.parent.mkdir(parents=True, exist_ok=True); tmp = MAN.with_suffix(".tmp")

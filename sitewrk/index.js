@@ -210,6 +210,9 @@ function finishHeaders(h, p) {
   const tm = TRANSCRIPT.exec(p);
   if (tm) { h.set("content-type", CT[tm[1]]); h.set("x-robots-tag", "noindex"); h.set("access-control-allow-origin", "*"); }   // #266
   if (isImg) h.set("vary", "accept");
+  // Merker fuer den Seitenbau (site.yml, Deploy-Job): diese Worker-Fassung liefert die Sitemaps der Sprachen ausser en/de aus R2 (SITEMAP_R2).
+  // Erst wenn /sitemap.xml ihn traegt, veroeffentlicht der Deploy-Job ein docs/ ohne diese Sitemaps - sonst antworteten sie mit 404 (alter Worker).
+  if (p === "/sitemap.xml" || SITEMAP_R2.test(p)) h.set("x-m365-sitemaps", "r2");
   if (p === "/") h.set("vary", VARY_HOME);   // Startseite: Antwort haengt von Sprache und Cookie ab (s. homeLang) - nie fuer eine andere Sprache aus einem Cache
   if (p === "/") h.set("link", '</.well-known/api-catalog>; rel="api-catalog", </openapi.json>; rel="service-desc"; type="application/vnd.oai.openapi+json", </llms.txt>; rel="service-doc"; type="text/plain", </.well-known/agent.json>; rel="describedby"; type="application/json"');   // RFC 8288 / 9727: Startseite verweist auf maschinenlesbare Ressourcen
   if (p === "/.well-known/api-catalog") { h.set("content-type", 'application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"'); h.set("access-control-allow-origin", "*"); }

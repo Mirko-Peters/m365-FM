@@ -64,6 +64,13 @@ test("Index und en/de-Sitemaps weiter von GitHub Pages, ohne noindex", async () 
   const i = await run(req("/sitemap.xml")); assert.equal(i.status, 200); assert.equal(await i.text(), IDX); assert.equal(i.headers.get("x-robots-tag"), null);
   const d = await run(req("/sitemap-de-blog.xml")); assert.equal(d.status, 200); assert.equal(await d.text(), "<urlset>de</urlset>"); assert.equal(d.headers.get("x-robots-tag"), null);
 });
+test("Merker x-m365-sitemaps: r2 (Pruefung im Deploy-Job von site.yml) auf dem Index, auch per HEAD und mit Query; nicht auf anderen Adressen", async () => {
+  store.clear();
+  for (const r of [req("/sitemap.xml"), req("/sitemap.xml?worker-check=1", {}, "HEAD"), req("/sitemap-fr-blog.xml"), req("/sitemap-de-blog.xml")]) {
+    const res = await run(r); assert.equal(res.status, 200, r.url); assert.equal(res.headers.get("x-m365-sitemaps"), "r2", r.url);
+  }
+  for (const p of ["/", "/fr/", "/feed.xml", "/sitemap-fr.xml"]) assert.equal((await run(req(p))).headers.get("x-m365-sitemaps"), null, p);
+});
 test("R2 als Ursprung: Sitemap direkt aus dem Bucket (application/xml, indexierbar), ohne Abruf bei GitHub Pages", async () => {
   store.clear(); __resetR2Ready();
   const e2 = { ...env, R2_PRIMARY: "1" };
