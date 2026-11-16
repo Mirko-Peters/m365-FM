@@ -362,14 +362,14 @@ jobs:
       # Seit 16.11.2026 fehlen in docs/ die Sitemaps der Sprachen ausser en/de (nur im R2-Bucket); ausliefern kann sie nur ein Site-Worker mit
       # SITEMAP_R2 (sitewrk.yml, eigener Workflow, Deploy-Schritt continue-on-error). Laeuft noch die alte Fassung, antworteten sie nach diesem
       # Deploy mit 404, waehrend sitemap.xml sie auffuehrt. Darum erst veroeffentlichen, wenn der Worker den Merker x-m365-sitemaps: r2 auf
-      # /sitemap.xml setzt (bis 10 min warten, dann Abbruch ohne Deploy; GitHub Pages behaelt den alten Stand mit allen Sitemaps).
+      # /sitemap.xml setzt (20 Versuche im Abstand von 30 s, gut 10 min, dann Abbruch ohne Deploy; GitHub Pages behaelt den alten Stand mit allen Sitemaps).
       # Notschalter: Repo-Variable SITEMAP_WORKER_CHECK=0.
       - name: Site-Worker liefert die Sitemaps aus R2? (sonst kein Deploy)
         if: (vars.SITEMAP_WORKER_CHECK || '1') != '0'   # wie SITE_PUSH_BUILD oben: eine nicht gesetzte Variable ist null, null != '0' waere false
         run: |
           for i in $(seq 1 20); do
-            if curl -sSfI --max-time 20 "https://www.m365.fm/sitemap.xml?worker-check=${{ github.run_id }}-$i" | tr -d '\r' | grep -qi '^x-m365-sitemaps: *r2$'; then echo "Site-Worker mit Sitemaps aus R2 ist live"; exit 0; fi
-            echo "Versuch $i: Merker x-m365-sitemaps fehlt (Site-Worker noch nicht veroeffentlicht?)"; sleep 30
+            if curl -sSfI --max-time 20 -A "m365fm-actions/1.0 (+https://www.m365.fm)" "https://www.m365.fm/sitemap.xml?worker-check=${{ github.run_id }}-$i" | tr -d '\r' | grep -qi '^x-m365-sitemaps: *r2$'; then echo "Site-Worker mit Sitemaps aus R2 ist live"; exit 0; fi
+            echo "Versuch $i: Merker x-m365-sitemaps fehlt (Site-Worker noch nicht veroeffentlicht?)"; [ "$i" -lt 20 ] && sleep 30
           done
           echo "::error::Der Site-Worker liefert die Sitemaps der Sprachen ausser en/de noch nicht aus R2 (Merker x-m365-sitemaps fehlt auf /sitemap.xml). Erst den Workflow sitewrk.yml erfolgreich veroeffentlichen, dann diesen Lauf wiederholen - sonst antworteten sitemap-<sprache>-*.xml mit 404."
           exit 1
