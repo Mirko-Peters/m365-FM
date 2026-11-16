@@ -429,7 +429,7 @@ async function partnerRequest(request, env, ctx, url) {
   const target = new URL(origin + (www || p)); target.search = url.search;
   const inner = new Request(target.href, request);
   inner.headers.set("x-partner-rewrite", "1");   // der www-Zweig leitet dann nicht zurueck auf partner (keine Schleife)
-  const res = await worker.fetch(inner, env, ctx);
+  const res = await site.fetch(inner, env, ctx);   // ohne Speculation-Rules (die Regeln gelten nur fuer www.m365.fm)
   const h = new Headers(res.headers);
   if (www) h.set("x-robots-tag", PARTNER_NOINDEX["x-robots-tag"]);
   const loc = h.get("location");
@@ -439,7 +439,67 @@ async function partnerRequest(request, env, ctx, url) {
   return new Response(request.method === "HEAD" ? null : res.body, { status: res.status, statusText: res.statusText, headers: h });
 }
 
+// ---------------------------------------------------------------- Vorabruf der naechsten Seite (Speculation Rules, Speed-Massnahme 5, 16.11.2026)
+// Jede HTML-Seite (200/304) auf www.m365.fm bekommt den Header Speculation-Rules: "/speculation.json"; die Regeln beantwortet der Worker selbst
+// (keine Kopplung an Seitenbau oder R2). Nur prefetch (laedt das HTML-Dokument vor, fuehrt kein Skript aus, laedt keine Bilder), nie prerender.
+// "moderate": erst bei Hover (~200 ms) bzw. Antippen. Nur gleiche Herkunft ("/*" relativ zu www.m365.fm): Kurzlinks (c.m365.fm), Klick- und
+// Werbezaehler (api-dub.m365.fm) sind fremde Herkunft und nie betroffen. Web Analytics (RUM) zaehlt nur per JavaScript, das beim Vorabruf nicht
+// laeuft; die ungefilterte Zonen-Statistik (Rueckfall in tools/sponsor_metrics.py und tools/mediakit.py) zaehlt dagegen jede HTML-Antwort am Rand,
+// also auch vorabgerufene Seiten, die nie geoeffnet werden (dort als "ungefiltert inkl. Bots und Vorabrufe" beschriftet).
+// Ausgenommen: Community (eigene App, Anmeldung), Arbeitsseiten mit Anmeldung (Admin, Redaktion, Moderation, Sponsor-Dashboard, Login-Rueckleitung),
+// Einladungslinks, Suche, /api/ und /auth/ (gibt es auf www nicht, nur zur Sicherheit), Adressen mit Query, Dateien (Feeds, JSON-Exporte, Bilder, PDF ...),
+// Links mit rel=nofollow, download, target=_blank oder data-no-prefetch und die Sprachwahl (SPEC_LANG_SEL, dieselben Links wie in assets/page.js):
+// deren Klick setzt erst das Cookie m365_lang; ein Vorabruf bei Hover/pointerdown ginge noch mit dem alten Cookie bzw. Accept-Language, und
+// homeLang() wuerde "/" mit 302 auf /de/ beantworten - der Browser koennte diese Antwort dann fuer den Klick auf "English" verwenden.
+// Weil der Browser Vorabrufe je ADRESSE speichert (nicht je Link), ist "/" selbst (und /index.html, /en, /en/..., die dorthin weiterleiten)
+// ausgenommen: sonst laedt z. B. der Knopf "M365.FM" auf /<l>/about/mirko-peters/ "/" mit der alten Sprache vor, und "English" landet wieder auf /<l>/.
+// Dateiendungen: URLPattern unterscheidet Gross/Klein; der Seitenbau erzeugt nur kleingeschriebene Pfade.
+// Achtung URLPattern: "/*\\?*" (Query beliebig) passt auch auf Adressen OHNE Query und wuerde jeden Vorabruf abschalten - darum "/*\\?(.+)".
+export const SPEC_PATH = "/speculation.json";
+export const SPEC_LANG_SEL = "details.lsw a[hreflang],a.lt[hreflang],a[data-setlang]";   // = Sprachwahl-Klick in assets/page.js (setzt m365_lang)
+export const SPEC_RULES = {
+  prefetch: [{
+    where: { and: [
+      { href_matches: "/*" },
+      { not: { href_matches: [
+        "/", "/index.html", "/en", "/en/*",
+        "/community/*", "/*/community/*", "/api/*", "/auth/*", "/admin/*", "/callback/*", "/einladung/*",
+        "/redaktion/*", "/*/redaktion/*", "/moderation/*", "/*/moderation/*",
+        "/sponsor/dashboard/*", "/*/sponsor/dashboard/*", "/search/*", "/*/search/*",
+        "/*\\?(.+)",
+        "/*.(json|jsonld|xml|rss|txt|md|csv|ics|vtt|pdf|zip|mp3|m4a|mp4|png|jpe?g|gif|webp|avif|svg|webmanifest)",
+      ] } },
+      { not: { selector_matches: "[rel~=nofollow],[download],[target=_blank],[data-no-prefetch]," + SPEC_LANG_SEL } },
+    ] },
+    eagerness: "moderate",
+  }],
+};
+const SPEC_BODY = JSON.stringify(SPEC_RULES);
+function speculationRules(request) {
+  const h = new Headers({ "content-type": "application/speculationrules+json", "cache-control": "public, max-age=3600", "x-robots-tag": "noindex" });
+  for (const [k, v] of Object.entries(SEC)) h.set(k, v);
+  return new Response(request.method === "HEAD" ? null : SPEC_BODY, { status: 200, headers: h });
+}
+// Header nur auf HTML-Seiten (200, 304 fuer den Browser-Cache) der eigenen Website; nie auf Weiterleitungen, Fehlern, Dateien, partner.m365.fm,
+// Staging, img.m365.fm oder BYOD-Domains (dort gibt es /speculation.json nicht)
+export function withSpeculation(request, env, res) {
+  const url = new URL(request.url);
+  if (isStaging(env) || !WWW_HOSTS.has(url.hostname) || url.protocol !== "https:" || request.headers.has("x-partner-rewrite")) return res;
+  if ((request.method !== "GET" && request.method !== "HEAD") || (res.status !== 200 && res.status !== 304)) return res;
+  const ct = res.headers.get("content-type");
+  if (ct ? !/^text\/html\b/i.test(ct) : !(res.status === 304 && isHtmlPath(url.pathname))) return res;
+  const h = new Headers(res.headers);
+  h.set("speculation-rules", `"${SPEC_PATH}"`);
+  return new Response(res.body, { status: res.status, statusText: res.statusText, headers: h });
+}
+
 const worker = {
+  async fetch(request, env, ctx) {
+    return withSpeculation(request, env, await site.fetch(request, env, ctx));
+  },
+};
+// Auslieferung ohne den Vorabruf-Header (partnerRequest ruft sie direkt auf: partner.m365.fm bekommt ihn nie)
+const site = {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     if (isStaging(env)) return stagingFetch(request, env);   // Testumgebung: eigener, abgeschlossener Pfad (oben); Live-Verhalten unveraendert
@@ -470,6 +530,7 @@ const worker = {
     }
     const p = url.pathname, isImg = IMG.test(p), isStatic = STATIC.test(p) || FONT.test(p);
     if (p.startsWith("/__r2c/")) return new Response("Not found", { status: 404 });   // interner Cache-Schluessel, keine oeffentliche Adresse
+    if (p === SPEC_PATH && WWW_HOSTS.has(url.hostname) && (request.method === "GET" || request.method === "HEAD")) return speculationRules(request);   // Regeln fuer den Vorabruf (s. withSpeculation)
     if (p === "/") { const hl = homeLang(request); if (hl) return langRedirect(url.origin, hl, url.search); }   // vor jedem Cache: eine englische Startseite aus dem Cache erreicht nie einen deutschen Browser
     const cf = isImg ? { cacheEverything: true, cacheTtl: 604800, polish: "lossy", mirage: true }
       : isStatic ? { cacheEverything: true, cacheTtl: 86400 }

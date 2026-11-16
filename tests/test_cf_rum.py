@@ -163,7 +163,7 @@ class RumTests(unittest.TestCase):
         self.assertIn("::warning title=Cloudflare Web Analytics::", log); self.assertIn("Account Analytics: Read", log)
         self.assertNotIn("test-token", log)
         row = MK.rows_for("de", {"cloudflare": c})[0]
-        self.assertEqual(row[2], "Cloudflare-Randstatistik (ungefiltert, inkl. Bots)"); self.assertEqual(row[3], "letzte 30 Tage")
+        self.assertEqual(row[2], "Cloudflare-Randstatistik (ungefiltert, inkl. Bots und Vorabrufe)"); self.assertEqual(row[3], "letzte 30 Tage")
         self.assertIn("unfiltered", MK.rows_for("en", {"cloudflare": c})[0][2])
         self.assertEqual(len(MK.rows_for("de", {"cloudflare": c})), 1, "Fallback ohne Besuche (unique IPs waeren bot-verzerrt)")
 
