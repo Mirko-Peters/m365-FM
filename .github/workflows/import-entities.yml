@@ -27,10 +27,12 @@ jobs:
         run: python tools/import_entities.py
       - name: Quotes aus geprüften Extraktionen an Personen-Entitäten übernehmen
         run: python tools/import_quotes.py
+      - name: Oberbegriffe per Regel eintragen und Ontologie pruefen (neue Eintraege bekommen sofort ihren Platz in der Hierarchie)
+        run: python tools/ontology_check.py --apply | tee -a "$GITHUB_STEP_SUMMARY" || true
       - name: Speichern
         run: |
           git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
-          git add -A data/entities.json data/quotes.json imports/entities 2>/dev/null || true
+          git add -A data/entities.json data/quotes.json imports/entities reports/ontology.md reports/ontology.json 2>/dev/null || true
           if git diff --cached --quiet; then echo "Nichts zu speichern"; exit 0; fi
           git commit -q -m "Entitäten aus freigegebenen Vorschlägen übernommen $(date -u +%Y-%m-%dT%H:%MZ)"
           (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
