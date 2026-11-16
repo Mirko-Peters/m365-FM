@@ -15280,7 +15280,10 @@
   "id": "azure-iot-hub-device-provisioning-service",
   "type": "product",
   "name": "Azure IoT Hub Device Provisioning Service (DPS)",
-  "aliases": [],
+  "aliases": [
+   "IoT Hub Device Provisioning Service",
+   "Device Provisioning Service"
+  ],
   "desc": {
    "en": "An Azure helper service for IoT Hub that verifies a device's proof of identity against enrollment rules on first boot and assigns it to an IoT hub using an allocation policy, enabling zero-touch provisioning.",
    "de": ""
@@ -15300,7 +15303,18 @@
    "lang": "en",
    "approved_by": "Mirko Peters (3.11.2026: alle freigegeben)",
    "episodes": [
-    "75853851"
+    "75853851",
+    "75855632"
+   ],
+   "merged": [
+    {
+     "id": "iot-hub-device-provisioning-service",
+     "import": "iot-hub-device-provisioning-service.json",
+     "approved_by": "Mirko Peters (3.11.2026: alle freigegeben)",
+     "episodes": [
+      "75855632"
+     ]
+    }
    ]
   }
  },
@@ -31713,34 +31727,6 @@
   }
  },
  {
-  "id": "iot-hub-device-provisioning-service",
-  "type": "product",
-  "name": "Azure IoT Hub Device Provisioning Service (DPS)",
-  "aliases": [],
-  "desc": {
-   "en": "Azure service that lets devices enroll through a repeatable provisioning process; it authenticates a device and assigns it to an IoT hub based on defined enrollment rules.",
-   "de": ""
-  },
-  "web": "",
-  "wikidata": "",
-  "wikipedia": "",
-  "docs": "",
-  "rel": [
-   [
-    "part_of",
-    "azure-iot-hub"
-   ]
-  ],
-  "source": {
-   "import": "iot-hub-device-provisioning-service.json",
-   "lang": "en",
-   "approved_by": "Mirko Peters (3.11.2026: alle freigegeben)",
-   "episodes": [
-    "75855632"
-   ]
-  }
- },
- {
   "id": "iot-hub-device-twin",
   "type": "concept",
   "name": "IoT Hub device twin",
@@ -37572,7 +37558,9 @@
   "id": "oauth-2-0",
   "type": "concept",
   "name": "OAuth 2.0",
-  "aliases": [],
+  "aliases": [
+   "OAuth"
+  ],
   "desc": {
    "en": "An open authorization standard that decides what an app can reach on a user's behalf using scoped access tokens; it is not a login system on its own, which is why OpenID Connect adds sign-in on top.",
    "de": ""
@@ -37590,43 +37578,38 @@
     "67677986",
     "67960173",
     "68008224",
+    "68755705",
+    "68755969",
     "68945012",
     "72541178",
     "73049092",
     "73051472",
+    "75899698",
     "75899715",
     "75934999",
-    "75935455"
-   ]
-  }
- },
- {
-  "id": "oauth",
-  "type": "concept",
-  "name": "OAuth 2.0",
-  "aliases": [],
-  "desc": {
-   "en": "OAuth 2.0 is an authorization standard in which an app obtains a short-lived access token (bearer token) that stands in for the signed-in user when calling an API, instead of sending a password or a long-lived API key.",
-   "de": ""
-  },
-  "web": "",
-  "wikidata": "",
-  "wikipedia": "",
-  "docs": "",
-  "rel": [],
-  "source": {
-   "import": "oauth.json",
-   "lang": "en",
-   "approved_by": "Mirko Peters (3.11.2026: alle freigegeben)",
-   "episodes": [
-    "68755705",
-    "68755969",
-    "75899698",
+    "75935455",
     "76105427",
     "76107133",
     "76107135",
     "76107140",
     "76107147"
+   ],
+   "merged": [
+    {
+     "id": "oauth",
+     "import": "oauth.json",
+     "approved_by": "Mirko Peters (3.11.2026: alle freigegeben)",
+     "episodes": [
+      "68755705",
+      "68755969",
+      "75899698",
+      "76105427",
+      "76107133",
+      "76107135",
+      "76107140",
+      "76107147"
+     ]
+    }
    ]
   }
  },
@@ -37709,14 +37692,16 @@
   "id": "oee",
   "type": "concept",
   "name": "Overall equipment effectiveness (OEE)",
-  "aliases": [],
+  "aliases": [
+   "Overall equipment effectiveness"
+  ],
   "desc": {
-   "en": "A manufacturing metric for how effectively equipment is used, combining availability, performance and quality.",
+   "en": "A manufacturing metric that combines availability, performance and quality to show how well equipment is used relative to its planned production time.",
    "de": ""
   },
   "web": "",
   "wikidata": "",
-  "wikipedia": "",
+  "wikipedia": "https://en.wikipedia.org/wiki/Overall_equipment_effectiveness",
   "docs": "",
   "rel": [],
   "source": {
@@ -37724,7 +37709,30 @@
    "lang": "en",
    "approved_by": "Mirko Peters (3.11.2026: alle freigegeben)",
    "episodes": [
-    "75864054"
+    "75573823",
+    "75576438",
+    "75585104",
+    "75855632",
+    "75860203",
+    "75863079",
+    "75864054",
+    "75991643"
+   ],
+   "merged": [
+    {
+     "id": "overall-equipment-effectiveness",
+     "import": "overall-equipment-effectiveness.json",
+     "approved_by": "Mirko Peters (3.11.2026: alle freigegeben)",
+     "episodes": [
+      "75573823",
+      "75576438",
+      "75585104",
+      "75855632",
+      "75860203",
+      "75863079",
+      "75991643"
+     ]
+    }
    ]
   }
  },
@@ -38773,35 +38781,6 @@
    "approved_by": "Mirko Peters (3.11.2026: alle freigegeben)",
    "episodes": [
     "68292197"
-   ]
-  }
- },
- {
-  "id": "overall-equipment-effectiveness",
-  "type": "concept",
-  "name": "Overall equipment effectiveness (OEE)",
-  "aliases": [],
-  "desc": {
-   "en": "A manufacturing metric that combines availability, performance and quality to show how well equipment is used relative to its planned production time.",
-   "de": ""
-  },
-  "web": "",
-  "wikidata": "",
-  "wikipedia": "https://en.wikipedia.org/wiki/Overall_equipment_effectiveness",
-  "docs": "",
-  "rel": [],
-  "source": {
-   "import": "overall-equipment-effectiveness.json",
-   "lang": "en",
-   "approved_by": "Mirko Peters (3.11.2026: alle freigegeben)",
-   "episodes": [
-    "75573823",
-    "75576438",
-    "75585104",
-    "75855632",
-    "75860203",
-    "75863079",
-    "75991643"
    ]
   }
  },
