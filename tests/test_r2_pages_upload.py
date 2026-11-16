@@ -302,6 +302,25 @@ class R2outOrderTest(Base):
             self.assertEqual(self.r2out_run(), 1, "Spiegel-Objekt und Neuladen gescheitert: nicht ausgeliefert -> kein Deploy")
         self._with_clean_manifest(body)
 
+    def test_blog_import_docs_mirror_is_reloaded_but_never_blocks(self):
+        """blog-import/*.json und translations-blog.json (seit 04.11.2026 nur in r2out/) liefert der Site-Worker wie die Exporte nicht als src=docs-Objekt aus:
+        der Upload prueft sie im Bucket mit und ersetzt einen Spiegel oder ein fehlendes Objekt; scheitert das, blockiert es den Deploy wie bisher nicht."""
+        def body():
+            tree(self.r2out, {"pl/x/index.html": "pl", "blog-import/index.json": '{"total":1}', "blog-import/part-1.json": "[]", "translations-blog.json": "{}", "search/part-1.json": "{}"})
+            self.assertEqual(self.r2out_run(), 0)
+            self.s3.obj["pages/blog-import/part-1.json"]["meta"] = {"src": "docs"}; del self.s3.obj["pages/translations-blog.json"]
+            heads = []; orig = self.s3.head_object
+            def head(Bucket, Key): heads.append(Key); return orig(Bucket=Bucket, Key=Key)
+            self.s3.head_object = head
+            self.s3.log.clear(); self.assertEqual(self.r2out_run(), 0)
+            self.assertEqual(sorted(heads), ["pages/blog-import/index.json", "pages/blog-import/part-1.json", "pages/translations-blog.json"], "Suchindex und Seiten nicht")
+            self.assertEqual(sorted(k for op, k in self.s3.log if op == "put"), ["pages/blog-import/part-1.json", "pages/translations-blog.json"])
+            self.assertEqual(self.s3.obj["pages/blog-import/part-1.json"]["meta"], {})
+            self.s3.obj["pages/blog-import/part-1.json"]["meta"] = {"src": "docs"}; self.s3.fail_put.add("pages/blog-import/part-1.json")
+            self.assertEqual(self.r2out_run(), 0, "Blog-Import blockiert den Deploy nicht")
+            self.s3.fail_put.clear(); self.assertEqual(self.r2out_run(), 0); self.assertEqual(self.s3.obj["pages/blog-import/part-1.json"]["meta"], {}, "naechster Lauf heilt")
+        self._with_clean_manifest(body)
+
 
 if __name__ == "__main__":
     unittest.main()

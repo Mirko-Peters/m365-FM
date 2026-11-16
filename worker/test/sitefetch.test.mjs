@@ -59,3 +59,16 @@ test("siteFetch: Netzfehler -> Spiegel (src=docs) gilt, entfernt markierte nie",
   const r = await siteFetch({ SITE, PAGES: B }, "/b.json"); assert.equal(r.status, 200); assert.equal((await r.json()).m, 1);
   assert.equal((await siteFetch({ SITE, PAGES: B }, "/a.json")).status, 502);
 }, async () => { throw new TypeError("network"); }));
+
+test("siteFetch: Register und Blog-Import nach 404 auch als Spiegel (src=docs, Wettlauf beim Umzug), nie als entfernt markiert", () => withFetch(async () => {
+  const B = bucket({ "pages/episodes-register-3.json": '{"part":3}', "pages/translations-register-ja.json": '{"lang":"ja"}', "pages/blog-import/part-2.json": "[2]",
+    "pages/translations-blog.json": '{"count":3}', "pages/episodes-register-4.json": "{}", "pages/entities.json": "{}" }, [],
+  { "pages/episodes-register-3.json": { src: "docs" }, "pages/translations-register-ja.json": { src: "docs" }, "pages/blog-import/part-2.json": { src: "docs" },
+    "pages/translations-blog.json": { src: "docs" }, "pages/episodes-register-4.json": { src: "docs", gone: "1" }, "pages/entities.json": { src: "docs" } });
+  assert.equal((await (await siteFetch({ SITE, PAGES: B }, "/episodes-register-3.json")).json()).part, 3);
+  assert.equal((await (await siteFetch({ SITE, PAGES: B }, "/translations-register-ja.json")).json()).lang, "ja");
+  assert.deepEqual(await (await siteFetch({ SITE, PAGES: B }, "/blog-import/part-2.json")).json(), [2]);
+  assert.equal((await (await siteFetch({ SITE, PAGES: B }, "/translations-blog.json")).json()).count, 3);
+  assert.equal((await siteFetch({ SITE, PAGES: B }, "/episodes-register-4.json")).status, 404, "gone=1 gilt immer");
+  assert.equal((await siteFetch({ SITE, PAGES: B }, "/entities.json")).status, 404, "andere Dateien: Spiegel nach 404 wie bisher nicht");
+}, async () => new Response("nf", { status: 404 })));

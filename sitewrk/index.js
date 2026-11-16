@@ -522,6 +522,7 @@ const worker = {
         if (obj.uploaded) h.set("last-modified", obj.uploaded.toUTCString());
         finishHeaders(h, p);
         if (notModified(request, h.get("etag"), h.get("last-modified"))) return new Response(null, { status: 304, headers: h });
+        if (request.method === "HEAD" && Number.isFinite(obj.size)) h.set("content-length", String(obj.size));   // wie GitHub Pages: Groesse auch per HEAD (GET: Laenge des R2-Datenstroms)
         return new Response(request.method === "HEAD" ? null : obj.body, { headers: h });
       }
     }

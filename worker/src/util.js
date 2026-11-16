@@ -22,13 +22,17 @@ export const b64u = {
 // episodes-register[-<n>].json und translations-register[-<l>].json, site_size.EXPORT_RX), kaemen dort als 404 zurueck.
 // Wie im Site-Worker nie ein als entfernt markiertes Objekt (gone=1) und nach einem echten 404 kein Spiegel von GitHub Pages (src=docs: dort weg);
 // ist GitHub Pages nicht erreichbar (Netzfehler), gilt der Spiegel.
+// Ausnahme R2_DATA (nur noch in r2out/, nie mehr in docs/): ein src=docs-Objekt kann dort nur der Spiegel eines Laufs von vor dem Umzug sein, der den
+// r2out-Upload des naechsten Laufs noch ueberschrieben hat (Deploy und Bau laufen getrennt). Sein Inhalt ist der Stand des vorigen Baus - besser als ein
+// 404, mit dem der Register-Import den Lauf auslaesst; der naechste r2out-Upload laedt die Datei neu (tools/r2_pages_upload.py, head_object-Pruefung).
+export const R2_DATA = /^\/(?:blog-import\/[^/]+\.json|translations-blog\.json|episodes-register(?:-[0-9]{1,3})?\.json|translations-register(?:-[a-z]{2})?\.json)$/;
 export async function siteFetch(env, path, init) {
   const r = await fetch(env.SITE + path, init).catch(() => null);
   if (r && r.ok) return r;
   if (env.PAGES && (!r || r.status === 404)) {
     const obj = await env.PAGES.get("pages" + path).catch(() => null);
     const cm = (obj && obj.customMetadata) || {};
-    if (obj && cm.gone !== "1" && !(r && cm.src === "docs")) return new Response(obj.body, { status: 200, headers: { "content-type": /\.json$/i.test(path) ? "application/json; charset=utf-8" : "application/octet-stream", "x-m365-src": "r2" } });
+    if (obj && cm.gone !== "1" && !(r && cm.src === "docs" && !R2_DATA.test(path))) return new Response(obj.body, { status: 200, headers: { "content-type": /\.json$/i.test(path) ? "application/json; charset=utf-8" : "application/octet-stream", "x-m365-src": "r2" } });
   }
   return r || new Response("", { status: 502 });
 }

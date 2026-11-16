@@ -54,6 +54,16 @@ class RuleTest(unittest.TestCase):
             self.assertTrue(worker.match(n), n); self.assertTrue(site_size.r2_only(n, LANGS), n)
         for n in KEPT: self.assertFalse(worker.match(n), n)
 
+    def test_sitefetch_data_rule_is_subset_of_r2_only(self):
+        """siteFetch (Community-Worker) liefert nach dem 404 auch src=docs-Objekte fuer R2_DATA (Register, Blog-Import, translations-blog.json: Wettlauf beim
+        Umzug). Das gilt nur fuer Dateien, die nie mehr in docs/ liegen (site_size.r2_only) und die der Site-Worker als Export kennt; og-manifest.json und
+        seo-report.json liest der Community-Worker nicht."""
+        m = re.search(r"export const R2_DATA = /\^\\/(.+?)\$/;", (ROOT / "worker" / "src" / "util.js").read_text("utf-8")); self.assertTrue(m)
+        rx, worker = re.compile("^" + m.group(1).replace("\\/", "/") + "$"), js_export_rx()
+        on = ["episodes-register.json", "episodes-register-3.json", "translations-register.json", "translations-register-ja.json", "translations-blog.json", "blog-import/part-1.json"]
+        for n in on: self.assertTrue(rx.match(n), n); self.assertTrue(site_size.r2_only(n, ()), n); self.assertTrue(worker.match(n), n)
+        for n in KEPT + ["og-manifest.json", "seo-report.json", "blog-import/a/b.json"]: self.assertFalse(rx.match(n), n)
+
     def test_writers_use_names_of_the_rule(self):
         """Die Schreiber (site_register.build, generate_site.py, site_seo.py) nutzen genau diese Namen; jede Sprache und Teilnummer faellt unter die Regel."""
         import site_register

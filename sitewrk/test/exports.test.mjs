@@ -18,7 +18,7 @@ globalThis.fetch = async (req) => {
 const { default: W, R2_EXPORT, __resetR2Ready } = await import("../index.js");
 const UP = new Date("2026-11-16T08:00:00Z");
 const J = '{"generated":"2026-11-16","episodes":[]}';
-const obj = (body, ct, meta = {}) => ({ httpEtag: '"e1"', uploaded: UP, httpMetadata: ct ? { contentType: ct } : {}, customMetadata: meta, arrayBuffer: async () => new TextEncoder().encode(body).buffer, text: async () => body, get body() { return new Response(body).body; } });
+const obj = (body, ct, meta = {}) => ({ size: new TextEncoder().encode(body).length, httpEtag: '"e1"', uploaded: UP, httpMetadata: ct ? { contentType: ct } : {}, customMetadata: meta, arrayBuffer: async () => new TextEncoder().encode(body).buffer, text: async () => body, get body() { return new Response(body).body; } });
 const B = {
   "pages/episodes-register.json": obj('{"parts":5}', "application/json; charset=utf-8"),
   "pages/episodes-register-3.json": obj(J, "application/octet-stream"),
@@ -59,6 +59,7 @@ test("R2-Rueckfall nach 404 bei GitHub Pages: Body, Header (application/json, no
   assert.equal(await (await run(req("/episodes-register-3.json"))).text(), J, "octet-stream in den Metadaten: trotzdem application/json");
   const t = await run(req("/translations-blog.json")); assert.equal(t.status, 200); hdr(t); assert.equal(await t.text(), '{"count":3}');
   const h = await run(req("/og-manifest.json", {}, "HEAD")); assert.equal(h.status, 200); assert.equal(h.body, null); hdr(h);
+  assert.equal(h.headers.get("content-length"), "2", "HEAD mit Groesse wie bei GitHub Pages");
   const n = await run(req("/seo-report.json", { "if-none-match": '"e1"' })); assert.equal(n.status, 304); assert.equal(n.body, null); assert.equal(n.headers.get("etag"), '"e1"');
   const m = await run(req("/og-manifest.json", { "if-modified-since": new Date(UP.getTime() + 1000).toUTCString() })); assert.equal(m.status, 304);
   const o = await run(req("/og-manifest.json", { "if-modified-since": new Date(UP.getTime() - 1000).toUTCString() })); assert.equal(o.status, 200);
@@ -91,4 +92,15 @@ test("R2 als Ursprung: Exporte direkt aus dem Bucket (application/json, noindex,
   const j = await run(req("/og-manifest.json", {}, "HEAD"), e2); assert.equal(j.status, 200); assert.equal(j.body, null); hdr(j);
   assert.equal(origins, 0, "kein Abruf bei GitHub Pages");
   const g = await run(req("/episodes-register-4.json"), e2); assert.equal(g.status, 404, "als entfernt markiert: auch mit R2 als Ursprung nicht");
+});
+test("R2_PRIMARY=1, Bau-Kennung passt nicht (Spiegel laeuft oder gescheitert): GitHub Pages zuerst, nach dem 404 der Export-Rueckfall wie ohne R2 als Ursprung", async () => {
+  store.clear(); __resetR2Ready();
+  const P2 = { get: async (k) => (k === "pages/r2-build.txt" ? obj("b0\n", "text/plain; charset=utf-8") : B[k] || null) };
+  const e3 = { PAGES: P2, MIGRATED: "1", R2_PRIMARY: "1" };
+  await run(req("/x/"), e3); await new Promise((r) => setTimeout(r, 10));   // Bau-Kennung im Hintergrund pruefen: b1 (GitHub Pages) != b0 (Bucket)
+  origins = 0;
+  const s = await run(req("/episodes-register-3.json"), e3); assert.equal(s.status, 200); hdr(s); assert.equal(await s.text(), J);
+  assert.equal(s.headers.get("x-m365-src"), null, "nicht aus R2 zuerst"); assert.equal(origins, 1, "erst GitHub Pages gefragt (404)");
+  const h = await run(req("/og-manifest.json", {}, "HEAD"), e3); assert.equal(h.status, 200); assert.equal(h.body, null); hdr(h);
+  for (const p of ["/episodes-register-4.json", "/translations-register-de.json"]) assert.equal((await run(req(p), e3)).status, 404, p + ": gone=1 bzw. src=docs wie ohne R2 als Ursprung");
 });

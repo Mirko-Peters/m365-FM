@@ -17,6 +17,10 @@ SITEMAP = re.compile(r"^pages/sitemap-[a-z]{2}-[a-z][a-z0-9-]*\.xml$")   # wie s
 # Aus docs/ umgezogene Datenexporte (seit 16.11.2026, wie site_size.EXPORT_RX und R2_EXPORT im Site-Worker): gleiche Behandlung wie die Sitemaps
 EXPORT = re.compile(r"^pages/(?:og-manifest|seo-report|episodes-register(?:-[0-9]{1,3})?|translations-register(?:-[a-z]{2})?)\.json$")
 moved = lambda k: bool(SITEMAP.match(k) or EXPORT.match(k))   # nur in r2out/, ausgeliefert nur ohne src=docs (Site-Worker), fehlen blockiert den Deploy
+# Blog-Import und Blog-Uebersetzungen liegen schon seit 04.11.2026 nur in r2out/ (R2_EXPORT im Site-Worker, ebenfalls ohne src=docs): im Bucket mitpruefen,
+# damit auch ein (unwahrscheinliches) src=docs-Objekt dort sicher ersetzt wird; fehlen blockiert den Deploy wie bisher nicht (Worker-Import holt sie spaeter).
+BLOG = re.compile(r"^pages/(?:blog-import/[^/]+\.json|translations-blog\.json)$")
+checked = lambda k: moved(k) or bool(BLOG.match(k))
 
 
 def main():
@@ -39,13 +43,13 @@ def main():
     for key, f in keys.items():
         h = hashlib.md5(f.read_bytes()).hexdigest()
         if man.get(key) != h or key in gone: todo.append((key, f, h))
-    # Sitemaps und umgezogene Datenexporte (wenige Schluessel) im Bucket nachsehen, auch wenn das Manifest sie als geladen fuehrt: der Spiegel des
+    # Sitemaps, umgezogene Datenexporte und Blog-Import (checked, wenige Schluessel) im Bucket nachsehen, auch wenn das Manifest sie als geladen fuehrt: der Spiegel des
     # vorigen Laufs (tools/r2_site_sync.py im Deploy-Job, Metadaten src=docs) kann sie nach diesem Upload noch mit seiner docs/-Fassung ueberschreiben,
     # solange er parallel laeuft (beim Umzug lagen sie zuletzt in docs/). Ein src=docs-Objekt liefert der Site-Worker nicht aus (404), und ohne
     # Inhaltsaenderung luede es kein spaeterer Lauf neu. Fehlt das Objekt ganz, ebenso neu laden.
     queued = {t[0] for t in todo}
     for key, f in keys.items():
-        if key in queued or not moved(key): continue
+        if key in queued or not checked(key): continue
         try: md = s3.head_object(Bucket=bucket, Key=key).get("Metadata") or {}
         except Exception as e:
             code = str(((getattr(e, "response", None) or {}).get("Error") or {}).get("Code", ""))
@@ -53,7 +57,7 @@ def main():
             else: print("Sitemap/Export im Bucket nicht pruefbar:", key, type(e).__name__); continue
         if md.get("src") == "docs" or md.get("missing") == "1":
             print("Sitemap/Export neu laden:", key, "(nur Spiegel aus docs/)" if md.get("src") == "docs" else "(fehlt im Bucket)")
-            man.pop(key, None); served.discard(key)   # gilt als nicht ausgeliefert: scheitert der Upload, Ende 1 wie bei einer fehlenden Sitemap oder einem fehlenden Export
+            man.pop(key, None); served.discard(key)   # gilt als nicht ausgeliefert: scheitert der Upload, Ende 1 wie bei einer fehlenden Sitemap oder einem fehlenden Export (Blog-Import: nur Hinweis)
             todo.append((key, f, hashlib.md5(f.read_bytes()).hexdigest()))
     print(f"{len(files)} Dateien, {len(todo)} neu, geaendert oder wieder erzeugt")
     def save_man():   # atomar schreiben: ein abgebrochener Lauf hinterlaesst nie eine halbe Liste
