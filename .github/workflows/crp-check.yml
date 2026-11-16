@@ -1,5 +1,6 @@
 name: CRP-Check (nur lesen)
-# Kritische Ladekette auf www.m365.fm wie GTmetrix/Lighthouse: Lighthouse mobil und Desktop (je 3 Laeufe, Median),
+# Ladezeiten auf www.m365.fm wie GTmetrix/Lighthouse: Lighthouse mobil und Desktop (je 3 Laeufe, Median) mit Score, FCP, LCP (Element und Phasen),
+# TBT, CLS (groesste Verschiebungen), Speed Index, TTFB, Gewicht, Anfragen, DOM-Groesse, Einsparungen und kritischer Ladekette,
 # dazu die tatsaechlich ausgelieferten <link>/<script>-Tags (was Cloudflare einfuegt: Web-Analytics-Beacon, E-Mail-Schutz).
 # Aendert nichts, braucht keine Secrets.
 on:
@@ -8,7 +9,7 @@ on:
       paths:
         description: "Pfade, durch Leerzeichen getrennt"
         required: false
-        default: "/ /de/ /show/episodes/internal-developer-platforms/ /entity/copilot/"
+        default: "/ /de/ /show/episodes/internal-developer-platforms/ /pl/show/episodes/internal-developer-platforms/ /entity/copilot/ /community/u/mirko-p/blog/what-oversharing-in-sharepoint-online-really-is/ /community/"
   push:
     branches: [ticket/crp]
     paths: [.github/workflows/crp-check.yml, tools/crp_live.mjs]
@@ -24,7 +25,7 @@ jobs:
         with: { node-version: 22 }
       - name: Ausgelieferte Tags (HTML roh)
         env:
-          PATHS_IN: ${{ github.event.inputs.paths || '/ /de/ /show/episodes/internal-developer-platforms/ /entity/copilot/' }}
+          PATHS_IN: ${{ github.event.inputs.paths || '/ /de/ /show/episodes/internal-developer-platforms/ /pl/show/episodes/internal-developer-platforms/ /entity/copilot/ /community/u/mirko-p/blog/what-oversharing-in-sharepoint-online-really-is/ /community/' }}
         run: |
           mkdir -p out/html
           for p in $PATHS_IN; do
@@ -49,7 +50,7 @@ jobs:
           done
       - name: Lighthouse (mobil und Desktop, je 3 Laeufe)
         env:
-          PATHS_IN: ${{ github.event.inputs.paths || '/ /de/ /show/episodes/internal-developer-platforms/ /entity/copilot/' }}
+          PATHS_IN: ${{ github.event.inputs.paths || '/ /de/ /show/episodes/internal-developer-platforms/ /pl/show/episodes/internal-developer-platforms/ /entity/copilot/ /community/u/mirko-p/blog/what-oversharing-in-sharepoint-online-really-is/ /community/' }}
         run: |
           mkdir -p out/lh
           export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
