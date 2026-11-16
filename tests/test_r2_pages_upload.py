@@ -106,6 +106,26 @@ class SyncTest(Base):
         self.assertFalse(self.s3.gone("pages/p3/index.html"), "wieder erzeugt -> neu geladen, Markierung weg")
         self.assertNotIn("pages/p3/index.html", json.loads(self.s3.obj["meta/gone.json"]["body"]))
 
+    def test_removed_r2out_language_pages_are_marked(self):
+        # K25: Profil privat/geloescht -> Sprachseiten (nur r2out/, ohne Metadaten) fehlen im Bau und muessen wie docs-Seiten als entfernt gelten
+        tree(self.docs, {f"p{i}/index.html": str(i) for i in range(10)})
+        for k in ("pages/fr/community/u/alice/index.html", "pages/ja/community/u/alice/index.html", "pages/pl/x/index.html"):
+            self.s3.obj[k] = {"body": b"alt", "ct": "text/html", "meta": {}}
+        self.s3.obj["pages/foo.bin"] = {"body": b"f", "ct": "application/octet-stream", "meta": {}}   # fremd, kein r2out-Muster
+        self.keys.write_text(json.dumps(["pages/fr/community/u/alice/index.html", "pages/ja/community/u/alice/index.html", "pages/pl/x/index.html"]))
+        self.assertEqual(self.sync(), 0)
+        self.assertFalse(self.s3.gone("pages/fr/community/u/alice/index.html"), "im Bau: bleibt")
+        self.keys.write_text(json.dumps(["pages/pl/x/index.html"]))   # naechster Bau: Profil alice nicht mehr oeffentlich
+        self.assertEqual(self.sync(), 0)
+        for k in ("pages/fr/community/u/alice/index.html", "pages/ja/community/u/alice/index.html"):
+            self.assertTrue(self.s3.gone(k), k); self.assertEqual(self.s3.obj[k]["body"], b"alt", "Inhalt bleibt im Bucket")
+            self.assertIn(k, json.loads(self.s3.obj["meta/gone.json"]["body"]))
+        ch = json.loads(self.changed.read_text()); self.assertIn("/fr/community/u/alice/", ch); self.assertIn("/ja/community/u/alice/", ch)
+        self.assertFalse(self.s3.gone("pages/foo.bin"), "fremde Objekte unberuehrt"); self.assertFalse(self.s3.gone("pages/pl/x/index.html"))
+        self.keys.write_text(json.dumps(["pages/pl/x/index.html", "pages/fr/community/u/alice/index.html"]))   # Profil wieder oeffentlich
+        self.assertEqual(self.sync(), 0)
+        self.assertIn("pages/fr/community/u/alice/index.html", json.loads(self.s3.obj["meta/gone.json"]["body"]), "bleibt markiert, bis der r2out-Upload es neu laedt")
+
     def test_lost_manifest_still_marks_from_bucket_listing(self):
         tree(self.docs, {f"p{i}/index.html": str(i) for i in range(10)})
         self.keys.write_text(json.dumps(["pages/pl/x/index.html"]))

@@ -12,7 +12,7 @@ Ablauf (Aufruf: python tools/r2_site_sync.py <docs>):
     Der Site-Worker nutzt R2 nur, wenn pages/r2-build.txt mit /r2-build.txt auf GitHub Pages uebereinstimmt: bei jedem Fehler liefert
     automatisch GitHub Pages, nie ein veralteter Stand aus R2.
 Umgebung: R2_ACCOUNT_ID, R2_BUCKET, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY (GitHub-Secrets); R2_MANIFEST, R2_KEEP_KEYS, R2_CHANGED_OUT, R2_TOMBSTONE_FORCE."""
-import hashlib, json, os, sys
+import hashlib, json, os, re, sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -21,6 +21,11 @@ from r2_common import GONE_KEY, IMG, client, ctype, read_gone, upload, url_of, T
 
 MARKER = "r2-build.txt"
 META = {"src": "docs"}
+# Sprachseiten aus r2out/ (site_size.r2_only: <l>/.../index.html aller Sprachen ausser en/de, seit 11.11.2026). Sie tragen keine Metadaten
+# (tools/r2_pages_upload.py). Fehlt eine davon im Bau (Profil privat oder geloescht, Blog, Event, Firma entfernt), wird sie wie eine docs-Seite
+# als entfernt markiert - sonst lieferte der Site-Worker sie weiter mit 200 aus (Sicherheitspruefung K25, DSGVO).
+R2OUT_LANGS = ("fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko")   # site_i18n.ALL_COMM_LANGS ohne en/de
+R2OUT_PAGE = re.compile(r"^pages/(?:" + "|".join(R2OUT_LANGS) + r")/.+/index\.html$")
 
 
 def fail(msg):
@@ -85,7 +90,8 @@ def main(src):
     write_changed()
     print(f"hochgeladen: {len(ok)}, Fehler: {len(failed)}")
     if failed: return fail(f"{len(failed)} Dateien nicht geladen (z. B. {failed[0][0]})")
-    # Entfernt markieren: nur eigene Spiegel-Objekte (Metadaten src=docs); Altbestand aus r2out/ bleibt wie bisher unberuehrt
+    # Entfernt markieren: eigene Spiegel-Objekte (Metadaten src=docs) und Sprachseiten aus r2out/ (R2OUT_PAGE), die der Bau nicht mehr erzeugt;
+    # andere Objekte ohne Metadaten bleiben unberuehrt
     cand = sorted(k for k in in_bucket if k not in files and k not in keep and k not in gone and k != "pages/" + MARKER)
     def head(k):
         try: return k, (s3.head_object(Bucket=bucket, Key=k).get("Metadata") or {}), None
@@ -99,14 +105,14 @@ def main(src):
     with ThreadPoolExecutor(THREADS) as ex:
         for k, md, e in ex.map(head, cand):
             if e: bad.append(k)
-            elif md.get("src") == "docs": own.append(k)
+            elif md.get("src") == "docs" or (not md.get("src") and R2OUT_PAGE.match(k)): own.append(k)
             else: foreign += 1
     if bad: return fail(f"{len(bad)} Schluessel nicht pruefbar (z. B. {bad[0]})")
     # Teilen-Bilder (pages/og/) zaehlen nicht mit: sie sind am 4.11.2026 bewusst aus docs/ in den Bucket unter og/ umgezogen (img.m365.fm/og/,
     # tools/r2_og_upload.py) - ihr einmaliges Markieren ist kein Zeichen fuer ein falsches Verzeichnis
     n_guard = sum(1 for k in own if not k.startswith("pages/og/"))
-    if n_guard > len(files) and os.environ.get("R2_TOMBSTONE_FORCE") != "1":
-        return fail(f"{n_guard} Dateien waeren als entfernt zu markieren, mehr als der Bau enthaelt ({len(files)}) - vermutlich falsches Verzeichnis. "
+    if n_guard > len(files) + len(keep) and os.environ.get("R2_TOMBSTONE_FORCE") != "1":   # Bau = docs/ plus r2out/
+        return fail(f"{n_guard} Dateien waeren als entfernt zu markieren, mehr als der Bau enthaelt ({len(files) + len(keep)}) - vermutlich falsches Verzeichnis. "
                     "Bei Absicht einmal mit R2_TOMBSTONE_FORCE=1 laufen lassen")
     marked = []
     with ThreadPoolExecutor(THREADS) as ex:
