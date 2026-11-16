@@ -14,7 +14,7 @@ from unittest import mock
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 try:
-    from PIL import Image
+    from PIL import Image, ImageCms
     import r2_upload as U
 except ImportError:   # Pillow fehlt
     U = None
@@ -39,8 +39,15 @@ def size(data):
 
 
 class FakeS3:
-    def __init__(self):
-        self.put, self.calls = [], []
+    def __init__(self, objects=None):
+        self.put, self.calls, self.objects = [], [], objects or {}
+
+    def get_object(self, Bucket, Key):
+        self.calls.append("get_object")
+        if Key not in self.objects:
+            raise OSError("NoSuchKey")
+        body, ct = self.objects[Key]
+        return {"Body": io.BytesIO(body), "ContentType": ct}
 
     def put_object(self, **kw):
         self.put.append(kw)
@@ -82,7 +89,7 @@ class Optimize(unittest.TestCase):
 
     def test_webp_only_if_smaller_after_resize(self):
         real = U._encode
-        fake = lambda im, fmt: (b"W" * 10**7) if fmt == "WEBP" else real(im, fmt)   # WebP kuenstlich groesser
+        fake = lambda im, fmt, icc=None: (b"W" * 10**7) if fmt == "WEBP" else real(im, fmt, icc)   # WebP kuenstlich groesser
         with mock.patch.object(U, "_encode", side_effect=fake):
             data, ct = U.optimize(img(3000, 1500), "image/jpeg")
         self.assertEqual(ct, "image/jpeg")
@@ -109,12 +116,64 @@ class Optimize(unittest.TestCase):
         for data, ct in ((gif, "image/gif"), (svg, "image/svg+xml"), (b"x" * 500, "image/avif"), (b"%PDF" + b"x" * 500, "application/pdf")):
             self.assertEqual(U.optimize(data, ct), (data, ct))
 
-    def test_animated_webp_untouched(self):
-        frames = [Image.new("RGB", (2000, 1000), c) for c in ((255, 0, 0), (0, 255, 0))]
+    @staticmethod
+    def anim(w, h, fmt):
+        frames = [Image.new("RGB", (w, h), c) for c in ((255, 0, 0), (0, 255, 0), (0, 0, 255))]
         buf = io.BytesIO()
-        frames[0].save(buf, "WEBP", save_all=True, append_images=frames[1:], duration=100)
-        src = buf.getvalue()
-        self.assertEqual(U.optimize(src, "image/webp"), (src, "image/webp"))
+        frames[0].save(buf, fmt, save_all=True, append_images=frames[1:], duration=[100, 200, 300], loop=0)
+        return buf.getvalue()
+
+    def test_small_animated_untouched(self):
+        for fmt, ct in (("WEBP", "image/webp"), ("PNG", "image/png")):
+            src = self.anim(800, 400, fmt)
+            self.assertEqual(U.optimize(src, ct), (src, ct))
+
+    def test_big_animated_resized_and_stays_animated(self):
+        for fmt, ct in (("WEBP", "image/webp"), ("PNG", "image/png")):
+            data, nct = U.optimize(self.anim(2000, 1000, fmt), ct)
+            self.assertEqual(nct, ct, "animierte Bilder behalten ihr Format")
+            with Image.open(io.BytesIO(data)) as im:
+                self.assertEqual((list(im.size), im.n_frames, im.format), ([1600, 800], 3, fmt))
+                durations = []
+                for i in range(im.n_frames):
+                    im.seek(i)
+                    im.load()   # WebP setzt die Dauer erst beim Laden
+                    durations.append(im.info.get("duration"))
+                self.assertEqual(durations, [100, 200, 300])
+
+    def test_big_animated_too_many_pixels_untouched(self):
+        src = self.anim(2000, 1000, "WEBP")
+        with mock.patch.object(U, "ANIM_MAX_PIXELS", 1000):
+            self.assertEqual(U.optimize(src, "image/webp"), (src, "image/webp"))
+
+    @staticmethod
+    def profiles():
+        srgb = ImageCms.ImageCmsProfile(ImageCms.createProfile("sRGB")).tobytes()
+        wide = srgb.replace("sRGB".encode("utf-16-be"), "wide".encode("utf-16-be"))   # RGB-Profil, das nicht sRGB heisst
+        assert wide != srgb
+        return srgb, wide
+
+    def test_non_srgb_icc_profile_kept(self):
+        srgb, wide = self.profiles()
+        for w, fmt, ct in ((800, "JPEG", "image/jpeg"), (3000, "JPEG", "image/jpeg"), (2400, "PNG", "image/png"), (3000, "WEBP", "image/webp")):
+            data, nct = U.optimize(img(w, w // 2, fmt, icc_profile=wide), ct)
+            with Image.open(io.BytesIO(data)) as im:
+                self.assertEqual(im.info.get("icc_profile"), wide, (w, fmt, nct))
+
+    def test_srgb_icc_profile_dropped(self):
+        srgb, _ = self.profiles()
+        data, ct = U.optimize(img(3000, 1500, "JPEG", icc_profile=srgb), "image/jpeg")
+        with Image.open(io.BytesIO(data)) as im:
+            self.assertIsNone(im.info.get("icc_profile"), "sRGB nehmen Browser ohnehin an")
+
+    def test_cmyk_jpeg_with_broken_profile_still_converted(self):
+        im = Image.new("CMYK", (2400, 1200), (0, 128, 255, 0))
+        buf = io.BytesIO()
+        im.save(buf, "JPEG", icc_profile=b"kein profil" * 20)
+        data, ct = U.optimize(buf.getvalue(), "image/jpeg")
+        self.assertEqual(size(data), [1600, 800])
+        with Image.open(io.BytesIO(data)) as out:
+            self.assertIsNone(out.info.get("icc_profile"))
 
     def test_broken_image_untouched(self):
         self.assertEqual(U.optimize(b"kein bild" * 50, "image/jpeg"), (b"kein bild" * 50, "image/jpeg"))
@@ -138,6 +197,14 @@ class CopyOne(unittest.TestCase):
 
     def test_plain_url_unchanged(self):
         self.assertEqual(U.fetch_url("https://a.example/x.png?a=1&b=2"), "https://a.example/x.png?a=1&b=2")
+
+    def test_legacy_entity_names_without_semicolon_unchanged(self):
+        for u in ("https://a.example/x?a=1&not=2&deg=90", "https://a.example/x?a=1&param=2", "https://a.example/x?copy=1&reg=2&times=3&cent=4"):
+            self.assertEqual(U.fetch_url(u), u)
+
+    def test_only_entities_with_semicolon_decoded(self):
+        self.assertEqual(U.fetch_url("https://a.example/x?a=1&amp;b=2&#38;c=3&#x26;d=4&AMP;e=5&not=6"),
+                         "https://a.example/x?a=1&b=2&c=3&d=4&e=5&not=6")
 
     def test_gif_copied_byte_for_byte(self):
         gif = img(2400, 300, "GIF")
@@ -175,11 +242,13 @@ class Shrink(unittest.TestCase):
             "https://img.podpage.com/tall.png": self.TALL,
             "https://img.podpage.com/anim.gif": f"{P}/i/eee.gif",
             "https://img.podpage.com/done.png": f"{P}/i/fff-w1600.webp",
+            "https://img.podpage.com/odd.png": f"{P}/i/ggg-w1600.webp",   # -w1600 mit (falschen) Massen > 1600: nie erneut
             "design/local.webp": f"{P}/local/banner.webp",
             "https://img.podpage.com/notr2.png": "https://example.com/elsewhere.png",
         }
         dims = {self.BIG: [3409, 4261], self.BIG2: [2000, 2000], self.SMALL: [1200, 675], self.TALL: [1080, 2115],
-                f"{P}/i/eee.gif": [2400, 300], f"{P}/i/fff-w1600.webp": [1600, 900], f"{P}/local/banner.webp": [3000, 900]}
+                f"{P}/i/eee.gif": [2400, 300], f"{P}/i/fff-w1600.webp": [1600, 900], f"{P}/i/ggg-w1600.webp": [2400, 900],
+                f"{P}/local/banner.webp": [3000, 900]}
         files = {self.BIG: (img(3409, 4261, "WEBP"), "image/webp"), self.BIG2: (img(2000, 2000), "image/jpeg")}
         return done, dims, files
 
@@ -201,7 +270,7 @@ class Shrink(unittest.TestCase):
         s3, http = FakeS3(), FakeHTTP(files)
         moved, n, failed = U.shrink(s3, "b", done, dims, get=http, workers=2)
         self.assertEqual(failed, [])
-        self.assertEqual(sorted(http.asked), [self.BIG, self.BIG2], "geladen wird ueber img.m365.fm")
+        self.assertEqual(sorted(http.asked), [self.BIG, self.BIG2])
         self.assertEqual(set(s3.calls), {"put_object"}, "nichts geloescht, nur hochgeladen")
         keys = sorted(p["Key"] for p in s3.put)
         self.assertEqual(keys[0], "i/aaa-w1600.webp")
@@ -229,6 +298,22 @@ class Shrink(unittest.TestCase):
         self.assertEqual([u for u, _ in failed], [self.BIG2])
         self.assertEqual(done["https://m.media-amazon.com/images/I/x.jpg"], self.BIG2)
         self.assertEqual(n, 2)
+
+    def test_default_reads_from_bucket_not_public_url(self):
+        done, dims, files = self.data()
+        s3 = FakeS3({k[len(P) + 1:]: v for k, v in files.items()})
+        with mock.patch.object(U, "http_get", side_effect=AssertionError("nicht ueber img.m365.fm")):
+            moved, n, failed = U.shrink(s3, "b", done, dims, workers=1)
+        self.assertEqual((failed, n), ([], 3))
+        self.assertEqual(s3.calls.count("get_object"), 2)
+
+    def test_bucket_read_error_falls_back_to_public_url(self):
+        done, dims, files = self.data()
+        http = FakeHTTP(files)
+        with mock.patch.object(U, "http_get", http):
+            moved, n, failed = U.shrink(FakeS3(), "b", done, dims, workers=1)
+        self.assertEqual((failed, n), ([], 3))
+        self.assertEqual(sorted(http.asked), [self.BIG, self.BIG2])
 
     def test_main_shrink_dry_run_and_apply(self):
         done, dims, files = self.data()

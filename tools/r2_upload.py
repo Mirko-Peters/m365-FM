@@ -3,10 +3,11 @@
 
 Standard ist ein Testlauf (zaehlt nur). Mit --apply wird geladen/hochgeladen und
 data/r2_map.json geschrieben (Original-URL -> https://img.m365.fm/<key>).
-Beim Kopieren werden JPEG/PNG/WebP auf hoechstens MAX_SIDE x MAX_SIDE Pixel verkleinert; GIF, SVG, AVIF, PDF und
-animierte Bilder bleiben unveraendert. JPEG/PNG werden als WebP gespeichert, wenn das kleiner ist.
+Beim Kopieren werden JPEG/PNG/WebP (auch animierte) auf hoechstens MAX_SIDE x MAX_SIDE Pixel verkleinert; GIF, SVG, AVIF
+und PDF bleiben unveraendert. JPEG/PNG werden als WebP gespeichert, wenn das kleiner ist (animierte behalten ihr Format).
 
---shrink verkleinert schon kopierte Bilder, die laut data/r2_dims.json breiter als MAX_SIDE sind: Laden ueber img.m365.fm,
+--shrink verkleinert schon kopierte Bilder, die laut data/r2_dims.json breiter als MAX_SIDE sind: Laden aus dem Bucket
+(S3-API, notfalls ueber img.m365.fm),
 Ablage unter einem NEUEN Schluessel mit Endung -w<MAX_SIDE> (alte Schluessel sind ein Jahr lang unveraenderlich gecacht),
 alle Eintraege in data/r2_map.json zeigen danach auf die neue URL, data/r2_dims.json bekommt die neuen Masse.
 Alte Objekte bleiben im Bucket (nichts wird geloescht). Ohne --apply nur Testlauf.
@@ -16,7 +17,7 @@ import gzip, hashlib, html, io, json, os, re, sys, urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from PIL import Image, ImageOps
+from PIL import Image, ImageCms, ImageOps, ImageSequence
 
 ROOT = Path(__file__).resolve().parent.parent
 MAP = ROOT / "data" / "r2_map.json"
@@ -31,6 +32,8 @@ EXT = {"image/jpeg": ".jpg", "image/png": ".png", "image/gif": ".gif", "image/we
 HOSTS = ("statics.mylandingpages.co", "roundups-inarticle-public.s3", "m.media-amazon.com", "img.podpage.com",
          "blogifyai.s3", "rank-ai-generated-images.s3", "images.pexels.com", "s3.us-west-1.amazonaws.com/redwood-labs",
          "neuroncdn", "media.podpage.com", "redwood-labs.s3.amazonaws.com")   # Podpage-Speicher: Gastfotos, Cover, Downloads (T32)
+ENTITY_RX = re.compile(r"&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);")   # nur HTML-Entitaeten MIT Semikolon
+ANIM_MAX_PIXELS = 200_000_000   # animierte Bilder: hoechstens so viele Pixel ueber alle verkleinerten Frames (Speicher)
 URL_RX = re.compile(r'https?://[^\s"\'<>)\\]+')
 # T32 Podpage-Abloesung: alles, was auf Podpage-Speicher liegt, vor der Kuendigung kopieren (auch nur archivierte Dateien)
 PODPAGE_SOURCES = ["data/podpage/episodes.json.gz", "data/podpage/hosts.json", "data/podpage/sponsors.json", "data/podpage/podcast.json",
@@ -99,42 +102,100 @@ def image_dimensions(data):
 
 def fetch_url(u):
     """URL zum Laden. Schluessel in data/r2_map.json stehen so, wie sie im HTML vorkommen (site_r2.rewrite ersetzt Rohtext),
-    also teils HTML-maskiert ('&amp;'); geladen wird die echte URL."""
-    return html.unescape(u)
+    also teils HTML-maskiert ('&amp;'); geladen wird die echte URL. Entschluesselt werden nur Entitaeten mit Semikolon:
+    html.unescape allein machte aus einem echten '&not=2' oder '&param=3' ein '¬=2' bzw. '¶m=3' (alte Namen ohne ';')."""
+    return ENTITY_RX.sub(lambda m: html.unescape(m.group(0)), u)
 
 
-def _encode(im, fmt):
+def _icc_rgb(icc):
+    """ICC-Profil zum Mitspeichern bei RGB-Ausgabe: nur ein RGB-Profil, das nicht sRGB ist (sRGB nehmen Browser ohnehin an,
+    das sparte nur ~3 KB). Sonst None."""
+    if not icc:
+        return None
+    try:
+        prof = ImageCms.ImageCmsProfile(io.BytesIO(icc)).profile
+        if prof.xcolor_space.strip() != "RGB" or "srgb" in (prof.profile_description or "").lower().replace(" ", ""):
+            return None
+        return icc
+    except Exception:
+        return None
+
+
+def _to_rgb(im):
+    """-> (RGB/RGBA-Bild, ICC-Profil zum Mitspeichern oder None). Ein RGB-Profil (z. B. Display P3, Adobe RGB) bleibt erhalten,
+    ein CMYK- oder Graustufen-Profil wird nach sRGB umgerechnet, damit sich die Farben nicht verschieben."""
+    mode = "RGBA" if im.mode in ("RGBA", "LA", "P", "PA") else "RGB"
+    icc = im.info.get("icc_profile")
+    if icc and im.mode in ("CMYK", "L", "RGB"):
+        try:
+            src = ImageCms.ImageCmsProfile(io.BytesIO(icc))
+            if src.profile.xcolor_space.strip() != "RGB":
+                return ImageCms.profileToProfile(im, src, ImageCms.createProfile("sRGB"), outputMode="RGB"), None
+        except Exception:
+            pass
+    return im.convert(mode), _icc_rgb(icc) if im.mode in ("RGB", "RGBA", "P", "PA") else None
+
+
+def _encode(im, fmt, icc=None):
     buf = io.BytesIO()
+    extra = {"icc_profile": icc} if icc else {}
     if fmt == "WEBP":
-        im.save(buf, "WEBP", quality=82, method=6)
+        im.save(buf, "WEBP", quality=82, method=6, **extra)
     elif fmt == "JPEG":
-        im.save(buf, "JPEG", quality=85, optimize=True, progressive=True)
+        im.save(buf, "JPEG", quality=85, optimize=True, progressive=True, **extra)
     else:
-        im.save(buf, "PNG", optimize=True)
+        im.save(buf, "PNG", optimize=True, **extra)
+    return buf.getvalue()
+
+
+def _shrink_animated(im, ct):
+    """Animiertes WebP/PNG (APNG) Frame fuer Frame auf hoechstens MAX_SIDE verkleinern; Format, Dauer und Wiederholung bleiben.
+    -> Bytes oder None (zu viele Pixel oder Fehler: dann bleibt das Original)."""
+    w, h = im.size
+    scale = min(MAX_SIDE / w, MAX_SIDE / h)
+    if im.n_frames * (w * scale) * (h * scale) > ANIM_MAX_PIXELS:
+        return None
+    frames, durations = [], []
+    for f in ImageSequence.Iterator(im):
+        fr = f.convert("RGBA")
+        fr.thumbnail((MAX_SIDE, MAX_SIDE), Image.LANCZOS)
+        frames.append(fr)
+        durations.append(f.info.get("duration") or 100)
+    kw = {"save_all": True, "append_images": frames[1:], "duration": durations, "loop": im.info.get("loop", 0)}
+    icc = _icc_rgb(im.info.get("icc_profile"))
+    if icc:
+        kw["icc_profile"] = icc
+    buf = io.BytesIO()
+    if ct == "image/webp":
+        frames[0].save(buf, "WEBP", quality=82, method=4, **kw)
+    else:
+        frames[0].save(buf, "PNG", **kw)
     return buf.getvalue()
 
 
 def optimize(data, ct):
     """JPEG/PNG/WebP auf hoechstens MAX_SIDE x MAX_SIDE verkleinern (Seitenverhaeltnis bleibt) und JPEG/PNG als WebP speichern,
-    wenn das kleiner ist. GIF, SVG, AVIF, PDF und animierte Bilder bleiben unveraendert. Gibt (Bytes, Inhaltstyp) zurueck."""
+    wenn das kleiner ist. Animiertes WebP/PNG wird nur verkleinert (Format bleibt), wenn es zu gross ist. GIF, SVG, AVIF und PDF
+    bleiben unveraendert. Ein Nicht-sRGB-Farbprofil (ICC) bleibt erhalten. Gibt (Bytes, Inhaltstyp) zurueck."""
     if ct not in ("image/jpeg", "image/png", "image/webp"):
         return data, ct
     try:
         im = Image.open(io.BytesIO(data))
-        if getattr(im, "is_animated", False):
-            return data, ct
         big = im.width > MAX_SIDE or im.height > MAX_SIDE
+        if getattr(im, "is_animated", False):
+            anim = _shrink_animated(im, ct) if big else None
+            return (anim, ct) if anim else (data, ct)
         if ct == "image/webp" and not big:
             return data, ct   # WebP in passender Groesse: unveraendert
         im = ImageOps.exif_transpose(im)   # Drehung aus EXIF anwenden: das WebP uebernimmt die EXIF-Angabe nicht
         if big:
             im.thumbnail((MAX_SIDE, MAX_SIDE), Image.LANCZOS)
-        im = im.convert("RGBA" if im.mode in ("RGBA", "LA", "P", "PA") else "RGB")
-        webp = _encode(im, "WEBP")
+        im, icc = _to_rgb(im)
+        webp = _encode(im, "WEBP", icc)
         if ct == "image/webp":
             return webp, ct
         # Vergleich: WebP nur, wenn kleiner als das Original bzw. (bei verkleinerten Bildern) als das verkleinerte Bild im Originalformat
-        other = (_encode(im, "PNG") if ct == "image/png" else _encode(im.convert("RGB"), "JPEG")) if big else data
+        other = (_encode(im, "PNG", icc) if ct == "image/png" else _encode(im.convert("RGB"), "JPEG", icc)) if big else data
         return (webp, "image/webp") if len(webp) < len(other) else (other, ct)
     except Exception:
         return data, ct
@@ -186,9 +247,19 @@ def shrunk_key(url, ct):
     return (head + "/" if head else "") + f"{stem}-w{MAX_SIDE}{EXT[ct]}"
 
 
+def r2_get(s3, bucket, url):
+    """Vorhandenes R2-Bild direkt aus dem Bucket lesen (S3-API, unabhaengig von Bot-/WAF-Regeln vor img.m365.fm);
+    klappt das nicht, ueber die oeffentliche URL. -> (Bytes, Inhaltstyp)."""
+    try:
+        r = s3.get_object(Bucket=bucket, Key=url[len(PUBLIC) + 1:])
+        return r["Body"].read(15_000_001), (r.get("ContentType") or "").split(";")[0].strip().lower()
+    except Exception:
+        return http_get(url)
+
+
 def shrink_one(s3, bucket, url, get=None):
     """Vorhandenes R2-Bild laden, verkleinern und unter neuem Schluessel ablegen -> (neue URL, [Breite, Hoehe])."""
-    data, ct = (get or http_get)(url)
+    data, ct = get(url) if get else r2_get(s3, bucket, url)
     if ct not in SHRINK_TYPES.values():
         ct = SHRINK_TYPES[Path(url).suffix.lower()]   # Typ aus der Endung, falls der Server keinen Bildtyp meldet
     if len(data) < 100 or len(data) > 15_000_000:
