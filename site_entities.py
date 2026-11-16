@@ -46,6 +46,7 @@ S = {"en": dict(entities="Microsoft ecosystem entity database", intro="Products,
 SPEAKERS = {}   # Entitaets-ID -> zusammengefuehrter Speaker (data/speakers.json) mit Events und Sessions
 import entity_fill_data as FD
 import ontology as ONT   # Oberbegriff-Kette fuer Brotkruemel, SKOS broader im JSON-LD-Graph
+import site_topic_crumbs as TC   # Adresse der Entitaetsseite je Sprache (gemeinsam mit den Themen-Brotkrumen)
 GENTEXT = {}   # Entitaet -> {en, de}: Ueberblickstexte aus data/entity_texts/part-*.json (aus Folgen und Fakten geschrieben, tools/entity_text_tasks.py)
 for _f in sorted((Path(__file__).parent / "data" / "entity_texts").glob("part-*.json")) if (Path(__file__).parent / "data" / "entity_texts").exists() else []:
     try: GENTEXT.update(json.loads(_f.read_text("utf-8")))
@@ -58,7 +59,7 @@ ORGPAGES = {}   # eid -> Firmen-Handle
 
 
 def eurl(BASE, lang, i):
-    return f"{BASE}{pfx(lang)}/entity/{i}/"
+    return TC.eurl(BASE, lang, i)   # eine Quelle fuer die Adresse der Entitaetsseite (auch die Themen-Brotkrumen der Folgen/Beitraege/Videos)
 
 
 def eid_of(BASE, i):
