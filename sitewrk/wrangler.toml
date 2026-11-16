@@ -24,7 +24,8 @@ PARTNER_REDIRECT = "1"
 # R2 als Ursprung: "1" = Seiten und Dateien zuerst aus dem Bucket (pages/<pfad>, Spiegel der Website aus dem Deploy-Job, tools/r2_site_sync.py),
 # aber nur solange pages/r2-build.txt mit /r2-build.txt auf GitHub Pages uebereinstimmt - sonst automatisch GitHub Pages.
 # "0" = wie bisher (GitHub Pages zuerst, R2 nur fuer Seiten, die es nur dort gibt). Notschalter: hier auf "0" setzen und mergen.
-R2_PRIMARY = "0"
+# Seit 16.11.2026 "1" (Wunsch Mirko): Spiegel und Bau-Kennung liefen im Bau 684 vollstaendig durch.
+R2_PRIMARY = "1"
 # Blog auf der eigenen Domain (BLOG_OWN_DOMAIN.md): "1" = Anfragen fremder Hosts (CNAME-Domains der Mitglieder) fragen den Community-Worker; Standard "0" = aus.
 # Eigene Hosts (m365.fm, *.m365.fm) sind nie betroffen. Zusaetzlich noetig (Mirko): Zone fuer die Blog-Domains mit Worker-Route, siehe Dokument.
 BYOD = "0"
