@@ -45,6 +45,7 @@ import { handleOrgOffers } from "./orgoffers.js";
 import { handleWish, seedRoadmap } from "./wish.js";
 import { handleShows, syncShows } from "./shows.js";
 import { handleMediakit } from "./mediakit.js";
+import { handleHardware } from "./hardware.js";
 import { handleMail, flushOutbox, notify } from "./mail.js";
 import { handleReviews } from "./reviews.js";
 import { handleEntityInvite, remindInvites } from "./entinvite.js";
@@ -459,6 +460,7 @@ async function api(env, request, url, path, asUser, ctx) {
   if (path.startsWith("/api/invite/") || path === "/api/admin/invites" || path === "/api/admin/invite/void") { const q = await handleInviter(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/entityinvite/")) { const q = await handleEntityInvite(env, request, url, path, user, J); if (q) return q; }
   if (path === "/api/mediakit" || path === "/api/mediakit/summary" || path === "/api/admin/mediakit") { const q = await handleMediakit(env, request, url, path, user, J); if (q) return q; }
+  if (path === "/api/hardware" || path === "/api/admin/hardware") { const q = await handleHardware(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/mail/") || path.startsWith("/api/admin/mail")) { const q = await handleMail(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/show/") || path.startsWith("/api/admin/show")) { const q = await handleShows(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/wish/")) { const q = await handleWish(env, request, url, path, user, J); if (q) return q; }

@@ -122,7 +122,7 @@ async function pdfFor(env, lang, brand = "m365fm") {
 }
 
 
-async function notifyAdmins(env, row) {
+export async function notifyAdmins(env, row) {
   try {
     const db = env.DB, adm = (env.ADMIN_SUBS || "").split(",").map((s) => s.trim()).filter(Boolean);
     if (!adm.length || !env.VAPID_PRIVATE_JWK) return;

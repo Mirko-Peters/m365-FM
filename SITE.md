@@ -48,6 +48,14 @@ Drei getrennte Hierarchie-Straenge in `rel` (Kante Kind → Eltern): `instance_o
 - Bekannter Stand der Dubletten/Alias-Kollisionen: `data/ontology_baseline.json` (`python tools/ontology_check.py --baseline` schreibt ihn neu, nur nach Pruefung). Neue Praedikate brauchen Worker (`PRED` in `worker/src/entities.js`), Anzeige (`FWD`/`INV` in `site_entities.py`) und Editor (`assets/entity.js`).
 - Partner-Kennzeichnung: Label `partner` in `data/sponsorships.json` ("Partner · Neutraler Partner: X") ist fuer Partner OHNE Bezahlung (Nerdio, Mirko 16.11.2026); bezahlte Platzierungen bleiben `sponsored`/`advertisement` (Cognillo, iFAKT).
 
+## Hardware-Sponsoring (16.11.2026)
+- Seiten `/hardware/` (Angebot, Preise, Ablauf, Formular) und `/hardware/how-we-test/` (Prüfkriterien, Gewichte) in EN und DE (`site_hardware.py`; andere Sprachen verlinken die englische Fassung). Verlinkt in der Fußzeile (`HWR.footer_links`).
+- Zusagen: Test kostenlos und unabhängig, mindestens 3 Testtage, Test online innerhalb von 2 Wochen nach Lieferung, Hersteller prüft nur Fakten (3 Werktage), Gerät bleibt bei M365.FM. Gesponsert (Anzeige): Video 1.000 USD, Podcast-Folge 500 USD, beides 1.250 USD; Gewinnspiel über Promoamp kostenlos organisiert ab 1.000 USD Preisen (Teilnehmerdaten an den Sponsor nur mit eigener Einwilligung).
+- Label `device` ("Testgerät vom Hersteller bereitgestellt") in `site_sponsorships.py`; Übersetzungen in `data/py_i18n.json` (Muttersprachen-Prüfung offen). Bezahlte Labels haben Vorrang.
+- Backend: Migration 0052 `hardware_requests`, `worker/src/hardware.js` (POST `/api/hardware`, Admin `/api/admin/hardware`), Reiter "Hardware-Anfragen" in `assets/admin.js`. Status: open, committed, received, published, declined.
+- Zusage-Mail: Status `committed` sendet einmal die Standard-Mail (DE/EN) mit Lieferadresse (`SHIP_TO` in `hardware.js`); `accept_sent` verhindert Doppelversand, bei Fehler zeigt das Admin-Panel eine Warnung.
+- Nach dem Merge: Worker neu deployen und Migration 0052 anwenden.
+
 ## Verwaltung und Profil auf eigenen Subdomains (admin.m365.fm, profile.m365.fm; 16.11.2026)
 - **admin.m365.fm** zeigt die Verwaltung (`/admin/`), **profile.m365.fm** das Konto und Profil (die Community-App `/community/` und `/<sprache>/community/` mit allen Reitern). Beide sind **immer noindex** (Header `x-robots-tag: noindex, nofollow`, `robots.txt` mit `Disallow: /`, keine Sitemap, nur GET/HEAD), gleiche Technik wie `partner.m365.fm` (Site-Worker `sitewrk/index.js`).
 - Oeffentliche Community-Seiten bleiben auf www (Profile `/community/u/<kuerzel>/`, Blog, Podcast, Gaeste, Mitglieder); auf den Subdomains gibt es nur die App-Seite und die statischen Dateien, alles andere leitet per 302 zu www.
