@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Fabric Apps: What They Are and How to Use Them"
 summary: "Fabric Apps (preview) lets developers build data-driven apps on Microsoft Fabric with TypeScript. This guide covers what the feature is, the admin switch, how to create and deploy an app, permissions and current limits."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-17
 topics: [microsoft-fabric-apps, fabric, fabric-capacity, fabric-tenant-settings]
 keypoints:
   - "Fabric Apps is a preview feature built on the Rayfin SDK. Developers define data models in TypeScript and Fabric generates the database, GraphQL API, authentication and hosting."

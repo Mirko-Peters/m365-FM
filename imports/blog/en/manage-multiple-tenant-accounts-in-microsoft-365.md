@@ -1,10 +1,10 @@
 ---
 title: "How to Manage Multiple Tenant Accounts in Microsoft 365: Users and Admins"
 summary: "Work with several Microsoft 365 tenants: switch organizations in Teams, understand guest versus member access, use the tenant switcher in the admin center, and decide when a multitenant organization is worth setting up."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-17
 topics: [microsoft-entra-tenant-governance, cross-tenant-access-settings, microsoft-365-admin-center, teams]
 keypoints:
   - "Each Microsoft 365 work account belongs to one tenant. Access to another organization usually means a guest account in that tenant."

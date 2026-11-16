@@ -1,10 +1,10 @@
 ---
 title: "OneDrive Sync Client Explained: How Syncing Works and Common Problems"
 summary: "What the OneDrive sync client does, how a change travels between Microsoft 365 and your PC, how Files On-Demand saves space, which limits matter and which problems show up most often, based on Microsoft documentation."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-17
 topics: [onedrive, onedrive-sync-engine, onedrive-files-on-demand, onedrive-selective-sync]
 keypoints:
   - "The OneDrive sync app for Windows and Mac keeps a folder on your device in step with Microsoft 365 storage. Microsoft calls the iOS and Android apps mobile apps, not sync apps."

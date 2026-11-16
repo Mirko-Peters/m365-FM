@@ -1,10 +1,10 @@
 ---
 title: "Copilot Governance and Guardrails: Permissions, Policies and Adoption"
 summary: "How to govern Microsoft 365 Copilot with the controls Microsoft documents: existing permissions, oversharing fixes, Restricted Content Discovery, Purview DLP, the security dashboard and measurement, in a practical order."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-17
 topics: [copilot-governance, copilot, purview, sharepoint-advanced-management]
 keypoints:
   - "Copilot only surfaces organizational data that the user already has at least view permission for. Permissions are the first guardrail, so oversharing becomes a Copilot problem."

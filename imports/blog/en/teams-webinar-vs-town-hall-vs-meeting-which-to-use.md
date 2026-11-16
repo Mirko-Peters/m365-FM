@@ -1,8 +1,8 @@
 ---
 title: "Teams Webinar vs Town Hall vs Meeting: Which One to Use"
 summary: "How Microsoft documents the difference between Teams meetings, webinars and town halls: attendee limits, registration, interaction, large-audience features and licensing, with a simple way to choose."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-17
 topics: [teams, teams-premium, teams-admin-center]

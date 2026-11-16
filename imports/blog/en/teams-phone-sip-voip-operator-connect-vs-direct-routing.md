@@ -1,10 +1,10 @@
 ---
 title: "Teams Phone: SIP, VoIP and Operator Connect vs Direct Routing Explained"
 summary: "How Teams Phone connects to the phone network: where SIP fits in, how Calling Plans, Operator Connect, Teams Phone Mobile and Direct Routing differ, and what each one needs, based on Microsoft Learn."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-17
 topics: [teams-phone, direct-routing, operator-connect, teams-admin-center]
 keypoints:
   - "Teams Phone is the call control and PBX layer in Microsoft 365. A separate PSTN solution provides phone numbers and access to the public phone network."

@@ -1,8 +1,8 @@
 ---
 title: "Power Automate and Workflows in Teams: How They Work (Beginner's Guide)"
 summary: "How the Workflows app in Microsoft Teams relates to Power Automate, how to create a workflow from a template or from scratch, how to manage it, and what the Office 365 Connectors retirement means for webhooks."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-17
 topics: [power-automate, teams, power-platform]
