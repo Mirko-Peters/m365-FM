@@ -205,6 +205,122 @@ class R2outOrderTest(Base):
             self.assertEqual(self.r2out_run(), 0, "alte Fassung liegt noch im Bucket")
         self._with_clean_manifest(body)
 
+    def test_sitemap_upload_type_and_missing_sitemap_blocks_deploy(self):
+        """16.11.2026: Sitemaps der Sprachen ausser en/de liegen nur in r2out/. Sie gehen mit application/xml in den Bucket (nicht gefiltert, im Purge);
+        fehlt eine davon nach dem Upload ganz -> Ende 1 (der Index in GitHub Pages verweist darauf, sonst 404). Andere .xml-Dateien blockieren nicht."""
+        def body():
+            tree(self.r2out, {"pl/x/index.html": "pl", "sitemap-fr-blog.xml": "<urlset/>", "sitemap-ja-show-episodes-2.xml": "<urlset/>", "fr/feed.xml": "<rss/>"})
+            self.s3.fail_put.add("pages/sitemap-fr-blog.xml")
+            self.assertEqual(self.r2out_run(), 1, "neue Sitemap fehlt im Bucket")
+            self.assertEqual(self.s3.obj["pages/sitemap-ja-show-episodes-2.xml"]["ct"], "application/xml; charset=utf-8")
+            self.assertEqual(self.s3.obj["pages/sitemap-ja-show-episodes-2.xml"]["meta"], {}, "kein src=docs: der Site-Worker liefert sie aus")
+            self.assertIn("pages/sitemap-fr-blog.xml", json.loads(self.keys.read_text()), "Schluessel fuer den Spiegel (nie als entfernt markiert)")
+            self.s3.fail_put.clear(); self.assertEqual(self.r2out_run(), 0)
+            self.assertIn("/sitemap-fr-blog.xml", json.loads(self.changed.read_text()), "fuer den Purge vorgemerkt")
+            tree(self.r2out, {"sitemap-fr-blog.xml": "<urlset>2</urlset>"}); self.s3.fail_put.add("pages/sitemap-fr-blog.xml")
+            self.assertEqual(self.r2out_run(), 0, "alte Fassung liegt noch im Bucket")
+            self.s3.fail_put = {"pages/fr/neu/feed.xml"}; tree(self.r2out, {"fr/neu/feed.xml": "<rss/>"})
+            self.assertEqual(self.r2out_run(), 0, "andere .xml (kein sitemap-<l>-<typ>.xml) blockiert nicht")
+        self._with_clean_manifest(body)
+
+    def test_moved_sitemap_overrides_docs_mirror_and_is_never_marked_gone(self):
+        """Umzug: pages/sitemap-fr-blog.xml lag als Spiegel aus docs/ (src=docs) im Bucket. Der r2out-Upload ersetzt ihn ohne src (sonst lieferte der Site-Worker
+        ihn nicht aus), der Spiegel nach dem Deploy markiert ihn nicht als entfernt (Schluessel aus r2out/)."""
+        def body():
+            self.s3.obj["pages/sitemap-fr-blog.xml"] = {"body": b"alt", "ct": "application/xml; charset=utf-8", "meta": {"src": "docs"}}
+            tree(self.r2out, {"pl/x/index.html": "pl", "sitemap-fr-blog.xml": "<urlset/>"})
+            self.assertEqual(self.r2out_run(), 0)
+            self.assertEqual(self.s3.obj["pages/sitemap-fr-blog.xml"], {"body": b"<urlset/>", "ct": "application/xml; charset=utf-8", "meta": {}})
+            tree(self.docs, {"index.html": "i", "sitemap.xml": "<sitemapindex/>", "sitemap-de-blog.xml": "<urlset/>"})
+            self.assertEqual(self.sync(), 0)
+            self.assertFalse(self.s3.gone("pages/sitemap-fr-blog.xml")); self.assertEqual(self.s3.obj["pages/sitemap-fr-blog.xml"]["meta"], {})
+            self.assertEqual(self.s3.obj["pages/sitemap-de-blog.xml"]["meta"], {"src": "docs"})
+        self._with_clean_manifest(body)
+
+    def test_sitemap_overwritten_by_previous_mirror_is_reloaded(self):
+        """Wettlauf: der Spiegel des vorigen Laufs (r2_site_sync, src=docs) ueberschreibt die eben aus r2out/ geladene Sitemap. Der naechste Upload
+        sieht das per head_object und laedt sie neu, obwohl das Manifest den Inhalt schon fuehrt; ebenso, wenn sie im Bucket fehlt. Andere Schluessel
+        werden nicht nachgesehen, unveraenderte Sitemaps ohne src=docs nicht neu geladen. Scheitert das Neuladen -> Ende 1 (nicht ausgeliefert)."""
+        def body():
+            tree(self.r2out, {"pl/x/index.html": "pl", "sitemap-fr-blog.xml": "<urlset/>", "sitemap-es-blog.xml": "<urlset/>", "sitemap-it-blog.xml": "<urlset/>"})
+            self.assertEqual(self.r2out_run(), 0)
+            heads = []; orig = self.s3.head_object
+            self.s3.head_object = lambda Bucket, Key: (heads.append(Key), orig(Bucket, Key))[1]
+            self.s3.obj["pages/sitemap-fr-blog.xml"] = {"body": b"docs-fassung", "ct": "application/xml; charset=utf-8", "meta": {"src": "docs"}}
+            self.s3.obj["pages/pl/x/index.html"]["meta"] = {"src": "docs"}   # Seiten: kein head_object (zu viele), bleibt wie bisher
+            del self.s3.obj["pages/sitemap-it-blog.xml"]
+            self.s3.log.clear(); self.assertEqual(self.r2out_run(), 0)
+            self.assertEqual(sorted(k for op, k in self.s3.log if op == "put"), ["pages/sitemap-fr-blog.xml", "pages/sitemap-it-blog.xml"])
+            self.assertEqual(self.s3.obj["pages/sitemap-fr-blog.xml"], {"body": b"<urlset/>", "ct": "application/xml; charset=utf-8", "meta": {}})
+            self.assertEqual(sorted(heads), ["pages/sitemap-es-blog.xml", "pages/sitemap-fr-blog.xml", "pages/sitemap-it-blog.xml"], "nur Sitemaps")
+            self.assertIn("/sitemap-fr-blog.xml", json.loads(self.changed.read_text()), "fuer den Purge vorgemerkt")
+            self.s3.log.clear(); self.assertEqual(self.r2out_run(), 0); self.assertEqual([x for x in self.s3.log if x[0] == "put"], [], "danach nichts mehr")
+            self.s3.obj["pages/sitemap-fr-blog.xml"]["meta"] = {"src": "docs"}; self.s3.fail_put.add("pages/sitemap-fr-blog.xml")
+            self.assertEqual(self.r2out_run(), 1, "Spiegel-Objekt und Neuladen gescheitert: nicht ausgeliefert -> kein Deploy")
+            self.s3.fail_put.clear(); self.assertEqual(self.r2out_run(), 0); self.assertEqual(self.s3.obj["pages/sitemap-fr-blog.xml"]["meta"], {})
+            self.s3.head_object = lambda Bucket, Key: (_ for _ in ()).throw(RuntimeError("timeout"))
+            self.s3.log.clear(); self.assertEqual(self.r2out_run(), 0, "head_object scheitert: nur Hinweis"); self.assertEqual([x for x in self.s3.log if x[0] == "put"], [])
+        self._with_clean_manifest(body)
+
+    def test_moved_export_missing_blocks_deploy_other_json_does_not(self):
+        """16.11.2026: Register, og-manifest.json und seo-report.json liegen nur in r2out/ (site_size.EXPORT_RX). Sie gehen mit application/json in den Bucket
+        (ohne src, fuer den Purge vorgemerkt); fehlt einer nach dem Upload ganz -> Ende 1 (kein Deploy). Andere .json (Suchindex, Blog-Import) blockieren nicht."""
+        def body():
+            tree(self.r2out, {"pl/x/index.html": "pl", "episodes-register-3.json": "{}", "og-manifest.json": "[]", "translations-register-ja.json": "{}"})
+            self.s3.fail_put.add("pages/episodes-register-3.json")
+            self.assertEqual(self.r2out_run(), 1, "neuer Export fehlt im Bucket")
+            self.assertEqual(self.s3.obj["pages/og-manifest.json"]["ct"], "application/json; charset=utf-8")
+            self.assertEqual(self.s3.obj["pages/translations-register-ja.json"]["meta"], {}, "kein src=docs: der Site-Worker liefert ihn aus")
+            self.assertIn("pages/episodes-register-3.json", json.loads(self.keys.read_text()), "Schluessel fuer den Spiegel (nie als entfernt markiert)")
+            self.s3.fail_put.clear(); self.assertEqual(self.r2out_run(), 0)
+            self.assertIn("/episodes-register-3.json", json.loads(self.changed.read_text()), "fuer den Purge vorgemerkt")
+            tree(self.r2out, {"episodes-register-3.json": '{"v":2}'}); self.s3.fail_put.add("pages/episodes-register-3.json")
+            self.assertEqual(self.r2out_run(), 0, "alte Fassung liegt noch im Bucket")
+            self.s3.fail_put = {"pages/search/part-9.json", "pages/blog-import/part-9.json"}; tree(self.r2out, {"search/part-9.json": "{}", "blog-import/part-9.json": "{}"})
+            self.assertEqual(self.r2out_run(), 0, "andere .json blockieren nicht")
+        self._with_clean_manifest(body)
+
+    def test_moved_export_overrides_docs_mirror_and_is_reloaded_after_race(self):
+        """Umzug: pages/seo-report.json lag als Spiegel aus docs/ (src=docs) im Bucket. Der r2out-Upload ersetzt ihn ohne src, der Spiegel nach dem Deploy
+        markiert ihn nicht als entfernt. Ueberschreibt ein spaeter Spiegel des vorigen Laufs ihn wieder (src=docs), laedt der naechste Upload ihn neu;
+        scheitert das -> Ende 1 (nicht ausgeliefert)."""
+        def body():
+            self.s3.obj["pages/seo-report.json"] = {"body": b"alt", "ct": "application/json; charset=utf-8", "meta": {"src": "docs"}}
+            tree(self.r2out, {"pl/x/index.html": "pl", "seo-report.json": "{}", "episodes-register.json": "{}"})
+            self.assertEqual(self.r2out_run(), 0)
+            self.assertEqual(self.s3.obj["pages/seo-report.json"], {"body": b"{}", "ct": "application/json; charset=utf-8", "meta": {}})
+            tree(self.docs, {"index.html": "i", "episodes.json": "{}"})
+            self.assertEqual(self.sync(), 0)
+            self.assertFalse(self.s3.gone("pages/seo-report.json")); self.assertEqual(self.s3.obj["pages/seo-report.json"]["meta"], {})
+            self.assertEqual(self.s3.obj["pages/episodes.json"]["meta"], {"src": "docs"}, "episodes.json bleibt in docs/")
+            self.s3.obj["pages/seo-report.json"] = {"body": b"docs-fassung", "ct": "application/json; charset=utf-8", "meta": {"src": "docs"}}
+            del self.s3.obj["pages/episodes-register.json"]
+            self.s3.log.clear(); self.assertEqual(self.r2out_run(), 0)
+            self.assertEqual(sorted(k for op, k in self.s3.log if op == "put"), ["pages/episodes-register.json", "pages/seo-report.json"])
+            self.assertEqual(self.s3.obj["pages/seo-report.json"]["meta"], {})
+            self.s3.obj["pages/seo-report.json"]["meta"] = {"src": "docs"}; self.s3.fail_put.add("pages/seo-report.json")
+            self.assertEqual(self.r2out_run(), 1, "Spiegel-Objekt und Neuladen gescheitert: nicht ausgeliefert -> kein Deploy")
+        self._with_clean_manifest(body)
+
+    def test_blog_import_docs_mirror_is_reloaded_but_never_blocks(self):
+        """blog-import/*.json und translations-blog.json (seit 04.11.2026 nur in r2out/) liefert der Site-Worker wie die Exporte nicht als src=docs-Objekt aus:
+        der Upload prueft sie im Bucket mit und ersetzt einen Spiegel oder ein fehlendes Objekt; scheitert das, blockiert es den Deploy wie bisher nicht."""
+        def body():
+            tree(self.r2out, {"pl/x/index.html": "pl", "blog-import/index.json": '{"total":1}', "blog-import/part-1.json": "[]", "translations-blog.json": "{}", "search/part-1.json": "{}"})
+            self.assertEqual(self.r2out_run(), 0)
+            self.s3.obj["pages/blog-import/part-1.json"]["meta"] = {"src": "docs"}; del self.s3.obj["pages/translations-blog.json"]
+            heads = []; orig = self.s3.head_object
+            def head(Bucket, Key): heads.append(Key); return orig(Bucket=Bucket, Key=Key)
+            self.s3.head_object = head
+            self.s3.log.clear(); self.assertEqual(self.r2out_run(), 0)
+            self.assertEqual(sorted(heads), ["pages/blog-import/index.json", "pages/blog-import/part-1.json", "pages/translations-blog.json"], "Suchindex und Seiten nicht")
+            self.assertEqual(sorted(k for op, k in self.s3.log if op == "put"), ["pages/blog-import/part-1.json", "pages/translations-blog.json"])
+            self.assertEqual(self.s3.obj["pages/blog-import/part-1.json"]["meta"], {})
+            self.s3.obj["pages/blog-import/part-1.json"]["meta"] = {"src": "docs"}; self.s3.fail_put.add("pages/blog-import/part-1.json")
+            self.assertEqual(self.r2out_run(), 0, "Blog-Import blockiert den Deploy nicht")
+            self.s3.fail_put.clear(); self.assertEqual(self.r2out_run(), 0); self.assertEqual(self.s3.obj["pages/blog-import/part-1.json"]["meta"], {}, "naechster Lauf heilt")
+        self._with_clean_manifest(body)
+
 
 if __name__ == "__main__":
     unittest.main()
