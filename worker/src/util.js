@@ -18,13 +18,17 @@ export const b64u = {
 
 // Dateien des Seitenbaus abrufen: erst ueber die Website, sonst direkt aus dem R2-Bucket (Schluessel pages/<pfad>, tools/r2_pages_upload.py).
 // Abrufe auf die eigene Zone (www.m365.fm) gehen ohne das Flag global_fetch_strictly_public am Site-Worker vorbei direkt zum Ursprung
-// (GitHub Pages). Dateien, die nur im Bucket liegen (blog-import/, translations-blog.json, duenne Sprachfassungen), kaemen dort als 404 zurueck.
+// (GitHub Pages). Dateien, die nur im Bucket liegen (blog-import/, translations-blog.json, duenne Sprachfassungen, seit 16.11.2026 auch die Register
+// episodes-register[-<n>].json und translations-register[-<l>].json, site_size.EXPORT_RX), kaemen dort als 404 zurueck.
+// Wie im Site-Worker nie ein als entfernt markiertes Objekt (gone=1) und nach einem echten 404 kein Spiegel von GitHub Pages (src=docs: dort weg);
+// ist GitHub Pages nicht erreichbar (Netzfehler), gilt der Spiegel.
 export async function siteFetch(env, path, init) {
   const r = await fetch(env.SITE + path, init).catch(() => null);
   if (r && r.ok) return r;
   if (env.PAGES && (!r || r.status === 404)) {
     const obj = await env.PAGES.get("pages" + path).catch(() => null);
-    if (obj) return new Response(obj.body, { status: 200, headers: { "content-type": /\.json$/i.test(path) ? "application/json; charset=utf-8" : "application/octet-stream", "x-m365-src": "r2" } });
+    const cm = (obj && obj.customMetadata) || {};
+    if (obj && cm.gone !== "1" && !(r && cm.src === "docs")) return new Response(obj.body, { status: 200, headers: { "content-type": /\.json$/i.test(path) ? "application/json; charset=utf-8" : "application/octet-stream", "x-m365-src": "r2" } });
   }
   return r || new Response("", { status: 502 });
 }
