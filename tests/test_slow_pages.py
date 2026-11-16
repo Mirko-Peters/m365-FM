@@ -128,15 +128,27 @@ class SlowPagesTests(unittest.TestCase):
     def test_top_and_min_samples_options_mobile_first(self):
         out = run(FakeCF(), top=10, min_samples=60)
         paths = out.splitlines()[-1].split(" ", 1)[1].split()
-        self.assertEqual(paths, ["/show/episodes/a/", "/de/show/episodes/a/", "/entity/copilot/"], "mobil zuerst, dann Desktop; nur > gut")
+        self.assertEqual(paths, ["/show/episodes/a/", "/de/show/episodes/a/", "/entity/copilot/", "/show/episodes/b/"],
+                         "Seiten: schlecht mobil, dann verbesserungswuerdig Desktop; danach Seitentyp /show/episodes/* (mobil, schlecht)")
+        self.assertIn("Seitentyp /show/episodes/*: schlecht (LCP), mobile (meistgemessene Seite, 30 Messungen)", out)
         self.assertNotIn("/community/` | mobile", out)
 
     def test_crp_paths_worst_first_then_mobile(self):
         rows = sorted([SP.finish({"path": p, "device": d, "count": 50, "samples": 50, "lcp": l}) for p, d, l in
                        (("/m-ni/", "mobile", 3500), ("/d-poor/", "desktop", 6000), ("/m-poor/", "mobile", 4500), ("/d-ni/", "desktop", 3900),
                         ("/good/", "mobile", 1000))], key=SP.rank_key)
-        self.assertEqual(SP.crp_paths(rows, 3), ["/m-poor/", "/d-poor/", "/m-ni/"])
-        self.assertEqual(SP.crp_paths(rows, 10), ["/m-poor/", "/d-poor/", "/m-ni/", "/d-ni/"], "gute Seiten nie")
+        self.assertEqual([p for p, _ in SP.crp_paths(rows, 3)], ["/m-poor/", "/d-poor/", "/m-ni/"])
+        self.assertEqual([p for p, _ in SP.crp_paths(rows, 10)], ["/m-poor/", "/d-poor/", "/m-ni/", "/d-ni/"], "gute Seiten nie")
+
+    def test_low_traffic_falls_back_to_page_types(self):
+        """Wenig Verkehr je Seite (Live-Stand Nov. 2026: keine Seite mit 20 Beacons in 7 Tagen): Seitentypen liefern die Pfade."""
+        groups = [g(f"/entity/e{i}/", "desktop", 10 * (5 + i), 3000 + 100 * i, si=10) for i in range(6)]      # je 5..10 Beacons
+        groups += [g("/", "desktop", 120, 6000, si=10), g("/de/", "desktop", 100, 5800, si=10)]           # 12 + 10 Beacons
+        groups += [g(f"/show/episodes/s{i}/", "desktop", 100, 1500, si=10) for i in range(5)]             # gut
+        out = run(FakeCF(groups=groups))
+        self.assertIn("Keine Seite erreicht 20 Messungen", out)
+        self.assertIn("| 1 | `/ (Startseite)` | desktop | 22 | 220 | 5,91 s", out)
+        self.assertEqual(out.splitlines()[-1], "CRP_PATHS: / /entity/e5/", "Startseite (schlecht) vor /entity/* (verbesserungswuerdig)")
 
     def test_empty_and_all_good(self):
         out = run(FakeCF(groups=[]))

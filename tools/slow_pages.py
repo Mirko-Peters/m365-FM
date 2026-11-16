@@ -14,8 +14,9 @@ timeToFirstByteP75 im Schema steht); ist die Introspektion gesperrt, gelten die 
 Bewertung nach Google (p75): LCP gut <= 2500 ms, schlecht > 4000 ms; INP gut <= 200 ms, schlecht > 500 ms; CLS gut <= 0,1, schlecht > 0,25.
 Rangfolge: schlechteste Bewertung (ueber LCP/INP/CLS) zuerst, darin hoeheres p75-LCP zuerst.
 
-Ausgabe (stdout): Markdown-Tabellen, letzte Zeile "CRP_PATHS: <Pfade>" (Top N, nur Seiten ueber "gut", bei gleicher Bewertung
-mobil zuerst). /admin und /cdn-cgi bleiben aussen vor.
+Ausgabe (stdout): Markdown-Tabellen (Seiten, gleiche Seite ueber alle Sprachen, Seitentypen), letzte Zeile "CRP_PATHS: <Pfade>"
+(Top N, nur ueber "gut", bei gleicher Bewertung mobil zuerst). Hat keine einzelne Seite genug Messungen (bei 10-%-Stichprobe der
+Normalfall), kommen die Pfade aus den langsamen Seitentypen: je Typ die meistgemessene Seite. /admin und /cdn-cgi bleiben aussen vor.
 Lauf: python tools/slow_pages.py [--days 7] [--top 3] [--min-samples 20]
 """
 import argparse
@@ -195,14 +196,24 @@ def page_type(path):
     return "/" + "/".join(seg[:1 if len(seg) == 2 else 2]) + "/*"
 
 
-def crp_paths(ranked, top):
-    """Top-N-Pfade fuer den Labortest: nur Seiten ueber 'gut'; schlechteste Bewertung zuerst, bei gleicher Bewertung mobil zuerst
-    (dann nach Rang), jeder Pfad einmal."""
-    order = sorted((r for r in ranked if r["severity"] >= 1), key=lambda r: (-r["severity"], r["device"] != "mobile"))  # stabil: Rang bleibt
+def _worst_first(rows):
+    """Nur Zeilen ueber 'gut'; schlechteste Bewertung zuerst, bei gleicher Bewertung mobil zuerst, sonst Rang (stabil)."""
+    return sorted((r for r in rows if r["severity"] >= 1), key=lambda r: (-r["severity"], r["device"] != "mobile"))
+
+
+def crp_paths(ranked, top, types=(), rows=()):
+    """Top-N-Pfade fuer den Labortest -> [(pfad, grund)], jeder Pfad einmal.
+    1. einzelne Seiten mit genug Messungen ueber 'gut' (ranked);
+    2. reicht das nicht (wenig Verkehr je Seite), je langsamem Seitentyp die meistgemessene Seite dieses Typs und Geraets."""
     out = []
-    for r in order:
-        if r["path"] not in out: out.append(r["path"])
+    for r in _worst_first(ranked):
         if len(out) >= top: break
+        if r["path"] not in (p for p, _ in out): out.append((r["path"], f"Seite: {r['rating']}, {r['device']}"))
+    for t in _worst_first(types):
+        if len(out) >= top: break
+        cands = sorted((r for r in rows if page_type(r["path"]) == t["path"] and r["device"] == t["device"]
+                        and r["path"] not in (p for p, _ in out)), key=lambda r: (-r["samples"], -(r.get("lcp") or 0), r["path"]))
+        if cands: out.append((cands[0]["path"], f"Seitentyp {t['path']}: {t['rating']}, {t['device']} (meistgemessene Seite, {cands[0]['samples']} Messungen)"))
     return out
 
 
@@ -266,10 +277,15 @@ def report(rows, fields, device, confirmed, since, until, clamped, min_samples, 
                     if m["samples"] >= min_samples), key=rank_key)
     if types:
         out += ["### Seitentypen (alle Sprachen, p75 gewichtet genähert)", ""] + _table(types[:15], fields, "Seitentyp") + [""]
-    paths = crp_paths(kept, top)
-    out.append(f"Für den CRP-Check (crp-check.yml, Eingabe „paths“): {len(paths)} Pfad(e), schlechteste zuerst (bei gleicher Bewertung mobil zuerst), nur Seiten über „gut“."
-               if paths else "Keine Seite mit genug Messungen liegt über „gut“ – diese Woche ist kein Labortest nötig.")
-    out += ["", "CRP_PATHS: " + " ".join(paths)]
+    picks = crp_paths(kept, top, types, rows)
+    if picks:
+        out += [f"### Für den CRP-Check (crp-check.yml, Eingabe „paths“): {len(picks)} Pfad(e)", "",
+                "Schlechteste Bewertung zuerst, bei gleicher Bewertung mobil zuerst; erst einzelne Seiten mit genug Messungen, "
+                "dann je langsamem Seitentyp die meistgemessene Seite.", ""]
+        out += [f"- `{p}` – {why}" for p, why in picks]
+    else:
+        out.append("Keine Seite und kein Seitentyp mit genug Messungen liegt über „gut“ – diese Woche ist kein Labortest nötig.")
+    out += ["", "CRP_PATHS: " + " ".join(p for p, _ in picks)]
     return "\n".join(out)
 
 
