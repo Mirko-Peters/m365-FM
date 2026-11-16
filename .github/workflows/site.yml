@@ -42,8 +42,8 @@ jobs:
       cancel-in-progress: false   # der laufende Bau wird fertig und veroeffentlicht; von mehreren wartenden Laeufen behaelt GitHub nur den neuesten.
                                   # Vorher (true) brach jeder Push den laufenden Bau ab: am 1.11. zwischen 07:34 und 08:12 sechs Abbrueche in Folge, nichts veroeffentlicht.
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: "3.12" }
       - name: Sponsor-Rechner gegen die Testvektoren des Prototyps pruefen (T37, blockierend; Node ist auf dem Runner vorhanden)
         run: node --test tests/sponsor_calc.test.mjs
@@ -63,18 +63,18 @@ jobs:
             echo "::warning::data/redirects_extra.json enthaelt Ziele, die es nicht mehr gibt (siehe Zusammenfassung)"; exit 1
           fi
       - name: Cache fuer den Browser (fester Schluessel, einmal gefuellt)
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.cache/ms-playwright
           key: playwright-chromium-v1
       - name: Cache fuer Teilen-Bilder (rollierend)
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: .ogcache
           key: ogcache-${{ github.run_id }}
           restore-keys: ogcache-
       - name: Cache fuer die Community-Exporte (letzte erreichbare Fassung je Endpunkt, siehe site_fetch.py)
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: data/cache
           key: exports-${{ github.run_id }}
@@ -241,7 +241,7 @@ jobs:
       # Pruefsummenliste der R2-Seiten in einem eigenen Cache: wird direkt nach dem Upload gesichert (auch wenn spaeter eine blockierende Pruefung
       # scheitert oder der Lauf abgebrochen wird). Vorher ging sie dann verloren und der naechste Lauf lud dieselben Seiten noch einmal hoch.
       - name: Pruefsummenliste der R2-Seiten (letzter Stand)
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: data/cache/r2_pages.json
           key: r2pages-${{ github.run_id }}
@@ -260,7 +260,7 @@ jobs:
           R2_KEYS_OUT=r2-keys.json python tools/r2_pages_upload.py r2out
       - name: Pruefsummenliste der R2-Seiten sichern (immer, sofort nach dem Upload)
         if: always() && hashFiles('data/cache/r2_pages.json') != ''
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: data/cache/r2_pages.json
           key: r2pages-${{ github.run_id }}-${{ github.run_attempt }}
@@ -338,7 +338,7 @@ jobs:
       # im Bucket mit /r2-build.txt auf GitHub Pages uebereinstimmt - also erst, wenn dieser Bau vollstaendig und fehlerfrei gespiegelt ist.
       - name: Bau-Kennung fuer den R2-Spiegel
         run: echo "${{ github.run_id }}.${{ github.run_attempt }}" > docs/r2-build.txt
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: page-hashes
           retention-days: 3
@@ -347,9 +347,11 @@ jobs:
             content-hashes.json
             r2-changed.json
             r2-keys.json
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with: { path: docs }
+      - uses: actions/configure-pages@v6
+      # upload-pages-artifact laesst ab v4 Punkt-Dateien weg; docs/.well-known/ (security.txt, Agent- und MCP-Karten, api-catalog)
+      # und .nojekyll muessen ins Pages-Artefakt (und damit in den R2-Spiegel), deshalb include-hidden-files.
+      - uses: actions/upload-pages-artifact@v5
+        with: { path: docs, include-hidden-files: true }
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -377,27 +379,27 @@ jobs:
           done
           echo "::error::Der Site-Worker liefert die Sitemaps der Sprachen ausser en/de oder die Datenexporte (Register, og-manifest.json, seo-report.json) noch nicht aus R2 (Merker x-m365-sitemaps bzw. x-m365-exports fehlt auf /sitemap.xml). Erst den Workflow sitewrk.yml erfolgreich veroeffentlichen, dann diesen Lauf wiederholen - sonst antworteten diese Dateien mit 404."
           exit 1
-      # deploy-pages@v4 wartet hoechstens 10 min (MAX_TIMEOUT = 600000 im Code der Action, ein groesserer timeout wird ignoriert). GitHub Pages
+      # deploy-pages wartet hoechstens 10 min (MAX_TIMEOUT = 600000 im Code der Action, auch in v5; ein groesserer timeout wird ignoriert). GitHub Pages
       # haengt bei unserer Groesse ab und zu laenger in "syncing_files"/"updating_pages" (Laeufe 529, 616, 627): dann bis zu zwei weitere Versuche
       # mit demselben Artefakt. Erst wenn auch der dritte scheitert, schlaegt der Job fehl (die folgenden Schritte laufen nur nach einem Erfolg).
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
         continue-on-error: true
       - id: deployment2
         if: steps.deployment.outcome == 'failure'
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
         continue-on-error: true
       - id: deployment3
         if: steps.deployment.outcome == 'failure' && steps.deployment2.outcome == 'failure'
-        uses: actions/deploy-pages@v4
-      - uses: actions/checkout@v4
+        uses: actions/deploy-pages@v5
+      - uses: actions/checkout@v7
       - name: Letzter Seiten-Stand (Hashes des vorigen Deploys)
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: .pagehashes
           key: page-hashes-${{ github.run_id }}
           restore-keys: page-hashes-
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with: { name: page-hashes, path: .newhashes }
       - name: "Cloudflare-Cache nur fuer geaenderte Adressen leeren, IndexNow nur fuer Aenderungen (Bing, Yandex, Seznam, Naver)"
         continue-on-error: true
@@ -417,17 +419,17 @@ jobs:
       # ausdruecklich sichern (nicht erst am Jobende): auch wenn der R2-Spiegel danach scheitert, bleibt der Stand fuer Purge und IndexNow aktuell
       - name: Seiten-Stand dieses Deploys sichern
         if: always() && hashFiles('.pagehashes/page-hashes.json') != ''
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: .pagehashes
           key: page-hashes-${{ github.run_id }}-${{ github.run_attempt }}
       # R2 als Ursprung: die eben veroeffentlichte Website (dasselbe Artefakt wie GitHub Pages) in den Bucket spiegeln - nur hier im Deploy-Job
       # (nur main, Umgebung github-pages), also nie neuer als GitHub Pages und nie von einem anderen Branch. Nichts wird geloescht.
       - name: Veroeffentlichte Website holen (GitHub-Pages-Artefakt)
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with: { name: github-pages, path: .site }
       - name: Pruefsummenliste des R2-Spiegels (letzter Stand)
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: .r2/r2_docs.json
           key: r2docs-${{ github.run_id }}
@@ -450,7 +452,7 @@ jobs:
           python tools/r2_site_sync.py .site/docs
       - name: Pruefsummenliste des R2-Spiegels sichern
         if: always() && steps.r2sync.outcome != 'skipped' && hashFiles('.r2/r2_docs.json') != ''
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: .r2/r2_docs.json
           key: r2docs-${{ github.run_id }}-${{ github.run_attempt }}

@@ -26,8 +26,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with: { node-version: 22 }
       - name: Community-API - Syntax und Tests (node --test)
         working-directory: worker
@@ -46,8 +46,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: "3.12" }
       - run: pip install -q requests cryptography pillow pyyaml reportlab   # reportlab: test_cf_rum laedt tools/mediakit.py
       - name: python3 -m unittest discover -s tests
@@ -60,8 +60,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with: { node-version: 22 }
       # Ohne MCP_URL: nur der Quelltext wird abgeglichen (jede API-Route hat ein Tool oder eine Begründung), kein Aufruf des Live-Servers
       - run: node tools/check_mcp_coverage.mjs
@@ -71,9 +71,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with: { fetch-depth: 0 }
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with: { python-version: "3.12" }
       - name: main als Vergleich holen
         run: git fetch --no-tags origin main:refs/remotes/origin/main
@@ -88,11 +88,11 @@ jobs:
       # Verkleinerter Bau: nur Deutsch und Englisch (Stellschraube SITE_LANGS in site_i18n.py / generate_site.py); von Hand mit "voll" alle Sprachen
       SITE_LANGS: ${{ (github.event_name == 'workflow_dispatch' && inputs.voll) && 'alle' || 'de,en' }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: "3.12" }
       - name: Cache der Community-Exporte (nur lesen)
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: data/cache
           key: exports-${{ github.run_id }}
@@ -119,8 +119,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: "3.12" }
       - run: pip install -q pyyaml
       # Rot, sobald [env.staging] oder ein Staging-Workflow eine Live-Ressource (Datenbank, Bucket, Worker, Domain, Secret) nennt
@@ -139,8 +139,8 @@ jobs:
       contents: read
       actions: read
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with: { node-version: 22 }
       - name: Auf die Staging-Deploys für diesen Stand warten
         env:
