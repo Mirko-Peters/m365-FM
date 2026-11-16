@@ -20,8 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with: { node-version: 22 }
       - name: Ausgelieferte Tags (HTML roh)
         env:
@@ -66,6 +66,6 @@ jobs:
           done
           node tools/crp_live.mjs out/lh | tee out/crp.md
           cat out/crp.md >> "$GITHUB_STEP_SUMMARY"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with: { name: crp-check, path: out/, retention-days: 7 }

@@ -30,8 +30,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: "3.12" }
       - name: Signatur fuer das Dienstkonto (JWT RS256)
         run: pip install -q requests cryptography
@@ -55,7 +55,7 @@ jobs:
           tar czf - -C gscout . | openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -salt -out enc/gsc-export.tar.gz.enc -pass env:TEAM_ANALYTICS_KEY
           rm -rf gscout
           echo "ready=1" >> "$GITHUB_OUTPUT"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: ${{ steps.enc.outputs.ready == '1' }}
         with:
           name: gsc-export

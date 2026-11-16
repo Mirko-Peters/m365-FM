@@ -37,8 +37,8 @@ jobs:
       HAIKU_USD_PER_MTOK_OUT: ${{ vars.HAIKU_USD_PER_MTOK_OUT || '0.50' }}
       USD_PER_EUR: ${{ vars.USD_PER_EUR || '1.08' }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: "3.12" }
       - name: Uebersetzer-Team arbeiten lassen
         env:

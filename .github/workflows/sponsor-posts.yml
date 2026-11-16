@@ -36,8 +36,8 @@ jobs:
       AI_GATEWAY_ID: ${{ vars.AI_GATEWAY_ID || 'm365fm' }}
       CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: "3.12" }
       - name: Kostenbuch je Schluessel zusammenfuehren (data/spend.json, auch bei pull --rebase; Schluessel anderer Jobs bleiben)
         run: |
@@ -106,7 +106,7 @@ jobs:
           exit $rc
       - name: Daten als Artefakt sichern (nur wenn ein Schritt gescheitert ist - bezahlte Ergebnisse gehen nicht mit dem Runner verloren)
         if: failure() || cancelled()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sponsor-daten
           path: |

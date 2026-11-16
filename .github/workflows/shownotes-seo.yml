@@ -31,8 +31,8 @@ jobs:
       USD_PER_EUR: ${{ vars.USD_PER_EUR || '1.08' }}
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}   # derselbe Schluessel wie articles.yml (Artikel-Key, GitHub-Secret)
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: "3.12" }
       - name: Kostenbuch je Schluessel zusammenfuehren (data/spend.json, auch bei pull --rebase -X theirs; Schluessel anderer Jobs wie "articles_tr" bleiben)
         run: |
@@ -94,7 +94,7 @@ jobs:
           echo "::error::Shownotes SEO: Ergebnisse und Kostenbuch konnten nicht gespeichert werden (Push abgelehnt)"; exit 1
       - name: Daten als Artefakt sichern (nur wenn ein Schritt gescheitert ist - bezahlte Ergebnisse gehen nicht mit dem Runner verloren)
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: shownotes-seo-daten
           path: |

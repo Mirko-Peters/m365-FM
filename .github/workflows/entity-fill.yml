@@ -33,8 +33,8 @@ jobs:
       HAIKU_USD_PER_MTOK_OUT: ${{ vars.HAIKU_USD_PER_MTOK_OUT || '0.50' }}
       USD_PER_EUR: ${{ vars.USD_PER_EUR || '1.08' }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: "3.12" }
       - name: Entitaeten fuellen
         if: inputs.mode != 'push'
@@ -76,7 +76,7 @@ jobs:
           echo "::error::Entitaeten fuellen: Ergebnisse, offene Batches und Kostenbuch konnten nicht gespeichert werden (Push abgelehnt)"; exit 1
       - name: Daten als Artefakt sichern (nur wenn ein Schritt gescheitert ist - bezahlte Ergebnisse und offene Batch-IDs gehen nicht mit dem Runner verloren)
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: entity-fill-daten
           path: data/entity_fill
