@@ -451,6 +451,8 @@ async function partnerRequest(request, env, ctx, url) {
 // Links mit rel=nofollow, download, target=_blank oder data-no-prefetch und die Sprachwahl (SPEC_LANG_SEL, dieselben Links wie in assets/page.js):
 // deren Klick setzt erst das Cookie m365_lang; ein Vorabruf bei Hover/pointerdown ginge noch mit dem alten Cookie bzw. Accept-Language, und
 // homeLang() wuerde "/" mit 302 auf /de/ beantworten - der Browser koennte diese Antwort dann fuer den Klick auf "English" verwenden.
+// Weil der Browser Vorabrufe je ADRESSE speichert (nicht je Link), ist "/" selbst (und /index.html, /en, /en/..., die dorthin weiterleiten)
+// ausgenommen: sonst laedt z. B. der Knopf "M365.FM" auf /<l>/about/mirko-peters/ "/" mit der alten Sprache vor, und "English" landet wieder auf /<l>/.
 // Dateiendungen: URLPattern unterscheidet Gross/Klein; der Seitenbau erzeugt nur kleingeschriebene Pfade.
 // Achtung URLPattern: "/*\\?*" (Query beliebig) passt auch auf Adressen OHNE Query und wuerde jeden Vorabruf abschalten - darum "/*\\?(.+)".
 export const SPEC_PATH = "/speculation.json";
@@ -460,6 +462,7 @@ export const SPEC_RULES = {
     where: { and: [
       { href_matches: "/*" },
       { not: { href_matches: [
+        "/", "/index.html", "/en", "/en/*",
         "/community/*", "/*/community/*", "/api/*", "/auth/*", "/admin/*", "/callback/*", "/einladung/*",
         "/redaktion/*", "/*/redaktion/*", "/moderation/*", "/*/moderation/*",
         "/sponsor/dashboard/*", "/*/sponsor/dashboard/*", "/search/*", "/*/search/*",

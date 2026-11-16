@@ -95,6 +95,7 @@ test("Regeln: nur prefetch (nie prerender), moderate, Ausnahmen fuer Anmeldung, 
   for (const p of ["/community/*", "/*/community/*", "/api/*", "/auth/*", "/admin/*", "/callback/*", "/einladung/*", "/redaktion/*", "/*/redaktion/*",
     "/moderation/*", "/*/moderation/*", "/sponsor/dashboard/*", "/*/sponsor/dashboard/*", "/search/*", "/*/search/*"]) assert.ok(ex.includes(p), p);
   assert.ok(ex.includes("/*\\?(.+)"), "Query ausgeschlossen");
+  for (const p of ["/", "/index.html", "/en", "/en/*"]) assert.ok(ex.includes(p), "Startseite (Sprachweiche per Cookie/Accept-Language) nie vorabrufen: " + p);
   assert.ok(!ex.includes("/*\\?*"), "'/*\\?*' passt (Suche '*') auch ohne Query und schaltete jeden Vorabruf ab");
   assert.equal(notSel.not.selector_matches, "[rel~=nofollow],[download],[target=_blank],[data-no-prefetch]," + SPEC_LANG_SEL);
 });
@@ -110,7 +111,9 @@ test("Sprachwahl nie vorabrufen: dieselben Links, deren Klick in assets/page.js 
 test("Regeln wie im Browser ausgewertet (URLPattern)", { skip: typeof URLPattern === "undefined" && "URLPattern fehlt in dieser Node-Fassung" }, () => {
   const base = "https://www.m365.fm" + SPEC_PATH, [rule] = SPEC_RULES.prefetch, [same, notHref] = rule.where.and;
   const ok = (u) => new URLPattern(same.href_matches, base).test(u) && !notHref.not.href_matches.some((p) => new URLPattern(p, base).test(u));
-  for (const u of ["/", "/de/", "/show/episodes/a/", "/de/show/episodes/a/", "/entity/sharepoint/", "/show/#x"]) assert.ok(ok("https://www.m365.fm" + u), u);
+  for (const u of ["/de/", "/show/episodes/a/", "/de/show/episodes/a/", "/entity/sharepoint/", "/show/#x"]) assert.ok(ok("https://www.m365.fm" + u), u);
+  for (const u of ["/", "/#x", "/index.html", "/en", "/en/show/"]) assert.ok(!ok("https://www.m365.fm" + u), "Startseite/Weiterleitung auf / nie: " + u);
+  assert.ok(!ok("https://www.m365.fm"), "https://www.m365.fm ohne Schraegstrich = /");
   for (const u of ["/community/", "/de/community/u/a/", "/einladung/abc/", "/sponsor/dashboard/", "/de/sponsor/dashboard/report/", "/search/?q=x", "/admin/",
     "/de/redaktion/", "/show/?utm_source=x", "/feed.xml", "/episodes.json", "/og/a.jpg", "/media.pdf"]) assert.ok(!ok("https://www.m365.fm" + u), u);
   for (const u of ["https://c.m365.fm/abc", "https://api-dub.m365.fm/go/abc", "https://partner.m365.fm/"]) assert.ok(!ok(u), u);
