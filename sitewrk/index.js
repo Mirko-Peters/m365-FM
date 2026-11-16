@@ -443,12 +443,18 @@ async function partnerRequest(request, env, ctx, url) {
 // Jede HTML-Seite (200/304) auf www.m365.fm bekommt den Header Speculation-Rules: "/speculation.json"; die Regeln beantwortet der Worker selbst
 // (keine Kopplung an Seitenbau oder R2). Nur prefetch (laedt das HTML-Dokument vor, fuehrt kein Skript aus, laedt keine Bilder), nie prerender.
 // "moderate": erst bei Hover (~200 ms) bzw. Antippen. Nur gleiche Herkunft ("/*" relativ zu www.m365.fm): Kurzlinks (c.m365.fm), Klick- und
-// Werbezaehler (api-dub.m365.fm) sind fremde Herkunft und nie betroffen; Seitenaufrufe zaehlt nur JavaScript, das beim Vorabruf nicht laeuft.
+// Werbezaehler (api-dub.m365.fm) sind fremde Herkunft und nie betroffen. Web Analytics (RUM) zaehlt nur per JavaScript, das beim Vorabruf nicht
+// laeuft; die ungefilterte Zonen-Statistik (Rueckfall in tools/sponsor_metrics.py und tools/mediakit.py) zaehlt dagegen jede HTML-Antwort am Rand,
+// also auch vorabgerufene Seiten, die nie geoeffnet werden (dort als "ungefiltert inkl. Bots und Vorabrufe" beschriftet).
 // Ausgenommen: Community (eigene App, Anmeldung), Arbeitsseiten mit Anmeldung (Admin, Redaktion, Moderation, Sponsor-Dashboard, Login-Rueckleitung),
-// Einladungslinks, Suche, /api/ und /auth/ (gibt es auf www nicht, nur zur Sicherheit), Adressen mit Query, Dateien (Feeds, JSON-Exporte, Bilder, PDF ...)
-// und Links mit rel=nofollow, download, target=_blank oder data-no-prefetch.
+// Einladungslinks, Suche, /api/ und /auth/ (gibt es auf www nicht, nur zur Sicherheit), Adressen mit Query, Dateien (Feeds, JSON-Exporte, Bilder, PDF ...),
+// Links mit rel=nofollow, download, target=_blank oder data-no-prefetch und die Sprachwahl (SPEC_LANG_SEL, dieselben Links wie in assets/page.js):
+// deren Klick setzt erst das Cookie m365_lang; ein Vorabruf bei Hover/pointerdown ginge noch mit dem alten Cookie bzw. Accept-Language, und
+// homeLang() wuerde "/" mit 302 auf /de/ beantworten - der Browser koennte diese Antwort dann fuer den Klick auf "English" verwenden.
+// Dateiendungen: URLPattern unterscheidet Gross/Klein; der Seitenbau erzeugt nur kleingeschriebene Pfade.
 // Achtung URLPattern: "/*\\?*" (Query beliebig) passt auch auf Adressen OHNE Query und wuerde jeden Vorabruf abschalten - darum "/*\\?(.+)".
 export const SPEC_PATH = "/speculation.json";
+export const SPEC_LANG_SEL = "details.lsw a[hreflang],a.lt[hreflang],a[data-setlang]";   // = Sprachwahl-Klick in assets/page.js (setzt m365_lang)
 export const SPEC_RULES = {
   prefetch: [{
     where: { and: [
@@ -460,7 +466,7 @@ export const SPEC_RULES = {
         "/*\\?(.+)",
         "/*.(json|jsonld|xml|rss|txt|md|csv|ics|vtt|pdf|zip|mp3|m4a|mp4|png|jpe?g|gif|webp|avif|svg|webmanifest)",
       ] } },
-      { not: { selector_matches: "[rel~=nofollow],[download],[target=_blank],[data-no-prefetch]" } },
+      { not: { selector_matches: "[rel~=nofollow],[download],[target=_blank],[data-no-prefetch]," + SPEC_LANG_SEL } },
     ] },
     eagerness: "moderate",
   }],

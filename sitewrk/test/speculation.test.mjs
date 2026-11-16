@@ -1,7 +1,7 @@
 // Speed-Massnahme 5: Vorabruf der naechsten Seite per Speculation Rules (nur prefetch). Header Speculation-Rules: "/speculation.json" nur auf
 // HTML-Seiten (200/304) von www.m365.fm - von GitHub Pages wie aus R2 (R2_PRIMARY=1); nie auf Weiterleitungen, Fehlern, Dateien, partner.m365.fm,
 // Staging oder BYOD. /speculation.json beantwortet der Worker selbst (application/speculationrules+json, 1 h Cache, gueltiges JSON).
-import { test } from "node:test"; import assert from "node:assert/strict";
+import { test } from "node:test"; import assert from "node:assert/strict"; import { readFileSync } from "node:fs";
 const store = new Map(); let origins = 0;
 globalThis.caches = { default: { match: async (r) => { const x = store.get(r.url); return x ? x.clone() : undefined; }, put: async (r, res) => { store.set(r.url, res.clone()); } } };
 const HTML = { "content-type": "text/html; charset=utf-8" };
@@ -19,7 +19,7 @@ globalThis.fetch = async (req) => {
   if (u.pathname === "/speculation.json") return new Response("origin", { headers: { "content-type": "application/json" } });
   return new Response("<html>404</html>", { status: 404, headers: HTML });
 };
-const { default: W, SPEC_RULES, SPEC_PATH, __resetR2Ready } = await import("../index.js");
+const { default: W, SPEC_RULES, SPEC_PATH, SPEC_LANG_SEL, __resetR2Ready } = await import("../index.js");
 const enc = (t) => new TextEncoder().encode(t).buffer;
 const obj = (body, ct) => ({ httpEtag: '"r2"', uploaded: new Date("2026-11-16T08:00:00Z"), httpMetadata: { contentType: ct }, customMetadata: {}, arrayBuffer: async () => enc(body), text: async () => body, get body() { return new Response(body).body; } });
 const B = {
@@ -70,6 +70,8 @@ test("nicht auf partner.m365.fm, Staging und img.m365.fm", async () => {
   const st = await run(req("/de/show/episodes/a/", { host: "staging.m365.fm" }), { ENVIRONMENT: "staging", PAGES }); assert.equal(st.status, 200);
   assert.equal(st.headers.get("speculation-rules"), null);
   const im = await run(req("/pages/x/", { host: "img.m365.fm" })); assert.equal(im.headers.get("speculation-rules"), null);
+  const sw = await run(req("/de/show/episodes/a/"), { ENVIRONMENT: "staging", PAGES }); assert.equal(sw.status, 200, "Staging-Worker mit www-Host");
+  assert.equal(sw.headers.get("speculation-rules"), null, "Staging liefert /speculation.json nicht aus, also auch kein Header");
 });
 test("/speculation.json: vom Worker, application/speculationrules+json, 1 h Cache, gueltiges JSON mit den Regeln", async () => {
   store.clear(); __resetR2Ready(); origins = 0;
@@ -94,7 +96,15 @@ test("Regeln: nur prefetch (nie prerender), moderate, Ausnahmen fuer Anmeldung, 
     "/moderation/*", "/*/moderation/*", "/sponsor/dashboard/*", "/*/sponsor/dashboard/*", "/search/*", "/*/search/*"]) assert.ok(ex.includes(p), p);
   assert.ok(ex.includes("/*\\?(.+)"), "Query ausgeschlossen");
   assert.ok(!ex.includes("/*\\?*"), "'/*\\?*' passt (Suche '*') auch ohne Query und schaltete jeden Vorabruf ab");
-  assert.equal(notSel.not.selector_matches, "[rel~=nofollow],[download],[target=_blank],[data-no-prefetch]");
+  assert.equal(notSel.not.selector_matches, "[rel~=nofollow],[download],[target=_blank],[data-no-prefetch]," + SPEC_LANG_SEL);
+});
+test("Sprachwahl nie vorabrufen: dieselben Links, deren Klick in assets/page.js das Cookie m365_lang setzt", () => {
+  // Sonst: Hover/pointerdown auf "English" (https://www.m365.fm/) ruft "/" noch ohne m365_lang=en ab, homeLang antwortet 302 -> /de/,
+  // und der Browser kann diese Antwort nach dem Klick verwenden - die Wahl "English" fuehrte zurueck auf /de/.
+  const js = readFileSync(new URL("../../assets/page.js", import.meta.url), "utf8");
+  const m = /closest\("([^"]*data-setlang[^"]*)"\)/.exec(js); assert.ok(m, "Sprachwahl-Selektor in assets/page.js gefunden");
+  const sel = SPEC_RULES.prefetch[0].where.and[2].not.selector_matches.split(",");
+  for (const part of m[1].split(",").map((x) => x.trim())) assert.ok(sel.includes(part), "vom Vorabruf ausgenommen: " + part);
 });
 // Mit URLPattern (Node >= 23.8, Browser): die Regeln wie der Browser auswerten. Node 22 (CI) hat es noch nicht -> uebersprungen.
 test("Regeln wie im Browser ausgewertet (URLPattern)", { skip: typeof URLPattern === "undefined" && "URLPattern fehlt in dieser Node-Fassung" }, () => {
