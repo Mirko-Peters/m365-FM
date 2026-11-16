@@ -24,7 +24,7 @@ URLS = [
     ("404", B + "/gibt-es-nicht-cache-check/"),
     ("Suchseite de", B + "/de/search/"),
 ]
-KEEP = ("cache-control", "cf-cache-status", "x-m365-cache", "age", "etag", "last-modified", "expires", "vary", "content-encoding", "content-type", "server", "x-cache", "alt-svc", "x-robots-tag", "x-m365-cr")
+KEEP = ("cache-control", "cf-cache-status", "x-m365-cache", "age", "etag", "last-modified", "expires", "vary", "content-encoding", "content-type", "server", "x-cache", "alt-svc", "x-robots-tag", "x-m365-cr", "x-m365-src")
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
