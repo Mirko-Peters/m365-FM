@@ -11,6 +11,7 @@ from unittest import mock
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT / "tests"))   # Nachbartest auch bei Aufruf als Modul
 import site_relsent as RS   # noqa: E402
 import site_index_rule as IR   # noqa: E402
 
