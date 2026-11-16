@@ -1105,7 +1105,7 @@ def cmd_login(cfg, state, args) -> None:
         redirect = "https://www.m365.fm/callback"
     if not cid or not sec:
         print("Client Id und Secret werden gebraucht."); return
-    st = secrets.token_hex(8)
+    st = secrets.token_hex(8)   # bewusst nicht "spreaker...": damit tauscht www.m365.fm/callback den Code selbst (Admin-Weg ueber den Worker, <API>/auth/spreaker/start)
     got: dict = {}
 
     if redirect.startswith("https://"):  # Callback-Seite auf dub.m365.fm zeigt den Code, hier einfuegen

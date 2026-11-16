@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Spreaker-OAuth ohne PC: Token wird mit dem Client-Secret verschluesselt in data/spreaker_auth.enc abgelegt (Repo ist oeffentlich,
-die Datei ohne das Secret unbrauchbar). Befehle: connect <code> (einmalig, tauscht den Code), refresh (erneuert bei Bedarf)."""
+die Datei ohne das Secret unbrauchbar). Befehle: connect <code> (einmalig, tauscht den Code), store <text> (verschluesselter Text von
+www.m365.fm/callback: der Worker hat den Code schon getauscht, worker/src/spreaker_connect.js), refresh (erneuert bei Bedarf)."""
 import base64, hashlib, json, os, sys, time
 from pathlib import Path
 import requests
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet, InvalidToken
 
 ROOT = Path(__file__).parent
 FILE = ROOT / "data" / "spreaker_auth.enc"
@@ -48,8 +49,22 @@ def exchange(data):
     return r.json()
 
 
+def store(blob):
+    """Verschluesselten Text von www.m365.fm/callback uebernehmen. Gibt nichts Geheimes aus."""
+    try:
+        d = json.loads(Fernet(_key()).decrypt(blob.strip().encode()))
+    except (InvalidToken, ValueError, TypeError):
+        fail("Text nicht entschluesselbar (unvollstaendig kopiert oder anderes SPREAKER_CLIENT_SECRET). Auf www.m365.fm/callback neu verbinden.")
+    if not isinstance(d, dict) or not d.get("access_token") or not d.get("refresh_token"):
+        fail("Im Text fehlt der Refresh-Token - Spreaker neu verbinden.")
+    save({"access_token": d["access_token"], "refresh_token": d["refresh_token"], "at": int(d.get("at") or time.time())})
+    print("Spreaker verbunden, Token verschluesselt gespeichert.")
+
+
 def connect(code):
     code = code.strip()
+    if code.startswith("gAAAAA"):   # Fernet-Text vom Worker (Version 0x80 + Zeitstempel), kein Spreaker-Code
+        return store(code)
     if "code=" in code:
         code = code.split("code=")[1].split("&")[0]
     j = exchange({"grant_type": "authorization_code", "redirect_uri": REDIRECT, "code": code})
@@ -73,6 +88,8 @@ def refresh():
 if __name__ == "__main__":
     if len(sys.argv) > 2 and sys.argv[1] == "connect":
         connect(sys.argv[2])
+    elif len(sys.argv) > 2 and sys.argv[1] == "store":
+        store(sys.argv[2])
     elif len(sys.argv) > 1 and sys.argv[1] == "refresh":
         refresh()
     elif len(sys.argv) > 1 and sys.argv[1] == "env":   # erneuert und legt den Token maskiert als SPREAKER_TOKEN in $GITHUB_ENV (fuer den Worker-Deploy)

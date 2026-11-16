@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       code:
-        description: "Code von www.m365.fm/callback (nach 'Erlauben' bei Spreaker)"
+        description: "verschluesselter Text von www.m365.fm/callback (oder Code)"
         required: true
 permissions:
   contents: write
@@ -11,11 +11,14 @@ jobs:
   connect:
     runs-on: ubuntu-latest
     steps:
+      # Als Erstes: Eingabe maskieren. Gelesen aus der Ereignisdatei statt per env, weil der Kopf dieses Schritts env-Werte vor dem Maskieren zeigen wuerde.
+      - name: Eingabe im Protokoll verbergen
+        run: printf '::add-mask::%s\n' "$(jq -r '.inputs.code // ""' "$GITHUB_EVENT_PATH")"
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with: { python-version: "3.12" }
       - run: pip install requests cryptography
-      - name: Code gegen Token tauschen
+      - name: Verschluesselten Text speichern (bzw. Code gegen Token tauschen)
         env:
           SPREAKER_CLIENT_ID: ${{ secrets.SPREAKER_CLIENT_ID }}
           SPREAKER_CLIENT_SECRET: ${{ secrets.SPREAKER_CLIENT_SECRET }}
