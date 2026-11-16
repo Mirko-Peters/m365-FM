@@ -121,6 +121,9 @@ const noindexPath = (p) => !p.startsWith("/.well-known/") && !/^\/(?:agent|episo
 // nicht fuer die Suche (der Text steht schon auf der Folgenseite). Gleiche Regel wie site_transcripts.PATH_RX.
 export const TRANSCRIPT = /^(?:\/[a-z]{2})?(?:\/show\/episodes)?\/[a-z0-9-]+\/transcript\.(txt|vtt)$/;
 const R2_EXPORT = /^\/(?:blog-import\/[^/]+\.json|translations-blog\.json)$/i;
+// Sitemaps der Sprachen ausser en/de (sitemap-<l>-<typ>[-<n>].xml, site_sitemaps.write_all) liegen seit 16.11.2026 nur im R2-Bucket (r2out/,
+// site_size.r2_only; allein die Blog-Sitemaps ~6 MB je Sprache). Gleiche Regel wie site_size.SITEMAP_RX. Index sitemap.xml und en/de bleiben in GitHub Pages.
+export const SITEMAP_R2 = /^\/sitemap-[a-z]{2}-[a-z][a-z0-9-]*\.xml$/;
 
 // Eigene Seiten gezogener Inhalte (/community/feed/<id>-<slug>/, site_feed.py), die der Seitenbau nicht mehr erzeugt - GitHub-Aktivitaet
 // (worker/src/feedpolicy.js), ausgeblendete oder aeltere Inhalte: 410 Gone statt 404, damit Suchmaschinen sie zuegig aus dem Index nehmen.
@@ -207,6 +210,9 @@ function finishHeaders(h, p) {
   const tm = TRANSCRIPT.exec(p);
   if (tm) { h.set("content-type", CT[tm[1]]); h.set("x-robots-tag", "noindex"); h.set("access-control-allow-origin", "*"); }   // #266
   if (isImg) h.set("vary", "accept");
+  // Merker fuer den Seitenbau (site.yml, Deploy-Job): diese Worker-Fassung liefert die Sitemaps der Sprachen ausser en/de aus R2 (SITEMAP_R2).
+  // Erst wenn /sitemap.xml ihn traegt, veroeffentlicht der Deploy-Job ein docs/ ohne diese Sitemaps - sonst antworteten sie mit 404 (alter Worker).
+  if (p === "/sitemap.xml" || SITEMAP_R2.test(p)) h.set("x-m365-sitemaps", "r2");
   if (p === "/") h.set("vary", VARY_HOME);   // Startseite: Antwort haengt von Sprache und Cookie ab (s. homeLang) - nie fuer eine andere Sprache aus einem Cache
   if (p === "/") h.set("link", '</.well-known/api-catalog>; rel="api-catalog", </openapi.json>; rel="service-desc"; type="application/vnd.oai.openapi+json", </llms.txt>; rel="service-doc"; type="text/plain", </.well-known/agent.json>; rel="describedby"; type="application/json"');   // RFC 8288 / 9727: Startseite verweist auf maschinenlesbare Ressourcen
   if (p === "/.well-known/api-catalog") { h.set("content-type", 'application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"'); h.set("access-control-allow-origin", "*"); }
@@ -504,6 +510,20 @@ const worker = {
         const h = new Headers({ "content-type": "application/json; charset=utf-8", "cache-control": HTML_CC });
         for (const [k, v] of Object.entries(SEC)) h.set(k, v);
         if (noindexPath(p)) h.set("x-robots-tag", "noindex");
+        return new Response(request.method === "HEAD" ? null : obj.body, { headers: h });
+      }
+    }
+    // Sitemap aus dem R2-Bucket (pages/<datei>): indexierbar (kein noindex), application/xml, SEC- und HTML-Cache-Header (finishHeaders), ETag/304, HEAD.
+    // Nur Objekte des r2out-Uploads: als entfernt markiert (gone=1) oder nur Spiegel von GitHub Pages (src=docs, dort 404 = wirklich weg) -> 404 wie bisher.
+    if (res.status === 404 && env.PAGES && SITEMAP_R2.test(p) && (request.method === "GET" || request.method === "HEAD")) {
+      const obj = await env.PAGES.get("pages" + p).catch(() => null);
+      const cm = (obj && obj.customMetadata) || {};
+      if (obj && cm.gone !== "1" && cm.src !== "docs") {
+        const h = new Headers({ "content-type": CT.xml, "access-control-allow-origin": "*" });   // CORS wie GitHub Pages
+        if (obj.httpEtag) h.set("etag", obj.httpEtag);
+        if (obj.uploaded) h.set("last-modified", obj.uploaded.toUTCString());
+        finishHeaders(h, p);
+        if (notModified(request, h.get("etag"), h.get("last-modified"))) return new Response(null, { status: 304, headers: h });
         return new Response(request.method === "HEAD" ? null : obj.body, { headers: h });
       }
     }

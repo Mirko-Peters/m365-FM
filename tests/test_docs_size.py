@@ -40,9 +40,10 @@ class R2PagesTest(unittest.TestCase):
             out, r2 = Path(tmp) / "docs", Path(tmp) / "r2out"
             write, write_r2, n = site_size.writers(out, r2, lambda c: c.replace("x.podpage.com", "img.m365.fm"), self.LANGS)
             to_r2 = ["fr/some-dub-episode/index.html", "ja/tag/copilot/index.html", "ko/c/security/index.html", "ru/community/events/m365con/index.html",
-                     "es/directory/de/berlin/index.html", "fr/show/episodes/page/2/index.html", "fr/community/u/mirko-p/blog/index.html", "translations-blog.json", "blog-import/part-1.json"]
+                     "es/directory/de/berlin/index.html", "fr/show/episodes/page/2/index.html", "fr/community/u/mirko-p/blog/index.html", "translations-blog.json", "blog-import/part-1.json",
+                     "sitemap-fr-blog.xml", "sitemap-ja-show-episodes-2.xml"]
             to_docs = ["fr/index.html", "de/some-dub-episode/index.html", "de/tag/copilot/index.html", "show/episodes/a/index.html", "community/u/mirko-p/blog/a/index.html",
-                       "entity/index.html", "fr/community/blog/feed.xml", "ru/community/events/m365con/event.ics", "fr/llms.txt", "fr/mvp/sw.js", "sitemap-fr-blog.xml", "index.html"]
+                       "entity/index.html", "fr/community/blog/feed.xml", "ru/community/events/m365con/event.ics", "fr/llms.txt", "fr/mvp/sw.js", "sitemap.xml", "sitemap-en-blog.xml", "sitemap-de-blog.xml", "index.html"]
             for rel in to_r2 + to_docs: write(rel, '<img src="https://x.podpage.com/a.png">')
             for rel in to_r2:
                 self.assertTrue((r2 / rel).is_file(), rel); self.assertFalse((out / rel).exists(), rel)
@@ -58,6 +59,40 @@ class R2PagesTest(unittest.TestCase):
         self.assertFalse(site_size.r2_only("pl/index.html", self.LANGS + ("pl",)), "Startseite der Sprache bleibt in GitHub Pages")
         self.assertFalse(site_size.r2_only("en/x/index.html", self.LANGS + ("en",)), "Englisch bleibt in GitHub Pages")
         self.assertFalse(site_size.r2_only("xx/x/index.html", self.LANGS), "nur Sprachpfade")
+
+    def test_rule_sitemaps(self):
+        """16.11.2026: Sitemaps der Sprachen ausser en/de (sitemap-<l>-<typ>[-<n>].xml, ~6 MB je Blog-Sitemap) nach r2out/; Index und en/de bleiben in GitHub Pages."""
+        L = self.LANGS + ("pl",)
+        for rel in ("sitemap-fr-blog.xml", "sitemap-ja-show-episodes.xml", "sitemap-pl-pages-2.xml", "sitemap-ru-entity.xml"):
+            self.assertTrue(site_size.r2_only(rel, L), rel)
+        for rel in ("sitemap.xml", "sitemap-en-blog.xml", "sitemap-de-blog.xml", "sitemap-de-show-episodes-2.xml", "sitemap-xx-blog.xml", "fr/sitemap-fr-blog.xml",
+                    "sitemap-fr.xml", "sitemap-fr-blog.xml.gz", "fr/community/blog/feed.xml"):
+            self.assertFalse(site_size.r2_only(rel, L), rel)
+        self.assertEqual(site_size.sitemap_lang("sitemap-ko-community.xml"), "ko"); self.assertEqual(site_size.sitemap_lang("sitemap.xml"), "")
+
+    def test_rule_covers_every_name_site_sitemaps_writes(self):
+        """Alle Namen, die site_sitemaps.write_all schreibt (je Sprache und Typ, mit Teilen -2), folgen der Regel; der Index bleibt in docs/."""
+        import site_sitemaps as SMAP
+        langs = {l: (l, l) for l in self.LANGS}
+        sm = []
+        for l in ("en",) + self.LANGS:
+            pre = "" if l == "en" else "/" + l
+            sm += [(f"https://www.m365.fm{pre}/show/episodes/a/", "2026-11-01", None), (f"https://www.m365.fm{pre}/entity/x/", "2026-11-01", None),
+                   (f"https://www.m365.fm{pre}/community/u/m/blog/p/", "2026-11-01", None), (f"https://www.m365.fm{pre}/learn/", "2026-11-01", None)]
+        sm += [(f"https://www.m365.fm/fr/ep-{i}/", "2026-11-01", None) for i in range(3)]
+        out = {}
+        old = SMAP.MAX_URLS
+        try:
+            SMAP.MAX_URLS = 2   # Teile -2 mitpruefen
+            SMAP.write_all(sm, lambda n, c: out.__setitem__(n, c), "https://www.m365.fm", langs, "2026-11-16")
+        finally:
+            SMAP.MAX_URLS = old
+        self.assertIn("sitemap-fr-episodes-2.xml", out)
+        for name in out:
+            if name == "sitemap.xml": self.assertFalse(site_size.r2_only(name, self.LANGS)); continue
+            lang = name.split("-")[1]
+            self.assertEqual(site_size.sitemap_lang(name), lang, name)
+            self.assertEqual(site_size.r2_only(name, self.LANGS), lang not in site_size.PAGES_LANGS, name)
 
     def test_site_build_routes_all_languages_but_en_de(self):
         import generate_site as G

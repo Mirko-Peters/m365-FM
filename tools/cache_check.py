@@ -19,6 +19,7 @@ URLS = [
     ("OG-Bild", "https://img.m365.fm/og/index.png"),   # Teilen-Bilder liegen im R2-Bucket (generate_og.py, tools/r2_og_upload.py)
     ("Icon", B + "/assets/apple-touch-icon.png"),
     ("Sitemap", B + "/sitemap.xml"),
+    ("Sitemap fr Blog (R2)", B + "/sitemap-fr-blog.xml"),   # Sitemaps der Sprachen ausser en/de liegen im R2-Bucket (site_size.r2_only)
     ("llms.txt", B + "/llms.txt"),
     ("R2-Bild", "https://img.m365.fm/i/5254f600109b589b2c2d.webp"),
     ("404", B + "/gibt-es-nicht-cache-check/"),

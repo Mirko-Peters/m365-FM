@@ -230,6 +230,14 @@ jobs:
           # Erst als Repo-Variable PARTNER_BASE eintragen, wenn partner.m365.fm ausgeliefert wird (Site-Worker-Deploy mit Route partner.m365.fm).
           PARTNER_BASE: ${{ vars.PARTNER_BASE }}
           GOOGLE_MAPS_API_KEY: ${{ vars.GOOGLE_MAPS_API_KEY || secrets.GOOGLE_MAPS_API_KEY }}
+      # Sitemaps der Sprachen ausser en/de liegen seit 16.11.2026 nur in r2out/ (R2-Bucket), Index und en/de in docs/: geprueft werden alle, und zwar
+      # VOR dem Upload - was in den Bucket geht, ist sofort live (der Site-Worker liefert es nach dem 404 von GitHub Pages), auch ohne Deploy
+      - name: Sitemaps prüfen (docs/ + r2out/, blockierend, vor dem R2-Upload)
+        run: python check_sitemaps.py docs r2out
+      # Ebenso vor dem Upload (braucht nur docs/ und r2out/ aus generate_site.py): prueft auch die Sitemaps und Seiten in r2out/. Danach waere eine
+      # neue fr/es/...-Sitemap oder Sprachseite schon im Bucket und damit live, auch wenn diese Pruefung den Bau anschliessend stoppt.
+      - name: Interne Links ohne Weiterleitung (href, JSON-LD, Sitemaps, Feeds in docs/ + r2out/; blockierend, vor dem R2-Upload)
+        run: python check_redirect_links.py docs r2out
       # Pruefsummenliste der R2-Seiten in einem eigenen Cache: wird direkt nach dem Upload gesichert (auch wenn spaeter eine blockierende Pruefung
       # scheitert oder der Lauf abgebrochen wird). Vorher ging sie dann verloren und der naechste Lauf lud dieselben Seiten noch einmal hoch.
       - name: Pruefsummenliste der R2-Seiten (letzter Stand)
@@ -240,7 +248,7 @@ jobs:
           restore-keys: r2pages-
       # Blockierend (11.11.2026): alle Sprachseiten ausser en/de liegen nur im Bucket. tools/r2_pages_upload.py endet nur dann mit 1, wenn eine Seite
       # dort noch ganz fehlt (sonst 404 nach dem Deploy); einzelne Fehler bei schon vorhandenen Seiten und bei Export-Dateien bleiben Warnungen.
-      - name: Seiten in den R2-Bucket laden (Sprachseiten ausser en/de, Sprachfassungen, Exporte; GitHub Pages bleibt klein, nichts wird geloescht)
+      - name: Seiten in den R2-Bucket laden (Sprachseiten und Sitemaps ausser en/de, Sprachfassungen, Exporte; GitHub Pages bleibt klein, nichts wird geloescht)
         env:
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
@@ -283,12 +291,8 @@ jobs:
       - name: Interne Links prüfen
         continue-on-error: true
         run: python check_links.py
-      - name: Interne Links ohne Weiterleitung (href, JSON-LD, Sitemaps, Feeds; blockierend)
-        run: python check_redirect_links.py
       - name: Schema.org (JSON-LD) prüfen (blockierend seit T7, Integrationsbau 1.11. ohne Fehler)
         run: python check_schema.py
-      - name: Sitemaps prüfen (blockierend)
-        run: python check_sitemaps.py
       - name: Encoding prüfen (Mojibake blockierend)
         run: python check_encoding.py
       - name: Titel und Beschreibungen prüfen (T7, blockierend)
@@ -355,6 +359,20 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url || steps.deployment2.outputs.page_url || steps.deployment3.outputs.page_url }}
     steps:
+      # Seit 16.11.2026 fehlen in docs/ die Sitemaps der Sprachen ausser en/de (nur im R2-Bucket); ausliefern kann sie nur ein Site-Worker mit
+      # SITEMAP_R2 (sitewrk.yml, eigener Workflow, Deploy-Schritt continue-on-error). Laeuft noch die alte Fassung, antworteten sie nach diesem
+      # Deploy mit 404, waehrend sitemap.xml sie auffuehrt. Darum erst veroeffentlichen, wenn der Worker den Merker x-m365-sitemaps: r2 auf
+      # /sitemap.xml setzt (20 Versuche im Abstand von 30 s, gut 10 min, dann Abbruch ohne Deploy; GitHub Pages behaelt den alten Stand mit allen Sitemaps).
+      # Notschalter: Repo-Variable SITEMAP_WORKER_CHECK=0.
+      - name: Site-Worker liefert die Sitemaps aus R2? (sonst kein Deploy)
+        if: (vars.SITEMAP_WORKER_CHECK || '1') != '0'   # wie SITE_PUSH_BUILD oben: eine nicht gesetzte Variable ist null, null != '0' waere false
+        run: |
+          for i in $(seq 1 20); do
+            if curl -sSfI --max-time 20 -A "m365fm-actions/1.0 (+https://www.m365.fm)" "https://www.m365.fm/sitemap.xml?worker-check=${{ github.run_id }}-$i" | tr -d '\r' | grep -qi '^x-m365-sitemaps: *r2$'; then echo "Site-Worker mit Sitemaps aus R2 ist live"; exit 0; fi
+            echo "Versuch $i: Merker x-m365-sitemaps fehlt (Site-Worker noch nicht veroeffentlicht?)"; [ "$i" -lt 20 ] && sleep 30
+          done
+          echo "::error::Der Site-Worker liefert die Sitemaps der Sprachen ausser en/de noch nicht aus R2 (Merker x-m365-sitemaps fehlt auf /sitemap.xml). Erst den Workflow sitewrk.yml erfolgreich veroeffentlichen, dann diesen Lauf wiederholen - sonst antworteten sitemap-<sprache>-*.xml mit 404."
+          exit 1
       # deploy-pages@v4 wartet hoechstens 10 min (MAX_TIMEOUT = 600000 im Code der Action, ein groesserer timeout wird ignoriert). GitHub Pages
       # haengt bei unserer Groesse ab und zu laenger in "syncing_files"/"updating_pages" (Laeufe 529, 616, 627): dann bis zu zwei weitere Versuche
       # mit demselben Artefakt. Erst wenn auch der dritte scheitert, schlaegt der Job fehl (die folgenden Schritte laufen nur nach einem Erfolg).

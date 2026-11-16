@@ -3,20 +3,24 @@ Aufruf: python tools/page_hashes.py docs page-hashes.json [content-hashes.json [
 Dritte Datei: Inhalts-Hash je HTML-Seite (Titel, Beschreibung, robots, canonical und Hauptinhalt, tools/content_hash.py), Grundlage fuer IndexNow.
 Viertes Argument (r2out/): auch die Seiten (index.html), die nur im R2-Bucket liegen (seit 11.11.2026 alle Sprachseiten ausser en/de, site_size.r2_only).
 Sonst gaelten sie nach dem Umzug als entfallen, und neue oder geaenderte Seiten dort kaemen nie zu IndexNow. Dateien in r2out/ leert der Purge ueber
-r2-changed.json. Merker R2_MARK: tools/purge_changed.py erkennt daran den ersten Lauf mit r2out/."""
-import hashlib, json, sys
+r2-changed.json. Merker R2_MARK: tools/purge_changed.py erkennt daran den ersten Lauf mit r2out/.
+Aus r2out/ zaehlen ausser den Seiten auch die Sitemaps der Sprachen ausser en/de (seit 16.11.2026 dort, site_size.r2_only): sonst gaelten sie nach
+dem Umzug aus docs/ als entfallen, und eine geaenderte Sitemap bliebe unter ihrer Adresse im Kanten-Cache (IndexNow betrifft nur Seiten)."""
+import hashlib, json, re, sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from content_hash import content_hash
 
 R2_MARK = "/__r2out__"
+SITEMAP = re.compile(r"^sitemap-[a-z]{2}-[a-z][a-z0-9-]*\.xml$")   # Sitemaps der Sprachen ausser en/de in r2out/ (site_size.SITEMAP_RX): Purge unter ihrer Adresse
 h, c = {}, {}
 
 
 def scan(src, pages_only=False):
     for f in src.rglob("*"):
-        if not f.is_file() or f.suffix not in (".html", ".xml", ".json", ".txt", ".jsonld", ".md", ".css", ".js") or (pages_only and f.name != "index.html"): continue
+        if not f.is_file() or f.suffix not in (".html", ".xml", ".json", ".txt", ".jsonld", ".md", ".css", ".js"): continue
         rel = f.relative_to(src).as_posix()
+        if pages_only and f.name != "index.html" and not SITEMAP.match(rel): continue
         url = "/" + (rel[:-len("index.html")] if rel.endswith("index.html") else rel)
         if pages_only and url in h: continue   # docs/ gilt (GitHub Pages liefert zuerst)
         b = f.read_bytes(); h[url] = hashlib.sha1(b).hexdigest()[:16]
