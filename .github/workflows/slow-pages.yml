@@ -17,6 +17,9 @@ on:
         description: "Mindestzahl Messungen je Seite und Geraet"
         required: false
         default: "20"
+  push:   # VORUEBERGEHEND fuer den Live-Test auf dem Branch, wird vor dem Merge entfernt
+    branches: [claude/slow-pages]
+    paths: [.github/workflows/slow-pages.yml, tools/slow_pages.py]
 permissions:
   contents: read
 concurrency:
