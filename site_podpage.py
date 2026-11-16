@@ -465,6 +465,10 @@ def redirect_table(eps, plist, guests, bposts, gmerge, baseids, LG, docs=None):
         oid = old + "-guest" if old in baseids else old
         for pre in [""] + [f"/{l}" for l in LG]:
             rd[f"{pre}/entity/{oid}"] = f"{pre}/entity/{new}/"
+    import site_learn as _SLN
+    for old, new in _SLN.entity_merges().items():   # zusammengefuehrte Entitaets-Dubletten (data/guest_merge.json "entities"): ebenso in allen Sprachpfaden
+        for pre in [""] + [f"/{l}" for l in LG]:
+            rd[f"{pre}/entity/{old}"] = f"{pre}/entity/{new}/"
     for old, new in extra_redirects().items():   # alte Adressen ohne Seite (data/redirects_extra.json); bestehende Eintraege gehen vor
         if old.strip("/").split("/")[0] in taken: clash.append(old); continue   # dort liegt inzwischen eine Seite: nicht wegleiten
         rd.setdefault(old, new)
