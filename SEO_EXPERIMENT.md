@@ -10,8 +10,8 @@ Verbessert ein **semantisch beschreibender interner Ankertext** ("Conditional Ac
 - **Nebenmaße:** Klicks pro Tag, mittlere Position, Zahl verschiedener Suchanfragen je Seite.
 
 ## Aufbau
-- **Teilnehmer:** 218 englische Entitätsseiten (Begriffe und Produkte), die mindestens 2 Beziehungen haben, nicht doppelt sind und einen sauberen Zusatz aus ihrer Beschreibung bekommen. Dateien: `data/seo_experiment.json` (eingefroren, nicht per Hand ändern).
-- **Gruppen:** *sem* (111, beschreibender Anker) und *ctl* (107, Name wie bisher). Zufällig nach Hash, getrennt nach Art (Begriff/Produkt) und Zahl der Beziehungen (2–3 / 4+), damit beide Gruppen ähnlich sind.
+- **Teilnehmer:** 200 englische Entitätsseiten (Begriffe und Produkte), die mindestens 2 Beziehungen haben, nicht doppelt sind und einen sauberen Zusatz aus ihrer Beschreibung bekommen. Dateien: `data/seo_experiment.json` (eingefroren, nicht per Hand ändern).
+- **Gruppen:** *sem* (100, beschreibender Anker) und *ctl* (100, Name wie bisher). Zufällig nach Hash, getrennt nach Art (Begriff/Produkt) und Zahl der Beziehungen (2–3 / 4+), damit beide Gruppen ähnlich sind.
 - **Behandlung:** Nur Links **auf** diese Seiten von anderen englischen Entitätsseiten (Listen „Teil von / Enthält / Verwandt mit …“ und „Verwandte Themen kurz erklärt“). Ankertext bei *sem*: `Name – Zusatz` (Zusatz = Anfang des ersten Beschreibungssatzes, regelbasiert, ohne KI, eingefroren in `anchors`). Jeder betroffene Link trägt `data-xv="sem"` oder `data-xv="ctl"`.
 - **Nicht betroffen:** Brotkrumen, Blog, Navigation, Sitemap, alle anderen Sprachen. Die Brotkrumen-Änderung (PR #499) und die Dubletten-Canonicals gelten für beide Gruppen gleich und fallen in der Differenz heraus.
 - **Start:** `start` in der JSON-Datei (geplant 30.11.2026); davor und ohne Datei ändert sich nichts. Mit `stop` endet es wieder.
@@ -24,7 +24,7 @@ Verbessert ein **semantisch beschreibender interner Ankertext** ("Conditional Ac
 5. **Prüfung des Aufbaus:** `python tools/seo_xp.py check docs` (nach einem Bau): *sem*-Links beschreibend, *ctl*-Links nur Name.
 
 ## Grenzen (ehrlich nennen)
-- **Kleine Stichprobe:** je rund 110 Seiten, viele mit wenigen Impressionen. Kleine Effekte sind kaum nachweisbar; ein „kein Unterschied“ heißt nicht „kein Effekt“.
+- **Kleine Stichprobe:** je 100 Seiten, viele mit wenigen Impressionen. Kleine Effekte sind kaum nachweisbar; ein „kein Unterschied“ heißt nicht „kein Effekt“.
 - **Nicht verblindet, keine Zufallszuteilung im strengen Sinn** (Hash-Zuteilung, aber nur aus Seiten mit sauberem Zusatz). Ergebnis gilt für ähnliche Seiten, nicht für alle.
 - **Störfaktoren:** Google-Updates, neue Folgen/Artikel, die einzelne Seiten pushen, Saison. Gleichzeitige Änderungen auf nur einer Gruppe vermeiden.
 - **Interne Links sind nur ein Signal.** Hier wird nur der Ankertext geändert; die Zahl der Links bleibt gleich.

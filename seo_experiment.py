@@ -20,6 +20,7 @@ FILE = ROOT / "data" / "seo_experiment.json"
 TYPES = ("concept", "product")   # gleichartige Seiten; Personen, Firmen, Zertifikate usw. sind aussen vor
 MIN_LINKS = 2                    # mindestens so viele eingehende/ausgehende Beziehungen: sonst gibt es kaum Links, an denen man etwas aendern koennte
 MAX_LEN = 90
+PER_GROUP = 100                  # je Gruppe genau so viele Seiten (Vorgabe Mirko, 16.11.2026: 100 gegen 100)
 _CUT = re.compile(r"\s+(?:that|which|for|with|used|built|designed|where|who)\s|[;:(,]|\s[–—-]\s|\.\s")
 _END = {"a", "an", "the", "of", "in", "on", "at", "by", "to", "from", "into", "and", "or", "as", "than", "its", "their", "your", "managed", "based", "built",
         "fully", "highly", "using", "across", "between", "per", "via", "over", "within", "inside", "such", "like", "both", "any", "all", "not", "is", "are"}
@@ -57,7 +58,7 @@ def _h(salt, i):
     return hashlib.sha256(f"{salt}:{i}".encode()).hexdigest()
 
 
-def assign(ents, salt="m365fm-2026-11-16", dup=None):
+def assign(ents, salt="m365fm-2026-11-16", dup=None, per_group=PER_GROUP):
     """Teilnehmer und Gruppen berechnen: Begriffe/Produkte mit sauberem Zusatz, mindestens MIN_LINKS Beziehungen, keine Dubletten. Gruppen werden je
     Art und Beziehungs-Klasse (2-3 / 4+) nach Hash sortiert und abwechselnd verteilt (gleich grosse, vergleichbare Gruppen)."""
     ids = set(ents)
@@ -72,10 +73,23 @@ def assign(ents, salt="m365fm-2026-11-16", dup=None):
     for i, e in ents.items():
         if e["type"] in TYPES and i not in skip and deg[i] >= MIN_LINKS and anchor(e):
             cells.setdefault((e["type"], "4+" if deg[i] >= 4 else "2-3"), []).append(i)
-    sem, ctl = [], []
+    # Je Klasse (Art x Beziehungen) abwechselnd verteilen, danach auf PER_GROUP je Gruppe kuerzen: Platz je Klasse im Verhaeltnis zu ihrer Groesse
+    # (Verfahren mit groesstem Rest), von hinten nach Hash gestrichen. So bleiben beide Gruppen gleich gross und gleich zusammengesetzt.
+    halves = {}
     for k in sorted(cells):
-        for n, i in enumerate(sorted(cells[k], key=lambda x: _h(salt, x))):
-            (sem if n % 2 == 0 else ctl).append(i)
+        o = sorted(cells[k], key=lambda x: _h(salt, x))
+        halves[k] = (o[0::2], o[1::2])
+    total = sum(len(v) for v in cells.values())
+    quota = {k: min(len(a), len(b)) for k, (a, b) in halves.items()}
+    if per_group and 2 * sum(quota.values()) > 2 * per_group:
+        raw = {k: per_group * len(cells[k]) / total for k in cells}
+        quota = {k: min(int(raw[k]), len(halves[k][0]), len(halves[k][1])) for k in cells}
+        for k in sorted(cells, key=lambda k: -(raw[k] - int(raw[k]))):
+            if sum(quota.values()) >= per_group: break
+            if quota[k] < min(len(halves[k][0]), len(halves[k][1])): quota[k] += 1
+    sem, ctl = [], []
+    for k, (a, b) in halves.items():
+        sem += a[:quota[k]]; ctl += b[:quota[k]]
     return sorted(sem), sorted(ctl), deg
 
 

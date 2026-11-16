@@ -41,13 +41,13 @@ class Gruppen(unittest.TestCase):
     def test_assign_ist_stabil_und_ausgewogen(self):
         a = X.assign(ENTS, dup=DUP)[:2]
         self.assertEqual(a, X.assign(ENTS, dup=DUP)[:2])
-        self.assertLessEqual(abs(len(a[0]) - len(a[1])), 6)
+        self.assertEqual((len(a[0]), len(a[1])), (X.PER_GROUP, X.PER_GROUP))   # genau 100 gegen 100
         self.assertEqual(set(a[0]) & set(a[1]), set())
 
     def test_eingefrorene_datei(self):
         sem, ctl = set(DATA["sem"]), set(DATA["ctl"])
         self.assertEqual(sem & ctl, set())
-        self.assertGreaterEqual(len(sem), 100); self.assertGreaterEqual(len(ctl), 100)
+        self.assertEqual((len(sem), len(ctl)), (100, 100))
         self.assertEqual(set(DATA["anchors"]), sem)
         for i in sem | ctl:
             self.assertIn(i, ENTS); self.assertIn(ENTS[i]["type"], X.TYPES); self.assertNotIn(i, DUP); self.assertNotIn(i, DUP.values())
@@ -55,7 +55,7 @@ class Gruppen(unittest.TestCase):
             self.assertTrue(t.startswith(ENTS[i]["name"] + " – "), i); self.assertLessEqual(len(t), len(ENTS[i]["name"]) + X.MAX_LEN + 3)
         for t in ("concept", "product"):   # beide Gruppen aehnlich zusammengesetzt
             a = sum(ENTS[i]["type"] == t for i in sem); b = sum(ENTS[i]["type"] == t for i in ctl)
-            self.assertLessEqual(abs(a - b), 4, t)
+            self.assertLessEqual(abs(a - b), 1, t)
         date.fromisoformat(DATA["start"])
 
 
