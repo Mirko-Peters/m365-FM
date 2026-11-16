@@ -171,7 +171,7 @@ class ContributorAppTest(unittest.TestCase):
     def test_manifest_only_on_app_pages(self):
         src = (ROOT / "generate_site.py").read_text("utf-8")
         self.assertNotIn('rel="manifest"', src, "kein seitenweites Manifest aus diesem PR (#204 plant eines)")
-        self.assertIn('<div id="c-mvp"></div>', src)
+        self.assertIn('"c-mvp"', (ROOT / "site_community_page.py").read_text("utf-8"))   # Platz und Nachladen der Community-Seite
 
     def test_service_worker_never_caches_api(self):
         written, _ = self.build()
