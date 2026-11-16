@@ -413,14 +413,29 @@ def make_guest_entities():
     gs = load("guests")
     base = {e["id"] for e in json.loads((D / "entities.json").read_text("utf-8"))}
     out = []
-    merge = (json.loads((D / "guest_merge.json").read_text("utf-8")).get("merge") or {}) if (D / "guest_merge.json").exists() else {}
+    gm = json.loads((D / "guest_merge.json").read_text("utf-8")) if (D / "guest_merge.json").exists() else {}
+    merge = gm.get("merge") or {}
+    folded = {}   # zusammengefuehrte Entitaets-Dubletten mit einem Gast als Ziel (guest_merge.json "entities"): Altfassung "was" fliesst in den Gast-Eintrag
+    for v in (gm.get("entities") or {}).values():
+        if isinstance(v, dict) and v.get("to") and isinstance(v.get("was"), dict):
+            folded.setdefault(v["to"], []).append(v["was"])
     for g in gs:
         if g.get("hidden") in (True, "True") or g["slug"] in merge: continue   # doppelter Gast: kein eigener Eintrag, siehe data/guest_merge.json
         i = g["slug"] + ("-guest" if g["slug"] in base else "")
         bio = plain(g.get("bio"))
         same = [g[k] for k in ("linkedin_link", "twitter_link", "youtube_link", "instagram_link", "facebook_link", "threads_link", "bluesky_link", "mastodon_link", "tiktok_link", "twitch_link", "wikipedia_link", "imdb_link") if g.get(k)]
-        out.append({"id": i, "type": "person", "name": g["name"], "aliases": [], "desc": {"en": bio, "de": bio}, "web": g.get("website") or "", "same_as": same, "job": g.get("title") or "", "rel": [],
-                    "image": g.get("image_path") or "", "guest": True})
+        rec = {"id": i, "type": "person", "name": g["name"], "aliases": [], "desc": {"en": bio, "de": bio}, "web": g.get("website") or "", "same_as": same, "job": g.get("title") or "", "rel": [],
+               "image": g.get("image_path") or "", "guest": True}
+        for w in folded.get(i, []):   # nichts verlieren: Namen als Alias, rel-Kanten, Profile, Firma (Gast-Angaben gehen vor)
+            for a in [w.get("name")] + list(w.get("aliases") or []):
+                if a and a.strip() != rec["name"] and a not in rec["aliases"]: rec["aliases"].append(a)
+            for r in w.get("rel") or []:
+                if list(r) not in rec["rel"]: rec["rel"].append(list(r))
+            for u in w.get("same_as") or []:
+                if u not in rec["same_as"]: rec["same_as"].append(u)
+            for k in ("company", "web", "job"):
+                if w.get(k) and not rec.get(k): rec[k] = w[k]
+        out.append(rec)
     (D / "guest_entities.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
     return out
 
@@ -466,6 +481,10 @@ def redirect_table(eps, plist, guests, bposts, gmerge, baseids, LG, docs=None):
         oid = old + "-guest" if old in baseids else old
         for pre in [""] + [f"/{l}" for l in LG]:
             rd[f"{pre}/entity/{oid}"] = f"{pre}/entity/{new}/"
+    import site_learn as _SLN
+    for old, new in _SLN.entity_merges().items():   # zusammengefuehrte Entitaets-Dubletten (data/guest_merge.json "entities"): ebenso in allen Sprachpfaden
+        for pre in [""] + [f"/{l}" for l in LG]:
+            rd[f"{pre}/entity/{old}"] = f"{pre}/entity/{new}/"
     for old, new in extra_redirects().items():   # alte Adressen ohne Seite (data/redirects_extra.json); bestehende Eintraege gehen vor
         if old.strip("/").split("/")[0] in taken: clash.append(old); continue   # dort liegt inzwischen eine Seite: nicht wegleiten
         rd.setdefault(old, new)

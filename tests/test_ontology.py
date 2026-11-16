@@ -112,5 +112,55 @@ class Pruefung(unittest.TestCase):
         self.assertLess(len(open_), 25, f"{len(open_)} Regeltreffer noch nicht eingetragen: python tools/ontology_check.py --apply")
 
 
+class KiLauf(unittest.TestCase):
+    """tools/ontology_ai.py ohne Netz: Kategorie-Regel, robustes Lesen der Antwort, Weitermachen nach Fehler."""
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / "tools"))
+        import ontology_ai
+        cls.AI = ontology_ai
+
+    def test_begriff_nie_automatisch_unter_kategorie(self):
+        ents = [ent("ai-assistant", "AI assistant", "category"), ent("generative-ai", "Generative AI"),
+                ent("rag", "RAG"), ent("prompt", "Prompt")]
+        got = [{"id": "rag", "broader": "ai-assistant", "kind": "technique", "confidence": "high"},
+               {"id": "prompt", "broader": "generative-ai", "kind": "term", "confidence": "high"}]
+        done, cat = self.AI.apply_safe(ents, got)
+        by = {e["id"]: e for e in ents}
+        self.assertEqual(done, [("prompt", "generative-ai")])
+        self.assertEqual(cat, ["rag"])
+        self.assertEqual(by["rag"]["rel"], [])                       # keine Kante zur Kategorie
+        self.assertEqual(by["rag"]["kind"], "technique")              # die Art darf trotzdem gesetzt werden
+        self.assertEqual({s["id"]: s["status"] for s in got}, {"rag": "review", "prompt": "angewendet"})
+        self.assertEqual(got[0]["broader"], "ai-assistant")           # der Vorschlag bleibt zur Ansicht erhalten
+
+    def test_antwort_robust_lesen(self):
+        p = self.AI.parse_answer
+        self.assertEqual(p('[{"id": "a"}]'), [{"id": "a"}])
+        self.assertEqual(p('Hier [Liste]:\n```json\n[{"id": "a", "x": "[b]"}]\n```\nDanach [1, 2].'), [{"id": "a", "x": "[b]"}])
+        self.assertEqual(p('[{"id": "a"}] und noch [{"id": "b"}]'), [{"id": "a"}])   # gierige Regex haette beide Listen verschluckt
+        with self.assertRaises(ValueError):
+            p("keine Liste")
+        with self.assertRaises(ValueError):
+            p('[{"id": "a"')                                            # abgeschnittene Antwort
+
+    def test_nach_fehler_weitermachen_und_zaehlen(self):
+        items = [ent(f"c{i}", f"C{i}") for i in range(self.AI.PER_CALL * 3)]
+        calls = []
+
+        def fake(batch, ctext):
+            calls.append(batch[0]["id"])
+            if len(calls) == 1:
+                raise OSError("Netz weg")
+            if len(calls) == 2:
+                return "kaputt [", (100, 7)                               # bezahlt, aber unlesbar
+            return json.dumps([{"id": batch[0]["id"], "broader": None, "kind": "term", "confidence": "low"}, {"id": "fremd"}]), (50, 5)
+        got, errors, tokens = self.AI.collect(items, "", ask_fn=fake, pause=0)
+        self.assertEqual(len(calls), 3)                                  # nicht nach dem ersten Fehler abgebrochen
+        self.assertEqual(errors, 2)
+        self.assertEqual(tokens, (150, 12))                              # tatsaechliche Token aus usage, auch fuer den unlesbaren Aufruf
+        self.assertEqual([s["id"] for s in got], [f"c{self.AI.PER_CALL * 2}"])   # nur ids aus dem eigenen Block
+
+
 if __name__ == "__main__":
     unittest.main()

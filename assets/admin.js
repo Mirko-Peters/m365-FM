@@ -28,7 +28,7 @@
   function api(p, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign({ "x-requested-with": "m365" }, o.headers || {}); if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(API + p, o).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { s: r.status, j: j }; }); }); }
   var TYPES = { product: "Produkt", platform: "Plattform", concept: "Konzept", org: "Firma", person: "Person", cert: "Zertifikat", event: "Event", media: "Medium", category: "Kategorie" };
   var ERR = { bad_name: "Name zu kurz", bad_type: "Typ fehlt", too_short: "Kurzbeschreibung fehlt (mindestens 20 Zeichen in Englisch oder Deutsch)", too_long: "Kurzbeschreibung zu lang (höchstens 300 Zeichen)", bad_url: "Eine Adresse ist ungültig (nur https, Docs nur microsoft.com, azure.com oder github.com)", bad_qid: "Wikidata-ID muss wie Q12345 aussehen", bad_relation: "Eine Beziehung zeigt auf eine unbekannte Entität", unchanged: "Nichts geändert", rate_limit: "Zu viele Änderungen in kurzer Zeit, bitte später", login: "Bitte anmelden", forbidden: "Nur für Admins", email_required: "Kein verifizierter E-Mail-Empfang für diese Person hinterlegt.", mail_off: "E-Mail-Versand ist nicht verfügbar; die Anfrage bleibt offen." };
-  var tabs = [["ov", "Übersicht"], ["fr", "Freigaben"], ["sponsor", "Sponsor-Anfragen"], ["slinks", "Sponsorlinks"], ["ads", "Werbung"], ["mk", "Mediadaten-Anfragen"], ["tr", "Übersetzungen"], ["sq", "Suche"], ["ent", "Entitäten"], ["li", "LinkedIn-Events"], ["mem", "Mitglieder"], ["elog", "Redaktions-Protokoll"], ["db", "Datenbank"], ["spurls", "Spreaker-Adressen"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
+  var tabs = [["ov", "Übersicht"], ["fr", "Freigaben"], ["sponsor", "Sponsor-Anfragen"], ["slinks", "Sponsorlinks"], ["ads", "Werbung"], ["mk", "Mediadaten-Anfragen"], ["hw", "Hardware-Anfragen"], ["tr", "Übersetzungen"], ["sq", "Suche"], ["ent", "Entitäten"], ["li", "LinkedIn-Events"], ["mem", "Mitglieder"], ["elog", "Redaktions-Protokoll"], ["db", "Datenbank"], ["spurls", "Spreaker-Adressen"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
   var LANGN = { de: "Deutsch", fr: "Französisch", es: "Spanisch", it: "Italienisch", nl: "Niederländisch", pt: "Portugiesisch", pl: "Polnisch", id: "Indonesisch", ru: "Russisch", uk: "Ukrainisch", ar: "Arabisch", he: "Hebräisch", ja: "Japanisch", ko: "Koreanisch", en: "Englisch" };
   var KINDN = { lblog: "Blog-Artikel", blog: "Blog (Community)", podcast: "Podcast", video: "Video", notes: "Show Notes", entity: "Entität", article: "Video-Artikel", episode: "Folge (Hauptshow)", page: "Seite" };
   // Uebersetzungen: Arten ohne Vormerken (der Haiku-Abarbeiter im Worker kennt sie nicht, der Server nimmt sie nicht an) mit dem Grund; Hinweis je Art unter der Filterzeile
@@ -104,6 +104,7 @@
         p.appendChild(h("button", { type: "button", class: "btn", text: "Zuordnung jetzt übernehmen", onclick: function (ev) { ev.target.disabled = true; api("/api/admin/panel/episode-urls/import", { method: "POST", body: {} }).then(function () { LOAD.spurls(); }); } })); }); },
     ads: function () { adsAdmin(); },
     mk: function () { mediakitLeads(); },
+    hw: function () { hardwareLeads(); },
     db: function () { overview(function (o) { var p = panes.db, d = o.db, m = h("p", { class: "adm-msg" }); p.textContent = "";
       p.appendChild(h("h2", { text: "Umzug in die Datenbank" }));
       var miss = d.entities_file == null ? null : Math.max(0, d.entities_file - (d.entities_db || 0));
@@ -285,6 +286,51 @@
     p.append(h("h2", { text: "Mediadaten-Anfragen (Leads)" }), h("p", { class: "mut", text: "Personenbezogene Daten, nur für Admins. Neueste zuerst, höchstens 200. Werbe-Anfragen der Banner-Formulare stehen im Reiter Werbung unter Leads." }), filter, " ", stFilter, " ", csvBtn, " ", count, counts, msgEl,
       h("div", { style: "overflow-x:auto" }, [h("table", { class: "adm-tbl" }, [h("thead", {}, [h("tr", {}, COLS.map(function (c) { return h("th", { text: c }); }))]), body])]));
     api("/api/admin/mediakit").then(function (r) {
+      if (r.s !== 200) { msg(msgEl, ERR[(r.j || {}).error] || "Fehler " + r.s, true); return; }
+      rows = (r.j.items || []).slice().sort(function (a, b) { return (b.created || 0) - (a.created || 0) || (b.id || 0) - (a.id || 0); }); view();
+    });
+  }
+
+  // Hardware-Sponsoring (/hardware/): Bewerbungen von Herstellern; eigener Status-Satz (zugesagt, Gerät da, Test online, abgelehnt), sonst wie die Mediadaten-Leads
+  var HW_ST = [["open", "offen", "#fde68a", "#5b4300"], ["committed", "zugesagt", "#bfdbfe", "#0b2e66"], ["received", "Gerät da", "#e9d5ff", "#3b0764"], ["published", "Test online", "#bbf7d0", "#0b4a1f"], ["declined", "abgelehnt", "#fecaca", "#6b1111"]];
+  var HW_CAT = { headset: "Headset", camera: "Kamera", rooms: "Teams Rooms", pc: "PC / Laptop", dock: "Dockingstation", monitor: "Monitor", key: "Security-Key", other: "Sonstiges" };
+  var HW_OFFER = { giveaway: "Gewinnspiel", video: "Video", podcast: "Podcast-Folge" };
+  function hwSt(k) { for (var i = 0; i < HW_ST.length; i++) if (HW_ST[i][0] === k) return HW_ST[i]; return HW_ST[0]; }
+  function hwBadge(k) { var o = hwSt(k); return h("span", { class: "adm-badge", "data-status": o[0], style: "display:inline-block;padding:.1em .6em;border-radius:1em;font-size:.85em;white-space:nowrap;background:" + o[2] + ";color:" + o[3], text: o[1] }); }
+  function hardwareLeads() {
+    var p = panes.hw, rows = [], HWU = "/api/admin/hardware", COLS = ["Datum", "Firma", "Kontakt", "Produkt", "Kategorie", "Menge", "Versand bis", "Angebote", "Status", "Ändern", ""];
+    var filter = h("input", { type: "search", "aria-label": "Bewerbungen filtern", placeholder: "Filter (Firma, Produkt, E-Mail)" }), msgEl = h("p", { class: "adm-msg" }), count = h("span", { class: "mut" });
+    var stFilter = h("select", { "aria-label": "Status filtern" }), body = h("tbody"), counts = h("div");
+    [["", "Alle Status"]].concat(HW_ST).forEach(function (o) { stFilter.appendChild(h("option", { value: o[0], text: o[1] })); });
+    function day(t) { return t ? new Date(t * 1000).toISOString().slice(0, 10) : ""; }
+    function statusSel(x) {
+      var sel = h("select", { "aria-label": "Status für " + x.company }); HW_ST.forEach(function (o) { var op = h("option", { value: o[0], text: o[1] }); if (hwSt(x.status)[0] === o[0]) op.selected = true; sel.appendChild(op); });
+      sel.addEventListener("change", function () { var old = x.status; sel.disabled = true;
+        api(HWU, { method: "POST", body: { action: "status", id: x.id, status: sel.value } }).then(function (r) { sel.disabled = false;
+          if (r.s === 200) { x.status = sel.value; var ml = (r.j || {}).mail; if (ml === "sent") x.accept_sent = 1; view(); if (ml) msg(msgEl, ml === "sent" ? "Zusage-Mail mit deiner Adresse wurde gesendet." : ml === "already" ? "Zusage-Mail war schon gesendet." : "Zusage-Mail konnte NICHT gesendet werden (" + ml + "). Bitte selbst schreiben.", ml !== "sent" && ml !== "already"); } else { sel.value = hwSt(old)[0]; msg(msgEl, "Status konnte nicht gespeichert werden (" + ((r.j || {}).error || r.s) + ")", true); } }); });
+      return sel;
+    }
+    function view() {
+      var q = filter.value.trim().toLowerCase();
+      var list = rows.filter(function (x) { return (!q || [x.name, x.company, x.email, x.product, x.message].join(" ").toLowerCase().indexOf(q) >= 0) && (!stFilter.value || hwSt(x.status)[0] === stFilter.value); });
+      var n = {}; rows.forEach(function (x) { var k = hwSt(x.status)[0]; n[k] = (n[k] || 0) + 1; });
+      counts.textContent = ""; counts.appendChild(h("p", { class: "mut" }, HW_ST.map(function (o) { return h("span", { style: "margin-right:.8em" }, [hwBadge(o[0]), " " + (n[o[0]] || 0)]); })));
+      body.textContent = "";
+      list.forEach(function (x) {
+        var offers = String(x.offers || "").split(",").filter(Boolean).map(function (o) { return HW_OFFER[o] || o; }).join(", ") || "–";
+        var prod = h("td", {}, [h("a", { href: x.product_url, target: "_blank", rel: "noopener noreferrer", text: x.product })]);
+        if (x.message) prod.appendChild(h("div", { class: "mut", style: "white-space:pre-wrap", text: x.message }));
+        body.appendChild(h("tr", {}, [h("td", { text: day(x.created) }), h("td", { text: x.company }), h("td", {}, [x.name + " ", h("a", { href: mailto(x.email), text: x.email })]), prod,
+          h("td", { text: HW_CAT[x.category] || x.category }), h("td", { text: String(x.quantity) }), h("td", { text: x.ship_by || "–" }), h("td", { text: offers }), h("td", {}, [hwBadge(x.status)]), h("td", {}, [statusSel(x)]),
+          h("td", {}, [leadDelete(x, HWU, msgEl, function () { rows = rows.filter(function (y) { return y.id !== x.id; }); view(); })])]));
+      });
+      count.textContent = list.length + " von " + rows.length;
+    }
+    filter.oninput = view; stFilter.onchange = view;
+    p.textContent = "";
+    p.append(h("h2", { text: "Hardware-Anfragen (Sponsoring)" }), h("p", { class: "mut", text: "Hersteller, die ein Gerät für einen unabhängigen Test anbieten. Personenbezogene Daten, nur für Admins. Neueste zuerst, höchstens 200. Die Bewerbung enthält die Zusage zum kostenlosen Versand." }), filter, " ", stFilter, " ", count, counts, msgEl,
+      h("div", { style: "overflow-x:auto" }, [h("table", { class: "adm-tbl" }, [h("thead", {}, [h("tr", {}, COLS.map(function (c) { return h("th", { text: c }); }))]), body])]));
+    api(HWU).then(function (r) {
       if (r.s !== 200) { msg(msgEl, ERR[(r.j || {}).error] || "Fehler " + r.s, true); return; }
       rows = (r.j.items || []).slice().sort(function (a, b) { return (b.created || 0) - (a.created || 0) || (b.id || 0) - (a.id || 0); }); view();
     });

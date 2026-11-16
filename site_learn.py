@@ -426,22 +426,43 @@ def _fetch_json(url, timeout=120):
 SRC_ENTS = {}   # T30: Entitaeten aus data/*.json ohne D1-Ueberlagerung (der Worker gleicht sie mit D1 ab)
 
 
-def merged_ids():
-    """Entitaets-ids zusammengefuehrter Gaeste (data/guest_merge.json "merge": alter Slug -> Ziel). Die alte Adresse /entity/<id>/
-    leitet weiter (site_podpage.redirect_table: id = Slug, bei Kollision mit data/entities.json Slug-guest); D1 kennt die alten ids
-    aus der Zeit vor dem Zusammenfuehren noch."""
+def entity_merges():
+    """Zusammengefuehrte Entitaets-Dubletten jeder Art (data/guest_merge.json "entities": alte Kennung -> {to, why, replaced, was}) als {alt: Ziel}.
+    Wirkung wie bei zusammengefuehrten Gaesten: 301 von /entity/<alt>/ in allen Sprachen (site_podpage.redirect_table), keine Seite (merged_ids)."""
+    try:
+        ent = json.loads((Path(__file__).parent / "data" / "guest_merge.json").read_text("utf-8")).get("entities") or {}
+    except (OSError, ValueError):
+        return {}
+    out = {}
+    for old, v in ent.items():
+        to = v.get("to") if isinstance(v, dict) else v
+        if to and to != old:
+            out[old] = to
+    return out
+
+
+def merge_targets():
+    """Alle alten Entitaets-ids -> Ziel: zusammengefuehrte Gaeste (data/guest_merge.json "merge": alter Slug -> Ziel; id = Slug, bei Kollision mit
+    data/entities.json Slug-guest) und Entitaets-Dubletten ("entities"). Die alte Adresse /entity/<id>/ leitet weiter (site_podpage.redirect_table);
+    D1 kennt die alten ids aus der Zeit vor dem Zusammenfuehren noch."""
     d = Path(__file__).parent / "data"
     try:
         merge = json.loads((d / "guest_merge.json").read_text("utf-8")).get("merge") or {}
         baseids = {e["id"] for e in json.loads((d / "entities.json").read_text("utf-8"))}
     except (OSError, ValueError):
-        return set()
-    out = set()
+        return {}
+    out = {}
     for old, new in merge.items():
         oid = old + "-guest" if old in baseids else old
         if oid != new:
-            out.add(oid)
+            out[oid] = new
+    out.update(entity_merges())
     return out
+
+
+def merged_ids():
+    """Alte Entitaets-ids (merge_targets): keine eigene Seite, die D1-Fassung wird beim Laden uebersprungen."""
+    return set(merge_targets())
 
 
 def load_entities(api):
@@ -459,7 +480,11 @@ def load_entities(api):
         for e in json.loads(sf.read_text("utf-8")):
             base.setdefault(e["id"], e)
     SRC_ENTS.clear(); SRC_ENTS.update({k: dict(v) for k, v in base.items()})   # T30: reine Repo-Fassung (vor D1) fuer /entities-src.json
-    gone = merged_ids()
+    moved = merge_targets()
+    for old, new in moved.items():   # zusammengefuehrt: der Worker-Abgleich (syncEntitiesFromSite) setzt in der D1-Fassung der alten id replaced_by/outdated
+        if old not in base:          # (wie das Bearbeiten-Formular) - dann ueberspringen sie Auto-Uebersetzung, MCP-Suche, SEO und Events; die Zeile bleibt erhalten
+            SRC_ENTS[old] = {"id": old, "outdated": True, "replaced_by": new}
+    gone = set(moved)
     over = (_fetch_json(f"{api}/api/entity/export") or {}).get("items", [])
     for it in over:
         d = it.get("data") or {}
