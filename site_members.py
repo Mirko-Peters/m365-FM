@@ -70,6 +70,17 @@ def strip_private_items(j):
     return j
 
 
+def repo_copy(j):
+    """Fassung fuer data/members_export.json (liegt im oeffentlichen Git-Repo und bleibt dort in der Historie): ohne Kontakt- und Adressdaten
+    der Personen (contact: E-Mail, Telefon, Strasse, PLZ, Ort). Die Seiten dieses Baus nutzen den frischen Export; faellt er aus, entstehen die
+    Profilseiten aus dieser Kopie ohne Kontaktzeile. Was ein Mitglied spaeter zuruecknimmt oder loescht, steht so nie dauerhaft im Repo."""
+    out = dict(j)
+    out["people"] = [{**x, "contact": {}} if isinstance(x, dict) and "contact" in x else x for x in (j.get("people") or [])]
+    for x in out["people"]:
+        if isinstance(x, dict): x.pop("private", None)
+    return out
+
+
 def public_orgs(orgs):
     """Unbeanspruchte Firmen (Paar aus einer Entitaet, noch ohne Inhaber, orgs.unclaimed=1) bekommen KEINE eigene Seite: die Entitaetsseite
     ist die einzige oeffentliche Seite (kein Duplikat). Der Export liefert sie schon nicht mehr aus (claimed=false); der Filter sichert aeltere
@@ -92,7 +103,7 @@ def fetch_members(api):
     if (j and j.get("people")) or empty:
         j = strip_private_items(j); state = "frisch" if live else "cache"
         try:
-            CACHE.write_text(json.dumps(j, ensure_ascii=False), encoding="utf-8")
+            CACHE.write_text(json.dumps(repo_copy(j), ensure_ascii=False), encoding="utf-8")
         except Exception:
             pass
     elif CACHE.exists():
