@@ -113,25 +113,44 @@ def _run_page(search, status=200, body="{}"):
 
 
 def test_callback_spreaker_admin_zeigt_den_verschluesselten_text():
-    r = _run_page("?code=abc123&state=spreaker", 200, json.dumps({"enc": "gAAAAAtest"}))
+    r = _run_page("?code=abc123&state=spreaker.Nonce_123-abc", 200, json.dumps({"enc": "gAAAAAtest"}))
     assert len(r["calls"]) == 1
     call = r["calls"][0]
     assert call["u"] == "https://api-dub.m365.fm/api/admin/spreaker-exchange"
     assert call["o"]["credentials"] == "include" and call["o"]["headers"]["x-requested-with"] == "m365" and call["o"]["method"] == "POST"
-    assert json.loads(call["o"]["body"]) == {"code": "abc123"}
+    assert json.loads(call["o"]["body"]) == {"code": "abc123", "state": "spreaker.Nonce_123-abc"}   # state geht mit, der Worker prueft ihn gegen sein Cookie
     assert r["c"] == "gAAAAAtest" and r["copied"] == ["gAAAAAtest"] and r["b"] == "inline-block"
     assert r["h"] == CB.HINT and r["replaced"]
 
 
-def test_callback_spreaker_ohne_admin_zeigt_grund_und_code():
-    r = _run_page("?code=abc123&state=spreaker", 401, json.dumps({"error": "login"}))
-    assert "Nicht angemeldet" in r["e"] and r["c"] == "abc123" and r["copied"] == ["abc123"]
-    r = _run_page("?code=abc123&state=spreaker-x", 403, json.dumps({"error": "forbidden"}))
-    assert "Kein Admin" in r["e"] and r["c"] == "abc123"
-    r = _run_page("?code=abc123&state=spreaker", 400, json.dumps({"error": "invalid_grant", "detail": "expired"}))
-    assert "invalid_grant" in r["e"] and "expired" in r["e"] and r["c"] == "abc123"
-    r = _run_page("?code=abc123&state=spreaker", 0)
-    assert "nicht erreichbar" in r["e"] and r["c"] == "abc123"
+_USABLE = "Der Code läuft nach ca. 30 Sekunden ab"
+_USED = "Der Code ist verbraucht – bitte über https://api-dub.m365.fm/auth/spreaker/start neu verbinden."
+
+
+def test_callback_spreaker_code_noch_nutzbar_zeigt_grund_und_code():
+    # 401/403/Netzfehler (und Pruefungen vor dem Spreaker-Aufruf): der Code war nie bei Spreaker -> wie bisher anbieten
+    for st, status, body, why in (("spreaker.n1", 401, {"error": "login"}, "Nicht angemeldet"),
+                                  ("spreaker-x", 403, {"error": "forbidden"}, "Kein Admin"),
+                                  ("spreaker.n1", 0, None, "nicht erreichbar"),
+                                  ("spreaker.n1", 429, {"error": "rate"}, "rate"),
+                                  ("spreaker.n1", 400, {"error": "bad_request"}, "bad_request")):
+        r = _run_page(f"?code=abc123&state={st}", status, json.dumps(body or {}))
+        assert why in r["e"] and _USABLE in r["e"] and "verbraucht" not in r["e"], (status, r)
+        assert r["c"] == "abc123" and r["copied"] == ["abc123"] and r["b"] == "inline-block"
+
+
+def test_callback_spreaker_code_verbraucht_kein_code_nur_neu_verbinden():
+    # Der Worker hat den Code schon an Spreaker geschickt (oder state passt nicht): Code NICHT anbieten, nur den Neustart-Weg nennen
+    for status, body, why in ((400, {"error": "invalid_grant", "detail": "expired"}, "invalid_grant – expired"),
+                              (502, {"error": "spreaker_503", "detail": "bad gateway"}, "spreaker_503"),
+                              (502, {"error": "spreaker_unreachable"}, "spreaker_unreachable"),
+                              (502, {"error": "no_refresh_token"}, "no_refresh_token"),
+                              (502, {"error": "no_access_token"}, "no_access_token"),
+                              (400, {"error": "state_mismatch"}, "passt nicht zu dieser Anmeldung")):
+        r = _run_page("?code=abc123&state=spreaker.n1", status, json.dumps(body))
+        assert why in r["e"] and r["e"].endswith(_USED) and _USABLE not in r["e"], (body, r)
+        assert r["c"] == "" and r["b"] != "inline-block" and r["copied"] == [] and "abc123" not in r["e"] + r["m"]
+        assert r["m"] == "Spreaker nicht verbunden."
 
 
 def test_callback_youtube_und_ohne_state_unveraendert():

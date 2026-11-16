@@ -1,11 +1,11 @@
 // Spreaker verbinden ueber den Worker (spreaker_connect.js): Fernet exakt wie spreaker_auth.py (cryptography.fernet), Route nur fuer Admins,
-// Klartext-Token nie in der Antwort, in Staging gesperrt, Start-Link mit state=spreaker.
+// Klartext-Token nie in der Antwort, in Staging gesperrt, Start-Link mit state=spreaker.<nonce> und signiertem Cookie m365sp (Login-CSRF-Schutz).
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import W from "../src/index.js";
 import { makeSession } from "../src/util.js";
-import { fernetEncrypt, fernetDecrypt, spreakerKey, handleSpreakerExchange, cleanDetail, SPREAKER_TOKEN_URL } from "../src/spreaker_connect.js";
+import { fernetEncrypt, fernetDecrypt, spreakerKey, handleSpreakerExchange, cleanDetail, spreakerStart, spreakerStateOk, SPREAKER_TOKEN_URL } from "../src/spreaker_connect.js";
 import { STAGING_STRIPPED } from "../src/staging.js";
 
 const API = "https://api-dub.m365.fm", SITE = "https://www.m365.fm";
@@ -65,13 +65,23 @@ globalThis.fetch = async (input, init) => {
   return realFetch(input, init);
 };
 
-async function call(env, uid, method, path, body, headers = {}) {
-  const h = { "x-requested-with": "m365", origin: SITE, ...(uid ? { cookie: `m365s=${await makeSession(env, uid)}` } : {}), ...(body ? { "content-type": "application/json" } : {}), ...headers };
+async function call(env, uid, method, path, body, headers = {}, more = "") {
+  const ck = [uid ? `m365s=${await makeSession(env, uid)}` : "", more].filter(Boolean).join("; ");
+  const h = { "x-requested-with": "m365", origin: SITE, ...(ck ? { cookie: ck } : {}), ...(body ? { "content-type": "application/json" } : {}), ...headers };
   const r = await W.fetch(new Request(API + path, { method, headers: h, body: body ? JSON.stringify(body) : undefined, redirect: "manual" }), env, { waitUntil() {} });
   const text = await r.text();
   let j = null; try { j = JSON.parse(text); } catch { /* HTML */ }
   return { s: r.status, j, text, h: r.headers };
 }
+
+// /auth/spreaker/start als Admin uid: liefert state aus dem Spreaker-Link und das Cookie m365sp (Name=Wert) wie der Browser es zurueckschickt
+async function start(env, uid = 1) {
+  const r = await call(env, uid, "GET", "/auth/spreaker/start");
+  assert.equal(r.s, 302);
+  const sc = r.h.get("set-cookie") || "";
+  return { state: new URL(r.h.get("location")).searchParams.get("state"), ck: sc.split(";")[0], sc };
+}
+const sp = async (env, code, st, uid = 1) => call(env, uid, "POST", "/api/admin/spreaker-exchange", { code, state: st.state }, {}, st.ck);
 
 test("exchange: ohne Anmeldung 401, ohne Admin 403, ohne x-requested-with 400 - Spreaker wird nie gefragt", async () => {
   const { env } = await mk(); calls = [];
@@ -85,8 +95,10 @@ test("exchange: ohne Anmeldung 401, ohne Admin 403, ohne x-requested-with 400 - 
 
 test("exchange: Admin bekommt nur {enc}; Klartext-Token nicht in der Antwort; enc entschluesselt die Tokens", async () => {
   const { env, raw } = await mk(); calls = [];
-  const r = await call(env, 1, "POST", "/api/admin/spreaker-exchange", { code: "https://www.m365.fm/callback?code=abc123XYZ&state=spreaker" });
+  const st = await start(env);
+  const r = await sp(env, "https://www.m365.fm/callback?code=abc123XYZ&state=" + st.state, st);
   assert.equal(r.s, 200);
+  assert.equal(r.h.get("set-cookie"), "m365sp=; Max-Age=0; Path=/; HttpOnly; Secure; SameSite=Lax", "state-Cookie nach dem Tausch geloescht");
   assert.deepEqual(Object.keys(r.j), ["enc"]);
   assert.ok(!r.text.includes("AT-live-secret") && !r.text.includes("RT-live-secret") && !r.text.includes(SECRET));
   assert.equal(r.h.get("cache-control"), "no-store");
@@ -104,19 +116,39 @@ test("exchange: Admin bekommt nur {enc}; Klartext-Token nicht in der Antwort; en
 });
 
 test("exchange: Spreaker-Fehler als {error, detail} (400 bzw. 502), ohne Geheimnisse", async () => {
-  const { env } = await mk();
+  const { env } = await mk(); const st = await start(env);
   reply = () => new Response(JSON.stringify({ error: "invalid_grant", error_description: `The authorization code has expired (client ${SECRET})` }), { status: 400 });
-  let r = await call(env, 1, "POST", "/api/admin/spreaker-exchange", { code: "abc123" });
+  let r = await sp(env, "abc123", st);
   assert.equal(r.s, 400); assert.equal(r.j.error, "invalid_grant");
+  assert.match(r.h.get("set-cookie") || "", /^m365sp=; Max-Age=0/, "Code ist verbraucht: state-Cookie weg");
   assert.match(r.j.detail, /expired/); assert.ok(!r.text.includes(SECRET));
   reply = () => new Response("<html>bad gateway</html>", { status: 503 });
-  r = await call(env, 1, "POST", "/api/admin/spreaker-exchange", { code: "abc123" });
+  r = await sp(env, "abc123", st);
   assert.equal(r.s, 502); assert.equal(r.j.error, "spreaker_503");
   reply = () => new Response(JSON.stringify({ access_token: "AT-only" }), { status: 200 });
-  r = await call(env, 1, "POST", "/api/admin/spreaker-exchange", { code: "abc123" });
+  r = await sp(env, "abc123", st);
   assert.equal(r.s, 502); assert.equal(r.j.error, "no_refresh_token"); assert.ok(!r.text.includes("AT-only"));
-  assert.equal((await call(env, 1, "POST", "/api/admin/spreaker-exchange", { code: "<script>" })).j.error, "bad_code");
+  assert.equal((await sp(env, "<script>", st)).j.error, "bad_code");
   reply = () => new Response(JSON.stringify({ access_token: "AT-live-secret", refresh_token: "RT-live-secret" }));
+});
+
+test("exchange: state muss zum Cookie passen (sonst 400 state_mismatch, Spreaker wird nicht gefragt, Cookie bleibt)", async () => {
+  const { env } = await mk(); calls = [];
+  const st = await start(env), other = await start(env);
+  const bad = async (state, ck, uid = 1) => {
+    const r = await call(env, uid, "POST", "/api/admin/spreaker-exchange", { code: "abc123", ...(state === undefined ? {} : { state }) }, {}, ck);
+    assert.equal(r.s, 400, String(state)); assert.equal(r.j.error, "state_mismatch"); assert.equal(r.h.get("set-cookie"), null);
+  };
+  await bad(undefined, st.ck);                          // alte Seite ohne state
+  await bad("spreaker", st.ck);                         // nur Praefix (frueheres festes state)
+  await bad(st.state, "");                              // kein Cookie (fremder Browser / untergeschobener Code)
+  await bad(other.state, st.ck);                        // state aus einem anderen Start
+  await bad(st.state, st.ck.replace(/.$/, (c) => (c === "A" ? "B" : "A")));   // Signatur manipuliert
+  const [k, v] = st.ck.split("="), dot = v.lastIndexOf("."), [n, , e] = v.slice(0, dot).split("|");
+  await bad(st.state, `${k}=${n}|2|${e}${v.slice(dot)}`);   // uid getauscht -> Signatur passt nicht
+  assert.equal(calls.length, 0);
+  const ok = await sp(env, "abc123", st); assert.equal(ok.s, 200, ok.text);   // der echte Ablauf klappt danach noch (vor den Staging-Tests: die sperren fetch global)
+  assert.equal(calls.length, 1);
 });
 
 test("exchange: ohne Client-Zugang 503, per MCP-Token nie", async () => {
@@ -137,7 +169,7 @@ test("exchange und Start in Staging gesperrt, Client-Zugang dort gar nicht sicht
   assert.equal(calls.length, 0);
 });
 
-test("/auth/spreaker/start: nur Admin, leitet mit state=spreaker auf Spreaker", async () => {
+test("/auth/spreaker/start: nur Admin, leitet mit state=spreaker.<nonce> auf Spreaker und setzt das signierte Cookie", async () => {
   const { env } = await mk();
   assert.equal((await call(env, 0, "GET", "/auth/spreaker/start")).s, 403);
   assert.equal((await call(env, 2, "GET", "/auth/spreaker/start")).s, 403);
@@ -145,7 +177,27 @@ test("/auth/spreaker/start: nur Admin, leitet mit state=spreaker auf Spreaker", 
   assert.equal(r.s, 302);
   const u = new URL(r.h.get("location"));
   assert.equal(u.origin + u.pathname, "https://www.spreaker.com/oauth2/authorize");
-  assert.deepEqual(Object.fromEntries(u.searchParams), { client_id: CID, response_type: "code", scope: "basic", state: "spreaker", redirect_uri: "https://www.m365.fm/callback" });
+  const { state, ...rest } = Object.fromEntries(u.searchParams);
+  assert.deepEqual(rest, { client_id: CID, response_type: "code", scope: "basic", redirect_uri: "https://www.m365.fm/callback" });
+  assert.match(state, /^spreaker\.[A-Za-z0-9_-]{20,}$/);
   assert.ok(!r.h.get("location").includes(SECRET));
+  const sc = r.h.get("set-cookie");
+  assert.match(sc, /^m365sp=[^;]+; Max-Age=600; Path=\/; HttpOnly; Secure; SameSite=Lax$/);   // Lax: www.m365.fm -> api-dub.m365.fm ist same-site, fetch schickt es mit
+  assert.ok(sc.includes(state.slice("spreaker.".length) + "|1|"), "Cookie enthaelt Nonce und Admin");
+  const r2 = await call(env, 1, "GET", "/auth/spreaker/start");
+  assert.notEqual(new URL(r2.h.get("location")).searchParams.get("state"), state, "jedes Mal ein neues Nonce");
   assert.equal((await call((await mk({ ENVIRONMENT: "staging" })).env, 1, "GET", "/auth/spreaker/start")).s, 403);   // index.js-Handler direkt: auch ohne stagingEnv gesperrt
+});
+
+test("spreakerStateOk: Nonce, Nutzer, Ablauf und Signatur", async () => {
+  const env = { SESSION_SECRET: "test-secret-0123456789", SPREAKER_CLIENT_ID: CID };
+  const t0 = 1700000000, o = await spreakerStart(env, 7, t0);
+  const state = new URL(o.location).searchParams.get("state"), ck = o.setCookie.split(";")[0];
+  const req = (c) => new Request(API + "/x", { headers: c ? { cookie: c } : {} });
+  assert.equal(await spreakerStateOk(env, req("a=1; " + ck + "; b=2"), 7, state, t0 + 10), true);
+  assert.equal(await spreakerStateOk(env, req(ck), 8, state, t0 + 10), false, "anderer Admin");
+  assert.equal(await spreakerStateOk(env, req(ck), 7, state, t0 + 601), false, "abgelaufen");
+  assert.equal(await spreakerStateOk({ ...env, SESSION_SECRET: "anderes-secret-0123456" }, req(ck), 7, state, t0 + 10), false, "fremde Signatur");
+  assert.equal(await spreakerStateOk(env, req(ck), 7, state + "x", t0 + 10), false);
+  assert.equal(await spreakerStateOk(env, req(""), 7, state, t0 + 10), false);
 });

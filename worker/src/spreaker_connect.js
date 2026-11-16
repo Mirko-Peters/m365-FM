@@ -3,13 +3,20 @@
 // POST /api/admin/spreaker-exchange. Der Worker tauscht ihn bei Spreaker und gibt nur einen Fernet-Text zurueck, verschluesselt wie spreaker_auth.py
 // (Schluessel = sha256("m365dub|" + SPREAKER_CLIENT_SECRET)). Diesen Text fuegt Mirko im Workflow "Spreaker verbinden (einmalig)" ein; er laeuft nicht ab.
 // Klartext-Token verlassen den Worker nie und werden nie protokolliert. In Staging gesperrt (staging.js).
+// Login-CSRF-Schutz: /auth/spreaker/start setzt state=spreaker.<nonce> und das signierte HttpOnly-Cookie m365sp (600 s, an den Admin gebunden);
+// der Tausch laeuft nur, wenn der mitgeschickte state zu diesem Cookie passt. So kann niemand einem angemeldeten Admin einen fremden Spreaker-Code
+// unterschieben. SameSite=Lax genuegt: www.m365.fm und api-dub.m365.fm sind same-site (gleiche registrierbare Domain m365.fm), der fetch mit
+// credentials:"include" schickt Lax-Cookies mit (wie die Sitzung m365s).
 import { isStaging } from "./staging.js";
-import { audit, rateLimit } from "./util.js";
+import { audit, rateLimit, cookie, sign, verify, randomToken } from "./util.js";
 
 export const SPREAKER_TOKEN_URL = "https://api.spreaker.com/oauth2/token";
 export const SPREAKER_AUTHORIZE_URL = "https://www.spreaker.com/oauth2/authorize";
 export const SPREAKER_REDIRECT = "https://www.m365.fm/callback";
-export const SPREAKER_STATE = "spreaker";   // die Rueckleitungsseite erkennt daran, dass sie den Code sofort an den Worker schicken soll
+export const SPREAKER_STATE = "spreaker";   // Praefix von state; die Rueckleitungsseite erkennt daran, dass sie den Code sofort an den Worker schicken soll
+export const SPREAKER_COOKIE = "m365sp";
+export const SPREAKER_STATE_TTL = 600;
+const STATE_RE = /^spreaker\.([A-Za-z0-9_-]{16,64})$/;
 
 const enc = new TextEncoder();
 
@@ -55,9 +62,26 @@ export async function fernetDecrypt(key, token) {
   return new TextDecoder().decode(await crypto.subtle.decrypt({ name: "AES-CBC", iv: body.slice(9, 25) }, aes, body.slice(25)));
 }
 
-export function spreakerAuthorizeUrl(env) {
-  const q = new URLSearchParams({ client_id: env.SPREAKER_CLIENT_ID, response_type: "code", scope: "basic", state: SPREAKER_STATE, redirect_uri: SPREAKER_REDIRECT });
+export function spreakerAuthorizeUrl(env, state = SPREAKER_STATE) {
+  const q = new URLSearchParams({ client_id: env.SPREAKER_CLIENT_ID, response_type: "code", scope: "basic", state, redirect_uri: SPREAKER_REDIRECT });
   return `${SPREAKER_AUTHORIZE_URL}?${q}`;
+}
+
+// Start: zufaelliges Nonce, state=spreaker.<nonce>, Cookie m365sp = nonce|uid|ablauf.signatur (Muster wie m365o in oauthStart, index.js)
+export async function spreakerStart(env, uid, now = Math.floor(Date.now() / 1000)) {
+  const nonce = randomToken(16), val = `${nonce}|${uid}|${now + SPREAKER_STATE_TTL}`;
+  return { location: spreakerAuthorizeUrl(env, `${SPREAKER_STATE}.${nonce}`), setCookie: cookie(SPREAKER_COOKIE, `${val}.${await sign(env.SESSION_SECRET, "spreaker|" + val)}`, SPREAKER_STATE_TTL) };
+}
+
+// passt state (aus dem Body) zum signierten Cookie dieses Admins und ist es noch gueltig?
+export async function spreakerStateOk(env, request, uid, state, now = Math.floor(Date.now() / 1000)) {
+  const m = STATE_RE.exec(String(state || ""));
+  const c = /(?:^|;\s*)m365sp=([^;]+)/.exec(request.headers.get("cookie") || "");
+  if (!m || !c || !env.SESSION_SECRET) return false;
+  const dot = c[1].lastIndexOf("."), val = c[1].slice(0, dot);
+  if (dot < 1 || !(await verify(env.SESSION_SECRET, "spreaker|" + val, c[1].slice(dot + 1)))) return false;
+  const [nonce, cu, exp] = val.split("|");
+  return nonce === m[1] && +cu === +uid && +exp >= now;
 }
 
 // Fehlertext von Spreaker fuer die Anzeige: kurz, eine Zeile, ohne Geheimnisse (Client-Secret/-ID, Code, Token-artige Zeichenketten)
@@ -68,7 +92,7 @@ export function cleanDetail(text, secrets = []) {
   return s.slice(0, 200);
 }
 
-// POST /api/admin/spreaker-exchange {code} -> {enc}. Nur angemeldete Admins ueber die Website (nicht per MCP), nie in Staging.
+// POST /api/admin/spreaker-exchange {code, state} -> {enc}. Nur angemeldete Admins ueber die Website (nicht per MCP), nie in Staging.
 export async function handleSpreakerExchange(env, request, user, J, viaMcp = false) {
   if (request.method !== "POST") return J({ error: "method_not_allowed" }, 405);
   if (isStaging(env)) return J({ error: "staging" }, 403);
@@ -82,6 +106,8 @@ export async function handleSpreakerExchange(env, request, user, J, viaMcp = fal
   if (code.includes("code=")) code = code.split("code=")[1].split("&")[0];
   try { code = decodeURIComponent(code); } catch { /* bleibt wie eingegeben */ }
   if (!/^[A-Za-z0-9._~+\/=-]{4,512}$/.test(code)) return J({ error: "bad_code" }, 400);
+  if (!(await spreakerStateOk(env, request, user.id, b?.state))) return J({ error: "state_mismatch" }, 400);   // Cookie bleibt: ein untergeschobener Aufruf soll den echten Ablauf nicht stoeren
+  const clear = { "set-cookie": cookie(SPREAKER_COOKIE, "", 0) };   // ab hier ist der Code an Spreaker gegangen (oder wird es gleich): state nur einmal
   if (env.DB && !(await rateLimit(env.DB, `spx:${user.id}`, 10, 3600))) return J({ error: "rate" }, 429);
   let res;
   try {
@@ -91,7 +117,7 @@ export async function handleSpreakerExchange(env, request, user, J, viaMcp = fal
       body: new URLSearchParams({ grant_type: "authorization_code", redirect_uri: SPREAKER_REDIRECT, client_id: cid, client_secret: sec, code }).toString(),
     });
   } catch {
-    return J({ error: "spreaker_unreachable" }, 502);
+    return J({ error: "spreaker_unreachable" }, 502, clear);
   }
   const text = await res.text().catch(() => "");
   let j = null;
@@ -100,12 +126,12 @@ export async function handleSpreakerExchange(env, request, user, J, viaMcp = fal
     const err = typeof j?.error === "string" && /^[a-z0-9_]{1,60}$/i.test(j.error) ? j.error : `spreaker_${res.status}`;
     const detail = cleanDetail(j?.error_description || j?.message || text, [sec, cid, code]);
     await audit(env.DB, user.id, "spreaker-connect", "", `fehler ${res.status} ${err}`);
-    return J({ error: err, detail }, res.status >= 400 && res.status < 500 ? 400 : 502);
+    return J({ error: err, detail }, res.status >= 400 && res.status < 500 ? 400 : 502, clear);
   }
   const at = j?.access_token, rt = j?.refresh_token;
-  if (typeof at !== "string" || !at) return J({ error: "no_access_token" }, 502);
-  if (typeof rt !== "string" || !rt) return J({ error: "no_refresh_token" }, 502);
+  if (typeof at !== "string" || !at) return J({ error: "no_access_token" }, 502, clear);
+  if (typeof rt !== "string" || !rt) return J({ error: "no_refresh_token" }, 502, clear);
   const out = await fernetEncrypt(await spreakerKey(sec), JSON.stringify({ access_token: at, refresh_token: rt, at: Math.floor(Date.now() / 1000) }));
   await audit(env.DB, user.id, "spreaker-connect", "", "ok");
-  return J({ enc: out }, 200, { "cache-control": "no-store" });
+  return J({ enc: out }, 200, { "cache-control": "no-store", ...clear });
 }
