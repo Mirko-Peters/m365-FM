@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Erzeugt pro Seite ein Teilen-Bild (Open Graph, 1200x630 PNG) aus docs/og-manifest.json mit Chromium (Playwright).
+"""Erzeugt pro Seite ein Teilen-Bild (Open Graph, 1200x630 PNG) aus og-manifest.json mit Chromium (Playwright). Die Liste liegt seit 16.11.2026 in
+r2out/ (site_size.r2_only, ~12,5 MB weniger in GitHub Pages; der Site-Worker liefert sie unter /og-manifest.json aus R2), aeltere Baue: docs/.
 Schlägt etwas fehl, wird das Standardbild kopiert, damit og:image nie ins Leere zeigt.
 Ablage: r2img/og/<pfad>.png (OG_OUT), nicht in docs/ - tools/r2_og_upload.py lädt sie vor dem Deploy in den R2-Bucket (auf main
 blockierend), ausgeliefert über https://img.m365.fm/og/<pfad>.png (generate_site.py OG_BASE). So bleibt GitHub Pages unter dem
@@ -58,10 +59,15 @@ body:before{{content:"";position:absolute;inset:0;background-image:linear-gradie
 CARD_VERSION = 1   # bei Aenderungen am Kartenlayout erhoehen, dann werden alle Bilder neu gezeichnet
 
 
+def manifest():
+    """Pfad der og-manifest.json: r2out/ neben docs/ (seit 16.11.2026), sonst docs/; None, wenn es keine gibt."""
+    return next((f for f in (DOCS.parent / "r2out" / "og-manifest.json", DOCS / "og-manifest.json") if f.is_file()), None)
+
+
 def main(fallback_only=False):
-    mf = DOCS / "og-manifest.json"
-    if not mf.exists():
-        return
+    mf = manifest()
+    if not mf:
+        print("og-manifest.json fehlt (weder r2out/ noch docs/) - keine Teilen-Bilder"); return
     items = json.load(open(mf, encoding="utf-8"))
     default = DOCS / "assets" / "og-default.png"
     if fallback_only:   # eigener Schritt im Bau: auch wenn das Zeichnen (Playwright) scheitert, hat jede Seite ein Bild fuer den Upload

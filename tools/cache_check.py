@@ -20,12 +20,13 @@ URLS = [
     ("Icon", B + "/assets/apple-touch-icon.png"),
     ("Sitemap", B + "/sitemap.xml"),
     ("Sitemap fr Blog (R2)", B + "/sitemap-fr-blog.xml"),   # Sitemaps der Sprachen ausser en/de liegen im R2-Bucket (site_size.r2_only)
+    ("Register (R2)", B + "/episodes-register.json"),   # grosse Datenexporte liegen seit 16.11.2026 im R2-Bucket (site_size.EXPORT_RX)
     ("llms.txt", B + "/llms.txt"),
     ("R2-Bild", "https://img.m365.fm/i/5254f600109b589b2c2d.webp"),
     ("404", B + "/gibt-es-nicht-cache-check/"),
     ("Suchseite de", B + "/de/search/"),
 ]
-KEEP = ("cache-control", "cf-cache-status", "x-m365-cache", "age", "etag", "last-modified", "expires", "vary", "content-encoding", "content-type", "server", "x-cache", "alt-svc", "x-robots-tag", "x-m365-cr", "x-m365-src")
+KEEP = ("cache-control", "cf-cache-status", "x-m365-cache", "age", "etag", "last-modified", "expires", "vary", "content-encoding", "content-type", "server", "x-cache", "alt-svc", "x-robots-tag", "x-m365-cr", "x-m365-src", "x-m365-sitemaps", "x-m365-exports")
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):

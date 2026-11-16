@@ -120,7 +120,10 @@ const noindexPath = (p) => !p.startsWith("/.well-known/") && !/^\/(?:agent|episo
 // #266: Transkript-Dateien je Folge (Hauptshow, Dub-Folge, Sprachfassung) liegen im R2-Bucket (r2out/): fuer Podcast-Apps (CORS) und Programme,
 // nicht fuer die Suche (der Text steht schon auf der Folgenseite). Gleiche Regel wie site_transcripts.PATH_RX.
 export const TRANSCRIPT = /^(?:\/[a-z]{2})?(?:\/show\/episodes)?\/[a-z0-9-]+\/transcript\.(txt|vtt)$/;
-const R2_EXPORT = /^\/(?:blog-import\/[^/]+\.json|translations-blog\.json)$/i;
+// Datenexporte nur im R2-Bucket (r2out/, site_size.r2_only): Blog-Import und Uebersetzungsliste der Blogbeitraege, seit 16.11.2026 auch die grossen
+// Exporte im Wurzelverzeichnis (site_size.EXPORT_RX, ~75 MB): Register fuer die Datenbank (episodes-register[-<n>].json, translations-register[-<l>].json),
+// og-manifest.json und seo-report.json. Nach dem 404 von GitHub Pages aus pages/<pfad> (s. u.), noindex wie bisher (noindexPath).
+export const R2_EXPORT = /^\/(?:blog-import\/[^/]+\.json|translations-blog\.json|(?:og-manifest|seo-report|episodes-register(?:-[0-9]{1,3})?|translations-register(?:-[a-z]{2})?)\.json)$/;
 // Sitemaps der Sprachen ausser en/de (sitemap-<l>-<typ>[-<n>].xml, site_sitemaps.write_all) liegen seit 16.11.2026 nur im R2-Bucket (r2out/,
 // site_size.r2_only; allein die Blog-Sitemaps ~6 MB je Sprache). Gleiche Regel wie site_size.SITEMAP_RX. Index sitemap.xml und en/de bleiben in GitHub Pages.
 export const SITEMAP_R2 = /^\/sitemap-[a-z]{2}-[a-z][a-z0-9-]*\.xml$/;
@@ -213,6 +216,8 @@ function finishHeaders(h, p) {
   // Merker fuer den Seitenbau (site.yml, Deploy-Job): diese Worker-Fassung liefert die Sitemaps der Sprachen ausser en/de aus R2 (SITEMAP_R2).
   // Erst wenn /sitemap.xml ihn traegt, veroeffentlicht der Deploy-Job ein docs/ ohne diese Sitemaps - sonst antworteten sie mit 404 (alter Worker).
   if (p === "/sitemap.xml" || SITEMAP_R2.test(p)) h.set("x-m365-sitemaps", "r2");
+  // Ebenso fuer die Datenexporte aus R2 (R2_EXPORT mit gone/src=docs-Pruefung, seit 16.11.2026): der Deploy-Job prueft beide Merker auf /sitemap.xml.
+  if (p === "/sitemap.xml" || R2_EXPORT.test(p)) h.set("x-m365-exports", "r2");
   if (p === "/") h.set("vary", VARY_HOME);   // Startseite: Antwort haengt von Sprache und Cookie ab (s. homeLang) - nie fuer eine andere Sprache aus einem Cache
   if (p === "/") h.set("link", '</.well-known/api-catalog>; rel="api-catalog", </openapi.json>; rel="service-desc"; type="application/vnd.oai.openapi+json", </llms.txt>; rel="service-doc"; type="text/plain", </.well-known/agent.json>; rel="describedby"; type="application/json"');   // RFC 8288 / 9727: Startseite verweist auf maschinenlesbare Ressourcen
   if (p === "/.well-known/api-catalog") { h.set("content-type", 'application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"'); h.set("access-control-allow-origin", "*"); }
@@ -504,26 +509,20 @@ const worker = {
       const obj = await env.PAGES.get("pages" + p).catch(() => null);
       if (obj) return new Response(obj.body, { headers: { "content-type": "application/json; charset=utf-8", "cache-control": "public, max-age=300, s-maxage=600", "x-robots-tag": "noindex", "access-control-allow-origin": "*" } });
     }
-    if (res.status === 404 && env.PAGES && R2_EXPORT.test(p) && (request.method === "GET" || request.method === "HEAD")) {
-      const obj = await env.PAGES.get("pages" + p).catch(() => null);
-      if (obj) {
-        const h = new Headers({ "content-type": "application/json; charset=utf-8", "cache-control": HTML_CC });
-        for (const [k, v] of Object.entries(SEC)) h.set(k, v);
-        if (noindexPath(p)) h.set("x-robots-tag", "noindex");
-        return new Response(request.method === "HEAD" ? null : obj.body, { headers: h });
-      }
-    }
-    // Sitemap aus dem R2-Bucket (pages/<datei>): indexierbar (kein noindex), application/xml, SEC- und HTML-Cache-Header (finishHeaders), ETag/304, HEAD.
+    // Sitemap oder Datenexport aus dem R2-Bucket (pages/<datei>): Sitemaps indexierbar als application/xml, Exporte als application/json mit noindex
+    // (noindexPath, wie aus GitHub Pages); SEC- und HTML-Cache-Header (finishHeaders), CORS wie GitHub Pages, ETag/304, HEAD.
     // Nur Objekte des r2out-Uploads: als entfernt markiert (gone=1) oder nur Spiegel von GitHub Pages (src=docs, dort 404 = wirklich weg) -> 404 wie bisher.
-    if (res.status === 404 && env.PAGES && SITEMAP_R2.test(p) && (request.method === "GET" || request.method === "HEAD")) {
+    const sm = SITEMAP_R2.test(p);
+    if (res.status === 404 && env.PAGES && (sm || R2_EXPORT.test(p)) && (request.method === "GET" || request.method === "HEAD")) {
       const obj = await env.PAGES.get("pages" + p).catch(() => null);
       const cm = (obj && obj.customMetadata) || {};
       if (obj && cm.gone !== "1" && cm.src !== "docs") {
-        const h = new Headers({ "content-type": CT.xml, "access-control-allow-origin": "*" });   // CORS wie GitHub Pages
+        const h = new Headers({ "content-type": sm ? CT.xml : CT.json, "access-control-allow-origin": "*" });   // CORS wie GitHub Pages
         if (obj.httpEtag) h.set("etag", obj.httpEtag);
         if (obj.uploaded) h.set("last-modified", obj.uploaded.toUTCString());
         finishHeaders(h, p);
         if (notModified(request, h.get("etag"), h.get("last-modified"))) return new Response(null, { status: 304, headers: h });
+        if (request.method === "HEAD" && Number.isFinite(obj.size)) h.set("content-length", String(obj.size));   // wie GitHub Pages: Groesse auch per HEAD (GET: Laenge des R2-Datenstroms)
         return new Response(request.method === "HEAD" ? null : obj.body, { headers: h });
       }
     }

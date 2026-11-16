@@ -17,8 +17,13 @@ def r2_only(rel, langs):
     auf "/", ohne Umweg ueber den R2-Rueckfall) und Dateien neben den Seiten (feed.xml, event.ics, llms.txt, sw.js): der Rueckfall liefert nur HTML.
     Seit 16.11.2026 auch die Sitemaps dieser Sprachen im Wurzelverzeichnis (sitemap-<l>-<typ>[-<n>].xml, site_sitemaps.write_all; allein die
     Blog-Sitemaps ~6 MB je Sprache wegen der hreflang-Alternates): der Site-Worker liefert sie nach dem 404 als application/xml (SITEMAP_R2 in
-    sitewrk/index.js). Der Index sitemap.xml und die Sitemaps von en/de bleiben in GitHub Pages."""
-    if rel == "translations-blog.json" or rel.startswith("blog-import/"): return True
+    sitewrk/index.js). Der Index sitemap.xml und die Sitemaps von en/de bleiben in GitHub Pages.
+    Ebenfalls seit 16.11.2026 die grossen Datenexporte im Wurzelverzeichnis (EXPORT_RX, ~75 MB): Register fuer die Datenbank
+    (episodes-register[-<n>].json ~21 MB, translations-register[-<l>].json ~35 MB; der Community-Worker holt sie mit siteFetch, das nach dem 404
+    von GitHub Pages im Bucket nachsieht), og-manifest.json (~12,5 MB, Eingabe von generate_og.py) und seo-report.json (~7 MB). Der Site-Worker
+    liefert sie nach dem 404 unter derselben Adresse aus (R2_EXPORT). In GitHub Pages bleiben Exporte, die Browser auf Seiten laden
+    (entities.json) oder die der Community-Worker ohne R2-Rueckfall abruft (episodes.json, entities*.json, quotes.json, topics.json ...)."""
+    if rel == "translations-blog.json" or rel.startswith("blog-import/") or EXPORT_RX.match(rel): return True
     l = sitemap_lang(rel)
     if l: return l in langs and l not in PAGES_LANGS
     p = rel.split("/")
@@ -26,6 +31,11 @@ def r2_only(rel, langs):
 
 
 SITEMAP_RX = re.compile(r"^sitemap-([a-z]{2})-[a-z][a-z0-9-]*\.xml$")   # Name aus site_sitemaps.write_all; gleiche Regel wie SITEMAP_R2 im Site-Worker
+
+
+# Grosse Datenexporte nur in r2out/ (site_register.build, generate_site.py, site_seo.py); gleiche Regel wie R2_EXPORT im Site-Worker,
+# EXPORT in tools/r2_pages_upload.py und tools/page_hashes.py
+EXPORT_RX = re.compile(r"^(?:og-manifest|seo-report|episodes-register(?:-[0-9]{1,3})?|translations-register(?:-[a-z]{2})?)\.json$")
 
 
 def sitemap_lang(rel):
