@@ -371,7 +371,7 @@ def rum_connection():
 def cloudflare(placements, day, out, statuses):
     """Seitenaufrufe je gesponserter URL: Cloudflare Web Analytics (Quelle 'cloudflare_rum', echte Browser-Aufrufe, Bots weitgehend
     ausgeschlossen). Nur wenn RUM nicht verfuegbar ist oder der Tag vor dem Start von Web Analytics liegt: Zonen-Anfragen (Quelle
-    'cloudflare', ungefiltert inkl. Bots). Der Worker zeigt fuer Tag+URL den RUM-Wert, sobald es einen gibt."""
+    'cloudflare', ungefiltert inkl. Bots und Browser-Vorabrufe). Der Worker zeigt fuer Tag+URL den RUM-Wert, sobald es einen gibt."""
     from tools import cf_rum
     token = cf_rum.token()   # CF_ANALYTICS_TOKEN (nur Lesen) oder CLOUDFLARE_API_TOKEN
     if not token:
@@ -403,11 +403,11 @@ def cloudflare(placements, day, out, statuses):
         cf_rum.warn(f"{reason}. Sponsor-Seitenaufrufe {day}: Fallback auf ungefilterte Zonen-Anfragen (Quelle 'cloudflare').")
     cloudflare_zone(placements, day, out, statuses)
     if statuses.get("Cloudflare") == "Abruf abgeschlossen":
-        statuses["Cloudflare"] = "Abruf abgeschlossen (Zone, ungefiltert inkl. Bots)"
+        statuses["Cloudflare"] = "Abruf abgeschlossen (Zone, ungefiltert inkl. Bots und Vorabrufe)"
 
 
 def cloudflare_zone(placements, day, out, statuses):
-    """Fallback: Anfragen je Pfad aus der Zonen-Statistik (ungefiltert, auch Bots)."""
+    """Fallback: Anfragen je Pfad aus der Zonen-Statistik (ungefiltert, auch Bots und Browser-Vorabrufe per Speculation Rules, sitewrk/index.js)."""
     from tools import cf_rum
     token = cf_rum.token()
     zone = os.environ.get("CF_ZONE_ID", "").strip()

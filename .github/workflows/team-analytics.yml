@@ -34,9 +34,9 @@ jobs:
             echo "::warning::Secret TEAM_ANALYTICS_KEY fehlt - Team-Analytics wird nicht abgerufen (das Artefakt waere fuer jedes angemeldete GitHub-Konto lesbar)."
             echo "skip=1" >> "$GITHUB_ENV"
           fi
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         if: env.skip != '1'
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         if: env.skip != '1'
         with:
           python-version: "3.12"
@@ -73,7 +73,7 @@ jobs:
           tar czf - -C out . | openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -salt -out enc/team-analytics.tar.gz.enc -pass env:TEAM_ANALYTICS_KEY
           rm -rf out
           echo "Verschluesselt: $(wc -c < enc/team-analytics.tar.gz.enc) Bytes"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: env.skip != '1'
         with:
           name: team-analytics

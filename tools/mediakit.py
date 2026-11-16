@@ -125,7 +125,8 @@ def cloudflare_rum():
 
 
 def cloudflare_zone():
-    """Fallback: Zonen-Statistik (httpRequests1dGroups) - zaehlt jede HTML-Antwort am Rand, auch Bots. Nur als 'ungefiltert' zeigen."""
+    """Fallback: Zonen-Statistik (httpRequests1dGroups) - zaehlt jede HTML-Antwort am Rand, auch Bots und Browser-Vorabrufe (Speculation Rules,
+    sitewrk/index.js: vorabgerufene Seiten zaehlen, auch wenn sie nie geoeffnet werden). Nur als 'ungefiltert' zeigen."""
     from tools import cf_rum
     tok = cf_rum.token()
     if not tok: return {}
@@ -149,7 +150,7 @@ def cloudflare_zone():
     out = {"source": "zone", "pageviews30": int(pv), "period30": f"{since}–{until}",
            "daily": [[r["dimensions"]["date"], int((r.get("sum") or {}).get("pageViews") or 0)] for r in rows],
            "countries": [[k, round(v * 100 / tot, 1)] for k, v in sorted(cty.items(), key=lambda kv: -kv[1])[:10]]}
-    print("Cloudflare (Zone, UNGEFILTERT inkl. Bots):", out["pageviews30"], "Seitenaufrufe,", len(out["countries"]), "Laender")
+    print("Cloudflare (Zone, UNGEFILTERT inkl. Bots und Vorabrufe):", out["pageviews30"], "Seitenaufrufe,", len(out["countries"]), "Laender")
     return out
 
 
@@ -306,7 +307,7 @@ TXT = {
                b_clicks="Bing search clicks", b_imp="Bing search impressions", langs="Site languages", videos="Published videos",
                g_clicks="Google search clicks", g_imp="Google search impressions", gai="Google AI impressions",
                ys_imp="Google search impressions of the YouTube channel", ys_clicks="Google search clicks to the YouTube channel"),
-        s=dict(yt="YouTube Analytics", cf="Cloudflare edge statistics (unfiltered, includes bots)",
+        s=dict(yt="YouTube Analytics", cf="Cloudflare edge statistics (unfiltered, includes bots and prefetches)",
                cf_rum="Cloudflare Web Analytics (real browser page loads, bots largely excluded)", sp="Spreaker", ai="Bing Webmaster Tools, AI Performance", bing="Bing Webmaster Tools", site="M365.FM", gsc="Google Search Console",
                gai="Google Search Console, Generative AI", ys="Search Console (YouTube channel)"),
         d28="last 28 days", d30="last 30 days", d7="7 days", total="total",
@@ -320,7 +321,7 @@ TXT = {
         web_daily="Page views per day · {p}", web_daily_zone="Page views per day (30 days, unfiltered)",
         web_cty="Page views by country · share", web_cty_zone="Requests by country (share, 30 days, unfiltered)",
         web_src_rum="Source: Cloudflare Web Analytics – counts real page loads in the browser (JavaScript beacon, no cookies), so bots are largely excluded. Web Analytics has been active since 29 Oct 2026; earlier days are not included and not estimated.",
-        web_src_zone="Source: Cloudflare edge statistics, unfiltered – counts every HTML response including bots and crawlers (Web Analytics was not available for this edition).", b_week="Bing search per week (12 weeks)", b_q="What people search for on Bing to find M365.FM",
+        web_src_zone="Source: Cloudflare edge statistics, unfiltered – counts every HTML response including bots, crawlers and browser prefetches (Web Analytics was not available for this edition).", b_week="Bing search per week (12 weeks)", b_q="What people search for on Bing to find M365.FM",
         q="Query", clicks="Clicks", imps="Impressions", ai_h="AI assistants", ai_t="Microsoft Copilot and partner AI services cited M365.FM pages {n} times between {p} – on average {d} different pages per day.",
         gai_t="Google showed M365.FM pages {n} times in AI Overviews and AI Mode between {p}.", gai_pages=" {g} different pages had AI impressions.",
         gai_src="Source: Google Search Console, Generative AI performance.",
@@ -355,7 +356,7 @@ TXT = {
                b_clicks="Bing-Suchklicks", b_imp="Bing-Suchimpressionen", langs="Sprachen der Website", videos="Veröffentlichte Videos",
                g_clicks="Google-Suchklicks", g_imp="Google-Suchimpressionen", gai="Google-KI-Impressionen",
                ys_imp="Google-Suchimpressionen des YouTube-Kanals", ys_clicks="Google-Suchklicks auf den YouTube-Kanal"),
-        s=dict(yt="YouTube Analytics", cf="Cloudflare-Randstatistik (ungefiltert, inkl. Bots)",
+        s=dict(yt="YouTube Analytics", cf="Cloudflare-Randstatistik (ungefiltert, inkl. Bots und Vorabrufe)",
                cf_rum="Cloudflare Web Analytics (echte Seitenaufrufe im Browser, weitgehend ohne Bots)", sp="Spreaker", ai="Bing Webmaster Tools, AI Performance", bing="Bing Webmaster Tools", site="M365.FM", gsc="Google Search Console",
                gai="Google Search Console, Generative AI", ys="Search Console (YouTube-Kanal)"),
         d28="letzte 28 Tage", d30="letzte 30 Tage", d7="7 Tage", total="gesamt",
@@ -369,7 +370,7 @@ TXT = {
         web_daily="Seitenaufrufe pro Tag · {p}", web_daily_zone="Seitenaufrufe pro Tag (30 Tage, ungefiltert)",
         web_cty="Seitenaufrufe nach Land · Anteil", web_cty_zone="Anfragen nach Land (Anteil, 30 Tage, ungefiltert)",
         web_src_rum="Quelle: Cloudflare Web Analytics – zählt echte Seitenaufrufe im Browser (JavaScript-Beacon, ohne Cookies), Bots sind damit weitgehend ausgeschlossen. Web Analytics ist seit 29.10.2026 aktiv; frühere Tage fehlen und werden nicht geschätzt.",
-        web_src_zone="Quelle: Cloudflare-Randstatistik, ungefiltert – zählt jede HTML-Antwort einschließlich Bots und Crawlern (Web Analytics war für diese Ausgabe nicht verfügbar).", b_week="Bing-Suche pro Woche (12 Wochen)", b_q="Wonach Menschen bei Bing suchen, um M365.FM zu finden",
+        web_src_zone="Quelle: Cloudflare-Randstatistik, ungefiltert – zählt jede HTML-Antwort einschließlich Bots, Crawlern und Browser-Vorabrufen (Web Analytics war für diese Ausgabe nicht verfügbar).", b_week="Bing-Suche pro Woche (12 Wochen)", b_q="Wonach Menschen bei Bing suchen, um M365.FM zu finden",
         q="Suchanfrage", clicks="Klicks", imps="Impressionen", ai_h="KI-Assistenten", ai_t="Microsoft Copilot und KI-Dienste von Partnern haben M365.FM-Seiten zwischen {p} {n}-mal zitiert – im Schnitt {d} verschiedene Seiten pro Tag.",
         gai_t="Google hat M365.FM-Seiten zwischen {p} {n}-mal in AI Overviews und im KI-Modus angezeigt.", gai_pages=" {g} verschiedene Seiten hatten KI-Impressionen.",
         gai_src="Quelle: Google Search Console, Bericht „Generative AI“.",

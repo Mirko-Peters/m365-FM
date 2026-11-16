@@ -113,10 +113,14 @@ class Rum:
             if h in found: return found[h]
         raise RumError("keine Web-Analytics-Site fuer www.m365.fm/m365.fm gefunden - Variable CF_RUM_SITE_TAG setzen")
 
+    def graphql(self, q, variables=None):
+        """Roher GraphQL-Aufruf -> (status, json), ohne Fehlerpruefung (z. B. fuer Schema-Introspektion in tools/slow_pages.py)."""
+        return _http(f"{API}/graphql", json.dumps({"query": q, "variables": variables or {}}).encode(), self._h)
+
     def query(self, q, since, until, **extra):
         """GraphQL mit $a (Konto), $t (siteTag), $s/$u (datetime, until inklusive -> < until+1 Tag). Liefert das accounts[0]-Objekt."""
         var = {"a": self.account, "t": self.site_tag, "s": f"{since}T00:00:00Z", "u": f"{until + dt.timedelta(days=1)}T00:00:00Z", **extra}
-        st, d = _http(f"{API}/graphql", json.dumps({"query": q, "variables": var}).encode(), self._h)
+        st, d = self.graphql(q, var)
         if st != 200 or d.get("errors") or not isinstance(d.get("data"), dict):
             raise RumError(f"GraphQL fehlgeschlagen (HTTP {st}{': ' + _errors(d) if _errors(d) else ''}) - "
                            "Token-Recht 'Account Analytics: Read' fuer das Konto pruefen")

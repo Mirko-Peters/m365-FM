@@ -8,14 +8,17 @@ on:
       fill_dims:
         description: "Fehlende Masse vorhandener R2-Bilder ermitteln"
         default: "false"
+      shrink:
+        description: "Vorhandene R2-Bilder breiter als 1600 px verkleinern (neuer Schluessel -w1600; nur mit apply=true wirklich)"
+        default: "false"
 permissions:
   contents: write
 jobs:
   copy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: "3.12" }
       - run: pip install boto3 pillow
       - name: Kopieren
@@ -24,7 +27,7 @@ jobs:
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-        run: python tools/r2_upload.py ${{ inputs.fill_dims == 'true' && '--fill-dims' || inputs.apply == 'true' && '--apply' || '' }}
+        run: python tools/r2_upload.py ${{ inputs.fill_dims == 'true' && '--fill-dims' || inputs.shrink == 'true' && '--shrink' || '' }} ${{ inputs.apply == 'true' && '--apply' || '' }}
       - name: Zuordnung sichern
         if: inputs.apply == 'true' || inputs.fill_dims == 'true'
         run: |

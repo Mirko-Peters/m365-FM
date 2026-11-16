@@ -8,6 +8,7 @@ import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.
 import site_media as MED
 import site_podpage as P
 import site_r2 as R2
+import site_spreaker_img as SPI   # Titelbild: kleinere Spreaker-Varianten per srcset (src bleibt das Original, es ist das Beitragsbild)
 import site_sidebar as SBR
 import site_topics as TOP
 
@@ -108,7 +109,7 @@ def items(BASE):
         if not re.search(r"<img\b", html):   # Titelbild wie frueher: Bild der verlinkten Folge, sonst erzeugtes Bild
             _ep = next((eps_by_slug[m] for m in re.findall(r'/show/episodes/([^/"]+)/', html) if m in eps_by_slug), None)
             _u = (_ep or {}).get("image_path") or ""
-            _hero = (f'<img src="{P.esc(_u)}" alt="{P.esc("Cover: " + _ep["name"])}" width="640" height="360" fetchpriority="high" decoding="async" style="width:100%;max-width:640px;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:8px">'
+            _hero = (f'<img src="{P.esc(_u)}"{SPI.srcset_only(_u, "(max-width: 680px) 100vw, 640px")} alt="{P.esc("Cover: " + _ep["name"])}" width="640" height="360" fetchpriority="high" decoding="async" style="width:100%;max-width:640px;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:8px">'
                      if _u.startswith("https://") and "None" not in _u and _ep else MED.hero_svg({"id": "blog-" + p["slug"], "name": p["title"], "type": "media"}, "Blog", "Titelbild: " + p["title"]))
             _hero = f'<figure style="margin:1em 0">{_hero}</figure>' if _hero.startswith("<img") else _hero   # hero_svg bringt sein eigenes <figure> mit
             html = _hero + html

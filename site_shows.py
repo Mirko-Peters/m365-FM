@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 from site_learn import esc
 from site_podpage import san, plain
 import site_meta_podcast as MP   # suchintent-freundliche <title>/meta description
+import site_spreaker_img as SPI   # kleine Spreaker-Cover-Varianten
 
 
 def d(ts):
@@ -44,7 +45,7 @@ def build(g, shows):
             pub(f"{s['slug']}/{e['slug']}/", e["title"], plain(e.get("descr")) or e["title"], body, ld, "article", d(e["pub"]),
                 seo=MP.network_episode_meta("en", e["title"], s["title"], e.get("descr"), uniq=_mpu))
         lst = "".join(f'<li style="margin:.8em 0"><a href="{su}{e["slug"]}/"><strong>{esc(e["title"])}</strong></a><br><span class="mut">{d(e["pub"])}</span></li>' for e in eps[:300])
-        img = f'<img src="{esc(s["image"])}" alt="" width="160" height="160" style="float:right;margin:0 0 1em 1em;border-radius:8px" loading="lazy">' if s.get("image") else ""
+        img = f'<img {SPI.src_attrs(s["image"], 160)} alt="" width="160" height="160" style="float:right;margin:0 0 1em 1em;border-radius:8px;object-fit:cover" loading="lazy">' if s.get("image") else ""   # Spreaker-Cover: 320er-Variante; object-fit:cover als Absicherung, falls eine Variante je nicht quadratisch ist
         body = f'{img}<h1>{esc(s["title"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="show" data-topic-id="{esc(s["slug"])}" data-topic-label="Follow this show">🔔 Follow this show</button><button type="button" class="btn" data-topic-follow data-topic-kind="creator" data-topic-id="{esc(s["handle"])}" data-topic-label="Follow host">🔔 Follow host</button><p class="mut">Host: {who} · {len(eps)} episodes</p><p>{esc(plain(s.get("descr")))}</p><ul style="list-style:none;padding:0">{lst}</ul>'
         ld = {"@context": "https://schema.org", "@type": "PodcastSeries", "name": s["title"], "url": su, "description": plain(s.get("descr"))[:500], "inLanguage": s.get("lang") or "en", "author": {"@type": "Person", "name": s["name"], "url": f"{BASE}/community/u/{s['handle']}/"}}
         pub(f"{s['slug']}/", s["title"], plain(s.get("descr")) or s["title"], body, ld, seo=MP.network_show_meta("en", s["title"], s["name"], s.get("descr"), len(eps)))

@@ -289,7 +289,9 @@ def card_html(lang, item, n, compact=False):
     """Karte fuer eine Folge. item: {title, hook, minutes, cover, page, apple, spotify}. n: "1"|"2"|"entity". Haupt-Link = Folgenseite (href), App-Ziel per Skript."""
     s = ui_text(lang)
     mins = f' · {_esc(s["min"].format(n=item["minutes"]))}' if item.get("minutes") and not compact else ""
-    cover = (f'<img class="ls-cover" src="{_esc(item["cover"])}" alt="" width="{48 if compact else 96}" height="{48 if compact else 96}" loading="lazy" decoding="async">' if item.get("cover") else "")
+    import site_spreaker_img as SPI   # Spreaker-Cover: kleine Variante statt 1400x1400
+    _cs = 48 if compact else 96
+    cover = (f'<img class="ls-cover" {SPI.src_attrs(item["cover"], _cs)} alt="" width="{_cs}" height="{_cs}" loading="lazy" decoding="async">' if item.get("cover") else "")
     badge = f'<span class="ls-badge"><span aria-hidden="true">▶ </span>{_esc(s["badge"])}{mins}</span>'
     main = f'<a class="ls-main" href="{_esc(item["page"])}" data-card="{n}">{_esc(item["title"])}</a>'
     if compact:

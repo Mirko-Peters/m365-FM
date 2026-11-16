@@ -10,7 +10,7 @@ import { AI_PREFIX, aiFieldValues, aiFieldsOf, aiUserId, humanEdited, ownedEntit
 
 const ID = /^[a-z0-9-]{2,48}$/;
 export const TYPES = ["product", "platform", "concept", "org", "person", "cert", "event", "media", "category", "industry", "job"];
-export const PRED = ["instance_of", "part_of", "developed_by", "related_to", "requires", "covers", "created_by", "organized_by", "similar_to"];
+export const PRED = ["instance_of", "part_of", "broader", "developed_by", "related_to", "requires", "covers", "created_by", "organized_by", "similar_to"];   // broader = Oberbegriff bei Begriffen (SKOS), Gegenrichtung narrower wird beim Anzeigen berechnet
 const TRUST_POINTS = 25;
 const now = () => Math.floor(Date.now() / 1000);
 const txt = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "").replace(/\s+/g, " ").trim();

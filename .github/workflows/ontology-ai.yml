@@ -1,0 +1,53 @@
+name: Ontologie - Oberbegriffe per KI vorschlagen (Haiku)
+# Nur von Hand. plan = Anzahl und Kostenschaetzung (nichts wird gesendet), run = Vorschlaege holen: sichere (confidence high, formal geprueft) kommen in data/entities.json,
+# alle Vorschlaege stehen in data/ontology_suggestions.json (status angewendet/review). Haiku-Tagesbudget wie bei den anderen KI-Laeufen (ai_gateway.check_budget, Job ontology_ai).
+# Bereits gefragte Begriffe werden nie ein zweites Mal bezahlt. Details: tools/ontology_ai.py, ontology.py.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "plan = nur zaehlen/schaetzen, run = Vorschlaege holen und eintragen"
+        type: choice
+        options: [plan, run]
+        default: plan
+      limit: { description: "Hoechstens N Begriffe (leer = alle)", required: false, default: "" }
+permissions:
+  contents: write
+concurrency: { group: ontology-ai, cancel-in-progress: false }
+jobs:
+  suggest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      AI_GATEWAY_ID: ${{ vars.AI_GATEWAY_ID || 'm365fm' }}
+      CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
+      COMMUNITY_API: https://api-dub.m365.fm
+      CRON_KEY: ${{ secrets.CRON_KEY }}
+      HAIKU_USD_PER_MTOK_IN: ${{ vars.HAIKU_USD_PER_MTOK_IN || '0.10' }}
+      HAIKU_USD_PER_MTOK_OUT: ${{ vars.HAIKU_USD_PER_MTOK_OUT || '0.50' }}
+      USD_PER_EUR: ${{ vars.USD_PER_EUR || '1.08' }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with: { python-version: "3.12" }
+      - name: Vorschlaege holen
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
+          MODE_IN: ${{ inputs.mode }}
+          LIMIT_IN: ${{ inputs.limit }}
+        run: |
+          ARGS=""
+          [ -n "$LIMIT_IN" ] && ARGS="--limit $LIMIT_IN"
+          python tools/ontology_ai.py "$MODE_IN" $ARGS | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Pruefbericht
+        if: inputs.mode == 'run'
+        run: python tools/ontology_check.py | tee -a "$GITHUB_STEP_SUMMARY" || true
+      - name: Speichern
+        if: inputs.mode == 'run'
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          git add data/entities.json data/ontology_suggestions.json reports/ontology.md reports/ontology.json
+          if git diff --cached --quiet; then echo "Nichts zu speichern"; exit 0; fi
+          git commit -q -m "Ontologie: Oberbegriffe und Arten per Haiku vorgeschlagen $(date -u +%Y-%m-%dT%H:%MZ)"
+          for i in 1 2 3 4 5; do (git pull --rebase -q -X theirs && git push -q) && exit 0; sleep 5; done; exit 1
