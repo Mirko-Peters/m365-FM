@@ -1,5 +1,5 @@
 {
- "_doc": "Podcast-Gaeste, die dieselbe Person sind. Schluessel = Podpage-Slug des doppelten Gasts, Wert = Ziel-Entitaet (Slug eines anderen Gasts oder Basis-Entitaet). Der doppelte Gast bekommt keine eigene Entitaet; seine Gastseite und Folgen verweisen auf das Ziel. Gleiche Person, aber nicht dieselbe Seite: bitte nur sichere Treffer eintragen (tools/match_guests.py). never: Paare, die NICHT dieselbe Person sind (match_guests.py meldet sie nicht mehr). also: Gastseite verweist zusaetzlich auf diese Entitaeten.",
+ "_doc": "Podcast-Gaeste, die dieselbe Person sind. Schluessel = Podpage-Slug des doppelten Gasts, Wert = Ziel-Entitaet (Slug eines anderen Gasts oder Basis-Entitaet). Der doppelte Gast bekommt keine eigene Entitaet; seine Gastseite und Folgen verweisen auf das Ziel. Gleiche Person, aber nicht dieselbe Seite: bitte nur sichere Treffer eintragen (tools/match_guests.py). never: Paare, die NICHT dieselbe Person sind (match_guests.py meldet sie nicht mehr). also: Gastseite verweist zusaetzlich auf diese Entitaeten. entities: zusammengefuehrte Entitaets-Dubletten jeder Art (Basis-Entitaet, Speaker, Gast-Kennung): alte Kennung -> {to: behaltene Kennung, why: Begruendung, replaced: ersetzte Felder des behaltenen Eintrags, was: vollstaendiger alter Eintrag (nichts geht verloren)}. Wirkung wie bei merge: /entity/<alt>/ leitet in allen Sprachen per 301 auf das Ziel (site_podpage.redirect_table), keine Seite und kein Sitemap-Eintrag fuer die alte Kennung, die D1-Fassung der alten Kennung wird beim Seitenbau uebersprungen (site_learn.merged_ids) und bekommt ueber /entities-src.json replaced_by/outdated (Worker-Abgleich syncEntitiesFromSite).",
  "merge": {
   "dieter-kempeneers": "dieter-kempeneers-1",
   "mirko-peters": "mirko-peters"
@@ -14,5 +14,146 @@
   "dieter-kempeneers": [
    "dominiek-verham"
   ]
+ },
+ "entities": {
+  "iot-hub-device-provisioning-service": {
+   "to": "azure-iot-hub-device-provisioning-service",
+   "why": "gleicher Name und Begriff (Azure IoT Hub DPS); behalten: Kennung passt zum Namen 'Azure ...', eigene Folge (azure-dps, 75853851) mit 3 Zitaten, genauere Beschreibung",
+   "was": {
+    "id": "iot-hub-device-provisioning-service",
+    "type": "product",
+    "name": "Azure IoT Hub Device Provisioning Service (DPS)",
+    "aliases": [],
+    "desc": {
+     "en": "Azure service that lets devices enroll through a repeatable provisioning process; it authenticates a device and assigns it to an IoT hub based on defined enrollment rules.",
+     "de": ""
+    },
+    "web": "",
+    "wikidata": "",
+    "wikipedia": "",
+    "docs": "",
+    "rel": [
+     [
+      "part_of",
+      "azure-iot-hub"
+     ]
+    ],
+    "source": {
+     "import": "iot-hub-device-provisioning-service.json",
+     "lang": "en",
+     "approved_by": "Mirko Peters (3.11.2026: alle freigegeben)",
+     "episodes": [
+      "75855632"
+     ]
+    }
+   }
+  },
+  "oauth": {
+   "to": "oauth-2-0",
+   "why": "beide heissen 'OAuth 2.0' und beschreiben denselben Standard (kein Oberbegriff 'OAuth' vs. Version); behalten: Kennung passt zum Namen, Microsoft-Learn-Link, Folge oauth-2-0-simply-explained, 10 statt 8 belegte Folgen, 11 von 12 Blog-Queue-Artikeln und 20 Extraktions-Links",
+   "was": {
+    "id": "oauth",
+    "type": "concept",
+    "name": "OAuth 2.0",
+    "aliases": [],
+    "desc": {
+     "en": "OAuth 2.0 is an authorization standard in which an app obtains a short-lived access token (bearer token) that stands in for the signed-in user when calling an API, instead of sending a password or a long-lived API key.",
+     "de": ""
+    },
+    "web": "",
+    "wikidata": "",
+    "wikipedia": "",
+    "docs": "",
+    "rel": [],
+    "source": {
+     "import": "oauth.json",
+     "lang": "en",
+     "approved_by": "Mirko Peters (3.11.2026: alle freigegeben)",
+     "episodes": [
+      "68755705",
+      "68755969",
+      "75899698",
+      "76105427",
+      "76107133",
+      "76107135",
+      "76107140",
+      "76107147"
+     ]
+    }
+   }
+  },
+  "overall-equipment-effectiveness": {
+   "to": "oee",
+   "why": "gleicher Name und Begriff; behalten: oee ist das Sponsoring-Thema von iFAKT (data/sponsorships.json), Profil-Skill in D1 (members_export), 4 rel-Kanten (setup-time, micro-stops, scrap-rate, total-productive-maintenance) und 16 Links in veroeffentlichten Blogartikeln; Beschreibung und Wikipedia-Link von overall-equipment-effectiveness uebernommen (genauer)",
+   "replaced": {
+    "desc.en": "A manufacturing metric for how effectively equipment is used, combining availability, performance and quality."
+   },
+   "was": {
+    "id": "overall-equipment-effectiveness",
+    "type": "concept",
+    "name": "Overall equipment effectiveness (OEE)",
+    "aliases": [],
+    "desc": {
+     "en": "A manufacturing metric that combines availability, performance and quality to show how well equipment is used relative to its planned production time.",
+     "de": ""
+    },
+    "web": "",
+    "wikidata": "",
+    "wikipedia": "https://en.wikipedia.org/wiki/Overall_equipment_effectiveness",
+    "docs": "",
+    "rel": [],
+    "source": {
+     "import": "overall-equipment-effectiveness.json",
+     "lang": "en",
+     "approved_by": "Mirko Peters (3.11.2026: alle freigegeben)",
+     "episodes": [
+      "75573823",
+      "75576438",
+      "75585104",
+      "75855632",
+      "75860203",
+      "75863079",
+      "75991643"
+     ]
+    }
+   }
+  },
+  "jean-sebastien-duchene": {
+   "to": "jean-sebastien-duche",
+   "why": "dieselbe Person (gleicher Name): Podcast-Gast (Bio, Bild, LinkedIn, Website, Auftritte) und Speaker M365Con 2026/2027; data/speaker_manual.json 'links' ordnet den Speaker schon dem Gast zu, Sessions und Themen bleiben in data/speakers.json unter der Gast-Kennung",
+   "was": {
+    "id": "jean-sebastien-duchene",
+    "type": "person",
+    "name": "Jean-Sébastien DUCHÊNE",
+    "aliases": [],
+    "desc": {
+     "en": "Jean-Sébastien DUCHÊNE is a speaker at M365Con 2026 and M365Con 2027 (Technical Directory at Magellan) with 2 sessions.",
+     "de": "Jean-Sébastien DUCHÊNE ist Speaker bei M365Con 2026 und M365Con 2027 (Technical Directory bei Magellan) mit 2 Sessions."
+    },
+    "web": "",
+    "same_as": [],
+    "job": "Technical Directory",
+    "company": "Magellan",
+    "rel": [
+     [
+      "related_to",
+      "active-directory"
+     ],
+     [
+      "related_to",
+      "entra-cloud-sync"
+     ],
+     [
+      "related_to",
+      "entra-id"
+     ],
+     [
+      "related_to",
+      "intune"
+     ]
+    ],
+    "speaker": true
+   }
+  }
  }
 }
