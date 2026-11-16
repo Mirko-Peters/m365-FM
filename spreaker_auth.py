@@ -54,7 +54,7 @@ def store(blob):
     try:
         d = json.loads(Fernet(_key()).decrypt(blob.strip().encode()))
     except (InvalidToken, ValueError, TypeError):
-        fail("Text nicht entschluesselbar (unvollstaendig kopiert oder anderes SPREAKER_CLIENT_SECRET). Auf www.m365.fm/callback neu verbinden.")
+        fail("Text nicht entschluesselbar (unvollstaendig kopiert oder anderes SPREAKER_CLIENT_SECRET). Ueber https://api-dub.m365.fm/auth/spreaker/start (als Admin angemeldet) neu verbinden.")
     if not isinstance(d, dict) or not d.get("access_token") or not d.get("refresh_token"):
         fail("Im Text fehlt der Refresh-Token - Spreaker neu verbinden.")
     save({"access_token": d["access_token"], "refresh_token": d["refresh_token"], "at": int(d.get("at") or time.time())})
@@ -75,7 +75,7 @@ def connect(code):
 def refresh():
     d = load()
     if not d or not d.get("refresh_token"):
-        fail("Kein Refresh-Token vorhanden – Workflow 'Spreaker verbinden' neu ausfuehren.")
+        fail("Kein Refresh-Token vorhanden – ueber https://api-dub.m365.fm/auth/spreaker/start (als Admin angemeldet) neu verbinden und den Text im Workflow 'Spreaker verbinden' einfuegen.")
     j = exchange({"grant_type": "refresh_token", "refresh_token": d["refresh_token"]})
     d["access_token"] = j["access_token"]
     if j.get("refresh_token"):

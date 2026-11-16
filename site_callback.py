@@ -23,10 +23,10 @@ _HTML = """<!doctype html><meta charset=utf-8><meta name=robots content="noindex
 function show(label,text,btn){$("m").textContent=label;$("c").textContent=text;var b=$("b");b.textContent=btn;b.style.display="inline-block";b.onclick=function(){navigator.clipboard.writeText(text);b.textContent="Kopiert ✓"}}
 function showCode(){show("Code (in das Programm bzw. den GitHub-Workflow einfügen):",c,"Code kopieren")}
 var PRE={login:1,forbidden:1,staging:1,not_configured:1,rate:1,bad_code:1,bad_request:1,method_not_allowed:1};
-function used(s,e){return e==="state_mismatch"||((s===400||s===502)&&!PRE[e])}
+function used(s,e){return e==="state_mismatch"?"state":((s===400||s===502)&&!PRE[e])?"used":""}
 function fail(why,gone){$("e").style.display="block";if(gone){$("m").textContent="Spreaker nicht verbunden.";$("c").textContent="";$("b").style.display="none";
-$("e").textContent=why+" Der Code ist verbraucht – bitte über "+API+"/auth/spreaker/start neu verbinden.";return}
-$("e").textContent=why+" Der Code läuft nach ca. 30 Sekunden ab – sofort einfügen oder als Admin anmelden und Spreaker neu verbinden.";showCode()}
+$("e").textContent=why+(gone==="state"?" Aus Sicherheitsgründen bitte über "+API+"/auth/spreaker/start neu verbinden.":" Der Code ist verbraucht – bitte über "+API+"/auth/spreaker/start neu verbinden.");return}
+$("e").textContent=why+" Bitte als Admin anmelden und über "+API+"/auth/spreaker/start neu verbinden. Der Code unten gilt nur ca. 30 Sekunden und ist nur für das lokale Programm.";showCode()}
 if(c&&st.indexOf("spreaker")===0){$("m").textContent="Spreaker-Code wird verschlüsselt …";
 fetch(API+"/api/admin/spreaker-exchange",{method:"POST",credentials:"include",headers:{"content-type":"application/json","x-requested-with":"m365"},body:JSON.stringify({code:c,state:st})})
 .then(function(r){return r.json().catch(function(){return {}}).then(function(j){return {s:r.status,j:j||{}}})})

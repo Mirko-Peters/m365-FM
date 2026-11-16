@@ -123,7 +123,8 @@ def test_callback_spreaker_admin_zeigt_den_verschluesselten_text():
     assert r["h"] == CB.HINT and r["replaced"]
 
 
-_USABLE = "Der Code läuft nach ca. 30 Sekunden ab"
+_USABLE = "Der Code unten gilt nur ca. 30 Sekunden und ist nur für das lokale Programm."
+_STATE = "Aus Sicherheitsgründen bitte über https://api-dub.m365.fm/auth/spreaker/start neu verbinden."
 _USED = "Der Code ist verbraucht – bitte über https://api-dub.m365.fm/auth/spreaker/start neu verbinden."
 
 
@@ -145,12 +146,18 @@ def test_callback_spreaker_code_verbraucht_kein_code_nur_neu_verbinden():
                               (502, {"error": "spreaker_503", "detail": "bad gateway"}, "spreaker_503"),
                               (502, {"error": "spreaker_unreachable"}, "spreaker_unreachable"),
                               (502, {"error": "no_refresh_token"}, "no_refresh_token"),
-                              (502, {"error": "no_access_token"}, "no_access_token"),
-                              (400, {"error": "state_mismatch"}, "passt nicht zu dieser Anmeldung")):
+                              (502, {"error": "no_access_token"}, "no_access_token")):
         r = _run_page("?code=abc123&state=spreaker.n1", status, json.dumps(body))
         assert why in r["e"] and r["e"].endswith(_USED) and _USABLE not in r["e"], (body, r)
         assert r["c"] == "" and r["b"] != "inline-block" and r["copied"] == [] and "abc123" not in r["e"] + r["m"]
         assert r["m"] == "Spreaker nicht verbunden."
+
+
+def test_callback_state_mismatch_nicht_verbraucht_aber_neu_verbinden():
+    # state passt nicht: der Worker hat Spreaker gar nicht gefragt -> nicht "verbraucht" sagen, aber auch keinen Code anbieten
+    r = _run_page("?code=abc123&state=spreaker.n1", 400, json.dumps({"error": "state_mismatch"}))
+    assert "passt nicht zu dieser Anmeldung" in r["e"] and r["e"].endswith(_STATE) and "verbraucht" not in r["e"], r
+    assert r["c"] == "" and r["b"] != "inline-block" and r["copied"] == [] and r["m"] == "Spreaker nicht verbunden."
 
 
 def test_callback_youtube_und_ohne_state_unveraendert():
