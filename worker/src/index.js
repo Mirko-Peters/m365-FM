@@ -70,6 +70,7 @@ import { handleTopicSubscriptions, dispatchTopicNotifications, queueTopicArticle
 import { savePushSubscription } from "./push.js";
 import { handleContributions, refreshContributions } from "./contributions.js";
 import { findUserByIdentity, createUserWithIdentity, linkIdentity, mergeProof, handleIdentities, MERGE_WINDOW, freshSession, reloginFor } from "./identities.js";
+import { handleSpreakerExchange, spreakerStart } from "./spreaker_connect.js";
 
 const PROVIDERS = {
   google: {
@@ -157,6 +158,17 @@ async function auth(env, request, url, path) {
       scope: "https://www.googleapis.com/auth/youtube https://www.googleapis.com/auth/yt-analytics.readonly",
       access_type: "offline", prompt: "consent", include_granted_scopes: "true" });
     return new Response(null, { status: 302, headers: { location: `https://accounts.google.com/o/oauth2/v2/auth?${q}`, "cache-control": "no-store" } });
+  }
+  if (path === "/auth/spreaker/start") {
+    // Einmalige Spreaker-Verbindung, nur Admin: Spreaker leitet mit state=spreaker.<nonce> auf www.m365.fm/callback zurueck; die Seite tauscht den Code sofort
+    // ueber POST /api/admin/spreaker-exchange (spreaker_connect.js) und zeigt einen verschluesselten Text fuer den Workflow „Spreaker verbinden (einmalig)“.
+    // Das Nonce steckt zusaetzlich im signierten Cookie m365sp (600 s); der Tausch klappt nur mit passendem state (Login-CSRF-Schutz).
+    if (isStaging(env)) return html("<p>Not available in staging.</p>", 403);
+    const sess = await readSessionInfo(env, request), admin = sess ? await me(env, sess.uid) : null;
+    if (!admin?.admin) return html("<p>Admin login required.</p>", 403);
+    if (!env.SPREAKER_CLIENT_ID || !env.SPREAKER_CLIENT_SECRET) return html("<p>Spreaker not configured.</p>", 503);
+    const o = await spreakerStart(env, admin.id);
+    return new Response(null, { status: 302, headers: { location: o.location, "set-cookie": o.setCookie, "cache-control": "no-store" } });
   }
   if (path === "/auth/linkedin-events/start" || path === "/auth/linkedin-events/callback") {   // einmalige Verbindung der LinkedIn-Seite, nur Admin
     const sess = await readSessionInfo(env, request), admin = sess ? await me(env, sess.uid) : null;
@@ -460,6 +472,7 @@ async function api(env, request, url, path, asUser, ctx) {
   if (path.startsWith("/api/credit/")) { const q = await handleCredits(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/seo/")) { const q = await handleSeo(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/edits/")) { const v = await handleVotes(env, request, url, path, user, J); if (v) return v; }
+  if (path === "/api/admin/spreaker-exchange") return await handleSpreakerExchange(env, request, user, J, asUser !== undefined);   // Spreaker-Code sofort tauschen, nur Admin (spreaker_connect.js)
   if (path.startsWith("/api/admin/linkedin/")) return await handleLinkedinEvents(env, request, url, path, user, J);
   if (path.startsWith("/api/admin/panel/")) return await handleAdminPanel(env, request, url, path, user, J);
   if (path.startsWith("/api/entity") || path.startsWith("/api/admin/entity")) { const e = await handleEntity(env, request, url, path, user, J); if (e) return e; }
