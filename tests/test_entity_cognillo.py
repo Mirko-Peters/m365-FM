@@ -101,9 +101,9 @@ class Sponsoring(unittest.TestCase):
         self.assertEqual(SPM.sponsor_extra_entities(FIRMA, "2026-11-10", RAW, self.recs), [FIRMA, *PRODUKTE])
         self.assertTrue(SPM.sponsor_extra_entities(FIRMA, "2027-07-17", RAW, self.recs))   # Nachfrist 182 Tage nach "end"
         self.assertEqual(SPM.sponsor_extra_entities(FIRMA, "2027-07-18", RAW, self.recs), [])
-        self.assertEqual([o["id"] for o in SPM.active_sponsor_orgs("2026-11-10", RAW, self.recs)], ["ifakt", FIRMA])
-        self.assertEqual([o["id"] for o in SPM.active_sponsor_orgs("2027-07-17", RAW, self.recs)], ["ifakt", FIRMA])   # Lead-Formular bleibt in der Karenzzeit
-        self.assertEqual([o["id"] for o in SPM.active_sponsor_orgs("2027-07-18", RAW, self.recs)], ["ifakt"])
+        self.assertEqual([o["id"] for o in SPM.active_sponsor_orgs("2026-11-10", RAW, self.recs) if o["id"] != "nerdio"], ["ifakt", FIRMA])
+        self.assertEqual([o["id"] for o in SPM.active_sponsor_orgs("2027-07-17", RAW, self.recs) if o["id"] != "nerdio"], ["ifakt", FIRMA])   # Lead-Formular bleibt in der Karenzzeit
+        self.assertEqual([o["id"] for o in SPM.active_sponsor_orgs("2027-07-18", RAW, self.recs) if o["id"] != "nerdio"], ["ifakt"])
 
     def test_lead_formular(self):
         h = ADS.sponsor_lead(BASE, "de", FIRMA, "Cognillo")

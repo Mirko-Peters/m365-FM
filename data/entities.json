@@ -36500,14 +36500,31 @@
   "name": "Nerdio",
   "aliases": [],
   "desc": {
-   "en": "Software vendor whose Nerdio Manager platform helps IT teams and MSPs deploy, manage and cost-optimize Azure Virtual Desktop, Windows 365 and Intune environments; the guest leads a team building a new platform there.",
-   "de": ""
+   "en": "Chicago-based software company whose Nerdio Manager products manage Azure Virtual Desktop, Windows 365, Intune and Microsoft 365 for IT teams and managed service providers. Its fact sheet gives 2020 as the founding year.",
+   "de": "Softwarefirma mit Sitz in Chicago, deren Nerdio-Manager-Produkte Azure Virtual Desktop, Windows 365, Intune und Microsoft 365 für IT-Teams und Managed Service Provider verwalten. Das Unternehmensdatenblatt nennt 2020 als Gründungsjahr."
   },
-  "web": "",
+  "web": "https://getnerdio.com/",
   "wikidata": "",
   "wikipedia": "",
   "docs": "",
-  "rel": [],
+  "rel": [
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "windows-365"
+   ],
+   [
+    "related_to",
+    "intune"
+   ],
+   [
+    "related_to",
+    "managed-service-provider"
+   ]
+  ],
   "source": {
    "import": "nerdio.json",
    "lang": "en",
@@ -36515,7 +36532,9 @@
    "episodes": [
     "73192525"
    ]
-  }
+  },
+  "city": "Chicago",
+  "country": "United States"
  },
  {
   "id": "nested-groups",
@@ -61950,6 +61969,2476 @@
    "import": "ifakt-platform-entities",
    "lang": "en",
    "approved_by": "Mirko Peters (11.11.2026: alle Microsoft- und Azure-Plattformen als Entitaeten mit Langtext)"
+  }
+ },
+ {
+  "id": "avd-scaling-plan",
+  "type": "concept",
+  "name": "AVD scaling plan",
+  "aliases": [
+   "Autoscale scaling plan"
+  ],
+  "desc": {
+   "en": "An Azure Virtual Desktop scaling plan defines schedules that let autoscale start and stop session hosts in a host pool to reduce costs. It is assigned to host pools of a matching type, pooled or personal.",
+   "de": "Ein Skalierungsplan in Azure Virtual Desktop definiert Zeitpläne, mit denen Autoscale Sitzungshosts eines Hostpools startet und beendet, um Kosten zu senken. Er wird Hostpools passenden Typs (gepoolt oder persönlich) zugewiesen."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scaling-plan",
+  "rel": [
+   [
+    "part_of",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ],
+   [
+    "related_to",
+    "azure-rbac"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-power-management-autoscaling",
+  "type": "concept",
+  "name": "Power management autoscaling (Azure Virtual Desktop)",
+  "aliases": [],
+  "desc": {
+   "en": "Power management autoscaling is the generally available autoscale method in Azure Virtual Desktop. It powers session hosts on and off, deallocating them, to match capacity. It is available in Azure and Azure Government.",
+   "de": "Power Management Autoscaling ist die allgemein verfügbare Autoscale-Methode in Azure Virtual Desktop. Sie schaltet Sitzungshosts je nach Bedarf ein und aus (Aufhebung der Zuordnung). Sie steht in Azure und Azure Government bereit."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios",
+  "rel": [
+   [
+    "broader",
+    "avd-scaling-plan"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-dynamic-autoscaling",
+  "type": "concept",
+  "name": "Dynamic autoscaling (Azure Virtual Desktop)",
+  "aliases": [],
+  "desc": {
+   "en": "Dynamic autoscaling is a preview autoscale method in Azure Virtual Desktop. Besides powering session hosts on and off, it creates and deletes them. It needs pooled host pools with session host configuration and runs only in Azure.",
+   "de": "Dynamic Autoscaling ist eine Autoscale-Methode in Azure Virtual Desktop, die sich in der Preview befindet. Sie schaltet Sitzungshosts ein und aus und erstellt oder löscht sie. Sie erfordert gepoolte Hostpools mit Sitzungshostkonfiguration, nur in Azure."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios",
+  "rel": [
+   [
+    "broader",
+    "avd-scaling-plan"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-autoscale-schedule-phases",
+  "type": "concept",
+  "name": "Autoscale schedule phases (ramp-up, peak, ramp-down, off-peak)",
+  "aliases": [
+   "Ramp-up",
+   "Peak",
+   "Ramp-down",
+   "Off-peak"
+  ],
+  "desc": {
+   "en": "Autoscale schedules in Azure Virtual Desktop have four phases: ramp-up, peak, ramp-down and off-peak. Each phase sets how autoscale turns session hosts on or off, for example no shutdowns during ramp-up.",
+   "de": "Autoscale-Zeitpläne in Azure Virtual Desktop haben vier Phasen: Hochfahren, Spitzenzeit, Herunterfahren und Nebenzeit. Jede Phase legt fest, wie Sitzungshosts ein- oder ausgeschaltet werden, etwa keine Abschaltung beim Hochfahren."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios",
+  "rel": [
+   [
+    "broader",
+    "avd-scaling-plan"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-capacity-threshold",
+  "type": "concept",
+  "name": "Capacity threshold (Azure Virtual Desktop autoscale)",
+  "aliases": [],
+  "desc": {
+   "en": "The capacity threshold in Azure Virtual Desktop autoscale is the percentage of used host pool capacity that triggers scaling. Autoscale turns on hosts above it and turns hosts off only if usage stays at or below it.",
+   "de": "Der Kapazitätsschwellenwert beim Autoscale in Azure Virtual Desktop ist der Prozentsatz der genutzten Hostpool-Kapazität, der eine Skalierung auslöst. Hosts werden darüber eingeschaltet und nur ausgeschaltet, wenn die Last darunter bleibt."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scaling-plan",
+  "rel": [
+   [
+    "broader",
+    "avd-scaling-plan"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ]
+  ],
+  "kind": "metric",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-minimum-percentage-of-hosts",
+  "type": "concept",
+  "name": "Minimum percentage of hosts (Azure Virtual Desktop autoscale)",
+  "aliases": [],
+  "desc": {
+   "en": "The minimum percentage of hosts is the share of session hosts that autoscale keeps on during a phase and never turns off. Results are rounded up, so 10% of 7 hosts keeps one host on.",
+   "de": "Der Mindestprozentsatz an Hosts gibt an, welcher Anteil der Sitzungshosts in einer Phase eingeschaltet bleibt und von Autoscale nie abgeschaltet wird. Es wird aufgerundet: 10 % von 7 Hosts ergibt einen laufenden Host."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scaling-plan",
+  "rel": [
+   [
+    "broader",
+    "avd-scaling-plan"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ]
+  ],
+  "kind": "metric",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-maximum-session-limit",
+  "type": "concept",
+  "name": "Maximum session limit (Azure Virtual Desktop)",
+  "aliases": [
+   "MaxSessionLimit"
+  ],
+  "desc": {
+   "en": "The maximum session limit is the number of user sessions allowed per session host in an Azure Virtual Desktop pooled host pool. Available capacity equals available hosts times this limit, which autoscale uses.",
+   "de": "Das maximale Sitzungslimit legt fest, wie viele Benutzersitzungen pro Sitzungshost in einem gepoolten Azure-Virtual-Desktop-Hostpool erlaubt sind. Die verfügbare Kapazität ergibt sich aus Hostanzahl mal Limit; Autoscale nutzt sie."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios",
+  "rel": [
+   [
+    "broader",
+    "avd-host-pool"
+   ]
+  ],
+  "kind": "metric",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-force-logoff",
+  "type": "concept",
+  "name": "Force sign out users during ramp-down (Azure Virtual Desktop)",
+  "aliases": [
+   "Force logoff"
+  ],
+  "desc": {
+   "en": "Force sign out is an autoscale option in the ramp-down phase of Azure Virtual Desktop. Autoscale puts the host with the fewest sessions in drain mode, notifies users, waits, then signs them out and turns the host off.",
+   "de": "Erzwungene Abmeldung ist eine Autoscale-Option in der Herunterfahrphase von Azure Virtual Desktop. Der Host mit den wenigsten Sitzungen kommt in den Drain-Modus, Benutzer werden benachrichtigt, nach der Wartezeit abgemeldet und der Host abgeschaltet."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios",
+  "rel": [
+   [
+    "broader",
+    "avd-scaling-plan"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-drain-mode",
+  "type": "concept",
+  "name": "Drain mode (Azure Virtual Desktop)",
+  "aliases": [],
+  "desc": {
+   "en": "Drain mode isolates an Azure Virtual Desktop session host for maintenance. It accepts no new user sessions, while existing sessions stay active until users sign out or an administrator ends them.",
+   "de": "Der Drain-Modus isoliert einen Azure-Virtual-Desktop-Sitzungshost für Wartungsarbeiten. Er nimmt keine neuen Benutzersitzungen an; bestehende Sitzungen bleiben aktiv, bis sich Benutzer abmelden oder ein Administrator sie beendet."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/drain-mode",
+  "rel": [
+   [
+    "broader",
+    "avd-session-host"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-start-vm-on-connect",
+  "type": "concept",
+  "name": "Start VM on Connect (Azure Virtual Desktop)",
+  "aliases": [],
+  "desc": {
+   "en": "Start VM on Connect lets users power on deallocated Azure Virtual Desktop session host VMs only when needed, which saves cost. It is configured per host pool and works with personal and pooled host pools.",
+   "de": "Start VM on Connect erlaubt es, deallokierte Sitzungshost-VMs in Azure Virtual Desktop erst bei Bedarf durch Benutzer einzuschalten, was Kosten spart. Es wird pro Hostpool konfiguriert und gilt für persönliche und gepoolte Hostpools."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/start-virtual-machine-connect",
+  "rel": [
+   [
+    "part_of",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ],
+   [
+    "related_to",
+    "azure-rbac"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-scaling-plan-exclusion-tag",
+  "type": "concept",
+  "name": "Scaling plan exclusion tag (Azure Virtual Desktop)",
+  "aliases": [
+   "excludeFromScaling"
+  ],
+  "desc": {
+   "en": "The exclusion tag is a tag name set in an Azure Virtual Desktop scaling plan. Session hosts carrying it are not started, stopped or changed in drain mode by autoscale, but still count toward the minimum percentage of hosts.",
+   "de": "Das Ausschluss-Tag ist ein im Azure-Virtual-Desktop-Skalierungsplan festgelegter Tag-Name. Sitzungshosts mit diesem Tag werden von Autoscale nicht gestartet, beendet oder im Drain-Modus geändert, zählen aber zum Mindestprozentsatz."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scaling-plan",
+  "rel": [
+   [
+    "broader",
+    "avd-scaling-plan"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ],
+   [
+    "related_to",
+    "azure-resource-tags"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-breadth-first-load-balancing",
+  "type": "concept",
+  "name": "Breadth-first load balancing (Azure Virtual Desktop)",
+  "aliases": [],
+  "desc": {
+   "en": "Breadth-first load balancing spreads new sessions across session hosts in a pooled Azure Virtual Desktop host pool. It picks randomly among the half of hosts with the fewest sessions. The maximum session limit defaults to 999999.",
+   "de": "Breadth-first-Lastenausgleich verteilt neue Sitzungen auf die Sitzungshosts eines gepoolten Azure-Virtual-Desktop-Hostpools. Er wählt zufällig aus der Hälfte der Hosts mit den wenigsten Sitzungen. Das Sitzungslimit ist standardmäßig 999999."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/host-pool-load-balancing",
+  "rel": [
+   [
+    "broader",
+    "avd-host-pool"
+   ]
+  ],
+  "kind": "method",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-depth-first-load-balancing",
+  "type": "concept",
+  "name": "Depth-first load balancing (Azure Virtual Desktop)",
+  "aliases": [
+   "Depth-first",
+   "Tiefenorientierte Lastverteilung"
+  ],
+  "desc": {
+   "en": "Depth-first is a load balancing algorithm for pooled host pools that fills one session host at a time up to its maximum session limit. It makes scaling down powered-on hosts easier and requires a configured limit.",
+   "de": "Depth-first ist ein Lastverteilungsalgorithmus für gepoolte Hostpools, der einen Sitzungshost nach dem anderen bis zum maximalen Sitzungslimit füllt. Er erleichtert das Herunterskalieren aktiver Hosts und erfordert ein festgelegtes Limit."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/host-pool-load-balancing",
+  "rel": [
+   [
+    "broader",
+    "avd-host-pool"
+   ],
+   [
+    "related_to",
+    "azure-autoscale"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ]
+  ],
+  "kind": "method",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-session-host",
+  "type": "concept",
+  "name": "Session host (Azure Virtual Desktop)",
+  "aliases": [],
+  "desc": {
+   "en": "A session host is a virtual machine registered to Azure Virtual Desktop that users connect to for their sessions. A host pool is a collection of session hosts, which should come from the same image.",
+   "de": "Ein Sitzungshost ist eine bei Azure Virtual Desktop registrierte virtuelle Maschine, mit der sich Benutzer für ihre Sitzungen verbinden. Ein Hostpool ist eine Sammlung von Sitzungshosts, die aus demselben Image stammen sollten."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/terminology",
+  "rel": [
+   [
+    "part_of",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ],
+   [
+    "related_to",
+    "windows-enterprise-multi-session"
+   ],
+   [
+    "related_to",
+    "fslogix"
+   ]
+  ],
+  "kind": "term",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-session-host-configuration",
+  "type": "concept",
+  "name": "Session host configuration (Azure Virtual Desktop)",
+  "aliases": [],
+  "desc": {
+   "en": "A session host configuration defines properties such as disk type and OS image for all session hosts in a host pool. Changes are applied to existing hosts through session host update, which replaces VMs in batches. Introduced in preview in November 2024.",
+   "de": "Eine Sitzungshostkonfiguration legt Eigenschaften wie Datenträgertyp und Betriebssystem-Image für alle Sitzungshosts eines Hostpools fest. Änderungen werden per Sitzungshost-Update angewendet, das VMs stapelweise ersetzt. Im November 2024 als Preview eingeführt."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new",
+  "rel": [
+   [
+    "broader",
+    "avd-host-pool"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-personal-host-pool",
+  "type": "concept",
+  "name": "Personal host pool (Azure Virtual Desktop)",
+  "aliases": [],
+  "desc": {
+   "en": "In a personal host pool, each session host is assigned to one user, who always gets sessions on that host. Assignment is either direct, by an administrator, or automatic to the first available session host.",
+   "de": "In einem persönlichen Hostpool ist jeder Sitzungshost einem einzelnen Benutzer zugewiesen, der dort immer seine Sitzungen erhält. Die Zuweisung erfolgt direkt durch einen Administrator oder automatisch zum ersten verfügbaren Sitzungshost."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/terminology",
+  "rel": [
+   [
+    "broader",
+    "avd-host-pool"
+   ]
+  ],
+  "kind": "term",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-pooled-host-pool",
+  "type": "concept",
+  "name": "Pooled host pool (Azure Virtual Desktop)",
+  "aliases": [],
+  "desc": {
+   "en": "In a pooled host pool, user sessions are load balanced across session hosts, so several users can share one host. The load balancing algorithm is either breadth-first or depth-first.",
+   "de": "In einem gepoolten Hostpool werden Benutzersitzungen auf Sitzungshosts verteilt, sodass mehrere Benutzer einen Host gemeinsam nutzen können. Als Lastverteilung dienen Breadth-first oder Depth-first."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/host-pool-load-balancing",
+  "rel": [
+   [
+    "broader",
+    "avd-host-pool"
+   ],
+   [
+    "related_to",
+    "windows-enterprise-multi-session"
+   ]
+  ],
+  "kind": "term",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-application-group",
+  "type": "concept",
+  "name": "Application group (Azure Virtual Desktop)",
+  "aliases": [],
+  "desc": {
+   "en": "An application group controls which resources users can access in one host pool. It is either a Desktop group (full desktop, pooled or personal) or a RemoteApp group (individual apps, pooled only). Each group belongs to one workspace.",
+   "de": "Eine Anwendungsgruppe steuert, auf welche Ressourcen Benutzer in einem Hostpool zugreifen. Sie ist entweder eine Desktopgruppe (voller Desktop, gepoolt oder persönlich) oder eine RemoteApp-Gruppe (einzelne Apps, nur gepoolt). Jede Gruppe gehört zu einem Arbeitsbereich."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/environment-setup",
+  "rel": [
+   [
+    "part_of",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ]
+  ],
+  "kind": "term",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-workspace",
+  "type": "concept",
+  "name": "Workspace (Azure Virtual Desktop)",
+  "aliases": [],
+  "desc": {
+   "en": "A workspace is a logical grouping of application groups in Azure Virtual Desktop and shows users what is published to them. Each application group must be associated with a workspace, and can belong to only one.",
+   "de": "Ein Arbeitsbereich (Workspace) ist in Azure Virtual Desktop eine logische Gruppierung von Anwendungsgruppen und zeigt Benutzern, was ihnen veröffentlicht wurde. Jede Anwendungsgruppe muss genau einem Arbeitsbereich zugeordnet sein."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/environment-setup",
+  "rel": [
+   [
+    "part_of",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ]
+  ],
+  "kind": "term",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-regional-host-pools",
+  "type": "concept",
+  "name": "Regional host pools (Azure Virtual Desktop)",
+  "aliases": [],
+  "desc": {
+   "en": "Regional host pools store host pool metadata in the selected Azure region instead of a geographical database shared across regions. This removes cross-region dependencies. Generally available since September 2026.",
+   "de": "Regionale Hostpools speichern ihre Metadaten in der gewählten Azure-Region statt in einer regionsübergreifend genutzten geografischen Datenbank. Das entfernt regionsübergreifende Abhängigkeiten. Seit September 2026 allgemein verfügbar (GA)."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new",
+  "rel": [
+   [
+    "broader",
+    "avd-host-pool"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-managed-identity",
+  "type": "concept",
+  "name": "Managed identity for Azure Virtual Desktop",
+  "aliases": [],
+  "desc": {
+   "en": "Managed identities for Azure Virtual Desktop remove the need to grant permissions to the service principal and allow permission control per host pool. They apply to session host configuration, autoscale and Start VM on Connect. Generally available since September 2026.",
+   "de": "Verwaltete Identitäten für Azure Virtual Desktop machen die Rechtevergabe an den Dienstprinzipal überflüssig und erlauben Berechtigungen je Hostpool. Sie gelten für Sitzungshostkonfiguration, Autoscale und Start VM on Connect. Seit September 2026 GA."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new",
+  "rel": [
+   [
+    "part_of",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ],
+   [
+    "related_to",
+    "azure-autoscale"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-hibernation",
+  "type": "concept",
+  "name": "Hibernate (Azure Virtual Desktop personal host pools)",
+  "aliases": [
+   "Hibernation"
+  ],
+  "desc": {
+   "en": "Hibernate lets you pause session hosts in a personal host pool that are not in use while preserving their state. Deploying personal host pool session hosts with hibernate support has been generally available since May 2024, as has autoscale support.",
+   "de": "Mit Hibernate (Ruhezustand) lassen sich nicht genutzte Sitzungshosts in einem persönlichen Hostpool pausieren, wobei ihr Zustand erhalten bleibt. Bereitstellung mit Hibernate-Unterstützung und Autoscale-Unterstützung sind seit Mai 2024 allgemein verfügbar (GA)."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new",
+  "rel": [
+   [
+    "broader",
+    "avd-session-host"
+   ],
+   [
+    "related_to",
+    "azure-autoscale"
+   ],
+   [
+    "related_to",
+    "avd-personal-host-pool"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-hybrid",
+  "type": "product",
+  "name": "Azure Virtual Desktop Hybrid",
+  "aliases": [],
+  "desc": {
+   "en": "Azure Virtual Desktop Hybrid extends the service to on-premises hypervisors or physical Windows Server. Azure Arc connects the session hosts, and an Arc extension registers them with a host pool. Public preview in May 2026, generally available since September 2026.",
+   "de": "Azure Virtual Desktop Hybrid erweitert den Dienst auf lokale Hypervisoren oder physische Windows-Server. Azure Arc verbindet die Sitzungshosts, eine Arc-Erweiterung registriert sie in einem Hostpool. Preview ab Mai 2026, seit September 2026 GA."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new",
+  "rel": [
+   [
+    "developed_by",
+    "microsoft"
+   ],
+   [
+    "part_of",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "azure-arc"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ]
+  ],
+  "kind": "architecture",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-for-azure-local",
+  "type": "product",
+  "name": "Azure Virtual Desktop for Azure Local",
+  "aliases": [],
+  "desc": {
+   "en": "Azure Virtual Desktop for Azure Local runs session hosts on Azure Local infrastructure, while host pools, workspaces and application groups stay in Azure. It offers lower latency and data locality; a host pool holds hosts either in Azure or on Azure Local.",
+   "de": "Azure Virtual Desktop for Azure Local betreibt Sitzungshosts auf Azure-Local-Infrastruktur, während Hostpools, Arbeitsbereiche und Anwendungsgruppen in Azure bleiben. Es bietet geringere Latenz und Datenlokalität; ein Hostpool enthält Hosts entweder in Azure oder auf Azure Local."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/azure-local-overview",
+  "rel": [
+   [
+    "developed_by",
+    "microsoft"
+   ],
+   [
+    "part_of",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "azure-local"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ],
+   [
+    "related_to",
+    "fslogix"
+   ]
+  ],
+  "kind": "architecture",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "rdp-shortpath",
+  "type": "concept",
+  "name": "RDP Shortpath",
+  "aliases": [],
+  "desc": {
+   "en": "RDP Shortpath sets up a UDP-based transport between the client and an Azure Virtual Desktop session host. It offers more reliable connections and more consistent latency than the default TCP reverse connect transport, which remains the fallback.",
+   "de": "RDP Shortpath baut einen UDP-basierten Transport zwischen Client und Azure-Virtual-Desktop-Sitzungshost auf. Er bietet zuverlässigere Verbindungen und gleichmäßigere Latenz als der standardmäßige TCP-Reverse-Connect-Transport, der als Fallback dient."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-rdp-shortpath",
+  "rel": [
+   [
+    "broader",
+    "remote-desktop-protocol"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "windows-app"
+   ],
+   [
+    "related_to",
+    "azure-expressroute"
+   ],
+   [
+    "related_to",
+    "virtual-private-network"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "rdp-multipath",
+  "type": "concept",
+  "name": "RDP Multipath",
+  "aliases": [],
+  "desc": {
+   "en": "RDP Multipath keeps multiple redundant TCP and UDP transport paths for a remote session and switches automatically to an available path when network conditions degrade. It became generally available for Azure Virtual Desktop and Windows 365 in July 2025.",
+   "de": "RDP Multipath hält mehrere redundante TCP- und UDP-Transportpfade für eine Remotesitzung vor und wechselt bei schlechter werdenden Netzwerkbedingungen automatisch zu einem verfügbaren Pfad. Es ist seit Juli 2025 für Azure Virtual Desktop und Windows 365 allgemein verfügbar."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new",
+  "rel": [
+   [
+    "broader",
+    "remote-desktop-protocol"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "windows-365"
+   ],
+   [
+    "related_to",
+    "windows-app"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-multimedia-redirection",
+  "type": "concept",
+  "name": "Multimedia redirection (Azure Virtual Desktop)",
+  "aliases": [
+   "MMR"
+  ],
+  "desc": {
+   "en": "Multimedia redirection offloads browser video playback and WebRTC calls from the remote session to the local device, improving rendering and call quality. It needs a session host service and a browser extension for Microsoft Edge or Google Chrome.",
+   "de": "Multimedia Redirection lagert Videowiedergabe im Browser und WebRTC-Anrufe aus der Remotesitzung auf das lokale Gerät aus und verbessert so Darstellung und Anrufqualität. Nötig sind ein Dienst auf dem Sitzungshost und eine Browsererweiterung für Edge oder Chrome."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/multimedia-redirection-intro",
+  "rel": [
+   [
+    "part_of",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "windows-365"
+   ],
+   [
+    "related_to",
+    "windows-app"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "msix-app-attach",
+  "type": "concept",
+  "name": "MSIX app attach",
+  "aliases": [
+   "App attach"
+  ],
+  "desc": {
+   "en": "App attach (MSIX app attach) dynamically attaches applications from a package to a user session without installing them on session hosts or in images. Apps run in containers, and packages can be shared across multiple host pools.",
+   "de": "App attach (MSIX app attach) hängt Anwendungen aus einem Paket dynamisch an eine Benutzersitzung an, ohne sie auf Sitzungshosts oder in Images zu installieren. Die Apps laufen in Containern, und ein Paket kann für mehrere Hostpools genutzt werden."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/app-attach-overview",
+  "rel": [
+   [
+    "part_of",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ],
+   [
+    "related_to",
+    "fslogix"
+   ],
+   [
+    "related_to",
+    "log-analytics"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-remoteapp",
+  "type": "concept",
+  "name": "RemoteApp (Azure Virtual Desktop)",
+  "aliases": [],
+  "desc": {
+   "en": "RemoteApp delivers individual applications from a session host instead of a full desktop. In November 2026 the RemoteApp enhancements became generally available, improving window snapping, resizing and full-screen behavior so apps act more like local ones.",
+   "de": "RemoteApp stellt einzelne Anwendungen eines Sitzungshosts statt eines kompletten Desktops bereit. Im November 2026 wurden die RemoteApp-Erweiterungen allgemein verfügbar; sie verbessern Fensteranordnung, Größenänderung und Vollbild, sodass Apps lokalen ähnlicher wirken."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new",
+  "rel": [
+   [
+    "broader",
+    "avd-application-group"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "windows-app"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-context-based-redirections",
+  "type": "concept",
+  "name": "Context-based redirections (Azure Virtual Desktop)",
+  "aliases": [],
+  "desc": {
+   "en": "Context-based redirections let admins dynamically control clipboard, printer, drive and low-level USB redirection by user identity, device compliance and network conditions. Announced as Public Preview in June 2026, with RemoteApp support in preview.",
+   "de": "Mit kontextbasierten Umleitungen steuern Administratoren Zwischenablage, Drucker, Laufwerke und USB-Umleitung dynamisch nach Benutzeridentität, Gerätekonformität und Netzwerkbedingungen. Im Juni 2026 als Public Preview angekündigt, RemoteApp-Support in der Preview."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new",
+  "rel": [
+   [
+    "part_of",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "conditional-access"
+   ],
+   [
+    "related_to",
+    "conditional-access-authentication-context"
+   ],
+   [
+    "related_to",
+    "device-compliance"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-display-protection",
+  "type": "concept",
+  "name": "Display Protection (Azure Virtual Desktop)",
+  "aliases": [],
+  "desc": {
+   "en": "Display Protection helps protect sensitive content in remote sessions by securing the display path between the session host and supported endpoint devices. Admins set the required protection level per host pool; announced as Public Preview in September 2026.",
+   "de": "Display Protection schützt sensible Inhalte in Remotesitzungen, indem der Anzeigepfad zwischen Sitzungshost und unterstützten Endgeräten gesichert wird. Administratoren legen die Schutzstufe pro Hostpool fest; im September 2026 als Public Preview angekündigt."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new",
+  "rel": [
+   [
+    "part_of",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-screen-capture-protection",
+  "type": "concept",
+  "name": "Screen capture protection (Azure Virtual Desktop)",
+  "aliases": [],
+  "desc": {
+   "en": "Screen capture protection blocks remote content from appearing in screenshots and screen sharing on client devices. It is enforced via Intune or Group Policy and is not DRM, so it should be one layer of a defense-in-depth approach.",
+   "de": "Der Bildschirmaufnahmeschutz verhindert, dass Remote-Inhalte in Screenshots und Bildschirmfreigaben auf Clientgeräten erscheinen. Er wird per Intune oder Gruppenrichtlinie durchgesetzt und ist kein DRM, sondern eine Ebene einer mehrschichtigen Sicherheitsstrategie."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/screen-capture-protection",
+  "rel": [
+   [
+    "part_of",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "windows-365"
+   ],
+   [
+    "related_to",
+    "intune"
+   ],
+   [
+    "related_to",
+    "windows-app"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-watermarking",
+  "type": "concept",
+  "name": "Watermarking (Azure Virtual Desktop)",
+  "aliases": [],
+  "desc": {
+   "en": "Watermarking overlays QR codes on remote desktop sessions to deter capture of sensitive information. Each code embeds a connection or device ID that admins can trace through Azure Virtual Desktop Insights or Log Analytics.",
+   "de": "Wasserzeichen blenden QR-Codes in Remotedesktopsitzungen ein, um das Erfassen sensibler Informationen zu erschweren. Jeder Code enthält eine Verbindungs- oder Geräte-ID, die Administratoren über Azure Virtual Desktop Insights oder Log Analytics nachverfolgen."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/watermarking",
+  "rel": [
+   [
+    "part_of",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "log-analytics"
+   ],
+   [
+    "related_to",
+    "intune"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-agent",
+  "type": "concept",
+  "name": "Azure Virtual Desktop agent",
+  "aliases": [
+   "AVD Agent"
+  ],
+  "desc": {
+   "en": "The Azure Virtual Desktop agent connects session hosts to the Azure Virtual Desktop service and acts as intermediary between the service and the virtual machine. New versions install automatically and roll out progressively, first through validation environments.",
+   "de": "Der Azure-Virtual-Desktop-Agent verbindet Sitzungshosts mit dem Azure-Virtual-Desktop-Dienst und vermittelt zwischen Dienst und virtueller Maschine. Neue Versionen werden automatisch installiert und schrittweise ausgerollt, zunächst über Validierungsumgebungen."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new-agent",
+  "rel": [
+   [
+    "broader",
+    "avd-session-host"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ]
+  ],
+  "kind": "term",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-insights",
+  "type": "product",
+  "name": "Azure Virtual Desktop Insights",
+  "aliases": [],
+  "desc": {
+   "en": "Azure Virtual Desktop Insights is a monitoring dashboard built on Azure Monitor Workbooks. It uses diagnostic data, performance counters and event logs stored in a Log Analytics workspace and collected by the Azure Monitor Agent.",
+   "de": "Azure Virtual Desktop Insights ist ein Überwachungs-Dashboard auf Basis von Azure Monitor Workbooks. Es nutzt Diagnosedaten, Leistungsindikatoren und Ereignisprotokolle aus einem Log-Analytics-Arbeitsbereich, die der Azure Monitor Agent sammelt."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/insights",
+  "rel": [
+   [
+    "developed_by",
+    "microsoft"
+   ],
+   [
+    "part_of",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "azure-monitor-workbooks"
+   ],
+   [
+    "related_to",
+    "log-analytics"
+   ],
+   [
+    "related_to",
+    "azure-monitor-agent"
+   ],
+   [
+    "related_to",
+    "azure-monitor"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-validation-environment",
+  "type": "concept",
+  "name": "Validation host pool (Azure Virtual Desktop)",
+  "aliases": [
+   "Validation environment"
+  ],
+  "desc": {
+   "en": "A validation host pool receives Azure Virtual Desktop service updates before production host pools, so admins can find update-related problems before users are affected. It is enabled as a per-host-pool setting and should mirror production.",
+   "de": "Ein Validierungs-Hostpool erhält Updates des Azure-Virtual-Desktop-Dienstes vor den Produktions-Hostpools, sodass Administratoren updatebedingte Probleme vor Auswirkungen auf Benutzer finden. Er wird pro Hostpool aktiviert und sollte die Produktion nachbilden."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-validation-environment",
+  "rel": [
+   [
+    "broader",
+    "avd-host-pool"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-scheduled-agent-updates",
+  "type": "concept",
+  "name": "Scheduled agent updates (Azure Virtual Desktop)",
+  "aliases": [],
+  "desc": {
+   "en": "A host pool setting in Azure Virtual Desktop that sets up to two two-hour maintenance windows for updating the AVD agent, side-by-side stack and Geneva Monitoring agent. Critical updates are still forced regardless of the windows.",
+   "de": "Eine Hostpool-Einstellung in Azure Virtual Desktop mit bis zu zwei zweistündigen Wartungsfenstern für Updates von AVD-Agent, Side-by-Side-Stack und Geneva-Monitoring-Agent. Kritische Updates werden unabhängig davon erzwungen."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/scheduled-agent-updates",
+  "rel": [
+   [
+    "part_of",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ],
+   [
+    "related_to",
+    "avd-agent"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-single-sign-on",
+  "type": "concept",
+  "name": "Single sign-on (Azure Virtual Desktop)",
+  "aliases": [],
+  "desc": {
+   "en": "Lets users sign in to Windows on an Azure Virtual Desktop session host with a Microsoft Entra ID token instead of typing a password, enabling passwordless sign-in. It requires Entra joined or hybrid joined hosts and the enablerdsaadauth RDP property.",
+   "de": "Ermöglicht die Anmeldung an Windows auf einem Azure-Virtual-Desktop-Sitzungshost mit einem Microsoft-Entra-ID-Token statt Passworteingabe, auch passwortlos. Voraussetzung sind Entra-joined oder hybrid-joined Hosts und die RDP-Eigenschaft enablerdsaadauth."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-single-sign-on",
+  "rel": [
+   [
+    "part_of",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "single-sign-on"
+   ],
+   [
+    "related_to",
+    "entra-id"
+   ],
+   [
+    "related_to",
+    "hybrid-entra-join"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-entra-join",
+  "type": "concept",
+  "name": "Microsoft Entra joined session hosts (Azure Virtual Desktop)",
+  "aliases": [],
+  "desc": {
+   "en": "Azure Virtual Desktop session hosts joined directly to Microsoft Entra ID instead of Active Directory, without needing a domain controller or Entra Domain Services. They can be enrolled in Intune automatically and support FSLogix profiles on Azure Files.",
+   "de": "Azure-Virtual-Desktop-Sitzungshosts, die direkt Microsoft Entra ID beitreten statt Active Directory, ohne Domänencontroller oder Entra Domain Services. Sie lassen sich automatisch in Intune registrieren und unterstützen FSLogix-Profile auf Azure Files."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/azure-ad-joined-session-hosts",
+  "rel": [
+   [
+    "part_of",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "entra-id"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ],
+   [
+    "related_to",
+    "fslogix"
+   ],
+   [
+    "related_to",
+    "hybrid-entra-join"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-teams-media-optimization",
+  "type": "concept",
+  "name": "Microsoft Teams media optimization (Azure Virtual Desktop)",
+  "aliases": [],
+  "desc": {
+   "en": "Redirects Microsoft Teams calling and meeting media to the user's local device while Teams runs on the session host. It uses SlimCore or the WebRTC Redirector Service with Windows App or the Remote Desktop client. Classic Teams on VDI ends support on 1 October 2026.",
+   "de": "Leitet Medien von Microsoft-Teams-Anrufen und -Besprechungen auf das lokale Gerät um, während Teams auf dem Sitzungshost läuft. Genutzt werden SlimCore oder der WebRTC Redirector Service mit Windows App oder Remote-Desktop-Client. Classic Teams auf VDI: Supportende 1. Oktober 2026."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/teams-on-avd",
+  "rel": [
+   [
+    "part_of",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "teams"
+   ],
+   [
+    "related_to",
+    "windows-enterprise-multi-session"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-ephemeral-os-disks",
+  "type": "concept",
+  "name": "Ephemeral OS disks (Azure Virtual Desktop)",
+  "aliases": [
+   "Ephemeral OS disk"
+  ],
+  "desc": {
+   "en": "An ephemeral OS disk lives on a VM's local storage instead of Azure Storage, giving lower latency and faster reimaging for stateless workloads. Data is lost on resize, redeploy or platform healing, and stop-deallocate is not supported.",
+   "de": "Ein kurzlebiger (ephemeral) OS-Datenträger liegt im lokalen VM-Speicher statt in Azure Storage und bietet geringere Latenz und schnelleres Reimaging für zustandslose Workloads. Daten gehen bei Größenänderung, Redeploy und Platform Healing verloren."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-machines/ephemeral-os-disks",
+  "rel": [
+   [
+    "broader",
+    "avd-session-host"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "golden-image"
+   ],
+   [
+    "related_to",
+    "azure-compute-gallery"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "trusted-launch",
+  "type": "concept",
+  "name": "Trusted launch (Azure virtual machines)",
+  "aliases": [],
+  "desc": {
+   "en": "A security feature for Azure Generation 2 VMs that protects against bootkits and rootkits using Secure Boot, a virtual TPM and boot integrity monitoring. It is enabled by default for new Gen2 VMs created in the portal, CLI and PowerShell.",
+   "de": "Ein Sicherheitsfeature für Azure-VMs der Generation 2, das mit Secure Boot, virtuellem TPM und Boot-Integritätsüberwachung vor Bootkits und Rootkits schützt. Es ist für neue Gen2-VMs in Portal, CLI und PowerShell standardmäßig aktiv."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch",
+  "rel": [
+   [
+    "part_of",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "trusted-platform-module"
+   ],
+   [
+    "related_to",
+    "azure-compute-gallery"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "avd-custom-image-templates",
+  "type": "concept",
+  "name": "Custom image templates (Azure Virtual Desktop)",
+  "aliases": [],
+  "desc": {
+   "en": "Azure Virtual Desktop feature built on Azure Image Builder that builds a custom session host image from a JSON template with built-in or custom scripts. The image is generalized with sysprep and can be stored in Azure Compute Gallery.",
+   "de": "Funktion von Azure Virtual Desktop auf Basis von Azure Image Builder, die aus einer JSON-Vorlage mit integrierten oder eigenen Skripten ein Sitzungshost-Image erstellt. Das Image wird mit Sysprep generalisiert und kann in Azure Compute Gallery liegen."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/virtual-desktop/custom-image-templates",
+  "rel": [
+   [
+    "broader",
+    "golden-image"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "azure-image-builder"
+   ],
+   [
+    "related_to",
+    "azure-compute-gallery"
+   ],
+   [
+    "related_to",
+    "fslogix"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "sysprep",
+  "type": "concept",
+  "name": "Sysprep (Windows image preparation)",
+  "aliases": [],
+  "desc": {
+   "en": "Windows tool whose /generalize option removes computer-specific information such as the SID so an installation can be captured and deployed to other PCs. Windows 8.1 and Windows Server 2012 or later allow up to 1001 runs per image.",
+   "de": "Windows-Werkzeug, dessen Option /generalize computerspezifische Informationen wie die SID entfernt, damit eine Installation erfasst und auf andere PCs verteilt werden kann. Ab Windows 8.1 und Windows Server 2012 sind bis zu 1001 Läufe je Image möglich."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/sysprep--generalize--a-windows-installation",
+  "rel": [
+   [
+    "broader",
+    "golden-image"
+   ],
+   [
+    "related_to",
+    "azure-image-builder"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ]
+  ],
+  "kind": "method",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "entra-kerberos-azure-files",
+  "type": "concept",
+  "name": "Microsoft Entra Kerberos for Azure Files",
+  "aliases": [
+   "Microsoft Entra Kerberos authentication for Azure Files"
+  ],
+  "desc": {
+   "en": "Lets hybrid and cloud-only users access Azure file shares over SMB with Microsoft Entra credentials, with Entra ID issuing the Kerberos tickets. Clients must be Entra joined or hybrid joined, and cloud-only users need no domain controller.",
+   "de": "Ermöglicht hybriden und reinen Cloud-Benutzern den SMB-Zugriff auf Azure-Dateifreigaben mit Microsoft-Entra-Anmeldedaten; Entra ID stellt die Kerberos-Tickets aus. Clients müssen Entra-joined oder hybrid-joined sein; Cloud-Benutzer brauchen keinen Domänencontroller."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/storage/files/storage-files-identity-auth-hybrid-identities-enable",
+  "rel": [
+   [
+    "part_of",
+    "azure-files"
+   ],
+   [
+    "related_to",
+    "microsoft-entra-kerberos"
+   ],
+   [
+    "related_to",
+    "fslogix"
+   ],
+   [
+    "related_to",
+    "entra-connect"
+   ],
+   [
+    "related_to",
+    "entra-cloud-sync"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "fslogix-profile-container",
+  "type": "concept",
+  "name": "FSLogix profile container",
+  "aliases": [
+   "Profile Container"
+  ],
+  "desc": {
+   "en": "A VHD(x) file on a remote file share that stores the user's profile, typically C:\\Users\\username, apart from an exclusion list. It is the most common FSLogix container and can also hold Office data in a single file.",
+   "de": "Eine VHD(x)-Datei auf einer Remote-Dateifreigabe, die das Benutzerprofil (typisch C:\\Users\\Benutzername) abzüglich einer Ausschlussliste speichert. Es ist der häufigste FSLogix-Container und kann auch Office-Daten in einer Datei enthalten."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/fslogix/concepts-container-types",
+  "rel": [
+   [
+    "part_of",
+    "fslogix"
+   ],
+   [
+    "related_to",
+    "azure-files"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "fslogix-office-container",
+  "type": "concept",
+  "name": "FSLogix Office container",
+  "aliases": [
+   "ODFC container"
+  ],
+  "desc": {
+   "en": "An optional FSLogix VHD(x) container for Office-specific profile data such as Outlook, OneDrive and SharePoint. It is often paired with other roaming profile solutions, and its data is mostly re-creatable, so it is not backed up or replicated.",
+   "de": "Ein optionaler FSLogix-VHD(x)-Container für Office-spezifische Profildaten wie Outlook, OneDrive und SharePoint. Er wird oft mit anderen Roaming-Profil-Lösungen kombiniert; die Daten sind meist neu erzeugbar und werden nicht gesichert oder repliziert."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/fslogix/concepts-container-types",
+  "rel": [
+   [
+    "part_of",
+    "fslogix"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "fslogix-cloud-cache",
+  "type": "concept",
+  "name": "FSLogix Cloud Cache",
+  "aliases": [],
+  "desc": {
+   "en": "FSLogix Cloud Cache keeps a local copy of Profile and ODFC containers on the VM and syncs changes to one or more remote storage providers. It protects users from short-term storage issues and can support disaster recovery across regions.",
+   "de": "FSLogix Cloud Cache hält eine lokale Kopie von Profil- und ODFC-Containern auf der VM und synchronisiert Änderungen mit einem oder mehreren Remote-Speicheranbietern. Es schützt vor kurzzeitigen Speicherproblemen und kann Disaster Recovery über Regionen hinweg unterstützen."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/fslogix/concepts-fslogix-cloud-cache",
+  "rel": [
+   [
+    "part_of",
+    "fslogix"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "azure-files"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "fslogix-app-masking",
+  "type": "concept",
+  "name": "FSLogix App Masking",
+  "aliases": [
+   "Application Masking"
+  ],
+  "desc": {
+   "en": "FSLogix Application Masking hides installed applications from selected users via Rule Sets created in the FSLogix Rule Editor. A Rule Set consists of a rule file (.fxr) and an assignment file (.fxa) placed on the virtual machine.",
+   "de": "FSLogix Application Masking blendet installierte Anwendungen für ausgewählte Benutzer aus, über Rule Sets aus dem FSLogix Rule Editor. Ein Rule Set besteht aus einer Regeldatei (.fxr) und einer Zuweisungsdatei (.fxa) auf der virtuellen Maschine."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/fslogix/tutorial-application-rule-sets",
+  "rel": [
+   [
+    "part_of",
+    "fslogix"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "fslogix-redirections-xml",
+  "type": "concept",
+  "name": "FSLogix redirections.xml",
+  "aliases": [
+   "Custom profile redirections.xml"
+  ],
+  "desc": {
+   "en": "redirections.xml is an admin-created file that includes or excludes files and folders in an FSLogix profile container. It is copied from a source folder set by RedirXMLSourceFolder and applies to profile containers only, not ODFC.",
+   "de": "redirections.xml ist eine vom Admin erstellte Datei, die Dateien und Ordner im FSLogix-Profilcontainer ein- oder ausschließt. Sie wird aus dem per RedirXMLSourceFolder festgelegten Quellordner kopiert und gilt nur für Profilcontainer, nicht für ODFC."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/fslogix/concepts-redirections-xml",
+  "rel": [
+   [
+    "part_of",
+    "fslogix"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "windows-365-boot",
+  "type": "concept",
+  "name": "Windows 365 Boot",
+  "aliases": [],
+  "desc": {
+   "en": "Windows 365 Boot lets Windows 11 physical devices sign users in directly to their Cloud PC instead of the local desktop. It offers a dedicated mode for one user and a shared mode for several users on one device.",
+   "de": "Mit Windows 365 Boot melden sich Benutzer auf physischen Windows-11-Geräten direkt an ihrem Cloud PC an statt am lokalen Desktop. Es gibt einen dedizierten Modus für einen Benutzer und einen freigegebenen Modus für mehrere Benutzer pro Gerät."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/windows-365/enterprise/windows-365-boot-overview",
+  "rel": [
+   [
+    "part_of",
+    "windows-365"
+   ],
+   [
+    "related_to",
+    "windows-365-frontline"
+   ],
+   [
+    "related_to",
+    "windows-365-link"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "showback-chargeback",
+  "type": "concept",
+  "name": "Showback and chargeback",
+  "aliases": [
+   "Showback",
+   "Chargeback"
+  ],
+  "desc": {
+   "en": "Showback gives teams visibility into the cloud costs they cause without billing them. Chargeback bills internal teams for their cloud costs through existing finance processes. Both rely on a cost allocation strategy, with showback usually first.",
+   "de": "Showback macht Teams die von ihnen verursachten Cloud-Kosten sichtbar, ohne sie zu belasten. Chargeback verrechnet Cloud-Kosten über bestehende Finanzprozesse intern an die Teams. Beides beruht auf einer Kostenallokation, meist zuerst Showback."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/cloud-computing/finops/framework/manage/invoicing-chargeback",
+  "rel": [
+   [
+    "broader",
+    "finops"
+   ],
+   [
+    "related_to",
+    "cost-to-serve"
+   ],
+   [
+    "related_to",
+    "microsoft-cost-management"
+   ],
+   [
+    "related_to",
+    "cloud-cost-optimization"
+   ]
+  ],
+  "kind": "practice",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "azure-budgets",
+  "type": "concept",
+  "name": "Azure budgets",
+  "aliases": [],
+  "desc": {
+   "en": "Azure budgets in Microsoft Cost Management compare actual or forecasted costs with a set amount and send email alerts at thresholds. They do not stop resources; action groups can trigger automation at subscription and resource group scope.",
+   "de": "Azure-Budgets in Microsoft Cost Management vergleichen tatsächliche oder prognostizierte Kosten mit einem Betrag und senden bei Schwellenwerten E-Mail-Warnungen. Ressourcen werden nicht gestoppt; Aktionsgruppen können Automatisierung auslösen."
+  },
+  "web": "",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "https://learn.microsoft.com/en-us/azure/cost-management-billing/costs/tutorial-acm-create-budgets",
+  "rel": [
+   [
+    "part_of",
+    "microsoft-cost-management"
+   ],
+   [
+    "related_to",
+    "cloud-cost-optimization"
+   ],
+   [
+    "related_to",
+    "azure-subscription"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "nerdio-manager-for-enterprise",
+  "type": "product",
+  "name": "Nerdio Manager for Enterprise",
+  "aliases": [],
+  "desc": {
+   "en": "Nerdio product for IT teams that manages Microsoft Azure Virtual Desktop, Windows 365 and Intune environments. Nerdio positions it as a platform for deploying, managing and optimizing costs of cloud desktops in an organization's own Azure.",
+   "de": "Nerdio-Produkt für IT-Teams zur Verwaltung von Microsoft Azure Virtual Desktop, Windows 365 und Intune. Nerdio positioniert es als Plattform, um Cloud-Desktops in der eigenen Azure-Umgebung bereitzustellen, zu verwalten und Kosten zu optimieren."
+  },
+  "web": "https://getnerdio.com/nerdio-manager-for-enterprise",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "",
+  "rel": [
+   [
+    "developed_by",
+    "nerdio"
+   ],
+   [
+    "instance_of",
+    "cloud-platform"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "windows-365"
+   ],
+   [
+    "related_to",
+    "intune"
+   ]
+  ],
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "nerdio-manager-for-msp",
+  "type": "product",
+  "name": "Nerdio Manager for MSP",
+  "aliases": [],
+  "desc": {
+   "en": "Nerdio product for managed service providers to set up, manage and grow Microsoft services for their customers, including Azure Virtual Desktop, Windows 365, Intune and Microsoft 365, with multi-customer features such as solution baselines.",
+   "de": "Nerdio-Produkt für Managed Service Provider, um Microsoft-Dienste für ihre Kunden einzurichten, zu verwalten und auszubauen, darunter Azure Virtual Desktop, Windows 365, Intune und Microsoft 365, mit Multikunden-Funktionen wie Solution Baselines."
+  },
+  "web": "https://getnerdio.com/",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "",
+  "rel": [
+   [
+    "developed_by",
+    "nerdio"
+   ],
+   [
+    "instance_of",
+    "cloud-platform"
+   ],
+   [
+    "related_to",
+    "managed-service-provider"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "windows-365"
+   ],
+   [
+    "related_to",
+    "intune"
+   ]
+  ],
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "nerdio-advisor",
+  "type": "concept",
+  "name": "Nerdio Advisor",
+  "aliases": [],
+  "desc": {
+   "en": "Nerdio Advisor is a suite of capabilities in Nerdio Manager. It models Azure Virtual Desktop deployment costs before resources are created and recommends changes to existing deployments, such as host pool and VM right-sizing.",
+   "de": "Nerdio Advisor ist eine Sammlung von Funktionen in Nerdio Manager. Sie modelliert die Kosten von Azure-Virtual-Desktop-Bereitstellungen vor dem Anlegen von Ressourcen und empfiehlt Änderungen an bestehenden Umgebungen, etwa Right-Sizing von Hostpools und VMs."
+  },
+  "web": "https://getnerdio.com/blog/unveiling-nerdio-manager-for-enterprise-6-and-nerdio-manager-for-msp-5/",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "",
+  "rel": [
+   [
+    "part_of",
+    "nerdio-manager-for-enterprise"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ],
+   [
+    "related_to",
+    "cloud-cost-optimization"
+   ]
+  ],
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "nerdio-scripted-actions",
+  "type": "concept",
+  "name": "Nerdio scripted actions",
+  "aliases": [],
+  "desc": {
+   "en": "Scripted actions in Nerdio Manager run Azure shell or Windows PowerShell scripts for tasks such as installing software, disabling services or configuring Azure resources. Nerdio lists them among its operations capabilities.",
+   "de": "Scripted Actions in Nerdio Manager führen Azure-Shell- oder Windows-PowerShell-Skripte aus, etwa zum Installieren von Software, Deaktivieren von Diensten oder Konfigurieren von Azure-Ressourcen. Nerdio zählt sie zu seinen Betriebsfunktionen."
+  },
+  "web": "https://getnerdio.com/nerdio-manager-for-enterprise",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "",
+  "rel": [
+   [
+    "part_of",
+    "nerdio-manager-for-enterprise"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ]
+  ],
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "nerdio-auto-scaling",
+  "type": "concept",
+  "name": "Nerdio auto-scaling",
+  "aliases": [],
+  "desc": {
+   "en": "Nerdio auto-scaling adjusts resources for personal and pooled Azure Virtual Desktop host pools to optimize cost and hardware use. Version 6 adds multiple scaling triggers and enhanced compute scaling, the latter listed under the Premium edition.",
+   "de": "Nerdio Auto-Scaling passt Ressourcen für persönliche und gepoolte Azure-Virtual-Desktop-Hostpools an, um Kosten und Hardwareauslastung zu optimieren. Version 6 ergänzt mehrere Scaling-Trigger und Enhanced Compute Scaling (laut Nerdio in der Premium-Edition)."
+  },
+  "web": "https://getnerdio.com/blog/unveiling-nerdio-manager-for-enterprise-6-and-nerdio-manager-for-msp-5/",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "",
+  "rel": [
+   [
+    "part_of",
+    "nerdio-manager-for-enterprise"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ],
+   [
+    "related_to",
+    "azure-autoscale"
+   ]
+  ],
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "nerdio-right-sizing",
+  "type": "concept",
+  "name": "Nerdio host pool and VM right-sizing",
+  "aliases": [],
+  "desc": {
+   "en": "Nerdio Advisor feature that monitors Azure Virtual Desktop utilization and flags VMs as oversized or undersized. It recommends new VM sizes with an impact analysis; changes can be scheduled outside business hours. GA in Nerdio Manager for Enterprise 6.0.",
+   "de": "Funktion von Nerdio Advisor, die die Auslastung von Azure Virtual Desktop überwacht und VMs als über- oder unterdimensioniert markiert. Sie empfiehlt neue VM-Größen mit Auswirkungsanalyse; Änderungen lassen sich außerhalb der Geschäftszeiten planen. GA in Nerdio Manager for Enterprise 6.0."
+  },
+  "web": "https://getnerdio.com/blog/unveiling-nerdio-manager-for-enterprise-6-and-nerdio-manager-for-msp-5/",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "",
+  "rel": [
+   [
+    "broader",
+    "nerdio-advisor"
+   ],
+   [
+    "related_to",
+    "rightsizing"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ],
+   [
+    "related_to",
+    "cloud-cost-optimization"
+   ],
+   [
+    "related_to",
+    "azure-virtual-machines"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "nerdio-unified-app-catalog",
+  "type": "concept",
+  "name": "Nerdio Unified App Catalog",
+  "aliases": [
+   "Unified Application Management"
+  ],
+  "desc": {
+   "en": "Nerdio catalog that centralizes application storage using native Microsoft Winget and delivers apps by policy without third-party agents on devices. Nerdio Manager for Enterprise 6.0 adds an SCCM connector to discover existing deployments.",
+   "de": "Nerdio-Katalog, der Anwendungen zentral über das native Microsoft Winget ablegt und per Richtlinie ohne Agenten von Drittanbietern auf Geräte verteilt. Nerdio Manager for Enterprise 6.0 ergänzt einen SCCM-Connector, um bestehende Bereitstellungen zu erkennen."
+  },
+  "web": "https://getnerdio.com/blog/unveiling-nerdio-manager-for-enterprise-6-and-nerdio-manager-for-msp-5/",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "",
+  "rel": [
+   [
+    "part_of",
+    "nerdio-manager-for-enterprise"
+   ],
+   [
+    "related_to",
+    "configuration-manager"
+   ],
+   [
+    "related_to",
+    "intune"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "nerdio-solution-baselines",
+  "type": "concept",
+  "name": "Nerdio Solution Baselines",
+  "aliases": [],
+  "desc": {
+   "en": "MSP-level policy templates in Nerdio Manager for MSP that keep settings consistent across customer accounts. Assigned accounts are checked against the baseline, drift is shown, and Enforce mode can fix prerequisites. Baselines began with Defender for Endpoint.",
+   "de": "Richtlinienvorlagen auf MSP-Ebene in Nerdio Manager for MSP, die Einstellungen über Kundenkonten hinweg konsistent halten. Zugewiesene Konten werden gegen die Baseline geprüft, Abweichungen angezeigt; der Enforce-Modus kann Voraussetzungen beheben."
+  },
+  "web": "https://nmmhelp.getnerdio.com/hc/en-us/articles/25498298095373",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "",
+  "rel": [
+   [
+    "part_of",
+    "nerdio-manager-for-msp"
+   ],
+   [
+    "related_to",
+    "security-baselines"
+   ],
+   [
+    "related_to",
+    "configuration-drift"
+   ],
+   [
+    "related_to",
+    "managed-service-provider"
+   ],
+   [
+    "related_to",
+    "microsoft-defender-for-endpoint"
+   ],
+   [
+    "related_to",
+    "intune"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "nerdio-finops-user-cost-attribution",
+  "type": "concept",
+  "name": "Nerdio FinOps user cost attribution",
+  "aliases": [],
+  "desc": {
+   "en": "Nerdio feature that allocates Azure costs, including shared components, to individual users based on usage patterns. Version 6.0 of Nerdio Manager for Enterprise adds per-host-pool attribution for showback and chargeback and an enhanced Power BI connector.",
+   "de": "Nerdio-Funktion, die Azure-Kosten einschließlich gemeinsam genutzter Komponenten anhand von Nutzungsmustern einzelnen Benutzern zuordnet. Version 6.0 von Nerdio Manager for Enterprise ergänzt Zuordnung pro Host Pool für Showback und Chargeback sowie einen erweiterten Power-BI-Connector."
+  },
+  "web": "https://getnerdio.com/blog/unveiling-nerdio-manager-for-enterprise-6-and-nerdio-manager-for-msp-5/",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "",
+  "rel": [
+   [
+    "part_of",
+    "nerdio-manager-for-enterprise"
+   ],
+   [
+    "related_to",
+    "finops"
+   ],
+   [
+    "related_to",
+    "chargeback"
+   ],
+   [
+    "related_to",
+    "showback"
+   ],
+   [
+    "related_to",
+    "power-bi"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "nerdio-azure-capacity-extender",
+  "type": "concept",
+  "name": "Nerdio Azure Capacity Extender",
+  "aliases": [],
+  "desc": {
+   "en": "Nerdio Manager host pool feature that lets admins list fallback VM sizes for when Azure lacks capacity for the preferred size. Host creation, auto-scale, auto-grow and auto-heal then avoid capacity failures. It requires the Premium edition.",
+   "de": "Host-Pool-Funktion in Nerdio Manager, mit der Admins Ersatz-VM-Größen festlegen, falls Azure für die bevorzugte Größe keine Kapazität hat. Hosterstellung, Auto-Scale, Auto-Grow und Auto-Heal schlagen so nicht an Kapazitätsgrenzen fehl. Erfordert die Premium-Edition."
+  },
+  "web": "https://nmehelp.getnerdio.com/hc/en-us/articles/26124377923085",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "",
+  "rel": [
+   [
+    "part_of",
+    "nerdio-manager-for-enterprise"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ],
+   [
+    "related_to",
+    "azure-virtual-machines"
+   ],
+   [
+    "related_to",
+    "azure-autoscale"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "nerdio-reserved-instance-management",
+  "type": "concept",
+  "name": "Nerdio Reserved Instance Management",
+  "aliases": [],
+  "desc": {
+   "en": "Nerdio Manager for MSP 5.0 capability that recommends Azure Reserved Instance purchases to drive savings while keeping resources available when needed. Nerdio Manager for Enterprise also offers Reserved Instance analytics for auto-scaling.",
+   "de": "Funktion in Nerdio Manager for MSP 5.0, die den Kauf von Azure Reserved Instances empfiehlt, um Kosten zu sparen und Ressourcen bei Bedarf verfügbar zu halten. Nerdio Manager for Enterprise bietet zudem Reserved-Instance-Analysen für Auto-Scaling."
+  },
+  "web": "https://getnerdio.com/blog/unveiling-nerdio-manager-for-enterprise-6-and-nerdio-manager-for-msp-5/",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "",
+  "rel": [
+   [
+    "part_of",
+    "nerdio-manager-for-enterprise"
+   ],
+   [
+    "related_to",
+    "azure-reservations"
+   ],
+   [
+    "related_to",
+    "azure-savings-plans"
+   ],
+   [
+    "related_to",
+    "cloud-cost-optimization"
+   ],
+   [
+    "related_to",
+    "finops"
+   ],
+   [
+    "related_to",
+    "azure-virtual-machines"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "nerdio-console-connect",
+  "type": "concept",
+  "name": "Nerdio Console Connect",
+  "aliases": [],
+  "desc": {
+   "en": "Remote support feature in Nerdio Manager, delivered in partnership with Zoho, for connecting to user sessions, session hosts, endpoints and desktop images. Announced as private preview in Nerdio Manager for MSP 5.0; requires admin rights.",
+   "de": "Fernunterstützungsfunktion in Nerdio Manager, bereitgestellt in Partnerschaft mit Zoho, für Verbindungen zu Benutzersitzungen, Sessionhosts, Endgeräten und Desktop-Images. In Nerdio Manager for MSP 5.0 als Private Preview angekündigt; erfordert Adminrechte."
+  },
+  "web": "https://nmehelp.getnerdio.com/hc/en-us/articles/36031072264205",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "",
+  "rel": [
+   [
+    "part_of",
+    "nerdio-manager-for-msp"
+   ],
+   [
+    "related_to",
+    "managed-service-provider"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "windows-365"
+   ],
+   [
+    "related_to",
+    "intune-remote-help"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "nerdio-assistpro",
+  "type": "concept",
+  "name": "Nerdio AssistPro",
+  "aliases": [],
+  "desc": {
+   "en": "Generative AI assistant in Nerdio Manager for Enterprise 6.0 that knows Nerdio documentation and answers support and how-to questions without a service request. Announced as public preview; a companion ScriptPro assistant was listed as coming soon.",
+   "de": "Generativer KI-Assistent in Nerdio Manager for Enterprise 6.0, der die Nerdio-Dokumentation kennt und Support- und How-to-Fragen ohne Serviceanfrage beantwortet. Als Public Preview angekündigt; ein ergänzender Assistent ScriptPro war als demnächst verfügbar aufgeführt."
+  },
+  "web": "https://getnerdio.com/blog/unveiling-nerdio-manager-for-enterprise-6-and-nerdio-manager-for-msp-5/",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "",
+  "rel": [
+   [
+    "part_of",
+    "nerdio-manager-for-enterprise"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "nerdio-cost-estimator",
+  "type": "concept",
+  "name": "Nerdio Cost Estimator",
+  "aliases": [],
+  "desc": {
+   "en": "Calculator in Nerdio Manager for MSP that asks a series of questions and generates an estimate of what customers will spend running Azure Virtual Desktop environments. Nerdio also offers a free modeler for Enterprise under Nerdio Advisor.",
+   "de": "Rechner in Nerdio Manager for MSP, der über Fragen eine Schätzung der Kosten erstellt, die Kunden für den Betrieb von Azure-Virtual-Desktop-Umgebungen haben. Nerdio bietet zudem einen kostenlosen Modeler für Enterprise unter Nerdio Advisor."
+  },
+  "web": "https://nmmhelp.getnerdio.com/hc/en-us/articles/26125608441357",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "",
+  "rel": [
+   [
+    "broader",
+    "nerdio-advisor"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "cloud-cost-optimization"
+   ],
+   [
+    "related_to",
+    "total-cost-of-ownership"
+   ],
+   [
+    "related_to",
+    "finops"
+   ],
+   [
+    "related_to",
+    "managed-service-provider"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
+  }
+ },
+ {
+  "id": "nerdio-desktop-image",
+  "type": "concept",
+  "name": "Nerdio desktop image management",
+  "aliases": [],
+  "desc": {
+   "en": "In Nerdio Manager for Enterprise, desktop images are the base templates for Azure Virtual Desktop VMs, holding the operating system and applications. They can be created or imported and managed over their lifecycle in one portal.",
+   "de": "In Nerdio Manager for Enterprise sind Desktop-Images die Basisvorlagen für VMs in Azure Virtual Desktop und enthalten Betriebssystem und Anwendungen. Sie lassen sich erstellen oder importieren und in einem Portal über ihren Lebenszyklus verwalten."
+  },
+  "web": "https://nmehelp.getnerdio.com/hc/en-us/articles/48283774944141-Desktop-Images",
+  "wikidata": "",
+  "wikipedia": "",
+  "docs": "",
+  "rel": [
+   [
+    "part_of",
+    "nerdio-manager-for-enterprise"
+   ],
+   [
+    "related_to",
+    "golden-image"
+   ],
+   [
+    "related_to",
+    "azure-virtual-desktop"
+   ],
+   [
+    "related_to",
+    "avd-host-pool"
+   ],
+   [
+    "related_to",
+    "azure-image-builder"
+   ]
+  ],
+  "kind": "feature",
+  "source": {
+   "import": "nerdio_new_entities.json",
+   "lang": "en",
+   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
   }
  }
 ]
