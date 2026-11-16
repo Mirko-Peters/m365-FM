@@ -54,3 +54,15 @@ test("analyse: fehlende Werte als Strich, kein Absturz", () => {
   assert.match(md, /\| desktop \/ \| – \| – \| – \| – \| – \|/);
   assert.match(md, /LCP-Element: `nicht ermittelt`/);
 });
+
+test("analyse: ohne LCP-Element und Verschiebungen steht der Grund dabei, Insight-Audits werden gelesen", () => {
+  const dir = mkdtempSync(join(tmpdir(), "crp-"));
+  const j = lh();
+  j.audits["largest-contentful-paint-element"] = { scoreDisplayMode: "error", errorMessage: "NO_LCP" };
+  j.audits["layout-shifts"] = { scoreDisplayMode: "notApplicable" };
+  j.audits["cls-culprits-insight"] = { details: { items: [{ score: 0.3, node: { selector: "ul.tabs", snippet: "<ul>" } }] } };
+  writeFileSync(join(dir, "desktop__%2Fcommunity%2F__1.json"), JSON.stringify(j));
+  const md = analyse(dir);
+  assert.match(md, /LCP-Element: `nicht ermittelt` \(Audits: largest-contentful-paint-element=error \(NO_LCP\)/);
+  assert.match(md, /Layout-Verschiebungen \(groesste\): 0\.300 ul\.tabs/);
+});

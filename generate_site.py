@@ -1328,7 +1328,6 @@ def build():
         thumb_html = lambda i: f'<div class="thumb"><a href="{url_of(i)}" title="{esc(i["e"]["title"])}"><figure class="cover" style="margin-inline:0">{yt_thumb(i["vid"], "")}</figure><h3>{esc(anchor_title(i["e"]["title"]))}</h3></a><p>{esc(short(parse_desc(i["e"]["desc"])[0], 110))}</p></div>'
         nvid = len({i["vid"] for i in newest})
         cats = "".join(f'<a class="chip cat" href="{cat_url(l, c)}">{esc(cat_name(c, l))} · {len(catidx[l][c])}</a>' for c in ORDER if c in catidx[l])
-        rows = [(x, LANGS[x][0], EN_NAMES.get(x, ""), f"{BASE}/{x}/podcast/") for x in active]
         pod_sec = (f'<h2 style="margin-top:0">{esc(HT(l, "podcast_in"))}</h2><p class="lede">{esc(short(s.get("description", ""), 300))}</p>'
                    f'<div class="btns"><a class="btn main" href="{pod}">{esc(ui[3])} ({len(newest)}) →</a>{sub_btns(l)}</div>{top_block(l)}')
         ld = [{"@context": "https://schema.org", "@type": "WebSite", "@id": f"{home}#website", "name": "M365.FM", "url": home, "inLanguage": LANGS[l][1],
@@ -1344,7 +1343,6 @@ def build():
 <h1>{esc(HT(l, "h1a"))} <em>{esc(HT(l, "h1b"))}</em></h1>
 <p class="lede">{esc(HT(l, "lede").format(n=n_langs))}</p>
 <div class="btns"><a class="btn main" href="{BASE}/{l}/community/">{esc(HT(l, "join"))}</a><a class="btn" href="#podcast">{esc(HT(l, "podcast_in"))} ↓</a><a class="btn" href="#languages">{esc(HT(l, "choose"))} ↓</a><a class="btn" href="{YT_CHANNEL}">{esc(HT(l, "youtube"))}</a><a class="btn" href="{(f"{BASE}/{l}/about/mirko-peters/" if l in _ABOUT_L else about_url(l))}">{esc(ui[5])}</a></div></div>
-{spec_box(HT(l, "now_dubbed"), HT(l, "editions").format(n=n_langs), rows[:6])}
 <div class="stats"><div><b>{len(newest)}</b><span>{esc(HT(l, "st_episodes"))}</span></div><div><b>{nvid}</b><span>{esc(HT(l, "st_videos"))}</span></div><div><b>{n_langs}</b><span>{esc(HT(l, "st_languages"))}</span></div><div><b>0 €</b><span>{esc(HT(l, "st_free"))}</span></div></div>
 {section(1, HT(l, "sec_latest"), HUB.hub(globals_ctx, l, BASE, COMMUNITY_API, newest, thumb_html, posts=_posts))}
 {section(2, HT(l, "podcast_in"), pod_sec, "podcast")}
@@ -1352,7 +1350,7 @@ def build():
 {section(4, HT(l, "sec_how"), spec_table(HT(l, "how_caption"), (HT(l, "col_no"), HT(l, "col_step"), HT(l, "col_detail")), how_steps(l)))}
 {section(5, HT(l, "sec_topics"), f'<h2 style="margin-top:0">{esc(HT(l, "topics_h"))}</h2><div class="chips">{cats}</div>')}</main>
 {m365con_band()}
-<main class="wrap"><section id="c-curator"></section><section id="c-sub"></section>{faq_html(l, "FAQ")}{cta_box(HT(l, "cta_h"), HT(l, "cta_p"), HT(l, "cta_btn"), f"{BASE}/show/")}{author_box(l)}</main>{footer(l)}{community_tags(l)}"""
+<main class="wrap"><section id="c-curator"></section><section id="c-sub"></section>{faq_html(l, "FAQ")}</main>{footer(l)}{community_tags(l)}"""   # Startseite ohne "Now dubbed", "Want the full interviews?" und Autorenkasten (Wunsch Mirko, 16.11.2026)
         write(f"{l}/index.html", page(l, title, d, home,   # Titel/Description der Sprach-Startseiten kommen aus data/home_i18n.json (PR Teil C)
                body, alts_home, ld, xdefault=f"{BASE}/", og_type="website"))
         sitemap.append((home, TODAY, alts_home))
@@ -1367,7 +1365,6 @@ def build():
         latest.append(by_vid[v][avail[n % len(avail)]])
     lt = "".join(f'<div class="thumb"><a href="{url_of(i)}" hreflang="{LANGS[i["lang"]][1]}" title="{esc(i["e"]["title"])}"><figure class="cover" style="margin-inline:0">{yt_thumb(i["vid"], "")}</figure><h3>{esc(anchor_title(i["e"]["title"]))}</h3></a><p>{esc(LANGS[i["lang"]][0])}</p></div>' for i in latest)
     nvid_all = len(by_vid)
-    rows = [(l, LANGS[l][0], EN_NAMES.get(l, ""), f"{BASE}/{l}/podcast/") for l in active]   # "Now dubbed": die gedubbte Show der Sprache
     tiles = lang_tiles("en")   # Sprachwahl: Startseite der Sprache (Klick setzt das Sprach-Cookie, assets/page.js)
     steps = how_steps("en")
     topics_root = " ".join(f'<span class="chip">{esc(t)}</span>' for t in ("Microsoft 365 Copilot", "AI agents", "Teams", "SharePoint", "Exchange", "Power Platform", "Microsoft Fabric", "Entra ID", "Purview", "Azure", "Security", "Governance"))
@@ -1376,14 +1373,13 @@ def build():
 <h1>The Microsoft community: <em>blog, podcast, events and explainers</em></h1>
 <p class="lede">Posts and podcasts from community members, events with their sessions and animated explainers about Microsoft 365, Copilot, Azure and the Power Platform by Microsoft MVP Mirko Peters – in {len(active)} languages. Free.</p>
 <div class="btns"><a class="btn main" href="{BASE}/community/">Join the community</a><a class="btn" href="#languages">Choose your language ↓</a><a class="btn" href="{YT_CHANNEL}">Watch on YouTube</a><a class="btn" href="{BASE}/entity/mirko-peters/">About Mirko Peters</a></div></div>
-{spec_box("Now dubbed", f"{len(active)} editions", rows[:6])}
 <div class="stats"><div><b>{len(items)}</b><span>Episodes</span></div><div><b>{nvid_all}</b><span>Videos</span></div><div><b>{len(active)}</b><span>Languages</span></div><div><b>0 €</b><span>Free</span></div></div>
 {section(1, "Languages", f'<div class="lgrid">{tiles}</div>', "languages")}
 {section(2, "How it works", spec_table("From one video to many shows", ("No.", "Step", "Detail"), steps))}
 {section(3, "Latest from the community", HUB.hub(None, "en", BASE, COMMUNITY_API, latest, lambda i: f'<div class="thumb"><a href="{url_of(i)}" hreflang="{LANGS[i["lang"]][1]}" title="{esc(i["e"]["title"])}"><figure class="cover" style="margin-inline:0">{yt_thumb(i["vid"], "")}</figure><h3>{esc(anchor_title(i["e"]["title"]))}</h3></a><p>{esc(LANGS[i["lang"]][0])}</p></div>', root=True))}
 {section(4, "Topics", f'<h2 style="margin-top:0">The Microsoft cloud, one concept at a time</h2><div class="chips">{topics_root}</div>')}</main>
 {m365con_band()}
-<main class="wrap">{faq_html('en', 'FAQ')}{cta_box(HT("en", "cta_h"), HT("en", "cta_p"), HT("en", "cta_btn"), f"{BASE}/show/")}{author_box('en')}</main>{footer_en()}"""
+<main class="wrap">{faq_html('en', 'FAQ')}</main>{footer_en()}"""   # ohne "Now dubbed", "Want the full interviews?" und Autorenkasten (Wunsch Mirko, 16.11.2026)
     write("index.html", page("en", "M365.FM: Microsoft 365 Podcast, Blog & Explainers",   # Suchabsicht (12.11.2026); eigener Wortlaut, damit / und /en/ (data/home_i18n.json) keinen doppelten Titel haben
           f"Microsoft 365, Copilot, Azure and Power Platform explained: podcast, blog, events and animated videos by Microsoft MVP Mirko Peters, in {len(active)} languages.",
           f"{BASE}/", root_body, alts_home, [person_ld(), org_ld(), event_ld(), faq_ld("en"), {"@context": "https://schema.org", "@type": "WebSite", "@id": f"{BASE}/#website", "name": "M365.FM international", "url": f"{BASE}/",

@@ -59,10 +59,14 @@ export function analyse(dir) {
       const ch = a["critical-request-chains"]?.details;
       const t0 = ch ? Math.min(...Object.values(ch.chains || {}).map((c) => c.request.startTime)) : 0;
       walkChain(ch?.chains, 0, out, t0);
-      const lcpNode = firstNode(a["largest-contentful-paint-element"]?.details);
+      // LCP-Element: klassisches Audit, sonst neuere Insight-Audits; findet sich nichts, den Grund (Status/Fehler) und vorhandene Audits nennen
+      const lcpIds = ["largest-contentful-paint-element", ...Object.keys(a).filter((id) => /lcp|largest-contentful/i.test(id) && id !== "largest-contentful-paint" && id !== "largest-contentful-paint-element")];
+      const lcpNode = lcpIds.map((id) => firstNode(a[id]?.details)).find(Boolean);
       const lcpEl = lcpNode ? `${lcpNode.selector || ""} ${lcpNode.snippet || ""}`.trim().slice(0, 200) : "";
       const shifts = [];
-      for (const it of (a["layout-shifts"]?.details?.items || a["layout-shift-elements"]?.details?.items || []).slice(0, 5)) {
+      const clsIds = ["layout-shifts", "layout-shift-elements", ...Object.keys(a).filter((id) => /cls|layout-shift/i.test(id) && !["cumulative-layout-shift", "layout-shifts", "layout-shift-elements"].includes(id))];
+      const clsItems = clsIds.map((id) => a[id]?.details?.items || []).find((x) => x.length) || [];
+      for (const it of clsItems.slice(0, 5)) {
         const n = firstNode(it);
         shifts.push(`${cls(it.score ?? it.weightedScore ?? null)} ${n ? `${n.selector || ""} ${(n.snippet || "").slice(0, 120)}`.trim() : ""}`);
       }
@@ -75,7 +79,9 @@ export function analyse(dir) {
         .map((x) => `${x.id}: ${x.displayValue || ""}${x.details?.overallSavingsMs ? `, ~${Math.round(x.details.overallSavingsMs)} ms` : ""}${x.details?.overallSavingsBytes ? `, ~${kb(x.details.overallSavingsBytes)} KB` : ""}`);
       const pre = (a["uses-rel-preload"]?.details?.items || []).map((i) => short(i.url));
       const warn = (j.runWarnings || []).concat(a["uses-rel-preload"]?.warnings || []).join(" | ");
-      detail[key] = { out, rb, lcpEl, phases: lcpPhases(a["largest-contentful-paint-element"]), shifts, fonts, biggest, opps, pre, warn, chains: ch?.longestChain };
+      const why = (ids) => ids.filter((id) => a[id]).map((id) => `${id}=${a[id].scoreDisplayMode || "?"}${a[id].errorMessage ? ` (${String(a[id].errorMessage).slice(0, 80)})` : ""}${a[id].explanation ? ` [${String(a[id].explanation).slice(0, 80)}]` : ""}`).join(", ") || "kein passendes Audit";
+      const phases = lcpIds.map((id) => lcpPhases(a[id])).find((x) => x.length) || [];
+      detail[key] = { out, rb, lcpEl, lcpWhy: lcpEl ? "" : why(lcpIds), phases, shifts, clsWhy: shifts.length ? "" : why(clsIds), fonts, biggest, opps, pre, warn, chains: ch?.longestChain };
     }
   }
   const md = ["## Ladezeiten (Lighthouse, Median aus allen Laeufen)", "",
@@ -86,9 +92,9 @@ export function analyse(dir) {
     md.push(`| ${k} | ${sc == null ? "–" : Math.round(sc * 100)} | ${ms(med(g.fcp))} | ${ms(med(g.lcp))} | ${ms(med(g.tbt))} | ${cls(med(g.cls))} | ${ms(med(g.si))} | ${ms(med(g.ttfb))} | ${kb(med(g.bytes))} | ${ms(med(g.reqs))} | ${ms(med(g.dom))} | ${ms(med(g.crp))} |`);
   }
   for (const [k, d] of Object.entries(detail).sort()) {
-    md.push("", `### ${k}`, `LCP-Element: \`${(d.lcpEl || "nicht ermittelt").replace(/`/g, "'")}\``,
+    md.push("", `### ${k}`, `LCP-Element: \`${(d.lcpEl || "nicht ermittelt").replace(/`/g, "'")}\`` + (d.lcpWhy ? ` (Audits: ${d.lcpWhy})` : ""),
       "LCP-Phasen: " + (d.phases.join(", ") || "–"),
-      "Layout-Verschiebungen (groesste): " + (d.shifts.join("; ") || "keine"),
+      "Layout-Verschiebungen (groesste): " + (d.shifts.join("; ") || "keine") + (d.clsWhy ? ` (Audits: ${d.clsWhy})` : ""),
       "Groesste Dateien: " + (d.biggest.join("; ") || "–"),
       "Einsparungen: " + (d.opps.join("; ") || "keine"),
       `Laengste Kette: ${JSON.stringify(d.chains)}`, "", "Kette:", ...d.out, "", "Renderblockierend: " + (d.rb.join("; ") || "keine"),
