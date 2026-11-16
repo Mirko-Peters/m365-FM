@@ -5,8 +5,11 @@
   python tools/ontology_ai.py run [--limit N]  Vorschlaege holen -> data/ontology_suggestions.json; sichere (confidence high, formal geprueft) kommen in data/entities.json
 
 Nur von Hand (Workflow ontology-ai.yml), mit Haiku-Tagesbudget (ai_gateway.check_budget, Job "ontology_ai"). Nichts wird geloescht; Eintraege mit Oberbegriff bleiben unberuehrt;
-unsichere Vorschlaege bleiben nur in der Vorschlagsdatei (status "review") fuer Mirko/den Dev-Chef."""
-import json, os, re, sys, time
+unsichere Vorschlaege bleiben nur in der Vorschlagsdatei (status "review") fuer Mirko/den Dev-Chef.
+Ein Begriff kommt nie automatisch unter eine Kategorie (type category, z. B. ai-assistant): solche Vorschlaege bleiben immer "review"
+(Kategorien sind fuer Produkte ueber instance_of; ein Begriff ist keine Art von Software-Kategorie).
+Ein fehlgeschlagener Aufruf (Netz, kaputte Antwort) wird gezaehlt und uebersprungen; die anderen laufen weiter."""
+import json, os, sys, time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -44,8 +47,63 @@ def ask(batch, ctext):
     tin, tout, cr, cw = usage_tokens(d.get("usage"))
     report_usage(JOB, MODEL, tin, tout, "run", cache_read=cr, cache_write=cw)
     txt = "".join(b.get("text", "") for b in d.get("content", []) if b.get("type") == "text")
-    m = re.search(r"\[.*\]", txt, re.S)
-    return json.loads(m.group(0)) if m else []
+    return txt, (tin, tout)
+
+
+def parse_answer(txt):
+    """Erstes vollstaendiges JSON-Array im Antworttext (Text davor/danach, ```json-Zaun oder ein zweites Array stoeren nicht).
+    Wirft ValueError, wenn keins lesbar ist; der Aufruf zaehlt dann als Fehler."""
+    dec = json.JSONDecoder()
+    i = txt.find("[")
+    while i >= 0:
+        try:
+            val, _ = dec.raw_decode(txt, i)
+            if isinstance(val, list):
+                return val
+        except ValueError:
+            pass
+        i = txt.find("[", i + 1)
+    raise ValueError("keine JSON-Liste in der Antwort")
+
+
+def to_category(s, by):
+    """True, wenn der Vorschlag einen Begriff unter eine Kategorie (type category) haengen wuerde."""
+    p = by.get(s.get("broader") or "")
+    return bool(p) and p.get("type") == "category"
+
+
+def collect(items, ctext, ask_fn=None, pause=1.0):
+    """Alle Bloecke abfragen (ask_fn(batch, ctext) -> (Antworttext, (Eingabe-, Ausgabe-Token))). Rueckgabe (Vorschlaege, Fehlerzahl, (Eingabe-, Ausgabe-Token tatsaechlich laut usage))."""
+    ask_fn = ask_fn or ask
+    got, errors, tin, tout = [], 0, 0, 0
+    for i in range(0, len(items), PER_CALL):
+        batch = items[i:i + PER_CALL]
+        try:
+            txt, (a, b) = ask_fn(batch, ctext)
+            tin += a; tout += b   # bezahlt, auch wenn die Antwort danach unlesbar ist
+            res = parse_answer(txt)
+        except Exception as ex:   # bezahlte Ergebnisse frueherer Aufrufe bleiben erhalten; der naechste Block laeuft weiter
+            errors += 1
+            print(f"::warning::Aufruf {i // PER_CALL + 1} fehlgeschlagen: {type(ex).__name__}")
+            continue
+        ids = {e["id"] for e in batch}
+        got += [dict(x, status="review") for x in res if isinstance(x, dict) and x.get("id") in ids]
+        if pause:
+            time.sleep(pause)
+    return got, errors, (tin, tout)
+
+
+def apply_safe(ents, got):
+    """Sichere Vorschlaege eintragen (ontology.apply_suggestions), aber nie Begriff -> Kategorie; Status in got setzen.
+    Rueckgabe: (eingetragen [(id, parent)], nur zur Ansicht wegen Kategorie [id])."""
+    by = {e["id"]: e for e in ents}
+    cat = {s["id"] for s in got if to_category(s, by)}
+    feed = [dict(s, broader=None) if s["id"] in cat else s for s in got]   # Art (kind) darf trotzdem gesetzt werden
+    done, _skipped = ONT.apply_suggestions(ents, feed)
+    applied = {i for i, _ in done}
+    for s in got:
+        s["status"] = "angewendet" if s["id"] in applied else "review"
+    return done, sorted(cat)
 
 
 def main(argv):
@@ -67,23 +125,15 @@ def main(argv):
         return 0
     if not check_budget(JOB, MODEL, eur):
         return 0
-    got = []
-    for i in range(0, len(items), PER_CALL):
-        batch = items[i:i + PER_CALL]
-        try:
-            res = ask(batch, ctext)
-        except Exception as ex:   # bezahlte Ergebnisse frueherer Aufrufe bleiben erhalten
-            print(f"::warning::Aufruf {i // PER_CALL + 1} fehlgeschlagen: {type(ex).__name__}"); break
-        ids = {e["id"] for e in batch}
-        got += [dict(x, status="review") for x in res if isinstance(x, dict) and x.get("id") in ids]
-        time.sleep(1)
-    done, skipped = ONT.apply_suggestions(ents, got)
-    applied = {i for i, _ in done}
-    for s in got:
-        s["status"] = "angewendet" if s["id"] in applied else "review"
+    got, errors, (rin, rout) = collect(items, ctext)
+    done, cat = apply_safe(ents, got)
     SUG.write_text(json.dumps(sorted([*old.values(), *got], key=lambda s: s["id"]), ensure_ascii=False, indent=1) + "\n", "utf-8")
     ENT.write_text(json.dumps(ents, ensure_ascii=False, indent=1), "utf-8")   # ohne Umbruch am Ende (Dateiformat-Test)
-    print(f"Vorschlaege {len(got)}; eingetragen {len(done)}; zur Ansicht {len(got) - len(done)}")
+    print(f"Vorschlaege {len(got)}; eingetragen {len(done)}; zur Ansicht {len(got) - len(done)} (davon Kategorie als Oberbegriff {len(cat)})")
+    print(f"Tatsaechlich verbraucht: {rin} Eingabe-/{rout} Ausgabe-Token = ca. {estimated_eur(rin, rout):.2f} EUR (Schaetzung war {tin}/{tout})")
+    print(f"Fehlgeschlagene Aufrufe: {errors} von {calls}")
+    if errors:
+        print(f"::warning::{errors} von {calls} Aufrufen fehlgeschlagen; die Begriffe daraus werden beim naechsten Lauf erneut gefragt")
     return 0
 
 
