@@ -1,8 +1,8 @@
 ---
 title: "Teams Channel vs Chat vs Team: What Is the Difference?"
 summary: "What a team, a channel and a chat are in Microsoft Teams, how standard, private and shared channels differ, where files are stored, and the documented size limits that help you choose."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-17
 topics: [teams, teams-channels, standard-channels, private-channels, shared-channels]

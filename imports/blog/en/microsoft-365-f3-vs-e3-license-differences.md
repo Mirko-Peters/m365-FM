@@ -1,10 +1,10 @@
 ---
 title: "Microsoft 365 F3 vs E3 License: Differences and Which One to Choose"
 summary: "A comparison of Microsoft 365 F3 and E3 based on Microsoft Learn: desktop apps, mailbox and OneDrive size, Teams features, what you lose when switching, and how to decide per user group."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-17
 topics: [microsoft-365-f3, microsoft-365-e3, microsoft-365-admin-center, teams]
 keypoints:
   - "F3 has no Microsoft 365 desktop apps. Users get Microsoft 365 for the web and mobile apps, and mobile use is limited to devices with screens under 10.9 inches."

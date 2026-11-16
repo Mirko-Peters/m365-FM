@@ -232,10 +232,10 @@ jobs:
           # Eigene Adresse des Sponsor-Dashboards (https://partner.m365.fm). Leer = Dashboard-Links bleiben www.m365.fm/sponsor/dashboard/.
           # Erst als Repo-Variable PARTNER_BASE eintragen, wenn partner.m365.fm ausgeliefert wird (Site-Worker-Deploy mit Route partner.m365.fm).
           PARTNER_BASE: ${{ vars.PARTNER_BASE }}
-          # Eigene Adressen von Verwaltung (https://admin.m365.fm) und Konto/Profil (https://profil.m365.fm), beide noindex. Leer = Links bleiben auf www.m365.fm.
-          # Erst als Repo-Variable ADMIN_BASE / PROFIL_BASE eintragen, wenn die Subdomain ausgeliefert wird (Site-Worker-Deploy mit ADMIN_HOST / PROFIL_HOST).
+          # Eigene Adressen von Verwaltung (https://admin.m365.fm) und Konto/Profil (https://profile.m365.fm), beide noindex. Leer = Links bleiben auf www.m365.fm.
+          # Erst als Repo-Variable ADMIN_BASE / PROFILE_BASE eintragen, wenn die Subdomain ausgeliefert wird (Site-Worker-Deploy mit ADMIN_HOST / PROFILE_HOST).
           ADMIN_BASE: ${{ vars.ADMIN_BASE }}
-          PROFIL_BASE: ${{ vars.PROFIL_BASE }}
+          PROFILE_BASE: ${{ vars.PROFILE_BASE }}
           GOOGLE_MAPS_API_KEY: ${{ vars.GOOGLE_MAPS_API_KEY || secrets.GOOGLE_MAPS_API_KEY }}
       # Sitemaps der Sprachen ausser en/de liegen seit 16.11.2026 nur in r2out/ (R2-Bucket), Index und en/de in docs/: geprueft werden alle, und zwar
       # VOR dem Upload - was in den Bucket geht, ist sofort live (der Site-Worker liefert es nach dem 404 von GitHub Pages), auch ohne Deploy

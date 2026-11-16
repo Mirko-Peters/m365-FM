@@ -1,10 +1,10 @@
 ---
 title: "Copilot Plugins, Graph Grounding and Copilot Studio Connectors Explained"
 summary: "What plugins, API plugins, grounding through Microsoft Graph, Copilot connectors and Copilot Studio connectors each mean in Microsoft 365 Copilot, how they differ, and which one to use for which job."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-17
 topics: [copilot, copilot-connectors, api-plugins, copilot-studio, copilot-grounding]
 keypoints:
   - "Microsoft now uses plugin for an installable package that can bundle a declarative agent, a skill, a Copilot connector and an MCP integration."

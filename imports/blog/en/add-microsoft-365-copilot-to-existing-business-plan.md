@@ -1,10 +1,10 @@
 ---
 title: "How to Add Microsoft 365 Copilot to an Existing Business Plan (Licenses and Steps)"
 summary: "How to add Copilot to a Microsoft 365 or Office 365 business plan: which base licenses qualify, the Copilot Business add-on for up to 300 users, and the admin center steps to assign it."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-19
+date: 2026-11-17
 topics: [copilot, microsoft-365-admin-center]
 keypoints:
   - "Copilot is an add-on. It needs an eligible base license and is not sold standalone. Microsoft 365 E7 includes it."

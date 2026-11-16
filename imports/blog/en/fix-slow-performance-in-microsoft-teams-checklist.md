@@ -1,10 +1,10 @@
 ---
 title: "How to Fix Slow Performance in Microsoft Teams (Checklist)"
 summary: "A step-by-step checklist for slow Microsoft Teams: check resource use and hardware, reduce video load, update, test the network and Call health, and clear the cache only as a targeted step."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-19
+date: 2026-11-17
 topics: [teams, teams-admin-center]
 keypoints:
   - "First find out what is slow: open Task Manager and look at the Teams process (Teams.exe or ms-teams.exe) for high CPU or memory."

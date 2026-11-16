@@ -13,7 +13,7 @@ import site_sponsor as SPN   # T37 Sponsor-Seite /sponsor/ (Seite, Fusszeilen-Li
 import site_landing as LND
 import site_mediakit as MKT
 import site_hardware as HWR   # Hardware-Sponsoring /hardware/ und /hardware/how-we-test/
-import site_hosts as HOSTS   # eigene Subdomains admin.m365.fm und profil.m365.fm (ADMIN_BASE, PROFIL_BASE; leer = wie bisher)
+import site_hosts as HOSTS   # eigene Subdomains admin.m365.fm und profile.m365.fm (ADMIN_BASE, PROFILE_BASE; leer = wie bisher)
 import site_support as SUP
 import site_expert_connect as ECN
 import site_entities as ENT
@@ -768,7 +768,7 @@ def community_tags(lang, vid=None, mode="", css_async=False):
     css_async: community.css nicht renderblockierend laden (Folgenseiten: die Widgets stehen unten und erscheinen erst nach der API-Antwort;
     Lighthouse zaehlte das Stylesheet am Seitenende als blockierend, ~0,4 s auf dem Handy). Ohne JavaScript gibt es dort ohnehin keine Widgets."""
     priv = f"{BASE}/{'datenschutz' if lang == 'de' else 'privacy'}/"
-    cfg = {"api": COMMUNITY_API, "lang": lang, "vid": vid, "privacy": priv, "communityUrl": HOSTS.profil_url(BASE, lang) or f"{BASE}/{lang}/community/", "roles": ROLE.js_cfg(BASE, lang)}
+    cfg = {"api": COMMUNITY_API, "lang": lang, "vid": vid, "privacy": priv, "communityUrl": HOSTS.profile_url(BASE, lang) or f"{BASE}/{lang}/community/", "roles": ROLE.js_cfg(BASE, lang)}
     # Die Oberflaechentexte (ca. 6 KB je Sprache, auf jeder Seite gleich) liegen in assets/cm-<sprache>.js (gecacht), nicht mehr in jeder Seite.
     css_url = f'{BASE}/assets/community.css?v={_cv("assets/community.css")}'
     css = (f'<link rel="preload" as="style" href="{css_url}" onload="this.onload=null;this.rel=\'stylesheet\'">' if css_async
@@ -815,7 +815,7 @@ def header(lang, switch):
         home = f"{BASE}/{L}/"; pre = f"{BASE}/{L}"; all_eps = (f"{BASE}/{L}/podcast/", UI[L][3]); pod = f"{BASE}/{L}/podcast/"   # der gedubbte Podcast der Sprache (Spreaker-Show)
     cl = NAV_CL.get(L, NAV_CL["en"])
     menu = [(ci.get("community", "Community"), [(all_eps[1], all_eps[0])] + [(cl[i], f"{pre}/community/{p}/") for i, p in enumerate(("podcast", "blog", "video", "library", "guests"))]),
-            (DIR.S[L]["title"], f"{pre}/directory/"), (ci.get("profile", "Profile"), HOSTS.profil_url(BASE, L) or f"{pre}/community/"), (LRN.T(L)["learn"], f"{pre}/learn/"), ("Podcast", pod)]
+            (DIR.S[L]["title"], f"{pre}/directory/"), (ci.get("profile", "Profile"), HOSTS.profile_url(BASE, L) or f"{pre}/community/"), (LRN.T(L)["learn"], f"{pre}/learn/"), ("Podcast", pod)]
     if not switch:
         items = [(x, LANGS[x][0], f"{BASE}/{x}/", LANGS[x][1]) for x in LANGS if (ROOT / "episodes").exists()]
         switch = lang_dropdown(lang if lang in LANGS else "en", items, "")

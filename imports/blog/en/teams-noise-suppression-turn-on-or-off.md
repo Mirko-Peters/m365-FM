@@ -1,10 +1,10 @@
 ---
 title: "Teams Noise Suppression: What It Does and How to Turn It On or Off"
 summary: "What Teams noise suppression does, where to switch it on or off before and during a meeting, what Auto, High and Low mean, when to turn it off, and the separate admin controls for dial-in callers and voice isolation."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-17
 topics: [teams, teams-admin-center, teams-rooms]
 keypoints:
   - "Noise suppression reduces background sounds such as shuffling papers, slamming doors or barking dogs. Microsoft says it is on by default and your setting carries over to the next meeting."

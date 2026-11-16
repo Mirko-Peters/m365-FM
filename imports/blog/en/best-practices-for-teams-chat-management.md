@@ -1,10 +1,10 @@
 ---
 title: "Best Practices for Teams Chat Management: Organize Chats and Set Policies"
 summary: "Practical Teams chat management for users and admins, built from Microsoft documentation: pin, mute and hide chats, know the group chat limits, set messaging policies, and understand how chat retention really works."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-17
 topics: [teams, teams-admin-center, microsoft-purview-data-lifecycle-management]
 keypoints:
   - "Users can pin, mute and hide chats from the More options menu in the chat list. A hidden chat returns when someone posts a new message."

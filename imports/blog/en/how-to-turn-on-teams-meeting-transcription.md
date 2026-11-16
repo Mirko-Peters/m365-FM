@@ -1,10 +1,10 @@
 ---
 title: "How to Turn On and Use Teams Meeting Transcription"
 summary: "How to start, stop, download and delete a Teams meeting transcript, who is allowed to do it, where transcripts are stored and which admin policy turns transcription on or off."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-19
+date: 2026-11-17
 topics: [teams, teams-meeting-transcription]
 keypoints:
   - "In a meeting, select More actions, then Transcribe, confirm the spoken language and select Confirm. Starting a recording also starts transcription."
