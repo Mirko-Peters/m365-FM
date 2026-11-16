@@ -5,7 +5,9 @@ Die Node-Tests (tests/community_lazy.test.mjs) nutzen eine DOM-Attrappe. Hier wi
   ohne hashchange (Reiter direkt per .hidden umgeschaltet, also ohne den Rueckfall im Lader);
 - Direktaufruf eines Reiters (#c-library) laedt nur dessen Gruppe; Startreiter Konto laedt keine Reiter-Gruppe;
 - #c-events-import (Link ?claim= von site_events.py) oeffnet den Reiter Events und laedt events-import.js;
-- Druck: Kopf, Fuss und Reiterleiste sind auf jedem Reiter ausgeblendet, nicht erst nach dem Reiter MVP.
+- Druck: Kopf, Fuss und Reiterleiste sind auf jedem Reiter ausgeblendet, nicht erst nach dem Reiter MVP;
+- Aufruf ohne Fragment: profile.js setzt kein #c-page, Chrome springt nicht ans Seitenende, der Fuss bleibt unter dem ersten Bild
+  und der spaeter eingefuegte Anmeldekasten verschiebt nichts (Lighthouse mobil: CLS 0.273 und spaetes LCP durch diesen Sprung).
 Die Bereichs-Skripte selbst sind Attrappen (melden nur ihr Laden), die API antwortet "nicht angemeldet"."""
 import json
 import os
@@ -50,8 +52,10 @@ class CommunityLazyBrowser(unittest.TestCase):
         cls.browser.close()
         cls.pw.stop()
 
-    def open(self, hash_=""):
-        pg = self.browser.new_page(viewport={"width": 412, "height": 823})
+    def open(self, hash_="", init_script=None, viewport=None):
+        pg = self.browser.new_page(viewport=viewport or {"width": 412, "height": 823})
+        if init_script:
+            pg.add_init_script(init_script)
         html = page_html()
 
         def route(r):
@@ -84,13 +88,30 @@ class CommunityLazyBrowser(unittest.TestCase):
 
     def test_start_tab_loads_no_tab_group(self):
         pg = self.open()
-        self.assertEqual(pg.evaluate("location.hash"), "#c-page")
+        self.assertEqual(pg.evaluate("location.hash"), "")   # kein #c-page beim Laden (sonst Sprung zum Fragment, siehe unten)
         tab_js = {n for g in CPG.GROUPS if g[3] == "view" for n in g[1]}
         idle_js = {n for g in CPG.GROUPS if g[3] != "view" for n in g[1]}
         pg.wait_for_timeout(500)
         got = set(self.loaded(pg))
         self.assertFalse(got & (tab_js - idle_js), got)
         pg.close()
+
+    def test_start_without_fragment_no_jump_no_shift(self):
+        cls_js = ("window.__CLS=0;new PerformanceObserver(function(l){l.getEntries().forEach(function(e){window.__CLS+=e.value;});})"
+                  ".observe({type:'layout-shift',buffered:true});")
+        for vp in ({"width": 412, "height": 823}, {"width": 1350, "height": 940}):   # Lighthouse mobil und desktop
+            with self.subTest(viewport=vp):
+                pg = self.open(init_script=cls_js, viewport=vp)
+                self.assertEqual(pg.evaluate("location.hash"), "")
+                self.assertEqual(pg.evaluate("scrollY"), 0)
+                # reservierte Hoehe (min-height:100vh) haelt den Fuss unter dem ersten Bild, solange #c-page noch leer ist
+                self.assertGreaterEqual(pg.evaluate("document.querySelector('footer').getBoundingClientRect().top"), vp["height"])
+                # wie community.js nach /api/me: Anmeldekasten in #c-page einfuegen (laesst main wachsen)
+                pg.evaluate("var s=document.createElement('section');s.style.height='1200px';document.getElementById('c-page').appendChild(s)")
+                pg.wait_for_timeout(300)
+                self.assertEqual(pg.evaluate("scrollY"), 0)
+                self.assertLess(pg.evaluate("window.__CLS"), 0.01)
+                pg.close()
 
     def test_deep_link_loads_only_that_tab(self):
         pg = self.open("#c-library")
