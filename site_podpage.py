@@ -12,6 +12,7 @@ import site_listen as LST   # "Show folgen"-Knopf (Apple Podcasts/Spotify nach G
 import site_transcripts as TRS   # #266: Transkripte als Dateien neben der Folgenseite (R2)
 import site_meta_podcast as MP   # suchintent-freundliche <title>/meta description (reine Funktionen)
 import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
+import site_spreaker_img as SPI   # kleine Spreaker-Cover-Varianten fuer sichtbare <img> (Ladezeit)
 from site_episode_urls import episode_url, sid_owners   # kanonische Folgen-Adresse (eine Quelle); eine Spreaker-ID je Seite
 import gzip, json, re, unicodedata, html as _h
 from functools import lru_cache
@@ -28,6 +29,7 @@ for _f in sorted((Path(__file__).parent / "data" / "episode_sections").glob("par
     try: SECTIONS.update(json.loads(_f.read_text("utf-8")))
     except Exception: pass
 PER = 100
+LIST_EAGER = (True, "auto", "auto")   # Folgenliste: Cover der ersten Karten liegen im ersten Bildschirm (Handy: etwa 3) - nicht lazy, die erste mit fetchpriority=high (LCP)
 OK_TAGS = {"p", "br", "strong", "b", "em", "i", "u", "ul", "ol", "li", "h2", "h3", "h4", "blockquote", "a", "code", "pre", "hr", "table", "thead", "tbody", "tr", "th", "td", "img"}
 SKIP = {"script", "style", "iframe", "form", "object", "embed"}
 
@@ -508,11 +510,11 @@ def build(g):
 
     sidebar = g["side"]   # die eine Sidebar aller Inhaltsseiten (generate_site.sidebar, site_sidebar.render)
 
-    def pub(rel, title, desc, body, ld=None, og="website", noindex=False, last=TODAY, alts=None, canon=None, seo=None):
+    def pub(rel, title, desc, body, ld=None, og="website", noindex=False, last=TODAY, alts=None, canon=None, seo=None, head=""):
         u = f"{root}{rel}"
         side = sidebar("en", (title + " " + plain(body)[:8000]) if not noindex else "")
         _st, _sd = seo if seo else ((title if title == NAME else f"{title} – {NAME}"), desc[:300])   # seo = (Titel mit Marke, Description) aus site_meta_podcast
-        h = page("en", _st, _sd, u, shell(body, side), alts, ld, xdefault=u, og_type=og, noindex=noindex)
+        h = page("en", _st, _sd, u, shell(body, side), alts, ld, xdefault=u, og_type=og, noindex=noindex, extra_head=head)
         if canon:   # T12: Seite bleibt erreichbar, die kanonische Adresse ist eine andere (z. B. Personen-Entitaet); nicht in die Sitemap
             h = h.replace(f'<link rel="canonical" href="{u}">', f'<link rel="canonical" href="{canon}">', 1)
         write(f"show/{rel}index.html", h)
@@ -532,13 +534,14 @@ def build(g):
 
     def ep_url(e): return f"{root}episodes/{e['slug']}/"
 
-    def img_tag(u, alt, size, eager=False):   # eager: Bild im ersten Bildschirm (Folgenkopf) - nicht lazy, sonst startet es erst nach dem Layout (LCP)
-        lz = "" if eager else 'loading="lazy" '
-        return f'<img src="{esc(u)}" alt="{esc(alt)}" width="{size}" height="{size}" {lz}decoding="async" style="width:{size}px;height:{size}px;object-fit:cover;border-radius:.5rem;flex:none">' if u else ""
+    def img_tag(u, alt, size, eager=False):   # eager: Bild im ersten Bildschirm - nicht lazy, sonst startet es erst nach dem Layout (LCP). True: dazu fetchpriority=high (Folgenkopf, erste Listenkarte); "auto": nur nicht lazy
+        lz = 'fetchpriority="high" ' if eager is True else ("" if eager else 'loading="lazy" ')
+        # Spreaker-Cover: kleine Variante (~2x Anzeigegroesse) statt 1400x1400 (site_spreaker_img); JSON-LD/og/Feeds behalten das Original
+        return f'<img {SPI.src_attrs(u, size)} alt="{esc(alt)}" width="{size}" height="{size}" {lz}decoding="async" style="width:{size}px;height:{size}px;object-fit:cover;border-radius:.5rem;flex:none">' if u else ""
 
-    def card(e):
+    def card(e, eager=False):   # eager wie img_tag (erste Karten der Folgenliste liegen im ersten Bildschirm)
         nr = SNT.get("en", title=e["name"])
-        s = short_desc(e, nr, 200); th = img_tag(thumb_of(e, nr), e["name"], 96)
+        s = short_desc(e, nr, 200); th = img_tag(thumb_of(e, nr), e["name"], 96, eager=eager)
         return (f'<li style="margin:.9em 0;display:flex;gap:1rem;align-items:flex-start">{th}<div><a href="{ep_url(e)}"><strong>{esc(e["name"])}</strong></a><br><span class="mut">{day(e["create_time"])}{" · S" + str(e["season"]) if e.get("season") else ""}</span><br>{esc(s)}</div></li>')
 
     # Blogposts (von www.m365.fm geholt, fetch_podpage_blog.py)
@@ -629,6 +632,7 @@ def build(g):
         _rw = bool(_rwn); _RWC[_rwr] = _RWC.get(_rwr, 0) + 1; _RWC["used"] = _RWC.get("used", 0) + _rw
         nnotes = rename_links(nnotes)   # T12: Show Notes verlinken die Folge oft ueber die alte Podpage-Adresse
         prev_, next_ = (eps[k + 1] if k + 1 < len(eps) else None), (eps[k - 1] if k else None)
+        _pc = SPI.PRECONNECT if SPI.is_spreaker(thumb_of(e, nrec)) else ""   # Cover im ersten Bildschirm kommt von Spreaker-CloudFront: Verbindung frueh aufbauen
         aud = f'<audio controls preload="none" style="width:100%" src="{esc(r["audio"])}"></audio>' if r and r.get("audio") else ""
         elk = platform_episode_links(elinks, nrec["id"], f"{nrec['id']}:en") if nrec else {}
         plat_links = [(n, (elk.get(pk) or e.get(fld) or "")) for n, pk, fld in (("Apple Podcasts", "apple", "episode_apple_url_path"), ("Spotify", "spotify", "episode_spotify_url_path"), ("YouTube", "youtube", "video_link"), ("YouTube Music", "youtube_music", "episode_youtube_music_url_path"), ("Deezer", "deezer", None))]
@@ -666,7 +670,7 @@ def build(g):
         for _dl, (_du, _) in oa.items(): alts[_dl] = _du   # T3: die Dub-Fassung (eigene Folge in der Sprache) ist die Sprachalternative, nicht die duenne Show-Kopie
         _seo = MP.en_episode_meta(e["name"], e.get("meta_title"), _rwm, e.get("summary"), short_desc(e, nrec, 600), uniq=_MPU, has_transcript=len(tr) > 200 or bool(_trf))   # Thema zuerst, Format und Marke hinten; Schablonen-Felder (X Explained | M365 FM) fallen weg
         pub(f"episodes/{e['slug']}/", e.get("meta_title") or e["name"], _rwm or short_desc(e, nrec, 155), body, ([ld] + nld) if nld else ld, "article", last=day(e.get("update_time")) or TODAY, alts=alts if len(alts) > 1 else None, seo=_seo,
-            noindex=episode_noindex(e, nrec, bool(snx), _rw, (short_desc(e, nrec, 300), nkp, nnotes, nfaq, tr if len(tr) > 200 else "")))
+            noindex=episode_noindex(e, nrec, bool(snx), _rw, (short_desc(e, nrec, 300), nkp, nnotes, nfaq, tr if len(tr) > 200 else "")), head=_pc)
         # lokalisierte Fassungen dieser Folge
         for l in TRL:
             tt = TRL[l].get(e["slug"])
@@ -691,7 +695,7 @@ def build(g):
             _lalts = None if l in oa else alts   # T3: Sprache mit Dub-Fassung: diese Kopie bleibt ohne hreflang (ein Vertreter je Sprache im Cluster)
             _lcan = oa[l][0] if l in oa else lu   # T42: Kopie in einer Sprache mit Dub-Folge -> kanonisch (auch og:url, Teilen, JSON-LD) die Dub-Folge, nicht in die Sitemap
             if l in oa: lald["url"] = _lcan
-            _lh = g["page"](l, MP.episode_title(l, e["name"] if MP.junk(lt) else lt, uniq=_MPL), MP.episode_desc(l, ls) or MP.episode_desc("en", short_desc(e, nrec, 600)) or short_desc(e, nrec, 155), _lcan, f'{g["header"](l, "")}<main class="wrap">{lbody}{loc_pager(l, k)}</main>{g["footer"](l)}', _lalts, [lald], xdefault=ep_url(e), og_type="article", og_of=ep_url(e), switch=alts, self_url=lu)
+            _lh = g["page"](l, MP.episode_title(l, e["name"] if MP.junk(lt) else lt, uniq=_MPL), MP.episode_desc(l, ls) or MP.episode_desc("en", short_desc(e, nrec, 600)) or short_desc(e, nrec, 155), _lcan, f'{g["header"](l, "")}<main class="wrap">{lbody}{loc_pager(l, k)}</main>{g["footer"](l)}', _lalts, [lald], xdefault=ep_url(e), og_type="article", og_of=ep_url(e), switch=alts, self_url=lu, extra_head=_pc)   # generate_site.page: extra_head="" ist der Standard; page haengt fuer /community/, /entity/, /glossary/ ui-<lang>.js an eine Kopie an
             (g.get("write_r2") or write)(f"{l}/show/episodes/{e['slug']}/index.html", _lh)
             if l not in oa: sitemap.append((lu, day(e.get("update_time")) or TODAY, _lalts))
     if _RWC.get("thin") or _RWC.get("unknown"):
@@ -705,7 +709,8 @@ def build(g):
     for p in range(pages_n):
         part = eps[p * PER:(p + 1) * PER]
         pg = "".join(f'<a href="{root}episodes/{"" if q == 0 else f"page/{q + 1}/"}"{" style=font-weight:700 aria-current=page" if q == p else " rel=prev" if q == p - 1 else " rel=next" if q == p + 1 else ""}>{q + 1}</a> ' for q in range(pages_n))
-        pub("episodes/" if p == 0 else f"episodes/page/{p + 1}/", "All episodes" + (f" – page {p + 1}" if p else ""), f"All {len(eps)} episodes of the {NAME}.", f'<h1>All episodes</h1><ul style="list-style:none;padding:0">{"".join(card(e) for e in part)}</ul><p>{pg}</p>', noindex=bool(p), alts=(_list_alts if not p and len(_list_alts) > 1 else None), seo=MP.episodes_list_meta(len(eps)) if not p else None)
+        pub("episodes/" if p == 0 else f"episodes/page/{p + 1}/", "All episodes" + (f" – page {p + 1}" if p else ""), f"All {len(eps)} episodes of the {NAME}.", f'<h1>All episodes</h1><ul style="list-style:none;padding:0">{"".join(card(e, eager=LIST_EAGER[i] if i < len(LIST_EAGER) else False) for i, e in enumerate(part))}</ul><p>{pg}</p>', noindex=bool(p), alts=(_list_alts if not p and len(_list_alts) > 1 else None), seo=MP.episodes_list_meta(len(eps)) if not p else None,
+            head=SPI.PRECONNECT if part and SPI.is_spreaker(thumb_of(part[0], SNT.get("en", title=part[0]["name"]))) else "")
 
     # Lokalisierte Folgenlisten (paginiert) je Sprache mit uebersetzten Titeln/Zusammenfassungen
     for l in TRL:
