@@ -59,8 +59,23 @@ class Pages(unittest.TestCase):
         self.assertIn("SPI.src_attrs(u, size)", src)   # img_tag: kleine Variante
         self.assertIn('fetchpriority="high" \' if eager', src)   # Folgenkopf: nicht lazy, hohe Prioritaet
         self.assertIn('**({"image": thumb_of(e, nrec)} if thumb_of(e, nrec) else {})', src)   # JSON-LD: Original
-        self.assertEqual(src.count('**({"extra_head": _pc} if _pc else {})'), 1)   # Sprachfassungen: preconnect
+        self.assertEqual(src.count("self_url=lu, extra_head=_pc)"), 1)   # Sprachfassungen: preconnect
         self.assertIn("head=_pc)", src)   # englische Folgenseite: preconnect
+        self.assertIn("noindex=noindex, extra_head=head)", src)   # pub reicht head an page weiter
+
+    def test_episode_list_first_covers_not_lazy(self):
+        """Folgenliste: erste Karte fetchpriority=high, Karten 2-3 ohne loading=lazy, der Rest lazy; preconnect zu Spreaker-CloudFront."""
+        self.assertEqual(P.LIST_EAGER, (True, "auto", "auto"))
+        src = (ROOT / "site_podpage.py").read_text("utf-8")
+        self.assertIn("""'fetchpriority="high" ' if eager is True else ("" if eager else 'loading="lazy" ')""", src)
+        self.assertIn("card(e, eager=LIST_EAGER[i] if i < len(LIST_EAGER) else False) for i, e in enumerate(part)", src)
+        self.assertIn('img_tag(thumb_of(e, nr), e["name"], 96, eager=eager)', src)
+        self.assertIn("head=SPI.PRECONNECT if part and SPI.is_spreaker(", src)
+
+    def test_shows_cover_object_fit(self):
+        """Show-Seite: 160x160 erzwungen - object-fit:cover, damit eine nicht quadratische Variante nicht verzerrt."""
+        src = (ROOT / "site_shows.py").read_text("utf-8")
+        self.assertIn('width="160" height="160" style="float:right;margin:0 0 1em 1em;border-radius:8px;object-fit:cover"', src)
 
     def test_listen_card_small_cover(self):
         it = {"title": "T", "hook": "", "minutes": 3, "cover": ORIG, "page": "https://www.m365.fm/show/episodes/t/"}
@@ -83,6 +98,20 @@ class Pages(unittest.TestCase):
         self.assertIn(ORIG, [x.get("image") for x in lds if isinstance(x, dict)])
         self.assertFalse(any("t_square_limited" in json.dumps(x) for x in lds))
         self.assertIn(f'src="{V(320)}"', h)
+
+    def test_page_extra_head_preconnect_kept_with_ui_script(self):
+        """generate_site.page haengt ui-<lang>.js nur fuer /community/, /entity/, /glossary/ an extra_head an; preconnect bleibt in beiden
+        Faellen genau einmal, der Wert des Aufrufers bleibt unveraendert (Zeichenkette, += erzeugt eine Kopie)."""
+        import generate_site as G
+        lang = G.COMM_LANGS[2]
+        body = "<main><h1>X</h1></main><footer></footer>"
+        for path, ui in ((f"/{lang}/show/episodes/x/", False), (f"/{lang}/community/x/", True)):
+            url = G.BASE + path
+            eh = SPI.PRECONNECT
+            head = G.page(lang, "X", "Beschreibung", url, body, None, None, xdefault=url, extra_head=eh).split("</head>")[0]
+            self.assertEqual(eh, SPI.PRECONNECT)
+            self.assertEqual(head.count(SPI.PRECONNECT), 1, path)
+            self.assertEqual(f"/assets/ui-{lang}.js" in head, ui, path)
 
 
 if __name__ == "__main__":

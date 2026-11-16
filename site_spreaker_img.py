@@ -3,7 +3,8 @@
 Spreaker liefert Folgenbilder ueber CloudFront mit einem Transformations-Segment im Pfad, z. B.
 https://d3wo5wojvuv7l.cloudfront.net/t_rss_itunes_square_1400/images.spreaker.com/original/<hash>.jpg (1400x1400, ~320 KB).
 Geprueft per url-peek (16.11.2026): t_square_limited_160 / _320 / _480 / _720 liefern 200 image/jpg (9,6 / 30 / 59 / 115 KB);
-t_square_limited_200, t_square_160 und t_square_320 liefern 400.
+t_square_limited_200, t_square_160 und t_square_320 liefern 400. Stichprobe 5 zufaellige Cover x 160/320/480/720 (url-peek-Lauf 43854347168):
+alle 20 liefern 200 image/jpg, laut JPEG-Kopf quadratisch (320er: 320x320).
 
 Nur das sichtbare <img> bekommt die kleine Variante (src + srcset). JSON-LD, og:image, Feeds und Downloads behalten die
 Originaladresse. Andere Adressen (img.m365.fm, YouTube, ...) bleiben unveraendert (CLAUDE.md: Spreaker-Folgenbilder sind die Ausnahme
