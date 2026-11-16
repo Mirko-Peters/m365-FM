@@ -1,6 +1,6 @@
-# Entitäten: JSON gegen D1 (2026-11-15T06:53Z)
+# Entitäten: JSON gegen D1 (2026-11-16T07:07Z)
 
-JSON-Basis 2254 · D1 live 2282 · in beiden 2254 · nur JSON 0 · nur D1 28
+JSON-Basis 2358 · D1 live 2387 · in beiden 2358 · nur JSON 0 · nur D1 29
 
 **13 Entitäten** weichen ab (letzte live-Fassung: import/auto 10, person 3).
 
