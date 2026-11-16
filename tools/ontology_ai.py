@@ -7,7 +7,8 @@
 Nur von Hand (Workflow ontology-ai.yml), mit Haiku-Tagesbudget (ai_gateway.check_budget, Job "ontology_ai"). Nichts wird geloescht; Eintraege mit Oberbegriff bleiben unberuehrt;
 unsichere Vorschlaege bleiben nur in der Vorschlagsdatei (status "review") fuer Mirko/den Dev-Chef.
 Ein Begriff kommt nie automatisch unter eine Kategorie (type category, z. B. ai-assistant): solche Vorschlaege bleiben immer "review"
-(Kategorien sind fuer Produkte ueber instance_of; ein Begriff ist keine Art von Software-Kategorie).
+(Kategorien sind vor allem fuer Produkte ueber instance_of; einzelne Begriff-zu-Kategorie-Kanten sind von Hand geprueft und gewollt,
+z. B. mfa/zero-trust unter identity-security-tool – die KI darf solche Kanten nur nicht selbst eintragen).
 Ein fehlgeschlagener Aufruf (Netz, kaputte Antwort) wird gezaehlt und uebersprungen; die anderen laufen weiter."""
 import json, os, sys, time
 from pathlib import Path
@@ -58,7 +59,7 @@ def parse_answer(txt):
     while i >= 0:
         try:
             val, _ = dec.raw_decode(txt, i)
-            if isinstance(val, list):
+            if isinstance(val, list) and (not val or all(isinstance(x, dict) for x in val)):   # nur Vorschlagslisten, kein [1] aus einem String
                 return val
         except ValueError:
             pass
