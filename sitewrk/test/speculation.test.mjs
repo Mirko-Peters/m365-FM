@@ -107,7 +107,8 @@ test("Sprachwahl nie vorabrufen: dieselben Links, deren Klick in assets/page.js 
   const sel = SPEC_RULES.prefetch[0].where.and[2].not.selector_matches.split(",");
   for (const part of m[1].split(",").map((x) => x.trim())) assert.ok(sel.includes(part), "vom Vorabruf ausgenommen: " + part);
 });
-// Mit URLPattern (Node >= 23.8, Browser): die Regeln wie der Browser auswerten. Node 22 (CI) hat es noch nicht -> uebersprungen.
+// Mit URLPattern (global ab Node 23.8, also in Node 24 der CI, und im Browser): die Regeln wie der Browser auswerten.
+// Aeltere Node-Fassungen (z. B. 22 lokal) haben es nicht -> dort uebersprungen.
 test("Regeln wie im Browser ausgewertet (URLPattern)", { skip: typeof URLPattern === "undefined" && "URLPattern fehlt in dieser Node-Fassung" }, () => {
   const base = "https://www.m365.fm" + SPEC_PATH, [rule] = SPEC_RULES.prefetch, [same, notHref] = rule.where.and;
   const ok = (u) => new URLPattern(same.href_matches, base).test(u) && !notHref.not.href_matches.some((p) => new URLPattern(p, base).test(u));
