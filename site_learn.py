@@ -2,6 +2,7 @@
 import json, re, html, os
 from functools import lru_cache
 import site_media as MED
+import ontology as ONT   # Oberbegriffe per Regel (Klammer/Praefix) fuer alle Entitaeten beim Laden
 import site_meta_entities as MM   # SEO-Titel und Meta-Descriptions nach Suchabsicht
 from pathlib import Path
 
@@ -477,13 +478,14 @@ def load_entities(api):
             if not rec.get("wikidata") and (base.get(it["id"]) or {}).get("wikidata"):   # Wikidata-Nummer der Redaktion gilt, solange sie im Formular leer ist
                 rec["wikidata"] = base[it["id"]]["wikidata"]
             base[it["id"]] = rec
+    ONT.derive(base)   # Oberbegriffe per Regel fuer ALLE Eintraege (auch neue aus D1/Gaesten/Speakern), nur im Speicher
     return base
 
 
 REPO_KEYS = ("city", "country", "street", "zip", "founded", "company", "disclosure", "logo_src", "logo_bg", "award",
              # belegte Fakten (site_facts.py, #305): ebenfalls nur hier gepflegt, fehlen im Formular und damit in der D1-Fassung
              "legal_form", "register", "employees", "founders", "ceo", "certifications", "partners", "customers",
-             "deployment", "integrations", "release_year", "trial_url", "positions")   # nur in data/entities.json gepflegt (Redaktion), nicht im Bearbeiten-Formular
+             "deployment", "integrations", "release_year", "trial_url", "positions", "kind")   # nur in data/entities.json gepflegt (Redaktion), nicht im Bearbeiten-Formular
 
 
 COMMUNITY_API_DEFAULT = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm")

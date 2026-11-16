@@ -149,7 +149,7 @@ def main(dry=False):
             d["status"] = "imported"; d["imported_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()); d["entity_id"] = e["id"]
             p.write_text(json.dumps(d, ensure_ascii=False, indent=1) + "\n", "utf-8")
     if not dry and (added or merged):
-        ENT.write_text(json.dumps(ents, ensure_ascii=False, indent=1) + "\n", "utf-8")
+        ENT.write_text(json.dumps(ents, ensure_ascii=False, indent=1), "utf-8")   # ohne Umbruch am Ende (tests/test_entity_lean_aliases.py)
     print(f"neu: {len(added)} {added[:20]}\nergaenzt: {len(merged)} {merged[:20]}\nschon vorhanden: {len(skipped)}\nabgelehnt: {len(bad)}")
     for n, err in bad: print(f"  {n}: {err}")
     return 0

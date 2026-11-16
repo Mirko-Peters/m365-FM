@@ -32,9 +32,12 @@ def tlab(lang, t):
     """Typname der Entitaet in der Sprache der Seite (en/de gepflegt, weitere Sprachen ueber site_i18n.T -> data/py_i18n.json)."""
     en, de = TL[t]
     return T(lang, en, de)
-FWD = {"instance_of": ("Is a", "Ist ein"), "part_of": ("Part of", "Teil von"), "developed_by": ("Developed by", "Entwickelt von"), "related_to": ("Related to", "Verwandt mit"), "requires": ("Requires", "Benötigt"),
+KIND_L = {"protocol": ("Protocol", "Protokoll"), "standard": ("Standard", "Standard"), "framework": ("Framework", "Rahmenwerk"), "method": ("Method", "Methode"),
+          "practice": ("Practice", "Praxis"), "architecture": ("Architecture", "Architektur"), "metric": ("Metric", "Kennzahl"), "role": ("Role", "Rolle"),
+          "feature": ("Feature", "Funktion"), "format": ("Format", "Format"), "technique": ("Technique", "Technik"), "threat": ("Threat", "Bedrohung"), "term": ("Term", "Begriff")}
+FWD = {"instance_of": ("Is a", "Ist ein"), "part_of": ("Part of", "Teil von"), "broader": ("Broader topic", "Oberbegriff"), "developed_by": ("Developed by", "Entwickelt von"), "related_to": ("Related to", "Verwandt mit"), "requires": ("Requires", "Benötigt"),
        "covers": ("Covers", "Behandelt"), "created_by": ("Created by", "Erstellt von"), "organized_by": ("Organized by", "Veranstaltet von"), "similar_to": ("Similar to", "Ähnlich wie")}
-INV = {"instance_of": ("Examples", "Beispiele"), "part_of": ("Includes", "Enthält"), "developed_by": ("Products and works", "Produkte und Werke"), "related_to": ("Related to", "Verwandt mit"),
+INV = {"instance_of": ("Examples", "Beispiele"), "part_of": ("Includes", "Enthält"), "broader": ("Narrower topics", "Unterbegriffe"), "developed_by": ("Products and works", "Produkte und Werke"), "related_to": ("Related to", "Verwandt mit"),
        "requires": ("Required by", "Benötigt von"), "covers": ("Covered by", "Behandelt in"), "created_by": ("Created", "Erstellt"), "organized_by": ("Organizes", "Veranstaltet"), "similar_to": ("Similar to", "Ähnlich wie")}
 S = {"en": dict(entities="Microsoft ecosystem entity database", intro="Products, platforms, concepts, certifications and organisations around Microsoft – with relationships, described by the community and published as Schema.org data.", new="Add a new topic", all="All", facts="Facts", website="Website", docs="Documentation", wikipedia="Wikipedia", wikidata="Wikidata", type="Type", aka="Also known as", experts="Experts and companies for this topic", noexperts="Nobody has listed this topic yet. Add it to your profile.", eps="Episodes about {t}", export="Data export", edit_e="Edit properties", glossary="Glossary", count="{n} entries", up="Last edited"),
      "de": dict(entities="Entitätsdatenbank zum Microsoft-Ökosystem", intro="Produkte, Plattformen, Konzepte, Zertifizierungen und Organisationen rund um Microsoft – mit Beziehungen, von der Community beschrieben und als Schema.org-Daten veröffentlicht.", new="Neues Thema anlegen", all="Alle", facts="Fakten", website="Webseite", docs="Dokumentation", wikipedia="Wikipedia", wikidata="Wikidata", type="Typ", aka="Auch bekannt als", experts="Experten und Firmen zu diesem Thema", noexperts="Dieses Thema hat noch niemand im Profil angegeben. Trag es in deinem Profil ein.", eps="Folgen zu {t}", export="Datenexport", edit_e="Eigenschaften bearbeiten", glossary="Glossar", count="{n} Einträge", up="Zuletzt bearbeitet")}
@@ -42,6 +45,7 @@ S = {"en": dict(entities="Microsoft ecosystem entity database", intro="Products,
 
 SPEAKERS = {}   # Entitaets-ID -> zusammengefuehrter Speaker (data/speakers.json) mit Events und Sessions
 import entity_fill_data as FD
+import ontology as ONT   # Oberbegriff-Kette fuer Brotkruemel, SKOS broader im JSON-LD-Graph
 GENTEXT = {}   # Entitaet -> {en, de}: Ueberblickstexte aus data/entity_texts/part-*.json (aus Folgen und Fakten geschrieben, tools/entity_text_tasks.py)
 for _f in sorted((Path(__file__).parent / "data" / "entity_texts").glob("part-*.json")) if (Path(__file__).parent / "data" / "entity_texts").exists() else []:
     try: GENTEXT.update(json.loads(_f.read_text("utf-8")))
@@ -690,7 +694,11 @@ def build(g, wiki_links, experts_by_ent, ep_find):
         entity_graph.append(musicgroup_ld(BASE))
     if any(e["type"] == "industry" for e in recs):
         entity_graph.append({"@type": "DefinedTermSet", "@id": f"{BASE}/entity/#industries", "name": "Industries", "url": f"{BASE}/entity/"})
-    write("entities.jsonld", json.dumps({"@context": "https://schema.org", "@graph": entity_graph}, ensure_ascii=False))
+    for _n, _e in zip(entity_graph, recs):   # SKOS: Oberbegriffe (broader) maschinenlesbar, nur im Graphen (die Einzelseiten bleiben reines schema.org)
+        _bro = [eid_of(BASE, t) for p, t in _e.get("rel", []) if p == "broader" and t in ENTS]
+        if _bro and isinstance(_n, dict):
+            _n["skos:broader"] = [{"@id": x} for x in _bro]
+    write("entities.jsonld", json.dumps({"@context": ["https://schema.org", {"skos": "http://www.w3.org/2004/02/skos/core#"}], "@graph": entity_graph}, ensure_ascii=False))
 
     cfg_t = lambda lang: S[lang]
     _nf = MM.name_flags(recs)   # gleicher Name unter zwei Kennungen: Titel braucht die Kennung (site_meta_entities)
@@ -746,6 +754,8 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 rb += team_html(BASE, lang, e["id"], root, api)
             _spr, _spown = SPM.entity(e["id"]), SPM.entity_own(e["id"])   # T37 Sponsor: laufende Sponsorings dieser Entitaet (inkl. 182 Tage Karenzzeit nach "end")
             facts = [(s["type"], esc(tlab(lang, e["type"])))]
+            if e.get("kind") in KIND_L:   # Art des Begriffs (ontology.KINDS), nur wo gepflegt
+                facts.append((T(lang, "Kind", "Art"), esc(KIND_L[e["kind"]][li])))
             _aka = aka_fact(e, lang, person_aka)
             if _aka:
                 facts.append(_aka)
@@ -912,7 +922,8 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                        + f'{esc(T(lang, "Last updated", "Zuletzt aktualisiert"))}: <time datetime="{_mod}">{_mod}</time></p>')
             # entity.js (Fragen und Antworten #en-qa) laedt, sobald der Bereich 2500 px vor dem Bildschirm ist (vorher 600 px): auf dem Handy setzte
             # das Skript Ueberschrift und Fragen erst ein, wenn der Bereich schon sichtbar war, und schob den Rest der Seite weg (CLS ~0,18 im Labor beim Scrollen)
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="entity" data-topic-id="{esc(e["id"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button>{SPM.note(lang, _spr, "entity")}{_disc}{_lead}<p class="mut">{esc(tlab(lang, e["type"]))}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{_dnote}{oldbanner}{claim_html(e["id"], lang, e, api)}{FX.logo_html(lang, e)}{hero}{longbox}{ft}{FX.sections(lang, e, root, ENTS)}{evl}{kpbox}{eb}{tline}{artbox}'
+            _cr = [(ENTS[x]["name"], f"{root}{x}/") for x in reversed(ONT.ancestors(e["id"], ENTS)[:3])]   # Oberbegriffe von oben nach unten (part_of > broader > instance_of)
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a>' + "".join(f' › <a href="{cu}">{esc(cn)}</a>' for cn, cu in _cr) + f'</nav><h1>{esc(e["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="entity" data-topic-id="{esc(e["id"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button>{SPM.note(lang, _spr, "entity")}{_disc}{_lead}<p class="mut">{esc(tlab(lang, e["type"]))}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{_dnote}{oldbanner}{claim_html(e["id"], lang, e, api)}{FX.logo_html(lang, e)}{hero}{longbox}{ft}{FX.sections(lang, e, root, ENTS)}{evl}{kpbox}{eb}{tline}{artbox}'
                           f'{qbox}{faqbox}{relmap}{relx}<div class="en-rel">{rb}</div>{gloss}{SU.block(lang, e["id"])}{wb}{("<h2>" + esc(s["experts"]) + "</h2>" + ehtml) if ehtml else ""}{srcbox}{updline}{edit}'
                           f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("edit_e",)}, ensure_ascii=False)}}};window.M365TopicConfig={{api:{json.dumps(api)},lang:{json.dumps(lang)}}};'
                           f'(function(){{var d=0,u="{BASE}/assets/entity.js";function go(){{if(d)return;d=1;var s=document.createElement("script");s.src=u;document.body.appendChild(s)}}'
@@ -931,7 +942,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                    "speakable": {"@type": "SpeakableSpecification", "cssSelector": ["h1", ".en-def"]},
                    "isPartOf": {"@id": f"{BASE}/#website"}, "relatedLink": [f"{root}{x}/" for k, v in groups.items() for x in v][:25],
                    **({"hasPart": {"@id": u + "#articles"}} if arturls else {}),
-                   "breadcrumb": {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": s["entities"], "item": root}, {"@type": "ListItem", "position": 2, "name": e["name"], "item": u}]}}]
+                   "breadcrumb": {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": s["entities"], "item": root}] + [{"@type": "ListItem", "position": 2 + k, "name": cn, "item": cu} for k, (cn, cu) in enumerate(_cr)] + [{"@type": "ListItem", "position": 2 + len(_cr), "name": e["name"], "item": u}]}}]
             if _spr:
                 ld[0]["sponsor"] = SPM.ld(_spr)   # T37 Sponsor: an der Seite (WebPage), nicht an der Entitaet selbst (/entities.jsonld bleibt neutral)
             if e["id"] == MUSICGROUP_ID and person_aka.get(e["id"]):

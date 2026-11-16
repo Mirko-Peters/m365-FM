@@ -45,6 +45,9 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with: { python-version: "3.12" }
+      - name: Ontologie pruefen (Zyklen, tote Verweise, Dubletten; Bericht in der Zusammenfassung, nicht blockierend - blockierend ist tests/test_ontology.py im PR)
+        continue-on-error: true
+        run: python3 tools/ontology_check.py | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Sponsor-Rechner gegen die Testvektoren des Prototyps pruefen (T37, blockierend; Node ist auf dem Runner vorhanden)
         run: node --test tests/sponsor_calc.test.mjs
       - name: Player nach Klick (kein iframe im ersten HTML, feste Masse) und Ladezeit-Regeln pruefen (blockierend)
