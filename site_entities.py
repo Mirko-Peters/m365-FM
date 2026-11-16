@@ -12,6 +12,7 @@ import site_facts as FX   # belegte Fakten (Rechtsform, Register, Kunden, Partne
 import site_mentions as MEN   # Erwaehnungen in fremden Medien als Quellen (data/press_mentions.json)
 import site_listen as LST   # Anhoeren-Karten (kompakte Variante unter den Beitraegen einer Entitaet)
 import site_meta_entities as MM   # SEO-Titel und Meta-Descriptions nach Suchabsicht (reine Funktionen)
+import site_relsent as RS   # Beziehungen als ganze Saetze in der Sprache der Seite (data/relation_sentences.json); zaehlen nicht als eigener Text
 import re
 from datetime import date
 from urllib.parse import quote, urlsplit
@@ -676,6 +677,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
     api = g.get("api", "https://api-dub.m365.fm")
     gl_ids = {x["id"] for x in GLOSS}
     inv = inverse_index()
+    _deg = {i: len(x.get("rel", [])) + len(inv.get(i, [])) for i, x in ENTS.items()}   # Vernetzung: bekanntere Eintraege zuerst in den Beziehungssaetzen
     shell = lambda lang, b: f'{header(lang, "")}<main class="wrap" style="max-width:56em">{b}</main>{footer(lang) if lang in LANGS else footer_en()}'
 
     import site_r2 as _R2   # Logos nur ueber den eigenen Bucket: logo_src (Original) -> img.m365.fm, sobald r2-images.yml es kopiert hat; vorher kein Logo (kein Hotlink)
@@ -746,7 +748,12 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _co = company_org(e) if e["type"] == "person" else None
             if _co:   # Person -> Arbeitgeber (Feld company) und Gegenrichtung Firma -> Personen
                 groups.setdefault(T(lang, "Works for", "Arbeitet bei"), []).append(_co["id"])
-            rb = "".join(f'<h3>{esc(k)}</h3><ul>' + "".join(f'<li><a href="{root}{x}/">{esc(ENTS[x]["name"])}</a> <span class="mut">· {esc(tlab(lang, ENTS[x]["type"]))}</span></li>' for x in dict.fromkeys(v)) + "</ul>" for k, v in groups.items())
+            _gid = {k: f"en-rel-{n + 1}" for n, k in enumerate(groups)}   # Sprungziele der vollstaendigen Listen (fuer "und N weitere" in den Beziehungssaetzen)
+            rb = "".join(f'<h3 id="{_gid[k]}">{esc(k)}</h3><ul>' + "".join(f'<li><a href="{root}{x}/">{esc(ENTS[x]["name"])}</a> <span class="mut">· {esc(tlab(lang, ENTS[x]["type"]))}</span></li>' for x in dict.fromkeys(v)) + "</ul>" for k, v in groups.items())
+            _wf = T(lang, "Works for", "Arbeitet bei")
+            relsent = RS.build(lang, e, [(p, t) for p, t in e.get("rel", []) if t in ENTS and p in FWD], [(p, f) for p, f in inv.get(e["id"], []) if p in INV], ENTS,
+                               lambda x: f"{root}{x}/", anchor=lambda d_, p_: _gid.get(_wf if p_ == "works_for" else (FWD if d_ == "f" else INV)[p_][li], ""),
+                               works_for=_co["id"] if _co else None, rank=lambda x: _deg.get(x, 0))   # Beziehungen als Saetze (site_relsent); die Listen darunter bleiben vollstaendig
             if e["type"] in ("industry", "job"):
                 rb += kind_html(BASE, lang, e, root)
             rb += MEN.section_html(lang, e["id"])   # sichtbare Erwaehnungen (nur iFAKT und Polaris, nur geprueft eingetragene)
@@ -923,7 +930,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             # entity.js (Fragen und Antworten #en-qa) laedt, sobald der Bereich 2500 px vor dem Bildschirm ist (vorher 600 px): auf dem Handy setzte
             # das Skript Ueberschrift und Fragen erst ein, wenn der Bereich schon sichtbar war, und schob den Rest der Seite weg (CLS ~0,18 im Labor beim Scrollen)
             _cr = [(ENTS[x]["name"], f"{root}{x}/") for x in reversed(ONT.ancestors(e["id"], ENTS)[:3])]   # Oberbegriffe von oben nach unten (part_of > broader > instance_of)
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a>' + "".join(f' › <a href="{cu}">{esc(cn)}</a>' for cn, cu in _cr) + f'</nav><h1>{esc(e["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="entity" data-topic-id="{esc(e["id"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button>{SPM.note(lang, _spr, "entity")}{_disc}{_lead}<p class="mut">{esc(tlab(lang, e["type"]))}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{_dnote}{oldbanner}{claim_html(e["id"], lang, e, api)}{FX.logo_html(lang, e)}{hero}{longbox}{ft}{FX.sections(lang, e, root, ENTS)}{evl}{kpbox}{eb}{tline}{artbox}'
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a>' + "".join(f' › <a href="{cu}">{esc(cn)}</a>' for cn, cu in _cr) + f'</nav><h1>{esc(e["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="entity" data-topic-id="{esc(e["id"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button>{SPM.note(lang, _spr, "entity")}{_disc}{_lead}<p class="mut">{esc(tlab(lang, e["type"]))}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{_dnote}{oldbanner}{claim_html(e["id"], lang, e, api)}{FX.logo_html(lang, e)}{hero}{relsent}{longbox}{ft}{FX.sections(lang, e, root, ENTS)}{evl}{kpbox}{eb}{tline}{artbox}'
                           f'{qbox}{faqbox}{relmap}{relx}<div class="en-rel">{rb}</div>{gloss}{SU.block(lang, e["id"])}{wb}{("<h2>" + esc(s["experts"]) + "</h2>" + ehtml) if ehtml else ""}{srcbox}{updline}{edit}'
                           f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("edit_e",)}, ensure_ascii=False)}}};window.M365TopicConfig={{api:{json.dumps(api)},lang:{json.dumps(lang)}}};'
                           f'(function(){{var d=0,u="{BASE}/assets/entity.js";function go(){{if(d)return;d=1;var s=document.createElement("script");s.src=u;document.body.appendChild(s)}}'
