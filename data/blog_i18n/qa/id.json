@@ -1,138 +1,5 @@
 [
  {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "40",
-  "fehler": "unuebersetzt",
-  "src": "<code># Requires MSGraph PowerShell &amp; AuditLog.Read.All Connect-MgGraph -Scopes &quot;AuditLog.Read.All&quot;,&quot;Directory.Read.All&quot; Get-MgAuditLogS",
-  "out": "<code># Requires MSGraph PowerShell &amp; AuditLog.Read.All Connect-MgGraph -Scopes &quot;AuditLog.Read.All&quot;,&quot;Directory.Read.All&quot; Get-MgAuditLogS"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "42",
-  "fehler": "unuebersetzt",
-  "src": "<code>Connect-MgGraph -Scopes &quot;User.Read.All&quot; Get-MgUser -All -Property UserPrincipalName,AssignedLicenses | Select-Object UserPrincipalName, @{n=&#x2",
-  "out": "<code>Connect-MgGraph -Scopes &quot;User.Read.All&quot; Get-MgUser -All -Property UserPrincipalName,AssignedLicenses | Select-Object UserPrincipalName, @{n=&#x2"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "46",
-  "fehler": "unuebersetzt",
-  "src": "<code>OfficeActivity</code> (Time, Workload, Operation, UserId, SiteUrl, ItemType, Target)",
-  "out": "<code>OfficeActivity</code> (Time, Workload, Operation, UserId, SiteUrl, ItemType, Target)"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "54",
-  "fehler": "unuebersetzt",
-  "src": "<code>Risky Sign-ins = COUNTROWS(FILTER(Signins, Signins[Risk] &lt;&gt; &quot;none&quot;))</code>",
-  "out": "<code>Risky Sign-ins = COUNTROWS(FILTER(Signins, Signins[Risk] &lt;&gt; &quot;none&quot;))</code>"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "55",
-  "fehler": "unuebersetzt",
-  "src": "<code>SP/OD Downloads = COUNTROWS(FILTER(OfficeActivity, OfficeActivity[Workload] IN {&quot;SharePoint&quot;,&quot;OneDrive&quot;} &amp;&amp; OfficeActivity[Ope",
-  "out": "<code>SP/OD Downloads = COUNTROWS(FILTER(OfficeActivity, OfficeActivity[Workload] IN {&quot;SharePoint&quot;,&quot;OneDrive&quot;} &amp;&amp; OfficeActivity[Ope"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "56",
-  "fehler": "unuebersetzt",
-  "src": "<code>Teams Feature Use = COUNTROWS(FILTER(OfficeActivity, OfficeActivity[Workload]=&quot;MicrosoftTeams&quot; &amp;&amp; OfficeActivity[Operation] IN {&quot;Me",
-  "out": "<code>Teams Feature Use = COUNTROWS(FILTER(OfficeActivity, OfficeActivity[Workload]=&quot;MicrosoftTeams&quot; &amp;&amp; OfficeActivity[Operation] IN {&quot;Me"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "57",
-  "fehler": "unuebersetzt",
-  "src": "<code>Inactive Licensed Users = DISTINCTCOUNTX(FILTER(Licenses, CALCULATE(COUNTROWS(OfficeActivity), ALLEXCEPT(OfficeActivity, OfficeActivity[UserId]))=0), Lice",
-  "out": "<code>Inactive Licensed Users = DISTINCTCOUNTX(FILTER(Licenses, CALCULATE(COUNTROWS(OfficeActivity), ALLEXCEPT(OfficeActivity, OfficeActivity[UserId]))=0), Lice"
- },
- {
-  "slug": "turning-static-notifications-into-interactive-teams-workflows",
-  "seg": "18",
-  "fehler": "unuebersetzt",
-  "src": "<code>{ &quot;$schema&quot;: &quot;http://adaptivecards.io/schemas/adaptive-card.json&quot;, &quot;type&quot;: &quot;AdaptiveCard&quot;, &quot;version&quot;: &q",
-  "out": "<code>{ &quot;$schema&quot;: &quot;http://adaptivecards.io/schemas/adaptive-card.json&quot;, &quot;type&quot;: &quot;AdaptiveCard&quot;, &quot;version&quot;: &q"
- },
- {
-  "slug": "turning-static-notifications-into-interactive-teams-workflows",
-  "seg": "24",
-  "fehler": "unuebersetzt",
-  "src": "<code>{ &quot;kind&quot;: &quot;policy-feedback&quot;, &quot;policyFeedback&quot;: &quot;Please clarify WFH days.&quot;, &quot;sentiment&quot;: &quot;neutral&qu",
-  "out": "<code>{ &quot;kind&quot;: &quot;policy-feedback&quot;, &quot;policyFeedback&quot;: &quot;Please clarify WFH days.&quot;, &quot;sentiment&quot;: &quot;neutral&qu"
- },
- {
-  "slug": "turning-static-notifications-into-interactive-teams-workflows",
-  "seg": "26",
-  "fehler": "unuebersetzt",
-  "src": "<code>{ &quot;type&quot;: &quot;Action.Execute&quot;, &quot;title&quot;: &quot;Approve&quot;, &quot;verb&quot;: &quot;approveRequest&quot;, &quot;data&quot;: { ",
-  "out": "<code>{ &quot;type&quot;: &quot;Action.Execute&quot;, &quot;title&quot;: &quot;Approve&quot;, &quot;verb&quot;: &quot;approveRequest&quot;, &quot;data&quot;: { "
- },
- {
-  "slug": "turning-static-notifications-into-interactive-teams-workflows",
-  "seg": "29",
-  "fehler": "unuebersetzt",
-  "src": "<code>{ &quot;type&quot;: &quot;Container&quot;, &quot;items&quot;: [ { &quot;type&quot;: &quot;TextBlock&quot;, &quot;text&quot;: &quot;Hello, ${user.displayNa",
-  "out": "<code>{ &quot;type&quot;: &quot;Container&quot;, &quot;items&quot;: [ { &quot;type&quot;: &quot;TextBlock&quot;, &quot;text&quot;: &quot;Hello, ${user.displayNa"
- },
- {
-  "slug": "turning-static-notifications-into-interactive-teams-workflows",
-  "seg": "31",
-  "fehler": "unuebersetzt",
-  "src": "<code>{ &quot;type&quot;: &quot;Input.ChoiceSet&quot;, &quot;id&quot;: &quot;priority&quot;, &quot;value&quot;: &quot;normal&quot;, &quot;choices&quot;: [ { &qu",
-  "out": "<code>{ &quot;type&quot;: &quot;Input.ChoiceSet&quot;, &quot;id&quot;: &quot;priority&quot;, &quot;value&quot;: &quot;normal&quot;, &quot;choices&quot;: [ { &qu"
- },
- {
-  "slug": "beyond-trust-falls-why-traditional-team-building-fails-and-what-to-do-instead",
-  "seg": "D",
-  "fehler": "html-tags",
-  "src": "Welcome back to another deep dive! If you have ever sat through a corporate retreat, dreading the moment a facilitator asks you to fall backward into the arms o",
-  "out": "Selamat datang kembali di deep dive lainnya! Jika Anda pernah mengikuti retret perusahaan dan merasa cemas saat fasilitator meminta Anda menjatuhkan diri ke bel"
- },
- {
-  "slug": "stop-paying-the-middleware-tax-hidden-costs-of-legacy-it",
-  "seg": "349",
-  "fehler": "unuebersetzt",
-  "src": "<a href=\"https://www.m365.fm/copilot-studio-computer-use-overview\" rel=\"noopener\" target=\"_blank\">Replace Legacy RPA with Copilot Studio Computer Use</a>",
-  "out": "<a href=\"https://www.m365.fm/copilot-studio-computer-use-overview\" rel=\"noopener\" target=\"_blank\">Replace Legacy RPA with Copilot Studio Computer Use</a>"
- },
- {
-  "slug": "stop-paying-the-middleware-tax-hidden-costs-of-legacy-it",
-  "seg": "350",
-  "fehler": "unuebersetzt",
-  "src": "<a href=\"https://www.m365.fm/the-monorepo-myth-why-your-architecture-is-fragmented\" rel=\"noopener\" target=\"_blank\">The Monorepo Myth: Why Your Architecture Is F",
-  "out": "<a href=\"https://www.m365.fm/the-monorepo-myth-why-your-architecture-is-fragmented\" rel=\"noopener\" target=\"_blank\">The Monorepo Myth: Why Your Architecture Is F"
- },
- {
-  "slug": "stop-paying-the-middleware-tax-hidden-costs-of-legacy-it",
-  "seg": "352",
-  "fehler": "unuebersetzt",
-  "src": "<a href=\"https://www.m365.fm/canvas-apps-vs-model-driven-apps-simply-explained\" rel=\"noopener\" target=\"_blank\">Canvas Apps vs Model-Driven Apps - Simply Explain",
-  "out": "<a href=\"https://www.m365.fm/canvas-apps-vs-model-driven-apps-simply-explained\" rel=\"noopener\" target=\"_blank\">Canvas Apps vs Model-Driven Apps - Simply Explain"
- },
- {
-  "slug": "microsoft-365-f3-vs-e3-choosing-the-right-license-for-your-workforce",
-  "seg": "86",
-  "fehler": "html-tags",
-  "src": "<strong>Retention and Sensitivity Policies:</strong>E3 lets you configure advanced retention and auto-labeling through Microsoft Purview, making it easier to me",
-  "out": "<strong>Kebijakan Retensi dan Sensitivitas:</strong>E3 memungkinkan Anda mengonfigurasi retensi lanjutan dan pelabelan otomatis melalui Microsoft Purview, sehin"
- },
- {
-  "slug": "mastering-azure-private-link-securing-cloud-resources-without-public-ips",
-  "seg": "78",
-  "fehler": "unuebersetzt",
-  "src": "0-1 PB - $- per GB, 1-5 PB - $- per GB, 5+ PB - $- per GB",
-  "out": "0-1 PB - $- per GB, 1-5 PB - $- per GB, 5+ PB - $- per GB"
- },
- {
-  "slug": "mastering-azure-private-link-securing-cloud-resources-without-public-ips",
-  "seg": "80",
-  "fehler": "unuebersetzt",
-  "src": "0-1 PB - $- per GB, 1-5 PB - $- per GB, 5+ PB - $- per GB",
-  "out": "0-1 PB - $- per GB, 1-5 PB - $- per GB, 5+ PB - $- per GB"
- },
- {
   "slug": "mastering-the-five-layers-of-exchange-hybrid-beyond-the-wizard",
   "seg": "16",
   "fehler": "unuebersetzt",
@@ -3492,5 +3359,138 @@
   "fehler": "unuebersetzt",
   "src": "<a href=\"https://people.cs.umass.edu/~emery/classes/cmpsci691st/readings/OS/Littles-Law-50-Years-Later.pdf\" rel=\"noopener\" target=\"_blank\">Little&#x27;s Law as ",
   "out": "<a href=\"https://people.cs.umass.edu/~emery/classes/cmpsci691st/readings/OS/Littles-Law-50-Years-Later.pdf\" rel=\"noopener\" target=\"_blank\">Little&#x27;s Law as "
+ },
+ {
+  "slug": "content/use-microsoft-forms-in-teams-polls-surveys-quizzes",
+  "seg": "44",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://support.microsoft.com/en-gb/office/work-with-colleagues-to-create-edit-and-review-forms-in-microsoft-teams-333b97a3-41d9-48bc-a1cb-84a96bd44e14",
+  "out": "<a href=\"https://support.microsoft.com/en-gb/office/work-with-colleagues-to-create-edit-and-review-forms-in-microsoft-teams-333b97a3-41d9-48bc-a1cb-84a96bd44e14"
+ },
+ {
+  "slug": "content/onedrive-storage-limits-check-usage-free-up-space",
+  "seg": "57",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/sharepoint/set-default-storage-space\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Set the default storage space f",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/sharepoint/set-default-storage-space\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Set the default storage space f"
+ },
+ {
+  "slug": "content/how-to-use-breakout-rooms-in-teams-meetings",
+  "seg": "A1",
+  "fehler": "html-tags",
+  "src": "According to Microsoft Support, the meeting organizer, or a presenter from the organizer's organization who was appointed as a breakout rooms manager, can creat",
+  "out": "Menurut Microsoft Support, penyelenggara rapat, atau presenter dari organisasi penyelenggara yang ditunjuk sebagai manajer ruang breakout, dapat membuat ruang. "
+ },
+ {
+  "slug": "content/how-to-use-breakout-rooms-in-teams-meetings",
+  "seg": "A3",
+  "fehler": "html-tags",
+  "src": "No. Microsoft Support states that End meeting closes only the main meeting. Select Close rooms in the breakout rooms panel to close them. A room shows Closed wh",
+  "out": "Tidak. Microsoft Support menyatakan bahwa <em>End meeting</em> hanya menutup rapat utama. Pilih <strong>Close rooms</strong> di panel ruang breakout untuk menut"
+ },
+ {
+  "slug": "content/how-to-use-breakout-rooms-in-teams-meetings",
+  "seg": "4",
+  "fehler": "html-tags",
+  "src": "Create rooms before a meeting from the calendar event, or during it with Rooms in the meeting controls. Assign people manually, randomly or let them self-select",
+  "out": "Buat ruang sebelum rapat dari acara kalender, atau selama rapat melalui <strong>Rooms</strong> di kontrol rapat. Tugaskan orang secara manual, acak, atau biarka"
+ },
+ {
+  "slug": "content/how-to-use-breakout-rooms-in-teams-meetings",
+  "seg": "5",
+  "fehler": "html-tags",
+  "src": "Rooms close automatically when a time limit ends. Ending the main meeting does not close rooms, so select Close rooms first.",
+  "out": "Ruang akan ditutup otomatis saat batas waktu berakhir. Mengakhiri rapat utama tidak menutup ruang, jadi pilih <strong>Close rooms</strong> terlebih dahulu."
+ },
+ {
+  "slug": "content/how-to-use-breakout-rooms-in-teams-meetings",
+  "seg": "14",
+  "fehler": "html-tags",
+  "src": "The Breakout rooms option appears in a calendar event only after invites have been sent.",
+  "out": "Opsi <strong>Breakout rooms</strong> hanya muncul di acara kalender setelah undangan dikirim."
+ },
+ {
+  "slug": "content/how-to-use-breakout-rooms-in-teams-meetings",
+  "seg": "21",
+  "fehler": "html-tags",
+  "src": "The Breakout rooms option appears in the calendar event only after invites have been sent.",
+  "out": "Opsi <strong>Breakout rooms</strong> hanya muncul di acara kalender setelah undangan dikirim."
+ },
+ {
+  "slug": "content/copilot-not-responding-slow-frozen-what-to-check",
+  "seg": "55",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/office/troubleshoot/copilot/copilot-missing-disabled-not-work-correctly\" rel=\"noopener\" target=\"_blank\">Microsoft Lea",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/office/troubleshoot/copilot/copilot-missing-disabled-not-work-correctly\" rel=\"noopener\" target=\"_blank\">Microsoft Lea"
+ },
+ {
+  "slug": "content/copilot-not-responding-slow-frozen-what-to-check",
+  "seg": "58",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/5933657/microsoft-365-copilot-chat-word-copilot-does-not-g\" rel=\"noopener\" target=\"_blank\">Microsof",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/5933657/microsoft-365-copilot-chat-word-copilot-does-not-g\" rel=\"noopener\" target=\"_blank\">Microsof"
+ },
+ {
+  "slug": "content/copilot-not-responding-slow-frozen-what-to-check",
+  "seg": "59",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/5794354/m365-copilot-is-not-responding\" rel=\"noopener\" target=\"_blank\">Microsoft Q&amp;A: M365 Copi",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/5794354/m365-copilot-is-not-responding\" rel=\"noopener\" target=\"_blank\">Microsoft Q&amp;A: M365 Copi"
+ },
+ {
+  "slug": "content/aadsts900561-and-aadsts50126-sign-in-errors-explained",
+  "seg": "52",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/entra/identity-platform/reference-error-codes\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Microsoft Entra authenticati",
+  "out": "<a href=\"https://learn.microsoft.com/entra/identity-platform/reference-error-codes\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Microsoft Entra authenticati"
+ },
+ {
+  "slug": "content/aadsts900561-and-aadsts50126-sign-in-errors-explained",
+  "seg": "53",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/5261614/aadsts900561-the-endpoint-only-accepts-post-reques\" rel=\"noopener\" target=\"_blank\">Microsof",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/5261614/aadsts900561-the-endpoint-only-accepts-post-reques\" rel=\"noopener\" target=\"_blank\">Microsof"
+ },
+ {
+  "slug": "content/aadsts900561-and-aadsts50126-sign-in-errors-explained",
+  "seg": "55",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/1635277/login-demo-dynamics-365-f-o-aadsts900561-the-endpo\" rel=\"noopener\" target=\"_blank\">Microsof",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/1635277/login-demo-dynamics-365-f-o-aadsts900561-the-endpo\" rel=\"noopener\" target=\"_blank\">Microsof"
+ },
+ {
+  "slug": "content/aadsts900561-and-aadsts50126-sign-in-errors-explained",
+  "seg": "56",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/797047/aadsts50126-error-validating-credentials-due-to-in\" rel=\"noopener\" target=\"_blank\">Microsoft",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/797047/aadsts50126-error-validating-credentials-due-to-in\" rel=\"noopener\" target=\"_blank\">Microsoft"
+ },
+ {
+  "slug": "content/how-to-manage-and-organize-teams-channels",
+  "seg": "A3",
+  "fehler": "html-tags",
+  "src": "Microsoft Support says to open the team, select More team options and Manage team, go to the Channels tab, filter by Deleted and select Restore. Microsoft Suppo",
+  "out": "Microsoft Support menyarankan untuk membuka tim, memilih <em>More team options</em> lalu <em>Manage team</em>, membuka tab Channels, memfilter menurut Deleted, "
+ },
+ {
+  "slug": "content/how-to-manage-and-organize-teams-channels",
+  "seg": "4",
+  "fehler": "html-tags",
+  "src": "Team owners control who can create, update or delete channels under More options, Settings, Member Permissions.",
+  "out": "Pemilik tim mengontrol siapa yang dapat membuat, memperbarui, atau menghapus saluran melalui <em>More options</em>, <em>Settings</em>, <em>Member Permissions</e"
+ },
+ {
+  "slug": "content/how-to-manage-and-organize-teams-channels",
+  "seg": "6",
+  "fehler": "html-tags",
+  "src": "Channel moderation works only in standard channels and not in the General channel. Turn it on under Manage channel.",
+  "out": "Moderasi saluran hanya berfungsi di saluran standar, bukan di saluran General. Aktifkan melalui <em>Manage channel</em>."
+ },
+ {
+  "slug": "content/how-to-manage-and-organize-teams-channels",
+  "seg": "7",
+  "fehler": "html-tags",
+  "src": "Deleted channels can be restored from Manage team, Channels, Deleted. Microsoft pages give 21 and 30 days for the window, so act quickly.",
+  "out": "Saluran yang dihapus dapat dipulihkan dari <em>Manage team</em>, Channels, Deleted. Halaman Microsoft memberikan jangka waktu 21 dan 30 hari, jadi bertindaklah "
  }
 ]

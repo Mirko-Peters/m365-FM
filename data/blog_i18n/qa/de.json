@@ -1,145 +1,5 @@
 [
  {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "25",
-  "fehler": "unuebersetzt",
-  "src": "<code>// Sentinel: SigninLogs + OfficeActivity let risky_signins = SigninLogs | where TimeGenerated &gt; ago(24h) | where RiskState in (&quot;atRisk&quot;, &quo",
-  "out": "<code>// Sentinel: SigninLogs + OfficeActivity let risky_signins = SigninLogs | where TimeGenerated &gt; ago(24h) | where RiskState in (&quot;atRisk&quot;, &quo"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "28",
-  "fehler": "unuebersetzt",
-  "src": "<code>let failed = SigninLogs | where TimeGenerated &gt; ago(24h) | where ResultType !in (&quot;0&quot;, &quot;50125&quot;, &quot;50140&quot;) // non-success (t",
-  "out": "<code>let failed = SigninLogs | where TimeGenerated &gt; ago(24h) | where ResultType !in (&quot;0&quot;, &quot;50125&quot;, &quot;50140&quot;) // non-success (t"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "30",
-  "fehler": "unuebersetzt",
-  "src": "<code>// &quot;Logged in&quot; but no Meetings/Channel activity in 14d let logins = SigninLogs | where TimeGenerated &gt; ago(14d) and AppDisplayName has &quot;",
-  "out": "<code>// &quot;Logged in&quot; but no Meetings/Channel activity in 14d let logins = SigninLogs | where TimeGenerated &gt; ago(14d) and AppDisplayName has &quot;"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "33",
-  "fehler": "unuebersetzt",
-  "src": "<code>let licensed = externaldata(UserPrincipalName:string, Sku:string)[@&quot;https://&lt;yourstorage&gt;/licensed.csv&quot;] with (format=&quot;csv&quot;, has",
-  "out": "<code>let licensed = externaldata(UserPrincipalName:string, Sku:string)[@&quot;https://&lt;yourstorage&gt;/licensed.csv&quot;] with (format=&quot;csv&quot;, has"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "35",
-  "fehler": "unuebersetzt",
-  "src": "<code>let email_threads = EmailEvents // Defender AH | where Timestamp &gt; ago(7d) | summarize emailCount=count() by SenderFromAddress, bin(Timestamp, 1d); let",
-  "out": "<code>let email_threads = EmailEvents // Defender AH | where Timestamp &gt; ago(7d) | summarize emailCount=count() by SenderFromAddress, bin(Timestamp, 1d); let"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "38",
-  "fehler": "unuebersetzt",
-  "src": "<code># Exchange Online PowerShell Connect-ExchangeOnline $start = (Get-Date).AddDays(-7) $end = Get-Date Search-UnifiedAuditLog -StartDate $start -EndDate $end",
-  "out": "<code># Exchange Online PowerShell Connect-ExchangeOnline $start = (Get-Date).AddDays(-7) $end = Get-Date Search-UnifiedAuditLog -StartDate $start -EndDate $end"
- },
- {
-  "slug": "mastering-the-microsoft-graph-validation-handshake",
-  "seg": "14",
-  "fehler": "unuebersetzt",
-  "src": "<code>Request: GET /webhook?validationToken=abc123<br>Response: 200 OK<br>Body: abc123<br>Content-Type: text/plain</code>",
-  "out": "<code>Request: GET /webhook?validationToken=abc123<br>Response: 200 OK<br>Body: abc123<br>Content-Type: text/plain</code>"
- },
- {
-  "slug": "project-management-in-teams-a-complete-guide-for-microsoft-365-users",
-  "seg": "178",
-  "fehler": "html-tags",
-  "src": "<strong>Organize <a href=\"/blog/teams-desktop-vs-web-vs-mobile-which-microsoft-teams-platform-is-right-for-you/\" rel=\"noopener\">teams and channels</a> by functi",
-  "out": "<strong>Teams und Kanäle nach Funktion und Rolle organisieren.</strong>Legen Sie für jeden Arbeitsstrang, jede Abteilung oder Funktion einen eigenen Kanal an, d"
- },
- {
-  "slug": "taming-schema-drift-and-format-chaos-in-your-azure-data-lake",
-  "seg": "44",
-  "fehler": "unuebersetzt",
-  "src": "<code>Source -&gt; Dataflows Gen2 (profile/clean/map/dedupe) -&gt; Staging/Quarantine -&gt; Curated Lakehouse</code><br><code>^ Pipelines orchestrate schedules,",
-  "out": "<code>Source -&gt; Dataflows Gen2 (profile/clean/map/dedupe) -&gt; Staging/Quarantine -&gt; Curated Lakehouse</code><br><code>^ Pipelines orchestrate schedules,"
- },
- {
-  "slug": "from-code-cruncher-to-creative-thinker-my-journey-with-microsoft-copilot-in-fabric",
-  "seg": "139",
-  "fehler": "unuebersetzt",
-  "src": "Set-SPOSite -Identity [site URL] -SearchScope &quot;Site&quot;",
-  "out": "Set-SPOSite -Identity [site URL] -SearchScope &quot;Site&quot;"
- },
- {
-  "slug": "custodian-not-found-troubleshooting-and-setup-for-cloud-custodian",
-  "seg": "65",
-  "fehler": "unuebersetzt",
-  "src": "<strong>Linux (Ubuntu/Debian/Fedora/RedHat/CentOS)</strong>Ubuntu/Debian: sudo apt update &amp;&amp; sudo apt install python3 python3-venv python3-pip",
-  "out": "<strong>Linux (Ubuntu/Debian/Fedora/RedHat/CentOS)</strong>Ubuntu/Debian: sudo apt update &amp;&amp; sudo apt install python3 python3-venv python3-pip"
- },
- {
-  "slug": "custodian-not-found-troubleshooting-and-setup-for-cloud-custodian",
-  "seg": "66",
-  "fehler": "unuebersetzt",
-  "src": "Fedora/RedHat: sudo dnf install python3 python3-venv python3-pip",
-  "out": "Fedora/RedHat: sudo dnf install python3 python3-venv python3-pip"
- },
- {
-  "slug": "custodian-not-found-troubleshooting-and-setup-for-cloud-custodian",
-  "seg": "67",
-  "fehler": "unuebersetzt",
-  "src": "CentOS: sudo yum install python3 python3-venv python3-pip",
-  "out": "CentOS: sudo yum install python3 python3-venv python3-pip"
- },
- {
-  "slug": "building-secure-email-solutions-sending-mail-via-microsoft-graph-for-developers",
-  "seg": "29",
-  "fehler": "unuebersetzt",
-  "src": "<code>POST https://graph.microsoft.com/v1.0/users/{id-or-user-principal-name}/sendMail</code>",
-  "out": "<code>POST https://graph.microsoft.com/v1.0/users/{id-or-user-principal-name}/sendMail</code>"
- },
- {
-  "slug": "breaking-low-code-limits-why-fusion-development-is-the-future",
-  "seg": "D",
-  "fehler": "html-tags",
-  "src": "Welcome back to the podcast and our companion blog! If you have ever hit a ceiling while trying to build an enterprise-grade solution entirely within a low-code",
-  "out": "Willkommen zurück zu unserem Podcast und unserem begleitenden Blog! Wenn Sie schon einmal an eine Grenze gestoßen sind, als Sie eine Unternehmenslösung ausschli"
- },
- {
-  "slug": "mastering-agentic-ai-how-copilot-studio-and-dataverse-mcp-are-transforming-m365",
-  "seg": "133",
-  "fehler": "unuebersetzt",
-  "src": "Microsoft 365 Copilot, Power Automate, Power Apps, Azure Logic Apps",
-  "out": "Microsoft 365 Copilot, Power Automate, Power Apps, Azure Logic Apps"
- },
- {
-  "slug": "powershell-for-copilot-advanced-troubleshooting-and-configuration",
-  "seg": "14",
-  "fehler": "unuebersetzt",
-  "src": "<code>Get-MsolAccountSku | Where-Object {$_.SkuPartNumber -like &quot;*Copilot*&quot;}</code>",
-  "out": "<code>Get-MsolAccountSku | Where-Object {$_.SkuPartNumber -like &quot;*Copilot*&quot;}</code>"
- },
- {
-  "slug": "powershell-for-copilot-advanced-troubleshooting-and-configuration",
-  "seg": "16",
-  "fehler": "unuebersetzt",
-  "src": "<code>Get-AzureADUser -ObjectId &quot;user@example.com&quot; | Select-Object DisplayName, UserPrincipalName, UserType</code>",
-  "out": "<code>Get-AzureADUser -ObjectId &quot;user@example.com&quot; | Select-Object DisplayName, UserPrincipalName, UserType</code>"
- },
- {
-  "slug": "powershell-for-copilot-advanced-troubleshooting-and-configuration",
-  "seg": "20",
-  "fehler": "unuebersetzt",
-  "src": "<code># Example: Resetting a specific Copilot setting (this command is illustrative, specific Copilot settings might require different commands) Set-ItemPropert",
-  "out": "<code># Example: Resetting a specific Copilot setting (this command is illustrative, specific Copilot settings might require different commands) Set-ItemPropert"
- },
- {
-  "slug": "powershell-for-copilot-advanced-troubleshooting-and-configuration",
-  "seg": "27",
-  "fehler": "unuebersetzt",
-  "src": "<code>Get-MsolAccountSku | Where-Object {$_.SkuPartNumber -like &quot;*Copilot*&quot;}</code>",
-  "out": "<code>Get-MsolAccountSku | Where-Object {$_.SkuPartNumber -like &quot;*Copilot*&quot;}</code>"
- },
- {
   "slug": "powershell-for-copilot-advanced-troubleshooting-and-configuration",
   "seg": "30",
   "fehler": "unuebersetzt",
@@ -3330,5 +3190,141 @@
   "fehler": "unuebersetzt",
   "src": "if ((Test-Path -Path $folder) -or (Test-Path -Path $regKey)) { Write-Output &quot;Detected&quot; exit 0 } exit 1 ```",
   "out": "if ((Test-Path -Path $folder) -or (Test-Path -Path $regKey)) { Write-Output &quot;Detected&quot; exit 0 } exit 1 ```"
+ },
+ {
+  "slug": "content/how-to-use-breakout-rooms-in-teams-meetings",
+  "seg": "A1",
+  "fehler": "html-tags",
+  "src": "According to Microsoft Support, the meeting organizer, or a presenter from the organizer's organization who was appointed as a breakout rooms manager, can creat",
+  "out": "Laut Microsoft Support können der Besprechungsorganisator oder ein Präsentator aus der Organisation des Organisators Räume erstellen, sofern dieser als Breakout"
+ },
+ {
+  "slug": "content/how-to-use-breakout-rooms-in-teams-meetings",
+  "seg": "A3",
+  "fehler": "html-tags",
+  "src": "No. Microsoft Support states that End meeting closes only the main meeting. Select Close rooms in the breakout rooms panel to close them. A room shows Closed wh",
+  "out": "Nein. Laut Microsoft Support beendet <strong>Besprechung beenden</strong> nur die Hauptbesprechung. Wählen Sie im Bereich für Breakout-Räume <strong>Räume schli"
+ },
+ {
+  "slug": "content/how-to-use-breakout-rooms-in-teams-meetings",
+  "seg": "4",
+  "fehler": "html-tags",
+  "src": "Create rooms before a meeting from the calendar event, or during it with Rooms in the meeting controls. Assign people manually, randomly or let them self-select",
+  "out": "Erstellen Sie Räume vor einer Besprechung über den Kalendereintrag oder während der Besprechung über <strong>Räume</strong> in den Besprechungssteuerelementen. "
+ },
+ {
+  "slug": "content/how-to-use-breakout-rooms-in-teams-meetings",
+  "seg": "5",
+  "fehler": "html-tags",
+  "src": "Rooms close automatically when a time limit ends. Ending the main meeting does not close rooms, so select Close rooms first.",
+  "out": "Räume werden automatisch geschlossen, wenn ein Zeitlimit abläuft. Das Beenden der Hauptbesprechung schließt die Räume nicht. Wählen Sie daher zuerst <strong>Räu"
+ },
+ {
+  "slug": "content/what-is-teams-phone-licenses-setup-calling-options",
+  "seg": "9",
+  "warn": "name-fehlt:Microsoft Teams"
+ },
+ {
+  "slug": "content/copilot-connectivity-troubleshooter-how-to-run-it",
+  "seg": "A1",
+  "fehler": "html-tags",
+  "src": "According to Microsoft Support, it runs in the Get Help app. Open Get Help, enter 'Copilot connectivity troubleshooter' in the search bar and follow the steps. ",
+  "out": "Laut Microsoft Support läuft er in der App „Hilfe anfordern“. Öffnen Sie „Hilfe anfordern“, geben Sie „Copilot connectivity troubleshooter“ in die Suchleiste ei"
+ },
+ {
+  "slug": "content/what-is-teams-phone-licenses-setup-calling-options",
+  "seg": "16",
+  "fehler": "unuebersetzt",
+  "src": "Office 365 F3 plus Microsoft Teams Phone Standard for Frontline Workers.",
+  "out": "Office 365 F3 plus Microsoft Teams Phone Standard for Frontline Workers."
+ },
+ {
+  "slug": "content/onedrive-storage-limits-check-usage-free-up-space",
+  "seg": "43",
+  "fehler": "html-tags",
+  "src": "In the SharePoint admin center, go to <strong>Settings</strong>, select the OneDrive <strong>Storage limit</strong> setting, enter the amount in GB in <strong>D",
+  "out": "Öffnen Sie im SharePoint Admin Center die Einstellungen, wählen Sie die Einstellung <strong>Speicherlimit</strong> für OneDrive aus, geben Sie den Betrag in GB "
+ },
+ {
+  "slug": "content/use-microsoft-forms-in-teams-polls-surveys-quizzes",
+  "seg": "28",
+  "warn": "name-fehlt:Microsoft 365"
+ },
+ {
+  "slug": "content/use-microsoft-forms-in-teams-polls-surveys-quizzes",
+  "seg": "A1",
+  "fehler": "html-tags",
+  "src": "Microsoft Support says to install the Forms app first if needed, then go to the channel, select Add a tab and choose Forms under Tabs for your team. You can cre",
+  "out": "Laut Microsoft Support installieren Sie zunächst bei Bedarf die Forms-App. Anschließend wechseln Sie in den Kanal, wählen <strong>Registerkarte hinzufügen</stro"
+ },
+ {
+  "slug": "content/use-microsoft-forms-in-teams-polls-surveys-quizzes",
+  "seg": "A3",
+  "fehler": "html-tags",
+  "src": "For polls posted in a chat or channel, Microsoft Support says only the creator can see names and individual responses if you turn on Record names of respondents",
+  "out": "Bei Umfragen, die in einem Chat oder Kanal veröffentlicht werden, sehen laut Microsoft Support nur die Ersteller die Namen und einzelnen Antworten, wenn Sie <st"
+ },
+ {
+  "slug": "content/use-microsoft-forms-in-teams-polls-surveys-quizzes",
+  "seg": "A4",
+  "fehler": "html-tags",
+  "src": "Microsoft Support documents quiz creation in Microsoft Forms at forms.office.com using New Quiz. The quiz page does not describe sharing to Teams, but the Send ",
+  "out": "Microsoft Support beschreibt die Quiz-Erstellung in Microsoft Forms unter forms.office.com mit <strong>Neues Quiz</strong>. Die Quiz-Seite beschreibt kein Teile"
+ },
+ {
+  "slug": "content/use-microsoft-forms-in-teams-polls-surveys-quizzes",
+  "seg": "4",
+  "fehler": "html-tags",
+  "src": "In a channel, add the Forms tab and choose Create a shared form that your team can edit, or add an existing form.",
+  "out": "Fügen Sie in einem Kanal den Forms-Tab hinzu und wählen Sie <strong>Gemeinsames Formular erstellen, das Ihr Team bearbeiten kann</strong> oder fügen Sie ein vor"
+ },
+ {
+  "slug": "content/use-microsoft-forms-in-teams-polls-surveys-quizzes",
+  "seg": "5",
+  "fehler": "html-tags",
+  "src": "Quizzes are created at forms.office.com with New Quiz. Mark correct answers and set points per question.",
+  "out": "Quizze erstellen Sie unter forms.office.com mit <strong>Neues Quiz</strong>. Markieren Sie die richtigen Antworten und legen Sie die Punkte pro Frage fest."
+ },
+ {
+  "slug": "content/use-microsoft-forms-in-teams-polls-surveys-quizzes",
+  "seg": "6",
+  "fehler": "html-tags",
+  "src": "Under Collect responses you choose who can respond: anyone, only people in your organization, or specific people.",
+  "out": "Unter <strong>Antworten sammeln</strong> legen Sie fest, wer antworten darf: jeder, nur Personen in Ihrer Organisation oder bestimmte Personen."
+ },
+ {
+  "slug": "content/use-microsoft-forms-in-teams-polls-surveys-quizzes",
+  "seg": "7",
+  "fehler": "html-tags",
+  "src": "Forms created in Teams cannot use Allow respondents to edit their responses. Create a group form instead.",
+  "out": "In Teams erstellte Formulare können <strong>Befragten erlauben, ihre Antworten zu bearbeiten</strong> nicht nutzen. Erstellen Sie stattdessen ein Gruppenformula"
+ },
+ {
+  "slug": "content/aadsts900561-and-aadsts50126-sign-in-errors-explained",
+  "seg": "53",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/5261614/aadsts900561-the-endpoint-only-accepts-post-reques\" rel=\"noopener\" target=\"_blank\">Microsof",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/5261614/aadsts900561-the-endpoint-only-accepts-post-reques\" rel=\"noopener\" target=\"_blank\">Microsof"
+ },
+ {
+  "slug": "content/teams-collaboration-tips-for-remote-and-hybrid-teams",
+  "seg": "A4",
+  "fehler": "html-tags",
+  "src": "Yes. Microsoft Support explains that you can hide a channel from your list through More options and Hide. Hidden channels still send notifications for @mentions",
+  "out": "Ja. Laut Microsoft Support können Sie einen Kanal über <strong>Weitere Optionen</strong> und <strong>Ausblenden</strong> aus Ihrer Liste entfernen. Ausgeblendet"
+ },
+ {
+  "slug": "content/teams-collaboration-tips-for-remote-and-hybrid-teams",
+  "seg": "12",
+  "fehler": "html-tags",
+  "src": "<strong>Tags.</strong> Microsoft Support describes three kinds: custom tags created by team owners (or by members if the owner allows it), shift-based tags from",
+  "out": "<strong>Tags.</strong> Laut Microsoft Support gibt es drei Arten: benutzerdefinierte Tags, die Teambesitzer erstellen (oder Mitglieder, wenn der Besitzer es erl"
+ },
+ {
+  "slug": "content/what-is-microsoft-teams-features-explained",
+  "seg": "22",
+  "fehler": "html-tags",
+  "src": "Files you share in a channel on the Files tab are stored in SharePoint. The pages read for this article describe only the channel case, so they do not say where",
+  "out": "Dateien, die Sie in einem Kanal auf der Registerkarte <em>Dateien</em> freigeben, werden in SharePoint gespeichert. Die für diesen Artikel ausgewerteten Seiten "
  }
 ]
