@@ -120,8 +120,6 @@ The troubleshooting guide names the event sources **WVD-Agent-Updater** and **Ms
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Microsoft Learn: Scheduled Agent Updates for Azure Virtual Desktop host pools](https://learn.microsoft.com/en-us/azure/virtual-desktop/scheduled-agent-updates)
 - [Microsoft Learn: Scheduled Agent Updates diagnostics guide](https://learn.microsoft.com/en-us/azure/virtual-desktop/agent-updates-diagnostics)
 - [Microsoft Learn: Getting started with the Azure Virtual Desktop agent](https://learn.microsoft.com/en-us/azure/virtual-desktop/agent-overview)

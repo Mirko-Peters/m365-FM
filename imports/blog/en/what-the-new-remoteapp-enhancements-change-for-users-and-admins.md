@@ -130,7 +130,6 @@ Learn's enhancements and what's new pages describe windowing, integration and vi
 
 ## Sources
 
-
 - [Microsoft Learn: RemoteApp enhancements (preview)](https://learn.microsoft.com/en-us/azure/virtual-desktop/remoteapp-enhancements)
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
 - [Microsoft Learn: What's new in the Azure Virtual Desktop SxS Network Stack](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new-sxs)

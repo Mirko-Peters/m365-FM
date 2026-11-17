@@ -125,8 +125,6 @@ Without autoscale, the FAQ (page dated 20 June 2025) describes a two-part approa
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Microsoft Learn: Configure Start VM on Connect](https://learn.microsoft.com/en-us/azure/virtual-desktop/start-virtual-machine-connect)
 - [Microsoft Learn: Start VM on Connect FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/start-virtual-machine-connect-faq)
 - [Microsoft Learn: Configure managed identity in Azure Virtual Desktop](https://learn.microsoft.com/en-ie/azure/virtual-desktop/configure-managed-identity)

@@ -100,7 +100,6 @@ The Windows App page for [what's new](https://learn.microsoft.com/en-us/windows-
 
 ## Sources
 
-
 - [Microsoft Learn: What is Windows App?](https://learn.microsoft.com/en-us/windows-app/overview)
 - [Microsoft Learn: Get started with Windows App to connect to devices and apps](https://learn.microsoft.com/en-us/windows-app/get-started-connect-devices-desktops-apps)
 - [Microsoft Learn: Compare Windows App features across platforms and devices](https://learn.microsoft.com/en-us/windows-app/compare-platforms-features)

@@ -97,7 +97,6 @@ A practical order of questions, based on the Learn tables:
 
 ## Sources
 
-
 - [Microsoft Learn: Screen capture protection in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/screen-capture-protection)
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
 - [Microsoft Learn: Input and Output Protection for Windows 365 and Azure Virtual Desktop](https://learn.microsoft.com/en-us/windows-365/enterprise/windows-cloud-io-protection)

@@ -214,8 +214,6 @@ So the message has at least two documented causes for personal pools: a missing 
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Microsoft Learn: Configure personal desktop assignment in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-personal-desktop-assignment-type)
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
 - [PowerShell Gallery: Az.DesktopVirtualization 5.3.0-preview](https://www.powershellgallery.com/packages/Az.DesktopVirtualization/5.3.0-preview)

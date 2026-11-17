@@ -119,8 +119,6 @@ Use the REST API when another system owns the trigger and you need a documented,
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Nerdio Help: REST API Overview](https://nmehelp.getnerdio.com/hc/en-us/articles/26124297319821-REST-API-Overview)
 - [Nerdio Help: Getting Started with REST API Integration](https://nmehelp.getnerdio.com/hc/en-us/articles/26124297445901-Getting-Started-with-REST-API-Integration)
 - [Nerdio Help: REST API Endpoint Implementation](https://nmehelp.getnerdio.com/hc/en-us/articles/26124316548877-REST-API-Endpoint-Implementation)

@@ -99,7 +99,6 @@ The FAQ notes that FSLogix has no direct migration path from other roaming-profi
 
 ## Sources
 
-
 - [Microsoft Learn: Use the sync app on virtual desktops](https://learn.microsoft.com/en-us/sharepoint/sync-vdi-support)
 - [Microsoft Learn: Install the sync app per-machine (Windows)](https://learn.microsoft.com/en-us/sharepoint/per-machine-installation)
 - [Microsoft Learn: Silently configure user accounts](https://learn.microsoft.com/en-us/sharepoint/use-silent-account-configuration)

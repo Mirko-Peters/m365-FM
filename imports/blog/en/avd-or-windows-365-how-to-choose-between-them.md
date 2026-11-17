@@ -101,7 +101,7 @@ Windows 365 Cloud PCs exist in a subscription owned by Microsoft ("hosted on beh
 
 ## Windows 365 Flex
 
-Windows 365 Frontline was renamed Windows 365 Flex in the week of May 4, 2026, according to Learn's What's new page: "The product, licensing, and capabilities are unchanged—only the name is different." The article "Windows 365 Frontline vs Windows 365 Enterprise: shift work and cost" covers the details and prices. In short:
+Windows 365 Frontline was renamed Windows 365 Flex in the week of May 4, 2026, according to Learn's What's new page: "The product, licensing, and capabilities are unchanged—only the name is different." The article "Windows 365 Flex vs Windows 365 Enterprise: shift work and cost" covers the details and prices. In short:
 
 - **Dedicated mode:** one license provisions up to three Cloud PCs used non-concurrently, each assigned to one user.
 - **Shared mode:** one license provisions one Cloud PC shared non-concurrently by a group. User data is deleted at sign-out unless User Experience Sync is enabled. Shared mode is available only in Azure Global Cloud.

@@ -93,8 +93,6 @@ Before you start, list the user identity types, session host operating systems, 
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Microsoft Learn: Microsoft Entra Kerberos authentication for Azure Files](https://learn.microsoft.com/en-us/azure/storage/files/storage-files-identity-auth-hybrid-identities-enable)
 - [Microsoft Learn: Store FSLogix profile containers on Azure Files using Microsoft Entra ID](https://learn.microsoft.com/en-us/fslogix/how-to-configure-profile-container-entra-id-hybrid)
 - [Microsoft Learn: Overview of Azure Files identity-based authentication options for SMB access](https://learn.microsoft.com/en-us/azure/storage/files/storage-files-active-directory-overview)

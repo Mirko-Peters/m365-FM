@@ -131,8 +131,6 @@ To see what autoscale did, enable diagnostics: in the Azure portal open **Azure 
 
 ## Sources
 
-Retrieved 2026-11-17.
-
 - [Microsoft Learn: Create and assign an autoscale scaling plan for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)
 - [Microsoft Learn: Autoscale scaling plans and example scenarios for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)
 - [Microsoft Learn: Azure Virtual Desktop autoscale glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary)

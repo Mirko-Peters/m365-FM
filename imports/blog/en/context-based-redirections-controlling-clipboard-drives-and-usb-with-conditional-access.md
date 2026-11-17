@@ -92,8 +92,6 @@ If every user connects from managed, compliant devices, or if no user should get
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - Microsoft Learn, Configure context-based redirections (Preview), Azure Virtual Desktop and Windows 365 tabs: https://learn.microsoft.com/en-us/windows-365/enterprise/context-based-redirections
 - Microsoft Learn, What's new in Azure Virtual Desktop: https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new
 - Windows IT Pro Blog, Adaptive data protection with context-based redirections in Windows 365, now in public preview (2 June 2026, updated 19 October 2026): https://techcommunity.microsoft.com/blog/windows-itpro-blog/adaptive-data-protection-with-context-based-redirections-in-windows-365-now-in-p/4521366

@@ -97,7 +97,6 @@ Learn's tip is to disable clipboard, drive and printer redirection too, since sc
 
 ## Sources
 
-
 - [Microsoft Learn: Screen capture protection in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/screen-capture-protection)
 - [Microsoft Learn: Add the administrative template for Azure Virtual Desktop to Group Policy](https://learn.microsoft.com/en-us/azure/virtual-desktop/administrative-template)
 - [Microsoft Learn: Using Azure Virtual Desktop multi-session with Microsoft Intune](https://learn.microsoft.com/en-us/intune/solutions/azure-virtual-desktop-multi-session)

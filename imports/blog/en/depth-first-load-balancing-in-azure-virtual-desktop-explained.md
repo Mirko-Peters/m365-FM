@@ -104,8 +104,6 @@ Learn says you can configure one algorithm at a time and change it at any time. 
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Microsoft Learn: Configure host pool load balancing in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-load-balancing)
 - [Microsoft Learn: Azure Virtual Desktop terminology](https://learn.microsoft.com/en-us/azure/virtual-desktop/terminology)
 - [Microsoft Learn: Session host statuses and health checks in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-status-health-checks)

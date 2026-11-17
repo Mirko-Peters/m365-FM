@@ -118,8 +118,6 @@ To roll back, re-create the assignment with the commands on Learn's service prin
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Microsoft Learn: Configure managed identity in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-managed-identity)
 - [Microsoft Learn: Managed identities for Azure resources](https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/overview)
 - [Microsoft Learn: New-AzWvdHostPool](https://learn.microsoft.com/en-us/powershell/module/az.desktopvirtualization/new-azwvdhostpool)

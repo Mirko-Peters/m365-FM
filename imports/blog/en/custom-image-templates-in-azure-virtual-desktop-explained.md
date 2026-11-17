@@ -100,8 +100,6 @@ A template route fits when you rebuild images regularly, want the same definitio
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Microsoft Learn: Custom image templates in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/custom-image-templates)
 - [Microsoft Learn: Use custom image templates to create custom images](https://learn.microsoft.com/en-us/azure/virtual-desktop/create-custom-image-templates)
 - [Microsoft Learn: Troubleshoot custom image templates in Azure Virtual Desktop](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-custom-image-templates)

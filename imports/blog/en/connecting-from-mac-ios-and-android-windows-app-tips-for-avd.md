@@ -111,7 +111,6 @@ An iPhone user without the policy is blocked, not silently unprotected. Check th
 
 ## Sources
 
-
 - [Microsoft Learn: Connect to Windows devices and apps with Windows App](https://learn.microsoft.com/en-us/windows-app/get-started-connect-devices-desktops-apps)
 - [Microsoft Learn: Compare Windows App features across platforms and devices](https://learn.microsoft.com/en-us/windows-app/compare-platforms-features)
 - [Microsoft Learn: Screen capture protection in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/screen-capture-protection)

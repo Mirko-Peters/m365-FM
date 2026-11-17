@@ -126,8 +126,6 @@ Our reading: if you enable scheduled agent updates on the validation pool, it wa
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Configure a host pool as a validation environment](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-validation-environment) (Microsoft Learn)
 - [What's new in the Azure Virtual Desktop Agent?](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new-agent) (Microsoft Learn)
 - [What's new in the Azure Virtual Desktop SxS Network Stack?](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new-sxs) (Microsoft Learn)

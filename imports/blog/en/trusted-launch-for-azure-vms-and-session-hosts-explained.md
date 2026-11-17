@@ -120,8 +120,6 @@ For Gen2 session hosts that run without trusted launch, Learn has a separate art
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Trusted launch for Azure VMs](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch) (Microsoft Learn, last updated 25 September 2026)
 - [Trusted launch FAQ](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch-faq) (Microsoft Learn, last updated February 2026)
 - [Security recommendations for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/security-recommendations) (Microsoft Learn, last updated 19 October 2026)

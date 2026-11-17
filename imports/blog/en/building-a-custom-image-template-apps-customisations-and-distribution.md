@@ -140,8 +140,6 @@ The portal can also show a red X on **Source image** when the type is a gallery.
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Microsoft Learn: Use custom image templates to create custom images - Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/create-custom-image-templates)
 - [Microsoft Learn: Custom image templates in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/custom-image-templates)
 - [Microsoft Learn: Troubleshoot custom image templates in Azure Virtual Desktop](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-custom-image-templates)

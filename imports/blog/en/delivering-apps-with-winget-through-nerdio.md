@@ -127,8 +127,6 @@ The same catalog can target Intune-enrolled Windows devices, including Windows 3
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [UAM: Supported configurations (Nerdio Manager for Enterprise)](https://nmehelp.getnerdio.com/hc/en-us/articles/26124323091981-UAM-Supported-configurations)
 - [Configure Nerdio Manager for Unified Application Management](https://nmehelp.getnerdio.com/hc/en-us/articles/26124344709517)
 - [UAM: Manage applications](https://nmehelp.getnerdio.com/hc/en-us/articles/25499402166285)

@@ -102,8 +102,6 @@ The practical order is: confirm your hosts are running during the intended windo
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Microsoft Learn: Scheduled Agent Updates for Azure Virtual Desktop host pools](https://learn.microsoft.com/en-us/azure/virtual-desktop/scheduled-agent-updates)
 - [Microsoft Learn: Scheduled Agent Updates diagnostics guide](https://learn.microsoft.com/en-us/azure/virtual-desktop/agent-updates-diagnostics)
 - [Microsoft Learn: Getting started with the Azure Virtual Desktop agent (agent update process)](https://learn.microsoft.com/en-us/azure/virtual-desktop/agent-overview)

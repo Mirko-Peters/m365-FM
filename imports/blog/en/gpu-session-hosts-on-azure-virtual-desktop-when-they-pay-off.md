@@ -126,8 +126,6 @@ Permissions matter in practice. For Intune, Learn lists an Entra ID account with
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - Microsoft Learn, Enable GPU acceleration for Azure Virtual Desktop: https://learn.microsoft.com/en-us/azure/virtual-desktop/graphics-enable-gpu-acceleration
 - Microsoft Learn, NVadsA10_v5 size series: https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/gpu-accelerated/nvadsa10v5-series
 - Microsoft Learn, NCasT4_v3 size series: https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/gpu-accelerated/ncast4v3-series

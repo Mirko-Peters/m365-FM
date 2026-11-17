@@ -104,8 +104,6 @@ Policies hold scope and timing, whichever route the app took in. The policy step
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [UAM: SCCM integration](https://nmehelp.getnerdio.com/hc/en-us/articles/26124368428045)
 - [Resolve SCCM metadata export errors](https://nmehelp.getnerdio.com/hc/en-us/articles/30884034657805-Resolve-SCCM-Metadata-Export-Errors)
 - [UAM: Manage deployment policies](https://nmehelp.getnerdio.com/hc/en-us/articles/26124385135245)

@@ -113,8 +113,6 @@ The sibling article "Azure Virtual Desktop cost levers: 15 options and what each
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Azure Virtual Desktop pricing](https://azure.microsoft.com/en-us/pricing/details/virtual-desktop/)
 - [Microsoft Learn: Understand and estimate the costs of Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/understand-estimate-costs)
 - [Microsoft Learn: Licensing Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/licensing)

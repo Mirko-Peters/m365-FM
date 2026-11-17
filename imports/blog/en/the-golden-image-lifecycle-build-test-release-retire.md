@@ -113,8 +113,6 @@ Learn also lists protections against accidental deletion: resource locks at the 
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Microsoft Learn: Create an Azure Virtual Desktop golden image](https://learn.microsoft.com/en-us/azure/virtual-desktop/set-up-golden-image)
 - [Microsoft Learn: Custom image templates in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/custom-image-templates)
 - [Microsoft Learn: Create custom image templates and custom images](https://learn.microsoft.com/en-us/azure/virtual-desktop/create-custom-image-templates)

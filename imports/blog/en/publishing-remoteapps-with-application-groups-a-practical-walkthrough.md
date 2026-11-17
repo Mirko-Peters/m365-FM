@@ -132,8 +132,6 @@ For application compatibility problems, a separate Learn page describes App Assu
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Microsoft Learn: Publish applications with RemoteApp in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/publish-applications-stream-remoteapp)
 - [Microsoft Learn: New-AzWvdApplication (Az.DesktopVirtualization)](https://learn.microsoft.com/en-us/powershell/module/az.desktopvirtualization/new-azwvdapplication)
 - [Microsoft Learn: Deploy Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop)

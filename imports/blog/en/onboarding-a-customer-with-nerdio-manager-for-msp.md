@@ -112,7 +112,6 @@ On billing, Nerdio says an installation is on per-user billing by default and th
 
 ## Sources
 
-
 - [Nerdio help center: Add an Account](https://nmmhelp.getnerdio.com/hc/en-us/articles/26125624156173)
 - [Nerdio help center: Add a Cloud PC Account](https://nmmhelp.getnerdio.com/hc/en-us/articles/26125586381965-Add-a-Cloud-PC-Account)
 - [Nerdio help center: Installing NMM Prerequisites](https://nmmhelp.getnerdio.com/hc/en-us/articles/360057684211-Installing-NMM-Prerequisites)

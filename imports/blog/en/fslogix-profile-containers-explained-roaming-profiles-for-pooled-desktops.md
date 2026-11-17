@@ -96,8 +96,6 @@ Sizing and locking settings, the Office container and Cloud Cache each have thei
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Microsoft Learn: What is FSLogix?](https://learn.microsoft.com/en-us/fslogix/overview-what-is-fslogix)
 - [Microsoft Learn: Types of FSLogix containers](https://learn.microsoft.com/en-us/fslogix/concepts-container-types)
 - [Microsoft Learn: FSLogix prerequisites](https://learn.microsoft.com/en-us/fslogix/overview-prerequisites)

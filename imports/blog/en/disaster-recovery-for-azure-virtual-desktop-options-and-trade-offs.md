@@ -120,8 +120,6 @@ If a short outage is acceptable and cost matters, active-passive with Cloud Cach
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Microsoft Learn: Azure Virtual Desktop business continuity and disaster recovery concepts](https://learn.microsoft.com/en-us/azure/virtual-desktop/disaster-recovery-concepts)
 - [Microsoft Learn: Multiregion business continuity and disaster recovery for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/architecture/example-scenario/azure-virtual-desktop/azure-virtual-desktop-multi-region-bcdr)
 - [Microsoft Learn: Azure Virtual Desktop service architecture and resilience](https://learn.microsoft.com/en-us/azure/virtual-desktop/service-architecture-resilience)

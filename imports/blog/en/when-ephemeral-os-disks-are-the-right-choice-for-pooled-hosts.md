@@ -107,7 +107,6 @@ A pooled pool with managed OS disks and power management autoscaling (generally 
 
 ## Sources
 
-
 - [Microsoft Learn: Ephemeral OS disks on Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy/session-hosts/ephemeral-os-disks)
 - [Microsoft Learn: Ephemeral OS disks for Azure VMs](https://learn.microsoft.com/en-us/azure/virtual-machines/ephemeral-os-disks)
 - [Microsoft Tech Community: Now in public preview, ephemeral OS disk support on Azure Virtual Desktop (15 October 2025)](https://techcommunity.microsoft.com/t5/azure-virtual-desktop-blog/now-in-public-preview-ephemeral-os-disk-support-on-azure-virtual/ba-p/4460172)

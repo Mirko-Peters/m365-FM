@@ -114,8 +114,6 @@ Remember what the pool does not cover. Learn describes validation host pools as 
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Configure a host pool as a validation environment](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-validation-environment) (Microsoft Learn)
 - [Azure Advisor recommendations for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/azure-advisor-recommendations) (Microsoft Learn)
 - [Scheduled Agent Updates](https://learn.microsoft.com/en-us/azure/virtual-desktop/scheduled-agent-updates) (Microsoft Learn)

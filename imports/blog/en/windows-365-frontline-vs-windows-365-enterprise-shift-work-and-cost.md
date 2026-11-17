@@ -119,8 +119,6 @@ The break-even point follows from the same numbers. For this size, a Flex licens
 
 ## Sources
 
-Retrieved 2026-11-17.
-
 - [Microsoft Learn: What is Windows 365 Flex?](https://learn.microsoft.com/en-us/windows-365/enterprise/introduction-windows-365-flex)
 - [Microsoft Learn: Windows 365 Flex licensing](https://learn.microsoft.com/en-us/windows-365/enterprise/windows-365-flex-license)
 - [Microsoft Learn: What is Windows 365 Enterprise?](https://learn.microsoft.com/en-us/windows-365/enterprise/overview)

@@ -114,8 +114,6 @@ This example is built from Learn's matrix, not taken from Learn. A pooled Window
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Microsoft Learn: Windows update management methodologies for session hosts](https://learn.microsoft.com/en-us/azure/virtual-desktop/windows-update-management-methodologies-session-hosts)
 - [Microsoft Learn: Azure Virtual Desktop terminology](https://learn.microsoft.com/en-us/azure/virtual-desktop/terminology)
 - [Microsoft Learn: Windows Enterprise multi-session remote desktops in Intune](https://learn.microsoft.com/en-us/intune/solutions/azure-virtual-desktop-multi-session)

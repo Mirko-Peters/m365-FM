@@ -89,8 +89,6 @@ The tagging page says a complete cost report of every supporting Azure service i
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Microsoft Learn: Tag Azure Virtual Desktop resources to manage costs](https://learn.microsoft.com/en-us/azure/virtual-desktop/tag-virtual-desktop-resources)
 - [Microsoft Learn: Understand and estimate costs for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/understand-estimate-costs)
 - [Microsoft Learn: Microsoft.DesktopVirtualization/hostPools/sessionHostConfigurations (ARM template reference)](https://learn.microsoft.com/en-us/azure/templates/microsoft.desktopvirtualization/hostpools/sessionhostconfigurations)

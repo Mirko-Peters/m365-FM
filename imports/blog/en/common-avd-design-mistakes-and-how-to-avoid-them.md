@@ -92,8 +92,6 @@ For Windows Server session hosts, licensing differs: Learn lists RDS CAL with So
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Microsoft Learn: Host pool management approaches](https://learn.microsoft.com/en-us/azure/virtual-desktop/host-pool-management-approaches)
 - [Microsoft Learn: Azure Virtual Desktop FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/faq)
 - [Microsoft Learn: Azure Virtual Desktop prerequisites](https://learn.microsoft.com/en-us/azure/virtual-desktop/prerequisites)

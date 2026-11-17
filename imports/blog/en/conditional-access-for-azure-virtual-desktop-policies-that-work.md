@@ -116,8 +116,6 @@ Connect with the Windows App and confirm that you see a single MFA prompt, if yo
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Microsoft Learn: Enforce Microsoft Entra multifactor authentication for Azure Virtual Desktop using Conditional Access](https://learn.microsoft.com/en-us/azure/virtual-desktop/set-up-mfa)
 - [Microsoft Learn: Configure single sign-on for Azure Virtual Desktop using Microsoft Entra authentication](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-single-sign-on)
 - [Microsoft Learn: Troubleshoot single sign-on and Conditional Access for Azure Virtual Desktop](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-sso-conditional-access)

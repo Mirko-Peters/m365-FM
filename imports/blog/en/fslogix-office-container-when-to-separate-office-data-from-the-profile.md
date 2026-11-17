@@ -125,8 +125,6 @@ Sign in as a standard user and run frx list-redirects from C:\Program Files\FSLo
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Microsoft Learn: FSLogix container types](https://learn.microsoft.com/en-us/fslogix/concepts-container-types)
 - [Microsoft Learn: Configure ODFC containers](https://learn.microsoft.com/en-us/fslogix/how-to-configure-odfc-containers)
 - [Microsoft Learn: FSLogix configuration examples](https://learn.microsoft.com/en-us/fslogix/concepts-configuration-examples)

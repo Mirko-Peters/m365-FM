@@ -108,8 +108,6 @@ Pooled pools support both [application group](/entity/avd-application-group/) ty
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Microsoft Learn: Azure Virtual Desktop terminology](https://learn.microsoft.com/en-us/azure/virtual-desktop/terminology)
 - [Microsoft Learn: FAQ for Windows Enterprise multi-session](https://learn.microsoft.com/en-us/azure/virtual-desktop/windows-multisession-faq)
 - [Microsoft Learn: Prerequisites for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/prerequisites)

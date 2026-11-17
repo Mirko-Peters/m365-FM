@@ -130,8 +130,6 @@ The companion article on sysprep pitfalls takes these cases further. For plannin
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Microsoft Learn: Create an Azure Virtual Desktop golden image](https://learn.microsoft.com/en-us/azure/virtual-desktop/set-up-golden-image)
 - [Microsoft Learn: Deprovision or generalize a VM before creating an image](https://learn.microsoft.com/en-us/azure/virtual-machines/generalize)
 - [Microsoft Learn: Sysprep (Generalize) a Windows installation](https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/sysprep--generalize--a-windows-installation)

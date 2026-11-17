@@ -106,8 +106,6 @@ These methods are not exclusive. Our reading, not a Nerdio or Microsoft rule: th
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [UAM: Supported configurations](https://nmehelp.getnerdio.com/hc/en-us/articles/26124323091981-UAM-Supported-configurations)
 - [UAM: Manage deployment policies](https://nmehelp.getnerdio.com/hc/en-us/articles/26124385135245)
 - [UAM: Manage applications](https://nmehelp.getnerdio.com/hc/en-us/articles/25499402166285)

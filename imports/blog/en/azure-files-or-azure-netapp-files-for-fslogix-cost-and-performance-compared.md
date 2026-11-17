@@ -109,8 +109,6 @@ If neither fits, Learn also lists Storage Spaces Direct, which is self-managed.
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Microsoft Learn: Storage options for FSLogix profile containers in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/store-fslogix-profile)
 - [Microsoft Learn: Azure Files scalability and performance targets](https://learn.microsoft.com/en-us/azure/storage/files/storage-files-scale-targets)
 - [Microsoft Learn: Understand Azure Files billing](https://learn.microsoft.com/en-us/azure/storage/files/understanding-billing)

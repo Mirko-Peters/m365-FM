@@ -130,8 +130,6 @@ If the host still fails, Learn says to create a support case with detailed infor
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Microsoft Learn: Troubleshoot Azure Virtual Desktop Agent issues](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-agent)
 - [Microsoft Learn: Troubleshoot Azure Virtual Desktop session host](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-vm-configuration)
 - [Microsoft Learn: Session host statuses and health checks](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-status-health-checks)

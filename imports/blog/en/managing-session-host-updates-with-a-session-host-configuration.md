@@ -109,8 +109,6 @@ Check that the **Current Version** column matches the target for every host, tha
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Microsoft Learn: Session host update](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update)
 - [Microsoft Learn: Update session hosts using session host update](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update-configure)
 - [Microsoft Learn: Troubleshoot session host configuration and session host update](https://learn.microsoft.com/en-us/azure/virtual-desktop/troubleshoot-session-host-update)

@@ -142,8 +142,6 @@ A May 2026 community post describes a scripted action after host pool join that 
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Learn: FSLogix profile containers on Azure Files with Entra ID](https://learn.microsoft.com/en-us/fslogix/how-to-configure-profile-container-entra-id-hybrid)
 - [Learn: Enable Entra Kerberos for Azure Files](https://learn.microsoft.com/en-us/azure/storage/files/storage-files-identity-auth-hybrid-identities-enable)
 - [Learn: Change the identity source](https://learn.microsoft.com/en-us/azure/storage/files/change-identity-source)

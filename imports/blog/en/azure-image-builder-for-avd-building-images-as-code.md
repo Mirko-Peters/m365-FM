@@ -136,8 +136,6 @@ By default the service creates a staging resource group named `IT_<ResourceGroup
 
 ## Sources
 
-Retrieved 17 November 2026.
-
 - [Microsoft Learn: Azure VM Image Builder overview](https://learn.microsoft.com/en-us/azure/virtual-machines/image-builder-overview)
 - [Microsoft Learn: Azure VM Image Builder template reference](https://learn.microsoft.com/en-us/azure/virtual-machines/linux/image-builder-json)
 - [Microsoft Learn: Troubleshoot Azure VM Image Builder](https://learn.microsoft.com/en-us/azure/virtual-machines/linux/image-builder-troubleshoot)
