@@ -23,13 +23,13 @@ faq:
 
 Updating hosts in a pool that uses a session host configuration is a two-step job: edit the configuration, then schedule a session host update that rolls the change out in batches. This guide is the practical side. It lists what to prepare, walks through the portal procedure, explains how to pause, cancel or retry, and shows where to look when something fails. The concept, the objects and the preview labels are covered in the article "Session host configuration in Azure Virtual Desktop explained", and image handling in "The golden image lifecycle: build, test, release, retire".
 
-Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community). Some Learn pages, for example the troubleshooting page, the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit.
+Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community). Some Learn pages, for example the troubleshooting page and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit.
 
 ## What an update does
 
-According to Microsoft Learn, session host update changes the VM disk type, OS image and other configuration of all hosts in a pool that has a [session host configuration](/entity/avd-session-host-configuration/). It deallocates or deletes the existing VMs and creates new ones, which join the [host pool](/entity/avd-host-pool/). The changes you can make are the image, VM size, disk type, security type (Standard, Trusted launch or Confidential), Active Directory domain join credentials, Microsoft Intune enrollment, local administrator credentials and a custom configuration script. Availability configuration, network configuration and location persist. The directory itself cannot change: Learn says you must use the same directory as the existing VMs, and the troubleshooting page adds that region, subscription, resource group and domain join type cannot change either. If the configuration differs in those fields from the hosts, the update fails to start.
+According to Microsoft Learn, session host update changes the VM disk type, OS image and other configuration of all hosts in a pool that has a [session host configuration](/entity/avd-session-host-configuration/). It deallocates or deletes the existing VMs and creates new ones, which join the [host pool](/entity/avd-host-pool/). The changes you can make are the image, VM size, disk type, security type (Standard, Trusted launch or Confidential), Active Directory domain join credentials, Microsoft Intune enrollment, local administrator credentials and a custom configuration script. Availability configuration, network configuration and location persist. Learn says you must use the same directory as the existing VMs, and the troubleshooting page adds that region, subscription, resource group and domain join type cannot change either.
 
-The flow per host: users receive your notification, the service waits the configured time and signs out the rest; the host goes into drain mode and leaves the pool without deleting its Active Directory computer account; a replacement VM is created with the name format `SessionHostName-DateTime` while the OS hostname stays the same; the replacement joins the pool and drain mode is turned off; the original VM is deleted, as the process description puts it. Power state and drain mode are preserved, so a pool whose hosts are all deallocated can be updated to save cost.
+The flow per host: users receive your notification and are signed out after the configured time; the host goes into drain mode and leaves the pool; a replacement VM is created with the name format `SessionHostName-DateTime` while the OS hostname stays the same; the replacement joins the pool and drain mode is turned off; the original VM is deleted. Power state and drain mode are preserved, so a pool whose hosts are all deallocated can be updated to save cost.
 
 ## Before you schedule
 
@@ -38,10 +38,10 @@ The flow per host: users receive your notification, the service waits the config
 3. **Disable autoscale.** Turn the [scaling plan](/entity/avd-scaling-plan/) off for the pool until the update ends.
 4. **Remove resource locks** from the hosts and their resource group.
 5. **Check quota.** The update creates VMs, and Learn asks you to keep subscription quota limits in mind and to consider requesting an increase if an update would go over the limit.
-6. **Check permissions, identity and key vault.** You need the RBAC permissions to update a session host configuration, which Learn lists in the prerequisites of the deploy article. The host pool's managed identity needs the Desktop Virtualization Virtual Machine Contributor role on the resource group or subscription for the session hosts. For the key vault, it needs Key Vault Secrets User under Azure RBAC, or the Get secret permission in an access policy, which Learn says is not supported with a system-assigned identity chosen at pool creation. The update must use a managed identity to reach a key vault with private network access, otherwise the vault must allow public access from all networks. Learn's managed identity page says host pools with a session host configuration require a managed identity starting 1 November 2025 to add hosts. The What's new entries differ: September 2025 gave estimated dates from 19 September to 15 November 2025, and September 2026 says "in a future service update". Check the Management tab of your pool.
-7. **Move customizations into code.** Manual changes on hosts, such as files, registry keys and certificates, are lost. Put them in the image, in Intune or Group Policy, or in the custom script. If you use Azure Virtual Desktop Insights, the Azure Monitor agent or Log Analytics agent is not installed automatically on updated hosts: use Azure Policy for the Azure Monitor agent, Azure Automation for the Log Analytics agent, or add the hosts manually in Insights.
+6. **Check permissions, identity and key vault.** You need the RBAC permissions to update a session host configuration, listed in the deploy article's prerequisites. The host pool's managed identity needs the Desktop Virtualization Virtual Machine Contributor role on the resource group or subscription for the session hosts. For the key vault, it needs Key Vault Secrets User under Azure RBAC, or the Get secret permission in an access policy, which Learn says is not supported with a system-assigned identity chosen at pool creation. The update must use a managed identity to reach a key vault with private network access, otherwise the vault must allow public access from all networks. Learn's managed identity page says host pools with a session host configuration require a managed identity starting 1 November 2025 to add hosts, while What's new of September 2026 says "in a future service update". Check whether your pool has one.
+7. **Move customizations into code.** Manual changes on hosts, such as files, registry keys and certificates, are lost, so put them in the image, Intune, Group Policy or the custom script. If you use Azure Virtual Desktop Insights, the Azure Monitor agent or Log Analytics agent is not installed automatically on updated hosts: use Azure Policy for the Azure Monitor agent, Azure Automation for the Log Analytics agent, or add the hosts manually in Insights.
 8. **Test.** Run the same update on a test pool that matches production, including applications and hotfixes.
-9. **Pick a quiet time.** Capacity drops and users are asked to sign in again.
+9. **Pick a quiet time.** Capacity drops and users must sign in again.
 
 The configure page also has Azure PowerShell tabs for these tasks. Learn notes that these cmdlets require the preview Az.DesktopVirtualization module, 5.3.0 or later.
 
@@ -55,18 +55,17 @@ Go to Azure portal > **Azure Virtual Desktop** > **Host pools** > your pool > **
 4. **Notifications.** Set the minutes before users are signed out, from 0 to 60, and the sign-out message.
 5. **Review.** Confirm validation passes and select **Update**.
 
-On the first update your settings overwrite the defaults of the session host management policy; later updates are pre-populated and your changes are saved. What you set is also saved to the configuration, so hosts are redeployed with the same values if you change nothing.
+On the first update your settings overwrite the defaults of the session host management policy; later updates are pre-populated and your changes are saved to the configuration.
 
 ### Choosing a batch size
 
-The first host is always updated alone. With 10 hosts and a batch size of 3, the initial host goes first, then batches of 3, 3 and 3, and at least 7 hosts stay available once the initial one is done. Since each host takes about 20 minutes and hosts in a batch run concurrently, that example means four rounds, so roughly 80 minutes in total, as a rough estimate that ignores queueing and retries. Learn warns that large batch sizes can cause intermittent `AgentRegistrationFailureGeneric` errors and that retrying usually resolves them. Choose the batch size by what the pool can lose, not by speed alone. Also keep it within your remaining core quota.
+The first host is always updated alone. With 10 hosts and a batch size of 3, the initial host goes first, then batches of 3, 3 and 3, and at least 7 hosts stay available once the initial one is done. With about 20 minutes per host and hosts in a batch running concurrently, that example is four rounds, roughly 80 minutes, as a rough estimate. Learn warns that large batch sizes can cause intermittent `AgentRegistrationFailureGeneric` errors and that retrying usually resolves them. Choose the batch size by what the pool can lose.
 
 ## While it runs
 
 - Open **Session hosts** to see a blue banner with the status. It shows one point in time, so select **Refresh**. If you started the update immediately, the banner may still say scheduled until you refresh.
-- Progress moves only when a host completes. With 10 hosts it stays at 0.00% until the first host finishes.
-- Do not remove VMs from the pool and do not change drain mode. The service manages it, and a host that cannot be recovered stays in drain mode until the update completes.
-- The Azure Monitor activity log also shows update activity.
+- Progress stays at 0.00% until the first host finishes.
+- Do not remove VMs from the pool and do not change drain mode. A host that cannot be recovered stays in drain mode until the update completes.
 
 ### Pause, resume, cancel, retry
 
@@ -79,7 +78,7 @@ Select **Manage session host update** and choose the action, then **Refresh**; t
 | Cancel | The current activity finishes first. A canceled update cannot be resumed |
 | Retry | Offered after a failure; see the status table below |
 
-An update paused for more than two weeks is canceled. Learn cautions that a canceled or partial update leaves mixed hosts, possibly with different OS versions or domains, so schedule another update soon to restore parity. Only one update can run or be scheduled per pool, while different pools can update at the same time.
+An update paused for more than two weeks is canceled. Learn cautions that a canceled or partial update leaves mixed hosts, so schedule another update soon to restore parity. Only one update can run or be scheduled per pool, while different pools can update at the same time.
 
 ## When an update fails
 
@@ -91,7 +90,7 @@ Learn's troubleshooting page describes the failure handling. If a host fails, th
 | Update failed | Failed while in progress | Retry resumes at the last host |
 | Session host rollback failed | The host failed to update and the rollback failed too | Retry resumes at the last host. Fix the cause first; capacity is lower and the host differs from the rest |
 
-Typical causes: no hosts to update (`HostpoolHasNoSessionHosts`, which appears when the configuration was not changed first), insufficient capacity, or a mismatch of region, subscription, resource group or domain join type with existing hosts; remove hosts that are inconsistent with the configuration. Failures in the first single-host batch usually come from configuration parameters, and a retry rarely helps. Later failures are often intermittent. If the image includes the PowerShell DSC extension, delete `C:\packages\plugin` from the image. Resource locks, Azure Policy that blocks changes, or changes to power state and drain mode by hand also cause failures. In Azure PowerShell, Learn lists `$updateProgress.PropertiesUpdateStatus`, `$updateProgress.UpdateProgressError` and `$updateProgress.UpdateProgressError.FaultText` as the properties that hold error details, and points to "Monitor the progress of an update" in the PowerShell tab of the configure page for the command that fills the variable. Also note that if an update fails, the host pool cannot be deleted until the update is canceled.
+Typical causes: no hosts to update (`HostpoolHasNoSessionHosts`, which appears when the configuration was not changed first), insufficient capacity, or a mismatch of region, subscription, resource group or domain join type with existing hosts; remove hosts that are inconsistent with the configuration. Failures in the first single-host batch usually come from configuration parameters; later ones are often intermittent. If the image includes the PowerShell DSC extension, delete `C:\packages\plugin` from the image. Resource locks, blocking Azure Policy, or manual changes to power state and drain mode also cause failures. In Azure PowerShell, Learn lists `$updateProgress.PropertiesUpdateStatus`, `$updateProgress.UpdateProgressError` and `$updateProgress.UpdateProgressError.FaultText` as the properties that hold error details, and points to "Monitor the progress of an update" in the PowerShell tab of the configure page for the command that fills the variable. Also note that if an update fails, the host pool cannot be deleted until the update is canceled.
 
 ## Diagnostics in Log Analytics
 
@@ -103,11 +102,11 @@ WVDSessionHostManagement
 | summarize arg_max(TimeGenerated, ProvisioningStatus, ScheduledDateTime, UpdateMaxVmsRemoved) by CorrelationId
 ```
 
-Related queries on the page cover successful updates with duration and median time per host, errors with the `CodeSymbolic` code, and cancellations. The page does not list error codes; use the troubleshooting page.
+Related queries on the page cover successful updates with duration and median time per host, errors with the `CodeSymbolic` code, and cancellations. For error codes, use the troubleshooting page.
 
 ## After the update
 
-Check that the **Current Version** column matches the target for every host, that users can sign in, and, if you use Insights, that the monitoring agent is present on the new hosts. Re-enable autoscale only after the update has finished. Active Directory computer objects are not deleted during an update, and the new VM inherits the original object, so there are temporarily orphaned objects. If you changed the domain credentials to another domain, remove the orphaned computer objects from the previous domain, and verify that GPOs still apply.
+Check that the **Current Version** column matches the target for every host, that users can sign in, and, with Insights, that the monitoring agent is present. Re-enable autoscale only after the update has finished. Active Directory computer objects are not deleted during an update, and the new VM inherits the original object, so there are temporarily orphaned objects. If you change the domain, Learn says to remove the orphaned computer objects from the previous domain.
 
 ## Sources
 
