@@ -51,11 +51,11 @@ test("Eintragen: Formular, Domain wird gesendet, Fehler werden verstaendlich gez
   assert.ok(root.textContent.includes("Bitte eine Unterdomain verwenden"), root.textContent.slice(-300));
 });
 
-test("Domain wartet auf DNS: genau der CNAME-Eintrag zum Kopieren, TXT optional, Jetzt pruefen, Entfernen", async () => {
+test("Domain wartet auf DNS: genau der CNAME-Eintrag zum Kopieren, TXT als Besitznachweis (Pflicht), Jetzt pruefen, Entfernen", async () => {
   const clip = [];
   const { root, btn, posts } = await boot({ "/api/byod/mine": MINE([DOM({ error: "dns_missing", checked: 1700000000 })]), "/api/byod/check": { ok: true }, "/api/byod/remove": { ok: true } }, { clip });
   const t = root.textContent;
-  for (const s of ["blog.anna.de", "CNAME", "blogs.m365blogs.net", "Wartet auf den DNS-Eintrag", "Wir finden den DNS-Eintrag noch nicht", "_m365fm-verify.blog.anna.de", "m365fm-verify=abc", "Ohne Ausfall wechseln", "Zuletzt geprüft"]) assert.ok(t.includes(s), s);
+  for (const s of ["blog.anna.de", "CNAME", "blogs.m365blogs.net", "Wartet auf den DNS-Eintrag", "Wir finden den DNS-Eintrag noch nicht", "_m365fm-verify.blog.anna.de", "m365fm-verify=abc", "Besitznachweis (Pflicht)", "Zuletzt geprüft"]) assert.ok(t.includes(s), s);
   assert.equal(root.all((e) => e.tagName === "INPUT").length, 2, "Felder fuer Impressum und Datenschutz");
   const copies = btn("Kopieren"); assert.equal(copies.length, 4);   // CNAME: Name, Wert; TXT: Name, Wert (die Zeile "Typ" hat keinen Knopf)
   copies[0].click(); await tick(); copies[1].click(); await tick(); assert.deepEqual(clip, ["blog.anna.de", "blogs.m365blogs.net"]);
