@@ -56,6 +56,7 @@ OUT = ROOT / "docs"
 _dom = (ROOT / "domain.txt").read_text().strip() if (ROOT / "domain.txt").exists() else ""
 BASE = os.environ.get("SITE_BASE") or (f"https://{_dom}" if _dom else "https://mirko-peters.github.io/m365-dub-downloader")
 BASE = BASE.rstrip("/")
+R2.DEFAULT_IMG = f"{BASE}/assets/og-default.png"   # tote Bilder (data/r2_dead.json): JSON-LD-Bildfelder und og:image weichen auf das Standardbild dieses Baus aus
 TODAY = date.today().isoformat()
 INDEXNOW_KEY = "0348df8af6514d5bae4d9f9a5ba51f57"
 

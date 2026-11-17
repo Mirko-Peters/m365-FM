@@ -100,7 +100,7 @@ def items(BASE):
             if seg.startswith("blog/") and seg[5:] in bslug: return f'href="{url_of(BASE, seg[5:])}"'
             if seg == "blog": return f'href="{BASE}/community/u/{HANDLE}/blog/"'
             return m.group(0)
-        return re.sub(r'href="([^"]+)"', rep, h)
+        return R2.drop_dead(re.sub(r'href="([^"]+)"', rep, h))   # dauerhaft fehlende Bilder (data/r2_dead.json) gar nicht erst ausgeben: kein kaputtes <img>, nicht in "images" (JSON-LD), Titelbild greift
 
     out = []
     for p in sorted(posts, key=lambda x: x.get("iso") or "", reverse=True):
