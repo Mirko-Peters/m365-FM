@@ -475,6 +475,7 @@ test("schema: Migrationen sind idempotent und enthalten jede zur Laufzeit angele
     if (/^ALTER TABLE (?:contributions ADD COLUMN (?:guid|canon|ctype|teaser) TEXT NOT NULL DEFAULT ''|contributions ADD COLUMN feed_item_id INTEGER NOT NULL DEFAULT 0|contribution_sources ADD COLUMN (?:mode TEXT NOT NULL DEFAULT 'track'|(?:etag|modified|last_error) TEXT NOT NULL DEFAULT ''|topics TEXT NOT NULL DEFAULT '\[\]'|seeded INTEGER NOT NULL DEFAULT 0)|feed_items ADD COLUMN origin TEXT NOT NULL DEFAULT '')$/i.test(s)) continue;
     if (/^ALTER TABLE (?:sponsor_clicks_daily|ad_stats_daily|ad_house_stats) ADD COLUMN clicks_filtered INTEGER NOT NULL DEFAULT 0$/i.test(s)) continue;   // 0051: gefilterte Klicks (Bots/Scanner) getrennt, Spalte mit Standardwert
     if (/^ALTER TABLE events ADD COLUMN (?:entity|entity_state) TEXT NOT NULL DEFAULT ''$/i.test(s)) continue;   // 0048: Event-Entitaet (evententity.js), Spalten mit Standardwert (D1 fuehrt jede Migration nur einmal aus)
+    if (/^ALTER TABLE yt_videos ADD COLUMN (?:(?:upload_url|nonce) TEXT NOT NULL DEFAULT ''|size INTEGER NOT NULL DEFAULT 0)$/i.test(s)) continue;   // 0053: Upload-Sitzung der Creator-Videos (K35/K36), Spalten mit Standardwert
     if (/^INSERT OR IGNORE INTO person_entity\(eid, user_id, created\)\s+SELECT /i.test(s)) continue;   // 0054: Rueckfuellung der Personen-Entitaeten, idempotent (vorhandene Merker bleiben)
     assert.match(s, /^CREATE (TABLE|INDEX|UNIQUE INDEX) IF NOT EXISTS /i, "nur idempotente Anweisungen: " + s.slice(0, 60));
   }
