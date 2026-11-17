@@ -255,6 +255,32 @@ test("Kontoloeschung: steht dieselbe id spaeter redaktionell im Repo, wird der M
   } finally { siteEnts = []; srcEnts = null; }
 });
 
+test("Kontoloeschung: Merker aufgehoben, /entities.json noch mit veralteter Profil-Fassung - zwei Cron-Laeufe holen sie nicht zurueck (K41)", async () => {
+  const { raw, env, user } = await setup();
+  const alice = await user(1, "Alice Example");
+  assert.equal((await saveProfile(env, alice, "alice", true, "Secret Headline Contoso")).s, 200);
+  const exported = (await call(env, "GET", "/api/entity/export")).j.items.find((x) => x.id === "alice");
+  assert.ok(JSON.stringify(exported).includes("Secret Headline Contoso"), "Profiltext steht vor der Loeschung im Export");
+  assert.equal((await call(env, "DELETE", "/api/me", alice)).s, 200);
+  // Repo hat inzwischen einen Gast mit gleicher id; der letzte Seitenbau (/entities.json) enthaelt aber noch die D1-Profil-Fassung
+  srcEnts = [{ id: "alice", name: "Alice Guest", type: "person", desc: { en: "Alice Guest is a podcast guest." } }];
+  siteEnts = [{ id: "alice", ...exported.data }];
+  const leak = (s) => /Secret Headline Contoso|Alice Example/.test(s);
+  try {
+    for (let run = 1; run <= 2; run++) {
+      await importEntitiesFromSite(env);
+      assert.equal(raw.prepare("SELECT COUNT(*) n FROM person_entity WHERE eid='alice'").get().n, 0, `Lauf ${run}: Merker aufgehoben`);
+      assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_rev WHERE eid='alice' AND status='live'").get().n, 1, `Lauf ${run}: genau eine live-Fassung`);
+      const revs = raw.prepare("SELECT data,summary FROM entity_rev WHERE eid='alice'").all();
+      assert.ok(!revs.some((r) => leak(r.data)), `Lauf ${run}: keine Revision mit Profiltext`);
+      const ex = JSON.stringify((await call(env, "GET", "/api/entity/export")).j.items.find((x) => x.id === "alice"));
+      assert.ok(ex.includes("Alice Guest"), `Lauf ${run}: Export liefert die Repo-Fassung`);
+      assert.ok(!leak(ex), `Lauf ${run}: Export ohne Profiltext`);
+      assert.ok(!leak(JSON.stringify(await callTool(env, null, "get_entity", { id: "alice" }))), `Lauf ${run}: MCP ohne Profiltext`);
+    }
+  } finally { siteEnts = []; srcEnts = null; }
+});
+
 test("Anonymer Speaker-Eintrag bleibt anonym, wenn der Veranstalter die Session speichert - auch mit einem Profil 'Former member' (K42)", async () => {
   const { raw, env, t, user } = await setup();
   const org = await user(2, "Org Owner"), mallory = await user(3, "Mallory");

@@ -46,19 +46,51 @@ export async function entityMap(env) {
 }
 
 // Cron: neue Eintraege aus entities.json (Repo) in die Datenbank uebernehmen (nur IDs ohne live-Fassung; nichts wird ueberschrieben) - ersetzt den Knopf in der Verwaltung fuer den laufenden Betrieb
+const ENT_ID = /^[a-z0-9][a-z0-9-]{1,79}$/;
+const validEnt = (e) => !!(e && ENT_ID.test(e.id || "") && e.name && e.type);
+
+async function siteSrcEntities(env) {
+  try { const r = await fetch(env.SITE + "/entities-src.json", { cf: { cacheTtl: 0 } }); if (r.ok) return (await r.json()).entities || []; } catch { /* noch nicht veroeffentlicht */ }
+  return [];
+}
+
+// K41: Merker einer geloeschten Personen-Entitaet (person_entity, user_id 0) aufheben, sobald dieselbe id redaktionell im Repo steht (z. B. ein
+// Podcast-Gast mit gleichem Namens-Slug) - sonst blendeten entityMap, MCP und Suche sie fuer immer aus. Im selben Schritt wird die Fassung aus
+// /entities-src.json (reine Repo-Fassung ohne D1, enthaelt nie die geloeschte Profil-Fassung) als live-Fassung angelegt, falls keine besteht.
+// Sonst holte der naechste importEntitiesFromSite die veraltete Profil-Fassung (Name, Kurzzeile) aus /entities.json des letzten Seitenbaus zurueck.
+// Rueckgabe: die ids, deren Merker in diesem Lauf aufgehoben wurde.
+export async function releasePersonMarks(db, src) {
+  const byId = new Map(); for (const e of src || []) if (validEnt(e)) byId.set(e.id, e);
+  if (!byId.size) return new Set();
+  const marks = ((await db.prepare("SELECT eid FROM person_entity WHERE user_id=0 AND eid IN (SELECT value FROM json_each(?))").bind(JSON.stringify([...byId.keys()])).all().catch(() => ({ results: [] }))).results || []).map((r) => r.eid);
+  const freed = new Set(), t = now();
+  for (let i = 0; i < marks.length; i += 25) {
+    const part = marks.slice(i, i + 25), stmts = [];
+    for (const eid of part) {
+      const { id, ...data } = byId.get(eid);
+      stmts.push(db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) SELECT ?,?,?,0,'live',? WHERE NOT EXISTS (SELECT 1 FROM entity_rev WHERE eid=? AND status='live')").bind(id, JSON.stringify(data), "Übernahme aus entities.json", t, id),
+        db.prepare("DELETE FROM person_entity WHERE user_id=0 AND eid=?").bind(eid));
+    }
+    try { await db.batch(stmts); for (const eid of part) freed.add(eid); } catch { /* naechster Lauf; der Merker bleibt, die Entitaet bleibt ausgeblendet */ }
+  }
+  return freed;
+}
+
 export async function importEntitiesFromSite(env) {
-  const db = env.DB, list = await siteEntities(env, 0);
-  if (!list.length) return { skipped: "entities.json nicht erreichbar" };
+  const db = env.DB, src = await siteSrcEntities(env);
+  const freed = await releasePersonMarks(db, src);   // vor have/hidden: die Repo-Fassung steht dann schon live
+  const list = await siteEntities(env, 0);
+  if (!list.length) return { skipped: "entities.json nicht erreichbar", released: freed.size };
   const have = new Set(((await db.prepare("SELECT DISTINCT eid FROM entity_rev WHERE status='live'").all()).results || []).map((r) => r.eid));
   // K41: Personen-Entitaet eines geloeschten (oder privaten) Profils nie aus dem letzten Seitenbau zurueckholen - /entities.json enthaelt bis zum
-  // naechsten Bau noch die D1-Fassung samt Name und Kurzzeile
+  // naechsten Bau noch die D1-Fassung samt Name und Kurzzeile. Ids mit gerade aufgehobenem Merker nie aus /entities.json (nur aus /entities-src.json).
   const hidden = await hiddenPersonEids(db);
-  const todo = list.filter((e) => e && /^[a-z0-9][a-z0-9-]{1,79}$/.test(e.id || "") && e.name && e.type && !have.has(e.id) && !hidden.has(e.id)), t = Math.floor(Date.now() / 1000);
+  const todo = list.filter((e) => validEnt(e) && !have.has(e.id) && !hidden.has(e.id) && !freed.has(e.id)), t = Math.floor(Date.now() / 1000);
   for (let i = 0; i < todo.length; i += 50)
     await db.batch(todo.slice(i, i + 50).map((e) => { const { id, ...data } = e; return db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,0,'live',?)").bind(id, JSON.stringify(data), "Übernahme aus entities.json", t); }));
-  const synced = await syncEntitiesFromSite(env).catch((e) => ({ error: String(e).slice(0, 120) }));
+  const synced = await syncEntitiesFromSite(env, { list: src }).catch((e) => ({ error: String(e).slice(0, 120) }));
   const paired = await pairExisting(env, { dry: false, limit: 50 }).catch((e) => ({ error: String(e).slice(0, 120) }));   // neue Firmen-Entitaeten aus dem Repo bekommen ihre Paar-Firma automatisch (idempotent)
-  return { imported: todo.length, db: have.size + todo.length, file: list.length, synced, paired };
+  return { imported: todo.length, db: have.size + todo.length, file: list.length, released: freed.size, synced, paired };
 }
 
 // T30: Abgleich JSON -> D1 fuer Entitaeten, die schon in der Datenbank sind. Grundlage ist /entities-src.json (Repo-Fassung ohne
@@ -112,12 +144,8 @@ export function mergeFromJson(json, revs, sysId) {
 
 export async function syncEntitiesFromSite(env, opts = {}) {
   const db = env.DB, dbMode = (await source(env)) === "db";
-  let list = [];
-  try { const r = await fetch(env.SITE + "/entities-src.json", { cf: { cacheTtl: 0 } }); if (r.ok) list = (await r.json()).entities || []; } catch { /* noch nicht veroeffentlicht */ }
-  // K41: Merker einer geloeschten Personen-Entitaet (person_entity, user_id 0) aufheben, sobald dieselbe id redaktionell im Repo steht (z. B. ein
-  // Podcast-Gast mit gleichem Namens-Slug) - sonst blendeten entityMap, MCP und Suche sie fuer immer aus. /entities-src.json ist die reine
-  // Repo-Fassung ohne D1, enthaelt also nie die geloeschte Profil-Fassung; der naechste importEntitiesFromSite legt die Repo-Fassung an.
-  if (list.length) await db.prepare("DELETE FROM person_entity WHERE user_id=0 AND eid IN (SELECT value FROM json_each(?))").bind(JSON.stringify(list.map((e) => e?.id).filter(Boolean))).run().catch(() => {});
+  const list = opts.list || await siteSrcEntities(env);
+  if (!opts.list) await releasePersonMarks(db, list);   // K41, siehe releasePersonMarks (importEntitiesFromSite ruft es schon vorher auf)
   if (dbMode) return { skipped: "entity_source=db" };
   if (!list.length) return { skipped: "entities-src.json nicht erreichbar" };
   const last = +(await db.prepare("SELECT v FROM meta WHERE k='ent_src_n'").first().catch(() => null))?.v || 0;
