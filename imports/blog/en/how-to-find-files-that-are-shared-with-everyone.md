@@ -1,8 +1,8 @@
 ---
 title: "How to find files that are shared with everyone"
 summary: "Files shared with everyone often go unnoticed until someone searches for them. Learn where to look with built-in Microsoft 365 reports, what those reports leave out, and when a third-party tool can help."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-17
 topics: [oversharing, sharepoint-reporting, sharepoint-essentials-toolkit]
