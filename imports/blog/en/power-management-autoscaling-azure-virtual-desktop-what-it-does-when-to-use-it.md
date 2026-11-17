@@ -9,9 +9,9 @@ topics: [avd-power-management-autoscaling, avd-scaling-plan]
 keypoints:
   - "Power management autoscaling powers existing session hosts on and off. Dynamic autoscaling also creates and deletes hosts, works only for pooled host pools with a session host configuration, and carries a preview label on Learn's scenarios and glossary pages."
   - "A scaling plan holds the schedules. Pooled schedules use four phases (ramp-up, peak, ramp-down, off-peak) with a capacity threshold and a minimum percentage of hosts. Personal schedules act on disconnected and signed-out sessions."
-  - "Autoscale turns a host on when used capacity exceeds the threshold, and turns one off only if used capacity stays at or below the threshold afterwards."
+  - "Autoscale turns a host on when used capacity exceeds the threshold. It turns a host off when used capacity is below the threshold and removing the host would not push it over the threshold. At exactly the threshold, nothing happens."
   - "The role Desktop Virtualization Power On Off Contributor must be assigned at subscription level. A lower scope can stop autoscale from working properly."
-  - "Learn says autoscale cannot be used with the Azure Automation and Logic Apps scaling tool on the same host pool. Check any other scaling tool before running it alongside."
+  - "Learn says not to combine autoscale with other Microsoft or third-party scaling tools, and to disable those for the host pools a scaling plan is applied to. Azure Automation and Logic Apps scaling cannot run on the same host pool."
 faq:
   - q: "Does power management autoscaling cost extra?"
     a: "Microsoft's autoscale FAQ says no: you are not charged extra for using autoscale, and it points to the Azure Virtual Desktop pricing page for rates. For personal host pools, the FAQ adds that autoscale deallocates a session host that was turned on but never used to sign in, after a period of inactivity, to avoid unnecessary compute costs."
@@ -66,7 +66,7 @@ The **minimum percentage of hosts** is the lowest share of all session hosts tha
 
 ## The decision rule, with numbers
 
-Autoscale turns a host on when used capacity exceeds the threshold. It turns a host off only if used capacity stays at or below the threshold after the host is gone, and the host has no sessions (force logoff in ramp-down is the exception).
+Autoscale turns a host on when used capacity exceeds the threshold. It turns a host off when used capacity is below the threshold, turning the host off would not exceed the threshold, and the host has no sessions (force logoff in ramp-down is the exception). Per Learn's FAQ, when capacity equals the threshold, autoscale does nothing.
 
 Learn's ramp-up scenario (scenario 1) starts with two available hosts out of six, a maximum session limit of 5 and a threshold of 30 percent. Capacity is 10 sessions. Three sessions give 30 percent, which is not above the threshold, so nothing happens. A fourth session gives 40 percent and autoscale turns on one host (capacity 15, about 27 percent). A fifth session gives 33 percent and another host starts. At 6 sessions nothing happens (30 percent). A seventh session gives 35 percent and a fifth host starts.
 
@@ -111,7 +111,7 @@ Consider another approach when:
 - Your demand depends on specific dates. The FAQ says autoscale does not currently support ramping down on specific dates.
 - You rely on the Azure CLI. The FAQ says autoscale cannot be configured with it.
 - You need disaster recovery. The FAQ says customers must set up their own disaster recovery strategy to manage outages: autoscale only handles scaling existing VMs within the region they were created in.
-- Another tool already scales the pool. Learn says autoscale cannot be used with Azure Automation and Azure Logic Apps scaling on the same host pool. For scaling features of third-party management products such as [Nerdio's auto-scaling](/entity/nerdio-auto-scaling/), Learn's pages checked here say nothing. As this article's own precaution, not a vendor statement, keep one scaling mechanism per host pool and check the vendor's documentation.
+- Another tool already scales the pool. Learn says autoscale cannot be used with Azure Automation and Azure Logic Apps scaling on the same host pool. More generally, the scenarios page says: "Don't use autoscale in combination with other scaling Microsoft or third-party scaling tools. Ensure that you disable those for the host pools you apply the scaling plans to." That covers third-party scaling features such as [Nerdio's auto-scaling](/entity/nerdio-auto-scaling/). Learn does not describe how a specific product behaves, so check that vendor's documentation and keep one scaling mechanism per host pool.
 
 ## Common traps
 

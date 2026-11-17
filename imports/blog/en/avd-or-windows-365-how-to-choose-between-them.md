@@ -14,7 +14,7 @@ keypoints:
   - "Learn notes that some organizations use both services, because each suits particular workloads. Which workloads go where is the administrator's own assessment."
 faq:
   - q: "Is Windows 365 the same as Azure Virtual Desktop?"
-    a: "No. Microsoft Learn describes Windows 365 as a service that creates Cloud PCs, each in a 1:1 relationship with one end user as their own personal PC in the cloud, and Azure Virtual Desktop as a desktop and app virtualization service that runs on Azure. Windows 365 uses Azure Virtual Desktop for connectivity, and its Cloud PCs are hosted in a subscription owned by Microsoft."
+    a: "No. Microsoft Learn describes Windows 365 as a service that creates Cloud PCs. In Windows 365 Enterprise, Business and Government, each end user has a 1:1 relationship with a Cloud PC, as their own personal PC in the cloud. Windows 365 Flex is the exception: multiple users can access a single Cloud PC, but not at the same time. Learn describes Azure Virtual Desktop as a desktop and app virtualization service that runs on Azure. Windows 365 uses Azure Virtual Desktop for connectivity, and its Cloud PCs are hosted in a subscription owned by Microsoft."
   - q: "Can I run multi-session Windows 11 on Windows 365?"
     a: "No. Microsoft Learn describes Windows 11 and Windows 10 Enterprise multi-session as exclusive to Azure Virtual Desktop, and an Enterprise or Business Cloud PC is a single-user device. Windows 365 Flex (formerly Frontline) is a different model: in Dedicated mode one license provisions up to three Cloud PCs for three users, and in Shared mode one Cloud PC is shared by a group, one user at a time."
   - q: "Which one costs less?"

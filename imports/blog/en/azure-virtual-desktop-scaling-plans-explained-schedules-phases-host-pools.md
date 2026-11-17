@@ -64,7 +64,7 @@ In the Azure portal the Schedules tab for a pooled plan asks for these values:
 The scenarios page describes the behavior for pooled pools:
 
 - **Ramp-up**: autoscale turns on hosts to meet the minimum percentage of hosts and whenever used capacity is above the threshold. It does not turn hosts off in this phase, to avoid a poor user experience.
-- **Peak**: autoscale turns hosts on and off as needed to keep use stable. It turns a host off only if used capacity stays at or below the threshold afterward and the host has no user sessions.
+- **Peak**: autoscale turns hosts on and off as needed to keep use stable. It turns a host off when used capacity is below the threshold, turning it off would not exceed the threshold, and the host has no user sessions. At exactly the threshold, autoscale does nothing.
 - **Ramp-down**: autoscale consolidates sessions and deallocates excess hosts. Before it turns a host off, it puts the host into [drain mode](/entity/avd-drain-mode/). It selects the host with the fewest sessions.
 - **Off-peak**: autoscale keeps the minimum percentage of hosts running, even if they have no users. With 0 percent and no sessions, no host needs to stay on (FAQ).
 

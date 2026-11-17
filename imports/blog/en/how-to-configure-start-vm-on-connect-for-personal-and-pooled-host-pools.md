@@ -1,6 +1,6 @@
 ---
 title: "How to configure Start VM on Connect for personal and pooled host pools"
-summary: "Assign the Desktop Virtualization Power On Contributor role to the Azure Virtual Desktop service principal or a managed identity (Preview), then set Start VM on connect to Yes in the host pool's properties. Test with a deallocated host and add a deallocation mechanism, because the feature only starts VMs."
+summary: "Assign the Desktop Virtualization Power On Contributor role to the Azure Virtual Desktop service principal or a managed identity, then set Start VM on connect to Yes in the host pool's properties. Test with a deallocated host and add a deallocation mechanism, because the feature only starts VMs."
 status: review
 publish: false
 author: mirko-p
@@ -8,7 +8,7 @@ date: 2026-11-18
 topics: [avd-start-vm-on-connect, azure-virtual-desktop]
 keypoints:
   - "Two things are required: a role assignment that lets Azure Virtual Desktop power on the VMs, and the Start VM on connect setting on an existing host pool."
-  - "The role is Desktop Virtualization Power On Contributor, assigned to the Azure Virtual Desktop service principal or a host pool managed identity (Preview) at a scope that contains the host pool and its session host VMs."
+  - "The role is Desktop Virtualization Power On Contributor, assigned to the Azure Virtual Desktop service principal or a host pool managed identity at a scope that contains the host pool and its session host VMs."
   - "Names of the host pool, its session hosts and the resource group may contain only ANSI characters."
   - "The setting is per host pool, so test it on one pool first. You can set it in the Azure portal, Azure PowerShell or Azure CLI, but not while you create a new host pool."
   - "Test a deallocated host for each pool type you run, and plan separately what deallocates the VMs afterwards."
@@ -53,14 +53,14 @@ Learn says this assignment allows Azure Virtual Desktop to power on VMs, check t
 6. Set **Assign access to** to **Microsoft Entra user, group, or service principal**, select **Select members**, enter the application name and select it. If two entries share the name, select both, then remove the one whose object ID does not match the one you noted.
 7. Select **Next**, then **Review + assign**.
 
-**Managed identity alternative (Preview).** Learn lists Start VM on Connect among the features that can use a managed identity on a host pool, but marks managed identity support for host pools as **Preview**, so it carries the Azure preview terms and is not a generally available option. A system-assigned identity is tied to the host pool; a user-assigned identity is an independent resource. Learn's managed identity page (updated 22 April 2026) gives these portal steps:
+**Managed identity alternative.** Learn lists Start VM on Connect among the features that can use a managed identity on a host pool. Learn's "What's new in Azure Virtual Desktop" lists "Managed identity support is now generally available" under September 2026, and says that in a future service update, host pools configured with a session host configuration will require a managed identity to add session hosts. The configuration page adds that this replaces reliance on the Azure Virtual Desktop service principal. Some Learn pages may still show older preview wording, so check the page you follow. A system-assigned identity is tied to the host pool; a user-assigned identity is an independent resource. Learn's managed identity page (updated 24 September 2026) gives these portal steps:
 
 1. Search for **Azure Virtual Desktop**, select **Host pools**, then select the host pool.
-2. Select **Identity (Preview)** and select **Assign a Managed Identity**.
+2. Select **Identity** and select **Assign a Managed Identity**.
 3. Choose **System assigned managed identity**, or **User assigned managed identity** and then the subscription and the existing identity.
 4. Select **Save**.
 
-You need Desktop Virtualization Host Pool Contributor at the host pool scope or higher; for a user-assigned identity you also need Managed Identity Operator at the identity's scope or higher. Then assign Desktop Virtualization Power On Contributor to that identity at a scope that contains the host pool and its session host VMs, using Azure's general role assignment steps. Learn's Start VM on Connect page does not give separate steps for that assignment, so confirm the result in **Access control (IAM)**. If you want only generally available features, use the service principal.
+You need Desktop Virtualization Host Pool Contributor at the host pool scope or higher; for a user-assigned identity you also need Managed Identity Operator at the identity's scope or higher. Then assign Desktop Virtualization Power On Contributor to that identity at a scope that contains the host pool and its session host VMs, using Azure's general role assignment steps. Learn's Start VM on Connect page does not give separate steps for that assignment, so confirm the result in **Access control (IAM)**. Both the service principal and a managed identity are documented options for this role assignment; because Learn says a managed identity will be required for host pools with a session host configuration, plan for it if you create or update such pools.
 
 ## Step 2: enable Start VM on connect
 
@@ -74,7 +74,7 @@ In the Azure portal (Learn's steps):
 
 The setting applies to the one host pool you edit, so repeat the steps for each pool.
 
-**Azure PowerShell and Azure CLI.** Learn's configuration page lists these as tabs, but its text shows no commands. The reference pages confirm the parameters:
+**Azure PowerShell and Azure CLI.** The parameters below come from the reference pages:
 
 - `Update-AzWvdHostPool` has a `-StartVMOnConnect` switch parameter, described as "The flag to turn on/off StartVMOnConnect feature". The reference has no example that uses it, so the line below is derived from the syntax:
 
@@ -127,7 +127,8 @@ Retrieved 17 November 2026.
 
 - [Microsoft Learn: Configure Start VM on Connect](https://learn.microsoft.com/en-us/azure/virtual-desktop/start-virtual-machine-connect)
 - [Microsoft Learn: Start VM on Connect FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/start-virtual-machine-connect-faq)
-- [Microsoft Learn: Configure managed identities for Azure Virtual Desktop host pools](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-managed-identity)
+- [Microsoft Learn: Configure managed identity in Azure Virtual Desktop](https://learn.microsoft.com/en-ie/azure/virtual-desktop/configure-managed-identity)
+- [Microsoft Learn: What's new in Azure Virtual Desktop (September 2026)](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
 - [Microsoft Learn: Assign Azure RBAC roles or Microsoft Entra roles to the Azure Virtual Desktop service principals](https://learn.microsoft.com/en-us/azure/virtual-desktop/service-principal-assign-roles)
 - [Microsoft Learn: Azure RBAC roles for Azure Virtual Desktop (rbac page)](https://learn.microsoft.com/en-us/azure/virtual-desktop/rbac)
 - [Microsoft Learn: Create and assign an autoscale scaling plan](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)
