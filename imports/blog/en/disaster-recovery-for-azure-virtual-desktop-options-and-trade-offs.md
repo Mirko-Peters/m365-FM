@@ -18,7 +18,7 @@ faq:
   - q: "Can I use Azure Site Recovery for pooled host pools?"
     a: "Microsoft's multiregion article uses Site Recovery for personal host pools, where each VM holds user data. For pooled host pools it describes a second host pool with FSLogix Cloud Cache instead. It also says not to use Site Recovery test failover on session hosts."
   - q: "Are regional host pools generally available?"
-    a: "Yes. Microsoft's Tech Community post \"Now generally available: Regional resiliency for Azure Virtual Desktop\", published on 30 September 2026 and updated on 13 November 2026, announces general availability in 14 regions, and Learn's What's new page lists them as generally available in September 2026. Some Learn pages, including the multiregion article, still use preview wording and name two regions, so check the current region list before you design around them."
+    a: "Yes. Microsoft's Tech Community post \"Now generally available: Regional resiliency for Azure Virtual Desktop\", published on 30 September 2026 and updated on 13 November 2026, announces general availability in 14 regions, and Learn's What's new page lists them as generally available in September 2026. One Learn page, the multiregion article (last updated 9 November 2026), still says regional host pools are in public preview; the current region list is on Learn's data locations page."
 ---
 
 Azure Virtual Desktop has no native disaster recovery feature, so recovery is something you assemble from Azure services. Microsoft's guidance describes three patterns: two live pooled host pools in two regions (active-active), a mostly switched-off second pool (active-passive), or Azure Site Recovery for personal desktops. The choice is a trade between recovery time, cost and operational effort.
@@ -29,7 +29,7 @@ This article compares the options using Microsoft Learn and the Azure Architectu
 
 Learn's [disaster recovery concepts](https://learn.microsoft.com/en-us/azure/virtual-desktop/disaster-recovery-concepts) article says the service has no native DR features. It splits responsibility. You or a partner manage the session hosts, profile management (usually FSLogix), applications, user data and identities. Microsoft manages the control plane. The [service architecture and resilience](https://learn.microsoft.com/en-us/azure/virtual-desktop/service-architecture-resilience) article says that if a web or gateway service instance, or a whole region, becomes unavailable, traffic is redirected to the next closest instance, and that the gateway is reached through Azure Front Door. It also says there is a short period during a database failover when new connections fail, without affecting existing connections. Microsoft's multiregion article adds that you do not need to set up control plane redundancy yourself.
 
-Microsoft's terms: high availability keeps smaller, local outages from interrupting the deployment, business continuity keeps the organization operating during outages of any size, and disaster recovery is getting back to operation after a full outage. Design for availability first, so that fewer events become disasters.
+Microsoft's terms: high availability keeps smaller, local outages from interrupting the deployment, business continuity keeps the organization operating during outages of any size, and disaster recovery is getting back to operation after a full outage.
 
 ## The patterns side by side
 
@@ -60,7 +60,7 @@ Configuration from the article, under `HKEY_LOCAL_MACHINE > SOFTWARE > FSLogix >
 
 `type=smb,connectionString=\\primarystgprofiles\profiles;type=smb,connectionString=\\secondarystgprofiles\profiles`
 
-On the secondary host pool you reverse the order, so local storage comes first. Cloud Cache writes to the first reachable provider and replicates to the next. Set it up twice, once for the [profile container](/entity/fslogix-profile-container/) and once for the Office container, whose key is under `SOFTWARE > Policy > FSLogix > ODFC`. You can leave the Office setting off, but the article warns it can misalign data between regions. Learn's Cloud Cache tutorial shows another provider mix, an SMB share plus an Azure page blob account, in the same `CCDLocations` value.
+On the secondary host pool you reverse the order, so local storage comes first. Cloud Cache writes to the first reachable provider and replicates to the next. Set it up twice, once for the [profile container](/entity/fslogix-profile-container/) and once for the Office container, whose key is under `SOFTWARE > Policy > FSLogix > ODFC`. You can leave the Office setting off, but the article warns it can misalign data between regions.
 
 Points that cost people time:
 
@@ -94,7 +94,7 @@ Specific cautions from Microsoft:
 
 ## Failing over active-passive pooled pools
 
-Users keep one workspace in active-passive. The article's procedure, in its own group names:
+Users keep one workspace in active-passive. The article's procedure uses the Active Directory groups GRP1, GRP2 and GRP3 and the application groups DAG1, APPG2 and APPG3:
 
 1. Remove the user groups from the application groups of the primary host pool.
 2. Connected users are force disconnected from the primary pool.
@@ -105,9 +105,9 @@ Fail over every application group, since users who reach different groups in dif
 
 ## The control plane scope
 
-Whether host pool metadata survives a regional database problem depends on the deployment scope. A [regional host pool](/entity/avd-regional-host-pools/) stores its metadata in its own region, and a geographical host pool stores it in a database shared across the geography. The scope cannot be changed after creation, and Learn's [Deploy Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop) page says regional and geographical objects cannot be mixed, so both pools, workspaces and application groups of a DR design need the same scope.
+Whether host pool metadata survives a regional database problem depends on the deployment scope. A [regional host pool](/entity/avd-regional-host-pools/) stores its metadata in its own region, with replicas across availability zones and, according to Learn's data locations page, metadata replicated to a paired region (where applicable) for disaster recovery purposes. A geographical host pool stores it in a database shared across the geography. The scope cannot be changed after creation, and Learn's [Deploy Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop) page says regional and geographical objects cannot be mixed, so both pools, workspaces and application groups of a DR design need the same scope.
 
-Microsoft announced general availability of regional host pools on 30 September 2026 in the Tech Community post "Now generally available: Regional resiliency for Azure Virtual Desktop", updated on 13 November 2026, and Learn's What's new page lists them as generally available in September 2026. The post lists 14 regions: East US 2, Central US, Australia East, Canada Central, Canada East, Central India, East Asia, Japan East, Japan West, Korea Central, North Europe, South Africa North, Southeast Asia and West Europe. It recommends Regional for new host pools and describes Geographical as not recommended, and Microsoft plans to stop the creation of new geographical host pools at a date not yet given. Learn's Data locations page, last updated on 16 November 2026, lists the same 14 regions for regional host pools, and the Regional host pools page says regional availability is expanding in phases. The multiregion article still says "Regional host pools are in public preview", so Learn is not fully consistent yet. Check the current region list on Learn before you design around a region. "Designing a multi-region Azure Virtual Desktop deployment" and "Regional host pools in Azure Virtual Desktop: where host pool metadata is stored" cover the scope choice.
+Microsoft announced general availability of regional host pools on 30 September 2026 in the Tech Community post "Now generally available: Regional resiliency for Azure Virtual Desktop", updated on 13 November 2026, and Learn's What's new page lists them as generally available in September 2026. The post covers 14 regions. It recommends Regional for new host pools and describes Geographical as not recommended, and Microsoft plans to stop the creation of new geographical host pools at a date not yet given. Learn's Data locations page, last updated on 16 November 2026, shows the same 14 regions in its Regional column, and the Regional host pools page says Azure Virtual Desktop now supports regional host pools and that availability is expanding in phases. That page still shows a few preview remnants, such as the 5.4.5-preview PowerShell module for the `-DeploymentScope` parameter. One Learn page has not caught up: the multiregion article still says "Regional host pools are in public preview". Take the region list from the data locations page and check it before you design around a region. The Regional host pools page also notes that errors and checkpoints are not reported into Log Analytics for regional session hosts. "Designing a multi-region Azure Virtual Desktop deployment" and "Regional host pools in Azure Virtual Desktop: where host pool metadata is stored" cover the scope choice.
 
 ## Checks outside the host pool
 
@@ -133,5 +133,4 @@ Retrieved 17 November 2026.
 - [Microsoft Learn: Azure Virtual Desktop FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/faq)
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
 - [Microsoft Learn: FSLogix high availability options](https://learn.microsoft.com/en-us/fslogix/concepts-container-high-availability)
-- [Microsoft Learn: Configure Cloud Cache for FSLogix profile containers](https://learn.microsoft.com/en-us/fslogix/tutorial-cloud-cache-containers)
 - [Microsoft Tech Community: Now generally available: Regional resiliency for Azure Virtual Desktop](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/now-generally-available-regional-resiliency-for-azure-virtual-desktop/4540458)

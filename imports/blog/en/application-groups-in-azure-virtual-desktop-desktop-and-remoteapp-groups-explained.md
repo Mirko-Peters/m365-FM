@@ -53,7 +53,7 @@ Learn states these rules in the terminology article:
 - You can assign only a single desktop application group per host pool, but you can assign multiple RemoteApp groups.
 - A user assigned to several RemoteApp groups on the same host pool has access to the aggregate of all applications in the groups they are assigned to.
 
-A practical consequence: you can split applications by audience without splitting VMs. For example, one pooled pool could carry one desktop group for IT staff and two RemoteApp groups, "Finance apps" and "Sales apps". A finance user assigned only to the first RemoteApp group sees only those apps. A user in both RemoteApp groups sees both sets. An IT user who is also in a RemoteApp group sees only the desktop, because of the preferred-type rule below. This example applies the rules above and is not a Microsoft-recommended layout.
+A practical consequence: you can split applications by audience without splitting VMs. For example, one pooled pool could carry one desktop group for IT staff and two RemoteApp groups, "Finance apps" and "Sales apps". A finance user assigned only to the first RemoteApp group sees only those apps. A user in both RemoteApp groups sees both sets. An IT user who is also in a RemoteApp group sees only the desktop if the host pool's preferred type is Desktop (the portal default) or not set, and only the RemoteApp applications if it is RemoteApp; see the preferred-type rule below. This example applies the rules above and is not a Microsoft-recommended layout.
 
 ## The preferred application group type
 
@@ -94,14 +94,12 @@ Two readings follow, and both are our interpretation. First, one RemoteApp group
 
 ## Creating, assigning and registering
 
-The procedure is on Learn's [Deploy Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop) page and in the walkthrough article. What matters for the design:
+The click-by-click steps, the role list and the workspace registration path are in "Publishing RemoteApps with application groups: a practical walkthrough" and "The Azure Virtual Desktop workspace: how users find their desktops and apps". Four points matter for the design:
 
-- The Basics tab asks for subscription, resource group, host pool, location, group type (**Desktop** or **RemoteApp**) and name. The location is where metadata is stored and matches the host pool. The group also inherits the host pool's deployment scope, so it can be registered only to a workspace with the same scope. Learn says you cannot change the scope of an existing host pool, workspace or application group, and that mixing scopes through PowerShell or the REST API fails. See [regional host pools](/entity/avd-regional-host-pools/) for the scope choice.
-- Creating the objects needs Desktop Virtualization Contributor on the resource group or subscription. Assigning users additionally needs `Microsoft.Authorization/roleAssignments/write`, which User Access Administrator and Owner include.
-- The built-in Desktop Virtualization User role is the one that lets a user use an application from an application group as a non-administrator, according to Learn's [RBAC article](https://learn.microsoft.com/en-us/azure/virtual-desktop/rbac).
-- To add applications to a RemoteApp group, at least one session host in the host pool must be powered on, according to Learn's publishing article.
-- On the Workspace tab of the creation wizard you can register a group only if it is a desktop group. A RemoteApp group is added to a workspace after it is created: **Azure Virtual Desktop**, **Workspaces**, the workspace, **Application groups**, **+ Add**, then the plus icon next to the group and **Select**. Only groups that are not already assigned to a workspace are listed.
-- The troubleshooting article for set-up issues says that after you move a subscription between Microsoft Entra tenants, the portal can lose track of old assignments and you need to reassign users to the application groups.
+- The group inherits the host pool's deployment scope, so it can be registered only to a workspace with the same scope. Learn's [Deploy Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop) page says you cannot change the scope of an existing host pool, workspace or application group, and that mixing scopes through PowerShell or the REST API fails. See [regional host pools](/entity/avd-regional-host-pools/) for the scope choice.
+- On the Workspace tab of the creation wizard you can register a group only if it is a desktop group. A RemoteApp group is added to a workspace after it is created.
+- The built-in Desktop Virtualization User role is the one that lets a user use an application from an application group as a non-administrator, according to Learn's [RBAC article](https://learn.microsoft.com/en-us/azure/virtual-desktop/rbac). Learn recommends assigning user groups to application groups.
+- To add applications to a RemoteApp group, at least one session host in the host pool must be powered on, according to Learn's [publishing article](https://learn.microsoft.com/en-us/azure/virtual-desktop/publish-applications-stream-remoteapp). After you move a subscription between Microsoft Entra tenants, the troubleshooting article says you need to reassign users to the application groups.
 
 ## Choosing a design
 
