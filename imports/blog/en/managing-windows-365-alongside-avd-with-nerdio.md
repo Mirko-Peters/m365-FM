@@ -53,7 +53,7 @@ A forced region change shuts down Cloud PCs and can take hours. **Force apply co
 
 Microsoft's What's new page says that in the week of 4 May 2026 Windows 365 Frontline was renamed [Windows 365 Flex](/entity/windows-365-frontline/), with product, licensing and capabilities unchanged. Nerdio's release notes list the rename under 8.1.0 (21 July 2026) and, under 8.2.0, a menu with pages for Enterprise, Flex Dedicated, Flex Shared and Cloud Apps.
 
-Per Learn, one Dedicated license provisions up to three Cloud PCs, each for one user. One Shared license provisions one Cloud PC that a group shares, one user at a time; user data is deleted after each session unless User Experience Sync is enabled. Learn lists Resize as not yet supported for Flex.
+Per Learn, one Dedicated license provisions up to three Cloud PCs, each for one user. One Shared license provisions one Cloud PC that a group shares, one user at a time; user data is deleted after each session unless User Experience Sync is enabled. Learn's Flex overview still lists Resize as not yet supported, but What's new (March 2026) says resize for Flex dedicated Cloud PCs is generally available, so check the current page.
 
 ## Where Nerdio and Intune overlap
 
@@ -66,7 +66,7 @@ Per Learn, one Dedicated license provisions up to three Cloud PCs, each for one 
 
 Nerdio's pages disagree on the alert location: the top note and release notes say the Alerts page, while the Manage Cloud PCs list names a Cloud PC Alerts tab. Since 8.2.0, editing a Cloud PC alert rule's conditions in Nerdio changes the Intune alert rule itself.
 
-For a tenant that runs only Cloud PCs, Intune already provides policies, remote actions and alerts. Nerdio changes the picture when one team also runs AVD pools and wants one console, one RBAC model, or the migration wizards. The cost depends on your Nerdio subscription level.
+For a tenant that runs only Cloud PCs, Intune already provides policies, remote actions and alerts. Nerdio changes the picture when one team also runs AVD pools and wants one console, one RBAC model, or the migration wizards.
 
 ## Flex Shared: User Experience Sync and Cloud Apps
 

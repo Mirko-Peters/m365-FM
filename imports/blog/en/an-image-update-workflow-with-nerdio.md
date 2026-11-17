@@ -66,7 +66,7 @@ The second method patches session hosts directly: **Hosts > Run script** runs th
 
 ## Option B: patch with an endpoint management tool
 
-Nerdio's lifecycle page also describes a tool such as Microsoft Configuration Manager (which Nerdio's page still calls Endpoint Configuration Manager) or Ivanti Endpoint Manager. In Set as image, select **Leave desktop image VM running** so the tool can modify the image. Run a recurring job on Patch Tuesday in the endpoint tool, schedule **Set as image** to start shortly after that job finishes, and schedule the host pool's **Re-image Hosts** function shortly after Set as image completes. The help center notes that this is one example.
+Nerdio's lifecycle page also describes a tool such as Configuration Manager (Nerdio's page still says Endpoint Configuration Manager) or Ivanti Endpoint Manager. In Set as image, select **Leave desktop image VM running** so the tool can modify the image. Run a recurring job on Patch Tuesday in the endpoint tool, schedule **Set as image** to start shortly after that job finishes, and schedule the host pool's **Re-image Hosts** function shortly after Set as image completes. The help center notes that this is one example.
 
 ## Refreshing from the Azure Marketplace
 
