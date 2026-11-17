@@ -1,6 +1,6 @@
 ---
 title: "Managing Intune for MSP clients with Nerdio"
-summary: "Nerdio Manager for MSP keeps Intune policies at the MSP level, publishes them to customer accounts and compares each customer against the source. This article walks through that workflow, its documented limits."
+summary: "Nerdio Manager for MSP keeps Intune policies at the MSP level, publishes them to customer accounts and compares each customer against the source. This article walks through that workflow and its documented limits."
 status: review
 publish: false
 author: mirko-p
@@ -56,7 +56,7 @@ Nerdio checks the source tenant for unimported changes every four hours; Import 
 
 ## Publishing a policy to customers
 
-Accounts without Intune enabled appear grayed out. Enable it per account under Settings > Integrations in the Modern Work area; it needs an Intune license in the customer tenant.
+A grayed-out account may not have Intune enabled; hover over its name for details. Enable it per account under Settings > Integrations in the Modern Work area; it needs an Intune license in the customer tenant.
 
 1. Open Policies and choose the policy type.
 2. Select Assign, then Add assignments.
@@ -128,6 +128,7 @@ All retrieved on 17 November 2026.
 - [Nerdio Help: Intune: Policy baselines](https://nmmhelp.getnerdio.com/hc/en-us/articles/26125608692493)
 - [Nerdio Help: Manage customer account-level features and permissions](https://nmmhelp.getnerdio.com/hc/en-us/articles/39828325981709)
 - [Nerdio Help: Account-level variables](https://nmmhelp.getnerdio.com/hc/en-us/articles/25498291119629)
+- [Nerdio Help: Enable Intune](https://nmmhelp.getnerdio.com/hc/en-us/articles/26125586026637)
 - [Nerdio Help: Azure Permissions and Nerdio Manager](https://nmmhelp.getnerdio.com/hc/en-us/articles/26125608873229)
 - [Nerdio Help: Enable and configure Intune Cross-Tenant Management](https://nmehelp.getnerdio.com/hc/en-us/articles/43762208848397)
 - [Nerdio blog: Intune for MSPs](https://getnerdio.com/blog/intune-for-msps/)
