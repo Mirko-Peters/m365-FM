@@ -3,6 +3,7 @@ Daten: data/podpage/*.json(.gz); Audio/Transkript aus data/en_episodes.json (fet
 import site_notes as SNT
 import site_shownotes as SNS   # T26: Vollfassungen shownotes/site/<episode_id>.md
 import site_extract as SX   # T27: Folgen <-> Entitaeten aus der QA-geprueften Extraktion
+import site_topic_crumbs as TC   # zweite BreadcrumbList nach dem Hauptthema (M365.FM > Oberbegriffe > Thema > Folge)
 import site_media as MED
 import site_img_dims as IMG
 from site_design import pager as PG   # Vor/Zurueck am Seitenende (rel=prev/next)
@@ -698,6 +699,12 @@ def build(g):
         if e.get("season") and str(e["season"]) != "None": ld["partOfSeason"] = {"@type": "PodcastSeason", "seasonNumber": e["season"]}
         _bc = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"}, {"@type": "ListItem", "position": 2, "name": "Episodes", "item": f"{root}episodes/"}, {"@type": "ListItem", "position": 3, "name": e["name"], "item": ep_url(e)}]}
         nld = list(nld) + [_bc]
+        _sxo = [s for s, _ in (SX.BY_EPISODE.get(str(_it.get("sid"))) or {}).get("entities", [])] if IDX["by_sid"].get(str(_it.get("sid"))) is _it else []   # Extraktion nach score
+        # zweite Spur nach dem Hauptthema (nur JSON-LD). Kandidaten: QA-gepruefte Extraktion (nach score), im Titel genannte Entitaeten, dann die about-Entitaeten
+        # nach Nennungen in Kernpunkten/FAQ; ep_about allein reicht nicht: jede Entitaetsseite fuehrt nur ihre 12 besten Folgen (copilot, teams ... fehlen dort fast immer), Dateireihenfolge
+        _tfirst = _sxo + TC.named_in(e["name"], ENTS_ALL)
+        _tbc = TC.breadcrumb(BASE, "en", TC.rank(_tfirst + (ep_about.get(e["slug"]) or []), ENTS_ALL, _it.get("_k", ""), first=_tfirst), ENTS_ALL, e["name"], ep_url(e))
+        if _tbc: nld.append(_tbc)
         if r and r.get("audio"): ld["associatedMedia"] = {"@type": "AudioObject", "contentUrl": r["audio"]}
         if plat_links: ld["sameAs"] = [u for _, u in plat_links]
         if len(tr) > 200: ld["transcript"] = tr[:5000]

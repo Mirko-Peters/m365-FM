@@ -5,6 +5,7 @@ from site_learn import ENTS, esc, _fetch_json, LCSS
 from site_design import pager as PG, neighbours as NB   # Vor/Zurueck am Seitenende (rel=prev/next)
 import site_player as PL   # YouTube-Player erst nach Klick
 import site_meta_podcast as MP   # suchintent-freundliche <title>/meta description
+import site_topic_crumbs as TC   # zweite BreadcrumbList nach dem Hauptthema (M365.FM > Oberbegriffe > Thema > Video)
 
 
 def fetch_videos(api):
@@ -56,6 +57,8 @@ def build(g, vids, people, api):
                    "uploadDate": iso(v["published"]), "thumbnailUrl": f"https://i.ytimg.com/vi/{v['video_id']}/hqdefault.jpg", "embedUrl": f"https://www.youtube.com/embed/{v['video_id']}",
                    "contentUrl": f"https://youtu.be/{v['video_id']}", "author": {"@type": "Person", "@id": au + "#person", "name": v["name"], "url": au}, **({"actor": [{"@type": "Person", "@id": f"{BASE}/community/u/{g['handle']}/#person", "name": g["name"], "url": f"{BASE}/community/u/{g['handle']}/"} for g in gs]} if gs else {}),
                    "publisher": {"@id": f"{BASE}/#org"}, "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics]}]
+            _tbc = TC.breadcrumb(BASE, lang, topics, ENTS, v["title"], u)   # zweite Spur nach dem Hauptthema (nur JSON-LD)
+            if _tbc: ld.append(_tbc)
             write(f"{pfx2(lang)}community/video/{v['slug']}/index.html", page(lang, *MP.community_item_meta(lang, "video", v["title"], v["name"], v.get("description")), u, b, None, ld, og_type="video.other", extra_head=LCSS, noindex=v["title"].startswith("[Test]"), side=(g["side"](lang, v["title"] + " " + (v.get("description") or "")[:1500], ids=topics) if g.get("side") else "")))
             if not v["title"].startswith("[Test]"): sitemap.append((u, iso(v["published"]), None))
         it = sorted(mine, key=lambda x: -x["published"]); ru = f"{croot}video/"

@@ -6,6 +6,7 @@ from site_learn import ENTS, esc, _fetch_json, LCSS, WT, wiki_render, wiki_image
 import site_notes as SNT
 import site_members as MEM
 import site_topics as TOP
+import site_topic_crumbs as TC   # zweite BreadcrumbList nach dem Hauptthema (M365.FM > Oberbegriffe > Thema > Beitrag)
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung bezahlter Beitraege (data/sponsorships.json)
 import site_img_dims as IMG
 import site_listen as LST   # Anhoeren-Karten (Stoerer) in den Beitraegen
@@ -135,6 +136,7 @@ def build(g, posts, people, api):
     for p in posts:
         if p.get("tr_of"): _ntr[p["lang"]] = _ntr.get(p["lang"], 0) + 1
     for _l, _n in sorted(_ntr.items()): print(f"Blog: {_n} Sprachfassungen {_l}, indexierbar: {sum(1 for p in posts if p.get('tr_of') and p['lang'] == _l and p.get('tr_index'))}")
+    _en_title = {(p["handle"], p["slug"]): p["title"] for p in posts if p.get("lang") == "en" and not is_translation(p)}   # Themen-Brotkrumen: Sprachfassungen waehlen das Hauptthema nach dem Titel des Originals (gleiches Thema in allen Sprachen)
     for lang in COMM_LANGS:
         mine = [p for p in posts if p["lang"] == lang]
         if not mine:
@@ -202,6 +204,8 @@ def build(g, posts, people, api):
                    "publisher": {"@id": f"{BASE}/#org"}}] + _fld + [{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [   # T4: Verlag und Brotkrumen
                        {"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"}, {"@type": "ListItem", "position": 2, "name": a["name"], "item": au},
                        {"@type": "ListItem", "position": 3, "name": "Blog", "item": au + "blog/"}, {"@type": "ListItem", "position": 4, "name": p["title"], "item": u}]}]
+            _tbc = TC.breadcrumb(BASE, lang, topics, ENTS, p["title"], u, title=_en_title.get((p["handle"], p["slug"])) if is_translation(p) else None)   # zweite Spur nach dem Hauptthema (nur JSON-LD); Wochenzusammenfassungen (Thema m365fm) bleiben ohne
+            if _tbc: ld.append(_tbc)
             if _spr:
                 ld[0]["sponsor"] = SPM.ld(_spr)   # T37 Sponsor: BlogPosting.sponsor
             b = SPM.mark(b, _spr + [r for r in _running if r not in _spr], "post")   # Links zur Website eines laufenden Sponsors tragen rel="sponsored", auch ohne Eintrag unter "posts" (Cognillo-Reihe); ohne Sponsoring unveraendert

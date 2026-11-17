@@ -30,6 +30,7 @@ import site_live as LIVE
 import site_notes as SNT
 import site_shownotes as SNS   # T26
 import site_extract as SX   # T27: Folgen und Videos <-> Entitaeten aus der QA-geprueften Extraktion
+import site_topic_crumbs as TC   # zweite BreadcrumbList nach dem Hauptthema (M365.FM > Oberbegriffe > Thema > Folge)
 SNALL = SNS.load_all()   # Vollfassungen der Shownotes je Spreaker-Folge (shownotes/site/<episode_id>.md)
 import site_text
 import site_ads as ADS
@@ -1230,7 +1231,8 @@ def build():
             for _l2, _sl in TRL_SLUGS.items():   # T42: Sprachen ohne Dub sind im Cluster mit ihrer lokalisierten Fassung (gegenseitig zur englischen Seite)
                 if _l2 not in alts and ORIG[vid] in _sl: alts[_l2] = f"{BASE}/{_l2}/show/episodes/{ORIG[vid]}/"
         canonical = url_of(it)
-        _xab = [{"@id": f"{BASE}/entity/{_s}/#entity"} for _s, _ in (SX.BY_EPISODE.get(str(it["eid"])) or {}).get("entities", []) if _s in LRN.ENTS][:8]   # T27: Entitaeten aus der QA-geprueften Extraktion
+        _xids = [_s for _s, _ in (SX.BY_EPISODE.get(str(it["eid"])) or {}).get("entities", []) if _s in LRN.ENTS][:8]   # T27: Entitaeten aus der QA-geprueften Extraktion (nach score)
+        _xab = [{"@id": f"{BASE}/entity/{_s}/#entity"} for _s in _xids]
         spk = f'https://www.spreaker.com/episode/{it["eid"]}'
         yt = f"https://youtu.be/{vid}"
         tr = e.get("tr") or ""
@@ -1267,6 +1269,8 @@ def build():
              "publisher": {"@id": f"{BASE}/#org"}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}},
             person_ld(), org_ld(),
         ]
+        _tbc = TC.breadcrumb(BASE, l, _xids + TC.named_in(e["title"], LRN.ENTS), LRN.ENTS, e["title"], canonical)   # zweite Spur nach dem Hauptthema (nur JSON-LD): Extraktion, sonst im Titel genannte Entitaeten (wie _ep_find der Entitaetsseiten)
+        if _tbc: ld.insert(2, _tbc)
         ld[0]["video"] = {"@id": canonical + "#video"}
         for _n in (ld if _spr else []):   # T37 Sponsor: PodcastEpisode und VideoObject derselben Folge
             if _n.get("@type") in ("PodcastEpisode", "VideoObject"): _n["sponsor"] = SPM.ld(_spr)
