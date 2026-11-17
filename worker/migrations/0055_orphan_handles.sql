@@ -4,11 +4,20 @@
 -- ein anderes Mitglied die Adresse spaeter, erbte es Namen, Link, Bearbeitungsrecht (events.js: x.h === meine Adresse), offene Einladungen und
 -- Abonnenten. Neuer Code raeumt nur Faelle NACH dem Deploy auf; diese Migration einmal fuer den Bestand. Bewusst als Migration und nicht als
 -- Cron-Schritt: setup.mjs spielt sie VOR dem Deploy ein (kein Zeitfenster, in dem jemand die Adresse uebernimmt, bevor der Nachtrag lief), D1
--- fuehrt sie genau einmal aus. Erneut ausgefuehrt aendert sie nichts (alle Bedingungen pruefen "Adresse ohne Profil", danach gibt es keine
+-- fuehrt sie genau einmal aus. Erneut ausgefuehrt aendert sie nichts (alle Bedingungen pruefen "Adresse ohne Profil und ohne Firma", danach gibt es keine
 -- solchen Eintraege mehr; die Sicherung behaelt je Zeile das erste Original).
 --
 -- Runde 10: Die Migration entfernt nichts unumkehrbar und anonymisiert niemanden. "Former member" entsteht nur bei echten Kontoloeschungen
 -- nach dem Deploy (profiles.js deleteUserData), nie durch diese Migration.
+--
+-- Runde 12 (Entscheidung Dev-Chef): Die Migration zieht NICHTS mehr automatisch auf ein Konto um - weder ueber den Merker person_entity
+-- (eine Adresse kann frueher nacheinander mehrere Inhaber gehabt haben; der Merker kennt nur einen davon und kann den falschen nennen) noch
+-- ueber Namen (eine Namensvetterin ist nicht die fruehere Inhaberin) noch ueber Ansprueche (ein Anspruch auf eine gleichnamige Firmen- oder
+-- Fremd-Entitaet ist nicht die Adresse). Fuer jede Adresse, die heute keinem Profil und keiner Firma gehoert, wird nur die Adressbindung
+-- geloest bzw. das Abo entfernt, jeweils mit Sicherung. Wer seine Talks wieder verknuepfen will, nutzt den vorhandenen Beanspruchen-Weg
+-- ("Bist du das?" / "Das bin ich", /api/speaker/suggest und /api/speaker/claim, events.js speakerMatches: Eintraege ohne Adresse mit
+-- aehnlichem Namen werden mit dem eigenen Profil verknuepft und als Speaker-Anfrage bestaetigt). Abonnenten und Speaker-Identitaet stellt ein Admin bei Bedarf einzeln aus der Sicherung wieder her
+-- (siehe ZURUECKSPIELEN; dabei die alte Adresse von Hand auf die heutige Adresse des richtigen Kontos setzen).
 --
 -- SICHERUNG mig0055_backup (bleibt dauerhaft, nicht oeffentlich: keine API liest sie, nur die D1-Sicherung exportiert sie). Vor jeder Aenderung
 -- steht dort die Originalzeile: tabelle, schluessel, wert (Originalzeile als JSON), zeit (Unix-Sekunden des Laufs). Schluessel und Wert je Tabelle:
@@ -41,26 +50,19 @@
 --     json_extract(wert, '$.expires'), json_extract(wert, '$.sent') FROM mig0055_backup WHERE tabelle = 'topic_queue';
 --   INSERT OR IGNORE INTO mail_topic_follows(user_id, eid, created, active) SELECT json_extract(wert, '$.user_id'), json_extract(wert, '$.eid'),
 --     json_extract(wert, '$.created'), json_extract(wert, '$.active') FROM mig0055_backup WHERE tabelle = 'mail_topic_follows';
--- Umgezogene Abos (auf die heutige Adresse des Kontos) bleiben dabei stehen; zurueck kommen die alten Zeilen daneben.
+-- Zurueck kommen die alten Zeilen mit der alten Adresse. Gehoert die Adresse inzwischen jemand anderem, vor dem Einspielen den Wert der
+-- Adresse (handle bzw. topic_id, in event_sessions das Feld h) auf die heutige Adresse des richtigen Kontos aendern.
 --
--- "Ohne Profil": kein profiles-Eintrag (oeffentlich oder privat) mit genau dieser Adresse. Zuerst wird je Adresse h das Konto gesucht, das sie
--- frueher trug (Hilfstabelle mig0055_handle, am Ende wieder entfernt). Runde 11 (Entscheidung Dev-Chef): EINZIGE Quelle ist der Merker
--- person_entity aus 0054 (eid = Adresse, eindeutig je Adresse). user_id > 0 mit vorhandenem Konto: dieses Konto. Sonst (kein Merker, user_id 0,
--- Konto weg): kein Konto. Es gibt keinen Rueckgriff ueber bestaetigte Ansprueche auf die eid (ein Anspruch auf eine gleichnamige Firmen- oder
--- Fremd-Entitaet ist nicht die Adresse) und keinen ueber Namen (eine Namensvetterin ist nicht die fruehere Inhaberin). Nichts wird ueber Namen
--- oder fremde Ansprueche zugeordnet.
--- Danach je Speaker-Eintrag mit so einer Adresse h:
---  a) Konto gefunden und es hat heute eine Adresse nh: wie releaseHandleOps mit neuer Adresse - h -> nh, e = h -> nh; Name, Status, Token bleiben.
---     Blog-Abos, Speaker-Identitaet (speaker_ref.handle), Creator-Abos (push_topics/email_topics kind 'creator') und unversandte Creator-Meldungen
---     (topic_queue) ziehen ebenfalls auf nh um.
---  b) Konto gefunden, aber ohne Adresse: wie releaseHandleOps ohne neue Adresse - h, t und e = h fallen weg, der Eintrag bleibt mit uid an das Konto
---     gebunden (Name und Status bleiben; nur dieses Konto kann ihn wieder beanspruchen, events.js speakerMatches/claim).
---  c) kein Konto gefunden (kein Merker, Merker user_id 0, Konto weg): nur die Adressbindung loesen - h, t und e = h fallen weg, Name n,
---     Status s und alle uebrigen Felder bleiben. Offene Einladungen (s = 'invited') bleiben ebenfalls stehen und verlieren nur h und t, damit
---     niemand sie ueber die Adresse annehmen kann.
--- Blog-Abos, Speaker-Identitaet und Creator-Abos auf eine Adresse ohne Profil, die nicht umziehen konnten (b, c), fallen weg bzw. verlieren die
--- Bindung - jeweils mit Sicherung. Creator-Abos auf Firmen-Adressen (orgs.handle) bleiben unberuehrt.
--- Reihenfolge der Liste bleibt (json_each nach key, Aggregat ueber die geordnete Unterabfrage); kein Eintrag wird entfernt.
+-- "Ohne Profil und ohne Firma": kein profiles-Eintrag (oeffentlich oder privat) und kein orgs-Eintrag mit genau dieser Adresse. Die Adressen
+-- stehen waehrend des Laufs in der Hilfstabelle mig0055_handle (am Anfang geleert, am Ende entfernt). Fuer jede solche Adresse h:
+--  - Speaker-Eintraege mit h: nur die Adressbindung loesen - h, t und e = h fallen weg; Name n, Status s und alle uebrigen Felder bleiben.
+--    Offene Einladungen (s = 'invited') bleiben ebenfalls stehen und verlieren nur h und t, damit niemand sie ueber die Adresse annehmen kann.
+--    Kein Eintrag wird entfernt, keiner wird an ein Konto gebunden (kein uid), niemand wird "Former member".
+--  - Blog-Abos (blog_follows.handle = h): weg.
+--  - Speaker-Identitaet (speaker_ref.handle = h): Adresse geleert (der Import verknuepfte sie sonst mit dem naechsten Inhaber, eventmerge.js linkHandle).
+--  - Creator-Abos (push_topics/email_topics kind 'creator', topic_id = h) und unversandte Creator-Meldungen (topic_queue, sent = 0): weg.
+--    Versandte Meldungen bleiben.
+-- Reihenfolge der Speaker-Liste bleibt (json_each nach key, Aggregat ueber die geordnete Unterabfrage).
 CREATE TABLE IF NOT EXISTS mig0055_backup (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   tabelle TEXT NOT NULL,
@@ -69,7 +71,7 @@ CREATE TABLE IF NOT EXISTS mig0055_backup (
   zeit INTEGER NOT NULL,
   UNIQUE (tabelle, schluessel)
 );
-CREATE TABLE IF NOT EXISTS mig0055_handle (h TEXT PRIMARY KEY, src TEXT NOT NULL DEFAULT '', uid INTEGER, nh TEXT NOT NULL DEFAULT '');
+CREATE TABLE IF NOT EXISTS mig0055_handle (h TEXT PRIMARY KEY);
 DELETE FROM mig0055_handle;
 INSERT OR IGNORE INTO mig0055_handle(h)
 SELECT json_extract(CASE WHEN j.type = 'object' THEN j.value END, '$.h') FROM event_sessions s,
@@ -81,14 +83,8 @@ INSERT OR IGNORE INTO mig0055_handle(h) SELECT handle FROM speaker_ref WHERE han
 INSERT OR IGNORE INTO mig0055_handle(h) SELECT topic_id FROM push_topics WHERE kind = 'creator' AND topic_id <> '';
 INSERT OR IGNORE INTO mig0055_handle(h) SELECT topic_id FROM email_topics WHERE kind = 'creator' AND topic_id <> '';
 INSERT OR IGNORE INTO mig0055_handle(h) SELECT topic_id FROM topic_queue WHERE kind = 'creator' AND sent = 0 AND topic_id <> '';
-DELETE FROM mig0055_handle WHERE EXISTS (SELECT 1 FROM profiles p WHERE p.handle = mig0055_handle.h);
--- Merker person_entity mit vorhandenem Konto (einzige Quelle, siehe oben)
-UPDATE mig0055_handle SET src = 'pe',
-  uid = (SELECT u.id FROM person_entity pe JOIN users u ON u.id = pe.user_id WHERE pe.eid = mig0055_handle.h AND pe.user_id > 0)
-WHERE EXISTS (SELECT 1 FROM person_entity pe WHERE pe.eid = mig0055_handle.h);
--- heutige Adresse des gefundenen Kontos
-UPDATE mig0055_handle SET nh = COALESCE((SELECT p.handle FROM profiles p WHERE p.user_id = mig0055_handle.uid AND COALESCE(p.handle, '') <> ''), '')
-WHERE uid IS NOT NULL;
+DELETE FROM mig0055_handle WHERE EXISTS (SELECT 1 FROM profiles p WHERE p.handle = mig0055_handle.h)
+  OR EXISTS (SELECT 1 FROM orgs g WHERE g.handle = mig0055_handle.h);
 -- Sicherung der betroffenen Speaker-Listen (ganze Liste je Session)
 INSERT OR IGNORE INTO mig0055_backup(tabelle, schluessel, wert, zeit)
 SELECT 'event_sessions', CAST(id AS TEXT), speakers, CAST(strftime('%s', 'now') AS INTEGER) FROM event_sessions
@@ -101,12 +97,8 @@ UPDATE event_sessions SET speakers = (
   SELECT json_group_array(json(v)) FROM (
     SELECT CASE
       WHEN o.h IS NULL THEN CASE WHEN j.type IN ('object', 'array') THEN j.value ELSE json_quote(j.value) END
-      WHEN o.uid IS NOT NULL AND o.nh <> '' THEN
-        CASE WHEN json_extract(j.value, '$.e') = o.h THEN json_set(j.value, '$.h', o.nh, '$.e', o.nh) ELSE json_set(j.value, '$.h', o.nh) END
-      WHEN o.uid IS NOT NULL THEN json_set(
-        CASE WHEN json_extract(j.value, '$.e') = o.h THEN json_remove(j.value, '$.h', '$.t', '$.e') ELSE json_remove(j.value, '$.h', '$.t') END,
-        '$.uid', o.uid)
-      ELSE CASE WHEN json_extract(j.value, '$.e') = o.h THEN json_remove(j.value, '$.h', '$.t', '$.e') ELSE json_remove(j.value, '$.h', '$.t') END
+      WHEN json_extract(j.value, '$.e') = o.h THEN json_remove(j.value, '$.h', '$.t', '$.e')
+      ELSE json_remove(j.value, '$.h', '$.t')
     END v, j.key k
     FROM json_each(event_sessions.speakers) j
     LEFT JOIN mig0055_handle o ON j.type = 'object' AND json_type(CASE WHEN j.type = 'object' THEN j.value END, '$.h') = 'text'
@@ -119,45 +111,30 @@ WHERE json_valid(speakers) AND json_type(speakers) = 'array' AND EXISTS (
   WHERE j.type = 'object' AND json_type(CASE WHEN j.type = 'object' THEN j.value END, '$.h') = 'text'
     AND json_extract(CASE WHEN j.type = 'object' THEN j.value END, '$.h') IN (SELECT h FROM mig0055_handle)
 );
--- Blog-Abos: auf die heutige Adresse des Kontos umziehen (a), Rest auf eine Adresse ohne Profil weg (wie releaseHandleOps und deleteUserData), vorher Sicherung
+-- Blog-Abos auf eine Adresse ohne Profil und Firma: weg (wie releaseHandleOps und deleteUserData), vorher Sicherung
 INSERT OR IGNORE INTO mig0055_backup(tabelle, schluessel, wert, zeit)
 SELECT 'blog_follows', json_array(user_id, handle), json_object('user_id', user_id, 'handle', handle, 'created', created), CAST(strftime('%s', 'now') AS INTEGER) FROM blog_follows
-WHERE NOT EXISTS (SELECT 1 FROM profiles p WHERE p.handle = blog_follows.handle);
-UPDATE OR IGNORE blog_follows SET handle = (SELECT o.nh FROM mig0055_handle o WHERE o.h = blog_follows.handle)
-WHERE handle IN (SELECT h FROM mig0055_handle WHERE nh <> '');
-DELETE FROM blog_follows WHERE NOT EXISTS (SELECT 1 FROM profiles p WHERE p.handle = blog_follows.handle);
--- Speaker-Identitaet: umziehen (a), sonst Bindung loesen (der Import verknuepfte sie sonst mit dem naechsten Inhaber, eventmerge.js linkHandle)
+WHERE handle IN (SELECT h FROM mig0055_handle);
+DELETE FROM blog_follows WHERE handle IN (SELECT h FROM mig0055_handle);
+-- Speaker-Identitaet: Bindung loesen, vorher Sicherung
 INSERT OR IGNORE INTO mig0055_backup(tabelle, schluessel, wert, zeit)
 SELECT 'speaker_ref', CAST(id AS TEXT), json_object('id', id, 'handle', handle), CAST(strftime('%s', 'now') AS INTEGER) FROM speaker_ref
-WHERE handle <> '' AND NOT EXISTS (SELECT 1 FROM profiles p WHERE p.handle = speaker_ref.handle);
-UPDATE speaker_ref SET handle = COALESCE((SELECT o.nh FROM mig0055_handle o WHERE o.h = speaker_ref.handle), '')
-WHERE handle <> '' AND NOT EXISTS (SELECT 1 FROM profiles p WHERE p.handle = speaker_ref.handle);
--- Creator-Abos anderer Mitglieder und unversandte Creator-Meldungen: umziehen (a), sonst weg - nicht fuer Firmen-Adressen
+WHERE handle IN (SELECT h FROM mig0055_handle);
+UPDATE speaker_ref SET handle = '' WHERE handle IN (SELECT h FROM mig0055_handle);
+-- Creator-Abos anderer Mitglieder und unversandte Creator-Meldungen: weg, vorher Sicherung
 INSERT OR IGNORE INTO mig0055_backup(tabelle, schluessel, wert, zeit)
 SELECT 'push_topics', json_array(endpoint, kind, topic_id), json_object('endpoint', endpoint, 'kind', kind, 'topic_id', topic_id, 'lang', lang, 'timezone', timezone, 'user_id', user_id, 'created', created), CAST(strftime('%s', 'now') AS INTEGER) FROM push_topics
-WHERE kind = 'creator' AND NOT EXISTS (SELECT 1 FROM profiles p WHERE p.handle = push_topics.topic_id)
-  AND NOT EXISTS (SELECT 1 FROM orgs g WHERE g.handle = push_topics.topic_id);
+WHERE kind = 'creator' AND topic_id IN (SELECT h FROM mig0055_handle);
 INSERT OR IGNORE INTO mig0055_backup(tabelle, schluessel, wert, zeit)
 SELECT 'email_topics', json_array(user_id, kind, topic_id), json_object('user_id', user_id, 'kind', kind, 'topic_id', topic_id, 'lang', lang, 'timezone', timezone, 'created', created), CAST(strftime('%s', 'now') AS INTEGER) FROM email_topics
-WHERE kind = 'creator' AND NOT EXISTS (SELECT 1 FROM profiles p WHERE p.handle = email_topics.topic_id)
-  AND NOT EXISTS (SELECT 1 FROM orgs g WHERE g.handle = email_topics.topic_id);
+WHERE kind = 'creator' AND topic_id IN (SELECT h FROM mig0055_handle);
 INSERT OR IGNORE INTO mig0055_backup(tabelle, schluessel, wert, zeit)
 SELECT 'topic_queue', CAST(id AS TEXT), json_object('id', id, 'channel', channel, 'recipient', recipient, 'lang', lang, 'timezone', timezone, 'kind', kind, 'topic_id', topic_id, 'item_key', item_key,
   'title', title, 'body', body, 'url', url, 'created', created, 'expires', expires, 'sent', sent), CAST(strftime('%s', 'now') AS INTEGER) FROM topic_queue
-WHERE kind = 'creator' AND sent = 0 AND NOT EXISTS (SELECT 1 FROM profiles p WHERE p.handle = topic_queue.topic_id)
-  AND NOT EXISTS (SELECT 1 FROM orgs g WHERE g.handle = topic_queue.topic_id);
-UPDATE OR IGNORE push_topics SET topic_id = (SELECT o.nh FROM mig0055_handle o WHERE o.h = push_topics.topic_id)
-WHERE kind = 'creator' AND topic_id IN (SELECT h FROM mig0055_handle WHERE nh <> '') AND NOT EXISTS (SELECT 1 FROM orgs g WHERE g.handle = push_topics.topic_id);
-UPDATE OR IGNORE email_topics SET topic_id = (SELECT o.nh FROM mig0055_handle o WHERE o.h = email_topics.topic_id)
-WHERE kind = 'creator' AND topic_id IN (SELECT h FROM mig0055_handle WHERE nh <> '') AND NOT EXISTS (SELECT 1 FROM orgs g WHERE g.handle = email_topics.topic_id);
-UPDATE OR IGNORE topic_queue SET topic_id = (SELECT o.nh FROM mig0055_handle o WHERE o.h = topic_queue.topic_id)
-WHERE kind = 'creator' AND sent = 0 AND topic_id IN (SELECT h FROM mig0055_handle WHERE nh <> '') AND NOT EXISTS (SELECT 1 FROM orgs g WHERE g.handle = topic_queue.topic_id);
-DELETE FROM push_topics WHERE kind = 'creator' AND NOT EXISTS (SELECT 1 FROM profiles p WHERE p.handle = push_topics.topic_id)
-  AND NOT EXISTS (SELECT 1 FROM orgs g WHERE g.handle = push_topics.topic_id);
-DELETE FROM email_topics WHERE kind = 'creator' AND NOT EXISTS (SELECT 1 FROM profiles p WHERE p.handle = email_topics.topic_id)
-  AND NOT EXISTS (SELECT 1 FROM orgs g WHERE g.handle = email_topics.topic_id);
-DELETE FROM topic_queue WHERE kind = 'creator' AND sent = 0 AND NOT EXISTS (SELECT 1 FROM profiles p WHERE p.handle = topic_queue.topic_id)
-  AND NOT EXISTS (SELECT 1 FROM orgs g WHERE g.handle = topic_queue.topic_id);
+WHERE kind = 'creator' AND sent = 0 AND topic_id IN (SELECT h FROM mig0055_handle);
+DELETE FROM push_topics WHERE kind = 'creator' AND topic_id IN (SELECT h FROM mig0055_handle);
+DELETE FROM email_topics WHERE kind = 'creator' AND topic_id IN (SELECT h FROM mig0055_handle);
+DELETE FROM topic_queue WHERE kind = 'creator' AND sent = 0 AND topic_id IN (SELECT h FROM mig0055_handle);
 DROP TABLE mig0055_handle;
 -- Themen-Abos anderer Mitglieder auf Personen-Entitaeten von Konten, die vor dem Deploy geloescht wurden (Merker user_id 0 aus 0054): weg, wie
 -- deleteUserData seit Runde 8 (mit Sicherung). Sonst erbte der naechste Inhaber der Adresse (ownedEntity, gleiche eid) die Abonnenten der geloeschten Person.
