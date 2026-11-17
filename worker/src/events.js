@@ -175,7 +175,8 @@ async function evViews(db, evs, withPending) {
   for (let i = 0; i < evs.length; i += 50) {
     const part = evs.slice(i, i + 50), ids = JSON.stringify(part.map((e) => e.id)), oid = [...new Set(part.map((e) => e.org_id).filter(Boolean))], uid = [...new Set(part.map((e) => e.owner_id).filter(Boolean))];
     const orgs = new Map((oid.length ? await all(`SELECT id,handle,name,public FROM orgs WHERE id ${IN}`, JSON.stringify(oid)) : []).map((o) => [o.id, o]));
-    const owners = new Map((uid.length ? await all(`SELECT u.id,u.name,p.handle FROM users u LEFT JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE u.id ${IN}`, JSON.stringify(uid)) : []).map((u) => [u.id, u]));
+    // K43: ein gesperrtes Konto erscheint nicht als Veranstalter (weder Name noch Profil-Adresse)
+    const owners = new Map((uid.length ? await all(`SELECT u.id,u.name,p.handle FROM users u LEFT JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE u.id ${IN} AND u.banned=0`, JSON.stringify(uid)) : []).map((u) => [u.id, u]));
     const sess = group(await all(`SELECT * FROM event_sessions WHERE event_id ${IN} AND merged_into=0 ${withPending ? "" : "AND status='live' "}ORDER BY start,id`, ids), "event_id");
     const partners = group(await all(`SELECT p.event_id,p.kind,p.level,o.handle,o.name,o.public FROM event_partners p JOIN orgs o ON o.id=p.org_id WHERE p.event_id ${IN} AND p.status='confirmed' ORDER BY p.created`, ids), "event_id");
     const asked = withPending ? group(await all(`SELECT a.event_id,o.handle FROM sponsor_asks a JOIN orgs o ON o.id=a.org_id WHERE a.event_id ${IN}`, ids), "event_id") : null;
@@ -635,7 +636,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     const ok = await claimEntity(db, eid, user.id, "manual"); return ok ? J({ ok: true }) : J({ error: "claimed" }, 409);
   }
   if (path === "/api/entity/claims" && method === "GET") {
-    const rows = (await db.prepare("SELECT c.eid,p.handle FROM entity_claims c JOIN profiles p ON p.user_id=c.user_id AND p.public=1 WHERE c.status='verified'").all()).results || [];
+    const rows = (await db.prepare("SELECT c.eid,p.handle FROM entity_claims c JOIN profiles p ON p.user_id=c.user_id AND p.public=1 JOIN users u ON u.id=c.user_id AND u.banned=0 WHERE c.status='verified'").all()).results || [];
     return J({ claims: rows }, 200, { "cache-control": "public, max-age=300" });
   }
   if (path === "/api/entity/claim/mine" && method === "GET") {

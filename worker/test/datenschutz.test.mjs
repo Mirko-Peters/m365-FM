@@ -133,8 +133,15 @@ test("Bann: Mitgliedersuche, Team, Teilnehmer, Bewertungen und Personen-Entitaet
   raw.prepare("INSERT INTO event_roles(event_id,user_id,role,created) VALUES (5,1,'helfer',?)").run(t);
   raw.prepare("INSERT INTO event_attendees(event_id,user_id,status,visible,created) VALUES (5,1,'going',1,?)").run(t);
   assert.equal((await callTool(env, null, "search_members", { query: "Carol" })).members.length, 1);
+  raw.prepare("INSERT INTO events(id,handle,title,owner_id,public,start,created,updated) VALUES (6,'ev-carol','Carols Event',1,1,?,?,?)").run(t + 86400, t, t);
+  raw.prepare("INSERT INTO entity_claims(eid,user_id,status,created) VALUES ('carol-co',1,'verified',?)").run(t);
+  const carolOrganizer = async () => (await call(env, "GET", "/api/events/export")).j.events.find((e) => e.handle === "ev-carol").organizer;
+  assert.deepEqual(await carolOrganizer(), { kind: "u", handle: "carol", name: "Carol Example" });
+  assert.ok(JSON.stringify((await call(env, "GET", "/api/entity/claims")).j).includes("carol"));
   await refreshProfilesExport(env);
   assert.equal((await call(env, "POST", "/api/admin/ban/1", admin)).s, 200);
+  assert.deepEqual(await carolOrganizer(), { kind: "u", handle: "", name: "" }, "K43: Veranstalter ohne Name und Adresse des gesperrten Kontos");
+  assert.deepEqual((await call(env, "GET", "/api/entity/claims")).j.claims, [], "K43: keine Beanspruchung eines gesperrten Kontos");
   assert.equal(cacheRows(raw), 0, "K45");
   assert.deepEqual((await callTool(env, null, "search_members", { query: "Carol" })).members, []);
   assert.ok(!JSON.stringify(await callTool(env, null, "get_event_team", { handle: "ev-five" })).includes("carol"));
