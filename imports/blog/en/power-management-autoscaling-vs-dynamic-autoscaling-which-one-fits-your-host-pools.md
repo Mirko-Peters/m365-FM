@@ -55,7 +55,7 @@ Otherwise, the way the host pool was created settles most cases. With standard m
 - The approach is set at creation. If you create a host pool without a session host configuration, you cannot add one afterwards.
 - A session host configuration can be used with pooled host pools only.
 
-The autoscale prerequisites repeat the consequence: a standard host pool needs the power management method. Hosts built with pipelines or scripts mean standard management. Learn's June 2026 What's new also introduces the term "Automated host pools" for pools where one session host configuration is enforced across all session hosts; this article keeps saying "host pool with a session host configuration". One more point if you plan a new pool for this: Learn's What's new (September 2025) gave an estimated schedule for requiring a managed identity on host pools with a session host configuration, while the September 2026 entry and the managed identity page now say the requirement comes "in a future service update". Check the current state before you plan a new pool. See [AVD host pool](/entity/avd-host-pool/) and [AVD session host configuration](/entity/avd-session-host-configuration/).
+The autoscale prerequisites repeat the consequence: a standard host pool needs the power management method. Hosts built with pipelines or scripts mean standard management. Learn's June 2026 What's new also introduces the term "Automated host pools" for pools where one session host configuration is enforced across all session hosts. One more point if you plan a new pool for this: Learn's What's new (September 2025) gave an estimated schedule for requiring a managed identity on host pools with a session host configuration, while the September 2026 entry and the managed identity page now say the requirement comes "in a future service update". Check the current state before you plan a new pool. See [AVD host pool](/entity/avd-host-pool/) and [AVD session host configuration](/entity/avd-session-host-configuration/).
 
 ## Decision 2: Pooled or personal?
 
@@ -65,14 +65,14 @@ Personal plans work differently from pooled ones:
 
 - **Start VM on Connect** is a switch in every phase. Only ramp-up also has a choice of which VMs to start: assigned only, assigned and unassigned, or none.
 - **Disconnect settings** ("When disconnected for (min)") and **sign-out settings** ("When logged off for (min)") take 0 to 360 minutes. The action can be deallocate, hibernate or do nothing.
-- The FAQ says you cannot make autoscale force users to sign out of a personal desktop, and that autoscale for personal desktops "only deallocates session hosts if the user has signed out of their user session". The plan settings above also offer an action for disconnected sessions. Learn does not reconcile the two statements, so test what your personal pool does after a disconnect.
+- The FAQ says you cannot make autoscale force users to sign out of a personal desktop, and that autoscale for personal desktops "only deallocates session hosts if the user has signed out of their user session". The plan settings above also offer an action for disconnected sessions. The FAQ and the schedule settings do not reconcile these two statements, so test what your personal pool does after a disconnect.
 - Learn warns that FSLogix and App Attach do not currently support hibernate.
 
 See [personal host pool](/entity/avd-personal-host-pool/) and [hibernation](/entity/avd-hibernation/).
 
 ## Decision 3: Do you need hosts created and deleted?
 
-Only pooled host pools with a session host configuration reach this question. Dynamic autoscaling changes the number of VMs in the pool, not just the number running. Learn's glossary says that when autoscale shuts down a VM it deallocates and stops it, so you are not charged for the compute resources. What a deallocated host's remaining resources cost, compared with deleting it, depends on your pricing. New hosts are built from the session host configuration: the FAQ says autoscale uses "the latest valid/stable image version defined in the default session host configuration, if you don't already have an active session host configuration". That wording is unclear, so confirm in a test pool which image a new host receives.
+Only pooled host pools with a session host configuration reach this question. Dynamic autoscaling changes the number of VMs in the pool, not just the number running. Learn's glossary says that when autoscale shuts down a VM it deallocates and stops it, so you are not charged for the compute resources. New hosts are built from the session host configuration: the FAQ says autoscale uses "the latest valid/stable image version defined in the default session host configuration, if you don't already have an active session host configuration". That wording is unclear, so confirm in a test pool which image a new host receives.
 
 If you need neither creation nor deletion, power management autoscaling is the narrower choice. When autoscale starts, creates or deletes is the subject of the article "Dynamic autoscaling for Azure Virtual Desktop: creating and deleting session hosts on demand".
 
@@ -89,7 +89,7 @@ Both methods use a schedule with ramp-up, peak, ramp-down and off-peak phases. S
 
 ## Example with numbers
 
-Learn's consolidation scenario (scenario 3) applies to both methods and is worked through in the phase article. In short: with four user sessions, a maximum session limit of 5 and a capacity threshold of 75%, the glossary formula Required Hosts = Total User Sessions / (Max Session Limit x Capacity Threshold), rounded up, gives 4 / (5 x 0.75) = 1.07, so 2 hosts. In Learn's scenario, with four of six hosts available, autoscale turns off two hosts after signing users out.
+Learn's consolidation scenario (scenario 3) applies to both methods; the full sequence is worked through in "Forcing users to sign out during AVD ramp-down: what happens and what users see". In short: with four user sessions, a maximum session limit of 5 and a capacity threshold of 75%, the glossary formula Required Hosts = Total User Sessions / (Max Session Limit x Capacity Threshold), rounded up, gives 4 / (5 x 0.75) = 1.07, so 2 hosts. In Learn's scenario, with four of six hosts available, autoscale turns off two hosts after signing users out.
 
 ## Shared settings in brief
 
@@ -129,5 +129,6 @@ All pages retrieved on 17 November 2026.
 - [Microsoft Learn: Azure Virtual Desktop autoscale glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary)
 - [Microsoft Learn: Azure Virtual Desktop autoscale FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq)
 - [Microsoft Learn: Host pool management approaches](https://learn.microsoft.com/en-us/azure/virtual-desktop/host-pool-management-approaches)
+- [Microsoft Learn: Configure managed identity in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-managed-identity)
 - [Microsoft Learn: Troubleshoot Autoscale Issues in Azure Virtual Desktop](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-autoscale)
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)

@@ -71,7 +71,7 @@ You have two ways to handle users still signed in:
 
 The consolidation arithmetic in Learn's third scenario, the sequence users see and the trade-offs between the two choices are covered in "Forcing users to sign out during AVD ramp-down: what happens and what users see" and "Force sign out vs wait for sign-out: choosing the ramp-down behaviour".
 
-Learn's FAQ adds a timing trap: if the ramp-down phase is 15 minutes long and the wait time before sign-out is 20 minutes, the schedule moves to off-peak first. Autoscale does not force sign-outs during off-peak, so the sessions stay, and autoscale waits until all users have signed out before it deallocates the VM. Keep the wait time shorter than the phase.
+Learn's FAQ adds a timing trap: with a 15-minute ramp-down phase and a 20-minute wait time, the schedule reaches off-peak first, autoscale does not force sign-outs there, and the VM is deallocated only after all users have signed out. Keep the wait time shorter than the phase.
 
 The wait time and the notification text are settings of the schedule. In Azure PowerShell they are `RampDownWaitTimeMinute` and `RampDownNotificationMessage`; in the ARM template reference they are `rampDownWaitTimeMinutes` and `rampDownNotificationMessage`, next to `rampDownForceLogoffUsers` and `rampDownStopHostsWhen`. Both Learn examples use 30 minutes, but the message differs: the create-and-assign page's PowerShell example uses "Please log out of your session.", and the example in the [New-AzWvdScalingPlanPooledSchedule](https://learn.microsoft.com/en-us/powershell/module/az.desktopvirtualization/new-azwvdscalingplanpooledschedule) cmdlet reference uses "Log out now, please." The cmdlet and ARM references describe the wait time as the number of minutes to wait to stop hosts during the ramp-down period and list no default, minimum or maximum for either value.
 
@@ -79,7 +79,7 @@ The wait time and the notification text are settings of the schedule. In Azure P
 
 The off-peak tab has a start time, which ends ramp-down, and a load-balancing choice. Learn recommends depth-first here, so hosts empty out gradually. The capacity threshold again cannot be edited and comes from ramp-down.
 
-For power management plans, the off-peak tab has no field for the minimum percentage of hosts. The create-and-assign page lists that field only in ramp-up and ramp-down, and the cmdlet and ARM references define only `RampUpMinimumHostsPct` and `RampDownMinimumHostsPct`. For these plans Learn states a carry-over only for the capacity threshold, none for the minimum percentage. Its examples do apply a minimum in off-peak: with six hosts and 10 percent, one host stays on even when the last users sign out. Confirm on a test host pool which value applies. According to the FAQ, autoscale can turn all VMs off only if the minimum percentage is 0 percent and no sessions, including disconnected ones, remain. The FAQ suggests the Group Policy setting "Set time limit for disconnected sessions", for example 15 to 30 minutes, finishing before ramp-down ends.
+For power management plans, the off-peak tab has no field for the minimum percentage of hosts. The create-and-assign page lists that field only in ramp-up and ramp-down, and the cmdlet and ARM references define only `RampUpMinimumHostsPct` and `RampDownMinimumHostsPct`. For these plans Learn states a carry-over only for the capacity threshold, none for the minimum percentage. Its examples do apply a minimum in off-peak: with six hosts and 10 percent, one host stays on even when the last users sign out. Confirm on a test host pool which value applies. Turning all VMs off, including the 0 percent minimum and the Group Policy setting for disconnected sessions that the FAQ suggests, is covered in "Minimum percentage of hosts in AVD autoscale explained".
 
 If you tag hosts with the plan's [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/), autoscale does not turn them on or off in any phase. In Learn's fourth scenario, five of six hosts carry the tag, so a fourth session pushes usage to 80 percent without starting any host. If the last untagged host is also tagged and turned off, a new user sees "No resources available". "Exclusion tags in AVD autoscale: keeping individual VMs out of scaling" walks through it.
 
@@ -89,14 +89,7 @@ On days that a schedule does not select, the last off-peak parameters of the sel
 
 ## Personal host pools
 
-A personal plan has no capacity threshold or minimum percentage. Each phase has a start time and a pair of rules based on the state of the user session. Learn lists these settings:
-
-1. **Start VM on Connect** can be turned on per phase. Learn highly recommends it if you do not start hosts during ramp-up.
-2. **Ramp-up only: VMs to start.** Choose assigned VMs only, assigned and unassigned VMs, or no VMs at the start time.
-3. **Disconnect settings.** "When disconnected for (min)" accepts a number from 0 to 360. Choose the action: deallocate the VM, hibernate the personal desktop, or do nothing.
-4. **Sign-out settings.** "When logged off for (min)" also accepts 0 to 360, with the same three actions.
-
-According to the FAQ, autoscale cannot force users to sign out of personal desktops. Deallocate or hibernate follows the disconnect and sign-out rules above. The FAQ's short answer says autoscale deallocates only after sign-out, which reads narrower than those rules, so check disconnect-based actions on one personal host pool. If you choose hibernate but the desktop does not have hibernate enabled, autoscale does nothing to that host. Learn notes that FSLogix and App Attach do not currently support hibernate. See [personal](/entity/avd-personal-host-pool/) and [pooled](/entity/avd-pooled-host-pool/) host pools. A scaling plan can be assigned only to host pools of the type set in the plan.
+A personal plan has no capacity threshold or minimum percentage. Each phase has a start time, a Start VM on Connect switch and two rules based on the session state: "When disconnected for (min)" and "When logged off for (min)". Both take 0 to 360 minutes and an action (deallocate, hibernate or do nothing). Only ramp-up also chooses which VMs to start. Autoscale cannot force users to sign out of personal desktops, and a hibernate action on a desktop without hibernate enabled does nothing, according to the FAQ. The full list of settings and the FSLogix and App Attach limits for hibernate are in "Azure Virtual Desktop scaling plans explained: schedules, phases and host pools" and "Personal host pools in Azure Virtual Desktop: when one desktop per user makes sense". See [personal](/entity/avd-personal-host-pool/) and [pooled](/entity/avd-pooled-host-pool/) host pools. A scaling plan can be assigned only to host pools of the type set in the plan.
 
 ## Dynamic autoscaling
 
@@ -110,6 +103,11 @@ A weekday schedule for ten pooled hosts with a session limit of 10 might look li
 2. Peak at 09:00: breadth-first, threshold 60 percent (carried over).
 3. Ramp-down at 17:00: depth-first, 10 percent minimum (one host), 75 percent threshold, force sign-out on with a wait time shorter than the two-hour phase.
 4. Off-peak at 19:00: depth-first, threshold 75 percent (carried over).
+
+Our own arithmetic for this example, not taken from Learn, using the rule that autoscale starts a host only when used capacity is above the threshold:
+
+- Ramp-up: 20 percent of ten hosts is two hosts, so capacity is 20 sessions. At a 60 percent threshold, 12 sessions (60 percent) cause no action. The 13th session makes 65 percent, so a third host starts and capacity rises to 30.
+- Ramp-down: 10 percent of ten hosts is one host, so capacity is 10 sessions. At a 75 percent threshold, 7 sessions (70 percent) fit on one host. An 8th session makes 80 percent, so a second host is needed.
 
 
 ## Sources

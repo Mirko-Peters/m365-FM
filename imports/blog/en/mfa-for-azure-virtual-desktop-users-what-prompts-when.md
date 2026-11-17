@@ -21,7 +21,7 @@ faq:
     a: "With single sign-on, users see a dialog to allow the Remote Desktop connection when they connect to a new session host. Entra remembers up to 15 hosts for 30 days. Administrators can hide it with a trusted device group on the Windows Cloud Login service principal."
 ---
 
-Microsoft Entra multifactor authentication prompts in Azure Virtual Desktop follow one rule: users are prompted only when a new access token is requested from Microsoft Entra ID for a resource. In practice that means at subscribe or when the user manually refreshes the resource list, at connection through the gateway, and, with single sign-on, at session host sign-in. Background feed refresh and diagnostics upload do not prompt; after the sign-in frequency period they fail silently until the next interactive sign-in. This article maps each moment to the Entra app that evaluates it and to the setting that decides how often the prompt returns. How to design the policies themselves, including the licensing they need, is covered in "Conditional Access for Azure Virtual Desktop: policies that work", and this article does not repeat it.
+Microsoft Entra multifactor authentication prompts in Azure Virtual Desktop follow one rule: users are prompted only when a new access token is requested from Microsoft Entra ID for a resource. In practice that means at subscribe or when the user manually refreshes the resource list, at connection through the gateway, and, with single sign-on, at session host sign-in. With periodic sign-in frequency, background feed refresh and diagnostics upload fail silently once the period is over, until the next interactive sign-in; with Every time on the wrong app they cause constant prompts instead. This article maps each moment to the Entra app that evaluates it and to the setting that decides how often the prompt returns. How to design the policies themselves, including the licensing they need, is covered in "Conditional Access for Azure Virtual Desktop: policies that work", and this article does not repeat it.
 
 ## Where authentication happens
 
@@ -36,7 +36,7 @@ The table combines the authentication overview, the MFA article and the single s
 | Moment | What is evaluated | Prompt behavior |
 |---|---|---|
 | User subscribes or manually refreshes the resource list | Azure Virtual Desktop app | Reauthentication when the sign-in frequency period has elapsed |
-| Background feed refresh and diagnostics upload | Azure Virtual Desktop app | After the period ends they fail silently until the user completes the next interactive Entra sign-in |
+| Background feed refresh and diagnostics upload | Azure Virtual Desktop app | With periodic frequency, they fail silently after the period ends until the user completes the next interactive Entra sign-in; Every time on this app causes constant prompts |
 | Connection through the gateway | Azure Virtual Desktop app | Prompt when a new token is needed |
 | Sign-in to the session host with single sign-on | Windows Cloud Login app | Prompt when a new token is needed |
 | Sign-in to the session host without single sign-on | Session host credentials | Credential prompt on every connection unless saved in the client |
@@ -70,7 +70,7 @@ With single sign-on, users see a dialog to allow the Remote Desktop connection w
 
 ## Entra joined session hosts
 
-Two points affect prompts on [Entra joined](/entity/avd-entra-join/) hosts. Legacy per-user MFA combined with Conditional Access causes the error "The sign-in method you're trying to use isn't allowed" or repeated prompts; Learn says to set per-user MFA to **Disabled** under **Identity**, **Users**, **All users**, **Per-user MFA** and to enforce MFA through Conditional Access. The second point, excluding the **Azure Windows VM Sign-In** app, is a policy decision and is covered in the Conditional Access article; the step-by-step fix for failing sign-ins is in "Azure Virtual Desktop Sign-In Fails on Entra-Joined Session Hosts: A Checklist". Learn also notes that on devices not registered with Entra, a "Stay signed in to all your apps" prompt can appear, and that users who choose to sign in to the app only may be prompted more often.
+One point affects prompts on [Entra joined](/entity/avd-entra-join/) hosts. Legacy per-user MFA combined with Conditional Access causes the error "The sign-in method you're trying to use isn't allowed" or repeated prompts; Learn says to set per-user MFA to **Disabled** under **Identity**, **Users**, **All users**, **Per-user MFA** and to enforce MFA through Conditional Access. Separately, Learn says that if you do not want to restrict sign-in to strong methods such as Windows Hello for Business, you exclude the **Azure Windows VM Sign-In** app from the policy; that is a policy decision covered in the Conditional Access article, and the step-by-step fix for failing sign-ins is in "Azure Virtual Desktop Sign-In Fails on Entra-Joined Session Hosts: A Checklist". Learn also notes that on devices not registered with Entra, a "Stay signed in to all your apps" prompt can appear, and that users who choose to sign in to the app only may be prompted more often.
 
 ## Checking why a prompt appeared
 
