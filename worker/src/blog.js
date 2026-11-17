@@ -7,7 +7,7 @@ import { decide, noteAuthorSave, dropBlogHistory } from "./editor.js";
 import { gate, inScope } from "./perm.js";
 import { baseIds } from "./entities.js";
 import { sanitize } from "./wiki.js";
-import { HIDDEN_MOD } from "./feedpolicy.js";
+import { HIDDEN_MOD, HIDDEN_OWN } from "./feedpolicy.js";
 import { cleanKeypoints, cleanFaq, jsonList, ensureSectionCols } from "./sections.js";
 
 const TRUST_POINTS = 25, MAX_POSTS_DAY = 5;
@@ -27,7 +27,13 @@ const postUrl = (env, lang, handle, slug) => `${env.SITE}${lang === "en" ? "" : 
 // Creator-Feed: veroeffentlichte Beitraege erscheinen im Feed des Profils (Kanal-Art "blog", ohne eigenen RSS-Abruf)
 export async function syncFeed(env, db, uid, post, handle, live) {
   const url = postUrl(env, post.lang, handle, post.slug);
-  if (!live) { await db.prepare("DELETE FROM feed_items WHERE url=? AND owner_type='u' AND owner_id=?").bind(url, uid).run(); return; }
+  // Nicht (mehr) live: Zeile loeschen - ausser die Moderation hat sie ausgeblendet. Dann bleibt sie als Sperre stehen (eigenes Bit 2 dazu), damit ein
+  // neuer Beitrag mit demselben slug (gleiche Adresse) nach Loeschen und Neuanlegen nicht am Moderations-Bit vorbei wieder im Feed erscheint.
+  if (!live) {
+    await db.batch([db.prepare("UPDATE feed_items SET hidden=hidden|? WHERE url=? AND owner_type='u' AND owner_id=? AND (hidden&?)<>0").bind(HIDDEN_OWN, url, uid, HIDDEN_MOD),
+      db.prepare("DELETE FROM feed_items WHERE url=? AND owner_type='u' AND owner_id=? AND (hidden&?)=0").bind(url, uid, HIDDEN_MOD)]);
+    return;
+  }
   const curl = `${env.SITE}/community/u/${handle}/blog/`;
   await db.prepare("INSERT OR IGNORE INTO channels(owner_type,owner_id,kind,url,feed) VALUES('u',?,'blog',?,'')").bind(uid, curl).run();
   const ch = await db.prepare("SELECT id FROM channels WHERE owner_type='u' AND owner_id=? AND url=?").bind(uid, curl).first(); if (!ch) return;

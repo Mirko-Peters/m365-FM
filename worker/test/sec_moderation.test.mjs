@@ -102,6 +102,30 @@ test("K30: Sprach- oder Profilnamenwechsel beim Speichern legt keinen sichtbaren
   assert.ok((await feed()).some((x) => x.id === curRow.id));
 });
 
+test("K30: Loeschen und Neuanlegen mit gleichem Titel bringt den ausgeblendeten Feed-Eintrag nicht zurueck", async () => {
+  const { raw, env } = await mk();
+  const body = "Ein Text fuer den Beitrag. ".repeat(15);
+  const save = (o) => call(env, 4, "POST", "/api/blog/save", { title: "Gleicher Titel", summary: "Kurz", body, lang: "de", topics: [], submit: true, ...o });
+  const first = await save({});
+  assert.equal(first.s, 200, JSON.stringify(first.j));
+  const f = raw.prepare("SELECT id,url,hidden FROM feed_items WHERE owner_id=4").get();
+  assert.equal(f.hidden, 0);
+  assert.equal((await call(env, 1, "POST", "/api/admin/feed-hide", { id: f.id, hidden: true })).s, 200);
+  assert.equal((await call(env, 4, "POST", "/api/blog/delete", { id: first.j.id })).s, 200);
+  const again = await save({});
+  assert.equal(again.s, 200, JSON.stringify(again.j));
+  assert.equal(again.j.slug, first.j.slug, "gleicher slug, gleiche Adresse");
+  const rows = raw.prepare("SELECT id,hidden FROM feed_items WHERE owner_id=4 AND url=?").all(f.url);
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].hidden & 1, 1, "Moderations-Bit bleibt");
+  const feed = await call(env, 0, "GET", "/api/feed");
+  assert.ok(!(feed.j?.items || []).some((x) => x.url === f.url), "nicht im Feed");
+  // ohne Moderation verschwindet die Zeile beim Loeschen weiterhin ganz
+  const other = await save({ title: "Anderer Titel" });
+  assert.equal((await call(env, 4, "POST", "/api/blog/delete", { id: other.j.id })).s, 200);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM feed_items WHERE owner_id=4 AND url LIKE ?").get(`%/blog/${other.j.slug}/`).n, 0);
+});
+
 // ---------- K31: ausgeblendete Bewertung kommt durch Loeschen und Neuanlegen nicht zurueck ----------
 test("K31: ausgeblendete Bewertung - eigenes Loeschen leert nur den Text, Neuanlegen bleibt gesperrt", async () => {
   const { raw, env } = await mk();
