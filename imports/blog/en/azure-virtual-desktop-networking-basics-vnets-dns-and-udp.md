@@ -58,7 +58,7 @@ Learn lists four explicit methods:
 
 Windows activation and updates do not work in a private subnet without an explicit egress method.
 
-The method matters for UDP. Learn's [RDP Shortpath article](https://learn.microsoft.com/en-us/azure/virtual-desktop/rdp-shortpath) says that Symmetric NAT, which maps one private source IP:port to a unique public destination IP:port, can use a relayed connection with TURN, and that this is the case if you use Azure Firewall and Azure NAT Gateway. Our reading: behind a NAT gateway, expect relayed UDP through the TURN relay (UDP 3478 to `51.5.0.0/16`) rather than direct STUN.
+The method matters for UDP. Learn's [RDP Shortpath article](https://learn.microsoft.com/en-us/azure/virtual-desktop/rdp-shortpath) says that Symmetric NAT, which maps one private source IP:port to a unique public destination IP:port, can use a relayed connection with TURN, and that this is the case if you use Azure Firewall and Azure NAT Gateway. Its client-network table also lists a NAT gateway's public IPs for direct STUN, so allow UDP 1024 to 65535 and UDP 3478 to `51.5.0.0/16` and test which path is used.
 
 ## DNS
 
@@ -106,7 +106,7 @@ Learn's [bandwidth article](https://learn.microsoft.com/en-us/azure/virtual-desk
 1. Create the virtual network and subnet in the same region as the session hosts.
 2. If you use AD DS or Microsoft Entra Domain Services, confirm the network reaches the domain controllers and DNS servers.
 3. Decide on DNS: Azure-provided or custom, and if custom, forwarding to 168.63.129.16.
-4. Give the subnet an explicit outbound method, such as a NAT gateway, if the virtual network is new and its subnet is private. This also applies when a route with next hop Internet bypasses the firewall. Our reading: behind a NAT gateway, plan for the TURN relay rather than direct STUN.
+4. Give the subnet an explicit outbound method, such as a NAT gateway, if the virtual network is new and its subnet is private. This also applies when a route with next hop Internet bypasses the firewall. Behind a NAT gateway, allow both UDP paths.
 5. Allow the outbound ports of the required endpoints list (mostly TCP 443, plus TCP 80, TCP 1688 for activation and UDP 3478), then run the Agent URL Tool.
 6. Do not intercept 168.63.129.16 or 169.254.169.254.
 7. Keep inbound 3389 closed and give session hosts no public IP addresses. Only the managed-network Shortpath listener needs an inbound UDP port.
