@@ -4,6 +4,7 @@ import { releaseHandleOps, invalidateProfileExport, forgetSearchPerson } from ".
 import { cleanText, randomToken, sha256hex, rateLimit } from "./util.js";
 import { levelName } from "./levels.js";
 import { baseIds, entityMap, handleEntity } from "./entities.js";
+import { blockSearchPeople } from "./search.js";
 import { autoVerifyCert, cleanI18n, saveI18n, readI18n, RESERVED_HANDLES } from "./profiles.js";
 import { canManage, EVENT_ROLES, promoteWaitlist, partnerAction, handleEvents } from "./events.js";
 import { handleEventImport, adminEventGate } from "./eventimport.js";
@@ -534,7 +535,7 @@ export async function callTool(env, user, name, a) {
     }
     await db.prepare(`UPDATE profiles SET ${sets.map(([k]) => k + "=?").join(",")},updated=? WHERE user_id=?`).bind(...sets.map(([, v]) => v), now(), user.id).run();
     // Wie POST /api/profile/me: alte Adresse frei -> Speaker-Eintraege und Blog-Abos wandern mit (K42); war das Profil oeffentlich -> Export und Suche sofort (K45)
-    if (cur?.handle && cur.handle !== handle) { const ops = await releaseHandleOps(db, cur.handle, handle, user.id); if (ops.length) await db.batch(ops); }
+    if (cur?.handle && cur.handle !== handle) { const ops = await releaseHandleOps(db, cur.handle, handle, user.id); if (ops.length) await db.batch(ops); await blockSearchPeople(env, [cur.handle]); }   // K41/A: Suchsperre der alten Adresse
     if (cur?.public) { await invalidateProfileExport(db); if (cur.handle !== handle || (a.public !== undefined && !a.public)) await forgetSearchPerson(db, cur.handle); }
     return { ok: true, note: "Public pages appear after the next hourly site build." };
   }

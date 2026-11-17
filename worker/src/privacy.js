@@ -22,6 +22,10 @@ export const HIDDEN_PERSON_SQL = "SELECT pe.eid FROM person_entity pe" +
 export async function hiddenPersonEids(db) {
   try { return new Set(((await db.prepare(HIDDEN_PERSON_SQL).all()).results || []).map((r) => r.eid)); } catch { return new Set(); }
 }
+// Eine id: Schreibwege (POST /api/entity, Freigaben in editor.js und votes.js) lehnen verborgene Personen-Entitaeten ab (K41/B)
+export async function isHiddenPerson(db, eid) {
+  try { return !!(await db.prepare(HIDDEN_PERSON_SQL + " AND pe.eid=?").bind(eid).first()); } catch { return false; }
+}
 
 // Suchindex: Profilseiten (alle Sprachen, auch Blog unter /community/u/<h>/) und die Personen-Entitaet der Adresse sofort als entfernt markieren.
 // syncSearchVectors (search.js) loescht danach die Vektoren (Vectorize); importSearchIndex holt sie nicht zurueck (publicHandleGuard).

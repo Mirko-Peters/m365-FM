@@ -1,6 +1,7 @@
 // Community-Abstimmung ueber offene Aenderungen (Wiki, Entitaeten): vertrauenswuerdige Mitglieder stimmen ab
 import { stats, evalBadges } from "./badges.js";
 import { certScoped } from "./entities.js";
+import { isHiddenPerson } from "./privacy.js";
 const NEED = 3, TRUST = 25;
 const now = () => Math.floor(Date.now() / 1000);
 const endorsedExpert = async (db, uid) => !!(await db.prepare("SELECT 1 x FROM endorsements WHERE owner_id=? AND by_id<>? GROUP BY eid HAVING COUNT(DISTINCT by_id)>=2 LIMIT 1").bind(uid, uid).first());   // Experte, den mind. 2 andere bestaetigt haben
@@ -35,6 +36,7 @@ export async function handleVotes(env, request, url, path, user, J) {
     if (!(await trusted(db, user)) && !(kind === "entity" && r && (await certScoped(env, user, r.eid)))) return J({ error: "not_trusted" }, 403);
     if (!r || r.status !== "pending") return J({ error: "not_pending" }, 404);
     if (r.user_id === user.id) return J({ error: "own_edit" }, 403);
+    if (kind === "entity" && (await isHiddenPerson(db, r.eid))) return J({ error: "not_found" }, 404);   // K41/B: keine Freigabe per Abstimmung fuer eine verborgene Personen-Entitaet
     await db.prepare("INSERT INTO edit_votes(kind,rev_id,user_id,v,created) VALUES(?,?,?,?,?) ON CONFLICT(kind,rev_id,user_id) DO UPDATE SET v=excluded.v").bind(kind, id, user.id, v, now()).run();
     const t = await db.prepare("SELECT COALESCE(SUM(v),0) net, COUNT(*) n FROM edit_votes WHERE kind=? AND rev_id=?").bind(kind, id).first();
     const owner = kind === "entity" && !!(await db.prepare("SELECT 1 x FROM entity_claims WHERE eid=? AND user_id=? AND status='verified'").bind(r.eid, user.id).first());

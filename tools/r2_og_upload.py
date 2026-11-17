@@ -4,7 +4,8 @@ erst live, wenn ihr Bild im Bucket ist - mit OG_REQUIRED=1 bricht jeder Fehler d
 Abgleich direkt mit dem Bucket (Liste mit ETag = MD5 einfacher PUTs): geladen wird, was fehlt oder sich geaendert hat - unabhaengig von Caches.
 Bilder entfernter Seiten bleiben im Bucket - mit einer Ausnahme (Datenschutz, PR #320): persoenliche Karten (PERSONAL: Einladungskarte
 og/einladung/<kuerzel>.png mit Foto und Name, Karte der Profilseite og/[<sprache>/]community/u/<kuerzel>.png mit Name) werden geloescht, sobald
-der Bau sie nicht mehr erzeugt, also nach Kontoloeschung oder wenn das Profil nicht mehr oeffentlich ist. Sicherungen: nichts, wenn der Bau gar keine
+der Bau sie nicht mehr erzeugt, also nach Kontoloeschung oder wenn das Profil nicht mehr oeffentlich ist. Ebenso Karten von Entitaetsseiten
+og/[<sprache>/]entity/<id>.png, wenn es die Entitaet im Bau in keiner Sprache mehr gibt (Personen-Entitaet eines geloeschten Profils, K41/D). Sicherungen: nichts, wenn der Bau gar keine
 Karte der Art enthaelt (Profil-Export ausgefallen) oder mehr zu loeschen waere als 10 bzw. als der Bau enthaelt - beides nur bewusst mit der
 Repo-Variable OG_PRUNE_FORCE=1 (site.yml). Ausnahme: der Bau hat den Profil-Export frisch abgerufen und er ist leer (Merker profiles-export.json
 von site_members.py: kein oeffentliches Profil mehr) - dann gehen auch die letzten Karten ohne OG_PRUNE_FORCE. Kuerzel stehen nie im Log.
@@ -23,6 +24,10 @@ PREFIXES = ("og/", "services/")
 EXT = (".png", ".webp")
 # Persoenliche Karten: Schluessel im Bucket, die es nur geben darf, solange der Bau sie erzeugt (site_invite.py, Profilseite in site_members.py)
 PERSONAL = {"Einladungskarten": re.compile(r"^og/einladung/[^/]+\.png$"), "Profilkarten": re.compile(r"^og/(?:[a-z]{2}/)?community/u/[^/]+\.png$")}
+# Karten von Entitaetsseiten og/[<sprache>/]entity/<id>.png zeigen bei Personen-Entitaeten aus einem Profil den Namen (K41/D). Sie gelten als
+# persoenlich, sobald es die Entitaet im Bau in KEINER Sprache mehr gibt (Kontoloeschung, Profil privat oder gesperrt: die Personen-Entitaet ist
+# verborgen und fehlt im Export). Karten bestehender Entitaeten ohne eigenes Bild (duenne Seite, noindex, og-default) bleiben unberuehrt.
+ENTITY_CARD = re.compile(r"^og/(?:[a-z]{2}/)?entity/([a-z0-9-]+)\.png$")
 
 
 def problem(msg):
@@ -84,6 +89,38 @@ def prune(s3, bucket, files, have, empty=False):
     return n
 
 
+def entity_pages(src):
+    """ids aller Entitaetsseiten dieses Baus (alle Sprachen) aus docs/ und r2out/ neben r2img/ (oder OG_PAGE_ROOTS, getrennt mit os.pathsep).
+    None, wenn keine gefunden wird (Seiten fehlen, Aufruf ausserhalb des Baus): dann wird keine Entitaetskarte geloescht."""
+    env = [Path(p) for p in os.environ.get("OG_PAGE_ROOTS", "").split(os.pathsep) if p]
+    ids = set()
+    for root in env or [Path(src).parent / "docs", Path(src).parent / "r2out"]:
+        if not root.is_dir(): continue
+        for pat in ("entity/*/index.html", "??/entity/*/index.html"):
+            ids.update(f.parent.name for f in root.glob(pat))
+    return ids or None
+
+
+def prune_entities(s3, bucket, files, have, pages):
+    """Karten entfernter Entitaeten loeschen (ENTITY_CARD, Entitaet in keiner Sprache mehr im Bau). Sicherungen: keine Entitaetsseiten gefunden ->
+    nichts; mehr als max(10, 5 % der Entitaetsseiten) -> nichts (Seiten unvollstaendig?), bewusst uebergehen mit OG_PRUNE_FORCE=1. ids nie im Log."""
+    old = sorted(k for k in have if k not in files and (m := ENTITY_CARD.match(k)) and m.group(1) not in (pages or ()))
+    if not old: return 0
+    if not pages:
+        print(f"::warning::Teilen-Bilder: keine Entitaetsseiten im Bau gefunden - {len(old)} Entitaetskarten nicht geprueft, nichts geloescht"); return 0
+    if os.environ.get("OG_PRUNE_FORCE") != "1" and len(old) > max(10, len(pages) // 20):
+        print(f"::warning::Teilen-Bilder: {len(old)} Entitaetskarten entfernter Entitaeten waeren zu loeschen ({len(pages)} Entitaeten im Bau) - nichts geloescht (bewusst: OG_PRUNE_FORCE=1)"); return 0
+    n = bad = 0
+    for k in old:
+        try: s3.delete_object(Bucket=bucket, Key=k); n += 1
+        except Exception as e:
+            bad += 1
+            if bad == 1: print("Fehler beim Loeschen:", type(e).__name__)
+    print(f"Entitaetskarten: {n} entfernter Entitaeten geloescht" + (f", {bad} nicht" if bad else ""))
+    if bad: print(f"::warning::Teilen-Bilder: {bad} Entitaetskarten entfernter Entitaeten nicht geloescht - der naechste Lauf versucht es erneut")
+    return n
+
+
 def main(src):
     files = {f.relative_to(src).as_posix(): f for f in src.rglob("*") if f.is_file() and f.suffix.lower() in EXT
              and f.relative_to(src).as_posix().startswith(PREFIXES)} if src.exists() else {}
@@ -99,6 +136,7 @@ def main(src):
     ok, failed = upload(s3, bucket, todo, retries=2, cache_control=CC)
     print(f"hochgeladen: {len(ok)}, Fehler: {len(failed)}")
     prune(s3, bucket, files, have, export_empty(src))
+    prune_entities(s3, bucket, files, have, entity_pages(src))
     if failed: return problem(f"{len(failed)} nicht hochgeladen (z. B. {failed[0][0]}); der naechste Lauf laedt nur den Rest")
     return 0
 

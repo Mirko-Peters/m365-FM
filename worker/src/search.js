@@ -202,26 +202,41 @@ async function withoutHiddenPeople(db, docs) {
   });
 }
 
-// K41: Sperrliste nach der Admin-Freigabe eines Personen-Merkers (entities.js releasePersonEntity). Bis dahin blendete der Merker das alte
-// Personen-Dokument /entity/<id>/ (Profilfassung des geloeschten Mitglieds, alle Sprachen) aus; ohne Merker holte der Suchindex des letzten
-// Seitenbaus es zurueck. Je id ein meta-Eintrag search_block:<id> mit den Suchindex-Durchlaeufen (Hash des Manifests wie cycle unten), die zum
-// Zeitpunkt der Freigabe veroeffentlicht bzw. importiert waren, und der Freigabezeit. Aufgenommen werden die Dokumente der id erst aus einem
-// neuen Seitenbau: anderer Hash UND (falls das Manifest build traegt) build nach der Freigabe. Ohne build und ohne bekannten Hash bleibt gesperrt.
+// K41/A: Sperrliste fuer Personen-Dokumente aus dem Suchindex des letzten Seitenbaus. Gesetzt bei der Admin-Freigabe eines Personen-Merkers
+// (entities.js releasePersonEntity), bei der Kontoloeschung (profiles.js deleteUserData: Adresse und Personen-Entitaeten) und beim Wechsel oder
+// Entfernen der Profil-Adresse (alte Adresse; profiles.js, mcp.js). Bis zum naechsten Seitenbau enthaelt der Index unter /community/u/<h>/ (alle
+// Sprachen) und /entity/<h>/ noch Name und Kurzzeile der alten Person - auch wenn die Adresse inzwischen einem anderen Mitglied gehoert oder es
+// den Merker uebernommen hat (profiles.js ownedEntity); withoutHiddenPeople prueft nur den heutigen Inhaber. Je Adresse/id ein meta-Eintrag
+// search_block:<h> mit den Suchindex-Durchlaeufen (Hash des Manifests wie cycle unten), die zum Zeitpunkt der Sperre veroeffentlicht bzw.
+// importiert waren, und der Sperrzeit. Aufgenommen werden die Dokumente erst aus einem Seitenbau, der seine Exporte NACH der Sperre geholt hat:
+// anderer Hash UND manifest.fetched (site_search.py: Zeitpunkt des Export-Abrufs am Anfang des Baus, site_fetch.data_time) nach der Sperre.
+// Ohne fetched bleibt gesperrt (build, das Ende des Baus, reicht nicht: ein Bau mit Exporten von vor der Sperre kann danach veroeffentlichen).
 export const SEARCH_BLOCK = "search_block:";
 const SEARCH_BLOCK_END = "search_block;";   // naechstes Zeichen nach ':' - Bereichsabfrage ueber den Primaerschluessel
-export async function searchBlockStatement(env, eid, at) {
-  const db = env.DB, cycles = new Set();
+const BLOCK_ID = /^[a-z0-9-]{2,48}$/;
+async function searchBlockCycles(env) {
+  const cycles = new Set();
   const manifest = await getJson(env, "/search/manifest.json", 0);
   if (manifest) cycles.add(await sha256hex(JSON.stringify(manifest)));
-  const imported = (await meta(db, "search_import_cycle").catch(() => null))?.v;
+  const imported = (await meta(env.DB, "search_import_cycle").catch(() => null))?.v;
   if (imported) cycles.add(imported);
-  return db.prepare("INSERT INTO meta(k,v) VALUES(?,?) ON CONFLICT(k) DO UPDATE SET v=excluded.v").bind(SEARCH_BLOCK + eid, JSON.stringify({ cycles: [...cycles], at }));
+  return [...cycles];
+}
+export async function searchBlockStatement(env, eid, at, cycles = null) {
+  return env.DB.prepare("INSERT INTO meta(k,v) VALUES(?,?) ON CONFLICT(k) DO UPDATE SET v=excluded.v").bind(SEARCH_BLOCK + eid, JSON.stringify({ cycles: cycles || await searchBlockCycles(env), at }));
+}
+// Kontoloeschung, Adresswechsel: Sperre fuer alle Adressen/ids auf einmal (ein Manifest-Abruf, ein Batch)
+export async function blockSearchPeople(env, ids, at = now()) {
+  const list = [...new Set((ids || []).filter((h) => BLOCK_ID.test(h || "")))];
+  if (!list.length || !env?.DB) return;
+  const cycles = await searchBlockCycles(env);
+  await env.DB.batch(await Promise.all(list.map((h) => searchBlockStatement(env, h, at, cycles))));
 }
 
 export function searchBlockActive(block, manifest, cycle) {
-  const cycles = Array.isArray(block?.cycles) ? block.cycles : [], at = +block?.at || 0, build = Date.parse(manifest?.build || "") / 1000;
+  const cycles = Array.isArray(block?.cycles) ? block.cycles : [], at = +block?.at || 0, fetched = Date.parse(manifest?.fetched || "") / 1000;
   if (cycles.includes(cycle)) return true;
-  return Number.isFinite(build) ? build <= at : !cycles.length;
+  return !(Number.isFinite(fetched) && fetched > at);
 }
 
 async function withoutBlockedEntities(db, docs, manifest, cycle) {
@@ -235,7 +250,10 @@ async function withoutBlockedEntities(db, docs, manifest, cycle) {
   }
   if (old.length) await db.batch(old.map((k) => db.prepare("DELETE FROM meta WHERE k=?").bind(k)));
   if (!blocked.size) return docs;
-  return docs.filter((d) => { const e = ENTITY_PATH.exec(new URL(d.url).pathname); return !(e && blocked.has(e[1])); });
+  return docs.filter((d) => {
+    const e = ENTITY_PATH.exec(new URL(d.url).pathname); if (e && blocked.has(e[1])) return false;
+    const p = PROFILE_PATH.exec(d.url); return !(p && blocked.has(p[1]));   // Profilseiten der alten Adresse (alle Sprachen, auch Blog darunter)
+  });
 }
 
 function documentText(doc) {

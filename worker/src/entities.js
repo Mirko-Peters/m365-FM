@@ -1,5 +1,5 @@
 // Entitaetsdatenbank fuer das Microsoft-Oekosystem: Community-Revisionen ueber den statischen Basisdaten (data/entities.json)
-import { hiddenPersonEids, HIDDEN_PERSON_SQL } from "./privacy.js";
+import { hiddenPersonEids, isHiddenPerson, HIDDEN_PERSON_SQL } from "./privacy.js";
 import { legacyRev } from "./editor.js";
 import { gate, inScope, roleOf, logEdit } from "./perm.js";
 import { audit, cleanText, rateLimit } from "./util.js";
@@ -59,8 +59,11 @@ async function siteSrcEntities(env) {
 // Aufhebung, sobald dieselbe id redaktionell im Repo steht, holte die veraltete Profil-Fassung aus /entities.json und das alte Suchdokument
 // /entity/<id>/ aus dem Suchindex des letzten Seitenbaus zurueck. Aufheben nur ausdruecklich durch einen Admin (releasePersonEntity,
 // POST /api/admin/person-entity/release): nur mit gueltigem Eintrag in /entities-src.json (reine Repo-Fassung ohne D1). In EINEM db.batch:
-// Repo-Fassung als live-Revision, alle Suchdokumente der Person (/entity/<id>/ und Sprachfassungen) auf gone=1, Sperrliste fuer
-// importSearchIndex (search.js searchBlockStatement: alte Dokumente erst aus einem neuen Seitenbau), Merker weg.
+// alle Fassungen der id verwerfen (status 'rejected'), die Repo-Fassung als einzige live-Revision anlegen, alle Suchdokumente der Person
+// (/entity/<id>/ und Sprachfassungen) auf gone=1, Sperrliste fuer importSearchIndex (search.js searchBlockStatement: alte Dokumente erst aus
+// einem neuen Seitenbau), Merker weg. Verworfen wird alles, was es zur id noch gibt: deleteUserData hat bei der Loeschung alle Fassungen
+// entfernt, jede spaetere ist ungeprueft (sie entstand, waehrend die id verborgen war, etwa mit Name und Kurzzeile aus der veralteten
+// /entities.json). 'rejected' statt 'old': eine 'old'-Fassung koennte die Redaktion im Versionsverlauf wieder live setzen (editor.js revertTo).
 export async function releasePersonEntity(env, eid) {
   const db = env.DB;
   if (!ENT_ID.test(eid || "")) return { error: "bad_request", status: 400 };
@@ -71,14 +74,16 @@ export async function releasePersonEntity(env, eid) {
   if (!validEnt(entry)) return { error: "not_in_repo", status: 409 };
   const { id, ...data } = entry, t = now(), marked = "EXISTS (SELECT 1 FROM person_entity WHERE eid=? AND user_id=0)";
   const res = await db.batch([
+    db.prepare(`UPDATE entity_rev SET status='rejected' WHERE eid=? AND status IN ('live','pending','old') AND ${marked}`).bind(id, eid),
     db.prepare(`INSERT INTO entity_rev(eid,data,summary,user_id,status,created) SELECT ?,?,?,0,'live',? WHERE NOT EXISTS (SELECT 1 FROM entity_rev WHERE eid=? AND status='live') AND ${marked}`)
       .bind(id, JSON.stringify(data), "Übernahme aus entities.json (Freigabe Personen-Merker)", t, id, eid),
     db.prepare("UPDATE search_doc SET gone=1 WHERE instr(url,?)>0").bind(`/entity/${eid}/`),
     await searchBlockStatement(env, eid, t),
     db.prepare("DELETE FROM person_entity WHERE eid=? AND user_id=0").bind(eid),
   ]);
-  if (!res?.[3]?.meta?.changes) return { error: "conflict", status: 409 };   // dazwischen von einem Konto uebernommen: nichts angelegt (Bedingung oben)
-  return { ok: true, eid, live: !!res[0]?.meta?.changes, search: "blocked_until_next_build" };
+  if (!res?.[4]?.meta?.changes) return { error: "conflict", status: 409 };   // dazwischen von einem Konto uebernommen: nichts verworfen oder angelegt (Bedingung oben)
+  if (!res?.[1]?.meta?.changes) return { error: "conflict", status: 409 };   // nicht erreichbar (live-Fassungen sind oben verworfen); nie 200 ohne die Repo-Fassung
+  return { ok: true, eid, live: true, discarded: res[0]?.meta?.changes || 0, search: "blocked_until_next_build" };
 }
 
 export async function handlePersonRelease(env, request, user, J, viaToken) {
@@ -88,7 +93,7 @@ export async function handlePersonRelease(env, request, user, J, viaToken) {
   const b = await request.json().catch(() => null), eid = String(b?.eid || "").trim();
   const r = await releasePersonEntity(env, eid);
   if (r.error) return J({ error: r.error }, r.status);
-  await audit(env.DB, user.id, "person-entity-release", eid, r.live ? "Repo-Fassung live" : "live-Fassung bestand");
+  await audit(env.DB, user.id, "person-entity-release", eid, `Repo-Fassung live, ${r.discarded} ungepruefte Fassung(en) verworfen`);
   return J(r);
 }
 
@@ -285,6 +290,7 @@ export async function handleEntity(env, request, url, path, user, J) {
     if (need()) return need();
     const b = await request.json().catch(() => ({})), id = String(b.id || "");
     if (!ID.test(id)) return J({ error: "bad_id" }, 400);
+    if (await isHiddenPerson(db, id)) return J({ error: "not_found" }, 404);   // K41/B: wie GET - keine Fassung (live oder Vorschlag) fuer eine verborgene Personen-Entitaet
     if (!(await rateLimit(db, `ent:h:${user.id}`, 8, 3600)) || !(await rateLimit(db, `ent:d:${user.id}`, 30, 86400))) return J({ error: "rate_limit" }, 429);
     const v = await validate(env, id, b.data || {}); if (v.err) return J({ error: v.err }, 400);
     const dup = await findDuplicate(env, id, v.data); if (dup) return J({ error: "duplicate", id: dup }, 409);   // Branche/Job: gleicher normalisierter Name oder Alias existiert schon

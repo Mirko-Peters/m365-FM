@@ -337,11 +337,20 @@ test("Personen-Merker: Admin-Freigabe legt die Repo-Fassung an, die Suche bleibt
       assert.ok(!LEAK.test(await searchHits(env, "Alice")) && !LEAK.test(await searchHits(env, "Secret Headline Contoso")), `Lauf ${run}: Suche ohne Profiltext`);
     }
     // anderes Manifest, aber ein Bau von vor der Freigabe (z. B. zwischengespeichert): weiter gesperrt
-    searchManifest = { generated: "2026-11-16", build: new Date((t - 3600) * 1000).toISOString(), parts: 1, count: 3 };
+    const iso = (x) => new Date(x * 1000).toISOString();
+    searchManifest = { generated: "2026-11-16", build: iso(t - 3600), fetched: iso(t - 4000), parts: 1, count: 3 };
     await importSearchIndex(env);
     assert.deepEqual(aliveAlice(raw), [], "Bau vor der Freigabe: weiter gesperrt");
+    // C: Bau veroeffentlicht NACH der Freigabe, hat seine Exporte aber VORHER geholt (site_fetch am Anfang des Baus): weiter gesperrt
+    searchManifest = { generated: "2026-11-17", build: iso(t + 7200), fetched: iso(t - 600), parts: 1, count: 3 };
+    await importSearchIndex(env);
+    assert.deepEqual(aliveAlice(raw), [], "Exporte vor der Freigabe geholt: weiter gesperrt, auch wenn build danach liegt");
+    // C: Manifest ohne fetched (aelterer Seitenbau): weiter gesperrt
+    searchManifest = { generated: "2026-11-17", build: iso(t + 7300), parts: 1, count: 3 };
+    await importSearchIndex(env);
+    assert.deepEqual(aliveAlice(raw), [], "ohne fetched: weiter gesperrt");
     // neuer Seitenbau nach der Freigabe: Suchindex mit der Repo-Fassung
-    searchManifest = { generated: "2026-11-18", build: new Date((t + 86400) * 1000).toISOString(), parts: 1, count: 3 };
+    searchManifest = { generated: "2026-11-18", build: iso(t + 86400), fetched: iso(t + 86000), parts: 1, count: 3 };
     searchPart = { part: 1, docs: [
       { id: "p2", url: SITE + "/entity/alice/", lang: "en", type: "person", title: "Alice Guest", summary: "Alice Guest is a podcast guest.", keywords: "alice" },
       { id: "m1", url: SITE + "/entity/m365/", lang: "en", type: "entity", title: "Microsoft 365", summary: "Suite", keywords: "m365" },
@@ -351,6 +360,106 @@ test("Personen-Merker: Admin-Freigabe legt die Repo-Fassung an, die Suche bleibt
     assert.equal(raw.prepare("SELECT gone FROM search_doc WHERE id='p3'").get().gone, 1, "alte Sprachfassung bleibt entfernt");
     const hits = await searchHits(env, "Alice");
     assert.ok(hits.includes("Alice Guest") && !LEAK.test(hits), "Suche findet die Repo-Fassung");
+  } finally { reset(); }
+});
+
+// Runde 5 / A: Suchsperre der alten Adresse bei Kontoloeschung und Adresswechsel - auch wenn die Adresse inzwischen jemand anderem gehoert
+// oder der Merker uebernommen wurde (withoutHiddenPeople prueft nur den heutigen Inhaber)
+const PROFILE_LEAK = /Secret Headline Contoso/;
+const staleProfileDocs = () => ({ part: 1, docs: [
+  { id: "u1", url: SITE + "/community/u/alice/", lang: "en", type: "page", title: "Alice Example", summary: "Secret Headline Contoso", keywords: "alice" },
+  { id: "u2", url: SITE + "/fr/community/u/alice/", lang: "fr", type: "page", title: "Alice Example", summary: "Secret Headline Contoso", keywords: "alice" },
+  { id: "u3", url: SITE + "/community/u/alice/blog/hello/", lang: "en", type: "blog", title: "Hello", summary: "Secret Headline Contoso", keywords: "alice" },
+  { id: "p2", url: SITE + "/entity/alice/", lang: "en", type: "person", title: "Alice Example", summary: "Secret Headline Contoso", keywords: "alice" },
+  { id: "m1", url: SITE + "/entity/m365/", lang: "en", type: "entity", title: "Microsoft 365", summary: "Suite", keywords: "m365" },
+] });
+const insertStaleProfileDocs = (raw, t) => { for (const d of staleProfileDocs().docs) raw.prepare("INSERT INTO search_doc(id,url,lang,type,title,title_norm,summary,keywords,entities,date,image,h,gone,updated,grp) VALUES (?,?,?,?,?,?,?,?,'','','','h',0,?,'')").run(d.id, d.url, d.lang, d.type, d.title, " " + d.title.toLowerCase() + " ", d.summary, d.keywords, t); };
+const aliveOld = (raw) => raw.prepare("SELECT id FROM search_doc WHERE gone=0 AND (instr(url,'/community/u/alice/')>0 OR instr(url,'/entity/alice/')>0)").all().map((r) => r.id).sort();
+
+test("Kontoloeschung: Adresse und Merker von einem anderen Mitglied uebernommen - veralteter Suchindex bringt das Profil nicht zurueck (A)", async () => {
+  const { raw, env, t, user } = await setup();
+  const alice = await user(1, "Alice Example");
+  assert.equal((await saveProfile(env, alice, "alice", true, "Secret Headline Contoso")).s, 200);
+  insertStaleProfileDocs(raw, t);
+  assert.equal((await call(env, "DELETE", "/api/me", alice)).s, 200);
+  assert.ok(raw.prepare("SELECT v FROM meta WHERE k='search_block:alice'").get(), "Suchsperre fuer die Adresse gesetzt");
+  // Bob speichert dieselbe Adresse oeffentlich und uebernimmt den Merker (ownedEntity, /entities.json kennt die id nicht mehr)
+  const bob = await user(2, "Bob Example");
+  assert.equal((await saveProfile(env, bob, "alice", true, "Bob Headline")).s, 200);
+  assert.equal(raw.prepare("SELECT user_id FROM person_entity WHERE eid='alice'").get()?.user_id, 2, "Merker uebernommen");
+  searchManifest = OLD_MANIFEST; searchPart = staleProfileDocs();
+  try {
+    for (let run = 1; run <= 2; run++) {
+      await importSearchIndex(env);
+      assert.deepEqual(aliveOld(raw), [], `Lauf ${run}: keine Profil- oder Personen-Dokumente aus dem alten Seitenbau`);
+      assert.ok(!PROFILE_LEAK.test(await searchHits(env, "Secret Headline Contoso")) && !PROFILE_LEAK.test(await searchHits(env, "Alice")), `Lauf ${run}: Suche ohne Profiltext`);
+      assert.equal(raw.prepare("SELECT gone FROM search_doc WHERE id='m1'").get().gone, 0, `Lauf ${run}: andere Dokumente normal`);
+    }
+    // ein Bau mit Exporten von vor der Loeschung (veroeffentlicht danach) entsperrt nicht
+    const iso = (x) => new Date(x * 1000).toISOString();
+    searchManifest = { generated: "2026-11-17", build: iso(t + 3600), fetched: iso(t - 60), parts: 1, count: 5 };
+    await importSearchIndex(env);
+    assert.deepEqual(aliveOld(raw), [], "Exporte vor der Loeschung: weiter gesperrt");
+    // neuer Seitenbau mit Exporten von nach der Loeschung: Bobs Seiten erscheinen
+    searchManifest = { generated: "2026-11-18", build: iso(t + 86400), fetched: iso(t + 86000), parts: 1, count: 2 };
+    searchPart = { part: 1, docs: [
+      { id: "u1", url: SITE + "/community/u/alice/", lang: "en", type: "page", title: "Bob Example", summary: "Bob Headline", keywords: "bob" },
+      { id: "m1", url: SITE + "/entity/m365/", lang: "en", type: "entity", title: "Microsoft 365", summary: "Suite", keywords: "m365" },
+    ] };
+    await importSearchIndex(env);
+    assert.deepEqual(aliveOld(raw), ["u1"], "neuer Seitenbau: Bobs Profilseite in der Suche");
+    assert.equal(raw.prepare("SELECT summary FROM search_doc WHERE id='u1'").get().summary, "Bob Headline");
+  } finally { reset(); }
+});
+
+test("Adresswechsel (Formular und MCP): alte Adresse gesperrt, ein neuer Inhaber holt das alte Profil nicht aus dem Suchindex zurueck (A)", async () => {
+  for (const via of ["form", "mcp"]) {
+    const { raw, env, t, user } = await setup();
+    const alice = await user(1, "Alice Example");
+    assert.equal((await saveProfile(env, alice, "alice", true, "Secret Headline Contoso")).s, 200);
+    insertStaleProfileDocs(raw, t);
+    if (via === "form") assert.equal((await saveProfile(env, alice, "alice-new", true, "Secret Headline Contoso")).s, 200);
+    else assert.equal((await callTool(env, { id: 1, name: "Alice Example" }, "update_my_profile", { handle: "alice-new" })).ok, true);
+    assert.ok(raw.prepare("SELECT v FROM meta WHERE k='search_block:alice'").get(), `${via}: Suchsperre fuer die alte Adresse`);
+    const bob = await user(2, "Bob Example");
+    assert.equal((await saveProfile(env, bob, "alice", true, "Bob Headline")).s, 200);
+    searchManifest = OLD_MANIFEST; searchPart = staleProfileDocs();
+    try {
+      await importSearchIndex(env);
+      assert.deepEqual(aliveOld(raw), [], `${via}: alte Profilseiten der Adresse bleiben draussen`);
+      assert.ok(!PROFILE_LEAK.test(await searchHits(env, "Secret Headline Contoso")), `${via}: Suche ohne Profiltext`);
+    } finally { reset(); }
+  }
+});
+
+// Runde 5 / B: keine ungepruefte Fassung fuer eine verborgene Personen-Entitaet; die Admin-Freigabe verwirft sie
+test("Verborgene Personen-Entitaet: POST /api/entity und Freigaben abgelehnt, Admin-Freigabe verwirft ungepruefte Fassungen (B)", async () => {
+  const { raw, env, t, user } = await deletedAliceWithStaleBuild();
+  const editor = await user(4, "Editor"), admin = await user(9, "Admin");
+  raw.prepare("UPDATE users SET role='editor' WHERE id=4").run(); raw.prepare("UPDATE users SET role='admin' WHERE id=9").run();
+  const leakData = { name: "Alice Example", type: "person", desc: { en: "Secret Headline Contoso" } };
+  try {
+    const post = await call(env, "POST", "/api/entity", editor, { id: "alice", data: leakData, summary: "aus /entities.json" });
+    assert.equal(post.s, 404, "POST /api/entity fuer die verborgene id abgelehnt");
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_rev WHERE eid='alice'").get().n, 0, "keine Fassung angelegt");
+    // ein Vorschlag, der auf anderem Weg entstanden ist: Freigabe ueber die Redaktion abgelehnt
+    raw.prepare("INSERT INTO entity_rev(id,eid,data,summary,user_id,status,created) VALUES (501,'alice',?,'Vorschlag',3,'pending',?)").run(JSON.stringify(leakData), t);
+    const dec = await call(env, "POST", "/api/editor/decide", admin, { kind: "entity", id: "501", action: "approve" });
+    assert.equal(dec.s, 409); assert.equal(dec.j.error, "hidden_person");
+    assert.equal((await call(env, "POST", "/api/admin/entity/approve/501", admin)).s, 409, "alte Admin-Route ebenso");
+    assert.equal(raw.prepare("SELECT status FROM entity_rev WHERE id=501").get().status, "pending");
+    // eine live-Fassung (z. B. vor dieser Sperre geschrieben): die Admin-Freigabe veroeffentlicht sie nicht
+    raw.prepare("INSERT INTO entity_rev(id,eid,data,summary,user_id,status,created) VALUES (502,'alice',?,'Editor',4,'live',?)").run(JSON.stringify(leakData), t);
+    const r = await call(env, "POST", "/api/admin/person-entity/release", admin, { eid: "alice" });
+    assert.equal(r.s, 200); assert.equal(r.j.live, true, "Repo-Fassung angelegt");
+    assert.deepEqual(raw.prepare("SELECT status FROM entity_rev WHERE id IN (501,502) ORDER BY id").all().map((x) => x.status), ["rejected", "rejected"], "ungepruefte Fassungen verworfen");
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_rev WHERE eid='alice' AND status='live'").get().n, 1);
+    const ex = JSON.stringify((await call(env, "GET", "/api/entity/export")).j.items.find((x) => x.id === "alice"));
+    assert.ok(ex.includes("Alice Guest") && !LEAK.test(ex), "Export liefert die Repo-Fassung");
+    const api = JSON.stringify((await call(env, "GET", "/api/entity?id=alice")).j);
+    assert.ok(!LEAK.test(api), "/api/entity ohne Profiltext (auch nicht im Verlauf)");
+    const mcp = JSON.stringify(await callTool(env, null, "get_entity", { id: "alice" }));
+    assert.ok(mcp.includes("Alice Guest") && !LEAK.test(mcp), "MCP liefert die Repo-Fassung");
   } finally { reset(); }
 });
 

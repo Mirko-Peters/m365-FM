@@ -126,10 +126,27 @@ def build_index(sitemap, roots, write_r2, base, langs):
     parts = [docs[i:i + PART] for i in range(0, len(docs), PART)]
     for n, p in enumerate(parts, 1):
         write_r2(f"search/part-{n}.json", json.dumps({"part": n, "docs": p}, ensure_ascii=False, separators=(",", ":")))
-    import datetime as _dt
-    write_r2("search/manifest.json", json.dumps({"generated": _dt.date.today().isoformat(), "build": _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), "parts": len(parts), "count": len(docs),
-                                                 "types": dict(Counter(d["type"] for d in docs)), "langs": dict(Counter(d["lang"] for d in docs))}, ensure_ascii=False))
+    write_r2("search/manifest.json", json.dumps(manifest(docs, len(parts)), ensure_ascii=False))
     return docs
+
+
+def manifest(docs, parts):
+    """Such-Manifest. build = Ende des Baus; fetched = Datenstand der Exporte (site_fetch.data_time, Abruf am Anfang des Baus; fehlt, wenn ein
+    Pflicht-Export nicht frisch oder gespeichert vorlag). Der Worker hebt Suchsperren (Kontoloeschung, Adresswechsel, Freigabe eines
+    Personen-Merkers) nur mit fetched nach der Sperre auf (search.js searchBlockActive, K41/C)."""
+    import datetime as _dt
+    fmt = "%Y-%m-%dT%H:%M:%SZ"
+    out = {"generated": _dt.date.today().isoformat(), "build": _dt.datetime.now(_dt.timezone.utc).strftime(fmt), "parts": parts, "count": len(docs),
+           "types": dict(Counter(d["type"] for d in docs)), "langs": dict(Counter(d["lang"] for d in docs))}
+    try:
+        import site_fetch as _SF
+        t = _SF.data_time()
+    except Exception:
+        t = None
+    if t is not None:
+        # auf die Sekunde abrunden: nie spaeter als der wahre Abruf
+        out["fetched"] = _dt.datetime.fromtimestamp(int(t), _dt.timezone.utc).strftime(fmt)
+    return out
 
 
 # ---- Suchseite -------------------------------------------------------------------------------------------------------------------

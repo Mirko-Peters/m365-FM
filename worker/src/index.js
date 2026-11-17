@@ -268,7 +268,7 @@ async function deleteAccount(env, id) {
   await deleteUserSearchDemand(db, id);   // Nachfrage zu eigenen Inhalten und zum Profil (#156): braucht Handle und Inhalte, also vor deleteUserBlog/deleteUserData
   await dropUserUploads(env, id).catch(() => 0);   // K36: noch private Creator-Videos des Kontos bei YouTube entfernen, solange die Zeilen sie noch nennen
   await deleteUserMessages(db, id); await deleteUserTokens(db, id); await deleteUserQa(db, id); await deleteUserBlog(db, id); await deleteUserLibrary(db, id); await deleteUserPodcast(db, id); await deleteUserVideos(db, id); await deleteUserGuests(db, id); await deleteUserGuestCredits(db, id);
-  await deleteUserData(db, id); await deleteUserExpertRequests(env, id);
+  await deleteUserData(db, id, env); await deleteUserExpertRequests(env, id);
   await deleteUserLinkedin(db, id);   // LinkedIn-Zugang dieses Admins (verschluesselte Tokens) und "veroeffentlicht von"
   await deleteUserInvites(env, id);   // Einlader: beide Seiten (eingeladen und Einlader samt eigenem Kuerzel in ref)
   await invalidateProfileExport(db);   // K45: nicht erst nach dem naechsten Cron (deleteUserData markiert zudem die Suchtreffer)

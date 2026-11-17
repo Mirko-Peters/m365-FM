@@ -30,7 +30,7 @@ def run_upload(src, s3, creds=True, required=False, env=None):
     fake = types.ModuleType("boto3"); fake.client = lambda *a, **k: s3
     old_mod, old_env = sys.modules.get("boto3"), dict(os.environ)
     sys.modules["boto3"] = fake
-    for k in [*CREDS, "OG_REQUIRED", "OG_PRUNE_FORCE"]: os.environ.pop(k, None)
+    for k in [*CREDS, "OG_REQUIRED", "OG_PRUNE_FORCE", "OG_PAGE_ROOTS"]: os.environ.pop(k, None)
     os.environ.update({**(CREDS if creds else {}), **({"OG_REQUIRED": "1"} if required else {}), **(env or {})})
     sys.path.insert(0, str(ROOT / "tools"))
     try:
@@ -138,6 +138,64 @@ class PersonalCardsTest(unittest.TestCase):
         self.s3.fail_delete = False
         rc, out = self.run_quiet(required=True)
         self.assertEqual(self.s3.log, [("delete", "og/einladung/max-m.png")])
+
+
+class EntityCardTest(unittest.TestCase):
+    """K41/D: Karten der Personen-Entitaet og/[<sprache>/]entity/<kuerzel>.png zeigen den Namen. Gibt es die Entitaet im Bau in keiner Sprache
+    mehr (Kontoloeschung: Personen-Entitaet verborgen, fehlt im Export), werden sie geloescht. Karten bestehender Entitaeten ohne eigenes Bild
+    (duenne Seite, og-default) bleiben; ohne Entitaetsseiten im Bau und bei zu vielen wird nichts geloescht."""
+    CARDS = {"og/index.png": b"A", "og/entity/teams.png": b"T", "og/de/entity/teams.png": b"U", "og/entity/max-m.png": b"M", "og/de/entity/max-m.png": b"N",
+             "og/entity/thin.png": b"D"}
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory(); t = Path(self.tmp.name)
+        self.src, self.s3, self.docs, self.r2out = t / "r2img", EtagS3(), t / "docs", t / "r2out"
+        for rel, body in self.CARDS.items():
+            p = self.src / rel; p.parent.mkdir(parents=True, exist_ok=True); p.write_bytes(body)
+        self.pages(["teams", "max-m", "thin"])
+        self.assertEqual(run_upload(self.src, self.s3), 0); self.s3.log.clear()
+    def tearDown(self): self.tmp.cleanup()
+
+    def pages(self, ids):
+        import shutil
+        for d in (self.docs, self.r2out): shutil.rmtree(d, ignore_errors=True)
+        for e in ids:   # englische Entitaetsseiten liegen in r2out/, Sprachfassungen in docs/
+            for p in (self.r2out / "entity" / e / "index.html", self.docs / "de" / "entity" / e / "index.html"):
+                p.parent.mkdir(parents=True, exist_ok=True); p.write_text("<html></html>", "utf-8")
+
+    def run_quiet(self, **kw):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out): rc = run_upload(self.src, self.s3, required=True, **kw)
+        return rc, out.getvalue()
+
+    def test_karten_der_personen_entitaet_eines_geloeschten_profils_werden_geloescht(self):
+        for rel in ("og/entity/max-m.png", "og/de/entity/max-m.png", "og/entity/thin.png"): (self.src / rel).unlink()
+        self.pages(["teams", "thin"])   # max-m: Konto geloescht, keine Entitaetsseite mehr; thin: Seite besteht, nur ohne eigenes Bild
+        rc, out = self.run_quiet()
+        self.assertEqual(rc, 0)
+        self.assertEqual(sorted(self.s3.log), [("delete", "og/de/entity/max-m.png"), ("delete", "og/entity/max-m.png")])
+        self.assertIn("og/entity/thin.png", self.s3.obj)
+        self.assertNotIn("max-m", out)   # das Kuerzel steht nie im Bau-Protokoll
+
+    def test_ohne_entitaetsseiten_im_bau_nichts_geloescht(self):
+        for rel in ("og/entity/max-m.png", "og/de/entity/max-m.png"): (self.src / rel).unlink()
+        self.pages([])
+        rc, out = self.run_quiet()
+        self.assertEqual(rc, 0); self.assertEqual(self.s3.log, []); self.assertIn("nichts geloescht", out)
+
+    def test_sicherung_gegen_massenloeschung(self):
+        for i in range(12): self.s3.obj[f"og/entity/alt-{i}.png"] = {"body": b"X", "ct": "image/png", "meta": {}}
+        rc, out = self.run_quiet()
+        self.assertEqual(rc, 0); self.assertEqual(self.s3.log, []); self.assertIn("OG_PRUNE_FORCE=1", out)
+        rc, out = self.run_quiet(env={"OG_PRUNE_FORCE": "1"})
+        self.assertEqual(len([x for x in self.s3.log if x[0] == "delete"]), 12)
+
+    def test_page_roots_ueber_umgebung(self):
+        (self.src / "og/entity/max-m.png").unlink()
+        other = Path(self.tmp.name) / "other"; (other / "entity" / "teams" ).mkdir(parents=True); (other / "entity" / "teams" / "index.html").write_text("x", "utf-8")
+        rc, out = self.run_quiet(env={"OG_PAGE_ROOTS": str(other)})
+        self.assertEqual(rc, 0)
+        self.assertEqual([x[1] for x in self.s3.log if x[0] == "delete"], ["og/entity/max-m.png"])   # mit docs/ und r2out/ (Seite max-m besteht) bliebe sie
 
 
 class EmptyExportTest(unittest.TestCase):

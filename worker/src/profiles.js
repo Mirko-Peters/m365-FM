@@ -7,6 +7,7 @@ import { cleanKeypoints, cleanFaq, jsonList, ensureSectionCols } from "./section
 import { sanitize } from "./wiki.js";
 import { cleanText, rateLimit } from "./util.js";
 import { baseIds, knownIds, validate, trustedUser, entityMap } from "./entities.js";
+import { blockSearchPeople } from "./search.js";
 import { findExperts } from "./experts.js";
 import { computeLevels } from "./levels.js";
 import { ensureDirectoryCols, geocodeAddress, recordGeocodeStatus } from "./directory.js";
@@ -422,7 +423,10 @@ export async function handleProfiles(env, request, url, path, user, J) {
       ON CONFLICT(user_id) DO UPDATE SET public=excluded.public,handle=excluded.handle,headline=excluded.headline,about=excluded.about,company=excluded.company,job=excluded.job,country=excluded.country,show_org=excluded.show_org,updated=excluded.updated`)
       .bind(user.id, isPublic, handle || null, txt(b.headline, 100), long(b.about, 1500), txt(b.company, 80), txt(b.job, 80), txt(b.country, 60), b.show_org === false ? 0 : 1, now()).run();
     await db.prepare("UPDATE users SET bio=? WHERE id=?").bind(isPublic ? txt(b.headline, 100) : "", user.id).run();   // users.bio ist oeffentlich (/api/u/<id>): die Kurzzeile eines privaten Profils gehoert nicht hinein (K22)
-    if (prev?.handle && prev.handle !== handle) { const ops = await releaseHandleOps(db, prev.handle, handle, user.id); if (ops.length) await db.batch(ops); }   // K42: Speaker-Eintraege gehen nicht an den naechsten Inhaber der Adresse
+    if (prev?.handle && prev.handle !== handle) {
+      const ops = await releaseHandleOps(db, prev.handle, handle, user.id); if (ops.length) await db.batch(ops);   // K42: Speaker-Eintraege gehen nicht an den naechsten Inhaber der Adresse
+      await blockSearchPeople(env, [prev.handle]);   // K41/A: alte Profil- und Personen-Dokumente der Adresse erst aus einem neuen Seitenbau (auch fuer einen spaeteren Inhaber)
+    }
     if (prev?.public) { await invalidateProfileExport(db); if (!isPublic || prev.handle !== handle) await forgetSearchPerson(db, prev.handle); }   // K45: nicht erst nach dem naechsten Cron
     if (b.i18n && typeof b.i18n === "object") await saveI18n(db, user.id, cleanI18n(b.i18n));
     if (ind) await db.batch([db.prepare("DELETE FROM profile_industry WHERE user_id=?").bind(user.id), ...ind.list.map((e) => db.prepare("INSERT INTO profile_industry(user_id,eid) VALUES(?,?)").bind(user.id, e))]);
@@ -728,7 +732,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
 }
 
 // Konto loeschen: alle Profil-, Firmen- und Entitaetsdaten des Nutzers entfernen bzw. anonymisieren
-export async function deleteUserData(db, id) {
+export async function deleteUserData(db, id, env = null) {
   const mailAddress = await db.prepare("SELECT email FROM mail_addr WHERE user_id=?").bind(id).first().catch(() => null);
   const handle = (await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(id).first())?.handle || "";
   // Personen-Entitaeten aus dem eigenen Profil (person_entity, nur von ownedEntity angelegt): reine Personendaten (Name, Kurzzeile) - Fassungen,
@@ -737,6 +741,10 @@ export async function deleteUserData(db, id) {
   // Aufheben (z. B. fuer einen Podcast-Gast mit gleicher id im Repo) nur ausdruecklich per Admin: POST /api/admin/person-entity/release (entities.js).
   // Event-, Firmen- und redaktionelle Entitaeten stehen nicht in person_entity und bleiben samt Geschichte (Revisionen auf user_id 0, unten).
   const persons = ((await db.prepare("SELECT eid FROM person_entity WHERE user_id=?").bind(id).all().catch(() => ({ results: [] }))).results || []).map((r) => r.eid);
+  // K41/A: Suchsperre fuer die Adresse und die Personen-Entitaeten VOR dem Freigeben: der Suchindex des letzten Seitenbaus enthaelt unter
+  // /community/u/<h>/ und /entity/<h>/ noch Name und Kurzzeile; withoutHiddenPeople liesse sie durch, sobald ein anderes Mitglied die Adresse
+  // oeffentlich speichert oder den Merker uebernimmt. Aufgehoben erst durch einen Seitenbau mit Exporten von nach der Loeschung (search.js).
+  await blockSearchPeople(env, [handle, ...persons]);
   if (persons.length) {
     await db.batch(persons.flatMap((eid) => [db.prepare("DELETE FROM entity_rev WHERE eid=?").bind(eid), db.prepare("DELETE FROM entity_claims WHERE eid=?").bind(eid), db.prepare("DELETE FROM entity_claim_review WHERE eid=?").bind(eid),
       db.prepare("DELETE FROM ent_tr WHERE eid=?").bind(eid), db.prepare("DELETE FROM ent_tr_seen WHERE eid=?").bind(eid), db.prepare("DELETE FROM translation WHERE kind='entity' AND item_id=?").bind(eid),

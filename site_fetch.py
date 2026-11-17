@@ -23,6 +23,8 @@ PREFETCH = ESSENTIAL + ("/api/entity/claims", "/api/feed/export", "/api/show/exp
 PREFETCH += tuple(f"/api/i18n/overrides?kind={_k}&lang={_l}" for _k in ("lblog", "episode", "notes") for _l in ("de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko"))
 
 _MEM, _STATE, _LOCK = {}, {}, threading.Lock()   # url -> json | None ; url -> "frisch" | "cache" | "fehlt"
+CACHE_MARGIN = 600   # gespeicherte Fassung: geschrieben nach dem Abruf (bis zu 3 x 120 s + Pausen) - der Datenstand liegt bis zu so viel davor
+_TIME = {}   # url -> Zeitpunkt der Daten (Unix): frisch = Beginn des Abrufs, Cache = Zeitpunkt, zu dem die gespeicherte Fassung geschrieben wurde
 
 
 def _name(url):
@@ -48,17 +50,19 @@ def fetch(url, timeout=120, tries=3):
     with _LOCK:
         if url in _MEM:
             return _MEM[url]
+    t0 = time.time()
     j, err = _http(url, timeout, tries)
     f = CACHE / _name(url)
+    stamp = None
     if j is not None:
-        state = "frisch"
+        state, stamp = "frisch", t0
         try:
             CACHE.mkdir(parents=True, exist_ok=True); f.write_text(json.dumps(j, ensure_ascii=False), encoding="utf-8")
         except Exception:
             pass
     elif f.exists():
         try:
-            j = json.loads(f.read_text("utf-8")); state = "cache"
+            j = json.loads(f.read_text("utf-8")); state = "cache"; stamp = f.stat().st_mtime - CACHE_MARGIN
             age = (time.time() - f.stat().st_mtime) / 3600
             print(f"WARNUNG: {url.split('://', 1)[-1]} nicht erreichbar ({err}) - gespeicherte Fassung von vor {age:.0f} h", file=sys.stderr)
         except Exception:
@@ -70,6 +74,7 @@ def fetch(url, timeout=120, tries=3):
         j = STX.fix_tree(j)   # Mojibake aus Fremd-Feeds und alten Importen vor dem Seitenbau reparieren (check_encoding ist blockierend)
     with _LOCK:
         _MEM[url] = j; _STATE[url] = state
+        if stamp is not None: _TIME[url] = stamp
     return j
 
 
@@ -102,3 +107,17 @@ def check(api=None):
 
 def states():
     return dict(_STATE)
+
+
+def data_time(paths=ESSENTIAL):
+    """Aeltester Datenstand der Pflicht-Exporte dieses Baus (Unix-Zeit) oder None, wenn einer fehlt (nicht geholt, ausgefallen ohne Cache,
+    Profile nur aus der eingecheckten data/members_export.json). site_search.py schreibt ihn als "fetched" ins Such-Manifest: der Worker
+    (search.js searchBlockActive) nimmt gesperrte Personen-Dokumente (Kontoloeschung, Adresswechsel) erst aus einem Bau wieder auf, dessen
+    Exporte NACH der Sperre geholt wurden - nicht schon, weil der Bau danach endet (K41/C)."""
+    with _LOCK:
+        times = []
+        for p in paths:
+            hit = [t for u, t in _TIME.items() if u.split("://", 1)[-1].split("/", 1)[-1] == p.lstrip("/")]
+            if not hit: return None
+            times.append(min(hit))
+    return min(times) if times else None
