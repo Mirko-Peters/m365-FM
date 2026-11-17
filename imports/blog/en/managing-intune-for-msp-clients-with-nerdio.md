@@ -1,13 +1,13 @@
 ---
 title: "Managing Intune for MSP clients with Nerdio"
-summary: "Nerdio Manager for MSP keeps Intune policies at the MSP level, publishes them to customer accounts and compares each customer against the source. This article walks through that workflow, its documented limits, and where the Intune admin center and Microsoft 365 Lighthouse may be enough."
+summary: "Nerdio Manager for MSP keeps Intune policies at the MSP level, publishes them to customer accounts and compares each customer against the source. This article walks through that workflow, its documented limits."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [nerdio-manager-for-msp, intune]
 keypoints:
-  - "Per Nerdio's pages, Intune policies are mostly imported from the MSP tenant or a JSON file into Nerdio Manager for MSP and published to customer accounts. Nerdio Manager can also clone a policy or create a built-in device compliance policy. Later source changes are pulled in by re-import or Update."
+  - "Per Nerdio's pages, Intune policies are imported from a source tenant (the MSP tenant or a specific tenant) or a JSON or TXT file into Nerdio Manager for MSP and published to customer accounts. Nerdio Manager can also clone a policy or create a built-in device compliance policy. Later source changes are pulled in by re-import or Update."
   - "Assignments to customers use a sync type, manual by default or automatic, and Add or Overwrite. Per Nerdio's Sync Type note, a policy assigned to All customers is also published automatically to newly added accounts."
   - "Drift status compares a customer's policy with the MSP source. For a policy outside a Policy Baseline, Fix drift only works in Enforced mode; Rollback and Accept drift (with an expiry) are the alternatives."
   - "Nerdio checks source tenants for unimported changes every 4 hours. Nerdio validates only the JSON syntax of an edited policy, not whether the Intune settings are valid."
@@ -21,7 +21,7 @@ faq:
     a: "The Configuration Drift window in Nerdio Manager shows the difference from the MSP source policy. The MSP can fix the drift (for a policy outside a Policy Baseline, Fix drift republishes the mismatched items in Enforced mode), roll back to another version assigned to the customer, or accept the drift for a set period."
 ---
 
-Nerdio Manager for MSP lets a managed service provider keep Intune policies in one place at the MSP level, publish them to customer accounts and see where a customer differs from the source. These are Intune policies, so Intune in each customer tenant presumably does the enforcing; the pages describe publishing. This article covers the workflow, key settings and where Microsoft's own tools may be enough.
+Nerdio Manager for MSP lets a managed service provider keep Intune policies in one place at the MSP level, publish them to customer accounts and see where a customer differs from the source. Changes made in Nerdio Manager are reflected in the customer's Intune admin center, and the other way round. This article covers the workflow, key settings and where Microsoft's own tools may be enough.
 
 The details come from Nerdio's help center and Microsoft Learn. Nerdio's pages still say "Microsoft Endpoint Manager admin center" for the Intune admin center; this article uses the current name. It does not cover Intune on AVD session hosts or onboarding a customer account.
 
@@ -56,6 +56,8 @@ Nerdio checks the source tenant for unimported changes every four hours; Import 
 
 ## Publishing a policy to customers
 
+Accounts without Intune enabled appear grayed out. Enable it per account under Settings > Integrations in the Modern Work area; it needs an Intune license in the customer tenant.
+
 1. Open Policies and choose the policy type.
 2. Select Assign, then Add assignments.
 3. Under Select assignments, choose accounts, or All for every account.
@@ -64,8 +66,6 @@ Nerdio checks the source tenant for unimported changes every four hours; Import 
 6. Select Apply and close.
 
 After you edit or update a policy, Re-publish applies to manual assignments and Publish now publishes automatic assignments immediately. Re-publish exists only for policies already assigned to customers.
-
-**Worked example (an illustration, not from Nerdio's pages).** An MSP imports an update ring and assigns it to All customers with Automatic sync. After an edit in Nerdio Manager, Publish now pushes the change to the assigned accounts.
 
 ## Per-customer differences
 
