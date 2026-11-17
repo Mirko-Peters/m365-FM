@@ -11,7 +11,7 @@ keypoints:
   - "You set one required and one optional maintenance window. Every window is two hours long, and the time zone is either one fixed zone for the pool or the local time of each session host."
   - "The setting is disabled by default and can be configured only for existing host pools, not while you create a new one."
   - "An update does not succeed if the session host is shut down or deallocated during the window. After four tries in a window the broker installs the update by force, and a critical update is installed by force regardless of the maintenance windows."
-  - "Learn points to the WVDAgentHealthStatus table in Log Analytics and to event ID 3277 in the VM's Application log to tell a failed update from a host that is simply in a later flight."
+  - "Learn points to the WVDAgentHealthStatus table in Log Analytics and to event ID 3277 in the VM's Application log to check on updates. The agent overview ties 3277 to a failed update, but the troubleshooting guide lists the same ID with other descriptions, so read the event text."
 faq:
   - q: "What does the Scheduled Agent Updates setting actually schedule?"
     a: "Updates of the Azure Virtual Desktop agent, the side-by-side stack and the Geneva Monitoring agent. Learn says the feature updates all three if any one of them needs an update, and that it does not apply to the initial installation of the components."
@@ -70,7 +70,7 @@ Our reading of the three rules together: the windows control timing for routine 
 
 ### Interaction with autoscale
 
-The first rule matters most for pools that use [autoscale](/entity/avd-scaling-plan/). A scaling plan can deallocate hosts after hours, as the [power management](/entity/avd-power-management-autoscaling/) schedules describe. A window placed in a phase where the plan has turned hosts off meets rule 1. Our reading: place at least one window in a period when your plan keeps the affected hosts running. Learn does not describe this combination; it is a consequence of the two documented behaviours, so test it on a non-production pool first.
+The first rule matters most for pools that use [autoscale](/entity/avd-scaling-plan/). Learn's autoscale glossary says that when autoscale shuts down a VM based on the defined schedule, it deallocates and stops the VM; see [power management](/entity/avd-power-management-autoscaling/) autoscaling. A window placed in a phase where the plan has turned hosts off meets rule 1. Our reading: place at least one window in a period when your plan keeps the affected hosts running. Learn does not describe this combination; it is a consequence of the two documented behaviours, so test it on a non-production pool first.
 
 ## Checking that it works
 
@@ -81,7 +81,7 @@ Learn's diagnostics guide uses Log Analytics. You create a workspace, send diagn
 
 The guide also says that if you have not enabled Scheduled Agent Updates, you will not see anything in the `NewPackagesAvailable` field. Neither query projects that field. If an update fails, the guide says the session host may have been turned off during the update, in which case you turn it back on.
 
-On the VM itself, the agent overview names one signal. In Event Viewer, under Windows Logs and Application, an event with ID 3277 means the agent update did not work. If you do not see it, Learn says the VM is in a different flight and will be updated later. Our reading: a host that is still on the old version shortly after a flight began is not necessarily broken, because Learn says VMs in one pool can receive the update at different times.
+On the VM itself, the agent overview names one signal. In Event Viewer, under Windows Logs and Application, the page says an event labeled ID 3277 means the agent update did not work, and that if you do not see it, the VM is in a different flight and will be updated later. Learn's agent troubleshooting guide, however, also lists event ID 3277 with other descriptions, for example `INVALID_REGISTRATION_TOKEN`, `INVALID_FORM`, `InstallationHealthCheckFailedException` and `DownloadMsiException`. Our reading: read the description text of the event before concluding that an update failed, and compare it with `UpgradeState` and `UpgradeErrorMsg` from the first query. Our reading, too: a host that is still on the old version shortly after a flight began is not necessarily broken, because Learn says VMs in one pool can receive the update at different times.
 
 ## Deciding whether to enable it
 
@@ -96,7 +96,7 @@ The feature adds a dependency (hosts running in the window) in exchange for pred
 
 A few limits to keep in view. Scheduled agent updates covers only the three agent components. Learn's agent overview says the agent update is not connected to Azure Virtual Desktop infrastructure build updates, and nothing on the feature page ties it to Windows updates of the guest operating system. It therefore cannot replace a patching plan. Our reading: treat it as one control among several, next to your [session host](/entity/avd-session-host/) patching approach.
 
-The feature page carries no preview label and was last updated on 20 June 2025.
+The feature page carries no preview label.
 
 The practical order is: confirm your hosts are running during the intended window, choose the time zone mode, enable the setting, then watch the next flight with the diagnostics queries. The steps themselves are covered in a companion how-to.
 
@@ -109,4 +109,6 @@ Retrieved 17 November 2026.
 - [Microsoft Learn: Getting started with the Azure Virtual Desktop agent (agent update process)](https://learn.microsoft.com/en-us/azure/virtual-desktop/agent-overview)
 - [Microsoft Learn: What's new in the Azure Virtual Desktop agent](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new-agent)
 - [Microsoft Learn: Configure a host pool as a validation environment](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-validation-environment)
+- [Microsoft Learn: Troubleshoot Azure Virtual Desktop Agent issues](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-agent)
+- [Microsoft Learn: Azure Virtual Desktop autoscale glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary)
 - [Microsoft Learn: Host Pools REST API, AgentUpdateProperties](https://learn.microsoft.com/en-us/rest/api/desktopvirtualization/host-pools/get?view=rest-desktopvirtualization-2024-04-03)
