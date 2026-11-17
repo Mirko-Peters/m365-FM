@@ -9,8 +9,8 @@ topics: [avd-drain-mode, avd-session-host]
 keypoints:
   - "Drain mode stops new sessions on a host. Existing sessions stay until the user signs out or an administrator ends them."
   - "A user who already has an active or disconnected session in the pool is still routed back to that host, even in drain mode, so list and end sessions before you patch."
-  - "Autoscale overrides drain mode on every VM in scope. Tag the VM with the scaling plan's exclusion tag first. This applies to power management plans for pooled and personal host pools and to dynamic plans."
-  - "Turning drain mode on needs the Desktop Virtualization Session Host Operator role. Messaging and signing users out needs the User Session Operator role."
+  - "In pooled host pools, Learn says autoscale overrides drain mode on every VM in scope, so tag the VM with the scaling plan's exclusion tag first. For personal host pools, Learn's FAQ says autoscale does not put the session host in drain mode."
+  - "Turning drain mode on needs the Desktop Virtualization Session Host Operator role. Messaging and signing users out is covered by the User Session Operator role; check the effective permissions of the account that runs the runbook."
   - "For image-based updates of hosts that use a session host configuration, session host update handles drain mode itself, and Learn says not to change it manually during an update."
 faq:
   - q: "Does drain mode sign users out?"
@@ -18,7 +18,7 @@ faq:
   - q: "Why is a user still landing on the host I drained?"
     a: "Learn's load-balancing page says a user who already has an active or disconnected session in the host pool is redirected to the host that holds that session, even if drain mode is on. Users without a session are not sent to a drained host. Check for disconnected sessions with Get-AzWvdUserSession."
   - q: "Will autoscale switch my host back on during maintenance?"
-    a: "It can. Learn's autoscale FAQ says autoscale overrides drain mode on all VMs included in scaling. To keep a VM out of scaling actions, use the exclusion tag set in the scaling plan: Learn says autoscale then does not start, stop or change the drain mode of tagged hosts."
+    a: "In a pooled host pool it can. Learn's autoscale FAQ says autoscale overrides drain mode on all VMs included in scaling. To keep a VM out of scaling actions, use the exclusion tag set in the scaling plan: Learn says autoscale then does not start, stop or change the drain mode of tagged hosts. For personal host pools the FAQ says autoscale does not put the session host in drain mode, but it can still deallocate a host that nobody signs in to."
 ---
 
 To patch one session host without cutting users off, tag the VM so autoscale leaves it alone, turn on drain mode, give the remaining users a message and a deadline, end any sessions that are left, patch and restart, and then turn drain mode off.
@@ -27,14 +27,14 @@ This article is the runbook for a single host. What drain mode is belongs to "Dr
 
 ## What you need before you start
 
-- **Roles.** Learn says turning drain mode on or off requires the Desktop Virtualization Session Host Operator role. Its description on the RBAC page adds that the role can view and remove session hosts and change drain mode. Sending messages, disconnecting sessions and signing users out is covered by the Desktop Virtualization User Session Operator role, which the RBAC page says does not allow changing drain mode.
+- **Roles.** Learn says turning drain mode on or off requires the Desktop Virtualization Session Host Operator role. Its description on the RBAC page adds that the role can view and remove session hosts and change drain mode. Sending messages, disconnecting sessions and signing users out is covered by the Desktop Virtualization User Session Operator role, which the RBAC page says does not allow changing drain mode. The built-in definition of the Session Host Operator role lists `Microsoft.DesktopVirtualization/hostpools/sessionhosts/*`, while the User Session Operator definition lists `.../sessionhosts/usersessions/*` explicitly. Whether one account can do both steps therefore depends on the roles actually assigned, so test with the account that will run the runbook.
 - **Azure PowerShell** with the Az.DesktopVirtualization module, or Azure Cloud Shell, if you want to script it.
 - **Capacity.** Learn says new connections go to the next available session host, so check that the remaining hosts can take the load. For a depth-first pool, check the [maximum session limit](/entity/avd-maximum-session-limit/) too, because Learn says that once all hosts have reached it you must raise it or add hosts.
 
 ## Step by step
 
-1. **Keep autoscale away from the host.** Learn's autoscale FAQ says autoscale still turns drained VMs on or off, no matter who put them in drain mode, because it overrides drain mode on all VMs included in scaling. The [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) is a tag name that you enter on the Basics tab of the [scaling plan](/entity/avd-scaling-plan/). Learn's example is `excludeFromScaling`. The field exists for power management plans and for dynamic plans, and Learn states that with the tag on a session host, autoscale does not start, stop or change the drain mode of that host. Add a tag with that name to the VM, and keep personal data out of tag names. Tagged hosts still count toward the minimum percentage of hosts.
-2. **Turn drain mode on.** In the Azure portal, open **Azure Virtual Desktop**, then **Host pools**, select the host pool, select **Session hosts**, check the host and select **Turn drain mode on**. With Azure PowerShell, Learn's drain-mode page sets drain mode with the `AllowNewSession` parameter of `Update-AzWvdSessionHost`, run once for each session host. The page writes the call with a splatted hash table; this is the same command in one block:
+1. **Keep autoscale away from the host (pooled host pools).** Learn's scenarios page says that for pooled host pools autoscale overwrites drain mode, and the autoscale FAQ says autoscale still turns drained VMs on or off, no matter who put them in drain mode, because it overrides drain mode on all VMs included in scaling. The [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) is a tag name that you enter on the Basics tab of the [scaling plan](/entity/avd-scaling-plan/) (on the Properties tab of an existing plan). Learn's example is `excludeFromScaling`. The field exists for power management plans and for dynamic plans, which apply only to pooled host pools with session host configuration. With the tag on a session host, autoscale does not start, stop or change the drain mode of that host. Add a tag with that name to the VM. Tag permissions and further details are in the exclusion tag article named above. For personal host pools see the section further down.
+2. **Turn drain mode on.** In the Azure portal, open **Azure Virtual Desktop**, then **Host pools**, select the host pool, select **Session hosts**, check the host and select **Turn drain mode on**. With Azure PowerShell, Learn's drain-mode page sets drain mode with the `AllowNewSession` parameter of `Update-AzWvdSessionHost`, run once for each session host. The page uses a `$params` hash table with `AllowNewSession = $False` and splats it into the cmdlet; the same call in one block, in the form of the cmdlet reference example, is:
 
    ```powershell
    Update-AzWvdSessionHost -ResourceGroupName <ResourceGroupName> `
@@ -76,7 +76,7 @@ This article is the runbook for a single host. What drain mode is belongs to "Dr
 ## Behavior that surprises people
 
 - **Disconnected sessions come back.** Learn's load-balancing page says that a user with an active or disconnected session who signs in again is sent to the host with that session, even in drain mode. A user without a session is never sent to a drained host. This is why step 3 matters: a host that looks empty can still hold disconnected sessions.
-- **An untagged host is still in scope.** If you drain a host manually and do not tag it, autoscale can still start, stop or change the drain mode of that host, according to the FAQ. The tag is what takes the host out of scaling, not drain mode.
+- **An untagged pooled host is still in scope.** If you drain a host in a pooled host pool manually and do not tag it, autoscale can still start, stop or change the drain mode of that host, according to the FAQ. The tag is what takes the host out of scaling, not drain mode.
 - **Unsaved work is lost.** `Remove-AzWvdUserSession` ends the session. Learn's reference describes no way to recover the session, so send the message in step 4 first.
 - **A tag left behind keeps the host out of scaling.** Learn says tagged hosts still count toward the minimum percentage of hosts, but autoscale does not start them. Remove the tag in step 7, or capacity can shrink without a visible reason.
 
@@ -96,7 +96,7 @@ Before you start, check that the other hosts can carry the evening load. The sib
 
 ## Personal host pools
 
-Learn's FAQ says autoscale does not put a personal desktop into drain mode before it deallocates it, and a user who connects during deallocation sees "No resources available". The FAQ also says that if a session host is turned on, by autoscale, Start VM on Connect or an administrator, and nobody signs into it, autoscale deallocates it after a period of inactivity that the page does not define. That affects you: a personal host that you start for patching, without a user signing in, can be deallocated under you. Put the exclusion tag on the personal host as well, since the scaling plan setting is available for power management plans, and add it before you start the VM. Also tell the assigned user, because a personal session host is assigned to one user.
+Learn's FAQ says autoscale does not put a personal desktop into drain mode before it deallocates it, and a user who connects during deallocation sees "No resources available". The FAQ also says that if a session host is turned on, by autoscale, Start VM on Connect or an administrator, and nobody signs into it, autoscale deallocates it after a period of inactivity that the page does not define. That affects you: a personal host that you start for patching, without a user signing in, can be deallocated under you. Learn describes the exclusion tag field for power management plans without limiting it to pooled host pools, but it does not spell out its effect on personal host pools. Tagging the personal host before you start the VM is therefore a precaution that this article suggests, not a documented guarantee; check on a test host. Also tell the assigned user, because a personal session host is assigned to one user.
 
 ## When drain mode is the wrong tool
 

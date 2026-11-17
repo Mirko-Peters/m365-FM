@@ -7,7 +7,7 @@ author: mirko-p
 date: 2026-11-18
 topics: [avd-autoscale-schedule-phases, avd-scaling-plan]
 keypoints:
-  - "Start with data: hourly counts of new connections from the WVDConnections table show when sign-ins begin, and the session counters from Insights show where open sessions hold, fall and reach the evening floor. Phase start times come from those turning points."
+  - "Start with data: hourly counts of new connections from the WVDConnections table show when sign-ins begin, and the Terminal Services session counters in your Log Analytics workspace, which you chart yourself, should show where open sessions hold, fall and reach the evening floor. Phase start times come from those turning points."
   - "The ramp-up start must leave time for hosts to power on before the first users arrive. Measure how long hosts take to start in your environment; the scenarios and create-and-assign pages give no figure."
   - "A ramp-down wait time must be shorter than the ramp-down phase. Learn's FAQ example is a 15-minute phase with a 20-minute wait, where forced sign-out never happens."
   - "Autoscale cannot ramp down on specific dates and a plan runs in one time zone. Use separate schedules for weekdays and weekends, and plan holidays by hand."
@@ -39,7 +39,7 @@ WVDConnections
 | order by TimeGenerated asc
 ```
 
-3. For open sessions, which is what shows the peak, the fall and the evening floor, use [Azure Virtual Desktop Insights](/entity/avd-insights/) if it is set up. Learn's cost page lists the counters Terminal Services Active Sessions and Total Sessions, each sampled every 60 seconds per VM. The page does not define them, so check what they report in your workspace and add the hosts together for a pool figure.
+3. Open sessions show the peak, the fall and the evening floor. [Azure Virtual Desktop Insights](/entity/avd-insights/) collects performance counters into the same workspace. Learn's cost page lists the counters Terminal Services Active Sessions, Inactive Sessions and Total Sessions, each sampled every 60 seconds per VM. The page does not define them, so query them yourself, check what they report and add the hosts together for a pool figure.
 4. After a plan is assigned to a pooled host pool and its Autoscale logs reach Log Analytics, the Autoscale tab in Insights shows the power-state changes of the session hosts over time and summary information. The underlying table, `WVDAutoscaleEvaluationPooled`, has the columns `SessionCount`, `SessionOccupancyPercent`, `ActiveSessionHostCount` and `ConfigSchedulePhase`, so you can read these values per schedule phase. Learn defines `SessionCount` as the sessions on hosts that autoscale considers active.
 
 Write down four numbers per weekday: when sign-ins first appear (sign-in profile), and, from the session counters, when sessions reach the daily maximum, when they start to fall, and when they reach the evening floor.

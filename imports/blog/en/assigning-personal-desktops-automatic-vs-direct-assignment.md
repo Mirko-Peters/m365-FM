@@ -10,7 +10,7 @@ keypoints:
   - "Automatic assignment is the default for new personal host pools: the user is assigned a desktop the first time they connect. Direct assignment requires you to assign the user to both the host pool and a specific session host."
   - "With direct assignment, a user who is assigned to the host pool but not to a session host sees 'No resources available'."
   - "Assigning, unassigning and reassigning work in the Azure portal and PowerShell, but not in the Azure CLI. Session host friendly names can be set only with PowerShell."
-  - "Multiple personal desktops per user need direct assignment, cannot be switched off once enabled, and need Az.DesktopVirtualization 6.0.0 or later (stable) or 5.3.0-preview or later when scripted."
+  - "Multiple personal desktops per user need direct assignment, cannot be switched off once enabled, and, when scripted, need the preview module Az.DesktopVirtualization 5.3.0-preview or a later preview version, which is what Learn names."
   - "Direct assignment must be saved first. Enabling multiple desktops in the same step produces an error."
 faq:
   - q: "Can I assign users to specific session hosts when the pool uses automatic assignment?"
@@ -55,7 +55,7 @@ Learn lists these for the configuration tasks:
 - A personal host pool with at least one session host.
 - An Azure account with the **Desktop Virtualization Contributor** role or equivalent.
 - For local scripting, the `desktopvirtualization` Azure CLI extension or the `Az.DesktopVirtualization` PowerShell module. Azure Cloud Shell is the alternative.
-- To assign multiple personal desktops with PowerShell, a module that contains the `MultiplePersistent` value. Learn says 5.3.0-preview or a later preview version and that the non-preview module lacks the values. The module's change log and PowerShell Gallery page list the value in the stable release 6.0.0 (2 June 2026), so Learn's wording looks outdated. Check your installed version with `Get-Module Az.DesktopVirtualization -ListAvailable`.
+- To assign multiple personal desktops with PowerShell, a module that contains the `MultiplePersistent` value. Learn says 5.3.0-preview or a later preview version and that the non-preview module lacks the values. The change log and PowerShell Gallery page of the stable release 6.0.0 (2 June 2026) also list the value, but Learn does not say that 6.0.0 is enough for this scenario, so test it in a lab pool before you rely on it. Check your installed version with `Get-Module Az.DesktopVirtualization -ListAvailable`.
 
 ## Switch the assignment type
 
@@ -145,7 +145,7 @@ Learn does not describe what happens to the data on the VM when you reassign it.
 
 Learn says multiple personal desktop assignment lets you assign more than one desktop to one user in a single host pool. It names users who juggle diverse business roles as the use case, for example backend and frontend development, or moving between testing and production environments. It removes the need for several host pools.
 
-Learn's What's new page lists the feature as a preview in March 2025 and as generally available since May 2025. For scripting, Learn still names a preview module, but a stable module from 6.0.0 onward also contains the required value (see Prerequisites).
+Learn's What's new page lists the feature as a preview in March 2025 and as generally available since May 2025. For scripting, Learn still names a preview module (see Prerequisites for the stable 6.0.0 module).
 
 Rules from the page:
 
@@ -180,7 +180,7 @@ $parameters = @{
 Update-AzWvdHostPool @parameters
 ```
 
-The `MultiplePersistent` value is the reason for the module requirement. The release notes of Az.DesktopVirtualization 5.3.0-preview read "Added 'MultiplePersistent' enum value to HostPool property loadBalancerType", and the stable release 6.0.0 lists the same entry. Learn's page still names only the preview route, so install a stable 6.0.0 or later module if you want to avoid a preview.
+Learn does not name which values it means when it says the non-preview module lacks them. The release notes of Az.DesktopVirtualization 5.3.0-preview read "Added 'MultiplePersistent' enum value to HostPool property loadBalancerType", and the stable release 6.0.0 lists the same entry. Learn's page names only the preview route, so use that module, or test a stable 6.0.0 or later module in a lab pool first.
 
 Then assign each session host with the `Update-AzWvdSessionHost` command from the section above. Run it again with a different `Name` value for every additional desktop in the same host pool.
 
@@ -203,7 +203,7 @@ These routines combine the documented steps. The order is a suggestion, not a Le
 | Set assignment type | Yes | Yes | Yes |
 | Assign a user to a session host | Yes | Yes | No |
 | Unassign or reassign | Yes | Yes, through a REST call | No |
-| Assign several desktops to one user | Yes | Yes, with Az.DesktopVirtualization 6.0.0 or later (stable) or 5.3.0-preview or later | No |
+| Assign several desktops to one user | Yes | Yes, with Az.DesktopVirtualization 5.3.0-preview or a later preview version (per Learn) | No |
 | Set friendly names | No | Yes | No |
 
 ## Interaction with power management

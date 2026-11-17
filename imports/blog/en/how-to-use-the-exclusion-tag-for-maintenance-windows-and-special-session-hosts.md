@@ -63,7 +63,7 @@ The same check applies to the minimum percentage of hosts. With eight hosts and 
 
 4. **Do the maintenance.** Learn notes that administrators can still connect to the server directly, without going through the Azure Virtual Desktop service. Start the VM yourself if it is off; autoscale will not do it for a tagged host.
 
-5. **Turn drain mode off.** Select the host and **Turn drain mode off**, or run the same cmdlet with `-AllowNewSession:$true`. Learn's own example shows only `$false`; `-AllowNewSession` is a switch parameter, so `$true` sets it back.
+5. **Turn drain mode off.** Select the host and **Turn drain mode off**, or run the same cmdlet with `-AllowNewSession:$true`. Learn's drain-mode page shows both directions with the same cmdlet: `AllowNewSession = $False` turns drain mode on and `$True` turns it off.
 
 6. **Remove the tag.** Delete the tag in the portal, or use the Delete operation with the same name and value pair that you added:
 
@@ -113,7 +113,7 @@ All retrieved on 2026-11-17.
 - [Microsoft Learn: Autoscale scenarios for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)
 - [Microsoft Learn: Autoscale FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq)
 - [Microsoft Learn: Autoscale glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary)
-- [Microsoft Learn: Set drain mode for Azure Virtual Desktop session hosts](https://learn.microsoft.com/en-us/azure/virtual-desktop/drain-mode)
+- [Microsoft Learn: Drain session hosts for maintenance in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/drain-mode)
 - [Microsoft Learn: Update-AzWvdSessionHost](https://learn.microsoft.com/en-us/powershell/module/az.desktopvirtualization/update-azwvdsessionhost)
 - [Microsoft Learn: Configure host pool load balancing](https://learn.microsoft.com/en-us/azure/virtual-desktop/host-pool-load-balancing)
 - [Microsoft Learn: Use tags to organize your Azure resources](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/tag-resources)
