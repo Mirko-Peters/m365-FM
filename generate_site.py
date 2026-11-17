@@ -903,17 +903,9 @@ def _sentences(text, limit):
 
 
 def _merged_refs(xs):
-    """Expertise/Zertifikate des Profils (D1, Feld "e" = Entitaets-id): zusammengefuehrte alte ids (site_learn.merge_targets, z. B.
-    azure-ai-foundry -> microsoft-foundry) auf das Ziel umschreiben und danach je Ziel nur einmal behalten (der erste Eintrag gewinnt,
-    bei gleichem Ziel der bestaetigte bzw. hoehere). Sonst fiele das Thema weg oder stuende zweimal als knowsAbout im Autorenkasten."""
-    mt = LRN.merge_targets()
-    rank = lambda x: (int(bool(x.get("verified") or x.get("via"))), x.get("level") or 0)
-    out = {}
-    for x in xs or []:
-        if not isinstance(x, dict) or not x.get("e"): continue
-        y = dict(x, e=mt.get(x["e"], x["e"]))
-        if y["e"] not in out or rank(y) > rank(out[y["e"]]): out[y["e"]] = y
-    return list(out.values())
+    """Expertise/Zertifikate des Profils mit zusammengefuehrten alten ids auf das Ziel und je Ziel einmal (site_learn.resolve_refs, Zuordnung
+    einmal je Bau zwischengespeichert). fetch_members liefert die Profile schon aufgeloest; das hier sichert AUTHOR aus anderen Quellen ab."""
+    return LRN.resolve_refs(xs)
 
 
 def author_box(lang):

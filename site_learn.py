@@ -465,6 +465,38 @@ def merged_ids():
     return set(merge_targets())
 
 
+@lru_cache(maxsize=1)
+def _merge_map():
+    """merge_targets() einmal je Bau: es liest guest_merge.json und die ganze entities.json (1,9 MB). resolve_refs laeuft je Profil und je
+    Autorenkasten (jede Folgen- und Blogseite); ohne Zwischenspeicher kostete das rund 25 ms je Seite. Die Dateien aendern sich waehrend des Baus nicht."""
+    return dict(merge_targets())
+
+
+def resolve_refs(xs):
+    """Expertise/Zertifikate eines Profils (D1, Feld "e" = Entitaets-id): zusammengefuehrte alte ids (merge_targets, z. B. azure-ai-foundry ->
+    microsoft-foundry) auf das Ziel umschreiben und je Ziel nur einen Eintrag behalten (der bestaetigte bzw. hoehere gewinnt, die Stelle des ersten
+    bleibt). Sonst fiele das Thema auf Profil, Expertenliste und im Autorenkasten weg (alte id nicht mehr in ENTS) oder stuende doppelt als knowsAbout.
+    Die D1-id bleibt bei umgeschriebenen Eintraegen unter "e0": Bestaetigen (pfpub.js, /api/endorse) vergleicht mit dem Live-Export und braucht sie."""
+    mt = _merge_map()
+    rank = lambda x: (int(bool(x.get("verified") or x.get("via"))), x.get("level") or 0)
+    out = {}
+    for x in xs or []:
+        if not isinstance(x, dict) or not x.get("e"): continue
+        to = mt.get(x["e"])
+        y = dict(x, e=to, e0=x.get("e0") or x["e"]) if to and to != x["e"] else x
+        if y["e"] not in out or rank(y) > rank(out[y["e"]]): out[y["e"]] = y
+    return list(out.values())
+
+
+def resolve_profile(x):
+    """Profil bzw. Firma aus dem Export mit aufgeloester Expertise und Zertifikaten (resolve_refs); das Original bleibt unveraendert."""
+    if not isinstance(x, dict): return x
+    y = dict(x)
+    for k in ("expertise", "certs"):
+        if k in y: y[k] = resolve_refs(y[k])
+    return y
+
+
 def load_entities(api):
     base = {}
     f = Path(__file__).parent / "data" / "entities.json"

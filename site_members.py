@@ -6,6 +6,7 @@ BLOGS = {}   # handle -> Sprachen mit Beiträgen
 from site_i18n import COMM_LANGS, pfx, pfx2, overlay, T
 from datetime import datetime, timezone
 from site_learn import ENTS, esc, _fetch_json, LCSS
+import site_learn as LRN   # resolve_profile: zusammengefuehrte Entitaets-ids in Expertise/Zertifikaten
 import site_meta_community as PM   # Titel/Description der Profile und Verzeichnisse (Suchabsicht)
 
 
@@ -119,7 +120,9 @@ def fetch_members(api):
         j = j or {}; state = "fehlt"
     _mark(state, len(j.get("people") or []))
     print(f"Profile: {len(j.get('people', []))} Personen, {len(j.get('orgs', []))} Firmen", file=sys.stderr)
-    return j.get("people", []), public_orgs(j.get("orgs", []))
+    # Zusammengefuehrte Entitaeten (data/guest_merge.json, z. B. azure-ai-foundry -> microsoft-foundry): D1 behaelt die alte id. Einmal hier auf das
+    # Ziel umschreiben, damit Profilseite (Liste, knowsAbout, Seitenleiste), Expertenlisten der Entitaet, Karten und Autorenkasten dieselbe Entitaet nennen.
+    return [LRN.resolve_profile(p) for p in j.get("people", [])], [LRN.resolve_profile(o) for o in public_orgs(j.get("orgs", []))]
 
 
 def experts_index(people, orgs):
@@ -394,7 +397,7 @@ def build(g, people, orgs, extra=None):
                 if e.get("endorsed"):
                     note.append(s["endorsed"].format(n=e["endorsed"]))
             out.append(f'<li><a href="{eurl(BASE, lang, e["e"])}">{esc(en["name"])}</a> <span class="mut">· <b class="pf-lvl pf-lvl{int(e.get("level") or 1)}">{esc(LV.get(e.get("level") or 1, LV[1])[li])}</b> · {esc(" · ".join(note))}</span>'
-                       f'<span class="pf-endorse" data-h="{esc(x["handle"])}" data-e="{e["e"]}"></span></li>')
+                       f'<span class="pf-endorse" data-h="{esc(x["handle"])}" data-e="{esc(e.get("e0") or e["e"])}"></span></li>')
         legend = f'<p class="mut pf-levels">{esc(s["levels"])}</p>' if out and x.get("type") != "o" else ""
         return "<ul>" + "".join(out) + "</ul>" + legend if out else ""
 
@@ -457,7 +460,7 @@ def build(g, people, orgs, extra=None):
             certs = "<ul>" + "".join(f'<li><a href="{eurl(BASE, lang, c["e"])}">{esc(ENTS[c["e"]]["name"])}</a>{" (" + str(c["year"]) + ")" if c.get("year") else ""}'
                                      + (' · <a href="' + esc(c["url"]) + '" rel="nofollow ugc noopener">✔ ' + (T(lang, "verified", "geprüft")) + "</a>" if c.get("verified") and c.get("url") else (" · ✔ " + (T(lang, "verified", "geprüft")) if c.get("verified") else ""))
                                      + (f' <span class="mut">· {c["endorsed"]} ' + (T(lang, "confirmations", "Bestätigungen")) + "</span>" if c.get("endorsed") else "")
-                                     + f' <span class="pf-certend" data-h="{esc(p["handle"])}" data-e="{c["e"]}"></span></li>' for c in _cs) + "</ul>" if _cs else ""
+                                     + f' <span class="pf-certend" data-h="{esc(p["handle"])}" data-e="{esc(c.get("e0") or c["e"])}"></span></li>' for c in _cs) + "</ul>" if _cs else ""
             contrib = "<ul>" + "".join(f'<li><a href="{eurl(BASE, lang, c["t"])}">{esc(ENTS[c["t"]]["name"] if c["t"] in ENTS else c["t"])}</a> <span class="mut">· {esc(s["wiki"] if c["k"] == "wiki" else s["entity"])} · {datetime.fromtimestamp(c["c"], timezone.utc).strftime("%Y-%m-%d")}{" – " + esc(c["s"]) if c.get("s") else ""}</span></li>' for c in p.get("contrib", []) if c["t"] in ENTS) + "</ul>" if p.get("contrib") else ""
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}members/">{esc(s["members"])}</a></nav>{img_tag("u", p, p["name"])}<h1>{esc(p["name"])}{ROLE.chip(BASE, lang, ROLE.role_of(p), p.get("scope"))}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="creator" data-topic-id="{esc(p["handle"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button><p style="font-size:1.1em">{esc(p.get("headline", ""))}</p><p>{tags_of_p(p, li, s)}</p>{ft}'
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(p["about"])}</p>' if p.get("about") else "")
