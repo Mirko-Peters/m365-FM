@@ -90,11 +90,11 @@ The table above shows the cost of the browser option: no RDP Shortpath, no Priva
 
 Use these checks, in this order:
 
-1. **Service first.** For Azure Virtual Desktop, Windows 365 and Dev Box, Windows App covers every platform in the first table. For Remote Desktop Services on Windows, follow Learn's note on the Remote Desktop app.
+1. **Service first.** For Azure Virtual Desktop, Windows 365 and Dev Box, Windows App covers every platform in the first table; Learn labels Meta Quest preview. For Remote Desktop Services on Windows, follow Learn's note on the Remote Desktop app.
 2. **Required features second.** Check each must-have feature (integrated apps, USB, multimedia redirection, Windows 365 Boot) against the platform columns before assigning users to a device type.
 3. **Identity third.** Decide whether users need passkeys, smart cards or Windows Hello for Business, and check Learn's remote session authentication table (single sign-on off) and in-session authentication table (WebAuthn redirection, which is preview outside Windows and not available in a browser).
 4. **Network last.** Shortpath and Private Link are not available in the browser, so use an installed client where those are required.
-5. **Version and install source.** For Azure Virtual Desktop, Windows 365 and remote PCs, Windows App on Windows supports Windows 11, Windows 10 version 1809 or later and Windows Server 2019 or later; for Microsoft Dev Box, Learn lists Windows 11 and Windows 10 version 21H2 or later. Windows App ships through the Microsoft Store or as a standalone MSIX installer, and the release notes list public and Insider channels.
+5. **Version and install source.** For Azure Virtual Desktop, Windows 365 and remote PCs, Windows App on Windows supports Windows 11, Windows 10 version 1809 or later and Windows Server 2019 or later (Windows 10 versions out of mainstream support must be enrolled in the Extended Security Updates program); for Microsoft Dev Box, Learn lists Windows 11 and Windows 10 version 21H2 or later. Windows App ships through the Microsoft Store or as a standalone MSIX installer, and the release notes list public and Insider channels.
 
 The Windows App page for [what's new](https://learn.microsoft.com/en-us/windows-app/whats-new) lists frequent Windows releases; its latest-release table lists public version 2.0.1489.0 and Insider version 2.0.1595.0, both available 10 November 2026. Record the Windows App version when you test a feature, because several rows carry minimum versions.
 
