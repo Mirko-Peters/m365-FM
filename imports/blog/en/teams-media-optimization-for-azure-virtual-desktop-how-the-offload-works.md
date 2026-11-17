@@ -123,7 +123,7 @@ For macOS, the SlimCore page asks for the non-Store Windows App (the MAU client)
 
 ### Policy and verification
 
-A Teams policy controls SlimCore use: `VDI2Optimization` in `CsTeamsVdiPolicy` defaults to `Enabled`. For Azure Virtual Desktop, Learn's Teams on Azure Virtual Desktop page advises installing the WebRTC Redirector Service as well, so users can fall back to WebRTC when they roam to a device that does not support the new architecture. After 1 April 2027 that WebRTC path ends on Windows endpoints. Learn's example for restricting it for a user is `New-CsTeamsVdiPolicy -Identity RestrictedUserPolicy -VDI2Optimization "Disabled"` followed by `Grant-CsTeamsVdiPolicy`.
+A Teams policy controls SlimCore use: `VDI2Optimization` in `CsTeamsVdiPolicy` defaults to `Enabled`. Learn's Teams on Azure Virtual Desktop page names WebRTC as the fallback when users roam to a device without the new architecture. After 1 April 2027 that WebRTC path ends on Windows endpoints. Learn's example for restricting it for a user is `New-CsTeamsVdiPolicy -Identity RestrictedUserPolicy -VDI2Optimization "Disabled"` followed by `Grant-CsTeamsVdiPolicy`.
 
 To check a session, connect, restart Teams, and open **More options (...)**, **Settings**, **About Teams**. The banner reads **AVD SlimCore Media Optimized** for SlimCore or **AVD Media Optimized** for WebRTC. **AVD Media not connected** means quit Teams and try again. In **Settings**, local audio devices and cameras should appear; **Remote audio** means the offload is not active. On the endpoint, `MsTeamsVdi.exe` should run as a child of `msrdc.exe`.
 
