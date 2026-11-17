@@ -10,7 +10,7 @@ keypoints:
   - "Three resource providers matter: Microsoft.DesktopVirtualization for AVD, plus Microsoft.HybridCompute, Microsoft.GuestConfiguration and Microsoft.HybridConnectivity for Azure Arc-enabled servers."
   - "The host pool needs a managed identity, and that identity needs the Reader role on the resource group that holds the Arc-enabled servers. Learn warns that a future release will keep session hosts from becoming available without it."
   - "Create a standard host pool without adding VMs. Session host configuration is not supported on Azure Virtual Desktop Hybrid."
-  - "Arc traffic is outbound on TCP 443, and the Azure Virtual Desktop endpoints are outbound too. No inbound ports are needed. Learn does not say which of the Azure fabric address rows apply to on-premises hosts, so test with the Agent URL Tool."
+  - "Arc traffic is outbound on TCP 443, and the Azure Virtual Desktop endpoints are outbound too. No inbound ports are needed. Learn's Azure fabric IP page calls two Azure addresses non-routable from on-premises networks, and its Hybrid troubleshooting page treats an unreachable 169.254.169.254 on Arc machines as expected."
   - "Learn says Azure Arc is not recommended for short-lived or VDI virtual machines. Plan Hybrid session hosts as long-lived machines that you do not delete and recreate under the same name."
 faq:
   - q: "Which Azure resource providers do I have to register for Azure Virtual Desktop Hybrid?"
@@ -21,7 +21,7 @@ faq:
     a: "No inbound ports are listed. The Azure Connected Machine agent communicates outbound over TCP port 443. The Azure Virtual Desktop required-endpoints page says all entries are outbound and that you do not need to open inbound ports for Azure Virtual Desktop."
 ---
 
-Running session hosts on-premises with Azure Virtual Desktop Hybrid needs three things in place before the first host registers: the Azure resources and roles, a supported and Arc-enabled Windows machine, and outbound access to the Azure Arc and Azure Virtual Desktop endpoints. This article is a checklist, in the order you will hit each item. For the concept and the decision to use Hybrid, see the [Hybrid explainer](/entity/avd-hybrid/). The page on [Azure Arc](/entity/azure-arc/) covers the connection layer in general.
+Running session hosts on-premises with Azure Virtual Desktop Hybrid needs three things in place before the first host registers: the Azure resources and roles, a supported and Arc-enabled Windows machine, and outbound access to the Azure Arc and Azure Virtual Desktop endpoints. This article is a checklist, in the order you will hit each item. For the concept, the decision to use Hybrid and the comparison with Azure Local, see the [Hybrid explainer](/entity/avd-hybrid/). The page on [Azure Arc](/entity/azure-arc/) covers the connection layer in general.
 
 Azure Virtual Desktop Hybrid was announced as generally available on 1 September 2026. Learn's overview and deployment pages, dated 2 September 2026, show no preview notice.
 
@@ -45,7 +45,7 @@ Register-AzResourceProvider -ProviderNamespace Microsoft.HybridConnectivity
 2. Select **Access control (IAM)**, then **Add** and **Add role assignment**.
 3. Search for **Reader**, select it and select **Next**.
 4. For **Assign access to**, choose **Managed identity**, then **Select members**.
-5. Pick your subscription, choose **Host pool** in the **Managed identity** list, select your host pool's identity and confirm with **Review + assign**.
+5. Pick your subscription, choose **Host pool** in the **Managed identity** list, select your host pool's identity, choose **Select**, then select **Review + assign** twice.
 
 Or in Azure PowerShell:
 
@@ -57,18 +57,18 @@ New-AzRoleAssignment -ObjectId $principalId -RoleDefinitionName "Reader" -Resour
 
 ## 2. The machine
 
-**Operating system and licensing.** Learn lists Windows Server 2025, 2022, 2019 and 2016 (virtual machines and headless physical servers), and Windows 11 and Windows 10 Enterprise (virtual machines, or dedicated headless physical hosts; no laptops or personal PCs). Multi-session editions are not supported. Users need the matching entitlement plus the Azure Virtual Desktop Hybrid service user license.
+**Operating system and licensing.** Learn lists Windows Server 2025, 2022, 2019 and 2016 (virtual machines and headless physical servers), and Windows 11 and Windows 10 Enterprise (virtual machines, or dedicated headless physical hosts). Multi-session editions are not supported. Users need the matching entitlement plus the Azure Virtual Desktop Hybrid service user license. The Hybrid explainer has the table and the license list.
 
-**Identity.** Windows client hosts can be Microsoft Entra ID-joined, AD DS-joined or hybrid-joined. Windows Server hosts must be AD DS-joined or hybrid-joined, because Entra-only join is not supported. Nerdio's help page for its own tooling says the VMs must be domain joined before the Azure Arc extension is installed. Learn does not state an order, so treat that as a Nerdio requirement and do it in that order anyway.
+**Identity.** Windows client hosts can be Microsoft Entra ID-joined, AD DS-joined or hybrid-joined. Windows Server hosts must be AD DS-joined or hybrid-joined, because Entra-only join is not supported. Learn names no order between domain join and the Arc extension. If you deploy with Nerdio Manager, Nerdio's help page requires the VMs to be domain joined before the Azure Arc extension is installed; that is a Nerdio requirement.
 
 **Arc agent.** The Azure Connected Machine agent must be installed and configured on each session host. Learn leaves the method open and refers to the Arc deployment options. Several points from the Arc pages matter for desktops:
 
-- The agent supports Windows Server 2016 to 2025 and Windows 10 and 11 clients. For clients, Arc supports them only in a server-like role: always connected to the internet, connected to power and powered on.
-- Learn says Microsoft does not recommend running Azure Arc on short-lived servers or VDI virtual machines. Arc cannot tell whether an agent is offline for maintenance or because the VM was deleted, so stale resources can conflict with a recreated VM of the same name. The same page says AVD on Azure Local does not use short-lived VMs and supports Arc on the desktop VMs. For Hybrid, the sources do not address pooled, re-imaged hosts, so assume persistent hosts and test a replacement cycle before production.
+- For the Windows versions Hybrid supports, the agent supports Windows Server 2016 to 2025 and Windows 10 and 11 clients. For clients, Arc supports them only in a server-like role: always connected to the internet, connected to power and powered on.
+- Learn says Microsoft does not recommend running Azure Arc on short-lived servers or VDI virtual machines. Arc cannot tell whether an agent is offline for maintenance or because the VM was deleted, so stale resources can conflict with a recreated VM of the same name. The same page says AVD on Azure Local does not use short-lived VMs and supports Arc on the desktop VMs. Learn's Hybrid pages do not say whether pooled, re-imaged hosts are supported. Plan persistent hosts and test a replacement cycle before production.
 - Do not connect a golden image to Arc with `azcmagent connect` before cloning. Cloned machines would share one Azure resource ID and end up disconnected. You can install the `azcmagent` package into the image and connect each clone afterwards with a unique name. Learn says a 429 error is a typical symptom of the cloned-ID case, and gives `azcmagent disconnect --force-local-only` followed by a new `azcmagent connect` as the fix.
 - If Group Policy manages "Log on as a service", add `NT SERVICE\himds`, which runs the Hybrid Instance Metadata Service.
 - Exclude the installer location from antivirus scans during installation.
-- Stay on an agent version from the last year. Learn says only those are officially supported.
+- Stay on an agent version from the last year, the only ones Learn calls officially supported.
 - For TLS, Learn says Windows agents from version 1.56 need at least one of the listed cipher suites for TLS 1.2 or 1.3, for example `TLS_AES_256_GCM_SHA384` or `TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384`.
 
 ## 3. Network
@@ -77,9 +77,11 @@ New-AzRoleAssignment -ObjectId $principalId -RoleDefinitionName "Reader" -Resour
 
 Traffic is light. Learn gives a heartbeat every five minutes (under 64 KB) and one persistent WebSocket connection. Extension packages can be up to 2 GB, so the install of the AVD extension is the heaviest moment.
 
-**Azure Virtual Desktop.** The deployment page requires that session hosts reach the AVD required URLs. In the Azure cloud list, these include `login.microsoftonline.com` (TCP 443), `*.wvd.microsoft.com` (TCP 443), `*.service.windows.cloud.microsoft`, `*.windows.cloud.microsoft` and `*.windows.static.microsoft` (TCP 443), `mrsglobalsteus2prod.blob.core.windows.net` (agent and side-by-side stack updates), `gcs.prod.monitoring.core.windows.net` and `*.prod.warm.ingest.monitor.core.windows.net` (agent traffic), and `azkms.core.windows.net` on TCP 1688 for Windows activation. Learn says Microsoft does not support deployments where these entries are blocked, and recommends service tags and FQDN tags, because AVD has no IP list to allow instead.
+**Azure Virtual Desktop.** The deployment page requires that session hosts reach the AVD required URLs. In the Azure cloud list, these include `login.microsoftonline.com` (TCP 443), `*.wvd.microsoft.com` (TCP 443), `*.service.windows.cloud.microsoft`, `*.windows.cloud.microsoft` and `*.windows.static.microsoft` (TCP 443), `mrsglobalsteus2prod.blob.core.windows.net` (agent and side-by-side stack updates), `gcs.prod.monitoring.core.windows.net` and `*.prod.warm.ingest.monitor.core.windows.net` (agent traffic), and `azkms.core.windows.net` on TCP 1688 for Windows activation. Learn says Microsoft does not support deployments where these entries are blocked. It recommends service tags and FQDN tags for Azure network configurations, notes that AVD has no IP address list to allow instead of FQDNs, and says a Next Generation Firewall needs a dynamic list made for Azure IP addresses.
 
-The same page lists two Azure fabric addresses, `169.254.169.254` and `168.63.129.16`, for session host VMs and Cloud PCs. It says traffic to them must not be intercepted, proxied or redirected. Neither the required-endpoints page nor the Hybrid pages say how these rows apply to a machine on your own hypervisor, where Arc serves the metadata endpoint locally (`IMDS_ENDPOINT` points to `http://localhost:40342`). Run the Azure Virtual Desktop Agent URL Tool on a host, which Learn describes as validating each required FQDN and endpoint, and do not assume.
+The same page lists two Azure fabric addresses, `169.254.169.254` and `168.63.129.16`, for session host VMs and Cloud PCs, and says traffic to them must not be intercepted, proxied or redirected. Two other Learn pages bear on on-premises hosts. The Azure fabric communication IPs page calls both addresses Azure-internal and non-routable and says they cannot be accessed from outside Azure or from on-premises networks. The Hybrid troubleshooting page says the extension's failed call to `169.254.169.254` ("Assuming it's not present") is not an error: IMDS is unreachable on Arc machines, the extension falls back to the Hybrid Instance Metadata Service, and no action is needed. Our reading: do not plan firewall or routing rules for these two addresses on-premises.
+
+The Azure Virtual Desktop Agent URL Tool checks the other endpoints. It ships with the RDAgent, so it exists on a host only after the Arc extension has installed the agent, and it does not verify wildcard entries. Allow the wildcards first. Before the first host registers, our suggestion is to test the FQDNs from the host network segment instead.
 
 **Proxies.** Learn recommends bypassing proxies for AVD traffic, advises against SSL termination and against authenticating proxies, because the agent components run in the system context and do not support proxies that require authentication.
 
@@ -110,15 +112,18 @@ On Windows Server, the extension enables the Remote Desktop Session Host role an
 1. In the Arc machine's **Extensions** list, the status of `Microsoft.AzureVirtualDesktop.CloudDeviceExtension` shows **Succeeded**. The PowerShell check is `Get-AzConnectedMachineExtension`.
 2. In the host pool's **Session hosts** list, the host is **Available**. Learn says this can take up to 15 minutes after the extension succeeds.
 3. If a host does not appear, check the Arc side first. The agent sends a heartbeat every five minutes, and Learn says a server silent for more than 15 minutes may be offline, blocked by the network or have a stopped agent. Logs are in `%ProgramData%\AzureConnectedMachineAgent\Log` (`himds.log`, `azcmagent.log`).
-4. If Arc is healthy and the host is still not Available, the cause is on the Azure Virtual Desktop side. Check the Reader role on the Arc resource group, the registration key's expiry and the required endpoints, then work through the existing checklist for session hosts that show Unavailable.
+4. If Arc is healthy and the host is still not Available, read the extension log in `C:\ProgramData\GuestConfig\extension_logs\Microsoft.AzureVirtualDesktop.CloudDeviceExtension\` and search for `[Fatal]`. Learn's Hybrid troubleshooting page maps messages to causes: an invalid or expired registration token (expiration of up to 27 days), a token tenant that differs from the machine's tenant ("Cross-tenant registration is not permitted"), an unreachable broker (`*.wvd.microsoft.com`, port 443), a WebSocket that is not established, and `NAME_ALREADY_REGISTERED` when a host with that VM name already exists in the host pool.
+5. Also check the Reader role on the Arc resource group and the required endpoints, then work through the article "Azure Virtual Desktop Session Host Shows Unavailable: A Step-by-Step Checklist".
 
 ## Sources
-
-All pages retrieved on 17 November 2026.
 
 - [Microsoft Learn: Deploy Azure Virtual Desktop Hybrid on-premises](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop-hybrid)
 - [Microsoft Learn: Azure Virtual Desktop Hybrid overview](https://learn.microsoft.com/en-us/azure/virtual-desktop/hybrid-overview)
 - [Microsoft Learn: Required FQDNs and endpoints for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/required-fqdn-endpoint)
+- [Microsoft Learn: Troubleshoot Azure Virtual Desktop Hybrid](https://learn.microsoft.com/en-us/azure/virtual-desktop/troubleshoot-azure-virtual-desktop-hybrid)
+- [Microsoft Learn: Azure fabric communication IPs](https://learn.microsoft.com/en-us/azure/virtual-desktop/azurecommunicationips)
+- [Microsoft Learn: Check access to required FQDNs and endpoints (Agent URL Tool)](https://learn.microsoft.com/en-us/azure/virtual-desktop/check-access-validate-required-fqdn-endpoint)
+- [Microsoft Learn: Azure Virtual Desktop on Azure Local](https://learn.microsoft.com/en-us/azure/virtual-desktop/azure-local-overview)
 - [Microsoft Learn: Proxy server guidelines for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/proxy-server-support)
 - [Microsoft Learn: Connected Machine agent prerequisites](https://learn.microsoft.com/en-us/azure/azure-arc/servers/prerequisites)
 - [Microsoft Learn: Overview of the Azure Connected Machine agent](https://learn.microsoft.com/en-us/azure/azure-arc/servers/agent-overview)
