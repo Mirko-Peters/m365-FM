@@ -35,7 +35,7 @@ Microsoft Learn describes the phases as follows:
 
 Learn gives no clock times; you define them. The portal's default values are suggestions for weekdays. Start times use the time zone set in the scaling plan.
 
-One rule applies to all phases of a pooled plan: for pooled host pools, autoscale ignores the load-balancing algorithm in the host pool settings and applies the one from the schedule. You also need a custom maximum session limit on the host pool, and Learn says not to use the default value. The glossary defines available capacity as the limit multiplied by the number of available session hosts, so the threshold percentages below are measured against whatever limit you set. See "Maximum session limit in Azure Virtual Desktop: how it defines host pool capacity" and "How to size the maximum session limit per session host".
+One rule applies to all phases of a pooled plan: for pooled host pools, autoscale ignores the load-balancing algorithm in the host pool settings and applies the one from the schedule. You also need a custom maximum session limit on the host pool, and Learn says not to use the default value. The glossary defines available capacity as the limit multiplied by the number of available session hosts, so the threshold percentages below are measured against whatever limit you set. "How to size the maximum session limit per session host" covers the choice of value.
 
 ## Ramp-up
 
@@ -56,7 +56,7 @@ Autoscale can turn hosts on in any phase when used capacity exceeds the threshol
 
 The peak tab asks for a start time, which is also the end of ramp-up, and for a load-balancing choice between breadth-first and depth-first. Breadth-first spreads new sessions across all available hosts. Depth-first sends them to the available host with the most connections that has not reached its session limit. The capacity threshold cannot be edited here. The value from ramp-up carries over. The peak tab has no minimum-percentage field either, but Learn's peak example lists a minimum of 30 percent.
 
-Peak is not static: autoscale can turn hosts on and off. In the Learn example, with six hosts, five of them running, a 30 percent threshold and a session limit of 5, capacity is 25. Seven sessions mean 28 percent. When two users sign out and five sessions remain, usage is 20 percent. Turning off one host would give 25 percent, below the threshold, so autoscale picks a host without sessions, puts it in drain mode and turns it off. At four sessions on four hosts no host is empty, so autoscale does nothing, although a further shutdown would stay under the threshold.
+Peak is not static: autoscale can turn hosts on and off. In the Learn example, with six hosts, five of them running, a 30 percent threshold and a session limit of 5, capacity is 25. Seven sessions mean 28 percent. When two users sign out and five sessions remain, usage is 20 percent. Turning off one host would give 25 percent, below the threshold, so autoscale picks a host without sessions, puts it in drain mode and turns it off.
 
 ## Ramp-down
 
@@ -70,7 +70,7 @@ You have two ways to handle users still signed in:
 
 The sequence users see is covered in "Forcing users to sign out during AVD ramp-down: what happens and what users see", and the trade-offs between the two choices in "Force sign out vs wait for sign-out: choosing the ramp-down behaviour".
 
-Learn's third scenario (six hosts, depth-first, 75 percent threshold, 10 percent minimum, session limit 5) shows both effects. With four hosts running four sessions (20 percent), force sign-out lets autoscale shut down two hosts. With four sessions on two hosts (40 percent), a further shutdown would put 80 percent on one host, so nothing happens. The "Forcing users to sign out" article walks through the full scenario.
+Learn's third scenario (six hosts, depth-first, 75 percent threshold, 10 percent minimum, session limit 5) shows this. With four hosts running four sessions (20 percent), force sign-out lets autoscale shut down two hosts. With four sessions on two hosts (40 percent), a further shutdown would put 80 percent on one host, so nothing happens.
 
 Learn's FAQ adds a timing trap: if the ramp-down phase is 15 minutes long and the wait time before sign-out is 20 minutes, the schedule moves to off-peak first. Autoscale does not force sign-outs during off-peak, so the sessions stay, and autoscale waits until all users have signed out before it deallocates the VM. Keep the wait time shorter than the phase.
 
@@ -112,7 +112,6 @@ A weekday schedule for a pooled host pool of ten hosts, all with a session limit
 3. Ramp-down at 17:00: depth-first, 10 percent minimum (one host), 75 percent threshold, force sign-out on with a wait time shorter than the two-hour phase.
 4. Off-peak at 19:00: depth-first, threshold 75 percent (carried over).
 
-Changes to a plan that is already assigned to host pools apply immediately.
 
 ## Sources
 
