@@ -7,16 +7,16 @@ author: mirko-p
 date: 2026-11-18
 topics: [trusted-launch, azure-virtual-desktop]
 keypoints:
-  - "Trusted launch is a set of coordinated features for Generation 2 Azure VMs: Secure Boot, a virtual TPM (vTPM) and boot integrity monitoring through remote attestation. Learn says you can enable them independently, and that it adds no VM price."
-  - "When you add session hosts in the Azure portal, Learn says the default security type is Trusted virtual machines. The Windows 11 requirements page lists trusted launch with vTPM enabled as the Azure setting for Windows 11 VMs."
-  - "The protection covers the running OS and OS disk, not data disks. Learn names bootkits, rootkits and kernel-level malware as the target, and lists endpoint protection and monthly base-image patching as separate recommendations."
+  - "Trusted launch combines Secure Boot, a virtual TPM (vTPM) and boot integrity monitoring for Generation 2 Azure VMs. Learn says you can enable them independently and that it adds no VM price."
+  - "Learn says the default security type is Trusted virtual machines when you add session hosts in the Azure portal. For Windows 11 on Azure, the requirements page lists trusted launch with vTPM enabled."
+  - "It covers the running OS and OS disk, not data disks, and targets bootkits, rootkits and kernel malware. Learn lists endpoint protection and monthly base-image patching as separate recommendations."
   - "A trusted launch VM does not boot if unsigned components are found. Learn says VMs created directly from Marketplace images should not hit this; custom images and drivers are where to look."
   - "Secrets bound to the vTPM belong to one VM, and pooled users can land on any host in the pool, so check features that rely on the vTPM before you use them on pooled session hosts."
 faq:
   - q: "Is trusted launch the same as a confidential VM?"
     a: "No. Learn's Azure Virtual Desktop security recommendations describe trusted launch as protection against bottom-of-the-stack threats such as rootkits, boot kits and kernel-level malware. Confidential VMs go further: Learn says they encrypt the desktop in memory, protect it in use and back it with a hardware root of trust. In the portal, Confidential virtual machines is a separate security type from Trusted launch virtual machines."
   - q: "Does trusted launch cost extra?"
-    a: "Learn's trusted launch overview says it does not increase existing VM pricing costs. Related services can have their own costs: the trusted launch FAQ says boot integrity alerts in Microsoft Defender for Cloud are only available if enhanced security features in Defender for Cloud are enabled, so check that plan's pricing separately."
+    a: "Learn's trusted launch overview says it does not increase existing VM pricing costs. The trusted launch FAQ also says boot integrity alerts in Microsoft Defender for Cloud are only available if enhanced security features in Defender for Cloud are enabled. Learn does not state a price for those features on these pages."
   - q: "Can I use a Generation 1 image or VM?"
     a: "Not for trusted launch itself, which applies to Generation 2 VMs. The Windows 11 requirements page also lists generation 2 for Windows 11 VMs and says in-place upgrade of existing generation 1 VMs to Windows 11 is not possible. Learn describes separate paths to move an existing Gen1 VM to Gen2 with trusted launch; this article does not cover the steps."
 ---
@@ -51,7 +51,7 @@ Scope to keep in mind:
 - **Threat class.** The stated target is bootkits, rootkits and kernel-level malware. Learn's AVD security recommendations list endpoint protection on all session hosts and monthly patching of base images as separate recommendations, next to the trusted launch section.
 - **Memory encryption.** Learn describes encryption of the desktop in memory for confidential VMs, not for trusted launch; see the comparison below.
 
-Learn lists two practical effects: the paravisor typically uses about 50 MB of memory, shown as reserved in the guest OS, and trusted launch does not increase existing VM pricing costs.
+Two practical notes from separate Learn pages: the FAQ says the paravisor typically uses about 50 MB of memory, shown as reserved in the guest OS. The overview says trusted launch does not increase existing VM pricing costs.
 
 ## Where it applies to Azure Virtual Desktop
 
@@ -67,13 +67,14 @@ So for a new Windows 11 multi-session pool created in the portal, you usually ge
 
 **Operating system.** Learn's supported list includes Windows 10 and 11 (Pro, Enterprise, Enterprise multi-session) and Windows Server 2016 to 2025, which covers the usual [session host](/entity/avd-session-host/) choices.
 
-**VM size.** Not every size family supports it. The overview's table has columns for supported size families, currently not supported size families and not supported size families. Supported families include B, D, E, F and L, and the NC, ND and NV GPU families. Dpsv5, Dpdsv5, Dplsv5, Dpldsv5 and Mbdsv4 (Preview) sit in the "currently not supported" column. Not supported are the A family, Dv2, Dv3, the DC and EC confidential families, the M family except Mbdsv4 (Preview), and the older NC-series, NV-series and NP-series. Learn's note under the table says the not-supported families do not support Generation 2 VMs, so the fix there is an equivalent supported size family. The page does not explain the "currently not supported" column further, so check those sizes with the query below.
+**VM size.** Not every size family supports it. The overview's table has columns for supported size families, currently not supported size families and not supported size families. Supported families include B, D, E, F and L, and the NC, ND and NV GPU families. Dpsv5, Dpdsv5, Dplsv5, Dpldsv5 and Mbdsv4 (Preview) sit in the "currently not supported" column. Not supported are the A family, Dv2, Dv3, the DC and EC confidential families, the M family except Mbdsv4 (Preview), and the older NC-series, NV-series and NP-series. Learn's note under the table says the not-supported families do not support Generation 2 VMs, so the fix there is an equivalent supported size family. Learn does not explain the "currently not supported" column further; check those sizes with the query below.
 
 To check a specific size, the FAQ gives a CLI query (`az vm list-skus ... --query "[?name=='<size>'].capabilities"`). For a Gen2 size, output that includes `TrustedLaunchDisabled True` means trusted launch is not supported; if that entry is absent, it is supported. One related limit: Learn says that once a VM is created with trusted launch you cannot resize it to a size family that does not support it, for example an unsupported M-series size.
 
 **Unsupported features.** The overview names managed images and Linux VM hibernation as unsupported.
 
 **Deployment code.** The portal, PowerShell and CLI default new Gen2 VMs to trusted launch. For templates (ARM, Bicep, Terraform), Learn says the absence of a `securityProfile` element deploys a VM without trusted launch unless the subscription is registered for the "Trusted Launch as Default" feature. With API version 2025-11-01 or higher, the default applies only if the Marketplace or gallery image, the source disk and the VM size all support trusted launch; otherwise the deployment still succeeds, without it. The explicit settings are `securityType: TrustedLaunch` with `secureBootEnabled` and `vTpmEnabled` set to true.
+
 ## Pooled hosts, the vTPM and encryption
 
 The vTPM is per VM. Learn's AVD security recommendations say any feature that uses the vTPM results in secrets bound to that specific VM, and in a pooled scenario users can be redirected to any VM in the host pool, so depending on how a feature is designed, this can have an impact. Our reading: test any feature that stores a secret in the vTPM on a real [pooled host pool](/entity/avd-pooled-host-pool/) before rollout, because a later session may land on a host that does not hold that secret.
@@ -81,6 +82,7 @@ The vTPM is per VM. Learn's AVD security recommendations say any feature that us
 The same page recommends enabling vTPM to use remote attestation, and says that with vTPM enabled you can also use BitLocker through Azure Disk Encryption. It warns: do not use BitLocker to encrypt the specific disk where FSLogix profile data is stored.
 
 For [ephemeral OS disks](/entity/avd-ephemeral-os-disks/), the FAQ says trusted launch supports them, but keys and secrets that the vTPM generates or seals after VM creation might not persist across reimaging and platform events such as service healing.
+
 ## Secure Boot, custom images and drivers
 
 Learn's FAQ says a trusted launch VM does not boot if unsigned components are detected in the UEFI firmware, bootloader, OS or boot drivers. VMs created directly from a Marketplace image should not hit this. If one does, the FAQ suggests, in order: update to a newer image version if the image is deprecated; check for unsigned boot components if the image was built outside the Marketplace; otherwise treat the VM as possibly infected with a bootkit or rootkit, delete it and recreate it from the same source image.
