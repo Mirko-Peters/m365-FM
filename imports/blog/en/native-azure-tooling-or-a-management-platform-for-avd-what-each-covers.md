@@ -1,6 +1,6 @@
 ---
 title: "Native Azure tooling or a management platform for AVD: what each covers"
-summary: "Azure Virtual Desktop has native features for host pool creation, autoscale, session host updates, image building and monitoring. A management platform such as Nerdio Manager for Enterprise offers one console, more scaling triggers and image staging, at the price of another application, permissions and a per-user licence."
+summary: "Azure Virtual Desktop has native features for host pool creation, autoscale, session host updates, image building and monitoring. A management platform such as Nerdio Manager for Enterprise offers more scaling triggers and image staging, at the price of another application, permissions and a per-user licence."
 status: review
 publish: false
 author: mirko-p
@@ -8,7 +8,7 @@ date: 2026-11-18
 topics: [azure-virtual-desktop, nerdio-manager-for-enterprise]
 keypoints:
   - "Native Azure Virtual Desktop covers a lot: scaling plans (power management and dynamic autoscaling), session host configuration with session host update, custom image templates on Azure Image Builder, and Insights on Azure Monitor."
-  - "Nerdio Manager for Enterprise runs as an Azure application in your own subscription and, per Nerdio, offers auto-scale triggers beyond session count (CPU, RAM), image staging, scripted actions and one console. Several features, such as multiple triggers and Global Pools, are Premium-only."
+  - "Nerdio Manager for Enterprise runs as an Azure application in your own subscription and, per Nerdio, offers auto-scale triggers beyond session count (CPU, RAM), image staging and scripted actions. Several features, such as multiple triggers and Global Pools, are Premium-only."
   - "Vendor comparisons age quickly: a Nerdio comparison page says native scaling cannot create hosts, while Learn documents dynamic autoscaling that creates and deletes session hosts for pooled pools with a session host configuration."
   - "Both routes have limits. The native session host configuration approach is chosen at creation and cannot be changed, and existing standard-management tooling does not work with it. Nerdio bills per unique Entra ID user per month and needs an installer with Global Admin and Subscription Owner rights, or a pre-created enterprise app."
   - "Decide per task, not per product: run the native tools where they meet your requirements, and test the platform on a pilot host pool where a documented gap costs you money or admin time."
@@ -21,7 +21,7 @@ faq:
     a: "Nerdio's billing page says charges are per calendar month and per unique Entra ID user, under either the Windows Cloud or the AVD entitlement model, in Core or Premium edition. The page lists no prices; ask Nerdio or your partner for a quote."
 ---
 
-Azure Virtual Desktop has native features for host pool creation, autoscale, session host updates, image building and monitoring. Whether they are enough depends on your environment. A management platform such as [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/) offers these tasks in one console, with CPU- and RAM-based scaling triggers and image staging. Whether that is worth another application and licence depends on your gaps.
+Azure Virtual Desktop has native features for host pool creation, autoscale, session host updates, image building and monitoring. Whether they are enough depends on your environment. A management platform such as [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/) covers these tasks in one product, with CPU- and RAM-based scaling triggers and image staging. Whether that is worth another application and licence depends on your gaps.
 
 This guide compares the two routes task by task, using Microsoft Learn for the native side and Nerdio's help pages for the platform. Nerdio's billing page lists no prices, so costs are not compared.
 
@@ -35,12 +35,12 @@ Microsoft announced general availability of enhanced host pool management, inclu
 
 | Task | Native Azure (Learn) | Nerdio Manager for Enterprise (Nerdio help pages) |
 |---|---|---|
-| Create host pools | Standard management: Azure portal, Azure CLI or Azure PowerShell; hosts on Azure or Azure Local. Session host configuration: pooled only, on Azure only (not Azure Local); portal or PowerShell, with the PowerShell cmdlets in preview. Learn pages differ on whether PowerShell can add hosts to such a pool, so check the current page | Create host pools from desktop images; static or auto-scaled; session hosts in Azure or AVD Hybrid (Azure Local or Nutanix AHV) |
+| Create host pools | Standard management: Azure portal, Azure CLI or Azure PowerShell; hosts on Azure or Azure Local. Session host configuration: pooled only, on Azure only (not Azure Local); portal or PowerShell, with the PowerShell cmdlets in preview. Learn's comparison table lists PowerShell for adding hosts to such a pool, but its add-session-hosts page says PowerShell cannot be used | Create host pools from desktop images; static or auto-scaled; session hosts in Azure or AVD Hybrid (Azure Local or Nutanix AHV) |
 | Scale session hosts | Scaling plans: power management and dynamic autoscaling | Auto-scale with triggers for CPU or RAM usage, average active sessions, available sessions and user-driven scaling (multiple triggers: Premium) |
 | Update session hosts | Session host update replaces VMs in batches (host pools with a session host configuration only) | Desktop images with optional staging; scheduled Marketplace refresh, deployed to the session hosts that use the image |
-| Build images | Custom image templates on Azure Image Builder | Create or import desktop images; optional Azure Compute Gallery with chosen replication regions |
+| Build images | Custom image templates on Azure Image Builder | Create or import desktop images; when setting an image, optional Azure Compute Gallery and replication to chosen regions |
 | Automate tasks | Custom PowerShell script in the session host configuration; scripts in image templates | Scripted actions: PowerShell on a VM or in an Azure Automation account |
-| Monitor | Insights on Azure Monitor Workbooks | Insights for Azure Virtual Desktop in Nerdio Manager, based on Log Analytics data; can link an Azure Monitor Insights workbook; some Insights are Premium-only |
+| Monitor | Insights on Azure Monitor Workbooks | Insights for Azure Virtual Desktop in Nerdio Manager, based on Log Analytics data; can link an Azure Monitor Insights workbook; some analytics and reporting features are Premium-only |
 
 ## Scaling
 
@@ -48,11 +48,11 @@ Native scaling plans for pooled host pools work on a percentage; personal pools 
 
 Native scaling comes in two methods. [Power management autoscaling](/entity/avd-power-management-autoscaling/) starts and deallocates existing hosts and is generally available. [Dynamic autoscaling](/entity/avd-dynamic-autoscaling/) can also create and delete session hosts, but only for pooled host pools with a session host configuration, and Learn says it is not supported in Azure Government.
 
-[Nerdio auto-scale](/entity/nerdio-auto-scaling/) adds more inputs. Per its help page, a scale-out trigger can be CPU or RAM usage, average active sessions, available sessions or user-driven, with up to 3 triggers. It also offers scale-in aggressiveness, rolling drain mode and pre-staged hosts. The same page says that "the multiple auto-scale triggers feature is available only in the Nerdio Manager Premium edition." Nerdio's billing page lists advanced auto-scale, multiple auto-scale triggers, intelligent pre-stage and rolling drain mode among its Premium features, which are not included in Core. The help pages do not say whether the help page's pre-staged hosts are the same as intelligent pre-stage.
+[Nerdio auto-scale](/entity/nerdio-auto-scaling/) adds more inputs. Per its help page, a scale-out trigger can be CPU or RAM usage, average active sessions, available sessions or user-driven, with up to 3 triggers. It also offers scale-in aggressiveness, rolling drain mode and pre-staged hosts. The same page says that "the multiple auto-scale triggers feature is available only in the Nerdio Manager Premium edition." Nerdio's billing page lists advanced auto-scale, multiple auto-scale triggers, intelligent pre-stage and rolling drain mode among its Premium features, which are not included in Core.
 
 Two cautions for a fair reading:
 
-- A Nerdio comparison page (last modified 16 June 2026) states that the session count threshold is the only native autoscale trigger, and that native scaling "can only power on hosts that already exist in your pool." The first fits Learn only in part: Learn's capacity threshold is a percentage of host pool capacity, not a session count per host. The second describes power management; dynamic autoscaling creates and deletes hosts. Treat the page as vendor material; it also concedes that native autoscale "works reasonably well" for small deployments.
+- A Nerdio comparison page (last modified 16 June 2026) states that the session count threshold is the only native autoscale trigger, and that native scaling "can only power on hosts that already exist in your pool." The first fits Learn only in part: Learn's capacity threshold is a percentage of host pool capacity, not a session count per host. The second describes power management; dynamic autoscaling creates and deletes hosts. Treat the page as vendor material; it also concedes that for small deployments with predictable usage, native autoscale "works reasonably well."
 - Learn's autoscale scenarios page says: "Don't use autoscale in combination with other scaling Microsoft or third-party scaling tools," and to disable those on the host pools a scaling plan applies to. The scaling plan page adds that autoscale and Azure Automation or Azure Logic Apps scaling can't run on the same host pool, and that dynamic scaling can't be used with any other scaling script. Our reading: per host pool, use either a native scaling plan or Nerdio auto-scale, and disable the other.
 
 ## Images and updates
@@ -75,7 +75,7 @@ For monitoring, native [AVD Insights](/entity/avd-insights/) is a dashboard on A
 
 **Architecture.** Nerdio's reference architecture lists what a Marketplace deployment creates in your subscription, including an automation account, SQL Server and database, Key Vault and App Service. The application's service principal receives Contributor permissions on the resource groups it manages, plus Reader and Backup Reader on the subscription. The installer needs Entra ID Global Admin and Azure subscription Owner rights, or an enterprise app created in advance. Native features instead need specific RBAC roles, for example Desktop Virtualization Power On Off Contributor at subscription scope for autoscale.
 
-**Licensing.** Nerdio bills per calendar month and per unique Entra ID user, in Core or Premium edition. Premium-only features on the billing page include multiple Entra ID tenant support, Azure Government support and Global Pools. Downgrading from Premium to Core "could result in loss of functionality."
+**Licensing.** Nerdio bills per calendar month and per unique Entra ID user, in Core or Premium edition. Premium-only features on the billing page include multiple Entra ID tenant support, Azure Government support and Global Pools. Nerdio's edition management page warns that downgrading from Premium to Core "could result in loss of functionality."
 
 **Native constraints.** Learn says the management approach is set at creation and cannot be changed. The session host configuration approach is for pooled host pools only, and "existing tooling designed for standard management won't work with a session host configuration." Before running a third-party platform against a pool with a session host configuration, ask the vendor how the two interact.
 
