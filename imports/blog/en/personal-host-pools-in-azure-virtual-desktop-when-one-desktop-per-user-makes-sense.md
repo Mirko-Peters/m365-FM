@@ -16,12 +16,12 @@ faq:
   - q: "Does a personal host pool need FSLogix?"
     a: "Not by default. Microsoft Learn says that in a personal host pool each user only ever uses one session host, so profile data can stay on the VM's OS disk. If you do use FSLogix with a personal pool, Learn says not to enable hibernation, because FSLogix does not support it."
   - q: "How many users can be on one session host in a personal host pool?"
-    a: "One. The maximum session limit of a personal host pool is one, and users always have their sessions on the session host they are assigned to. The exception is that one user can be assigned several personal desktops, but only with direct assignment."
+    a: "One. The maximum session limit of a personal host pool is one, and users always have their sessions on the session host they are assigned to. One user can, however, be assigned several personal desktops (several hosts), but only with direct assignment; each host still has one user."
   - q: "Can autoscale sign users out of a personal desktop?"
     a: "No. Microsoft Learn's autoscale FAQ says autoscale does not force users to sign out of personal desktops, and that it only deallocates session hosts if the user has signed out. Another FAQ answer says \"signed out or disconnected\", and a scaling plan can act on disconnected sessions through a disconnect timer, so test with your settings. A session host that was turned on and never used is deallocated after a period of inactivity that the page does not define."
 ---
 
-A personal host pool in Azure Virtual Desktop assigns each session host virtual machine to one user. That user always lands on the same VM, and the desktop keeps its files and settings on the VM's OS disk. The model fits users who need dedicated resources or data separation and where the cost of one VM per user is acceptable. This article sets out the criteria, the sizing starting points and the cost controls that apply to personal pools.
+A personal host pool in Azure Virtual Desktop assigns each session host virtual machine to one user. That user always lands on the same VM, and the desktop can keep its files and settings on the VM's OS disk. The model fits users who need dedicated resources or data separation and where the cost of one VM per user is acceptable. This article sets out the criteria, the sizing starting points and the cost controls that apply to personal pools.
 
 Prices are outside the scope of this article. For the side-by-side comparison with pooled pools, including load balancing and autoscale differences, see the sibling article "Pooled or personal host pools: a decision guide". For assignment procedures, see "Assigning personal desktops: automatic vs direct assignment".
 
@@ -59,7 +59,7 @@ The same sizing page gives minimums for single-session VMs:
 | Medium | 4 vCPUs, 16 GB, 32 GB | D4s_v5, D4s_v4 | 30 GB |
 | Heavy | 8 vCPUs, 32 GB, 32 GB | D8s_v5, D8s_v4 | 30 GB |
 
-Learn calls these generic guidelines for initial performance estimates only. For other single-session scenarios it tells you to ask the software vendors of your workload. It also says running on virtual machines can incur a 15 to 20 percent capacity cost compared with bare metal, based on internal testing. The profile container column applies only if you use profile containers.
+Learn calls these generic guidelines for initial performance estimates only. It also recommends at least two physical CPU cores per VM, typically four vCPUs with hyper-threading, so the 2-vCPU Light row is a floor to validate rather than a default. For other single-session scenarios it tells you to ask the software vendors of your workload. It also says running on virtual machines can incur a 15 to 20 percent capacity cost compared with bare metal, based on internal testing. The profile container column applies only if you use profile containers.
 
 ## Cost controls for personal desktops
 

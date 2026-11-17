@@ -9,7 +9,7 @@ topics: [azure-compute-gallery, azure-virtual-desktop]
 keypoints:
   - "A gallery holds image definitions, and each definition holds image versions. You deploy from a version, never from the definition itself."
   - "Versions are named major.minor.patch with integers. 'latest' resolves to the highest major, then minor, then patch, and 'exclude from latest' keeps a version out of that choice."
-  - "Each version is created in a source region, which must also be one of its target regions, and has a replica count per region. Learn's gallery overview recommends one replica for every 20 VMs created at the same time and at least three replicas for production images; the session host update page recommends at least two replicas of the image you use."
+  - "Each version is created in a source region, which must also be one of its target regions, and has a replica count per region. Learn's gallery overview recommends one replica for every 20 VMs created at the same time and at least three replicas for production images; the session host update how-to page recommends at least two replicas of the image you use."
   - "There is no charge for the gallery itself. You pay for the storage of each replica and for network egress when the first copy leaves the source region."
   - "Learn disagrees with itself on cross-subscription images for session host configuration: two pages updated in July 2026 list a gallery image in another subscription as unsupported, while What's new for September 2025 announces support within the same tenant. Test it before centralizing images."
 faq:
