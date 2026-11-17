@@ -9,7 +9,7 @@ topics: [rdp-multipath, remote-desktop-protocol]
 keypoints:
   - "Three layers, three jobs: TCP reverse connect through the gateway brokers every session, Shortpath adds a UDP transport (managed network, direct STUN or TURN relay), and Multipath keeps standby UDP and TCP paths and switches when the active path degrades."
   - "Only the managed-network listener needs session host configuration. Shortpath for public networks works without configuration if networks and firewalls allow it. The Multipath page lists no separate switch for it, but recommends Shortpath as its primary transport."
-  - "Keep TURN enabled unless you disable it for troubleshooting. the Shortpath configuration page calls TURN a predictable path when direct UDP cannot be established, for example behind Symmetric NAT or restrictive firewalls, and says disabling it lowers the connection success rate and can force TCP."
+  - "Keep TURN enabled unless disabling it for troubleshooting. The Shortpath configuration page calls TURN a predictable path when direct UDP cannot be established, for example behind Symmetric NAT or restrictive firewalls, and says disabling it lowers the connection success rate and can force TCP."
   - "Network rules to allow: TCP 443 to the gateway range, UDP 3478 to the TURN range 51.5.0.0/16, and outbound UDP for direct STUN, default ports 49152 to 65535. Multipath can use up to three UDP and two TCP ports per session."
   - "Verify layer by layer: Connection Information shows UDP (Private Network), UDP or UDP (Relay), the connection bar shows Multipath, and UdpUse in the WVDConnections table reports 1, 2 or 4."
 faq:
