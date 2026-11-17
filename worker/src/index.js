@@ -631,7 +631,8 @@ const handlers = {
       if (path.startsWith("/go/")) return await handleSponsorLink(env, request, url, path, ctx);
       if (path === "/paypal/webhook") return await handlePaypalWebhook(env, request);   // #281: Signatur wird vor jeder Aktion bei PayPal geprueft
       if (path.startsWith("/auth/")) return (await auth(env, request, url, path)) || new Response("not found", { status: 404 });
-      if (path === "/mcp") return await handleMcp(env, request, (uid) => me(env, uid), (req, user) => api(env, req, new URL(req.url), new URL(req.url).pathname, user, ctx));
+      // Bridge-Aufrufe tragen die IP des echten Aufrufers weiter: sonst landen alle MCP-Clients bei IP-Limits (Suche, Expertensuche) in einem gemeinsamen Eimer (K19)
+      if (path === "/mcp") return await handleMcp(env, request, (uid) => me(env, uid), (req, user) => { const ipIn = request.headers.get("cf-connecting-ip"); if (ipIn) { const h = new Headers(req.headers); h.set("cf-connecting-ip", ipIn); req = new Request(req, { headers: h }); } return api(env, req, new URL(req.url), new URL(req.url).pathname, user, ctx); });
       if (path === "/a2a") return await handleA2a(env, request);
       if (path === "/api/byod/serve") return await handleByodServe(env, request, url);   // Blog auf der eigenen Domain (nur mit BYOD=1), ohne Sitzung
       if (path.startsWith("/api/")) return await api(env, request, url, path, undefined, ctx);

@@ -1,6 +1,6 @@
 // Mail-System: bestaetigte Adresse je Konto, Einstellungen je Art, Warteschlange (Outbox) mit Versand, Abmeldelink in jeder Mail.
 import { mailReady, sendMail } from "./mailer.js";
-import { esc, sign, verify, randomToken, rateLimit } from "./util.js";
+import { esc, sign, verify, randomToken, rateLimit, sha256hex } from "./util.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 export const KINDS = { weekly: 1, reply: 1, reply_now: 0, wish: 1, show: 1, event: 1, system: 1 };   // 1 = standardmaessig an; "system" = Test/Bestaetigung
@@ -115,6 +115,8 @@ export async function handleMail(env, request, url, path, user, J) {
     if (!/^[^\s@<>]{1,64}@[^\s@<>]{1,190}\.[a-z]{2,}$/.test(email)) return J({ error: "email" }, 400);
     if (!mailReady(env)) return J({ error: "mail_off" }, 503);
     if (!(await rateLimit(db, `mset:${user.id}`, 4, 3600))) return J({ error: "rate_limit" }, 429);
+    // dazu je Zieladresse hoechstens 3 Bestaetigungsmails am Tag, egal von welchem Konto (K37); im Schluessel nur ein Hash der Adresse
+    if (!(await rateLimit(db, `mset_to:${(await sha256hex(`${env.SESSION_SECRET || ""}|mset|${email}`)).slice(0, 32)}`, 3, 86400))) return J({ error: "rate_limit" }, 429);
     const token = randomToken(20);
     await db.prepare("INSERT OR REPLACE INTO mail_addr(user_id,email,verified,token,created) VALUES(?,?,0,?,?)").bind(user.id, email, token, now()).run();
     const link = `${env.API}/api/mail/confirm?t=${encodeURIComponent(token)}`;

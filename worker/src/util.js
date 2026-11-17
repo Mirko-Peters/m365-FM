@@ -139,6 +139,14 @@ export async function memberOf(env, uid) {
   return { ...u, admin: isAdmin(env, u), editor: u.role === "editor", moderator: u.role === "moderator", pro };
 }
 
+// Schluessel fuer Limits "je Aufrufer" (K19): angemeldet die Konto-Nummer, sonst ein taeglich wechselnder Hash der IP (nie die IP selbst).
+// Ohne IP (Service-Binding, interne Aufrufe) ein eigener, klar benannter Eimer - nie ein Hash aus leerer IP, der stillschweigend alle teilen.
+export async function callerKey(env, request, user) {
+  if (user?.id) return `u:${user.id}`;
+  const ip = request.headers.get("cf-connecting-ip") || "";
+  return ip ? (await sha256hex(`${ip}|${new Date().toISOString().slice(0, 10)}|${env.SESSION_SECRET || ""}`)) : "noip";
+}
+
 // Ratelimit: max Aktionen pro Fenster (Sekunden). true = erlaubt
 // Eine einzige Anweisung (UPSERT mit Bedingung): Pruefen und Hochzaehlen sind atomar. Frueher SELECT, dann INSERT/UPDATE - parallele Anfragen
 // (z. B. ein MCP-Batch mit Promise.all) lasen denselben Stand und kamen alle durch (Sicherheitspruefung K37/K40). Erlaubt ist ein Aufruf nur,

@@ -1,4 +1,4 @@
-import { audit, cleanText, isLang, rateLimit, sha256hex } from "./util.js";
+import { audit, callerKey, cleanText, isLang, rateLimit, sha256hex } from "./util.js";
 import { baseIds, entityMap } from "./entities.js";
 import { sendPush } from "./push.js";
 import { embed, queryVectors, rrf, upsertVectors, vectorId } from "./vectors.js";
@@ -403,9 +403,7 @@ export async function handleExpertRequests(env, request, path, user, J, ctx) {
   await ensureExpertConnectColumns(db);
   if (path === "/api/experts/search" && method === "GET") {
     if (new URL(request.url).searchParams.get("q")) {   // oeffentliche Suche mit Begriff: Embedding (Workers AI) kostet, daher IP-Grenze wie /api/search
-      const day = new Date().toISOString().slice(0, 10);
-      const ipHash = await sha256hex(`${request.headers.get("cf-connecting-ip") || ""}|${day}|${env.SESSION_SECRET || ""}`);
-      if (!(await rateLimit(db, `expert_search:${ipHash}`, 60, 60))) return J({ error: "rate_limit" }, 429);
+      if (!(await rateLimit(db, `expert_search:${await callerKey(env, request, user)}`, 60, 60))) return J({ error: "rate_limit" }, 429);   // je Konto oder IP-Hash (util.js callerKey, K19)
     }
     const items = await expertSearch(env, new URL(request.url).searchParams.get("q"), {
       lang: new URL(request.url).searchParams.get("lang") || "",

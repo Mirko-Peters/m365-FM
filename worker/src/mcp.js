@@ -47,7 +47,10 @@ export async function handleTokens(env, request, url, path, user, J) {
 export async function deleteUserTokens(db, uid) { await db.prepare("DELETE FROM api_tokens WHERE user_id=?").bind(uid).run(); }
 
 // ---------- Daten ----------
+// Lesende Werkzeuge teilen sich je MCP-Anfrage EINEN Vollscan der Entitaeten (ctx.entities, in handleMcp gesetzt; ein Batch mit 20 Aufrufen
+// las vorher 20-mal entity_rev komplett, K18). Schreibende Werkzeuge lesen immer frisch.
 const allEntities = entityMap;
+const readEntities = (env, ctx) => (ctx?.entities ? ctx.entities() : entityMap(env));
 const shortEnt = (e) => ({ id: e.id, name: e.name, type: e.type, description: { en: e.desc?.en || "", de: e.desc?.de || "" }, url: `https://www.m365.fm/entity/${e.id}/` });
 
 // Anleitungen "Wie lege ich X an?" - Single Source fuer das Tool get_help, die Anleitungsseite und den herunterladbaren Skill.
@@ -278,16 +281,16 @@ export const TOOLS = [
 ];
 TOOLS.push(...BRIDGE);
 
-export async function callTool(env, user, name, a) {
+export async function callTool(env, user, name, a, ctx = null) {
   const db = env.DB;
   if (name === "search_entities") {
     const q = String(a.query || "").toLowerCase().trim(); if (!q) return { error: "query_required" };
     const lim = Math.min(30, Math.max(1, parseInt(a.limit) || 15)), has = (v) => String(v || "").toLowerCase();
     const score = (e) => { const n = has(e.name); return n === q || e.id === q ? 0 : n.startsWith(q) ? 1 : n.includes(q) || e.id.includes(q) ? 2 : (e.aliases || []).some((x) => has(x).includes(q)) ? 3 : has(e.desc?.en).includes(q) || has(e.desc?.de).includes(q) ? 4 : 9; };
-    const hits = [...(await allEntities(env)).values()].filter((e) => !e.outdated && !e.replaced_by && (!a.type || e.type === a.type)).map((e) => [score(e), e]).filter(([sc]) => sc < 9).sort((x, y) => x[0] - y[0] || x[1].name.localeCompare(y[1].name));
+    const hits = [...(await readEntities(env, ctx)).values()].filter((e) => !e.outdated && !e.replaced_by && (!a.type || e.type === a.type)).map((e) => [score(e), e]).filter(([sc]) => sc < 9).sort((x, y) => x[0] - y[0] || x[1].name.localeCompare(y[1].name));
     return { total: hits.length, results: hits.slice(0, lim).map(([, e]) => shortEnt(e)) };
   }
-  if (name === "get_entity") { const e = (await allEntities(env)).get(String(a.id || "")); return e ? { ...shortEnt(e), long: { en: e.long?.en || "", de: e.long?.de || "" }, aliases: e.aliases || [], web: e.web || "", docs: e.docs || "", wikipedia: e.wikipedia || "", relations: e.rel || [] } : { error: "not_found", hint: "Use search_entities to find the id." }; }
+  if (name === "get_entity") { const e = (await readEntities(env, ctx)).get(String(a.id || "")); return e ? { ...shortEnt(e), long: { en: e.long?.en || "", de: e.long?.de || "" }, aliases: e.aliases || [], web: e.web || "", docs: e.docs || "", wikipedia: e.wikipedia || "", relations: e.rel || [] } : { error: "not_found", hint: "Use search_entities to find the id." }; }
   if (name === "manage_event_duplicates") {
     const J = (d, st = 200) => new Response(JSON.stringify(d), { status: st }), act = String(a.action), P = "/api/admin/events/";
     if (!(await adminEventGate(db, user, P + (act === "list_claims" || act === "decide_claim" ? "claim" : /^(list_review|approve_event|reject_event)$/.test(act) ? "review" : "dupes"))).ok) return { error: "forbidden" };   // perm.js can(), Admin-Sache (wie die Routen)
@@ -561,7 +564,7 @@ export async function callTool(env, user, name, a) {
     return { ok: true, status };
   }
   if (name === "list_translation_tasks") {
-    const all = [...(await allEntities(env)).values()], lim = Math.min(20, Math.max(1, parseInt(a.limit) || 10)), off = Math.max(0, parseInt(a.offset) || 0), tasks = [];
+    const all = [...(await readEntities(env, ctx)).values()], lim = Math.min(20, Math.max(1, parseInt(a.limit) || 10)), off = Math.max(0, parseInt(a.offset) || 0), tasks = [];
     for (const e of all) {
       if (e.outdated || e.replaced_by) continue;
       const miss = [];
@@ -630,6 +633,12 @@ export async function visibleTools(env, user) {
   return TOOLS.filter((t) => (!t.program || progs.has(t.program)) && (!t.staff || isStaff(user)));
 }
 
+// Limits (K17/K18): Batch hoechstens 20 Eintraege mit Token, 5 ohne; jeder tools/call zaehlt einzeln gegen ein Stundenbudget - auch ohne Token
+// (je Aufrufer-IP, nur als Hash gespeichert; ohne IP, etwa ueber das Service-Binding des Agenten, ein eigener Eimer). Schreibende Werkzeuge
+// eines Batches laufen nacheinander, jedes mit eigener Limitpruefung; lesende weiter parallel.
+export const MAX_BATCH = 20, MAX_BATCH_ANON = 5, ANON_LIMIT = 200, NOIP_LIMIT = 600;
+const isWriteCall = (m) => m?.method === "tools/call" && !!TOOLS.find((x) => x.name === m.params?.name)?.write;
+
 export async function handleMcp(env, request, getUser, dispatch) {
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: hdr });
   if (request.method === "GET" || request.method === "DELETE") return reply({ error: "Use POST (Streamable HTTP, no SSE stream)." }, 405);
@@ -641,6 +650,9 @@ export async function handleMcp(env, request, getUser, dispatch) {
     user = await getUser(row.user_id); await env.DB.prepare("UPDATE api_tokens SET last_used=? WHERE id=?").bind(now(), row.id).run();
   }
   let msg; try { msg = await request.json(); } catch { return reply({ jsonrpc: "2.0", id: null, error: { code: -32700, message: "parse error" } }, 400); }
+  const ip = request.headers.get("cf-connecting-ip") || "";
+  const anonKey = user ? "" : ip ? `mcpa:${(await sha256hex(`${ip}|${new Date().toISOString().slice(0, 10)}|${env.SESSION_SECRET || ""}`)).slice(0, 32)}` : "mcpa:noip";
+  let entP = null; const ctx = { entities: () => (entP ||= entityMap(env)) };   // ein Vollscan je Anfrage fuer alle lesenden Aufrufe
   const one = async (m) => {
     if (!m || m.jsonrpc !== "2.0" || typeof m.method !== "string") return { jsonrpc: "2.0", id: m?.id ?? null, error: { code: -32600, message: "invalid request" } };
     if (m.id === undefined) return null;   // Benachrichtigung
@@ -657,12 +669,19 @@ export async function handleMcp(env, request, getUser, dispatch) {
       if (t.program && user && !(await userPrograms(env, user)).has(t.program)) res = { error: "program_inactive", message: `This tool is only available when the program ${t.program.toUpperCase()} is active in your profile (Community -> Profile -> Programs). Use export_contributions with format=${t.fixed?.format || "csv"} instead.` };
       else if (needsToken(t) && !user) res = { error: "token_required", hint: "Create a personal token in the community (Account -> AI access) and send it as 'Authorization: Bearer <token>'." };
       else if (missing.length) res = { error: "missing_argument", missing };
-      else if (user && !(await rateLimit(env.DB, t.write ? `mcp:${user.id}` : `mcpr:${user.id}`, t.write ? 60 : 600, 3600))) res = { error: "rate_limit" };
-      else { try { res = t.route ? await bridge(dispatch, user, t, args) : await callTool(env, user, t.name, args); } catch (e) { console.error("mcp tool failed", t.name, e && e.message); res = { error: "server" }; } }
+      else if (!(await rateLimit(env.DB, user ? (t.write ? `mcp:${user.id}` : `mcpr:${user.id}`) : anonKey, user ? (t.write ? 60 : 600) : ip ? ANON_LIMIT : NOIP_LIMIT, 3600))) res = { error: "rate_limit" };
+      else { try { res = t.route ? await bridge(dispatch, user, t, args) : await callTool(env, user, t.name, args, ctx); } catch (e) { console.error("mcp tool failed", t.name, e && e.message); res = { error: "server" }; } if (t.write) entP = null; }
       return ok({ content: [{ type: "text", text: JSON.stringify(res) }], isError: !!res.error });
     }
     return { jsonrpc: "2.0", id: m.id, error: { code: -32601, message: "method not found" } };
   };
-  if (Array.isArray(msg)) { if (msg.length > 20) return reply({ jsonrpc: "2.0", id: null, error: { code: -32600, message: "batch too large (max 20)" } }, 400); const out = (await Promise.all(msg.map(one))).filter(Boolean); return out.length ? reply(out) : reply(null, 202); }
+  if (Array.isArray(msg)) {
+    const max = user ? MAX_BATCH : MAX_BATCH_ANON;
+    if (msg.length > max) return reply({ jsonrpc: "2.0", id: null, error: { code: -32600, message: `batch too large (max ${max}${user ? "" : " without token"})` } }, 400);
+    const reads = msg.map((m) => (isWriteCall(m) ? null : one(m).then((v) => ({ v }), (e) => ({ e }))));   // Lesen parallel
+    const out = [];
+    for (let i = 0; i < msg.length; i++) { const r = reads[i] ? await reads[i] : { v: await one(msg[i]) }; if (r.e) throw r.e; out.push(r.v); }   // Schreiben nacheinander
+    const res = out.filter(Boolean); return res.length ? reply(res) : reply(null, 202);
+  }
   const r = await one(msg); return r ? reply(r) : reply(null, 202);
 }
