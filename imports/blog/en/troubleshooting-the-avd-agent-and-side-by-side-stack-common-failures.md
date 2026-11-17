@@ -90,7 +90,7 @@ If `rdp-tcp` and `rdp-sxs` still do not show `Listen`, Learn says to re-register
 
 **`INVALID_FORM`.** In the registry key `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\RDInfraAgent`, read `BrokerResourceIdURI` and `BrokerResourceIdURIGlobal`. Open each in a browser with `/api/health` appended. A healthy result says **RD Broker is Healthy**. If the pages do not load, unblock the required endpoints. If they load but the agent still fails, check Group Policy for TLS cipher settings: Learn says the service uses the same TLS 1.2 ciphers as Azure Front Door.
 
-**Event 3703 and event 3019.** 3703 reads `RD Gateway Url: is not accessible`, and 3019 means the web socket transport URLs cannot be reached. For both, allow the required URL list through firewall, proxy and DNS. For a support case on 3019, Learn asks for network trace logs.
+**Event 3703 and event 3019.** 3703 reads `RD Gateway Url: is not accessible`, and 3019 means the web socket transport URLs cannot be reached. For 3703, allow the required URL list through firewall and proxy. For 3019, Learn also names DNS settings. For a support case on 3019, Learn asks for network trace logs.
 
 **Test the endpoints from the host.** Run `WVDAgentUrlTool.exe` from the installed agent folder; it needs .NET 4.6.2, RDAgent 1.0.2944.400 or higher, and `WVDAgentUrlTool.config` next to it.
 

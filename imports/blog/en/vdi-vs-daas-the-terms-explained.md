@@ -7,14 +7,14 @@ author: mirko-p
 date: 2026-11-18
 topics: [virtual-desktop-infrastructure, azure-virtual-desktop]
 keypoints:
-  - "VDI describes the architecture: desktops run as virtual machines on central infrastructure and users connect remotely. DaaS describes a purchase model: a provider operates that infrastructure and you pay for the desktops as a service. Sources define the two terms differently, and Learn labels its own products SaaS and PaaS rather than DaaS or VDI."
+  - "VDI describes the architecture: desktops run as virtual machines on central infrastructure and users connect remotely. DaaS describes a purchase model: a provider operates that infrastructure and you pay for the desktops as a service. Sources define the two terms differently. A Learn training unit labels Windows 365 SaaS and Azure Virtual Desktop PaaS, and Learn also uses the term VDI for Azure Virtual Desktop."
   - "Azure Virtual Desktop splits the work. Microsoft provides the web, broker and gateway services; you create and manage the session hosts, image, network connectivity, backup and identities. Learn's training unit calls it a PaaS model and a cloud VDI platform."
   - "Learn calls Windows 365 a SaaS, says the Cloud PCs exist in a subscription owned by Microsoft, and describes a per-user per-month license model. Our reading: this is the Microsoft product closest to the common DaaS definition, a provider hosting virtual desktops."
   - "Windows 365 Frontline was renamed Windows 365 Flex in the week of 4 May 2026. Flex Dedicated mode provisions up to three Cloud PCs per license for non-concurrent use, so in our reading a DaaS label alone does not tell you whether a desktop is personal or shared."
-  - "Nerdio Manager is a management platform for Azure Virtual Desktop and Windows 365. It runs in the customer's own Azure subscription and does not replace either service."
+  - "Nerdio Manager for Enterprise is a deployment, management and auto-scaling platform for Azure Virtual Desktop and Windows 365 Cloud PCs, deployed inside the customer's own Azure subscription. Our reading: it manages those services rather than replacing either one."
 faq:
   - q: "Is Azure Virtual Desktop VDI or DaaS?"
-    a: "Learn calls it a PaaS model and a cloud VDI platform, and says Microsoft provides the VDI components (web, broker and gateway services) as a service while the customer creates and manages the session hosts, image, network connectivity, backup and identities. Nerdio's DaaS page says Azure Virtual Desktop is not truly a DaaS service. Our reading: the split of responsibilities answers the question better than either label."
+    a: "Learn calls it a PaaS model and a cloud VDI platform, and says Microsoft provides the VDI components (web, broker and gateway services) as a service while the customer creates and manages the session hosts, image, network connectivity, backup and identities. Nerdio's DaaS page says Azure Virtual Desktop is not truly a DaaS service, but covers it alongside Windows 365 because Microsoft groups both under Windows Cloud. Our reading: the split of responsibilities answers the question better than either label."
   - q: "Is Windows 365 a DaaS?"
     a: "Learn's wording is SaaS: a cloud-based service that creates Cloud PCs, which exist in a subscription owned by Microsoft under a per-user per-month license model. Our reading: that matches the common DaaS definition, a provider hosting virtual desktops, so DaaS works as shorthand, but it is not Learn's own label for the product."
   - q: "Does a Windows 365 Flex license mean one desktop per user?"
@@ -33,7 +33,7 @@ In practice the line is blurred. Between "you run everything" and "the provider 
 
 ## What Microsoft's own pages say
 
-Learn labels its products by service model: Windows 365 as SaaS and Azure Virtual Desktop as PaaS. It also uses the term VDI for Azure Virtual Desktop. The training unit that compares the two services calls Azure Virtual Desktop "a cloud VDI platform" and says Windows 365 needs "no virtual desktop infrastructure (VDI) expertise". The service architecture page for [Azure Virtual Desktop](/entity/azure-virtual-desktop/) says most components are Microsoft-managed and that "Microsoft provides the virtual desktop infrastructure (VDI) components for core functionality as a service". It lists:
+Learn's wording differs by page. The Windows 365 overview calls Windows 365 a SaaS, and the training unit that compares the two services calls Azure Virtual Desktop a "PaaS model". The same unit calls Azure Virtual Desktop "a cloud VDI platform" and says Windows 365 needs "no virtual desktop infrastructure (VDI) expertise". The service architecture page for [Azure Virtual Desktop](/entity/azure-virtual-desktop/) says most components are Microsoft-managed and that "Microsoft provides the virtual desktop infrastructure (VDI) components for core functionality as a service". It lists:
 
 - a **web service** that returns connection information to the user's device,
 - a **broker service** that orchestrates incoming connections,
@@ -50,7 +50,7 @@ Learn's training unit that compares the two services labels Windows 365 "SaaS: c
 
 | Layer | Azure Virtual Desktop | Windows 365 Enterprise | Windows 365 Business |
 |---|---|---|---|
-| Service label (Learn) | PaaS | SaaS | SaaS |
+| Service label (Learn training unit) | PaaS | SaaS | SaaS |
 | Where the VMs run | Customer's Azure subscription | Subscription owned by Microsoft | Microsoft-managed |
 | Network | Customer-managed virtual network | Microsoft-hosted network, or a customer virtual network through an Azure network connection | Microsoft-managed |
 | Provisioning and image | Manual provisioning, fully customizable | Fully customizable image | Automatic, no customization |
@@ -64,7 +64,7 @@ Our reading: if you take "DaaS" to mean "the provider runs the hosts and I pay p
 
 ## Windows 365 Flex: one license, several users
 
-Windows 365 Frontline was renamed Windows 365 Flex in the week of 4 May 2026. Learn's what's new page says the product, licensing and capabilities are unchanged and only the name is different. Older material and the [Windows 365 Frontline](/entity/windows-365-frontline/) entity page still use the former name.
+[Windows 365 Frontline](/entity/windows-365-frontline/) was renamed Windows 365 Flex in the week of 4 May 2026. Learn's what's new page says the product, licensing and capabilities are unchanged and only the name is different.
 
 Flex has two modes, and a license can be applied to either:
 
@@ -75,7 +75,7 @@ Learn's example: with 10 licenses in Dedicated mode you can provision up to 30 C
 
 ## Third-party DaaS and where Nerdio fits
 
-The word DaaS also appears as a vendor product name. Learn's Azure architecture getting-started page lists "Citrix DaaS" as "a desktop and app virtualization service that you can use to provision Windows desktops and apps on Azure with Citrix and Azure Virtual Desktop". It is a different kind of offer: the vendor's service in front, Azure and Azure Virtual Desktop underneath. This article does not compare it feature by feature.
+The word DaaS also appears as a vendor product name. Learn's Azure architecture getting-started page lists "Citrix DaaS" as "a desktop and app virtualization service that you can use to provision Windows desktops and apps on Azure with Citrix and Azure Virtual Desktop". Learn lists it alongside Azure Virtual Desktop, Windows 365 and Omnissa Horizon Cloud on Microsoft Azure as an Azure virtual desktop solution. This article does not compare it feature by feature.
 
 Nerdio Manager sits on another axis. Nerdio's documentation describes Nerdio Manager for Enterprise as "a deployment, management, and auto-scaling platform" for Azure Virtual Desktop and Windows 365 Cloud PCs, "deployed as an all-PaaS, secure Azure application inside the customer's own subscription". Nerdio's own blog says it provides a single console for both Windows 365 and Azure Virtual Desktop environments. Our reading: it is a management layer on top of those services. The desktops remain Azure Virtual Desktop session hosts or Windows 365 Cloud PCs, so the service-model question in this article is the same with or without it. See [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/) and [Nerdio](/entity/nerdio/).
 
@@ -87,10 +87,10 @@ Replace the labels with questions, and note the answers in a sheet before compar
 2. **Does the user need a private desktop or a shared host?** Multi-session is exclusive to Azure Virtual Desktop. Windows 365 Enterprise and Business are single-user Cloud PCs. Flex licenses are used non-concurrently.
 3. **Whose subscription and network carry the VMs?** Azure Virtual Desktop VMs run in your subscription and virtual network. Learn's Windows 365 architecture page says that if you use Microsoft Entra join and a Microsoft-hosted network, you do not need to bring an Azure subscription or manage the NIC; if you bring your own network and use an Azure network connection, the NICs are created by Windows 365 in your Azure subscription.
 4. **How is cost metered?** Consumption for Azure Virtual Desktop, per user per month for Windows 365. Learn says the more cost-effective option depends on planning and forecasting usage, so use your own user counts and current Microsoft price pages.
-5. **Which licenses entitle users?** Learn's prerequisites list entitlements such as Microsoft 365 E3, E5, A3, A5, F3 and Business Premium for internal use of Windows client images on Azure Virtual Desktop. Windows 365 is licensed per user per month.
+5. **Which licenses entitle users?** Learn's prerequisites list entitlements such as Microsoft 365 E3, E5, A3, A5, F3 and Business Premium for internal use of Windows client images on Azure Virtual Desktop. For Windows 365 Enterprise, Learn's requirements page says users must have licenses for Windows E3, Intune, Microsoft Entra ID P1 and Windows 365; for Windows 365 Flex, licenses for Windows E3, Intune and Microsoft Entra ID P1, and membership in the Microsoft Entra security group in the provisioning policy. Windows 365 is billed per user per month.
 6. **Which identity and device management do you already run?** Microsoft Entra ID is always used to authenticate Azure Virtual Desktop users; Learn's Windows 365 architecture page says [Intune](/entity/intune/) is used to manage Cloud PCs.
 
-A short example: a company has 300 knowledge workers who each need a personal desktop and a team of 40 call-center agents on shifts. This is the author's assessment. The first group maps to single-user desktops, where Windows 365 Enterprise and a personal [host pool](/entity/avd-host-pool/) are both candidates. The second group is a candidate for Flex or a pooled host pool. In our reading, the answers to questions 1 to 4 decide, not the label. The article "AVD or Windows 365: how to choose between them" goes deeper into that decision.
+A short example: a company has 300 knowledge workers who each need a personal desktop and a team of 40 call-center agents on shifts. The first group maps to single-user desktops, where Windows 365 Enterprise and a personal [host pool](/entity/avd-host-pool/) are both candidates. The second group is a candidate for Flex or a pooled host pool. In our reading, the answers to questions 1 to 4 decide, not the label. The article "AVD or Windows 365: how to choose between them" goes deeper into that decision.
 
 ## Sources
 
@@ -101,6 +101,7 @@ Last checked 17 November 2026.
 - [Microsoft Learn: Azure Virtual Desktop terminology](https://learn.microsoft.com/en-us/azure/virtual-desktop/terminology)
 - [Microsoft Learn: Prerequisites for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/prerequisites)
 - [Microsoft Learn: What is Windows 365?](https://learn.microsoft.com/en-us/windows-365/overview)
+- [Microsoft Learn: Windows 365 requirements](https://learn.microsoft.com/en-us/windows-365/enterprise/requirements)
 - [Microsoft Learn: What is Windows 365 Enterprise?](https://learn.microsoft.com/en-us/windows-365/enterprise/overview)
 - [Microsoft Learn: Windows 365 architecture](https://learn.microsoft.com/en-us/windows-365/enterprise/architecture)
 - [Microsoft Learn: What is Windows 365 Flex?](https://learn.microsoft.com/en-us/windows-365/enterprise/introduction-windows-365-flex)

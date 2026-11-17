@@ -61,7 +61,7 @@ Learn's [Configure profile containers](https://learn.microsoft.com/en-us/fslogix
 | `VolumeType` | VHDX | Recommended over VHD for supported size and fewer corruption cases; the configuration reference gives `vhd` as the default |
 | `SizeInMBs` | 30000 | Default; the reference says it can be increased at any time, but not decreased |
 | `FlipFlopProfileDirectoryName` | 1 | Recommended for easier browsing; changing it in an existing environment can cause users to get new profiles |
-| `DeleteLocalProfileWhenVHDShouldApply` | 1 | Recommended so users do not use local profiles and lose data unexpectedly; the reference says its default is 0 and that FSLogix permanently deletes a local profile when this is 1. At 0, Learn says an existing local profile is honored instead of the container. Our suggestion: enable it for a user only after that user's profile is copied and backed up |
+| `DeleteLocalProfileWhenVHDShouldApply` | 1 | Recommended so users do not use local profiles and lose data unexpectedly; the reference says its default is 0 and that FSLogix permanently deletes a local profile when this is 1. At 0, Learn says an existing local profile is honored instead of the container. Our suggestion: enable it on a host only after the profiles of the users who sign in there are copied and backed up |
 
 Two settings matter for the order of work. Pick the `FlipFlopProfileDirectoryName` value before you copy any profile, because the folder name is part of how FSLogix finds the container. `DeleteLocalProfileWhenVHDShouldApply` comes after the copy (steps 5 and 6), because a user's local profile on a host otherwise takes precedence over the copied container.
 
