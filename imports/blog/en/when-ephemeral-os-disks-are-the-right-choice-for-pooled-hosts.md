@@ -9,16 +9,16 @@ topics: [avd-ephemeral-os-disks, avd-session-host]
 keypoints:
   - "Ephemeral OS disks suit stateless pooled session hosts. Microsoft's Azure documentation names workloads that tolerate individual VM failures but are sensitive to deployment and reimage time."
   - "Learn's Azure Virtual Desktop page says these VMs cannot be deallocated and can only be restarted, reimaged or deleted. The cost model is delete and recreate, not deallocate and start."
-  - "They are supported only in pooled host pools configured with a session host configuration, and Learn says they are not supported in Azure Government. Personal pools and pools without a configuration are out."
+  - "They are supported only in pooled host pools configured with a session host configuration, and Learn says they are not supported in Azure Government during preview. Personal pools and pools without a configuration are out."
   - "For dynamic autoscaling, Learn says to set Minimum percentage of active hosts to 100 percent in every phase, so that scaling only creates and deletes hosts."
   - "Everything on the OS disk is lost on resize, redeploy or healing. Azure Backup, Azure Disk Encryption, snapshots and image capture are unsupported, and Learn's Azure Virtual Desktop page excludes NVMe and Premium SSD during preview."
 faq:
   - q: "Can I use ephemeral OS disks on a personal host pool?"
-    a: "No. Learn says ephemeral OS disks in Azure Virtual Desktop are supported only in pooled host pools configured with a session host configuration, and the October 2025 preview post says the same. A personal desktop is meant to keep its state, which an ephemeral disk does not do."
+    a: "No. Learn says ephemeral OS disks in Azure Virtual Desktop are supported only in pooled host pools configured with a session host configuration, and the October 2025 preview post says the same."
   - q: "Will my users lose their files when a session host is reimaged?"
     a: "Anything stored on the session host's OS disk is lost, and that includes a local profile. Users whose profile is in an FSLogix container on remote storage keep it, because the container is not part of the host's disk. Check where each application writes data before you decide."
   - q: "Do ephemeral OS disks save money?"
-    a: "Possibly, but the saving depends on the VM size you need. Nerdio's help article says ephemeral OS disks have no associated storage costs. Microsoft's Azure page says the placement option does not change the cost, and that a Standard SSD or Premium SSD base disk is charged. Learn's Azure Virtual Desktop page says that during preview only Standard SSD is supported. Compare the full VM price with a local-storage size against your current size and disk."
+    a: "The sources differ. Nerdio's help article says ephemeral OS disks have no associated storage costs. Microsoft's Azure page says the placement option does not change the cost, and that a Standard SSD or Premium SSD base disk is charged. Learn's Azure Virtual Desktop page says that during preview only Standard SSD is supported. Compare the full VM price with a local-storage size against your current size and disk."
 ---
 
 Ephemeral OS disks are the right choice for pooled session hosts that hold no user state: the profile is in FSLogix, the applications are in the image or delivered separately, and the pool adds and removes hosts instead of deallocating them. They are the wrong choice when hosts must be deallocated and started again, keep local data, run in Azure Government, or rely on features such as Azure Backup. This article is the decision guide. How the disk works and how to switch it on is covered in the sibling article "Ephemeral OS disks for Azure Virtual Desktop: fast, cheap, stateless hosts".
@@ -44,9 +44,9 @@ One wording difference matters for runbooks. The Azure VM page lists stop-deallo
 
 ## Check 1: pool type, management approach and cloud
 
-Learn's Azure Virtual Desktop page says ephemeral OS disks are supported only in pooled host pools configured with a session host configuration, and that pooled is the only host pool type supported with a session host configuration and ephemeral OS disks. The October 2025 preview post says the same. Learn's host pool management approaches page adds that the approach is set when the pool is created and cannot be changed, so an existing pool without a session host configuration means a new pool. The decision is made before deployment. See [pooled host pools](/entity/avd-pooled-host-pool/) and, for the other type, [personal host pools](/entity/avd-personal-host-pool/).
+Learn's Azure Virtual Desktop page says ephemeral OS disks are supported only in pooled host pools configured with a session host configuration. The October 2025 preview post says the same. Learn's host pool management approaches page adds that the approach is set when the pool is created and cannot be changed, so an existing pool without a session host configuration means a new pool. The decision is made before deployment. See [pooled host pools](/entity/avd-pooled-host-pool/) and, for the other type, [personal host pools](/entity/avd-personal-host-pool/).
 
-Cloud matters too. The Azure Virtual Desktop page says ephemeral OS disks are only available in Azure and are not supported in Azure Government during preview. The autoscale scenarios page says dynamic autoscaling is not supported in Azure Government either, and the session host update page limits that feature to the global Azure cloud. For an Azure Government tenant, this check ends the decision.
+Cloud matters too. The Azure Virtual Desktop page says ephemeral OS disks are only available in Azure and are not supported in Azure Government during preview. The autoscale scenarios page says dynamic autoscaling is not supported in Azure Government either, and the session host update page limits session host update to the global Azure cloud. For an Azure Government tenant, this check ends the decision.
 
 Two points to verify before relying on this:
 
@@ -64,17 +64,14 @@ Walk through what else writes to the OS disk:
 1. **User data outside the profile.** Files saved to a local folder outside the redirected profile are lost on reimage, deletion, resize or healing.
 2. **Per-machine apps installed after deployment.** Learn's session host update page says manual customizations are not present after an update and lists three homes for them: the image, configuration management (Intune or Group Policy) and the custom configuration PowerShell script. Our reading is that the same logic applies to every replaced ephemeral host. Add apps to the [golden image](/entity/golden-image/); [MSIX app attach](/entity/msix-app-attach/) is our suggestion for apps that change more often than the image.
 3. **Monitoring agents.** The same page says that if you use Azure Virtual Desktop Insights, the Azure Monitor agent is not installed automatically on updated session hosts, and that you can use Azure Policy to install it automatically.
-4. **Domain objects.** Per the update page, computer accounts of replaced hosts are inherited by the new VMs, so existing GPOs still apply.
 
 Learn's FAQ recommends compute-level Azure Backup only for personal host pools. In our reading, that leaves the image and the profile storage as the things to protect for a pooled pool with ephemeral hosts, and the host itself as disposable.
 
 ## Check 3: capacity pattern and cost
 
-An ephemeral host cannot be deallocated, so the way to release its compute capacity is deletion. Learn describes two scaling methods: power management autoscaling, which deallocates session hosts and is generally available, and [dynamic autoscaling](/entity/avd-dynamic-autoscaling/), which can also create and delete them. Learn's ephemeral OS disk page recommends dynamic autoscaling for these pools and sets one rule: in each phase of the scaling plan, set **Minimum percentage of active hosts (%)** to 100 percent. The reason it gives is that these hosts do not support starting and deallocating, so with 100 percent the scaling process only creates and deletes session hosts.
+Learn's ephemeral OS disk page lists deallocation of VMs as unsupported and recommends [dynamic autoscaling](/entity/avd-dynamic-autoscaling/) for these pools. It sets one rule: in each phase of the scaling plan, set **Minimum percentage of active hosts (%)** to 100 percent. The reason it gives is that these hosts do not support starting and deallocating, so with 100 percent the scaling process only creates and deletes session hosts. Power management autoscaling remains generally available.
 
-The scaling plan creation page describes the minimum host pool size as hosts that can be in a running or a stopped state. For an ephemeral pool, the ephemeral OS disk page is the more specific rule, and it leaves no stopped state: hosts are either running or deleted.
-
-Nerdio's help article describes the same constraint in its own terms. Its base host pool capacity is always set to the minimum active host capacity and cannot be edited, and Nerdio's [auto-scaling](/entity/nerdio-auto-scaling/) can create and destroy session host VMs on this storage. With minimum active host capacity set to 0, the article says you have no compute and no storage costs when the pool is scaled in.
+Nerdio's help article (see also Nerdio [auto-scaling](/entity/nerdio-auto-scaling/)) describes the same constraint in its own terms: such a host must be destroyed to free its compute capacity, and the base host pool capacity is always set to the minimum active host capacity and cannot be edited. With a minimum active host capacity of 0, the article says there are no compute and no storage costs.
 
 For cost, the sources differ in what they promise:
 
@@ -85,7 +82,9 @@ Neither source gives a regional price, so compare two full configurations in the
 
 ## Check 4: VM size and image fit
 
-The size check is arithmetic. The Azure page says the image's OS disk size must be less than or equal to the cache or temp size of the chosen VM size. Learn's Azure Virtual Desktop page gives a worked example: a 127 GiB Windows 11 Enterprise multi-session image on Standard_D8s_v3, whose temp disk is 200 GiB, leaves about 73 GiB. With trusted launch, Azure reserves 1 GiB for VMGS from that local space, so add 1 GiB to the image size when you compare. 
+The size check is arithmetic. The Azure page says the image's OS disk size must be less than or equal to the cache or temp size of the chosen VM size. With trusted launch, Azure reserves 1 GiB for VMGS from that local space, so add 1 GiB to the image size when you compare. The Azure page shows the effect: a 75 GiB image on Standard_D2ads_v5, whose temp disk is 75 GiB, fails with temp disk placement and trusted launch, and the error message names 74 GB as the limit.
+
+Read the temp or cache size for the exact VM size from that size's own page in Azure documentation before relying on any example.
 
 Learn's Azure Virtual Desktop page sets two disk-type limits on top of that, both worded for preview. Ephemeral OS disks are not supported with NVMe and Premium SSD during preview, and only Standard SSD is supported and is selected automatically once ephemeral OS disks are configured. The Azure VM page describes NVMe placement, but the Azure Virtual Desktop page excludes it for session hosts. Nerdio says a VM size without Premium SSD support does not support ephemeral OS disks, and that the option is grayed out when the cache is too small. Our reading is that Nerdio describes a VM size capability while Learn describes the disk type you can pick, so the two statements are not the same test.
 
@@ -97,14 +96,14 @@ With trusted launch, the Azure page cautions that keys or secrets the vTPM gener
 2. Confirm the pool is, or can be, a pooled host pool with a session host configuration. If not, stop here.
 3. Confirm profiles are in FSLogix and no user data is written elsewhere on C:.
 4. Confirm every application is in the image or delivered by a layer that survives host replacement.
-5. Confirm capacity is managed by creating and deleting hosts, with dynamic autoscaling (Minimum percentage of active hosts at 100 percent in every phase) or Nerdio auto-scaling, and that no process depends on deallocating the same host.
+5. Confirm capacity is managed by creating and deleting hosts, with dynamic autoscaling (Minimum percentage of active hosts at 100 percent in every phase), and that no process depends on deallocating the same host.
 6. Check the size: image OS disk, plus 1 GiB if you use trusted launch, against the cache or temp storage of the VM size, and make sure the size is not one that relies on NVMe.
 7. Confirm you do not need Azure Backup, Azure Disk Encryption, snapshots or image capture on the host itself.
 8. Pilot with a small pool, reimage or replace a host, and confirm that users find their profile, apps and settings unchanged.
 
 ## If it does not fit
 
-A pooled pool with managed OS disks and power management autoscaling (generally available) keeps hosts that can be deallocated and started again, at the price of persistent disk charges. A personal host pool keeps user state on the host, and Learn's autoscale scenarios page lists hibernation for personal host pools. Both choices are less strict about state, and neither gives the fast reimage that ephemeral disks offer.
+A pooled pool with managed OS disks and power management autoscaling (generally available) keeps hosts that can be deallocated and started again; the Azure VM page lists stop-deallocation as supported for persistent OS disks. Compare the disk charges as described in Check 3. A personal host pool is where Learn's autoscale scenarios page lists hibernation.
 
 ## Sources
 
@@ -114,12 +113,10 @@ Retrieved on 17 November 2026.
 - [Microsoft Learn: Ephemeral OS disks for Azure VMs](https://learn.microsoft.com/en-us/azure/virtual-machines/ephemeral-os-disks)
 - [Microsoft Tech Community: Now in public preview, ephemeral OS disk support on Azure Virtual Desktop (15 October 2025)](https://techcommunity.microsoft.com/t5/azure-virtual-desktop-blog/now-in-public-preview-ephemeral-os-disk-support-on-azure-virtual/ba-p/4460172)
 - [Microsoft Tech Community: Enhanced host pool management for Azure Virtual Desktop is now generally available](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)
-- [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
 - [Microsoft Learn: Azure Virtual Desktop FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/faq)
 - [Microsoft Learn: Host pool management approaches](https://learn.microsoft.com/en-us/azure/virtual-desktop/host-pool-management-approaches)
 - [Microsoft Learn: Update session hosts with a session host configuration](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update)
 - [Microsoft Learn: Create and assign an autoscale scaling plan for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)
 - [Microsoft Learn: Autoscale scaling plans and example scenarios](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)
 - [Microsoft Learn: Azure Virtual Desktop terminology](https://learn.microsoft.com/en-us/azure/virtual-desktop/terminology)
-- [Microsoft Learn: What is FSLogix?](https://learn.microsoft.com/en-us/fslogix/overview-what-is-fslogix)
 - [Nerdio Manager help: Ephemeral OS Disks](https://nmehelp.getnerdio.com/hc/en-us/articles/26124378246157-Ephemeral-OS-Disks)

@@ -55,7 +55,6 @@ The Azure VM page adds the upper bound: the OS disk can be as large as the cache
 
 ### Sizing examples from Learn
 
-- A 127 GiB marketplace Windows image on Standard_DS3_v2, which has a 127 GiB cache: enough for cache placement.
 - Learn's temp-placement example uses a 127 GiB Windows 11 multi-session image on Standard_D8s_v3 and says the temp size is 200 GiB, leaving about 73 GiB. The Dsv3 size page contradicts this: Standard_D8s_v3 has a 64 GiB temp disk and a 200 GiB cache, so a 127 GiB image does not fit with temp placement. Do not plan from this example.
 - Dadsv5 size page: Standard_D2ads_v5 has a 75 GiB temp disk (127 GiB does not fit), Standard_D4ads_v5 150 GiB and Standard_D8ads_v5 300 GiB. Subtracting the image size, as the Azure VM page describes, would leave 23 and 173 GiB (our arithmetic).
 
@@ -71,7 +70,7 @@ Read the cache and temp columns. The script also reports NVMe placement, but Lea
 
 ## Placement: OS cache or temp disk
 
-The Azure Virtual Desktop page says the OS disk can sit on the VM's OS cache or on its temp disk, set through the DiffDiskPlacement property. Azure VM documentation says cache placement is available on older sizes with a cache disk, such as Dsv2 and Dsv3, and temp placement on sizes with a temp disk, such as Dadsv5 and Ddsv5. It states that placement does not affect cost or performance, because performance depends on the VM's local storage, and with temp placement the disk shares IOPS with the temp disk. The FAQ says placement cannot be changed once the disk exists; in a host pool, our reading is that a change means replacing hosts.
+The Azure Virtual Desktop page says the OS disk can sit on the VM's OS cache or on its temp disk, set through the DiffDiskPlacement property. Azure VM documentation says cache placement is available on older sizes with a cache disk, such as Dsv3, and temp placement on sizes with a temp disk, such as Dadsv5 and Ddsv5. It states that placement does not affect cost or performance, because performance depends on the VM's local storage, and with temp placement the disk shares IOPS with the temp disk. The FAQ says placement cannot be changed once the disk exists; in a host pool, our reading is that a change means replacing hosts.
 
 ## What it rules out
 
