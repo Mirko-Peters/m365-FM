@@ -1,4 +1,4 @@
-/* Mediadaten-Formular (/media-kit/, /m365con/sponsor/ und die HeySummit-Einbettung): sendet Name, Firma, E-Mail an den Worker, der das PDF per E-Mail schickt.
+/* Mediadaten-Formular (/media-kit/, /m365con/sponsor/ und die HeySummit-Einbettung): sendet Name, Firma, E-Mail und das Turnstile-Token an den Worker, der das PDF per E-Mail schickt.
    Konfiguration window.M365MK = {api, lang, brand?, kpis?, ok, err, sending, send}. brand "m365con" waehlt das M365Con-Deck (#260);
    kpis: true laedt die Kennzahlen-Vorschau (nur Summen) von GET /api/mediakit/summary?brand=... in #mk-kpis.
    Ohne Abhaengigkeiten, damit tools (site_mediakit.py) das Skript unveraendert in die HeySummit-Einbettung kopieren kann. */
@@ -7,11 +7,21 @@
   if (!C || !f) return;
   var msg = f.querySelector(".mk-msg"), btn = f.querySelector("button[type=submit]");
   var say = function (t, ok) { msg.textContent = t; msg.className = "mk-msg " + (ok ? "ok" : "err"); };
+  /* Bot-Pruefung (Cloudflare Turnstile): den oeffentlichen Schluessel liefert GET /api/mediakit; ohne bestandene Pruefung schickt der Worker keine Mail */
+  var tsBox = document.createElement("div"), widget = null; tsBox.className = "mk-ts"; f.insertBefore(tsBox, btn);
+  if (window.fetch) fetch(C.api + "/api/mediakit", { credentials: "omit" }).then(function (r) { return r.ok ? r.json() : {}; }).then(function (d) {
+    if (!d || !d.turnstile) return;
+    var s = document.createElement("script"); s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"; s.async = true;
+    s.onload = function () { if (window.turnstile) widget = window.turnstile.render(tsBox, { sitekey: d.turnstile, language: C.lang }); };
+    document.head.appendChild(s);
+  }).catch(function () {});
+  var resetTs = function () { if (window.turnstile && widget != null) window.turnstile.reset(widget); };
   f.addEventListener("submit", function (ev) {
     ev.preventDefault();
     var v = function (n) { return (f.elements[n].value || "").trim(); };
     var body = { name: v("name"), company: v("company"), email: v("email"), website: v("website"), consent: f.elements.consent.checked, lang: C.lang, source: (C.source || location.pathname).slice(0, 60) };
     if (C.brand) body.brand = C.brand;
+    body.turnstile = window.turnstile && widget != null ? window.turnstile.getResponse(widget) : "";
     if (body.name.length < 2) return say(C.err.name);
     if (body.company.length < 2) return say(C.err.company);
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(body.email)) return say(C.err.email);
@@ -21,9 +31,9 @@
       .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { return { ok: r.ok, d: d }; }); })
       .then(function (x) {
         if (x.ok && x.d.ok) { say(C.ok.replace("{email}", body.email), true); f.reset(); }
-        else say(C.err[x.d.error] || C.err["default"]);
+        else { say(C.err[x.d.error] || C.err["default"]); resetTs(); }
       })
-      .catch(function () { say(C.err["default"]); })
+      .catch(function () { say(C.err["default"]); resetTs(); })
       .then(function () { btn.disabled = false; btn.textContent = C.send; });
   });
 

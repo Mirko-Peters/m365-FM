@@ -14,7 +14,7 @@ T = {
         consent="I agree that M365.FM uses my details to send me the media kit and may contact me once about it. No newsletter.",
         send="Send me the media kit", sending="Sending …", ok="Done – the media kit is on its way to {email}. Please also check your spam folder.",
         err={"name": "Please enter your name.", "company": "Please enter your company.", "email": "Please enter a valid e-mail address.", "consent": "Please confirm the consent.",
-             "rate_limit": "Too many requests – please try again tomorrow.", "default": "Sending failed. Please try again later or write to mirko.peters@m365.fm."},
+             "rate_limit": "Too many requests – please try again tomorrow.", "captcha": "Please complete the security check and try again.", "default": "Sending failed. Please try again later or write to mirko.peters@m365.fm."},
         inside="What's inside", items=["Reach per channel with source and period", "Audience: who listens, watches and reads", "Channels and formats: podcast, video, articles, community, events", "Sponsorship and partnership options (always labelled)", "Contact for interviews, sponsorships and projects"],
         privacy="Privacy", privacy_t="We store name, company and e-mail to send the PDF and to answer follow-up questions. Details: ", privacy_l="privacy policy",
         also="Also interesting", ads="Ad placements (book online)", sponsor="Sponsorship packages", publishers="For journalists, editors and PR", services="All services",
@@ -28,7 +28,7 @@ T = {
         consent="Ich bin einverstanden, dass M365.FM meine Angaben nutzt, um mir die Mediadaten zu schicken, und mich einmalig dazu kontaktieren darf. Kein Newsletter.",
         send="Mediadaten zuschicken", sending="Wird gesendet …", ok="Erledigt – die Mediadaten sind unterwegs an {email}. Schau bitte auch im Spam-Ordner nach.",
         err={"name": "Bitte gib deinen Namen ein.", "company": "Bitte gib deine Firma ein.", "email": "Bitte gib eine gültige E-Mail-Adresse ein.", "consent": "Bitte bestätige die Einwilligung.",
-             "rate_limit": "Zu viele Anfragen – bitte morgen erneut versuchen.", "default": "Senden fehlgeschlagen. Bitte später erneut versuchen oder an mirko.peters@m365.fm schreiben."},
+             "rate_limit": "Zu viele Anfragen – bitte morgen erneut versuchen.", "captcha": "Bitte schließe die Sicherheitsprüfung ab und versuche es erneut.", "default": "Senden fehlgeschlagen. Bitte später erneut versuchen oder an mirko.peters@m365.fm schreiben."},
         inside="Das steckt drin", items=["Reichweite je Kanal mit Quelle und Zeitraum", "Zielgruppe: wer zuhört, zuschaut und liest", "Kanäle und Formate: Podcast, Video, Artikel, Community, Events", "Sponsoring- und Partnerschaftsmöglichkeiten (immer gekennzeichnet)", "Kontakt für Interviews, Sponsorings und Projekte"],
         privacy="Datenschutz", privacy_t="Wir speichern Name, Firma und E-Mail, um das PDF zu senden und Rückfragen zu beantworten. Details: ", privacy_l="Datenschutzerklärung",
         also="Auch interessant", ads="Werbeplätze (online buchen)", sponsor="Sponsoring-Pakete", publishers="Für Journalisten, Redaktionen und PR", services="Alle Services",
@@ -99,7 +99,7 @@ TC = {
         consent="I agree that M365.FM / M365Con uses my details to send me the sponsor and media data and may contact me once about it. No newsletter.",
         send="Send me the PDF", sending="Sending …", ok="Done – the sponsor and media data are on their way to {email}. Please also check your spam folder.",
         err={"name": "Please enter your name.", "company": "Please enter your company.", "email": "Please enter a valid e-mail address.", "consent": "Please confirm the consent.",
-             "rate_limit": "Too many requests – please try again tomorrow.", "default": "Sending failed. Please try again later or write to mirko.peters@m365.fm."},
+             "rate_limit": "Too many requests – please try again tomorrow.", "captcha": "Please complete the security check and try again.", "default": "Sending failed. Please try again later or write to mirko.peters@m365.fm."},
         inside="What's inside", items=["Editions: sessions, speakers and registrations per edition", "Live streams and recaps on YouTube and LinkedIn",
                                        "Search visibility of m365con.net (Google and Bing)", "Topics, session formats and partners of past editions",
                                        "Every figure with source and period – nothing estimated"],
@@ -118,7 +118,7 @@ TC = {
         consent="Ich bin einverstanden, dass M365.FM / M365Con meine Angaben nutzt, um mir die Sponsoring- und Mediadaten zu schicken, und mich einmalig dazu kontaktieren darf. Kein Newsletter.",
         send="PDF zuschicken", sending="Wird gesendet …", ok="Erledigt – die Sponsoring- und Mediadaten sind unterwegs an {email}. Schau bitte auch im Spam-Ordner nach.",
         err={"name": "Bitte gib deinen Namen ein.", "company": "Bitte gib deine Firma ein.", "email": "Bitte gib eine gültige E-Mail-Adresse ein.", "consent": "Bitte bestätige die Einwilligung.",
-             "rate_limit": "Zu viele Anfragen – bitte morgen erneut versuchen.", "default": "Senden fehlgeschlagen. Bitte später erneut versuchen oder an mirko.peters@m365.fm schreiben."},
+             "rate_limit": "Zu viele Anfragen – bitte morgen erneut versuchen.", "captcha": "Bitte schließe die Sicherheitsprüfung ab und versuche es erneut.", "default": "Senden fehlgeschlagen. Bitte später erneut versuchen oder an mirko.peters@m365.fm schreiben."},
         inside="Das steckt drin", items=["Ausgaben: Sessions, Speaker und Anmeldungen je Ausgabe", "Livestreams und Recaps auf YouTube und LinkedIn",
                                          "Sichtbarkeit von m365con.net in der Suche (Google und Bing)", "Themen, Session-Formate und Partner bisheriger Ausgaben",
                                          "Jede Zahl mit Quelle und Zeitraum – nichts geschätzt"],
@@ -217,7 +217,7 @@ def build_con(g):
 
 def embed_html(lang, api="https://api-dub.m365.fm", base="https://www.m365.fm"):
     """Eigenstaendiges HTML fuer einen HTML-Block im HeySummit-Pagebuilder (m365con.net / de.m365con.net): Stil nur unter .m365con-mk,
-    Skript = assets/mediakit.js inline (eine Quelle), Formular an api-dub.m365.fm/api/mediakit mit brand=m365con. Keine fremden Hosts."""
+    Skript = assets/mediakit.js inline (eine Quelle), Formular an api-dub.m365.fm/api/mediakit mit brand=m365con. Einziger fremder Host: Cloudflare Turnstile (Bot-Pruefung)."""
     js = (_ROOT / "assets" / "mediakit.js").read_text("utf-8")
     src = "heysummit:" + ("de." if lang == "de" else "") + "m365con.net"
     return (f'<!-- M365Con: Sponsoring- und Mediadaten ({lang.upper()}). Erzeugt mit "python3 site_mediakit.py --embed" (site_mediakit.py), nicht von Hand aendern. -->\n'

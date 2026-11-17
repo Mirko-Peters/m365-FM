@@ -8,6 +8,7 @@
 import { sendMail, mailReady } from "./mailer.js";
 import { esc, rateLimit } from "./util.js";
 import { sendPush } from "./push.js";
+import { verifyTurnstile } from "./ads.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 const LANGS = ["en", "de"];
@@ -28,7 +29,7 @@ export const LEAD_STATUS = ["open", "in_progress", "closed_lost", "closed_won"];
 const T = {
   en: {
     subject: "Your M365.FM media kit",
-    hi: (n) => `Hi ${n},`,
+    hi: (n) => (n ? `Hi ${n},` : "Hi,"),
     body: (c) => `thank you for your interest in M365.FM${c ? ` on behalf of ${c}` : ""}. Attached you will find our current media kit with up-to-date figures for the podcast, YouTube, the website in 19 languages and our community.`,
     next: "If you would like to talk about a sponsorship, an interview or a joint project, simply reply to this e-mail – it goes directly to Mirko Peters.",
     links: "Useful links",
@@ -39,7 +40,7 @@ const T = {
   },
   de: {
     subject: "Deine M365.FM-Mediadaten",
-    hi: (n) => `Hallo ${n},`,
+    hi: (n) => (n ? `Hallo ${n},` : "Hallo,"),
     body: (c) => `vielen Dank für dein Interesse an M365.FM${c ? ` für ${c}` : ""}. Im Anhang findest du unsere aktuellen Mediadaten mit den neuesten Zahlen zu Podcast, YouTube, der Website in 19 Sprachen und unserer Community.`,
     next: "Wenn du über ein Sponsoring, ein Interview oder ein gemeinsames Projekt sprechen möchtest, antworte einfach auf diese E-Mail – sie geht direkt an Mirko Peters.",
     links: "Hilfreiche Links",
@@ -54,7 +55,7 @@ const T = {
 const TC = {
   en: {
     subject: "Your M365Con sponsor & media data",
-    hi: (n) => `Hi ${n},`,
+    hi: (n) => (n ? `Hi ${n},` : "Hi,"),
     body: (c) => `thank you for your interest in M365Con${c ? ` on behalf of ${c}` : ""}. Attached you will find our current sponsor and media data with up-to-date figures for the editions, live streams, recaps and search visibility of the Microsoft 365 Community Convention.`,
     next: "Sponsoring is on request: simply reply to this e-mail – it goes directly to Mirko Peters, who will get back to you with options and dates.",
     links: "Useful links",
@@ -65,7 +66,7 @@ const TC = {
   },
   de: {
     subject: "Deine M365Con-Sponsoring- und Mediadaten",
-    hi: (n) => `Hallo ${n},`,
+    hi: (n) => (n ? `Hallo ${n},` : "Hallo,"),
     body: (c) => `vielen Dank für dein Interesse an der M365Con${c ? ` für ${c}` : ""}. Im Anhang findest du unsere aktuellen Sponsoring- und Mediadaten mit den neuesten Zahlen zu den Ausgaben, Livestreams, Recaps und der Sichtbarkeit in der Suche.`,
     next: "Sponsoring gibt es auf Anfrage: Antworte einfach auf diese E-Mail – sie geht direkt an Mirko Peters, der sich mit Möglichkeiten und Terminen meldet.",
     links: "Hilfreiche Links",
@@ -183,6 +184,7 @@ export async function handleMediakit(env, request, url, path, user, J) {
     const rows = (await db.prepare("SELECT id,name,company,email,lang,source,created,sent,err,status,status_updated FROM mediakit_requests ORDER BY id DESC LIMIT 200").all()).results || [];
     return J({ items: rows }, 200, NS);
   }
+  if (request.method === "GET") return J({ turnstile: env.TURNSTILE_SITE_KEY || "" }, 200, { "cache-control": "public, max-age=3600" });   // Formular: Turnstile-Schluessel (oeffentlich)
   if (request.method !== "POST") return J({ error: "method" }, 405);
 
   const b = await request.json().catch(() => ({}));
@@ -200,6 +202,9 @@ export async function handleMediakit(env, request, url, path, user, J) {
   if (!(await rateLimit(db, ipKey, 5, 86400))) return J({ error: "rate_limit" }, 429);
   if (!(await rateLimit(db, "mk_mail:" + email, 2, 86400))) return J({ error: "rate_limit" }, 429);
   if (!mailReady(env)) return J({ error: "mail_unavailable" }, 503);
+  // Bot-Pruefung wie beim Lead-Formular (fail closed): ohne bestandenes Turnstile keine Mail an eine unbestaetigte Adresse
+  const ts = await verifyTurnstile(env, b.turnstile, ip);
+  if (!ts.ok) return J({ error: ts.error }, ts.error === "captcha_unavailable" ? 503 : 400);
 
   const ins = await db.prepare("INSERT INTO mediakit_requests(name,company,email,lang,source,created) VALUES(?,?,?,?,?,?)").bind(name, company, email, lang, source, now()).run();
   const id = ins.meta.last_row_id;
@@ -208,7 +213,7 @@ export async function handleMediakit(env, request, url, path, user, J) {
   const r = await sendMail(env, {
     to: email,
     subject: t.subject,
-    html: mailHtml(env, t, name, company, !!pdf, lang, brand),
+    html: mailHtml(env, t, "", "", !!pdf, lang, brand),   // kein frei eingegebener Text (Name, Firma) in der Mail an eine unbestaetigte Adresse; beides steht nur in der Lead-Tabelle
     replyTo: "mirko.peters@m365.fm",
     attachments: pdf ? [{ filename: B.file(pdf.lang), content: pdf.buf, type: "application/pdf", disposition: "attachment" }] : [],   // Binaerdaten; Base64 nur fuer Resend (mailer.js)
   });
