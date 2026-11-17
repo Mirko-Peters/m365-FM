@@ -8,7 +8,7 @@ date: 2026-11-18
 topics: [avd-power-management-autoscaling, avd-scaling-plan]
 keypoints:
   - "Power management autoscaling starts and deallocates existing session hosts. Dynamic autoscaling can also create and delete session hosts."
-  - "Dynamic autoscaling works only for pooled host pools with a session host configuration, and Learn lists it for Azure only, not Azure Government. Power management autoscaling has long been generally available."
+  - "Dynamic autoscaling works only for pooled host pools with a session host configuration, and Learn lists it for Azure only, not Azure Government. Power management autoscaling is generally available."
   - "Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, in July 2026. Some Learn pages, such as the scenarios and glossary pages, still carry preview wording."
   - "The management approach is set when the host pool is created and cannot be changed later, so the choice is often made before the scaling plan exists."
   - "For pooled host pools, both methods use the same consolidation calculation and force sign-out behavior. The difference is the final action: deallocate or delete."
@@ -44,11 +44,7 @@ For pooled host pools, the scenarios article says the consolidation calculations
 
 ## Status of dynamic autoscaling
 
-- On 9 July 2026 Microsoft announced on Tech Community the general availability of enhanced host pool management for Azure Virtual Desktop. It covers three features: session host configuration and update, dynamic autoscale and ephemeral OS disks.
-- Some Learn pages, for example the scenarios and glossary pages, still label dynamic autoscaling "preview" and power management "generally available". The create-and-assign page requires a `-preview` PowerShell module version (5.4.2-preview).
-- What's new lists it as preview in November 2024 and, in June 2026, as "now available for pooled host pools with session host configuration", without a label.
-
-Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026. Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit. Details are in the article "Requirements and limits of dynamic autoscaling in Azure Virtual Desktop".
+Power management autoscaling is generally available. For dynamic autoscaling, Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community, 9 July 2026). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit. The troubleshooting article also still says "Dynamic Autoscaling (preview)". What's new lists it as preview in November 2024 and, in June 2026, as "now available for pooled host pools with session host configuration", without a label. Details are in the article "Requirements and limits of dynamic autoscaling in Azure Virtual Desktop".
 
 ## Decision 1: Which cloud and how was the host pool created?
 
@@ -59,7 +55,7 @@ Otherwise, the way the host pool was created settles most cases. With standard m
 - The approach is set at creation. If you create a host pool without a session host configuration, you cannot add one afterwards.
 - A session host configuration can be used with pooled host pools only.
 
-The autoscale prerequisites repeat the consequence: a standard host pool needs the power management method. Hosts built with pipelines or scripts mean standard management. Learn's June 2026 What's new also introduces the term "Automated host pools" for pools where one session host configuration is enforced across all session hosts; this article keeps saying "host pool with a session host configuration". See [AVD host pool](/entity/avd-host-pool/) and [AVD session host configuration](/entity/avd-session-host-configuration/).
+The autoscale prerequisites repeat the consequence: a standard host pool needs the power management method. Hosts built with pipelines or scripts mean standard management. Learn's June 2026 What's new also introduces the term "Automated host pools" for pools where one session host configuration is enforced across all session hosts; this article keeps saying "host pool with a session host configuration". One more point if you plan a new pool for this: Learn's What's new (September 2025) says that from 19 September 2025 new host pools with a session host configuration created in the Azure portal must use a managed identity, and announced that existing pools without one lose the ability to update the configuration (from 15 October 2025) and to create session hosts (from 15 November 2025). See [AVD host pool](/entity/avd-host-pool/) and [AVD session host configuration](/entity/avd-session-host-configuration/).
 
 ## Decision 2: Pooled or personal?
 
@@ -76,7 +72,7 @@ See [personal host pool](/entity/avd-personal-host-pool/) and [hibernation](/ent
 
 ## Decision 3: Do you need hosts created and deleted?
 
-Only pooled host pools with a session host configuration reach this question. Dynamic autoscaling changes the number of VMs in the pool, not just the number running. The autoscale pages do not compare the cost of deallocated and deleted hosts, so check your own pricing. New hosts are built from the session host configuration; Learn's FAQ gives the image rule.
+Only pooled host pools with a session host configuration reach this question. Dynamic autoscaling changes the number of VMs in the pool, not just the number running. Learn's glossary says that when autoscale shuts down a VM it deallocates and stops it, so you are not charged for the compute resources. What other resources of a deallocated host cost, compared with deleting the host, depends on your own pricing. New hosts are built from the session host configuration: the FAQ says autoscale uses "the latest valid/stable image version defined in the default session host configuration, if you don't already have an active session host configuration". The second half of that sentence is unclear in the FAQ itself, so confirm in a test pool which image a new host receives.
 
 If you need neither creation nor deletion, power management autoscaling is the narrower choice. When autoscale starts, creates or deletes is the subject of the article "Dynamic autoscaling for Azure Virtual Desktop: creating and deleting session hosts on demand".
 
@@ -102,9 +98,8 @@ The final step is where the methods diverge: power management leaves the removed
 - **Maximum session limit.** For pooled host pools, set it explicitly and do not use the default. See [maximum session limit](/entity/avd-maximum-session-limit/).
 - **Exclusion tag.** Tagged hosts are not turned on, turned off or changed in drain mode in any phase, but they still count toward the minimum percentage of hosts. If the tagged hosts are switched off, autoscale cannot start them, so the pool cannot reach the minimum. Learn's scenario 4 shows the result: if the last untagged host is tagged and switched off, a user who tries to sign in sees "No resources available". See [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/).
 - **Drain mode.** For pooled host pools, autoscale overwrites drain mode, so use the exclusion tag for maintenance. See [drain mode](/entity/avd-drain-mode/).
-- **Other scaling tools.** You cannot use autoscale together with scaling via Azure Automation and Azure Logic Apps on the same host pool.
-- **Schedules and holidays.** A schedule repeats on the days you select under "Repeat on" and uses the time zone of the plan. Days you leave unselected carry over the last off-peak settings until the next ramp-up. The autoscale FAQ says autoscale "doesn't currently support ramping down on specific dates", so a schedule cannot be tied to a calendar date.
-- **Roles.** Power management needs Desktop Virtualization Power On Off Contributor, dynamic autoscaling also Desktop Virtualization Virtual Machine Contributor. The create-and-assign page names the Azure Virtual Desktop service principal and, in the power management section, also a managed identity assigned to the host pool, with the subscription as scope. It says a lower scope prevents autoscale from working properly, while the troubleshooting page lists host pool, resource group or subscription scope as acceptable. Use the subscription scope. Endpoint and network requirements for dynamic autoscaling are in the requirements article.
+- **Holidays.** The autoscale FAQ says autoscale "doesn't currently support ramping down on specific dates", so a schedule cannot be tied to a calendar date.
+- **Roles.** Power management needs Desktop Virtualization Power On Off Contributor, dynamic autoscaling also Desktop Virtualization Virtual Machine Contributor. The create-and-assign prerequisites for both methods allow the role to go to a managed identity assigned to the host pool or to the Azure Virtual Desktop service principal. The subsection on assigning permissions names the managed identity option only for power management and the service principal alone for dynamic autoscaling. The scope is the subscription. It says a lower scope prevents autoscale from working properly, while the troubleshooting page lists host pool, resource group or subscription scope as acceptable. Use the subscription scope. Endpoint and network requirements for dynamic autoscaling are in the requirements article.
 
 ## How to pick, in order
 
@@ -118,7 +113,7 @@ The final step is where the methods diverge: power management leaves the removed
 
 ## One more check
 
-Force sign-out can only happen in the ramp-down phase, and Learn gives no default wait time, so set and test it yourself. For personal pools with hibernate, the troubleshooting article says a host stays unavailable if the RDAgentBootLoader and RDAgent services are not Running about 5 minutes after resume. It suggests deallocate in that case.
+Force sign-out can only happen in the ramp-down phase. The create-and-assign page states no default wait time (its PowerShell example uses 30 minutes as an example value), so set and test it yourself. For personal pools with hibernate, the troubleshooting article says a host stays unavailable if the RDAgentBootLoader and RDAgent services are not Running about 5 minutes after resume. It suggests deallocate in that case.
 
 ## Related
 
