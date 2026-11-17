@@ -64,27 +64,52 @@ export function r2Key(p) {   // Adresse (dekodiert) -> Schluessel im Bucket ("" 
   if (p.endsWith("/")) return "pages" + p + "index.html";
   return extOf(p) ? "pages" + p : "";
 }
-const READY_TTL = 30000;   // Bau-Kennung je Isolate 30 s merken; aufgefrischt wird im Hintergrund, keine Anfrage wartet darauf
+export const READY_TTL = 30000;   // Bau-Kennung 30 s merken (je Isolate und geteilt im Kanten-Cache); aufgefrischt wird im Hintergrund, keine Anfrage wartet auf die Pruefung
 let READY = { t: -1e15, v: "", busy: 0 };
 export function __resetR2Ready() { READY = { t: -1e15, v: "", busy: 0 }; }   // nur fuer Tests
+export function __r2ReadyState() { return { ...READY }; }   // nur fuer Tests
 const withTimeout = (p, ms) => Promise.race([p, new Promise((r) => setTimeout(() => r(null), ms))]);
+const BUILD_RX = /^[A-Za-z0-9._-]{1,64}$/;
 async function checkBuild(env, url) {
   const [a, b] = await Promise.all([
     fetch(url.origin + "/r2-build.txt?r2check=" + Math.floor(Date.now() / READY_TTL), { signal: AbortSignal.timeout(3000) }).then((x) => (x.ok ? x.text() : "")).catch(() => ""),   // mit Query: nie aus dem Kanten-Cache
     withTimeout(env.PAGES.get("pages/r2-build.txt").then((x) => (x ? x.text() : "")), 3000).then((x) => x || "").catch(() => "")]);
   const o = String(a).trim(), r = String(b).trim();
-  return o === r && /^[A-Za-z0-9._-]{1,64}$/.test(o) ? o : "";
+  return o === r && BUILD_RX.test(o) ? o : "";
 }
-// Liefert die Bau-Kennung, wenn R2 genau den Bau von GitHub Pages enthaelt, sonst "". Nie auf eine Pruefung warten, die eine andere Anfrage
-// gestartet hat (bricht sie ab, haengen sonst alle): die Pruefung laeuft ueber ctx.waitUntil dieser Anfrage, bis dahin gilt der letzte Stand
-// (nach dem Start eines Isolates: "" = GitHub Pages).
-function r2Ready(env, url, ctx) {
+// Kaltes Isolat (Dienstag-Check 17.11.2026): ohne gemerkte Kennung nahm die erste Anfrage eines Isolats den Weg ueber GitHub Pages - fuer Seiten,
+// die es nur im Bucket gibt (/entity/*, Sprachseiten), mit 404 und danach dem R2-Rueckfall (zwei Ursprungs-Wege). Deshalb legt jede Pruefung ihr
+// Ergebnis mit Pruefzeit 30 s im Kanten-Cache des Rechenzentrums ab (Schluessel /__r2c/~ready, oeffentlich 404 wie alle /__r2c/). Ein neues Isolat
+// liest es einmal (hoechstens READY_WAIT ms, eigener Abruf dieser Anfrage) und uebernimmt es nur, wenn die Pruefung juenger als 30 s ist - so ist
+// der Stand nie aelter als im Isolat selbst. Auf checkBuild (nie gecachter Abruf bei GitHub Pages) wartet weiterhin keine Anfrage.
+const READY_KEY = "/__r2c/~ready", READY_WAIT = 50;
+async function sharedReady(url) {
+  const read = caches.default.match(new Request(url.origin + READY_KEY)).then(async (c) => (c ? { t: c.headers.get("x-r2-build-t"), v: (await c.text()).trim() } : null));
+  const c = await withTimeout(read.catch(() => null), READY_WAIT);
+  if (!c || !/^\d{10,16}$/.test(c.t || "") || (c.v && !BUILD_RX.test(c.v))) return null;
+  const now = Date.now(), t = Math.min(Number(c.t), now);   // Uhrabweichung: hoechstens ab jetzt gueltig
+  return now - t < READY_TTL ? { t, v: c.v } : null;
+}
+function storeReady(url, t, v) {
+  const age = Math.max(1, Math.ceil((READY_TTL - (Date.now() - t)) / 1000));
+  return caches.default.put(new Request(url.origin + READY_KEY), new Response(v, { headers: { "content-type": "text/plain; charset=utf-8", "cache-control": `public, max-age=${age}`, "x-r2-build-t": String(t) } })).catch(() => {});
+}
+// Liefert { v, src }: v = Bau-Kennung, wenn R2 genau den Bau von GitHub Pages enthaelt, sonst ""; src fuer Server-Timing (mem = Isolat,
+// cache = geteilt aus dem Kanten-Cache, cold = kein gueltiger Stand: GitHub Pages). Nie auf eine Pruefung warten, die eine andere Anfrage
+// gestartet hat (bricht sie ab, haengen sonst alle): die Pruefung laeuft ueber ctx.waitUntil dieser Anfrage, bis dahin gilt der letzte Stand.
+async function r2Ready(env, url, ctx) {
+  let src = "mem";
+  if (Date.now() - READY.t >= READY_TTL && !READY.v) {   // nach dem Start eines Isolates (oder zuletzt "nicht bereit"): geteilten Stand lesen
+    const sh = await sharedReady(url);
+    if (sh && sh.t > READY.t) { READY = { t: sh.t, v: sh.v, busy: READY.busy }; src = "cache"; } else src = "cold";
+  }
   const now = Date.now();
   if (now - READY.t >= READY_TTL && now - READY.busy > 10000) {
     READY.busy = now;
-    ctx.waitUntil(checkBuild(env, url).then((v) => { READY = { t: Date.now(), v, busy: 0 }; }).catch(() => { READY = { t: Date.now(), v: "", busy: 0 }; }));
+    ctx.waitUntil(checkBuild(env, url).then((v) => { const t = Date.now(); READY = { t, v, busy: 0 }; return storeReady(url, t, v); })
+      .catch(() => { READY = { t: Date.now(), v: "", busy: 0 }; }));
   }
-  return READY.v;
+  return { v: READY.v, src };
 }
 async function r2First(request, env, ctx, url, p, key, build) {
   const html = key.endsWith("/index.html"), ext = html ? "html" : extOf(key);
@@ -576,16 +601,22 @@ const site = {
       : { cacheEverything: true, cacheTtlByStatus: { "200-299": EDGE_HTML, "404": 60, "500-599": 0 } };   // HTML: 4 h am Rand, Purge nach jedem Deploy
     // T41: ohne Query zum Ursprung - GitHub Pages ist statisch, so landen ?utm_…/?fbclid=… im selben Cache-Eintrag (Zone steht auf Caching-Level "basic": mit Query sonst gar kein Cache)
     const page = !isImg && !isStatic && isHtmlPath(p), rq = request;   // Seiten: R2 zuerst auch bei Range-Anfragen (s. u.)
+    // Messung (Server-Timing, nur Seiten): src = r2 (R2 zuerst), pages (GitHub Pages), r2fallback (GitHub Pages 404, dann Bucket);
+    // ready = mem/cache/cold (Herkunft der Bau-Kennung, s. r2Ready) oder off (R2 zuerst nicht moeglich: Notschalter, Methode, Pfad); Dauern in ms
+    let ready = "off";
     if (env.R2_PRIMARY === "1" && env.PAGES && !isImg && (request.method === "GET" || request.method === "HEAD") && !p.startsWith("/search/") && p !== "/r2-build.txt" && (page || !request.headers.has("range"))) {
       let dp = p; try { dp = decodeURIComponent(p); } catch { /* ungueltige Kodierung: wie angefragt */ }   // Schluessel im Bucket sind UTF-8 (z. B. /ru/tag/облако/)
       const key = r2Key(dp);
-      const build = key ? r2Ready(env, url, ctx) : "";
-      if (build) {
-        const r2 = await r2First(rq, env, ctx, url, p, key, build);
-        if (r2) return r2;
+      if (key) {
+        const rd = await r2Ready(env, url, ctx);
+        ready = rd.src;
+        if (rd.v) {
+          const t0 = Date.now(), r2 = await r2First(rq, env, ctx, url, p, key, rd.v);
+          if (r2) { r2.headers.set("server-timing", `src;desc="r2", ready;desc="${ready}", r2;dur=${Date.now() - t0}`); return r2; }
+        }
       }
     }
-    const res = await fetch(url.search ? new Request(url.origin + p, rq) : rq, { cf });
+    const t0 = Date.now(), res = await fetch(url.search ? new Request(url.origin + p, rq) : rq, { cf }), tOrigin = Date.now() - t0;
     // Weiterleitung des Ursprungs (z. B. GitHub Pages /callback -> /callback/) bekam keine Query, weil wir ohne Query abrufen (T41).
     // Query wieder anhaengen, sonst verliert die OAuth-Rueckleitung den Code (?code=…) - so geschehen am 4.11. beim YouTube-Verbinden.
     if (url.search && res.status >= 301 && res.status <= 308) {
@@ -638,7 +669,8 @@ const site = {
       }
     }
     if (res.status === 404 && env.PAGES && !IMG.test(p) && (request.method === "GET" || request.method === "HEAD")) {
-      const r2 = await r2Page(rq, env, ctx, url, p);
+      const t1 = Date.now(), r2 = await r2Page(rq, env, ctx, url, p);
+      if (r2 && page) r2.headers.set("server-timing", `src;desc="r2fallback", ready;desc="${ready}", origin;dur=${tOrigin}, r2;dur=${Date.now() - t1}`);
       if (r2 && !p.endsWith("/") && !/\.[a-z0-9]{1,8}$/i.test(p)) return new Response(null, { status: 301, headers: { ...SEC, location: url.origin + p + "/" + url.search, "cache-control": "public, max-age=600" } });   // wie GitHub Pages: Verzeichnis ohne "/" -> 301 auf "/"
       if (r2) return r2;
       const m = LANG_EP.exec(p);   // noch nicht hochgeladen: englisches Original statt 404 - umbenannt gleich auf den neuen Slug (ein Schritt)
@@ -655,6 +687,7 @@ const site = {
     if (res.status === 404 && FEED_ITEM.test(p) && (request.method === "GET" || request.method === "HEAD")) return feedGone(request, p);
     const h = new Headers(res.headers);
     finishHeaders(h, p);
+    if (page) h.append("server-timing", `src;desc="pages", ready;desc="${ready}", origin;dur=${tOrigin}`);
     return new Response(request.method === "HEAD" ? null : res.body, { status: res.status, statusText: res.statusText, headers: h });
   },
 };
