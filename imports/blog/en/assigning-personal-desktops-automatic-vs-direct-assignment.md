@@ -1,6 +1,6 @@
 ---
 title: "Assigning personal desktops: automatic vs direct assignment"
-summary: "Personal host pools use either automatic assignment, where a user gets a desktop on first connection, or direct assignment, where an admin ties each user to a named session host. This guide gives the portal, PowerShell and Azure CLI routes where Learn documents them, the multiple-desktop rules and the errors to expect."
+summary: "Personal host pools use either automatic assignment, where a user gets a desktop on first connection, or direct assignment, where an admin ties each user to a named session host. This guide gives the portal, PowerShell and Azure CLI routes for assignment type and user assignment, the multiple-desktop rules and the errors to expect."
 status: review
 publish: false
 author: mirko-p
@@ -23,7 +23,7 @@ faq:
 
 Personal host pools offer two assignment types. With automatic assignment the user gets a session host the first time they connect. With direct assignment an admin assigns each user to a named session host before the user can connect. This guide covers how to choose, how to switch and operate each type, and the limits of the tools involved.
 
-The sibling article "Pooled or personal host pools: a decision guide" lists the portal paths in a compact form. This article adds the prerequisites, the commands, the working scenarios and the order of steps that avoids the documented errors. All facts come from Microsoft Learn pages retrieved on 17 November 2026.
+The sibling article "Pooled or personal host pools: a decision guide" lists the portal paths in a compact form. This article adds the prerequisites, the commands, the working scenarios and the order of steps that avoids the documented errors.
 
 ## How the two types differ
 
@@ -33,9 +33,9 @@ Learn's [personal desktop assignment article](https://learn.microsoft.com/en-us/
 |---|---|---|
 | Default for new personal host pools | Yes | No |
 | Session host needed before first connection | No | Yes |
-| What happens on first connection | The session is load balanced to an available session host and that desktop becomes the user's | The user connects to the session host they were assigned to |
+| What happens on first connection | The session is load balanced to a previously unassigned session host and that desktop becomes the user's | The user connects to the session host they were assigned to |
 
-Under automatic assignment, users must first be assigned to the host pool, usually through the application group, so that they can see the desktop. Under direct assignment, Learn says you must assign the user to both the host pool and a specific session host. A user who has only the host pool assignment sees the error "No resources available".
+Under automatic assignment, users must first be assigned to the host pool so that they can see the desktop; the portal steps below do this through the application group. Under direct assignment, Learn says you must assign the user to both the host pool and a specific session host. A user who has only the host pool assignment sees the error "No resources available".
 
 When you create the pool, select **Automatic** for the service to assign any personal desktop not already assigned to a user, or **Direct** to assign a specific personal desktop to a user ([host pool creation article](https://learn.microsoft.com/en-us/azure/virtual-desktop/create-host-pools-azure-marketplace)). With **Direct** you can also check **Assign multiple desktops to a single user** at that point.
 
@@ -118,7 +118,7 @@ Rules from the page:
 - There is no limit on the number of personal desktops one user can have in the pool.
 - If you use a single FSLogix profile container for a single host pool, allow multiple connections to the profile containers to avoid errors.
 
-For a new pool, check the box when you select **Direct**. For an existing pool, save direct assignment first: open **Settings**, **Properties**, set **Assignment type** to **Direct** and select **Save**, then check **Assign multiple desktops to a single user** and save again. Learn warns that doing both in one step produces an error. Then assign each session host with the steps above, once per host.
+Learn shows an Azure PowerShell tab next to the portal steps for enabling and for assigning multiple desktops, and says the Azure CLI cannot do either. This article does not reproduce those PowerShell commands, so take them from the Learn page. For a new pool, check the box when you select **Direct**. For an existing pool, save direct assignment first: open **Settings**, **Properties**, set **Assignment type** to **Direct** and select **Save**, then check **Assign multiple desktops to a single user** and save again. Learn warns that doing both in one step produces an error. Then assign each session host with the steps above, once per host.
 
 Set friendly names so that users can tell their desktops apart. Learn says the portal and the Azure CLI cannot set them. In PowerShell, use `Update-AzWvdSessionHost` with `-HostPoolName`, `-Name`, `-ResourceGroupName` and `-FriendlyName`. To audit the result, pipe `Get-AzWvdSessionHost` to `FL Name, AssignedUser, FriendlyName`.
 
@@ -139,7 +139,7 @@ These routines combine the documented steps. The order is a suggestion, not a Le
 | Set assignment type | Yes | Yes | Yes |
 | Assign a user to a session host | Yes | Yes | No |
 | Unassign or reassign | Yes | Yes, through a REST call | No |
-| Assign several desktops to one user | Yes | Yes, preview module | No |
+| Assign several desktops to one user | Yes | Yes, preview module (commands on the Learn page) | No |
 | Set friendly names | No | Yes | No |
 
 ## Interaction with power management
@@ -153,7 +153,7 @@ So the message has at least two documented causes for personal pools: a missing 
 Retrieved 17 November 2026.
 
 - [Microsoft Learn: Configure personal desktop assignment in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-personal-desktop-assignment-type)
-- [Microsoft Docs on GitHub: source file of the same page, with its PowerShell and Azure CLI tabs](https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/virtual-desktop/configure-host-pool-personal-desktop-assignment-type.md)
+- [Microsoft Docs on GitHub: source file of the same page, used for the assignment type, assign, unassign and reassign commands](https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/virtual-desktop/configure-host-pool-personal-desktop-assignment-type.md)
 - [Microsoft Learn: Create a host pool in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/create-host-pools-azure-marketplace)
 - [Microsoft Learn: az desktopvirtualization hostpool](https://learn.microsoft.com/en-us/cli/azure/desktopvirtualization/hostpool)
 - [Microsoft Learn: Update-AzWvdHostPool](https://learn.microsoft.com/en-us/powershell/module/az.desktopvirtualization/update-azwvdhostpool)
