@@ -14,7 +14,7 @@ import site_listen as LST   # Anhoeren-Karten (kompakte Variante unter den Beitr
 import site_meta_entities as MM   # SEO-Titel und Meta-Descriptions nach Suchabsicht (reine Funktionen)
 import re
 from datetime import date
-from urllib.parse import quote, urlsplit
+from urllib.parse import urlsplit
 from site_i18n import COMM_LANGS, pfx, pfx2, overlay
 from pathlib import Path
 from site_learn import (ENTS, esc, ent_names, fetch_wiki, wiki_block, WCSS, LCSS, WT, GLOSS, GLOSS_JS, write_wk_js)
@@ -570,8 +570,8 @@ def claim_html(eid, lang, entity, api):
         links = entity.get("same_as") if isinstance(entity.get("same_as"), list) else []
         linkedin = next((u for u in links if isinstance(u, str) and linkedin_profile(u)), "")
         if entity.get("type") == "person" and linkedin:
-            target = f"{BASE_}{pfx(lang)}/entity/{eid}/?claim=linkedin"
-            href = f'{api}/auth/login/linkedin?return={quote(target, safe="")}'
+            # K1: Formular-POST an /auth/claim/linkedin - nur dieser Knopf beginnt eine Uebernahme (Absicht im signierten state), kein ?claim=linkedin in einer Rueckkehr-URL
+            action = f"{api}/auth/claim/linkedin"
             text = T(lang, "Claim this profile with LinkedIn", "Profil mit LinkedIn beanspruchen")
             messages = json.dumps({
                 "verified": T(lang, "Profile claimed and automatically verified.", "Profil beansprucht und automatisch bestätigt."),
@@ -582,10 +582,12 @@ def claim_html(eid, lang, entity, api):
             }, ensure_ascii=False)
             community = f"{BASE_}{pfx(lang)}/community/#c-expert"
             login_text = T(lang, "Claim this profile through your community profile", "Profil über dein Community-Profil beanspruchen")
-            return (f'<p><a id="en-claim-link" class="btn main" rel="nofollow" hidden href="{esc(href)}">{esc(text)}</a></p>'
-                    f'<p id="en-claim-msg" role="status" aria-live="polite"></p><script>(function(){{var p=new URLSearchParams(location.search),r=p.get("claim_result"),m={messages},e=document.getElementById("en-claim-msg"),a=document.getElementById("en-claim-link");'
+            return (f'<form id="en-claim-form" method="post" action="{esc(action)}" hidden><input type="hidden" name="entity" value="{esc(eid)}"><input type="hidden" name="lang" value="{esc(lang)}">'
+                    f'<p><button type="submit" class="btn main">{esc(text)}</button></p></form>'
+                    f'<p><a id="en-claim-link" class="btn main" rel="nofollow" hidden href="{esc(community)}">{esc(login_text)}</a></p>'
+                    f'<p id="en-claim-msg" role="status" aria-live="polite"></p><script>(function(){{var p=new URLSearchParams(location.search),r=p.get("claim_result"),m={messages},e=document.getElementById("en-claim-msg"),f=document.getElementById("en-claim-form"),a=document.getElementById("en-claim-link");'
                     f'if(e&&m[r]){{e.textContent=m[r];var u=new URL(location.href);u.searchParams.delete("claim_result");history.replaceState(null,"",u)}}'
-                    f'if(a)fetch("{esc(api)}/api/me",{{credentials:"include"}}).then(function(x){{return x.json()}}).then(function(x){{if(x.user&&x.user.provider!=="linkedin"){{a.href="{esc(community)}";a.textContent="{esc(login_text)}"}}a.hidden=false}}).catch(function(){{a.href="{esc(community)}";a.textContent="{esc(login_text)}";a.hidden=false}})}})();</script>')
+                    f'if(f&&a)fetch("{esc(api)}/api/me",{{credentials:"include"}}).then(function(x){{return x.json()}}).then(function(x){{if(x.user&&x.user.provider!=="linkedin")a.hidden=false;else f.hidden=false}}).catch(function(){{a.hidden=false}})}})();</script>')
         return ""
     return f'<p><a href="{BASE_}{pfx(lang)}/community/u/{h}/">{T(lang, "Profile on M365.FM (maintained by the person)", "Profil auf M365.FM (gepflegt von der Person)")}</a></p>'
 

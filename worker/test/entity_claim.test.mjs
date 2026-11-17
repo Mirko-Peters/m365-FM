@@ -50,6 +50,9 @@ function withEntities() {
   globalThis.fetch = async (input) => String(input).endsWith("/entities.json") ? { json: async () => ({ entities }) } : { ok: false, json: async () => ({}) };
   return () => { globalThis.fetch = old; };
 }
+// K1: die Uebernahme beginnt nur der Formular-POST des Knopfs auf der Entitaetsseite
+const claimStart = (env, eid, headers = { origin: "https://site.test", "sec-fetch-site": "same-site" }, lang = "en") =>
+  worker.fetch(new Request("https://api.test/auth/claim/linkedin", { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded", ...headers }, body: new URLSearchParams({ entity: eid, lang }) }), env);
 async function adminDecision(env, eid, ok) {
   const req = new Request("https://api.test/api/admin/entity/claim", { method: "POST", body: JSON.stringify({ eid, ok }) });
   return handleEvents(env, req, new URL(req.url), "/api/admin/entity/claim", { id: 99, admin: true }, J);
@@ -160,7 +163,7 @@ test("LinkedIn: Callback übergibt verifizierte Userinfo-Mail an den Claim-Abgle
   const { raw, env } = await setup(), restore = withEntities();
   try {
     raw.prepare("INSERT INTO entity_contacts(eid,email,name,created) VALUES('contact-person','alex@example.com','Alex',1)").run();
-    const login = await worker.fetch(new Request("https://api.test/auth/login/linkedin?return=" + encodeURIComponent("https://site.test/entity/contact-person/?claim=linkedin"), { headers: { "sec-fetch-site": "same-site" } }), env);
+    const login = await claimStart(env, "contact-person");
     const auth = new URL(login.headers.get("location"));
     assert.equal(auth.searchParams.get("scope"), "openid profile email");
     const cookie = login.headers.get("set-cookie").split(";")[0], state = auth.searchParams.get("state");
@@ -182,7 +185,7 @@ test("LinkedIn: vorhandener Claim liefert beim OAuth-Ruecksprung HTTP 409; Login
   try {
     addUser(raw, 1);
     raw.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES('claimed-person',1,'verified','admin',1)").run();
-    const login = await worker.fetch(new Request("https://api.test/auth/login/linkedin?return=" + encodeURIComponent("https://site.test/entity/claimed-person/?claim=linkedin"), { headers: { "sec-fetch-site": "same-site" } }), env);
+    const login = await claimStart(env, "claimed-person");
     const auth = new URL(login.headers.get("location"));
     assert.equal(auth.searchParams.get("scope"), "openid profile email");
     const cookie = login.headers.get("set-cookie").split(";")[0], state = auth.searchParams.get("state");
@@ -301,12 +304,13 @@ test("Kontolöschung entfernt offene Claims und Claim-Prüfdetails, behält best
   } finally { raw.close(); }
 });
 
-// Sicherheits-Audit K1: Login-CSRF - ein Link von einer fremden Seite beansprucht keine Entitaet, er meldet nur an
-test("K1: LinkedIn-Claim nur, wenn der Ablauf auf der eigenen Seite begonnen wurde (Sec-Fetch-Site)", async () => {
+// Sicherheits-Audit K1: Login-CSRF - ein Link von einer fremden Seite beansprucht keine Entitaet, er meldet nur an.
+// Die Absicht folgt nicht aus ?claim=linkedin in der Rueckkehr-URL (die uebernehmen Login-Knoepfe aus location.href), sondern nur aus dem Formular-POST
+// /auth/claim/linkedin von unserer Seite, der sie in den signierten state schreibt.
+test("K1: LinkedIn-Claim nur ueber den Formular-POST der Entitaetsseite, nie ueber ?claim=linkedin im GET-Login", async () => {
   const { raw, env } = await setup(), restore = withEntities();
   try {
-    const flow = async (headers) => {
-      const login = await worker.fetch(new Request("https://api.test/auth/login/linkedin?return=" + encodeURIComponent("https://site.test/entity/contact-person/?claim=linkedin"), { headers }), env);
+    const finish = async (login) => {
       const auth = new URL(login.headers.get("location"));
       const cookie = login.headers.get("set-cookie").split(";")[0], state = auth.searchParams.get("state");
       const prev = globalThis.fetch;
@@ -319,16 +323,32 @@ test("K1: LinkedIn-Claim nur, wenn der Ablauf auf der eigenen Seite begonnen wur
       try { return await worker.fetch(new Request(`https://api.test/auth/callback/linkedin?code=test-code&state=${encodeURIComponent(state)}`, { headers: { cookie } }), env); }
       finally { globalThis.fetch = prev; }
     };
-    for (const h of [{ "sec-fetch-site": "cross-site" }, { "sec-fetch-site": "none" }, {}]) {   // fremde Seite, getippte Adresse, alter Browser
-      const cb = await flow(h);
+    const claims = () => raw.prepare("SELECT COUNT(*) n FROM entity_claims WHERE eid='contact-person'").get().n;
+    // GET-Login mit ?claim=linkedin in der Rueckkehr-URL - auch same-site (Klick auf "Bearbeiten" nach einem fremden Link auf /entity/x/?claim=linkedin)
+    for (const h of [{ "sec-fetch-site": "same-site" }, { "sec-fetch-site": "same-origin" }, { "sec-fetch-site": "cross-site" }, { "sec-fetch-site": "none" }, {}]) {
+      const login = await worker.fetch(new Request("https://api.test/auth/login/linkedin?return=" + encodeURIComponent("https://site.test/entity/contact-person/?claim=linkedin"), { headers: h }), env);
+      const cb = await finish(login);
       assert.equal(cb.status, 302);
       const loc = cb.headers.get("location");
       assert.doesNotMatch(loc, /claim_result|claim=linkedin/, JSON.stringify(h));
       assert.match(cb.headers.get("set-cookie"), /m365s=/);   // angemeldet wird trotzdem
-      assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_claims WHERE eid='contact-person'").get().n, 0, JSON.stringify(h));
+      assert.equal(claims(), 0, JSON.stringify(h));
     }
-    const ok = await flow({ "sec-fetch-site": "same-site" });
-    assert.match(ok.headers.get("location"), /claim_result=pending/);
+    // POST von einer fremden Seite oder ohne Origin: kein Ablauf
+    for (const h of [{ origin: "https://evil.example", "sec-fetch-site": "cross-site" }, { origin: "https://evil.example" }, {}, { origin: "https://site.test", "sec-fetch-site": "cross-site" }]) {
+      const r = await claimStart(env, "contact-person", h);
+      assert.equal(r.status, 403, JSON.stringify(h));
+      assert.equal(r.headers.get("set-cookie"), null);
+    }
+    assert.equal((await worker.fetch(new Request("https://api.test/auth/claim/linkedin"), env)).status, 405);
+    assert.equal((await claimStart(env, "Bad Id!")).status, 400);
+    assert.equal((await claimStart(env, "contact-person", undefined, "xx")).status, 400);
+    assert.equal(claims(), 0);
+    // der Knopf der Entitaetsseite: Rueckkehr auf die Entitaetsseite der Sprache, Uebernahme wartet auf die Redaktion
+    const de = await claimStart(env, "contact-person", undefined, "de");
+    assert.equal(de.status, 302);
+    const ok = await finish(de);
+    assert.match(ok.headers.get("location"), /^https:\/\/site\.test\/de\/entity\/contact-person\/\?claim_result=pending$/);
     assert.equal(raw.prepare("SELECT status FROM entity_claims WHERE eid='contact-person'").get().status, "pending");
   } finally { restore(); raw.close(); }
 });

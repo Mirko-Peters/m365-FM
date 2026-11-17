@@ -179,16 +179,26 @@ async function auth(env, request, url, path) {
     const r = await oauthCallbackLE(env, request, url, admin);
     return back(r.ok ? "ok" : r.error);
   }
+  if (path === "/auth/claim/linkedin") {   // K1: einzige Stelle, die eine LinkedIn-Uebernahme beginnt - Formular-POST des Knopfs auf der Entitaetsseite (site_entities.py claim_html)
+    if (request.method !== "POST") return html("<p>Method not allowed.</p>", 405);
+    // Nur von unserer Seite: Origin (bei POST immer gesendet, nicht faelschbar) und, falls vorhanden, Sec-Fetch-Site. Ein Link oder Formular einer fremden Seite beansprucht nichts.
+    const sfs = request.headers.get("sec-fetch-site") || "";
+    if (request.headers.get("origin") !== env.SITE || (sfs && sfs !== "same-site" && sfs !== "same-origin")) return html("<p>Claim must be started on the profile page.</p>", 403);
+    const f = await request.formData().catch(() => null), eid = String(f?.get("entity") || ""), lang = String(f?.get("lang") || "en");
+    if (!/^[a-z0-9][a-z0-9-]{1,78}$/.test(eid) || (lang !== "en" && !isLang(lang))) return html("<p>Bad request.</p>", 400);
+    if (!PROVIDERS.linkedin.id(env) || !PROVIDERS.linkedin.secret(env)) return html("<p>Login not configured.</p>", 503);
+    const o = await oauthStart(env, "linkedin", `${env.SITE}${lang === "en" ? "" : "/" + lang}/entity/${eid}/`, "C");   // Absicht "C" steht im signierten state (Cookie m365o)
+    return new Response(null, { status: 302, headers: { location: o.location, "set-cookie": o.setCookie } });
+  }
   if (!m) return null;
   const P = PROVIDERS[m[2]];
   if (!P.id(env) || !P.secret(env)) return html("<p>Login not configured.</p>", 503);
   const redirect = `${env.API}/auth/callback/${m[2]}`;
   if (m[1] === "login") {
-    const ret = safeReturn(env, url.searchParams.get("return") || env.SITE), sfs = request.headers.get("sec-fetch-site") || "";
-    // LinkedIn-Uebernahme nur, wenn der Ablauf auf unserer Seite begonnen wurde (Klick auf "Profil beanspruchen"): Absicht "C" im signierten state.
-    // Ein Link oder eine Weiterleitung von einer fremden Seite (Sec-Fetch-Site cross-site/none/fehlt) meldet nur an, beansprucht nichts (Login-CSRF).
-    const claimIntent = m[2] === "linkedin" && (sfs === "same-site" || sfs === "same-origin") && new URL(ret).searchParams.get("claim") === "linkedin";
-    const o = await oauthStart(env, m[2], ret, claimIntent ? "C" : "");
+    // Der GET-Login meldet nur an und beansprucht nie etwas, auch nicht mit ?claim=linkedin in der Rueckkehr-URL (die uebernehmen Login-Knoepfe aus location.href).
+    // Die Uebernahme beginnt nur der Formular-POST /auth/claim/linkedin (Absicht "C" im signierten state).
+    const ret = safeReturn(env, url.searchParams.get("return") || env.SITE);
+    const o = await oauthStart(env, m[2], ret);
     return new Response(null, { status: 302, headers: { location: o.location, "set-cookie": o.setCookie } });
   }
   // callback
@@ -225,9 +235,9 @@ async function auth(env, request, url, path) {
   if (u.banned) return html("<p>This account is blocked.</p>", 403);
   const h = new Headers({ location: ret });
   if (m[2] === "linkedin") {
-    const target = new URL(ret), claim = target.searchParams.get("claim");
-    if (claim && intent !== "C") { target.searchParams.delete("claim"); h.set("location", target.href); }   // nicht auf unserer Seite begonnen: nur anmelden
-    const match = claim === "linkedin" && intent === "C" && /^\/(?:[a-z]{2}\/)?entity\/([a-z0-9][a-z0-9-]{1,78})\/?$/i.exec(target.pathname);
+    const target = new URL(ret);
+    if (target.searchParams.has("claim")) { target.searchParams.delete("claim"); h.set("location", target.href); }   // alte Links mit ?claim=linkedin: nur anmelden
+    const match = intent === "C" && /^\/(?:[a-z]{2}\/)?entity\/([a-z0-9][a-z0-9-]{1,78})\/?$/i.exec(target.pathname);
     if (match) {
       const result = await claimLinkedinEntity(env, u, raw, match[1]);
       if (result.error === "claimed") {
