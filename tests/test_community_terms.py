@@ -38,6 +38,17 @@ class Terms(unittest.TestCase):
         for lang, t in d.items():
             self.assertIn("M365.FM", t["delete_account_d"], lang)
 
+    def test_texts_promise_only_what_the_worker_does(self):
+        # Geloeschte Blogbeitraege bleiben gespeichert (blog.js deleteUserBlog: user_id=-id), oeffentlich gibt es aber keine Route ohne Profil:
+        # die Texte duerfen nicht "bleiben sichtbar" versprechen, nur dass M365.FM sie anonym zeigen DARF. Privatstellen blendet Bewertungen,
+        # Kommentare und Speaker-Eintraege nicht aus - die Bedingungen sagen das.
+        d = json.loads((ROOT / "data" / "community_i18n.json").read_text("utf-8"))
+        self.assertNotIn("visible", d["en"]["delete_account_d"]); self.assertNotIn("sichtbar", d["de"]["delete_account_d"])
+        self.assertIn("may keep showing them anonymised", d["en"]["delete_account_d"]); self.assertIn("darf sie anonymisiert weiter zeigen", d["de"]["delete_account_d"])
+        de, en = SL.terms_de(), SL.terms_en()
+        self.assertNotIn("Deine Beiträge erscheinen nicht mehr unter deinem Namen", de); self.assertNotIn("no longer appear under your name", en)
+        self.assertIn("zeigen weiter deinen Anzeigenamen", de); self.assertIn("keep showing your display name", en)
+
     def test_publish_hint_in_blog_editor(self):
         js = (ROOT / "assets" / "blog.js").read_text("utf-8")
         self.assertIn("Nutzungsrecht an deinem Beitrag", js); self.assertIn("non-exclusive, perpetual and irrevocable licence", js)
