@@ -10,7 +10,7 @@ keypoints:
   - "The setting covers three components together: the Azure Virtual Desktop agent, the side-by-side stack and the Geneva Monitoring agent. It does not apply to the initial installation of these components."
   - "You set one required and one optional maintenance window. Every window is two hours long, and the time zone is either one fixed zone for the pool or the local time of each session host."
   - "The setting is disabled by default and can be configured only for existing host pools, not while you create a new one."
-  - "An update does not succeed if the session host is shut down or deallocated during the window. After four tries in a window the broker installs the update by force, and a critical update is installed by force at any time."
+  - "An update does not succeed if the session host is shut down or deallocated during the window. After four tries in a window the broker installs the update by force, and a critical update is installed by force regardless of the maintenance windows."
   - "Learn points to the WVDAgentHealthStatus table in Log Analytics and to event ID 3277 in the VM's Application log to tell a failed update from a host that is simply in a later flight."
 faq:
   - q: "What does the Scheduled Agent Updates setting actually schedule?"
