@@ -183,3 +183,32 @@ test("K28: 25 selbst erzeugte Punkte (Profil, Blog, Abzeichen) machen nicht vert
   // Redaktion und Admin bleiben ohne Schwelle vertrauenswuerdig
   assert.equal(await isTrusted(env.DB, { id: 1, admin: true, created: t }), true);
 });
+
+test("K28: vier frische Konten, die sich gegenseitig als Experten bestaetigen, stimmen keine wartende Aenderung live", async () => {
+  const { raw, env } = await mk(12);
+  const t = NOW(), ring = [3, 4, 5, 6];
+  raw.prepare(`UPDATE users SET created=? WHERE id IN (${ring.join(",")})`).run(t);
+  for (const o of ring) {
+    raw.prepare("INSERT INTO expertise(owner_type,owner_id,eid,level) VALUES('u',?,?,3)").run(o, "teams");
+    for (const by of ring) if (by !== o) raw.prepare("INSERT INTO endorsements(owner_id,eid,by_id,created) VALUES(?,?,?,?)").run(o, "teams", by, t);
+  }
+  const pend = ins(raw, "wiki_rev", { term: "teams", lang: "de", body: "Vorschlag eines Zweitkontos", user_id: 6, status: "pending", created: t });
+  for (const uid of [3, 4, 5]) assert.equal((await call(env, uid, "POST", "/api/edits/vote", { kind: "wiki", id: pend, v: 1 })).j.error, "not_trusted");
+  assert.equal(one(raw, "SELECT status FROM wiki_rev WHERE id=?", pend).status, "pending");
+  assert.equal(one(raw, "SELECT COUNT(*) n FROM edit_votes").n, 0);
+  assert.equal((await call(env, 3, "GET", "/api/edits/pending?kind=wiki&key=teams&lang=de")).j.can_vote, false);
+});
+
+test("K28: von einem Eigentuemer der Entitaet per Einzelstimme freigegebene Aenderungen zaehlen nicht als Fremdpruefung", async () => {
+  const { raw, env } = await mk(12);
+  ins(raw, "entity_claims", { eid: "teams", user_id: 7, status: "verified", via: "owner", created: 1 });
+  for (let i = 0; i < 9; i++) {
+    const id = ins(raw, "entity_rev", { eid: "teams", data: "{}", summary: "Zweitkonto " + i, user_id: 8, status: "old", created: 1 });
+    raw.prepare("INSERT INTO edit_votes(kind,rev_id,user_id,v,created) VALUES('entity',?,7,1,1)").run(id);
+  }
+  assert.equal(await trustPoints(env.DB, 8), 0);
+  assert.equal(await isTrusted(env.DB, { id: 8, created: 1 }), false);
+  // per Redaktion oder Abstimmung freigegebene Aenderungen an fremden Entitaeten zaehlen weiter
+  for (let i = 0; i < 9; i++) ins(raw, "entity_rev", { eid: "azure", data: "{}", summary: "fremd " + i, user_id: 9, status: "old", created: 1 });
+  assert.equal(await trustPoints(env.DB, 9), 27);
+});

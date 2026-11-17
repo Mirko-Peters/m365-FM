@@ -3,8 +3,9 @@ import { evalBadges, isTrusted } from "./badges.js";
 import { certScoped } from "./entities.js";
 const NEED = 3;   // Vertrauen: badges.js isTrusted (TRUST_POINTS)
 const now = () => Math.floor(Date.now() / 1000);
-const endorsedExpert = async (db, uid) => !!(await db.prepare("SELECT 1 x FROM endorsements WHERE owner_id=? AND by_id<>? GROUP BY eid HAVING COUNT(DISTINCT by_id)>=2 LIMIT 1").bind(uid, uid).first());   // Experte, den mind. 2 andere bestaetigt haben
-const trusted = async (db, u) => !!(u && ((await isTrusted(db, u)) || (await endorsedExpert(db, u.id))));   // badges.js isTrusted (K28)
+// Abstimmen darf nur, wer badges.js isTrusted erfuellt (K28). Frueher reichten zwei Bestaetigungen derselben Expertise durch beliebige andere
+// Konten - ohne Kontoalter und Punkte: vier frische Zweitkonten bestaetigten sich gegenseitig und stimmten wartende Aenderungen live.
+const trusted = async (db, u) => !!(u && (await isTrusted(db, u)));
 
 export async function handleVotes(env, request, url, path, user, J) {
   const db = env.DB;

@@ -134,7 +134,10 @@ export async function trustPoints(db, uid) {
   const likes = await n("SELECT COUNT(*) n FROM likes l JOIN comments c ON c.id=l.comment_id WHERE c.user_id=? AND c.status='ok' AND l.user_id<>?", uid, uid);   // Likes anderer
   // freigegebene Aenderungen (Redaktion oder Abstimmung) - ohne die eigene, selbst verwaltete Entitaet (Profil, Event, beanspruchte Firma): die geht ohne Pruefung live
   const edits = await n("SELECT COUNT(*) n FROM wiki_rev WHERE user_id=? AND status IN ('live','old')", uid)
-    + await n("SELECT COUNT(*) n FROM entity_rev r WHERE r.user_id=?1 AND r.status IN ('live','old') AND r.summary<>'Selbst verwaltet' AND NOT EXISTS (SELECT 1 FROM entity_claims c WHERE c.eid=r.eid AND c.user_id=?1 AND c.status='verified')", uid);
+    + await n("SELECT COUNT(*) n FROM entity_rev r WHERE r.user_id=?1 AND r.status IN ('live','old') AND r.summary<>'Selbst verwaltet' AND NOT EXISTS (SELECT 1 FROM entity_claims c WHERE c.eid=r.eid AND c.user_id=?1 AND c.status='verified')"
+      // nicht, wenn die Freigabe die Ein-Stimmen-Zustimmung eines Eigentuemers der Entitaet war (votes.js owner): das ist keine Fremdpruefung,
+      // ein Eigentuemer koennte sonst Zweitkonten ueber Aenderungen an seiner Entitaet vertrauenswuerdig machen
+      + " AND NOT EXISTS (SELECT 1 FROM edit_votes v JOIN entity_claims o ON o.eid=r.eid AND o.user_id=v.user_id AND o.status='verified' WHERE v.kind='entity' AND v.rev_id=r.id AND v.v=1)", uid);
   const events = await n(EVENTS_SQL, uid), speaker = await n(SPEAKER_SQL, uid);
   const recR = await n("SELECT COUNT(*) n FROM recommendations WHERE subject_id=? AND author_id<>? AND status='live'", uid, uid);
   const endoR = await n("SELECT COUNT(*) n FROM endorsements WHERE owner_id=? AND by_id<>?", uid, uid);
