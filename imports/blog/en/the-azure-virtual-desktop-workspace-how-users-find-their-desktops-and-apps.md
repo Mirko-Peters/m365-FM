@@ -35,7 +35,7 @@ Microsoft Learn's [terminology article](https://learn.microsoft.com/en-us/azure/
 
 So the path for one user is: user, then assignment to an application group, then the group's registration with a workspace, then the host pool's session hosts. Read together, these definitions mean that a workspace holds no VMs and no users itself: it references application groups, and users reach those groups through their assignments. See [workspaces](/entity/avd-workspace/), [application groups](/entity/avd-application-group/) and [host pools](/entity/avd-host-pool/).
 
-Because users can be assigned to several application groups across several host pools, one user can see resources from several pools in one list, and several workspaces can show up for the same user if their groups sit in different workspaces. This follows from the definitions above rather than from a separate Learn statement.
+Learn's terminology page says that users can be assigned to multiple application groups across multiple host pools, which lets you vary the applications and desktops that users can access. Our reading: this means one user can see resources from several pools in one list, and several workspaces can show up for the same user if their groups sit in different workspaces. Learn does not state those two consequences in so many words.
 
 ## Creating a workspace and registering groups
 
