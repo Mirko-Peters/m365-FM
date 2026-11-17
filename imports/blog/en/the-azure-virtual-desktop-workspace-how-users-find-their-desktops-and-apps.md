@@ -39,9 +39,9 @@ Because users can be assigned to several application groups across several host 
 
 ## Creating a workspace and registering groups
 
-Learn's [creation article](https://learn.microsoft.com/en-us/azure/virtual-desktop/create-application-group-workspace) describes these portal choices for a workspace:
+Learn's [deployment article](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop) describes these portal choices for a workspace:
 
-- **Deployment scope**: **Regional** or **Geographical**. The option appears only when the selected location supports regional workspaces. A workspace can only have application groups of the same scope registered to it, so create it with the same scope as the host pools whose groups it will publish.
+- **Deployment scope**: **Regional** or **Geographical**. Learn says the option appears only when the selected location supports regional workspaces; the Tech Community announcement says the field is now visible in every location, with only the supported scope selectable where Regional is not yet available. A workspace can only have application groups of the same scope registered to it, so create it with the same scope as the host pools whose groups it will publish.
 - **Application groups** tab (optional): select **Yes**, then **+ Register application groups**, pick the groups and choose **Select**.
 - **Advanced** tab (optional): **Enable diagnostics settings**, with destinations a Log Analytics workspace, a storage account or an event hub.
 
@@ -57,11 +57,11 @@ The rules that matter for workspaces:
 
 - A regional host pool can only be a member of a regional workspace and can only contain regional application groups, and the reverse for geographical.
 - Application groups created in a regional host pool are automatically regional.
-- Scope is set at creation and cannot be changed afterwards. PowerShell or REST requests that mix scopes fail.
+- Scope is set at creation and cannot be changed afterwards.
 
-Regional host pools have been generally available since 30 September 2026, according to the Tech Community announcement, and the September 2026 entry of What's new confirms general availability. The announcement, last updated on 13 November 2026, lists 14 regions, and Learn's [data locations](https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations) page shows the same 14 with a mark in its Regional column. The [Regional Host Pools](https://learn.microsoft.com/en-us/azure/virtual-desktop/regional-host-pools) page refers to that table and says availability is expanding in phases, so check the current list before you build on it. The announcement calls Regional the recommended scope for new host pools and Geographical not recommended, and says Microsoft plans to stop offering new Geographical host pools at a later date, without a date. For a new workspace, the practical reading is to match the scope of the host pools it will publish. The full treatment is in "Regional host pools in Azure Virtual Desktop: where host pool metadata is stored". See [regional host pools](/entity/avd-regional-host-pools/).
+Learn's [deployment article](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop) adds how mixing shows up: in the Azure portal, objects with an incompatible scope are greyed out in the lists you select from, and a PowerShell or REST request that associates objects of different scopes fails.
 
-The data locations page also says the service stores customer input data, such as object names, and customer data such as application names, VM names and user principal names, in the geography (geographical scope) or region (regional scope) of the resource. It states that the service does not directly store user data or application-related data such as documents, databases or configuration files.
+Regional host pools have been generally available since 30 September 2026, according to the Tech Community announcement, and the September 2026 entry of What's new confirms it. The announcement, last updated on 13 November 2026, names East US 2 and Central US as the first regions and 12 more, 14 in total, and Learn's [data locations](https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations) page shows the same 14 in its Regional column. The [Regional Host Pools](https://learn.microsoft.com/en-us/azure/virtual-desktop/regional-host-pools) page says availability is expanding in phases, so check the current list. Some Learn pages still carry preview wording, for example the multiregion architecture article, so rely on the announcement and What's new for the status. The announcement calls Regional the recommended scope for new host pools and says Microsoft plans to stop offering new Geographical host pools at a later date, without a date. For a new workspace, match the scope of the host pools it will publish. The full treatment is in "Regional host pools in Azure Virtual Desktop: where host pool metadata is stored". See [regional host pools](/entity/avd-regional-host-pools/).
 
 ## How users reach a workspace
 
@@ -105,24 +105,24 @@ Work through these in order:
 
 ## Workspaces and disaster recovery
 
-The multiregion article notes that in an active-active design users see duplicate feed entries, so you create separate workspaces and name them clearly. In an active-passive design users stay in one workspace and failover moves their assignments between application groups.
+The multiregion article notes that in an active-active design users see duplicate feed entries, so you create separate workspaces and name them clearly. In an active-passive design users stay in one workspace and failover moves their assignments between application groups. Region choice and failover steps are in "Designing a multi-region Azure Virtual Desktop deployment" and "Disaster recovery for Azure Virtual Desktop: options and trade-offs".
 
 ## Sources
 
 Retrieved 17 November 2026.
 
 - [Microsoft Learn: Azure Virtual Desktop terminology](https://learn.microsoft.com/en-us/azure/virtual-desktop/terminology)
-- [Microsoft Learn: Create a host pool, workspace and application group in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/create-application-group-workspace)
+- [Microsoft Learn: Deploy Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop)
 - [Microsoft Learn: Azure Virtual Desktop service architecture and resilience](https://learn.microsoft.com/en-us/azure/virtual-desktop/service-architecture-resilience)
 - [Microsoft Learn: Azure Virtual Desktop data locations](https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations)
 - [Microsoft Learn: Regional Host Pools](https://learn.microsoft.com/en-us/azure/virtual-desktop/regional-host-pools)
 - [Microsoft Learn: Get started with Windows App and connect to devices and apps](https://learn.microsoft.com/en-us/windows-app/get-started-connect-devices-desktops-apps)
-- [Microsoft Learn: Connect to Azure Virtual Desktop with the Remote Desktop client for Windows (archived)](https://learn.microsoft.com/en-us/azure/virtual-desktop/users/connect-windows)
+- [Microsoft Learn: Use the Remote Desktop client to connect to Azure Virtual Desktop (archived)](https://learn.microsoft.com/en-us/previous-versions/remote-desktop-client/connect-windows-cloud-services)
 - [Microsoft Learn: Customize the feed for Azure Virtual Desktop users](https://learn.microsoft.com/en-us/azure/virtual-desktop/customize-feed-for-virtual-desktop-users)
 - [Microsoft Learn: Built-in Azure RBAC roles for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/rbac)
 - [Microsoft Learn: Azure Virtual Desktop FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/faq)
 - [Microsoft Learn: Preferred application group type behavior for pooled host pools](https://learn.microsoft.com/en-us/azure/virtual-desktop/preferred-application-group-type)
-- [Microsoft Learn: Troubleshoot Azure Virtual Desktop set-up issues](https://learn.microsoft.com/en-us/azure/virtual-desktop/troubleshoot-set-up-issues)
+- [Microsoft Learn: Azure Virtual Desktop environment host pool creation](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-set-up-issues)
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
 - [Microsoft Learn: Multiregion business continuity and disaster recovery for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/architecture/example-scenario/azure-virtual-desktop/azure-virtual-desktop-multi-region-bcdr)
 - [Microsoft Tech Community: Now generally available: Regional resiliency for Azure Virtual Desktop](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/now-generally-available-regional-resiliency-for-azure-virtual-desktop/4540458)

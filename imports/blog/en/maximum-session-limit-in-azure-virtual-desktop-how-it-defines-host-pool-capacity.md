@@ -1,6 +1,6 @@
 ---
 title: "Maximum session limit in Azure Virtual Desktop: how it defines host pool capacity"
-summary: "The maximum session limit is the number of user sessions a pooled host pool will load balance to one session host. Multiplied by the number of available session hosts it gives the host pool capacity that autoscale compares with its capacity threshold."
+summary: "The maximum session limit is the number of user sessions that load balancing aims to place on one session host of a pooled host pool. Multiplied by the number of available session hosts it gives the host pool capacity that autoscale compares with its capacity threshold."
 status: review
 publish: false
 author: mirko-p
