@@ -260,3 +260,30 @@ test("K28: verifizierter Eigentuemer ohne Vertrauenspunkte darf ueber Aenderunge
   assert.equal((await call(env, 7, "POST", "/api/edits/vote", { kind: "entity", id: b, v: 1 })).j.error, "not_trusted");
   assert.equal((await call(env, 9, "POST", "/api/edits/vote", { kind: "entity", id: b, v: 1 })).j.error, "not_trusted");
 });
+
+test("K3: Mitverwalter eines Events und eigene Events geben weder Speaker-Punkte noch das prog_speaker-Abzeichen", async () => {
+  const { raw, env } = await mk(8);
+  const { badgesFor } = await import("../src/badges.js");
+  const sp = (...l) => JSON.stringify(l.map(([h, s]) => ({ h, n: h, s })));
+  const sess = (event_id, proposer_id, speakers) => ins(raw, "event_sessions", { event_id, title: "Session", speakers, status: "live", proposer_id, created: 1 });
+  const ev = (handle, owner_id, extra = {}) => ins(raw, "events", { handle, owner_id, title: handle, start: "2027-01-01", public: 1, review: "approved", created: 1, updated: 1, ...extra });
+  const pb = async (uid) => ((await badgesFor(env.DB, [uid])).get(uid) || []).filter((b) => b.startsWith("prog_speaker_"));
+  // eigenes, freigegebenes Event: Session (vom Mitverwalter 7 angelegt) mit sich selbst als bestaetigtem Speaker
+  const own = ev("eigen", 4); sess(own, 7, sp(["user-4", "confirmed"]));
+  assert.deepEqual(await pb(4), [], "eigenes Event gibt kein Speaker-Abzeichen");
+  // Mitverwalter (event_roles) auf fremdem Event traegt sich in die Session des Veranstalters ein
+  const co = ev("mitverwaltet", 5); ins(raw, "event_roles", { event_id: co, user_id: 6, role: "programm-manager", created: 1 });
+  sess(co, 5, sp(["user-6", "confirmed"]));
+  // Firmen-Event: Event-Manager der Veranstalterfirma
+  ins(raw, "orgs", { id: 1, handle: "acme", name: "Acme", created: 1 });
+  ins(raw, "org_members", { org_id: 1, user_id: 8, role: "events", status: "active", created: 1 });
+  const fe = ev("firma", 5, { org_id: 1 }); sess(fe, 5, sp(["user-8", "confirmed"]));
+  for (const u of [6, 8]) {
+    assert.equal(await trustPoints(env.DB, u), 0, `user-${u}: keine Speaker-Punkte als Mitverwalter`);
+    assert.deepEqual(await pb(u), []);
+  }
+  // fremdes Event ohne Rolle: Abzeichen und Punkte wie bisher
+  const ok = ev("fremd", 5); sess(ok, 5, sp(["user-3", "confirmed"]));
+  assert.deepEqual(await pb(3), ["prog_speaker_bronze"]);
+  assert.equal(await trustPoints(env.DB, 3), 100);
+});

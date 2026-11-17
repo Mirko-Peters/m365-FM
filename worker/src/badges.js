@@ -25,10 +25,15 @@ export async function episodeDates(env) {
 // anderem angelegt, auf einem freigegebenen oeffentlichen Event eines anderen Veranstalters, und der EIGENE Eintrag (nicht irgendeiner in der
 // Session) ist "confirmed". Vorher reichte ein LIKE ueber das ganze JSON - wer sich selbst als Speaker eintrug (speakersCheck bestaetigt den
 // eigenen Handle), bekam je Session 100 Punkte, auch auf Entwuerfen und in Vorschlaegen.
-export const SPEAKER_SQL = `SELECT COUNT(DISTINCT s.id) n FROM event_sessions s JOIN events e ON e.id=s.event_id
-  JOIN json_each(CASE WHEN json_valid(s.speakers) THEN s.speakers ELSE '[]' END) j
-  WHERE s.status='live' AND s.merged_into=0 AND s.proposer_id<>?1 AND e.owner_id<>?1 AND e.review='approved' AND e.public=1 AND e.merged_into=0
-    AND json_extract(j.value,'$.s')='confirmed' AND json_extract(j.value,'$.h')=(SELECT handle FROM profiles WHERE user_id=?1 AND public=1 AND handle IS NOT NULL)`;
+// Mitverwalter (event_roles) und Event-Verantwortliche der Veranstalterfirma zaehlen wie der Veranstalter selbst: sie koennen sich in fremde
+// Sessions eintragen (speakersCheck bestaetigt den eigenen Handle), das ist keine Fremdpruefung. ?1 = Konto-Nummer (Ausdruck).
+const speakerWhere = (u) => `s.status='live' AND s.merged_into=0 AND s.proposer_id<>${u} AND e.owner_id<>${u} AND e.review='approved' AND e.public=1 AND e.merged_into=0
+    AND NOT EXISTS (SELECT 1 FROM event_roles er WHERE er.event_id=e.id AND er.user_id=${u})
+    AND NOT EXISTS (SELECT 1 FROM org_members om WHERE e.org_id>0 AND om.org_id=e.org_id AND om.user_id=${u} AND om.status='active' AND om.role IN ('owner','admin','events'))
+    AND json_extract(j.value,'$.s')='confirmed'`;
+const SPEAKER_JOIN = `FROM event_sessions s JOIN events e ON e.id=s.event_id JOIN json_each(CASE WHEN json_valid(s.speakers) THEN s.speakers ELSE '[]' END) j`;
+export const SPEAKER_SQL = `SELECT COUNT(DISTINCT s.id) n ${SPEAKER_JOIN}
+  WHERE ${speakerWhere("?1")} AND json_extract(j.value,'$.h')=(SELECT handle FROM profiles WHERE user_id=?1 AND public=1 AND handle IS NOT NULL)`;
 // Freigegebene, oeffentliche Events (nicht zusammengefuehrt); ein privater Entwurf zaehlt nicht als Event
 const EVENTS_SQL = "SELECT COUNT(*) n FROM events WHERE owner_id=? AND review='approved' AND public=1 AND merged_into=0";
 
@@ -182,14 +187,12 @@ export async function badgesFor(db, ids) {
   const pq = await db.prepare(`SELECT owner_id id, program p FROM programs WHERE owner_type='u' AND verified=1 AND owner_id IN (${ids.map(() => "?").join(",")})`).bind(...ids).all();
   const PO = ["mvp", "rd", "mct", "msa", "ms_employee", "partner"];
   for (const r of (pq.results || []).sort((a, z) => PO.indexOf(z.p) - PO.indexOf(a.p))) m.set(r.id, ["prog_" + r.p, ...(m.get(r.id) || [])]);
-  // Speaker-Abzeichen: eingeladen und bestaetigt (Session mit status confirmed beim Profil-Handle)
+  // Speaker-Abzeichen: nach denselben Regeln wie die Speaker-Punkte (SPEAKER_SQL, K3) - frueher zaehlte jeder confirmed-Eintrag beim Handle,
+  // auch auf dem eigenen oder einem mitverwalteten Event
   try {
-    const hs = (await db.prepare(`SELECT user_id id, handle FROM profiles WHERE handle IS NOT NULL AND user_id IN (${ids.map(() => "?").join(",")})`).bind(...ids).all()).results || [];
-    if (hs.length) {
-      const conf = new Map();
-      for (const r of (await db.prepare(`SELECT speakers FROM event_sessions WHERE status='live' AND speakers LIKE '%"confirmed"%'`).all()).results || []) { try { for (const x of JSON.parse(r.speakers || "[]")) if (x.h && x.s === "confirmed") conf.set(x.h, (conf.get(x.h) || 0) + 1); } catch { /* ignore */ } }
-      for (const r of hs) { const n = conf.get(r.handle) || 0; if (n) m.set(r.id, [...(m.get(r.id) || []), "prog_speaker_" + (n >= 15 ? "platinum" : n >= 7 ? "gold" : n >= 3 ? "silver" : "bronze")]); }   // Stufen nach bestaetigten Sessions: 1 / 3 / 7 / 15
-    }
+    const rows = (await db.prepare(`SELECT p.user_id id, COUNT(DISTINCT s.id) n ${SPEAKER_JOIN} JOIN profiles p ON p.public=1 AND p.handle IS NOT NULL AND p.handle=json_extract(j.value,'$.h')
+      WHERE p.user_id IN (${ids.map(() => "?").join(",")}) AND ${speakerWhere("p.user_id")} GROUP BY p.user_id`).bind(...ids).all()).results || [];
+    for (const r of rows) { const n = r.n || 0; if (n) m.set(r.id, [...(m.get(r.id) || []), "prog_speaker_" + (n >= 15 ? "platinum" : n >= 7 ? "gold" : n >= 3 ? "silver" : "bronze")]); }   // Stufen nach bestaetigten Sessions: 1 / 3 / 7 / 15
   } catch { /* Events-Tabellen fehlen: kein Badge */ }
   return m;
 }
