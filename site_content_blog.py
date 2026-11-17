@@ -34,15 +34,91 @@ def _ts(d):
         return 0
 
 
+# ---------- Tabellen (GitHub-Pipe-Tabellen) ----------
+# SNS.md_blocks kennt nur Ueberschriften, Absaetze und Listen (die Shownotes brauchen mehr nicht): Tabellenzeilen wuerden zu einem Absatz mit
+# senkrechten Strichen. Deshalb wie bei den Bildern vorab im Blog-Renderer: Tabelle -> Platzhalter-Absatz, nach md_blocks wieder -> <table>.
+_SEP_CELL = re.compile(r"^:?-+:?$")
+_FENCE = re.compile(r"^\s*(```|~~~)")
+_HEAD = re.compile(r"^\s{0,3}#{1,6}\s")
+TBL = re.compile(r"@@TBL@@(\d+)@@")
+
+
+def _split_row(line, code_aware=True):
+    """Zeile einer Pipe-Tabelle -> Zellen. '\\|' ist ein Pipe-Zeichen im Text, ein '|' in `code` trennt nicht; fuehrender und schliessender Strich entfallen."""
+    s, out, cur, code, i = line.strip(), [], [], False, 0
+    while i < len(s):
+        c = s[i]
+        if c == "\\" and s[i + 1:i + 2] == "|": cur.append("|"); i += 2; continue
+        if c == "`" and code_aware: code = not code
+        if c == "|" and not code: out.append("".join(cur)); cur = []
+        else: cur.append(c)
+        i += 1
+    if code: return _split_row(line, False)   # offenes Backtick: Striche trotzdem als Trenner
+    out.append("".join(cur))
+    if s.startswith("|"): out = out[1:]
+    if s.endswith("|") and not s.endswith("\\|") and out and out[-1] == "": out = out[:-1]
+    return [c.strip() for c in out]
+
+
+def _separator(line):
+    """Trennzeile (--- | :---: | ---:) -> Ausrichtungen ('', 'left', 'center', 'right') oder None, wenn es keine ist."""
+    if "|" not in line or not re.fullmatch(r"[\s|:\-]+", line): return None
+    cells = _split_row(line)
+    if not cells or not all(_SEP_CELL.match(c) for c in cells): return None
+    return ["center" if c[0] == ":" and c[-1] == ":" else "left" if c[0] == ":" else "right" if c[-1] == ":" else "" for c in cells]
+
+
+def _table_html(head, aligns, rows):
+    n = len(head)
+    def cell(tag, txt, k):
+        a = aligns[k] if k < len(aligns) else ""
+        attr = (' scope="col"' if tag == "th" else "") + (f' style="text-align:{a}"' if a else "")
+        return f"<{tag}{attr}>{SNS._inline(txt)}</{tag}>"
+    body = []
+    for r in rows:
+        r = r[:n - 1] + [" | ".join(r[n - 1:])] if len(r) > n else r + [""] * (n - len(r))   # zu lang: Rest in die letzte Zelle (nichts geht verloren); zu kurz: leere Zellen
+        body.append("<tr>" + "".join(cell("td", c, k) for k, c in enumerate(r)) + "</tr>")
+    return ('<div class="tbl-wrap"><table><thead><tr>' + "".join(cell("th", c, k) for k, c in enumerate(head)) + "</tr></thead><tbody>" + "".join(body) + "</tbody></table></div>")
+
+
+def extract_tables(md):
+    """Pipe-Tabellen im Markdown -> (Markdown mit Platzhaltern @@TBL@@n@@ als eigener Absatz, [HTML je Tabelle]). Eine Tabelle braucht Kopfzeile mit '|'
+    und direkt darunter eine Trennzeile mit gleich vielen Spalten; sie endet an der ersten Zeile ohne '|', an einer Ueberschrift oder an einer Leerzeile, nach der keine Zeile mit '|' am Anfang folgt.
+    Zeilen in Codebloecken (```) bleiben unveraendert. Ohne Tabelle kommt md unveraendert zurueck."""
+    lines, out, tables, i, fence = md.split("\n"), [], [], 0, False
+    while i < len(lines):
+        ln = lines[i]
+        if _FENCE.match(ln): fence = not fence
+        al = _separator(lines[i + 1]) if not fence and "|" in ln and i + 1 < len(lines) and not _HEAD.match(ln) else None
+        head = _split_row(ln) if al is not None else None
+        if al is None or len(head) != len(al):
+            out.append(ln); i += 1; continue
+        j, rows = i + 2, []
+        while j < len(lines):
+            k = j
+            while k < len(lines) and not lines[k].strip(): k += 1   # Leerzeilen mitten in der Tabelle (kommt in Entwuerfen vor): geht es mit einer Zeile ab '|' weiter, bleibt sie in der Tabelle, ausser dort beginnt eine neue Tabelle
+            if k >= len(lines) or "|" not in lines[k] or _HEAD.match(lines[k]) or (k > j and (not lines[k].lstrip().startswith("|") or (k + 1 < len(lines) and _separator(lines[k + 1]) is not None))): break   # nach Leerzeile beginnt eine neue Tabelle
+            rows.append(_split_row(lines[k])); j = k + 1
+        tables.append(_table_html(head, al, rows)); out += ["", f"@@TBL@@{len(tables) - 1}@@", ""]; i = j
+    return ("\n".join(out) if tables else md), tables
+
+
+def wrap_tables(html):
+    """Sprachfassungen: die Bereinigung des Uebersetzers (site_podpage.san) behaelt <table>, verwirft aber <div class> und style - der Wrapper (waagerechtes Scrollen)
+    kommt hier wieder um jede <table>, die noch keinen hat."""
+    return re.sub(r'(?<!<div class="tbl-wrap">)(<table\b.*?</table>)', r'<div class="tbl-wrap">\1</div>', html, flags=re.S) if "<table" in html else html
+
+
 def render(md):
-    """Markdown -> HTML (gleiche Grundlage wie die Shownotes); Bildzeilen werden zu <figure>."""
+    """Markdown -> HTML (gleiche Grundlage wie die Shownotes); Bildzeilen werden zu <figure>, Pipe-Tabellen zu <div class="tbl-wrap"><table>."""
     out = []
+    md, tables = extract_tables(md)
     for b in SNS.md_blocks(IMG.sub(lambda m: f"\n\n@@IMG@@{m.group(2)}@@{m.group(1)}@@\n\n", md)):
         if b[0] == "h":
             lvl, t = b[1]; lvl = min(max(lvl, 2), 4); out.append(f"<h{lvl}>{SNS._inline(t)}</h{lvl}>")
         elif b[0] == "p":
-            m = re.fullmatch(r"@@IMG@@(\S+)@@(.*)@@", b[1].strip())
-            out.append(f'<figure><img src="{esc(m.group(1))}" alt="{esc(m.group(2))}" loading="lazy" decoding="async"></figure>' if m else f"<p>{SNS._inline(b[1])}</p>")
+            m = re.fullmatch(r"@@IMG@@(\S+)@@(.*)@@", b[1].strip()); t = TBL.fullmatch(b[1].strip()) if tables else None
+            out.append(tables[int(t.group(1))] if t else f'<figure><img src="{esc(m.group(1))}" alt="{esc(m.group(2))}" loading="lazy" decoding="async"></figure>' if m else f"<p>{SNS._inline(b[1])}</p>")
         else:
             out.append(f"<{b[0]}>" + "".join(f"<li>{SNS._inline(x)}</li>" for x in b[1]) + f"</{b[0]}>")
     return "\n".join(out)
@@ -168,6 +244,7 @@ def translations(BASE, posts, ents):
             r = TB.assemble(s, data.get(s["slug"]), lang) if o else None
             if not r: continue
             title, desc, html, faq = r
+            html = wrap_tables(html)   # Tabellen: Wrapper fuer waagerechtes Scrollen (die Bereinigung der Uebersetzung entfernt ihn)
             out.append({**{k: o[k] for k in COPY if k in o}, "lang": lang, "title": title, "summary": (desc or "")[:400], "body": "", "html": html, "keypoints": [], "votes": 0,
                         "faq": [{"q": q["name"], "a": q["acceptedAnswer"]["text"]} for q in faq if q.get("name")], "images": re.findall(r'<img[^>]+src="(https://[^"]+)"', html),
                         "legacy": True, "content_tr": True, "tr_of": "en", "ai_tr": True, "tr_index": IR.index_or_long(lang in index, desc, html)}); n += 1   # 13.11.2026: ab 2500 Zeichen eigener Text immer index (site_index_rule)
