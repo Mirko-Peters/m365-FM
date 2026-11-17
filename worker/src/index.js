@@ -284,7 +284,7 @@ function pubComment(c, mine, liked, badges, admin, roles) {
 async function api(env, request, url, path, asUser, ctx) {
   const method = request.method, J = (d, s = 200, x) => json(d, s, env, request, x);
   if (method === "OPTIONS") return new Response(null, { status: 204, headers: cors(env, request) });
-  if (asUser === undefined && method !== "GET" && !["/api/internal/ai-spend", "/api/internal/sponsor-metrics", "/api/email/unsub", "/api/mail/unsub", "/api/topics/email-unsub", "/api/entityinvite/decline"].includes(path) && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);   // interne Routen per CRON_KEY; Abmeldelinks (RFC 8058) senden keinen Zusatz-Header, alle per Token geschuetzt
+  if (asUser === undefined && method !== "GET" && !["/api/internal/ai-spend", "/api/internal/sponsor-metrics", "/api/email/unsub", "/api/mail/unsub", "/api/topics/email-unsub", "/api/entityinvite/decline", "/api/mail/confirm", "/api/email/confirm"].includes(path) && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);   // interne Routen per CRON_KEY; Abmeldelinks (RFC 8058) senden keinen Zusatz-Header, alle per Token geschuetzt
   // asUser: vom MCP-Server (Token bereits geprueft) - dann keine Cookie-Sitzung noetig
   const uid = asUser === undefined ? await readSession(env, request) : null, user = asUser === undefined ? (uid ? await me(env, uid) : null) : asUser;
   const need = () => (user ? null : J({ error: "login" }, 401));
@@ -554,8 +554,13 @@ async function api(env, request, url, path, asUser, ctx) {
       html: `<p>Please confirm your subscription to new M365.FM episodes (${esc(b.lang)}):</p><p><a href="${link}">${link}</a></p><p>Bitte bestätige dein Abo neuer M365.FM-Folgen. Wenn du das nicht warst, ignoriere diese E-Mail.</p>` });
     return J({ ok: true });
   }
-  if (path === "/api/email/confirm" && method === "GET") {
+  if (path === "/api/email/confirm" && (method === "GET" || method === "POST")) {   // GET fragt nur nach (Link-Pruefer der Mailfilter), erst der Knopf (POST) bestaetigt
     const t = url.searchParams.get("token") || "", lang = isLang(url.searchParams.get("lang")) ? url.searchParams.get("lang") : "en";
+    if (method === "GET") {
+      const s = t ? await db.prepare("SELECT confirmed FROM email_subs WHERE token=?").bind(t).first() : null;
+      if (!s) return html("<p>Link invalid or expired.</p>", 404);
+      if (!s.confirmed) return html(`<h2>Confirm subscription? / Abo bestätigen?</h2><p>Click the button to receive new episodes from M365.FM by e-mail. If this wasn't you, just close this page.</p><p>Klicke auf den Knopf, um neue Folgen von M365.FM per E-Mail zu bekommen. Warst du das nicht, schließe diese Seite einfach.</p><form method="post"><button type="submit" style="font:inherit;padding:.6em 1.2em">Confirm / Bestätigen</button></form>`);
+    }
     const r = await db.prepare("UPDATE email_subs SET confirmed=1 WHERE token=?").bind(t).run();
     return html(r.meta.changes ? `<h2>✓ Subscription confirmed</h2><p><a href="${env.SITE}/${lang}/">${env.SITE.replace("https://", "")}</a></p>` : "<p>Link invalid or expired.</p>", r.meta.changes ? 200 : 404);
   }

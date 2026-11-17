@@ -251,3 +251,30 @@ test("K10: /api/push/subscribe und /api/topics/follow lehnen fremde Hosts ab; se
   assert.equal(hit, 0);
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM push_subs WHERE endpoint='https://evil.example/old'").get().n, 0);
 });
+
+// ---------- K9: Bestaetigungslink der Benachrichtigungsadresse bestaetigt erst per Knopf (POST), nicht beim GET des Mailscanners ----------
+test("K9: /api/mail/confirm - GET aendert nichts, POST nur vom eingetragenen Konto, Ablauf nach 48 h; /api/email/confirm ebenso per Knopf", async () => {
+  const { raw, env } = await mk();
+  const NOWS = Math.floor(Date.now() / 1000), T = "tok-0123456789abcdef";
+  await call(env, 4, "GET", "/api/mail/me");   // legt die Mail-Tabellen an
+  raw.prepare("INSERT INTO mail_addr(user_id,email,verified,token,created) VALUES(4,'opfer@contoso.com',0,?,?)").run(T, NOWS);
+  const ver = () => raw.prepare("SELECT verified FROM mail_addr WHERE user_id=4").get().verified;
+  const g = await call(env, 0, "GET", `/api/mail/confirm?t=${T}`);   // Mailscanner ohne Sitzung
+  assert.equal(g.s, 200); assert.match(g.text, /<form method="post">/); assert.equal(ver(), 0);
+  const raw0 = await W.fetch(new Request(`${API}/api/mail/confirm?t=${T}`, { method: "POST" }), env, { waitUntil() {} });   // Formular-POST ohne Zusatz-Header und ohne Sitzung
+  assert.equal(raw0.status, 401); assert.equal(ver(), 0);
+  assert.equal((await call(env, 6, "POST", `/api/mail/confirm?t=${T}`)).s, 403); assert.equal(ver(), 0);   // anderes Konto
+  const ok = await W.fetch(new Request(`${API}/api/mail/confirm?t=${T}`, { method: "POST", headers: { cookie: `m365s=${await makeSession(env, 4)}` } }), env, { waitUntil() {} });
+  assert.equal(ok.status, 200); assert.equal(ver(), 1);
+  // abgelaufener Link
+  raw.prepare("INSERT INTO mail_addr(user_id,email,verified,token,created) VALUES(6,'x@contoso.com',0,'tok-abgelaufen-12345',?)").run(NOWS - 3 * 86400);
+  assert.equal((await call(env, 6, "POST", "/api/mail/confirm?t=tok-abgelaufen-12345")).s, 404);
+  assert.equal(raw.prepare("SELECT verified FROM mail_addr WHERE user_id=6").get().verified, 0);
+  // Folgen-Abo ohne Konto
+  raw.prepare("INSERT INTO email_subs(email,lang,token,confirmed,created) VALUES('leser@contoso.com','de','sub-token-1',0,1)").run();
+  const sg = await call(env, 0, "GET", "/api/email/confirm?token=sub-token-1&lang=de");
+  assert.equal(sg.s, 200); assert.match(sg.text, /<form method="post">/);
+  assert.equal(raw.prepare("SELECT confirmed FROM email_subs").get().confirmed, 0);
+  const sp = await W.fetch(new Request(`${API}/api/email/confirm?token=sub-token-1&lang=de`, { method: "POST" }), env, { waitUntil() {} });
+  assert.equal(sp.status, 200); assert.equal(raw.prepare("SELECT confirmed FROM email_subs").get().confirmed, 1);
+});
