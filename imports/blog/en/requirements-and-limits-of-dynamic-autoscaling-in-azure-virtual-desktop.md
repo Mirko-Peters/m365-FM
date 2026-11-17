@@ -9,7 +9,7 @@ topics: [avd-dynamic-autoscaling, avd-scaling-plan, avd-managed-identity]
 keypoints:
   - "Dynamic autoscaling needs a pooled host pool with a session host configuration. That choice is made when the host pool is created and cannot be added later."
   - "Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, in July 2026. Some Learn pages, such as the glossary and scenarios pages, still carry preview wording, so check the current page before relying on a limit."
-  - "Learn gives three different statements on the managed identity requirement for host pools with a session host configuration: an estimated schedule from September 2025, 1 November 2025 on the configuration page, and 'a future service update' in September 2026. Check the current state."
+  - "Learn gives two different statements on the managed identity requirement for host pools with a session host configuration: an estimated schedule from September 2025 and 'a future service update' in September 2026 and on the configuration page. Check the current state."
   - "A custom max session limit is required, session hosts must reach one extra storage endpoint, and one scaling plan can be assigned per host pool."
   - "Autoscale overrides drain mode and ignores the host pool's load balancing setting. Use the exclusion tag for hosts you want to keep out of scaling."
 faq:
@@ -53,9 +53,9 @@ What's new announces a [managed identity](/entity/avd-managed-identity/) require
 - Starting 15 October 2025, existing pools cannot update their session host configuration until a managed identity is added.
 - Starting 15 November 2025, existing pools cannot create session hosts until one is added.
 
-These are estimated dates, not confirmed ones, and the later entry does not match them. The page "Configure managed identity in Azure Virtual Desktop" gives a third version: "Host pools configured with a session host configuration will require a managed identity starting November 1st, 2025 in order to add session hosts to the host pool". That page still carries a preview notice. The September 2026 What's new entry announces managed identity support as generally available and says: "In a future service update, host pools configured with a session host configuration will require a managed identity in order to add session hosts". Whether it is already enforced is open. The September 2025 entry says that creating a new host pool with a session host configuration in the portal requires a managed identity, while the deployment page says you can choose at creation time whether to assign one.
+These are estimated dates, not confirmed ones, and the later entry does not match them. The page "Configure managed identity in Azure Virtual Desktop" (updated 4 November 2026) says in an Important note that host pools configured with a session host configuration "will require a managed identity in a future service update". The September 2026 What's new entry announces managed identity support as generally available and says: "In a future service update, host pools configured with a session host configuration will require a managed identity in order to add session hosts". Whether it is already enforced is open. The September 2025 entry says that creating a new host pool with a session host configuration in the portal requires a managed identity, while the deployment page says you can choose at creation time whether to assign one.
 
-The deployment page says the managed identity performs create, delete and update operations for session hosts in place of the service principal, and the configuration page lists autoscale among the features that can use a managed identity. Check the current state of all three statements before you rely on one.
+The deployment page says the managed identity performs create, delete and update operations for session hosts in place of the service principal, and the configuration page lists autoscale among the features that can use a managed identity. Check the current state of both statements before you rely on one.
 
 ## Region rules
 
@@ -104,7 +104,7 @@ Learn lists these limits for autoscale in general:
 
 1. Confirm that the host pool is pooled and was created with a session host configuration. In the portal, the Scaling method option only appears when you choose Pooled as the host pool type.
 2. Confirm that the host pool is not on Azure Local and not in Azure Government.
-3. Decide on a managed identity: the deployment page words it as optional at creation, What's new says portal creation requires one, and the dates for the general requirement differ between pages. If you use one, give it Desktop Virtualization Virtual Machine Contributor on the resource group or subscription of the session hosts.
+3. Decide on a managed identity: the deployment page words it as optional at creation, What's new says portal creation requires one, and the timing of the general requirement differs between pages. If you use one, give it Desktop Virtualization Virtual Machine Contributor on the resource group or subscription of the session hosts.
 4. Set a custom max session limit instead of the default.
 5. Assign both roles to the Azure Virtual Desktop service principal at subscription scope, or to the host pool's managed identity if you use one (the scaling plan page names the Power On Off Contributor role for a managed identity in its power management section).
 6. Allow outbound access to `wvdhpustgr0prod.blob.core.windows.net` from the session host subnet.
