@@ -14,7 +14,7 @@ keypoints:
   - "For image-based updates of hosts that use a session host configuration, session host update handles drain mode itself, and Learn says not to change it manually during an update."
 faq:
   - q: "What happens to users who are connected when I turn drain mode on?"
-    a: "No. Microsoft Learn says existing connections stay active until the user signs out or an administrator ends the session. Drain mode only stops new sessions. You have to message the users and end the sessions yourself, for example with Send-AzWvdUserSessionMessage and Remove-AzWvdUserSession."
+    a: "Nothing happens to them. Microsoft Learn says existing connections stay active until the user signs out or an administrator ends the session. Drain mode only stops new sessions. You have to message the users and end the sessions yourself, for example with Send-AzWvdUserSessionMessage and Remove-AzWvdUserSession."
   - q: "Why is a user still landing on the host I drained?"
     a: "Learn's load-balancing page says a user who already has an active or disconnected session in the host pool is redirected to the host that holds that session, even if drain mode is on. Users without a session are not sent to a drained host. Check for disconnected sessions with Get-AzWvdUserSession."
   - q: "Will autoscale switch my host back on during maintenance?"
