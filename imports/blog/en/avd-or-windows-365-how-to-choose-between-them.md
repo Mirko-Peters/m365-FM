@@ -31,16 +31,16 @@ Choose Azure Virtual Desktop (AVD) when you need pooled multi-session hosts, Win
 | Operating systems | Windows 11, Windows 10, Windows Server | Windows 11, Windows 10 |
 | Multi-session | Yes. Windows 11 and 10 Enterprise multi-session is exclusive to AVD | No, single user per Cloud PC (Flex shares one Cloud PC one user at a time) |
 | Billing | Consumption based | Per user, per month (Flex: pooled licenses at tenant level) |
-| Management | Azure portal, Azure CLI, PowerShell, REST API; Intune | Intune (Enterprise), web self-service (Business) |
+| Management | Azure portal, Azure CLI, PowerShell, REST API; Intune | Intune (Enterprise); Microsoft 365 admin center or Windows App (Business) |
 | Azure subscription | Required | Enterprise: not needed on the Microsoft-hosted network, required for an Azure network connection. Business: uses the Microsoft-hosted network |
 
 ## What each service is
 
-Microsoft Learn describes [Azure Virtual Desktop](/entity/azure-virtual-desktop/) as "a desktop and app virtualization service that runs on Azure." The environment is created in the organization's own Azure subscription.
+Microsoft Learn describes [Azure Virtual Desktop](/entity/azure-virtual-desktop/) as "a desktop and app virtualization service that runs on Azure."
 
-[Windows 365](/entity/windows-365/) Enterprise is, in Learn's words, "a cloud-based service that automatically creates a new type of Windows virtual machine (Cloud PCs) for your end users." Each Cloud PC is assigned to an individual user. Admins do not create Cloud PCs by hand. After Cloud PC support is set up in Microsoft Intune, a Cloud PC is provisioned automatically whenever a user with a Cloud PC license is assigned to an appropriate Microsoft Entra user group, and the Cloud PC is enrolled in Intune.
+[Windows 365](/entity/windows-365/) Enterprise is, in Learn's words, "a cloud-based service that automatically creates a new type of Windows virtual machine (Cloud PCs) for your end users." Each Cloud PC is assigned to an individual user. Admins do not create Cloud PCs by hand: after Cloud PC support is set up in Intune, a Cloud PC is provisioned automatically when a licensed user is assigned to an appropriate Microsoft Entra group.
 
-The two services are connected. The Windows 365 architecture page states that Cloud PC connectivity is provided by Azure Virtual Desktop and that no inbound connections from the internet are made to the Cloud PC. It also says Cloud PCs do not support third-party connection brokers. For AVD, Learn names Citrix and Omnissa as Approved Providers (see criterion 1).
+The two services are connected. The Windows 365 architecture page states that Cloud PC connectivity is provided by Azure Virtual Desktop and that no inbound connections from the internet are made to the Cloud PC. It also says Cloud PCs do not support third-party connection brokers.
 
 ## Decision criteria
 
@@ -49,7 +49,7 @@ The two services are connected. The Windows 365 architecture page states that Cl
 - An Enterprise or Business Cloud PC belongs to one user. Flex is the exception (see below).
 - AVD offers both. Learn says single-session assigns devices to one user, and multi-session provides scalability. Windows 11 and Windows 10 Enterprise multi-session is "exclusive to Azure Virtual Desktop" and can "greatly reduce the number of virtual machines and operating system overhead." The multi-session FAQ adds that running Windows Enterprise multi-session in production outside the AVD service violates the licensing agreement. Only Microsoft and the Approved Providers Citrix and Omnissa may provide access. See [pooled host pools](/entity/avd-pooled-host-pool/) and [personal host pools](/entity/avd-personal-host-pool/).
 
-Only AVD supports several users signed in at the same time on one host (multi-session). Windows 365 Flex lets users share Cloud PCs one at a time. If every user needs a persistent personal desktop with no host sizing, Windows 365 fits more directly. AVD covers that case through personal host pools, but the hosts must be managed.
+Of the two services, only AVD offers multi-session hosts, with several users signed in on one host at the same time. Windows 365 Flex lets users share Cloud PCs one at a time. If every user needs a persistent personal desktop with no host sizing, Windows 365 fits more directly. AVD covers that case through personal host pools, but the hosts must be managed.
 
 ### 2. Operating system and application scope
 
@@ -66,7 +66,7 @@ Learn's comparison lists AVD with a "consumption-based pricing model" and Window
 A practical comparison method:
 
 1. List users by profile: dedicated, shared, part-time, occasional.
-2. For AVD, estimate VM size per session count, storage for profiles and images, networking and operations effort. Autoscale can help manage compute cost, see [power management autoscaling](/entity/avd-power-management-autoscaling/).
+2. For AVD, estimate VM size per session count, storage for profiles and images, networking and operations effort. [Autoscale](/entity/avd-power-management-autoscaling/) can help manage compute cost.
 3. For Windows 365, take the per-user price for the Cloud PC size each profile needs, plus network costs if ANC is used.
 4. Compare totals per profile, not for the whole company.
 
@@ -78,11 +78,11 @@ According to the Learn page comparing Business and Enterprise, Windows 365 Enter
 
 ### 5. Azure skills and network control
 
-AVD in Azure requires an Azure subscription, the relevant Azure RBAC roles for deployment (the prerequisites page leaves the specific roles to the deployment articles; Learn's built-in roles article describes them) and the `Microsoft.DesktopVirtualization` resource provider registered, which needs Contributor or Owner on the subscription. A virtual network and subnet in the same Azure region as the session hosts are required. Round-trip time from the client network to the Azure region should be below 150 ms. Session hosts can join Microsoft Entra ID or an Active Directory domain (AD DS or Microsoft Entra Domain Services).
+AVD in Azure requires an Azure subscription, Azure RBAC roles for deployment and the `Microsoft.DesktopVirtualization` resource provider registered. Registering needs the `*/register/action` permission, which Contributor and Owner include. Learn's built-in roles article names Desktop Virtualization Host Pool Contributor plus Virtual Machine Contributor to create VMs, and for a portal deployment also Application Group Contributor and Workspace Contributor; Desktop Virtualization Contributor is the alternative. A virtual network and subnet in the same Azure region as the session hosts are required. Round-trip time from the client network to the Azure region should be below 150 ms. Session hosts can join Microsoft Entra ID or an Active Directory domain (AD DS or Microsoft Entra Domain Services).
 
 Windows 365 Enterprise has two network options, per the Learn deployment options page:
 
-- **Microsoft-hosted network:** no Azure subscription needed, "all you need is the required licenses." There is no control of the virtual network and no direct access to on-premises resources, so a VPN or private access solution is required. It supports Microsoft Entra join, not hybrid join. Learn calls it the recommended option and says Microsoft recommends it for Windows 365 deployments.
+- **Microsoft-hosted network:** no Azure subscription needed, "all you need is the required licenses." There is no control of the virtual network and no direct access to on-premises resources, so a VPN or private access solution is required. It supports Microsoft Entra join, not hybrid join. Learn lists it as the recommended option.
 - **Azure network connection (ANC):** the Cloud PC's network interface sits in a virtual network in the organization's own subscription. This gives direct line of sight to on-premises resources and supports both Entra join and Entra hybrid join. Egress and network infrastructure costs fall on that subscription. Hybrid join requires this option.
 
 Windows 365 Business has no virtual network option: Learn's comparison lists Microsoft Entra join without VNet support, and the training unit lists the Microsoft-managed network for Business. Enterprise can use both options side by side, for example ANC for legacy requirements only.
@@ -93,7 +93,7 @@ For AVD, the overview lists the Azure portal, Azure CLI, Azure PowerShell and RE
 
 ### 7. Image and customization
 
-Learn's comparison lists AVD provisioning as manual and fully customizable, Windows 365 provisioning as automatic, with no customization for Business and a fully customizable image for Enterprise (gallery or custom images). AVD is fully customizable, with profile solutions such as [FSLogix](/entity/fslogix/). Windows 365 offers several CPU, RAM and storage sizes.
+Learn's comparison lists AVD provisioning as manual and fully customizable, Windows 365 provisioning as automatic, with no customization for Business and a fully customizable image for Enterprise (gallery or custom images). AVD is fully customizable, with profile solutions such as [FSLogix](/entity/fslogix/).
 
 ### 8. Where the desktop runs
 
@@ -101,13 +101,11 @@ Windows 365 Cloud PCs exist in a subscription owned by Microsoft ("hosted on beh
 
 ## Windows 365 Flex
 
-Windows 365 Frontline was renamed Windows 365 Flex in the week of May 4, 2026, according to Learn's What's new page: "The product, licensing, and capabilities are unchanged—only the name is different." In short:
+Windows 365 Frontline was renamed Windows 365 Flex in the week of May 4, 2026, according to Learn's What's new page: "The product, licensing, and capabilities are unchanged—only the name is different." The article "Windows 365 Frontline vs Windows 365 Enterprise: shift work and cost" covers the details and prices. In short:
 
-- **Dedicated mode:** one license provisions up to three Cloud PCs used non-concurrently, each assigned to one user, with one concurrent session.
-- **Shared mode:** one license provisions one Cloud PC shared non-concurrently by a group. All user data is deleted at sign-out, unless User Experience Sync is enabled for user-specific app data and Windows settings. Learn notes Shared mode is available only for Azure Global Cloud.
-- **Status:** the Flex page gives no preview or GA label. What's new records Frontline Shared mode as generally available since the week of March 31, 2025, and Dedicated mode concurrency management since the week of June 2, 2025.
-
-Flex is not multi-session: only one user is signed in to a given Cloud PC at a time.
+- **Dedicated mode:** one license provisions up to three Cloud PCs used non-concurrently, each assigned to one user.
+- **Shared mode:** one license provisions one Cloud PC shared non-concurrently by a group. User data is deleted at sign-out unless User Experience Sync is enabled. Shared mode is available only in Azure Global Cloud.
+- **Status:** What's new records Shared mode as generally available since the week of March 31, 2025, and Dedicated mode concurrency management since the week of June 2, 2025.
 
 ## A practical selection checklist
 
@@ -121,8 +119,8 @@ Flex is not multi-session: only one user is signed in to a given Cloud PC at a t
 
 ## Example scenarios
 
-- **Call center, 150 agents on shifts, one application set.** Shared hosts are an option, so AVD multi-session with autoscale is worth pricing. Windows 365 Flex Shared mode is the other candidate. Because Shared mode deletes user data at sign-out, this article's own assessment is that profile data would have to be kept elsewhere; Learn does not discuss this case.
-- **Consultancy, 40 contractors who need a persistent Windows 11 desktop for a project.** Business Cloud PCs are provisioned and run without Intune, but with no image customization. Enterprise Cloud PCs are created from provisioning policies assigned to Microsoft Entra groups, and each user needs a license. Both use a per-user license.
+- **Call center, 150 agents on shifts, one application set.** Shared hosts are an option, so AVD multi-session with autoscale is worth pricing. Windows 365 Flex Shared mode is the other candidate. Shared mode deletes user data at sign-out. Learn describes User Experience Sync, which stores user-specific app data and Windows settings in the cloud, for Shared mode; a pilot should show whether that covers the agents' needs.
+- **Consultancy, 40 contractors who need a persistent Windows 11 desktop for a project.** Business has no licensing prerequisites and no Intune requirement, is capped at 300 users per tenant, and provisions a standard image on the Microsoft-hosted network. Enterprise needs Windows Enterprise, Intune and Entra ID P1 per user, but adds custom images, provisioning policies, Intune policy management and hybrid join through an Azure network connection. If the contractors need none of those, Business is the smaller setup; otherwise choose Enterprise. This is the author's assessment based on Learn's comparison.
 
 ## Related
 

@@ -10,7 +10,7 @@ keypoints:
   - "A workspace is a logical grouping of application groups. An application group must be associated with a workspace for users to see its desktops and apps, and it can belong to only one."
   - "A user sees a resource when two links exist: the user is assigned to the application group, and the group is registered with a workspace."
   - "A workspace and its application groups must share a location and a deployment scope, regional or geographical, and the scope cannot be changed after creation."
-  - "Users reach the workspace by signing in to Windows App, or by subscribing in the older Remote Desktop client with an email address or a feed URL. Learn says the content then refreshes regularly and at client start."
+  - "Users reach the workspace by signing in to Windows App, or by subscribing in the older Remote Desktop client with an email address or a feed URL. Learn says this refreshes regularly and at client start for the Remote Desktop client for Windows (MSI); it gives no interval for Windows App."
   - "Workspace management has its own built-in roles. Workspace Contributor manages workspaces, and seeing the applications of a related group also needs Application Group Reader."
 faq:
   - q: "Why does a user not see a desktop that I published?"
@@ -41,13 +41,13 @@ Because users can be assigned to several application groups across several host 
 
 Learn's [deployment article](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop) describes these portal choices for a workspace:
 
-- **Deployment scope**: **Regional** or **Geographical**. Learn says the option appears only when the selected location supports regional workspaces; the Tech Community announcement says the field is now visible in every location, with only the supported scope selectable where Regional is not yet available. A workspace can only have application groups of the same scope registered to it, so create it with the same scope as the host pools whose groups it will publish.
+- **Deployment scope**: **Regional** or **Geographical**. Learn says the option appears only when the selected location supports regional workspaces. The Tech Community announcement describes host pool creation instead: it says the Deployment scope field will be visible in any location, with only the supported scope selectable where Regional is not yet available. It does not describe workspace creation, so check the field in your own portal. A workspace can only have application groups of the same scope registered to it, so create it with the same scope as the host pools whose groups it will publish.
 - **Application groups** tab (optional): select **Yes**, then **+ Register application groups**, pick the groups and choose **Select**.
 - **Advanced** tab (optional): **Enable diagnostics settings**, with destinations a Log Analytics workspace, a storage account or an event hub.
 
 To register a group later: **Azure Virtual Desktop**, **Workspaces**, the workspace name, **Application groups**, **+ Add**, the plus icon next to the group, **Select**. Only groups not already assigned to a workspace are listed.
 
-Learn's FAQ adds a location rule: workspaces must be in the same location as their application groups, and when a workspace updates, the related application groups update with it. For the group-to-host-pool link, the FAQ gives the reason that data should not be transferred between multiple locations.
+Learn's FAQ adds a location rule: workspaces must be in the same location as their application groups, and when a workspace updates, the related application groups update with it. For the group-to-host-pool link, the FAQ gives the reason that data should not be transferred between multiple locations. How this location rule fits a single workspace in an active-passive design is open; see the disaster recovery section below.
 
 ## Deployment scope: where the workspace metadata lives
 
@@ -77,7 +77,7 @@ Regional host pools have been generally available since 30 September 2026, accor
 
 The same article states that, as of 27 March 2026, the Remote Desktop client for Windows (MSI) and the Remote Desktop web client are no longer supported for customers in public cloud environments, and that users should migrate to Windows App. Support for the MSI client was extended until 28 September 2026 for Azure Government, Azure operated by 21Vianet and AVD Classic. That date has passed, and the page does not say what applies afterwards. For the web client in Azure Government and Azure operated by 21Vianet, the page says no end-of-support date has been announced. The Remote Desktop app from the Microsoft Store reached end of support in September 2025. In practice, give users the Windows App instructions, and treat the URL table above as a reference for clients you still have to support.
 
-**Refresh.** Learn says that once a user has subscribed, the content updates automatically and regularly, and each time the client starts. Resources can be added, changed or removed based on admin changes. A new display name for an app or desktop, set on the application group under **Applications**, appears after the client refreshes. For personal pools, a session host friendly name can be set only with PowerShell (`Update-AzWvdSessionHost` with `FriendlyName`), not in the portal.
+**Refresh.** For the Remote Desktop client for Windows (MSI), the archived Learn article says that once a user has subscribed, the content updates automatically and regularly, and each time the client starts, and that resources can be added, changed or removed based on admin changes. The Windows App article gives no refresh interval, so do not assume the same timing there. A new display name for an app or desktop, set on the application group under **Applications**, appears after the client refreshes. For personal pools, a session host friendly name can be set only with PowerShell (`Update-AzWvdSessionHost` with `FriendlyName`), not in the portal.
 
 ## Who can manage what
 
@@ -105,7 +105,7 @@ Work through these in order:
 
 ## Workspaces and disaster recovery
 
-The multiregion article notes that in an active-active design users see duplicate feed entries, so you create separate workspaces and name them clearly. In an active-passive design users stay in one workspace and failover moves their assignments between application groups. Region choice and failover steps are in "Designing a multi-region Azure Virtual Desktop deployment" and "Disaster recovery for Azure Virtual Desktop: options and trade-offs".
+The multiregion article notes that in an active-active design users see duplicate feed entries, so you create separate workspaces and name them clearly. In an active-passive design the article says users keep the same workspace, and failover moves their assignments between application groups. Learn's FAQ location rule (a workspace must be in the same location as its application groups) and this description do not state together how one workspace works across two regions. Test it before relying on a single workspace, and compare it with the layouts in the multi-region article. Region choice and failover steps are in "Designing a multi-region Azure Virtual Desktop deployment" and "Disaster recovery for Azure Virtual Desktop: options and trade-offs".
 
 ## Sources
 

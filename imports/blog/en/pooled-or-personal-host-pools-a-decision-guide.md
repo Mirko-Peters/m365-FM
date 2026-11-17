@@ -9,7 +9,7 @@ topics: [avd-pooled-host-pool, avd-personal-host-pool]
 keypoints:
   - "A pooled host pool lets user sessions be load balanced to any session host, with several users on one host. A personal host pool assigns each session host to one user."
   - "Pooled pools use breadth-first or depth-first load balancing. Learn says load balancing does not apply to personal host pools: there is no algorithm to choose, and each user maps 1:1 to a session host."
-  - "Personal pools use automatic or direct assignment. Automatic is the default for new personal pools; with direct assignment a user without a session host gets 'No resources available'."
+  - "Personal pools use automatic or direct assignment. Automatic is the default for new personal pools; with direct assignment a user assigned only to the host pool, not to a session host, gets 'No resources available'."
   - "Profile data goes to FSLogix on pooled pools. On personal pools it can stay on the VM's OS disk. Pooled hosts are updated by redeploying from updated images, personal hosts with Windows Updates or Configuration Manager. RemoteApp is available with pooled host pools only."
   - "Autoscale differs by type: pooled plans can force sign-out in ramp-down, personal schedules offer no forced sign-out setting, only disconnect and sign-out timers, and autoscale does not put a personal host in drain mode before deallocating it."
 faq:
@@ -23,7 +23,7 @@ faq:
 
 A pooled host pool fits users who can share session hosts and whose profile lives outside the VM. A personal host pool fits users who need one dedicated desktop that keeps its own state. The rest of this guide sets out the criteria, the load-balancing and assignment rules, and what changes for autoscale.
 
-This comparison is based on Microsoft Learn. Prices and user-count thresholds are outside this guide. On changing the type later, the Azure Virtual Desktop FAQ is clear: you cannot change a host pool's type after you create it, but you can move registered VMs to a host pool of the other type.
+This comparison is based on Microsoft Learn. Prices and user-count thresholds are outside this guide.
 
 ## The two host pool types
 
@@ -52,7 +52,7 @@ Learn also says personal desktops suit users with resource-intensive workloads, 
 
 ### Updates, apps and management approach
 
-Three rows in the table decide how much operating effort each type needs. Pooled hosts are updated by redeploying from updated images, which matches the session host configuration approach (session host update); with standard management you build and replace images with your own tools. Learn's host pool management page says the management approach is set at creation and cannot be changed, and that a session host configuration can be used with pooled host pools only. Anyone who must publish individual applications needs a pooled host pool, because RemoteApp application groups are available only there. The AVD FAQ adds that in-place upgrade of the session host operating system is supported for personal but not for pooled host pools, and that Azure Backup at the compute level is recommended only for personal host pools.
+Three rows in the table decide how much operating effort each type needs. Pooled hosts are updated by redeploying from updated images. Our reading, not a Learn statement: this fits the session host configuration approach (session host update). With standard management you build and replace images with your own tools. Learn's host pool management page says the management approach is set at creation and cannot be changed, and that a session host configuration can be used with pooled host pools only. Anyone who must publish individual applications needs a pooled host pool, because RemoteApp application groups are available only there. The AVD FAQ adds that in-place upgrade of the session host operating system is supported for personal but not for pooled host pools, and that Azure Backup at the compute level is recommended only for personal host pools.
 
 ### Profiles are the practical dividing line
 
@@ -66,9 +66,11 @@ Learn's [load-balancing article](https://learn.microsoft.com/en-us/azure/virtual
 
 **[Depth-first](/entity/avd-depth-first-load-balancing/)** keeps starting new sessions on one host until its maximum session limit is reached, then moves on; on a tie it takes the first host from the query. You must set a maximum session limit with depth-first, and once all hosts reach it you need to raise it or add hosts.
 
+With autoscale, the host pool value does not apply: Learn's autoscale scenarios page says that for pooled host pools autoscale ignores the load-balancing algorithm in the host pool settings and applies load balancing based on the schedule configuration.
+
 For both algorithms, a user with an active or disconnected session is sent back to that session host even if [drain mode](/entity/avd-drain-mode/) is enabled on it, and a user without a session is never sent to a host in drain mode.
 
-Learn's [autoscale FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq) says a scaling plan can set a different algorithm per phase: breadth-first for ramp-up and peak, depth-first for ramp-down and off-peak, because it consolidates sessions onto fewer hosts.
+Learn's [autoscale FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq) says a scaling plan can set a different algorithm per phase: breadth-first for ramp-up and peak, depth-first for ramp-down and off-peak, which consolidates sessions onto fewer hosts.
 
 ## Personal host pools: assignment
 
@@ -83,7 +85,7 @@ Two assignment types exist:
 
 In the Azure portal the type is a host pool property: **Host pools**, your pool, **Properties**, the **Assignment** drop-down (**Automatic** or **Direct**), then **Save**. For direct assignment, Learn's portal path is: host pool, **Application groups**, the application group, **Assignments**, **+ Add**, select the users or groups, then **Assign VM** in the information bar, select the session host and **Assign** (or **Assignment** > **Assign user**), select the user and **Select**. To unassign or reassign, open **Session hosts**, select the host, then **Assignment** > **Unassign user** or **Assign to a different user**.
 
-Learn says the Azure CLI cannot assign, unassign or reassign users. Friendly names for session hosts can only be set with PowerShell (`Update-AzWvdSessionHost` with the `FriendlyName` parameter). The sibling article "Assigning personal desktops: automatic vs direct assignment" covers the steps in detail.
+Learn says the Azure CLI cannot assign, unassign or reassign users. Friendly names for session hosts can only be set with PowerShell (`Update-AzWvdSessionHost` with the `FriendlyName` parameter). The sibling article "Assigning personal desktops: automatic vs direct assignment" has the details.
 
 ### Multiple personal desktops for one user
 
@@ -91,7 +93,7 @@ Learn says you can assign multiple personal desktops to one user only in persona
 
 ## Autoscale differences
 
-Learn's [scaling plan article](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan) compares both types. A [scaling plan](/entity/avd-scaling-plan/) can only be assigned to host pools of the type specified in the plan. Both types use the phases ramp-up, peak, ramp-down and off-peak. Phase details are in the sibling article "Ramp-up, peak, ramp-down and off-peak: the four AVD autoscale phases explained".
+Learn's [scaling plan article](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan) compares both types. A [scaling plan](/entity/avd-scaling-plan/) can only be assigned to host pools of the type specified in the plan. Both types use the phases ramp-up, peak, ramp-down and off-peak.
 
 | Area | Pooled | Personal |
 |---|---|---|
@@ -100,7 +102,7 @@ Learn's [scaling plan article](https://learn.microsoft.com/en-us/azure/virtual-d
 | Ramp-up settings | Start time, algorithm, minimum percentage of hosts, capacity threshold | Start time, [Start VM on Connect](/entity/avd-start-vm-on-connect/), VMs to start |
 | Disconnect and sign-out timers | Not part of the schedule; Learn describes a time limit policy (Intune or Group Policy) for signing out disconnected users | In every phase, 0 to 360 minutes, each with an action (deallocate, hibernate or do nothing) |
 
-Status: power management is generally available for pooled and personal pools; see [power management autoscaling](/entity/avd-power-management-autoscaling/). Dynamic autoscaling applies only to pooled pools with a session host configuration. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview (Az.DesktopVirtualization) that the scaling plan article requires for it, still carry preview wording; check the current page before relying on a limit. The sibling article "Power management autoscaling vs dynamic autoscaling: which one fits your host pools" covers the choice between the two.
+Status: power management is generally available for pooled and personal pools; see [power management autoscaling](/entity/avd-power-management-autoscaling/). Dynamic autoscaling applies only to pooled pools with a session host configuration. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview (Az.DesktopVirtualization) that the scaling plan article requires for it, still carry preview wording; check the current page before relying on a limit.
 
 For personal pools, the FAQ says autoscale does not put the host into drain mode before deallocating it, so a user who connects during deallocation gets a "No resources available" error. For pooled pools, it says autoscale overrides drain mode on all VMs in scope, so use an exclusion tag to keep a VM out of scaling.
 
@@ -113,7 +115,7 @@ If a personal plan is set to hibernate but the hosts do not have hibernation ena
 1. List the user groups and note whether each workload needs a dedicated VM.
 2. Check where profile data must live. If users can land on different hosts, plan FSLogix.
 3. Check the operating model: if users need published RemoteApp applications or you want session host configuration with update and dynamic autoscaling, plan pooled; decide how hosts will be patched (image redeployment or Windows Updates and Configuration Manager).
-4. For pooled pools, choose breadth-first or depth-first, and set a maximum session limit (mandatory for depth-first).
+4. For pooled pools, choose breadth-first or depth-first, and set a maximum session limit (mandatory for depth-first). If a scaling plan will manage the pool, the algorithm in each schedule phase applies instead of the host pool value.
 5. For personal pools, choose automatic or direct assignment. Direct assignment fits when you want to control which user gets which VM, and it is required if one user needs several desktops; automatic suits the rest.
 6. Decide how autoscale should end sessions: forced sign-out in pooled ramp-down, or disconnect and sign-out timers on personal pools.
 7. Pilot with a small group and compare the user experience and the VM running hours.

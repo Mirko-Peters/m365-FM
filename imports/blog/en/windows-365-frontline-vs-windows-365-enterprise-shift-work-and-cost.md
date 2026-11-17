@@ -1,44 +1,44 @@
 ---
 title: "Windows 365 Frontline vs Windows 365 Enterprise: shift work and cost"
-summary: "Windows 365 Enterprise assigns one licensed Cloud PC to each user, while Frontline (renamed Windows 365 Flex in May 2026) licenses concurrent use, either as up to three dedicated Cloud PCs per license or as one shared Cloud PC per license. For shift work, the number of users per shift and the mode decide which model costs less."
+summary: "Windows 365 Enterprise assigns one licensed Cloud PC to each user, while Windows 365 Flex (formerly Frontline, renamed in May 2026) licenses concurrent use, either as up to three dedicated Cloud PCs per license or as one shared Cloud PC per license. For shift work, the number of users per shift and the mode decide which model costs less."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [windows-365-frontline, windows-365]
 keypoints:
-  - "Enterprise is a 1:1 model: one license, one Cloud PC, one user. Frontline licenses concurrent sessions instead of named users."
+  - "Enterprise is a 1:1 model: one license, one Cloud PC, one user. Flex licenses concurrent sessions instead of named users."
   - "Dedicated mode gives each user a persistent Cloud PC, up to three per license, but only one of them can be active at a time."
   - "Shared mode provides one Cloud PC per license for a group, used one user at a time, and deletes user data at sign-out unless User Experience Sync is enabled."
-  - "On the published list prices checked on 16 November 2026, a 2 vCPU, 8 GB, 128 GB plan costs $41 (Enterprise) or $62 (Frontline/Flex) per month (the pages show a dollar sign without naming a currency, so USD is assumed), so Frontline costs less once a license serves two or more shift users."
-  - "Microsoft renamed Windows 365 Frontline to Windows 365 Flex in the week of 4 May 2026. Product, licensing and capabilities are unchanged."
+  - "On the en-US list prices retrieved on 17 November 2026, a 2 vCPU, 8 GB, 128 GB plan costs $41 per user and month (Enterprise) or $62 per license and month (Flex), so Flex costs less once a license serves two or more shift users. Those pages show a dollar sign without a currency code; other locales show local currencies and tax notes."
+  - "Microsoft renamed Windows 365 Frontline to Windows 365 Flex in the week of 4 May 2026. Product, licensing and capabilities are unchanged. In both models each user still needs Windows Enterprise, Intune and Microsoft Entra ID P1."
 faq:
   - q: "Is Windows 365 Frontline still called Frontline?"
-    a: "Microsoft's What's new page says that in the week of 4 May 2026 Windows 365 Frontline was renamed Windows 365 Flex, with product, licensing and capabilities unchanged. Current Learn pages use Flex. Older articles and the entity page still say Frontline."
-  - q: "How many users can one Frontline license serve?"
+    a: "Microsoft's What's new page says that in the week of 4 May 2026 Windows 365 Frontline was renamed Windows 365 Flex, with product, licensing and capabilities unchanged. The Windows 365 Flex pages on Learn and the Microsoft price page use Flex; some older Learn pages and training units still say Frontline."
+  - q: "How many users can one Flex license serve?"
     a: "In Dedicated mode, one license provisions up to three Cloud PCs, each assigned to one user, and only one session can be active per license at a time. In Shared mode, one license provisions one Cloud PC that a group uses one user at a time."
   - q: "Can more users sign in than there are licenses?"
     a: "Only briefly, and only in Dedicated mode. The concurrency buffer lets a tenant exceed the maximum up to four times per day, for at most one hour each. It does not apply to GPU-enabled Cloud PCs or to Shared mode."
 ---
 
-Windows 365 Enterprise gives every user a personal Cloud PC under one license per user. Windows 365 Frontline, which Microsoft has renamed Windows 365 Flex, licenses concurrent sessions instead, so one license can serve several people who work in different shifts. For a team where only part of the staff is online at any time, Frontline can be the cheaper model on paper. For people who work all day, one license per user avoids the concurrency rules.
+Windows 365 Enterprise gives every user a personal Cloud PC under one license per user. Windows 365 Flex (formerly Windows 365 Frontline) licenses concurrent sessions instead, so one license can serve several people who work in different shifts. For a team where only part of the staff is online at any time, Flex can be the cheaper model on paper. For people who work all day, one license per user avoids the concurrency rules.
 
-This article compares the two for shift work, using Microsoft Learn and the Microsoft price pages retrieved on 16 November 2026.
+This article compares the two for shift work, using Microsoft Learn and the Microsoft price pages retrieved on 17 November 2026.
 
 ## A note on the name
 
-The What's new page for Windows 365 Enterprise says that in the week of 4 May 2026 Windows 365 Frontline was renamed Windows 365 Flex, and that product, licensing and capabilities are unchanged. Current Learn pages and the price page say Flex. This article uses "Frontline" where the older name helps searching, and otherwise "Flex". The M365.FM entity page is [Windows 365 Frontline](/entity/windows-365-frontline/).
+The What's new page for Windows 365 Enterprise says that in the week of 4 May 2026 Windows 365 Frontline was renamed Windows 365 Flex, and that product, licensing and capabilities are unchanged. Microsoft's announcement on the Windows IT Pro Blog adds that the change does not affect how the service works or how it is purchased. The Windows 365 Flex pages on Learn and the Microsoft price page use Flex, while some older Learn pages and training units still say Frontline. Both names refer to the same product. The M365.FM entity page is [Windows 365 Flex (formerly Frontline)](/entity/windows-365-frontline/).
 
 ## How the two models differ
 
 [Windows 365](/entity/windows-365/) Enterprise creates Windows Cloud PCs for end users. Learn says it uses Microsoft Intune for management, Microsoft Entra ID for identity and Azure Virtual Desktop for remote connectivity. Each Cloud PC is assigned to one user and is that user's dedicated Windows device. Assigning a license to a user starts provisioning, and billing is per user per month.
 
-Flex is the exception to the 1:1 relationship. Learn describes it as a version of Windows 365 in which several users share a Cloud PC under a single license, never at the same time. It has two modes, and the mode changes both the user experience and the cost.
+Flex is the exception to the 1:1 relationship. One Flex license serves several users who never work at the same time, either as up to three dedicated Cloud PCs (Dedicated mode) or as one shared Cloud PC (Shared mode). The mode changes both the user experience and the cost.
 
-| | Enterprise | Frontline/Flex Dedicated | Frontline/Flex Shared |
+| | Enterprise | Flex Dedicated | Flex Shared |
 |---|---|---|---|
 | Cloud PCs per license | 1 | Up to 3, each assigned to one user | 1, used by a group |
-| Concurrent sessions per license | 1 (own user) | 1 | 1 |
+| Concurrent sessions per license | 1 per user license | 1 | 1 |
 | User data | Persistent | Persists between sessions | Deleted at sign-out, unless User Experience Sync (UES) is enabled |
 | Concurrency buffer | Not applicable | Yes, limited use per day | No |
 | Use cases named by Learn | 1:1 relationship between user and Cloud PC | On a rotation schedule, across time zones, part-time, contingent staff | Customer-facing workers, external contractors; short specialized tasks without data persistence |
@@ -53,8 +53,6 @@ Power behaviour affects shift change:
 - Intelligent prestart can start a Cloud PC before a predictable daily login. Learn says it needs connections on at least 3 of the past 30 days to predict usage. It does not consume a license until the user connects, and the Cloud PC shuts down again if the user does not connect within two hours. The What's new page lists it as generally available since the week of 30 March 2026.
 - Session State Retention hibernates eligible Cloud PCs after two idle hours (the default), so the user returns to open apps. The What's new page lists it as generally available for eligible Dedicated Cloud PCs in the week of 21 September 2026. Learn adds that resizing to an unsupported size makes a Cloud PC ineligible, and that events that need a reboot, such as some Windows updates, start a fresh session.
 
-If a Dedicated group has more users than Cloud PCs for the selected size, some users do not get a Cloud PC.
-
 ### The concurrency buffer
 
 Shift changes overlap, and the concurrency buffer can absorb short overlaps. Learn describes these rules for Dedicated mode:
@@ -65,42 +63,44 @@ Shift changes overlap, and the concurrency buffer can absorb short overlaps. Lea
 - If the tenant is blocked more than twice in seven days, the block becomes permanent. A support ticket from the Intune portal can lift it.
 - The buffer does not apply to GPU-enabled Cloud PCs or to Shared mode.
 
-The Learn page does not explain how the one-hour cap per use fits with the rule that counts uses of more than one hour, so confirm the exact behaviour with Microsoft before relying on it for a rota. Use the Windows 365 Flex connection hourly report to see usage and set up the concurrency alert to be notified each time the buffer activates.
+Learn states a one-hour limit per use and a block after uses of more than one hour, without saying how the two fit together. Treat the buffer as a margin for brief overlaps, not as planned capacity. Use the Windows 365 Flex connection hourly report to see usage and set up the concurrency alert to be notified each time the buffer activates.
 
 ## Shared mode in practice
 
-In Shared mode, one license provisions one Cloud PC for a group of users, who use it one after another. All user data is deleted at sign-out, unless User Experience Sync is enabled. The What's new page lists UES as generally available since the week of 17 November 2025 and says it is designed for Shared and Cloud Apps scenarios. Shared mode can also offer Cloud Apps instead of the full desktop. Flex licenses entitle streaming Cloud Apps in Shared mode, and What's new lists Windows 365 Cloud Apps as preview in the week of 15 September 2025 and as generally available in the week of 17 November 2025.
+In Shared mode, one license provisions one Cloud PC for a group of users, who use it one after another. All user data is deleted at sign-out, unless User Experience Sync is enabled. The What's new page lists UES as generally available since the week of 17 November 2025 and says it is designed for Shared and Cloud Apps scenarios. Shared mode can also offer Cloud Apps instead of the full desktop; What's new lists Cloud Apps as generally available since the week of 17 November 2025.
 
 Further points from Learn and the What's new page:
 
 - Maximum active sessions equal the number of licenses allocated to the group, and there is no concurrency buffer.
 - Shared mode is only available in the Azure Global Cloud.
 - Shared mode reached general availability in the week of 31 March 2025. Shared provisioning policies support up to 5,000 Cloud PCs each since the week of 9 March 2026.
-- Snapshot-based reset, which returns the Cloud PC to a known-good snapshot at each sign-in, is listed as preview since the week of 27 April 2026.
-
-If the tenant has both modes and you add licenses, Learn says Dedicated Cloud PCs are provisioned first.
+- Snapshot-based reset, which reverts the Cloud PC to a known-good snapshot after each sign-out, before the next user signs in, is in public preview since the week of 27 April 2026.
 
 ## What the licenses cost
 
-The Microsoft price pages, retrieved on 16 November 2026, list monthly subscriptions that renew automatically. Both pages show a dollar sign without naming the currency, so USD is assumed. Flex prices are per license, and Enterprise prices are per user.
+The en-US Microsoft price pages, retrieved on 17 November 2026, list monthly subscriptions that renew automatically. They show a dollar sign without a currency code and carry no tax note. Flex prices are per license, and Enterprise prices are per user. Prices depend on the billing country: the worldwide Flex page shows a generic currency sign and the note "Price does not include tax", and the Irish Flex page lists euro prices excluding VAT. Check the page for your billing country before you calculate.
 
-| Plan | Enterprise, per user and month | Frontline/Flex, per license and month |
+| Plan | Enterprise, per user and month | Flex, per license and month |
 |---|---|---|
-| 2 vCPU, 4 GB, 128 GB | 31.00 | 47.00 |
-| 2 vCPU, 8 GB, 128 GB | 41.00 | 62.00 |
-| 2 vCPU, 8 GB, 256 GB | 50.00 | 75.00 |
-| 4 vCPU, 16 GB, 128 GB | 66.00 | 99.00 |
-| 8 vCPU, 32 GB, 128 GB | 123.00 | 185.00 |
+| 2 vCPU, 4 GB, 128 GB | $31.00 | $47.00 |
+| 2 vCPU, 8 GB, 128 GB | $41.00 | $62.00 |
+| 2 vCPU, 8 GB, 256 GB | $50.00 | $75.00 |
+| 4 vCPU, 16 GB, 128 GB | $66.00 | $99.00 |
+| 8 vCPU, 32 GB, 128 GB | $123.00 | $185.00 |
 
-On the Flex page, purchasing is listed as "Contact Sales". The Enterprise page lists "Buy now" for sizes up to 8 vCPU and "Contact Sales" for larger sizes. The pages state no taxes, regional prices or currency code, and neither page covers Microsoft 365 licenses or Azure networking costs.
+On the Flex page, purchasing is listed as "Contact Sales". The Enterprise page lists "Buy now" for sizes up to 8 vCPU and "Contact Sales" for larger sizes.
+
+These prices cover the Cloud PC license only. In both models each user must also be licensed for Windows 11 or Windows 10 Enterprise, Microsoft Intune and Microsoft Entra ID P1. Learn lists Microsoft 365 E3, E5, F3, A3, A5, Business Premium and Education Student Use Benefit subscriptions as including them. Flex licenses are pooled at tenant level and show as assigned to zero users in the Microsoft 365 admin center; the Windows 365 utilization report shows how many are in use. Azure network costs are not included either.
 
 ### Worked example
 
-A service desk has 30 agents on three shifts of 10, and each agent needs a 2 vCPU, 8 GB, 128 GB Cloud PC. These figures are arithmetic on the list prices above, not a quote.
+A service desk has 30 agents on three shifts of 10, and each agent needs a 2 vCPU, 8 GB, 128 GB Cloud PC. These figures are arithmetic on the en-US list prices above, not a quote.
 
 1. **Enterprise:** 30 licenses x 41.00 = 1,230.00 per month. Every agent has a personal Cloud PC at any hour.
-2. **Frontline/Flex Dedicated:** 10 concurrent users need 10 licenses, and each license can provision up to three Cloud PCs. 10 x 62.00 = 620.00 per month. All 30 agents have their own persistent Cloud PC. If shifts overlap at handover, plan for the concurrency buffer limits above, or buy more licenses.
-3. **Frontline/Flex Shared:** 10 licenses for a pool of 10 Cloud PCs, again 620.00 per month, with data deleted at sign-out unless UES is enabled. The saving is the same, but the agents lose a persistent desktop.
+2. **Flex Dedicated:** 10 concurrent users need 10 licenses, and each license can provision up to three Cloud PCs. 10 x 62.00 = 620.00 per month. All 30 agents have their own persistent Cloud PC. If shifts overlap at handover, plan for the concurrency buffer limits above, or buy more licenses.
+3. **Flex Shared:** 10 licenses for a pool of 10 Cloud PCs, again 620.00 per month, with data deleted at sign-out unless UES is enabled. The saving is the same, but the agents lose a persistent desktop.
+
+All 30 agents need the Windows Enterprise, Intune and Entra ID P1 licenses in every variant, so the saving applies only to the Cloud PC license line.
 
 The break-even point follows from the same numbers. For this size, a Flex license costs 62.00 and an Enterprise license costs 41.00, so Flex costs less as soon as one license serves two users (2 x 41.00 = 82.00). With one user per license, Enterprise costs less. If the peak is close to the headcount, the saving shrinks or disappears.
 
@@ -109,21 +109,27 @@ The break-even point follows from the same numbers. For this size, a Flex licens
 1. **Count concurrent users, not people.** Take the highest number of simultaneous sessions in a normal week, including handover, and add headroom. This drives the Flex license count.
 2. **Decide whether the desktop must persist.** If a user needs installed apps, local files or settings, Dedicated mode or Enterprise fits. If sessions are short and generic, Shared mode may be enough, with UES for settings.
 3. **Check the shift pattern.** This is the author's assessment, not a Learn statement: regular, predictable shifts fit intelligent prestart, while irregular shifts or full overlap point to Enterprise or more licenses.
-4. **Check the region and cloud.** Shared mode is limited to the Azure Global Cloud and the regions on the requirements page.
+4. **Check the region and cloud.** Shared mode is limited to the Azure Global Cloud and needs one specific Azure region, without the multi-region selection of Dedicated mode. The Windows 365 requirements page lists the supported regions.
 
 ## Limits of this comparison
 
 - Enterprise agreements, partner pricing and regional prices can differ.
-- The Flex introduction page lists the Resize Cloud PC remote action and cross-region disaster recovery as not yet supported. The What's new page lists resize for Dedicated Cloud PCs as generally available since the week of 2 March 2026, and cross-region disaster recovery for Flex Dedicated mode in the week of 8 September 2025. The dated What's new entries are newer and more specific, so the introduction page appears out of date on this point. Test either feature in your tenant before relying on it.
-- The Flex license assignment page and the requirements page were not reviewed. The article "AVD or Windows 365: how to choose between them" covers the wider platform choice.
+- The Flex introduction page lists the Resize Cloud PC remote action and cross-region disaster recovery as not yet supported, without naming a mode. The What's new page lists resize for Dedicated Cloud PCs as generally available since the week of 2 March 2026, and cross-region disaster recovery for Flex Dedicated mode in the week of 8 September 2025. Check the mode you plan to use and test either feature in your tenant before relying on it.
+- For the wider platform choice, see the article "AVD or Windows 365: how to choose between them".
 
 ## Sources
 
-All retrieved on 2026-11-16.
+Retrieved 2026-11-17.
 
 - [Microsoft Learn: What is Windows 365 Flex?](https://learn.microsoft.com/en-us/windows-365/enterprise/introduction-windows-365-flex)
+- [Microsoft Learn: Windows 365 Flex licensing](https://learn.microsoft.com/en-us/windows-365/enterprise/windows-365-flex-license)
 - [Microsoft Learn: What is Windows 365 Enterprise?](https://learn.microsoft.com/en-us/windows-365/enterprise/overview)
+- [Microsoft Learn: Windows 365 requirements](https://learn.microsoft.com/en-us/windows-365/enterprise/requirements)
 - [Microsoft Learn: What's new in Windows 365 Enterprise and Windows 365 Flex](https://learn.microsoft.com/en-us/windows-365/whats-new)
 - [Microsoft Learn: Concurrency buffer for Windows 365 Flex](https://learn.microsoft.com/en-us/windows-365/enterprise/concurrency-buffer)
-- [Microsoft: Windows 365 Flex pricing](https://www.microsoft.com/windows-365/frontline/all-pricing)
-- [Microsoft: Windows 365 Enterprise pricing](https://www.microsoft.com/en-us/windows-365/enterprise/all-pricing)
+- [Microsoft Learn: Examine Windows 365 editions (training unit)](https://learn.microsoft.com/en-us/training/modules/examine-windows-365/2-examine-windows-365-editions)
+- [Windows IT Pro Blog: Windows 365 and Azure Virtual Desktop, expanding access](https://techcommunity.microsoft.com/blog/windows-itpro-blog/windows-365-and-azure-virtual-desktop-expanding-access/4515931)
+- [Microsoft: Windows 365 Flex pricing (en-US)](https://www.microsoft.com/en-us/windows-365/flex/all-pricing)
+- [Microsoft: Windows 365 Flex pricing (worldwide page)](https://www.microsoft.com/en/windows-365/frontline/all-pricing)
+- [Microsoft: Windows 365 Flex plans and pricing (Ireland)](https://www.microsoft.com/en-ie/windows-365/flex/compare-plans-pricing/)
+- [Microsoft: Windows 365 Enterprise pricing (en-US)](https://www.microsoft.com/en-us/windows-365/enterprise/all-pricing)

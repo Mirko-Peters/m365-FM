@@ -9,7 +9,7 @@ topics: [avd-capacity-threshold, avd-scaling-plan]
 keypoints:
   - "Available capacity is the maximum session limit times the number of available session hosts. Used capacity is active plus disconnected sessions divided by that figure."
   - "Autoscale acts only when usage is above or below the threshold. If used capacity equals the threshold, nothing happens."
-  - "In ramp-down and off-peak, required hosts equal total sessions divided by the product of maximum session limit and threshold, rounded up. Disconnected sessions count and are assumed to reconnect."
+  - "In ramp-down and off-peak, the formula gives required hosts as total sessions divided by the product of maximum session limit and threshold, rounded up. Disconnected sessions count and are assumed to reconnect. The minimum percentage of hosts can keep more hosts running than the formula."
   - "The threshold is entered in ramp-up and ramp-down. Peak takes the ramp-up value and off-peak takes the ramp-down value."
   - "The threshold counts sessions, not CPU or memory, and Learn requires a custom maximum session limit for pooled autoscale and says not to keep the default."
 faq:
@@ -50,7 +50,7 @@ These examples use invented values and Learn's formulas. Take a pooled pool with
 
 **Consolidating in ramp-down.** Learn gives the formula for hosts needed: total sessions divided by (maximum session limit times threshold), rounded up. With 36 sessions, 36 / 7 = 5.14, so 6 hosts. At a threshold of 80 percent, 36 / 8 = 4.5, so 5 hosts. One extra host is the cost of 10 extra points of headroom.
 
-**Disconnected sessions.** Learn's FAQ counts disconnected sessions toward required hosts: 6 disconnected users, a limit of 5 and a threshold of 90 percent need 6 / 4.5 = 1.33, so 2 hosts. The same formula on our pool (limit 10, threshold 70 percent) gives 12 disconnected sessions / 7 = 1.71, so 2 hosts. The threshold, not the session count alone, decides how many hosts stay on.
+**Disconnected sessions.** Learn's FAQ counts disconnected sessions toward required hosts: 6 disconnected users, a limit of 5 and a threshold of 90 percent need 6 / 4.5 = 1.33, so 2 hosts. The same formula on our pool (limit 10, threshold 70 percent) gives 12 disconnected sessions / 7 = 1.71, so 2 hosts. Together with the minimum percentage of hosts, the threshold decides how many hosts stay on: in Learn's ramp-down and off-peak scenarios the minimum percentage keeps at least one host available even when the formula would allow fewer.
 
 ## What the threshold does in each phase
 
