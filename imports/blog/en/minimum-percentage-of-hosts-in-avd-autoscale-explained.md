@@ -21,7 +21,7 @@ faq:
     a: "They count in the calculation, according to the portal text on the scaling plan page. Autoscale does not start, stop or change drain mode on tagged hosts, so a tagged host that is turned off cannot be started to meet the minimum."
 ---
 
-The minimum percentage of hosts is the lowest percentage of all session hosts in a host pool that autoscale keeps turned on in a given phase of a scaling plan schedule. It is a floor on running hosts, not a target for sessions, and Microsoft Learn says that a percentage you enter that is not a whole number is rounded up to the nearest whole number. This article explains what the setting does, where it applies, how it combines with the capacity threshold and what Learn does not say about it. Sources are listed at the end and were retrieved on 17 November 2026.
+The minimum percentage of hosts is the lowest percentage of all session hosts in a host pool that autoscale keeps turned on in a given phase of a scaling plan schedule. It is a floor on running hosts, not a target for sessions, and Microsoft Learn says that a percentage you enter that is not a whole number is rounded up to the nearest whole number. This article explains what the setting does, where it applies, how it combines with the capacity threshold and which details are inferred. Sources are listed at the end and were retrieved on 17 November 2026.
 
 ## What the setting is
 

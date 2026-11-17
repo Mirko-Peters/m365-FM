@@ -21,8 +21,7 @@ faq:
     a: "Nothing for existing sessions. Learn says that lowering the limit on a session host with active sessions does not affect them. The lower value applies to where new sessions can go."
 ---
 
-The maximum session limit is the number of user sessions that load balancing will place on one session host of a pooled host pool. Multiplied by the number of available session hosts, it gives the capacity of the pool, and that capacity is what autoscale compares with its capacity threshold. This article explains the definition, how load balancing and autoscale use the value, how to set it and what to watch for. How to choose a number for a given VM size is covered in the sibling article "How to size the maximum session limit per session host". Sources are listed at the end and were retrieved on 17 November 2026.
-
+The maximum session limit is the number of user sessions that load balancing will place on one session host of a pooled host pool. Multiplied by the number of available session hosts, it gives the capacity of the pool, and that capacity is what autoscale compares with its capacity threshold. This article explains the definition, how load balancing and autoscale use the value, how to set it and what to watch for. How to choose a number for a given VM size is covered in the sibling article "How to size the maximum session limit per session host".
 ## Definition and where it applies
 
 When you create a pooled [host pool](/entity/avd-host-pool/) in the Azure portal, **Max session limit** is the maximum number of users you want load-balanced to a single session host ([deployment article](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop)). When you select **Pooled** as the host pool type, the portal shows **Load balancing algorithm** and **Max session limit**. When you select **Personal**, it shows **Assignment type** and **Assign multiple desktops to a single user** instead. Learn's load-balancing article adds that load balancing does not apply to personal host pools, because users always have a 1:1 mapping to a session host, so the limit is a pooled-pool setting. Load balancing, described in Learn's [load-balancing article](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-load-balancing), is where the limit takes effect. The entity page on the [maximum session limit](/entity/avd-maximum-session-limit/) has the short definition.
@@ -70,11 +69,10 @@ The load-balancing article describes two algorithms for pooled pools, and each t
 - **[Breadth-first](/entity/avd-breadth-first-load-balancing/)** does not require a limit. It queries hosts that allow new connections and picks one at random from the half with the fewest sessions. If you pick breadth-first when you first create the pool, the limit defaults to 999999, which is also the highest value you can set.
 - **[Depth-first](/entity/avd-depth-first-load-balancing/)** requires a limit. It selects, among hosts that allow new connections and have not reached the limit, the host with the most sessions, and on a tie the first host from the query. When a host reaches its limit, new connections go to the next host.
 
-Under depth-first, Learn adds an important note: once all session hosts have reached the maximum session limit, you need to increase the limit or add more session hosts to the host pool. For breadth-first, the page does not say what happens when every host has reached the limit. Rules that apply to both algorithms:
+In its depth-first section, Learn adds two statements. First, you can use Azure Virtual Desktop Insights to monitor the number of sessions on each session host and review session host performance to help determine the maximum session limit for your environment. Second, once all session hosts have reached the maximum session limit, you need to increase the limit or add more session hosts to the host pool. For breadth-first, the page does not say what happens when every host has reached the limit. Rules that apply to both algorithms:
 
 - Lowering the limit on a host with active user sessions does not affect those sessions.
 - A user who already has an active or disconnected session in the pool is sent back to that host, even if [drain mode](/entity/avd-drain-mode/) is on. A user without a session is never sent to a host in drain mode.
-- Learn suggests using Azure Virtual Desktop Insights to monitor the number of sessions on each host and review session host performance when you choose a limit.
 
 A scaling plan schedule can set a different algorithm for each phase, for example breadth-first in ramp-up and peak and depth-first in ramp-down and off-peak (autoscale FAQ). The limit stays the same setting under both algorithms.
 
@@ -106,7 +104,7 @@ The cmdlet reference's own example sets the value to 6 together with other param
 2. **Using depth-first without a limit.** Learn says you must set one. Depth-first selects hosts that have not reached the limit and fills the one with the most sessions first.
 3. **Changing the limit and expecting users to move.** Existing sessions stay where they are. The new value affects where new sessions can go and the capacity that autoscale calculates.
 4. **Counting hosts that are off.** Capacity includes only available session hosts.
-5. **Treating the limit as a performance guarantee.** In Learn's definitions the limit is a number of sessions, and neither CPU nor memory appears in the capacity formula. Check host performance in Insights, as Learn suggests.
+5. **Treating the limit as a performance guarantee.** In Learn's definitions the limit is a number of sessions, and neither CPU nor memory appears in the capacity formula. Learn's depth-first section points to Azure Virtual Desktop Insights for reviewing session host performance when choosing a limit, and the same check is useful under any algorithm.
 
 ## A short checklist
 

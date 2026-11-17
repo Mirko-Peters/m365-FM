@@ -4,11 +4,11 @@ summary: "Dynamic autoscaling in Azure Virtual Desktop only works for pooled hos
 status: review
 publish: false
 author: mirko-p
-date: 2026-11-17
+date: 2026-11-18
 topics: [avd-dynamic-autoscaling, avd-scaling-plan, avd-managed-identity]
 keypoints:
   - "Dynamic autoscaling needs a pooled host pool with a session host configuration. That choice is made when the host pool is created and cannot be added later."
-  - "Glossary, scenarios and troubleshooting label dynamic autoscaling preview. What's new says preview (Nov 2024) and 'now available' (June 2026), and no Learn page calls it generally available."
+  - "Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, in July 2026. Some Learn pages, such as the glossary and scenarios pages, still carry preview wording, so check the current page before relying on a limit."
   - "What's new announces a managed identity requirement for host pools with a session host configuration, with an estimated schedule starting 19 September 2025; its September 2026 entry says the requirement to add session hosts comes in a future service update, so check the current state."
   - "A custom max session limit is required, session hosts must reach one extra storage endpoint, and one scaling plan can be assigned per host pool."
   - "Autoscale overrides drain mode and ignores the host pool's load balancing setting. Use the exclusion tag for hosts you want to keep out of scaling."
@@ -16,21 +16,21 @@ faq:
   - q: "Can I use dynamic autoscaling on an existing host pool?"
     a: "Only if that host pool was created with a session host configuration. Microsoft Learn says the management approach is set when you create the host pool and cannot be changed later. A host pool created without a session host configuration can only use power management autoscaling."
   - q: "Is dynamic autoscaling generally available?"
-    a: "No Learn page calls it generally available (checked on 2026-11-16). The glossary, the scenarios page and the troubleshooting page label it preview. What's new announced it as preview in November 2024 and says in June 2026 that it is now available, without a GA label. The scaling plan page requires a preview version of the Az.DesktopVirtualization module."
+    a: "Yes, according to Microsoft. A Tech Community post of 9 July 2026 announces general availability of enhanced host pool management, which includes dynamic autoscale, session host configuration and update, and ephemeral OS disks. Some Learn pages still carry preview wording, for example the glossary and scenarios pages, and the scaling plan page names a preview version (5.4.2-preview) of the Az.DesktopVirtualization module. Check the current page before relying on a limit."
   - q: "Which roles does dynamic autoscaling need?"
     a: "Desktop Virtualization Power On Off Contributor and Desktop Virtualization Virtual Machine Contributor, assigned to the Azure Virtual Desktop service principal with the subscription as assignable scope. Learn warns that a lower scope, such as a resource group, host pool or VM, prevents autoscale from working properly."
 ---
 
 Dynamic autoscaling in Azure Virtual Desktop can start, stop, create and delete session hosts, but only for pooled host pools that use a session host configuration, and only in Azure, not Azure Government. This article lists what Microsoft Learn documents as requirements and limits, so you can check a design before you build it.
 
-## Status: preview or generally available?
+## Status: generally available, with preview wording left on some pages
 
 An [AVD scaling plan](/entity/avd-scaling-plan/) uses one of two methods:
 
 - **Power management autoscaling** starts and stops (deallocates) session hosts. The scaling plan page calls it "already generally available". It is available in Azure and Azure Government.
 - **Dynamic autoscaling** also creates and deletes session hosts. It is only available in Azure.
 
-The glossary, the scenarios page and the troubleshooting page label dynamic autoscaling preview. What's new announced it as preview in November 2024, and its June 2026 entry says "Dynamic autoscaling is now available for pooled host pools with session host configuration" without a generally available label. No Learn page calls it generally available. The scaling plan page requires version 5.4.2-preview or later of the Az.DesktopVirtualization PowerShell module for dynamic autoscaling. Check the status again before production use.
+Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community, 9 July 2026). The post says dynamic autoscale, session host update and ephemeral OS disks all need a host pool with a session host configuration, and it names no cloud, region or remaining preview component. Some Learn pages, for example the scenarios and glossary pages, still carry preview wording, and the scaling plan page requires version 5.4.2-preview or later of the Az.DesktopVirtualization PowerShell module for dynamic autoscaling. What's new announced dynamic autoscaling as preview in November 2024, and its June 2026 entry says "Dynamic autoscaling is now available for pooled host pools with session host configuration" without a label. Check the current page before relying on a limit.
 
 ## Host pool requirements
 
@@ -134,8 +134,9 @@ The pages checked give no maximum host pool size for a dynamic plan beyond the d
 
 ## Sources
 
-All retrieved on 2026-11-16.
+Retrieved on 17 November 2026.
 
+- [Microsoft Tech Community: Enhanced host pool management for Azure Virtual Desktop is now generally available (9 July 2026)](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)
 - [Microsoft Learn: Create and assign an autoscale scaling plan](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)
 - [Microsoft Learn: Autoscale scaling plans and example scenarios](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)
 - [Microsoft Learn: Azure Virtual Desktop autoscale FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq)
