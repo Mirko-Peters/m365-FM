@@ -1,6 +1,6 @@
 // Entitaetsdatenbank fuer das Microsoft-Oekosystem: Community-Revisionen ueber den statischen Basisdaten (data/entities.json)
 import { legacyRev } from "./editor.js";
-import { gate, inScope, roleOf, logEdit } from "./perm.js";
+import { gate, inScope, roleOf, logEdit, orgIdsOf } from "./perm.js";
 import { cleanText, rateLimit } from "./util.js";
 import { entityTranslations } from "./autotr.js";
 import { stats, evalBadges } from "./badges.js";
@@ -216,6 +216,16 @@ async function liveOf(db, eid) {
   return await db.prepare("SELECT r.id,r.data,r.created,r.user_id,COALESCE(u.name,'') name FROM entity_rev r LEFT JOIN users u ON u.id=r.user_id AND u.banned=0 WHERE r.eid=? AND r.status='live' ORDER BY r.created DESC LIMIT 1").bind(eid).first();
 }
 export const trustedUser = async (db, user) => !!(user && (user.admin || user.editor || user.pro || (await stats(db, user.id)).points >= TRUST_POINTS));
+export const trustedMember = async (db, user) => !!(user && (user.pro || (await stats(db, user.id)).points >= TRUST_POINTS));   // Vertrauen als Mitglied (ohne Rolle)
+// Live-Schreiben der Redaktion an Entitaeten und Wiki-Begriffen: nur ueber can("entity.edit_live") - Fachbereich (Thema = Entitaet), Tageslimit,
+// eigene Firma, nie in eigener Sache, Moderatoren nur Empfehlung. Faellt die Pruefung durch, gelten die Rechte als Mitglied (trustedMember).
+export async function staffEditLive(db, user, eid) {
+  if (roleOf(user) === "user") return false;
+  const owner = Number((await db.prepare("SELECT user_id FROM entity_claims WHERE eid=? AND status='verified'").bind(eid).first().catch(() => null))?.user_id || 0);
+  const linked = ((await db.prepare("SELECT org_id FROM org_entity WHERE eid=?").bind(eid).all().catch(() => ({ results: [] }))).results || []).map((r) => r.org_id);
+  const orgIds = [...new Set([...linked, ...(await orgIdsOf(db, owner))])];
+  return (await gate(db, user, "entity.edit_live", { topics: [eid], ownerId: owner || undefined, orgIds })).ok;
+}
 
 export async function handleEntity(env, request, url, path, user, J) {
   const db = env.DB, method = request.method; let m;
@@ -241,14 +251,15 @@ export async function handleEntity(env, request, url, path, user, J) {
     const t = now();
     const fresh = v.data.type === "org" && !cur && !(await baseIds(env)).has(id);   // neue Firmen-Entitaet: Community-Firma im selben Request mitanlegen
     const claimed = await db.prepare("SELECT 1 x FROM entity_claims WHERE eid=? AND user_id=? AND status='verified'").bind(id, user.id).first();
-    if (!claimed && !(user.admin || user.editor)) {   // Selbst verwaltete Entitaeten (Event, Profil, Firma): lange Beschreibung nur durch den Eigentuemer
+    if (!claimed && !user.admin) {   // Selbst verwaltete Entitaeten (Event, Profil, Firma): lange Beschreibung nur durch den Eigentuemer (auch nicht durch Editoren; der Admin darf)
       const hasOwner = await db.prepare("SELECT 1 x FROM entity_claims WHERE eid=? AND status='verified'").bind(id).first();
       const oldLong = JSON.stringify((cur ? JSON.parse(cur.data) : (await entityMap(env)).get(id) || {}).long || {}), newLong = JSON.stringify(v.data.long || {});
       if (hasOwner && oldLong !== newLong) return J({ error: "owner_only" }, 403);
     }
-    if (claimed || (await trustedUser(db, user)) || (await certScoped(env, user, id))) {
+    const staff = !claimed && (await staffEditLive(db, user, id));
+    if (claimed || staff || (await trustedMember(db, user)) || (await certScoped(env, user, id))) {
       await db.batch([db.prepare("UPDATE entity_rev SET status='old' WHERE eid=? AND status='live'").bind(id), db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,'live',?)").bind(id, data, summary, user.id, t)]);
-      if (roleOf(user) !== "user") {   // Redaktion schreibt live: mit der Rolle zum Zeitpunkt der Aenderung im Protokoll (daran haengt, wer es zuruecksetzen darf)
+      if (staff) {   // Redaktion schreibt live (can() bestanden): mit der Rolle zum Zeitpunkt der Aenderung im Protokoll (daran haengt, wer es zuruecksetzen darf)
         const rid = (await db.prepare("SELECT id FROM entity_rev WHERE eid=? AND user_id=? AND status='live' ORDER BY id DESC LIMIT 1").bind(id, user.id).first())?.id;
         if (rid) await logEdit(db, user, "entity.edit_live", "entity", rid, { reason: summary });
       }

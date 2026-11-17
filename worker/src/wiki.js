@@ -3,7 +3,7 @@ import { legacyRev, revRole } from "./editor.js";
 import { gate, inScope, roleOf, logEdit } from "./perm.js";
 import { cleanText, rateLimit, isLang, memberOf } from "./util.js";
 import { stats, evalBadges } from "./badges.js";
-import { baseIds } from "./entities.js";
+import { baseIds, staffEditLive, trustedMember } from "./entities.js";
 
 const TERM = /^[a-z0-9-]{2,48}$/;
 const okLang = (l) => l === "en" || isLang(l);
@@ -100,14 +100,15 @@ export async function handleWiki(env, request, url, path, user, J) {
     if (!(await rateLimit(db, `wiki:h:${user.id}`, 6, 3600)) || !(await rateLimit(db, `wiki:d:${user.id}`, 25, 86400))) return J({ error: "rate_limit" }, 429);
     const cur = await liveOf(db, term, lang);
     if (cur && cur.body === body) return J({ error: "unchanged" }, 400);
-    const trusted = user.admin || user.editor || user.pro || (await stats(db, user.id)).points >= TRUST_POINTS;
+    const staff = await staffEditLive(db, user, term);   // Redaktion: can("entity.edit_live") mit Fachbereich, Tageslimit, eigener Firma
+    const trusted = staff || (await trustedMember(db, user));
     const t = now();
     if (trusted) {
       await db.batch([
         db.prepare("UPDATE wiki_rev SET status='old' WHERE term=? AND lang=? AND status='live'").bind(term, lang),
         db.prepare("INSERT INTO wiki_rev(term,lang,body,summary,user_id,status,created) VALUES(?,?,?,?,?,'live',?)").bind(term, lang, body, summary, user.id, t),
       ]);
-      if (roleOf(user) !== "user") {   // Redaktion schreibt live: mit der Rolle zum Zeitpunkt der Aenderung im Protokoll (daran haengt, wer es zuruecksetzen darf)
+      if (staff) {   // Redaktion schreibt live: mit der Rolle zum Zeitpunkt der Aenderung im Protokoll (daran haengt, wer es zuruecksetzen darf)
         const rid = (await db.prepare("SELECT id FROM wiki_rev WHERE term=? AND lang=? AND user_id=? AND status='live' ORDER BY id DESC LIMIT 1").bind(term, lang, user.id).first())?.id;
         if (rid) await logEdit(db, user, "entity.edit_live", "wiki", rid, { reason: summary });
       }

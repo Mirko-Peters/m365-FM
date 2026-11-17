@@ -186,3 +186,41 @@ test("K29: drei Meldungen blenden einen Kommentar der Redaktion nicht aus", asyn
   assert.equal(raw.prepare("SELECT status FROM comments WHERE id=?").get(c).status, "ok");
   assert.equal(raw.prepare("SELECT status FROM comments WHERE id=?").get(m).status, "hidden");
 });
+
+// ---------- K5: Live-Aenderungen der Redaktion nur ueber can("entity.edit_live"); Langtext beanspruchter Entitaeten nur Inhaber/Admin ----------
+test("K5: Entitaeten/Wiki - Editoren schreiben live nur mit can(), owner_only gilt auch fuer Editoren", async () => {
+  const { raw, env } = await mk();
+  const D = (long) => ({ name: "Azure", type: "product", desc: { en: "Cloud platform of Microsoft.", de: "Cloud-Plattform von Microsoft." }, long: { de: long, en: "" } });
+  const live = () => { const r = raw.prepare("SELECT user_id,data FROM entity_rev WHERE eid='azure' AND status='live' ORDER BY id DESC LIMIT 1").get(); return { uid: r.user_id, long: JSON.parse(r.data).long?.de || "" }; };
+  ins(raw, "entity_rev", { eid: "azure", data: JSON.stringify(D("Alter Text von Konto vier, laenger.")), summary: "s", user_id: 4, status: "old", created: 1 });
+  ins(raw, "entity_rev", { eid: "azure", data: JSON.stringify(D("Inhabertext der Seite mit genug Inhalt.")), summary: "s", user_id: 6, status: "live", created: 2 });
+  ins(raw, "entity_claims", { eid: "azure", user_id: 6, via: "email", status: "verified", created: 1 });
+  const post = (uid, long, id = "azure", data) => call(env, uid, "POST", "/api/entity", { id, data: data || D(long), summary: "Aenderung" });
+  // Fach-Editor 7 (Bereich teams) und Editor 2: Langtext des Inhabers nicht ueberschreibbar (auch nicht mit der alten Fassung - Umgehung von not_editor_edit)
+  for (const uid of [7, 2]) {
+    const r = await post(uid, "Fremdtext eines Editors der Redaktion."); assert.equal(r.s, 403); assert.equal(r.j.error, "owner_only");
+    assert.equal((await post(uid, "Alter Text von Konto vier, laenger.")).j.error, "owner_only");
+  }
+  assert.deepEqual(live(), { uid: 6, long: "Inhabertext der Seite mit genug Inhalt." });
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM edit_log WHERE action='entity.edit_live'").get().n, 0);
+  // Inhaber und Admin duerfen
+  assert.equal((await post(6, "Neuer Inhabertext der Seite, live.")).j.status, "live");
+  assert.equal((await post(1, "Admin aendert den Langtext der Seite.")).j.status, "live");
+  // Fach-Editor ausserhalb seines Bereichs (ohne eigenes Vertrauen als Mitglied): nur Vorschlag, kein Redaktions-Protokoll
+  const T = (desc) => ({ name: "Contoso", type: "org", web: "https://www.contoso.com", desc: { en: desc, de: desc } });
+  const r7 = await post(7, "", "contoso", T("Contoso company text by topic editor."));
+  assert.equal(r7.j.status, "pending");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM edit_log WHERE user_id=7").get().n, 0);
+  // Fach-Editor im Bereich: live mit Protokoll
+  const r7b = await post(7, "", "teams", { name: "Microsoft Teams", type: "product", desc: { en: "Chat and meetings app.", de: "Chat- und Meeting-App." } });
+  assert.equal(r7b.j.status, "live");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM edit_log WHERE user_id=7 AND action='entity.edit_live'").get().n, 1);
+  // Editor als Mitglied der Firma, die mit der Entitaet verknuepft ist: own_company -> kein Live-Schreiben als Redaktion
+  const o = ins(raw, "orgs", { handle: "contoso-x", name: "Contoso", public: 1, created: 1 });
+  ins(raw, "org_entity", { org_id: o, eid: "contoso" }); ins(raw, "org_members", { org_id: o, user_id: 5, role: "member", status: "active", created: 1 });
+  assert.equal((await post(5, "", "contoso", T("Contoso text written by own employee."))).j.status, "pending");
+  assert.equal((await post(2, "", "contoso", T("Contoso text by an independent editor."))).j.status, "live");
+  // Wiki: Fach-Editor ausserhalb des Bereichs -> Vorschlag; im Bereich -> live
+  assert.equal((await call(env, 7, "POST", "/api/wiki", { term: "azure", lang: "de", body: "Wiki-Text ausserhalb des Bereichs.", summary: "x" })).j.status, "pending");
+  assert.equal((await call(env, 7, "POST", "/api/wiki", { term: "teams", lang: "de", body: "Wiki-Text im eigenen Bereich, live.", summary: "x" })).j.status, "live");
+});
