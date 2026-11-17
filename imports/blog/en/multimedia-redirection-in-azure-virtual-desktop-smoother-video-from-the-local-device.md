@@ -93,20 +93,20 @@ Three things are easy to confuse, and each has a different job.
 
 **Device redirection over the [Remote Desktop Protocol](/entity/remote-desktop-protocol/)** is a third path. Learn's Teams page lists the RDP properties `audiocapturemode:i:1`, `audiomode:i:0` and `camerastoredirect:s:*` for microphone and camera redirection, and says device redirection is not required when media optimization is in use. It is a different feature from moving media rendering to the client.
 
-**Browser video on an unlisted site**: Learn does not describe this case. Our reading is that it is played without redirection, as Learn says for protected content ("regular video playback").
+**Browser video on an unlisted site**: Learn says video playback redirection is limited by default to the listed sites and any extra sites you configure, and its troubleshooting page shows the status "Not active on this site" for a page that is not supported for redirection. Our reading is that the video then plays without redirection, as Learn says for protected content ("regular video playback").
 
 A practical way to place MMR: it applies when the media app is a web page in Edge or Chrome and the page is on a list. If the app is Teams, look at media optimization. Learn describes call redirection for "WebRTC-based calling apps" on the listed websites; our reading is that a native desktop softphone is outside that scope.
 
 ## When a pilot is worth running
 
-Learn does not publish performance figures for MMR, so any gain has to be measured in your own environment. A reasonable pilot, which is our suggestion and not Microsoft guidance, follows this outline:
+The multimedia redirection page gives no performance figures, so any gain has to be measured in your own environment. A reasonable pilot, which is our suggestion and not Microsoft guidance, follows this outline:
 
 1. Pick one or two user groups that watch training video or use a supported browser-based softphone, for instance e-learning on a listed site such as LinkedIn Learning or Pluralsight.
 2. Confirm the clients are Windows App on Windows 2.0.297.0 or later, or Cloud PC devices such as Windows 365 Link. Users on other clients will see "The extension is not loaded" and get no redirection, so check the client mix of the group first.
 3. Install the service and extension on a test host pool, then check the extension icon: Learn describes a blue border when redirection is available on the page and a video playback or call icon while redirection is active.
 4. Compare session host CPU use and user-reported smoothness with and without redirection for the same video.
 
-The comparison in step 4 is the one Learn does not provide, and it is the number you need before you decide whether to maintain the service on every session host.
+The comparison in step 4 gives you the number you need before you decide whether to maintain the service on every session host.
 
 ## Keeping the service current
 
@@ -118,4 +118,4 @@ The service has an explicit version history. The latest entry in Learn's what's 
 - [Microsoft Learn: What's new in multimedia redirection](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new-multimedia-redirection)
 - [Microsoft Learn: Troubleshoot multimedia redirection](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-multimedia-redirection)
 - [Microsoft Learn: Use Microsoft Teams on Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/teams-on-avd)
-- [Microsoft Learn: Install Teams for Virtualized Desktop Infrastructure (VDI)](https://learn.microsoft.com/en-us/microsoftteams/new-teams-vdi-requirements-deploy)
+- [Microsoft Learn: Microsoft Teams for Virtualized Desktop Infrastructure (VDI)](https://learn.microsoft.com/en-us/microsoftteams/teams-client-vdi-requirements-deploy)
