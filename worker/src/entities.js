@@ -1,4 +1,5 @@
 // Entitaetsdatenbank fuer das Microsoft-Oekosystem: Community-Revisionen ueber den statischen Basisdaten (data/entities.json)
+import { hiddenPersonEids, HIDDEN_PERSON_SQL } from "./privacy.js";
 import { legacyRev } from "./editor.js";
 import { gate, inScope, roleOf, logEdit } from "./perm.js";
 import { cleanText, rateLimit } from "./util.js";
@@ -38,8 +39,8 @@ export async function baseIds(env) {
 export async function entityMap(env) {
   const base = new Map();
   if ((await source(env)) !== "db") for (const e of await siteEntities(env)) base.set(e.id, e);
-  const rows = (await env.DB.prepare("SELECT eid,data FROM entity_rev WHERE status='live' ORDER BY id").all()).results || [];
-  for (const r of rows) { try { base.set(r.eid, { id: r.eid, ...JSON.parse(r.data) }); } catch { /* defekte Zeile ignorieren */ } }
+  const rows = (await env.DB.prepare("SELECT eid,data FROM entity_rev WHERE status='live' ORDER BY id").all()).results || [], hidden = await hiddenPersonEids(env.DB);
+  for (const r of rows) { if (hidden.has(r.eid)) continue; try { base.set(r.eid, { id: r.eid, ...JSON.parse(r.data) }); } catch { /* defekte Zeile ignorieren */ } }   // K41: Personen-Entitaet eines privaten, gesperrten oder geloeschten Profils nie oeffentlich (MCP get_entity, search_entities ...)
   return base;
 }
 
@@ -223,6 +224,7 @@ export async function handleEntity(env, request, url, path, user, J) {
 
   if (path === "/api/entity" && method === "GET") {
     const id = url.searchParams.get("id"); if (!ID.test(id || "")) return J({ error: "bad_request" }, 400);
+    if ((await hiddenPersonEids(db)).has(id)) return J({ error: "not_found" }, 404);   // K41: Personen-Entitaet eines nicht (mehr) oeffentlichen Profils
     const live = await liveOf(db, id);
     const hist = ((await db.prepare("SELECT r.id,r.data,r.summary,r.created,COALESCE(u.name,'') name FROM entity_rev r LEFT JOIN users u ON u.id=r.user_id WHERE r.eid=? AND r.status IN ('live','old') ORDER BY r.created DESC LIMIT 15").bind(id).all()).results || []);
     let mine = null; if (user) mine = await db.prepare("SELECT id,data FROM entity_rev WHERE eid=? AND user_id=? AND status='pending' ORDER BY created DESC LIMIT 1").bind(id, user.id).first();
@@ -263,11 +265,11 @@ export async function handleEntity(env, request, url, path, user, J) {
     const pair = fresh ? await pairNewOrgEntity(env, user, id, v.data, { requireOwner: true }).catch(() => null) : null;
     return J({ ok: true, status: "pending", ...(pair ? { company: pair.handle, owner: pair.owner } : {}) });
   }
-  if (path === "/api/entity/tr" && method === "GET") return J({ items: await entityTranslations(env.DB) }, 200, { "cache-control": "public, max-age=300" });   // automatische Uebersetzungen (autotr.js)
+  if (path === "/api/entity/tr" && method === "GET") { const items = await entityTranslations(env.DB); for (const eid of await hiddenPersonEids(db)) delete items[eid]; return J({ items }, 200, { "cache-control": "public, max-age=300" }); }   // automatische Uebersetzungen (autotr.js)
   if (path === "/api/entity/export" && method === "GET") {
     // src: Herkunft der live-Fassung (seed = Uebernahme aus entities.json, ai = KI-Entwurf, human = von einem Menschen veraendert, owned = selbst verwaltet); h: Hash von desc/long/faq (Schutz in /api/internal/entity-fill)
     // aif: Felder (desc.en, long.de ...), deren Wert noch genau der eines KI-Entwurfs ist - der Seitenbau kennzeichnet sie als KI-Text
-    const rows = (await db.prepare("SELECT r.eid,r.data,r.created,r.user_id,r.summary FROM entity_rev r WHERE r.status='live'").all()).results || [], sys = await aiUserId(db, false), human = await humanEdited(db, sys), owned = await ownedEntities(db), aiv = await aiFieldValues(db, sys);
+    const rows = (await db.prepare(`SELECT r.eid,r.data,r.created,r.user_id,r.summary FROM entity_rev r WHERE r.status='live' AND r.eid NOT IN (${HIDDEN_PERSON_SQL})`).all()).results || [], sys = await aiUserId(db, false), human = await humanEdited(db, sys), owned = await ownedEntities(db), aiv = await aiFieldValues(db, sys);
     const items = [];
     for (const r of rows) { const data = JSON.parse(r.data), aif = aiFieldsOf(data, aiv.get(r.eid)); items.push({ id: r.eid, data, created: r.created, uid: r.user_id, src: revSource(r, sys, human, owned), h: await stateHash(data), aif }); }
     return J({ items }, 200, { "cache-control": "public, max-age=300" });

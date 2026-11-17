@@ -301,7 +301,7 @@ export function similarName(a, b) {
 }
 async function speakerMatches(db, me) {
   const rows = (await db.prepare("SELECT s.speakers,e.title ev FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.merged_into=0 AND s.speakers LIKE '%\"n\":%' AND e.public=1 LIMIT 3000").all()).results || [], by = new Map();
-  for (const r of rows) { let sp = []; try { sp = JSON.parse(r.speakers); } catch { continue; } for (const x of sp) if (x.n && !x.h && similarName(me.name, x.n)) { const o = by.get(x.n) || { name: x.n, sessions: 0, events: new Set() }; o.sessions++; o.events.add(r.ev); by.set(x.n, o); } }
+  for (const r of rows) { let sp = []; try { sp = JSON.parse(r.speakers); } catch { continue; } for (const x of sp) if (x.n && !x.h && !x.anon && similarName(me.name, x.n)) { const o = by.get(x.n) || { name: x.n, sessions: 0, events: new Set() }; o.sessions++; o.events.add(r.ev); by.set(x.n, o); } }
   return [...by.values()].map((o) => ({ name: o.name, sessions: o.sessions, events: [...o.events].slice(0, 4) }));
 }
 export async function handleEvents(env, request, url, path, user, J) {
@@ -431,7 +431,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     if (m[2] === "attendees" && method === "GET") {
       const going = (await db.prepare("SELECT COUNT(*) n FROM event_attendees WHERE event_id=? AND status='going'").bind(ev.id).first()).n;
       const wl = (await db.prepare("SELECT COUNT(*) n FROM event_attendees WHERE event_id=? AND status='waitlist'").bind(ev.id).first()).n;
-      const vis = (await db.prepare("SELECT u.name,p.handle FROM event_attendees a JOIN users u ON u.id=a.user_id JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE a.event_id=? AND a.status='going' AND a.visible=1 ORDER BY a.created LIMIT 200").bind(ev.id).all()).results || [];
+      const vis = (await db.prepare("SELECT u.name,p.handle FROM event_attendees a JOIN users u ON u.id=a.user_id AND u.banned=0 JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE a.event_id=? AND a.status='going' AND a.visible=1 ORDER BY a.created LIMIT 200").bind(ev.id).all()).results || [];
       const me = user ? await db.prepare("SELECT status,visible FROM event_attendees WHERE event_id=? AND user_id=?").bind(ev.id, user.id).first() : null;
       return J({ transfer: !!TRANSFER[ev.handle], going, waitlist: wl, capacity: cap, full: cap > 0 && going >= cap, visible: vis.map((r) => ({ name: r.name, handle: r.handle })), me: me ? { status: me.status, visible: !!me.visible } : null, can_edit: user ? await canManage(db, user, ev, "edit") : false }, 200, { "cache-control": "no-store" });
     }
@@ -503,7 +503,7 @@ export async function handleEvents(env, request, url, path, user, J) {
   if ((m = path.match(/^\/api\/event\/([a-z0-9-]{3,40})\/team$/))) {
     const ev = await db.prepare("SELECT * FROM events WHERE handle=? AND merged_into=0").bind(m[1]).first(); if (!ev) return J({ error: "not_found" }, 404);
     if (method === "GET") {
-      const rows = (await db.prepare("SELECT r.role,r.user_id,u.name,p.handle FROM event_roles r JOIN users u ON u.id=r.user_id LEFT JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE r.event_id=? ORDER BY r.created").bind(ev.id).all()).results || [];
+      const rows = (await db.prepare("SELECT r.role,r.user_id,u.name,p.handle FROM event_roles r JOIN users u ON u.id=r.user_id LEFT JOIN profiles p ON p.user_id=u.id AND p.public=1 AND u.banned=0 WHERE r.event_id=? ORDER BY r.created").bind(ev.id).all()).results || [];
       const mine = need() ? false : await canManage(db, user, ev, "roles");
       return J({ roles: Object.keys(EVENT_ROLES), team: rows.filter((r) => mine || r.handle).map((r) => ({ role: r.role, name: r.name, handle: r.handle || "", ...(mine ? { uid: r.user_id } : {}) })), can_edit: mine });
     }
@@ -553,7 +553,8 @@ export async function handleEvents(env, request, url, path, user, J) {
     let n = 0, ops = [];
     for (const r of (await db.prepare("SELECT id,speakers FROM event_sessions WHERE merged_into=0 AND speakers LIKE ?").bind(`%"n":${JSON.stringify(ok.name).slice(0, -1)}"%`).all()).results || []) {
       let sp = []; try { sp = JSON.parse(r.speakers); } catch { continue; } let ch = false;
-      for (const x of sp) if (x.n === ok.name && !x.h) { if (x.t) ops.push(db.prepare("DELETE FROM speaker_invites WHERE token=?").bind(x.t)); delete x.t; delete x.o; x.h = me.handle; x.s = "invited"; ch = true; n++; }
+      for (const x of sp) if (x.n === ok.name && !x.h && !x.anon) {   // anonymisierte Eintraege (geloeschtes Konto, privacy.js) beansprucht niemand
+        if (x.t) ops.push(db.prepare("DELETE FROM speaker_invites WHERE token=?").bind(x.t)); delete x.t; delete x.o; x.h = me.handle; x.s = "invited"; ch = true; n++; }
       if (ch) ops.push(db.prepare("UPDATE event_sessions SET speakers=? WHERE id=?").bind(JSON.stringify(sp), r.id));
     }
     if (ops.length) await db.batch(ops);
@@ -595,7 +596,9 @@ export async function handleEvents(env, request, url, path, user, J) {
     if (need()) return need();
     const b = await body(), pr = await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(user.id).first(); if (!pr?.handle) return J({ error: "need_profile" }, 409);
     const se = await db.prepare("SELECT id,speakers FROM event_sessions WHERE id=?").bind(+b.id).first(); if (!se) return J({ error: "not_found" }, 404);
-    const sp = parse(se.speakers, []).map((x) => (x.h === pr.handle ? { ...x, s: b.ok ? "confirmed" : "declined" } : x));
+    const old = parse(se.speakers, []);
+    if (!old.some((x) => x.h === pr.handle && x.s === "invited")) return J({ error: "not_pending" }, 409);   // nur offene Anfragen (wie MCP respond_speaker_request); eine abgelehnte wird nicht nachtraeglich bestaetigt
+    const sp = old.map((x) => (x.h === pr.handle && x.s === "invited" ? { ...x, s: b.ok ? "confirmed" : "declined" } : x));
     await db.prepare("UPDATE event_sessions SET speakers=? WHERE id=?").bind(JSON.stringify(sp), se.id).run();
     return J({ ok: true });
   }

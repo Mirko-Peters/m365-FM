@@ -7,7 +7,7 @@ export { haikuJson } from "./util.js";
 const WAIT = 24 * 3600, WINDOW = 30 * 24 * 3600, DAILY_CAP = 150, PER_RUN = 4;
 const LANGS = { en: "English", de: "German", fr: "French", es: "Spanish", it: "Italian", nl: "Dutch", pt: "Portuguese (European)", pl: "Polish", id: "Indonesian", ru: "Russian", uk: "Ukrainian", ar: "Arabic", he: "Hebrew", ja: "Japanese", ko: "Korean" };
 const KINDS = {
-  blog: { table: "blog_posts", sel: "id,lang,title,summary,body", where: "status='live' AND html='' AND published>0", t: "published", f: ["title", "summary", "body"] },
+  blog: { table: "blog_posts", sel: "id,lang,title,summary,body", where: "status='live' AND html='' AND published>0 AND user_id>0", t: "published", f: ["title", "summary", "body"] },
   podcast: { table: "pod_episodes", sel: "id,lang,title,description AS summary", where: "published>0", t: "published", f: ["title", "summary"] },
   video: { table: "yt_videos", sel: "id,lang,title,description AS summary", where: "published>0", t: "published", f: ["title", "summary"] },
 };

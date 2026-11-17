@@ -1,5 +1,6 @@
 // Folgen-Register (episode, episode_text, episode_guest) und Uebersetzungen (translation) aus den Registerdateien des Seitenbaus uebernehmen,
 // schrittweise (je Lauf begrenzt), nur geaenderte Zeilen (Hash). Exporte fuer Seitenbau und Agenten.
+import { HIDDEN_PERSON_SQL } from "./privacy.js";
 import { siteFetch } from "./util.js";
 const now = () => Math.floor(Date.now() / 1000);
 const hash = (x) => { let h = 5381; const s = String(x); for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0; return (h >>> 0).toString(16); };
@@ -97,10 +98,15 @@ export async function handleRegister(env, request, url, path, user, J) {
     for (const r of guests) (G.get(r.episode_id) || G.set(r.episode_id, []).get(r.episode_id)).push(r.eid);
     return J({ count: eps.length, episodes: eps.map((e) => ({ ...e, h: undefined, texts: T.get(e.id) || {}, guests: G.get(e.id) || [] })) }, 200, { "cache-control": "public, max-age=300" });
   }
-  if (path === "/api/translations/export" && request.method === "GET") {   // ?kind=episode|blog|lblog|entity|notes&lang=de (Pflicht: kind)
+  if (path === "/api/translations/export" && request.method === "GET") {   // ?kind=episode|entity|notes&lang=de (Pflicht: kind)
     const kind = url.searchParams.get("kind") || "", lang = url.searchParams.get("lang") || "";
     if (!kind) return J({ error: "bad_request" }, 400);
-    const rows = (await db.prepare("SELECT item_id,lang,field,text,src,quality FROM translation WHERE kind=?" + (lang ? " AND lang=?" : "") + " LIMIT 60000").bind(...(lang ? [kind, lang] : [kind])).all().catch(() => ({ results: [] }))).results || [];
+    // K21: Uebersetzungen von Community-Inhalten (blog, lblog = Sprachfassungen der Mitglieder-Blogs mit Profil-Adresse, podcast, video) nie ungefiltert -
+    // nach Loeschen, Ablehnen, Privatstellen oder Bann blieben sie sonst anonym abrufbar. Blog-Sprachfassungen liefern /api/blog/export und die
+    // Seiten selbst (nur live, oeffentliches Profil, nicht gesperrt); kein Seitenbau-Skript nutzt diesen Endpunkt.
+    if (!["episode", "entity", "notes"].includes(kind)) return J({ error: "bad_kind" }, 400);
+    const hide = kind === "entity" ? ` AND item_id NOT IN (${HIDDEN_PERSON_SQL})` : "";   // K41: Personen-Entitaet eines nicht (mehr) oeffentlichen Profils
+    const rows = (await db.prepare("SELECT item_id,lang,field,text,src,quality FROM translation WHERE kind=?" + (lang ? " AND lang=?" : "") + hide + " LIMIT 60000").bind(...(lang ? [kind, lang] : [kind])).all().catch(() => ({ results: [] }))).results || [];
     return J({ kind, count: rows.length, items: rows }, 200, { "cache-control": "public, max-age=300" });
   }
   return null;

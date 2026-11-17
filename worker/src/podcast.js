@@ -1,5 +1,6 @@
 // Community-Podcast: Mitglieder reichen Episoden ein (Audio -> Entwurf bei Spreaker), die Community stimmt ab,
 // ab der Schwelle prueft Mirko in Spreaker und veroeffentlicht dort; der Cron erkennt die Veroeffentlichung.
+import { dropTranslationOps } from "./privacy.js";
 import { gate, inScope } from "./perm.js";
 import { decide } from "./editor.js";
 import { guestsOf, dropGuests } from "./credits.js";
@@ -67,7 +68,7 @@ export async function rejectPitch(env, id, note) {
 }
 
 export async function deleteUserPodcast(db, uid) {
-  await db.batch([db.prepare("DELETE FROM pod_votes WHERE user_id=? OR ep_id IN (SELECT id FROM pod_episodes WHERE user_id=?)").bind(uid, uid), db.prepare("DELETE FROM pod_episodes WHERE user_id=?").bind(uid)]);
+  await db.batch([...dropTranslationOps(db, "podcast", "pod_episodes", "user_id=?", uid), db.prepare("DELETE FROM pod_votes WHERE user_id=? OR ep_id IN (SELECT id FROM pod_episodes WHERE user_id=?)").bind(uid, uid), db.prepare("DELETE FROM pod_episodes WHERE user_id=?").bind(uid)]);   // K21: Uebersetzungen mit
 }
 
 export async function handlePodcast(env, request, url, path, user, J) {

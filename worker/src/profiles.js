@@ -1,4 +1,5 @@
 // Experten- und Firmenprofile, Programme (MVP/MCT/...), Kanaele mit Feeds, Upvotes, Bestaetigungen
+import { releaseHandleOps, invalidateProfileExport, forgetSearchPerson, forgetSearchEntity, forgetPublicPerson } from "./privacy.js";
 import { scopeOf, can, gate, inScope, logEdit, roleOf } from "./perm.js";
 import { decide } from "./editor.js";
 import { syncAutoRoles } from "./roles.js";
@@ -398,6 +399,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
     if (!(await rateLimit(db, `prof:${user.id}`, 20, 3600))) return J({ error: "rate_limit" }, 429);
     const b = await body();
     const previousLocation = await db.prepare("SELECT p.country,pp.* FROM profiles p LEFT JOIN profile_private pp ON pp.user_id=p.user_id WHERE p.user_id=?").bind(user.id).first();
+    const prev = await db.prepare("SELECT handle,public FROM profiles WHERE user_id=?").bind(user.id).first();   // fuer Adresswechsel und Privatstellen (privacy.js)
     let handle = String(b.handle || "").toLowerCase().trim(); const isPublic = b.public ? 1 : 0;
     if (handle && !HANDLE.test(handle)) return J({ error: "bad_handle" }, 400);
     if (RESERVED_HANDLES.has(handle) && (await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(user.id).first())?.handle !== handle) return J({ error: "handle_taken" }, 409);   // nur neu vergeben gesperrt: wer das Kuerzel schon hat, speichert weiter
@@ -416,7 +418,9 @@ export async function handleProfiles(env, request, url, path, user, J) {
     await db.prepare(`INSERT INTO profiles(user_id,public,handle,headline,about,company,job,country,show_org,updated) VALUES(?,?,?,?,?,?,?,?,?,?)
       ON CONFLICT(user_id) DO UPDATE SET public=excluded.public,handle=excluded.handle,headline=excluded.headline,about=excluded.about,company=excluded.company,job=excluded.job,country=excluded.country,show_org=excluded.show_org,updated=excluded.updated`)
       .bind(user.id, isPublic, handle || null, txt(b.headline, 100), long(b.about, 1500), txt(b.company, 80), txt(b.job, 80), txt(b.country, 60), b.show_org === false ? 0 : 1, now()).run();
-    await db.prepare("UPDATE users SET bio=? WHERE id=?").bind(txt(b.headline, 100), user.id).run();
+    await db.prepare("UPDATE users SET bio=? WHERE id=?").bind(isPublic ? txt(b.headline, 100) : "", user.id).run();   // users.bio ist oeffentlich (/api/u/<id>): die Kurzzeile eines privaten Profils gehoert nicht hinein (K22)
+    if (prev?.handle && prev.handle !== handle) { const ops = await releaseHandleOps(db, prev.handle, handle); if (ops.length) await db.batch(ops); }   // K42: Speaker-Eintraege gehen nicht an den naechsten Inhaber der Adresse
+    if (prev?.public) { await invalidateProfileExport(db); if (!isPublic || prev.handle !== handle) await forgetSearchPerson(db, prev.handle); }   // K45: nicht erst nach dem naechsten Cron
     if (b.i18n && typeof b.i18n === "object") await saveI18n(db, user.id, cleanI18n(b.i18n));
     if (ind) await db.batch([db.prepare("DELETE FROM profile_industry WHERE user_id=?").bind(user.id), ...ind.list.map((e) => db.prepare("INSERT INTO profile_industry(user_id,eid) VALUES(?,?)").bind(user.id, e))]);
     if (jb) await db.batch(jb.list.length ? [db.prepare("INSERT INTO profile_job(user_id,eid) VALUES(?,?) ON CONFLICT(user_id) DO UPDATE SET eid=excluded.eid").bind(user.id, jb.list[0])] : [db.prepare("DELETE FROM profile_job WHERE user_id=?").bind(user.id)]);
@@ -469,7 +473,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const hit = url.searchParams.get("fresh") === "1" && user?.admin ? null : await db.prepare("SELECT v,updated FROM export_cache WHERE k='profiles'").first().catch(() => null);
     if (hit && now() - hit.updated < 7200) return J(JSON.parse(hit.v), 200, { "cache-control": "public, max-age=300", "x-export-age": String(now() - hit.updated) });
     try { return J(await refreshProfilesExport(env), 200, { "cache-control": "public, max-age=300", "x-export-age": "0" }); }
-    catch (e) { if (hit) return J(JSON.parse(hit.v), 200, { "cache-control": "public, max-age=60", "x-export-age": String(now() - hit.updated), "x-export-stale": "1" }); throw e; }   // lieber eine aeltere Fassung als ein Fehler
+    catch (e) { if (hit && now() - hit.updated < 86400) return J(JSON.parse(hit.v), 200, { "cache-control": "public, max-age=60", "x-export-age": String(now() - hit.updated), "x-export-stale": "1" }); throw e; }   // lieber eine aeltere Fassung als ein Fehler - aber hoechstens einen Tag alt (zurueckgezogene Profile)
   }
 
   // ---- Bestaetigung durch andere (Endorsements), Upvotes ----
@@ -723,6 +727,16 @@ export async function handleProfiles(env, request, url, path, user, J) {
 // Konto loeschen: alle Profil-, Firmen- und Entitaetsdaten des Nutzers entfernen bzw. anonymisieren
 export async function deleteUserData(db, id) {
   const mailAddress = await db.prepare("SELECT email FROM mail_addr WHERE user_id=?").bind(id).first().catch(() => null);
+  const handle = (await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(id).first())?.handle || "";
+  // Personen-Entitaeten aus dem eigenen Profil (ownedEntity, "Selbst verwaltet", Typ person): reine Personendaten (Name, Kurzzeile) - weg samt
+  // Uebersetzungen und Anspruch, damit die Adresse spaeter frei und nichts davon oeffentlich bleibt (K41). Redaktionelle Entitaeten bleiben (user_id 0).
+  const persons = ((await db.prepare("SELECT c.eid FROM entity_claims c WHERE c.user_id=? AND c.via='owner' AND EXISTS (SELECT 1 FROM entity_rev r WHERE r.eid=c.eid AND r.summary='Selbst verwaltet' AND (CASE WHEN json_valid(r.data) THEN json_extract(r.data,'$.type') END)='person')").bind(id).all().catch(() => ({ results: [] }))).results || []).map((r) => r.eid);
+  if (persons.length) {
+    await db.batch(persons.flatMap((eid) => [db.prepare("DELETE FROM entity_rev WHERE eid=?").bind(eid), db.prepare("DELETE FROM entity_claims WHERE eid=?").bind(eid), db.prepare("DELETE FROM entity_claim_review WHERE eid=?").bind(eid),
+      db.prepare("DELETE FROM ent_tr WHERE eid=?").bind(eid), db.prepare("DELETE FROM ent_tr_seen WHERE eid=?").bind(eid), db.prepare("DELETE FROM translation WHERE kind='entity' AND item_id=?").bind(eid)]));
+    for (const eid of persons) await forgetSearchEntity(db, eid);
+  }
+  await forgetPublicPerson(db, handle);   // Export-Zwischenspeicher und Suchindex sofort (K45)
   await db.prepare("DELETE FROM recommendations WHERE author_id=? OR subject_id=?").bind(id, id).run();
   await db.prepare("DELETE FROM profile_company WHERE user_id=?").bind(id).run();
   await db.prepare("DELETE FROM profile_business WHERE user_id=?").bind(id).run();   // Geschaeftsadressen (0046)

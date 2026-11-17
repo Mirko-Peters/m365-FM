@@ -1,3 +1,4 @@
+import { hiddenPersonEids } from "./privacy.js";
 import { rateLimit, sha256hex } from "./util.js";
 import { embed, queryVectors, rrf, upsertVectors, vectorId } from "./vectors.js";
 import { countSearch } from "./search_demand.js";
@@ -137,7 +138,7 @@ export async function importSearchIndex(env) {
   }
 
   const siteOrigin = new URL(env.SITE).origin;
-  const docs = json.docs.map((doc) => normalizeDoc(doc, siteOrigin)).filter(Boolean);
+  const docs = await withoutHiddenPeople(db, json.docs.map((doc) => normalizeDoc(doc, siteOrigin)).filter(Boolean));
   const existing = await currentRows(db, docs.map((doc) => doc.id));
   const statements = [];
   const timestamp = now();
@@ -185,6 +186,20 @@ export async function importSearchIndex(env) {
     return { part, changed, gone: missing.length, tokenizer };
   }
   return { part, changed, tokenizer };
+}
+
+// K45: Der Index kommt aus dem letzten Seitenbau. Bis zum naechsten Bau enthaelt er noch Profilseiten (alle Sprachen, auch Blog unter
+// /community/u/<h>/) und Personen-Entitaeten von Mitgliedern, die ihr Profil inzwischen privat gestellt oder geloescht haben oder gesperrt
+// wurden. privacy.js markiert diese sofort als entfernt; hier kommen sie nicht zurueck.
+const PROFILE_PATH = /\/community\/u\/([a-z0-9][a-z0-9-]{2,29})\//, ENTITY_PATH = /\/entity\/([a-z0-9-]{2,48})\/?$/;
+async function withoutHiddenPeople(db, docs) {
+  if (!docs.some((d) => PROFILE_PATH.test(d.url) || (d.type === "person" && ENTITY_PATH.test(new URL(d.url).pathname)))) return docs;
+  const pub = new Set(((await db.prepare("SELECT p.handle FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.public=1 AND p.handle IS NOT NULL").all().catch(() => ({ results: [] }))).results || []).map((r) => r.handle));
+  const hidden = await hiddenPersonEids(db);
+  return docs.filter((d) => {
+    const m = PROFILE_PATH.exec(d.url); if (m && !pub.has(m[1])) return false;
+    const e = d.type === "person" && ENTITY_PATH.exec(new URL(d.url).pathname); return !(e && hidden.has(e[1]));
+  });
 }
 
 function documentText(doc) {

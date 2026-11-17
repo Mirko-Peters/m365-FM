@@ -1,4 +1,5 @@
 // Blog je Mitglied: Beitraege schreiben (Wiki-Markup mit Quellen), Pruefung fuer Neue, Upvotes, Export fuer den Seitenbau
+import { dropTranslationOps } from "./privacy.js";
 import { limitTopics } from "./sponsor_extra.js";
 import { cleanText, rateLimit, isLang } from "./util.js";
 import { translatedBlogItems } from "./autotr.js";
@@ -33,9 +34,14 @@ export async function syncFeed(env, db, uid, post, handle, live) {
   await db.prepare("INSERT INTO feed_items(channel_id,owner_type,owner_id,url,title,published) VALUES(?,?,?,?,?,?) ON CONFLICT(url) DO UPDATE SET title=excluded.title,hidden=0").bind(ch.id, "u", uid, url, post.title, post.published || now()).run();
 }
 
+// Konto loeschen: veroeffentlichte Beitraege (live) bleiben bei M365.FM (Nutzungsrecht, Community-Bedingungen), aber anonym: user_id = -id (kein
+// Konto, kein Profil, keine Adresse; die oeffentlichen Exporte verlangen ein oeffentliches Profil und zeigen sie deshalb nicht mehr unter dem
+// alten Namen). Entwuerfe, Eingereichtes und Abgelehntes (nie veroeffentlicht) gehen samt Uebersetzungen. Eigene Stimmen, Abos und Co-Autor-Eintraege gehen.
 export async function deleteUserBlog(db, uid) {
   const mine = "(SELECT CAST(id AS TEXT) FROM blog_posts WHERE user_id=?)";   // Verlauf, Empfehlungen und Textauszuege der Redaktion zu diesen Beitraegen gehen mit
   await db.batch([db.prepare(`DELETE FROM content_rev WHERE kind='blog' AND item_id IN ${mine}`).bind(uid), db.prepare(`DELETE FROM edit_proposals WHERE kind='blog' AND item_id IN ${mine}`).bind(uid), db.prepare(`UPDATE edit_log SET before='',after='' WHERE kind='blog' AND item_id IN ${mine}`).bind(uid),
+    db.prepare("UPDATE blog_posts SET user_id=-id,note='' WHERE user_id=? AND status='live'").bind(uid),
+    ...dropTranslationOps(db, "blog", "blog_posts", "user_id=?", uid),
     db.prepare("DELETE FROM blog_follows WHERE user_id=?").bind(uid), db.prepare("DELETE FROM blog_votes WHERE post_id IN (SELECT id FROM blog_posts WHERE user_id=?) OR user_id=?").bind(uid, uid), db.prepare("DELETE FROM blog_coauthors WHERE post_id IN (SELECT id FROM blog_posts WHERE user_id=?) OR user_id=?").bind(uid, uid), db.prepare("DELETE FROM blog_posts WHERE user_id=?").bind(uid)]);
 }
 
@@ -179,7 +185,7 @@ export async function handleBlog(env, request, url, path, user, J) {
     if (!p) return J({ error: "not_found" }, 404);
     if (p.handle) await syncFeed(env, db, p.user_id, p, p.handle, false);
     await db.prepare("DELETE FROM comments WHERE vid=?").bind("blog" + p.id).run(); await dropBlogHistory(db, p.id);
-    await db.batch([db.prepare("DELETE FROM blog_votes WHERE post_id=?").bind(p.id), db.prepare("DELETE FROM blog_coauthors WHERE post_id=?").bind(p.id), db.prepare("DELETE FROM blog_posts WHERE id=?").bind(p.id)]);
+    await db.batch([...dropTranslationOps(db, "blog", "blog_posts", "id=?", p.id), db.prepare("DELETE FROM blog_votes WHERE post_id=?").bind(p.id), db.prepare("DELETE FROM blog_coauthors WHERE post_id=?").bind(p.id), db.prepare("DELETE FROM blog_posts WHERE id=?").bind(p.id)]);   // K21: KI-Uebersetzungen mit
     return J({ ok: true });
   }
 

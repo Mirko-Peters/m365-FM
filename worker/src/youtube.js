@@ -1,5 +1,6 @@
 // Creator-Videos fuer den YouTube-Kanal "m365 Show": Der Worker legt eine resumable Upload-Session an (privat), der Browser
 // laedt direkt zu YouTube hoch. Abstimmung -> ab Schwelle Aufgabe fuer Mirko -> Freigabe (oeffentlich schalten) in YouTube Studio.
+import { dropTranslationOps } from "./privacy.js";
 import { gate, inScope } from "./perm.js";
 import { decide } from "./editor.js";
 import { guestsOf, dropGuests } from "./credits.js";
@@ -83,7 +84,7 @@ export async function rejectVideo(env, id, note) {
 }
 
 export async function deleteUserVideos(db, uid) {
-  await db.batch([db.prepare("DELETE FROM yt_votes WHERE user_id=? OR vid_id IN (SELECT id FROM yt_videos WHERE user_id=?)").bind(uid, uid), db.prepare("DELETE FROM yt_videos WHERE user_id=?").bind(uid)]);
+  await db.batch([...dropTranslationOps(db, "video", "yt_videos", "user_id=?", uid), db.prepare("DELETE FROM yt_votes WHERE user_id=? OR vid_id IN (SELECT id FROM yt_videos WHERE user_id=?)").bind(uid, uid), db.prepare("DELETE FROM yt_videos WHERE user_id=?").bind(uid)]);   // K21: Uebersetzungen mit
 }
 
 export async function handleVideo(env, request, url, path, user, J) {

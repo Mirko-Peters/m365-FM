@@ -12,6 +12,7 @@
 //     nicht am heutigen Namen oder Termin des Events hier: umbenannt, verschoben oder (auch von einem Admin) zusammengefuehrt, er wird aufgefrischt und nie neu angelegt.
 //  8) Fuer ein Import-Event, das niemand pflegt, ist eine Quelle massgeblich – der Datensatz der Veranstaltungsliste (Community Days), sonst der, aus dem es
 //     entstand: aendert ihn die Quelle (Termin, Ort, Texte), folgt das Event. Andere Datensaetze ergaenzen nur; gepflegte Events aendert kein Import.
+import { anonSpeaker, mapSpeakers } from "./privacy.js";
 import { ensureDirectoryCols } from "./directory.js";
 import { cleanUrl, goodHost } from "./profiles.js";
 import { cleanText } from "./util.js";
@@ -471,11 +472,12 @@ export async function sessionDeleteOps(db, sid, tomb = true, t = now()) {
 // Die Anweisungen gehoeren ans ENDE der Batch (nach dem Loeschen der Events und offenen Vorschlaege des Kontos): die Pruefung "verweist noch eine Session
 // auf die Identitaet?" laeuft in SQL zum Zeitpunkt der Ausfuehrung.
 export async function forgetImporter(db, uid) {
-  const h = (await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(uid).first())?.handle || "", ops = [], gone = new Set();
+  const h = (await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(uid).first())?.handle || "", ops = [], gone = new Set(), handled = new Set();
   const refs = ((await db.prepare("SELECT DISTINCT x.ref FROM session_source x JOIN event_sessions s ON s.id=x.session_id WHERE x.kind='sessionize_profile' AND s.proposer_id=?").bind(uid).all()).results || []).map((r) => r.ref), rj = JSON.stringify(refs);
   if (refs.length) {
     const rows = (await db.prepare("SELECT s.id,s.speakers,s.proposer_id,s.merged_into,(SELECT COUNT(*) FROM session_source o WHERE o.session_id=s.id AND NOT (o.kind='sessionize_profile' AND o.ref IN (SELECT value FROM json_each(?1)))) other FROM event_sessions s WHERE s.id IN (SELECT session_id FROM session_source WHERE kind='sessionize_profile' AND ref IN (SELECT value FROM json_each(?1)))").bind(rj).all()).results || [];
     for (const r of rows) {
+      handled.add(r.id);
       const sp = parse(r.speakers, []), rest = h ? sp.filter((x) => x.h !== h) : sp;
       for (const x of sp) if (h && x.h === h && x.r) gone.add(x.r);
       if (r.merged_into || (!rest.length && !r.other && r.proposer_id === uid)) ops.push(...(await sessionDeleteOps(db, r.id, false)));   // nur dieser Import trug die Session
@@ -486,6 +488,9 @@ export async function forgetImporter(db, uid) {
   ops.push(db.prepare("DELETE FROM event_claims WHERE user_id=?").bind(uid), db.prepare("DELETE FROM import_preview WHERE user_id=?").bind(uid),
     db.prepare("UPDATE merge_log SET by_user=0 WHERE by_user=?").bind(uid), db.prepare("UPDATE dedupe_queue SET decided_by=0 WHERE decided_by=?").bind(uid));
   if (h) {
+    // Speaker-Eintraege in Programmen anderer Veranstalter: bleiben (Inhalt bei M365.FM), aber anonym - ohne Name, Handle und Entitaet.
+    // Sonst uebernaehme ein spaeteres Konto mit derselben Profil-Adresse die Eintraege samt Rechten (Sicherheitspruefung K42).
+    ops.push(...(await mapSpeakers(db, h, (x) => { if (x.r) gone.add(x.r); return anonSpeaker(x); }, handled)));
     for (const r of (await db.prepare("SELECT id FROM speaker_ref WHERE handle=?").bind(h).all()).results || []) gone.add(r.id);
     ops.push(db.prepare("UPDATE speaker_ref SET handle='' WHERE handle=?").bind(h));
     // Protokoll: den Eintrag der Person (Name + Profil) aus den gemerkten Speaker-Listen nehmen; die Zusammenfuehrung selbst bleibt nachvollziehbar

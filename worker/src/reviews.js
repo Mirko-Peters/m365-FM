@@ -19,7 +19,7 @@ export async function handleReviews(env, request, url, path, user, J) {
   const db = env.DB, method = request.method; await ensure(db);
   if (path === "/api/reviews" && method === "GET") {
     const show = SHOW.test(url.searchParams.get("show") || "") ? url.searchParams.get("show") : "en";
-    const rows = (await db.prepare(`SELECT r.id,r.user_id,r.rating,r.title,r.body,r.created,COALESCE(u.name,'Member') name,(SELECT COUNT(*) FROM review_helpful h WHERE h.review_id=r.id) helpful,(SELECT handle FROM profiles p WHERE p.user_id=r.user_id AND p.public=1) handle FROM show_reviews r LEFT JOIN users u ON u.id=r.user_id AND u.banned=0 WHERE r.show=? AND r.status='published' ORDER BY helpful DESC, r.created DESC LIMIT 200`).bind(show).all().catch(() => ({ results: [] }))).results || [];
+    const rows = (await db.prepare(`SELECT r.id,r.user_id,r.rating,r.title,r.body,r.created,COALESCE(u.name,'Former member') name,(SELECT COUNT(*) FROM review_helpful h WHERE h.review_id=r.id) helpful,(SELECT p.handle FROM profiles p WHERE p.user_id=u.id AND p.public=1) handle FROM show_reviews r LEFT JOIN users u ON u.id=r.user_id AND u.banned=0 WHERE r.show=? AND r.status='published' ORDER BY helpful DESC, r.created DESC LIMIT 200`).bind(show).all().catch(() => ({ results: [] }))).results || [];
     const agg = await db.prepare("SELECT COUNT(*) n, COALESCE(SUM(rating),0) s, SUM(rating=5) c5, SUM(rating=4) c4, SUM(rating=3) c3, SUM(rating=2) c2, SUM(rating=1) c1 FROM show_reviews WHERE show=? AND status='published'").bind(show).first();
     let mine = null, voted = [];
     if (user) {

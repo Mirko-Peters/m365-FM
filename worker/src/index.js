@@ -1,4 +1,5 @@
 // Community-API (Cloudflare Worker + D1): Login (Google/Microsoft), Kommentare, Abzeichen, Kurator, Push, E-Mail
+import { invalidateProfileExport, forgetPublicPerson } from "./privacy.js";
 import { isStaging, stagingEnv, installFetchGuard, stagingResponse, robotsResponse } from "./staging.js";
 import { json, cors, isOwnSite, cookie, makeSession, readSession, readSessionInfo, sha256hex, cleanText, cleanName, randomToken, rateLimit, isLang, esc, b64u, sign, verify, audit, aiBudgetStatus, reportExternalAiUsage, memberOf } from "./util.js";
 import { evalBadges, stats, topUsers, badgesFor, award } from "./badges.js";
@@ -249,6 +250,8 @@ async function deleteAccount(env, id) {
     db.prepare("DELETE FROM entity_claim_evidence WHERE user_id=?").bind(id),   // Adress-Nachweis (0046): Geschaeftsadresse, Notiz, Beleg-Link
     db.prepare("DELETE FROM entity_claims WHERE user_id=? AND status<>'verified'").bind(id),
     db.prepare("DELETE FROM likes WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
+    // Show-Bewertungen bleiben (Inhalt bei M365.FM), aber anonym: user_id = -id (kein Konto, kein Name, kein Profil-Link); eigene "hilfreich"-Stimmen gehen (K44)
+    db.prepare("UPDATE show_reviews SET user_id=-id WHERE user_id=?").bind(id), db.prepare("DELETE FROM review_helpful WHERE user_id=?").bind(id),
     db.prepare("DELETE FROM reports WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
     db.prepare("DELETE FROM comments WHERE user_id=?").bind(id), db.prepare("DELETE FROM user_badges WHERE user_id=?").bind(id),
     db.prepare("DELETE FROM push_topics WHERE user_id=? OR endpoint IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(id, id), db.prepare("DELETE FROM email_topics WHERE user_id=?").bind(id),
@@ -267,6 +270,7 @@ async function deleteAccount(env, id) {
   await deleteUserData(db, id); await deleteUserExpertRequests(env, id);
   await deleteUserLinkedin(db, id);   // LinkedIn-Zugang dieses Admins (verschluesselte Tokens) und "veroeffentlicht von"
   await deleteUserInvites(env, id);   // Einlader: beide Seiten (eingeladen und Einlader samt eigenem Kuerzel in ref)
+  await invalidateProfileExport(db);   // K45: nicht erst nach dem naechsten Cron (deleteUserData markiert zudem die Suchtreffer)
 }
 
 const me = memberOf;   // util.js: dieselbe Rollen-Ermittlung auch fuer Cron-Laeufe (Kurzposts)
@@ -486,11 +490,13 @@ async function api(env, request, url, path, asUser, ctx) {
     if (!isLang(lang)) return J({ error: "bad_request" }, 400);
     const d = new Date(), since = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1) / 1000;
     const top = await topUsers(db, lang, since, 5), bm = await badgesFor(db, top.map((t) => t.id)), rm = await publicRoles(db, top.map((t) => t.id));
-    const last = await db.prepare("SELECT c.month,c.points,u.id,u.name,u.bio FROM curators c JOIN users u ON u.id=c.user_id WHERE c.lang=? ORDER BY c.month DESC LIMIT 1").bind(lang).first();
+    const last = await db.prepare("SELECT c.month,c.points,u.id,u.name,CASE WHEN p.user_id IS NULL OR p.public=1 THEN u.bio ELSE '' END bio FROM curators c JOIN users u ON u.id=c.user_id AND u.banned=0 LEFT JOIN profiles p ON p.user_id=u.id WHERE c.lang=? ORDER BY c.month DESC LIMIT 1").bind(lang).first();
     return J({ month: d.toISOString().slice(0, 7), top: top.map((t) => ({ ...t, badges: bm.get(t.id) || [], ...(rm.get(t.id) ? { role: rm.get(t.id) } : {}), ...(rm.scopes.get(t.id) ? { scope: rm.scopes.get(t.id) } : {}) })), last: last || null }, 200, { "cache-control": "public, max-age=300" });
   }
   if ((m = /^\/api\/u\/(\d+)$/.exec(path)) && method === "GET") {
-    const u = await db.prepare("SELECT id,name,bio,lang,created FROM users WHERE id=? AND banned=0").bind(+m[1]).first();
+    // K22: nur Konten mit oeffentlichem Profil oder oeffentlichem Kommentar (sonst liesse sich jedes Konto ueber fortlaufende IDs abfragen);
+    // die Kurzvorstellung nur ohne Profil (Community-Bio aus POST /api/me) oder bei oeffentlichem Profil
+    const u = await db.prepare("SELECT u.id,u.name,CASE WHEN p.user_id IS NULL OR p.public=1 THEN u.bio ELSE '' END bio,u.lang,u.created FROM users u LEFT JOIN profiles p ON p.user_id=u.id WHERE u.id=? AND u.banned=0 AND (p.public=1 OR EXISTS (SELECT 1 FROM comments c WHERE c.user_id=u.id AND c.status='ok'))").bind(+m[1]).first();
     if (!u) return J({ error: "not_found" }, 404);
     const rc = (await db.prepare("SELECT vid,lang,substr(body,1,160) body,created FROM comments WHERE user_id=? AND status='ok' ORDER BY created DESC LIMIT 5").bind(u.id).all()).results || [];
     const cur = (await db.prepare("SELECT lang,month FROM curators WHERE user_id=? ORDER BY month DESC").bind(u.id).all()).results || [];
@@ -606,7 +612,11 @@ async function api(env, request, url, path, asUser, ctx) {
       await evalBadges(env, +m[1]);
       return J({ ok: true, role });
     }
-    if ((m = /^\/api\/admin\/ban\/(\d+)$/.exec(path)) && method === "POST") { await db.prepare("UPDATE users SET banned=1 WHERE id=?").bind(+m[1]).run(); await audit(db, user.id, "ban", m[1]); return J({ ok: true }); }
+    if ((m = /^\/api\/admin\/ban\/(\d+)$/.exec(path)) && method === "POST") {
+      await db.prepare("UPDATE users SET banned=1 WHERE id=?").bind(+m[1]).run(); await audit(db, user.id, "ban", m[1]);
+      await forgetPublicPerson(db, (await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(+m[1]).first())?.handle || "");   // K45: Export und Suche sofort; Personen-Entitaet blendet privacy.js aus
+      return J({ ok: true });
+    }
   }
   return J({ error: "not_found" }, 404);
 }
