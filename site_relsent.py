@@ -5,7 +5,9 @@ und [Microsoft Fabric]." auf der Seite von Power BI, "Microsoft entwickelt [Micr
   Fehlt eine Vorlage in einer Sprache, gibt es fuer diese Beziehung keinen Satz: die vollstaendige Liste der Beziehungen unter dem Text (site_entities, div.en-rel)
   bleibt in jeder Sprache stehen, es geht also nichts verloren.
 - Verlinkt werden die Ziel-Entitaeten mit ihrem Namen als Ankertext (beschreibend, kein "hier"); die Seite selbst ({s}) ist kein Link.
-- Listen: hoechstens CAP Namen, dann "und N weitere" als Sprungmarke auf die vollstaendige Liste darunter (bei CAP+1 Namen stehen alle da, nie "und 1 weitere").
+- Listen: hoechstens CAP Namen, dann "und N weitere" als Text (bei CAP+1 Namen stehen alle da, nie "und 1 weitere"); der Sprung auf die vollstaendige Liste
+  darunter ist ein eigener Link mit Ziel und Beziehung im Linktext ("Vollstaendige Listen: alle 246 Produkte und Werke von Microsoft", data/link_context.json more.*).
+- Seiten ohne Beziehungen: Rueckfall-Satz aus gemeinsamen Folgen ("In Folgen zu {s} geht es oft auch um ...", cooc/cooc_rank), nie in e["rel"].
 - Keine Doppelung: was ein genauerer Satz schon nennt (Kategorie, Entwickler, Teil von ...), steht nicht noch einmal im "eng verwandt"-Satz.
 
 Index-Regel (site_index_rule, "ab 2500 Zeichen eigener Text"): diese Saetze sind aus Vorlagen erzeugt und zaehlen NICHT als eigener Text. Die Entitaetsregel
@@ -98,10 +100,11 @@ def _link(lang, url, text):
     return f'<a href="{esc(url)}">{t}</a>'
 
 
-def build(lang, e, fwd, inv, ents, href, anchor=None, works_for=None, rank=None, cap=CAP):
+def build(lang, e, fwd, inv, ents, href, anchor=None, works_for=None, rank=None, cap=CAP, total=None):
     """Beziehungssaetze einer Entitaet als HTML-Abschnitt ('' ohne Saetze).
     fwd: [(praedikat, ziel-id)] aus e["rel"]; inv: [(praedikat, quell-id)] (Gegenrichtung); ents: id -> Entitaet; href(id) -> URL der Entitaetsseite;
-    anchor(richtung, praedikat) -> id der vollstaendigen Liste (Sprungziel fuer "N weitere"); works_for: Firmen-id der Person; rank(id) -> Sortierwert (hoeher zuerst)
+    anchor(richtung, praedikat[, satzschluessel]) -> id der vollstaendigen Liste (Sprungziel der Zeile "Vollstaendige Listen"); total(richtung, praedikat, satzschluessel)
+    -> Zahl der Eintraege dieser Liste (sonst die Zahl im Satz); works_for: Firmen-id der Person; rank(id) -> Sortierwert (hoeher zuerst)
     fuer die Gegenrichtung (bekanntere Eintraege zuerst; die Hinrichtung bleibt in der redaktionellen Reihenfolge)."""
     D = data(); L = D.get(lang) or {}; T = L.get("t") or {}; M = (D.get("en") or {}).get("t") or {}
     if not T:
@@ -110,7 +113,7 @@ def build(lang, e, fwd, inv, ents, href, anchor=None, works_for=None, rank=None,
     groups = {}   # schluessel -> {"dir", "p", "ids"}
 
     def add(key, d, p, i, back=False):
-        g = groups.setdefault(key, {"dir": d, "p": p, "ids": [], "back": set()})
+        g = groups.setdefault(key, {"dir": d, "p": p, "k": key, "ids": [], "back": set()})
         if i not in g["ids"] and i != e["id"]:
             g["ids"].append(i)
             if back:
@@ -136,14 +139,28 @@ def build(lang, e, fwd, inv, ents, href, anchor=None, works_for=None, rank=None,
         for g in groups.values():
             g["ids"].sort(key=lambda i: (1, -rank(i)) if i in g["back"] else (0, 0))
 
+    fulls = []   # (Satzschluessel, Sprungziel, Anzahl): Links "alle 246 Produkte und Werke von Microsoft" unter den Saetzen
+
+    def _anchor(g):
+        if not anchor:
+            return ""
+        try:
+            return anchor(g["dir"], g["p"], g["k"])   # mit Satzschluessel: eigene Liste z. B. fuer i.developed_by.src:cert
+        except TypeError:
+            return anchor(g["dir"], g["p"])
+
     def lst(g, ids=None, more_link=None):
-        """Verlinkte Namen; more_link ueberschreibt den Text "N weitere" (Deutsch nach Dativ: "von A und 5 weiteren")."""
+        """Verlinkte Namen; more_link ueberschreibt den Text "N weitere" (Deutsch nach Dativ: "von A und 5 weiteren").
+        "N weitere" ist Text, kein Link (Audit SEO-9/E9/A11Y-8: gleich klingende Links ohne Ziel); den Sprung auf die vollstaendige Liste
+        traegt ein eigener Link mit Beziehung im Linktext (fulls -> Zeile "Vollstaendige Listen: alle 246 Produkte und Werke von Microsoft")."""
         ids = g["ids"] if ids is None else ids
         if len(ids) > cap + 1:
             shown, n = ids[:cap], len(ids) - cap
-            a = anchor(g["dir"], g["p"]) if anchor else ""
             mt = (more_link or (L.get("more") or {}).get("link") or "{n}").replace("{n}", str(n))
-            more = f'<a href="#{esc(a)}">{esc(mt)}</a>' if a else esc(mt)
+            more = esc(mt)
+            a = _anchor(g)
+            if a and all(a != x[1] for x in fulls):
+                fulls.append((g["k"], a, total(g["dir"], g["p"], g["k"]) if total else len(g["ids"])))
         else:
             shown, more = ids, ""
         return join(lang, [_link(lang, href(i), ents[i]["name"]) for i in shown], more)
@@ -208,5 +225,70 @@ def build(lang, e, fwd, inv, ents, href, anchor=None, works_for=None, rank=None,
         return ""
     ss = L.get("sent_sep", " ")
     ps = "".join(f"<p>{ss.join(x)}</p>" for x in (sent_f, sent_i) if x)
+    ps += full_lists(lang, e["name"], fulls)
     h = esc(L.get("heading") or (D.get("en") or {}).get("heading") or "Relationships")
     return f'<section class="en-rels" data-own-text="no" aria-labelledby="en-rels-h"><h2 id="en-rels-h">{h}</h2>{ps}</section>'
+
+
+def _more_key(k):
+    """Vorlage fuer den Sprunglink: genauer Satzschluessel, sonst ohne .subj:/.src:-Zusatz, sonst allgemein (data/link_context.json, more.*)."""
+    import site_linkctx as LC
+    for c in (k, k.split(".subj:")[0].split(".src:")[0]):
+        if LC.raw("en", "more." + c):
+            return "more." + c
+    return "more._"
+
+
+def full_lists(lang, name, fulls):
+    """Zeile "Vollstaendige Listen: alle 246 Produkte und Werke von Microsoft und alle 50 von Microsoft vergebenen Zertifizierungen" (Sprungmarken auf
+    die vollstaendigen Listen darunter). Linktext = Ziel samt Beziehung in der Sprache der Seite; '' ohne gekuerzte Liste."""
+    if not fulls:
+        return ""
+    import site_linkctx as LC
+    items = [f'<a href="#{esc(a)}">{LC.text(lang, _more_key(k), s=name, n=n)}</a>' for k, a, n in fulls]
+    return f'<p class="en-full">{LC.text(lang, "more.full")} {join(lang, items)}</p>'
+
+
+_DF = {}
+
+
+def cooc_rank(eid, eps_of, about, ents, k=CAP, skip=("mirko-peters",)):
+    """Rueckfall fuer Entitaeten ohne Beziehungen (Audit Linktexte SEO-1, Paket 3): Themen, die in denselben Folgen vorkommen.
+    eps_of: Folgen-Schluessel (slug) der Seite; about: Folge -> ids der Entitaeten, deren Seite die Folge fuehrt (generate_site._ep_about).
+    Gewicht je gemeinsamer Folge 1/log2(1 + Themen der Folge) (Sammelfolgen zaehlen weniger) mal Seltenheit log(1 + Folgen / Folgen des Themas)
+    (Allerweltsthemen wie Microsoft 365 zaehlen weniger). Ohne die Seite selbst, den Host (skip) und Kategorien; hoechstens k ids, beste zuerst."""
+    import math
+    n_all = max(1, len(about))
+    if _DF.get("about") is not about or _DF.get("n") != len(about):   # Folgen je Thema einmal je Bau (about aendert sich waehrend des Baus nicht)
+        df = {}
+        for xs in about.values():
+            for i in set(xs):
+                df[i] = df.get(i, 0) + 1
+        _DF.clear(); _DF.update(about=about, n=len(about), df=df)
+    df = _DF["df"]
+    sc, shared = {}, {}
+    for x in dict.fromkeys(eps_of):
+        xs = [i for i in dict.fromkeys(about.get(x) or ()) if i != eid]
+        if not xs:
+            continue
+        w = 1 / math.log2(2 + len(xs))
+        for i in xs:
+            if i in skip or i not in ents or ents[i].get("type") == "category":
+                continue
+            sc[i] = sc.get(i, 0) + w * math.log(1 + n_all / max(1, df.get(i, 1)))
+            shared[i] = shared.get(i, 0) + 1
+    return sorted(sc, key=lambda i: (-sc[i], -shared[i], ents[i].get("name", "").lower(), i))[:k]
+
+
+def cooc(lang, e, ids, ents, href):
+    """Satz "In Folgen zu {s} geht es oft auch um [A], [B] und [C]." (data/relation_sentences.json, cooc) als eigener Abschnitt; '' ohne ids oder Vorlage.
+    Steht nur auf Seiten ohne Beziehungen und schreibt nichts in e["rel"]: die Aussage ist "kommt in denselben Folgen vor", keine Beziehung im Graphen."""
+    D = data(); L = D.get(lang) or {}
+    c = L.get("cooc") or {}
+    ids = [i for i in ids if i in ents and i != e["id"]]
+    if not ids or not c.get("t"):
+        return ""
+    subj = f"<bdi>{esc(e['name'])}</bdi>" if lang in RTL else esc(e["name"])
+    x = join(lang, [_link(lang, href(i), ents[i]["name"]) for i in ids])
+    return (f'<section class="en-rels en-cooc" data-own-text="no" aria-labelledby="en-rels-h"><h2 id="en-rels-h">{esc(c.get("heading") or "")}</h2>'
+            f'<p>{fill(lang, c["t"], s=subj, x=x)}</p></section>')

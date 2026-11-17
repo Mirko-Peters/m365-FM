@@ -1,5 +1,6 @@
 """Englische Show-Seite (Nachbau von www.m365.fm / Podpage) unter /show/: Folgen, Seiten, Hosts, Sponsoren, Reviews, Gaeste (als Personen-Entitaeten).
 Daten: data/podpage/*.json(.gz); Audio/Transkript aus data/en_episodes.json (fetch_en_episodes.py). Videos sind bewusst ausgeschlossen."""
+import site_linkctx as LC   # Beziehungskontext der Linklisten (data/link_context.json)
 import site_notes as SNT
 import site_shownotes as SNS   # T26: Vollfassungen shownotes/site/<episode_id>.md
 import site_extract as SX   # T27: Folgen <-> Entitaeten aus der QA-geprueften Extraktion
@@ -561,9 +562,9 @@ def build(g):
 
     sidebar = g["side"]   # die eine Sidebar aller Inhaltsseiten (generate_site.sidebar, site_sidebar.render)
 
-    def pub(rel, title, desc, body, ld=None, og="website", noindex=False, last=TODAY, alts=None, canon=None, seo=None, head="", ids=None):
+    def pub(rel, title, desc, body, ld=None, og="website", noindex=False, last=TODAY, alts=None, canon=None, seo=None, head="", ids=None, topics_h=""):
         u = f"{root}{rel}"
-        side = sidebar("en", (title + " " + plain(body)[:8000]) if not noindex else "", ids=ids or None)   # ids: feste Themen der Seite (Folgen: about + im Text verlinkt)
+        side = sidebar("en", (title + " " + plain(body)[:8000]) if not noindex else "", ids=ids or None, topics_h=topics_h)   # ids: feste Themen der Seite (Folgen: about + im Text verlinkt); topics_h: Ueberschrift mit Beziehung
         _st, _sd = seo if seo else ((title if title == NAME else f"{title} – {NAME}"), desc[:300])   # seo = (Titel mit Marke, Description) aus site_meta_podcast
         h = page("en", _st, _sd, u, shell(body, side), alts, ld, xdefault=u, og_type=og, noindex=noindex, extra_head=head)
         if canon:   # T12: Seite bleibt erreichbar, die kanonische Adresse ist eine andere (z. B. Personen-Entitaet); nicht in die Sitemap
@@ -718,8 +719,8 @@ def build(g):
               else f'<h2>Transcript</h2>{TRS.links_html(_trf)}' if _trf else "")   # #266: Dateien sichtbar verlinkt, Transkript im HTML unveraendert
         body = (f'<article><p class="mut">{day(e["create_time"])}{" · Season " + str(e["season"]) if e.get("season") else ""}</p><h1>{esc(e["name"])}</h1>{SPM.note("en", _spr, "episode")}{aud}{LST.follow_for(BASE, "en")}'
                 f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), cover_alt("en", e["name"]), 160, eager=True)}<div><strong>{esc(_rwm or short_desc(e, nrec, 300))}</strong></div></div>{nkp}<div class="pp-notes">{nnotes}{IMG.CSS if IMG.needs_responsive_css(nnotes) else ""}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
-                + (f"<p>{ext}</p>" if ext else "") + (f'<p class="mut">Host: {hl}</p>' if hl else "") + (f"<h2>Guests</h2><ul>{gl}</ul>" if gl else "") + also
-                + (("<h2>Related articles</h2><ul>" + "".join(f'<li><a href="{bp_url(p)}">{esc(p["title"])}</a></li>' for p in related_posts(e["slug"])) + "</ul>") if related_posts(e["slug"]) else "") + tx + "</article>" + (g.get("author_box")("en") if g.get("author_box") else "")
+                + (f"<p>{ext}</p>" if ext else "") + (f'<p class="mut">Host: {hl}</p>' if hl else "") + (f'<h2>Guests</h2>{LC.intro("en", "ep.guests")}<ul>{gl}</ul>' if gl else "") + also
+                + (("<h2>Related articles</h2>" + LC.intro("en", "ep.arts") + "<ul>" + "".join(f'<li><a href="{bp_url(p)}">{esc(p["title"])}</a></li>' for p in related_posts(e["slug"])) + "</ul>") if related_posts(e["slug"]) else "") + tx + "</article>" + (g.get("author_box")("en") if g.get("author_box") else "")
                 + PG("en", (ep_url(prev_), prev_["name"]) if prev_ else None, (ep_url(next_), next_["name"]) if next_ else None))
         ld = {"@context": "https://schema.org", "@type": "PodcastEpisode", "@id": ep_url(e) + "#episode", "name": e["name"], "url": ep_url(e), "datePublished": day(e["create_time"]),
               "description": short_desc(e, nrec, 500), "partOfSeries": {"@id": root + "#series", "@type": "PodcastSeries", "name": NAME, "url": root}, "inLanguage": "en", **({"image": thumb_of(e, nrec)} if thumb_of(e, nrec) else {}), "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}, "publisher": {"@id": f"{BASE}/#org"}}
@@ -746,7 +747,7 @@ def build(g):
         _seo = MP.en_episode_meta(e["name"], e.get("meta_title"), _rwm, e.get("summary"), short_desc(e, nrec, 600), uniq=_MPU, has_transcript=len(tr) > 200 or bool(_trf))   # Thema zuerst, Format und Marke hinten; Schablonen-Felder (X Explained | M365 FM) fallen weg
         pub(f"episodes/{e['slug']}/", e.get("meta_title") or e["name"], _rwm or short_desc(e, nrec, 155), body, ([ld] + nld) if nld else ld, "article", last=day(e.get("update_time")) or TODAY, alts=alts if len(alts) > 1 else None, seo=_seo,
             noindex=episode_noindex(e, nrec, bool(snx), _rw, (short_desc(e, nrec, 300), nkp, nnotes, nfaq, tr if len(tr) > 200 else "")), head=_pc,
-            ids=list(dict.fromkeys(_about + [i for i in _ment if ENTS_ALL[i].get("type") != "category"]))[:12])
+            ids=list(dict.fromkeys(_about + [i for i in _ment if ENTS_ALL[i].get("type") != "category"]))[:12], topics_h=LC.plain("en", "side.episode"))
         # lokalisierte Fassungen dieser Folge
         for l in TRL:
             tt = TRL[l].get(e["slug"])
@@ -824,7 +825,7 @@ def build(g):
         soc = " · ".join(f'<a href="{esc(gg[k])}" rel="noopener">{n}</a>' for k, n in (("website", "Website"), ("linkedin_link", "LinkedIn"), ("twitter_link", "X"), ("youtube_link", "YouTube")) if gg.get(k))
         img = f'<img src="{esc(gg["image_path"])}" alt="{esc(gg["name"])}" width="120" height="120" style="border-radius:50%;object-fit:cover;float:right;margin:0 0 1em 1em" loading="lazy">' if (gg.get("image_path") or "").startswith("http") else ""
         body = (f'<article>{img}<h1>{esc(gg["name"])}</h1><p class="mut">{esc(gg.get("title") or "")}</p><div>{san(gg.get("bio"))}</div><p>{soc}</p>{ent}'
-                + (f'<h2>Episodes</h2><ul style="list-style:none;padding:0">{"".join(card(e) for e in mine)}</ul>' if mine else "") + "</article>")
+                + (f'<h2>Episodes</h2>{LC.intro("en", "guest.eps", s=gg["name"])}<ul style="list-style:none;padding:0">{"".join(card(e) for e in mine)}</ul>' if mine else "") + "</article>")
         ld = {"@context": "https://schema.org", "@type": "ProfilePage", "mainEntity": {"@type": "Person", "@id": f"{BASE}/entity/{eid}/#entity" if known else f"{root}guests/{gg['slug']}/#p", "name": gg["name"], "jobTitle": gg.get("title") or "",
               "sameAs": [gg[k] for k in ("linkedin_link", "twitter_link", "youtube_link", "website") if gg.get(k)]}}
         _canon = f"{BASE}/entity/{eid}/" if eid == "mirko-peters" else None   # T12: eine kanonische Mirko-Peters-Adresse (Personen-Entitaet)

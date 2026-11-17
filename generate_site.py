@@ -51,7 +51,8 @@ import site_money as SM
 import site_cover
 import site_player as PL   # Player (YouTube, Spreaker) erst nach Klick: Platzhalter mit festen Massen statt iframe
 from site_content import FAQ
-from site_taxonomy import (CATS, ORDER, TOPICS, TAGW, cat_name, classify, tags_of, tag_slug, tag_url, related, autolink, _rx_i)
+from site_taxonomy import (CATS, ORDER, TOPICS, TAGW, cat_name, classify, tags_of, tag_slug, tag_url, related, autolink, _rx_i, common_topic)
+import site_linkctx as LC   # Beziehungskontext der Linklisten: Einleitungssatz je Liste (data/link_context.json)
 
 ROOT = Path(__file__).parent
 OUT = ROOT / "docs"
@@ -1099,18 +1100,18 @@ def build():
     def url_of(it): return episode_url(BASE, it["lang"], it["slug"])
     SBX = SBR.Index()
     _SHP = json.loads((ROOT / "data" / "platforms.json").read_text("utf-8")) if (ROOT / "data" / "platforms.json").exists() else {}
-    def sidebar(l, text="", ids=None, exclude=(), home=False):
+    def sidebar(l, text="", ids=None, exclude=(), home=False, topics_h=""):
         """Die eine Sidebar aller Inhaltsseiten (site_sidebar.render), gleich in allen Sprachen: Englisch mit den Folgen der Hauptshow (/show/),
         die Dub-Sprachen mit den Folgen ihrer Sprache. ids: feste Themenliste der Seite (Entitaets-IDs), sonst Treffer im Text."""
         if l in LANGS:
             return SBR.render(SBX, BASE, l, text, by_lang.get(l, []), url_of, lambda x: anchor_title(x["e"]["title"]), f"{BASE}/{l}/podcast/", _SHP.get(l), "",
-                              f"https://www.spreaker.com/show/{LANGS[l][3]}/episodes/feed", pfx(l), f"{BASE}/{l}/community/", ids, exclude, home)
+                              f"https://www.spreaker.com/show/{LANGS[l][3]}/episodes/feed", pfx(l), f"{BASE}/{l}/community/", ids, exclude, home, topics_h)
         import site_podpage as _PP
         _en = _PP.episode_index(BASE)["items"]
         return SBR.render(SBX, BASE, "en", text, _en, lambda x: x["url"], lambda x: x["e"]["title"], f"{BASE}/show/episodes/", _SHP.get("en"),
-                          f"{BASE}/show/listen/" if _SHP.get("en") else "", "https://www.spreaker.com/show/6704921/episodes/feed", "", f"{BASE}/community/", ids, exclude, home)
-    def side_for(l, title, body_html, home=False):   # Sidebar der Sprachseiten: Themen der Seite (Treffer im Text), neueste Folgen der Sprache, Community
-        return sidebar(l, strip_tags(title + " " + body_html.split("<main", 1)[-1])[:2500], home=home)
+                          f"{BASE}/show/listen/" if _SHP.get("en") else "", "https://www.spreaker.com/show/6704921/episodes/feed", "", f"{BASE}/community/", ids, exclude, home, topics_h)
+    def side_for(l, title, body_html, home=False, topics_h=""):   # Sidebar der Sprachseiten: Themen der Seite (Treffer im Text), neueste Folgen der Sprache, Community
+        return sidebar(l, strip_tags(title + " " + body_html.split("<main", 1)[-1])[:2500], home=home, topics_h=topics_h)
 
     R2OUT = ROOT / "r2out"   # Seiten, die nicht in GitHub Pages liegen, sondern im R2-Bucket (tools/r2_pages_upload.py laedt sie hoch, der Site-Worker liefert sie aus)
     write, write_r2, _r2n = writers(OUT, R2OUT, R2.rewrite, LANGS)   # write: docs/, ausser was site_size.r2_only nach r2out/ legt (Seiten der Sprachen ausser en/de, Exporte); write_r2: immer r2out/
@@ -1157,7 +1158,7 @@ def build():
                 out += f'<a class="chip" rel="tag" href="{tag_url(BASE, l, t)}">{esc(t)}</a>'
             elif s:
                 out += f'<span class="chip">{esc(t)}</span>'
-        return f'<div class="chips">{out}</div>' if out else ""
+        return (LC.intro(l, "ep.topics") + f'<div class="chips">{out}</div>') if out else ""   # Einleitungssatz: Beziehung Folge -> Themen (site_linkctx)
 
     def top_real(l, n=10):
         rows = (topdata.get("langs") or {}).get(l) or []
@@ -1348,7 +1349,10 @@ def build():
         el = _ep_links; sh = plat.get(l, {})
         btns = ep_btns(l, el, sh, spk, yt, e["title"], _trf, tr)
         showrow = show_row(l, sh)
-        rel = "".join(f'<a class="row" href="{url_of(x)}" title="{esc(x["e"]["title"])}"><h3>{esc(anchor_title(x["e"]["title"]))}</h3></a>' for x in more)
+        _mtx = LT.ep_texts([(x["e"]["title"], url_of(x)) for x in more])   # voller Titel, nie derselbe Text fuer zwei Folgen (Audit SEO-7)
+        rel = "".join(f'<a class="row" href="{url_of(x)}" title="{esc(x["e"]["title"])}"><h3>{esc(t_)}</h3></a>' for x, t_ in zip(more, _mtx))
+        _ct = common_topic(it, more, tagraw[l], tagsets[l], catsets[l])   # gemeinsames Thema aller verwandten Folgen: "Weitere Folgen zu {Thema}"
+        _rel_in = LC.intro(l, "ep.more", t=(_ct[1] if _ct[0] == "tag" else cat_name(_ct[1], l))) if _ct else LC.intro(l, "ep.more0")
         body = f"""{header(l, lang_switch(l, alts, active))}
 <main class="wrap"><article>
 <nav class="crumbs" aria-label="breadcrumb"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])} / {it["date"]}</nav>
@@ -1366,7 +1370,7 @@ def build():
 {author_box(l)}
 </article>
 {PAGER(l, *[(url_of(x), x['e']['title']) if x else None for x in NEIGH(by_lang[l], DPOS[l][vid])])}
-{('<h2>' + esc(ui[4]) + '</h2><div class="list">' + rel + '</div>') if rel else ''}
+{('<h2>' + esc(ui[4]) + '</h2>' + _rel_in + '<div class="list">' + rel + '</div>') if rel else ''}
 <p style="margin-top:1.6em">{all_eps_btn(l)}</p>
 <section id="c-comments"></section><section id="c-sub"></section></main>
 {footer(l)}{community_tags(l, vid, css_async=True)}"""
@@ -1374,7 +1378,7 @@ def build():
         OG_COVER[canonical] = art_svg(vid, LANGS[l][0], lang=l)
         _mt = MP.episode_title(l, e["title"], uniq=MPU); _md = MP.episode_desc(l, intro, prefer_answer=True, has_video=True, has_transcript=bool(_trf or tr)) or short(intro)   # Thema zuerst, dann Format und Marke; Description = Kernaussage
         write(f'{l}/{it["slug"]}/index.html',
-              page(l, _mt, _md, canonical, body, alts, ld + _nld, xdefault=alts.get("en"), side=side_for(l, e["title"], body), extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))
+              page(l, _mt, _md, canonical, body, alts, ld + _nld, xdefault=alts.get("en"), side=side_for(l, e["title"], body, topics_h=LC.plain(l, "side.episode")), extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))
         sitemap.append((canonical, it["date"], alts))
         if vid in ORIG: ORIG_ALTS.setdefault(ORIG[vid], {})[l] = (canonical, e["title"])
 
@@ -1717,7 +1721,7 @@ def build():
 <main class="wrap"><nav class="crumbs" aria-label="breadcrumb"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])}</nav>
 <div class="kicker">{esc(kind)} · {esc(LANGS[l][0])}</div><h1>{esc(label)}</h1>{hero}
 <p class="mut">{len(lst)} × {esc(ui[3])}</p>
-<h2>{esc(ui[3])}</h2><div class="list">{rows_html(lst)}</div>
+<h2>{esc(ui[3])}</h2>{LC.intro(l, "tag.eps" if noindex else "cat.eps", s=label)}<div class="list">{rows_html(lst)}</div>
 <h2>{esc(TOPICS.get(l, "Topics"))}</h2><div class="chips">{others}</div>
 <p style="margin-top:1.6em">{all_eps_btn(l)}</p></main>{footer(l)}"""
         _mt, _md = (label, desc) if noindex else MP.category_meta(l, label, len(lst), [x["e"]["title"] for x in lst[:6]])   # Tag-Seiten (noindex) bleiben unveraendert

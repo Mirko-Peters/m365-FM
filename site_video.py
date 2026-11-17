@@ -7,6 +7,7 @@ import site_player as PL   # YouTube-Player erst nach Klick
 import site_meta_podcast as MP   # suchintent-freundliche <title>/meta description
 import site_topic_crumbs as TC   # zweite BreadcrumbList nach dem Hauptthema (M365.FM > Oberbegriffe > Thema > Video)
 import site_entmatch as EM   # Kontext-Links in der Beschreibung
+import site_linkctx as LC   # Beziehungskontext der Linklisten (data/link_context.json)
 
 
 def fetch_videos(api):
@@ -55,7 +56,7 @@ def build(g, vids, people, api):
             b = shell(lang, f'<p class="mut"><a href="{croot}video/">{esc(ttl)}</a></p><article><h1>{esc(v["title"])}</h1>'
                             f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{v["handle"]}/" rel="author">{esc(v["name"])}</a> · {iso(v["published"])}</p>{guests_html}{player}'
                             f'{_desc}'
-                            f'{"<p class=mut>" + esc(T(lang, "The author disclosed the use of AI.", "Die Autorin bzw. der Autor hat den KI-Einsatz offengelegt.")) + "</p>" if v.get("ai") else ""}</article><p>{tl}</p>'
+                            f'{"<p class=mut>" + esc(T(lang, "The author disclosed the use of AI.", "Die Autorin bzw. der Autor hat den KI-Einsatz offengelegt.")) + "</p>" if v.get("ai") else ""}</article>{(LC.intro(lang, "video.topics") + "<p>" + tl + "</p>") if tl else ""}'
                             f'<p><a class="btn" href="https://youtu.be/{v["video_id"]}" rel="noopener">{esc(T(lang, "Watch on YouTube", "Auf YouTube ansehen"))}</a> <a href="{croot}video/feed.xml">RSS</a></p>' + PG(lang, *[(f"{croot}video/{x['slug']}/", x["title"]) if x else None for x in NB(_seq, _pos[v['slug']])], kind="video") + '<section id="c-comments"></section>'
                             + (ctags(lang, "video%d" % v["id"]) if ctags else ""))
             ld = [{"@context": "https://schema.org", "@type": "VideoObject", "@id": u + "#video", "url": u, "name": v["title"], "description": (v.get("description") or "")[:500], "inLanguage": lang,
@@ -64,7 +65,7 @@ def build(g, vids, people, api):
                    "publisher": {"@id": f"{BASE}/#org"}, "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics], **({"mentions": _ment} if _ment else {})}]
             _tbc = TC.breadcrumb(BASE, lang, topics, ENTS, v["title"], u)   # zweite Spur nach dem Hauptthema (nur JSON-LD)
             if _tbc: ld.append(_tbc)
-            write(f"{pfx2(lang)}community/video/{v['slug']}/index.html", page(lang, *MP.community_item_meta(lang, "video", v["title"], v["name"], v.get("description")), u, b, None, ld, og_type="video.other", extra_head=LCSS, noindex=v["title"].startswith("[Test]"), side=(g["side"](lang, v["title"] + " " + (v.get("description") or "")[:1500], ids=topics) if g.get("side") else "")))
+            write(f"{pfx2(lang)}community/video/{v['slug']}/index.html", page(lang, *MP.community_item_meta(lang, "video", v["title"], v["name"], v.get("description")), u, b, None, ld, og_type="video.other", extra_head=LCSS, noindex=v["title"].startswith("[Test]"), side=(g["side"](lang, v["title"] + " " + (v.get("description") or "")[:1500], ids=topics, topics_h=LC.plain(lang, "side.video") if topics else "") if g.get("side") else "")))
             if not v["title"].startswith("[Test]"): sitemap.append((u, iso(v["published"]), None))
         it = sorted(mine, key=lambda x: -x["published"]); ru = f"{croot}video/"
         lst = '<ul class="bl-list" style="padding:0;list-style:none">' + "".join(f'<li style="padding:.7em 0;border-bottom:1px solid var(--bd)"><a href="{croot}video/{v["slug"]}/"><b>{esc(v["title"])}</b></a> <span class="mut">· {esc(v["name"])} · {iso(v["published"])}</span></li>' for v in it) + "</ul>"

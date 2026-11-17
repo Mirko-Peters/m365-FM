@@ -180,26 +180,72 @@ class Templates(unittest.TestCase):
         self.assertEqual(t.count("[Microsoft Fabric]"), 1)
 
     def test_kuerzung_und_sprungmarke(self):
+        """'N weitere' ist Text; der Sprung auf die vollstaendige Liste ist ein eigener Link mit Ziel und Beziehung im Linktext (Audit SEO-9/E9/A11Y-8)."""
         es = {"hub": ent("hub", "org", "Hub")}
         for n in range(10):
             es[f"p{n}"] = ent(f"p{n}", "product", f"P{n}", [("developed_by", "hub")])
         h = render("en", "hub", es)
-        self.assertEqual(plain(h), "Hub develops [P0], [P1], [P2], [P3], [P4], [P5] and [4 more].")
-        self.assertIn('<a href="#rel-i-developed_by">4 more</a>', h, "Sprung auf die vollstaendige Liste darunter")
-        self.assertEqual(plain(render("de", "hub", es)), "Hub entwickelt [P0], [P1], [P2], [P3], [P4], [P5] und [4 weitere].")
+        self.assertEqual(plain(h), "Hub develops [P0], [P1], [P2], [P3], [P4], [P5] and 4 more. Full lists: [all 10 products and works by Hub]")
+        self.assertIn('<a href="#rel-i-developed_by">all 10 products and works by Hub</a>', h, "Sprung auf die vollstaendige Liste darunter")
+        self.assertNotIn(">4 more</a>", h, "kein gleich klingender Link ohne Ziel")
+        self.assertEqual(plain(render("de", "hub", es)), "Hub entwickelt [P0], [P1], [P2], [P3], [P4], [P5] und 4 weitere. Vollständige Listen: [alle 10 Produkte und Werke von Hub]")
         for k in ("p7", "p8", "p9"):
             del es[k]
         self.assertEqual(plain(render("en", "hub", es)), "Hub develops [P0], [P1], [P2], [P3], [P4], [P5] and [P6].", "bei CAP+1 alle Namen, nie 'and 1 more'")
         h = render("en", "hub", {**es, **{f"p{n}": ent(f"p{n}", "product", f"P{n}", [("developed_by", "hub")]) for n in range(7, 12)}}, anchor=None)
-        self.assertIn(" and 6 more.", plain(h)); self.assertNotIn('href="#', h, "ohne Sprungziel kein toter Link")
+        self.assertIn(" and 6 more.", plain(h)); self.assertNotIn('href="#', h, "ohne Sprungziel kein toter Link"); self.assertNotIn("Full lists", h)
+
+    def test_sprungmarke_je_liste_mit_satzschluessel(self):
+        """Zertifizierungen und Produkte desselben Herstellers: zwei Listen, zwei Sprungziele, je ein Link mit eigener Beziehung; total = Zahl der Zielliste."""
+        es = {"hub": ent("hub", "org", "Hub")}
+        es.update({f"p{n}": ent(f"p{n}", "product", f"P{n}", [("developed_by", "hub")]) for n in range(9)})
+        es.update({f"c{n}": ent(f"c{n}", "cert", f"C{n}", [("developed_by", "hub")]) for n in range(8)})
+        h = render("en", "hub", es, anchor=lambda d, p, k=None: f"rel-{k}", total=lambda d, p, k=None: 99 if k == "i.developed_by" else 8)
+        self.assertIn('<a href="#rel-i.developed_by">all 99 products and works by Hub</a>', h)
+        self.assertIn('<a href="#rel-i.developed_by.src:cert">all 8 certifications issued by Hub</a>', h)
+        self.assertEqual(plain(h).count("Full lists:"), 1)
+        for lang in ("ja", "ar", "ru"):
+            hl = render(lang, "hub", es, anchor=lambda d, p, k=None: f"rel-{k}")
+            self.assertEqual(hl.count('href="#rel-'), 2, lang)
+            self.assertNotIn("{n}", hl, lang); self.assertNotIn("{s}", hl, lang)
+            if lang in ("ar",):
+                self.assertIn("<bdi>Hub</bdi>", hl.split('class="en-full"')[1])
 
     def test_kuerzung_dativ_deutsch(self):
         es = {"x": ent("x", "product", "X", [("developed_by", f"o{n}") for n in range(9)])}
         es.update({f"o{n}": ent(f"o{n}", "org", f"O{n}") for n in range(9)})
-        self.assertEqual(plain(render("de", "x", es)), "X ist ein Produkt von [O0], [O1], [O2], [O3], [O4], [O5] und [3 weiteren].")
+        self.assertEqual(plain(render("de", "x", es)), "X ist ein Produkt von [O0], [O1], [O2], [O3], [O4], [O5] und 3 weiteren. Vollständige Listen: [alle 9 Entwickler von X]")
         es["x"]["type"] = "concept"
-        self.assertEqual(plain(render("de", "x", es)), "X wird von [O0], [O1], [O2], [O3], [O4], [O5] und [3 weiteren] entwickelt.")
-        self.assertEqual(plain(render("en", "x", es)), "X is developed by [O0], [O1], [O2], [O3], [O4], [O5] and [3 more].")
+        self.assertEqual(plain(render("de", "x", es)), "X wird von [O0], [O1], [O2], [O3], [O4], [O5] und 3 weiteren entwickelt. Vollständige Listen: [alle 9 Entwickler von X]")
+        self.assertEqual(plain(render("en", "x", es)), "X is developed by [O0], [O1], [O2], [O3], [O4], [O5] and 3 more. Full lists: [all 9 developers of X]")
+
+    def test_rueckfall_gemeinsame_folgen(self):
+        """Seite ohne Beziehungen: Satz aus gemeinsamen Folgen (cooc), gewichtet, ohne Seite, Host und Kategorien, hoechstens 6, in allen 15 Sprachen."""
+        es = {"a": ent("a", "concept", "Accounts payable"), "b": ent("b", "product", "Dynamics 365"), "c": ent("c", "concept", "Invoice"),
+              "cat": ent("cat", "category", "Business application"), "mirko-peters": ent("mirko-peters", "person", "Mirko Peters"), "big": ent("big", "product", "Microsoft 365")}
+        es.update({f"z{n}": ent(f"z{n}", "concept", f"Z{n}") for n in range(8)})
+        about = {"e1": ["a", "b", "c", "cat", "mirko-peters", "big"], "e2": ["a", "b", "big"], "e3": ["a", "c"]}
+        for n in range(20):
+            about[f"x{n}"] = ["big"]   # Allerweltsthema: in vielen Folgen
+        about["e4"] = ["a"] + [f"z{n}" for n in range(8)]   # Sammelfolge mit vielen Themen
+        ids = RS.cooc_rank("a", ["e1", "e2", "e3", "e4"], about, es)
+        self.assertEqual(set(ids[:2]), {"b", "c"}, "zwei gemeinsame Folgen zuerst")
+        self.assertNotIn("a", ids); self.assertNotIn("cat", ids); self.assertNotIn("mirko-peters", ids)
+        self.assertEqual(len(ids), 6)
+        self.assertLess(ids.index("c"), ids.index("big") if "big" in ids else 99, "seltenes Thema vor Allerweltsthema")
+        self.assertEqual(RS.cooc_rank("a", [], about, es), [])
+        h = RS.cooc("de", es["a"], ["b", "c"], es, lambda x: f"/entity/{x}/")
+        self.assertEqual(plain(h), "In Folgen zu Accounts payable geht es oft auch um [Dynamics 365] und [Invoice].")
+        self.assertIn('data-own-text="no"', h); self.assertIn("<h2", h)
+        self.assertEqual(plain(RS.cooc("en", es["a"], ["b"], es, lambda x: f"/entity/{x}/")), "Episodes about Accounts payable often also cover [Dynamics 365].")
+        self.assertEqual(RS.cooc("en", es["a"], [], es, lambda x: ""), "")
+        self.assertEqual(es["a"]["rel"], [], "nichts in e['rel'] geschrieben")
+        for lang in RS.data():
+            if lang.startswith("_"):
+                continue
+            hl = RS.cooc(lang, es["a"], ["b", "c"], es, lambda x: f"/entity/{x}/")
+            self.assertEqual(hl.count("<a "), 2, lang); self.assertNotIn("{", hl, lang)
+            self.assertNotIn('href="/entity/a/"', hl, f"{lang}: kein Selbstverweis")
 
     def test_gegenrichtung_bekanntere_zuerst(self):
         es = {"hub": ent("hub", "org", "Hub")}

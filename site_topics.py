@@ -82,6 +82,14 @@ def autolink_html(html, ents, url_of, max_links=None, exclude=(), lang="en", ctx
     return h, [(t, url_of(i), i) for t, i in links]
 
 
+def common_topic(p, rel):
+    """Thema des Beitrags, das ALLE verwandten Beitraege (related) tragen, in der Reihenfolge der Themen des Beitrags (Hauptthema zuerst); sonst None.
+    Fuer den Einleitungssatz "Weitere Artikel zu {Thema}" (site_linkctx post.more)."""
+    if not rel:
+        return None
+    return next((t for t in (p.get("topics") or []) if all(t in (q.get("topics") or []) for q in rel)), None)
+
+
 def related(posts, p, k=6):
     """Verwandte Beitraege nach Themen-Ueberschneidung (Hauptthema doppelt), dann nach Datum; gleiche Sprache."""
     t = p.get("topics") or []

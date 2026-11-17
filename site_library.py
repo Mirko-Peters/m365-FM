@@ -2,6 +2,7 @@
 from datetime import datetime, timezone
 from site_i18n import COMM_LANGS, pfx, pfx2, T
 import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
+import site_linkctx as LC   # Beziehungskontext der Linklisten (data/link_context.json)
 from site_learn import ENTS, esc, _fetch_json, LCSS
 
 INDEX_VOTES = 10
@@ -79,7 +80,7 @@ def build(g, items, people, api):
             b = shell(lang, f'{CSS}<p class="mut"><a href="{ru}">{esc(t0)}</a> · {esc(kl(lang, p["kind"]))}</p><article><h1>{esc(p["title"])}</h1>'
                             f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{p["handle"]}/">{esc(a["name"])}</a> · {iso(p["published"])} · {esc(T(lang, "Version", "Version"))} {p.get("version", 1)}</p>'
                             f'{("<p>" + esc(p["summary"]) + "</p>") if p.get("summary") else ""}{open_link(lang, p)}<pre class="lib-code" id="lib-code">{esc(p["body"])}</pre></article>'
-                            f'<p><button type="button" class="btn main" id="lib-copy" data-ok="{esc(T(lang, "Copied", "Kopiert"))}">{esc(T(lang, "Copy", "Kopieren"))}</button> {vote}</p><p>{tl}</p><section id="c-comments"></section>'
+                            f'<p><button type="button" class="btn main" id="lib-copy" data-ok="{esc(T(lang, "Copied", "Kopiert"))}">{esc(T(lang, "Copy", "Kopieren"))}</button> {vote}</p>{(LC.intro(lang, "lib.topics") + "<p>" + tl + "</p>") if tl else ""}<section id="c-comments"></section>'
                             f'<script>{JS.replace("%API%", api)}</script>' + (ctags(lang, "lib%d" % p["id"]) if ctags else ""))
             lang_code = KINDS.get(p["kind"], KINDS["other"])[2]
             node = {"@type": "SoftwareSourceCode" if lang_code else "CreativeWork", "@id": u + "#item", "name": p["title"], "description": p.get("summary") or "", "inLanguage": lang,

@@ -122,13 +122,15 @@ def chips_for(ix, text="", ids=None, exclude=(), k=12, lang="en"):
     return out
 
 
-def render(ix, BASE, lang, text="", items=(), url_of=None, title_of=None, all_url="", shp=None, listen_url="", rss="", ent_prefix="", community_url="", ids=None, exclude=(), home=False):
+def render(ix, BASE, lang, text="", items=(), url_of=None, title_of=None, all_url="", shp=None, listen_url="", rss="", ent_prefix="", community_url="", ids=None, exclude=(), home=False, topics_h=""):
     """Die Sidebar einer Seite in ihrer Sprache: M365Con-Karte, Google-Quelle, Themen/Personen der Seite, neueste Folgen der Sprache, Hoeren & folgen, Community.
     items/url_of/title_of: neueste Folgen der Sprache; all_url: alle Folgen; shp: Plattform-Links der Show der Sprache (data/platforms.json);
-    listen_url: Seite mit allen Plattformen (nur wenn es sie gibt); rss: Feed der Show; home: Sprach-Startseite (ohne Hoeren-Karte, Aufbau wie bisher)."""
+    listen_url: Seite mit allen Plattformen (nur wenn es sie gibt); rss: Feed der Show; home: Sprach-Startseite (ohne Hoeren-Karte, Aufbau wie bisher).
+    topics_h: Ueberschrift der Themen-Karte mit der Beziehung zur Seite ("Mit Power BI verknuepfte Themen", "Themen & Personen dieser Folge", site_linkctx side.*);
+    ohne Angabe die allgemeine "Themen & Personen auf dieser Seite" (Treffer im Text)."""
     t = L10N.get(lang) or L10N["en"]; shp = shp or {}
     chips = "".join(f'<li><a class="sb-chip t-{esc(e["type"])}" href="{BASE}{ent_prefix}/entity/{esc(e["id"])}/" title="{esc(TYPE_L.get(e["type"], ""))}"><i></i>{esc(e["name"])}</a></li>' for e in chips_for(ix, text, ids, exclude, lang=lang))
-    ents = f'<section class="sb-card"><h2>{esc(t["topics"])}</h2><ul class="sb-chips">{chips}</ul><a class="sb-more" href="{BASE}{ent_prefix}/entity/">{esc(t["kg"])}</a></section>' if chips else ""
+    ents = f'<section class="sb-card"><h2>{esc(topics_h or t["topics"])}</h2><ul class="sb-chips">{chips}</ul><a class="sb-more" href="{BASE}{ent_prefix}/entity/">{esc(t["kg"])}</a></section>' if chips else ""
     late = "".join(f'<li><a href="{esc(url_of(x))}">{esc(title_of(x))}</a></li>' for x in list(items)[:5]) if url_of else ""
     new = f'<section class="sb-card"><h2>{esc(t["latest"])}</h2><ol class="sb-list">{late}</ol><a class="sb-more" href="{esc(all_url)}">{esc(t["all"])}</a></section>' if late else ""
     con = (f'<section class="sb-card sb-con"><a href="{CON}" rel="noopener" aria-label="M365Con International 2027">{con_img(BASE)}</a>'

@@ -9,6 +9,7 @@ Regeln:
 - Alles in der Seitensprache ueber site_i18n.T (data/py_i18n.json).
 Gemeinsam benutzt von generate_site.author_box, site_members.chan_ul, site_home (Creator-Feed), site_feed und site_entities."""
 import html
+import re
 from urllib.parse import urlsplit
 
 from site_i18n import T
@@ -172,3 +173,27 @@ def domain_note(url):
     """Kleine, graue Domain neben einem Link (nicht als Linktext)."""
     h = host(url)
     return f' <small class="mut">{html.escape(h)}</small>' if h else ""
+
+
+_AI_TAIL = re.compile(r"\s*\((KI|AI)[^)]*\)\s*$")
+
+
+def ep_text(title, n=80):
+    """Linktext fuer eine Folge in Listen (Audit Linktexte SEO-7): der volle Titel, nicht nur der Teil vor dem Doppelpunkt ("Microsoft Graph"
+    waere der nackte Name einer Entitaet); erst ab n Zeichen an einer Wortgrenze gekuerzt. Der KI-Zusatz "(AI …)" am Ende faellt weg."""
+    t = _AI_TAIL.sub("", re.sub(r"<[^>]+>", "", html.unescape(title or ""))).strip()
+    if len(t) <= n:
+        return t
+    return t[: n - 1].rsplit(" ", 1)[0].rstrip(",;:–—-") + "…"
+
+
+def ep_texts(items, n=80, names=()):
+    """[(titel, url)] -> Linktexte: ep_text, aber ein Kurztext, der fuer verschiedene Ziele gleich waere oder genau einem Entitaetsnamen
+    entspricht (names, klein geschrieben), wird der volle Titel. Gleiches Ziel = gleicher Text."""
+    short = [ep_text(t, n) for t, _ in items]
+    full = [ep_text(t, 10 ** 6) for t, _ in items]
+    by = {}
+    for s, (_, u) in zip(short, items):
+        by.setdefault(s, set()).add(u)
+    nm = {x.lower() for x in names}
+    return [f if (len(by[s]) > 1 or s.lower() in nm) else s for s, f in zip(short, full)]
