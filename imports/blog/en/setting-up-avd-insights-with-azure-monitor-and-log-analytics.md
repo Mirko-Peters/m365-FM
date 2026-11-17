@@ -1,6 +1,6 @@
 ---
 title: "Setting up AVD Insights with Azure Monitor and Log Analytics"
-summary: "Azure Virtual Desktop Insights needs three data feeds before it shows anything: diagnostic settings on host pools and workspaces, the Azure Monitor Agent with a data collection rule on the session hosts, and the recommended performance counters and event logs. This article walks through the setup order, the configuration workbook steps and the checks that tell you it worked."
+summary: "Azure Virtual Desktop Insights needs three kinds of data collection: diagnostics from the environment, the recommended performance counters and the recommended Windows event logs from the session hosts. The Azure Monitor Agent with a data collection rule carries the last two. This article walks through the setup order, the configuration workbook steps and the checks that tell you it worked."
 status: review
 publish: false
 author: mirko-p
