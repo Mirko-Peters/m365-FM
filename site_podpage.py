@@ -75,6 +75,12 @@ def plain(s):
     return re.sub(r"\s+", " ", _h.unescape(re.sub(r"<[^>]+>", " ", s or ""))).strip()
 
 
+def cover_alt(lang, title):
+    """Alt-Text des Folgencovers im Folgenkopf: "Cover: {Titel}" in der Seitensprache (data/py_i18n.json, sonst Englisch); title ist der Titel in dieser Sprache."""
+    from site_i18n import T as _T
+    return _T(lang, "Cover: {t}", "Cover: {t}").replace("{t}", title or "")
+
+
 def load(name):
     for f in (PD / f"{name}.json", PD / f"{name}.json.gz"):
         if f.exists():
@@ -560,7 +566,7 @@ def build(g):
 
     def card(e, eager=False):   # eager wie img_tag (erste Karten der Folgenliste liegen im ersten Bildschirm)
         nr = SNT.get("en", title=e["name"])
-        s = short_desc(e, nr, 200); th = img_tag(thumb_of(e, nr), e["name"], 96, eager=eager)
+        s = short_desc(e, nr, 200); th = img_tag(thumb_of(e, nr), "", 96, eager=eager)   # Alt-Texte: alt="" - der Folgentitel steht direkt daneben als Link (sonst liest der Screenreader ihn doppelt)
         return (f'<li style="margin:.9em 0;display:flex;gap:1rem;align-items:flex-start">{th}<div><a href="{ep_url(e)}"><strong>{esc(e["name"])}</strong></a><br><span class="mut">{day(e["create_time"])}{" · S" + str(e["season"]) if e.get("season") else ""}</span><br>{esc(s)}</div></li>')
 
     # Blogposts (von www.m365.fm geholt, fetch_podpage_blog.py)
@@ -651,6 +657,7 @@ def build(g):
         _rw = bool(_rwn); _RWC[_rwr] = _RWC.get(_rwr, 0) + 1; _RWC["used"] = _RWC.get("used", 0) + _rw
         nnotes = rename_links(nnotes)   # T12: Show Notes verlinken die Folge oft ueber die alte Podpage-Adresse
         prev_, next_ = (eps[k + 1] if k + 1 < len(eps) else None), (eps[k - 1] if k else None)
+        nnotes = IMG.alt_text(nnotes, "en", e["name"])   # Alt-Texte: schwache Alt-Texte (Ueberschrift, Platzhalter) durch die aus data/r2_alt.json.gz ersetzen
         _pc = SPI.PRECONNECT if SPI.is_spreaker(thumb_of(e, nrec)) else ""   # Cover im ersten Bildschirm kommt von Spreaker-CloudFront: Verbindung frueh aufbauen
         aud = f'<audio controls preload="none" style="width:100%" src="{esc(r["audio"])}"></audio>' if r and r.get("audio") else ""
         elk = platform_episode_links(elinks, nrec["id"], f"{nrec['id']}:en") if nrec else {}
@@ -665,7 +672,7 @@ def build(g):
         tx = (f'<h2>Transcript</h2>{TRS.links_html(_trf)}<details open><summary>Read the full transcript</summary><p style="white-space:pre-wrap;line-height:1.6">{esc(tr)}</p></details>' if len(tr) > 200
               else f'<h2>Transcript</h2>{TRS.links_html(_trf)}' if _trf else "")   # #266: Dateien sichtbar verlinkt, Transkript im HTML unveraendert
         body = (f'<article><p class="mut">{day(e["create_time"])}{" · Season " + str(e["season"]) if e.get("season") else ""}</p><h1>{esc(e["name"])}</h1>{SPM.note("en", _spr, "episode")}{aud}{LST.follow_for(BASE, "en")}'
-                f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), e["name"], 160, eager=True)}<div><strong>{esc(_rwm or short_desc(e, nrec, 300))}</strong></div></div>{nkp}<div class="pp-notes">{nnotes}{IMG.CSS if IMG.needs_responsive_css(nnotes) else ""}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
+                f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), cover_alt("en", e["name"]), 160, eager=True)}<div><strong>{esc(_rwm or short_desc(e, nrec, 300))}</strong></div></div>{nkp}<div class="pp-notes">{nnotes}{IMG.CSS if IMG.needs_responsive_css(nnotes) else ""}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
                 + (f"<p>{ext}</p>" if ext else "") + (f'<p class="mut">Host: {hl}</p>' if hl else "") + (f"<h2>Guests</h2><ul>{gl}</ul>" if gl else "") + also
                 + (("<h2>Related articles</h2><ul>" + "".join(f'<li><a href="{bp_url(p)}">{esc(p["title"])}</a></li>' for p in related_posts(e["slug"])) + "</ul>") if related_posts(e["slug"]) else "") + tx + "</article>" + (g.get("author_box")("en") if g.get("author_box") else "")
                 + PG("en", (ep_url(prev_), prev_["name"]) if prev_ else None, (ep_url(next_), next_["name"]) if next_ else None))
@@ -699,10 +706,11 @@ def build(g):
             ln_html = san(ln) if ln else ""
             if ln and _rwn: ln_html += SSEO.topics_html(_rwn, ENTS_ALL, BASE, TOPICS.get(l, "Topics"))   # Themen-Zeile mit Entitaetslinks setzt der Bau, sie wird nicht mituebersetzt
             lu = loc_url(l, f"episodes/{e['slug']}/")
+            if ln: ln_html = IMG.alt_text(ln_html, l, lt)   # Alt-Texte in der Sprache der Fassung (die Uebersetzung uebernimmt den englischen Alt-Text)
             _ldub = TRS.REG.dub.get((l, e["slug"]))   # #266: Dub-Folge der Sprache hat ein Transkript -> dieselben Dateien auch unter dieser Adresse
             _ltrf = TRS.REG.publish(g.get("write_r2") or write, BASE, f"{l}/show/episodes/{e['slug']}/", vtt=TRS.dub_vtt(l, _ldub[0]), index=False) if _ldub else {}
             lbody = (f'<article><p class="mut">{day(e["create_time"])}</p><h1>{esc(lt)}</h1>{SPM.note(l, _spr, "episode")}{aud}{LST.follow_for(BASE, l)}'
-                     f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), lt, 160, eager=True)}<div><strong>{esc(ls)}</strong></div></div>'
+                     f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), cover_alt(l, lt), 160, eager=True)}<div><strong>{esc(ls)}</strong></div></div>'
                      + (f'<div class="pp-notes">{ln_html}{IMG.CSS if IMG.needs_responsive_css(ln_html) else ""}</div>' if ln else "") + (f"<p>{ext}</p>" if ext else "")
                      + (TRS.links_html(_ltrf, _ldub[1]) if _ltrf else "")
                      + f'<p class="mut"><a href="{ep_url(e)}" hreflang="en" lang="en">{esc(e["name"])}</a> (English)</p></article>')

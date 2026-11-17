@@ -2,8 +2,8 @@
 (function () {
   var U = window.M365U; if (!U) return;
   var h = U.h, de = (window.M365X || {}).lang === "de";
-  var T = de ? { linkbtn: "Link einfügen (https)", linkurl: "Adresse (https://…)", linktext: "Linktext", img: "Bild einfügen (https, .jpg/.png/.webp, Alt-Text Pflicht)", imgurl: "Bild-Adresse (https://…/bild.jpg)", imgalt: "Alt-Text (beschreibt das Bild, mind. 5 Zeichen)", h2: "Überschrift", h3: "Zwischenüberschrift", b: "Fett", i: "Kursiv", ul: "Liste", ol: "Nummerierte Liste", q: "Zitat", link: "Link auf ein Thema", ref: "Quelle einfügen", write: "Schreiben", prev: "Vorschau", empty: "Hier erscheint die Vorschau, sobald du schreibst.", chars: "Zeichen", refs: "Quellen", rtitle: "Titel der Quelle", rurl: "https://…", rpub: "Herausgeber", rdate: "Datum", add: "Einfügen", topic: "Thema-ID (z. B. power-bi)", ttext: "Linktext", bold: "fetter Text", ital: "kursiver Text", txt: "Text", vis: "Visuell", html: "HTML", md: "Markdown", htmlhint: "HTML einfügen oder bearbeiten – erlaubt sind Überschriften, Absätze, Listen, Zitate, fett und kursiv; alles andere wird beim Wechsel entfernt.", undo: "Rückgängig", redo: "Wiederholen", clear: "Formatierung entfernen", mdhint: "Markdown mit Live-Vorschau." }
-    : { linkbtn: "Insert link (https)", linkurl: "Address (https://…)", linktext: "Link text", img: "Insert image (https, .jpg/.png/.webp, alt text required)", imgurl: "Image URL (https://…/image.jpg)", imgalt: "Alt text (describes the image, min. 5 characters)", h2: "Heading", h3: "Subheading", b: "Bold", i: "Italic", ul: "List", ol: "Numbered list", q: "Quote", link: "Link to a topic", ref: "Insert source", write: "Write", prev: "Preview", empty: "The preview appears as soon as you start writing.", chars: "characters", refs: "Sources", rtitle: "Source title", rurl: "https://…", rpub: "Publisher", rdate: "Date", add: "Insert", topic: "Topic id (e.g. power-bi)", ttext: "Link text", bold: "bold text", ital: "italic text", txt: "text", vis: "Visual", html: "HTML", md: "Markdown", htmlhint: "Paste or edit HTML – headings, paragraphs, lists, quotes, bold and italic are kept; everything else is removed when you switch.", undo: "Undo", redo: "Redo", clear: "Clear formatting", mdhint: "Markdown with live preview." };
+  var T = de ? { linkbtn: "Link einfügen (https)", linkurl: "Adresse (https://…)", linktext: "Linktext", img: "Bild einfügen (https, .jpg/.png/.webp, Alt-Text Pflicht)", imgurl: "Bild-Adresse (https://…/bild.jpg)", imgalt: "Alt-Text (beschreibt das Bild, mind. 5 Zeichen)", imgalth: "Alt-Text: was das Bild zeigt oder aussagt, in einem Satz (bei Diagrammen die Kernaussage). Nicht „Bild“ oder „Screenshot“ und nicht die Überschrift wiederholen.", imgbad: "Bitte eine https-Bildadresse (.jpg, .png, .webp, .gif, .avif) und einen beschreibenden Alt-Text (mind. 5 Zeichen, kein Platzhalter wie „Bild“) angeben.", h2: "Überschrift", h3: "Zwischenüberschrift", b: "Fett", i: "Kursiv", ul: "Liste", ol: "Nummerierte Liste", q: "Zitat", link: "Link auf ein Thema", ref: "Quelle einfügen", write: "Schreiben", prev: "Vorschau", empty: "Hier erscheint die Vorschau, sobald du schreibst.", chars: "Zeichen", refs: "Quellen", rtitle: "Titel der Quelle", rurl: "https://…", rpub: "Herausgeber", rdate: "Datum", add: "Einfügen", topic: "Thema-ID (z. B. power-bi)", ttext: "Linktext", bold: "fetter Text", ital: "kursiver Text", txt: "Text", vis: "Visuell", html: "HTML", md: "Markdown", htmlhint: "HTML einfügen oder bearbeiten – erlaubt sind Überschriften, Absätze, Listen, Zitate, fett und kursiv; alles andere wird beim Wechsel entfernt.", undo: "Rückgängig", redo: "Wiederholen", clear: "Formatierung entfernen", mdhint: "Markdown mit Live-Vorschau." }
+    : { linkbtn: "Insert link (https)", linkurl: "Address (https://…)", linktext: "Link text", img: "Insert image (https, .jpg/.png/.webp, alt text required)", imgurl: "Image URL (https://…/image.jpg)", imgalt: "Alt text (describes the image, min. 5 characters)", imgalth: "Alt text: what the image shows or says, in one sentence (for charts the key message). Not “image” or “screenshot”, and do not repeat the heading.", imgbad: "Please enter an https image URL (.jpg, .png, .webp, .gif, .avif) and descriptive alt text (min. 5 characters, no placeholder like “image”).", h2: "Heading", h3: "Subheading", b: "Bold", i: "Italic", ul: "List", ol: "Numbered list", q: "Quote", link: "Link to a topic", ref: "Insert source", write: "Write", prev: "Preview", empty: "The preview appears as soon as you start writing.", chars: "characters", refs: "Sources", rtitle: "Source title", rurl: "https://…", rpub: "Publisher", rdate: "Date", add: "Insert", topic: "Topic id (e.g. power-bi)", ttext: "Link text", bold: "bold text", ital: "italic text", txt: "text", vis: "Visual", html: "HTML", md: "Markdown", htmlhint: "Paste or edit HTML – headings, paragraphs, lists, quotes, bold and italic are kept; everything else is removed when you switch.", undo: "Undo", redo: "Redo", clear: "Clear formatting", mdhint: "Markdown with live preview." };
 
   /* ---------- Infografiken {{viz|typ|Titel|a~b;a~b}} ---------- */
   var VT = de ? { viz: "Interaktive Infografik einfügen", bars: "Balken", stats: "Zahlen", steps: "Schritte", timeline: "Zeitleiste", compare: "Vorher/Nachher", title: "Titel der Grafik", label: "Bezeichnung", value: "Wert", detail: "Beschreibung", when: "Wann", what: "Was", add: "+ Zeile", del: "Zeile entfernen", ins: "Einfügen", la: "Name links", lb: "Name rechts", va: "Wert links", vb: "Wert rechts", prev: "Vorschau" }
@@ -141,6 +141,16 @@
       panel.appendChild(h("button", { type: "button", class: "btn main", text: T.add, onclick: function () { if (done(els.map(function (e) { return e.value.trim(); })) !== false) panel.hidden = true; } }));
       panel.appendChild(h("button", { type: "button", class: "btn", text: "✕", "aria-label": "Close", onclick: function () { panel.hidden = true; if (mode === "vis") restore(); else ta.focus(); } })); els[0].focus();
     }
+    // Alt-Texte: Platzhalter und Dateinamen gelten nicht als Beschreibung (wie die schwachen Alt-Texte, die der Seitenbau ersetzt, site_img_alt.WEAK)
+    var ALT_WEAK = /^(image|img|bild|foto|photo|picture|screenshot|grafik|graphic|logo|icon|generated image|product image|chart|diagram|diagramm|alt|alt text|alt-text)$/i;
+    function altOk(a, url) {
+      a = (a || "").trim(); if (a.length < 5 || ALT_WEAK.test(a)) return false;
+      var f = (url || "").split("?")[0].split("/").pop() || ""; return !(f && a.toLowerCase() === f.toLowerCase()) && !/^[\w-]+\.(jpe?g|png|webp|gif|avif)$/i.test(a);
+    }
+    function altMsg(t, bad) {
+      var p = panel.querySelector("#ed-alt-h") || panel.insertBefore(h("p", { id: "ed-alt-h", class: "mut" }), panel.querySelector("button"));
+      p.textContent = t; if (bad) p.setAttribute("role", "alert"); else p.removeAttribute("role");
+    }
     function btn(l, t, fn, cls) { var b = h("button", { type: "button", class: "ed-b " + (cls || ""), title: t, "aria-label": t, text: l, onclick: fn }); b.addEventListener("mousedown", function (e) { e.preventDefault(); }); return b; }
     function act(v, m) { return function () { if (mode === "vis") v(); else m(); }; }
     // Infografik-Baustein: Typ waehlen, Zeilen eintragen, Live-Vorschau, Einfuegen
@@ -191,10 +201,13 @@
       }),
       btn("🖼", T.img, function () {
         fields([["u", T.imgurl], ["a", T.imgalt, selText()]], function (v) {
-          if (!/^https:\/\/\S+\.(jpe?g|png|webp|gif|avif)(\?\S*)?$/i.test(v[0]) || v[1].length < 5) return false;
+          if (!/^https:\/\/\S+\.(jpe?g|png|webp|gif|avif)(\?\S*)?$/i.test(v[0]) || !altOk(v[1], v[0])) { altMsg(T.imgbad, true); return false; }
           var val = v[0] + "|" + v[1].replace(/[{}|\[\]]/g, "");
           if (mode === "vis") { var im = h("img", { src: v[0], alt: v[1], referrerpolicy: "no-referrer" }); im.style.maxWidth = "100%"; im.style.height = "auto"; im.setAttribute("data-img", val); im.setAttribute("contenteditable", "false"); insertNode(im); } else mput("{{img|" + val + "}}", "", "");
         });
+        // Alt-Texte: Pflichtfeld sichtbar machen und erklaeren, was ein guter Alt-Text ist (vorher scheiterte ein zu kurzer Alt-Text stumm)
+        var ai = panel.querySelectorAll("input")[1]; if (ai) { ai.required = true; ai.setAttribute("minlength", "5"); ai.setAttribute("aria-describedby", "ed-alt-h"); }
+        altMsg(T.imgalth, false);
       }),
       btn("📊", VT.viz, function () { buildViz(); }),
       btn("[1] " + T.refs, T.ref, function () {
