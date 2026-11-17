@@ -14,7 +14,7 @@ keypoints:
   - "Autoscale changes drain mode on every host in scope, whoever set it. Use an exclusion tag to keep a host out of scaling."
 faq:
   - q: "If I set depth-first on the host pool, will it still apply once a scaling plan is assigned and enabled?"
-    a: "Microsoft Learn says the preference selected in the schedule overrides the host pool setting, and that for pooled host pools autoscale ignores the host pool algorithm and applies load balancing from its schedule configuration. Learn also says a scaling plan takes effect once you enable it, and describes a checkbox to disable autoscale for a host pool. While autoscale is enabled, read the schedule, not the host pool setting; to confirm it in your environment, create a test pool and watch where new sessions land."
+    a: "Microsoft Learn says the preference selected in the schedule overrides the host pool setting, and that for pooled host pools autoscale ignores the host pool algorithm and applies load balancing from its schedule configuration. Learn also says a scaling plan takes effect once you enable it, and describes an option to disable the plan for a selected host pool. While autoscale is enabled, read the schedule, not the host pool setting; to confirm it in your environment, create a test pool and watch where new sessions land."
   - q: "Which phases should use depth-first?"
     a: "Learn's scaling plan article recommends depth-first for off-peak and breadth-first for ramp-up, and allows either for peak. Its FAQ suggests depth-first for ramp-down and off-peak so autoscale can consolidate sessions to the minimum number of hosts."
   - q: "Does this apply to personal host pools?"
@@ -42,7 +42,7 @@ Learn's [scenarios page](https://learn.microsoft.com/en-us/azure/virtual-desktop
 
 ### Which value to trust
 
-Learn documents the override in the schedule, so the host pool's own load balancing field is not the setting that runs while autoscale is enabled for the pool. Learn says a scaling plan takes effect as soon as you enable it, and its edit steps describe an **Enable autoscale** checkbox in the **Scaling plan** menu of the host pool, which disables the plan for that pool when you unselect it. Our reading: while autoscale is disabled for a pool, the schedule is not applied, so check the host pool's setting then. This matters when you disable autoscale temporarily, for example before a maintenance task.
+Learn documents the override in the schedule, so the host pool's own load balancing field is not the setting that runs while autoscale is enabled for the pool. Learn says a scaling plan takes effect as soon as you enable it, and says that if you enabled the plan during deployment, you can disable it for the selected host pool in the **Scaling plan** menu by unselecting the **Enable autoscale** checkbox. Our reading: while autoscale is disabled for a pool, the schedule is not applied, so check the host pool's setting then. This matters when you disable autoscale temporarily, for example before a maintenance task.
 
 Do not use the host pool's **Properties** page to tell which algorithm applies while the plan is enabled; read the schedule. To confirm it in your environment, create a test pool, assign a plan with depth-first in off-peak and observe where new sessions land.
 
@@ -85,7 +85,7 @@ Learn adds that on days not selected in a schedule, the last off-peak settings c
 
 ## Keeping a host out of the logic
 
-Learn says that for pooled host pools autoscale overwrites drain mode, and its FAQ says this holds no matter who put a host in drain mode. To exclude a host, use an [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/); the setup is covered in "Exclusion tags in AVD autoscale: keeping individual VMs out of scaling". For depth-first, note that a tagged host is outside the consolidation: autoscale does not start, stop or drain it. Our reading: sessions that land on it are not consolidated away.
+Learn says that for pooled host pools autoscale overwrites drain mode, and its FAQ says this holds no matter who put a host in drain mode. To exclude a host, use an [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/); the setup is covered in "Exclusion tags in AVD autoscale: keeping individual VMs out of scaling". For depth-first, note that autoscale does not start, stop or drain a tagged host, although Learn says tagged hosts still count in the minimum percentage of hosts. Our reading: sessions that land on a tagged host are not consolidated away; Learn does not say whether tagged hosts enter the consolidation calculation.
 
 ## Checks after the change
 
