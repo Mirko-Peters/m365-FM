@@ -240,10 +240,10 @@ test("Anonymer Speaker-Eintrag bleibt anonym, wenn der Veranstalter die Session 
   assert.equal((await call(env, "POST", "/api/speaker/claim", mallory, { name: "Former member" })).s, 404);
 });
 
-test("Migration 0053: Rueckfuellung nur aus der ersten Fassung von ownedEntity, nicht aus spaeteren Vorschlaegen (K41)", async () => {
+test("Migration 0054: Rueckfuellung nur aus der ersten Fassung von ownedEntity, nicht aus spaeteren Vorschlaegen (K41)", async () => {
   const { DatabaseSync } = await import("node:sqlite");
   const raw = new DatabaseSync(":memory:"), dir = new URL("../migrations/", import.meta.url), files = readdirSync(dir).filter((f) => f.endsWith(".sql")).sort();
-  for (const f of files.filter((f) => f < "0053")) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
+  for (const f of files.filter((f) => f < "0054")) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
   const ins = raw.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES (?,?,?,?,?,1)");
   ins.run("alice", JSON.stringify({ name: "Alice", type: "person" }), "Selbst verwaltet", 1, "old");
   ins.run("alice", JSON.stringify({ name: "Alice", type: "person", web: "https://a.example/" }), "Web", 1, "live");
@@ -252,7 +252,7 @@ test("Migration 0053: Rueckfuellung nur aus der ersten Fassung von ownedEntity, 
   ins.run("ev-conf", JSON.stringify({ name: "Conf", type: "person" }), "Selbst verwaltet", 3, "rejected");
   const cl = raw.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES (?,?,'verified','owner',1)");
   cl.run("alice", 1); cl.run("ev-conf", 2);
-  const m = readFileSync(new URL("0053_person_entity.sql", dir), "utf-8");
+  const m = readFileSync(new URL("0054_person_entity.sql", dir), "utf-8");
   raw.exec(m); raw.exec(m);   // idempotent
   assert.deepEqual(raw.prepare("SELECT eid,user_id FROM person_entity ORDER BY eid").all().map((r) => ({ ...r })), [{ eid: "alice", user_id: 1 }]);
 });
