@@ -21,32 +21,28 @@ faq:
     a: "Yes. Learn describes Scheduled Agent Updates as a host pool setting, so each pool has its own windows and time zone. The same windows on several pools mean the pools update at the same time, so decide deliberately whether that is what you want."
 ---
 
-To keep routine Azure Virtual Desktop agent updates out of working hours, enable Scheduled Agent Updates on each host pool and give it one or two two-hour windows in which the session hosts are running. This guide is the practical companion to the [explainer on scheduled agent updates](/entity/avd-scheduled-agent-updates/), which covers what the feature does and what it does not control. Those behaviours are not repeated here.
+To keep routine Azure Virtual Desktop agent updates out of working hours, enable Scheduled Agent Updates on each host pool and give it one or two two-hour windows in which the session hosts are running. This guide is the practical companion to the [explainer on scheduled agent updates](/entity/avd-scheduled-agent-updates/), which covers what the feature does and what it does not control. Behaviours are restated here only where they affect a decision.
 
 ## Before you start: what to have ready
 
-Three facts from Microsoft Learn shape every decision below.
-
-- The feature can be configured only for existing host pools, not while you create one.
-- Each maintenance window is two hours long, and the session hosts must be running during it. If a host is shut down or deallocated, the update does not succeed.
-- The setting belongs to the [host pool](/entity/avd-host-pool/). The time zone and windows apply to all session hosts in that pool.
+Per Learn, the feature can be configured only for existing host pools, and each maintenance window is two hours long. The setting belongs to the [host pool](/entity/avd-host-pool/), so the time zone and windows apply to all its session hosts.
 
 Collect for each pool the time zone its hosts use, the hours when users are signed in, and the schedule of any scaling plan that powers the hosts on and off.
 
 ## Step 1: Make sure the hosts are on during the window
 
-This is the step most likely to break the plan. Learn's autoscale pages say that when autoscale shuts down a VM it deallocates and stops it. A deallocated host cannot take the update.
+Learn says the update does not succeed if the session host is shut down or deallocated during the window, and its autoscale glossary says that when autoscale shuts down a VM it deallocates and stops it. A deallocated host cannot take the update.
 
-Learn's scaling plan page gives you the tools to handle this:
+Learn's autoscale pages (scenarios, glossary, and create and assign a scaling plan) describe the settings you can use to handle this:
 
 1. A scaling plan can have one or multiple schedules, for example different schedules for weekdays and the weekend. Each schedule has a **Repeat on** field for the days it applies to.
 2. Unselected days inherit the last off-peak parameters until the next ramp-up phase. A plan with one Monday to Friday schedule keeps the Friday off-peak configuration until Monday's ramp-up, so, our reading, hosts that autoscale deallocated on Friday evening are not brought back for a Saturday window.
 3. In the ramp-up phase, **Minimum percentage of hosts** is the percentage of session hosts you want to always remain on in that phase.
 4. A scaling plan operates only in its own configured time zone, and the start times you enter must be in that zone.
 
-Our reading: for a Saturday window, add a Saturday schedule whose ramp-up starts shortly before the window and whose minimum percentage keeps every host that needs the update running. For the whole pool, that is all of them. Learn does not say how long hosts started in ramp-up stay on through the following phases, so do not assume it; the first run described in step 6 is the test. If you do not use autoscale, check that nothing else, such as a manual shutdown routine or a cost script, switches the hosts off.
+Our reading: for a Saturday window, add a Saturday schedule whose ramp-up starts shortly before the window and whose minimum percentage keeps every host that needs the update running. For the whole pool, that is all of them. Learn does not say how long hosts started in ramp-up stay on through the following phases; the first run in step 6 is the test. Without autoscale, check that no manual shutdown routine or cost script switches the hosts off.
 
-[Start VM on Connect](/entity/avd-start-vm-on-connect/) only starts a host when someone connects, so it does not cover a window.
+Learn says [Start VM on Connect](/entity/avd-start-vm-on-connect/) powers on a VM when a user connects. In a pooled host pool it powers one on only when none are turned on, and further VMs only when the first reaches the session limit. Our reading: it does not bring every host up for a window, so do not use it as a substitute for the schedule above.
 
 ## Step 2: Choose the day, the hour and the second window
 
@@ -56,7 +52,7 @@ Practical guidelines, based on Learn's rules:
 
 - **Pick the window from your own data.** Learn gives no recommended time. Use the hours when users are actually signed in and leave a margin around the two hours.
 - **Make the second window a real retry.** Learn says the optional second window gives the components another chance if the first attempt is unsuccessful. Put it on another day or hour, and make sure the hosts are on then too.
-- **Do not rely on the window to stop all updates.** Learn says the broker tries up to four times in a window and then installs the update by force, and that a critical agent component update is installed by force for security purposes. A forced install can therefore happen outside your preferred slot.
+- **Do not treat the window as a guarantee.** Learn says the broker tries up to four times in each window and then installs the update by force, and that a critical agent component update is installed by force for security purposes. Learn does not say when a forced install happens, so plan for it instead of relying on a specific moment.
 
 ## Step 3: Pick the time zone mode
 
@@ -65,10 +61,10 @@ The portal offers two options, and the REST API stores them as `maintenanceWindo
 | Situation | Option | Check before you rely on it |
 |---|---|---|
 | All hosts and users in one time zone | Specify one time zone for the windows | The zone must be a Windows time zone ID as .NET defines it; the Learn REST example uses `Alaskan Standard Time` |
-| Hosts and users spread over several zones | Use session host local time | Each host runs the window in its own local time; the REST reference says the time zone must be set when this flag is true |
+| Hosts and users spread over several zones | Use session host local time | Each host runs the window in its own local time; the REST reference says the time zone must be set when this flag is true, which the portal text does not say, so test it |
 | Hosts created in the Azure portal | Either, but verify | Learn says the local time zone of VMs created in the Azure portal is UTC by default |
 
-The last row is the common trap. With the local time option, a host that still runs on UTC takes the window in UTC, which can be the middle of a user's day in another part of the world. On a host, `Get-TimeZone` shows the current zone and `Get-TimeZone -ListAvailable` lists the zones that exist. `Set-TimeZone` changes the zone of the VM, which Learn names as the way to correct it. Our reading: changing a guest's clock affects more than updates, so a fixed pool-wide zone is the smaller change. Learn does not say how daylight saving time is handled for a window, so check the hour after the clocks change.
+Learn says VMs created in the Azure portal default to UTC. Our reading: with the local time option, a host that still runs on UTC would take the window in UTC, which can fall in the middle of a user's day in another part of the world. On a host, `Get-TimeZone` shows the current zone and `Get-TimeZone -ListAvailable` lists the zones that exist. Learn names `Set-TimeZone` as the way to change the VM's time zone. Our reading: changing a guest's clock affects more than updates, so a fixed pool-wide zone is the smaller change. Learn does not say how daylight saving time is handled for a window, so check the hour after the clocks change.
 
 ## Step 4: Enable the setting
 
@@ -80,13 +76,13 @@ The Learn page documents the Azure portal path:
 4. Select a day and time for the **Maintenance window**. Add a second window if you want one.
 5. Select **Apply**.
 
-For [Nerdio Manager](/entity/nerdio/), Nerdio's help describes the same setting under the host pool's action menu: **Properties**, then **AVD**, with the toggle **Use Scheduled AVD Agent Update**, a time zone, **Use local session host time zone** and an optional additional maintenance window. Check which label your version shows.
+For [Nerdio Manager](/entity/nerdio/), Nerdio's help describes the same setting after you locate the host pool, in its action menu under **Settings**, then **AVD**, with the toggle **Use Scheduled AVD Agent Update**, a time zone, **Use local session host time zone** and an optional additional maintenance window. Check which label your version shows.
 
-If you manage many pools by script, the documentation is uneven. The REST API's host pool update accepts an `agentUpdate` object; the Learn sample sets `type` to `Scheduled`, `useSessionHostLocalTime` to `false`, a `maintenanceWindowTimeZone` and two windows, one on Friday at hour 7 and one on Saturday at hour 8. The `Update-AzWvdHostPool` reference lists `-AgentUpdateType`, `-AgentUpdateMaintenanceWindow`, `-AgentUpdateMaintenanceWindowTimeZone` and `-AgentUpdateUseSessionHostLocalTime`, but it gives no example of them, does not list the accepted values for the type and documents no cmdlet to build the window objects. The `az desktopvirtualization hostpool update` reference lists no agent update parameter. Test a script on one pool and read the setting back in the portal.
+If you manage many pools by script, the documentation is uneven. The REST API's host pool update (reference version 2024-04-03) accepts an `agentUpdate` object; the Learn sample sets `type` to `Scheduled`, `useSessionHostLocalTime` to `false`, a `maintenanceWindowTimeZone` and two windows, one on Friday at hour 7 and one on Saturday at hour 8. The `Update-AzWvdHostPool` reference lists `-AgentUpdateType`, `-AgentUpdateMaintenanceWindow`, `-AgentUpdateMaintenanceWindowTimeZone` and `-AgentUpdateUseSessionHostLocalTime`, but it gives no example of them and does not list the accepted values for the type. The `az desktopvirtualization hostpool update` reference lists no agent update parameter. Test a script on one pool and read the setting back in the portal.
 
 ## Step 5: Stagger several host pools
 
-Every pool has its own windows, so identical windows mean every pool updates at the same time. Learn describes a window as pool-wide and gives no per-host stagger inside a pool, so spacing is a per-pool decision. Learn also says that pools with the setting enabled receive an update after it has been fully flighted to production, and that flights run over five days. Our reading: once an update has reached production, the next window of each pool decides when it installs, so you can use the order of the windows as a rollout order.
+Every pool has its own windows, so identical windows mean every pool updates at the same time. Learn describes a window as pool-wide and gives no per-host stagger inside a pool, so spacing is a per-pool decision. Our reading: once an update has reached production, the next window of each pool decides when it installs, so the order of the windows can serve as a rollout order.
 
 An example for four pools, built only from the documented window rules:
 
@@ -95,18 +91,18 @@ An example for four pools, built only from the documented window rules:
 | Pilot | Small group of volunteers | Saturday, hour 6 | First to take the update |
 | Production A | Largest group | Sunday, hour 6 | A day to read the pilot result first |
 | Production B | Second region or department | Sunday, hour 9 | Does not overlap A's two-hour window |
-| Validation | Early look at service changes | No scheduled updates | Enabling the setting delays its early view |
+| Validation | Sees new agent versions before production | Leave the setting off | Our reading, explained below |
 
-The last row follows from Learn's own text: with the setting on, non-critical updates arrive only after full flighting. A [validation host pool](/entity/avd-validation-environment/) exists to see changes before that, so leave the setting off there. Windows of different pools that share a dependency, such as a profile file share, are better kept at least two hours apart.
+The last row is our reading, built from two statements. Learn says pools with the setting enabled receive the agent update after it has been fully flighted to production. The agent what's new page says Microsoft monitors the rollout in validation environments first, that the rollout can take several weeks, and that validation versions are repacked with a new version number before production. Together they suggest that a [validation host pool](/entity/avd-validation-environment/) with the setting enabled would take an update only at the production stage and lose its earlier view, so we would leave the setting off there.
 
-If your pools are spread over several zones, local session host time already staggers the updates by geography.
+Our reading: if your pools are spread over several zones and use local session host time, the same day and hour already fall at different real times by geography, as in Learn's Saturday 9:00 PM example.
 
 ## Step 6: Diagnose the first run
 
-Read the first run, not only the setup. The queries and the event 3277 caveat are in the explainer. What this section adds is how to read the result against the window.
+The queries and the event 3277 caveat are in the explainer. This section reads the result against the window.
 
 - **Convert the clock.** The `WVDAgentHealthStatus` reference says `TimeGenerated` is in UTC. Convert your window before comparing it with `LastUpgradeTimeStamp`. The reference defines that column as the time recorded when the upgrade status changed.
-- **Look at the state values you actually have.** The table reference describes `UpgradeState` only as the last known state from a previous update and lists no values. Run a summary over `Status` and `UpgradeState` for your hosts to learn which values appear, and keep that list.
+- **Look at the state values you actually have.** The table reference describes `UpgradeState` only as the last known state from a previous update and lists no values. Summarize `Status` and `UpgradeState` for your hosts to see which values appear.
 - **Read the error column's contents.** The reference text for `UpgradeErrorMsg` repeats the description of `SxSStackVersion`, so do not rely on its description.
 
 When a host did not update, work from the symptom:
@@ -116,11 +112,10 @@ When a host did not update, work from the symptom:
 | Host was off during the window | Learn's diagnostics guide says to turn the host back on; then fix the power schedule from step 1 |
 | Host shows **Upgrading** or **Unavailable** | The agent or stack did not install. The troubleshooting guide reinstalls the side-by-side stack with `qwinsta.exe` checks, and has a clean reinstall as the last resort |
 | Event 3389 with `MissingMethodException: Method not found` | The agent reverted to an earlier version; the guide names .NET Framework below 4.7.2 and tells you to upgrade it |
-| Event 3277 with `DownloadMsiException` | Not enough disk space for the agent; free space or enlarge the disk |
-| Event 3277 with `InstallMsiException` | The installer is already running, or group policy blocks `msiexec.exe` |
-| Update landed outside the window | Compare with the four-try rule and the critical-update rule in step 2 |
+| Event 3277 with `DownloadMsiException` or `InstallMsiException` | Not enough disk space for the agent, or the installer is already running, or group policy blocks `msiexec.exe` |
+| Update landed outside the window | Learn does not say whether a forced install stays inside the window; compare with the four-try rule and the critical-update rule in step 2 |
 
-The troubleshooting guide also tells you to review the event sources **WVD-Agent-Updater** and **MsiInstaller** in Event Viewer. Learn says an agent update normally takes two to three minutes on a new VM and should not cause it to lose connection or shut down. It gives no figure for hosts that carry sessions, so test one host with users on it before a window overlaps work.
+The troubleshooting guide also names the event sources **WVD-Agent-Updater** and **MsiInstaller** in Event Viewer. Learn gives two to three minutes for an update on a new VM and no figure for hosts that carry sessions, so test one such host before a window overlaps work.
 
 ## Sources
 
@@ -130,6 +125,7 @@ Retrieved 17 November 2026.
 - [Microsoft Learn: Scheduled Agent Updates diagnostics guide](https://learn.microsoft.com/en-us/azure/virtual-desktop/agent-updates-diagnostics)
 - [Microsoft Learn: Getting started with the Azure Virtual Desktop agent](https://learn.microsoft.com/en-us/azure/virtual-desktop/agent-overview)
 - [Microsoft Learn: Create and assign an autoscale scaling plan](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)
+- [Microsoft Learn: Configure Start VM on Connect](https://learn.microsoft.com/en-us/azure/virtual-desktop/start-virtual-machine-connect)
 - [Microsoft Learn: Autoscale scenarios](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)
 - [Microsoft Learn: Autoscale glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary)
 - [Microsoft Learn: Troubleshoot Azure Virtual Desktop Agent issues](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-agent)
