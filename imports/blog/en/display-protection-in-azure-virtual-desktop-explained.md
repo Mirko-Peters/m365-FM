@@ -45,7 +45,7 @@ According to the current Learn page, Display Protection uses Microsoft PlayReady
 - **Hardware DRM (SL3000)**: hardware-backed PlayReady protection that needs a compatible GPU on the endpoint, either discrete or integrated.
 - **Software DRM (SL2000)**: software-based PlayReady protection, used only when the configured level permits a fallback.
 
-The session host does not need a GPU: Learn says Display Protection doesn't require a GPU-enabled Cloud PC, and that hardware protection depends on the GPU of the endpoint. Our reading: the feature concerns the video path to the client, not graphics performance on the host; what's new describes it as securing the display path between the session host and supported endpoint devices. Protection applies to remote-session video, not to other applications running locally on the endpoint. Managed and unmanaged (bring-your-own-device) endpoints are both supported, as long as they meet the client requirements.
+Learn says Display Protection doesn't require a GPU-enabled Cloud PC, and that hardware protection depends on the GPU of the endpoint. Our reading: the feature concerns the video path to the client, not graphics performance on the host; what's new describes it as securing the display path between the session host and supported endpoint devices. Protection applies to remote-session video, not to other applications running locally on the endpoint. Managed and unmanaged (bring-your-own-device) endpoints are both supported, as long as they meet the client requirements.
 
 ## The three levels
 
@@ -77,7 +77,7 @@ with the value 0, 1 or 2. Learn says this property enables server-side verificat
 | Session host | A supported Windows client operating system or Windows Server |
 | Hardware DRM | A compatible GPU on the endpoint, discrete or integrated |
 
-Not supported: virtual endpoint devices, macOS, iOS, Android, web browsers, other clients than Windows App on Windows, and Windows 365 Link devices. Learn does not say how an unsupported client behaves at level 1, so test every client class that your users own before you set the property on a shared pool. The Windows App release notes also record a fix, in version 2.0.1315.0, for an issue where Display Protection was initialized for all connections regardless of the admin policy setting, so keep the client current.
+Not supported: virtual endpoint devices, macOS, iOS, Android, web browsers, other clients than Windows App on Windows, and Windows 365 Link devices. Learn states a general rule: a connection is allowed only when Windows App can establish the configured PlayReady protection level, and if display protection can't be established at that level, the connection is blocked and an error appears on the endpoint. Learn names no specific behavior or error message for the unsupported client types above, so test every client class that your users own before you set the property on a shared pool. The Windows App release notes also record a fix, in version 2.0.1315.0, for an issue where Display Protection was initialized for all connections regardless of the admin policy setting, so keep the client current.
 
 ## What it does not do
 
@@ -98,7 +98,7 @@ Learn describes several controls that each cover a different risk. They are conf
 |---|---|---|---|
 | Display Protection | Screen capture malware on the Windows endpoint | PlayReady encryption of session video, hardware or software DRM | Host pool RDP property |
 | [Screen capture protection](/entity/avd-screen-capture-protection/) | Screenshots and screen sharing on clients | Blocks capture through standard OS features and APIs; Learn says it is not a substitute for DRM solutions | Intune or Group Policy on the session hosts for native clients; Learn describes other patterns for web and mobile endpoints |
-| [Watermarking](/entity/avd-watermarking/) | Photographs of the screen, and tracing a leak | QR code containing the Connection ID or Device ID | Intune or Group Policy on the session hosts |
+| [Watermarking](/entity/avd-watermarking/) | Discourages photographing the screen; the QR code lets admins trace the session | QR code containing the Connection ID or Device ID | Intune or Group Policy on the session hosts |
 | Input protection | Keylogger malware | Kernel-level driver on the endpoint; MSI required | Host pool RDP property plus MSI on the endpoint |
 
 Screen capture protection has a wider client list than Display Protection: its Learn page lists Windows App on Windows, macOS, iOS, iPadOS and Android, among others, with minimum versions for some. Display Protection is limited to physical Windows 11 devices. A deployment that needs controls on phones, Macs and browsers therefore cannot rely on Display Protection alone. The screen capture protection page also recommends pairing it with watermarking and with disabling clipboard, drive and printer redirection where that fits your risk model.
@@ -117,8 +117,9 @@ Retrieved on 17 November 2026.
 
 - [Microsoft Learn: Display Protection for Windows 365 and Azure Virtual Desktop](https://learn.microsoft.com/en-us/windows-365/enterprise/display-protection)
 - [Microsoft Learn: Input and Output Protection for Windows 365 and Azure Virtual Desktop](https://learn.microsoft.com/en-us/windows-365/enterprise/windows-cloud-io-protection)
-- [Microsoft Learn: Windows Cloud Input Protection](https://learn.microsoft.com/en-us/windows-365/enterprise/windows-cloud-input-protection)
+- [Microsoft Learn: Input Protection (preview)](https://learn.microsoft.com/en-us/windows-365/enterprise/input-protection)
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
+- [Microsoft Learn: What's new in Windows 365 Enterprise](https://learn.microsoft.com/en-us/windows-365/enterprise/whats-new)
 - [Microsoft Learn: What's new in Windows App](https://learn.microsoft.com/en-us/windows-app/whats-new?tabs=windows)
 - [Microsoft Learn: Enable screen capture protection in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/screen-capture-protection)
 - [Microsoft Learn: Watermarking in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/watermarking)
