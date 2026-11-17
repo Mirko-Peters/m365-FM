@@ -77,7 +77,7 @@ The autoscale FAQ says autoscale can turn off all VMs in a host pool if the mini
 
 ## Excluded hosts
 
-A VM that carries the scaling plan's [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) is not turned on, off or changed in drain mode by autoscale. The portal text says tagged hosts are still part of the calculation of the minimum percentage of hosts. In Learn's scenario, five of six hosts carry the tag and the one untagged host stays on in off-peak because of the minimum percentage. If the admin then tags that last host as well and turns it off, autoscale cannot start any host, and a user who signs in sees "No resources available".
+A VM that carries the scaling plan's [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) is not turned on, off or changed in drain mode by autoscale. Learn's scaling plan article notes that tagged hosts are still part of the calculation of the minimum percentage of hosts. In Learn's scenario, five of six hosts carry the tag and the one untagged host stays on in off-peak because of the minimum percentage. If the admin then tags that last host as well and turns it off, autoscale cannot start any host, and a user who signs in sees "No resources available".
 
 Following from the tag definition, which is an inference and not a Learn sentence, a tagged host can count toward the percentage while being unable to help meet it.
 

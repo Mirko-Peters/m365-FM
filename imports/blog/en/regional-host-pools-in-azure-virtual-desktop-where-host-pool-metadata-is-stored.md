@@ -7,7 +7,7 @@ author: mirko-p
 date: 2026-11-18
 topics: [avd-regional-host-pools, avd-host-pool]
 keypoints:
-  - "Deployment scope decides where metadata lives: Regional means a database in one Azure region, with replicas across availability zones and replication to a paired region where applicable. Geographical, the default in PowerShell and ARM, means a database that serves the whole geography. Learn says there are no functional differences between the two types of host pool."
+  - "Deployment scope decides where metadata lives: Regional means a database in one Azure region, with replicas across availability zones and replication to a paired region where applicable. Geographical, the default in PowerShell, means a database that serves the whole geography. Learn says there are no functional differences between the two types of host pool."
   - "Scope is set when the object is created and cannot be changed. Host pools, workspaces, application groups and App Attach packages of different scopes cannot be associated with each other."
   - "Regional host pools have been generally available since 30 September 2026 and are offered in 14 regions, which Learn's data locations article lists. Some preview wording remains on Learn pages."
   - "Microsoft strongly recommends Regional for new host pools in a supported region, and recommends placing session host VMs in the same region as the regional metadata, although the metadata location is not technically tied to where VMs run."
@@ -18,7 +18,7 @@ faq:
   - q: "Can I convert an existing geographical host pool to regional?"
     a: "Not in place. Learn says the scope cannot be changed after creation. The announcement says support for migrating existing geographical host pools is coming in a phased rollout, with no timeline. Until then, deploy a new regional host pool with the same configuration and move users over."
   - q: "Do regional host pools change how users connect?"
-    a: "Learn states: "There are no functional differences between the two types of host pool." What differs is where the metadata is stored and the scope rules. The limits section lists the restrictions the sources name, such as missing Log Analytics reporting for regional session hosts and the preview wording on OS disks."
+    a: "Learn states: 'There are no functional differences between the two types of host pool.' What differs is where the metadata is stored and the scope rules. The limits section lists the restrictions the sources name, such as missing Log Analytics reporting for regional session hosts and the preview wording on OS disks."
 ---
 
 A regional host pool keeps its metadata in a database inside one Azure region, with replicas across availability zones and a copy replicated to a paired region where applicable. A geographical host pool, the default in PowerShell, keeps it in a database that serves every Azure region of the geography. Everything else about the host pool, including how users connect, stays the same, and the choice cannot be reversed after creation.
