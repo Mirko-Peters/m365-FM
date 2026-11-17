@@ -31,7 +31,11 @@ export async function syncFeed(env, db, uid, post, handle, live) {
   const curl = `${env.SITE}/community/u/${handle}/blog/`;
   await db.prepare("INSERT OR IGNORE INTO channels(owner_type,owner_id,kind,url,feed) VALUES('u',?,'blog',?,'')").bind(uid, curl).run();
   const ch = await db.prepare("SELECT id FROM channels WHERE owner_type='u' AND owner_id=? AND url=?").bind(uid, curl).first(); if (!ch) return;
-  await db.prepare("INSERT INTO feed_items(channel_id,owner_type,owner_id,url,title,published) VALUES(?,?,?,?,?,?) ON CONFLICT(url) DO UPDATE SET title=excluded.title,hidden=feed_items.hidden&? WHERE feed_items.owner_type='u' AND feed_items.owner_id=excluded.owner_id").bind(ch.id, "u", uid, url, post.title, post.published || now(), HIDDEN_MOD).run();   // nur den eigenen Schalter loeschen: das Ausblenden der Moderation (Bit 1) bleibt
+  // Die Sperre der Moderation haengt am Beitrag, nicht an der Adresse: neue Sprache oder neuer Profilname ergeben eine neue Adresse (neue Zeile). Hat die
+  // Moderation eine Zeile DESSELBEN Beitrags (eigene Zeilen, gleiche Endung /blog/<slug>/ - der slug ist je Mitglied eindeutig) ausgeblendet, beginnt die neue ausgeblendet.
+  const tail = `/blog/${post.slug}/`;
+  const mod = await db.prepare("SELECT 1 x FROM feed_items WHERE owner_type='u' AND owner_id=? AND url<>? AND (hidden&?)<>0 AND substr(url,1,length(?))=? AND instr(url,'/community/u/')>0 AND substr(url,-length(?))=? LIMIT 1").bind(uid, url, HIDDEN_MOD, env.SITE, env.SITE, tail, tail).first();
+  await db.prepare("INSERT INTO feed_items(channel_id,owner_type,owner_id,url,title,published,hidden) VALUES(?,?,?,?,?,?,?) ON CONFLICT(url) DO UPDATE SET title=excluded.title,hidden=feed_items.hidden&? WHERE feed_items.owner_type='u' AND feed_items.owner_id=excluded.owner_id").bind(ch.id, "u", uid, url, post.title, post.published || now(), mod ? HIDDEN_MOD : 0, HIDDEN_MOD).run();   // nur den eigenen Schalter loeschen: das Ausblenden der Moderation (Bit 1) bleibt
 }
 
 export async function deleteUserBlog(db, uid) {
