@@ -89,7 +89,7 @@ The design decision for an administrator is whether to control the path (listene
 
 ## What tends to prevent a direct path
 
-Learn's recommendations for public networks read as a list of things that interfere with direct UDP: force tunneling, double NAT or carrier-grade NAT, cloud packet-inspection services and TCP-based VPNs. It also recommends that users leave UPnP enabled on home routers, because the client can use UPnP to create a port mapping that improves the odds of a direct connection, and it suggests enabling IPv6 or Teredo, which adds NAT traversal candidates in IPv4-only networks. The Windows 365 page adds a known-issues list that matches this: double NAT through a secure web gateway or proxy, routing through an inspecting proxy, networks that restrict UDP, and carrier-grade NAT.
+Learn's recommendations for public networks read as a list of things that interfere with direct UDP: force tunneling, double NAT or carrier-grade NAT, cloud packet-inspection services and TCP-based VPNs. It also recommends that users leave UPnP enabled on home routers, because the client can use UPnP to create a port mapping that improves the odds of a direct connection, and it suggests enabling IPv6 or Teredo, which adds NAT traversal candidates in IPv4-only networks. The Windows 365 page adds a matching known-issues list: double NAT through a secure web gateway or proxy, an inspecting proxy, networks that restrict UDP, and carrier-grade NAT.
 
 None of these breaks a session, since TCP remains; they decide whether users see the UDP benefit.
 
@@ -101,7 +101,7 @@ Learn states that Shortpath extends RDP multi-transport and does not replace rev
 
 Per the configuration page, the client must be Windows App or the Remote Desktop app on a supported platform. The prerequisites list Windows App on Windows, on macOS in a beta (version 11.3.8, build 3048) and on Android and ChromeOS as a preview.
 
-For availability, the RDP Shortpath page marks Shortpath for public networks via STUN and TURN as generally available in the Azure cloud and in Azure Government. The configuration page, on the other hand, says STUN is available in both clouds and TURN only in the Azure public cloud. Learn's pages disagree here, so check the current wording of both pages for your cloud.
+For cloud availability, the pages disagree on TURN in Azure Government, as the FAQ above describes. Check the current wording of both pages for your cloud.
 
 [Windows 365](/entity/windows-365/) Cloud PCs can use the same feature. The Windows 365 page on Learn lists STUN and TURN as generally available in the Azure public cloud and in Azure Government, and says the Cloud PC needs outbound UDP to the public address space because the client's address is usually unknown.
 

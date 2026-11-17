@@ -68,20 +68,20 @@ Learn's page on container corruption or missing data says antivirus products are
 
 **A sector size mismatch.** `VHDXSectorSize` should not be used unless Microsoft Support directs it, because a mismatch in disk sector sizes can lead to a BSOD.
 
-**Product bugs.** The known issues page lists fixed defects in 25.02: containers that did not detach, and a message that the Recycle Bin was corrupted. Learn does not describe either as damage to the container file. Learn names the latest FSLogix version as the resolution.
+**Product bugs.** The known issues page lists fixed defects in 25.02: containers that did not detach, and a message that the Recycle Bin was corrupted. Learn does not describe either as damage to the container file and names the latest FSLogix version as the resolution.
 
 **Cloud Cache.** Learn warns that if a read cannot be hydrated from any remote provider, the result can be a session hang or a system crash. See [FSLogix Cloud Cache](/entity/fslogix-cloud-cache/) for the design.
 
 ## Step 4: Recover, from least to most invasive
 
-Learn gives no repair recipe, so the order below combines documented tools with ordinary file handling. Steps that are our own reading and not Learn text are marked.
+Learn gives no repair recipe, so the order below combines documented tools with ordinary file handling. Our own steps are marked.
 
 1. **Stop users and sessions touching the file.** FSLogix holds an exclusive lock while the user is connected, so make sure no session of that user remains.
 2. **Work on a copy** (own recommendation, not from Learn). Copy the VHD(x) to a separate location before you try anything.
-3. **Inspect with the frx utility.** From `C:\Program Files\FSLogix\Apps`, `frx edit-profile -filename <path>` attaches the file and opens Explorer and the Registry Editor on its contents. `begin-edit-profile` attaches the VHD(x) and its registry hive, and `end-edit-profile` detaches both again using the cookie that `begin-edit-profile` prints. Learn does not claim these commands fix a damaged file; they let you see whether the data can be read.
-4. **Restore from backup.** For [Azure Files](/entity/azure-files/) shares protected by [Azure Backup](/entity/azure-backup/), the portal offers restoring the full share or individual files, to the original or an alternate location, and lets you skip or overwrite on conflict. Restoring to an alternate location keeps the current share unchanged, which suits a comparison. Learn says vaulted backup supports full-share recovery only, and that a vault-tier restore needs 20 percent more free space on the target share than the size of the data being restored.
-5. **Move the data into a new container.** `frx migrate-vhd -src <old> -dest <new>` creates and formats a VHD(x) and mirrors the contents of the source. `frx copyto-vhd` copies a folder into a VHD(x), and `frx copy-profile` copies a local profile. Learn says `migrate-vhd` creates a VHD(x) that defaults to 30 GB and dynamic sizing, and that `copy-profile` needs `-size-mbs` above 5000 when the local profile exceeds 5 GB. These tools are documented as copy utilities, and Learn does not say how they behave on a damaged source, so test first.
-6. **Let FSLogix create a fresh container** (own reading of the naming behaviour above): Learn says that when FSLogix cannot find an existing container it creates a new empty one. Moving the old folder aside and keeping it for data recovery follows from that, but Learn does not present it as a recovery procedure.
+3. **Inspect with the frx utility.** From `C:\Program Files\FSLogix\Apps`, `frx edit-profile -filename <path>` attaches the file and opens Explorer and the Registry Editor on its contents. `begin-edit-profile` attaches the VHD(x) and its registry hive, and `end-edit-profile` detaches both again using the cookie that `begin-edit-profile` prints. Learn does not claim these commands fix a damaged file; they show whether the data can be read.
+4. **Restore from backup.** For [Azure Files](/entity/azure-files/) shares protected by [Azure Backup](/entity/azure-backup/), the portal offers restoring the full share or individual files, to the original or an alternate location, and lets you skip or overwrite on conflict. Learn says vaulted backup supports full-share recovery only, and that a vault-tier restore needs 20 percent more free space on the target share than the size of the data being restored.
+5. **Move the data into a new container.** `frx migrate-vhd -src <old> -dest <new>` creates and formats a VHD(x) and mirrors the contents of the source. `frx copyto-vhd` copies a folder into a VHD(x), and `frx copy-profile` copies a local profile. Learn says `migrate-vhd` creates a VHD(x) that defaults to 30 GB and dynamic sizing, and that `copy-profile` needs `-size-mbs` above 5000 when the local profile exceeds 5 GB. Learn does not say how these copy utilities behave on a damaged source, so test first.
+6. **Let FSLogix create a fresh container** (own reading of the naming behaviour above): Learn says that when FSLogix cannot find an existing container it creates a new empty one. Moving the old folder aside for data recovery follows from that, but Learn does not present it as a recovery procedure.
 
 ## Comparing the options
 
