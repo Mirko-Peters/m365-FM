@@ -67,7 +67,7 @@ The limit is the same value that feeds [autoscale](/entity/avd-scaling-plan/) ca
 
 ### Starting points for the value
 
-Learn's [sizing guidelines](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/virtual-machine-recs) list maximum users per vCPU for multi-session hosts: 6 for light, 4 for medium, 2 for heavy and 1 for power workloads. At the light level, an 8-vCPU host supports about 48 users. Learn calls these estimates generic and recommends validating them with a pilot or simulation. The step-by-step calculation is in "How to size the maximum session limit per session host".
+Learn's [sizing guidelines](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/virtual-machine-recs) list maximum users per vCPU for multi-session hosts: 6 for light, 4 for medium, 2 for heavy and 1 for power workloads. At the light level the table's maximum is 6 users per vCPU, which is 48 users on an 8-vCPU host. Learn calls these estimates generic and recommends validating them with a pilot or simulation. The step-by-step calculation is in "How to size the maximum session limit per session host".
 
 Pick the limit with the knowledge that depth-first deliberately runs the first hosts at it. That is the point of the algorithm, so the limit has to be a load you are willing to put on a host for a whole working day, not only a theoretical maximum.
 
@@ -108,7 +108,7 @@ Retrieved 17 November 2026.
 
 - [Microsoft Learn: Configure host pool load balancing in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-load-balancing)
 - [Microsoft Learn: Azure Virtual Desktop terminology](https://learn.microsoft.com/en-us/azure/virtual-desktop/terminology)
-- [Microsoft Learn: Troubleshoot Azure Virtual Desktop session host statuses and health checks](https://learn.microsoft.com/en-us/azure/virtual-desktop/troubleshoot-statuses-checks)
+- [Microsoft Learn: Session host statuses and health checks in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-status-health-checks)
 - [Microsoft Learn: Session host virtual machine sizing guidelines](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/virtual-machine-recs)
 - [Microsoft Learn: Create and assign an autoscale scaling plan for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)
 - [Microsoft Learn: Azure Virtual Desktop autoscale FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq)

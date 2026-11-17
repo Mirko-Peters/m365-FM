@@ -64,7 +64,7 @@ What this means in practice:
 | Question | Points to breadth-first | Points to depth-first |
 |---|---|---|
 | What matters more, response time or running cost? | Response time | Running cost |
-| Are session hosts switched off outside working hours? | Hosts stay on anyway | Idle hosts can be switched off |
+| Do you want idle hosts to drop out while others still carry users? | Sessions stay spread over all running hosts, so fewer hosts empty out (own reading of the selection rule) | Later hosts stay empty and are easier to scale down (Learn) |
 | Can you set and maintain a realistic session limit? | Limit is optional | Limit is mandatory and must fit the workload |
 | Is the workload heavy per user? | Spreading keeps contention lower, which is Learn's stated reason | A low limit is needed so a packed host is not overloaded (inference) |
 | Do users sign in in a short burst? | Burst is spread over hosts (inference) | Burst hits one host first (inference) |
