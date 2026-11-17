@@ -9,7 +9,7 @@ topics: [rdp-multipath, remote-desktop-protocol]
 keypoints:
   - "Multipath monitors several transport paths for one session: UDP through STUN, UDP through a TURN relay, and redundant TCP reverse connect paths. If the active path degrades, traffic moves to a standby path. If every path is lost, the client tries to reconnect when the network returns."
   - "Learn says no configuration is needed beyond an environment that supports RDP Shortpath. It lists Windows App 2.0.559.0 for multiple UDP paths and 2.0.1069.0 for redundant TCP paths; macOS has a beta for UDP paths and other platforms are not supported."
-  - "Status per Learn's What's new: Multipath GA in July 2025 and fully rolled out in November 2025; redundant TCP in preview in April 2026, a phased GA rollout from May 2026 and GA in July 2026; Azure Government GA in October 2026."
+  - "Status per Learn's What's new: Multipath GA in July 2025 and fully rolled out in November 2025; redundant TCP in preview in April 2026, a phased GA rollout from May 2026 and GA in July 2026 for Azure Virtual Desktop and Windows 365 Cloud PCs. In Azure Government, redundant UDP paths were GA in September 2026 and redundant TCP followed in October 2026."
   - "Plan capacity per user: each session can open up to five outbound paths, up to three UDP and up to two TCP. Firewall rules, NAT capacity and port exhaustion limits should allow for that."
   - "Check it in the connection bar, which shows that RDP Multipath is enabled, and in Azure Virtual Desktop Insights under connection reliability."
 faq:
@@ -18,7 +18,7 @@ faq:
   - q: "Does Multipath replace RDP Shortpath?"
     a: "No. Learn recommends configuring Shortpath as the primary transport so that Multipath has UDP paths to work with. Multipath adds standby paths to the transport that Shortpath and reverse connect already provide. If UDP is blocked, Learn says redundant TCP paths can still add resilience."
   - q: "Why does one host pool show Multipath and another does not?"
-    a: "A likely reason is rollout. The May 2026 entry in What's new says that until the rollout reaches full availability, redundant TCP may not be consistently enabled across all host pools. The client version matters too, because 2.0.1069.0 or later is needed for the redundant TCP paths."
+    a: "Check the client first. The Multipath page names Windows App 2.0.559.0 for multiple UDP paths and 2.0.1069.0 for redundant TCP paths, and says connections must come from a local Windows device. Rollout is a second possibility: the May 2026 entry in What's new says that until the rollout reaches full availability, redundant TCP may not be consistently enabled across all host pools. The July 2026 entry announces general availability, and no page we read says whether any pool is still waiting."
 ---
 
 RDP Multipath is an Azure Virtual Desktop transport feature that watches more than one network path for a session and moves traffic to a standby path when the active one degrades or fails. It adds resilience on top of [RDP Shortpath](/entity/rdp-shortpath/) and the TCP reverse connect transport, and Microsoft Learn says it needs no configuration beyond a supported client and an environment that supports Shortpath. This article covers what a "path" is, what the feature depends on, what is generally available, and how to plan and check it. How Multipath fits with Shortpath and TURN in a rollout is the subject of a separate article in this series.
@@ -33,15 +33,15 @@ Learn names three kinds of path:
 
 - **UDP via STUN.** A direct UDP connection between client and session host. ICE discovers and evaluates Shortpath routes.
 - **UDP via TURN.** A UDP connection relayed through a Microsoft relay server, used when a direct connection is not possible.
-- **TCP via reverse connect.** Redundant TCP paths established using Rendezvous, the same family of transport that every session starts on.
+- **TCP via reverse connect.** Redundant TCP-based reverse connect paths established using Rendezvous. Learn's Shortpath page separately says every connection begins on a TCP-based reverse connect transport.
 
 Learn says these can be combined. Its example diagram shows UDP via STUN as the active path, supplemented by redundant UDP connections through a TURN server. When UDP-based Shortpath is available, UDP stays the preferred transport for performance and reliability; redundant TCP paths are added as standby transport on top. If UDP is unavailable or restricted by network policy, Learn says Multipath can still provide resilience through redundant TCP paths.
 
-If the active path degrades or fails, the system switches to a backup UDP or TCP path. If all paths are lost, for example in a network outage, it attempts to reconnect once connectivity is restored. Learn does not publish thresholds, switch times or the rules that rank one standby path above another, so any expectation about how fast a switch feels needs a pilot with your own networks.
+If the active path degrades or fails, the system switches to a backup UDP or TCP path. If all paths are lost, for example in a network outage, it attempts to reconnect once connectivity is restored. The Multipath page does not publish thresholds, switch times or the rules that rank one standby path above another, so any expectation about how fast a switch feels needs a pilot with your own networks. For what the user sees when a session pauses and resumes, see the section on Modern Auto-Reconnect below.
 
 ## Where it sits in the connection sequence
 
-Multipath does not change how a session starts. Learn's Shortpath page says every connection begins on the TCP-based reverse connect transport through the Azure Virtual Desktop gateway, where brokering and authentication happen. The session host and client then exchange candidate lists over that transport, and ICE coordinates STUN and TURN so that the preferred path is tried first. Shortpath, once established, carries the dynamic virtual channels for remote graphics, input and device redirection. Multipath, as Learn describes it, keeps backup paths on standby after that point and switches when the active one degrades. In our reading, Shortpath decides which path is used now, and Multipath decides what happens when that path stops being good enough.
+Multipath does not change how a session starts. Learn's Shortpath page says every connection begins on the TCP-based reverse connect transport through the Azure Virtual Desktop gateway, where brokering and authentication happen. For public networks, the session host and client then exchange candidate lists over that transport, and ICE coordinates STUN and TURN so that the preferred path is tried first. Shortpath, once established, carries the dynamic virtual channels for remote graphics, input and device redirection. Multipath, as Learn describes it, keeps backup paths on standby after that point and switches when the active one degrades. In our reading, Shortpath decides which path is used now, and Multipath decides what happens when that path stops being good enough.
 
 ## What it needs
 
@@ -51,20 +51,22 @@ Multipath does not change how a session starts. Learn's Shortpath page says ever
 |---|---|
 | Windows App for Windows, 2.0.559.0 or later | Multipath with multiple UDP transport paths |
 | Windows App for Windows, 2.0.1069.0 or later | Multiple UDP paths and redundant TCP paths |
-| Windows App for macOS beta, 11.3.8 (3048) | Multipath with multiple UDP transport paths |
+| Windows App for macOS beta, 11.3.8 (3048) | Multipath with multiple UDP transport paths; What's new adds that the environment must meet the Shortpath for public networks requirements |
 | Other platforms | Not currently supported |
 
 Learn adds that connections must come from a local Windows device for the Windows versions above. [Windows App](/entity/windows-app/) is the client to standardise on, and the version check is the first item to test when one user gets Multipath and another does not.
 
-**Network.** The Azure cloud endpoints Learn lists for TCP and UDP RDP transport are:
+**Network.** The Multipath page lists these Azure cloud endpoints for TCP and UDP RDP transport:
 
 | Method | Destination | Protocol and port |
 |---|---|---|
 | TCP-based RDP, used first for every connection | `*.wvd.microsoft.com`, `40.64.144.0/20` | TCP 443 |
 | UDP via TURN | `51.5.0.0/16` | UDP 3478 |
-| UDP via STUN, direct | any | UDP 1024-65535, default 49152-65535 |
+| UDP via STUN, direct | `51.5.0.0/16` | UDP 1024-65535, default 49152-65535 |
 
-For Azure Government, the Multipath page lists `20.159.80.0/24` on TCP 443 and `20.140.236.0/22` on UDP 3478 for TURN and for the STUN range. Note the label on that tab: it says Shortpath connectivity through those endpoints is in public preview for Azure Government, limited to designated validation rings, while the availability table on the same page, the Shortpath page and the October 2026 entry in What's new all say general availability. Check the current wording if you run in that cloud.
+The STUN row is where Learn's pages differ. The Multipath page gives `51.5.0.0/16` as the address for direct STUN. The Shortpath page's firewall tables give the destination as "Any" for the session host virtual network, and, for the client network, the public IP addresses assigned to the NAT gateway or Azure Firewall as provided by the STUN endpoint. Learn does not reconcile the two. In our reading, the safer rule for direct STUN is the broader one: allow outbound UDP to the internet in the port range, and treat `51.5.0.0/16` as certain only for the TURN relay on UDP 3478.
+
+For Azure Government, the Multipath page lists `20.159.80.0/24` on TCP 443 and `20.140.236.0/22` on UDP 3478 for TURN and for the STUN range. The label on that tab says Shortpath connectivity through those endpoints is in public preview for Azure Government, limited to designated validation rings. That matches the September 2026 entries in What's new, where TURN was still in preview there. The availability table on the same page, the Shortpath page and the October 2026 entry all say general availability, so the label may be out of date. Check the current wording if you run in that cloud.
 
 ## Status: what is generally available
 
@@ -77,16 +79,17 @@ Learn's [What's new](https://learn.microsoft.com/en-us/azure/virtual-desktop/wha
 | April 2026 | Redundant TCP paths announced in public preview |
 | May 2026 | GA rollout of redundant TCP begins, phased and quality-driven; redundant TCP may not be enabled consistently across all host pools until it completes |
 | July 2026 | Redundant TCP generally available for Azure Virtual Desktop |
-| September 2026 | UDP support for Windows App on macOS beta |
-| October 2026 | Multipath and Shortpath with TURN generally available in Azure Government |
+| August 2026 | Modern Auto-Reconnect, which is powered by Multipath, enters public preview and begins a phased rollout |
+| September 2026 | UDP support for Windows App on macOS beta. In Azure Government, redundant UDP paths generally available, phased GA of redundant TCP started (validation ring), and Shortpath with TURN in public preview |
+| October 2026 | Multipath with redundant TCP and UDP paths, and Shortpath with TURN, generally available in Azure Government |
 
-The Multipath page's availability table shows both multiple UDP paths and redundant TCP paths as generally available in the Azure public cloud and Azure Government. The July 2025 entry names Windows 365 as well; the redundant TCP entries name Azure Virtual Desktop, so confirm Windows 365 behaviour before you promise it to Cloud PC users.
+The Multipath page's availability table shows both multiple UDP paths and redundant TCP paths as generally available in the Azure public cloud and Azure Government. For Windows 365, the Windows 365 What's new page has its own entries: Multipath fully rolled out on 3 November 2025, the redundant TCP GA rollout in the week of 11 May 2026, and general availability of redundant TCP for Windows 365 Cloud PC in the week of 6 July 2026. It also lists the Azure Government steps for Windows 365 in September and October 2026.
 
 ## Planning capacity
 
 One detail from Learn changes sizing. Each active session can establish up to five outbound transport paths: up to three UDP ports for Shortpath and Multipath connections, and up to two TCP ports for reverse connect, including redundant paths. Learn tells administrators to set firewall rules, NAT capacity and port exhaustion limits for the expected number of concurrent sessions and their paths.
 
-A worked example, which is our arithmetic on Learn's maximum and not a measured value: 500 concurrent sessions could open up to 1,500 UDP and 1,000 TCP outbound ports, 2,500 in total. A NAT gateway or firewall that was sized for one connection per session could therefore see several times the connection count. The same applies to the client side, where a shared office egress address serves many users at once.
+A worked example, which is our arithmetic on Learn's maximum and not a measured value: 500 concurrent sessions could open up to 1,500 UDP and 1,000 TCP outbound ports, 2,500 in total. A NAT gateway or firewall that was sized for one connection per session could therefore see several times the connection count. In our reading, the same applies on the client side, where a shared office egress address serves many users at once.
 
 ## Verifying that it works
 
@@ -95,7 +98,7 @@ Learn offers two checks:
 1. **In the session.** The connection bar's connection information shows that RDP Multipath is enabled.
 2. **In Azure.** [Azure Virtual Desktop Insights](/entity/avd-insights/) has a connection reliability use case that administrators can review.
 
-Learn does not document a log field that identifies the standby paths of a session. For the transport in use, the Shortpath configuration article describes the `UdpUse` column in the WVDConnections table, with 1 for managed networks, 2 for direct STUN and 4 for TURN; any other value means TCP.
+Neither the Multipath page nor the Shortpath configuration article names a log field that identifies the standby paths of a session. For the transport in use, the Shortpath configuration article describes the `UdpUse` column in the WVDConnections table, with 1 for managed networks, 2 for direct STUN and 4 for TURN; any other value means TCP.
 
 ## Limits and when it will not help
 
