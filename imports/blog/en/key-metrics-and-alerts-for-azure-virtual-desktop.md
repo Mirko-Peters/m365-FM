@@ -49,11 +49,13 @@ Open Insights at `aka.ms/avdi` and use the configuration workbook to check the s
 | Is capacity right? | Utilization: session history, session host count, users per core | Idle hosts powered on suggest a scaling plan |
 | Is autoscale healthy? | Autoscale tab; WVDAutoscaleEvaluationPooled | Pooled host pools only; personal pools send autoscale logs to a storage account or Event Hubs |
 
+The `WVDAutoscaleEvaluationPooled` table is the most direct source for autoscale health. Learn lists per-evaluation columns such as `ActiveSessionHostCount`, `UnhealthySessionHostCount`, `ExcludedSessionHostCount`, `SessionOccupancyPercent` and `ScalingReasonMessage`, which records what autoscale decided and why, plus the `Config` columns for the schedule phase in force. When `ResultType` is not `Succeeded`, join to `WVDErrors` on `CorrelationId`.
+
 Learn's two Insights pages disagree slightly on input delay. The use-cases page says each host should ideally stay below 100 ms. The glossary sorts delay into good (below 150 ms), acceptable (150 to 500 ms), poor (500 to 2,000 ms) and bad (above 2,000 ms), based on a counter sampled every 30 seconds with the worst case in each window reported. Pick one and say which in your runbook.
 
 ## What Insights does with alerts
 
-Insights reads alerts; it does not create them. Learn calls Azure Monitor alerts an optional feature to be set up separately, and says the Overview page shows active alerts classified as severity 0, the "most urgent items" that could stop a deployment working. A severity 2 rule will therefore not appear there, but it still fires and notifies.
+Insights reads alerts; it does not create them. Learn calls Azure Monitor alerts an optional feature to be set up separately, and says the Overview page shows active alerts classified as severity 0, the "most urgent items" that could stop a deployment working. Learn describes only severity 0 alerts on that page; a rule you give a lower severity is still evaluated and still notifies through its action group.
 
 ## Which alert type fits
 
@@ -65,7 +67,7 @@ Learn's alert types page gives the guide. This table maps it to Azure Virtual De
 | Metric | Data that is already precomputed as metrics; one rule can cover many resources of one type in one region, but not VM guest metrics | Platform metrics of session host VMs, such as the CPU example Learn gives; detecting missing data |
 | Activity log | Event-driven and stateless; fires once and stays "Fired" until you set the user response | A VM deleted or restarted in a production resource group; Service Health and Resource Health |
 
-Learn's note on log alerts is worth keeping: they work best for detecting specific data, not a lack of data, because logs are more latent than metrics. For a session host that stopped reporting, Learn points to metric alerts.
+Learn's note on log alerts is worth keeping: they suit detecting specific data rather than a lack of data, because logs are more latent than metrics. For a session host that stopped reporting, Learn points to metric alerts.
 
 ## Building a log search alert rule
 
