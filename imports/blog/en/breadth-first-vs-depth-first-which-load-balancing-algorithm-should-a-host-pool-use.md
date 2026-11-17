@@ -51,7 +51,7 @@ The numbers below are an illustration built from the selection rules above, not 
 
 **Depth-first.** All four hosts start empty, so the first user is a tie and goes to the first host returned by the query, call it H1; Learn does not define the query order, and H1 to H4 are only labels. From then on H1 has the most sessions among hosts below the limit, so sessions 2 to 10 also land on H1. H2 takes the next 10, and H3 takes the last 5. H4 stays empty. If H1 and H2 are full at 10 and a 26th user arrives, H3 receives it.
 
-**Breadth-first.** Each new session goes to a random host among the two with the fewest sessions. With 25 users and 4 hosts the average is about 6 sessions per host. Because the choice is random, an individual host can finish noticeably above or below that average, and the split differs from day to day.
+**Breadth-first.** Each new session goes to a random host among the two with the fewest sessions. With 25 users and 4 hosts the average is about 6 sessions per host. Because new sessions only go to the two least-loaded hosts, the counts end up close together, typically 6 or 7 per host in this example (own calculation), though Learn notes the distribution is not guaranteed to be even. Differences grow in real pools because users sign out at different times (own reading).
 
 What this means in practice:
 
