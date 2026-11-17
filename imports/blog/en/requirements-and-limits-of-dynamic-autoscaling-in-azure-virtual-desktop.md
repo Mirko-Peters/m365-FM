@@ -36,7 +36,8 @@ Microsoft announced general availability of enhanced host pool management, inclu
 
 [Dynamic autoscaling](/entity/avd-dynamic-autoscaling/) can only be used for pooled host pools with a session host configuration. The details come from the page on host pool management approaches:
 
-- The management approach is set when you create the host pool. It cannot be changed later. - A session host configuration works with [pooled host pools](/entity/avd-pooled-host-pool/) only. [Personal host pools](/entity/avd-personal-host-pool/) can use power management autoscaling, not dynamic autoscaling.
+- The management approach is set when you create the host pool. It cannot be changed later.
+- A session host configuration works with [pooled host pools](/entity/avd-pooled-host-pool/) only. [Personal host pools](/entity/avd-personal-host-pool/) can use power management autoscaling, not dynamic autoscaling.
 - Once a pool has a [session host configuration](/entity/avd-session-host-configuration/), you cannot create, update or scale its session hosts outside the Azure Virtual Desktop service with tools built for standard management. You also cannot retrieve a registration token to add hosts created outside the service.
 - On the deployment page, Learn says the session host configuration is not supported with Azure Local.
 
@@ -54,7 +55,7 @@ What's new announces a [managed identity](/entity/avd-managed-identity/) require
 
 These are estimated dates, not confirmed ones, and the later entry does not match them. The page "Configure managed identity in Azure Virtual Desktop" gives a third version: "Host pools configured with a session host configuration will require a managed identity starting November 1st, 2025 in order to add session hosts to the host pool". That page still carries a preview notice and was last updated on 22 April 2026. The September 2026 What's new entry announces managed identity support as generally available and says: "In a future service update, host pools configured with a session host configuration will require a managed identity in order to add session hosts". Whether the requirement is already enforced is therefore an open question. The September 2025 entry says that creating a new host pool with a session host configuration in the portal requires a managed identity, while the deployment page says you can choose at creation time whether to assign one.
 
-Dynamic autoscaling creates session hosts, so it would presumably be affected; Learn does not say so explicitly. Check the current state of all three statements before you rely on one.
+The deployment page says the managed identity performs create, delete and update operations for session hosts in place of the service principal, and the configuration page lists autoscale among the features that can use a managed identity. Check the current state of all three statements before you rely on one.
 
 ## Region rules
 
@@ -105,7 +106,7 @@ Learn lists these limits for autoscale in general:
 1. Confirm that the host pool is pooled and was created with a session host configuration. In the portal, the Scaling method option only appears when you choose Pooled as the host pool type.
 2. Confirm that the host pool is not on Azure Local and not in Azure Government.
 3. Decide on a managed identity: the deployment page words it as optional at creation, What's new says portal creation requires one, and the dates for the general requirement differ between pages. If you use one, give it Desktop Virtualization Virtual Machine Contributor on the resource group or subscription of the session hosts.
-4. Set a custom max session limit, for example 10, instead of the default.
+4. Set a custom max session limit instead of the default.
 5. Assign both roles to the Azure Virtual Desktop service principal at subscription scope, or to the host pool's managed identity if you use one (Learn does not list the roles for the identity separately in that section).
 6. Allow outbound access to `wvdhpustgr0prod.blob.core.windows.net` from the session host subnet.
 7. Install the Az.DesktopVirtualization 5.4.2-preview module or later if you use PowerShell.
