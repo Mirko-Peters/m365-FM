@@ -70,6 +70,38 @@ test("K30: Blogbeitrag erneut speichern laesst das Moderations-Bit im Feed stehe
   assert.equal(raw.prepare("SELECT hidden FROM feed_items WHERE id=?").get(f.id).hidden, 0);
 });
 
+test("K30: Sprach- oder Profilnamenwechsel beim Speichern legt keinen sichtbaren Feed-Eintrag am Moderations-Bit vorbei an", async () => {
+  const { raw, env } = await mk();
+  ins(raw, "blog_posts", { id: 50, user_id: 4, slug: "p50", title: "Beitrag 50", summary: "Kurz", body: "Text", lang: "de", topics: "[]", status: "live", created: 100, updated: 100, published: 100 });
+  ins(raw, "blog_posts", { id: 51, user_id: 4, slug: "p51", title: "Beitrag 51", summary: "Kurz", body: "Text", lang: "de", topics: "[]", status: "live", created: 100, updated: 100, published: 100 });
+  const save = (id, lang) => call(env, 4, "POST", "/api/blog/save", { id, title: "Titel " + lang, summary: "Kurz", body: "Ein Text fuer den Beitrag.", lang, topics: [] });
+  const rows = (slug) => raw.prepare("SELECT id,url,hidden FROM feed_items WHERE owner_id=4 AND url LIKE ? ORDER BY id").all(`%/blog/${slug}/`);
+  assert.equal((await save(50, "de")).s, 200); assert.equal((await save(51, "de")).s, 200);
+  const f = rows("p50")[0];
+  assert.equal((await call(env, 1, "POST", "/api/admin/feed-hide", { id: f.id, hidden: true })).s, 200);
+  // Sprachwechsel: neue Adresse, aber ausgeblendet
+  assert.equal((await save(50, "fr")).s, 200);
+  assert.equal(rows("p50").length, 2);
+  assert.ok(rows("p50").every((r) => (r.hidden & 1) === 1), JSON.stringify(rows("p50")));
+  // Profilname geaendert: wieder neue Adresse, wieder ausgeblendet
+  raw.prepare("UPDATE profiles SET handle='neu-4' WHERE user_id=4").run();
+  assert.equal((await save(50, "fr")).s, 200);
+  assert.equal(rows("p50").length, 3);
+  assert.ok(rows("p50").every((r) => (r.hidden & 1) === 1), JSON.stringify(rows("p50")));
+  const feed = async () => (await call(env, 0, "GET", "/api/feed")).j?.items || [];
+  assert.ok(!(await feed()).some((x) => /\/blog\/p50\//.test(x.url)), "Beitrag 50 nicht im Feed");
+  // der andere Beitrag desselben Mitglieds ist nicht betroffen
+  assert.equal((await save(51, "fr")).s, 200);
+  assert.ok(rows("p51").every((r) => r.hidden === 0));
+  assert.ok((await feed()).some((x) => /\/blog\/p51\//.test(x.url)), "Beitrag 51 im Feed");
+  // die Moderation gibt die aktuelle Zeile frei: sie erscheint, und erneutes Speichern sperrt sie nicht wieder
+  const curRow = rows("p50").at(-1);
+  assert.equal((await call(env, 1, "POST", "/api/admin/feed-hide", { id: curRow.id, hidden: false })).s, 200);
+  assert.equal((await save(50, "fr")).s, 200);
+  assert.equal(raw.prepare("SELECT hidden FROM feed_items WHERE id=?").get(curRow.id).hidden, 0);
+  assert.ok((await feed()).some((x) => x.id === curRow.id));
+});
+
 // ---------- K31: ausgeblendete Bewertung kommt durch Loeschen und Neuanlegen nicht zurueck ----------
 test("K31: ausgeblendete Bewertung - eigenes Loeschen leert nur den Text, Neuanlegen bleibt gesperrt", async () => {
   const { raw, env } = await mk();
@@ -176,6 +208,47 @@ test("K29: Wiki-Meldungen - Redaktionsfassung bleibt, Zweitkonten zaehlen nicht,
   let last; for (const id of ids) last = await report(4, id);
   assert.equal(last.s, 200);
   assert.equal((await report(4, b)).s, 429);
+});
+
+test("K29: jede Wiki-Meldung erreicht die Pruefliste der Redaktion (Redaktionsfassung, frische Konten, Ruecknahme)", async () => {
+  const { raw, env } = await mk();
+  const NOWS = Math.floor(Date.now() / 1000);
+  for (const id of [11, 12, 13]) raw.prepare("INSERT INTO users(id,provider,sub,name,role,created) VALUES(?,?,?,?,?,?)").run(id, "t", "s" + id, "Neu" + id, "user", NOWS);
+  const report = (uid, id) => call(env, uid, "POST", `/api/wiki/report/${id}`);
+  const queue = async (uid = 2) => ((await call(env, uid, "GET", "/api/editor/queue")).j?.items || []).filter((x) => x.kind === "wiki_report");
+  // (a) Redaktionsfassung, eine Meldung -> Antwort "review" und Eintrag in der Pruefliste
+  assert.equal((await call(env, 2, "POST", "/api/wiki", { term: "teams", lang: "de", body: "Korrektur der Redaktion mit genug Text", summary: "Korrektur" })).j.status, "live");
+  const b = raw.prepare("SELECT id FROM wiki_rev WHERE term='teams' AND status='live'").get().id;
+  const rb = await report(6, b); assert.equal(rb.s, 200); assert.equal(rb.j.status, "review");
+  // (b) Mitgliedsfassung, drei Meldungen frischer Konten (zaehlen nicht fuer die Ruecknahme) -> bleibt live, steht aber in der Pruefliste
+  const c = ins(raw, "wiki_rev", { term: "azure", lang: "de", body: "Fassung eines Mitglieds mit Text", summary: "", user_id: 6, status: "live", created: 2 });
+  for (const uid of [11, 12, 13]) assert.equal((await report(uid, c)).s, 200);
+  assert.equal(raw.prepare("SELECT status FROM wiki_rev WHERE id=?").get(c).status, "live");
+  const q = await queue();
+  const qb = q.find((x) => x.id === String(b)), qc = q.find((x) => x.id === String(c));
+  assert.ok(qb, "Redaktionsfassung in der Pruefliste"); assert.ok(qc, "Mitgliedsfassung in der Pruefliste");
+  assert.match(qc.title, /3× gemeldet/); assert.deepEqual(qc.topics, ["azure"]);
+  assert.equal(qb.own, true); assert.equal(qb.actions.resolve, "no");   // der Verfasser (Editor 2) entscheidet nicht ueber Meldungen zur eigenen Fassung
+  assert.ok((await queue(3)).some((x) => x.id === String(c)), "Moderation sieht die Meldungen");
+  assert.ok(!(await queue(7)).some((x) => x.id === String(c)), "Fach-Editor (teams) sieht azure nicht");
+  // Vorschau und Verlauf der Fassung fuer die Redaktion
+  const it = await call(env, 5, "GET", `/api/editor/item?kind=wiki_report&id=${c}`);
+  assert.equal(it.s, 200); assert.match(it.j.item.body, /Fassung eines Mitglieds/);
+  assert.equal((await call(env, 5, "GET", `/api/editor/history?kind=wiki&id=${c}`)).s, 200);
+  // Erledigen = Meldungen verwerfen, mit Protokoll; danach nicht mehr in der Liste; Admin kann es rueckgaengig machen
+  const d = await call(env, 5, "POST", "/api/editor/decide", { kind: "wiki_report", id: String(c), action: "resolve" });
+  assert.equal(d.s, 200, JSON.stringify(d.j));
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM wiki_reports WHERE rev_id=?").get(c).n, 0);
+  assert.ok(!(await queue()).some((x) => x.id === String(c)));
+  assert.equal((await call(env, 5, "POST", "/api/editor/decide", { kind: "wiki_report", id: String(c), action: "resolve" })).s, 409);
+  assert.equal((await call(env, 1, "POST", `/api/admin/editlog/undo/${d.j.log}`)).s, 200);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM wiki_reports WHERE rev_id=?").get(c).n, 3);
+  // eine per Meldungen zurueckgenommene Fassung bleibt sichtbar (Redaktion kann sie ueber den Verlauf wiederherstellen)
+  raw.prepare("UPDATE wiki_rev SET status='reported' WHERE id=?").run(c);
+  assert.match((await queue()).find((x) => x.id === String(c))?.title || "", /zurückgenommen/);
+  // Fassungen ohne Meldung und nicht mehr aktuelle Fassungen erscheinen nicht
+  raw.prepare("UPDATE wiki_rev SET status='old' WHERE id=?").run(c);
+  assert.ok(!(await queue()).some((x) => x.id === String(c)));
 });
 
 test("K29: drei Meldungen blenden einen Kommentar der Redaktion nicht aus", async () => {
