@@ -212,3 +212,51 @@ test("K28: von einem Eigentuemer der Entitaet per Einzelstimme freigegebene Aend
   for (let i = 0; i < 9; i++) ins(raw, "entity_rev", { eid: "azure", data: "{}", summary: "fremd " + i, user_id: 9, status: "old", created: 1 });
   assert.equal(await trustPoints(env.DB, 9), 27);
 });
+
+test("K28: Likes, Bestaetigungen, Stimmen und Empfehlungen von frischen oder gesperrten Zweitkonten machen nicht vertrauenswuerdig; je Geber gedeckelt", async () => {
+  const { raw, env } = await mk(20);
+  const t = NOW();
+  // Konto 2 (alt) schreibt 25 Kommentare und 25 Blogbeitraege, Zweitkonto 3 (heute angelegt) liked, stimmt, bestaetigt und empfiehlt alles
+  raw.prepare("UPDATE users SET created=? WHERE id=3").run(t);
+  raw.prepare("INSERT INTO expertise(owner_type,owner_id,eid,level) VALUES('u',2,'teams',3),('u',2,'azure',3)").run();
+  for (let i = 0; i < 25; i++) {
+    const c = ins(raw, "comments", { vid: "v" + i, lang: "de", user_id: 2, body: "Kommentar " + i, status: "ok", created: t });
+    raw.prepare("INSERT INTO likes(comment_id,user_id,created) VALUES(?,3,?)").run(c, t);
+    const b = ins(raw, "blog_posts", { user_id: 2, slug: "p" + i, title: "B" + i, summary: "", body: "x", lang: "de", topics: "[]", status: "live", created: t, updated: t });
+    raw.prepare("INSERT INTO blog_votes(post_id,user_id,created) VALUES(?,3,?)").run(b, t);
+  }
+  for (const e of ["teams", "azure"]) raw.prepare("INSERT INTO endorsements(owner_id,eid,by_id,created) VALUES(2,?,3,?)").run(e, t);
+  ins(raw, "recommendations", { author_id: 3, subject_id: 2, relation: "colleague", body: "Sehr gut", status: "live", created: t });
+  assert.equal(await trustPoints(env.DB, 2), 0, "frisches Zweitkonto gibt keine Vertrauenspunkte");
+  assert.equal((await call(env, 2, "POST", "/api/wiki", { term: "teams", lang: "de", body: "Microsoft Teams ist die Plattform fuer Chat und Meetings." })).j.status, "pending");
+  // dasselbe Zweitkonto, alt: zaehlt nur einmal je Quelle und hoechstens GIVER_CAP (5) Punkte
+  raw.prepare("UPDATE users SET created=1 WHERE id=3").run();
+  assert.equal(await trustPoints(env.DB, 2), 5);
+  assert.equal((await call(env, 2, "POST", "/api/wiki", { term: "azure", lang: "de", body: "Azure ist die Cloud-Plattform von Microsoft fuer alles." })).j.status, "pending");
+  // gesperrt: zaehlt nicht
+  raw.prepare("UPDATE users SET banned=1 WHERE id=3").run();
+  assert.equal(await trustPoints(env.DB, 2), 0);
+  // fuenf verschiedene alte Konten mit je einer Empfehlung reichen (25 Punkte)
+  for (const a of [4, 5, 6, 7, 8]) ins(raw, "recommendations", { author_id: a, subject_id: 2, relation: "colleague", body: "Gut", status: "live", created: t });
+  assert.equal(await trustPoints(env.DB, 2), 25);
+  assert.equal(await isTrusted(env.DB, { id: 2, created: 1 }), true);
+});
+
+test("K28: verifizierter Eigentuemer ohne Vertrauenspunkte darf ueber Aenderungen an seiner Entitaet abstimmen, sonst niemand", async () => {
+  const { raw, env } = await mk(12);
+  const t = NOW();
+  raw.prepare("UPDATE users SET created=? WHERE id IN (7,9)").run(t);
+  ins(raw, "entity_claims", { eid: "teams", user_id: 7, status: "verified", via: "owner", created: 1 });
+  const a = ins(raw, "entity_rev", { eid: "teams", data: "{}", summary: "Vorschlag", user_id: 8, status: "pending", created: t });
+  const b = ins(raw, "entity_rev", { eid: "azure", data: "{}", summary: "Vorschlag", user_id: 8, status: "pending", created: t });
+  assert.equal(await trustPoints(env.DB, 7), 0);
+  assert.equal((await call(env, 7, "GET", "/api/edits/inbox")).j.entity.length, 1);
+  assert.equal((await call(env, 7, "GET", "/api/edits/pending?kind=entity&key=teams")).j.can_vote, true);
+  assert.equal((await call(env, 7, "GET", "/api/edits/pending?kind=entity&key=azure")).j.can_vote, false);
+  const r = await call(env, 7, "POST", "/api/edits/vote", { kind: "entity", id: a, v: 1 });
+  assert.equal(r.s, 200); assert.equal(r.j.status, "live");
+  assert.equal(one(raw, "SELECT status FROM entity_rev WHERE id=?", a).status, "live");
+  // fremde Entitaet und Nicht-Eigentuemer bleiben gesperrt
+  assert.equal((await call(env, 7, "POST", "/api/edits/vote", { kind: "entity", id: b, v: 1 })).j.error, "not_trusted");
+  assert.equal((await call(env, 9, "POST", "/api/edits/vote", { kind: "entity", id: b, v: 1 })).j.error, "not_trusted");
+});

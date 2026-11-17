@@ -129,9 +129,20 @@ export async function stats(db, uid) {
 // oeffentliches Profil, Abzeichen, eigene Kommentare, ungepruefte Blogbeitraege oder selbst gegruendete Firmen (das waren 25 Punkte in drei
 // Anfragen). Dazu ein Mindestalter des Kontos. Redaktion, Admin und bestaetigte Programme bleiben ohne Schwelle vertrauenswuerdig.
 export const TRUST_POINTS = 25, TRUST_MIN_AGE = 7 * 86400;
+export const GIVER_CAP = 5;   // hoechstens 5 Vertrauenspunkte je Geber: fuer 25 braucht es fuenf verschiedene alte Konten
+// ?1 Mitglied, ?2 spaetestes Anlagedatum eines Gebers, ?3 Deckel je Geber. Like 1, Blog-Stimme 1, Bestaetigung 2, Empfehlung 5 - je Geber und Quelle einmal.
+const GIVEN_SQL = `SELECT COALESCE(SUM(MIN(x.p, ?3)),0) n FROM (SELECT q.g, SUM(q.p) p FROM (
+    SELECT DISTINCT l.user_id g, 1 p, 'l' k FROM likes l JOIN comments c ON c.id=l.comment_id WHERE c.user_id=?1 AND c.status='ok'
+    UNION SELECT DISTINCT v.user_id, 1, 'b' FROM blog_votes v JOIN blog_posts b ON b.id=v.post_id WHERE b.user_id=?1
+    UNION SELECT DISTINCT by_id, 2, 'e' FROM endorsements WHERE owner_id=?1
+    UNION SELECT DISTINCT author_id, 5, 'r' FROM recommendations WHERE subject_id=?1 AND status='live'
+  ) q JOIN users g ON g.id=q.g AND g.banned=0 AND g.created>0 AND g.created<=?2 WHERE q.g<>?1 GROUP BY q.g) x`;
 export async function trustPoints(db, uid) {
   const n = async (sql, ...b) => ((await db.prepare(sql).bind(...b).first().catch(() => ({ n: 0 })))?.n) || 0;
-  const likes = await n("SELECT COUNT(*) n FROM likes l JOIN comments c ON c.id=l.comment_id WHERE c.user_id=? AND c.status='ok' AND l.user_id<>?", uid, uid);   // Likes anderer
+  // Likes, Blog-Stimmen, Bestaetigungen und Empfehlungen anderer: je Geber hoechstens einmal je Quelle und zusammen hoechstens GIVER_CAP,
+  // und nur von Konten, die selbst TRUST_MIN_AGE alt und nicht gesperrt sind - sonst macht ein am selben Tag angelegtes Zweitkonto mit
+  // 25 Likes das Hauptkonto in unter einer Stunde vertrauenswuerdig
+  const given = await n(GIVEN_SQL, uid, Math.floor(Date.now() / 1000) - TRUST_MIN_AGE, GIVER_CAP);
   // freigegebene Aenderungen (Redaktion oder Abstimmung) - ohne die eigene, selbst verwaltete Entitaet (Profil, Event, beanspruchte Firma): die geht ohne Pruefung live
   const edits = await n("SELECT COUNT(*) n FROM wiki_rev WHERE user_id=? AND status IN ('live','old')", uid)
     + await n("SELECT COUNT(*) n FROM entity_rev r WHERE r.user_id=?1 AND r.status IN ('live','old') AND r.summary<>'Selbst verwaltet' AND NOT EXISTS (SELECT 1 FROM entity_claims c WHERE c.eid=r.eid AND c.user_id=?1 AND c.status='verified')"
@@ -139,11 +150,8 @@ export async function trustPoints(db, uid) {
       // ein Eigentuemer koennte sonst Zweitkonten ueber Aenderungen an seiner Entitaet vertrauenswuerdig machen
       + " AND NOT EXISTS (SELECT 1 FROM edit_votes v JOIN entity_claims o ON o.eid=r.eid AND o.user_id=v.user_id AND o.status='verified' WHERE v.kind='entity' AND v.rev_id=r.id AND v.v=1)", uid);
   const events = await n(EVENTS_SQL, uid), speaker = await n(SPEAKER_SQL, uid);
-  const recR = await n("SELECT COUNT(*) n FROM recommendations WHERE subject_id=? AND author_id<>? AND status='live'", uid, uid);
-  const endoR = await n("SELECT COUNT(*) n FROM endorsements WHERE owner_id=? AND by_id<>?", uid, uid);
-  const blogV = await n("SELECT COUNT(*) n FROM blog_votes v JOIN blog_posts b ON b.id=v.post_id WHERE b.user_id=? AND v.user_id<>?", uid, uid);
   const pod = await n("SELECT COUNT(*) n FROM pod_episodes WHERE user_id=? AND status='published'", uid), vids = await n("SELECT COUNT(*) n FROM yt_videos WHERE user_id=? AND status='published'", uid);   // von der Redaktion veroeffentlicht
-  return likes + edits * 3 + Math.min(events, 20) * 50 + Math.min(speaker, 20) * 100 + recR * 5 + Math.min(endoR, 20) * 2 + Math.min(blogV, 200) + Math.min(pod, 20) * 20 + Math.min(vids, 20) * 20;
+  return given + edits * 3 + Math.min(events, 20) * 50 + Math.min(speaker, 20) * 100 + Math.min(pod, 20) * 20 + Math.min(vids, 20) * 20;
 }
 export async function isTrusted(db, user) {
   if (!user) return false;
