@@ -1,6 +1,6 @@
 ---
 title: "Azure Virtual Desktop Hybrid explained: session hosts on-premises, managed from Azure"
-summary: "Azure Virtual Desktop Hybrid keeps the Azure Virtual Desktop service in Azure and puts the session hosts on your own on-premises hypervisor or hardware, connected through Azure Arc. You trade Azure-side lifecycle features such as autoscale and multi-session for local placement, so check the limits before you choose it."
+summary: "Azure Virtual Desktop Hybrid keeps the Azure Virtual Desktop service in Azure and puts the session hosts on your own on-premises hypervisor or hardware, connected through Azure Arc. You trade Azure-side lifecycle features such as autoscale and Windows 11 multi-session for local placement, so check the limits before you choose it."
 status: review
 publish: false
 author: mirko-p
@@ -18,12 +18,12 @@ faq:
   - q: "Can I use Windows 11 multi-session with Azure Virtual Desktop Hybrid?"
     a: "No. The Learn overview lists Windows 11 Enterprise multi-session and Windows 10 Enterprise multi-session as not supported on Azure Virtual Desktop Hybrid. Windows Server, Windows 11 Enterprise and Windows 10 Enterprise are supported, with conditions on physical devices."
   - q: "How is Azure Virtual Desktop Hybrid different from Azure Virtual Desktop for Azure Local?"
-    a: "Hybrid uses Azure Arc-enabled Windows machines on a hypervisor or headless physical device that you choose. Azure Virtual Desktop for Azure Local runs session hosts on Azure Local instances (version 23H2 or later), supports multi-session images, was announced with autoscale support in October 2024 and bills per active vCPU. Learn says it is not an Azure Arc-enabled service and not supported as a standalone service outside Azure or on other Arc-enabled servers, but it still requires the Connected Machine agent on its session host VMs. Both keep the service components in Azure."
+    a: "Hybrid uses Azure Arc-enabled Windows machines on a hypervisor or headless physical device that you choose. Azure Virtual Desktop for Azure Local runs session hosts on Azure Local instances (version 23H2 or later), supports multi-session images, was announced with autoscale support in October 2024 (Learn's scaling plan page does not mention Azure Local) and bills per active vCPU. Learn says it is not an Azure Arc-enabled service and not supported as a standalone service outside Azure or on other Arc-enabled servers, but it still requires the Connected Machine agent on its session host VMs. Both keep the service components in Azure."
 ---
 
-Azure Virtual Desktop Hybrid keeps the Azure Virtual Desktop service in Azure and runs the session hosts on infrastructure you operate yourself. Each host is a Windows virtual machine or a headless physical device that is Azure Arc-enabled. The choice is worth it when the desktops must sit next to local data or hardware, and it costs you the Azure-side lifecycle features.
+Azure Virtual Desktop Hybrid keeps the Azure Virtual Desktop service in Azure and runs the session hosts on infrastructure you operate yourself. Each host is a Windows virtual machine or a headless physical device that is Azure Arc-enabled. Microsoft and Nerdio position it for desktops that must sit next to local data or hardware, and it costs you the Azure-side lifecycle features.
 
-This article explains the concept and the decision. It does not repeat the setup steps or the network requirements, which a separate article covers, and it keeps the operating system and licensing section to what the decision needs. It is based on Microsoft Learn, a Microsoft Tech Community announcement and Nerdio's own pages.
+This article explains the concept and the decision. It does not repeat the setup steps or the network requirements, which the companion article "Requirements for running AVD session hosts on-premises with Azure Arc" covers, and it keeps the operating system and licensing section to what the decision needs. It is based on Microsoft Learn, a Microsoft Tech Community announcement and Nerdio's own pages.
 
 ## What Azure Virtual Desktop Hybrid is
 
@@ -40,7 +40,7 @@ The product page for the entity is [Azure Virtual Desktop Hybrid](/entity/avd-hy
 
 ## Status and naming
 
-Microsoft announced the general availability of Azure Virtual Desktop Hybrid in a Tech Community post published on 1 September 2026 and updated on 2 September 2026. Before that, a Windows IT Pro post of 4 May 2026 described it as being in public preview, and Learn's what's-new page lists "AVD for hybrid environments with Arc-Enabled Servers (Public Preview)" under May 2026 and the general availability entry under September 2026. The Learn overview and deployment pages are dated 2 September 2026 and show no preview notice. Nerdio's AVD Hybrid product page, last modified in October 2026, gives no status.
+Microsoft announced the general availability of Azure Virtual Desktop Hybrid in a Tech Community post published on 1 September 2026 and updated on 2 September 2026. Before that, a Windows IT Pro post of 4 May 2026 described it as being in public preview, and Learn's what's-new page lists "AVD for hybrid environments with Arc-Enabled Servers (Public Preview)" under May 2026 and the general availability entry under September 2026. The Learn overview and deployment pages carry the page date 2 September 2026 and show no preview notice. Nerdio's AVD Hybrid product page, last modified in October 2026, gives no status.
 
 Two names are easy to confuse. "Hybrid" in this article means the Azure Arc-based offer above. It is not the same as a hybrid-joined session host, which means a machine joined to both Active Directory and Microsoft Entra ID, and it is not Azure Virtual Desktop for Azure Local.
 
@@ -75,12 +75,18 @@ Identity is a second filter. Windows client session hosts can be Microsoft Entra
 |---|---|---|---|
 | Where hosts run | Azure virtual machines | Azure Local instances, version 23H2 or later and registered with Azure | Your hypervisor or headless physical device, Arc-enabled |
 | Multi-session Windows 11 | Yes, per Learn's prerequisites page | Yes, per the Azure Local page | No |
-| Autoscale | Documented on its own Learn pages | Yes: Microsoft announced autoscale as generally available for host pools on Azure Stack HCI, the earlier name of Azure Local, in October 2024 (Tech Community); Learn's scaling plan page does not mention Azure Local | No |
+| Autoscale | Documented on its own Learn pages | Sources differ: a Tech Community post of October 2024 announced autoscale as generally available for host pools on Azure Stack HCI, the earlier name of Azure Local; Learn's scaling plan page does not mention Azure Local | No |
 | Start VM on Connect | Yes | Yes: Learn says it can be enabled for session hosts on Azure and Azure Local | No |
 | Fee beyond user rights | Azure compute and storage | Azure Local service fee plus a fee per active vCPU | Hybrid service user license; compute, storage and networking stay in your environment |
 | Arc relationship | Not used; Learn advises against installing Arc on Azure VMs | Not an Arc-enabled service in Learn's wording, but the Connected Machine agent is installed on the session host VMs, automatically when you add hosts in the portal | Required for every session host |
 
-The Azure Local column comes from the [Azure Virtual Desktop on Azure Local](/entity/avd-for-azure-local/) overview page. It lists Windows 11 and Windows 10 Enterprise multi-session among the supported images, an Azure Local service fee, a fee per active vCPU, and the rule that one host pool holds hosts either in Azure or on Azure Local. Learn also says that offer, because it is not an Azure Arc-enabled service, is not supported as a standalone service outside Azure, in a multicloud environment or on other Arc-enabled servers. The same page requires the Connected Machine agent on the session host VMs, and the Azure Arc prerequisites page lists Azure Local among the environments where the agent can be installed. Learn's Hybrid overview speaks of "your preferred on-premises hypervisor" without naming products, and the announcement names VMware vSphere, Nutanix AHV and Hyper-V. On autoscale, the sources differ in scope: the Tech Community post of 18 October 2024 says the same scaling plans that apply to Azure virtual machines can now be applied to Azure Stack HCI VMs, while Learn's scaling plan page does not mention Azure Local. Learn's Hybrid pages do not say whether Hybrid is intended for hosts on Azure Local. If your hardware is Azure Local, start from the Azure Local offer and confirm with Microsoft before planning Hybrid on it.
+The Azure Local column comes from the [Azure Virtual Desktop on Azure Local](/entity/avd-for-azure-local/) overview page. It lists Windows 11 and Windows 10 Enterprise multi-session among the supported images, an Azure Local service fee, a fee per active vCPU, and the rule that one host pool holds hosts either in Azure or on Azure Local. 
+
+Learn also says that offer, because it is not an Azure Arc-enabled service, is not supported as a standalone service outside Azure, in a multicloud environment or on other Arc-enabled servers. The same page requires the Connected Machine agent on the session host VMs, and the Azure Arc prerequisites page lists Azure Local among the environments where the agent can be installed. 
+
+Learn's Hybrid overview speaks of "your preferred on-premises hypervisor" without naming products, and the announcement names VMware vSphere, Nutanix AHV and Hyper-V.
+
+On autoscale, the sources differ in scope: the Tech Community post of 18 October 2024 says the same scaling plans that apply to Azure virtual machines can now be applied to Azure Stack HCI VMs, while Learn's scaling plan page does not mention Azure Local. Learn's Hybrid pages do not say whether Hybrid is intended for hosts on Azure Local. If your hardware is Azure Local, start from the Azure Local offer and confirm with Microsoft before planning Hybrid on it. The article on [Azure Virtual Desktop for Azure Local](/entity/avd-for-azure-local/) on this site covers that offer, including autoscale, in detail.
 
 ## When it fits and when it does not
 
@@ -89,7 +95,7 @@ The Learn overview pitches the offer as using current datacenter resources and t
 A short test for an admin:
 
 1. **Does the workload have to run on your hardware?** If not, Azure-hosted session hosts keep autoscale and session host configuration.
-2. **Do you need multi-session or autoscale?** If yes, Hybrid is out. Look at Azure-hosted pools or the Azure Local offer, which lists multi-session images and, per the Tech Community post, autoscale.
+2. **Do you need Windows 11 or Windows 10 multi-session, or Azure-side autoscale?** If yes, Hybrid is out. Windows Server hosts are supported, and Learn says the extension enables the Remote Desktop Session Host role on them, so several users can share one server. For multi-session client images look at Azure-hosted pools or the Azure Local offer, which lists them. For autoscale on Azure Local, the sources differ (see the table).
 3. **Can you provision and power-manage hosts yourself?** If you cannot, plan a partner tool or scripts before the pilot, not after.
 4. **Can Windows Server hosts join AD DS?** If your design is Entra-only, Windows Server hosts do not qualify.
 5. **Are the licenses in place?** The user entitlement and the Hybrid service user license are both required.
@@ -110,7 +116,7 @@ The announcement carries partner statements from Login VSI, Nerdio and Nutanix. 
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
 - [Microsoft Learn: Azure Arc-enabled servers prerequisites](https://learn.microsoft.com/en-us/azure/azure-arc/servers/prerequisites)
 - [Microsoft Learn: Required FQDNs and endpoints for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/required-fqdn-endpoint)
-- [Tech Community: Microsoft Azure Virtual Desktop Hybrid is now generally available (1 September 2026)](https://techcommunity.microsoft.com/t5/azure-virtual-desktop-blog/microsoft-azure-virtual-desktop-hybrid-is-now-generally/ba-p/4550523)
+- [Tech Community: Microsoft Azure Virtual Desktop Hybrid is now generally available (1 September 2026)](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/microsoft-azure-virtual-desktop-hybrid-is-now-generally-available/4550523)
 - [Tech Community: New features for Azure Virtual Desktop for Azure Stack HCI (18 October 2024)](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/new-features-for-azure-virtual-desktop-for-azure-stack-hci/4273496)
 - [Tech Community: Windows 365 and Azure Virtual Desktop expanding access (4 May 2026)](https://techcommunity.microsoft.com/blog/windows-itpro-blog/windows-365-and-azure-virtual-desktop-expanding-access/4515931)
 - [Nerdio: AVD Hybrid](https://getnerdio.com/avd-hybrid/)

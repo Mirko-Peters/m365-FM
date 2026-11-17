@@ -54,7 +54,7 @@ The watermarking page lists these clients:
 
 | Client | Platform | Listed on the watermarking page | Status on Learn's Remote Desktop client page |
 |---|---|---|---|
-| Remote Desktop client | Windows Desktop (MSI), Windows 10 and later | 1.2.3317 or later | Not supported in public cloud since 27 March 2026 |
+| Remote Desktop client | Windows Desktop, Windows 10 and later | 1.2.3317 or later | MSI client not supported in public cloud since 27 March 2026; Microsoft Store app out of support since September 2025 |
 | Remote Desktop client | Web browser | No version | Not supported in public cloud since 27 March 2026 |
 | Remote Desktop client | macOS | 10.9.5 or later | No longer available to download; replaced by Windows App |
 | Remote Desktop client | iOS/iPadOS | 10.5.4 or later | No longer available to download; replaced by Windows App |
