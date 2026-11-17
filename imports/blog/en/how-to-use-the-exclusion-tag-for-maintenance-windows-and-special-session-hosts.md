@@ -41,7 +41,7 @@ The same check applies to the minimum percentage of hosts. With eight hosts and 
 
 ## Maintenance runbook
 
-1. **Tag the VM.** In the Azure portal open the VM, select **Add tags** (the button reads **change** if the VM already has tags), enter the plan's tag name and a value, and select **Save**. The autoscale pages define the match by tag name and do not say whether the value is compared. For several VMs, select them in a resource list and use **Assign tags**. Tags are not inherited from the resource group, so each VM needs its own. In PowerShell, merge the tag into the existing ones:
+1. **Tag the VM.** In the Azure portal open the VM, select **Add tags** (if the VM already has tags, Learn's edit section says to select **change**), enter the plan's tag name and a value, and select **Save**. The autoscale pages define the match by tag name and do not say whether the value is compared. For several VMs, select them in a resource list and use **Assign tags**. Tags are not inherited from the resource group, so each VM needs its own. In PowerShell, merge the tag into the existing ones:
 
    ```powershell
    $vm = Get-AzResource -Name "avd-host-03" -ResourceGroup "rg-avd"
