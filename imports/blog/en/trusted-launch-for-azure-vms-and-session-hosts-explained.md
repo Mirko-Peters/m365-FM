@@ -48,7 +48,7 @@ The measuring side is described elsewhere: the AVD security recommendations say 
 Scope to keep in mind:
 
 - **Data disks.** The FAQ says trusted launch security features apply to the running OS and OS disks only, not to data disks or to OS binaries stored on data disks.
-- **Threat class.** The stated target is bootkits, rootkits and kernel-level malware. Learn's AVD security recommendations list endpoint protection on all session hosts and monthly patching of base images as separate recommendations, next to the trusted launch section.
+- **Threat class.** The stated target is bootkits, rootkits and kernel-level malware. Learn's AVD security recommendations list endpoint protection on all session hosts and monthly patching of base images as separate recommendations.
 - **Memory encryption.** Learn describes encryption of the desktop in memory for confidential VMs, not for trusted launch; see the comparison below.
 
 Two practical notes from separate Learn pages: the FAQ says the paravisor typically uses about 50 MB of memory, shown as reserved in the guest OS. The overview says trusted launch does not increase existing VM pricing costs.
