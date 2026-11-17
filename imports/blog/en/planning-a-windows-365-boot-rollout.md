@@ -134,8 +134,6 @@ For captive portal problems, Learn says to disconnect, reconnect and sign in aga
 
 ## Sources
 
-Retrieved on 17 November 2026.
-
 - [Microsoft Learn: Guided scenario, deploy Windows 365 Boot to physical devices](https://learn.microsoft.com/en-us/windows-365/enterprise/windows-365-boot-guide)
 - [Microsoft Learn: Windows 365 Boot physical device requirements](https://learn.microsoft.com/en-us/windows-365/enterprise/windows-365-boot-physical-device-requirements)
 - [Microsoft Learn: What is Windows 365 Boot?](https://learn.microsoft.com/en-us/windows-365/enterprise/windows-365-boot-overview)

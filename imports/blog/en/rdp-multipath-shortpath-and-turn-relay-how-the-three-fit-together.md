@@ -102,7 +102,6 @@ The Shortpath page lists TURN relay availability per region and says a relay is 
 
 ## Sources
 
-Retrieved on 17 November 2026.
 
 - [Microsoft Learn: RDP Shortpath for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/rdp-shortpath)
 - [Microsoft Learn: Configure RDP Shortpath for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-rdp-shortpath)

@@ -86,7 +86,6 @@ Hotpatching, which applies eligible updates without a reboot, is supported on Wi
 
 ## Sources
 
-Retrieved on 17 November 2026.
 
 - [Microsoft Learn: Windows Enterprise multi-session FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/windows-multisession-faq)
 - [Microsoft Learn: Prerequisites for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/prerequisites)

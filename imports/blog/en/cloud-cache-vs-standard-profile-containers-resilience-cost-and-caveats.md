@@ -118,8 +118,6 @@ In [Nerdio](/entity/nerdio/) Manager you go to **Cloud Desktops > Azure Virtual 
 
 ## Sources
 
-Retrieved on 17 November 2026.
-
 - [Microsoft Learn: High availability options for FSLogix](https://learn.microsoft.com/en-us/fslogix/concepts-container-high-availability)
 - [Microsoft Learn: FSLogix Cloud Cache](https://learn.microsoft.com/en-us/fslogix/concepts-fslogix-cloud-cache)
 - [Microsoft Learn: FSLogix business continuity and disaster recovery options](https://learn.microsoft.com/en-us/fslogix/concepts-container-recovery-business-continuity)

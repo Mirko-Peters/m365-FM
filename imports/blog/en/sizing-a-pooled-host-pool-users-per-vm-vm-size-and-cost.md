@@ -98,7 +98,7 @@ Microsoft announced general availability of enhanced host pool management, inclu
 
 Three things set the compute bill: how many hosts run, for how many hours, and the VM size. In outline, monthly compute is VM-hours multiplied by the hourly rate, plus disks, profile storage and licences. Learn's service limits page points to the Azure pricing calculator for the rate.
 
-Illustration with the 13 hosts of 8 vCPUs from step 3: if all 13 run 24 hours, that is 312 VM-hours a day. If 13 run for 8 peak hours and two stay on for the other 16, that is 13 x 8 + 2 x 16 = 136 VM-hours. The two always-on hosts are an assumption, not a Microsoft figure. "What Azure Virtual Desktop really costs: the full cost model" and "15 ways to cut Azure Virtual Desktop cost without hurting users" cover the other line items.
+Illustration with the 13 hosts of 8 vCPUs from step 3: if all 13 run 24 hours, that is 312 VM-hours a day. If 13 run for 8 peak hours and two stay on for the other 16, that is 13 x 8 + 2 x 16 = 136 VM-hours. The two always-on hosts are an assumption, not a Microsoft figure. "What Azure Virtual Desktop really costs: the full cost model" and "Azure Virtual Desktop cost levers: 15 options and what each one trades off" cover the other line items.
 
 Profile storage is a separate line. Learn's [cost page](https://learn.microsoft.com/en-us/azure/virtual-desktop/understand-estimate-costs) lists user profile storage, such as Azure Files or Azure NetApp Files, for FSLogix profile containers as an accompanying cost. The sizing table lists a minimum profile storage of 30 GB per workload type without saying whether that is per user or in total, so it is not multiplied here. See [FSLogix](/entity/fslogix/).
 

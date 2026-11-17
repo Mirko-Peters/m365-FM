@@ -122,7 +122,6 @@ If a personal plan is set to hibernate but the hosts do not have hibernation ena
 
 ## Sources
 
-Retrieved on 17 November 2026.
 
 - [Microsoft Learn: Azure Virtual Desktop terminology](https://learn.microsoft.com/en-us/azure/virtual-desktop/terminology)
 - [Microsoft Learn: Azure Virtual Desktop FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/faq)

@@ -99,7 +99,6 @@ Check these before you promise them to users, because Learn marks several as pre
 
 ## Sources
 
-Retrieved on 17 November 2026.
 
 - [Microsoft Learn: Azure Virtual Desktop terminology](https://learn.microsoft.com/en-us/azure/virtual-desktop/terminology)
 - [Microsoft Learn: Publish applications with RemoteApp in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/publish-applications-stream-remoteapp)

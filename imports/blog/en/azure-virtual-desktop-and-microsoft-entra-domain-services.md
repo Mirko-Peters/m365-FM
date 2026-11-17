@@ -112,7 +112,6 @@ Our reading, based on the limits above:
 
 ## Sources
 
-Retrieved on 17 November 2026.
 
 - [Microsoft Learn: Microsoft Entra Domain Services overview](https://learn.microsoft.com/en-us/entra/identity/domain-services/overview)
 - [Microsoft Learn: Compare self-managed AD DS, Microsoft Entra Domain Services and Microsoft Entra ID](https://learn.microsoft.com/en-us/entra/identity/domain-services/compare-identity-solutions)

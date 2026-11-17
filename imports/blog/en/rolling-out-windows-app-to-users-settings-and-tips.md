@@ -113,7 +113,6 @@ Set aside users who connect to Remote Desktop Services on Windows. Learn's Windo
 
 ## Sources
 
-Retrieved on 17 November 2026.
 
 - [Microsoft Learn: Windows App overview](https://learn.microsoft.com/en-us/windows-app/overview)
 - [Microsoft Learn: Connect to Windows devices and apps with Windows App](https://learn.microsoft.com/en-us/windows-app/get-started-connect-devices-desktops-apps)

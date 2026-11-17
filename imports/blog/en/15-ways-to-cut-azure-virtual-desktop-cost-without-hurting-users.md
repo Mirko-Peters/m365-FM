@@ -1,5 +1,5 @@
 ---
-title: "15 ways to cut Azure Virtual Desktop cost without hurting users"
+title: "Azure Virtual Desktop cost levers: 15 options and what each one trades off"
 summary: "Fifteen levers for lowering Azure Virtual Desktop cost, grouped into compute hours, compute rate, storage and monitoring, and licensing, each with its user-facing trade-off and source. Item 14 has no documented saving, item 15 only avoids paying twice, and some features still carry preview wording on Learn."
 status: review
 publish: false

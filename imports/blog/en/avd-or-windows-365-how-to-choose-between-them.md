@@ -132,8 +132,6 @@ Windows 365 Frontline was renamed Windows 365 Flex in the week of May 4, 2026, a
 
 ## Sources
 
-Retrieved on 2026-11-17.
-
 - [Microsoft Learn: What is Azure Virtual Desktop?](https://learn.microsoft.com/en-us/azure/virtual-desktop/overview)
 - [Microsoft Learn: Prerequisites for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/prerequisites)
 - [Microsoft Learn: Built-in Azure RBAC roles for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/rbac)

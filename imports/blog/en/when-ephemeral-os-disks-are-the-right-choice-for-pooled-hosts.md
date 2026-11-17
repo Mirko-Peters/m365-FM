@@ -21,7 +21,7 @@ faq:
     a: "The sources differ. Nerdio's help article says ephemeral OS disks have no associated storage costs. Microsoft's Azure page says the placement option does not change the cost, and that a Standard SSD or Premium SSD base disk is charged. Learn's Azure Virtual Desktop page says that during preview only Standard SSD is supported. Compare the full VM price with a local-storage size against your current size and disk."
 ---
 
-Ephemeral OS disks are the right choice for pooled session hosts that hold no user state: the profile is in FSLogix, the applications are in the image or delivered separately, and the pool adds and removes hosts instead of deallocating them. They are the wrong choice when hosts must be deallocated and started again, keep local data, run in Azure Government, or rely on features such as Azure Backup. This article is the decision guide. How the disk works and how to switch it on is covered in the sibling article "Ephemeral OS disks for Azure Virtual Desktop: fast, cheap, stateless hosts".
+Ephemeral OS disks are the right choice for pooled session hosts that hold no user state: the profile is in FSLogix, the applications are in the image or delivered separately, and the pool adds and removes hosts instead of deallocating them. They are the wrong choice when hosts must be deallocated and started again, keep local data, run in Azure Government, or rely on features such as Azure Backup. This article is the decision guide. How the disk works and how to switch it on is covered in the sibling article "Ephemeral OS disks for Azure Virtual Desktop: what they are and when to use them".
 
 ## The short answer
 
@@ -107,7 +107,6 @@ A pooled pool with managed OS disks and power management autoscaling (generally 
 
 ## Sources
 
-Retrieved on 17 November 2026.
 
 - [Microsoft Learn: Ephemeral OS disks on Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy/session-hosts/ephemeral-os-disks)
 - [Microsoft Learn: Ephemeral OS disks for Azure VMs](https://learn.microsoft.com/en-us/azure/virtual-machines/ephemeral-os-disks)

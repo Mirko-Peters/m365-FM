@@ -100,8 +100,6 @@ It fits poorly when users are cloud-only, when masking would be your only contro
 
 ## Sources
 
-Retrieved on 17 November 2026.
-
 - [Microsoft Learn: Rule Sets and the Rules Editor (concepts)](https://learn.microsoft.com/en-us/fslogix/concepts-fslogix-apps-rule-editor-rule-sets)
 - [Microsoft Learn: FSLogix FAQ](https://learn.microsoft.com/en-us/fslogix/overview-faq)
 - [Microsoft Learn: App Attach in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/app-attach-overview)

@@ -111,8 +111,6 @@ What the apply-license page, the host pool deployment article and the Windows Se
 
 ## Sources
 
-Retrieved on 17 November 2026.
-
 - [Microsoft Learn: Licensing Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/licensing)
 - [Microsoft Learn: Apply Windows license to session host virtual machines](https://learn.microsoft.com/en-us/azure/virtual-desktop/apply-windows-license)
 - [Microsoft Learn: Deploy Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop)

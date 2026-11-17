@@ -115,7 +115,6 @@ FSLogix is tied to the same kind of licenses as the desktop itself: the per-user
 
 ## Sources
 
-Retrieved on 17 November 2026.
 
 - [Microsoft Learn: Azure Virtual Desktop Hybrid overview](https://learn.microsoft.com/en-us/azure/virtual-desktop/hybrid-overview)
 - [Microsoft Learn: Licensing Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/licensing)

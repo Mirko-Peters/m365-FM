@@ -108,8 +108,6 @@ Under this model, a user who launches sessions in March and never signs in durin
 
 ## Sources
 
-Retrieved on 17 November 2026.
-
 - [Nerdio help center (Enterprise): Nerdio Manager Edition Management](https://nmehelp.getnerdio.com/hc/en-us/articles/25499386018701-Nerdio-Manager-Edition-Management)
 - [Nerdio help center (Enterprise): NME entitlements consumption and billing](https://nmehelp.getnerdio.com/hc/en-us/articles/26124388880397-NME-entitlements-consumption-and-billing)
 - [Nerdio help center (Enterprise): Subscribe to a License of Nerdio Manager](https://nmehelp.getnerdio.com/hc/en-us/articles/25499377095053-Subscribe-to-a-License-of-Nerdio-Manager)

@@ -112,8 +112,6 @@ Nerdio's help says App Masking is currently not supported in AAD joined host poo
 
 ## Sources
 
-Retrieved on 17 November 2026.
-
 - [Microsoft Learn: Tutorial: Create and implement Rule Sets (Application Masking)](https://learn.microsoft.com/en-us/fslogix/tutorial-application-rule-sets)
 - [Microsoft Learn: Rule Sets and the Rules Editor (concepts)](https://learn.microsoft.com/en-us/fslogix/concepts-fslogix-apps-rule-editor-rule-sets)
 - [Microsoft Learn: Install FSLogix](https://learn.microsoft.com/en-us/fslogix/how-to-install-fslogix)

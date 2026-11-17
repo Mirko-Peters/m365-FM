@@ -92,8 +92,6 @@ Nerdio's pricing and product pages name no minimum environment size at which the
 
 ## Sources
 
-Retrieved on 17 November 2026.
-
 - [Nerdio help center (Enterprise): About Nerdio Manager](https://nmehelp.getnerdio.com/hc/en-us/articles/26124301747213-About-Nerdio-Manager)
 - [Nerdio help center (Enterprise): Nerdio Manager for Enterprise reference architecture](https://nmehelp.getnerdio.com/hc/en-us/articles/26124355756941-Nerdio-Manager-for-Enterprise-reference-architecture)
 - [Nerdio help center (Enterprise): Preparation and Prerequisites](https://nmehelp.getnerdio.com/hc/en-us/articles/28419295581709-Preparation-and-Prerequisites)

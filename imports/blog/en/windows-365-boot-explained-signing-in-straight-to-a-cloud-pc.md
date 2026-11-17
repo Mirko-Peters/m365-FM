@@ -115,8 +115,6 @@ This article covers the concept. Requirements, the guided scenario steps, Autopi
 
 ## Sources
 
-Retrieved on 17 November 2026.
-
 - [Microsoft Learn: What is Windows 365 Boot?](https://learn.microsoft.com/en-us/windows-365/enterprise/windows-365-boot-overview)
 - [Microsoft Learn: Guided scenario, deploy Windows 365 Boot to physical devices](https://learn.microsoft.com/en-us/windows-365/enterprise/windows-365-boot-guide)
 - [Microsoft Learn: Restrict user access to Windows 365 Boot physical devices](https://learn.microsoft.com/en-us/windows-365/enterprise/windows-365-boot-restrict-user-access-physical-device)

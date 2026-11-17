@@ -109,7 +109,7 @@ At the hypothetical rate, that is 1,672 units against 7,200, about 23 percent of
 3. Tag host pools with `cm-resource-parent` set to the host pool resource ID, so Cost Management can group costs by host pool. Learn says the tag does not affect billing, and the linked cost-analysis article is labelled preview.
 4. Decide commitments only after you have a few weeks of actual running hours.
 
-The sibling article "15 ways to cut Azure Virtual Desktop cost without hurting users" covers the levers one by one.
+The sibling article "Azure Virtual Desktop cost levers: 15 options and what each one trades off" covers the levers one by one.
 
 ## Sources
 

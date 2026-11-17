@@ -130,8 +130,6 @@ Plan for these events:
 
 ## Sources
 
-Retrieved on 17 November 2026.
-
 - [Microsoft Learn: Explore Azure Hybrid Benefit for Windows VMs](https://learn.microsoft.com/en-us/azure/virtual-machines/windows/hybrid-use-benefit-licensing)
 - [Microsoft Learn: Azure Hybrid Benefit for Windows Server](https://learn.microsoft.com/en-us/windows-server/get-started/azure-hybrid-benefit)
 - [Azure: Azure Hybrid Benefit](https://azure.microsoft.com/en-us/pricing/hybrid-benefit/)

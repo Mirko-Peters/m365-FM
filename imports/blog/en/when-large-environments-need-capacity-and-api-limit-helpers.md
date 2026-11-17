@@ -116,8 +116,6 @@ The tuning above reduces the number of calls; it does not add capacity. For allo
 
 ## Sources
 
-Retrieved on 17 November 2026.
-
 - [Nerdio Help Center: Azure API limits and throttling overview](https://nmehelp.getnerdio.com/hc/en-us/articles/26124316172941-Azure-API-limits-and-throttling-overview)
 - [Nerdio Help Center: Azure API Limit Booster](https://nmehelp.getnerdio.com/hc/en-us/articles/26124388476941-Azure-API-Limit-Booster)
 - [Nerdio Help Center: Scale up Nerdio Manager for large deployments](https://nmehelp.getnerdio.com/hc/en-us/articles/26124315546381-Scale-up-Nerdio-Manager-for-large-deployments)

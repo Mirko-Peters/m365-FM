@@ -123,8 +123,6 @@ A budget answers "has the total passed a number". It does not say which host poo
 
 ## Sources
 
-Retrieved on 17 November 2026.
-
 - [Microsoft Learn: Tutorial, Create and manage budgets](https://learn.microsoft.com/en-us/azure/cost-management-billing/costs/tutorial-acm-create-budgets)
 - [Microsoft Learn: Use cost alerts to monitor usage and spending](https://learn.microsoft.com/en-us/azure/cost-management-billing/costs/cost-mgt-alerts-monitor-usage-spending)
 - [Microsoft Learn: Manage costs with budgets (budget scenario)](https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/cost-management-budget-scenario)

@@ -112,7 +112,6 @@ On billing, Nerdio says an installation is on per-user billing by default and th
 
 ## Sources
 
-Retrieved on 17 November 2026.
 
 - [Nerdio help center: Add an Account](https://nmmhelp.getnerdio.com/hc/en-us/articles/26125624156173)
 - [Nerdio help center: Add a Cloud PC Account](https://nmmhelp.getnerdio.com/hc/en-us/articles/26125586381965-Add-a-Cloud-PC-Account)

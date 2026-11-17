@@ -1,5 +1,5 @@
 ---
-title: "Windows 365 Frontline vs Windows 365 Enterprise: shift work and cost"
+title: "Windows 365 Flex vs Windows 365 Enterprise: shift work and cost"
 summary: "Windows 365 Enterprise assigns one licensed Cloud PC to each user, while Windows 365 Flex (formerly Frontline, renamed in May 2026) licenses concurrent use, either as up to three dedicated Cloud PCs per license or as one shared Cloud PC per license. For shift work, the number of users per shift and the mode decide which model costs less."
 status: review
 publish: false

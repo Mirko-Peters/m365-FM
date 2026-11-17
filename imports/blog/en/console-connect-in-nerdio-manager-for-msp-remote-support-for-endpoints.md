@@ -102,8 +102,6 @@ A fictional [managed service provider](/entity/managed-service-provider/) suppor
 
 ## Sources
 
-Retrieved on 17 November 2026.
-
 - [Nerdio help center (MSP): Enable Console Connect (remote support)](https://nmmhelp.getnerdio.com/hc/en-us/articles/26125609444109-Enable-Console-Connect-remote-support)
 - [Nerdio help center (MSP): Console Connect Troubleshooting/FAQs](https://nmmhelp.getnerdio.com/hc/en-us/articles/31946604792077-Console-Connect-Troubleshooting-FAQs)
 - [Nerdio help center (MSP): NMM Release Notes](https://nmmhelp.getnerdio.com/hc/en-us/articles/360055385832-NMM-Release-Notes)

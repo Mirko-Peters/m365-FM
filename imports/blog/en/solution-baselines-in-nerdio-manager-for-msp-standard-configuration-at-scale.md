@@ -96,8 +96,6 @@ A fictional MSP supports 14 small customers and wants the same Entra ID sign-in 
 
 ## Sources
 
-Retrieved on 17 November 2026.
-
 - [Nerdio help center: Solution Baselines, MSP-level management](https://nmmhelp.getnerdio.com/hc/en-us/articles/25498298095373)
 - [Nerdio help center: Get started with Microsoft 365 solution baselines](https://nmmhelp.getnerdio.com/hc/en-us/articles/37958534716941-Get-started-with-Microsoft-365-solution-baselines-in-Nerdio-Manager)
 - [Nerdio help center: What Microsoft 365 solution baseline settings are recommended?](https://nmmhelp.getnerdio.com/hc/en-us/articles/35388344800013-What-Microsoft-365-solution-baseline-settings-are-recommended)

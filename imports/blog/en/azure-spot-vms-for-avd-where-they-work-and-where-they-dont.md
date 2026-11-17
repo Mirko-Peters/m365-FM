@@ -108,7 +108,6 @@ Use Spot where an eviction is an inconvenience: test pools, short-lived training
 
 ## Sources
 
-Retrieved on 17 November 2026.
 
 - [Microsoft Learn: Use Azure Spot Virtual Machines](https://learn.microsoft.com/en-us/azure/virtual-machines/spot-vms)
 - [Microsoft Learn: Deploy Spot VMs using the Azure portal](https://learn.microsoft.com/en-us/azure/virtual-machines/spot-portal)

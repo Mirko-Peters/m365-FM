@@ -97,7 +97,6 @@ A practical order of questions, based on the Learn tables:
 
 ## Sources
 
-Retrieved on 17 November 2026.
 
 - [Microsoft Learn: Screen capture protection in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/screen-capture-protection)
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)

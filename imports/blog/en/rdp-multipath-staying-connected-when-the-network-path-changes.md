@@ -126,7 +126,6 @@ Neither the Multipath page nor the Shortpath configuration article names a log f
 
 ## Sources
 
-Retrieved on 17 November 2026.
 
 - [Microsoft Learn: Use RDP Multipath to improve Azure Virtual Desktop connections](https://learn.microsoft.com/en-us/azure/virtual-desktop/rdp-multipath)
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)

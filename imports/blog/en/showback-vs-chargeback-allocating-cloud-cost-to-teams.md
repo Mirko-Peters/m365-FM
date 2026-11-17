@@ -112,8 +112,6 @@ Learn's showback page gives a simple rule: use actual cost for invoice reconcili
 
 ## Sources
 
-Retrieved on 17 November 2026.
-
 - [Microsoft Learn: Invoicing and chargeback (FinOps Framework)](https://learn.microsoft.com/en-us/cloud-computing/finops/framework/manage/invoicing-chargeback)
 - [Microsoft Learn: Allocation (FinOps Framework)](https://learn.microsoft.com/en-us/cloud-computing/finops/framework/understand/allocation)
 - [Microsoft Learn: Data analysis and showback](https://learn.microsoft.com/en-us/cloud-computing/finops/capabilities-analysis-showback)

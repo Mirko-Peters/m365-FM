@@ -87,7 +87,6 @@ Two settings matter for the order of work. Pick the `FlipFlopProfileDirectoryNam
 
 ## Sources
 
-Retrieved on 17 November 2026.
 
 - [Microsoft Learn: FSLogix overview FAQ](https://learn.microsoft.com/en-us/fslogix/overview-faq)
 - [Microsoft Learn: frx command-line utility](https://learn.microsoft.com/en-us/fslogix/utilities/frx/frx)

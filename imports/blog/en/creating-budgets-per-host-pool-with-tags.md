@@ -168,8 +168,6 @@ Learn's REST page shows the same shape with a dimension filter and two tag filte
 
 ## Sources
 
-Retrieved on 17 November 2026.
-
 - [Microsoft Learn: Tutorial, Create and manage budgets](https://learn.microsoft.com/en-us/azure/cost-management-billing/costs/tutorial-acm-create-budgets)
 - [Microsoft Learn: Microsoft.Consumption budgets (template reference)](https://learn.microsoft.com/en-us/azure/templates/microsoft.consumption/budgets)
 - [Microsoft Learn: Budgets, Create Or Update (Consumption REST API)](https://learn.microsoft.com/en-us/rest/api/consumption/budgets/create-or-update?view=rest-consumption-2024-08-01)

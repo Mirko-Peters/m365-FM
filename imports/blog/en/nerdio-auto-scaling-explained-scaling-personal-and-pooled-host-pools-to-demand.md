@@ -110,8 +110,6 @@ Nerdio's pricing page separates three rows: AVD Auto-scale and AVD Auto-heal are
 
 ## Sources
 
-Retrieved on 17 November 2026.
-
 - [Nerdio help: NME entitlements consumption and billing](https://nmehelp.getnerdio.com/hc/en-us/articles/26124388880397-NME-entitlements-consumption-and-billing)
 - [Nerdio: Enterprise pricing and feature details](https://getnerdio.com/pricing/enterprise/)
 - [Nerdio help: Enable dynamic host pool Auto-scaling](https://nmehelp.getnerdio.com/hc/en-us/articles/26124304193037-Enable-Dynamic-Host-Pool-Auto-scaling)

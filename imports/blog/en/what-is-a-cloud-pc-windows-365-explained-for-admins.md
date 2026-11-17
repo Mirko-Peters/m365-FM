@@ -106,8 +106,6 @@ The planning guide says all users connect through the Windows App client or a su
 
 ## Sources
 
-Retrieved on 17 November 2026.
-
 - [Microsoft Learn: What is Windows 365?](https://learn.microsoft.com/en-us/windows-365/overview)
 - [Microsoft Learn: What is Windows 365 Enterprise?](https://learn.microsoft.com/en-us/windows-365/enterprise/overview)
 - [Microsoft Learn: Windows 365 requirements](https://learn.microsoft.com/en-us/windows-365/enterprise/requirements)

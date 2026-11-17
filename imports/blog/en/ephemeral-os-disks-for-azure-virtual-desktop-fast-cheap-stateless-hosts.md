@@ -1,5 +1,5 @@
 ---
-title: "Ephemeral OS disks for Azure Virtual Desktop: fast, cheap, stateless hosts"
+title: "Ephemeral OS disks for Azure Virtual Desktop: what they are and when to use them"
 summary: "An ephemeral OS disk keeps the session host's operating system on the VM's local storage instead of remote Azure Storage, so the host is reimaged or deleted rather than stopped and started. In Azure Virtual Desktop it works only in pooled host pools that use a session host configuration, and it comes with a clear list of size, placement and feature limits."
 status: review
 publish: false
@@ -23,7 +23,7 @@ faq:
 
 An ephemeral OS disk stores a session host's operating system on the virtual machine's local storage instead of in remote Azure Storage. In Azure Virtual Desktop that means a host is reset by reimaging it or removed by deleting it, never deallocated and started again. The feature works only in pooled host pools that use a session host configuration, and it is meant for stateless hosts.
 
-Which workloads should use it is a separate decision and is not covered here. On the title's "fast" and "cheap": the sources describe lower latency and quicker reimaging only qualitatively, and none gives a figure for a cost saving on session hosts.
+Which workloads should use it is a separate decision and is not covered here. The sources describe lower latency and quicker reimaging only qualitatively, and none gives a figure for a cost saving on session hosts.
 
 ## Status and naming
 

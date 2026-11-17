@@ -127,7 +127,6 @@ Run this lookup against a test connection before you need it, so you know the da
 
 ## Sources
 
-Retrieved on 17 November 2026.
 
 - [Microsoft Learn: Watermarking in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/watermarking)
 - [Microsoft Learn: Screen capture protection in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/screen-capture-protection)

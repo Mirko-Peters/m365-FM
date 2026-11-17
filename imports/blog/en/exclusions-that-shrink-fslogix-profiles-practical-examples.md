@@ -126,8 +126,6 @@ For the product overview, see [FSLogix](/entity/fslogix/).
 
 ## Sources
 
-Retrieved on 17 November 2026.
-
 - [Microsoft Learn: Tutorial: Create and implement redirections.xml](https://learn.microsoft.com/en-us/fslogix/tutorial-redirections-xml)
 - [Microsoft Learn: Custom profile redirections.xml](https://learn.microsoft.com/en-us/fslogix/concepts-redirections-xml)
 - [Microsoft Learn: FSLogix FAQ](https://learn.microsoft.com/en-us/fslogix/overview-faq)

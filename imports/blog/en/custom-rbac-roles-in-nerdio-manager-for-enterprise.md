@@ -123,8 +123,6 @@ A custom Nerdio role does not reach everything. Three neighbouring settings dese
 
 ## Sources
 
-Retrieved on 17 November 2026.
-
 - [Nerdio help center (Enterprise): Role-based access control (RBAC): Custom roles](https://nmehelp.getnerdio.com/hc/en-us/articles/26124328221709)
 - [Nerdio help center (Enterprise): Role-based access control (RBAC) in Nerdio Manager](https://nmehelp.getnerdio.com/hc/en-us/articles/26124313324173)
 - [Nerdio help center (Enterprise): Role-based Access Control (RBAC): Multiple Group Assignments](https://nmehelp.getnerdio.com/hc/en-us/articles/26124385542797)

@@ -149,7 +149,6 @@ The SlimCore page lists Microsoft 365 endpoint ID 11, marked Optimize and requir
 
 ## Sources
 
-Retrieved on 17 November 2026.
 
 - [Microsoft Learn: Use Microsoft Teams on Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/teams-on-avd)
 - [Microsoft Learn: New VDI solution for Teams](https://learn.microsoft.com/en-us/microsoftteams/vdi-2)
