@@ -41,7 +41,7 @@ If the active path degrades or fails, the system switches to a backup UDP or TCP
 
 ## Where it sits in the connection sequence
 
-Multipath does not change how a session starts. Learn's Shortpath page says every connection begins on the TCP-based reverse connect transport through the Azure Virtual Desktop gateway, where brokering and authentication happen. For public networks, the session host and client then exchange candidate lists over that transport, and ICE coordinates STUN and TURN so that the preferred path is tried first. Shortpath, once established, carries the dynamic virtual channels for remote graphics, input and device redirection. Multipath, as Learn describes it, keeps backup paths on standby after that point and switches when the active one degrades. In our reading, Shortpath decides which path is used now, and Multipath decides what happens when that path stops being good enough.
+Multipath does not change how a session starts. Learn's Shortpath page says every connection begins on the TCP-based reverse connect transport through the Azure Virtual Desktop gateway, where brokering and authentication happen. For public networks, the session host and client then exchange candidate lists over that transport, and ICE coordinates STUN and TURN so that the preferred path is tried first. Multipath, as Learn describes it, keeps backup paths on standby after that point and switches when the active one degrades. In our reading, Shortpath decides which path is used now, and Multipath decides what happens when that path stops being good enough.
 
 ## What it needs
 
@@ -54,7 +54,7 @@ Multipath does not change how a session starts. Learn's Shortpath page says ever
 | Windows App for macOS beta, 11.3.8 (3048) | Multipath with multiple UDP transport paths; What's new adds that the environment must meet the Shortpath for public networks requirements |
 | Other platforms | Not currently supported |
 
-Learn adds that connections must come from a local Windows device for the Windows versions above. [Windows App](/entity/windows-app/) is the client to standardise on, and the version check is the first item to test when one user gets Multipath and another does not.
+Learn adds that connections must come from a local Windows device for the Windows versions above. The [Windows App](/entity/windows-app/) version check is the first item to test when one user gets Multipath and another does not.
 
 **Network.** The Multipath page lists these Azure cloud endpoints for TCP and UDP RDP transport:
 
@@ -83,13 +83,22 @@ Learn's [What's new](https://learn.microsoft.com/en-us/azure/virtual-desktop/wha
 | September 2026 | UDP support for Windows App on macOS beta. In Azure Government, redundant UDP paths generally available, phased GA of redundant TCP started (validation ring), and Shortpath with TURN in public preview |
 | October 2026 | Multipath with redundant TCP and UDP paths, and Shortpath with TURN, generally available in Azure Government |
 
-The Multipath page's availability table shows both multiple UDP paths and redundant TCP paths as generally available in the Azure public cloud and Azure Government. For Windows 365, the Windows 365 What's new page has its own entries: Multipath fully rolled out on 3 November 2025, the redundant TCP GA rollout in the week of 11 May 2026, and general availability of redundant TCP for Windows 365 Cloud PC in the week of 6 July 2026. It also lists the Azure Government steps for Windows 365 in September and October 2026.
+The Multipath page's availability table shows both multiple UDP paths and redundant TCP paths as generally available in the Azure public cloud and Azure Government. For Windows 365, the Windows 365 What's new page has its own entries: Multipath fully rolled out on 3 November 2025, the redundant TCP GA rollout in the week of 11 May 2026, and general availability of redundant TCP for Windows 365 Cloud PC in the week of 6 July 2026.
+
+## What users see: Modern Auto-Reconnect
+
+The most visible effect of a path change is what happens to the session window. Learn's [Session Auto-Reconnect](https://learn.microsoft.com/en-us/azure/virtual-desktop/fast-reconnect) page describes two models.
+
+- **Current model.** After the client detects a transport failure, it waits for the operating system to report a network, then retries in a loop. Each attempt is a full end-to-end operation, and the delay between attempts starts at about one second and doubles with jitter, for a window of about 30 seconds. A modal "Reconnecting" dialog blocks input meanwhile; if the window expires, the user is asked to retry or cancel.
+- **Modern Auto-Reconnect.** Instead of retrying, the client enters a "connection paused" state while the session stays active on the host, and resumes it as soon as any viable path appears. Learn says this is enabled by RDP Multipath, which lets the connection recover without rebuilding the whole connection state, and that the user sees a lightweight "Connection paused" notification instead of a blocking dialog. If connectivity does not return within the allowed waiting period, the user is asked whether to keep waiting or close the session.
+
+Status and requirements, per Learn: What's new lists Modern Auto-Reconnect twice in August 2026, as a public preview and as the start of a phased rollout in Azure Virtual Desktop, and the Windows 365 What's new page lists a rollout start in the week of 10 August 2026. The Auto-Reconnect page says availability expands gradually and requires Windows App for Windows 2.0.1314.0 or later, in addition to Multipath. It does not give the length of the waiting period.
 
 ## Planning capacity
 
 One detail from Learn changes sizing. Each active session can establish up to five outbound transport paths: up to three UDP ports for Shortpath and Multipath connections, and up to two TCP ports for reverse connect, including redundant paths. Learn tells administrators to set firewall rules, NAT capacity and port exhaustion limits for the expected number of concurrent sessions and their paths.
 
-A worked example, which is our arithmetic on Learn's maximum and not a measured value: 500 concurrent sessions could open up to 1,500 UDP and 1,000 TCP outbound ports, 2,500 in total. A NAT gateway or firewall that was sized for one connection per session could therefore see several times the connection count. In our reading, the same applies on the client side, where a shared office egress address serves many users at once.
+A worked example, which is our arithmetic on Learn's maximum and not a measured value: 500 concurrent sessions could open up to 1,500 UDP and 1,000 TCP outbound ports, 2,500 in total, several times what one connection per session would need. In our reading, the same applies on the client side, where a shared office egress address serves many users at once.
 
 ## Verifying that it works
 
@@ -105,12 +114,12 @@ Neither the Multipath page nor the Shortpath configuration article names a log f
 - Multipath improves how a session survives a path change. It does not create a path where none exists. If the client cannot reach the gateway on TCP 443, no standby path helps.
 - Learn says other platforms are not currently supported, so users on clients outside the table above should not expect a Multipath benefit.
 - Learn recommends Shortpath as the primary transport. Where UDP is blocked, expect the redundant TCP paths to be the only standby, and test that on your own networks.
-- Because behaviour depends on rollout state, client version and network, compare a pilot group with a control group before you quote an improvement.
+- Compare a pilot group with a control group before you quote an improvement, because behaviour depends on rollout state, client version and network.
 
 ## A short checklist
 
-1. Standardise on Windows App 2.0.1069.0 or later on Windows devices.
-2. Allow TCP 443 to the gateway range, UDP 3478 to the TURN range and outbound UDP for STUN.
+1. Use Windows App 2.0.1069.0 or later on Windows devices, which Learn recommends, and 2.0.1314.0 or later if you want Modern Auto-Reconnect.
+2. Allow TCP 443 to the gateway range, UDP 3478 to the TURN range and outbound UDP for STUN, noting the difference between the Multipath and Shortpath pages described above.
 3. Size NAT and firewall capacity for up to five paths per session.
 4. Confirm the indicator in the connection bar on a test session, then review connection reliability in Insights.
 5. Record the host pools where it does not appear and check client version before opening a ticket.
@@ -121,5 +130,7 @@ Retrieved on 17 November 2026.
 
 - [Microsoft Learn: Use RDP Multipath to improve Azure Virtual Desktop connections](https://learn.microsoft.com/en-us/azure/virtual-desktop/rdp-multipath)
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
+- [Microsoft Learn: What's new in Windows 365 Enterprise](https://learn.microsoft.com/en-us/windows-365/enterprise/whats-new)
+- [Microsoft Learn: Session Auto-Reconnect](https://learn.microsoft.com/en-us/azure/virtual-desktop/fast-reconnect)
 - [Microsoft Learn: RDP Shortpath for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/rdp-shortpath)
 - [Microsoft Learn: Configure RDP Shortpath for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-rdp-shortpath)

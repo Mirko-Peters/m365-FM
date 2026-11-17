@@ -10,7 +10,7 @@ keypoints:
   - "Screen capture protection blocks or hides remote content in local screenshots and screen sharing. Learn says it uses standard OS features and APIs, provides no DRM-level protection and is not a substitute for DRM."
   - "The session host setting has two values: Block screen capture on client, and Block screen capture on client and server. Only the second also stops tools and services inside the VM or Cloud PC from capturing the screen."
   - "Native Windows and macOS clients follow the session host setting. Android, iOS/iPadOS and web connections additionally need an Intune MAM app protection policy and a Conditional Access policy, and a client without them is blocked."
-  - "It does not stop a photo of the monitor, deliberate disclosure, or copying through the clipboard, drives and printers. Learn points to watermarking and to disabling redirection for those cases."
+  - "It does not stop a photo of the monitor or copying through the clipboard, drives and printers. Learn points to watermarking for the photo and to disabling redirection for copying. Keyloggers on the endpoint are a different problem, covered by Input protection (preview)."
   - "Learn lists known limits: Teams screen sharing can show black content in unsupported configurations, and on macOS some native apps may not respect the protection."
 faq:
   - q: "Does screen capture protection stop someone from photographing the screen?"
@@ -33,7 +33,7 @@ When protection is on, Learn says remote content is automatically blocked in scr
 - A screen share of the local device, for example in a Teams call, does not show the protected remote content.
 - With the second session host setting (below), tools and services running inside the VM or Cloud PC cannot capture the screen either.
 
-Learn's own test for a deployment is to connect to a new session, take a screenshot or share your screen from the local device, and confirm that the content is blocked or hidden. It also says you must sign out of any existing session and sign back in for a change to take effect, and that users must connect from a supported device, otherwise they see an error saying screen capture protection is enabled.
+Learn's own test for a deployment is to connect to a new session, take a screenshot or share your screen from the local device, and confirm that the content is blocked or hidden. It also says you must sign out of any existing session and sign back in for a change to take effect (the how-to article covers the session host restart that Learn's configuration steps include), and that users must connect from a supported device, otherwise they see an error saying screen capture protection is enabled.
 
 ## Two modes on the session host
 
@@ -56,11 +56,11 @@ Where enforcement happens depends on the client. Learn's tables, simplified:
 | macOS | Connects, capture blocked | Connects, capture not blocked |
 | iOS/iPadOS | Connects only if a MAM policy blocks screen capture; then blocked | Connects, capture blocked |
 | Android | Connects only if a MAM policy blocks screen capture; then blocked | Connects, capture blocked |
-| Web | Connects only in Microsoft Edge for Business with a MAM policy; then blocked | Connects, capture blocked |
+| Web | Connects only in Microsoft Edge for Business on Windows with a MAM policy; then blocked | Connects, capture blocked |
 
 Read the right-hand column carefully. If you configure only the MAM policy and nothing on the session hosts, Learn's table shows capture not blocked on native Windows and macOS clients; Learn's deployment patterns say those clients enforce the session host policy. The mobile and web clients are protected by the MAM policy, but that is a client-side control, not a server-side one: Learn says it does not prevent tools and services inside the VM or Cloud PC from capturing the screen.
 
-Version floors from Learn: Windows App on iOS/iPadOS 11.2.4, Windows App on Android 11.0.0.94, Microsoft Edge for Business 134.0.3124.51 or later for web (147 or later on devices managed by a different organization). The session host itself needs Windows 11 or Windows 10, version 22H2 or later. On Windows, [RemoteApp](/entity/avd-remoteapp/) sessions also need a local device running Windows 11, version 22H2 or later. Android means Windows App on Android, not ChromeOS or Meta Quest, because Intune MAM is not supported there.
+Version floors from Learn: Windows App on iOS/iPadOS 11.2.4, Windows App on Android 11.0.0.94, Microsoft Edge for Business on Windows, 134.0.3124.51 or later, for web (147 or later on devices managed by a different organization). Learn lists no web path for browsers on macOS or Linux. The same page lists the Remote Desktop client (Windows and macOS) next to Windows App as a supported native client; the minimum versions for it are in the how-to article. The session host itself needs Windows 11 or Windows 10, version 22H2 or later. On Windows, [RemoteApp](/entity/avd-remoteapp/) sessions also need a local device running Windows 11, version 22H2 or later. Android means Windows App on Android, not ChromeOS or Meta Quest, because Intune MAM is not supported there.
 
 The mobile and web paths use two policies: an Intune MAM app protection policy that blocks screen capture (set **Screen capture** to **Block** on Android and iOS/iPadOS; for web, an Edge policy restricting copy and paste to org sources and destinations) and a [Conditional Access](/entity/conditional-access/) policy that requires an app protection policy. Learn says Conditional Access itself does not block screen capture; it only makes sure the protected app is the one connecting. For the web path, the Edge app protection policy uses the Windows platform and the setting **Allow cut, copy, and paste for** = **Org data destinations and org data sources**, which Learn says activates protection across the whole Edge work profile, including all tabs, not only the Windows App tab. Learn also says to create the web Conditional Access policy (Windows platform, Browser client app) separately from the Android and iOS/iPadOS policy, and not to add **Require device to be marked as compliant** to it. The web path has extra limits too: it does not support Windows devices managed by the same tenant, which should connect with the native [Windows App](/entity/windows-app/) instead.
 
@@ -70,11 +70,13 @@ Learn is direct about the limit: screen capture protection "doesn't provide Digi
 
 **A photo of the screen.** The feature works through OS capture APIs, so a phone camera is outside its reach. Learn suggests [watermarking](/entity/avd-watermarking/) for this case: an admin can use a QR code shown in the session to trace it. Watermarking discourages; it does not prevent.
 
-**Copying content out through redirection.** Learn's tip says to disable clipboard, drive and printer redirection as well, because disabling redirection helps prevent users from copying content from the remote session. Learn describes this as an additional step. Our reading is that the screen capture setting and the redirection settings are separate controls on the [host pool](/entity/avd-host-pool/) and the session hosts, so enabling one does not change the other.
+**Copying content out through redirection.** Learn's tip says to disable clipboard, drive and printer redirection as well, because disabling redirection helps prevent users from copying content from the remote session. Learn describes this as an additional step, so the redirection settings on the [host pool](/entity/avd-host-pool/) need their own review. Per Learn's What's new for July 2025, clipboard, drive, USB and printer redirection are disabled by default for newly created host pools, so check older pools in particular.
 
-**Deliberate disclosure.** Learn recommends using screen capture protection as part of a defense-in-depth strategy that includes Conditional Access, data loss prevention and endpoint management. Our reading is that this means typing out data, reading it aloud or exporting it through an allowed application are outside what the feature does.
+**Deliberate disclosure.** Learn recommends using screen capture protection as part of a defense-in-depth strategy that includes Conditional Access, data loss prevention and endpoint management. The Learn page does not discuss typing out data, reading it aloud or exporting it through an allowed application; our reading is that the feature does not address these.
 
-**A connection from a client that cannot comply.** This is a blocking behavior rather than a gap, but it affects planning: once the session host setting is on, a client that cannot meet it is refused with an error. The feature is therefore all-or-nothing per VM or Cloud PC, and Learn describes the setting on the session hosts, not per user. If two groups need different treatment, our reading is that they need separate host pools, but Learn does not state this.
+**A connection from a client that cannot comply.** This is a blocking behavior rather than a gap, but it affects planning: once the session host setting is on, a client that cannot meet it is refused with an error. Learn applies the setting to the computers you target, either through an Intune device configuration profile assigned to a group of the VMs or Cloud PCs, or through Group Policy linked to a security group or organizational unit that contains the devices. Which session hosts get the setting is therefore decided by that assignment. Mobile and web clients are the exception: with the setting on, they connect only if an Intune MAM policy that blocks screen capture applies to the user's app, which Learn calls hybrid enforcement.
+
+**Capture malware on the endpoint and keyloggers.** Screen capture protection is a separate feature from Input and Output Protection, which Learn describes as two independently configured components for Windows 365 Cloud PCs and Azure Virtual Desktop session hosts. [Display protection](/entity/avd-display-protection/) targets unauthorized screen capture and recording on the endpoint device and needs an updated Windows App there. Input protection addresses keyloggers with a kernel-level driver installed through an MSI on the endpoint; Learn marks it as public preview. Learn says the two components have separate availability and supported configurations, so check their own pages before comparing them with screen capture protection. Screen capture protection does not cover keystrokes at all.
 
 ## Known limits to plan for
 
@@ -87,7 +89,7 @@ Learn is direct about the limit: screen capture protection "doesn't provide Digi
 
 A practical order of questions, based on the Learn tables:
 
-1. Which clients connect to this host pool? If the answer includes Windows and macOS only, a session host policy is enough. If it includes mobile or web, add MAM and Conditional Access.
+1. Which clients connect to this host pool? If the answer includes Windows and macOS only, a session host policy is enough. If it includes mobile or web, add MAM and Conditional Access; for web, that means Edge for Business on Windows only.
 2. Is the threat limited to the endpoint, or can a user run capture tools inside the session? That decides between the two session host values.
 3. Do Teams screen sharing and macOS collaboration matter for these users? Pilot first, because Learn lists both as known limits.
 4. What other path would the same user use to take data out? Add watermarking and disable the redirections that are not needed.
@@ -99,4 +101,4 @@ Retrieved on 17 November 2026.
 
 - [Microsoft Learn: Screen capture protection in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/screen-capture-protection)
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
-- [Microsoft Learn: Add the administrative template for Azure Virtual Desktop to Group Policy](https://learn.microsoft.com/en-us/azure/virtual-desktop/administrative-template)
+- [Microsoft Learn: Input and Output Protection for Windows 365 and Azure Virtual Desktop](https://learn.microsoft.com/en-us/windows-365/enterprise/windows-cloud-io-protection)

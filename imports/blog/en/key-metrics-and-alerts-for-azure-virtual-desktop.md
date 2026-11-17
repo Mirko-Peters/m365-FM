@@ -1,6 +1,6 @@
 ---
 title: "Key metrics and alerts for Azure Virtual Desktop"
-summary: "Azure Virtual Desktop monitoring rests on three data sources: connection and error diagnostics in Log Analytics, performance counters from the session hosts, and autoscale evaluations. Insights charts them and Azure Monitor alerts can act on them. Learn recommends Service Health alerts for Azure Virtual Desktop but gives no thresholds for log or metric alert rules, so those thresholds are your own."
+summary: "In our grouping, Azure Virtual Desktop monitoring rests on three data sources: connection and error diagnostics in Log Analytics, performance counters from the session hosts, and autoscale evaluations. Insights charts them and Azure Monitor alerts can act on them. Learn recommends Service Health alerts for Azure Virtual Desktop, and its Azure Virtual Desktop pages give no thresholds for log or metric alert rules, so you set those yourself."
 status: review
 publish: false
 author: mirko-p
@@ -8,22 +8,22 @@ date: 2026-11-18
 topics: [avd-insights, azure-virtual-desktop]
 keypoints:
   - "Insights is a dashboard built on Azure Monitor Workbooks. It needs diagnostic settings on host pools and workspaces, the Azure Monitor Agent with a data collection rule on the session hosts, and a Log Analytics workspace. Alerts are optional and set up separately."
-  - "Learn's Insights pages give two yardsticks for input delay: ideal below 100 ms in the use cases, and good below 150 ms, acceptable 150 to 500 ms in the glossary. For latency it says generally below 100 ms, poor above 200 ms."
+  - "Learn's Insights pages give two yardsticks for input delay: ideal below 100 ms in the use cases, and good below 150 ms, acceptable 150 to 500 ms in the glossary. For latency it says generally below 100 ms, low quality above 200 ms."
   - "Most Azure Virtual Desktop diagnostics are logs, so log search alerts on the WVD tables are the natural fit. Learn warns that log alerts are a poor fit for detecting missing data and suggests metric alerts for that."
   - "Learn describes the Insights Overview page as showing active Azure Monitor alerts classified as severity 0. Alert rules, action groups and severity are configured in Azure Monitor."
   - "Session host update does not install the Azure Monitor Agent on the new hosts, so monitoring can go quiet after an update unless Azure Policy installs the agent."
 faq:
   - q: "Does Azure Virtual Desktop have a built-in alert set?"
-    a: "Learn recommends two Service Health alert types for Azure Virtual Desktop, service issue and health advisory, but it does not publish thresholds for alert rules on diagnostics or performance data. Azure Monitor's recommended alert rules are enabled for virtual machines, AKS resources and Log Analytics workspaces. The Azure Monitor baseline alerts project, a GitHub-hosted project that Learn links and not a Learn page itself, includes an Azure Virtual Desktop pattern with predefined rules that are disabled by default. Otherwise you create the rules yourself, for example as log search alerts on the WVD tables."
+    a: "Learn recommends two Service Health alert types for Azure Virtual Desktop, service issue and health advisory, but the Azure Virtual Desktop pages cited here do not publish thresholds for alert rules on diagnostics or performance data. Azure Monitor's recommended alert rules are enabled for virtual machines, AKS resources and Log Analytics workspaces. The Azure Monitor baseline alerts project, a GitHub-hosted project that Learn links and not a Learn page itself, includes an Azure Virtual Desktop pattern with predefined rules that are disabled by default. Otherwise you create the rules yourself, for example as log search alerts on the WVD tables."
   - q: "Which alert type should I use for Azure Virtual Desktop diagnostics?"
     a: "Log search alerts, because the diagnostics land in Log Analytics tables whose names start with WVD. Use activity log alerts for events such as a VM being deleted and for Service Health notifications, and metric alerts for platform metrics of the session host VMs or for detecting missing data."
   - q: "Why did my Insights data stop after a session host update?"
     a: "Learn says the Azure Monitor agent is not installed automatically on session hosts that session host update creates. It suggests Azure Policy to install the agent, or adding the hosts again from within Insights in the Azure portal."
 ---
 
-The metrics that matter most for Azure Virtual Desktop come from three places: connection and error diagnostics, performance counters from the session hosts, and autoscale evaluations. Insights charts all three, and Azure Monitor alert rules can notify you when they cross a limit you choose. Learn recommends Service Health alerts for Azure Virtual Desktop but does not publish thresholds for alert rules on diagnostics or performance data, so this article separates what Learn states from the starting rules we suggest.
+The metrics that matter most for Azure Virtual Desktop come from three places: connection and error diagnostics, performance counters from the session hosts, and autoscale evaluations. Insights charts all three, and Azure Monitor alert rules can notify you when they cross a limit you choose. Learn recommends Service Health alerts for Azure Virtual Desktop, but the Azure Virtual Desktop pages cited here do not publish thresholds for alert rules on diagnostics or performance data, so this article separates what Learn states from the starting rules we suggest.
 
-It does not cover query-by-query diagnostics, which belong to a separate article on KQL.
+It does not cover query-by-query diagnostics, which belong to the separate article "Useful KQL queries for Azure Virtual Desktop diagnostics".
 
 ## What has to be in place first
 
@@ -46,7 +46,7 @@ Open Insights at `aka.ms/avdi` and use the configuration workbook to check the s
 | Is the network slow? | Insights, Connection Performance, round-trip time by gateway region | Latency generally below 100 ms, a session broadly low quality above 200 ms; compare median with the 95th percentile |
 | Is sign-in slow? | Time to connect | Split into user route, stack connected, logon (profiles, GPOs, shell start, FSLogix) and shell start to shell ready; the components can run in parallel, so they do not add up to the total. Learn subtracts the time users take to enter credentials |
 | Do users feel lag? | Host Performance, input delay | See the two yardsticks below |
-| Are hosts under pressure? | Host CPU and memory, disk timing, disk queue length | Host Diagnostics shows a session host with CPU above 60% for a one-minute selection as an example; it is not a limit |
+| Are hosts under pressure? | Host CPU and memory, disk timing, disk queue length | Learn names no threshold values for these counters; the 60% over one minute appears only in the Host Diagnostics example of a session host with high CPU |
 | Are connections dropping? | Connection Reliability | Top 20 disconnection events, pivoted by host pool, transport, session host, client version or gateway region |
 | Is capacity right? | Utilization: session history, session host count | Idle hosts powered on suggest a scaling plan; the glossary also defines users per core |
 | Is autoscale healthy? | Autoscale tab; WVDAutoscaleEvaluationPooled | Pooled host pools only; personal pools send autoscale logs to a storage account or Event Hubs |
@@ -88,7 +88,7 @@ You need read permission on the target, write permission on the rule's resource 
 
 ## A starting set of rules
 
-The first rule is the one Learn recommends for Azure Virtual Desktop. For the others Learn publishes no thresholds, so the conditions are our suggestions. Tune them against two weeks of your own data.
+The first rule is the one Learn recommends for Azure Virtual Desktop. For the others the Azure Virtual Desktop pages cited here publish no thresholds, so the conditions are our suggestions, except where the VM row points to Learn's recommended alerts. Tune them against two weeks of your own data.
 
 | Rule | Query idea | Notes |
 |---|---|---|
@@ -96,7 +96,7 @@ The first rule is the one Learn recommends for Azure Virtual Desktop. For the ot
 | Autoscale evaluation not successful | `WVDAutoscaleEvaluationPooled`, `where ResultType != "Succeeded"` (Learn's own filter), threshold above 0 | Join to `WVDErrors` on `CorrelationId` for detail, as Learn's sample does |
 | Admin-fixable errors rising | `WVDErrors`, `where ServiceError == false`, split by `CodeSymbolic`, threshold above a count you set | Learn says `ServiceError` false marks issues an admin task can resolve; true means escalate to Microsoft with the correlation ID |
 | Agent health | `WVDAgentHealthStatus`, filtered on the `Status` values you see in your data | Learn's column description does not list the values, so read them from your own table first |
-| Session host VM under load | Metric alert on VM platform metrics | Multi-resource rules need the same resource type and region |
+| Session host VM under load | Metric alert on VM platform metrics, for example from the recommended alert rules in Learn's VM tutorial | That tutorial lets you pick rules, change the recommended threshold and set the severity, which defaults to Informational; it gives no Azure Virtual Desktop values. Multi-resource rules need the same resource type and region |
 | VM deleted in production | Activity log alert on the resource group | Learn gives a VM deleted in a production resource group as an example scenario |
 
 The Azure Monitor baseline alerts project, which Learn's alerts overview links as an example of policy-based alerting at scale, has an Azure Virtual Desktop pattern with predefined rules that are disabled by default. Examples are host pool capacity at 95%, 85% and 50% and disconnected users after 24 and 72 hours. It is a GitHub-hosted project, not a Learn page, so check its current version before use.
@@ -116,6 +116,7 @@ Retrieved 17 November 2026.
 - [Microsoft Learn: Send Azure Virtual Desktop diagnostics to Log Analytics](https://learn.microsoft.com/en-us/azure/virtual-desktop/diagnostics-log-analytics)
 - [Microsoft Learn: Session host update](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update)
 - [Microsoft Learn: Types of Azure Monitor alerts](https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-types)
+- [Microsoft Learn: Enable recommended alerts for an Azure virtual machine](https://learn.microsoft.com/en-us/azure/azure-monitor/vm/tutorial-alerts)
 - [Microsoft Learn: Overview of Azure Monitor alerts](https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-overview)
 - [Microsoft Learn: Create Azure Monitor log search alert rules](https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-create-log-alert-rule)
 - [Microsoft Learn: WVDErrors table reference](https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables/wvderrors)
