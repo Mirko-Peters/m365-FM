@@ -16,7 +16,7 @@ faq:
   - q: "Can I publish single apps from a personal host pool?"
     a: "No. Microsoft Learn's terminology article says RemoteApp application groups are available with pooled host pools only. A personal host pool publishes a full desktop through a desktop application group."
   - q: "Do users need to install anything to open a RemoteApp?"
-    a: "They need a client. Learn describes apps appearing in Windows App, on the Apps tab, and lists Windows, macOS, iOS/iPadOS, Android/ChromeOS, a web browser and Meta Quest (listed as preview) as platforms for Azure Virtual Desktop. The applications themselves are installed on the session hosts or attached with App Attach, not on the user's device."
+    a: "They need a client. Learn describes apps appearing in Windows App, on the Apps tab, and lists Windows, macOS, iOS/iPadOS, Android/ChromeOS, a web browser and Meta Quest (marked as preview in the page's introductory list) as platforms for Azure Virtual Desktop. The applications themselves are installed on the session hosts or attached with App Attach, not on the user's device."
   - q: "Is RemoteApp the same as Windows 365 Cloud Apps?"
     a: "They deliver the same kind of experience, individual apps in Windows App, but the back end differs. Cloud Apps run on Windows 365 Flex Cloud PCs in shared mode and need a Windows 365 Flex license, while RemoteApp runs on Azure Virtual Desktop session hosts in a pooled host pool that you manage."
 ---
@@ -36,7 +36,7 @@ Learn's [publishing article](https://learn.microsoft.com/en-us/azure/virtual-des
 
 ## What users see
 
-In Windows App, users select the **Apps** tab (or **Devices** for desktops) after they sign in, then select an app to connect. Learn's [Windows App article](https://learn.microsoft.com/en-us/windows-app/get-started-connect-devices-desktops-apps) says the tabs are hidden if you have no resources of that type assigned, and that you can pin favorites to the **Favorites** tab. It lists Azure Virtual Desktop as available in Windows App on Windows, macOS, iOS/iPadOS, Android/ChromeOS, a web browser and Meta Quest, which the article marks as preview.
+In Windows App, users select the **Apps** tab (or **Devices** for desktops) after they sign in, then select an app to connect. Learn's [Windows App article](https://learn.microsoft.com/en-us/windows-app/get-started-connect-devices-desktops-apps) says the tabs are hidden if you have no resources of that type assigned, and that you can pin favorites to the **Favorites** tab. It lists Azure Virtual Desktop as available in Windows App on Windows, macOS, iOS/iPadOS, Android/ChromeOS, a web browser and Meta Quest, which its introductory list marks as preview.
 
 You control the names. Learn's [feed customization article](https://learn.microsoft.com/en-us/azure/virtual-desktop/customize-feed-for-virtual-desktop-users) says to open the application group, select **Applications**, select the application and change **Display name**; users see the new name once their client refreshes. The role needed is Desktop Virtualization Application Group Contributor.
 
@@ -50,7 +50,7 @@ Two details matter for planning. First, Learn's FAQ says that when you add apps 
 
 Users are not assigned to individual apps, except with App Attach. They are assigned to the application group and can open every app in it. If a user is in several RemoteApp groups on the same host pool, they get the aggregate of the apps in those groups (terminology article). Each group must be associated with a [workspace](/entity/avd-workspace/) for users to see the apps.
 
-The one conflict to design around is a user who holds both a desktop group and a RemoteApp group on the same host pool. Learn's [preferred application group type article](https://learn.microsoft.com/en-us/azure/virtual-desktop/preferred-application-group-type) says the host pool's preferred type decides what Windows App shows. It also says the Azure portal preselects **Desktop** and automatically creates a desktop group with the suffix `-DAG`, whether you choose Desktop or RemoteApp, and that you can remove that group after creation if you only want RemoteApp applications. Connecting to both group types through the `ms-avd:connect` URI scheme is possible but not recommended, because two sessions on one host pool can cause problems such as overloaded session hosts and applications that crash. The sibling article on desktop and RemoteApp groups covers the matrix in detail.
+The one conflict to design around is a user who holds both a desktop group and a RemoteApp group on the same host pool. Learn's [preferred application group type article](https://learn.microsoft.com/en-us/azure/virtual-desktop/preferred-application-group-type) says the host pool's preferred type decides what Windows App shows, and that the Azure portal also creates a desktop group with the suffix `-DAG` next to a RemoteApp group unless you remove it. The sibling article on desktop and RemoteApp groups covers the matrix and the `ms-avd:connect` caveat.
 
 A simple design that avoids all of this: give app users and desktop users different host pools, or make sure no user holds both group types on one pool.
 
@@ -59,9 +59,9 @@ A simple design that avoids all of this: give app users and desktop users differ
 RemoteApp changes what the user sees, not what the session host is. The session host is still a Windows machine with a full operating system, and two points are easy to miss.
 
 - **It is not application isolation.** Learn's [Windows 365 Cloud Apps article](https://learn.microsoft.com/en-us/windows-365/enterprise/cloud-apps) says a published app can open other apps on the Cloud PC: Outlook published as a Cloud App can launch Microsoft Edge from email links even if Edge is not published. It says to use Application Control for Windows to control app access fully. The Azure Virtual Desktop publishing article does not repeat this statement, so treat it as a likely behavior of any RemoteApp session and test it on your own session hosts.
-- **Pooled hosts are shared.** RemoteApp runs on the same pooled session hosts as desktops, so the host pool settings covered in the load-balancing and sizing articles of this series still apply. Our reading, not a Learn statement: test how much memory and CPU your heaviest app needs in a pilot before you size the pool.
+- **Pooled hosts are shared.** RemoteApp runs on the same pooled session hosts as desktops, so host pool load balancing and sizing still apply. Our reading, not a Learn statement: test how much memory and CPU your heaviest app needs in a pilot before you size the pool.
 
-For apps that do not run well in a remote session, Learn's [App Assure page](https://learn.microsoft.com/en-us/windows/compatibility/app-assure) lists Azure Virtual Desktop among the platforms where App Assure engineers help resolve application compatibility issues. It describes App Assure as part of the FastTrack benefit, which comes at no additional cost with eligible Microsoft 365 and Windows plans.
+For apps that do not run well in a remote session, Learn's [App Assure page](https://learn.microsoft.com/en-us/windows/compatibility/app-assure) lists Azure Virtual Desktop among the platforms where App Assure engineers help with compatibility issues; check the page's date and your plan's eligibility.
 
 ## RemoteApp or a desktop: how to decide
 
@@ -83,7 +83,7 @@ Windows 365 offers the same app-streaming model for Cloud PCs. Learn says Cloud 
 
 Check these before you promise them to users, because Learn marks several as preview:
 
-- **RemoteApp enhancements.** Learn's [what's new page](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new) says in its November 2026 entry that they are generally available for Azure Virtual Desktop, while the [enhancements article](https://learn.microsoft.com/en-us/azure/virtual-desktop/remoteapp-enhancements) still says preview. The sibling article "What the new RemoteApp enhancements change for users and admins" sets out the status and the requirements.
+- **RemoteApp enhancements.** The what's new page and the enhancements article differ on preview or general availability; the sibling article "What the new RemoteApp enhancements change for users and admins" sets out the status and the requirements.
 - **Pin RemoteApp shortcuts to the local desktop.** Public preview, according to the September 2026 what's new entry. The publishing article says the **Create desktop shortcut (Preview)** option also needs additional Intune setup.
 - **Context-based redirections for RemoteApp.** Preview, according to the October 2026 what's new entry. See [context-based redirections](/entity/avd-context-based-redirections/).
 - **Remote assistance in RemoteApp sessions.** The July 2026 what's new entry says Intune Remote Help now supports remote assistance within RemoteApp sessions.

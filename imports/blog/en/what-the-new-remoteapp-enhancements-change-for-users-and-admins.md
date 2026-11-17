@@ -48,7 +48,7 @@ Learn's pages say different things on 17 November 2026. The what's new page cove
 | What's new, November 2026 | "RemoteApp enhancements are now generally available for Azure Virtual Desktop" |
 | Windows 365 Cloud Apps article (dated 15 October 2026) | Lists enhanced user experiences for Cloud Apps among its public preview items |
 
-The what's new entry is the newer statement, but Microsoft has not explained why the enhancements article still says preview. Practical consequence: do not assume the default has changed for production host pools. Test with a connection and read the session type (see "Verify the mode" below). For Cloud Apps, treat the behavior as preview until the Windows 365 article says otherwise.
+The what's new entry is the newer statement, while the enhancements article still says preview; neither page says why their wording differs. Practical consequence: do not assume the default has changed for production host pools. Test with a connection and read the session type (see "Verify the mode" below). For Cloud Apps, treat the behavior as preview until the Windows 365 article says otherwise.
 
 ## Requirements
 
