@@ -102,6 +102,26 @@ If part of your user base connects with unsupported clients, they get AVC/H.264,
 3. In the session's **Connection Information** window, select **See details**. **Codecs Used: HEVC** under Graphics details means HEVC frame encoding is in use.
 4. In Event Viewer, open Applications and Services Logs > Microsoft > Windows > RemoteDesktopServices-RdpCoreCDV > Operational for Azure Virtual Desktop connections. Event ID 170 with "AVC hardware encoder enabled: 1" means GPU frame encoding. Event ID 162 with **Avc444FullScreenProfile** or **HevcProfile** shows which full-screen video profile is active.
 
+## A pilot that answers the pay-off question
+
+The honest test of whether a GPU size pays off is a side-by-side pilot. The steps are our suggestion; the settings come from Learn.
+
+1. Pick one representative application and one task users complain about, such as rotating a 3D model or scrubbing a timeline.
+2. Build two session hosts in a pilot host pool: one on the CPU size you use today, one on a GPU size from the table above. A fractional NVadsA10 v5 size such as Standard_NV6ads_A10_v5 (1/6 GPU, 4 GB) is the smallest NVadsA10 v5 size, so it is a low-commitment way to ask "does the GPU help at all".
+3. Install the GRID driver and apply the Intune or Group Policy settings from the previous section on the GPU host only. Restart it.
+4. Run the same task on both hosts with the same users and note frame rate, responsiveness and whether the application loads the GPU, using the verification steps.
+5. Repeat on the next larger fractional size if the smallest one is saturated, and compare density against price in the Azure pricing calculator.
+
+Permissions for the configuration matter in practice. Learn lists the Policy and Profile manager built-in role in Microsoft Entra ID for Intune, plus a group of target devices, or a domain account with Group Policy object permissions and a security group or organizational unit for Group Policy.
+
+## Common mistakes
+
+- **A GPU size without the policy.** The VM has a GPU, but sessions are still rendered on the CPU, because the default does not use it.
+- **The CUDA driver on a graphics size.** For NVIDIA sizes in this scenario only GRID drivers support GPU acceleration for most applications and the Windows user interface.
+- **An unsupported series.** NC, NCv2, NCv3, ND and NDv2 are not generally appropriate as session hosts. NCasT4_v3 is the NC-family exception that Learn lists.
+- **H.264 prioritized without hardware encoding.** This can produce CPU-based encoding while the GPU sits idle.
+- **HEVC expected on RemoteApp.** The HEVC prerequisites require a desktop application group.
+
 ## Sources
 
 Retrieved 17 November 2026.

@@ -39,6 +39,10 @@ Learn says these can be combined. Its example diagram shows UDP via STUN as the 
 
 If the active path degrades or fails, the system switches to a backup UDP or TCP path. If all paths are lost, for example in a network outage, it attempts to reconnect once connectivity is restored. Learn does not publish thresholds, switch times or the rules that rank one standby path above another, so any expectation about how fast a switch feels needs a pilot with your own networks.
 
+## Where it sits in the connection sequence
+
+Multipath does not change how a session starts. Learn's Shortpath page says every connection begins on the TCP-based reverse connect transport through the Azure Virtual Desktop gateway, where brokering and authentication happen. The session host and client then exchange candidate lists over that transport, and ICE coordinates STUN and TURN so that the preferred path is tried first. Shortpath, once established, carries the dynamic virtual channels for remote graphics, input and device redirection. Multipath, as Learn describes it, keeps backup paths on standby after that point and switches when the active one degrades. In our reading, Shortpath decides which path is used now, and Multipath decides what happens when that path stops being good enough.
+
 ## What it needs
 
 **Client.** Learn lists these minimums:
@@ -96,7 +100,7 @@ Learn does not document a log field that identifies the standby paths of a sessi
 ## Limits and when it will not help
 
 - Multipath improves how a session survives a path change. It does not create a path where none exists. If the client cannot reach the gateway on TCP 443, no standby path helps.
-- Users on unsupported clients, such as web or mobile clients in the table above, get no Multipath benefit.
+- Learn says other platforms are not currently supported, so users on clients outside the table above should not expect a Multipath benefit.
 - Learn recommends Shortpath as the primary transport. Where UDP is blocked, expect the redundant TCP paths to be the only standby, and test that on your own networks.
 - Because behaviour depends on rollout state, client version and network, compare a pilot group with a control group before you quote an improvement.
 

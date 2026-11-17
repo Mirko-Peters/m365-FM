@@ -9,7 +9,7 @@ topics: [rdp-shortpath, remote-desktop-protocol]
 keypoints:
   - "Every connection starts on the TCP reverse connect transport through the gateway. The client then tries UDP in the background, and if UDP succeeds the TCP connection drops. If it fails, the session stays on TCP."
   - "Learn describes four options: managed networks with the listener, managed networks with ICE/STUN, public networks with direct STUN and public networks relayed through TURN. Only the listener variant needs a setting on the session host."
-  - "Public networks prefer a direct STUN path and use a TURN relay when a firewall or NAT blocks it. Learn names Symmetric NAT, as with Azure Firewall and Azure NAT Gateway, as a case for the relayed connection."
+  - "Public networks prefer a direct STUN path and use a TURN relay when a firewall or NAT blocks it. Learn gives Symmetric NAT, as with Azure Firewall and Azure NAT Gateway, as an example for using the relayed connection."
   - "When managed and public paths are both available, the first connection established is used, and Learn says the managed path is likely to win because it needs fewer steps."
   - "The security level is the same as the TCP reverse connect transport: TLS over reliable UDP using the session host's certificate, set up only after the service has authenticated the session."
 faq:
@@ -54,9 +54,9 @@ How step 3 works differs between the two modes.
 
 **Managed networks** means a private connection with direct line of sight: [Azure ExpressRoute](/entity/azure-expressroute/) private peering, or a site-to-site or point-to-site IPsec VPN such as [Azure VPN Gateway](/entity/azure-vpn-gateway/). Learn defines line of sight as the client being able to reach the session host without being blocked by firewalls. For other VPN types it recommends a UDP-based VPN, because TCP-based VPNs add the overhead of TCP congestion control, which slows RDP.
 
-In the listener variant, the session host sends the client the list of its IPv4 and IPv6 addresses, and the client probes them directly. That is why it needs an open inbound port on every session host.
+In the listener variant, the session host sends the client the list of its IPv4 and IPv6 addresses, and the client probes them directly. Learn lists the listener and its inbound port as a requirement on every session host; in our reading the two belong together, because the client probes the session host directly.
 
-**Public networks** means the internet. Learn describes the problem it solves: client and session host both sit behind NAT devices and usually do not know their own public address.
+**Public networks** means the internet. Learn describes the problem it solves: clients usually sit behind a NAT device and do not know their own public address.
 
 ## How a public path is found: ICE, STUN and TURN
 
@@ -70,7 +70,7 @@ For public networks, Learn says Interactive Connectivity Establishment (ICE) coo
 4. The session host passes its candidate list to the client over the existing reverse connect transport. The client gathers its own candidates and sends them back.
 5. Both sides then try to connect to each other at the same moment. Learn explains why: many NAT devices accept incoming traffic on a socket once outbound traffic has opened it, so simultaneous attempts often succeed without any inbound firewall rule.
 
-**TURN** is the fallback. When STUN fails because a firewall or NAT device blocks the direct path, traffic is relayed through an intermediate server. Learn's order of preference puts the direct STUN connection first and the relayed connection second. It names Symmetric NAT, which maps one private source address and port to a unique public destination address and port, as the typical reason for a relay, and says this is the case with [Azure Firewall](/entity/azure-firewall/) and [Azure NAT Gateway](/entity/azure-nat-gateway/). If UDP is blocked completely, the connection falls back to TCP.
+**TURN** is the fallback. When STUN fails because a firewall or NAT device blocks the direct path, traffic is relayed through an intermediate server. Learn's order of preference puts the direct STUN connection first and the relayed connection second. It names Symmetric NAT, which maps one private source address and port to a unique public destination address and port, as an example of when a relay is used, and says this is the case with [Azure Firewall](/entity/azure-firewall/) and [Azure NAT Gateway](/entity/azure-nat-gateway/). If UDP is blocked completely, the connection falls back to TCP.
 
 A TURN relay is chosen by the client's physical location. Learn notes that a client far from any relay might fall back to TCP. According to Learn, the TURN range moved from a shared Azure Communication Services subnet to a dedicated range for Azure Virtual Desktop and Windows 365 across 39 Azure regions. The page lists those regions; check it for your users' locations. For the address range and ports, use the networking basics article or the Learn page itself.
 
@@ -110,7 +110,7 @@ For availability, the RDP Shortpath page marks Shortpath for public networks via
 1. Do users connect over ExpressRoute or an IPsec VPN with a direct route to the session hosts? Then a managed-network option applies. Decide between the listener, which needs an inbound port on every session host, and ICE/STUN, which does not. Learn lists DSCP marking and a per-session throttle rate as benefits for managed networks; it does not say whether that covers the ICE/STUN variant as well.
 2. Do users connect over the internet? Public-network Shortpath needs no configuration when firewalls allow the traffic and the transport settings are at their defaults. The questions become whether UDP may leave the session host subnet and the client network, and which outbound path the subnet uses.
 3. Is a Symmetric NAT in the path, for example Azure Firewall or Azure NAT Gateway in front of the session hosts? Plan for the relayed connection, and keep TURN enabled.
-4. Do you need control over which path wins? Use scenario 5: block UDP on the route you do not want.
+4. Do you need control over which path wins and have not enabled Shortpath for managed networks? Use scenario 5: block UDP on the route you do not want.
 5. Do users sit behind double NAT, carrier-grade NAT, an inspecting proxy or a TCP-based VPN? Expect TCP and treat UDP as an improvement where it appears.
 
 ## Sources
