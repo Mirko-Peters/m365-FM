@@ -50,8 +50,8 @@ HUB_DEGREE = 100
 STRICT_KIDS = 25
 _TERM = set(".!?:;\n。！？•")
 _OPEN = "\"'“„‘«([*>#-–— \t "
-_WORD_L = re.compile(r"([^\W\d_][\w'’.+#-]*)[  ]+$")
-_WORD_R = re.compile(r"^[  ]+([^\W\d_][\w'’.+#-]*)")
+_WORD_L = re.compile(r"([^\W\d_][\w'’.+#-]*)[^\S\n]+$")   # Leerraum jeder Art ausser Zeilenwechsel (Blockgrenze)
+_WORD_R = re.compile(r"[^\S\n]+([^\W\d_][\w'’.+#-]*)")
 _PAREN = re.compile(r"^(.*?)\s*\(([^()]+)\)\s*$")
 
 
