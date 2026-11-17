@@ -38,6 +38,7 @@ DEFAULT_IMG = _default_img()   # generate_site setzt es auf f"{BASE}/assets/og-d
 _SENT = "\x00r2dead\x00"
 _WS = r"(?:\s|\\[nrt]|&nbsp;|<br\s*/?>)*"   # Leerraum auch in JSON-maskiertem HTML (blog-import/part-N.json: \n, \")
 _IMG_KEYS = ("image", "thumbnailUrl")
+_CAPTXT = r"((?:(?!</?fig(?:ure|caption)\b).)*?)"   # Bildunterschrift ohne eigenes </figcaption>/<figure>: .*? lief sonst ueber die Grenze in die naechste <figure> (traf andere Bilder)
 
 
 def _rx_dead(urls):
@@ -48,8 +49,8 @@ def _rx_dead(urls):
         "any": re.compile(alt),
         "img": re.compile(r"<img\b[^>]*?\ssrc=(\\?[\"'])(?:" + alt + r")\1[^>]*>", re.I),
         "a": re.compile(r"<a\b[^>]*>" + _WS + _SENT + _WS + r"</a>", re.I),
-        "fig": re.compile(r"<figure\b[^>]*>" + _WS + r"(?:<figcaption\b[^>]*>(.*?)</figcaption>)?" + _WS + _SENT + _WS
-                          + r"(?:<figcaption\b[^>]*>(.*?)</figcaption>)?" + _WS + r"</figure>", re.I | re.S),
+        "fig": re.compile(r"<figure\b[^>]*>" + _WS + r"(?:<figcaption\b[^>]*>" + _CAPTXT + r"</figcaption>)?" + _WS + _SENT + _WS
+                          + r"(?:<figcaption\b[^>]*>" + _CAPTXT + r"</figcaption>)?" + _WS + r"</figure>", re.I | re.S),
         "p": re.compile(r"<p\b[^>]*>" + _WS + _SENT + _WS + r"</p>", re.I),
         "ld": re.compile(r'(<script type="application/ld\+json">)(.*?)(</script>)', re.S),
         "meta": re.compile(r'(<meta\s+(?:property|name)="(?:og:image|og:image:url|og:image:secure_url|twitter:image)"\s+content=")(?:' + alt + r')(")', re.I),
@@ -98,8 +99,8 @@ def drop_dead(html, dead=None, default=None):
     h = rx["img"].sub(_SENT, html)
     if _SENT in h:
         h = rx["a"].sub(_SENT, h)
+        h = rx["p"].sub(_SENT, h)   # vor <figure>: auch <figure><p><img></p></figure> faellt ganz weg (sonst bliebe ein leeres <figure>)
         h = rx["fig"].sub(_cap, h)
-        h = rx["p"].sub("", h)
         h = h.replace(_SENT, "")
     field = lambda s: rx["field"].sub(lambda f: f'{f.group(1)}"{default}"', s)
 

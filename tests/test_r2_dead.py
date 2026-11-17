@@ -51,6 +51,18 @@ class DropDead(unittest.TestCase):
         self.assertEqual(drop(h), "<p>Abb. 1: Ablauf</p>")
         self.assertEqual(drop(f'<figure>\n<img src="{D1}">\n</figure><p>x</p>'), "<p>x</p>")
 
+    def test_figure_caption_stays_in_own_figure(self):
+        # frueher lief (.*?) der Bildunterschrift ueber </figcaption> hinaus bis in die naechste <figure>: die Figur mit dem guten Bild zerbrach
+        ok_fig = f'<figure><figcaption>A</figcaption><img src="{OK}"></figure>'
+        self.assertEqual(drop(ok_fig + f'<p>Text</p><figure><figcaption>B</figcaption><img src="{D1}"></figure>'), ok_fig + "<p>Text</p><p>B</p>")
+        ok_fig2 = f'<figure><img src="{OK}"><figcaption>Y</figcaption></figure>'
+        h = f'<figure><img src="{D1}"><figcaption>X</figcaption><p>Quelle</p></figure><p>Text</p>' + ok_fig2
+        self.assertEqual(drop(h), "<figure><figcaption>X</figcaption><p>Quelle</p></figure><p>Text</p>" + ok_fig2)
+
+    def test_figure_with_p_around_img_removed(self):
+        self.assertEqual(drop(f'<figure><p><img src="{D1}"></p></figure><p>x</p>'), "<p>x</p>", "keine leere <figure>")
+        self.assertEqual(drop(f'<figure>\n<p><img src="{D1}"></p>\n<figcaption>Abb.</figcaption></figure>'), "<p>Abb.</p>")
+
     def test_other_images_untouched(self):
         h = f'<p><img src="{OK}" alt="ok"></p><p><img src="{D1}"></p>'
         self.assertEqual(drop(h), f'<p><img src="{OK}" alt="ok"></p>')
