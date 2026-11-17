@@ -62,21 +62,17 @@ On a pooled pool, a user who signs out and signs back in might be load balanced 
 
 Learn's [load-balancing article](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-load-balancing) lists two algorithms. You can configure one per pooled host pool at a time and change it at any time.
 
-**[Breadth-first](/entity/avd-breadth-first-load-balancing/)** aims to distribute new sessions evenly across the session hosts. It queries the hosts that allow new connections and then picks one at random from the half of the available hosts with the fewest sessions. Learn gives an example: with nine hosts holding 11 to 19 sessions, a new session can go to any of the first five hosts with the fewest sessions. Because of the randomization, sessions may not be spread evenly. A [maximum session limit](/entity/avd-maximum-session-limit/) is not required; if you pick breadth-first when you create the pool, the default is 999999, which is also the highest value you can set. If you use autoscale on a pooled pool, set a custom limit instead of the default; the autoscale prerequisites on Learn say not to use the default value.
+**[Breadth-first](/entity/avd-breadth-first-load-balancing/)** aims to distribute new sessions evenly: it picks a host at random from the half of the available hosts with the fewest sessions. A [maximum session limit](/entity/avd-maximum-session-limit/) is not required; the default is 999999, which is also the highest value you can set. If you use autoscale on a pooled pool, set a custom limit instead; the autoscale prerequisites on Learn say not to use the default value.
 
-**[Depth-first](/entity/avd-depth-first-load-balancing/)** keeps starting new sessions on one host until its maximum session limit is reached. It selects the host with the most sessions among those that allow new connections and have not reached the limit; on a tie it takes the first host from the query. You must set a maximum session limit with depth-first. Once all hosts have reached the limit, you need to raise it or add hosts.
+**[Depth-first](/entity/avd-depth-first-load-balancing/)** keeps starting new sessions on one host until its maximum session limit is reached, then moves on; on a tie it takes the first host from the query. You must set a maximum session limit with depth-first, and once all hosts reach it you need to raise it or add hosts.
 
-Rules for both algorithms, from the same page:
+For both algorithms, a user with an active or disconnected session is sent back to that session host even if [drain mode](/entity/avd-drain-mode/) is enabled on it, and a user without a session is never sent to a host in drain mode.
 
-- A user with an active or disconnected session in the pool is sent back to that session host, even if [drain mode](/entity/avd-drain-mode/) is enabled on it.
-- A user without a session is never sent to a host in drain mode.
-- Lowering the maximum session limit on a host with active sessions does not affect those sessions.
-
-Learn's [autoscale FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq) notes that a scaling plan can set a different algorithm per phase. It says breadth-first suits ramp-up and peak, and depth-first suits ramp-down and off-peak because it consolidates sessions onto fewer hosts.
+Learn's [autoscale FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq) says a scaling plan can set a different algorithm per phase: breadth-first for ramp-up and peak, depth-first for ramp-down and off-peak, because it consolidates sessions onto fewer hosts.
 
 ## Personal host pools: assignment
 
-Learn's article on [personal desktop assignment](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-personal-desktop-assignment-type) says personal desktops have a one-to-one mapping: a single user can only be assigned to a single personal desktop, unless multiple assignment is enabled (see below). User activities, files and settings can persist on the VM's OS disk after sign-out.
+Learn's article on [personal desktop assignment](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-personal-desktop-assignment-type) says a single user can only be assigned to a single personal desktop, unless multiple assignment is enabled (see below). User activities, files and settings can persist on the VM's OS disk after sign-out.
 
 Two assignment types exist:
 
@@ -91,7 +87,7 @@ Learn says the Azure CLI cannot assign, unassign or reassign users. Friendly nam
 
 ### Multiple personal desktops for one user
 
-Learn says you can assign multiple personal desktops to one user only in personal host pools with direct assignment. Pooled pools and automatic assignment are not supported. Once the option is enabled on a host pool, it cannot be disabled. Save direct assignment first, then in a separate save select **Assign multiple desktops to a single user**; doing both at once produces an error. In PowerShell this uses `LoadBalancerType = 'MultiplePersistent'` and needs Az.DesktopVirtualization 5.3.0-preview or later, according to the article, so check the module version before you script it. If a single FSLogix profile container serves the pool, Learn says to enable multiple concurrent connections to avoid errors.
+Learn says you can assign multiple personal desktops to one user only in personal host pools with direct assignment; pooled pools and automatic assignment are not supported. Once enabled, the option cannot be disabled. Save direct assignment first, then in a separate save select **Assign multiple desktops to a single user**. In PowerShell this uses `LoadBalancerType = 'MultiplePersistent'` and needs Az.DesktopVirtualization 5.3.0-preview or later, according to the article, so check the module version before you script it. If a single FSLogix profile container serves the pool, Learn says to enable multiple concurrent connections to avoid errors.
 
 ## Autoscale differences
 
@@ -106,16 +102,16 @@ Learn's [scaling plan article](https://learn.microsoft.com/en-us/azure/virtual-d
 
 Status: power management is generally available for pooled and personal pools; see [power management autoscaling](/entity/avd-power-management-autoscaling/). Dynamic autoscaling applies only to pooled pools with a session host configuration. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview (Az.DesktopVirtualization) that the scaling plan article requires for it, still carry preview wording; check the current page before relying on a limit. The sibling article "Power management autoscaling vs dynamic autoscaling: which one fits your host pools" covers the choice between the two.
 
-For personal pools, the FAQ adds three points. Autoscale deallocates a personal desktop when the user session is signed out or disconnected. It does not put the host into drain mode first, so a user who connects during deallocation gets a "No resources available" error. A session host that was turned on but never signed into is deallocated after a period of inactivity, which the page does not define. For pooled pools, the FAQ says autoscale overrides drain mode on all VMs in scope, so use an exclusion tag to keep a VM out of scaling.
+For personal pools, the FAQ says autoscale does not put the host into drain mode before deallocating it, so a user who connects during deallocation gets a "No resources available" error. For pooled pools, it says autoscale overrides drain mode on all VMs in scope, so use an exclusion tag to keep a VM out of scaling.
 
 ### Hibernation and FSLogix
 
-Learn says that personal desktop autoscale with hibernation requires hibernation to be enabled on the session hosts. If a plan is set to hibernate but the hosts do not have hibernation enabled, the FAQ says autoscale does nothing to them: no hibernate and no deallocate. Learn also says FSLogix and App Attach currently do not support hibernate and that you should not enable hibernate if you use them for personal host pools. If you chose FSLogix for a personal pool, plan for deallocation, not hibernation. See [hibernation](/entity/avd-hibernation/).
+If a personal plan is set to hibernate but the hosts do not have hibernation enabled, the FAQ says autoscale does nothing to them: no hibernate and no deallocate. Learn also says FSLogix and App Attach currently do not support hibernate, so if you chose FSLogix for a personal pool, plan for deallocation. See [hibernation](/entity/avd-hibernation/).
 
 ## A short selection procedure
 
-1. List the user groups and note for each whether the workload needs a dedicated VM.
-2. Check where profile data must live. If users can land on different hosts, as on a pooled pool, plan FSLogix.
+1. List the user groups and note whether each workload needs a dedicated VM.
+2. Check where profile data must live. If users can land on different hosts, plan FSLogix.
 3. Check the operating model: if users need published RemoteApp applications or you want session host configuration with update and dynamic autoscaling, plan pooled; decide how hosts will be patched (image redeployment or Windows Updates and Configuration Manager).
 4. For pooled pools, choose breadth-first or depth-first, and set a maximum session limit (mandatory for depth-first).
 5. For personal pools, choose automatic or direct assignment. Direct assignment fits when you want to control which user gets which VM, and it is required if one user needs several desktops; automatic suits the rest.
