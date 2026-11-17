@@ -23,7 +23,7 @@ faq:
 
 Context-based redirections let you decide, per connection, whether clipboard, drive and storage, printer and USB redirection works in an Azure Virtual Desktop session. The decision depends on whether the connection meets a Microsoft Entra Conditional Access requirement that you attach through an authentication context. As of 17 November 2026 the feature is in preview.
 
-This article explains the model and the design choices. The click-by-click configuration is a separate article in this series.
+This article explains the model and the design choices. The click-by-click configuration, validation and troubleshooting are in a separate article in this series, "Securing redirection in Azure Virtual Desktop with Entra authentication context". Background on the feature itself is on the [context-based redirections](/entity/avd-context-based-redirections/) entity page.
 
 ## Status in one paragraph
 
@@ -66,7 +66,7 @@ Context-based redirection does not replace session host settings. The Microsoft 
 
 Two practical consequences follow from the blog post and Learn:
 
-1. For testing, the redirections you want to gate should be "Not Configured" or "Enabled" in other policies, because an existing policy that disables a redirection wins. The post names recent gallery images as one place where such settings may already exist.
+1. For testing, the redirections you want to gate should be "Not Configured" or "Enabled" in other policies, because an existing policy that disables a redirection wins. The post, which is written for Windows 365 Cloud PCs, names recent gallery images as one place where such settings may already exist. Our reading: the same check is sensible for Azure Virtual Desktop session hosts built from those images.
 2. When a result is not what you expect, Learn's troubleshooting list includes "existing redirection policies that might override the configuration" next to the Conditional Access assignment, device compliance status and the host pool RDP properties.
 
 Learn's clipboard article describes the usual pattern for Azure Virtual Desktop: enable clipboard redirection on the session hosts with Intune or Group Policy, then control it with the host pool RDP properties. Context-based redirection adds a conditional layer on top of that pattern. Our reading, not a Learn statement: treat the session host policy as the ceiling and the authentication context as the switch below it.
@@ -83,13 +83,12 @@ Learn's clipboard article describes the usual pattern for Azure Virtual Desktop:
 
 - It is a preview, with the status above.
 - Microsoft says it is developing a Resultant Set of Policy (RSOP) capability so admins can see which redirection settings applied to a connection and which policy produced them. Until then, troubleshooting means checking each layer by hand.
-- Before deleting an authentication context, Entra's documentation says to confirm that nothing uses it, for example by checking sign-in logs for authentication context policy hits, and that it must have no assigned Conditional Access policies and not be published to apps.
-- Authentication context works with users or workload identities, but not in the same Conditional Access policy.
 - Learn's configuration article documents the mapping through the Azure portal RDP properties page and shows no scripted equivalent.
+- Deleting an authentication context has its own preconditions in Entra; the step-by-step article in this series lists them.
 
 ## When it is the wrong tool
 
-If every user connects from managed, compliant devices, a plain RDP property set to `0` or `1` is simpler and has no preview status. If the concern is capture of the screen rather than data transfer, redirection control does not help; that is a different control such as screen capture protection or watermarking. Context-based redirection fits when the same host pool serves both trusted and untrusted devices and you want one set of desktops.
+If every user connects from managed, compliant devices, or if no user should get a given redirection at all, a plain RDP property (a value of `0` or `1`, or a Group Policy or Intune setting on the session hosts) is simpler and has no preview status. If the concern is capture of the screen rather than data transfer, redirection control does not help; that is a different control such as screen capture protection or watermarking. Context-based redirection fits when the same host pool serves both trusted and untrusted devices and you want one set of desktops.
 
 ## Sources
 

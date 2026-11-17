@@ -23,15 +23,15 @@ faq:
 
 To restrict clipboard, drive, printer and USB redirection for connections from unmanaged devices, you create an authentication context in Microsoft Entra, a Conditional Access policy that targets it, and a mapping from that context to the redirections in the host pool's RDP properties. Context-based redirection is in preview as of 17 November 2026, so run it first on a pilot host pool.
 
-This walkthrough follows Learn's configuration article for Azure Virtual Desktop. The concepts behind it, and how the setting fits with other controls, are covered in the explainer article on context-based redirections in this series.
+This walkthrough follows Learn's configuration article for Azure Virtual Desktop and concentrates on the steps, the validation and the troubleshooting. The model behind it, the preview status, the design choices and how the setting fits with other controls are covered in the explainer article on context-based redirections in this series, so this article does not repeat them.
 
 ## Before you start
 
 - **A host pool to test on.** The mapping applies to all session hosts in the host pool, desktop and RemoteApp sessions alike (RemoteApp support has been in preview since October 2026). A separate pilot host pool keeps production unchanged.
 - **Permissions.** Editing RDP properties needs, per Learn's custom RDP properties article, the Desktop Virtualization Host Pool Contributor role or equivalent. You also need rights to create authentication contexts and Conditional Access policies in Microsoft Entra.
-- **Licensing.** Entra's developer guidance says Conditional Access requires Microsoft Entra ID P1 and that authentication context is not available in the Free edition.
+- **Licensing.** Microsoft Entra ID P1 or higher; the explainer article has the detail.
 - **A decision on the trust signal.** Learn's example requires a compliant device. That relies on devices being enrolled and evaluated in Intune, so check that compliance reporting works for your test devices first.
-- **Existing redirection policies.** Microsoft's blog post warns that an existing policy which disables a redirection wins, because the most restrictive policy always applies. For the redirections you want to gate, the other policies should be "Not Configured" or "Enabled". Check Intune and Group Policy settings on the session hosts, including those that ship with recent gallery images.
+- **Existing redirection policies.** An existing policy that disables a redirection wins, because the most restrictive policy applies. For the redirections you want to gate, the other policies should be "Not Configured" or "Enabled". Check Intune and Group Policy settings on the session hosts. Microsoft's blog post, written for Cloud PCs, names recent gallery images as a place where such settings may exist; our reading is that the same check is sensible for session hosts built from them.
 
 ## Step 1: create the authentication context
 
@@ -42,7 +42,7 @@ This walkthrough follows Learn's configuration article for Azure Virtual Desktop
 5. Select **Publish to apps**, then pick an available value from the **ID** list. The example uses c8.
 6. Select **Save**.
 
-Write down the name and the ID. Learn says you use the same authentication context in the policy and in the redirection settings. Entra allows c1 to c99, and its documentation advises names that can be reused across resources, such as *trusted devices*, to keep the number of contexts small.
+Write down the name and the ID. Learn says you use the same authentication context in the policy and in the redirection settings. Entra allows c1 to c99; prefer a name you can reuse across resources, as the explainer article describes.
 
 ## Step 2: create the Conditional Access policy
 
@@ -77,7 +77,7 @@ Our reading, not a Learn statement: because the policy targets an authentication
 6. Repeat steps 4 and 5 for each further redirection.
 7. Select **Save**.
 
-Learn's screenshot sets drive and storage redirection and clipboard redirection to the dynamic option with the c8 context. The four redirections available for this mapping are clipboard, drive and storage, printer and USB. For reference, the host pool defaults include `redirectclipboard:i:1`, `redirectprinters:i:1`, `drivestoredirect:s:*` and `usbdevicestoredirect:s:*`, so without the dynamic setting every connection gets those redirections.
+Learn's screenshot sets drive and storage redirection and clipboard redirection to the dynamic option with the c8 context. The four redirections available for this mapping are clipboard, drive and storage, printer and USB. Check the starting state of your pilot host pool before you test. Learn's custom RDP properties article lists `redirectclipboard:i:1`, `redirectprinters:i:1`, `drivestoredirect:s:*` and `usbdevicestoredirect:s:*` among the default values, but Learn's what's new page records that since July 2025 clipboard, drive, opaque low-level USB and printer redirection are disabled for newly created host pools. Older host pools may still have them on. Without knowing the current values, you cannot tell whether a test result comes from the dynamic setting or from the starting state.
 
 If you manage RDP properties by script, note how Learn's examples work: `Update-AzWvdHostPool -CustomRdpProperty` replaces all custom properties unless you append your change to the current value. Learn's context-based redirection article documents only the portal route for this mapping. To roll back, our reading is that you set the redirection back to its previous value on the same tab and save.
 
@@ -104,12 +104,12 @@ Illustrative scenario: with the context mapped to clipboard and drives only, a u
 
 Learn's checklist for Azure Virtual Desktop, in the order to work through it:
 
-1. **Policy assignment and authentication context.** Is the user in the group the policy targets, and is the policy set to On? Does the policy target the same context you mapped?
+1. **Policy assignment and authentication context.** Is the user in the group the policy targets, and is the policy set to On? Does the policy target the same context you mapped? Entra's developer guidance says that if no Conditional Access policy is assigned to an authentication context value, the claim might still be issued. Our reading: a context without an assigned, enabled policy may therefore leave a noncompliant device with the redirection, so confirm that the policy is really attached.
 2. **Device compliance.** Check the device's compliance status in Microsoft Entra ID and Intune.
 3. **Host pool RDP properties.** Did the save succeed, and is the right context selected for each redirection?
 4. **Existing redirection policies.** An Intune or Group Policy setting that disables the redirection on the session host overrides the configuration, as the most restrictive setting wins.
 
-Entra's documentation notes that sign-in logs show where authentication context policies are applied, which is the place to look when a compliant device is still treated as noncompliant. Microsoft also says a Resultant Set of Policy feature is in development to show which settings and policy source applied to a connection. It is not available today, so expect to check the layers manually.
+Entra's documentation notes that sign-in logs show where authentication context policies are applied, which is the place to look when a compliant device is still treated as noncompliant. Microsoft says a Resultant Set of Policy feature is in development to show which settings and policy source applied to a connection, so for now check the layers manually.
 
 ## Rolling out beyond the pilot
 
@@ -117,10 +117,10 @@ An order that follows from the steps above, and is our suggestion rather than a 
 
 1. Pilot with one redirection, for example drives, on one host pool and a small user group.
 2. Add the other redirections after tests 1 to 3 pass.
-3. Repeat the host pool mapping for each production host pool. The authentication context and the policy can be reused.
+3. Repeat the host pool mapping for each production host pool. Our reading: the authentication context and the policy can be reused, because the mapping lives in each host pool's RDP properties.
 4. Record the context name and ID next to the host pool name in your documentation, so a later change to the policy is made with its dependents in view.
 
-Do not delete the context casually later. Entra says to confirm that nothing uses it first, and it must have no Conditional Access policy assigned and not be published to apps.
+Do not delete the context casually later. Entra says to confirm that nothing uses it first; it must have no Conditional Access policy assigned and not be published to apps.
 
 ## Sources
 
