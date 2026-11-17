@@ -112,6 +112,9 @@ test("Privatstellen: Personen-Entitaet, Export, Suche und Kurzzeile verschwinden
   raw.prepare("INSERT INTO comments(user_id,vid,lang,body,status,created) VALUES (1,'ep1','en','Hallo','ok',?)").run(t);
   raw.prepare("UPDATE users SET bio='Secret Co' WHERE id=1").run();   // Altbestand
   assert.equal((await call(env, "GET", "/api/u/1")).j.user.bio, "", "K22: Kommentator mit privatem Profil ohne Kurzzeile");
+  raw.prepare("INSERT INTO comments(user_id,vid,lang,body,status,created) VALUES (1,'ep1','de','Hallo','ok',?)").run(t);
+  const top = (await call(env, "GET", "/api/curator?lang=de")).j.top;
+  assert.equal(top.length, 1); assert.equal(top[0].bio, "", "K22: Kurator-Rangliste ohne Kurzzeile eines privaten Profils");
   // Suchindex aus dem letzten Bau bringt das Profil nicht zurueck
   searchPart = { part: 1, docs: [{ id: "p1", url: SITE + "/community/u/bob/", lang: "en", type: "person", title: "Bob", summary: "", keywords: "" }, { id: "e1", url: SITE + "/episodes/x/", lang: "en", type: "episode", title: "Folge", summary: "", keywords: "" }] };
   try { await importSearchIndex(env); } finally { searchPart = null; }
