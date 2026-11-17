@@ -1,10 +1,10 @@
 ---
 title: "Manage Tasks in Teams with Planner and To Do (Plus a Daily Standup Setup)"
 summary: "How the Planner app in Teams brings together To Do, Planner plans and meeting tasks, how to create shared plans with files, and how to run a daily standup with recurring meeting notes."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-19
+date: 2026-11-18
 topics: [microsoft-planner, microsoft-to-do, teams]
 keypoints:
   - "The Planner app in Teams, called Tasks by Planner and To Do before March 2024, shows your private tasks, assigned tasks, flagged emails and plans in one place."

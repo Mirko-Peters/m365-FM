@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Loop Explained: What It Is, Loop Components in Teams and Tips"
 summary: "What Microsoft Loop is, how components, pages and workspaces differ, how to send a Loop component in Teams and where the content is stored, plus tips for using Loop effectively and the admin controls behind it."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-20
+date: 2026-11-18
 topics: [microsoft-loop, loop-workspaces, teams]
 keypoints:
   - "Loop has three building blocks. Components are portable pieces of content, pages are flexible canvases in the Loop app and workspaces group everything for a project."

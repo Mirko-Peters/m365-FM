@@ -1,10 +1,10 @@
 ---
 title: "How to Use Copilot in Word and Outlook: Write, Rewrite and Summarize"
 summary: "How Copilot helps in Word and Outlook: draft a document or email, rewrite selected text, summarize a document or email thread, with the exact buttons, example prompts, requirements and limits."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-19
+date: 2026-11-18
 topics: [copilot, word, outlook]
 keypoints:
   - "In Word, open Copilot with the Copilot Dynamic Action Button, describe the outcome, name a source with a slash if needed, and keep, discard or refine the draft."

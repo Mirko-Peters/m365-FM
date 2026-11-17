@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Whiteboard in Teams: Tips and How-to for Collaboration"
 summary: "How to share a Microsoft Whiteboard in a Teams meeting, keep working on it afterwards, lock it as read-only and use templates, reactions, ink tools and shortcuts, with the limits for external guests."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-19
+date: 2026-11-18
 topics: [microsoft-whiteboard, teams]
 keypoints:
   - "In a meeting, select Share, then Microsoft Whiteboard in the Whiteboard section, and pick an existing board or start a new one. No screen share is needed."

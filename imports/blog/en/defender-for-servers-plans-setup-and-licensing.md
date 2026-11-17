@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Defender for Servers: Plans, Setup and Licensing"
 summary: "Defender for Servers is a paid plan in Defender for Cloud with two tiers. This guide covers Plan 1 versus Plan 2, how to turn it on, how billing works and what happens with existing Defender for Endpoint licenses."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-20
+date: 2026-11-18
 topics: [microsoft-defender-for-cloud, microsoft-defender-for-endpoint, azure]
 keypoints:
   - "Defender for Servers is a plan inside Microsoft Defender for Cloud. Plan 1 is entry-level and centers on endpoint detection and response (EDR) through Defender for Endpoint."

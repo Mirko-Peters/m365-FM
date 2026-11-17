@@ -1,10 +1,10 @@
 ---
 title: "Teams Channel Moderation: Best Practices and Setup"
 summary: "How to set up channel moderation in Microsoft Teams, who can moderate, which posting permissions you can restrict, where it does not work, and which use cases Microsoft documents, with notes where its pages disagree."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-20
+date: 2026-11-18
 topics: [teams, teams-channels]
 keypoints:
   - "Channel moderation is configured by team owners. When it is on, only moderators can start new posts in that channel."

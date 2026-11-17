@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Purview DLP Policies and Best Practices for Banks and Financial Data"
 summary: "How to plan, design, simulate and enforce Microsoft Purview DLP policies for financial data, using Microsoft's own guidance: stakeholders, templates, leakage tolerance, simulation mode and alerts."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-19
+date: 2026-11-18
 topics: [purview, dlp, dlp-simulation-mode]
 keypoints:
   - "Microsoft's DLP guidance is not specific to banking. It treats planning as a design exercise built on risk, impact and rollout."

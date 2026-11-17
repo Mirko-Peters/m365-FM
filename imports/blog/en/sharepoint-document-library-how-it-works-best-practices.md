@@ -1,10 +1,10 @@
 ---
 title: "SharePoint Document Library: How It Works and Best Practices"
 summary: "What a SharePoint document library is, how to create one, and the documented limits and settings that matter: versioning, list view threshold, permissions, columns and sync."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-19
+date: 2026-11-18
 topics: [sharepoint, sharepoint-document-libraries, sharepoint-list-view-threshold]
 keypoints:
   - "A document library is a secure place to store files that people can find, co-author and open from any device. A new site comes with one by default."
