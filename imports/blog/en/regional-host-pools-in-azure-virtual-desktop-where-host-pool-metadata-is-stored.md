@@ -106,7 +106,7 @@ Learn says the host pool list in the portal has a **Deployment scope** column th
 
 ## Where this fits
 
-For new host pools, Learn strongly recommends regional host pools in the regions you require, marks regional as recommended and geographical as not recommended in the portal drop-down, and suggests considering a move of existing geographical host pools. The announcement adds a placement recommendation: put session host VMs in the same region as the regional metadata, even though the BCDR article says metadata location is independent of VM location. The choice covers the metadata location only. It does not make session hosts or profile storage resilient: those remain your responsibility, and Learn's service architecture article lists them as customer-managed. Region pairing and multi-region layouts are covered in "Designing a multi-region Azure Virtual Desktop deployment", and the data residency side in "What regional host pools mean for data residency and resilience".
+For new host pools, Learn strongly recommends regional host pools in the regions you require, marks regional as recommended and geographical as not recommended in the portal drop-down, and suggests considering a move of existing geographical host pools. The announcement adds a placement recommendation: put session host VMs in the same region as the regional metadata, even though the BCDR article says metadata location is independent of VM location. The choice covers the metadata location only. It does not make session hosts or profile storage resilient: those remain your responsibility (our reading), and Learn's disaster recovery concepts article discusses profile management and user data as their own topics. Region pairing and multi-region layouts are covered in "Designing a multi-region Azure Virtual Desktop deployment", and the data residency side in "What regional host pools mean for data residency and resilience".
 
 ## Sources
 
@@ -118,5 +118,6 @@ All retrieved on 17 November 2026.
 - [Microsoft Learn: Data locations for Azure Virtual Desktop (list of regions)](https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations)
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
 - [Microsoft Learn: Deploy Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop)
+- [Microsoft Learn: Disaster recovery concepts for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/disaster-recovery-concepts)
 - [Microsoft Learn: Multiregion BCDR for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/architecture/example-scenario/azure-virtual-desktop/azure-virtual-desktop-multi-region-bcdr)
 - [Microsoft Tech Community: Now in public preview: Azure Virtual Desktop regional host pools](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/-/4474598)
