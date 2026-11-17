@@ -9,21 +9,21 @@ topics: [azure-virtual-desktop]
 keypoints:
   - "Four policies sit under Session Time Limits: disconnected sessions, active but idle sessions, active sessions, and End session when time limits are reached. Without the last one, the idle and active limits disconnect the user instead of signing them out."
   - "Learn's examples for the disconnected-session limit are 15 to 30 minutes, finishing before the end of the autoscale ramp-down phase. Keep it above five minutes, or a short network loss can end a session."
-  - "Intune: a profile for Windows 10 and later, the settings picker path Administrative templates, Windows Components, Remote Desktop Services, Remote Desktop Session Host, Session Time Limits, then a restart of the hosts. Domain-joined hosts can use a Group Policy object linked to the OU instead."
+  - "Intune: a Settings catalog profile for Windows 10 and later, the settings picker path Administrative templates, Windows Components, Remote Desktop Services, Remote Desktop Session Host, Session Time Limits. Domain-joined hosts can use a Group Policy object instead. Learn ends both procedures with a restart of the hosts."
   - "Where the same policy is set for both Computer Configuration and User Configuration, the computer setting wins. Device-scope Intune policies go to device groups, not to users."
-  - "A time limit signs users out but does not deallocate VMs. Autoscale or another automation does that, and autoscale counts disconnected sessions as active until they are gone."
+  - "A time limit ends or disconnects sessions but does not deallocate VMs. Autoscale or another automation does that, and autoscale counts disconnected sessions as active until they are gone."
 faq:
   - q: "Do I need to restart the session hosts after setting a limit?"
-    a: "Yes, for the Intune route. Learn's scaling plan article says that once the policy applies to the computers providing a remote session, you restart them for the settings to take effect. For Group Policy, Learn's autoscale pages name no restart step, so test one host before rolling out."
+    a: "Yes, on both routes. Learn's scaling plan article ends its Intune procedure and its Group Policy procedure for the disconnected-session limit with restarting the computers that provide the remote session, so the settings take effect. Applying the same step to the idle and active limits is our reading."
   - q: "Why do my idle sessions disconnect instead of signing out?"
     a: "By default Remote Desktop Services disconnects a session that reaches an idle or active limit. To end it instead, enable End session when time limits are reached. Per the Policy CSP page, that setting applies only to limits an administrator set explicitly, not to timeouts caused by network conditions."
   - q: "Does a time limit stop the VM and its cost?"
     a: "No. The Start VM on Connect FAQ says signing users out does not deallocate their VMs. Deallocation needs autoscale or an automation script. The autoscale FAQ pairs the disconnected-session limit with a minimum active host percentage of 0 in off-peak to reach zero running hosts."
 ---
 
-Set the limits as Remote Desktop Services policies on the session hosts, either in a Group Policy object or in an Intune profile, and restart the hosts. This article covers the policy side: which setting does what, which values Microsoft documents, and why a limit sometimes seems to be ignored. For the concepts behind disconnect and sign-out, see the companion explainer on session time limits.
+Set the limits as Remote Desktop Services policies on the session hosts, either in a Group Policy object or in an Intune profile, and restart the hosts. This article covers the policy side: which setting does what, which values Microsoft documents, and why a limit sometimes seems to be ignored. For the concepts behind disconnect and sign-out, see the companion article "Disconnect and sign-out time limits in Azure Virtual Desktop explained".
 
-These are inbox Windows policies from the TerminalServer administrative template (TerminalServer.admx), applied to [session hosts](/entity/avd-session-host/) in [Azure Virtual Desktop](/entity/azure-virtual-desktop/). They are not a separate Azure Virtual Desktop feature, and the Learn pages cited below carry no preview label for them.
+These are inbox Windows policies from the TerminalServer administrative template (TerminalServer.admx), applied to [session hosts](/entity/avd-session-host/) in [Azure Virtual Desktop](/entity/azure-virtual-desktop/). They are not a separate Azure Virtual Desktop feature.
 
 ## The four policies
 
@@ -45,7 +45,7 @@ Four details from the same reference decide how you combine them:
 
 ## Choosing the combination
 
-Pick the policy from the problem you are solving. The examples are ours, not Microsoft recommendations; the only values Learn gives for AVD host pools are in the next section.
+Pick the policy from the problem you are solving. The examples are ours, not Microsoft recommendations; the pages cited here give values for AVD host pools only in the next section.
 
 | Problem | Policies | Effect |
 |---|---|---|
@@ -57,7 +57,7 @@ If you chain an idle limit and a disconnected limit, the user is signed out afte
 
 ## Which values Learn gives
 
-Learn is sparing with numbers for AVD, and none of the pages sets a required value.
+The cited pages give few numbers for AVD, and none sets a required value.
 
 - **Disconnected sessions on pooled hosts with autoscale.** The autoscale FAQ says to set an appropriate timeout, for example 15 to 30 minutes, and to make sure it completes before the end of the ramp-down phase. It lists this as one part of a recommended configuration, next to stopping VMs when they have no active sessions, optional force sign-out, and a minimum percentage of active hosts of 0 in off-peak.
 - **A lower bound.** The Start VM on Connect FAQ says to set the End a disconnected session limit to more than five minutes, because a low value can end sessions when a network connection drops for too long, which costs users unsaved work.
