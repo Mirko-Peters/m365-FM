@@ -24,13 +24,18 @@ const call = (env, path, method = "GET", data, user = { id: 1 }) => { const url 
 const body = async (r) => (await r).json();
 
 // Mock fuer DNS-ueber-HTTPS und Cloudflare: dns = { "<name>|<type>": Antwort-JSON }, cf = Zustand des Custom Hostnames
-function mocks({ dns = {}, cf = null } = {}) {
-  const calls = [], state = { cf, dns, creates: 0 };
+function mocks({ dns = {}, cf = null, txtFrom = null } = {}) {   // txtFrom: Datenbank - das Mitglied hat das TXT-Token seines Eintrags gesetzt
+  const calls = [], state = { cf, dns, creates: 0, txtFrom };
   const orig = globalThis.fetch;
   globalThis.fetch = async (u, init = {}) => {
     const url = String(u); calls.push({ url, method: init.method || "GET", headers: init.headers || {}, body: init.body });
     if (url.startsWith("https://cloudflare-dns.com/dns-query")) {
-      const q = new URL(url), key = q.searchParams.get("name") + "|" + q.searchParams.get("type"), r = state.dns[key];
+      const q = new URL(url), key = q.searchParams.get("name") + "|" + q.searchParams.get("type");
+      let r = state.dns[key];
+      if (!r && state.txtFrom && q.searchParams.get("type") === "TXT" && q.searchParams.get("name").startsWith("_m365fm-verify.")) {
+        const toks = state.txtFrom.prepare("SELECT token FROM blog_domains WHERE domain=?").all(q.searchParams.get("name").slice(15)).map((x) => x.token);
+        if (toks.length) r = { Status: 0, Answer: toks.map((t) => ({ type: 16, data: `"m365fm-verify=${t}"` })) };
+      }
       if (r === "fail") return new Response("x", { status: 502 });
       return new Response(JSON.stringify(r || { Status: 3, Answer: [] }), { status: 200 });
     }
@@ -86,7 +91,7 @@ test("mine: nur eigene Domains, Pruef-Token nur als fertiger TXT-Wert", async ()
 });
 
 test("check ohne Cloudflare-Zugang: DNS ok -> verified, nie active, KEIN Aufruf an Cloudflare", async () => {
-  const { env, raw } = await makeDb(); const m = mocks({ dns: cnameOk("blog.anna.de") });
+  const { env, raw } = await makeDb(); const m = mocks({ dns: cnameOk("blog.anna.de"), txtFrom: raw });
   try {
     await call(env, "/api/byod/add", "POST", { domain: "blog.anna.de", imprint_url: "https://anna.de/i" });
     const r = await body(call(env, "/api/byod/check", "POST", { id: 1 }));
@@ -113,7 +118,7 @@ test("check: DNS fehlt -> pending mit dns_missing; Netzfehler aendert nichts; oh
 });
 
 test("check mit Cloudflare: anlegen -> wartet -> active; Impressum Pflicht; Token nur im Authorization-Header", async () => {
-  const { env, raw } = await makeDb(), cenv = { ...env, ...CFENV }; const m = mocks({ dns: cnameOk("blog.anna.de") });
+  const { env, raw } = await makeDb(), cenv = { ...env, ...CFENV }; const m = mocks({ dns: cnameOk("blog.anna.de"), txtFrom: raw });
   try {
     assert.ok(cfOn(cenv)); assert.ok(!cfOn({ ...cenv, CF_ZONE_ID: "kurz" })); assert.ok(!cfOn({ CF_API_TOKEN: "x" })); assert.ok(!cfOn(env));
     await call(cenv, "/api/byod/add", "POST", { domain: "blog.anna.de" });   // ohne Impressum
@@ -135,14 +140,14 @@ test("check mit Cloudflare: anlegen -> wartet -> active; Impressum Pflicht; Toke
 });
 
 test("Aktive Domain wird abgeschaltet, wenn der DNS-Eintrag eindeutig fehlt oder Cloudflare nicht mehr active meldet; Netzfehler schalten nicht ab", async () => {
-  const { env, raw } = await makeDb(), cenv = { ...env, ...CFENV }; const m = mocks({ dns: cnameOk("blog.anna.de") });
+  const { env, raw } = await makeDb(), cenv = { ...env, ...CFENV }; const m = mocks({ dns: cnameOk("blog.anna.de"), txtFrom: raw });
   try {
     await call(cenv, "/api/byod/add", "POST", { domain: "blog.anna.de", imprint_url: "https://anna.de/i" });
     await call(cenv, "/api/byod/check", "POST", { id: 1 }); m.state.cf = { ...m.state.cf, status: "active", ssl: { status: "active" } };
     assert.equal((await body(call(cenv, "/api/byod/check", "POST", { id: 1 }))).domain.status, "active");
     m.state.dns = { "blog.anna.de|CNAME": "fail" };
     assert.equal((await body(call(cenv, "/api/byod/check", "POST", { id: 1 }))).domain.status, "active", "Netzfehler: unveraendert");
-    m.state.dns = {};
+    m.state.dns = {}; m.state.txtFrom = null;   // alle Eintraege entfernt
     const r = await body(call(cenv, "/api/byod/check", "POST", { id: 1 })); assert.equal(r.domain.status, "pending"); assert.equal(raw.prepare("SELECT activated_at a FROM blog_domains").get().a, 0);
     assert.equal(await serveBlog(cenv, "blog.anna.de", "/"), null);
     m.state.dns = cnameOk("blog.anna.de"); m.state.cf = { ...m.state.cf, status: "pending", ssl: { status: "pending_validation" } };
@@ -151,7 +156,7 @@ test("Aktive Domain wird abgeschaltet, wenn der DNS-Eintrag eindeutig fehlt oder
 });
 
 test("Cloudflare-Fehler: Status bleibt, nur ein Fehlercode (keine Meldung mit Token); bei geloeschtem Hostnamen wird neu angelegt", async () => {
-  const { env } = await makeDb(), cenv = { ...env, ...CFENV }; const m = mocks({ dns: cnameOk("blog.anna.de"), cf: { error: 9109 } });
+  const { env, raw } = await makeDb(), cenv = { ...env, ...CFENV }; const m = mocks({ dns: cnameOk("blog.anna.de"), cf: { error: 9109 }, txtFrom: raw });
   try {
     await call(cenv, "/api/byod/add", "POST", { domain: "blog.anna.de", imprint_url: "https://anna.de/i" });
     const r = await body(call(cenv, "/api/byod/check", "POST", { id: 1 })); assert.equal(r.domain.status, "verified"); assert.equal(r.domain.error, "cf_9109"); assert.ok(!JSON.stringify(r).includes(TOKEN));
@@ -185,7 +190,7 @@ test("Impressum entfernen schaltet eine aktive Domain sofort ab; ungueltige Link
 });
 
 test("remove: nur die eigene, Cloudflare-Hostname wird mitgeloescht, Fehler dort behaelt die Zeile, gesperrte bleiben", async () => {
-  const { env, raw } = await makeDb(), cenv = { ...env, ...CFENV }; const m = mocks({ dns: cnameOk("blog.anna.de") });
+  const { env, raw } = await makeDb(), cenv = { ...env, ...CFENV }; const m = mocks({ dns: cnameOk("blog.anna.de"), txtFrom: raw });
   try {
     await call(cenv, "/api/byod/add", "POST", { domain: "blog.anna.de" }); await call(cenv, "/api/byod/check", "POST", { id: 1 });
     assert.equal((await call(cenv, "/api/byod/remove", "POST", { id: 1 }, { id: 2 })).status, 404);
@@ -263,5 +268,35 @@ test("Kontoloeschung: Domains des Kontos weg, Hostname bei Cloudflare nur mit Se
     const idx = readFileSync(new URL("../src/index.js", import.meta.url), "utf-8"), del = idx.slice(idx.indexOf("async function deleteAccount("), idx.indexOf("const me = memberOf"));
     assert.match(del, /deleteUserByod\(env, id\)/);
     assert.match(readFileSync(new URL("../src/identities.js", import.meta.url), "utf-8"), /simple\("blog_domains"\)/);
+  } finally { m.done(); }
+});
+
+// Sicherheits-Audit K16: der CNAME allein belegt keinen Besitz (verwaister CNAME); erster Nachweis nur mit dem TXT-Token des eigenen Eintrags
+test("K16: erster Nachweis nur mit TXT-Token - Uebernahme einer verwaisten Domain per CNAME scheitert", async () => {
+  const { env, raw } = await makeDb(), cenv = { ...env, ...CFENV }; const m = mocks({ dns: cnameOk("blog.anna.de") });
+  try {
+    // (a) nur CNAME: pending, txt_missing, kein Aufruf an Cloudflare
+    await call(cenv, "/api/byod/add", "POST", { domain: "blog.anna.de", imprint_url: "https://anna.de/i" });
+    let r = await body(call(cenv, "/api/byod/check", "POST", { id: 1 }));
+    assert.equal(r.domain.status, "pending"); assert.equal(r.domain.error, "txt_missing"); assert.equal(cfCalls(m).length, 0);
+    // (b) CNAME + TXT des eigenen Eintrags: verified, Hostname wird angelegt
+    m.state.txtFrom = raw;
+    r = await body(call(cenv, "/api/byod/check", "POST", { id: 1 })); assert.equal(r.domain.status, "verified"); assert.equal(m.state.creates, 1);
+    m.state.cf = { ...m.state.cf, status: "active", ssl: { status: "active" } };
+    assert.equal((await body(call(cenv, "/api/byod/check", "POST", { id: 1 }))).domain.status, "active");
+    // (d) bereits nachgewiesen: CNAME allein haelt die Domain aktiv
+    const oldTok = raw.prepare("SELECT token t FROM blog_domains").get().t;
+    m.state.txtFrom = null;
+    assert.equal((await body(call(cenv, "/api/byod/check", "POST", { id: 1 }))).domain.status, "active");
+    // (c) Anna entfernt die Domain, CNAME und ihr altes TXT bleiben stehen; Ben traegt sie ein -> keine Uebernahme
+    assert.equal((await call(cenv, "/api/byod/remove", "POST", { id: 1 })).status, 200);
+    m.state.dns = { ...cnameOk("blog.anna.de"), "_m365fm-verify.blog.anna.de|TXT": { Status: 0, Answer: [{ type: 16, data: `"m365fm-verify=${oldTok}"` }] } };
+    m.state.cf = null; const before = m.state.creates;
+    await call(cenv, "/api/byod/add", "POST", { domain: "blog.anna.de", imprint_url: "https://ben.de/i" }, { id: 2 });
+    const id = raw.prepare("SELECT id FROM blog_domains WHERE user_id=2").get().id;
+    r = await body(call(cenv, "/api/byod/check", "POST", { id }, { id: 2 }));
+    assert.equal(r.domain.status, "pending"); assert.equal(r.domain.error, "txt_missing");
+    assert.equal(m.state.creates, before, "kein Hostname fuer Ben");
+    assert.equal(await serveBlog(cenv, "blog.anna.de", "/"), null);
   } finally { m.done(); }
 });

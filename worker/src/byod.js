@@ -35,6 +35,9 @@ export async function checkDomain(env, d, t = now()) {
   const dns = await checkDns(d.domain, target, d.token);
   if (!dns.ok) return await set({ error: "dns_unavailable" });   // Netzfehler: nichts aendern, nie abschalten wegen eines Ausfalls
   if (!dns.cname && !dns.txt) return await set({ status: "pending", error: "dns_missing", activated_at: 0 });   // eindeutig keine Eintraege: auch eine aktive Domain wird abgeschaltet
+  // Erster Nachweis nur ueber das TXT-Token DIESES Eintrags: der CNAME zeigt fuer alle Mitglieder auf dasselbe Ziel und belegt nicht, wer die Domain
+  // kontrolliert (verwaister CNAME nach Entfernen oder Kontoloeschung). Danach haelt der CNAME eine nachgewiesene Domain am Leben.
+  if (!d.verified_at && !dns.txt) return await set({ status: "pending", error: "txt_missing", activated_at: 0 });
   let n = { ...d, status: d.status === "active" ? "active" : "verified", verified_at: d.verified_at || t, error: "" };
   if (!cfOn(env)) return await set({ ...n, status: n.status === "active" ? "verified" : n.status, activated_at: 0 });   // ohne Zugang zu Cloudflare nie aktiv, ohne Fehler
   let cf = n.cf_id ? await cfGet(env, n.cf_id) : await cfCreate(env, d.domain);
