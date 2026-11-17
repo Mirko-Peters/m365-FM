@@ -8,28 +8,28 @@ date: 2026-11-18
 topics: [trusted-launch, azure-virtual-desktop]
 keypoints:
   - "Pick the path first: a pooled pool with a session host configuration changes the security type in a session host update. A pool with standard management means changing each Gen 2 VM or replacing it."
-  - "An in-place upgrade needs a stopped Generation 2 VM, a supported size and OS, no unsupported features, and the Enhanced policy if Azure Backup is on. Disable Azure Site Recovery first."
+  - "An in-place upgrade needs a stopped Generation 2 VM, a supported size and OS, no unsupported features, and the Enhanced policy if Azure Backup is on. Azure Site Recovery has to be disabled first; Learn's Site Recovery page calls migrating protected VMs unsupported yet lists steps, and protection has to be set up again afterwards."
   - "Images must be Generation 2. For an Azure Compute Gallery image, Learn recommends the TrustedLaunchSupported security type on the image definition, which creates both Gen2 and trusted launch VMs."
-  - "Rolling back to Standard is one-way: trusted launch cannot be re-enabled on the same VM. Rollback is not available in the portal and needs newer CLI, PowerShell or API versions."
+  - "For a single VM changed in place (paths B and C), rolling back to Standard is one-way: trusted launch cannot be re-enabled on that VM. The portal does not support that rollback, which needs newer CLI, PowerShell or API versions."
   - "Verify afterwards: security type on the VM, Secure Boot and vTPM, the Guest Attestation extension, and outbound access to the Azure Attestation endpoint."
 faq:
   - q: "Can I enable trusted launch on a running session host?"
-    a: "No. Learn's procedure for an existing Generation 2 VM stops (deallocates) the VM first, changes the security type, then starts it again. Put the host in drain mode beforehand so that no new sessions arrive, and plan for the VM being offline for the change."
+    a: "It depends on the generation. For a Gen2 VM, Learn's procedure stops the VM first, changes the security type, then starts it again. For a Gen1 VM in the portal, the VM must be running when you start, and the portal asks you to confirm the deallocation when you save; with the CLI or PowerShell you deallocate first. Either way the VM is deallocated during the change, so put the host in drain mode beforehand."
   - q: "What happens to my existing Gen1 session hosts?"
-    a: "Learn describes an upgrade path from Gen1 to Gen2 with trusted launch that includes converting the guest OS disk from MBR to GPT with MBR2GPT, and it does not support Gen1 to Gen2 without trusted launch. Our reading: for pooled hosts, replacing them from a Gen2 image avoids that conversion, but Learn does not say so."
+    a: "Learn describes an upgrade from Gen1 to Gen2 with trusted launch for which you first convert the guest OS volume from MBR to GPT (on Windows with MBR2GPT), and does not support Gen1 to Gen2 without trusted launch. Our reading: replacing pooled hosts from a Gen2 image avoids that conversion, but Learn does not say so."
   - q: "Can I turn it off again if something breaks?"
-    a: "Yes, but it is one-way. Setting the security type back to Standard works with Azure CLI 2.86.0 or later, Azure PowerShell 15.6.1 or later, or Microsoft.Compute API version 2025-11-01 or later, not in the portal. Learn warns that trusted launch cannot be re-enabled on the same VM afterwards, and advises a test on a non-production Gen2 VM and restore points before any change."
+    a: "For a single VM changed in place (paths B and C), yes, but it is one-way. Learn describes setting the security type back to Standard with newer Azure CLI, Azure PowerShell or API versions, not in the portal, and warns that trusted launch cannot be re-enabled on that VM afterwards. For path A, the service tries to roll back a host that fails to update to the previous configuration, and a failed update can only be retried or cancelled; see Rollback and pitfalls."
 ---
 
-To enable trusted launch on Azure Virtual Desktop session hosts, first check how the host pool is managed. In a pooled host pool with a session host configuration, you set **Security type** to Trusted launch virtual machines in a session host update, and the service replaces the hosts. Otherwise you stop each Generation 2 VM and switch its security type, or you deploy new hosts from a Generation 2 image.
+To enable trusted launch on [Azure Virtual Desktop](/entity/azure-virtual-desktop/) session hosts, first check how the host pool is managed. In a pooled host pool with a session host configuration, you set **Security type** to Trusted launch virtual machines in a session host update, and the service replaces the hosts. Otherwise you stop each Generation 2 VM and switch its security type, or you deploy new hosts from a Generation 2 image.
 
-This is the how-to companion to [Trusted launch for Azure VMs and session hosts explained](/community/u/mirko-p/blog/trusted-launch-for-azure-vms-and-session-hosts-explained/), which covers what [trusted launch](/entity/trusted-launch/) does. Here the focus is the order of steps, the values and the stumbling blocks for [Azure Virtual Desktop](/entity/azure-virtual-desktop/).
+This is the how-to companion to [Trusted launch for Azure VMs and session hosts explained](/community/u/mirko-p/blog/trusted-launch-for-azure-vms-and-session-hosts-explained/), which covers what [trusted launch](/entity/trusted-launch/) does.
 
 ## Choose the path
 
-Trusted launch is the default for newly created Azure Generation 2 VMs, and session hosts added in the Azure portal default to Trusted virtual machines, per Learn. Existing VMs keep their setting, so the steps below mainly concern older hosts. Open a VM's **Overview** and read **Security type**.
+Learn calls trusted launch the default state for newly created Azure Generation 2 VMs when the image, source disk and VM size support it. The [Deploy Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop) page lists Trusted launch virtual machines as the default security type when you create a host pool with a session host configuration in the portal. Learn's FAQ says trusted launch as default "doesn't change existing Azure VMs", so the steps below mainly concern older hosts. Open a VM's **Overview** and read **Security type**.
 
-Which path applies depends on how the host pool was created. Learn says the management approach is set at creation and cannot be changed later, so a pool created without a session host configuration cannot get one afterwards. "Standard management" here is that approach, not the security type Standard. Session host configuration is for pooled host pools only, and its hosts cannot be changed outside the service with tools designed for standard management.
+Learn says the management approach cannot be changed after the pool is created, and session host configuration is for pooled pools only.
 
 | Situation | Path | Effect on hosts |
 |---|---|---|
@@ -38,45 +38,35 @@ Which path applies depends on how the host pool was created. Learn says the mana
 | Standard-management pool, Gen1 VMs | Gen1 upgrade or new hosts (path C) | Disk conversion, or replacement |
 | Any pool, your own image | Prepare a Gen2 image first (path D) | New hosts only |
 
-Microsoft announced general availability of enhanced host pool management, including session host configuration and update, in July 2026 (Tech Community). Some Learn pages still carry preview wording; check the current page before relying on a limit.
+Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit.
 
 ## Check the prerequisites
 
 Learn's page for [existing Gen2 VMs](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch-existing-vm) lists what the VM needs:
 
-- A supported size family and OS version. The [overview](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch) lists Windows 10 and 11 and Windows Server 2016 to 2025, and size families such as B, D, E, F and L; A, Dv2 and Dv3 are not supported. Check its live size table, which has columns for sizes that are "currently not supported".
+- A supported size family and OS version: compare your VM size with the supported and not supported lists in the [overview](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch).
 - No unsupported features. The overview names managed images and Linux VM hibernation.
-- Azure Backup, if used, on the Enhanced policy. Learn says trusted launch cannot be enabled on VMs with Standard policy backup protection, and the migration article is labelled preview.
-- Azure Site Recovery disabled before the upgrade, then reconfigured afterwards.
+- Azure Backup, if used, on the Enhanced policy. Learn says trusted launch cannot be enabled on VMs with Standard policy backup protection. See [Migrate Azure VM backups from standard to enhanced policy](https://learn.microsoft.com/en-us/azure/backup/backup-azure-vm-migrate-enhanced-policy).
+- Azure Site Recovery: both the Gen2 page and the [Site Recovery page](https://learn.microsoft.com/en-us/azure/site-recovery/concepts-trusted-vm) say to disable it before the upgrade; the Gen2 page adds that it can be re-enabled afterwards. The Site Recovery page says protected Gen2 VMs cannot be migrated and its support matrix lists the migration as not supported, yet it gives steps (disable replication, uninstall the extension and mobility service, then migrate); recovery points are deleted and the VM needs protection again. Our reading: treat protected VMs as unsupported unless confirmed otherwise.
 - Restore points for production VMs, and a test on a non-production VM first.
-
-For monitoring, Learn's [deployment article](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch-portal) asks you to allow the `AzureAttestation` service tag in outbound NSG rules, let firewalls reach `*.attest.azure.net`, and onboard the subscription to Defender for Cloud, since otherwise you cannot monitor boot integrity.
 
 ## Path A: session host update
 
-This path applies to pooled host pools with a session host configuration whose session hosts are all in the same Azure region and resource group. Learn says a trusted launch VM needs a generation 2 image.
+This path needs a pooled pool with a session host configuration and hosts in one region and resource group. The general workflow and known issues are in our article on [session host updates](/community/u/mirko-p/blog/managing-session-host-updates-with-a-session-host-configuration/); this section covers the trusted launch specifics.
 
-1. Prepare the image. A Compute Gallery image should have at least two replicas, and an image in a different subscription from the host pool is not supported.
-2. Disable autoscale for the pool. The [session host update](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update) page says to disable it before the update and keep it off until the update finishes.
-3. Remove resource locks on the session hosts and their resource group.
-4. In the Azure portal, open **Azure Virtual Desktop**, then **Host pools**, select the pool, then **Session hosts**.
-5. Select **Manage session host update**, then **New update**. Alternatively select **Manage session host configuration**, then **Edit**.
-6. On the **Basics** tab, set the VM batch size, the maximum number of hosts removed at a time. Learn says one initial host is updated first, and the update stops if that host fails.
-7. On the **Session hosts** tab, set **Security type** to **Trusted launch virtual machines**. Secure boot and vTPM are selected automatically. Review image, size and disk type too.
-8. On the **Schedule** tab, choose **Schedule update now** or a time up to two weeks ahead. On **Notifications**, set the minutes before users are signed out (0 to 60) and a message.
-9. Review and select **Update**. Watch the blue banner under **Session hosts** and select **Refresh**.
+1. Use a generation 2 image, which Learn says a trusted launch VM needs. Replicas and images from another subscription, where Learn's pages differ, are covered in the session host update article linked above.
+2. Disable autoscale for the pool until the update finishes, and remove any resource locks on the session hosts or their resource group (both per the update pages).
+3. In the Azure portal, open the pool's **Session hosts**, select **Manage session host update**, then **New update**. On **Basics**, set the VM batch size; one initial host is updated first, and the update stops if that host fails.
+4. On the **Session hosts** tab, set **Security type** to **Trusted launch virtual machines**. Secure boot and vTPM are selected automatically.
+5. On **Schedule**, choose **Schedule update now** or a time up to two weeks ahead. On **Notifications**, set the sign-out delay (0 to 60 minutes), then select **Review** and **Update**.
 
-Learn plans about 20 minutes per session host, with the hosts in a batch updated concurrently. Our arithmetic for 10 hosts and a batch size of 2: the initial host plus five batches is six rounds of about 20 minutes, so roughly 120 minutes. Learn does not say whether the sign-out wait applies per batch or once.
+Learn says it takes around 20 minutes for a session host to update, with each batch updated concurrently. Follow progress in the blue banner under **Session hosts**, using **Refresh**.
 
-Do not change drain mode or remove VMs during the update; the service sets drain mode itself. Files, registry keys or certificates added manually to session hosts are not present afterwards, so put them in the image, in Intune or Group Policy, or in the custom configuration script. A scheduled update cannot be edited. The OS disk name changes to the format `SessionHostName-DateTime_Hash`. The PowerShell examples on the [session host configuration update](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update-configure) page do not set the security type; that page lists it only in the portal steps. The session host configuration cmdlets come from a preview version of the Az.DesktopVirtualization module (from 5.3.0).
-
-The [session host update](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update) page lists two limits that matter here: it is available only in the global Azure cloud, not Azure US Government or Azure operated by 21Vianet, and a purchase plan on a gallery image is not retained.
-
-Our reading: because path A creates new VMs, switching back would be another update, not the one-way rollback of an in-place change. Learn does not document this, so test it on a spare pool.
+Do not change drain mode or remove VMs during the update; the service manages drain mode.
 
 ## Path B: change existing Gen2 VMs
 
-Use this for a host pool with standard management and Generation 2 VMs. Drain one host first, using **Turn drain mode on** under **Host pools**, **Session hosts**, or `Update-AzWvdSessionHost` with `AllowNewSession = $False` per [drain mode](https://learn.microsoft.com/en-us/azure/virtual-desktop/drain-mode). Existing sessions stay active.
+Use this for standard management and Generation 2 VMs. Drain one host first, using **Turn drain mode on** under **Host pools**, **Session hosts**, or `Update-AzWvdSessionHost` with `AllowNewSession = $False` per [drain mode](https://learn.microsoft.com/en-us/azure/virtual-desktop/drain-mode). Existing sessions stay active; stop the VM when none remain.
 
 Portal steps:
 
@@ -85,7 +75,7 @@ Portal steps:
 3. Open the **Security type** list, select **Trusted launch**, tick **Secure Boot** and **vTPM**, and select **Save**.
 4. Start the VM and confirm that you can sign in over RDP.
 
-Learn adds that vTPM is on by default, Secure Boot is not, and Learn recommends Secure Boot unless you use a custom unsigned kernel or drivers. VMs created from a Compute Gallery image, a managed image or an OS disk cannot be upgraded in the portal. Use the CLI or PowerShell:
+Learn adds that vTPM is on by default, Secure Boot is not (strongly recommended), and VMs created from a Compute Gallery image, a managed image or an OS disk cannot be upgraded in the portal. Use the CLI or PowerShell:
 
 ```azurecli
 az vm deallocate --resource-group myResourceGroup --name myVm
@@ -101,21 +91,19 @@ Get-AzVM -ResourceGroupName myResourceGroup -VMName myVm |
 Start-AzVM -ResourceGroupName myResourceGroup -Name myVm
 ```
 
-The CLI output should show `securityType` as `TrustedLaunch` with both UEFI settings true. Then take the host out of drain mode and test a connection.
+Check that `securityType` shows `TrustedLaunch`, then end drain mode and test a connection.
 
 ## Path C: Gen1 hosts
 
-Learn treats this as a separate [Gen1 upgrade](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch-existing-vm-gen-1). Gen1 to Gen2 without trusted launch is not supported, and the guest disk must change from MBR to GPT first. For Windows, Learn runs `MBR2GPT /validate /allowFullOS`, stops if validation fails, then `MBR2GPT /convert /allowFullOS`, which is irreversible. Windows Server 2016 is excluded on this path, and Windows OS volume encryption such as BitLocker must be disabled before and re-enabled afterwards.
+Learn's [Gen1 upgrade](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch-existing-vm-gen-1) does not support Gen1 to Gen2 without trusted launch, and the guest OS volume, usually MBR on Gen1, must be updated to GPT first. For Windows: `MBR2GPT /validate /allowFullOS`, stop if validation fails, then `MBR2GPT /convert /allowFullOS`, which is irreversible. Windows Server 2016 is excluded on this path, and Windows OS volume encryption such as BitLocker must be disabled before and re-enabled afterwards. The same Enhanced backup policy and Site Recovery prerequisites apply as for Gen2.
 
-Before running MBR2GPT, take a full backup or create restore points. Learn says a VM upgraded to trusted launch cannot be rolled back to Gen1 and has to be recovered from a backup taken before the upgrade. It also says the Windows system volume cannot be extended after the conversion, and recommends extending it before the upgrade.
+Before running MBR2GPT, take a full backup or create restore points: a VM upgraded this way cannot be rolled back to Gen1, only recovered from a backup or restore point taken before. The Windows system volume cannot be extended after the conversion, so extend it first.
 
-Afterwards, set the security type as in path B. In the portal the Gen1 VM must be running; you acknowledge that the guest OS volume was updated and validated, tick Secure Boot and vTPM, save, and confirm the deallocation.
-
-Known issues listed there matter for host pools: the image reference still shows the Gen1 source, so reimaging with that reference causes a boot failure, and the temporary disk can move from D: to E:.
+Afterwards, set the security type as in path B. In the portal the Gen1 VM must be running; you acknowledge the volume update, tick Secure Boot and vTPM, save and confirm the deallocation. With the CLI or PowerShell, deallocate it first. Learn's known issue: the image reference still shows Gen1, so reimaging fails to boot. To replace Gen1 hosts instead, see path D.
 
 ## Path D: a Gen2 image that supports trusted launch
 
-For your own [golden images](/entity/golden-image/) in [Azure Compute Gallery](/entity/azure-compute-gallery/), Learn recommends an image definition with security type `TrustedLaunchSupported`. The source must contain no VM guest state; the result can create Gen2 or trusted launch VMs.
+For your own [golden images](/entity/golden-image/) in [Azure Compute Gallery](/entity/azure-compute-gallery/), Learn recommends an image definition with security type `TrustedLaunchSupported`. The source must contain no VM guest state; the image can create Gen2 or trusted launch VMs.
 
 ```azurecli
 az sig image-definition create --resource-group MyResourceGroup --location eastus \
@@ -125,36 +113,46 @@ az sig image-definition create --resource-group MyResourceGroup --location eastu
     --features SecurityType=TrustedLaunchSupported
 ```
 
-Learn's CLI example uses `--os-type Linux`; the value above is adapted. An image captured from a trusted launch VM needs the definition type `TrustedLaunch` and can create only trusted launch VMs. Managed images are not supported with trusted launch.
+Replace the placeholder names with your own.
 
-The [FAQ](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch-faq) adds that if a Gen2 VM is used to generate a `TrustedLaunchSupported` gallery image through Azure Image Builder or Packer, explicitly bypass the trusted launch default for that build VM by setting `securityType` to `Standard` (API 2025-11-01 or later).
+Learn's overview lists managed images as unsupported with trusted launch and recommends Azure Compute Gallery. The [deployment article](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch-portal) is consistent: it names a Gen2 managed image only as a source for a gallery image version whose definition is `TrustedLaunchSupported`, and says managed images cannot be created for trusted launch VMs. The [FAQ](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch-faq) says to bypass the trusted launch default (`securityType` of `Standard`) on a Gen2 VM used to create managed images, or to generate `TrustedLaunchSupported` gallery images with Azure Image Builder or Packer.
+
+### Deploy new hosts from the image
+
+For a standard-management pool, the [Add session hosts](https://learn.microsoft.com/en-us/azure/virtual-desktop/add-session-hosts-host-pool) page lists the security type options without naming a default. Generate a registration key (**Host pools**, the pool, **Registration key**, **Generate new key**). Then open **Session hosts**, select **+ Add**, and on the **Virtual machines** tab set **Security type** to **Trusted launch virtual machines** (secure boot and vTPM are selected automatically). Select your gallery image via **See all images**, choose the size, complete the other tabs and select **Create**.
+
+The page says all session hosts in a pool should have the same configuration; our reading is to drain and remove old hosts once no sessions remain.
 
 ## Verify and monitor
 
-1. On each VM's **Overview**, confirm **Security type** and the Secure Boot and vTPM states. After a session host update, **Current Version** and **Target Version** under **Session hosts** show whether each host is current.
-2. For monitoring, tick **Integrity monitoring** under **Settings**, **Configuration**. Learn says this installs the Guest Attestation extension. Secure Boot and vTPM must be on first.
-3. If the extension fails to provision behind an NSG or proxy, Learn's fix is an outbound rule with the `AzureAttestation` service tag set to Allow.
-4. Check Defender for Cloud recommendations on Secure Boot, vTPM and the extension.
+1. On each VM's **Overview**, confirm **Security type**, Secure Boot and vTPM.
+2. For monitoring, tick **Integrity monitoring** under **Settings**, **Configuration**. Learn says this installs the Guest Attestation extension, and Secure Boot and vTPM must be on first.
+3. Learn's [deployment article](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch-portal) lists letting firewalls reach `*.attest.azure.net`. If the extension fails to provision behind an NSG, Learn's fix is an outbound Allow rule for the `AzureAttestation` service tag.
 
 ## Rollback and pitfalls
 
-- **Rollback is one-way.** Learn says that after setting `securityType` to Standard, trusted launch cannot be re-enabled on that VM. A Gen1 VM upgraded to trusted launch returns to Gen1 only from a backup.
-- **Resize and drivers.** Per the overview, a trusted launch VM cannot be resized to an unsupported family such as M-series, and does not boot if unsigned boot components are found.
-- **Backups.** Per the FAQ, backups from before the upgrade restore the whole VM or data disks, not the OS disk alone.
+- **Rollback of a single VM is one-way.** For paths B and C, Learn says that after setting `securityType` to Standard, trusted launch cannot be re-enabled on that VM. The portal does not support this rollback; it needs Azure CLI 2.86.0, Azure PowerShell 15.6.1 or API version 2025-11-01, or later.
+- **Rollback and failures in path A.** Per Learn's [troubleshooting page](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-session-host-configuration-update), a host that fails to update is rolled back to the previous session host configuration if possible; hosts already updated are not rolled back. The service finishes the current batch and marks the update failed; you can only retry or cancel. If a rollback fails, the host is unavailable and capacity drops (our reading: the pool then has mixed security types). An update that fails to initiate cannot be retried; cancel and schedule a new one. Statuses and recovery are in the session host update article. Learn describes no undo for a completed update; because the update pages list Standard as a selectable security type, our reading is that a further update with **Security type** set to Standard is the way back.
+- **Unsigned components.** Per the overview, with Secure Boot on, a VM does not boot if a boot component is unsigned.
 
 ## Sources
 
-Retrieved 17 November 2026.
+Microsoft Learn pages unless noted.
 
-- [Enable trusted launch on existing Gen2 VMs](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch-existing-vm) (Microsoft Learn, last updated 19 June 2026)
-- [Upgrade existing Gen1 VMs to Gen2 with trusted launch](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch-existing-vm-gen-1) (Microsoft Learn, last updated 19 June 2026)
-- [Deploy a trusted launch VM](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch-portal) (Microsoft Learn)
-- [Trusted launch for Azure VMs](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch) (Microsoft Learn, last updated 25 September 2026)
-- [Trusted launch FAQ](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch-faq) (Microsoft Learn)
-- [Boot integrity monitoring overview](https://learn.microsoft.com/en-us/azure/virtual-machines/boot-integrity-monitoring-overview) (Microsoft Learn)
-- [Session host update](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update) (Microsoft Learn, last updated 2 July 2026)
-- [Update session hosts with a session host configuration](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update-configure) (Microsoft Learn, content date 2 July 2026)
-- [Host pool management approaches](https://learn.microsoft.com/en-us/azure/virtual-desktop/host-pool-management-approaches) (Microsoft Learn)
-- [Drain session hosts for maintenance](https://learn.microsoft.com/en-us/azure/virtual-desktop/drain-mode) (Microsoft Learn)
-- [Security recommendations for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/security-recommendations) (Microsoft Learn)
+- [Enable Trusted launch on existing Azure Gen2 VMs](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch-existing-vm) (updated 19 June 2026)
+- [Upgrade existing Azure Gen1 VMs to Trusted launch](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch-existing-vm-gen-1) (updated 19 June 2026)
+- [Deploy a virtual machine with Trusted Launch enabled](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch-portal)
+- [Trusted Launch for Azure virtual machines](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch) (updated 25 September 2026)
+- [Migrate Azure VM backups from standard to enhanced policy](https://learn.microsoft.com/en-us/azure/backup/backup-azure-vm-migrate-enhanced-policy)
+- [Azure Site Recovery support for Azure trusted launch virtual machines](https://learn.microsoft.com/en-us/azure/site-recovery/concepts-trusted-vm)
+- [Trusted launch FAQs](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch-faq)
+- [Boot integrity monitoring overview](https://learn.microsoft.com/en-us/azure/virtual-machines/boot-integrity-monitoring-overview)
+- [Session host update for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update) (updated 2 July 2026)
+- [Update session hosts using session host update in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update-configure) (updated 2 July 2026)
+- [Host pool management approaches for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/host-pool-management-approaches)
+- [Add session hosts to a host pool](https://learn.microsoft.com/en-us/azure/virtual-desktop/add-session-hosts-host-pool) (updated 2 July 2026)
+- [What's new in Azure Virtual Desktop?](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new) (updated 21 October 2026)
+- [Drain session hosts for maintenance in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/drain-mode)
+- [Deploy Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop) (updated 1 October 2026)
+- [Troubleshoot session host configuration and session host update in Azure Virtual Desktop](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-session-host-configuration-update)
 - [Enhanced host pool management for Azure Virtual Desktop is now generally available](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612) (Microsoft Tech Community, July 2026)
