@@ -87,3 +87,31 @@ test("K31: ausgeblendete Bewertung - eigenes Loeschen leert nur den Text, Neuanl
   assert.equal((await call(env, 6, "POST", "/api/reviews/delete", { id: r2 })).s, 200);
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM show_reviews WHERE id=?").get(r2).n, 0);
 });
+
+// ---------- K7: Firmen-Admin kann den Inhaber weder herabstufen noch entfernen ----------
+test("K7: approve gilt nur fuer wartende Mitglieder; Inhaber und Admins bleiben geschuetzt", async () => {
+  const { raw, env } = await mk();
+  const o = ins(raw, "orgs", { handle: "firma-x", name: "Firma X", public: 1, created: 1 });
+  for (const [uid, role, status] of [[1, "owner", "active"], [2, "admin", "active"], [5, "admin", "active"], [4, "member", "pending"], [6, "editor", "active"]]) ins(raw, "org_members", { org_id: o, user_id: uid, role, status, created: 1 });
+  const roleOf = (uid) => ({ ...raw.prepare("SELECT role,status FROM org_members WHERE org_id=? AND user_id=?").get(o, uid) });
+  const mem = (uid, body) => call(env, uid, "POST", "/api/org/firma-x/member", body);
+  // (a) Admin stuft den Inhaber per approve herab -> abgelehnt
+  const a = await mem(2, { action: "approve", user_id: 1, role: "member" });
+  assert.equal(a.s, 409); assert.equal(a.j.error, "not_pending");
+  assert.deepEqual(roleOf(1), { role: "owner", status: "active" });
+  // (b) Admin stuft einen anderen Admin per approve herab -> abgelehnt
+  assert.equal((await mem(2, { action: "approve", user_id: 5, role: "member" })).s, 409);
+  assert.deepEqual(roleOf(5), { role: "admin", status: "active" });
+  // (c) Inhaber entfernen geht nicht
+  assert.equal((await mem(2, { action: "remove", user_id: 1 })).s, 400);
+  assert.deepEqual(roleOf(1), { role: "owner", status: "active" });
+  // (e) aktives Mitglied per approve umstufen geht nicht (nur ueber "role")
+  assert.equal((await mem(2, { action: "approve", user_id: 6, role: "member" })).s, 409);
+  assert.deepEqual(roleOf(6), { role: "editor", status: "active" });
+  // (d) wartende Anfrage freigeben geht weiter
+  assert.equal((await mem(2, { action: "approve", user_id: 4, role: "member" })).s, 200);
+  assert.deepEqual(roleOf(4), { role: "member", status: "active" });
+  // Rolle-Zweig: Admin darf den Inhaber nicht herabstufen
+  assert.equal((await mem(2, { action: "role", user_id: 1, role: "member" })).s, 403);
+  assert.deepEqual(roleOf(1), { role: "owner", status: "active" });
+});
