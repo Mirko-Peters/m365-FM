@@ -81,7 +81,7 @@ The page says packages can be uploaded as APPX, BURN, EXE, INNO, MSI, MSIX, MSST
 1. Go to **Applications > Deployment > Deployment Policies** and select **New**.
 2. Name the policy. It is enabled by default.
 3. Under **Applications**, pick an action: install or uninstall an app or a group. Nerdio recommends not mixing install and uninstall tasks in one policy.
-4. Under **Deploy to**, choose Azure Virtual Desktop and add targets: an AVD workspace, a global pool, or a multi-session or single-session [host pool](/entity/avd-host-pool/).
+4. Under **Deploy to**, choose Azure Virtual Desktop and add targets: an AVD workspace, a global pool (Nerdio lists Global Pools as public preview), or a multi-session or single-session [host pool](/entity/avd-host-pool/).
 5. Set the scheduling options described below and select **Save**.
 
 Once saved, a policy starts deploying to the desktops in scope. The Supported-configurations page says policy assessment runs on new AVD devices every 15 minutes, and that a stopped in-scope AVD desktop is started for the task and returned to its original state afterwards.
