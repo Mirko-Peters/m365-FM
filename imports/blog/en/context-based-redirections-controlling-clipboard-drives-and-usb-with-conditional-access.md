@@ -31,9 +31,9 @@ Microsoft announced the public preview of context-based redirections in the Wind
 
 ## The problem it addresses
 
-A host pool's RDP properties are static. Learn's custom RDP properties article lists these defaults, among others: `redirectclipboard:i:1`, `drivestoredirect:s:*`, `redirectprinters:i:1` and `usbdevicestoredirect:s:*`. With those values, every user from every device gets clipboard, drive, printer and USB redirection. Setting them to `0` closes the data path for everyone, including users on managed devices.
+A host pool's RDP properties are static: a redirection is on or off for every connection to that host pool. Learn's custom RDP properties article lists `redirectclipboard:i:1`, `drivestoredirect:s:*`, `redirectprinters:i:1` and `usbdevicestoredirect:s:*` among the default values. Learn's what's new page, however, records that since July 2025 clipboard, drive, opaque low-level USB and printer redirection are disabled for newly created host pools, and that admins enable them as needed through the host pool RDP properties, Intune or Group Policy. Older host pools can therefore still have these redirections on, and a new host pool starts with them off. Check the current RDP properties of the host pool you plan to use.
 
-The Microsoft blog post frames this around bring-your-own-device (BYOD) scenarios: an unmanaged or noncompliant device may not meet the standard of a corporate-managed one. Context-based redirection lets you keep a redirection for sessions you trust and restrict it for the rest.
+Either way the property is a single switch for everyone. Leaving a redirection off blocks users on managed devices as well, and turning it on grants it to every device. The Microsoft blog post frames the gap around bring-your-own-device (BYOD) scenarios: an unmanaged or noncompliant device may not meet the standard of a corporate-managed one. Context-based redirection lets you enable a redirection for sessions you trust and restrict it for the rest, which also makes it a way to switch the July 2025 defaults back on selectively.
 
 ## The three pieces
 
@@ -51,7 +51,7 @@ The example on Learn uses a context named "All Managed, Compliant Devices" with 
 
 ## What happens at connection time
 
-Learn's validation steps describe the expected result. From a managed, compliant device that satisfies the policy, the configured redirections are available in the desktop or RemoteApp session. From a BYOD or noncompliant device that does not satisfy it, the same redirections are restricted or unavailable. The policy is therefore evaluated per connection, not once per user.
+Learn's validation steps describe the expected result. From a managed, compliant device that satisfies the policy, the configured redirections are available in the desktop or RemoteApp session. From a BYOD or noncompliant device that does not satisfy it, the same redirections are restricted or unavailable. Our reading, not a Learn statement: because the same person gets different results from different devices, the requirement is checked for each connection rather than once per user.
 
 ## What you can control, and where
 
@@ -75,11 +75,9 @@ Learn's clipboard article describes the usual pattern for Azure Virtual Desktop:
 
 **Pick the trust signal first.** The Learn example uses device compliance. The Microsoft blog post lists device management state, compliance posture, user or group membership and network conditions as the kinds of signals, and Learn's overview names user role, device compliance and network location. Every signal needs a Conditional Access condition or grant control behind it, so start from the policy you can already enforce.
 
-**Gate only what carries risk.** Clipboard and drive redirection move data out of the session directly. Printer and USB redirection are different paths with different business uses. Mapping all four to one context is simple; mapping them separately lets you keep, say, printing available while restricting drives. That split is an organizational choice, not a recommendation from Microsoft.
+**Decide which redirections to gate.** Each of the four redirections can be mapped on its own, so you can map all four to one context or only some. Our reading, not a Microsoft recommendation: clipboard and drive redirection move data between the session and the local device directly, so they are the usual first candidates, while printer and USB redirection serve different business needs and may stay as they are.
 
-**Keep the number of contexts small.** Entra's guidance on reusable names points the same way.
-
-**Plan licensing.** Entra's developer guidance says Conditional Access requires Microsoft Entra ID P1 and that authentication context values are not available in the Free edition.
+**Plan licensing and device management.** Entra's developer guidance says Conditional Access requires Microsoft Entra ID P1 and that authentication context values are not available in the Free edition. Our reading: a compliance-based requirement also assumes that the devices are enrolled and evaluated in Intune.
 
 ## Limits and open points
 

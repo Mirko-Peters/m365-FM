@@ -115,6 +115,7 @@ Display Protection suits pools where you control the endpoints, or can require a
 
 Retrieved on 17 November 2026.
 
+- [Microsoft Learn: Cloud PC monitoring overview (preview)](https://learn.microsoft.com/en-us/windows-365/enterprise/cloud-pc-monitoring-overview)
 - [Microsoft Learn: Display Protection for Windows 365 and Azure Virtual Desktop](https://learn.microsoft.com/en-us/windows-365/enterprise/display-protection)
 - [Microsoft Learn: Input and Output Protection for Windows 365 and Azure Virtual Desktop](https://learn.microsoft.com/en-us/windows-365/enterprise/windows-cloud-io-protection)
 - [Microsoft Learn: Input Protection (preview)](https://learn.microsoft.com/en-us/windows-365/enterprise/input-protection)
