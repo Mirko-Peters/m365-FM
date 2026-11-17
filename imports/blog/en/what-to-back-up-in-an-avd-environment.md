@@ -36,7 +36,7 @@ Learn's service architecture article says most components are Microsoft-managed.
 | FSLogix profile containers on Azure Files | Back up with Azure Backup, or accept recreated profiles | Decide per the next section; pooled hosts keep no state |
 | FSLogix profile containers on Azure NetApp Files | Use the built-in Azure NetApp Files backup | Check regional feature availability, per the multiregion article. The FSLogix storage article also lists Azure NetApp Files snapshots |
 | FSLogix Office containers | No backup needed if the content is only rebuildable cache | A separate Office container is an advanced scenario per the multiregion article |
-| MSIX App Attach packages | Use Azure Storage replication (ZRS, or GRS for Azure Files), in a storage account separate from the profile and Office accounts | Back up that account if you cannot easily rebuild the package repository | The article recommends one account per region over a single GRS account, which does not suit local access after a failover |
+| MSIX App Attach packages | Use Azure Storage replication (ZRS, or GRS for Azure Files), in a storage account separate from the profile and Office accounts; back up that account if you cannot easily rebuild the package repository | The multiregion article recommends one storage account per region over a single GRS account, which does not suit local access after a failover |
 | Pooled session hosts | Treat as stateless, rebuild from image | Profiles and data are in external storage or OneDrive |
 | Personal session hosts | Back up at VM level, replicate with Azure Site Recovery for DR | Each user's VM can store state |
 | Golden images | Store in Azure Compute Gallery with replicas | Our reading: a recorded, versioned image is the backup |

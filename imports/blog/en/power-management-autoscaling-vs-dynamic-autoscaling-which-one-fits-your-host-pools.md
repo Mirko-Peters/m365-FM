@@ -65,7 +65,7 @@ Personal plans work differently from pooled ones:
 
 - **Start VM on Connect** is a switch in every phase. Only ramp-up also has a choice of which VMs to start: assigned only, assigned and unassigned, or none.
 - **Disconnect settings** ("When disconnected for (min)") and **sign-out settings** ("When logged off for (min)") take 0 to 360 minutes. The action can be deallocate, hibernate or do nothing.
-- The FAQ says you cannot make autoscale force users to sign out of a personal desktop, and that autoscale for personal desktops "only deallocates session hosts if the user has signed out of their user session". The plan settings above also offer an action for disconnected sessions. The FAQ and the schedule settings do not reconcile these two statements, so test what your personal pool does after a disconnect.
+- The FAQ says you cannot make autoscale force users to sign out of a personal desktop, and that autoscale for personal desktops "only deallocates session hosts if the user has signed out of their user session". The plan settings above also offer an action for disconnected sessions. Another FAQ answer, on drain mode, says autoscale deallocates a personal desktop when the session is "signed out or disconnected", so the FAQ is not consistent with itself, and the plan settings do not settle it either. Test what your personal pool does after a disconnect.
 - Learn warns that FSLogix and App Attach do not currently support hibernate.
 
 See [personal host pool](/entity/avd-personal-host-pool/) and [hibernation](/entity/avd-hibernation/).

@@ -27,7 +27,7 @@ This article looks at what Microsoft Learn says about data locations and service
 
 ## Status
 
-Microsoft's What's new page lists regional host pools as generally available in September 2026, and a Tech Community post published on 30 September 2026 and updated on 13 November 2026 names 14 regions in total. Some Learn wording lags. The Regional Host Pools article keeps module version 5.4.5-preview for the `-DeploymentScope` parameter, a sentence about the service becoming generally available, and an ephemeral OS disk row that says "during preview", and the multiregion BCDR article still says public preview. Status, region list and scope rules are covered in the companion article named above, so this article does not repeat them. Confirm the Deployment scope field in your own portal before you commit a design to it.
+Microsoft's What's new page lists regional host pools as generally available in September 2026, and a Tech Community post published on 30 September 2026 and updated on 13 November 2026 names 14 regions in total. Some Learn pages still carry preview wording, for example the multiregion BCDR article. Status, region list and scope rules are covered in the companion article on where host pool metadata is stored, so this article does not repeat them. Confirm the Deployment scope field in your own portal before you commit a design to it.
 
 ## The four categories of data
 
@@ -64,7 +64,7 @@ The paired-region copy deserves a question to your compliance team. The Data loc
 
 The failure behaviour comes from two articles. The multiregion BCDR article says that a problem in the region hosting the geographical database affects host pools across all regions in that geography, while with regional host pools a problem in one region affects only host pools in that region. The service architecture article says that during a database failover, new connections fail briefly while existing connections are unaffected, and that this applies to both the geographical and the regional database. If a gateway instance fails, TCP-based RDP connections relayed through it drop, and users reconnect to the remaining instances and resume their sessions. The page says new connections can still be made when a region fails, because Azure Traffic Manager directs web service traffic and Azure Front Door directs gateway traffic to the next closest available instance. It does not state what happens to existing sessions in a full region outage, so do not assume anything beyond the text.
 
-Everything below the service components stays your job. Learn lists session hosts, including operating system image customizations and applications, virtual network connectivity, the resiliency, backup and recovery of those session hosts, and user identities and access control as customer-managed. The disaster recovery overview adds that Azure Virtual Desktop has no native features for managing disaster recovery scenarios and points to availability zones, Azure Site Recovery and Azure Files data redundancy options for that layer.
+Everything below the service components stays your job. Learn lists session hosts, including operating system image customizations and applications, virtual network connectivity, the resiliency, backup and recovery of those session hosts, and user identities and access control as customer-managed. The disaster recovery concepts article adds that Azure Virtual Desktop has no native features for managing disaster recovery scenarios and points to availability zones, Azure Site Recovery and Azure Files data redundancy options for that layer.
 
 ## Example: one pooled host pool in East US 2
 
@@ -82,7 +82,7 @@ Suppose a team wants the host pool metadata for a pooled host pool kept in East 
 
 ## What it does not solve
 
-Regional scope reduces the blast radius for the metadata. It is not a disaster recovery design, and a host pool in one region with profiles in another still has two failure domains. For design choices on that layer, see the articles on multi-region deployments and disaster recovery in this series. For the object model, see [AVD host pool](/entity/avd-host-pool/) and [regional host pools](/entity/avd-regional-host-pools/).
+Regional scope reduces the blast radius for the metadata. It is not a disaster recovery design, and in our reading, a host pool in one region with profiles in another still has two failure domains. For design choices on that layer, see the articles on multi-region deployments and disaster recovery in this series. For the object model, see [AVD host pool](/entity/avd-host-pool/) and [regional host pools](/entity/avd-regional-host-pools/).
 
 ## Sources
 
@@ -94,4 +94,4 @@ All retrieved on 17 November 2026.
 - [Microsoft Learn: Azure Virtual Desktop service architecture and resilience](https://learn.microsoft.com/en-us/azure/virtual-desktop/service-architecture-resilience)
 - [Microsoft Learn: Regional Host Pools - Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/regional-host-pools)
 - [Microsoft Learn: Multiregion BCDR for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/architecture/example-scenario/azure-virtual-desktop/azure-virtual-desktop-multi-region-bcdr)
-- [Microsoft Learn: Disaster recovery for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/disaster-recovery)
+- [Microsoft Learn: Azure Virtual Desktop disaster recovery concepts](https://learn.microsoft.com/en-us/azure/virtual-desktop/disaster-recovery-concepts)
