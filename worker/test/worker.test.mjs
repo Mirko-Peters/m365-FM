@@ -481,7 +481,9 @@ test("schema: Migrationen sind idempotent und enthalten jede zur Laufzeit angele
     // 0055: Altbestand Adressen ohne Profil (Speaker-Eintraege, Blog-, Creator-Abos, Speaker-Identitaet) und Themen-Abos auf Merker geloeschter Konten;
     // jede Anweisung trifft nur Zeilen mit einer Adresse ohne Profil bzw. Merker user_id 0 und aendert beim zweiten Lauf nichts (Test in datenschutz.test.mjs).
     // Runde 9: Hilfstabellen mig0055_handle/mig0055_name (frueheres Konto je Adresse) werden am Anfang geleert und am Ende entfernt
+    // Runde 10: dauerhafte Sicherung mig0055_backup - jede Originalzeile vor der Aenderung, UNIQUE (tabelle, schluessel) behaelt beim zweiten Lauf das erste Original
     if (/^(?:DELETE FROM|INSERT OR IGNORE INTO|UPDATE|DROP TABLE) mig0055_(?:handle|name)\b/i.test(s)
+      || /^INSERT OR IGNORE INTO mig0055_backup\(tabelle, schluessel, wert, zeit\)\s+SELECT /i.test(s)
       || /^UPDATE OR IGNORE (?:blog_follows|push_topics|email_topics|topic_queue) SET (?:handle|topic_id) = \(SELECT o\.nh FROM mig0055_handle o /i.test(s)
       || /^UPDATE speaker_ref SET handle = COALESCE\(\(SELECT o\.nh FROM mig0055_handle o /i.test(s)
       || /^DELETE FROM (?:push_topics|email_topics|topic_queue) WHERE kind = 'creator' AND (?:sent = 0 AND )?NOT EXISTS \(SELECT 1 FROM profiles p /i.test(s)) continue;

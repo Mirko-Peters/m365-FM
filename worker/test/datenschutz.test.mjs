@@ -641,7 +641,10 @@ test("Kontoloeschung: Abos einer frueheren Adresse, die inzwischen ein anderes K
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM profiles WHERE handle='alice' AND user_id=3").get().n, 1);
 });
 
-test("Migration 0055: Altbestand - Speaker-Eintraege, Blog-Abos und Speaker-Identitaet einer Adresse ohne Profil gehen nicht an den naechsten Inhaber (Runde 8)", async () => {
+const MIG0055 = () => readFileSync(new URL("../migrations/0055_orphan_handles.sql", import.meta.url), "utf-8");
+const backup = (raw, tabelle) => Object.fromEntries(raw.prepare("SELECT schluessel,wert FROM mig0055_backup WHERE tabelle=? ORDER BY schluessel").all(tabelle).map((r) => [r.schluessel, JSON.parse(r.wert)]));
+
+test("Migration 0055: Altbestand - Adresse ohne Profil verliert nur die Bindung, Name bleibt, Originale in mig0055_backup; der naechste Inhaber erbt nichts (Runde 8/10)", async () => {
   const sessions = [
     { h: "alice", n: "Alice Realname", s: "confirmed", e: "alice", r: 4 },   // geloeschtes Konto
     { n: "Name Only", s: "confirmed" },
@@ -661,65 +664,75 @@ test("Migration 0055: Altbestand - Speaker-Eintraege, Blog-Abos und Speaker-Iden
     raw.prepare("INSERT INTO event_sessions(id,event_id,title,speakers,status,proposer_id,created) VALUES(20,10,'Copilot deep dive',?,'live',2,?)").run(JSON.stringify(sessions), t);
     raw.prepare("INSERT INTO event_sessions(id,event_id,title,speakers,status,proposer_id,created) VALUES(21,10,'Kaputt','kein json','live',2,?)").run(t);
     raw.prepare("INSERT INTO users(id,provider,sub,name,role,created) VALUES(5,'github','s5','Fan','',?)").run(t);
-    raw.prepare("INSERT INTO blog_follows(user_id,handle,created) VALUES(5,'alice',?),(5,'olga',?),(5,'bea-old',?)").run(t, t, t);
+    raw.prepare("INSERT INTO blog_follows(user_id,handle,created) VALUES(5,'alice',11),(5,'olga',12),(5,'bea-old',13)").run();
     raw.prepare("INSERT INTO speaker_ref(id,name,name_key,handle,created,updated) VALUES(4,'Alice Realname','alice realname','alice',1,1),(6,'Olga Organizer','olga organizer','olga',1,1),(7,'Bea Mover','bea mover','bea-old',1,1)").run();
   });
   const sp = () => JSON.parse(raw.prepare("SELECT speakers FROM event_sessions WHERE id=20").get().speakers);
   assert.deepEqual(sp(), [
-    { n: "Former member", s: "confirmed", anon: 1 },
+    { n: "Alice Realname", s: "confirmed", r: 4 },
     { n: "Name Only", s: "confirmed" },
     { h: "olga", n: "Olga Organizer", s: "confirmed" },
+    { n: "Zed Invited", s: "invited" },
     { h: "bea-new", n: "Bea Mover", s: "confirmed", e: "bea-new" },
-  ], "geloeschtes Konto anonym, offene Einladung verworfen, fruehere Adresse eines bestehenden Kontos auf die heutige umgezogen (Runde 9), Rest unveraendert");
+  ], "kein Konto: nur h, t und e = h weg, Name und Status bleiben, offene Einladung bleibt ohne Adresse und Token; fruehere Adresse eines bestehenden Kontos zieht um");
+  assert.ok(!JSON.stringify(sp()).includes("Former member"), "die Migration anonymisiert niemanden (Runde 10)");
   assert.equal(raw.prepare("SELECT speakers FROM event_sessions WHERE id=21").get().speakers, "kein json", "kaputtes JSON unangetastet");
   assert.deepEqual(raw.prepare("SELECT handle FROM blog_follows ORDER BY handle").all().map((r) => r.handle), ["bea-new", "olga"], "Bea behaelt ihre Abonnenten (Runde 9)");
   assert.deepEqual(raw.prepare("SELECT id,handle FROM speaker_ref ORDER BY id").all().map((r) => [r.id, r.handle]), [[4, ""], [6, "olga"], [7, "bea-new"]]);
-  // idempotent: ein zweiter Lauf aendert nichts
-  const before = JSON.stringify(sp());
-  raw.exec(readFileSync(new URL("../migrations/0055_orphan_handles.sql", import.meta.url), "utf-8"));
+  // Sicherung: Originale vor jeder Aenderung, auch fuer geloeschte Abos (Runde 10)
+  assert.deepEqual(backup(raw, "event_sessions"), { 20: sessions }, "ganze alte Speaker-Liste");
+  assert.deepEqual(backup(raw, "blog_follows"), { '[5,"alice"]': { user_id: 5, handle: "alice", created: 11 }, '[5,"bea-old"]': { user_id: 5, handle: "bea-old", created: 13 } });
+  assert.deepEqual(backup(raw, "speaker_ref"), { 4: { id: 4, handle: "alice" }, 7: { id: 7, handle: "bea-old" } });
+  // idempotent: ein zweiter Lauf aendert nichts, auch nicht an der Sicherung
+  const before = JSON.stringify(sp()), bk = JSON.stringify(raw.prepare("SELECT * FROM mig0055_backup ORDER BY id").all());
+  raw.exec(MIG0055());
   assert.equal(JSON.stringify(sp()), before);
+  assert.equal(JSON.stringify(raw.prepare("SELECT * FROM mig0055_backup ORDER BY id").all()), bk);
 
-  // Carol uebernimmt die Adresse: erbt weder Name, Abonnenten noch Bearbeitungsrecht oder Einladungen
-  const carol = await user(9, "Carol Newowner");
+  // Carol uebernimmt die Adressen: erbt weder Link, Abonnenten noch Bearbeitungsrecht oder Einladungen
+  const carol = await user(9, "Carol Newowner"), zoe = await user(8, "Zoe Newowner");
   assert.equal((await saveProfile(env, carol, "alice", true)).s, 200);
-  const ex = await call(env, "GET", "/api/events/export");
-  const exs = JSON.stringify(ex.j);
-  assert.ok(!exs.includes("Alice Realname") && !exs.includes("Zed Invited") && !exs.includes('"h":"alice"'), exs);
+  assert.equal((await saveProfile(env, zoe, "zed", true)).s, 200);
+  const exs = JSON.stringify((await call(env, "GET", "/api/events/export")).j);
+  assert.ok(!exs.includes('"h":"alice"') && !exs.includes('"h":"zed"') && !exs.includes("Carol") && !exs.includes("Zoe"), exs);
   assert.equal((await call(env, "GET", "/api/blog/followers?handle=alice")).j.followers, 0);
   const ed = await call(env, "POST", "/api/event/devday/session", carol, { id: 20, title: "Copilot deep dive", abstract: "Carol schreibt in Alices Session", speakers: [{ h: "alice", n: "Alice Realname" }], topics: [] });
   assert.notEqual(ed.s, 200, JSON.stringify(ed.j));
   assert.ok(!String(raw.prepare("SELECT abstract FROM event_sessions WHERE id=20").get().abstract || "").includes("Carol"));
   assert.deepEqual((await call(env, "GET", "/api/speaker/requests", carol)).j.items || [], []);
+  assert.deepEqual((await call(env, "GET", "/api/speaker/requests", zoe)).j.items || [], [], "Zoe nimmt Zeds Einladung nicht ueber die Adresse an");
   // Bea kann ihren Eintrag weiter beanspruchen (an ihr Konto gebunden), Carol nicht
   assert.ok(!JSON.stringify((await call(env, "GET", "/api/speaker/suggest", carol)).j || {}).includes("Bea Mover"));
 });
 
-test("Migration 0055: fruehere Adresse eines bestehenden Kontos ohne Merker - Speaker-Name, Blog- und Creator-Abos ziehen auf die heutige Adresse um; nur Adressen ohne Konto werden anonym (Runde 9)", async () => {
+test("Migration 0055: fruehere Adresse eines bestehenden Kontos zieht um; ohne gefundenes Konto nur Bindung loesen, Name bleibt, mit Sicherung (Runde 9/10)", async () => {
   const sessions = [
     { h: "dan-old", n: "Dan Living", s: "confirmed", e: "dan-old" },   // alter Adresswechsel, kein Merker, keine Entitaet: nur der Name fuehrt zum Konto
     { h: "dan-old", n: "Dan Living", s: "invited", t: "tok-dan" },
     { h: "kim-old", n: "K. Claimer", s: "confirmed" },   // bestaetigter Anspruch eines bestehenden Kontos auf die eid = alte Adresse
     { h: "gone", n: "Gina Gone", s: "confirmed", e: "gone" },   // Merker user_id 0 (geloescht): kein Rueckgriff auf die gleichnamige Gina
-    { h: "sam-old", n: "Sam Same", s: "confirmed", t: "tok-sam" },   // Name zweier Konten: nicht anonym, aber ohne Adresse
-    { h: "nobody", n: "Nobody Known", s: "confirmed" },   // kein Konto: anonym
+    { h: "sam-old", n: "Sam Same", s: "confirmed", t: "tok-sam" },   // Name zweier Konten: kein Konto gefunden
+    { h: "nobody", n: "Nobody Known", s: "confirmed" },   // kein Konto
+    { h: "lea-old", n: "Lea Nickname", s: "confirmed", e: "lea-ent" },   // lebendes Konto (Lea Living, lea-new), dessen Name nicht passt
+    { h: "ivy", n: "Ivy Invited", s: "invited", t: "tok-ivy" },   // offene Einladung an eine Adresse ohne Konto
   ];
   const { raw, env, user } = await setup((r) => {
     const u = (id, name, h) => { r.prepare("INSERT INTO users(id,provider,sub,name,role,created) VALUES(?,'github',?,?,'',1)").run(id, "s" + id, name); if (h) r.prepare("INSERT INTO profiles(user_id,handle,public,updated) VALUES(?,?,1,1)").run(id, h); };
-    u(2, "Olga Organizer", "olga"); u(3, "Dan Living", "dan-new"); u(4, "Kim Claimer", "kim-new"); u(5, "Fan"); u(6, "Gina Gone", "gina-other"); u(7, "Sam Same", "sam-a"); u(8, "sam same", "sam-b");
+    u(2, "Olga Organizer", "olga"); u(3, "Dan Living", "dan-new"); u(4, "Kim Claimer", "kim-new"); u(5, "Fan"); u(6, "Gina Gone", "gina-other"); u(7, "Sam Same", "sam-a"); u(8, "sam same", "sam-b"); u(10, "Lea Living", "lea-new");
     r.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES ('kim-old',4,'verified','manual',1)").run();
     r.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES ('gone',?,'Selbst verwaltet',0,'live',1)").run(JSON.stringify({ name: "Gina Gone", type: "person" }));
     r.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES ('gone',77,'verified','owner',1)").run();
     r.prepare("INSERT INTO orgs(id,handle,name,public,created) VALUES (1,'contoso','Contoso',1,1)").run();
     r.prepare("INSERT INTO events(id,handle,owner_id,title,start,public,created,updated) VALUES(10,'devday',2,'Dev Day','2027-03-01',1,1,1)").run();
     r.prepare("INSERT INTO event_sessions(id,event_id,title,speakers,status,proposer_id,created) VALUES(20,10,'Talk',?,'live',2,1)").run(JSON.stringify(sessions));
-    r.prepare("INSERT INTO blog_follows(user_id,handle,created) VALUES (5,'dan-old',1),(5,'nobody',1),(2,'dan-old',1),(2,'dan-new',1)").run();
+    r.prepare("INSERT INTO blog_follows(user_id,handle,created) VALUES (5,'dan-old',1),(5,'nobody',1),(2,'dan-old',1),(2,'dan-new',1),(5,'lea-old',1)").run();
     r.prepare("INSERT INTO speaker_ref(id,name,name_key,handle,created,updated) VALUES (1,'Dan Living','dan living','dan-old',1,1)").run();
     for (const h of ["dan-old", "ghost", "contoso"]) {
       r.prepare("INSERT INTO push_topics(endpoint,kind,topic_id,lang,user_id,created) VALUES ('https://push.example/5','creator',?,'en',5,1)").run(h);
       r.prepare("INSERT INTO email_topics(user_id,kind,topic_id,lang,created) VALUES (5,'creator',?,'en',1)").run(h);
       r.prepare("INSERT INTO topic_queue(channel,recipient,lang,kind,topic_id,item_key,title,url,created,expires) VALUES ('email','5','en','creator',?,'article:x','Neu','https://x',1,9999999999)").run(h);
     }
-    r.prepare("INSERT INTO email_topics(user_id,kind,topic_id,lang,created) VALUES (2,'creator','dan-new','en',1),(2,'creator','dan-old','en',1)").run();
+    r.prepare("INSERT INTO email_topics(user_id,kind,topic_id,lang,created) VALUES (2,'creator','dan-new','en',1),(2,'creator','dan-old','en',1),(5,'creator','nobody','en',1)").run();
     r.prepare("INSERT INTO topic_queue(channel,recipient,lang,kind,topic_id,item_key,title,url,created,expires,sent) VALUES ('email','5','en','creator','ghost','article:alt','Alt','https://x',1,9999999999,1)").run();
   });
   const sp = () => JSON.parse(raw.prepare("SELECT speakers FROM event_sessions WHERE id=20").get().speakers);
@@ -727,21 +740,33 @@ test("Migration 0055: fruehere Adresse eines bestehenden Kontos ohne Merker - Sp
     { h: "dan-new", n: "Dan Living", s: "confirmed", e: "dan-new" },
     { h: "dan-new", n: "Dan Living", s: "invited", t: "tok-dan" },
     { h: "kim-new", n: "K. Claimer", s: "confirmed" },
-    { n: "Former member", s: "confirmed", anon: 1 },
+    { n: "Gina Gone", s: "confirmed" },
     { n: "Sam Same", s: "confirmed" },
-    { n: "Former member", s: "confirmed", anon: 1 },
+    { n: "Nobody Known", s: "confirmed" },
+    { n: "Lea Nickname", s: "confirmed", e: "lea-ent" },
+    { n: "Ivy Invited", s: "invited" },
   ]);
   const col = (sql) => raw.prepare(sql).all().map((x) => Object.values(x).join("|"));
-  assert.deepEqual(col("SELECT user_id,handle FROM blog_follows ORDER BY user_id,handle"), ["2|dan-new", "5|dan-new"], "Abos umgezogen, doppeltes Abo zusammengelegt, Adresse ohne Konto weg");
+  assert.deepEqual(col("SELECT user_id,handle FROM blog_follows ORDER BY user_id,handle"), ["2|dan-new", "5|dan-new"], "Abos umgezogen, doppeltes Abo zusammengelegt, Adressen ohne gefundenes Konto weg");
   assert.deepEqual(col("SELECT handle FROM speaker_ref"), ["dan-new"]);
   assert.deepEqual(col("SELECT topic_id FROM push_topics WHERE kind='creator' ORDER BY topic_id"), ["contoso", "dan-new"]);
   assert.deepEqual(col("SELECT user_id,topic_id FROM email_topics WHERE kind='creator' ORDER BY user_id,topic_id"), ["2|dan-new", "5|contoso", "5|dan-new"]);
   assert.deepEqual(col("SELECT topic_id,sent FROM topic_queue ORDER BY topic_id,sent"), ["contoso|0", "dan-new|0", "ghost|1"], "unversandte Meldung zieht um bzw. faellt weg, versandte bleibt");
-  assert.equal(raw.prepare("SELECT COUNT(*) n FROM sqlite_master WHERE name LIKE 'mig0055%'").get().n, 0, "Hilfstabellen entfernt");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM sqlite_master WHERE name IN ('mig0055_handle','mig0055_name')").get().n, 0, "Hilfstabellen entfernt");
+  // Sicherung: alle Originale, auch die entfernten Abos und Meldungen; Firmen-Abos und versandte Meldungen unberuehrt
+  assert.deepEqual(backup(raw, "event_sessions"), { 20: sessions });
+  assert.deepEqual(Object.keys(backup(raw, "blog_follows")), ['[2,"dan-old"]', '[5,"dan-old"]', '[5,"lea-old"]', '[5,"nobody"]']);
+  assert.deepEqual(backup(raw, "blog_follows")['[5,"lea-old"]'], { user_id: 5, handle: "lea-old", created: 1 });
+  assert.deepEqual(backup(raw, "speaker_ref"), { 1: { id: 1, handle: "dan-old" } });
+  assert.deepEqual(Object.keys(backup(raw, "push_topics")), ['["https://push.example/5","creator","dan-old"]', '["https://push.example/5","creator","ghost"]']);
+  assert.deepEqual(backup(raw, "push_topics")['["https://push.example/5","creator","ghost"]'], { endpoint: "https://push.example/5", kind: "creator", topic_id: "ghost", lang: "en", timezone: "UTC", user_id: 5, created: 1 });
+  assert.deepEqual(Object.keys(backup(raw, "email_topics")), ['[2,"creator","dan-old"]', '[5,"creator","dan-old"]', '[5,"creator","ghost"]', '[5,"creator","nobody"]']);
+  assert.deepEqual(Object.values(backup(raw, "topic_queue")).map((x) => [x.topic_id, x.sent, x.item_key, x.expires]).sort(), [["dan-old", 0, "article:x", 9999999999], ["ghost", 0, "article:x", 9999999999]]);
   // idempotent
-  const before = JSON.stringify(sp());
-  raw.exec(readFileSync(new URL("../migrations/0055_orphan_handles.sql", import.meta.url), "utf-8"));
+  const before = JSON.stringify(sp()), bk = raw.prepare("SELECT COUNT(*) n FROM mig0055_backup").get().n;
+  raw.exec(MIG0055());
   assert.equal(JSON.stringify(sp()), before);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM mig0055_backup").get().n, bk, "zweiter Lauf sichert nichts doppelt");
   assert.deepEqual(col("SELECT user_id,handle FROM blog_follows ORDER BY user_id,handle"), ["2|dan-new", "5|dan-new"]);
   // Dan bearbeitet seinen Eintrag weiter und sieht seine Einladung; wer dan-old uebernimmt, erbt nichts
   const dan = `m365s=${await makeSession(env, 3)}`;
@@ -751,8 +776,28 @@ test("Migration 0055: fruehere Adresse eines bestehenden Kontos ohne Merker - Sp
   assert.equal((await saveProfile(env, carol, "dan-old", true)).s, 200);
   assert.equal((await call(env, "GET", "/api/blog/followers?handle=dan-old")).j.followers, 0);
   assert.deepEqual((await call(env, "GET", "/api/speaker/requests", carol)).j.items || [], []);
+  // Adressen ohne Konto: wer sie uebernimmt, erbt keine Bearbeitung, kein Abo, keinen Link und keine Einladung
+  const nora = await user(11, "Nora Newowner"), ian = await user(12, "Ian Newowner"), leo = await user(13, "Leo Newowner");
+  assert.equal((await saveProfile(env, nora, "nobody", true)).s, 200);
+  assert.equal((await saveProfile(env, ian, "ivy", true)).s, 200);
+  assert.equal((await saveProfile(env, leo, "lea-old", true)).s, 200);
+  for (const h of ["nobody", "ivy", "lea-old"]) assert.equal((await call(env, "GET", `/api/blog/followers?handle=${h}`)).j.followers, 0, h);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM email_topics WHERE topic_id IN ('nobody','ivy','lea-old')").get().n, 0, "keine geerbten Creator-Abos");
+  const exs = JSON.stringify((await call(env, "GET", "/api/events/export")).j);
+  for (const h of ["nobody", "ivy", "lea-old", "dan-old", "gone", "sam-old"]) assert.ok(!exs.includes(`"h":"${h}"`), h);
+  assert.ok(exs.includes("Nobody Known") && exs.includes("Lea Nickname") && !exs.includes("Former member"), "Namen bleiben, niemand wird anonymisiert");
+  for (const c of [nora, ian, leo]) {
+    assert.deepEqual((await call(env, "GET", "/api/speaker/requests", c)).j.items || [], []);
+    const ed = await call(env, "POST", "/api/event/devday/session", c, { id: 20, title: "Talk", abstract: "uebernommen", speakers: [{ h: "nobody", n: "Nobody Known" }], topics: [] });
+    assert.notEqual(ed.s, 200, JSON.stringify(ed.j));
+  }
+  assert.ok(!String(raw.prepare("SELECT abstract FROM event_sessions WHERE id=20").get().abstract || "").includes("uebernommen"));
+  // Zurueckspielen nach der Anleitung im Kopf der Migration: Speaker-Liste und entferntes Abo sind wieder da
+  raw.exec("UPDATE event_sessions SET speakers = (SELECT b.wert FROM mig0055_backup b WHERE b.tabelle = 'event_sessions' AND b.schluessel = CAST(event_sessions.id AS TEXT)) WHERE CAST(id AS TEXT) IN (SELECT schluessel FROM mig0055_backup WHERE tabelle = 'event_sessions')");
+  raw.exec("INSERT OR IGNORE INTO blog_follows(user_id, handle, created) SELECT json_extract(wert, '$.user_id'), json_extract(wert, '$.handle'), json_extract(wert, '$.created') FROM mig0055_backup WHERE tabelle = 'blog_follows' AND schluessel = '[5,\"lea-old\"]'");
+  assert.deepEqual(sp(), sessions);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM blog_follows WHERE user_id=5 AND handle='lea-old'").get().n, 1);
 });
-
 test("Creator-Abos und unversandte Creator-Meldungen: ziehen beim Adresswechsel mit, fallen bei Kontoloeschung weg; der naechste Inhaber erbt keine (Runde 9)", async () => {
   const { raw, env, t, user } = await setup();
   const alice = await user(1, "Alice Example"), bob = await user(2, "Bob Fan"), carol = await user(3, "Carol Newowner");
