@@ -50,7 +50,9 @@ These examples use invented values and Learn's formulas. Take a pooled pool with
 
 **Consolidating in ramp-down.** Learn gives the formula for hosts needed: total sessions divided by (maximum session limit times threshold), rounded up. With 36 sessions, 36 / 7 = 5.14, so 6 hosts. At a threshold of 80 percent, 36 / 8 = 4.5, so 5 hosts. One extra host is the cost of 10 extra points of headroom.
 
-**Disconnected sessions.** Learn's FAQ counts disconnected sessions toward required hosts: 6 disconnected users, a limit of 5 and a threshold of 90 percent need 6 / 4.5 = 1.33, so 2 hosts. The same formula on our pool (limit 10, threshold 70 percent) gives 12 disconnected sessions / 7 = 1.71, so 2 hosts. Together with the minimum percentage of hosts, the threshold decides how many hosts stay on: in Learn's ramp-down and off-peak scenarios the minimum percentage keeps at least one host available even when the formula would allow fewer.
+**Disconnected sessions.** Learn's FAQ counts disconnected sessions toward required hosts: 6 disconnected users, a limit of 5 and a threshold of 90 percent need 6 / 4.5 = 1.33, so 2 hosts. The same formula on our pool (limit 10, threshold 70 percent) gives 12 disconnected sessions / 7 = 1.71, so 2 hosts.
+
+**The minimum percentage as a floor.** The threshold is not the only input. Learn's troubleshooting page says that in ramp-down and off-peak autoscale uses the higher of two values: the formula result for the current sessions and the Minimum percentage of active hosts setting of the scaling plan phase. If the minimum percentage gives a higher number, it takes precedence. Learn's ramp-down and off-peak scenarios show the same effect: the minimum percentage keeps at least one host available even when the formula would allow fewer.
 
 ## What the threshold does in each phase
 
@@ -90,12 +92,13 @@ Nerdio's help page for dynamic host pool auto-scaling in Nerdio Manager lists ot
 
 ## Sources
 
-Retrieved 17 November 2026.
+Accessed 17 November 2026.
 
 - [Microsoft Learn: Autoscale glossary for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary)
 - [Microsoft Learn: Autoscale scaling plans and example scenarios in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)
 - [Microsoft Learn: Create and assign an autoscale scaling plan](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)
 - [Microsoft Learn: Azure Virtual Desktop autoscale FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq)
+- [Microsoft Learn: Troubleshoot autoscale issues in Azure Virtual Desktop](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-autoscale)
 - [Microsoft Learn: Monitor autoscale operations with Insights](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-monitor-operations-insights)
 - [Microsoft Learn: Configure host pool load balancing](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-load-balancing)
 - [Microsoft Learn: Session host virtual machine sizing guidelines](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/virtual-machine-recs)

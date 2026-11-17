@@ -23,8 +23,6 @@ faq:
 
 Secure Azure Virtual Desktop by working through seven areas: the trust boundary, identity and access, network, session host hardening, what leaves the session, platform and boot protection, and patching and monitoring. This checklist follows Microsoft Learn's security recommendations page and the dedicated pages for screen capture protection, watermarking and Private Link.
 
-Conditional Access design and Private Link have their own articles in this series, so the checklist keeps both short.
-
 ## What you are responsible for
 
 Microsoft manages the virtualization control plane, physical hosts, physical network and datacenter. You or your partner manage identity, user devices, app security, the session host operating system, the deployment configuration and the network controls.
@@ -44,19 +42,19 @@ Learn says not to grant local administrator rights in multi-session pooled scena
 - Require multifactor authentication for all users and administrators with [Microsoft Entra multifactor authentication](/entity/mfa/).
 - Use [Conditional Access](/entity/conditional-access/) to evaluate who signs in, how and from which device; the sibling article "Conditional Access for Azure Virtual Desktop: policies that work" covers the policies.
 - Require Token Protection on the endpoint that runs the Windows App; Learn states it does not apply to the session host.
-- Limit Azure permissions with [Azure RBAC](/entity/azure-rbac/). Learn's RBAC page describes Desktop Virtualization Session Host Operator as viewing and removing session hosts and changing drain mode, and User Session Operator as sending messages, disconnecting sessions and signing users out. Both are narrower than Host Pool Contributor, which allows managing all aspects of a host pool.
+- Limit Azure permissions with [Azure RBAC](/entity/azure-rbac/). Learn's RBAC page describes Desktop Virtualization Session Host Operator as viewing and removing session hosts and changing drain mode, and Desktop Virtualization User Session Operator as sending messages, disconnecting sessions and signing users out. Both are narrower than Desktop Virtualization Host Pool Contributor, which allows managing all aspects of a host pool.
 - Collect audit logs from Azure Activity Log, Microsoft Entra, the session hosts and Key Vault.
 
 ## 3. Network
 
 - Control network access with segmentation and filtering. Session hosts can reach any internet resource by default; to limit this, use [Azure Firewall](/entity/azure-firewall/), network virtual appliances or proxies, with the rules Azure Virtual Desktop requires.
 - Avoid direct RDP access to hosts; if needed, use just-in-time access from Defender for Cloud.
-- If users must not reach the service over the public internet, [Azure Private Link](/entity/azure-private-link/) provides private endpoints: `connection` (one per host pool), `feed` (one per workspace) and `global` (one for the whole deployment). Private Link for Azure Virtual Desktop has been generally available since 14 July 2023, and UDP over Private Link since February 2026, according to Microsoft's announcements. Key limits from the Private Link page: enable Private Link on each Azure subscription you want to use it with; allow the entire TCP dynamic port range 1-65535 to the host pool's `connection` private endpoint, because restricting ports can stop users from connecting; and UDP over Private Link is blocked unless you opt in on the host pool's **Networking** page, with the public Shortpath options (STUN and TURN) turned off. The Private Link article in this series covers DNS zones and agent restarts.
+- If users must not reach the service over the public internet, [Azure Private Link](/entity/azure-private-link/) provides private endpoints: `connection` (one per host pool), `feed` (one per workspace) and `global` (one for the whole deployment). Private Link for Azure Virtual Desktop has been generally available since 14 July 2023, and UDP over Private Link since February 2026, according to Microsoft's announcements. Key limits from the Private Link page: enable Private Link on each Azure subscription you want to use it with, allow the entire TCP range 1-65535 to the `connection` private endpoint, and opt in to UDP on the host pool's **Networking** page with the public Shortpath options (STUN and TURN) turned off. The Private Link article in this series has the details.
 - For FSLogix profiles, Learn says to follow the security recommendations of your SMB share provider. Its example is private endpoints for Azure Files, which make the share reachable only within an Azure virtual network.
 
 ## 4. Session host hardening
 
-- Enable endpoint protection on every session host: Learn names "Windows Defender Antivirus", which Windows documentation calls [Microsoft Defender Antivirus](/entity/microsoft-defender-antivirus/), or a third-party program. Exclude FSLogix or other VHD-mounting file extensions.
+- Enable endpoint protection on every session host: Learn names Windows Defender Antivirus (see [Microsoft Defender Antivirus](/entity/microsoft-defender-antivirus/)) or a third-party program. Exclude FSLogix or other VHD-mounting file extensions.
 - Deploy endpoint detection and response. On server operating systems with Defender for Cloud enabled, this deploys [Microsoft Defender for Endpoint](/entity/microsoft-defender-for-endpoint/); client operating systems can use it or a third-party product.
 - Do not give users admin access; distribute software through [Intune](/entity/intune/) or similar tools.
 - Restrict what can run. Learn says RemoteApp is not a security feature and points to [App Control for Business](/entity/app-control-for-business/) and AppLocker. In its section headlined "Windows Defender Application Control", it advises targeting policies at the device, because a user-targeted policy affects all users on the device equally.
@@ -95,16 +93,16 @@ Known limits: it is not DRM, content can appear black in Teams sharing with unsu
 
 [Watermarking](/entity/avd-watermarking/) has been generally available since July 2023, according to Learn's what's new page. It shows QR codes in the remote desktop that hold the connection ID (default) or the device ID, so a photographed screen can be traced to a session. The device ID is only for personal host pool session hosts that are Microsoft Entra joined or hybrid joined.
 
-You enable it in the same Intune Settings catalog area, selecting **Enable watermarking** (not the deprecated entry), setting it to **Enabled** and syncing the session hosts with Intune. Supported clients include the Remote Desktop client for Windows (1.2.3317 or later), macOS (10.9.5 or later), iOS and iPadOS (10.5.4 or later) and web, and Windows App on Windows, macOS, iOS, iPadOS and web. Windows App on Android and ChromeOS is in preview.
+You enable it in the same Intune Settings catalog area (Group Policy has the same setting), selecting **Enable watermarking** (not the deprecated entry), setting it to **Enabled** and syncing the session hosts with Intune. Supported clients include the Remote Desktop client for Windows (1.2.3317 or later), macOS (10.9.5 or later), iOS and iPadOS (10.5.4 or later) and web, and Windows App on Windows, macOS, iOS, iPadOS and web. Windows App on Android and ChromeOS is in preview.
 
-Learn's limits: once enabled, only watermarking-capable clients can connect, and an unsupported client fails with a non-specific message. It applies only to full desktops (RemoteApp connections are allowed without it), and direct `mstsc.exe` connections bypass it. Azure Virtual Desktop Insights must be configured to look up a connection ID.
+Learn's limits: once enabled, only supporting clients can connect, and others fail with a non-specific message. It applies only to full desktops (RemoteApp connections are allowed without it), and direct `mstsc.exe` connections bypass it. Learn lists Azure Virtual Desktop Insights as a prerequisite; you look up a connection ID from a QR code in Insights or with a Log Analytics query on `WVDConnections`.
 
 ## 6. Platform and boot protection
 
-- **Trusted launch** is the default security type for new session hosts created in the Azure portal. See [Trusted launch](/entity/trusted-launch/).
-- **Confidential VMs** encrypt memory in use and are supported for Windows 11, Windows 10 Enterprise and Windows Server 2022 and 2019 in active support.
+- **Trusted launch**: when you add session hosts in the Azure portal, Learn says the default security type is Trusted virtual machines. See [Trusted launch](/entity/trusted-launch/).
+- **Confidential VMs** encrypt memory in use and are supported for Windows 11 Enterprise and Enterprise multi-session, Windows 10 Enterprise and Enterprise multi-session, and Windows Server 2022 and 2019, in versions in active support.
 - Secure Boot, vTPM, virtualization-based security, HVCI and Credential Guard add boot and kernel protection. Learn recommends enabling vTPM to use remote attestation. Secrets bound to vTPM tie to one VM and pooled users can land on any VM, so check the impact first. Learn also warns not to use BitLocker on the disk that stores FSLogix profile data.
-- **Administrator protection** is not supported on Windows 11 session hosts, including custom images. If enabled, users may see unexpected prompts or elevation failures. Learn says that applying the Microsoft Security Compliance Toolkit baselines through Group Policy turns it on starting with the October 2026 Windows security update, even if you did not enable it. To turn it off, set **User Account Control: Configure type of Admin Approval Mode** to **Legacy Admin Approval Mode** and restart the host. The setting is not available on Windows Server, and Learn's interim advice is to configure users as standard users.
+- **Administrator protection** is not supported on Windows 11 session hosts, including custom images. If enabled, users may see unexpected prompts or elevation failures. Learn says that applying the Microsoft Security Compliance Toolkit baselines through Group Policy turns it on starting with the October 2026 Windows security update, even if you did not enable it. To turn it off, set **User Account Control: Configure type of Admin Approval Mode** to **Legacy Admin Approval Mode** and restart the host. Learn says Administrator protection is not available on Windows Server, and its interim advice is to configure users as standard users.
 
 ## 7. Patching and monitoring
 
@@ -123,7 +121,7 @@ Learn's limits: once enabled, only watermarking-capable clients can connect, and
 
 ## Sources
 
-Retrieved 17 November 2026.
+Accessed 17 November 2026.
 
 - [Microsoft Learn: Security recommendations for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/security-recommendations)
 - [Microsoft Learn: Screen capture protection in Azure Virtual Desktop and Windows 365](https://learn.microsoft.com/en-us/azure/virtual-desktop/screen-capture-protection)
