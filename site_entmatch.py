@@ -15,10 +15,15 @@ Regeln (Mirko, 17.11.2026):
   Titel-Reihe ("Apply to Each Loop Limit"); im Deutschen zaehlt die Grossschreibung bei deutschen Substantiven ("Ihre Teams") nicht.
 - Kontext entscheidet IMMER bei Mehrdeutigkeit: Kandidaten, die mit den uebrigen erkannten Entitaeten, den Themen der Seite oder der Seite selbst
   verbunden sind (Kanten in rel beider Richtungen, gemeinsamer Oberbegriff, gemeinsame Folgen in der QA-geprueften Extraktion), gewinnen; ohne
-  Stuetze gibt es keinen Treffer. Sammelknoten (microsoft, azure, microsoft-tool, Kategorien) stuetzen Konzept-Kurznamen nicht.
+  Stuetze gibt es keinen Treffer. Sammelknoten (microsoft, azure, microsoft-tool, Kategorien) stuetzen weder Konzepte noch Allerweltswoerter noch
+  kurze Abkuerzungen (ein "Microsoft" auf der Seite macht aus "an Access key" nicht Microsoft Access).
+- Gegenpruefung Paket 2: mehrteilige Produktnamen auch in Titel-Schreibung ("Teams Admin Center"); "Microsoft "/"D365 " vor einem Produktnamen
+  gehoert zum Namen ("Microsoft Dynamics 365 Sales"); eine einteilige Kurzform, die Kopfwort weiterer Eigennamen ist ("Copilot" bei GitHub Copilot),
+  entscheidet der Kontext; kurze Abkuerzungen, die nicht den eigenen Namen buchstabieren (IAM, MVP, CEO), brauchen Stuetze; ein Konzept-Alias ohne
+  gemeinsames Wort mit dem Namen nur, wenn die Seite von der Entitaet handelt; Kurznamen mit Zusatz nicht als Verb, Befehl oder nach "that".
 
 Kontext-Links (link_html): jede Entitaet nur bei der ersten Nennung je Seite, ohne Obergrenze, nie in Ueberschriften, Links, Code, Bildunterschriften,
-Fragen-Ueberschriften (summary) oder Knoepfen, keine Selbstverweise. Linktext ist das Wort, wie es im Satz steht (Sprache der Seite); weicht es vom
+Fragen-Ueberschriften (summary), Knoepfen oder Vorlagen-Bausteinen (div.listen-to-box, data-nolink), keine Selbstverweise. Linktext ist das Wort, wie es im Satz steht (Sprache der Seite); weicht es vom
 kanonischen Namen ab, steht der Name im title. Bestehende Entitaets-Links (z. B. a.gl der Show Notes) zaehlen als erste Nennung; weitere Links auf
 dieselbe Entitaet, Links in Ueberschriften und Selbstverweise werden zu Text (keine Doppellinks)."""
 import json
@@ -44,8 +49,12 @@ BRANDS = {"Microsoft", "Azure", "Power", "Dynamics", "Office", "Viva", "MS", "Wi
 TITLE_OK = {"I", "A", "An", "The"}   # gross geschriebene Kleinwoerter vor einem Namen machen noch keine Titel-Reihe
 VERB_BEFORE = {"can", "could", "might", "may", "will", "would", "should", "must", "to", "do", "does", "did", "you", "we", "they", "i", "it", "he", "she",
                "not", "also", "often", "then", "never", "always", "just", "kann", "können", "wird", "werden", "zu"}
-DETS = {"a", "an", "the", "this", "that", "these", "those", "each", "every", "your", "our", "its", "their", "his", "her", "my", "one", "any", "no", "same", "new",
+DETS = {"a", "an", "the", "this", "these", "those", "each", "every", "your", "our", "its", "their", "his", "her", "my", "one", "any", "no", "same", "new",
         "ein", "eine", "einen", "einem", "der", "die", "das", "den", "dem", "des", "jeder", "jede", "jedes", "ihr", "ihre", "unser", "unsere"}
+# einteilige Konzeptnamen, die als Allerweltswort auch etwas anderes heissen ("storage container", Frachtcontainer): nur als Thema der Seite oder mit vollem Namen
+CONCEPT_COMMON = {"container", "pegging"}
+PREFIX_TYPES = {"product", "platform"}   # "Microsoft Dynamics 365 Sales", "D365 Finance": die Marke davor gehoert zum Namen des Produkts
+_VARIANT = re.compile(r"(?: for the web| Online| for (?:Windows|Mac|iOS|Android))$")
 HUB_DEGREE = 100
 STRICT_KIDS = 25
 _TERM = set(".!?:;\n。！？•")
@@ -66,7 +75,7 @@ _STOPW = {"and", "or", "of", "the", "a", "an", "for", "in", "on", "to", "with", 
 
 
 def _overlap(a, b):
-    w = lambda x: {t for t in re.findall(r"\w+", x.lower()) if t not in _STOPW}
+    w = lambda x: {t.rstrip("s") for t in re.findall(r"\w+", x.lower()) if t not in _STOPW}   # "Power Platform connectors" teilt "connector" mit "Connector"
     return bool(w(a) & w(b))
 
 
@@ -74,6 +83,13 @@ def _shorter(a, b):
     """a ist eine echte Kurzform von b (Woerter von a ohne Plural-s sind eine echte Teilmenge der Woerter von b)."""
     w = lambda x: {t.rstrip("s") for t in re.findall(r"\w+", x.lower()) if t not in _STOPW}
     return w(a) < w(b)
+
+
+def _initials(n):
+    """Anfangsbuchstaben eines Namens ohne Zusatz in Klammern und ohne Fuellwoerter: "Amazon Web Services" -> AWS."""
+    m = _PAREN.match(n)
+    n = m.group(1) if m else n
+    return "".join(w[0].upper() for w in re.split(r"[\s-]+", n) if w and w.lower() not in _STOPW)
 
 
 def _distinct(f):
@@ -112,15 +128,34 @@ class Used(dict):
 
 
 class Form:
-    __slots__ = ("text", "eid", "mode", "common", "qual", "is_name", "proper", "is_abbr")
+    __slots__ = ("text", "eid", "mode", "common", "qual", "is_name", "proper", "is_abbr", "ctxabbr", "own", "sib")
 
-    def __init__(self, text, eid, mode, common, qual, is_name, proper, is_abbr=False):
+    def __init__(self, text, eid, mode, common, qual, is_name, proper, is_abbr=False, ctxabbr=False, own=False):
         self.text, self.eid, self.mode, self.common, self.qual, self.is_name, self.proper, self.is_abbr = text, eid, mode, common, qual, is_name, proper, is_abbr
+        self.ctxabbr = ctxabbr   # kurze Abkuerzung als Alias (CRM, IAM, MVP, SOC, CEO): nur mit Stuetze aus dem Kontext ohne Sammelknoten
+        self.own = own           # Konzept-Alias ohne gemeinsames Wort mit dem Namen: nur, wenn die Entitaet selbst Thema der Seite ist oder voll genannt wird
+        self.sib = frozenset()   # andere Entitaeten mit diesem Wort als Kopfwort ("Copilot": GitHub Copilot, Copilot in Power BI): Kontext entscheidet
 
     def accepts(self, t):
         if self.mode == "ci": return True
         if self.mode == "cs": return t == self.text
+        if self.mode == "ct": return t == self.text or _title_of(self.text, t)   # mehrteiliger Produktname auch in Titel-Schreibung
         return t == self.text or (t[1:] == self.text[1:] and t[:1].lower() == self.text[:1].lower())   # "fl": nur der erste Buchstabe frei
+
+
+def _title_of(f, t):
+    """t ist f in Titel-Schreibung ("Teams Admin Center" zu "Teams admin center"): nur Anfangsbuchstaben gross, sonst gleich."""
+    a, b = f.split(" "), t.split(" ")
+    return len(a) == len(b) and all(x == y or (x[:1].islower() and y == x[:1].upper() + x[1:]) for x, y in zip(a, b))
+
+
+def _head(n):
+    """Kopfwort eines Namens: letztes Wort vor "in/for/of/on/with" ("Copilot in Power BI" -> Copilot), sonst das letzte ("GitHub Copilot" -> Copilot)."""
+    w = n.split(" ")
+    for k, x in enumerate(w):
+        if k and x in ("in", "for", "of", "on", "with"):
+            return w[k - 1]
+    return w[-1]
 
 
 def load_common(path=COMMON_FILE):
@@ -180,6 +215,16 @@ class Matcher:
             for f in fs:                 # ("PCI" = Permission Creep Index oder Payment Card Industry), nur mit Kontext
                 if f.is_abbr and len(f.text) <= 3 and f.eid not in self.nbr and not self.df.get(f.eid):
                     f.common = True
+        # einteilige Kurzform, die Kopfwort weiterer Eigennamen ist ("Copilot" bei GitHub Copilot, Copilot in Power BI, Security Copilot): mehrdeutig
+        heads = {}
+        for i, e in live.items():
+            n = (e.get("name") or "").strip()
+            if e.get("type") in PROPER and e.get("type") != "person" and " " in n and not _VARIANT.search(n):
+                heads.setdefault(_head(n), set()).add(i)
+        for fs in self.forms.values():
+            for f in fs:
+                if f.proper and not f.is_name and " " not in f.text:
+                    f.sib = frozenset(heads.get(f.text, set()) - {f.eid})
         self.rx = re.compile(r"(?<![\w-])(" + _trie(self.forms) + r")(?![\w-])", re.I) if self.forms else None
 
     # ---------------------------------------------------------------- Formen
@@ -198,6 +243,12 @@ class Matcher:
         for a in e.get("aliases") or []:
             a = (a or "").strip()
             if a: out.append((a, "alias", None))
+        if e.get("type") in PREFIX_TYPES:   # "Microsoft Dynamics 365 Sales" ist Dynamics 365 Sales, nicht "Microsoft Dynamics 365" + Text; "D365 Finance" ebenso
+            for f, kind, _ in [x for x in out if x[1] in ("name", "alias") and not _PAREN.match(x[0])]:
+                if f.startswith("Dynamics 365 ") and len(f) > 15:
+                    out.append(("D365 " + f[13:], "brand", None))
+                if (kind == "name" or " " in f) and not f.startswith(("MS ", "Microsoft")):
+                    out.append(("Microsoft " + f, "brand", None))
         return out
 
     def _add(self, f, e, kind, qual):
@@ -208,7 +259,7 @@ class Matcher:
         if t == "person" and not multi: return   # Personen nur mit vollem Namen
         if len(f) < 3 or (len(f) < 4 and not _distinct(f)): return
         if proper:
-            mode = "cs"
+            mode = "ct" if multi and kind in ("name", "short", "brand") else "cs"   # Aliase ("Sales pipeline") nur genau so geschrieben
         elif multi:
             mode = "ci"
         else:
@@ -220,21 +271,31 @@ class Matcher:
             common = (lo in self.common_words and not _distinct(f)) or kind == "qual"
         else:
             common = (kind in ("alias", "short", "qual") or t in ("industry", "job")) and not _distinct(f)   # "education", "retail": Branche nur mit Hinweis
+        own = False
         if kind == "alias" and multi and not proper and (not _overlap(f, e.get("name") or "") or _shorter(f, e.get("name") or "")):
-            common = True   # Konzept-Alias ohne gemeinsames Wort mit dem Namen ("Change management" bei "Copilot adoption") oder Kurzform ("Task flows"
+            common = True   # Konzept-Alias ohne gemeinsames Wort mit dem Namen ("Smart factory" bei "Industry 4.0") oder Kurzform ("Task flows"
                             # bei "Fabric task flow"): anderer bzw. allgemeinerer Begriff, nur mit Kontext
+            own = not _overlap(f, e.get("name") or "")   # ohne gemeinsames Wort: Linktext ist nicht der Zielname, Nachbarstuetze reicht nicht
+        if not proper and not multi and kind == "name" and lo in CONCEPT_COMMON:
+            common = True   # "Container": nur als Thema der Seite (Konzept-Zweig in resolve)
+        ctxabbr = ((proper or t in ("job", "industry")) and kind in ("alias", "abbr", "short") and bool(re.fullmatch(r"[A-Z]{2,4}", f))
+                   and f != _initials(e.get("name") or ""))
+        # kurze Abkuerzung als Alias eines Eigennamens oder einer Rolle, die nicht die Anfangsbuchstaben des eigenen Namens sind (CRM bei Dynamics 365 Sales,
+        # IAM bei "AWS Identity and Access Management", MVP, CEO bei Managing director): allgemeines Kuerzel, nur mit Stuetze. AWS (Amazon Web Services),
+        # AKS, GCP buchstabieren ihren Namen und bleiben sicher; Fachbegriffe (TPM, DLP) ebenso
         q = None
         if kind == "qual":
             common = True; q = qual
         is_name = kind == "name"
         lst = self.forms.setdefault(lo, [])
         if any(x.eid == e["id"] and x.text == f for x in lst): return
-        lst.append(Form(f, e["id"], mode, common, q, is_name, proper, kind == "abbr"))
+        lst.append(Form(f, e["id"], mode, common, q, is_name, proper, kind == "abbr", ctxabbr, own))
         self.names.setdefault(lo, e["id"])
 
     # ---------------------------------------------------------------- Kontext
     def support(self, eid, C, strict=False, qual=None):
-        """Stuetze der Kandidatin eid durch den Kontext C (Menge von ids). strict: Sammelknoten zaehlen nicht (Konzept-Kurznamen)."""
+        """Stuetze der Kandidatin eid durch den Kontext C (Menge von ids). strict: Sammelknoten zaehlen nicht (Konzepte, Allerweltswoerter, kurze Abkuerzungen:
+        ein "Microsoft" irgendwo auf der Seite macht aus "an Access key" noch nicht Microsoft Access)."""
         if qual:
             q = self.lookup(qual)
             if not q or not (q in C or (self.nbr.get(q, set()) - self.hubs) & C):
@@ -255,6 +316,11 @@ class Matcher:
                 if n >= 2 and n >= 0.2 * min(da, self.df.get(x, 0) or 1):
                     s += 1
         return s
+
+    def page_ctx(self, eid, neighbors=()):
+        """Kontext einer Entitaetsseite: die Entitaet und ihre direkten Nachbarn ohne Sammelknoten; ein Sammelknoten selbst nur mit sich."""
+        if eid in self.hubs: return {eid}
+        return {eid} | (set(neighbors) - self.hubs)
 
     def lookup(self, name):
         """Name -> id (Name, sonst eindeutiger nicht mehrdeutiger Treffer)."""
@@ -327,25 +393,42 @@ class Matcher:
     def resolve(self, plain, lang="en", ctx=(), hits=None):
         """Angenommene Nennungen [(start, end, text, id)] in der Reihenfolge des Textes. ctx: ids der Seite (eigene Entitaet, Themen, Kategorie)."""
         hits = self.raw(plain) if hits is None else hits
-        sure, C = {}, set(ctx or ())
+        sure, C, sibs = {}, set(ctx or ()), {}
         for k, (s, e, t, fs) in enumerate(hits):
             ids = {f.eid for f in fs}
             names = [f for f in fs if f.is_name and not f.common and not f.qual]
-            if len(ids) == 1 and not any(f.common or f.qual for f in fs):
-                sure[k] = fs[0].eid
+            if len(ids) == 1 and not any(f.common or f.qual or f.ctxabbr for f in fs):
+                if any(f.sib for f in fs):
+                    sibs[k] = fs[0].eid   # "Copilot": erst nach den sicheren Treffern entscheiden
+                else:
+                    sure[k] = fs[0].eid
             elif len({f.eid for f in names}) == 1 and not any(f.common for f in fs if f.eid == names[0].eid):
                 sure[k] = names[0].eid   # Name schlaegt Alias anderer Eintraege
+        C |= set(sure.values())
+        for k, i in sibs.items():   # Kurzform eines Kopfworts: steht eine der laengeren Entitaeten auf der Seite, meint der Text sie (oder bleibt offen)
+            o = {x for f in hits[k][3] for x in f.sib} & C
+            if not o:
+                sure[k] = i
+            elif len(o) == 1 and i not in C:
+                sure[k] = next(iter(o))
         C |= set(sure.values())
         out = []
         for k, (s, e, t, fs) in enumerate(hits):
             if k in sure:
                 out.append((s, e, t, sure[k])); continue
+            if k in sibs: continue
             best, bs, tie = None, 0, False
             for f in fs:
-                if f.common and f.proper and not self._cue(plain, s, e, lang, f):
-                    continue
+                if f.sib and f.sib & C:
+                    continue   # Kopfwort einer anderen Entitaet der Seite ("Fabric" auf einer Service-Fabric-Seite)
+                if f.own and f.eid not in C:
+                    continue   # Alias ohne gemeinsames Wort mit dem Namen: nur, wenn die Seite von der Entitaet selbst handelt
                 bonus = 0
-                if not f.proper and f.common and " " not in f.text and (self.live.get(f.eid) or {}).get("type") in ("industry", "job"):
+                if f.ctxabbr:
+                    pass   # kurze Abkuerzung: Schreibung sagt nichts, es zaehlt nur die Stuetze (ohne Sammelknoten)
+                elif f.common and f.proper and not self._cue(plain, s, e, lang, f):
+                    continue
+                elif not f.proper and f.common and " " not in f.text and (self.live.get(f.eid) or {}).get("type") in ("industry", "job"):
                     if f.eid not in C and not _SECTOR.search(plain, max(0, s - 100), s):
                         continue   # Branche als Einzelwort ("role-specific education") nur nach "industries/sectors like ..." oder als Thema der Seite
                     bonus = 1   # der Hinweis selbst ist die Stuetze
@@ -355,9 +438,10 @@ class Matcher:
                     m = _WORD_L.search(plain, max(0, s - 40), s)
                     if m and m.group(1).lower() in VERB_BEFORE:
                         continue   # als Verb gebraucht ("might trigger", "you harness")
-                    if f.eid not in C and not self._sentence_start(plain, s) and not (m and m.group(1).lower() in DETS):
-                        continue   # Kurzname mit Zusatz nur als Nomen ("the trigger", "Grounding is ..."), nicht "change data, trigger actions"
-                sc = self.support(f.eid, C - {f.eid} if f.eid not in (ctx or ()) else C, strict=not f.proper, qual=f.qual) + bonus
+                    if f.eid not in C and not (m and m.group(1).lower() in DETS) and not (self._sentence_start(plain, s) and self.lookup(f.qual) in C):
+                        continue   # Kurzname mit Zusatz nur als Nomen ("the trigger"); am Satzanfang nur, wenn der Zusatz selbst auf der Seite steht
+                                   # ("Grounding is ..." neben Copilot), nicht als Befehl ("Trigger scaling actions") oder "trends that lead to"
+                sc = self.support(f.eid, C - {f.eid} if f.eid not in (ctx or ()) else C, strict=not f.proper or f.common or f.ctxabbr, qual=f.qual) + bonus
                 if sc <= 0: continue
                 sc = sc * 10 + (5 if f.is_name else 0)
                 if best is None or sc > bs: best, bs, tie = f, sc, False
@@ -394,6 +478,7 @@ class Matcher:
         excl = set(exclude or ()) | HOST
         ent_of = ent_of or _ent_of_href
         if not html: return html, []
+        html, keep = _protect(html)   # feste Bausteine ("Listen to this episode"-Kasten): weder Links noch Kontext
         if dedupe:
             html = _dedupe(html, used, excl, ent_of)
         else:
@@ -423,7 +508,7 @@ class Matcher:
         P = "".join(plain)
         C = set(ctx or ()) | {i for i in used if i not in HOST}
         hits = self.resolve(P, lang, C)
-        if not hits: return html, []
+        if not hits: return _restore(html, keep), []
         # Treffer auf editierbare Textstuecke abbilden
         spans = [(off, off + len(tok), n) for n, (tok, off, ed) in enumerate(pieces) if ed and off >= 0]
         rep, links = {}, []
@@ -437,7 +522,7 @@ class Matcher:
             if not u: continue
             used.add(i); links.append((t, i))
             rep.setdefault(spans[j][2], []).append((s - spans[j][0], e - spans[j][0], t, i, u))
-        if not rep: return html, []
+        if not rep: return _restore(html, keep), []
         out = []
         for n, (tok, off, ed) in enumerate(pieces):
             if n in rep:
@@ -447,7 +532,7 @@ class Matcher:
                     ti = "" if t == nm or "title=" in extra else f' title="{_esc(nm)}"'
                     tok = tok[:a] + f'<a href="{_esc(u)}" class="{cls}"{ti}{extra}>{tok[a:b]}</a>' + tok[b:]
             out.append(tok)
-        return "".join(out), links
+        return _restore("".join(out), keep), links
 
 
 _SKIP = re.compile(r"<(a|h[1-6]|code|pre|script|style|figure|figcaption|summary|button|svg|title|nav|textarea|select|label|kbd|samp|time)\b[^>]*>.*?</\1\s*>", re.S | re.I)
@@ -457,6 +542,33 @@ _A = re.compile(r"<a\b([^>]*)>(.*?)</a\s*>", re.S | re.I)
 _HEAD = re.compile(r"<(h[1-6]|summary)\b[^>]*>.*?</\1\s*>", re.S | re.I)
 _ENT_URL = re.compile(r"^(?:https?://(?:www\.)?m365\.fm)?(?:/[a-z]{2})?/entity/([a-z0-9][a-z0-9-]*)/?(?:[?#].*)?$")
 _esc = lambda s: str(s).replace("&", "&amp;").replace('"', "&quot;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+_BOILER = re.compile(r'<(div|span|p)\b(?=[^>]*(?:\bclass="[^"]*\blisten-to-box\b|\bdata-nolink\b))[^>]*>', re.I)
+_KEEP = re.compile(r'<div data-emk="(\d+)"></div>')
+
+
+def _protect(html):
+    """Feste Vorlagen-Bausteine durch Platzhalter ersetzen, dort hat ein Link keinen Bezug zum Thema der Seite: div.listen-to-box der frueheren
+    Podpage-Beitraege und Show Notes ("... why it matters for Microsoft 365, Azure, Power Platform, security, AI, and modern work.") und Elemente
+    mit data-nolink (z. B. wiederkehrende Zeilen der Stream-Beschreibungen). Sie liefern auch keinen Kontext."""
+    keep, out, pos = [], [], 0
+    for m in _BOILER.finditer(html):
+        if m.start() < pos: continue
+        tag = re.compile(r"<(/?)" + m.group(1) + r"\b[^>]*>", re.I)
+        depth, end = 0, len(html)
+        for d in tag.finditer(html, m.start()):
+            depth += -1 if d.group(1) else 1
+            if depth == 0:
+                end = d.end(); break
+        out.append(html[pos:m.start()]); out.append(f'<div data-emk="{len(keep)}"></div>'); keep.append(html[m.start():end]); pos = end
+    if not keep: return html, keep
+    out.append(html[pos:])
+    return "".join(out), keep
+
+
+def _restore(html, keep):
+    return _KEEP.sub(lambda m: keep[int(m.group(1))], html) if keep else html
 
 
 def _href(attrs):

@@ -149,6 +149,7 @@ def build(g, posts, people, api):
         INDEX_VOTES = 10   # nur noch fuer automatische Sprachfassungen ohne Freigabe (bisherige Regel); Originale stehen immer auf index
         w = WT.get(lang, WT["en"]); croot = f"{BASE}{pfx(lang)}/community/"
         links_l = {i: [e["name"], f"{BASE}{pfx(lang) if lang == 'de' else ''}/entity/{i}/"] for i, e in ENTS.items()}
+        _eu = EM.url_in(BASE, lang)   # Ziel der Kontext-Links (einmal je Sprache, Ergebnis je id zwischengespeichert)
         title_blog = T(lang, "Blog", "Blog")
         _idx_keys = set(); _lifted = 0   # (handle, slug) der indexierbaren Beitraege dieser Sprache: Grundlage der Verzeichnisse; _lifted: Sprachfassungen nur wegen der Laenge auf index
         _seq = {}   # Beitraege je Autor in dieser Sprache, neueste zuerst: Vor/Zurueck blaettert durch den Blog der Autorin bzw. des Autors
@@ -168,7 +169,8 @@ def build(g, posts, people, api):
             _kp, _fq, _fld = SNT.sections(p.get("keypoints"), p.get("faq"), lang)   # Kernpunkte und FAQ aus eigenen Feldern
             # Kontext-Links (site_entmatch): erste Nennung jeder Entitaet auf der Seite (Kernpunkte, dann Text), ohne Obergrenze, in allen Sprachen und fuer
             # alle Beitragsarten (fruehere Podpage-Beitraege, Content-Pakete, Sponsor-/Partnerartikel, Community-Beitraege); Kontext = Themen des Beitrags
-            _used = EM.Used(); _lu = lambda i: links_l[i][1] if i in links_l else None; _ctx = [t for t in p.get("topics", []) if t in ENTS]
+            # Ziel wie bei Folgen, Videos und Show-Sprachfassungen (site_entmatch.url_in): Entitaetsseite der Sprache nur, wenn sie dort auf index steht
+            _used = EM.Used(); _lu = lambda i: _eu(i) if i in ENTS else None; _ctx = [t for t in p.get("topics", []) if t in ENTS]
             _kp, _ = TOP.autolink_html(_kp, ENTS, _lu, lang=lang, ctx=_ctx, used=_used)
             body_html, _al = TOP.autolink_html(body_html, ENTS, _lu, lang=lang, ctx=_ctx, used=_used)
             _ment = [i for i in _used if i in ENTS]

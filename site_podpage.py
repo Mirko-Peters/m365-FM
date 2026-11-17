@@ -757,7 +757,8 @@ def build(g):
             if ln and _rwn: ln_html += SSEO.topics_html(_rwn, ENTS_ALL, BASE, TOPICS.get(l, "Topics"))   # Themen-Zeile mit Entitaetslinks setzt der Bau, sie wird nicht mituebersetzt
             lu = loc_url(l, f"episodes/{e['slug']}/")
             if ln: ln_html = IMG.alt_text(ln_html, l, lt)   # Alt-Texte in der Sprache der Fassung (die Uebersetzung uebernimmt den englischen Alt-Text)
-            if ln: ln_html, _ = EMX.link_html(ln_html, _EMU.setdefault(l, EM.url_in(BASE, l)), l, _ectx)   # Kontext-Links wie in der englischen Fassung, in der Sprache der Seite
+            _lused = EM.Used()   # Kontext-Links dieser Sprachfassung (fuer mentions wie in der englischen Fassung)
+            if ln: ln_html, _ = EMX.link_html(ln_html, _EMU.setdefault(l, EM.url_in(BASE, l)), l, _ectx, used=_lused)   # Kontext-Links wie in der englischen Fassung, in der Sprache der Seite
             _ldub = TRS.REG.dub.get((l, e["slug"]))   # #266: Dub-Folge der Sprache hat ein Transkript -> dieselben Dateien auch unter dieser Adresse
             _ltrf = TRS.REG.publish(g.get("write_r2") or write, BASE, f"{l}/show/episodes/{e['slug']}/", vtt=TRS.dub_vtt(l, _ldub[0]), index=False) if _ldub else {}
             lbody = (f'<article><p class="mut">{day(e["create_time"])}</p><h1>{esc(lt)}</h1>{SPM.note(l, _spr, "episode")}{aud}{LST.follow_for(BASE, l)}'
@@ -768,6 +769,9 @@ def build(g):
             lald = {"@context": "https://schema.org", "@type": "PodcastEpisode", "name": lt, "url": lu, "datePublished": day(e["create_time"]), "description": ls[:500],
                     "inLanguage": LG[l][1], "partOfSeries": {"@type": "PodcastSeries", "name": NAME, "url": root}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}
             if r and r.get("audio"): lald["associatedMedia"] = {"@type": "AudioObject", "contentUrl": r["audio"]}
+            if _about: lald["about"] = ld["about"]   # dieselbe Folge, dieselben Entitaeten wie die englische Fassung
+            _lment = EM.mentions(BASE, [i for i in _lused if i in ENTS_ALL and i not in EM.HOST], _about)
+            if _lment: lald["mentions"] = _lment   # im Text dieser Fassung verlinkte Entitaeten (Audit E7)
             if _spr: lald["sponsor"] = SPM.ld(_spr); lbody = SPM.mark(lbody, _spr, "episode")
             # Sprachfassung (uebersetzter Titel und Teaser, bei 150 Folgen je Sprache auch Show Notes): indexierbar, in Sitemap und hreflang; liegt im R2-Bucket statt in GitHub Pages
             _lalts = None if l in oa else alts   # T3: Sprache mit Dub-Fassung: diese Kopie bleibt ohne hreflang (ein Vertreter je Sprache im Cluster)

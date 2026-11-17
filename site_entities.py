@@ -909,7 +909,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _gen = ""
             if _isgen:
                 _gen = f'<p class="mut" style="font-size:.85em">{esc(T(lang, "Overview compiled with AI from M365.FM episodes and the facts on this page. You can improve it with the edit button below.", "Überblick, mit KI aus M365.FM-Folgen und den Fakten dieser Seite zusammengestellt. Du kannst ihn unten über „Bearbeiten“ verbessern."))}</p>' if _lt.strip() else ""
-            longbox = ("<h2>" + (T(lang, "Description", "Beschreibung")) + "</h2>" + "".join(f"<p>{esc(par).replace(chr(10), '<br>')}</p>" for par in _lt.split("\n\n") if par.strip()) + _gen) if _lt.strip() else ""
+            longbox = ("<h2>" + (T(lang, "Description", "Beschreibung")) + "</h2>" + "".join(f"<p>{esc(par).replace(chr(10), '<br>')}</p>" for par in _lt.split("\n\n") if par.strip())) if _lt.strip() else ""   # KI-Hinweis _gen erst nach den Kontext-Links
             # KI-Kurzbeschreibung (data/entity_fill, auch nach push in D1) immer sichtbar kennzeichnen; steht schon der Ueberblick-Hinweis, reicht der
             _dnote = f'<p class="mut" style="font-size:.85em">{esc(T(lang, "Short description written with AI from the facts on this page. You can improve it with the edit button below.", "Kurzbeschreibung, mit KI aus den Fakten dieser Seite geschrieben. Du kannst sie unten über „Bearbeiten“ verbessern."))}</p>' if not _gen and FD.desc_is_ai(e, lang, d) else ""
             w = WT.get(lang, WT["en"])
@@ -932,19 +932,22 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                         if q["q"].strip().lower() not in _seenq and (_hit(q["q"], x) or _hit(q["a"], x)):
                             _seenq.add(q["q"].strip().lower()); _efq.append({"q": q["q"], "a": q["a"], "src": x})
             # Kontext-Links in Definition, Beschreibung (Langtext) und Kernpunkten (site_entmatch): erste Nennung je Entitaet, ohne Selbstverweis; was die
-            # Beziehungssaetze schon verlinken, bleibt dort (erste semantische Nennung); Kontext = die Entitaet selbst und ihre Nachbarn
+            # Beziehungssaetze schon verlinken, bleibt dort (erste semantische Nennung); Kontext = die Entitaet selbst und ihre direkten Nachbarn ohne Sammelknoten
+            # (bei einem Sammelknoten wie microsoft nur die Entitaet: tausende Nachbarn waeren jeder Zusatz, "not a lead generation engine" -> Lead)
             _aeo = lambda h: (h[len(root):].split("/")[0] or None) if h.startswith(root) else _EM._ent_of_href(h)
-            _rsl = _EM.linked_ids(relsent, _aeo); _aused = _EM.Used(sorted(_rsl - {e["id"]})); _actx = {e["id"]} | {x for v in groups.values() for x in v}
+            _rsl = _EM.linked_ids(relsent, _aeo); _aused = _EM.Used(sorted(_rsl - {e["id"]})); _actx = _EMX.page_ctx(e["id"], (x for v in groups.values() for x in v))
             _aeu = lambda i: f"{root}{i}/"
             _defh, _ = _EMX.link_html(f'<p class="en-def" style="font-size:1.1em">{esc(d)}</p>', _aeu, lang, _actx, exclude=(e["id"],), used=_aused, ent_of=_aeo)
             longbox, _ = _EMX.link_html(longbox, _aeu, lang, _actx, exclude=(e["id"],), used=_aused, ent_of=_aeo)
+            longbox += _gen if longbox else ""   # fester KI-Hinweis ohne Kontext-Links (sonst "M365.FM episodes" -> m365fm auf jeder Seite mit Langtext)
             kpbox, _ = _EMX.link_html(kpbox, _aeu, lang, _actx, exclude=(e["id"],), used=_aused, ent_of=_aeo)
-            _amen = [i for i in _aused if i in ENTS and i != e["id"] and i not in _rsl]
             _allq = _fq + _efq
             _aitag = f' <span class="mut">({T(lang, "AI", "KI")})</span>'
             _faqai = f'<p class="mut" style="font-size:.85em">{esc(T(lang, "Questions marked with AI were written with AI from the facts on this page.", "Mit KI markierte Fragen wurden mit KI aus den Fakten dieser Seite geschrieben."))}</p>' if any(x.get("ai") for x in _allq) else ""
             faqbox = (f'<section class="en-faq"><h2>{T(lang, "Frequently asked questions", "Häufige Fragen")}</h2>' + _faqai + "".join(
                 f'<details><summary>{esc(x["q"])}{_aitag if x.get("ai") else ""}</summary><p>{esc(x["a"])}' + (f' <span class="mut">· <a href="{_epu(x["src"])}">{esc(T(lang, "From the episode", "Aus der Folge"))}: {esc(g["anchor_title"](x["src"]["e"]["title"], 48))}</a></span>' if x.get("src") else "") + "</p></details>" for x in _allq) + "</section>") if _allq else ""
+            faqbox, _ = _EMX.link_html(faqbox, _aeu, lang, _actx, exclude=(e["id"],), used=_aused, ent_of=_aeo)   # FAQ-Antworten wie auf Folgenseiten (Fragen in summary bleiben ohne Link)
+            _amen = [i for i in _aused if i in ENTS and i != e["id"] and i not in _rsl]
             faqbox += f'<div id="en-qa" data-eid="{e["id"]}"></div>'
             _epq = g.get("ep_by_spreaker") or {}
             _qurl = lambda q: _epq.get(str(q.get("episode_id")), (None, None))
