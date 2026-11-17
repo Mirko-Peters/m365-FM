@@ -392,8 +392,14 @@
     return f;
   }
 
-  Promise.all([api("/api/profile/me"), fetch(X.base + "/entities.json" + (X.v ? "?v=" + encodeURIComponent(X.v) : ""), { cache: "no-cache" }).then(function (r) { return r.json(); }), api("/api/org/mine")]).then(function (a) {
-    if (a[0].s !== 200) return; var me = a[0].j, all = (a[1].entities || []), p = me.profile || {}, orgs = (a[2].j.orgs || []);
+  // /entities.json (~560 KB) nur fuer Angemeldete: erst nach 200 von /api/profile/me holen, dann parallel zu /api/org/mine (laeuft schon).
+  // Abgemeldete Besucher von /community/ laden die Datei nicht (Folgepunkt aus #508).
+  var orgP = api("/api/org/mine"); orgP.catch(function () {});   // abgemeldet bleibt die Antwort ungenutzt: keine unbehandelte Ablehnung
+  api("/api/profile/me").then(function (r0) {
+    if (r0.s !== 200) return null;
+    return Promise.all([r0, fetch(X.base + "/entities.json" + (X.v ? "?v=" + encodeURIComponent(X.v) : ""), { cache: "no-cache" }).then(function (r) { return r.json(); }), orgP]);
+  }).then(function (a) {
+    if (!a) return; var me = a[0].j, all = (a[1].entities || []), p = me.profile || {}, orgs = (a[2].j.orgs || []);
     var sec = h("section", { class: "ccard" }, [h("h2", { text: Q.h }), h("p", { class: "cmut", text: Q.intro })]), msg = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" });
     var pub = chk(Q.pub, p.public), handle = inp(30, p.handle || me.suggest), head = inp(100, p.headline), about = h("textarea", { rows: 6, maxlength: 1500 }), company = inp(80, p.company_eid ? ((all.filter(function (x) { return x.id === p.company_eid; })[0] || {}).name || p.company) : ""), jobp = pickerRows(all, function (x) { return x.type === "job"; }, p.job_eid ? [{ e: p.job_eid }] : jobGuess(all, p.job), false, KQ.jobl, "job", { single: true, pick: KQ.jobpick, mk: KQ.mk, pend: KQ.pend_sel, dup: KQ.dup }), indp = pickerRows(all, function (x) { return x.type === "industry"; }, (p.industries || []).map(function (e) { return { e: e }; }), false, KQ.indadd, "industry", { pick: KQ.indpick, mk: KQ.mk, pend: KQ.pend_sel, dup: KQ.dup }), country = inp(60, p.country), so = chk(Q.showorg, p.show_org !== false);
     about.value = p.about || "";

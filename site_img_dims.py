@@ -91,12 +91,21 @@ class _Images(HTMLParser):
             self.handle_starttag(tag, attrs)
 
 
-def enhance(source):
+def enhance(source, lang=None, title=""):
+    """Bildmasse ergaenzen. Mit lang zusaetzlich schwache Alt-Texte durch die aus data/r2_alt.json.gz ersetzen (site_img_alt, Seitensprache lang).
+    Ohne lang bleibt jeder Alt-Text unveraendert: site_podpage.san ruft enhance ohne Sprache auf, und translate_blog.source_of zerlegt dessen Ausgabe -
+    ein geaenderter Alt-Text in einem Textsegment wuerde sonst die Uebersetzungs-Hashes aendern."""
     parser = _Images(source)
     parser.feed(source)
     for start, end, replacement in reversed(parser.edits):
         source = source[:start] + replacement + source[end:]
-    return source
+    return alt_text(source, lang, title) if lang else source
+
+
+def alt_text(source, lang="en", title=""):
+    """Nur die Alt-Texte (site_img_alt.apply): fuer HTML, das schon durch enhance()/san() lief, an der Stelle, an der die Seitensprache feststeht."""
+    import site_img_alt as ALT
+    return ALT.apply(source, lang, title)
 
 
 

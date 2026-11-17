@@ -17,7 +17,8 @@ import site_hosts as HOSTS   # eigene Subdomains admin.m365.fm und profile.m365.
 import site_support as SUP
 import site_expert_connect as ECN
 import site_entities as ENT
-from site_i18n import COMM_LANGS, pfx, site_langs
+from site_i18n import COMM_LANGS, pfx, site_langs, T
+import site_linktext as LT   # Linktexte nennen das Ziel (Kanaele, Pfeile, aria-labels)
 import site_members as MEM
 import site_roles as ROLE
 import site_invite as INV
@@ -29,6 +30,7 @@ import site_live as LIVE
 import site_notes as SNT
 import site_shownotes as SNS   # T26
 import site_extract as SX   # T27: Folgen und Videos <-> Entitaeten aus der QA-geprueften Extraktion
+import site_topic_crumbs as TC   # zweite BreadcrumbList nach dem Hauptthema (M365.FM > Oberbegriffe > Thema > Folge)
 SNALL = SNS.load_all()   # Vollfassungen der Shownotes je Spreaker-Folge (shownotes/site/<episode_id>.md)
 import site_text
 import site_ads as ADS
@@ -344,7 +346,9 @@ def share_html(lang, url, title):
     # Der Mail-Link (mailto:?subject=...) enthaelt keine Adresse. Ohne email_off schreibt Cloudflares E-Mail-Schutz ihn trotzdem um und
     # laedt dafuer auf JEDER Seite email-decode.min.js (synchrones Skript in der kritischen Kette; ohne JS ginge der Link ins Leere).
     _off = lambda n, a: f"<!--email_off-->{a}<!--/email_off-->" if n == "E-Mail" else a
-    fl = "".join(_off(n, f'<a href="{h}" target="_blank" rel="noopener nofollow" aria-label="{n}" title="{n}" style="--bc:#{BRAND_ICONS[n][1]}">{brand_icon(n)}</a>') for n, h in nets)
+    # Linktexte F5: "Auf LinkedIn teilen" statt nur "LinkedIn" (klang nach dem Profil, nicht nach Teilen); in der Seitensprache
+    _sl = lambda n: T(lang, "Share by email", "Per E-Mail teilen") if n == "E-Mail" else T(lang, "Share on {network}", "Auf {network} teilen").format(network=n)
+    fl = "".join(_off(n, f'<a href="{h}" target="_blank" rel="noopener nofollow" aria-label="{esc(_sl(n))}" title="{esc(_sl(n))}" style="--bc:#{BRAND_ICONS[n][1]}">{brand_icon(n)}</a>') for n, h in nets)
     fbar = (f'<aside class="fshare" aria-label="{esc(SHARE_L.get(lang, "Share"))}">{fl}'
             f'<button type="button" data-share data-url="{url}" data-title="{esc(strip_tags(title))}" aria-label="{esc(COPY_L.get(lang, "Copy link"))}" title="{esc(COPY_L.get(lang, "Copy link"))}" style="--bc:#6B7280">{brand_icon("Copy")}</button></aside>')
     return fbar   # Klick-Logik in assets/page.js
@@ -733,7 +737,7 @@ M365CON_END = date(2027, 1, 22)
 def con_bar(lang):
     if date.today() > M365CON_END:
         return ""
-    return (f'<div class="mbar"><a href="https://m365con.net" rel="noopener"><b>{esc(BAR_T.get(lang, BAR_T["en"]))}</b> · 11–22 Jan 2027 · 120 sessions<i>→ m365con.net</i></a></div>')
+    return (f'<div class="mbar"><a href="https://m365con.net" rel="noopener"><b>{esc(BAR_T.get(lang, BAR_T["en"]))}</b> · 11–22 Jan 2027 · 120 sessions<i><span aria-hidden="true">→</span> m365con.net</i></a></div>')
 
 
 import site_home as HUB
@@ -857,12 +861,17 @@ def footer(lang):
     # Top-Seiten je Dub-Sprache /<l>/top/; Englisch /top/ (Top 10 der Hauptshow), solange es echte Wochendaten gibt - sonst die Folgenliste der Hauptshow
     _top = (f'<a href="{BASE}/{_tl}/top/">{esc((TOP_L if _tl in TOP_REAL else REC_L).get(_tl, "Top"))}</a>' if _tl in LANGS else
             f'<a href="{BASE}/{TOPW.EN_REL}">{esc(TOP_L["en"])}</a>' if "en" in TOP_REAL else f'<a href="{BASE}/show/episodes/">{esc(REC_L["en"])}</a>')
-    _nw = f'<a href="{BASE}/{"de/" if lang == "de" else ""}updates/">{"Updates & Roadmap" if lang == "de" else "Updates & roadmap"}</a>'
+    # Linktexte F6: Footer-Texte in der Seitensprache (T/data/py_i18n.json), nicht nur de/en. Die rechtlichen Seiten gibt es auf Deutsch (Impressum,
+    # Datenschutz) und Englisch (legal, privacy): fremdsprachige Linktexte tragen lang (WCAG 3.1.2), Ziele in anderer Sprache hreflang.
+    _x = lambda en, de: esc(T(lang, en, de))
+    _de = "" if lang == "de" else ' lang="de" hreflang="de"'
+    _en = ' lang="en" hreflang="en"' if lang == "de" else "" if lang == "en" else ' hreflang="en"'
+    _nw = f'<a href="{BASE}/{"de/" if lang == "de" else ""}updates/">{_x("Updates & roadmap", "Updates & Roadmap")}</a>'
     return (f'<footer><div class="wrap">{_top}{_nw}'   # m365.fm, M365Con, LinkedIn, YouTube seit 4.11. nicht mehr im Footer (Wunsch Mirko); dafuer der Service-Hub /services/
-            f'<a href="{ast_url(lang)}">{esc(ast_label(lang))}</a><a href="{BASE}/{"de/" if lang == "de" else ""}press/">{"Pressekit" if lang == "de" else "Press kit"}</a>'
-            f'<a href="{BASE}/{"de/" if lang == "de" else ""}media-kit/">{"Mediadaten" if lang == "de" else "Media kit"}</a>'
-            f'<a href="{SPN.url(BASE, _tl)}">{esc(SPN.label(_tl))}</a>' + HWR.footer_links(BASE, lang) + (f'<a href="{SUP.url(BASE, _tl)}">{"Unterstützen" if _tl == "de" else "Support us"}</a>' if SUP.active() else '') + f'<a href="{LND.hub_url(BASE, _tl)}">{LND.footer_label(_tl)}</a><a href="{BASE}/impressum/" rel="nofollow">Impressum</a><a href="{BASE}/legal/" rel="nofollow">Legal notice</a>'
-            f'<a href="{BASE}/datenschutz/" rel="nofollow">Datenschutz</a><a href="{BASE}/privacy/" rel="nofollow">Privacy</a><a href="{BASE}/{"sicherheit" if lang == "de" else "security"}/" rel="nofollow">{"Sicherheit" if lang == "de" else "Security"}</a>'
+            f'<a href="{ast_url(lang)}">{esc(ast_label(lang))}</a><a href="{BASE}/{"de/" if lang == "de" else ""}press/">{_x("Press kit", "Pressekit")}</a>'
+            f'<a href="{BASE}/{"de/" if lang == "de" else ""}media-kit/">{_x("Media kit", "Mediadaten")}</a>'
+            f'<a href="{SPN.url(BASE, _tl)}">{esc(SPN.label(_tl))}</a>' + HWR.footer_links(BASE, lang) + (f'<a href="{SUP.url(BASE, _tl)}">{_x("Support us", "Unterstützen")}</a>' if SUP.active() else '') + f'<a href="{LND.hub_url(BASE, _tl)}">{LND.footer_label(_tl)}</a><a href="{BASE}/impressum/" rel="nofollow"{_de}>Impressum</a><a href="{BASE}/legal/" rel="nofollow"{_en}>{_x("Legal notice", "Legal notice")}</a>'
+            f'<a href="{BASE}/datenschutz/" rel="nofollow"{_de}>Datenschutz</a><a href="{BASE}/privacy/" rel="nofollow"{_en}>{_x("Privacy", "Privacy")}</a><a href="{BASE}/{"sicherheit" if lang == "de" else "security"}/" rel="nofollow"{"" if lang in ("de", "en") else _en}>{_x("Security", "Sicherheit")}</a>'
             f'<div style="margin-top:10px">© {date.today().year} Mirko Peters · M365.FM</div></div></footer>')
 
 
@@ -897,14 +906,15 @@ def author_box(lang):
     """Author-Box mit schema.org-Auszeichnung (Person, gleiche @id wie das JSON-LD), Expertise als Entitaets-Links, Zertifikaten und sameAs-Kanaelen:
     macht den Autor fuer Suchmaschinen und KI-Antworten (GEO) als geprueften Experten erkennbar (E-E-A-T)."""
     de = lang == "de"; ent = f"{BASE}/entity/mirko-peters/#entity"; pref = f'{BASE}/{"de/" if de else ""}'
-    L = dict(about="Über den Autor" if de else "About the author", exp="Expertise" if de else "Expertise", cert="Zertifizierungen" if de else "Certifications", prof="Profil ansehen" if de else "View profile")
+    L = dict(about=T(lang, "About the author", "Über den Autor"), exp=T(lang, "Expertise", "Expertise"), cert=T(lang, "Certifications", "Zertifizierungen"))   # Linktexte F1: Beschriftung in allen Sprachen
     if AUTHOR.get("handle"):
         a = AUTHOR; progs = {"mvp": "Microsoft MVP", "mct": "Microsoft Certified Trainer", "rd": "Microsoft Regional Director", "msa": "Microsoft Student Ambassador"}
         icons = {"mvp": "🏆", "mct": "🎓", "rd": "🧭", "msa": "🌟"}
         vp = [x["p"] for x in a.get("programs", []) if x.get("verified") and x["p"] in progs]
         lab = " · ".join(icons[x] + " " + progs[x] for x in vp)
-        KL = {"linkedin": "LinkedIn", "github": "GitHub", "youtube": "YouTube", "x": "X", "mastodon": "Mastodon", "bluesky": "Bluesky", "twitch": "Twitch", "blog": "Blog", "podcast": "Podcast", "newsletter": "Newsletter", "website": "Web", "other": "Link"}
-        chs = "".join(f'<a href="{esc(c["url"])}" rel="me noopener" itemprop="sameAs">{esc(KL.get(c["kind"], "Link"))}</a> ' for c in a.get("channels", [])[:8] if c.get("url"))
+        # Linktexte F1: ein Kanal heisst nach seinem Namen (m365con.net, "M365.FM Deutsch auf Spreaker"), nicht nach seiner Art ("Web", "Podcast"); gleiche Texte nur fuer gleiche Ziele
+        chs = "".join(f'<a href="{esc(c["url"])}" rel="me noopener" itemprop="sameAs"{LT.a_attr(ar)}>{esc(t)}</a> '
+                      for c, t, ar in LT.channel_links([c for c in a.get("channels", [])[:8] if c.get("url")], lang, a.get("name")))
         img = f'{COMMUNITY_API}/api/img/u/{a["handle"]}' if a.get("img") else (f"{BASE}/assets/mirko-peters.jpg" if (ROOT / "assets" / "mirko-peters.jpg").exists() else "")
         badge = f'<img class="badge" src="{img}" alt="{esc(a["name"])}" width="58" height="58" loading="lazy" itemprop="image">' if img else '<div class="badge">MP</div>'
         badge = ROLE.avatar(badge, ROLE.role_of(a), lang, small=True)   # Editor/Moderator: Ring und Symbol auch im Autorenkasten
@@ -934,6 +944,53 @@ EXTRA = (("amazon_show", "Amazon Music"), ("deezer_show", "Deezer"), ("iheart_sh
 
 def extra_btns(sh):
     return "".join(f'<a class="btn" href="{sh[k]}" rel="noopener">{n}</a>' for k, n in EXTRA if sh.get(k))
+
+
+SHOW_ROW = (("apple_show", "Apple Podcasts"), ("spotify_show", "Spotify"), ("amazon_show", "Amazon Music"), ("deezer_show", "Deezer"), ("iheart_show", "iHeart"), ("youtube_show", "YouTube"),
+            ("youtube_music_show", "YouTube Music"), ("castbox_show", "Castbox"), ("podcastaddict_show", "Podcast Addict"), ("podchaser_show", "Podchaser"))
+
+
+def show_name(l):
+    """Eigener Name der Sprach-Show: 'M365.FM Deutsch'."""
+    return f"M365.FM {LANGS[l][0]}" if l in LANGS else "M365.FM"
+
+
+def show_row(l, sh):
+    """Linktexte F2: Show-Links der Sprache, Ziel steht im Link ('M365.FM Deutsch bei Apple Podcasts'; frueher 'M365.FM ▸' ausserhalb des Links)."""
+    return " ".join(f'<a href="{sh[k]}" rel="noopener">{esc(T(l, "{show} on {platform}", "{show} bei {platform}").format(show=show_name(l), platform=n))}</a>' for k, n in SHOW_ROW if sh.get(k))
+
+
+def ep_btns(l, el, sh, spk, yt, title, trf=None, tr=None):
+    """Linktexte F2: Knoepfe der Dub-Folgenseite. Plattformknoepfe nur mit echtem Folgenlink ('Diese Folge bei Apple Podcasts'); ohne ihn reicht
+    die Show-Zeile (show_row), statt eines zweiten Links mit anderem Ziel. Gleiche Kurztexte auf allen Folgen bekommen ein aria-label mit dem Folgentitel,
+    Symbole sind fuer Screenreader versteckt, 'VTT' heisst 'Untertitel (WebVTT)'."""
+    ui = UI[l]; at = anchor_title(title); b = ""
+    ep = lambda p: esc(T(l, "This episode on {platform}", "Diese Folge bei {platform}").format(platform=p))
+    if el.get("apple"): b += f'<a class="btn" data-p="apple" href="{el["apple"]}" rel="noopener">{ep("Apple Podcasts")}</a>'
+    if el.get("spotify"): b += f'<a class="btn" data-p="spotify" href="{el["spotify"]}" rel="noopener">{ep("Spotify")}</a>'
+    if el.get("deezer"): b += f'<a class="btn" href="{el["deezer"]}" rel="noopener">{ep("Deezer")}</a>'
+    ico = lambda s: f'<span aria-hidden="true">{s}</span> '
+    b += f'<a class="btn" data-p="spreaker" href="{spk}" rel="noopener"{LT.a_attr(LT.aria(ui[0], at + " – Spreaker"))}>{ico("🎧")}{esc(ui[0])}</a>'
+    b += f'<a class="btn" href="{yt}" rel="noopener"{LT.a_attr(LT.aria(ui[1], at))}>{ico("▶")}{esc(ui[1])}</a>'
+    if trf:
+        b += f'<a class="btn" href="{trf["txt"]}" type="text/plain" rel="nofollow">{ico("📄")}{esc(ui[2])} (TXT)</a>'
+        if trf.get("vtt"): b += f'<a class="btn" href="{trf["vtt"]}" type="text/vtt" rel="nofollow">{esc(T(l, "Subtitles (WebVTT)", "Untertitel (WebVTT)"))}</a>'
+    elif tr: b += f'<a class="btn" href="{tr}">{ico("📄")}{esc(ui[2])}</a>'   # Datei (noch) nicht im Repo: bisheriger Link
+    return b
+
+
+def orig_link(l, slug, title=None):
+    """Linktexte F2: 'Original (English): {Titel}' statt nur 'Original (English)'."""
+    if not slug:
+        return ""
+    t = esc(T(l, "Original (English)", "Original (Englisch)")) + (f': <span lang="en">{esc(anchor_title(title))}</span>' if title else "")
+    return f'<p class="mut"><a href="{BASE}/show/episodes/{slug}/" hreflang="en">{t}</a></p>'
+
+
+def all_eps_btn(l, n=None, cls="btn"):
+    """'Alle Folgen →' mit Ziel im Namen ('Alle Folgen – M365.FM Deutsch'); der Pfeil ist fuer Screenreader versteckt."""
+    txt = UI[l][3] + (f" ({n})" if n is not None else "")
+    return f'<a class="{cls}" href="{BASE}/{l}/podcast/"{LT.a_attr(txt + " – " + show_name(l))}>{esc(txt)}{LT.arrow()}</a>'
 
 
 def same_as(l, sh):
@@ -1129,19 +1186,20 @@ def build():
         _per = f'<p class="mut">{esc(TOPW.fmt_range(l, _pa, _pb))}</p>' if _pa and not is_prov(l) else ""   # Zeitraum der Vorwoche
         return (f'<h2>★ {esc(top_label(l))}</h2>{_per}<div class="list">' + "".join(
             f'<a class="row" href="{url_of(x)}" title="{esc(x["e"]["title"])}"><h3>{n + 1}. {esc(anchor_title(x["e"]["title"]))}</h3></a>' for n, x in enumerate(t)) +
-            f'</div><p><a class="btn" href="{BASE}/{l}/top/">{esc(top_label(l))} →</a></p>')
+            f'</div><p><a class="btn" href="{BASE}/{l}/top/">{esc(top_label(l))}{LT.arrow()}</a></p>')
 
     def topics_nav(l):
         cs = "".join(f'<a class="chip cat" href="{cat_url(l, c)}">{esc(cat_name(c, l))} · {len(catidx[l][c])}</a>' for c in ORDER if c in catidx[l])
         return top_block(l) + f'<h2>{esc(TOPICS.get(l, "Topics"))}</h2><div class="chips">{cs}</div>'
 
     # Englisches Original je Video (Podpage-Show unter /show/), Zuordnung ueber den englischen YouTube-Titel
-    ORIG = {}
+    ORIG = {}; ORIG_T = {}   # ORIG_T: Titel der englischen Folge (Linktext "Original (English): {Titel}")
     try:
         import site_podpage as _PPm
         _et = site_text.fix_tree(json.load(open(ROOT / "data" / "en_titles.json", encoding="utf-8"))) if (ROOT / "data" / "en_titles.json").exists() else {}   # T5
         _byt = {_PPm.norm(e["name"]): e for e in _PPm.load("episodes")}
         ORIG = {v: _byt[_PPm.norm(t)]["slug"] for v, t in _et.items() if _PPm.norm(t) in _byt}
+        ORIG_T = {v: _byt[_PPm.norm(t)]["name"] for v, t in _et.items() if _PPm.norm(t) in _byt}
     except Exception as _ex:
         print("Original-Zuordnung:", _ex)
     ORIG_ALTS = {}
@@ -1173,7 +1231,8 @@ def build():
             for _l2, _sl in TRL_SLUGS.items():   # T42: Sprachen ohne Dub sind im Cluster mit ihrer lokalisierten Fassung (gegenseitig zur englischen Seite)
                 if _l2 not in alts and ORIG[vid] in _sl: alts[_l2] = f"{BASE}/{_l2}/show/episodes/{ORIG[vid]}/"
         canonical = url_of(it)
-        _xab = [{"@id": f"{BASE}/entity/{_s}/#entity"} for _s, _ in (SX.BY_EPISODE.get(str(it["eid"])) or {}).get("entities", []) if _s in LRN.ENTS][:8]   # T27: Entitaeten aus der QA-geprueften Extraktion
+        _xids = [_s for _s, _ in (SX.BY_EPISODE.get(str(it["eid"])) or {}).get("entities", []) if _s in LRN.ENTS][:8]   # T27: Entitaeten aus der QA-geprueften Extraktion (nach score)
+        _xab = [{"@id": f"{BASE}/entity/{_s}/#entity"} for _s in _xids]
         spk = f'https://www.spreaker.com/episode/{it["eid"]}'
         yt = f"https://youtu.be/{vid}"
         tr = e.get("tr") or ""
@@ -1210,6 +1269,8 @@ def build():
              "publisher": {"@id": f"{BASE}/#org"}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}},
             person_ld(), org_ld(),
         ]
+        _tbc = TC.breadcrumb(BASE, l, _xids + TC.named_in(e["title"], LRN.ENTS), LRN.ENTS, e["title"], canonical)   # zweite Spur nach dem Hauptthema (nur JSON-LD): Extraktion, sonst im Titel genannte Entitaeten (wie _ep_find der Entitaetsseiten)
+        if _tbc: ld.insert(2, _tbc)
         ld[0]["video"] = {"@id": canonical + "#video"}
         for _n in (ld if _spr else []):   # T37 Sponsor: PodcastEpisode und VideoObject derselben Folge
             if _n.get("@type") in ("PodcastEpisode", "VideoObject"): _n["sponsor"] = SPM.ld(_spr)
@@ -1257,27 +1318,18 @@ def build():
                 {"@type": "Question", "name": x["q"], "acceptedAnswer": {"@type": "Answer", "text": x["a"]}} for x in faq_items]})
         lis = "".join(f"<li>{x}</li>" for x in bullets)
         el = _ep_links; sh = plat.get(l, {})
-        apple = el.get("apple") or sh.get("apple_show"); spot = el.get("spotify") or sh.get("spotify_show")
-        btns = ""
-        if apple: btns += f'<a class="btn" data-p="apple" href="{apple}" rel="noopener">Apple Podcasts</a>'
-        if spot: btns += f'<a class="btn" data-p="spotify" href="{spot}" rel="noopener">Spotify</a>'
-        if el.get("deezer") or sh.get("deezer_show"): btns += f'<a class="btn" href="{el.get("deezer") or sh["deezer_show"]}" rel="noopener">Deezer</a>'
-        if sh.get("amazon_show"): btns += f'<a class="btn" href="{sh["amazon_show"]}" rel="noopener">Amazon Music</a>'
-        showrow = "".join(f'<a href="{sh[k]}" rel="noopener">{n}</a>' for k, n in (("apple_show", "Apple Podcasts"), ("spotify_show", "Spotify"), ("amazon_show", "Amazon Music"), ("deezer_show", "Deezer"), ("iheart_show", "iHeart"), ("youtube_show", "YouTube"), ("youtube_music_show", "YouTube Music"), ("castbox_show", "Castbox"), ("podcastaddict_show", "Podcast Addict"), ("podchaser_show", "Podchaser")) if sh.get(k))
-        btns += f'<a class="btn" data-p="spreaker" href="{spk}" rel="noopener">🎧 {esc(ui[0])}</a>' 
-        btns += f'<a class="btn" href="{yt}" rel="noopener">▶ {esc(ui[1])}</a>'
-        if _trf: btns += f'<a class="btn" href="{_trf["txt"]}" type="text/plain" rel="nofollow">📄 {esc(ui[2])} (TXT)</a>' + (f'<a class="btn" href="{_trf["vtt"]}" type="text/vtt" rel="nofollow">VTT</a>' if _trf.get("vtt") else "")
-        elif tr: btns += f'<a class="btn" href="{tr}">📄 {esc(ui[2])}</a>'   # Datei (noch) nicht im Repo: bisheriger Link
+        btns = ep_btns(l, el, sh, spk, yt, e["title"], _trf, tr)
+        showrow = show_row(l, sh)
         rel = "".join(f'<a class="row" href="{url_of(x)}" title="{esc(x["e"]["title"])}"><h3>{esc(anchor_title(x["e"]["title"]))}</h3></a>' for x in more)
         body = f"""{header(l, lang_switch(l, alts, active))}
 <main class="wrap"><article>
 <nav class="crumbs" aria-label="breadcrumb"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])} / {it["date"]}</nav>
-<div class="kicker">M365.FM · {esc(LANGS[l][0])}</div>{('<p class="mut"><a href="' + BASE + '/show/episodes/' + ORIG[vid] + '/" hreflang="en">' + ("Original (English)" if l != "de" else "Original (Englisch)") + '</a></p>') if vid in ORIG else ""}
+<div class="kicker">M365.FM · {esc(LANGS[l][0])}</div>{orig_link(l, ORIG.get(vid), ORIG_T.get(vid))}
 <h1>{esc(h1_main)}</h1>{("<p class=sub>" + esc(h1_rest) + "</p>") if h1_rest else ""}{SPM.note(l, _spr, "episode")}
 {chips_html(l, it)}<p class="lede">{intro}</p>
 <figure class="cover" style="margin-inline:0">{art_svg(vid, LANGS[l][0], "M365.FM · " + ui[0], l)}</figure>
 <div class="panel">{PL.player("spreaker", it["eid"], e["title"], ui[0], link=spk)}
-<div class="btns">{btns}</div>{"<p class=showrow>M365.FM ▸ " + showrow + "</p>" if showrow else ""}</div>{LST.follow_for(BASE, l)}
+<div class="btns">{btns}</div>{"<p class=showrow>" + showrow + "</p>" if showrow else ""}</div>{LST.follow_for(BASE, l)}
 <div style="margin:22px 0">{PL.player("youtube", vid, e["title"], ui[1], link=yt)}</div>
 <p class="mut">▶ {esc(e["title"])}</p>
 <h2>{esc(hdr)}</h2><ol class="points">{lis}</ol>
@@ -1287,7 +1339,7 @@ def build():
 </article>
 {PAGER(l, *[(url_of(x), x['e']['title']) if x else None for x in NEIGH(by_lang[l], DPOS[l][vid])])}
 {('<h2>' + esc(ui[4]) + '</h2><div class="list">' + rel + '</div>') if rel else ''}
-<p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/podcast/">{esc(ui[3])} →</a></p>
+<p style="margin-top:1.6em">{all_eps_btn(l)}</p>
 <section id="c-comments"></section><section id="c-sub"></section></main>
 {footer(l)}{community_tags(l, vid, css_async=True)}"""
         if _spr: body = SPM.mark(body, _spr, "episode")   # T37 Sponsor: Links zum Sponsor mit rel="sponsored"
@@ -1332,7 +1384,7 @@ def build():
         nvid = len({i["vid"] for i in newest})
         cats = "".join(f'<a class="chip cat" href="{cat_url(l, c)}">{esc(cat_name(c, l))} · {len(catidx[l][c])}</a>' for c in ORDER if c in catidx[l])
         pod_sec = (f'<h2 style="margin-top:0">{esc(HT(l, "podcast_in"))}</h2><p class="lede">{esc(short(s.get("description", ""), 300))}</p>'
-                   f'<div class="btns"><a class="btn main" href="{pod}">{esc(ui[3])} ({len(newest)}) →</a>{sub_btns(l)}</div>{top_block(l)}')
+                   f'<div class="btns">{all_eps_btn(l, len(newest), "btn main")}{sub_btns(l)}</div>{top_block(l)}')
         ld = [{"@context": "https://schema.org", "@type": "WebSite", "@id": f"{home}#website", "name": "M365.FM", "url": home, "inLanguage": LANGS[l][1],
                "potentialAction": {"@type": "SearchAction", "target": {"@type": "EntryPoint", "urlTemplate": f"{home}search/?q={{search_term_string}}"}, "query-input": "required name=search_term_string"},
                "publisher": {"@id": f"{BASE}/#org"}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}},
@@ -1593,6 +1645,7 @@ def build():
     SHW.build(_ctx, (LRN._fetch_json(f"{COMMUNITY_API}/api/show/export") or {}).get("items", []))
     phase("Community (Profile, Events, Blog, Bibliothek, Podcast, Video, Feed, Shows)")
     PP.build(_ctx)
+    import site_anchor as _ANC; print(_ANC.summary())   # Linktexte im Altbestand (Blog BLG.build, Show Notes PP.build): ersetzte Anker je Regel
     import site_i18n_overrides as OVR; OVR.publish(OUT)   # Veraltet-Liste und Einheiten-Ansicht fuer /redaktion/: erst HIER, nach allen note_blog/note_podpage (PP.build merkt Folgen und Show Notes vor)
     phase("Englische Show (Podpage)")
     MCPS.build(_ctx)
@@ -1641,7 +1694,7 @@ def build():
 <p class="mut">{len(lst)} × {esc(ui[3])}</p>
 <h2>{esc(ui[3])}</h2><div class="list">{rows_html(lst)}</div>
 <h2>{esc(TOPICS.get(l, "Topics"))}</h2><div class="chips">{others}</div>
-<p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/podcast/">{esc(ui[3])} →</a></p></main>{footer(l)}"""
+<p style="margin-top:1.6em">{all_eps_btn(l)}</p></main>{footer(l)}"""
         _mt, _md = (label, desc) if noindex else MP.category_meta(l, label, len(lst), [x["e"]["title"] for x in lst[:6]])   # Tag-Seiten (noindex) bleiben unveraendert
         return page(l, _mt, _md, canonical, body, alts, ld, og_type="website", noindex=noindex, side=side_for(l, label, body))
 
@@ -1709,7 +1762,7 @@ def build():
 <main class="wrap"><nav class="crumbs" aria-label="breadcrumb"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])}</nav>
 <div class="kicker">★ {esc(LANGS[l][0])}{"" if prov or not _pa else " · " + esc(TOPW.fmt_range(l, _pa, _pb))}</div><h1>{esc(h1)}</h1>{"" if prov else f'<p class="mut">{esc(TOPW.note(l))}</p>'}
 <div class="list">{rows}</div>
-<p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/podcast/">{esc(ui[3])} →</a></p></main>{footer(l)}"""
+<p style="margin-top:1.6em">{all_eps_btn(l)}</p></main>{footer(l)}"""
         _mt, _md = MP.top_meta(l, label, None if prov else h1, [x["e"]["title"] for x in t[:3]])
         write(f"{l}/top/index.html", page(l, _mt, _md, u, body, None if prov else alts, ld, og_type="website", noindex=prov, side=side_for(l, label, body), switch=sw_top))
         if not prov:

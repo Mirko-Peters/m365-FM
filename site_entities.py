@@ -1,6 +1,7 @@
 import re
 """Entitaetsdatenbank fuer das Microsoft-Oekosystem: Seiten, JSON-Exporte, Schema.org-Graph."""
 from site_i18n import T
+import site_linktext as LT   # Linktexte: Name statt roher URL, aria-labels mit Ziel
 import site_updates as SU
 import site_quotes as SQ   # Quotes an Personen-Entitaeten
 import site_media as MED
@@ -12,6 +13,7 @@ import site_facts as FX   # belegte Fakten (Rechtsform, Register, Kunden, Partne
 import site_mentions as MEN   # Erwaehnungen in fremden Medien als Quellen (data/press_mentions.json)
 import site_listen as LST   # Anhoeren-Karten (kompakte Variante unter den Beitraegen einer Entitaet)
 import site_meta_entities as MM   # SEO-Titel und Meta-Descriptions nach Suchabsicht (reine Funktionen)
+import site_relsent as RS   # Beziehungen als ganze Saetze in der Sprache der Seite (data/relation_sentences.json); zaehlen nicht als eigener Text
 import re
 from datetime import date
 from urllib.parse import quote, urlsplit
@@ -46,6 +48,7 @@ S = {"en": dict(entities="Microsoft ecosystem entity database", intro="Products,
 SPEAKERS = {}   # Entitaets-ID -> zusammengefuehrter Speaker (data/speakers.json) mit Events und Sessions
 import entity_fill_data as FD
 import ontology as ONT   # Oberbegriff-Kette fuer Brotkruemel, SKOS broader im JSON-LD-Graph
+import site_topic_crumbs as TC   # Adresse der Entitaetsseite je Sprache (gemeinsam mit den Themen-Brotkrumen)
 GENTEXT = {}   # Entitaet -> {en, de}: Ueberblickstexte aus data/entity_texts/part-*.json (aus Folgen und Fakten geschrieben, tools/entity_text_tasks.py)
 for _f in sorted((Path(__file__).parent / "data" / "entity_texts").glob("part-*.json")) if (Path(__file__).parent / "data" / "entity_texts").exists() else []:
     try: GENTEXT.update(json.loads(_f.read_text("utf-8")))
@@ -58,7 +61,7 @@ ORGPAGES = {}   # eid -> Firmen-Handle
 
 
 def eurl(BASE, lang, i):
-    return f"{BASE}{pfx(lang)}/entity/{i}/"
+    return TC.eurl(BASE, lang, i)   # eine Quelle fuer die Adresse der Entitaetsseite (auch die Themen-Brotkrumen der Folgen/Beitraege/Videos)
 
 
 def eid_of(BASE, i):
@@ -158,7 +161,7 @@ def aka_fact(e, lang, person_aka):
     sources = {x["name"].casefold(): x.get("source") for x in entries}
     value = ", ".join(
         esc(name) + (
-            f' <small><a href="{esc(sources[name.casefold()])}" rel="nofollow noopener">{esc(T(lang, "source", "Quelle"))}</a></small>'
+            f' <small><a href="{esc(sources[name.casefold()])}" rel="nofollow noopener"{LT.a_attr(LT.aria(T(lang, "source", "Quelle"), f"„{name}“ ({LT.host(sources[name.casefold()])})"))}>{esc(T(lang, "source", "Quelle"))}</a></small>'   # Linktexte F4: Ziel im Namen
             if sources.get(name.casefold()) else ""
         )
         for name in names
@@ -374,6 +377,24 @@ def index_langs(lx, has_de, thin):
     dazu jede Sprache mit langem eigenem Text (lx, long_index_langs) - auch bei duenner Entitaet. Reihenfolge: en, de, dann lx."""
     r = ([] if thin else ["en"] + (["de"] if has_de else []))
     return r + [l for l in lx if l not in r]
+
+
+def has_de(e):
+    """Echter deutscher Text (hreflang en/de): Gast-Entitaeten haben de == en, dann ist /de/ ein Duplikat und bleibt ohne Index."""
+    d = e.get("desc") or {}
+    return bool(d.get("de")) and d.get("de") != d.get("en") or bool((e.get("long") or {}).get("de")) or bool(GENTEXT.get(e["id"], {}).get("de")) or FD.has_text(e, "de")
+
+
+_TOPIC_IDX = {}
+
+
+def topic_index_langs(e):
+    """index_langs einer Entitaet, die Thema sein kann (keine Person, also nie duenn): Sprachen, in denen ihre Seite auf index steht. Fuer die
+    Themen-Brotkrumen (site_topic_crumbs), damit sie dieselbe Regel nutzen wie die Seiten selbst; je Lauf einmal je Entitaet berechnet."""
+    r = _TOPIC_IDX.get(e["id"])
+    if r is None:
+        r = _TOPIC_IDX[e["id"]] = frozenset(index_langs(long_index_langs(e), has_de(e), False))
+    return r
 
 
 def ent_ld(BASE, e, lang, glossary_set=None, person_aka=None):
@@ -676,6 +697,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
     api = g.get("api", "https://api-dub.m365.fm")
     gl_ids = {x["id"] for x in GLOSS}
     inv = inverse_index()
+    _deg = {i: len(x.get("rel", [])) + len(inv.get(i, [])) for i, x in ENTS.items()}   # Vernetzung: bekanntere Eintraege zuerst in den Beziehungssaetzen
     shell = lambda lang, b: f'{header(lang, "")}<main class="wrap" style="max-width:56em">{b}</main>{footer(lang) if lang in LANGS else footer_en()}'
 
     import site_r2 as _R2   # Logos nur ueber den eigenen Bucket: logo_src (Original) -> img.m365.fm, sobald r2-images.yml es kopiert hat; vorher kein Logo (kein Hotlink)
@@ -746,7 +768,12 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _co = company_org(e) if e["type"] == "person" else None
             if _co:   # Person -> Arbeitgeber (Feld company) und Gegenrichtung Firma -> Personen
                 groups.setdefault(T(lang, "Works for", "Arbeitet bei"), []).append(_co["id"])
-            rb = "".join(f'<h3>{esc(k)}</h3><ul>' + "".join(f'<li><a href="{root}{x}/">{esc(ENTS[x]["name"])}</a> <span class="mut">· {esc(tlab(lang, ENTS[x]["type"]))}</span></li>' for x in dict.fromkeys(v)) + "</ul>" for k, v in groups.items())
+            _gid = {k: f"en-rel-{n + 1}" for n, k in enumerate(groups)}   # Sprungziele der vollstaendigen Listen (fuer "und N weitere" in den Beziehungssaetzen)
+            rb = "".join(f'<h3 id="{_gid[k]}">{esc(k)}</h3><ul>' + "".join(f'<li><a href="{root}{x}/">{esc(ENTS[x]["name"])}</a> <span class="mut">· {esc(tlab(lang, ENTS[x]["type"]))}</span></li>' for x in dict.fromkeys(v)) + "</ul>" for k, v in groups.items())
+            _wf = T(lang, "Works for", "Arbeitet bei")
+            relsent = RS.build(lang, e, [(p, t) for p, t in e.get("rel", []) if t in ENTS and p in FWD], [(p, f) for p, f in inv.get(e["id"], []) if p in INV], ENTS,
+                               lambda x: f"{root}{x}/", anchor=lambda d_, p_: _gid.get(_wf if p_ == "works_for" else (FWD if d_ == "f" else INV)[p_][li], ""),
+                               works_for=_co["id"] if _co else None, rank=lambda x: _deg.get(x, 0))   # Beziehungen als Saetze (site_relsent); die Listen darunter bleiben vollstaendig
             if e["type"] in ("industry", "job"):
                 rb += kind_html(BASE, lang, e, root)
             rb += MEN.section_html(lang, e["id"])   # sichtbare Erwaehnungen (nur iFAKT und Polaris, nur geprueft eingetragene)
@@ -761,7 +788,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 facts.append(_aka)
             for k, key in (("website", "web"), ("docs", "docs"), ("wikipedia", "wikipedia")):
                 if e.get(key):
-                    facts.append((s[k], f'<a href="{esc(SPM.link_url(_spr, e[key], "entity"))}" rel="{SPM.link_rel(_spr, e[key], own=_spown and key == "web")}">{esc(e[key].replace("https://", "").rstrip("/"))}</a>'))
+                    facts.append((s[k], f'<a href="{esc(SPM.link_url(_spr, e[key], "entity"))}" rel="{SPM.link_rel(_spr, e[key], own=_spown and key == "web")}">{esc(LT.ext_label(lang, e["name"], key, e[key]))}</a>{LT.domain_note(e[key])}'))   # Linktexte F3: Name statt roher URL
             LIC = {"free": ("free", "kostenlos"), "included": ("included in Microsoft 365", "in Microsoft 365 enthalten"), "addon": ("add-on", "Add-on"), "paid": ("paid", "kostenpflichtig")}
             for lab_en, lab_de, val in (("Version", "Version", e.get("version")), ("Released", "Veröffentlicht", e.get("released")), ("Licence", "Lizenz", (T(lang, *LIC[e["license"]]) if True else "") if e.get("license") in LIC else ""),
                                         ("Level", "Stufe", (e.get("level") or "").capitalize()), ("Exam code", "Prüfungscode", e.get("exam")), ("Valid for", "Gültig für", (f"{e['valid_months']} " + (T(lang, "months", "Monate"))) if e.get("valid_months") else "")):
@@ -781,7 +808,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 facts.append((T(lang, "Founded", "Gegründet"), esc(str(e["founded"]))))
             facts += FX.rows(lang, e, root, ENTS)
             if e.get("wikidata"):
-                facts.append((s["wikidata"], f'<a href="https://www.wikidata.org/wiki/{e["wikidata"]}" rel="noopener">{e["wikidata"]}</a>'))
+                facts.append((s["wikidata"], f'<a href="https://www.wikidata.org/wiki/{e["wikidata"]}" rel="noopener">{esc(LT.ext_label(lang, e["name"], "wikidata", ""))}</a> <small class="mut">{esc(e["wikidata"])}</small>'))
             if e.get("start"):
                 facts.append((T(lang, "Date", "Datum"), esc(e["start"] + (" – " + e["end"] if e.get("end") else ""))))
             ft = '<table class="en-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b}</td></tr>' for a, b in facts) + "</tbody></table>"
@@ -827,7 +854,8 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _epu = lambda x: x.get("url") or url_of(x)
             ept = s.get("eps") or S["en"]["eps"]
             _yt = g.get("yt_of") or (lambda x: "")   # T27: YouTube-Video der Folge
-            _ytl = lambda x: (f' · <a href="https://www.youtube.com/watch?v={esc(_yt(x))}" rel="noopener">{esc(T(lang, "Video on YouTube", "Video auf YouTube"))}</a>') if _yt(x) else ""
+            _ytv = T(lang, "Video on YouTube", "Video auf YouTube")   # Linktexte F4: gleicher Kurztext je Folge, Ziel im aria-label ("Video auf YouTube: {Folgentitel}")
+            _ytl = lambda x: (f' · <a href="https://www.youtube.com/watch?v={esc(_yt(x))}" rel="noopener"{LT.a_attr(LT.aria(_ytv, g["anchor_title"](x["e"]["title"])))}>{esc(_ytv)}</a>') if _yt(x) else ""
             eb = (f'<h2>{esc(ept.format(t=e["name"]))}</h2>' + "".join(
                 f'<article class="en-ep"><h3><a href="{_epu(x)}">{esc(g["anchor_title"](x["e"]["title"]))}</a></h3><p class="mut">{esc(x.get("date", ""))}{_ytl(x)}</p><p>{esc(g["ep_sum"](x))}</p></article>' for x in eps)) if eps else ""
             _tl = tlab(lang, e["type"])   # nicht "tlab" nennen: das verdeckte die Funktion in ganz build() (NameError, Seitenbau bricht ab)
@@ -907,11 +935,13 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _mod = max([MOD.get(e["id"], TODAY), str(e.get("edited") or e.get("dbrev") or "")[:10], *[_iso(p.get("published")) for p in _arts[:1]], *[max((str(x.get("date", ""))[:10] for x in eps), default="")],
                         *[_iso(x.get("created")) for x in _fq[:1]]] + [""])
             _mod = _mod if len(_mod) == 10 and _mod <= TODAY else TODAY
-            _src = [(T(lang, "Official website", "Offizielle Website"), e.get("web")), (T(lang, "Documentation", "Dokumentation"), e.get("docs")), ("Wikipedia", e.get("wikipedia")),
-                    ("Wikidata", f"https://www.wikidata.org/wiki/{e['wikidata']}" if e.get("wikidata") else "")] + [(T(lang, "Profile", "Profil"), u_) for u_ in (e.get("same_as") or [])[:4]]
-            _src = [(n_, u_) for n_, u_ in _src if u_ and str(u_).startswith("http")]
-            srcbox = (f'<section class="en-src"><h2>{esc(T(lang, "Sources", "Quellen"))}</h2><ul>' + "".join(f'<li>{esc(n_)}: <a href="{esc(SPM.link_url(_spr, u_, "entity"))}" rel="{SPM.link_rel(_spr, u_, own=_spown and u_ == e.get("web"))}">{esc(u_.replace("https://", "").rstrip("/"))}</a></li>' for n_, u_ in _src)
-                      + (f'<li>{esc(T(lang, "Feed for this topic (RSS)", "Feed zu diesem Thema (RSS)"))}: <a href="{BASE}/entity/{e["id"]}/feed.xml">entity/{e["id"]}/feed.xml</a></li>' if (eps or _arts) else "")
+            # Linktexte F3: Quellen heissen nach Entitaet und Ziel ("{Name} – Microsoft Learn", "Wikidata-Eintrag zu {Name}", "RSS-Feed: {Name}"), nicht nach der rohen URL; Domain klein daneben
+            _src = [("web", e.get("web")), ("docs", e.get("docs")), ("wikipedia", e.get("wikipedia")),
+                    ("wikidata", f"https://www.wikidata.org/wiki/{e['wikidata']}" if e.get("wikidata") else "")] + [("profile", u_) for u_ in (e.get("same_as") or [])[:4]]
+            _src = [(k_, u_) for k_, u_ in _src if u_ and str(u_).startswith("http")]
+            _srl = LT.unique([(LT.ext_label(lang, e["name"], k_, u_), u_) for k_, u_ in _src])
+            srcbox = (f'<section class="en-src"><h2>{esc(T(lang, "Sources", "Quellen"))}</h2><ul>' + "".join(f'<li><a href="{esc(SPM.link_url(_spr, u_, "entity"))}" rel="{SPM.link_rel(_spr, u_, own=_spown and u_ == e.get("web"))}">{esc(t_)}</a>{LT.domain_note(u_)}</li>' for t_, u_ in _srl)
+                      + (f'<li><a href="{BASE}/entity/{e["id"]}/feed.xml" type="application/rss+xml">{esc(T(lang, "RSS feed: {name}", "RSS-Feed: {name}").format(name=e["name"]))}</a></li>' if (eps or _arts) else "")
                       + (f'<li>{esc(T(lang, "M365.FM episodes on this topic", "M365.FM-Folgen zum Thema"))}: {len(eps)}</li>' if eps else "") + (f'<li>{esc(T(lang, "Articles on this topic", "Artikel zum Thema"))}: {len(_arts)}</li>' if _arts else "") + MEN.src_li(lang, e["id"]) + "</ul></section>") if (_src or eps or _arts or MEN.for_entity(e["id"])) else ""
             _dt = disclosure_of(e, lang)   # Transparenzhinweis (z. B. Arbeitgeber des Hosts), kein Sponsoring: keine rel=sponsored-Links
             _disc = f'<p class="en-disc" role="note" style="{SPM.NOTE_STYLE}">{esc(_dt)}</p>' if _dt else ""
@@ -923,7 +953,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             # entity.js (Fragen und Antworten #en-qa) laedt, sobald der Bereich 2500 px vor dem Bildschirm ist (vorher 600 px): auf dem Handy setzte
             # das Skript Ueberschrift und Fragen erst ein, wenn der Bereich schon sichtbar war, und schob den Rest der Seite weg (CLS ~0,18 im Labor beim Scrollen)
             _cr = [(ENTS[x]["name"], f"{root}{x}/") for x in reversed(ONT.ancestors(e["id"], ENTS)[:3])]   # Oberbegriffe von oben nach unten (part_of > broader > instance_of)
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a>' + "".join(f' › <a href="{cu}">{esc(cn)}</a>' for cn, cu in _cr) + f'</nav><h1>{esc(e["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="entity" data-topic-id="{esc(e["id"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button>{SPM.note(lang, _spr, "entity")}{_disc}{_lead}<p class="mut">{esc(tlab(lang, e["type"]))}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{_dnote}{oldbanner}{claim_html(e["id"], lang, e, api)}{FX.logo_html(lang, e)}{hero}{longbox}{ft}{FX.sections(lang, e, root, ENTS)}{evl}{kpbox}{eb}{tline}{artbox}'
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a>' + "".join(f' › <a href="{cu}">{esc(cn)}</a>' for cn, cu in _cr) + f'</nav><h1>{esc(e["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="entity" data-topic-id="{esc(e["id"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button>{SPM.note(lang, _spr, "entity")}{_disc}{_lead}<p class="mut">{esc(tlab(lang, e["type"]))}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{_dnote}{oldbanner}{claim_html(e["id"], lang, e, api)}{FX.logo_html(lang, e)}{hero}{relsent}{longbox}{ft}{FX.sections(lang, e, root, ENTS)}{evl}{kpbox}{eb}{tline}{artbox}'
                           f'{qbox}{faqbox}{relmap}{relx}<div class="en-rel">{rb}</div>{gloss}{SU.block(lang, e["id"])}{wb}{("<h2>" + esc(s["experts"]) + "</h2>" + ehtml) if ehtml else ""}{srcbox}{updline}{edit}'
                           f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("edit_e",)}, ensure_ascii=False)}}};window.M365TopicConfig={{api:{json.dumps(api)},lang:{json.dumps(lang)}}};'
                           f'(function(){{var d=0,u="{BASE}/assets/entity.js";function go(){{if(d)return;d=1;var s=document.createElement("script");s.src=u;document.body.appendChild(s)}}'
@@ -960,7 +990,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 if _epids:
                     node["subjectOf"] = (node.get("subjectOf") or []) + _epids
             # hreflang en/de nur bei echtem deutschem Text (Gast-Entitaeten haben de == en: dann ist /de/ ein Duplikat und bleibt ohne Index)
-            _has_de = bool(e["desc"].get("de")) and e["desc"].get("de") != e["desc"].get("en") or bool((e.get("long") or {}).get("de")) or bool(GENTEXT.get(e["id"], {}).get("de")) or FD.has_text(e, "de")
+            _has_de = has_de(e)   # dieselbe Regel nutzen die Themen-Brotkrumen (topic_index_langs)
             _thin = False
             if e["type"] == "person" and e["id"] != AUTHOR_EID:   # Personen: nur mit echter Beschreibung (nicht der Speaker-Schablone) oder mehreren Auftritten in den Index
                 _app = max(len(ep_find(e, "en")), len(ep_find(e, "de"))) + len((SPEAKERS.get(e["id"]) or {}).get("sessions") or [])   # T42: gleiche Entscheidung fuer en und de (sonst verweist en per hreflang auf ein noindex-de)

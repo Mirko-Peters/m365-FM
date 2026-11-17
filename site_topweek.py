@@ -152,7 +152,7 @@ def build_en(g, items, topdata, label, alts, switch=None):
 <main class="wrap"><nav class="crumbs" aria-label="breadcrumb"><a href="{BASE}/">M365.FM</a> / <a href="{BASE}/show/">Show</a></nav>
 <div class="kicker">★ English{(" · " + esc(fmt_range("en", a, b))) if a else ""}</div><h1>{esc(h1)}</h1><p class="mut">{esc(note("en"))}</p>
 <div class="list">{rows}</div>
-<p style="margin-top:1.6em"><a class="btn" href="{BASE}/show/episodes/">All episodes →</a></p></main>{g["footer"]("en")}"""
+<p style="margin-top:1.6em"><a class="btn" href="{BASE}/show/episodes/">All episodes<span aria-hidden="true"> →</span></a></p></main>{g["footer"]("en")}"""
     _mt, desc = MP.top_meta("en", label, h1 if a else None, [x["e"]["title"] for x in items[:3]])
     g["write"](f"{EN_REL}index.html", g["page"]("en", _mt, desc, u, body, alts, ld, og_type="website", switch=switch or alts))
     feed = [{"rank": n + 1, "title": x["e"]["title"], "url": x["url"], "episode": int(x["sid"]) if str(x.get("sid", "")).isdigit() else x.get("sid")} for n, x in enumerate(items)]

@@ -22,7 +22,7 @@ def build(g, items, people):
             nm = i["title"] or i["name"]
             return (f'<li style="padding:.7em 0;border-bottom:1px solid var(--bd);list-style:none"><b>{esc(nm)}</b> <span class="mut">· <a href="{croot}u/{i["handle"]}/">{esc(i["name"])}</a> · '
                     f'{esc(", ".join(FM.get(f, f) for f in i["formats"]))} · {esc(", ".join(i["langs"]))}</span>{("<br>" + esc(i["note"])) if i.get("note") else ""}<br>{tp}'
-                    f'<br><a class="btn" href="{croot}?msg={i["handle"]}#c-messages">{esc(T(lang, "Send message", "Nachricht senden"))}</a></li>')
+                    f'<br><a class="btn" href="{croot}?msg={i["handle"]}#c-messages">{esc(T(lang, "Message {name}", "Nachricht an {name}").format(name=i["name"]))}</a></li>')   # Linktexte F4: Empfaenger im Linktext
         sp = [i for i in items if i["kind"] == "speaker"]; ho = [i for i in items if i["kind"] == "host"]
         sec = lambda h, l: f'<h2>{esc(h)}</h2>' + ('<ul style="padding:0">' + "".join(card(i) for i in l) + "</ul>" if l else f'<p class="mut">{esc(T(lang, "Nothing here yet.", "Noch nichts da."))}</p>')
         intro = T(lang, "Podcasters, YouTubers and organizers find guests and speakers – and speakers find hosts. Matching works through shared topics.", "Podcaster, YouTuber und Veranstalter finden Gäste und Speaker – und Speaker finden Hosts. Zugeordnet wird über gemeinsame Themen.")

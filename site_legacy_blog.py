@@ -4,6 +4,7 @@ bleiben aber statisch (HTML mit Tabellen und Bildern bleibt vollstaendig erhalte
 import ast, json, re, zlib
 from datetime import datetime, timezone
 
+import site_anchor as ANC   # Linktexte im Altbestand beim Bau verbessern ("here" -> Zieltitel), Quelldaten bleiben unveraendert
 import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
 import site_media as MED
 import site_podpage as P
@@ -14,6 +15,9 @@ import site_topics as TOP
 
 HANDLE, NAME = "mirko-p", "Mirko Peters"   # echtes Community-Profil von Mirko
 TOPICS = {}   # Slug -> Themen der frueheren Beitraege (auch fuer die schon in der Datenbank liegenden Fassungen, deren Themen beim Import eingefroren wurden)
+EN_HTML = {}   # Slug -> HTML des englischen Originals (nach fix, ohne Titelbild): Abgleich der Anker fuer die Sprachfassungen (site_anchor)
+TITLES = {}   # Slug -> {Sprache: Titel} aller frueheren Beitraege und ihrer Sprachfassungen: Linktext fuer Links auf einen Beitrag
+_TT = []   # site_anchor.Titles, einmal je Bau
 
 
 def _ts(s):
@@ -52,6 +56,37 @@ def tr_config():
     return build, [l for l in (c.get("index") or []) if l in build]
 
 
+_EPT = {}   # Sprache -> {Folgen-Slug: [Titel, Zusammenfassung]}
+_HERO_EP = {}   # Beitrags-Slug -> Folge, deren Cover das Titelbild ist (items())
+
+
+def ep_title(lang, ep):
+    """Folgentitel in der Sprache lang (data/podpage_i18n/<lang>.json mit den Handtexten der Redaktion, wie die Folgenseiten), sonst der englische Titel."""
+    if not ep:
+        return ""
+    if lang != "en" and lang not in _EPT:
+        from pathlib import Path
+        f = Path(__file__).parent / "data" / "podpage_i18n" / f"{lang}.json"
+        try:
+            import i18n_overrides as _OV
+            _EPT[lang] = _OV.apply_show(lang, json.loads(f.read_text("utf-8"))) if f.exists() else {}
+        except Exception:
+            _EPT[lang] = {}
+    t = ((_EPT.get(lang) or {}).get(ep.get("slug")) or [""])[0] if lang != "en" else ""
+    return t or ep.get("name") or ""
+
+
+def hero_html(lang, slug, title, ep):
+    """Titelbild eines frueheren Beitrags ohne eigenes Bild: Cover der verlinkten Folge (Alt "Cover: {Folgentitel}" in der Seitensprache), sonst das
+    erzeugte SVG mit dem Beitragstitel (aria-label "Titelbild: {Titel}" in der Seitensprache). title ist der Beitragstitel in dieser Sprache."""
+    from site_i18n import T
+    _u = (ep or {}).get("image_path") or ""
+    if _u.startswith("https://") and "None" not in _u and ep:
+        alt = T(lang, "Cover: {t}", "Cover: {t}").replace("{t}", ep_title(lang, ep))
+        return (f'<figure style="margin:1em 0"><img src="{P.esc(_u)}"{SPI.srcset_only(_u, "(max-width: 680px) 100vw, 640px")} alt="{P.esc(alt)}" width="640" height="360" fetchpriority="high" decoding="async" style="width:100%;max-width:640px;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:8px"></figure>')
+    return MED.hero_svg({"id": "blog-" + slug, "name": title, "type": "media"}, "Blog", T(lang, "Cover image: {t}", "Titelbild: {t}").replace("{t}", title))   # hero_svg bringt sein eigenes <figure> mit
+
+
 def translations(BASE, posts_by_slug, fixhtml):
     """Sprachfassungen der frueheren Beitraege aus data/blog_i18n (translate_blog.assemble: nur vollstaendige, zum Original passende Fassungen).
     Jede Fassung ist ein Beitrag in der Zielsprache mit tr_of='en' und derselben URL-Struktur unter /<lang>/."""
@@ -69,7 +104,7 @@ def translations(BASE, posts_by_slug, fixhtml):
             if not r: continue
             title, desc, html, faq = r
             html = fixhtml(html)
-            if not re.search(r"<img\b", html) and p.get("hero"): html = p["hero"] + html
+            if not re.search(r"<img\b", html) and p.get("hero"): html = hero_html(lang, slug, title, _HERO_EP.get(slug)) + html   # Alt-Texte: Titelbild mit Alt-Text und Titel in der Sprache der Fassung (nicht das englische)
             out.append({**{k: v for k, v in p.items() if k not in ("src", "hero")}, "lang": lang, "title": title, "summary": (desc or "")[:400], "html": html, "faq": [{"q": q["name"], "a": q["acceptedAnswer"]["text"]} for q in faq if q.get("name")],
                         "images": re.findall(r'<img[^>]+src="(https://[^"]+)"', html), "tr_of": "en", "ai_tr": True, "tr_index": IR.index_or_long(lang in index, desc, html)}); n += 1   # 13.11.2026: auch eine nicht freigegebene Sprache steht auf index, wenn der uebersetzte Text >= 2500 Zeichen hat (assemble liefert nur vollstaendige Fassungen, kein Englisch-Rueckfall)
         print(f"Blog-Uebersetzungen {lang}: {n} Beitraege{' (index)' if lang in index else ' (noindex, ausser Fassungen ab 2500 Zeichen)'}")
@@ -105,25 +140,61 @@ def items(BASE):
     out = []
     for p in sorted(posts, key=lambda x: x.get("iso") or "", reverse=True):
         html = fix(P.san(p["html"]))
+        EN_HTML[p["slug"]] = html; TITLES.setdefault(p["slug"], {})["en"] = p["title"]
         text = P.plain(html); _hero = ""
+        _ep = None
         if not re.search(r"<img\b", html):   # Titelbild wie frueher: Bild der verlinkten Folge, sonst erzeugtes Bild
             _ep = next((eps_by_slug[m] for m in re.findall(r'/show/episodes/([^/"]+)/', html) if m in eps_by_slug), None)
-            _u = (_ep or {}).get("image_path") or ""
-            _hero = (f'<img src="{P.esc(_u)}"{SPI.srcset_only(_u, "(max-width: 680px) 100vw, 640px")} alt="{P.esc("Cover: " + _ep["name"])}" width="640" height="360" fetchpriority="high" decoding="async" style="width:100%;max-width:640px;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:8px">'
-                     if _u.startswith("https://") and "None" not in _u and _ep else MED.hero_svg({"id": "blog-" + p["slug"], "name": p["title"], "type": "media"}, "Blog", "Titelbild: " + p["title"]))
-            _hero = f'<figure style="margin:1em 0">{_hero}</figure>' if _hero.startswith("<img") else _hero   # hero_svg bringt sein eigenes <figure> mit
+            _hero = hero_html("en", p["slug"], p["title"], _ep)
             html = _hero + html
         topics = TOP.score_topics(ix, p["title"], text, key=p["slug"]); TOPICS[p["slug"]] = topics   # gewichtete Zuordnung (site_topics), gecacht je Beitrag
         pub = _ts(p.get("iso")); upd = _ts(p.get("modified")) or pub
         out.append({"id": 900_000_000 + zlib.crc32(p["slug"].encode()) % 90_000_000, "handle": HANDLE, "name": NAME, "slug": p["slug"], "title": p["title"], "summary": (p.get("desc") or "")[:400],
                     "body": "", "html": html, "lang": "en", "topics": topics, "keypoints": [], "faq": _faq(p.get("faq")), "published": pub, "created": pub, "updated": upd, "votes": 0,
                     "coauthors": [], "legacy": True, "images": re.findall(r'<img[^>]+src="(https://[^"]+)"', html), "src": p, "hero": _hero})
+        _HERO_EP[p["slug"]] = _ep   # Folge des Titelbilds: die Sprachfassungen setzen Alt-Text und Folgentitel in ihrer Sprache
     TOP.save()
     by_slug = {x["slug"]: x for x in out}
     out += translations(BASE, by_slug, fix)
+    for x in out:
+        if x.get("tr_of"): TITLES.setdefault(x["slug"], {})[x["lang"]] = x["title"]
     for x in out: x.pop("src", None); x.pop("hero", None)
     _ROWS[BASE] = _rows(out)
     return out
+
+
+def titles(BASE=""):
+    """site_anchor.Titles fuer Links im Altbestand (Blog und Show Notes): Folgen (Podpage, mit uebersetzten Titeln aus data/podpage_i18n samt Handtexten
+    der Redaktion), fruehere Beitraege mit Sprachfassungen (TITLES, gefuellt von items()), Entitaeten, umbenannte Folgen und feste Weiterleitungen."""
+    if _TT:
+        return _TT[0]
+    import i18n_overrides as OV
+    from site_learn import ENTS
+    eps = {e["slug"]: {"en": e.get("name") or ""} for e in P.load("episodes") if e.get("slug") and e.get("name")
+           and e.get("published") not in (False, "False") and e.get("hidden") not in (True, "True")}
+    d = P.D / "podpage_i18n"
+    for l in ANC.LANGS[1:]:
+        f = d / f"{l}.json"
+        if not f.exists():
+            continue
+        try:
+            tr = OV.apply_show(l, json.loads(f.read_text("utf-8")))
+        except Exception:
+            continue
+        for slug, v in tr.items():
+            if slug in eps and v and v[0]: eps[slug][l] = v[0]
+    for p in P.load("blog_posts"):
+        if p.get("slug") and p.get("title"): TITLES.setdefault(p["slug"], {}).setdefault("en", p["title"])
+    _TT.append(ANC.Titles(eps, TITLES, P.RENAMES, P.extra_redirects(), {i: e.get("name") for i, e in ENTS.items() if e.get("name")}, BASE))
+    return _TT[0]
+
+
+def better_links(p, html, lang, BASE=""):
+    """Linktexte eines frueheren Beitrags (auch der Datenbank-Fassung von mirko-p) beim Seitenbau verbessern; andere Beitraege bleiben unveraendert.
+    Laeuft auf dem fertigen HTML nach dem Nachschlagen der Uebersetzung (translate_blog.source_of sieht weiter den Originaltext)."""
+    if not html or p.get("handle") != HANDLE or p.get("slug") not in EN_HTML:
+        return html
+    return ANC.improve(html, lang, titles(BASE), ref=None if lang == "en" else EN_HTML[p["slug"]], area="blog-" + ("en" if lang == "en" else "tr"))
 
 
 PER = 100

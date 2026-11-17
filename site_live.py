@@ -69,7 +69,7 @@ def build(g):
         embed = f"https://www.youtube-nocookie.com/embed/live_stream?channel={cid}&autoplay=1&rel=0"
         lead = upcoming[0] if upcoming else (arch[0] if arch else None)
         player = (f'<h2>{esc(t["watchh"])}</h2><div class="lv-hero"><button type="button" id="live-load" class="lv-play" data-src="{esc(embed)}" data-t="{esc(t["h"])}" style="background-image:linear-gradient(#0008,#0008),url({thumb(lead["id"])})" aria-label="{esc(t["load"])}">▶ {esc(t["load"])}</button>'
-                  f'<p><a class="btn main" href="{yt}/live" rel="noopener">{esc(t["open"])} ↗</a> <a class="btn" href="{yt}?sub_confirmation=1" rel="noopener">{esc(t["sub"])}</a></p><p class="mut">{esc(t["watchp"])}</p></div>') if lead else ""
+                  f'<p><a class="btn main" href="{yt}/live" rel="noopener">{esc(t["open"])}<span aria-hidden="true"> ↗</span></a> <a class="btn" href="{yt}?sub_confirmation=1" rel="noopener">{esc(t["sub"])}</a></p><p class="mut">{esc(t["watchp"])}</p></div>') if lead else ""
 
         def when(s):
             st = s.get("start") or s.get("published") or ""
@@ -77,7 +77,7 @@ def build(g):
 
         def row(s, up=False):
             lnk = f'{root}{s["slug"]}/'
-            return (f'<li data-start="{esc(s.get("start", ""))}"><a href="{lnk}"><img src="{thumb(s["id"])}" alt="{esc(s["title"])}" width="176" height="99" loading="lazy" decoding="async"></a>'
+            return (f'<li data-start="{esc(s.get("start", ""))}"><a href="{lnk}" tabindex="-1" aria-hidden="true"><img src="{thumb(s["id"])}" alt="{esc(s["title"])}" width="176" height="99" loading="lazy" decoding="async"></a>'
                     f'<div><a href="{lnk}"><strong>{esc(s["title"])}</strong></a>{f"<span class=live-badge hidden>{esc(t["livenow"])}</span>" if up else ""}<br><span class="mut">{when(s)}</span><br>{esc(short(s.get("description")))}</div></li>')
         up_html = (f'<h2>{esc(t["upc"])}</h2><ul class="lv-list">' + "".join(row(s, True) for s in upcoming) + "</ul>") if upcoming else f'<h2>{esc(t["upc"])}</h2><p class="mut">{esc(t["noupc"])}</p>'
         ar_html = (f'<h2>{esc(t["past"] if pastl else t["recent"])}</h2><ul class="lv-list">' + "".join(row(s) for s in arch[:40]) + "</ul>") if arch else ""
@@ -104,7 +104,7 @@ def build(g):
                 m, sec = divmod(int(s["duration"]), 60); hh, m = divmod(m, 60); vid["duration"] = f"PT{hh}H{m}M{sec}S"
             sb = (f'<p class="mut"><a href="{root}">{esc(t["back"])}</a></p><article><h1>{esc(s["title"])}</h1><p class="mut">{when(s)}{" · " + str(s["views"]) + " " + t["views"] if s.get("views") else ""}</p>'
                   f'<div style="margin:22px 0">{PL.player("youtube", s["id"], s["title"], t["play"])}</div>'
-                  f'{("<h2>" + esc(t["desc"]) + "</h2>" + paras) if paras else ""}<p><a class="btn" href="https://www.youtube.com/watch?v={s["id"]}" rel="noopener">{esc(t["open"])} ↗</a></p></article>')
+                  f'{("<h2>" + esc(t["desc"]) + "</h2>" + paras) if paras else ""}<p><a class="btn" href="https://www.youtube.com/watch?v={s["id"]}" rel="noopener">{esc(t["open"])}<span aria-hidden="true"> ↗</span></a></p></article>')
             write(f"{'de/' if lang == 'de' else ''}live/{s['slug']}/index.html", page(lang, *MP.live_stream_meta(lang, s["title"], d), u, shell(sb), None, [vid], og_type="video.other", side=(g["side"](lang, s["title"] + " " + d[:2000]) if g.get("side") else "")))
             sitemap.append((u, (s.get("published") or TODAY)[:10], None))
     write("de/live/index.html", f'<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url={BASE}/de/podcast/"><link rel="canonical" href="{BASE}/de/podcast/"><title>Podcast auf Deutsch</title></head><body><p><a href="{BASE}/de/podcast/">Weiter zum deutschen Podcast</a></p></body></html>')

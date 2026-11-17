@@ -15,6 +15,7 @@ def _topic_name(eid):
     return e.get("name") if e.get("type") not in (None, "person", "org", "job", "event", "media") else ""
 from site_entities import TL, eurl, eid_of, tlab
 import site_roles as ROLE
+import site_linktext as LT   # Linktexte: Kanaele nach ihrem Namen statt nach ihrer Art
 import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
 
 PROG_FULL = {"gde": "Google Developer Expert (GDE)", "mvp": "Microsoft Most Valuable Professional (MVP)", "mct": "Microsoft Certified Trainer (MCT)", "rd": "Microsoft Regional Director (RD)", "msa": "Microsoft Student Ambassador (MSA)", "ms_employee": "Microsoft employee", "partner": "Microsoft Partner"}
@@ -414,8 +415,10 @@ def build(g, people, orgs, extra=None):
     MS_A = {"modern_work": ("Modern Work", "Modern Work"), "business_apps": ("Business Applications", "Business Applications"), "data_ai": ("Data & AI", "Data & AI"), "infrastructure": ("Infrastructure", "Infrastructure"), "digital_app": ("Digital & App Innovation", "Digital & App Innovation"), "security": ("Security", "Security"), "csp": ("Cloud Solution Provider (CSP)", "Cloud Solution Provider (CSP)"), "msp": ("Managed Service Provider", "Managed Service Provider"), "isv": ("Software Vendor (ISV)", "Softwarehersteller (ISV)"), "inner_circle": ("Inner Circle", "Inner Circle"), "other": ("Other", "Sonstiges")}
     MS_L = {"solutions_partner": ("Solutions Partner", "Solutions Partner"), "specialization": ("Specialization", "Spezialisierung"), "advanced_specialization": ("Advanced specialization", "Advanced Specialization"), "inner_circle": ("Inner Circle member", "Inner-Circle-Mitglied"), "poty_finalist": ("Partner of the Year finalist", "Partner-of-the-Year-Finalist"), "poty_winner": ("Partner of the Year winner", "Partner-of-the-Year-Gewinner"), "registered": ("Registered partner", "Registrierter Partner"), "other": ("Other", "Sonstiges")}
     def chan_ul(x, lang="en"):
-        chans = shown_channels(BASE, x)
-        return '<ul>' + "".join(f'<li><a href="{esc(c["url"])}" rel="me nofollow ugc noopener" target="_blank">{esc(KIND.get(c["kind"], c["kind"]))}</a> <span class="mut">{esc(c["url"].replace("https://", "").rstrip("/")[:60])}{fol(c.get("followers"), lang)}</span></li>' for c in chans) + "</ul>" if chans else ""
+        # Linktexte F1: Linktext = eigener Name des Kanals (site_linktext.channel_links, eindeutig je Ziel); die Art und die Adresse stehen grau daneben
+        chans = LT.channel_links(shown_channels(BASE, x), lang, x.get("name"))
+        _u = lambda c: c["url"].replace("https://", "").rstrip("/")[:60]
+        return '<ul>' + "".join(f'<li><a href="{esc(c["url"])}" rel="me nofollow ugc noopener" target="_blank"{LT.a_attr(ar)}>{esc(t)}</a> <span class="mut">{esc(KIND.get(c["kind"], c["kind"]))}{(" · " + esc(_u(c))) if _u(c).removeprefix("www.").casefold() not in t.casefold() else ""}{fol(c.get("followers"), lang)}</span></li>' for c, t, ar in chans) + "</ul>" if chans else ""
 
     for lang in COMM_LANGS:
         s = S[lang]; li = 1 if lang == "de" else 0; noidx = lang != "en"
@@ -482,7 +485,7 @@ def build(g, people, orgs, extra=None):
             if o.get("ms"):
                 facts.append(("Microsoft", "<br>".join(f'{esc(MS_A.get(m["area"], (m["area"],)*2)[li])}: {esc(MS_L.get(m["level"], (m["level"],)*2)[li])}{(" (" + esc(m["since"]) + ")") if m.get("since") else ""}' for m in o["ms"])))
             ft = '<table class="mb-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b_}</td></tr>' for a, b_ in facts) + "</tbody></table>" if facts else ""
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}companies/">{esc(s["companies"])}</a></nav>{img_tag("o", o, o["name"])}<h1>{esc(o["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="creator" data-topic-id="{esc(o["handle"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button><p style="font-size:1.1em">{esc(o.get("tagline", ""))}</p><p>{tags_of_p(o, li, s)}</p>{ft}'
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}companies/">{esc(s["companies"])}</a></nav>{img_tag("o", o, T(lang, "Logo of {n}", "Logo von {n}").replace("{n}", o["name"]))}<h1>{esc(o["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="creator" data-topic-id="{esc(o["handle"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button><p style="font-size:1.1em">{esc(o.get("tagline", ""))}</p><p>{tags_of_p(o, li, s)}</p>{ft}'
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(o["about"])}</p>' if o.get("about") else "")
                           + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(o, lang, li, s)}' if o.get("expertise") else "") + (f'<h2>{esc(s["team"])}</h2>{mem}' if mem else "")
                           + (f'<h2>{esc(s["latest"])}</h2>{items_ul(o)}' if items_ul(o) else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(o, lang)}' if chan_ul(o, lang) else "") + ((extra or {}).get(lang, {}).get("c", {}).get(o["handle"], "")) + live_js + topic_js + css)
