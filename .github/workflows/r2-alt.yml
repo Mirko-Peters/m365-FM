@@ -1,0 +1,71 @@
+name: Alt-Texte fuer R2-Bilder per KI (Haiku)
+# Nur von Hand. plan = Anzahl und Kostenschaetzung in EUR (nichts wird gesendet), run = Message Batch senden, abwarten, Ergebnis nach data/r2_alt.json.gz.
+# Haiku-Tagesbudget wie bei den anderen KI-Laeufen (ai_gateway.check_budget, Job r2_alt). Fertige Bilder werden nie ein zweites Mal bezahlt;
+# ein noch laufender Batch steht in data/r2_alt_state.json und wird beim naechsten run (oder collect) eingesammelt. Details: tools/r2_alt.py, site_img_alt.py.
+# Erst mit limit=50 ein Probestueck holen und pruefen, dann ohne limit. Bilder auf fremden Hosts vorher mit r2-images.yml kopieren (plan listet sie).
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "plan = nur zaehlen/schaetzen, run = Batch senden und einsammeln, collect = nur offenen Batch einsammeln"
+        type: choice
+        options: [plan, run, collect]
+        default: plan
+      limit: { description: "Hoechstens N Bilder (leer = alle offenen)", required: false, default: "" }
+      source:
+        description: "url = Anthropic laedt das Bild von img.m365.fm, base64 = der Lauf laedt es selbst und schickt es mit (falls der Abruf scheitert)"
+        type: choice
+        options: [url, base64]
+        default: url
+permissions:
+  contents: write
+concurrency: { group: r2-alt, cancel-in-progress: false }
+jobs:
+  alt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      AI_GATEWAY_ID: ${{ vars.AI_GATEWAY_ID || 'm365fm' }}
+      CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
+      COMMUNITY_API: https://api-dub.m365.fm
+      CRON_KEY: ${{ secrets.CRON_KEY }}
+      HAIKU_USD_PER_MTOK_IN: ${{ vars.HAIKU_USD_PER_MTOK_IN || '0.10' }}
+      HAIKU_USD_PER_MTOK_OUT: ${{ vars.HAIKU_USD_PER_MTOK_OUT || '0.50' }}
+      USD_PER_EUR: ${{ vars.USD_PER_EUR || '1.08' }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with: { python-version: "3.12" }
+      - name: Planen bzw. Batch senden
+        env:
+          ANTHROPIC_API_KEY: ${{ inputs.mode != 'plan' && secrets.ANTHROPIC_API_KEY_SHOW || '' }}
+          MODE_IN: ${{ inputs.mode }}
+          LIMIT_IN: ${{ inputs.limit }}
+          SOURCE_IN: ${{ inputs.source }}
+        run: |
+          ARGS="--source $SOURCE_IN"
+          [ -n "$LIMIT_IN" ] && ARGS="$ARGS --limit $LIMIT_IN"
+          M="$MODE_IN"; [ "$M" = "collect" ] && M="plan"   # collect: erst hier nur den Stand zeigen, eingesammelt wird im naechsten Schritt
+          python tools/r2_alt.py "$M" $ARGS | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Stand sichern (Batch-ID)
+        if: inputs.mode == 'run'
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          git add data/r2_alt_state.json data/r2_alt.json.gz 2>/dev/null || true
+          if git diff --cached --quiet; then echo "Nichts zu sichern"; exit 0; fi
+          git commit -q -m "Alt-Texte: Batch gesendet $(date -u +%Y-%m-%dT%H:%MZ)"
+          for i in 1 2 3 4 5; do (git pull --rebase -q -X theirs && git push -q) && exit 0; sleep 5; done; exit 1
+      - name: Einsammeln
+        if: inputs.mode != 'plan'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
+        run: python tools/r2_alt.py collect --wait 12600 | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Ergebnis sichern
+        if: always() && inputs.mode != 'plan'
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          git add data/r2_alt_state.json data/r2_alt.json.gz 2>/dev/null || true
+          if git diff --cached --quiet; then echo "Nichts zu speichern"; exit 0; fi
+          git commit -q -m "Alt-Texte: Ergebnisse per Haiku $(date -u +%Y-%m-%dT%H:%MZ)"
+          for i in 1 2 3 4 5; do (git pull --rebase -q -X theirs && git push -q) && exit 0; sleep 5; done; exit 1

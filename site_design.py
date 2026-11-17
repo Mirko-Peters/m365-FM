@@ -204,7 +204,9 @@ FLAG = {"de": "de", "es": "es", "fr": "fr", "it": "it", "pt": "br", "nl": "nl", 
 
 
 def flag(code, base, name=""):
-    return f'<img class="fl" src="{base}/assets/flags/{FLAG.get(code, "gb")}.svg" width="22" height="16" alt="{_e(name)}" loading="lazy">'
+    """Flagge im Sprachumschalter. Alt-Texte: alt="" - der Sprachname steht direkt daneben als Text bzw. im aria-label des summary; mit dem Namen als Alt
+    liest der Screenreader ihn doppelt ("Deutsch Deutsch"). name bleibt als Parameter fuer bestehende Aufrufer."""
+    return f'<img class="fl" src="{base}/assets/flags/{FLAG.get(code, "gb")}.svg" width="22" height="16" alt="" loading="lazy">'
 
 
 EN_URL = ""
