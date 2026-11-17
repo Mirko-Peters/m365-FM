@@ -16,7 +16,7 @@ faq:
   - q: "Do I need a management platform to run Azure Virtual Desktop?"
     a: "No. Microsoft Learn documents native features for creating host pools, scaling session hosts, updating them and building images, and it lists 14 built-in RBAC roles for Azure Virtual Desktop. Whether they are enough depends on your size and requirements; the decision steps below show how to test that."
   - q: "Can I mix native autoscale and a third-party scaling tool on the same host pool?"
-    a: "Not according to Learn, which says not to use autoscale in combination with other scaling Microsoft or third-party scaling tools, and to disable those on the host pools a scaling plan applies to. In our reading, that means one scaling owner per host pool: either a native scaling plan or the third-party tool."
+    a: "Not according to Learn, which says not to use autoscale in combination with other scaling Microsoft or third-party scaling tools. In our reading, that means one scaling owner per host pool: either a native scaling plan or the third-party tool."
   - q: "What does Nerdio Manager for Enterprise cost?"
     a: "Nerdio's billing page says charges are per calendar month and per unique Entra ID user, under either the Windows Cloud or the AVD entitlement model, in Core or Premium edition. The page lists no prices; ask Nerdio or your partner for a quote."
 ---
@@ -27,7 +27,7 @@ This guide compares the two routes task by task. It uses Microsoft Learn for the
 
 ## The scope of the comparison
 
-[Azure Virtual Desktop](/entity/azure-virtual-desktop/) is the service. "Native" here means the features Microsoft ships with it and with Azure. "Management platform" means a separate application that orchestrates Azure resources on your behalf. Nerdio describes its product as "a deployment, management, and auto-scaling platform for Azure Virtual Desktop (AVD) and Windows 365 Cloud PC." It runs as an all-PaaS Azure application inside the customer's own subscription.
+[Azure Virtual Desktop](/entity/azure-virtual-desktop/) is the service. "Native" means features Microsoft ships with it and Azure; a "management platform" is a separate application that orchestrates Azure resources for you. Nerdio describes its product as "a deployment, management, and auto-scaling platform for Azure Virtual Desktop (AVD) and Windows 365 Cloud PC." It runs as an Azure application in the customer's own subscription.
 
 Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, on 9 July 2026 (Tech Community). Some Learn pages, for example the autoscale scenarios page and module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit.
 
@@ -37,22 +37,22 @@ Microsoft announced general availability of enhanced host pool management, inclu
 |---|---|---|
 | Create host pools | Azure portal, Azure CLI or Azure PowerShell. Adding hosts to a pool with a session host configuration is done in the portal; Learn says PowerShell can't be used for that | Create host pools from desktop images; static or auto-scaled; session hosts in Azure or AVD Hybrid (Azure Local or Nutanix AHV) |
 | Scale session hosts | Scaling plans: power management and dynamic autoscaling | Auto-scale with triggers for CPU or RAM usage, average active sessions, available sessions and user-driven scaling (multiple triggers: Premium) |
-| Update session hosts | Session host update replaces VMs in batches | Desktop images with optional staging; scheduled Marketplace refresh, deployed to the session hosts that use the image |
+| Update session hosts | Session host update replaces VMs in batches (host pools with a session host configuration only) | Desktop images with optional staging; scheduled Marketplace refresh, deployed to the session hosts that use the image |
 | Build images | Custom image templates on Azure Image Builder | Create or import desktop images; optional Azure Compute Gallery with chosen replication regions |
 | Automate tasks | Custom PowerShell script in the session host configuration; scripts in image templates | Scripted actions: PowerShell on a VM or in an Azure Automation account |
-| Monitor | Insights on Azure Monitor Workbooks | Performance monitoring is listed in the product description |
+| Monitor | Insights on Azure Monitor Workbooks | Nerdio's product description lists performance monitoring; this article does not compare it |
 
 ## Scaling: where the two differ most
 
-Native scaling plans work on a percentage. Learn explains that autoscale compares the used host pool capacity (user sessions divided by available host pool capacity) with a capacity threshold, and turns a host on only when usage is above the threshold. With two available hosts and a maximum session limit of five, available capacity is 10; three sessions make 30%. On pooled pools this needs a custom maximum session limit, because Learn says not to use the default. See the [capacity threshold](/entity/avd-capacity-threshold/) article for details.
+Native scaling plans for pooled host pools work on a percentage; personal pools use time-based actions after disconnect or sign-out. Learn explains that autoscale compares the used host pool capacity (user sessions divided by available host pool capacity) with a capacity threshold, and turns a host on only when usage is above the threshold. With two available hosts and a maximum session limit of five, available capacity is 10; three sessions make 30%. On pooled pools this needs a custom maximum session limit, because Learn says not to use the default. See [capacity threshold](/entity/avd-capacity-threshold/). Start VM on Connect, available with both management approaches, lets users power on a deallocated host when they connect.
 
 Native scaling comes in two methods. [Power management autoscaling](/entity/avd-power-management-autoscaling/) starts and deallocates existing hosts and is generally available. [Dynamic autoscaling](/entity/avd-dynamic-autoscaling/) can also create and delete session hosts, but only for pooled host pools with a session host configuration, and Learn says it is not supported in Azure Government.
 
-[Nerdio auto-scale](/entity/nerdio-auto-scaling/) adds more inputs. Per its help page, a scale-out trigger can be CPU or RAM usage, average active sessions, available sessions or user-driven, and you can select up to 3 triggers. It also offers scale-in aggressiveness (High, Medium, Low), rolling drain mode and pre-staged hosts. The same page says that "the multiple auto-scale triggers feature is available only in the Nerdio Manager Premium edition." Nerdio's billing page lists multiple auto-scale triggers, intelligent pre-stage and rolling drain mode under advanced auto-scale, which requires a Premium entitlement and is not included in Core. Nerdio's help page also describes starting or creating VMs when demand rises and stopping or deleting them otherwise.
+[Nerdio auto-scale](/entity/nerdio-auto-scaling/) adds more inputs. Per its help page, a scale-out trigger can be CPU or RAM usage, average active sessions, available sessions or user-driven, and you can select up to 3 triggers. It also offers scale-in aggressiveness (High, Medium, Low), rolling drain mode and pre-staged hosts. The same page says that "the multiple auto-scale triggers feature is available only in the Nerdio Manager Premium edition." Nerdio's billing page lists multiple triggers, intelligent pre-stage and rolling drain mode under advanced auto-scale, which needs a Premium entitlement and is not in Core.
 
 Two cautions for a fair reading:
 
-- A Nerdio comparison page (last modified 16 June 2026) states that the session count threshold is the only native autoscale trigger, and that native scaling "can only power on hosts that already exist in your pool." The first fits Learn only in part: native scaling reacts to session load, but Learn's capacity threshold is a percentage of host pool capacity, not a session count per host. The second describes power management; dynamic autoscaling creates and deletes hosts. Treat the page as vendor material: its figures, such as "approximately $900 to $1,200 per month per 100 machines", and the customer savings it cites are Nerdio's own claims. The same page concedes that native autoscale "works reasonably well" for small deployments with predictable usage.
+- A Nerdio comparison page (last modified 16 June 2026) states that the session count threshold is the only native autoscale trigger, and that native scaling "can only power on hosts that already exist in your pool." The first fits Learn only in part: native scaling reacts to session load, but Learn's capacity threshold is a percentage of host pool capacity, not a session count per host. The second describes power management; dynamic autoscaling creates and deletes hosts. Treat the page as vendor material: its cost figures and customer savings are Nerdio's own claims. The same page concedes that native autoscale "works reasonably well" for small deployments with predictable usage.
 - Learn's autoscale scenarios page says: "Don't use autoscale in combination with other scaling Microsoft or third-party scaling tools," and to disable those on the host pools a scaling plan applies to. The scaling plan page adds that autoscale and Azure Automation or Azure Logic Apps scaling can't run on the same host pool, and that dynamic scaling can't be used with any other scaling script. Our reading: per host pool, use either a native scaling plan or Nerdio auto-scale, and disable the other.
 
 ## Images and updates
@@ -63,7 +63,7 @@ The native route has two parts. [Custom image templates](/entity/avd-custom-imag
 - Autoscale must be disabled on the host pool before the update starts and until it finishes, because a scaling plan enabled during an update can fail it.
 - The Azure Monitor agent is not installed automatically on updated hosts, which affects Insights, and the feature is available only in the global Azure cloud, not Azure Government.
 
-On the platform side, Nerdio's [desktop image](/entity/nerdio-desktop-image/) pages say that images can be created or imported, and that custom Azure images in your subscription can also be used to build and re-image host pools. Image Staging deploys an image to a test or "staging" pool before activation; per Nerdio, it is available only for images recently refreshed from the Azure Marketplace. You pick an Azure Compute Gallery and replication regions, and can keep the new version inactive or activate it automatically after a number of days. A Marketplace refresh can be scheduled, and Nerdio says the refreshed image is automatically deployed to all session hosts that use it. For tool-independent image lifecycle practice, see [golden image](/entity/golden-image/).
+On the platform side, Nerdio's [desktop image](/entity/nerdio-desktop-image/) pages say that images can be created or imported, and that custom Azure images in your subscription can also be used to build and re-image host pools. Image Staging deploys an image to a test or "staging" pool before activation; per Nerdio, it is available only for images recently refreshed from the Azure Marketplace. You pick an Azure Compute Gallery and replication regions, and can keep the new version inactive or activate it automatically after a number of days. A Marketplace refresh can be scheduled, and Nerdio says the refreshed image is automatically deployed to all session hosts that use it. See also [golden image](/entity/golden-image/).
 
 ## Automation and monitoring
 
@@ -77,7 +77,7 @@ For monitoring, [AVD Insights](/entity/avd-insights/) is a dashboard on Azure Mo
 
 **Licensing.** Nerdio bills per calendar month and per unique Entra ID user, in Core or Premium edition. Premium-only features named on the billing page include multiple Entra ID tenant support, Azure Government support, advanced auto-scale and Global Pools. Downgrading from Premium to Core "could result in loss of functionality," and the edition can be changed at any time.
 
-**Native constraints.** Learn says the management approach is set at creation and cannot be changed. The session host configuration approach is for pooled host pools only, and "existing tooling designed for standard management won't work with a session host configuration." If you already use pipelines or scripts that add and replace VMs, they stay on standard management. Before running a third-party platform against a host pool that has a session host configuration, ask the vendor how the two interact.
+**Native constraints.** Learn says the management approach is set at creation and cannot be changed. The session host configuration approach is for pooled host pools only, and "existing tooling designed for standard management won't work with a session host configuration." Pipelines or scripts that add and replace VMs stay on standard management. Before running a third-party platform against a pool with a session host configuration, ask the vendor how the two interact.
 
 ## Alternatives to both
 
@@ -88,7 +88,7 @@ For monitoring, [AVD Insights](/entity/avd-insights/) is a dashboard on Azure Mo
 
 1. List the tasks you perform on host pools each month: scaling, patching, imaging, reporting.
 2. Mark each as "native is enough" or "gap", with a measurable reason such as users hitting full hosts or hours spent rebuilding images.
-3. Check the licence column: Premium-only features may be the ones you need.
+3. Check which features are Premium-only: they may be the ones you need.
 4. Check that your operating model fits: standard management or session host configuration, one scaling owner per pool (native plan or Nerdio, not both), and the permissions each route needs.
 5. Run a pilot host pool for a few weeks and compare user experience, VM running hours and admin time against a native baseline.
 6. Re-check the comparison when either side ships changes. Microsoft announced general availability of enhanced host pool management in July 2026, so older comparisons may describe the native side incompletely.
