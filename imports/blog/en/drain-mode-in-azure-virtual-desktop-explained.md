@@ -1,6 +1,6 @@
 ---
 title: "Drain mode in Azure Virtual Desktop explained"
-summary: "Drain mode stops a session host from accepting new sessions from new users, while existing sessions continue until they end. This article explains what it changes and what it does not, who can turn it on, how autoscale uses and overrides it, and how to read and set it in the portal and with PowerShell."
+summary: "Drain mode stops a session host from accepting new sessions from new users, while existing sessions continue until they end. This article explains what it changes and what it does not, how the load balancer and autoscale treat it, and how to set and read it in the portal and with PowerShell."
 status: review
 publish: false
 author: mirko-p
@@ -11,7 +11,7 @@ keypoints:
   - "Drain mode is not a sign-out, a shutdown or a health status. It changes only whether the host can be chosen for new connections."
   - "A user who already has an active or disconnected session on a drained host is still redirected to that host when signing in again. New users are not placed there."
   - "On pooled host pools autoscale turns drain mode on and off no matter who set it. Use the exclusion tag to protect a host. On personal pools autoscale does not use drain mode."
-  - "In PowerShell the setting is the AllowNewSession switch of Update-AzWvdSessionHost, and the Session Host Operator role is listed as the prerequisite for the portal procedure."
+  - "In PowerShell, Update-AzWvdSessionHost with AllowNewSession set to $False turns drain on and $True turns it off. Learn lists the Desktop Virtualization Session Host Operator role as the prerequisite for the portal and the PowerShell procedure alike."
 faq:
   - q: "Does drain mode sign users out?"
     a: "No. Microsoft Learn says existing connections remain active until the user signs out or an administrator ends the session. Drain mode only affects where new sessions are placed."
@@ -21,7 +21,7 @@ faq:
     a: "Learn says that if you refresh the portal immediately after changing drain mode, the status might appear out of sync, and it advises waiting at least 60 seconds before refreshing."
 ---
 
-Drain mode is a per-host setting that stops a session host from accepting new user sessions. Sessions that already exist are not touched. This article explains what the setting changes, what it does not change, how the load balancer and autoscale treat it, and how to set and read it. For the maintenance procedure that uses it, see the separate articles on patching with drain mode. Sources were retrieved on 17 November 2026.
+Drain mode is a per-host setting that stops a session host from accepting new user sessions. Sessions that already exist are not touched. This article explains what the setting changes, what it does not change, how the load balancer and autoscale treat it, and how to set and read it. The step-by-step maintenance runbook is a separate article, "How to use drain mode for patching and maintenance of session hosts", and planning waves across a pool is covered in "Patching AVD without downtime: rolling updates with drain mode".
 
 ## What drain mode does
 
@@ -32,13 +32,13 @@ Microsoft Learn describes [drain mode](/entity/avd-drain-mode/) as a way to isol
 - **Maintenance.** Once no sessions remain on the host, you can do the maintenance.
 - **Administrator access.** Administrators can still connect to the server directly, without going through the Azure Virtual Desktop service.
 
-In the Azure PowerShell reference the same state is the `-AllowNewSession` parameter of `Update-AzWvdSessionHost`. Learn's autoscale FAQ uses the matching property name AllowNewSessions: when autoscale turns drain mode off after deallocating a VM, it sets AllowNewSessions to true. So drain mode on means new sessions are not allowed, and drain mode off means they are.
+In the Azure PowerShell reference the same state is the `-AllowNewSession` parameter of `Update-AzWvdSessionHost`, and the output object of `Get-AzWvdSessionHost` carries an `AllowNewSession` property described as "Allow a new session." Learn's text uses the plural AllowNewSessions in places, and its autoscale FAQ says that when autoscale turns drain mode off after deallocating a VM, it sets AllowNewSessions to true. So drain mode on means new sessions are not allowed, and drain mode off means they are.
 
 ## What drain mode is not
 
 - **It is not a sign-out.** Nothing ends because you turned it on.
-- **It is not a shutdown.** The VM keeps running, and so does its cost.
-- **It is not a health state.** It does not mark the host as unavailable. Health checks and statuses are a separate topic; see the checklist for hosts that show as unavailable.
+- **It is not a shutdown.** Learn describes no shutdown, so the VM keeps running and its cost continues. That is a conclusion from the description rather than a Learn statement.
+- **It is not a health state.** It does not mark the host as unavailable. Health checks and statuses are a separate topic; see "Azure Virtual Desktop Session Host Shows Unavailable: A Step-by-Step Checklist".
 - **It is not the same as the maximum session limit.** Under depth-first load balancing a host at its [maximum session limit](/entity/avd-maximum-session-limit/) is left out of the query for new sessions, but only until sessions end and there is room again. A drained host stays excluded until you switch drain mode off.
 
 ## How the load balancer treats a drained host
@@ -52,38 +52,34 @@ The second rule matters for planning. A user with a disconnected session on a dr
 
 ## Who can set it, and how
 
-Learn's prerequisites for the portal procedure are a host pool with at least one session host and the **Desktop Virtualization Session Host Operator** role. For local Azure PowerShell you need the Az.DesktopVirtualization module, or you can use Azure Cloud Shell.
+Learn's drain page lists the prerequisites for the whole procedure, portal and PowerShell alike: a host pool with at least one session host and the **Desktop Virtualization Session Host Operator** role. For local Azure PowerShell you also need the Az.DesktopVirtualization module, or you can use Azure Cloud Shell.
 
-In the Azure portal:
+In the Azure portal, open the host pool, select **Session hosts**, check the host and choose **Turn drain mode on**. Choose **Turn drain mode off** to allow connections again.
 
-1. Sign in to the Azure portal and search for **Azure Virtual Desktop**.
-2. Select **Host pools**, then the host pool, then **Session hosts**.
-3. Select the check box next to the session host and choose **Turn drain mode on**.
-4. To allow connections again, select the host and choose **Turn drain mode off**.
-
-Learn's What's new page lists January 2021 as the date when you could enable or disable drain mode for multiple session hosts at once, and February 2021 as the date of bulk drain mode in the session host grid tab. Both entries carry no preview or GA label.
-
-In PowerShell, the reference page for `Update-AzWvdSessionHost` gives this example:
+In Azure PowerShell, Learn's drain page gives one command for each direction. It runs against one session host at a time, so repeat it for every host you want to change:
 
 ```powershell
-Update-AzWvdSessionHost -ResourceGroupName ResourceGroupName `
-    -HostPoolName HostPoolName `
-    -Name SessionHostName `
-    -AllowNewSession:$false
+# Drain mode on: block new sessions
+$params = @{
+    ResourceGroupName = '<ResourceGroupName>'
+    HostPoolName = '<HostPoolName>'
+    Name = '<SessionHostName>'
+    AllowNewSession = $False
+}
+Update-AzWvdSessionHost @params
+
+# Drain mode off: allow new sessions
+$params.AllowNewSession = $True
+Update-AzWvdSessionHost @params
 ```
 
-`-AllowNewSession` is a switch parameter, so `:$true` is the inverse. The reference page shows only the `:$false` example, so test the reverse on a non-production host first. The reference page for `Get-AzWvdSessionHost` documents no output property for this setting, so the portal remains the documented place to read the state.
+The page shows the two blocks separately; the single hash table above is this article's shortening.
+
+To read the state, `Get-AzWvdSessionHost` returns an `ISessionHost` object. Its `AllowNewSession` property holds the setting, and the REST reference lists the same value as `properties.allowNewSession`. A line such as `Get-AzWvdSessionHost -ResourceGroupName <ResourceGroupName> -HostPoolName <HostPoolName> | Select-Object Name, AllowNewSession, Session, Status` lists every host in a pool with its setting and session count. The `Select-Object` filter is this article's suggestion, not a Learn example. After a change in the portal, wait at least 60 seconds before you refresh, because Learn warns that an immediate refresh can show an out-of-sync status.
 
 ## How autoscale uses and overrides drain mode
 
-Autoscale uses drain mode itself, which is the most common source of confusion. The relevant statements are:
-
-- Before autoscale deallocates a pooled session host in ramp-down, it puts the host in drain mode. With forced sign-out it also notifies the users and signs them out after the wait time.
-- After the VM is deallocated, autoscale sets AllowNewSessions back to true, which turns drain mode off.
-- Autoscale still turns drain mode on or off on VMs included in scaling, no matter who put them in drain mode. To exclude a VM from scaling actions you must use the [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/). Tagged hosts are not started, stopped or changed in drain mode.
-- For personal host pools, autoscale does not put the host in drain mode before it deallocates it. A user who tries to connect while autoscale is deallocating the host receives the error "No resources available".
-
-So a drain you set by hand on a pooled host may be reversed at the next scaling action unless the host carries the tag. See the [scaling plan](/entity/avd-scaling-plan/) and [force sign-out](/entity/avd-force-logoff/) articles in this series for the ramp-down sequence.
+Autoscale uses drain mode itself, which is the most common source of confusion. On pooled host pools it puts a host in drain mode before it deallocates it in ramp-down, sets AllowNewSessions back to true afterwards, and turns drain mode on or off on any VM in scope, no matter who put it there. Only a host that carries the [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) is left alone. On personal host pools autoscale does not use drain mode, and a user who connects during deallocation receives "No resources available". The runbook article shows how to tag a host before you drain it, and the [force sign-out](/entity/avd-force-logoff/) article describes the ramp-down sequence.
 
 ## A short example
 
@@ -102,7 +98,6 @@ Only the last row ends sessions. Drain mode therefore needs a second step, eithe
 
 ## Reading the result
 
-- **Timing.** After you change drain mode in the portal, wait at least 60 seconds before refreshing. Learn warns that an immediate refresh can show an out-of-sync status.
 - **Sessions.** Check the session count on the host before you start work. Existing sessions are not ended by drain mode. The Insights glossary says its Sessions item shows connected and disconnected sessions, while Idle sessions shows only disconnected ones.
 - **Direct access.** Because administrators can reach the VM without the service, your own testing on a drained host does not prove what users will see.
 
@@ -111,17 +106,18 @@ Only the last row ends sessions. Drain mode therefore needs a second step, eithe
 - **"I turned drain mode on and users were disconnected."** The documentation does not describe that. Check for autoscale, a policy or a patch process that ends sessions.
 - **"The host is drained but still has users."** Expected: sessions persist, and returning users go back to their host.
 - **"Drain mode is off again."** On pooled pools, check the scaling plan and the exclusion tag first.
-- **"New users cannot connect at all."** If every host in a pool is in drain mode, no host can take a new user. The sources retrieved do not name the error message for that case.
+- **"New users cannot connect at all."** If every host in a pool is in drain mode, no host can take a new user. Learn documents no error message for this case.
 
 ## Sources
 
-All retrieved on 17 November 2026.
+Accessed 17 November 2026.
 
-- [Microsoft Learn: Drain mode in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/drain-mode)
+- [Microsoft Learn: Drain session hosts for maintenance in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/drain-mode)
 - [Microsoft Learn: Host pool load-balancing methods](https://learn.microsoft.com/en-us/azure/virtual-desktop/host-pool-load-balancing)
 - [Microsoft Learn: Autoscale FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq)
 - [Microsoft Learn: Autoscale scenarios for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)
 - [Microsoft Learn: Update-AzWvdSessionHost](https://learn.microsoft.com/en-us/powershell/module/az.desktopvirtualization/update-azwvdsessionhost)
 - [Microsoft Learn: Get-AzWvdSessionHost](https://learn.microsoft.com/en-us/powershell/module/az.desktopvirtualization/get-azwvdsessionhost)
-- [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
+- [Microsoft Learn: ISessionHost model](https://learn.microsoft.com/en-us/dotnet/api/microsoft.azure.powershell.cmdlets.desktopvirtualization.models.isessionhost)
+- [Microsoft Learn: Session Hosts - Get (REST API)](https://learn.microsoft.com/en-us/rest/api/desktopvirtualization/session-hosts/get)
 - [Microsoft Learn: Azure Virtual Desktop Insights glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/insights-glossary)
