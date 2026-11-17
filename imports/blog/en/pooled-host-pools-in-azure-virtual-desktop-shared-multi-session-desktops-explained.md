@@ -11,10 +11,10 @@ keypoints:
   - "Pooled pools use breadth-first or depth-first load balancing. Depth-first requires a maximum session limit, autoscale on a pooled pool requires a custom one even with breadth-first, and under high concurrent load a host can exceed the limit."
   - "Users in pooled pools should keep their profile in FSLogix, because a new sign-in can land on a different session host."
   - "Windows is kept current by redeploying session hosts from updated images, and in-place upgrades from Windows 10 to Windows 11 are not supported on pooled session hosts."
-  - "Power management autoscaling is generally available. Dynamic autoscaling, which also creates and deletes hosts, is labelled preview on Learn's scenarios and glossary pages and needs a preview PowerShell module; What's new says it is now available in June 2026 without a general availability label."
+  - "Power management autoscaling is generally available. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, in July 2026, while some Learn pages still carry preview wording, so check the current page before relying on a limit."
 faq:
   - q: "How many users can share one session host in a pooled host pool?"
-    a: "It depends on the maximum session limit you set and on the VM's resources. Microsoft Learn does not give a fixed number and says the number of concurrent sessions depends on vCPU, memory, disk and vGPU, how users work and how heavy the workload is. Validate on your own system."
+    a: "It depends on the maximum session limit you set and on the VM's resources. The multi-session FAQ gives no fixed number and says concurrent sessions depend on vCPU, memory, disk and vGPU, how users work and how heavy the workload is. Learn's sizing guidelines list maximum users per vCPU as a starting estimate: Light 6, Medium 4, Heavy 2, Power 1. Validate on your own system."
   - q: "Do pooled host pools need FSLogix?"
     a: "Learn says users in pooled host pools should store their profile data in FSLogix, because they can be load balanced to different session hosts. It also says FSLogix comes pre-installed on all available Windows Enterprise multi-session images. Profile containers on Azure Files are also documented for cloud-only and external identities, announced as generally available in May 2026."
   - q: "Can a pooled host pool publish RemoteApp?"
@@ -55,32 +55,32 @@ Learn's terminology page distinguishes three session states: active, disconnecte
 
 Two load-balancing algorithms exist, set under the pool's **Properties**: breadth-first spreads new sessions across hosts, and depth-first fills one host before moving to the next and requires a [maximum session limit](/entity/avd-maximum-session-limit/). Learn's [load-balancing article](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-load-balancing) has the details; see [breadth-first](/entity/avd-breadth-first-load-balancing/), [depth-first](/entity/avd-depth-first-load-balancing/) and [drain mode](/entity/avd-drain-mode/) for the rules.
 
-One point matters for capacity planning. The comparison table on Learn's terminology page says that under high concurrent connection load, when several users connect at the same time, the number of sessions on a host can exceed the maximum session limit. Learn does not draw a conclusion from this. As a planning suggestion, not a Learn statement: leave headroom below the hardware ceiling rather than setting the limit at it.
+One point matters for capacity planning. The comparison table on Learn's terminology page says that under high concurrent connection load, when several users connect at the same time, the number of sessions on a host can exceed the maximum session limit. As a planning suggestion, not a Learn statement: leave headroom below the hardware ceiling rather than setting the limit at it.
 
 ## Profiles: the part that cannot be skipped
 
 Because a user can land on a different host at each sign-in, a profile stored on one VM's disk would not follow them. Learn therefore says pooled users should store profile data in [FSLogix](/entity/fslogix/). FSLogix comes pre-installed on all available Windows Enterprise multi-session images. The FSLogix overview says FSLogix uses a filter driver to virtualize and redirect the profile at the file system level, so applications are unaware the profile is on the network.
 
-The same overview says profile containers can be used with Cloud Cache for high availability and disaster recovery solutions. It also says Office Container (ODFC) is not used together with Profile Container under most circumstances. FSLogix storage design, permissions and sizing need their own planning, and Learn recommends skills in identity and authentication, storage design and architecture, and Windows deployment, among others, for it. Learn's sizing guidelines list a minimum profile storage of 30 GB in every multi-session workload row, as a starting point.
+The same overview says profile containers can be used with Cloud Cache for high availability and disaster recovery solutions. It also says Office Container (ODFC) is not used together with Profile Container under most circumstances. FSLogix storage design, permissions and sizing need their own planning, and Learn recommends skills in identity and authentication, storage design and architecture, and Windows deployment, among others, for it.
 
 ## Updates: replace rather than patch
 
 For pooled pools Learn says Windows is updated by redeploying session hosts from updated images. Learn's What's new page for June 2026 introduces "automated host pools": pools where a single session host configuration (SHC) enforces settings across all session hosts, so updates are made by changing the configuration instead of each host. This article uses "automated host pool" for that case. Learn's [host pool management approaches](https://learn.microsoft.com/en-us/azure/virtual-desktop/host-pool-management-approaches) page says the session host configuration approach can be used with pooled host pools only. See [session host configuration](/entity/avd-session-host-configuration/) for the object itself, and the article "The golden image lifecycle: build, test, release, retire" for building the images.
 
-In an automated host pool, [session host update](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update) deallocates or deletes existing VMs and creates new ones with the updated configuration. Files, registry keys or certificates added manually do not survive. Put them in the image, in configuration management such as Intune or Group Policy, or in the custom configuration script. Learn also says to disable autoscale before an update and keep it disabled until it finishes, because an enabled scaling plan can make the update fail with a runtime error.
+Session host configuration and update belong to the enhanced host pool management that Microsoft announced as generally available in July 2026. In an automated host pool, [session host update](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update) deallocates or deletes existing VMs and creates new ones with the updated configuration. Files, registry keys or certificates added manually do not survive. Put them in the image, in configuration management such as Intune or Group Policy, or in the custom configuration script. Learn also says to disable autoscale before an update and keep it disabled until it finishes, because an enabled scaling plan can make the update fail with a runtime error.
 
 Limits at creation, per the [host pool creation article](https://learn.microsoft.com/en-us/azure/virtual-desktop/create-host-pools-azure-marketplace): up to 500 session hosts with a session host configuration, and up to 400 with standard management, both depending on subscription quota, and you can add more later.
 
 ## How many users fit on a host
 
-Learn does not give one user count for multi-session. The Windows multi-session FAQ says the number of simultaneously active sessions depends on vCPU, memory, disk and vGPU, how users work in their sessions and how heavy the workload is, and suggests validating on your own system. The [sizing guidelines](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/session-host-virtual-machine-sizing-guidelines) add that a host which copes with steady load may still not cope with everyone signing in at once. The article "Sizing a pooled host pool: users per VM, VM size and cost" covers core counts and the arithmetic.
+The Windows multi-session FAQ gives no fixed user count. It says the number of simultaneously active sessions depends on vCPU, memory, disk and vGPU, how users work in their sessions and how heavy the workload is, and suggests validating on your own system. The [sizing guidelines](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/session-host-virtual-machine-sizing-guidelines) do give starting values for multi-session as maximum users per vCPU: Light 6, Medium 4, Heavy 2 and Power 1. The page calls its examples generic guidelines to use only for initial performance estimates, and adds that a host which copes with steady load may still not cope with everyone signing in at once. The article "Sizing a pooled host pool: users per VM, VM size and cost" covers core counts and the arithmetic.
 
 ## Power management for pooled pools
 
 Pooled pools can start and stop hosts to match demand. The terminology page's comparison table says autoscale for pooled host pools turns VMs on and off based on the capacity thresholds and schedules you define. Learn names two scaling methods:
 
 - **[Power management autoscaling](/entity/avd-power-management-autoscaling/)** powers hosts on and off. The [autoscale scenarios page](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios) labels it generally available, and it is the option for pools with standard management.
-- **[Dynamic autoscaling](/entity/avd-dynamic-autoscaling/)** also creates and deletes session hosts. It can only be used for pooled host pools with a session host configuration. The scenarios page and the autoscale glossary label it preview, and the scaling plan article requires the Az.DesktopVirtualization module version 5.4.2-preview or a later preview version for PowerShell. What's new says in June 2026 that it is "now available" for pooled host pools with session host configuration, without a general availability label. The scenarios page says it is not supported in Azure Government.
+- **[Dynamic autoscaling](/entity/avd-dynamic-autoscaling/)** also creates and deletes session hosts. It can only be used for pooled host pools with a session host configuration. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 ([Tech Community announcement](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview that the scaling plan article requires for PowerShell, still carry preview wording; check the current page before relying on a limit. What's new says in June 2026 that it is "now available" for pooled host pools with session host configuration. The scenarios page says it is not supported in Azure Government.
 
 "Power management autoscaling vs dynamic autoscaling: which one fits your host pools" compares them.
 
@@ -98,7 +98,7 @@ Pooled pools support both [application group](/entity/avd-application-group/) ty
 2. Choose a multi-session image and verify your license entitlement.
 3. Choose a load-balancing algorithm and set a maximum session limit: required for depth-first, and required as a custom value, not the default, for any pooled pool that uses autoscale.
 4. Decide between standard management and a session host configuration, and plan image updates as redeployments, not in-place patches.
-5. Decide how hosts are powered on and off, and which method's status you accept.
+5. Decide how hosts are powered on and off, and and check the current Learn page for the limits of that method.
 6. Pilot, then measure sessions per host and logon times.
 
 ## Sources
@@ -116,6 +116,7 @@ Retrieved 17 November 2026.
 - [Microsoft Learn: Autoscale glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary)
 - [Microsoft Learn: Create and assign an autoscale scaling plan](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
+- [Azure Virtual Desktop blog: Enhanced host pool management for Azure Virtual Desktop is now generally available](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)
 - [Microsoft Learn: Start VM on Connect](https://learn.microsoft.com/en-us/azure/virtual-desktop/start-virtual-machine-connect)
 - [Microsoft Learn: What is FSLogix](https://learn.microsoft.com/en-us/fslogix/overview-what-is-fslogix)
 - [Microsoft Learn: Use Azure Files and Microsoft Entra ID with FSLogix profile containers](https://learn.microsoft.com/en-us/fslogix/how-to-configure-profile-container-azure-ad)

@@ -27,10 +27,7 @@ To patch Azure Virtual Desktop session hosts without downtime, work in waves. Ta
 
 Microsoft Learn describes drain mode as a way to isolate a session host for maintenance without disrupting service. The host does not accept new user sessions, and new connections go to the next available session host. Existing connections stay active until the user signs out or an administrator ends the session. Administrators can still connect directly to the server without going through the Azure Virtual Desktop service. See also the entity pages for [drain mode](/entity/avd-drain-mode/) and [session hosts](/entity/avd-session-host/).
 
-Two details change how a wave behaves:
-
-- **Disconnected sessions come back.** The load balancing page says a user with an active or disconnected session who signs in again is sent to the host that holds that session, even if drain mode is on for it. A host that still has disconnected sessions therefore does not empty by itself. Plan a cut-off at which you end those sessions.
-- **Drain mode does not shut anything down.** It only affects where new sessions land.
+One detail changes how a wave behaves. **Disconnected sessions come back:** the load balancing page says a user with an active or disconnected session who signs in again is sent to the host that holds that session, even if drain mode is on for it. A host that still has disconnected sessions therefore does not empty by itself. Plan a cut-off at which you end those sessions.
 
 ## Roles for the wave
 
@@ -74,7 +71,7 @@ Tag before you turn drain mode on. Remove the tag from each host once that host 
 
 Draining a host removes its capacity for new sessions. Learn defines available capacity as the host pool's maximum session limit multiplied by the number of available session hosts.
 
-Worked example with illustrative numbers: a pooled pool has 10 hosts and a maximum session limit of 10, so capacity is 100. At 15:00 there are 55 sessions. Draining 2 hosts leaves 8 accepting hosts with a capacity of 80. The users on the drained hosts will sign out and reconnect to the other hosts, so 55 sessions must fit into 80 with room for new arrivals. They do. Draining 5 hosts would leave 50, which is below the current 55, so that wave is too large. The numbers are an example, not a recommendation; your own session counts and limit decide.
+Worked example with illustrative numbers: a pooled pool has 10 hosts and a maximum session limit of 10, so capacity is 100. At 15:00 there are 55 sessions. Draining 2 hosts leaves 8 accepting hosts with a capacity of 80. The users on the drained hosts will sign out and reconnect to the other hosts, so 55 sessions must fit into 80 with room for new arrivals. They do. Draining 5 hosts would leave 50, which is below the current 55, so that wave is too large. Your own session counts and limit decide.
 
 Practical rules that follow:
 
@@ -89,7 +86,7 @@ The sequence repeats for each wave. The companion articles hold the commands; th
 1. **Check the starting state.** Every host in the pool shows as available, and you have a test user for a smoke test.
 2. **Tag the wave's hosts** with the scaling plan's exclusion tag.
 3. **Turn drain mode on** in the portal (**Host pools** > pool > **Session hosts** > **Turn drain mode on**) or with PowerShell. Learn's drain mode page calls `Update-AzWvdSessionHost` with `ResourceGroupName`, `HostPoolName`, `Name` and `AllowNewSession = $False`; `$True` turns drain mode off again. Run it once per host.
-4. **Empty the hosts.** `Get-AzWvdUserSession -ResourceGroupName <rg> -HostPoolName <pool> -SessionHostName <host>` lists the sessions on one host. Its `-Filter` parameter, an OData expression on `userprincipalname` and `sessionstate`, exists only in the form without `-SessionHostName`, which lists the whole pool. `Send-AzWvdUserSessionMessage` requires the resource group, pool, host and `-UserSessionId`; title and body are optional. After the cut-off, `Remove-AzWvdUserSession` ends what remains. Its `-Force` switch is described only as forcing the deletion, so try it on a non-production pool first. Ending a session can lose unsaved work.
+4. **Empty the hosts.** `Get-AzWvdUserSession -ResourceGroupName <rg> -HostPoolName <pool> -SessionHostName <host>` lists the sessions on one host. Its `-Filter` parameter, an OData expression on `userprincipalname` and `sessionstate`, exists only in the form without `-SessionHostName`, which lists the whole pool. `Send-AzWvdUserSessionMessage` requires the resource group, pool, host and `-UserSessionId`. After the cut-off, `Remove-AzWvdUserSession` ends what remains; its `-Force` switch is described only as forcing the deletion. Ending a session can lose unsaved work.
 5. **Patch and restart** the hosts with your normal tooling.
 6. **Verify.** Check in the portal that each host is available and that a test sign-in works. Administrators can sign in to a drained host directly for this purpose.
 7. **Turn drain mode off**, remove the tag, and wait at least 60 seconds before you refresh the portal, because Learn says the status might appear out of sync.
@@ -111,14 +108,13 @@ Pools created with a session host configuration have a second option. Session ho
 | Time per host | Depends on your patching | About 20 minutes according to Learn |
 | Manual host changes | Kept | Lost, unless they are in the image, in management tools or in the custom script |
 
-Learn notes that with a batch size of 3 and 10 hosts, at least 7 stay available after the first host. For the mechanics, see [session host configuration](/entity/avd-session-host-configuration/) and the companion article on managing updates with it. In a session host update users are asked to log off and can sign in again at once on another host, so the capacity thinking from the sizing section applies there too.
+Learn notes that with a batch size of 3 and 10 hosts, at least 7 stay available after the first host. For the mechanics, see [session host configuration](/entity/avd-session-host-configuration/) and the companion article on managing updates with it. The capacity thinking from the sizing section applies there too.
 
 ## Pitfalls
 
 - **Forgetting the tag.** A host leaves drain mode while you work because autoscale treated it as a normal host.
 - **Draining too much.** Capacity is the product of the limit and the available hosts. Do the arithmetic before each wave.
 - **Disconnected sessions.** A host that never reaches zero sessions usually holds disconnected ones that users would reconnect to.
-- **Trusting the first status.** Refresh after 60 seconds, not immediately.
 - **Mixing methods.** Do not change drain mode by hand while a session host update is running, and do not run both on the same hosts.
 - **Personal pools.** This pattern is written for pooled pools, where several users share a host. For personal pools the autoscale FAQ says autoscale does not put hosts in drain mode before deallocating them, so the wave logic here does not carry over.
 

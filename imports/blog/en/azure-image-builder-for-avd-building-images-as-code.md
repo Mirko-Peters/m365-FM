@@ -8,7 +8,7 @@ date: 2026-11-18
 topics: [azure-image-builder, azure-virtual-desktop]
 keypoints:
   - "Azure VM Image Builder is a managed Azure service built on HashiCorp Packer. You submit a template that names a source, customizations and distribution targets, and the service builds and distributes the image."
-  - "AVD custom image templates are built on Azure Image Builder and have been generally available since September 2023. The portal route adds built-in scripts for common AVD settings, while a direct template gives full control of the JSON."
+  - "AVD custom image templates are built on Azure Image Builder and have been generally available in the Azure public cloud since September 2023. The portal route adds built-in scripts for common AVD settings, while a direct template gives full control of the JSON."
   - "The template has three main sections: a source (platform image, managed image or gallery image version), a list of customizers that run in order, and one or more distribution targets."
   - "Build timeout defaults to 240 minutes, with a range of 6 to 960 minutes. For Windows, Learn advises not going below 60 minutes and using at least a Standard_D2_v2 build VM."
   - "Image Builder does not support Azure Hybrid Benefit for Windows Server, and the image template resource is immutable and cannot be moved."
@@ -23,7 +23,7 @@ faq:
 
 Azure VM Image Builder, often called Azure Image Builder or AIB, builds a VM image from a configuration you submit as a template. The service creates a temporary build VM, runs your customizations, generalizes the image and distributes the result to an Azure Compute Gallery, a managed image or a VHD. For Azure Virtual Desktop it offers a repeatable, reviewable template as an alternative to hand-built golden images. This article explains the template, how to start a build and find its log, the AVD-specific route and the limits.
 
-Microsoft's What's new page and the Azure Virtual Desktop blog announced custom image templates as generally available in September 2023. The overview labels the service's Azure DevOps task as preview. Everything here comes from Microsoft Learn pages and one Azure Virtual Desktop blog post, retrieved on 17 November 2026. Lifecycle practice and gallery replication are covered in "The golden image lifecycle: build, test, release, retire" and "Azure Compute Gallery for AVD images: versions and replication".
+Microsoft's What's new page and the Azure Virtual Desktop blog announced custom image templates as generally available in September 2023. The blog post names the Azure public cloud and says Azure Government and China entered public preview at that time; the custom image templates pages carry no status label, so check them for your cloud. The overview labels the service's Azure DevOps task as preview. Lifecycle practice and gallery replication are covered in "The golden image lifecycle: build, test, release, retire" and "Azure Compute Gallery for AVD images: versions and replication".
 
 ## What the service does
 
@@ -100,12 +100,12 @@ Points from the reference:
 
 ## Rules that stop builds from hanging
 
-The AVD article lists tips for Windows builds. Set `runElevated` and `runAsSystem` to true on PowerShell customizers, or the build stops responding. Use `write-host` so output reaches customization.log. Scripts must exit with 0, because a non-zero code fails the customization. Test scripts on a standalone VM first. The sample scripts in that article are for illustration and testing, not production workloads.
+The AVD article lists tips for Windows builds. Set `runElevated` and `runAsSystem` to true on PowerShell customizers, or the build stops responding. Use `write-host` so output reaches customization.log. Scripts must exit with 0, because a non-zero code fails the customization. Test scripts on a standalone VM first.
 
 ## Deploy and start the build
 
 1. **Submit the template.** The PowerShell article uses `New-AzResourceGroupDeployment` with an ARM template file and parameters. The `identity` block is required: the reference says you must create a user-assigned identity with permissions on the resources, and list it under `identity` as `"type": "UserAssigned"` with its resource ID. Keep secrets out of the template: inline commands can be viewed in the template definition, so the reference says passwords, SAS tokens and authentication tokens belong in scripts in Azure Storage, where access requires authentication.
-2. **Optionally validate.** The `validate` property can run validation after the build. With `sourceValidationOnly` set to true, only the source image is validated and no build runs. If validation fails, `continueDistributeOnFailure` decides whether the image is still distributed; the reference advises caution with true.
+2. **Optionally validate.** The `validate` property validates platform images and customized images. With `sourceValidationOnly` set to true, the image in `source` is validated directly and no separate build runs. If validation fails, `continueDistributeOnFailure` decides whether the image is still distributed; the reference advises caution with true.
 3. **Start the build.** Either set `autoRun` to Enabled, which starts one build when the template is created, or invoke Run. The reference gives:
 
 ```powershell
@@ -133,7 +133,6 @@ By default the service creates a staging resource group named `IT_<ResourceGroup
 - Deleting the template: the overview suggests it to avoid the storage cost, but the reference says the staging resource group is deleted with the template, a VHD distribution is lost with it ("If you delete the image template, then you'll lose the VHD"), and the logs go with the group. Copy VHDs and download logs first. The custom image templates page says the IT_ group is also deleted when you delete the resource group containing the image, while the PowerShell walkthrough says that deleting only the resource group leaves the IT_ group behind. Deleting the template first avoids the question.
 - For Azure DevOps builds, the troubleshooting page says the staging group is deleted after a successful build, so a log needs a sleep step to read. The custom image templates page says the group can be deleted after success, provided you do not need the logs.
 - March 2026 release notes: after 31 March 2026 new virtual networks default to private subnets without default outbound access. If a template sets `subnetId` or `containerInstanceSubnetId` and the build or validation VMs need internet access, that subnet must have outbound access enabled. Separately, with Azure unmanaged disks retiring, VHDs produced by Image Builder can no longer provision new VMs.
-- The service is available in the regions the overview lists, and you can still distribute images outside them.
 
 ## Sources
 
