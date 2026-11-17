@@ -23,13 +23,13 @@ faq:
 
 Nerdio Manager delivers Winget packages to Azure Virtual Desktop session hosts through its Unified Application Management feature. You choose an app from a Winget repository, import it if needed, and create a deployment policy that installs it on the target host pools.
 
-Nerdio's help pages call the feature Unified Application Management (UAM); the release notes say "Unified App Management". See also the [Nerdio Unified App Catalog](/entity/nerdio-unified-app-catalog/) entity. This article covers Winget delivery only, not SCCM import or Shell Apps.
+Nerdio's help pages call the feature Unified Application Management (UAM); the release notes use both "Unified App Management" and "Unified Application Management". See also the [Nerdio Unified App Catalog](/entity/nerdio-unified-app-catalog/) entity. This article covers Winget delivery only, not SCCM import or Shell Apps.
 
 ## What Winget is, and what Nerdio adds
 
 Microsoft Learn describes WinGet as a command-line tool to discover, install, upgrade, remove and configure applications on Windows 10, Windows 11 and Windows Server 2025. Learn says it is supported on Windows 10 version 1809 (build 17763) or later and is not available until a user has logged on for the first time.
 
-Nerdio puts a policy layer on top of winget. Per Nerdio's Enterprise help pages, you search a catalog, deploy once or by policy, and see the status per device. A policy can carry a maintenance window and a drain mode so that installs do not disturb signed-in users.
+Nerdio puts a policy layer on top of winget. You search a catalog, deploy once or by policy, and see the status per device. A policy can carry a maintenance window and a drain mode.
 
 ## Two kinds of Winget repository
 
@@ -43,7 +43,7 @@ Nerdio puts a policy layer on top of winget. Per Nerdio's Enterprise help pages,
 
 The table follows Nerdio's Enterprise "Supported configurations" page. The MSP repository page adds that the community repository is Microsoft-managed and linked by default, and that Nerdio publishes the application list "as is" without maintaining it.
 
-A private repository is built from Azure resources in your subscription. It rests on Microsoft's open-source winget-cli-restsource project, a reference implementation of a REST package source (winget source type Microsoft.Rest) that uses Azure Functions for the endpoints and Azure Cosmos DB for the manifests. A Nerdio help page says the private repository feature uses that project, which currently runs on .NET 8. Azure Functions support for .NET 8 ended on 10 November 2026: apps keep running, but without security updates or customer service for .NET 8. Nerdio says it will keep using the .NET 8 release until the project publishes a .NET 10 based revision, and plans to upgrade once that is tested.
+A private repository is built from Azure resources in your subscription. It rests on Microsoft's open-source winget-cli-restsource project, a reference implementation of a REST package source (winget source type Microsoft.Rest) that uses Azure Functions and Azure Cosmos DB. A Nerdio help page says the private repository feature uses that project, which currently runs on .NET 8. Azure Functions support for .NET 8 ended on 10 November 2026: apps keep running, but without security updates or customer service for .NET 8. Nerdio says it will keep using the .NET 8 release until the project publishes a .NET 10 based revision, and plans to upgrade once that is tested.
 
 ## Create or link a repository
 
@@ -51,15 +51,15 @@ The Enterprise configuration page gives these steps. Navigate to System > Settin
 
 1. To link a repository, select **Link**, set the type to WinGet, enter a friendly name and the repository URL under **Location**, and select **OK**.
 2. To create a private repository, select **Add** instead.
-3. Enter a display name, then choose a resource group, a storage account, a Log Analytics workspace and an App Service Plan. You can create a new storage account or workspace in the same dialog.
+3. Enter a display name, then choose a resource group, a storage account, a Log Analytics workspace and an App Service Plan.
 4. Optionally enable private endpoints. The page says this adds endpoints for the storage account, Key Vault, Cosmos DB and the function app, and disables public access on the first three. The function app keeps public access by default so that physical clients can still install Winget apps. You must give subnets for the web app and the endpoints.
 5. Optionally set resource name prefixes. Nerdio adds a random suffix. Select **OK**.
 
-The MSP page says an additional repository in another region adds an App Service Plan, which "incurs additional costs", and suggests reusing an existing plan to limit them.
+The MSP page says an additional repository in another region adds an App Service Plan, which "incurs additional costs".
 
 ## Import an app into the private repository
 
-The Enterprise "Manage applications" page describes two imports. Both start at Applications > Catalog > All Apps.
+The Enterprise "Manage applications" page describes two Winget imports. Both start at Applications > Catalog > All Apps.
 
 **Copy a catalog app into your private repository.** Find the app, open its action menu and select **Import**. Choose the package version, the private repository and the package ID. The option **Synchronize the latest version** is described as ensuring that the latest version of the source application is automatically imported if it has not been imported already. The page does not say when that check runs.
 
@@ -74,17 +74,17 @@ You can also deploy a catalog app directly with **Deploy**. Without the option *
 
 Test silent behaviour before you import: Nerdio's page suggests running winget locally with `--silent` and the application ID. Learn says `--silent` suppresses all UI and `--accept-package-agreements` accepts the package licence, for example `winget install --id <Id> -e --silent --accept-package-agreements`. If an app cannot install or remove silently, Nerdio says to contact the vendor.
 
-The page says packages can be uploaded as APPX, BURN, EXE, INNO, MSI, MSIX, MSSTORE, NULLSOFT, PORTABLE, PWA, WIX or ZIP, while the supported-configurations page names .EXE, .MSI and .MSIX plus .ZIP packages with a single installer. Test other types before relying on them. A known issue: some imported apps can be recorded under the Winget community repository ID, which causes policy failure messages even though the app installs. Entering the correct product code on the Installer page is the documented fix.
+The page says packages can be uploaded as APPX, BURN, EXE, INNO, MSI, MSIX, MSSTORE, NULLSOFT, PORTABLE, PWA, WIX or ZIP, while the supported-configurations page names .EXE, .MSI and .MSIX plus .ZIP packages with a single installer. A known issue: some imported apps can be recorded under the Winget community repository ID, which causes policy failure messages even though the app installs. Entering the correct product code on the Installer page is the documented fix.
 
 ## Create the deployment policy
 
 1. Go to **Applications > Deployment > Deployment Policies** and select **New**.
 2. Name the policy. It is enabled by default.
 3. Under **Applications**, pick an action: install or uninstall an app or a group. Nerdio recommends not mixing install and uninstall tasks in one policy.
-4. Under **Deploy to**, choose Azure Virtual Desktop and add targets: an AVD workspace, a global pool, or a multi-session or single-session [host pool](/entity/avd-host-pool/). The same policy can cover several personal and pooled pools.
+4. Under **Deploy to**, choose Azure Virtual Desktop and add targets: an AVD workspace, a global pool, or a multi-session or single-session [host pool](/entity/avd-host-pool/).
 5. Set the scheduling options described below and select **Save**.
 
-Once saved, a policy starts deploying to the desktops in scope. The Supported-configurations page says policy assessment runs on new AVD devices every 15 minutes.
+Once saved, a policy starts deploying to the desktops in scope. The Supported-configurations page says policy assessment runs on new AVD devices every 15 minutes, and that a stopped in-scope AVD desktop is started for the task and returned to its original state afterwards.
 
 ### Settings that matter on session hosts
 
@@ -104,18 +104,17 @@ The same catalog can target Intune-enrolled Windows devices, including Windows 3
 - Maintenance windows and drain mode are not supported. Tasks follow the Intune agent's schedule.
 - Only policy-based deployment is supported, not one-time deployment.
 - Winget apps are deployed through Intune scripts, so they do not appear on the Intune applications page. Check status on the UAM policy's details page.
-- The Intune repository supports MSI (line-of-business) and EXE (Win32) apps in the Device/System context.
-- The deployment policy page lists a **Use Task Worker** option, labelled public preview, for non-Intune applications. During the preview UAM processes only the first 1,000 devices.
+- The Intune repository type, a separate source from Winget, currently supports MSI (line-of-business) and EXE (Win32) apps in the Device/System context.
+- Separately, the deployment policy page lists a **Use Task Worker** option, labelled public preview, for non-Intune applications. During the preview UAM processes only the first 1,000 devices.
 
 ## Where it fits among delivery methods
 
 | Method | What the sources say |
 |---|---|
-| Nerdio Winget policy | Installs onto the running host or Intune device, with scheduling, drain mode and status. |
-| App in the image | Installed in the [golden image](/entity/golden-image/), the template that bundles the OS, updates and applications. See also [Nerdio desktop image management](/entity/nerdio-desktop-image/). |
+| Nerdio Winget policy | Installs through a policy onto in-scope AVD hosts (stopped hosts are started for the task and returned to their original state) or onto Intune devices. Maintenance window, drain mode and desired host state apply to AVD only. |
+| App in the image | Installed in the [golden image](/entity/golden-image/). See also [Nerdio desktop image management](/entity/nerdio-desktop-image/). |
 | [MSIX app attach](/entity/msix-app-attach/) | Per Learn, apps are attached to the user session and not installed locally on hosts or images. Needs an SMB share and MSIX, Appx or App-V packages. |
 
-App attach suits teams that prefer not to install apps on hosts, and Learn lists upgrades without a maintenance window as a benefit.
 
 ## Troubleshooting and known issues
 
@@ -123,8 +122,8 @@ App attach suits teams that prefer not to install apps on hosts, and Learn lists
 - **"Application [app name] not found on target host after installation"**: the install did not finish. Check the logs.
 - **"Set-LocalUser: An unspecified error occurred: status = 3221226252"**: Nerdio Manager cannot create a local admin account. Nerdio says the policies "UIA elevation prompt without secure desktop" and "Admin Approval Mode for Built-in Administrator" must be disabled, in Intune or Group Policy.
 - **"Write-ExtendedLog is not recognized"**: an Attack Surface Reduction policy may block the UAM policy. Nerdio has an ASR exclusions page for this.
-- **"No newer package versions are available from the configured application"**: the Deployment status page warns this can occur when versions contain unexpected characters such as < or >, and gives a one-time uninstall policy and redeploy as the fix. The release notes for v8.0.1 (GA, 16 June 2026) word it "...configured sources" and say the error was resolved for < or >: source and target version are now treated as identical and no action is taken. Our reading: the workaround may still apply to other characters or older versions.
-- **Updating imported apps**: use the **Synchronize the latest version** option described above. A community request asked for an easier way to compare imported apps with the public repository; Nerdio's reply said only that it would discuss the suggestion with the development team.
+- **"No newer package versions are available from the configured application"**: the Deployment status page warns this can occur when versions contain unexpected characters such as < or >, and gives a one-time uninstall policy and redeploy as the fix. The release notes for v8.0.1 (GA, 16 June 2026) word it "...configured sources" and say the error was resolved for < or >: source and target version are now treated as identical and no action is taken. The warning says "such as" < or >, while the release notes describe the fix for those two characters only.
+- **Updating imported apps**: the import dialog has a **Synchronize the latest version** option, but Nerdio documents neither when it runs nor whether it updates apps imported earlier. A community request asked for an easier way to compare imported apps with the public repository, which it describes as a manual search; Nerdio's reply said only that it would discuss the suggestion with the development team.
 
 ## Sources
 
