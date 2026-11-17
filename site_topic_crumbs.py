@@ -3,6 +3,8 @@ Struktur-Spur (M365.FM > Episodes > Titel) eine zweite schema.org-BreadcrumbList
 
     M365.FM > bis zu 3 Oberbegriffe des Hauptthemas (von oben nach unten) > Hauptthema (Entitaetsseite) > die Seite selbst
 
+Entitaetsseiten in der Sprache der Seite, wenn sie dort auf index stehen, sonst die englische Fassung (crumb_url).
+
 Die Oberbegriffe kommen aus derselben Kette wie die Brotkrumen der Entitaetsseiten (ontology.ancestors: part_of > broader > instance_of).
 Google erlaubt mehrere Brotkrumen-Spuren je Seite.
 
@@ -48,6 +50,17 @@ ROOT_NAME = "M365.FM"
 def eurl(BASE, lang, i):
     """Adresse der Entitaetsseite in der Sprache (eine Quelle: site_entities.eurl verwendet diese Funktion)."""
     return f"{BASE}{pfx(lang)}/entity/{i}/"
+
+
+def crumb_url(BASE, lang, i, ents):
+    """Adresse eines Zwischenglieds der Themen-Spur: die Entitaetsseite in der Sprache der Seite, wenn sie dort auf index steht (dieselbe Regel wie
+    die Entitaetsseiten: site_entities.topic_index_langs - en, de mit echtem deutschem Text, Sprachen mit langem eigenem Text), sonst die englische
+    Seite (x-default ihres hreflang-Clusters). Sonst zeigte die Spur in den meisten Sprachen auf noindex-Seiten ausserhalb von Index und Sitemap."""
+    if lang != "en":
+        import site_entities as SE   # erst hier: site_entities importiert dieses Modul
+        if lang not in SE.topic_index_langs(ents[i]):
+            lang = "en"
+    return eurl(BASE, lang, i)
 
 
 def _alive(e):
@@ -148,7 +161,7 @@ def breadcrumb(BASE, lang, about_ids, ents, page_name, page_url, title=None):
         return None
     items, seen = [(ROOT_NAME, f"{BASE}/")], {f"{BASE}/"}
     for x in chain(main, ents) + [main]:
-        u = eurl(BASE, lang, x)
+        u = crumb_url(BASE, lang, x, ents)
         if u not in seen and ents[x].get("name"):
             items.append((ents[x]["name"], u)); seen.add(u)
     if page_url in seen:

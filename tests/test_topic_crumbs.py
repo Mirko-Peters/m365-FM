@@ -43,6 +43,12 @@ ENTS = {e["id"]: e for e in [
 ]}
 
 
+def _idx(*ids, langs=("en", "de")):
+    """Indexierte Sprachen der Entitaetsseiten festlegen (sonst haengt der Test an den echten Texten in data/): ids stehen in langs auf index, alle anderen nur en."""
+    import site_entities as SE
+    return patch.object(SE, "topic_index_langs", lambda e: frozenset(langs) if e["id"] in ids else frozenset({"en"}))
+
+
 def lists(ld):
     return [x for x in (ld if isinstance(ld, list) else [ld]) if isinstance(x, dict) and x.get("@type") == "BreadcrumbList"]
 
@@ -99,7 +105,8 @@ class Chain(unittest.TestCase):
         self.assertEqual(TC.chain("legacy-child", ENTS), ["collaboration-tool", "microsoft-365"])   # ersetzter Oberbegriff (skype) faellt weg, die Kette darueber bleibt
 
     def test_breadcrumb_items(self):
-        bc = TC.breadcrumb(BASE, "de", ["mirko-peters", "ca-policy"], ENTS, "Folge X", f"{BASE}/de/x/")
+        with _idx(*ENTS):
+            bc = TC.breadcrumb(BASE, "de", ["mirko-peters", "ca-policy"], ENTS, "Folge X", f"{BASE}/de/x/")
         self.assertEqual(bc["@type"], "BreadcrumbList"); self.assertEqual(bc["@context"], "https://schema.org")
         it = bc["itemListElement"]
         self.assertEqual([x["position"] for x in it], list(range(1, len(it) + 1)))
@@ -110,6 +117,35 @@ class Chain(unittest.TestCase):
         self.assertTrue(all(x["item"].startswith("https://") for x in it))
         en = TC.breadcrumb(BASE, "en", ["sharepoint"], ENTS, "Post", f"{BASE}/p/")
         self.assertEqual([x["item"] for x in en["itemListElement"]][1:3], [f"{BASE}/entity/collaboration-tool/", f"{BASE}/entity/microsoft-365/"])
+
+    def test_language_url_only_where_entity_page_is_indexed(self):
+        """Zwischenglieder: Sprachfassung der Entitaetsseite nur, wenn sie in der Sprache auf index steht, sonst die englische Seite (x-default)."""
+        with _idx("entra-id", "conditional-access"):   # nur diese beiden haben eine indexierte de-Seite
+            de = [x["item"] for x in TC.breadcrumb(BASE, "de", ["ca-policy"], ENTS, "Folge X", f"{BASE}/de/x/")["itemListElement"]]
+            fr = [x["item"] for x in TC.breadcrumb(BASE, "fr", ["ca-policy"], ENTS, "Episode X", f"{BASE}/fr/x/")["itemListElement"]]
+        self.assertEqual(de, [f"{BASE}/", f"{BASE}/entity/microsoft-entra/", f"{BASE}/de/entity/entra-id/", f"{BASE}/de/entity/conditional-access/", f"{BASE}/entity/ca-policy/", f"{BASE}/de/x/"])
+        self.assertEqual(fr, [f"{BASE}/", f"{BASE}/entity/microsoft-entra/", f"{BASE}/entity/entra-id/", f"{BASE}/entity/conditional-access/", f"{BASE}/entity/ca-policy/", f"{BASE}/fr/x/"])   # fr ohne indexierte Entitaetsseiten
+        with _idx("teams", langs=("en", "fr")):   # langer eigener fr-Text: fr-Seite steht auf index
+            fr = [x["item"] for x in TC.breadcrumb(BASE, "fr", ["teams"], ENTS, "Teams FR", f"{BASE}/fr/t/")["itemListElement"]]
+        self.assertEqual(fr[1:4], [f"{BASE}/entity/collaboration-tool/", f"{BASE}/entity/microsoft-365/", f"{BASE}/fr/entity/teams/"])
+
+    def test_index_rule_is_the_entity_pages_rule(self):
+        import site_entities as SE
+        src = (ROOT / "site_entities.py").read_text("utf-8")
+        self.assertIn("_has_de = has_de(e)", src)   # Entitaetsseite und Themen-Spur nutzen dieselbe Regel
+        self.assertIn("_il = index_langs(_lx, _has_de, _thin)", src)
+        e_de = dict(ENTS["sharepoint"], id="zz-de", desc={"en": "Text", "de": "Deutscher Text"})
+        e_dup = dict(ENTS["sharepoint"], id="zz-dup", desc={"en": "Text", "de": "Text"})
+        e_fr = dict(ENTS["sharepoint"], id="zz-fr", desc={"en": "Text", "de": ""})
+        with patch.object(SE, "_TOPIC_IDX", {}), patch.object(SE, "GENTEXT", {}), patch.object(SE.FD, "has_text", lambda e, l: False), \
+                patch.object(SE, "long_index_langs", lambda e: ["fr"] if e["id"] == "zz-fr" else []):
+            self.assertEqual(SE.topic_index_langs(e_de), {"en", "de"})
+            self.assertEqual(SE.topic_index_langs(e_dup), {"en"})   # de == en: Duplikat, kein Index
+            self.assertEqual(SE.topic_index_langs(e_fr), {"en", "fr"})
+            self.assertEqual(TC.crumb_url(BASE, "fr", "zz-fr", {"zz-fr": e_fr}), f"{BASE}/fr/entity/zz-fr/")
+            self.assertEqual(TC.crumb_url(BASE, "fr", "zz-de", {"zz-de": e_de}), f"{BASE}/entity/zz-de/")
+            self.assertEqual(TC.crumb_url(BASE, "de", "zz-de", {"zz-de": e_de}), f"{BASE}/de/entity/zz-de/")
+            self.assertEqual(TC.crumb_url(BASE, "de", "zz-dup", {"zz-dup": e_dup}), f"{BASE}/entity/zz-dup/")
 
     def test_no_topic_no_list(self):
         self.assertIsNone(TC.breadcrumb(BASE, "en", ["mirko-peters"], ENTS, "T", f"{BASE}/t/"))
@@ -148,7 +184,8 @@ class Rendered(unittest.TestCase):
                  dict(id=2, handle="mirko-p", slug="ca-tips", lang="de", title="Tipps", summary="s", body="Text", published=1700000000, votes=0, topics=["mirko-peters", "ca-policy"], tr_of="en"),
                  dict(id=3, handle="mirko-p", slug="no-topic", lang="en", title="Ohne Thema", summary="s", body="Text", published=1700000001, votes=0, topics=["mirko-peters"])]
         pages, schemas = {}, {}
-        with patch.object(BLG, "ENTS", ENTS), patch.object(BLG, "COMM_LANGS", ("en", "de")):
+        posts.append(dict(posts[1], id=4, lang="fr", title="Astuces"))
+        with patch.object(BLG, "ENTS", ENTS), patch.object(BLG, "COMM_LANGS", ("en", "de", "fr")), _idx(*ENTS):   # alle Themen mit indexierter de-Seite, keines in fr
             BLG.build(_g(pages, schemas), posts, [{"handle": "mirko-p", "name": "Mirko Peters"}], "")
         u = f"{BASE}/community/u/mirko-p/blog/ca-tips/"
         bcs = lists(schemas[u])
@@ -160,6 +197,9 @@ class Rendered(unittest.TestCase):
         self.assertEqual(len(de), 2)
         self.assertEqual(de[1]["itemListElement"][1]["item"], f"{BASE}/de/entity/microsoft-entra/")   # Entitaetsseiten der Sprache
         self.assertEqual(de[1]["itemListElement"][-1]["name"], "Tipps")
+        fr = lists(schemas[f"{BASE}/fr/community/u/mirko-p/blog/ca-tips/"])
+        self.assertEqual([x["item"] for x in fr[1]["itemListElement"][1:-1]], [f"{BASE}/entity/{i}/" for i in ("microsoft-entra", "entra-id", "conditional-access", "ca-policy")])   # fr-Entitaetsseiten noindex: englische Seiten
+        self.assertEqual(fr[1]["itemListElement"][-1]["name"], "Astuces")
         self.assertEqual(len(lists(schemas[f"{BASE}/community/u/mirko-p/blog/no-topic/"])), 1)   # ohne Thema: nur die bisherige Spur
         self.assertNotIn("Conditional Access policy</a> ›", pages["community/u/mirko-p/blog/ca-tips/index.html"])   # nichts Sichtbares
 

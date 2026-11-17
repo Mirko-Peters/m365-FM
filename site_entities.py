@@ -377,6 +377,24 @@ def index_langs(lx, has_de, thin):
     return r + [l for l in lx if l not in r]
 
 
+def has_de(e):
+    """Echter deutscher Text (hreflang en/de): Gast-Entitaeten haben de == en, dann ist /de/ ein Duplikat und bleibt ohne Index."""
+    d = e.get("desc") or {}
+    return bool(d.get("de")) and d.get("de") != d.get("en") or bool((e.get("long") or {}).get("de")) or bool(GENTEXT.get(e["id"], {}).get("de")) or FD.has_text(e, "de")
+
+
+_TOPIC_IDX = {}
+
+
+def topic_index_langs(e):
+    """index_langs einer Entitaet, die Thema sein kann (keine Person, also nie duenn): Sprachen, in denen ihre Seite auf index steht. Fuer die
+    Themen-Brotkrumen (site_topic_crumbs), damit sie dieselbe Regel nutzen wie die Seiten selbst; je Lauf einmal je Entitaet berechnet."""
+    r = _TOPIC_IDX.get(e["id"])
+    if r is None:
+        r = _TOPIC_IDX[e["id"]] = frozenset(index_langs(long_index_langs(e), has_de(e), False))
+    return r
+
+
 def ent_ld(BASE, e, lang, glossary_set=None, person_aka=None):
     """Schema.org-Knoten einer Entitaet (sprachneutrale @id)."""
     person_aka = person_aka or {}
@@ -961,7 +979,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 if _epids:
                     node["subjectOf"] = (node.get("subjectOf") or []) + _epids
             # hreflang en/de nur bei echtem deutschem Text (Gast-Entitaeten haben de == en: dann ist /de/ ein Duplikat und bleibt ohne Index)
-            _has_de = bool(e["desc"].get("de")) and e["desc"].get("de") != e["desc"].get("en") or bool((e.get("long") or {}).get("de")) or bool(GENTEXT.get(e["id"], {}).get("de")) or FD.has_text(e, "de")
+            _has_de = has_de(e)   # dieselbe Regel nutzen die Themen-Brotkrumen (topic_index_langs)
             _thin = False
             if e["type"] == "person" and e["id"] != AUTHOR_EID:   # Personen: nur mit echter Beschreibung (nicht der Speaker-Schablone) oder mehreren Auftritten in den Index
                 _app = max(len(ep_find(e, "en")), len(ep_find(e, "de"))) + len((SPEAKERS.get(e["id"]) or {}).get("sessions") or [])   # T42: gleiche Entscheidung fuer en und de (sonst verweist en per hreflang auf ein noindex-de)
