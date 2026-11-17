@@ -106,7 +106,9 @@
   root.appendChild(h("h2", { text: Q.h })); root.appendChild(h("p", { class: "mut", text: Q.intro })); root.appendChild(msg);
   root.appendChild(h("p", {}, [h("button", { type: "button", class: "btn main", text: Q.speaker, onclick: function () { box.textContent = ""; box.appendChild(form("speaker")); } }), " ", h("button", { type: "button", class: "btn main", text: Q.host, onclick: function () { box.textContent = ""; box.appendChild(form("host")); } })]));
   root.appendChild(box); root.appendChild(list);
-  fetch("/entities.json").then(function (r) { return r.json(); }).then(function (j) { (j.entities || []).forEach(function (e) { NAMES[e.id] = e.name; }); }).catch(function () {}).then(function () {
-    api("/api/me").then(function (r) { if (r.j && r.j.user) { load(); loadRequests(); } else { root.appendChild(h("p", { text: Q.login })); root.appendChild(h("h3", { text: R.h })); root.appendChild(h("p", { text: R.login })); } }).catch(function () { root.appendChild(h("p", { text: Q.login })); });
-  });
+  // Themennamen aus /entities.json (~560 KB) nur fuer Angemeldete (Listen und Anfragen sehen nur sie); abgemeldet keine Anfrage an die Datei
+  api("/api/me").then(function (r) {
+    if (!(r.j && r.j.user)) { root.appendChild(h("p", { text: Q.login })); root.appendChild(h("h3", { text: R.h })); root.appendChild(h("p", { text: R.login })); return; }
+    fetch("/entities.json").then(function (r2) { return r2.json(); }).then(function (j) { (j.entities || []).forEach(function (e) { NAMES[e.id] = e.name; }); }).catch(function () {}).then(function () { load(); loadRequests(); });
+  }).catch(function () { root.appendChild(h("p", { text: Q.login })); });
 })();
