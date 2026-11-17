@@ -25,7 +25,7 @@ Watermarking in [Azure Virtual Desktop](/entity/azure-virtual-desktop/) draws QR
 
 ## What watermarking does
 
-Learn's [Watermarking in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/watermarking) page describes the feature as working alongside screen capture protection to help prevent sensitive information from being captured on client endpoints. When it is on, QR code watermarks appear as part of the remote desktop. The setting lives on the session hosts, which you manage with Microsoft Intune or Group Policy, and the client app enforces it. The page names Windows App and the Remote Desktop client as the enforcing clients.
+Learn's [Watermarking in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/watermarking) page describes the feature as working alongside screen capture protection to help prevent sensitive information from being captured on client endpoints. When it is on, QR code watermarks appear as part of the remote desktop. The setting lives on the session hosts, which you manage with Microsoft Intune or Group Policy, and the client app enforces it. The page names Windows App and the Remote Desktop client as the enforcing clients; the Remote Desktop client is being phased out in favour of Windows App, as the client section below explains.
 
 The effect is visible. A user, or anyone looking over a shoulder, sees a grid of QR codes over the session; how opaque they are is a policy setting. If someone photographs the screen or shares a screenshot taken by other means, the codes are in the picture. An admin who receives that picture can read a code, find the connection it belongs to, and see which user was signed in. In our reading, that traceability is what gives the feature its deterrent value: a leaked image can be tied to a connection.
 
@@ -36,7 +36,7 @@ The QR code holds one of two values, chosen in the policy:
 - **Connection ID**, the default. It identifies one remote session. In Log Analytics the same value is the `CorrelationId` of a connection.
 - **Device ID**. Learn says to select it only for session hosts that are in a personal host pool and joined to Microsoft Entra ID or Microsoft Entra hybrid joined.
 
-The codes carry an identifier, not a user name. The link from identifier to person comes from your own monitoring data, which is why Learn lists [Azure Virtual Desktop Insights](https://learn.microsoft.com/en-us/azure/virtual-desktop/insights) as a prerequisite. For pooled host pools this means keeping the default, Connection ID: Learn limits Device ID to personal host pools, and the page does not explain the reason for that limit.
+The codes carry an identifier, not a user name. The link from identifier to person comes from your own monitoring data. Learn lists [Azure Virtual Desktop Insights](https://learn.microsoft.com/en-us/azure/virtual-desktop/insights) as a prerequisite and describes looking up the session from the code in Insights or Log Analytics; in our reading, that is where the identifier gets matched to a user. For pooled host pools this means keeping the default, Connection ID: Learn limits Device ID to personal host pools, and the page does not explain the reason for that limit.
 
 ## Where it applies and where it does not
 
@@ -46,20 +46,24 @@ Learn's Important box lists three boundaries that matter for planning:
 2. **RemoteApp is not covered.** Watermarking is for remote desktops only. With RemoteApp it is not applied and the connection is allowed.
 3. **Direct RDP is not covered.** If someone connects to a session host directly, not through Azure Virtual Desktop, with `mstsc.exe`, no watermark is applied and the connection is allowed.
 
-The second and third points decide whether the control is meaningful in your environment. A host pool that publishes only RemoteApps gets no watermark at all. A pool with open inbound RDP to the session hosts offers a path around it. Restricting direct access to the hosts is a network and access decision that lies outside this feature, but it determines whether the watermark can be bypassed.
+The second and third points decide whether the control is meaningful in your environment. A host pool that publishes only RemoteApps gets no watermark at all. In our reading, a pool whose session hosts accept direct RDP connections offers a path around it. Restricting direct access to the hosts is a network and access decision that lies outside this feature, but it determines whether the watermark can be bypassed.
 
 ## Supported clients
 
-The page lists the clients that support watermarking:
+The watermarking page lists these clients:
 
-| Client | Platform | Minimum version or note |
-|---|---|---|
-| Remote Desktop client | Windows Desktop, Windows 10 and later | 1.2.3317 or later |
-| Remote Desktop client | Web browser | Listed without a version |
-| Remote Desktop client | macOS | 10.9.5 or later |
-| Remote Desktop client | iOS/iPadOS | 10.5.4 or later |
-| [Windows App](/entity/windows-app/) | Windows, macOS, iOS and iPadOS, web browser | Listed without a version |
-| Windows App | Android/Chrome OS | Marked as preview |
+| Client | Platform | Listed on the watermarking page | Status on Learn's Remote Desktop client page |
+|---|---|---|---|
+| Remote Desktop client | Windows Desktop (MSI), Windows 10 and later | 1.2.3317 or later | Not supported in public cloud since 27 March 2026 |
+| Remote Desktop client | Web browser | No version | Not supported in public cloud since 27 March 2026 |
+| Remote Desktop client | macOS | 10.9.5 or later | No longer available to download; replaced by Windows App |
+| Remote Desktop client | iOS/iPadOS | 10.5.4 or later | No longer available to download; replaced by Windows App |
+| [Windows App](/entity/windows-app/) | Windows, macOS, iOS and iPadOS, web browser | No version | Named as the replacement |
+| Windows App | Android/Chrome OS | Marked as preview | Named as the replacement for the Android Remote Desktop client |
+
+The two Learn pages are out of step. The watermarking page (last updated June 2025, according to its page metadata) still lists the Remote Desktop client rows. Learn's archived [Remote Desktop client page](https://learn.microsoft.com/en-us/previous-versions/remote-desktop-client/connect-windows-cloud-services) says that from 27 March 2026 the Windows MSI client and the Remote Desktop web client are no longer supported for public cloud environments. MSI support was extended to 28 September 2026 for Azure Government, Azure operated by 21Vianet and AVD Classic; that date has passed. For the web client, the page states no end-of-support date in Azure Government or Azure operated by 21Vianet. The Microsoft Store Remote Desktop app reached end of support in September 2025, and the page says the macOS and iOS/iPadOS clients can no longer be downloaded. It says the Android client is being replaced. Microsoft tells users to migrate to Windows App.
+
+In our reading, the Windows App rows are therefore the clients to plan around, and the version numbers in the Remote Desktop rows matter mainly for devices that still have those clients installed. Where a mix of clients is in use, check the current wording of both pages.
 
 Windows App's own comparison page, [Compare Windows App features across platforms and devices](https://learn.microsoft.com/en-us/windows-app/compare-platforms-features), shows watermarking as supported on Windows, macOS, iOS/iPadOS, Android/Chrome OS and web browser for Azure Virtual Desktop. It does not repeat the preview label for Android/Chrome OS, so treat Android and ChromeOS as preview where the watermarking page says so, and confirm the current wording before you rely on it.
 
@@ -84,7 +88,7 @@ The lookup is short. Read the code, then match its value to a connection:
 - In **Azure Virtual Desktop Insights**, open the Connection Diagnostics tab and look for the Connection ID in the list of connections, which also shows first attempt time, user and number of attempts.
 - In **Log Analytics**, query the `WVDConnections` table, filtering `CorrelationId` on the full or a partial value from the code.
 
-Both routes depend on connection data reaching your workspace, which is why Insights is a prerequisite. If monitoring is not configured before an incident, the code in a leaked image has nothing to match against. The exact steps and the query are in the configuration article.
+In our reading, both routes depend on connection data reaching your workspace, so if monitoring is not configured before an incident, the code in a leaked image has nothing to match against. The exact steps and the query are in the configuration article.
 
 One practical limit is not addressed on the page: The watermarking page does not say how legible a code stays in a photograph taken from a distance, at an angle or at a given opacity. Take a real photo of a test session with the settings you plan to use and confirm that a phone camera can read the code.
 
@@ -95,7 +99,7 @@ Learn lists five options for the watermark: QR code bitmap scale factor, QR code
 ## Before you roll it out
 
 - **Pick the pools.** Use watermarking where a leaked image would matter and where users connect to full desktops. Skip it, or add other controls, where the pool publishes RemoteApps.
-- **Inventory the clients.** Any user on a client that does not support it will fail to connect with a vague error. Check the minimum versions in the table above.
+- **Inventory the clients.** Any user on a client that does not support it will fail to connect with a vague error. Move users to Windows App where they still run the Remote Desktop client, and check the status column in the table above.
 - **Turn on monitoring first.** Insights must be set up before the code is useful.
 - **Tell users.** A visible QR grid will prompt questions. As our recommendation, involve privacy and HR stakeholders as your jurisdiction requires, since the identifiers link a session to a person through your logs.
 - **Pair it.** Combine it with screen capture protection and redirection limits; none of them replaces the others.
@@ -107,4 +111,5 @@ Retrieved on 17 November 2026.
 - [Microsoft Learn: Watermarking in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/watermarking)
 - [Microsoft Learn: Screen capture protection in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/screen-capture-protection)
 - [Microsoft Learn: Compare Windows App features across platforms and devices](https://learn.microsoft.com/en-us/windows-app/compare-platforms-features)
+- [Microsoft Learn: Use the Remote Desktop client to connect to Azure Virtual Desktop (archived)](https://learn.microsoft.com/en-us/previous-versions/remote-desktop-client/connect-windows-cloud-services)
 - [Microsoft Learn: Enable Insights to monitor Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/insights)

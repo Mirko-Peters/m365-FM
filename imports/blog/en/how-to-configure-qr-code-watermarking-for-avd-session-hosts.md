@@ -29,7 +29,7 @@ Learn lists these prerequisites:
 
 - An existing [host pool](/entity/avd-host-pool/) with session hosts.
 - A Microsoft Entra ID account with at least the **Desktop Virtualization Host Pool Contributor** built-in role on the host pool.
-- A client that supports watermarking. Remote Desktop client: Windows Desktop 1.2.3317 or later on Windows 10 and later, web browser, macOS 10.9.5 or later, iOS/iPadOS 10.5.4 or later. [Windows App](/entity/windows-app/): Windows, macOS, iOS and iPadOS, web browser, and Android/Chrome OS (marked preview).
+- A client that supports watermarking. The page lists [Windows App](/entity/windows-app/) for Windows, macOS, iOS and iPadOS, web browser, and Android/Chrome OS (marked preview). It also still lists the Remote Desktop client: Windows Desktop 1.2.3317 or later on Windows 10 and later, web browser, macOS 10.9.5 or later, iOS/iPadOS 10.5.4 or later. Learn's archived [Remote Desktop client page](https://learn.microsoft.com/en-us/previous-versions/remote-desktop-client/connect-windows-cloud-services) says the Windows MSI client and the web client are no longer supported in public cloud environments since 27 March 2026, and that the macOS and iOS/iPadOS clients can no longer be downloaded and are replaced by Windows App. In our reading, plan on Windows App; the explainer article has the full status table.
 - Azure Virtual Desktop Insights configured for your environment.
 - For Intune: an Entra ID account with the **Policy and Profile manager** role, and a group containing the devices to configure.
 - For Group Policy: a domain account in **Domain Admins**, and a security group or organizational unit (OU) containing the session hosts.
@@ -55,7 +55,7 @@ Learn's prerequisites call for a group that contains the devices you want to con
 
 ## Option B: configure with Group Policy
 
-1. Make the administrative template for Azure Virtual Desktop available in Group Policy by following the steps for the administrative template that Learn's watermarking page links to.
+1. Make the administrative template available in Group Policy by following Learn's [Add the administrative template for Azure Virtual Desktop to Group Policy](https://learn.microsoft.com/en-us/azure/virtual-desktop/administrative-template). In short, download the template files from `https://aka.ms/avdgpo`, extract the `.cab` file and `.zip` archive, and copy `terminalserver-avd.admx` and `en-US\terminalserver-avd.adml` to `PolicyDefinitions` on your domain controllers (the local folder or the Group Policy Central Store). Without the template, the **Azure Virtual Desktop** folder in step 3 does not appear.
 2. Open the **Group Policy Management** console on a device you use to manage the domain, then create or edit a policy that targets the computers providing a remote session.
 3. Go to **Computer Configuration** > **Policies** > **Administrative Templates** > **Windows Components** > **Remote Desktop Services** > **Remote Desktop Session Host** > **Azure Virtual Desktop**.
 4. Open **Enable watermarking** and set it to **Enabled**.
@@ -95,7 +95,7 @@ A sensible test plan is to start with the defaults, take a photo of the test ses
 
 ## Find the session behind a code
 
-Learn describes two routes. Both need Azure Virtual Desktop Insights configured.
+Learn describes two routes and lists Azure Virtual Desktop Insights as a prerequisite for watermarking. In our reading, the Log Analytics route also needs the Azure Virtual Desktop connection data to reach the workspace.
 
 **Azure Virtual Desktop Insights**
 
@@ -119,10 +119,10 @@ Run this lookup against a test connection before you need it, so you know the da
 ## Common pitfalls
 
 - **Policy applied, no watermark.** Check that the session host received the policy (Intune sync or Group Policy refresh) and that the user started a new session. For Group Policy, Learn says existing sessions need to sign out and back in again; the Intune steps do not say this, so ask test users to reconnect there too.
-- **Users report a generic connection error after rollout.** Suspect an unsupported client first. Check the client against the version list above.
+- **Users report a generic connection error after rollout.** Suspect an unsupported client first. Check which client the user runs: Windows App is the client to move users to, and the older Remote Desktop clients are retired or no longer downloadable, as described under "Before you start".
 - **Wrong Intune entry.** If the embedded content option is missing, the deprecated setting was probably selected.
 - **Device ID on a pooled host pool.** Learn limits Device ID to personal host pools that are Entra joined or hybrid joined.
-- **Code not matching in Insights.** Confirm the time range and host pool you selected, and try the Log Analytics query with a partial value.
+- **Code not matching in Insights (our suggestion).** Confirm the time range and host pool you selected, and try the Log Analytics query with a partial value.
 - **Expecting more than it does.** Watermarking traces and deters; it does not block capture. Pair it with screen capture protection and consider disabling clipboard, drive and printer redirection, as Learn's [screen capture protection](https://learn.microsoft.com/en-us/azure/virtual-desktop/screen-capture-protection) page advises.
 
 ## Sources
@@ -131,3 +131,5 @@ Retrieved on 17 November 2026.
 
 - [Microsoft Learn: Watermarking in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/watermarking)
 - [Microsoft Learn: Screen capture protection in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/screen-capture-protection)
+- [Microsoft Learn: Add the administrative template for Azure Virtual Desktop to Group Policy](https://learn.microsoft.com/en-us/azure/virtual-desktop/administrative-template)
+- [Microsoft Learn: Use the Remote Desktop client to connect to Azure Virtual Desktop (archived)](https://learn.microsoft.com/en-us/previous-versions/remote-desktop-client/connect-windows-cloud-services)
