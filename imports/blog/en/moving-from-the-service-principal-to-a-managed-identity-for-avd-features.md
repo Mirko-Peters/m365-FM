@@ -118,7 +118,7 @@ To roll back, re-create the assignment with the commands on Learn's service prin
 - **Wrong scope.** An identity with the right role at the resource group does not satisfy autoscale.
 - **Dynamic autoscale.** Learn's dynamic scaling section names the service principal for both roles. Check the live page for which identity you may use before removing anything.
 - **Key vault access policy.** Learn says the Get secret access policy is not supported if you chose a system-assigned identity during pool creation; use Azure RBAC.
-- **Pool deletion.** A system-assigned identity is deleted with the host pool, while a user-assigned identity and its permissions stay.
+- **Removing the identity versus deleting the pool.** Learn says removing a system-assigned identity from a host pool deletes it, while removing a user-assigned identity only ends the association and leaves its permissions unchanged. Our reading: deleting the pool follows the same split, since Learn's overview ties a system-assigned identity to its parent resource's lifecycle.
 - **Preview wording.** Some Learn pages still carry preview wording for enhanced host pool management, which Microsoft announced as generally available in July 2026; check the current page before relying on a limit.
 
 ## Sources
@@ -126,6 +126,8 @@ To roll back, re-create the assignment with the commands on Learn's service prin
 Retrieved 17 November 2026.
 
 - [Microsoft Learn: Configure managed identity in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-managed-identity)
+- [Microsoft Learn: Managed identities for Azure resources](https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/overview)
+- [Microsoft Learn: New-AzWvdHostPool](https://learn.microsoft.com/en-us/powershell/module/az.desktopvirtualization/new-azwvdhostpool)
 - [Microsoft Learn: Assign Azure RBAC roles or Microsoft Entra roles to the Azure Virtual Desktop service principals](https://learn.microsoft.com/en-us/azure/virtual-desktop/service-principal-assign-roles)
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
 - [Microsoft Learn: Create and assign an autoscale scaling plan](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)

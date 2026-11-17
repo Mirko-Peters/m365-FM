@@ -10,7 +10,7 @@ keypoints:
   - "Insights is a dashboard built on Azure Monitor Workbooks. It needs diagnostic settings on host pools and workspaces, the Azure Monitor Agent with a data collection rule on the session hosts, and a Log Analytics workspace. Alerts are optional and set up separately."
   - "Learn's Insights pages give two yardsticks for input delay: ideal below 100 ms in the use cases, and good below 150 ms, acceptable 150 to 500 ms in the glossary. For latency it says generally below 100 ms, poor above 200 ms."
   - "Most Azure Virtual Desktop diagnostics are logs, so log search alerts on the WVD tables are the natural fit. Learn warns that log alerts are a poor fit for detecting missing data and suggests metric alerts for that."
-  - "Insights shows only active severity 0 Azure Monitor alerts on its Overview page. Alert rules, action groups and severity are configured in Azure Monitor."
+  - "Learn describes the Insights Overview page as showing active Azure Monitor alerts classified as severity 0. Alert rules, action groups and severity are configured in Azure Monitor."
   - "Session host update does not install the Azure Monitor Agent on the new hosts, so monitoring can go quiet after an update unless Azure Policy installs the agent."
 faq:
   - q: "Does Azure Virtual Desktop have a built-in alert set?"
