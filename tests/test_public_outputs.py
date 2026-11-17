@@ -64,6 +64,18 @@ class Mediakit(unittest.TestCase):
         self.assertNotIn("pricing", d["local"])
 
 
+class MediakitNotPublic(unittest.TestCase):
+    """K14: Die Mediadaten-PDFs und latest.json liegen im Bucket m365-fm, dessen oeffentliche Adresse img.m365.fm ist. Der Site-Worker muss
+    img.m365.fm/mediakit/* abfangen (404), sonst liessen sie sich ohne Formular direkt laden."""
+
+    def test_site_worker_routes_mediakit_on_img_host(self):
+        toml = (ROOT / "sitewrk" / "wrangler.toml").read_text("utf-8")
+        live = toml.split("[env.staging]")[0]
+        self.assertRegex(live, r'\{ pattern = "img\.m365\.fm/mediakit/\*", zone_name = "m365\.fm" \}')
+        js = (ROOT / "sitewrk" / "index.js").read_text("utf-8")
+        self.assertIn('if (url.hostname === "img.m365.fm") return new Response("Not found", { status: 404', js)
+
+
 class MembersExport(unittest.TestCase):
     """K23: data/members_export.json liegt im oeffentlichen Repo (Historie bleibt) - nie Kontakt- oder Adressdaten hineinschreiben."""
 

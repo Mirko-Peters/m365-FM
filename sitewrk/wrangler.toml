@@ -10,7 +10,8 @@ workers_dev = false
 # partner.m365.fm: Sponsor-Dashboard auf eigener Subdomain (noindex). Custom Domain: Cloudflare legt den DNS-Eintrag "partner" selbst an; ein vorhandener Eintrag "partner" blockiert den Deploy.
 # Rueckbau: Zeile entfernen und PARTNER_HOST leeren (www.m365.fm/sponsor/dashboard/ bleibt dann die Adresse).
 routes = [{ pattern = "dub.m365.fm/*", zone_name = "m365.fm" }, { pattern = "www.m365.fm/*", zone_name = "m365.fm" }, { pattern = "m365.fm/*", zone_name = "m365.fm" },
-  { pattern = "img.m365.fm/pages/*", zone_name = "m365.fm" }, { pattern = "img.m365.fm/meta/*", zone_name = "m365.fm" },
+  # img.m365.fm/mediakit/*: die Mediadaten-PDFs und latest.json gibt es nur ueber das Formular (worker/src/mediakit.js, R2-Binding), nicht direkt aus dem Bucket (K14)
+  { pattern = "img.m365.fm/pages/*", zone_name = "m365.fm" }, { pattern = "img.m365.fm/meta/*", zone_name = "m365.fm" }, { pattern = "img.m365.fm/mediakit/*", zone_name = "m365.fm" },
   { pattern = "partner.m365.fm", custom_domain = true, zone_name = "m365.fm" },
   # admin.m365.fm (Verwaltung) und profile.m365.fm (Konto und Profil): wie partner eigene Subdomains, noindex. Cloudflare legt die DNS-Eintraege "admin" und "profil"
   # selbst an; vorhandene Eintraege mit diesen Namen blockieren den Deploy (vorher im DNS loeschen).
