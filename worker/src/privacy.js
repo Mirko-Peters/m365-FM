@@ -8,8 +8,15 @@ export const FORMER = "Former member";
 
 // Oeffentliche Profile kommen aus einem Zwischenspeicher (Cron alle 30 Minuten). Wird etwas Oeffentliches privat, gesperrt oder geloescht,
 // verwerfen wir ihn sofort; der naechste Abruf baut ihn neu (profiles.js refreshProfilesExport filtert public=1 und banned=0).
+// Generationszaehler (meta profiles_export_gen): refreshProfilesExport schreibt den Zwischenspeicher nur, wenn seit seinem Start keine
+// Invalidierung kam - sonst schriebe ein laufender Export (Cron oder Abruf) die Fassung von vor der Loeschung/dem Privatstellen zurueck.
+export const EXPORT_GEN = "profiles_export_gen";
 export async function invalidateProfileExport(db) {
+  await db.prepare("INSERT INTO meta(k,v) VALUES(?,'1') ON CONFLICT(k) DO UPDATE SET v=CAST(CAST(v AS INTEGER)+1 AS TEXT)").bind(EXPORT_GEN).run().catch(() => {});
   await db.prepare("DELETE FROM export_cache WHERE k='profiles'").run().catch(() => {});
+}
+export async function profileExportGen(db) {
+  return String((await db.prepare("SELECT v FROM meta WHERE k=?").bind(EXPORT_GEN).first().catch(() => null))?.v ?? "0");
 }
 
 // Personen-Entitaeten aus dem eigenen Profil: genau die, die profiles.js ownedEntity mit Typ person angelegt hat (Tabelle person_entity,
@@ -79,6 +86,24 @@ export async function mapSpeakers(db, handle, fn, skip = new Set(), uid = 0) {
     let sp; try { sp = JSON.parse(r.speakers); } catch { continue; }
     if (!Array.isArray(sp) || !sp.some(hit)) continue;
     ops.push(db.prepare("UPDATE event_sessions SET speakers=? WHERE id=?").bind(JSON.stringify(sp.map((x) => (hit(x) ? fn(x) : x))), r.id));
+  }
+  return ops;
+}
+
+// Kontoloeschung (profiles.js deleteUserData): Speaker-Eintraege, die nur per Name an eine Personen-Entitaet des Kontos gebunden sind ({n, e} ohne h,
+// z. B. von speakersCheck/linkSpeakerEntities), anonymisieren - sonst behielten sie den Namen und zeigten nach einer Uebernahme der Adresse auf die
+// Entitaet des neuen Inhabers (Runde 6). Eintraege mit h gehoeren einem (anderen) Profil und bleiben. Anweisungen fuer db.batch.
+export async function anonEntitySpeakerOps(db, eids) {
+  const set = new Set(eids.filter(Boolean)), ops = [], seen = new Set();
+  if (!set.size) return ops;
+  const hit = (x) => !!x && typeof x === "object" && !x.h && set.has(x.e);
+  for (const eid of set) {
+    for (const r of (await db.prepare("SELECT id,speakers FROM event_sessions WHERE instr(speakers,?)>0").bind(`"e":"${eid}"`).all()).results || []) {
+      if (seen.has(r.id)) continue; seen.add(r.id);
+      let sp; try { sp = JSON.parse(r.speakers); } catch { continue; }
+      if (!Array.isArray(sp) || !sp.some(hit)) continue;
+      ops.push(db.prepare("UPDATE event_sessions SET speakers=? WHERE id=?").bind(JSON.stringify(sp.map((x) => (hit(x) ? anonSpeaker(x) : x))), r.id));
+    }
   }
   return ops;
 }

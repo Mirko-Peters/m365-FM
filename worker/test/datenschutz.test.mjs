@@ -494,3 +494,90 @@ test("Migration 0054: Rueckfuellung nur aus der ersten Fassung von ownedEntity, 
   raw.exec(m); raw.exec(m);   // idempotent
   assert.deepEqual(raw.prepare("SELECT eid,user_id FROM person_entity ORDER BY eid").all().map((r) => ({ ...r })), [{ eid: "alice", user_id: 1 }]);
 });
+
+test("Profil-Export: Loeschung waehrend refreshProfilesExport schreibt keine alte Fassung in den Zwischenspeicher (Runde 6)", async () => {
+  const { raw, env, user } = await setup();
+  const alice = await user(1, "Alice Example");
+  assert.equal((await call(env, "POST", "/api/profile/me", alice, { handle: "alice", public: true, headline: "Senior Consultant at Contoso", about: "Mein Profiltext", channels: [], programs: [], certs: [] })).s, 200);
+  assert.equal((await refreshProfilesExport(env)).people.length, 1);
+  // Die Loeschung laeuft, waehrend der Export das Profil liest (personView: Kanaele)
+  let fired = false;
+  const hooked = { ...env.DB, prepare(sql) {
+    const st = env.DB.prepare(sql), all = st.all;
+    st.all = async () => { if (!fired && /FROM channels WHERE owner_type='u'/.test(sql)) { fired = true; assert.equal((await call(env, "DELETE", "/api/me", alice)).s, 200); } return all(); };
+    return st;
+  } };
+  const t0 = Math.floor(Date.now() / 1000);
+  await refreshProfilesExport({ ...env, DB: hooked });
+  assert.ok(fired, "Loeschung lief waehrend des Exports");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM users WHERE id=1").get().n, 0);
+  const ex = await call(env, "GET", "/api/profiles/export");
+  assert.deepEqual(ex.j.people.map((p) => p.handle), [], "geloeschtes Profil nicht im oeffentlichen Export");
+  const c = raw.prepare("SELECT v,updated FROM export_cache WHERE k='profiles'").get();
+  assert.ok(c && !c.v.includes("Mein Profiltext"), "Zwischenspeicher ohne alte Fassung");
+  assert.ok(c.updated >= t0 && c.updated <= Math.floor(Date.now() / 1000), "updated ist die Startzeit des Exports");
+  // Bedingtes Schreiben: eine Invalidierung nach dem Start verhindert das Schreiben
+  const gen = raw.prepare("SELECT v FROM meta WHERE k='profiles_export_gen'").get();
+  assert.ok(gen && +gen.v >= 1, "Invalidierung zaehlt die Generation hoch");
+});
+
+test("Kontoloeschung: Q&A und Name-Speaker-Eintraege zur Personen-Entitaet wandern nicht zum naechsten Inhaber der Adresse (Runde 6)", async () => {
+  const { raw, env, t, user } = await setup();
+  const alice = await user(1, "Alice Example"), bob = await user(2, "Bob"), carol = await user(3, "Carol"), yan = await user(4, "Yan Newcomer");
+  assert.equal((await saveProfile(env, alice, "alice", true)).s, 200);
+  const q = await call(env, "POST", "/api/qa/ask", bob, { eid: "alice", q: "Wo arbeitet Alice Example eigentlich", lang: "de" });
+  assert.equal(q.s, 200, JSON.stringify(q.j));
+  const a = await call(env, "POST", "/api/qa/answer", carol, { qid: q.j.id, a: "Alice Example ist Senior Consultant bei Contoso in Hamburg." });
+  assert.equal(a.s, 200, JSON.stringify(a.j));
+  raw.prepare("UPDATE entity_a SET accepted=1").run();
+  const faq = async () => (await call(env, "GET", "/api/qa/export")).j.items.filter((x) => x.eid === "alice" || /Alice Example/.test(x.q + x.a));
+  assert.equal((await faq()).length, 1);
+  raw.prepare("INSERT INTO events(id,handle,title,owner_id,public,start,created,updated) VALUES (5,'ev-five','Event',2,1,?,?,?)").run(t + 86400, t, t);
+  raw.prepare("INSERT INTO event_sessions(id,event_id,title,speakers,status,proposer_id,created) VALUES (7,5,'Talk',?,'live',2,?)").run(JSON.stringify([{ n: "Alice Example", e: "alice", s: "confirmed" }, { n: "Bob Guest", e: "bob-guest", s: "confirmed" }]), t);
+
+  // Privat gestellt: Q&A verborgen, Fragen und Antworten abgelehnt; wieder oeffentlich: zurueck
+  assert.equal((await saveProfile(env, alice, "alice", false)).s, 200);
+  assert.equal((await faq()).length, 0, "FAQ ohne verborgene Person");
+  assert.equal((await call(env, "GET", "/api/qa?eid=alice")).j.questions.length, 0);
+  assert.equal((await callTool(env, null, "get_entity_questions", { id: "alice" })).questions.length, 0);
+  assert.equal((await call(env, "POST", "/api/qa/ask", bob, { eid: "alice", q: "Noch eine Frage zu Alice", lang: "de" })).s, 400);
+  assert.equal((await call(env, "POST", "/api/qa/answer", carol, { qid: q.j.id, a: "Noch eine Antwort zu Alice Example hier." })).s, 404);
+  assert.equal((await saveProfile(env, alice, "alice", true)).s, 200);
+  assert.equal((await faq()).length, 1, "wieder oeffentlich: FAQ zurueck");
+
+  assert.equal((await call(env, "DELETE", "/api/me", alice)).s, 200);
+  assert.equal((await faq()).length, 0, "nach Loeschung kein FAQ-Eintrag");
+  assert.equal((await call(env, "GET", "/api/qa?eid=alice")).j.questions.length, 0);
+  assert.equal((await callTool(env, null, "get_entity_questions", { id: "alice" })).questions.length, 0);
+  const qr = raw.prepare("SELECT eid,hidden,user_id FROM entity_q").get();
+  assert.deepEqual([qr.eid, qr.hidden, qr.user_id], ["", 1, 2], "Frage bleibt (Bob), aber ohne eid und verborgen");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_a").get().n, 1, "Antwort bleibt erhalten");
+  const sp = JSON.parse(raw.prepare("SELECT speakers FROM event_sessions WHERE id=7").get().speakers);
+  assert.equal(sp[0].n, "Former member"); assert.equal(sp[0].e, undefined); assert.equal(sp[0].s, "confirmed");
+  assert.deepEqual(sp[1], { n: "Bob Guest", e: "bob-guest", s: "confirmed" }, "andere Eintraege unveraendert");
+
+  // Ein anderes Mitglied uebernimmt die Adresse: erbt weder Q&A noch Speaker-Eintraege
+  assert.equal((await saveProfile(env, yan, "alice", true, "Student")).s, 200);
+  assert.equal((await faq()).length, 0, "FAQ der Entitaetsseite alice (jetzt Yan) ohne Alices Q&A");
+  assert.equal((await call(env, "GET", "/api/qa?eid=alice")).j.questions.length, 0);
+  assert.ok(!raw.prepare("SELECT speakers FROM event_sessions WHERE id=7").get().speakers.includes("alice"));
+});
+
+test("Pruef-Warteschlange: Vorschlag zu einer verborgenen Person gekennzeichnet, ohne Freigabe; Text fuer hidden_person in de/en (Runde 6)", async () => {
+  const { raw, env, t, user } = await setup();
+  const alice = await user(1, "Alice Example"), admin = await user(9, "Admin");
+  raw.prepare("UPDATE users SET role='admin' WHERE id=9").run();
+  assert.equal((await saveProfile(env, alice, "alice", true)).s, 200);
+  raw.prepare("INSERT INTO entity_rev(id,eid,data,summary,user_id,status,created) VALUES (601,'alice',?,'Vorschlag',3,'pending',?)").run(JSON.stringify({ name: "Alice Example", type: "person" }), t);
+  const item = async () => (await call(env, "GET", "/api/editor/queue", admin)).j.items.find((x) => x.kind === "entity" && x.id === "601");
+  let it = await item();
+  assert.ok(it && !it.hiddenPerson && it.actions.approve === "do", "oeffentliches Profil: normal freigebbar");
+  assert.equal((await saveProfile(env, alice, "alice", false)).s, 200);
+  it = await item();
+  assert.ok(it, "Vorschlag bleibt sichtbar (Ablehnen geht)");
+  assert.equal(it.hiddenPerson, true); assert.equal(it.actions.approve, "no"); assert.equal(it.actions.reject, "do");
+  const ui = readFileSync(new URL("../../assets/redaktion.js", import.meta.url), "utf-8");
+  assert.equal((ui.match(/hidden_person: "/g) || []).length, 2, "Fehlertext hidden_person in en und de");
+  assert.ok(/hiddenPerson: "verborgene Person"/.test(ui) && /hiddenPerson: "hidden person"/.test(ui), "Kennzeichnung in de und en");
+  assert.ok(/it\.hiddenPerson \?/.test(ui), "Karte zeigt die Kennzeichnung");
+});

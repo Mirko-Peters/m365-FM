@@ -1,6 +1,6 @@
 // MCP-Server (Streamable HTTP, JSON-RPC) fuer www.m365.fm: Lesen ohne Anmeldung, Schreiben mit persoenlichem KI-Zugangstoken.
 // Alle Schreibaktionen laufen durch dieselben Regeln wie die Website (Abstimmung, Pflichtfelder, Rate-Limits).
-import { releaseHandleOps, invalidateProfileExport, forgetSearchPerson } from "./privacy.js";
+import { releaseHandleOps, invalidateProfileExport, forgetSearchPerson, HIDDEN_PERSON_SQL } from "./privacy.js";
 import { cleanText, randomToken, sha256hex, rateLimit } from "./util.js";
 import { levelName } from "./levels.js";
 import { baseIds, entityMap, handleEntity } from "./entities.js";
@@ -547,7 +547,7 @@ export async function callTool(env, user, name, a) {
     return { guides: g.map((h) => ({ id: h.id, how_to: de ? h.de : h.en, tools: h.tools })), ...(t && !g.length ? { error: "unknown_topic" } : {}), topics: HOWTO.map((h) => h.id), note: "Always show the user the text before saving. Write tools need the personal token." };
   }
   if (name === "get_entity_questions") {
-    const qs = (await db.prepare("SELECT id,q,lang FROM entity_q WHERE eid=? AND hidden=0 ORDER BY created DESC LIMIT 20").bind(String(a.id || "")).all()).results || [], out = [];
+    const qs = (await db.prepare(`SELECT id,q,lang FROM entity_q WHERE eid=? AND hidden=0 AND eid NOT IN (${HIDDEN_PERSON_SQL}) ORDER BY created DESC LIMIT 20`).bind(String(a.id || "")).all()).results || [], out = [];   // Runde 6: verborgene Personen ohne Q&A
     for (const q of qs) out.push({ ...q, answers: ((await db.prepare("SELECT a.id,a.a,a.accepted,(SELECT COUNT(*) FROM entity_a_votes v WHERE v.a_id=a.id) votes FROM entity_a a WHERE a.q_id=? AND a.hidden=0 ORDER BY a.accepted DESC, votes DESC LIMIT 5").bind(q.id).all()).results || []) });
     return { questions: out };
   }

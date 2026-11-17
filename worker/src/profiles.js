@@ -1,5 +1,5 @@
 // Experten- und Firmenprofile, Programme (MVP/MCT/...), Kanaele mit Feeds, Upvotes, Bestaetigungen
-import { releaseHandleOps, invalidateProfileExport, forgetSearchPerson, forgetSearchEntity, forgetPublicPerson } from "./privacy.js";
+import { releaseHandleOps, invalidateProfileExport, profileExportGen, EXPORT_GEN, anonEntitySpeakerOps, forgetSearchPerson, forgetSearchEntity, forgetPublicPerson } from "./privacy.js";
 import { scopeOf, can, gate, inScope, logEdit, roleOf } from "./perm.js";
 import { decide } from "./editor.js";
 import { syncAutoRoles } from "./roles.js";
@@ -257,9 +257,23 @@ async function replaceLists(db, t, id, { exp, prog, chan, certs }) {
 }
 
 // Profil-Export fuer den Seitenbau: alle Profile lesen und in D1 zwischenspeichern (Cron alle 30 Minuten), damit der Abruf eine einzige Zeile liest
+// Wettlauf (Runde 6): Startzeit und Generation (privacy.js invalidateProfileExport) vor dem Lesen merken. Geschrieben wird nur, wenn seit dem Start
+// keine Invalidierung kam (bedingtes INSERT), mit updated = Startzeit; sonst neuer Versuch mit frischen Daten (hoechstens drei).
 export async function refreshProfilesExport(env) {
   const db = env.DB;
   await db.prepare("CREATE TABLE IF NOT EXISTS export_cache (k TEXT PRIMARY KEY, v TEXT NOT NULL, updated INTEGER NOT NULL)").run();
+  let out = null;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const started = now(), gen = await profileExportGen(db);
+    out = await buildProfilesExport(env);
+    const r = await db.prepare("INSERT INTO export_cache(k,v,updated) SELECT 'profiles',?1,?2 WHERE COALESCE((SELECT v FROM meta WHERE k=?3),'0')=?4 ON CONFLICT(k) DO UPDATE SET v=excluded.v,updated=excluded.updated")
+      .bind(JSON.stringify(out), started, EXPORT_GEN, gen).run();
+    if (Number(r?.meta?.changes ?? 1) > 0) return out;
+  }
+  return out;
+}
+async function buildProfilesExport(env) {
+  const db = env.DB;
     const us = (await db.prepare("SELECT user_id FROM profiles WHERE public=1 AND handle IS NOT NULL ORDER BY updated DESC LIMIT 300").all()).results || [];
     const os = (await db.prepare("SELECT id FROM orgs WHERE public=1 AND unclaimed=0 ORDER BY created DESC LIMIT 200").all()).results || [];
     const people = [], orgs = [], errs = [];
@@ -274,7 +288,6 @@ export async function refreshProfilesExport(env) {
     for (let k = 0; k < us.length; k += 6) for (const v of await Promise.all(us.slice(k, k + 6).map((u) => one(u).catch((e) => { errs.push(String((e && e.message) || e).slice(0, 200)); return null; })))) if (v) people.push(v);   // in Gruppen parallel, Reihenfolge bleibt; ein defektes Profil stoppt den Export nicht
     for (const o of os) { const v = await orgView(db, o.id, 0); if (v) { delete v.id; v.industries = (v.industries || []).filter((e) => emap.get(e)?.type === "industry"); orgs.push(v); } }
   const out = { people, orgs, ...(errs.length ? { failed: errs.length, errors: errs.slice(0, 3) } : {}) };   // Fehler einzelner Profile bleiben sichtbar (Diagnose), der Seitenbau ignoriert die Felder
-  await db.prepare("INSERT INTO export_cache(k,v,updated) VALUES('profiles',?,?) ON CONFLICT(k) DO UPDATE SET v=excluded.v,updated=excluded.updated").bind(JSON.stringify(out), now()).run();
   return out;
 }
 
@@ -748,7 +761,11 @@ export async function deleteUserData(db, id, env = null) {
   if (persons.length) {
     await db.batch(persons.flatMap((eid) => [db.prepare("DELETE FROM entity_rev WHERE eid=?").bind(eid), db.prepare("DELETE FROM entity_claims WHERE eid=?").bind(eid), db.prepare("DELETE FROM entity_claim_review WHERE eid=?").bind(eid),
       db.prepare("DELETE FROM ent_tr WHERE eid=?").bind(eid), db.prepare("DELETE FROM ent_tr_seen WHERE eid=?").bind(eid), db.prepare("DELETE FROM translation WHERE kind='entity' AND item_id=?").bind(eid),
-      db.prepare("UPDATE person_entity SET user_id=0 WHERE eid=?").bind(eid)]));
+      db.prepare("UPDATE person_entity SET user_id=0 WHERE eid=?").bind(eid)]).concat(
+      // Runde 6: Q&A anderer Mitglieder zur Person bleibt, aber verborgen und ohne eid (wanderte sonst zum naechsten Inhaber der Adresse);
+      // Speaker-Eintraege, die nur per Name+e an die Person gebunden sind, werden anonym
+      db.prepare("UPDATE entity_q SET hidden=1,eid='' WHERE eid IN (SELECT value FROM json_each(?))").bind(JSON.stringify(persons)),
+      ...(await anonEntitySpeakerOps(db, persons))));
     for (const eid of persons) await forgetSearchEntity(db, eid);
   }
   await forgetPublicPerson(db, handle);   // Export-Zwischenspeicher und Suchindex sofort (K45)

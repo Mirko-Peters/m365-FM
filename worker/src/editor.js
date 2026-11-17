@@ -13,7 +13,7 @@ import { cleanText, sha256hex } from "./util.js";
 import { limitTopics } from "./sponsor_extra.js";
 import { rejectPitch } from "./podcast.js";
 import { rejectVideo } from "./youtube.js";
-import { isHiddenPerson } from "./privacy.js";
+import { isHiddenPerson, hiddenPersonEids } from "./privacy.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 const txt = (s, n) => String(s || "").replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, "").trim().slice(0, n);
@@ -322,12 +322,15 @@ async function queue(db, user, kind, lang) {
   const actor = await loadActor(db, user);
   const vis = out.filter((x) => inScope(actor, { topics: x.topics || [], lang: x.lang }));   // Fach-Editor: nur eigener Themenbereich; Eintraege ohne Thema nur fuer allgemeine Editoren
   out.length = 0; out.push(...vis);
+  // Runde 6: offene Vorschlaege zu verborgenen Personen-Entitaeten (Profil privat, gesperrt, geloescht) kennzeichnen; Freigeben geht nicht (409 hidden_person)
+  const hiddenP = out.some((x) => x.kind === "entity") ? await hiddenPersonEids(db) : new Set();
   const orgs = new Map(), ids = [...new Set(out.map((x) => x.authorId).filter(Boolean))];   // Firmen aller Autoren in wenigen Abfragen (eigene Firma)
   for (let i = 0; i < ids.length; i += 80) for (const r of (await db.prepare(`SELECT user_id,org_id FROM org_members WHERE status='active' AND user_id IN (${ids.slice(i, i + 80).map(() => "?").join(",")})`).bind(...ids.slice(i, i + 80)).all().catch(() => ({ results: [] }))).results || []) orgs.set(r.user_id, [...(orgs.get(r.user_id) || []), r.org_id]);
   for (const x of out) {   // je Aktion: do | propose | no (fuer die Schaltflaechen); Eigentuemer/Firma wirken ueber can()
     const ip = { ownerId: x.authorId, orgIds: orgs.get(x.authorId) || [], topics: x.topics || [], lang: x.lang }; x.actions = {};
     for (const a of KIND_ACTIONS[x.kind]) { const p = can(actor, ACT[a], ip); x.actions[a] = modeOf(p); }
     x.own = actor.id === x.authorId;
+    if (x.kind === "entity" && hiddenP.has(x.title)) { x.hiddenPerson = true; x.actions.approve = "no"; }
   }
   return out;
 }
