@@ -7,11 +7,11 @@ author: mirko-p
 date: 2026-11-18
 topics: [avd-custom-image-templates, golden-image]
 keypoints:
-  - "The portal flow is Azure Virtual Desktop, Custom image templates, + Add custom image template, with seven tabs: Basics, Source image, Distribution targets, Build properties, Customizations, Tags and Review and create. A build only starts when you select Start build."
-  - "Customizations run in the order listed. You can add built-in scripts, such as FSLogix, Teams optimizations or Office changes, and your own scripts from a publicly reachable URI or a storage account the managed identity can read."
-  - "The source image generation has to match the generation of the Azure Compute Gallery image definition; a mismatch is a documented validation failure. Learn also says the build VM size and the later session host size must match the image generation."
-  - "Distribute to a managed image, an Azure Compute Gallery or both. Leave the gallery version blank for an automatic version, and set Excluded from latest to Yes to keep a new build out of deployments that ask for latest."
-  - "Build logs are the main diagnostic. customization.log in the packerlogs container shows which script failed, and every script has to exit with 0 and never wait for input."
+  - "The portal has seven tabs, from Basics to Review and create. Creating the template builds nothing: a build only starts when you select Start build."
+  - "Customizations run in the order listed. Add built-in scripts such as FSLogix or Teams optimizations, or your own scripts from a public URI or a storage account the managed identity can read."
+  - "The source image generation must match the gallery image definition; a mismatch is a documented validation failure. Build VM and session host sizes must match the generation too, per Learn."
+  - "Distribute to a managed image, an Azure Compute Gallery or both. A blank gallery version is generated automatically; Excluded from latest set to Yes keeps a build out of latest."
+  - "customization.log in the packerlogs container shows which script failed. Scripts have to exit with 0 and never wait for input."
 faq:
   - q: "In what order should I add scripts to a custom image template?"
     a: "Learn says customizers run in the order specified and that one failure fails the whole customization. It gives no preferred order for apps. A sensible suggestion is to put language, profile and optimization settings first, your own application installs next and Apply Windows Updates last, so nothing installed afterwards is missed. Test the order on a build before you rely on it."
@@ -51,13 +51,13 @@ Creating the template does not build anything. To build, tick the template in th
 
 The timeout field is the maximum wait for the whole build, including customizations, validations and distributions. Learn advises a higher value when you use the Language Pack or Configure Windows Optimization scripts, because Windows Update runs automatically for them. The portal page gives no default. The underlying Image Builder template reference states a default of 240 minutes, a range of 6 to 960 and advice not to go below 60 for Windows.
 
-If you leave the virtual network blank, the custom image templates page says a temporary virtual network, subnet and public IP address are created. The Image Builder networking page, last updated 26 August 2026, says in its connectivity model that Image Builder does not deploy a public IP for direct connectivity, so the two pages differ on whether a public IP address is created, and Learn does not reconcile them. The build VM needs internet access to download built-in and own scripts. If you choose your own subnet, check its outbound access: the Image Builder release notes say that after 31 March 2026 new virtual networks in Azure default to private subnets without default outbound access, and that a subnet specified for the build VM must have outbound access enabled if the build needs it. In our reading, choosing a subnet on Build properties falls under this. If you bring a subnet that has a private service policy, disable that policy, or the build fails with `PrivateLinkService Network Policy is not disabled for the given subnet`.
+If you leave the virtual network blank, the custom image templates page says a temporary virtual network, subnet and public IP address are created. The Image Builder networking page, last updated 26 August 2026, says in its connectivity model that Image Builder does not deploy a public IP for direct connectivity, so the two pages differ on whether a public IP address is created, and Learn does not reconcile them. The build VM needs internet access to download built-in and own scripts. If you choose your own subnet, check its outbound access: the Image Builder release notes say that after 31 March 2026 new virtual networks in Azure default to private subnets without default outbound access, and that a subnet specified for the build VM must have outbound access enabled if the build needs it. In our reading, choosing a subnet on Build properties falls under this. The managed identity also needs access to an existing virtual network or its resource group, and a private service policy on the subnet must be disabled, or the build fails with `PrivateLinkService Network Policy is not disabled for the given subnet`.
 
 ## Planning the customization list
 
 Customizers run in the order listed, and one failure fails the whole customization. The **Move up**, **Move down**, **Move to top** and **Move to bottom** actions set the order.
 
-Learn's overview gives these built-in scripts as examples, so the list may not be complete, and it documents no parameters on the page:
+Learn's overview gives these built-in scripts as examples, so the list may not be complete:
 
 - Install language packs, and set the default language
 - Enable time zone redirection
@@ -104,7 +104,7 @@ $successCodes = @(0)   # add the vendor's documented success codes
 if ($successCodes -contains $p.ExitCode) { exit 0 } else { exit $p.ExitCode }
 ```
 
-Check with the vendor which exit codes mean success and map them to 0 in the script, because a nonzero code fails the build and the portal page lists no field for valid exit codes. Test the script on a standalone VM before it goes into a template. Microsoft Support does not handle customer-created scripts or modified copies of Microsoft scripts. Issues with the built-in ones can be raised at the RDS-Templates repository.
+Check with the vendor which exit codes mean success and map them to 0 in the script, because a nonzero code fails the build and the portal page lists no field for valid exit codes. Microsoft Support does not handle customer-created scripts or modified copies of Microsoft scripts. Issues with the built-in ones can be raised at the RDS-Templates repository.
 
 ## Distribution: managed image or gallery
 
@@ -125,7 +125,7 @@ When adding session hosts, the Virtual Machines tab offers the default image lis
 
 ## When a build fails
 
-Open `customization.log` first. It is in the `packerlogs` container of the storage account in the `IT_<ResourceGroupName>_<TemplateName>_<GUID>` resource group, in a folder named by GUID. Entries for built-in scripts begin `Starting AVD AIB Customization: {<Script name>}`. Search for `(telemetry)` to find the provisioner that started but never ended.
+Open `customization.log` first. By default it is in the `packerlogs` container of the storage account in the `IT_<ResourceGroupName>_<TemplateName>_<GUID>` resource group, in a folder named by GUID; if you named a staging group, look there. Entries for built-in scripts begin `Starting AVD AIB Customization: {<Script name>}`. Search for `(telemetry)` from the bottom of the log to find the last customizer that ran.
 
 | Symptom | Cause | Fix |
 |---|---|---|
