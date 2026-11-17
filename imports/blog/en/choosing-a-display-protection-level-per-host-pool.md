@@ -7,9 +7,9 @@ author: mirko-p
 date: 2026-11-18
 topics: [avd-display-protection, azure-virtual-desktop]
 keypoints:
-  - "The level is one RDP property on the host pool: enableWindowsCloudIODisplayProtection:i:0, 1 or 2. Every user of the pool receives the same value, so pools with different endpoint classes need separate levels or separate pools."
+  - "The level is one RDP property on the host pool: enableWindowsCloudIODisplayProtection:i:0, 1 or 2. Learn sets the value on the host pool, so we read it as applying to every user of the pool; pools with different endpoint classes then need separate pools."
   - "Level 1 uses hardware DRM (SL3000) when available and allows software DRM (SL2000) as a fallback. Level 2 requires SL3000 and blocks the connection if the endpoint cannot provide it."
-  - "Display Protection is listed as Public Preview from September 2026 and works only with Windows App 2.0.1236.0 or newer on a physical Windows 11 device."
+  - "Learn's what's new lists Display Protection as Public Preview in its September 2026 section; it works only with Windows App 2.0.1236.0 or newer on a physical Windows 11 device."
   - "A change can take up to 8 hours to reach an endpoint. Selecting Refresh in Windows App applies it immediately, so pilot with a small group first."
   - "HDCP is not enforced at any level, so a docks-and-adapters check is part of the pilot rather than something the level decides for you."
 faq:
@@ -23,7 +23,7 @@ faq:
 
 Choose the Display Protection level by looking at the endpoints that connect to the host pool: level 0 where it is not needed, level 1 where capable devices should be protected but others must still connect, and level 2 only where every connecting device is a physical Windows 11 PC that can provide hardware DRM. The level is a single RDP property on the [host pool](/entity/avd-host-pool/), so the decision is one value per pool. This guide covers the decision, the steps to set and test it, and the problems an administrator should expect.
 
-The feature itself is explained in the article on Display Protection in Azure Virtual Desktop. In short: it encrypts the session video with Microsoft PlayReady so screen capture malware on the user's Windows device cannot read it. [Display Protection](/entity/avd-display-protection/) is listed as Public Preview in the September 2026 section of Learn's [What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new). The Learn page on the feature (updated 13 November 2026) shows no preview banner, so check the current status before you commit a production pool to it.
+The feature itself is explained in the article on Display Protection in Azure Virtual Desktop. In short: it uses Microsoft PlayReady to encrypt the session video and, in Learn's words, helps protect it from screen capture malware on the user's local Windows device. [Display Protection](/entity/avd-display-protection/) is listed as Public Preview in the September 2026 section of Learn's [What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new). The Learn page on the feature (updated 13 November 2026) carries no preview label for Display Protection itself, so check the current status before you commit a production pool to it.
 
 ## What the three values do
 
@@ -54,11 +54,11 @@ The rows are scenarios, not Microsoft recommendations; the mapping is our readin
 | Pool scenario | Suggested level | Reason | Trade-off |
 |---|---|---|---|
 | General office users on mixed endpoints, including Macs and browsers | 0 on this pool | Unsupported clients are in the pool | Add other controls, for example screen capture protection, which supports more clients |
-| Pilot group on managed Windows 11 laptops | 1 | Shows which devices get hardware DRM and which fall back | A software fallback is a weaker guarantee |
+| Pilot group on managed Windows 11 laptops | 1 | Lets capable devices use hardware DRM while devices that cannot still connect with software DRM | In our reading, a software fallback is a weaker guarantee; Learn does not say how to see which DRM level a connection used |
 | Sensitive data, managed physical Windows 11 devices with known GPUs | 2 | Blocks any device that cannot provide hardware DRM | Users on weaker devices cannot connect until the device changes |
 | Sensitive data, but some users on Macs or tablets | Separate pools | A pool-wide value cannot suit both groups | More host pools to manage |
 
-If you must serve two endpoint classes with different levels, two host pools with their own RDP properties is the only route Learn's configuration supports; Learn describes no per-user setting.
+Learn describes the level only as a host pool RDP property and describes no per-user setting, so the documented way to give two groups different levels is two host pools with their own RDP properties.
 
 ## Steps: set the level on a host pool
 
@@ -75,17 +75,17 @@ The property is not in Learn's supported RDP properties list (last updated 11 Au
 ## Steps: pilot before you widen
 
 1. Create or pick a small pool, or a pilot user group in a dedicated pool, and set level 1.
-2. From a physical Windows 11 endpoint with Windows App 2.0.1236.0 or newer, connect, and confirm that no error appears.
+2. From a physical Windows 11 endpoint with Windows App 2.0.1236.0 or newer, connect, and confirm that the connection succeeds. At level 1 a software fallback also connects without an error, so a successful connection does not by itself show which DRM type was used.
 3. Run a screen capture tool during the session. Learn says the captured remote content should be blocked or blank.
 4. Repeat from each endpoint model you own, including docks and adapters. Learn's capture test checks only the endpoint behavior. It does not validate HDCP or show that an external capture device is blocked.
-5. Check [Intune](/entity/intune/) Cloud PC monitoring (preview) under **Reports** > **Cloud PC monitoring (preview)** > **Connection health**, open **View data**, then the **Events** table, and look for the `DisplayProtectionState` event. Learn says event names and values might change before general availability and does not say whether the report covers Azure Virtual Desktop pools without a Windows 365 deployment, so verify what you see in your own tenant.
+5. Check [Intune](/entity/intune/) Cloud PC monitoring (preview) under **Reports** > **Cloud PC monitoring (preview)** > **Connection health**, open **View data**, then the **Events** table, and look for the `DisplayProtectionState` event. Learn says the event confirms whether protection was negotiated for a connection and that event names and values might change before general availability. Check in your tenant that your Azure Virtual Desktop connections appear there and whether the event shows the DRM type; Learn does not describe that detail.
 6. Only when the pilot shows that all intended devices connect, consider level 2 on the same or a new pool.
 
 ## Problems to expect
 
 - **Incompatible-client error after a change.** Learn says a connection can be blocked with an incompatible-client error shortly after you enable or change the setting. Select **Refresh** in Windows App or wait, up to 8 hours, and try again.
 - **Old Windows App versions.** The minimum is 2.0.1236.0. The Windows App release notes record a fix in version 2.0.1315.0 for an issue where Display Protection was initialized for all connections regardless of the admin policy setting, so keep the client current.
-- **Hardware enforcement and the display.** Learn says the hardware DRM requirement is separate from the HDCP capability of the attached display. A second Learn page, at the windows-cloud-display-protection address (updated 8 September 2026, labelled preview), says DisplayLink docks and USB display adapters are not supported and mentions error code `0x110`. The current page says not to assume that a non-HDCP monitor, DisplayLink dock or USB adapter is blocked. Test those devices against your chosen level.
+- **Hardware enforcement and the display.** Learn says the hardware DRM requirement is separate from the HDCP capability of the attached display. Learn says not to assume that display protection blocks a non-HDCP monitor, a DisplayLink dock or a USB display adapter, and to validate the endpoint and display setup against your selected protection level. It also says HDCP enforcement is planned as a separate option in a future update and is not in the current release.
 - **Resolution.** A 5K monitor is not supported. Learn advises a 4K or lower monitor for protected sessions.
 - **Troubleshooting data.** If the connection fails and the cause is unclear, Learn asks for the activity ID, the timestamp of the failure and the reproduction steps when you contact Microsoft support. For connection errors it links to its connection error troubleshooting page.
 
@@ -102,7 +102,6 @@ Display Protection is one control. It does not stop someone from photographing t
 Retrieved on 17 November 2026.
 
 - [Microsoft Learn: Display Protection for Windows 365 and Azure Virtual Desktop](https://learn.microsoft.com/en-us/windows-365/enterprise/display-protection)
-- [Microsoft Learn: Display Protection (Preview), page at the windows-cloud-display-protection address](https://learn.microsoft.com/en-us/windows-365/enterprise/windows-cloud-display-protection)
 - [Microsoft Learn: Input and Output Protection for Windows 365 and Azure Virtual Desktop](https://learn.microsoft.com/en-us/windows-365/enterprise/windows-cloud-io-protection)
 - [Microsoft Learn: Windows Cloud Input Protection](https://learn.microsoft.com/en-us/windows-365/enterprise/windows-cloud-input-protection)
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
