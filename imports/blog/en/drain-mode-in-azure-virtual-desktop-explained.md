@@ -38,7 +38,7 @@ In the Azure PowerShell reference the same state is the `-AllowNewSession` param
 
 - **It is not a sign-out.** Nothing ends because you turned it on.
 - **It is not a shutdown.** Learn describes no shutdown, so the VM keeps running and its cost continues. That is a conclusion from the description rather than a Learn statement.
-- **It is not a health state.** It does not mark the host as unavailable. Health checks and statuses are a separate topic; see "Azure Virtual Desktop Session Host Shows Unavailable: A Step-by-Step Checklist".
+- **It is not a health state.** Learn lists the new-session setting and the status as separate properties. Health checks and statuses are a separate topic; see "Azure Virtual Desktop Session Host Shows Unavailable: A Step-by-Step Checklist".
 - **It is not the same as the maximum session limit.** Under depth-first load balancing a host at its [maximum session limit](/entity/avd-maximum-session-limit/) is left out of the query for new sessions, but only until sessions end and there is room again. A drained host stays excluded until you switch drain mode off.
 
 ## How the load balancer treats a drained host
@@ -79,7 +79,7 @@ To read the state, `Get-AzWvdSessionHost` returns an `ISessionHost` object. Its 
 
 ## How autoscale uses and overrides drain mode
 
-Autoscale uses drain mode itself, which is the most common source of confusion. On pooled host pools it puts a host in drain mode before it deallocates it, sets AllowNewSessions back to true afterwards, and turns drain mode on or off on any VM in scope, no matter who put it there. Only a host that carries the [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) is left alone. On personal host pools autoscale does not use drain mode, and a user who connects during deallocation receives "No resources available". The runbook article shows how to tag a host before you drain it, and the [force sign-out](/entity/avd-force-logoff/) article describes the ramp-down sequence.
+Autoscale uses drain mode itself, which is easy to overlook. On pooled host pools it puts a host in drain mode before it deallocates it, sets AllowNewSessions back to true afterwards, and turns drain mode on or off on any VM in scope, no matter who put it there. Only a host that carries the [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) is left alone. On personal host pools autoscale does not use drain mode, and a user who connects during deallocation receives "No resources available". The runbook article shows how to tag a host before you drain it, and the [force sign-out](/entity/avd-force-logoff/) article describes the ramp-down sequence.
 
 ## A short example
 

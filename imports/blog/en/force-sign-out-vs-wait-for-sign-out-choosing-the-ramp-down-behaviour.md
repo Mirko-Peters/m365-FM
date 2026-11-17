@@ -9,7 +9,7 @@ topics: [avd-force-logoff, avd-scaling-plan]
 keypoints:
   - "The ramp-down tab offers force sign-out, or, with it off, a choice between VMs that have no active or disconnected sessions and VMs that have no active sessions. The create-and-assign page names both off options without describing the difference beyond their labels."
   - "Learn's autoscale FAQ lists a recommended configuration of four parts: stop VMs when no active sessions, force sign-out \"if you want to\" sign out users who do not disconnect within the wait time, a Group Policy time limit of 15 to 30 minutes for disconnected sessions, and a minimum percentage of active hosts of 0 in off-peak."
-  - "Force sign-out trades unsaved work for certainty: after the wait time, remaining idle, disconnected and active sessions are ended and the host is deallocated."
+  - "Force sign-out trades unsaved work for certainty: after the wait time, remaining idle, disconnected and active sessions are ended and the host is deallocated (or deleted, with dynamic autoscaling)."
   - "Waiting costs running hosts. Disconnected sessions count as used capacity, and zero running hosts needs zero sessions and a minimum percentage of 0."
   - "The choice applies to pooled pools. Learn says autoscale cannot be configured to force users out of a personal desktop."
 faq:
@@ -21,7 +21,7 @@ faq:
     a: "No. Learn says forced sign-out is possible only during ramp-down. In other phases the setting does nothing, so a wait that runs past the end of ramp-down is not enforced."
 ---
 
-Turn force sign-out on when ending sessions at a fixed time is acceptable and you want hosts deallocated on schedule. Leave it off when unsaved work or long-running tasks matter more than the cost of hosts that stay on. Microsoft's autoscale FAQ lists a recommended configuration in which a time limit for disconnected sessions is one part and force sign-out is an optional one ("if you want to sign out users who don't disconnect within the wait time"). This article compares that configuration with the alternatives. How the forced sign-out sequence runs, and where the wait time and message are set, is covered in "Forcing users to sign out during AVD ramp-down: what happens and what users see". This article is about the decision for a pooled [scaling plan](/entity/avd-scaling-plan/).
+Turn force sign-out on when ending sessions at a fixed time is acceptable and you want hosts shut down on schedule. Leave it off when unsaved work or long-running tasks matter more than the cost of hosts that stay on. Microsoft's autoscale FAQ lists a recommended configuration in which a time limit for disconnected sessions is one part and force sign-out is an optional one ("if you want to sign out users who don't disconnect within the wait time"). This article compares that configuration with the alternatives. How the forced sign-out sequence runs, and where the wait time and message are set, is covered in "Forcing users to sign out during AVD ramp-down: what happens and what users see". This article is about the decision for a pooled [scaling plan](/entity/avd-scaling-plan/).
 
 ## The three choices on the ramp-down tab
 
@@ -29,7 +29,7 @@ For a power management plan the ramp-down tab has the field [Force logoff of use
 
 | Choice | What Learn says | Effect on hosts |
 |---|---|---|
-| Force logoff of users on | Autoscale drains the host with the fewest sessions, notifies users, signs out those who remain after the wait time and deallocates the VM | Hosts beyond the required number are deallocated on schedule |
+| Force logoff of users on | Autoscale drains the host with the fewest sessions, notifies users, signs out those who remain after the wait time and deallocates the VM (dynamic autoscaling: deallocates or deletes) | Hosts beyond the required number are shut down once the wait time has passed |
 | Off: **VMs have no active or disconnected sessions** | The create-and-assign page names the option and gives no further description | Not described |
 | Off: **VMs have no active sessions** | The glossary and scenarios pages describe "Stop VMs when ... no active sessions" as waiting for voluntary sign-outs, then consolidating. The wording points to this option, but Learn does not say so | Disconnected sessions still count toward capacity (FAQ) |
 
@@ -54,7 +54,7 @@ The pages do not fit together without a gap. The create-and-assign page says tha
 
 ## What waiting costs
 
-Disconnected sessions are the usual reason hosts stay on. The FAQ states that they are treated as active sessions for capacity calculations, because autoscale assumes users may reconnect. Its example: 9 disconnected users, a maximum session limit of 5 and a threshold of 90 percent give 9 / (5 x 0.9) = 2 hosts minimum. Zero running hosts after hours needs zero user sessions, including disconnected sessions, and a minimum percentage of hosts of 0 percent.
+Disconnected sessions can keep hosts on. The FAQ states that they are treated as active sessions for capacity calculations, because autoscale assumes users may reconnect. Its example: 9 disconnected users, a maximum session limit of 5 and a threshold of 90 percent give 9 / (5 x 0.9) = 2 hosts minimum. Zero running hosts after hours needs zero user sessions, including disconnected sessions, and a minimum percentage of hosts of 0 percent.
 
 The arithmetic below is an illustration and not a Learn figure. If two hosts stay on for a 10-hour night because of six lingering disconnected sessions, that is 20 host-hours per night for six users. Your own VM price turns that into a cost.
 
@@ -63,7 +63,7 @@ The arithmetic below is an illustration and not a Learn figure. If two hosts sta
 The FAQ says idle, disconnected and active sessions are forced to sign out if the users do not sign out during the ramp-down wait time. The costs are therefore:
 
 - **Unsaved work.** Treat any open document as at risk when the session ends. Whether your profile solution closes cleanly is something to test, for example with [FSLogix](/entity/fslogix/).
-- **Late workers.** An active user at the end of ramp-down is treated like an abandoned session, because the FAQ says idle, disconnected and active sessions are all forced to sign out.
+- **Late workers.** An active user when the wait time runs out is signed out like everyone else, because the FAQ says idle, disconnected and active sessions are all forced to sign out.
 - **Other time zones.** A scaling plan has one time zone (the `-TimeZone` parameter of `New-AzWvdScalingPlan` is the "Timezone of the scaling plan"), so users in other time zones can be active during your ramp-down.
 
 The wait time and the notification text are settings you control, which is what makes notice possible. See the sibling article for the parameters. The timing rule is covered there too: a wait that outlasts the phase is not enforced.
