@@ -67,7 +67,7 @@ The limit is the same value that feeds [autoscale](/entity/avd-scaling-plan/) ca
 
 ### Starting points for the value
 
-Learn's [sizing guidelines](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/virtual-machine-recs) list maximum users per vCPU for multi-session hosts: 6 for light, 4 for medium, 2 for heavy and 1 for power workloads. At the light level the table's maximum is 6 users per vCPU, which is 48 users on an 8-vCPU host. Learn calls these estimates generic and recommends validating them with a pilot or simulation. The step-by-step calculation is in "How to size the maximum session limit per session host".
+Learn's [sizing guidelines](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/virtual-machine-recs) list maximum users per vCPU for multi-session hosts: 6 for light, 4 for medium, 2 for heavy and 1 for power workloads. At the light level the table's maximum is 6 users per vCPU, which is 48 users on an 8-vCPU host. Learn calls these figures generic guidelines for initial performance estimates and describes a pilot approach and a simulation approach for capacity planning. The step-by-step calculation is in "How to size the maximum session limit per session host".
 
 Pick the limit with the knowledge that depth-first deliberately runs the first hosts at it. That is the point of the algorithm, so the limit has to be a load you are willing to put on a host for a whole working day, not only a theoretical maximum.
 

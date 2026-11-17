@@ -69,7 +69,7 @@ What this means in practice:
 | Is the workload heavy per user? | Spreading keeps contention lower, which is Learn's stated reason | A low limit is needed so a packed host is not overloaded (inference) |
 | Do users sign in in a short burst? | Burst is spread over hosts (inference) | Burst hits one host first (inference) |
 
-Learn's load-balancing page adds a note for depth-first: to keep the user experience good, change the maximum session limit to a number that suits your requirements. Per-vCPU starting values, the 20-user guidance and the caveat that Learn's sizing page is not fully consistent are in "How to size the maximum session limit per session host"; the depth-first article lists the same starting points. Learn calls them generic estimates to be validated with a pilot or simulation.
+Learn's load-balancing page adds a note for depth-first: to keep the user experience good, change the maximum session limit to a number that suits your requirements. Per-vCPU starting values, the 20-user guidance and the caveat that Learn's sizing page is not fully consistent are in "How to size the maximum session limit per session host"; the depth-first article lists the same starting points. Learn calls them generic guidelines to be used only for initial performance estimates, and for capacity planning it describes a pilot approach and a simulation approach.
 
 ## Steps to change the algorithm
 
