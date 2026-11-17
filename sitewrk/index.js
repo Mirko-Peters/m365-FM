@@ -82,6 +82,11 @@ async function checkBuild(env, url) {
 // Ergebnis mit Pruefzeit 30 s im Kanten-Cache des Rechenzentrums ab (Schluessel /__r2c/~ready, oeffentlich 404 wie alle /__r2c/). Ein neues Isolat
 // liest es einmal (hoechstens READY_WAIT ms, eigener Abruf dieser Anfrage) und uebernimmt es nur, wenn die Pruefung juenger als 30 s ist - so ist
 // der Stand nie aelter als im Isolat selbst. Auf checkBuild (nie gecachter Abruf bei GitHub Pages) wartet weiterhin keine Anfrage.
+// Grenze: Das hilft nur, wenn im selben Rechenzentrum in den letzten 30 s eine Pruefung lief. Bei wenig Verkehr (Messung 17.11.: ~1,7 Seitenaufrufe/min
+// weltweit) ist der Eintrag nach einer Ruhepause meist abgelaufen (ready=cold) - eine Senkung der TTFB ist damit NICHT belegt. Erst messen
+// (Server-Timing ready/src auf /entity/*). Bleibt ready=cold mit src=r2fallback haeufig, ist der naechste Hebel, im kalten Zustand Pfade, die es nur
+// im Bucket gibt (site_size.r2_only, Entitaeten nach site_entities.py), gleich ueber r2Page zu holen (derselbe Inhalt wie heute der 404-Rueckfall).
+// READY_TTL NICHT einfach verlaengern: nach einem Deploy gaelte die alte Kennung weiter, und r2First laese unter /__r2c/@<alter Bau>/ bis zu 4 h alte Seiten.
 const READY_KEY = "/__r2c/~ready", READY_WAIT = 50;
 async function sharedReady(url) {
   const read = caches.default.match(new Request(url.origin + READY_KEY)).then(async (c) => (c ? { t: c.headers.get("x-r2-build-t"), v: (await c.text()).trim() } : null));
