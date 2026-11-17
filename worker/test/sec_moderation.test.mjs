@@ -115,3 +115,27 @@ test("K7: approve gilt nur fuer wartende Mitglieder; Inhaber und Admins bleiben 
   assert.equal((await mem(2, { action: "role", user_id: 1, role: "member" })).s, 403);
   assert.deepEqual(roleOf(1), { role: "owner", status: "active" });
 });
+
+// ---------- K4: Meldungen zur eigenen Expert-Connect-Antwort entscheidet nicht der Antwort-Autor ----------
+test("K4: expert_report zu einer Antwort - own_content prueft den Antwort-Autor", async () => {
+  const { raw, env } = await mk();
+  const er = ins(raw, "expert_requests", { user_id: 4, title: "Anfrage", description: "Beschreibung", status: "open", lang: "de", created: 1 });
+  const rp = ins(raw, "expert_request_replies", { request_id: er, user_id: 3, body: "Antwort des Moderators", created: 2 });
+  ins(raw, "expert_request_reports", { request_id: er, user_id: 4, reply_id: rp, reason: "unpassend", created: 3 });
+  const id = `${er}:${rp}`, left = () => raw.prepare("SELECT COUNT(*) n FROM expert_request_reports WHERE request_id=? AND reply_id=?").get(er, rp).n;
+  // Pruefliste: der Antwort-Autor (Moderator 3) sieht den Eintrag als eigenen, ohne Schaltflaeche
+  const q = await call(env, 3, "GET", "/api/editor/queue?kind=expert_report");
+  const it = (q.j.items || []).find((x) => x.id === id);
+  assert.ok(it, "Eintrag in der Pruefliste"); assert.equal(it.own, true); assert.equal(it.actions.resolve, "no");
+  // Entscheidung in eigener Sache: 403 own_content, Meldung bleibt
+  const d = await call(env, 3, "POST", "/api/editor/decide", { kind: "expert_report", id, action: "resolve" });
+  assert.equal(d.s, 403); assert.equal(d.j.error, "own_content"); assert.equal(left(), 1);
+  // eigene Firma des Antwort-Autors
+  const o = ins(raw, "orgs", { handle: "firma-k4", name: "Firma", public: 1, created: 1 });
+  ins(raw, "org_members", { org_id: o, user_id: 3, role: "member", status: "active", created: 1 }); ins(raw, "org_members", { org_id: o, user_id: 5, role: "member", status: "active", created: 1 });
+  const c = await call(env, 5, "POST", "/api/editor/decide", { kind: "expert_report", id, action: "resolve" });
+  assert.equal(c.j.error, "own_company"); assert.equal(left(), 1);
+  // unbeteiligter Editor darf
+  assert.equal((await call(env, 2, "POST", "/api/editor/decide", { kind: "expert_report", id, action: "resolve" })).s, 200);
+  assert.equal(left(), 0);
+});
