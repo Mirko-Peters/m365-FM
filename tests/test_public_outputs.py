@@ -19,6 +19,20 @@ class MembersExport(unittest.TestCase):
         for p in d.get("people") or []:
             self.assertFalse(p.get("contact"), p.get("handle"))
             self.assertNotIn("private", p)
+        for o in d.get("orgs") or []:
+            for loc in o.get("locations") or []:
+                self.assertLessEqual(set(loc), {"label", "country"}, o.get("handle"))
+
+    def test_repo_copy_cuts_org_locations_to_country_and_label(self):
+        import site_members as MEM
+        j = {"people": [], "orgs": [{"handle": "solo", "name": "Solo", "locations": [
+            {"id": 7, "label": "Buero", "address": "Hauptstr. 1", "zip": "12345", "city": "Musterstadt", "country": "Germany",
+             "public": 1, "lat": 52.5, "lng": 13.4, "geo_precision": "street"}]}]}
+        out = MEM.repo_copy(j)
+        self.assertEqual(out["orgs"][0]["locations"], [{"label": "Buero", "country": "Germany"}])
+        self.assertEqual(j["orgs"][0]["locations"][0]["city"], "Musterstadt", "der frische Export fuer die Seiten bleibt unveraendert")
+        raw = json.dumps(out, ensure_ascii=False)
+        for v in ("Hauptstr. 1", "12345", "Musterstadt", "52.5"): self.assertNotIn(v, raw)
 
     def test_fetch_members_writes_cache_without_contact_but_pages_keep_it(self):
         import site_members as MEM
