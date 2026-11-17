@@ -1,6 +1,6 @@
 ---
 title: "Troubleshooting the AVD agent and side-by-side stack: common failures"
-summary: "Microsoft Learn points to two places to look first when the Azure Virtual Desktop agent or side-by-side stack fails: the Application log and the qwinsta output. This article maps those signs to the narrow fix Learn documents, so a full reinstall becomes the last step instead of the first."
+summary: "Learn's agent troubleshooting page starts with the session host's Application log, and its stack sections use the qwinsta output. This article maps those signs to the narrow fix Learn documents and notes the cases where Learn goes straight to a full reset."
 status: review
 publish: false
 author: mirko-p
@@ -11,7 +11,7 @@ keypoints:
   - "Run qwinsta on the session host. If rdp-tcp and rdp-sxs do not show Listen, the side-by-side stack is the problem, and Learn's health check table treats a failed stack listener check as fatal."
   - "Installs and updates fail for narrow, checkable reasons: a Group Policy that blocks msiexec.exe or cmd.exe, too little disk space, .NET Framework below 4.7.2 as a possible cause, a DisableRegistryTools value of 1, or an operating system SKU such as Windows Pro that cannot run the stack."
   - "INVALID_FORM, event 3703 and event 3019 are network and policy problems between the agent and the service. Our reading: test the broker with /api/health and run WVDAgentUrlTool.exe before you touch the registration."
-  - "A registration key must be valid for at least one hour and at most 27 days. Reinstall everything with a new key only when the targeted fixes do not apply."
+  - "A registration key must be valid for at least one hour and at most 27 days. Learn's full reset with a new key is for the cases it names and for problems the earlier sections did not resolve."
 faq:
   - q: "How do I check whether the side-by-side stack is healthy?"
     a: "Run qwinsta.exe on the session host. Learn says the stack is fine when the rdp-tcp and rdp-sxs entries are listed and their STATE column shows Listen. If either entry is missing or not listening, there is a stack issue. Learn says stack updates are installed together with agent updates, and that the listener does not work if the update was unsuccessful."
@@ -21,9 +21,9 @@ faq:
     a: "Learn says the side-by-side stack supports only Windows Enterprise or Windows Server SKUs. On other SKUs the stack installs but is not activated, so it does not appear in qwinsta. Create session hosts with a supported operating system."
 ---
 
-For a broken Azure Virtual Desktop agent or side-by-side stack, Learn points to two places to look first: the session host's Application log and the `qwinsta` output. Match the event text or the output to the narrow fix first. The full uninstall and reinstall is the last step, because it removes the host from the pool and starts a new registration.
+For a broken Azure Virtual Desktop agent or side-by-side stack, Learn recommends starting in the session host's Application log; for stack problems it uses the `qwinsta` output. Match the event text or the output to the narrow fix first. Learn keeps the full uninstall and reinstall for the cases it names and for problems the earlier sections did not resolve.
 
-This article covers the [Azure Virtual Desktop agent](/entity/avd-agent/) and stack on one [session host](/entity/avd-session-host/). For a running host marked Unavailable, including domain join, autoscale and URL checks, the article "Azure Virtual Desktop Session Host Shows Unavailable: A Step-by-Step Checklist" is the broader starting point. Learn's main troubleshooting page was last updated in October 2025, and its registry steps are written for Windows 10 version 2004.
+This article covers the [Azure Virtual Desktop agent](/entity/avd-agent/) and stack on one [session host](/entity/avd-session-host/). For a running host marked Unavailable, including domain join, autoscale and URL checks, the article "Azure Virtual Desktop Session Host Shows Unavailable: A Step-by-Step Checklist" is the broader starting point.
 
 ## What the agent, the boot loader and the stack are
 
@@ -65,7 +65,7 @@ Learn gives this procedure for hosts stuck in Upgrading or Unavailable:
 
 1. Sign in as administrator and run `qwinsta.exe` to confirm the stack state.
 2. Stop the boot loader with `Stop-Service RDAgentBootLoader`.
-3. Uninstall the latest **Remote Desktop Services SxS Network Stack** (Programs and Features, or Settings > Apps on Windows 11).
+3. Uninstall the latest **Remote Desktop Services SxS Network Stack**, or the version named in the `ReverseConnectionListener` value under `...\Terminal Server\WinStations` (Programs and Features, or Settings > Apps on Windows 11).
 4. Find the newest installer already on the host:
 
 ```powershell
@@ -75,7 +75,7 @@ $sxsMsi
 
 5. Install it with `msiexec /i $sxsMsi`, restart the VM, and run `qwinsta.exe` again.
 
-If `rdp-tcp` and `rdp-sxs` still do not show `Listen`, Learn says to re-register the VM and reinstall the agent. A separate Learn page lists known causes of a malfunctioning stack: not following the correct order of the enabling steps, an auto update to Windows 10 Enhanced Versatile Disc (EVD), and a missing Remote Desktop Session Host role. On Windows Server, the registration steps include installing that role before the agent; the command-line variant is `Install-WindowsFeature -Name RDS-RD-Server -Restart`. That page says `O_REVERSE_CONNECT_STACK_FAILURE` means the stack is not installed.
+If `rdp-tcp` and `rdp-sxs` still do not show `Listen`, Learn says to re-register the VM and reinstall the agent. The Learn page "Troubleshoot Azure Virtual Desktop session host" lists known causes of a malfunctioning stack: not following the correct order of the enabling steps, an auto update to Windows 10 "Enhanced Versatile Disc (EVD)" (Learn's wording), and a missing Remote Desktop Session Host role. The same page gives the cause of `O_REVERSE_CONNECT_STACK_FAILURE` as a stack that is not installed on the VM. On Windows Server, the registration steps in "Add session hosts to a host pool" include installing that role before the agent; the command-line variant is `Install-WindowsFeature -Name RDS-RD-Server -Restart`.
 
 ## Failures that block the install
 
@@ -90,13 +90,13 @@ If `rdp-tcp` and `rdp-sxs` still do not show `Listen`, Learn says to re-register
 
 **`INVALID_FORM`.** In the registry key `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\RDInfraAgent`, read `BrokerResourceIdURI` and `BrokerResourceIdURIGlobal`. Open each in a browser with `/api/health` appended. A healthy result says **RD Broker is Healthy**. If the pages do not load, unblock the required endpoints. If they load but the agent still fails, check Group Policy for TLS cipher settings: Learn says the service uses the same TLS 1.2 ciphers as Azure Front Door.
 
-**Event 3703 and event 3019.** 3703 reads `RD Gateway Url: is not accessible`, and 3019 means the web socket transport URLs cannot be reached. For both, allow the required URL list through firewall, proxy and DNS. Learn's 3703 section names its Required URL Check tool; the steps below use the Agent URL Tool. For a support case on 3019, Learn asks for network trace logs.
+**Event 3703 and event 3019.** 3703 reads `RD Gateway Url: is not accessible`, and 3019 means the web socket transport URLs cannot be reached. For both, allow the required URL list through firewall, proxy and DNS. For a support case on 3019, Learn asks for network trace logs.
 
 **Test the endpoints from the host.** Run `WVDAgentUrlTool.exe` from the installed agent folder; it needs .NET 4.6.2, RDAgent 1.0.2944.400 or higher, and `WVDAgentUrlTool.config` next to it.
 
 The output lists reachable and unreachable endpoints. The tool does not check wildcard entries, only specific entries beneath them.
 
-**`ENDPOINT_NOT_FOUND` (3277).** The broker found no endpoint. Learn lists four causes: no hosts in the pool, hosts not active, all hosts over the [maximum session limit](/entity/avd-maximum-session-limit/), or no agent service running. Learn's checks cover the pool, session limit, agent service, stack listener, broker access and token. For "Connection not found: RDAgent does not have an active connection to the broker", a host at its connection limit, Learn suggests lowering the session limit or adding resources.
+**`ENDPOINT_NOT_FOUND` (3277).** The broker found no endpoint. Learn lists four causes: no hosts in the pool, hosts not active, all hosts over the [maximum session limit](/entity/avd-maximum-session-limit/), or no agent service running. For "Connection not found: RDAgent does not have an active connection to the broker", a host at its connection limit, Learn suggests lowering the session limit or adding resources.
 
 ## Registration and token failures
 
@@ -109,7 +109,7 @@ The output lists reachable and unreachable endpoints. The tool does not check wi
 
 **Loader stopped.** Learn says a stopped `RDAgentBootLoader`, or no status for **Remote Desktop Agent Loader**, means the boot loader could not install the agent properly. In Services, start **Remote Desktop Agent Loader** (greyed out means no administrator permissions), wait 10 seconds, then refresh. If it stops again, Learn suspects a registration failure.
 
-**Needs Assistance.** Learn names three health checks. `UrlsAccessibleCheck`: a firewall blocks a required URL, or the hosts file lists it (find the file via `DataBasePath` under `HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters`). `MetaDataServiceCheck`: unblock 169.254.169.254 and bypass web proxies for it. `MonitoringAgentCheck`: confirm the Geneva Agent is installed, read `GenevaInstall.txt` in `C:\Program Files\Microsoft RDInfra`, and check that the scheduled task `GenevaTask_<version>` runs.
+**Needs Assistance.** Learn names three health checks. `UrlsAccessibleCheck`: a firewall blocks a required URL, or the hosts file lists it (find the file via `DataBasePath` under `HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters`). `MetaDataServiceCheck`: unblock 169.254.169.254 and bypass web proxies for it; for a web proxy, Learn uses `netsh winhttp set proxy proxy-server="http=<customerwebproxyhere>" bypass-list="169.254.169.254"`. `MonitoringAgentCheck`: confirm the Geneva Agent is installed, read `GenevaInstall.txt` in `C:\Program Files\Microsoft RDInfra`, and check that the scheduled task `GenevaTask_<version>` runs.
 
 ## Slow start at boot
 
@@ -122,7 +122,7 @@ Learn's catch-all procedure applies when a host is stuck in Upgrading or Unavail
 1. Uninstall the four programs named above (every instance), then restart. Over RDP, choose **Do not close applications** when the stack uninstall asks.
 2. Remove the host from the pool: **Host pools**, your pool, **Session Hosts**, select the host, **Remove**.
 3. Generate a new registration key.
-4. Run the current agent and boot loader installers, paste the key, and restart. The host should then show as **Available**; Learn gives no wait time here.
+4. Run the current agent and boot loader installers, paste the key, and restart. The host should then show as **Available**.
 
 ## When to open a case
 
