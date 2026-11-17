@@ -9,12 +9,12 @@ topics: [fslogix-profile-container]
 keypoints:
   - "Triage first: locks, permissions, a full container or share, and a changed folder-naming setting all look like corruption but have documented fixes that leave the VHD(x) intact. Learn says the user's data is not lost after a naming change."
   - "Learn ties container corruption to antivirus scanning, the older VHD format, deleting the wrong data inside a container and, in Cloud Cache failover designs, ungraceful disaster events. A misconfigured redirections.xml is documented on the same page as a source of unexpected results. Abrupt sessions, a sector size mismatch and unsupported concurrent access are documented as lock, sign-in or crash problems, not as damage."
-  - "The FSLogix status and reason codes in the Profile log and under HKLM\\Software\\FSLogix\\Profiles\\Sessions\\<SID> separate attach, open, format and lock failures."
-  - "Azure Backup restore and the frx utility are documented, but Learn gives no recovery procedure for a damaged VHD(x). The options below are our combination of those tools, so work on copies."
+  - "The FSLogix status and reason codes in the Profile log and under HKLM\\Software\\FSLogix\\Profiles\\Sessions\\<SID> separate open, attach, initialize and format failures (codes 11, 12, 15, 17); locks show up in the Windows error code and text on the same log lines."
+  - "Azure Backup restore and the frx utility are documented, but the Learn pages listed under Sources give no recovery procedure for a damaged VHD(x). The options below are our combination of those tools, so work on copies."
   - "Prevention is mostly configuration: VHDX, the antivirus exclusion list, a simple redirections.xml, monitored capacity, a current FSLogix version and a tested backup."
 faq:
   - q: "Does FSLogix repair a corrupted VHDX automatically?"
-    a: "Learn does not describe an automatic repair of a damaged container. The frx utility can attach or copy containers, but it is not documented as a repair tool. Practical options, combined by us from general tools, are restoring from a backup or moving readable data into a new container."
+    a: "The Learn pages listed under Sources do not describe an automatic repair of a damaged container. The frx utility reference describes attaching and copying containers, not repair. Practical options, combined by us from general tools, are restoring from a backup or moving readable data into a new container."
   - q: "Is a temporary profile a sign of a corrupted container?"
     a: "Not necessarily. Learn lists many other causes of a temporary or local profile: FSLogix not enabled, a wrong VHDLocations value, missing storage permissions, a container in use on another computer, an existing local profile and a full storage provider. Read the Profile log first."
   - q: "Does VHDX reduce the risk compared with VHD?"
@@ -90,8 +90,8 @@ This order combines documented tools with ordinary file handling. Our own steps 
 | Option | Keeps data | Learn documents it for corruption | Main limit |
 |---|---|---|---|
 | Restore from Azure Backup | Data as of the restore point | Restore is documented; the link to FSLogix damage is not | Needs a backup; original-location restore needs a snapshot recovery point |
-| Inspect and copy with frx | Whatever is readable | Tools are documented, repair is not | Unknown behavior on a damaged file |
-| New empty container | None, unless copied in | Creation of a missing container is documented (`VHDLocations`, naming change); use after damage is not | Users lose settings and cached data |
+| Inspect and copy with frx | Whatever is readable | Tools are documented, repair is not described on these pages | Unknown behavior on a damaged file |
+| New empty container | None, unless copied in | Creation of a missing container is documented (`VHDLocations`, naming change); use after damage is not described on these pages | Users lose settings and cached data |
 
 ## Step 5: Reduce the chance of a repeat
 
