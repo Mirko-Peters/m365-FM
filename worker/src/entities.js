@@ -111,10 +111,14 @@ export function mergeFromJson(json, revs, sysId) {
 }
 
 export async function syncEntitiesFromSite(env, opts = {}) {
-  const db = env.DB;
-  if ((await source(env)) === "db") return { skipped: "entity_source=db" };
+  const db = env.DB, dbMode = (await source(env)) === "db";
   let list = [];
   try { const r = await fetch(env.SITE + "/entities-src.json", { cf: { cacheTtl: 0 } }); if (r.ok) list = (await r.json()).entities || []; } catch { /* noch nicht veroeffentlicht */ }
+  // K41: Merker einer geloeschten Personen-Entitaet (person_entity, user_id 0) aufheben, sobald dieselbe id redaktionell im Repo steht (z. B. ein
+  // Podcast-Gast mit gleichem Namens-Slug) - sonst blendeten entityMap, MCP und Suche sie fuer immer aus. /entities-src.json ist die reine
+  // Repo-Fassung ohne D1, enthaelt also nie die geloeschte Profil-Fassung; der naechste importEntitiesFromSite legt die Repo-Fassung an.
+  if (list.length) await db.prepare("DELETE FROM person_entity WHERE user_id=0 AND eid IN (SELECT value FROM json_each(?))").bind(JSON.stringify(list.map((e) => e?.id).filter(Boolean))).run().catch(() => {});
+  if (dbMode) return { skipped: "entity_source=db" };
   if (!list.length) return { skipped: "entities-src.json nicht erreichbar" };
   const last = +(await db.prepare("SELECT v FROM meta WHERE k='ent_src_n'").first().catch(() => null))?.v || 0;
   if (last && list.length < last * 0.8) return { skipped: `entities-src.json unvollstaendig (${list.length} statt ${last})` };   // Schutz vor einem halben Seitenbau

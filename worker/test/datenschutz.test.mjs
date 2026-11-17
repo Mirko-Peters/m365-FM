@@ -14,8 +14,10 @@ const API = "https://api-dub.m365.fm", SITE = "https://www.m365.fm";
 const realFetch = globalThis.fetch;
 let searchPart = null;   // Attrappe fuer den Suchindex des letzten Seitenbaus
 let siteEnts = [];   // Attrappe fuer /entities.json des letzten Seitenbaus
+let srcEnts = null;   // Attrappe fuer /entities-src.json (reine Repo-Fassung)
 globalThis.fetch = async (u) => {
   const s = String(u);
+  if (srcEnts && s.endsWith("/entities-src.json")) return new Response(JSON.stringify({ entities: srcEnts }), { headers: { "content-type": "application/json" } });
   if (s.endsWith("/entities.json")) return new Response(JSON.stringify({ entities: siteEnts }), { headers: { "content-type": "application/json" } });
   if (searchPart && s.endsWith("/search/manifest.json")) return new Response(JSON.stringify({ generated: "2026-11-16", parts: 1 }), { headers: { "content-type": "application/json" } });
   if (searchPart && s.endsWith("/search/part-1.json")) return new Response(JSON.stringify(searchPart), { headers: { "content-type": "application/json" } });
@@ -233,6 +235,24 @@ test("Kontoloeschung: der naechste Cron holt die Personen-Entitaet nicht aus /en
   assert.equal((await saveProfile(env, bob, "alice", true)).s, 200);
   assert.ok((await entityIds(env)).includes("alice"));
   assert.equal(raw.prepare("SELECT user_id FROM person_entity WHERE eid='alice'").get().user_id, 2);
+});
+
+test("Kontoloeschung: steht dieselbe id spaeter redaktionell im Repo, wird der Merker aufgehoben (K41)", async () => {
+  const { raw, env, user } = await setup();
+  const alice = await user(1, "Alice Example");
+  assert.equal((await saveProfile(env, alice, "alice", true)).s, 200);
+  assert.equal((await call(env, "DELETE", "/api/me", alice)).s, 200);
+  assert.equal(raw.prepare("SELECT user_id FROM person_entity WHERE eid='alice'").get().user_id, 0);
+  const guest = { id: "alice", name: "Alice Guest", type: "person", desc: { en: "Alice Guest is a podcast guest." } };
+  siteEnts = [guest]; srcEnts = [guest];
+  try {
+    await importEntitiesFromSite(env);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM person_entity WHERE eid='alice'").get().n, 0, "Merker aufgehoben");
+    assert.equal((await call(env, "GET", "/api/entity?id=alice")).s, 200);
+    assert.ok(JSON.stringify(await callTool(env, null, "get_entity", { id: "alice" })).includes("Alice Guest"), "MCP liefert die Repo-Fassung");
+    await importEntitiesFromSite(env);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_rev WHERE eid='alice' AND status='live'").get().n, 1, "der naechste Cron legt die Repo-Fassung an");
+  } finally { siteEnts = []; srcEnts = null; }
 });
 
 test("Anonymer Speaker-Eintrag bleibt anonym, wenn der Veranstalter die Session speichert - auch mit einem Profil 'Former member' (K42)", async () => {
