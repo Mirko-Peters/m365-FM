@@ -1,13 +1,13 @@
 ---
 title: "Azure Virtual Desktop licensing explained"
-summary: "Azure Virtual Desktop costs come from two sources: the Azure resources you consume and the license that gives each user access rights. Internal users need an eligible Windows, Microsoft 365 or RDS license, and external customers need per-user access pricing on an enrolled Azure subscription."
+summary: "For session hosts in Azure, Azure Virtual Desktop costs come from two sources: the Azure resources you consume and the license that gives each user access rights. Internal users need an eligible Windows, Microsoft 365 or RDS license, and external customers need per-user access pricing on an enrolled Azure subscription."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [azure-virtual-desktop, microsoft-365-e3]
 keypoints:
-  - "Learn splits Azure Virtual Desktop costs into Azure resource consumption (VMs, storage, networking) and licensing. The license is a per-user access right; for eligible Windows, Microsoft 365 and RDS licenses it is billed through licensing channels."
+  - "For session hosts in Azure, Learn splits Azure Virtual Desktop costs into Azure resource consumption (VMs, storage, networking) and licensing. The license is a per-user access right; for eligible Windows, Microsoft 365 and RDS licenses it is billed through licensing channels."
   - "For Windows 10 and 11 session hosts, internal users are covered by Microsoft 365 E3, E5, A3, A5, F3, Business Premium or Student Use Benefit, Windows Enterprise E3 or E5, Windows Education A3 or A5, or Windows VDA per user. Windows Server session hosts need an RDS CAL with Software Assurance or an RDS User Subscription License."
   - "External users cannot use those licenses. They are covered by per-user access pricing, charged through an enrolled Azure subscription for each user who connects in the billing month. It is not available for Windows Server session hosts."
   - "Microsoft 365 E3 grants Azure Virtual Desktop access rights in your tenant, including for B2B collaborators who are assigned the license in your tenant. A license in one tenant does not carry over to another tenant of a multitenant organization."
@@ -21,7 +21,7 @@ faq:
     a: "Learn warns that users with separate assigned licenses are also charged by Azure Virtual Desktop in an enrolled subscription. For internal users that you have already licensed, Microsoft recommends a separate subscription that is not enrolled in per-user access pricing."
 ---
 
-Azure Virtual Desktop has two separate cost items: the Azure infrastructure you run, and the license that entitles each user to connect. For internal employees Learn requires an eligible license for each user, for example Microsoft 365 E3 or E5 for Windows 10 or 11 session hosts; whether your tenant already holds it depends on the plans you have bought. For external customers the license is replaced by per-user access pricing, which you enable on an Azure subscription. This guide sets out which license covers which session host operating system, how external access works, and what the licenses do not pay for.
+For session hosts that run in Azure, Azure Virtual Desktop has two separate cost items: the Azure infrastructure you run, and the license that entitles each user to connect. Azure Virtual Desktop Hybrid, with session hosts on premises, is priced differently (see below). For internal employees Learn requires an eligible license for each user, for example Microsoft 365 E3 or E5 for Windows 10 or 11 session hosts; whether your tenant already holds it depends on the plans you have bought. For external customers the license is replaced by per-user access pricing, which you enable on an Azure subscription. This guide sets out which license covers which session host operating system, how external access works, and what the licenses do not pay for.
 
 ## Two sources of cost
 
@@ -31,6 +31,8 @@ Microsoft Learn's page [Understand and estimate costs for Azure Virtual Desktop]
 - **Licensing** gives the user the right to access Azure Virtual Desktop. For internal commercial purposes you must buy an eligible license for each user who accesses it. For external commercial purposes, per-user access pricing lets you pay for access rights on behalf of external users.
 
 Learn says costs are charged to the organization that owns the deployment, not to the end users.
+
+This split applies to session hosts that run in Azure, which this guide covers. Azure Virtual Desktop Hybrid runs session hosts on premises on Azure Arc-enabled machines. Learn's [Hybrid overview](https://learn.microsoft.com/en-us/azure/virtual-desktop/hybrid-overview) says its licensing consists of user entitlement and a Hybrid service user license, and the Azure pricing page lists a per-user monthly fee for it. Azure Local has its own offering on that page. For those models, use the Hybrid overview and the pricing page.
 
 ## Internal users: which license for which operating system
 
@@ -43,15 +45,14 @@ The [licensing page](https://learn.microsoft.com/en-us/azure/virtual-desktop/lic
 
 The practical consequences:
 
-- A tenant on [Microsoft 365 E3](/entity/microsoft-365-e3/) or [E5](/entity/microsoft-365-e5/) already holds the access rights for Windows client session hosts, including [multi-session](/entity/windows-enterprise-multi-session/). So do tenants on [Microsoft 365 F3](/entity/microsoft-365-f3/) and [Business Premium](/entity/microsoft-365-business-premium/), according to the same table. Check the exact SKU of each user rather than assuming a plan name implies the right.
+- A tenant on [Microsoft 365 E3](/entity/microsoft-365-e3/) or [E5](/entity/microsoft-365-e5/) already holds the access rights for Windows client session hosts, including [multi-session](/entity/windows-enterprise-multi-session/). So do tenants on [Microsoft 365 F3](/entity/microsoft-365-f3/) and [Business Premium](/entity/microsoft-365-business-premium/), according to the same table. Check the exact SKU of each user rather than assuming a plan name implies the right to use Azure Virtual Desktop.
 - Windows Server session hosts are licensed through RDS, not through Microsoft 365. A Microsoft 365 license does not appear in that row of the table.
 - The prerequisites page says that if your license entitles you to use Azure Virtual Desktop, you do not need to install or apply a separate license for the access right itself.
 - The Azure pricing page has a footnote on access from non-Windows Pro endpoints: customers can access Azure Virtual Desktop from them if they have a Microsoft 365 E3, E5, F3, Business, A3, A5 or Student Use Benefits license, or a Windows 11 or Windows 10 VDA per user license.
-- Properly licensed customers can apply a Windows license to their session host VMs and run them without paying for another license, according to the apply Windows license page (see below).
 
 ### Applying the Windows license to session host VMs
 
-Separate from the user's access right, the Azure VM itself must carry the Windows license setting. Learn's [apply Windows license](https://learn.microsoft.com/en-us/azure/virtual-desktop/apply-windows-license) page says that creating the host pool and VMs in the Azure portal, or from the GitHub Azure Resource Manager template, applies it automatically. For VMs you built another way, it gives this PowerShell for Windows client VMs:
+Separate from the user's access right, the Azure VM itself carries a Windows license setting, and the prerequisites page says to make sure it is correctly assigned in Azure. Learn's [apply Windows license](https://learn.microsoft.com/en-us/azure/virtual-desktop/apply-windows-license) page says that creating the host pool and VMs in the Azure portal, or from the GitHub Azure Resource Manager template, applies it automatically. For VMs you built another way, it gives this PowerShell for Windows client VMs:
 
 ```powershell
 $vm = Get-AzVM -ResourceGroup <resourceGroupName> -Name <vmName>
@@ -86,7 +87,7 @@ Learn says it is not a full replacement for a Windows or Microsoft 365 license. 
 
 ## Contractors, partners and multiple tenants
 
-Learn's rules for people from other organizations are short. First, the definition: internal users are members of your own organization, "including external vendors or contractors"; external users for external commercial purposes are your customers, for example when you offer a software-as-a-service application on Azure Virtual Desktop. Learn's own example is a retail company that gives an external contractor company access to line-of-business apps: because the contractors serve internal purposes, the company must buy an eligible license for each contractor, and per-user access pricing is not applicable in that scenario.
+Learn's rules for people from other organizations are short. First, the definition: internal users are members of your own organization, "including external vendors or contractors"; external users for external commercial purposes are your customers, for example when you offer a software-as-a-service application on Azure Virtual Desktop. In Learn's example, a retail company gives an external contractor company access to line-of-business apps: the contractors serve internal purposes, so the company buys an eligible license for each, and per-user access pricing does not apply.
 
 - Anyone accessing Azure Virtual Desktop or other online services must be licensed, including contractors, unless the online service terms say otherwise. Licenses in the collaborator's home tenant generally do not grant entitlements in your tenant.
 - For B2B collaborators, buy the same kind of license as for internal users and assign it to the collaborator's identity in your Microsoft Entra ID tenant. Learn's example: Microsoft 365 E3 grants Azure Virtual Desktop access rights in your tenant, plus Entra ID P1, Microsoft 365 Apps, Intune Plan 1 and Defender for Endpoint Plan 1 entitlements.
@@ -94,7 +95,7 @@ Learn's rules for people from other organizations are short. First, the definiti
 
 ## FSLogix eligibility
 
-FSLogix is tied to the same kind of licenses as the desktop itself: the per-user access pricing row of the licensing comparison includes access rights to Azure Virtual Desktop and FSLogix. The [FSLogix prerequisites](https://learn.microsoft.com/en-us/fslogix/overview-prerequisites) page says you are eligible to use FSLogix if you have one of these licenses: Microsoft 365 E3 and E5, A3 and A5 or Student Use Benefits, F1 and F3, and Business; Windows 10 Enterprise E3 and E5; Windows 10 Education A3 and A5; RDS CAL; RDS SAL; and the Azure Virtual Desktop per-user access license. The lists differ in wording: the FSLogix page says "Microsoft 365 Business", the Azure Virtual Desktop page says "Business Premium", and the FSLogix page lists F1 and the Azure Virtual Desktop page does not. Compare the two pages for your exact SKUs before you rely on a plan name. The FSLogix page adds that FSLogix may be used in any public or private data center or cloud, as long as the user is properly licensed.
+FSLogix is tied to the same kind of licenses as the desktop itself: the per-user access pricing row of the licensing comparison includes access rights to Azure Virtual Desktop and FSLogix. The [FSLogix prerequisites](https://learn.microsoft.com/en-us/fslogix/overview-prerequisites) page says you are eligible to use FSLogix if you have one of these licenses: Microsoft 365 E3 and E5, A3 and A5 or Student Use Benefits, F1 and F3, and Business; Windows 10 Enterprise E3 and E5; Windows 10 Education A3 and A5; RDS CAL; RDS SAL; and the Azure Virtual Desktop per-user access license. The lists differ in wording: the FSLogix page says "Microsoft 365 Business", the Azure Virtual Desktop page says "Business Premium", and the FSLogix page lists F1 and the Azure Virtual Desktop page does not. The FSLogix page adds that FSLogix may be used in any public or private data center or cloud, as long as the user is properly licensed.
 
 ## Other cases on the prerequisites page
 
@@ -116,6 +117,7 @@ FSLogix is tied to the same kind of licenses as the desktop itself: the per-user
 
 Retrieved on 17 November 2026.
 
+- [Microsoft Learn: Azure Virtual Desktop Hybrid overview](https://learn.microsoft.com/en-us/azure/virtual-desktop/hybrid-overview)
 - [Microsoft Learn: Licensing Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/licensing)
 - [Microsoft Learn: Prerequisites for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/prerequisites)
 - [Microsoft Learn: Enroll in per-user access pricing](https://learn.microsoft.com/en-us/azure/virtual-desktop/enroll-per-user-access-pricing)
