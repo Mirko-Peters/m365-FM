@@ -8,7 +8,7 @@ date: 2026-11-18
 topics: [avd-capacity-threshold, avd-scaling-plan]
 keypoints:
   - "Microsoft Learn gives example thresholds (30, 60, 75, 80 and 90 percent) but names no recommended value, although it calls the values pre-filled in the portal suggested weekday values. The right number depends on your session limit, sign-in pattern and host start-up time."
-  - "Set a custom maximum session limit first. The threshold is a percentage of limit times hosts, and the default of 999999 makes it meaningless."
+  - "Set a custom maximum session limit first. The threshold is a percentage of limit times hosts, and the 999999 default of a new breadth-first pool makes it meaningless."
   - "The buffer between the trigger point and the session limit has to absorb sign-ins while the next host starts. Start-up time varies by environment, so measure it."
   - "As a rule of thumb, which is our inference and not a Learn statement, use a lower threshold in ramp-up, which carries over to peak, and a higher one in ramp-down, which carries over to off-peak."
   - "Each 15 points of threshold can change the host count at steady load. By our calculation, 200 sessions at a limit of 32 need at least 11, 9 and 7 hosts at 60, 75 and 90 percent."
@@ -63,7 +63,7 @@ Learn's example values show the range, not a recommendation: 30 percent in a six
 
 ## Step 4: See what the choice costs
 
-Learn gives the formula sessions divided by (limit times threshold), rounded up, for consolidation in ramp-down and off-peak. Applying it at peak is our inference: it gives the minimum number of hosts that keeps usage at or below the threshold, and the real count can be higher, because autoscale does not turn hosts off in ramp-up and the minimum percentage of hosts sets a floor. For 200 sessions with a limit of 32, the minimum is:
+For consolidation, Learn's troubleshooting article gives CEILING(total sessions / (limit x threshold)) for ramp-down and off-peak, compares the result with the minimum percentage of active hosts and uses the higher value. The scenarios page gives the same division for ramp-down without rounding, and the FAQ words it with disconnected sessions and rounds 6 / 4.5 = 1.33 up to 2 hosts. Applying it at peak is our inference: it gives the minimum number of hosts that keeps usage at or below the threshold, and the real count can be higher, because autoscale does not turn hosts off in ramp-up and the minimum percentage of hosts sets a floor. For 200 sessions with a limit of 32, the minimum is:
 
 | Threshold | Calculation | At least |
 |---|---|---|
@@ -81,7 +81,7 @@ If the pool's host count is too small for the peak at the chosen threshold, no t
 
 ## Step 5: Check the interactions
 
-- **Disconnected sessions count.** Learn's FAQ says autoscale treats them as active for capacity because users may reconnect, so lingering disconnected sessions push usage up. A time limit policy for disconnected sessions lowers used capacity.
+- **Disconnected sessions count.** Learn's FAQ and troubleshooting article say autoscale treats them as active for capacity because users may reconnect, and the glossary formula counts active plus disconnected sessions, so lingering disconnected sessions push usage up. A time limit policy for disconnected sessions lowers used capacity.
 - **Excluded hosts.** Hosts with the [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) never start. If all remaining hosts are tagged, a threshold breach starts nothing, and Learn warns that new users may see "No resources available".
 - **Forced sign-out.** In ramp-down, a high threshold means more consolidation, which means more users on hosts that autoscale removes (our inference; Learn says only that autoscale picks the host with the fewest sessions). With [force sign-out](/entity/avd-force-logoff/) on, those users are signed out after the wait time. With it off, hosts stay on until users leave.
 - **Minimum percentage.** It sets a floor regardless of the threshold, so a threshold that looks too high may be hidden behind a high minimum.
@@ -89,7 +89,7 @@ If the pool's host count is too small for the peak at the chosen threshold, no t
 
 ## Step 6: Validate with Insights
 
-Insights shows autoscale decisions for pooled pools, if a few things are in place first. Learn lists a pooled host pool with a scaling plan assigned (personal pools are not supported), and Insights configured for the host pool and its workspace. In the host pool's diagnostic settings, send the "Autoscale logs for pooled host pools" category to the same Log Analytics workspace. You need the Desktop Virtualization Contributor role to configure diagnostics, and Desktop Virtualization Reader plus Log Analytics Reader to query. Learn's `WVDAutoscaleEvaluationPooled` table includes `SessionOccupancyPercent`, `SessionCount`, `ActiveSessionHostsPercent` and `ScalingReasonMessage`, plus `ConfigCapacityThresholdPercent` and `ConfigMinActiveSessionHostsPercent`, the values configured for the schedule phase at the time of evaluation. Run Learn's query for peak occupancy per day, schedule and phase after a week:
+Insights shows autoscale decisions for pooled pools, if a few things are in place first. Learn lists a pooled host pool with a scaling plan assigned (personal pools are not supported), and Insights configured for the host pool and its workspace. In the host pool's diagnostic settings, send the "Autoscale logs for pooled host pools" category to the same Log Analytics workspace. You need the Desktop Virtualization Contributor role to configure diagnostics, and Desktop Virtualization Reader plus Log Analytics Reader to query. Learn's `WVDAutoscaleEvaluationPooled` table includes `SessionOccupancyPercent`, `SessionCount`, `ActiveSessionHostsPercent` and `ScalingReasonMessage`, plus `ConfigCapacityThresholdPercent` and `ConfigMinActiveSessionHostsPercent`, which Learn describes as scaling plan configuration values for the schedule phase. Run Learn's query for peak occupancy per day, schedule and phase after a week:
 
 ```kusto
 WVDAutoscaleEvaluationPooled
@@ -106,6 +106,7 @@ Read it this way, as a practical heuristic and not a Learn rule: peak occupancy 
 - [Microsoft Learn: Autoscale scaling plans and example scenarios](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)
 - [Microsoft Learn: Create and assign an autoscale scaling plan](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)
 - [Microsoft Learn: Azure Virtual Desktop autoscale FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq)
+- [Microsoft Learn: Troubleshoot autoscale issues in Azure Virtual Desktop](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-autoscale)
 - [Microsoft Learn: Configure host pool load balancing](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-load-balancing)
 - [Microsoft Learn: Session host virtual machine sizing guidelines](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/virtual-machine-recs)
 - [Microsoft Learn: WVDConnections table reference](https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables/wvdconnections)

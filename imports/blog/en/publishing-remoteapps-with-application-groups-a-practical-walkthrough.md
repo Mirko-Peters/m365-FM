@@ -21,7 +21,7 @@ faq:
     a: "They probably have both a desktop and a RemoteApp group on the same host pool, and the host pool's preferred application group type is Desktop, which is the portal default. Change the setting under the host pool's Properties or, as a design choice, give each type its own host pool."
 ---
 
-To publish a RemoteApp, create a RemoteApp application group on a pooled host pool, add the application to it, assign users to the group, and make sure the group is registered with a workspace. Users then see the app in the client next to any desktops they have. The concepts behind this are in the sibling article "Application groups in Azure Virtual Desktop: desktop and RemoteApp groups explained"; this one is the procedure.
+To publish a RemoteApp, create a RemoteApp application group on a pooled host pool, add the application to it, assign users to the group, and make sure the group is registered with a workspace. Users then see the app in the client; if they also have a desktop group on the same host pool, the host pool's preferred application group type decides which of the two they see. The concepts behind this are in the sibling article "Application groups in Azure Virtual Desktop: desktop and RemoteApp groups explained"; this one is the procedure.
 
 ## Before you start
 
@@ -128,7 +128,7 @@ If the app does not appear, work through the list in the troubleshooting section
 7. Has the client refreshed?
 8. For a Store app, did an update change the install path, or is the icon file missing on a host?
 
-For application compatibility problems, a separate Learn page describes App Assure. It is part of the FastTrack benefit, which comes at no additional cost with eligible Microsoft 365 and Windows plans, and the page lists Azure Virtual Desktop among the supported technologies. The publishing article itself does not mention it.
+For application compatibility problems, a separate Learn page describes App Assure. It is part of the FastTrack benefit, which comes at no additional cost with eligible Microsoft 365 and Windows plans, and the page lists Azure Virtual Desktop among the supported technologies. The publishing article also points to it under Next steps, as a Microsoft service that helps resolve issues with applications running in Azure Virtual Desktop at no extra cost.
 
 ## Sources
 

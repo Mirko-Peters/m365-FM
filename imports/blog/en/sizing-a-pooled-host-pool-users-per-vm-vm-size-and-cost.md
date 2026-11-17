@@ -9,7 +9,7 @@ topics: [avd-pooled-host-pool, avd-host-pool]
 keypoints:
   - "Microsoft Learn gives maximum users per vCPU for multi-session hosts: 6 for light, 4 for medium, 2 for heavy and 1 for power workloads. It calls these generic guidelines for initial estimates only."
   - "For multi-session VMs Learn limits the size to 6 to 24 vCPUs, says not to go above 32 cores, and says that for 20 or more users on one VM several smaller VMs would perform better than one or two large ones."
-  - "Host count is peak concurrent sessions divided by sessions per host, rounded up. Dividing also by the capacity threshold gives a starting estimate for autoscale. That step is our inference from Learn's ramp-down formula, not a Learn sizing rule."
+  - "Host count is peak concurrent sessions divided by the sessions per host you set, rounded up. Learn's ceiling is an upper bound for estimating, not a value to set: the limit should be lower, and the pilot decides how much lower."
   - "Compute is billed while a VM runs or is stopped but still allocated. A deallocated VM is not billed for compute, but its disks and networking still are."
   - "Pilot with real users, including the sign-in peak, and check session counts and host performance in Azure Virtual Desktop Insights before you fix the VM size and the limit."
 faq:
@@ -29,46 +29,50 @@ This guide assumes you know what a [pooled host pool](/entity/avd-pooled-host-po
 
 Three numbers define a pooled pool: the VM size, the number of sessions each VM accepts (the [maximum session limit](/entity/avd-maximum-session-limit/)), and the number of [session hosts](/entity/avd-session-host/) in the [host pool](/entity/avd-host-pool/). Microsoft states the caveat itself: the examples on its [sizing guidelines page](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/session-host-virtual-machine-sizing-guidelines) are "generic guidelines" for initial performance estimates, and you should scale the deployment to your users' needs.
 
+Two terms are used here in a fixed way. The ceiling is the arithmetic maximum from Learn's table: users per vCPU times the vCPUs of the VM. The limit is the value you set on the host pool, which in our reading should sit below the ceiling.
+
 ## Step 1: choose the workload type and read the ceiling
 
-Learn defines four workload types by example users (light, medium, heavy and power) and lists a maximum number of users per vCPU for multi-session hosts: 6, 4, 2 and 1. The full table, with the minimum VM configuration for each type, is in "How to size the maximum session limit per session host". The sizing page calls these figures generic guidelines for initial estimates.
+Learn defines four workload types by example users (light, medium, heavy and power) and lists a maximum number of users per vCPU for multi-session hosts: 6, 4, 2 and 1. The full table, with the minimum VM configuration for each type, is in "How to size the maximum session limit per session host".
 
-These are maximums, not targets. Running a host at its ceiling leaves no margin for a busy hour. Learn does not say how to size a pool that serves several user types. Splitting the groups across host pools is a practical option, and it is a judgment rather than a Learn rule.
+These are maximums, not targets. Learn asks you to plan for some headroom for unexpected spikes in user activity, so a host that runs at its ceiling has none left for a busy hour. Learn does not say how to size a pool that serves several user types. Splitting the groups across host pools is a practical option, and it is a judgment rather than a Learn rule.
 
 ## Step 2: pick the VM size
 
-The VM-size rules from Learn (6 to 24 vCPUs, not more than 32 cores, 15 to 20 percent virtualization overhead) are listed in "How to size the maximum session limit per session host". Three of them decide the host count here:
+The VM-size rules from Learn (6 to 24 vCPUs, not more than 32 cores, 15 to 20 percent virtualization overhead) are listed in "How to size the maximum session limit per session host", together with the scaling factor, the memory example and the sign-in example. Two statements decide the host count here:
 
-- Doubling the cores does not double the capacity. Learn gives a typical scaling factor of 1.5 to 1.9, says it is higher when the core count is small, and says it falls as the number of cores grows.
-- Prefer a large number of smaller VMs. Learn's reason is operational: they are easier to shut down for updates or when unused, whereas a large VM more often has a user signed in. For 20 or more users on one VM, it says several smaller VMs would perform better than one or two large ones.
-- Memory can be the limit as well as cores. Learn's example is that increasing memory from 8 GB to 16 GB can more than double the number of users when memory is the limiting factor.
+- Learn recommends a large number of smaller VMs instead of a few large ones. Its reason is operational: smaller VMs are easier to shut down for updates or when unused, whereas a large VM more often has a user signed in.
+- For 20 or more users connected to one VM, Learn says several smaller VMs would perform better than one or two large ones. It also names breadth-first load balancing as a way to spread users evenly across VMs instead of filling one host first.
 
-Sign-in peaks matter as much as the average. Learn says user logon is a CPU-intensive operation, and its example is 30 or more users signing in within 10 minutes on a 16-core host, where two 8-core VMs would handle the load better.
+A ceiling of 32 or more sessions per host is above that 20-user statement. In our reading, that is a reason to pilot, not to take the ceiling at face value.
 
 ## Step 3: calculate the host count
 
-Take the peak number of concurrent sessions, not the number of named users. In its ramp-down consolidation, autoscale counts active and disconnected sessions together, so count both.
+Take the peak number of concurrent sessions, not the number of named users. Autoscale counts active and disconnected sessions together, so count both.
 
-Example: 200 users with a medium workload, all connected at peak. This is arithmetic on the Learn ceiling, not a Learn figure.
+Example: 150 users with a heavy workload (2 users per vCPU), all connected at peak. The numbers are arithmetic on the Learn ceiling, not Learn figures.
 
-| Option | vCPUs per host | Ceiling per host (4 x vCPUs) | Hosts for 200 sessions | Total vCPUs |
+| Option | vCPUs per host | Ceiling per host (2 x vCPUs) | Hosts for 150 sessions at the ceiling | Total vCPUs |
 |---|---|---|---|---|
-| 8-vCPU size, such as D8s_v5 | 8 | 32 | 200 / 32 = 6.25, so 7 | 56 |
-| 16-vCPU size, such as D16s_v5 | 16 | 64 | 200 / 64 = 3.13, so 4 | 64 |
+| 8-vCPU size, such as D8s_v5 | 8 | 16 | 150 / 16 = 9.38, so 10 | 80 |
+| 16-vCPU size, such as D16s_v5 | 16 | 32 | 150 / 32 = 4.69, so 5 | 80 |
 
-If one host fails or is drained, seven hosts lose about 14 percent of capacity and four hosts lose 25 percent. Seven hosts also leave 24 sessions of slack against the ceiling (7 x 32 = 224), and four hosts leave 56 (4 x 64 = 256). Neither option is a recommendation. In our reading, the table shows the trade-off between the number of hosts and the share of capacity that one failed or drained host takes away.
+At the ceiling both options leave only 10 sessions of slack (10 x 16 = 160 and 5 x 32 = 160). If one host fails or is drained, ten hosts lose 10 percent of capacity and five hosts lose 20 percent. The 16-vCPU ceiling of 32 is above Learn's 20-user statement.
 
-## Step 4: add headroom for autoscale
+Now set a limit below the ceiling. As an assumption, not a Learn value, take three quarters of each ceiling: 12 for the 8-vCPU size and 24 for the 16-vCPU size.
 
-If you use autoscale, the [capacity threshold](/entity/avd-capacity-threshold/) decides when it starts another host. Learn's [scaling plan article](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan) gives the rule with an example: two hosts with a limit of 20 give a capacity of 40 sessions, and with a threshold of 75 percent a third host starts once there are more than 30 sessions.
+| Option | Limit per host | Hosts for 150 sessions | Total vCPUs | Capacity lost with one host out |
+|---|---|---|---|---|
+| 8-vCPU size | 12 | 150 / 12 = 12.5, so 13 | 104 | about 8 percent |
+| 16-vCPU size | 24 | 150 / 24 = 6.25, so 7 | 112 | about 14 percent |
 
-Learn's [scenarios page](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios) states a formula for consolidation in ramp-down:
+Neither option is a recommendation. In our reading, the tables show the trade-off between host count and the capacity one failed or drained host takes away, and what headroom costs in extra hosts. The pilot in step 5 decides the real limit.
 
-Required hosts = total sessions (active + disconnected) / (max session limit x capacity threshold)
+## Step 4: check the autoscale prerequisites
 
-Using it for peak sizing is our inference, not a Learn statement. For the example with a limit of 32 and a threshold of 75 percent, which is a calculation example and not a Learn recommendation: 200 / (32 x 0.75) = 8.33, so 9 hosts. That is two more 8-vCPU hosts than the plain ceiling calculation, and it keeps used capacity under the threshold. The real count can differ, because autoscale does not turn hosts off in ramp-up and the minimum percentage of hosts sets a floor. For how to pick the percentage, see "Choosing the right capacity threshold for pooled host pools".
+If you use autoscale, the [capacity threshold](/entity/avd-capacity-threshold/) decides when it starts another host, and the host count from step 3 is a starting point rather than the final number. The threshold arithmetic is worked through in "Capacity threshold in AVD autoscale: how the percentage decides when another host starts" and "Choosing the right capacity threshold for pooled host pools", so it is not repeated here. The real count can differ from a plain division, because, per Learn's [scenarios page](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios), autoscale does not turn hosts off in ramp-up and the minimum percentage of hosts sets a floor.
 
-One prerequisite: for autoscale on pooled pools Learn says you must configure a custom maximum session limit and not keep the default. The load-balancing page states that a pool created with breadth-first gets a default of 999999, which says nothing about your VM. See [power management autoscaling](/entity/avd-power-management-autoscaling/) and [scaling plans](/entity/avd-scaling-plan/) for the mechanics.
+One prerequisite affects sizing directly: for autoscale on pooled pools, Learn's [scaling plan article](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan) says you must configure a custom maximum session limit and not keep the default. The [load-balancing page](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-load-balancing) states that a pool created with breadth-first gets a default of 999999, which says nothing about your VM. See [power management autoscaling](/entity/avd-power-management-autoscaling/) and [scaling plans](/entity/avd-scaling-plan/) for the mechanics.
 
 ## Step 5: validate in a pilot
 
@@ -76,7 +80,7 @@ Learn's sizing page names two approaches: a pilot, described as more time and co
 
 [Nerdio](/entity/nerdio/) offers a related, rule-based route. Its [right-sizing](/entity/nerdio-right-sizing/) feature for pooled host pools is described in Nerdio's article on right-sizing shared host pools as a premium feature of Nerdio Manager for Enterprise 6.0 and later, found under Advisor, with potential savings shown for each option. The article dates from 21 May 2024, so check current documentation for version details. Nerdio's help page for the rule "Right-size AVD pooled desktops" says it uses processor time and available memory counters, with default triggers of 80 percent to recommend a larger size and 60 percent to recommend a smaller one, a 90th percentile baseline and a 30-day analysis window. Recommendations need at least 72 hours of VM power-on time, which can be non-continuous, and between 24 and 72 hours they appear with a warning.
 
-The rule page requires the host pool type to be "dynamic", Nerdio auto-scale to be turned on, and CPU and RAM data collection to be turned on. Nerdio's [host pool overview](https://nmehelp.getnerdio.com/hc/en-us/articles/26124329605517) now calls these auto-scale-enabled host pools, where session hosts are created and removed automatically based on the auto-scale configuration, and says the type was previously called "dynamic". "Right-sizing host pools with Nerdio Advisor: a worked example" walks through it.
+The rule page requires the host pool type to be "dynamic", Nerdio auto-scale to be turned on, and CPU and RAM data collection to be turned on. Nerdio's [host pool overview](https://nmehelp.getnerdio.com/hc/en-us/articles/26124329605517) now calls these auto-scale-enabled host pools, where session hosts are created and removed automatically based on the auto-scale configuration, and says the type was previously called "dynamic".
 
 ## Cost: what moves the bill
 
@@ -92,11 +96,11 @@ With dynamic autoscaling the page says a host is deallocated or deleted; it does
 
 Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit.
 
-Three things set the compute bill: how many hosts run, for how many hours, and the VM size. In outline, monthly compute is VM-hours multiplied by the hourly rate, plus disks, profile storage and licences. Learn's service limits page points to the Azure pricing calculator for the rate. Learn's sizing page says conserving resources makes a deployment "less expensive", which is the argument for smaller VMs that can be switched off.
+Three things set the compute bill: how many hosts run, for how many hours, and the VM size. In outline, monthly compute is VM-hours multiplied by the hourly rate, plus disks, profile storage and licences. Learn's service limits page points to the Azure pricing calculator for the rate and says to add Azure Virtual Desktop within the Compute section. Learn's sizing page says conserving resources makes a deployment "less expensive", which is the argument for smaller VMs that can be switched off.
 
-Illustration with the nine-host result: if all nine run 24 hours, that is 216 VM-hours a day. If nine run for 8 peak hours and two stay on for the other 16, that is 9 x 8 + 2 x 16 = 104 VM-hours. This is arithmetic, not a saving that Microsoft promises: the two always-on hosts are an assumption. "What Azure Virtual Desktop really costs: the full cost model" and "15 ways to cut Azure Virtual Desktop cost without hurting users" cover the other line items.
+Illustration with the 13 hosts of 8 vCPUs from step 3: if all 13 run 24 hours, that is 312 VM-hours a day. If 13 run for 8 peak hours and two stay on for the other 16, that is 13 x 8 + 2 x 16 = 136 VM-hours. This is arithmetic, not a saving that Microsoft promises: the two always-on hosts are an assumption. "What Azure Virtual Desktop really costs: the full cost model" and "15 ways to cut Azure Virtual Desktop cost without hurting users" cover the other line items.
 
-Profile storage is a separate line. If the 30 GB minimum profile storage from Learn's table applies to each user, 200 users need at least 6,000 GB for profile containers. See [FSLogix](/entity/fslogix/) for where those live.
+Profile storage is a separate line. If the 30 GB minimum profile storage from Learn's table applies to each user, 150 users need at least 4,500 GB for profile containers. See [FSLogix](/entity/fslogix/) for where those live.
 
 ## Common mistakes
 
