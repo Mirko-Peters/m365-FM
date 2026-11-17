@@ -49,13 +49,13 @@ Decide first which pool you will test on. A small pilot pool with a handful of u
 7. Optional: on **Scope tags**, pick a scope tag.
 8. On **Assignments**, select the group that contains the session hosts, then select **Next**.
 9. On **Review + create**, check the settings and select **Create**.
-10. Sync the session hosts with Intune so the settings take effect. Learn points to the Intune device sync remote action for this.
+10. Sync the session hosts with Intune so the settings take effect.
 
-Assign the profile to a group of session host devices, not to user groups. The policy is a computer setting on the machine that provides the remote session.
+Learn's prerequisites call for a group that contains the devices you want to configure, so assign the profile to a group of session host devices.
 
 ## Option B: configure with Group Policy
 
-1. Make the administrative template for Azure Virtual Desktop available in Group Policy by following Learn's [administrative template](https://learn.microsoft.com/en-us/azure/virtual-desktop/administrative-template) steps.
+1. Make the administrative template for Azure Virtual Desktop available in Group Policy by following the steps for the administrative template that Learn's watermarking page links to.
 2. Open the **Group Policy Management** console on a device you use to manage the domain, then create or edit a policy that targets the computers providing a remote session.
 3. Go to **Computer Configuration** > **Policies** > **Administrative Templates** > **Windows Components** > **Remote Desktop Services** > **Remote Desktop Session Host** > **Azure Virtual Desktop**.
 4. Open **Enable watermarking** and set it to **Enabled**.
@@ -82,7 +82,7 @@ Notes from the page on these values:
 - Select **Device ID** only for session hosts in a personal host pool that are joined to Microsoft Entra ID or Microsoft Entra hybrid joined. For pooled host pools, keep Connection ID.
 - Learn's tip: try different opacity values to balance session readability against the ability to scan the code, and keep the defaults for the other parameters.
 
-A sensible test plan is to start with the defaults, take a photo of the test session with a phone, and raise or lower opacity in small steps until the code can be read from the photo without making the work area hard to read. Changing the grid box values is possible but Learn recommends against it.
+A sensible test plan is to start with the defaults, take a photo of the test session with a phone, and raise or lower opacity in small steps until the code can be read from the photo without making the work area hard to read. Changing the grid box values is possible, but Learn recommends keeping the defaults for everything except opacity.
 
 ## Verify the result
 
@@ -90,7 +90,7 @@ A sensible test plan is to start with the defaults, take a photo of the test ses
 2. Sign out any test session, then connect to a remote desktop with a supported client. You should see QR codes in the session.
 3. Connect once with an unsupported client, if you have one, to see the non-specific error and confirm your help desk can recognise it.
 4. Connect to a RemoteApp from the same pool and confirm that no watermark appears, so nobody assumes RemoteApp sessions are covered.
-5. Note the on-screen code (a phone camera reader will show the value) for the next section.
+5. Read the on-screen code with a QR reader and note the value for the next section.
 
 ## Find the session behind a code
 
