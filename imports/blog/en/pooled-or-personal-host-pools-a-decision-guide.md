@@ -14,7 +14,7 @@ keypoints:
   - "Autoscale differs by type: pooled plans can force sign-out in ramp-down, personal schedules offer no forced sign-out setting, only disconnect and sign-out timers, and autoscale does not put a personal host in drain mode before deallocating it."
 faq:
   - q: "Can I change a host pool from pooled to personal later?"
-    a: "No. The Azure Virtual Desktop FAQ says that once you create a host pool, you cannot change its type. You can, however, move any VMs you register to a host pool to a different type of host pool, so the practical route is to create a host pool of the other type and move the VMs."
+    a: "No. The Azure Virtual Desktop FAQ says that once you create a host pool, you cannot change its type. You can, however, move any VMs you register to a host pool to a different type of host pool. Our reading: the route is a new host pool of the other type, with the VMs moved over. Learn's host pool management approaches page says you cannot retrieve a registration token to add session hosts created outside Azure Virtual Desktop to a host pool that uses a session host configuration, so check the target pool's management approach first."
   - q: "Does load balancing apply to personal host pools?"
     a: "No. Microsoft Learn says load balancing does not apply to personal host pools because users always have a 1:1 mapping to a session host. Personal pools use an assignment type instead, either automatic or direct. With automatic assignment a user without a host gets one at the first connection, as described below."
   - q: "Can one user get more than one personal desktop?"

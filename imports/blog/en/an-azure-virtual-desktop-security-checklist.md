@@ -49,7 +49,7 @@ Learn says not to grant local administrator rights in multi-session pooled scena
 
 - Control network access with segmentation and filtering. Session hosts can reach any internet resource by default; to limit this, use [Azure Firewall](/entity/azure-firewall/), network virtual appliances or proxies, with the rules Azure Virtual Desktop requires.
 - Avoid direct RDP access to hosts; if needed, use just-in-time access from Defender for Cloud.
-- If users must not reach the service over the public internet, [Azure Private Link](/entity/azure-private-link/) provides private endpoints: `connection` (one per host pool), `feed` (one per workspace) and `global` (one for the whole deployment). Private Link for Azure Virtual Desktop has been generally available since 14 July 2023, and UDP over Private Link since February 2026, according to Microsoft's announcements. Key limits from the Private Link page: enable Private Link on each Azure subscription you want to use it with, allow the entire TCP range 1-65535 to the `connection` private endpoint, and opt in to UDP on the host pool's **Networking** page with the public Shortpath options (STUN and TURN) turned off. The Private Link article in this series has the details.
+- If users must not reach the service over the public internet, [Azure Private Link](/entity/azure-private-link/) provides private endpoints: `connection` (one per host pool), `feed` (one per workspace) and `global` (one for the whole deployment). Private Link for Azure Virtual Desktop has been generally available since 14 July 2023, and UDP over Private Link since February 2026, according to Microsoft's announcements. Key limits from the Private Link page: enable Private Link on each Azure subscription you want to use it with, if you restrict ports from clients or session hosts to the private endpoints, allow the entire TCP range 1-65535 to the `connection` private endpoint, and opt in to UDP on the host pool's **Networking** page with the public Shortpath options (STUN and TURN) turned off.
 - For FSLogix profiles, Learn says to follow the security recommendations of your SMB share provider. Its example is private endpoints for Azure Files, which make the share reachable only within an Azure virtual network.
 
 ## 4. Session host hardening
@@ -75,7 +75,7 @@ Learn says drives, clipboard, printers and USB are disabled by default in remote
 | Printer | Universal Print |
 | USB | Not needed for common peripherals such as mouse, keyboard and webcam; enable only when required |
 
-On the host pool these map to RDP properties such as `redirectclipboard` (default 0), `redirectprinters` (default 0), `drivestoredirect` and `usbdevicestoredirect` (both empty by default), according to the RDP properties page. Other redirections default to on: COM ports (`redirectcomports`), smart cards (`redirectsmartcards`), WebAuthn (`redirectwebauthn`) and MTP or PTP devices such as cameras (`devicestoredirect`). Review them as well when data must not leave the session.
+On the host pool these map to RDP properties such as `redirectclipboard` (default 0), `redirectprinters` (default 0), `drivestoredirect` and `usbdevicestoredirect` (both empty by default), according to the RDP properties page. Other redirections default to on: COM ports (`redirectcomports`), smart cards (`redirectsmartcards`), WebAuthn (`redirectwebauthn`) and MTP or PTP devices such as cameras (`devicestoredirect`). Review them too.
 
 ### Screen capture protection
 
@@ -85,7 +85,7 @@ On the host pool these map to RDP properties such as `redirectclipboard` (defaul
 - Native clients: Windows App on Windows and macOS, and the Remote Desktop client for Windows (1.2.1672 or later) and macOS (10.7.0 or later). RemoteApp sessions from Windows also need local Windows 11 22H2 or later.
 - Mobile clients (Windows App on iOS and iPadOS 11.2.4 or later, Android 11.0.0.94 or later) use hybrid enforcement: the connection is allowed only when an Intune MAM app protection policy with **Screen capture** set to **Block** applies to the app. Learn pairs this with a Conditional Access policy that requires an app protection policy for Azure Virtual Desktop (and **Windows Cloud Login** if single sign-on is on).
 - Web client on Windows: Microsoft Edge for Business 134.0.3124.51 or later (147 or later on devices managed by a different organization), in an Edge work profile on a personal or other-organization device; same-tenant managed devices are not supported. It needs its own Intune MAM policy for Edge, with **Allow cut, copy, and paste for** set to **Org data destinations and org data sources**, and its own Conditional Access policy for the Windows platform and the **Browser** client app. A policy that combines the Windows platform with **Mobile apps and desktop clients** blocks native Windows clients.
-- On the session hosts, enable **Enable screen capture protection** with an Intune Settings catalog profile or Group Policy. **Block screen capture on client** blocks capture on the local device; **Block screen capture on client and server** also blocks tools and services inside the VM. Once the policy applies, restart the session hosts for it to take effect. Users must then sign out of existing sessions and connect to a new one.
+- On the session hosts, enable **Enable screen capture protection** with an Intune Settings catalog profile or Group Policy. **Block screen capture on client** blocks capture on the local device; **Block screen capture on client and server** also blocks tools and services inside the VM. Restart the session hosts once the policy applies; users must then connect in a new session.
 
 Known limits: it is not DRM, content can appear black in Teams sharing with unsupported configurations, and some macOS apps may not fully respect it.
 
@@ -114,7 +114,7 @@ Learn's limits: once enabled, only supporting clients can connect, and others fa
 ## How to use the checklist
 
 1. Record the trust boundary for each user group before building host pools.
-2. Apply sections 2, 3, 4, 6 and 7, plus the redirection review from section 5, as a baseline to every host pool.
+2. Work through sections 2, 3, 4, 6 and 7 and the redirection review from section 5 for every host pool. This is our recommendation. Treat Private Link, confidential VMs and vTPM-dependent features as decisions per requirement.
 3. Add screen capture protection and watermarking for groups that handle data that must not leave the session.
 4. Pilot each control on one host, because watermarking, screen capture protection and application control change what users see.
 5. Re-check the list when you adopt new Microsoft security baselines, because a baseline can change a default.

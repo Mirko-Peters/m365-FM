@@ -69,7 +69,7 @@ Dynamic autoscaling additionally needs **Desktop Virtualization Virtual Machine 
 3. On the **Basics** tab, fill in these fields:
    - **Subscription**, **Resource group** and **Scaling plan name**, for example `sp-pooled-weekday-westeurope`.
    - **Location**: the plan's Azure region (see prerequisite 1). **Time zone**: the time zone to use with your plan.
-   - **Host pool type**: **Pooled** or **Personal**. The type cannot be changed after the plan is created.
+   - **Host pool type**: **Pooled** or **Personal**.
    - **Exclusion tag**: a tag name for hosts autoscale must leave alone, for example `excludeFromScaling`.
    - **Scaling method** (pooled only): **Power management autoscaling**.
 
