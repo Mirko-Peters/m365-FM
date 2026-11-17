@@ -11,7 +11,7 @@ TEST_DAYS = 3        # mindestens so viele Tage im Alltag testen
 PUBLISH_WEEKS = 2    # Veroeffentlichung spaetestens so viele Wochen nach Eingang des Geraets
 FACT_DAYS = 3        # Werktage fuer die Faktenpruefung durch den Hersteller (nur Fakten, nie Wertung)
 CRITERIA = (("setup", 20), ("core", 30), ("manage", 20), ("security", 15), ("daily", 10), ("value", 5))   # Gewichte in Prozent, Summe 100
-CATEGORIES = ("headset", "camera", "rooms", "pc", "dock", "monitor", "key", "other")
+CATEGORIES = ("headset", "speaker", "mic", "camera", "rooms", "board", "pc", "thin", "tablet", "peripheral", "dock", "monitor", "printer", "network", "storage", "wearable", "xr", "key", "other")
 
 T = {
     "en": dict(
@@ -43,7 +43,7 @@ T = {
                "Paid content (video, podcast, giveaway) is labeled Sponsored. Devices supplied by the manufacturer are labeled “Test device provided by the manufacturer”.",
                "We promise an honest test. We do not promise a good review."],
         what_h="What we test",
-        what="Teams headsets and speakerphones, webcams, Teams Rooms devices, Copilot+ PCs and laptops, docking stations, monitors, security keys and other devices that work with Microsoft 365.",
+        what="Teams headsets, speakers and microphones, webcams, Teams Rooms devices and interactive displays, Copilot+ PCs, laptops, thin clients, tablets, docking stations, monitors, mice and keyboards, printers, network devices, storage, wearables, VR and AR headsets, security keys and other devices that work with Microsoft 365.",
         faq_h="Questions",
         faq=[("Do we pay for the review?", "No. The independent review is free."),
              ("Can we see the review before it goes live?", "You can check the facts (specifications, price, features) before publication. We send them to you and you have 3 business days to correct errors. Scores and verdict are not shared in advance and cannot be changed."),
@@ -51,7 +51,7 @@ T = {
              ("How fast is the review online?", "Within 2 weeks of delivery."),
              ("What happens with the participant data of a giveaway?", "Only people who explicitly agree to share their data with the sponsor are passed on, in line with data protection law.")],
         form_h="Apply with your product", name="Name", company="Company", email="Work e-mail", product="Product name", product_url="Link to the product page (https://…)",
-        category="Category", cats=dict(headset="Headset or speakerphone", camera="Webcam or camera", rooms="Teams Rooms device", pc="PC or laptop (e.g. Copilot+ PC)", dock="Docking station", monitor="Monitor", key="Security key", other="Other"),
+        category="Category", cats=dict(headset="Headset or speakerphone", speaker="Speaker or soundbar", mic="Microphone", camera="Webcam or camera", rooms="Teams Rooms device", board="Interactive display or whiteboard", pc="PC or laptop (e.g. Copilot+ PC)", thin="Thin client or mini PC", tablet="Tablet or phone", peripheral="Mouse or keyboard", dock="Docking station", monitor="Monitor", printer="Printer or scanner", network="Router, Wi-Fi or network device", storage="Storage or backup device", wearable="Wearable or smartwatch", xr="VR or AR headset", key="Security key", other="Other"),
         quantity="Number of devices", ship_by="Ready to ship by (date)", offers="I am also interested in (optional)", offs=dict(giveaway="Giveaway", video="Sponsored video", podcast="Sponsored podcast episode"),
         message="Anything we should know? (certifications, firmware, test conditions)",
         ships="If M365.FM accepts, we will ship the device free of charge. The device stays with M365.FM. I understand this does not buy a score or a positive verdict.",
@@ -113,7 +113,7 @@ T = {
                "Bezahlte Inhalte (Video, Podcast, Gewinnspiel) sind als Anzeige gekennzeichnet. Vom Hersteller gestellte Geräte tragen den Hinweis „Testgerät vom Hersteller bereitgestellt“.",
                "Wir versprechen einen ehrlichen Test. Wir versprechen keinen guten Test."],
         what_h="Was wir testen",
-        what="Teams-Headsets und Freisprecheinrichtungen, Webcams, Teams-Rooms-Geräte, Copilot+ PCs und Laptops, Dockingstationen, Monitore, Security-Keys und andere Geräte, die mit Microsoft 365 funktionieren.",
+        what="Teams-Headsets, Lautsprecher und Mikrofone, Webcams, Teams-Rooms-Geräte und interaktive Displays, Copilot+ PCs, Laptops, Thin Clients, Tablets, Dockingstationen, Monitore, Mäuse und Tastaturen, Drucker, Netzwerkgeräte, Speicher, Wearables, VR- und AR-Brillen, Security-Keys und andere Geräte, die mit Microsoft 365 funktionieren.",
         faq_h="Fragen",
         faq=[("Bezahlen wir für den Test?", "Nein. Der unabhängige Test ist kostenlos."),
              ("Können wir den Test vor der Veröffentlichung sehen?", "Du kannst vor der Veröffentlichung die Fakten prüfen (technische Daten, Preis, Funktionen). Wir schicken sie dir, du hast 3 Werktage, um Fehler zu korrigieren. Bewertung und Urteil bekommst du nicht vorab und kannst sie nicht ändern."),
@@ -121,7 +121,7 @@ T = {
              ("Wie schnell ist der Test online?", "Innerhalb von 2 Wochen nach Lieferung."),
              ("Was passiert mit den Teilnehmerdaten eines Gewinnspiels?", "Nur Personen, die der Weitergabe an den Sponsor ausdrücklich zustimmen, werden weitergegeben, im Einklang mit dem Datenschutzrecht.")],
         form_h="Mit deinem Produkt bewerben", name="Name", company="Firma", email="Geschäftliche E-Mail", product="Produktname", product_url="Link zur Produktseite (https://…)",
-        category="Kategorie", cats=dict(headset="Headset oder Freisprecheinrichtung", camera="Webcam oder Kamera", rooms="Teams-Rooms-Gerät", pc="PC oder Laptop (z. B. Copilot+ PC)", dock="Dockingstation", monitor="Monitor", key="Security-Key", other="Sonstiges"),
+        category="Kategorie", cats=dict(headset="Headset oder Freisprecheinrichtung", speaker="Lautsprecher oder Soundbar", mic="Mikrofon", camera="Webcam oder Kamera", rooms="Teams-Rooms-Gerät", board="Interaktives Display oder Whiteboard", pc="PC oder Laptop (z. B. Copilot+ PC)", thin="Thin Client oder Mini-PC", tablet="Tablet oder Smartphone", peripheral="Maus oder Tastatur", dock="Dockingstation", monitor="Monitor", printer="Drucker oder Scanner", network="Router, WLAN oder Netzwerkgerät", storage="Speicher oder Backup-Gerät", wearable="Wearable oder Smartwatch", xr="VR- oder AR-Brille", key="Security-Key", other="Sonstiges"),
         quantity="Anzahl Geräte", ship_by="Versandbereit bis (Datum)", offers="Ich interessiere mich auch für (optional)", offs=dict(giveaway="Gewinnspiel", video="Gesponsertes Video", podcast="Gesponserte Podcast-Folge"),
         message="Was sollten wir wissen? (Zertifizierungen, Firmware, Testbedingungen)",
         ships="Wenn M365.FM annimmt, verschicken wir das Gerät kostenlos. Das Gerät bleibt bei M365.FM. Mir ist klar, dass das weder eine Wertung noch ein positives Urteil kauft.",
