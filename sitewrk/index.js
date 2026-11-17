@@ -9,7 +9,8 @@ const SEC = {
 const IMG = /\.(png|jpe?g|gif|webp|avif|svg|ico)$/i, STATIC = /^\/(assets|covers|og)\//i, FONT = /\.(woff2?|ttf|otf)$/i;
 const HASHED = /^\/assets\/(site\.[0-9a-f]{8,}\.css|(page|a11y)\.[0-9a-f]{8,}\.js)$/i;   // Dateiname traegt den Inhalts-Hash: darf ein Jahr im Browser bleiben
 // T41 Caching: HTML 4 h am Rand statt 10 Min (nach jedem Deploy leert tools/purge_changed.py genau die geaenderten Adressen),
-// Sprachseiten aus R2 ebenfalls 4 h im Kanten-Cache (Cache API, Schluessel /__r2c/<pfad>/, Purge nach dem Upload), Browser fragt bei HTML immer nach (304 per ETag/Last-Modified)
+// Sprachseiten aus R2 ebenfalls 4 h im Kanten-Cache (Cache API, Schluessel /__r2c/<pfad>/ bzw. mit R2 als Ursprung /__r2f<pfad>, s. r2CacheKey; Purge nach
+// dem Upload bzw. vor der Bau-Kennung), Browser fragt bei HTML immer nach (304 per ETag/Last-Modified)
 const EDGE_HTML = 14400, R2_TTL = 14400, R2_MISS_TTL = 600;
 const HTML_CC = "public, max-age=0, s-maxage=600, stale-while-revalidate=86400";
 const r2Path = (p) => (p.endsWith("/") ? p : p + "/");
@@ -86,11 +87,20 @@ function r2Ready(env, url, ctx) {
   }
   return READY.v;
 }
+// Kanten-Cache des R2-Ursprungs. Bau-Kennung mit Endung "-pfad" (site.yml seit 17.11.2026): Schluessel nur aus dem Pfad (/__r2f<pfad>) - ein Eintrag
+// ueberlebt den naechsten Deploy, wenn sich die Datei nicht geaendert hat. Geaenderte, neue und entfallene Adressen leert der Deploy-Job nach dem
+// vollstaendigen Spiegel und vor dem Setzen der Kennung (tools/purge_changed.py --r2): was ein Isolat mit einer alten Kennung bis dahin gecacht hat, ist
+// weg, was es danach cacht, ist schon neu. Gelingt der Purge nicht, bleibt die alte Kennung (dann GitHub Pages).
+// "Geaendert" heisst: Purge-Hash ohne die Liste "neueste Folgen" (tools/page_hashes.py) - die Seitenleiste eines
+// sonst unveraenderten Eintrags ist hoechstens R2_TTL (4 h) alt. Eigener Praefix /__r2f: den Schluessel /__r2c<pfad> bildet der alte R2-Rueckfall aus
+// jeder angefragten Adresse (z. B. /@x/... -> /__r2c/@x/...), er darf hier nie treffen. Kennung ohne "-pfad" (Deploy-Job ohne diesen Purge): wie bisher
+// mit Bau-Kennung im Schluessel (/__r2c/@<kennung><pfad>), Eintraege eines frueheren Baus treffen nie.
+export const PATH_KEY = /-pfad$/;
+export const r2CacheKey = (origin, build, cp) => origin + (PATH_KEY.test(build) ? "/__r2f" + cp : "/__r2c/@" + build + cp);
 async function r2First(request, env, ctx, url, p, key, build) {
   const html = key.endsWith("/index.html"), ext = html ? "html" : extOf(key);
   const cp = html ? (p.endsWith("/index.html") ? p.slice(0, -"index.html".length) : r2Path(p)) : p;   // /a/index.html und /a/ teilen den Eintrag
-  // Bau-Kennung im Schluessel: Eintraege eines frueheren Baus treffen nie (kein Purge noetig), getrennt vom alten R2-Rueckfall (/__r2c<pfad>)
-  const cache = caches.default, ck = new Request(url.origin + "/__r2c/@" + build + cp);
+  const cache = caches.default, ck = new Request(r2CacheKey(url.origin, build, cp));
   let hit = await cache.match(ck).catch(() => null), state = "HIT";
   if (!hit) {
     state = "MISS";
@@ -568,7 +578,7 @@ const site = {
       if (to) return redirect(request, url.origin, to, url.search);
     }
     const p = url.pathname, isImg = IMG.test(p), isStatic = STATIC.test(p) || FONT.test(p);
-    if (p.startsWith("/__r2c/")) return new Response("Not found", { status: 404 });   // interner Cache-Schluessel, keine oeffentliche Adresse
+    if (p.startsWith("/__r2c/") || p.startsWith("/__r2f/")) return new Response("Not found", { status: 404 });   // interne Cache-Schluessel, keine oeffentlichen Adressen
     if (p === SPEC_PATH && WWW_HOSTS.has(url.hostname) && (request.method === "GET" || request.method === "HEAD")) return speculationRules(request);   // Regeln fuer den Vorabruf (s. withSpeculation)
     if (p === "/") { const hl = homeLang(request); if (hl) return langRedirect(url.origin, hl, url.search); }   // vor jedem Cache: eine englische Startseite aus dem Cache erreicht nie einen deutschen Browser
     const cf = isImg ? { cacheEverything: true, cacheTtl: 604800, polish: "lossy", mirage: true }
