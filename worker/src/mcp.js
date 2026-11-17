@@ -634,7 +634,8 @@ export async function visibleTools(env, user) {
 }
 
 // Limits (K17/K18): Batch hoechstens 20 Eintraege mit Token, 5 ohne; jeder tools/call zaehlt einzeln gegen ein Stundenbudget - auch ohne Token
-// (je Aufrufer-IP, nur als Hash gespeichert; ohne IP, etwa ueber das Service-Binding des Agenten, ein eigener Eimer). Schreibende Werkzeuge
+// (je Aufrufer-IP, nur als Hash gespeichert; der Agent-Worker reicht die IP des Endnutzers ueber das Service-Binding weiter, agents/src/session.js
+// upstream; ohne IP ein eigener Eimer). Schreibende Werkzeuge
 // eines Batches laufen nacheinander, jedes mit eigener Limitpruefung; lesende weiter parallel.
 export const MAX_BATCH = 20, MAX_BATCH_ANON = 5, ANON_LIMIT = 200, NOIP_LIMIT = 600;
 const isWriteCall = (m) => m?.method === "tools/call" && !!TOOLS.find((x) => x.name === m.params?.name)?.write;

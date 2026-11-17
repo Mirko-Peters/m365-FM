@@ -33,9 +33,12 @@ export const result = (value, isError = false) => ({
   content: [{ type: "text", text: JSON.stringify(value) }], isError,
 });
 
-export async function upstream(binding, authorization, method, params) {
+// ip: cf-connecting-ip des Endnutzers (von Cloudflare am Agent-Eingang gesetzt). Ueber das Service-Binding setzt Cloudflare keinen; ohne ihn
+// teilten sich alle anonymen Agent-Nutzer einen Limit-Eimer im Community-Worker (K18/K19). Das Binding erreicht nur dieser Worker.
+export async function upstream(binding, authorization, method, params, ip = "") {
   const headers = { "content-type": "application/json" };
   if (authorization) headers.authorization = authorization;
+  if (typeof ip === "string" && /^[0-9a-fA-F.:]{2,45}$/.test(ip)) headers["cf-connecting-ip"] = ip;
   const response = await binding.fetch(new Request("https://api-dub.m365.fm/mcp", {
     method: "POST", headers,
     body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }),
@@ -81,7 +84,7 @@ export function visibleTools(tools, authenticated) {
     (tool.annotations?.readOnlyHint === true && !tool.description.endsWith(" (requires token)")));
 }
 
-export async function confirmedCall({ tool, args, authorization, binding, confirm }) {
+export async function confirmedCall({ tool, args, authorization, binding, confirm, ip = "" }) {
   if (tool.annotations?.readOnlyHint !== true) {
     if (!authorization) return result({ error: "token_required" }, true);
     const approval = await confirm({
@@ -95,5 +98,5 @@ export async function confirmedCall({ tool, args, authorization, binding, confir
       return result({ error: "confirmation_declined" }, true);
     }
   }
-  return upstream(binding, authorization, "tools/call", { name: tool.name, arguments: args });
+  return upstream(binding, authorization, "tools/call", { name: tool.name, arguments: args }, ip);
 }
