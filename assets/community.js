@@ -10,8 +10,10 @@
     (kids || []).forEach(function (c) { if (c != null) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
     return e;
   }
+  /* x-requested-with nur bei schreibenden Anfragen: der Worker prueft ihn nur dort (CSRF, worker/src/index.js); bei GET wuerde er einen
+     CORS-Preflight (OPTIONS) vor jede Abfrage setzen, z. B. vor /api/me beim Laden der Community-Seite */
   function api(path, o) {
-    o = o || {}; o.credentials = "include"; o.headers = Object.assign({ "x-requested-with": "m365" }, o.headers || {});
+    o = o || {}; o.credentials = "include"; o.headers = Object.assign(/^(GET)?$/i.test(o.method || "") ? {} : { "x-requested-with": "m365" }, o.headers || {});
     if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; }
     return fetch(API + path, o).then(function (r) { return r.json().then(function (j) { return { s: r.status, j: j }; }); });
   }
@@ -30,7 +32,11 @@
     var r = SH && u ? SH.readRef() : null; if (!r || !r.token) return;
     api("/api/invite/ref", { method: "POST", body: { token: r.token } }).then(function (x) { if (x.s === 200 || x.s === 400) SH.clearRef(); }).catch(function () {});   // 200 = entschieden oder beim Server vorgemerkt (Tagesgrenze: er holt es nach), 400 = Beleg ungueltig/abgelaufen; 429 (zu viele Versuche dieses Kontos): spaeter erneut
   }
-  function me(force) { if (!mePromise || force) mePromise = api("/api/me").then(function (r) { var u = r.j.user || null; attributeRef(u); return u; }); return mePromise; }
+  /* Hinweis fuer das erste Bild der Community-Seite (site_community_page.py, Skript im <head>): "1" = angemeldet, dann ist der statische
+     Anmeldekasten von Anfang an ausgeblendet. Nur eine Merkhilfe, keine Anmeldung: entscheidend bleibt /api/me. */
+  var AUTH_KEY = "m365_auth";
+  function authHint(on) { try { if (on) localStorage.setItem(AUTH_KEY, "1"); else localStorage.removeItem(AUTH_KEY); } catch (e) { /* ignore */ } }
+  function me(force) { if (!mePromise || force) mePromise = api("/api/me").then(function (r) { var u = r.j.user || null; if (r.s === 200 || r.s === 401) authHint(!!u); attributeRef(u); return u; }); return mePromise; }
   function hideAll(sel) { document.querySelectorAll(sel).forEach(function (e) { e.hidden = true; }); }
   function date(ts) { try { return new Date(ts * 1000).toLocaleDateString(LANG); } catch (e) { return ""; } }
 
@@ -72,9 +78,12 @@
   function badgeEls(list, big) {
     return h("span", { class: "cbs" }, (list || []).map(function (b) { var iv = /^inviter_\d+$/.test(b) ? invBadge(b) : null; if (iv) return h("span", { class: "cb" + (big ? " big" : ""), title: iv.title, text: iv.icon }); return h("span", { class: "cb" + (big ? " big" : ""), title: /^prog_/.test(b) ? PGN[b.slice(5)] : tt("b_" + b) + " – " + tt("b_" + b + "_d"), text: PGI[b.slice(5)] && /^prog_/.test(b) ? PGI[b.slice(5)] : (ICON[b] || "★") }); }));
   }
-  function pruneLogin(box){var P=window.__m365p=window.__m365p||fetch(API+"/api/providers").then(function(r){return r.json()}).catch(function(){return null});P.then(function(j){if(!j||!j.providers)return;[].slice.call(box.querySelectorAll("a[href*=\"/auth/login/\"]")).forEach(function(a){var m=/login\/(\w+)/.exec(a.href);if(m&&j.providers.indexOf(m[1])<0)a.remove()})})}
+  /* keep: statischer Kasten der Community-Seite - Knoepfe nicht entfernen (der Kasten wuerde schrumpfen und alles darunter verschieben),
+     sondern nur abschalten, damit sie nicht auf die Seite "Login not configured" (503) fuehren */
+  function pruneLogin(box, keep){var P=window.__m365p=window.__m365p||fetch(API+"/api/providers").then(function(r){return r.json()}).catch(function(){return null});P.then(function(j){if(!j||!j.providers)return;[].slice.call(box.querySelectorAll("a[href*=\"/auth/login/\"]")).forEach(function(a){var m=/login\/(\w+)/.exec(a.href);if(m&&j.providers.indexOf(m[1])<0){if(keep){a.removeAttribute("href");a.setAttribute("aria-disabled","true");}else a.remove()}})})}
+  function loginRet() { return encodeURIComponent(location.href.split("#")[0]); }
   function loginBox() {
-    var ret = encodeURIComponent(location.href.split("#")[0]);
+    var ret = loginRet();
     var lb = h("div", { class: "clogin" }, [
       h("p", { text: tt("login_to_comment") }),
       h("div", { class: "btns" }, [
@@ -167,8 +176,8 @@
     var st = h("p", { class: "cmsg", role: "status" }), push = h("div", { class: "csub" }), mail = h("form", { class: "csub" });
     function setPush() {
       push.textContent = "";
-      if (!pushOK) { push.appendChild(h("p", { class: "cmut", text: tt("push_unsupported") })); return; }
-      navigator.serviceWorker.getRegistration("/").then(function (reg) { return reg ? reg.pushManager.getSubscription() : null; }).then(function (sub) {
+      if (!pushOK) { push.appendChild(h("p", { class: "cmut", text: tt("push_unsupported") })); return Promise.resolve(); }
+      return navigator.serviceWorker.getRegistration("/").then(function (reg) { return reg ? reg.pushManager.getSubscription() : null; }).then(function (sub) {
         if (!sub) {
           push.appendChild(h("button", { type: "button", class: "btn main", text: "🔔 " + tt("push_btn"), onclick: enable }));
           return;
@@ -201,8 +210,9 @@
     mail.appendChild(em); mail.appendChild(h("button", { type: "submit", class: "btn", text: "✉ " + tt("email_btn") }));
     mail.addEventListener("submit", function (e) { e.preventDefault(); api("/api/email/subscribe", { method: "POST", body: { email: em.value, lang: LANG } }).then(function (r) { st.textContent = r.s === 200 ? tt("email_sent") : r.s === 429 ? tt("rate_limit") : tt("error"); if (r.s === 200) em.value = ""; }); });
     root.appendChild(h("h2", { text: tt("sub_title") })); root.appendChild(h("p", { class: "cmut", text: tt("sub_text") }));
-    root.appendChild(push); root.appendChild(mail); root.appendChild(st); setPush();
+    root.appendChild(push); root.appendChild(mail); root.appendChild(st); var ready = setPush();
     api("/api/push/key").catch(function () { root.hidden = true; });
+    return ready;   // erster Stand der Push-Zeile steht (mountPage haengt den Kasten erst dann ein)
   }
 
   /* ---------- Kurator / Bestenliste ---------- */
@@ -210,7 +220,7 @@
     return h("li", {}, [h("span", { class: "cr", text: String(i + 1) }), h("a", { href: C.communityUrl + "?u=" + u.id, text: u.name }), roleChip(u.role, u.scope), badgeEls(u.badges), h("span", { class: "cmut", text: u.points + " " + tt("points") })]);
   }
   function mountCurator(root, full) {
-    api("/api/curator?lang=" + LANG).then(function (r) {
+    return api("/api/curator?lang=" + LANG).then(function (r) {
       if (r.s !== 200) throw 0;
       root.appendChild(h("h2", { text: "🏆 " + tt(full ? "leaderboard" : "curator_title") }));
       var j = r.j;
@@ -304,9 +314,39 @@
     load(); merge();
     return box;
   }
+  /* Mitglieder-Karten (Aenderungsvorschlaege, eigene Events, KI-Zugang, Punkte): nur fuer Angemeldete. Abgemeldet blieben sie leere
+     Karten bzw. zeigten einen Token-Knopf, dessen Aufruf mit 401 endet, und rueckten beim Fuellen des Kastens darueber nach (CLS div.ccard) */
+  function memberCards(root) {
+    var ibox = h("div", { class: "ccard" }); root.appendChild(ibox);
+    api("/api/edits/inbox").then(function (r) { if (r.s !== 200) return; var n = (r.j.entity || []).length + (r.j.wiki || []).length; if (!n) return;
+      ibox.appendChild(h("h2", { text: "✏️ " + n + " offene Änderungsvorschläge" }));
+      (r.j.entity || []).forEach(function (x) { ibox.appendChild(h("p", {}, [h("a", { href: "/entity/" + x.eid + "/", text: x.eid }), " – " + x.name + (x.summary ? ": " + x.summary : "")])); });
+      (r.j.wiki || []).forEach(function (x) { ibox.appendChild(h("p", { class: "cmut", text: "Wiki: " + x.term + " (" + x.lang + ") – " + x.name })); }); });
+    var ebox = h("div", { class: "ccard" }); root.appendChild(ebox);
+    api("/api/events/mine").then(function (r) { var l = (r.j && r.j.events) || []; if (r.s !== 200 || !l.length) return; var de = (document.documentElement.lang || "en").slice(0, 2) === "de";
+      ebox.appendChild(h("h2", { text: de ? "Meine Events" : "My events" }));
+      l.forEach(function (e) { ebox.appendChild(h("p", {}, [h("b", { text: e.title }), " · " + e.start + (e.public ? "" : (de ? " · nicht öffentlich" : " · not public")) + " ", h("a", { class: "btn", href: "#c-events", text: de ? "Bearbeiten" : "Edit" }), " ", h("a", { href: (de ? "/de" : "") + "/community/events/" + e.handle + "/", text: de ? "Öffentliche Seite" : "Public page" })])); }); });
+    var kbox = h("div", { class: "ccard" }); root.appendChild(kbox);
+    (function aiTokens() { var de = (document.documentElement.lang || "en").slice(0, 2) === "de", msg = h("p", { class: "cok", role: "status", "aria-live": "polite" }), list = h("ul");
+      kbox.appendChild(h("h2", { text: de ? "KI-Zugang (MCP)" : "AI access (MCP)" }));
+      kbox.appendChild(h("p", { class: "cmut" }, [de ? "Verbinde Claude oder ChatGPT mit deinem Konto, damit deine KI dein Profil ausfüllt und Vorschläge macht. " : "Connect Claude or ChatGPT to your account so your AI can fill in your profile and make suggestions. ", h("a", { href: (de ? "/de" : "") + "/community/mcp/", text: de ? "Anleitung" : "How-to" })]));
+      kbox.appendChild(h("p", { class: "cmut" }, [h("a", { href: "/m365-fm-skill/SKILL.md", download: "SKILL.md", text: de ? "Skill-Datei herunterladen (Anleitung für deine KI, was man hier anlegen kann)" : "Download skill file (guide for your AI on what can be created here)" })]));
+      function load() { api("/api/ai-token").then(function (r) { list.textContent = ""; ((r.j && r.j.tokens) || []).forEach(function (t) { list.appendChild(h("li", {}, [t.label + " · " + new Date(t.created * 1000).toLocaleDateString() + (t.last_used ? " · " + (de ? "zuletzt genutzt " : "last used ") + new Date(t.last_used * 1000).toLocaleDateString() : "") + " ", h("button", { type: "button", class: "btn", text: de ? "Widerrufen" : "Revoke", onclick: function () { api("/api/ai-token/" + t.id, { method: "DELETE" }).then(load); } })])); }); }); }
+      kbox.appendChild(list); kbox.appendChild(h("button", { type: "button", class: "btn main", text: de ? "Neuen Zugangstoken erzeugen" : "Create new access token", onclick: function () {
+        api("/api/ai-token", { method: "POST", body: { label: "KI-Zugang" } }).then(function (r) { if (r.s !== 200) { msg.textContent = de ? "Nicht möglich (max. 5 Tokens)." : "Not possible (max. 5 tokens)."; return; } msg.textContent = ""; var box = h("p", {}, [h("code", { text: r.j.token }), " ", h("button", { type: "button", class: "btn", text: de ? "Kopieren" : "Copy", onclick: function (e) { try { navigator.clipboard.writeText(r.j.token); e.target.textContent = "✓"; } catch (x) {} } })]); kbox.appendChild(h("p", { class: "cmut", text: de ? "Wird nur einmal angezeigt. Wie ein Passwort behandeln." : "Shown only once. Treat it like a password." })); kbox.appendChild(box); load(); }); } }));
+      kbox.appendChild(msg); load(); })();
+    var pbox = h("div", { class: "ccard" }, [h("h2", { text: tt("points_t") })]); root.appendChild(pbox);
+    api("/api/points").then(function (pr) { if (pr.s !== 200) return; var d = pr.j, msg = h("p", { class: "cok", role: "status", "aria-live": "polite" });
+      pbox.appendChild(h("p", { text: tt("points_bal").replace("{b}", d.balance).replace("{e}", d.earned) }));
+      d.catalog.forEach(function (it) { pbox.appendChild(h("div", { class: "btns" }, [h("span", { text: tt("it_" + it.id) + " – " + it.cost }), h("button", { type: "button", class: "btn", text: tt("redeem"), disabled: d.balance < it.cost ? "disabled" : null, onclick: function () {
+        api("/api/points/redeem", { method: "POST", body: { item: it.id } }).then(function (r) { msg.textContent = r.s === 200 ? (r.j.status === "pending" ? tt("ok_pending") : tt("ok_done")) : tt("not_enough"); if (r.s === 200) setTimeout(function () { location.reload(); }, 1200); }); } })])); });
+      pbox.appendChild(msg); });
+  }
   function mountPage(root) {
-    var uid = new URLSearchParams(location.search).get("u");
+    var uid = new URLSearchParams(location.search).get("u"), st = document.getElementById("c-login"), D = document.documentElement;   // st: Anmeldekasten aus dem HTML
+    if (st && st.parentNode !== root) st = null;
     if (uid) {
+      if (st) st.remove();
       api("/api/u/" + encodeURIComponent(uid)).then(function (r) {
         if (r.s !== 200) { root.appendChild(h("p", { text: tt("error") })); return; }
         var j = r.j;
@@ -319,8 +359,15 @@
       return;
     }
     me().then(function (u) {
-      if (!u) root.appendChild(loginBox());
-      else {
+      if (!u) {
+        if (st) {   // stehen lassen (erstes Bild, LCP); nur der Ruecksprung auf die aktuelle Adresse, ohne Wirkung aufs Layout
+          [].forEach.call(st.querySelectorAll("a[href*=\"/auth/login/\"]"), function (a) { a.href = a.href.split("?")[0] + "?return=" + loginRet(); });
+          pruneLogin(st, true);
+        } else root.appendChild(loginBox());
+        D.classList.remove("c-in");   // veralteter Hinweis: Kasten wieder zeigen
+      } else {
+        if (st) st.remove();
+        D.classList.remove("c-in");
         var name = h("input", { type: "text", maxlength: 40, value: u.name, "aria-label": tt("your_name") }), mode = h("select", { "aria-label": tt("nm_label") }), opts = u.name_opts || {};
         [["short", "nm_short"], ["full", "nm_full"], ["first", "nm_first"], ["handle", "nm_handle"], ["custom", "nm_custom"]].forEach(function (x) { if (x[0] !== "custom" && !opts[x[0]]) return; mode.appendChild(h("option", { value: x[0], text: tt(x[1]) + (opts[x[0]] ? " – " + opts[x[0]] : "") })); });
         mode.value = u.name_mode || "short"; if (mode.value !== (u.name_mode || "short")) mode.value = "custom";
@@ -334,42 +381,22 @@
           h("h2", { text: tt("profile") }), h("p", { class: "cmut", text: u.points + " " + tt("points") + " · " + u.comments + " " + tt("comments_count") + " · " + u.likes + " " + tt("likes_count") }),
           h("label", { text: tt("nm_label") }), mode, nlab, name, h("p", { class: "cmut", text: tt("nm_hint") }),
           h("div", { class: "btns" }, [h("button", { type: "button", class: "btn main", text: tt("save"), onclick: function () { api("/api/me", { method: "POST", body: { name: name.value, name_mode: mode.value, lang: LANG } }).then(function (r) { ok.textContent = r.s === 200 ? "✓ " + tt("saved") : tt("error"); }); } }),
-            h("button", { type: "button", class: "btn", text: tt("signout"), onclick: function () { api("/api/logout", { method: "POST" }).then(function () { location.reload(); }); } }), ok]),
-          h("details", { class: "cdel" }, [h("summary", { text: tt("delete_account") }), h("p", { class: "cmut", text: tt("delete_account_d") }), h("button", { type: "button", class: "btn", text: tt("delete_account_btn"), onclick: function () { if (confirm(tt("delete_account_d"))) api("/api/me", { method: "DELETE" }).then(function () { location.reload(); }); } })])]));
+            h("button", { type: "button", class: "btn", text: tt("signout"), onclick: function () { authHint(false); api("/api/logout", { method: "POST" }).then(function () { location.reload(); }); } }), ok]),
+          h("details", { class: "cdel" }, [h("summary", { text: tt("delete_account") }), h("p", { class: "cmut", text: tt("delete_account_d") }), h("button", { type: "button", class: "btn", text: tt("delete_account_btn"), onclick: function () { if (confirm(tt("delete_account_d"))) api("/api/me", { method: "DELETE" }).then(function () { authHint(false); location.reload(); }); } })])]));
         root.appendChild(signinsCard());
         root.appendChild(inviteCard());
       }
       var gotL = BADGES.filter(function (b) { return u && u.badges.indexOf(b) > -1; }), bd = h("div", { class: "cbadges" }, gotL.map(function (b) { return h("div", { class: "cbadge got" }, [h("span", { class: "cb big", text: ICON[b] }), h("div", {}, [h("b", { text: tt("b_" + b) }), h("span", { class: "cmut", text: tt("b_" + b + "_d") })])]); }));
       if (BADGES.length > gotL.length) bd.appendChild(h("div", { class: "cbadge" }, [h("span", { class: "cb big", text: "❔" }), h("div", {}, [h("b", { text: tt("hid").replace("{n}", BADGES.length - gotL.length) })])]));
-      var ibox = h("div", { class: "ccard" }); root.appendChild(ibox);
-      api("/api/edits/inbox").then(function (r) { if (r.s !== 200) return; var n = (r.j.entity || []).length + (r.j.wiki || []).length; if (!n) return;
-        ibox.appendChild(h("h2", { text: "✏️ " + n + " offene Änderungsvorschläge" }));
-        (r.j.entity || []).forEach(function (x) { ibox.appendChild(h("p", {}, [h("a", { href: "/entity/" + x.eid + "/", text: x.eid }), " – " + x.name + (x.summary ? ": " + x.summary : "")])); });
-        (r.j.wiki || []).forEach(function (x) { ibox.appendChild(h("p", { class: "cmut", text: "Wiki: " + x.term + " (" + x.lang + ") – " + x.name })); }); });
-      var ebox = h("div", { class: "ccard" }); root.appendChild(ebox);
-      api("/api/events/mine").then(function (r) { var l = (r.j && r.j.events) || []; if (r.s !== 200 || !l.length) return; var de = (document.documentElement.lang || "en").slice(0, 2) === "de";
-        ebox.appendChild(h("h2", { text: de ? "Meine Events" : "My events" }));
-        l.forEach(function (e) { ebox.appendChild(h("p", {}, [h("b", { text: e.title }), " · " + e.start + (e.public ? "" : (de ? " · nicht öffentlich" : " · not public")) + " ", h("a", { class: "btn", href: "#c-events", text: de ? "Bearbeiten" : "Edit" }), " ", h("a", { href: (de ? "/de" : "") + "/community/events/" + e.handle + "/", text: de ? "Öffentliche Seite" : "Public page" })])); }); });
-      var kbox = h("div", { class: "ccard" }); root.appendChild(kbox);
-      (function aiTokens() { var de = (document.documentElement.lang || "en").slice(0, 2) === "de", msg = h("p", { class: "cok", role: "status", "aria-live": "polite" }), list = h("ul");
-        kbox.appendChild(h("h2", { text: de ? "KI-Zugang (MCP)" : "AI access (MCP)" }));
-        kbox.appendChild(h("p", { class: "cmut" }, [de ? "Verbinde Claude oder ChatGPT mit deinem Konto, damit deine KI dein Profil ausfüllt und Vorschläge macht. " : "Connect Claude or ChatGPT to your account so your AI can fill in your profile and make suggestions. ", h("a", { href: (de ? "/de" : "") + "/community/mcp/", text: de ? "Anleitung" : "How-to" })]));
-        kbox.appendChild(h("p", { class: "cmut" }, [h("a", { href: "/m365-fm-skill/SKILL.md", download: "SKILL.md", text: de ? "Skill-Datei herunterladen (Anleitung für deine KI, was man hier anlegen kann)" : "Download skill file (guide for your AI on what can be created here)" })]));
-        function load() { api("/api/ai-token").then(function (r) { list.textContent = ""; ((r.j && r.j.tokens) || []).forEach(function (t) { list.appendChild(h("li", {}, [t.label + " · " + new Date(t.created * 1000).toLocaleDateString() + (t.last_used ? " · " + (de ? "zuletzt genutzt " : "last used ") + new Date(t.last_used * 1000).toLocaleDateString() : "") + " ", h("button", { type: "button", class: "btn", text: de ? "Widerrufen" : "Revoke", onclick: function () { api("/api/ai-token/" + t.id, { method: "DELETE" }).then(load); } })])); }); }); }
-        kbox.appendChild(list); kbox.appendChild(h("button", { type: "button", class: "btn main", text: de ? "Neuen Zugangstoken erzeugen" : "Create new access token", onclick: function () {
-          api("/api/ai-token", { method: "POST", body: { label: "KI-Zugang" } }).then(function (r) { if (r.s !== 200) { msg.textContent = de ? "Nicht möglich (max. 5 Tokens)." : "Not possible (max. 5 tokens)."; return; } msg.textContent = ""; var box = h("p", {}, [h("code", { text: r.j.token }), " ", h("button", { type: "button", class: "btn", text: de ? "Kopieren" : "Copy", onclick: function (e) { try { navigator.clipboard.writeText(r.j.token); e.target.textContent = "✓"; } catch (x) {} } })]); kbox.appendChild(h("p", { class: "cmut", text: de ? "Wird nur einmal angezeigt. Wie ein Passwort behandeln." : "Shown only once. Treat it like a password." })); kbox.appendChild(box); load(); }); } }));
-        kbox.appendChild(msg); load(); })();
-      var pbox = h("div", { class: "ccard" }, [h("h2", { text: tt("points_t") })]); root.appendChild(pbox);
-      api("/api/points").then(function (pr) { if (pr.s !== 200) return; var d = pr.j, msg = h("p", { class: "cok", role: "status", "aria-live": "polite" });
-        pbox.appendChild(h("p", { text: tt("points_bal").replace("{b}", d.balance).replace("{e}", d.earned) }));
-        d.catalog.forEach(function (it) { pbox.appendChild(h("div", { class: "btns" }, [h("span", { text: tt("it_" + it.id) + " – " + it.cost }), h("button", { type: "button", class: "btn", text: tt("redeem"), disabled: d.balance < it.cost ? "disabled" : null, onclick: function () {
-          api("/api/points/redeem", { method: "POST", body: { item: it.id } }).then(function (r) { msg.textContent = r.s === 200 ? (r.j.status === "pending" ? tt("ok_pending") : tt("ok_done")) : tt("not_enough"); if (r.s === 200) setTimeout(function () { location.reload(); }, 1200); }); } })])); });
-        pbox.appendChild(msg); });
+      if (u) memberCards(root);
       root.appendChild(h("h2", { text: tt("badges") })); root.appendChild(bd);
       if (u && u.admin) root.appendChild(teamPanel());
-      var cur = h("section", { class: "ccard" }), sub = h("section", { class: "ccard" });
-      root.appendChild(cur); root.appendChild(sub); mountCurator(cur, true); mountSub(sub);
-    }).catch(function () { root.hidden = false; root.appendChild(h("p", { class: "cmut", role: "status", text: tt("error") })); });
+      // Bestenliste und Abo erst einhaengen, wenn sie gefuellt sind (beide stehen zuletzt): kein leerer Kasten, der beim Fuellen waechst und
+      // das darunter verschiebt. Spaetestens nach 4 s trotzdem (langsame API).
+      var cur = h("section", { class: "ccard" }), sub = h("section", { class: "ccard" }), done = false;
+      function add() { if (done) return; done = true; root.appendChild(cur); root.appendChild(sub); }
+      Promise.all([mountCurator(cur, true), mountSub(sub)]).then(add, add); setTimeout(add, 4000);
+    }).catch(function () { D.classList.remove("c-in"); root.hidden = false; root.appendChild(h("p", { class: "cmut", role: "status", text: tt("error") })); });   // Zustand unbekannt: Kasten zeigen
   }
 
   // T9: Widgets erst laden, wenn sie in die Naehe des sichtbaren Bereichs kommen (spart API-Aufrufe und Verbindungsaufbau beim ersten Laden)

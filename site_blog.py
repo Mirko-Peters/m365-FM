@@ -103,13 +103,13 @@ def iso(ts):
 
 
 VOTEJS = ('(function(){var A="%API%",H="%H%",bs=[].slice.call(document.querySelectorAll(".bl-vote"));if(!bs.length)return;'
-          'function f(p,o){o=o||{};o.credentials="include";o.headers=Object.assign({"x-requested-with":"m365"},o.headers||{});return fetch(A+p,o).then(function(r){return r.json()})}'
+          'function f(p,o){o=o||{};o.credentials="include";o.headers=Object.assign(/^(GET)?$/i.test(o.method||"")?{}:{"x-requested-with":"m365"},o.headers||{});return fetch(A+p,o).then(function(r){return r.json()})}'
           'f("/api/blog/votes?handle="+H).then(function(d){bs.forEach(function(b){var s=b.dataset.s;b.querySelector(".n").textContent=(d.votes||{})[s]||0;if((d.mine||[]).indexOf(s)>-1)b.setAttribute("aria-pressed","true")})}).catch(function(){});'
           'bs.forEach(function(b){b.addEventListener("click",function(){f("/api/blog/vote",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({handle:H,slug:b.dataset.s})}).then(function(d){if(d.error==="login"){location.href=A.replace("api-","")+"/community/";return}'
           'if(d.ok){b.querySelector(".n").textContent=d.votes;b.setAttribute("aria-pressed",d.voted?"true":"false")}}).catch(function(){})})})})();')
 
 FOLLOWJS = ('(function(){var A="%API%",b=document.querySelector(".bl-follow");if(!b)return;var H=b.dataset.h,t=b.querySelector(".t");'
-            'function f(p,o){o=o||{};o.credentials="include";o.headers=Object.assign({"x-requested-with":"m365"},o.headers||{});return fetch(A+p,o).then(function(r){return r.json()})}'
+            'function f(p,o){o=o||{};o.credentials="include";o.headers=Object.assign(/^(GET)?$/i.test(o.method||"")?{}:{"x-requested-with":"m365"},o.headers||{});return fetch(A+p,o).then(function(r){return r.json()})}'
             'function set(on){b.setAttribute("aria-pressed",on?"true":"false");t.textContent=on?"%FOLLOWING%":"%FOLLOW%"}'
             'f("/api/blog/following").then(function(d){if(d.following)set(d.following.indexOf(H)>-1)}).catch(function(){});'
             'b.addEventListener("click",function(){var on=b.getAttribute("aria-pressed")!=="true";f("/api/blog/follow",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({handle:H,on:on})}).then(function(d){if(d.error==="login"){location.href=A.replace("api-","")+"/community/";return}if(d.ok)set(on)}).catch(function(){})})})();')
