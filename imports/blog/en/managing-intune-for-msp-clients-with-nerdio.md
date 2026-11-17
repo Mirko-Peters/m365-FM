@@ -1,45 +1,46 @@
 ---
 title: "Managing Intune for MSP clients with Nerdio"
-summary: "Nerdio Manager for MSP keeps Intune policies at the MSP level, publishes them to customer accounts and compares each customer against the source. This article walks through that workflow, its documented limits, and how it differs from the Intune admin center and Microsoft 365 Lighthouse."
+summary: "Nerdio Manager for MSP keeps Intune policies at the MSP level, publishes them to customer accounts and compares each customer against the source. This article walks through that workflow, its documented limits, and how its scope and requirements compare with the Intune admin center and Microsoft 365 Lighthouse."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [nerdio-manager-for-msp, intune]
 keypoints:
-  - "Per Nerdio's pages, Intune policies are created in the MSP tenant, imported into Nerdio Manager for MSP once and published to customer accounts. Intune in each customer tenant still enforces them."
+  - "Per Nerdio's pages, Intune policies are created in the MSP tenant, imported into Nerdio Manager for MSP and published to customer accounts. Later source changes are pulled in by re-import or Update. Our reading: Intune in each customer tenant does the enforcing, because these are Intune policies."
   - "Assignments to customers use a sync type, manual by default or automatic, and Add or Overwrite. With automatic sync for All customers, new accounts receive the policy automatically."
   - "Drift status compares a customer's policy with the MSP source. For a policy outside a Policy Baseline, Fix drift only works in Enforced mode; Rollback and Accept drift (with an expiry) are the alternatives."
   - "Nerdio checks source tenants for unimported changes every 4 hours. Nerdio validates only the JSON syntax of an edited policy, not whether the Intune settings are valid."
-  - "Microsoft 365 Lighthouse is a no-additional-cost Microsoft option with its own limits (CSP partners, up to 2,500 licensed users per customer tenant). Microsoft also names Nerdio and others as companion solutions for Intune multi-tenant work."
+  - "Microsoft 365 Lighthouse is a no-additional-cost Microsoft option with its own limits (CSP partners, up to 2,500 licensed users per customer tenant). Microsoft's September 2025 post names Nerdio and inforcer as independent companion solutions; a March 2026 post adds three validated partners, including CIPP."
 faq:
   - q: "Does Nerdio replace Intune for an MSP?"
-    a: "No. Intune remains the service that enforces policies in each customer tenant. Nerdio's help pages describe policies, profiles and baselines that are published to customer accounts, and say that changes made in Nerdio Manager or in the admin center appear in the other. The Microsoft post that announces the collaboration calls Nerdio and inforcer independent companion solutions built on Intune."
+    a: "No. Intune remains the underlying service; our reading is that it enforces the policies in each customer tenant. Nerdio's help pages describe policies, profiles and baselines that are published to customer accounts. On the account-level page, changes to assigned policies and profiles made in Nerdio Manager or in the admin center are reflected in the other. The Microsoft post that announces the collaboration calls Nerdio and inforcer independent companion solutions."
   - q: "Can an MSP use Nerdio Manager for Intune only, without Azure Virtual Desktop?"
-    a: "Yes, with limits. Nerdio's account-level page describes Intune-only accounts, meaning accounts without an Azure Virtual Desktop subscription. They can manage only Intune policies, have access only to MSP-assigned certificates, and cannot use customer-level private WinGet or Shell Apps repositories because those need an Azure subscription."
+    a: "Yes, with limits. Nerdio's account-level general management page describes Intune-only accounts, meaning accounts without an Azure Virtual Desktop subscription. They can manage only Intune policies, have access only to MSP-assigned certificates, and cannot use customer-level private WinGet or Shell Apps repositories because those need an Azure subscription."
   - q: "What happens when a customer changes a policy that the MSP published?"
     a: "The Configuration Drift window in Nerdio Manager shows the difference from the MSP source policy. The MSP can fix the drift (for a policy outside a Policy Baseline, Fix drift republishes the mismatched items in Enforced mode), roll back to another version assigned to the customer, or accept the drift for a set period."
 ---
 
-Nerdio Manager for MSP lets a managed service provider keep Intune policies in one place at the MSP level, publish them to customer accounts and see where a customer differs from the source. Intune in each customer tenant still does the enforcing. This article covers the workflow, the steps and settings that matter in daily use, and where Microsoft's own tools may be enough.
+Nerdio Manager for MSP lets a managed service provider keep Intune policies in one place at the MSP level, publish them to customer accounts and see where a customer differs from the source. These are Intune policies, so our reading is that Intune in each customer tenant does the enforcing; the pages describe publishing. This article covers the workflow, the steps and settings that matter in daily use, and where Microsoft's own tools may be enough.
 
-The details come from Nerdio's help center and Microsoft Learn. Nerdio's pages call the Intune admin portal the "Microsoft Endpoint Manager admin center", and this article keeps that wording when it quotes them. It does not cover Intune on AVD session hosts or onboarding a customer account.
+The details come from Nerdio's help center and Microsoft Learn. Nerdio's pages call the Intune admin portal the "Microsoft Endpoint Manager admin center"; this article keeps that wording. It does not cover Intune on AVD session hosts or onboarding a customer account.
 
 ## The multi-tenant problem
 
-Intune is configured per tenant. A September 2025 Microsoft post by Lior_Bela says MSPs repeat tasks across tenants, troubleshoot inconsistent policies and switch between portals. It announces a collaboration with inforcer and Nerdio and calls their products independent companion solutions built on Intune. A March 2026 follow-up adds three validated partners. Neither post labels a capability as preview or generally available.
+Intune is configured per tenant. A September 2025 Microsoft post by Lior_Bela says MSPs repeat tasks across tenants, troubleshoot inconsistent policies and switch between portals. It announces a collaboration with inforcer and Nerdio, which it calls independent companion solutions building capabilities on top of Intune. A March 2026 follow-up adds three validated partners: AvePoint, CyberDrain CIPP and SoftwareCentral. Neither post labels a capability as preview or generally available.
 
 An MSP therefore has several routes:
 
 | Route | What the sources say |
 |---|---|
 | Intune admin center per customer tenant | Configured per tenant; the Microsoft post describes repeated tasks and portal switching |
-| [Microsoft 365 Lighthouse](/entity/microsoft-365-lighthouse/) | A Microsoft admin portal for managing customers at scale; no additional cost. Requires CSP enrollment and, per customer tenant, delegated access (GDAP or DAP), at most 2,500 licensed users and the partner's region. Device pages need all devices enrolled in Intune with compliance policies assigned |
-| Partner solutions such as Nerdio, inforcer, CIPP | Described in Microsoft's posts as independent companion solutions built on Intune |
+| [Microsoft 365 Lighthouse](/entity/microsoft-365-lighthouse/) | A Microsoft admin portal for managing customers at scale; no additional cost. Learn lists a default SMB security baseline, multi-tenant device-compliance insights and tools to compare policies. Requires CSP enrollment and, per customer tenant, delegated access (GDAP or DAP), at most 2,500 licensed users and the partner's region. Device pages need all devices enrolled in Intune with compliance policies assigned |
+| Nerdio, inforcer | Named in Microsoft's September 2025 post as independent companion solutions building on top of Intune |
+| CIPP | One of three further validated partners in Microsoft's March 2026 post (the September post mentions it as a community tool) |
 
 Nerdio's own blog (2023) states that native Intune has no multi-tenant management and no import or export of policies between customer tenants. That is a vendor statement.
 
-Access differs too. Lighthouse requires a delegated administrative relationship, either [GDAP](https://learn.microsoft.com/en-us/partner-center/customers/gdap-introduction) or DAP, per customer. Nerdio's permissions page describes an app registration that is created in the customer tenant when an account is added. An admin native to that tenant, with the Global Administrator role and Owner on the Azure subscription, grants its permissions; afterwards most actions run on the app registration's behalf. That page does not mention GDAP. Per Nerdio's account-level page, the granular prerequisite model is generally available and the default for new accounts, and the Least Privilege model is in Public Preview.
+Access differs too. Lighthouse requires a delegated administrative relationship, either [GDAP](https://learn.microsoft.com/en-us/partner-center/customers/gdap-introduction) or DAP, per customer. Nerdio's permissions page describes an app registration created in the customer tenant when an account is added. An admin native to that tenant, with Global Administrator and Owner on the Azure subscription, grants its permissions; afterwards most actions run on the app registration's behalf. That page does not mention GDAP. Per Nerdio's page on account-level features and permissions, the granular prerequisite model is generally available and the default for new accounts, and the Least Privilege model is in Public Preview.
 
 ## How Nerdio organises Intune for an MSP
 
@@ -49,29 +50,29 @@ Nerdio Manager works on two levels: at the MSP level you keep source policies an
 - Devices: Configuration Profiles, MAM Policies, Autopilot Profiles, Enrollment Status Pages
 - Security: Security Baselines, Compliance Policies, Update Rings, Endpoint Security Policies, Defender O365 Policies
 
-Policies enter Nerdio Manager in two ways. **Import from a source tenant** (Policies > [type] > Import Actions > Import) walks through four stages: Available Policies, Selected Policies, Policy Options and Summary. **Import from JSON** accepts a JSON or TXT file or pasted JSON. Imported policies can then be edited or cloned from the action menu, which opens their settings in a JSON editor. Nerdio's general-management page says compliance, configuration and security policies are created in the Microsoft Endpoint Manager admin center using an MSP-level Azure tenant, and that in Nerdio Manager you can only view them. Its advanced-management page still describes editing, cloning and updating policies in Nerdio Manager. The pages are not fully consistent; our reading is that new policies originate in the source tenant and Nerdio Manager works on the imported copies.
+Policies enter Nerdio Manager in two ways. **Import from a source tenant** (Policies > [type] > Import Actions > Import) walks through four stages: Available Policies, Selected Policies, Policy Options and Summary. **Import from JSON** accepts a JSON or TXT file or pasted JSON. Imported policies can be edited or cloned from the action menu, which opens a JSON editor. Nerdio's general-management page says compliance, configuration and security policies are created in the Microsoft Endpoint Manager admin center using an MSP-level Azure tenant, and that in Nerdio Manager you can only view them. Its advanced-management page still describes editing, cloning and updating policies in Nerdio Manager. The pages are not fully consistent; our reading is that new policies originate in the source tenant and Nerdio Manager works on the imported copies.
 
-Nerdio checks the source tenant for unimported changes every four hours; Import Actions > Source tenant check starts one manually.
+Nerdio checks the source tenant for unimported changes every four hours; Import Actions > Source tenant check does it manually. The import options include Overwrite if already exists, which re-imports a policy and keeps its assignments.
 
 ## Publishing a policy to customers
 
 1. Open Policies and choose the policy type.
 2. Select Assign, then Add assignments.
-3. Under Select assignments, choose accounts, or All for every account. A grayed-out account may mean Intune is not enabled for it.
+3. Under Select assignments, choose accounts, or All for every account.
 4. Choose Add to extend existing assignments or Overwrite to replace them, then Confirm.
 5. On the Assignments page set the Sync Type. Manual is the default; Automatic republishes regularly, and with All customers selected, new accounts get the policy automatically. Set the Version, and for Conditional Access the State.
 6. Select Apply and close.
 
 After you edit or update a policy, Re-publish applies to manual assignments and Publish now publishes automatic assignments immediately. Re-publish exists only for policies already assigned to customers.
 
-**Worked example (an illustration, not from Nerdio's pages).** An MSP imports an update ring and assigns it to All customers with Automatic sync. After an edit in Nerdio Manager, Publish now pushes the change to the automatic assignments, while an account on Manual sync gets it only when someone selects Re-publish.
+**Worked example (an illustration, not from Nerdio's pages).** An MSP imports an update ring and assigns it to All customers with Automatic sync. After an edit in Nerdio Manager, Publish now pushes the change to the assigned accounts. Had the assignment used Manual sync, the change would reach them only when someone selects Re-publish.
 
 ## Per-customer differences
 
-Customers rarely want identical settings. Three mechanisms cover this:
+Three mechanisms cover customer differences:
 
-- **Inherited variables.** In the Settings step of the edit wizard, Nerdio's page says inherited variables are passed with `$InheritedVars.Variable_Name` (treat the name as a placeholder; Nerdio has a separate Account-level variables page). Drift checks ignore account-level Inherited variables, because those are expected to differ.
-- **Direct assignment.** For Configuration Profiles, Autopilot Profiles, Enrollment Status Pages, Compliance Policies, Security Baselines, Update Rings and Endpoint Security Policies you can set users, devices and group templates per account; Conditional Access and Defender for Office 365 policies have their own dialog steps. Nerdio's page names the policy types that support filters and those that support group templates because of Microsoft limitations, and the lists differ: Conditional Access supports filters but not group templates, Compliance Policies the reverse, and Autopilot Profiles take group templates for All Devices only.
+- **Inherited variables.** Inherited variables are passed to policies with `$InheritedVars.Variable_Name`. Nerdio's Account-level variables page limits real names to 20 alphanumeric characters or hyphens, no underscores, so treat Variable_Name as a placeholder. At the account level, Settings > Integrations lets you override an inherited variable or reset it to the MSP default. Drift checks ignore account-level Inherited variables, because those are expected to differ.
+- **Direct assignment.** For Configuration Profiles, Autopilot Profiles, Enrollment Status Pages, Compliance Policies, Security Baselines, Update Rings and Endpoint Security Policies you can set users, devices and group templates per account; Conditional Access and Defender for Office 365 policies have their own dialog steps. Because of Microsoft limitations the filter and group-template lists differ: Conditional Access supports filters but not group templates, Compliance Policies the reverse, and Autopilot Profiles take group templates for All Devices only.
 - **Account-level assignment.** Inside one customer account, Policies > [category] > Assign lets you set Included Groups, with All users (Intune-licensed users) or All devices (Intune-enrolled devices), and Excluded Groups. Nerdio's page limits these two options to one type of assignment without saying exactly how, so test it first.
 
 ## Drift, versions and rollback
@@ -90,22 +91,22 @@ A baseline groups Intune policies under a desired state. Create one under Baseli
 
 When you view the status of a Policy Baseline, each policy has its own Fix drift action. Per Nerdio, it is available for policies in a Report-only baseline and for policies in an Enforce baseline that are not yet published. In a Report-only baseline it publishes the policy to that account once, after you tick a check box to override Report-only mode, which allows a gradual rollout.
 
-Baselines are processed from top to bottom, and a lower-priority baseline skips a policy that a higher one already evaluated or published. Nerdio advises against overlapping baselines. [Nerdio Solution Baselines](/entity/nerdio-solution-baselines/) are a separate MSP-level feature and are not covered here.
+Baselines are processed from top to bottom, and a lower-priority baseline skips a policy that a higher one already evaluated or published. Nerdio advises against overlapping baselines. [Nerdio Solution Baselines](/entity/nerdio-solution-baselines/) are a separate feature, not covered here.
 
 To use the Center for Internet Security (CIS) Intune policies, enable them first: at the MSP level go to System > System Settings > Integrations, select Disabled next to CIS Intune Policies in the Center for Internet Security area, then select I Agree and Enable. CIS policy baselines then appear in Policy Management.
 
 ## Limits and pitfalls from the documentation
 
 - **Syntax-only validation.** When you edit JSON, Nerdio Manager validates only the syntax, not whether the Intune settings and values are valid.
-- **Authentication contexts are shared.** Nerdio's page says they use a shared set of predefined IDs in the customer tenant (c1-c199), so overwriting one can affect other policies; Microsoft Learn says up to 99 definitions (c1-c99), so check the tenant. The overwrite option is off by default; Nerdio advises reviewing existing contexts first in the Microsoft Entra admin center under Protection > Conditional Access > Authentication contexts.
-- **Microsoft-managed Conditional Access policies** are read-only in Nerdio. Nerdio's page says Microsoft turns them on automatically after 45 days; Microsoft Learn says no less than 30 days after introduction if they stay in Report-only, sometimes faster, with notice two weeks before. Check the notices your tenants receive. Import from several tenants, because the policies can differ. You can change their state and group assignments, but not edit them or push them to tenants.
+- **Authentication contexts are shared.** Nerdio's page says they use a shared set of predefined IDs in the customer tenant (c1-c199), so overwriting one can affect other policies; Microsoft Learn says up to 99 definitions (c1-c99), so check the tenant. The overwrite option is off by default; review existing contexts first under Protection > Conditional Access > Authentication contexts in the Microsoft Entra admin center.
+- **Microsoft-managed Conditional Access policies** are read-only in Nerdio. Nerdio's page says Microsoft turns them on automatically after 45 days; Microsoft Learn says no less than 30 days after introduction if they stay in Report-only, sometimes faster, with notice two weeks before. Import from several tenants, because the policies can differ. You can change their state and group assignments, but not edit or push them.
 - **The built-in device compliance policy is tenant-wide** and cannot be scoped to user or device groups; by default it can report compliant when no compliance policy is assigned.
-- **Limited Access mode is deprecated.** Nerdio's permissions page marks account-level Limited Access mode as deprecated from v7.3, in favor of the Granular and Least Privilege access models. Where it is still used, the account app has no Global Admin role and Intune permissions are assigned under Settings > Integrations.
-- **Cross-Tenant Management is a different feature.** Nerdio's page on Intune Cross-Tenant Management, which links secondary Intune tenants to one Nerdio Manager instance, is labelled Public Preview and sits in the Nerdio Manager for Enterprise help center.
+- **Limited Access mode is deprecated.** Nerdio's permissions page marks account-level Limited Access mode as deprecated from v7.3, in favor of the Granular and Least Privilege access models.
+- **Cross-Tenant Management is a different feature.** Nerdio's page on Intune Cross-Tenant Management is labelled Public Preview and sits in the Nerdio Manager for Enterprise help center.
 
 ## Which route fits
 
-Choose by workload rather than by product. If your customer tenants meet the Lighthouse requirements, it costs nothing extra. If you also run [Azure Virtual Desktop](/entity/azure-virtual-desktop/) or Windows 365 for the same customers, a console that handles both and publishes Intune policies with drift checks can reduce portal switching. Compare inforcer and CIPP too.
+Choose by workload rather than by product. If your customer tenants meet the Lighthouse requirements, it costs nothing extra. If you also run [Azure Virtual Desktop](/entity/azure-virtual-desktop/) or Windows 365 for the same customers, one console that handles both and publishes Intune policies with drift checks may suit you. Compare inforcer and CIPP too.
 
 Before a wide rollout, run one policy through the whole cycle on a test customer: import, assign with manual sync, republish, change a setting in the customer tenant, read the drift status, then fix or accept it.
 
@@ -122,7 +123,6 @@ Before a wide rollout, run one policy through the whole cycle on a test customer
 
 All retrieved on 17 November 2026.
 
-- [Nerdio Help: Overview of Intune Policies and Configurations](https://nmmhelp.getnerdio.com/hc/en-us/articles/26125616287373)
 - [Nerdio Help: Intune policy: MSP level general management](https://nmmhelp.getnerdio.com/hc/en-us/articles/26125624563085)
 - [Nerdio Help: Intune policy: MSP-level advanced management](https://nmmhelp.getnerdio.com/hc/en-us/articles/26125615807629)
 - [Nerdio Help: Intune policy: Account-level general management](https://nmmhelp.getnerdio.com/hc/en-us/articles/26125601997069)
@@ -132,7 +132,6 @@ All retrieved on 17 November 2026.
 - [Nerdio Help: Azure Permissions and Nerdio Manager](https://nmmhelp.getnerdio.com/hc/en-us/articles/26125608873229)
 - [Nerdio Help: Enable and configure Intune Cross-Tenant Management](https://nmehelp.getnerdio.com/hc/en-us/articles/43762208848397)
 - [Nerdio blog: Intune for MSPs](https://getnerdio.com/blog/intune-for-msps/)
-- [Nerdio blog: Policy standardization in Nerdio Manager for MSP](https://getnerdio.com/blog/policy-standardization-in-nerdio-manager-for-msp/)
 - [Tech Community: Addressing multi-tenant management challenges for MSPs with Microsoft Intune and partner innovations](https://techcommunity.microsoft.com/t5/microsoft-intune-blog/addressing-multi-tenant-management-challenges-for-msps-with/ba-p/4453682)
 - [Tech Community: Announcing three new partners for multi-tenant management with Microsoft Intune](https://techcommunity.microsoft.com/t5/microsoft-intune-blog/announcing-three-new-partners-for-multi-tenant-management-with/ba-p/4501339)
 - [Microsoft Learn: Microsoft 365 Lighthouse overview](https://learn.microsoft.com/en-us/microsoft-365/lighthouse/m365-lighthouse-overview)
