@@ -72,7 +72,7 @@ The steps follow the portal flow in Learn's deployment article.
 8. **Network.** Select an existing network to connect each session host to.
 9. **Domain join.** **Active Directory** is the only option shown, including Microsoft Entra hybrid join. Enter the UPN and password of an account that can join computers, and choose whether to specify a domain or OU; if you answer no, the UPN suffix is used as the domain.
 10. **Local administrator.** Enter a username and password for the local administrator account.
-11. Complete the remaining tabs as for a host pool in Azure, then review and create. Do not disable Windows Remote Management when you create session hosts in the portal, because PowerShell DSC requires it.
+11. Complete the remaining tabs as for Azure, then review and create. Do not disable Windows Remote Management when you create session hosts in the portal, because PowerShell DSC requires it.
 
 Afterwards, license and activate the VMs before use. Learn says to use Azure verification for VMs for Windows 10 and 11 Enterprise multi-session and Windows Server 2022 Datacenter: Azure Edition, and your existing activation methods for other images.
 
@@ -94,13 +94,13 @@ Afterwards, license and activate the VMs before use. Learn says to use Azure ver
 | Mixed pools | Azure and Azure Local hosts cannot share a host pool | Create separate pools |
 | Azure Government and 21Vianet | Learn labels these versions preview; portal provisioning is not available for Azure Government | Check the page for the current status |
 
-Two more points. The Azure Local VM management page says moving a resource group is not supported for these VMs and their associated resources, and that taking a VM checkpoint locally is supported only on Azure Local 2504 and later. Both bear on how you design resource groups and image rollbacks.
+Two more points. The Azure Local VM management page says moving a resource group is not supported for these VMs and their associated resources, and that taking a VM checkpoint locally is supported only on Azure Local 2504 and later.
 
 ### Connectivity and the agent
 
 Session hosts must reach the Azure Instance Metadata Service through the Azure Connected Machine agent, which the portal installs automatically when you add hosts. Learn's overview links to the Required FQDNs and endpoints page, which says Microsoft does not support deployments where the listed FQDNs and endpoints are blocked. Only one entry in that table names Azure Local: `aka.ms` (TCP 443), the Microsoft URL shortener used during session host deployment on Azure Local. For Azure Local itself, Learn asks for the firewall URLs listed in "Required firewall URLs for Azure Local deployments" and for access to the Instance Metadata Service through the Connected Machine agent.
 
-The same page also lists two Azure fabric communication IPs, `169.254.169.254` (Instance Metadata Service, TCP 80) and `168.63.129.16`, for session host VMs and Cloud PCs, and says traffic to them must not be intercepted, proxied or redirected. Learn's page on those IPs describes them as Azure-internal platform addresses that cannot be accessed from outside Azure or from on-premises networks, and it does not mention Azure Local. Our reading: do not plan separate firewall or routing rules for these two addresses on Azure Local, and confirm with Microsoft if your design needs more. The Azure Virtual Desktop Agent URL Tool described on Learn can check whether a session host reaches the listed FQDN endpoints.
+The same page also lists two Azure fabric communication IPs, `169.254.169.254` (Instance Metadata Service, TCP 80) and `168.63.129.16`, for session host VMs and Cloud PCs, and says traffic to them must not be intercepted, proxied or redirected. Learn's page on those IPs describes them as Azure-internal platform addresses that cannot be accessed from outside Azure or from on-premises networks, and it does not mention Azure Local. Learn does not say how these two addresses apply to Azure Local VMs. If the network of your instance uses a proxy or transparent traffic interception, clarify this with Microsoft before deployment and test it on a pilot session host. The Azure Virtual Desktop Agent URL Tool described on Learn can check whether a session host reaches the listed FQDN endpoints.
 
 ## Verify the result
 
