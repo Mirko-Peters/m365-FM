@@ -16,7 +16,7 @@ faq:
   - q: "Can an Azure Virtual Desktop deployment run with no domain controller at all?"
     a: "Learn says Microsoft Entra joined session hosts do not need line of sight to a domain controller or Microsoft Entra Domain Services, and that in some cases no domain controller is needed. Whether that holds for you depends on what the session hosts must reach: Learn says an Active Directory and line of sight to it are needed to access on-premises resources from these VMs. For hybrid identities, setting Windows ACLs on an Azure Files share for FSLogix needs a system with connectivity to a domain controller."
   - q: "Can I mix Microsoft Entra joined and domain-joined session hosts in one host pool?"
-    a: "No. Learn's note says host pools should only contain VMs of the same domain join type, so Microsoft Entra joined VMs belong with other Microsoft Entra joined VMs only. If both join types are needed, use separate host pools."
+    a: "Learn says they should not be mixed: host pools should only contain VMs of the same domain join type, so Microsoft Entra joined VMs belong with other Microsoft Entra joined VMs only. If both join types are needed, use separate host pools."
   - q: "Do I have to assign an Azure role so users can sign in to Microsoft Entra joined session hosts?"
     a: "For host pools without a session host configuration, yes: Learn says to assign Virtual Machine User Login to users, and Virtual Machine Administrator Login to administrators who need local administrative privileges. For host pools with a session host configuration, Learn says this extra role assignment is not required, although the troubleshooting page for the sign-in error does not mention that exception. Owner or Contributor alone does not grant sign-in."
 ---
@@ -85,22 +85,22 @@ The session hosts do not need line of sight to a domain controller. For hybrid i
 - **Group SID limit.** A Kerberos ticket can include at most 1,010 group SIDs; cloud-only identities also need the `kdc_enable_cloud_group_sids` manifest tag.
 - **Encryption.** The Azure Files article says Entra Kerberos ticket encryption is always AES-256.
 
-Learn's pages disagree on identity types. The prerequisites page says that with Entra join, user accounts must be hybrid identities. The Entra joined page's profile section mentions hybrid accounts only, while its introduction calls Azure Files access for hybrid, cloud-only and external identities fully supported. Learn's What's new page announces general availability of FSLogix profile containers for cloud-only and external identities in May 2026. Our reading: the hybrid-only sentences predate that announcement, and the FSLogix and Azure Files articles are the current sources.
+Learn's pages disagree on identity types. The prerequisites page says that for FSLogix with Entra joined hosts, user accounts must be hybrid identities and profiles must sit on Azure Files or Azure NetApp Files. The Entra joined page's profile section mentions hybrid accounts only, while its introduction calls Azure Files access supported for hybrid, cloud-only and external identities. Learn's What's new page announces general availability of FSLogix profile containers for cloud-only and external identities in May 2026. Our reading: the hybrid-only sentences have not been updated to match it; the FSLogix and Azure Files articles are current.
 
-The Azure Files article also sets operating system limits stricter than the join requirements above. For cloud-only identities it lists Windows 11 Enterprise or Pro (single or multi-session) or Windows Server 2025 with the latest cumulative updates. For hybrid identities it lists Windows 11, Windows 10 version 2004 or later, Windows Server 2025 and Windows Server 2022. Windows Server 2019 does not appear on that page.
+The Azure Files article sets stricter operating system limits than the join requirements above. For cloud-only identities it lists Windows 11 Enterprise or Pro (single or multi-session) or Windows Server 2025 with the latest cumulative updates. For hybrid identities it lists Windows 11, Windows 10 version 2004 or later, Windows Server 2025 and Windows Server 2022.
 
 ## Management without Group Policy
 
-Intune takes over device configuration. The [Intune multi-session article](https://learn.microsoft.com/en-us/mem/intune/fundamentals/azure-virtual-desktop-multi-session) says Intune management of Azure Virtual Desktop multi-session is generally available and requires:
+Intune takes over device configuration. The [Intune multi-session article](https://learn.microsoft.com/en-us/intune/solutions/azure-virtual-desktop-multi-session) says Intune management of Azure Virtual Desktop multi-session is generally available and requires:
 
 - Pooled host pools deployed through Azure Resource Manager.
 - The same tenant as Intune.
 - Azure Virtual Desktop agent version 1.0.2944.1400 or later.
 - For Entra joined VMs, **Enroll the VM with Intune** enabled in the Azure portal.
 
-Intune does not support Windows Autopilot, the enrollment status page, Windows update ring policies, RemoteApp or MSIX app attach for these hosts. Deleting a VM in Azure leaves an orphaned device record; Intune attempts to delete records for devices inactive for 60 days or more, and Learn says this is not guaranteed.
+Intune does not support Windows Autopilot, the enrollment status page, Windows update ring policies, RemoteApp or MSIX app attach for these hosts. Deleting a VM in Azure leaves an orphaned device record; Intune attempts to delete records inactive for 60 days or more, which Learn says is not guaranteed.
 
-Windows Server is the exception. Per the prerequisites, a Windows Server session host joined to Entra cannot be enrolled in Intune; Learn points to Microsoft Entra hybrid join with Group Policy from an Active Directory domain, or local Group Policy on each host. The same page says session hosts joined to a Microsoft Entra Domain Services domain cannot be managed with Intune.
+Windows Server is the exception. Per the prerequisites, a Windows Server session host joined to Entra cannot be enrolled in Intune; Learn points to Microsoft Entra hybrid join with Group Policy from an Active Directory domain, or local Group Policy on each host. Hosts joined to Microsoft Entra Domain Services cannot be managed with Intune either.
 
 ## Limits to check before you commit
 
@@ -110,7 +110,7 @@ Windows Server is the exception. Per the prerequisites, a Windows Server session
 
 ## A short decision rule
 
-This is our reading of the sources, not a Microsoft rule. Entra join fits when users are in Entra ID, the hosts run a Windows client OS, profiles can sit on Azure Files, and nothing on the host needs Kerberos or NTLM to on-premises systems. Domain join or hybrid join fits when applications or file servers depend on the domain, when Windows Server session hosts need Intune-style management, or when the host pool runs on Azure Local.
+This is our reading of the sources, not a Microsoft rule. Entra join fits when users are in Entra ID, the hosts run a Windows client OS, profiles can sit on Azure Files, and nothing on the host needs Kerberos or NTLM to on-premises systems. Domain join or hybrid join fits when applications or file servers depend on the domain, when Windows Server session hosts need Group Policy from Active Directory (Learn: Intune does not support Windows Server), or when the host pool runs on Azure Local.
 
 ## Related
 
@@ -129,8 +129,8 @@ This is our reading of the sources, not a Microsoft rule. Entra join fits when u
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
 - [Microsoft Learn: Authentication in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/authentication)
 - [Microsoft Learn: Enforce Microsoft Entra multifactor authentication for Azure Virtual Desktop using Conditional Access](https://learn.microsoft.com/en-us/azure/virtual-desktop/set-up-mfa)
-- [Microsoft Learn: Troubleshoot connections to Microsoft Entra joined VMs in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/troubleshoot-azure-ad-connections)
+- [Microsoft Learn: Troubleshoot connections to Microsoft Entra joined VMs in Azure Virtual Desktop](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-azure-ad-connections)
 - [Microsoft Learn: Sign in to a Windows virtual machine in Azure by using Microsoft Entra ID](https://learn.microsoft.com/en-us/entra/identity/devices/howto-vm-sign-in-azure-ad-windows)
 - [Microsoft Learn: Store FSLogix profile containers on Azure Files using Microsoft Entra ID](https://learn.microsoft.com/en-us/fslogix/how-to-configure-profile-container-entra-id-hybrid)
 - [Microsoft Learn: Enable Microsoft Entra Kerberos authentication for hybrid identities on Azure Files](https://learn.microsoft.com/en-us/azure/storage/files/storage-files-identity-auth-hybrid-identities-enable)
-- [Microsoft Learn: Intune management of Windows Enterprise multi-session session hosts](https://learn.microsoft.com/en-us/mem/intune/fundamentals/azure-virtual-desktop-multi-session)
+- [Microsoft Learn: Using Azure Virtual Desktop multi-session with Microsoft Intune](https://learn.microsoft.com/en-us/intune/solutions/azure-virtual-desktop-multi-session)
