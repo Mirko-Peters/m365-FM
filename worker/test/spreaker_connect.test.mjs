@@ -143,7 +143,10 @@ test("exchange: state muss zum Cookie passen (sonst 400 state_mismatch, Spreaker
   await bad("spreaker", st.ck);                         // nur Praefix (frueheres festes state)
   await bad(st.state, "");                              // kein Cookie (fremder Browser / untergeschobener Code)
   await bad(other.state, st.ck);                        // state aus einem anderen Start
-  await bad(st.state, st.ck.replace(/.$/, (c) => (c === "A" ? "B" : "A")));   // Signatur manipuliert
+  // Signatur manipuliert: das erste Zeichen der Signatur kippen. Das letzte Zeichen taugt nicht: bei 32 Byte HMAC traegt es
+  // in base64url 2 Fuellbits, A<->B (oder B/C/D->A) dekodiert zu denselben Bytes und die Signatur bleibt gueltig (ca. 6 % rot).
+  const sd = st.ck.lastIndexOf(".") + 1;
+  await bad(st.state, st.ck.slice(0, sd) + (st.ck[sd] === "A" ? "B" : "A") + st.ck.slice(sd + 1));
   const [k, v] = st.ck.split("="), dot = v.lastIndexOf("."), [n, , e] = v.slice(0, dot).split("|");
   await bad(st.state, `${k}=${n}|2|${e}${v.slice(dot)}`);   // uid getauscht -> Signatur passt nicht
   assert.equal(calls.length, 0);
