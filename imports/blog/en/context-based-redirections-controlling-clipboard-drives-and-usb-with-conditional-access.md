@@ -55,7 +55,7 @@ Learn's validation steps describe the expected result. From a managed, compliant
 
 ## What you can control, and where
 
-- **Redirections:** clipboard, drive and storage, printer, and USB. Learn's what's new entry calls USB "low-level USB redirection", matching the opaque redirection of the `usbdevicestoredirect` property.
+- **Redirections:** clipboard, drive and storage, printer, and USB. These are the four redirections Learn's configuration article lists as controllable.
 - **Scope:** the host pool. Learn states the settings apply to all session hosts in the host pool, so different trust rules for different user groups need either different contexts in the policy design or different host pools. Which of the two fits is your design call; Learn does not prescribe one.
 - **Session types:** full desktop sessions in Windows App on Windows, web browsers, Android, iOS/iPadOS and macOS. RemoteApp sessions are also supported on Azure Virtual Desktop, in preview since October 2026.
 - **Windows 365:** the same idea, but configured through an Intune Remote Connection Experience policy assigned to device groups of Cloud PCs. Learn limits Windows 365 support to Windows 365 Enterprise and Windows 365 Flex dedicated mode. Windows 365 Flex is the name Microsoft now uses for what was Windows 365 Frontline.
@@ -88,7 +88,7 @@ Learn's clipboard article describes the usual pattern for Azure Virtual Desktop:
 
 ## When it is the wrong tool
 
-If every user connects from managed, compliant devices, or if no user should get a given redirection at all, a plain RDP property (a value of `0` or `1`, or a Group Policy or Intune setting on the session hosts) is simpler and has no preview status. If the concern is capture of the screen rather than data transfer, redirection control does not help; that is a different control such as screen capture protection or watermarking. Context-based redirection fits when the same host pool serves both trusted and untrusted devices and you want one set of desktops.
+If every user connects from managed, compliant devices, or if no user should get a given redirection at all, a plain RDP property (a value of `0` or `1`, or a Group Policy or Intune setting on the session hosts) is simpler and has no preview status. If the concern is capture of the screen rather than data transfer, redirection control does not help; that is a different control, such as screen capture protection. Context-based redirection fits when the same host pool serves both trusted and untrusted devices and you want one set of desktops.
 
 ## Sources
 

@@ -100,11 +100,11 @@ Two more points. The Azure Local VM management page says moving a resource group
 
 Session hosts must reach the Azure Instance Metadata Service through the Azure Connected Machine agent, which the portal installs automatically when you add hosts. Learn's overview links to the Required FQDNs and endpoints page, which says Microsoft does not support deployments where the listed FQDNs and endpoints are blocked. Only one entry in that table names Azure Local: `aka.ms` (TCP 443), the Microsoft URL shortener used during session host deployment on Azure Local. For Azure Local itself, Learn asks for the firewall URLs listed in "Required firewall URLs for Azure Local deployments" and for access to the Instance Metadata Service through the Connected Machine agent.
 
-The same page also lists two Azure fabric communication IPs, `169.254.169.254` (Instance Metadata Service, TCP 80) and `168.63.129.16`, for session host VMs and Cloud PCs, and says traffic to them must not be intercepted, proxied or redirected. Learn's page on those IPs describes them as Azure-internal platform addresses that cannot be accessed from outside Azure or from on-premises networks, and it does not mention Azure Local. Learn does not say how these two addresses apply to Azure Local VMs. If the network of your instance uses a proxy or transparent traffic interception, clarify this with Microsoft before deployment and test it on a pilot session host. The Azure Virtual Desktop Agent URL Tool described on Learn can check whether a session host reaches the listed FQDN endpoints.
+The same page also lists two Azure fabric communication IPs, `169.254.169.254` (Instance Metadata Service, TCP 80) and `168.63.129.16`, for session host VMs and Cloud PCs, and says traffic to them must not be intercepted, proxied or redirected. Learn's page on those IPs describes them as Azure-internal platform addresses that cannot be accessed from outside Azure or from on-premises networks, and it does not mention Azure Local. Neither that page nor the Required FQDNs table says how these two addresses apply to Azure Local VMs. If the network of your instance uses a proxy or transparent traffic interception, clarify this with Microsoft before deployment and test it on a pilot session host. The Azure Virtual Desktop Agent URL Tool described on Learn can check whether a session host reaches the listed FQDN endpoints.
 
 ## Verify the result
 
-After deployment, confirm the following before assigning users:
+Our checklist before assigning users:
 
 - The session hosts show as available in the host pool.
 - A test user can connect with a Remote Desktop client.

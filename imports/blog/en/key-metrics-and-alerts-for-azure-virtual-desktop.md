@@ -1,6 +1,6 @@
 ---
 title: "Key metrics and alerts for Azure Virtual Desktop"
-summary: "In our grouping, Azure Virtual Desktop monitoring rests on three data sources: connection and error diagnostics in Log Analytics, performance counters from the session hosts, and autoscale evaluations. Insights charts them and Azure Monitor alerts can act on them. Learn recommends Service Health alerts for Azure Virtual Desktop, and its Azure Virtual Desktop pages give no thresholds for log or metric alert rules, so you set those yourself."
+summary: "In our grouping, Azure Virtual Desktop monitoring rests on three data sources: connection and error diagnostics in Log Analytics, performance counters from the session hosts, and autoscale evaluations, which Insights charts and Azure Monitor alerts can act on. Learn recommends Service Health alerts; its Insights, diagnostics and service-alert pages name no thresholds for log or metric alert rules, so you set those yourself or start from the Azure Monitor baseline alerts project."
 status: review
 publish: false
 author: mirko-p
@@ -14,14 +14,14 @@ keypoints:
   - "Session host update does not install the Azure Monitor Agent on the new hosts, so monitoring can go quiet after an update unless Azure Policy installs the agent."
 faq:
   - q: "Does Azure Virtual Desktop have a built-in alert set?"
-    a: "Learn recommends two Service Health alert types for Azure Virtual Desktop, service issue and health advisory, but the Azure Virtual Desktop pages cited here do not publish thresholds for alert rules on diagnostics or performance data. Azure Monitor's recommended alert rules are enabled for virtual machines, AKS resources and Log Analytics workspaces. The Azure Monitor baseline alerts project, a GitHub-hosted project that Learn links and not a Learn page itself, includes an Azure Virtual Desktop pattern with predefined rules that are disabled by default. Otherwise you create the rules yourself, for example as log search alerts on the WVD tables."
+    a: "Learn recommends two Service Health alert types for Azure Virtual Desktop, service issue and health advisory, but the Insights, diagnostics and service-alert pages name no thresholds for alert rules on diagnostics or performance data. Azure Monitor's recommended alert rules are enabled for virtual machines, AKS resources and Log Analytics workspaces. The Azure Monitor baseline alerts project, a GitHub-hosted project that Learn links and not a Learn page itself, includes an Azure Virtual Desktop pattern with predefined rules that are disabled by default. Otherwise you create the rules yourself, for example as log search alerts on the WVD tables."
   - q: "Which alert type should I use for Azure Virtual Desktop diagnostics?"
     a: "Log search alerts, because the diagnostics land in Log Analytics tables whose names start with WVD. Use activity log alerts for events such as a VM being deleted and for Service Health notifications, and metric alerts for platform metrics of the session host VMs or for detecting missing data."
   - q: "Why did my Insights data stop after a session host update?"
     a: "Learn says the Azure Monitor agent is not installed automatically on session hosts that session host update creates. It suggests Azure Policy to install the agent, or adding the hosts again from within Insights in the Azure portal."
 ---
 
-The metrics that matter most for Azure Virtual Desktop come from three places: connection and error diagnostics, performance counters from the session hosts, and autoscale evaluations. Insights charts all three, and Azure Monitor alert rules can notify you when they cross a limit you choose. Learn recommends Service Health alerts for Azure Virtual Desktop, but the Azure Virtual Desktop pages cited here do not publish thresholds for alert rules on diagnostics or performance data, so this article separates what Learn states from the starting rules we suggest.
+The metrics that matter most for Azure Virtual Desktop come from three places: connection and error diagnostics, performance counters from the session hosts, and autoscale evaluations. Insights charts all three, and Azure Monitor alert rules can notify you when they cross a limit you choose. Learn recommends Service Health alerts for Azure Virtual Desktop, but its Insights, diagnostics and service-alert pages name no thresholds for alert rules on diagnostics or performance data, so this article separates what Learn states from the starting rules we suggest.
 
 It does not cover query-by-query diagnostics, which belong to the separate article "Useful KQL queries for Azure Virtual Desktop diagnostics".
 
@@ -57,7 +57,7 @@ Learn's two Insights pages disagree slightly on input delay. The use-cases page 
 
 ## What Insights does with alerts
 
-Insights reads alerts; it does not create them. Learn calls Azure Monitor alerts an optional feature to be set up separately, and says the Overview page shows active alerts classified as severity 0, the "most urgent items" that could stop a deployment working. Learn describes only severity 0 alerts on that page. The Alerts page in Azure Monitor lists the alert instances across your resources, and the severity of each rule is your decision.
+Our reading: Insights reads alerts; it does not create them. Learn calls Azure Monitor alerts an optional feature to be set up separately, and says the Overview page shows active alerts classified as severity 0, the "most urgent items" that could stop a deployment working. The Alerts page in Azure Monitor lists the alert instances across your resources, and the severity of each rule is your decision.
 
 ## Which alert type fits
 
@@ -73,7 +73,7 @@ Learn's note on log alerts is worth keeping: they suit detecting specific data r
 
 ## Building a log search alert rule
 
-Learn's rule wizard, from **Monitor** > **Alerts** > **Create** > **Alert rule**:
+Learn's rule wizard opens in the Azure portal from **Monitor** > **Alerts** > **+ Create** > **Alert rule**, or from **Alerts** on a resource, which presets the scope:
 
 1. Choose the Log Analytics workspace as scope.
 2. On **Condition**, choose **Custom log search** and write the query. Learn lists limits: no `bag_unpack()`, `pivot()` or `narrow()`, and `ago()` only with timespan literals.
@@ -88,20 +88,20 @@ You need read permission on the target, write permission on the rule's resource 
 
 ## A starting set of rules
 
-The first rule is the one Learn recommends for Azure Virtual Desktop. For the others the Azure Virtual Desktop pages cited here publish no thresholds, so the conditions are our suggestions, except where the VM row points to Learn's recommended alerts. Tune them against two weeks of your own data.
+The first rule is the one Learn recommends for Azure Virtual Desktop. For the others, Learn's Insights, diagnostics and service-alert pages name no thresholds, so the conditions are our suggestions; the VM and health rows add starting values from the baseline alerts project described below. Tune them against two weeks of your own data.
 
 | Rule | Query idea | Notes |
 |---|---|---|
 | Service Health: service issue and health advisory | Activity log alerts on service notifications, set up under **Service Health** in the Azure portal | Learn recommends these two event types: service issues that affect connectivity or management, and health advisories such as an open port 3389 or a deprecation |
 | Autoscale evaluation not successful | `WVDAutoscaleEvaluationPooled`, `where ResultType != "Succeeded"` (Learn's own filter), threshold above 0 | Join to `WVDErrors` on `CorrelationId` for detail, as Learn's sample does |
 | Admin-fixable errors rising | `WVDErrors`, `where ServiceError == false`, split by `CodeSymbolic`, threshold above a count you set | Learn says `ServiceError` false marks issues an admin task can resolve; true means escalate to Microsoft with the correlation ID |
-| Agent health | `WVDAgentHealthStatus`, filtered on the `Status` values you see in your data | Learn's column description does not list the values, so read them from your own table first |
-| Session host VM under load | Metric alert on VM platform metrics, for example from the recommended alert rules in Learn's VM tutorial | That tutorial lets you pick rules, change the recommended threshold and set the severity, which defaults to Informational; it gives no Azure Virtual Desktop values. Multi-resource rules need the same resource type and region |
+| Agent health | `WVDAgentHealthStatus`, filtered on the `Status` values you see in your data, or on `SessionHostHealthCheckResult` | Learn's column description for `Status` does not list the values, so read them from your own table first; the baseline project has a Health Check Failure rule, severity 1, evaluated every 5 minutes |
+| Session host VM under load | Metric alert on VM platform metrics, for example from the recommended alert rules in Learn's VM tutorial | Learn's VM tutorial lets you pick rules, change the threshold and set the severity, which defaults to Informational, but gives no Azure Virtual Desktop values. The baseline project uses CPU above 95% (severity 1) or 85% (severity 2) and available memory below 1 GB (severity 1) or 2 GB (severity 2), as metric alerts every 5 minutes. Multi-resource rules need the same resource type and region |
 | VM deleted in production | Activity log alert on the resource group | Learn gives a VM deleted in a production resource group as an example scenario |
 
-The Azure Monitor baseline alerts project, which Learn's alerts overview links as an example of policy-based alerting at scale, has an Azure Virtual Desktop pattern with predefined rules that are disabled by default. Examples are host pool capacity at 95%, 85% and 50% and disconnected users after 24 and 72 hours. It is a GitHub-hosted project, not a Learn page, so check its current version before use.
+The Azure Monitor baseline alerts project, which Learn's alerts overview links as an example of policy-based alerting at scale, has an Azure Virtual Desktop pattern with predefined rules that are disabled by default. Examples are host pool capacity at 95%, 85% and 50% and disconnected users after 24 and 72 hours; the values quoted in the table above come from the project's version 2.2.1 of 16 December 2025. It is a GitHub-hosted project, not a Learn page, so check its current version before use.
 
-Keep the first version small. A rule nobody acts on is noise, and dimension splitting multiplies alerts quickly.
+Keep the first version small, because dimension splitting multiplies alerts.
 
 ## Sources
 
