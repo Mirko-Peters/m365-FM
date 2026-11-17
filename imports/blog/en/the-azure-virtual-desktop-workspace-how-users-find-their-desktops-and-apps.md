@@ -17,8 +17,8 @@ faq:
     a: "Check the two links first: the user, or one of their groups, must be assigned to the application group, and the application group must be registered with a workspace. Then check that the client has refreshed and that the host pool's preferred application group type is not hiding the resource."
   - q: "Can an application group be in more than one workspace?"
     a: "No. Microsoft Learn says an application group can only be assigned to a single workspace. One workspace can hold several application groups."
-  - q: "Does a workspace store anything about users or sessions?"
-    a: "Not user documents. Learn's data locations article says the service stores customer input data such as object names and settings, and customer data such as application and VM names and user principal names, in the geography or region of the resource. It does not store user documents or databases."
+  - q: "Does a workspace store anything about users?"
+    a: "Not user documents. Learn's data locations article says the service stores customer input data such as object names, and customer data such as application and VM names and user principal names, in the geography or region of the resource. It does not directly store user-created documents, databases or configuration files."
 ---
 
 A workspace is the object that turns application groups into a list a user can open. If a user is assigned to an application group and that group is registered with a workspace, the group's desktops and apps appear in the client. If either link is missing, nothing appears.
@@ -33,9 +33,9 @@ Microsoft Learn's [terminology article](https://learn.microsoft.com/en-us/azure/
 - An **application group** controls access to a full desktop or a logical grouping of applications on session hosts in a single host pool.
 - A **workspace** is a logical grouping of application groups. Each application group must be associated with a workspace for users to see the desktops and applications published to them. An application group can only be assigned to a single workspace.
 
-So the path for one user is: user, then assignment to an application group, then the group's registration with a workspace, then the host pool's session hosts. A workspace itself holds no VMs and no users. It holds references to application groups, and the users reach those groups through their assignments. See [workspaces](/entity/avd-workspace/), [application groups](/entity/avd-application-group/) and [host pools](/entity/avd-host-pool/).
+So the path for one user is: user, then assignment to an application group, then the group's registration with a workspace, then the host pool's session hosts. Read together, these definitions mean that a workspace holds no VMs and no users itself: it references application groups, and users reach those groups through their assignments. See [workspaces](/entity/avd-workspace/), [application groups](/entity/avd-application-group/) and [host pools](/entity/avd-host-pool/).
 
-Because users can be assigned to several application groups across several host pools, one user can see resources from several pools in one list, and several workspaces can show up for the same user if their groups sit in different workspaces. Learn describes this as a way to vary the applications and desktops users can reach.
+Because users can be assigned to several application groups across several host pools, one user can see resources from several pools in one list, and several workspaces can show up for the same user if their groups sit in different workspaces. This follows from the definitions above rather than from a separate Learn statement.
 
 ## Creating a workspace and registering groups
 
@@ -59,9 +59,9 @@ The rules that matter for workspaces:
 - Application groups created in a regional host pool are automatically regional.
 - Scope is set at creation and cannot be changed afterwards. PowerShell or REST requests that mix scopes fail.
 
-Regional host pools have been generally available since 30 September 2026, according to the Tech Community announcement, and the September 2026 entry of What's new confirms general availability. The announcement lists 14 regions. The [data locations](https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations) page still names only Central US and East US 2 for regional scope, so it is behind the announcement. Check the current region list before you build on it. The sibling articles on regional host pools cover the choice in depth. See [regional host pools](/entity/avd-regional-host-pools/).
+Regional host pools have been generally available since 30 September 2026, according to the Tech Community announcement, and the September 2026 entry of What's new confirms general availability. The announcement, last updated on 13 November 2026, lists 14 regions, and Learn's [data locations](https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations) page shows the same 14 with a mark in its Regional column. The [Regional Host Pools](https://learn.microsoft.com/en-us/azure/virtual-desktop/regional-host-pools) page refers to that table and says availability is expanding in phases, so check the current list before you build on it. The announcement calls Regional the recommended scope for new host pools and Geographical not recommended, and says Microsoft plans to stop offering new Geographical host pools at a later date, without a date. For a new workspace, the practical reading is to match the scope of the host pools it will publish. The full treatment is in "Regional host pools in Azure Virtual Desktop: where host pool metadata is stored". See [regional host pools](/entity/avd-regional-host-pools/).
 
-The same data locations page says the service stores customer input data, such as object names and settings, and customer data such as application names, VM names and user principal names, in the geography (geographical scope) or region (regional scope) of the resource. It states that the service does not store user documents, databases or config files.
+The data locations page also says the service stores customer input data, such as object names, and customer data such as application names, VM names and user principal names, in the geography (geographical scope) or region (regional scope) of the resource. It states that the service does not directly store user data or application-related data such as documents, databases or configuration files.
 
 ## How users reach a workspace
 
@@ -75,7 +75,7 @@ The same data locations page says the service stores customer input data, such a
 | Azure for US Government | `https://rdweb.wvd.azure.us/api/arm/feeddiscovery` |
 | Azure operated by 21Vianet | `https://rdweb.wvd.azure.cn/api/arm/feeddiscovery` |
 
-The same article states that support for the Remote Desktop client for Windows (MSI) and the web client ended on 27 March 2026 for customers in public cloud environments, and that users should migrate to Windows App. For this reason, give users the Windows App instructions unless you operate in an environment where the legacy client is still supported.
+The same article states that, as of 27 March 2026, the Remote Desktop client for Windows (MSI) and the Remote Desktop web client are no longer supported for customers in public cloud environments, and that users should migrate to Windows App. Support for the MSI client was extended until 28 September 2026 for Azure Government, Azure operated by 21Vianet and AVD Classic. That date has passed, and the page does not say what applies afterwards. For the web client in Azure Government and Azure operated by 21Vianet, the page says no end-of-support date has been announced. The Remote Desktop app from the Microsoft Store reached end of support in September 2025. In practice, give users the Windows App instructions, and treat the URL table above as a reference for clients you still have to support.
 
 **Refresh.** Learn says that once a user has subscribed, the content updates automatically and regularly, and each time the client starts. Resources can be added, changed or removed based on admin changes. A new display name for an app or desktop, set on the application group under **Applications**, appears after the client refreshes. For personal pools, a session host friendly name can be set only with PowerShell (`Update-AzWvdSessionHost` with `FriendlyName`), not in the portal.
 
@@ -96,12 +96,12 @@ Assigning users needs `Microsoft.Authorization/roleAssignments/write`, which Use
 
 Work through these in order:
 
-1. Is the user, or a group they belong to, assigned to the application group? After a subscription moves between Microsoft Entra tenants, Learn says assignments can be lost and you must reassign users.
+1. Is the user, or a group they belong to, assigned to the application group? If the subscription moved from one Microsoft Entra tenant to another and old assignments are still tied to the previous tenant, Learn says the Azure portal loses track of them, and you need to reassign users to application groups.
 2. Is the application group registered with a workspace, and do both share a location and a deployment scope?
 3. If the user has both a desktop and a RemoteApp group on the same pooled pool, which type does the host pool prefer? Only the preferred type is shown.
 4. For a RemoteApp, is a session host powered on, and is the application installed?
-5. Has the client refreshed? Sign out and in, or restart it.
-6. Is the user on a supported client?
+5. Has the client refreshed? Learn says the legacy client updates regularly and each time it starts, so signing out and in or restarting it is a reasonable first test (a suggestion, not a Learn step).
+6. Is the user on Windows App? In public cloud the legacy clients are past their end-of-support dates, as described above.
 
 ## Workspaces and disaster recovery
 
@@ -115,6 +115,7 @@ Retrieved 17 November 2026.
 - [Microsoft Learn: Create a host pool, workspace and application group in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/create-application-group-workspace)
 - [Microsoft Learn: Azure Virtual Desktop service architecture and resilience](https://learn.microsoft.com/en-us/azure/virtual-desktop/service-architecture-resilience)
 - [Microsoft Learn: Azure Virtual Desktop data locations](https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations)
+- [Microsoft Learn: Regional Host Pools](https://learn.microsoft.com/en-us/azure/virtual-desktop/regional-host-pools)
 - [Microsoft Learn: Get started with Windows App and connect to devices and apps](https://learn.microsoft.com/en-us/windows-app/get-started-connect-devices-desktops-apps)
 - [Microsoft Learn: Connect to Azure Virtual Desktop with the Remote Desktop client for Windows (archived)](https://learn.microsoft.com/en-us/azure/virtual-desktop/users/connect-windows)
 - [Microsoft Learn: Customize the feed for Azure Virtual Desktop users](https://learn.microsoft.com/en-us/azure/virtual-desktop/customize-feed-for-virtual-desktop-users)

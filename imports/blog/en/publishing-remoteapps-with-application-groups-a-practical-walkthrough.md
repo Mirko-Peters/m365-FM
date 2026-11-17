@@ -8,7 +8,7 @@ date: 2026-11-18
 topics: [avd-application-group, azure-virtual-desktop]
 keypoints:
   - "RemoteApp groups need a pooled host pool, at least one powered-on session host, and the applications installed on the session hosts, or an App Attach package added and assigned to the host pool."
-  - "In the portal you add an application from one of three sources: App Attach, Start menu or File path. Azure CLI cannot publish applications."
+  - "In the portal you add an application from one of three sources: App Attach, Start menu or File path. Azure CLI cannot publish applications; Azure PowerShell can, with New-AzWvdApplication."
   - "Users are assigned to the application group, not to individual applications, unless you use App Attach."
   - "If a user also has a desktop group on the same host pool, the preferred application group type decides whether they see the desktop or the apps."
   - "Pinning a RemoteApp shortcut to the local desktop is a preview option and needs extra Intune setup. Microsoft Store apps and Windows Sandbox need their own steps."
@@ -16,23 +16,24 @@ faq:
   - q: "Do I need a powered-on session host to add a RemoteApp?"
     a: "Yes. Microsoft Learn says at least one session host must be powered on in the host pool the application group is assigned to when you add applications. Learn's FAQ adds that a RemoteApp group needs a session host to determine the Start menu apps."
   - q: "Can I publish RemoteApps with the Azure CLI?"
-    a: "No. Learn says you cannot publish applications using the Azure CLI. The Azure PowerShell tab exists on the publishing page, but the page text used here shows no cmdlets, so check the Az.DesktopVirtualization reference for the current commands."
+    a: "No. Learn says you cannot publish applications using the Azure CLI, because the Azure CLI extension for Azure Virtual Desktop has no commands for applications. Use Azure PowerShell instead: the New-AzWvdApplication cmdlet in the Az.DesktopVirtualization module adds an application to a RemoteApp group."
   - q: "Why do my users see a desktop instead of the RemoteApps?"
-    a: "They probably have both a desktop and a RemoteApp group on the same host pool, and the host pool's preferred application group type is Desktop, which is the portal default. Change the setting under the host pool's Properties or give each type its own host pool."
+    a: "They probably have both a desktop and a RemoteApp group on the same host pool, and the host pool's preferred application group type is Desktop, which is the portal default. Change the setting under the host pool's Properties or, as a design choice, give each type its own host pool."
 ---
 
 To publish a RemoteApp, create a RemoteApp application group on a pooled host pool, add the application to it, assign users to the group, and make sure the group is registered with a workspace. Users then see the app in the client next to any desktops they have. The concepts behind this are in the sibling article "Application groups in Azure Virtual Desktop: desktop and RemoteApp groups explained"; this one is the procedure.
 
-All steps come from Microsoft Learn pages retrieved on 17 November 2026. Menu names can change, so compare with the live portal.
+Menu names can change, so compare with the live portal.
 
 ## Before you start
 
-Learn's [publishing article](https://learn.microsoft.com/en-us/azure/virtual-desktop/publish-applications) lists these prerequisites:
+Learn's [publishing article](https://learn.microsoft.com/en-us/azure/virtual-desktop/publish-applications-stream-remoteapp) lists these prerequisites:
 
 - An Azure subscription and an existing [host pool](/entity/avd-host-pool/) with session hosts, a RemoteApp application group and a workspace.
 - At least one session host powered on in the host pool the group is assigned to.
 - The applications installed on the session hosts of that pool. With App Attach, add and assign an MSIX, Appx or App-V package to the host pool first. See [MSIX app attach](/entity/msix-app-attach/).
 - At least the Desktop Virtualization Application Group Contributor role on the resource group or subscription.
+- For the PowerShell route, an Azure session with the right subscription context. To publish App Attach applications with PowerShell you need version 4.2.0 or later of the `Az.DesktopVirtualization` module, and for Microsoft Store applications the `Appx` module, which is part of Windows.
 
 RemoteApp application groups are available only on pooled host pools, according to Learn's terminology article. If your pool is personal, publish a desktop instead.
 
@@ -61,6 +62,27 @@ What each source asks for:
 | File path | Application path (the `.exe`), Application identifier, Display name, Description, Require command line. |
 
 Learn's FAQ explains why Start menu needs a running host: for a RemoteApp group the service needs a session host to determine the Start menu apps.
+
+**The same step in Azure PowerShell.** Learn's publishing article shows the cmdlets for each source. For a Start menu application, list the available items and use the `AppAlias` value:
+
+```powershell
+$parameters = @{
+    ApplicationGroupName = '<ApplicationGroupName>'
+    ResourceGroupName    = '<ResourceGroupName>'
+}
+Get-AzWvdStartMenuItem @parameters | Select-Object Name, AppAlias
+
+$parameters = @{
+    Name               = 'WordPad'
+    AppAlias           = 'wordpad'
+    GroupName          = '<ApplicationGroupName>'
+    ResourceGroupName  = '<ResourceGroupName>'
+    CommandLineSetting = 'DoNotAllow'
+}
+New-AzWvdApplication @parameters
+```
+
+For a file path source, Learn's example publishes Excel with `FilePath`, `IconPath`, `IconIndex = '1'`, `CommandLineSetting = 'Require'`, a `CommandLineArgument` and `ShowInPortal = $true`. The cmdlet reference lists `GroupName`, `Name`, `ResourceGroupName` and `CommandLineSetting` as mandatory; `CommandLineSetting` controls whether the app can be launched with command line arguments from the client, with arguments set at publish time, or with none. For an App Attach application, read the package with `Get-AzWvdAppAttachPackage`, then call `New-AzWvdApplication` with `ApplicationType = 'MsixApplication'`, `MsixPackageFamilyName` and `MsixPackageApplicationId`. Check the result with `Get-AzWvdApplication -GroupName <ApplicationGroupName> -ResourceGroupName <ResourceGroupName>`.
 
 ## Step 3: set the icon
 
@@ -91,9 +113,9 @@ If the app does not appear, work through the list in the troubleshooting section
 
 **Windows Sandbox.** Needs a VM size that supports nested virtualization. Learn recommends installing it in a custom image. Publish it with the file path `C:\Windows\System32\WindowsSandbox.exe`.
 
-**Pinning a shortcut to the local desktop.** For the File path source there is a **Create desktop shortcut (Preview)** toggle. Learn says additional Intune setup is needed or the setting will not take effect. The What's new page lists pinning RemoteApp shortcuts as public preview in September 2026. Treat it as a preview feature.
+**Pinning a shortcut to the local desktop.** In the portal, Learn lists a **Create desktop shortcut (Preview)** toggle with the File path source fields, and for PowerShell it points to a script in preview. Either way, Learn says additional Intune setup is needed or the setting will not take effect. The What's new page lists pinning RemoteApp shortcuts as public preview in September 2026. Treat it as a preview feature.
 
-**Scripting.** You cannot publish applications with the Azure CLI. Learn's CLI page says the Azure CLI extension has no commands for applications and points to Azure PowerShell, and the page text used for this article shows no cmdlets. Look up the current `Az.DesktopVirtualization` reference before you automate.
+**Scripting.** You cannot publish applications with the Azure CLI. Learn's CLI page says the Azure CLI extension has no commands for applications and points to Azure PowerShell. Use `New-AzWvdApplication` as shown in Step 2, and check the parameters against the current `Az.DesktopVirtualization` reference before you automate.
 
 ## Troubleshooting checklist
 
@@ -101,7 +123,7 @@ If the app does not appear, work through the list in the troubleshooting section
 2. Is the application installed on every session host in the pool?
 3. For App Attach, was the package added and assigned to the host pool first?
 4. Is the group registered with a workspace of the same deployment scope?
-5. Is the user in the group, directly or through a group? After a subscription moves between Microsoft Entra tenants, Learn says assignments can be lost and must be redone.
+5. Is the user in the group, directly or through a group? If you moved the subscription from one Microsoft Entra tenant to another and old assignments are still tied to the previous tenant, Learn says the Azure portal loses track of them, and you need to reassign users to application groups.
 6. Does the user also have a desktop group on the same host pool with Desktop as preferred type?
 7. Has the client refreshed?
 8. For a Store app, did an update change the install path, or is the icon file missing on a host?
@@ -112,7 +134,8 @@ Microsoft also points to App Assure, a service designed to help resolve applicat
 
 Retrieved 17 November 2026.
 
-- [Microsoft Learn: Publish applications in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/publish-applications)
+- [Microsoft Learn: Publish applications with RemoteApp in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/publish-applications-stream-remoteapp)
+- [Microsoft Learn: New-AzWvdApplication (Az.DesktopVirtualization)](https://learn.microsoft.com/en-us/powershell/module/az.desktopvirtualization/new-azwvdapplication)
 - [Microsoft Learn: Create a host pool, workspace and application group in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/create-application-group-workspace)
 - [Microsoft Learn: Azure Virtual Desktop terminology](https://learn.microsoft.com/en-us/azure/virtual-desktop/terminology)
 - [Microsoft Learn: Preferred application group type behavior for pooled host pools](https://learn.microsoft.com/en-us/azure/virtual-desktop/preferred-application-group-type)
