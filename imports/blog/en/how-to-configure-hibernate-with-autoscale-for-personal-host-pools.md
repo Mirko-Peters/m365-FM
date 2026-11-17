@@ -8,7 +8,7 @@ date: 2026-11-18
 topics: [avd-hibernation, avd-personal-host-pool]
 keypoints:
   - "The order matters: enable hibernation on the VMs, verify a manual hibernate and resume, assign the Desktop Virtualization Power On Off Contributor role at subscription scope, then create the scaling plan."
-  - "In the portal the host option is the Hibernate checkbox on the Virtual machines tab of the host pool creation flow. For existing VMs, Learn documents deallocating the VM, setting supportsHibernation on the OS disk and enabling hibernation on the VM."
+  - "In the portal the host option is the Hibernate checkbox on the Virtual machines tab of the standard-management host pool flow, which is the flow for personal host pools. For existing VMs, Learn documents deallocating the VM, setting supportsHibernation on the OS disk and enabling hibernation on the VM."
   - "In the personal schedule, Disconnect settings and Sign out settings each take 0 to 360 minutes and an action of deallocate, hibernate or do nothing. The PowerShell module must be Az.DesktopVirtualization 4.2.0 or later."
   - "If a plan says hibernate but the desktops do not have hibernation enabled, autoscale neither hibernates nor deallocates them."
   - "Insights supports autoscale monitoring for pooled host pools only. For personal pools Learn describes sending Autoscale logs to a storage account or an event hub."
@@ -28,7 +28,7 @@ To use hibernate with autoscale on a personal host pool, enable hibernation on e
 From Learn's [scaling plan article](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan) and the [hibernation overview](https://learn.microsoft.com/en-us/azure/virtual-machines/hibernate-resume):
 
 - A [personal host pool](/entity/avd-personal-host-pool/). Do not enable hibernate if you use FSLogix or App Attach for it.
-- A VM size in a series that Learn lists for hibernation, an OS that supports it, and an OS disk large enough for memory, OS and applications.
+- A VM size in a series that Learn lists for hibernation (the listed general purpose series support up to 64 GB RAM, the NVv4 and NVadsA10v5 GPU series up to 112 GB), an OS that supports it, and an OS disk large enough for memory, OS and applications. Ephemeral OS disks, Azure Backup and managed images are listed as unsupported; the concept article covers the full list.
 - The scaling plan's configuration data must be in the same Azure region as the host pool configuration. The session hosts can be in any supported region.
 - For PowerShell, the Az.DesktopVirtualization module version 4.2.0 or later.
 - The `Microsoft.Authorization/roleAssignments/write` permission on the subscription for the role assignment (part of Owner and User Access Administrator).
@@ -37,10 +37,10 @@ Autoscale for personal host pools falls under [power management autoscaling](/en
 
 ## Step 1: enable hibernation on the session hosts
 
-**New session hosts in the portal.** Learn's [deployment article](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop) describes the flow:
+**New session hosts in the portal.** Learn's [deployment article](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop) has two portal flows. The **Hibernate** box appears in the flow "Create a host pool with standard management". The flow "Create a host pool with a session host configuration" lists no Hibernate field, and Learn says Pooled is the only host pool type supported with a session host configuration, so a personal host pool uses the standard-management flow. Its steps:
 
 1. In the Azure portal, search for **Azure Virtual Desktop**, select **Host pools**, then **Create**.
-2. On **Basics**, set **Host pool type** to **Personal**.
+2. On **Basics**, set **Host pool type** to **Personal**. You may also see **Deployment scope** (Regional or Geographical, with Geographical as the default); it appears only when the region supports regional host pools.
 3. On the **Virtual machines** tab, set **Add virtual machines** to **Yes** and choose the image and VM size.
 4. Select the **Hibernate** box. Learn notes hibernation is available only for personal host pools, and that with Microsoft Teams media optimizations you should update the WebRTC redirector service to 1.45.2310.13001.
 5. Set **OS disk size** so the disk can store the memory contents in addition to the OS and applications. Learn recommends Premium SSD for production workloads.
@@ -69,7 +69,7 @@ Hibernate from the guest does not count: Learn says that does not move the VM to
 
 ## Step 3: assign the role
 
-Assign **Desktop Virtualization Power On Off Contributor** to the Azure Virtual Desktop service principal or to a managed identity assigned to the host pool, with your subscription as the assignable scope. Learn warns that any lower level, such as resource group, host pool or VM, prevents autoscale from working properly. Do not copy the scope advice for Start VM on Connect, whose Power On Contributor role Learn allows at lower scopes; the companion article on that feature covers it.
+Assign **Desktop Virtualization Power On Off Contributor** to the Azure Virtual Desktop service principal or to a managed identity assigned to the host pool, with your subscription as the assignable scope. Learn warns that any lower level, such as resource group, host pool or VM, prevents autoscale from working properly. Do not copy the scope advice for Start VM on Connect, whose Power On Contributor role Learn allows at lower scopes; "How to configure Start VM on Connect for personal and pooled host pools" covers it.
 
 ## Step 4: create the personal scaling plan
 
@@ -78,7 +78,7 @@ Assign **Desktop Virtualization Power On Off Contributor** to the Azure Virtual 
 3. On **Schedules**, select **Add schedule**, name it and choose the days under **Repeat on**.
 4. On **Ramp up**, set the **Start time**, **Start VM on Connect**, and **VMs to start**: **Assigned VMs only**, **Assigned and unassigned VMs**, or **Don't turn VMs on at start time**. Learn highly recommends Start VM on Connect if you do not start hosts during ramp-up.
 5. Under **Disconnect settings** set **When disconnected for (min)** and **Perform**. Under **Sign out settings** set **When logged off for (min)** and **Perform**. Minutes run from 0 to 360, and the actions are deallocate, hibernate or do nothing.
-6. Repeat the same fields on **Peak hours**, **Ramp-down** and **Off-peak hours** (these tabs have no **VMs to start**).
+6. Repeat the same fields on **Peak hours**, **Ramp-down** and **Off-peak hours** (these tabs have no **VMs to start**). Each phase also needs a **Start time**, which Learn says is also the end time of the previous phase.
 7. On **Host pool assignments**, tick the pool. You can only assign a plan to host pools of the type chosen in the plan. Add tags, then **Review + create** and **Create**.
 
 Example values of our own, not from Learn: ramp-up 06:00, peak 08:15, ramp-down 16:30, off-peak 18:45; in each phase hibernate after 30 minutes disconnected and deallocate after 15 minutes signed out. Learn notes that changes to a plan already assigned to host pools apply immediately, and that unselected days carry over the last off-peak parameters.
@@ -92,11 +92,11 @@ RampDownMinutesToWaitOnLogoff = '15'
 RampDownActionOnLogoff = 'Hibernate'
 ```
 
-Check the assignment afterwards with `(Get-AzWvdScalingPlan @params).HostPoolReference | FL HostPoolArmPath,ScalingPlanEnabled`.
+Check the assignment afterwards with `(Get-AzWvdScalingPlan @params).HostPoolReference | FL HostPoolArmPath,ScalingPlanEnabled`. In Learn's example `$params` is a hashtable with `ResourceGroupName` and `Name` set to the resource group and scaling plan name.
 
 ## Step 5: monitor what autoscale did
 
-Learn's [Insights article](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-monitor-operations-insights) says autoscale monitoring in Insights supports pooled host pools only. For personal pools, the [autoscale diagnostics article](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-diagnostics) says to open the scaling plan, select **Diagnostic Settings**, **Add diagnostic setting**, tick **Autoscale logs** and archive to a storage account or stream to an event hub. Logs land in the `insight-logs-autoscaling` container. That page was last dated 2023 and its sample shows a load-balancer event, so check what your logs contain for hibernate actions.
+Learn's [Insights article](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-monitor-operations-insights) says autoscale monitoring in Insights supports pooled host pools only. For personal pools, the [autoscale diagnostics article](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-diagnostics) says to open the scaling plan, select **Diagnostic Settings**, **Add diagnostic setting**, tick **Autoscale logs** and archive to a storage account or stream to an event hub. Learn says a storage account must be in the same region as the scaling plan. Logs land in the `insight-logs-autoscaling` container. That page was last dated 2023 and its sample shows a load-balancer event, so check what your logs contain for hibernate actions.
 
 ## Known failure points
 
@@ -110,10 +110,10 @@ Learn's [Insights article](https://learn.microsoft.com/en-us/azure/virtual-deskt
 | `VMHibernateNotSupported` | Hibernating right after boot is not supported; retry after a few minutes. |
 | `InternalOperationError` | Usually transient; retry after 5 minutes. |
 | Guest never hibernates | Check `sc query vmicshutdown` and `sc query power` for disabled services, and the minimum OS build when memory integrity (HVCI) is on. |
-| Resume fails with `AllocationFailed` or `OverconstrainedResumeFromHibernatedStateAllocationRequest` | Retry later, or stop-deallocate and start (this discards the saved memory). |
+| Resume fails with `AllocationFailed` or `OverconstrainedResumeFromHibernatedStateAllocationRequest` | Learn suggests trying again later or, as an alternative, stop-deallocating the VM and starting it again. Learn describes a stop (deallocate) as a shutdown that does not persist memory contents, so in our reading expect a normal boot, not a resume. |
 | User sees "No resources available" | Autoscale does not set drain mode before deallocating a personal desktop, so a connection during deallocation fails. |
 
-One more caution from the FAQ: it says autoscale for personal desktops deallocates only after sign-out, while the scaling plan page documents actions for disconnected sessions. Pilot your timers before you assign the plan broadly.
+One more caution from the autoscale FAQ: it words the deallocation condition for personal desktops in two ways. One answer says autoscale deallocates session hosts only if the user has signed out, and another says it deallocates when the session is signed out or disconnected. The scaling plan page documents actions for disconnected sessions. Pilot your timers before you assign the plan broadly.
 
 ## Sources
 

@@ -14,16 +14,16 @@ keypoints:
   - "Hibernation for personal host pool session hosts and for autoscale reached general availability in May 2024, according to Learn's What's new page."
 faq:
   - q: "Does hibernation cost less than deallocating a personal desktop?"
-    a: "Not on compute. Learn's billing table lists the deallocated state, which includes a hibernated VM, as not billed for instance usage, and disks and networking continue to incur charges in both cases. Hibernation can add cost through the larger OS disk it needs to hold the memory contents, so its benefit is the preserved session, not a bigger discount."
+    a: "Not on compute. Learn's billing table lists the deallocated state, which includes a hibernated VM, as not billed for instance usage, and disks and networking continue to incur charges in both cases. In our reading, hibernation can add cost through the larger OS disk it needs to hold the memory contents, so its benefit is the preserved session, not a bigger discount."
   - q: "Is hibernation for AVD generally available?"
     a: "Learn's What's new page lists two May 2024 entries: hibernate support for session hosts in a personal host pool and hibernate support for autoscale are both generally available. It applies to personal host pools only."
   - q: "What happens if a hibernated VM cannot start because of capacity?"
-    a: "Learn says there is no capacity assurance when starting hibernated VMs, and that in rare cases you can try again later. The troubleshooting page also suggests stopping (deallocating) the VM and starting it again, which discards the saved memory state."
+    a: "Learn says there is no capacity assurance when starting hibernated VMs, and that in rare cases you can try again later. The troubleshooting page suggests trying again later or, as an alternative, stop-deallocating the VM and starting it again. Learn describes a stop (deallocate) as a shutdown that does not persist the memory contents, so in our reading expect a normal boot rather than a resume."
 ---
 
 Hibernation lets Azure save a personal desktop's memory to its OS disk and then deallocate the VM, so you stop paying for compute while the user's open applications return on the next start. It does not save more compute than a plain deallocation. The reason to use it is the preserved session, and the price is a larger OS disk plus several platform limits. This article covers the concept, the cost model and the decision. The portal and PowerShell steps are in the companion article "How to configure hibernate with autoscale for personal host pools".
 
-The basics of when hibernation applies are already in "Personal host pools in Azure Virtual Desktop: when one desktop per user makes sense": it is available only for [personal host pools](/entity/avd-personal-host-pool/), FSLogix and App Attach do not support it, and the OS disk must hold the memory contents. This article does not repeat that section.
+The basics of when hibernation applies are already in "Personal host pools in Azure Virtual Desktop: when one desktop per user makes sense": it is available only for [personal host pools](/entity/avd-personal-host-pool/), FSLogix and App Attach do not support it, and the OS disk must hold the memory contents. This article repeats only what the hibernation decision needs.
 
 ## What hibernation does to a session host
 
@@ -49,7 +49,6 @@ The table sets the two stopped states side by side, using Learn's [states and bi
 | Memory contents | Not persisted | Written to the OS disk, restored on start |
 | Resize | Possible | Not possible while hibernated |
 | Attach or detach disks and NICs | Possible | Not possible while hibernated |
-| Capacity when starting | The hibernation pages make no statement | No capacity assurance |
 
 The states and billing page also says a VM that has entered hibernation is shown as *Hibernated (deallocated)* and is not billed for instance usage. A running VM, and a VM that is stopped but still allocated, are billed. This is why timers matter more than the action: the compute saving starts when the VM leaves the running state, whichever action you choose.
 
@@ -57,7 +56,7 @@ The states and billing page also says a VM that has entered hibernation is shown
 
 Learn says that once a VM is hibernated, your account is billed only for the storage (OS disk, data disks) and networking resources (such as IPs) attached to it. Two consequences follow.
 
-First, hibernation does not change the compute arithmetic. Take an illustrative personal desktop that a user needs 10 hours a day on 5 days a week, an assumption chosen only for this example. The week has 168 hours, so at most 50 hours are running and up to 118 hours are not billed for compute. That figure is the same whether the VM is deallocated or hibernated in those hours. The real saving comes from how soon after the user leaves the VM stops, which is set by the scaling plan timers.
+First, hibernation does not change the compute arithmetic. Take an illustrative personal desktop that a user needs 10 hours a day on 5 days a week, an assumption chosen only for this example. The week has 168 hours, so at least 50 hours are running (the user needs them, and the VM also runs through the timer delay) and at most 118 hours are not billed for compute. That figure is the same whether the VM is deallocated or hibernated in those hours. The real saving comes from how soon after the user leaves the VM stops, which is set by the scaling plan timers.
 
 Second, hibernation raises the disk requirement. Learn's prerequisites call for a persistent OS disk large enough to store the contents of the RAM, the OS and the running applications. The creation flow in Learn's [deployment article](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop) repeats this for the **OS disk size** field. The troubleshooting page lists a creation error that says the OS disk size must be greater than the VM memory.
 
@@ -87,7 +86,7 @@ The [hibernation overview](https://learn.microsoft.com/en-us/azure/virtual-machi
 - **VM series and memory.** Listed general purpose series (Dasv5, Dadsv5, Dsv5, Ddsv5, Easv5, Eadsv5, Esv5, Edsv5) support hibernation up to 64 GB RAM, and the NVv4 and NVadsA10v5 GPU series up to 112 GB RAM.
 - **Unsupported Azure features.** Ephemeral OS disks, shared disks, availability sets, Uniform-mode scale sets, Spot VMs, managed images, Azure Backup and capacity reservations. The AVD deployment flow lets you choose availability zones, availability sets or no redundancy, so confirm that your choice is compatible.
 - **Windows guest.** The page file cannot be on the temp disk, and Learn's Windows page lists supported versions that include Windows 11 Enterprise and Enterprise multi-session.
-- **Capacity.** No guarantee that capacity is available when a hibernated VM starts.
+- **Capacity.** No capacity assurance when a hibernated VM starts. The troubleshooting page lists `AllocationFailed` and `OverconstrainedResumeFromHibernatedStateAllocationRequest` for this case and suggests trying again later or stop-deallocating the VM and starting it again.
 
 Because Azure Backup is on the list, decide up front how you protect the data on hibernating personal desktops.
 

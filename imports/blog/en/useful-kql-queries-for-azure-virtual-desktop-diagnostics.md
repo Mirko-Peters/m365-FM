@@ -7,7 +7,7 @@ author: mirko-p
 date: 2026-11-18
 topics: [avd-insights, kql]
 keypoints:
-  - "All queries run against the WVD-prefixed tables that fill after you add a diagnostic setting with Send to Log Analytics on the host pool, workspace or scaling plan."
+  - "All queries run against the WVD-prefixed tables that fill after you add a diagnostic setting with Send to Log Analytics on the host pool, application group or workspace."
   - "Start with WVDErrors and the Connection Errors query, which joins WVDConnections, WVDErrors and WVDCheckpoints on CorrelationId. A ServiceError value of false means an admin can resolve the cause."
   - "The WVDAutoscaleEvaluationPooled table covers pooled host pools only. Learn says Insights does not monitor autoscale for personal host pools."
   - "The connection quality table WVDConnectionNetworkData is documented on a page headed preview, so check the current page before you build alerts on it."
@@ -21,7 +21,7 @@ faq:
     a: "Learn says the value should be false for issues an admin can resolve. If it is true, escalate to Microsoft and provide the CorrelationId of the failing activity."
 ---
 
-The fastest way to diagnose an Azure Virtual Desktop problem in Log Analytics is to query WVDErrors for the affected user, then join the connection and checkpoint tables on the correlation ID to see where the attempt stopped. This article collects the queries that Microsoft Learn publishes for that, grouped by the question they answer. Every query block below is copied from a Learn page; replace placeholders such as `userupn` before you run it. For the dashboards built on the same data, see the sibling articles on [AVD Insights](/entity/avd-insights/), and for fixing a failed connection once you know the cause, see the AVD connection failure checklist.
+The fastest way to diagnose an Azure Virtual Desktop problem in Log Analytics is to query WVDErrors for the affected user, then join the connection and checkpoint tables on the correlation ID to see where the attempt stopped. This article collects the queries that Microsoft Learn publishes for that, grouped by the question they answer. Every query block below is copied from a Learn page; replace placeholders such as `userupn` before you run it. For the dashboards built on the same data, see "Key metrics and alerts for Azure Virtual Desktop" and [AVD Insights](/entity/avd-insights/), and for fixing a failed connection once you know the cause, see "Troubleshooting Azure Virtual Desktop connection failures: a checklist".
 
 ## What must be switched on first
 
@@ -31,7 +31,7 @@ Learn's Insights setup page lists the categories to enable on a host pool: Manag
 
 | Table | What a row represents | Notes from Learn |
 |---|---|---|
-| WVDConnections | A connection activity in the states Started, Connected and Completed | Intermediate states are Started, Connected and Completed |
+| WVDConnections | A connection activity in the states Started, Connected and Completed | The Connection Errors query joins it to WVDErrors and WVDCheckpoints on `CorrelationId` |
 | WVDErrors | An error for an activity | `ServiceError` false means an admin can resolve it |
 | WVDCheckpoints | A step reached in an activity | Apps inside a full desktop session are not tracked |
 | WVDAgentHealthStatus | Health of the agent on each session host | Fires about every 30 seconds |
@@ -48,7 +48,7 @@ WVDErrors
 |take 100
 ```
 
-Learn adds that `WVDErrors` shows management errors, host registration issues and problems while a user subscribes to a list of apps or desktops. Then use the Connection Errors query from the WVDConnections examples. It lists the checkpoints and errors for each connection attempt. Uncomment the user filter to narrow it:
+Our note, not from Learn: `take` returns an arbitrary set of rows, not the newest. To see the latest errors first, put `| order by TimeGenerated desc` before `| take 100`. Learn adds that `WVDErrors` shows management errors, host registration issues and problems while a user subscribes to a list of apps or desktops. Then use the Connection Errors query from the WVDConnections examples. It lists the checkpoints and errors for each connection attempt. Uncomment the user filter to narrow it:
 
 ```kusto
 //You can also uncomment the where clause to filter to a specific user if you are troubleshooting an issue.
@@ -87,7 +87,7 @@ WVDErrors
 | summarize count(UserName) by CodeSymbolic
 ```
 
-If many users share one code, suspect the environment (a host, a network path, a policy). If only one user has it, look at the client and the account. Learn's Insights glossary describes the same split as "Kind": errors marked ServiceError TRUE happened in the service, and errors marked FALSE happened outside it.
+Learn's Insights glossary says that if a connection issue spans multiple hosts, users, resources or clients, it is likely to affect the whole system, and otherwise it is a smaller issue of lower priority. Our reading: many users with one code suggest looking at the shared environment, and a single user suggests looking at that user's client and account. The glossary also defines "Kind": errors marked ServiceError TRUE happened in the service, and errors marked FALSE happened outside it.
 
 ## Question 3: are autoscale evaluations failing?
 
@@ -132,7 +132,7 @@ Learn's Azure Monitor reference pages hold more examples that follow the same pa
 
 - WVDConnections: session duration, top 10 users by average connection duration, average connection duration by host pool, client operating systems by user count, and average session logon time by host pool.
 - WVDCheckpoints: published remote resources by count of users, which only reflects apps published as RemoteApp.
-- WVDAgentHealthStatus: active sessions per session host as a time chart, and a health check summary whose query maps the check indexes to names such as DomainJoin, DomainTrust, FSLogix, SxSStack, URLCheck, DomainReachable, WebRTCRedirector and IMDSReachable. Use it after the [agent](/entity/avd-agent/) shows as unavailable.
+- WVDAgentHealthStatus: peak active sessions per host pool as a time chart (the Learn query is titled "Active sessions on SessionHost", but it sums the hosts of each pool), and a health check summary whose query maps the check indexes to names such as DomainJoin, DomainTrust, FSLogix, SxSStack, URLCheck, DomainReachable, WebRTCRedirector and IMDSReachable. Use it after the [agent](/entity/avd-agent/) shows as unavailable.
 
 Learn's glossary defines time to connect as starting at a WVDConnections row with state Started and ending at a WVDCheckpoints row named ShellReady for desktops, or RdpShellAppExecuted for RemoteApp (first launch only). That tells you where to look if you build your own logon-time query.
 
