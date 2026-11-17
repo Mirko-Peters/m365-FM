@@ -7,9 +7,9 @@ author: mirko-p
 date: 2026-11-18
 topics: [nerdio-desktop-image, golden-image]
 keypoints:
-  - "Nerdio's cycle is power on the image VM, change it, then Power off & set as image. Per the help center, an automated process runs Sysprep and sealing and commits the result to the image object, after which the image can build new host pools or re-image existing ones."
-  - "A monthly cycle uses three recurring jobs: patch the image (the Update Windows 10 or Update Windows 11 script, or an endpoint management tool), Set as image, then Resize/Re-image on the host pool. Nerdio says each should start after the previous one has finished."
-  - "Staging creates the new version inactive. Existing configurations keep using the current version until you activate it, by hand or automatically after a set number of days; Nerdio says linked pools have their image updated when the automatic activation runs."
+  - "Nerdio's cycle: power on the image VM, change it, then Power off & set as image. An automated process runs Sysprep and sealing; the image can then build new host pools or re-image existing ones."
+  - "A monthly cycle uses three recurring jobs: patch the image, Set as image, then Resize/Re-image on the host pool. Nerdio says each should start after the previous one has finished."
+  - "Staging creates the new version inactive. Existing configurations keep the current one until you activate it, by hand or after set days; Nerdio says linked pools then have their image updated."
   - "Re-image settings control the blast radius: group size, number of failures before aborting, drain mode for hosts not yet processed, and how long to wait before forcing users off."
   - "Backup versions need attention. Nerdio's pages say some backup images are not visible or manageable in Nerdio Manager and should be deleted manually to avoid storage costs."
 faq:
@@ -23,11 +23,11 @@ faq:
 
 An image update in Nerdio Manager for Enterprise is a chain of three jobs. You change the desktop image VM, run **Set as image** to turn that VM into a new image version, and then run **Resize/Re-image** on each host pool that should use it. This article sets out the chain as a monthly cycle, explains staging and backups, and compares it with the native Azure Virtual Desktop route.
 
-The facts below come from the help center for [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/); menu names can change between releases, so check them in your tenant. For generic image design see the [golden image](/entity/golden-image/) articles.
+The facts below come from the help center for [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/); menu names can change between releases, so check them in your tenant. The lifecycle page covers imported desktop images. Nerdio says custom Azure images that are not imported can build host pools and re-image them in the same way, and that importing makes many management features available that otherwise are not. For generic image design see the [golden image](/entity/golden-image/) articles.
 
 ## How the pieces fit
 
-In Nerdio's model a [desktop image](/entity/nerdio-desktop-image/) consists of two Azure objects: a VM used to manage the image, and the image itself, used to deploy session hosts. Powering on a desktop image powers on its VM.
+In Nerdio's model a [desktop image](/entity/nerdio-desktop-image/) consists of two Azure objects: a VM used to manage the image, and the image itself, used to deploy session hosts.
 
 Nerdio's lifecycle page lists the loop:
 
@@ -48,7 +48,7 @@ The options in the Set as image dialog that matter for an update cycle:
 - **Version Increment Type**: Major, Minor or Revision. From 1.4.3 these give 2.0.0, 1.5.0 and 1.4.4.
 - **Stage new image as inactive**, **Backup Version Limit**, **Change log** and **Apply tags**.
 
-Three settings are fixed once the image exists: hibernation support cannot be changed after creation, and the security type and the Azure Compute Gallery are locked to the selection made when the image was created or imported. Standard is the default security type; the other options need a generation 2 VM with the gallery option enabled. Nerdio's page lists limitations of the Trusted launch and Confidential VM options, such as no support for backup, managed disks and ephemeral OS disks, whereas Microsoft's Trusted Launch page lists only managed images and Linux VM hibernation as unsupported. Check the current state before choosing a security type; see [trusted launch](/entity/trusted-launch/).
+Three settings are fixed once the image exists: hibernation support cannot be changed after creation, and the security type and the Azure Compute Gallery are locked to the selection made when the image was created or imported. Standard is the default security type; the other options need a generation 2 VM with the gallery option enabled. Nerdio's page lists limitations of the Trusted launch and Confidential VM options, such as no support for backup, managed disks and ephemeral OS disks, whereas Microsoft's Trusted Launch page lists only managed images and Linux VM hibernation under unsupported features. Check the current state before choosing a security type; see [trusted launch](/entity/trusted-launch/).
 
 Nerdio also says it removes all local user profiles during image creation, which increases the likelihood of Sysprep success; **Skip removal of local profiles** bypasses this.
 
@@ -62,15 +62,15 @@ Nerdio's patching FAQ describes two methods. The first patches the image and re-
 
 Patch Tuesday is the second Tuesday of each month; Nerdio recommends **Monthly after "Patch Tuesday"** with a **Days after** value for all three tasks.
 
-The second method patches session hosts directly: **Hosts > Run script** runs the Update Windows script on all VMs in the pool, with an optional **Exclude non-running hosts** setting. Because it changes the hosts and not the image, hosts built later from the unchanged image start at the image's patch level. This article follows the image route.
+The second method patches session hosts directly: **Hosts > Run script** runs the Update Windows script on all VMs in the pool, with an optional **Exclude non-running hosts** setting. This article follows the image route.
 
 ## Option B: patch with an endpoint management tool
 
-Nerdio's lifecycle page also describes a tool such as Microsoft Endpoint Configuration Manager or Ivanti Endpoint Manager. In Set as image, select **Leave desktop image VM running** so the tool can modify the image. Run a recurring job on Patch Tuesday in the endpoint tool, schedule **Set as image** to start shortly after that job finishes, and schedule the host pool's **Re-image Hosts** function shortly after Set as image completes. The help center notes that this is one example. The schedules are time-based, so leave a margin between jobs.
+Nerdio's lifecycle page also describes a tool such as Microsoft Configuration Manager (which Nerdio's page still calls Endpoint Configuration Manager) or Ivanti Endpoint Manager. In Set as image, select **Leave desktop image VM running** so the tool can modify the image. Run a recurring job on Patch Tuesday in the endpoint tool, schedule **Set as image** to start shortly after that job finishes, and schedule the host pool's **Re-image Hosts** function shortly after Set as image completes. The help center notes that this is one example.
 
 ## Refreshing from the Azure Marketplace
 
-A third pattern starts from a Microsoft-published image each time. Nerdio describes refreshing desktop images from the Azure Marketplace to get a pristine image with the latest OS patches: select **Power off & Set as image**, turn on **Schedule**, enable **Refresh image from Azure Marketplace** and pick the **Marketplace Image**. Scripted actions can run with the refresh. Nerdio says the refreshed image is deployed automatically to all session hosts that use it, unlike the patch-the-image pattern with its separate Resize/Re-image job.
+A third pattern starts from a Microsoft-published image each time. Nerdio describes refreshing desktop images from the Azure Marketplace to get a pristine image with the latest OS patches: select **Power off & Set as image**, turn on **Schedule**, enable **Refresh image from Azure Marketplace** and pick the **Marketplace Image**. Scripted actions can run with the refresh. Nerdio says the refreshed image is deployed automatically to all session hosts that use it.
 
 Nerdio states that refreshing removes the existing desktop image VM and re-creates it from the latest Marketplace image. In our reading, anything installed on the old VM by hand is then gone, so put customizations into scripted actions and application management.
 
@@ -78,11 +78,11 @@ Nerdio states that refreshing removes the existing desktop image VM and re-creat
 
 **Stage new image as inactive** creates the new version without activating it. Existing configurations keep using the current version. Nerdio's staging steps turn on **Geographic distribution & Azure compute gallery** if it is not already on, so staging assumes the gallery option. Related settings:
 
-- **Activate staged image after**: activates automatically after a set number of days. Nerdio says any linked pools then have their associated image updated, without saying whether that re-images the hosts.
+- **Activate staged image after**: activates automatically after a set number of days. Nerdio's Set as image page and patching FAQ both describe an image update for linked pools, without saying whether that re-images the hosts.
 - **Current image action**: keep the current version as a backup, or remove it after activation.
 - **Activate staged image** in the action menu, for manual activation. Nerdio says the staged image becomes the active version and the older version is saved as a backup.
 
-The Stage Desktop Images page describes testing changes in a test or "Staging" pool before activation. It also says staging is available only for images recently refreshed from the Azure Marketplace, whereas the Set as image page and the patching FAQ list the staging option without that condition. Nerdio's staging steps have no field for choosing the test pool, and its pages do not say which version a scheduled Resize/Re-image uses while a newer version is staged. Confirm both in your tenant before relying on staging as a gate.
+The Stage Desktop Images page describes testing changes in a test or "Staging" pool before activation. It also says staging is available only for images recently refreshed from the Azure Marketplace, whereas the Set as image page and the patching FAQ list the staging option without that condition. Nerdio's staging steps have no field for choosing the test pool, and its pages do not say which version a scheduled Resize/Re-image uses while a newer version is staged. Confirm both in your tenant.
 
 ## Re-imaging the host pool
 
@@ -92,6 +92,7 @@ Select **Hosts > Resize/Re-image** on the host pool. The dialog offers:
 |---|---|
 | Run now or Schedule | Run at once, or in chosen time frames |
 | Desktop Image | The image applied to the hosts |
+| VM Size and OS Disk | Optional fields to change host size or OS disk |
 | Process Host in Groups Of | Concurrent re-imaging operations; larger groups finish faster, but a bad image or an Azure issue can leave many hosts in error. For 150 hosts the page suggests groups of 25. The patching FAQ gives a default of 1 |
 | Number of failures before aborting | Stops the run after that many failed tasks. The patching FAQ gives a default of 1 |
 | After first group is done, set remaining hosts to drain mode | Users then connect only to re-imaged hosts. See [drain mode](/entity/avd-drain-mode/) |
@@ -110,7 +111,7 @@ Set as image has two backup options. **Keep current version as backup** retains 
 
 Nerdio thus calls backups unmanaged and also describes an automatic limit on them. It does not say whether the limit covers the versions listed as unmanaged, so check the gallery after the first few cycles.
 
-For Windows 365, the same dialog has **Enable for Cloud PCs**, with a limit of 20 uploaded images. Custom image templates are an alternative build route; see the [custom image templates](/entity/avd-custom-image-templates/) articles.
+For Windows 365, the same dialog has **Enable for Cloud PCs**, with a limit of 20 uploaded images. For an alternative build route see the [custom image templates](/entity/avd-custom-image-templates/) articles.
 
 ## Native route in comparison
 
@@ -121,7 +122,7 @@ For Windows 365, the same dialog has **Enable for Cloud PCs**, with a limit of 2
 | Roll out | Resize/Re-image, in groups | Session host update, only for [host pools with a session host configuration](/entity/avd-session-host-configuration/) |
 | Staging | Inactive version, then manual or timed activation | Test the update process on a test host pool aligned to the host pool |
 
-Session host update deallocates or deletes the existing VMs and creates new ones; its first batch updates one initial host to test the process. Its Learn page says autoscale should be disabled before an update and kept disabled until it finishes, that manual customizations are not present afterwards, and that it is available only in the global Azure cloud. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit. Nerdio's documentation on re-imaging does not say whether Nerdio's autoscale must be paused during a re-image, so test that case before the first scheduled run.
+Session host update deallocates or deletes the existing VMs and creates new ones; an update first targets a single initial host to test the end-to-end process, then continues with the remaining hosts in batches. Its Learn page says autoscale should be disabled before an update and kept disabled until it finishes, that manual customizations are not present afterwards, and that it is available only in the global Azure cloud. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community). Some Learn pages, such as the scenarios and glossary pages, still carry preview wording; check the current page before relying on a limit. Nerdio's Resize/re-image page does not say whether Nerdio's autoscale must be paused during a re-image, so test that case before the first scheduled run.
 
 ## Sources
 
