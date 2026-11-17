@@ -79,7 +79,7 @@ To read the state, `Get-AzWvdSessionHost` returns an `ISessionHost` object. Its 
 
 ## How autoscale uses and overrides drain mode
 
-Autoscale uses drain mode itself, which is the most common source of confusion. On pooled host pools it puts a host in drain mode before it deallocates it in ramp-down, sets AllowNewSessions back to true afterwards, and turns drain mode on or off on any VM in scope, no matter who put it there. Only a host that carries the [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) is left alone. On personal host pools autoscale does not use drain mode, and a user who connects during deallocation receives "No resources available". The runbook article shows how to tag a host before you drain it, and the [force sign-out](/entity/avd-force-logoff/) article describes the ramp-down sequence.
+Autoscale uses drain mode itself, which is the most common source of confusion. On pooled host pools it puts a host in drain mode before it deallocates it, sets AllowNewSessions back to true afterwards, and turns drain mode on or off on any VM in scope, no matter who put it there. Only a host that carries the [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) is left alone. On personal host pools autoscale does not use drain mode, and a user who connects during deallocation receives "No resources available". The runbook article shows how to tag a host before you drain it, and the [force sign-out](/entity/avd-force-logoff/) article describes the ramp-down sequence.
 
 ## A short example
 
@@ -113,7 +113,7 @@ Only the last row ends sessions. Drain mode therefore needs a second step, eithe
 Accessed 17 November 2026.
 
 - [Microsoft Learn: Drain session hosts for maintenance in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/drain-mode)
-- [Microsoft Learn: Host pool load-balancing methods](https://learn.microsoft.com/en-us/azure/virtual-desktop/host-pool-load-balancing)
+- [Microsoft Learn: Configure host pool load balancing in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-load-balancing)
 - [Microsoft Learn: Autoscale FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq)
 - [Microsoft Learn: Autoscale scenarios for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)
 - [Microsoft Learn: Update-AzWvdSessionHost](https://learn.microsoft.com/en-us/powershell/module/az.desktopvirtualization/update-azwvdsessionhost)
