@@ -8,16 +8,22 @@ Uebersetzung (translate_blog.source_of und die Quell-Hashes sehen den Originalte
 Regeln (Mirko 16.11.2026, Audit-Plan "Linktexte"):
 - Interner Link mit allgemeinem Text ("here", "hier", "this guide", "learn more", "read more", "this link", "link" ... in allen 15 Sprachen)
   -> anchor_title(Titel der Zielseite) in der Seitensprache (Sprachfassung des Ziels, sonst Englisch).
-- "Listen to the full episode" -> "Folge anhören: {Folgentitel}" in der Seitensprache.
+- "Listen to the full episode" -> "Folge anhören: {Folgentitel}" in der Seitensprache, aber nur, wenn der Anker eine abgeschlossene Wendung ist
+  (danach Satzzeichen, Blockende oder Zeilenumbruch). Geht der Satz nach dem Link weiter ("<a>hören Sie sich die vollständige Folge</a> des Podcasts an",
+  "ぜひ<a>エピソード全編を聴いて</a>ください"), bleibt der sichtbare Text und der Link bekommt aria-label="{sichtbarer Text}: {Folgentitel}"
+  (der sichtbare Text steht am Anfang des Namens, WCAG 2.5.3 "Label in Name").
 - Externer Link mit allgemeinem Text -> Domain des Ziels (nach dem Bereinigen hat ein Link keinen title, deshalb die Domain).
 - Spreaker-Unterstuetzer-Adresse als Linktext -> "M365.FM auf Spreaker unterstützen" (lokalisiert).
-- "Link" in einer Tabellenzeile -> Text der ersten Zelle derselben Zeile.
+- "Link"/"Links" (und Uebersetzungen) in einer Tabellenzeile -> Text der ersten Zelle derselben Zeile, nur wenn diese ein kurzer Name ist (hoechstens
+  60 Zeichen, kein Satz, kein reines Datum oder Jahr, in der Tabelle eindeutig); sonst die normale Regel (Zieltitel bzw. Domain).
 - Leere oder nur aus einem Bild ohne Alt-Text bestehende Anker -> aria-label (Zieltitel bzw. Domain), sichtbarer Inhalt bleibt.
 - Alles andere bleibt, insbesondere schon beschreibende Texte und "M365 FM" auf die Startseite.
 
 Sprachfassungen: Ist die Ankerliste einer Uebersetzung deckungsgleich mit der des englischen Originals (gleiche Anzahl, gleiche Ziele
 in derselben Reihenfolge, bei ueber 99 % der Beitraege der Fall), gilt die Einordnung des englischen Ankers ("here" -> "hier", "ici",
-"こちら" ...). Sonst entscheiden die Wortlisten je Sprache (GENERIC/LISTEN).
+"こちら" ...). Sonst entscheiden die Wortlisten je Sprache (GENERIC/LISTEN). Ueber den Abgleich wird der sichtbare Text nur ersetzt, wenn das englische
+Original eine Nominalgruppe ist ("this page" -> "auf dieser Seite"); bei "here", "learn more" usw. sind die Uebersetzungen oft Verbgruppen
+("die wir <a>hier ausführlich erklären</a>"), dort bleibt der Text und der Link bekommt aria-label="{sichtbarer Text}: {Zieltitel}".
 
 Deterministisch und idempotent: der neue Text haengt nur vom Ziel, der Seitensprache und der Tabellenzeile ab; ein zweiter Lauf aendert
 nichts. HTML wird nur innerhalb von <a ...>...</a> angefasst: Textknoten werden ersetzt, Tags (strong, em, img) bleiben stehen."""
@@ -78,7 +84,7 @@ _G = {
 }
 _L = {
     "en": "listen to the full episode|listen to the episode|listen to this episode|listen now|listen here|listen to the full podcast episode",
-    "de": "hören sie sich die vollständige episode an|hören sie sich die vollständige folge an|hören sie sich die vollständige folge|hören sie sich die vollständige episode|"
+    "de": "hören sie sich die vollständige episode an|hören sie sich die vollständige folge an|"   # ohne "an" ist es ein Satzanfang ("... des Podcasts an")
           "folge anhören|episode anhören|folge jetzt anhören|jetzt die folge anhören|ganze folge anhören",
     "fr": "écoutez l'épisode complet|écouter l'épisode complet|écouter l'intégralité de l'épisode|écouter l'épisode|écoutez l'épisode",
     "es": "escucha el episodio completo|escuchar el episodio completo|escuche el episodio completo|escucha el episodio|escuchar el episodio",
@@ -95,6 +101,10 @@ _L = {
     "ja": "エピソード全編を聴く|エピソード全編を聴いて|エピソード全編をお聴きください|エピソードの全編を聴いて|エピソードを聴く",
     "ko": "전체 에피소드 듣기|전체 에피소드를 들어보십시오|전체 에피소드를 들어보세요|전체 에피소드를 들어 보십시오|에피소드 듣기",
 }
+# "Link" in allen Sprachen (Tabellenregel)
+_LINKWORD = {"en": "link|links", "de": "link|links", "fr": "lien|liens", "es": "enlace|enlaces", "it": "link", "nl": "link|links", "pt": "link|links",
+             "pl": "link|linki|odnośnik", "id": "tautan", "ru": "ссылка|ссылки", "uk": "посилання", "ar": "رابط|الرابط", "he": "קישור|קישורים",
+             "ja": "リンク|リンク先", "ko": "링크"}
 _EDGE = " \t\r\n.,:;!?·…→←↗»«›‹>\"'()[]“”„‘’。、！？："
 
 
@@ -106,6 +116,9 @@ def norm(t):
 
 GENERIC = {l: frozenset(norm(x) for x in v.split("|")) for l, v in _G.items()}
 LISTEN = {l: frozenset(norm(x) for x in v.split("|")) for l, v in _L.items()}
+LINKWORD = {l: frozenset(norm(x) for x in v.split("|")) for l, v in _LINKWORD.items()}
+# Englische allgemeine Anker, die Nominalgruppen sind: ihre Uebersetzungen ("auf dieser Seite", "diesem Beitrag") lassen sich durch den Zieltitel ersetzen
+NOUNISH_EN = frozenset(x for x in GENERIC["en"] if x.startswith("this ")) | {"link", "links", "source", "full article"}
 
 
 def classify(text, lang):
@@ -231,22 +244,73 @@ def _short(t, ref):
     return len(t.split()) <= len((ref or "").split()) + 2
 
 
+_TABLE = re.compile(r"<table\b.*?</table\s*>", re.S | re.I)
+_YEAR = re.compile(r"(?<!\d)(?:1[5-9]|20)\d\d(?!\d)")
+_SENT = re.compile(r"[.!?。！？](?:\s|$)")
+
+
+def _row_name(first):
+    """Erste Zelle als Linktext tauglich? Kurzer Name: hoechstens 60 Zeichen und 8 Woerter, kein Satz, kein reines Datum/Jahr
+    ("Feb 25 2026", "2026-02-25", "2026年3月3日", "Dalenius (1977)": ohne die Zahlen bleibt hoechstens ein Wort), keine Adresse, nicht selbst allgemein."""
+    if not first or len(first) > 60 or len(first.split()) > 8 or classify(first, "en") or _URLTXT.match(first) or _SENT.search(first):
+        return False
+    nums = re.findall(r"\d+", first)
+    rest = re.sub(r"[\d\W_年月日년월일]+", " ", first).split()   # "2026年3月3日", "2026년 3월 3일"
+    if not re.search(r"[^\W\d_]", first) or (nums and len(rest) <= 1 and (_YEAR.search(first) or len(nums) >= 2)):
+        return False
+    return True
+
+
 def _row_context(html):
-    """{Startposition eines Ankers: Text der ersten Zelle} fuer Anker in einer spaeteren Zelle derselben Tabellenzeile."""
+    """{Startposition eines Ankers: Text der ersten Zelle} fuer Anker in einer spaeteren Zelle derselben Tabellenzeile; nur erste Zellen, die ein
+    kurzer Name sind (_row_name) und in ihrer Tabelle nur einmal vorkommen (sonst haetten zwei Links mit verschiedenen Zielen denselben Text)."""
     out = {}
     if "<tr" not in html.lower():
         return out
-    for tr in _TR.finditer(html):
-        cells = list(_CELL.finditer(tr.group(0)))
-        if len(cells) < 2:
-            continue
-        first = plain(cells[0].group(2))
-        if not first or len(first) > 120 or classify(first, "en") or _URLTXT.match(first):
-            continue
-        for c in cells[1:]:
-            for a in _A.finditer(c.group(2)):
-                out[tr.start() + c.start(2) + a.start()] = first
+    scopes = [(t.start(), t.group(0)) for t in _TABLE.finditer(html)] or [(0, html)]
+    for off, tbl in scopes:
+        rows = []
+        for tr in _TR.finditer(tbl):
+            cells = list(_CELL.finditer(tr.group(0)))
+            if len(cells) < 2:
+                continue
+            pos = [off + tr.start() + c.start(2) + a.start() for c in cells[1:] for a in _A.finditer(c.group(2))]
+            if pos:
+                rows.append((plain(cells[0].group(2)), pos))
+        seen = Counter(norm(f) for f, _ in rows)
+        for first, pos in rows:
+            if seen[norm(first)] == 1 and _row_name(first):
+                out.update(dict.fromkeys(pos, first))
     return out
+
+
+_INLINE = re.compile(r"</?(?:strong|em|b|i|u|span|small|mark|sup|sub|code|abbr)\b[^>]*>", re.I)
+_BLOCK = re.compile(r"</?(?:p|div|li|ul|ol|br|hr|h[1-6]|td|th|tr|table|tbody|thead|tfoot|section|article|blockquote|figure|figcaption|details|summary|"
+                    r"dl|dd|dt|pre|header|footer|nav|aside|main)\b", re.I)
+_WS = re.compile(r"^(?:\s|&nbsp;|&#160;|\u00a0)+")
+_STOP = ".!?;:。！？；：…"
+
+
+def _complete(html, m):
+    """Ist der Anker eine abgeschlossene Wendung? Danach (nach Leerraum und Inline-Tags) kommt Satzzeichen, ein Blockende/Zeilenumbruch oder das Ende;
+    oder der Ankertext endet selbst mit einem Satzzeichen. Japanische te-Form ("…を聴いて") fuehrt den Satz immer weiter ("…ください")."""
+    text = plain(m.group(2)).rstrip(" →↗»›")
+    if text.endswith("て"):
+        return False
+    if text[-1:] in _STOP:
+        return True
+    rest = html[m.end():m.end() + 400]
+    while True:
+        rest = _WS.sub("", rest)
+        im = _INLINE.match(rest)
+        if not im:
+            break
+        rest = rest[im.end():]
+    if not rest:
+        return True
+    if rest.startswith("<"):
+        return bool(_BLOCK.match(rest))
+    return rest[0] in _STOP
 
 
 def _is_support(href):
@@ -290,21 +354,36 @@ def _decide(i, m, lang, titles, kinds, rows):
         return None
     if _is_support(href) and (_URLTXT.match(text) or classify(text, lang)):
         return "spreaker-support", SUPPORT_LABEL[lang], False
-    cls = classify(text, lang)
+    n = norm(text)
+    cls, linkword = classify(text, lang), n in LINKWORD.get(lang, ()) or n in LINKWORD["en"]
+    keep = False   # True: sichtbarer Text bleibt (Satz liefe sonst nicht weiter), der Link bekommt aria-label="{Text}: {Ziel}"
     if cls is None and kinds is not None and kinds[i][0] and _short(text, kinds[i][1]):
-        cls = "generic"   # Uebersetzung eines allgemeinen Ankers; bei "listen" weicht der Wortlaut ab (z. B. "der vollstaendigen Episode"): nur der Titel passt in den Satz
+        rn = norm(kinds[i][1])   # Uebersetzung eines allgemeinen englischen Ankers
+        if kinds[i][0] == "listen":
+            cls = "listen"
+        else:
+            cls, keep, linkword = "generic", rn not in NOUNISH_EN, rn in LINKWORD["en"]
     if cls is None:
         return None
-    if cls == "generic" and m.start() in rows:
+    if cls == "generic" and linkword and m.start() in rows:
         return "table-row", rows[m.start()], False
+    if cls == "listen" and not _complete(m.string, m):
+        keep = True
     if t:
-        return f"{cls}-{t[0]}", (f"{LISTEN_LABEL[lang]}: {title}" if cls == "listen" and t[0] == "episode" else title), False
+        new = f"{LISTEN_LABEL[lang]}: {title}" if cls == "listen" and t[0] == "episode" else title
+        if keep:
+            return (None if at.get("aria-label") else (f"{cls}-{t[0]}-aria", f"{text.rstrip(_EDGE)}: {title}", True))
+        return f"{cls}-{t[0]}", new, False
     if titles.path(href) is not None:
         return "unresolved-internal", "", False
     if cls == "listen":
         return "unresolved-listen", "", False
     d = domain(href)
-    return ("external-domain", d, False) if d and norm(d) != norm(text) else None
+    if not d or norm(d) == n:
+        return None
+    if keep:
+        return None if at.get("aria-label") else ("external-domain-aria", f"{text.rstrip(_EDGE)}: {d}", True)
+    return "external-domain", d, False
 
 
 def improve(html, lang, titles, ref=None, area="", stats=None):

@@ -48,10 +48,43 @@ class Rules(unittest.TestCase):
         self.assertEqual(text_of(out), ["DLP in Microsoft 365 einrichten"])
 
     def test_listen_full_episode(self):
-        out, _ = self.fix(f"<p>{a(EP, 'Listen to the full episode')} for more.</p>")
+        out, _ = self.fix(f"<p>Be sure to {a(EP, 'Listen to the full episode')}.</p>")
         self.assertEqual(text_of(out), ["Listen to the episode: DLP – Simply Explained"])
         out, _ = self.fix(f"<p>{a(EP, 'Hören Sie sich die vollständige Folge an')}.</p>", "de")
         self.assertEqual(text_of(out), ["Folge anhören: DLP – einfach erklärt"])
+        out, _ = self.fix(f"<p>Mehr dazu. <strong>{a(EP, 'Folge anhören →')}</strong></p><h3>Weiter</h3>", "de")   # Blockende nach Inline-Tag
+        self.assertEqual(text_of(out), ["Folge anhören: DLP – einfach erklärt"])
+
+    def test_listen_sentence_continues_after_link(self):
+        """Geht der Satz nach dem Link weiter, bleibt der sichtbare Text (sonst "..., Folge anhören: X des Podcasts an"); aria-label beginnt mit ihm."""
+        out, st = self.fix(f"<p>Um tiefer einzusteigen, {a(EP, 'hören Sie sich die vollständige Episode an')} und abonnieren Sie den Podcast.</p>", "de")
+        self.assertEqual(text_of(out), ["hören Sie sich die vollständige Episode an"])
+        self.assertIn('aria-label="hören Sie sich die vollständige Episode an: DLP – einfach erklärt"', out)
+        self.assertEqual(st[("", "listen-episode-aria")], 1)
+        h = f"<p>Mehr dazu, {a(EP, 'Listen to the full episode')} of the M365 FM Podcast.</p>"
+        out, _ = self.fix(h)
+        self.assertEqual(text_of(out), ["Listen to the full episode"])
+        self.assertIn('aria-label="Listen to the full episode: DLP – Simply Explained"', out)
+        # Satzanfang ohne "an": keine Wortlisten-Form mehr; ohne Abgleich bleibt er ganz unveraendert
+        h = f"<p>Um einzusteigen, {a(EP, 'hören Sie sich die vollständige Folge')} des M365 FM Podcasts an.</p>"
+        self.assertIsNone(A.classify("hören Sie sich die vollständige Folge", "de"))
+        self.assertEqual(self.fix(h, "de")[0], h)
+        en = f"<p>To dive deeper, {a(EP, 'Listen to the full episode')} of the M365 FM Podcast.</p>"
+        out, _ = self.fix(h, "de", ref=en)   # Abgleich mit dem Original: als Folgenlink erkannt, Text bleibt
+        self.assertEqual(text_of(out), ["hören Sie sich die vollständige Folge"])
+        self.assertIn('aria-label="hören Sie sich die vollständige Folge: DLP – einfach erklärt"', out)
+
+    def test_listen_japanese_te_form_and_continuation(self):
+        jt = A.Titles(episodes={"dlp-simply-explained": {"en": "DLP – Simply Explained", "ja": "DLP – わかりやすく解説"}}, base=B)
+        for h in (f"<p>ぜひ{a(EP, 'エピソード全編を聴いて')}ください。</p>", f"<p>ポッドキャストの{a(EP, 'エピソード全編を聴いて')}、購読してください。</p>",
+                  f"<p>ポッドキャストの{a(EP, 'エピソード全編を聴く')}をご覧ください。</p>"):
+            st = Counter()
+            out = A.improve(h, "ja", jt, stats=st)
+            self.assertEqual(A.improve(out, "ja", jt, stats=Counter()), out)
+            self.assertEqual(text_of(out), text_of(h), h)
+            self.assertIn(": DLP – わかりやすく解説\"", out)
+        out = A.improve(f"<p>{a(EP, 'エピソードを聴く →')}</p>", "ja", jt, stats=Counter())
+        self.assertEqual(text_of(out), ["エピソードを聴く: DLP – わかりやすく解説"])
 
     def test_old_podpage_addresses_resolve(self):
         for href in (f"{B}/old-slug/", "https://m365.fm/m365-fm-podcast/old-slug", "/show/episodes/old-slug/"):
@@ -90,6 +123,37 @@ class Rules(unittest.TestCase):
         self.assertIn("<strong>Certifications</strong>", out)   # Formatierung im Anker bleibt
         self.assertEqual(st[("", "table-row")], 2)
 
+    def table(self, rows, lang="en"):
+        h = "<table><tbody>" + "".join(f"<tr><td>{c1}</td><td>{c2}</td></tr>" for c1, c2 in rows) + "</tbody></table>"
+        return text_of(self.fix(h, lang)[0])
+
+    def test_table_row_only_for_link_word(self):
+        """'Source'/'Learn more' in einer Tabelle: normale Regel (Domain), nicht die erste Zelle."""
+        u = "https://www.sherweb.com/blog/x/"
+        self.assertEqual(self.table([("Provides insights", a(u, "Source")), ("Official", a("https://learn.microsoft.com/x", "Learn more"))]),
+                         ["sherweb.com", "learn.microsoft.com"])
+        self.assertEqual(self.table([("Azure Monitor", a(u, "Links"))]), ["Azure Monitor"])
+        self.assertEqual(self.table([("Kurse", a(u, "Link"))], "de"), ["Kurse"])
+        self.assertEqual(self.table([("Cours", a(u, "lien"))], "fr"), ["Cours"])
+
+    def test_table_row_long_first_cell(self):
+        long = "Provides deep, machine learning-powered insights into cost anomalies across all subscriptions"
+        self.assertEqual(self.table([(long, a("https://www.vertexcs.com/x", "Link"))]), ["vertexcs.com"])
+        self.assertEqual(self.table([("Use it. It works", a("https://www.vertexcs.com/x", "Link"))]), ["vertexcs.com"])   # Satz
+
+    def test_table_row_date_or_year_first_cell(self):
+        tc = "https://techcommunity.microsoft.com/blog/"
+        self.assertEqual(self.table([("Feb 25 2026", a(tc + "a", "Link")), ("Feb 25 2026", a(tc + "b", "Link"))]),
+                         ["techcommunity.microsoft.com"] * 2)
+        for c in ("Dalenius (1977)", "2026-02-25", "25.02.2026", "2024", "2026年3月3日"):
+            self.assertEqual(self.table([(c, a(tc + "a", "Link"))]), ["techcommunity.microsoft.com"], c)
+        self.assertEqual(self.table([("Windows 11", a(tc + "a", "Link"))]), ["Windows 11"])   # Produktname mit Zahl bleibt tauglich
+
+    def test_table_row_first_cell_unique_in_table(self):
+        tc = "https://techcommunity.microsoft.com/blog/"
+        self.assertEqual(self.table([("Copilot", a(tc + "a", "Link")), ("Copilot", a(tc + "b", "Link")), ("Purview", a(tc + "c", "Link"))]),
+                         ["techcommunity.microsoft.com", "techcommunity.microsoft.com", "Purview"])
+
     def test_empty_and_image_only_anchor_get_aria_label(self):
         img = '<img src="https://img.m365.fm/x.webp" alt="" loading="lazy">'
         out, st = self.fix(f"<p>{a('https://www.amazon.com/dp/B0', img)}{a(POST, '')}</p>")
@@ -126,8 +190,16 @@ class Rules(unittest.TestCase):
         en = f"<p>{a(EP, 'Listen to the full episode')} and {a(POST, 'here')} and {a(POST, 'here')}</p>"
         de = f"<p>Mehr in der {a(EP, 'vollständigen Episode')}, {a(POST, 'ausführlich')} und {a(POST, 'Tipps zum Organisieren von Projekten in Teams')}</p>"
         out, _ = self.fix(de, "de", ref=en)
-        # Wortlaut weicht ab -> nur der Titel (passt in den Satz); kurzer Anker ersetzt; langer, schon beschreibender Anker bleibt
-        self.assertEqual(text_of(out), ["DLP – einfach erklärt", "DLP in Microsoft 365 einrichten", "Tipps zum Organisieren von Projekten in Teams"])
+        # Satz geht weiter bzw. Original "here" (Uebersetzung oft Verb/Adverb): Text bleibt, aria-label; langer, schon beschreibender Anker bleibt ganz
+        self.assertEqual(text_of(out), ["vollständigen Episode", "ausführlich", "Tipps zum Organisieren von Projekten in Teams"])
+        self.assertIn('aria-label="vollständigen Episode: DLP – einfach erklärt"', out)
+        self.assertIn('aria-label="ausführlich: DLP in Microsoft 365 einrichten"', out)
+        self.assertEqual(out.count("aria-label"), 2)
+        en = f"<p>As described on {a(POST, 'this page')}, see {a(POST, 'here')} for details.</p>"
+        de = f"<p>Wie {a(POST, 'auf dieser Seite')} beschrieben, die wir {a(POST, 'hier ausführlich erklären')}.</p>"
+        out, _ = self.fix(de, "de", ref=en)   # Nominalgruppe -> Zieltitel; Verbgruppe -> Text bleibt
+        self.assertEqual(text_of(out), ["DLP in Microsoft 365 einrichten", "hier ausführlich erklären"])
+        self.assertIn('aria-label="hier ausführlich erklären: DLP in Microsoft 365 einrichten"', out)
         ko = f"<p>{a(POST, '여기')}</p>"
         self.assertEqual(text_of(self.fix(ko, "ko", ref=f"<p>{a(POST, 'here')}</p>")[0]), ["How to Set Up DLP in Microsoft 365"])   # ohne Sprachfassung des Ziels: Englisch
 
