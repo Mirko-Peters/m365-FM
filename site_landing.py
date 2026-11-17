@@ -1,4 +1,4 @@
-"""Mehrsprachige Service-Landingpages: Hub /services/, 7 x /for/<zielgruppe>/, 6 x /i-want-to/<ziel>/ in allen 15 Sprachpfaden.
+"""Mehrsprachige Service-Landingpages: Hub /services/, 7 x /for/<zielgruppe>/, 7 x /i-want-to/<ziel>/ in allen 15 Sprachpfaden.
 
 Texte: site_landing_copy.py (en, de). Weitere Sprachen ueber site_i18n.T (Worker uebersetzt die englischen Texte aus ui_js_en.json).
 Solange eine Sprache die Texte noch nicht uebersetzt hat (_ready), wird ihre Fassung noindex geschrieben, nicht in die Sitemap und nicht
@@ -129,6 +129,8 @@ def _link(base, lang, key):
         return f"{base}{ed}/updates/"
     if key == "press":
         return f"{base}{ed}/press/"
+    if key in ("hardware", "howtest"):   # /hardware/ (site_hardware.py) gibt es in allen Sprachpfaden
+        return f"{base}{p}/hardware/" + ("how-we-test/" if key == "howtest" else "")
     if key == "mcp":
         return f"{base}{ed}/community/mcp/"
     if key == "live":

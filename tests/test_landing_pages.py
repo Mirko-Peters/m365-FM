@@ -57,9 +57,9 @@ class LandingPageTests(unittest.TestCase):
     def test_all_pages_have_localized_routes_and_hreflang_clusters(self):
         with self.tr_all():
             self.build()
-        self.assertEqual(len(site_landing.PAGES), 14)   # #281: + Werbeplaetze
-        self.assertEqual(len(self.files), 30)
-        self.assertEqual(len(self.r2_files), 15 * (len(site_landing.LANGS_ALL) - 2))
+        self.assertEqual(len(site_landing.PAGES), 15)   # #281: + Werbeplaetze
+        self.assertEqual(len(self.files), 32)
+        self.assertEqual(len(self.r2_files), 16 * (len(site_landing.LANGS_ALL) - 2))
         self.assertEqual(len(self.sitemap), len(self.files) + len(self.r2_files))
         self.assertEqual(len(self.pages), len(self.sitemap))
         for path in ("services/index.html", "de/services/index.html", "for/sponsors/index.html"):
@@ -76,7 +76,7 @@ class LandingPageTests(unittest.TestCase):
     def test_untranslated_languages_are_noindex_and_outside_the_cluster(self):
         with self.tr_de():
             self.build()
-        self.assertEqual(len(self.sitemap), 30)
+        self.assertEqual(len(self.sitemap), 32)
         for lang, canonical, alternates, xdefault, kwargs in self.pages:
             if lang in ("en", "de"):
                 self.assertEqual(set(alternates), {"en", "de"})
@@ -107,7 +107,7 @@ class LandingPageTests(unittest.TestCase):
         import re
         hub = self.files["services/index.html"]
         thumbs = re.findall(r'<img [^>]*loading="lazy"[^>]*>', hub)
-        self.assertEqual(len(thumbs), 14)
+        self.assertEqual(len(thumbs), 15)
         for tag in thumbs:
             self.assertIn('width="480" height="270"', tag)
             self.assertRegex(tag, r'alt="[^"]{20,}"')
@@ -208,7 +208,7 @@ class LandingPageTests(unittest.TestCase):
         alts, kw = pages["https://example.test/de/for/advertisers/"]
         self.assertTrue(kw.get("noindex")); self.assertIsNone(alts)
         self.assertNotIn("https://example.test/for/advertisers/", [u for u, _, _ in self.sitemap])
-        self.assertEqual(len(self.sitemap), 28)
+        self.assertEqual(len(self.sitemap), 30)
         for hub in ("services/index.html", "de/services/index.html"):
             self.assertNotIn("for/advertisers/", self.files[hub])
         for path, html_ in self.files.items():
