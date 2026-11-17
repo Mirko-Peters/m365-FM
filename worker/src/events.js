@@ -1,6 +1,6 @@
 // Events (Veranstalter), Sessions mit Speakern, Sponsoren-Suche fuer Veranstalter
 import { mailReady, sendMail } from "./mailer.js";
-import { anonSpeaker, isFormer } from "./privacy.js";
+import { acctKeys, anonSpeaker, isFormer } from "./privacy.js";
 import { ownedEntity } from "./profiles.js";
 import { cleanText, esc, rateLimit } from "./util.js";
 import { baseIds, entityMap } from "./entities.js";
@@ -166,6 +166,21 @@ export async function claimLinkedinEntity(env, user, info, eid) {
   }
   return { status };
 }
+// Oeffentlicher Events-Export (Runde 8): Speaker mit Profil-Adresse und Veranstalter-Profil tragen den Konto-Schluessel ak (privacy.js acctKeys) des
+// Kontos, das die Adresse jetzt fuehrt. Kommt der Export beim Seitenbau aus data/cache, zeigt site_fetch.scrub einen Eintrag nur mit Name und Link,
+// wenn Adresse und Schluessel zum frischen Profil-Export passen (sonst "Former member" ohne Link).
+async function withEventAcctKeys(env, evs) {
+  const hs = new Set();
+  for (const ev of evs) { if (ev.organizer?.kind === "u" && ev.organizer.handle) hs.add(ev.organizer.handle); for (const s of ev.sessions || []) for (const x of s.speakers || []) if (x.h) hs.add(x.h); }
+  if (!hs.size) return evs;
+  const uid = new Map(((await env.DB.prepare("SELECT handle,user_id FROM profiles WHERE handle IN (SELECT value FROM json_each(?))").bind(JSON.stringify([...hs])).all()).results || []).map((r) => [r.handle, r.user_id]));
+  const ak = await acctKeys(env), key = async (h) => (uid.has(h) ? await ak(uid.get(h), h) : undefined);
+  for (const ev of evs) {
+    if (ev.organizer?.kind === "u" && ev.organizer.handle) { const k = await key(ev.organizer.handle); if (k) ev.organizer.ak = k; }
+    for (const s of ev.sessions || []) s.speakers = await Promise.all((s.speakers || []).map(async (x) => { const k = x.h ? await key(x.h) : undefined; return k ? { ...x, ak: k } : x; }));
+  }
+  return evs;
+}
 const sessView = (r, mgr) => ({ id: r.id, title: r.title, abstract: r.abstract, start: r.start, end: r.end, room: r.room, track: r.track, level: r.level, lang: r.lang, topics: parse(r.topics, []), speakers: mgr ? parse(r.speakers, []).map(({ email, ...x }) => x) : parse(r.speakers, []).filter((x) => x.s === "confirmed").map((x) => ({ h: x.h, n: x.n, e: x.e })), speakers_open: parse(r.speakers, []).filter((x) => x.s !== "confirmed").length, recording_url: r.recording_url, status: r.status });
 // Ansichten vieler Events mit fester Zahl an Abfragen (je 50 Events hoechstens sieben), nicht mehreren je Event: der Export aller oeffentlichen Events
 // bleibt so auch mit Hunderten importierter Events weit unter der Subrequest-Grenze eines Aufrufs.
@@ -328,7 +343,7 @@ export async function handleEvents(env, request, url, path, user, J) {
   }
   if (path === "/api/events/export" && method === "GET") {
     const evs = (await db.prepare("SELECT * FROM events WHERE public=1 ORDER BY unclaimed,start DESC LIMIT 300").all()).results || [];   // von Mitgliedern gepflegte Events zuerst: importierte verdraengen sie nie aus dem Export (und damit von der Seite)
-    return J({ events: await evViews(db, evs, false) }, 200, { "cache-control": "public, max-age=300" });
+    return J({ events: await withEventAcctKeys(env, await evViews(db, evs, false)) }, 200, { "cache-control": "public, max-age=300" });
   }
   if (path === "/api/events/mine" && method === "GET") {
     if (need()) return need();

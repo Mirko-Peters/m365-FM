@@ -142,7 +142,9 @@ test("Bann: Mitgliedersuche, Team, Teilnehmer, Bewertungen und Personen-Entitaet
   raw.prepare("INSERT INTO events(id,handle,title,owner_id,public,start,created,updated) VALUES (6,'ev-carol','Carols Event',1,1,?,?,?)").run(t + 86400, t, t);
   raw.prepare("INSERT INTO entity_claims(eid,user_id,status,created) VALUES ('carol-co',1,'verified',?)").run(t);
   const carolOrganizer = async () => (await call(env, "GET", "/api/events/export")).j.events.find((e) => e.handle === "ev-carol").organizer;
-  assert.deepEqual(await carolOrganizer(), { kind: "u", handle: "carol", name: "Carol Example" });
+  const { ak, ...org } = await carolOrganizer();
+  assert.deepEqual(org, { kind: "u", handle: "carol", name: "Carol Example" });
+  assert.match(ak, /^[0-9a-f]{16}$/, "Konto-Schluessel fuer den Seitenbau (Runde 8)");
   assert.ok(JSON.stringify((await call(env, "GET", "/api/entity/claims")).j).includes("carol"));
   await refreshProfilesExport(env);
   assert.equal((await call(env, "POST", "/api/admin/ban/1", admin)).s, 200);
@@ -637,4 +639,114 @@ test("Kontoloeschung: Abos einer frueheren Adresse, die inzwischen ein anderes K
   assert.equal((await call(env, "DELETE", "/api/me", alice)).s, 200);
   assert.equal((await call(env, "GET", "/api/blog/followers?handle=alice")).j.followers, 1, "Bobs Abonnent bleibt");
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM profiles WHERE handle='alice' AND user_id=3").get().n, 1);
+});
+
+test("Migration 0055: Altbestand - Speaker-Eintraege, Blog-Abos und Speaker-Identitaet einer Adresse ohne Profil gehen nicht an den naechsten Inhaber (Runde 8)", async () => {
+  const sessions = [
+    { h: "alice", n: "Alice Realname", s: "confirmed", e: "alice", r: 4 },   // geloeschtes Konto
+    { n: "Name Only", s: "confirmed" },
+    { h: "olga", n: "Olga Organizer", s: "confirmed" },   // Adresse mit Profil: bleibt
+    { h: "zed", n: "Zed Invited", s: "invited", t: "tok-zed" },   // offene Einladung an ein geloeschtes Konto
+    { h: "bea-old", n: "Bea Mover", s: "confirmed", e: "bea-old" },   // fruehere Adresse eines bestehenden Kontos (alter Adresswechsel)
+  ];
+  const { raw, env, user } = await setup((raw) => {
+    const t = Math.floor(Date.now() / 1000);
+    raw.prepare("INSERT INTO users(id,provider,sub,name,role,created) VALUES(2,'github','s2','Olga Organizer','',?)").run(t);
+    raw.prepare("INSERT INTO profiles(user_id,handle,public,updated) VALUES(2,'olga',1,?)").run(t);
+    raw.prepare("INSERT INTO users(id,provider,sub,name,role,created) VALUES(3,'github','s3','Bea Mover','',?)").run(t);
+    raw.prepare("INSERT INTO profiles(user_id,handle,public,updated) VALUES(3,'bea-new',1,?)").run(t);
+    raw.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES ('bea-old',?,'Selbst verwaltet',3,'live',1)").run(JSON.stringify({ name: "Bea Mover", type: "person" }));
+    raw.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES ('bea-old',3,'verified','owner',1)").run();
+    raw.prepare("INSERT INTO events(id,handle,owner_id,title,start,public,created,updated) VALUES(10,'devday',2,'Dev Day','2027-03-01',1,?,?)").run(t, t);
+    raw.prepare("INSERT INTO event_sessions(id,event_id,title,speakers,status,proposer_id,created) VALUES(20,10,'Copilot deep dive',?,'live',2,?)").run(JSON.stringify(sessions), t);
+    raw.prepare("INSERT INTO event_sessions(id,event_id,title,speakers,status,proposer_id,created) VALUES(21,10,'Kaputt','kein json','live',2,?)").run(t);
+    raw.prepare("INSERT INTO users(id,provider,sub,name,role,created) VALUES(5,'github','s5','Fan','',?)").run(t);
+    raw.prepare("INSERT INTO blog_follows(user_id,handle,created) VALUES(5,'alice',?),(5,'olga',?)").run(t, t);
+    raw.prepare("INSERT INTO speaker_ref(id,name,name_key,handle,created,updated) VALUES(4,'Alice Realname','alice realname','alice',1,1),(6,'Olga Organizer','olga organizer','olga',1,1)").run();
+  });
+  const sp = () => JSON.parse(raw.prepare("SELECT speakers FROM event_sessions WHERE id=20").get().speakers);
+  assert.deepEqual(sp(), [
+    { n: "Former member", s: "confirmed", anon: 1 },
+    { n: "Name Only", s: "confirmed" },
+    { h: "olga", n: "Olga Organizer", s: "confirmed" },
+    { n: "Bea Mover", s: "confirmed", uid: 3 },
+  ], "geloeschtes Konto anonym, offene Einladung verworfen, frueheres Konto an uid gebunden, Rest unveraendert");
+  assert.equal(raw.prepare("SELECT speakers FROM event_sessions WHERE id=21").get().speakers, "kein json", "kaputtes JSON unangetastet");
+  assert.deepEqual(raw.prepare("SELECT handle FROM blog_follows ORDER BY handle").all().map((r) => r.handle), ["olga"]);
+  assert.deepEqual(raw.prepare("SELECT id,handle FROM speaker_ref ORDER BY id").all().map((r) => [r.id, r.handle]), [[4, ""], [6, "olga"]]);
+  // idempotent: ein zweiter Lauf aendert nichts
+  const before = JSON.stringify(sp());
+  raw.exec(readFileSync(new URL("../migrations/0055_orphan_handles.sql", import.meta.url), "utf-8"));
+  assert.equal(JSON.stringify(sp()), before);
+
+  // Carol uebernimmt die Adresse: erbt weder Name, Abonnenten noch Bearbeitungsrecht oder Einladungen
+  const carol = await user(9, "Carol Newowner");
+  assert.equal((await saveProfile(env, carol, "alice", true)).s, 200);
+  const ex = await call(env, "GET", "/api/events/export");
+  const exs = JSON.stringify(ex.j);
+  assert.ok(!exs.includes("Alice Realname") && !exs.includes("Zed Invited") && !exs.includes('"h":"alice"'), exs);
+  assert.equal((await call(env, "GET", "/api/blog/followers?handle=alice")).j.followers, 0);
+  const ed = await call(env, "POST", "/api/event/devday/session", carol, { id: 20, title: "Copilot deep dive", abstract: "Carol schreibt in Alices Session", speakers: [{ h: "alice", n: "Alice Realname" }], topics: [] });
+  assert.notEqual(ed.s, 200, JSON.stringify(ed.j));
+  assert.ok(!String(raw.prepare("SELECT abstract FROM event_sessions WHERE id=20").get().abstract || "").includes("Carol"));
+  assert.deepEqual((await call(env, "GET", "/api/speaker/requests", carol)).j.items || [], []);
+  // Bea kann ihren Eintrag weiter beanspruchen (an ihr Konto gebunden), Carol nicht
+  assert.ok(!JSON.stringify((await call(env, "GET", "/api/speaker/suggest", carol)).j || {}).includes("Bea Mover"));
+});
+
+test("Kontoloeschung: Themen-Abos anderer auf die Personen-Entitaet gehen nicht an den naechsten Inhaber der Adresse (Runde 8)", async () => {
+  const { raw, env, t, user } = await setup();
+  const alice = await user(1, "Alice Example"), fan = await user(2, "Fan"), bob = await user(3, "Bob");
+  assert.equal((await saveProfile(env, alice, "alice", true)).s, 200);
+  assert.equal(raw.prepare("SELECT user_id FROM person_entity WHERE eid='alice'").get()?.user_id, 1);
+  raw.prepare("INSERT INTO push_topics(endpoint,kind,topic_id,lang,user_id,created) VALUES ('https://push.example/1','entity','alice','en',2,?),('https://push.example/1','entity','copilot','en',2,?)").run(t, t);
+  raw.prepare("INSERT INTO email_topics(user_id,kind,topic_id,lang,created) VALUES (2,'entity','alice','en',?),(2,'entity','copilot','en',?)").run(t, t);
+  raw.prepare("INSERT INTO mail_topic_follows(user_id,eid,created) VALUES (2,'alice',?),(2,'copilot',?)").run(t, t);
+  assert.equal((await call(env, "DELETE", "/api/me", alice)).s, 200);
+  for (const [tb, col] of [["push_topics", "topic_id"], ["email_topics", "topic_id"], ["mail_topic_follows", "eid"]])
+    assert.deepEqual(raw.prepare(`SELECT ${col} x FROM ${tb} ORDER BY x`).all().map((r) => r.x), ["copilot"], tb);
+  assert.equal((await saveProfile(env, bob, "alice", true)).s, 200);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM email_topics WHERE topic_id='alice'").get().n, 0);
+});
+
+test("Migration 0054: verwaister bestaetigter manueller Anspruch eines vor dem Deploy geloeschten Kontos bekommt den Merker (Runde 8)", async () => {
+  const { raw } = await setup((r) => {
+    r.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES ('man',?,'Selbst verwaltet',0,'live',1)").run(JSON.stringify({ name: "Manual Person", type: "person" }));
+    r.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES ('man',7,'verified','manual',1)").run();
+    r.prepare("INSERT INTO users(id,provider,sub,name,role,created) VALUES (5,'github','s5','Fan','',1)").run();
+    r.prepare("INSERT INTO email_topics(user_id,kind,topic_id,lang,created) VALUES (5,'entity','man','en',1)").run();
+  });
+  assert.equal(raw.prepare("SELECT user_id FROM person_entity WHERE eid='man'").get()?.user_id, 0);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_claims WHERE eid='man'").get().n, 0);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM email_topics WHERE topic_id='man'").get().n, 0, "Themen-Abos auf die Altdaten weg (0055)");
+});
+
+test("Exporte fuer den Seitenbau: Konto-Schluessel ak statt Konto-ID, neuer Inhaber der Adresse hat einen anderen Schluessel; pe kennzeichnet Profil-Entitaeten (Runde 8)", async () => {
+  const { raw, env, t, user } = await setup();
+  const alice = await user(1, "Alice Example"), carol = await user(9, "Carol Newowner");
+  assert.equal((await saveProfile(env, alice, "alice", true)).s, 200);
+  raw.prepare("INSERT INTO lib_items(user_id,slug,kind,title,status,created,updated,published) VALUES (1,'p1','prompt','Alices Prompt','live',?,?,?)").run(t, t, t);
+  raw.prepare("INSERT INTO guest_listings(user_id,kind,title,created,updated) VALUES (1,'speaker','Copilot',?,?)").run(t, t);
+  raw.prepare("INSERT INTO yt_videos(user_id,title,status,video_id,created,updated,published) VALUES (1,'Alices Video','published','abcdefghijk',?,?,?)").run(t, t, t);
+  const prof = async (h) => (await call(env, "GET", "/api/profiles/export")).j.people.find((p) => p.handle === h);
+  const akA = (await prof("alice")).ak;
+  assert.match(akA, /^[0-9a-f]{16}$/);
+  for (const p of ["/api/library/export", "/api/guests/export", "/api/video/export"]) {
+    const it = (await call(env, "GET", p)).j.items[0];
+    assert.equal(it.ak, akA, p); assert.equal(it.user_id, undefined, p + " ohne Konto-ID");
+  }
+  assert.equal((await call(env, "GET", "/api/guests/list")).j.items[0].user_id, undefined);
+  const ent = (await call(env, "GET", "/api/entity/export")).j.items.find((x) => x.id === "alice");
+  assert.equal(ent?.pe, true, "Personen-Entitaet aus dem Profil gekennzeichnet");
+  assert.equal(ent.ak, akA, "mit dem Schluessel des Inhabers");
+  raw.prepare("INSERT INTO events(id,handle,title,owner_id,public,start,created,updated) VALUES (5,'ev-five','Event',1,1,?,?,?)").run(t + 86400, t, t);
+  raw.prepare("INSERT INTO event_sessions(id,event_id,title,speakers,status,proposer_id,created) VALUES (7,5,'Talk',?,'live',1,?)").run(JSON.stringify([{ h: "alice", n: "Alice Example", s: "confirmed" }]), t);
+  const ev = (await call(env, "GET", "/api/events/export")).j.events.find((e) => e.handle === "ev-five");
+  assert.equal(ev.organizer.ak, akA); assert.equal(ev.sessions[0].speakers[0].ak, akA);
+  assert.equal((await call(env, "DELETE", "/api/me", alice)).s, 200);
+  assert.equal((await saveProfile(env, carol, "alice", true)).s, 200);
+  const akC = (await prof("alice")).ak;
+  assert.ok(akC && akC !== akA, "gleiche Adresse, anderes Konto: anderer Schluessel");
+  assert.equal((await saveProfile(env, carol, "carol", true)).s, 200);
+  assert.notEqual((await prof("carol")).ak, akC, "Schluessel haengt an der Adresse (alte und neue Adresse nicht verknuepfbar)");
 });

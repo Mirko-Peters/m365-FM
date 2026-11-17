@@ -7,6 +7,9 @@
 - check(): fehlen Pflicht-Exporte (Blog, Profile, Entitaeten, Q&A) frisch UND im Cache, bricht der Bau mit Exit 1 ab. Den Profil-Export
   braucht der Bau frisch: aus einer alten Fassung kaemen geloeschte oder private Profile zurueck.
   SITE_OFFLINE=1 (lokale Testbauten ohne Netz) macht daraus eine Warnung.
+- scrub() (Runde 8): Kommen Exporte mit Personenbezug (Entitaeten, Feed, Shows, Events, Gaeste, Bibliothek, Podcast, Video) aus data/cache, werden
+  sie gegen den frischen Profil-Export gefiltert: sie stammen vom letzten Bau, also womoeglich von vor einer Kontoloeschung, dem Privatstellen
+  oder einem Adresswechsel - und die Adresse kann inzwischen einem anderen Mitglied gehoeren.
 """
 import json, os, re, sys, time, threading, urllib.request
 from pathlib import Path
@@ -25,6 +28,7 @@ PREFETCH = ESSENTIAL + ("/api/entity/claims", "/api/feed/export", "/api/show/exp
 PREFETCH += tuple(f"/api/i18n/overrides?kind={_k}&lang={_l}" for _k in ("lblog", "episode", "notes") for _l in ("de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko"))
 
 _MEM, _STATE, _LOCK = {}, {}, threading.Lock()   # url -> json | None ; url -> "frisch" | "cache" | "fehlt"
+_BUSY = {}   # url -> threading.Event, solange ein Abruf laeuft: ein zweiter Aufruf derselben URL wartet darauf statt doppelt abzurufen (scrub holt Profile nach)
 CACHE_MARGIN = 600   # gespeicherte Fassung: geschrieben nach dem Abruf (bis zu 3 x 120 s + Pausen) - der Datenstand liegt bis zu so viel davor
 _TIME = {}   # url -> Zeitpunkt der Daten (Unix): frisch = Beginn des Abrufs, Cache = Zeitpunkt, zu dem die gespeicherte Fassung geschrieben wurde
 
@@ -49,9 +53,22 @@ def _http(url, timeout, tries):
 
 def fetch(url, timeout=120, tries=3):
     """JSON eines Endpunkts: Speicher -> Netz (mit Wiederholung) -> data/cache. None nur, wenn beides fehlt."""
-    with _LOCK:
-        if url in _MEM:
-            return _MEM[url]
+    while True:
+        with _LOCK:
+            if url in _MEM:
+                return _MEM[url]
+            ev = _BUSY.get(url)
+            if ev is None:
+                _BUSY[url] = threading.Event(); break
+        ev.wait()
+    try:
+        return _fetch(url, timeout, tries)
+    finally:
+        with _LOCK:
+            _BUSY.pop(url).set()
+
+
+def _fetch(url, timeout, tries):
     t0 = time.time()
     j, err = _http(url, timeout, tries)
     f = CACHE / _name(url)
@@ -74,10 +91,107 @@ def fetch(url, timeout=120, tries=3):
         print(f"WARNUNG: {url.split('://', 1)[-1]} nicht erreichbar ({err}) und keine gespeicherte Fassung", file=sys.stderr)
     if j is not None:
         j = STX.fix_tree(j)   # Mojibake aus Fremd-Feeds und alten Importen vor dem Seitenbau reparieren (check_encoding ist blockierend)
+    if j is not None and state == "cache":
+        j = scrub(url, j)
     with _LOCK:
         _MEM[url] = j; _STATE[url] = state
         if stamp is not None: _TIME[url] = stamp
     return j
+
+
+# ---------------------------------------------------------------- scrub (Runde 8)
+FORMER = "Former member"   # wie worker/src/privacy.js FORMER
+SCRUB = ("/api/entity/export", "/api/feed/export", "/api/show/export", "/api/events/export", "/api/guests/export", "/api/library/export",
+         "/api/podcast/export", "/api/video/export")
+
+
+def _split(url):
+    """-> (Basis-URL, Pfad ohne Abfrage) fuer https://host/api/... ; (None, None) sonst"""
+    i = url.find("/api/")
+    return (url[:i], url[i:].split("?", 1)[0]) if i >= 0 else (None, None)
+
+
+def fresh_people(api):
+    """Oeffentliche Profile aus dem FRISCHEN Profil-Export dieses Baus: {Adresse: Profil}. Ohne frischen Export leer (alles mit Personenbezug faellt
+    dann weg; check() bricht den Bau ohnehin ab, ausser lokal mit SITE_OFFLINE=1)."""
+    j = fetch(api + PROFILES)
+    if _STATE.get(api + PROFILES) != "frisch" or not isinstance(j, dict):
+        return {}
+    return {p["handle"]: p for p in j.get("people") or [] if isinstance(p, dict) and p.get("handle")}
+
+
+def _norm(s):
+    return " ".join(str(s or "").split()).casefold()
+
+
+def same_person(pb, handle, name=None, ak=None):
+    """Gehoert ein Eintrag (Adresse, Name, Konto-Schluessel ak aus worker privacy.js acctKeys) noch dem Profil, das die Adresse im frischen Export
+    traegt? Adresse muss oeffentlich sein; tragen beide einen Konto-Schluessel, muss er gleich sein (anderes Konto mit derselben Adresse: nein).
+    Sonst (aeltere Cache-Fassung ohne ak) muss der Name passen."""
+    p = pb.get(handle) if handle else None
+    if not p:
+        return False
+    if ak and p.get("ak"):
+        return ak == p["ak"]
+    if name and p.get("name"):
+        return _norm(name) == _norm(p["name"])
+    return True
+
+
+def _keep(pb, it):
+    return isinstance(it, dict) and same_person(pb, it.get("handle"), it.get("name"), it.get("ak"))
+
+
+def _credits(pb, it):
+    """Gaeste einer Podcast-Folge oder eines Videos ({handle, name}): nur noch passende Profile."""
+    if isinstance(it, dict) and isinstance(it.get("guests"), list):
+        it = {**it, "guests": [g for g in it["guests"] if _keep(pb, g)]}
+    return it
+
+
+def _speaker(pb, x):
+    """Event-Speaker {h, n, e, ak}: mit h nur, wenn das Profil frisch oeffentlich ist und Konto-Schluessel (bzw. in aelteren Fassungen ohne ak der
+    Name) passt - sonst anonym wie worker anonSpeaker (kein Name, kein Profil-Link, keine Entitaet)."""
+    if not isinstance(x, dict) or not x.get("h") or same_person(pb, x["h"], x.get("n"), x.get("ak")):
+        return x
+    return {"n": FORMER}
+
+
+def scrub(url, j):
+    """Export aus data/cache gegen den frischen Profil-Export filtern (siehe Kopf). Unbekannte Pfade und Formen bleiben unveraendert."""
+    api, path = _split(url)
+    if path not in SCRUB or not isinstance(j, dict):
+        return j
+    pb = fresh_people(api)
+    if path == "/api/events/export":
+        evs = []
+        for ev in j.get("events") or []:
+            if not isinstance(ev, dict):
+                evs.append(ev); continue
+            ev = dict(ev)
+            org = ev.get("organizer")
+            if isinstance(org, dict) and org.get("kind") == "u" and org.get("handle") and not same_person(pb, org["handle"], org.get("name"), org.get("ak")):
+                ev["organizer"] = {"kind": "u", "handle": "", "name": FORMER}
+            ev["sessions"] = [({**s, "speakers": [_speaker(pb, x) for x in s.get("speakers") or []]} if isinstance(s, dict) else s) for s in ev.get("sessions") or []]
+            evs.append(ev)
+        return {**j, "events": evs}
+    items = j.get("items")
+    if not isinstance(items, list):
+        return j
+    if path == "/api/entity/export":
+        # Personen-Entitaeten aus Profilen (pe; aeltere Fassungen ohne pe: selbst verwaltet und Typ person) nur, wenn die Adresse frisch oeffentlich
+        # ist und der Name zum Profil passt (sonst: geloescht, privat oder Adresse inzwischen bei einem anderen Mitglied)
+        def personal(i):
+            d = i.get("data") if isinstance(i.get("data"), dict) else {}
+            return bool(i["pe"]) if "pe" in i else (i.get("src") == "owned" and d.get("type") == "person")
+        out = [i for i in items if not isinstance(i, dict) or not personal(i) or same_person(pb, i.get("id"), (i.get("data") or {}).get("name"), i.get("ak"))]
+    elif path == "/api/feed/export":
+        out = [i for i in items if not isinstance(i, dict) or i.get("type") == "o" or _keep(pb, i)]   # Firmen-Eintraege (type o) betrifft das nicht
+    else:
+        out = [_credits(pb, i) for i in items if _keep(pb, i)]
+    if len(out) != len(items):
+        print(f"Hinweis: {path} aus data/cache - {len(items) - len(out)} Eintraege ohne passendes frisches Profil ausgelassen", file=sys.stderr)
+    return {**j, "items": out}
 
 
 def prefetch(api=None, langs=()):

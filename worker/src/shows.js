@@ -1,6 +1,7 @@
 // Podcast-Umzug: Mitglied traegt seine RSS-URL ein, alle Folgen (Text, Audio, Dauer, Transkript) werden importiert und taeglich abgeglichen.
 // Die Show erscheint nach Freigabe (Admin/Editor) auf /shows/<slug>/ der Plattform.
 import { cleanText, rateLimit, esc } from "./util.js";
+import { withAcctKeys } from "./privacy.js";
 import { notify } from "./mail.js";
 import { can, gate, inScope, logEdit } from "./perm.js";
 import { queueTopicNotification } from "./topic_notifications.js";
@@ -100,9 +101,9 @@ export async function handleShows(env, request, url, path, user, J) {
   if (!path.startsWith("/api/show/") && !path.startsWith("/api/admin/show")) return null;
   const db = env.DB, method = request.method; await ensure(db);
   if (path === "/api/show/export" && method === "GET") {
-    const shows = (await db.prepare("SELECT s.id,s.slug,s.title,s.descr,s.site,s.image,s.lang,s.synced,p.handle,u.name FROM shows s JOIN profiles p ON p.user_id=s.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=s.user_id AND u.banned=0 WHERE s.status='live'").all()).results || [];
+    const shows = (await db.prepare("SELECT s.id,s.slug,s.title,s.descr,s.site,s.image,s.lang,s.synced,p.handle,u.name,s.user_id FROM shows s JOIN profiles p ON p.user_id=s.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=s.user_id AND u.banned=0 WHERE s.status='live'").all()).results || [];
     for (const s of shows) s.eps = (await db.prepare("SELECT slug,title,descr,pub,audio,dur,image,season,num,link,CASE WHEN transcript='-' THEN '' ELSE transcript END transcript FROM show_eps WHERE show_id=? ORDER BY pub DESC LIMIT 2000").bind(s.id).all()).results || [];
-    return J({ items: shows }, 200, { "cache-control": "public, max-age=300" });
+    return J({ items: await withAcctKeys(env, shows) }, 200, { "cache-control": "public, max-age=300" });   // ak statt user_id (privacy.js acctKeys)
   }
   if (!user) return J({ error: "login" }, 401);
   if (path === "/api/show/mine" && method === "GET") {

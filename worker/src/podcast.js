@@ -1,6 +1,6 @@
 // Community-Podcast: Mitglieder reichen Episoden ein (Audio -> Entwurf bei Spreaker), die Community stimmt ab,
 // ab der Schwelle prueft Mirko in Spreaker und veroeffentlicht dort; der Cron erkennt die Veroeffentlichung.
-import { dropTranslationOps } from "./privacy.js";
+import { dropTranslationOps, withAcctKeys } from "./privacy.js";
 import { gate, inScope } from "./perm.js";
 import { decide } from "./editor.js";
 import { guestsOf, dropGuests } from "./credits.js";
@@ -84,11 +84,11 @@ export async function handlePodcast(env, request, url, path, user, J) {
   }
   if (path === "/api/podcast/export" && method === "GET") {   // fuer den Seitenbau: nur veroeffentlichte
     const rows = (await db.prepare(
-      `SELECT e.id,e.title,e.description,e.lang,e.topics,e.created,e.published,e.ep_url,e.spreaker_id,e.ai,p.handle,u.name
+      `SELECT e.id,e.title,e.description,e.lang,e.topics,e.created,e.published,e.ep_url,e.spreaker_id,e.ai,p.handle,u.name,e.user_id
        FROM pod_episodes e JOIN profiles p ON p.user_id=e.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=e.user_id AND u.banned=0
        WHERE e.status='published' ORDER BY e.published DESC LIMIT 1000`).all()).results || [];
     const gs = await guestsOf(db, "podcast", rows.map((r) => r.id));
-    return J({ items: rows.map((r) => ({ ...r, topics: parse(r.topics, []), slug: podSlug(r), guests: gs[r.id] || [] })) }, 200, { "cache-control": "public, max-age=300" });
+    return J({ items: await withAcctKeys(env, rows.map((r) => ({ ...r, topics: parse(r.topics, []), slug: podSlug(r), guests: gs[r.id] || [] }))) }, 200, { "cache-control": "public, max-age=300" });
   }
 
   if (path.startsWith("/api/admin/podcast")) {

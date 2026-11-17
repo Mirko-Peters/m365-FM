@@ -3,6 +3,7 @@ import { limitTopics } from "./sponsor_extra.js";
 import { cleanText, rateLimit, isLang } from "./util.js";
 import { baseIds } from "./entities.js";
 import { cleanUrl } from "./profiles.js";
+import { withAcctKeys } from "./privacy.js";
 
 const FORMATS = ["podcast", "youtube", "event", "webinar", "article"], MAX_LIST = 5;
 const now = () => Math.floor(Date.now() / 1000);
@@ -25,8 +26,10 @@ export async function handleGuests(env, request, url, path, user, J) {
 
   if ((path === "/api/guests/list" || path === "/api/guests/export") && method === "GET") {
     const kind = url.searchParams.get("kind"), topic = url.searchParams.get("topic");
-    const rows = ((await db.prepare(`SELECT ${COLS} ${JOIN} WHERE g.active=1 ${kind === "speaker" || kind === "host" ? "AND g.kind=?" : ""} ORDER BY g.updated DESC LIMIT 500`).bind(...(kind === "speaker" || kind === "host" ? [kind] : [])).all()).results || []).map(pub);
-    return J({ items: topic ? rows.filter((r) => r.topics.includes(topic)) : rows }, 200, { "cache-control": path.endsWith("export") ? "public, max-age=300" : "no-store" });
+    const rows = ((await db.prepare(`SELECT ${COLS} ${JOIN} WHERE g.active=1 ${kind === "speaker" || kind === "host" ? "AND g.kind=?" : ""} ORDER BY g.updated DESC LIMIT 500`).bind(...(kind === "speaker" || kind === "host" ? [kind] : [])).all()).results || []).map(fix);
+    const list = topic ? rows.filter((r) => r.topics.includes(topic)) : rows;
+    // Export fuer den Seitenbau: ak statt user_id (privacy.js acctKeys); die Liste ohne beides
+    return J({ items: path.endsWith("export") ? await withAcctKeys(env, list) : list.map(({ user_id, ...x }) => x) }, 200, { "cache-control": path.endsWith("export") ? "public, max-age=300" : "no-store" });
   }
   if (!user) return J({ error: "login" }, 401);
 

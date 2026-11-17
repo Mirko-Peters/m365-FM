@@ -1,5 +1,5 @@
 // Entitaetsdatenbank fuer das Microsoft-Oekosystem: Community-Revisionen ueber den statischen Basisdaten (data/entities.json)
-import { hiddenPersonEids, isHiddenPerson, HIDDEN_PERSON_SQL } from "./privacy.js";
+import { acctKeys, hiddenPersonEids, isHiddenPerson, HIDDEN_PERSON_SQL } from "./privacy.js";
 import { legacyRev } from "./editor.js";
 import { gate, inScope, roleOf, logEdit } from "./perm.js";
 import { audit, cleanText, rateLimit } from "./util.js";
@@ -327,7 +327,13 @@ export async function handleEntity(env, request, url, path, user, J) {
     // aif: Felder (desc.en, long.de ...), deren Wert noch genau der eines KI-Entwurfs ist - der Seitenbau kennzeichnet sie als KI-Text
     const rows = (await db.prepare(`SELECT r.eid,r.data,r.created,r.user_id,r.summary FROM entity_rev r WHERE r.status='live' AND r.eid NOT IN (${HIDDEN_PERSON_SQL})`).all()).results || [], sys = await aiUserId(db, false), human = await humanEdited(db, sys), owned = await ownedEntities(db), aiv = await aiFieldValues(db, sys);
     const items = [];
-    for (const r of rows) { const data = JSON.parse(r.data), aif = aiFieldsOf(data, aiv.get(r.eid)); items.push({ id: r.eid, data, created: r.created, uid: r.user_id, src: revSource(r, sys, human, owned), h: await stateHash(data), aif }); }
+    // pe: Personen-Entitaet aus einem Profil (person_entity, ownedEntity) - der Seitenbau baut sie aus einer Cache-Fassung nur, wenn das Profil im
+    // frischen Profil-Export oeffentlich ist und der Konto-Schluessel ak passt (site_fetch.scrub, privacy.js acctKeys; Runde 8)
+    const pe = new Map(((await db.prepare("SELECT eid,user_id FROM person_entity WHERE user_id>0").all().catch(() => ({ results: [] }))).results || []).map((r) => [r.eid, r.user_id])), ak = await acctKeys(env);
+    for (const r of rows) {
+      const data = JSON.parse(r.data), aif = aiFieldsOf(data, aiv.get(r.eid)), k = pe.has(r.eid) ? await ak(pe.get(r.eid), r.eid) : undefined;
+      items.push({ id: r.eid, data, created: r.created, uid: r.user_id, src: revSource(r, sys, human, owned), h: await stateHash(data), aif, pe: pe.has(r.eid), ...(k ? { ak: k } : {}) });
+    }
     return J({ items }, 200, { "cache-control": "public, max-age=300" });
   }
   if (path.startsWith("/api/admin/entity")) {

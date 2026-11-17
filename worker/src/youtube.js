@@ -1,6 +1,6 @@
 // Creator-Videos fuer den YouTube-Kanal "m365 Show": Der Worker legt eine resumable Upload-Session an (privat), der Browser
 // laedt direkt zu YouTube hoch. Abstimmung -> ab Schwelle Aufgabe fuer Mirko -> Freigabe (oeffentlich schalten) in YouTube Studio.
-import { dropTranslationOps } from "./privacy.js";
+import { dropTranslationOps, withAcctKeys } from "./privacy.js";
 import { gate, inScope } from "./perm.js";
 import { decide } from "./editor.js";
 import { guestsOf, dropGuests } from "./credits.js";
@@ -171,11 +171,11 @@ export async function handleVideo(env, request, url, path, user, J) {
   }
   if (path === "/api/video/export" && method === "GET") {
     const rows = (await db.prepare(
-      `SELECT v.id,v.title,v.description,v.lang,v.topics,v.created,v.published,v.video_id,v.ai,p.handle,u.name
+      `SELECT v.id,v.title,v.description,v.lang,v.topics,v.created,v.published,v.video_id,v.ai,p.handle,u.name,v.user_id
        FROM yt_videos v JOIN profiles p ON p.user_id=v.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=v.user_id AND u.banned=0
        WHERE v.status='published' ORDER BY v.published DESC LIMIT 1000`).all()).results || [];
     const gs = await guestsOf(db, "video", rows.map((r) => r.id));
-    return J({ items: rows.map((r) => ({ ...r, topics: parse(r.topics, []), slug: vidSlug(r), guests: gs[r.id] || [] })) }, 200, { "cache-control": "public, max-age=300" });
+    return J({ items: await withAcctKeys(env, rows.map((r) => ({ ...r, topics: parse(r.topics, []), slug: vidSlug(r), guests: gs[r.id] || [] }))) }, 200, { "cache-control": "public, max-age=300" });
   }
 
   if (path.startsWith("/api/admin/video")) {

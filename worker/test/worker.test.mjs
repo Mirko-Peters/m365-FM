@@ -477,7 +477,14 @@ test("schema: Migrationen sind idempotent und enthalten jede zur Laufzeit angele
     if (/^ALTER TABLE events ADD COLUMN (?:entity|entity_state) TEXT NOT NULL DEFAULT ''$/i.test(s)) continue;   // 0048: Event-Entitaet (evententity.js), Spalten mit Standardwert (D1 fuehrt jede Migration nur einmal aus)
     if (/^ALTER TABLE yt_videos ADD COLUMN (?:(?:upload_url|nonce) TEXT NOT NULL DEFAULT ''|size INTEGER NOT NULL DEFAULT 0)$/i.test(s)) continue;   // 0053: Upload-Sitzung der Creator-Videos (K35/K36), Spalten mit Standardwert
     if (/^INSERT OR IGNORE INTO person_entity\(eid, user_id, created\)\s+SELECT /i.test(s)) continue;   // 0054: Rueckfuellung der Personen-Entitaeten, idempotent (vorhandene Merker bleiben)
-    if (/^DELETE FROM entity_claims WHERE via = 'owner' AND status = 'verified'\s+AND eid IN \(SELECT eid FROM person_entity WHERE user_id = 0\)\s+AND NOT EXISTS \(SELECT 1 FROM users u WHERE u\.id = entity_claims\.user_id\)$/i.test(s)) continue;   // 0054: verwaiste Owner-Ansprueche geloeschter Konten (Altbestand), idempotent
+    if (/^DELETE FROM entity_claims WHERE via IN \('owner', 'manual'\) AND status = 'verified'\s+AND eid IN \(SELECT eid FROM person_entity WHERE user_id = 0\)\s+AND NOT EXISTS \(SELECT 1 FROM users u WHERE u\.id = entity_claims\.user_id\)$/i.test(s)) continue;   // 0054: verwaiste Owner- und manuelle Ansprueche geloeschter Konten (Altbestand), idempotent
+    // 0055: Altbestand Adressen ohne Profil (Speaker-Eintraege, Blog-Abos, Speaker-Identitaet) und Themen-Abos auf Merker geloeschter Konten;
+    // jede Anweisung trifft nur Zeilen mit einer Adresse ohne Profil bzw. Merker user_id 0 und aendert beim zweiten Lauf nichts (Test in datenschutz.test.mjs)
+    if (/^UPDATE event_sessions SET speakers = \(\s+SELECT json_group_array\(json\(v\)\) FROM \(/i.test(s)
+      || /^DELETE FROM blog_follows WHERE NOT EXISTS \(SELECT 1 FROM profiles p WHERE p\.handle = blog_follows\.handle\)$/i.test(s)
+      || /^UPDATE speaker_ref SET handle = '' WHERE handle <> '' AND NOT EXISTS \(SELECT 1 FROM profiles p WHERE p\.handle = speaker_ref\.handle\)$/i.test(s)
+      || /^DELETE FROM (?:push_topics|email_topics) WHERE kind = 'entity' AND topic_id IN \(SELECT eid FROM person_entity WHERE user_id = 0\)$/i.test(s)
+      || /^DELETE FROM mail_topic_follows WHERE eid IN \(SELECT eid FROM person_entity WHERE user_id = 0\)$/i.test(s)) continue;
     assert.match(s, /^CREATE (TABLE|INDEX|UNIQUE INDEX) IF NOT EXISTS /i, "nur idempotente Anweisungen: " + s.slice(0, 60));
   }
   const inMig = new Set([...sql.matchAll(/CREATE (?:TABLE|UNIQUE INDEX|INDEX) IF NOT EXISTS (\w+)/gi)].map((m) => m[1]));

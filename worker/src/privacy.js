@@ -6,6 +6,30 @@
 // Bezug zu einem Konto - IDs werden mit AUTOINCREMENT nie neu vergeben, negative nie.
 export const FORMER = "Former member";
 
+// Konto-Schluessel fuer den Seitenbau (Runde 8): Exporte mit Profil-Bezug (Profile, Feed, Shows, Gaeste, Bibliothek, Podcast, Video) tragen je
+// Eintrag ak = HMAC(Konto-ID, Adresse). Kommt ein Export beim Seitenbau aus data/cache (Ausfall), behaelt site_fetch.scrub nur Eintraege, deren
+// Adresse UND Schluessel zum frischen Profil-Export passen - uebernimmt ein anderes Konto die Adresse, passt der Schluessel nicht mehr. Die
+// Konto-ID selbst bleibt verborgen, und alte und neue Adresse eines Kontos sind ueber den Schluessel nicht verknuepfbar (Adresse im HMAC).
+// ak(uid, handle) -> 16 Hex-Zeichen oder undefined (kein Geheimnis gesetzt, fehlende Werte: Feld entfaellt, der Seitenbau prueft dann den Namen).
+export async function acctKeys(env) {
+  const sec = String(env?.SESSION_SECRET || "");
+  if (!sec || !globalThis.crypto?.subtle) return async () => undefined;
+  const enc = new TextEncoder(), memo = new Map();
+  const key = await crypto.subtle.importKey("raw", enc.encode("acct-key:" + sec), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  return async (uid, handle) => {
+    if (!uid || !handle) return undefined;
+    const k = `${uid}:${handle}`;
+    if (!memo.has(k)) memo.set(k, [...new Uint8Array(await crypto.subtle.sign("HMAC", key, enc.encode(k))).slice(0, 8)].map((b) => b.toString(16).padStart(2, "0")).join(""));
+    return memo.get(k);
+  };
+}
+// Eintraege eines Exports mit user_id: ak setzen, user_id entfernen (die Konto-ID ist nicht oeffentlich)
+export async function withAcctKeys(env, rows, uidKey = "user_id") {
+  const ak = await acctKeys(env), out = [];
+  for (const r of rows) { const { [uidKey]: uid, ...x } = r; const k = await ak(uid, x.handle); out.push(k ? { ...x, ak: k } : x); }
+  return out;
+}
+
 // Oeffentliche Profile kommen aus einem Zwischenspeicher (Cron alle 30 Minuten). Wird etwas Oeffentliches privat, gesperrt oder geloescht,
 // verwerfen wir ihn sofort; der naechste Abruf baut ihn neu (profiles.js refreshProfilesExport filtert public=1 und banned=0).
 // Generationszaehler (meta profiles_export_gen): refreshProfilesExport schreibt den Zwischenspeicher nur, wenn seit seinem Start keine

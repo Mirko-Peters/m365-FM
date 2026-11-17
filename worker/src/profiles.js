@@ -1,5 +1,5 @@
 // Experten- und Firmenprofile, Programme (MVP/MCT/...), Kanaele mit Feeds, Upvotes, Bestaetigungen
-import { releaseHandleOps, invalidateProfileExport, profileExportGen, EXPORT_GEN, anonEntitySpeakerOps, forgetSearchPerson, forgetSearchEntity, forgetPublicPerson } from "./privacy.js";
+import { acctKeys, releaseHandleOps, invalidateProfileExport, profileExportGen, EXPORT_GEN, anonEntitySpeakerOps, forgetSearchPerson, forgetSearchEntity, forgetPublicPerson } from "./privacy.js";
 import { scopeOf, can, gate, inScope, logEdit, roleOf } from "./perm.js";
 import { decide } from "./editor.js";
 import { syncAutoRoles } from "./roles.js";
@@ -277,12 +277,13 @@ async function buildProfilesExport(env) {
     const us = (await db.prepare("SELECT user_id FROM profiles WHERE public=1 AND handle IS NOT NULL ORDER BY updated DESC LIMIT 300").all()).results || [];
     const os = (await db.prepare("SELECT id FROM orgs WHERE public=1 AND unclaimed=0 ORDER BY created DESC LIMIT 200").all()).results || [];
     const people = [], orgs = [], errs = [];
-    const emap = await entityMap(env);
+    const emap = await entityMap(env), ak = await acctKeys(env);
     const one = async (u) => {
       const v = await personView(db, u.user_id, 0); if (!v) return null;
       v.expertise = v.expertise.filter((e) => emap.has(e.e));
       v.industries = (v.industries || []).filter((e) => emap.get(e)?.type === "industry");   // oeffentlich nur live veroeffentlichte Entitaeten
       if (v.job_eid && emap.get(v.job_eid)?.type !== "job") v.job_eid = "";
+      const k = await ak(u.user_id, v.handle); if (k) v.ak = k;   // Runde 8: Seitenbau prueft Cache-Exporte gegen Adresse + Konto (privacy.js acctKeys)
       delete v.id; return v;
     };
     for (let k = 0; k < us.length; k += 6) for (const v of await Promise.all(us.slice(k, k + 6).map((u) => one(u).catch((e) => { errs.push(String((e && e.message) || e).slice(0, 200)); return null; })))) if (v) people.push(v);   // in Gruppen parallel, Reihenfolge bleibt; ein defektes Profil stoppt den Export nicht
@@ -559,11 +560,11 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const rows = (await db.prepare(`SELECT i.id,i.title,i.url,i.summary,i.thumb,i.body,i.topics,i.keypoints,i.faq,i.published,i.origin,c.kind,i.owner_type,i.owner_id,(SELECT COUNT(*) FROM item_votes v WHERE v.item_id=i.id) votes FROM feed_items i JOIN channels c ON c.id=i.channel_id
       WHERE i.hidden=0 AND ${publicKindSql()} AND i.url NOT LIKE ? AND i.published>? AND ((i.owner_type='u' AND i.owner_id IN (SELECT p.user_id FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.public=1)) OR (i.owner_type='o' AND i.owner_id IN (SELECT id FROM orgs WHERE public=1)))
       ORDER BY i.published DESC LIMIT 300`).bind(env.SITE + "%", now() - FEED_DAYS * 86400).all()).results || [];
-    const names = new Map(), out = [];
+    const names = new Map(), out = [], ak = await acctKeys(env);
     for (const r of rows) {
       const k = r.owner_type + r.owner_id;
       if (!names.has(k)) names.set(k, r.owner_type === "u" ? await db.prepare("SELECT p.handle,u.name FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.user_id=?").bind(r.owner_id).first() : await db.prepare("SELECT handle,name FROM orgs WHERE id=?").bind(r.owner_id).first());
-      const o = names.get(k); if (o) out.push({ id: r.id, summary: r.summary || "", thumb: r.thumb || "", body: r.body || "", keypoints: jsonList(r.keypoints), faq: jsonList(r.faq), topics: (() => { try { return JSON.parse(r.topics || "[]"); } catch { return []; } })(), title: r.title, url: r.url, published: r.published, kind: r.kind, origin: r.origin || "", votes: r.votes, type: r.owner_type, handle: o.handle, name: o.name });
+      const o = names.get(k); if (o) out.push({ id: r.id, summary: r.summary || "", thumb: r.thumb || "", body: r.body || "", keypoints: jsonList(r.keypoints), faq: jsonList(r.faq), topics: (() => { try { return JSON.parse(r.topics || "[]"); } catch { return []; } })(), title: r.title, url: r.url, published: r.published, kind: r.kind, origin: r.origin || "", votes: r.votes, type: r.owner_type, handle: o.handle, name: o.name, ...(r.owner_type === "u" && (await ak(r.owner_id, o.handle)) ? { ak: await ak(r.owner_id, o.handle) } : {}) });
     }
     return J({ items: out }, 200, { "cache-control": "public, max-age=300" });
   }
@@ -765,6 +766,12 @@ export async function deleteUserData(db, id, env = null) {
       // Runde 6: Q&A anderer Mitglieder zur Person bleibt, aber verborgen und ohne eid (wanderte sonst zum naechsten Inhaber der Adresse);
       // Speaker-Eintraege, die nur per Name+e an die Person gebunden sind, werden anonym
       db.prepare("UPDATE entity_q SET hidden=1,eid='' WHERE eid IN (SELECT value FROM json_each(?))").bind(JSON.stringify(persons)),
+      // Runde 8: Themen-Abos ANDERER Mitglieder auf die Personen-Entitaet (Push, E-Mail, alte Wochenmail-Themen) und noch nicht versandte
+      // Meldungen dazu - sonst gingen nach einer Uebernahme der Adresse (ownedEntity, gleiche eid) die Meldungen des neuen Inhabers an sie
+      db.prepare("DELETE FROM push_topics WHERE kind='entity' AND topic_id IN (SELECT value FROM json_each(?))").bind(JSON.stringify(persons)),
+      db.prepare("DELETE FROM email_topics WHERE kind='entity' AND topic_id IN (SELECT value FROM json_each(?))").bind(JSON.stringify(persons)),
+      db.prepare("DELETE FROM mail_topic_follows WHERE eid IN (SELECT value FROM json_each(?))").bind(JSON.stringify(persons)),
+      db.prepare("DELETE FROM topic_queue WHERE sent=0 AND kind='entity' AND topic_id IN (SELECT value FROM json_each(?))").bind(JSON.stringify(persons)),
       ...(await anonEntitySpeakerOps(db, persons))));
     for (const eid of persons) await forgetSearchEntity(db, eid);
   }
