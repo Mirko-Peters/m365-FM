@@ -8,7 +8,8 @@ Ablauf (Aufruf: python tools/r2_site_sync.py <docs>):
  3. Entfernt markieren - nichts wird geloescht: Schluessel im Bucket, die weder in docs/ noch in r2out/ (R2_KEEP_KEYS, Liste aus dem Bau)
     vorkommen, bekommen Metadaten gone=1, der Inhalt bleibt. So verhaelt sich R2 wie GitHub Pages nach einem Deploy (Umbenennungen,
     geloeschte Entitaeten). Sicherung: mehr Markierungen als Dateien im Bau -> Abbruch (ausser R2_TOMBSTONE_FORCE=1).
- 4. Ende 0 nur ohne jeden Fehler. Die Bau-Kennung setzt danach ein eigener Aufruf (--marker <docs>), nach dem Purge.
+ 4. Ende 0 nur ohne jeden Fehler. Die Bau-Kennung setzt danach ein eigener Aufruf (--marker <docs>), nach dem Purge (seit 17.11.2026 auch
+    nach dem Purge des R2-Kanten-Caches, tools/purge_changed.py --r2; scheitert er, bleibt die alte Kennung).
     Der Site-Worker nutzt R2 nur, wenn pages/r2-build.txt mit /r2-build.txt auf GitHub Pages uebereinstimmt: bei jedem Fehler liefert
     automatisch GitHub Pages, nie ein veralteter Stand aus R2.
 Umgebung: R2_ACCOUNT_ID, R2_BUCKET, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY (GitHub-Secrets); R2_MANIFEST, R2_KEEP_KEYS, R2_CHANGED_OUT, R2_TOMBSTONE_FORCE."""

@@ -22,7 +22,7 @@ globalThis.fetch = async (req) => {
   if (u.pathname === "/sponsor/dashboard/old/") return new Response(null, { status: 301, headers: { location: "https://www.m365.fm/de/sponsor/dashboard/report/" } });
   return new Response("404", { status: 404, headers: { "content-type": "text/html" } });
 };
-const { default: W, r2Key, __resetR2Ready, isHtmlPath, wwwToPartner, partnerToWww } = await import("../index.js");
+const { default: W, r2Key, r2CacheKey, PATH_KEY, __resetR2Ready, isHtmlPath, wwwToPartner, partnerToWww } = await import("../index.js");
 const PAGES = { get: async (k) => { r2gets++; if (k === "pages/pl/x/index.html") return { httpEtag: '"r2e"', uploaded: new Date("2026-11-01T20:00:00Z"), arrayBuffer: async () => new TextEncoder().encode("<html>pl</html>").buffer }; if (k === "pages/blog-import/index.json") return { body: new Response('{"total":7}').body }; if (k === "pages/translations-blog.json") return { body: new Response('{"count":3}').body }; return null; } };
 const env = { PAGES, MIGRATED: "1" };
 const req = (path, c, h = {}, method = "GET") => { const r = new Request("https://www.m365.fm" + path, { headers: h, method }); if (c) Object.defineProperty(r, "cf", { value: { country: c } }); return r; };
@@ -208,6 +208,47 @@ test("R2 zuerst: Cache-Eintrag eines frueheren Baus wird nie ausgeliefert", asyn
   store.clear(); globalThis.ORIGIN_BUILD = "b1"; await warm();
   store.set("https://www.m365.fm/__r2c/@b0/de/r2only/", new Response("<html>alt</html>", { headers: { "content-type": "text/html; charset=utf-8" } }));
   const r = await run2(req("/de/r2only/", "US")); assert.equal(await r.text(), "<html><body>r2 de</body></html>"); assert.equal(r.headers.get("x-m365-cache"), "MISS");
+});
+
+// Kanten-Cache ueber Deploys (17.11.2026): Bau-Kennung mit Endung "-pfad" -> Schluessel nur aus dem Pfad (/__r2f<pfad>). Unveraenderte Eintraege ueberleben
+// den Deploy; geaenderte leert der Deploy-Job vor der Kennung per URL (tools/purge_changed.py --r2, hier: Eintrag loeschen wie ein Purge).
+const bucket = { ...B2 };
+const envP = { ...env2, PAGES: { get: async (k) => { r2gets2++; return bucket[k] || null; } } };
+const deployP = async (b) => { globalThis.ORIGIN_BUILD = b; bucket["pages/r2-build.txt"] = obj2(b + "\n", "text/plain; charset=utf-8"); __resetR2Ready(); await W.fetch(req("/nolm/", "US"), envP, { waitUntil: (p) => p }); for (let i = 0; i < 20; i++) { await new Promise((r) => setTimeout(r, 5)); const w = []; await W.fetch(req("/__probe/", "US"), envP, { waitUntil: (p) => w.push(p) }); await Promise.all(w); } };
+const runP = async (r) => { const w = []; const res = await W.fetch(r, envP, { waitUntil: (p) => w.push(p) }); await Promise.all(w); return res; };
+test("Pfad-Schluessel: Schluessel ohne Bau-Kennung, kodiert wie die Purge-Adressen von tools/purge_changed.py", async () => {
+  assert.equal(r2CacheKey("https://www.m365.fm", "7.1-pfad", "/de/x/"), "https://www.m365.fm/__r2f/de/x/");
+  assert.equal(r2CacheKey("https://www.m365.fm", "7.1", "/de/x/"), "https://www.m365.fm/__r2c/@7.1/de/x/", "alte Kennung: wie bisher mit Bau-Kennung");
+  assert.ok(PATH_KEY.test("44013398298.1-pfad") && !PATH_KEY.test("44013398298.1") && !PATH_KEY.test("pfad"));
+  store.clear(); await deployP("p1-pfad");
+  const ru = await runP(req("/ru/tag/" + encodeURIComponent("облако") + "/", "US")); assert.equal(ru.headers.get("x-m365-src"), "r2");
+  assert.ok(store.has("https://www.m365.fm/__r2f/ru/tag/%D0%BE%D0%B1%D0%BB%D0%B0%D0%BA%D0%BE/"), "gleiche Adresse wie der Purge (tests/test_kanten_cache.py)");
+  await runP(req("/de/r2only/index.html", "DE")); assert.ok(store.has("https://www.m365.fm/__r2f/de/r2only/"), "/a/index.html und /a/ teilen den Eintrag");
+  await runP(req("/feed.json", "DE")); assert.ok(store.has("https://www.m365.fm/__r2f/feed.json"));
+  assert.ok(![...store.keys()].some((k) => k.includes("@p1")), "keine Bau-Kennung im Schluessel");
+});
+test("Pfad-Schluessel: unveraenderte Seite bleibt ueber den Deploy im Cache, geaenderte kommt nach dem Purge frisch", async () => {
+  store.clear(); bucket["pages/de/r2only/index.html"] = obj2("<html>v1</html>", "text/html; charset=utf-8"); bucket["pages/de/fix/index.html"] = obj2("<html>fix</html>", "text/html; charset=utf-8");
+  await deployP("p1-pfad");
+  assert.equal((await runP(req("/de/r2only/", "DE"))).headers.get("x-m365-cache"), "MISS");
+  assert.equal((await runP(req("/de/fix/", "DE"))).headers.get("x-m365-cache"), "MISS");
+  bucket["pages/de/r2only/index.html"] = obj2("<html>v2</html>", "text/html; charset=utf-8");   // neuer Bau im Spiegel: eine Seite geaendert, eine nicht
+  store.delete("https://www.m365.fm/__r2f/de/r2only/");   // R2-Purge nach dem Spiegel (Adresse aus tools/purge_changed.py --r2), danach die Kennung
+  const mid = await runP(req("/de/r2only/", "DE"));   // Isolat noch mit der alten Kennung zwischen Purge und Kennung: cacht schon den neuen Stand
+  assert.equal(await mid.text(), "<html>v2</html>"); assert.equal(mid.headers.get("x-m365-cache"), "MISS");
+  await deployP("p2-pfad");
+  const same = await runP(req("/de/fix/", "DE")); assert.equal(same.headers.get("x-m365-cache"), "HIT", "unveraendert: Kanten-Cache ueberlebt den Deploy"); assert.equal(await same.text(), "<html>fix</html>");
+  const ch = await runP(req("/de/r2only/", "DE")); assert.equal(await ch.text(), "<html>v2</html>", "nie der alte Stand");
+  bucket["pages/de/r2only/index.html"] = B2["pages/de/r2only/index.html"]; delete bucket["pages/de/fix/index.html"];
+});
+test("Pfad-Schluessel: Eintraege werden nie mit einer alten Kennung (ohne -pfad) gelesen, interne Schluessel sind keine Adressen", async () => {
+  store.clear(); await deployP("p3");
+  store.set("https://www.m365.fm/__r2f/de/r2only/", new Response("<html>alt</html>", { headers: { "content-type": "text/html; charset=utf-8" } }));
+  const r = await runP(req("/de/r2only/", "DE")); assert.equal(await r.text(), "<html><body>r2 de</body></html>"); assert.equal(r.headers.get("x-m365-cache"), "MISS");
+  const before = lastOrigin;
+  for (const p of ["/__r2f/de/r2only/", "/__r2c/@p3/de/r2only/"]) { const x = await runP(req(p, "DE")); assert.equal(x.status, 404); }
+  assert.equal(lastOrigin, before, "kein Abruf beim Ursprung");
+  globalThis.ORIGIN_BUILD = "b1"; bucket["pages/r2-build.txt"] = B2["pages/r2-build.txt"]; __resetR2Ready();
 });
 
 test("Teilen-Bilder: nach dem Umzug nach R2 leitet /og/... per 301 auf img.m365.fm, solange GitHub Pages das Bild noch hat, kommt es von dort", async () => {
