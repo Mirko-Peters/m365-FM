@@ -4,7 +4,7 @@ summary: "You create an Azure Virtual Desktop scaling plan under Azure Virtual D
 status: review
 publish: false
 author: mirko-p
-date: 2026-11-17
+date: 2026-11-18
 topics: [avd-scaling-plan, azure-virtual-desktop]
 keypoints:
   - "Before the plan works, set a custom MaxSessionLimit on pooled host pools and assign Desktop Virtualization Power On Off Contributor at subscription level (the Learn page lists a second role for dynamic autoscaling)."
@@ -29,7 +29,7 @@ An [AVD scaling plan](/entity/avd-scaling-plan/) scales the session host virtual
 - **Power management autoscaling** powers existing session hosts on and off. It is generally available in Azure and Azure Government.
 - **Dynamic autoscaling** also creates and deletes session hosts. It works only for pooled host pools with session host configuration and is not supported in Azure Government.
 
-Status of dynamic autoscaling: the scenarios and glossary pages label it preview, and the create page requires a preview build of the Az.DesktopVirtualization module (5.4.2-preview or later). The What's new page lists it as preview in November 2024 and as "now available" in June 2026, without a general availability label. No Learn page calls it generally available. Check the current pages before relying on it. This article follows power management.
+On the Learn pages checked on 17 November 2026, dynamic autoscaling carries a preview label (scenarios, glossary) or no general availability label (What's new: "now in preview" in November 2024, "now available" in June 2026). The create page lists a preview module version (5.4.2-preview) for it. This article follows power management.
 
 Two rules apply to every plan. A host pool can have only one scaling plan, while one plan can serve several host pools of the same type. Autoscale cannot run on the same host pool as the Azure Automation and Azure Logic Apps scaling script.
 
@@ -45,17 +45,22 @@ See also [Azure Virtual Desktop](/entity/azure-virtual-desktop/) and [AVD host p
 
 ## Step 1: Assign the role to the service
 
-The scaling plan page does not describe the clicks; they follow the Azure RBAC article on assigning roles in the portal:
+The clicks follow the Azure RBAC article on assigning roles in the portal. To assign the role to the service principal, first find its object ID, as Learn's page on the AVD service principals describes:
+
+- In the Azure portal, open **Microsoft Entra ID**. On the Overview page, enter the application ID `9cdead84-a844-4324-93f2-b2e6bb768d07` under **Search your tenant**.
+- Select the matching enterprise application, **Azure Virtual Desktop** or **Windows Virtual Desktop**. Under properties, note its name and object ID. The object ID corresponds to the application ID and is unique to your tenant.
+
+Then assign the role:
 
 1. In the Azure portal, search for **Subscriptions** and open the subscription.
 2. Select **Access control (IAM)**, then **Add**, then **Add role assignment**.
 3. On the **Role** tab, select **Desktop Virtualization Power On Off Contributor**.
-4. On the **Members** tab, select the Azure Virtual Desktop service principal (**User, group, or service principal**), or a managed identity assigned to your host pool (**Managed identity**). The service principal is named "Azure Virtual Desktop" or "Windows Virtual Desktop" (depending on when the resource provider was registered) and has the application ID `9cdead84-a844-4324-93f2-b2e6bb768d07`. Entries ending in "Client" or "ARM Provider" are different principals. If two entries share the name, keep the one whose object ID matches the application ID search in your tenant.
-5. Select **Review + assign**. Repeat for every subscription with host pools you want to scale.
+4. On the **Members** tab, select the Azure Virtual Desktop service principal (**User, group, or service principal**), or a managed identity assigned to your host pool (**Managed identity**). The service principal is named "Azure Virtual Desktop" or "Windows Virtual Desktop" (depending on when the resource provider was registered) and has the application ID `9cdead84-a844-4324-93f2-b2e6bb768d07`. Entries ending in "Client" or "ARM Provider" are different principals. If you get two entries with the same name, select both for now, then remove the entry whose object ID does not match the one you noted.
+5. Select **Review + assign**. Repeat for every subscription with host pools to scale.
 
 Learn says that a scope below the subscription, such as a resource group, host pool or VM, prevents autoscale from working properly.
 
-The Learn page lists a second role, **Desktop Virtualization Virtual Machine Contributor**, in the permissions section that precedes the dynamic scaling plan steps. Learn describes it as allowing the resource provider to create, delete, update, start and stop virtual machines.
+The Learn page lists a second role, **Desktop Virtualization Virtual Machine Contributor**, in the permissions section that precedes the dynamic scaling plan steps. Learn describes it as allowing the resource provider to create, delete, update, start and stop VMs.
 
 ## Step 2: Create the plan (Basics tab)
 
@@ -63,40 +68,40 @@ The Learn page lists a second role, **Desktop Virtualization Virtual Machine Con
 2. Select **Scaling Plans**, then **Create**.
 3. On the **Basics** tab, fill in these fields:
    - **Subscription**, **Resource group** and **Scaling plan name**, for example `sp-pooled-weekday-westeurope`.
-   - **Location**: must match the host pool region. **Time zone**: the plan operates only in this time zone.
+   - **Location**: must match the host pool region. **Time zone**: the time zone to use with your plan.
    - **Host pool type**: **Pooled** or **Personal**.
    - **Exclusion tag**: a tag name for hosts autoscale must leave alone, for example `excludeFromScaling`.
    - **Scaling method** (pooled only): **Power management autoscaling**.
 
-If you add the exclusion tag to a session host, autoscale does not start it, stop it or change its drain mode. Tagged hosts still count toward the minimum percentage of hosts. Keep personal data out of the tag.
+If you add the exclusion tag to a session host, autoscale does not start it, stop it or change its drain mode. Tagged hosts still count toward the minimum percentage of hosts.
 
 ## Step 3: Define the schedule
 
-On the **Schedules** tab, select **Add schedule**, enter a **Schedule name** and choose the days under **Repeat on**. Then complete the four phases: ramp-up, peak hours, ramp-down and off-peak hours. The start time of a phase is also the end time of the previous one. "Ramp-up, peak, ramp-down and off-peak: the four AVD autoscale phases explained" covers every parameter.
+On the **Schedules** tab, select **Add schedule**, enter a **Schedule name** and choose the days under **Repeat on**. Then complete the four phases: ramp-up, peak hours, ramp-down and off-peak hours. The start time of a phase is also the end time of the previous one. The companion article on the four autoscale phases covers every parameter.
 
 ### Pooled host pools
 
 - **Ramp-up:** start time, load balancing algorithm (Learn recommends breadth-first), minimum percentage of hosts, capacity threshold.
 - **Peak hours:** start time and algorithm (breadth-first or depth-first). The ramp-up capacity threshold carries over.
-- **Ramp-down:** start time, algorithm (the autoscale FAQ suggests depth-first), minimum percentage of hosts, capacity threshold, force logoff.
-- **Off-peak hours:** start time and algorithm (depth-first). The ramp-down capacity threshold carries over.
+- **Ramp-down:** start time, algorithm (the autoscale FAQ says depth-first can be used in ramp-down and off-peak), minimum percentage of hosts, capacity threshold, force logoff.
+- **Off-peak hours:** start time and algorithm (Learn recommends depth-first). The ramp-down capacity threshold carries over.
 
 Autoscale applies the algorithm from the schedule, not the one in the host pool settings.
 
-Two numbers drive the decisions. The capacity threshold compares user sessions with available capacity, which is the number of available session hosts times the maximum session limit. Learn's example: two hosts with 20 sessions each give a capacity of 40; at 75%, a third host starts above 30 sessions. The minimum percentage of hosts is rounded up: 10% of seven hosts keeps one host on.
+Two numbers drive the decisions. The capacity threshold compares user sessions with available capacity (available session hosts times the maximum session limit). Learn's example: two hosts with a limit of 20 give a capacity of 40 sessions; at a 75% threshold, a third host starts above 30 sessions. The minimum percentage of hosts is rounded up: 10% of seven hosts keeps one host on. The decision rule is explained in the companion article on power management autoscaling.
 
 In ramp-down, **Force logoff** on means autoscale puts the host with the fewest sessions in drain mode, notifies users, signs them out after the wait time and deallocates the VM. With it off, select **VMs have no active or disconnected sessions** or **VMs have no active sessions**, and autoscale waits for users to sign out. A host is shut down only if the remaining hosts can take all sessions without exceeding the capacity threshold. Forced sign-out happens only in ramp-down.
 
 ### Example schedule
 
-The following values are an example, not Learn defaults, for a pooled host pool of 10 hosts with a maximum session limit of 10:
+The following values are an example, not Learn defaults, for a pooled host pool of 10 hosts with a maximum session limit of 10, repeating Monday to Friday:
 
-- Ramp-up 07:00, breadth-first, minimum 20% of hosts (2 hosts), capacity threshold 60%.
-- Peak hours 09:00, breadth-first; the threshold carries over.
-- Ramp-down 17:00, depth-first, minimum 10% (1 host), threshold 75%.
-- Off-peak hours 19:00, depth-first; the threshold carries over.
+- Ramp-up 07:00, breadth-first, minimum 20% of hosts (2 hosts), threshold 60%.
+- Peak hours 09:00, breadth-first.
+- Ramp-down 17:00, depth-first, minimum 10% (1 host), threshold 75%, force logoff on with a 30-minute wait time.
+- Off-peak hours 19:00, depth-first.
 
-Repeat on Monday to Friday, with force logoff on and a 30-minute wait time in ramp-down. With 2 hosts on, capacity is 20 sessions, so the 60% threshold is crossed at 13 sessions and a third host starts.
+With 2 hosts on, capacity is 20 sessions, so the 60% threshold is crossed at 13 sessions and a third host starts.
 
 ### Personal host pools
 
@@ -114,11 +119,11 @@ If days are unselected in a schedule, the last off-peak parameters on the select
 
 You can only assign a plan to host pools whose type matches the type chosen in the plan. If you do not want to enable autoscale yet, leave all check boxes unselected and assign pools later. Changes to a plan that is already assigned to host pools apply immediately.
 
-To assign pools later, open **Azure Virtual Desktop**, then **Scaling plans**, select the plan, and under **Manage** select **Host pool assignments**, then **+ Assign**, select the host pools and select **Assign**. The host pools must be in the same Azure region as the plan. If you enabled the plan during host pool deployment, you can switch autoscale off for that host pool by clearing **Enable autoscale** in the **Scaling plan** menu of the host pool.
+To assign pools later, open **Azure Virtual Desktop**, then **Scaling plans**, select the plan, and under **Manage** select **Host pool assignments**, then **+ Assign**, select the host pools and select **Assign**. The host pools must be in the same Azure region as the plan. If you enabled the scaling plan during deployment, Learn adds that you can disable it for the selected host pool in the **Scaling plan** menu by unselecting the **Enable autoscale** checkbox.
 
 ## Step 5: Optional time limit policy
 
-Disconnected sessions still count toward used capacity, so, without force logoff, hosts with only disconnected sessions stay on. Learn describes a time limit policy that signs out disconnected users after a set time; the autoscale FAQ suggests 15 to 30 minutes, completed before ramp-down ends. For [Intune](/entity/intune/): in the Microsoft Intune admin center, create or edit a configuration profile for **Windows 10 and later** with profile type **Session Time Limits**. In the settings picker go to **Administrative templates**, **Windows Components**, **Remote Desktop Services**, **Remote Desktop Session Host**, **Session Time Limits**, select **Set time limit for disconnected sessions**, set it to **Enabled** and choose a time value. Assign the profile to a group containing the session hosts, create it, and restart the computers after the policy applies.
+Disconnected sessions count toward used capacity, and in ramp-down without force logoff you must choose between **VMs have no active or disconnected sessions** and **VMs have no active sessions**. Learn describes a time limit policy that signs out disconnected users after a set time; the autoscale FAQ suggests 15 to 30 minutes, completed before ramp-down ends. For [Intune](/entity/intune/): in the Microsoft Intune admin center, create or edit a configuration profile for **Windows 10 and later** with profile type **Session Time Limits**. In the settings picker go to **Administrative templates**, **Windows Components**, **Remote Desktop Services**, **Remote Desktop Session Host**, **Session Time Limits**, select **Set time limit for disconnected sessions**, set it to **Enabled** and choose a time value. Assign the profile to a group containing the session hosts, create it, and restart the computers after the policy applies.
 
 The account needs the **Policy and Profile manager** role.
 
@@ -126,7 +131,7 @@ The account needs the **Policy and Profile manager** role.
 
 A suggested test, not a Learn requirement: Tag one test host and confirm that autoscale leaves its power state and drain mode alone.
 
-To see what autoscale did, enable diagnostics: in the Azure portal open **Azure Virtual Desktop**, **Scaling plans**, select the plan, then **Diagnostic Settings** and **Add diagnostic setting**. Select **Autoscale logs** and choose **Archive to a storage account** or **Stream to an event hub**, and select **Save**. The storage account must be in the same region as the plan, and the logs appear in the `insight-logs-autoscaling` container.
+To see what autoscale did, enable diagnostics: in the Azure portal open **Azure Virtual Desktop**, **Scaling plans**, select the plan, then **Diagnostic Settings** and **Add diagnostic setting**. Enter a name for the diagnostic setting, select **Autoscale logs** and choose **Archive to a storage account** or **Stream to an event hub**, and select **Save**. The storage account must be in the same region as the plan, and the logs appear in the `insight-logs-autoscaling` container. For pooled host pools, Learn recommends the autoscale data integrated with [Insights](/entity/avd-insights/) in Azure Virtual Desktop for a more complete view.
 
 ## Known limits
 
@@ -135,7 +140,7 @@ To see what autoscale did, enable diagnostics: in the Azure portal open **Azure 
 
 ## Sources
 
-Retrieved 2026-11-16.
+Retrieved 2026-11-17.
 
 - [Microsoft Learn: Create and assign an autoscale scaling plan for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)
 - [Microsoft Learn: Autoscale scaling plans and example scenarios for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)

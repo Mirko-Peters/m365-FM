@@ -1,0 +1,147 @@
+---
+title: "Azure Compute Gallery for AVD images: versions and replication"
+summary: "Azure Compute Gallery stores image definitions and numbered image versions and copies them to the regions where you deploy session hosts. This article explains the structure, version rules, replication settings, sharing and limits that matter for Azure Virtual Desktop."
+status: review
+publish: false
+author: mirko-p
+date: 2026-11-18
+topics: [azure-compute-gallery, azure-virtual-desktop]
+keypoints:
+  - "A gallery holds image definitions, and each definition holds image versions. You deploy from a version, never from the definition itself."
+  - "Versions are named major.minor.patch with integers. 'latest' resolves to the highest major, then minor, then patch, and 'exclude from latest' keeps a version out of that choice."
+  - "Each version is created in a source region, which must also be one of its target regions, and has a replica count per region. Learn recommends one replica for every 20 VMs created at the same time and at least three replicas for production images."
+  - "There is no charge for the gallery itself. You pay for the storage of each replica and for network egress when the first copy leaves the source region."
+  - "Session host configuration does not currently support a gallery image in a different subscription than the host pool."
+faq:
+  - q: "Do I need an Azure Compute Gallery to use a custom image in Azure Virtual Desktop?"
+    a: "No. Microsoft Learn says custom images can be stored in an Azure Compute Gallery, as a managed image, or both. The gallery adds management of region replication, versioning and sharing."
+  - q: "What happens when an image version reaches its end of life date?"
+    a: "Learn's image definition page says end-of-life dates are informational and users can still create VMs from versions past that date. To block deletion before end of life, the gallery page points to the BlockDeletionBeforeEndOfLife setting."
+  - q: "Does the version number have to follow a format?"
+    a: "Yes. Learn says the image version name must be in major.minor.patch format using integers, within the range of a 32-bit integer, and made of numbers and periods. Example: 1.0.0."
+---
+
+Azure Compute Gallery is the Azure resource that stores custom images as named, numbered versions and replicates them to the regions where you deploy. For Azure Virtual Desktop it is the usual place for a session host image: host pools can select a gallery image when you create or add session hosts. This article covers how the pieces fit, how versions and replication behave, and which limits and costs apply.
+
+The facts come from Microsoft Learn pages retrieved on 17 November 2026. For how a full image is built, tested, released and retired, see the sibling article "The golden image lifecycle: build, test, release, retire".
+
+## The three levels
+
+Learn's [Azure Compute Gallery overview](https://learn.microsoft.com/en-us/azure/virtual-machines/azure-compute-gallery) describes gallery, image definition and image version as resources, which means you can share each one with Azure RBAC roles.
+
+- **Gallery.** The container. Learn says gallery names can contain letters, digits, dots and underscores, but no dashes, and must be unique within the subscription ([create a gallery](https://learn.microsoft.com/en-us/azure/virtual-machines/create-gallery)).
+- **Image definition.** A logical grouping with identity and requirements. Publisher, offer and SKU are used in combination, and each definition needs a unique set of the three. Definitions also carry the operating system type, the OS state (generalized or specialized, required), the Hyper-V generation (default generation 1), an architecture, features such as hibernation support, and a security type such as Trusted Launch supported ([image definitions and versions](https://learn.microsoft.com/en-us/azure/virtual-machines/shared-image-galleries)).
+- **Image version.** The deployable copy. Learn says you do not deploy a VM from the definition but from the versions created from it.
+
+If you ever share a gallery as a community gallery, Learn warns that information from your image definitions, including Publisher, Offer and SKU, is publicly available, so keep sensitive names out of those fields ([share a community gallery](https://learn.microsoft.com/en-us/azure/virtual-machines/share-gallery-community)). The warning is written for community galleries, not for private ones.
+
+For Azure Virtual Desktop, the generation matters. The [custom image templates article](https://learn.microsoft.com/en-us/azure/virtual-desktop/create-custom-image-templates) says the generation of the source image must match the generation set in the image definition, and that you should not create an image version yourself at that stage, because Azure Virtual Desktop does it when the build runs. The [session host update article](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update) says the new image must be supported for Azure Virtual Desktop and for the generation of virtual machine.
+
+## Versions
+
+Learn says the version name must follow major.minor.patch with integers, and always uses that format. A version can come from a VM (generalized or specialized), a managed image, managed disks or snapshots, VHDs in a storage account, or another image version.
+
+Selection rules:
+
+- **latest.** When a deployment asks for latest, Azure chooses the highest major version, then minor, then patch.
+- **Exclude from latest.** You can set it per version and per region, and Learn says the regional flag takes precedence over the global one.
+- **End of life date.** The definition page says it is informational: users can still create VMs from older versions.
+- **Editable later.** Regional replica count, target regions, exclude from latest and the end-of-life date can be updated after creation.
+
+How to use these flags when you release and retire a build is covered in the sibling article on the golden image lifecycle.
+
+Pin a specific version in production host pools when you need repeatable builds. Use latest only where you accept that a newly published version is picked up by the next deployment. This is a practical suggestion, not a Learn rule. The session host update page does not say whether a latest reference is supported, so test it in a test host pool.
+
+## Replication
+
+Learn's [image version article](https://learn.microsoft.com/en-us/azure/virtual-machines/image-version) separates the region where you create the version from the target regions that receive copies. You need to replicate to the source region as well, so the first replica in the list is in the region where you created the image. The [gallery overview](https://learn.microsoft.com/en-us/azure/virtual-machines/azure-compute-gallery) says replication time depends on the amount of data copied and the number of regions, and can take a few hours in some cases. After replication completes in a region, you can deploy a VM or scale set from the version there.
+
+Replica settings:
+
+| Setting | What Learn says |
+|---|---|
+| Replica count | Set per region, or as a common count that regions inherit |
+| Maximum | 100 replicas per image version; 50 are described as sufficient for most uses; a separate note gives 50 per region |
+| Sizing rule | Keep one replica for every 20 VMs created concurrently |
+| Production images | Keep a minimum of three replicas |
+| Storage type | Standard LRS by default; Standard ZRS for regions with availability zones; the gallery page also mentions Premium LRS |
+| Shallow replication | Faster, but you cannot deploy a large number of VMs from that version |
+
+The gallery overview gives both numbers: a maximum of 100 replicas per image version, and, in its recommendations list, a maximum of 50 replicas per region. It does not reconcile them. As a suggestion, treat 50 per region as the working ceiling.
+
+For a pool of 200 session hosts deployed together, the one-replica-per-20 rule gives ten replicas in that region. Rolling out in smaller batches needs fewer. That arithmetic is an application of Learn's rule, not a limit.
+
+Learn also says the gallery service is not a global resource. For disaster recovery, it recommends at least two galleries in separate regions. Images cannot be replicated across clouds, and the gallery resource cannot be moved to another subscription.
+
+### Create a version with replication
+
+The image version article gives these portal steps once the image definition exists:
+
+1. On the definition's **Get started** tab, select **Create a version**.
+2. In **Region**, select the region where the image is created. If a source does not appear in later lists, try changing the region; you can replicate to other regions later.
+3. In **Version number**, enter a value such as 1.0.0, in major.minor.patch format with integers.
+4. Choose the source, then on the **Replication** tab select the storage type and set the **Default replica count**, which you can override per region.
+5. Add target regions, adjust their replica counts, then select **Review + create**.
+
+The Azure CLI reference for `az sig image-version create` shows the same settings in one command. Its example copies a version to several regions with per-region replica counts and storage types:
+
+```azurecli
+az sig image-version create --resource-group MyResourceGroup \
+--gallery-name MyGallery --gallery-image-definition MyImage \
+--gallery-image-version 1.0.0 --replica-count 1 \
+--storage-account-type Standard_ZRS --managed-image image-name \
+--target-regions eastus2 ukwest=3 southindia=standard_lrs \
+brazilsouth=2=standard_lrs
+```
+
+The reference says the home location of the image source must be in the list of target regions, and that the default replica count is 1 and the default storage type Standard LRS. The example uses a managed image as the source.
+
+## Sharing
+
+Learn recommends sharing at the gallery level and not sharing individual image versions. RBAC works for people, groups and service principals, including people outside the tenant. A direct shared gallery, which covers all users in a subscription or tenant, is labelled preview. It allows at most 30 subscriptions and 5 tenants, cannot contain encrypted image versions, and needs a gallery created with sharing permissions set to Groups. Community galleries publish images to all Azure customers, which Learn says calls for caution with intellectual property.
+
+Within Azure Virtual Desktop, one limit stands out. The session host update article says session host configurations do not currently support accessing a gallery image in a different subscription than the host pool. If you centralize images in a shared subscription, check whether your host pools use session host configuration.
+
+## Using gallery images in a host pool
+
+Gallery images appear in the host pool wizard. Under **Host pools**, the pool, **Session hosts**, **+ Add**, **Next: Virtual Machines**, the **Image** list includes images stored as an Azure Compute Gallery shared image or a managed image, and **See all images** shows more ([add session hosts](https://learn.microsoft.com/en-us/azure/virtual-desktop/add-session-hosts-host-pool)). This path applies to standard management. With a session host configuration the image is part of the configuration, which the sibling articles on session host configuration and on managing session host updates cover. If you build with custom image templates, the **Distribution targets** tab can write to a gallery, a managed image or both. For galleries you can set a version number, replicated regions, **Excluded from latest** and the storage account type. Leave the version blank and one is generated.
+
+## Gallery or managed image
+
+| Aspect | Azure Compute Gallery | Managed image |
+|---|---|---|
+| Regions | Replication managed per version | The Image Builder source managed image must be in the same subscription and region |
+| Hibernation | Definition can declare support | Not supported with hibernation |
+
+Learn's custom image templates page links managed images to a legacy managed image article. As a suggestion rather than a Learn rule, start a new image design with a gallery.
+
+## Costs and limits
+
+Learn says there is no extra charge for the gallery service. You pay for storage, billed on the occupied size of the image version times replicas times regions, and for egress when the first copy is replicated from the source region. Learn's example: a 127 GB OS disk occupying 10 GB, replicated to three regions with two replicas each, gives six snapshots of 10 GB.
+
+Limits per subscription and region: 100 galleries, 1,000 image definitions and 10,000 image versions. Images must be smaller than 2 TB, and shallow replication supports up to 32 TB.
+
+## A starting layout for AVD images
+
+1. Create the gallery, with a resource lock, and separate galleries for test and production, as Learn suggests.
+2. Create one image definition per OS and generation, with consistent publisher, offer and SKU.
+3. Replicate only to regions with session hosts, with replicas sized for your deployment batch.
+
+Staging a new version with exclude from latest, switching host pools and retiring old versions follow the release flow in the golden image lifecycle article.
+
+## Sources
+
+Retrieved 17 November 2026.
+
+- [Microsoft Learn: Azure Compute Gallery overview](https://learn.microsoft.com/en-us/azure/virtual-machines/azure-compute-gallery)
+- [Microsoft Learn: Store and share images in an Azure Compute Gallery (image definitions and versions)](https://learn.microsoft.com/en-us/azure/virtual-machines/shared-image-galleries)
+- [Microsoft Learn: Create an image definition and an image version](https://learn.microsoft.com/en-us/azure/virtual-machines/image-version)
+- [Microsoft Learn: Create an Azure Compute Gallery](https://learn.microsoft.com/en-us/azure/virtual-machines/create-gallery)
+- [Microsoft Learn: Share images using a community gallery](https://learn.microsoft.com/en-us/azure/virtual-machines/share-gallery-community)
+- [Microsoft Learn: az sig image-version](https://learn.microsoft.com/en-us/cli/azure/sig/image-version)
+- [Microsoft Learn: Create custom image templates and custom images in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/create-custom-image-templates)
+- [Microsoft Learn: Custom image templates in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/custom-image-templates)
+- [Microsoft Learn: Session host update in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update)
+- [Microsoft Learn: Add session hosts to a host pool](https://learn.microsoft.com/en-us/azure/virtual-desktop/add-session-hosts-host-pool)
+- [Microsoft Learn: Azure VM hibernation overview](https://learn.microsoft.com/en-us/azure/virtual-machines/hibernate-resume)
+- [Microsoft Learn: Azure VM Image Builder JSON template reference](https://learn.microsoft.com/en-us/azure/virtual-machines/linux/image-builder-json)

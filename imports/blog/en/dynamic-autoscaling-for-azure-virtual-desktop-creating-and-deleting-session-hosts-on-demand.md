@@ -1,124 +1,99 @@
 ---
 title: "Dynamic autoscaling for Azure Virtual Desktop: creating and deleting session hosts on demand"
-summary: "Dynamic autoscaling is the Azure Virtual Desktop scaling method that, besides powering session hosts on and off, creates and deletes them. It works only for pooled host pools with a session host configuration, and Microsoft Learn labels its status inconsistently, so check the current page before you rely on it."
+summary: "Dynamic autoscaling starts existing session hosts while the number needed stays within the minimum host pool size, and creates additional ones once more are needed, up to the maximum. This article covers when it creates, when it only starts and when it deletes, and where Microsoft Learn stays silent."
 status: review
 publish: false
 author: mirko-p
-date: 2026-11-17
+date: 2026-11-18
 topics: [avd-dynamic-autoscaling, avd-scaling-plan]
 keypoints:
-  - "Dynamic autoscaling powers session hosts on and off and also creates and deletes them. Power management autoscaling only deallocates and starts them."
-  - "It requires a pooled host pool with a session host configuration, a custom maximum session limit and two roles assigned at subscription level."
-  - "The consolidation maths is the same for both methods: required hosts = sessions / (maximum session limit x capacity threshold), rounded up."
-  - "Microsoft Learn still marks dynamic autoscaling as preview on some pages, while the June 2026 What's new entry says it is available without a label. Verify the status before you plan a rollout."
-  - "Hosts with an ephemeral OS disk cannot be deallocated, so Learn recommends a minimum percentage of active hosts of 100% in every phase."
+  - "When the number of hosts needed is not larger than the minimum host pool size, autoscale only turns hosts on. When it is larger, autoscale turns on stopped hosts and creates additional ones, up to the maximum host pool size."
+  - "Two settings steer the mix: the same minimum and maximum host pool size means only start and deallocate, and a minimum percentage of active hosts of 100 means only create and delete."
+  - "If the host count exceeds the phase's maximum, which can happen when the maximum differs per phase, autoscale deletes active deallocated hosts without sessions and then continues to delete or deallocate by schedule and capacity threshold, except in the ramp-up phase."
+  - "New hosts get the latest valid and stable image version of the default session host configuration."
+  - "Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, in July 2026. Some Learn pages still carry preview wording; check the current page before relying on a limit."
 faq:
-  - q: "Is dynamic autoscaling generally available?"
-    a: "The Learn pages do not agree. The What's new page announced it as preview in November 2024 and says in June 2026 that it is now available, without the words generally available. The autoscale scenarios, glossary and troubleshooting pages call it preview, no Learn page calls it generally available, and the PowerShell instructions use a preview module of Az.DesktopVirtualization. Treat the status as unconfirmed and check the pages again before a production rollout."
-  - q: "Can I use dynamic autoscaling on any host pool?"
-    a: "No. Microsoft Learn says it can only be assigned to pooled host pools with a session host configuration. For a standard host pool without session host configuration, use the power management scaling method. The approach is set when the host pool is created and cannot be changed later."
-  - q: "Can I combine dynamic autoscaling with another scaling script?"
-    a: "No. Learn says you cannot use dynamic scaling with any other scaling script on the same host pool, and names scaling with Azure Automation and Azure Logic Apps as an example. Use one method or the other."
+  - q: "When does autoscale create a host instead of just starting one?"
+    a: "The autoscale FAQ ties it to the minimum host pool size. If the number of hosts needed is not larger than the minimum, autoscale turns on session hosts when used capacity exceeds the capacity threshold. If it is larger, autoscale turns on stopped hosts and creates additional ones. Active hosts do not exceed the maximum host pool size."
+  - q: "How do I make dynamic autoscaling only start and deallocate, or only create and delete?"
+    a: "For start and deallocate only, set the same value for minimum and maximum host pool size, or choose power management autoscaling. For create and delete only, set the minimum percentage of active hosts to 100."
+  - q: "Can I still create and delete session hosts manually?"
+    a: "The FAQ says yes. When autoscale deletes a host that you created manually, it honors your settings for whether to delete the network interface and the disk automatically."
 ---
 
-Dynamic autoscaling is a scaling method for [Azure Virtual Desktop](/entity/azure-virtual-desktop/) that adjusts capacity in two ways: it powers session hosts on and off, and it creates and deletes session hosts. It works only for pooled host pools that use a session host configuration. Microsoft Learn labels its release status inconsistently, so the status section below shows what each page says.
+Dynamic autoscaling for [Azure Virtual Desktop](/entity/azure-virtual-desktop/) decides between three actions. Per the Learn FAQ, it only turns hosts on while the number of hosts needed is not larger than the minimum host pool size, turns on stopped hosts and creates additional ones when more are needed, and deletes hosts when the pool exceeds the maximum or when it scales in. It works only for pooled host pools with a session host configuration, and Microsoft announced its general availability in July 2026, although some Learn pages still carry preview wording.
 
-This article covers what the method does, how hosts are created and deleted, and how the schedule parameters interact. It is based on Microsoft Learn pages retrieved on 2026-11-16. It does not cover the creation of a session host configuration itself.
+This article is about that decision. The status details, requirements and network rules are in the article "Requirements and limits of dynamic autoscaling in Azure Virtual Desktop", the phases in the article about the four autoscale phases, and the contrast with the older method in "Power management autoscaling vs dynamic autoscaling". All pages cited here were retrieved on 17 November 2026.
 
-## What dynamic autoscaling does
+## What the method adds
 
-Microsoft Learn defines [dynamic autoscaling](/entity/avd-dynamic-autoscaling/) as a scaling method that "powers on and off session hosts and creates and deletes session hosts to adjust to the available capacity in a host pool." The alternative is [power management autoscaling](/entity/avd-power-management-autoscaling/), which only powers hosts on and off and is the option for host pools with standard management.
+Learn defines [dynamic autoscaling](/entity/avd-dynamic-autoscaling/) as a method that "powers on and off session hosts and creates and deletes session hosts to adjust to the available capacity in a host pool". [Power management autoscaling](/entity/avd-power-management-autoscaling/) only powers hosts on and off. The consolidation calculation and the forced sign-out behavior are identical; the final scale-in action is "deallocates or deletes the VM" instead of only deallocating it.
 
-In the Learn scenarios, the consolidation calculation and the forced sign-out behavior are identical for both methods. The only difference is that power management deallocates a session host, while dynamic autoscaling can delete it.
+Status in one line: Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit.
 
-Both methods are configured in a [scaling plan](/entity/avd-scaling-plan/). A plan can only be assigned to host pools of the host pool type set in the plan, and a host pool can have only one scaling plan. For pooled host pools, autoscale also overwrites [drain mode](/entity/avd-drain-mode/) and ignores the load-balancing algorithm in the host pool settings.
+## When autoscale starts, creates or deletes
 
-## Status: preview or available?
+The FAQ section "Dynamic scaling" answers this directly. You define the minimum host pool size, the maximum host pool size and the minimum percentage of active hosts in each phase, and you do not choose between turning on and creating. Autoscale decides:
 
-Learn does not use one label across pages:
-
-- The scenarios, glossary and troubleshooting pages label it "Dynamic Autoscaling (preview)", while power management autoscaling is listed as generally available.
-- What's new lists "Dynamic autoscaling for Azure Virtual Desktop is now in preview" in November 2024.
-- What's new says in June 2026 that dynamic autoscaling "is now available for pooled host pools with session host configuration." That entry has no generally available label and does not mention preview.
-- The create-and-assign page requires the `Az.DesktopVirtualization` module in version 5.4.2-preview or a later preview version for PowerShell.
-
-No Learn page calls dynamic autoscaling generally available. Before a production rollout, check the current pages and your support terms.
-
-## Requirements in short
-
-Learn lists these conditions for assigning a dynamic scaling plan. The full list is in the article "Requirements and limits of dynamic autoscaling in Azure Virtual Desktop".
-
-- **Host pool.** Pooled, with a [session host configuration](/entity/avd-session-host-configuration/). The management approach is set when the host pool is created and cannot be changed later. A host pool created without a session host configuration cannot get one afterwards.
-- **Maximum session limit.** A custom [maximum session limit](/entity/avd-maximum-session-limit/) for load balancing. Learn says not to use the default value.
-- **Cloud and region.** Azure only, not Azure Government. Scaling plan configuration data must be in the same region as the host pool configuration.
-- **Roles.** Desktop Virtualization Power On Off Contributor and Desktop Virtualization Virtual Machine Contributor, with the subscription as scope. Learn warns that a lower scope, such as a resource group, host pool or VM, prevents autoscale from working properly. Assigning them needs `Microsoft.Authorization/roleAssignments/write`.
-- **No other scaling tool.** Learn says dynamic scaling cannot be used with any other scaling script on the same host pool.
-
-The What's new page also describes a [managed identity](/entity/avd-managed-identity/) requirement for host pools with a session host configuration. Its September 2025 entry gives an estimated progression: from September 19, 2025, new host pools created in the Azure portal need a managed identity; from October 15, 2025, existing host pools cannot update the configuration without one; from November 15, 2025, they cannot create session hosts without one. The September 2026 entry says managed identity support is now generally available and that the requirement for adding session hosts will apply "in a future service update", without a date. The two entries do not fit together cleanly, so check the page for the current state.
-
-## How hosts are created and deleted
-
-Creating and deleting hosts is what power management autoscaling does not do. What Learn documents:
-
-- What's new describes the purpose as schedules that "dynamically create and delete session host virtual machines based on usage patterns".
-- Hosts in a pool with a session host configuration are managed by the Azure Virtual Desktop service. Tools built for standard management cannot create, update or scale them.
-- The two roles allow Azure Virtual Desktop to "create, delete, update, start, and stop any session hosts in those subscriptions".
-- When autoscale creates a host, it deploys the Azure Virtual Desktop agent from the endpoint `wvdhpustgr0prod.blob.core.windows.net`. Hosts that cannot reach it fail with `CustomerVmNoAccessToDeploymentPackageException`, so open that endpoint on firewalls and proxies.
-- At the end of a scale-in with forced sign-out, autoscale "deallocates or deletes the VM" after signing users out.
-- For every pool with a session host configuration, What's new (June 2025) says session host creation retries automatically after transient errors, Log Analytics for the host pool includes session host creation activity, and increasing the host pool size through the API or a custom ARM template makes the service create new session hosts.
-
-The scenario examples below say "turn on" and show only the threshold logic, not a host being created. The final action of a scale-in is the difference: power management deallocates, dynamic autoscaling "deallocates or deletes".
-
-## Create a plan in the Azure portal
-
-In the Azure portal, open **Azure Virtual Desktop**, select **Scaling Plans** and then **Create**. On **Basics**, set the host pool type to **Pooled** and the scaling method to **Dynamic autoscaling**. An optional exclusion tag such as `excludeFromScaling` is entered there too. Add a schedule with the General, Ramp up, Peak hours, Ramp-down and Off-peak hours tabs, assign the pooled host pools with session host configuration, then select **Review + create**.
-
-Changes to a plan that is already assigned take effect immediately.
-
-## How the schedule parameters work
-
-A schedule has four [phases](/entity/avd-autoscale-schedule-phases/): ramp-up, peak hours, ramp-down and off-peak hours. Learn describes these parameters on the General tab:
-
-| Parameter | Meaning |
+| Situation | What autoscale does |
 |---|---|
-| Minimum percentage of active hosts | Minimum share of running hosts, based on the minimum host pool size. Learn's example: 10% with a minimum pool size of 10 keeps one host available. |
-| Minimum host pool size | Number of session hosts that are always part of the pool. They can be running or stopped. |
-| Maximum host pool size | Maximum number of running session hosts. |
+| Hosts needed are not larger than the minimum host pool size | Turns on session hosts if used capacity exceeds the capacity threshold |
+| Hosts needed are larger than the minimum host pool size | Turns on the stopped hosts and creates additional ones |
+| Active hosts would exceed the maximum host pool size | Keeps the total at the maximum, as long as used capacity exceeds the capacity threshold |
+| Host count is above the current phase's maximum | Deletes active deallocated hosts that have no sessions, then continues by schedule and capacity threshold, except in ramp-up |
+| Scale-in during ramp-down with forced sign-out | Signs users out after the wait time, then deallocates or deletes the VM |
 
-The [capacity threshold](/entity/avd-capacity-threshold/) is set on the ramp-up tab and carried into peak hours. The ramp-down value carries into off-peak hours. Learn's example: a threshold of 60% with 100 total sessions of capacity triggers scale-out once more than 60 sessions are in use. The [minimum percentage of hosts](/entity/avd-minimum-percentage-of-hosts/) in ramp-up carries into peak hours. On unselected days the last off-peak parameters stay in effect until the next ramp-up, so Friday's off-peak settings apply until Monday's ramp-up.
+Three more rules from the FAQ and the scaling plan page:
 
-## The consolidation maths
+- **New hosts.** Autoscale creates hosts with the latest valid and stable image version defined in the default session host configuration, if you do not already have an active session host configuration.
+- **Minimum overrides.** The minimum host pool size overrides the number of session hosts you defined in the host pool. The scaling plan page describes it as the number of hosts that are always part of the pool, running or stopped.
+- **Maximum per phase.** The maximum can differ per phase, so a pool can exceed the maximum when a new phase starts. Autoscale then deletes active deallocated hosts without sessions to honor the current phase's maximum, and afterwards continues to delete or deallocate by schedule and capacity threshold, except in the ramp-up phase. The FAQ adds that this matches power management autoscaling, where pooled hosts are not deallocated in ramp-up.
 
-The glossary gives the formula for both methods: required hosts = total user sessions / (maximum session limit x capacity threshold), rounded up. Active and disconnected sessions both count.
+## Worked illustration
 
-Worked example from the glossary: 8 disconnected users, a maximum session limit of 10 and a capacity threshold of 80%. That gives 8 / (10 x 0.8) = 1, so one host stays. To reach zero hosts, there must be zero sessions, including disconnected ones. The glossary suggests a Group Policy setting that signs out disconnected sessions automatically.
+This example is an illustration, not a Learn scenario. The glossary defines the formula required hosts = total sessions / (maximum session limit x capacity threshold), rounded up, for session consolidation in ramp-down and off-peak. Learn does not say that the FAQ's "number of session hosts needed" is calculated the same way in other phases, so the numbers below rest on that assumption.
 
-The scenarios page adds a scale-out example with 6 hosts, breadth-first load balancing, a 30% threshold, a 30% minimum percentage and a maximum session limit of 5:
+Setup: maximum session limit 5, capacity threshold 80%, minimum host pool size 4, maximum host pool size 10. One host handles 5 x 0.8 = 4 sessions before the threshold is reached.
 
-- The pool starts with 2 running hosts, because 30% of 6 rounds up to 2.
-- With 3 sessions on 2 hosts, usage is 30%. That is not greater than the threshold, so nothing is turned on.
-- With 4 sessions, usage is 40%. A third host is started, capacity rises to 15 and usage falls to 27%.
+- 14 sessions: 14 / 4 = 3.5, rounded up to 4. This is not larger than the minimum of 4, so autoscale starts stopped hosts and does not create any.
+- 22 sessions: 22 / 4 = 5.5, rounded up to 6. This is larger than the minimum, so autoscale turns on the stopped hosts and creates additional ones.
+- 50 sessions: 50 / 4 = 12.5, rounded up to 13. The total number of active hosts stays at the maximum of 10 as long as used capacity exceeds the threshold. Learn does not say what users experience when more hosts would be needed than the maximum allows.
 
-For scale-in during ramp-down, Learn's example uses depth-first, a 75% threshold and a 10% minimum. With 4 sessions on 2 running hosts and a maximum session limit of 5, capacity is 10 and usage is 40%. This is a later step of the scenario, and autoscale does not turn off another host there. Learn states why: turning off one more host would leave one host with a capacity of 5, and 4 users would make 80% used capacity, above the 75% threshold. Autoscale only removes or stops a host when all existing sessions can fit on the remaining hosts without exceeding the threshold.
+## Steering the mix
 
-## Scale-in, forced sign-out and the exclusion tag
+Two levers come from the FAQ:
 
-During ramp-down with **Force logoff users** enabled, autoscale picks the host with the fewest sessions, active and disconnected, puts it in [drain mode](/entity/avd-drain-mode/), notifies users, signs them out after the wait time, and then deallocates or deletes the VM. [Forced sign-out](/entity/avd-force-logoff/) ends the user sessions once the wait time is over. Without forced sign-out, you choose between the conditions **VMs have no active or disconnected sessions** and **VMs have no active sessions**.
+1. **Only start and deallocate.** Choose power management autoscaling when you create the plan, or use dynamic autoscaling and set the same value for minimum and maximum host pool size.
+2. **Only create and delete.** Set the minimum percentage of active hosts to 100. Autoscale then creates or deletes hosts only if used capacity exceeds or drops below the capacity threshold. Learn recommends exactly this for hosts with ephemeral OS disks, which cannot be deallocated.
 
-Hosts that carry the [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) are left alone for start, stop and drain-mode changes, but they still count toward the minimum percentage of hosts. In Learn's scenario, five of six hosts carry the tag and the pool cannot grow when 4 sessions on the single running host push usage to 80%.
+What the sources do not state is which individual hosts autoscale deletes on scale-in, as opposed to deallocates, when both are possible. The final action is only described as "deallocates or deletes". Test with a small pool before you rely on a particular outcome.
 
-## Ephemeral OS disks
+## Scale-in and the exclusion tag
 
-Hosts that use [ephemeral OS disks](/entity/avd-ephemeral-os-disks/) cannot be deallocated, only restarted, reimaged or deleted. Learn therefore recommends dynamic autoscaling for these host pools and a **Minimum percentage of active hosts** of 100% in every phase. With that value, scaling only creates and deletes hosts and never tries to start or deallocate them. Ephemeral OS disks are supported only in pooled host pools with a session host configuration. The same Learn page frames further limits as applying "during preview": no NVMe or premium SSD, only Standard SSD as OS disk type, and no Azure Government.
+During ramp-down with **Force logoff users** enabled, autoscale picks the host with the fewest sessions, active and disconnected, puts it in [drain mode](/entity/avd-drain-mode/), notifies users, signs them out after the wait time and then deallocates or deletes the VM. [Forced sign-out](/entity/avd-force-logoff/) only works in ramp-down. Without it, you choose between the conditions **VMs have no active or disconnected sessions** and **VMs have no active sessions**. The phase article in this series walks through Learn's consolidation example with numbers, and it applies unchanged here.
 
-## Open points
+Hosts with the [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) are not turned on, turned off or changed in drain mode, and they still count toward the minimum percentage of hosts. Learn describes the tag only in those terms. It does not say whether autoscale can delete a tagged host, so do not assume either way.
 
-The Learn pages retrieved do not explain how long session host creation takes, how deleted hosts are cleaned up beyond the VM, or which diagnostic tables record creation failures. What's new says only that Log Analytics for the host pool includes session host creation activity. The troubleshooting page points to separate pages on autoscale diagnostics and monitoring, which were not read for this article.
+## Manual hosts, ephemeral disks and managed identity
+
+- **Manual hosts.** The FAQ says you can still create and delete session hosts manually. For a host you created manually that autoscale later deletes, your NIC and disk deletion settings are honored. Learn's management approaches page adds that, with a session host configuration, you cannot create, update or scale hosts outside the service using tools designed for standard management.
+- **Ephemeral OS disks.** These hosts can be restarted, reimaged or deleted but not deallocated, and are supported only in pooled host pools with a session host configuration. Ephemeral OS disks are part of the July 2026 general availability announcement, and the June 2026 What's new entry says they are "now available". As of the Learn page, which still carries preview wording, there is no support for NVMe and premium SSD, only Standard SSD, and no Azure Government. Those limits may be out of date, so check the page. See [ephemeral OS disks](/entity/avd-ephemeral-os-disks/).
+- **Managed identity.** What's new (September 2025) lists staged dates for [managed identity](/entity/avd-managed-identity/) on host pools with a session host configuration: from 19 September 2025 new portal-created pools need one, from 15 October 2025 existing pools cannot update the configuration without one, and from 15 November 2025 they cannot create session hosts without one. The September 2026 entry says that in a future service update such pools "will require a managed identity" to add session hosts, without a date. Details are in the requirements article.
+
+## Where creation is documented
+
+What's new (June 2025) says session host creation retries automatically after transient errors and that Log Analytics for the host pool includes session host creation activity. Hosts that autoscale creates need access to `wvdhpustgr0prod.blob.core.windows.net` to deploy the agent, according to the scaling plan page. The requirements article lists the other roles, scope and network rules.
+
+## Monitoring and open points
+
+Autoscale evaluations for pooled host pools are written to the `WVDAutoscaleEvaluationPooled` table. If a result is Failed, join to `WVDErrors` on `CorrelationId` for details. The example query on the monitoring page counts only start, deallocate and force sign-out attempts, not creations or deletions, and the diagnostics page shows a single example log entry, `HostPoolLoadBalancerTypeUpdated`. Neither page says where creation or deletion failures appear, how long creating a host takes, or whether a tagged host can be deleted.
 
 ## Sources
 
-Retrieved on 2026-11-16.
+Retrieved on 17 November 2026.
 
+- [Microsoft Tech Community: Enhanced host pool management for Azure Virtual Desktop is now generally available (9 July 2026)](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)
+- [Microsoft Learn: Azure Virtual Desktop autoscale FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq)
 - [Microsoft Learn: Create and assign an autoscale scaling plan for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)
 - [Microsoft Learn: Autoscale scaling plans and example scenarios in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)
 - [Microsoft Learn: Azure Virtual Desktop autoscale glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary)
@@ -126,3 +101,5 @@ Retrieved on 2026-11-16.
 - [Microsoft Learn: What's new in Azure Virtual Desktop?](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
 - [Microsoft Learn: Troubleshoot autoscale issues in Azure Virtual Desktop](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-autoscale)
 - [Microsoft Learn: Ephemeral OS disks on Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy/session-hosts/ephemeral-os-disks)
+- [Microsoft Learn: Autoscale monitoring and operations insights](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-monitor-operations-insights)
+- [Microsoft Learn: Autoscale diagnostics](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-diagnostics)
