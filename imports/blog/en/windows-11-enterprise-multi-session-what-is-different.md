@@ -1,6 +1,6 @@
 ---
 title: "Windows 11 Enterprise multi-session: what is different"
-summary: "Windows 11 Enterprise multi-session allows several users to sign in at the same time on one VM, but it runs only in Azure Virtual Desktop, only in pooled host pools, and is managed and patched differently from Windows 11 Enterprise. This article lists the differences an admin meets when moving a single-session image or a policy set to it."
+summary: "Windows 11 Enterprise multi-session allows several users to sign in at the same time on one VM. It may be used in production only in Azure Virtual Desktop, Learn marks it as not supported in personal host pools, and it is managed and serviced differently from Windows 11 Enterprise. This article lists the differences an admin meets when moving a single-session image or a policy set to it."
 status: review
 publish: false
 author: mirko-p
@@ -14,22 +14,22 @@ keypoints:
   - "Patching differs. Learn recommends session host update or Azure Compute Gallery images and marks Windows Update as not recommended, Windows Autopatch as not supported, and hotpatch as not supported."
 faq:
   - q: "Is Windows 11 Enterprise multi-session licensed differently from Windows 11 Enterprise?"
-    a: "Not according to Learn's prerequisites page, which lists Windows 11 Enterprise multi-session and Windows 11 Enterprise in the same row with the same internal-use licenses: Microsoft 365 E3, E5, A3, A5, F3, Business Premium and Student Use Benefit, Windows Enterprise E3 and E5, Windows Education A3 and A5, and Windows VDA per user. External commercial use goes through per-user access pricing. Check the current page and Azure Virtual Desktop pricing before you buy."
+    a: "Not according to Learn's prerequisites page, which lists Windows 11 Enterprise multi-session and Windows 11 Enterprise in the same row with the same internal-use licensing methods, for example Microsoft 365 E3 and E5 and Windows VDA per user. External commercial use goes through per-user access pricing. Check the current page and Azure Virtual Desktop pricing before you buy."
   - q: "Can I use multi-session in a personal host pool?"
     a: "Learn's update management page marks Windows client multi-session as not supported in personal host pools and supported in pooled ones. Learn also says pooled pools with Windows client Enterprise are not recommended and describes that case as session density set to 1."
   - q: "Can I run Windows Enterprise multi-session on my own hardware or in another cloud?"
     a: "Not for production. Learn's FAQ says customers may not run Windows Enterprise multi-session in production outside the Azure Virtual Desktop service, that Microsoft or its approved providers, Citrix and Omnissa, provide access to that service, and that it also does not activate against on-premises Key Management Services."
 ---
 
-Windows 11 Enterprise multi-session differs from Windows 11 Enterprise in five ways that matter to an administrator: it allows multiple users to be signed in at once, it is available only through Azure Virtual Desktop and only as a pooled session host, it reports itself as a server-class product type, it is managed through a narrower Intune feature set, and it is serviced by replacing images rather than patching in place. Everything else, from the Windows 11 user interface to the per-user licensing, looks the same. This article lists the differences one by one so you can check an existing image, policy set or process before you move it.
+Windows 11 Enterprise multi-session differs from Windows 11 Enterprise in several ways that matter to an administrator: it allows multiple users to be signed in at once, it may be used in production only through Azure Virtual Desktop and is intended for pooled session hosts, it reports itself as a server-class product type, it is managed through a narrower Intune feature set, and Learn recommends servicing it by replacing images rather than patching in place. Learn describes the user experience as a familiar Windows experience, and the licensing row is the same as for Windows 11 Enterprise. This article lists the differences one by one so you can check an existing image, policy set or process before you move it.
 
-Learn's Windows Enterprise multi-session FAQ, which covers Windows 10 and Windows 11 together, describes it as a virtual edition of Windows Enterprise that allows multiple concurrent interactive sessions, something that previously only Windows Server could do. The sources for this article are the Learn pages listed at the end, all retrieved on 17 November 2026.
+Learn's Windows Enterprise multi-session FAQ, which covers Windows 10 and Windows 11 together, describes it as a virtual edition of Windows Enterprise that allows multiple concurrent interactive sessions, something that previously only Windows Server could do.
 
 ## Where it can run
 
-**Only in Azure Virtual Desktop.** Learn's FAQ says it does not allow Windows Enterprise multi-session in production environments outside the Azure Virtual Desktop service. Only Microsoft or the Azure Virtual Desktop approved providers, Citrix and Omnissa, can provide access to the service. It is against the licensing agreement to run it outside for production, and it does not activate against on-premises KMS.
+**Production use only in Azure Virtual Desktop.** Learn's FAQ says it does not allow Windows Enterprise multi-session in production environments outside the Azure Virtual Desktop service. Only Microsoft or the Azure Virtual Desktop approved providers, Citrix and Omnissa, can provide access to the service. Running it outside the service for production is against the licensing agreement, and it does not activate against on-premises KMS.
 
-**Only in pooled host pools.** Learn's update management page has a table of supported session host operating systems by host pool type. For Windows client multi-session it shows personal host pools as Not supported and pooled host pools as Supported. For Windows client Enterprise (single-session) it shows personal as Supported and pooled as Not recommended, with a footnote that this means session density set to 1. So the usual split is multi-session for [pooled](/entity/avd-pooled-host-pool/) and single-session Enterprise for [personal](/entity/avd-personal-host-pool/) host pools.
+**Pooled, not personal host pools.** Learn's update management page has a table of session host operating systems by host pool type. For Windows client multi-session it shows personal host pools as Not supported, a marker the page defines as should not be used for, or not applicable to, this operating system, and pooled host pools as Supported. Our reading is that multi-session is intended for pooled pools; Learn's FAQ describes the familiar Windows experience for session hosts in a pooled host pool. For Windows client Enterprise (single-session) it shows personal as Supported and pooled as Not recommended, with a footnote that this means session density set to 1. So the usual split is multi-session for [pooled](/entity/avd-pooled-host-pool/) and single-session Enterprise for [personal](/entity/avd-personal-host-pool/) host pools.
 
 **Not as a converted VM.** Learn's FAQ says you cannot upgrade an existing Windows Professional or Enterprise VM to multi-session. If you deploy a multi-session VM and then change the product key to another edition, you cannot switch back and must redeploy. Changing the Azure Virtual Desktop VM SKU to another edition is not supported. For an existing fleet the route is a new image and new VMs.
 
@@ -43,7 +43,7 @@ How many users fit on one VM is not fixed by the edition. Learn says the number 
 
 ## What is the same: licensing
 
-It is easy to assume the multi-session edition needs different licenses. Learn's prerequisites page lists Windows 11 Enterprise multi-session and Windows 11 Enterprise in one row, with the same internal-use licensing methods: Microsoft 365 E3, E5, A3, A5, F3, Business Premium and Student Use Benefit; Windows Enterprise E3 and E5; Windows Education A3 and A5; and Windows VDA per user. For external commercial use the same row points to per-user access pricing. The FAQ adds that multi-session lets IT use existing per-user Windows licensing instead of RDS Client Access Licenses. Windows Server session hosts are listed in separate rows of that table, and our licensing article covers the cases in detail.
+It is easy to assume the multi-session edition needs different licenses. Learn's prerequisites page lists Windows 11 Enterprise multi-session and Windows 11 Enterprise in one row with the same licensing methods, and the FAQ adds that multi-session lets IT use existing per-user Windows licensing instead of RDS Client Access Licenses. Windows Server session hosts sit in separate rows. The full list of qualifying licenses and the external-use rules are in our article on Azure Virtual Desktop licensing.
 
 ## Profiles and apps
 
@@ -59,24 +59,19 @@ To customize, Learn recommends custom image templates. Alternatively create an A
 
 ## Management with Intune
 
-Learn's Intune page describes Intune management of multi-session VMs as generally available, with device-based configuration for devices and user-based configuration for users. The VMs must be in pooled host pools deployed through Azure Resource Manager, in the same tenant, running AVD agent 1.0.2944.1400 or later, and either Microsoft Entra hybrid joined (with device-credential enrollment or co-management) or Microsoft Entra joined and enrolled. Learn calls the edition "a separate OS edition" for which some Windows Enterprise configurations are not supported. The main differences from Windows 11 Enterprise:
+Learn's Intune page describes Intune management of multi-session VMs as generally available. The VMs must be in pooled host pools deployed through Azure Resource Manager, in the same tenant as Intune, running AVD agent 1.0.2944.1400 or later, and either Microsoft Entra hybrid joined or Microsoft Entra joined and enrolled. Learn calls the edition a separate OS edition for which some Windows Enterprise configurations are not supported. The differences you meet first:
 
-| Area | Multi-session, per Learn |
-|---|---|
-| Profile types | Settings catalog; only the trusted certificate, SCEP, PKCS and VPN (device tunnel only) templates are supported. Unsupported templates show as Not applicable. |
-| Compliance | A defined list is supported (for example minimum and maximum OS version, password settings, firewall, antivirus, Defender risk score); everything else reports Not applicable. Target compliance policies to devices; user-targeted compliance is not supported. |
-| Apps | System-context apps targeted to devices, with **Required** or **Uninstall** intent. **Available** intent is not supported. RemoteApp and MSIX app attach are not supported in Intune. |
-| Updates | Windows update ring policies are not supported; quality update settings come from the Settings catalog. |
-| Enrollment | Autopilot, Commercial OOBE and the enrollment status page are not supported. |
-| Remote actions | Autopilot reset, BitLocker key rotation, Fresh Start, Remote lock, Reset password and Wipe are not supported. |
+- **Profiles:** use the Settings catalog. Of the templates, only trusted certificate, SCEP, PKCS and VPN (device tunnel only) are supported; other templates show as Not applicable.
+- **Compliance and apps:** only a defined list of compliance settings is supported, and compliance policies must target devices. Apps must install in the system context, be targeted to devices, and use **Required** or **Uninstall** intent; **Available** is not supported.
+- **Updates and enrollment:** Windows update ring policies, Autopilot, Commercial OOBE and the enrollment status page are not supported.
 
-Learn's FAQ also names Configuration Manager 1906 as a recommended management tool for multi-session. Our article on managing session hosts with [Intune](/entity/intune/) covers these limits in more depth.
+Three limits matter most when you build images. Learn says Intune does not support a cloned image of a computer that is already enrolled; replicated enrollment or identity tokens cause enrollment or synchronization failures, and Learn's troubleshooting link names error 0x8007064c, the machine is already enrolled. Intune also does not support token roaming between devices, so if FSLogix is used you must make sure tokens are not roamed or duplicated, and Learn points to the FSLogix RoamIdentity setting. Finally, session hosts joined to Microsoft Entra Domain Services cannot be managed with Intune. Learn's FAQ also names Configuration Manager 1906 as a recommended management tool for multi-session. Our article on managing session hosts with [Intune](/entity/intune/) covers compliance, apps, update rings and remote actions in full.
 
 ## Servicing
 
-Servicing is where a single-session habit hurts most. Learn's update management page gives these markers for monthly updates on Windows client multi-session: Windows Update Not recommended, [Windows Autopatch](/entity/windows-autopatch/) Not supported, Configuration Manager Supported, session host update Recommended, and [Azure Compute Gallery](/entity/azure-compute-gallery/) Recommended. For Windows client Enterprise, Windows Update and Autopatch are Recommended. Hotpatching, which applies eligible updates without a reboot, is listed as supported on Windows 11 Enterprise, version 24H2 or later with virtualization-based security, and Not supported on multi-session.
+Servicing is where a single-session habit hurts most. Learn's update management page marks Windows Update as Not recommended for monthly updates on multi-session, [Windows Autopatch](/entity/windows-autopatch/) as Not supported, Configuration Manager as Supported, and session host update and [Azure Compute Gallery](/entity/azure-compute-gallery/) as Recommended. For Windows client Enterprise, Windows Update and Autopatch are Recommended. Learn recommends image-based servicing through session host update for pooled environments, citing consistent host configuration, easier rollback and less impact on active sessions, and notes that user data and local storage are not saved when a host is updated this way. Our article on Windows Update strategies for session hosts covers the full marker tables.
 
-Feature updates follow the same pattern. Windows Update is Not recommended and Autopatch Not supported for multi-session, with session host update and Azure Compute Gallery Recommended. For feature updates through WSUS the page says Not recommended, while the multi-session FAQ says the OS can receive feature updates published to WSUS as long as the VM meets the Windows 11 hardware requirements, so read WSUS as possible but not preferred. In-place upgrades, for example Windows 10 to 11, are not supported for pooled session hosts; Learn recommends new VMs from a new image, using session host update for multi-session. Session host update needs a host pool with a session host configuration. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit.
+Hotpatching, which applies eligible updates without a reboot, is supported on Windows 11 Enterprise, version 24H2 or later, with virtualization-based security enabled and updates managed through Windows Autopatch and Microsoft Intune. Learn lists it as Not supported on multi-session. For feature updates through WSUS the page says Not recommended, while the multi-session FAQ says the OS can receive feature updates published to WSUS as long as the VM meets the Windows 11 hardware requirements, so read WSUS as possible but not preferred. In-place upgrades, for example Windows 10 to 11, are not supported for pooled session hosts; Learn recommends new VMs from a new image, using session host update for multi-session. Session host update needs a host pool with a session host configuration. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit.
 
 ## A checklist before you move
 
@@ -84,8 +79,8 @@ Feature updates follow the same pattern. Windows Update is Not recommended and A
 2. Do all applications install on a ProductType 3 system, and none rely on Remote Desktop IP Virtualization?
 3. Is the profile in FSLogix, and are apps provisioned for all users rather than installed per profile?
 4. Are your Intune profiles settings-catalog based, and are apps targeted to devices with Required intent?
-5. Is there an image-based process for monthly updates, instead of Windows Update rings?
-6. Is every license already covered, and is every user within Azure Virtual Desktop?
+5. Is there an image-based process for monthly updates, instead of Windows Update rings, and are images built without cloning an already enrolled machine?
+6. Is every license already covered, and does every user connect through the Azure Virtual Desktop service?
 
 ## Sources
 
