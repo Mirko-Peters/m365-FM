@@ -96,11 +96,11 @@ With dynamic autoscaling a host can be deleted instead of deallocated. Learn's [
 
 Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit.
 
-Three things set the compute bill: how many hosts run, for how many hours, and the VM size. In outline, monthly compute is VM-hours multiplied by the hourly rate, plus disks, profile storage and licences. Learn's service limits page points to the Azure pricing calculator for the rate and says to add Azure Virtual Desktop within the Compute section. Learn's sizing page says conserving resources makes a deployment "less expensive", which is the argument for smaller VMs that can be switched off.
+Three things set the compute bill: how many hosts run, for how many hours, and the VM size. In outline, monthly compute is VM-hours multiplied by the hourly rate, plus disks, profile storage and licences. Learn's service limits page points to the Azure pricing calculator for the rate.
 
 Illustration with the 13 hosts of 8 vCPUs from step 3: if all 13 run 24 hours, that is 312 VM-hours a day. If 13 run for 8 peak hours and two stay on for the other 16, that is 13 x 8 + 2 x 16 = 136 VM-hours. The two always-on hosts are an assumption, not a Microsoft figure. "What Azure Virtual Desktop really costs: the full cost model" and "15 ways to cut Azure Virtual Desktop cost without hurting users" cover the other line items.
 
-Profile storage is a separate line. Learn's [cost page](https://learn.microsoft.com/en-us/azure/virtual-desktop/understand-estimate-costs) lists user profile storage, such as Azure Files or Azure NetApp Files, for FSLogix profile containers as an accompanying cost. The sizing table's "30 GB" minimum has no stated unit, so it is not multiplied here. See [FSLogix](/entity/fslogix/).
+Profile storage is a separate line. Learn's [cost page](https://learn.microsoft.com/en-us/azure/virtual-desktop/understand-estimate-costs) lists user profile storage, such as Azure Files or Azure NetApp Files, for FSLogix profile containers as an accompanying cost. The sizing table lists a minimum profile storage of 30 GB per workload type without saying whether that is per user or in total, so it is not multiplied here. See [FSLogix](/entity/fslogix/).
 
 ## Common mistakes
 
