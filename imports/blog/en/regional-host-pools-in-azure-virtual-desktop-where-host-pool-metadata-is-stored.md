@@ -45,7 +45,7 @@ The setting is called deployment scope and has two values:
 | Applies to | Host pools, workspaces, application groups, App Attach packages | Same objects |
 | Can it be changed later | No | No |
 
-Application groups inherit the scope of their host pool. A regional host pool can join only a regional workspace and contain only regional application groups, and the reverse applies to geographical objects. Learn adds that the portal greys out incompatible objects and that PowerShell or REST requests that mix scopes fail. Learn's page on creating workspaces says regional and geographical objects can coexist in the same subscription and region and are managed independently.
+Application groups inherit the scope of their host pool. A regional host pool can join only a regional workspace and contain only regional application groups, and the reverse applies to geographical objects. Learn adds that the portal greys out incompatible objects and that PowerShell or REST requests that mix scopes fail. Learn's Deploy Azure Virtual Desktop article says regional and geographical objects can coexist in the same subscription and region and are managed independently.
 
 Learn gives the benefits as follows: more resilient connectivity, because cross-region dependencies are removed and an Azure region or database outage affects fewer host pools, and control over data sovereignty, because the metadata sits in a region you choose. On failover of the regional database there is a short period in which new connections fail, while existing connections are unaffected.
 
@@ -91,7 +91,7 @@ Some statements on the Learn page date from the preview period, and the announce
 
 ## Moving from geographical to regional
 
-Because the scope cannot be changed, a move means building new objects. The announcement says existing geographical host pools need no action now and that support for migrating them is coming in a phased rollout. The Regional Host Pools article says Azure Virtual Desktop is working toward transitioning existing geographical host pool metadata to regional infrastructure, with more information to follow, and Learn's workspace article says the same as the announcement. The BCDR article is the outlier: it says Microsoft provides migration tooling. Until a migration path exists, the preview post describes deploying regional host pools manually with the same configuration and moving users over. A practical sequence follows from the scope rules:
+Because the scope cannot be changed, a move means building new objects. The announcement says existing geographical host pools need no action now and that support for migrating them is coming in a phased rollout. The Regional Host Pools article says Azure Virtual Desktop is working toward transitioning existing geographical host pool metadata to regional infrastructure, with more information to follow, and Learn's Deploy Azure Virtual Desktop article says the same as the announcement. The BCDR article is the outlier: it says Microsoft provides migration tooling. Until a migration path exists, the preview post describes deploying regional host pools manually with the same configuration and moving users over. A practical sequence follows from the scope rules:
 
 1. Create a regional workspace first, because only regional application groups can join it.
 2. Create the regional host pool and its application groups in a supported region.
@@ -117,6 +117,6 @@ All retrieved on 17 November 2026.
 - [Microsoft Learn: Azure Virtual Desktop service architecture and resilience](https://learn.microsoft.com/en-us/azure/virtual-desktop/service-architecture-resilience)
 - [Microsoft Learn: Data locations for Azure Virtual Desktop (list of regions)](https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations)
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
-- [Microsoft Learn: Create a workspace and an application group (create-application-group-workspace page)](https://learn.microsoft.com/en-us/azure/virtual-desktop/create-application-group-workspace)
+- [Microsoft Learn: Deploy Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop)
 - [Microsoft Learn: Multiregion BCDR for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/architecture/example-scenario/azure-virtual-desktop/azure-virtual-desktop-multi-region-bcdr)
 - [Microsoft Tech Community: Now in public preview: Azure Virtual Desktop regional host pools](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/-/4474598)
