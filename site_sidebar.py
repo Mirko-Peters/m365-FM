@@ -10,6 +10,59 @@ STOP = {"access", "project", "compliance", "governance", "automation", "prompt",
 TYPE_PRIO = {"product": 0, "person": 1, "cert": 2, "platform": 3, "concept": 4, "event": 5, "org": 6, "media": 7, "category": 9, "industry": 8, "job": 8}
 GSRC = "https://www.google.com/preferences/source?q=m365.fm"
 CON = "https://m365con.net/?utm_source=m365.fm&utm_medium=sidebar&utm_campaign=attending2027"
+# Bild der M365Con-Karte: verkleinerte Fassungen im R2-Bucket (tools/sidebar_con_img.py -> design/sidebar/, data/r2_local.json, Workflow r2-images.yml).
+# Auf dem Desktop ist es oft das LCP-Element (Lighthouse /entity/copilot/, 17.11.2026: 675 px / 68,5 KB fuer ~310 CSS-px, loading=lazy).
+CON_WIDTHS = (340, 480, 675)   # 1x, 1,25-1,5x und 2x der Desktop-Breite (19,4rem); 675 = Breite der Quelle, nicht hochskaliert
+CON_WH = (675, 563)   # Seitenverhaeltnis fuer width/height (Platz reserviert, keine Verschiebung)
+CON_DESK = "(min-width: 62.01rem)"   # ab hier steht die Seitenleiste rechts neben dem Inhalt (assets/sbar.css: max-width:62rem = darunter)
+# Desktop: Spalte 20.5rem minus 2 x .55rem Innenabstand der Karte; darunter 2-3 Spalten (minmax(16rem,1fr)) bzw. eine Spalte (100vw - 2 x 22px .wrap - 1.1rem)
+CON_SIZES = CON_DESK + " 19.4rem, (min-width: 36rem) 50vw, calc(100vw - 62px)"
+CON_ALT = "I'm attending M365Con International 2027, January 11–22, 2027, free online event"
+
+
+def con_file(w, ext):
+    return f"design/sidebar/attending-m365con-{w}.{ext}"
+
+
+def con_sources():
+    """(avif-srcset oder "", webp-srcset, webp-URL der groessten Fassung) aus img.m365.fm, oder None, solange r2-images.yml die WebP-Fassungen
+    nicht hochgeladen hat (dann bleibt das bisherige Bild /assets/attending-m365con.webp). AVIF nur, wenn alle Breiten hochgeladen sind
+    (tools/sidebar_con_img.py legt sie nur an, wenn sie kleiner als WebP sind)."""
+    import site_r2 as R2
+    webp = [(R2.local(con_file(w, "webp")), w) for w in CON_WIDTHS]
+    if not all(u for u, _ in webp):
+        return None
+    avif = [(R2.local(con_file(w, "avif")), w) for w in CON_WIDTHS]
+    ss = lambda xs: ", ".join(f"{u} {w}w" for u, w in xs)
+    return (ss(avif) if all(u for u, _ in avif) else ""), ss(webp), webp[-1][0]
+
+
+def con_img(BASE):
+    """Bild der M365Con-Karte. Mit R2-Fassungen: <picture> (AVIF, sonst WebP) mit srcset/sizes, ohne loading=lazy. fetchpriority=low am <img>:
+    auf dem Handy steht die Seitenleiste unter dem Inhalt (sonst hebt Chrome es als eines der ersten Bilder auf "Medium"); auf dem Desktop holt
+    con_preload im Kopf dieselbe Datei mit hoher Prioritaet, das <img> nimmt sie aus dem Preload (eine Anfrage, im Browsertest geprueft).
+    Ohne R2-Fassungen: das bisherige Bild unveraendert (lazy, kein Preload)."""
+    src = con_sources()
+    w, h = CON_WH
+    if not src:
+        return f'<img src="{BASE}/assets/attending-m365con.webp" alt="{CON_ALT}" width="{w}" height="{h}" loading="lazy">'
+    avif, webp, big = src
+    a = f'<source type="image/avif" srcset="{esc(avif)}" sizes="{CON_SIZES}">' if avif else ""
+    return f'<picture class="sb-conp">{a}<img src="{esc(big)}" srcset="{esc(webp)}" sizes="{CON_SIZES}" alt="{CON_ALT}" width="{w}" height="{h}" fetchpriority="low"></picture>'
+
+
+def con_preload(body):
+    """Desktop-Preload des Kartenbilds fuer den <head>, nur wenn die Seite die Karte mit den R2-Fassungen enthaelt (faellt mit der Karte weg).
+    media: nur Desktop, dort ist das Bild das LCP-Element; dieselben srcset/sizes wie im <picture>, damit der Browser dieselbe Datei waehlt.
+    Mit AVIF: type=image/avif (Browser ohne AVIF ueberspringen den Preload und laden das WebP wie bisher ueber das <img>)."""
+    if '<picture class="sb-conp">' not in body:
+        return ""
+    src = con_sources()
+    if not src:
+        return ""
+    avif, webp, _ = src
+    t = ' type="image/avif"' if avif else ""
+    return (f'<link rel="preload" as="image"{t} imagesrcset="{esc(avif or webp)}" imagesizes="{CON_SIZES}" media="{CON_DESK}" fetchpriority="high">')
 
 
 class Index:
@@ -85,7 +138,7 @@ def render(ix, BASE, lang, text="", items=(), url_of=None, title_of=None, all_ur
     ents = f'<section class="sb-card"><h2>{esc(t["topics"])}</h2><ul class="sb-chips">{chips}</ul><a class="sb-more" href="{BASE}{ent_prefix}/entity/">{esc(t["kg"])}</a></section>' if chips else ""
     late = "".join(f'<li><a href="{esc(url_of(x))}">{esc(title_of(x))}</a></li>' for x in list(items)[:5]) if url_of else ""
     new = f'<section class="sb-card"><h2>{esc(t["latest"])}</h2><ol class="sb-list">{late}</ol><a class="sb-more" href="{esc(all_url)}">{esc(t["all"])}</a></section>' if late else ""
-    con = (f'<section class="sb-card sb-con"><a href="{CON}" rel="noopener" aria-label="M365Con International 2027"><img src="{BASE}/assets/attending-m365con.webp" alt="I\'m attending M365Con International 2027, January 11–22, 2027, free online event" width="675" height="563" loading="lazy"></a>'
+    con = (f'<section class="sb-card sb-con"><a href="{CON}" rel="noopener" aria-label="M365Con International 2027">{con_img(BASE)}</a>'
            f'<a class="sb-btn" href="{CON}" rel="noopener">{esc(t["seat"])}</a></section>')
     goog = (f'<section class="sb-card sb-g"><a class="gb" href="{GSRC}" rel="noopener" target="_blank"><img src="{BASE}/assets/gsource.webp" alt="Add M365.fm as a preferred source on Google" width="647" height="192" loading="lazy"></a><p>{t["google"]}</p></section>')
     links = " ".join(f'<a href="{esc(shp[k])}" rel="noopener">{n}</a>' for k, n in LISTEN if shp.get(k))
