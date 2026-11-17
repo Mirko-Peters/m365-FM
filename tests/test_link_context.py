@@ -116,6 +116,9 @@ class Matrix(unittest.TestCase):
         self.assertEqual(LC.plain("en", "side.entity", s="Power BI"), "Topics linked to Power BI")
         self.assertEqual(LC.intro("xx", "ep.guests"), '<p class="lc" data-own-text="no">Guests in this episode:</p>', "unbekannte Sprache: Englisch")
         self.assertEqual(LC.intro("en", "gibt.es.nicht"), "")
+        self.assertEqual(LC.text("fr", "ent.eps", s="Azure"), "Épisodes où il est question d’Azure\u00a0:", "Franzoesisch: de -> d’ vor Vokal")
+        self.assertEqual(LC.text("fr", "ent.eps", s="Power BI"), "Épisodes où il est question de Power BI\u00a0:")
+        self.assertEqual(LC.plain("ar", "side.entity", s="A & B"), "مواضيع مرتبطة بـA & B", "Ueberschrift ohne HTML")
 
     def test_folgentitel_voll_und_eindeutig(self):
         self.assertEqual(LT.ep_text("Microsoft Graph: The Enterprise Nervous System (AI dub)"), "Microsoft Graph: The Enterprise Nervous System")

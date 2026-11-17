@@ -18,10 +18,12 @@ Inventar der Linklisten (Stand Paket 3, alle Seitenarten aus site_*.py):
 Reine Funktionen bis auf das einmalige Lesen der JSON-Datei."""
 import html
 import json
+import re
 from pathlib import Path
 
 FILE = Path(__file__).parent / "data" / "link_context.json"
 RTL = ("ar", "he")
+_VOWEL = "AEIOUYÀÂÄÉÈÊËÎÏÔÖÛÜaeiouyàâäéèêëîïôöûü"
 _DATA = None
 
 
@@ -54,16 +56,15 @@ def text(lang, key, **vals):
     """Fertiger HTML-Text (Namen escaped, in ar/he als <bdi>). Unbekannte Platzhalter bleiben stehen; {n} wird als Zahl eingesetzt."""
     t = html.escape(raw(lang, key), quote=False)
     for k, v in vals.items():
+        if lang == "fr" and k != "n" and str(v)[:1] in _VOWEL:   # Franzoesisch: "de Azure" -> "d’Azure" (wie site_relsent.fill)
+            t = re.sub(r"(^|(?<=\s))de \{" + k + r"\}", "d’{" + k + "}", t)
         t = t.replace("{" + k + "}", str(v) if k == "n" else _name(lang, v))
     return t
 
 
 def plain(lang, key, **vals):
     """Wie text, aber ohne HTML (Ueberschriften, aria-label)."""
-    t = raw(lang, key)
-    for k, v in vals.items():
-        t = t.replace("{" + k + "}", str(v))
-    return t
+    return html.unescape(re.sub(r"<[^>]+>", "", text(lang, key, **vals)))
 
 
 def intro(lang, key, cls="lc", **vals):
@@ -71,5 +72,3 @@ def intro(lang, key, cls="lc", **vals):
     t = text(lang, key, **vals)
     return f'<p class="{cls}" data-own-text="no">{t}</p>' if t else ""
 
-
-CSS = ".lc{margin:.2em 0 .5em;color:var(--mut,#555)}"
