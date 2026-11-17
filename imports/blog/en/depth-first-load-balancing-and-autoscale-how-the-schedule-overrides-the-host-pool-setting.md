@@ -14,7 +14,7 @@ keypoints:
   - "Autoscale changes drain mode on every host in scope, whoever set it. Use an exclusion tag to keep a host out of scaling."
 faq:
   - q: "If I set depth-first on the host pool, will it still apply once a scaling plan is assigned?"
-    a: "Microsoft Learn says the preference selected in the schedule overrides the host pool setting, and that autoscale on pooled pools applies load balancing from its own schedule configuration. The sources used here do not say whether the host pool Properties page then shows the schedule's value, so check it on a test pool."
+    a: "Microsoft Learn says the preference selected in the schedule overrides the host pool setting, and that autoscale on pooled pools applies load balancing from its own schedule configuration. To know which algorithm runs, read the schedule, not the host pool setting; to confirm it in your environment, create a test pool and watch where new sessions land."
   - q: "Which phases should use depth-first?"
     a: "Learn's scaling plan article recommends depth-first for off-peak and breadth-first for ramp-up, and allows either for peak. Its FAQ suggests depth-first for ramp-down and off-peak so autoscale can consolidate sessions to the minimum number of hosts."
   - q: "Does this apply to personal host pools?"
@@ -23,7 +23,7 @@ faq:
 
 With a scaling plan assigned to a pooled host pool, the load balancing algorithm that runs is the one in the schedule phase, not the one on the host pool. Microsoft Learn says so for the ramp-up phase ("the load balancing preference you select here overrides the one you selected for your original host pool settings") and states more generally that autoscale on pooled pools overrides load balancing settings and applies them from its own schedule. This guide shows how to use that for depth-first.
 
-It covers power management autoscaling on pooled pools. Microsoft announced general availability of dynamic autoscaling in July 2026 (Tech Community), although Learn's autoscale glossary still carries preview wording; it is not the subject here. Sources are listed at the end and were retrieved on 17 November 2026. The article "Depth-first load balancing in Azure Virtual Desktop explained" covers the algorithm itself.
+It covers power management autoscaling on pooled pools. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit. Dynamic autoscaling is not the subject here. The article "Depth-first load balancing in Azure Virtual Desktop explained" covers the algorithm itself.
 
 ## Where the override happens
 
@@ -40,9 +40,9 @@ The autoscale FAQ explains the reasoning: breadth-first in the first two phases 
 
 Learn's [scenarios page](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios) says it differently in its overview: for pooled host pools, autoscale overrides drain mode and load-balancing settings and applies load balancing from the schedule. The examples there use breadth-first for ramp-up, peak and off-peak, and depth-first for ramp-down. They are examples, not a rule, so follow the recommendation text when you design a schedule.
 
-### What the sources do not say
+### Which value to trust
 
-No page used here says whether the host pool's **Properties** page changes when a plan takes over, or what is shown there. Treat the host pool value as not authoritative while a plan is assigned, and read the schedule when you need to know which algorithm applies. If you need certainty, create a test pool, assign a plan with depth-first in off-peak and observe where new sessions land.
+Learn documents the override in the schedule, so the host pool's own load balancing field is not the setting that runs while a plan is assigned. Our reading: do not use the host pool's **Properties** page to tell which algorithm applies; read the schedule. To confirm it in your environment, create a test pool, assign a plan with depth-first in off-peak and observe where new sessions land.
 
 Learn also says that changes to a plan already assigned to host pools apply immediately. A schedule edit is therefore a live change.
 
@@ -62,13 +62,13 @@ Learn's scenario 3 sets the case: six hosts, depth-first, capacity threshold 75%
 
 The consolidation formula on the page is: required hosts = total sessions (active plus disconnected) divided by (maximum session limit times capacity threshold).
 
-Here, 4 sessions divided by (5 times 0.75, which is 3.75) is about 1.07, so two hosts are required. Autoscale can turn off two of the four. Because the sessions are split evenly, it picks two hosts at random, puts them in [drain mode](/entity/avd-drain-mode/), notifies the users, signs them out after the wait time and turns the hosts off. With two hosts and four users (40%), turning off a third would push use to 80%, above 75%, so it does not.
+Here, 4 sessions divided by (5 times 0.75, which is 3.75) is about 1.07, so two hosts are required. Autoscale can turn off two of the four. Because the sessions are split evenly, it picks two hosts at random, puts them in [drain mode](/entity/avd-drain-mode/), notifies the users, signs them out after the wait time and turns the hosts off. Two sessions are left on two hosts (20%). In Learn's example the two signed-out users then sign back in, which makes four users on two hosts (40%). Turning off one more host would leave one host with a capacity of five, and four users would then be 80%, above 75%, so autoscale does not.
 
-When it later has three users on two hosts (30%), autoscale can turn one more off. It selects the host with the fewest sessions, drains it, notifies users and forces sign-out after the set time. One host remains. A user signing back in raises use to 60%, and the last host stays on, because turning it off would leave capacity below the 10% minimum.
+When one user later signs out, three users remain on two hosts (30%), and autoscale can turn one more off. It selects the host with the fewest sessions, drains it, notifies users and forces sign-out after the set time. One host remains, with two sessions (40%). When the user who was signed out signs back in, use is 60%, and the last host stays on, because turning it off would leave no available host, which is below the 10% minimum percentage of hosts.
 
 Two consequences for depth-first design:
 
-1. **Consolidation works through sign-out.** In the scenario, hosts are drained and users are signed out after the wait time. Depth-first keeps sessions from spreading in the first place, so the sign-out step should affect fewer users; this is an inference, not a Learn statement.
+1. **Consolidation works through sign-out.** In the scenario, hosts are drained and users are signed out after the wait time. Without force sign-out, Learn says autoscale waits for users to sign out voluntarily before it turns hosts off. Depth-first keeps sessions from spreading in the first place, so the sign-out step should affect fewer users; this is an inference, not a Learn statement.
 2. **The limit is part of the math.** A limit of 10 instead of 5 in the same example gives 4 divided by 7.5, about 0.53, so a single host would be enough.
 
 ### A second worked example
@@ -77,14 +77,14 @@ Learn's FAQ gives the disconnected-session case: 6 disconnected users, a limit o
 
 ## Steps: set depth-first for off-peak
 
-The pooled schedule has these tabs per Learn. You need rights to edit scaling plans.
+Learn lists these tabs for creating or changing a pooled schedule.
 
 1. In the Azure portal open **Azure Virtual Desktop** and then **Scaling plans**, and select the plan.
-2. Go to **Schedules** and select **Add schedule** for a new one, or open the existing schedule. Learn describes these tabs in the creation wizard, so the labels in the edit view may differ slightly.
+2. Under the **Manage** heading, select **Schedules**, then select **Add schedule** for a new schedule or open the existing one.
 3. On **Ramp up**, set the start time, the algorithm (breadth-first), the minimum percentage of hosts and the capacity threshold.
 4. On **Peak hours**, choose breadth-first or depth-first.
 5. On **Ramp-down**, set the start time, the algorithm, the minimum percentage, the capacity threshold and force logoff of users.
-6. On **Off-peak hours**, set the start time and choose depth-first.
+6. On **Off-peak hours**, set the start time and choose depth-first. The capacity threshold is not set here; the value from Ramp-down carries over.
 7. Save. If the plan is already assigned, the change applies immediately.
 
 Learn adds that on days not selected in a schedule, the last off-peak settings carry over until the next ramp-up. A Friday off-peak depth-first setting is therefore also what runs over the weekend if no weekend schedule exists.
