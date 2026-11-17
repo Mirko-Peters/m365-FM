@@ -7,16 +7,16 @@ author: mirko-p
 date: 2026-11-18
 topics: [avd-custom-image-templates, golden-image]
 keypoints:
-  - "Custom image templates are built on Azure Image Builder and tailored for Azure Virtual Desktop. A template is a JSON file with the source image, distribution targets, build properties and customizations, and a separate step submits it to Azure Image Builder to build the image."
-  - "Learn gives 13 examples of built-in scripts, among them language packs, FSLogix, RDP Shortpath, Teams optimizations and Windows Updates. You can add your own scripts from a public location or from a storage account with an RBAC role."
-  - "A build runs in a staging resource group under a user-assigned managed identity. By default it is named IT_<ResourceGroupName>_<TemplateName>_<GUID>; most of its resources are deleted after the build, while the storage account stays, and its packerlogs container holds customization.log."
+  - "A custom image template is a JSON file with source image, distribution targets, build properties and customizations. A separate build step submits it to Azure Image Builder, which creates the image."
+  - "Learn gives 13 example built-in scripts, such as language packs, FSLogix, RDP Shortpath and Windows Updates. Your own scripts need a public location or a storage account with an RBAC role."
+  - "A build runs under a user-assigned managed identity. The staging group IT_<ResourceGroupName>_<TemplateName>_<GUID> exists from template creation; its storage account stays after the build."
   - "The image can go to Azure Compute Gallery, to a managed image or to both. Learn calls managed images legacy and points to the gallery for new features."
-  - "The feature was announced as generally available in the Azure public cloud in September 2023. Microsoft Support does not handle problems with customer-written scripts, or with Microsoft scripts that you modified."
+  - "General availability in the Azure public cloud was announced in September 2023. Microsoft Support does not handle problems with customer-written or modified Microsoft scripts."
 faq:
   - q: "Do I need to write any Azure Image Builder JSON to use custom image templates?"
     a: "Not for the portal route. The announcement says admins do not need to write their own scripts, because they pick built-in customizations in the Azure Virtual Desktop portal. The portal still produces a JSON template, and you can add your own scripts when the built-in ones do not cover a need."
   - q: "Does a custom image template update the session hosts that already run?"
-    a: "No. The template only produces an image. Learn describes the result as a source image you use when you create or update a host pool, so existing session hosts change only when you deploy or replace them from a new image version."
+    a: "Learn describes the template as producing an image that you can use as the source image for session hosts when you create or update a host pool. It does not describe a template or build changing running session hosts by itself. How you move existing hosts to a new image is a separate step."
   - q: "Is a custom image template the same as a golden image?"
     a: "It is one way to produce a golden image. The golden image is the finished, generalized image; the template is the repeatable definition from which the image is built. A manual build and a template build can both end in the same kind of image."
 ---
@@ -27,7 +27,7 @@ A custom image template in Azure Virtual Desktop is a JSON definition of a sessi
 
 Learn splits the creation of a custom image into two parts: you create a template that defines what the image should contain, then build the image by submitting the template to Azure Image Builder. The template is the definition; nothing is built until you select the template in the portal list and choose **Start build**.
 
-The portal can import an existing template as the base for a new one (**Import from existing template** on the Basics tab). Session hosts change only when you deploy or replace them from a new image.
+The portal can import an existing template as the base for a new one (**Import from existing template** on the Basics tab). The resulting image is the source for session hosts when you create or update a host pool, according to Learn; the template and build pages do not describe them changing running session hosts.
 
 The [golden image](/entity/golden-image/) is the finished artifact; the template is one method of producing it. Learn describes custom image templates as built on [Azure Image Builder](/entity/azure-image-builder/) and tailored for Azure Virtual Desktop, and its troubleshooting page says Azure Image Builder uses [HashiCorp Packer](/entity/hashicorp-packer/). See also [custom image templates](/entity/avd-custom-image-templates/).
 
@@ -37,7 +37,7 @@ Learn names four parts of the JSON template: the source image, the distribution 
 
 | Part | What it decides | Notes from Learn |
 |---|---|---|
-| Source image | Starting point | Azure Marketplace, an Azure Compute Gallery image, a managed image or, per the overview, an existing custom image template (in the portal, the last one is **Import from existing template**). The source must be a supported Azure Virtual Desktop operating system. |
+| Source image | Starting point | Azure Marketplace, an Azure Compute Gallery image, a managed image or, per the overview, an existing custom image template. The portal's Source type offers marketplace, managed image and Compute Gallery. The source must be a supported Azure Virtual Desktop operating system. |
 | Distribution targets | Where the result lands | Managed image, Azure Compute Gallery, or both. |
 | Build properties | How the build runs | Build timeout, build VM size, optional staging resource group, optional virtual network and subnet. |
 | Customizations | What changes in the image | Built-in scripts and your own scripts, in the order you set. |
@@ -49,13 +49,13 @@ The build timeout is the maximum time for all customizations, validations and di
 ## What happens during a build
 
 1. **Identity.** Azure Image Builder uses a user-assigned [managed identity](/entity/managed-identity/) to create resources in your subscription, such as a resource group, a build VM, a Key Vault and a storage account. Learn recommends a dedicated identity with a custom role, ideally scoped to the resource group that stores the templates.
-2. **Staging resource group.** By default Azure Image Builder creates a group named `IT_<ResourceGroupName>_<TemplateName>_<GUID>`; the template can name its own instead, and a group you name must be empty before the build starts. Most of the resources are temporary and are deleted after the build. The storage account is the exception.
+2. **Staging resource group.** Learn says this group is created when the template is created, not when the build starts. The default name is `IT_<ResourceGroupName>_<TemplateName>_<GUID>`; you can name your own instead, and a group you name must be empty before the build starts. Most of its resources are temporary and are deleted after the build. The storage account is the exception.
 3. **Build VM.** Image Builder deploys a temporary VM from the source image. If you do not select a virtual network, a temporary virtual network, subnet and public IP address are created.
 4. **Download and run.** The build VM needs internet access to download scripts; built-in ones come from the RDS-Templates repository on GitHub. Scripts run in the order shown on the Customizations tab, and built-in scripts include restarts where needed.
 5. **Generalize and distribute.** Image Builder generalizes the image with [sysprep](/entity/sysprep/) and distributes it to the targets you chose. Compute Gallery handles region replication, versioning and sharing.
 6. **Clean up.** The temporary resources go away. Learn says the group can be deleted after a successful build if you do not need the logs. Until then the storage account stays, with up to three containers: `shell` for customization scripts, `packerlogs` for logs and `vhds` for the VHD held temporarily before it becomes a managed image or gallery version.
 
-Each GUID-named folder inside `packerlogs` holds `customization.log` with all Packer output. Entries for built-in scripts begin with `Starting AVD AIB Customization: {<Script name>}: {<Timestamp>}`, a string worth searching for.
+Each GUID-named folder inside `packerlogs` holds `customization.log` with all Packer output. Entries for built-in scripts begin with `Starting AVD AIB Customization: {<Script name>}: {<Timestamp>}`.
 
 Learn lists seven resource providers to register, including Microsoft.VirtualMachineImages and Microsoft.ContainerInstance; a missing ContainerInstance registration produces an authorization error for `Microsoft.ContainerInstance/register/action`.
 
@@ -65,7 +65,7 @@ Learn gives these built-in scripts as examples: install language packs, set the 
 
 Your own scripts need a publicly available location such as GitHub or a web service. A storage account also works if the managed identity has an RBAC role such as Storage Blob Data Reader. A tip on the creation page says removing or uninstalling the Microsoft Store app is not supported.
 
-In our reading, the examples are mostly platform settings that many environments need. For applications the template is one choice among several. Learn's manual golden image page names two others, [Microsoft Intune](/entity/intune/) for device management and Azure Image Builder with Azure DevOps to automate the build, and says the right strategy depends on the size and complexity of the environment and on how you deploy applications. Each application change inside the image means a new build, so frequently changing apps are worth weighing against delivery outside it, such as [App Attach](/entity/msix-app-attach/). What's new announced that MSIX App Attach would be deprecated on 1 June 2025 and asked admins to move apps to App Attach. That weighing is a design consideration, not a Learn statement.
+In our reading, the examples are mostly platform settings that many environments need. For applications the template is one choice among several. Learn's manual golden image page names two others, [Microsoft Intune](/entity/intune/) for device management and Azure Image Builder with Azure DevOps to automate the build, and says the right strategy depends on the size and complexity of the environment and on how you deploy applications. Each application change inside the image means a new build, so frequently changing apps are worth weighing against delivery outside it, such as [App Attach](/entity/msix-app-attach/). That weighing is a design consideration, not a Learn statement.
 
 ## Where the image goes: managed image or Compute Gallery
 
@@ -82,13 +82,13 @@ The AVD golden image page recommends gallery images for production because of re
 | Manual golden image | You deploy a base VM, customize it, run sysprep and capture | Interactive control over the VM | Every step is manual and repeatable only by discipline. Learn warns against capturing the same VM twice or a VM in a host pool. |
 | Custom image template | Portal-defined template, built by Azure Image Builder | Repeatable definition, built-in AVD scripts | Scripts must be reachable by the build VM. Microsoft Support does not handle customer-written scripts. |
 | Direct Azure Image Builder template | You write the full template and run it from PowerShell, CLI, ARM or a pipeline | Full control of the template, including its customizers | You maintain the JSON and the scripts yourself. |
-| Nerdio Manager desktop image | A VM is created from an Azure library image or an existing Azure VM, customized, then turned into an image, by default stored in an Azure Compute Gallery | Image handling inside the Nerdio Manager console | A VM-based flow, a different mechanism from Image Builder. |
+| Nerdio Manager desktop image | A VM is created from an Azure library image or an existing Azure VM, customized, then turned into an image, by default stored in an Azure Compute Gallery | Scripted actions run on a clone before sysprep; Compute Gallery distribution on by default | The page describes a VM-based flow and does not describe Azure Image Builder. |
 
-The Nerdio row comes from the Nerdio help page "Create a Desktop Image" (dated 9 November 2026), which does not mention Azure Image Builder. Nerdio Manager removes local user profiles before sysprep, with an option to skip that step. Windows scripts run through the Azure Custom Script extension on a clone of the image VM before sysprep, while Azure runbooks run through the Azure automation account. The target VM for a scripted action can be the clone (default) or the source VM. Geographic distribution with an Azure Compute Gallery is enabled by default, and creation may take up to an hour. See [Nerdio desktop image management](/entity/nerdio-desktop-image/).
+The Nerdio row comes from the Nerdio help page "Create a Desktop Image" (dated 9 November 2026). Nerdio Manager for Enterprise removes local user profiles before sysprep, with an option to skip that step. Windows scripts run through the Azure Custom Script extension on a clone of the image VM before sysprep, while Azure runbooks run through the Azure automation account. The target VM for a scripted action can be the clone (default) or the source VM. Geographic distribution with an Azure Compute Gallery is enabled by default, and creation may take up to an hour. See [Nerdio desktop image management](/entity/nerdio-desktop-image/).
 
 ## Status, support scope and limits
 
-What's new records custom image templates as in preview in May 2023, and the Azure Virtual Desktop blog announced general availability on 19 September 2023. That post names the Azure public cloud as generally available and Azure Government and China as entering public preview at that time. The current Learn pages carry no status label; check them for your cloud.
+What's new records custom image templates as in preview in May 2023 and as generally available in September 2023; the Azure Virtual Desktop blog announced general availability on 19 September 2023. That post names the Azure public cloud as generally available and Azure Government and China as entering public preview at that time. Check the current Learn pages for your cloud.
 
 The troubleshooting page says Microsoft Support does not handle issues with customer-created scripts, or with scripts or templates copied from a Microsoft repository and then modified.
 
