@@ -55,7 +55,7 @@ import { handleGuests, deleteUserGuests } from "./guests.js";
 import { deleteUserEntityInvites } from "./entinvite.js";
 import { handleExpertRequests, deleteUserExpertRequests, syncExpertVectors, closeExpiredExpertRequests } from "./expert_requests.js";
 import { handlePodcast, deleteUserPodcast, pollPodcast } from "./podcast.js";
-import { handleVideo, deleteUserVideos, pollVideos } from "./youtube.js";
+import { handleVideo, deleteUserVideos, dropUserUploads, pollVideos } from "./youtube.js";
 import { handleMcp, handleTokens, deleteUserTokens } from "./mcp.js";
 import { handleSeo } from "./seo_api.js";
 import { handleCredits, deleteUserGuestCredits } from "./credits.js";
@@ -263,6 +263,7 @@ async function deleteAccount(env, id) {
   await deleteUserEditorial(db, id);   // Redaktion (Migration 0037): vor deleteUserBlog, weil der Verlauf an den Beitraegen des Kontos haengt
   await deleteUserEntityInvites(db, id);   // braucht mail_addr und die bestaetigten Claims: vor deleteUserData
   await deleteUserSearchDemand(db, id);   // Nachfrage zu eigenen Inhalten und zum Profil (#156): braucht Handle und Inhalte, also vor deleteUserBlog/deleteUserData
+  await dropUserUploads(env, id).catch(() => 0);   // K36: noch private Creator-Videos des Kontos bei YouTube entfernen, solange die Zeilen sie noch nennen
   await deleteUserMessages(db, id); await deleteUserTokens(db, id); await deleteUserQa(db, id); await deleteUserBlog(db, id); await deleteUserLibrary(db, id); await deleteUserPodcast(db, id); await deleteUserVideos(db, id); await deleteUserGuests(db, id); await deleteUserGuestCredits(db, id);
   await deleteUserData(db, id); await deleteUserExpertRequests(env, id);
   await deleteUserLinkedin(db, id);   // LinkedIn-Zugang dieses Admins (verschluesselte Tokens) und "veroeffentlicht von"
