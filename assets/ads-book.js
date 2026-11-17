@@ -21,7 +21,7 @@
   function eur(c) { try { return new Intl.NumberFormat(LANG, { style: "currency", currency: "EUR" }).format(c / 100); } catch (e) { return (c / 100).toFixed(2) + " €"; } }
   function num(n) { try { return new Intl.NumberFormat(LANG).format(n); } catch (e) { return String(n); } }
   function api(p, o) {
-    o = o || {}; o.credentials = "include"; o.headers = Object.assign(/^(GET|HEAD)?$/i.test(o.method || "") ? {} : { "x-requested-with": "m365" }, o.headers || {});   /* nur schreibend: GET ohne CORS-Preflight (Worker prueft nur Nicht-GET) */
+    o = o || {}; o.credentials = "include"; o.headers = Object.assign(/^(GET)?$/i.test(o.method || "") ? {} : { "x-requested-with": "m365" }, o.headers || {});   /* nur schreibend: GET ohne CORS-Preflight (Worker prueft nur Nicht-GET) */
     if (o.body && !(o.body instanceof Blob) && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; }
     return fetch(API + p, o).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { s: r.status, j: j }; }); });
   }

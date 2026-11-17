@@ -26,7 +26,7 @@
   }) : {};
   function api(path, options) {
     options = options || {}; options.credentials = "include";
-    options.headers = Object.assign(/^(GET|HEAD)?$/i.test(options.method || "") ? {} : { "x-requested-with": "m365" }, options.headers || {});   // nur schreibend: GET ohne CORS-Preflight
+    options.headers = Object.assign(/^(GET)?$/i.test(options.method || "") ? {} : { "x-requested-with": "m365" }, options.headers || {});   // nur schreibend: GET ohne CORS-Preflight
     if (options.body && typeof options.body !== "string") {
       options.body = JSON.stringify(options.body); options.headers["content-type"] = "application/json";
     }

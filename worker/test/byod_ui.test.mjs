@@ -22,7 +22,7 @@ async function boot(routes, { me = { id: 1 }, lang = "de", clip } = {}) {
   const root = new El("div"), posts = [];
   const fetch = async (url, o = {}) => {
     const path = new URL(url).pathname, body = o.body ? JSON.parse(o.body) : undefined;
-    assert.equal(o.headers["x-requested-with"], /^(GET|HEAD)?$/i.test(o.method || "") ? undefined : "m365");   // nur schreibend (GET ohne CORS-Preflight)
+    assert.equal(o.headers["x-requested-with"], /^(GET)?$/i.test(o.method || "") ? undefined : "m365");   // nur schreibend (GET ohne CORS-Preflight)
     if (o.method === "POST") posts.push({ path, body });
     const r = path === "/api/me" ? { user: me } : typeof routes[path] === "function" ? routes[path](body, o.method || "GET") : routes[path] ?? {};
     const [status, data] = Array.isArray(r) ? r : [200, r];

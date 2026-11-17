@@ -6,7 +6,7 @@
   var X = window.M365X, root = document.getElementById("c-blogdomain"); if (!X || !root) return;
   var de = X.lang === "de";
   function h(tag, a, kids) { var e = document.createElement(tag); for (var k in (a || {})) { if (k === "class") e.className = a[k]; else if (k === "text") e.textContent = a[k]; else if (k.slice(0, 2) === "on") e.addEventListener(k.slice(2), a[k]); else e.setAttribute(k, a[k]); } (kids || []).forEach(function (c) { if (c) e.appendChild(c); }); return e; }
-  function api(path, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign(/^(GET|HEAD)?$/i.test(o.method || "") ? {} : { "x-requested-with": "m365" }, o.headers || {});   /* nur schreibend: GET ohne CORS-Preflight (Worker prueft nur Nicht-GET) */ if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(X.api + path, o).then(function (r) { return r.json().then(function (j) { return { s: r.status, j: j }; }); }); }
+  function api(path, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign(/^(GET)?$/i.test(o.method || "") ? {} : { "x-requested-with": "m365" }, o.headers || {});   /* nur schreibend: GET ohne CORS-Preflight (Worker prueft nur Nicht-GET) */ if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(X.api + path, o).then(function (r) { return r.json().then(function (j) { return { s: r.status, j: j }; }); }); }
   var uid = 0;
   function field(label, el) { var id = "bdm" + (++uid); el.id = id; return h("div", {}, [h("label", { for: id, text: label }), el]); }
   var Q = M365L(de, "blogdomain.Q", {

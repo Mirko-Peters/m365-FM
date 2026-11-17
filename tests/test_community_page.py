@@ -235,7 +235,7 @@ class WriteOnlyCsrfHeader(unittest.TestCase):
                     ctx = ln[max(0, m.start() - 160):m.start()]
                     with self.subTest(file=f.name, ctx=ctx[-90:]):
                         # erlaubt: Bedingung auf die Methode im Ausdruck davor, oder ein fester schreibender Aufruf
-                        self.assertTrue(re.search(r'GET\|HEAD|!== "GET"|body \?|method: ?"(POST|DELETE)"', ctx), ctx)
+                        self.assertTrue(re.search(r'\^\(GET\)\?\$/i|!== "GET"|body \?|method: ?"(POST|DELETE)"', ctx), ctx)
 
 
 class CommunityPageInBuild(unittest.TestCase):

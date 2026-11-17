@@ -13,7 +13,7 @@
   /* x-requested-with nur bei schreibenden Anfragen: der Worker prueft ihn nur dort (CSRF, worker/src/index.js); bei GET wuerde er einen
      CORS-Preflight (OPTIONS) vor jede Abfrage setzen, z. B. vor /api/me beim Laden der Community-Seite */
   function api(path, o) {
-    o = o || {}; o.credentials = "include"; o.headers = Object.assign(/^(GET|HEAD)?$/i.test(o.method || "") ? {} : { "x-requested-with": "m365" }, o.headers || {});
+    o = o || {}; o.credentials = "include"; o.headers = Object.assign(/^(GET)?$/i.test(o.method || "") ? {} : { "x-requested-with": "m365" }, o.headers || {});
     if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; }
     return fetch(API + path, o).then(function (r) { return r.json().then(function (j) { return { s: r.status, j: j }; }); });
   }
