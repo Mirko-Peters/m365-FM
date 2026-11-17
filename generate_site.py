@@ -1411,8 +1411,10 @@ def build():
     import site_legal as SL
     for path, fn, lg, ttl in (("impressum", SL.impressum_de, "de", "Impressum"), ("legal", SL.impressum_en, "en", "Legal notice"),
                               ("datenschutz", SL.privacy_de, "de", "Datenschutz"), ("privacy", SL.privacy_en, "en", "Privacy policy"),
-                              ("security", SL.security_en, "en", "Security"), ("sicherheit", SL.security_de, "de", "Sicherheit")):
-        _pair = {"impressum": "legal", "legal": "impressum", "datenschutz": "privacy", "privacy": "datenschutz", "security": "sicherheit", "sicherheit": "security"}[path]   # T42: Umschalter auf das Gegenstueck
+                              ("security", SL.security_en, "en", "Security"), ("sicherheit", SL.security_de, "de", "Sicherheit"),
+                              ("nutzungsbedingungen", SL.terms_de, "de", "Community-Bedingungen"), ("terms", SL.terms_en, "en", "Community terms")):
+        _pair = {"impressum": "legal", "legal": "impressum", "datenschutz": "privacy", "privacy": "datenschutz", "security": "sicherheit", "sicherheit": "security",
+                 "nutzungsbedingungen": "terms", "terms": "nutzungsbedingungen"}[path]   # T42: Umschalter auf das Gegenstueck
         _lsw = {lg: f"{BASE}/{path}/", ("en" if lg == "de" else "de"): f"{BASE}/{_pair}/"}
         write(f"{path}/index.html", page(lg, f"{ttl} – M365.FM", ttl, f"{BASE}/{path}/", f"{header(lg, '')}<main class=\"wrap\" style=\"max-width:46em\">{fn()}</main>{footer(lg)}", og_type="website", noindex=True, switch=_lsw))
 
