@@ -23,8 +23,6 @@ faq:
 
 Microsoft Entra Domain Services gives Azure Virtual Desktop session hosts a managed Active Directory-style domain without domain controllers that you run yourself. It is a supported join option, but Learn lists clear limits: no single sign-on with Microsoft Entra authentication and no Intune management for session hosts joined to it.
 
-This guide compares the join options, walks through the setup order, and lists the limits that decide whether a managed domain fits a given deployment.
-
 ## What Entra Domain Services provides
 
 Learn's [overview](https://learn.microsoft.com/en-us/entra/identity/domain-services/overview) says Domain Services provides managed domain services such as domain join, group policy, LDAP and Kerberos/NTLM authentication, without deploying, managing or patching domain controllers in the cloud. It is aimed at legacy applications that depend on AD DS protocols and cannot easily use modern authentication.
@@ -50,7 +48,7 @@ The [Azure Virtual Desktop prerequisites](https://learn.microsoft.com/en-us/azur
 | Entra ID + Entra Domain Services | Joined to Entra ID | In Entra ID and Entra Domain Services, synchronized |
 | Entra-only | Joined to Entra ID | In Entra ID (including external identities) |
 
-Learn adds that if you also use AD DS or Entra Domain Services, the accounts need to be hybrid identities, and that with Entra Domain Services the synchronization from Entra ID is automatic. Learn's authentication article says user identities that exist only in AD DS are not supported, because users must be discoverable through Microsoft Entra ID.
+Learn adds that if you also use AD DS or Entra Domain Services, the accounts need to be hybrid identities. User identities that exist only in AD DS are not supported, because users must be discoverable through Microsoft Entra ID.
 
 ## Comparison: three ways to join session hosts
 
@@ -62,13 +60,12 @@ Learn adds that if you also use AD DS or Entra Domain Services, the accounts nee
 | Single sign-on with Entra authentication | Not supported on its own (see below) | Supported | Not supported on its own; supported for Entra hybrid joined hosts |
 | Domain controllers | Managed by Microsoft, no sign-in | None needed | Run by you |
 | Schema extensions | Not supported | Not applicable | Possible |
-| Cloud-only users | Synchronized after a password change | Supported on Entra joined VMs | Not applicable (hybrid identities) |
 
 The device-object, authentication and management rows for Entra Domain Services and Entra joined come from Learn's [identity comparison](https://learn.microsoft.com/en-us/entra/identity/domain-services/compare-identity-solutions). The AD DS column follows Learn's table for self-managed AD DS and the Azure Virtual Desktop articles. The single sign-on row comes from the [single sign-on article](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-single-sign-on).
 
 Learn's comparison of a managed domain with self-managed AD DS shows the same pattern. Both support domain join, NTLM and Kerberos, custom OU structure and Group Policy. A managed domain does not give Domain or Enterprise administrator privileges and does not allow schema extensions. Domain and forest trusts are listed as possible for a managed domain but require the Enterprise SKU.
 
-[Microsoft Entra joined](/entity/avd-entra-join/) hosts are covered separately in the series. [Hybrid join](/entity/hybrid-entra-join/) hosts are the other Entra-based option.
+See also [Microsoft Entra joined](/entity/avd-entra-join/) and [hybrid joined](/entity/hybrid-entra-join/) session hosts.
 
 ## Setup order for Entra Domain Services-joined session hosts
 
@@ -78,15 +75,15 @@ Learn's comparison of a managed domain with self-managed AD DS shows the same pa
 4. **Make the credentials available.** Cloud-only users must change their password in Microsoft Entra ID before they are synchronized. The initial synchronization may take a few hours to a couple of days, depending on the number of objects. For hybrid users, [configure Microsoft Entra Connect](/entity/entra-connect/) to synchronize password hashes in the NTLM and Kerberos compatible formats. A federated directory without hashes in Entra ID does not work with Domain Services, according to Learn's FAQ.
 5. **Prepare the join account.** For Entra Domain Services you need to be a member of the *AAD DC Administrators* group, and the account used to join a domain cannot have multifactor authentication enabled.
 6. **Deploy session hosts.** Learn lists the domain name, the credentials to join the domain and an optional organizational unit as parameters for session host deployment, and requires that the virtual network can reach the domain controllers and DNS servers. In the portal's host pool creation, the directory field offers Microsoft Entra ID or Active Directory. Our reading: the managed domain is entered through the Active Directory option with its domain name; check the portal wording in your tenant.
-7. **Test with one user.** Sign in with a user whose password was changed after the managed domain was created. Learn recommends the UPN format (for example `driley@aaddscontoso.com`) because the auto-generated SAMAccountName may differ from the UPN prefix.
+7. **Sign in with the UPN.** Learn recommends the UPN format (for example `driley@aaddscontoso.com`), because the auto-generated SAMAccountName may differ from the UPN prefix.
 
 ## FSLogix profiles with Entra Domain Services
 
 For [FSLogix](/entity/fslogix/) profile containers on [Azure Files](/entity/azure-files/), Learn's storage overview names three identity sources: on-premises AD DS, Entra Domain Services and [Microsoft Entra Kerberos](/entity/entra-kerberos-azure-files/). You can use only one per storage account, and it applies to all file shares in the account. For Entra Domain Services it lists cloud-only or hybrid identities, and says Kerberos authentication requires the client to be joined to the managed domain.
 
-The [Azure Files article](https://learn.microsoft.com/en-us/azure/storage/files/storage-files-identity-auth-domain-services-enable) describes the portal path: storage account, **Data storage**, **Classic file shares**, then **Identity-based access**, **Microsoft Entra Domain Services**, **Set up**, select the checkbox and **Save**. It requires that the managed domain shows a Running health status with password hash synchronization enabled. Setting the property domain-joins the storage account to the managed domain. Share-level permissions still have to be assigned afterwards. Learn recommends AES-256 for Kerberos on the storage account.
+The [Azure Files article](https://learn.microsoft.com/en-us/azure/storage/files/storage-files-identity-auth-domain-services-enable) describes the portal path: storage account, **Data storage**, **Classic file shares**, then **Identity-based access**, **Microsoft Entra Domain Services**, **Set up**, select the checkbox and **Save**. It requires that the managed domain shows a Running health status with password hash synchronization enabled. Setting the property domain-joins the storage account to the managed domain. Share-level permissions still have to be assigned afterwards.
 
-The comparison differs for Microsoft Entra Kerberos: Learn says clients must be Microsoft Entra joined or hybrid joined, and session hosts need no line of sight to a domain controller for FSLogix. That makes it the alternative to evaluate if you choose Entra-joined session hosts instead of a managed domain. Learn's prerequisites page also says that for Entra-joined session hosts with FSLogix, profiles go on Azure Files or Azure NetApp Files and user accounts must be hybrid identities, while the Entra Kerberos article lists cloud-only identities as supported in the Azure cloud; verify which statement applies to your design.
+Microsoft Entra Kerberos is the alternative: Learn says clients must be Microsoft Entra joined or hybrid joined, and for FSLogix the session hosts need no line of sight to a domain controller. Learn's prerequisites page says Entra-joined session hosts with FSLogix need hybrid identities, while the Entra Kerberos article lists cloud-only identities as supported in the Azure cloud; verify which applies to your design.
 
 ## Limits and failure points
 
@@ -94,11 +91,9 @@ The comparison differs for Microsoft Entra Kerberos: Learn says clients must be 
 - **Intune.** Session hosts joined to Entra Domain Services cannot be managed with Intune; Group Policy is the management route.
 - **No privileged access.** The managed domain's domain controllers are not reachable. Learn describes a management VM joined to the managed domain with the usual AD DS tools such as Active Directory Administrative Center and the DNS and Group Policy snap-ins. Members of the *AAD DC Administrators* group get remote desktop access to machines joined to the managed domain.
 - **Mostly read-only.** You cannot change user attributes, passwords or group memberships in a managed domain, apart from custom OUs. The OU structure is flat, and users and groups sit in the *AADDC Users* container.
-- **No on-premises GPOs.** Group Policies, Sysvol contents, computer objects and OUs from on-premises AD DS are not synchronized.
-- **Schema.** Schema extensions are not supported.
+- **No on-premises GPOs.** Group Policies, Sysvol contents, computer objects and OUs from on-premises AD DS are not synchronized, and schema extensions are not supported.
 - **One managed domain per directory.** Learn's FAQ says a single Entra directory can have only one managed domain.
 - **Passwords.** The default password lifetime is 90 days. Five invalid attempts within 2 minutes lock the account for 30 minutes in the managed domain; this does not lock the account in Microsoft Entra ID.
-- **External identities.** Accounts from external directories linked to the tenant are not available in Domain Services.
 - **Hybrid identity matching.** For hybrid identities, Learn says the UPN or the SID must match between AD and Microsoft Entra ID.
 
 ## SKU and sizing guidance
@@ -111,7 +106,7 @@ Learn's [administration concepts](https://learn.microsoft.com/en-us/entra/identi
 | Enterprise | 25,001 to 100,000 | 3,001 to 10,000 per hour | Every three days |
 | Premium | 100,001 to 500,000 | 10,001 to 70,000 per hour | Daily; kept seven days, every third backup kept 30 days |
 
-You can change the SKU after creation. Additional replica sets (up to five including the first) need Enterprise or Premium, according to the replica-sets article.
+You can change the SKU after creation. Learn's replica-sets article says additional replica sets, up to five including the first, need Enterprise or Premium.
 
 ## When a managed domain fits
 
@@ -121,7 +116,7 @@ Our reading, based on the limits above:
 - **It is a poor fit** when you want single sign-on with Microsoft Entra authentication, Intune management of session hosts, schema changes or privileged domain administration.
 - **If a user population is cloud-only** and no application needs NTLM or Kerberos, the Entra-joined route removes the managed domain and the password-hash step, but then FSLogix needs a profile-storage identity option that works with Entra-joined clients.
 
-A pilot with one host pool will show the sign-in experience and the password-hash timing before you commit.
+A pilot host pool shows the sign-in experience and the password-hash timing before you commit.
 
 ## Sources
 
