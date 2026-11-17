@@ -103,10 +103,10 @@ Only the last row ends sessions. Drain mode therefore needs a second step, eithe
 
 ## Common misunderstandings
 
-- **"I turned drain mode on and users were disconnected."** The documentation does not describe that. Check for autoscale, a policy or a patch process that ends sessions.
+- **"I turned drain mode on and users were disconnected."** The drain mode page does not describe that. Check for autoscale, a policy or a patch process that ends sessions.
 - **"The host is drained but still has users."** Expected: sessions persist, and returning users go back to their host.
 - **"Drain mode is off again."** On pooled pools, check the scaling plan and the exclusion tag first.
-- **"New users cannot connect at all."** If every host in a pool is in drain mode, no host can take a new user. Learn documents no error message for this case.
+- **"New users cannot connect at all."** If every host in a pool is in drain mode, no host can take a new user. The drain mode page documents no error message for this case.
 
 ## Sources
 
