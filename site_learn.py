@@ -2,6 +2,7 @@
 import json, re, html, os
 from functools import lru_cache
 import site_media as MED
+import site_hidden as HID   # ausgeblendete Entitaeten (data/entity_hidden.json)
 import ontology as ONT   # Oberbegriffe per Regel (Klammer/Praefix) fuer alle Entitaeten beim Laden
 import site_meta_entities as MM   # SEO-Titel und Meta-Descriptions nach Suchabsicht
 from pathlib import Path
@@ -479,7 +480,12 @@ def load_entities(api):
     if sf.exists():
         for e in json.loads(sf.read_text("utf-8")):
             base.setdefault(e["id"], e)
+    hidden = HID.ids()   # ausgeblendete Entitaeten (data/entity_hidden.json): keine Seite, keine Liste; die Repo-Eintraege bleiben unveraendert in den Quelldateien
+    for i in hidden:
+        base.pop(i, None)
     SRC_ENTS.clear(); SRC_ENTS.update({k: dict(v) for k, v in base.items()})   # T30: reine Repo-Fassung (vor D1) fuer /entities-src.json
+    for i in hidden:   # wie zusammengefuehrte: der Worker-Abgleich (syncEntitiesFromSite) setzt in der D1-Fassung outdated (MCP-Suche, SEO, Events, Auto-Uebersetzung ueberspringen sie)
+        SRC_ENTS[i] = {"id": i, "outdated": True}
     moved = merge_targets()
     for old, new in moved.items():   # zusammengefuehrt: der Worker-Abgleich (syncEntitiesFromSite) setzt in der D1-Fassung der alten id replaced_by/outdated
         if old not in base:          # (wie das Bearbeiten-Formular) - dann ueberspringen sie Auto-Uebersetzung, MCP-Suche, SEO und Events; die Zeile bleibt erhalten
@@ -488,6 +494,8 @@ def load_entities(api):
     over = (_fetch_json(f"{api}/api/entity/export") or {}).get("items", [])
     for it in over:
         d = it.get("data") or {}
+        if it.get("id") in hidden:   # ausgeblendet (data/entity_hidden.json): die D1-Fassung bekommt ebenfalls keine Seite
+            continue
         if it.get("id") in gone and it["id"] not in base:   # zusammengefuehrte Person (data/guest_merge.json): alte D1-Fassung keine eigene Seite, die Adresse leitet weiter
             continue
         if it.get("id") and d.get("name") and d.get("type"):

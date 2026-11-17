@@ -1,0 +1,9 @@
+{
+ "_doc": "Ausgeblendete Entitaeten (Entscheidung Mirko 17.11.2026: 'Seite entfernen + Weiterleitung'). Jede id in 'ids' bekommt in KEINER Sprache eine Entitaetsseite und steht in keiner Liste (Entitaetenuebersicht, Suche, Sitemaps, entities.json/.jsonld, llms-entities.txt, Sidebar, JSON-LD-Verweise, Speaker-Liste, Gaesteliste, Folgen-Verlinkung). /entity/<id>/ und /<sprache>/entity/<id>/ leiten per 301 auf die Entitaetenuebersicht der Sprache (site_podpage.redirect_table), ein gleichnamiger Podcast-Gast (Gastseite /show/guests/<id>/) leitet auf /show/guests/. Der Name bleibt in Folgen und Sessions als einfacher Text ohne Link. Gelesen ueber site_hidden.py (Seitenbau, Gaeste-/Speaker-Erzeugung, Weiterleitungen, tools/build_speakers.py, fill_entities.py); die D1-Fassung wird beim Seitenbau uebersprungen und ueber /entities-src.json als outdated markiert. Rueckgaengig: id aus der Liste nehmen (die Quelldaten in data/*.json bleiben unveraendert). 'why': Begruendung je id (nur zur Dokumentation).",
+ "ids": [
+  "gokan-ozcifci"
+ ],
+ "why": {
+  "gokan-ozcifci": "Mirko 17.11.2026: Seite https://www.m365.fm/entity/gokan-ozcifci/ ausblenden, Weiterleitung auf die Entitaetenuebersicht"
+ }
+}

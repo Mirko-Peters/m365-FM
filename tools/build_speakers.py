@@ -4,11 +4,12 @@ daraus entstehen Personen-Entitaeten mit Sessions (data/speaker_entities.json) u
 Eigene Eingriffe in data/speaker_manual.json:
   {"merge": [["Name A", "Name B"]], "never": [["Name A", "Name B"]], "links": {"mirko peters": {"entity": "mirko-peters", "handle": "mirko-peters"}}, "fix": {"name": {"company": "...", "title": "..."}}}
 Aufruf: python tools/build_speakers.py   (deterministisch, ohne Netz)"""
-import json, re, unicodedata
+import json, re, sys, unicodedata
 from difflib import SequenceMatcher
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))   # site_hidden (ausgeblendete Entitaeten)
 D = ROOT / "data"
 # Programme (alt -> neu); Handle und Titel wie die Events in der Plattform
 PROGRAMS = [("m365con_program_2026.json", "m365con-2026", "M365Con 2026"), ("m365con_program_dach.json", "m365con-dach-2026", "M365Con DACH 2026"), ("m365con_program.json", "m365con-2027", "M365Con 2027")]
@@ -145,6 +146,8 @@ def main():
         speakers.append(sp)
         if len(idx) > 1 and (aliases or len({r["event"] for r in members}) > 1):
             merged.append({"name": canon, "aliases": aliases, "events": [e["handle"] for e in events]})
+    import site_hidden as HID   # ausgeblendete Entitaeten (data/entity_hidden.json): kein Speaker-Eintrag, keine Entitaet - der Name bleibt in den Sessions als Text
+    speakers = HID.drop(speakers)
     # Personen-Entitaeten (bestehende, z. B. mirko-peters, bleiben unveraendert)
     ents = []
     for sp in speakers:

@@ -121,9 +121,10 @@ def nbytes(*parts): return sum(len(str(x).encode("utf-8")) for x in parts)
 
 # ---------- Daten ----------
 def load_entities():
+    import site_hidden as HID   # ausgeblendete Entitaeten (data/entity_hidden.json): keine KI-Texte dafuer
     ents = {}
     for f in ("entities", "guest_entities", "speaker_entities"):
-        for e in jload(D / f"{f}.json", []):
+        for e in HID.drop(jload(D / f"{f}.json", [])):
             ents.setdefault(e["id"], e)
     return ents
 

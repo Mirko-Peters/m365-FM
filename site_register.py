@@ -15,7 +15,8 @@ def build(write, BASE, TODAY, posts):
     import site_notes as SNT
     idx = P.episode_index(BASE)
     enx = json.loads((ROOT / "data" / "en_episodes.json").read_text("utf-8")) if (ROOT / "data" / "en_episodes.json").exists() else {}
-    gents = {e["id"]: e for e in json.loads((ROOT / "data" / "guest_entities.json").read_text("utf-8"))} if (ROOT / "data" / "guest_entities.json").exists() else {}
+    import site_hidden as HID   # ausgeblendete Entitaeten (data/entity_hidden.json): kein Gast-Verweis auf eine Entitaet ohne Seite
+    gents = {e["id"]: e for e in HID.drop(json.loads((ROOT / "data" / "guest_entities.json").read_text("utf-8")))} if (ROOT / "data" / "guest_entities.json").exists() else {}
     gid = {}
     for e in gents.values():
         gid[e["id"][:-6] if e["id"].endswith("-guest") else e["id"]] = e["id"]
