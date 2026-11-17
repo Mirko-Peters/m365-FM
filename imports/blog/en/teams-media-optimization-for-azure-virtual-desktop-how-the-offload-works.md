@@ -99,7 +99,7 @@ Per Learn, a session host needs Windows 10 or 11 multi-session or Windows 10 or 
 
 1. Set the registry value `IsWVDEnvironment` (DWORD, `1`) under `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Teams` on each session host, creating the `Teams` key if needed. Learn gives `New-Item` and `New-ItemProperty` commands for this.
 2. Install the Remote Desktop WebRTC Redirector Service MSI (`aka.ms/msrdcwebrtcsvc/msi`) on each session host. Learn advises this for new Teams too, as the fallback path. Its latest public version on the version history page is 1.56.2603.20001, published 17 September 2026.
-3. Install Teams per machine on pooled host pools. Learn's Teams for VDI page recommends `teamsbootstrapper.exe -p`, which Learn describes as always installing the latest Teams client.
+3. Deploy Teams with bulk deployment. Learn's Teams for VDI page recommends `teamsbootstrapper.exe -p`, which Learn describes as always installing the latest Teams client.
 
 Device redirection is not needed with media optimization. Without it, Learn suggests the RDP properties `audiocapturemode:i:1`, `audiomode:i:0` and `camerastoredirect:s:*` instead.
 
@@ -123,7 +123,7 @@ For macOS, the SlimCore page asks for the non-Store Windows App (the MAU client)
 
 ### Policy and verification
 
-A Teams policy controls SlimCore use: `VDI2Optimization` in `CsTeamsVdiPolicy` defaults to `Enabled`. On the SlimCore page, in the roaming context, Teams tries SlimCore and attempts WebRTC optimization if the endpoint does not support it. After 1 April 2027 that WebRTC path ends on Windows endpoints. Learn's example for restricting it for a user is `New-CsTeamsVdiPolicy -Identity RestrictedUserPolicy -VDI2Optimization "Disabled"` followed by `Grant-CsTeamsVdiPolicy`.
+A Teams policy controls SlimCore use: `VDI2Optimization` in `CsTeamsVdiPolicy` defaults to `Enabled`. For Azure Virtual Desktop, Learn's Teams on Azure Virtual Desktop page advises installing the WebRTC Redirector Service as well, so users can fall back to WebRTC when they roam to a device that does not support the new architecture. After 1 April 2027 that WebRTC path ends on Windows endpoints. Learn's example for restricting it for a user is `New-CsTeamsVdiPolicy -Identity RestrictedUserPolicy -VDI2Optimization "Disabled"` followed by `Grant-CsTeamsVdiPolicy`.
 
 To check a session, connect, restart Teams, and open **More options (...)**, **Settings**, **About Teams**. The banner reads **AVD SlimCore Media Optimized** for SlimCore or **AVD Media Optimized** for WebRTC. **AVD Media not connected** means quit Teams and try again. In **Settings**, local audio devices and cameras should appear; **Remote audio** means the offload is not active. On the endpoint, `MsTeamsVdi.exe` should run as a child of `msrdc.exe`.
 
