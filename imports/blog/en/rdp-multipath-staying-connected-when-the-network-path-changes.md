@@ -25,7 +25,7 @@ RDP Multipath is an Azure Virtual Desktop transport feature that watches more th
 
 ## The problem it addresses
 
-A [Remote Desktop Protocol](/entity/remote-desktop-protocol/) session runs over one transport at a time. If that path degrades, because a Wi-Fi access point changes, a VPN reconnects or a mobile link drops, the user sees a freeze or a disconnect. Learn's [RDP Multipath article](https://learn.microsoft.com/en-us/azure/virtual-desktop/rdp-multipath) describes the answer: continuous monitoring of multiple network paths and dynamic selection of the most reliable one, which reduces the likelihood of disconnections. Backup paths stay on standby, and if the active path becomes unstable or fails, Multipath switches to the next one.
+When the transport of a [Remote Desktop Protocol](/entity/remote-desktop-protocol/) session fails (Learn names a TCP disconnect, a keep-alive timeout or the loss of the network interface as signals), the current Auto-Reconnect model freezes the screen behind a modal "Reconnecting" dialog and blocks user input, according to Learn's [fast reconnect article](https://learn.microsoft.com/en-us/azure/virtual-desktop/fast-reconnect). Learn's [RDP Multipath article](https://learn.microsoft.com/en-us/azure/virtual-desktop/rdp-multipath) describes the answer: continuous monitoring of multiple network paths and dynamic selection of the most reliable one, which reduces the likelihood of disconnections. Backup paths stay on standby, and if the active path becomes unstable or fails, Multipath switches to the next one.
 
 ## Which paths it manages
 

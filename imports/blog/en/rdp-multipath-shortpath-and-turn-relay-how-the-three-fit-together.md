@@ -88,7 +88,7 @@ Three questions come up in planning, and the Multipath and Shortpath pages are s
 
 ## Troubleshooting order
 
-When users report drops or high latency, work from the bottom of the stack upwards, because each layer depends on the one below it.
+When users report drops or high latency, work from the bottom of the stack upwards. This order is our working rule, not a Learn requirement.
 
 1. Does the session connect at all? That is the TCP 443 path to the gateway.
 2. Does it use UDP? Read Connection Information. As a working rule of ours, a plain TCP session points to a blocked UDP route, a TCP-only policy, or a network configuration the Shortpath page advises against.
