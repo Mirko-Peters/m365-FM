@@ -106,18 +106,16 @@ _IX = []
 
 
 def named_in(text, ents):
-    """Entitaeten, deren Name/Alias im Text steht, in der Reihenfolge des Auftretens - derselbe vorsichtige Abgleich wie die Themen der
-    Sidebar (site_sidebar.Index: laengster Name zuerst, Mindestlaenge, ohne zu allgemeine Einzelwoerter wie "Teams", "Copilot", "Azure")."""
+    """Entitaeten, deren Name/Alias im Text steht, in der Reihenfolge des Auftretens - derselbe Abgleich wie die Themen der Sidebar
+    (site_sidebar.Index ueber den gemeinsamen Namensindex site_entmatch: Eigennamen mit Beachtung der Schreibung, Allerweltswoerter nur in
+    Eigennamen-Stellung und mit Kontext, Sammelbegriffe als Einzelwort nicht)."""
     if not text:
         return []
     if not _IX:
         import site_sidebar as SBR
         _IX.append(SBR.Index())
     ix = _IX[0]
-    if not ix.rx:
-        return []
-    out = [ix.names.get(m.group(1).lower()) for m in ix.rx.finditer(text)]
-    return [i for i in dict.fromkeys(out) if i and i in ents]
+    return [i for i in ix.ids(text) if i and i in ents]
 
 
 def rank(ids, ents, text, first=()):

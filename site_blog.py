@@ -6,6 +6,7 @@ from site_learn import ENTS, esc, _fetch_json, LCSS, WT, wiki_render, wiki_image
 import site_notes as SNT
 import site_members as MEM
 import site_topics as TOP
+import site_entmatch as EM   # JSON-LD mentions der Kontext-Links
 import site_topic_crumbs as TC   # zweite BreadcrumbList nach dem Hauptthema (M365.FM > Oberbegriffe > Thema > Beitrag)
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung bezahlter Beitraege (data/sponsorships.json)
 import site_img_dims as IMG
@@ -164,8 +165,13 @@ def build(g, posts, people, api):
                 import site_legacy_blog as LBL
                 body_html = LBL.better_links(p, body_html, lang, BASE)
             body_html = one_h1(body_html, p["title"])   # Bing-SEO-Bericht: nur die Seitenueberschrift ist <h1>; <h1> im Beitragstext wird <h2>, eine Wiederholung des Titels entfaellt
-            if p.get("html"):   # erste Nennung einer Entitaet im Text auf ihre Seite verlinken (Wissensgraph aus dem Artikel heraus), in allen Sprachen
-                body_html, _al = TOP.autolink_html(body_html, ENTS, lambda i: links_l[i][1], max_links=8)
+            _kp, _fq, _fld = SNT.sections(p.get("keypoints"), p.get("faq"), lang)   # Kernpunkte und FAQ aus eigenen Feldern
+            # Kontext-Links (site_entmatch): erste Nennung jeder Entitaet auf der Seite (Kernpunkte, dann Text), ohne Obergrenze, in allen Sprachen und fuer
+            # alle Beitragsarten (fruehere Podpage-Beitraege, Content-Pakete, Sponsor-/Partnerartikel, Community-Beitraege); Kontext = Themen des Beitrags
+            _used = EM.Used(); _lu = lambda i: links_l[i][1] if i in links_l else None; _ctx = [t for t in p.get("topics", []) if t in ENTS]
+            _kp, _ = TOP.autolink_html(_kp, ENTS, _lu, lang=lang, ctx=_ctx, used=_used)
+            body_html, _al = TOP.autolink_html(body_html, ENTS, _lu, lang=lang, ctx=_ctx, used=_used)
+            _ment = [i for i in _used if i in ENTS]
             if not p.get("legacy"):
                 body_html = IMG.enhance(body_html)
             body_html = IMG.alt_text(body_html, lang, p["title"])   # Alt-Texte: schwache Alt-Texte (Ueberschrift, Platzhalter, englisch auf Sprachfassungen) aus data/r2_alt.json.gz in der Seitensprache
@@ -182,7 +188,6 @@ def build(g, posts, people, api):
             topics, _spx = SPM.split_topics([t for t in p.get("topics", []) if t in ENTS], [x for x in _spr_ex if x in ENTS])
             tl = (f'<section class="bl-ents"><h2>{esc(T(lang, "Entities in this article", "Entitäten in diesem Artikel"))}</h2><p>' + "".join(f'<a class="mb-tag" href="{links_l[t][1]}">{esc(ENTS[t]["name"])}</a> ' + (f'<small class="mut">{esc(SPM.badge(lang, _spr))}</small> ' if t in _spx else '') for t in topics) + '</p></section>') if topics else ""
             vote = "" if p.get("legacy") else f'<p><button type="button" class="bl-vote" data-s="{esc(p["slug"])}" aria-pressed="false" aria-label="Upvote">▲ <span class="n">{p.get("votes", 0)}</span></button></p>'
-            _kp, _fq, _fld = SNT.sections(p.get("keypoints"), p.get("faq"), lang)   # Kernpunkte und FAQ aus eigenen Feldern
             if p.get("html"): _fq = ""   # FAQ steht schon im Text des Beitrags; nur das Schema (FAQPage) bleibt
             cos = [c for c in (p.get("coauthors") or []) if c.get("handle") in pb and c["handle"] != p["handle"]]
             co_html = "".join(f' {esc(T(lang, "and", "und"))} <a href="{croot}u/{c["handle"]}/" rel="author">{esc(pb[c["handle"]]["name"])}</a>' for c in cos) if len(cos) == 1 else "".join(f', <a href="{croot}u/{c["handle"]}/" rel="author">{esc(pb[c["handle"]]["name"])}</a>' for c in cos)
@@ -200,7 +205,7 @@ def build(g, posts, people, api):
             ld = [{"@context": "https://schema.org", "@type": "BlogPosting", "@id": u + "#post", "mainEntityOfPage": u, "headline": p["title"], "description": p.get("summary") or "",
                    "inLanguage": lang, **({"image": p["images"][:6]} if p.get("html") and p.get("images") else ({"image": [i["url"] for i in wiki_images(p["body"])]} if wiki_images(p["body"]) else {})), "datePublished": iso(p["published"]), "dateModified": iso(p.get("updated") or p["published"]),
                    "author": [_author_node(BASE, a, au)] + [{"@type": "Person", "@id": f"{BASE}/community/u/{c['handle']}/#person", "name": pb[c["handle"]]["name"], "url": f"{BASE}/community/u/{c['handle']}/"} for c in cos],
-                   "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics], "citation": [{"@type": "CreativeWork", "name": r["title"], "url": r["url"]} for r in refs],
+                   "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics], **({"mentions": EM.mentions(BASE, _ment, topics)} if EM.mentions(BASE, _ment, topics) else {}), "citation": [{"@type": "CreativeWork", "name": r["title"], "url": r["url"]} for r in refs],
                    "publisher": {"@id": f"{BASE}/#org"}}] + _fld + [{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [   # T4: Verlag und Brotkrumen
                        {"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"}, {"@type": "ListItem", "position": 2, "name": a["name"], "item": au},
                        {"@type": "ListItem", "position": 3, "name": "Blog", "item": au + "blog/"}, {"@type": "ListItem", "position": 4, "name": p["title"], "item": u}]}]

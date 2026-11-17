@@ -1225,6 +1225,17 @@ def build():
     SNT.load(COMMUNITY_API); SNT.publish(OUT)   # Show Notes aus Spreaker (data/show_notes) + Bearbeitungen aus dem Editor; Rohdaten fuer den Editor unter /show-notes/
     EN_TOP = TOPW.en_items(topdata, _PPs.episode_index(BASE)["by_sid"])   # Top 10 der Hauptshow (erst nach SNT.load: episode_index wird je Bau zwischengespeichert)
     if EN_TOP: TOP_REAL.add("en")   # Fusszeile englischer Seiten -> /top/
+    import site_entmatch as _EM   # gemeinsamer Namensindex: Folgen je Entitaet (Dub), Kontext-Links der Folgenseiten
+    _EMX = _EM.shared(LRN.ENTS); _EMU = {}
+    _dhc = {}
+    def _dub_hits(lang, it):
+        """Entitaeten einer Dub-Folge aus Titel (Schreibung beachtet, Kontext: Extraktion der Folge) und Tags (nur eindeutige Formen), einmal je Folge."""
+        k = (lang, it["slug"])
+        if k not in _dhc:
+            _m = _EMX
+            _cx = {s for s, _ in (SX.BY_EPISODE.get(str(it.get("eid"))) or {}).get("entities", [])}
+            _dhc[k] = set(_m.ids(it["e"]["title"], lang, _cx)) | set(_m.ids_tags(it["e"].get("tags") or ""))
+        return _dhc[k]
     # Episoden-Seiten
     DPOS = {l: {i["vid"]: n for n, i in enumerate(seq)} for l, seq in by_lang.items()}   # Stelle jeder Folge in ihrer Sprache (neueste zuerst) fuer Vor/Zurueck
     MPU = MP.Uniq()   # SEO-Titel der Folgenseiten: je Sprache einmalig
@@ -1285,12 +1296,18 @@ def build():
         pc = [c for c in ORDER if c in cat_of[vid]][0]
         ld[0]["genre"] = cat_name(pc, l)
         ld[0]["keywords"] = ", ".join(tagraw[l][vid]) or e.get("tags", "")
+        # Kontext-Links (site_entmatch) in Teaser, Stichpunkten, Hoerhinweis, Artikel, FAQ und Show Notes der Folge: erste Nennung je Entitaet auf der
+        # Seite, Ziel in der Sprache der Seite (wenn dort auf index, sonst englisch), Kontext = Extraktion der Folge und Treffer im Titel
+        _dused = _EM.Used(); _dctx = set(_xids) | _dub_hits(l, it); _du = _EMU.setdefault(l, _EM.url_in(BASE, l))
+        _intro_h, _ = _EMX.link_html(intro, _du, l, _dctx, used=_dused)
+        _lis_h, _ = _EMX.link_html("".join(f"<li>{x}</li>" for x in bullets), _du, l, _dctx, used=_dused)
+        _aud_h, _ = _EMX.link_html(f'<p class="lede" style="margin-top:1.4em">{aud}</p>', _du, l, _dctx, used=_dused)
         art = articles.get(vid, {}).get(l, {})
         art_html = art.get("html", "")
         if art_html:
             art_html, _lk = autolink(art_html, it, [], tagraw[l], url_of, money=LRN.drop_glossed(SM.registry_for(MONEY, l)))
             autolink_log.append(((vid, l), _lk))
-            art_html = LRN.gloss_link(art_html, l, BASE)
+            art_html = LRN.gloss_link(art_html, l, BASE, ctx=_dctx, used=_dused, url_of=_du)
         if art_html and art.get("info"):
             ih = info_html(art["info"])
             art_html = re.sub(r"(</p>)", r"\1" + ih.replace("\\", "\\\\"), art_html, count=1) if ih else art_html
@@ -1322,7 +1339,12 @@ def build():
                          + "".join(f"<details><summary>{esc(x['q'])}</summary><p>{esc(x['a'])}</p></details>" for x in faq_items) + "</section>")
             ld.append({"@context": "https://schema.org", "@type": "FAQPage", "inLanguage": LANGS[l][1], "mainEntity": [
                 {"@type": "Question", "name": x["q"], "acceptedAnswer": {"@type": "Answer", "text": x["a"]}} for x in faq_items]})
-        lis = "".join(f"<li>{x}</li>" for x in bullets)
+        lis = _lis_h
+        faq_block, _ = _EMX.link_html(faq_block, _du, l, _dctx, used=_dused)
+        notes_block, _ = _EMX.link_html(notes_block, _du, l, _dctx, used=_dused)
+        _dm = _EM.mentions(BASE, [i for i in _dused if i in LRN.ENTS], _xids)
+        for _n in (ld if _dm else []):   # im Text verlinkte Entitaeten (Audit E7); about bleibt die Extraktion
+            if _n.get("@type") in ("PodcastEpisode", "VideoObject"): _n["mentions"] = _dm
         el = _ep_links; sh = plat.get(l, {})
         btns = ep_btns(l, el, sh, spk, yt, e["title"], _trf, tr)
         showrow = show_row(l, sh)
@@ -1332,14 +1354,14 @@ def build():
 <nav class="crumbs" aria-label="breadcrumb"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])} / {it["date"]}</nav>
 <div class="kicker">M365.FM · {esc(LANGS[l][0])}</div>{orig_link(l, ORIG.get(vid), ORIG_T.get(vid))}
 <h1>{esc(h1_main)}</h1>{("<p class=sub>" + esc(h1_rest) + "</p>") if h1_rest else ""}{SPM.note(l, _spr, "episode")}
-{chips_html(l, it)}<p class="lede">{intro}</p>
+{chips_html(l, it)}<p class="lede">{_intro_h}</p>
 <figure class="cover" style="margin-inline:0">{art_svg(vid, LANGS[l][0], "M365.FM · " + ui[0], l)}</figure>
 <div class="panel">{PL.player("spreaker", it["eid"], e["title"], ui[0], link=spk)}
 <div class="btns">{btns}</div>{"<p class=showrow>" + showrow + "</p>" if showrow else ""}</div>{LST.follow_for(BASE, l)}
 <div style="margin:22px 0">{PL.player("youtube", vid, e["title"], ui[1], link=yt)}</div>
 <p class="mut">▶ {esc(e["title"])}</p>
 <h2>{esc(hdr)}</h2><ol class="points">{lis}</ol>
-<p class="lede" style="margin-top:1.4em">{aud}</p>
+{_aud_h}
 {("<section class=article>" + art_html + "</section>") if art_html else ""}{quiz_block}{faq_block}{notes_block}
 {author_box(l)}
 </article>
@@ -1566,12 +1588,11 @@ def build():
         k = (e["id"], lang)
         if k not in _epc:
             if lang == "en":
-                _epc[k] = PP.find_episodes(BASE, e, LRN.ent_names(e))
+                _epc[k] = PP.find_episodes(BASE, e)
             else:
-                rx = [_rx_i(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])") for n in LRN.ent_names(e)]   # je Name einmal je Bau kompiliert (re.I)
                 _bye = {str(it["eid"]): it for it in by_lang.get(lang, [])}
                 _ext = [_bye[sid] for sid in SX.episodes_for(e["id"]) if sid in _bye]   # T27: QA-gepruefte Extraktion der Dub-Folge nennt die Entitaet
-                _hit = [it for it in by_lang.get(lang, []) if any(r.search(it["e"]["title"] + " " + (it["e"].get("tags") or "")) for r in rx)] if rx else []
+                _hit = [it for it in by_lang.get(lang, []) if e["id"] in _dub_hits(lang, it)]   # gemeinsamer Namensindex (site_entmatch): Titel mit Schreibung, Tags nur eindeutige Formen
                 _epc[k] = list({it["slug"]: it for it in _ext + _hit}.values())[:12]
         return _epc[k]
     _yt_by_slug = {v: k for k, v in ORIG.items()}   # Hauptshow-Folge -> YouTube-Video (gleiches Video wie die Dub-Fassungen)

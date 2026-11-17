@@ -66,29 +66,21 @@ def con_preload(body):
 
 
 class Index:
-    def __init__(self):
-        ents = json.loads((D / "entities.json").read_text("utf-8"))
-        gp = D / "guest_entities.json"
-        if gp.exists(): ents += json.loads(gp.read_text("utf-8"))
-        self.by = {}; names = {}
-        self.all = {e["id"]: e for e in ents}   # auch Kategorien: fuer feste Themenlisten (Entitaetsseite, Blogbeitrag)
-        for e in ents:
-            if e["type"] in ("category",) or e["id"] == "mirko-peters": continue
-            for n in [e["name"]] + list(e.get("aliases") or []):
-                n = (n or "").strip()
-                if " " not in n and n.lower() in STOP and n.lower() != e["name"].lower(): continue
-                if len(n) < (6 if e.get("guest") else 4) and n not in ("Teams", "Excel", "Word", "Azure", "Loop", "Viva", "Bing"): continue
-                names.setdefault(n.lower(), e["id"])
-            self.by[e["id"]] = e
-        keys = sorted(names, key=len, reverse=True)
-        self.names = names
-        self.rx = re.compile(r"(?<![\w-])(" + "|".join(re.escape(k) for k in keys) + r")(?![\w-])", re.I) if keys else None
+    """Themen-Chips der Seitenleiste ueber den gemeinsamen Namensindex (site_entmatch): Eigennamen mit Beachtung der Schreibung, Allerweltswoerter
+    ("surface", "react", "Teams" am Satzanfang) nur in Eigennamen-Stellung und mit Kontext der Seite (Audit Linktexte E2)."""
+    def __init__(self, ents=None):
+        import site_entmatch as EM
+        self.m = EM.shared(ents)
+        self.all = dict(self.m.ents)   # auch Kategorien: fuer feste Themenlisten (Entitaetsseite, Blogbeitrag)
+        self.by = {i: e for i, e in self.m.live.items() if e.get("type") not in ("category",) and i != "mirko-peters"}
+        self.names = self.m.names   # Fingerabdruck des Index (site_topics._fp)
 
-    def match(self, text, k=8):
-        if not self.rx: return []
-        cnt = {}
-        for m in self.rx.finditer(text):
-            i = self.names.get(m.group(1).lower()); cnt[i] = cnt.get(i, 0) + 1
+    def ids(self, text, lang="en", ctx=()):
+        """{id: Nennungen} (ohne Kategorien und Host) in der Reihenfolge der ersten Nennung."""
+        return {i: n for i, n in self.m.ids(text, lang, ctx, generic=False).items() if i in self.by}
+
+    def match(self, text, k=8, lang="en", ctx=()):
+        cnt = self.ids(text, lang, ctx)
         ids = sorted(cnt, key=lambda i: (self.by[i]["name"].lower() in STOP, -min(cnt[i], 3), TYPE_PRIO.get(self.by[i]["type"], 8), -cnt[i]))
         return [self.by[i] for i in ids[:k]]
 
@@ -116,8 +108,9 @@ L10N = {
 LISTEN = (("apple_show", "Apple Podcasts"), ("spotify_show", "Spotify"), ("amazon_show", "Amazon Music"), ("deezer_show", "Deezer"), ("iheart_show", "iHeart"))
 
 
-def chips_for(ix, text="", ids=None, exclude=(), k=12):
-    """Themen & Personen der Seite: feste Liste (ids, z. B. verwandte Entitaeten einer Entitaetsseite oder Themen eines Beitrags), sonst Treffer im Text."""
+def chips_for(ix, text="", ids=None, exclude=(), k=12, lang="en"):
+    """Themen & Personen der Seite: feste Liste (ids, z. B. verwandte Entitaeten einer Entitaetsseite oder Themen eines Beitrags), sonst Treffer im Text
+    (Kontext der Seite: ihre festen ids und die eigene Entitaet aus exclude)."""
     out, seen = [], set(exclude or ())
     for i in ids or ():
         e = ix.all.get(i)
@@ -125,7 +118,7 @@ def chips_for(ix, text="", ids=None, exclude=(), k=12):
             seen.add(i); out.append(e)
         if len(out) >= k: break
     if not out and text:
-        out = [e for e in ix.match(text, k + len(seen)) if e["id"] not in seen][:k]
+        out = [e for e in ix.match(text, k + len(seen), lang=lang, ctx=set(ids or ()) | set(exclude or ())) if e["id"] not in seen][:k]
     return out
 
 
@@ -134,7 +127,7 @@ def render(ix, BASE, lang, text="", items=(), url_of=None, title_of=None, all_ur
     items/url_of/title_of: neueste Folgen der Sprache; all_url: alle Folgen; shp: Plattform-Links der Show der Sprache (data/platforms.json);
     listen_url: Seite mit allen Plattformen (nur wenn es sie gibt); rss: Feed der Show; home: Sprach-Startseite (ohne Hoeren-Karte, Aufbau wie bisher)."""
     t = L10N.get(lang) or L10N["en"]; shp = shp or {}
-    chips = "".join(f'<li><a class="sb-chip t-{esc(e["type"])}" href="{BASE}{ent_prefix}/entity/{esc(e["id"])}/" title="{esc(TYPE_L.get(e["type"], ""))}"><i></i>{esc(e["name"])}</a></li>' for e in chips_for(ix, text, ids, exclude))
+    chips = "".join(f'<li><a class="sb-chip t-{esc(e["type"])}" href="{BASE}{ent_prefix}/entity/{esc(e["id"])}/" title="{esc(TYPE_L.get(e["type"], ""))}"><i></i>{esc(e["name"])}</a></li>' for e in chips_for(ix, text, ids, exclude, lang=lang))
     ents = f'<section class="sb-card"><h2>{esc(t["topics"])}</h2><ul class="sb-chips">{chips}</ul><a class="sb-more" href="{BASE}{ent_prefix}/entity/">{esc(t["kg"])}</a></section>' if chips else ""
     late = "".join(f'<li><a href="{esc(url_of(x))}">{esc(title_of(x))}</a></li>' for x in list(items)[:5]) if url_of else ""
     new = f'<section class="sb-card"><h2>{esc(t["latest"])}</h2><ol class="sb-list">{late}</ol><a class="sb-more" href="{esc(all_url)}">{esc(t["all"])}</a></section>' if late else ""

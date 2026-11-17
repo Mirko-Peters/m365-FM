@@ -561,7 +561,7 @@ GLOSS[:] = sorted(({"id": e["id"], "name": e["name"], "cat": (_GLEG.get(e["id"])
 def ent_names(e, strict=True):
     out = [e["name"], re.sub(r"\s*\(.*?\)", "", e["name"]).strip()]
     m = re.search(r"\(([A-Za-z]{3,6})\)", e["name"])
-    if m:
+    if m and sum(c.isupper() for c in m.group(1)) >= 2:   # nur Abkuerzungen ("(DLP)"), kein Zusatz wie "(Azure)" oder "(Git)": sonst fuehrte "Azure" auf "Routing preference (Azure)"
         out.append(m.group(1))
     if e["name"].startswith("Microsoft "):
         out.append(e["name"][10:])
@@ -589,54 +589,21 @@ def _word_rx(nm):
     return re.compile(r"(?<![\w-])" + re.escape(nm) + r"(?![\w-])")
 
 
-def gloss_link(html_, lang, base, max_links=8):
-    """Erste Nennung bekannter Begriffe im Artikel auf die Glossar-Seite verlinken (nur Absätze/Listen, nie in Links)."""
-    if not GLOSS or not html_:
+def gloss_link(html_, lang, base, max_links=None, ctx=(), used=None, exclude=(), url_of=None):
+    """Kontext-Links mit Glossar-Hover (a.gl, data-gt/data-gd) im Artikel einer Folge: gemeinsamer Namensindex (site_entmatch), erste Nennung je
+    Entitaet ohne Obergrenze (max_links bleibt nur fuer alte Aufrufer), nie in Ueberschriften oder Links. ctx: Entitaeten der Folge (Extraktion),
+    used: auf der Seite schon verlinkte ids. Ziel: /de/entity/ auf deutschen Seiten, sonst die englische Seite (wie bisher)."""
+    if not html_:
         return html_
-    tgt = (lambda x: f"{base}/de/entity/{x['id']}/") if lang == "de" else (lambda x: f"{base}/entity/{x['id']}/")
-    gids = {x["id"] for x in GLOSS}
-    cands = [(nm, x) for x in GLOSS for nm in _names(x)]
-    ents = [e for e in ENTS.values() if e["id"] not in gids and e["type"] not in ("media",)]
-    for e in ents:
-        x = {"id": e["id"], "name": e["name"], "en": e["desc"].get("en", ""), "de": e["desc"].get("de") or e["desc"].get("en", ""), "ent": True}
-        cands += [(nm, x) for nm in ent_names(e)]
-    cands.sort(key=lambda c: -len(c[0]))
-    etgt = lambda x: f"{base}/de/entity/{x['id']}/" if lang == "de" else f"{base}/entity/{x['id']}/"
-    used, cnt = set(), [0]
-
-    def blk(m):
-        if cnt[0] >= max_links:
-            return m.group(0)
-        block = m.group(0)
-        parts = re.split(r"(<[^>]+>)", block)
-        for nm, x in cands:
-            if cnt[0] >= max_links:
-                break
-            if x["id"] in used:
-                continue
-            if nm not in block:   # Muster ist der woertliche Name (ohne re.I): kommt er im Block nicht vor, trifft er in keinem Textstueck
-                continue
-            rx = _word_rx(nm)
-            depth = 0
-            for i, seg in enumerate(parts):
-                if i % 2 == 1:
-                    if re.match(r"<a[\s>]", seg, re.I):
-                        depth += 1
-                    elif seg.lower().startswith("</a"):
-                        depth = max(0, depth - 1)
-                    continue
-                if depth == 0 and seg.strip():
-                    mm = rx.search(seg)
-                    if mm:
-                        dd = x["de"] if lang == "de" else x["en"]
-                        u_ = etgt(x) if x.get("ent") else tgt(x)
-                        parts[i:i + 1] = [seg[:mm.start()], f'<a class="ilink gl" href="{u_}" data-gt="{esc(x["name"])}" data-gd="{esc(dd)}"' + ('' if lang == "de" else ' data-gl="en"') + '>', mm.group(0), "</a>", seg[mm.end():]]
-                        used.add(x["id"])
-                        cnt[0] += 1
-                        break
-        return "".join(parts)
-
-    return re.sub(r"<(p|li)>.*?</\1>", blk, html_, flags=re.S)
+    import site_entmatch as EM
+    etgt = url_of or (lambda i: f"{base}/de/entity/{i}/" if lang == "de" else f"{base}/entity/{i}/")
+    def attrs(i, t):
+        e = ENTS.get(i) or {}
+        d = e.get("desc") or {}
+        dd = (d.get("de") or d.get("en") or "") if lang == "de" else (d.get("en") or "")
+        return f' data-gt="{esc(e.get("name") or "")}" data-gd="{esc(dd)}"' + ("" if lang == "de" else ' data-gl="en"')
+    h, _ = EM.shared().link_html(html_, etgt, lang=lang, ctx=ctx, exclude=exclude, used=used, cls="ilink gl", attrs=attrs)
+    return h
 
 
 GLOSS_JS = ""   # Glossar-Tooltips liegen in assets/page.js

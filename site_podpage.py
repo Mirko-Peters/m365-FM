@@ -4,6 +4,7 @@ import site_notes as SNT
 import site_shownotes as SNS   # T26: Vollfassungen shownotes/site/<episode_id>.md
 import site_extract as SX   # T27: Folgen <-> Entitaeten aus der QA-geprueften Extraktion
 import site_topic_crumbs as TC   # zweite BreadcrumbList nach dem Hauptthema (M365.FM > Oberbegriffe > Thema > Folge)
+import site_entmatch as EM   # gemeinsamer Namensindex: Folgen je Entitaet, Kontext-Links der Show Notes
 import site_media as MED
 import site_img_dims as IMG
 from site_design import pager as PG   # Vor/Zurueck am Seitenende (rel=prev/next)
@@ -390,14 +391,33 @@ def episode_index(BASE):
     return _IDX[BASE]
 
 
-@lru_cache(maxsize=None)
-def _word_rx(name):   # einmal je Bau und Name kompiliert (vorher je Entitaet neu; der re-Cache fasst nur 512 Muster)
-    return re.compile(r"(?<![\w-])" + re.escape(name) + r"(?![\w-])")
+def ep_hits(BASE):
+    """Einmal je Bau: je Folge der Hauptshow die erkannten Entitaeten (gemeinsamer Namensindex site_entmatch) in Titel ("t") und
+    Kernpunkten/FAQ ("k"), {id: Nennungen}. Kontext je Folge: QA-gepruefte Extraktion und die sicheren Treffer der Folge selbst; so wird
+    "attack surface" nicht Microsoft Surface und "visuals react" nicht React (Audit Linktexte E2)."""
+    idx = episode_index(BASE)
+    if "hits" in idx:
+        return idx["hits"]
+    import site_entmatch as EM
+    m = EM.shared()
+    out = {}
+    for it in idx["items"]:
+        ctx = {sx for sx, _ in (SX.BY_EPISODE.get(str(it.get("sid"))) or {}).get("entities", [])} if it.get("sid") else set()
+        title = it["e"]["title"]; kp = " \n".join(it["keypoints"] + [x["q"] + " " + x["a"] for x in it["faq"]])
+        T0 = len(title) + 1
+        t, k = {}, {}
+        for s0, _, tx, i in m.resolve(title + "\n" + kp, "en", ctx):
+            d = t if s0 < T0 else k
+            d[i] = d.get(i, 0) + 1
+        out[it["slug"]] = {"t": t, "k": k}
+    idx["hits"] = out
+    return out
 
 
-def find_episodes(BASE, e, names, n=12):
-    """Folgen der Hauptshow zu einer Entitaet: Name/Alias im Titel zaehlt 3, in Kernpunkten/FAQ 1; die besten n nach Punkten, dann Datum.
-    Gast-Entitaeten bekommen ihre Auftritte (Namensnennung in Titel/Show Notes)."""
+def find_episodes(BASE, e, names=None, n=12):
+    """Folgen der Hauptshow zu einer Entitaet: im Titel genannt zaehlt 3, je Nennung in Kernpunkten/FAQ 1 (Erkennung ueber site_entmatch, ep_hits);
+    die besten n nach Punkten, dann Datum. Gast-Entitaeten bekommen ihre Auftritte (Namensnennung in Titel/Show Notes). names: nur noch fuer
+    alte Aufrufer (ohne Wirkung)."""
     idx = episode_index(BASE)
     ext = [idx["by_sid"][sid] for sid in SX.episodes_for(e["id"]) if sid in idx["by_sid"]]   # T27: QA-gepruefte Extraktion nennt die Entitaet (staerkster Beleg)
     app = []
@@ -407,12 +427,11 @@ def find_episodes(BASE, e, names, n=12):
     app = list({x["slug"]: x for x in ext + app}.values())
     if e.get("guest"):
         return app[:n]
-    rx = [_word_rx(x.lower()) for x in names if len(x) > 1]
-    if not rx:
-        return app[:n]
+    H = ep_hits(BASE)
     hits = []
     for it in idx["items"]:
-        sc = 3 * sum(1 for r in rx if r.search(it["_t"])) + sum(len(r.findall(it["_k"])) for r in rx)
+        h = H.get(it["slug"]) or {}
+        sc = 3 * bool((h.get("t") or {}).get(e["id"])) + (h.get("k") or {}).get(e["id"], 0)
         if sc:
             hits.append((sc, it["date"], it))
     hits.sort(key=lambda x: (x[0], x[1]), reverse=True)
@@ -542,9 +561,9 @@ def build(g):
 
     sidebar = g["side"]   # die eine Sidebar aller Inhaltsseiten (generate_site.sidebar, site_sidebar.render)
 
-    def pub(rel, title, desc, body, ld=None, og="website", noindex=False, last=TODAY, alts=None, canon=None, seo=None, head=""):
+    def pub(rel, title, desc, body, ld=None, og="website", noindex=False, last=TODAY, alts=None, canon=None, seo=None, head="", ids=None):
         u = f"{root}{rel}"
-        side = sidebar("en", (title + " " + plain(body)[:8000]) if not noindex else "")
+        side = sidebar("en", (title + " " + plain(body)[:8000]) if not noindex else "", ids=ids or None)   # ids: feste Themen der Seite (Folgen: about + im Text verlinkt)
         _st, _sd = seo if seo else ((title if title == NAME else f"{title} – {NAME}"), desc[:300])   # seo = (Titel mit Marke, Description) aus site_meta_podcast
         h = page("en", _st, _sd, u, shell(body, side), alts, ld, xdefault=u, og_type=og, noindex=noindex, extra_head=head)
         if canon:   # T12: Seite bleibt erreichbar, die kanonische Adresse ist eine andere (z. B. Personen-Entitaet); nicht in die Sitemap
@@ -628,6 +647,7 @@ def build(g):
     loc_url = lambda l, rel: f"{BASE}/{l}/show/{rel}"
     elinks = json.loads((D / "episode_links.json").read_text("utf-8")) if (D / "episode_links.json").exists() else {}   # Plattform-Abgleich (sync_platforms.py)
     SNALL = SNS.load_all(); ENTS_ALL = ENTS
+    EMX = EM.shared(); _EMU = {}
     # Vor/Zurueck der Show-Sprachfassungen: Reihe aus den eigenstaendigen (kanonischen) Fassungen je Sprache, neueste zuerst wie eps. Fassungen einer
     # Folge mit Dub in der Sprache sind Kopien (kanonisch = Dub-Folge) und nicht Teil der Reihe; sie zeigen auf die naechsten Nachbarn der Reihe.
     _dub = lambda l, x: bool(((g.get("orig_alts") or {}).get(x["slug"]) or {}).get(l))
@@ -670,6 +690,19 @@ def build(g):
         if not snx and not (nrec and nrec.get("markup")): nnotes = _anc(nnotes, "en")   # nur die alten Podpage-Show-Notes (und ihre Neufassung), nie die Vollfassung oder Editor-Texte
         prev_, next_ = (eps[k + 1] if k + 1 < len(eps) else None), (eps[k - 1] if k else None)
         nnotes = IMG.alt_text(nnotes, "en", e["name"])   # Alt-Texte: schwache Alt-Texte (Ueberschrift, Platzhalter) durch die aus data/r2_alt.json.gz ersetzen
+        # Themen der Folge: Extraktion (nach score), im Titel genannt, dann die Entitaeten, deren Seite die Folge fuehrt (ep_about), nach Nennungen in Kernpunkten/FAQ
+        _it = IDX["by_slug"].get(e["slug"]) or {}
+        _sxo = [s for s, _ in (SX.BY_EPISODE.get(str(_it.get("sid"))) or {}).get("entities", [])] if IDX["by_sid"].get(str(_it.get("sid"))) is _it else []   # Extraktion nach score
+        _tfirst = _sxo + TC.named_in(e["name"], ENTS_ALL)
+        _about = [x for x in TC.rank(ep_about.get(e["slug"]) or [], ENTS_ALL, _it.get("_k", ""), first=_tfirst) if x in ENTS_ALL][:12]   # PodcastEpisode.about = Seitenleisten-Chips (sichtbar)
+        # Kontext-Links in Kernpunkten, Show Notes und FAQ (site_entmatch): erste Nennung je Entitaet auf der Seite, bestehende a.gl-Links zaehlen mit,
+        # Doppel- und Ueberschriften-Links werden Text; Kontext = Themen der Folge. Transkripte bleiben ohne (zu lang, Rauschen).
+        _used = EM.Used(); _ectx = set(_about) | set(_tfirst)
+        _eu = lambda i: f"{BASE}/entity/{i}/"
+        nkp, _ = EMX.link_html(nkp, _eu, "en", _ectx, used=_used)
+        nnotes, _ = EMX.link_html(nnotes, _eu, "en", _ectx, used=_used)
+        nfaq, _ = EMX.link_html(nfaq, _eu, "en", _ectx, used=_used)
+        _ment = [i for i in _used if i in ENTS_ALL and i not in EM.HOST]
         _pc = SPI.PRECONNECT if SPI.is_spreaker(thumb_of(e, nrec)) else ""   # Cover im ersten Bildschirm kommt von Spreaker-CloudFront: Verbindung frueh aufbauen
         aud = f'<audio controls preload="none" style="width:100%" src="{esc(r["audio"])}"></audio>' if r and r.get("audio") else ""
         elk = platform_episode_links(elinks, nrec["id"], f"{nrec['id']}:en") if nrec else {}
@@ -690,19 +723,17 @@ def build(g):
                 + PG("en", (ep_url(prev_), prev_["name"]) if prev_ else None, (ep_url(next_), next_["name"]) if next_ else None))
         ld = {"@context": "https://schema.org", "@type": "PodcastEpisode", "@id": ep_url(e) + "#episode", "name": e["name"], "url": ep_url(e), "datePublished": day(e["create_time"]),
               "description": short_desc(e, nrec, 500), "partOfSeries": {"@id": root + "#series", "@type": "PodcastSeries", "name": NAME, "url": root}, "inLanguage": "en", **({"image": thumb_of(e, nrec)} if thumb_of(e, nrec) else {}), "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}, "publisher": {"@id": f"{BASE}/#org"}}
-        _it = IDX["by_slug"].get(e["slug"]) or {}
         if _it.get("duration"): ld["timeRequired"] = _it["duration"]; ld["duration"] = _it["duration"]
         if _it.get("number"): ld["episodeNumber"] = _it["number"]
-        if ep_about.get(e["slug"]): ld["about"] = [{"@id": f"{BASE}/entity/{x}/#entity"} for x in ep_about[e["slug"]][:12]]   # Entitaeten, deren Seite diese Folge fuehrt
+        if _about: ld["about"] = [{"@id": f"{BASE}/entity/{x}/#entity"} for x in _about]   # Entitaeten, deren Seite diese Folge fuehrt (dieselben stehen als Chips in der Seitenleiste)
+        if EM.mentions(BASE, _ment, _about): ld["mentions"] = EM.mentions(BASE, _ment, _about)   # im Text verlinkte Entitaeten (Audit E7)
         _gids = [gent[gg["name"]] for gg in eg[e["slug"]] if gg["name"] in gent and gent[gg["name"]] in ents]
         if _gids: ld["contributor"] = [{"@id": f"{BASE}/entity/{x}/#entity"} for x in _gids]
         if e.get("season") and str(e["season"]) != "None": ld["partOfSeason"] = {"@type": "PodcastSeason", "seasonNumber": e["season"]}
         _bc = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"}, {"@type": "ListItem", "position": 2, "name": "Episodes", "item": f"{root}episodes/"}, {"@type": "ListItem", "position": 3, "name": e["name"], "item": ep_url(e)}]}
         nld = list(nld) + [_bc]
-        _sxo = [s for s, _ in (SX.BY_EPISODE.get(str(_it.get("sid"))) or {}).get("entities", [])] if IDX["by_sid"].get(str(_it.get("sid"))) is _it else []   # Extraktion nach score
         # zweite Spur nach dem Hauptthema (nur JSON-LD). Kandidaten: QA-gepruefte Extraktion (nach score), im Titel genannte Entitaeten, dann die about-Entitaeten
         # nach Nennungen in Kernpunkten/FAQ; ep_about allein reicht nicht: jede Entitaetsseite fuehrt nur ihre 12 besten Folgen (copilot, teams ... fehlen dort fast immer), Dateireihenfolge
-        _tfirst = _sxo + TC.named_in(e["name"], ENTS_ALL)
         _tbc = TC.breadcrumb(BASE, "en", TC.rank(_tfirst + (ep_about.get(e["slug"]) or []), ENTS_ALL, _it.get("_k", ""), first=_tfirst), ENTS_ALL, e["name"], ep_url(e))
         if _tbc: nld.append(_tbc)
         if r and r.get("audio"): ld["associatedMedia"] = {"@type": "AudioObject", "contentUrl": r["audio"]}
@@ -714,7 +745,8 @@ def build(g):
         for _dl, (_du, _) in oa.items(): alts[_dl] = _du   # T3: die Dub-Fassung (eigene Folge in der Sprache) ist die Sprachalternative, nicht die duenne Show-Kopie
         _seo = MP.en_episode_meta(e["name"], e.get("meta_title"), _rwm, e.get("summary"), short_desc(e, nrec, 600), uniq=_MPU, has_transcript=len(tr) > 200 or bool(_trf))   # Thema zuerst, Format und Marke hinten; Schablonen-Felder (X Explained | M365 FM) fallen weg
         pub(f"episodes/{e['slug']}/", e.get("meta_title") or e["name"], _rwm or short_desc(e, nrec, 155), body, ([ld] + nld) if nld else ld, "article", last=day(e.get("update_time")) or TODAY, alts=alts if len(alts) > 1 else None, seo=_seo,
-            noindex=episode_noindex(e, nrec, bool(snx), _rw, (short_desc(e, nrec, 300), nkp, nnotes, nfaq, tr if len(tr) > 200 else "")), head=_pc)
+            noindex=episode_noindex(e, nrec, bool(snx), _rw, (short_desc(e, nrec, 300), nkp, nnotes, nfaq, tr if len(tr) > 200 else "")), head=_pc,
+            ids=list(dict.fromkeys(_about + [i for i in _ment if ENTS_ALL[i].get("type") != "category"]))[:12])
         # lokalisierte Fassungen dieser Folge
         for l in TRL:
             tt = TRL[l].get(e["slug"])
@@ -725,6 +757,7 @@ def build(g):
             if ln and _rwn: ln_html += SSEO.topics_html(_rwn, ENTS_ALL, BASE, TOPICS.get(l, "Topics"))   # Themen-Zeile mit Entitaetslinks setzt der Bau, sie wird nicht mituebersetzt
             lu = loc_url(l, f"episodes/{e['slug']}/")
             if ln: ln_html = IMG.alt_text(ln_html, l, lt)   # Alt-Texte in der Sprache der Fassung (die Uebersetzung uebernimmt den englischen Alt-Text)
+            if ln: ln_html, _ = EMX.link_html(ln_html, _EMU.setdefault(l, EM.url_in(BASE, l)), l, _ectx)   # Kontext-Links wie in der englischen Fassung, in der Sprache der Seite
             _ldub = TRS.REG.dub.get((l, e["slug"]))   # #266: Dub-Folge der Sprache hat ein Transkript -> dieselben Dateien auch unter dieser Adresse
             _ltrf = TRS.REG.publish(g.get("write_r2") or write, BASE, f"{l}/show/episodes/{e['slug']}/", vtt=TRS.dub_vtt(l, _ldub[0]), index=False) if _ldub else {}
             lbody = (f'<article><p class="mut">{day(e["create_time"])}</p><h1>{esc(lt)}</h1>{SPM.note(l, _spr, "episode")}{aud}{LST.follow_for(BASE, l)}'

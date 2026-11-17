@@ -1,6 +1,6 @@
 """Themen-Zuordnung, Verlinkung und Verwandtschaft fuer Beitraege (Paket 8).
 - score_topics: Entitaeten eines Textes mit Gewicht (Titel 4, Anfang 2, Rest 1; allgemeine Begriffe wie "Microsoft 365" nur, wenn sie im Titel stehen oder nichts Spezifischeres da ist).
-- autolink_html: erste Nennung einer Entitaet im HTML eines Beitrags auf ihre Seite verlinken (nur Absaetze/Listen, nie Ueberschriften oder bestehende Links).
+- autolink_html: erste Nennung jeder Entitaet im HTML auf ihre Seite verlinken (site_entmatch, ohne Obergrenze, nie Ueberschriften oder bestehende Links).
 - related: verwandte Beitraege ueber gemeinsame Themen (Hauptthema zaehlt doppelt), dann nach Datum.
 Ergebnisse der Zuordnung werden je Beitrag in data/cache/blog_topics.json gehalten (Hash von Titel und Textanfang)."""
 import hashlib, html as _h, json, re
@@ -35,25 +35,30 @@ def _fp(ix):
     """Kurzer Fingerabdruck des Entitaeten-Index (IDs und Namen), damit der Themen-Cache nach neuen Entitaeten nicht veraltet."""
     k = id(ix)
     if k not in _FP:
-        _FP[k] = hashlib.sha1("|".join(sorted(ix.names)).encode("utf-8")).hexdigest()[:10]
+        _FP[k] = hashlib.sha1(("entmatch-1|" + "|".join(sorted(ix.names))).encode("utf-8")).hexdigest()[:10]   # entmatch-1: Erkennung ueber site_entmatch
     return _FP[k]
 
 
 def score_topics(ix, title, text, k=10, key=None):
-    """-> [eid, ...] nach Gewicht; key: Cache-Schluessel (z. B. Slug)."""
+    """-> [eid, ...] nach Gewicht; key: Cache-Schluessel (z. B. Slug). Erkennung ueber den gemeinsamen Namensindex (site_entmatch ueber ix.m):
+    Titel und Text als ein Kontext, damit mehrdeutige Kurznamen nur mit Stuetze der uebrigen Themen zaehlen."""
     h = hashlib.sha1((title + "\n" + text[:12000] + "\n" + _fp(ix)).encode("utf-8")).hexdigest()[:12]   # Fingerabdruck der Entitaeten: neue Entitaeten werten den Cache neu aus
     if key:
         c = _load().get(key)
         if c and c.get("h") == h: return list(c["t"])
-    if not ix.rx:
+    m = getattr(ix, "m", None)
+    if m is None or not m.rx:
         return []
-    sc = {}
-    def add(s, w):
-        for m in ix.rx.finditer(s):
-            i = ix.names.get(m.group(1).lower())
-            if i: sc[i] = sc.get(i, 0) + w
-    add(title, 4); add(text[:600], 2); add(text[600:3000], 1); add(text[3000:12000], 0.5)   # ganzer Artikel: spaeter Genanntes zaehlt ab zwei Nennungen
-    in_title = {ix.names.get(m.group(1).lower()) for m in ix.rx.finditer(title)}
+    body = text[:12000]
+    plain = title + "\n" + body
+    T0 = len(title) + 1
+    sc, in_title = {}, set()
+    for s, e, t, i in m.resolve(plain):
+        if i not in ix.by: continue
+        if s < T0: w = 4; in_title.add(i)
+        else:
+            p = s - T0; w = 2 if p < 600 else 1 if p < 3000 else 0.5   # ganzer Artikel: spaeter Genanntes zaehlt ab zwei Nennungen
+        sc[i] = sc.get(i, 0) + w
     for i in list(sc):
         if i in GENERIC and i not in in_title: sc[i] *= 0.35   # allgemeine Begriffe nur mit Titeltreffer voll werten
     order = sorted(sc, key=lambda i: (-sc[i], i in GENERIC, i))
@@ -65,45 +70,16 @@ def score_topics(ix, title, text, k=10, key=None):
     return top
 
 
-_rx_big = lru_cache(maxsize=32)(re.compile)   # das Muster aller Entitaetsnamen (~50 KB) nicht je Beitrag neu kompilieren, falls der re-Cache (512) es verdraengt hat
-
-
-_SKIP = re.compile(r"<(a|h1|h2|h3|h4|h5|h6|code|pre|script|style|figure|figcaption)\b[^>]*>.*?</\1>", re.S | re.I)
-
-
-def autolink_html(html, ents, url_of, max_links=8, exclude=()):
-    """Erste Nennung je Entitaet (Name/Alias, >= 4 Zeichen oder mehrteilig) ausserhalb von Ueberschriften/Links verlinken. -> (html, [(name, url)])"""
-    names = []
-    for e in ents.values():
-        if e["id"] in exclude or e["id"] in GENERIC or e.get("type") in ("category", "person") or e.get("outdated"): continue
-        for n in [e["name"]] + list(e.get("aliases") or []):
-            n = (n or "").strip()
-            if len(n) >= 4 and (len(n) >= 6 or " " in n or n in ("Teams", "Excel", "Azure", "Loop", "Viva")): names.append((n, e["id"]))
-    if not names: return html, []
-    names.sort(key=lambda x: -len(x[0]))
-    rx = _rx_big(r"(?<![\w-])(" + "|".join(re.escape(n) for n, _ in names) + r")(?![\w-])")   # einmal je Bau (je Muster) kompiliert
-    byname = {n.lower(): i for n, i in names}
-    # geschuetzte Bereiche herausnehmen
-    parts, pos, used, links = [], 0, set(), []
-    for m in _SKIP.finditer(html):
-        parts.append((html[pos:m.start()], True)); parts.append((m.group(0), False)); pos = m.end()
-    parts.append((html[pos:], True))
-    out = []
-    for seg, editable in parts:
-        if not editable or len(links) >= max_links:
-            out.append(seg); continue
-        # nur Text ausserhalb von Tags ersetzen
-        toks = re.split(r"(<[^>]+>)", seg); res = []
-        for t in toks:
-            if t.startswith("<") or len(links) >= max_links: res.append(t); continue
-            def rep(m):
-                i = byname.get(m.group(1).lower())
-                if not i or i in used or len(links) >= max_links: return m.group(0)
-                used.add(i); u = url_of(i); links.append((m.group(1), u))
-                return f'<a href="{u}" class="en-al">{m.group(1)}</a>'
-            res.append(rx.sub(rep, t))
-        out.append("".join(res))
-    return "".join(out), links
+def autolink_html(html, ents, url_of, max_links=None, exclude=(), lang="en", ctx=(), used=None, attrs=None):
+    """Kontext-Links im HTML eines Beitrags (site_entmatch.Matcher.link_html): erste Nennung je Entitaet ohne Obergrenze, nie in Ueberschriften,
+    Links, Code oder Bildunterschriften, keine Selbstverweise (exclude), Linktext wie im Satz. max_links bleibt nur fuer alte Aufrufer (None = alle).
+    ctx: Themen der Seite (Kontext fuer mehrdeutige Kurznamen); used: auf der Seite schon verlinkte ids. -> (html, [(text, url, id)])"""
+    import site_entmatch as EM
+    m = EM.shared(ents)
+    h, links = m.link_html(html, url_of, lang=lang, ctx=set(ctx or ()) | set(exclude or ()), exclude=exclude, used=used, attrs=attrs)
+    if max_links is not None and len(links) > max_links:   # nur fuer Werkzeuge, die die alte Obergrenze nachstellen
+        h, links = m.link_html(html, url_of, lang=lang, ctx=set(ctx or ()) | set(exclude or ()), exclude=set(exclude or ()) | {i for _, i in links[max_links:]}, used=None, attrs=attrs)
+    return h, [(t, url_of(i), i) for t, i in links]
 
 
 def related(posts, p, k=6):

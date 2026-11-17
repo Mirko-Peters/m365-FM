@@ -49,6 +49,7 @@ SPEAKERS = {}   # Entitaets-ID -> zusammengefuehrter Speaker (data/speakers.json
 import entity_fill_data as FD
 import ontology as ONT   # Oberbegriff-Kette fuer Brotkruemel, SKOS broader im JSON-LD-Graph
 import site_topic_crumbs as TC   # Adresse der Entitaetsseite je Sprache (gemeinsam mit den Themen-Brotkrumen)
+import site_entmatch as _EM   # gemeinsamer Namensindex: Kontext-Links und Kernpunkte der Folgen
 GENTEXT = {}   # Entitaet -> {en, de}: Ueberblickstexte aus data/entity_texts/part-*.json (aus Folgen und Fakten geschrieben, tools/entity_text_tasks.py)
 for _f in sorted((Path(__file__).parent / "data" / "entity_texts").glob("part-*.json")) if (Path(__file__).parent / "data" / "entity_texts").exists() else []:
     try: GENTEXT.update(json.loads(_f.read_text("utf-8")))
@@ -697,6 +698,16 @@ def build(g, wiki_links, experts_by_ent, ep_find):
     api = g.get("api", "https://api-dub.m365.fm")
     gl_ids = {x["id"] for x in GLOSS}
     inv = inverse_index()
+    _EMX = _EM.shared(ENTS)
+    _EPC = {}
+    def _ep_ctx(x):
+        """Kontext eines Kernpunkts: erkannte Entitaeten seiner Folge (Titel, Kernpunkte/FAQ) und deren Extraktion."""
+        k = x.get("slug")
+        if k not in _EPC:
+            import site_podpage as _PP
+            h = _PP.ep_hits(BASE).get(k) or {}
+            _EPC[k] = set(h.get("t") or {}) | set(h.get("k") or {}) | {sx for sx, _ in (_PP.SX.BY_EPISODE.get(str(x.get("sid"))) or {}).get("entities", [])}
+        return _EPC[k]
     _deg = {i: len(x.get("rel", [])) + len(inv.get(i, [])) for i, x in ENTS.items()}   # Vernetzung: bekanntere Eintraege zuerst in den Beziehungssaetzen
     shell = lambda lang, b: f'{header(lang, "")}<main class="wrap" style="max-width:56em">{b}</main>{footer(lang) if lang in LANGS else footer_en()}'
 
@@ -907,9 +918,10 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _fq = ([x for x in FAQ.get(e["id"], []) if x.get("lang", "en") == lang] + FD.faq(e, lang))[:8]
             kpbox, _efq = "", []
             if lang == "en" and eps:   # Kernpunkte und FAQ der Folgen, die den Namen nennen (nur englisch: keine gemischtsprachigen Seiten)
-                _nrx = [re.compile(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])", re.I) for n in ent_names(e) if len(n) > 1]
-                _hit = lambda t: any(r.search(t) for r in _nrx)
-                _kps = [(k, x) for x in eps for k in (x.get("keypoints") or []) if _hit(k)][:5]
+                # gemeinsamer Namensindex (site_entmatch) statt Namenssuche ohne Schreibung: "attack surface" ist kein Kernpunkt zu Microsoft Surface.
+                # Kontext je Kernpunkt: die erkannten Entitaeten seiner Folge (site_podpage.ep_hits) und ihre Extraktion
+                _hit = lambda t, x: e["id"] in _EMX.ids(t, "en", _ep_ctx(x))
+                _kps = [(k, x) for x in eps for k in (x.get("keypoints") or []) if _hit(k, x)][:5]
                 if _kps:
                     kpbox = (f'<section class="en-kp"><h2>{esc("Key points about " + e["name"])}</h2><ul>'
                              + "".join(f'<li>{esc(k)} <span class="mut">· <a href="{_epu(x)}">{esc(g["anchor_title"](x["e"]["title"], 48))}</a></span></li>' for k, x in _kps) + "</ul></section>")
@@ -917,8 +929,17 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 for x in eps:
                     for q in (x.get("faq") or []):
                         if len(_efq) >= 5: break
-                        if q["q"].strip().lower() not in _seenq and (_hit(q["q"]) or _hit(q["a"])):
+                        if q["q"].strip().lower() not in _seenq and (_hit(q["q"], x) or _hit(q["a"], x)):
                             _seenq.add(q["q"].strip().lower()); _efq.append({"q": q["q"], "a": q["a"], "src": x})
+            # Kontext-Links in Definition, Beschreibung (Langtext) und Kernpunkten (site_entmatch): erste Nennung je Entitaet, ohne Selbstverweis; was die
+            # Beziehungssaetze schon verlinken, bleibt dort (erste semantische Nennung); Kontext = die Entitaet selbst und ihre Nachbarn
+            _aeo = lambda h: (h[len(root):].split("/")[0] or None) if h.startswith(root) else _EM._ent_of_href(h)
+            _rsl = _EM.linked_ids(relsent, _aeo); _aused = _EM.Used(sorted(_rsl - {e["id"]})); _actx = {e["id"]} | {x for v in groups.values() for x in v}
+            _aeu = lambda i: f"{root}{i}/"
+            _defh, _ = _EMX.link_html(f'<p class="en-def" style="font-size:1.1em">{esc(d)}</p>', _aeu, lang, _actx, exclude=(e["id"],), used=_aused, ent_of=_aeo)
+            longbox, _ = _EMX.link_html(longbox, _aeu, lang, _actx, exclude=(e["id"],), used=_aused, ent_of=_aeo)
+            kpbox, _ = _EMX.link_html(kpbox, _aeu, lang, _actx, exclude=(e["id"],), used=_aused, ent_of=_aeo)
+            _amen = [i for i in _aused if i in ENTS and i != e["id"] and i not in _rsl]
             _allq = _fq + _efq
             _aitag = f' <span class="mut">({T(lang, "AI", "KI")})</span>'
             _faqai = f'<p class="mut" style="font-size:.85em">{esc(T(lang, "Questions marked with AI were written with AI from the facts on this page.", "Mit KI markierte Fragen wurden mit KI aus den Fakten dieser Seite geschrieben."))}</p>' if any(x.get("ai") for x in _allq) else ""
@@ -953,7 +974,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             # entity.js (Fragen und Antworten #en-qa) laedt, sobald der Bereich 2500 px vor dem Bildschirm ist (vorher 600 px): auf dem Handy setzte
             # das Skript Ueberschrift und Fragen erst ein, wenn der Bereich schon sichtbar war, und schob den Rest der Seite weg (CLS ~0,18 im Labor beim Scrollen)
             _cr = [(ENTS[x]["name"], f"{root}{x}/") for x in reversed(ONT.ancestors(e["id"], ENTS)[:3])]   # Oberbegriffe von oben nach unten (part_of > broader > instance_of)
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a>' + "".join(f' › <a href="{cu}">{esc(cn)}</a>' for cn, cu in _cr) + f'</nav><h1>{esc(e["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="entity" data-topic-id="{esc(e["id"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button>{SPM.note(lang, _spr, "entity")}{_disc}{_lead}<p class="mut">{esc(tlab(lang, e["type"]))}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{_dnote}{oldbanner}{claim_html(e["id"], lang, e, api)}{FX.logo_html(lang, e)}{hero}{relsent}{longbox}{ft}{FX.sections(lang, e, root, ENTS)}{evl}{kpbox}{eb}{tline}{artbox}'
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a>' + "".join(f' › <a href="{cu}">{esc(cn)}</a>' for cn, cu in _cr) + f'</nav><h1>{esc(e["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="entity" data-topic-id="{esc(e["id"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button>{SPM.note(lang, _spr, "entity")}{_disc}{_lead}<p class="mut">{esc(tlab(lang, e["type"]))}</p>{_defh}{_dnote}{oldbanner}{claim_html(e["id"], lang, e, api)}{FX.logo_html(lang, e)}{hero}{relsent}{longbox}{ft}{FX.sections(lang, e, root, ENTS)}{evl}{kpbox}{eb}{tline}{artbox}'
                           f'{qbox}{faqbox}{relmap}{relx}<div class="en-rel">{rb}</div>{gloss}{SU.block(lang, e["id"])}{wb}{("<h2>" + esc(s["experts"]) + "</h2>" + ehtml) if ehtml else ""}{srcbox}{updline}{edit}'
                           f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("edit_e",)}, ensure_ascii=False)}}};window.M365TopicConfig={{api:{json.dumps(api)},lang:{json.dumps(lang)}}};'
                           f'(function(){{var d=0,u="{BASE}/assets/entity.js";function go(){{if(d)return;d=1;var s=document.createElement("script");s.src=u;document.body.appendChild(s)}}'
@@ -971,6 +992,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                    **({"author": {"@id": eid_of(BASE, AUTHOR_EID)}} if _au else {}),
                    "speakable": {"@type": "SpeakableSpecification", "cssSelector": ["h1", ".en-def"]},
                    "isPartOf": {"@id": f"{BASE}/#website"}, "relatedLink": [f"{root}{x}/" for k, v in groups.items() for x in v][:25],
+                   **({"mentions": _EM.mentions(BASE, _amen)} if _amen else {}),   # Kontext-Links in Definition, Beschreibung und Kernpunkten (Audit E7)
                    **({"hasPart": {"@id": u + "#articles"}} if arturls else {}),
                    "breadcrumb": {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": s["entities"], "item": root}] + [{"@type": "ListItem", "position": 2 + k, "name": cn, "item": cu} for k, (cn, cu) in enumerate(_cr)] + [{"@type": "ListItem", "position": 2 + len(_cr), "name": e["name"], "item": u}]}}]
             if _spr:
