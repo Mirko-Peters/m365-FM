@@ -417,7 +417,8 @@ async function api(env, request, url, path, asUser, ctx) {
     }
     await db.prepare("INSERT OR IGNORE INTO reports(comment_id,user_id,created) VALUES(?,?,?)").bind(id, user.id, now()).run();
     const n = (await db.prepare("SELECT COUNT(*) n FROM reports WHERE comment_id=?").bind(id).first()).n;
-    if (n >= 3 && c.status === "ok") {
+    const au = await db.prepare("SELECT role FROM users WHERE id=?").bind(c.user_id).first();
+    if (n >= 3 && c.status === "ok" && (!au || !au.role || au.role === "user")) {   // Kommentare der Redaktion blendet nur die Moderation aus, nicht drei Meldungen
       await db.prepare("UPDATE comments SET status='hidden' WHERE id=?").bind(id).run();
       const rs = (await db.prepare("SELECT user_id FROM reports WHERE comment_id=?").bind(id).all()).results || [];
       for (const r of rs) await evalBadges(env, r.user_id);

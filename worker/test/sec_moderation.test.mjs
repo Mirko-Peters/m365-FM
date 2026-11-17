@@ -139,3 +139,50 @@ test("K4: expert_report zu einer Antwort - own_content prueft den Antwort-Autor"
   assert.equal((await call(env, 2, "POST", "/api/editor/decide", { kind: "expert_report", id, action: "resolve" })).s, 200);
   assert.equal(left(), 0);
 });
+
+// ---------- K29: Meldungen setzen keine Redaktionsfassung zurueck und brauchen unabhaengige, vertrauenswuerdige Konten ----------
+test("K29: Wiki-Meldungen - Redaktionsfassung bleibt, Zweitkonten zaehlen nicht, Ruecknahme protokolliert und wiederherstellbar", async () => {
+  const { raw, env } = await mk();
+  const NOWS = Math.floor(Date.now() / 1000);
+  for (const id of [11, 12, 13]) raw.prepare("INSERT INTO users(id,provider,sub,name,role,created) VALUES(?,?,?,?,?,?)").run(id, "t", "s" + id, "Neu" + id, "user", NOWS);   // frische Zweitkonten
+  for (const id of [14, 15, 16]) { raw.prepare("INSERT INTO users(id,provider,sub,name,role,created) VALUES(?,?,?,?,?,1)").run(id, "t", "s" + id, "Pro" + id, "user"); ins(raw, "programs", { owner_type: "u", owner_id: id, program: "mvp", verified: 1 }); }
+  const st = (id) => raw.prepare("SELECT status FROM wiki_rev WHERE id=?").get(id).status;
+  const report = (uid, id) => call(env, uid, "POST", `/api/wiki/report/${id}`);
+  // (a) Vandalismus A (Mitglied) live, Editor korrigiert mit B -> drei Meldungen (auch vertrauenswuerdige) setzen B nicht zurueck
+  const a = ins(raw, "wiki_rev", { term: "teams", lang: "de", body: "Vandalismus Vandalismus Vandalismus", summary: "", user_id: 6, status: "live", created: 1 });
+  assert.equal((await call(env, 2, "POST", "/api/wiki", { term: "teams", lang: "de", body: "Korrektur der Redaktion mit genug Text", summary: "Korrektur" })).j.status, "live");
+  const b = raw.prepare("SELECT id FROM wiki_rev WHERE term='teams' AND status='live'").get().id;
+  for (const uid of [11, 12, 13, 14, 15, 16]) assert.equal((await report(uid, b)).s, 200);
+  assert.equal(st(b), "live"); assert.equal(st(a), "old");
+  const exp = await call(env, 0, "GET", "/api/wiki/export?lang=de");
+  assert.ok(exp.j.items.some((x) => x.term === "teams" && /Korrektur/.test(x.body)));
+  // (b) Mitgliedsfassung C: drei frische Konten zaehlen nicht
+  const c0 = ins(raw, "wiki_rev", { term: "azure", lang: "de", body: "Fruehere Fassung mit Text", summary: "", user_id: 4, status: "old", created: 1 });
+  const c = ins(raw, "wiki_rev", { term: "azure", lang: "de", body: "Fassung eines Mitglieds mit Text", summary: "", user_id: 6, status: "live", created: 2 });
+  for (const uid of [11, 12, 13]) await report(uid, c);
+  assert.equal(st(c), "live", "Zweitkonten setzen nichts zurueck");
+  // drei vertrauenswuerdige, aeltere Konten: Ruecknahme mit Protokoll, Status wiederherstellbar
+  for (const uid of [14, 15]) await report(uid, c);
+  assert.equal(st(c), "live");
+  await report(16, c);
+  assert.equal(st(c), "reported"); assert.equal(st(c0), "live");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM edit_log WHERE action='wiki.auto_revert' AND item_id=?").get(String(c)).n, 1);
+  const rv = await call(env, 2, "POST", "/api/editor/revert", { kind: "wiki", id: String(c0), rev: c, cur: c0 });
+  assert.equal(rv.s, 200, JSON.stringify(rv.j)); assert.equal(st(c), "live"); assert.equal(st(c0), "old");
+  // (c) Ratelimit: 10 Meldungen je Konto und Tag
+  for (let i = 0; i < 10; i++) raw.prepare("INSERT INTO wiki_rev(term,lang,body,summary,user_id,status,created) VALUES('azure','en','x','',6,'live',?)").run(10 + i);
+  const ids = raw.prepare("SELECT id FROM wiki_rev WHERE lang='en' ORDER BY id").all().map((r) => r.id);
+  let last; for (const id of ids) last = await report(4, id);
+  assert.equal(last.s, 200);
+  assert.equal((await report(4, b)).s, 429);
+});
+
+test("K29: drei Meldungen blenden einen Kommentar der Redaktion nicht aus", async () => {
+  const { raw, env } = await mk();
+  const c = ins(raw, "comments", { vid: "v1", lang: "de", user_id: 2, body: "Hinweis der Redaktion", status: "ok", created: 1 });
+  const m = ins(raw, "comments", { vid: "v1", lang: "de", user_id: 6, body: "Kommentar eines Mitglieds", status: "ok", created: 1 });
+  for (const uid of [3, 4, 5]) { await call(env, uid, "POST", `/api/comments/${c}/report`); }
+  for (const uid of [3, 4, 5]) { await call(env, uid, "POST", `/api/comments/${m}/report`); }
+  assert.equal(raw.prepare("SELECT status FROM comments WHERE id=?").get(c).status, "ok");
+  assert.equal(raw.prepare("SELECT status FROM comments WHERE id=?").get(m).status, "hidden");
+});

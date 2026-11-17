@@ -1,7 +1,7 @@
 // Community-Wiki fuer Glossarbegriffe: kurze Ergaenzung zur Kurzinfo, Revisionen, Moderation
-import { legacyRev } from "./editor.js";
+import { legacyRev, revRole } from "./editor.js";
 import { gate, inScope, roleOf, logEdit } from "./perm.js";
-import { cleanText, rateLimit, isLang } from "./util.js";
+import { cleanText, rateLimit, isLang, memberOf } from "./util.js";
 import { stats, evalBadges } from "./badges.js";
 import { baseIds } from "./entities.js";
 
@@ -9,7 +9,8 @@ const TERM = /^[a-z0-9-]{2,48}$/;
 const okLang = (l) => l === "en" || isLang(l);
 const now = () => Math.floor(Date.now() / 1000);
 const TRUST_POINTS = 25;   // ab so vielen Punkten duerfen Beitraege sofort live gehen
-const AUTO_REVERT = 3;     // so viele Meldungen blenden eine Revision aus
+const AUTO_REVERT = 3;     // so viele Meldungen vertrauenswuerdiger, unabhaengiger Konten nehmen eine Revision zurueck
+const REPORTER_AGE = 7 * 86400;   // Meldungen zaehlen erst ab diesem Kontoalter (neue Zweitkonten zaehlen nicht)
 
 export const MAX_BODY = 12000;
 const MAX_REFS = 25, MAX_IMGS = 10, MAX_LINKS = 40;
@@ -124,9 +125,10 @@ export async function handleWiki(env, request, url, path, user, J) {
     const id = +m[1];
     const r = await db.prepare("SELECT id,term,lang,status,user_id FROM wiki_rev WHERE id=?").bind(id).first();
     if (!r || r.status !== "live" || r.user_id === user.id) return J({ error: "bad_request" }, 400);
+    if (!(await rateLimit(db, `wrep:${user.id}`, 10, 86400))) return J({ error: "rate_limit" }, 429);
     await db.prepare("INSERT OR IGNORE INTO wiki_reports(rev_id,user_id,created) VALUES(?,?,?)").bind(id, user.id, now()).run();
-    const n = (await db.prepare("SELECT COUNT(*) n FROM wiki_reports WHERE rev_id=?").bind(id).first()).n;
-    if (n >= AUTO_REVERT) await revert(db, r);
+    if ((await revRole(db, "wiki", id)) !== "user") return J({ ok: true, status: "review" });   // von der Redaktion gesetzte Fassung: nie automatisch zuruecknehmen, nur die Redaktion entscheidet
+    if ((await countedReports(env, r)) >= AUTO_REVERT) await revert(db, r);
     return J({ ok: true });
   }
 
@@ -148,9 +150,22 @@ export async function handleWiki(env, request, url, path, user, J) {
   return null;
 }
 
-async function revert(db, r) {   // gemeldete Revision ausblenden, vorherige Fassung wieder live
+// Meldungen, die fuer die automatische Ruecknahme zaehlen: nur unabhaengige, vertrauenswuerdige Konten - nicht der Autor, nicht gesperrt, Konto mindestens
+// REPORTER_AGE alt und Redaktion, bestaetigtes Programm (pro) oder TRUST_POINTS Punkte. Drei frische Zweitkonten setzen so nichts zurueck.
+async function countedReports(env, r) {
+  const rows = (await env.DB.prepare("SELECT user_id FROM wiki_reports WHERE rev_id=? AND user_id<>? LIMIT 50").bind(r.id, r.user_id || 0).all()).results || [];
+  let n = 0;
+  for (const { user_id } of rows) {
+    const u = await memberOf(env, user_id); if (!u || (u.created || 0) > now() - REPORTER_AGE) continue;
+    if (roleOf(u) !== "user" || u.pro || (await stats(env.DB, u.id)).points >= TRUST_POINTS) n++;
+  }
+  return n;
+}
+
+async function revert(db, r) {   // gemeldete Revision zuruecknehmen (Status "reported": die Redaktion kann sie im Verlauf wiederherstellen), vorherige Fassung wieder live, mit Protokoll
   const prev = await db.prepare("SELECT id FROM wiki_rev WHERE term=? AND lang=? AND status='old' AND id<? ORDER BY id DESC LIMIT 1").bind(r.term, r.lang, r.id).first();
-  const ops = [db.prepare("UPDATE wiki_rev SET status='rejected' WHERE id=?").bind(r.id)];
+  const ops = [db.prepare("UPDATE wiki_rev SET status='reported' WHERE id=? AND status='live'").bind(r.id)];
   if (prev) ops.push(db.prepare("UPDATE wiki_rev SET status='live' WHERE id=?").bind(prev.id));
   await db.batch(ops);
+  await logEdit(db, { id: 0, role: "user" }, "wiki.auto_revert", "wiki", r.id, { reason: `${AUTO_REVERT} Meldungen`, before: { live: r.id }, after: { live: prev?.id || 0 } });
 }

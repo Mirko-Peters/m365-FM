@@ -219,7 +219,7 @@ const entText = (d) => [d.name, d.desc?.en && "EN: " + d.desc.en, d.desc?.de && 
 const hv = (r) => ({ id: r.id, ts: r.ts, user: r.name || "", role: r.role || "", action: r.action || "edit", reason: r.reason || "", title: r.title || "", summary: r.summary || "", body: String(r.body || "").slice(0, 20000), status: r.status || "" });
 // Rolle, in der eine Wiki-/Entitaeten-Revision geschrieben bzw. wieder live gesetzt wurde: aus dem Protokoll (Stand zum Zeitpunkt der Aenderung), nicht aus
 // der heutigen Rolle des Verfassers. Ohne Eintrag war es ein Mitglied.
-const revRole = async (db, kind, revId) => (await db.prepare("SELECT role FROM edit_log WHERE kind=? AND item_id=? AND action IN ('entity.edit_live','content.edit_full') AND undone=0 ORDER BY id DESC LIMIT 1").bind(kind, String(revId)).first())?.role || "user";
+export const revRole = async (db, kind, revId) => (await db.prepare("SELECT role FROM edit_log WHERE kind=? AND item_id=? AND action IN ('entity.edit_live','content.edit_full') AND undone=0 ORDER BY id DESC LIMIT 1").bind(kind, String(revId)).first())?.role || "user";
 // Liefert { versions (neueste zuerst), current, ownerId, it } oder null. it = der Eintrag ohne Sichtpruefung (die Aufrufer pruefen: Redaktion ueber visible,
 // der Autor ueber die Eigentuemerschaft).
 export async function versionsOf(db, kind, id) {
@@ -274,7 +274,7 @@ export async function revertTo(env, user, kind, id, revId, seen) {
   } else {
     const t = kind === "wiki" ? "wiki_rev" : "entity_rev", cond = kind === "wiki" ? "term=? AND lang=?" : "eid=?", args = kind === "wiki" ? [v.it.term, v.it.lang] : [v.it.eid];
     const row = await db.prepare(`SELECT status,user_id FROM ${t} WHERE id=?`).bind(target.id).first();
-    if (!row || row.status !== "old") return { status: 409, body: { error: "not_revertable" } };   // abgelehnte oder wartende Fassungen gehen nur ueber die Freigabe live
+    if (!row || !(row.status === "old" || (kind === "wiki" && row.status === "reported"))) return { status: 409, body: { error: "not_revertable" } };   // abgelehnte oder wartende Fassungen gehen nur ueber die Freigabe live; per Meldungen zurueckgenommene Wiki-Fassungen ("reported") stellt die Redaktion hier wieder her
     if (role !== "admin" && row.user_id && Number(row.user_id) === Number(actor.id)) return { status: 403, body: { error: "own_content" } };   // nicht die eigene Fassung wieder live setzen
     await db.batch([db.prepare(`UPDATE ${t} SET status='old' WHERE ${cond} AND status='live'`).bind(...args), db.prepare(`UPDATE ${t} SET status='live' WHERE id=?`).bind(target.id)]);
     logItem = target.id;   // am Eintrag der jetzt live stehenden Revision: daraus liest revRole "von der Redaktion gesetzt"
