@@ -16,14 +16,12 @@ faq:
   - q: "What operating systems can a session host run?"
     a: "Per Microsoft Learn's prerequisites: Windows 11 Enterprise multi-session and Enterprise, Windows 10 Enterprise multi-session and Enterprise, and Windows Server 2025, 2022, 2019 and 2016, all 64-bit. N, KN and LTSC editions and Arm64-based Azure VMs are listed as not supported."
   - q: "How many users fit on one multi-session session host?"
-    a: "It depends on the workload. Learn lists up to 6 users per vCPU for light, 4 for medium, 2 for heavy and 1 for power workloads, so an 8-vCPU host at the light level supports about 48 users. Learn describes these as generic estimates and recommends a pilot or simulation."
+    a: "It depends on the workload. Learn lists up to 6 users per vCPU for light, 4 for medium, 2 for heavy and 1 for power workloads, so 8 vCPUs at the light level give 48 as an upper bound (our arithmetic, not a Learn figure). Learn says doubling cores does not double capacity and describes the figures as generic estimates for initial planning, and it recommends a pilot or simulation."
   - q: "How long is the registration key valid?"
     a: "You choose the duration. Learn's page on adding session hosts says a registration key is valid only for the time you specify, up to a maximum of 27 days, and suggests 1 to 4 hours for an interactive rollout."
 ---
 
-An Azure Virtual Desktop session host is a virtual machine that is registered to the service and that users connect to for their desktop or application sessions. A host pool is a collection of these machines. Desktops and applications run on session hosts, while in pooled host pools the user profile is stored separately, typically in FSLogix. In our reading, that is why sizing, health and replacement of hosts are central tasks for an AVD administrator.
-
-It stays at overview level; adding and replacing hosts, session host configuration and patching have their own articles.
+An Azure Virtual Desktop session host is a virtual machine that is registered to the service and that users connect to for their desktop or application sessions. A host pool is a collection of these machines. Desktops and applications run on session hosts, while in pooled host pools the user profile is stored separately, typically in FSLogix. That is why sizing, health and replacement of hosts are central tasks for an AVD administrator.
 
 ## What a session host is
 
@@ -36,7 +34,7 @@ The role of the host depends on the pool type:
 | Users on one host | Several at once | One assigned user |
 | User profile | Should be in [FSLogix](/entity/fslogix/), because the next sign-in can reach another host | Can sit on the VM's OS disk |
 | Default patching | Redeploy hosts from updated images | Windows Update, Configuration Manager or other tools |
-| Maximum sessions | The configured maximum session limit | One |
+| Maximum sessions | The configured maximum session limit, which can be exceeded under high concurrent connection load | One |
 
 Learn names two management approaches for host pools. With a [session host configuration](/entity/avd-session-host-configuration/), Azure Virtual Desktop manages the lifecycle of the hosts for you. With standard management, you create, update and scale the hosts yourself. Learn's whats-new page lists automated host pools, which use a session host configuration, as "now available" in June 2026, and Microsoft announced general availability of enhanced host pool management, which includes session host configuration, in July 2026 (Tech Community). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit.
 
@@ -57,16 +55,16 @@ A **registration key** authorizes a host to join the pool. Per Learn it is valid
 The [prerequisites page](https://learn.microsoft.com/en-us/azure/virtual-desktop/prerequisites) sets the following:
 
 - **Operating systems (64-bit):** Windows 11 Enterprise multi-session and Enterprise, Windows 10 Enterprise multi-session and Enterprise, Windows Server 2025, 2022, 2019 and 2016.
-- **Not supported:** 32-bit systems, N, KN and LTSC editions, ultra disks for the OS disk, ephemeral OS disks for Azure VMs, Virtual Machine Scale Sets and Arm64-based Azure VMs. The ephemeral OS disk entry sits in tension with Microsoft's July 2026 announcement, which lists ephemeral OS disks as part of enhanced host pool management for pools with a session host configuration, and with the June 2026 What's new entry. Learn does not reconcile the two, so check the current prerequisites page before planning ephemeral disks.
-- **Identity:** hosts must be joined to the same Microsoft Entra tenant as the users or to an Active Directory domain (AD DS or Microsoft Entra Domain Services). The account used to join a domain cannot have multifactor authentication enabled.
-- **Network:** a virtual network and subnet in the same region as the session host (this describes Azure VMs; for session hosts on Azure Local, Learn says they can only join an AD DS domain). Learn recommends not opening inbound port 3389 and not assigning public IP addresses.
+- **Not supported:** 32-bit systems, N, KN and LTSC editions, ultra disks for the OS disk, ephemeral OS disks for Azure VMs, Virtual Machine Scale Sets and Arm64-based Azure VMs. The ephemeral OS disk entry differs from Microsoft's July 2026 announcement, which lists ephemeral OS disks as part of enhanced host pool management. Learn's [ephemeral OS disks page](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy/session-hosts/ephemeral-os-disks) says they are supported only in pooled host pools configured with a session host configuration, and it still carries preview wording for some details, such as the disk type. Read both pages before planning ephemeral disks.
+- **Identity:** hosts must be joined to the same Microsoft Entra tenant as the users or to an Active Directory domain (AD DS or Microsoft Entra Domain Services). For session hosts on Azure Local, Learn says they can only join an AD DS domain. The account used to join a domain cannot have multifactor authentication enabled.
+- **Network:** a virtual network and subnet in the same Azure region as the session host. Learn recommends not opening inbound port 3389 and not assigning public IP addresses.
 - **Licensing:** your Windows license must be correctly assigned in Azure and the OS activated. Windows Server hosts use RDS client access licenses with Software Assurance or RDS User Subscription Licenses.
 
-For VMs created through the portal, Learn limits the name prefix to 11 characters and the prefix plus suffix to 15, and says you can deploy up to 400 session hosts at once, depending on quota.
+Name and count limits depend on the management approach. For standard management, the [deployment article](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop) gives a name prefix of at most 11 characters, prefix plus suffix of at most 15, and up to 400 session hosts at creation, depending on quota. For a host pool with a session host configuration, the same article gives a prefix of at most 10 characters (prefix plus suffix still 15) and up to 500 session hosts when you create the pool. The ephemeral OS disks page gives 11 for the prefix in that case, so use 10 if you want a prefix that fits both.
 
 ## Health and status
 
-Learn's status page lists the statuses a session host can have and the health checks behind them. A host is *Available* when it passes all health checks, and it stays *Available* even when it has reached its maximum session limit. *Needs Assistance* means a non-fatal check failed (Geneva Monitoring Agent, metadata service or URL checks), and users can still connect with a possibly degraded experience. *Unavailable* means the host is off or failed a fatal health check, and *Shutdown* means it was shut down. Neither receives new sessions. The health checks include domain joined, side-by-side stack listener, domain trust, Geneva Monitoring Agent, App Attach and metadata service, with the first three marked fatal.
+Learn's status page lists six statuses and the health checks behind them. A host is *Available* when it passes all health checks, and it stays *Available* even when it has reached its maximum session limit. *Needs Assistance* means a non-fatal check failed (Geneva Monitoring Agent, metadata service or URL checks), and users can still connect with a possibly degraded experience. *Unavailable* means the host is off or failed a fatal health check, and *Shutdown* means it was shut down. Neither receives new sessions. *Upgrading* and *Upgrade Failed* describe the agent upgrade. In the health check table, the side-by-side stack listener and domain trust checks are called fatal, and if the domain joined check fails users cannot connect. The Geneva Monitoring Agent check is called semi-fatal, and the App Attach and metadata service checks are not fatal.
 
 ## Sizing
 
@@ -91,7 +89,7 @@ The sizing result feeds the [maximum session limit](/entity/avd-maximum-session-
 4. **Update.** Learn's session host update replaces hosts from a new configuration in batches, and it is only available for host pools with a session host configuration. Learn says to disable autoscale during such an update.
 5. **Retire.** Put the host in drain mode (**Session hosts**, select the host, **Turn drain mode on**). It then accepts no new sessions and existing connections stay until users sign out or an administrator ends them. Remove it after the last session ends.
 
-Retirement leaves traces. Session host update does not delete Active Directory computer objects, and Intune's multi-session page says that deleting VMs in Azure leaves orphaned device records which it tries to delete after 60 inactive days, without a guarantee.
+Retirement can leave traces. During session host update, Learn says AD computer objects are not deleted: the replacement VM keeps the host name and inherits the existing object, and you only need to remove orphaned objects from the previous domain if you change the domain. Intune's multi-session page says that deleting VMs in Azure leaves orphaned device records which it tries to delete after 60 inactive days, without a guarantee.
 
 ## Sources
 
@@ -103,6 +101,8 @@ Accessed 17 November 2026.
 - [Microsoft Learn: Add session hosts to a host pool](https://learn.microsoft.com/en-us/azure/virtual-desktop/add-session-hosts-host-pool)
 - [Microsoft Learn: Session host statuses and health checks in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-status-health-checks)
 - [Microsoft Learn: Session host virtual machine sizing guidelines](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/session-host-virtual-machine-sizing-guidelines)
+- [Microsoft Learn: Deploy Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop)
+- [Microsoft Learn: Ephemeral OS disks on Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy/session-hosts/ephemeral-os-disks)
 - [Microsoft Learn: Enable drain mode in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/drain-mode)
 - [Microsoft Learn: Session host update for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update)
 - [Microsoft Learn: Windows Enterprise multi-session remote desktops in Intune](https://learn.microsoft.com/en-us/intune/solutions/azure-virtual-desktop-multi-session)
