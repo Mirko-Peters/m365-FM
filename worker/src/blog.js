@@ -154,8 +154,10 @@ export async function handleBlog(env, request, url, path, user, J) {
     if (day >= MAX_POSTS_DAY) return J({ error: "rate_limit" }, 429);
     let slug = slugify(title) || "post", n = 1;
     while (await db.prepare("SELECT 1 x FROM blog_posts WHERE user_id=? AND slug=?").bind(user.id, slug).first()) slug = `${slugify(title).slice(0, 52) || "post"}-${++n}`;
-    const r = await db.prepare("INSERT INTO blog_posts(user_id,slug,title,summary,body,lang,topics,keypoints,faq,status,note,created,updated,published) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
-      .bind(user.id, slug, title, summary, sb.body, lang, JSON.stringify(topics), JSON.stringify(kp?.list || []), JSON.stringify(fq?.list || []), status, "", t, t, status === "live" ? t : 0).run();
+    // Tageslimit in derselben Anweisung wie das Anlegen (atomar): parallele Anfragen lasen sonst alle denselben Zaehlerstand
+    const r = await db.prepare("INSERT INTO blog_posts(user_id,slug,title,summary,body,lang,topics,keypoints,faq,status,note,created,updated,published) SELECT ?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14 WHERE (SELECT COUNT(*) FROM blog_posts WHERE user_id=?1 AND created>?15)<?16")
+      .bind(user.id, slug, title, summary, sb.body, lang, JSON.stringify(topics), JSON.stringify(kp?.list || []), JSON.stringify(fq?.list || []), status, "", t, t, status === "live" ? t : 0, t - 86400, MAX_POSTS_DAY).run();
+    if (!(r.meta?.changes > 0)) return J({ error: "rate_limit" }, 429);
     await syncFeed(env, db, user.id, { lang, slug, title, published: t }, pr?.handle, status === "live" && !!pr?.handle);
     if (cos.list) await saveCoauthors(db, r.meta.last_row_id, cos.list);
     return J({ ok: true, id: r.meta.last_row_id, slug, status });

@@ -287,3 +287,11 @@ test("K3: Mitverwalter eines Events und eigene Events geben weder Speaker-Punkte
   assert.deepEqual(await pb(3), ["prog_speaker_bronze"]);
   assert.equal(await trustPoints(env.DB, 3), 100);
 });
+
+test("Blog: 10 parallele neue Beitraege legen hoechstens MAX_POSTS_DAY (5) an", async () => {
+  const { raw, env } = await mk(3);
+  const rs = await Promise.all(Array.from({ length: 10 }, (_, i) => call(env, 2, "POST", "/api/blog/save", { title: "Entwurf Nummer " + i, body: "Ein kurzer Entwurf.", lang: "de" })));
+  assert.equal(rs.filter((r) => r.s === 200).length, 5);
+  assert.equal(rs.filter((r) => r.s === 429).length, 5);
+  assert.equal(one(raw, "SELECT COUNT(*) n FROM blog_posts WHERE user_id=2").n, 5);
+});

@@ -171,7 +171,7 @@ Podpage kostet 65 $/Monat (ca. 780 $/Jahr). Ziel: m365.fm komplett auf dub.m365.
 - Offen: Muttersprachler-Prüfung, echte Inhalts-Übersetzung, hreflang erst dann.
 
 ## Blog je Mitglied (gebaut, 30.10.)
-- Worker `src/blog.js`: Tabellen `blog_posts`/`blog_votes`; Speichern/Einreichen (Wiki-Markup mit Quellen wie im Glossar, Themen = Entitäten, 20 Sprachen), Neue → Prüfung (`/api/admin/blog`, `/api/admin/blog/decide`), ab 25 Punkten/Pro/Redaktion sofort live, Upvotes (nicht für eigene Beiträge), Export `/api/blog/export`, Live-Votes `/api/blog/votes`.
+- Worker `src/blog.js`: Tabellen `blog_posts`/`blog_votes`; Speichern/Einreichen (Wiki-Markup mit Quellen wie im Glossar, Themen = Entitäten, 20 Sprachen), Neue → Prüfung (`/api/admin/blog`, `/api/admin/blog/decide`), Pro/Redaktion und vertrauenswuerdige Mitglieder (25 fremd gepruefte Punkte, Konto mindestens 7 Tage alt, `badges.js` `isTrusted`) sofort live, Upvotes (nicht für eigene Beiträge), Export `/api/blog/export`, Live-Votes `/api/blog/votes`.
 - Seiten: `/community/u/<handle>/blog/<slug>/` (BlogPosting, author → Personen-Entität, about → Themen, citation → Quellen), Autoren-Blog, Gesamt-Blog `/community/blog/`; nur in der Sprache des Beitrags; en/de indexierbar, übrige noindex.
 - Oberfläche: Reiter „Blog“ in der Community (`assets/blog.js`). MCP: `list_my_blog_posts`, `save_blog_post`, `delete_blog_post` (+ HOWTO „blog“).
 - Prüf-Warteschlange: im Reiter Blog für Admin/Redaktion (gebaut). Offen: Badge „Autor“, Punkte für veröffentlichte Beiträge, Blog-Link auf der Profilseite, Feed-Aufnahme (Creator-Feed), Hover/Teilen, Kommentare, Stick-Man-Video aus Beitrag (Punkte-Katalog „video“).
