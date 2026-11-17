@@ -110,7 +110,7 @@ On Windows Server, the extension enables the Remote Desktop Session Host role an
 1. In the Arc machine's **Extensions** list, the status of `Microsoft.AzureVirtualDesktop.CloudDeviceExtension` shows **Succeeded**. The PowerShell check is `Get-AzConnectedMachineExtension`.
 2. In the host pool's **Session hosts** list, the host is **Available**. Learn says this can take up to 15 minutes after the extension succeeds.
 3. If a host does not appear, check the Arc side first. The agent sends a heartbeat every five minutes, and Learn says a server silent for more than 15 minutes may be offline, blocked by the network or have a stopped agent. Logs are in `%ProgramData%\AzureConnectedMachineAgent\Log` (`himds.log`, `azcmagent.log`).
-4. If Arc is healthy and the host is still not Available, the cause is on the Azure Virtual Desktop side. Check the Reader role on the Arc resource group, the registration key's expiry and the required endpoints, then follow the [session host checklist](/blog/avd-session-host-unavailable-checklist/).
+4. If Arc is healthy and the host is still not Available, the cause is on the Azure Virtual Desktop side. Check the Reader role on the Arc resource group, the registration key's expiry and the required endpoints, then work through the existing checklist for session hosts that show Unavailable.
 
 ## Sources
 
