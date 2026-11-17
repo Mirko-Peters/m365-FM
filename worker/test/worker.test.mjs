@@ -936,7 +936,9 @@ test("sponsor links: redirects, daily deduplication, bots and no cookies (SQLite
     assert.match(response.headers.get("x-robots-tag"), /noindex/);
     await call();
     assert.equal(raw.prepare("SELECT SUM(clicks) n FROM sponsor_clicks_daily").get().n, 1);
-    await call("GET", "Different browser");
+    await call("GET", "Different browser");   // gleiche IP, andere (frei waehlbare) Browserkennung: kein neuer Klick (K12)
+    assert.equal(raw.prepare("SELECT SUM(clicks) n FROM sponsor_clicks_daily").get().n, 1);
+    await call("GET", "Different browser", "?s=episode", { "cf-connecting-ip": "203.0.113.2" });   // anderer Besucher
     assert.equal(raw.prepare("SELECT SUM(clicks) n FROM sponsor_clicks_daily").get().n, 2);
     await call("GET", "bot/1.0");
     await call("HEAD", "Mozilla/5.0");
@@ -945,7 +947,7 @@ test("sponsor links: redirects, daily deduplication, bots and no cookies (SQLite
     await call("GET", "Low score", "?s=episode", {}, { country: "DE", botManagement: { score: 20 } });
     assert.equal(raw.prepare("SELECT SUM(clicks) n FROM sponsor_clicks_daily").get().n, 2,
       "Cloudflare-verifizierte Bots und Score unter 30 werden nicht gezählt");
-    response = await call("GET", "Another browser", "?s=invalid-surface");
+    response = await call("GET", "Another browser", "?s=invalid-surface", { "cf-connecting-ip": "203.0.113.3" });
     assert.equal(response.status, 302);
     assert.equal(raw.prepare("SELECT clicks FROM sponsor_clicks_daily WHERE surface='other'").get().clicks, 1);
     raw.exec(`INSERT INTO sponsor_links(code,org_id,placement_id,target_url,utm,active,created_at)

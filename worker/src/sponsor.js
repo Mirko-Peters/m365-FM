@@ -143,7 +143,6 @@ export async function handleSponsorLink(env, request, url, path, ctx) {
   if (!link || !target) return miss();
   for (const [key, value] of Object.entries(cleanUtm(link.utm))) target.searchParams.set(key, value);
 
-  const bot = request.headers.get("user-agent") || "";
   // Mensch oder Bot (botcheck.js, eine Schaetzung): Bot-/Scanner-/Vorschau-Abrufe werden getrennt als clicks_filtered gezaehlt, nicht verworfen
   const filtered = classify(request).bot;
   const shouldCount = request.method === "GET";
@@ -151,7 +150,8 @@ export async function handleSponsorLink(env, request, url, path, ctx) {
     ctx.waitUntil((async () => {
       const day = new Date().toISOString().slice(0, 10);
       const salt = await hmac(env.SESSION_SECRET, `go:${day}`);
-      const keyHash = await hmac(salt, `${request.headers.get("cf-connecting-ip") || ""}|${bot}|${filtered ? "f:" : ""}${code}`);
+      // echte Klicks (im Dashboard "measured") je IP, Code und Tag - ohne den frei waehlbaren User-Agent (K12); gefilterte Abrufe weiter je Kennung getrennt sichtbar
+      const keyHash = await hmac(salt, filtered ? `${request.headers.get("cf-connecting-ip") || ""}|${request.headers.get("user-agent") || ""}|f:${code}` : `${request.headers.get("cf-connecting-ip") || ""}|${code}`);
       const cache = globalThis.caches?.default;
       let duplicate = false;
       if (cache) {

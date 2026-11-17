@@ -15,7 +15,7 @@ import { handleI18nPublic } from "./i18n_edit.js";
 import { can, roleOf, isStaff, inScope, publicRoles, loadActor, logEdit } from "./perm.js";
 import { handleLinkedinEvents, oauthStartLE, oauthCallbackLE, deleteUserLinkedin, purgeLinkedinOrphans } from "./linkedin_events.js";
 import { handleSponsor, handleSponsorLink } from "./sponsor.js";
-import { handleAds, handlePaypalWebhook, goHost } from "./ads.js";
+import { handleAds, handlePaypalWebhook, goHost, purgeAdCounters } from "./ads.js";
 import { handleSponsorOrders } from "./sponsor_orders.js";
 import { autoTranslateItems, autoTranslateEntities, runTrQueue, runTrDemand } from "./autotr.js";
 import { syncLiveEvents } from "./liveevents.js";
@@ -671,6 +671,7 @@ const handlers = {
       T("syncInviterBadges", () => syncInviterBadges(env));   // einmal taeglich (Sicherheitsnetz: Zurechnung, Entwertung und Kontoloeschung bewerten sofort)
       T("purgeLinkedinOrphans", () => purgeLinkedinOrphans(env.DB));   // verwaiste LinkedIn-Zeilen nach dem Ende des Events (#323)
       T("purgeSearchStats", () => purgeSearchStats(env.DB));   // Suchbegriffe und Nachfrage: 12 Monate (#156)
+      T("purgeAdCounters", () => purgeAdCounters(env.DB));   // Abrechnungszaehler der Werbeplaetze (je IP-Hash und Tag, K12) nach 2 Tagen
     }
     if (event.cron === "*/30 * * * *") T("runDigest", () => runDigest(env, { at: scheduledAt }));
     if (event.cron === "*/30 * * * *") T("byodChecks", () => runByodChecks(env));   // Blog auf der eigenen Domain: DNS/Zertifikat offener und aktiver Domains (nur mit BYOD=1)

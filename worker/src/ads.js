@@ -540,7 +540,7 @@ async function serve(env, request, url, J) {
   const paid = bookingOn(env) && SLOTS.includes(slot) && url.searchParams.get("house_only") !== "1";   // Schalter aus oder reiner Hausplatz: nur Hausanzeigen
   const b = paid ? await pickCampaign(db, { slot, pageType, topics }) : null;
   if (b) {
-    if (!bot) {   // cookiefrei: kein Bezeichner, nur Tageszaehler
+    if (!bot && (await billable(env, request, "adimp", b.id))) {   // cookiefrei: kein Bezeichner, nur Tageszaehler; je IP und Tag gedeckelt (K12)
       await countStat(db, b.id, slot, pageType, "impressions", country);
       if (b.kind === "cpm") await consume(db, b.id);
     }
@@ -563,11 +563,28 @@ async function serve(env, request, url, J) {
   return J({ ad: null, house: h ? { title: h.title, body: h.body, cta: h.cta, url: goUrl(env, `h-x${h.id}`, ctxq.toString()) } : null }, 200, NS);
 }
 
+// Abrechnung je Aufrufer und Tag (Sicherheitspruefung K12): Schluessel aus IP, Kampagne und Tag, gehasht mit dem Geheimnis - NICHT aus frei
+// waehlbaren Kopfzeilen wie dem User-Agent (eine neue UA-Zeichenkette zaehlte frueher erneut). In D1 (rateLimit, atomar), weil der Edge-Cache
+// je Rechenzentrum getrennt ist. Je IP, Kampagne und Tag hoechstens AD_BILL_PER_IP_DAY berechnete Einblendungen bzw. ein berechneter Klick;
+// alles darueber wird ausgeliefert, aber dem Werbekunden weder berechnet noch als Einblendung gezaehlt.
+export const AD_BILL_PER_IP_DAY = 1;
+async function billable(env, request, kind, bookingId, max = AD_BILL_PER_IP_DAY) {
+  const ip = request.headers.get("cf-connecting-ip") || "";
+  const h = (await sha256hex(`${env.SESSION_SECRET || ""}:${kind}:${today()}:${ip}|${bookingId}`)).slice(0, 32);
+  return rateLimit(env.DB, `${kind}:${h}`, max, 86400);
+}
+// Taeglich (Cron 0 6): abgelaufene Zaehler der Abrechnung entfernen (nur Hashes, aelter als 2 Tage)
+export async function purgeAdCounters(db) {
+  const cut = Math.floor(Date.now() / 1000) - 2 * 86400;
+  for (const k of ["adimp", "adclk"]) await db.prepare("DELETE FROM ratelimit WHERE k>=? AND k<? AND win<?").bind(k + ":", k + ";", cut).run();
+}
+
 async function dedupe(env, request, code) {
   const cache = globalThis.caches?.default;
   if (!cache || !env.SESSION_SECRET) return false;
   const day = today();
-  const key = await sha256hex(`${env.SESSION_SECRET}:adgo:${day}:${request.headers.get("cf-connecting-ip") || ""}|${request.headers.get("user-agent") || ""}|${code}`);
+  const ua = code.startsWith("f:") ? request.headers.get("user-agent") || "" : "";   // echte Klicks ohne User-Agent (K12); gefilterte weiter je Kennung
+  const key = await sha256hex(`${env.SESSION_SECRET}:adgo:${day}:${request.headers.get("cf-connecting-ip") || ""}|${ua}|${code}`);
   const req = new Request(`https://dedupe.m365.fm/ad/${key}`);
   if (await cache.match(req)) return true;
   await cache.put(req, new Response("1", { headers: { "cache-control": "public, max-age=86400" } }));
@@ -598,7 +615,7 @@ export async function handleAdGo(env, request, url, code, ctx) {
     const work = (async () => {
       if (await dedupe(env, request, filtered ? `f:${code}` : code)) return;
       await countStat(db, b.id, slot, pageType, filtered ? "clicks_filtered" : "clicks", countryOf(request));
-      if (b.kind === "cpc" && !filtered && b.status === "active") await consume(db, b.id);
+      if (b.kind === "cpc" && !filtered && b.status === "active" && (await billable(env, request, "adclk", b.id))) await consume(db, b.id);   // ein berechneter Klick je IP und Tag (K12)
     })().catch(() => {});
     if (ctx?.waitUntil) ctx.waitUntil(work); else await work;
   }
