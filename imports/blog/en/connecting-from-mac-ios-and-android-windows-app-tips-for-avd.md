@@ -9,7 +9,7 @@ topics: [windows-app, azure-virtual-desktop]
 keypoints:
   - "Learn's requirements for Azure Virtual Desktop: macOS 12.0 or later, iOS or iPadOS 17.0 or later, Android 10 or later, Chrome OS 126 or later. The Windows 365 tab of the same page lists different minimums for macOS and iOS."
   - "Several features are Windows-only or limited elsewhere: multimedia redirection, USB and serial redirection, scanners, third-party virtual channel plugins and Display Protection. Dynamic resolution is missing on iOS/iPadOS and Android."
-  - "Integrated RemoteApps are listed for Windows and macOS only; on iOS/iPadOS and Android, a RemoteApp opens inside Windows App."
+  - "Integrated apps (RemoteApps integrated with the local device) are listed for Windows and macOS only, not for iOS/iPadOS or Android."
   - "Screen capture protection on iOS/iPadOS and Android works through an Intune MAM policy that blocks screen capture, and a connection is blocked if that policy is missing."
   - "With single sign-on off, iOS and Android can authenticate to the remote session with a password only; smart cards and Windows Hello for Business are not listed there."
 faq:
@@ -21,7 +21,7 @@ faq:
     a: "When screen capture protection is enabled on the session hosts, Learn says Android and iOS/iPadOS connections are allowed only if an Intune MAM app protection policy that blocks screen capture applies to Windows App. Without it, the connection is blocked."
 ---
 
-Windows App connects to [Azure Virtual Desktop](/entity/azure-virtual-desktop/) from macOS, iOS/iPadOS and Android/Chrome OS, with the same account and the same workspace as on Windows. What differs is the feature set: several things that users know from a Windows PC are not offered on a Mac, an iPad or an Android phone, and a few security controls depend on Intune settings that only apply to mobile apps. This article lists the requirements, the sign-in steps, the gaps that cause support tickets, and what an admin should check before assigning pools to these devices. The general overview of the client belongs to other articles in this series; this one covers the non-Windows platforms.
+Windows App connects to [Azure Virtual Desktop](/entity/azure-virtual-desktop/) from macOS, iOS/iPadOS and Android/Chrome OS, with the same work or school account as on Windows. What differs is the feature set: several things that users know from a Windows PC are not offered on a Mac, an iPad or an Android phone, and a few security controls depend on Intune settings that only apply to mobile apps. This article lists the requirements, the sign-in steps, the gaps that cause support tickets, and what an admin should check before assigning pools to these devices.
 
 ## Platform requirements
 
@@ -34,8 +34,6 @@ Microsoft Learn's [Connect to Windows devices and apps with Windows App](https:/
 | Android/Chrome OS | Google Play Store | Android 10, Chrome OS 126 |
 
 The device must be actively supported by its manufacturer, and users need a work or school account: Learn says you can't sign in to [Windows App](/entity/windows-app/) with a personal Microsoft account. The same page shows different minimums on its Windows 365 tab (macOS 14.0 and iOS/iPadOS 16.0), so use the tab that matches the service. Learn also says visionOS is supported only in compatibility mode, and that Meta Quest support is in preview. Windows App in a web browser does not support mobile browsers.
-
-Unlike on Windows, the Remote Desktop client is not the only route. On the platforms covered here, Windows App is the client that the connect page documents, and the watermarking page lists the older Remote Desktop client for macOS (10.9.5 or later) and iOS/iPadOS (10.5.4 or later) next to it. This article covers Windows App only.
 
 ## Signing in on each platform
 
