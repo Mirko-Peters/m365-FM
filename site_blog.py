@@ -116,6 +116,10 @@ FOLLOWJS = ('(function(){var A="%API%",b=document.querySelector(".bl-follow");if
 
 CSS = ('<style>.bl-list{padding:0}.bl-list li{list-style:none;padding:.8em 0;border-bottom:1px solid var(--bd)}.bl-vote{font:inherit;cursor:pointer;border:1px solid var(--bd);border-radius:2em;padding:.25em .8em;background:var(--card);color:inherit}'
        '.bl-vote[aria-pressed=true]{border-color:var(--ac)}.bl-rel{margin:1.5em 0}.bl-rel h2{font-size:1.15rem}.en-al{text-decoration:underline dotted;text-underline-offset:.15em}</style>')
+# Tabellen im Beitragstext (site_content_blog.extract_tables: <div class="tbl-wrap"><table>): nur auf Seiten mit Tabelle eingebunden; Farben ueber die Seitenfarben (hell/dunkel), breite Tabellen scrollen waagerecht
+TBL_CSS = ('<style>.tbl-wrap{overflow-x:auto;max-width:100%;margin:1.2em 0;-webkit-overflow-scrolling:touch}.tbl-wrap table{border-collapse:collapse;width:100%;font-size:.93em;line-height:1.45;color:var(--fg)}'
+           '.tbl-wrap th,.tbl-wrap td{min-width:7.5em;padding:.5em .75em;border:1px solid var(--bd);text-align:start;vertical-align:top}.tbl-wrap thead th{background:var(--card);font-weight:700;border-bottom:2px solid var(--mut)}'
+           '.tbl-wrap tbody th{text-align:start}.tbl-wrap code{overflow-wrap:anywhere}</style>')
 
 
 def build(g, posts, people, api):
@@ -190,7 +194,7 @@ def build(g, posts, people, api):
             _disc = "".join(f'<p class="en-disc" role="note" style="{SPM.NOTE_STYLE}">{esc(d)}</p>' for d in disclosures(p, body_html, lang, skip=_spr_ex))
             b = shell(lang, f'{WCSS}{CSS}<p class="mut"><a href="{croot}blog/">{esc(title_blog)}</a> · <a href="{croot}u/{p["handle"]}/blog/">{esc(a["name"])}</a></p><article class="wk-body"><h1>{esc(p["title"])}</h1>{SPM.note(lang, _spr, "post")}{_disc}'
                             f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{p["handle"]}/" rel="author">{esc(a["name"])}</a>{co_html}{esc(" · ")}<time datetime="{iso(p["published"])}">{iso(p["published"])}</time>{upd_html}</p>'
-                            f'{("<p>" + esc(p["summary"]) + "</p>") if p.get("summary") else ""}{_aitr(p, lang, BASE)}{_kp}{body_html}{IMG.CSS if IMG.needs_responsive_css(body_html) else ""}{_fq}{SNT.CSS if (_kp or _fq) else ""}</article>{tl}{relbox}{vote}'
+                            f'{("<p>" + esc(p["summary"]) + "</p>") if p.get("summary") else ""}{_aitr(p, lang, BASE)}{_kp}{body_html}{IMG.CSS if IMG.needs_responsive_css(body_html) else ""}{TBL_CSS if "tbl-wrap" in body_html else ""}{_fq}{SNT.CSS if (_kp or _fq) else ""}</article>{tl}{relbox}{vote}'
                             f'<p>{("" if p.get("legacy") else "<button type=" + chr(34) + "button" + chr(34) + " class=" + chr(34) + "bl-vote bl-follow" + chr(34) + " data-h=" + chr(34) + esc(p["handle"]) + chr(34) + " aria-pressed=" + chr(34) + "false" + chr(34) + "><span class=" + chr(34) + "t" + chr(34) + ">" + esc(T(lang, "Follow this blog", "Blog abonnieren")) + "</span></button> ")}<a href="{croot}u/{p["handle"]}/blog/feed.xml">RSS</a></p>'
                             + ((g.get("author_box")(lang) if g.get("author_box") and p["handle"] == "mirko-p" and lang in ("en", "de") else ""))
                             + PG(lang, *[(f'{croot}u/{x["handle"]}/blog/{x["slug"]}/', x["title"]) if x else None for x in NB(_seq[_sk(p)], _pos[(p["handle"], p["slug"])])], kind="article")
