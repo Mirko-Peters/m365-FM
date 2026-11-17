@@ -12,12 +12,13 @@ export async function invalidateProfileExport(db) {
   await db.prepare("DELETE FROM export_cache WHERE k='profiles'").run().catch(() => {});
 }
 
-// Selbst verwaltete Personen-Entitaeten (profiles.js ownedEntity: eid = Profil-Adresse, Zusammenfassung "Selbst verwaltet", Typ person), deren
-// Inhaber kein oeffentliches, nicht gesperrtes Profil mit genau dieser Adresse (mehr) hat: privat gestellt, gesperrt, Adresse geaendert,
-// zusammengefuehrt (banned=2) oder geloescht. Sie erscheinen in keinem oeffentlichen Weg; kommt das Profil zurueck, sind sie wieder da.
-export const HIDDEN_PERSON_SQL = "SELECT c.eid FROM entity_claims c WHERE c.via='owner'" +
-  " AND EXISTS (SELECT 1 FROM entity_rev r WHERE r.eid=c.eid AND r.summary='Selbst verwaltet' AND (CASE WHEN json_valid(r.data) THEN json_extract(r.data,'$.type') END)='person')" +
-  " AND NOT EXISTS (SELECT 1 FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.user_id=c.user_id AND p.handle=c.eid AND p.public=1)";
+// Personen-Entitaeten aus dem eigenen Profil: genau die, die profiles.js ownedEntity mit Typ person angelegt hat (Tabelle person_entity,
+// Migration 0053; nur ownedEntity schreibt sie - keine Zusammenfassung oder kein Typ, den ein Mitglied in einem Vorschlag selbst setzen kann).
+// Ausgeblendet, solange ihr Inhaber kein oeffentliches, nicht gesperrtes Profil mit genau dieser Adresse hat: privat gestellt, gesperrt, Adresse
+// geaendert, zusammengefuehrt (banned=2) oder geloescht (user_id 0, die Zeile bleibt als Merker: sonst holte importEntitiesFromSite die Person aus
+// dem letzten Seitenbau zurueck). Sie erscheinen in keinem oeffentlichen Weg; kommt das Profil zurueck, sind sie wieder da.
+export const HIDDEN_PERSON_SQL = "SELECT pe.eid FROM person_entity pe" +
+  " WHERE NOT EXISTS (SELECT 1 FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.user_id=pe.user_id AND p.handle=pe.eid AND p.public=1)";
 export async function hiddenPersonEids(db) {
   try { return new Set(((await db.prepare(HIDDEN_PERSON_SQL).all()).results || []).map((r) => r.eid)); } catch { return new Set(); }
 }
@@ -44,11 +45,14 @@ export async function forgetPublicPerson(db, handle) {
 
 // Eintrag eines Speakers, dessen Konto geloescht wurde: bleibt im Programm (Inhalt bei M365.FM), aber ohne Name, Handle, Entitaet, Einladung
 export const anonSpeaker = (x) => ({ n: FORMER, s: x.s, anon: 1 });
+export const isFormer = (n) => String(n || "").trim().toLowerCase() === FORMER.toLowerCase();
 
 // Profil-Adresse wird frei (geaendert oder entfernt): Speaker-Eintraege, Speaker-Identitaet und Blog-Abos gehen NICHT an einen spaeteren
 // Inhaber der alten Adresse, sondern wandern mit (neue Adresse) bzw. verlieren die Bindung (keine Adresse mehr; der Name bleibt, das Konto
-// besteht ja weiter). Gleiche Ersetzung wie beim Zusammenfuehren (identities.js). Liefert Anweisungen fuer db.batch.
-export async function releaseHandleOps(db, oldH, newH) {
+// besteht ja weiter). Ohne neue Adresse bleibt der Eintrag an das Konto gebunden (uid): nur dieses Konto kann ihn spaeter wieder beanspruchen
+// (events.js speakerMatches/claim), und loescht es sich, wird er anonymisiert (eventmerge.js forgetImporter). Gleiche Ersetzung wie beim
+// Zusammenfuehren (identities.js). Liefert Anweisungen fuer db.batch.
+export async function releaseHandleOps(db, oldH, newH, uid = 0) {
   if (!oldH || oldH === newH) return [];
   const H = (h) => `"h":"${h}"`, E = (h) => `"e":"${h}"`;
   if (newH) return [
@@ -56,18 +60,21 @@ export async function releaseHandleOps(db, oldH, newH) {
     db.prepare("UPDATE speaker_ref SET handle=? WHERE handle=?").bind(newH, oldH),
     db.prepare("UPDATE OR IGNORE blog_follows SET handle=? WHERE handle=?").bind(newH, oldH), db.prepare("DELETE FROM blog_follows WHERE handle=?").bind(oldH),
   ];
-  return [...(await mapSpeakers(db, oldH, ({ h, e, t, ...x }) => (e && e !== oldH ? { ...x, e } : x))),
+  return [...(await mapSpeakers(db, oldH, ({ h, e, t, ...x }) => ({ ...x, ...(e && e !== oldH ? { e } : {}), ...(uid ? { uid } : {}) }))),
     db.prepare("UPDATE speaker_ref SET handle='' WHERE handle=?").bind(oldH), db.prepare("DELETE FROM blog_follows WHERE handle=?").bind(oldH)];
 }
 
-// Alle Sessions mit einem Speaker-Eintrag h=<handle>: Eintraege mit fn umschreiben (Anweisungen fuer db.batch)
-export async function mapSpeakers(db, handle, fn, skip = new Set()) {
-  const ops = [];
-  for (const r of (await db.prepare("SELECT id,speakers FROM event_sessions WHERE instr(speakers,?)>0").bind(`"h":"${handle}"`).all()).results || []) {
+// Alle Sessions mit einem Speaker-Eintrag h=<handle> (oder uid=<Konto>, siehe releaseHandleOps): Eintraege mit fn umschreiben (Anweisungen fuer db.batch).
+// Beides in EINEM Durchlauf: zwei getrennte Durchlaeufe schrieben dieselbe Session mit veraltetem Stand und verloeren die erste Aenderung.
+export async function mapSpeakers(db, handle, fn, skip = new Set(), uid = 0) {
+  const ops = [], hit = (x) => (!!handle && x?.h === handle) || (!!uid && x?.uid === uid);
+  const kh = handle ? `"h":"${handle}"` : "", ku = uid ? `"uid":${uid}` : "";
+  if (!kh && !ku) return ops;
+  for (const r of (await db.prepare("SELECT id,speakers FROM event_sessions WHERE (?1<>'' AND instr(speakers,?1)>0) OR (?2<>'' AND instr(speakers,?2)>0)").bind(kh, ku).all()).results || []) {
     if (skip.has(r.id)) continue;
     let sp; try { sp = JSON.parse(r.speakers); } catch { continue; }
-    if (!Array.isArray(sp) || !sp.some((x) => x?.h === handle)) continue;
-    ops.push(db.prepare("UPDATE event_sessions SET speakers=? WHERE id=?").bind(JSON.stringify(sp.map((x) => (x?.h === handle ? fn(x) : x))), r.id));
+    if (!Array.isArray(sp) || !sp.some(hit)) continue;
+    ops.push(db.prepare("UPDATE event_sessions SET speakers=? WHERE id=?").bind(JSON.stringify(sp.map((x) => (hit(x) ? fn(x) : x))), r.id));
   }
   return ops;
 }

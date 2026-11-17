@@ -41,6 +41,7 @@ export async function entityMap(env) {
   if ((await source(env)) !== "db") for (const e of await siteEntities(env)) base.set(e.id, e);
   const rows = (await env.DB.prepare("SELECT eid,data FROM entity_rev WHERE status='live' ORDER BY id").all()).results || [], hidden = await hiddenPersonEids(env.DB);
   for (const r of rows) { if (hidden.has(r.eid)) continue; try { base.set(r.eid, { id: r.eid, ...JSON.parse(r.data) }); } catch { /* defekte Zeile ignorieren */ } }   // K41: Personen-Entitaet eines privaten, gesperrten oder geloeschten Profils nie oeffentlich (MCP get_entity, search_entities ...)
+  for (const eid of hidden) base.delete(eid);   // auch nicht aus /entities.json des letzten Seitenbaus (enthaelt bis zum naechsten Bau noch die D1-Fassung)
   return base;
 }
 
@@ -49,7 +50,10 @@ export async function importEntitiesFromSite(env) {
   const db = env.DB, list = await siteEntities(env, 0);
   if (!list.length) return { skipped: "entities.json nicht erreichbar" };
   const have = new Set(((await db.prepare("SELECT DISTINCT eid FROM entity_rev WHERE status='live'").all()).results || []).map((r) => r.eid));
-  const todo = list.filter((e) => e && /^[a-z0-9][a-z0-9-]{1,79}$/.test(e.id || "") && e.name && e.type && !have.has(e.id)), t = Math.floor(Date.now() / 1000);
+  // K41: Personen-Entitaet eines geloeschten (oder privaten) Profils nie aus dem letzten Seitenbau zurueckholen - /entities.json enthaelt bis zum
+  // naechsten Bau noch die D1-Fassung samt Name und Kurzzeile
+  const hidden = await hiddenPersonEids(db);
+  const todo = list.filter((e) => e && /^[a-z0-9][a-z0-9-]{1,79}$/.test(e.id || "") && e.name && e.type && !have.has(e.id) && !hidden.has(e.id)), t = Math.floor(Date.now() / 1000);
   for (let i = 0; i < todo.length; i += 50)
     await db.batch(todo.slice(i, i + 50).map((e) => { const { id, ...data } = e; return db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,0,'live',?)").bind(id, JSON.stringify(data), "Übernahme aus entities.json", t); }));
   const synced = await syncEntitiesFromSite(env).catch((e) => ({ error: String(e).slice(0, 120) }));

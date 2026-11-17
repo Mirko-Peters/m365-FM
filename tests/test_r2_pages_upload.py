@@ -93,13 +93,15 @@ class SyncTest(Base):
     def test_tombstone_own_objects_only_and_revive(self):
         tree(self.docs, {f"p{i}/index.html": str(i) for i in range(10)})
         self.s3.obj["pages/pl/x/index.html"] = {"body": b"pl", "ct": "text/html", "meta": {}}           # r2out (in der Liste)
-        self.s3.obj["pages/old-r2out/index.html"] = {"body": b"o", "ct": "text/html", "meta": {}}      # Altbestand r2out (nicht in der Liste)
+        self.s3.obj["pages/old-r2out/index.html"] = {"body": b"o", "ct": "text/html", "meta": {}}      # Altbestand r2out (nicht in der Liste): Seite, die kein Bau mehr erzeugt
+        self.s3.obj["pages/old-r2out/data.bin"] = {"body": b"d", "ct": "application/octet-stream", "meta": {}}   # fremd: keine Seite
         self.keys.write_text(json.dumps(["pages/pl/x/index.html"]))
         self.assertEqual(self.sync(), 0)
         (self.docs / "p3" / "index.html").unlink()
         self.assertEqual(self.sync(), 0)
         self.assertTrue(self.s3.gone("pages/p3/index.html")); self.assertEqual(self.s3.obj["pages/p3/index.html"]["body"], b"3", "Inhalt bleibt")
-        self.assertFalse(self.s3.gone("pages/old-r2out/index.html"), "fremde Objekte unberuehrt"); self.assertFalse(self.s3.gone("pages/pl/x/index.html"))
+        self.assertFalse(self.s3.gone("pages/old-r2out/data.bin"), "fremde Objekte unberuehrt"); self.assertFalse(self.s3.gone("pages/pl/x/index.html"))
+        self.assertTrue(self.s3.gone("pages/old-r2out/index.html"), "Seite ohne Metadaten, die der Bau nicht mehr erzeugt: entfernt (K25/K41)")
         self.assertIn("pages/p3/index.html", json.loads(self.s3.obj["meta/gone.json"]["body"])); self.assertIn("/p3/", json.loads(self.changed.read_text()))
         tree(self.docs, {"p3/index.html": "3"})   # gleiche Seite, gleicher Inhalt kommt zurueck
         self.assertEqual(self.sync(), 0)
@@ -125,6 +127,22 @@ class SyncTest(Base):
         self.keys.write_text(json.dumps(["pages/pl/x/index.html", "pages/fr/community/u/alice/index.html"]))   # Profil wieder oeffentlich
         self.assertEqual(self.sync(), 0)
         self.assertIn("pages/fr/community/u/alice/index.html", json.loads(self.s3.obj["meta/gone.json"]["body"]), "bleibt markiert, bis der r2out-Upload es neu laedt")
+
+    def test_removed_r2out_en_de_pages_are_marked(self):
+        # K25/K41: Entitaetsseiten aller Sprachen (auch en/de) und Blog-Sprachfassungen liegen ohne Sprachpraefix bzw. mit de/ in r2out/;
+        # fehlen sie im Bau (Profil privat/geloescht), gelten sie als entfernt - sonst bliebe /entity/<handle>/ mit Name und Kurzzeile erreichbar
+        tree(self.docs, {f"p{i}/index.html": str(i) for i in range(10)})
+        ks = ("pages/entity/alice/index.html", "pages/de/entity/alice/index.html", "pages/community/u/alice/blog/x/index.html", "pages/entity/alice/feed.xml")
+        for k in ks + ("pages/entity/m365/index.html",):
+            self.s3.obj[k] = {"body": b"alt", "ct": "text/html", "meta": {}}
+        self.s3.obj["pages/foo.bin"] = {"body": b"f", "ct": "application/octet-stream", "meta": {}}   # fremd, kein Seiten-Muster
+        self.keys.write_text(json.dumps(list(ks) + ["pages/entity/m365/index.html"]))
+        self.assertEqual(self.sync(), 0)
+        self.keys.write_text(json.dumps(["pages/entity/m365/index.html"]))   # naechster Bau: Profil alice weg
+        self.assertEqual(self.sync(), 0)
+        for k in ks: self.assertTrue(self.s3.gone(k), k)
+        self.assertFalse(self.s3.gone("pages/entity/m365/index.html"), "noch im Bau: bleibt")
+        self.assertFalse(self.s3.gone("pages/foo.bin"), "fremde Objekte unberuehrt")
 
     def test_lost_manifest_still_marks_from_bucket_listing(self):
         tree(self.docs, {f"p{i}/index.html": str(i) for i in range(10)})

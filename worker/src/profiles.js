@@ -45,6 +45,9 @@ export async function ownedEntity(env, user, o) {
       await db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,'live',?)").bind(o.eid, JSON.stringify(v.data), "Selbst verwaltet", user.id, now()).run(); created = true;
     }
     if (created || user.admin) await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,'verified','owner',?) ON CONFLICT(eid) DO UPDATE SET user_id=excluded.user_id,status='verified',via='owner',created=excluded.created WHERE entity_claims.status='rejected'").bind(o.eid, user.id, now()).run();
+    // Personen-Entitaet aus dem Profil merken (privacy.js HIDDEN_PERSON_SQL, K41): nur hier, nicht ueber Felder eines Vorschlags. Eine neue erste
+    // Fassung (z. B. die frei gewordene Adresse eines geloeschten Kontos, Merker mit user_id 0) gehoert dem neuen Inhaber.
+    if (created && o.type === "person") await db.prepare("INSERT INTO person_entity(eid,user_id,created) VALUES(?,?,?) ON CONFLICT(eid) DO UPDATE SET user_id=excluded.user_id,created=excluded.created").bind(o.eid, user.id, now()).run();
     return o.eid;
   } catch (e) { return ""; }
 }
@@ -419,7 +422,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
       ON CONFLICT(user_id) DO UPDATE SET public=excluded.public,handle=excluded.handle,headline=excluded.headline,about=excluded.about,company=excluded.company,job=excluded.job,country=excluded.country,show_org=excluded.show_org,updated=excluded.updated`)
       .bind(user.id, isPublic, handle || null, txt(b.headline, 100), long(b.about, 1500), txt(b.company, 80), txt(b.job, 80), txt(b.country, 60), b.show_org === false ? 0 : 1, now()).run();
     await db.prepare("UPDATE users SET bio=? WHERE id=?").bind(isPublic ? txt(b.headline, 100) : "", user.id).run();   // users.bio ist oeffentlich (/api/u/<id>): die Kurzzeile eines privaten Profils gehoert nicht hinein (K22)
-    if (prev?.handle && prev.handle !== handle) { const ops = await releaseHandleOps(db, prev.handle, handle); if (ops.length) await db.batch(ops); }   // K42: Speaker-Eintraege gehen nicht an den naechsten Inhaber der Adresse
+    if (prev?.handle && prev.handle !== handle) { const ops = await releaseHandleOps(db, prev.handle, handle, user.id); if (ops.length) await db.batch(ops); }   // K42: Speaker-Eintraege gehen nicht an den naechsten Inhaber der Adresse
     if (prev?.public) { await invalidateProfileExport(db); if (!isPublic || prev.handle !== handle) await forgetSearchPerson(db, prev.handle); }   // K45: nicht erst nach dem naechsten Cron
     if (b.i18n && typeof b.i18n === "object") await saveI18n(db, user.id, cleanI18n(b.i18n));
     if (ind) await db.batch([db.prepare("DELETE FROM profile_industry WHERE user_id=?").bind(user.id), ...ind.list.map((e) => db.prepare("INSERT INTO profile_industry(user_id,eid) VALUES(?,?)").bind(user.id, e))]);
@@ -728,12 +731,15 @@ export async function handleProfiles(env, request, url, path, user, J) {
 export async function deleteUserData(db, id) {
   const mailAddress = await db.prepare("SELECT email FROM mail_addr WHERE user_id=?").bind(id).first().catch(() => null);
   const handle = (await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(id).first())?.handle || "";
-  // Personen-Entitaeten aus dem eigenen Profil (ownedEntity, "Selbst verwaltet", Typ person): reine Personendaten (Name, Kurzzeile) - weg samt
-  // Uebersetzungen und Anspruch, damit die Adresse spaeter frei und nichts davon oeffentlich bleibt (K41). Redaktionelle Entitaeten bleiben (user_id 0).
-  const persons = ((await db.prepare("SELECT c.eid FROM entity_claims c WHERE c.user_id=? AND c.via='owner' AND EXISTS (SELECT 1 FROM entity_rev r WHERE r.eid=c.eid AND r.summary='Selbst verwaltet' AND (CASE WHEN json_valid(r.data) THEN json_extract(r.data,'$.type') END)='person')").bind(id).all().catch(() => ({ results: [] }))).results || []).map((r) => r.eid);
+  // Personen-Entitaeten aus dem eigenen Profil (person_entity, nur von ownedEntity angelegt): reine Personendaten (Name, Kurzzeile) - Fassungen,
+  // Uebersetzungen und Anspruch weg, damit nichts davon oeffentlich bleibt (K41). Der Merker bleibt mit user_id 0: die Entitaet bleibt verborgen und
+  // importEntitiesFromSite legt sie nicht aus dem letzten Seitenbau (/entities.json) neu an; uebernimmt jemand die Adresse, gehoert sie ihm (ownedEntity).
+  // Event-, Firmen- und redaktionelle Entitaeten stehen nicht in person_entity und bleiben samt Geschichte (Revisionen auf user_id 0, unten).
+  const persons = ((await db.prepare("SELECT eid FROM person_entity WHERE user_id=?").bind(id).all().catch(() => ({ results: [] }))).results || []).map((r) => r.eid);
   if (persons.length) {
     await db.batch(persons.flatMap((eid) => [db.prepare("DELETE FROM entity_rev WHERE eid=?").bind(eid), db.prepare("DELETE FROM entity_claims WHERE eid=?").bind(eid), db.prepare("DELETE FROM entity_claim_review WHERE eid=?").bind(eid),
-      db.prepare("DELETE FROM ent_tr WHERE eid=?").bind(eid), db.prepare("DELETE FROM ent_tr_seen WHERE eid=?").bind(eid), db.prepare("DELETE FROM translation WHERE kind='entity' AND item_id=?").bind(eid)]));
+      db.prepare("DELETE FROM ent_tr WHERE eid=?").bind(eid), db.prepare("DELETE FROM ent_tr_seen WHERE eid=?").bind(eid), db.prepare("DELETE FROM translation WHERE kind='entity' AND item_id=?").bind(eid),
+      db.prepare("UPDATE person_entity SET user_id=0 WHERE eid=?").bind(eid)]));
     for (const eid of persons) await forgetSearchEntity(db, eid);
   }
   await forgetPublicPerson(db, handle);   // Export-Zwischenspeicher und Suchindex sofort (K45)

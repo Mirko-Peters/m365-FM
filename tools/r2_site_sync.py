@@ -21,11 +21,12 @@ from r2_common import GONE_KEY, IMG, client, ctype, read_gone, upload, url_of, T
 
 MARKER = "r2-build.txt"
 META = {"src": "docs"}
-# Sprachseiten aus r2out/ (site_size.r2_only: <l>/.../index.html aller Sprachen ausser en/de, seit 11.11.2026). Sie tragen keine Metadaten
-# (tools/r2_pages_upload.py). Fehlt eine davon im Bau (Profil privat oder geloescht, Blog, Event, Firma entfernt), wird sie wie eine docs-Seite
-# als entfernt markiert - sonst lieferte der Site-Worker sie weiter mit 200 aus (Sicherheitspruefung K25, DSGVO).
-R2OUT_LANGS = ("fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko")   # site_i18n.ALL_COMM_LANGS ohne en/de
-R2OUT_PAGE = re.compile(r"^pages/(?:" + "|".join(R2OUT_LANGS) + r")/.+/index\.html$")
+# Seiten aus r2out/ (site_size.write_r2: Sprachseiten ausser en/de seit 11.11.2026, dazu Entitaetsseiten ALLER Sprachen einschliesslich en/de,
+# Blog-Sprachfassungen und Lernseiten - auch pages/entity/<id>/index.html und pages/community/u/<h>/blog/<slug>/index.html). Sie tragen keine
+# Metadaten (tools/r2_pages_upload.py). Fehlt eine davon im Bau (Profil privat oder geloescht, Bann, Blog, Event, Firma entfernt), wird sie wie
+# eine docs-Seite als entfernt markiert - sonst lieferte der Site-Worker sie weiter mit 200 aus (Sicherheitspruefung K25/K41, DSGVO). Deshalb
+# zaehlt jede Seite (index.html) und jeder Feed (feed.xml) ohne Metadaten, nicht nur die mit Sprachpraefix.
+R2OUT_PAGE = re.compile(r"^pages/.+/(?:index\.html|feed\.xml)$")
 
 
 def fail(msg):
@@ -90,7 +91,7 @@ def main(src):
     write_changed()
     print(f"hochgeladen: {len(ok)}, Fehler: {len(failed)}")
     if failed: return fail(f"{len(failed)} Dateien nicht geladen (z. B. {failed[0][0]})")
-    # Entfernt markieren: eigene Spiegel-Objekte (Metadaten src=docs) und Sprachseiten aus r2out/ (R2OUT_PAGE), die der Bau nicht mehr erzeugt;
+    # Entfernt markieren: eigene Spiegel-Objekte (Metadaten src=docs) und Seiten aus r2out/ (R2OUT_PAGE), die der Bau nicht mehr erzeugt;
     # andere Objekte ohne Metadaten bleiben unberuehrt
     cand = sorted(k for k in in_bucket if k not in files and k not in keep and k not in gone and k != "pages/" + MARKER)
     def head(k):

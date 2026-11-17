@@ -478,7 +478,7 @@ export async function forgetImporter(db, uid) {
     const rows = (await db.prepare("SELECT s.id,s.speakers,s.proposer_id,s.merged_into,(SELECT COUNT(*) FROM session_source o WHERE o.session_id=s.id AND NOT (o.kind='sessionize_profile' AND o.ref IN (SELECT value FROM json_each(?1)))) other FROM event_sessions s WHERE s.id IN (SELECT session_id FROM session_source WHERE kind='sessionize_profile' AND ref IN (SELECT value FROM json_each(?1)))").bind(rj).all()).results || [];
     for (const r of rows) {
       handled.add(r.id);
-      const sp = parse(r.speakers, []), rest = h ? sp.filter((x) => x.h !== h) : sp;
+      const sp = parse(r.speakers, []), rest = sp.filter((x) => !(h && x.h === h) && x.uid !== uid);
       for (const x of sp) if (h && x.h === h && x.r) gone.add(x.r);
       if (r.merged_into || (!rest.length && !r.other && r.proposer_id === uid)) ops.push(...(await sessionDeleteOps(db, r.id, false)));   // nur dieser Import trug die Session
       else if (rest.length !== sp.length) ops.push(db.prepare("UPDATE event_sessions SET speakers=? WHERE id=?").bind(JSON.stringify(rest), r.id));
@@ -487,10 +487,11 @@ export async function forgetImporter(db, uid) {
   }
   ops.push(db.prepare("DELETE FROM event_claims WHERE user_id=?").bind(uid), db.prepare("DELETE FROM import_preview WHERE user_id=?").bind(uid),
     db.prepare("UPDATE merge_log SET by_user=0 WHERE by_user=?").bind(uid), db.prepare("UPDATE dedupe_queue SET decided_by=0 WHERE decided_by=?").bind(uid));
+  // Speaker-Eintraege in Programmen anderer Veranstalter: bleiben (Inhalt bei M365.FM), aber anonym - ohne Name, Handle und Entitaet.
+  // Sonst uebernaehme ein spaeteres Konto mit derselben Profil-Adresse die Eintraege samt Rechten (Sicherheitspruefung K42). Ebenso die Eintraege,
+  // die nach dem Entfernen der Profil-Adresse nur noch an das Konto gebunden sind (uid, privacy.js releaseHandleOps).
+  ops.push(...(await mapSpeakers(db, h, (x) => { if (x.r) gone.add(x.r); return anonSpeaker(x); }, handled, uid)));
   if (h) {
-    // Speaker-Eintraege in Programmen anderer Veranstalter: bleiben (Inhalt bei M365.FM), aber anonym - ohne Name, Handle und Entitaet.
-    // Sonst uebernaehme ein spaeteres Konto mit derselben Profil-Adresse die Eintraege samt Rechten (Sicherheitspruefung K42).
-    ops.push(...(await mapSpeakers(db, h, (x) => { if (x.r) gone.add(x.r); return anonSpeaker(x); }, handled)));
     for (const r of (await db.prepare("SELECT id FROM speaker_ref WHERE handle=?").bind(h).all()).results || []) gone.add(r.id);
     ops.push(db.prepare("UPDATE speaker_ref SET handle='' WHERE handle=?").bind(h));
     // Protokoll: den Eintrag der Person (Name + Profil) aus den gemerkten Speaker-Listen nehmen; die Zusammenfuehrung selbst bleibt nachvollziehbar

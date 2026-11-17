@@ -121,7 +121,7 @@ export async function mergeStatements(db, S, T) {
   st.push(q("UPDATE user_identities SET user_id=? WHERE user_id=?", T, S));
   // Inhalte und Autorschaft (ohne Eindeutigkeit je Nutzer)
   for (const t of ["comments", "curators", "wiki_rev", "entity_rev", "entity_q", "entity_a", "push_subs", "push_topics", "points_spent", "api_tokens",
-    "entity_claims", "entity_claim_evidence", "episode_notes", "pod_episodes", "yt_videos", "guest_listings", "shows", "wish", "expert_requests", "mail_outbox"]) simple(t);
+    "entity_claims", "entity_claim_evidence", "person_entity", "episode_notes", "pod_episodes", "yt_videos", "guest_listings", "shows", "wish", "expert_requests", "mail_outbox"]) simple(t);
   simple("events", "owner_id"); simple("event_sessions", "proposer_id"); simple("event_roles", "added_by"); simple("entity_invites", "by_user");
   // Einlader: Einladungen von S gehoeren T; ist S selbst eingeladen worden, zaehlt das nur, wenn T noch keinen Einlader hat (kein doppeltes Zaehlen)
   st.push(q("UPDATE invite_success SET inviter_user_id=? WHERE inviter_user_id=?", T, S));
@@ -217,6 +217,8 @@ export async function mergeStatements(db, S, T) {
     st.push(q("UPDATE event_sessions SET speakers=replace(speakers,?,?) WHERE instr(speakers,?)>0", `"h":"${sh}"`, `"h":"${th}"`, `"h":"${sh}"`));
     st.push(q("UPDATE speaker_ref SET handle=? WHERE handle=?", th, sh));   // #317: gemerkte Speaker-Identitaet zeigt kuenftig auf das Profil von T
   }
+  // Speaker-Eintraege, die nach dem Entfernen der Profil-Adresse nur noch an das Konto gebunden sind (privacy.js releaseHandleOps): gehoeren kuenftig T
+  st.push(q("UPDATE event_sessions SET speakers=replace(replace(speakers,?1,?2),?3,?4) WHERE instr(speakers,?1)>0 OR instr(speakers,?3)>0", `"uid":${S},`, `"uid":${T},`, `"uid":${S}}`, `"uid":${T}}`));
   set("blog_follows");
   if (th || sh) st.push(q("DELETE FROM blog_follows WHERE user_id=? AND handle=?", T, th || sh));
   for (const t of ["profile_private", "profile_company", "user_prefs", "msg_prefs", "expert_settings", "profile_job"]) keepT(t);
