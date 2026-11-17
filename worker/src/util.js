@@ -141,9 +141,19 @@ export async function memberOf(env, uid) {
 
 // Schluessel fuer Limits "je Aufrufer" (K19): angemeldet die Konto-Nummer, sonst ein taeglich wechselnder Hash der IP (nie die IP selbst).
 // Ohne IP (Service-Binding, interne Aufrufe) ein eigener, klar benannter Eimer - nie ein Hash aus leerer IP, der stillschweigend alle teilen.
+// IP fuer Limits und Zaehler: IPv4 unveraendert, IPv6 auf das /64-Praefix gekuerzt (ein Anschluss bekommt meist ein ganzes /64 und kann
+// darin beliebig viele Adressen nutzen - je voller Adresse zaehlte jede neue Adresse als neuer Besucher). IPv4-gemappte Adressen als IPv4.
+export function ipBucket(ip) {
+  const a = String(ip || "").trim().toLowerCase();
+  if (!a.includes(":")) return a;
+  const v4 = a.match(/^::ffff:(\d+\.\d+\.\d+\.\d+)$/); if (v4) return v4[1];
+  const [head, tail] = a.split("::"), h = head ? head.split(":") : [], t = tail ? tail.split(":") : [];
+  const full = tail === undefined ? h : [...h, ...Array(Math.max(0, 8 - h.length - t.length)).fill("0"), ...t];
+  return full.slice(0, 4).map((x) => x.replace(/^0+(?=.)/, "")).join(":") + "::/64";
+}
 export async function callerKey(env, request, user) {
   if (user?.id) return `u:${user.id}`;
-  const ip = request.headers.get("cf-connecting-ip") || "";
+  const ip = ipBucket(request.headers.get("cf-connecting-ip"));
   return ip ? (await sha256hex(`${ip}|${new Date().toISOString().slice(0, 10)}|${env.SESSION_SECRET || ""}`)) : "noip";
 }
 

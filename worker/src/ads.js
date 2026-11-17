@@ -6,7 +6,7 @@
 // - Einblendungen cookiefrei beim Ausliefern des Platzes gezaehlt (je Kampagne, Platz, Seitentyp, Tag), Klicks ueber /go/<code>.
 import { classify, isBot, isImpressionBot } from "./botcheck.js";
 import { LEAD_STATUS } from "./mediakit.js";
-import { cleanText, esc, rateLimit, sha256hex, audit, cors } from "./util.js";
+import { cleanText, esc, rateLimit, sha256hex, audit, cors, ipBucket } from "./util.js";
 import { notify } from "./mail.js";
 import { sponsorOrderInvoiceEvent } from "./sponsor_orders.js";
 
@@ -569,14 +569,17 @@ async function serve(env, request, url, J) {
 // alles darueber wird ausgeliefert, aber dem Werbekunden weder berechnet noch als Einblendung gezaehlt.
 export const AD_BILL_PER_IP_DAY = 1;
 async function billable(env, request, kind, bookingId, max = AD_BILL_PER_IP_DAY) {
-  const ip = request.headers.get("cf-connecting-ip") || "";
+  const ip = ipBucket(request.headers.get("cf-connecting-ip"));   // IPv6 je /64
+
   const h = (await sha256hex(`${env.SESSION_SECRET || ""}:${kind}:${today()}:${ip}|${bookingId}`)).slice(0, 32);
   return rateLimit(env.DB, `${kind}:${h}`, max, 86400);
 }
-// Taeglich (Cron 0 6): abgelaufene Zaehler der Abrechnung entfernen (nur Hashes, aelter als 2 Tage)
+// Taeglich (Cron 0 6): abgelaufene Zaehler entfernen (nur Hashes bzw. Konto-Nummern, Fenster aelter als 2 Tage): Abrechnung der Werbeplaetze,
+// Sponsor-Klicks je IP und Tag, MCP ohne Token je IP und Tag, Suchnachfrage je Konto/IP - deren Schluessel wiederholen sich nie bzw. sind abgelaufen
+export const PURGE_PREFIXES = ["adimp", "adclk", "sgo", "mcpa", "sdq"];
 export async function purgeAdCounters(db) {
   const cut = Math.floor(Date.now() / 1000) - 2 * 86400;
-  for (const k of ["adimp", "adclk"]) await db.prepare("DELETE FROM ratelimit WHERE k>=? AND k<? AND win<?").bind(k + ":", k + ";", cut).run();
+  for (const k of PURGE_PREFIXES) await db.prepare("DELETE FROM ratelimit WHERE k>=? AND k<? AND win<?").bind(k + ":", k + ";", cut).run();
 }
 
 async function dedupe(env, request, code) {

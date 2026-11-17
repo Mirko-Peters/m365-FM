@@ -1,6 +1,6 @@
 // MCP-Server (Streamable HTTP, JSON-RPC) fuer www.m365.fm: Lesen ohne Anmeldung, Schreiben mit persoenlichem KI-Zugangstoken.
 // Alle Schreibaktionen laufen durch dieselben Regeln wie die Website (Abstimmung, Pflichtfelder, Rate-Limits).
-import { cleanText, randomToken, sha256hex, rateLimit } from "./util.js";
+import { cleanText, randomToken, sha256hex, rateLimit, ipBucket } from "./util.js";
 import { levelName } from "./levels.js";
 import { baseIds, entityMap, handleEntity } from "./entities.js";
 import { autoVerifyCert, cleanI18n, saveI18n, readI18n, RESERVED_HANDLES } from "./profiles.js";
@@ -651,7 +651,7 @@ export async function handleMcp(env, request, getUser, dispatch) {
     user = await getUser(row.user_id); await env.DB.prepare("UPDATE api_tokens SET last_used=? WHERE id=?").bind(now(), row.id).run();
   }
   let msg; try { msg = await request.json(); } catch { return reply({ jsonrpc: "2.0", id: null, error: { code: -32700, message: "parse error" } }, 400); }
-  const ip = request.headers.get("cf-connecting-ip") || "";
+  const ip = ipBucket(request.headers.get("cf-connecting-ip"));   // IPv6 je /64
   const anonKey = user ? "" : ip ? `mcpa:${(await sha256hex(`${ip}|${new Date().toISOString().slice(0, 10)}|${env.SESSION_SECRET || ""}`)).slice(0, 32)}` : "mcpa:noip";
   let entP = null; const ctx = { entities: () => (entP ||= entityMap(env)) };   // ein Vollscan je Anfrage fuer alle lesenden Aufrufe
   const one = async (m) => {

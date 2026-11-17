@@ -243,3 +243,18 @@ test("Browser und In-App-Browser von DuckDuckGo, Pinterest, Yandex, Baidu, Qwant
     "Mozilla/5.0 (compatible; SeznamBot/4.0; +https://o-seznam.cz/napoveda/vyhledavani/en/seznambot-crawler/)", "Mozilla/5.0 (compatible; Qwantify/2.4w; +https://www.qwant.com/)"];
   for (const ua of bots) assert.equal(isImpressionBot(req(ua)), true, ua);
 });
+
+test("K12: Sponsor-Klick je Besucher und Tag auch ueber mehrere Rechenzentren nur einmal gezaehlt (D1 statt Edge-Cache), IPv6 je /64", async () => {
+  const { raw, fetchAs, done } = await setup();
+  try {
+    const human = { "user-agent": CHROME, ...HUMAN };
+    await fetchAs("https://c.m365.fm/acme-home?s=topic", human);
+    // anderes Rechenzentrum: eigener, leerer Edge-Cache
+    Object.defineProperty(globalThis, "caches", { configurable: true, value: { default: { match: async () => null, put: async () => {} } } });
+    await fetchAs("https://c.m365.fm/acme-home?s=topic", human);
+    assert.equal(sum(raw, "clicks"), 1, "derselbe Besucher in einem zweiten Rechenzentrum zaehlt nicht erneut");
+    await fetchAs("https://c.m365.fm/acme-home?s=topic", { ...human, "cf-connecting-ip": "2001:db8:5:6::1" });
+    await fetchAs("https://c.m365.fm/acme-home?s=topic", { ...human, "cf-connecting-ip": "2001:db8:5:6::2" });
+    assert.equal(sum(raw, "clicks"), 2, "zwei Adressen aus einem /64 sind ein Besucher");
+  } finally { done(); }
+});

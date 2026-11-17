@@ -1,4 +1,4 @@
-import { cleanText, esc, rateLimit, sha256hex } from "./util.js";
+import { cleanText, esc, rateLimit, sha256hex, ipBucket } from "./util.js";
 import { notify } from "./mail.js";
 import { handleAdGo, handleHouseGo, adStatsForOrg } from "./ads.js";
 import { classify } from "./botcheck.js";
@@ -151,17 +151,10 @@ export async function handleSponsorLink(env, request, url, path, ctx) {
       const day = new Date().toISOString().slice(0, 10);
       const salt = await hmac(env.SESSION_SECRET, `go:${day}`);
       // echte Klicks (im Dashboard "measured") je IP, Code und Tag - ohne den frei waehlbaren User-Agent (K12); gefilterte Abrufe weiter je Kennung getrennt sichtbar
-      const keyHash = await hmac(salt, filtered ? `${request.headers.get("cf-connecting-ip") || ""}|${request.headers.get("user-agent") || ""}|f:${code}` : `${request.headers.get("cf-connecting-ip") || ""}|${code}`);
-      const cache = globalThis.caches?.default;
-      let duplicate = false;
-      if (cache) {
-        const cacheKey = new Request(`https://dedupe.m365.fm/${keyHash}`);
-        duplicate = !!(await cache.match(cacheKey));
-        if (!duplicate) {
-          const ttl = Math.max(1, Math.ceil((Date.parse(`${day}T23:59:59.999Z`) - Date.now()) / 1000));
-          await cache.put(cacheKey, new Response("1", { headers: { "cache-control": `public, max-age=${ttl}` } }));
-        }
-      }
+      const ip = ipBucket(request.headers.get("cf-connecting-ip"));   // IPv6 je /64
+      const keyHash = await hmac(salt, filtered ? `${ip}|${request.headers.get("user-agent") || ""}|f:${code}` : `${ip}|${code}`);
+      // in D1 (rateLimit, atomar), nicht im Edge-Cache: der ist je Rechenzentrum getrennt, derselbe Besucher zaehlte dort je Standort neu
+      const duplicate = !(await rateLimit(env.DB, `sgo:${String(keyHash).slice(0, 32)}`, 1, 86400));
       if (duplicate) return;
       const rawSurface = url.searchParams.get("s") || "";
       const surface = SURFACES.has(rawSurface) ? rawSurface : "other";
