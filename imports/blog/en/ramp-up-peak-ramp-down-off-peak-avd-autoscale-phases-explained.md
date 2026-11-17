@@ -33,7 +33,7 @@ Microsoft Learn describes the phases as follows:
 - **Ramp-down**: the end of the working day; active sessions fall quickly. VMs are usually shut down now to save cost.
 - **Off-peak**: the lowest number of sessions. A small amount of resources may stay on for late workers.
 
-Learn gives no clock times; you define them. The portal's default values are suggestions for weekdays. Start times use the time zone set in the scaling plan.
+The phase definitions give no clock times; you define them. Learn's PowerShell example for a pooled schedule uses 6:30 AM for ramp-up, 8:30 AM for peak, 4:00 PM for ramp-down and 10:45 PM for off-peak, and the page says the default values you see in the portal when you create a schedule are suggested values for weekdays. Start times use the time zone set in the scaling plan.
 
 One rule applies to all phases of a pooled plan: for pooled host pools, autoscale ignores the load-balancing algorithm in the host pool settings and applies the one from the schedule. You also need a custom maximum session limit on the host pool, and Learn says not to use the default value. The glossary defines available capacity as the limit multiplied by the number of available session hosts, so the threshold percentages below are measured against whatever limit you set. "How to size the maximum session limit per session host" covers the choice of value.
 
@@ -48,7 +48,7 @@ In a pooled host pool with power management autoscaling, the ramp-up tab has the
 | Minimum percentage of hosts | The percentage of session hosts that should stay on in this phase. A value that is not a whole number is rounded up. |
 | Capacity threshold | The percentage of available host pool capacity that triggers a scaling action. |
 
-A worked example from the Learn scenario page uses six session hosts, breadth-first, a 30 percent capacity threshold, a 30 percent minimum percentage of hosts and a maximum session limit of 5. Thirty percent of six is 1.8, and autoscale rounds up, so two hosts are on. Their capacity is 10 sessions. With three sessions, usage is 30 percent, which is equal to the threshold, so nothing happens. Autoscale acts only above or below the threshold. With four sessions, usage is 40 percent, so autoscale turns on a third host. Capacity becomes 15, and usage drops to about 27 percent.
+Learn's first scenario uses six session hosts, breadth-first, a 30 percent capacity threshold, a 30 percent minimum percentage of hosts and a maximum session limit of 5. Thirty percent of six is 1.8, and autoscale rounds up, so two hosts are on, with a capacity of 10 sessions. Three sessions equal the 30 percent threshold, so nothing happens; four sessions make 40 percent, so autoscale turns on a third host and capacity becomes 15. The rounding is covered in "Minimum percentage of hosts in AVD autoscale explained".
 
 Autoscale can turn hosts on in any phase when used capacity exceeds the threshold, but pooled autoscale does not turn session hosts off during ramp-up, to avoid a poor user experience.
 
@@ -62,19 +62,18 @@ Peak is not static: autoscale can turn hosts on and off. In the Learn example, w
 
 The ramp-down tab has the largest set of fields: start time, load-balancing algorithm, minimum percentage of hosts, capacity threshold and force logoff of users. The capacity threshold is entered here, and the off-peak phase takes it over.
 
-Autoscale shuts a host down only when all existing sessions, active and disconnected, fit on fewer hosts without exceeding the capacity threshold. Learn's formula for the hosts needed is total sessions (active plus disconnected) divided by the product of the maximum session limit and the capacity threshold.
+Autoscale shuts a host down only when all existing sessions, active and disconnected, fit on fewer hosts without exceeding the capacity threshold. Learn's formula for the hosts needed is total sessions (active plus disconnected) divided by the product of the maximum session limit and the capacity threshold, rounded up to the nearest whole number.
+
 You have two ways to handle users still signed in:
 
 1. **Force sign-out on.** Autoscale chooses the host with the fewest sessions, active and disconnected, and puts it in drain mode. It notifies the users that they will be signed out and ends the sessions after the wait time. Then it deallocates the VM. Only ramp-down supports this. In any other phase the force logoff setting does nothing.
 2. **Force sign-out off.** You choose either "VMs have no active or disconnected sessions" or "VMs have no active sessions". Learn's scenarios page describes the "no active sessions" behavior as autoscale waiting for users to sign out voluntarily; it does not describe the other option further.
 
-The sequence users see is covered in "Forcing users to sign out during AVD ramp-down: what happens and what users see", and the trade-offs between the two choices in "Force sign out vs wait for sign-out: choosing the ramp-down behaviour".
-
-Learn's third scenario (six hosts, depth-first, 75 percent threshold, 10 percent minimum, session limit 5) shows this. With four hosts running four sessions (20 percent), force sign-out lets autoscale shut down two hosts. With four sessions on two hosts (40 percent), a further shutdown would put 80 percent on one host, so nothing happens.
+The consolidation arithmetic in Learn's third scenario, the sequence users see and the trade-offs between the two choices are covered in "Forcing users to sign out during AVD ramp-down: what happens and what users see" and "Force sign out vs wait for sign-out: choosing the ramp-down behaviour".
 
 Learn's FAQ adds a timing trap: if the ramp-down phase is 15 minutes long and the wait time before sign-out is 20 minutes, the schedule moves to off-peak first. Autoscale does not force sign-outs during off-peak, so the sessions stay, and autoscale waits until all users have signed out before it deallocates the VM. Keep the wait time shorter than the phase.
 
-The wait time and the notification text are settings of the schedule. In Azure PowerShell they are `RampDownWaitTimeMinute` and `RampDownNotificationMessage`; in the ARM template reference they are `rampDownWaitTimeMinutes` and `rampDownNotificationMessage`, next to `rampDownForceLogoffUsers` and `rampDownStopHostsWhen`. Learn's create-and-assign example sets 30 minutes and the text "Please log out of your session." The cmdlet and ARM references describe the wait time as the number of minutes to wait to stop hosts during the ramp-down period and list no default, minimum or maximum for either value. The FAQ's 15 and 20 minutes are examples, not defaults.
+The wait time and the notification text are settings of the schedule. In Azure PowerShell they are `RampDownWaitTimeMinute` and `RampDownNotificationMessage`; in the ARM template reference they are `rampDownWaitTimeMinutes` and `rampDownNotificationMessage`, next to `rampDownForceLogoffUsers` and `rampDownStopHostsWhen`. Both Learn examples use 30 minutes, but the message differs: the create-and-assign page's PowerShell example uses "Please log out of your session.", and the example in the [New-AzWvdScalingPlanPooledSchedule](https://learn.microsoft.com/en-us/powershell/module/az.desktopvirtualization/new-azwvdscalingplanpooledschedule) cmdlet reference uses "Log out now, please." The cmdlet and ARM references describe the wait time as the number of minutes to wait to stop hosts during the ramp-down period and list no default, minimum or maximum for either value. The FAQ's 15 and 20 minutes are examples, not defaults.
 
 ## Off-peak hours
 

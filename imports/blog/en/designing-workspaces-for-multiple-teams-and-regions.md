@@ -39,7 +39,7 @@ On a pooled host pool you can assign one desktop application group and multiple 
 
 **Deployment scope.** Learn's deployment article says the scope is set at creation and cannot be changed, a regional host pool can join only a regional workspace, and application groups inherit the scope of their host pool. A workspace can hold only application groups with the same scope. The portal greys out incompatible objects, and PowerShell or REST requests that mix scopes fail. **Deployment scope** only appears when the selected Location supports regional workspaces. See [regional host pools](/entity/avd-regional-host-pools/).
 
-Regional host pools have been generally available since 30 September 2026, according to the Tech Community announcement, which lists 14 regions; the September 2026 entry of What's new confirms general availability. The Regional Host Pools and data locations articles on Learn still name only East US 2 and Central US and carry preview wording, so check the current region list before choosing a scope. A workspace for regional host pools sits in the same supported region as those pools.
+Regional host pools have been generally available since 30 September 2026, according to the Tech Community announcement, which lists 14 regions; the September 2026 entry of What's new confirms general availability. The Regional Host Pools article on Learn still carries preview wording and names only East US 2 and Central US, and the data locations article also lists only those two regions, so check the current region list before choosing a scope. On that reading, a workspace for regional host pools sits in the same supported region as those pools.
 
 ## Three layouts
 
