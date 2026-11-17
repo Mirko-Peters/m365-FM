@@ -4,7 +4,7 @@ summary: "Choose a pooled host pool when several users can share a session host 
 status: review
 publish: false
 author: mirko-p
-date: 2026-11-17
+date: 2026-11-18
 topics: [avd-pooled-host-pool, avd-personal-host-pool]
 keypoints:
   - "A pooled host pool lets user sessions be load balanced to any session host, with several users on one host. A personal host pool assigns each session host to one user."

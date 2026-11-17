@@ -4,7 +4,7 @@ summary: "Windows 365 Enterprise assigns one licensed Cloud PC to each user, whi
 status: review
 publish: false
 author: mirko-p
-date: 2026-11-17
+date: 2026-11-18
 topics: [windows-365-frontline, windows-365]
 keypoints:
   - "Enterprise is a 1:1 model: one license, one Cloud PC, one user. Frontline licenses concurrent sessions instead of named users."

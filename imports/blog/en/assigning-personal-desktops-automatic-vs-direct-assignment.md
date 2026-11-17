@@ -46,7 +46,7 @@ Learn does not prescribe a type for a scenario. The guidance below is inference 
 - **Many similar users, no need to control which VM they get.** Automatic needs the least admin work, because you only maintain the application group assignment and keep enough free session hosts.
 - **Named VMs with different sizes, images or software.** Direct lets you map a user to a specific host, for example a larger VM for a heavy workload. Under automatic assignment you can also assign a user directly in advance, which gives you a mix.
 - **One user needs more than one desktop.** Only direct assignment supports this.
-- **You want a predictable failure.** Under direct assignment an unassigned user fails with "No resources available". Under automatic assignment the service picks from available session hosts, so you need to watch how many free hosts remain. Learn does not say what a user sees when no free host is left, so test it.
+- **You want a predictable failure.** Under direct assignment an unassigned user fails with "No resources available". Under automatic assignment the service picks from available session hosts, so you need to watch how many free hosts remain. The personal desktop assignment page does not say what a user sees when no free host is left, so test it.
 
 ## Prerequisites
 
@@ -61,17 +61,23 @@ Learn lists these for the configuration tasks:
 
 The type is a host pool property. In the Azure portal, open **Azure Virtual Desktop**, then **Host pools**, the personal host pool and **Properties**. Select **Automatic** or **Direct** in the **Assignment** drop-down and select **Save**.
 
-Learn's PowerShell and Azure CLI tabs use these commands. Replace `Direct` with `Automatic` to switch back:
+Learn's PowerShell and Azure CLI tabs show the following commands. Replace the `<placeholder>` values, and replace `Direct` with `Automatic` to switch back:
 
 ```powershell
-Update-AzWvdHostPool -ResourceGroupName $resourceGroupName -Name $hostPoolName -PersonalDesktopAssignmentType Direct
+$parameters = @{
+   ResourceGroupName = '<ResourceGroupName>'
+   Name = '<HostPoolName>'
+   PersonalDesktopAssignmentType = 'Direct'
+}
+
+Update-AzWvdHostPool @parameters
 ```
 
 ```azurecli
 az desktopvirtualization hostpool update \
---resource-group $resourceGroupName \
---name $hostPoolName \
---personal-desktop-assignment-type Direct
+    --resource-group <ResourceGroupName> \
+    --name <HostPoolName> \
+    --personal-desktop-assignment-type Direct
 ```
 
 The [Azure CLI reference](https://learn.microsoft.com/en-us/cli/azure/desktopvirtualization/hostpool) lists the parameter with the accepted values Automatic and Direct.
@@ -83,7 +89,14 @@ Learn says you can do this in the Azure portal or PowerShell, not the Azure CLI.
 In PowerShell, Learn's command is:
 
 ```powershell
-Update-AzWvdSessionHost -HostPoolName $hostPoolName -Name $sessionHostName -ResourceGroupName $resourceGroupName -AssignedUser $userupn
+$parameters = @{
+   HostPoolName = '<HostPoolName>'
+   Name = '<SessionHostName>'
+   ResourceGroupName = '<ResourceGroupName>'
+   AssignedUser = '<UserUPN>'
+}
+
+Update-AzWvdSessionHost @parameters
 ```
 
 The [Update-AzWvdSessionHost](https://learn.microsoft.com/en-us/powershell/module/az.desktopvirtualization/update-azwvdsessionhost) reference describes `-AssignedUser` as "User assigned to SessionHost" and `-Force` as the "Force flag to update assign, unassign or reassign personal desktop".
@@ -95,21 +108,44 @@ Both operations are portal and PowerShell only. In the portal, open the host poo
 Learn's PowerShell tabs call the REST API through `Invoke-AzRestMethod` with an empty or a new `assignedUser` value:
 
 ```powershell
-$unassignDesktopParams = @{
+$parameters = @{
     Path = "/subscriptions/$subscriptionId/resourceGroups/$resourceGroupName/providers/Microsoft.DesktopVirtualization/hostPools/$hostPoolName/sessionHosts/$($sessionHostName)?api-version=2022-02-10-preview&force=true"
-    Payload = @{ properties = @{ assignedUser = '' }} | ConvertTo-Json
+    Payload = @{
+        properties = @{
+            assignedUser = ''
+        }
+    } | ConvertTo-Json
     Method = 'PATCH'
 }
-Invoke-AzRestMethod @unassignDesktopParams
+
+Invoke-AzRestMethod @parameters
 ```
 
-For a reassignment, Learn uses the same call with `assigneduser = $reassignUserUpn`, a variable that holds the new user's UPN. The path contains a preview API version, so test the call against a lab host pool first.
+For a reassignment, Learn first sets `$reassignUserUpn` to the new user's UPN and then runs the same call with `assigneduser = $reassignUserUpn` in the payload instead of the empty string:
 
-Learn does not describe what happens to the data on the VM when you reassign it. Because Learn says files and settings persist on the OS disk after sign-out, treat the OS disk as belonging to the previous user and decide in advance whether to clean up or replace the VM.
+```powershell
+$parameters = @{
+    Path = "/subscriptions/$subscriptionId/resourceGroups/$resourceGroupName/providers/Microsoft.DesktopVirtualization/hostPools/$hostPoolName/sessionHosts/$($sessionHostName)?api-version=2022-02-10-preview&force=true"
+    Payload = @{
+        properties = @{
+            assigneduser = $reassignUserUpn
+        }
+    } | ConvertTo-Json
+    Method = 'PATCH'
+}
+
+Invoke-AzRestMethod @parameters
+```
+
+The path contains a preview API version, so test the call against a lab host pool first.
+
+Learn does not describe what happens to the data on the VM when you reassign it. Because Learn says files and settings can persist on the OS disk after sign-out, treat the OS disk as belonging to the previous user and decide in advance whether to clean up or replace the VM.
 
 ## Multiple personal desktops per user
 
-Learn says multiple personal desktop assignment lets you assign more than one desktop to one user in a single host pool, and gives developers switching between backend and frontend, or between testing and production, as examples. It removes the need for several host pools.
+Learn says multiple personal desktop assignment lets you assign more than one desktop to one user in a single host pool. It names users who juggle diverse business roles as the use case, for example backend and frontend development, or moving between testing and production environments. It removes the need for several host pools.
+
+Learn's What's new page lists the feature as a preview in March 2025 and as generally available since May 2025. Only the PowerShell module version needed for scripting carries the preview label.
 
 Rules from the page:
 
@@ -118,7 +154,35 @@ Rules from the page:
 - There is no limit on the number of personal desktops one user can have in the pool.
 - If you use a single FSLogix profile container for a single host pool, allow multiple connections to the profile containers to avoid errors.
 
-Learn shows an Azure PowerShell tab next to the portal steps for both enabling and assigning multiple desktops. For assigning, it says explicitly that you can't assign multiple personal desktops to a user with the Azure CLI. The enabling steps list only the portal and PowerShell and say nothing about the Azure CLI. This article does not reproduce those PowerShell commands, so take them from the Learn page. For a new pool, check the box when you select **Direct**. For an existing pool, save direct assignment first: open **Settings**, **Properties**, set **Assignment type** to **Direct** and select **Save**, then check **Assign multiple desktops to a single user** and save again. Learn warns that doing both in one step produces an error. Then assign each session host with the steps above, once per host.
+Learn shows an Azure PowerShell tab next to the portal steps for both enabling and assigning multiple desktops. For assigning, it says explicitly that you can't assign multiple personal desktops to a user with the Azure CLI. The enabling steps list only the portal and PowerShell and say nothing about the Azure CLI.
+
+For a new pool, check the box when you select **Direct**. For an existing pool, save direct assignment first: open **Settings**, **Properties**, set **Assignment type** to **Direct** and select **Save**, then check **Assign multiple desktops to a single user** and save again. Learn warns that doing both in one step produces an error.
+
+In PowerShell the same two-step order applies. First make sure the assignment type is `Direct`, then set the load balancer type to `MultiplePersistent`:
+
+```powershell
+$parameters = @{
+   ResourceGroupName = '<ResourceGroupName>'
+   Name = '<HostPoolName>'
+   PersonalDesktopAssignmentType = 'Direct'
+}
+
+Update-AzWvdHostPool @parameters
+```
+
+```powershell
+$parameters = @{
+   ResourceGroupName = '<ResourceGroupName>'
+   Name = '<HostPoolName>'
+   LoadBalancerType = 'MultiplePersistent'
+}
+
+Update-AzWvdHostPool @parameters
+```
+
+The `MultiplePersistent` value is the reason for the preview module requirement: the release notes of Az.DesktopVirtualization 5.3.0-preview read "Added 'MultiplePersistent' enum value to HostPool property loadBalancerType". Check the module version in the PowerShell Gallery before you script this.
+
+Then assign each session host with the `Update-AzWvdSessionHost` command from the section above. Run it again with a different `Name` value for every additional desktop in the same host pool.
 
 Set friendly names so that users can tell their desktops apart. Learn says the portal and the Azure CLI cannot set them. In PowerShell, use `Update-AzWvdSessionHost` with `-HostPoolName`, `-Name`, `-ResourceGroupName` and `-FriendlyName`. To audit the result, pipe `Get-AzWvdSessionHost` to `FL Name, AssignedUser, FriendlyName`.
 
@@ -139,7 +203,7 @@ These routines combine the documented steps. The order is a suggestion, not a Le
 | Set assignment type | Yes | Yes | Yes |
 | Assign a user to a session host | Yes | Yes | No |
 | Unassign or reassign | Yes | Yes, through a REST call | No |
-| Assign several desktops to one user | Yes | Yes, preview module (commands on the Learn page) | No |
+| Assign several desktops to one user | Yes | Yes, with the preview module (5.3.0-preview or later) | No |
 | Set friendly names | No | Yes | No |
 
 ## Interaction with power management
@@ -153,7 +217,8 @@ So the message has at least two documented causes for personal pools: a missing 
 Retrieved 17 November 2026.
 
 - [Microsoft Learn: Configure personal desktop assignment in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-personal-desktop-assignment-type)
-- [Microsoft Docs on GitHub: source file of the same page, used for the assignment type, assign, unassign and reassign commands](https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/virtual-desktop/configure-host-pool-personal-desktop-assignment-type.md)
+- [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
+- [PowerShell Gallery: Az.DesktopVirtualization 5.3.0-preview](https://www.powershellgallery.com/packages/Az.DesktopVirtualization/5.3.0-preview)
 - [Microsoft Learn: Create a host pool in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/create-host-pools-azure-marketplace)
 - [Microsoft Learn: az desktopvirtualization hostpool](https://learn.microsoft.com/en-us/cli/azure/desktopvirtualization/hostpool)
 - [Microsoft Learn: Update-AzWvdHostPool](https://learn.microsoft.com/en-us/powershell/module/az.desktopvirtualization/update-azwvdhostpool)
