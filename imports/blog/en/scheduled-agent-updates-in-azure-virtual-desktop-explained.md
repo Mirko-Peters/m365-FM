@@ -1,6 +1,6 @@
 ---
 title: "Scheduled agent updates in Azure Virtual Desktop explained"
-summary: "Scheduled agent updates is a host pool setting that confines non-critical updates of the Azure Virtual Desktop agent, the side-by-side stack and the Geneva Monitoring agent to one or two two-hour maintenance windows. It is off by default, it cannot stop critical updates, and it only works if the session hosts are running during the window."
+summary: "Scheduled agent updates is a host pool setting that confines non-critical updates of the Azure Virtual Desktop agent, the side-by-side stack and the Geneva Monitoring agent to one or two two-hour maintenance windows. It is off by default, critical updates are installed by force, and it only works if the session hosts are running during the window."
 status: review
 publish: false
 author: mirko-p
@@ -10,7 +10,7 @@ keypoints:
   - "The setting covers three components together: the Azure Virtual Desktop agent, the side-by-side stack and the Geneva Monitoring agent. It does not apply to the initial installation of these components."
   - "You set one required and one optional maintenance window. Every window is two hours long, and the time zone is either one fixed zone for the pool or the local time of each session host."
   - "The setting is disabled by default and can be configured only for existing host pools, not while you create a new one."
-  - "An update does not succeed if the session host is shut down or deallocated during the window. After four tries in a window the broker installs the update by force, and a critical update is installed by force regardless of the maintenance windows."
+  - "An update does not succeed if the session host is shut down or deallocated during the window. After four tries in a window the broker installs the update by force, and Learn says a critical update is installed by force for security purposes without naming a time."
   - "Learn points to the WVDAgentHealthStatus table in Log Analytics and to event ID 3277 in the VM's Application log to check on updates. The agent overview ties 3277 to a failed update, but the troubleshooting guide lists the same ID with other descriptions, so read the event text."
 faq:
   - q: "What does the Scheduled Agent Updates setting actually schedule?"
