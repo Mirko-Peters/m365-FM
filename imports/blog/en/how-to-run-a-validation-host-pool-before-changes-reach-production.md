@@ -16,7 +16,7 @@ faq:
   - q: "How many validation host pools do I need?"
     a: "At least one, according to the Azure Advisor recommendation page, which asks for one host pool with a validation environment. The same page recommends that fewer than half of your host pools be validation pools. Our suggestion: start with one small pool. A second one for another kind of production pool, for example personal next to pooled, only fits under Learn's limit while production pools outnumber validation pools. With one production and one validation pool, validation is exactly half, which is not fewer than half, so weigh the Advisor hint against the value of the test."
   - q: "Should the validation host pool be switched off outside working hours?"
-    a: "Learn's validation environment and scheduled agent updates pages say nothing about powering off validation hosts. The scheduled agent updates page says an update fails if the host is shut down or deallocated during a maintenance window, but that applies to pools with the feature enabled, and a validation pool should not have it. Its agent overview describes flights that run over several days. Our suggestion: keep validation hosts running at least through the working day, so updates are not missed."
+    a: "Learn's validation environment and scheduled agent updates pages say nothing about powering off validation hosts. The scheduled agent updates page says an update fails if the host is shut down or deallocated during a maintenance window, but that applies to pools with the feature enabled, and a validation pool should not have it. Learn's guide to monitoring agent updates says more generally that an unsuccessful update might be because the host was turned off during the update. Learn's agent overview describes flights that run over several days. Our suggestion: keep validation hosts running at least through the working day, so updates are not missed."
   - q: "Can a failed validation check stop the update from reaching production?"
     a: "Learn's pages on flighting and scheduled agent updates describe no such block. A validation result tells you about a problem early. For non-critical agent components, scheduled agent updates let you choose maintenance windows on production pools, but Learn says critical agent component updates are installed by force for security. Plan for the failure rather than relying on a block."
 ---
@@ -44,9 +44,8 @@ Our suggestion for a first build:
 
 Keep these settings out of the validation pool's way:
 
-- **Do not enable scheduled agent updates on it.** Learn's [scheduled agent updates page](https://learn.microsoft.com/en-us/azure/virtual-desktop/scheduled-agent-updates) says hosts with the feature receive the agent update after the agent has been fully flighted to production. Our reading: on a validation pool that removes the early view. The [feature](/entity/avd-scheduled-agent-updates/) fits the production pools.
-- **Keep the hosts running during working hours.** This is our suggestion. The scheduled agent updates page says an update fails if a host is shut down or deallocated during the maintenance window, but that is about pools that enable the feature. Learn's [agent overview](https://learn.microsoft.com/en-us/azure/virtual-desktop/agent-overview) says new agent versions go out in five-day flights and that it takes 24 hours for all VMs in a single broker region to receive the update in a flight. It does not describe powered-off VMs. If you use autoscale, give this pool a schedule that keeps hosts on through the working day.
-- **Turn on the diagnostics you will read.** Learn's [diagnostics article](https://learn.microsoft.com/en-us/azure/virtual-desktop/diagnostics-log-analytics) lists an Agent Health Status category among the diagnostic settings and says data may take a few hours to appear after first set-up. Enable it on the validation and production host pools and send it to a Log Analytics workspace. Learn does not name the table that receives this category; our reading is `WVDAgentHealthStatus`, so check that it fills.
+- **Do not enable scheduled agent updates on it.** Learn's [scheduled agent updates page](https://learn.microsoft.com/en-us/azure/virtual-desktop/scheduled-agent-updates) says hosts with the feature receive the agent update after the agent has been fully flighted to production. Our reading: on a validation pool that removes the early view. - **Keep the hosts running during working hours.** This is our suggestion. The scheduled agent updates page says an update fails if a host is shut down or deallocated during the maintenance window, but that is about pools that enable the feature. Learn's guide to monitoring agent updates says an unsuccessful update might be because the session host was turned off during the update, and to turn it back on. Learn's [agent overview](https://learn.microsoft.com/en-us/azure/virtual-desktop/agent-overview) says agent versions go out in five-day flights, with 24 hours per broker region. If you use autoscale, give this pool a schedule that keeps hosts on through the working day.
+- **Turn on the diagnostics you will read.** Learn's [diagnostics article](https://learn.microsoft.com/en-us/azure/virtual-desktop/diagnostics-log-analytics) lists an Agent Health Status category among the diagnostic settings and says data may take a few hours to appear after first set-up. Enable it on the validation and production host pools and send it to a Log Analytics workspace. That article does not name the table for this category, but Learn's [guide to monitoring agent updates](https://learn.microsoft.com/en-us/azure/virtual-desktop/agent-updates-diagnostics) queries `WVDAgentHealthStatus` for agent versions and update state. Our reading is that the category fills this table, so check that it fills.
 
 ## Step 3: Watch versions every week
 
@@ -82,15 +81,15 @@ When the validation hosts show a new agent or stack version, or a release note d
 | Sign-in | One test user per client type you support | The desktop or app opens |
 | Profile | A test user with an existing profile | FSLogix profile loads for the test user, with no temporary profile |
 | Applications | The five to ten applications users start first | Each opens and does its main task |
-| Errors | `WVDErrors` and `WVDConnections` for the test window | No new error codes; connections reach Connected, and Completed after the test user disconnects or signs out |
+| Errors | `WVDErrors` and `WVDConnections` for the test window | No new error codes; connections reach Connected, and Completed once the session is disconnected |
 
 A few notes on reading these results:
 
 - Learn's status page and the REST reference describe *Upgrade Failed* differently. The status page says it does not affect new or existing user sessions, and the REST reference calls the host unavailable. Treat any host in that state as a failed check and test a connection to it.
 - The [agent overview](https://learn.microsoft.com/en-us/azure/virtual-desktop/agent-overview) ties an Application event with ID 3277 to a failed agent update, and Learn's [agent troubleshooting page](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-agent) lists 3277 with other descriptions, so read the event text, not only the ID.
-- Learn's diagnostics article defines Started as the user selecting and connecting to an app or desktop, Connected as the successful connection to the VM, and Completed as the user or server disconnecting the session. It also says that the `ServiceError` column of `WVDErrors` shows whether an admin can fix the issue (`false`) or it needs escalating to Microsoft (`true`). For escalations it asks you to include the CorrelationID.
+- Learn's diagnostics article defines Started as the user selecting and connecting to an app or desktop, Connected as the successful connection to the VM, and Completed as the user or server disconnecting the session. It also says that `ServiceError` in `WVDErrors` should be `false` for issues an admin can resolve; if it is `true`, escalate to Microsoft. For escalations it asks you to include the CorrelationID.
 
-A check this size takes a test user and an admin about half an hour; that figure is our estimate. Record the date, the versions seen, the result and who ran it.
+Record the date, the versions seen, the result and who ran it.
 
 ## Step 5: Decide what a failure means
 
@@ -98,7 +97,7 @@ Write the rule before you need it. A simple version:
 
 - **Pass:** all checks pass. Note the versions and move on. Production will receive its update later.
 - **Hold:** a check fails but the cause looks local, such as a host that was off or a test user with a stale profile. Fix the cause and repeat the check within a day.
-- **Fail:** the same check fails on a clean host. Collect the CorrelationID from `WVDErrors`, the event text, the versions and the time, and open a support case. Learn's [agent troubleshooting page](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-agent) covers the [agent](/entity/avd-agent/) side of this.
+- **Fail:** the same check fails on a clean host. Collect the CorrelationID from `WVDErrors`, the event text, the versions and the time, and open a support case. The [agent](/entity/avd-agent/) troubleshooting page above covers that side.
 
 Be clear about what the result lets you do. Our reading of the sources: it gives you time, evidence and a chance to warn users. For non-critical agent components, [scheduled agent updates](/entity/avd-scheduled-agent-updates/) on the production pools let you choose when those updates install, and per Learn the update arrives only after full flighting to production. Learn also says critical agent component updates are installed by force for security. If a production host does fail an update, [drain mode](/entity/avd-drain-mode/) stops new sessions on that host while you investigate, and the agent overview warns against deleting the older agent and stack versions a VM keeps, because that can leave it unable to roll back and unavailable.
 
@@ -110,7 +109,7 @@ A validation pool drifts when production changes and nobody updates it. Add thre
 2. Test users are reviewed each quarter against the people who use production daily.
 3. Someone owns the weekly routine and the log. A pool with no owner produces no early warning.
 
-Remember what the pool does not cover. It shows Microsoft's service updates early, not your own images or Windows updates; those need a separate test pool or stage in your image process. If you also monitor with [Azure Virtual Desktop Insights](/entity/avd-insights/), our suggestion is to include the validation pool there so its hosts are checked with the same views as production.
+Remember what the pool does not cover. Learn describes validation host pools as a way to monitor service updates before they reach your standard pools. Our reading: that does not include your own images or Windows updates, which need a separate test pool or stage in your image process. If you also monitor with [Azure Virtual Desktop Insights](/entity/avd-insights/), our suggestion is to include the validation pool there so its hosts are checked with the same views as production.
 
 ## Sources
 
@@ -126,6 +125,7 @@ Retrieved 17 November 2026.
 - [Session hosts - Get, API version 2024-04-03](https://learn.microsoft.com/en-us/rest/api/desktopvirtualization/session-hosts/get?view=rest-desktopvirtualization-2024-04-03) (Microsoft Learn REST reference)
 - [WVDAgentHealthStatus table](https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables/wvdagenthealthstatus) (Microsoft Learn, Azure Monitor reference)
 - [Use Log Analytics for the diagnostics feature](https://learn.microsoft.com/en-us/azure/virtual-desktop/diagnostics-log-analytics) (Microsoft Learn)
+- [Set up diagnostics for monitoring agent updates](https://learn.microsoft.com/en-us/azure/virtual-desktop/agent-updates-diagnostics) (Microsoft Learn)
 - [Session host statuses and health checks](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-status-health-checks) (Microsoft Learn)
 - [Troubleshoot the Azure Virtual Desktop agent](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-agent) (Microsoft Learn)
 - [Set up Azure Service Health alerts for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/set-up-service-alerts) (Microsoft Learn)
