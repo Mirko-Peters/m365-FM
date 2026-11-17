@@ -8,7 +8,7 @@ date: 2026-11-18
 topics: [azure-virtual-desktop, microsoft-365-e3]
 keypoints:
   - "Learn splits Azure Virtual Desktop costs into Azure resource consumption (VMs, storage, networking) and licensing. The license is a per-user access right; for eligible Windows, Microsoft 365 and RDS licenses it is billed through licensing channels."
-  - "For Windows 10 and 11 session hosts, internal users are covered by Microsoft 365 E3, E5, A3, A5, F3 or Business Premium, Windows Enterprise E3 or E5, Windows Education A3 or A5, or Windows VDA per user. Windows Server session hosts need an RDS CAL with Software Assurance or an RDS User Subscription License."
+  - "For Windows 10 and 11 session hosts, internal users are covered by Microsoft 365 E3, E5, A3, A5, F3, Business Premium or Student Use Benefit, Windows Enterprise E3 or E5, Windows Education A3 or A5, or Windows VDA per user. Windows Server session hosts need an RDS CAL with Software Assurance or an RDS User Subscription License."
   - "External users cannot use those licenses. They are covered by per-user access pricing, charged through an enrolled Azure subscription for each user who connects in the billing month. It is not available for Windows Server session hosts."
   - "Microsoft 365 E3 grants Azure Virtual Desktop access rights in your tenant, including for B2B collaborators who are assigned the license in your tenant. A license in one tenant does not carry over to another tenant of a multitenant organization."
   - "Per-user access pricing covers Azure Virtual Desktop and FSLogix access rights only. It does not include Microsoft Office, Microsoft Defender XDR or Universal Print."
@@ -21,9 +21,7 @@ faq:
     a: "Learn warns that users with separate assigned licenses are also charged by Azure Virtual Desktop in an enrolled subscription. For internal users that you have already licensed, Microsoft recommends a separate subscription that is not enrolled in per-user access pricing."
 ---
 
-Azure Virtual Desktop has two separate cost items: the Azure infrastructure you run, and the license that entitles each user to connect. For internal employees the license is usually one you already own, for example Microsoft 365 E3 or E5 for Windows 10 or 11 session hosts. For external customers the license is replaced by per-user access pricing, which you enable on an Azure subscription. This guide sets out which license covers which session host operating system, how external access works, and what the licenses do not pay for.
-
-Take prices only from the Azure pricing page; this article gives no price figures.
+Azure Virtual Desktop has two separate cost items: the Azure infrastructure you run, and the license that entitles each user to connect. For internal employees Learn requires an eligible license for each user, for example Microsoft 365 E3 or E5 for Windows 10 or 11 session hosts; whether your tenant already holds it depends on the plans you have bought. For external customers the license is replaced by per-user access pricing, which you enable on an Azure subscription. This guide sets out which license covers which session host operating system, how external access works, and what the licenses do not pay for.
 
 ## Two sources of cost
 
@@ -80,7 +78,7 @@ The pricing figures are on the [Azure Virtual Desktop pricing](https://azure.mic
 
 ### Keep internal users out of an enrolled subscription
 
-Learn's warning is specific: users who already have a separate assigned license are also charged by Azure Virtual Desktop in an enrolled subscription. For internal users you have already licensed, it recommends a separate subscription that is not enrolled. Learn adds an important note: per-user access pricing can only be used for external commercial purposes, not internal purposes, and it is not a way to enable external guest user accounts with Azure Virtual Desktop. Contractors therefore need an eligible license, as in the contractor example under the next heading.
+Learn's warning is specific: users who already have a separate assigned license are also charged by Azure Virtual Desktop in an enrolled subscription. For internal users you have already licensed, it recommends a separate subscription that is not enrolled. Learn adds an important note: per-user access pricing can only be used for external commercial purposes, not internal purposes, and it is not a way to enable external guest user accounts with Azure Virtual Desktop.
 
 ### What per-user access pricing does not include
 
