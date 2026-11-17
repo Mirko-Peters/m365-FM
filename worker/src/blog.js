@@ -2,14 +2,14 @@
 import { limitTopics } from "./sponsor_extra.js";
 import { cleanText, rateLimit, isLang } from "./util.js";
 import { translatedBlogItems } from "./autotr.js";
-import { stats } from "./badges.js";
+import { isTrusted } from "./badges.js";
 import { decide, noteAuthorSave, dropBlogHistory } from "./editor.js";
 import { gate, inScope } from "./perm.js";
 import { baseIds } from "./entities.js";
 import { sanitize } from "./wiki.js";
 import { cleanKeypoints, cleanFaq, jsonList, ensureSectionCols } from "./sections.js";
 
-const TRUST_POINTS = 25, MAX_POSTS_DAY = 5;
+const MAX_POSTS_DAY = 5;   // Vertrauen: badges.js isTrusted
 const now = () => Math.floor(Date.now() / 1000);
 const TOP_SPANS = { day: 86400, week: 7 * 86400, month: 30 * 86400, year: 365 * 86400, evergreen: 0 };   // Sekunden; 0 = alle Stimmen
 const txt = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "").replace(/\s+/g, " ").trim();
@@ -20,7 +20,7 @@ const FIELDS = "id,slug,title,summary,body,lang,status,topics,keypoints,faq,note
 
 const view = (r) => ({ ...r, topics: parse(r.topics, []), keypoints: jsonList(r.keypoints), faq: jsonList(r.faq) });
 
-async function trusted(db, user) { return !!(user.admin || user.editor || user.pro || (await stats(db, user.id)).points >= TRUST_POINTS); }
+async function trusted(db, user) { return isTrusted(db, user); }   // badges.js (K28)
 
 const postUrl = (env, lang, handle, slug) => `${env.SITE}${lang === "en" ? "" : "/" + lang}/community/u/${handle}/blog/${slug}/`;
 // Creator-Feed: veroeffentlichte Beitraege erscheinen im Feed des Profils (Kanal-Art "blog", ohne eigenen RSS-Abruf)
@@ -154,8 +154,10 @@ export async function handleBlog(env, request, url, path, user, J) {
     if (day >= MAX_POSTS_DAY) return J({ error: "rate_limit" }, 429);
     let slug = slugify(title) || "post", n = 1;
     while (await db.prepare("SELECT 1 x FROM blog_posts WHERE user_id=? AND slug=?").bind(user.id, slug).first()) slug = `${slugify(title).slice(0, 52) || "post"}-${++n}`;
-    const r = await db.prepare("INSERT INTO blog_posts(user_id,slug,title,summary,body,lang,topics,keypoints,faq,status,note,created,updated,published) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
-      .bind(user.id, slug, title, summary, sb.body, lang, JSON.stringify(topics), JSON.stringify(kp?.list || []), JSON.stringify(fq?.list || []), status, "", t, t, status === "live" ? t : 0).run();
+    // Tageslimit in derselben Anweisung wie das Anlegen (atomar): parallele Anfragen lasen sonst alle denselben Zaehlerstand
+    const r = await db.prepare("INSERT INTO blog_posts(user_id,slug,title,summary,body,lang,topics,keypoints,faq,status,note,created,updated,published) SELECT ?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14 WHERE (SELECT COUNT(*) FROM blog_posts WHERE user_id=?1 AND created>?15)<?16")
+      .bind(user.id, slug, title, summary, sb.body, lang, JSON.stringify(topics), JSON.stringify(kp?.list || []), JSON.stringify(fq?.list || []), status, "", t, t, status === "live" ? t : 0, t - 86400, MAX_POSTS_DAY).run();
+    if (!(r.meta?.changes > 0)) return J({ error: "rate_limit" }, 429);
     await syncFeed(env, db, user.id, { lang, slug, title, published: t }, pr?.handle, status === "live" && !!pr?.handle);
     if (cos.list) await saveCoauthors(db, r.meta.last_row_id, cos.list);
     return J({ ok: true, id: r.meta.last_row_id, slug, status });

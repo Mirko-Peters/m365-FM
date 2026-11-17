@@ -15,7 +15,7 @@ import { handleI18nPublic } from "./i18n_edit.js";
 import { can, roleOf, isStaff, inScope, publicRoles, loadActor, logEdit } from "./perm.js";
 import { handleLinkedinEvents, oauthStartLE, oauthCallbackLE, deleteUserLinkedin, purgeLinkedinOrphans } from "./linkedin_events.js";
 import { handleSponsor, handleSponsorLink } from "./sponsor.js";
-import { handleAds, handlePaypalWebhook, goHost } from "./ads.js";
+import { handleAds, handlePaypalWebhook, goHost, purgeAdCounters } from "./ads.js";
 import { handleSponsorOrders } from "./sponsor_orders.js";
 import { autoTranslateItems, autoTranslateEntities, runTrQueue, runTrDemand } from "./autotr.js";
 import { syncLiveEvents } from "./liveevents.js";
@@ -632,7 +632,8 @@ const handlers = {
       if (path.startsWith("/go/")) return await handleSponsorLink(env, request, url, path, ctx);
       if (path === "/paypal/webhook") return await handlePaypalWebhook(env, request);   // #281: Signatur wird vor jeder Aktion bei PayPal geprueft
       if (path.startsWith("/auth/")) return (await auth(env, request, url, path)) || new Response("not found", { status: 404 });
-      if (path === "/mcp") return await handleMcp(env, request, (uid) => me(env, uid), (req, user) => api(env, req, new URL(req.url), new URL(req.url).pathname, user, ctx));
+      // Bridge-Aufrufe tragen die IP des echten Aufrufers weiter: sonst landen alle MCP-Clients bei IP-Limits (Suche, Expertensuche) in einem gemeinsamen Eimer (K19)
+      if (path === "/mcp") return await handleMcp(env, request, (uid) => me(env, uid), (req, user) => { const ipIn = request.headers.get("cf-connecting-ip"); if (ipIn) { const h = new Headers(req.headers); h.set("cf-connecting-ip", ipIn); req = new Request(req, { headers: h }); } return api(env, req, new URL(req.url), new URL(req.url).pathname, user, ctx); });
       if (path === "/a2a") return await handleA2a(env, request);
       if (path === "/api/byod/serve") return await handleByodServe(env, request, url);   // Blog auf der eigenen Domain (nur mit BYOD=1), ohne Sitzung
       if (path.startsWith("/api/")) return await api(env, request, url, path, undefined, ctx);
@@ -671,6 +672,7 @@ const handlers = {
       T("syncInviterBadges", () => syncInviterBadges(env));   // einmal taeglich (Sicherheitsnetz: Zurechnung, Entwertung und Kontoloeschung bewerten sofort)
       T("purgeLinkedinOrphans", () => purgeLinkedinOrphans(env.DB));   // verwaiste LinkedIn-Zeilen nach dem Ende des Events (#323)
       T("purgeSearchStats", () => purgeSearchStats(env.DB));   // Suchbegriffe und Nachfrage: 12 Monate (#156)
+      T("purgeAdCounters", () => purgeAdCounters(env.DB));   // Abrechnungszaehler der Werbeplaetze (je IP-Hash und Tag, K12) nach 2 Tagen
     }
     if (event.cron === "*/30 * * * *") T("runDigest", () => runDigest(env, { at: scheduledAt }));
     if (event.cron === "*/30 * * * *") T("byodChecks", () => runByodChecks(env));   // Blog auf der eigenen Domain: DNS/Zertifikat offener und aktiver Domains (nur mit BYOD=1)

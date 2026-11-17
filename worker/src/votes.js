@@ -1,10 +1,12 @@
 // Community-Abstimmung ueber offene Aenderungen (Wiki, Entitaeten): vertrauenswuerdige Mitglieder stimmen ab
-import { stats, evalBadges } from "./badges.js";
+import { evalBadges, isTrusted } from "./badges.js";
 import { certScoped } from "./entities.js";
-const NEED = 3, TRUST = 25;
+const NEED = 3;   // Vertrauen: badges.js isTrusted (TRUST_POINTS)
 const now = () => Math.floor(Date.now() / 1000);
-const endorsedExpert = async (db, uid) => !!(await db.prepare("SELECT 1 x FROM endorsements WHERE owner_id=? AND by_id<>? GROUP BY eid HAVING COUNT(DISTINCT by_id)>=2 LIMIT 1").bind(uid, uid).first());   // Experte, den mind. 2 andere bestaetigt haben
-const trusted = async (db, u) => !!(u && (u.admin || u.editor || u.pro || (await stats(db, u.id)).points >= TRUST || (await endorsedExpert(db, u.id))));
+// Abstimmen darf nur, wer badges.js isTrusted erfuellt (K28). Frueher reichten zwei Bestaetigungen derselben Expertise durch beliebige andere
+// Konten - ohne Kontoalter und Punkte: vier frische Zweitkonten bestaetigten sich gegenseitig und stimmten wartende Aenderungen live.
+const trusted = async (db, u) => !!(u && (await isTrusted(db, u)));
+const isOwner = async (db, u, eid) => !!(u && eid && (await db.prepare("SELECT 1 x FROM entity_claims WHERE eid=? AND user_id=? AND status='verified'").bind(eid, u.id).first()));
 
 export async function handleVotes(env, request, url, path, user, J) {
   const db = env.DB;
@@ -19,7 +21,7 @@ export async function handleVotes(env, request, url, path, user, J) {
       const mine = user ? await db.prepare("SELECT v FROM edit_votes WHERE kind=? AND rev_id=? AND user_id=?").bind(kind, r.id, user.id).first() : null;
       out.push({ id: r.id, body: r.body, summary: r.summary, name: r.name, created: r.created, net: v.net, votes: v.n, need: NEED, mine: mine?.v || 0, own: user?.id === r.user_id });
     }
-    return J({ kind, can_vote: (await trusted(db, user)) || (kind === "entity" && (await certScoped(env, user, key))), edits: out });
+    return J({ kind, can_vote: (kind === "entity" && (await isOwner(db, user, key))) || (await trusted(db, user)) || (kind === "entity" && (await certScoped(env, user, key))), edits: out });
   }
   if (path === "/api/edits/inbox" && request.method === "GET") {   // offene Aenderungen an meinen Entitaeten (Eigentuemer) bzw. fuer Editoren alle
     if (!user) return J({ error: "login" }, 401);
@@ -32,12 +34,14 @@ export async function handleVotes(env, request, url, path, user, J) {
     if (!user) return J({ error: "login" }, 401);
     const b = await request.json().catch(() => ({})), kind = b.kind === "entity" ? "entity" : "wiki", v = b.v === -1 ? -1 : 1, id = +b.id;
     const r = kind === "wiki" ? await db.prepare("SELECT id,term,lang,user_id,status FROM wiki_rev WHERE id=?").bind(id).first() : await db.prepare("SELECT id,eid,user_id,status FROM entity_rev WHERE id=?").bind(id).first();
-    if (!(await trusted(db, user)) && !(kind === "entity" && r && (await certScoped(env, user, r.eid)))) return J({ error: "not_trusted" }, 403);
+    // Eigentuemer zuerst: ein verifizierter Eigentuemer entscheidet ueber Aenderungen an seiner Entitaet auch ohne Vertrauenspunkte
+    // (trustPoints zaehlt solche Freigaben nicht als Fremdpruefung, daher kein Weg zu Vertrauen fuer Zweitkonten)
+    const owner = kind === "entity" && !!r && (await isOwner(db, user, r.eid));
+    if (!owner && !(await trusted(db, user)) && !(kind === "entity" && r && (await certScoped(env, user, r.eid)))) return J({ error: "not_trusted" }, 403);
     if (!r || r.status !== "pending") return J({ error: "not_pending" }, 404);
     if (r.user_id === user.id) return J({ error: "own_edit" }, 403);
     await db.prepare("INSERT INTO edit_votes(kind,rev_id,user_id,v,created) VALUES(?,?,?,?,?) ON CONFLICT(kind,rev_id,user_id) DO UPDATE SET v=excluded.v").bind(kind, id, user.id, v, now()).run();
     const t = await db.prepare("SELECT COALESCE(SUM(v),0) net, COUNT(*) n FROM edit_votes WHERE kind=? AND rev_id=?").bind(kind, id).first();
-    const owner = kind === "entity" && !!(await db.prepare("SELECT 1 x FROM entity_claims WHERE eid=? AND user_id=? AND status='verified'").bind(r.eid, user.id).first());
     let status = "pending";
     if (owner ? v === 1 : (t.n >= NEED && t.net > 0)) {
       status = "live";

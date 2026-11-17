@@ -48,8 +48,8 @@ async function setup() {
       ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
     return handleSponsor(env, request, new URL(request.url), new URL(request.url).pathname, J, user);
   };
-  const go = async (code, ua = "Mozilla/5.0 Chrome/130") => {
-    const request = new Request(`https://api.example/go/${code}?s=episode`, { headers: { "user-agent": ua, "cf-connecting-ip": "203.0.113.9",
+  const go = async (code, ua = "Mozilla/5.0 Chrome/130", ip = "203.0.113.9") => {
+    const request = new Request(`https://api.example/go/${code}?s=episode`, { headers: { "user-agent": ua, "cf-connecting-ip": ip,
       // Kopfzeilen eines echten Link-Klicks (botcheck.js); ohne sie zaehlt der Aufruf als gefiltert (clicks_filtered)
       "accept-language": "de-DE,de;q=0.9", accept: "text/html,*/*;q=0.8", "sec-fetch-mode": "navigate", "sec-fetch-dest": "document", "sec-fetch-site": "cross-site" } });
     Object.defineProperty(request, "cf", { value: { country: "DE" } });
@@ -141,7 +141,9 @@ test("/go/ nach dem Ende: leitet weiter und zaehlt; active=0 (Hand/Erstattung) b
     assert.equal(response.status, 302, "Platzierung seit fast 3 Jahren beendet, Link leitet weiter");
     assert.equal(response.headers.get("location"), "https://acme.example/old?utm_source=m365.fm");
     assert.equal(raw.prepare("SELECT SUM(clicks) n FROM sponsor_clicks_daily WHERE code='acme-old'").get().n, 1, "und zaehlt");
-    await go("acme-old", "Another browser");
+    await go("acme-old", "Mozilla/5.0 Chrome/131");   // dieselbe IP mit anderer Browserkennung: kein neuer Besucher (K12)
+    assert.equal(raw.prepare("SELECT SUM(clicks) n FROM sponsor_clicks_daily WHERE code='acme-old'").get().n, 1);
+    await go("acme-old", "Mozilla/5.0 Chrome/131", "198.51.100.20");   // anderer Besucher
     assert.equal(raw.prepare("SELECT SUM(clicks) n FROM sponsor_clicks_daily WHERE code='acme-old'").get().n, 2);
     response = await go("acme-off");
     assert.equal(response.status, 404, "deaktivierter Code bleibt aus");

@@ -3,12 +3,13 @@ import { cleanText, rateLimit } from "./util.js";
 import { stats } from "./badges.js";
 
 const TTL = 7 * 86400, BASE_LIMIT = 5, MAX_LIMIT = 25;
+export const MAX_BONUS = 20;   // eingeloeste Kontakte (Punkte, je +5) heben das Tageslimit hoechstens um so viel (Sicherheitspruefung K3/K38: vorher ohne Deckel)
 const now = () => Math.floor(Date.now() / 1000);
 const text = (s) => cleanText(s, 1000).replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "[Link entfernt]").trim();
 
 export const dailyLimit = async (db, uid) => {
   const bonus = (await db.prepare("SELECT extra FROM msg_bonus WHERE user_id=? AND day=?").bind(uid, new Date().toISOString().slice(0, 10)).first())?.extra || 0;
-  return Math.min(MAX_LIMIT, BASE_LIMIT + Math.floor(((await stats(db, uid)).earned || 0) / 50)) + bonus;
+  return Math.min(MAX_LIMIT, BASE_LIMIT + Math.floor(((await stats(db, uid)).earned || 0) / 50)) + Math.min(MAX_BONUS, Math.max(0, bonus));
 };
 
 export async function purgeMessages(db) {
@@ -80,10 +81,16 @@ export async function handleMessages(env, request, url, path, user, J) {
     let t = await db.prepare("SELECT * FROM msg_threads WHERE (a_id=?1 AND b_id=?2) OR (a_id=?2 AND b_id=?1)").bind(user.id, to).first();
     const t0 = now();
     if (!t) {
-      const used = (await db.prepare("SELECT COUNT(*) n FROM msg_threads WHERE a_id=? AND created>?").bind(user.id, t0 - 86400).first()).n, lim = await dailyLimit(db, user.id);
-      if (used >= lim) return J({ error: "daily_limit", limit: lim }, 429);
-      const r = await db.prepare("INSERT INTO msg_threads(a_id,b_id,ctx,created,last,a_read) VALUES(?,?,?,?,?,?)").bind(user.id, to, ctx, t0, t0, t0).run();
-      t = { id: r.meta.last_row_id, a_id: user.id };
+      // Tageslimit atomar: Zaehlen und Anlegen in EINER Anweisung (wie expert_requests.js). Vorher COUNT, dann INSERT - parallele Anfragen
+      // (Promise.all, MCP-Batch mit start_message) lasen alle denselben Stand und legten mehr neue Kontakte an als erlaubt (K17/K39).
+      const lim = await dailyLimit(db, user.id);
+      const r = await db.prepare("INSERT INTO msg_threads(a_id,b_id,ctx,created,last,a_read) SELECT ?1,?2,?3,?4,?4,?4 WHERE (SELECT COUNT(*) FROM msg_threads WHERE a_id=?1 AND created>?5)<?6 ON CONFLICT(a_id,b_id) DO NOTHING")
+        .bind(user.id, to, ctx, t0, t0 - 86400, lim).run();
+      if (r.meta.changes) t = { id: r.meta.last_row_id, a_id: user.id };
+      else {   // Limit erreicht - oder eine parallele Anfrage hat denselben Thread eben angelegt: dann dort anhaengen
+        t = await db.prepare("SELECT * FROM msg_threads WHERE (a_id=?1 AND b_id=?2) OR (a_id=?2 AND b_id=?1)").bind(user.id, to).first();
+        if (!t) return J({ error: "daily_limit", limit: lim }, 429);
+      }
     }
     await db.batch([db.prepare("INSERT INTO msg_messages(thread_id,from_id,body,created) VALUES(?,?,?,?)").bind(t.id, user.id, tx, t0), db.prepare(`UPDATE msg_threads SET last=?,${t.a_id === user.id ? "a_read" : "b_read"}=? WHERE id=?`).bind(t0, t0, t.id)]);
     return J({ ok: true, thread: t.id });

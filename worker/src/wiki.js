@@ -2,13 +2,13 @@
 import { legacyRev } from "./editor.js";
 import { gate, inScope, roleOf, logEdit } from "./perm.js";
 import { cleanText, rateLimit, isLang } from "./util.js";
-import { stats, evalBadges } from "./badges.js";
+import { evalBadges, isTrusted } from "./badges.js";
 import { baseIds } from "./entities.js";
 
 const TERM = /^[a-z0-9-]{2,48}$/;
 const okLang = (l) => l === "en" || isLang(l);
 const now = () => Math.floor(Date.now() / 1000);
-const TRUST_POINTS = 25;   // ab so vielen Punkten duerfen Beitraege sofort live gehen
+// Ab badges.js TRUST_POINTS (nur fremd gepruefte Punkte, Mindestalter des Kontos) duerfen Beitraege sofort live gehen
 const AUTO_REVERT = 3;     // so viele Meldungen blenden eine Revision aus
 
 export const MAX_BODY = 12000;
@@ -83,7 +83,7 @@ export async function handleWiki(env, request, url, path, user, J) {
     let mine = null, trusted = false;
     if (user) {
       mine = await db.prepare("SELECT id,body,created FROM wiki_rev WHERE term=? AND lang=? AND user_id=? AND status='pending' ORDER BY created DESC LIMIT 1").bind(term, lang, user.id).first();
-      trusted = user.admin || user.editor || user.pro || (await stats(db, user.id)).points >= TRUST_POINTS;
+      trusted = await isTrusted(db, user);
     }
     return J({ live: live ? { id: live.id, body: live.body, name: live.name || "", created: live.created } : null, history: hist, mine, loggedIn: !!user, trusted, admin: !!(user?.admin || user?.editor), owner: !!user?.admin });
   }
@@ -99,7 +99,7 @@ export async function handleWiki(env, request, url, path, user, J) {
     if (!(await rateLimit(db, `wiki:h:${user.id}`, 6, 3600)) || !(await rateLimit(db, `wiki:d:${user.id}`, 25, 86400))) return J({ error: "rate_limit" }, 429);
     const cur = await liveOf(db, term, lang);
     if (cur && cur.body === body) return J({ error: "unchanged" }, 400);
-    const trusted = user.admin || user.editor || user.pro || (await stats(db, user.id)).points >= TRUST_POINTS;
+    const trusted = await isTrusted(db, user);
     const t = now();
     if (trusted) {
       await db.batch([

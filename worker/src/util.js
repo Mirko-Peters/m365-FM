@@ -139,17 +139,33 @@ export async function memberOf(env, uid) {
   return { ...u, admin: isAdmin(env, u), editor: u.role === "editor", moderator: u.role === "moderator", pro };
 }
 
+// Schluessel fuer Limits "je Aufrufer" (K19): angemeldet die Konto-Nummer, sonst ein taeglich wechselnder Hash der IP (nie die IP selbst).
+// Ohne IP (Service-Binding, interne Aufrufe) ein eigener, klar benannter Eimer - nie ein Hash aus leerer IP, der stillschweigend alle teilen.
+// IP fuer Limits und Zaehler: IPv4 unveraendert, IPv6 auf das /64-Praefix gekuerzt (ein Anschluss bekommt meist ein ganzes /64 und kann
+// darin beliebig viele Adressen nutzen - je voller Adresse zaehlte jede neue Adresse als neuer Besucher). IPv4-gemappte Adressen als IPv4.
+export function ipBucket(ip) {
+  const a = String(ip || "").trim().toLowerCase();
+  if (!a.includes(":")) return a;
+  const v4 = a.match(/^::ffff:(\d+\.\d+\.\d+\.\d+)$/); if (v4) return v4[1];
+  const [head, tail] = a.split("::"), h = head ? head.split(":") : [], t = tail ? tail.split(":") : [];
+  const full = tail === undefined ? h : [...h, ...Array(Math.max(0, 8 - h.length - t.length)).fill("0"), ...t];
+  return full.slice(0, 4).map((x) => x.replace(/^0+(?=.)/, "")).join(":") + "::/64";
+}
+export async function callerKey(env, request, user) {
+  if (user?.id) return `u:${user.id}`;
+  const ip = ipBucket(request.headers.get("cf-connecting-ip"));
+  return ip ? (await sha256hex(`${ip}|${new Date().toISOString().slice(0, 10)}|${env.SESSION_SECRET || ""}`)) : "noip";
+}
+
 // Ratelimit: max Aktionen pro Fenster (Sekunden). true = erlaubt
+// Eine einzige Anweisung (UPSERT mit Bedingung): Pruefen und Hochzaehlen sind atomar. Frueher SELECT, dann INSERT/UPDATE - parallele Anfragen
+// (z. B. ein MCP-Batch mit Promise.all) lasen denselben Stand und kamen alle durch (Sicherheitspruefung K37/K40). Erlaubt ist ein Aufruf nur,
+// wenn diese Anweisung eine Zeile anlegt oder hochzaehlt; ist das Fenster voll, aendert sie nichts (changes=0) und n bleibt bei max.
 export async function rateLimit(db, key, max, windowSec) {
   const now = Math.floor(Date.now() / 1000);
-  const row = await db.prepare("SELECT n, win FROM ratelimit WHERE k=?").bind(key).first();
-  if (!row || now - row.win >= windowSec) {
-    await db.prepare("INSERT OR REPLACE INTO ratelimit(k,n,win) VALUES(?,?,?)").bind(key, 1, now).run();
-    return true;
-  }
-  if (row.n >= max) return false;
-  await db.prepare("UPDATE ratelimit SET n=n+1 WHERE k=?").bind(key).run();
-  return true;
+  const r = await db.prepare("INSERT INTO ratelimit(k,n,win) VALUES(?1,1,?2) ON CONFLICT(k) DO UPDATE SET n=CASE WHEN ?2-win>=?3 THEN 1 ELSE n+1 END, win=CASE WHEN ?2-win>=?3 THEN ?2 ELSE win END WHERE ?2-win>=?3 OR n<?4")
+    .bind(key, now, windowSec, max).run();
+  return (r?.meta?.changes || 0) > 0;
 }
 
 const numeric = (value, fallback) => Number.isFinite(Number(value)) && Number(value) >= 0 ? Number(value) : fallback;

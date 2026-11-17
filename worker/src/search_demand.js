@@ -17,7 +17,7 @@
 //   Dasselbe per MCP: Tool search_content_gaps (ohne Token); die volle Auswertung fuer Redaktion/Admin: search_report bzw. GET /api/search/report.
 // Fuer den Seitenbau: GET /api/search/demand-export -> {generated, min, langs: {de: [{kind, item, title, searches, days}]}} (kind episode = Folge der
 //   Hauptshow per Slug, lblog = frueherer Blogbeitrag per Slug). translate_show.py, translate_notes.py und translate_blog.py lesen sie NUR als Reihenfolge.
-import { LANGS, rateLimit, sha256hex } from "./util.js";
+import { LANGS, callerKey, rateLimit } from "./util.js";
 import { classifyQuery } from "./search.js";
 import { gate } from "./perm.js";
 
@@ -214,8 +214,7 @@ export async function handleSearchDemand(env, request, url, path, user, J) {
     return J(await searchReport(db, { lang, weeks: weeksOf(url, 52), min }));
   }
   // kurzes Ratelimit wie bei /api/search: Schluessel ist ein taeglich wechselnder Hash, nie die IP selbst
-  const ipHash = await sha256hex(`${request.headers.get("cf-connecting-ip") || ""}|${today()}|${env.SESSION_SECRET || ""}`);
-  if (!(await rateLimit(db, `sdq:${ipHash}`, 30, 60))) return J({ error: "rate_limit" }, 429, noindex);
+  if (!(await rateLimit(db, `sdq:${await callerKey(env, request, user)}`, 30, 60))) return J({ error: "rate_limit" }, 429, noindex);   // je Konto oder IP-Hash (util.js callerKey, K19)
   if (path === "/api/search/gaps") {
     const lang = langOf(url, "en");
     if (!lang) return J({ error: "bad_lang" }, 400, noindex);

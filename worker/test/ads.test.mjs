@@ -7,6 +7,8 @@ import { readFileSync, readdirSync } from "node:fs";
 import { handleAds, handlePaypalWebhook, handleAdGo, quote, loadPricing, resetPaypalToken, webpSize, pickCampaign, paypalConfig, adStatsForOrg } from "../src/ads.js";
 
 import { handleSponsorLink } from "../src/sponsor.js";
+import { ipBucket } from "../src/util.js";
+import { purgeAdCounters } from "../src/ads.js";
 
 // Kopfzeilen eines echten Browsers bei einem Link-Klick (die Bot-Erkennung wertet Sprache und Sec-Fetch aus, siehe src/botcheck.js)
 const HUMAN = { "accept-language": "de-DE,de;q=0.9,en;q=0.8", accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "sec-fetch-mode": "navigate", "sec-fetch-dest": "document", "sec-fetch-site": "cross-site", "sec-fetch-user": "?1" };
@@ -314,7 +316,9 @@ test("Auslieferung: zählt Einblendungen cookiefrei je Kampagne/Platz/Seitentyp/
   assert.equal((await call("/api/ads/serve", { query: "?slot=side&pt=lang" })).status, 400);
   // Volumen erreicht: Kampagne endet
   raw.prepare("UPDATE ad_bookings SET delivered=quantity-1 WHERE id=?").run(id);
-  await call("/api/ads/serve", { query: "?slot=mid&pt=episode" });
+  await call("/api/ads/serve", { query: "?slot=mid&pt=episode" });   // derselbe Besucher (IP) am selben Tag: nicht noch einmal berechnet (K12)
+  assert.equal(row(id).status, "active");
+  await call("/api/ads/serve", { query: "?slot=mid&pt=episode", headers: { "cf-connecting-ip": "198.51.100.30" } });
   assert.equal(row(id).status, "ended");
 });
 
@@ -592,4 +596,45 @@ test("Hausanzeige aus dem Admin: Go-Link mit Seitenkontext, Kampagnen-Zahlen mit
   const csv = await call("/api/admin/ads/stats", { user: ADMIN, query: "?format=csv" });
   assert.match(csv.text, /"slot","page_type","country","impressions"/);
   assert.match(csv.text, /"mid","episode","CH","1","0"/);
+});
+
+// Sicherheitspruefung K12: bezahltes Volumen laesst sich nicht mit wechselnder Browserkennung verbrauchen - je IP, Kampagne und Tag
+// hoechstens eine berechnete Einblendung bzw. ein berechneter Klick (D1, atomar); ein anderer Besucher (andere IP) zaehlt weiter.
+test("K12: TKP und CPC je IP und Tag nur einmal berechnet, egal mit welcher Browserkennung; Zaehler ohne IP", async () => {
+  const cpm = activeBooking({ quantity: 10 });
+  for (let i = 0; i < 20; i++) await call("/api/ads/serve", { query: "?slot=mid&pt=episode", headers: { "user-agent": `Mozilla/5.0 (Windows NT 10.0) Chrome/${100 + i}` } });
+  assert.equal(row(cpm).delivered, 1); assert.equal(row(cpm).status, "active");
+  assert.equal(raw.prepare("SELECT SUM(impressions) n FROM ad_stats_daily WHERE booking_id=?").get(cpm).n, 1, "das Dashboard zeigt, was berechnet wurde");
+  await call("/api/ads/serve", { query: "?slot=mid&pt=episode", headers: { "cf-connecting-ip": "198.51.100.40" } });
+  assert.equal(row(cpm).delivered, 2, "anderer Besucher zaehlt");
+  raw.prepare("UPDATE ad_bookings SET status='ended' WHERE id=?").run(cpm);
+  const card = activeBooking({ code: "ad-cardk12abc", product: "company_card", quantity: 5 });
+  const go = (ua, ip = "203.0.113.50") => { const url = new URL("https://api-dub.m365.fm/go/ad-cardk12abc?s=mid&pt=entity");
+    return handleSponsorLink(env, new Request(url, { headers: { "user-agent": ua, ...HUMAN, "cf-connecting-ip": ip } }), url, "/go/ad-cardk12abc", undefined); };
+  for (let i = 0; i < 5; i++) assert.equal((await go(`Mozilla/5.0 Chrome/${120 + i}`)).status, 302);
+  assert.equal(row(card).delivered, 1, "ein berechneter Klick je IP und Tag");
+  await go("Mozilla/5.0 Chrome/130", "198.51.100.41");
+  assert.equal(row(card).delivered, 2);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM ratelimit WHERE k LIKE '%203.0.113%' OR k LIKE '%198.51.100%'").get().n, 0, "nur Hashes, keine IP");
+});
+
+// K12 (Nachpruefung): IPv6-Anschluesse bekommen meist ein ganzes /64 - je voller Adresse zaehlte jede neue Adresse als neuer Besucher
+test("K12: IPv6 je /64 gezaehlt - neue Adressen im selben Praefix werden nicht erneut berechnet; alte Zaehler werden aufgeraeumt", async () => {
+  assert.equal(ipBucket("2001:db8:1:2:aaaa::1"), "2001:db8:1:2::/64");
+  assert.equal(ipBucket("2001:0db8:0001:0002:ffff:ffff:ffff:ffff"), "2001:db8:1:2::/64");
+  assert.equal(ipBucket("2001:db8::1"), "2001:db8:0:0::/64");
+  assert.equal(ipBucket("::ffff:198.51.100.7"), "198.51.100.7");
+  assert.equal(ipBucket("198.51.100.7"), "198.51.100.7");
+  assert.equal(ipBucket(null), "");
+  const cpm = activeBooking({ code: "ad-v6test0001", quantity: 10 });
+  for (let i = 1; i <= 5; i++) await call("/api/ads/serve", { query: "?slot=mid&pt=episode", headers: { "cf-connecting-ip": `2001:db8:1:2::${i.toString(16)}` } });
+  assert.equal(row(cpm).delivered, 1, "fuenf Adressen aus einem /64 sind ein Besucher");
+  await call("/api/ads/serve", { query: "?slot=mid&pt=episode", headers: { "cf-connecting-ip": "2001:db8:1:3::1" } });
+  assert.equal(row(cpm).delivered, 2, "anderes /64 zaehlt");
+  // Aufraeumen: abgelaufene Zaehler von Sponsor-Klicks, MCP ohne Token und Suchnachfrage verschwinden, frische bleiben
+  const ins = raw.prepare("INSERT OR REPLACE INTO ratelimit(k,n,win) VALUES(?,?,?)"), old = Math.floor(Date.now() / 1000) - 3 * 86400;
+  for (const k of ["sgo:a", "mcpa:a", "sdq:u:7", "sdq:abc", "mcp:7"]) ins.run(k, 1, old);
+  ins.run("sdq:u:8", 1, Math.floor(Date.now() / 1000));
+  await purgeAdCounters(env.DB);
+  assert.deepEqual(raw.prepare("SELECT k FROM ratelimit WHERE k IN ('sgo:a','mcpa:a','sdq:u:7','sdq:abc','mcp:7','sdq:u:8') ORDER BY k").all().map((r) => r.k), ["mcp:7", "sdq:u:8"]);
 });

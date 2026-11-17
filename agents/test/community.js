@@ -19,7 +19,8 @@ export default {
     let result;
     if (message.method === "tools/call") {
       const { name, arguments: args } = message.params;
-      if (name === "list_events") result = { content: [{ type: "text", text: JSON.stringify({ calls }) }] };
+      // ip: cf-connecting-ip, den der Agent ueber das Service-Binding weiterreicht (K18/K19: Limit je Endnutzer statt ein Eimer fuer alle)
+      if (name === "list_events") result = { content: [{ type: "text", text: JSON.stringify({ calls, ip: request.headers.get("cf-connecting-ip") || "" }) }] };
       else {
         calls.push({ name, args, member: auth.endsWith("test-member-a") ? "a" : "b" });
         result = { content: [{ type: "text", text: JSON.stringify({ ok: true, id: calls.length }) }] };

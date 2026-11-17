@@ -57,13 +57,13 @@ after(async () => {
   if (directory) await rm(directory, { recursive: true, force: true });
 });
 
-async function connect(token = "", approval) {
+async function connect(token = "", approval, extraHeaders = {}) {
   const client = new Client({ name: "test", version: "1" }, {
     capabilities: approval ? { elicitation: { form: {} } } : {},
   });
   if (approval) client.setRequestHandler(ElicitRequestSchema, approval);
   const transport = new StreamableHTTPClientTransport(url, {
-    requestInit: { headers: token ? { Authorization: authorization(token) } : {} },
+    requestInit: { headers: { ...extraHeaders, ...(token ? { Authorization: authorization(token) } : {}) } },
   });
   clients.push(client);
   await client.connect(transport);
@@ -196,4 +196,13 @@ test("Ungültiges Gedächtnis und andere Routen werden abgewiesen", async () => 
     assert.equal((await client.callTool({ name: "context_set", arguments: args })).isError, true);
   }
   assert.equal((await fetch(new URL("/mcp", url))).status, 404);
+});
+
+test("K18/K19: anonyme Agent-Aufrufe reichen die IP des Endnutzers an den Community-Worker weiter (kein gemeinsamer Limit-Eimer)", async () => {
+  const seen = [];
+  for (const ip of ["203.0.113.7", "203.0.113.8"]) {
+    const { client } = await connect("", undefined, { "cf-connecting-ip": ip });
+    seen.push(text(await client.callTool({ name: "list_events" })).ip);
+  }
+  assert.deepEqual(seen, ["203.0.113.7", "203.0.113.8"]);
 });
