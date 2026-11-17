@@ -408,7 +408,7 @@ test("expert connect: Push nur bei erster Veroeffentlichung, Links auf Expert Co
   const subs = {};
   for (const id of [1, 2, 6]) {
     subs[id] = await pushSubscriber();
-    raw.prepare("INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES(?,?,?,?,?,?,0)").run(`https://push.example/${id}`, subs[id].p256dh, subs[id].authText, "en", id, t);
+    raw.prepare("INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES(?,?,?,?,?,?,0)").run(`https://fcm.googleapis.com/fcm/send/${id}`, subs[id].p256dh, subs[id].authText, "en", id, t);
   }
   const sent = [], originalFetch = globalThis.fetch;
   globalThis.fetch = async (url, o) => { sent.push({ user: Number(String(url).split("/").pop()), body: o.body }); return new Response(null, { status: 201 }); };

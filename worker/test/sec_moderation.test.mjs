@@ -5,6 +5,7 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import W from "../src/index.js";
 import { makeSession } from "../src/util.js";
+import { isPushEndpoint, sendPush } from "../src/push.js";
 
 const API = "https://api-dub.m365.fm", SITE = "https://www.m365.fm";
 const ENTS = [{ id: "teams", type: "product", name: "Microsoft Teams" }, { id: "azure", type: "product", name: "Azure" }, { id: "contoso", type: "org", name: "Contoso", web: "https://www.contoso.com" }];
@@ -223,4 +224,30 @@ test("K5: Entitaeten/Wiki - Editoren schreiben live nur mit can(), owner_only gi
   // Wiki: Fach-Editor ausserhalb des Bereichs -> Vorschlag; im Bereich -> live
   assert.equal((await call(env, 7, "POST", "/api/wiki", { term: "azure", lang: "de", body: "Wiki-Text ausserhalb des Bereichs.", summary: "x" })).j.status, "pending");
   assert.equal((await call(env, 7, "POST", "/api/wiki", { term: "teams", lang: "de", body: "Wiki-Text im eigenen Bereich, live.", summary: "x" })).j.status, "live");
+});
+
+// ---------- K10: Push-Registrierung nur fuer bekannte Push-Dienste ----------
+test("K10: isPushEndpoint - Allowlist bekannter Push-Dienste", () => {
+  for (const ok of ["https://fcm.googleapis.com/fcm/send/abc", "https://updates.push.services.mozilla.com/wpush/v2/x", "https://web.push.apple.com/QX", "https://wns2-par02p.notify.windows.com/w/?token=x"]) assert.equal(isPushEndpoint(ok), true, ok);
+  for (const bad of ["https://evil.example/x", "https://fcm.googleapis.com.evil.example/", "https://user@fcm.googleapis.com/", "https://fcm.googleapis.com:8443/", "http://fcm.googleapis.com/x", "https://notify.windows.com.evil/x", "https://evilnotify.windows.com/x", "", "kein url"]) assert.equal(isPushEndpoint(bad), false, bad);
+});
+test("K10: /api/push/subscribe und /api/topics/follow lehnen fremde Hosts ab; sendPush fragt sie nie an", async () => {
+  const { raw, env } = await mk();
+  const keys = { p256dh: "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U", auth: "8eDyX_uCN0XRhSbY5hs7Hg" };
+  const bad = await call(env, 0, "POST", "/api/push/subscribe", { endpoint: "https://evil.example/x", keys, lang: "en" });
+  assert.equal(bad.s, 400);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM push_subs").get().n, 0);
+  assert.equal((await call(env, 0, "POST", "/api/push/subscribe", { endpoint: "https://fcm.googleapis.com/fcm/send/abc", keys, lang: "en" })).s, 200);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM push_subs").get().n, 1);
+  const tf = await call(env, 0, "POST", "/api/topics/follow", { kind: "entity", id: "teams", lang: "en", endpoint: "https://evil.example/y", keys });
+  assert.equal(tf.s, 400);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM push_subs WHERE endpoint LIKE 'https://evil%'").get().n, 0);
+  assert.equal((await call(env, 0, "POST", "/api/topics/follow", { kind: "entity", id: "teams", lang: "en", endpoint: "https://fcm.googleapis.com/fcm/send/topic", keys })).s, 200);   // Gegenprobe: derselbe Aufruf mit Push-Dienst geht
+  // Alt-Eintrag mit fremdem Host: kein fetch, Abo wird entfernt
+  raw.prepare("INSERT INTO push_subs(endpoint,p256dh,auth,lang,created,digest) VALUES('https://evil.example/old',?,?,'en',1,1)").run(keys.p256dh, keys.auth);
+  let hit = 0; extraFetch = async (u) => { if (u.startsWith("https://evil.example")) { hit++; return new Response("", { status: 201 }); } };
+  try { const r = await sendPush(env, { endpoint: "https://evil.example/old", ...keys }, { title: "x" }); assert.equal(r.gone, true); }
+  finally { extraFetch = null; }
+  assert.equal(hit, 0);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM push_subs WHERE endpoint='https://evil.example/old'").get().n, 0);
 });

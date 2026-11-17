@@ -133,55 +133,55 @@ test("topic subscriptions label over 50 followed creators without exceeding D1's
 
 test("topic push subscriptions do not opt into the episode digest", async () => {
   const { db, raw } = await database();
-  await savePushSubscription(db, { endpoint: "https://push.example/topic", p256dh: "p", auth: "a", lang: "en", digest: 0, created: 1 });
-  await savePushSubscription(db, { endpoint: "https://push.example/digest", p256dh: "p", auth: "a", lang: "en", digest: 1, created: 1 });
-  await savePushSubscription(db, { endpoint: "https://push.example/topic", p256dh: "p2", auth: "a2", lang: "en", digest: 0, created: 2 });
-  assert.equal(raw.prepare("SELECT digest FROM push_subs WHERE endpoint='https://push.example/topic'").get().digest, 0);
-  assert.deepEqual((await digestPushSubscriptions(db, "en")).map((s) => ({ ...s })), [{ endpoint: "https://push.example/digest", p256dh: "p", auth: "a" }]);
-  await savePushSubscription(db, { endpoint: "https://push.example/topic", p256dh: "p2", auth: "a2", lang: "en", digest: 1, created: 3 });
-  assert.equal(raw.prepare("SELECT digest FROM push_subs WHERE endpoint='https://push.example/topic'").get().digest, 1);
+  await savePushSubscription(db, { endpoint: "https://fcm.googleapis.com/fcm/send/topic", p256dh: "p", auth: "a", lang: "en", digest: 0, created: 1 });
+  await savePushSubscription(db, { endpoint: "https://fcm.googleapis.com/fcm/send/digest", p256dh: "p", auth: "a", lang: "en", digest: 1, created: 1 });
+  await savePushSubscription(db, { endpoint: "https://fcm.googleapis.com/fcm/send/topic", p256dh: "p2", auth: "a2", lang: "en", digest: 0, created: 2 });
+  assert.equal(raw.prepare("SELECT digest FROM push_subs WHERE endpoint='https://fcm.googleapis.com/fcm/send/topic'").get().digest, 0);
+  assert.deepEqual((await digestPushSubscriptions(db, "en")).map((s) => ({ ...s })), [{ endpoint: "https://fcm.googleapis.com/fcm/send/digest", p256dh: "p", auth: "a" }]);
+  await savePushSubscription(db, { endpoint: "https://fcm.googleapis.com/fcm/send/topic", p256dh: "p2", auth: "a2", lang: "en", digest: 1, created: 3 });
+  assert.equal(raw.prepare("SELECT digest FROM push_subs WHERE endpoint='https://fcm.googleapis.com/fcm/send/topic'").get().digest, 1);
 });
 
 test("push digest can be disabled without removing a topic subscription", async () => {
   const { db, raw } = await database();
   raw.exec(`
-    INSERT INTO push_subs(endpoint,p256dh,auth,lang,created,digest) VALUES('https://push.example/topic-digest','p','a','en',1,1);
-    INSERT INTO push_topics(endpoint,kind,topic_id,lang,timezone,created) VALUES('https://push.example/topic-digest','entity','copilot-studio','en','UTC',1);
+    INSERT INTO push_subs(endpoint,p256dh,auth,lang,created,digest) VALUES('https://fcm.googleapis.com/fcm/send/topic-digest','p','a','en',1,1);
+    INSERT INTO push_topics(endpoint,kind,topic_id,lang,timezone,created) VALUES('https://fcm.googleapis.com/fcm/send/topic-digest','entity','copilot-studio','en','UTC',1);
   `);
   const env = { DB: db, SITE: "https://www.m365.fm", API: "https://api-dub.m365.fm", SESSION_SECRET: "test-secret" };
   const request = (path, method = "GET", body) => new Request(`https://api-dub.m365.fm${path}`, {
     method, headers: { origin: "https://www.m365.fm", "x-requested-with": "m365", ...(body ? { "content-type": "application/json" } : {}) },
     body: body ? JSON.stringify(body) : undefined,
   });
-  const statusBefore = await worker.fetch(request("/api/push/status?endpoint=https%3A%2F%2Fpush.example%2Ftopic-digest"), env);
+  const statusBefore = await worker.fetch(request("/api/push/status?endpoint=https%3A%2F%2Ffcm.googleapis.com%2Ffcm%2Fsend%2Ftopic-digest"), env);
   assert.deepEqual(await statusBefore.json(), { registered: true, digest: true, topics: true });
-  const changed = await worker.fetch(request("/api/push/digest", "POST", { endpoint: "https://push.example/topic-digest", on: false }), env);
+  const changed = await worker.fetch(request("/api/push/digest", "POST", { endpoint: "https://fcm.googleapis.com/fcm/send/topic-digest", on: false }), env);
   assert.equal(changed.status, 200);
-  assert.equal(raw.prepare("SELECT COUNT(*) n FROM push_topics WHERE endpoint='https://push.example/topic-digest'").get().n, 1);
-  assert.equal(raw.prepare("SELECT digest FROM push_subs WHERE endpoint='https://push.example/topic-digest'").get().digest, 0);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM push_topics WHERE endpoint='https://fcm.googleapis.com/fcm/send/topic-digest'").get().n, 1);
+  assert.equal(raw.prepare("SELECT digest FROM push_subs WHERE endpoint='https://fcm.googleapis.com/fcm/send/topic-digest'").get().digest, 0);
 });
 
 test("signed-out endpoint holders can inspect and disable an account push digest", async () => {
   const { db, raw } = await database();
-  raw.exec("INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES('https://push.example/account-digest','p','a','de',7,1,1)");
+  raw.exec("INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES('https://fcm.googleapis.com/fcm/send/account-digest','p','a','de',7,1,1)");
   const env = { DB: db, SITE: "https://www.m365.fm", API: "https://api-dub.m365.fm" };
   const request = (path, method = "GET", body) => new Request(`https://api-dub.m365.fm${path}`, {
     method, headers: { origin: "https://www.m365.fm", "x-requested-with": "m365", ...(body ? { "content-type": "application/json" } : {}) },
     body: body ? JSON.stringify(body) : undefined,
   });
-  const status = await worker.fetch(request("/api/push/status?endpoint=https%3A%2F%2Fpush.example%2Faccount-digest"), env);
+  const status = await worker.fetch(request("/api/push/status?endpoint=https%3A%2F%2Ffcm.googleapis.com%2Ffcm%2Fsend%2Faccount-digest"), env);
   assert.equal(status.status, 200);
   assert.deepEqual(await status.json(), { registered: true, digest: true, topics: false });
-  const off = await worker.fetch(request("/api/push/digest", "POST", { endpoint: "https://push.example/account-digest", on: false }), env);
+  const off = await worker.fetch(request("/api/push/digest", "POST", { endpoint: "https://fcm.googleapis.com/fcm/send/account-digest", on: false }), env);
   assert.equal(off.status, 200);
-  assert.equal(raw.prepare("SELECT digest FROM push_subs WHERE endpoint='https://push.example/account-digest'").get().digest, 0);
-  const on = await worker.fetch(request("/api/push/digest", "POST", { endpoint: "https://push.example/account-digest", on: true }), env);
+  assert.equal(raw.prepare("SELECT digest FROM push_subs WHERE endpoint='https://fcm.googleapis.com/fcm/send/account-digest'").get().digest, 0);
+  const on = await worker.fetch(request("/api/push/digest", "POST", { endpoint: "https://fcm.googleapis.com/fcm/send/account-digest", on: true }), env);
   assert.equal(on.status, 400);
 });
 
 test("push endpoint removal clears recipient scheduling state", async () => {
   const { db, raw } = await database();
-  const endpoint = "https://push.example/expired";
+  const endpoint = "https://fcm.googleapis.com/fcm/send/expired";
   raw.exec(`INSERT INTO topic_recipient_state(channel,recipient,not_before,updated) VALUES('push','${endpoint}',2000000000,1)`);
   const receiver = await crypto.subtle.generateKey({ name: "ECDH", namedCurve: "P-256" }, true, ["deriveBits"]);
   const p256dh = b64u.enc(new Uint8Array(await crypto.subtle.exportKey("raw", receiver.publicKey)));
@@ -217,7 +217,7 @@ test("topic follow registers missing endpoints without consuming the push subscr
   const { db, raw } = await database();
   raw.exec(`
     INSERT INTO events(id,handle,owner_id,title,start,public,created,updated) VALUES(1,'follow-topic',7,'Follow topic','2027-01-11',1,1,1);
-    INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES('https://push.example/existing','old-p','old-a','de',7,1,1);
+    INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES('https://fcm.googleapis.com/fcm/send/existing','old-p','old-a','de',7,1,1);
   `);
   const env = { DB: db, SITE: "https://www.m365.fm" };
   const run = async (endpoint, lang = "en") => {
@@ -229,14 +229,14 @@ test("topic follow registers missing endpoints without consuming the push subscr
     return handleTopicSubscriptions(env, request, new URL(request.url), "/api/topics/follow", { id: 7 }, (data, status = 200) => ({ data, status }));
   };
   for (let i = 0; i < 21; i++) {
-    const result = await run("https://push.example/new");
+    const result = await run("https://fcm.googleapis.com/fcm/send/new");
     assert.equal(result.status, 200);
   }
-  const newSub = raw.prepare("SELECT lang,digest FROM push_subs WHERE endpoint='https://push.example/new'").get();
+  const newSub = raw.prepare("SELECT lang,digest FROM push_subs WHERE endpoint='https://fcm.googleapis.com/fcm/send/new'").get();
   assert.deepEqual([newSub.lang, newSub.digest], ["en", 0]);
-  const existing = await run("https://push.example/existing");
+  const existing = await run("https://fcm.googleapis.com/fcm/send/existing");
   assert.equal(existing.status, 200);
-  const digest = raw.prepare("SELECT lang,digest FROM push_subs WHERE endpoint='https://push.example/existing'").get();
+  const digest = raw.prepare("SELECT lang,digest FROM push_subs WHERE endpoint='https://fcm.googleapis.com/fcm/send/existing'").get();
   assert.deepEqual([digest.lang, digest.digest], ["de", 1]);
 });
 
@@ -244,25 +244,25 @@ test("unfollow and clear ignore a missing browser endpoint for a signed-in accou
   const { db, raw } = await database();
   raw.exec(`
     INSERT INTO email_topics(user_id,kind,topic_id,lang,timezone,created) VALUES(7,'event','remaining-event','de','UTC',1);
-    INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES('https://push.example/account-clear','p','a','en',7,1,0);
-    INSERT INTO topic_recipient_state(channel,recipient,not_before,updated) VALUES('push','https://push.example/account-clear',2000000000,1);
+    INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES('https://fcm.googleapis.com/fcm/send/account-clear','p','a','en',7,1,0);
+    INSERT INTO topic_recipient_state(channel,recipient,not_before,updated) VALUES('push','https://fcm.googleapis.com/fcm/send/account-clear',2000000000,1);
   `);
   const env = { DB: db }, user = { id: 7 };
   const run = async (path, body) => {
     const request = new Request(`https://api-dub.m365.fm/api/topics/${path}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
     return handleTopicSubscriptions(env, request, new URL(request.url), `/api/topics/${path}`, user, (data, status = 200) => ({ data, status }));
   };
-  const unfollow = await run("unfollow", { kind: "event", id: "missing-push-topic", endpoint: "https://push.example/removed" });
+  const unfollow = await run("unfollow", { kind: "event", id: "missing-push-topic", endpoint: "https://fcm.googleapis.com/fcm/send/removed" });
   assert.equal(unfollow.status, 200);
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM email_topics WHERE user_id=7 AND topic_id='remaining-event'").get().n, 1);
-  const anonymous = await handleTopicSubscriptions(env, new Request("https://api-dub.m365.fm/api/topics/unfollow", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ kind: "event", id: "remaining-event", endpoint: "https://push.example/unknown" }) }), new URL("https://api-dub.m365.fm/api/topics/unfollow"), "/api/topics/unfollow", null, (data, status = 200) => ({ data, status }));
+  const anonymous = await handleTopicSubscriptions(env, new Request("https://api-dub.m365.fm/api/topics/unfollow", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ kind: "event", id: "remaining-event", endpoint: "https://fcm.googleapis.com/fcm/send/unknown" }) }), new URL("https://api-dub.m365.fm/api/topics/unfollow"), "/api/topics/unfollow", null, (data, status = 200) => ({ data, status }));
   assert.equal(anonymous.status, 400);
   raw.prepare("INSERT INTO topic_recipient_state(channel,recipient,not_before,updated) VALUES('email','7',2000000000,1)").run();
-  const cleared = await run("clear", { endpoint: "https://push.example/removed" });
+  const cleared = await run("clear", { endpoint: "https://fcm.googleapis.com/fcm/send/removed" });
   assert.equal(cleared.status, 200);
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM email_topics WHERE user_id=7").get().n, 0);
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM topic_recipient_state WHERE channel='email' AND recipient='7'").get().n, 0);
-  assert.equal(raw.prepare("SELECT COUNT(*) n FROM topic_recipient_state WHERE channel='push' AND recipient='https://push.example/account-clear'").get().n, 0);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM topic_recipient_state WHERE channel='push' AND recipient='https://fcm.googleapis.com/fcm/send/account-clear'").get().n, 0);
 });
 
 test("event exports preserve the event time zone", async () => {
@@ -303,8 +303,8 @@ test("account deletion clears push and e-mail recipient scheduling state", async
   const { db, raw } = await database();
   raw.exec(`
     INSERT INTO users(id,provider,sub,name,created) VALUES(7,'test','7','Test',1);
-    INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES('https://push.example/delete-account','p','a','en',7,1,0);
-    INSERT INTO topic_recipient_state(channel,recipient,not_before,updated) VALUES('push','https://push.example/delete-account',2000000000,1),('email','7',2000000000,1);
+    INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES('https://fcm.googleapis.com/fcm/send/delete-account','p','a','en',7,1,0);
+    INSERT INTO topic_recipient_state(channel,recipient,not_before,updated) VALUES('push','https://fcm.googleapis.com/fcm/send/delete-account',2000000000,1),('email','7',2000000000,1);
   `);
   const env = { DB: db, SESSION_SECRET: "test-secret", SITE: "https://www.m365.fm", API: "https://api-dub.m365.fm" };
   const token = await makeSession(env, 7);
@@ -319,8 +319,8 @@ test("topic article polling processes only the newest 50 and queues them in batc
   const { db, raw } = await database();
   raw.exec(`
     INSERT INTO meta(k,v) VALUES('topic_articles_init','1');
-    INSERT INTO push_subs(endpoint,p256dh,auth,lang,created,digest) VALUES('https://push.example/articles','p','a','en',1,0);
-    INSERT INTO push_topics(endpoint,kind,topic_id,lang,timezone,created) VALUES('https://push.example/articles','entity','copilot-studio','en','UTC',1);
+    INSERT INTO push_subs(endpoint,p256dh,auth,lang,created,digest) VALUES('https://fcm.googleapis.com/fcm/send/articles','p','a','en',1,0);
+    INSERT INTO push_topics(endpoint,kind,topic_id,lang,timezone,created) VALUES('https://fcm.googleapis.com/fcm/send/articles','entity','copilot-studio','en','UTC',1);
   `);
   const articles = Array.from({ length: 51 }, (_, i) => ({
     url: `https://www.m365.fm/article/${i}`, title: `Article ${i}`, topics: ["copilot-studio"],
@@ -343,8 +343,8 @@ test("session reminders interpret event start as local time and expire at its UT
   raw.exec(`
     INSERT INTO events(id,handle,owner_id,title,start,tz,public,created,updated) VALUES(1,'m365con-2027',1,'M365Con','2026-11-05','Europe/Berlin',1,1,1);
     INSERT INTO event_sessions(id,event_id,title,start,status,proposer_id,created) VALUES(42,1,'Copilot session','2026-11-05T13:00','live',1,1);
-    INSERT INTO push_subs(endpoint,p256dh,auth,lang,created,digest) VALUES('https://push.example/reminder','p','a','en',1,0);
-    INSERT INTO push_topics(endpoint,kind,topic_id,lang,timezone,created) VALUES('https://push.example/reminder','session','42','en','UTC',1);
+    INSERT INTO push_subs(endpoint,p256dh,auth,lang,created,digest) VALUES('https://fcm.googleapis.com/fcm/send/reminder','p','a','en',1,0);
+    INSERT INTO push_topics(endpoint,kind,topic_id,lang,timezone,created) VALUES('https://fcm.googleapis.com/fcm/send/reminder','session','42','en','UTC',1);
   `);
   const at = Math.floor(new Date("2026-11-05T11:45:00Z").getTime() / 1000);
   await queueSessionReminders({ DB: db, SITE: "https://www.m365.fm" }, at);
@@ -358,7 +358,7 @@ test("topic subscriptions: require a registered push endpoint or a verified, exp
   raw.exec(`
     INSERT INTO events(id,handle,owner_id,title,start,created,updated) VALUES(1,'m365con-2027',1,'M365Con','2027-01-11',1,1);
     INSERT INTO event_sessions(id,event_id,title,start,status,proposer_id,created) VALUES(42,1,'Copilot session','2027-01-11T10:00','live',1,1);
-    INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES('https://push.example/42','p','a','en',NULL,1,0);
+    INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES('https://fcm.googleapis.com/fcm/send/42','p','a','en',NULL,1,0);
     INSERT INTO users(id,provider,sub,name,created) VALUES(7,'test','7','Test',1);
     INSERT INTO mail_addr(user_id,email,verified,token,created) VALUES(7,'test@example.invalid',1,'',1);
     INSERT INTO event_sessions(id,event_id,title,start,status,proposer_id,created) VALUES(43,1,'Second session','2027-01-11T11:00','live',1,1);
@@ -374,35 +374,35 @@ test("topic subscriptions: require a registered push endpoint or a verified, exp
   const denied = await run("follow", { kind: "session", id: "42", lang: "en" });
   assert.equal(denied.status, 400);
   assert.equal(denied.data.error, "consent_required");
-  raw.exec("INSERT INTO topic_queue(channel,recipient,lang,timezone,kind,topic_id,item_key,title,url,created,expires) VALUES('push','https://push.example/42','en','UTC','session','42','old','Session','https://www.m365.fm/',1,2000000000)");
-  const follow = await run("follow", { kind: "session", id: "42", endpoint: "https://push.example/42", lang: "de", timezone: "Europe/Berlin" });
+  raw.exec("INSERT INTO topic_queue(channel,recipient,lang,timezone,kind,topic_id,item_key,title,url,created,expires) VALUES('push','https://fcm.googleapis.com/fcm/send/42','en','UTC','session','42','old','Session','https://www.m365.fm/',1,2000000000)");
+  const follow = await run("follow", { kind: "session", id: "42", endpoint: "https://fcm.googleapis.com/fcm/send/42", lang: "de", timezone: "Europe/Berlin" });
   assert.deepEqual(follow.data, { ok: true, following: true });
-  assert.equal(raw.prepare("SELECT COUNT(*) n FROM push_topics WHERE endpoint='https://push.example/42'").get().n, 1);
-  assert.equal(raw.prepare("SELECT timezone FROM push_topics WHERE endpoint='https://push.example/42'").get().timezone, "Europe/Berlin");
-  const pushPrefs = raw.prepare("SELECT lang,timezone FROM topic_queue WHERE recipient='https://push.example/42'").get();
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM push_topics WHERE endpoint='https://fcm.googleapis.com/fcm/send/42'").get().n, 1);
+  assert.equal(raw.prepare("SELECT timezone FROM push_topics WHERE endpoint='https://fcm.googleapis.com/fcm/send/42'").get().timezone, "Europe/Berlin");
+  const pushPrefs = raw.prepare("SELECT lang,timezone FROM topic_queue WHERE recipient='https://fcm.googleapis.com/fcm/send/42'").get();
   assert.equal(pushPrefs.lang, "de");
   assert.equal(pushPrefs.timezone, "Europe/Berlin");
-  const mine = await run("mine", {}, null, "GET", "?endpoint=https%3A%2F%2Fpush.example%2F42");
+  const mine = await run("mine", {}, null, "GET", "?endpoint=https%3A%2F%2Ffcm.googleapis.com%2Ffcm%2Fsend%2F42");
   assert.equal(mine.data.subscriptions.length, 1);
   assert.equal(mine.data.subscriptions[0].label, "Copilot session");
-  const unfollow = await run("unfollow", { kind: "session", id: "42", endpoint: "https://push.example/42" });
+  const unfollow = await run("unfollow", { kind: "session", id: "42", endpoint: "https://fcm.googleapis.com/fcm/send/42" });
   assert.deepEqual(unfollow.data, { ok: true, following: false });
-  assert.equal(raw.prepare("SELECT COUNT(*) n FROM push_subs WHERE endpoint='https://push.example/42'").get().n, 0);
-  const followAgain = await run("follow", { kind: "session", id: "43", endpoint: "https://push.example/42", keys: { p256dh: "p", auth: "a" }, lang: "en" });
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM push_subs WHERE endpoint='https://fcm.googleapis.com/fcm/send/42'").get().n, 0);
+  const followAgain = await run("follow", { kind: "session", id: "43", endpoint: "https://fcm.googleapis.com/fcm/send/42", keys: { p256dh: "p", auth: "a" }, lang: "en" });
   assert.deepEqual(followAgain.data, { ok: true, following: true });
-  assert.equal(raw.prepare("SELECT COUNT(*) n FROM push_subs WHERE endpoint='https://push.example/42'").get().n, 1);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM push_subs WHERE endpoint='https://fcm.googleapis.com/fcm/send/42'").get().n, 1);
 
   raw.exec(`
-    INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created) VALUES('https://push.example/account','p','a','en',7,1);
-    INSERT INTO push_topics(endpoint,kind,topic_id,lang,timezone,user_id,created) VALUES('https://push.example/account','session','42','en','UTC',7,1);
-    INSERT INTO topic_queue(channel,recipient,lang,timezone,kind,topic_id,item_key,title,body,url,created,expires) VALUES('push','https://push.example/account','en','UTC','session','42','reminder:42','Session','','https://www.m365.fm/',1,2000000000);
+    INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created) VALUES('https://fcm.googleapis.com/fcm/send/account','p','a','en',7,1);
+    INSERT INTO push_topics(endpoint,kind,topic_id,lang,timezone,user_id,created) VALUES('https://fcm.googleapis.com/fcm/send/account','session','42','en','UTC',7,1);
+    INSERT INTO topic_queue(channel,recipient,lang,timezone,kind,topic_id,item_key,title,body,url,created,expires) VALUES('push','https://fcm.googleapis.com/fcm/send/account','en','UTC','session','42','reminder:42','Session','','https://www.m365.fm/',1,2000000000);
   `);
   const status = await run("status", {}, { id: 7 }, "GET", "?kind=session&id=42");
   assert.equal(status.data.following, true, "account follows are visible without the original device");
   const accountUnfollow = await run("unfollow", { kind: "session", id: "42" }, { id: 7 });
   assert.deepEqual(accountUnfollow.data, { ok: true, following: false });
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM push_topics WHERE user_id=7").get().n, 0);
-  assert.equal(raw.prepare("SELECT COUNT(*) n FROM topic_queue WHERE recipient='https://push.example/account' AND sent=0").get().n, 0);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM topic_queue WHERE recipient='https://fcm.googleapis.com/fcm/send/account' AND sent=0").get().n, 0);
 
   raw.exec("INSERT INTO topic_queue(channel,recipient,lang,timezone,kind,topic_id,item_key,title,url,created,expires) VALUES('email','7','en','UTC','session','42','old-email','Session','https://www.m365.fm/',1,2000000000)");
   const email = await run("follow", { kind: "session", id: "42", lang: "de", email: true, timezone: "Europe/Berlin" }, { id: 7 });

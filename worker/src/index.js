@@ -49,7 +49,7 @@ import { handleHardware } from "./hardware.js";
 import { handleMail, flushOutbox, notify } from "./mail.js";
 import { handleReviews } from "./reviews.js";
 import { handleEntityInvite, remindInvites } from "./entinvite.js";
-import { handleInviter, syncInviterBadges, deleteUserInvites } from "./inviter.js";
+import { handleInviter, syncInviterBadges, deleteUserInvites, netOf } from "./inviter.js";
 import { handleDemo } from "./demo.js";
 import { handleGuests, deleteUserGuests } from "./guests.js";
 import { deleteUserEntityInvites } from "./entinvite.js";
@@ -68,7 +68,7 @@ import { handleWiki } from "./wiki.js";
 import { syncExpertise } from "./levels.js";
 import { backfillDirectoryGeocodes, ensureDirectoryCols, handleDirectory } from "./directory.js";
 import { handleTopicSubscriptions, dispatchTopicNotifications, queueTopicArticles, queueSessionReminders } from "./topic_notifications.js";
-import { savePushSubscription } from "./push.js";
+import { savePushSubscription, isPushEndpoint } from "./push.js";
 import { handleContributions, refreshContributions } from "./contributions.js";
 import { findUserByIdentity, createUserWithIdentity, linkIdentity, mergeProof, handleIdentities, MERGE_WINDOW, freshSession, reloginFor } from "./identities.js";
 import { handleSpreakerExchange, spreakerStart } from "./spreaker_connect.js";
@@ -517,8 +517,8 @@ async function api(env, request, url, path, asUser, ctx) {
   if (path === "/api/push/subscribe" && method === "POST") {
     const b = await request.json().catch(() => ({}));
     const e = b.endpoint, k = b.keys || {};
-    if (!/^https:\/\//.test(e || "") || e.length > 600 || !k.p256dh || !k.auth || !(b.lang === "en" || isLang(b.lang))) return J({ error: "bad_request" }, 400);
-    if (!(await rateLimit(db, `ps:${ip(request)}`, 20, 3600))) return J({ error: "rate" }, 429);
+    if (!isPushEndpoint(e) || !k.p256dh || !k.auth || String(k.p256dh).length > 200 || String(k.auth).length > 100 || !(b.lang === "en" || isLang(b.lang))) return J({ error: "bad_request" }, 400);   // nur bekannte Push-Dienste
+    if (!(await rateLimit(db, `ps:${user ? "u" + user.id : netOf(ip(request))}`, 20, 3600))) return J({ error: "rate" }, 429);   // ohne Anmeldung je Netz (IPv6 /64), nicht je Adresse
     await savePushSubscription(db, {
       endpoint: e, p256dh: String(k.p256dh), auth: String(k.auth), lang: b.lang,
       userId: user?.id ?? null, created: now(), digest: b.digest === 0 ? 0 : 1,
