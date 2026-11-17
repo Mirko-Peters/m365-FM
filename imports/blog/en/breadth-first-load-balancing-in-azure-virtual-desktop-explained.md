@@ -70,14 +70,18 @@ You need the **Desktop Virtualization Host Pool Contributor** role. In the Azure
 3. For **Load balancing algorithm**, choose breadth-first from the drop-down, and for **Max session limit** enter a value.
 4. Select **Save**.
 
-In PowerShell, `Update-AzWvdHostPool` takes `-LoadBalancerType` and `-MaxSessionLimit`. The cmdlet reference shows an example with `-LoadBalancerType 'BreadthFirst'` and `-MaxSessionLimit 6`; it does not list the accepted values of the parameter, so use the documented example as the pattern.
+In PowerShell, `Update-AzWvdHostPool` takes `-LoadBalancerType` and `-MaxSessionLimit`. Learn's load balancing page shows how to set breadth-first without changing the maximum session limit:
 
 ```powershell
-Update-AzWvdHostPool -ResourceGroupName "rg-avd" -Name "hp-pooled-01" `
-    -LoadBalancerType 'BreadthFirst' -MaxSessionLimit 12
+$parameters = @{
+    Name              = '<HostPoolName>'
+    ResourceGroupName = '<ResourceGroupName>'
+    LoadBalancerType  = 'BreadthFirst'
+}
+Update-AzWvdHostPool @parameters
 ```
 
-The resource names and the limit of 12 are examples. Choose the limit from the sessions each host can carry, using Insights data on session counts and host performance. Learn recommends this approach for depth-first; we suggest the same data for breadth-first.
+To check the result, the same page uses `Get-AzWvdHostPool @parameters | Format-Table Name, LoadBalancerType, MaxSessionLimit`. The Azure CLI equivalent is `az desktopvirtualization hostpool update --resource-group <ResourceGroupName> --name <HostPoolName> --load-balancer-type BreadthFirst`. Learn notes that `Persistent` and `MultiplePersistent` apply only to personal host pools. To set a limit as well, add `-MaxSessionLimit` with your own value, for example `-MaxSessionLimit 12`. The 12 is only an example. Choose the limit from the sessions each host can carry, using Insights data on session counts and host performance. Learn recommends this approach for depth-first; we suggest the same data for breadth-first.
 
 ## When to expect surprises
 
