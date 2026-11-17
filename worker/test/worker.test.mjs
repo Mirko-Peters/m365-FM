@@ -477,12 +477,13 @@ test("schema: Migrationen sind idempotent und enthalten jede zur Laufzeit angele
     if (/^ALTER TABLE events ADD COLUMN (?:entity|entity_state) TEXT NOT NULL DEFAULT ''$/i.test(s)) continue;   // 0048: Event-Entitaet (evententity.js), Spalten mit Standardwert (D1 fuehrt jede Migration nur einmal aus)
     if (/^ALTER TABLE yt_videos ADD COLUMN (?:(?:upload_url|nonce) TEXT NOT NULL DEFAULT ''|size INTEGER NOT NULL DEFAULT 0)$/i.test(s)) continue;   // 0053: Upload-Sitzung der Creator-Videos (K35/K36), Spalten mit Standardwert
     if (/^INSERT OR IGNORE INTO person_entity\(eid, user_id, created\)\s+SELECT /i.test(s)) continue;   // 0054: Rueckfuellung der Personen-Entitaeten, idempotent (vorhandene Merker bleiben)
+    if (/^INSERT OR IGNORE INTO mig0054_backup\(tabelle, schluessel, wert, zeit\)\s+SELECT 'entity_claims', /i.test(s)) continue;   // 0054 (Runde 11): Sicherung vor dem Loeschen, UNIQUE (tabelle, schluessel) behaelt beim zweiten Lauf das erste Original
     if (/^DELETE FROM entity_claims WHERE via IN \('owner', 'manual'\) AND status = 'verified'\s+AND eid IN \(SELECT eid FROM person_entity WHERE user_id = 0\)\s+AND NOT EXISTS \(SELECT 1 FROM users u WHERE u\.id = entity_claims\.user_id\)$/i.test(s)) continue;   // 0054: verwaiste Owner- und manuelle Ansprueche geloeschter Konten (Altbestand), idempotent
     // 0055: Altbestand Adressen ohne Profil (Speaker-Eintraege, Blog-, Creator-Abos, Speaker-Identitaet) und Themen-Abos auf Merker geloeschter Konten;
     // jede Anweisung trifft nur Zeilen mit einer Adresse ohne Profil bzw. Merker user_id 0 und aendert beim zweiten Lauf nichts (Test in datenschutz.test.mjs).
-    // Runde 9: Hilfstabellen mig0055_handle/mig0055_name (frueheres Konto je Adresse) werden am Anfang geleert und am Ende entfernt
+    // Runde 9: Hilfstabelle mig0055_handle (frueheres Konto je Adresse) wird am Anfang geleert und am Ende entfernt (Runde 11: ohne mig0055_name)
     // Runde 10: dauerhafte Sicherung mig0055_backup - jede Originalzeile vor der Aenderung, UNIQUE (tabelle, schluessel) behaelt beim zweiten Lauf das erste Original
-    if (/^(?:DELETE FROM|INSERT OR IGNORE INTO|UPDATE|DROP TABLE) mig0055_(?:handle|name)\b/i.test(s)
+    if (/^(?:DELETE FROM|INSERT OR IGNORE INTO|UPDATE|DROP TABLE) mig0055_handle\b/i.test(s)
       || /^INSERT OR IGNORE INTO mig0055_backup\(tabelle, schluessel, wert, zeit\)\s+SELECT /i.test(s)
       || /^UPDATE OR IGNORE (?:blog_follows|push_topics|email_topics|topic_queue) SET (?:handle|topic_id) = \(SELECT o\.nh FROM mig0055_handle o /i.test(s)
       || /^UPDATE speaker_ref SET handle = COALESCE\(\(SELECT o\.nh FROM mig0055_handle o /i.test(s)
