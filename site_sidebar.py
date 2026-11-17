@@ -15,8 +15,8 @@ CON = "https://m365con.net/?utm_source=m365.fm&utm_medium=sidebar&utm_campaign=a
 CON_WIDTHS = (340, 480, 675)   # 1x, 1,25-1,5x und 2x der Desktop-Breite (19,4rem); 675 = Breite der Quelle, nicht hochskaliert
 CON_WH = (675, 563)   # Seitenverhaeltnis fuer width/height (Platz reserviert, keine Verschiebung)
 CON_DESK = "(min-width: 62.01rem)"   # ab hier steht die Seitenleiste rechts neben dem Inhalt (assets/sbar.css: max-width:62rem = darunter)
-# Desktop: Spalte 20.5rem minus 2 x .55rem Innenabstand der Karte; darunter 2-3 Spalten (minmax(16rem,1fr)) bzw. eine Spalte (100vw - 2 x 22px .wrap - 1.1rem)
-CON_SIZES = CON_DESK + " 19.4rem, (min-width: 36rem) 50vw, calc(100vw - 62px)"
+# Desktop: Spalte 20.5rem minus 2 x .55rem Innenabstand der Karte; darunter 3 Spalten ab 52.75rem (30vw), 2 Spalten (50vw) (minmax(16rem,1fr)) bzw. eine Spalte (100vw - 2 x 22px .wrap - 1.1rem)
+CON_SIZES = CON_DESK + " 19.4rem, (min-width: 52.75rem) 30vw, (min-width: 36rem) 50vw, calc(100vw - 62px)"
 CON_ALT = "I'm attending M365Con International 2027, January 11–22, 2027, free online event"
 
 
