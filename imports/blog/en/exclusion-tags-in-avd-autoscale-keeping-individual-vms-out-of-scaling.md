@@ -33,7 +33,7 @@ The scenarios page adds the exact scope. When a VM has a tag name that matches t
 
 In the Azure portal wizard for a scaling plan, the **Basics** tab has an **Exclusion tag** field, for both power management and dynamic plans. Learn's field description uses `excludeFromScaling` as the example name. After creation, you change the tag name on the **Properties** tab of the plan, together with the friendly name, description and time zone. Changes to a plan that is already assigned apply immediately.
 
-Learn gives no procedure for applying the tag to the VMs themselves. That is ordinary Azure tagging, covered below. Learn also asks you not to put sensitive information such as user principal names or other personal data into the exclusion tag.
+The autoscale pages give no procedure for applying the tag to the VMs themselves. That is ordinary Azure tagging, covered below. Learn also asks you not to put sensitive information such as user principal names or other personal data into the exclusion tag.
 
 ## What a tagged host does and does not do
 
@@ -58,12 +58,12 @@ The FAQ treats personal host pools differently. For personal desktops autoscale 
 
 Learn's fourth scenario shows what happens when the tag removes the capacity autoscale needs. The pool has six session hosts, a 75 percent capacity threshold, a 10 percent minimum percentage of hosts and a maximum session limit of 5, in the off-peak phase. One host is running with three sessions, which is 60 percent used capacity.
 
-1. The administrator tags five of the six hosts. A fourth user signs in. Four sessions on a capacity of 5 are 80 percent, above the 75 percent threshold, but autoscale starts nothing because every other host is tagged. No error appears at this point; the one running host still takes the user.
+1. The administrator tags five of the six hosts. A fourth user signs in. Four sessions on a capacity of 5 are 80 percent, above the 75 percent threshold, but autoscale starts nothing because every other host is tagged. Learn reports four user sessions on the one running host and no further host being turned on.
 2. All users sign out. The single running host stays on, because 10 percent of six hosts rounds up to one host.
 3. The administrator tags the last untagged host and turns it off. Now every host is excluded and off. Autoscale cannot turn on a VM for the next user, who sees a "No resources available" error.
 4. The administrator removes the tag from two VMs. Autoscale turns on only one of them, because one host is enough to meet the 10 percent minimum.
 
-The lesson is arithmetic you can do in advance. Once all untagged hosts are running, untagged hosts times the maximum session limit times the capacity threshold is the number of sessions the pool can carry before autoscale would want another host and cannot get one. Four untagged hosts, a limit of 10 and a 75 percent threshold give 4 x 10 x 0.75 = 30 sessions. If some untagged hosts are still off, autoscale can start them, so the ceiling is reached only when they are all on. Learn's final table for the scenario lists a 19 percent minimum although its text says 10 percent; the text and the arithmetic agree on 10 percent, so this article uses that. See [capacity threshold](/entity/avd-capacity-threshold/), [maximum session limit](/entity/avd-maximum-session-limit/) and [minimum percentage of hosts](/entity/avd-minimum-percentage-of-hosts/); the rounding rule has its own article, "How rounding up works with the minimum percentage of hosts, with worked examples".
+The lesson is arithmetic you can do in advance. This is the article's own simplified model, not a statement from Learn. It assumes that every tagged host is switched off. Learn's glossary defines available host pool capacity as the maximum session limit multiplied by the number of available session hosts, and available session hosts as hosts that pass the agent health checks and have powered-on VMs. A tagged host that is running therefore also adds capacity by that definition, and the ceiling is higher; Learn does not say whether a host in drain mode counts. With all tagged hosts off and all untagged hosts running, untagged hosts times the maximum session limit times the capacity threshold is the number of sessions the pool can carry before used capacity goes over the threshold and autoscale has no host left to turn on. Four untagged hosts, a limit of 10 and a 75 percent threshold give 4 x 10 x 0.75 = 30 sessions. If some untagged hosts are still off, autoscale can start them, so the ceiling is reached only when they are all on. Learn's final table for the scenario lists a 19 percent minimum although its text says 10 percent; the text and the arithmetic agree on 10 percent, so this article uses that. See [capacity threshold](/entity/avd-capacity-threshold/), [maximum session limit](/entity/avd-maximum-session-limit/) and [minimum percentage of hosts](/entity/avd-minimum-percentage-of-hosts/); the rounding rule has its own article, "How rounding up works with the minimum percentage of hosts, with worked examples".
 
 ## How Azure tags behave
 
@@ -81,7 +81,7 @@ For a pooled host pool, open the host pool in the Azure portal, select **Insight
 
 ## What Learn does not say
 
-Microsoft Learn does not answer several questions, so plan around them instead of assuming:
+The Learn pages listed under Sources do not answer several questions, so plan around them instead of assuming:
 
 - How quickly autoscale notices a newly added or removed tag.
 - Whether the tag value is part of the match.

@@ -53,7 +53,7 @@ What's new announces a [managed identity](/entity/avd-managed-identity/) require
 - Starting 15 October 2025, existing pools cannot update their session host configuration until a managed identity is added.
 - Starting 15 November 2025, existing pools cannot create session hosts until one is added.
 
-These are estimated dates, not confirmed ones, and the later entry does not match them. The page "Configure managed identity in Azure Virtual Desktop" gives a third version: "Host pools configured with a session host configuration will require a managed identity starting November 1st, 2025 in order to add session hosts to the host pool". That page still carries a preview notice and was last updated on 22 April 2026. The September 2026 What's new entry announces managed identity support as generally available and says: "In a future service update, host pools configured with a session host configuration will require a managed identity in order to add session hosts". Whether the requirement is already enforced is therefore an open question. The September 2025 entry says that creating a new host pool with a session host configuration in the portal requires a managed identity, while the deployment page says you can choose at creation time whether to assign one.
+These are estimated dates, not confirmed ones, and the later entry does not match them. The page "Configure managed identity in Azure Virtual Desktop" gives a third version: "Host pools configured with a session host configuration will require a managed identity starting November 1st, 2025 in order to add session hosts to the host pool". That page still carries a preview notice and was last updated on 22 April 2026. The September 2026 What's new entry announces managed identity support as generally available and says: "In a future service update, host pools configured with a session host configuration will require a managed identity in order to add session hosts". Whether it is already enforced is open. The September 2025 entry says that creating a new host pool with a session host configuration in the portal requires a managed identity, while the deployment page says you can choose at creation time whether to assign one.
 
 The deployment page says the managed identity performs create, delete and update operations for session hosts in place of the service principal, and the configuration page lists autoscale among the features that can use a managed identity. Check the current state of all three statements before you rely on one.
 
@@ -65,7 +65,7 @@ The deployment page says the managed identity performs create, delete and update
 
 ## Roles and permissions
 
-The scaling plan page names two built-in roles for dynamic autoscaling, Desktop Virtualization Power On Off Contributor and Desktop Virtualization Virtual Machine Contributor. Both go to the Azure Virtual Desktop service principal, with the Azure subscription as assignable scope. The prerequisites on the same page also allow "a managed identity assigned to your host pool" as the recipient of the role assignment, and Learn lists autoscale among the features that can use a managed identity. The roles in the dynamic-scaling section are named for the service principal. Which roles a managed identity needs for powering hosts on and off is not spelled out there: the deployment page names Desktop Virtualization Virtual Machine Contributor for a host pool's managed identity, and the configuration page names Desktop Virtualization Host Pool Contributor for the person who sets the identity up.
+The scaling plan page names two built-in roles for dynamic autoscaling, Desktop Virtualization Power On Off Contributor and Desktop Virtualization Virtual Machine Contributor. Both go to the Azure Virtual Desktop service principal, with the Azure subscription as assignable scope. The configuration page lists autoscale among the features that can use a managed identity, but the dynamic-scaling section names the roles for the service principal only. The power management section of the same page says the Desktop Virtualization Power On Off Contributor role goes to "a managed identity assigned to your host pool or the Azure Virtual Desktop service principal". For the other role, the deployment page names Desktop Virtualization Virtual Machine Contributor for a host pool's managed identity, and the configuration page names Desktop Virtualization Host Pool Contributor for the person who sets the identity up.
 
 The page warns that an assignment below the subscription, such as the resource group, host pool or VM, prevents autoscale from working properly. Assigning the roles requires `Microsoft.Authorization/roleAssignments/write` on the subscription, which User Access Administrator and Owner include. The troubleshooting page is looser and lists "host pool, resource group, or subscription scope" for the Power On Off Contributor role. The two pages conflict, so assign at subscription scope, as the scaling plan page documents.
 
@@ -74,8 +74,6 @@ The page warns that an assignment below the subscription, such as the resource g
 - **Custom max session limit.** For dynamic autoscaling, the host pool must have a custom max session limit for load balancing. Learn says not to use the default value. It does not give a recommended number.
 - **Minimum host pool size, maximum host pool size and minimum percentage of active hosts.** The minimum host pool size in the scaling plan overrides the number of session hosts defined in the host pool (FAQ). Above the maximum, autoscale deletes active, deallocated session hosts with no sessions.
 - **Capacity threshold.** The scaling plan page gives an example: with a threshold of 60% and a host pool capacity of 100 sessions, autoscale turns on more session hosts once the load exceeds 60 sessions.
-
-The FAQ adds two special cases: the same minimum and maximum host pool size means only start and deallocate; a minimum percentage of active hosts of 100 means only create and delete.
 
 ## Network requirement
 
@@ -88,6 +86,7 @@ Learn lists these limits for autoscale in general:
 - You can only associate one scaling plan per host pool. One plan can be assigned to one or more host pools of the same type.
 - A scaling plan can only be assigned to host pools that match the host pool type in the plan. A dynamic plan only goes to pooled host pools with a session host configuration.
 - The scaling plan type, pooled or personal, cannot be changed after the plan is created (glossary).
+- Host pools must be in the same Azure region as the scaling plan (scaling plan page, section on editing a plan).
 - A scaling plan operates only in its configured time zone.
 - You cannot use autoscale together with other Microsoft or third-party scaling tools on the same host pool. This includes scaling with Azure Automation and Azure Logic Apps. Disable the others first.
 - Autoscale does not support ramping down on specific dates, such as holidays.
@@ -107,7 +106,7 @@ Learn lists these limits for autoscale in general:
 2. Confirm that the host pool is not on Azure Local and not in Azure Government.
 3. Decide on a managed identity: the deployment page words it as optional at creation, What's new says portal creation requires one, and the dates for the general requirement differ between pages. If you use one, give it Desktop Virtualization Virtual Machine Contributor on the resource group or subscription of the session hosts.
 4. Set a custom max session limit instead of the default.
-5. Assign both roles to the Azure Virtual Desktop service principal at subscription scope, or to the host pool's managed identity if you use one (Learn does not list the roles for the identity separately in that section).
+5. Assign both roles to the Azure Virtual Desktop service principal at subscription scope, or to the host pool's managed identity if you use one (the scaling plan page names the Power On Off Contributor role for a managed identity in its power management section).
 6. Allow outbound access to `wvdhpustgr0prod.blob.core.windows.net` from the session host subnet.
 7. Install the Az.DesktopVirtualization 5.4.2-preview module or later if you use PowerShell.
 8. Check that no Azure Automation or Logic Apps scaling still runs on the pool, and that no other plan is assigned.
@@ -115,7 +114,7 @@ Learn lists these limits for autoscale in general:
 
 ## Open points
 
-The 500 and 400 session host figures above belong to the deployment form and are not a stated maximum for a plan. The scaling plan creation page and the autoscale FAQ give no number for the maximum host pool size of a dynamic plan or for the number of schedules. The scenarios page also contradicts itself: scenario 4 shows a minimum percentage of hosts of 19% in its table and 10% in its text.
+The 500 and 400 session host figures belong to the deployment form, not to a plan. The scaling plan creation page and the autoscale FAQ give no number for the maximum host pool size of a dynamic plan or for the number of schedules. The scenarios page also contradicts itself: scenario 4 shows a minimum percentage of hosts of 19% in its table and 10% in its text.
 
 ## Related
 
