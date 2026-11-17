@@ -1,6 +1,6 @@
 ---
 title: "15 ways to cut Azure Virtual Desktop cost without hurting users"
-summary: "Fifteen levers for lowering Azure Virtual Desktop cost, grouped into compute hours, compute rate, storage, monitoring and licensing, each with its user-facing trade-off and source. Item 14 has no documented saving, item 15 only avoids paying twice, and some features still carry preview wording on Learn."
+summary: "Fifteen levers for lowering Azure Virtual Desktop cost, grouped into compute hours, compute rate, storage and monitoring, and licensing, each with its user-facing trade-off and source. Item 14 has no documented saving, item 15 only avoids paying twice, and some features still carry preview wording on Learn."
 status: review
 publish: false
 author: mirko-p
@@ -21,7 +21,7 @@ faq:
     a: "Some do. Start VM on Connect adds a wait while a VM powers on, forced sign-out ends sessions after a wait time, and consolidation can mean fewer hosts for the same sessions. Each item below names its user-facing cost so you can pilot it."
 ---
 
-The fifteen items below follow five groups: the hours session hosts stay allocated, the rate you pay per hour, storage, monitoring and licensing. Each names what [Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq) documents and the user-facing trade-off. Item 14 has no documented saving and item 15 applies to one licensing setup only, so read the count as fifteen levers, not fifteen proven savings. For the detail behind items 10 to 13 and 15, see "What Azure Virtual Desktop really costs: the full cost model".
+The fifteen items below follow four groups: the hours session hosts stay allocated, the rate you pay per hour, storage and monitoring (which also holds the OS disk choice in item 14), and licensing. Each names what [Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq) documents and the user-facing trade-off. Item 14 has no documented saving and item 15 applies to one licensing setup only, so read the count as fifteen levers, not fifteen proven savings. For the detail behind items 10 to 13 and 15, see "What Azure Virtual Desktop really costs: the full cost model".
 
 Before changing anything, make cost visible: Learn describes a `cm-resource-parent` tag, valued with a host pool resource ID, that lets Cost Management group costs by host pool. It does not affect billing.
 
@@ -33,7 +33,7 @@ Before changing anything, make cost visible: Learn describes a `cm-resource-pare
 
 **3. Consolidate with depth-first in ramp-down and off-peak.** The FAQ's example is breadth-first for ramp-up and peak and depth-first for ramp-down and off-peak, which lets autoscale consolidate sessions onto the fewest hosts. User cost: busier hosts late in the day. See [depth-first](/entity/avd-depth-first-load-balancing/).
 
-**4. Sign out disconnected sessions and allow zero hosts overnight.** Disconnected sessions count as used capacity and keep hosts running. The FAQ recommends signing out disconnected sessions after 15 to 30 minutes with the Group Policy setting **Set time limit for disconnected sessions** (Computer Configuration > Administrative Templates > Windows Components > Remote Desktop Services > Remote Desktop Session Host > Session Time Limits), and a 0 percent minimum in off-peak, to reach zero hosts. The timeout must complete before ramp-down ends. In a domain, link the GPO to the session hosts' OU, not Local Computer Policy. For Intune, the scaling plan article describes a configuration profile for Windows 10 and later, profile type Session Time Limits, then a host restart. User cost: people who return after the limit start a fresh session.
+**4. Sign out disconnected sessions and allow zero hosts overnight.** Disconnected sessions count as used capacity and keep hosts running. The FAQ recommends signing out disconnected sessions after 15 to 30 minutes with the Group Policy setting **Set time limit for disconnected sessions** (Computer Configuration > Administrative Templates > Windows Components > Remote Desktop Services > Remote Desktop Session Host > Session Time Limits), and a 0 percent minimum in off-peak, to reach zero hosts. The timeout must complete before ramp-down ends. For Intune, the scaling plan article describes a configuration profile for Windows 10 and later, profile type Session Time Limits, then a host restart. User cost: people who return after the limit start a fresh session.
 
 **5. Use force sign-out in ramp-down where the work pattern allows.** Autoscale drains the host with the fewest sessions, notifies users and signs them out after the wait time. Learn says it works only in ramp-down. User cost: forced sign-out, so reserve it for pools where sessions can be reopened. See [force sign-out](/entity/avd-force-logoff/).
 
@@ -53,7 +53,7 @@ Before changing anything, make cost visible: Learn describes a `cm-resource-pare
 
 ## Storage and monitoring
 
-**12. Choose disks and profile storage on purpose.** Learn bills managed disks by provisioned size, prorated hourly, and the VM states page says disks and networking continue to incur charges when VMs are deallocated. Learn lists Standard SSD for development and test and Premium SSD for low-latency production. For profiles, Learn recommends Azure Files for most customers and says to use the provisioned v2 model for new deployments. Provisioned shares bill what you provision, so size them from real profile data. Azure Files reservations apply to provisioned v1 (SSD) and pay-as-you-go (HDD hot and cool) shares, not to provisioned v2, so a v2 share cannot be reserved. The disk page describes one-year Premium SSD reservations from P30 to P80; size first, then commit. User cost: slow logons if undersized. See [Azure Files](/entity/azure-files/) and [Azure NetApp Files](/entity/azure-netapp-files/).
+**12. Choose disks and profile storage on purpose.** Learn bills managed disks by provisioned size, prorated hourly, and the VM states page says disks and networking continue to incur charges when VMs are deallocated. Learn lists Standard SSD for development and test and Premium SSD for low-latency production. For profiles, the FSLogix storage page recommends Azure Files for most customers, and the Azure Files billing page says to use the provisioned v2 model for all new Azure Files deployments. Provisioned shares bill what you provision, so size them from real profile data. Azure Files reservations apply to provisioned v1 (SSD) and pay-as-you-go (HDD hot and cool) shares, not to provisioned v2, so a v2 share cannot be reserved. The disk page describes one-year Premium SSD reservations from P30 to P80; size first, then commit. User cost: slow logons if undersized. See [Azure Files](/entity/azure-files/) and [Azure NetApp Files](/entity/azure-netapp-files/).
 
 **13. Trim Insights data.** In most cases, performance counters should make up 80 to 99 percent of Insights ingestion, per Learn's cost page. Reduce counter frequency or remove counters, but keep the Windows events and diagnostics, as Learn advises. User cost: fewer data points in some Insights visuals.
 
@@ -69,7 +69,7 @@ Compare host-hours before and after each change, not only the invoice, and check
 
 ## Where a management tool fits
 
-Learn's autoscale FAQ says autoscale does not currently support ramping down on specific dates. Nerdio's help page for Nerdio Manager, titled "Dynamic Host Pool Auto-scaling" (Nerdio's own feature, not Learn's dynamic autoscaling in item 7), describes separate settings for selected off-peak dates, multiple scale-out triggers and a scale-in aggressiveness setting that defaults to High. Multiple auto-scale triggers and auto-scale profiles are marked Premium only, so check your edition. It makes no comparison with native autoscale, so test any tool against the same measured hours. See [Nerdio auto-scaling](/entity/nerdio-auto-scaling/).
+Learn's autoscale FAQ says autoscale does not currently support ramping down on specific dates. Nerdio's help page for Nerdio Manager, titled "Enable dynamic host pool Auto-scaling" (Nerdio's own feature, not Learn's dynamic autoscaling in item 7), describes separate settings for selected off-peak dates, multiple scale-out triggers and a scale-in aggressiveness setting that defaults to High. Multiple auto-scale triggers and auto-scale profiles are marked Premium only, so check your edition. It makes no comparison with native autoscale, so test any tool against the same measured hours. See [Nerdio auto-scaling](/entity/nerdio-auto-scaling/).
 
 ## Order of work
 
