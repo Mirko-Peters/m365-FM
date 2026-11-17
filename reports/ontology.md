@@ -1,4 +1,4 @@
-# Ontologie-Bericht 2026-11-16
+# Ontologie-Bericht 2026-11-17
 
 - Eintraege: **2354** (aktuell gueltig 2330); Typen: concept 1090, product 786, person 318, cert 41, org 36, job 25, industry 13, category 9, platform 8, event 3, media 1
 - Mit mindestens einer Beziehung: **841** (36%); ganz verwaist (nichts raus, nichts rein): **1391**
