@@ -57,13 +57,13 @@ Learn says a plan operates only in its configured time zone, and the peak start 
 
 ## Step 3: Set minimum percentage and capacity threshold
 
-The [capacity threshold](/entity/avd-capacity-threshold/) and the [minimum percentage of hosts](/entity/avd-minimum-percentage-of-hosts/) are entered in ramp-up and ramp-down. Learn's create-and-assign page lists "Minimum percentage of hosts" only for those two phases, and says the ramp-up capacity threshold carries over to peak and the ramp-down value carries over to off-peak. Peak and off-peak hold no threshold or minimum field of their own, and Learn does not say whether the ramp-down minimum also applies in off-peak.
+The [capacity threshold](/entity/avd-capacity-threshold/) and the [minimum percentage of hosts](/entity/avd-minimum-percentage-of-hosts/) are entered in ramp-up and ramp-down. Learn's create-and-assign page lists "Minimum percentage of hosts" only for those two phases, and says the ramp-up capacity threshold carries over to peak and the ramp-down value carries over to off-peak. Peak and off-peak hold no threshold or minimum field of their own. Learn's off-peak scenario and its troubleshooting page apply a minimum percentage of hosts during ramp-down and off-peak, but no page states that the ramp-down value carries over, so check in Insights that hosts really reach zero after a schedule change. This guide covers power management autoscaling for pooled host pools.
 
 Use your data like this:
 
 - **Ramp-up minimum:** the number of hosts needed for the first wave, divided by total hosts. Autoscale rounds a non-whole result up.
 - **Ramp-up threshold:** how full hosts may get before another starts. Learn's scenario sets a higher threshold and lower minimum for ramp-down, which it says decreases the need to turn on new hosts at the end of the workday.
-- **Ramp-down minimum:** the floor you accept while load falls. Set it to 0 percent if hosts should be able to reach zero after hours, because Learn's FAQ says autoscale can turn off all VMs only when the minimum percentage of hosts is 0 and no sessions remain. Users who stay late are then covered by the load-based calculation, not by a floor.
+- **Ramp-down minimum:** the floor you accept while load falls. Set it to 0 percent if hosts should be able to reach zero after hours, because Learn's FAQ says autoscale can turn off all VMs if the minimum percentage of hosts is 0 and no sessions remain. Users who stay late are then covered by the load-based calculation, not by a floor.
 
 Choosing the threshold value itself is covered in "Choosing the right capacity threshold for pooled host pools". Set a custom maximum session limit first. Learn says not to use the default value, because the capacity calculation depends on it.
 
@@ -72,11 +72,11 @@ Choosing the threshold value itself is covered in "Choosing the right capacity t
 In ramp-down, autoscale shuts hosts down only if all active and disconnected sessions fit on fewer hosts without exceeding the threshold. The ramp-down field **Force logoff of users** decides what happens to users on hosts that autoscale wants to remove:
 
 - **On.** Autoscale shuts down the host with the fewest sessions (active and disconnected), puts it in [drain mode](/entity/avd-drain-mode/), sends a notification, signs users out after the wait time and then deallocates the VM. See [force sign-out](/entity/avd-force-logoff/).
-- **Off.** Learn says you must then choose **VMs have no active or disconnected sessions** or **VMs have no active sessions**, and does not explain how they differ. Hosts with sessions stay on until users sign out. The example below uses the first option, the stricter reading of the names; confirm the result in Insights.
+- **Off.** Learn's create-and-assign page says you must then choose **VMs have no active or disconnected sessions** or **VMs have no active sessions**, and does not explain the difference there. The autoscale FAQ describes the second option: it prevents deallocating hosts with active (connected) sessions, while disconnected sessions still count as active for capacity calculations and are consolidated onto fewer hosts. Hosts with sessions stay on until users sign out. The example below uses **VMs have no active sessions**, the option the FAQ's recommended zero-host setup names, together with a disconnected-session time limit.
 
 Forced sign-out happens only in ramp-down. Learn's FAQ gives this trap: with a 15-minute ramp-down and a 20-minute wait time, the schedule moves to off-peak before the sign-out occurs, so sessions are not forced out and autoscale waits for everyone to sign out. Make the phase longer than the wait. Learn does not state a default wait time or the notification text.
 
-To reach zero hosts, Learn's FAQ says you need zero sessions including disconnected ones, a 0 percent minimum, and a Group Policy time limit for disconnected sessions (for example 15 to 30 minutes) that completes before the end of the ramp-down phase. Learn's create-and-assign page gives the Intune route: a configuration profile for Windows 10 and later with the Session Time Limits profile type, setting **Administrative templates > Windows Components > Remote Desktop Services > Remote Desktop Session Host > Session Time Limits > Set time limit for disconnected sessions**. Restart the session hosts after the policy applies. The sibling articles on forced sign-out cover the user-facing side.
+To reach zero hosts, Learn's FAQ says you need zero sessions including disconnected ones, a 0 percent minimum during off-peak hours, and a Group Policy time limit for disconnected sessions (for example 15 to 30 minutes) that completes before the end of the ramp-down phase. Learn's create-and-assign page gives the Intune route: a configuration profile for Windows 10 and later with the Session Time Limits profile type, setting **Administrative templates > Windows Components > Remote Desktop Services > Remote Desktop Session Host > Session Time Limits > Set time limit for disconnected sessions**. Restart the session hosts after the policy applies. The sibling articles on forced sign-out cover the user-facing side.
 
 ## Step 5: Cover days, weekends and holidays
 
@@ -95,16 +95,16 @@ The numbers are invented. A pooled host pool has 15 hosts, a maximum session lim
 | 08:00 to 08:30 | 20 rising to 100 | 3 rising to 14 | Autoscale adds hosts as sessions climb |
 | 08:30 to 17:00 | 100 (office staff) | 100 / 7.5 = 13.3, so 14 | Peak, threshold carried over from ramp-up |
 | 17:00 to 20:00 | 20 (finance team) | 20 / 7.5 = 2.7, so 3 | Load-based, no floor needed |
-| After 20:30 | 0 | 0 | Needs 0 percent and no disconnected sessions |
+| After 21:00 | 0 | 0 | Needs 0 percent and no disconnected sessions |
 
-The "hosts needed" column is a capacity calculation, not a forecast of running hosts. With **Force logoff of users** off, autoscale waits for users to sign out and does not move sessions between hosts, so more than 3 hosts can stay on in the evening if the finance team's sessions are spread across them. That is the price of not signing anyone out.
+The "hosts needed" column is a capacity calculation, not a forecast of running hosts. With **Force logoff of users** off, autoscale waits for users to sign out voluntarily, then consolidates and deallocates hosts with no sessions, so more than 3 hosts can stay on in the evening if the finance team's sessions are spread across them. That is the price of not signing anyone out.
 
 A schedule from this table:
 
 1. **Ramp-up 06:00:** breadth-first, minimum 20 percent, threshold 75 percent. The 06:00 start leaves a margin before the 06:30 sign-ins, sized from your measured start-up time.
 2. **Peak 08:30:** breadth-first. The 75 percent threshold carries over from ramp-up; the algorithm is chosen in the peak phase itself.
 3. **Ramp-down 17:00:** depth-first, minimum 0 percent, threshold 75 percent. **Force logoff of users** is off, so the finance team is not moved during consolidation.
-4. **Off-peak 20:30:** depth-first, with the threshold carried over from ramp-down and a 30-minute disconnected-session limit applied through policy. The limit has to complete before the ramp-down phase ends, so size it against your own phase length.
+4. **Off-peak 21:00:** depth-first, with the threshold carried over from ramp-down and a 30-minute disconnected-session limit applied through policy. Sessions end at 20:00, so the limit completes at 20:30, before the ramp-down phase ends; size it against your own phase length.
 
 Learn's create-and-assign page recommends breadth-first for ramp-up and depth-first for off-peak, and leaves peak and ramp-down to you. Its FAQ gives breadth-first for ramp-up and peak and depth-first for ramp-down and off-peak as an example, because depth-first consolidates sessions on fewer hosts.
 
@@ -128,6 +128,7 @@ Retrieved 17 November 2026.
 - [Microsoft Learn: Autoscale scaling plans and example scenarios in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)
 - [Microsoft Learn: Create and assign an autoscale scaling plan for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)
 - [Microsoft Learn: Azure Virtual Desktop autoscale glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary)
+- [Microsoft Learn: Troubleshoot autoscale in Azure Virtual Desktop](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-autoscale)
 - [Microsoft Learn: Azure Virtual Desktop autoscale FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq)
 - [Microsoft Learn: Use Log Analytics for the diagnostics feature](https://learn.microsoft.com/en-us/azure/virtual-desktop/diagnostics-log-analytics)
 - [Microsoft Learn: Monitor autoscale operations with Insights](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-monitor-operations-insights)

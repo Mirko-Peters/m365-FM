@@ -1,6 +1,6 @@
 ---
 title: "What Azure Virtual Desktop really costs: the full cost model"
-summary: "For session hosts in Azure, Azure Virtual Desktop cost is the sum of compute hours, disks, image and profile storage, networking, licensing and monitoring. This article lists each line item, how Microsoft documents its billing, and a worked host-hour example."
+summary: "For session hosts in Azure, Azure Virtual Desktop cost is the sum of compute hours, disks, image and profile storage, networking, licensing, monitoring and identity. This article lists each line item, how Microsoft documents its billing, and a worked host-hour example."
 status: review
 publish: false
 author: mirko-p
@@ -18,12 +18,12 @@ faq:
   - q: "Do I still pay for a VM that autoscale has turned off?"
     a: "Not for compute, if the VM is deallocated. Microsoft Learn says deallocated VMs are not billed for instance usage, but disks and networking can continue to incur charges. A VM in the Stopped (allocated) state is still billed."
   - q: "Where can I find actual prices?"
-    a: "On the Azure Virtual Desktop pricing page and in the Azure pricing calculator. Rates depend on region, VM size and agreement, and the pricing page itself shows components rather than amounts, so this article gives host-hours instead of currency."
+    a: "On the Azure Virtual Desktop pricing page and in the Azure pricing calculator. Rates depend on region, VM size and agreement, so this article gives host-hours instead of currency. Learn says the calculator's Azure Virtual Desktop module estimates session host VMs and the aggregate extra storage of optional features, so price licensing, monitoring and identity from their own pages."
 ---
 
-Azure Virtual Desktop cost, for session hosts in Azure, is the sum of seven lines: compute, disks, image and profile storage, networking, licensing and monitoring. Compute is the line your scaling settings control directly, because you pay for a VM only while it is allocated. This article walks through each line using [Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-desktop/licensing) and Microsoft's pricing page, then shows a host-hour example with stated assumptions.
+Azure Virtual Desktop cost, for session hosts in Azure, is the sum of eight lines: compute, disks, image storage, profile storage, networking, licensing, monitoring, and identity with supporting services. Compute is the line your scaling settings control directly, because you pay for a VM only while it is allocated. This article walks through each line using [Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-desktop/licensing) and Microsoft's pricing page, then shows a host-hour example with stated assumptions.
 
-It gives host-hours rather than currency amounts, because rates depend on region, VM size and agreement. Microsoft's [pricing page](https://azure.microsoft.com/en-us/pricing/details/virtual-desktop/) lists the components without amounts, so use it together with the Azure pricing calculator to fill in your own numbers.
+It gives host-hours rather than currency amounts, because rates depend on region, VM size and agreement. Check Microsoft's [pricing page](https://azure.microsoft.com/en-us/pricing/details/virtual-desktop/) and the Azure pricing calculator for the rates that apply to you.
 
 ## The cost model at a glance
 
@@ -36,10 +36,11 @@ It gives host-hours rather than currency amounts, because rates depend on region
 | Networking | Azure networking charges, listed as a component on the pricing page | None described |
 | Licensing | License entitlement or, for external users, per-user access pricing | None |
 | Monitoring | Log Analytics ingestion and retention | Not described; depends on what you collect |
+| Identity and supporting services | Entra ID tier, domain controller VMs if you use AD DS, App Attach and image-template storage | None described |
 
 The pricing page splits the model into two parts: user access rights and Azure infrastructure. For session hosts in Azure it lists no separate Azure Virtual Desktop service fee. Learn says you run no gateway or broker servers yourself. See [Azure Virtual Desktop](/entity/azure-virtual-desktop/) and [FinOps](/entity/finops/) for background.
 
-Other deployment models carry their own fees. The same page lists a per-virtual-core hourly service fee for Azure Local and a per-user monthly service fee for Azure Virtual Desktop Hybrid, both without amounts shown. Those are outside this article, as are services you attach yourself, such as backup or a firewall, which have their own pricing.
+Other deployment models carry their own fees. The same page lists a per-virtual-core hourly service fee for Azure Local and a per-user monthly service fee for Azure Virtual Desktop Hybrid, and says Hybrid users are billed per user per month. Those are outside this article, as are services you attach yourself, such as backup or a firewall, which have their own pricing.
 
 ## Compute: the line you steer
 
@@ -54,7 +55,7 @@ Two design choices set the compute line:
 
 **Disks.** Learn says managed disks are billed according to their provisioned size, prorated hourly, regardless of how much data is written. The power-state page adds that disks keep incurring charges when the VM is deallocated. For disk types, Learn lists Standard SSD for web servers, lightly used enterprise applications and development and test, and Premium SSD for production workloads that need high performance and low latency.
 
-**Images.** The pricing page lists storage for operating system images, data disks and user profiles under infrastructure. It shows no amounts, so look up the storage service you keep images in.
+**Images.** The pricing page lists storage for operating system images, data disks and user profiles under infrastructure. Look up the pricing of the storage service you keep images in.
 
 **Profile storage.** For [FSLogix](/entity/fslogix/) profile containers, Learn recommends Azure Files for most customers and lists [Azure NetApp Files](/entity/azure-netapp-files/) and Storage Spaces Direct as alternatives. Billing differs by option:
 
@@ -66,7 +67,7 @@ Learn's tier guidance by workload says standard shares for light workloads under
 
 ## Networking
 
-Networking is the least documented line. Learn's billing page notes that disks and networking continue to incur charges alongside the power-state table and points to Azure's networking pricing, and the Azure Virtual Desktop pricing page lists networking as an infrastructure component. Neither names meters or amounts for session hosts. Check your own bill for data transfer and virtual network items, and treat the line as a variable until you have a few weeks of data.
+Learn's cost page lists network bandwidth among session host costs and adds that the total may include egress network traffic to Microsoft 365 services, such as OneDrive for Business or Exchange Online. The power-state page notes that networking continues to incur charges for a deallocated VM. This article gives no figure for the line: check your own bill for data transfer and virtual network items, and treat it as a variable until you have a few weeks of data.
 
 ## Licensing: who is entitled, and what that costs
 
@@ -79,6 +80,10 @@ Learn's licensing page splits the question by user type.
 ## Monitoring: the line people forget
 
 Azure Virtual Desktop Insights stores data in a Log Analytics workspace. Learn's cost page estimates 92 to 145 MB ingested per VM per day, or roughly 3 to 5 GB per VM per 31 days, and says performance counters should make up 80 to 99 percent of that. Learn stresses these are examples: actual cost depends on your size, health, usage and Azure Monitor pricing model. See [Azure Virtual Desktop Insights](/entity/avd-insights/) and [Log Analytics](/entity/log-analytics/).
+
+## Identity and supporting services
+
+Learn's cost page treats identity as its own component. Microsoft Entra ID has a free tier and licensed tiers for some features, such as conditional access. If you use Active Directory Domain Services, the domain controller VMs add their own compute, storage and networking cost. Microsoft Entra Domain Services is the managed alternative. The same page lists App Attach application storage (for example Azure Files or Azure NetApp Files) and storage and bandwidth for custom image templates as accompanying costs.
 
 ## Commitment discounts and Azure Hybrid Benefit
 
@@ -95,12 +100,12 @@ The example uses invented numbers to show the shape, not a benchmark. Ten sessio
 - **Always on:** 10 hosts x 24 hours x 30 days = 7,200 host-hours.
 - **Autoscale:** on each weekday, ramp-up 07:00 to 09:00 with 2 hosts (4 host-hours), peak 09:00 to 17:00 with 8 hosts (64), ramp-down 17:00 to 19:00 with 4 hosts (8), and 0 hosts afterwards. That is 76 host-hours a day. The assumption is that weekends run 0 hosts, so the month is 76 x 22 = 1,672 host-hours.
 
-At the hypothetical rate, that is 1,672 units against 7,200, about 23 percent of the always-on figure. Learn says autoscale can reach zero running hosts only if the minimum percentage of hosts is 0 and no user sessions remain, including disconnected ones. Disks, image and profile storage, licensing and monitoring do not follow the host-hour count, so the total falls by less than the compute line alone.
+At the hypothetical rate, that is 1,672 units against 7,200, about 23 percent of the always-on figure. Learn says autoscale can turn off all VMs if the minimum percentage of hosts is 0% and no user sessions remain, including disconnected ones. Disks, image and profile storage, licensing, monitoring and identity do not follow the host-hour count, so the total falls by less than the compute line alone.
 
 ## What to do with the model
 
 1. List your session hosts by pool, size and expected running hours.
-2. Price each line in the Azure pricing calculator. Learn's What's new records two calculator updates in 2021: in June 2021 a storage section (managed disk and file storage bandwidth) and a custom section that shows cost per user, and in December 2021 storage and networking or bandwidth costs. Check the calculator itself for its current state.
+2. Price session host VMs and optional-feature storage in the Azure pricing calculator. Learn says its Azure Virtual Desktop module can only estimate consumption costs for session host VMs and the aggregate additional storage of optional features, and that other features can be added as separate modules on the same calculator page. Price licensing, monitoring, identity and Microsoft 365 egress from their own pages or from your bill. Learn's What's new also records calculator updates in 2021 (a storage section and a custom cost-per-user section in June, storage and networking or bandwidth costs in December); check the calculator for its current state.
 3. Tag host pools with `cm-resource-parent` set to the host pool resource ID, so Cost Management can group costs by host pool. Learn says the tag does not affect billing, and the linked cost-analysis article is labelled preview.
 4. Decide commitments only after you have a few weeks of actual running hours.
 
@@ -111,6 +116,7 @@ The sibling article "15 ways to cut Azure Virtual Desktop cost without hurting u
 Retrieved 17 November 2026.
 
 - [Azure Virtual Desktop pricing](https://azure.microsoft.com/en-us/pricing/details/virtual-desktop/)
+- [Microsoft Learn: Understand and estimate the costs of Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/understand-estimate-costs)
 - [Microsoft Learn: Licensing Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/licensing)
 - [Microsoft Learn: Prerequisites for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/prerequisites)
 - [Microsoft Learn: Azure Virtual Desktop terminology](https://learn.microsoft.com/en-us/azure/virtual-desktop/terminology)
