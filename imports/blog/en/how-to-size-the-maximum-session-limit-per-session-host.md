@@ -67,7 +67,7 @@ Worked example: a medium workload on an 8-vCPU host gives 4 x 8 = 32 as a starti
 
 ## Step 4: Set the limit on the host pool
 
-You need an existing pooled host pool and the **Desktop Virtualization Host Pool Contributor** role. In the Azure portal the setting is under the host pool's **Properties**, next to **Load balancing algorithm**. The portal steps are listed in the explainer, so here is the scripted path from Learn, which also reads the value back:
+You need an existing pooled host pool and the **Desktop Virtualization Host Pool Contributor** role. In the Azure portal the setting is under the host pool's **Properties**, next to **Load balancing algorithm**. The portal steps are listed in the explainer, so here is the scripted path from Learn, which also reads the value back. Learn's example is titled for depth-first with a limit of 10: it sets `LoadBalancerType = 'DepthFirst'` as well, so change or remove that line if your pool uses breadth-first.
 
 ```powershell
 $parameters = @{

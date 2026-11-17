@@ -78,7 +78,7 @@ This article is the runbook for a single host. What drain mode is belongs to "Dr
 - **Disconnected sessions come back.** Learn's load-balancing page says that a user with an active or disconnected session who signs in again is sent to the host with that session, even in drain mode. A user without a session is never sent to a drained host. This is why step 3 matters: a host that looks empty can still hold disconnected sessions.
 - **An untagged pooled host is still in scope.** If you drain a host in a pooled host pool manually and do not tag it, autoscale can still start, stop or change the drain mode of that host, according to the FAQ. The tag is what takes the host out of scaling, not drain mode.
 - **Unsaved work is lost.** `Remove-AzWvdUserSession` ends the session. Learn's reference describes no way to recover the session, so send the message in step 4 first.
-- **A tag left behind keeps the host out of scaling.** Learn says tagged hosts still count toward the minimum percentage of hosts, but autoscale does not start them. Remove the tag in step 7, or capacity can shrink without a visible reason.
+- **A tag left behind keeps the host out of scaling.** Learn says tagged hosts are still part of the calculation of the minimum percentage of hosts, but autoscale does not start them. Remove the tag in step 7, or capacity can shrink without a visible reason.
 
 ## An example timeline for one host
 

@@ -11,7 +11,7 @@ keypoints:
   - "The sequence is: select the host with the fewest sessions, put it in drain mode, notify its users, wait, end the remaining sessions, deallocate the VM."
   - "Idle, disconnected and active sessions are all forced to sign out if the users do not sign out during the wait time."
   - "The wait time and the notification text are settings of the schedule, not fixed values: RampDownWaitTimeMinute and RampDownNotificationMessage in PowerShell. The cmdlet reference example uses 30 minutes and a short sample message."
-  - "Learn states no default and no allowed range for the wait time, and the pages in Sources do not describe how the message is displayed in the client, so test with a pilot host pool."
+  - "Learn states no default and no allowed range for the wait time, and how the message appears in the client is something to check in a pilot host pool."
 faq:
   - q: "Does force sign-out also sign out disconnected sessions?"
     a: "Yes. Microsoft Learn says idle, disconnected and active sessions are forced to sign out if the users do not sign out during the ramp-down wait time. The glossary defines a forced sign-out as ending an active or disconnected session without the user's consent."
@@ -37,7 +37,7 @@ Three scope rules come from Learn:
 
 ## The sequence, step by step
 
-1. **Consolidation check.** The scenarios page gives the minimum number of hosts as the total sessions (active plus disconnected) divided by the product of the maximum session limit and the capacity threshold. Hosts are whole units, so this article reads the result as rounded up. Only hosts beyond that number are candidates.
+1. **Consolidation check.** The scenarios page gives the minimum number of hosts as the total sessions (active plus disconnected) divided by the product of the maximum session limit and the capacity threshold. The glossary adds that the result is rounded up to the nearest whole number. Only hosts beyond that number are candidates.
 2. **Host selection.** Autoscale selects the host with the fewest sessions. If several hosts have equal numbers, the scenarios page says it chooses at random.
 3. **Drain mode.** The host goes into [drain mode](/entity/avd-drain-mode/) and accepts no sessions from new users.
 4. **Notification.** Users on that host receive a notification that they will be signed out after a certain time.
@@ -56,7 +56,7 @@ Scenario 3 on the scenarios page uses six session hosts, depth-first load balanc
 - One user signs out, leaving three sessions on two hosts, 30 percent. Now one more host can go. Autoscale selects the one with the fewest sessions, drains it, notifies its users and signs out the rest after the wait.
 - The forced-out user reconnects, and three sessions now run on one host, 60 percent. The last host stays on, because turning it off would breach the minimum percentage of hosts.
 
-You can run the same check with your own values. Suppose four hosts run at the start of ramp-down with 12 sessions in total, a maximum session limit of 20 and a threshold of 75 percent. The formula gives 12 / (20 x 0.75) = 0.8, which this article rounds up to one host. Three hosts are therefore candidates, subject to the minimum percentage, and autoscale drains the hosts with the fewest sessions first. The numbers are illustrative, not from Learn.
+You can run the same check with your own values. Suppose four hosts run at the start of ramp-down with 12 sessions in total, a maximum session limit of 20 and a threshold of 75 percent. The formula gives 12 / (20 x 0.75) = 0.8, which rounds up to one host, as in the glossary's formula. Three hosts are therefore candidates, subject to the minimum percentage, and autoscale drains the hosts with the fewest sessions first. The numbers are illustrative, not from Learn.
 
 ## What users see, and where you set it
 
@@ -77,7 +77,7 @@ The cmdlet reference describes the wait time as the number of minutes to wait to
 
 **The end of the session.** After the wait time the session ends. Learn calls it a forced sign-out, not a disconnect, so plan for unsaved work to be lost. A user who reconnects while the host is drained is handled by the load balancer: Learn says a user with an active or disconnected session on a drained host is still redirected there, while new users are never sent to a drained host. Once the forced sign-out has ended the old session, the next connection goes to another host. For personal desktops, autoscale does not use drain mode when it deallocates, and a user who connects during deallocation receives "No resources available".
 
-The pages in Sources do not describe how the message appears in the Remote Desktop client or the Windows App, or how applications react to the sign-out. Write the message so that it stands on its own, with the time and the action, and check it in a pilot host pool.
+Write the message so that it stands on its own, with the time and the action, and check in a pilot host pool how it appears in the Remote Desktop client or the Windows App and how applications react to the sign-out.
 
 ## Related settings
 

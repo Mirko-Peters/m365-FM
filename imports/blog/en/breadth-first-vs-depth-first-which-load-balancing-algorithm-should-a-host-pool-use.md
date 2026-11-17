@@ -9,7 +9,7 @@ topics: [avd-breadth-first-load-balancing, avd-depth-first-load-balancing, avd-h
 keypoints:
   - "Microsoft Learn describes breadth-first as the choice when user experience matters most, and depth-first as the choice for cost-conscious organizations that want granular control over how many session hosts are powered on."
   - "Depth-first requires a maximum session limit. Breadth-first does not, and its default limit of 999999 is also the highest value you can set."
-  - "Breadth-first picks randomly among the half of eligible hosts with the fewest sessions, so Learn notes that sessions may not be evenly distributed. Depth-first is deterministic: the eligible host with the most sessions wins."
+  - "Breadth-first picks randomly among the half of eligible hosts with the fewest sessions, so Learn notes that sessions may not be evenly distributed. Depth-first picks the eligible host with the most sessions and, on a tie, the first host from the query."
   - "Both algorithms send a returning user with an active or disconnected session back to that host, even if it is in drain mode. Load balancing does not apply to personal host pools."
   - "You can change the algorithm at any time. If a scaling plan is assigned, Learn says autoscale applies the algorithm from the schedule instead of the host pool setting."
 faq:
@@ -49,7 +49,7 @@ Learn's own breadth-first example: with nine hosts holding 11 to 19 sessions, a 
 
 The numbers below are an illustration built from the selection rules above, not a Learn example.
 
-**Depth-first.** All four hosts start empty, so the first user is a tie and goes to the first host returned by the query, call it H1. From then on H1 has the most sessions among hosts below the limit, so sessions 2 to 10 also land on H1. H2 takes the next 10, and H3 takes the last 5. H4 stays empty. If H1 and H2 are full at 10 and a 26th user arrives, H3 receives it.
+**Depth-first.** All four hosts start empty, so the first user is a tie and goes to the first host returned by the query, call it H1; Learn does not define the query order, and H1 to H4 are only labels. From then on H1 has the most sessions among hosts below the limit, so sessions 2 to 10 also land on H1. H2 takes the next 10, and H3 takes the last 5. H4 stays empty. If H1 and H2 are full at 10 and a 26th user arrives, H3 receives it.
 
 **Breadth-first.** Each new session goes to a random host among the two with the fewest sessions. With 25 users and 4 hosts the average is about 6 sessions per host. Because the choice is random, an individual host can finish noticeably above or below that average, and the split differs from day to day.
 

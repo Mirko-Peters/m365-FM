@@ -21,7 +21,7 @@ faq:
     a: "No. Learn says load balancing does not apply to personal host pools, because each user has a 1:1 mapping to a session host. Personal pools use automatic or direct assignment."
 ---
 
-Depth-first load balancing sends each new user session to the session host that already has the most sessions, as long as that host has not reached its maximum session limit. When a host is full, the next one starts to fill. The rule is deterministic, and it is the reason a pooled host pool can end up with some hosts full and others empty.
+Depth-first load balancing sends each new user session to the session host that already has the most sessions, as long as that host has not reached its maximum session limit. When a host is full, the next one starts to fill. The rule is simple, and it is the reason a pooled host pool can end up with some hosts full and others empty.
 
 This article explains the algorithm for a pooled [host pool](/entity/avd-host-pool/). For a side-by-side decision against breadth-first, see the article "Breadth-first vs depth-first: which load balancing algorithm should a host pool use". Sources are listed at the end and were retrieved on 17 November 2026.
 
@@ -89,7 +89,7 @@ Pick the limit with the knowledge that depth-first deliberately runs the first h
 
 Depth-first only decides placement. The cost effect depends on something switching idle hosts off. Learn describes autoscale for pooled pools as turning VMs on and off based on the capacity thresholds and schedules you define, and its FAQ suggests depth-first in ramp-down and off-peak so that autoscale can consolidate sessions to the minimum number of hosts. Learn's autoscale scenarios page says that for pooled host pools autoscale ignores the load-balancing algorithm in the host pool settings and applies the one from the schedule. That interaction has its own article, "Depth-first load balancing and autoscale: how the schedule overrides the host pool setting". This article covers power management autoscaling, which the scenarios page labels generally available.
 
-Learn's sizing page adds a caution about host size. For 20 or more users per VM, several smaller VMs perform better than one or two large ones. Many smaller VMs are also easier to patch and to shut down when idle, which suits depth-first.
+Learn's sizing page adds a caution about host size. For 20 or more users per VM, several smaller VMs perform better than one or two large ones. Learn adds that it is easier to shut down VMs that need updating or are not in use when you run many smaller VMs, because more of them have no active users. The same page names breadth-first as an alternative when many users sign in at once, which pulls against depth-first.
 
 ## Setting depth-first in the portal
 

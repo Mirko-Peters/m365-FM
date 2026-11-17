@@ -97,7 +97,7 @@ The scope is narrow. The setup page says public network Shortpath (STUN/TURN) is
 ## Limits and status
 
 - **Status.** Learn's What's new shows Private Link in preview in November 2022 and lists it as generally available in its July 2023 entry. The setup page says the PowerShell cmdlets need the preview version of the Az.DesktopVirtualization module, added in version 5.0.0.
-- **Clients.** The setup page names Remote Desktop client for Windows 1.2.4066 or later, and the Windows App on macOS and iOS/iPadOS. The overview adds that a Windows client on a private network without internet access, subscribed to both public and private feeds, cannot reach the feed.
+- **Clients.** The overview says all Remote Desktop clients can be used with Private Link. The setup page lists the Remote Desktop app on any platform, requires version 1.2.4066 or later of the Remote Desktop client for Windows, and also names the Windows App on macOS and iOS/iPadOS. The overview adds that a Windows client on a private network without internet access, subscribed to both public and private feeds, cannot reach the feed.
 - **Regions and cost.** The Private Link overview page lists no supported regions and no prices. The Tech Community announcement, published on 14 July 2023 and updated on 28 July 2023, states: "As of July 28, 2023, Private Link for Azure Virtual Desktop is generally available in Azure Government." Check Azure's current pricing for private endpoints before you plan many of them.
 
 ## Sources
