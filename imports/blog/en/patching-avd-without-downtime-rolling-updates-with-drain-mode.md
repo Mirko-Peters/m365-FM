@@ -1,6 +1,6 @@
 ---
 title: "Patching AVD without downtime: rolling updates with drain mode"
-summary: "To patch Azure Virtual Desktop session hosts without downtime, update them in small waves: tag, drain, empty, patch, restart and return each wave to service before the next. Microsoft recommends image-based servicing for pooled multi-session hosts, so rolling drain fits mainly Windows Server, single-session Windows client and the retirement of old hosts."
+summary: "To patch Azure Virtual Desktop session hosts without downtime, update them in small waves: tag, drain, empty, patch, restart and return each wave to service before the next. Microsoft recommends image-based servicing for pooled multi-session hosts and rates pooled single-session Windows client as not recommended, so rolling drain fits mainly pooled Windows Server hosts and the retirement of old hosts."
 status: review
 publish: false
 author: mirko-p
@@ -10,7 +10,7 @@ keypoints:
   - "Drain mode stops a session host from accepting new sessions. Existing sessions stay active until users sign out or an administrator ends them, and administrators can still connect to the host directly."
   - "Autoscale turns drain mode on or off on every host included in scaling, no matter who set it. Microsoft Learn says to use the scaling plan's exclusion tag for hosts you maintain."
   - "A rolling update is limited by capacity. Hosts in drain mode do not take new sessions, so the remaining hosts must be able to hold the users who reconnect."
-  - "Learn's September 2026 servicing guidance recommends session host update or Azure Compute Gallery images for Windows client multi-session pools and rates Windows Update there as not recommended. Rolling drain remains the pattern for patch-in-place hosts."
+  - "Learn's September 2026 servicing guidance recommends session host update or Azure Compute Gallery images for Windows client multi-session pools and rates Windows Update there as not recommended. It also rates pooled single-session Windows client as not recommended, so rolling drain is mainly the pattern for patch-in-place Windows Server hosts."
   - "A user with a disconnected session is sent back to that host even when drain mode is on, so a host with disconnected sessions does not empty by itself."
 faq:
   - q: "Does drain mode disconnect users who are already signed in?"
@@ -21,7 +21,7 @@ faq:
     a: "Learn says not to change drain mode on VMs during a session host update, because the service manages it automatically. Use drain mode for manual rolling maintenance instead."
 ---
 
-To patch Azure Virtual Desktop session hosts without downtime, work in waves. Tag a few hosts, put them into drain mode, wait until their users have signed out, patch and restart them, check that they are healthy, return them to service, and only then take the next wave. This article covers how to size a wave, how the wave loop runs, why autoscale can undo your work, and when Microsoft's own guidance points away from patching in place. The cmdlet-level runbooks live in the companion articles "How to use drain mode for patching and maintenance of session hosts" and "How to use the exclusion tag for maintenance windows and special session hosts", so this one concentrates on planning and decisions. Sources are listed at the end and were retrieved on 17 November 2026.
+To patch Azure Virtual Desktop session hosts without downtime, work in waves. Tag a few hosts, put them into drain mode, wait until their users have signed out, patch and restart them, check that they are healthy, return them to service, and only then take the next wave. This article covers how to size a wave, how the wave loop runs, why autoscale can undo your work, and when Microsoft's own guidance points away from patching in place. The cmdlet-level runbooks live in the companion articles "How to use drain mode for patching and maintenance of session hosts" and "How to use the exclusion tag for maintenance windows and special session hosts", so this one concentrates on planning and decisions.
 
 ## What drain mode does
 
@@ -34,16 +34,16 @@ Two details change how a wave behaves:
 
 ## Roles for the wave
 
-Two built-in roles split the work, and neither covers the other's tasks, per the RBAC page:
+Two built-in roles matter for a wave, according to the RBAC page:
 
 - **Desktop Virtualization Session Host Operator** allows viewing and removing session hosts and changing drain mode.
-- **Desktop Virtualization User Session Operator** allows sending messages, disconnecting sessions and signing users out, but does not allow changing drain mode.
+- **Desktop Virtualization User Session Operator** allows sending messages, disconnecting sessions and signing users out, but does not allow host pool or session host management such as removing a session host or changing drain mode.
 
-If one team switches drain mode and another handles user messages, each needs its own role. Learn's drain mode page lists only the Session Host Operator role as its prerequisite.
+Learn's drain mode page lists only the Session Host Operator role as its prerequisite. If a separate team handles user messages, the User Session Operator role covers that work but not drain mode. The RBAC page does not say whether the Session Host Operator role also covers the user-session actions, so check in your tenant before you decide whether one team needs both roles.
 
 ## Rolling drain or image-based servicing?
 
-Microsoft added "Windows update management methodologies for session hosts" to Learn in September 2026 (page dated 29 October 2026). It states that image-based servicing through session host update is recommended for pooled environments because it provides consistent host configuration, easier rollback and reduced impact to active user sessions. Its method tables for monthly security and quality updates read as follows:
+Microsoft added "Windows update management methodologies for session hosts" to Learn in September 2026 (page dated 29 October 2026). It states that image-based servicing through session host update is recommended for pooled environments because it provides consistent host configuration, easier rollback and reduced impact to active user sessions. Its table for monthly security and quality updates lists seven delivery methods; this excerpt omits the Windows Autopatch, Configuration Manager and automatic guest patching rows:
 
 | Method | Windows client Enterprise | Windows client multi-session | Windows Server |
 |---|---|---|---|
@@ -55,14 +55,15 @@ Microsoft added "Windows update management methodologies for session hosts" to L
 The page does not use the term rolling drain, but its image-based workflow ends with deploying new hosts and then draining and removing the old ones. The consequence for this article:
 
 - **Windows client multi-session pools:** Learn favors replacing hosts over patching them. Use rolling drain to retire the old hosts, not as the monthly patch route. Session host update needs a session host configuration; without one, the Compute Gallery route applies.
-- **Windows client Enterprise and Windows Server:** patching in place is a documented route, and rolling drain is how you do it without downtime.
-- **Local state:** Learn notes that user data and local storage are not kept when hosts are replaced through image-based servicing. Hosts that carry such state are a reason to stay with patching in place where the table permits it.
+- **Windows Server in pooled pools:** Learn's host pool type table rates it as supported, and Windows Update (supported) and Azure Update Manager (recommended) are the in-place routes. Rolling drain is how you patch in place without downtime.
+- **Windows client Enterprise (single-session):** the same table rates pooled pools of it as not recommended, with the footnote that session density is set to 1, and personal pools as supported. For a pooled single-session pool, rolling drain is therefore an exception. Personal pools are patched per VM, and the wave logic in this article does not carry over to them.
+- **Local state:** Learn notes that user data and local storage are not kept when hosts are replaced through image-based servicing. Hosts that carry such state are a reason to stay with patching in place where the tables permit it.
 
 ## Autoscale can undo drain mode
 
 If the pool has a [scaling plan](/entity/avd-scaling-plan/), drain mode is not yours alone. The autoscale FAQ says autoscale still turns VMs in drain mode on or off no matter who put them there, and that it overrides drain mode on all VMs included in scaling. The scenarios page repeats this for pooled pools and tells you to use exclusion tags when updating VMs.
 
-The [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) is a tag name that you define on the scaling plan. The glossary calls it a property of the plan that you apply to the VMs to leave out of scaling actions. In practice that is an ordinary Azure resource tag on the VM whose name matches the plan's exclusion tag, for example `excludeFromScaling`, Learn's example. Autoscale then does not turn the VM on or off or change its drain mode. The autoscale pages do not say whether the tag's value is compared, and the exclusion tag runbook covers the portal and `Update-AzTag` steps. Two further points matter for patching:
+The [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) is a tag name that you define on the scaling plan. The glossary calls it a property of the plan that you apply to the VMs to leave out of scaling actions. In practice that is an ordinary Azure resource tag on the VM whose name matches the plan's exclusion tag, for example `excludeFromScaling`, Learn's example. Autoscale then does not turn the VM on or off or change its drain mode. The autoscale pages speak only of the tag name, and the exclusion tag runbook covers the portal and `Update-AzTag` steps. Two further points matter for patching:
 
 - Tagged hosts still count toward the minimum percentage of hosts calculation, but autoscale cannot start them.
 - Learn asks you to keep sensitive information, such as user principal names, out of exclusion tags.
@@ -87,14 +88,14 @@ The sequence repeats for each wave. The companion articles hold the commands; th
 
 1. **Check the starting state.** Every host in the pool shows as available, and you have a test user for a smoke test.
 2. **Tag the wave's hosts** with the scaling plan's exclusion tag.
-3. **Turn drain mode on** in the portal (**Host pools** > pool > **Session hosts** > **Turn drain mode on**) or with `Update-AzWvdSessionHost ... -AllowNewSession:$false`. The cmdlet reference documents this call; it does not use the term drain mode and describes `-AllowNewSession` as "Allow a new session".
+3. **Turn drain mode on** in the portal (**Host pools** > pool > **Session hosts** > **Turn drain mode on**) or with PowerShell. Learn's drain mode page calls `Update-AzWvdSessionHost` with `ResourceGroupName`, `HostPoolName`, `Name` and `AllowNewSession = $False`; `$True` turns drain mode off again. Run it once per host.
 4. **Empty the hosts.** `Get-AzWvdUserSession -ResourceGroupName <rg> -HostPoolName <pool> -SessionHostName <host>` lists the sessions on one host. Its `-Filter` parameter, an OData expression on `userprincipalname` and `sessionstate`, exists only in the form without `-SessionHostName`, which lists the whole pool. `Send-AzWvdUserSessionMessage` requires the resource group, pool, host and `-UserSessionId`; title and body are optional. After the cut-off, `Remove-AzWvdUserSession` ends what remains. Its `-Force` switch is described only as forcing the deletion, so try it on a non-production pool first. Ending a session can lose unsaved work.
 5. **Patch and restart** the hosts with your normal tooling.
 6. **Verify.** Check in the portal that each host is available and that a test sign-in works. Administrators can sign in to a drained host directly for this purpose.
 7. **Turn drain mode off**, remove the tag, and wait at least 60 seconds before you refresh the portal, because Learn says the status might appear out of sync.
 8. **Confirm the host takes sessions again** before you start the next wave.
 
-Learn's documentation does not name a command that reports the drain state, so use the portal for the check.
+Check the drain state of each host in the portal's **Session hosts** list, after the 60-second wait.
 
 ## Rolling drain compared with session host update
 

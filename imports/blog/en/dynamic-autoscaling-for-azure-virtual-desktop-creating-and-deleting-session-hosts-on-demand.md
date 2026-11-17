@@ -10,7 +10,7 @@ keypoints:
   - "When the number of hosts needed is not larger than the minimum host pool size, autoscale only turns hosts on. When it is larger, autoscale turns on stopped hosts and creates additional ones, up to the maximum host pool size."
   - "Two settings steer the mix: the same minimum and maximum host pool size means only start and deallocate, and a minimum percentage of active hosts of 100 means only create and delete."
   - "If the host count exceeds the phase's maximum, which can happen when the maximum differs per phase, autoscale deletes active deallocated hosts without sessions and then continues to delete or deallocate by schedule and capacity threshold, except in the ramp-up phase."
-  - "New hosts get the latest valid and stable image version of the default session host configuration."
+  - "New hosts get the latest valid and stable image version of the default session host configuration, if you do not already have an active session host configuration."
   - "Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, in July 2026. Some Learn pages still carry preview wording; check the current page before relying on a limit."
 faq:
   - q: "When does autoscale create a host instead of just starting one?"
@@ -23,7 +23,7 @@ faq:
 
 Dynamic autoscaling for [Azure Virtual Desktop](/entity/azure-virtual-desktop/) decides between three actions. Per the Learn FAQ, it only turns hosts on while the number of hosts needed is not larger than the minimum host pool size, turns on stopped hosts and creates additional ones when more are needed, and deletes hosts when the pool exceeds the maximum or when it scales in. It works only for pooled host pools with a session host configuration, and Microsoft announced its general availability in July 2026, although some Learn pages still carry preview wording.
 
-This article is about that decision. The status details, requirements and network rules are in the article "Requirements and limits of dynamic autoscaling in Azure Virtual Desktop", the phases in the article about the four autoscale phases, and the contrast with the older method in "Power management autoscaling vs dynamic autoscaling". All pages cited here were retrieved on 17 November 2026.
+This article is about that decision. The status details, requirements and network rules are in the article "Requirements and limits of dynamic autoscaling in Azure Virtual Desktop", the phases in the article about the four autoscale phases, and the contrast with the older method in "Power management autoscaling vs dynamic autoscaling: which one fits your host pools".
 
 ## What the method adds
 
@@ -66,7 +66,7 @@ Two levers come from the FAQ:
 1. **Only start and deallocate.** Choose power management autoscaling when you create the plan, or use dynamic autoscaling and set the same value for minimum and maximum host pool size.
 2. **Only create and delete.** Set the minimum percentage of active hosts to 100. Autoscale then creates or deletes hosts only if used capacity exceeds or drops below the capacity threshold. Learn recommends exactly this for hosts with ephemeral OS disks, which cannot be deallocated.
 
-What the sources do not state is which individual hosts autoscale deletes on scale-in, as opposed to deallocates, when both are possible. The final action is only described as "deallocates or deletes". Test with a small pool before you rely on a particular outcome.
+Learn does not state which individual hosts autoscale deletes on scale-in, as opposed to deallocates, when both are possible. The final action is only described as "deallocates or deletes". Test with a small pool before you rely on a particular outcome.
 
 ## Scale-in and the exclusion tag
 

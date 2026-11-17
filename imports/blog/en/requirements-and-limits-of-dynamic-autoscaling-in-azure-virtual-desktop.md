@@ -121,7 +121,7 @@ Learn lists these limits for autoscale in general:
 
 ## Open points
 
-The pages checked give no maximum host pool size for a dynamic plan beyond the deployment form values above, and no limit for the number of schedules or host pools per plan. The scenarios page also contradicts itself: scenario 4 shows a minimum percentage of hosts of 19% in its table and 10% in its text.
+The Learn pages listed under Sources state no maximum host pool size for a dynamic plan beyond the deployment form values above, and no limit for the number of schedules or host pools per plan. The scenarios page also contradicts itself: scenario 4 shows a minimum percentage of hosts of 19% in its table and 10% in its text.
 
 ## Related
 
