@@ -21,7 +21,7 @@ faq:
     a: "No. Learn says load balancing does not apply to personal host pools, because users always have a 1:1 mapping to a session host. Only pooled host pools use breadth-first or depth-first."
 ---
 
-Breadth-first load balancing in Azure Virtual Desktop sends each new user session to a session host chosen at random from the half of available hosts that currently have the fewest sessions. It aims to spread users across the pool so that CPU, memory and disk on each host are less contended, and it does not require a maximum session limit. This article explains the selection rule, the settings that interact with it, how it behaves with autoscale, and how to configure it. A side-by-side decision between breadth-first and depth-first is covered in a separate article of this series.
+Breadth-first load balancing in Azure Virtual Desktop sends each new user session to a session host chosen at random from the half of available hosts that currently have the fewest sessions. It aims to spread users across the pool so that CPU, memory and disk on each host are less contended, and it does not require a maximum session limit. The side-by-side decision between breadth-first and depth-first is covered in a separate article of this series.
 
 ## How a host is chosen
 
@@ -29,7 +29,7 @@ Learn describes the algorithm in two steps. First it queries the session hosts i
 
 Learn's own example: nine session hosts have 11, 12, 13, 14, 15, 16, 17, 18 and 19 sessions. A new session does not automatically go to the host with 11. It can go to any of the first five hosts, those with the fewest sessions, at random. Learn states the consequence: because of the randomization, some sessions may not be evenly distributed across all session hosts.
 
-The practical reading is that breadth-first keeps the heavily loaded hosts from receiving new sessions, but it does not guarantee equal counts. To see the real spread, [Azure Virtual Desktop Insights](/entity/avd-insights/) can show the number of sessions on each host; this is a practical suggestion, not something Learn states for breadth-first.
+The practical reading is that breadth-first keeps the most heavily loaded hosts from receiving new sessions, but it does not guarantee equal counts.
 
 ## Rules shared with depth-first
 
@@ -45,7 +45,7 @@ Autoscale changes this. The create-and-assign page says that when you use autosc
 
 A scaling plan sets a load balancing algorithm per phase. The scenarios page says that for pooled host pools autoscale ignores the algorithm in the host pool settings and applies load balancing based on the schedule, and the create-and-assign page says the preference chosen in the schedule overrides the one in the original host pool settings. That page also recommends breadth-first for ramp-up, to distribute users across existing hosts and keep access times fast. The autoscale FAQ gives an example for the day as a whole: breadth-first during ramp-up and peak for an even distribution of sessions, and depth-first during ramp-down and off-peak so autoscale can consolidate sessions onto fewer hosts. The article on depth-first load balancing and autoscale covers the phase-by-phase override, so this section stays with breadth-first. Learn does not say whether the host pool's own **Load balancing algorithm** property changes when a plan takes over; what it states is that the schedule is what autoscale applies.
 
-To collect autoscale logs, open the scaling plan in the Azure portal, go to **Diagnostic Settings**, select **Add diagnostic setting**, select **Autoscale logs** and send them to a storage account or an event hub. For pooled host pools, Learn's diagnostics page recommends the autoscale data integrated with [Azure Virtual Desktop Insights](/entity/avd-insights/) for a more comprehensive view. Its sample log, dated 2021, shows an `HostPoolLoadBalancerTypeUpdated` entry with `PreviousLoadBalancerType` set to `BreadthFirst`, `NewLoadBalancerType` set to `DepthFirst` and the message "Host pool's load balancing algorithm updated". Learn does not say when autoscale writes such an entry. See [autoscale schedule phases](/entity/avd-autoscale-schedule-phases/).
+To collect autoscale logs, open the scaling plan in the Azure portal, go to **Diagnostic Settings**, select **Add diagnostic setting**, select **Autoscale logs** and send them to a storage account or an event hub. For pooled host pools, Learn's diagnostics page recommends the autoscale data integrated with [Azure Virtual Desktop Insights](/entity/avd-insights/) for a more comprehensive view. Its sample log, dated 2021, shows a `HostPoolLoadBalancerTypeUpdated` entry with `PreviousLoadBalancerType` set to `BreadthFirst`, `NewLoadBalancerType` set to `DepthFirst` and the message "Host pool's load balancing algorithm updated". Learn does not say when autoscale writes such an entry. See [autoscale schedule phases](/entity/avd-autoscale-schedule-phases/).
 
 Learn's first autoscale scenario uses breadth-first in ramp-up. The pool has six session hosts, a 30 percent capacity threshold, a 30 percent minimum percentage of hosts and a maximum session limit of 5. Autoscale starts two hosts to meet the minimum, because 30 percent of six is 1.8, rounded up to two. Available capacity is 10.
 
@@ -53,15 +53,17 @@ Learn's first autoscale scenario uses breadth-first in ramp-up. The pool has six
 2. A fourth user signs in. Used capacity is 40 percent, above the threshold, so autoscale starts a third host. Capacity rises to 15 and used capacity falls to 27 percent.
 3. A fifth user brings it to 33 percent, so a fourth host starts. At 5 sessions on 4 hosts capacity is 20 and use is 25 percent.
 
-A new host that has no sessions falls in the fewest-sessions half, so new sign-ins reach it quickly. That follows from the selection rule rather than from a Learn statement, and the random choice means the first sessions may not all land on it.
-
 ## Cost and performance
 
 Learn frames the trade-off directly. Breadth-first is described as ideal for organizations that want to prioritize the user experience, because host resources such as CPU, memory and disk are generally less contended. Depth-first is described as ideal for cost-conscious organizations, because saturating one host at a time makes it easier to scale down the number of powered-on hosts when fewer users are signed in.
 
-For a breadth-first pool without autoscale, sessions stay spread over every running host. Our inference from the selection rule: hosts are less likely to empty out on their own, so shutting one down means getting its sessions off first. Learn's drain mode page says a host in drain mode accepts no new sessions, existing connections stay active until the user signs out or an administrator ends the session, and maintenance can start once no sessions remain; it does not cover deallocating the VM.
+Learn's drain mode page says a host in drain mode accepts no new sessions, existing connections stay active until the user signs out or an administrator ends the session, and maintenance can start once no sessions remain; it does not cover deallocating the VM.
 
-With power management autoscale, the ramp-down behavior depends on a setting in the scaling plan. Learn says that, with or without forced sign-out, autoscale only shuts down hosts if all existing sessions (active and disconnected) can be consolidated onto fewer hosts without exceeding the capacity threshold, and the minimum percentage of hosts is still respected. If you enable forced sign-out during ramp-down and a host qualifies, autoscale takes the host with the fewest sessions: it puts the host in drain mode, notifies the users, signs them out after the wait time and then deallocates the VM. Without forced sign-out, you choose instead between **VMs have no active or disconnected sessions** and **VMs have no active sessions**. A dynamic scaling plan deallocates or deletes the VM. By the same reasoning as above, without forced sign-out autoscale shuts down only hosts without sessions, and on a breadth-first pool, where sessions are spread over every host, few hosts are empty. That is an inference from the selection rule. The autoscale FAQ names depth-first in ramp-down and off-peak as a way for autoscale to consolidate sessions onto the minimal possible number of hosts. For the cost side, see the [scaling plan](/entity/avd-scaling-plan/) articles in this series; the decision itself is in the comparison with depth-first.
+With power management autoscale, the ramp-down behavior depends on a setting in the scaling plan. Learn says that, with or without forced sign-out, autoscale only shuts down hosts if all existing sessions (active and disconnected) can be consolidated onto fewer hosts without exceeding the capacity threshold, and the minimum percentage of hosts is still respected. If you enable forced sign-out during ramp-down and a host qualifies, autoscale takes the host with the fewest sessions: it puts the host in drain mode, notifies the users, signs them out after the wait time and then deallocates the VM. Without forced sign-out, you choose instead between **VMs have no active or disconnected sessions** and **VMs have no active sessions**.
+
+Learn pages describe what the second option does with disconnected sessions in different terms, and they are not reconciled. The scenarios page says in scenario 2 that autoscale "only turns off session hosts with no user sessions on them" unless the plan is in ramp-down and force logoff is enabled, and in scenario 3 that with "Stop VMs when no active sessions" autoscale "waits for users to sign out voluntarily, then consolidates and deallocates hosts with no sessions". The glossary says excess hosts are deallocated "if they have no sessions or if force sign-out is enabled". The autoscale FAQ says the setting prevents deallocating hosts with active (connected) sessions, that disconnected sessions still count as active for capacity calculations, and that it allows autoscale to consolidate disconnected users onto fewer hosts. Check the behavior on a test pool before you plan costs around either reading. On a breadth-first pool sessions are spread over every host, so few hosts are likely to be empty; that is our inference from the selection rule.
+
+To run zero hosts after hours, the FAQ says there must be zero user sessions, disconnected ones included, and the minimum percentage of hosts must be 0%. It suggests the group policy **Set time limit for disconnected sessions** (Session Time Limits under Remote Desktop Session Host) with a timeout such as 15 to 30 minutes that completes before ramp-down ends. For the cost side, see the [scaling plan](/entity/avd-scaling-plan/) articles in this series; the decision itself is in the comparison with depth-first.
 
 ## How to configure it
 
@@ -83,13 +85,15 @@ $parameters = @{
 Update-AzWvdHostPool @parameters
 ```
 
-To check the result, the same page uses `Get-AzWvdHostPool @parameters | Format-Table Name, LoadBalancerType, MaxSessionLimit`. The Azure CLI equivalent is `az desktopvirtualization hostpool update --resource-group <ResourceGroupName> --name <HostPoolName> --load-balancer-type BreadthFirst`. Learn notes that `Persistent` and `MultiplePersistent` apply only to personal host pools. To set a limit as well, add `-MaxSessionLimit` with your own value, for example `-MaxSessionLimit 12`. The 12 is only an example. Choose the limit from the sessions each host can carry, using Insights data on session counts and host performance. Learn recommends this approach for depth-first; we suggest the same data for breadth-first.
+To check the result, the same page uses `Get-AzWvdHostPool @parameters | Format-Table Name, LoadBalancerType, MaxSessionLimit`. The Azure CLI equivalent is `az desktopvirtualization hostpool update --resource-group <ResourceGroupName> --name <HostPoolName> --load-balancer-type BreadthFirst`. Learn introduces the PowerShell block as setting breadth-first "without adjusting the maximum session limit", so the existing limit stays as it was. To set a limit as well, add `-MaxSessionLimit` with your own value, for example `-MaxSessionLimit 12`; in the Azure CLI, Learn's depth-first example adds `--max-session-limit 10`. The 12 is only an example. Learn's depth-first section says you can use Insights to monitor the number of sessions on each session host and review session host performance to help determine the limit; the same data can help for breadth-first. For local use, Learn lists the `desktopvirtualization` Azure CLI extension or the `Az.DesktopVirtualization` PowerShell module as prerequisites.
 
 ## When to expect surprises
 
 - **Personal pools.** There is no algorithm to set. Learn says users map 1:1 to a session host.
 - **Uneven counts.** Random selection from half of the hosts will produce differences. They are expected behavior, not a fault.
-- **The limit.** 999999 is the default and the highest value, and autoscale requires a custom one. Outside autoscale, the load balancing page does not describe how the limit enters breadth-first selection, and the terminology page notes that a host can exceed it under concurrent sign-in load. Test in a pilot pool before you rely on it as a cap.
+- **Autoscale.** Under an assigned scaling plan for a pooled host pool, the schedule's algorithm is the one autoscale applies, not the host pool setting.
+- **The limit.** Outside autoscale, the load balancing page does not describe how the limit enters breadth-first selection, and the terminology page notes that a host can exceed it under concurrent sign-in load. Test in a pilot pool before you rely on it as a cap.
+- **Disconnected sessions.** They can keep hosts running after hours; see the zero-hosts note in the cost section.
 
 ## Related
 
@@ -110,5 +114,6 @@ All retrieved on 2026-11-17.
 - [Microsoft Learn: Drain session hosts for maintenance in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/drain-mode)
 - [Microsoft Learn: Autoscale FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq)
 - [Microsoft Learn: Autoscale scenarios for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)
+- [Microsoft Learn: Autoscale glossary for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary)
 - [Microsoft Learn: Set up diagnostics for Autoscale](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-diagnostics)
 - [Microsoft Learn: Update-AzWvdHostPool](https://learn.microsoft.com/en-us/powershell/module/az.desktopvirtualization/update-azwvdhostpool)

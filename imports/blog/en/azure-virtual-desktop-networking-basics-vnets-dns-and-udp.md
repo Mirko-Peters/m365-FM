@@ -25,10 +25,10 @@ Azure Virtual Desktop needs three network basics: a virtual network and subnet i
 
 ## How a connection reaches a session host
 
-Learn's [network connectivity article](https://learn.microsoft.com/en-us/azure/virtual-desktop/network-connectivity) says Azure Virtual Desktop uses reverse connect transport. Unlike an on-premises Remote Desktop Services deployment, there is no TCP listener on the session host waiting for RDP connections. Both sides connect outbound over HTTPS:
+Learn's [network connectivity article](https://learn.microsoft.com/en-us/azure/virtual-desktop/network-connectivity) says Azure Virtual Desktop uses reverse connect transport. Unlike on-premises Remote Desktop Services, no TCP listener on the session host waits for RDP connections. Both sides connect outbound over HTTPS:
 
-- At startup, the Remote Desktop Agent Loader service on the session host opens a persistent communication channel to the Azure Virtual Desktop broker, layered on a TLS connection.
-- When a user selects a resource, the client opens a TLS connection to a gateway instance. For public cloud connections, Learn says gateway latencies are evaluated, the gateways are grouped in 10 ms steps, and the one with the lowest latency and then the lowest number of existing connections is chosen.
+- At startup, the Remote Desktop Agent Loader service on the session host opens a persistent TLS channel to the Azure Virtual Desktop broker.
+- When a user selects a resource, the client opens a TLS connection to a gateway instance. For public cloud connections, gateways are grouped in 10 ms latency steps, and the one with the lowest latency and then the fewest existing connections is chosen.
 - The session host connects to the same gateway, and the gateway relays data between both endpoints. This is the base transport for RDP.
 
 For connections from clients and session hosts to the service infrastructure, TLS 1.2 is the minimum and TLS 1.3 can be used if the client operating system supports it (Windows 11 21H2 and Windows Server 2022 onward).
@@ -47,26 +47,26 @@ Address space and peering are not prescribed by these pages, so this article doe
 
 ## Outbound internet access in a new virtual network
 
-The required endpoints are public addresses, so a session host needs a working outbound path to them. Learn's [default outbound access article](https://learn.microsoft.com/en-us/azure/virtual-network/ip-services/default-outbound-access) says that for the API version released after 31 March 2026, subnets in new virtual networks have `defaultOutboundAccess` set to `false`. Virtual machines in these private subnets cannot rely on default outbound access and need an explicit outbound method to reach public endpoints. The Azure portal already defaults to private subnets, and deployments using earlier API versions keep the earlier default. Existing virtual networks are not changed unless their subnets are explicitly made private.
+The required endpoints are public addresses, so a session host needs an outbound path to them. Learn's [default outbound access article](https://learn.microsoft.com/en-us/azure/virtual-network/ip-services/default-outbound-access) says that for the API version released after 31 March 2026, subnets in new virtual networks have `defaultOutboundAccess` set to `false`. Virtual machines in these private subnets need an explicit outbound method to reach public endpoints. The Azure portal already defaults to private subnets, deployments using earlier API versions keep the earlier default, and existing virtual networks are not changed unless their subnets are made private.
 
 Learn lists four explicit methods:
 
 - Associate a NAT gateway with the subnet, which Learn calls the recommended method for most scenarios.
 - Associate a standard load balancer configured with outbound rules.
-- Associate a standard public IP with a network interface of the VM. Note that this conflicts with Learn's advice above to avoid public IP addresses on session hosts, so weigh it against that advice.
+- Associate a standard public IP with a network interface of the VM. This conflicts with Learn's advice to avoid public IP addresses on session hosts.
 - Add a firewall or network virtual appliance and point traffic to it with a user-defined route.
 
-The same article says Windows activation and Windows updates do not work in a private subnet without an explicit method of egress. Activation uses `azkms.core.windows.net` on TCP 1688, which appears in the endpoint table below.
+The same article says Windows activation and Windows updates do not work in a private subnet without an explicit method of egress.
 
 ## DNS
 
 Learn's [name resolution article](https://learn.microsoft.com/en-us/azure/virtual-network/virtual-networks-name-resolution-for-vms-and-role-instances) lists four methods for resources in a virtual network: Azure Private DNS zones, Azure-provided name resolution, your own DNS server, which can forward queries to Azure, and Azure DNS Private Resolver. Points that matter for session hosts:
 
 - The Azure DNS address is 168.63.129.16, a static address that does not change. A DNS server inside the network, such as a domain controller running in Azure, can answer its own domains and forward other queries to that address.
-- After you change DNS settings on a deployed virtual network or VM, renew the DHCP lease on the affected VMs. For Windows, Learn gives `ipconfig /renew`. Learn also says not to edit DNS server IPs inside a VM, because service healing can erase them.
-- If Azure VPN Gateway is used with custom DNS server IPs on a virtual network, the address 168.63.129.16 must be in the list to keep service uninterrupted.
+- After you change DNS settings on a deployed virtual network or VM, renew the DHCP lease on the affected VMs (`ipconfig /renew` on Windows). Do not edit DNS server IPs inside a VM, because service healing can erase them.
+- If Azure VPN Gateway is used with custom DNS server IPs on a virtual network, 168.63.129.16 must be in the list to keep service uninterrupted.
 
-The [required endpoints article](https://learn.microsoft.com/en-us/azure/virtual-desktop/required-fqdn-endpoint) adds a rule specific to Azure Virtual Desktop. Session host VMs need two Azure platform addresses: 169.254.169.254 (instance metadata, TCP 80) and 168.63.129.16 (ports 80 and 32526 on TCP, port 53 on TCP and UDP). Learn says traffic to these addresses must not be intercepted, proxied or redirected, because that causes provisioning failures, health monitoring problems and connection problems. Port 53 for that address is needed only with Azure-provided DNS. With custom DNS, queries go to your servers, and you must make sure the session hosts can reach them within the virtual network.
+The [required endpoints article](https://learn.microsoft.com/en-us/azure/virtual-desktop/required-fqdn-endpoint) adds a rule specific to Azure Virtual Desktop. Session host VMs need two Azure platform addresses: 169.254.169.254 (instance metadata, TCP 80) and 168.63.129.16 (ports 80 and 32526 on TCP, port 53 on TCP and UDP). Learn says traffic to these addresses must not be intercepted, proxied or redirected, because that causes provisioning failures, health monitoring problems and connection problems. Port 53 for that address is needed only with Azure-provided DNS; with custom DNS, make sure the session hosts can reach your servers.
 
 ## Outbound endpoints
 
@@ -81,9 +81,9 @@ All entries on the required endpoints page are outbound. A selection for session
 | `mrsglobalsteus2prod.blob.core.windows.net` | TCP 443 | Agent and side-by-side stack updates |
 | `*.service.windows.cloud.microsoft` | TCP 443 | Service traffic |
 
-The full list is longer and also includes certificate endpoints on TCP 80, so use the page as the reference, because Learn can change it. Learn says you must use the wildcard for FQDNs involving service traffic, and that Microsoft does not support deployments where the listed FQDNs are blocked. It offers no IP address range to allow in place of FQDNs, and recommends service tags and FQDN tags to simplify the configuration. The Azure Virtual Desktop service tag and FQDN tag are both named `WindowsVirtualDesktop`. Service tags work in network security group rules, Azure Firewall rules and user-defined routes. The Azure Virtual Desktop Agent URL Tool checks from a session host whether each endpoint is reachable.
+The full list is longer and also includes certificate endpoints on TCP 80, so use the page as the reference. Learn says you must use the wildcard for FQDNs involving service traffic, and that deployments where the listed FQDNs are blocked are not supported. It offers no IP address range in place of FQDNs, and recommends service tags and FQDN tags. The Azure Virtual Desktop service tag and FQDN tag are both named `WindowsVirtualDesktop`. Service tags work in network security group rules, Azure Firewall rules and user-defined routes. The Agent URL Tool checks from a session host whether each endpoint is reachable.
 
-For Azure Firewall, Learn's [firewall guidance](https://learn.microsoft.com/en-us/azure/firewall/protect-azure-virtual-desktop) says the firewall uses the FQDN tag `WindowsVirtualDesktop` to simplify the configuration. It also warns that disconnections can occur during Azure Firewall scale-ins if you route all traffic to the firewall with a default route. For hub-and-spoke designs, Learn's remedy is a route in the route table of the Azure Virtual Desktop subnet with destination type Service tag, destination service `WindowsVirtualDesktop` and next hop Internet, so that the gateway and broker are reached directly. In a private subnet, this route needs one more piece: Learn says routes with next hop type `Internet` break in a private subnet, and connections to the service tag destinations fail unless an explicit outbound method, such as a NAT gateway, is also configured for the source of the connection. Learn also says not to use TLS inspection with Azure Virtual Desktop.
+For Azure Firewall, Learn's [firewall guidance](https://learn.microsoft.com/en-us/azure/firewall/protect-azure-virtual-desktop) uses the FQDN tag `WindowsVirtualDesktop` and warns that disconnections can occur during Azure Firewall scale-ins if you route all traffic to the firewall with a default route. For hub-and-spoke designs, Learn's remedy is a route in the route table of the Azure Virtual Desktop subnet with destination type Service tag, destination service `WindowsVirtualDesktop` and next hop Internet, so that the gateway and broker are reached directly. In a private subnet, this route needs one more piece: Learn says routes with next hop type `Internet` break in a private subnet, and connections to the service tag destinations fail unless an explicit outbound method, such as a NAT gateway, is also configured for the source of the connection. Learn also says not to use TLS inspection with Azure Virtual Desktop.
 
 ## UDP and RDP Shortpath
 
@@ -100,7 +100,7 @@ Public network Shortpath via STUN and TURN is generally available in the Azure c
 
 ## Bandwidth and latency
 
-Learn's [bandwidth article](https://learn.microsoft.com/en-us/azure/virtual-desktop/rdp-bandwidth) gives graphics estimates for a single 1920x1080 monitor in default mode: idle 0.3 Kbps, Microsoft Word 100 to 150 Kbps, web browsing 6 to 6.5 Mbps and video playback 8.5 to 9.5 Mbps. It says that only changed screen areas are sent, and it states that throttling and rate-limiting are not supported for reverse connect transport, so QoS for bandwidth limits needs RDP Shortpath for managed networks. For quality, Learn's [connection quality article](https://learn.microsoft.com/en-us/azure/virtual-desktop/connection-latency) describes the `ConnectionGraphicsData` table, which Learn labels preview. It rates end-to-end delay per frame as good below 150 ms, okay from 150 to 300 ms and bad above 300 ms, and records data only when a metric is okay or bad. This is a different measurement from the round-trip time below 150 ms in the prerequisites, so do not compare the two numbers directly.
+Learn's [bandwidth article](https://learn.microsoft.com/en-us/azure/virtual-desktop/rdp-bandwidth) estimates graphics for a single 1920x1080 monitor in default mode: idle 0.3 Kbps, Microsoft Word 100 to 150 Kbps, web browsing 6 to 6.5 Mbps and video playback 8.5 to 9.5 Mbps. Throttle rate-limiting is not supported for reverse connect transport, so bandwidth limits need RDP Shortpath for managed networks. For quality, Learn's [connection quality article](https://learn.microsoft.com/en-us/azure/virtual-desktop/connection-latency) describes the `ConnectionGraphicsData` table, which Learn labels preview. It rates end-to-end delay per frame as good below 150 ms, okay from 150 to 300 ms and bad above 300 ms, and records data only when a metric is okay or bad. This is a different measurement from the round-trip time below 150 ms in the prerequisites, so do not compare the two numbers directly.
 
 ## A short network checklist
 
