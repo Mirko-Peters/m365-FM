@@ -58,7 +58,7 @@ Configuration from the article, under `HKEY_LOCAL_MACHINE > SOFTWARE > FSLogix >
 
 `type=smb,connectionString=\\primarystgprofiles\profiles;type=smb,connectionString=\\secondarystgprofiles\profiles`
 
-On the secondary host pool you reverse the order, so local storage comes first. Per FSLogix's Cloud Cache overview, it works from a local cache, flushes changes asynchronously to every listed provider, and reads from one provider, following the listed order. Set it up twice, once for the [profile container](/entity/fslogix-profile-container/) and once for the Office container (key under `SOFTWARE > Policy > FSLogix > ODFC`); the article warns that leaving the Office setting off can misalign data between regions.
+On the secondary host pool you reverse the order, so local storage comes first. Per FSLogix's Cloud Cache overview, Cloud Cache works from a local cache, flushes changes asynchronously to every listed provider, and reads from one provider, following the listed order. Set it up twice, once for the [profile container](/entity/fslogix-profile-container/) and once for the Office container (key under `SOFTWARE > Policy > FSLogix > ODFC`); the article warns that leaving the Office setting off can misalign data between regions.
 
 Points that cost people time:
 
