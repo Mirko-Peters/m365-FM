@@ -11,7 +11,7 @@ keypoints:
   - "It follows from the rounding rule, and is not a Learn quotation, that any percentage above 0 keeps at least one host on and that the effective share can be well above the typed value in small pools."
   - "A second round-up exists in the ramp-down and off-peak consolidation formula, Required Hosts = CEILING(sessions / (maximum session limit x capacity threshold)). Learn's troubleshooting article says autoscale uses the higher of that result and the 'Minimum percentage of active hosts' setting, which this article reads as the minimum percentage of hosts."
   - "To get exactly k hosts out of N, choose a percentage greater than (k-1)/N and at most k/N. The tables in this article are arithmetic from the Learn rule, not Learn tables."
-  - "Learn does not say whether decimal percentages are accepted, whether unhealthy hosts count, or how the dynamic autoscaling field rounds, so test those on a pilot pool."
+  - "The Azure resource reference types the ramp-up and ramp-down minimum host percentage as an integer from 0 to 100. The scaling plan and scenarios articles do not say whether the portal field accepts decimals, whether unhealthy hosts count, or how the dynamic autoscaling field rounds, so test those on a pilot pool."
 faq:
   - q: "Which percentage keeps exactly N hosts on?"
     a: "For k hosts in a pool of N, use a percentage greater than (k-1)/N and at most k/N, times 100. In a pool of 7, 1 to 14 percent keeps one host, 15 to 28 keeps two and 29 to 42 keeps three. This is arithmetic from Learn's rounding rule, not a Learn table."
@@ -70,7 +70,7 @@ If you want exactly k hosts out of N, the percentage must be greater than (k-1)/
 | 12 | 2 | 9 to 16 |
 | 12 | 3 | 17 to 25 |
 
-The 7-host rows can be checked by hand. Fourteen percent of 7 is 0.98 and rounds to 1. Fifteen percent is 1.05 and rounds to 2. Whether the portal accepts decimal percentages is not stated on the Learn pages used here, so this article stays with whole numbers.
+The 7-host rows can be checked by hand. Fourteen percent of 7 is 0.98 and rounds to 1. Fifteen percent is 1.05 and rounds to 2. The Azure resource reference types the schedule properties `rampUpMinimumHostsPct` and `rampDownMinimumHostsPct` as integers from 0 to 100, and the scaling plan article does not say whether the portal field accepts decimals, so this article stays with whole numbers. With integer percentages the rounding always acts on the product of host count and percentage, which is why it ends up as a whole number of hosts.
 
 The result is sensitive to pool size. If you add hosts to the pool, the same percentage can keep more hosts on. A pool that grows from 20 to 21 hosts moves a 30 percent minimum from 6 hosts (exactly 6.0) to 7 hosts (6.3 rounds up). Recheck the percentage whenever the pool size changes.
 
@@ -93,7 +93,7 @@ The first row is the glossary's session consolidation example. The second is the
 
 ## Combining both: the higher value wins
 
-The troubleshooting article says that during ramp-down and off-peak autoscale uses the higher of two values: the formula result and the "Minimum percentage of active hosts" setting in the scaling plan phase. That is also the name of the dynamic autoscaling field, and the page says its guidance covers both Power Management Autoscaling and Dynamic Autoscaling (preview). It never uses the portal label "Minimum percentage of hosts". Applying the rule to the power management field is therefore an inference. It is consistent with the scaling plan article, which says the minimum percentage of hosts is still respected during ramp-down, and with scenario 3, where a 10 percent minimum keeps the last host on. The examples below use the "Minimum percentage of hosts" field on that basis; they are calculated, not taken from Learn.
+The troubleshooting article says that during ramp-down and off-peak autoscale uses the higher of two values: the formula result and the "Minimum percentage of active hosts" setting in the scaling plan phase. That is also the name of the dynamic autoscaling field, and the page says its guidance covers both power management autoscaling and dynamic autoscaling. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 ([Tech Community](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit. The troubleshooting page never uses the portal label "Minimum percentage of hosts". Applying the rule to the power management field is therefore an inference. It is consistent with the scaling plan article, which says the minimum percentage of hosts is still respected during ramp-down, and with scenario 3, where a 10 percent minimum keeps the last host on. The examples below use the "Minimum percentage of hosts" field on that basis; they are calculated, not taken from Learn.
 
 | Pool | Sessions | Max session limit | Threshold | Formula | Minimum | Hosts kept on |
 |---|---|---|---|---|---|---|
@@ -105,13 +105,13 @@ The troubleshooting article says that during ramp-down and off-peak autoscale us
 
 The last two rows depend on the FAQ statement that autoscale can turn off all VMs only when the minimum is 0 percent and no sessions remain. Disconnected sessions count as sessions, so the zero-host case also needs a time limit for disconnected sessions, which the FAQ configures through Group Policy and the scaling plan article also describes with Microsoft Intune.
 
-## What Learn does not say
+## What the scaling plan and scenarios articles leave open
 
-- **Decimals.** The pages used here give no valid range and no statement on decimal percentages.
-- **Unhealthy hosts.** The glossary defines the percentage against all session hosts. Learn does not say whether a host that fails agent health checks, and so is not an available session host, changes the count.
+- **Decimals.** The Azure resource reference gives integers from 0 to 100 for the ramp-up and ramp-down properties. The scaling plan article gives no range for the portal field and does not say whether decimal percentages are accepted.
+- **Unhealthy hosts.** The glossary defines the percentage against all session hosts. It does not say whether a host that fails agent health checks, and so is not an available session host, changes the count.
 - **Tagged hosts.** The portal text says hosts with the exclusion tag still count in the calculation of the minimum percentage. Because autoscale cannot turn them on, an excluded host that is off cannot help meet the minimum. See [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/).
-- **The dynamic field.** For dynamic autoscaling, the field "Minimum percentage of active hosts (%)" is based on the minimum host pool size. Learn's example, 10 percent of a minimum size of 10, gives exactly one host, so it shows no rounding. How a fractional result is handled is not stated.
-- **A typo.** The final table of scenario 4 shows 19 percent where the text shows 10 percent. Do not read 19 percent as a rounding example.
+- **The dynamic field.** For dynamic autoscaling, the field "Minimum percentage of active hosts (%)" is based on the minimum host pool size. Learn's example, 10 percent of a minimum size of 10, gives exactly one host, so it shows no rounding. The scenarios article does not state how a fractional result is handled.
+- **A typo.** The final table of scenario 4 shows 19 percent where the text shows 10 percent.
 
 ## Checking your own pool
 
@@ -130,3 +130,5 @@ Retrieved 17 November 2026.
 - [Microsoft Learn: Autoscale glossary for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary)
 - [Microsoft Learn: Azure Virtual Desktop autoscale FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq)
 - [Microsoft Learn: Troubleshoot autoscale in Azure Virtual Desktop](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-autoscale)
+- [Microsoft Learn: Microsoft.DesktopVirtualization scalingPlans template reference](https://learn.microsoft.com/en-us/azure/templates/microsoft.desktopvirtualization/scalingplans)
+- [Tech Community: Enhanced host pool management for Azure Virtual Desktop is now generally available](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)

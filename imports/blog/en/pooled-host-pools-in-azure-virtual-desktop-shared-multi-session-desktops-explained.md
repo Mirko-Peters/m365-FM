@@ -8,7 +8,7 @@ date: 2026-11-18
 topics: [avd-pooled-host-pool, avd-host-pool]
 keypoints:
   - "In a pooled host pool several users share one session host, and users are not assigned to hosts. Learn describes the result as a shared experience with lower costs and greater efficiency."
-  - "Pooled pools use breadth-first or depth-first load balancing. Depth-first requires a maximum session limit, and under high concurrent load a host can exceed that limit."
+  - "Pooled pools use breadth-first or depth-first load balancing. Depth-first requires a maximum session limit, autoscale on a pooled pool requires a custom one even with breadth-first, and under high concurrent load a host can exceed the limit."
   - "Users in pooled pools should keep their profile in FSLogix, because a new sign-in can land on a different session host."
   - "Windows is kept current by redeploying session hosts from updated images, and in-place upgrades from Windows 10 to Windows 11 are not supported on pooled session hosts."
   - "Power management autoscaling is generally available. Dynamic autoscaling, which also creates and deletes hosts, is labelled preview on Learn's scenarios and glossary pages and needs a preview PowerShell module; What's new says it is now available in June 2026 without a general availability label."
@@ -16,7 +16,7 @@ faq:
   - q: "How many users can share one session host in a pooled host pool?"
     a: "It depends on the maximum session limit you set and on the VM's resources. Microsoft Learn does not give a fixed number and says the number of concurrent sessions depends on vCPU, memory, disk and vGPU, how users work and how heavy the workload is. Validate on your own system."
   - q: "Do pooled host pools need FSLogix?"
-    a: "Learn says users in pooled host pools should store their profile data in FSLogix, because they can be load balanced to different session hosts. It also says FSLogix comes pre-installed on all available Windows Enterprise multi-session images."
+    a: "Learn says users in pooled host pools should store their profile data in FSLogix, because they can be load balanced to different session hosts. It also says FSLogix comes pre-installed on all available Windows Enterprise multi-session images. Profile containers on Azure Files are also documented for cloud-only and external identities, announced as generally available in May 2026."
   - q: "Can a pooled host pool publish RemoteApp?"
     a: "Yes. Learn says RemoteApp application groups are available with pooled host pools only, while desktop application groups work with pooled or personal pools. A pooled pool can have one desktop application group and several RemoteApp application groups."
 ---
@@ -47,7 +47,7 @@ Shared sessions need a multi-session capable OS. Learn's [FAQ for Windows Enterp
 - Edition changes: you cannot upgrade an existing VM running Windows Professional or Enterprise to multi-session.
 - In-place upgrade: for example from Windows 10 to Windows 11, this is not supported for session hosts in a pooled host pool.
 - Reporting: the OS reports ProductType 3, the same value as Windows Server. Some installers may block installation if they detect a client ProductType.
-- Join type: the FAQ says Windows Enterprise multi-session can be Microsoft Entra joined. The prerequisites page adds a condition for profiles: to use FSLogix Profile Container with Entra joined session hosts, store profiles on Azure Files or Azure NetApp Files, and use user accounts that are hybrid identities created in AD DS and synchronized to Microsoft Entra ID.
+- Join type: the FAQ says Windows Enterprise multi-session can be Microsoft Entra joined. For profiles, the [prerequisites page](https://learn.microsoft.com/en-us/azure/virtual-desktop/prerequisites) says FSLogix Profile Container with Entra joined session hosts needs profiles on Azure Files or Azure NetApp Files and user accounts that are hybrid identities, created in AD DS and synchronized to Microsoft Entra ID. Newer Learn pages go further. What's new for May 2026 announces general availability of FSLogix profile containers for cloud-only and external identities on pooled host pools, and the [FSLogix article on Azure Files and Microsoft Entra ID](https://learn.microsoft.com/en-us/fslogix/how-to-configure-profile-container-azure-ad) lists cloud-only and external identities as supported, in the Azure cloud only. The prerequisites page still states only the hybrid condition, so check the FSLogix article for your identity type.
 
 ## Sessions in a pooled pool
 
@@ -59,9 +59,9 @@ One point matters for capacity planning. The comparison table on Learn's termino
 
 ## Profiles: the part that cannot be skipped
 
-Because a user can land on a different host at each sign-in, a profile stored on one VM's disk would not follow them. Learn therefore says pooled users should store profile data in [FSLogix](/entity/fslogix/). FSLogix comes pre-installed on all available Windows Enterprise multi-session images. The FSLogix overview says its Profile Container uses a filter driver to virtualize and redirect the profile at the file system level, so applications are unaware the profile is on the network.
+Because a user can land on a different host at each sign-in, a profile stored on one VM's disk would not follow them. Learn therefore says pooled users should store profile data in [FSLogix](/entity/fslogix/). FSLogix comes pre-installed on all available Windows Enterprise multi-session images. The FSLogix overview says FSLogix uses a filter driver to virtualize and redirect the profile at the file system level, so applications are unaware the profile is on the network.
 
-The same overview says profile containers can be used with Cloud Cache for high availability and disaster recovery solutions. It also says Office Container (ODFC) is not used together with Profile Container under most circumstances. FSLogix storage design, permissions and sizing need their own planning, and Learn recommends skills in identity and authentication, storage design and Windows deployment for it. Learn's sizing guidelines list a minimum of 30 GB of profile container storage in every multi-session workload row, as a starting point.
+The same overview says profile containers can be used with Cloud Cache for high availability and disaster recovery solutions. It also says Office Container (ODFC) is not used together with Profile Container under most circumstances. FSLogix storage design, permissions and sizing need their own planning, and Learn recommends skills in identity and authentication, storage design and architecture, and Windows deployment, among others, for it. Learn's sizing guidelines list a minimum profile storage of 30 GB in every multi-session workload row, as a starting point.
 
 ## Updates: replace rather than patch
 
@@ -82,7 +82,11 @@ Pooled pools can start and stop hosts to match demand. The terminology page's co
 - **[Power management autoscaling](/entity/avd-power-management-autoscaling/)** powers hosts on and off. The [autoscale scenarios page](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios) labels it generally available, and it is the option for pools with standard management.
 - **[Dynamic autoscaling](/entity/avd-dynamic-autoscaling/)** also creates and deletes session hosts. It can only be used for pooled host pools with a session host configuration. The scenarios page and the autoscale glossary label it preview, and the scaling plan article requires the Az.DesktopVirtualization module version 5.4.2-preview or a later preview version for PowerShell. What's new says in June 2026 that it is "now available" for pooled host pools with session host configuration, without a general availability label. The scenarios page says it is not supported in Azure Government.
 
-"Power management autoscaling vs dynamic autoscaling: which one fits your host pools" compares them. [Start VM on Connect](https://learn.microsoft.com/en-us/azure/virtual-desktop/start-virtual-machine-connect) behaves differently in pooled pools: it powers on a host only when none are on, and starts further VMs only when the first reaches the session limit. It starts a VM every five minutes at most, so a user may see "No resources available" and need to retry.
+"Power management autoscaling vs dynamic autoscaling: which one fits your host pools" compares them.
+
+Both methods share one prerequisite for pooled pools that is easy to miss. The [scaling plan article](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan) says that when you use autoscale for a pooled host pool, you must set a custom maximum session limit, and it says not to use the default value. The [load-balancing article](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-load-balancing) gives the breadth-first default as 999999. So breadth-first pools also need an explicit limit before autoscale is switched on.
+
+ [Start VM on Connect](https://learn.microsoft.com/en-us/azure/virtual-desktop/start-virtual-machine-connect) behaves differently in pooled pools: it powers on a host only when none are on, and starts further VMs only when the first reaches the session limit. It starts a VM every five minutes at most, so a user may see "No resources available" and need to retry.
 
 ## Application groups on pooled pools
 
@@ -92,7 +96,7 @@ Pooled pools support both [application group](/entity/avd-application-group/) ty
 
 1. Confirm that users can share a machine and that their profile can move to FSLogix.
 2. Choose a multi-session image and verify your license entitlement.
-3. Choose a load-balancing algorithm and, for depth-first, a maximum session limit.
+3. Choose a load-balancing algorithm and set a maximum session limit: required for depth-first, and required as a custom value, not the default, for any pooled pool that uses autoscale.
 4. Decide between standard management and a session host configuration, and plan image updates as redeployments, not in-place patches.
 5. Decide how hosts are powered on and off, and which method's status you accept.
 6. Pilot, then measure sessions per host and logon times.
@@ -114,4 +118,5 @@ Retrieved 17 November 2026.
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
 - [Microsoft Learn: Start VM on Connect](https://learn.microsoft.com/en-us/azure/virtual-desktop/start-virtual-machine-connect)
 - [Microsoft Learn: What is FSLogix](https://learn.microsoft.com/en-us/fslogix/overview-what-is-fslogix)
+- [Microsoft Learn: Use Azure Files and Microsoft Entra ID with FSLogix profile containers](https://learn.microsoft.com/en-us/fslogix/how-to-configure-profile-container-azure-ad)
 - [Microsoft Learn: Session host virtual machine sizing guidelines](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/session-host-virtual-machine-sizing-guidelines)

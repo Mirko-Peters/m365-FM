@@ -21,9 +21,9 @@ faq:
     a: "Learn says you incur compute, networking and storage costs similar to building images manually, charged at your Azure rates. It names a small storage cost for the staging resource group and possible egress charges when the image is distributed to other regions."
 ---
 
-Azure VM Image Builder, often called Azure Image Builder or AIB, builds a VM image from a configuration you submit as a template. The service creates a temporary build VM, runs your customizations, generalizes the image and distributes the result to an Azure Compute Gallery, a managed image or a VHD. For Azure Virtual Desktop this replaces hand-built golden images with a repeatable, reviewable template. This article explains the template, how to start a build and find its log, the AVD-specific route and the limits.
+Azure VM Image Builder, often called Azure Image Builder or AIB, builds a VM image from a configuration you submit as a template. The service creates a temporary build VM, runs your customizations, generalizes the image and distributes the result to an Azure Compute Gallery, a managed image or a VHD. For Azure Virtual Desktop it offers a repeatable, reviewable template as an alternative to hand-built golden images. This article explains the template, how to start a build and find its log, the AVD-specific route and the limits.
 
-Microsoft's What's new page and the Azure Virtual Desktop blog announced custom image templates as generally available in September 2023. The overview labels the service's Azure DevOps task as preview. Everything here comes from Microsoft Learn pages retrieved on 17 November 2026. Lifecycle practice and gallery replication are covered in "The golden image lifecycle: build, test, release, retire" and "Azure Compute Gallery for AVD images: versions and replication".
+Microsoft's What's new page and the Azure Virtual Desktop blog announced custom image templates as generally available in September 2023. The overview labels the service's Azure DevOps task as preview. Everything here comes from Microsoft Learn pages and one Azure Virtual Desktop blog post, retrieved on 17 November 2026. Lifecycle practice and gallery replication are covered in "The golden image lifecycle: build, test, release, retire" and "Azure Compute Gallery for AVD images: versions and replication".
 
 ## What the service does
 
@@ -116,7 +116,7 @@ Invoke-AzResourceAction -ResourceName $imageTemplateName -ResourceGroupName $ima
 az resource invoke-action --resource-group $imageResourceGroup --resource-type Microsoft.VirtualMachineImages/imageTemplates -n <template-name> --action Run
 ```
 
-   `autoRun` does not give ongoing builds, so a rebuild needs another Run. In the portal, select the template in **Custom images templates** and choose **Start build**.
+   `autoRun` does not give ongoing builds, so a rebuild needs another Run. In the portal, select the template in **Custom image templates** and choose **Start build**.
 4. **Watch the status.** `Start-AzImageBuilderTemplate -NoWait` returns immediately. `Get-AzImageBuilderTemplate` exposes `LastRunStatusRunState`, `LastRunStatusMessage` and `LastRunStatusRunSubState`.
 5. **Use the result.** In the host pool wizard, select **See all images**, then **My Items**, and choose **My Images** for managed images or **Shared Images** for a gallery. The VM size must match the image generation.
 
@@ -130,7 +130,7 @@ By default the service creates a staging resource group named `IT_<ResourceGroup
 - The image template is immutable and cannot be moved. To relocate it, recreate it with a new name.
 - Trusted Launch and Confidential VM: images marked TrustedLaunchSupported or ConfidentialVMSupported work as sources, but TrustedLaunch and ConfidentialVM images do not. Source and distribution must both be TrustedLaunchSupported.
 - Cost: compute, networking and storage at your Azure rates, a small storage cost for the staging group, and possible egress to other regions.
-- Deleting the template: the overview suggests it to avoid the storage cost, but the reference says the staging resource group is deleted with the template, a VHD distribution is lost with it ("If you delete the image template, then you'll lose the VHD"), and the logs go with the group. Copy VHDs and download logs first. Delete the template before its resource group, otherwise the IT_ group remains.
+- Deleting the template: the overview suggests it to avoid the storage cost, but the reference says the staging resource group is deleted with the template, a VHD distribution is lost with it ("If you delete the image template, then you'll lose the VHD"), and the logs go with the group. Copy VHDs and download logs first. The custom image templates page says the IT_ group is also deleted when you delete the resource group containing the image, while the PowerShell walkthrough says that deleting only the resource group leaves the IT_ group behind. Deleting the template first avoids the question.
 - For Azure DevOps builds, the troubleshooting page says the staging group is deleted after a successful build, so a log needs a sleep step to read. The custom image templates page says the group can be deleted after success, provided you do not need the logs.
 - March 2026 release notes: after 31 March 2026 new virtual networks default to private subnets without default outbound access. If a template sets `subnetId` or `containerInstanceSubnetId` and the build or validation VMs need internet access, that subnet must have outbound access enabled. Separately, with Azure unmanaged disks retiring, VHDs produced by Image Builder can no longer provision new VMs.
 - The service is available in the regions the overview lists, and you can still distribute images outside them.

@@ -40,7 +40,7 @@ For power management autoscaling on a pooled host pool, the field is listed in t
 
 The peak hours and off-peak hours tabs do not list the field. For the capacity threshold Learn says explicitly that the peak value carries over from ramp-up. For the minimum percentage it gives no such sentence, yet its scenarios and FAQ refer to a minimum in peak and off-peak, for example a 10 percent minimum that keeps one host on in off-peak. Treat the carry-over as a point to confirm on a test host pool before you rely on it: compare the number of running hosts in the peak phase with your calculation.
 
-The page does not state a default value or a valid range for the field.
+The scaling plan article does not state a default value or a valid range for the field. The Azure resource reference for scaling plans types the matching schedule properties, `rampUpMinimumHostsPct` and `rampDownMinimumHostsPct`, as integers with a minimum of 0 and a maximum of 100, and lists no equivalent properties for peak or off-peak hours.
 
 ## What autoscale does with it
 
@@ -52,7 +52,7 @@ The page does not state a default value or a valid range for the field.
 
 During ramp-down and off-peak the setting competes with the consolidation formula. Learn's [troubleshooting article](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-autoscale) says autoscale determines the actual minimum host count during ramp-down and off-peak by using the higher of two values: the formula result for current sessions, and the "Minimum percentage of active hosts" setting in the scaling plan phase. If the percentage gives the higher number, it takes precedence, and Learn calls it a common reason hosts stay on when the formula suggests fewer.
 
-Note the name. That page says "Minimum percentage of active hosts", which is also the name of the dynamic autoscaling field, and it says its guidance covers both Power Management Autoscaling (generally available) and Dynamic Autoscaling (preview). It does not use the portal label "Minimum percentage of hosts". Reading the rule as applying to the power management field is an inference. It is consistent with the scaling plan article, which says that during ramp-down the minimum percentage of hosts is still respected and autoscale shuts hosts down only if all sessions can be consolidated onto fewer hosts without exceeding the capacity threshold, and with Learn's scenario 3, where a 10 percent minimum keeps the last host on. The formula and its rounding are the subject of the sibling article "How rounding up works with the minimum percentage of hosts, with worked examples".
+Note the name. That page says "Minimum percentage of active hosts", which is also the name of the dynamic autoscaling field, and it says its guidance covers both power management autoscaling and dynamic autoscaling. It does not use the portal label "Minimum percentage of hosts". Reading the rule as applying to the power management field is an inference. It is consistent with the scaling plan article, which says that during ramp-down the minimum percentage of hosts is still respected and autoscale shuts hosts down only if all sessions can be consolidated onto fewer hosts without exceeding the capacity threshold, and with Learn's scenario 3, where a 10 percent minimum keeps the last host on. The formula and its rounding are the subject of the sibling article "How rounding up works with the minimum percentage of hosts, with worked examples".
 
 ## Floor versus threshold
 
@@ -74,18 +74,18 @@ Because the capacity comes from the [maximum session limit](/entity/avd-maximum-
 The autoscale FAQ says autoscale can turn off all VMs in a host pool if the minimum percentage of hosts is 0 percent and there are no user sessions on the session hosts. Disconnected sessions are the usual obstacle. Autoscale treats them as sessions that may reconnect, so hosts keep running. The route, as the FAQ and the troubleshooting article describe it:
 
 1. Set a time limit for disconnected sessions. Both pages use Group Policy: **Computer Configuration**, **Administrative Templates**, **Windows Components**, **Remote Desktop Services**, **Remote Desktop Session Host**, **Session Time Limits**, **Set time limit for disconnected sessions**. The scaling plan article also describes doing this with Microsoft Intune. The FAQ suggests 15 to 30 minutes as an example.
-2. Make sure the timeout completes before the end of ramp-down or off-peak.
+2. Make sure the timeout completes before the end of the ramp-down phase, as the FAQ advises.
 3. Set the minimum percentage of hosts to 0 percent for the phase where you want hosts off.
 
 ## Excluded hosts
 
-A VM that carries the scaling plan's [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) is not turned on, off or changed in drain mode by autoscale. The portal text says tagged hosts are still part of the calculation of the minimum percentage of hosts. In Learn's scenario, five of six hosts carry the tag, the last host is turned off, and a new user sees "No resources available" because no host can be started. The tag scenario is covered in the exclusion tag articles of this series.
+A VM that carries the scaling plan's [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) is not turned on, off or changed in drain mode by autoscale. The portal text says tagged hosts are still part of the calculation of the minimum percentage of hosts. In Learn's scenario, five of six hosts carry the tag and the one untagged host stays on in off-peak because of the minimum percentage. If the admin then tags that last host as well and turns it off, autoscale cannot start any host, and a user who signs in sees "No resources available". The tag scenario is covered in the exclusion tag articles of this series.
 
 The practical rule: a tagged host can count toward the percentage while being unable to help meet it.
 
 ## Dynamic autoscaling
 
-Dynamic autoscaling, which can create and delete hosts, uses a related field named **Minimum percentage of active hosts (%)**. Learn bases it on the minimum host pool size. With 10 percent and a minimum host pool size of 10, one host is always available. Dynamic autoscaling is described as preview on Learn's scenarios page, while power management autoscaling is generally available. Setting the field to 100 percent makes autoscale only create and delete hosts. The sibling article on power management versus dynamic autoscaling compares the two methods.
+Dynamic autoscaling, which can create and delete hosts, uses a related field named **Minimum percentage of active hosts (%)**. Learn bases it on the minimum host pool size. With 10 percent and a minimum host pool size of 10, one host is always available. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 ([Tech Community](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit. Power management autoscaling remains generally available. Setting the field to 100 percent makes autoscale only create and delete hosts. The sibling article on power management versus dynamic autoscaling compares the two methods.
 
 ## A short procedure for choosing a value
 
@@ -105,3 +105,5 @@ Retrieved 17 November 2026.
 - [Microsoft Learn: Autoscale scaling plans and example scenarios in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)
 - [Microsoft Learn: Azure Virtual Desktop autoscale FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq)
 - [Microsoft Learn: Troubleshoot autoscale in Azure Virtual Desktop](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-autoscale)
+- [Microsoft Learn: Microsoft.DesktopVirtualization scalingPlans template reference](https://learn.microsoft.com/en-us/azure/templates/microsoft.desktopvirtualization/scalingplans)
+- [Tech Community: Enhanced host pool management for Azure Virtual Desktop is now generally available](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)
