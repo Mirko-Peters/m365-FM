@@ -23,11 +23,11 @@ faq:
 
 To enable trusted launch on Azure Virtual Desktop session hosts, first check how the host pool is managed. In a pooled host pool with a session host configuration, you set **Security type** to Trusted launch virtual machines in a session host update, and the service replaces the hosts. Otherwise you stop each Generation 2 VM and switch its security type, or you deploy new hosts from a Generation 2 image.
 
-This is the how-to companion to the explainer the article "Trusted launch for Azure VMs and session hosts explained", which covers what Secure Boot, the vTPM and boot integrity monitoring do on [trusted launch](/entity/trusted-launch/). Here the focus is on the order of steps, the values and the stumbling blocks for [Azure Virtual Desktop](/entity/azure-virtual-desktop/).
+This is the how-to companion to the explainer article ""Trusted launch for Azure VMs and session hosts explained"", which covers what Secure Boot, the vTPM and boot integrity monitoring do on [trusted launch](/entity/trusted-launch/). Here the focus is on the order of steps, the values and the stumbling blocks for [Azure Virtual Desktop](/entity/azure-virtual-desktop/).
 
 ## Choose the path
 
-Check first which hosts need this. Learn says trusted launch is the default state for newly created Azure Generation 2 VMs and scale sets, and that session hosts added in the Azure portal default to Trusted virtual machines. The default does not change VMs that already run, so the steps below mainly concern older hosts. Open a VM's **Overview** and read **Security type** to see which it is.
+Learn says trusted launch is the default state for newly created Azure Generation 2 VMs and scale sets, and that session hosts added in the Azure portal default to Trusted virtual machines. The default does not change VMs that already run, so the steps below mainly concern older hosts. Open a VM's **Overview** and read **Security type** to see which it is.
 
 | Situation | Path | Effect on hosts |
 |---|---|---|
@@ -52,7 +52,7 @@ Two network items apply to monitoring. Learn's [deployment article](https://lear
 
 ## Path A: session host update
 
-This path applies to pooled host pools with a session host configuration. It needs an image that supports Azure Virtual Desktop and matches the VM generation. Learn says a trusted launch or confidential VM needs a generation 2 image.
+This path applies to pooled host pools with a session host configuration whose session hosts are all in the same Azure region and resource group. It needs an image that supports Azure Virtual Desktop and matches the VM generation. Learn says a trusted launch or confidential VM needs a generation 2 image.
 
 1. Prepare the image. A Compute Gallery image should have at least two replicas, and an image in a different subscription from the host pool is not supported.
 2. Disable autoscale for the pool. The [session host update](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update) page says to disable it before the update and keep it off until the update finishes.
@@ -64,13 +64,13 @@ This path applies to pooled host pools with a session host configuration. It nee
 8. On the **Schedule** tab, choose **Schedule update now** or a time up to two weeks ahead. On **Notifications**, set the minutes before users are signed out (0 to 60) and a message.
 9. Review and select **Update**. Watch the blue banner under **Session hosts** and select **Refresh**.
 
-Planning figures from Learn: about 20 minutes per session host, with the hosts in a batch updated concurrently. Our arithmetic for 10 hosts and a batch size of 2: the initial host plus five batches is six rounds of about 20 minutes, so roughly 120 minutes. Learn also describes a notification and a wait before remaining users are signed out; our reading is that the sign-out time you set adds to each round. Learn recommends scheduling outside busy periods.
+Planning figures from Learn: about 20 minutes per session host, with the hosts in a batch updated concurrently. Our arithmetic for 10 hosts and a batch size of 2: the initial host plus five batches is six rounds of about 20 minutes, so roughly 120 minutes. Learn also describes a notification and a wait before remaining users are signed out; our reading is that the sign-out time you set adds to each round.
 
-Do not change drain mode or remove VMs during the update, because the service sets drain mode itself. An update cannot be edited once scheduled; cancel and schedule again. The OS disk name changes to the format `SessionHostName-DateTime_Hash`. The PowerShell examples on the update page set image, credentials, size and disk type, but none sets the security type; Learn documents that setting only in the portal procedure. The cmdlets for session host configuration come from a preview version of the Az.DesktopVirtualization module (added in 5.3.0).
+Do not change drain mode or remove VMs during the update, because the service sets drain mode itself. Files, registry keys or certificates added manually to session hosts are not present afterwards, so put them in the image, in Intune or Group Policy, or in the custom configuration script. An update cannot be edited once scheduled; cancel and schedule again. The OS disk name changes to the format `SessionHostName-DateTime_Hash`. The PowerShell examples on the [session host configuration update](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update-configure) page set image, credentials, size and disk type; none sets the security type, which that page lists only in the portal steps. The cmdlets for session host configuration come from a preview version of the Az.DesktopVirtualization module (added in 5.3.0).
 
 The [session host update](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update) page lists these limits: it is available only in the global Azure cloud, not Azure US Government or Azure operated by 21Vianet, and a purchase plan on a gallery image is not retained.
 
-Our reading: because path A creates new VMs, switching the security type back later is another update, not the one-way rollback that applies to an in-place VM change. Learn does not document this, so test it on a spare pool first.
+Our reading: because path A creates new VMs, switching back is another update, not the one-way rollback of an in-place change. Learn does not document this, so test it on a spare pool first.
 
 ## Path B: change existing Gen2 VMs
 
@@ -105,7 +105,7 @@ The CLI output should return a `securityProfile` with `securityType` set to `Tru
 
 Learn treats this as a separate [Gen1 upgrade](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch-existing-vm-gen-1). Gen1 to Gen2 without trusted launch is not supported, and the guest disk must change from MBR to GPT first. For Windows, Learn runs `MBR2GPT /validate /allowFullOS`, stops if validation fails, then `MBR2GPT /convert /allowFullOS`, which is irreversible. Windows Server 2016 is excluded on this path, and Windows OS volume encryption such as BitLocker must be disabled before and re-enabled afterwards.
 
-Known issues listed there matter for host pools: the image reference still shows the Gen1 source, so reimaging with that reference causes a boot failure, and the temporary disk can move from D: to E:. Our reading: for pooled hosts rebuilt from images anyway, new Gen2 hosts are less work, but test both.
+Known issues listed there matter for host pools: the image reference still shows the Gen1 source, so reimaging with that reference causes a boot failure, and the temporary disk can move from D: to E:.
 
 ## Path D: a Gen2 image that supports trusted launch
 
@@ -134,7 +134,7 @@ One build-time detail from the [FAQ](https://learn.microsoft.com/en-us/azure/vir
 
 - **Rollback is one-way.** Learn says that after setting `securityType` to Standard, trusted launch cannot be re-enabled on that VM.
 - **Resize limit.** A trusted launch VM cannot be resized to an unsupported family such as M-series, per the overview.
-- **Unsigned drivers.** A trusted launch VM does not boot if unsigned boot components are found. Marketplace images should not hit this.
+- **Unsigned drivers.** A trusted launch VM does not boot if unsigned boot components are found.
 - **Backups.** Per the FAQ, backups from before the upgrade restore the whole VM or data disks, not the OS disk alone.
 
 ## Sources
