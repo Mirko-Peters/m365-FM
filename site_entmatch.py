@@ -44,6 +44,8 @@ BRANDS = {"Microsoft", "Azure", "Power", "Dynamics", "Office", "Viva", "MS", "Wi
 TITLE_OK = {"I", "A", "An", "The"}   # gross geschriebene Kleinwoerter vor einem Namen machen noch keine Titel-Reihe
 VERB_BEFORE = {"can", "could", "might", "may", "will", "would", "should", "must", "to", "do", "does", "did", "you", "we", "they", "i", "it", "he", "she",
                "not", "also", "often", "then", "never", "always", "just", "kann", "können", "wird", "werden", "zu"}
+DETS = {"a", "an", "the", "this", "that", "these", "those", "each", "every", "your", "our", "its", "their", "his", "her", "my", "one", "any", "no", "same", "new",
+        "ein", "eine", "einen", "einem", "der", "die", "das", "den", "dem", "des", "jeder", "jede", "jedes", "ihr", "ihre", "unser", "unsere"}
 HUB_DEGREE = 100
 STRICT_KIDS = 25
 _TERM = set(".!?:;\n。！？•")
@@ -65,6 +67,12 @@ _STOPW = {"and", "or", "of", "the", "a", "an", "for", "in", "on", "to", "with", 
 def _overlap(a, b):
     w = lambda x: {t for t in re.findall(r"\w+", x.lower()) if t not in _STOPW}
     return bool(w(a) & w(b))
+
+
+def _shorter(a, b):
+    """a ist eine echte Kurzform von b (Woerter von a ohne Plural-s sind eine echte Teilmenge der Woerter von b)."""
+    w = lambda x: {t.rstrip("s") for t in re.findall(r"\w+", x.lower()) if t not in _STOPW}
+    return w(a) < w(b)
 
 
 def _distinct(f):
@@ -103,10 +111,10 @@ class Used(dict):
 
 
 class Form:
-    __slots__ = ("text", "eid", "mode", "common", "qual", "is_name", "proper")
+    __slots__ = ("text", "eid", "mode", "common", "qual", "is_name", "proper", "is_abbr")
 
-    def __init__(self, text, eid, mode, common, qual, is_name, proper):
-        self.text, self.eid, self.mode, self.common, self.qual, self.is_name, self.proper = text, eid, mode, common, qual, is_name, proper
+    def __init__(self, text, eid, mode, common, qual, is_name, proper, is_abbr=False):
+        self.text, self.eid, self.mode, self.common, self.qual, self.is_name, self.proper, self.is_abbr = text, eid, mode, common, qual, is_name, proper, is_abbr
 
     def accepts(self, t):
         if self.mode == "ci": return True
@@ -167,6 +175,10 @@ class Matcher:
                     self.par.setdefault(i, set()).add(x); self.kids.setdefault(x, set()).add(i)
         self.hubs = {i for i, n in deg.items() if n >= HUB_DEGREE} | {i for i, e in live.items() if e.get("type") in SKIP_TYPES}
         self.pair, self.df = cooc if cooc is not None else ({}, {})
+        for fs in self.forms.values():   # kurze Abkuerzung einer Entitaet, die der Graph nicht kennt (keine Kanten, keine Folgen): mehrdeutig
+            for f in fs:                 # ("PCI" = Permission Creep Index oder Payment Card Industry), nur mit Kontext
+                if f.is_abbr and len(f.text) <= 3 and f.eid not in self.nbr and not self.df.get(f.eid):
+                    f.common = True
         self.rx = re.compile(r"(?<![\w-])(" + _trie(self.forms) + r")(?![\w-])", re.I) if self.forms else None
 
     # ---------------------------------------------------------------- Formen
@@ -207,15 +219,16 @@ class Matcher:
             common = (lo in self.common_words and not _distinct(f)) or kind == "qual"
         else:
             common = kind in ("alias", "short", "qual") and not _distinct(f)
-        if kind == "alias" and multi and not proper and not _overlap(f, e.get("name") or ""):
-            common = True   # Konzept-Alias ohne gemeinsames Wort mit dem Namen ("Change management" bei "Copilot adoption"): anderer Begriff, nur mit Kontext
+        if kind == "alias" and multi and not proper and (not _overlap(f, e.get("name") or "") or _shorter(f, e.get("name") or "")):
+            common = True   # Konzept-Alias ohne gemeinsames Wort mit dem Namen ("Change management" bei "Copilot adoption") oder Kurzform ("Task flows"
+                            # bei "Fabric task flow"): anderer bzw. allgemeinerer Begriff, nur mit Kontext
         q = None
         if kind == "qual":
             common = True; q = qual
         is_name = kind == "name"
         lst = self.forms.setdefault(lo, [])
         if any(x.eid == e["id"] and x.text == f for x in lst): return
-        lst.append(Form(f, e["id"], mode, common, q, is_name, proper))
+        lst.append(Form(f, e["id"], mode, common, q, is_name, proper, kind == "abbr"))
         self.names.setdefault(lo, e["id"])
 
     # ---------------------------------------------------------------- Kontext
@@ -336,6 +349,8 @@ class Matcher:
                     m = _WORD_L.search(plain, max(0, s - 40), s)
                     if m and m.group(1).lower() in VERB_BEFORE:
                         continue   # als Verb gebraucht ("might trigger", "you harness")
+                    if f.eid not in C and not self._sentence_start(plain, s) and not (m and m.group(1).lower() in DETS):
+                        continue   # Kurzname mit Zusatz nur als Nomen ("the trigger", "Grounding is ..."), nicht "change data, trigger actions"
                 sc = self.support(f.eid, C - {f.eid} if f.eid not in (ctx or ()) else C, strict=not f.proper, qual=f.qual)
                 if sc <= 0: continue
                 sc = sc * 10 + (5 if f.is_name else 0)

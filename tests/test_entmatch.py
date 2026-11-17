@@ -68,6 +68,14 @@ class Bericht(unittest.TestCase):
         self.assertIn("power-automate-trigger", m.ids("The trigger starts the flow in Power Automate."))
         self.assertNotIn("agent-harness", m.ids("How you harness it with AI agents decides the outcome."))
 
+    def test_stichprobe_fehltreffer(self):
+        # Fehltreffer aus der Stichprobe (150 Links der Altbeitraege): Verb nach Komma, Kurzform eines Fabric-Begriffs, mehrdeutige Abkuerzung
+        m = EM.shared(LRN.ENTS)
+        self.assertNotIn("power-automate-trigger", m.ids("These workflows can change data, trigger actions, or share information in Power Automate."))
+        self.assertNotIn("fabric-task-flow", m.ids("Copilot orchestrates chat, meetings, and task flows in Microsoft Teams."))
+        self.assertNotIn("permission-creep-index", m.ids("The finance team had to add third-party PCI tools for transactions."))
+        self.assertIn("dlp", m.ids("Enforce DLP policies in Microsoft Purview."))
+
     def test_konzept_alias_anderer_begriff_nur_mit_kontext(self):
         m = EM.shared(LRN.ENTS)
         self.assertNotIn("copilot-adoption", m.ids("Change management and decision rights are key for any program."))
