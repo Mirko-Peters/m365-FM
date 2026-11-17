@@ -11,7 +11,7 @@ keypoints:
   - "With single sign-on, the remote session phase accepts any method that works for cloud sign-in, including passwordless ones. Without it, Learn's table lists only smart card and password for that phase."
   - "Passkeys and FIDO2 devices need the session to disconnect on lock. The remote lock screen does not support them, and with single sign-on disconnect is the default."
   - "Passwordless sign-in to apps and sites inside the session is a separate path: WebAuthn requests are redirected to the local device (RDP property redirectwebauthn, default 1), with the Windows App on Windows. Windows App on macOS, iOS and Android is in preview for this."
-  - "Use Conditional Access policies, not per-user MFA, and give Windows Cloud Login its own policy next to the Azure Virtual Desktop one. Aligned sign-in frequency avoids repeated prompts."
+  - "Use Conditional Access policies, not per-user MFA, and give Windows Cloud Login its own policy next to the Azure Virtual Desktop one. Use the same sign-in frequency on both, or an equal or longer one on Windows Cloud Login, to avoid repeated prompts."
 faq:
   - q: "Do I need to change anything for users to use passkeys or Windows Hello for Business after I enable single sign-on?"
     a: "For signing in to the session host, no separate switch: Learn says the remote session phase accepts any cloud-service method when single sign-on is configured. For signing in to apps and sites inside the session, WebAuthn requests must be redirected to the local device, which is the host pool default, and the user must be on a client that supports it."
@@ -29,7 +29,6 @@ Setting up single sign-on for Azure Virtual Desktop means completing five tasks:
 
 - An Entra role of Application Administrator or Cloud Application Administrator, or equivalent.
 - Session hosts that are Microsoft Entra joined or hybrid joined, on a supported build (companion article).
-- The Microsoft Graph PowerShell SDK, version 2.9.0 or later, if you use PowerShell for steps 1 and 2; the portal steps are below.
 - A decision on session lock behavior (step 5), because it affects passkeys.
 
 Learn advises against connecting with domain administrator accounts, because the default Password Replication Policy on read-only domain controllers denies their replication and can cause repeated prompts. Use a non-administrator account with **Run as administrator** or `runas`.
@@ -52,11 +51,11 @@ Learn advises against connecting with domain administrator accounts, because the
 
    The cloud account needs the Hybrid Identity Administrator role, and the domain account must be in Domain Admins and Enterprise Admins. Without it on hybrid joined hosts, users may see an error that the specific session does not exist, or get a standard credential dialog instead of single sign-on. See [Microsoft Entra Kerberos](/entity/microsoft-entra-kerberos/).
 
-4. **Review Conditional Access.** Single sign-on adds Windows Cloud Login to the sign-in path. Learn recommends two policies with aligned settings: one for **Azure Virtual Desktop** (`9cdead84-a844-4324-93f2-b2e6bb768d07`) and one for **Windows Cloud Login**, both requiring MFA. Do not add the Azure Virtual Desktop Azure Resource Manager Provider app, and do not block the Windows 365 app, which the Windows App uses. The sign-in frequency option **Every time** is supported only on Windows Cloud Login, and on the Azure Virtual Desktop app it causes constant prompts on feed refresh. Disable per-user MFA for these users and enforce MFA through [Conditional Access](/entity/conditional-access/) only.
+4. **Review Conditional Access.** Single sign-on adds Windows Cloud Login to the sign-in path. Learn recommends two policies: one for **Azure Virtual Desktop** (`9cdead84-a844-4324-93f2-b2e6bb768d07`) and one for **Windows Cloud Login**, both requiring MFA. Do not add the Azure Virtual Desktop Azure Resource Manager Provider app, and do not block the Windows 365 app, which the Windows App uses. Set sign-in frequency to the same value on both, or set the Windows Cloud Login policy to match or exceed the Azure Virtual Desktop one. The option **Every time** is supported only on Windows Cloud Login; on the Azure Virtual Desktop app it causes constant prompts on feed refresh and diagnostics upload. Disable per-user MFA for these users and enforce MFA through [Conditional Access](/entity/conditional-access/) only. For Entra joined hosts, connections require the legacy per-user MFA sign-in method to be off, and if you do not want to limit sign-in to strong methods such as Windows Hello for Business, exclude the **Azure Windows VM Sign-In** app from the policy.
 
 5. **Choose the lock behavior.** With single sign-on, a locked session disconnects by default. To change it in Intune, create a **Settings catalog** profile for Windows 10 and later, browse to **Administrative templates > Windows Components > Remote Desktop Services > Remote Desktop Session Host > Security**, and set **Disconnect remote session on lock for Microsoft identity platform authentication** (Enabled disconnects, Disabled shows the remote lock screen). The setting needs Windows 11 with KB5037770, Windows 10 21H2 or later with KB5039211, or Windows Server 2022 with KB5037782, or later. Restart the session hosts after the policy applies.
 
-6. **Turn it on for the host pool.** In the Azure portal, open the host pool and set **Microsoft Entra single sign-on** to the option stating that connections will use Microsoft Entra authentication to provide single sign-on. In PowerShell, set the RDP property `enablerdsaadauth:i:1`; its default is `0`. Learn's property list says it replaces `targetisaadjoined`. After a change, users need to refresh their resources to receive it.
+6. **Turn it on for the host pool.** In the Azure portal, open the host pool and set **Microsoft Entra single sign-on** to the option stating that connections will use Microsoft Entra authentication to provide single sign-on. This corresponds to the RDP property `enablerdsaadauth:i:1`; its default is `0`. Learn's property list says it replaces `targetisaadjoined`. After a change, users need to refresh their resources to receive it.
 
 7. **Test.** Connect with the Windows App. Then open **Identity > Monitoring & health > Sign-in logs** in Entra and confirm that the Azure Virtual Desktop and Windows Cloud Login entries both show **Success** with the expected policies applied.
 
@@ -102,15 +101,13 @@ On the preview platforms, Learn limits redirection to Windows 365 and Azure Virt
 
 ### Kerberos still matters for smart cards and Windows Hello
 
-Learn says session host authentication supports NTLM and Kerberos, but smart card and Windows Hello for Business can only use Kerberos to sign in. The client then needs line of sight to a domain controller through the corporate network, a VPN or a KDC Proxy server. Plan domain controller reachability and the Kerberos server object (step 3) before rollout.
-
-For Entra joined hosts, Learn adds that connections require the legacy per-user MFA sign-in method to be off, and that if you do not want to limit sign-in to strong methods such as Windows Hello for Business, you exclude the **Azure Windows VM Sign-In** app from the Conditional Access policy.
+Learn says session host authentication supports NTLM and Kerberos, but smart card and Windows Hello for Business can only use Kerberos to sign in. The client then needs line of sight to a domain controller through the corporate network, a VPN or a KDC Proxy server.
 
 ## Errors to expect after enabling
 
 | Symptom | Cause and fix, per Learn |
 |---|---|
-| Repeated prompts | Sign-in frequency differs between the two apps, or **Every time** is set on the Azure Virtual Desktop app. Match them and use **Every time** on Windows Cloud Login only |
+| Repeated prompts | Sign-in frequency differs between the two apps, or **Every time** is set on the Azure Virtual Desktop app. Use the same value on both, or an equal or longer value on Windows Cloud Login; use **Every time** on Windows Cloud Login only |
 | AADSTS65001 | The user or admin has not consented to the app. Hide the consent dialog or grant admin consent for Windows Cloud Login |
 | AADSTS530002 | A policy requires a compliant device and it is not. For connection-time policies the requirement applies to the client device |
 | AADSTS530032 | A tenant-level control blocks sign-in, such as Security Defaults or a block policy |
