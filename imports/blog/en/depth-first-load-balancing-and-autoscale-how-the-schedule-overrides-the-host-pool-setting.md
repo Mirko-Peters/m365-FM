@@ -80,7 +80,7 @@ Learn's FAQ gives the disconnected-session case: 6 disconnected users, a limit o
 Learn lists these tabs for creating or changing a pooled schedule.
 
 1. In the Azure portal open **Azure Virtual Desktop** and then **Scaling plans**, and select the plan.
-2. Under the **Manage** heading, select **Schedules**, then select **Add schedule** for a new schedule or open the existing one.
+2. Under the **Manage** heading, select **Schedules**, then open the schedule you want to change. If the plan has no schedule yet, create one first.
 3. On **Ramp up**, set the start time, the algorithm (breadth-first), the minimum percentage of hosts and the capacity threshold.
 4. On **Peak hours**, choose breadth-first or depth-first.
 5. On **Ramp-down**, set the start time, the algorithm, the minimum percentage, the capacity threshold and force logoff of users.

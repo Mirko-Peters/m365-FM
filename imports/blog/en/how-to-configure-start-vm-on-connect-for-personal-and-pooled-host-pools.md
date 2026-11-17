@@ -10,7 +10,7 @@ keypoints:
   - "Two things are required: a role assignment that lets Azure Virtual Desktop power on the VMs, and the Start VM on connect setting on an existing host pool."
   - "The role is Desktop Virtualization Power On Contributor, assigned to the Azure Virtual Desktop service principal or a host pool managed identity at a scope that contains the host pool and its session host VMs."
   - "Names of the host pool, its session hosts and the resource group may contain only ANSI characters."
-  - "The setting is per host pool, so test it on one pool first. You can set it in the Azure portal, Azure PowerShell or Azure CLI, but not while you create a new host pool."
+  - "The setting is per host pool, so test it on one pool first. You can set it in the Azure portal, Azure PowerShell or Azure CLI, and Learn says to configure it on an existing host pool, not while you create one."
   - "Test a deallocated host for each pool type you run, and plan separately what deallocates the VMs afterwards."
 faq:
   - q: "Which role does Start VM on Connect need, and who gets it?"
@@ -53,7 +53,7 @@ Learn says this assignment allows Azure Virtual Desktop to power on VMs, check t
 6. Set **Assign access to** to **Microsoft Entra user, group, or service principal**, select **Select members**, enter the application name and select it. If two entries share the name, select both, then remove the one whose object ID does not match the one you noted.
 7. Select **Next**, then **Review + assign**.
 
-**Managed identity alternative.** Learn lists Start VM on Connect among the features that can use a managed identity on a host pool. Learn's "What's new in Azure Virtual Desktop" lists "Managed identity support is now generally available" under September 2026, and says that in a future service update, host pools configured with a session host configuration will require a managed identity to add session hosts. Learn's managed identity page says this replaces reliance on the Azure Virtual Desktop service principal for those host pools; it does not say this about Start VM on Connect itself. A system-assigned identity is tied to the host pool; a user-assigned identity is an independent resource. Learn's managed identity page (updated 25 September 2026) gives these portal steps:
+**Managed identity alternative.** Learn lists Start VM on Connect among the features that can use a managed identity on a host pool. Learn's "What's new in Azure Virtual Desktop" lists "Managed identity support is now generally available" under September 2026, and says that in a future service update, host pools configured with a session host configuration will require a managed identity to add session hosts. Learn's managed identity page says this replaces reliance on the Azure Virtual Desktop service principal for those host pools; it does not say this about Start VM on Connect itself. A system-assigned identity is tied to the host pool; a user-assigned identity is an independent resource. Learn's managed identity page (September 2026) gives these portal steps:
 
 1. Search for **Azure Virtual Desktop**, select **Host pools**, then select the host pool.
 2. Select **Identity** and select **Assign a Managed Identity**.
@@ -90,7 +90,7 @@ az desktopvirtualization hostpool update --resource-group $resourceGroupName --n
 az desktopvirtualization hostpool update --resource-group $resourceGroupName --name $hostPoolName --start-vm-on-connect false
 ```
 
-The `Update-AzWvdHostPool` reference describes `-StartVMOnConnect` as "The flag to turn on/off StartVMOnConnect feature". The CLI reference says `--start-vm-on-connect` accepts 0, 1, f, false, n, no, t, true, y and yes, and that the extension needs Azure CLI 2.55.0 or later. Both commands change an existing host pool, which matches Learn's rule that you cannot enable the setting while creating one.
+The `Update-AzWvdHostPool` reference describes `-StartVMOnConnect` as "The flag to turn on/off StartVMOnConnect feature". The CLI reference says `--start-vm-on-connect` accepts 0, 1, f, false, n, no, t, true, y and yes, and that the extension needs Azure CLI 2.55.0 or later. Both commands change an existing host pool, which is the route Learn describes. The create commands list the same parameter in their references, but Learn's configuration page only describes setting it on existing host pools.
 
 ## Step 3: test each pool type
 
