@@ -14,7 +14,7 @@ keypoints:
   - "Learn recommends at least two replicas for a gallery image used with session host update and at least three replicas for production images in general."
 faq:
   - q: "Should I use a managed image or an Azure Compute Gallery?"
-    a: "Microsoft Learn calls the gallery recommended for production because it supports replication, versioning and deployment at scale. A managed image is described as a simpler, standalone option for basic deployments."
+    a: "Learn recommends Azure Compute Gallery images for production because of capabilities such as replication and image versioning, and describes the gallery as the way to create and share images at scale. It describes managed images as suited to development and test, with a couple of simple generalized images used within a single region and subscription. A managed image can only create VMs in its own region and cannot be shared across subscriptions and tenants."
   - q: "Can I capture a session host that is already in a host pool?"
     a: "Learn says not to. Its configuration would conflict with the image and the new VM would not work. Build the image from a separate base VM that was never registered to a host pool."
   - q: "How do I keep a new image version from being picked up automatically?"
@@ -49,7 +49,7 @@ The golden image article gives this sequence:
 6. Disable antivirus before sysprep, since it can break it. Make sure Unified Write Filter is not enabled, because it is not supported on session hosts.
 7. Take a final snapshot, run sysprep as described in the generalize guide, and capture.
 
-On capture, Learn recommends an Azure Compute Gallery, formerly called Shared Image Gallery, for production. After a capture you must delete the VM, because you can no longer use it. If capture fails, do not capture the same VM again; create a new VM from the last snapshot and run sysprep again. Likewise, build the next image from a new base VM created from your last snapshot, and patch that base regularly.
+On capture, Learn recommends an Azure Compute Gallery for production. Learn's imaging overview notes that the gallery was formerly known as Shared Image Gallery, which is the name some older pages still use. After a capture you must delete the VM, because you can no longer use it. If capture fails, do not capture the same VM again; create a new VM from the last snapshot and run sysprep again. Likewise, build the next image from a new base VM created from your last snapshot, and patch that base regularly.
 
 ### Custom image templates
 
@@ -73,11 +73,11 @@ Release means publishing a version, deciding it is approved, and pointing pools 
 
 **Version it.** In an [Azure Compute Gallery](/entity/azure-compute-gallery/), a version number has the form MajorVersion.MinorVersion.Patch, uses integers and periods, and must fit a 32-bit integer. A scheme such as 2026.11.0 fits that rule; the scheme is your choice, not Learn's. Versioning, replication and sharing are covered in the article on Azure Compute Gallery for AVD images.
 
-**Replicate it.** Replication time depends on the amount of data and the number of target regions, and Learn says it can take a few hours in some cases. Learn recommends at least two replicas of a gallery image used with session host update, and the gallery page recommends at least three replicas for production images.
+**Replicate it.** Replication time depends on the amount of data and the number of target regions, and Learn says it can take a few hours in some cases. The page on updating session hosts recommends at least two replicas of a gallery image used with session host update, and the Azure Compute Gallery page recommends at least three replicas for production images.
 
 **Stage it.** The **Exclude from latest** field defaults to No, and Learn describes it as the way to keep a version from being used when a VM is created with `latest` in place of a version number. It does not hide the version from anyone who names it. The session host update pages do not say whether a session host configuration accepts `latest`, so a practical approach, not a Learn rule, is to leave candidates unreferenced and give the configuration the version number only after the test pool passes. Exclude from latest and the end of life date can be changed after creation.
 
-**Roll it out.** For a pool with a [session host configuration](/entity/avd-session-host-configuration/), point the configuration to the new version and schedule a session host update. Learn's image requirement is that the image is supported for Azure Virtual Desktop and for the generation of virtual machine in use. Batches, timing, notifications and the purchase plan, OS disk and `C:\packages\plugin` traps are covered in "Managing session host updates with a session host configuration". Two limits matter at release time:
+**Roll it out.** For a pool with a [session host configuration](/entity/avd-session-host-configuration/), point the configuration to the new version and schedule a session host update. Learn's image requirement is that the image is supported for Azure Virtual Desktop and for the generation of virtual machine in use. Batches, timing, notifications, the purchase plan and OS disk limits, and the `C:\packages\plugin` trap are covered in "Managing session host updates with a session host configuration". Two limits matter at release time:
 
 - Session host update is only available in the global Azure cloud, not in clouds such as Azure US Government or Azure operated by 21Vianet.
 - Learn's session host update pages say a gallery image in a different Azure subscription than the host pool is not currently supported, while the What's new entry of September 2025 announces support for images in another subscription within the same tenant. The pages disagree, so test it before you rely on it. The article "Session host configuration in Azure Virtual Desktop explained" discusses this.
@@ -90,8 +90,8 @@ Microsoft announced general availability of enhanced host pool management, inclu
 
 Retiring a version has three parts, and the first is weaker than it sounds.
 
-1. **Stop recommending it.** Set Exclude from latest to Yes and set the **End of life date**, which the image version article describes as the date when you think the version should stop being used. Learn is explicit that end of life dates are informational: users can still create VMs from versions past the date, and a version requested by number stays usable. Both settings are signals, not locks.
-2. **Find what still references it.** In the host pool's Session hosts list, the Current Version column shows the timestamp of the session host configuration version, not the image version, so it does not answer this question. Learn does not describe a single report for it. Check the image selected in the pool's session host configuration and the image reference in the properties of the VMs in Azure. New hosts are created from the stored configuration, so a deleted version that the configuration still names would stop new hosts from being created. The gallery FAQ adds that VMs already created from a deleted gallery image stay unaffected, but virtual machine scale set scale-out fails because it relies on the source image ID.
+1. **Stop recommending it.** Set Exclude from latest to Yes and set the **End of life date**, which the image version article describes as the date when you think the version should stop being used. Learn is explicit that end of life dates are informational: users can still create VMs from images and versions past the end of life date. Together with the Exclude from latest wording, this means a version requested by number stays usable. Both settings are signals, not locks.
+2. **Find what still references it.** In the host pool's Session hosts list, the Current Version column shows the timestamp of the session host configuration version, not the image version, so it does not answer this question. Learn does not describe a single report for it. Check the image selected in the pool's session host configuration and the image reference in the properties of the VMs in Azure. Learn says new hosts are created with the configuration stored in the session host configuration. It does not document what happens when that configuration names a deleted version, so expect host creation from it to fail. The gallery FAQ documents the neighboring case: VMs already created from a deleted gallery image stay unaffected, but virtual machine scale set scale-out fails because it relies on the source image ID.
 3. **Delete it.** Learn says to delete gallery resources in reverse order: image versions first, then the image definition once all its versions are gone, then the gallery. The Azure CLI command is:
 
 ```bash
@@ -122,6 +122,7 @@ Retrieved 17 November 2026.
 - [Microsoft Learn: Store and share images in an Azure Compute Gallery](https://learn.microsoft.com/en-us/azure/virtual-machines/shared-image-galleries)
 - [Microsoft Learn: Create an image version](https://learn.microsoft.com/en-us/azure/virtual-machines/image-version)
 - [Microsoft Learn: List, update, and delete gallery resources](https://learn.microsoft.com/en-us/azure/virtual-machines/update-image-resources)
+- [Microsoft Learn: Virtual machine image options (Azure Compute Gallery and managed images)](https://learn.microsoft.com/en-us/azure/virtual-machines/linux/imaging)
 - [Microsoft Learn: Session host update](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update)
 - [Microsoft Learn: Update session hosts using session host update](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update-configure)
 - [Microsoft Learn: Troubleshoot session host update](https://learn.microsoft.com/en-us/azure/virtual-desktop/troubleshoot-session-host-update)

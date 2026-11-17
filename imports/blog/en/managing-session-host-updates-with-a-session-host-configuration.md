@@ -34,14 +34,14 @@ The flow per host: users receive your notification and are signed out after the 
 ## Before you schedule
 
 1. **Check the pool.** It must be a pooled host pool with a configuration. All hosts must be in the same region and resource group.
-2. **Prepare the image.** It must be supported for Azure Virtual Desktop and match the generation of virtual machine. Trusted launch and Confidential VMs need Generation 2. For a gallery image, Learn recommends at least two replicas, and a gallery image in a different subscription than the host pool is described as not currently supported. The What's new entry of September 2025 announces support for images in another subscription within the same tenant, so the pages disagree; test it before you rely on it. Session host update is only available in the global Azure cloud, not in Azure US Government or Azure operated by 21Vianet.
+2. **Prepare the image.** It must be supported for Azure Virtual Desktop and match the generation of virtual machine. Trusted launch and Confidential VMs need Generation 2. Two limits from Learn's known issues: a purchase plan on a gallery image is not retained when hosts are updated, and the OS disk size cannot be changed during an update, because the service uses the size defined by the gallery image. For a gallery image, Learn recommends at least two replicas, and a gallery image in a different subscription than the host pool is described as not currently supported. What's new of September 2025 announces support for images in another subscription within the same tenant, so the pages disagree; test before relying on it. Session host update is only available in the global Azure cloud, not in Azure US Government or Azure operated by 21Vianet.
 3. **Disable autoscale.** Turn the [scaling plan](/entity/avd-scaling-plan/) off for the pool until the update ends.
 4. **Remove resource locks** from the hosts and their resource group.
 5. **Check quota.** The update creates VMs, and Learn asks you to keep subscription quota limits in mind and to consider requesting an increase if an update would go over the limit.
-6. **Check permissions, identity and key vault.** You need the RBAC permissions to update a session host configuration, listed in the deploy article's prerequisites. The host pool's managed identity needs the Desktop Virtualization Virtual Machine Contributor role on the resource group or subscription for the session hosts. For the key vault, it needs Key Vault Secrets User under Azure RBAC, or the Get secret permission in an access policy, which Learn says is not supported with a system-assigned identity chosen at pool creation. The update must use a managed identity to reach a key vault with private network access, otherwise the vault must allow public access from all networks. Learn's managed identity page says host pools with a session host configuration require a managed identity starting 1 November 2025 to add hosts, while What's new of September 2026 says "in a future service update". Check whether your pool has one.
+6. **Check permissions, identity and key vault.** You need the RBAC permissions to update a session host configuration, listed in the deploy article's prerequisites. The host pool's managed identity needs the Desktop Virtualization Virtual Machine Contributor role on the resource group or subscription for the session hosts. For the key vault, it needs Key Vault Secrets User under Azure RBAC, or the Get secret permission in an access policy, which Learn says is not supported with a system-assigned identity chosen at pool creation. The update must use a managed identity to reach a key vault with private network access, otherwise the vault must allow public access from all networks. Learn's managed identity page says pools with a session host configuration require a managed identity starting 1 November 2025, while What's new of September 2026 says "in a future service update". Check whether your pool has one.
 7. **Move customizations into code.** Manual changes on hosts, such as files, registry keys and certificates, are lost, so put them in the image, Intune, Group Policy or the custom script. If you use Azure Virtual Desktop Insights, the Azure Monitor agent or Log Analytics agent is not installed automatically on updated hosts: use Azure Policy for the Azure Monitor agent, Azure Automation for the Log Analytics agent, or add the hosts manually in Insights.
 8. **Test.** Run the same update on a test pool that matches production, including applications and hotfixes.
-9. **Pick a quiet time.** Capacity drops and users must sign in again.
+9. **Pick a quiet time.** Capacity drops.
 
 The configure page also has Azure PowerShell tabs for these tasks. Learn notes that these cmdlets require the preview Az.DesktopVirtualization module, 5.3.0 or later.
 
@@ -59,8 +59,7 @@ On the first update your settings overwrite the defaults of the session host man
 
 ### Choosing a batch size
 
-The first host is always updated alone. With 10 hosts and a batch size of 3, the initial host goes first, then batches of 3, 3 and 3, and at least 7 hosts stay available once the initial one is done. With about 20 minutes per host and hosts in a batch running concurrently, that example is four rounds, roughly 80 minutes, as a rough estimate. Learn warns that large batch sizes can cause intermittent `AgentRegistrationFailureGeneric` errors and that retrying usually resolves them. Choose the batch size by what the pool can lose.
-
+The first host is always updated alone. With 10 hosts and a batch size of 3, the initial host goes first, then batches of 3, 3 and 3, and at least 7 hosts stay available once the initial one is done. With about 20 minutes per host and hosts in a batch running concurrently, that example is four rounds, roughly 80 minutes, as a rough estimate. Learn warns that large batch sizes can cause intermittent `AgentRegistrationFailureGeneric` errors and that retrying usually resolves them. 
 ## While it runs
 
 - Open **Session hosts** to see a blue banner with the status. It shows one point in time, so select **Refresh**. If you started the update immediately, the banner may still say scheduled until you refresh.
@@ -102,7 +101,7 @@ WVDSessionHostManagement
 | summarize arg_max(TimeGenerated, ProvisioningStatus, ScheduledDateTime, UpdateMaxVmsRemoved) by CorrelationId
 ```
 
-Related queries on the page cover successful updates with duration and median time per host, errors with the `CodeSymbolic` code, and cancellations. For error codes, use the troubleshooting page.
+Related queries on the page cover successful updates with duration and median time per host, errors with the `CodeSymbolic` code, and cancellations.
 
 ## After the update
 

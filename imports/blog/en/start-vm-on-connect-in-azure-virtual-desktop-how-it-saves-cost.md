@@ -24,6 +24,7 @@ faq:
 Start VM on Connect saves compute cost by letting session hosts stay deallocated until a user connects. It only turns VMs on. The saving appears when a second mechanism, usually autoscale, turns them off again.
 
 This article explains how the feature behaves and where the saving comes from. The configuration steps, including the role assignment, are in the sibling article "How to configure Start VM on Connect for personal and pooled host pools".
+
 ## What the feature does
 
 Learn describes [Start VM on Connect](/entity/avd-start-vm-on-connect/) as a way to reduce costs by letting end users power on the VMs used as [session hosts](/entity/avd-session-host/) only when they need them, so that VMs can be powered off when they are not needed. It is configured per host pool, for session hosts on Azure and on Azure Local, in personal or pooled host pools. The billing table below applies to Azure VMs.
@@ -64,7 +65,7 @@ An illustration, using no prices: suppose a personal desktop is needed only betw
 Start VM on Connect needs a partner for the shutdown side:
 
 1. **Autoscale.** Learn's FAQ names autoscale as the way to deallocate VMs for pooled and personal host pools. See [power management autoscaling](/entity/avd-power-management-autoscaling/) and the article on the four autoscale phases.
-2. **A disconnected-session policy plus automation.** The FAQ describes setting **Set time limit for disconnected sessions** to **Enabled** and **End a disconnected session** under Group Policy (**Computer Configuration > Administrative Templates > Windows Components > Remote Desktop Services > Remote Desktop Session Host > Session Time Limits**). The limit should be greater than five minutes, because a low value can end sessions when a network drops. Signing users out still does not deallocate VMs, so you also need Azure automation scripts.
+2. **A disconnected-session policy plus automation.** The FAQ describes setting **Set time limit for disconnected sessions** to **Enabled** and **End a disconnected session** on the VM in the local Group Policy settings (**Computer Configuration > Administrative Templates > Windows Components > Remote Desktop Services > Remote Desktop Session Host > Session Time Limits**). The limit should be greater than five minutes, because a low value can end sessions when a network drops. Signing users out still does not deallocate VMs, so you also need Azure automation scripts.
 
 For personal desktops with autoscale, Learn says that if you choose not to have personal desktops started during ramp-up, autoscale will not start them, and you must either enable Start VM on Connect or start them yourself. The scaling plan article says Learn highly recommends enabling it in that case. Learn's autoscale FAQ adds that a VM turned on by autoscale, by Start VM on Connect or by an admin that nobody signs into is deallocated after a period of inactivity, which the page does not define. Learn's scaling plan article lists the Start VM on Connect option only in the schedules for personal host pools, so test the combination with a pooled scaling plan before you rely on it.
 
@@ -77,7 +78,7 @@ For personal desktops with autoscale, Learn says that if you choose not to have 
 
 ## A pooled walk-through
 
-This timeline is a model built on Learn's rules, with invented numbers: a boot time of three minutes, and the assumption that the five-minute window runs from the last VM start. Learn gives no boot duration and does not define how the window is measured. The host pool has three VMs, all deallocated, and a maximum session limit of five.
+This timeline is a model built on Learn's rules, with invented numbers: a boot time of three minutes, and the assumption that the five-minute window runs from the last VM start. Learn's Start VM on Connect page gives no boot duration and does not define how the window is measured. The host pool has three VMs, all deallocated, and a maximum session limit of five.
 
 1. **08:00.** The first user connects. No VM is on, so Start VM on Connect starts VM 1. The user waits for the boot and sees the power-on message in the client.
 2. **08:03.** VM 1 is up. Four more users connect and fill it to five sessions.
@@ -94,7 +95,9 @@ The example shows where users feel the feature: a login burst can meet the error
 
 ## How to check the effect
 
-Learn gives no cost-measurement method. A practical check is to compare how many hours your session hosts are allocated for a few weeks before and after you enable the feature and the shutdown automation. If the hours do not fall, look for VMs that are still allocated overnight, because the shutdown mechanism is the part that decides the saving.
+Learn's Start VM on Connect pages give no savings figures and no method for measuring the saving. For tracking spend, Learn's cost article says that once Azure Virtual Desktop is deployed, you can use Microsoft Cost Management and its cost analysis tools to track monthly Azure Virtual Desktop consumption costs under your Azure subscription or subscriptions. It also says you can tag Azure Virtual Desktop resources to manage costs.
+
+A practical check follows from that: tag the session host resources, then compare the monthly consumption costs in cost analysis for a few months before and after you enable the feature and the shutdown automation. If the costs do not fall, look for VMs that are still allocated overnight, because the shutdown mechanism is the part that decides the saving. Keep other changes, such as pool size or user numbers, in mind when you compare.
 
 ## When it fits
 
@@ -113,3 +116,4 @@ Retrieved 17 November 2026.
 - [Microsoft Learn: Azure Virtual Desktop autoscale FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq)
 - [Microsoft Learn: Create and assign an autoscale scaling plan](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)
 - [Microsoft Learn: States and billing status of Azure Virtual Machines](https://learn.microsoft.com/en-us/azure/virtual-machines/states-billing)
+- [Microsoft Learn: Understand and estimate costs for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/understand-estimate-costs)
