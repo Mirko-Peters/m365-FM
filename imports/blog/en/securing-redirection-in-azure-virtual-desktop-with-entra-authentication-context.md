@@ -98,7 +98,7 @@ Connect with a client Learn lists for full desktop sessions: Windows App on Wind
 - **Printer:** Learn's printer redirection article.
 - **USB:** Learn's USB redirection article.
 
-Illustrative scenario: with the context mapped to clipboard and drives only, a user on a compliant laptop can copy text from a local document into the remote session and see local drives. The same user on a personal laptop (BYOD) should get neither, while printing, which you did not map, behaves as before.
+Illustrative scenario: with the context mapped to clipboard and drives only, a user on a compliant laptop can copy text from a local document into the remote session and see local drives. The same user on a personal laptop (BYOD) should get neither.
 
 ## If it does not behave as expected
 

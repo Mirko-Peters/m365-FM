@@ -65,7 +65,7 @@ The Azure VM sizes overview also lists other graphics families, for example NVad
 
 ### The NVadsA10 v5 detail
 
-The NVadsA10 v5 series uses NVIDIA A10 GPUs with AMD EPYC 74F3V (Milan) processors and is the series with partial GPUs among the series on this list. Learn's size tables list six sizes:
+The NVadsA10 v5 series uses NVIDIA A10 GPUs with AMD EPYC 74F3V (Milan) processors and, of the two series still available here, is the only one with partial GPUs. Learn's size tables list six sizes:
 
 | Size | vCPUs | Memory (GiB) | GPU share | GPU memory (GB) |
 |---|---|---|---|---|
