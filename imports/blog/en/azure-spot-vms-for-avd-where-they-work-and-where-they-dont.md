@@ -23,7 +23,7 @@ faq:
 
 Azure Spot VMs are cheaper because Azure can take them back: they run on unused capacity, can be evicted at any time with 30 seconds' notice, and have no SLA. For Azure Virtual Desktop that makes them suitable for interruption-tolerant, disposable [session hosts](/entity/avd-session-host/), and a poor fit for a desktop a user relies on all day. This guide covers the eviction rules, how Spot hosts interact with host pool setup and autoscale, and a way to decide.
 
-Microsoft does not document a Spot workflow for Azure Virtual Desktop. Where this article goes beyond the Learn pages, it says so ("our reading").
+The Learn articles on adding session hosts and on autoscale do not mention Spot VMs, and no Learn page found describes a Spot workflow for Azure Virtual Desktop. Where this article goes beyond Learn, it says so ("our reading").
 
 ## What a Spot VM promises, and what it does not
 
@@ -63,15 +63,15 @@ The Microsoft Q&A thread asked how to run AVD session hosts on Spot. A volunteer
 Our reading, based on the eviction rules above: Spot suits hosts where losing a session costs little.
 
 - **Test and lab pools.** A validation or training host pool where users expect occasional interruption, and where nothing business-critical runs.
-- **Stateless pooled hosts with profiles in FSLogix.** On a pooled pool, Learn says users can connect to a different host each time, so they should keep profile data in [FSLogix](/entity/fslogix/). If the profile lives off-host, it does not depend on the disk of the evicted VM. This limits the damage; it does not remove the disconnect, and unsaved work in the open session can be lost. Learn does not describe how a profile container behaves after a hard eviction; test that.
-- **Extra capacity beside standard hosts.** Our reading: a small pool of Spot hosts for non-critical users, separate from a pool of standard VMs. A separate pool keeps users on the pool you chose; within one pool, load balancing places sessions on any host, including a Spot one.
+- **Stateless pooled hosts with profiles in FSLogix.** On a pooled pool, Learn says users can connect to a different host each time, so they should keep profile data in [FSLogix](/entity/fslogix/). An off-host profile does not depend on the evicted VM's disk. This does not remove the disconnect; unsaved work in the open session can be lost. Learn does not describe how a profile container behaves after a hard eviction; test that.
+- **Extra capacity beside standard hosts.** Our reading: a small pool of Spot hosts for non-critical users, separate from a pool of standard VMs. Within one pool, load balancing places sessions on any host, including a Spot one.
 
 ## Where Spot hosts do not work well
 
 - **Personal desktops.** A [personal host pool](/entity/avd-personal-host-pool/) assigns one host to one user, and Learn says user data can sit on the OS disk. With the Delete policy that disk goes with the VM. With Deallocate the disk stays, but the user cannot work until the VM is allocated again, and Learn gives no guarantee that it will be.
 - **Production pooled hosts that carry the whole workload.** If every host can be evicted, a capacity event can leave nobody a host to connect to. Learn's advice is to use standard VMs if you need capacity right away.
 - **Scheduled or contractual availability.** There is no SLA for Spot VMs.
-- **Users who cannot lose a session.** The Spot articles describe only the in-VM Scheduled Event (`Preempt`), delivered without a guarantee, and no sign-out message to users. Autoscale ramp-down, by contrast, puts a host in drain mode and sends a notification before signing users out after the wait time you set, if you enable forced sign-out during ramp-down.
+- **Users who cannot lose a session.** Eviction is signalled to the VM through the Scheduled Events `Preempt` event, which Learn says is delivered without a guarantee, with a minimum notice of 30 seconds. The Learn pages used here describe no sign-out message to users. Autoscale ramp-down, by contrast, puts a host in drain mode and sends a notification before signing users out after the wait time you set, if you enable forced sign-out during ramp-down.
 
 ## How eviction meets autoscale
 
@@ -104,7 +104,7 @@ Spot can sit beside these, for example a standard baseline pool plus a small Spo
 
 ## Summary
 
-Use Spot where an eviction is an inconvenience: test pools, short-lived training hosts, or stateless pooled hosts for users who tolerate reconnecting. Avoid it for personal desktops and for hosts you rely on at a fixed time. Because Azure Virtual Desktop does not document Spot, the practical test is a pilot with a small user group, a simulated eviction, and a look at the eviction rate for your size and region.
+Use Spot where an eviction is an inconvenience: test pools, short-lived training hosts, or stateless pooled hosts for users who tolerate reconnecting. Avoid it for personal desktops and for hosts you rely on at a fixed time. Because the Azure Virtual Desktop pages used here do not describe Spot hosts, the practical test is a pilot with a small user group, a simulated eviction, and a look at the eviction rate for your size and region.
 
 ## Sources
 
