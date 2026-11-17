@@ -7,7 +7,7 @@ author: mirko-p
 date: 2026-11-18
 topics: [avd-power-management-autoscaling, avd-scaling-plan]
 keypoints:
-  - "Power management autoscaling powers existing session hosts on and off. Dynamic autoscaling also creates and deletes hosts, works only for pooled host pools with a session host configuration, and carries a preview label on Learn's scenarios and glossary pages."
+  - "Power management autoscaling powers existing session hosts on and off. Dynamic autoscaling also creates and deletes hosts and works only for pooled host pools with a session host configuration. Microsoft announced it as generally available in July 2026, while some Learn pages still carry preview wording."
   - "A scaling plan holds the schedules. Pooled schedules use four phases (ramp-up, peak, ramp-down, off-peak) with a capacity threshold and a minimum percentage of hosts. Personal schedules act on disconnected and signed-out sessions."
   - "Autoscale turns a host on when used capacity exceeds the threshold. It turns a host off when used capacity is below the threshold and removing the host would not push it over the threshold. At exactly the threshold, nothing happens."
   - "The role Desktop Virtualization Power On Off Contributor must be assigned at subscription level. A lower scope can stop autoscale from working properly."
@@ -18,7 +18,7 @@ faq:
   - q: "Can autoscale turn off every VM in a host pool?"
     a: "Only if the minimum percentage of hosts is set to 0 percent and there are no user sessions on the session hosts. Microsoft's FAQ says a disconnected session counts as a session and recommends a time limit policy that signs out disconnected users."
   - q: "Can I configure autoscale with the Azure CLI or skip specific dates such as holidays?"
-    a: "According to the autoscale FAQ on Microsoft Learn at the time of review, autoscale does not offer configuration through Azure CLI and does not support ramping down on specific dates. Check the current FAQ before you plan around either point."
+    a: "The autoscale FAQ on Microsoft Learn states that autoscale does not offer configuration through Azure CLI and does not support ramping down on specific dates, such as holidays."
 ---
 
 Power management autoscaling is the Azure Virtual Desktop feature that powers existing session hosts on and off, following a schedule and the share of session capacity that is in use. Use it when a host pool has a recognisable daily rhythm and you want unused VMs deallocated outside working hours. It does not create or delete VMs. That is the job of dynamic autoscaling, a separate scaling method.
@@ -28,7 +28,7 @@ Power management autoscaling is the Azure Virtual Desktop feature that powers ex
 Microsoft Learn defines autoscale as the native scaling service that scales session hosts up and down based on the capacity of the host pools and the scaling plan schedule you define. There are two scaling methods:
 
 - **Power management autoscaling** powers session hosts on and off to adjust to the available capacity in a host pool. Learn names it as the option for host pools with standard management.
-- **Dynamic autoscaling** also creates and deletes session hosts. It can only be used for pooled host pools with a session host configuration. On the Learn pages checked on 17 November 2026, it is labelled preview on the scenarios and glossary pages. The What's new page announced it as "now in preview" in November 2024 and as "now available" in June 2026, without a general availability label. Learn describes power management autoscaling as generally available.
+- **Dynamic autoscaling** also creates and deletes session hosts. It can only be used for pooled host pools with a session host configuration. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 ([Tech Community](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit. Learn describes power management autoscaling as generally available.
 
 When autoscale shuts down a VM, it deallocates it. Microsoft's FAQ states that using autoscale does not cost extra and refers to the pricing page for rates.
 
@@ -70,7 +70,7 @@ Autoscale turns a host on when used capacity exceeds the threshold. It turns a h
 
 Learn's ramp-up scenario (scenario 1) starts with two available hosts out of six, a maximum session limit of 5 and a threshold of 30 percent. Capacity is 10 sessions. Three sessions give 30 percent, which is not above the threshold, so nothing happens. A fourth session gives 40 percent and autoscale turns on one host (capacity 15, about 27 percent). A fifth session gives 33 percent and another host starts. At 6 sessions nothing happens (30 percent). A seventh session gives 35 percent and a fifth host starts.
 
-Autoscale does not turn hosts off during ramp-up. Learn's peak scenario (scenario 2) has 5 available hosts, a limit of 5 and 7 sessions, which is 28 percent used. Autoscale turns off no host yet, because removing one would leave 7 sessions on 20 sessions of capacity, 35 percent (this division is our own arithmetic, not a figure from Learn), above the 30 percent threshold. After two users sign out for lunch, 5 sessions remain. Removing one host would give 25 percent, so autoscale selects a host without user sessions, puts it in drain mode and turns it off. For more worked schedules, see the companion articles on the four autoscale phases and on the scaling plan procedure.
+Autoscale does not turn hosts off during ramp-up. Learn's peak scenario (scenario 2) has 5 available hosts, a limit of 5 and 7 sessions, which is 28 percent used. Autoscale turns off no host yet, because removing one would leave 7 sessions on 20 sessions of capacity, 35 percent (35 percent by simple division), above the 30 percent threshold. After two users sign out for lunch, 5 sessions remain. Removing one host would give 25 percent, so autoscale selects a host without user sessions, puts it in drain mode and turns it off. For more worked schedules, see the companion articles on the four autoscale phases and on the scaling plan procedure.
 
 ## Ramp-down and off-peak
 
@@ -81,7 +81,7 @@ You choose how the remaining hosts are emptied:
 - **Stop VMs when**: select **VMs have no active or disconnected sessions** or **VMs have no active sessions**, and autoscale waits for users to sign out. The FAQ says that with the second option autoscale still treats disconnected sessions as active, because users may reconnect immediately.
 - **Force logoff of users**: autoscale picks the host with the fewest sessions, puts it in drain mode, notifies users, signs them out after the wait time you set, and deallocates the VM.
 
-Force logoff applies only in ramp-down. Learn's ramp-down scenario (scenario 3) has 4 available hosts, a limit of 5, 4 sessions (20 percent used), a threshold of 75 percent and a minimum of 10 percent. Applying the glossary formula, 4 ÷ (5 × 0.75) = 1.07, so 2 hosts are required. Learn's text says two hosts can be turned off without exceeding 75 percent, so two hosts with the fewest sessions are drained, their users are notified and signed out, and the hosts are turned off. Later in the same scenario, after the users reconnect (4 sessions, 40 percent) and one user signs out (3 sessions, 30 percent), one more host is turned off. When the forced-out user signs back in (3 sessions on one host, 60 percent), autoscale keeps the last host on, because turning it off would drop capacity to 0, below the 10 percent minimum.
+Force logoff applies only in ramp-down. Learn's ramp-down scenario (scenario 3) has 4 available hosts, a limit of 5, 4 sessions (20 percent used), a threshold of 75 percent and a minimum of 10 percent. Applying the glossary formula, 4 ÷ (5 × 0.75) = 1.07, so 2 hosts are required. Learn's text says two hosts can be turned off without exceeding 75 percent, and because every host has the same number of sessions, autoscale chooses two hosts at random, signs out all their users and turns the hosts off. Later in the same scenario, after the users reconnect (4 sessions, 40 percent) and one user signs out (3 sessions, 30 percent), one more host is turned off, chosen as the host with the fewest sessions. When the forced-out user signs back in (3 sessions on one host, 60 percent), autoscale keeps the last host on, because turning it off would drop capacity to 0, below the 10 percent minimum.
 
 In off-peak, the minimum percentage of hosts keeps capacity on. Per the FAQ, autoscale can turn off all VMs only if the minimum percentage of hosts is 0 percent and there are no user sessions on the session hosts, disconnected ones included. Learn points to a time limit policy, set in Intune or Group Policy, that signs out disconnected sessions.
 
@@ -111,7 +111,7 @@ Consider another approach when:
 - Your demand depends on specific dates. The FAQ says autoscale does not currently support ramping down on specific dates.
 - You rely on the Azure CLI. The FAQ says autoscale cannot be configured with it.
 - You need disaster recovery. The FAQ says customers must set up their own disaster recovery strategy to manage outages: autoscale only handles scaling existing VMs within the region they were created in.
-- Another tool already scales the pool. Learn says autoscale cannot be used with Azure Automation and Azure Logic Apps scaling on the same host pool. More generally, the scenarios page says: "Don't use autoscale in combination with other scaling Microsoft or third-party scaling tools. Ensure that you disable those for the host pools you apply the scaling plans to." That covers third-party scaling features such as [Nerdio's auto-scaling](/entity/nerdio-auto-scaling/). Learn does not describe how a specific product behaves, so check that vendor's documentation and keep one scaling mechanism per host pool.
+- Another tool already scales the pool. Learn says autoscale cannot be used with Azure Automation and Azure Logic Apps scaling on the same host pool. More generally, the scenarios page says: "Don't use autoscale in combination with other scaling Microsoft or third-party scaling tools. Ensure that you disable those for the host pools you apply the scaling plans to." For a specific third-party product, check that vendor's documentation and keep one scaling mechanism per host pool.
 
 ## Common traps
 
@@ -129,3 +129,4 @@ All pages retrieved on 2026-11-17.
 - [Microsoft Learn: Autoscale FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq)
 - [Microsoft Learn: Set up diagnostics for Autoscale](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-diagnostics)
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
+- [Microsoft Tech Community: Enhanced host pool management for Azure Virtual Desktop is now generally available](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)

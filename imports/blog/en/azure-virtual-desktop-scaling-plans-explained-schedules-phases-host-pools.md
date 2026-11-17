@@ -4,7 +4,7 @@ summary: "An Azure Virtual Desktop scaling plan is an Azure resource that holds 
 status: review
 publish: false
 author: mirko-p
-date: 2026-11-17
+date: 2026-11-18
 topics: [avd-scaling-plan, azure-virtual-desktop]
 keypoints:
   - "A scaling plan is an Azure Resource Manager object. It can be assigned to several host pools, but only to pools of the same type, and the type cannot be changed after creation."
@@ -21,7 +21,7 @@ faq:
     a: "For pooled host pools, Microsoft Learn says autoscale ignores the configured algorithm and applies the algorithm set for the phase in the schedule. Learn suggests breadth-first for ramp-up and peak and depth-first for ramp-down and off-peak."
 ---
 
-An Azure Virtual Desktop scaling plan is an Azure resource that contains one or more schedules. Each schedule divides the day into four phases, and autoscale uses the settings of the current phase to decide when to turn session hosts on, consolidate sessions and turn hosts off. This article explains the objects, the four phases, the settings of each phase and the points that decide whether a plan behaves as expected. It follows [Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary); sources are listed at the end, retrieved on 16 November 2026.
+An Azure Virtual Desktop scaling plan is an Azure resource that contains one or more schedules. Each schedule divides the day into four phases, and autoscale uses the settings of the current phase to decide when to turn session hosts on, consolidate sessions and turn hosts off. This article explains the objects, the four phases, the settings of each phase and the points that decide whether a plan behaves as expected. It follows [Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary); sources are listed at the end.
 
 ## The objects: scaling plan, schedule, host pool
 
@@ -29,7 +29,7 @@ A **scaling plan** is an Azure Resource Manager object that defines the schedule
 
 One plan can be assigned to several host pools, but each host pool can have only one scaling plan. Learn adds two limits: the host pools must be of the same type as the plan, and the type cannot be changed after creation. A mixed fleet therefore needs one plan per pool type. The plan runs in the time zone you select on the Basics tab of the creation wizard. The scaling plan configuration data must sit in the same Azure region as the host pool configuration. The session host VMs can be in any supported region.
 
-Learn also names two scaling methods for pooled pools. **Power management autoscaling** powers VMs on and off and works with standard session host management. **Dynamic autoscaling** can also create and delete session hosts, and it applies only to pooled host pools that use session host configuration. The Learn glossary, scenarios and troubleshooting pages label dynamic autoscaling preview. The What's new entries call it preview in November 2024 and "now available" in June 2026, without a GA label, and none of the Learn pages retrieved for this article calls it generally available. It requires a preview version of the `Az.DesktopVirtualization` PowerShell module (5.4.2-preview or later), and the scenarios page says it is not available in Azure Government. Power management autoscaling is generally available. This article concentrates on power management. See the entity pages for [power management autoscaling](/entity/avd-power-management-autoscaling/) and [dynamic autoscaling](/entity/avd-dynamic-autoscaling/).
+Learn also names two scaling methods for pooled pools. **Power management autoscaling** powers VMs on and off and works with standard session host management. **Dynamic autoscaling** can also create and delete session hosts, and it applies only to pooled host pools that use session host configuration. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 ([Tech Community](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit. The create-and-assign page lists the `Az.DesktopVirtualization` PowerShell module version 5.4.2-preview or later for dynamic autoscaling, and the scenarios page says it is not available in Azure Government. Power management autoscaling is generally available. This article concentrates on power management. See the entity pages for [power management autoscaling](/entity/avd-power-management-autoscaling/) and [dynamic autoscaling](/entity/avd-dynamic-autoscaling/).
 
 ## The four phases
 
@@ -55,7 +55,7 @@ In the Azure portal the Schedules tab for a pooled plan asks for these values:
 
 **Capacity threshold.** [Available capacity](/entity/avd-capacity-threshold/) is the [maximum session limit](/entity/avd-maximum-session-limit/) multiplied by the number of available session hosts. Used capacity is the number of active and disconnected sessions divided by that figure. If used capacity exceeds the threshold, autoscale turns on hosts until usage falls below it. For example, two hosts with a maximum session limit of 20 give a capacity of 40. At a 75 percent threshold, more than 30 sessions trigger a third host.
 
-**Minimum percentage of hosts.** This is the lowest percentage of all session hosts in the pool that must be turned on in a phase. The result is rounded up to a whole number. The scenarios page gives this case: 30 percent of six hosts is 1.8, which autoscale rounds up to two. See [minimum percentage of hosts](/entity/avd-minimum-percentage-of-hosts/).
+**Minimum percentage of hosts.** This is the lowest percentage of all session hosts in the pool that must be turned on in a phase. The result is rounded up to a whole number. In the scenarios page's first example, 30 percent of six hosts is not a whole number, and autoscale rounds up to two hosts. See [minimum percentage of hosts](/entity/avd-minimum-percentage-of-hosts/).
 
 **Load balancing algorithm.** For pooled pools autoscale ignores the algorithm configured on the host pool and applies the algorithm from the schedule. The FAQ suggests [breadth-first](/entity/avd-breadth-first-load-balancing/) for ramp-up and peak, and [depth-first](/entity/avd-depth-first-load-balancing/) for ramp-down and off-peak, so that sessions spread out early in the day and consolidate later.
 
@@ -64,7 +64,7 @@ In the Azure portal the Schedules tab for a pooled plan asks for these values:
 The scenarios page describes the behavior for pooled pools:
 
 - **Ramp-up**: autoscale turns on hosts to meet the minimum percentage of hosts and whenever used capacity is above the threshold. It does not turn hosts off in this phase, to avoid a poor user experience.
-- **Peak**: autoscale turns hosts on and off as needed to keep use stable. It turns a host off when used capacity is below the threshold, turning it off would not exceed the threshold, and the host has no user sessions. At exactly the threshold, autoscale does nothing.
+- **Peak**: autoscale turns hosts on and off as needed to keep use stable. It turns a host off when used capacity is below the threshold, turning it off would not exceed the threshold, and the host has no user sessions. At exactly the threshold, autoscale does nothing (FAQ).
 - **Ramp-down**: autoscale consolidates sessions and deallocates excess hosts. Before it turns a host off, it puts the host into [drain mode](/entity/avd-drain-mode/). It selects the host with the fewest sessions.
 - **Off-peak**: autoscale keeps the minimum percentage of hosts running, even if they have no users. With 0 percent and no sessions, no host needs to stay on (FAQ).
 
@@ -72,7 +72,7 @@ For consolidation Learn gives this formula: required hosts equal total sessions 
 
 ### Force sign-out and wait time
 
-[Force sign-out](/entity/avd-force-logoff/) is a setting of the ramp-down phase of a schedule and applies only there. Autoscale drains the host with the fewest sessions, notifies users, waits for the configured time, and then ends the remaining sessions and deallocates the host. Without it, you choose between "VMs have no active or disconnected sessions" and "VMs have no active sessions", and autoscale waits for users to sign out. Learn's FAQ adds that disconnected sessions still count for capacity, and that reaching zero running hosts after hours requires a minimum percentage of 0 percent and no sessions at all. It suggests the Group Policy setting "Set time limit for disconnected sessions" for that. The pages retrieved give no default for the wait time. The ramp-down details have their own article in this series, "Ramp-up, peak, ramp-down and off-peak: the four AVD autoscale phases explained".
+[Force sign-out](/entity/avd-force-logoff/) is a setting of the ramp-down phase of a schedule and applies only there. Autoscale drains the host with the fewest sessions, notifies users, waits for the configured time, and then ends the remaining sessions and deallocates the host. Without it, you choose between "VMs have no active or disconnected sessions" and "VMs have no active sessions", and autoscale waits for users to sign out. Learn's FAQ adds that disconnected sessions still count for capacity, and that reaching zero running hosts after hours requires a minimum percentage of 0 percent and no sessions at all. It suggests the Group Policy setting "Set time limit for disconnected sessions" for that. Learn's FAQ gives only example wait times, 15 and 20 minutes, and states no default. The ramp-down details have their own article in this series, "Ramp-up, peak, ramp-down and off-peak: the four AVD autoscale phases explained".
 
 ## Personal host pools
 
@@ -86,7 +86,7 @@ The full portal procedure has its own article, "How to create and assign an AVD 
 
 ## Exclusion tags and drain mode
 
-A VM with the [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) is not turned on, turned off or changed in drain mode by autoscale, in any phase. Tagged hosts still count toward the minimum percentage calculation. Learn warns that if every available host is excluded and none can be turned on, new users get a "No resources available" error. The Learn FAQ and the scenarios page both state that autoscale overrides drain mode on the VMs it scales, whoever set it, so use the tag when you patch or test a host.
+A VM with the [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) is not turned on, turned off or changed in drain mode by autoscale, in any phase. Tagged hosts still count toward the minimum percentage calculation. Learn warns that if every available host is excluded and none can be turned on, new users get a "No resources available" error. The Learn FAQ and the scenarios page both state that for pooled host pools autoscale overrides drain mode on the VMs it scales, whoever set it, so use the tag when you patch or test a host.
 
 ## Checks after assignment
 
@@ -106,7 +106,7 @@ A VM with the [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) is not tu
 
 ## Sources
 
-All retrieved on 2026-11-16.
+All retrieved on 17 November 2026.
 
 - [Microsoft Learn: Autoscale glossary for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary)
 - [Microsoft Learn: Autoscale scenarios for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)
@@ -115,3 +115,4 @@ All retrieved on 2026-11-16.
 - [Microsoft Learn: Set up diagnostics for Autoscale](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-diagnostics)
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
 - [Microsoft Learn: Troubleshoot autoscale issues in Azure Virtual Desktop](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-autoscale)
+- [Microsoft Tech Community: Enhanced host pool management for Azure Virtual Desktop is now generally available](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)
