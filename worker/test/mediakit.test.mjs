@@ -281,3 +281,13 @@ test("K13: Mediadaten - ohne Turnstile keine Mail; Name und Firma stehen nicht i
   const cfg = await call(env, "/api/mediakit", { method: "GET" });
   assert.deepEqual(await cfg.json(), { turnstile: "1x00000000000000000000AA" });
 });
+
+// Sicherheits-Audit K13 (Rest): Turnstile vor den Ratelimits - Anfragen ohne gueltiges Token verbrauchen nicht das Kontingent einer fremden Adresse
+test("K13: Mediadaten - ungueltige Turnstile-Versuche zaehlen nicht gegen das Tageslimit der Adresse", async () => {
+  const { env, sent } = await setup({ "mediakit/m365fm-media-kit-de.pdf": "%PDF-fm" });
+  const email = "opfer@contoso.com";
+  for (const tok of [undefined, "falsch", "abgelaufen"]) assert.equal((await call(env, "/api/mediakit", body({ email, turnstile: tok }))).status, 400);
+  const ok = await call(env, "/api/mediakit", body({ email }));
+  assert.equal(ok.status, 200);
+  assert.equal(sent.length, 1);
+});

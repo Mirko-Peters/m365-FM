@@ -199,12 +199,13 @@ export async function handleMediakit(env, request, url, path, user, J) {
 
   const ip = request.headers.get("cf-connecting-ip") || "0";
   const ipKey = "mk_ip:" + Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(ip + (env.SESSION_SECRET || ""))))).slice(0, 8).map((x) => x.toString(16).padStart(2, "0")).join("");
+  // Bot-Pruefung wie beim Lead-Formular (fail closed): ohne bestandenes Turnstile keine Mail an eine unbestaetigte Adresse.
+  // Sie laeuft vor den Ratelimits, damit Anfragen ohne gueltiges Token das Tageskontingent einer fremden Adresse nicht verbrauchen.
+  const ts = await verifyTurnstile(env, b.turnstile, ip);
+  if (!ts.ok) return J({ error: ts.error }, ts.error === "captcha_unavailable" ? 503 : 400);
   if (!(await rateLimit(db, ipKey, 5, 86400))) return J({ error: "rate_limit" }, 429);
   if (!(await rateLimit(db, "mk_mail:" + email, 2, 86400))) return J({ error: "rate_limit" }, 429);
   if (!mailReady(env)) return J({ error: "mail_unavailable" }, 503);
-  // Bot-Pruefung wie beim Lead-Formular (fail closed): ohne bestandenes Turnstile keine Mail an eine unbestaetigte Adresse
-  const ts = await verifyTurnstile(env, b.turnstile, ip);
-  if (!ts.ok) return J({ error: ts.error }, ts.error === "captcha_unavailable" ? 503 : 400);
 
   const ins = await db.prepare("INSERT INTO mediakit_requests(name,company,email,lang,source,created) VALUES(?,?,?,?,?,?)").bind(name, company, email, lang, source, now()).run();
   const id = ins.meta.last_row_id;
