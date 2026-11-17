@@ -143,8 +143,10 @@ test("exchange: state muss zum Cookie passen (sonst 400 state_mismatch, Spreaker
   await bad("spreaker", st.ck);                         // nur Praefix (frueheres festes state)
   await bad(st.state, "");                              // kein Cookie (fremder Browser / untergeschobener Code)
   await bad(other.state, st.ck);                        // state aus einem anderen Start
-  await bad(st.state, st.ck.replace(/.$/, (c) => (c === "A" ? "B" : "A")));   // Signatur manipuliert
   const [k, v] = st.ck.split("="), dot = v.lastIndexOf("."), [n, , e] = v.slice(0, dot).split("|");
+  // Signatur manipuliert: erstes Zeichen der Signatur tauschen. Nicht das letzte - bei 32 Byte HMAC in Base64url (43 Zeichen) traegt es 2 ungenutzte Bits,
+  // A->B aendert dann kein Byte, und der Test war in etwa 1 von 16 Laeufen rot.
+  await bad(st.state, `${k}=${v.slice(0, dot + 1)}${v[dot + 1] === "A" ? "B" : "A"}${v.slice(dot + 2)}`);
   await bad(st.state, `${k}=${n}|2|${e}${v.slice(dot)}`);   // uid getauscht -> Signatur passt nicht
   assert.equal(calls.length, 0);
   const ok = await sp(env, "abc123", st); assert.equal(ok.s, 200, ok.text);   // der echte Ablauf klappt danach noch (vor den Staging-Tests: die sperren fetch global)
