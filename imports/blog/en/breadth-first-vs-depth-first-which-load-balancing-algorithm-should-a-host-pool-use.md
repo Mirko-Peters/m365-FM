@@ -87,7 +87,7 @@ If you pick breadth-first when you create a host pool, the default limit is 9999
 
 ## What to do when depth-first runs out of room
 
-Learn marks this as important: when all hosts reach the maximum session limit, you must either increase the limit or add session hosts. New users cannot be placed otherwise. Use [Azure Virtual Desktop Insights](/entity/avd-insights/) to watch sessions per host and host performance, which is the monitoring Learn recommends when choosing the limit.
+Learn marks this as important: when all hosts reach the maximum session limit, you must either increase the limit or add session hosts. Depth-first only considers hosts below the limit, so no candidate remains (our reading of the selection rule); Learn does not say what users see. Use [Azure Virtual Desktop Insights](/entity/avd-insights/) to watch sessions per host and host performance, which is the monitoring Learn recommends when choosing the limit.
 
 ## Interaction with autoscale
 

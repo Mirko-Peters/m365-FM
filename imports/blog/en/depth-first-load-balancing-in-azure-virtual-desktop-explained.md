@@ -14,7 +14,7 @@ keypoints:
   - "Under high concurrent sign-in load, the number of sessions on a host can exceed the maximum session limit, according to Learn's terminology page."
 faq:
   - q: "What happens when all session hosts reach the maximum session limit?"
-    a: "New users cannot be placed. Microsoft Learn says that in this case you must either increase the maximum session limit or add session hosts to the host pool."
+    a: "Microsoft Learn says that in this case you must either increase the maximum session limit or add session hosts to the host pool. Depth-first only considers hosts below the limit, so no candidate remains (our reading of the selection rule); Learn does not say what users see."
   - q: "Does depth-first turn session hosts off by itself?"
     a: "No. Load balancing only decides which host receives a new session. Learn describes autoscale as the feature that turns VMs on and off in pooled host pools, based on capacity thresholds and schedules. Depth-first leaves some hosts with few or no sessions, which makes them easier to scale down."
   - q: "Can I use depth-first on a personal host pool?"
