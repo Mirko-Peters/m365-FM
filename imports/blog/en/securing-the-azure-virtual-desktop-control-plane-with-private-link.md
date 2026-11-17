@@ -11,17 +11,17 @@ keypoints:
   - "Four scenarios are documented: full private, private with public discovery, private sessions only and no Private Link. Each needs a different set of endpoints."
   - "The global workspace cannot be access-controlled. Learn says it is always reachable from public routes, even if you set it to private-only."
   - "Two private DNS zones are involved: privatelink-global.wvd.microsoft.com for the global endpoint and privatelink.wvd.microsoft.com for feed and connection endpoints. Sharing one zone between them is no longer supported."
-  - "UDP traffic such as RDP Shortpath for managed networks is blocked over Private Link until you opt in on the host pool Networking page, and the public STUN and TURN options must then be turned off."
+  - "UDP traffic such as RDP Shortpath for managed networks is blocked over Private Link until you opt in on the Networking page. Learn says public network Shortpath using STUN or TURN is not supported with Private Link, and the portal requires those options to be off."
 faq:
   - q: "Is Private Link for Azure Virtual Desktop generally available?"
     a: "Microsoft Learn's What's new page lists Private Link with Azure Virtual Desktop as generally available in its July 2023 entry. The setup page says the Private Link PowerShell cmdlets need the preview Az.DesktopVirtualization module 5.0.0-preview, so check that page for the current module version."
   - q: "Do I need a private endpoint for every part of the service?"
     a: "No. Learn lists a sessions-only scenario that needs only the host pool connection endpoints, and a scenario without the global endpoint where initial feed discovery stays public. Only the full private scenario needs global, feed and connection endpoints."
   - q: "Does Private Link work with RDP Shortpath?"
-    a: "Yes, with an opt-in. Learn says UDP over Private Link is blocked unless you select Allow Direct UDP network path over Private Link on the host pool Networking page. The public Shortpath options (STUN and TURN) must be turned off for the portal to save the setting."
+    a: "Only RDP Shortpath for managed networks, and only with an opt-in. Learn says UDP over Private Link is blocked unless you select Allow Direct UDP network path over Private Link on the Networking page. Public network Shortpath using STUN or TURN is not supported with Private Link, and the portal will not save the setting while those options are on."
 ---
 
-Private Link lets you reach Azure Virtual Desktop through private endpoints in your own virtual network, so the traffic between that network and the service stays on the Microsoft network. How much of the service you move onto private routes is your choice: Microsoft Learn documents four scenarios, from fully private to sessions-only. This article compares them, lists the setup steps and covers the DNS and access settings that most often decide whether users can connect. Learn does not use the term "control plane" for this. It describes feed discovery, feed download and host pool connections, and that is what the article follows. Sources were retrieved on 17 November 2026.
+Private Link lets you reach Azure Virtual Desktop through private endpoints in your own virtual network, so the traffic between that network and the service stays on the Microsoft network. How much of the service you move onto private routes is your choice: Microsoft Learn documents four scenarios, from fully private to sessions-only. This article compares them, lists the setup steps and covers the DNS and access settings that most often decide whether users can connect. Learn does not use the term "control plane" for this. It describes feed discovery, feed download and host pool connections, and that is what the article follows. Access to the Azure management plane, such as the portal and Azure Resource Manager, is outside its scope.
 
 ## What Private Link changes
 
@@ -65,9 +65,11 @@ Learn says that, starting 1 September 2023, sharing the `privatelink.wvd.microso
 
 The client sequence for a private-only connection is, in short: the device queries `rdweb.wvd.microsoft.com` and the global zone returns a private IP for initial discovery; a query for `<workspaceId>.privatelink.wvd.microsoft.com` returns the private IP for feed download over TCP 443; the connection then queries `<hostpoolId>.afdfp-rdgateway.wvd.microsoft.com`, which the `privatelink.wvd.microsoft.com` zone resolves to the gateway's private IP, also over TCP 443. Session traffic then uses a port in the TCP dynamic range of 1 to 65535.
 
-For clients outside Azure, the Private Link DNS integration page adds three rules: a DNS forwarder must sit in the virtual network that is linked to the private DNS zone, the forwarder forwards to Azure DNS at 168.63.129.16, and the conditional forwarder on-premises must use the public zone name, not the `privatelink` name. Peered or hub-and-spoke networks need links from the zone to every network that has clients, and Learn warns against putting records for several services in one zone. See also [Azure private DNS zone](/entity/azure-private-dns-zone/). A separate article in this series covers DNS basics for the service.
+For clients outside Azure, the Private Link DNS integration page adds three rules: a DNS forwarder must sit in the virtual network that is linked to the private DNS zone, the forwarder forwards to Azure DNS at 168.63.129.16, and the conditional forwarder on-premises must use the public zone name, not the `privatelink` name. That page is Azure's general private endpoint guide, so these rules apply to any Private Link service and it gives no Azure Virtual Desktop-specific forwarder names. Peered or hub-and-spoke networks need links from the zone to every network that has clients, and Learn warns against putting records for several services in one zone. See also [Azure private DNS zone](/entity/azure-private-dns-zone/). A separate article in this series covers DNS basics for the service.
 
 ## Setup steps
+
+Learn's prerequisites are an existing host pool with session hosts, an application group and a workspace; a virtual network and a subnet for the endpoints; the Azure role-based access control permissions to create private endpoints; and a supported client app. The setup page also has Azure PowerShell and Azure CLI procedures beside the portal steps below.
 
 1. **Register the resource provider on each subscription.** In the Azure portal open **Subscriptions**, select the subscription, then **Settings**, **Resource providers**, select **Microsoft.DesktopVirtualization** and choose **Re-register**. Confirm the status is **Registered**.
 2. **Plan the address space.** Learn says IP allocations can grow over time, because additional addresses are needed for private endpoints during capacity expansions. Use a subnet with headroom.
@@ -88,18 +90,21 @@ To also block public routes in the network, Learn suggests a network security gr
 
 ## RDP Shortpath over Private Link
 
-UDP-based transports are blocked over Private Link unless you opt in. On the host pool, open **Networking**, **Public access**, choose either "enable public access for end users, use private access for session hosts" or "disable public access and use private access", select **Allow Direct UDP network path over Private Link**, then turn off [RDP Shortpath](/entity/rdp-shortpath/) for public networks via STUN and via TURN on the **RDP Shortpath** tab. The portal blocks saving with a configuration error while either is on. Learn's What's new lists RDP Shortpath (UDP) over Private Link as generally available in February 2026, with explicit opt-in. Connections without it continue over WebSocket (TCP).
+UDP-based transports are blocked over Private Link unless you opt in. On the host pool, open **Networking**, **Public access**, choose either "enable public access for end users, use private access for session hosts" or "disable public access and use private access", select **Allow Direct UDP network path over Private Link**, then turn off [RDP Shortpath](/entity/rdp-shortpath/) for public networks via STUN and via TURN on the **RDP Shortpath** tab. The portal blocks saving with a configuration error while either is on.
+
+The scope is narrow. The setup page says public network Shortpath (STUN/TURN) is not supported with Private Link and names RDP Shortpath for managed networks as the option to use; the February 2025 What's new entry says the same about "all other RDP Shortpath options using STUN or TURN". What's new lists RDP Shortpath (UDP) over Private Link as generally available in February 2026, with explicit opt-in. Connections without the opt-in continue over WebSocket (TCP).
 
 ## Limits and status
 
 - **Status.** Learn's What's new shows Private Link in preview in November 2022 and lists it as generally available in its July 2023 entry. The setup page says the PowerShell cmdlets need the preview Az.DesktopVirtualization 5.0.0-preview module.
 - **Clients.** The setup page names Remote Desktop client for Windows 1.2.4066 or later, and the Windows App on macOS and iOS/iPadOS. The overview adds that a Windows client on a private network without internet access, subscribed to both public and private feeds, cannot reach the feed.
-- **Regions and cost.** The pages retrieved give no region list and no prices. Check Azure's pricing for private endpoints before you plan many of them.
+- **Regions and cost.** Learn's Private Link pages list no supported regions and no prices. A Tech Community post from 28 July 2023 states that Private Link for Azure Virtual Desktop is generally available in Azure Government. Check Azure's pricing for private endpoints before you plan many of them.
 
 ## Sources
 
-All retrieved on 17 November 2026.
+Accessed 17 November 2026.
 
+- [Microsoft Tech Community: Announcing the General Availability of Private Link for Azure Virtual Desktop](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/announcing-the-general-availability-of-private-link-for-azure/3874429)
 - [Microsoft Learn: Azure Private Link with Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/private-link-overview)
 - [Microsoft Learn: Set up Private Link with Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/private-link-setup)
 - [Microsoft Learn: Azure Private Endpoint DNS integration](https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-dns-integration)

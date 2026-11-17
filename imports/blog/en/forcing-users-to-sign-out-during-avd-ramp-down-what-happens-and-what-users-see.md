@@ -1,51 +1,51 @@
 ---
 title: "Forcing users to sign out during AVD ramp-down: what happens and what users see"
-summary: "When force sign-out is enabled in the ramp-down phase, autoscale drains the host with the fewest sessions, notifies its users, waits, ends the remaining sessions and deallocates the VM. This article follows that sequence, shows Microsoft's worked scenario and lists what Learn does not document about the user experience."
+summary: "When force sign-out is enabled in the ramp-down phase, autoscale drains the host with the fewest sessions, notifies its users, waits, ends the remaining sessions and deallocates the VM. This article follows that sequence, shows Microsoft's worked scenario and explains where the wait time and the notification text are set."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-force-logoff, avd-scaling-plan]
 keypoints:
-  - "Force sign-out works only in the ramp-down phase of a pooled scaling plan schedule. Learn says the setting does not sign out users in any other phase, and autoscale cannot force users out of a personal desktop."
+  - "Force sign-out works only in the ramp-down phase of a scaling plan schedule. Learn says the setting does not sign out users in any other phase, and autoscale cannot force users out of a personal desktop."
   - "The sequence is: select the host with the fewest sessions, put it in drain mode, notify its users, wait, end the remaining sessions, deallocate the VM."
   - "Idle, disconnected and active sessions are all forced to sign out if the users do not sign out during the wait time."
-  - "If the wait time is longer than the ramp-down phase, the schedule moves to off-peak and sessions are not forced out."
-  - "Learn does not publish the notification text, a default wait time or the wait time limits, so check them in a test host pool before you tell users what to expect."
+  - "The wait time and the notification text are settings of the schedule, not fixed values: RampDownWaitTimeMinute and RampDownNotificationMessage in PowerShell. Learn's examples use 30 minutes and a short sample message."
+  - "Learn states no default and no allowed range for the wait time, and it does not describe how the message is displayed in the client, so test with a pilot host pool."
 faq:
   - q: "Does force sign-out also sign out disconnected sessions?"
     a: "Yes. Microsoft Learn says idle, disconnected and active sessions are forced to sign out if the users do not sign out during the ramp-down wait time. The glossary defines a forced sign-out as ending an active or disconnected session without the user's consent."
+  - q: "Can I change the notification text and the wait time?"
+    a: "Yes. The scaling plan schedule has a wait time in minutes and a notification message for the ramp-down period. Learn's PowerShell example sets 30 minutes and the text 'Please log out of your session.' Learn gives no default and no allowed range for either value."
   - q: "Can a forced-out user start a new session on the host that is about to shut down?"
     a: "Not as a new user. Autoscale puts the host in drain mode first, and the load balancer does not consider drained hosts for new users. It sets drain mode back to off after it has deallocated the VM."
-  - q: "Does force sign-out work for personal host pools?"
-    a: "No. The autoscale FAQ says autoscale for personal desktops only deallocates a session host if the user has signed out of the session."
 ---
 
-Force sign-out is a setting in the ramp-down phase of a pooled autoscale schedule. When it is on, autoscale picks the session host with the fewest sessions, puts it in drain mode, notifies the users on it, waits for the configured time, ends any sessions that remain and deallocates the VM. This article explains each step, shows Microsoft's worked example and lists what Learn leaves undocumented. A separate article compares force sign-out with waiting for users to sign out. Sources were retrieved on 17 November 2026.
+Force sign-out is a setting in the ramp-down phase of an autoscale schedule. When it is on, autoscale picks the session host with the fewest sessions, puts it in drain mode, sends the users on it a notification, waits for the configured time, ends any sessions that remain and deallocates the VM. Both the wait time and the notification text are values you set in the schedule. This article explains each step, shows Microsoft's worked example and says what Learn leaves open. Whether to turn the setting on at all is the subject of "Force sign out vs wait for sign-out: choosing the ramp-down behaviour".
 
 ## What the setting is
 
-Microsoft Learn's glossary defines a forced sign-out as the service ending an active or disconnected user session without the user's consent. In the scaling plan schedule it appears on the ramp-down tab. The portal label for pooled plans with power management autoscaling is **Force logoff of users**. For dynamic autoscaling, which Learn labels preview in its glossary and scenarios pages, the label is **Force logoff users**. See [force sign-out](/entity/avd-force-logoff/) and the [scaling plan](/entity/avd-scaling-plan/) for the surrounding objects.
+Microsoft Learn's glossary defines a forced sign-out as the service ending an active or disconnected user session without the user's consent. In the scaling plan schedule it appears on the ramp-down tab. The portal label for pooled plans with power management autoscaling is **Force logoff of users**. For dynamic autoscaling the label is **Force logoff users**, and the FAQ says the force sign-out and consolidation logic is the same for both methods.
+
+On status: Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 ([Tech Community](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording, so check the current page before relying on a limit. Power management autoscaling is generally available. See [force sign-out](/entity/avd-force-logoff/) and the [scaling plan](/entity/avd-scaling-plan/) for the surrounding objects.
 
 Three scope rules come from Learn:
 
-- Only ramp-down. The scenarios page says the force logoff setting does not sign out users in any other phase. The FAQ gives the reason that matters in practice: if the ramp-down phase is 15 minutes long and the wait time is 20 minutes, the schedule shifts to off-peak and sessions are not forced out.
-- Pooled pools only. The FAQ says autoscale for personal desktops only deallocates a host if the user has already signed out.
-- Not a replacement for consolidation. Autoscale shuts down hosts only if all existing sessions, active and disconnected, fit on fewer hosts without exceeding the [capacity threshold](/entity/avd-capacity-threshold/). The minimum percentage of hosts is respected too.
+- **Only ramp-down.** The scenarios page says the force logoff setting does not sign out users in any other phase. If the wait time is longer than the phase, the schedule moves to off-peak and sessions are not forced out. The FAQ's example is a 15-minute phase with a 20-minute wait.
+- **Pooled pools only.** The FAQ answers "Can I configure autoscale to force users to sign out of their personal desktop?" with no: autoscale for personal desktops only deallocates a host if the user has signed out. Learn is not uniform here, because another FAQ entry speaks of a session being "signed out or disconnected", and the personal schedule has a **When disconnected for (min)** setting with a deallocate action. What Learn does not offer for personal pools is a forced sign-out.
+- **Consolidation still applies.** Autoscale shuts down hosts only if all existing sessions, active and disconnected, fit on fewer hosts without exceeding the [capacity threshold](/entity/avd-capacity-threshold/), and the minimum percentage of hosts is respected.
 
 ## The sequence, step by step
 
-Learn's scenarios, create-and-assign and FAQ pages describe the order:
-
-1. **Consolidation check.** Autoscale calculates the hosts needed: total sessions (active plus disconnected) divided by the product of the maximum session limit and the capacity threshold. Only hosts beyond that number are candidates.
-2. **Host selection.** Autoscale selects the host with the fewest user sessions, active and disconnected. If several hosts have equal numbers, the scenarios page says it chooses at random.
-3. **Drain mode.** The selected host goes into [drain mode](/entity/avd-drain-mode/), so it accepts no new sessions from new users.
-4. **Notification.** Autoscale sends the users on that host a notification that they will be signed out after a certain time.
-5. **Wait.** Autoscale waits for the configured time. Users can sign out themselves during this period.
+1. **Consolidation check.** Autoscale divides the total sessions (active plus disconnected) by the product of the maximum session limit and the capacity threshold and rounds up. Only hosts beyond that number are candidates.
+2. **Host selection.** Autoscale selects the host with the fewest sessions. If several hosts have equal numbers, the scenarios page says it chooses at random.
+3. **Drain mode.** The host goes into [drain mode](/entity/avd-drain-mode/) and accepts no sessions from new users.
+4. **Notification.** Users on that host receive a notification that they will be signed out after a certain time.
+5. **Wait.** Autoscale waits for the configured time. Users can sign out themselves.
 6. **Forced sign-out.** Users still connected, idle or disconnected are signed out.
-7. **Deallocation.** Autoscale deallocates the VM and then sets the AllowNewSessions setting back to true, which turns drain mode off. For dynamic pools Learn says it deallocates or deletes the VM.
+7. **Deallocation.** Autoscale deallocates the VM, and for dynamic plans it can delete it. It then sets AllowNewSessions back to true, which turns drain mode off.
 
-The FAQ also says that, even with force sign-out enabled, autoscale still consolidates disconnected users during ramp-down. The forced sign-out applies only to users who remain after the wait time ends.
+Even with force sign-out on, autoscale still consolidates disconnected users first. The forced sign-out applies only to users who remain after the wait time.
 
 ## A worked example from Learn
 
@@ -54,45 +54,59 @@ Scenario 3 on the scenarios page uses six session hosts, depth-first load balanc
 - Autoscale can turn off two hosts without exceeding 75 percent. Every host has sessions, so it uses force sign-out. The session counts are equal, so it picks two hosts at random, drains them, notifies the users, signs out whoever remains after the wait time and turns the hosts off. Two hosts remain with capacity 10.
 - Two users reconnect and sessions rise to four, 40 percent used. Autoscale does not turn off another host, because one host with capacity 5 and four users would be at 80 percent.
 - One user signs out, leaving three sessions on two hosts, 30 percent. Now one more host can go. Autoscale selects the one with the fewest sessions, drains it, notifies its users and signs out the rest after the wait.
-- The forced-out user reconnects, and three sessions now run on one host, 60 percent. The last host stays on. Learn says autoscale keeps at least one host running during ramp-down when the minimum percentage would otherwise be breached.
+- The forced-out user reconnects, and three sessions now run on one host, 60 percent. The last host stays on, because turning it off would breach the minimum percentage of hosts.
 
-You can run the same check with your own values. Suppose four hosts are running at the start of ramp-down with 12 sessions in total, a maximum session limit of 20 and a threshold of 75 percent. The consolidation formula gives 12 / (20 x 0.75) = 0.8, which rounds up to one host. Three hosts are therefore candidates, subject to the minimum percentage of hosts, and autoscale drains and signs out the hosts with the fewest sessions first. The numbers are illustrative, not from Learn.
+You can run the same check with your own values. Suppose four hosts run at the start of ramp-down with 12 sessions in total, a maximum session limit of 20 and a threshold of 75 percent. The formula gives 12 / (20 x 0.75) = 0.8, which rounds up to one host. Three hosts are therefore candidates, subject to the minimum percentage, and autoscale drains the hosts with the fewest sessions first. The numbers are illustrative, not from Learn.
 
-The example shows that a forced sign-out is not the end of a user's day. A user whose host is shut down can sign in again and is placed on a host that is still available.
+A forced sign-out is not the end of a user's day. A user whose host is shut down can sign in again and is placed on a host that is still available.
 
-## What users see, and what is not documented
+## What users see, and where you set it
 
-Learn documents less about the user side than about the autoscale side. The pages state:
+The experience on the user side has three parts.
 
-- Users on the selected host receive a notification that they are going to be forcibly signed out after a certain time. The scenarios page also describes a notification that the session host will be turned off.
-- After the wait time the session ends. Learn calls it a forced sign-out, not a disconnect, so plan for unsaved work to be lost.
-- A user who reconnects while the host is drained is handled by the load balancer. Learn's load-balancing page says that a user with an active or disconnected session on a drained host is still redirected to that host, and that for new users the load balancer does not consider drained hosts. Once the forced sign-out has ended the old session, the user no longer has a session there, so the next connection goes to another host.
-- For personal desktops, the FAQ says autoscale does not use drain mode when it deallocates after a sign-out or disconnect. A user who connects during deallocation receives the error "No resources available".
+**The notification.** Learn's create-and-assign page says autoscale sends the users a notification telling them they will be signed out, and the scenarios page describes a notification that the session host will be turned off. The text is yours to set: the schedule has a notification message field for the ramp-down period.
 
-Learn does not state the notification text, the default wait time, the allowed range of the wait time, or how the message appears in the Remote Desktop client or Windows App. The FAQ and scenarios pages use 15 minutes only as an example. The create-and-assign page does not name a field for them either, so confirm the portal fields and run a test in a non-production host pool before you describe the experience to users. Do not copy the text of a notification from a forum post into your user communication without checking it.
+**The wait time.** The schedule also has the number of minutes to wait before hosts are stopped. These are the PowerShell parameters of `New-AzWvdScalingPlanPooledSchedule`, as Learn's example for a pooled schedule sets them:
 
-## Interaction with other settings
+```powershell
+RampDownForceLogoffUser = $true
+RampDownWaitTimeMinute = '30'
+RampDownNotificationMessage = 'Please log out of your session.'
+RampDownStopHostsWhen = 'ZeroSessions'
+```
 
-- **Exclusion tag.** Hosts that carry the [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) are not started, stopped or changed in drain mode. Because autoscale does not stop them, their users are not signed out by the scale-down.
-- **Manual drain mode.** The FAQ says autoscale overrides drain mode on all VMs included in scaling, no matter who set it. Use the tag for maintenance hosts.
-- **Time limit for disconnected sessions.** Learn suggests a Group Policy or Intune setting, "Set time limit for disconnected sessions", under Remote Desktop Session Host and Session Time Limits. The FAQ says to make sure the timeout completes before the end of the ramp-down phase. That policy removes disconnected sessions, which autoscale otherwise assumes may reconnect.
-- **Manual cleanup.** The Az.DesktopVirtualization module has `Send-AzWvdUserSessionMessage`, which takes a message title and body, and `Remove-AzWvdUserSession`, which has a `-Force` switch. You can use them for a single host outside autoscale.
+The cmdlet reference describes the wait time as the number of minutes to wait to stop hosts during the ramp-down period and the message as the notification message for users during that period. In the ARM template reference the properties are `rampDownWaitTimeMinutes`, `rampDownNotificationMessage`, `rampDownForceLogoffUsers` and `rampDownStopHostsWhen`, with the values `ZeroActiveSessions` and `ZeroSessions` for the last one. Learn lists no minimum, maximum or default for these properties, and the cmdlet reference shows no default for either. The 30 minutes and the sample text are examples, not recommended values.
+
+**The end of the session.** After the wait time the session ends. Learn calls it a forced sign-out, not a disconnect, so plan for unsaved work to be lost. A user who reconnects while the host is drained is handled by the load balancer: Learn says a user with an active or disconnected session on a drained host is still redirected there, while new users are never sent to a drained host. Once the forced sign-out has ended the old session, the next connection goes to another host. For personal desktops, autoscale does not use drain mode when it deallocates, and a user who connects during deallocation receives "No resources available".
+
+Learn does not describe how the message appears in the Remote Desktop client or the Windows App, or how applications react to the sign-out. Write the message so that it stands on its own, with the time and the action, and check it in a pilot host pool.
+
+## Related settings
+
+The decision between forcing and waiting, the time limit for disconnected sessions, and the cost of each are covered in "Force sign out vs wait for sign-out: choosing the ramp-down behaviour". Two facts matter for the sequence itself:
+
+- **Exclusion tag.** Hosts that carry the [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) are not started, stopped or changed in drain mode, so their users are not signed out by the scale-down.
+- **Manual drain mode.** Autoscale overrides drain mode on all VMs included in scaling, no matter who set it. See "Drain mode in Azure Virtual Desktop explained".
 
 ## Practical checks
 
-- Set the wait time shorter than the ramp-down phase, with margin. The FAQ's 15 and 20 minute example is the failure case.
-- Tell users when ramp-down starts and what sign-out means for open files. The sources do not describe how applications react.
+- Set the wait time shorter than the ramp-down phase, with margin.
+- Put the end-of-day behaviour and the sign-out deadline in the message text, and tell users in advance what a sign-out means for open files.
 - Check whether your profile solution flushes data cleanly on sign-out. Learn's autoscale pages do not cover [FSLogix](/entity/fslogix/) behavior at forced sign-out.
-- Keep the maximum session limit realistic, because the consolidation maths depends on it. See the sizing guide in this series.
+- Keep the maximum session limit realistic, because the consolidation maths depends on it. See "How to size the maximum session limit per session host".
+- For a single host outside autoscale, `Send-AzWvdUserSessionMessage` takes a message title and body, and `Remove-AzWvdUserSession` has a `-Force` switch. "How to use drain mode for patching and maintenance of session hosts" shows the order of the commands.
 
 ## Sources
 
-All retrieved on 17 November 2026.
+Accessed 17 November 2026.
 
+- [Microsoft Tech Community: Enhanced host pool management for Azure Virtual Desktop is now generally available (9 July 2026)](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)
 - [Microsoft Learn: Autoscale scenarios for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)
 - [Microsoft Learn: Autoscale FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq)
 - [Microsoft Learn: Autoscale glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary)
 - [Microsoft Learn: Create and assign an autoscale scaling plan](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)
+- [Microsoft Learn: New-AzWvdScalingPlanPooledSchedule](https://learn.microsoft.com/en-us/powershell/module/az.desktopvirtualization/new-azwvdscalingplanpooledschedule)
+- [Microsoft Learn: Microsoft.DesktopVirtualization scalingPlans (ARM template reference)](https://learn.microsoft.com/en-us/azure/templates/microsoft.desktopvirtualization/scalingplans)
 - [Microsoft Learn: Host pool load-balancing methods](https://learn.microsoft.com/en-us/azure/virtual-desktop/host-pool-load-balancing)
 - [Microsoft Learn: Send-AzWvdUserSessionMessage](https://learn.microsoft.com/en-us/powershell/module/az.desktopvirtualization/send-azwvdusersessionmessage)
 - [Microsoft Learn: Remove-AzWvdUserSession](https://learn.microsoft.com/en-us/powershell/module/az.desktopvirtualization/remove-azwvdusersession)

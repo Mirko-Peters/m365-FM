@@ -23,7 +23,7 @@ faq:
 
 Dynamic autoscaling for [Azure Virtual Desktop](/entity/azure-virtual-desktop/) decides between three actions. Per the Learn FAQ, it only turns hosts on while the number of hosts needed is not larger than the minimum host pool size, turns on stopped hosts and creates additional ones when more are needed, and deletes hosts when the pool exceeds the maximum or when it scales in. It works only for pooled host pools with a session host configuration, and Microsoft announced its general availability in July 2026, although some Learn pages still carry preview wording.
 
-This article is about that decision. The status details, requirements and network rules are in the article "Requirements and limits of dynamic autoscaling in Azure Virtual Desktop", the phases in the article about the four autoscale phases, and the contrast with the older method in "Power management autoscaling vs dynamic autoscaling: which one fits your host pools".
+This article is about that decision. The status details, requirements and network rules are in the article "Requirements and limits of dynamic autoscaling in Azure Virtual Desktop", the phases in "Ramp-up, peak, ramp-down and off-peak: the four AVD autoscale phases explained", and the contrast with the older method in "Power management autoscaling vs dynamic autoscaling: which one fits your host pools".
 
 ## What the method adds
 
@@ -39,17 +39,17 @@ The FAQ section "Dynamic scaling" answers this directly. You define the minimum 
 |---|---|
 | Hosts needed are not larger than the minimum host pool size | Turns on session hosts if used capacity exceeds the capacity threshold |
 | Hosts needed are larger than the minimum host pool size | Turns on the stopped hosts and creates additional ones |
-| Active hosts would exceed the maximum host pool size | Keeps the total at the maximum, as long as used capacity exceeds the capacity threshold |
+| More hosts would be needed than the maximum host pool size allows | Does not start or create more hosts than the maximum |
 | Host count is above the current phase's maximum | Deletes active deallocated hosts that have no sessions, then continues by schedule and capacity threshold, except in ramp-up |
 | Scale-in during ramp-down with forced sign-out | Signs users out after the wait time, then deallocates or deletes the VM |
 
 Three more rules from the FAQ and the scaling plan page:
 
-- **New hosts.** Autoscale creates hosts with the latest valid and stable image version defined in the default session host configuration, if you do not already have an active session host configuration.
+- **New hosts.** Autoscale creates hosts with the latest valid and stable image version defined in the default session host configuration, if you do not already have an active session host configuration. The FAQ words this condition in that way, and the page does not explain what an "active" session host configuration is in this context.
 - **Minimum overrides.** The minimum host pool size overrides the number of session hosts you defined in the host pool. The scaling plan page describes it as the number of hosts that are always part of the pool, running or stopped.
 - **Maximum per phase.** The maximum can differ per phase, so a pool can exceed the maximum when a new phase starts. Autoscale then deletes active deallocated hosts without sessions to honor the current phase's maximum, and afterwards continues to delete or deallocate by schedule and capacity threshold, except in the ramp-up phase. The FAQ adds that this matches power management autoscaling, where pooled hosts are not deallocated in ramp-up.
 
-## Worked illustration
+## Illustration under an assumption
 
 This example is an illustration, not a Learn scenario. The glossary defines the formula required hosts = total sessions / (maximum session limit x capacity threshold), rounded up, for session consolidation in ramp-down and off-peak. Learn does not say that the FAQ's "number of session hosts needed" is calculated the same way in other phases, so the numbers below rest on that assumption.
 
@@ -78,7 +78,7 @@ Hosts with the [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) are not 
 
 - **Manual hosts.** The FAQ says you can still create and delete session hosts manually. For a host you created manually that autoscale later deletes, your NIC and disk deletion settings are honored. Learn's management approaches page adds that, with a session host configuration, you cannot create, update or scale hosts outside the service using tools designed for standard management.
 - **Ephemeral OS disks.** These hosts can be restarted, reimaged or deleted but not deallocated, and are supported only in pooled host pools with a session host configuration. Ephemeral OS disks are part of the July 2026 general availability announcement, and the June 2026 What's new entry says they are "now available". As of the Learn page, which still carries preview wording, there is no support for NVMe and premium SSD, only Standard SSD, and no Azure Government. Those limits may be out of date, so check the page. See [ephemeral OS disks](/entity/avd-ephemeral-os-disks/).
-- **Managed identity.** What's new (September 2025) gives an "estimated progression" for [managed identity](/entity/avd-managed-identity/) on host pools with a session host configuration: starting 19 September 2025, new portal-created pools must use one; starting 15 October 2025, existing pools cannot update the configuration until one is added; and starting 15 November 2025, existing pools cannot create session hosts until one is added. These are estimated dates, not confirmed ones, and the later entry does not match them. The September 2026 entry announces managed identity support for host pools as generally available, including for session host configuration and autoscale. It also says that in a future service update, such pools "will require a managed identity" to add session hosts, without a date. Check the current state before you rely on either reading. Details are in the requirements article.
+- **Managed identity.** Three Learn statements about the [managed identity](/entity/avd-managed-identity/) requirement for host pools with a session host configuration do not agree. What's new (September 2025) gives an "estimated progression" in which, from 15 November 2025, existing pools cannot create session hosts until a managed identity is added. The page "Configure managed identity in Azure Virtual Desktop", which still carries a preview notice (last updated 22 April 2026), says such pools "will require a managed identity starting November 1st, 2025". The What's new entry of September 2026, which announces managed identity support as generally available, says the requirement comes "in a future service update", without a date. Check the current state before you rely on any of them. The requirements article covers the details.
 
 ## Where creation is documented
 
@@ -98,6 +98,7 @@ Retrieved on 17 November 2026.
 - [Microsoft Learn: Autoscale scaling plans and example scenarios in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)
 - [Microsoft Learn: Azure Virtual Desktop autoscale glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary)
 - [Microsoft Learn: Host pool management approaches](https://learn.microsoft.com/en-us/azure/virtual-desktop/host-pool-management-approaches)
+- [Microsoft Learn: Configure managed identity in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-managed-identity)
 - [Microsoft Learn: What's new in Azure Virtual Desktop?](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
 - [Microsoft Learn: Troubleshoot autoscale issues in Azure Virtual Desktop](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-autoscale)
 - [Microsoft Learn: Ephemeral OS disks on Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy/session-hosts/ephemeral-os-disks)
