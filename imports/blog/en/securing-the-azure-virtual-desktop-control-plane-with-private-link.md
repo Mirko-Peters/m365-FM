@@ -39,7 +39,7 @@ Learn names three workflows, each tied to a resource type and a sub-resource:
 
 | Scenario | Private routes | Public routes | Endpoints needed |
 |---|---|---|---|
-| 1. Full private | Discovery, feed download, sessions | None | global, feed, connection |
+| 1. Full private | Discovery, feed download, sessions | Global workspace stays reachable | global, feed, connection |
 | 2. Private, public discovery | Feed download, sessions | Initial feed discovery | feed, connection |
 | 3. Private sessions only | Sessions | Discovery and feed download | connection |
 | 4. No Private Link | None | All | None |
@@ -48,11 +48,11 @@ Scenario 3 is the smallest change. It adds one endpoint per [host pool](/entity/
 
 ## The global endpoint needs care
 
-The global endpoint creates DNS entries and private IP routes for the global FQDN and becomes a single shared route for all clients. Learn gives these rules:
+The global endpoint creates DNS entries and private IP routes for the global FQDN and becomes a single shared route for all clients. Learn says the following:
 
-- Use a separate workspace only for this purpose, with no application groups registered. Deleting it stops all feed discovery.
+- Learn recommends a separate workspace used only for this purpose, with no application groups registered. Deleting it stops all feed discovery.
 - You cannot control access to this workspace. If you set it to private-only, the setting is ignored and it is always reachable from public routes.
-- It is one endpoint for all deployments, so treat it as shared infrastructure rather than something to create per project.
+- Learn says one global endpoint serves the whole deployment. Our reading: treat it as shared infrastructure rather than something to create per project.
 
 ## DNS: two zones and a fixed query sequence
 
