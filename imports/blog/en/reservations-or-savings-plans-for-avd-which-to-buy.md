@@ -34,7 +34,7 @@ Learn's cost page says VM instances usually cost the most of a session host's co
 | You commit to | A specific instance type or family in a specific region | A fixed hourly spend on eligible compute |
 | Term | One or three years | One or three years |
 | Applies to | Matching VMs in the chosen scope | Eligible compute across all regions: Virtual Machines, App Service, Functions Premium, Container Instances, Dedicated Host, Container Apps, Spring Apps Enterprise |
-| Discount | Up to 72 percent from pay-as-you-go, per Learn | Varies by product and term; the Learn overview pages give no percentage |
+| Discount | Up to 72 percent from pay-as-you-go, per Learn | Up to 65 percent for compute savings plans, per Learn; rates vary by product and term, not commitment amount |
 | Scope options | Resource group, subscription, shared, management group | Resource group, subscription, management group, shared |
 | Cancel or exchange | Refund up to USD 50,000 in 12 months; exchange rules below | Cannot be cancelled, refunded or exchanged |
 
@@ -51,7 +51,7 @@ A deallocated host frees its hours for other matching VMs in the same scope, so 
 
 ## What neither one covers
 
-- **Windows software.** A reserved instance covers infrastructure. Learn says that on Windows VMs without Azure Hybrid Benefit, software is charged through separate Windows Server meters sized by core count. Compute savings plans likewise exclude software, and Learn notes that [Azure Hybrid Benefit](/entity/azure-hybrid-benefit/) might cover licensing. Whether your session hosts incur those meters depends on the image, so check your usage data.
+- **Windows software.** A reserved instance covers infrastructure. Learn says that on Windows VMs without Azure Hybrid Benefit, software is charged through separate Windows Server meters sized by core count. Compute savings plans likewise exclude software, and Learn notes that [Azure Hybrid Benefit](/entity/azure-hybrid-benefit/) might cover licensing. Learn does not say how they apply to Windows multi-session images, so check usage data for Windows Server meters.
 - **Storage and networking.** Learn says a VM reservation covers only the compute part of VM usage, and compute savings plans do not cover networking or storage.
 - **Spot VMs.** Learn says Azure does not offer reservations for [Spot VMs](/entity/azure-spot-virtual-machines/). Its Spot VM article does not say whether savings plans apply, so confirm that before counting Spot hosts toward a savings plan commitment.
 - **Capacity.** Neither guarantees that a VM can be started.
