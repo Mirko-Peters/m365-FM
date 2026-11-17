@@ -16,7 +16,7 @@ faq:
   - q: "Which Azure Local version do I need for Azure Virtual Desktop?"
     a: "Learn says the Azure Local instance must run a minimum of version 23H2 and be registered with Azure. Azure Arc VM management is installed automatically. The Azure Government and Azure operated by 21Vianet versions are labeled preview on Learn."
   - q: "Can I use Microsoft Entra join for session hosts on Azure Local?"
-    a: "The portal flow offers Active Directory only, which includes Microsoft Entra hybrid join. The Azure Local overview says native Microsoft Entra join is supported through PowerShell and other deployment methods, while the prerequisites page says Azure Local session hosts can only be joined to AD DS. Test your join method in a pilot and re-read both pages before committing."
+    a: "The portal flow offers Active Directory only, which includes Microsoft Entra hybrid join. The Azure Local overview says native Microsoft Entra join is supported through PowerShell and other deployment methods, while the prerequisites page says Azure Local session hosts can only be joined to AD DS. Pilot the join method you need; the companion article on when to keep session hosts close to the data sets out the same discrepancy."
   - q: "How long can the session host name prefix be?"
     a: "The prefix can be a maximum of 11 characters because it is used in the computer name, and the prefix and suffix combined can be a maximum of 15 characters. Session host names must be unique."
 ---
@@ -33,7 +33,7 @@ To add session hosts on Azure Local you need an instance on version 23H2 or late
 - A logical network created on the instance. DHCP logical networks and static logical networks with automatic IP allocation are supported.
 - Azure roles: the Azure Stack HCI VM Contributor role for session hosts on Azure Local, and Desktop Virtualization Contributor to create the host pool, workspace and application group.
 
-Learn's general [prerequisites page](https://learn.microsoft.com/en-us/azure/virtual-desktop/prerequisites) adds the identity side. You need a domain account that can join computers to your Active Directory domain, and the account used for the join cannot have multifactor authentication enabled. For hybrid identities, the UserPrincipalName or the Security Identifier must match across Active Directory Domain Services and Microsoft Entra ID, and you configure Microsoft Entra Connect to synchronize identities. The domain name, the join credentials and an optional organizational unit are the deployment parameters.
+Learn's general [prerequisites page](https://learn.microsoft.com/en-us/azure/virtual-desktop/prerequisites) adds the identity side. You need a domain account that can join computers to your Active Directory domain, and the account used for the join cannot have multifactor authentication enabled. For hybrid identities, the UserPrincipalName or the Security Identifier must match across Active Directory Domain Services and Microsoft Entra ID, and you configure Microsoft Entra Connect to synchronize identities. The domain name, the join credentials and an optional organizational unit are the deployment parameters. Two more items from the Learn pages: register the `Microsoft.DesktopVirtualization` resource provider for the subscription, and to assign users to the application group you need `Microsoft.Authorization/roleAssignments/write` permissions on it, which the User Access Administrator and Owner roles include.
 
 ### Check the Arc components
 
@@ -54,7 +54,7 @@ The Azure CLI command has this shape (the page uses variables for each value):
 az stack-hci-vm image create --resource-group <resource-group> --custom-location <custom-location-id> --name <image-name> --os-type <os-type> --offer <offer> --publisher <publisher> --sku <sku> --version <version>
 ```
 
-For Windows 11 Enterprise multi-session the page lists publisher `microsoftwindowsdesktop`, offer `windows-11` and SKUs such as `win11-24h2-avd`; the multi-session image with Microsoft 365 apps uses offer `office-365` and, for example, `win11-24h2-avd-m365`. The `--version` value is optional and defaults to the latest. Use only English (en-us) VHDs for VM images, per the prerequisites page.
+For Windows 11 Enterprise multi-session the page lists publisher `microsoftwindowsdesktop`, offer `windows-11` and SKUs such as `win11-24h2-avd`; the multi-session image with Microsoft 365 apps uses offer `office-365` and, for example, `win11-24h2-avd-m365`. The `--version` value is optional and defaults to the latest. Learn's [VM management prerequisites](https://learn.microsoft.com/en-us/azure/azure-local/manage/azure-arc-vm-management-prerequisites) say to use only English (en-us) language VHDs to create VM images.
 
 On the supported operating systems, the [overview](https://learn.microsoft.com/en-us/azure/virtual-desktop/azure-local-overview) lists Windows 11 and Windows 10 Enterprise (with and without multi-session) and Windows Server 2025, 2022 and 2019, in each case versions still in support.
 
@@ -62,8 +62,8 @@ On the supported operating systems, the [overview](https://learn.microsoft.com/e
 
 The steps follow the portal flow in Learn's deployment article.
 
-1. **Create the host pool.** On the **Basics** tab, set the subscription, resource group, host pool name, location, validation environment, preferred app group type and host pool type (pooled or personal). Keep in mind that a host pool holds session hosts on Azure or on Azure Local, not both.
-2. **Management approach.** Standard management is available for pooled and personal host pools with session hosts on Azure Local. Session host configuration is currently not supported with Azure Local.
+1. **Create the host pool.** On the **Basics** tab, set the subscription, resource group, host pool name, location, validation environment, preferred app group type and host pool type (pooled or personal). Learn also lists a **Deployment scope** field (Regional or Geographical, Geographical by default) that appears only in regions that support regional host pools and cannot be changed after creation; the regional host pools article in this series covers it. Keep in mind that a host pool holds session hosts on Azure or on Azure Local, not both.
+2. **Management approach.** Do not select a session host configuration: Standard management is available for pooled and personal host pools with session hosts on Azure Local, and Learn says session host configuration is currently not supported with Azure Local. This is a choice between two approaches, not a field on the Basics tab.
 3. **Virtual machines tab.** Set **Add virtual machines** to **Yes**, then expand the Azure Local section.
 4. **Name prefix.** Use a prefix such as `hp01-sh`. The prefix is at most 11 characters, and prefix plus suffix at most 15 characters, because it becomes the computer name in the operating system. Names must be unique.
 5. **Virtual machine type.** Select **Azure Local**, then pick the **Custom location**, which is the Azure Local instance that receives the session hosts.
@@ -72,13 +72,15 @@ The steps follow the portal flow in Learn's deployment article.
 8. **Network.** Select an existing network to connect each session host to.
 9. **Domain join.** **Active Directory** is the only option shown, including Microsoft Entra hybrid join. Enter the UPN and password of an account that can join computers, and choose whether to specify a domain or OU; if you answer no, the UPN suffix is used as the domain.
 10. **Local administrator.** Enter a username and password for the local administrator account.
-11. Complete the remaining tabs as for a host pool in Azure, then review and create.
+11. Complete the remaining tabs as for a host pool in Azure, then review and create. Do not disable Windows Remote Management when you create session hosts in the portal, because PowerShell DSC requires it.
+
+Learn also describes deployment with the Azure CLI and Azure PowerShell; this guide follows the portal.
 
 Afterwards, license and activate the VMs before use. Learn says to use Azure verification for VMs for Windows 10 and 11 Enterprise multi-session and Windows Server 2022 Datacenter: Azure Edition, and your existing activation methods for other images.
 
 ## Plan the FSLogix profile storage
 
-FSLogix profile containers need an SMB share. For smaller deployments Learn describes a VM-based file share cluster using Storage Spaces Direct on the instance (deploy VMs, set up Storage Spaces Direct in guest VM clusters, configure SMB permissions, configure [FSLogix](/entity/fslogix/)). For large deployments it recommends a separate SMB share on the same network so storage can scale independently. See the [profile container](/entity/fslogix-profile-container/) entity for the container concept.
+FSLogix profile containers need an SMB share. The Learn overview recommends a VM-based file share cluster using Storage Spaces Direct on the Azure Local instance (deploy VMs, set up Storage Spaces Direct in guest VM clusters, configure SMB permissions, configure [FSLogix](/entity/fslogix/)). For large deployments with high resource requirements it recommends a separate SMB share on the same network as the session hosts so storage can scale independently; the Architecture Center describes the on-instance option as more suitable for smaller deployments. The companion article compares the two options in more detail. See the [profile container](/entity/fslogix-profile-container/) entity for the container concept.
 
 ## Pitfalls
 
@@ -89,7 +91,7 @@ FSLogix profile containers need an SMB share. For smaller deployments Learn desc
 | IPv4 only | Azure Local VMs support only IPv4 | Do not plan IPv6 for session hosts |
 | Changes inside the VM do not sync | A static IP or data disk change made inside the VM or with local tools is not reflected in Azure | Make those changes through Azure management tools |
 | Image updates are not in place | An update creates a separate image resource with an incremented name | Create a test VM from the new image, verify, then delete the old image |
-| Resource bridge deletion | Deleting it removes the Azure control plane for Azure Local VMs; delete the custom location only after the bridge | Treat both as protected resources |
+| Resource bridge deletion | Deleting it removes the Azure control plane for Azure Local VMs; Learn says to delete dependent resources first and the custom location only after the bridge | Treat both as protected resources unless you reimage or decommission |
 | Identity assumptions | Portal flow offers Active Directory only; the overview mentions native Entra join through PowerShell and other methods | Pilot the join method you need |
 | Mixed pools | Azure and Azure Local hosts cannot share a host pool | Create separate pools |
 | Azure Government and 21Vianet | Learn labels these versions preview; portal provisioning is not available for Azure Government | Check the page for the current status |
@@ -98,7 +100,7 @@ Two more points. The Azure Local VM management page says moving a resource group
 
 ### Connectivity and the agent
 
-Session hosts must reach the Azure Instance Metadata Service through the Azure Connected Machine agent, which the portal installs automatically when you add hosts. Learn's overview points to the "Required FQDN endpoints" list for the Azure Virtual Desktop URLs but does not list them. Treat them like any other deployment: confirm the URLs are not blocked by a firewall or network filtering.
+Session hosts must reach the Azure Instance Metadata Service through the Azure Connected Machine agent, which the portal installs automatically when you add hosts. Learn's overview links to the page Required FQDNs and endpoints for Azure Virtual Desktop for the URLs and does not list them itself. That page says Microsoft does not support deployments where the listed FQDNs and endpoints are blocked. Two entries matter here. The table lists `aka.ms` (TCP 443) as the Microsoft URL shortener used during session host deployment on Azure Local. The Azure fabric communication IPs `169.254.169.254` (the Instance Metadata Service, TCP 80) and `168.63.129.16` must be reachable and, per that page, not intercepted, proxied or redirected. The Azure Virtual Desktop Agent URL Tool described on Learn can check whether a session host reaches the listed endpoints.
 
 ## Verify the result
 
@@ -112,11 +114,10 @@ After deployment, confirm the following before assigning users:
 
 ## Sources
 
-Retrieved on 17 November 2026.
-
 - [Microsoft Learn: Deploy Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop)
 - [Microsoft Learn: Azure Virtual Desktop on Azure Local](https://learn.microsoft.com/en-us/azure/virtual-desktop/azure-local-overview)
 - [Microsoft Learn: Prerequisites for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/prerequisites)
+- [Microsoft Learn: Required FQDNs and endpoints for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/required-fqdn-endpoint)
 - [Microsoft Learn: What is Azure Local VM management?](https://learn.microsoft.com/en-us/azure/azure-local/manage/azure-arc-vm-management-overview)
 - [Microsoft Learn: Azure Local VM management prerequisites](https://learn.microsoft.com/en-us/azure/azure-local/manage/azure-arc-vm-management-prerequisites)
 - [Microsoft Learn: Create Azure Local VM images from Azure Marketplace](https://learn.microsoft.com/en-us/azure/azure-local/manage/virtual-machine-image-azure-marketplace)

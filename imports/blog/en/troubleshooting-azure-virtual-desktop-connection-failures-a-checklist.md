@@ -9,39 +9,39 @@ topics: [azure-virtual-desktop, avd-agent]
 keypoints:
   - "Sort the failure by stage before you change anything: no sign-in, signed in but no resources, resource visible but launch fails, or connected but unstable. Each stage has a different owner and a different fix."
   - "An empty feed is usually an assignment problem: the user is not assigned to an application group, the application group is not in a workspace, or the user comes from a distribution group. Learn says distribution groups are not supported."
-  - "Launch errors about credentials or 'account is configured to prevent you from using this device' point to the Virtual Machine User Login role or to a Conditional Access policy, not to the network."
+  - "On Microsoft Entra joined session hosts, launch errors about credentials or 'account is configured to prevent you from using this device' point to the Virtual Machine User Login role or to a Conditional Access policy. With AD DS-joined hosts, look elsewhere first."
   - "TCP-based reverse connect always starts first and UDP (RDP Shortpath) is tried afterwards. Blocked UDP or a proxy as the only path leaves users on TCP, which is slower but still connects."
-  - "Connections that never reach the Azure Virtual Desktop service do not appear in the diagnostics tables. If WVDConnections shows nothing for the attempt, look at the client network."
+  - "Connections that never reach the Azure Virtual Desktop service do not appear in the diagnostics tables. If diagnostics were enabled before the attempt and WVDConnections shows nothing for a user who got as far as starting a resource, look at the client network, the proxy and the sign-in."
 faq:
   - q: "Where do I see whether a failed connection reached Azure Virtual Desktop at all?"
-    a: "In Log Analytics. Learn says connections that do not reach Azure Virtual Desktop do not show up in diagnostics results, because the diagnostics role service is part of the service. Query WVDConnections for the user's UPN. If there is a Started row for the attempt, the request reached the service; if there is none, look at the client network, the proxy and the sign-in."
+    a: "In Log Analytics. Learn says connections that do not reach Azure Virtual Desktop do not show up in diagnostics results, because the diagnostics role service is part of the service. Query WVDConnections for the user's UPN. If there is a Started row for the attempt, the request reached the service. If there is none, check first that the diagnostic setting was enabled before the attempt, because data appears only after enabling and can take a few hours. If it was, and the user got as far as starting a resource, look at the client network, the proxy and the sign-in."
   - q: "What do the states Started, Connected and Completed mean?"
     a: "Learn describes them as the intermediate states for connection activities: Started when a user selects an app or desktop in the client, Connected when the user successfully connects to the VM that hosts it, and Completed when the user or the server disconnects the session. A Started row without a Connected row for the same CorrelationId suggests, by our reading of those states, that the connection did not reach the host."
   - q: "Does blocking UDP stop users from connecting?"
     a: "No. Learn says RDP starts with a TCP-based reverse connect transport and then tries UDP. If a firewall blocks UDP, RDP Shortpath fails and the connection falls back to TCP. Users get lower responsiveness, not a failed connection. A proxy configured as the only path also forces RDP over TCP."
 ---
 
-A connection to Azure Virtual Desktop fails at one of four stages: sign-in, feed, launch or transport. Find the stage first, then fix the layer that owns it. This checklist covers the client, identity and network side of the problem. For a host that is running but shows Unavailable, use the existing session host checklist. Problems inside the agent and side-by-side stack belong in a separate article about the [Azure Virtual Desktop agent](/entity/avd-agent/).
+A connection to Azure Virtual Desktop fails at one of four stages: sign-in, feed, launch or transport. Find the stage first, then fix the layer that owns it. This checklist covers the client, identity and network side of the problem. For a host that is running but shows Unavailable, use the article "Azure Virtual Desktop Session Host Shows Unavailable: A Step-by-Step Checklist". Problems inside the agent and side-by-side stack belong in a separate article about the [Azure Virtual Desktop agent](/entity/avd-agent/).
 
-The sources are Microsoft Learn pages on service connections, client troubleshooting, diagnostics, RDP Shortpath and proxies. One of them, the Remote Desktop client for Windows page, is archived under "previous versions" and the successor client is [Windows App](/entity/windows-app/), so treat its client-specific steps as dated.
+The Learn page on the Remote Desktop client for Windows is archived under "previous versions" and the successor client is [Windows App](/entity/windows-app/), so treat its client-specific steps as dated.
 
 ## Start with scope and status
 
-Learn's troubleshooting overview says to check the Azure status page and Azure Service Health before anything else. Then answer three questions:
+Learn's troubleshooting overview says to check the Azure status page and Azure Service Health before anything else. Then answer three scoping questions (our own structure, not a Learn list):
 
 1. One user, a group, or everyone?
 2. One client (Windows App, web, a specific device) or all clients?
 3. One network (home, office, VPN) or all networks?
 
-Windows App's basic troubleshooting page adds the cheap tests: confirm internet access, update to the latest Windows App, and try Windows App in a web browser. If the web client works and the installed client does not, the problem is the client install. For Azure Virtual Desktop it also points to the Azure Virtual Desktop Experience Estimator to check the round trip time from the user's location to the service. For Windows 365 and Dev Box it names the **Inspect connection** and **Troubleshoot & repair** actions, which this checklist does not cover.
+Windows App's basic troubleshooting page adds the cheap tests: confirm internet access, update to the latest Windows App, and try Windows App in a web browser. Learn lists the browser test as one basic step and draws no conclusion from it. Our reading: if the web client works and the installed client does not, that points to the installed client or the device (network, proxy or TLS settings included), not to the account. For Azure Virtual Desktop it also points to the Azure Virtual Desktop Experience Estimator to check the round trip time from the user's location to the service. For Windows 365 and Dev Box it names the **Inspect connection** and **Troubleshoot & repair** actions, which this checklist does not cover.
 
 ## Where does the failure sit?
 
 | Stage | What the user sees | First place to look |
 |---|---|---|
-| Sign-in | Sign-in loop, error from AD FS or Entra ID, blocked by Conditional Access | Entra sign-in logs, Conditional Access, federation settings |
+| Sign-in | Error from AD FS or Entra ID, blocked by Conditional Access | Entra sign-in logs, Conditional Access, federation settings |
 | Feed | Signed in, no icons, or "administrator has not yet configured any resources" | Application group assignment, workspace, group type |
-| Launch | Credentials rejected, "account is configured to prevent you from using this device", "administrator may have ended your session" | VM sign-in role, MFA policy, Remote Desktop Services policy |
+| Launch | Credentials rejected, "account is configured to prevent you from using this device", "administrator may have ended your session" | VM sign-in role and MFA policy (Entra joined hosts), Remote Desktop Services policy |
 | Transport | Connects slowly, drops, poor graphics | Proxy, UDP and Shortpath, client network |
 
 ## Stage 1: sign-in
@@ -62,7 +62,7 @@ Check the user's sign-in identity in the Entra sign-in logs, then follow Learn's
 Learn has a section for a user who can start the client and authenticate but sees nothing. Work through it in this order:
 
 1. Confirm the user is assigned to application groups. Learn uses `Get-AzRoleAssignment -SignInName <userupn>`.
-2. Confirm the user signs in with the right account. In the client, sign out of any other account first. For the web client, an InPrivate window helps with cached credentials.
+2. Confirm the user signs in with the right account. In the client, sign out of any other account first. The archived client page adds that, with the web client, you can use an InPrivate browser window to try a different account.
 3. Check the application group is associated with a workspace.
 4. If the user gets access through a group, check that it is a Microsoft Entra security group. Learn says Azure Virtual Desktop does not support distribution groups.
 5. If the subscription was moved to another Microsoft Entra tenant, the service loses the assignments, because they are still tied to the old tenant. Reassign the users to their application groups. If a CSP created the subscription and transferred it, re-register the resource provider: in the Azure portal, open **Subscription**, select your subscription, select **Resource provider**, select **Microsoft.DesktopVirtualization** and select **Re-register**.
@@ -71,14 +71,14 @@ The Windows App message "It appears that your system administrator has not yet c
 
 ## Stage 3: the resource starts but the sign-in to the VM fails
 
-These messages come from the Remote Desktop client page and appear after the user selects a desktop or app.
+These messages come from the Remote Desktop client page and appear after the user selects a desktop or app. The first two relate to Microsoft Entra joined session hosts: Learn's page on those hosts says users need the **Virtual Machine User Login** role in host pools without a session host configuration, and that the extra role assignment is not required for host pools that use one. If your hosts are AD DS-joined, skip the role and MFA checks and start with the Remote Desktop Services policy or the client-device causes below.
 
 - **"Your account is configured to prevent you from using this device."** Learn says to make sure the user has the **Virtual Machine User Login** role on the VMs.
 - **"The user name or password is incorrect"** when the credentials are right. Check two things: the Virtual Machine User Login role on the VM or resource group for each user, and whether your Conditional Access policy excludes MFA requirements for the **Azure Windows VM sign-in** cloud application. Learn says VM sign-ins do not support per-user enabled or enforced Microsoft Entra MFA. If sign-in logs are in Log Analytics, Learn shows a query on `AADNonInteractiveUserSignInLogs` filtered by `AppId == "372140e0-b3b7-4226-8ef9-d57986796201"` that lists the MFA result and the Conditional Access policies that applied.
 - **"Your administrator may have ended your session."** Learn links this to the policy **Allow users to connect remotely using Remote Desktop Services** being disabled. Enable it under **Computer Configuration > Administrative Templates > Windows Components > Remote Desktop Services > Remote Desktop Session Host > Connections**, in Group Policy or in the Intune settings catalog.
 - **Authentication problems on the client device.** Learn lists an N edition of Windows without the Media Feature Pack, and a device where TLS 1.2 is not enabled. For the second case it gives registry values under `SCHANNEL\Protocols\TLS 1.2\Client` and `Server` (`Enabled` = 1, `DisabledByDefault` = 0) and `SystemDefaultTlsVersions` and `SchUseStrongCrypto` = 1 under the .NET Framework key.
 
-For Microsoft Entra joined hosts, Learn points to a separate troubleshooting page for connections to Entra joined VMs, which this article does not repeat.
+For Microsoft Entra joined hosts, Learn points to a separate troubleshooting page for connections to Entra joined VMs, which this article does not repeat. Learn also says that if the client PC is not Entra joined, hybrid joined or registered to the same tenant, the host pool needs the custom RDP property `targetisaadjoined:i:1`, which limits sign-in to user name and password; the web, Android, macOS and iOS clients need it too.
 
 ## Stage 4: the transport
 
@@ -101,15 +101,17 @@ WVDConnections
 | where UserName == "userupn"
 | take 100
 | sort by TimeGenerated asc, CorrelationId
+```
 
+```kusto
 WVDErrors
 | where UserName == "userupn"
 | take 100
 ```
 
-A connection row moves through Started, Connected and Completed. A Started row with no Connected row for the same `CorrelationId` suggests the user never reached the VM (our reading of the documented states, not a Learn statement). In `WVDErrors`, `ServiceError` equal to `false` marks an issue an administrator can fix, and `true` means escalate to Microsoft with the CorrelationId. Diagnostics start only after you enable the setting and can take a few hours to appear. Learn also says that client information can be missing from `WVDConnections` and `WVDCheckpoints` even when the connection completed.
+A connection row moves through Started, Connected and Completed. A Started row with no Connected row for the same `CorrelationId` suggests the user never reached the VM (our reading of the documented states, not a Learn statement; the user may also have cancelled). Check `WVDErrors` and `WVDCheckpoints` for the same `CorrelationId`. In `WVDErrors`, `ServiceError` equal to `false` marks an issue an administrator can fix, and `true` means escalate to Microsoft with the CorrelationId. Diagnostics start only after you enable the setting and can take a few hours to appear. Learn also says that client information can be missing from `WVDConnections` and `WVDCheckpoints` even when the connection completed.
 
-For the client itself, the Remote Desktop client page gives the log folder `%temp%\DiagOutputDir\RdClientAutoTrace` (ETL files, convertible with `tracerpt`) and a reset with `msrdcw.exe /reset`. For Windows App, Learn suggests repairing the app in Windows or reinstalling it on other platforms. [Azure Virtual Desktop Insights](/entity/avd-insights/) is the dashboard that Learn's troubleshooting overview names for finding issues quickly.
+For the client itself, the Remote Desktop client page gives the log folder `%temp%\DiagOutputDir\RdClientAutoTrace` (ETL files, convertible with `tracerpt`) and a reset with `msrdcw.exe /reset`, which restores the client's default settings and unsubscribes the user from all workspaces. For Windows App, Learn suggests repairing the app in Windows or reinstalling it on other platforms. [Azure Virtual Desktop Insights](/entity/avd-insights/) is the dashboard that Learn's troubleshooting overview names for finding issues quickly.
 
 ## Escalation order
 
@@ -118,15 +120,14 @@ For the client itself, the Remote Desktop client page gives the log folder `%tem
 3. Stage 1 to 4 above, in order.
 4. Diagnostics: WVDConnections and WVDErrors with the CorrelationId.
 5. If the connection reaches the VM but the host is Unavailable or the agent fails, move to the session host and agent articles.
-6. Open an Azure support case with the CorrelationId and times in UTC.
+6. Open an Azure support case with the CorrelationId (the identifier Learn names for escalation). Our suggestion: add the time of the attempt in UTC.
 
 ## Sources
-
-All pages retrieved on 17 November 2026.
 
 - [Microsoft Learn: Troubleshoot Azure Virtual Desktop service connection](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-service-connection)
 - [Microsoft Learn: Azure Virtual Desktop troubleshooting overview](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-set-up-overview)
 - [Microsoft Learn: Troubleshoot the Remote Desktop client for Windows (archived)](https://learn.microsoft.com/en-us/previous-versions/remote-desktop-client/troubleshoot-client-windows)
+- [Microsoft Learn: Microsoft Entra joined session hosts in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/azure-ad-joined-session-hosts)
 - [Microsoft Learn: Basic troubleshooting for Windows App](https://learn.microsoft.com/en-us/windows-app/troubleshoot-basic)
 - [Microsoft Learn: Azure Virtual Desktop diagnostics log analytics](https://learn.microsoft.com/en-us/azure/virtual-desktop/diagnostics-log-analytics)
 - [Microsoft Learn: RDP Shortpath](https://learn.microsoft.com/en-us/azure/virtual-desktop/rdp-shortpath)
