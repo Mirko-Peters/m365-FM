@@ -18,7 +18,7 @@ faq:
   - q: "What happens to users on a Spot session host when it is evicted?"
     a: "Azure evicts the VM with 30 seconds' notice, announced through Scheduled Events without a delivery guarantee. The sessions on that host end, and unsaved work in them can be lost. With the Deallocate policy the VM and its disks remain, but Learn says there is no guarantee that a later allocation succeeds; with Delete the VM and its disks are removed."
   - q: "Does a reservation or savings plan apply to Spot VMs?"
-    a: "Learn says Azure does not offer reservations for Spot VMs. Learn's Spot VM article does not mention savings plans, so confirm that coverage in the Azure billing documentation before you mix Spot hosts with commitments. Reservations and savings plans for AVD are compared in a separate article of this series."
+    a: "The Learn Spot VM article does not say whether either applies to Spot VMs, so confirm coverage in the Azure billing documentation before mixing them. Reservations and savings plans for AVD are compared in a separate article of this series."
 ---
 
 Azure Spot VMs are cheaper because Azure can take them back: they run on unused capacity, can be evicted at any time with 30 seconds' notice, and have no SLA. For Azure Virtual Desktop that makes them suitable for interruption-tolerant, disposable [session hosts](/entity/avd-session-host/), and a poor fit for a desktop a user relies on all day. This guide covers the eviction rules, how Spot hosts interact with host pool setup and autoscale, and a way to decide.
@@ -64,7 +64,7 @@ Our reading, based on the eviction rules above: Spot suits hosts where losing a 
 
 - **Test and lab pools.** A validation or training host pool where users expect occasional interruption, and where nothing business-critical runs.
 - **Stateless pooled hosts with profiles in FSLogix.** On a pooled pool, Learn says users can connect to a different host each time, so they should keep profile data in [FSLogix](/entity/fslogix/). An off-host profile does not depend on the evicted VM's disk. This does not remove the disconnect; unsaved work in the open session can be lost. Learn does not describe how a profile container behaves after a hard eviction; test that.
-- **Extra capacity beside standard hosts.** Our reading: a small pool of Spot hosts for non-critical users, separate from a pool of standard VMs. Within one pool, load balancing places sessions on any host, including a Spot one.
+- **Extra capacity beside standard hosts.** Our reading: a small pool of Spot hosts for non-critical users, separate from a pool of standard VMs. Within one pool, load balancing can place sessions on a Spot host.
 
 ## Where Spot hosts do not work well
 
@@ -97,7 +97,7 @@ Also note that autoscale and the Azure Automation or Logic Apps scaling method c
 Spot discounts apply per VM, while the other cost levers keep the VM standard. Consider them before Spot:
 
 - **Autoscale.** Ramp-down deallocates unused hosts; if you enable forced sign-out, it warns signed-in users first. See [dynamic autoscaling](/entity/avd-dynamic-autoscaling/) and power management.
-- **Commitments.** [Azure Reservations](/entity/azure-reservations/) and [Azure savings plans](/entity/azure-savings-plans/) lower the price of steady compute use. Learn says Azure does not offer reservations for Spot VMs.
+- **Commitments.** [Azure Reservations](/entity/azure-reservations/) and [Azure savings plans](/entity/azure-savings-plans/) lower the price of steady compute use; Learn's Spot article does not say if they apply to Spot.
 - **Right-sizing.** A host that is too large costs more on any pricing model.
 
 Spot can sit beside these, for example a standard baseline pool plus a small Spot pool, but this article does not claim that Microsoft supports any particular combination.
