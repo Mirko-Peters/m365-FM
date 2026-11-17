@@ -53,7 +53,7 @@ On capture, Learn recommends an Azure Compute Gallery for production. Learn's im
 
 ### Custom image templates
 
-The portal path is **Azure Virtual Desktop > Custom image templates > + Add custom image template**, with tabs for Basics, Source image, Distribution targets, Build properties, Customizations, Tags and Review. You set a build timeout in minutes, and Learn recommends a higher value for language pack installation or Windows Optimization because they trigger Windows Update. It gives no default or range. The feature is described as generally available in the What's new entry of September 2023; the template pages themselves carry no label. Prerequisites, the built-in script list and the template anatomy are covered in the article on Azure Image Builder for AVD. [Custom image templates](/entity/avd-custom-image-templates/) sit on top of [Azure Image Builder](/entity/azure-image-builder/).
+The portal path is **Azure Virtual Desktop > Custom image templates > + Add custom image template**, with tabs for Basics, Source image, Distribution targets, Build properties, Customizations, Tags and Review and create. You set a build timeout in minutes, and Learn recommends a higher value for language pack installation or Windows Optimization because they trigger Windows Update. It gives no default or range. The feature is described as generally available in the What's new entry of September 2023; the template pages themselves carry no label. Prerequisites, the built-in script list and the template anatomy are covered in the article on Azure Image Builder for AVD. [Custom image templates](/entity/avd-custom-image-templates/) sit on top of [Azure Image Builder](/entity/azure-image-builder/).
 
 ## Stage 2: test
 

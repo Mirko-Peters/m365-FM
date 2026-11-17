@@ -1,6 +1,6 @@
 ---
 title: "Azure Files or Azure NetApp Files for FSLogix: cost and performance compared"
-summary: "Both Azure Files and Azure NetApp Files can host FSLogix profile containers over SMB, and Microsoft Learn recommends Azure Files for most customers. This comparison sets billing, published limits, Learn's workload tier tables, region and identity prerequisites side by side, using Microsoft Learn only."
+summary: "Both Azure Files and Azure NetApp Files can host FSLogix profile containers over SMB, and Microsoft Learn recommends Azure Files for most customers. This comparison sets billing, published limits, Learn's workload tier tables, region and identity prerequisites side by side."
 status: review
 publish: false
 author: mirko-p
@@ -21,7 +21,7 @@ faq:
     a: "Yes. Learn lists FSLogix user profile containers, including FSLogix ODFC (Office) containers, as a supported workload for SMB Continuous Availability on Azure NetApp Files. The SMB volume needs an Active Directory connection and a delegated subnet, and Learn says Entra-only identities are not currently supported."
 ---
 
-Azure Files and Azure NetApp Files can both host FSLogix profile containers over SMB, and Microsoft Learn is explicit about its default: "We recommend storing FSLogix profile containers on Azure Files for most of our customers." Azure NetApp Files is the other Azure-native option, with higher stated performance ceilings and a different billing model, region list and identity prerequisites. This comparison uses Learn only, gives no prices and states where Learn is silent or its pages differ. Sources are listed at the end and were retrieved on 17 November 2026.
+Azure Files and Azure NetApp Files can both host FSLogix profile containers over SMB, and Microsoft Learn is explicit about its default: "We recommend storing FSLogix profile containers on Azure Files for most of our customers." Azure NetApp Files is the other Azure-native option, with higher stated performance ceilings and a different billing model, region list and identity prerequisites. This comparison gives no prices and states where Learn is silent or its pages differ. Sources are listed at the end and were retrieved on 17 November 2026.
 
 ## What FSLogix needs from storage
 
@@ -34,7 +34,7 @@ Learn's [storage options article for FSLogix](https://learn.microsoft.com/en-us/
 | Area | Azure Files | Azure NetApp Files |
 |---|---|---|
 | Regional availability | All regions | Select regions |
-| Redundancy | Locally, zone, geo and geo-zone redundant | Locally redundant; zone-redundant with cross-zone replication; geo-redundant with cross-region replication |
+| Redundancy | Locally, zone, geo and geo-zone redundant; geo options apply to HDD shares only, SSD shares must use LRS or ZRS | Locally redundant; zone-redundant with cross-zone replication; geo-redundant with cross-region replication |
 | Tiers | Standard (transaction optimized), Premium | Standard, Premium, Ultra |
 | Stated maximum performance | Up to 100K IOPS and 10 GBps per share at about 3 ms latency | Up to 460K IOPS and 4.5 GBps per volume at about 1 ms latency |
 | Capacity (FSLogix page) | 100 TiB per share, up to 5 PiB per general purpose account | 100 TiB per volume, up to 12.5 PiB per NetApp account |
@@ -67,9 +67,9 @@ Learn gives no user-count boundaries for "small", "medium" or "large". It adds t
 
 ## Performance: what the limits mean for profiles
 
-These are ceilings for a share or volume. A profile workload is many users, each with one VHDX file, so per-file limits matter too. For SSD file shares, Learn's [scale targets](https://learn.microsoft.com/en-us/azure/storage/files/storage-files-scale-targets) list a maximum of 12,000 data IOPS per file, up to about 3 GiB/s SMB read throughput per file and 2,000 concurrent handles per file and directory. The HDD tiers, which include the standard shares recommended for light workloads, are lower per file: 1,000 IOPS and 60 MiB/s. Learn gives no profile-specific numbers. The scale targets page gives capacity by media type, which differs from the table above: 256 TiB per share and per account for SSD provisioned v2, 100 TiB for SSD provisioned v1, 256 TiB per share and 4 PiB per account for HDD provisioned v2, and 100 TiB per share and 5 PiB per account for HDD pay-as-you-go. SSD provisioned v2 shares can be provisioned from 32 GiB to 256 TiB. The FSLogix page gives a 1 GiB minimum share size, while the scale targets page lists 32 GiB for SSD provisioned v2 and 100 GiB for SSD provisioned v1, so check the minimum for your tier.
+These are ceilings for a share or volume. A profile workload is many users, each with one VHDX file, so per-file limits matter too. For SSD file shares, Learn's [scale targets](https://learn.microsoft.com/en-us/azure/storage/files/storage-files-scale-targets) list a maximum of 12,000 data IOPS per file, up to about 3 GiB/s SMB read throughput per file and 2,000 concurrent handles per file and directory. The HDD tiers, which include the standard shares recommended for light workloads, are lower per file: 1,000 IOPS and 60 MiB/s. The scale targets page gives no profile-specific numbers. It gives capacity by media type, which differs from the table above: 256 TiB per share and per account for SSD provisioned v2, 100 TiB for SSD provisioned v1, 256 TiB per share and 4 PiB per account for HDD provisioned v2, and 100 TiB per share and 5 PiB per account for HDD pay-as-you-go. SSD provisioned v2 shares can be provisioned from 32 GiB to 256 TiB. The FSLogix page gives a 1 GiB minimum share size, while the scale targets page lists 32 GiB for SSD provisioned v2 and 100 GiB for SSD provisioned v1, so check the minimum for your tier.
 
-For Azure NetApp Files, throughput follows the service level and the capacity ([service levels](https://learn.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-service-levels)): up to 16 MiB/s per TiB for Standard, 64 MiB/s for Premium and 128 MiB/s for Ultra. Learn's example is a 2 TiB Premium volume in an auto QoS pool, which gets 128 MiB/s. The Flexible service level, which has a minimum throughput of 128 MiB/s for a pool and is supported only for new manual QoS capacity pools, is outside this comparison. The 1 TiB minimum pool at the three linear levels gives, by simple multiplication, 16, 64 and 128 MiB/s.
+For Azure NetApp Files, throughput follows the service level and the capacity ([service levels](https://learn.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-service-levels)): up to 16 MiB/s per TiB for Standard, 64 MiB/s for Premium and 128 MiB/s for Ultra.The Flexible service level is outside this comparison. The 1 TiB minimum pool at the three linear levels gives, by simple multiplication, 16, 64 and 128 MiB/s.
 
 ## Cost: how each one is billed
 
@@ -97,8 +97,8 @@ The practical difference, calculated from the minimums above, is granularity. A 
 
 ## How to decide
 
-1. Start from Learn's default: Azure Files for most customers. Move to Azure NetApp Files if your workload tier and user count point to it in the tables above.
-2. Check region, media type and redundancy. Azure NetApp Files is listed for select regions, and Azure Files does not offer every media tier and redundancy option in every region.
+1. Start from Learn's default: Azure Files for most customers. Consider Azure NetApp Files if you need its higher stated ceilings, replication-based zone or region options or Azure NetApp Files backup, and your identity setup is AD DS or Microsoft Entra Domain Services.
+2. Check region, media type and redundancy. Geo-redundancy (GRS or GZRS) is not supported for Azure Files SSD file shares, so premium shares need LRS or ZRS. Azure NetApp Files is listed for select regions, and Azure Files does not offer every media tier and redundancy option in every region.
 3. Check identity. If session hosts are Entra joined and users are cloud-only, Azure Files has a documented route. For Azure NetApp Files, Learn's FSLogix article says Entra-only identities are not supported, and Entra Kerberos is a September 2026 preview.
 4. Estimate profile size and concurrent logons, then compare the per-share, per-file and 3,000-profile volume limits and the service level throughput against that estimate.
 5. Model cost for each option in the Azure pricing calculator for the same region and redundancy.
