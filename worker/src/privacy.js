@@ -94,9 +94,29 @@ export async function releaseHandleOps(db, oldH, newH, uid = 0) {
     db.prepare("UPDATE event_sessions SET speakers=replace(replace(speakers,?,?),?,?) WHERE instr(speakers,?)>0").bind(H(oldH), H(newH), E(oldH), E(newH), H(oldH)),
     db.prepare("UPDATE speaker_ref SET handle=? WHERE handle=?").bind(newH, oldH),
     db.prepare("UPDATE OR IGNORE blog_follows SET handle=? WHERE handle=?").bind(newH, oldH), db.prepare("DELETE FROM blog_follows WHERE handle=?").bind(oldH),
+    ...creatorTopicOps(db, [oldH], newH),
   ];
   return [...(await mapSpeakers(db, oldH, ({ h, e, t, ...x }) => ({ ...x, ...(e && e !== oldH ? { e } : {}), ...(uid ? { uid } : {}) }))),
-    db.prepare("UPDATE speaker_ref SET handle='' WHERE handle=?").bind(oldH), db.prepare("DELETE FROM blog_follows WHERE handle=?").bind(oldH)];
+    db.prepare("UPDATE speaker_ref SET handle='' WHERE handle=?").bind(oldH), db.prepare("DELETE FROM blog_follows WHERE handle=?").bind(oldH),
+    ...creatorTopicOps(db, [oldH], "")];
+}
+
+// Creator-Abos ANDERER Mitglieder auf eine Profil-Adresse (push_topics/email_topics kind='creator', topic_id = Adresse) und noch nicht versandte
+// Creator-Meldungen dazu (topic_queue): wandern mit der Adresse (newH) bzw. fallen weg (Adresswechsel ohne neue Adresse, Kontoloeschung). Sonst erbte
+// der naechste Inhaber der Adresse die Abonnenten (feeds.js, shows.js, queueTopicArticles), und /api/topics/mine zeigte den Abonnenten seinen Namen
+// (Runde 9). Adressen, die ein anderes Profil oder eine Firma fuehrt, bleiben unberuehrt. Anweisungen fuer db.batch.
+export function creatorTopicOps(db, handles, newH = "") {
+  const hs = JSON.stringify([...new Set(handles.filter(Boolean))].filter((h) => h !== newH));
+  if (hs === "[]") return [];
+  const free = (col) => `kind='creator' AND ${col} IN (SELECT value FROM json_each(?)) AND NOT EXISTS (SELECT 1 FROM profiles p WHERE p.handle=${col}) AND NOT EXISTS (SELECT 1 FROM orgs o WHERE o.handle=${col})`;
+  const ops = [];
+  if (newH) ops.push(db.prepare(`UPDATE OR IGNORE push_topics SET topic_id=? WHERE ${free("push_topics.topic_id")}`).bind(newH, hs),
+    db.prepare(`UPDATE OR IGNORE email_topics SET topic_id=? WHERE ${free("email_topics.topic_id")}`).bind(newH, hs),
+    db.prepare(`UPDATE OR IGNORE topic_queue SET topic_id=? WHERE sent=0 AND ${free("topic_queue.topic_id")}`).bind(newH, hs));
+  ops.push(db.prepare(`DELETE FROM push_topics WHERE ${free("push_topics.topic_id")}`).bind(hs),
+    db.prepare(`DELETE FROM email_topics WHERE ${free("email_topics.topic_id")}`).bind(hs),
+    db.prepare(`DELETE FROM topic_queue WHERE sent=0 AND ${free("topic_queue.topic_id")}`).bind(hs));
+  return ops;
 }
 
 // Alle Sessions mit einem Speaker-Eintrag h=<handle> (oder uid=<Konto>, siehe releaseHandleOps): Eintraege mit fn umschreiben (Anweisungen fuer db.batch).

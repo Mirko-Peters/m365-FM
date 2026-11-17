@@ -5,7 +5,8 @@ Abgleich direkt mit dem Bucket (Liste mit ETag = MD5 einfacher PUTs): geladen wi
 Bilder entfernter Seiten bleiben im Bucket - mit einer Ausnahme (Datenschutz, PR #320): persoenliche Karten (PERSONAL: Einladungskarte
 og/einladung/<kuerzel>.png mit Foto und Name, Karte der Profilseite og/[<sprache>/]community/u/<kuerzel>.png mit Name) werden geloescht, sobald
 der Bau sie nicht mehr erzeugt, also nach Kontoloeschung oder wenn das Profil nicht mehr oeffentlich ist. Ebenso Karten von Entitaetsseiten
-og/[<sprache>/]entity/<id>.png, wenn es die Entitaet im Bau in keiner Sprache mehr gibt (Personen-Entitaet eines geloeschten Profils, K41/D). Sicherungen: nichts, wenn der Bau gar keine
+og/[<sprache>/]entity/<id>.png, wenn es die Entitaet im Bau in keiner Sprache mehr gibt (Personen-Entitaet eines geloeschten Profils, K41/D), und
+Karten der Blogseiten og/[<sprache>/]community/u/<kuerzel>/blog.png bzw. .../blog/<slug>.png (BLOG_CARD, mit Namen), die der Bau nicht mehr erzeugt. Sicherungen: nichts, wenn der Bau gar keine
 Karte der Art enthaelt (Profil-Export ausgefallen) oder mehr zu loeschen waere als 10 bzw. als der Bau enthaelt - beides nur bewusst mit der
 Repo-Variable OG_PRUNE_FORCE=1 (site.yml). Ausnahme: der Bau hat den Profil-Export frisch abgerufen und er ist leer (Merker profiles-export.json
 von site_members.py: kein oeffentliches Profil mehr) - dann gehen auch die letzten Karten ohne OG_PRUNE_FORCE. Kuerzel stehen nie im Log.
@@ -28,6 +29,10 @@ PERSONAL = {"Einladungskarten": re.compile(r"^og/einladung/[^/]+\.png$"), "Profi
 # persoenlich, sobald es die Entitaet im Bau in KEINER Sprache mehr gibt (Kontoloeschung, Profil privat oder gesperrt: die Personen-Entitaet ist
 # verborgen und fehlt im Export). Karten bestehender Entitaeten ohne eigenes Bild (duenne Seite, noindex, og-default) bleiben unberuehrt.
 ENTITY_CARD = re.compile(r"^og/(?:[a-z]{2}/)?entity/([a-z0-9-]+)\.png$")
+# Karten der Blogseiten eines Profils (site_blog.py): og/[<sprache>/]community/u/<kuerzel>/blog.png (Uebersicht, Titel "Blog – <Name>"),
+# .../blog/page/<n>.png und .../blog/<slug>.png (Beitrag, "<Titel> – <Name>"). Sie zeigen den Namen und gelten als persoenlich, sobald der Bau sie
+# nicht mehr erzeugt (Kontoloeschung, Profil privat, Adresswechsel, Beitrag entfernt) - Runde 9.
+BLOG_CARD = re.compile(r"^og/(?:[a-z]{2}/)?community/u/([^/]+)/blog(?:/.+)?\.png$")
 
 
 def problem(msg):
@@ -121,6 +126,32 @@ def prune_entities(s3, bucket, files, have, pages):
     return n
 
 
+def prune_blog(s3, bucket, files, have, empty=False):
+    """Blogkarten loeschen, die der Bau nicht mehr erzeugt (BLOG_CARD). Sicherungen wie bei prune_entities: keine Blogkarte im Bau -> nichts (Export
+    ausgefallen?); Karten von mehr als max(10, 5 % der Blog-Autoren im Bau) Adressen -> nichts; bewusst uebergehen mit OG_PRUNE_FORCE=1. Ist der
+    Profil-Export frisch und leer (export_empty), gibt es zu Recht keine Blogkarte mehr - die Sicherungen entfallen. Kuerzel nie im Log."""
+    old = sorted(k for k in have if k not in files and BLOG_CARD.match(k))
+    if not old: return 0
+    cur = {m.group(1) for k in files if (m := BLOG_CARD.match(k))}
+    gone = {BLOG_CARD.match(k).group(1) for k in old}
+    if empty and not cur:
+        print("Teilen-Bilder: Profil-Export frisch und leer - die letzten Blogkarten werden geloescht")
+    elif os.environ.get("OG_PRUNE_FORCE") != "1":
+        if not cur:
+            print(f"::warning::Teilen-Bilder: {len(old)} Blogkarten im Bucket, aber keine im Bau (Blog- oder Profil-Export ausgefallen?) - nichts geloescht (bewusst: OG_PRUNE_FORCE=1)"); return 0
+        if len(gone) > max(10, len(cur) // 20):
+            print(f"::warning::Teilen-Bilder: Blogkarten von {len(gone)} Adressen waeren zu loeschen ({len(cur)} Blog-Autoren im Bau) - nichts geloescht (bewusst: OG_PRUNE_FORCE=1)"); return 0
+    n = bad = 0
+    for k in old:
+        try: s3.delete_object(Bucket=bucket, Key=k); n += 1
+        except Exception as e:
+            bad += 1
+            if bad == 1: print("Fehler beim Loeschen:", type(e).__name__)
+    print(f"Blogkarten: {n} entfernter Blogseiten geloescht" + (f", {bad} nicht" if bad else ""))
+    if bad: print(f"::warning::Teilen-Bilder: {bad} Blogkarten entfernter Blogseiten nicht geloescht - der naechste Lauf versucht es erneut")
+    return n
+
+
 def main(src):
     files = {f.relative_to(src).as_posix(): f for f in src.rglob("*") if f.is_file() and f.suffix.lower() in EXT
              and f.relative_to(src).as_posix().startswith(PREFIXES)} if src.exists() else {}
@@ -136,6 +167,7 @@ def main(src):
     ok, failed = upload(s3, bucket, todo, retries=2, cache_control=CC)
     print(f"hochgeladen: {len(ok)}, Fehler: {len(failed)}")
     prune(s3, bucket, files, have, export_empty(src))
+    prune_blog(s3, bucket, files, have, export_empty(src))
     prune_entities(s3, bucket, files, have, entity_pages(src))
     if failed: return problem(f"{len(failed)} nicht hochgeladen (z. B. {failed[0][0]}); der naechste Lauf laedt nur den Rest")
     return 0

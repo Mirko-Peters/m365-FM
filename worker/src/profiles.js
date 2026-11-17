@@ -1,5 +1,5 @@
 // Experten- und Firmenprofile, Programme (MVP/MCT/...), Kanaele mit Feeds, Upvotes, Bestaetigungen
-import { acctKeys, releaseHandleOps, invalidateProfileExport, profileExportGen, EXPORT_GEN, anonEntitySpeakerOps, forgetSearchPerson, forgetSearchEntity, forgetPublicPerson } from "./privacy.js";
+import { acctKeys, releaseHandleOps, creatorTopicOps, invalidateProfileExport, profileExportGen, EXPORT_GEN, anonEntitySpeakerOps, forgetSearchPerson, forgetSearchEntity, forgetPublicPerson } from "./privacy.js";
 import { scopeOf, can, gate, inScope, logEdit, roleOf } from "./perm.js";
 import { decide } from "./editor.js";
 import { syncAutoRoles } from "./roles.js";
@@ -805,6 +805,8 @@ export async function deleteUserData(db, id, env = null) {
     db.prepare("DELETE FROM expertise WHERE owner_type='u' AND owner_id=?").bind(id), db.prepare("DELETE FROM expertise_evidence WHERE owner_id=?").bind(id), db.prepare("DELETE FROM expertise_score WHERE owner_id=?").bind(id), db.prepare("DELETE FROM programs WHERE owner_type='u' AND owner_id=?").bind(id),
     db.prepare("DELETE FROM profile_private WHERE user_id=?").bind(id), db.prepare("DELETE FROM profile_i18n WHERE user_id=?").bind(id), db.prepare("DELETE FROM certs WHERE user_id=?").bind(id), db.prepare("DELETE FROM cert_check WHERE user_id=?").bind(id), db.prepare("DELETE FROM cert_endorse WHERE owner_id=? OR by_id=?").bind(id, id), db.prepare("DELETE FROM endorsements WHERE owner_id=? OR by_id=?").bind(id, id),
     db.prepare("DELETE FROM profiles WHERE user_id=?").bind(id),
+    // Runde 9: Creator-Abos anderer Mitglieder auf die Adresse und fruehere Adressen (nach dem Loeschen des Profils, damit die Adresse frei ist)
+    ...creatorTopicOps(db, followHandles),
     db.prepare("DELETE FROM mail_topic_follows WHERE user_id=?").bind(id),
     db.prepare("DELETE FROM mail_prefs WHERE user_id=?").bind(id),
     db.prepare("DELETE FROM mail_outbox WHERE user_id=?").bind(id),

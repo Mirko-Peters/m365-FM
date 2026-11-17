@@ -478,11 +478,15 @@ test("schema: Migrationen sind idempotent und enthalten jede zur Laufzeit angele
     if (/^ALTER TABLE yt_videos ADD COLUMN (?:(?:upload_url|nonce) TEXT NOT NULL DEFAULT ''|size INTEGER NOT NULL DEFAULT 0)$/i.test(s)) continue;   // 0053: Upload-Sitzung der Creator-Videos (K35/K36), Spalten mit Standardwert
     if (/^INSERT OR IGNORE INTO person_entity\(eid, user_id, created\)\s+SELECT /i.test(s)) continue;   // 0054: Rueckfuellung der Personen-Entitaeten, idempotent (vorhandene Merker bleiben)
     if (/^DELETE FROM entity_claims WHERE via IN \('owner', 'manual'\) AND status = 'verified'\s+AND eid IN \(SELECT eid FROM person_entity WHERE user_id = 0\)\s+AND NOT EXISTS \(SELECT 1 FROM users u WHERE u\.id = entity_claims\.user_id\)$/i.test(s)) continue;   // 0054: verwaiste Owner- und manuelle Ansprueche geloeschter Konten (Altbestand), idempotent
-    // 0055: Altbestand Adressen ohne Profil (Speaker-Eintraege, Blog-Abos, Speaker-Identitaet) und Themen-Abos auf Merker geloeschter Konten;
-    // jede Anweisung trifft nur Zeilen mit einer Adresse ohne Profil bzw. Merker user_id 0 und aendert beim zweiten Lauf nichts (Test in datenschutz.test.mjs)
+    // 0055: Altbestand Adressen ohne Profil (Speaker-Eintraege, Blog-, Creator-Abos, Speaker-Identitaet) und Themen-Abos auf Merker geloeschter Konten;
+    // jede Anweisung trifft nur Zeilen mit einer Adresse ohne Profil bzw. Merker user_id 0 und aendert beim zweiten Lauf nichts (Test in datenschutz.test.mjs).
+    // Runde 9: Hilfstabellen mig0055_handle/mig0055_name (frueheres Konto je Adresse) werden am Anfang geleert und am Ende entfernt
+    if (/^(?:DELETE FROM|INSERT OR IGNORE INTO|UPDATE|DROP TABLE) mig0055_(?:handle|name)\b/i.test(s)
+      || /^UPDATE OR IGNORE (?:blog_follows|push_topics|email_topics|topic_queue) SET (?:handle|topic_id) = \(SELECT o\.nh FROM mig0055_handle o /i.test(s)
+      || /^UPDATE speaker_ref SET handle = COALESCE\(\(SELECT o\.nh FROM mig0055_handle o /i.test(s)
+      || /^DELETE FROM (?:push_topics|email_topics|topic_queue) WHERE kind = 'creator' AND (?:sent = 0 AND )?NOT EXISTS \(SELECT 1 FROM profiles p /i.test(s)) continue;
     if (/^UPDATE event_sessions SET speakers = \(\s+SELECT json_group_array\(json\(v\)\) FROM \(/i.test(s)
       || /^DELETE FROM blog_follows WHERE NOT EXISTS \(SELECT 1 FROM profiles p WHERE p\.handle = blog_follows\.handle\)$/i.test(s)
-      || /^UPDATE speaker_ref SET handle = '' WHERE handle <> '' AND NOT EXISTS \(SELECT 1 FROM profiles p WHERE p\.handle = speaker_ref\.handle\)$/i.test(s)
       || /^DELETE FROM (?:push_topics|email_topics) WHERE kind = 'entity' AND topic_id IN \(SELECT eid FROM person_entity WHERE user_id = 0\)$/i.test(s)
       || /^DELETE FROM mail_topic_follows WHERE eid IN \(SELECT eid FROM person_entity WHERE user_id = 0\)$/i.test(s)) continue;
     assert.match(s, /^CREATE (TABLE|INDEX|UNIQUE INDEX) IF NOT EXISTS /i, "nur idempotente Anweisungen: " + s.slice(0, 60));

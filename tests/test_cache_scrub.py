@@ -119,6 +119,62 @@ class ScrubCache(Base):
         self.assertIn("Alice Geloescht", (self.cache / SF._name(API + "/api/feed/export")).read_text("utf-8"))
 
 
+# Runde 9: Blog (Autor und Co-Autoren), Entitaets-Ansprueche und Q&A aus data/cache
+CACHE9 = {
+    "/api/blog/export": {"items": [
+        {"id": 1, "slug": "mein-weg", "title": "Mein Weg", "body": "Persoenlicher Text von Alice", "handle": "alice", "name": "Alice Geloescht", "ak": A_OLD, "coauthors": []},
+        {"id": 2, "slug": "bobs-post", "title": "Bobs Beitrag", "body": "x", "handle": "bob", "name": "Bob Builder", "ak": "b" * 16,
+         "coauthors": [{"handle": "alice", "name": "Alice Geloescht", "ak": A_OLD}, {"handle": "bob", "name": "Bob Builder", "ak": "b" * 16}]},
+        {"id": 3, "slug": "alt", "title": "Alte Fassung ohne ak", "body": "x", "handle": "alice", "name": "Alice Geloescht", "coauthors": []},
+        {"id": 1000000102, "slug": "mein-weg", "title": "Mi camino", "lang": "es", "ai_tr": True, "handle": "alice", "name": "Alice Geloescht", "ak": A_OLD, "coauthors": []}]},
+    "/api/entity/claims": {"claims": [{"eid": "guest-x", "handle": "alice", "ak": A_OLD}, {"eid": "guest-y", "handle": "bob", "ak": "b" * 16},
+                                      {"eid": "guest-z", "handle": "alice"}, {"eid": "guest-w", "handle": "dora", "ak": "d" * 16}]},
+    "/api/qa/export": {"items": [{"eid": "alice", "q": "Wer ist Alice?", "a": "Alice Geloescht ...", "lang": "en", "ak": A_OLD},
+                                 {"eid": "alice", "q": "Alte Fassung ohne ak", "a": "...", "lang": "en"},
+                                 {"eid": "bob", "q": "Wer ist Bob?", "a": "Bob ...", "lang": "en", "ak": "b" * 16},
+                                 {"eid": "copilot", "q": "Was ist Copilot?", "a": "...", "lang": "en"}]},
+}
+
+
+class ScrubBlogClaimsQa(Base):
+    fresh = {"/api/profiles/export": FRESH["/api/profiles/export"]}
+
+    def setUp(self):
+        super().setUp()
+        for p, j in CACHE9.items():
+            (self.cache / SF._name(API + p)).write_text(json.dumps(j), "utf-8")
+
+    def test_blog_nur_passende_autoren_und_co_autoren(self):
+        self.get("/api/profiles/export")
+        items = self.get("/api/blog/export")["items"]
+        self.assertEqual([i["id"] for i in items], [2], "Alices Beitraege (auch Uebersetzung und alte Fassung) erscheinen nicht unter Carol")
+        self.assertEqual([c["handle"] for c in items[0]["coauthors"]], ["bob"])
+        self.assertNotIn("Persoenlicher Text von Alice", json.dumps(items))
+
+    def test_ansprueche_nur_mit_passendem_konto(self):
+        self.get("/api/profiles/export")
+        self.assertEqual([c["eid"] for c in self.get("/api/entity/claims")["claims"]], ["guest-y"], "anderes Konto, alte Fassung ohne ak, kein Profil: weg")
+
+    def test_qa_zur_alten_person_nicht_beim_neuen_inhaber(self):
+        self.get("/api/profiles/export")
+        self.assertEqual([i["q"] for i in self.get("/api/qa/export")["items"]], ["Wer ist Bob?", "Was ist Copilot?"])
+
+    def test_check_und_frische_fassung_unveraendert(self):
+        SF.prefetch(API)
+        self.assertTrue(SF.check(API))
+        self.assertEqual(SF.states()[API + "/api/blog/export"], "cache")
+        dump = json.dumps([self.get(p) for p in CACHE9], ensure_ascii=False)
+        self.assertNotIn("Alice Geloescht", dump); self.assertNotIn(A_OLD, dump)
+
+
+class BlogFrischUnveraendert(Base):
+    fresh = {**FRESH, "/api/blog/export": CACHE9["/api/blog/export"]}
+
+    def test_frischer_blog_export_wird_nicht_gefiltert(self):
+        self.get("/api/profiles/export")
+        self.assertEqual(len(self.get("/api/blog/export")["items"]), 4)
+
+
 class OhneFrischeProfile(Base):
     fresh = {k: v for k, v in FRESH.items() if k != "/api/profiles/export"}
 

@@ -1,6 +1,6 @@
 // Events (Veranstalter), Sessions mit Speakern, Sponsoren-Suche fuer Veranstalter
 import { mailReady, sendMail } from "./mailer.js";
-import { acctKeys, anonSpeaker, isFormer } from "./privacy.js";
+import { acctKeys, withAcctKeys, anonSpeaker, isFormer } from "./privacy.js";
 import { ownedEntity } from "./profiles.js";
 import { cleanText, esc, rateLimit } from "./util.js";
 import { baseIds, entityMap } from "./entities.js";
@@ -651,8 +651,8 @@ export async function handleEvents(env, request, url, path, user, J) {
     const ok = await claimEntity(db, eid, user.id, "manual"); return ok ? J({ ok: true }) : J({ error: "claimed" }, 409);
   }
   if (path === "/api/entity/claims" && method === "GET") {
-    const rows = (await db.prepare("SELECT c.eid,p.handle FROM entity_claims c JOIN profiles p ON p.user_id=c.user_id AND p.public=1 JOIN users u ON u.id=c.user_id AND u.banned=0 WHERE c.status='verified'").all()).results || [];
-    return J({ claims: rows }, 200, { "cache-control": "public, max-age=300" });
+    const rows = (await db.prepare("SELECT c.eid,p.handle,c.user_id FROM entity_claims c JOIN profiles p ON p.user_id=c.user_id AND p.public=1 JOIN users u ON u.id=c.user_id AND u.banned=0 WHERE c.status='verified'").all()).results || [];
+    return J({ claims: await withAcctKeys(env, rows) }, 200, { "cache-control": "public, max-age=300" });   // ak statt Konto-ID (site_fetch.scrub, Runde 9)
   }
   if (path === "/api/entity/claim/mine" && method === "GET") {
     if (need()) return need();

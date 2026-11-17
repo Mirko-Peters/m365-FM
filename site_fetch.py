@@ -7,7 +7,8 @@
 - check(): fehlen Pflicht-Exporte (Blog, Profile, Entitaeten, Q&A) frisch UND im Cache, bricht der Bau mit Exit 1 ab. Den Profil-Export
   braucht der Bau frisch: aus einer alten Fassung kaemen geloeschte oder private Profile zurueck.
   SITE_OFFLINE=1 (lokale Testbauten ohne Netz) macht daraus eine Warnung.
-- scrub() (Runde 8): Kommen Exporte mit Personenbezug (Entitaeten, Feed, Shows, Events, Gaeste, Bibliothek, Podcast, Video) aus data/cache, werden
+- scrub() (Runde 8, Runde 9: Blog, Ansprueche, Q&A): Kommen Exporte mit Personenbezug (Entitaeten, Feed, Shows, Events, Gaeste, Bibliothek,
+  Podcast, Video, Blog mit Co-Autoren, Entitaets-Ansprueche, Q&A zu Personen-Entitaeten) aus data/cache, werden
   sie gegen den frischen Profil-Export gefiltert: sie stammen vom letzten Bau, also womoeglich von vor einer Kontoloeschung, dem Privatstellen
   oder einem Adresswechsel - und die Adresse kann inzwischen einem anderen Mitglied gehoeren.
 """
@@ -102,7 +103,7 @@ def _fetch(url, timeout, tries):
 # ---------------------------------------------------------------- scrub (Runde 8)
 FORMER = "Former member"   # wie worker/src/privacy.js FORMER
 SCRUB = ("/api/entity/export", "/api/feed/export", "/api/show/export", "/api/events/export", "/api/guests/export", "/api/library/export",
-         "/api/podcast/export", "/api/video/export")
+         "/api/podcast/export", "/api/video/export", "/api/blog/export", "/api/entity/claims", "/api/qa/export")
 
 
 def _split(url):
@@ -124,15 +125,18 @@ def _norm(s):
     return " ".join(str(s or "").split()).casefold()
 
 
-def same_person(pb, handle, name=None, ak=None):
+def same_person(pb, handle, name=None, ak=None, strict=False):
     """Gehoert ein Eintrag (Adresse, Name, Konto-Schluessel ak aus worker privacy.js acctKeys) noch dem Profil, das die Adresse im frischen Export
     traegt? Adresse muss oeffentlich sein; tragen beide einen Konto-Schluessel, muss er gleich sein (anderes Konto mit derselben Adresse: nein).
-    Sonst (aeltere Cache-Fassung ohne ak) muss der Name passen."""
+    Sonst (aeltere Cache-Fassung ohne ak) muss der Name passen. strict: Eintraege ohne Namen (Ansprueche, Q&A) brauchen ak, sobald das Profil
+    einen traegt (sonst liesse eine alte Cache-Fassung ohne ak jeden Eintrag zur Adresse durch)."""
     p = pb.get(handle) if handle else None
     if not p:
         return False
     if ak and p.get("ak"):
         return ak == p["ak"]
+    if strict and p.get("ak"):
+        return False
     if name and p.get("name"):
         return _norm(name) == _norm(p["name"])
     return True
@@ -175,10 +179,28 @@ def scrub(url, j):
             ev["sessions"] = [({**s, "speakers": [_speaker(pb, x) for x in s.get("speakers") or []]} if isinstance(s, dict) else s) for s in ev.get("sessions") or []]
             evs.append(ev)
         return {**j, "events": evs}
+    if path == "/api/entity/claims":
+        # Ansprueche {eid, handle, ak}: haengen eine Entitaet (z. B. Podcast-Gast) an ein Profil (ENT.CLAIMS, MEM.CLAIMED) - nur, wenn Adresse und
+        # Konto-Schluessel zum frischen Profil-Export passen (Runde 9)
+        cl = j.get("claims")
+        if not isinstance(cl, list):
+            return j
+        out = [c for c in cl if isinstance(c, dict) and same_person(pb, c.get("handle"), None, c.get("ak"), strict=True)]
+        if len(out) != len(cl):
+            print(f"Hinweis: {path} aus data/cache - {len(cl) - len(out)} Eintraege ohne passendes frisches Profil ausgelassen", file=sys.stderr)
+        return {**j, "claims": out}
     items = j.get("items")
     if not isinstance(items, list):
         return j
-    if path == "/api/entity/export":
+    if path == "/api/blog/export":
+        # Beitraege nur von passenden Profilen; Co-Autoren ebenso (Runde 9: sonst erschienen Beitraege der alten Person unter dem neuen Inhaber)
+        out = [({**i, "coauthors": [c for c in i["coauthors"] if _keep(pb, c)]} if isinstance(i.get("coauthors"), list) else i) for i in items if _keep(pb, i)]
+    elif path == "/api/qa/export":
+        # Q&A zu Personen-Entitaeten (ak des Inhabers): nur, wenn die Adresse (eid) noch demselben Konto gehoert. Ohne ak (keine Person oder alte
+        # Fassung): nicht, wenn die eid heute eine Profil-Adresse ist - sonst landete die FAQ zur alten Person auf der Seite des neuen Inhabers
+        out = [i for i in items if not isinstance(i, dict)
+               or (same_person(pb, i.get("eid"), None, i["ak"]) if i.get("ak") else i.get("eid") not in pb)]
+    elif path == "/api/entity/export":
         # Personen-Entitaeten aus Profilen (pe; aeltere Fassungen ohne pe: selbst verwaltet und Typ person) nur, wenn die Adresse frisch oeffentlich
         # ist und der Name zum Profil passt (sonst: geloescht, privat oder Adresse inzwischen bei einem anderen Mitglied)
         def personal(i):
