@@ -16,7 +16,7 @@ faq:
   - q: "Do I need to open inbound ports for Azure Virtual Desktop?"
     a: "Not for the default transport. Microsoft Learn says the service uses a reverse connection, so no inbound ports are needed. The exception is the optional RDP Shortpath listener for managed networks, which needs an inbound UDP port on each session host. Learn recommends not opening inbound port 3389 or assigning public IP addresses to session hosts, and suggests just-in-time VM access if you must open 3389."
   - q: "Is UDP required for Azure Virtual Desktop?"
-    a: "No. TCP on port 443 is the default. RDP Shortpath adds a UDP-based transport. For public networks it works without extra configuration when firewalls allow UDP, using the TURN relay instead of direct STUN behind Azure NAT Gateway or Azure Firewall, according to Learn; the managed-network listener variant needs the listener enabled. If a firewall blocks UDP, Learn says the connection falls back to TCP."
+    a: "No. TCP on port 443 is the default. RDP Shortpath adds a UDP-based transport. For public networks it works without extra configuration when firewalls allow UDP, and Learn says Symmetric NAT, as with Azure NAT Gateway or Azure Firewall, can use the TURN relay instead of direct STUN; the managed-network listener variant needs the listener enabled. If a firewall blocks UDP, Learn says the connection falls back to TCP."
   - q: "Which DNS servers should session hosts use?"
     a: "That depends on your identity setup. For AD DS or Microsoft Entra Domain Services, the virtual network must reach the domain controllers and relevant DNS servers. Learn lists four name resolution methods for virtual networks: Azure Private DNS zones (called the preferred solution), Azure-provided DNS, your own DNS server and DNS Private Resolver. A DNS server in the network, such as a domain controller running in Azure, can answer its own domains and forward all other queries to 168.63.129.16."
 ---
@@ -28,7 +28,7 @@ Azure Virtual Desktop needs three network basics: a virtual network and subnet i
 Learn's [network connectivity article](https://learn.microsoft.com/en-us/azure/virtual-desktop/network-connectivity) says Azure Virtual Desktop uses reverse connect transport. Unlike on-premises Remote Desktop Services, no TCP listener on the session host waits for RDP connections. Both sides connect outbound over HTTPS:
 
 - At startup, the Remote Desktop Agent Loader service on the session host opens a persistent TLS channel to the Azure Virtual Desktop broker.
-- When a user selects a resource, the client opens a TLS connection to a gateway instance. For public cloud connections, gateways are grouped in 10 ms latency steps, and the one with the lowest latency and then the fewest existing connections is chosen.
+- When a user selects a resource, the client opens a TLS connection to a gateway instance. For public cloud connections, gateways are put into groups of 10 ms, and the one with the lowest latency and then the fewest existing connections is chosen.
 - The session host connects to the same gateway, and the gateway relays data between both endpoints. This is the base transport for RDP.
 
 For all connections that clients and session hosts start to the service infrastructure, TLS 1.2 is the minimum and TLS 1.3 can be used if the client operating system supports it. Inside the relayed path, RDP sets up a nested TLS connection between client and session host with the mutually agreed version, up to TLS 1.3, which Learn says is supported starting in Windows 11 21H2 and Windows Server 2022.
@@ -56,7 +56,7 @@ Learn lists four explicit methods:
 - Associate a standard public IP with a network interface of the VM. Learn lists this as a valid method but recommends no public IP addresses on session hosts.
 - Add a firewall or network virtual appliance and point traffic to it with a user-defined route.
 
-Windows activation and Windows updates do not work in a private subnet without an explicit method of egress.
+Windows activation and updates do not work in a private subnet without an explicit egress method.
 
 The method matters for UDP. Learn's [RDP Shortpath article](https://learn.microsoft.com/en-us/azure/virtual-desktop/rdp-shortpath) says that Symmetric NAT, which maps one private source IP:port to a unique public destination IP:port, can use a relayed connection with TURN, and that this is the case if you use Azure Firewall and Azure NAT Gateway. Our reading: behind a NAT gateway, expect relayed UDP through the TURN relay (UDP 3478 to `51.5.0.0/16`) rather than direct STUN.
 
@@ -92,10 +92,10 @@ Learn's [RDP Shortpath article](https://learn.microsoft.com/en-us/azure/virtual-
 |---|---|---|
 | Managed networks, listener variant | Private connection such as ExpressRoute private peering or a site-to-site or point-to-site VPN (IPsec) | You must enable the UDP listener on the session host, default port 3390, with an inbound port allowed on each session host |
 | Managed networks, STUN variant | Same private connections | Direct UDP through STUN, with no inbound port required on the session host |
-| Public networks, direct | STUN between client and session host; Learn says NAT Gateway and Azure Firewall use TURN instead | Outbound from the session host subnet on UDP 1024 to 65535, default range 49152 to 65535 (Learn excludes port 65330, which Azure reserves); the session host's STUN query uses UDP 3478 |
-| Public networks, relayed | TURN | UDP 3478 to `51.5.0.0/16` in the Azure cloud; Learn's firewall table calls this rule STUN/TURN relay |
+| Public networks, direct | STUN between client and session host; Symmetric NAT can use TURN instead (see above) | Outbound from the session host subnet on UDP 1024 to 65535, default range 49152 to 65535 (Learn says port 65330 is ignored in the default range because Azure uses it internally); the session host's STUN query uses UDP 3478 |
+| Public networks, relayed | TURN | UDP 3478 to `51.5.0.0/16` in the Azure cloud; Learn names this rule STUN/TURN relay |
 
-Public network Shortpath via STUN and TURN is generally available in the Azure cloud, according to the page. It works without extra configuration when networks and firewalls allow the traffic and the RDP transport settings are at their defaults, so for public networks the questions are whether UDP may pass your firewalls and which outbound method the subnet uses. If both modes are available, the connection that is established first is used. Learn recommends avoiding force tunneling, double or carrier-grade NAT, cloud packet-inspection services and TCP-based VPNs, and enabling IPv6 connectivity or Teredo. If a firewall blocks UDP, Shortpath fails and the connection continues over TCP. Learn says the TURN relay is chosen by the client's physical location, and a client far from a relay might fall back to TCP. See [RDP Shortpath](/entity/rdp-shortpath/) for the settings.
+Public network Shortpath via STUN and TURN is generally available in the Azure cloud, according to the page. It works without extra configuration when networks and firewalls allow the traffic and the RDP transport settings are at their defaults, so for public networks the questions are whether UDP may pass your firewalls and which outbound method the subnet uses. If both modes are available, the connection that is established first is used. Learn recommends avoiding force tunneling, double or carrier-grade NAT, cloud packet-inspection services and TCP-based VPNs, and enabling IPv6 connectivity or Teredo. If a firewall blocks UDP, Shortpath fails and the connection continues over TCP. Learn says the TURN relay is chosen by the client's location, and a distant client might fall back to TCP. See [RDP Shortpath](/entity/rdp-shortpath/) for the settings.
 
 ## Bandwidth and latency
 
@@ -106,7 +106,7 @@ Learn's [bandwidth article](https://learn.microsoft.com/en-us/azure/virtual-desk
 1. Create the virtual network and subnet in the same region as the session hosts.
 2. If you use AD DS or Microsoft Entra Domain Services, confirm the network reaches the domain controllers and DNS servers.
 3. Decide on DNS: Azure-provided or custom, and if custom, forwarding to 168.63.129.16.
-4. Give the subnet an explicit outbound method, such as a NAT gateway, if the virtual network is new and its subnet is private. This also applies when a route with next hop Internet bypasses the firewall. Expect TURN relay rather than direct STUN behind a NAT gateway.
+4. Give the subnet an explicit outbound method, such as a NAT gateway, if the virtual network is new and its subnet is private. This also applies when a route with next hop Internet bypasses the firewall. Our reading: behind a NAT gateway, plan for the TURN relay rather than direct STUN.
 5. Allow the outbound ports of the required endpoints list (mostly TCP 443, plus TCP 80, TCP 1688 for activation and UDP 3478), then run the Agent URL Tool.
 6. Do not intercept 168.63.129.16 or 169.254.169.254.
 7. Keep inbound 3389 closed and give session hosts no public IP addresses. Only the managed-network Shortpath listener needs an inbound UDP port.
