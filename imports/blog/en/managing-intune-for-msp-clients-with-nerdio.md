@@ -8,7 +8,7 @@ date: 2026-11-18
 topics: [nerdio-manager-for-msp, intune]
 keypoints:
   - "Per Nerdio's pages, Intune policies are mostly imported from the MSP tenant or a JSON file into Nerdio Manager for MSP and published to customer accounts. Nerdio Manager can also clone a policy or create a built-in device compliance policy. Later source changes are pulled in by re-import or Update."
-  - "Assignments to customers use a sync type, manual by default or automatic, and Add or Overwrite. With automatic sync for All customers, new accounts receive the policy automatically."
+  - "Assignments to customers use a sync type, manual by default or automatic, and Add or Overwrite. Per Nerdio's Sync Type note, a policy assigned to All customers is also published automatically to newly added accounts."
   - "Drift status compares a customer's policy with the MSP source. For a policy outside a Policy Baseline, Fix drift only works in Enforced mode; Rollback and Accept drift (with an expiry) are the alternatives."
   - "Nerdio checks source tenants for unimported changes every 4 hours. Nerdio validates only the JSON syntax of an edited policy, not whether the Intune settings are valid."
   - "Microsoft 365 Lighthouse is a no-additional-cost Microsoft option with its own limits (CSP partners, up to 2,500 licensed users per customer tenant). Microsoft's September 2025 post names Nerdio and inforcer as independent companion solutions; a March 2026 post adds three validated partners, including CIPP."
@@ -21,7 +21,7 @@ faq:
     a: "The Configuration Drift window in Nerdio Manager shows the difference from the MSP source policy. The MSP can fix the drift (for a policy outside a Policy Baseline, Fix drift republishes the mismatched items in Enforced mode), roll back to another version assigned to the customer, or accept the drift for a set period."
 ---
 
-Nerdio Manager for MSP lets a managed service provider keep Intune policies in one place at the MSP level, publish them to customer accounts and see where a customer differs from the source. These are Intune policies, so our reading is that Intune in each customer tenant does the enforcing; the pages describe publishing. This article covers the workflow, key settings and where Microsoft's own tools may be enough.
+Nerdio Manager for MSP lets a managed service provider keep Intune policies in one place at the MSP level, publish them to customer accounts and see where a customer differs from the source. These are Intune policies, so Intune in each customer tenant presumably does the enforcing; the pages describe publishing. This article covers the workflow, key settings and where Microsoft's own tools may be enough.
 
 The details come from Nerdio's help center and Microsoft Learn. Nerdio's pages still say "Microsoft Endpoint Manager admin center" for the Intune admin center; this article uses the current name. It does not cover Intune on AVD session hosts or onboarding a customer account.
 
@@ -60,7 +60,7 @@ Nerdio checks the source tenant for unimported changes every four hours; Import 
 2. Select Assign, then Add assignments.
 3. Under Select assignments, choose accounts, or All for every account.
 4. Choose Add to extend existing assignments or Overwrite to replace them, then Confirm.
-5. On the Assignments page set the Sync Type. Manual is the default; Automatic republishes regularly, and with All customers selected, new accounts get the policy automatically. Set the Version, and for Conditional Access the State.
+5. On the Assignments page set the Sync Type. Manual is the default; Automatic republishes regularly. Nerdio's note adds that a policy assigned to All customers is also published automatically to newly added accounts. Set the Version, and for Conditional Access the State.
 6. Select Apply and close.
 
 After you edit or update a policy, Re-publish applies to manual assignments and Publish now publishes automatic assignments immediately. Re-publish exists only for policies already assigned to customers.
@@ -98,7 +98,7 @@ To use the Center for Internet Security (CIS) Intune policies, enable them first
 ## Limits and pitfalls from the documentation
 
 - **Syntax-only validation.** When you edit JSON, Nerdio Manager validates only the syntax, not whether the Intune settings and values are valid.
-- **Authentication contexts are shared.** Nerdio's page says they use a shared set of predefined IDs in the customer tenant (c1-c199), so overwriting one can affect other policies; Microsoft Learn says up to 99 definitions (c1-c99), so check the tenant. The overwrite option is off by default; review existing contexts first under Protection > Conditional Access > Authentication contexts in the Microsoft Entra admin center.
+- **Authentication contexts are shared.** Nerdio's page says they use a shared set of predefined IDs in the customer tenant (c1-c199), so overwriting one can affect other policies; Microsoft Learn says up to 99 definitions (c1-c99), so check the tenant. The overwrite option is off by default; review existing contexts first. Microsoft Learn gives the path as Entra ID > Conditional Access > Authentication context; Nerdio's page still says Protection > Conditional Access > Authentication contexts.
 - **Microsoft-managed Conditional Access policies** are read-only in Nerdio. Nerdio's page says Microsoft turns them on automatically after 45 days; Microsoft Learn says no less than 30 days after introduction if they stay in Report-only, sometimes faster, with notice two weeks before. Import from several tenants, because the policies can differ. You can change their state and group assignments, but not edit or push them.
 - **The built-in device compliance policy is tenant-wide** and cannot be scoped to user or device groups; by default it can report compliant when no compliance policy is assigned. Nerdio's Add Built-in Device Compliance Policy applies one to multiple customer accounts.
 - **Limited Access mode is deprecated.** Nerdio's permissions page marks account-level Limited Access mode as deprecated from v7.3, in favor of the Granular and Least Privilege access models.
