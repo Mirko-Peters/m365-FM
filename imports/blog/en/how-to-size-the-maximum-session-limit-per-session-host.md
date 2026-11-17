@@ -1,31 +1,31 @@
 ---
 title: "How to size the maximum session limit per session host"
-summary: "Microsoft Learn gives no formula for the maximum session limit, so you derive a starting value from the session host's vCPU count and workload type, then correct it with monitoring data. This guide shows the steps, a worked example and the points where the value affects load balancing and autoscale."
+summary: "Learn's host pool load-balancing page gives no recommended maximum session limit and points to Azure Virtual Desktop Insights, while its VM sizing guidance lists maximum users per vCPU. This guide turns those figures into a starting value from the vCPU count and workload type, then corrects it with monitoring data, with a worked example and the effects on load balancing and autoscale."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-maximum-session-limit, avd-host-pool]
 keypoints:
-  - "Learn gives no sizing formula for the maximum session limit. It points to Azure Virtual Desktop Insights for choosing the value, and its VM sizing guidance lists maximum users per vCPU: 6 light, 4 medium, 2 heavy, 1 power."
+  - "Learn's load-balancing page names no recommended maximum session limit and points to Azure Virtual Desktop Insights for choosing it. Its VM sizing guidance lists maximum users per vCPU: 6 light, 4 medium, 2 heavy, 1 power."
   - "Learn calls its sizing numbers initial estimates only, so multiply users per vCPU by your vCPU count to get a starting value, then validate with a pilot and watch users per core, input delay, CPU and memory."
   - "Capacity is the limit multiplied by the number of available hosts. As this article's arithmetic, a limit of 32 on two hosts gives 64 sessions, and a 75 percent threshold starts a third host above 48."
   - "Depth-first load balancing requires a limit. A breadth-first pool starts at 999999, and Learn says not to use the default value when autoscale manages a pooled pool."
-  - "Lowering the limit on a host that has active sessions does not affect those sessions."
+  - "Lowering the limit on a host that has active sessions does not affect those sessions. Learn also says that under high concurrent connection load the number of sessions on a host can exceed the limit, so treat it as a target and leave headroom."
 faq:
   - q: "Is there a recommended maximum session limit value?"
-    a: "No. Microsoft Learn gives no recommended value. It says to use Azure Virtual Desktop Insights to find a value that suits your environment, and it lists maximum users per vCPU by workload type as a starting point."
+    a: "Not as a single number. Learn's host pool load-balancing page gives no recommended value and says to use Azure Virtual Desktop Insights to find a limit that fits your environment. Learn's VM sizing guidance lists maximum users per vCPU by workload type, which this guide uses as a starting point and describes as initial estimates only."
   - q: "What happens if I leave the default of 999999?"
     a: "With breadth-first, a pool created without a custom value starts at 999999, the highest value you can set. Learn says not to use the default when autoscale manages a pooled pool, but it does not give a reason. A reasonable inference is that a capacity of that size can never reach a capacity threshold. Depth-first needs a real limit."
   - q: "Does changing the limit disconnect users?"
     a: "No. Learn says that lowering the maximum session limit on a session host that has active user sessions does not affect those existing sessions."
 ---
 
-Microsoft Learn does not publish a formula for the maximum session limit. The practical method is to take a starting value from the VM's vCPU count and the workload type, set it on the host pool, and correct it with monitoring data. This guide walks through that in six steps, using Learn's pages on [load balancing](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-load-balancing), [session host sizing](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/virtual-machine-recs) and [autoscale](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan). What the value means and how it defines capacity is covered in "Maximum session limit in Azure Virtual Desktop: how it defines host pool capacity", so this guide concentrates on choosing a number.
+Learn's host pool load-balancing page gives no recommended value for the maximum session limit and points to Azure Virtual Desktop Insights for choosing one, while its VM sizing guidance lists maximum users per vCPU for four workload types. The practical method is to combine the two: take a starting value from the VM's vCPU count and the workload type, set it on the host pool, and correct it with monitoring data. This guide walks through that in six steps, using Learn's pages on [load balancing](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-load-balancing), [session host sizing](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/session-host-virtual-machine-sizing-guidelines) and [autoscale](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan). What the value means and how it defines capacity is covered in "Maximum session limit in Azure Virtual Desktop: how it defines host pool capacity", so this guide concentrates on choosing a number.
 
 ## What the value controls
 
-The [maximum session limit](/entity/avd-maximum-session-limit/) is a host pool property that sets how many user sessions one [session host](/entity/avd-session-host/) accepts. [Depth-first](/entity/avd-depth-first-load-balancing/) load balancing requires it, a pool created with [breadth-first](/entity/avd-breadth-first-load-balancing/) starts at 999999, and Learn says not to use the default value when autoscale manages a pooled [host pool](/entity/avd-host-pool/). Learn's [autoscale glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary) defines available capacity as the limit multiplied by the number of available session hosts.
+The [maximum session limit](/entity/avd-maximum-session-limit/) is a host pool property that sets how many user sessions load balancing aims to place on one [session host](/entity/avd-session-host/). It is not a hard cap: Learn's terminology page says that under high concurrent connection load, when several users connect to the host pool at the same time, the number of sessions created on a session host can exceed the limit. [Depth-first](/entity/avd-depth-first-load-balancing/) load balancing requires it, a pool created with [breadth-first](/entity/avd-breadth-first-load-balancing/) starts at 999999, and Learn says not to use the default value when autoscale manages a pooled [host pool](/entity/avd-host-pool/). Learn's [autoscale glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary) defines available capacity as the limit multiplied by the number of available session hosts.
 
 Learn states the autoscale requirement without giving a reason. The consequences below are this article's reading of the formula, not Learn statements: a limit that is too high lets a host fill beyond what its CPU and memory support, and a limit that is too low reduces capacity and makes autoscale start hosts earlier.
 
@@ -61,7 +61,7 @@ Learn's multi-session table gives maximum users per vCPU:
 | Heavy | 2 | 8 vCPUs, 16 GB, 32 GB |
 | Power | 1 | 6 vCPUs, 56 GB, 340 GB |
 
-Multiply the users per vCPU by the vCPUs of your VM size. The multiplication is this article's arithmetic, not a Learn figure. Learn describes all of these numbers as generic guidelines for initial performance estimates only.
+Multiply the users per vCPU by the vCPUs of your VM size. The multiplication is this article's arithmetic, not a Learn figure. Learn describes all of these numbers as generic guidelines for initial performance estimates only. Our reading: the table gives maximums and Learn says capacity does not scale linearly with cores, so treat the product as an upper bound for the pilot rather than an average to plan on.
 
 Worked example: a medium workload on an 8-vCPU host gives 4 x 8 = 32 as a starting limit. A heavy workload on the same host gives 2 x 8 = 16. A light workload on a 16-vCPU host gives 6 x 16 = 96, which is a case to test carefully, because memory can become the limit. Learn says that raising memory from 8 GB to 16 GB can more than double the number of users when memory is the constraint. It gives no memory-per-user figure, so record memory use in the pilot.
 
@@ -86,7 +86,7 @@ The Azure CLI equivalent is `az desktopvirtualization hostpool update` with `--m
 
 ## Step 5: Check the effect on autoscale
 
-Autoscale turns on a host when used capacity exceeds the capacity threshold, and used capacity counts active and disconnected sessions. Apply that to the starting value from step 3. With a limit of 32, two hosts give 64 sessions of capacity, and a 75 percent threshold means a third host starts when the sessions exceed 48. If that is too early or too late for your logon pattern, change the limit or the threshold, but not both at once, so you can see which change did what. The [capacity threshold](/entity/avd-capacity-threshold/) and phase settings are covered in the [scaling plan](/entity/avd-scaling-plan/) articles.
+Autoscale turns on a host when used capacity exceeds the capacity threshold, and used capacity counts active and disconnected sessions. Apply that to the starting value from step 3. With a limit of 32, two hosts give 64 sessions of capacity, and a 75 percent threshold means a third host starts when the sessions exceed 48. If the third host starts too early or too late for your logon pattern, change the limit or the threshold, but not both at once, so you can see which change did what. Because Learn says concurrent logons can push a host past its limit, keep headroom below the calculated value and measure the logon peak in the pilot. The [capacity threshold](/entity/avd-capacity-threshold/) and phase settings are covered in the [scaling plan](/entity/avd-scaling-plan/) articles.
 
 The same arithmetic gives a rough host count. For 200 concurrent medium-workload users and a limit of 32, the pool needs at least 200 / 32 = 6.25, so 7 hosts, if every host runs full. At 7 hosts the capacity is 224 sessions and 200 sessions is about 89 percent, above a 75 percent threshold. Keeping used capacity at or below 75 percent needs 200 / (32 x 0.75) = 8.3, so 9 hosts. This applies the consolidation formula from Learn's autoscale scenarios page, which Learn uses for the ramp-down phase, to peak sizing. The use for sizing is this article's, not a Learn example, and it shows why the limit, the threshold and the number of hosts have to be planned together.
 
@@ -102,13 +102,14 @@ Useful measures from the Insights glossary:
 - **Input delay**: sampled every 30 seconds per session. Learn's bands are below 150 ms good, 150 to 500 ms acceptable, 500 to 2,000 ms poor and above 2,000 ms bad.
 - **Performance counters**: processor time and memory counters such as available MBytes and percent committed bytes in use, collected every 30 seconds.
 
-Learn gives no CPU or memory threshold for the limit. A working rule, which is this article's suggestion, is to compare input delay at peak with the bands above after each change. If peak input delay moves out of the good band while users per core sits at your limit, lower the value. If CPU and memory stay low at the limit, raise it in small steps. Learn says only that lowering the limit does not affect existing sessions. It does not describe how the new value is applied afterwards, so confirm the result in Insights after the next logon peak.
+Neither the load-balancing page nor the sizing page gives a CPU or memory threshold for the limit. A working rule, which is this article's suggestion, is to compare input delay at peak with the bands above after each change. If peak input delay moves out of the good band while users per core sits at your limit, lower the value. If CPU and memory stay low at the limit, raise it in small steps. Learn says only that lowering the limit does not affect existing sessions. It does not describe how the new value is applied afterwards, so confirm the result in Insights after the next logon peak, and check at that peak whether hosts ended up above the limit.
 
 ## Common mistakes
 
 - **Keeping 999999 on a depth-first pool.** Depth-first requires a limit, Learn says not to use the default value when autoscale manages the pool, and it points to Insights for finding a value that fits your environment.
 - **Reading the table's minimums as sizes.** The Power row lists a minimum of 6 vCPUs, and its example sizes, such as D16ds_v5 and NV6, differ in vCPU count. Check the vCPU count of the size you deploy.
 - **Ignoring disconnected sessions.** Autoscale counts them as used capacity, so a limit that is too tight combined with long-lived disconnected sessions starts hosts earlier than expected.
+- **Treating the limit as a guarantee.** Learn says that under high concurrent connection load a host can receive more sessions than the limit, so a pool sized with no headroom can be overrun at logon peaks.
 - **Treating the number as fixed.** Learn describes its figures as initial estimates, so pilot before you commit.
 
 ## Related
@@ -122,7 +123,8 @@ Learn gives no CPU or memory threshold for the limit. A working rule, which is t
 Accessed 17 November 2026.
 
 - [Microsoft Learn: Configure host pool load balancing](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-load-balancing)
-- [Microsoft Learn: Session host virtual machine sizing guidelines](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/virtual-machine-recs)
+- [Microsoft Learn: Session host virtual machine sizing guidelines](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/session-host-virtual-machine-sizing-guidelines)
+- [Microsoft Learn: Azure Virtual Desktop terminology](https://learn.microsoft.com/en-us/azure/virtual-desktop/terminology)
 - [Microsoft Learn: Autoscale glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary)
 - [Microsoft Learn: Autoscale scenarios for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)
 - [Microsoft Learn: Create and assign an autoscale scaling plan](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)
