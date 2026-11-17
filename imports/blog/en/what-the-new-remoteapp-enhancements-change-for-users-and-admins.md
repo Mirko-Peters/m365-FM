@@ -8,13 +8,13 @@ date: 2026-11-18
 topics: [avd-remoteapp, avd-application-group]
 keypoints:
   - "Learn lists improved Windows Snap and full-screen support, better multi-monitor handling and refined visuals such as borders, shadows and theme integration. The what's new page adds window moving and resizing and z-ordering."
-  - "Status as of 17 November 2026: the what's new page says RemoteApp enhancements are generally available (November 2026). The enhancements article, last updated 2 September 2026, still says preview, so check both before you plan the rollout."
+  - "Status as of 17 November 2026: the what's new page says RemoteApp enhancements are generally available for Azure Virtual Desktop (November 2026). The enhancements article, dated 2 September 2026, still says preview, so check both before you plan the rollout."
   - "Both sides need updates: session hosts on Windows 11 Enterprise 24H2 or 25H2 (or multi-session) with KB5070311 or later, SxS Network Stack 1.0.2507.25750 or newer, and a Windows 11 24H2 or 25H2 device with Windows App 2.0.864.0 or newer."
   - "The opt-in is the registry value EnableRemoteAppV2 = 1 under HKLM\\Software\\Policies\\Microsoft\\Windows NT\\Terminal Services, followed by a reboot. You verify it in Connection information: Remote session type must show RemoteAppV2."
   - "Learn lists known issues: some enhancements do not apply to Microsoft Edge and Chrome, narrowing a window at minimum width can move it, and closing a window can change the foreground window."
 faq:
   - q: "Do I have to enable the RemoteApp enhancements myself?"
-    a: "It depends on the page you read. The enhancements article (last updated 2 September 2026) says that production host pools keep the existing experience by default and administrators can opt in with the EnableRemoteAppV2 registry value. It also says that after general availability the enhancements are enabled by default on supported systems. The what's new page announced general availability in November 2026, so check the article's current text and verify the session type on a test connection."
+    a: "It depends on the page you read. The enhancements article (dated 2 September 2026) says that production host pools keep the existing experience by default and administrators can opt in with the EnableRemoteAppV2 registry value. It also says that after general availability the enhancements are enabled by default on supported systems. The what's new page announced general availability in November 2026, so check the article's current text and verify the session type on a test connection."
   - q: "How do I know a connection uses the enhancements?"
     a: "Open Connection information during a RemoteApp session, select See details and read Remote session type. Learn says RemoteAppV2 means the enhancements are working and any other value means they are not."
   - q: "Do the enhancements also apply to Windows 365 Cloud Apps?"
@@ -35,20 +35,20 @@ Learn's [RemoteApp enhancements article](https://learn.microsoft.com/en-us/azure
 
 The November 2026 entry on Learn's [what's new page](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new) describes the approach as server-first with first-class support for RemoteApps in Windows. It says RemoteApps more closely behave like local applications, with improvements to moving and resizing windows, Windows Snap, window appearance, z-ordering and full-screen behavior.
 
-For users this means fewer cases where a published app looks or acts differently from the app next to it on the local desktop. The effect is on windowing, not on what the app can do.
+For users this means fewer cases where a published app looks or acts differently from the app next to it on the local desktop. The what's new entry goes further than windowing: it says the enhancements "improve application functionality gaps" as well as addressing longstanding windowing and integration issues. The November 2025 entry also lists better DPI handling.
 
 ## Status: preview or generally available?
 
-Two Learn pages say different things at the time of retrieval, 17 November 2026.
+Learn's pages say different things on 17 November 2026. The what's new page covers Azure Virtual Desktop; for Windows 365 Cloud Apps the status differs, as the last row shows.
 
 | Source | What it says |
 |---|---|
 | What's new, November 2025 | "Enhancements to RemoteApps (preview)": enhanced user experiences are rolling out to public preview |
-| RemoteApp enhancements article (last updated 2 September 2026) | Title and text say preview; during public preview the enhancements roll out in the validation environment, and once generally available they are enabled by default on supported systems |
+| RemoteApp enhancements article (dated 2 September 2026) | Title and text say preview; during public preview the enhancements roll out in the validation environment, and once generally available they are enabled by default on supported systems |
 | What's new, November 2026 | "RemoteApp enhancements are now generally available for Azure Virtual Desktop" |
-| Windows 365 Cloud Apps article (last updated 15 October 2026) | Lists enhanced user experiences for Cloud Apps among its public preview items |
+| Windows 365 Cloud Apps article (dated 15 October 2026) | Lists enhanced user experiences for Cloud Apps among its public preview items |
 
-Our reading: the general availability announcement is the newer statement, and the dedicated article has not yet caught up. That is an inference from the dates; Microsoft has not said so. Practical consequence: do not assume the default has changed for production host pools. Test with a connection and read the session type (see "Verify the mode" below). For Cloud Apps, treat the behavior as preview until the Windows 365 article says otherwise.
+The what's new entry is the newer statement, but Microsoft has not explained why the enhancements article still says preview. Practical consequence: do not assume the default has changed for production host pools. Test with a connection and read the session type (see "Verify the mode" below). For Cloud Apps, treat the behavior as preview until the Windows 365 article says otherwise.
 
 ## Requirements
 
@@ -70,7 +70,7 @@ Learn lists these prerequisites for the enhancements article's scenario:
 - A local device running Windows 11, version 24H2 or 25H2.
 - A supported client: Windows App for Windows 2.0.864.0 or newer, or Remote Desktop client for Windows 1.2.6760.0 or newer.
 
-Learn's [SxS Network Stack page](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new-sxs) shows that version 1.0.2507.25750 was published in November 2025 with the note "General improvements and bug fixes for RemoteApp". The same page lists 1.0.2507.25755 (December 2025), which "fixes a RemoteApp connection issue for Windows 11 KB5070311 or later updates", and gives 1.0.2607.31800 as the current production version and 1.0.2608.28400 as the validation version. A host that meets only the minimum SxS version therefore misses a RemoteApp fix that Learn lists; aim for the current production version. The pages do not say which operating systems older than the table, or Windows Server, receive the enhancements, so do not promise them.
+Learn's [SxS Network Stack page](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new-sxs) shows that version 1.0.2507.25750 was published in November 2025 with the note "General improvements and bug fixes for RemoteApp". The same page lists 1.0.2507.25755 (December 2025), which "fixes a RemoteApp connection issue for Windows 11 KB5070311 or later updates", and gives 1.0.2607.31825 as the latest production version and 1.0.2610.08300 as the latest validation version, both published in October 2026. A host that meets only the minimum SxS version therefore misses a RemoteApp fix that Learn lists; aim for the current production version. The pages do not say which operating systems older than the table, or Windows Server, receive the enhancements, so do not promise them.
 
 The requirement for a Windows 11 local device matters for planning. The article does not describe what users on other platforms get, so verify your macOS, web and mobile users separately with the platform documentation, such as the [Windows App connection article](https://learn.microsoft.com/en-us/windows-app/get-started-connect-devices-desktops-apps).
 
@@ -90,7 +90,7 @@ Per Learn, enhancements are enabled by default for host pools in the [validation
 
 For Windows 365 Cloud Apps, Learn says you can deploy the registry value with [Remediations in Intune](https://learn.microsoft.com/en-us/mem/intune/fundamentals/remediations). For session hosts, the article does not name a deployment tool; your image, [Intune](/entity/intune/) or Group Policy process applies. If you build session hosts from a golden image, put the value in the image so that new hosts start with it. That is our suggestion, not a Learn step.
 
-Because the setting is per host, apply it to every host in a pool. A pool with a mix of enabled and disabled hosts gives users a different experience from one session to the next, and the article says nothing about mixed pools.
+Because the setting is per host, apply it to every host in a pool. The article says nothing about pools with a mix of enabled and disabled hosts. Our reading: such a pool is likely to give users a different experience from one session to the next, so test it before you accept it.
 
 ## Verify the mode
 
@@ -101,7 +101,7 @@ Because the setting is per host, apply it to every host in a pool. A pool with a
 3. Select **See details**.
 4. Read **Remote session type**. **RemoteAppV2** means the enhancements are working. Any other value means they are not; recheck the client and host prerequisites and the registry value.
 
-Check this on at least one host per pool and one client per supported platform before you tell users that the behavior has changed.
+Check this on at least one host per pool and one client of each supported type (Windows App and Remote Desktop client) before you tell users that the behavior has changed.
 
 ## Known issues and limits
 
@@ -111,7 +111,7 @@ Learn lists three known issues:
 - Narrowing a RemoteApp window that is already at minimum width sometimes moves the window instead.
 - Closing a RemoteApp window sometimes changes the foreground window.
 
-If your published apps include Edge or Chrome, tell users that part of the improved behavior will not apply to those two apps. The November 2026 what's new entry does not list them, so they come from the enhancements article, as of its September 2026 update; check the current article for changes.
+If your published apps include Edge or Chrome, tell users that part of the improved behavior will not apply to those two apps. The November 2026 what's new entry does not list them, so they come from the enhancements article, as dated 2 September 2026; check the current article for changes.
 
 ## A rollout plan for admins
 
@@ -126,7 +126,7 @@ The same rollout applies to Cloud Apps, with the Intune Remediations route for t
 
 ## What these enhancements do not change
 
-They do not change who can open an app, which host runs it or how many sessions a host takes. Assignment, the preferred application group type and host pool settings stay as they were; see "Application groups in Azure Virtual Desktop: desktop and RemoteApp groups explained". Newer RemoteApp features on the what's new page are separate: pinning RemoteApp shortcuts to the local desktop (public preview, September 2026), RemoteApp support for context-based redirections (preview, October 2026, see [context-based redirections](/entity/avd-context-based-redirections/)) and Intune Remote Help in RemoteApp sessions (July 2026).
+Learn's enhancements and what's new pages describe windowing, integration and visual behavior and mention no change to assignment, the preferred application group type or host pool settings. Our reading, not a Learn statement: those settings stay as they were, so check them in a pilot; the sibling article "Application groups in Azure Virtual Desktop: desktop and RemoteApp groups explained" covers them. Newer RemoteApp features on the what's new page are separate: pinning RemoteApp shortcuts to the local desktop (public preview, September 2026), RemoteApp support for context-based redirections (preview, October 2026, see [context-based redirections](/entity/avd-context-based-redirections/)) and Intune Remote Help in RemoteApp sessions (July 2026).
 
 ## Sources
 
