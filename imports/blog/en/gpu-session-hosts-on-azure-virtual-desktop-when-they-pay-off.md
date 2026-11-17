@@ -30,9 +30,9 @@ This guide helps you decide, compares the sizes that remain, and shows what must
 Learn's introduction describes GPU acceleration as parts that work together, and names these two:
 
 - **GPU-accelerated application rendering:** the GPU renders graphics inside the remote session.
-- **GPU-accelerated remote frame encoding:** the Remote Desktop Protocol encodes rendered frames for the local device. The GPU does this encoding for higher frame rates and a better experience. Learn notes it may consume more network bandwidth and more session host and client resources, and it benefits 3D modeling, CAD/CAM and video playback and editing. The frame encoding can use AVC/H.264 or HEVC/H.265, and Learn says HEVC allows 25 to 50 percent better compression than AVC/H.264 at the same quality, or better quality at the same bitrate.
+- **GPU-accelerated remote frame encoding:** the Remote Desktop Protocol encodes rendered frames for the local device. The GPU does this encoding for higher frame rates and a better experience. Learn notes it may consume more network bandwidth and more session host and client resources, and it benefits 3D modeling, CAD/CAM and video. The frame encoding can use AVC/H.264 or HEVC/H.265, and Learn says HEVC allows 25 to 50 percent better compression than AVC/H.264 at the same quality, or better quality at the same bitrate.
 
-Full-screen video encoding with AVC/H.264 also works without GPU acceleration. HEVC needs a compatible GPU-enabled VM. Learn also says you can increase the default chroma value to improve image quality; with HEVC the 4:4:4 chroma setting falls back to 4:2:0.
+Full-screen video encoding with AVC/H.264 also works without GPU acceleration. HEVC needs a compatible GPU-enabled VM. With HEVC, a 4:4:4 chroma setting falls back to 4:2:0.
 
 ## Do you need one? A decision table
 
@@ -44,7 +44,7 @@ Full-screen video encoding with AVC/H.264 also works without GPU acceleration. H
 | Office and web workloads | Test CPU-only first | Our reading: Learn sets no threshold for these |
 | Compute or machine learning on a VM | Not as a session host | NC, NCv2, NCv3, ND and NDv2 target CUDA-style tools; NCasT4_v3 is listed separately |
 
-Our reading on cost: the benefit has to outweigh GPU size pricing, which this guide does not quote. Use the Azure pricing calculator that the VM size pages link to, and compare it with the CPU size that passes your pilot.
+Our reading on cost: the benefit has to outweigh GPU size pricing, which this guide does not quote. Compare the Azure pricing calculator figure with the CPU size that passes your pilot.
 
 ## Which VM sizes are supported
 
@@ -57,15 +57,15 @@ Learn's Azure Virtual Desktop GPU page (ms.date May 2025, last updated August 20
 | NVadsA10 v5-series | Supported | HEVC/H.265 and AVC/H.264 | No retirement notice |
 | NCasT4_v3-series | Supported | HEVC/H.265 and AVC/H.264 | No retirement notice |
 
-The last column comes from the Learn size pages for each series, not from the Azure Virtual Desktop page, which still lists NVv3 and NVv4; it was last updated in August 2025, before the retirement date. For new session hosts, NVadsA10 v5 and NCasT4_v3 are the two series left from this list. Our reading: NVv4 was the only series in the table limited to AVC/H.264, so both remaining series support HEVC/H.265 and AVC/H.264 for frame encoding. If you still run hosts on a retired series, plan the move to one of the remaining sizes.
+The last column comes from the Learn size pages, not from the Azure Virtual Desktop page, which still lists NVv3 and NVv4 and was last updated in August 2025, before the retirement date. For new session hosts, NVadsA10 v5 and NCasT4_v3 are the two series left from this list. Our reading: NVv4 was the only series in the table limited to AVC/H.264, so both remaining series support HEVC/H.265 and AVC/H.264 for frame encoding. If you still run hosts on a retired series, plan the move to one of the remaining sizes.
 
-Learn's advice on choosing: the right size depends on application workloads, desired experience and cost. Larger and more capable GPUs generally give a better experience at a given user density, and smaller and fractional GPU sizes give finer control over cost and quality.
+Learn's advice on choosing: the right size depends on workloads, desired experience and cost. Larger GPUs generally give a better experience at a given user density; fractional sizes give finer control over cost and quality.
 
 The Azure VM sizes overview also lists other graphics families, for example NVads V710 v5 in the NV family and the NG family for virtual desktop use. They do not appear in Learn's Azure Virtual Desktop table, so check that page for support before choosing one.
 
 ### The NVadsA10 v5 detail
 
-The NVadsA10 v5 series uses NVIDIA A10 GPUs with AMD EPYC 74F3V (Milan) processors and is the series with partial GPUs. Learn's size tables list six sizes:
+The NVadsA10 v5 series uses NVIDIA A10 GPUs with AMD EPYC 74F3V (Milan) processors and is the series with partial GPUs among the series on this list. Learn's size tables list six sizes:
 
 | Size | vCPUs | Memory (GiB) | GPU share | GPU memory (GB) |
 |---|---|---|---|---|
@@ -76,11 +76,11 @@ The NVadsA10 v5 series uses NVIDIA A10 GPUs with AMD EPYC 74F3V (Milan) processo
 | Standard_NV36adms_A10_v5 | 36 | 880 | 1 | 24 |
 | Standard_NV72ads_A10_v5 | 72 | 880 | 2 | 48 |
 
-Two details matter for planning. Each instance includes a GRID license, usable as a virtual workstation for one user or by 25 concurrent users in a virtual application scenario. The Azure Virtual Desktop GPU page on Learn gives the same 25-user figure for NVIDIA GPU sizes in general. And the series page lists Live Migration and Memory Preserving Updates as not supported, so plan host maintenance accordingly. Ephemeral OS disks are listed as supported.
+Two details matter for planning. Each instance includes a GRID license, usable as a virtual workstation for one user or by 25 concurrent users in a virtual application scenario. The Azure Virtual Desktop GPU page gives the same 25-user figure for NVIDIA sizes. The series page lists Live Migration and Memory Preserving Updates as not supported, so plan host maintenance accordingly.
 
 ## What must be in place
 
-1. **Driver.** For NVIDIA sizes, install the GRID driver, not the CUDA driver. The NVIDIA GPU Driver Extension installs GRID automatically for these sizes. For AMD GPU sizes, use the AMD drivers Azure provides. Only Azure-distributed drivers are supported. HEVC needs GRID 16.2 (537.13) or later.
+1. **Driver.** For NVIDIA sizes, install the GRID driver, not the CUDA driver. Learn's Azure Virtual Desktop page says that installing with the NVIDIA GPU Driver Extension installs the GRID driver automatically. The NCasT4_v3 size page says otherwise for that series: the extension installs CUDA drivers there, and for graphics and visualization workloads the Azure-supported GRID drivers must be installed manually. Our reading: on NCasT4_v3 do not rely on the extension, and on any size check which driver ended up installed. Only Azure-distributed drivers are supported. HEVC needs GRID 16.2 (537.13) or later.
 2. **Policy for rendering.** In an Intune settings catalog profile or Group Policy, under Administrative templates > Windows Components > Remote Desktop Services > Remote Desktop Session Host > Remote Session Environment, enable **Use hardware graphics adapters for all Remote Desktop Services sessions**.
 3. **Policy for AVC/H.264 encoding.** In the same location, enable **Prioritize H.264/AVC 444 Graphics mode for Remote Desktop connections** and **Configure H.264/AVC hardware encoding for Remote Desktop connections**. Learn warns that prioritizing H.264 without the hardware encoding setting can result in CPU-based encoding.
 4. **Policy for HEVC.** Under Remote Desktop Session Host > Azure Virtual Desktop, enable **Configure H.265/HEVC hardware encoding for Remote Desktop Connections**. This needs the Azure Virtual Desktop administrative template. If both HEVC and AVC are enabled, HEVC is prioritized for compatible sessions, and AVC is used when HEVC is not available on the local device or your environment does not meet the HEVC prerequisites.
@@ -95,7 +95,7 @@ HEVC has been generally available since June 2025, after a preview announced in 
 - Multimedia redirection disabled by uninstalling the host component. Our reading: a pool that relies on multimedia redirection for video cannot also use HEVC on the same hosts.
 - Local device with a GPU that has HEVC 4K YUV 4:2:0 decode support, the Microsoft HEVC codec, and Windows App 2.0.503.0 or later, or the Remote Desktop app 1.2.6081 or later, on Windows. Learn says other platforms and versions are not supported.
 
-Learn says that when both HEVC/H.265 and AVC/H.264 hardware acceleration are enabled and HEVC is not available on the local device or in your environment, AVC/H.264 is used instead. So if part of your user base connects with unsupported clients, enable both policies and size the network for the AVC/H.264 case. Learn does not describe what happens when only the HEVC policy is enabled.
+Learn says that when both HEVC/H.265 and AVC/H.264 hardware acceleration are enabled and HEVC is not available on the local device or in your environment, AVC/H.264 is used instead. So if part of your user base connects with unsupported clients, enable both policies. Our reading: plan the network for the AVC/H.264 case as well. Learn does not describe what happens when only the HEVC policy is enabled.
 
 ## Verify the GPU is used
 
@@ -109,18 +109,18 @@ Learn says that when both HEVC/H.265 and AVC/H.264 hardware acceleration are ena
 The honest test of whether a GPU size pays off is a side-by-side pilot. The steps are our suggestion; the settings come from Learn.
 
 1. Pick one representative application and one task users complain about, such as rotating a 3D model or scrubbing a timeline.
-2. Build two small pilot host pools, one with a session host on the CPU size you use today and one with a session host on a GPU size that is still available, such as an NVadsA10 v5 or NCasT4_v3 size. Separate pools let you send the same test users to a chosen host; in one mixed pool the load balancer decides, unless you put one host in drain mode. A fractional NVadsA10 v5 size such as Standard_NV6ads_A10_v5 (1/6 GPU, 4 GB) is the smallest NVadsA10 v5 size, so it is a low-commitment way to ask "does the GPU help at all".
-3. Install the GRID driver and apply the Intune or Group Policy settings from the previous section on the GPU host only. Restart it.
+2. Build two small pilot host pools, one with a session host on the CPU size you use today and one with a session host on a GPU size that is still available, such as an NVadsA10 v5 or NCasT4_v3 size. Separate pools let you send the same test users to a chosen host; in one mixed pool the load balancer decides, unless you put one host in drain mode. Standard_NV6ads_A10_v5 (1/6 GPU, 4 GB) is the smallest NVadsA10 v5 size, a low-commitment way to ask "does the GPU help at all".
+3. Install the GRID driver (manually on NCasT4_v3, see the driver point above) and apply the Intune or Group Policy settings from the previous section on the GPU host only. Restart it.
 4. Run the same task on both hosts with the same users and note frame rate, responsiveness and whether the application loads the GPU, using the verification steps.
-5. Repeat on the next larger fractional size if the smallest one is saturated, and compare density against price in the Azure pricing calculator.
+5. Repeat on the next larger fractional size if the smallest one is saturated, and compare density against price.
 
-Permissions for the configuration matter in practice. For Intune, Learn lists a Microsoft Entra ID account that is assigned the Policy and Profile manager built-in Intune RBAC role, plus a group of target devices, or a domain account with Group Policy object permissions and a security group or organizational unit for Group Policy.
+Permissions matter in practice. For Intune, Learn lists an Entra ID account with the Policy and Profile manager built-in RBAC role plus a group of target devices. For Group Policy it lists a domain account with Group Policy object permissions plus a security group or organizational unit.
 
 ## Common mistakes
 
 - **A GPU size without the policy.** The VM has a GPU, but sessions are still rendered on the CPU, because the default does not use it.
-- **The CUDA driver on a graphics size.** For NVIDIA sizes in this scenario only GRID drivers support GPU acceleration for most applications and the Windows user interface.
-- **An unsupported or retired series.** NC, NCv2, NCv3, ND and NDv2 are not generally appropriate as session hosts. Our reading: NCasT4_v3 is the one NC-family series that Learn's Azure Virtual Desktop page lists as supported. NVv3 and NVv4 still appear on the Azure Virtual Desktop GPU page but retired on 30 September 2026.
+- **The CUDA driver on a graphics size.** For NVIDIA sizes in this scenario only GRID drivers support GPU acceleration for most applications and the Windows user interface. On NCasT4_v3 the NVIDIA GPU Driver Extension installs CUDA drivers, according to the size page, so the GRID driver is a manual step there.
+- **An unsupported or retired series.** NC, NCv2, NCv3, ND and NDv2 are not generally appropriate as session hosts. NVv3 and NVv4 still appear on the Azure Virtual Desktop GPU page but retired on 30 September 2026.
 - **H.264 prioritized without hardware encoding.** Learn says this can result in software (CPU-based) encoding, so the GPU may sit idle for encoding.
 - **HEVC expected on RemoteApp.** The HEVC prerequisites require a desktop application group.
 
