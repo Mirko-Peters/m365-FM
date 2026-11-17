@@ -11,12 +11,12 @@ keypoints:
   - "Several features are Windows-only or limited elsewhere: multimedia redirection, USB and serial redirection, scanners, third-party virtual channel plugins and Display Protection. Dynamic resolution is missing on iOS/iPadOS and Android."
   - "Integrated apps (RemoteApps integrated with the local device) are listed for Windows and macOS only, not for iOS/iPadOS or Android."
   - "Screen capture protection on iOS/iPadOS and Android works through an Intune MAM policy that blocks screen capture, and a connection is blocked if that policy is missing."
-  - "With single sign-on off, iOS and Android can authenticate to the remote session with a password only; smart cards and Windows Hello for Business are not listed there."
+  - "With single sign-on off, iOS and Android can authenticate to the remote session with a password only; Learn lists smart cards and Windows Hello for Business as not supported there."
 faq:
   - q: "Which Windows App versions and operating systems do I need on Mac, iPhone and Android?"
     a: "For Azure Virtual Desktop, Learn lists macOS 12.0 or later, iOS or iPadOS 17.0 or later, and Android 10 or later (Chrome OS 126 or later). The page also notes that the Windows 365 tab lists macOS 14.0 and iOS/iPadOS 16.0 as minimums, so check the tab that matches your service."
-  - q: "Can users on mobile devices use RemoteApp, USB devices or multiple monitors?"
-    a: "Learn's comparison lists multiple monitors for Windows, macOS and Android/Chrome OS (ChromeOS devices only for Android), USB redirection for Windows only, and integrated apps for Windows and macOS only. Test each case on the platform in question."
+  - q: "Can users on iOS, iPadOS or Android get integrated apps, USB devices or multiple monitors?"
+    a: "Learn's comparison lists integrated apps (RemoteApps integrated with the local device) for Windows and macOS only, so not for iOS/iPadOS or Android. The connect page shows apps appearing next to devices for users to tap, but whether a given RemoteApp launches well on a phone is something to test. Multiple monitors are listed for Windows, macOS and Android/Chrome OS (ChromeOS devices only for Android), and USB redirection for Windows only."
   - q: "Why is a user on iOS or Android blocked when screen capture protection is enabled?"
     a: "When screen capture protection is enabled on the session hosts, Learn says Android and iOS/iPadOS connections are allowed only if an Intune MAM app protection policy that blocks screen capture applies to Windows App. Without it, the connection is blocked."
 ---
@@ -71,18 +71,18 @@ If users see an empty list, Learn's advice is to contact the administrator: the 
 Details that matter in practice:
 
 - **Printing on macOS.** Windows App supports the Publisher Imagesetter printer driver by default (CUPS only); native printer drivers are not supported.
-- **Clipboard.** Bidirectional clipboard is listed for all three, but text and images only on iOS/iPadOS and text only on Android. Learn says macOS supports a one-way clipboard natively, while other platforms need remote session configuration for it.
-- **Keyboard language.** Keyboard input language redirection is listed for macOS but not for iOS/iPadOS or Android.
+- **Clipboard.** Bidirectional clipboard is listed for all three, but text and images only on iOS/iPadOS and text only on Android/Chrome OS. A one-way (unidirectional) clipboard is native on macOS, and on iOS/iPadOS it needs remote session configuration. For Android/Chrome OS, Learn lists the one-way clipboard as not supported.
+- **Keyboard language.** Keyboard input language redirection is listed for macOS and not supported on iOS/iPadOS or Android.
 - **Interface language.** The user interface is English (United States) only on macOS and iOS/iPadOS; Android offers many more locales.
 - **WebAuthn.** Passkey redirection into the session is in preview on all three, with minimum Windows App versions: macOS 11.4.2, iOS 11.3.7, Android 11.0.0.119. On Android the passkey must be stored on the device by a software provider such as Microsoft Authenticator; passkeys from a physical key or QR code are not supported.
 
-The practical consequence for pool design: a workload that needs USB tokens, scanners, serial devices or heavy video playback with multimedia redirection has to be limited to Windows clients. Users on tablets who need a "real" desktop feel will notice the missing dynamic resolution and smart sizing.
+The practical consequence for pool design: a workload that needs USB tokens, scanners, serial devices or heavy video playback with multimedia redirection has to be limited to Windows clients. Tablet users on iOS/iPadOS will notice that Learn lists neither dynamic resolution nor smart sizing there, so the remote desktop does not resize or scale to the window the way it can on Windows or macOS.
 
 ## Authentication differences
 
-For sign-in to the service, Learn lists passwords, Microsoft Authenticator and passkeys as available on all three platforms (passkeys with minimum app versions). Smart card with Microsoft Entra certificate-based authentication is listed for macOS and iOS/iPadOS, and smart card with Active Directory Federation Services for macOS only among these three. Windows Hello for Business is not listed for any of them.
+For sign-in to the service, Learn lists passwords, Microsoft Authenticator and passkeys as available on all three platforms (passkeys with minimum app versions). Smart card with Microsoft Entra certificate-based authentication is listed for macOS and iOS/iPadOS, and smart card with Active Directory Federation Services for macOS only among these three. Windows Hello for Business (certificate, cloud and key trust) is listed as not supported on macOS, iOS/iPadOS and Android.
 
-For the remote session itself, with single sign-on disabled, Learn lists only a password for iOS/iPadOS and Android. macOS adds smart card, which needs smart card redirection with Network Level Authentication disabled. If your session hosts rely on smart cards or Windows Hello for Business certificates for in-session sign-in, mobile users are not covered. Single sign-on avoids the problem by passing the cloud credentials to the session, which makes it the practical default for these devices.
+For the remote session itself, with single sign-on disabled, Learn lists only a password for iOS/iPadOS and Android. macOS adds smart card, which needs smart card redirection with Network Level Authentication disabled. Learn lists smart card and Windows Hello for Business certificate trust as not supported on iOS/iPadOS and Android for sign-in inside the session, so if your session hosts rely on them, mobile users are not covered. Learn also says that when single sign-on is enabled, the credentials used to sign in to the cloud service are passed through to the remote session. In our view, that makes single sign-on the option to evaluate first for these devices; it is a recommendation, not a Learn statement.
 
 External identities (guest users) are listed as generally available on macOS from 11.4.2, on iOS from 11.3.9 and on Android from 11.0.0.119, with a limit on iOS and Android: you can only sign in as a work or school account, or a Microsoft account that is signed in to Authenticator as a connected account.
 
@@ -104,7 +104,7 @@ An iPhone user without the policy is blocked, not silently unprotected. Check th
 
 1. Decide per host pool which platforms you support, using the table above.
 2. Confirm minimum OS and app versions on the device fleet, and which service tab of the connect page applies.
-3. Enable single sign-on, so mobile users do not depend on password or smart card prompts in the session.
+3. Consider enabling single sign-on, so mobile users do not depend on password prompts in the session (our recommendation; with it off, Learn lists only a password for iOS/iPadOS and Android).
 4. If you enable screen capture protection on session hosts, assign the Intune MAM policy and a matching Conditional Access policy before allowing mobile connections.
 5. Test one device per platform: sign-in, RemoteApp launch, printing, clipboard and Teams.
 6. Tell users what will not work on their device, in plain words, before the first ticket.

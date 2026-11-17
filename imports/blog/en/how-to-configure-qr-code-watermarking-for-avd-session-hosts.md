@@ -10,7 +10,7 @@ keypoints:
   - "In Intune, add Enable watermarking from the settings catalog under Administrative templates > Windows Components > Remote Desktop Services > Remote Desktop Session Host > Azure Virtual Desktop. Do not pick the entry marked [Deprecated]."
   - "In Group Policy, the same setting sits under Computer Configuration > Policies > Administrative Templates, in the same folder path, and needs the Azure Virtual Desktop administrative template."
   - "Defaults: scale factor 4, opacity 2000, grid width 320, grid height 180, embedded content Connection ID. Learn suggests changing only the opacity."
-  - "After the policy applies, sync (Intune) or refresh Group Policy or restart (Group Policy); existing sessions must sign out and back in. Unsupported clients can no longer connect."
+  - "After the policy applies, sync (Intune) or refresh Group Policy or restart (Group Policy). Learn says existing sessions must sign out and back in for Group Policy changes to take effect. Unsupported clients can no longer connect."
   - "To trace a code, search the Connection ID in Azure Virtual Desktop Insights or query WVDConnections by CorrelationId in Log Analytics."
 faq:
   - q: "Why does Learn warn against the entry marked [Deprecated] Enable watermarking in Intune?"
@@ -61,7 +61,7 @@ Learn's prerequisites call for a group that contains the devices you want to con
 4. Open **Enable watermarking** and set it to **Enabled**.
 5. Set the options (next section).
 6. Make sure the policy applies to the session hosts, then refresh Group Policy on them or restart them.
-7. Connect with a supported client and check that QR codes appear. Existing sessions must sign out and back in for the change to take effect.
+7. Connect with a supported client and check that QR codes appear. Learn says any existing sessions need to sign out and back in again for the change to take effect.
 
 ## The five options
 
@@ -71,15 +71,16 @@ Intune and Group Policy offer the same options, with the same defaults:
 |---|---|---|---|
 | QR code bitmap scale factor | 1 to 10 | 4 | Size in pixels of each QR code dot |
 | QR code bitmap opacity | 100 to 9999 | 2000 | How transparent the watermark is; 100 is fully transparent |
-| Width of grid box (percent of QR code bitmap width) | 100 to 1000 | 320 | Horizontal distance between QR codes |
-| Height of grid box (percent of QR code bitmap width) | 100 to 1000 | 180 | Vertical distance between QR codes |
+| Width of grid box (percent of QR code bitmap width) | 100 to 1000 | 320 | Distance between the QR codes, in percent. Combined with the height, 100 puts the codes side by side across the whole screen |
+| Height of grid box (percent of QR code bitmap width) | 100 to 1000 | 180 | Distance between the QR codes, in percent. Combined with the width, 100 puts the codes side by side across the whole screen |
 | QR code embedded content | Connection ID or Device ID | Connection ID | Which identifier the code contains |
 
-Notes from the page on these values:
+Notes on these values:
 
-- For width and height, a value of 100 makes the codes appear side by side and fill the entire screen when combined.
+- Learn describes the width and height rows with the same wording and does not say which one controls the horizontal or the vertical spacing. A value of 100 for both makes the codes appear side by side and fill the entire screen.
 - The Group Policy table states that 9999 is fully opaque; the Intune table describes only the transparent end.
-- Select **Device ID** only for session hosts in a personal host pool that are joined to Microsoft Entra ID or Microsoft Entra hybrid joined. For pooled host pools, keep Connection ID.
+- Select **Device ID** only for session hosts in a personal host pool that are joined to Microsoft Entra ID or Microsoft Entra hybrid joined.
+- For pooled host pools, this means keeping the default, Connection ID (our reading of that restriction).
 - Learn's tip: try different opacity values to balance session readability against the ability to scan the code, and keep the defaults for the other parameters.
 
 A sensible test plan is to start with the defaults, take a photo of the test session with a phone, and raise or lower opacity in small steps until the code can be read from the photo without making the work area hard to read. Changing the grid box values is possible, but Learn recommends keeping the defaults for everything except opacity.
@@ -87,7 +88,7 @@ A sensible test plan is to start with the defaults, take a photo of the test ses
 ## Verify the result
 
 1. Apply the policy to the pilot group and sync or refresh as described above.
-2. Sign out any test session, then connect to a remote desktop with a supported client. You should see QR codes in the session.
+2. Sign out any test session (Learn requires this for Group Policy; for Intune it is a precaution, since the Intune steps only say to sync), then connect to a remote desktop with a supported client. You should see QR codes in the session.
 3. Connect once with an unsupported client, if you have one, to see the non-specific error and confirm your help desk can recognise it.
 4. Connect to a RemoteApp from the same pool and confirm that no watermark appears, so nobody assumes RemoteApp sessions are covered.
 5. Read the on-screen code with a QR reader and note the value for the next section.
@@ -117,7 +118,7 @@ Run this lookup against a test connection before you need it, so you know the da
 
 ## Common pitfalls
 
-- **Policy applied, no watermark.** Check that the session host received the policy (Intune sync or Group Policy refresh) and that the user started a new session. Existing sessions keep running without it until the user signs out and in again.
+- **Policy applied, no watermark.** Check that the session host received the policy (Intune sync or Group Policy refresh) and that the user started a new session. For Group Policy, Learn says existing sessions need to sign out and back in again; the Intune steps do not say this, so ask test users to reconnect there too.
 - **Users report a generic connection error after rollout.** Suspect an unsupported client first. Check the client against the version list above.
 - **Wrong Intune entry.** If the embedded content option is missing, the deprecated setting was probably selected.
 - **Device ID on a pooled host pool.** Learn limits Device ID to personal host pools that are Entra joined or hybrid joined.

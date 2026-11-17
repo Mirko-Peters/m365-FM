@@ -74,13 +74,11 @@ The steps follow the portal flow in Learn's deployment article.
 10. **Local administrator.** Enter a username and password for the local administrator account.
 11. Complete the remaining tabs as for a host pool in Azure, then review and create. Do not disable Windows Remote Management when you create session hosts in the portal, because PowerShell DSC requires it.
 
-Learn also describes deployment with the Azure CLI and Azure PowerShell; this guide follows the portal.
-
 Afterwards, license and activate the VMs before use. Learn says to use Azure verification for VMs for Windows 10 and 11 Enterprise multi-session and Windows Server 2022 Datacenter: Azure Edition, and your existing activation methods for other images.
 
 ## Plan the FSLogix profile storage
 
-FSLogix profile containers need an SMB share. The Learn overview recommends a VM-based file share cluster using Storage Spaces Direct on the Azure Local instance (deploy VMs, set up Storage Spaces Direct in guest VM clusters, configure SMB permissions, configure [FSLogix](/entity/fslogix/)). For large deployments with high resource requirements it recommends a separate SMB share on the same network as the session hosts so storage can scale independently; the Architecture Center describes the on-instance option as more suitable for smaller deployments. The companion article compares the two options in more detail. See the [profile container](/entity/fslogix-profile-container/) entity for the container concept.
+[FSLogix](/entity/fslogix/) profile containers need an SMB share. The Learn overview recommends a VM-based file share cluster using Storage Spaces Direct on the Azure Local instance, and for large deployments with high resource requirements a separate SMB share on the same network as the session hosts. The Architecture Center describes the on-instance option as more suitable for smaller deployments. The companion article compares the two options; the [profile container](/entity/fslogix-profile-container/) entity covers the concept.
 
 ## Pitfalls
 
@@ -100,7 +98,9 @@ Two more points. The Azure Local VM management page says moving a resource group
 
 ### Connectivity and the agent
 
-Session hosts must reach the Azure Instance Metadata Service through the Azure Connected Machine agent, which the portal installs automatically when you add hosts. Learn's overview links to the page Required FQDNs and endpoints for Azure Virtual Desktop for the URLs and does not list them itself. That page says Microsoft does not support deployments where the listed FQDNs and endpoints are blocked. Two entries matter here. The table lists `aka.ms` (TCP 443) as the Microsoft URL shortener used during session host deployment on Azure Local. The Azure fabric communication IPs `169.254.169.254` (the Instance Metadata Service, TCP 80) and `168.63.129.16` must be reachable and, per that page, not intercepted, proxied or redirected. The Azure Virtual Desktop Agent URL Tool described on Learn can check whether a session host reaches the listed endpoints.
+Session hosts must reach the Azure Instance Metadata Service through the Azure Connected Machine agent, which the portal installs automatically when you add hosts. Learn's overview links to the Required FQDNs and endpoints page, which says Microsoft does not support deployments where the listed FQDNs and endpoints are blocked. Only one entry in that table names Azure Local: `aka.ms` (TCP 443), the Microsoft URL shortener used during session host deployment on Azure Local. For Azure Local itself, Learn asks for the firewall URLs listed in "Required firewall URLs for Azure Local deployments" and for access to the Instance Metadata Service through the Connected Machine agent.
+
+The same page also lists two Azure fabric communication IPs, `169.254.169.254` (Instance Metadata Service, TCP 80) and `168.63.129.16`, for session host VMs and Cloud PCs, and says traffic to them must not be intercepted, proxied or redirected. Learn's page on those IPs describes them as Azure-internal platform addresses that cannot be accessed from outside Azure or from on-premises networks, and it does not mention Azure Local. Our reading: do not plan separate firewall or routing rules for these two addresses on Azure Local, and confirm with Microsoft if your design needs more. The Azure Virtual Desktop Agent URL Tool described on Learn can check whether a session host reaches the listed FQDN endpoints.
 
 ## Verify the result
 
@@ -108,9 +108,8 @@ After deployment, confirm the following before assigning users:
 
 - The session hosts show as available in the host pool.
 - A test user can connect with a Remote Desktop client.
-- Activation succeeded for the OS image you chose.
-- The FSLogix share is reachable from the session hosts and permissions work.
-- Monitoring and backup are in place (Azure Monitor and Azure Backup are among the services the Architecture Center lists for this design).
+- Activation succeeded, and the FSLogix share is reachable with working permissions.
+- Monitoring and backup are in place (the Architecture Center lists Azure Monitor and Azure Backup for this design).
 
 ## Sources
 
@@ -118,6 +117,7 @@ After deployment, confirm the following before assigning users:
 - [Microsoft Learn: Azure Virtual Desktop on Azure Local](https://learn.microsoft.com/en-us/azure/virtual-desktop/azure-local-overview)
 - [Microsoft Learn: Prerequisites for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/prerequisites)
 - [Microsoft Learn: Required FQDNs and endpoints for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/required-fqdn-endpoint)
+- [Microsoft Learn: Azure fabric communication IPs](https://learn.microsoft.com/en-us/azure/virtual-desktop/azurecommunicationips)
 - [Microsoft Learn: What is Azure Local VM management?](https://learn.microsoft.com/en-us/azure/azure-local/manage/azure-arc-vm-management-overview)
 - [Microsoft Learn: Azure Local VM management prerequisites](https://learn.microsoft.com/en-us/azure/azure-local/manage/azure-arc-vm-management-prerequisites)
 - [Microsoft Learn: Create Azure Local VM images from Azure Marketplace](https://learn.microsoft.com/en-us/azure/azure-local/manage/virtual-machine-image-azure-marketplace)

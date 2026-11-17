@@ -29,8 +29,6 @@ According to [Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-d
 
 Two details matter for design. First, Learn says the service is not an Azure Arc-enabled service and is not supported as a standalone service outside Azure, in a multicloud environment or on other Arc-enabled servers. Second, each session host VM runs the Azure Connected Machine agent so that it can reach the Azure Instance Metadata Service, which Learn calls a required endpoint for [Azure Virtual Desktop](/entity/azure-virtual-desktop/). The portal installs the agent automatically when you add session hosts. The Azure Architecture Center adds that the session hosts run the [Azure Virtual Desktop agent](/entity/avd-agent/) and the Azure Arc agent, and that the Azure resource bridge component of the instance orchestrates Azure Local VM lifecycle operations.
 
-Users connect with the same Remote Desktop clients as for session hosts in Azure.
-
 ## The three drivers Microsoft names
 
 Learn lists these supported scenarios and benefits:
@@ -38,8 +36,6 @@ Learn lists these supported scenarios and benefits:
 - **Performance for users far from Azure.** Placing session hosts closer improves the experience for users with poor connectivity to the Azure public cloud. Learn lists [RDP Shortpath](/entity/rdp-shortpath/) for low-latency user access among the benefits.
 - **Data locality.** App and user data can stay on-premises, including in the session host VMs and in associated services such as file servers.
 - **Proximity to legacy apps and data sources.** Desktops sit next to systems that are hard to move.
-
-Learn also lists cost and management benefits that apply to any Azure Virtual Desktop deployment, such as Windows 10 and Windows 11 Enterprise multi-session and portal-based management. They are not reasons to choose Azure Local over Azure by themselves.
 
 One caution on data locality: Learn says some customer data, diagnostic data and service-generated data is still stored in Azure. If a regulation covers more than your own application data, check which data the service stores before you rely on "on-premises". The article on regional host pools in this series covers where host pool metadata lives.
 
