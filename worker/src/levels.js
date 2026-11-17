@@ -35,7 +35,7 @@ export async function collectEvidence(env, entityMap) {
   const users = new Set((await rows(db, "SELECT id FROM users WHERE banned=0")).map((u) => u.id));
   const add = (uid, eid, kind, item, w) => { const k = `${uid}|${eid}|${kind}|${item}`; if (!uid || !users.has(+uid) || !emap.has(eid) || seen.has(k)) return; seen.add(k); out.push({ uid: +uid, eid, kind, item: String(item), w: w ?? WEIGHTS[kind] }); };
   const topics = (r, uid, kind, item) => { for (const t of parse(r.topics).slice(0, 10)) if (typeof t === "string") add(uid, t, kind, item); };
-  for (const r of await rows(db, "SELECT id,user_id,topics FROM blog_posts WHERE status='live'")) topics(r, r.user_id, "blog", r.id);
+  for (const r of await rows(db, "SELECT id,user_id,topics FROM blog_posts WHERE status='live' AND user_id>0")) topics(r, r.user_id, "blog", r.id);
   for (const r of await rows(db, "SELECT b.id,c.user_id,b.topics FROM blog_coauthors c JOIN blog_posts b ON b.id=c.post_id WHERE c.status='confirmed' AND b.status='live'")) topics(r, r.user_id, "coauthor", r.id);
   for (const r of await rows(db, "SELECT id,user_id,topics FROM pod_episodes WHERE status='published'")) topics(r, r.user_id, "podcast", r.id);
   for (const r of await rows(db, "SELECT id,user_id,topics FROM yt_videos WHERE status='published'")) topics(r, r.user_id, "video", r.id);

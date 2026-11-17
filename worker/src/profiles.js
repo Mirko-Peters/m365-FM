@@ -1,4 +1,5 @@
 // Experten- und Firmenprofile, Programme (MVP/MCT/...), Kanaele mit Feeds, Upvotes, Bestaetigungen
+import { acctKeys, releaseHandleOps, creatorTopicOps, invalidateProfileExport, profileExportGen, EXPORT_GEN, anonEntitySpeakerOps, forgetSearchPerson, forgetSearchEntity, forgetPublicPerson } from "./privacy.js";
 import { scopeOf, can, gate, inScope, logEdit, roleOf } from "./perm.js";
 import { decide } from "./editor.js";
 import { syncAutoRoles } from "./roles.js";
@@ -6,6 +7,7 @@ import { cleanKeypoints, cleanFaq, jsonList, ensureSectionCols } from "./section
 import { sanitize } from "./wiki.js";
 import { cleanText, rateLimit } from "./util.js";
 import { baseIds, knownIds, validate, trustedUser, entityMap } from "./entities.js";
+import { blockSearchPeople } from "./search.js";
 import { findExperts } from "./experts.js";
 import { computeLevels } from "./levels.js";
 import { ensureDirectoryCols, geocodeAddress, recordGeocodeStatus } from "./directory.js";
@@ -44,6 +46,9 @@ export async function ownedEntity(env, user, o) {
       await db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,'live',?)").bind(o.eid, JSON.stringify(v.data), "Selbst verwaltet", user.id, now()).run(); created = true;
     }
     if (created || user.admin) await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,'verified','owner',?) ON CONFLICT(eid) DO UPDATE SET user_id=excluded.user_id,status='verified',via='owner',created=excluded.created WHERE entity_claims.status='rejected'").bind(o.eid, user.id, now()).run();
+    // Personen-Entitaet aus dem Profil merken (privacy.js HIDDEN_PERSON_SQL, K41): nur hier, nicht ueber Felder eines Vorschlags. Eine neue erste
+    // Fassung (z. B. die frei gewordene Adresse eines geloeschten Kontos, Merker mit user_id 0) gehoert dem neuen Inhaber.
+    if (created && o.type === "person") await db.prepare("INSERT INTO person_entity(eid,user_id,created) VALUES(?,?,?) ON CONFLICT(eid) DO UPDATE SET user_id=excluded.user_id,created=excluded.created").bind(o.eid, user.id, now()).run();
     return o.eid;
   } catch (e) { return ""; }
 }
@@ -252,24 +257,38 @@ async function replaceLists(db, t, id, { exp, prog, chan, certs }) {
 }
 
 // Profil-Export fuer den Seitenbau: alle Profile lesen und in D1 zwischenspeichern (Cron alle 30 Minuten), damit der Abruf eine einzige Zeile liest
+// Wettlauf (Runde 6): Startzeit und Generation (privacy.js invalidateProfileExport) vor dem Lesen merken. Geschrieben wird nur, wenn seit dem Start
+// keine Invalidierung kam (bedingtes INSERT), mit updated = Startzeit; sonst neuer Versuch mit frischen Daten (hoechstens drei).
 export async function refreshProfilesExport(env) {
   const db = env.DB;
   await db.prepare("CREATE TABLE IF NOT EXISTS export_cache (k TEXT PRIMARY KEY, v TEXT NOT NULL, updated INTEGER NOT NULL)").run();
+  let out = null;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const started = now(), gen = await profileExportGen(db);
+    out = await buildProfilesExport(env);
+    const r = await db.prepare("INSERT INTO export_cache(k,v,updated) SELECT 'profiles',?1,?2 WHERE COALESCE((SELECT v FROM meta WHERE k=?3),'0')=?4 ON CONFLICT(k) DO UPDATE SET v=excluded.v,updated=excluded.updated")
+      .bind(JSON.stringify(out), started, EXPORT_GEN, gen).run();
+    if (Number(r?.meta?.changes ?? 1) > 0) return out;
+  }
+  return out;
+}
+async function buildProfilesExport(env) {
+  const db = env.DB;
     const us = (await db.prepare("SELECT user_id FROM profiles WHERE public=1 AND handle IS NOT NULL ORDER BY updated DESC LIMIT 300").all()).results || [];
     const os = (await db.prepare("SELECT id FROM orgs WHERE public=1 AND unclaimed=0 ORDER BY created DESC LIMIT 200").all()).results || [];
     const people = [], orgs = [], errs = [];
-    const emap = await entityMap(env);
+    const emap = await entityMap(env), ak = await acctKeys(env);
     const one = async (u) => {
       const v = await personView(db, u.user_id, 0); if (!v) return null;
       v.expertise = v.expertise.filter((e) => emap.has(e.e));
       v.industries = (v.industries || []).filter((e) => emap.get(e)?.type === "industry");   // oeffentlich nur live veroeffentlichte Entitaeten
       if (v.job_eid && emap.get(v.job_eid)?.type !== "job") v.job_eid = "";
+      const k = await ak(u.user_id, v.handle); if (k) v.ak = k;   // Runde 8: Seitenbau prueft Cache-Exporte gegen Adresse + Konto (privacy.js acctKeys)
       delete v.id; return v;
     };
     for (let k = 0; k < us.length; k += 6) for (const v of await Promise.all(us.slice(k, k + 6).map((u) => one(u).catch((e) => { errs.push(String((e && e.message) || e).slice(0, 200)); return null; })))) if (v) people.push(v);   // in Gruppen parallel, Reihenfolge bleibt; ein defektes Profil stoppt den Export nicht
     for (const o of os) { const v = await orgView(db, o.id, 0); if (v) { delete v.id; v.industries = (v.industries || []).filter((e) => emap.get(e)?.type === "industry"); orgs.push(v); } }
   const out = { people, orgs, ...(errs.length ? { failed: errs.length, errors: errs.slice(0, 3) } : {}) };   // Fehler einzelner Profile bleiben sichtbar (Diagnose), der Seitenbau ignoriert die Felder
-  await db.prepare("INSERT INTO export_cache(k,v,updated) VALUES('profiles',?,?) ON CONFLICT(k) DO UPDATE SET v=excluded.v,updated=excluded.updated").bind(JSON.stringify(out), now()).run();
   return out;
 }
 
@@ -398,6 +417,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
     if (!(await rateLimit(db, `prof:${user.id}`, 20, 3600))) return J({ error: "rate_limit" }, 429);
     const b = await body();
     const previousLocation = await db.prepare("SELECT p.country,pp.* FROM profiles p LEFT JOIN profile_private pp ON pp.user_id=p.user_id WHERE p.user_id=?").bind(user.id).first();
+    const prev = await db.prepare("SELECT handle,public FROM profiles WHERE user_id=?").bind(user.id).first();   // fuer Adresswechsel und Privatstellen (privacy.js)
     let handle = String(b.handle || "").toLowerCase().trim(); const isPublic = b.public ? 1 : 0;
     if (handle && !HANDLE.test(handle)) return J({ error: "bad_handle" }, 400);
     if (RESERVED_HANDLES.has(handle) && (await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(user.id).first())?.handle !== handle) return J({ error: "handle_taken" }, 409);   // nur neu vergeben gesperrt: wer das Kuerzel schon hat, speichert weiter
@@ -416,7 +436,12 @@ export async function handleProfiles(env, request, url, path, user, J) {
     await db.prepare(`INSERT INTO profiles(user_id,public,handle,headline,about,company,job,country,show_org,updated) VALUES(?,?,?,?,?,?,?,?,?,?)
       ON CONFLICT(user_id) DO UPDATE SET public=excluded.public,handle=excluded.handle,headline=excluded.headline,about=excluded.about,company=excluded.company,job=excluded.job,country=excluded.country,show_org=excluded.show_org,updated=excluded.updated`)
       .bind(user.id, isPublic, handle || null, txt(b.headline, 100), long(b.about, 1500), txt(b.company, 80), txt(b.job, 80), txt(b.country, 60), b.show_org === false ? 0 : 1, now()).run();
-    await db.prepare("UPDATE users SET bio=? WHERE id=?").bind(txt(b.headline, 100), user.id).run();
+    await db.prepare("UPDATE users SET bio=? WHERE id=?").bind(isPublic ? txt(b.headline, 100) : "", user.id).run();   // users.bio ist oeffentlich (/api/u/<id>): die Kurzzeile eines privaten Profils gehoert nicht hinein (K22)
+    if (prev?.handle && prev.handle !== handle) {
+      const ops = await releaseHandleOps(db, prev.handle, handle, user.id); if (ops.length) await db.batch(ops);   // K42: Speaker-Eintraege gehen nicht an den naechsten Inhaber der Adresse
+      await blockSearchPeople(env, [prev.handle]);   // K41/A: alte Profil- und Personen-Dokumente der Adresse erst aus einem neuen Seitenbau (auch fuer einen spaeteren Inhaber)
+    }
+    if (prev?.public) { await invalidateProfileExport(db); if (!isPublic || prev.handle !== handle) await forgetSearchPerson(db, prev.handle); }   // K45: nicht erst nach dem naechsten Cron
     if (b.i18n && typeof b.i18n === "object") await saveI18n(db, user.id, cleanI18n(b.i18n));
     if (ind) await db.batch([db.prepare("DELETE FROM profile_industry WHERE user_id=?").bind(user.id), ...ind.list.map((e) => db.prepare("INSERT INTO profile_industry(user_id,eid) VALUES(?,?)").bind(user.id, e))]);
     if (jb) await db.batch(jb.list.length ? [db.prepare("INSERT INTO profile_job(user_id,eid) VALUES(?,?) ON CONFLICT(user_id) DO UPDATE SET eid=excluded.eid").bind(user.id, jb.list[0])] : [db.prepare("DELETE FROM profile_job WHERE user_id=?").bind(user.id)]);
@@ -469,7 +494,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const hit = url.searchParams.get("fresh") === "1" && user?.admin ? null : await db.prepare("SELECT v,updated FROM export_cache WHERE k='profiles'").first().catch(() => null);
     if (hit && now() - hit.updated < 7200) return J(JSON.parse(hit.v), 200, { "cache-control": "public, max-age=300", "x-export-age": String(now() - hit.updated) });
     try { return J(await refreshProfilesExport(env), 200, { "cache-control": "public, max-age=300", "x-export-age": "0" }); }
-    catch (e) { if (hit) return J(JSON.parse(hit.v), 200, { "cache-control": "public, max-age=60", "x-export-age": String(now() - hit.updated), "x-export-stale": "1" }); throw e; }   // lieber eine aeltere Fassung als ein Fehler
+    catch (e) { if (hit && now() - hit.updated < 86400) return J(JSON.parse(hit.v), 200, { "cache-control": "public, max-age=60", "x-export-age": String(now() - hit.updated), "x-export-stale": "1" }); throw e; }   // lieber eine aeltere Fassung als ein Fehler - aber hoechstens einen Tag alt (zurueckgezogene Profile)
   }
 
   // ---- Bestaetigung durch andere (Endorsements), Upvotes ----
@@ -535,11 +560,11 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const rows = (await db.prepare(`SELECT i.id,i.title,i.url,i.summary,i.thumb,i.body,i.topics,i.keypoints,i.faq,i.published,i.origin,c.kind,i.owner_type,i.owner_id,(SELECT COUNT(*) FROM item_votes v WHERE v.item_id=i.id) votes FROM feed_items i JOIN channels c ON c.id=i.channel_id
       WHERE i.hidden=0 AND ${publicKindSql()} AND i.url NOT LIKE ? AND i.published>? AND ((i.owner_type='u' AND i.owner_id IN (SELECT p.user_id FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.public=1)) OR (i.owner_type='o' AND i.owner_id IN (SELECT id FROM orgs WHERE public=1)))
       ORDER BY i.published DESC LIMIT 300`).bind(env.SITE + "%", now() - FEED_DAYS * 86400).all()).results || [];
-    const names = new Map(), out = [];
+    const names = new Map(), out = [], ak = await acctKeys(env);
     for (const r of rows) {
       const k = r.owner_type + r.owner_id;
       if (!names.has(k)) names.set(k, r.owner_type === "u" ? await db.prepare("SELECT p.handle,u.name FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.user_id=?").bind(r.owner_id).first() : await db.prepare("SELECT handle,name FROM orgs WHERE id=?").bind(r.owner_id).first());
-      const o = names.get(k); if (o) out.push({ id: r.id, summary: r.summary || "", thumb: r.thumb || "", body: r.body || "", keypoints: jsonList(r.keypoints), faq: jsonList(r.faq), topics: (() => { try { return JSON.parse(r.topics || "[]"); } catch { return []; } })(), title: r.title, url: r.url, published: r.published, kind: r.kind, origin: r.origin || "", votes: r.votes, type: r.owner_type, handle: o.handle, name: o.name });
+      const o = names.get(k); if (o) out.push({ id: r.id, summary: r.summary || "", thumb: r.thumb || "", body: r.body || "", keypoints: jsonList(r.keypoints), faq: jsonList(r.faq), topics: (() => { try { return JSON.parse(r.topics || "[]"); } catch { return []; } })(), title: r.title, url: r.url, published: r.published, kind: r.kind, origin: r.origin || "", votes: r.votes, type: r.owner_type, handle: o.handle, name: o.name, ...(r.owner_type === "u" && (await ak(r.owner_id, o.handle)) ? { ak: await ak(r.owner_id, o.handle) } : {}) });
     }
     return J({ items: out }, 200, { "cache-control": "public, max-age=300" });
   }
@@ -721,8 +746,36 @@ export async function handleProfiles(env, request, url, path, user, J) {
 }
 
 // Konto loeschen: alle Profil-, Firmen- und Entitaetsdaten des Nutzers entfernen bzw. anonymisieren
-export async function deleteUserData(db, id) {
+export async function deleteUserData(db, id, env = null) {
   const mailAddress = await db.prepare("SELECT email FROM mail_addr WHERE user_id=?").bind(id).first().catch(() => null);
+  const handle = (await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(id).first())?.handle || "";
+  // Personen-Entitaeten aus dem eigenen Profil (person_entity, nur von ownedEntity angelegt): reine Personendaten (Name, Kurzzeile) - Fassungen,
+  // Uebersetzungen und Anspruch weg, damit nichts davon oeffentlich bleibt (K41). Der Merker bleibt dauerhaft mit user_id 0: die Entitaet bleibt verborgen und
+  // importEntitiesFromSite legt sie nicht aus dem letzten Seitenbau (/entities.json) neu an; uebernimmt jemand die Adresse, gehoert sie ihm (ownedEntity).
+  // Aufheben (z. B. fuer einen Podcast-Gast mit gleicher id im Repo) nur ausdruecklich per Admin: POST /api/admin/person-entity/release (entities.js).
+  // Event-, Firmen- und redaktionelle Entitaeten stehen nicht in person_entity und bleiben samt Geschichte (Revisionen auf user_id 0, unten).
+  const persons = ((await db.prepare("SELECT eid FROM person_entity WHERE user_id=?").bind(id).all().catch(() => ({ results: [] }))).results || []).map((r) => r.eid);
+  // K41/A: Suchsperre fuer die Adresse und die Personen-Entitaeten VOR dem Freigeben: der Suchindex des letzten Seitenbaus enthaelt unter
+  // /community/u/<h>/ und /entity/<h>/ noch Name und Kurzzeile; withoutHiddenPeople liesse sie durch, sobald ein anderes Mitglied die Adresse
+  // oeffentlich speichert oder den Merker uebernimmt. Aufgehoben erst durch einen Seitenbau mit Exporten von nach der Loeschung (search.js).
+  await blockSearchPeople(env, [handle, ...persons]);
+  if (persons.length) {
+    await db.batch(persons.flatMap((eid) => [db.prepare("DELETE FROM entity_rev WHERE eid=?").bind(eid), db.prepare("DELETE FROM entity_claims WHERE eid=?").bind(eid), db.prepare("DELETE FROM entity_claim_review WHERE eid=?").bind(eid),
+      db.prepare("DELETE FROM ent_tr WHERE eid=?").bind(eid), db.prepare("DELETE FROM ent_tr_seen WHERE eid=?").bind(eid), db.prepare("DELETE FROM translation WHERE kind='entity' AND item_id=?").bind(eid),
+      db.prepare("UPDATE person_entity SET user_id=0 WHERE eid=?").bind(eid)]).concat(
+      // Runde 6: Q&A anderer Mitglieder zur Person bleibt, aber verborgen und ohne eid (wanderte sonst zum naechsten Inhaber der Adresse);
+      // Speaker-Eintraege, die nur per Name+e an die Person gebunden sind, werden anonym
+      db.prepare("UPDATE entity_q SET hidden=1,eid='' WHERE eid IN (SELECT value FROM json_each(?))").bind(JSON.stringify(persons)),
+      // Runde 8: Themen-Abos ANDERER Mitglieder auf die Personen-Entitaet (Push, E-Mail, alte Wochenmail-Themen) und noch nicht versandte
+      // Meldungen dazu - sonst gingen nach einer Uebernahme der Adresse (ownedEntity, gleiche eid) die Meldungen des neuen Inhabers an sie
+      db.prepare("DELETE FROM push_topics WHERE kind='entity' AND topic_id IN (SELECT value FROM json_each(?))").bind(JSON.stringify(persons)),
+      db.prepare("DELETE FROM email_topics WHERE kind='entity' AND topic_id IN (SELECT value FROM json_each(?))").bind(JSON.stringify(persons)),
+      db.prepare("DELETE FROM mail_topic_follows WHERE eid IN (SELECT value FROM json_each(?))").bind(JSON.stringify(persons)),
+      db.prepare("DELETE FROM topic_queue WHERE sent=0 AND kind='entity' AND topic_id IN (SELECT value FROM json_each(?))").bind(JSON.stringify(persons)),
+      ...(await anonEntitySpeakerOps(db, persons))));
+    for (const eid of persons) await forgetSearchEntity(db, eid);
+  }
+  await forgetPublicPerson(db, handle);   // Export-Zwischenspeicher und Suchindex sofort (K45)
   await db.prepare("DELETE FROM recommendations WHERE author_id=? OR subject_id=?").bind(id, id).run();
   await db.prepare("DELETE FROM profile_company WHERE user_id=?").bind(id).run();
   await db.prepare("DELETE FROM profile_business WHERE user_id=?").bind(id).run();   // Geschaeftsadressen (0046)
@@ -737,6 +790,12 @@ export async function deleteUserData(db, id) {
       db.prepare("DELETE FROM item_votes WHERE item_id IN (SELECT id FROM feed_items WHERE owner_type='o' AND owner_id=?)").bind(o.org_id), db.prepare("DELETE FROM feed_items WHERE owner_type='o' AND owner_id=?").bind(o.org_id),
       db.prepare("DELETE FROM channels WHERE owner_type='o' AND owner_id=?").bind(o.org_id), db.prepare("DELETE FROM org_locations WHERE org_id=?").bind(o.org_id), db.prepare("DELETE FROM org_members WHERE org_id=?").bind(o.org_id), db.prepare("DELETE FROM orgs WHERE id=?").bind(o.org_id));
   }
+  // Blog-Abos ANDERER Mitglieder auf die Adresse des Kontos (blog_follows.handle): deleteUserBlog loescht nur die eigenen (user_id). Sonst erbte der
+  // naechste Inhaber der Adresse Abonnentenzahl und Abonnenten (Runde 7, wie releaseHandleOps beim Adresswechsel). Fruehere Adressen sind die eids der
+  // Personen-Entitaeten aus dem Profil (ownedEntity: eid = Adresse); deren Abos sind beim Wechsel schon mitgewandert, Reste trotzdem weg - aber nicht,
+  // wenn ein anderes Konto die Adresse inzwischen fuehrt (dessen eigene Abonnenten).
+  const followHandles = [...new Set([handle, ...persons].filter(Boolean))];
+  if (followHandles.length) ops.push(db.prepare("DELETE FROM blog_follows WHERE handle IN (SELECT value FROM json_each(?)) AND NOT EXISTS (SELECT 1 FROM profiles p WHERE p.handle=blog_follows.handle AND p.user_id<>?)").bind(JSON.stringify(followHandles), id));
   ops.push(
     db.prepare("DELETE FROM org_members WHERE user_id=?").bind(id),
     db.prepare("DELETE FROM contributions WHERE user_id=?").bind(id), db.prepare("DELETE FROM contribution_sources WHERE user_id=?").bind(id), db.prepare("DELETE FROM contribution_ignored WHERE user_id=?").bind(id),   // Loeschmarken enthalten URLs geloeschter Beitraege (DSGVO)
@@ -746,6 +805,8 @@ export async function deleteUserData(db, id) {
     db.prepare("DELETE FROM expertise WHERE owner_type='u' AND owner_id=?").bind(id), db.prepare("DELETE FROM expertise_evidence WHERE owner_id=?").bind(id), db.prepare("DELETE FROM expertise_score WHERE owner_id=?").bind(id), db.prepare("DELETE FROM programs WHERE owner_type='u' AND owner_id=?").bind(id),
     db.prepare("DELETE FROM profile_private WHERE user_id=?").bind(id), db.prepare("DELETE FROM profile_i18n WHERE user_id=?").bind(id), db.prepare("DELETE FROM certs WHERE user_id=?").bind(id), db.prepare("DELETE FROM cert_check WHERE user_id=?").bind(id), db.prepare("DELETE FROM cert_endorse WHERE owner_id=? OR by_id=?").bind(id, id), db.prepare("DELETE FROM endorsements WHERE owner_id=? OR by_id=?").bind(id, id),
     db.prepare("DELETE FROM profiles WHERE user_id=?").bind(id),
+    // Runde 9: Creator-Abos anderer Mitglieder auf die Adresse und fruehere Adressen (nach dem Loeschen des Profils, damit die Adresse frei ist)
+    ...creatorTopicOps(db, followHandles),
     db.prepare("DELETE FROM mail_topic_follows WHERE user_id=?").bind(id),
     db.prepare("DELETE FROM mail_prefs WHERE user_id=?").bind(id),
     db.prepare("DELETE FROM mail_outbox WHERE user_id=?").bind(id),

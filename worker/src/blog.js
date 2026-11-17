@@ -1,4 +1,5 @@
 // Blog je Mitglied: Beitraege schreiben (Wiki-Markup mit Quellen), Pruefung fuer Neue, Upvotes, Export fuer den Seitenbau
+import { dropTranslationOps, acctKeys, withAcctKeys } from "./privacy.js";
 import { limitTopics } from "./sponsor_extra.js";
 import { cleanText, rateLimit, isLang } from "./util.js";
 import { translatedBlogItems } from "./autotr.js";
@@ -33,9 +34,14 @@ export async function syncFeed(env, db, uid, post, handle, live) {
   await db.prepare("INSERT INTO feed_items(channel_id,owner_type,owner_id,url,title,published) VALUES(?,?,?,?,?,?) ON CONFLICT(url) DO UPDATE SET title=excluded.title,hidden=0").bind(ch.id, "u", uid, url, post.title, post.published || now()).run();
 }
 
+// Konto loeschen: veroeffentlichte Beitraege (live) bleiben bei M365.FM (Nutzungsrecht, Community-Bedingungen), aber anonym: user_id = -id (kein
+// Konto, kein Profil, keine Adresse; die oeffentlichen Exporte verlangen ein oeffentliches Profil und zeigen sie deshalb nicht mehr unter dem
+// alten Namen). Entwuerfe, Eingereichtes und Abgelehntes (nie veroeffentlicht) gehen samt Uebersetzungen. Eigene Stimmen, Abos und Co-Autor-Eintraege gehen.
 export async function deleteUserBlog(db, uid) {
   const mine = "(SELECT CAST(id AS TEXT) FROM blog_posts WHERE user_id=?)";   // Verlauf, Empfehlungen und Textauszuege der Redaktion zu diesen Beitraegen gehen mit
   await db.batch([db.prepare(`DELETE FROM content_rev WHERE kind='blog' AND item_id IN ${mine}`).bind(uid), db.prepare(`DELETE FROM edit_proposals WHERE kind='blog' AND item_id IN ${mine}`).bind(uid), db.prepare(`UPDATE edit_log SET before='',after='' WHERE kind='blog' AND item_id IN ${mine}`).bind(uid),
+    db.prepare("UPDATE blog_posts SET user_id=-id,note='' WHERE user_id=? AND status='live'").bind(uid),
+    ...dropTranslationOps(db, "blog", "blog_posts", "user_id=?", uid),
     db.prepare("DELETE FROM blog_follows WHERE user_id=?").bind(uid), db.prepare("DELETE FROM blog_votes WHERE post_id IN (SELECT id FROM blog_posts WHERE user_id=?) OR user_id=?").bind(uid, uid), db.prepare("DELETE FROM blog_coauthors WHERE post_id IN (SELECT id FROM blog_posts WHERE user_id=?) OR user_id=?").bind(uid, uid), db.prepare("DELETE FROM blog_posts WHERE user_id=?").bind(uid)]);
 }
 
@@ -63,13 +69,16 @@ export async function handleBlog(env, request, url, path, user, J) {
 
   if (path === "/api/blog/export" && method === "GET") {   // oeffentlich: freigegebene Beitraege oeffentlicher Profile
     const rows = (await db.prepare(
-      `SELECT b.id,b.slug,b.title,b.summary,b.body,b.lang,b.topics,b.keypoints,b.faq,b.created,b.published,b.updated,(b.html<>'') has_html,p.handle,u.name,(SELECT COUNT(*) FROM blog_votes v WHERE v.post_id=b.id) votes
+      `SELECT b.id,b.slug,b.title,b.summary,b.body,b.lang,b.topics,b.keypoints,b.faq,b.created,b.published,b.updated,(b.html<>'') has_html,p.handle,u.name,b.user_id,(SELECT COUNT(*) FROM blog_votes v WHERE v.post_id=b.id) votes
        FROM blog_posts b JOIN profiles p ON p.user_id=b.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=b.user_id AND u.banned=0
        WHERE b.status='live' ORDER BY b.published DESC LIMIT 6000`).all()).results || [];   // ohne html (zu gross); das holt /api/blog/html seitenweise
-    const co = (await db.prepare("SELECT c.post_id,p.handle,u.name FROM blog_coauthors c JOIN profiles p ON p.user_id=c.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=c.user_id AND u.banned=0 WHERE c.status='confirmed' ORDER BY c.created").all()).results || [], by = {};
-    for (const c of co) (by[c.post_id] ||= []).push({ handle: c.handle, name: c.name });
+    const co = (await db.prepare("SELECT c.post_id,c.user_id,p.handle,u.name FROM blog_coauthors c JOIN profiles p ON p.user_id=c.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=c.user_id AND u.banned=0 WHERE c.status='confirmed' ORDER BY c.created").all()).results || [], by = {};
+    // Runde 9: Autor und Co-Autoren tragen den Konto-Schluessel ak statt der Konto-ID (privacy.js acctKeys) - site_fetch.scrub prueft eine
+    // Cache-Fassung damit gegen den frischen Profil-Export (uebernimmt ein anderes Konto die Adresse, passt ak nicht mehr)
+    const ak = await acctKeys(env);
+    for (const c of co) { const k = await ak(c.user_id, c.handle); (by[c.post_id] ||= []).push({ handle: c.handle, name: c.name, ...(k ? { ak: k } : {}) }); }
     const trs = await translatedBlogItems(db);   // automatisch uebersetzte Fassungen (autotr.js)
-    return J({ items: rows.map((r) => ({ ...r, topics: parse(r.topics, []), keypoints: jsonList(r.keypoints), faq: jsonList(r.faq), coauthors: by[r.id] || [] })).concat(trs) }, 200, { "cache-control": "public, max-age=300" });
+    return J({ items: await withAcctKeys(env, rows.map((r) => ({ ...r, topics: parse(r.topics, []), keypoints: jsonList(r.keypoints), faq: jsonList(r.faq), coauthors: by[r.id] || [] })).concat(trs)) }, 200, { "cache-control": "public, max-age=300" });
   }
   if (path === "/api/blog/html" && method === "GET") {   // oeffentlich, nur fuer den Seitenbau: HTML uebernommener Beitraege seitenweise
     const off = Math.max(0, +url.searchParams.get("offset") || 0), lim = Math.min(Math.max(+url.searchParams.get("limit") || 40, 1), 60);
@@ -179,7 +188,7 @@ export async function handleBlog(env, request, url, path, user, J) {
     if (!p) return J({ error: "not_found" }, 404);
     if (p.handle) await syncFeed(env, db, p.user_id, p, p.handle, false);
     await db.prepare("DELETE FROM comments WHERE vid=?").bind("blog" + p.id).run(); await dropBlogHistory(db, p.id);
-    await db.batch([db.prepare("DELETE FROM blog_votes WHERE post_id=?").bind(p.id), db.prepare("DELETE FROM blog_coauthors WHERE post_id=?").bind(p.id), db.prepare("DELETE FROM blog_posts WHERE id=?").bind(p.id)]);
+    await db.batch([...dropTranslationOps(db, "blog", "blog_posts", "id=?", p.id), db.prepare("DELETE FROM blog_votes WHERE post_id=?").bind(p.id), db.prepare("DELETE FROM blog_coauthors WHERE post_id=?").bind(p.id), db.prepare("DELETE FROM blog_posts WHERE id=?").bind(p.id)]);   // K21: KI-Uebersetzungen mit
     return J({ ok: true });
   }
 

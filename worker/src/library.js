@@ -2,6 +2,7 @@
 import { limitTopics } from "./sponsor_extra.js";
 import { cleanText, rateLimit, isLang } from "./util.js";
 import { baseIds } from "./entities.js";
+import { withAcctKeys } from "./privacy.js";
 
 export const LIB_KINDS = ["prompt", "instructions", "agent", "skill", "plugin", "manifest", "copilotstudio", "flow", "powerapp", "kql", "dax", "excel", "graph", "powershell", "adaptivecard", "other"];
 const now = () => Math.floor(Date.now() / 1000);
@@ -30,10 +31,10 @@ export async function handleLibrary(env, request, url, path, user, J) {
 
   if (path === "/api/library/export" && method === "GET") {
     const rows = (await db.prepare(
-      `SELECT b.id,b.slug,b.kind,b.title,b.summary,b.body,b.link,b.lang,b.topics,b.version,b.created,b.published,b.updated,p.handle,u.name,(SELECT COUNT(*) FROM lib_votes v WHERE v.item_id=b.id) votes
+      `SELECT b.id,b.slug,b.kind,b.title,b.summary,b.body,b.link,b.lang,b.topics,b.version,b.created,b.published,b.updated,p.handle,u.name,b.user_id,(SELECT COUNT(*) FROM lib_votes v WHERE v.item_id=b.id) votes
        FROM lib_items b JOIN profiles p ON p.user_id=b.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=b.user_id AND u.banned=0
        WHERE b.status='live' ORDER BY b.published DESC LIMIT 1000`).all()).results || [];
-    return J({ items: rows.map((r) => ({ ...r, topics: parse(r.topics, []) })) }, 200, { "cache-control": "public, max-age=300" });
+    return J({ items: await withAcctKeys(env, rows.map((r) => ({ ...r, topics: parse(r.topics, []) }))) }, 200, { "cache-control": "public, max-age=300" });   // ak statt user_id (privacy.js acctKeys)
   }
   if (path === "/api/library/votes" && method === "GET") {
     const rows = (await db.prepare("SELECT b.id,(SELECT COUNT(*) FROM lib_votes v WHERE v.item_id=b.id) votes FROM lib_items b WHERE b.status='live'").all()).results || [];

@@ -30,7 +30,7 @@ def run_upload(src, s3, creds=True, required=False, env=None):
     fake = types.ModuleType("boto3"); fake.client = lambda *a, **k: s3
     old_mod, old_env = sys.modules.get("boto3"), dict(os.environ)
     sys.modules["boto3"] = fake
-    for k in [*CREDS, "OG_REQUIRED", "OG_PRUNE_FORCE"]: os.environ.pop(k, None)
+    for k in [*CREDS, "OG_REQUIRED", "OG_PRUNE_FORCE", "OG_PAGE_ROOTS"]: os.environ.pop(k, None)
     os.environ.update({**(CREDS if creds else {}), **({"OG_REQUIRED": "1"} if required else {}), **(env or {})})
     sys.path.insert(0, str(ROOT / "tools"))
     try:
@@ -111,6 +111,7 @@ class PersonalCardsTest(unittest.TestCase):
         rc, out = self.run_quiet(required=True)
         self.assertEqual(rc, 0)
         self.assertEqual(sorted(self.s3.log), [("delete", "og/community/u/max-m.png"), ("delete", "og/de/community/u/max-m.png"), ("delete", "og/einladung/max-m.png")])
+        # die Blogkarte bleibt hier nur, weil der Bau gar keine Blogkarte mehr enthaelt (Sicherung, BlogCardTest)
         self.assertEqual(sorted(self.s3.obj), ["og/community/u/anna-b.png", "og/community/u/max-m/blog/post.png", "og/einladung/anna-b.png", "og/entity/teams.png", "og/index.png"])
         self.assertNotIn("max-m", out)   # das Kuerzel eines entfernten Profils steht nie im (oeffentlichen) Bau-Protokoll
 
@@ -121,7 +122,7 @@ class PersonalCardsTest(unittest.TestCase):
         self.assertEqual(rc, 0); self.assertEqual(self.s3.log, []); self.assertEqual(sorted(self.s3.obj), sorted(self.CARDS))
         self.assertIn("::warning::", out); self.assertIn("nichts geloescht", out)
         rc, out = self.run_quiet(required=True, env={"OG_PRUNE_FORCE": "1"})   # wirklich kein oeffentliches Profil mehr: bewusst freigegeben
-        self.assertEqual(rc, 0); self.assertEqual(sorted(self.s3.obj), ["og/community/u/max-m/blog/post.png", "og/entity/teams.png", "og/index.png"])
+        self.assertEqual(rc, 0); self.assertEqual(sorted(self.s3.obj), ["og/entity/teams.png", "og/index.png"])   # Blogkarte ebenfalls (Runde 9)
 
     def test_sicherung_gegen_massenloeschung(self):
         for i in range(12): self.s3.obj[f"og/einladung/alt-{i}.png"] = {"body": b"X", "ct": "image/png", "meta": {}}   # 12 alte Karten, der Bau hat nur 2
@@ -140,11 +141,112 @@ class PersonalCardsTest(unittest.TestCase):
         self.assertEqual(self.s3.log, [("delete", "og/einladung/max-m.png")])
 
 
+class EntityCardTest(unittest.TestCase):
+    """K41/D: Karten der Personen-Entitaet og/[<sprache>/]entity/<kuerzel>.png zeigen den Namen. Gibt es die Entitaet im Bau in keiner Sprache
+    mehr (Kontoloeschung: Personen-Entitaet verborgen, fehlt im Export), werden sie geloescht. Karten bestehender Entitaeten ohne eigenes Bild
+    (duenne Seite, og-default) bleiben; ohne Entitaetsseiten im Bau und bei zu vielen wird nichts geloescht."""
+    CARDS = {"og/index.png": b"A", "og/entity/teams.png": b"T", "og/de/entity/teams.png": b"U", "og/entity/max-m.png": b"M", "og/de/entity/max-m.png": b"N",
+             "og/entity/thin.png": b"D"}
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory(); t = Path(self.tmp.name)
+        self.src, self.s3, self.docs, self.r2out = t / "r2img", EtagS3(), t / "docs", t / "r2out"
+        for rel, body in self.CARDS.items():
+            p = self.src / rel; p.parent.mkdir(parents=True, exist_ok=True); p.write_bytes(body)
+        self.pages(["teams", "max-m", "thin"])
+        self.assertEqual(run_upload(self.src, self.s3), 0); self.s3.log.clear()
+    def tearDown(self): self.tmp.cleanup()
+
+    def pages(self, ids):
+        import shutil
+        for d in (self.docs, self.r2out): shutil.rmtree(d, ignore_errors=True)
+        for e in ids:   # englische Entitaetsseiten liegen in r2out/, Sprachfassungen in docs/
+            for p in (self.r2out / "entity" / e / "index.html", self.docs / "de" / "entity" / e / "index.html"):
+                p.parent.mkdir(parents=True, exist_ok=True); p.write_text("<html></html>", "utf-8")
+
+    def run_quiet(self, **kw):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out): rc = run_upload(self.src, self.s3, required=True, **kw)
+        return rc, out.getvalue()
+
+    def test_karten_der_personen_entitaet_eines_geloeschten_profils_werden_geloescht(self):
+        for rel in ("og/entity/max-m.png", "og/de/entity/max-m.png", "og/entity/thin.png"): (self.src / rel).unlink()
+        self.pages(["teams", "thin"])   # max-m: Konto geloescht, keine Entitaetsseite mehr; thin: Seite besteht, nur ohne eigenes Bild
+        rc, out = self.run_quiet()
+        self.assertEqual(rc, 0)
+        self.assertEqual(sorted(self.s3.log), [("delete", "og/de/entity/max-m.png"), ("delete", "og/entity/max-m.png")])
+        self.assertIn("og/entity/thin.png", self.s3.obj)
+        self.assertNotIn("max-m", out)   # das Kuerzel steht nie im Bau-Protokoll
+
+    def test_ohne_entitaetsseiten_im_bau_nichts_geloescht(self):
+        for rel in ("og/entity/max-m.png", "og/de/entity/max-m.png"): (self.src / rel).unlink()
+        self.pages([])
+        rc, out = self.run_quiet()
+        self.assertEqual(rc, 0); self.assertEqual(self.s3.log, []); self.assertIn("nichts geloescht", out)
+
+    def test_sicherung_gegen_massenloeschung(self):
+        for i in range(12): self.s3.obj[f"og/entity/alt-{i}.png"] = {"body": b"X", "ct": "image/png", "meta": {}}
+        rc, out = self.run_quiet()
+        self.assertEqual(rc, 0); self.assertEqual(self.s3.log, []); self.assertIn("OG_PRUNE_FORCE=1", out)
+        rc, out = self.run_quiet(env={"OG_PRUNE_FORCE": "1"})
+        self.assertEqual(len([x for x in self.s3.log if x[0] == "delete"]), 12)
+
+    def test_page_roots_ueber_umgebung(self):
+        (self.src / "og/entity/max-m.png").unlink()
+        other = Path(self.tmp.name) / "other"; (other / "entity" / "teams" ).mkdir(parents=True); (other / "entity" / "teams" / "index.html").write_text("x", "utf-8")
+        rc, out = self.run_quiet(env={"OG_PAGE_ROOTS": str(other)})
+        self.assertEqual(rc, 0)
+        self.assertEqual([x[1] for x in self.s3.log if x[0] == "delete"], ["og/entity/max-m.png"])   # mit docs/ und r2out/ (Seite max-m besteht) bliebe sie
+
+
+class BlogCardTest(unittest.TestCase):
+    """Runde 9: Teilen-Karten der Blogseiten og/[<sprache>/]community/u/<kuerzel>/blog.png und .../blog/<slug>.png zeigen den Namen. Erzeugt der Bau
+    sie nicht mehr (Kontoloeschung, Profil privat, Adresswechsel), werden sie geloescht; ohne Blogkarten im Bau und bei zu vielen Adressen nicht."""
+    CARDS = {"og/index.png": b"A", "og/community/u/anna-b/blog.png": b"B", "og/community/u/anna-b/blog/hallo.png": b"C",
+             "og/community/u/alice/blog.png": b"D", "og/community/u/alice/blog/mein-weg.png": b"E", "og/de/community/u/alice/blog.png": b"F",
+             "og/community/u/alice/blog/page/2.png": b"G", "og/community/u/alice.png": b"H", "og/community/u/anna-b.png": b"I"}
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory(); self.src, self.s3 = Path(self.tmp.name) / "r2img", EtagS3()
+        for rel, body in self.CARDS.items():
+            p = self.src / rel; p.parent.mkdir(parents=True, exist_ok=True); p.write_bytes(body)
+        self.assertEqual(run_upload(self.src, self.s3), 0); self.s3.log.clear()
+    def tearDown(self): self.tmp.cleanup()
+
+    def run_quiet(self, **kw):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out): rc = run_upload(self.src, self.s3, required=True, **kw)
+        return rc, out.getvalue()
+
+    def test_blogkarten_eines_entfernten_profils_werden_geloescht(self):
+        for rel in self.CARDS:
+            if "/alice" in rel: (self.src / rel).unlink()   # alice: Konto geloescht, keine Profil- und Blogseiten mehr
+        rc, out = self.run_quiet()
+        self.assertEqual(rc, 0)
+        self.assertEqual(sorted(x[1] for x in self.s3.log if x[0] == "delete"), sorted(k for k in self.CARDS if "/alice" in k))
+        self.assertEqual(sorted(self.s3.obj), sorted(k for k in self.CARDS if "/alice" not in k))
+        self.assertNotIn("alice", out); self.assertNotIn("mein-weg", out)
+
+    def test_ohne_blogkarten_im_bau_nichts_geloescht(self):
+        for rel in self.CARDS:
+            if "/blog" in rel: (self.src / rel).unlink()   # Blog-Export ausgefallen: keine Blogseite im Bau
+        rc, out = self.run_quiet()
+        self.assertEqual(rc, 0); self.assertEqual(self.s3.log, []); self.assertIn("nichts geloescht", out)
+
+    def test_sicherung_gegen_massenloeschung(self):
+        for i in range(12): self.s3.obj[f"og/community/u/alt-{i}/blog.png"] = {"body": b"X", "ct": "image/png", "meta": {}}   # 12 Adressen, der Bau hat 2 Autoren
+        rc, out = self.run_quiet()
+        self.assertEqual(rc, 0); self.assertEqual(self.s3.log, []); self.assertIn("OG_PRUNE_FORCE=1", out)
+        rc, out = self.run_quiet(env={"OG_PRUNE_FORCE": "1"})
+        self.assertEqual(len([x for x in self.s3.log if x[0] == "delete"]), 12)
+
+
 class EmptyExportTest(unittest.TestCase):
     """F07 (Folge-PR zu #320): ist der Profil-Export frisch abgerufen und leer (letztes oeffentliches Profil entfernt), gehen auch die letzten
     persoenlichen Karten ohne OG_PRUNE_FORCE; ist er ausgefallen (Zwischenspeicher, fehlt) oder fehlen nur die Karten im Bau, greift die Sicherung weiter."""
-    KEEP = {"og/index.png": b"A", "og/community/u/max-m/blog/post.png": b"S"}
-    CARDS = {"og/einladung/max-m.png": b"M", "og/community/u/max-m.png": b"P", "og/de/community/u/max-m.png": b"Q"}
+    KEEP = {"og/index.png": b"A"}
+    CARDS = {"og/einladung/max-m.png": b"M", "og/community/u/max-m.png": b"P", "og/de/community/u/max-m.png": b"Q", "og/community/u/max-m/blog/post.png": b"S",
+             "og/community/u/max-m/blog.png": b"T"}
 
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory(); self.src, self.s3 = Path(self.tmp.name) / "r2img", EtagS3()
@@ -181,8 +283,8 @@ class EmptyExportTest(unittest.TestCase):
 
 
 class MembersExportMarkTest(unittest.TestCase):
-    """site_members.fetch_members: ein frisch abgerufener, leerer Export ersetzt die gespeicherte Fassung (keine Seiten und Karten entfernter Profile)
-    und setzt den Merker fuer den Upload; ein Ausfall nutzt die gespeicherte Fassung und markiert "cache"."""
+    """site_members.fetch_members: ein frisch abgerufener, leerer Export ergibt keine Profile (keine Seiten und Karten entfernter Profile) und setzt
+    den Merker fuer den Upload; ein Ausfall bricht den Bau ab (Runde 7: keine Profilseiten aus alten Daten) und markiert "fehlt"."""
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory(); t = Path(self.tmp.name)
         sys.path.insert(0, str(ROOT))
@@ -196,18 +298,22 @@ class MembersExportMarkTest(unittest.TestCase):
         from unittest import mock
         url = "https://api.example.test/api/profiles/export"
         with mock.patch.object(self.MEM, "CACHE", self.cache), mock.patch.object(self.MEM, "MARK", self.mark), mock.patch.object(self.MEM, "_fetch_export", return_value=export), \
-                mock.patch.object(self.SF, "states", return_value={url: state}), mock.patch("time.sleep"), contextlib.redirect_stderr(io.StringIO()):
-            people, _ = self.MEM.fetch_members("https://api.example.test")
+                mock.patch.object(self.SF, "states", return_value={url: state}), mock.patch("time.sleep"), mock.patch.dict(os.environ, {"SITE_OFFLINE": "0"}), \
+                contextlib.redirect_stderr(io.StringIO()):
+            try:
+                people, _ = self.MEM.fetch_members("https://api.example.test")
+            except SystemExit as e:
+                return f"abbruch {e.code}", json.loads(self.mark.read_text("utf-8"))
         return [p["handle"] for p in people], json.loads(self.mark.read_text("utf-8"))
 
     def test_frisch_leer(self):
         self.assertEqual(self.fetch({"people": [], "orgs": []}, "frisch"), ([], {"state": "frisch", "people": 0}))
-        self.assertEqual(json.loads(self.cache.read_text("utf-8"))["people"], [], "die gespeicherte Fassung folgt dem Export")
+        self.assertNotIn("max-m", self.cache.read_text("utf-8"), "die Repo-Kopie enthaelt keine Profildaten")
 
     def test_leer_mit_fehlern_oder_aus_zwischenspeicher_gilt_als_ausfall(self):
-        self.assertEqual(self.fetch({"people": [], "orgs": [], "failed": 3}, "frisch"), (["max-m"], {"state": "cache", "people": 1}))
-        self.assertEqual(self.fetch({"people": [], "orgs": []}, "cache"), (["max-m"], {"state": "cache", "people": 1}))
-        self.assertEqual(self.fetch(None, "fehlt"), (["max-m"], {"state": "cache", "people": 1}))
+        for export, state in (({"people": [], "orgs": [], "failed": 3}, "frisch"), ({"people": [], "orgs": []}, "cache"),
+                              ({"people": [{"handle": "alt-x", "name": "Alt", "items": []}], "orgs": []}, "cache"), (None, "fehlt")):
+            self.assertEqual(self.fetch(export, state), ("abbruch 1", {"state": "fehlt", "people": 0}), (export, state))
 
     def test_frisch_mit_profilen(self):
         self.assertEqual(self.fetch({"people": [{"handle": "anna-b", "name": "Anna", "items": []}], "orgs": []}, "frisch"), (["anna-b"], {"state": "frisch", "people": 1}))

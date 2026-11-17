@@ -335,7 +335,7 @@
           h("label", { text: tt("nm_label") }), mode, nlab, name, h("p", { class: "cmut", text: tt("nm_hint") }),
           h("div", { class: "btns" }, [h("button", { type: "button", class: "btn main", text: tt("save"), onclick: function () { api("/api/me", { method: "POST", body: { name: name.value, name_mode: mode.value, lang: LANG } }).then(function (r) { ok.textContent = r.s === 200 ? "✓ " + tt("saved") : tt("error"); }); } }),
             h("button", { type: "button", class: "btn", text: tt("signout"), onclick: function () { api("/api/logout", { method: "POST" }).then(function () { location.reload(); }); } }), ok]),
-          h("details", { class: "cdel" }, [h("summary", { text: tt("delete_account") }), h("p", { class: "cmut", text: tt("delete_account_d") }), h("button", { type: "button", class: "btn", text: tt("delete_account_btn"), onclick: function () { if (confirm(tt("delete_account_d"))) api("/api/me", { method: "DELETE" }).then(function () { location.reload(); }); } })])]));
+          h("details", { class: "cdel" }, [h("summary", { text: tt("delete_account") }), h("p", { class: "cmut", text: tt("delete_account_d") }), h("p", { class: "cmut" }, [h("a", { href: (document.documentElement.lang || "en").slice(0, 2) === "de" ? "/nutzungsbedingungen/" : "/terms/", text: (document.documentElement.lang || "en").slice(0, 2) === "de" ? "Community-Bedingungen" : "Community terms" })]), h("button", { type: "button", class: "btn", text: tt("delete_account_btn"), onclick: function () { if (confirm(tt("delete_account_d"))) api("/api/me", { method: "DELETE" }).then(function () { location.reload(); }); } })])]));
         root.appendChild(signinsCard());
         root.appendChild(inviteCard());
       }

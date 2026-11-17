@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT))
 import site_meta_community as M   # noqa: E402
 
 BRAND = re.compile(r"M365[ .]?FM", re.I)
-PEOPLE = json.loads((ROOT / "data" / "members_export.json").read_text("utf-8"))
+PEOPLE = json.loads((ROOT / "tests" / "fixtures" / "members_sample.json").read_text("utf-8"))   # erfundene Stichprobe (data/members_export.json ohne Profildaten)
 ENTS = {e["id"]: e for e in json.loads((ROOT / "data" / "entities.json").read_text("utf-8"))}
 
 

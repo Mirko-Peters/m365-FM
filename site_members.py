@@ -36,7 +36,7 @@ S = {"en": dict(members="Members", companies="Companies", mintro="Experts of the
 SIZE_N = {"1": (1, 1), "2-10": (2, 10), "11-50": (11, 50), "51-200": (51, 200), "201-1000": (201, 1000), "1000+": (1001, None)}
 
 
-CACHE = Path(__file__).parent / "data" / "members_export.json"   # letzte erfolgreiche Fassung: faellt der Abruf aus, bleiben die Profilseiten erhalten
+CACHE = Path(__file__).parent / "data" / "members_export.json"   # nur Platzhalter ohne Profildaten (repo_copy); nie Rueckfall fuer Profilseiten
 # Merker fuer tools/r2_og_upload.py im Bilder-Ordner (OG_OUT, wird nicht hochgeladen): Stand des Profil-Exports dieses Baus. Nur bei "frisch" und
 # 0 Personen darf der Upload die letzten persoenlichen Karten loeschen; bei "cache"/"fehlt" (Export ausgefallen) greift seine Sicherung.
 MARK = Path(__file__).parent / __import__("os").environ.get("OG_OUT", "r2img") / "profiles-export.json"
@@ -72,18 +72,12 @@ def strip_private_items(j):
 
 
 def repo_copy(j):
-    """Fassung fuer data/members_export.json (liegt im oeffentlichen Git-Repo und bleibt dort in der Historie): ohne Kontakt- und Adressdaten
-    der Personen (contact: E-Mail, Telefon, Strasse, PLZ, Ort) und der Firmenstandorte (nur Land und Label). Die Seiten dieses Baus nutzen den frischen Export; faellt er aus, entstehen die
-    Profilseiten aus dieser Kopie ohne Kontaktzeile. Was ein Mitglied spaeter zuruecknimmt oder loescht, steht so nie dauerhaft im Repo."""
-    out = dict(j)
-    out["people"] = [{**x, "contact": {}} if isinstance(x, dict) and "contact" in x else x for x in (j.get("people") or [])]
-    for x in out["people"]:
-        if isinstance(x, dict): x.pop("private", None)
-    # Firmenstandorte nur mit Land und Label: Strasse, PLZ, Ort und Koordinaten (bei Einzelunternehmern personenbezogen) blieben sonst in der
-    # Git-Historie, auch wenn der Standort spaeter zurueckgezogen wird. Die Seiten nutzen locations nicht.
-    out["orgs"] = [{**o, "locations": [{"label": l.get("label", ""), "country": l.get("country", "")} for l in o["locations"] if isinstance(l, dict)]}
-                   if isinstance(o, dict) and isinstance(o.get("locations"), list) else o for o in (j.get("orgs") or [])]
-    return out
+    """Fassung fuer data/members_export.json (liegt im oeffentlichen Git-Repo und bleibt dort in der Historie): KEINE Personen- oder Firmendaten
+    mehr (Runde 7) - keine Namen, Kurzzeilen, Profiltexte, Fotos, Inhalte, Handles oder Zaehler. Frueher entstanden die Profilseiten aus dieser
+    Kopie, wenn der Export ausfiel, und brachten geloeschte, private und umbenannte Profile zurueck. Heute bricht der Bau ohne frischen Export ab
+    (fetch_members, site_fetch.check); kein Abnehmer liest die Datei. Sie bleibt als fester Platzhalter, damit der Commit-Schritt in site.yml
+    nichts mehr daran aendert (die alte Fassung mit Personendaten wird einmal ueberschrieben)."""
+    return {"version": 2, "hinweis": "Keine Profildaten im Repo: die Profilseiten entstehen nur aus dem frischen /api/profiles/export (site_members.fetch_members)."}
 
 
 def public_orgs(orgs):
@@ -102,21 +96,25 @@ def fetch_members(api):
             break
         print(f"WARNUNG: Profil-Export Versuch {n + 1}/3 fehlgeschlagen", file=sys.stderr); time.sleep(5 * (n + 1))
     live = SF.states().get(url) == "frisch"
-    # Frisch abgerufen, ohne Fehler und wirklich leer (kein oeffentliches Profil mehr): kein Rueckgriff auf die alte Fassung - sonst blieben Seiten und
-    # Teilen-Karten (Foto, Name) entfernter Profile stehen. Ein leerer Export mit Fehlern (failed) oder aus einem Zwischenspeicher gilt als ausgefallen.
+    # Frisch abgerufen, ohne Fehler und wirklich leer (kein oeffentliches Profil mehr): keine Profilseiten - sonst blieben Seiten und Teilen-Karten
+    # (Foto, Name) entfernter Profile stehen. Ein leerer Export mit Fehlern (failed) gilt als ausgefallen.
     empty = live and bool(j) and j.get("people") == [] and not j.get("failed")
-    if (j and j.get("people")) or empty:
-        j = strip_private_items(j); state = "frisch" if live else "cache"
+    if live and j and (j.get("people") or empty):
+        j = strip_private_items(j); state = "frisch"
         try:
             CACHE.write_text(json.dumps(repo_copy(j), ensure_ascii=False), encoding="utf-8")
         except Exception:
             pass
-    elif CACHE.exists():
-        print("WARNUNG: Profil-Export nicht erreichbar, nutze die gespeicherte Fassung", file=sys.stderr)
-        j = strip_private_items(json.loads(CACHE.read_text("utf-8"))); state = "cache"
     else:
-        print("FEHLER: Profil-Export nicht erreichbar und keine gespeicherte Fassung: es entstehen keine Profilseiten", file=sys.stderr)
-        j = j or {}; state = "fehlt"
+        # Kein frischer Export (ausgefallen, leer mit Fehlern oder nur eine alte Fassung aus data/cache): keine Profilseiten aus alten Daten (Runde 7).
+        # Abbruch des Baus statt eines Baus ohne Profilseiten: so laeuft weder der Upload noch der Deploy, die zuletzt veroeffentlichten Profilseiten
+        # bleiben bis zum naechsten erfolgreichen Bau stehen, und r2_site_sync/r2_og_upload markieren sie nicht massenhaft als entfernt.
+        _mark("fehlt", 0)
+        if __import__("os").environ.get("SITE_OFFLINE") == "1":
+            print("WARNUNG (SITE_OFFLINE=1): Profil-Export nicht frisch abrufbar - lokaler Bau ohne Profilseiten", file=sys.stderr)
+            return [], []
+        print("FEHLER: Profil-Export nicht frisch abrufbar - Bau abgebrochen (keine Profilseiten aus alten Daten, kein Deploy). Lokal: SITE_OFFLINE=1 setzen.", file=sys.stderr)
+        sys.exit(1)
     _mark(state, len(j.get("people") or []))
     print(f"Profile: {len(j.get('people', []))} Personen, {len(j.get('orgs', []))} Firmen", file=sys.stderr)
     return j.get("people", []), public_orgs(j.get("orgs", []))
