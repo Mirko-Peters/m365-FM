@@ -14,7 +14,7 @@ keypoints:
   - "FSLogix profiles need an SMB share. The Learn overview recommends a Storage Spaces Direct guest cluster on the Azure Local instance and an external share for large deployments with high resource requirements; the Architecture Center calls the on-instance option more suitable for smaller deployments."
 faq:
   - q: "Does Azure Virtual Desktop for Azure Local work without an internet connection to Azure?"
-    a: "No. Microsoft Learn says the service requires a connection to the Azure Virtual Desktop service hosted in Azure for brokering connections and connecting users. The sources do not describe how new or existing sessions behave during an outage of that connection, so test it and plan the network path and monitoring."
+    a: "No. Microsoft Learn says the service requires a connection to the Azure Virtual Desktop service hosted in Azure for brokering connections and connecting users. Learn's overview page does not say what happens to existing sessions if that connection is lost, so test this in your pilot and plan the network path and monitoring."
   - q: "Can one host pool contain session hosts in Azure and on Azure Local?"
     a: "No. Learn says each host pool must contain only session hosts on Azure or only on Azure Local. Use a separate host pool for each kind."
   - q: "Is the old name Azure Virtual Desktop for Azure Stack HCI still correct?"
@@ -58,14 +58,14 @@ Two of these shape operations most: how scaling works, and how many users a host
 ### Scaling and management approach
 
 - **Session host configuration.** Learn says it is currently not supported with Azure Local. Learn's autoscale page says dynamic autoscaling can only be used for pooled host pools with session host configuration, and Microsoft's July 2026 general availability announcement for enhanced host pool management says session host update, dynamic autoscale and ephemeral OS disks require a host pool with session host configuration. Some Learn pages, including the autoscale scenarios page, still carry preview wording for dynamic autoscaling, so check the current page before relying on a limit. Our reading: none of the three is available for Azure Local session hosts.
-- **Power management autoscaling.** This is the scaling option for standard management, and the sources differ: a Tech Community post of October 2024 announced autoscale as generally available for host pools on Azure Stack HCI, the earlier name of Azure Local, and said the same scaling plans used for Azure VMs can be applied to those VMs; Learn's scaling plan page states power management autoscaling for Azure and Azure Government and does not mention Azure Local. Our reading: power management autoscaling is available for Azure Local session hosts and dynamic autoscaling is not. Check the current Learn page before you plan around it.
+- **Power management autoscaling.** This is the scaling option for standard management, and the sources differ: a Tech Community post of October 2024 announced autoscale as generally available for host pools on Azure Stack HCI, the earlier name of Azure Local, and said the same scaling plans used for Azure VMs can be applied to those VMs; [Learn's scaling plan page](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan) states that power management autoscaling is available in Azure and Azure Government and does not mention Azure Local. Our reading: power management autoscaling is available for Azure Local session hosts and dynamic autoscaling is not. Check the current Learn page before you plan around it.
 - **Start VM on Connect.** Learn's Start VM on Connect page says you can enable it for session hosts on Azure and Azure Local in personal or pooled host pools. The 2024 post had already added it for Azure Stack HCI VMs, and Learn's what's new page records an April 2024 preview of both features.
 
 The [session host configuration](/entity/avd-session-host-configuration/) article explains what that approach adds.
 
 ### Density
 
-Learn's VM sizing guidelines list maximum users per vCPU for multi-session hosts (6 light, 4 medium, 2 heavy, 1 power), but they are based on Azure VMs and described as generic guidelines for initial estimates only. Treat them as a starting point for a pilot, not a commitment.
+Learn's VM sizing guidelines list maximum users per vCPU for multi-session hosts (6 light, 4 medium, 2 heavy, 1 power), but they are based on Azure VMs and described as generic guidelines for initial estimates only. Treat them as a pilot starting point.
 
 ### Status
 
@@ -79,7 +79,7 @@ Learn names three components:
 2. **Azure Local service fee.** See the Azure Local pricing page.
 3. **Azure Virtual Desktop for Azure Local service fee.** Charged for each active virtual CPU on session hosts running on Azure Local.
 
-The Azure Architecture Center's reference design uses a pricing calculator estimate for a three-node Azure Local cluster running 10 multi-session hosts for roughly 50 to 100 medium-workload users. That estimate excludes the per-user access fees, on-premises hardware, physical networking equipment and Windows Server licensing, so it is a sizing illustration, not a total cost. Comparing with an Azure deployment needs your own hardware and licensing numbers.
+The Azure Architecture Center's reference design uses a pricing calculator estimate for a three-node Azure Local cluster running 10 multi-session hosts for roughly 50 to 100 medium-workload users. That estimate excludes the per-user access fees, on-premises hardware, physical networking equipment and Windows Server licensing, so it is not a total cost. Comparing with an Azure deployment needs your own hardware and licensing numbers.
 
 ## Where profiles live
 
@@ -115,6 +115,7 @@ Nerdio's documentation states that Nerdio Manager supports Azure Virtual Desktop
 - [Microsoft Learn: Deploy Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop)
 - [Microsoft Learn: Prerequisites for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/prerequisites)
 - [Microsoft Learn: Autoscale scaling plans and example scenarios](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)
+- [Microsoft Learn: Create and assign an autoscale scaling plan](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)
 - [Microsoft Learn: Configure Start VM on Connect](https://learn.microsoft.com/en-us/azure/virtual-desktop/start-virtual-machine-connect)
 - [Microsoft Learn: Session host virtual machine sizing guidelines](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/session-host-virtual-machine-sizing-guidelines)
 - [Tech Community: Enhanced host pool management for Azure Virtual Desktop is now generally available](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)
