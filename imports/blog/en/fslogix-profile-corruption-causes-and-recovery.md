@@ -46,36 +46,42 @@ The Profile log is the main evidence. Learn says it is `Profile_%date%.log` in `
 
 FSLogix also stores a Status, a Reason and an Error value per session in the registry, for profile containers under `HKLM\Software\FSLogix\Profiles\Sessions\<SID>`. The status codes that matter for a suspect file include 11 (cannot open the virtual disk), 12 (cannot attach), 15 (cannot initialize the disk), 17 (error while formatting) and 27 (cannot find the disk at the given location). Reason code 3 means a local profile exists, 7 a Windows temporary profile and 9 a failed profile load. In our reading, a cannot-open or cannot-initialize status that stays after locks, permissions and space are ruled out points toward the file itself. Learn does not say that these codes indicate corruption, so treat them as a pointer, not a verdict.
 
-## Step 3: Know the documented causes of damage and inconsistency
+## Step 3: Separate documented corruption causes from other failure causes
 
-Learn names several conditions that can leave containers in a bad state.
+Learn's page on container corruption or missing data says antivirus products are "one of the most common occurrences of container corruption" and warns about redirections.xml. Other pages tie corruption to a few more conditions. A second group leaves containers in a bad state without Learn calling it damage.
 
-**Antivirus and security tools.** Learn's prerequisites page lists exclusions for container files on SMB shares (`*.VHD`, `*.VHDX` and the `.lock`, `.meta` and `.metadata` files) and says that without them security tools can lock or corrupt files. For the attach points it lists `ERROR_SHARING_VIOLATION`, temporary profiles and logoff hangs. It tells you to apply the exclusions in all layers: endpoint AV, network scanning and data loss prevention.
+### Documented as corruption or data loss
 
-**The VHD format.** The configuration page recommends VHDX over VHD because of its supported size and reduced corruption scenarios. The `VolumeType` default is `vhd`.
+**Antivirus and security tools.** The corruption page says that scanning or processing data into or out of a container can lead to corruption. Learn's prerequisites page lists exclusions for container files on SMB shares (`*.VHD`, `*.VHDX` and the `.lock`, `.meta` and `.metadata` files) and says that without them security tools can lock or corrupt files. It lists `ERROR_SHARING_VIOLATION`, temporary profiles and logoff hangs as symptoms and says to apply the exclusions in all layers: endpoint AV, network scanning and data loss prevention.
 
-**Sessions that end abruptly.** If a session terminates abruptly, the mounted container may not be detached properly, and the next sign-in may fail. Learn recommends enabling `CleanupInvalidSessions` (under `HKLM\SOFTWARE\FSLogix\Apps`, default 0) and first looking for an operational cause. The known issues page lists a fixed bug in version 26.01 (3.26.102.18413), where the setting stopped Office containers from being created or mounted when profile and Office containers were both enabled. The mitigation was to disable it, and the resolution is a current version.
+**redirections.xml.** The corruption page advises caution when excluding directories: a misconfigured redirections.xml file can give unexpected results, the profile folders are not random, and the file should stay simple.
 
-**Concurrent access.** The default is a single connection with an exclusive lock. Learn warns that concurrent connections are not supported on session hosts in an Azure Virtual Desktop host pool, that multiple connections to one container need differencing disks with `ProfileType` 3, that all sessions using the container should have a matching `ProfileType`, and that `0` should not be mixed with any other value. OneDrive does not support multiple simultaneous connections using the same container.
-
-**A sector size mismatch.** `VHDXSectorSize` should not be used unless Microsoft Support directs it, because a mismatch can lead to a BSOD.
+**The VHD format.** The profile container configuration page recommends VHDX over VHD because of its supported size and reduced corruption scenarios. The `VolumeType` default is `vhd`.
 
 **Editing contents.** Learn warns that deleting the wrong data from a user's container can cause data loss or profile corruption.
 
-**Product bugs.** The known issues page lists fixed defects in 25.02 where containers did not detach and where users saw a message that the Recycle Bin was corrupted. Learn names installing the latest FSLogix version as the resolution, and it is also the first requirement for a support request.
+### Documented as attach failures, crashes or unsupported setups
+
+**Sessions that end abruptly.** The `CleanupInvalidSessions` description says the mounted VHD(x) might not be detached properly and the next sign-in may not attach it. Learn describes enabling the setting (under `HKLM\SOFTWARE\FSLogix\Apps`, default 0) as a way to let FSLogix clean up invalid sessions. The known issues page lists a fixed bug in version 26.01 (3.26.102.18413), where the setting stopped Office containers from being created or mounted when profile and Office containers were both enabled.
+
+**Concurrent access.** The default is a single connection with an exclusive lock. Learn warns that concurrent connections are not supported on session hosts in an Azure Virtual Desktop host pool, that multiple connections to one container need differencing disks with `ProfileType` 3, that sessions should not mix `0` with any other value, and that OneDrive does not support multiple simultaneous connections using the same container. None of this is described as a cause of damage.
+
+**A sector size mismatch.** `VHDXSectorSize` should not be used unless Microsoft Support directs it, because a mismatch in disk sector sizes can lead to a BSOD.
+
+**Product bugs.** The known issues page lists fixed defects in 25.02: containers that did not detach, and a message that the Recycle Bin was corrupted. Learn does not describe either as damage to the container file. Learn names the latest FSLogix version as the resolution.
 
 **Cloud Cache.** Learn warns that if a read cannot be hydrated from any remote provider, the result can be a session hang or a system crash. See [FSLogix Cloud Cache](/entity/fslogix-cloud-cache/) for the design.
 
 ## Step 4: Recover, from least to most invasive
 
-Learn gives no repair recipe, so the order below combines documented tools with ordinary file handling. Steps that are my reasoning, not Learn text, are marked.
+Learn gives no repair recipe, so the order below combines documented tools with ordinary file handling. Steps that are our own reading and not Learn text are marked.
 
 1. **Stop users and sessions touching the file.** FSLogix holds an exclusive lock while the user is connected, so make sure no session of that user remains.
-2. **Work on a copy** (my recommendation, not from Learn). Copy the VHD(x) to a separate location before you try anything.
-3. **Inspect with the frx utility.** From `C:\Program Files\FSLogix\Apps`, `frx edit-profile -filename <path>` attaches the file and opens Explorer and the Registry Editor on its contents. `begin-edit-profile` and `end-edit-profile` do the same in two steps. Learn does not claim these commands fix a damaged file; they let you see whether the data can be read.
+2. **Work on a copy** (own recommendation, not from Learn). Copy the VHD(x) to a separate location before you try anything.
+3. **Inspect with the frx utility.** From `C:\Program Files\FSLogix\Apps`, `frx edit-profile -filename <path>` attaches the file and opens Explorer and the Registry Editor on its contents. `begin-edit-profile` attaches the VHD(x) and its registry hive without opening Explorer or the Registry Editor, and `end-edit-profile` detaches both again using the cookie that `begin-edit-profile` prints. Learn does not claim these commands fix a damaged file; they let you see whether the data can be read.
 4. **Restore from backup.** For [Azure Files](/entity/azure-files/) shares protected by [Azure Backup](/entity/azure-backup/), the portal offers restoring the full share or individual files, to the original or an alternate location, and lets you skip or overwrite on conflict. Restoring to an alternate location keeps the current share unchanged, which suits a comparison. Learn says vaulted backup supports full-share recovery only, and that a vault-tier restore needs 20 percent more free space on the target share than the size of the data being restored.
-5. **Move the data into a new container.** `frx migrate-vhd -src <old> -dest <new>` creates and formats a VHD(x) and mirrors the contents of the source. `frx copyto-vhd` copies a folder into a VHD(x), and `frx copy-profile` copies a local profile. Learn says a new VHD(x) defaults to 30 GB and dynamic sizing, and that `copy-profile` needs `-size-mbs` above 5000 when the local profile exceeds 5 GB. These tools are documented as copy utilities, and Learn does not say how they behave on a damaged source, so test first.
-6. **Let FSLogix create a fresh container** (my reading of the naming behaviour above): Learn says that when FSLogix cannot find an existing container it creates a new empty one. Moving the old folder aside and keeping it for data recovery follows from that, but Learn does not present it as a recovery procedure.
+5. **Move the data into a new container.** `frx migrate-vhd -src <old> -dest <new>` creates and formats a VHD(x) and mirrors the contents of the source. `frx copyto-vhd` copies a folder into a VHD(x), and `frx copy-profile` copies a local profile. Learn says `migrate-vhd` creates a VHD(x) that defaults to 30 GB and dynamic sizing, and that `copy-profile` needs `-size-mbs` above 5000 when the local profile exceeds 5 GB. These tools are documented as copy utilities, and Learn does not say how they behave on a damaged source, so test first.
+6. **Let FSLogix create a fresh container** (own reading of the naming behaviour above): Learn says that when FSLogix cannot find an existing container it creates a new empty one. Moving the old folder aside and keeping it for data recovery follows from that, but Learn does not present it as a recovery procedure.
 
 ## Comparing the options
 
@@ -84,13 +90,13 @@ Learn gives no repair recipe, so the order below combines documented tools with 
 | Restore from Azure Backup | Data as of the restore point | Backup restore is documented; the link to FSLogix damage is not | Needs a backup; vault restore needs 20 percent free space |
 | Inspect and copy with frx | Whatever is readable | Tools are documented, repair is not | Unknown behavior on a damaged file |
 | New empty container | None, unless copied in | Behavior implied by the naming section | Users lose settings and cached data |
-| Cloud Cache | Replicates writes to every provider | Documented as resilience for storage issues, not as a backup | Learn says it writes data to all providers, so do not assume it protects against a damaged container |
+| Cloud Cache | Writes go to every provider | Learn describes it as resiliency and high availability against short-term storage issues, and as an option in a BCDR plan; it does not document it as protection for a damaged container | Data is written to all providers, so in our reading a damaged container may be written to all of them as well |
 
 ## Step 5: Reduce the chance of a repeat
 
 1. Use `VolumeType` `vhdx` for new containers and plan the migration of old VHD files.
-2. Apply the antivirus, DLP and network-scanner exclusions from the prerequisites page.
-3. Learn's configuration page recommends `LockedRetryCount` 3, `LockedRetryInterval` 15, `ReAttachRetryCount` 3 and `ReAttachIntervalSeconds` 15 for a faster failure; the defaults are 12, 5, 60 and 10.
+2. Apply the antivirus, DLP and network-scanner exclusions from the prerequisites page, and keep redirections.xml simple.
+3. Learn's profile container configuration page recommends `LockedRetryCount` 3, `LockedRetryInterval` 15, `ReAttachRetryCount` 3 and `ReAttachIntervalSeconds` 15 for a faster failure; the defaults are 12, 5, 60 and 10.
 4. Monitor the share's capacity and the size of containers against `SizeInMBs`.
 5. Keep `ProfileType` at 0 for single connections and avoid `VHDXSectorSize`.
 6. Run a current FSLogix version, and read the known issues page before you update.
@@ -103,6 +109,7 @@ Accessed 17 November 2026.
 - [Microsoft Learn: Troubleshooting with Logging and Diagnostics (FSLogix)](https://learn.microsoft.com/en-us/fslogix/troubleshooting-events-logs-diagnostics)
 - [Microsoft Learn: FSLogix Codes and what they mean](https://learn.microsoft.com/en-us/fslogix/troubleshooting-error-codes)
 - [Microsoft Learn: Issues with container attach or detach](https://learn.microsoft.com/en-us/fslogix/troubleshooting-container-attach-detach)
+- [Microsoft Learn: Issues with container corruption or missing data](https://learn.microsoft.com/en-us/fslogix/troubleshooting-container-corruption)
 - [Microsoft Learn: Issues with container lock or in use](https://learn.microsoft.com/en-us/fslogix/troubleshooting-container-locked)
 - [Microsoft Learn: Issues with old, temp or local profiles](https://learn.microsoft.com/en-us/fslogix/troubleshooting-old-temp-local-profiles)
 - [Microsoft Learn: FSLogix known issues](https://learn.microsoft.com/en-us/fslogix/troubleshooting-known-issues)

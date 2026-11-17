@@ -81,7 +81,7 @@ Assign **Desktop Virtualization Power On Off Contributor** to the Azure Virtual 
 6. Repeat the same fields on **Peak hours**, **Ramp-down** and **Off-peak hours** (these tabs have no **VMs to start**). Each phase also needs a **Start time**, which Learn says is also the end time of the previous phase.
 7. On **Host pool assignments**, tick the pool. You can only assign a plan to host pools of the type chosen in the plan. Add tags, then **Review + create** and **Create**.
 
-Example values of our own, not from Learn: ramp-up 06:00, peak 08:15, ramp-down 16:30, off-peak 18:45; in each phase hibernate after 30 minutes disconnected and deallocate after 15 minutes signed out. Learn notes that changes to a plan already assigned to host pools apply immediately, and that unselected days carry over the last off-peak parameters.
+Example values: the phase times (ramp-up 06:00, peak 08:15, ramp-down 16:30, off-peak 18:45) follow Learn's PowerShell example for personal schedules; the timers are our own, hibernate after 30 minutes disconnected and deallocate after 15 minutes signed out in each phase. Learn notes that changes to a plan already assigned to host pools apply immediately, and that unselected days carry over the last off-peak parameters.
 
 **PowerShell.** Learn's example uses `New-AzWvdScalingPlanPersonalSchedule` with parameters such as these:
 
@@ -96,7 +96,7 @@ Check the assignment afterwards with `(Get-AzWvdScalingPlan @params).HostPoolRef
 
 ## Step 5: monitor what autoscale did
 
-Learn's [Insights article](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-monitor-operations-insights) says autoscale monitoring in Insights supports pooled host pools only. For personal pools, the [autoscale diagnostics article](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-diagnostics) says to open the scaling plan, select **Diagnostic Settings**, **Add diagnostic setting**, tick **Autoscale logs** and archive to a storage account or stream to an event hub. Learn says a storage account must be in the same region as the scaling plan. Logs land in the `insight-logs-autoscaling` container. That page was last dated 2023 and its sample shows a load-balancer event, so check what your logs contain for hibernate actions.
+Learn's [Insights article](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-monitor-operations-insights) says autoscale monitoring in Insights supports pooled host pools only. For personal pools, the [autoscale diagnostics article](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-diagnostics) says to open the scaling plan, select **Diagnostic Settings**, **Add diagnostic setting**, tick **Autoscale logs** and archive to a storage account or stream to an event hub. Learn says a storage account must be in the same region as the scaling plan. Under **Containers** in the storage account, the logs sit in the `insight-logs-autoscaling` folder. The page's sample log is from 2021 and shows a load-balancer event, so check what your logs contain for hibernate actions.
 
 ## Known failure points
 

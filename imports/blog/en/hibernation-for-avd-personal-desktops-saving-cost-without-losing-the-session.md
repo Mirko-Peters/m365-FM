@@ -50,7 +50,7 @@ The table sets the two stopped states side by side, using Learn's [states and bi
 | Resize | Possible | Not possible while hibernated |
 | Attach or detach disks and NICs | Possible | Not possible while hibernated |
 
-The states and billing page also says a VM that has entered hibernation is shown as *Hibernated (deallocated)* and is not billed for instance usage. A running VM, and a VM that is stopped but still allocated, are billed. This is why timers matter more than the action: the compute saving starts when the VM leaves the running state, whichever action you choose.
+The states and billing page also says a VM that has entered hibernation is shown as *Hibernated (deallocated)* and is not billed for instance usage. A running VM, and a VM that is stopped but still allocated, are billed. This is why timers matter more than the action: the compute saving starts when the VM reaches the deallocated or hibernated (deallocated) state, whichever of the two actions you choose. A VM that is stopping or stopped but still allocated is billed.
 
 ## What you pay for while a desktop is hibernated
 

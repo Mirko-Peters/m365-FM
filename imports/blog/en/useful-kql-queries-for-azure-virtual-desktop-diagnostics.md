@@ -21,7 +21,7 @@ faq:
     a: "Learn says the value should be false for issues an admin can resolve. If it is true, escalate to Microsoft and provide the CorrelationId of the failing activity."
 ---
 
-The fastest way to diagnose an Azure Virtual Desktop problem in Log Analytics is to query WVDErrors for the affected user, then join the connection and checkpoint tables on the correlation ID to see where the attempt stopped. This article collects the queries that Microsoft Learn publishes for that, grouped by the question they answer. Every query block below is copied from a Learn page; replace placeholders such as `userupn` before you run it. For the dashboards built on the same data, see "Key metrics and alerts for Azure Virtual Desktop" and [AVD Insights](/entity/avd-insights/), and for fixing a failed connection once you know the cause, see "Troubleshooting Azure Virtual Desktop connection failures: a checklist".
+A practical order for diagnosing an Azure Virtual Desktop problem in Log Analytics, in our reading, is to query WVDErrors for the affected user, then join the connection and checkpoint tables on the correlation ID to see where the attempt stopped. This article collects the queries that Microsoft Learn publishes for that, grouped by the question they answer. Every query block below is copied from a Learn page; replace placeholders such as `userupn` before you run it. For the dashboards built on the same data, see "Key metrics and alerts for Azure Virtual Desktop" and [AVD Insights](/entity/avd-insights/), and for fixing a failed connection once you know the cause, see "Troubleshooting Azure Virtual Desktop connection failures: a checklist".
 
 ## What must be switched on first
 
@@ -34,7 +34,7 @@ Learn's Insights setup page lists the categories to enable on a host pool: Manag
 | WVDConnections | A connection activity in the states Started, Connected and Completed | The Connection Errors query joins it to WVDErrors and WVDCheckpoints on `CorrelationId` |
 | WVDErrors | An error for an activity | `ServiceError` false means an admin can resolve it |
 | WVDCheckpoints | A step reached in an activity | Apps inside a full desktop session are not tracked |
-| WVDAgentHealthStatus | Health of the agent on each session host | Fires about every 30 seconds |
+| WVDAgentHealthStatus | Health of the agent on each session host | Fires about every 30 seconds, per a comment in Learn's example query |
 | WVDAutoscaleEvaluationPooled | One autoscale evaluation of a pooled host pool | Needs the autoscale log category |
 | WVDConnectionNetworkData | Round-trip time and bandwidth estimates | Preview page; needs the Network Data Logs category |
 
@@ -114,7 +114,7 @@ WVDConnectionNetworkData
 | render timechart
 ```
 
-The same page has queries for bandwidth, for round-trip time and bandwidth per connection joined to WVDConnections (client OS, client version, protocol), and for the 10 users with the highest round-trip time. Because the page is a preview page dated 2023, check its current state before you base an alert on the table.
+The same page has queries for bandwidth, for round-trip time and bandwidth per connection joined to WVDConnections (client OS, client version, protocol), and for the 10 users with the highest round-trip time. Because the page title says preview (the banner names the Connection Graphics Data Logs), check its current state before you base an alert on the table.
 
 ## A triage order that uses these queries
 
@@ -132,7 +132,7 @@ Learn's Azure Monitor reference pages hold more examples that follow the same pa
 
 - WVDConnections: session duration, top 10 users by average connection duration, average connection duration by host pool, client operating systems by user count, and average session logon time by host pool.
 - WVDCheckpoints: published remote resources by count of users, which only reflects apps published as RemoteApp.
-- WVDAgentHealthStatus: peak active sessions per host pool as a time chart (the Learn query is titled "Active sessions on SessionHost", but it sums the hosts of each pool), and a health check summary whose query maps the check indexes to names such as DomainJoin, DomainTrust, FSLogix, SxSStack, URLCheck, DomainReachable, WebRTCRedirector and IMDSReachable. Use it after the [agent](/entity/avd-agent/) shows as unavailable.
+- WVDAgentHealthStatus: peak active sessions per host pool as a time chart (the Learn query is titled "Active sessions on SessionHost", but it sums the hosts of each pool), and a health check summary whose query maps the check indexes to names such as DomainJoin, DomainTrust, FSLogix, SxSStack, URLCheck, DomainReachable, WebRTCRedirector and IMDSReachable. Our suggestion: use it after the [agent](/entity/avd-agent/) shows as unavailable.
 
 Learn's glossary defines time to connect as starting at a WVDConnections row with state Started and ending at a WVDCheckpoints row named ShellReady for desktops, or RdpShellAppExecuted for RemoteApp (first launch only). That tells you where to look if you build your own logon-time query.
 
@@ -141,7 +141,7 @@ Learn's glossary defines time to connect as starting at a WVDConnections row wit
 - Connections that do not reach Azure Virtual Desktop do not appear in diagnostics results, so a client-side network failure can leave no row at all.
 - Client information can be missing from WVDConnections and WVDCheckpoints even when the connection completes.
 - Diagnostic events are sent when completed, and connection activities show Started, Connected and Completed as intermediate states.
-- The diagnostics article is dated 2020 on Learn and its query set is small; the Azure Monitor reference pages are dated January 2026. Learn's Azure Monitor pages are the more current source for examples.
+- The diagnostics article's query set is small and its metadata date is 2020 (Learn shows it as updated in June 2025); the Azure Monitor reference pages are dated January 2026. Learn's Azure Monitor pages are the more current source for examples.
 - Standard Log Analytics storage charges apply to every table you send.
 
 ## Sources

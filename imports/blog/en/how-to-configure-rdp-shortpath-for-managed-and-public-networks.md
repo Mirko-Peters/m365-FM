@@ -9,8 +9,8 @@ topics: [rdp-shortpath, remote-desktop-protocol]
 keypoints:
   - "Only the managed-network listener variant needs session host configuration: enable Enable RDP Shortpath for managed networks through Intune or Group Policy, allow the inbound port (default 3390) and restart the session hosts."
   - "The host pool has its own RDP Shortpath settings under Networking. Each of the four options can be Default, Enabled or Disabled, and where host pool and session host disagree the most restrictive setting applies."
-  - "The Azure PowerShell parameters ManagedPrivateUdp, DirectUdp, PublicUdp and RelayUdp need version 5.2.1 preview of the Az.DesktopVirtualization module."
-  - "Learn advises keeping TURN enabled unless you disable it for troubleshooting, because it gives a reliable path when direct UDP fails and disabling it can push connections to TCP."
+  - "Learn says the Azure PowerShell parameters ManagedPrivateUdp, DirectUdp, PublicUdp and RelayUdp were added in version 5.2.1 preview of the Az.DesktopVirtualization module. The cmdlet reference for Update-AzWvdHostPool does not list them, so check your module version before scripting."
+  - "Learn advises keeping TURN enabled unless you disable it for troubleshooting, because it gives a reliable path when direct UDP fails and disabling it can push connections to TCP. Learn's configuration page says TURN is available only in the Azure public cloud, while other Learn pages list it as generally available in Azure Government."
   - "Verify with the Connection Information dialog (UDP (Private Network), UDP or UDP (Relay)), event ID 135 on the session host, or the UdpUse column in the WVDConnections table."
 faq:
   - q: "Do I have to configure anything for RDP Shortpath on public networks?"
@@ -29,8 +29,10 @@ Learn lists these prerequisites:
 
 - A client that supports it. Windows App on Windows qualifies. Learn lists a macOS beta (version 11.3.8, build 3048) and Android and ChromeOS as preview.
 - For the managed-network listener, direct connectivity from the client to the session host on the listener port, not blocked by Windows Firewall, another firewall or a network security group. Examples are [Azure ExpressRoute](/entity/azure-expressroute/) private peering or an IPsec site-to-site or point-to-site VPN.
-- For public networks, outbound UDP from the session hosts to the internet or to the STUN and TURN servers, and the same for clients.
-- For Azure PowerShell, the Az.DesktopVirtualization module. The Shortpath parameters were added in version 5.2.1 preview, so this part of the configuration depends on a preview module.
+- For public networks, internet access for clients and session hosts, with outbound UDP from the session hosts to the internet or to the STUN and TURN servers.
+- For Azure PowerShell, the Az.DesktopVirtualization module. Learn says the Shortpath parameters were added in version 5.2.1 preview and tells you to use that version. The cmdlet reference page for `Update-AzWvdHostPool` (Azure PowerShell 16.5.0) does not list the four parameters, so run `Get-Help Update-AzWvdHostPool -Parameter ManagedPrivateUdp` in your session first, or use the portal steps below.
+
+Availability differs by cloud. The first note on Learn's configuration page says public-network Shortpath via STUN is available in the Azure public cloud and Azure Government, and via TURN only in the Azure public cloud. The TURN option also needs the client to be in a supported location; the TURN region list is on the concept page. The RDP Shortpath concept page and the Windows 365 page, however, list TURN as generally available in Azure Government as well. Learn's pages disagree, so check the current wording for your cloud before you plan around TURN.
 
 By default, all four options are enabled at host pool level (Default means Enabled), and UDP and TCP are both enabled in Windows on session hosts and clients.
 
@@ -103,7 +105,7 @@ Learn also describes a policy that switches individual path types on or off per 
 - RDP Shortpath for public networks using NAT traversal
 - RDP Shortpath for public networks using Relay (TURN)
 
-Enabled or Not configured means the connection attempts the path. Disabled means it does not. Restart the session hosts afterwards. Learn's note is explicit: keep TURN enabled unless you turn it off for troubleshooting, because it is the predictable path behind Symmetric NAT or restrictive firewalls, and disabling it lowers the connection success rate and can force TCP. The Group Policy steps on the page tell you to open the managed networks setting; open the setting for the type you actually want to change.
+Enabled or Not configured means the connection attempts the path. Disabled means it does not. Restart the session hosts afterwards. Learn's note is explicit: keep TURN enabled unless you turn it off for troubleshooting, because it is the predictable path behind Symmetric NAT or restrictive firewalls, and disabling it lowers the connection success rate and can force TCP. A further note says it is strongly recommended to enable and optimize TURN in all cases, especially across networks you do not manage. The Group Policy steps on the page tell you to open the managed networks setting; open the setting for the type you actually want to change.
 
 ## Step 5: Limit the port range (optional)
 
@@ -124,12 +126,12 @@ Teredo is optional. In IPv4-only networks it adds NAT traversal candidates. Run 
 Connect to a session and check one of these:
 
 - **Connection Information** in the client: UDP (Private Network) means managed-network Shortpath, UDP means direct STUN, and UDP (Relay) means TURN.
-- **Event Viewer** on the session host: Applications and Services Logs, Microsoft, Windows, RemoteDesktopServices-RdpCoreCDV, Operational. Filter for event ID 135. A UDP session shows the message "The multi-transport connection finished for tunnel: 1, its transport type set to UDP".
+- **Event Viewer** on the session host (Learn's introduction mentions the client device, but its steps use the session host): Applications and Services Logs, Microsoft, Windows, RemoteDesktopServices-RdpCoreCDV, Operational. Filter for event ID 135. A UDP session shows the message "The multi-transport connection finished for tunnel: 1, its transport type set to UDP".
 - **Log Analytics**: the `UdpUse` column of the WVDConnections table. Learn defines 1 as managed networks, 2 as public networks with direct STUN and 4 as public networks relayed by TURN. Any other value means TCP.
 
 ## Windows 365
 
-Cloud PCs have no host pool networking settings. Learn's Windows 365 page sends you to the Azure Virtual Desktop instructions and says indirect UDP with TURN is on by default. To turn UDP off, set the ADMX_TerminalServer policy TS_SELECT_TRANSPORT to Use only TCP. The page lists the same known problem cases as for Azure Virtual Desktop: double NAT, proxies, UDP restrictions and carrier-grade NAT.
+Learn's Windows 365 page sends you to the Azure Virtual Desktop instructions to enable Shortpath for public networks and says indirect UDP with TURN is on by default. To turn UDP off, set the ADMX_TerminalServer policy TS_SELECT_TRANSPORT to Use only TCP. Its known-issues list names double NAT, for example through a secure web gateway or proxy, routing through an internet proxy or inspection device, networks that restrict UDP or limit ports and IP ranges, carrier-grade NAT, and connection drops during TURN relay updates, after which the client reconnects automatically within a few seconds.
 
 ## Common stumbling blocks
 
@@ -137,7 +139,7 @@ Cloud PCs have no host pool networking settings. Learn's Windows 365 page sends 
 - **A forgotten TCP-only policy** from an older baseline, found in step 1.
 - **A Disabled host pool option** that overrides a correct policy.
 - **A closed listener port** in Windows Firewall or a network security group.
-- **A NAT type that blocks direct paths.** Learn says a relayed connection with TURN is the option for Symmetric NAT, so allow the relay path rather than disabling UDP.
+- **A NAT type that blocks direct paths.** Learn says a relayed connection with TURN is the option for Symmetric NAT, so allow the relay path rather than disabling UDP, where TURN is available for your cloud and client location.
 
 ## Sources
 
