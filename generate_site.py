@@ -1590,6 +1590,7 @@ def build():
     SHW.build(_ctx, (LRN._fetch_json(f"{COMMUNITY_API}/api/show/export") or {}).get("items", []))
     phase("Community (Profile, Events, Blog, Bibliothek, Podcast, Video, Feed, Shows)")
     PP.build(_ctx)
+    import site_anchor as _ANC; print(_ANC.summary())   # Linktexte im Altbestand (Blog BLG.build, Show Notes PP.build): ersetzte Anker je Regel
     import site_i18n_overrides as OVR; OVR.publish(OUT)   # Veraltet-Liste und Einheiten-Ansicht fuer /redaktion/: erst HIER, nach allen note_blog/note_podpage (PP.build merkt Folgen und Show Notes vor)
     phase("Englische Show (Podpage)")
     MCPS.build(_ctx)
