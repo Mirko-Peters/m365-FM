@@ -58,7 +58,7 @@ Regional host pools are generally available. The Tech Community post "Now genera
 - East US 2 and Central US, the regions in which the announcement says general availability was first announced
 - Australia East, Canada Central, Canada East, Central India, East Asia, Japan East, Japan West, Korea Central, North Europe, South Africa North, Southeast Asia and West Europe, added in later updates
 
-The post does not list a German region. A comment under it says the team is working on Germany West Central; that is not a date or a commitment.
+The post does not list a German region, and neither does the Data locations table, so check the portal for Germany West Central.
 
 Learn matches the announcement on the region count. The [Data locations article](https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations), last updated on 16 November 2026, has a table with a Geographical and a Regional column, and the same 14 regions carry a check in the Regional column. The [Regional Host Pools article](https://learn.microsoft.com/en-us/azure/virtual-desktop/regional-host-pools) says Azure Virtual Desktop now supports regional host pools, refers to the Data locations article for available regions and adds that regional availability is expanding in phases. Some preview wording remains there: module version 5.4.5-preview for `-DeploymentScope`, a sentence that speaks of the service becoming generally available, and the OS disk row. The multiregion BCDR article on Learn still says regional host pools are in public preview, so status labels differ between Learn pages. The announcement and What's new say general availability.
 

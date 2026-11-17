@@ -1,6 +1,6 @@
 ---
 title: "Conditional Access for Azure Virtual Desktop: policies that work"
-summary: "With single sign-on, Azure Virtual Desktop needs two separate, aligned Conditional Access policies: one for the Azure Virtual Desktop app and one for Windows Cloud Login. Leave the Azure Resource Manager Provider app out and exclude the two AVD apps from any broad All cloud apps policy."
+summary: "With single sign-on, Azure Virtual Desktop needs two separate, aligned Conditional Access policies: one for the Azure Virtual Desktop app and one for Windows Cloud Login. Leave the Azure Resource Manager Provider app out and check any broad All cloud apps policy, because one that requires device compliance can break sign-in."
 status: review
 publish: false
 author: mirko-p
@@ -23,7 +23,7 @@ faq:
 
 Use two separate Conditional Access policies for Azure Virtual Desktop when single sign-on is on: one that targets the Azure Virtual Desktop app and one that targets the Windows Cloud Login app, both requiring multifactor authentication for the same users, with aligned sign-in frequency. This article is about designing those policies. Fixing a sign-in that already fails is covered in the article on Entra-joined sign-in failures, and the prompt sequence users see in "MFA for Azure Virtual Desktop users: what prompts when".
 
-The sources are Microsoft Learn pages retrieved on 17 November 2026. The main page, on MFA for Azure Virtual Desktop, was last updated on 29 July 2026.
+Learn's page on MFA for Azure Virtual Desktop was last updated in late July 2026.
 
 ## Which apps a policy must target
 
@@ -47,11 +47,11 @@ Two warnings from Learn. The Windows App authenticates to both the Azure Virtual
 | One combined policy on both apps | Not recommended | "Create two separate policies rather than one combined policy." |
 | Two aligned policies | One policy per app, each with its own session controls | Recommended structure for single sign-on; users then see a single MFA prompt (if required) |
 
-Learn gives no separate reason for the two-policy recommendation. It says that both apps need policies that are aligned with each other, or users see MFA prompts at unexpected times. Our reading, not Learn's wording: a single policy carries one set of session controls, so two policies are the way to give each app its own sign-in frequency. Learn does say that the **Every time** option is supported only on Windows Cloud Login, and that applying it to the Azure Virtual Desktop app causes constant prompts on feed refresh and diagnostics upload.
+Learn's note under the policy tables gives one reason, which concerns sign-in frequency: both apps need policies that are aligned with each other, or users see MFA prompts at unexpected times. Our reading, not Learn's wording: a single policy carries one set of session controls, so two policies are the way to give each app its own sign-in frequency. Learn does say that the **Every time** option is supported only on Windows Cloud Login, and that applying it to the Azure Virtual Desktop app causes constant prompts on feed refresh and diagnostics upload.
 
-## Exclude the AVD apps from All cloud apps policies
+## Check All cloud apps policies
 
-The most common source of surprises is an existing tenant-wide policy. Learn's list of misconfigurations includes a policy that targets All cloud apps with device compliance: sign-in fails because the session host does not meet the compliance policy. Learn's resolution is to exclude Windows Cloud Login and Azure Virtual Desktop from that policy and to create separate Azure Virtual Desktop-specific policies. Learn's checklist also asks you to list every policy that targets All cloud apps before you enable single sign-on, because these policies reach Azure Virtual Desktop sessions and can block access unexpectedly.
+One of the five misconfigurations in Learn's list is an existing tenant-wide policy that targets All cloud apps with device compliance: sign-in fails because the session host does not meet the compliance policy. Learn's resolution is to exclude Windows Cloud Login and Azure Virtual Desktop from that policy and to create separate Azure Virtual Desktop-specific policies. Learn's checklist also asks you to list every policy that targets All cloud apps before you enable single sign-on, because these policies reach Azure Virtual Desktop sessions and can block access unexpectedly. Learn does not say to exclude the two apps from every All cloud apps policy. Our reading: an exclusion removes that policy's controls for those apps, so exclude only where a policy blocks sign-in, and make sure the two Azure Virtual Desktop policies enforce what you need. For compliance there is another route in Learn's troubleshooting page: scope connection-time compliance to client devices (see Device compliance below).
 
 ## Build the policies
 
@@ -69,7 +69,7 @@ Learn's MFA page ends at the **On** state. The Entra documentation describes **r
 
 ## Sign-in frequency
 
-Learn's example for periodic reauthentication is 1 hour and it gives no default. The rule for the pair is that the Windows Cloud Login policy should match or exceed the Azure Virtual Desktop policy, and Learn warns that differing settings can cause MFA prompts at unexpected times. **Every time** prompts users when they launch a new connection more than 5 to 10 minutes after their last authentication. Learn presents it as a Windows Cloud Login option, not as a pattern to combine with a different periodic value on the other app, so treat that combination as a deliberate decision. When each prompt appears, including what happens on session lock and reconnect, is covered in "MFA for Azure Virtual Desktop users: what prompts when".
+Learn's example for periodic reauthentication is 1 hour and it gives no default. Learn also notes that users may see a "Stay signed in to all your apps" prompt if their Windows device is not registered with Microsoft Entra ID; if they deselect **Allow my organization to manage my device** and select **No, sign in to this app only**, they may be prompted more often. The rule for the pair is that the Windows Cloud Login policy should match or exceed the Azure Virtual Desktop policy, and Learn warns that differing settings can cause MFA prompts at unexpected times. **Every time** prompts users when they launch a new connection more than 5 to 10 minutes after their last authentication. Learn presents it as a Windows Cloud Login option, not as a pattern to combine with a different periodic value on the other app, so treat that combination as a deliberate decision. When each prompt appears, including what happens on session lock and reconnect, is covered in "MFA for Azure Virtual Desktop users: what prompts when".
 
 ## Conditions that need care
 
@@ -108,7 +108,7 @@ The names and values below are an example that combines the settings Learn descr
 | AVD-01 Require MFA | Azure Virtual Desktop | Group "AVD users" | Browser, mobile apps and desktop clients | Require multifactor authentication | Periodic, 8 hours |
 | AVD-02 Require MFA host sign-in | Windows Cloud Login | Group "AVD users" | Browser, mobile apps and desktop clients | Require multifactor authentication | Periodic, 8 hours (matches AVD-01) |
 
-Keep the Azure Resource Manager Provider app out of both policies, and exclude both apps from any All cloud apps policy. Exclude your [emergency access accounts](/entity/emergency-access-accounts/) (Microsoft recommends two or more) from policies that block or restrict sign-in.
+Keep the Azure Resource Manager Provider app out of both policies. If an All cloud apps policy with device compliance blocks sign-in, Learn's resolution is to exclude both apps from that policy; the two policies above then have to carry the controls you need. Exclude your [emergency access accounts](/entity/emergency-access-accounts/) (Microsoft recommends two or more) from policies that block or restrict sign-in.
 
 ## Verify
 

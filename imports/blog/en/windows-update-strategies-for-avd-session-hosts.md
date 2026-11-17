@@ -23,8 +23,6 @@ faq:
 
 There is no single patching method for Azure Virtual Desktop. Microsoft Learn's guidance, published in September 2026, picks a method by operating system: Windows Update or Windows Autopatch for single-session Windows client, session host update or an image from Azure Compute Gallery for multi-session, and Azure Update Manager or automatic guest patching for Windows Server. This article sets out that matrix, the two servicing models behind it and the limits of Intune on multi-session hosts.
 
-Sources are listed at the end and were retrieved on 17 November 2026. The methodology page carries no preview or general availability label, but some Learn pages on session host update tooling do; see "Session host update in short" below.
-
 ## Two servicing models
 
 Learn's [update management methodologies](https://learn.microsoft.com/en-us/azure/virtual-desktop/windows-update-management-methodologies-session-hosts) page lists the common methods under one of two models.
@@ -43,7 +41,7 @@ Learn's matrix also restricts which operating systems suit which host pool type:
 | Personal | Supported | Not supported | Supported |
 | Pooled | Not recommended (footnote 2) | Supported | Supported |
 
-Footnote 2 in Learn's table reads "Session density set to 1 (session limit)". The terminology page gives the matching default: [personal host pools](/entity/avd-personal-host-pool/) are updated with Windows Update, Microsoft Configuration Manager or other software distribution tools, and [pooled host pools](/entity/avd-pooled-host-pool/) by redeploying session hosts from updated images.
+Footnote 2 in Learn's table reads "Session density set to 1 (session limit)". Our reading is that it qualifies the pooled client Enterprise cell, which is a pool with a session limit of one and is marked Not recommended. Learn's terminology page describes the usual update path by pool type separately: [personal host pools](/entity/avd-personal-host-pool/) are updated with Windows Update, Microsoft Configuration Manager or other software distribution tools, and [pooled host pools](/entity/avd-pooled-host-pool/) by redeploying session hosts from updated images.
 
 ## Monthly security and quality updates
 
@@ -79,7 +77,7 @@ Learn describes hotpatching as applying eligible monthly security updates withou
 | Windows client multi-session | Not supported |
 | Windows Server | Supported on Azure Edition only |
 
-For Windows 11 Enterprise, Learn says updates must be managed through Windows Autopatch and Microsoft Intune. A pooled multi-session pool therefore cannot use hotpatching for reboot avoidance.
+For Windows 11 Enterprise, Learn says hotpatching is supported when updates are managed through Windows Autopatch and Microsoft Intune. Learn marks hotpatching as not supported for Windows client multi-session, so a pooled Windows client multi-session pool cannot rely on it to avoid reboots; the Windows Server Azure Edition row is separate.
 
 ## Feature updates and OS version upgrades
 
@@ -93,7 +91,7 @@ Learn's management page recommends Intune for managing Azure Virtual Desktop env
 
 ## Session host update in short
 
-[Session host update](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update) works on host pools with a [session host configuration](/entity/avd-session-host-configuration/). It deallocates or deletes the existing VMs and creates new ones from the updated configuration, in batches. Per Learn, the first host is updated alone to prove the process, and each host takes about 20 minutes. Disable autoscale on the host pool before an update and keep it off until it finishes, and expect manual customizations on the old VM to be lost unless they are in the image, in Intune or Group Policy, or in the custom configuration script. The procedure is in "Managing session host updates with a session host configuration".
+[Session host update](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update) works on host pools with a [session host configuration](/entity/avd-session-host-configuration/). It deallocates or deletes the existing VMs and creates new ones from the updated configuration, in batches. Per Learn, the first host is updated alone to prove the process, and each host takes about 20 minutes. Learn says session host update is only available in the global Azure cloud, not in other clouds such as Azure US Government or Azure operated by 21Vianet. Disable autoscale on the host pool before an update and keep it off until it finishes, and expect manual customizations on the old VM to be lost unless they are in the image, in Intune or Group Policy, or in the custom configuration script. The procedure is in "Managing session host updates with a session host configuration".
 
 Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community). Some Learn pages still carry preview wording; for example, the update configuration page says the Azure PowerShell cmdlets for host pools with a session host configuration are in preview and were added in Az.DesktopVirtualization version 5.3.0. Check the current page before relying on a limit.
 
@@ -112,7 +110,7 @@ This example is built from Learn's matrix, not taken from Learn. A pooled Window
 3. For pooled multi-session, plan image-based servicing: image, test pool, new image version, batch replacement, with profiles in FSLogix.
 4. For personal client hosts, pick Windows Update or Windows Autopatch; for Windows Server, check guest patching support against your image.
 5. Decide who controls agent updates, and set maintenance windows if needed.
-6. Re-check the Learn matrix before each major change, because Learn updated the page on 29 October 2026.
+6. Re-check the Learn matrix before each major change, because the page carries the date 29 October 2026.
 
 ## Sources
 
