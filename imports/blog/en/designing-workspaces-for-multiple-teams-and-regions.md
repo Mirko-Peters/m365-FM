@@ -69,8 +69,6 @@ With the **by-region** layout you create two workspaces. The East US 2 workspace
 
 With the **by-team** layout a workspace cannot hold both regional groups of a team, so you need four workspaces: finance in East US 2, finance in Central US, engineering in East US 2 and engineering in Central US. If a finance user is assigned to both finance groups, two workspaces show up in that user's feed and the user has to tell them apart by name. Clear names, for example "Finance East US 2" in the workspace name or friendly name, keep it readable, in line with the multiregion article's advice on clear names and labels. Assigning each user only to the group for their home region keeps the feed to one workspace per user; that is a design choice.
 
-For a handful of teams, by-region keeps the object count lowest; by-team suits separately administered teams, and every region you add multiplies the workspaces.
-
 ## Delegation
 
 Azure RBAC has separate Desktop Virtualization roles for workspaces, application groups and host pools. For layout design, three points matter:
@@ -87,10 +85,9 @@ Splitting duties so that a team owns its workspace while a platform team owns th
 - Count the regions. Each needs its own workspace, and each team-and-region pair needs one in a by-team layout.
 - Confirm that no application group needs to appear in two workspaces. If one does, a RemoteApp group can be duplicated; a desktop group on a pooled host pool cannot, because only one is allowed per pool, so that case needs a second host pool.
 - Check that each workspace's region matches the region of every application group registered to it, and test an active-passive pair on a single workspace before relying on it.
-- Count what each user will see after assignment, including the number of workspaces.
-- Test with a pilot group and a refreshed client before assigning large groups.
+- Count the workspaces each user will see after assignment, and test with a pilot group and a refreshed client before assigning large groups.
 
-To register a group in a workspace, use the steps in the companion article: **Workspaces**, **Create**, then on the **Application groups** tab **Register application groups: Yes** and **+ Register application groups**, or **+ Add** on an existing workspace. Only groups that are not yet assigned to a workspace are listed. A workspace's **Friendly name** is the optional display name users see.
+To register a group in a workspace, use the steps in the companion article: **Workspaces**, **Create**, then on the **Application groups** tab **Register application groups: Yes** and **+ Register application groups**, or **+ Add** on an existing workspace. Only groups that are not yet assigned to a workspace are listed.
 
 ## Service limits to design around
 
@@ -105,7 +102,7 @@ The Azure subscription and service limits page lists these maximums for Azure Vi
 | Role assignment | Any Azure Virtual Desktop object | 200 |
 | Session host | Host pool | 10,000 |
 
-For more than 1,000 application groups Microsoft asks you to raise a support ticket in the Azure portal. The table has no limit for application groups per workspace. In a large by-team layout the workspace count is teams times regions, and application groups and role assignments grow with it.
+For more than 1,000 application groups Microsoft asks you to raise a support ticket in the Azure portal. The table has no limit for application groups per workspace. In a by-team layout the workspace count is teams times regions.
 
 ## Sources
 
