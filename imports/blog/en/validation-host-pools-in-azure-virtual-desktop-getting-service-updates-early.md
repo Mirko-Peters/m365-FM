@@ -54,8 +54,10 @@ The same page lists entries marked [Validation] next to the production entries, 
 | Change set (from the agent release notes) | Validation entry | Production entry |
 |---|---|---|
 | Version 1.0.15547.100 (App Attach reliability, monitoring and recovery) | Published August 2026 | Published September 2026 |
-| Version 1.0.15732.100 (certificate validation, App Attach security) | Published September 2026 | Published October 2026 |
+| Version 1.0.14114.100 (health monitoring for Azure Local, agent startup reliability on slow-booting VMs) | Published April 2026 | Published May 2026 |
 | Same changes, repacked: 1.0.15294.100 in validation and 1.0.15294.200 in production (smaller package, Azure Local reliability, bootloader startup) | Published July 2026 | Published September 2026 |
+
+The page also lists version 1.0.15732.100 twice, once marked Validation (September 2026) and once as a production entry (October 2026), with different change lists, so read the entry you rely on in full.
 
 Our reading: in these three cases the gap between the validation entry and the production entry was one to two calendar months. This is an observation from month-level release notes, not a Microsoft commitment, so do not build a change-freeze calendar on it.
 
@@ -65,9 +67,9 @@ A January 2023 entry shows how the lines can differ. Learn says versions 1.0.573
 
 Agent and stack versions are not the only thing staged this way. Learn's [RemoteApp enhancements (preview)](https://learn.microsoft.com/en-us/azure/virtual-desktop/remoteapp-enhancements) article, dated 2 September 2026, says the enhancements are enabled by default for host pools deployed in the validation environment as part of a staged rollout at a 75% chance. Host pools in the production environment keep the existing experience by default. Administrators can opt in by setting the registry value `EnableRemoteAppV2` to `1`, or opt out in the validation environment by setting it to `0`. The article is titled preview, so these enhancements are preview, not generally available.
 
-The consequence for a validation pool: a feature rollout can change behaviour there without any action from you, and with a chance below 100% two validation pools may behave differently. If your test plan assumes identical behaviour, check the registry value on each pool.
+Our reading: a feature rollout can change behaviour in a validation pool without any action from you, and with a chance below 100% two validation pools may behave differently. If your test plan assumes identical behaviour, check the registry value on each pool.
 
-Learn's [What's new](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new) page shows two more uses of the early lane. In August 2025 it said managed identity support for host pools using a session host configuration was available only for host pools configured as a validation environment. In September 2026 it said managed identity support is now generally available for session host configuration, autoscale, Start VM on Connect and Azure Virtual Desktop for Azure Local. Two September 2026 entries for Azure Government also say customers can try a capability by using "the validation ring". Learn does not define that phrase on the pages read here, so do not assume it is the same setting as the host pool property.
+Learn's [What's new](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new) page shows two more uses of the early lane. In August 2025 it said managed identity support for host pools using a session host configuration, in the Azure preview portal, was supported only for host pools configured as a validation environment. In September 2026 it said managed identity support is now generally available for session host configuration, autoscale, Start VM on Connect and Azure Virtual Desktop for Azure Local. Two September 2026 entries for Azure Government also say customers can try a capability by using "the validation ring". The What's new page does not define that phrase, so do not assume it is the same setting as the host pool property.
 
 ## Turning it on
 
@@ -109,14 +111,14 @@ The setting alone only changes when a pool receives updates. The signal comes fr
 - A fixed check after each new version. Compare the agent version on the validation hosts with the Validation row of the release notes, sign in as a test user, start the applications that matter and check the connection.
 - A place to look when an update fails. Learn's [agent overview](https://learn.microsoft.com/en-us/azure/virtual-desktop/agent-overview) says that in Event Viewer under Windows Logs, then Application, an event labeled "ID 3277" means the agent update did not work. If you do not see that event, the VM is in a different flight and will be updated later.
 
-The agent overview also says agent updates are not connected to Azure Virtual Desktop infrastructure build updates, and that an infrastructure update does not mean the agent updated with it. Treat the validation pool as an early view of the agent and stack release lines and of staged features, not of every change the service makes.
+The agent overview also says agent updates are not connected to Azure Virtual Desktop infrastructure build updates, and that an infrastructure update does not mean the agent updated with it. Our reading: treat the validation pool as an early view of the agent and stack release lines and of staged features, not of every change the service makes.
 
 ## What a validation pool does not do
 
-- **It does not test your own changes.** Learn describes the pool as the place where service updates are applied first. An image, application or Windows update you build needs its own test host pool; see the [session host update](/entity/avd-session-host-configuration/) approach if you use a session host configuration.
+- **It does not test your own changes.** Learn describes the pool as the place where service updates are applied first. Our reading: an image, application or Windows update you build needs its own test host pool. If you use a [session host configuration](/entity/avd-session-host-configuration/), that test pool is a second pool next to the validation pool.
 - **It does not tell you the lead time.** Learn says rollouts can take several weeks and gives no guaranteed interval before production.
 - **It does not announce changes.** Learn's validation article points to the agent release notes as the way to keep up with updates, so someone has to read them.
-- **It is not a rollback.** Learn says the VM keeps three versions of the agent and of the stack so recovery is possible if an update goes wrong, which is a separate mechanism from the validation pool.
+- **It does not undo a bad update.** Learn's agent overview says a VM keeps three versions of the agent and of the side-by-side stack, which allows quick recovery if something goes wrong with an update. Our reading: that is a separate mechanism from the validation pool.
 
 ## Scheduled agent updates change the picture
 
