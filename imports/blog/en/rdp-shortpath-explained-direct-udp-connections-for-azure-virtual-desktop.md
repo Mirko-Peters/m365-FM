@@ -25,17 +25,17 @@ RDP Shortpath is a UDP-based transport for [Remote Desktop Protocol](/entity/rem
 
 ## What problem it addresses
 
-Learn's [RDP Shortpath article](https://learn.microsoft.com/en-us/azure/virtual-desktop/rdp-shortpath) describes the trade-off. A UDP-based transport offers better connection reliability and more consistent latency. The TCP-based reverse connect transport is the one with the highest compatibility across network configurations and a high success rate for establishing RDP connections. Shortpath keeps both: TCP guarantees that a session can start, UDP improves it where the network allows.
+Learn's [RDP Shortpath article](https://learn.microsoft.com/en-us/azure/virtual-desktop/rdp-shortpath) describes the trade-off. A UDP-based transport offers better connection reliability and more consistent latency. The TCP-based reverse connect transport is the one with the highest compatibility across network configurations and a high success rate for establishing RDP connections. Shortpath keeps both: TCP gives the broadest compatibility and a high success rate for starting a session, and UDP improves the session where the network allows.
 
 The UDP transport is built on the Universal Rate Control Protocol (URCP). Learn says URCP adds active monitoring of network conditions to UDP and provides fair, full use of the link. Learn lists these benefits: higher throughput; with STUN, no extra relay points, which reduces round-trip time; and, for managed networks only, support for Quality of Service marking with DSCP and a throttle rate that limits outbound traffic per session.
 
 ## The connection sequence in one view
 
-Learn's description of the sequence is the same for both modes in its first and last steps:
+Learn describes one sequence for managed networks and another for public networks. Both share these steps, with one difference in step 3:
 
 1. The connection starts on the TCP reverse connect transport through the Azure Virtual Desktop gateway. Brokering and authentication happen here.
 2. Client and session host exchange capabilities over this first transport.
-3. The two sides try to build a UDP path in parallel. Learn says the client keeps establishing the initial connection over reverse connect meanwhile, so the user sees no delay.
+3. The two sides try to build a UDP path in parallel. For managed networks, Learn says the client keeps establishing the initial connection over reverse connect while it probes the session host's addresses, so the user sees no delay. The public-network sequence on the same page does not repeat that statement.
 4. If a UDP path works, the client sets up TLS over reliable UDP, and all dynamic virtual channels (remote graphics, input and device redirection) move to the new transport.
 5. If a firewall or the network topology blocks UDP, RDP continues on reverse connect.
 
@@ -56,7 +56,7 @@ How step 3 works differs between the two modes.
 
 In the listener variant, the session host sends the client the list of its IPv4 and IPv6 addresses, and the client probes them directly. That is why it needs an open inbound port on every session host.
 
-**Public networks** means the internet. Learn describes the problem this mode solves: the client and the session host both sit behind NAT devices and usually do not know their own public address.
+**Public networks** means the internet. Learn describes the problem it solves: client and session host both sit behind NAT devices and usually do not know their own public address.
 
 ## How a public path is found: ICE, STUN and TURN
 
@@ -74,7 +74,7 @@ For public networks, Learn says Interactive Connectivity Establishment (ICE) coo
 
 A TURN relay is chosen by the client's physical location. Learn notes that a client far from any relay might fall back to TCP. According to Learn, the TURN range moved from a shared Azure Communication Services subnet to a dedicated range for Azure Virtual Desktop and Windows 365 across 39 Azure regions. The page lists those regions; check it for your users' locations. For the address range and ports, use the networking basics article or the Learn page itself.
 
-Relays have one operational property worth knowing before you promise anything to users. Learn says TURN-based connections can drop during relay updates, usually in planned maintenance windows but occasionally outside them for urgent fixes, and that the client reconnects within a few seconds.
+Learn says TURN-based connections can drop during relay updates, usually in planned maintenance windows but occasionally outside them for urgent fixes, and that the client reconnects within a few seconds.
 
 ## When more than one path exists: first found wins
 
@@ -85,7 +85,7 @@ A user on a corporate VPN can often reach the session host both over the private
 - **Steering a route** (scenario 5): to stop ICE/STUN from using a particular route, an administrator can block UDP on that route. The remaining path is then always used.
 - **Everything blocked** (scenario 7): Shortpath fails and the session runs on TCP reverse connect.
 
-This is the main design decision for an administrator: whether you want to control the path (managed network, listener, or UDP blocked on one route) or accept whatever ICE finds.
+The design decision for an administrator is whether to control the path (listener, or UDP blocked on one route) or accept whatever ICE finds.
 
 ## What tends to prevent a direct path
 
@@ -101,13 +101,13 @@ Learn states that Shortpath extends RDP multi-transport and does not replace rev
 
 Per the configuration page, the client must be Windows App or the Remote Desktop app on a supported platform. The prerequisites list Windows App on Windows, on macOS in a beta (version 11.3.8, build 3048) and on Android and ChromeOS as a preview.
 
-For availability, the RDP Shortpath page marks Shortpath for public networks via STUN and TURN as generally available in the Azure cloud and in Azure Government. The configuration page, on the other hand, says STUN is available in both clouds and TURN only in the Azure public cloud. Treat the two statements as unreconciled and check both pages for your cloud.
+For availability, the RDP Shortpath page marks Shortpath for public networks via STUN and TURN as generally available in the Azure cloud and in Azure Government. The configuration page, on the other hand, says STUN is available in both clouds and TURN only in the Azure public cloud. Learn's pages disagree here, so check the current wording of both pages for your cloud.
 
 [Windows 365](/entity/windows-365/) Cloud PCs can use the same feature. The Windows 365 page on Learn lists STUN and TURN as generally available in the Azure public cloud and in Azure Government, and says the Cloud PC needs outbound UDP to the public address space because the client's address is usually unknown.
 
 ## A short decision guide
 
-1. Do users connect over ExpressRoute or an IPsec VPN with a direct route to the session hosts? Then a managed-network option applies. Decide between the listener, which needs an inbound port on every session host, and ICE/STUN, which does not. The listener also gives you the DSCP and throttle features.
+1. Do users connect over ExpressRoute or an IPsec VPN with a direct route to the session hosts? Then a managed-network option applies. Decide between the listener, which needs an inbound port on every session host, and ICE/STUN, which does not. Learn lists DSCP marking and a per-session throttle rate as benefits for managed networks; it does not say whether that covers the ICE/STUN variant as well.
 2. Do users connect over the internet? Public-network Shortpath needs no configuration when firewalls allow the traffic and the transport settings are at their defaults. The questions become whether UDP may leave the session host subnet and the client network, and which outbound path the subnet uses.
 3. Is a Symmetric NAT in the path, for example Azure Firewall or Azure NAT Gateway in front of the session hosts? Plan for the relayed connection, and keep TURN enabled.
 4. Do you need control over which path wins? Use scenario 5: block UDP on the route you do not want.

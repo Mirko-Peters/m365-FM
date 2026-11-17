@@ -48,7 +48,7 @@ Learn says you install both the multimedia redirection service and the browser e
 msiexec /i <path to the MSI file> /qn
 ```
 
-The `/qn` switch means no user interface or interaction. After installation you still have to enable the extension (step 2).
+The `/qn` switch means no user interface or interaction. By default, users are prompted to enable the extension when they open the browser; step 2 does this centrally.
 
 ## Step 2: Enable the extension centrally
 
@@ -90,7 +90,7 @@ For **Microsoft Edge**:
 4. Double-click **Configure extension management settings**, select **Enabled** and enter the same single-line JSON as in the Intune steps.
 5. Make sure the policy applies, then restart the computers.
 
-For **Google Chrome**, download the Chrome ADM/ADMX templates from [Chrome Enterprise](https://chromeenterprise.google/browser/download/#manage-policies-tab). Learn's step 2 then tells you to copy `terminalserver-avd.admx` and `en-US\terminalserver-avd.adml` to `C:\Windows\PolicyDefinitions\` (and its `en-US` folder) or to the Central Store at `\\<domain>\SYSVOL\<domain>\Policies\PolicyDefinitions`. Those file names do not match the Chrome download and Learn does not explain this, so check that the Chrome policies appear in the editor first. Then go to **Computer Configuration** > **Policies** > **Administrative Templates** > **Google** > **Google Chrome** > **Extensions**, double-click **Extension management settings**, select **Enabled** and enter the Chrome JSON from the previous section. Restart the computers afterwards.
+For **Google Chrome**, download the Chrome ADM/ADMX templates from [Chrome Enterprise](https://chromeenterprise.google/browser/download/#manage-policies-tab). Learn's step 2 then tells you to copy, on your domain controllers, `terminalserver-avd.admx` and `en-US\terminalserver-avd.adml` to `C:\Windows\PolicyDefinitions\` (and its `en-US` folder) or to the Central Store at `\\<domain>\SYSVOL\<domain>\Policies\PolicyDefinitions`. Learn's [administrative template page](https://learn.microsoft.com/en-us/azure/virtual-desktop/administrative-template) describes these two files as part of the Azure Virtual Desktop template download (aka.ms/avdgpo), not the Chrome download. The multimedia redirection page does not spell out how the two fit together; our reading is that you need both. Check that the Chrome policies appear in the editor first. Then go to **Computer Configuration** > **Policies** > **Administrative Templates** > **Google** > **Google Chrome** > **Extensions**, double-click **Extension management settings**, select **Enabled** and enter the Chrome JSON from the previous section. Restart the computers afterwards.
 
 ### Microsoft Edge management service (Edge only)
 
@@ -121,24 +121,24 @@ The settings below are optional. Edge keys are shown; Chrome uses the Chrome ID 
 | Add call sites | REG_SZ `AllowedCallRedirectionSites` under the same key |
 | Block the extension on domains | `runtime_blocked_hosts`, for example `["*://*.contoso.com"]`; `["*://*"]` blocks everything, with `runtime_allowed_hosts` for exceptions |
 
-Format for the site lists: fully qualified domain names, optionally followed by one subdirectory, no scheme, no trailing slash, separated by semicolons, for example `contoso.com;videos.contoso.com;contoso.com/training`. Matching uses the host name and the first path segment. You can set the value with Intune, Configuration Manager or Group Policy, or with PowerShell as administrator:
+Format for the site lists: fully qualified domain names, optionally followed by one subdirectory, no scheme, no trailing slash, separated by semicolons, for example `contoso.com;videos.contoso.com;contoso.com/training`. Matching uses the host name and the first path segment. Set the value with your management tool or with PowerShell as administrator:
 
 ```powershell
 New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Edge\3rdparty\extensions\joeclbldhdmoijbaagobkhlpfjglcihd\policy" -Force
 New-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Edge\3rdparty\extensions\joeclbldhdmoijbaagobkhlpfjglcihd\policy" -Name AllowedVideoRedirectionSites -PropertyType String -Value "<URLs>" -Force
 ```
 
-Replace `<URLs>` with your list. Learn states that adding a video site enables video playback redirection for it but does not guarantee compatibility, and protected content stays unsupported. For a call site, Learn says the same about compatibility and asks you to test calls on each site you add. A `runtime_allowed_hosts` entry does not enable redirection either: it only lets the extension interact with that domain.
+Replace `<URLs>` with your list. Learn states that adding a video site enables video playback redirection for it but does not guarantee compatibility, and protected content stays unsupported. For a call site, Learn says the same about compatibility and asks you to test calls on each site you add.
 
 ## What it supports, in short
 
-Learn's page lists the sites that work by default; the explainer article covers them and the limits, including that protected content is not supported. Two optional extension toggles go beyond the lists. Learn says of **Enable video playback for all sites (beta)** that it is experimental and might not work as expected. **Enable call redirection for all sites (experimental)** is described as experimental and useful when developing integration of your website with call redirection. Use both for testing. For the call toggle, Learn's test procedure first creates the key `HKEY_CURRENT_USER\Software\Microsoft\MMR` on the local Windows device with DWORD `AllowCallRedirectionAllSites` = `1`, then you connect to a remote session, select the extension icon, choose **Show Advanced Settings** and switch the toggle on.
+Learn names two functions. **Video playback redirection** covers web pages with embedded video; the default list includes YouTube, Vimeo, LinkedIn Learning and Pluralsight, and protected content is not supported. **Call redirection** covers WebRTC-based audio calls on listed sites such as Dialpad, Five9 and Genesys. Other sites need an allow-list entry (step 4). Supported clients and unsupported clouds are under Before you start; the explainer article has the full site lists. Two optional extension toggles go beyond the lists. Learn says of **Enable video playback for all sites (beta)** that it is experimental and might not work as expected. **Enable call redirection for all sites (experimental)** is described as experimental and useful when developing integration of your website with call redirection. Use both for testing. For the call toggle, Learn's test procedure first creates the key `HKEY_CURRENT_USER\Software\Microsoft\MMR` on the local Windows device with DWORD `AllowCallRedirectionAllSites` = `1`, then you connect to a remote session, select the extension icon, choose **Show Advanced Settings** and switch the toggle on.
 
 ## Pitfalls to plan for
 
 - **Updates:** The service does not update automatically. Install the new MSI with the same steps and it replaces the old version. The extension updates by itself. The latest version in Learn's history is 1.0.2604.16004 from 14 July 2026.
-- **Extension missing after the MSI:** Learn says the MSI might not install the extension. Install it from the stores with these direct links, because the extension cannot be found by searching: [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/wvd-multimedia-redirectio/joeclbldhdmoijbaagobkhlpfjglcihd) and [Chrome Web Store](https://chromewebstore.google.com/detail/lfmemoeeciijgkjkgbgikoonlkabmlno).
-- **Extension installed but not loading:** When the MSI installs the extension, the browser asks users to turn it on at first launch, and an extension that is not turned on does not load. Force-install it by policy as in step 2.
+- **Extension missing after the MSI:** Learn says the MSI might not install the extension. Use these direct store links, because searching does not find it: [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/wvd-multimedia-redirectio/joeclbldhdmoijbaagobkhlpfjglcihd) and [Chrome Web Store](https://chromewebstore.google.com/detail/lfmemoeeciijgkjkgbgikoonlkabmlno).
+- **Extension installed but not loading:** Users who decline the first-launch prompt get no extension. Force-install it by policy as in step 2.
 - **"The extension failed to load":** Learn lists three causes on the session host: the service is not installed, the latest supported Visual C++ Redistributable is missing, or the deployment blocks `cmd.exe`. Fix the cause and restart the browser. If none applies, reinstall the service and restart the browser.
 - **Blocked cmd.exe:** Edge and Chrome use `cmd.exe` by default to start the service. If App Control for Business or AppLocker blocks it, enable the browser policy `NativeHostsExecutablesLaunchDirectly` on the session hosts: REG_DWORD `1` under `HKLM\SOFTWARE\Policies\Microsoft\Edge` (Edge 121 and later) or `HKLM\SOFTWARE\Policies\Google\Chrome`. Restart the browser afterwards.
 - **"Another Multimedia Redirection extension is running":** Only one multimedia redirection extension is supported per browser, for example not the public and the Insider version together. Check `edge://extensions` or `chrome://extensions`, and make sure policy force-installs only one.
@@ -146,10 +146,9 @@ Learn's page lists the sites that work by default; the explainer article covers 
 - **Calls stop after a reconnect:** Refresh the web page.
 - **Call and video toggles clash:** If a supported call site misbehaves while **Enable video playback for all sites** is on, switch that toggle off and retry.
 
-For calls that sound poor, Learn points to the app provider; for calls that do not connect, it points to a Microsoft support ticket.
-
 ## Sources
 
 - [Microsoft Learn: Multimedia redirection for video playback and calls in a remote session](https://learn.microsoft.com/en-us/azure/virtual-desktop/multimedia-redirection-video-playback-calls)
 - [Microsoft Learn: What's new in multimedia redirection](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new-multimedia-redirection)
 - [Microsoft Learn: Troubleshoot multimedia redirection](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-multimedia-redirection)
+- [Microsoft Learn: Add the administrative template for Azure Virtual Desktop to Group Policy](https://learn.microsoft.com/en-us/azure/virtual-desktop/administrative-template)

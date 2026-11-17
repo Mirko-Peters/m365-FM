@@ -1,6 +1,6 @@
 ---
 title: "FSLogix profile corruption: causes and recovery"
-summary: "A damaged FSLogix container usually shows up as a failed attach, a temporary profile or a hung sign-out, and many look-alike problems such as locks, full disks or a changed naming setting are not corruption at all. This article sorts the documented causes, shows how to tell them apart from the logs and status codes, and compares the recovery options Learn supports."
+summary: "A failed attach, a temporary profile or a hung sign-out can point to a damaged FSLogix container, but look-alikes such as locks, permissions, full disks or a changed naming setting are more common. This article sorts the documented causes, shows how to tell them apart from the logs and status codes, and compares the recovery options Learn supports."
 status: review
 publish: false
 author: mirko-p
@@ -8,22 +8,22 @@ date: 2026-11-18
 topics: [fslogix-profile-container]
 keypoints:
   - "Triage first: locks, permissions, a full container or share, and a changed folder-naming setting all look like corruption but have documented fixes that leave the VHD(x) intact. Learn says the user's data is not lost after a naming change."
-  - "Documented risk factors for damaged containers are scanning by antivirus tools, the older VHD format, sessions that end abruptly, a sector size mismatch, unsupported concurrent access and deleting the wrong data inside a container."
+  - "Learn ties container corruption to antivirus scanning, the older VHD format, deleting the wrong data inside a container and, on its corruption page, a misconfigured redirections.xml. Abrupt sessions, a sector size mismatch and unsupported concurrent access are documented as attach failures or crashes, not as damage."
   - "The FSLogix status and reason codes in the Profile log and under HKLM\\Software\\FSLogix\\Profiles\\Sessions\\<SID> separate attach, open, format and lock failures."
   - "Recovery options with Learn support are restoring the share or single files with Azure Backup, and attaching or copying a container with the frx utility. Learn does not describe a repair procedure for a damaged VHD(x), so work on copies."
   - "Prevention is mostly configuration: VHDX, the antivirus exclusion list, sensible retry values, enough free space, single sessions per user and a current FSLogix version."
 faq:
   - q: "Does FSLogix repair a corrupted VHDX automatically?"
-    a: "Learn does not describe automatic repair of a damaged container. The FSLogix troubleshooting pages cover attach, lock, size and naming problems, and the frx utility can attach or copy containers, but none of these pages documents a repair of the file itself. Recovery therefore means restoring from a backup or moving the data into a new container."
+    a: "Learn does not describe automatic repair of a damaged container. The FSLogix troubleshooting pages cover attach, lock, size and naming problems, and the frx utility can attach or copy containers, but none of these pages documents a repair of the file itself. The documented options are therefore restoring from a backup or moving the data into a new container."
   - q: "Is a temporary profile a sign of a corrupted container?"
     a: "Not necessarily. Learn lists many other causes of a temporary or local profile: FSLogix not enabled, a wrong VHDLocations value, missing storage permissions, a container in use on another computer, an existing local profile and a full storage provider. Read the Profile log and the status code before you touch the container."
   - q: "Does VHDX reduce the risk compared with VHD?"
-    a: "Learn's profile container configuration page recommends VHDX because of its supported size and reduced corruption scenarios. The VolumeType default is vhd, and the setting applies to newly created files, so existing VHD containers stay as they are until they are migrated."
+    a: "Learn's profile container configuration page recommends VHDX because of its supported size and reduced corruption scenarios. The VolumeType default is vhd, and the setting applies to newly created files, so, in our reading, existing VHD containers stay as they are until they are migrated."
 ---
 
-A damaged FSLogix container rarely announces itself. Users get a temporary profile, a blank desktop, a failed sign-out or a profile that will not attach, and the cause is often something else: a lock, a full container, a permission problem or a changed naming setting. This article separates real container damage from its look-alikes, lists the causes that Microsoft Learn documents, and compares the recovery options. The sign-in symptoms of a local profile are covered in the article on users who get a local profile instead of the container, so this one concentrates on damaged or inconsistent containers.
+A damaged FSLogix container does not announce itself. Users get a temporary profile, a blank desktop, a failed sign-out or a profile that will not attach, and the cause can just as well be a lock, a full container, a permission problem or a changed naming setting. This article separates real container damage from its look-alikes, lists the causes that Microsoft Learn documents, and compares the recovery options. The sign-in symptoms of a local profile are covered in the article on users who get a local profile instead of the container, so this one concentrates on damaged or inconsistent containers.
 
-One limit up front. The FSLogix troubleshooting pages on Learn describe attach, lock, size and naming problems. They do not describe a procedure to repair a damaged VHD(x) file. What follows is the documented set of causes and tools, and where Learn is silent the article says so.
+One limit up front. The FSLogix troubleshooting pages on Learn describe attach, lock, size and naming problems, and the page on container corruption names causes and points to configuration. None of them describes a procedure to repair a damaged VHD(x) file. What follows is the documented set of causes and tools, and where Learn is silent the article says so.
 
 ## Step 1: Rule out the look-alikes
 
@@ -31,8 +31,9 @@ Learn's troubleshooting pages list causes that give the same symptom as a damage
 
 | Symptom in the log or on screen | Cause documented by Learn | Fix documented by Learn |
 |---|---|---|
-| `Attach vhd(x) failed, file is locked` or `AcquireExclusiveLock` failed | Container in use in another session; FSLogix keeps an exclusive lock while a user is connected | Sign out the other session; review concurrent-connection options |
-| `Access is denied`, `FrxStatus: 31` | Missing NTFS, share or Azure RBAC permissions | Configure SMB storage permissions |
+| `Operation 'AcquireExclusiveLock' failed`, error 0xa7, `FrxStatus: 33` | Container in use on another computer; FSLogix keeps an exclusive lock while a user is connected | Learn lists allowing a temporary profile, teaching users to sign out first, or enabling concurrent connections |
+| `Attach vhd(x) failed, file is locked ... (Access is denied.)`, `FrxStatus: 31` | Missing NTFS, share or Azure RBAC permissions. In Learn's example the text in brackets is `Access is denied`; its wrong-credentials example also ends in `FrxStatus: 31`, so read the bracket text | Configure SMB storage permissions |
+| Access problems on a share that worked before | Learn's Important note on its troubleshooting pages: the April 2026 Windows Server update changes the default Kerberos encryption type from RC4 to AES-SHA1, and shares hosting containers that are not upgraded might have access issues | Upgrade to AES-SHA1 before installing the update; Learn links an FSLogix blog post on the change |
 | Container fails to attach, user sees errors | Size on disk reached SizeInMBs; Learn says the container must have more than 200 MB to attach | Raise SizeInMBs; FSLogix extends existing containers at sign-in |
 | New empty profile, no temporary profile | A naming setting (`FlipFlopProfileDirectoryName`, `SIDDirNameMatch`, `SIDDirNamePattern`, `VHDNameMatch`, `VHDNamePattern`) changed after containers existed | Revert the setting or rename the folders; Learn says the data is not lost |
 | Hung session, failed mount or detach | Storage provider is full | Add capacity |
@@ -43,7 +44,7 @@ Increasing `SizeInMBs` affects all users with dynamic disks, can be raised at an
 
 The Profile log is the main evidence. Learn says it is `Profile_%date%.log` in `C:\ProgramData\FSLogix\Logs\Profile`, with `[WARN:xxxxxx]` and `[ERROR:xxxxxx]` lines whose codes come from Windows. Search for `LoadProfile: <username>` and follow the process ID.
 
-FSLogix also stores a Status, a Reason and an Error value per session in the registry, for profile containers under `HKLM\Software\FSLogix\Profiles\Sessions\<SID>`. The status codes that matter for a suspect file include 11 (cannot open the virtual disk), 12 (cannot attach), 15 (cannot initialize the disk), 17 (error while formatting) and 27 (cannot find the disk at the given location). Reason code 3 means a local profile exists, 7 a Windows temporary profile and 9 a failed profile load. A cannot-open or cannot-initialize status that stays after locks, permissions and space are ruled out points toward the file itself. Learn does not say that these codes prove corruption, so treat them as a pointer, not a verdict.
+FSLogix also stores a Status, a Reason and an Error value per session in the registry, for profile containers under `HKLM\Software\FSLogix\Profiles\Sessions\<SID>`. The status codes that matter for a suspect file include 11 (cannot open the virtual disk), 12 (cannot attach), 15 (cannot initialize the disk), 17 (error while formatting) and 27 (cannot find the disk at the given location). Reason code 3 means a local profile exists, 7 a Windows temporary profile and 9 a failed profile load. In our reading, a cannot-open or cannot-initialize status that stays after locks, permissions and space are ruled out points toward the file itself. Learn does not say that these codes indicate corruption, so treat them as a pointer, not a verdict.
 
 ## Step 3: Know the documented causes of damage and inconsistency
 
