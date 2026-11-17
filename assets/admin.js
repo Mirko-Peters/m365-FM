@@ -293,7 +293,7 @@
 
   // Hardware-Sponsoring (/hardware/): Bewerbungen von Herstellern; eigener Status-Satz (zugesagt, Gerät da, Test online, abgelehnt), sonst wie die Mediadaten-Leads
   var HW_ST = [["open", "offen", "#fde68a", "#5b4300"], ["committed", "zugesagt", "#bfdbfe", "#0b2e66"], ["received", "Gerät da", "#e9d5ff", "#3b0764"], ["published", "Test online", "#bbf7d0", "#0b4a1f"], ["declined", "abgelehnt", "#fecaca", "#6b1111"]];
-  var HW_CAT = { headset: "Headset", camera: "Kamera", rooms: "Teams Rooms", pc: "PC / Laptop", dock: "Dockingstation", monitor: "Monitor", key: "Security-Key", other: "Sonstiges" };
+  var HW_CAT = { headset: "Headset", speaker: "Lautsprecher", mic: "Mikrofon", camera: "Kamera", rooms: "Teams Rooms", board: "Display / Whiteboard", pc: "PC / Laptop", thin: "Thin Client", tablet: "Tablet / Handy", peripheral: "Maus / Tastatur", dock: "Dockingstation", monitor: "Monitor", printer: "Drucker / Scanner", network: "Netzwerk", storage: "Speicher", wearable: "Wearable", xr: "VR / AR", key: "Security-Key", other: "Sonstiges" };
   var HW_OFFER = { giveaway: "Gewinnspiel", video: "Video", podcast: "Podcast-Folge" };
   function hwSt(k) { for (var i = 0; i < HW_ST.length; i++) if (HW_ST[i][0] === k) return HW_ST[i]; return HW_ST[0]; }
   function hwBadge(k) { var o = hwSt(k); return h("span", { class: "adm-badge", "data-status": o[0], style: "display:inline-block;padding:.1em .6em;border-radius:1em;font-size:.85em;white-space:nowrap;background:" + o[2] + ";color:" + o[3], text: o[1] }); }

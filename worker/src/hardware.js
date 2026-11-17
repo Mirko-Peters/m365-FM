@@ -15,7 +15,7 @@ const EMAIL_RX = /^[^\s@<>"']{1,64}@[^\s@<>"']{1,190}\.[a-z]{2,24}$/i;
 const clean = (s, n) => String(s || "").replace(/[\u0000-\u001f\u007f<>]/g, " ").replace(/\s+/g, " ").trim().slice(0, n);
 
 export const HW_STATUS = ["open", "committed", "received", "published", "declined"];
-export const HW_CATEGORIES = ["headset", "camera", "rooms", "pc", "dock", "monitor", "key", "other"];
+export const HW_CATEGORIES = ["headset", "speaker", "mic", "camera", "rooms", "board", "pc", "thin", "tablet", "peripheral", "dock", "monitor", "printer", "network", "storage", "wearable", "xr", "key", "other"];
 export const HW_OFFERS = ["giveaway", "video", "podcast"];
 
 let ready = false;

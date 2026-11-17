@@ -12,8 +12,12 @@ Ablage unter einem NEUEN Schluessel mit Endung -w<MAX_SIDE> (alte Schluessel sin
 alle Eintraege in data/r2_map.json zeigen danach auf die neue URL, data/r2_dims.json bekommt die neuen Masse.
 Alte Objekte bleiben im Bucket (nichts wird geloescht). Ohne --apply nur Testlauf.
 Zugang ueber R2_ACCOUNT_ID, R2_BUCKET, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY.
+
+Dauerhaft fehlende Bilder (Ursprung antwortet HTTP 404 oder 410) landen in data/r2_dead.json (URL -> {"date", "status"}) und werden
+bei spaeteren Laeufen nicht erneut versucht; site_r2.py gibt sie beim Seitenbau nicht als <img> aus. Ist ein Bild wieder da,
+den Eintrag aus data/r2_dead.json entfernen, dann kopiert der naechste --apply-Lauf es.
 """
-import gzip, hashlib, html, io, json, os, re, sys, urllib.request
+import gzip, hashlib, html, io, json, os, re, sys, time, urllib.error, urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -22,6 +26,8 @@ from PIL import Image, ImageCms, ImageOps, ImageSequence
 ROOT = Path(__file__).resolve().parent.parent
 MAP = ROOT / "data" / "r2_map.json"
 DIMS = ROOT / "data" / "r2_dims.json"
+DEAD = ROOT / "data" / "r2_dead.json"   # dauerhaft fehlende fremde Bilder (404/410): URL -> {"date": "JJJJ-MM-TT", "status": 404}
+DEAD_CODES = (404, 410)
 LOCAL = ROOT / "data" / "r2_local.json"   # {"<Repo-Pfad>": "<Schluessel im Bucket>"}: eigene Bilder aus dem Repo (z. B. design/listen/listen-banner.webp)
 LOCAL_TYPES = {".webp": "image/webp", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".gif": "image/gif", ".svg": "image/svg+xml", ".avif": "image/avif"}
 PUBLIC = "https://img.m365.fm"
@@ -301,6 +307,35 @@ def shrink(s3, bucket, done, dims, get=None, workers=8):
     return moved, repoint(done, moved), failed
 
 
+def load_dead():
+    """data/r2_dead.json -> dict (Schluessel mit '_' sind Kommentare und bleiben beim Schreiben erhalten)."""
+    try:
+        d = json.loads(DEAD.read_text("utf-8")) if DEAD.exists() else {}
+    except ValueError:
+        return {}
+    return d if isinstance(d, dict) else {}
+
+
+def note_dead(dead, u, exc, today=None):
+    """Fehler beim Laden von u: bei HTTP 404/410 dauerhaft als fehlend vermerken -> True; alles andere (Zeitueberschreitung, 403, 5xx,
+    kein Bild) bleibt ein voruebergehender Fehler und wird beim naechsten Lauf erneut versucht -> False."""
+    code = getattr(exc, "code", None)
+    if isinstance(exc, urllib.error.HTTPError) and code in DEAD_CODES:
+        dead[u] = {"date": today or time.strftime("%Y-%m-%d", time.gmtime()), "status": int(code)}
+        return True
+    return False
+
+
+def write_dead(dead):
+    DEAD.write_text(json.dumps(dict(sorted(dead.items())), indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def print_failed(failed):
+    """Alle Fehler ausgeben (frueher nur die ersten 20: der Rest blieb im Lauf unsichtbar)."""
+    for u, e in failed:
+        print("  FEHLER", u, e)
+
+
 def load_data():
     done = json.load(open(MAP, encoding="utf-8")) if MAP.exists() else {}
     dims = json.load(open(DIMS, encoding="utf-8")) if DIMS.exists() else {}
@@ -330,8 +365,7 @@ def main_shrink(apply):
     moved, n, failed = shrink(s3_client(), os.environ["R2_BUCKET"], done, dims)
     write_data(done, dims)
     print(f"{len(moved)} verkleinert, {n} Zuordnungen umgestellt, {len(failed)} fehlgeschlagen (bleiben bei der alten URL)")
-    for u, e in failed[:20]:
-        print("  FEHLER", u[:90], e)
+    print_failed(failed)
 
 
 def fill_dimensions(mapping, dims):
@@ -358,8 +392,7 @@ def fill_dimensions(mapping, dims):
         list(ex.map(one, missing))
     DIMS.write_text(json.dumps(dict(sorted(dims.items())), separators=(",", ":"), ensure_ascii=False), encoding="utf-8")
     print(f"{len(dims) - original_count} Masse ergaenzt, {len(failed)} fehlgeschlagen")
-    for u, e in failed[:20]:
-        print("  FEHLER", u[:90], e)
+    print_failed(failed)
 
 
 def main():
@@ -374,11 +407,15 @@ def main():
         return
     todo = urls()
     done, dims = load_data()
+    dead = load_dead()
     todo = [u for u in todo if u not in done]
-    print(f"{len(todo)} Bilder offen, {len(done)} schon in R2, {len(local_files())} lokale Dateien (data/r2_local.json)")
+    n_dead = sum(1 for u in todo if u in dead)
+    todo = [u for u in todo if u not in dead]
+    print(f"{len(todo)} Bilder offen, {len(done)} schon in R2, {n_dead} dauerhaft fehlend (data/r2_dead.json, nicht erneut versucht), "
+          f"{len(local_files())} lokale Dateien (data/r2_local.json)")
     if not apply:
-        for u in todo[:10]:
-            print("  ", u[:110])
+        for u in todo:
+            print("  ", u)
         print("Testlauf, nichts hochgeladen. Mit --apply ausfuehren.")
         return
     s3 = s3_client()
@@ -386,18 +423,24 @@ def main():
     failed = []
     print(f"{upload_local(s3, bucket, done, dims)} lokale Dateien hochgeladen")
 
+    new_dead = {}
+
     def one(u):
         try:
             copy_one(s3, bucket, u, done, dims)
         except Exception as e:
             failed.append((u, str(e)[:80]))
+            note_dead(new_dead, u, e)
 
     with ThreadPoolExecutor(8) as ex:
         list(ex.map(one, todo))
     write_data(done, dims)
-    print(f"{len(todo) - len(failed)} hochgeladen, {len(failed)} fehlgeschlagen (bleiben beim Original)")
-    for u, e in failed[:20]:
-        print("  FEHLER", u[:90], e)
+    if new_dead:
+        dead.update(new_dead)
+        write_dead(dead)
+    print(f"{len(todo) - len(failed)} hochgeladen, {len(failed)} fehlgeschlagen (bleiben beim Original), "
+          f"davon {len(new_dead)} dauerhaft fehlend (HTTP 404/410 -> data/r2_dead.json, der Seitenbau laesst sie weg)")
+    print_failed(failed)
 
 
 if __name__ == "__main__":
