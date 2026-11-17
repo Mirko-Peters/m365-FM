@@ -732,8 +732,9 @@ export async function deleteUserData(db, id) {
   const mailAddress = await db.prepare("SELECT email FROM mail_addr WHERE user_id=?").bind(id).first().catch(() => null);
   const handle = (await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(id).first())?.handle || "";
   // Personen-Entitaeten aus dem eigenen Profil (person_entity, nur von ownedEntity angelegt): reine Personendaten (Name, Kurzzeile) - Fassungen,
-  // Uebersetzungen und Anspruch weg, damit nichts davon oeffentlich bleibt (K41). Der Merker bleibt mit user_id 0: die Entitaet bleibt verborgen und
+  // Uebersetzungen und Anspruch weg, damit nichts davon oeffentlich bleibt (K41). Der Merker bleibt dauerhaft mit user_id 0: die Entitaet bleibt verborgen und
   // importEntitiesFromSite legt sie nicht aus dem letzten Seitenbau (/entities.json) neu an; uebernimmt jemand die Adresse, gehoert sie ihm (ownedEntity).
+  // Aufheben (z. B. fuer einen Podcast-Gast mit gleicher id im Repo) nur ausdruecklich per Admin: POST /api/admin/person-entity/release (entities.js).
   // Event-, Firmen- und redaktionelle Entitaeten stehen nicht in person_entity und bleiben samt Geschichte (Revisionen auf user_id 0, unten).
   const persons = ((await db.prepare("SELECT eid FROM person_entity WHERE user_id=?").bind(id).all().catch(() => ({ results: [] }))).results || []).map((r) => r.eid);
   if (persons.length) {

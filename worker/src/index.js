@@ -5,7 +5,7 @@ import { json, cors, isOwnSite, cookie, makeSession, readSession, readSessionInf
 import { evalBadges, stats, topUsers, badgesFor, award } from "./badges.js";
 import { runDigest, runPushDigest } from "./digest.js";
 import { sendMail } from "./mailer.js";
-import { handleEntity, importEntitiesFromSite } from "./entities.js";
+import { handleEntity, handlePersonRelease, importEntitiesFromSite } from "./entities.js";
 import { importLegacyBlog } from "./legacyblog.js";
 import { importContentBlog } from "./contentblog.js";
 import { handleA2a } from "./a2a.js";
@@ -482,6 +482,7 @@ async function api(env, request, url, path, asUser, ctx) {
   if (path === "/api/admin/spreaker-exchange") return await handleSpreakerExchange(env, request, user, J, asUser !== undefined);   // Spreaker-Code sofort tauschen, nur Admin (spreaker_connect.js)
   if (path.startsWith("/api/admin/linkedin/")) return await handleLinkedinEvents(env, request, url, path, user, J);
   if (path.startsWith("/api/admin/panel/")) return await handleAdminPanel(env, request, url, path, user, J);
+  if (path === "/api/admin/person-entity/release") return await handlePersonRelease(env, request, user, J, asUser !== undefined);   // K41: Personen-Merker nach Kontoloeschung nur ausdruecklich aufheben (entities.js)
   if (path.startsWith("/api/entity") || path.startsWith("/api/admin/entity")) { const e = await handleEntity(env, request, url, path, user, J); if (e) return e; }
   if (/^\/api\/(profile|profiles|endorse|cert-endorse|vote|feed|org|orgs|img|recommend)(\/|$)/.test(path) || path === "/api/admin/verify" || path === "/api/admin/cert-queue" || path === "/api/admin/feed-hide") { const p = await handleProfiles(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
   if (path === "/api/wiki" || path.startsWith("/api/wiki/") || path.startsWith("/api/admin/wiki")) { const w = await handleWiki(env, request, url, path, user, J); if (w) return w; }

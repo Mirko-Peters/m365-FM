@@ -48,9 +48,9 @@ async function ensureSearchFts(db) {
   catch (error) { ftsReady.delete(db); throw error; }
 }
 
-async function getJson(env, path) {
+async function getJson(env, path, cacheTtl = 600) {
   try {
-    const response = await fetch(env.SITE + path, { cf: { cacheTtl: 600 } });
+    const response = await fetch(env.SITE + path, { cf: { cacheTtl } });
     return response.ok ? await response.json() : null;
   } catch {
     return null;
@@ -138,7 +138,7 @@ export async function importSearchIndex(env) {
   }
 
   const siteOrigin = new URL(env.SITE).origin;
-  const docs = await withoutHiddenPeople(db, json.docs.map((doc) => normalizeDoc(doc, siteOrigin)).filter(Boolean));
+  const docs = await withoutBlockedEntities(db, await withoutHiddenPeople(db, json.docs.map((doc) => normalizeDoc(doc, siteOrigin)).filter(Boolean)), manifest, cycle);
   const existing = await currentRows(db, docs.map((doc) => doc.id));
   const statements = [];
   const timestamp = now();
@@ -200,6 +200,42 @@ async function withoutHiddenPeople(db, docs) {
     const m = PROFILE_PATH.exec(d.url); if (m && !pub.has(m[1])) return false;
     const e = d.type === "person" && ENTITY_PATH.exec(new URL(d.url).pathname); return !(e && hidden.has(e[1]));
   });
+}
+
+// K41: Sperrliste nach der Admin-Freigabe eines Personen-Merkers (entities.js releasePersonEntity). Bis dahin blendete der Merker das alte
+// Personen-Dokument /entity/<id>/ (Profilfassung des geloeschten Mitglieds, alle Sprachen) aus; ohne Merker holte der Suchindex des letzten
+// Seitenbaus es zurueck. Je id ein meta-Eintrag search_block:<id> mit den Suchindex-Durchlaeufen (Hash des Manifests wie cycle unten), die zum
+// Zeitpunkt der Freigabe veroeffentlicht bzw. importiert waren, und der Freigabezeit. Aufgenommen werden die Dokumente der id erst aus einem
+// neuen Seitenbau: anderer Hash UND (falls das Manifest build traegt) build nach der Freigabe. Ohne build und ohne bekannten Hash bleibt gesperrt.
+export const SEARCH_BLOCK = "search_block:";
+const SEARCH_BLOCK_END = "search_block;";   // naechstes Zeichen nach ':' - Bereichsabfrage ueber den Primaerschluessel
+export async function searchBlockStatement(env, eid, at) {
+  const db = env.DB, cycles = new Set();
+  const manifest = await getJson(env, "/search/manifest.json", 0);
+  if (manifest) cycles.add(await sha256hex(JSON.stringify(manifest)));
+  const imported = (await meta(db, "search_import_cycle").catch(() => null))?.v;
+  if (imported) cycles.add(imported);
+  return db.prepare("INSERT INTO meta(k,v) VALUES(?,?) ON CONFLICT(k) DO UPDATE SET v=excluded.v").bind(SEARCH_BLOCK + eid, JSON.stringify({ cycles: [...cycles], at }));
+}
+
+export function searchBlockActive(block, manifest, cycle) {
+  const cycles = Array.isArray(block?.cycles) ? block.cycles : [], at = +block?.at || 0, build = Date.parse(manifest?.build || "") / 1000;
+  if (cycles.includes(cycle)) return true;
+  return Number.isFinite(build) ? build <= at : !cycles.length;
+}
+
+async function withoutBlockedEntities(db, docs, manifest, cycle) {
+  const rows = (await db.prepare("SELECT k,v FROM meta WHERE k>=? AND k<?").bind(SEARCH_BLOCK, SEARCH_BLOCK_END).all().catch(() => ({ results: [] }))).results || [];
+  if (!rows.length) return docs;
+  const blocked = new Set(), old = [], limit = now() - 90 * 86400;
+  for (const row of rows) {
+    let block = null; try { block = JSON.parse(row.v); } catch { /* defekt: gesperrt lassen */ }
+    if (!block || searchBlockActive(block, manifest, cycle)) blocked.add(row.k.slice(SEARCH_BLOCK.length));
+    else if ((+block?.at || 0) < limit) old.push(row.k);   // laengst durch einen neuen Seitenbau ersetzt; Eintrag bleibt sonst (Rueckfall auf ein zwischengespeichertes altes Manifest)
+  }
+  if (old.length) await db.batch(old.map((k) => db.prepare("DELETE FROM meta WHERE k=?").bind(k)));
+  if (!blocked.size) return docs;
+  return docs.filter((d) => { const e = ENTITY_PATH.exec(new URL(d.url).pathname); return !(e && blocked.has(e[1])); });
 }
 
 function documentText(doc) {

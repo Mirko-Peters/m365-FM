@@ -15,8 +15,8 @@ export async function invalidateProfileExport(db) {
 // Personen-Entitaeten aus dem eigenen Profil: genau die, die profiles.js ownedEntity mit Typ person angelegt hat (Tabelle person_entity,
 // Migration 0054; nur ownedEntity schreibt sie - keine Zusammenfassung oder kein Typ, den ein Mitglied in einem Vorschlag selbst setzen kann).
 // Ausgeblendet, solange ihr Inhaber kein oeffentliches, nicht gesperrtes Profil mit genau dieser Adresse hat: privat gestellt, gesperrt, Adresse
-// geaendert, zusammengefuehrt (banned=2) oder geloescht (user_id 0, die Zeile bleibt als Merker: sonst holte importEntitiesFromSite die Person aus
-// dem letzten Seitenbau zurueck). Sie erscheinen in keinem oeffentlichen Weg; kommt das Profil zurueck, sind sie wieder da.
+// geaendert, zusammengefuehrt (banned=2) oder geloescht (user_id 0, die Zeile bleibt dauerhaft als Merker: sonst holte importEntitiesFromSite die
+// Person aus dem letzten Seitenbau zurueck; aufheben nur per Admin, entities.js releasePersonEntity). Sie erscheinen in keinem oeffentlichen Weg; kommt das Profil zurueck, sind sie wieder da.
 export const HIDDEN_PERSON_SQL = "SELECT pe.eid FROM person_entity pe" +
   " WHERE NOT EXISTS (SELECT 1 FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.user_id=pe.user_id AND p.handle=pe.eid AND p.public=1)";
 export async function hiddenPersonEids(db) {

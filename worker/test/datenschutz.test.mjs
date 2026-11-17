@@ -15,11 +15,13 @@ const realFetch = globalThis.fetch;
 let searchPart = null;   // Attrappe fuer den Suchindex des letzten Seitenbaus
 let siteEnts = [];   // Attrappe fuer /entities.json des letzten Seitenbaus
 let srcEnts = null;   // Attrappe fuer /entities-src.json (reine Repo-Fassung)
+const OLD_MANIFEST = { generated: "2026-11-16", parts: 1 };
+let searchManifest = OLD_MANIFEST;   // Attrappe fuer /search/manifest.json
 globalThis.fetch = async (u) => {
   const s = String(u);
   if (srcEnts && s.endsWith("/entities-src.json")) return new Response(JSON.stringify({ entities: srcEnts }), { headers: { "content-type": "application/json" } });
   if (s.endsWith("/entities.json")) return new Response(JSON.stringify({ entities: siteEnts }), { headers: { "content-type": "application/json" } });
-  if (searchPart && s.endsWith("/search/manifest.json")) return new Response(JSON.stringify({ generated: "2026-11-16", parts: 1 }), { headers: { "content-type": "application/json" } });
+  if (searchPart && s.endsWith("/search/manifest.json")) return new Response(JSON.stringify(searchManifest), { headers: { "content-type": "application/json" } });
   if (searchPart && s.endsWith("/search/part-1.json")) return new Response(JSON.stringify(searchPart), { headers: { "content-type": "application/json" } });
   return new Response("{}", { status: 404 });
 };
@@ -237,48 +239,119 @@ test("Kontoloeschung: der naechste Cron holt die Personen-Entitaet nicht aus /en
   assert.equal(raw.prepare("SELECT user_id FROM person_entity WHERE eid='alice'").get().user_id, 2);
 });
 
-test("Kontoloeschung: steht dieselbe id spaeter redaktionell im Repo, wird der Merker aufgehoben (K41)", async () => {
-  const { raw, env, user } = await setup();
-  const alice = await user(1, "Alice Example");
-  assert.equal((await saveProfile(env, alice, "alice", true)).s, 200);
-  assert.equal((await call(env, "DELETE", "/api/me", alice)).s, 200);
-  assert.equal(raw.prepare("SELECT user_id FROM person_entity WHERE eid='alice'").get().user_id, 0);
-  const guest = { id: "alice", name: "Alice Guest", type: "person", desc: { en: "Alice Guest is a podcast guest." } };
-  siteEnts = [guest]; srcEnts = [guest];
-  try {
-    await importEntitiesFromSite(env);
-    assert.equal(raw.prepare("SELECT COUNT(*) n FROM person_entity WHERE eid='alice'").get().n, 0, "Merker aufgehoben");
-    assert.equal((await call(env, "GET", "/api/entity?id=alice")).s, 200);
-    assert.ok(JSON.stringify(await callTool(env, null, "get_entity", { id: "alice" })).includes("Alice Guest"), "MCP liefert die Repo-Fassung");
-    await importEntitiesFromSite(env);
-    assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_rev WHERE eid='alice' AND status='live'").get().n, 1, "der naechste Cron legt die Repo-Fassung an");
-  } finally { siteEnts = []; srcEnts = null; }
-});
-
-test("Kontoloeschung: Merker aufgehoben, /entities.json noch mit veralteter Profil-Fassung - zwei Cron-Laeufe holen sie nicht zurueck (K41)", async () => {
-  const { raw, env, user } = await setup();
+// K41-Rueckbau: Der Merker bleibt nach einer Kontoloeschung dauerhaft, auch wenn dieselbe id spaeter redaktionell im Repo steht. Aufheben nur per Admin.
+const LEAK = /Secret Headline Contoso|Alice Example/;
+const GUEST = { id: "alice", name: "Alice Guest", type: "person", desc: { en: "Alice Guest is a podcast guest." } };
+const staleDocs = (headline) => ({ part: 1, docs: [
+  { id: "p2", url: SITE + "/entity/alice/", lang: "en", type: "person", title: "Alice Example", summary: headline, keywords: "alice" },
+  { id: "p3", url: SITE + "/de/entity/alice/", lang: "de", type: "person", title: "Alice Example", summary: headline, keywords: "alice" },
+  { id: "m1", url: SITE + "/entity/m365/", lang: "en", type: "entity", title: "Microsoft 365", summary: "Suite", keywords: "m365" },
+] });
+async function deletedAliceWithStaleBuild() {
+  const ctx = await setup(), { raw, env, t, user } = ctx;
   const alice = await user(1, "Alice Example");
   assert.equal((await saveProfile(env, alice, "alice", true, "Secret Headline Contoso")).s, 200);
   const exported = (await call(env, "GET", "/api/entity/export")).j.items.find((x) => x.id === "alice");
   assert.ok(JSON.stringify(exported).includes("Secret Headline Contoso"), "Profiltext steht vor der Loeschung im Export");
+  raw.prepare("INSERT INTO search_doc(id,url,lang,type,title,title_norm,summary,keywords,entities,date,image,h,gone,updated,grp) VALUES ('p2',?,'en','person','Alice Example',' alice example ','Secret Headline Contoso','alice','','','','h',0,?,''),('p3',?,'de','person','Alice Example',' alice example ','Secret Headline Contoso','alice','','','','h',0,?,'')").run(SITE + "/entity/alice/", t, SITE + "/de/entity/alice/", t);
   assert.equal((await call(env, "DELETE", "/api/me", alice)).s, 200);
-  // Repo hat inzwischen einen Gast mit gleicher id; der letzte Seitenbau (/entities.json) enthaelt aber noch die D1-Profil-Fassung
-  srcEnts = [{ id: "alice", name: "Alice Guest", type: "person", desc: { en: "Alice Guest is a podcast guest." } }];
-  siteEnts = [{ id: "alice", ...exported.data }];
-  const leak = (s) => /Secret Headline Contoso|Alice Example/.test(s);
+  // Repo hat inzwischen einen Gast mit gleicher id; /entities.json und der Suchindex des letzten Seitenbaus enthalten noch die Profil-Fassung
+  srcEnts = [GUEST, { id: "m365", name: "Microsoft 365", type: "product" }];
+  siteEnts = [{ id: "alice", ...exported.data }, { id: "m365", name: "Microsoft 365", type: "product" }];
+  searchManifest = OLD_MANIFEST; searchPart = staleDocs("Secret Headline Contoso");
+  return ctx;
+}
+const searchHits = async (env, q) => { const r = await call(env, "GET", "/api/search?q=" + encodeURIComponent(q)); assert.equal(r.s, 200); return JSON.stringify(r.j.results); };   // ohne Echo der Anfrage (q)
+const aliveAlice = (raw) => raw.prepare("SELECT id,title,summary FROM search_doc WHERE gone=0 AND instr(url,'/entity/alice/')>0").all();
+const reset = () => { siteEnts = []; srcEnts = null; searchPart = null; searchManifest = OLD_MANIFEST; };
+
+test("Kontoloeschung: id spaeter im Repo, zwei Crons mit veralteter /entities.json und veraltetem Suchindex - Entitaet bleibt verborgen, Suche ohne Treffer (K41)", async () => {
+  const { raw, env } = await deletedAliceWithStaleBuild();
   try {
     for (let run = 1; run <= 2; run++) {
       await importEntitiesFromSite(env);
-      assert.equal(raw.prepare("SELECT COUNT(*) n FROM person_entity WHERE eid='alice'").get().n, 0, `Lauf ${run}: Merker aufgehoben`);
-      assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_rev WHERE eid='alice' AND status='live'").get().n, 1, `Lauf ${run}: genau eine live-Fassung`);
-      const revs = raw.prepare("SELECT data,summary FROM entity_rev WHERE eid='alice'").all();
-      assert.ok(!revs.some((r) => leak(r.data)), `Lauf ${run}: keine Revision mit Profiltext`);
-      const ex = JSON.stringify((await call(env, "GET", "/api/entity/export")).j.items.find((x) => x.id === "alice"));
-      assert.ok(ex.includes("Alice Guest"), `Lauf ${run}: Export liefert die Repo-Fassung`);
-      assert.ok(!leak(ex), `Lauf ${run}: Export ohne Profiltext`);
-      assert.ok(!leak(JSON.stringify(await callTool(env, null, "get_entity", { id: "alice" }))), `Lauf ${run}: MCP ohne Profiltext`);
+      await importSearchIndex(env);
+      assert.equal(raw.prepare("SELECT user_id FROM person_entity WHERE eid='alice'").get()?.user_id, 0, `Lauf ${run}: Merker bleibt`);
+      assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_rev WHERE eid='alice'").get().n, 0, `Lauf ${run}: keine Revision (weder Repo- noch Profil-Fassung)`);
+      assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_rev WHERE eid='m365' AND status='live'").get().n, 1, `Lauf ${run}: andere Eintraege normal`);
+      assert.ok(!(await entityIds(env)).includes("alice"), `Lauf ${run}: nicht im Export`);
+      assert.equal((await call(env, "GET", "/api/entity?id=alice")).s, 404, `Lauf ${run}`);
+      const mcp = JSON.stringify(await callTool(env, null, "get_entity", { id: "alice" }));
+      assert.ok(!LEAK.test(mcp) && !mcp.includes("Alice Guest"), `Lauf ${run}: MCP liefert nichts`);
+      assert.ok(!LEAK.test(JSON.stringify(await callTool(env, null, "search_entities", { q: "alice" }))), `Lauf ${run}: MCP-Suche ohne Profiltext`);
+      assert.deepEqual(aliveAlice(raw), [], `Lauf ${run}: kein Suchdokument der Person`);
+      assert.ok(!LEAK.test(await searchHits(env, "Alice")) && !LEAK.test(await searchHits(env, "Secret Headline Contoso")), `Lauf ${run}: Suche ohne Profiltext`);
+      assert.ok(!LEAK.test(JSON.stringify((await call(env, "GET", "/api/entity/tr")).j)), `Lauf ${run}: Uebersetzungen ohne Profiltext`);
+      assert.equal(raw.prepare("SELECT gone FROM search_doc WHERE id='m1'").get()?.gone, 0, `Lauf ${run}: andere Suchdokumente normal`);
     }
-  } finally { siteEnts = []; srcEnts = null; }
+  } finally { reset(); }
+});
+
+test("Personen-Merker: Admin-Freigabe legt die Repo-Fassung an, die Suche bleibt ohne Profiltext bis zum naechsten Seitenbau (K41)", async () => {
+  const { raw, env, t, user } = await deletedAliceWithStaleBuild();
+  const admin = await user(9, "Admin"), mallory = await user(3, "Mallory");
+  raw.prepare("UPDATE users SET role='admin' WHERE id=9").run();
+  const release = (c, eid = "alice") => call(env, "POST", "/api/admin/person-entity/release", c, { eid });
+  try {
+    await importEntitiesFromSite(env); await importSearchIndex(env);   // Cron vor der Freigabe: Index-Durchlauf des alten Seitenbaus importiert
+    assert.equal((await release(mallory)).s, 403, "nur Admin");
+    assert.equal((await release("")).s, 403, "ohne Anmeldung nicht");
+    const noHeader = await W.fetch(new Request(API + "/api/admin/person-entity/release", { method: "POST", headers: { origin: SITE, cookie: admin, "content-type": "application/json" }, body: JSON.stringify({ eid: "alice" }) }), env);
+    assert.equal(noHeader.status, 400, "ohne x-requested-with nicht");
+    assert.equal((await call(env, "GET", "/api/admin/person-entity/release", admin)).s, 405);
+    assert.equal((await release(admin, "nobody")).s, 404, "kein Merker");
+    srcEnts = [{ id: "alice", name: "Alice Guest" }];   // ungueltiger Eintrag (ohne type)
+    assert.equal((await release(admin)).j.error, "not_in_repo");
+    srcEnts = [{ id: "m365", name: "Microsoft 365", type: "product" }];
+    const r0 = await release(admin);
+    assert.equal(r0.s, 409); assert.equal(r0.j.error, "not_in_repo", "id nicht in /entities-src.json");
+    assert.equal(raw.prepare("SELECT user_id FROM person_entity WHERE eid='alice'").get()?.user_id, 0, "Merker bleibt ohne Repo-Eintrag");
+    srcEnts = [GUEST, { id: "m365", name: "Microsoft 365", type: "product" }];
+
+    const r = await release(admin);
+    assert.equal(r.s, 200); assert.equal(r.j.ok, true); assert.equal(r.j.live, true);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM person_entity WHERE eid='alice'").get().n, 0, "Merker aufgehoben");
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_rev WHERE eid='alice' AND status='live'").get().n, 1, "Repo-Fassung live");
+    assert.ok(raw.prepare("SELECT COUNT(*) n FROM audit WHERE action='person-entity-release' AND target='alice'").get().n >= 1, "im Audit-Protokoll");
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM search_doc WHERE instr(url,'/entity/alice/')>0 AND gone=0").get().n, 0, "Suchdokumente der Person entfernt");
+    assert.ok(raw.prepare("SELECT v FROM meta WHERE k='search_block:alice'").get(), "Sperrliste fuer den Suchindex");
+    assert.equal((await release(admin)).s, 404, "zweite Freigabe: kein Merker mehr");
+
+    const check = async (label) => {
+      const revs = raw.prepare("SELECT data FROM entity_rev WHERE eid='alice'").all();
+      assert.ok(!revs.some((x) => LEAK.test(x.data)), `${label}: keine Revision mit Profiltext`);
+      assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_rev WHERE eid='alice' AND status='live'").get().n, 1, `${label}: genau eine live-Fassung`);
+      const ex = JSON.stringify((await call(env, "GET", "/api/entity/export")).j.items.find((x) => x.id === "alice"));
+      assert.ok(ex.includes("Alice Guest") && !LEAK.test(ex), `${label}: Export liefert die Repo-Fassung`);
+      const api = await call(env, "GET", "/api/entity?id=alice");
+      assert.equal(api.s, 200); assert.ok(!LEAK.test(JSON.stringify(api.j)), `${label}: /api/entity ohne Profiltext`);
+      const mcp = JSON.stringify(await callTool(env, null, "get_entity", { id: "alice" }));
+      assert.ok(mcp.includes("Alice Guest") && !LEAK.test(mcp), `${label}: MCP liefert die Repo-Fassung`);
+    };
+    await check("nach der Freigabe");
+    // zwei Crons mit veralteter /entities.json und veraltetem Suchindex (gleicher Seitenbau wie bei der Freigabe)
+    for (let run = 1; run <= 2; run++) {
+      await importEntitiesFromSite(env); await importSearchIndex(env);
+      await check(`Lauf ${run}`);
+      assert.deepEqual(aliveAlice(raw), [], `Lauf ${run}: altes Personen-Dokument bleibt draussen`);
+      assert.ok(!LEAK.test(await searchHits(env, "Alice")) && !LEAK.test(await searchHits(env, "Secret Headline Contoso")), `Lauf ${run}: Suche ohne Profiltext`);
+    }
+    // anderes Manifest, aber ein Bau von vor der Freigabe (z. B. zwischengespeichert): weiter gesperrt
+    searchManifest = { generated: "2026-11-16", build: new Date((t - 3600) * 1000).toISOString(), parts: 1, count: 3 };
+    await importSearchIndex(env);
+    assert.deepEqual(aliveAlice(raw), [], "Bau vor der Freigabe: weiter gesperrt");
+    // neuer Seitenbau nach der Freigabe: Suchindex mit der Repo-Fassung
+    searchManifest = { generated: "2026-11-18", build: new Date((t + 86400) * 1000).toISOString(), parts: 1, count: 3 };
+    searchPart = { part: 1, docs: [
+      { id: "p2", url: SITE + "/entity/alice/", lang: "en", type: "person", title: "Alice Guest", summary: "Alice Guest is a podcast guest.", keywords: "alice" },
+      { id: "m1", url: SITE + "/entity/m365/", lang: "en", type: "entity", title: "Microsoft 365", summary: "Suite", keywords: "m365" },
+    ] };
+    await importSearchIndex(env);
+    assert.deepEqual(aliveAlice(raw).map((x) => ({ ...x })), [{ id: "p2", title: "Alice Guest", summary: "Alice Guest is a podcast guest." }], "neuer Seitenbau: Repo-Fassung in der Suche");
+    assert.equal(raw.prepare("SELECT gone FROM search_doc WHERE id='p3'").get().gone, 1, "alte Sprachfassung bleibt entfernt");
+    const hits = await searchHits(env, "Alice");
+    assert.ok(hits.includes("Alice Guest") && !LEAK.test(hits), "Suche findet die Repo-Fassung");
+  } finally { reset(); }
 });
 
 test("Anonymer Speaker-Eintrag bleibt anonym, wenn der Veranstalter die Session speichert - auch mit einem Profil 'Former member' (K42)", async () => {
