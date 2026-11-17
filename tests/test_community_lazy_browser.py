@@ -7,8 +7,10 @@ Die Node-Tests (tests/community_lazy.test.mjs) nutzen eine DOM-Attrappe. Hier wi
 - #c-events-import (Link ?claim= von site_events.py) oeffnet den Reiter Events und laedt events-import.js;
 - Druck: Kopf, Fuss und Reiterleiste sind auf jedem Reiter ausgeblendet, nicht erst nach dem Reiter MVP;
 - Aufruf ohne Fragment: profile.js setzt kein #c-page, Chrome springt nicht ans Seitenende, der Fuss bleibt unter dem ersten Bild
-  und der spaeter eingefuegte Anmeldekasten verschiebt nichts (Lighthouse mobil: CLS 0.273 und spaetes LCP durch diesen Sprung).
-Die Bereichs-Skripte selbst sind Attrappen (melden nur ihr Laden), die API antwortet "nicht angemeldet"."""
+  und der spaeter eingefuegte Anmeldekasten verschiebt nichts (Lighthouse mobil: CLS 0.273 und spaetes LCP durch diesen Sprung);
+- /entities.json (~560 KB) holen profile.js und guests.js nur fuer Angemeldete (Folgepunkt aus #508): abgemeldet keine Anfrage,
+  auch nicht auf den Reitern Profil, Firmen und Gaeste; angemeldet weiter vorhanden.
+Die Bereichs-Skripte selbst sind Attrappen (melden nur ihr Laden), die API antwortet "nicht angemeldet" (ausser im Test "angemeldet")."""
 import json
 import os
 import sys
@@ -52,8 +54,11 @@ class CommunityLazyBrowser(unittest.TestCase):
         cls.browser.close()
         cls.pw.stop()
 
-    def open(self, hash_="", init_script=None, viewport=None):
+    def open(self, hash_="", init_script=None, viewport=None, real=(), api=None):
+        """real: weitere echte Skripte statt Attrappen; api(pfad) -> (status, json) oder None fuer 401 "nicht angemeldet"."""
         pg = self.browser.new_page(viewport=viewport or {"width": 412, "height": 823})
+        pg.ents = []   # Anfragen an /entities.json
+        pg.on("request", lambda q: pg.ents.append(q.url) if "/entities.json" in q.url else None)
         if init_script:
             pg.add_init_script(init_script)
         html = page_html()
@@ -64,14 +69,16 @@ class CommunityLazyBrowser(unittest.TestCase):
                 return r.fulfill(status=200, content_type="text/html", body=html)
             if u.startswith(BASE + "/assets/"):
                 n = u.split("/assets/", 1)[1].split("?", 1)[0]
-                if n in REAL:
+                if n in REAL or n in real:
                     ct = "text/css" if n.endswith(".css") else "application/javascript"
                     return r.fulfill(status=200, content_type=ct, body=(ROOT / "assets" / n).read_text("utf-8"))
                 return r.fulfill(status=200, content_type="application/javascript", body=f"(window.__L=window.__L||[]).push({json.dumps(n)});")
             if u.startswith(API):
-                return r.fulfill(status=401, content_type="application/json", body='{"error":"login"}')
+                got = api(u[len(API):].split("?", 1)[0]) if api else None
+                st, js = got or (401, {"error": "login"})
+                return r.fulfill(status=st, content_type="application/json", body=json.dumps(js))
             if u.startswith(BASE + "/entities.json"):
-                return r.fulfill(status=200, content_type="application/json", body="[]")
+                return r.fulfill(status=200, content_type="application/json", body='{"entities":[]}')
             return r.fulfill(status=404, body="")
         pg.route("**/*", route)
         pg.goto(BASE + "/community/" + hash_)
@@ -150,6 +157,30 @@ class CommunityLazyBrowser(unittest.TestCase):
         pg = self.open("#c-msg")
         self.assertEqual(pg.evaluate("location.hash"), "#c-msg")
         self.assertFalse(pg.evaluate("document.getElementById('c-page').hidden"))
+        pg.close()
+
+    def test_logged_out_no_entities_json(self):
+        # Reiter Konto (Start), Profil, Firmen und Gaeste (echtes guests.js; events.js liefert window.M365U): keine Anfrage an /entities.json
+        pg = self.open(real={"events.js", "guests.js"})
+        for t in ("c-expert", "c-orgs", "c-guests"):
+            pg.click(f".ctab[data-t='{t}']")
+        pg.wait_for_function("document.querySelector('#c-guests h3')", timeout=3000)   # guests.js lief und hat /api/me abgewartet (Hinweis Anmeldung)
+        pg.wait_for_timeout(500)
+        self.assertEqual(pg.ents, [])
+        pg.close()
+
+    def test_logged_in_loads_entities_json(self):
+        def api(path):
+            return {"/api/profile/me": (200, {"profile": {}, "suggest": "anna"}), "/api/org/mine": (200, {"orgs": []}),
+                    "/api/me": (200, {"user": {"id": "u1", "name": "Anna"}})}.get(path)
+        pg = self.open(real={"events.js", "guests.js"}, api=api)
+        # profile.js: gleich nach /api/profile/me, ohne Reiterwechsel (Profil- und Firmenbereich werden beim Laden gebaut)
+        pg.wait_for_function("document.querySelector('#c-expert section.ccard h2')", timeout=3000)
+        self.assertEqual([u.split("?", 1)[0] for u in pg.ents], [BASE + "/entities.json"])
+        pg.click(".ctab[data-t='c-guests']")   # guests.js: Themennamen fuer Angemeldete
+        pg.wait_for_function("document.querySelector('#c-guests h2')", timeout=3000)
+        pg.wait_for_timeout(500)
+        self.assertEqual(len(pg.ents), 2, pg.ents)
         pg.close()
 
     def test_print_hides_header_footer_tabs_on_every_tab(self):
