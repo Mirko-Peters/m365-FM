@@ -11,10 +11,10 @@ keypoints:
   - "Pooled pools use breadth-first or depth-first load balancing. Depth-first requires a maximum session limit, autoscale on a pooled pool requires a custom one even with breadth-first, and under high concurrent load a host can exceed the limit."
   - "Users in pooled pools should keep their profile in FSLogix, because a new sign-in can land on a different session host."
   - "Windows is kept current by redeploying session hosts from updated images, and in-place upgrades from Windows 10 to Windows 11 are not supported on pooled session hosts."
-  - "Power management autoscaling is generally available. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, in July 2026, while some Learn pages still carry preview wording, so check the current page before relying on a limit."
+  - "Power management autoscaling is generally available. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, in July 2026, while some Learn pages still carry preview wording."
 faq:
   - q: "How many users can share one session host in a pooled host pool?"
-    a: "It depends on the maximum session limit you set and on the VM's resources. The multi-session FAQ gives no fixed number and says concurrent sessions depend on vCPU, memory, disk and vGPU, how users work and how heavy the workload is. Learn's sizing guidelines list maximum users per vCPU as a starting estimate: Light 6, Medium 4, Heavy 2, Power 1. Validate on your own system."
+    a: "It depends on the maximum session limit you set and on the VM's resources. The multi-session FAQ gives no fixed number. Learn's sizing guidelines list maximum users per vCPU as a starting estimate: Light 6, Medium 4, Heavy 2, Power 1. Validate on your own system."
   - q: "Do pooled host pools need FSLogix?"
     a: "Learn says users in pooled host pools should store their profile data in FSLogix, because they can be load balanced to different session hosts. It also says FSLogix comes pre-installed on all available Windows Enterprise multi-session images. FSLogix profile containers for cloud-only and external identities were announced as generally available in May 2026, and the FSLogix article describes them on Azure Files."
   - q: "Can a pooled host pool publish RemoteApp?"
@@ -33,14 +33,14 @@ Compared with a personal pool, the page states:
 
 - Users are not assigned to session hosts. After a user signs out and back in, the session might be load balanced to a different host.
 - The number of sessions per host is set by the maximum session limit property.
-- Windows is updated by redeploying session hosts from updated images instead of traditional updates.
+- Windows is updated by redeploying session hosts from updated images.
 - Users should store their profile data in FSLogix.
 
-All hosts in a pool should be sourced from the same image for a consistent user experience.
+All hosts in a pool should come from the same image for a consistent user experience.
 
 ## The operating system behind it
 
-Shared sessions need a multi-session capable OS. Learn's [FAQ for Windows Enterprise multi-session](https://learn.microsoft.com/en-us/azure/virtual-desktop/windows-multisession-faq) says Windows 10 and Windows 11 Enterprise multi-session allow multiple concurrent interactive sessions, which previously only Windows Server could do. Facts worth knowing before you build:
+Shared sessions need a multi-session capable OS. Learn's [FAQ for Windows Enterprise multi-session](https://learn.microsoft.com/en-us/azure/virtual-desktop/windows-multisession-faq) says Windows 10 and Windows 11 Enterprise multi-session allow multiple concurrent interactive sessions, which previously only Windows Server could do. Before you build:
 
 - Licensing: you can use existing per-user Windows licensing instead of RDS Client Access Licenses. The [prerequisites page](https://learn.microsoft.com/en-us/azure/virtual-desktop/prerequisites) lists the entitling licenses, such as Microsoft 365 E3, E5, A3, A5, F3 and Business Premium, and Windows Enterprise E3 and E5. For Windows Server session hosts it lists RDS CALs with Software Assurance.
 - Where it may run: Learn says it does not allow Windows Enterprise multi-session in production outside the Azure Virtual Desktop service, and it does not activate against on-premises KMS.
@@ -91,7 +91,7 @@ Both methods share one easily missed prerequisite for pooled pools. The [scaling
 
 Autoscale also changes which algorithm counts. The scenarios page says that for pooled host pools, autoscale ignores the load-balancing algorithm in the host pool settings and instead applies load balancing based on the schedule configuration. The algorithm choice therefore matters for pools without autoscale; with autoscale, the schedule decides. The article "Depth-first load balancing and autoscale: how the schedule overrides the host pool setting" walks through this.
 
-[Start VM on Connect](https://learn.microsoft.com/en-us/azure/virtual-desktop/start-virtual-machine-connect) behaves differently in pooled pools: it powers on a host only when none are on, and starts further VMs only when the first reaches the session limit. It starts a VM every five minutes at most, so a user may see "No resources available" and need to retry.
+[Start VM on Connect](https://learn.microsoft.com/en-us/azure/virtual-desktop/start-virtual-machine-connect) behaves differently in pooled pools: it powers on a host only when none are on, and starts further VMs only when the first reaches the session limit. It starts a VM every five minutes at most, so a user may see "No resources available".
 
 ## Application groups on pooled pools
 
@@ -102,7 +102,7 @@ Pooled pools support both [application group](/entity/avd-application-group/) ty
 1. Confirm that users can share a machine and that their profile can move to FSLogix.
 2. Choose a multi-session image and verify your license entitlement.
 3. Set a maximum session limit: required for depth-first, and required as a custom value, not the default, for any pooled pool that uses autoscale. Choose a load-balancing algorithm for pools without autoscale; with autoscale the schedule applies the load balancing instead.
-4. Decide between standard management and a session host configuration before you create the pool. Learn says the approach is set at creation and cannot be changed later, and a pool created without a session host configuration cannot get one afterwards. Plan image updates as redeployments, not in-place patches.
+4. Decide between standard management and a session host configuration before you create the pool: Learn says the approach cannot be changed later, and a pool without a session host configuration cannot get one afterwards. Plan image updates as redeployments, not in-place patches.
 5. Decide how hosts are powered on and off, and check the current Learn page for the limits of that method.
 6. Pilot, then measure sessions per host and logon times.
 

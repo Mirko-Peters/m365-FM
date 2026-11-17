@@ -16,12 +16,12 @@ faq:
   - q: "Is Azure Image Builder the same thing as AVD custom image templates?"
     a: "Not exactly. Microsoft Learn says custom image templates in Azure Virtual Desktop are built on Azure Image Builder and tailored for AVD. They give a portal flow with built-in scripts, while Azure Image Builder itself accepts any template you write."
   - q: "Where do I find the build log if a customization fails?"
-    a: "Learn says the staging resource group holds a storage account with a packerlogs container. Each build has a folder there with customization.log, and validation.log when validation ran. By default the group is named IT_ followed by the resource group, template name and a GUID. Deleting the template removes the group and these logs."
+    a: "Learn says the staging resource group holds a storage account with a packerlogs container. Each build has a folder there with customization.log, and validation.log when validation ran. Deleting the template removes the group and these logs."
   - q: "Do I pay for Azure Image Builder?"
-    a: "Learn says you incur compute, networking and storage costs similar to building images manually, charged at your Azure rates. It names a small storage cost for the staging resource group and possible egress charges when the image is distributed to other regions."
+    a: "Learn says you incur compute, networking and storage costs similar to building images manually, charged at your Azure rates, plus possible egress charges when the image is distributed to other regions."
 ---
 
-Azure VM Image Builder, often called Azure Image Builder or AIB, builds a VM image from a configuration you submit as a template. The service creates a temporary build VM, runs your customizations, generalizes the image and distributes the result to an Azure Compute Gallery, a managed image or a VHD. For Azure Virtual Desktop it offers a repeatable, reviewable template as an alternative to hand-built golden images. This article explains the template, how to start a build and find its log, the AVD-specific route and the limits.
+Azure VM Image Builder, often called Azure Image Builder or AIB, builds a VM image from a configuration you submit as a template. The service creates a temporary build VM, runs your customizations, generalizes the image and distributes the result to an Azure Compute Gallery, a managed image or a VHD. For Azure Virtual Desktop it offers a repeatable template as an alternative to hand-built golden images. This article explains the template, how to start a build and find its log, the AVD-specific route and the limits.
 
 Microsoft's What's new page and the Azure Virtual Desktop blog announced custom image templates as generally available in September 2023. The blog post names the Azure public cloud and says Azure Government and China entered public preview at that time; the custom image templates pages carry no status label, so check them for your cloud. The overview labels the service's Azure DevOps task as preview. Lifecycle practice and gallery replication are covered in "The golden image lifecycle: build, test, release, retire" and "Azure Compute Gallery for AVD images: versions and replication".
 
@@ -29,7 +29,7 @@ Microsoft's What's new page and the Azure Virtual Desktop blog announced custom 
 
 Learn's [overview](https://learn.microsoft.com/en-us/azure/virtual-machines/image-builder-overview) describes a fully managed Azure service built on [HashiCorp Packer](https://www.packer.io/). It works with Azure Marketplace base images and existing custom images, for Windows and Linux, and for generation 1 and generation 2 Hyper-V images. The distributed image always has the generation of the source image. It hides the need to generalize with Sysprep, though advanced users can override that.
 
-You can pass a configuration with Azure PowerShell, the Azure CLI or Azure Resource Manager templates, or call it from a pipeline with the DevOps task (preview). The portal experience has been available since March 2023. Because the template is an Azure resource, the build definition can live in source control next to your other infrastructure code. That is the "as code" part, and it is an operating choice rather than a feature of the service.
+You can pass a configuration with Azure PowerShell, the Azure CLI or Azure Resource Manager templates, or call it from a pipeline with the DevOps task (preview). The portal experience has been available since March 2023. Because the template is an Azure resource, the build definition can live in source control next to your other infrastructure code; that is an operating choice rather than a feature of the service.
 
 ## Two routes: custom image templates or a direct template
 
@@ -91,7 +91,7 @@ Learn's [template reference](https://learn.microsoft.com/en-us/azure/virtual-mac
 
 Points from the reference:
 
-- **Source.** Three types: PlatformImage, ManagedImage (same subscription and region) and SharedImageVersion. Only generalized source images are supported. The overview shows `az vm image list --publisher MicrosoftWindowsDesktop --sku g2 --output table --all` for finding generation 2 SKUs.
+- **Source.** Three types: PlatformImage, ManagedImage (same subscription and region) and SharedImageVersion. Only generalized source images are supported. The overview shows `az vm image list --publisher MicrosoftWindowsDesktop --sku g2 --output table --all` for generation 2 SKUs.
 - **Build timeout.** If you omit it or set 0, the default is 240 minutes. The minimum is 6 and the maximum 960. For Windows Learn does not recommend less than 60.
 - **Build VM.** The default is Standard_D1_v2 for generation 1 and Standard_D2ds_v4 for generation 2. The PowerShell walkthrough says the D1_v2 default is not suitable for Windows and recommends Standard_D2_v2 or greater. A value of 0 for osDiskSizeGB keeps the source size; you cannot reduce it.
 - **Customizers.** Customizers run in the order they appear in the template. The types are File, PowerShell, Shell, WindowsRestart and WindowsUpdate. The File customizer suits downloads under 20 MB. For the WindowsUpdate customizer, Microsoft tests and validates the community provisioner and investigates issues with it, but the open-source project itself is not officially supported.
@@ -100,7 +100,7 @@ Points from the reference:
 
 ## Rules for Windows build scripts
 
-The PowerShell walkthrough lists tips for Windows builds. Set `runElevated` and `runAsSystem` to true on PowerShell customizers, or, in Learn's words, the build will stop responding. Use `write-host` so output reaches customization.log. Scripts must exit with 0, because a non-zero code fails the customization and stops the build. Test scripts on a standalone VM first. The same page calls its sample scripts illustration and testing material that should not be used for production workloads, so treat them as a starting point.
+The PowerShell walkthrough lists tips for Windows builds. Set `runElevated` and `runAsSystem` to true on PowerShell customizers, or, in Learn's words, the build will stop responding. Use `write-host` so output reaches customization.log. Scripts must exit with 0, because a non-zero code fails the customization and stops the build. Test scripts on a standalone VM first. The same page says its sample scripts are for illustration and testing only, not for production workloads.
 
 ## Deploy and start the build
 
@@ -122,16 +122,16 @@ az resource invoke-action --resource-group $imageResourceGroup --resource-type M
 
 ## Where the logs are
 
-By default the service creates a staging resource group named `IT_<ResourceGroupName>_<TemplateName>_<GUID>`; you can name your own with `stagingResourceGroup` (or on the Build properties tab). Learn says most resources in it are temporary and deleted after the build, except the storage account. In that account, the `packerlogs` container has one folder per build, and each holds `customization.log` and, when validation ran, `validation.log`. The [custom image templates troubleshooting page](https://learn.microsoft.com/en-us/azure/virtual-desktop/troubleshoot-custom-image-templates) says entries for built-in scripts begin `Starting AVD AIB Customization: {<script name>}`. The [Image Builder troubleshooting page](https://learn.microsoft.com/en-us/azure/virtual-machines/linux/image-builder-troubleshoot) gives the download path: storage account, **Data Storage**, the **Container** option, the `packerlogs` container, then the folder of the build you want. For a running build, look in the staging group for the container instance `vmimagebuilder-build-container-...` and its logs.
+By default the service creates a staging resource group named `IT_<ResourceGroupName>_<TemplateName>_<GUID>`; you can name your own with `stagingResourceGroup` (or on the Build properties tab). Learn says most resources in it are temporary and deleted after the build, except the storage account. In that account, the `packerlogs` container has one folder per build, and each holds `customization.log` and, when validation ran, `validation.log`. The [custom image templates troubleshooting page](https://learn.microsoft.com/en-us/azure/virtual-desktop/troubleshoot-custom-image-templates) says entries for built-in scripts begin `Starting AVD AIB Customization: {<script name>}`. The [Image Builder troubleshooting page](https://learn.microsoft.com/en-us/azure/virtual-machines/linux/image-builder-troubleshoot) gives the download path: storage account, **Data Storage**, the **Container** option, the `packerlogs` container, then the folder of the build you want. For a running build, open the container instance `vmimagebuilder-build-container-...` in the staging group, under **Settings** and **Containers**, on the **Logs** tab.
 
 ## Limits, costs and recent changes
 
 - Azure Hybrid Benefit for Windows Server is not supported.
 - The image template is immutable and cannot be moved. To relocate it, recreate it with a new name.
 - Trusted Launch and Confidential VM: images marked TrustedLaunchSupported or ConfidentialVMSupported work as sources, but TrustedLaunch and ConfidentialVM images do not. Source and distribution must both be TrustedLaunchSupported.
-- Cost: compute, networking and storage at your Azure rates, a small storage cost for the staging group, and possible egress to other regions.
+- Cost: compute, networking and storage at your Azure rates, plus possible egress to other regions.
 - Deleting the template: the overview suggests it to avoid the storage cost, but the reference says the staging resource group is deleted with the template, a VHD distribution is lost with it ("If you delete the image template, then you'll lose the VHD"), and the logs go with the group. Copy VHDs and download logs first. The custom image templates page says the IT_ group is also deleted when you delete the resource group containing the image, while the PowerShell walkthrough says that deleting only the resource group leaves the IT_ group behind. Deleting the template first avoids the question.
-- For Azure DevOps builds, the troubleshooting page says the staging group is deleted after a successful build, so a log needs a sleep step to read. The custom image templates page says the group can be deleted after success, provided you do not need the logs.
+- For Azure DevOps builds, the troubleshooting page says the staging group is deleted after a successful build, so reading a log needs a sleep step.
 - March 2026 release notes: after 31 March 2026 new virtual networks default to private subnets without default outbound access. If a template sets `subnetId` or `containerInstanceSubnetId` and the build or validation VMs need internet access, that subnet must have outbound access enabled. Separately, with Azure unmanaged disks retiring, VHDs produced by Image Builder can no longer provision new VMs.
 
 ## Sources
