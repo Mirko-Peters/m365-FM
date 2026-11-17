@@ -57,7 +57,7 @@ Learn's table continues from there: 6 sessions on 4 hosts is 30 percent, so noth
 
 Learn frames the trade-off directly. Breadth-first is described as ideal for organizations that want to prioritize the user experience, because host resources such as CPU, memory and disk are generally less contended. Depth-first is described as ideal for cost-conscious organizations, because saturating one host at a time makes it easier to scale down the number of powered-on hosts when fewer users are signed in.
 
-The two algorithms can also be combined in one scaling plan. The autoscale FAQ gives breadth-first in ramp-up and peak as an example, and depth-first in ramp-down and off-peak to help autoscale consolidate user sessions until it reaches the minimal possible number of session hosts. What autoscale does in ramp-down, including forced sign-out and running zero hosts after hours, is covered in the depth-first and scaling plan articles of this series; see also the [scaling plan](/entity/avd-scaling-plan/) entity.
+The two algorithms can be combined in one scaling plan, as the autoscale FAQ example described under breadth-first and autoscale above shows. What autoscale does in ramp-down, including forced sign-out and running zero hosts after hours, is covered in the depth-first and scaling plan articles of this series; see also the [scaling plan](/entity/avd-scaling-plan/) entity.
 
 ## How to configure it
 
@@ -83,8 +83,7 @@ To check the result, the same page uses `Get-AzWvdHostPool @parameters | Format-
 
 ## When to expect surprises
 
-- **Uneven counts.** Random selection from half of the hosts will produce differences; Learn describes this as expected.
-- **Drain mode under autoscale.** For pooled host pools, Learn says autoscale overwrites drain mode on the VMs included in scaling, so use exclusion tags for VMs you want left alone, for example while updating them.
+- **Drain mode under autoscale.** For pooled host pools, Learn says autoscale overwrites drain mode on the VMs included in scaling, so use exclusion tags for VMs you want left alone, for example while updating them. The autoscale scenarios page and the autoscale FAQ both say this, so check the exclusion tag on any host that seems to switch state unexpectedly.
 
 ## Related
 
