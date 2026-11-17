@@ -81,7 +81,7 @@ For a pooled host pool, open the host pool in the Azure portal, select **Insight
 
 ## What Learn does not say
 
-The Learn pages listed under Sources do not answer several questions, so plan around them instead of assuming:
+The Learn pages on autoscale do not answer several questions, so plan around them instead of assuming:
 
 - How quickly autoscale notices a newly added or removed tag.
 - Whether the tag value is part of the match.
