@@ -4,6 +4,7 @@ bleiben aber statisch (HTML mit Tabellen und Bildern bleibt vollstaendig erhalte
 import ast, json, re, zlib
 from datetime import datetime, timezone
 
+import site_anchor as ANC   # Linktexte im Altbestand beim Bau verbessern ("here" -> Zieltitel), Quelldaten bleiben unveraendert
 import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
 import site_media as MED
 import site_podpage as P
@@ -14,6 +15,9 @@ import site_topics as TOP
 
 HANDLE, NAME = "mirko-p", "Mirko Peters"   # echtes Community-Profil von Mirko
 TOPICS = {}   # Slug -> Themen der frueheren Beitraege (auch fuer die schon in der Datenbank liegenden Fassungen, deren Themen beim Import eingefroren wurden)
+EN_HTML = {}   # Slug -> HTML des englischen Originals (nach fix, ohne Titelbild): Abgleich der Anker fuer die Sprachfassungen (site_anchor)
+TITLES = {}   # Slug -> {Sprache: Titel} aller frueheren Beitraege und ihrer Sprachfassungen: Linktext fuer Links auf einen Beitrag
+_TT = []   # site_anchor.Titles, einmal je Bau
 
 
 def _ts(s):
@@ -136,6 +140,7 @@ def items(BASE):
     out = []
     for p in sorted(posts, key=lambda x: x.get("iso") or "", reverse=True):
         html = fix(P.san(p["html"]))
+        EN_HTML[p["slug"]] = html; TITLES.setdefault(p["slug"], {})["en"] = p["title"]
         text = P.plain(html); _hero = ""
         _ep = None
         if not re.search(r"<img\b", html):   # Titelbild wie frueher: Bild der verlinkten Folge, sonst erzeugtes Bild
@@ -151,9 +156,45 @@ def items(BASE):
     TOP.save()
     by_slug = {x["slug"]: x for x in out}
     out += translations(BASE, by_slug, fix)
+    for x in out:
+        if x.get("tr_of"): TITLES.setdefault(x["slug"], {})[x["lang"]] = x["title"]
     for x in out: x.pop("src", None); x.pop("hero", None)
     _ROWS[BASE] = _rows(out)
     return out
+
+
+def titles(BASE=""):
+    """site_anchor.Titles fuer Links im Altbestand (Blog und Show Notes): Folgen (Podpage, mit uebersetzten Titeln aus data/podpage_i18n samt Handtexten
+    der Redaktion), fruehere Beitraege mit Sprachfassungen (TITLES, gefuellt von items()), Entitaeten, umbenannte Folgen und feste Weiterleitungen."""
+    if _TT:
+        return _TT[0]
+    import i18n_overrides as OV
+    from site_learn import ENTS
+    eps = {e["slug"]: {"en": e.get("name") or ""} for e in P.load("episodes") if e.get("slug") and e.get("name")
+           and e.get("published") not in (False, "False") and e.get("hidden") not in (True, "True")}
+    d = P.D / "podpage_i18n"
+    for l in ANC.LANGS[1:]:
+        f = d / f"{l}.json"
+        if not f.exists():
+            continue
+        try:
+            tr = OV.apply_show(l, json.loads(f.read_text("utf-8")))
+        except Exception:
+            continue
+        for slug, v in tr.items():
+            if slug in eps and v and v[0]: eps[slug][l] = v[0]
+    for p in P.load("blog_posts"):
+        if p.get("slug") and p.get("title"): TITLES.setdefault(p["slug"], {}).setdefault("en", p["title"])
+    _TT.append(ANC.Titles(eps, TITLES, P.RENAMES, P.extra_redirects(), {i: e.get("name") for i, e in ENTS.items() if e.get("name")}, BASE))
+    return _TT[0]
+
+
+def better_links(p, html, lang, BASE=""):
+    """Linktexte eines frueheren Beitrags (auch der Datenbank-Fassung von mirko-p) beim Seitenbau verbessern; andere Beitraege bleiben unveraendert.
+    Laeuft auf dem fertigen HTML nach dem Nachschlagen der Uebersetzung (translate_blog.source_of sieht weiter den Originaltext)."""
+    if not html or p.get("handle") != HANDLE or p.get("slug") not in EN_HTML:
+        return html
+    return ANC.improve(html, lang, titles(BASE), ref=None if lang == "en" else EN_HTML[p["slug"]], area="blog-" + ("en" if lang == "en" else "tr"))
 
 
 PER = 100

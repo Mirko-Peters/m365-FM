@@ -633,6 +633,9 @@ def build(g):
         it = lambda k2: (loc_url(l, f"episodes/{eps[k2]['slug']}/"), TRL[l][eps[k2]["slug"]][0]) if k2 is not None else None
         return PG(l, it(older), it(newer))
     _RWC = {}   # neu geschriebene Show Notes (site_shownotes_seo): Folgen je Regel, fuers Protokoll
+    import site_anchor as ANC, site_legacy_blog as _LBL   # Linktexte der alten Podpage-Show-Notes beim Bau verbessern (Spreaker-Unterstuetzer-URL, "Link" in Tabellen, "here")
+    _ATT = _LBL.titles(BASE)
+    _anc = lambda h, l, ref=None: ANC.improve(h, l, _ATT, ref=ref, area="shownotes-" + ("en" if l == "en" else "tr"))
     _MPU = MP.Uniq(); _MPL = MP.Uniq()   # einmalige SEO-Titel: englische Folgen, Sprachfassungen
     for k, e in enumerate(eps):
         r, tr = tr_for(e)
@@ -656,6 +659,8 @@ def build(g):
         nkp, nnotes, nfaq, nld, _rwm, _rwr, _rwn = SSEO.for_page(e, nrec, bool(snx), (nkp, nnotes, nfaq, nld), ENTS_ALL, BASE, html=None if (nrec and nrec.get("markup")) else nnotes)
         _rw = bool(_rwn); _RWC[_rwr] = _RWC.get(_rwr, 0) + 1; _RWC["used"] = _RWC.get("used", 0) + _rw
         nnotes = rename_links(nnotes)   # T12: Show Notes verlinken die Folge oft ueber die alte Podpage-Adresse
+        _nn_en = nnotes   # vor dem Linktext-Durchlauf: Abgleich der Anker fuer die uebersetzten Show Notes
+        if not snx and not (nrec and nrec.get("markup")): nnotes = _anc(nnotes, "en")   # nur die alten Podpage-Show-Notes (und ihre Neufassung), nie die Vollfassung oder Editor-Texte
         prev_, next_ = (eps[k + 1] if k + 1 < len(eps) else None), (eps[k - 1] if k else None)
         nnotes = IMG.alt_text(nnotes, "en", e["name"])   # Alt-Texte: schwache Alt-Texte (Ueberschrift, Platzhalter) durch die aus data/r2_alt.json.gz ersetzen
         _pc = SPI.PRECONNECT if SPI.is_spreaker(thumb_of(e, nrec)) else ""   # Cover im ersten Bildschirm kommt von Spreaker-CloudFront: Verbindung frueh aufbauen
@@ -703,7 +708,7 @@ def build(g):
             if not tt or not tt[0]: continue
             lt, ls = tt[0], tt[1] or short_desc(e, nrec, 300)
             ln = NTL.get(l, {}).get(e["slug"])
-            ln_html = san(ln) if ln else ""
+            ln_html = _anc(san(ln), l, _nn_en) if ln else ""   # uebersetzte Show Notes: Linktexte nach dem Nachschlagen der Uebersetzung
             if ln and _rwn: ln_html += SSEO.topics_html(_rwn, ENTS_ALL, BASE, TOPICS.get(l, "Topics"))   # Themen-Zeile mit Entitaetslinks setzt der Bau, sie wird nicht mituebersetzt
             lu = loc_url(l, f"episodes/{e['slug']}/")
             if ln: ln_html = IMG.alt_text(ln_html, l, lt)   # Alt-Texte in der Sprache der Fassung (die Uebersetzung uebernimmt den englischen Alt-Text)

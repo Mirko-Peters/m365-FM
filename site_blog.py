@@ -158,6 +158,9 @@ def build(g, posts, people, api):
             a = pb[p["handle"]]; au = f"{BASE}/community/u/{a['handle']}/"
             u = f"{croot}u/{p['handle']}/blog/{p['slug']}/"
             body_html, refs = (p["html"], []) if p.get("html") else wiki_render(p["body"], links_l, w)   # uebernommene fruehere Blogbeitraege: HTML bleibt vollstaendig erhalten
+            if p.get("html") and p["handle"] == "mirko-p":   # fruehere Podpage-Beitraege samt Sprachfassungen: allgemeine Linktexte ("here", "hier") -> Zieltitel (site_anchor)
+                import site_legacy_blog as LBL
+                body_html = LBL.better_links(p, body_html, lang, BASE)
             body_html = one_h1(body_html, p["title"])   # Bing-SEO-Bericht: nur die Seitenueberschrift ist <h1>; <h1> im Beitragstext wird <h2>, eine Wiederholung des Titels entfaellt
             if p.get("html"):   # erste Nennung einer Entitaet im Text auf ihre Seite verlinken (Wissensgraph aus dem Artikel heraus), in allen Sprachen
                 body_html, _al = TOP.autolink_html(body_html, ENTS, lambda i: links_l[i][1], max_links=8)
