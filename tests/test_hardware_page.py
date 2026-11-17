@@ -42,6 +42,17 @@ class Seiten(unittest.TestCase):
         self.assertEqual(len(H.T["en"]["faq"]), len(H.T["de"]["faq"]))
         self.assertEqual(set(H.T["en"]["crit"]), {k for k, _ in H.CRITERIA})
 
+    def test_kategorien_in_seite_worker_und_admin_gleich(self):
+        import re
+        w = (ROOT / "worker" / "src" / "hardware.js").read_text("utf-8")
+        wk = re.search(r"HW_CATEGORIES = \[(.*?)\]", w).group(1).replace('"', "").replace(" ", "").split(",")
+        a = (ROOT / "assets" / "admin.js").read_text("utf-8")
+        ak = re.findall(r"(\w+): \"", re.search(r"var HW_CAT = \{(.*?)\};", a).group(1))
+        self.assertEqual(list(H.CATEGORIES), wk)
+        self.assertEqual(list(H.CATEGORIES), ak)
+        self.assertEqual(set(H.T["en"]["cats"]), set(H.CATEGORIES))
+        self.assertEqual(H.CATEGORIES[-1], "other", "Sonstiges steht zuletzt")
+
     def test_preise_und_zusagen_wie_vorgegeben(self):
         en = self.out["hardware/index.html"]
         for s in ("1,000 USD", "500 USD", "1,250 USD", "Free to organise", "within 2 weeks", "3 business days", "Test devices stay with us"):
