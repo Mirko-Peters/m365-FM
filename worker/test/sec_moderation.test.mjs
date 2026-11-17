@@ -210,6 +210,20 @@ test("K29: Wiki-Meldungen - Redaktionsfassung bleibt, Zweitkonten zaehlen nicht,
   assert.equal((await report(4, b)).s, 429);
 });
 
+test("K29: der Autor der vorherigen Fassung zaehlt nicht fuer die Ruecknahme, die seine Fassung wieder live setzt", async () => {
+  const { raw, env } = await mk();
+  for (const id of [14, 15, 16, 17]) { raw.prepare("INSERT INTO users(id,provider,sub,name,role,created) VALUES(?,?,?,?,?,1)").run(id, "t", "s" + id, "Pro" + id, "user"); ins(raw, "programs", { owner_type: "u", owner_id: id, program: "mvp", verified: 1 }); }
+  const st = (id) => raw.prepare("SELECT status FROM wiki_rev WHERE id=?").get(id).status;
+  const report = (uid, id) => call(env, uid, "POST", `/api/wiki/report/${id}`);
+  const p0 = ins(raw, "wiki_rev", { term: "azure", lang: "de", body: "Fruehere Fassung des Pro-Kontos", summary: "", user_id: 14, status: "old", created: 1 });
+  const c = ins(raw, "wiki_rev", { term: "azure", lang: "de", body: "Neuere Fassung eines Mitglieds", summary: "", user_id: 6, status: "live", created: 2 });
+  for (const uid of [14, 15, 16]) assert.equal((await report(uid, c)).s, 200);
+  assert.equal(st(c), "live", "die Meldung des Nutzniessers zaehlt nicht");
+  assert.equal(st(p0), "old");
+  assert.equal((await report(17, c)).s, 200);
+  assert.equal(st(c), "reported"); assert.equal(st(p0), "live");
+});
+
 test("K29: jede Wiki-Meldung erreicht die Pruefliste der Redaktion (Redaktionsfassung, frische Konten, Ruecknahme)", async () => {
   const { raw, env } = await mk();
   const NOWS = Math.floor(Date.now() / 1000);

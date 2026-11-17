@@ -153,8 +153,10 @@ export async function handleWiki(env, request, url, path, user, J) {
 
 // Meldungen, die fuer die automatische Ruecknahme zaehlen: nur unabhaengige, vertrauenswuerdige Konten - nicht der Autor, nicht gesperrt, Konto mindestens
 // REPORTER_AGE alt und Redaktion, bestaetigtes Programm (pro) oder TRUST_POINTS Punkte. Drei frische Zweitkonten setzen so nichts zurueck.
+// Auch der Autor der vorherigen Fassung zaehlt nicht: revert() setzt seine Fassung wieder live, er ist Nutzniesser der Ruecknahme.
 async function countedReports(env, r) {
-  const rows = (await env.DB.prepare("SELECT user_id FROM wiki_reports WHERE rev_id=? AND user_id<>? LIMIT 50").bind(r.id, r.user_id || 0).all()).results || [];
+  const prev = await prevRev(env.DB, r);
+  const rows = (await env.DB.prepare("SELECT user_id FROM wiki_reports WHERE rev_id=? AND user_id NOT IN (?,?) LIMIT 50").bind(r.id, r.user_id || 0, prev?.user_id || 0).all()).results || [];
   let n = 0;
   for (const { user_id } of rows) {
     const u = await memberOf(env, user_id); if (!u || (u.created || 0) > now() - REPORTER_AGE) continue;
@@ -163,8 +165,11 @@ async function countedReports(env, r) {
   return n;
 }
 
+// die Fassung, die revert() wieder live setzt
+const prevRev = (db, r) => db.prepare("SELECT id,user_id FROM wiki_rev WHERE term=? AND lang=? AND status='old' AND id<? ORDER BY id DESC LIMIT 1").bind(r.term, r.lang, r.id).first();
+
 async function revert(db, r) {   // gemeldete Revision zuruecknehmen (Status "reported": die Redaktion kann sie im Verlauf wiederherstellen), vorherige Fassung wieder live, mit Protokoll
-  const prev = await db.prepare("SELECT id FROM wiki_rev WHERE term=? AND lang=? AND status='old' AND id<? ORDER BY id DESC LIMIT 1").bind(r.term, r.lang, r.id).first();
+  const prev = await prevRev(db, r);
   const ops = [db.prepare("UPDATE wiki_rev SET status='reported' WHERE id=? AND status='live'").bind(r.id)];
   if (prev) ops.push(db.prepare("UPDATE wiki_rev SET status='live' WHERE id=?").bind(prev.id));
   await db.batch(ops);
