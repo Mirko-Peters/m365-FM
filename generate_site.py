@@ -1211,7 +1211,8 @@ def build():
     _go_data = {} if _go_offline else (LRN._fetch_json(f"{COMMUNITY_API}/api/sponsor/go-codes") or {})
     SPM.set_go_codes(_go_data.get("codes", []), offline=_go_offline)
     try:   # Speaker der M365Con-Programme: zusammengefuehrte Personen (tools/build_speakers.py) -> Entitaetsseiten und /speakers.json fuer den Worker
-        _sp = json.loads((ROOT / "data" / "speakers.json").read_text("utf-8")).get("speakers", [])
+        import site_hidden as _HID   # ausgeblendete Entitaeten (data/entity_hidden.json): Speaker ohne Entitaetsseite und ohne Eintrag fuer den Worker (Name bleibt Text)
+        _sp = _HID.drop(json.loads((ROOT / "data" / "speakers.json").read_text("utf-8")).get("speakers", []))
         ENT.SPEAKERS.update({x["id"]: x for x in _sp})
         write("speakers.json", json.dumps({"version": 1, "speakers": [{k: x[k] for k in ("id", "name", "aliases", "handle") if k in x} for x in _sp]}, ensure_ascii=False))
     except Exception as _e:

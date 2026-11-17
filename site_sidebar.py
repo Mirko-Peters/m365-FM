@@ -2,6 +2,7 @@
 "immer die gleiche"): M365Con-Karte, Google-Quelle, Themen & Personen der Seite (Wissensgraph), neueste Folgen der Sprache, Hoeren & folgen, Community.
 Die fruehere Karte "M365.FM Show" (Show-Menue) gibt es nicht mehr; ihre Ziele stehen auf /show/ (site_podpage.py)."""
 import json, re
+import site_hidden as HID
 from html import escape as esc
 from pathlib import Path
 D = Path(__file__).parent / "data"
@@ -17,6 +18,7 @@ class Index:
         ents = json.loads((D / "entities.json").read_text("utf-8"))
         gp = D / "guest_entities.json"
         if gp.exists(): ents += json.loads(gp.read_text("utf-8"))
+        ents = HID.drop(ents)   # ausgeblendete Entitaeten (data/entity_hidden.json): nie als Thema/Person der Seite
         self.by = {}; names = {}
         self.all = {e["id"]: e for e in ents}   # auch Kategorien: fuer feste Themenlisten (Entitaetsseite, Blogbeitrag)
         for e in ents:

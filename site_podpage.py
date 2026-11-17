@@ -12,6 +12,7 @@ import site_shownotes_seo as SSEO   # neu geschriebene englische Show Notes (rew
 import site_listen as LST   # "Show folgen"-Knopf (Apple Podcasts/Spotify nach Geraet) unter dem Player der Folgenseiten
 import site_transcripts as TRS   # #266: Transkripte als Dateien neben der Folgenseite (R2)
 import site_meta_podcast as MP   # suchintent-freundliche <title>/meta description (reine Funktionen)
+import site_hidden as HID   # ausgeblendete Entitaeten (data/entity_hidden.json): Gast ohne Seite, Name bleibt Text
 import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
 import site_spreaker_img as SPI   # kleine Spreaker-Cover-Varianten fuer sichtbare <img> (Ladezeit)
 from site_episode_urls import episode_url, sid_owners   # kanonische Folgen-Adresse (eine Quelle); eine Spreaker-ID je Seite
@@ -361,8 +362,9 @@ def episode_index(BASE):
         return _IDX[BASE]
     eps = [e for e in load("episodes") if e.get("published") not in (False, "False") and e.get("hidden") not in (True, "True")]
     eps.sort(key=lambda e: e["create_time"], reverse=True)
-    guests = [x for x in load("guests") if x.get("hidden") not in (True, "True")]
-    gnames = sorted(((gg["name"], gg) for gg in guests if len(gg["name"]) > 5), key=lambda x: -len(x[0]))
+    allg = [x for x in load("guests") if x.get("hidden") not in (True, "True")]
+    guests = [x for x in allg if not HID.guest_hidden(x["slug"])]   # sichtbare Gaeste (Gastseite, Liste, Weiterleitung); ausgeblendete bleiben unten nur als Name in der Folge
+    gnames = sorted(((gg["name"], gg) for gg in allg if len(gg["name"]) > 5), key=lambda x: -len(x[0]))
     items, eg, ge, by_slug = [], {}, {}, {}
     for e in eps:
         nrec = SNT.get("en", title=e["name"])
@@ -375,7 +377,7 @@ def episode_index(BASE):
         for gg in eg[e["slug"]]:
             ge.setdefault(gg["slug"], []).append(e)
         it = {"slug": e["slug"], "lang": "en", "e": {"title": e["name"], "desc": ""}, "date": day(e["create_time"]), "url": episode_url(BASE, "en", e["slug"]),
-              "sum": short_desc(e, nrec, 260), "keypoints": [x for x in kp if isinstance(x, str)], "faq": faq, "guests": [gg["slug"] for gg in eg[e["slug"]]],
+              "sum": short_desc(e, nrec, 260), "keypoints": [x for x in kp if isinstance(x, str)], "faq": faq, "guests": [gg["slug"] for gg in eg[e["slug"]] if not HID.guest_hidden(gg["slug"])],
               "duration": iso_dur((nrec or {}).get("duration")), "number": (str(e.get("number") or "") if str(e.get("number") or "") not in ("None", "") else ""), "season": (str(e.get("season") or "") if str(e.get("season")) != "None" else "")}
         it["_t"] = e["name"].lower(); it["_k"] = " ".join(it["keypoints"] + [x["q"] + " " + x["a"] for x in faq]).lower()
         it["sid"], it["sid_q"] = spreaker_match(e, nrec)   # Spreaker-Folgen-ID (Schluessel der Extraktion shownotes/entities/<id>.json) und Guete der Zuordnung
@@ -434,6 +436,7 @@ def make_guest_entities():
     for g in gs:
         if g.get("hidden") in (True, "True") or g["slug"] in merge: continue   # doppelter Gast: kein eigener Eintrag, siehe data/guest_merge.json
         i = g["slug"] + ("-guest" if g["slug"] in base else "")
+        if HID.is_hidden(i): continue   # ausgeblendete Entitaet (data/entity_hidden.json): kein Eintrag in guest_entities.json
         bio = plain(g.get("bio"))
         same = [g[k] for k in ("linkedin_link", "twitter_link", "youtube_link", "instagram_link", "facebook_link", "threads_link", "bluesky_link", "mastodon_link", "tiktok_link", "twitch_link", "wikipedia_link", "imdb_link") if g.get(k)]
         rec = {"id": i, "type": "person", "name": g["name"], "aliases": [], "desc": {"en": bio, "de": bio}, "web": g.get("website") or "", "same_as": same, "job": g.get("title") or "", "rel": [],
@@ -497,6 +500,12 @@ def redirect_table(eps, plist, guests, bposts, gmerge, baseids, LG, docs=None):
     for old, new in _SLN.entity_merges().items():   # zusammengefuehrte Entitaets-Dubletten (data/guest_merge.json "entities"): ebenso in allen Sprachpfaden
         for pre in [""] + [f"/{l}" for l in LG]:
             rd[f"{pre}/entity/{old}"] = f"{pre}/entity/{new}/"
+    for hid in sorted(HID.ids()):   # ausgeblendete Entitaeten (data/entity_hidden.json): /entity/<id>/ in allen Sprachpfaden auf die Entitaetenuebersicht der Sprache (301, ein Schritt)
+        for pre in [""] + [f"/{l}" for l in LG]:
+            rd[f"{pre}/entity/{hid}"] = f"{pre}/entity/"
+    for x in load("guests"):   # gleichnamiger Podcast-Gast: keine Gastseite mehr (in der Liste /show/guests/ steht er nicht), alte Adressen auf die Gaesteliste
+        if HID.guest_hidden(x["slug"]):
+            rd[f"/guests/{x['slug']}"] = "/show/guests/"   # /show/guests/<slug>/ selbst: Weiterleitungsseite (Site-Worker fragt die Tabelle unter /show nicht), siehe build()
     for old, new in extra_redirects().items():   # alte Adressen ohne Seite (data/redirects_extra.json); bestehende Eintraege gehen vor
         if old.strip("/").split("/")[0] in taken: clash.append(old); continue   # dort liegt inzwischen eine Seite: nicht wegleiten
         rd.setdefault(old, new)
@@ -509,7 +518,7 @@ def table_inputs():
     """Eingaben von redirect_table() aus dem Datenstand im Repo (wie build(), ohne Seitenbau) - fuer Tests und Auswertungen."""
     import gzip as _gz
     eps = [e for e in load("episodes") if e.get("published") not in (False, "False") and e.get("hidden") not in (True, "True")]
-    guests = [x for x in load("guests") if x.get("hidden") not in (True, "True")]
+    guests = [x for x in load("guests") if x.get("hidden") not in (True, "True") and not HID.guest_hidden(x["slug"])]
     SKIPP = {"episodes", "blog", "reviews", "podroll", "courses", "store", "videos", "guests", "people", "sponsors", "contact", "join", "leave_review", "rate", "guest_intake", "newsletter", "follow", "voicemail", "community-events", "legal", "hosts"}
     plist = [p["slug"] for p in load("pages") if p["slug"] not in SKIPP and p.get("page_content") not in (None, "", "None")]
     _bf = PD / "blog_posts.json.gz"
@@ -526,10 +535,10 @@ def build(g):
     eps.sort(key=lambda e: e["create_time"], reverse=True)
     pod = json.loads((PD / "podcast.json").read_text("utf-8")) if (PD / "podcast.json").exists() else {}
     hosts, links, revs, spons, files, cats = (load(n) for n in ("hosts", "links", "reviews", "sponsors", "downloadable_files", "categories"))
-    pages = load("pages"); guests = [x for x in load("guests") if x.get("hidden") not in (True, "True")]
+    pages = load("pages"); guests = [x for x in load("guests") if x.get("hidden") not in (True, "True") and not HID.guest_hidden(x["slug"])]   # ausgeblendete Entitaet: keine Gastseite, nicht in der Liste
     enx = json.loads((D / "en_episodes.json").read_text("utf-8")) if (D / "en_episodes.json").exists() else {}
     enx_by_id = {str(v["spreaker_id"]): v for v in enx.values() if v.get("spreaker_id")}
-    ents = {e["id"]: e for e in json.loads((D / "guest_entities.json").read_text("utf-8"))} if (D / "guest_entities.json").exists() else {}
+    ents = {e["id"]: e for e in HID.drop(json.loads((D / "guest_entities.json").read_text("utf-8")))} if (D / "guest_entities.json").exists() else {}
     _gm = json.loads((D / "guest_merge.json").read_text("utf-8")) if (D / "guest_merge.json").exists() else {}
     gmerge, galso = (_gm.get("merge") or {}), (_gm.get("also") or {})   # doppelte Gaeste -> Ziel-Entitaet; Gastseite verweist zusaetzlich auf diese Entitaeten
     baseids = {e["id"] for e in json.loads((D / "entities.json").read_text("utf-8"))}
@@ -679,7 +688,7 @@ def build(g):
         hl = "".join(f'<a href="{BASE}/entity/mirko-peters/">{esc(h["name"])}</a> ' for h in hosts if h.get("slug") == "mirko-peters")   # Host ist die Personen-Entitaet (ein Profil-Handle mirko-peters gibt es nicht)
         oa = (g.get("orig_alts") or {}).get(e["slug"]) or {}
         also = ('<h2>Also available in other languages</h2><ul>' + "".join(f'<li><a href="{u}" hreflang="{lg}">{esc(t)}</a> <span class="mut">({lg})</span></li>' for lg, (u, t) in sorted(oa.items())) + "</ul>") if oa else ""
-        gl = "".join(f'<li><a href="{root}guests/{gg["slug"]}/">{esc(gg["name"])}</a></li>' for gg in eg[e["slug"]])
+        gl = "".join(f'<li>{esc(gg["name"])}</li>' if HID.guest_hidden(gg["slug"]) else f'<li><a href="{root}guests/{gg["slug"]}/">{esc(gg["name"])}</a></li>' for gg in eg[e["slug"]])   # ausgeblendeter Gast: nur Name, kein Link
         _spr = SPM.episode(slug=e["slug"])   # T37 Sponsor: Folge aus einem Sponsoring (dauerhaft, auch die Sprachfassungen)
         tx = (f'<h2>Transcript</h2>{TRS.links_html(_trf)}<details open><summary>Read the full transcript</summary><p style="white-space:pre-wrap;line-height:1.6">{esc(tr)}</p></details>' if len(tr) > 200
               else f'<h2>Transcript</h2>{TRS.links_html(_trf)}' if _trf else "")   # #266: Dateien sichtbar verlinkt, Transkript im HTML unveraendert
@@ -794,6 +803,12 @@ def build(g):
         pub(f"guests/{gg['slug']}/", f"{gg['name']} – guest", plain(gg.get("bio")) or f"{gg['name']} on the {NAME}", body, ld, "profile", canon=_canon, seo=MP.guest_meta(gg["name"], gg.get("title") or "", gg.get("bio") or "", len(mine)))
         gl += f'<li style="margin:.4em 0"><a href="{root}guests/{gg["slug"]}/">{esc(gg["name"])}</a> <span class="mut">{esc(gg.get("title") or "")[:90]}</span></li>'
     if guests: pub("guests/", "Guests", f"{len(guests)} guests of the {NAME}.", f'<h1>Guests</h1><ul style="list-style:none;padding:0">{gl}</ul>', seo=MP.guests_list_meta(len(guests)))
+
+    for x in load("guests"):   # ausgeblendete Entitaet (data/entity_hidden.json): die fruehere Gastseite bleibt als Weiterleitungsseite auf die Liste (noindex, wie /show/blog/)
+        if x.get("hidden") not in (True, "True") and HID.guest_hidden(x["slug"]):
+            _gu = f"{root}guests/"
+            write(f"show/guests/{x['slug']}/index.html", (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url={_gu}">'
+                                                         f'<link rel="canonical" href="{_gu}"><title>Guests</title></head><body><p><a href="{_gu}">Guests</a></p></body></html>'))
 
     # Blog: die Beitraege sind jetzt Community-Beitraege von mirko-p (site_legacy_blog.py + site_blog.py); hier nur Weiterleitungsseiten fuer die kurz genutzten Adressen /show/blog/...
     def _stub(to, label):
