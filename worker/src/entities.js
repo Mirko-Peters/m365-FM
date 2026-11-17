@@ -3,7 +3,7 @@ import { legacyRev } from "./editor.js";
 import { gate, inScope, roleOf, logEdit } from "./perm.js";
 import { cleanText, rateLimit } from "./util.js";
 import { entityTranslations } from "./autotr.js";
-import { stats, evalBadges } from "./badges.js";
+import { evalBadges, isTrusted } from "./badges.js";
 import { findDuplicate } from "./kinds.js";
 import { pairNewOrgEntity, pairExisting } from "./orgpair.js";
 import { AI_PREFIX, aiFieldValues, aiFieldsOf, aiUserId, humanEdited, ownedEntities, revSource, stateHash } from "./entfill.js";
@@ -11,7 +11,6 @@ import { AI_PREFIX, aiFieldValues, aiFieldsOf, aiUserId, humanEdited, ownedEntit
 const ID = /^[a-z0-9-]{2,48}$/;
 export const TYPES = ["product", "platform", "concept", "org", "person", "cert", "event", "media", "category", "industry", "job"];
 export const PRED = ["instance_of", "part_of", "broader", "developed_by", "related_to", "requires", "covers", "created_by", "organized_by", "similar_to"];   // broader = Oberbegriff bei Begriffen (SKOS), Gegenrichtung narrower wird beim Anzeigen berechnet
-const TRUST_POINTS = 25;
 const now = () => Math.floor(Date.now() / 1000);
 const txt = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "").replace(/\s+/g, " ").trim();
 const httpsUrl = (s, ok) => { s = String(s || "").trim(); if (!s) return ""; try { const u = new URL(s); if (u.protocol !== "https:" || s.length > 250 || u.username || !ok(u.hostname)) return null; return u.href; } catch { return null; } };
@@ -215,7 +214,7 @@ export async function validate(env, id, raw) {
 async function liveOf(db, eid) {
   return await db.prepare("SELECT r.id,r.data,r.created,r.user_id,COALESCE(u.name,'') name FROM entity_rev r LEFT JOIN users u ON u.id=r.user_id AND u.banned=0 WHERE r.eid=? AND r.status='live' ORDER BY r.created DESC LIMIT 1").bind(eid).first();
 }
-export const trustedUser = async (db, user) => !!(user && (user.admin || user.editor || user.pro || (await stats(db, user.id)).points >= TRUST_POINTS));
+export const trustedUser = (db, user) => isTrusted(db, user);   // badges.js: nur fremd gepruefte Punkte, Mindestalter des Kontos (K28)
 
 export async function handleEntity(env, request, url, path, user, J) {
   const db = env.DB, method = request.method; let m;

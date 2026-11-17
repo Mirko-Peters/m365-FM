@@ -1,10 +1,10 @@
 // Community-Abstimmung ueber offene Aenderungen (Wiki, Entitaeten): vertrauenswuerdige Mitglieder stimmen ab
-import { stats, evalBadges } from "./badges.js";
+import { evalBadges, isTrusted } from "./badges.js";
 import { certScoped } from "./entities.js";
-const NEED = 3, TRUST = 25;
+const NEED = 3;   // Vertrauen: badges.js isTrusted (TRUST_POINTS)
 const now = () => Math.floor(Date.now() / 1000);
 const endorsedExpert = async (db, uid) => !!(await db.prepare("SELECT 1 x FROM endorsements WHERE owner_id=? AND by_id<>? GROUP BY eid HAVING COUNT(DISTINCT by_id)>=2 LIMIT 1").bind(uid, uid).first());   // Experte, den mind. 2 andere bestaetigt haben
-const trusted = async (db, u) => !!(u && (u.admin || u.editor || u.pro || (await stats(db, u.id)).points >= TRUST || (await endorsedExpert(db, u.id))));
+const trusted = async (db, u) => !!(u && ((await isTrusted(db, u)) || (await endorsedExpert(db, u.id))));   // badges.js isTrusted (K28)
 
 export async function handleVotes(env, request, url, path, user, J) {
   const db = env.DB;

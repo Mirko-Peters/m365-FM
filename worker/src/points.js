@@ -10,6 +10,18 @@ export const CATALOG = [
 ];
 const now = () => Math.floor(Date.now() / 1000);
 const today = () => new Date().toISOString().slice(0, 10);
+const dayStart = () => Math.floor(Date.parse(today() + "T00:00:00Z") / 1000);
+export const MAX_CONTACT_REDEEMS = 4;   // "contacts" hoechstens 4x je UTC-Tag (+20 Kontakte, messages.js MAX_BONUS)
+
+// Punkte abbuchen - atomar: Guthabenpruefung und Abbuchung in EINER Anweisung (Sicherheitspruefung K38). earned kommt aus stats() und wird
+// gebunden (es waechst nur, eine leicht veraltete Zahl ist also auf der sicheren Seite); die Summe der Ausgaben liest die Anweisung selbst.
+// cap = optional { item, since, max }: hoechstens max Abbuchungen dieses Postens seit since (Tagesdeckel). Rueckgabe: id der neuen Zeile oder 0.
+export async function spendPoints(db, uid, earned, item, cost, status, note, cap = null) {
+  const r = await db.prepare(`INSERT INTO points_spent(user_id,item,cost,status,note,created) SELECT ?1,?2,?3,?4,?5,?6
+    WHERE ?7-(SELECT COALESCE(SUM(cost),0) FROM points_spent WHERE user_id=?1)>=?3${cap ? " AND (SELECT COUNT(*) FROM points_spent WHERE user_id=?1 AND item=?8 AND created>=?9)<?10" : ""}`)
+    .bind(uid, item, cost, status, note, now(), earned, ...(cap ? [cap.item, cap.since, cap.max] : [])).run();
+  return r.meta.changes ? r.meta.last_row_id : 0;
+}
 
 export async function handlePoints(env, request, url, path, user, J) {
   const db = env.DB, method = request.method;
@@ -24,8 +36,11 @@ export async function handlePoints(env, request, url, path, user, J) {
     const b = await request.json().catch(() => ({})), it = CATALOG.find((c) => c.id === b.item); if (!it) return J({ error: "bad_item" }, 400);
     const st = await stats(db, user.id); if (st.balance < it.cost) return J({ error: "not_enough", balance: st.balance }, 400);
     const note = cleanText(b.note || "", 300).replace(/[<>]/g, "");
-    await db.prepare("INSERT INTO points_spent(user_id,item,cost,status,note,created) VALUES(?,?,?,?,?,?)").bind(user.id, it.id, it.cost, it.auto ? "done" : "pending", note, now()).run();
-    if (it.id === "contacts") await db.prepare("INSERT INTO msg_bonus(user_id,day,extra) VALUES(?,?,5) ON CONFLICT(user_id,day) DO UPDATE SET extra=extra+5").bind(user.id, today()).run();
+    const cap = it.id === "contacts" ? { item: "contacts", since: dayStart(), max: MAX_CONTACT_REDEEMS } : null;
+    if (cap && (await db.prepare("SELECT COUNT(*) n FROM points_spent WHERE user_id=? AND item='contacts' AND created>=?").bind(user.id, cap.since).first()).n >= cap.max) return J({ error: "limit", max: cap.max }, 429);   // Tagesdeckel, nichts abgebucht
+    const id = await spendPoints(db, user.id, st.earned, it.id, it.cost, it.auto ? "done" : "pending", note, cap);
+    if (!id) { const now2 = await stats(db, user.id); return now2.balance < it.cost ? J({ error: "not_enough", balance: now2.balance }, 400) : J({ error: "limit", max: MAX_CONTACT_REDEEMS }, 429); }   // parallele Einloesung war schneller
+    if (it.id === "contacts") await db.prepare("INSERT INTO msg_bonus(user_id,day,extra) VALUES(?1,?2,5) ON CONFLICT(user_id,day) DO UPDATE SET extra=MIN(extra+5,?3)").bind(user.id, today(), MAX_CONTACT_REDEEMS * 5).run();
     return J({ ok: true, balance: st.balance - it.cost, status: it.auto ? "done" : "pending" });
   }
   if (path === "/api/admin/points/requests" && method === "GET") {

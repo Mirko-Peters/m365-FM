@@ -483,8 +483,8 @@ test("319-9: can() kennt jede Aktion der Redaktion; die alten Routen und die MCP
   assert.deepEqual(["admin", "editor", "fach", "mod", "user"].map((u) => ok(u, "role.vote", { ownerId: 9 })), ["do", "do", "do", "forbidden", "forbidden"]);
   for (const a of ["role.assign", "admin.undo", "escalation.close"]) assert.deepEqual(["admin", "editor", "fach", "mod", "user"].map((u) => ok(u, a)), ["do", "admin_only", "admin_only", "admin_only", "forbidden"]);
   assert.equal(ok("editor", "claim.decide", { ownerId: 2 }), "own_content"); assert.equal(ok("editor", "role.vote", { ownerId: 2 }), "own_content");
-  // keine Route entscheidet mehr an can() vorbei: die Rollen-Kurzformen stehen nur noch dort, wo ein Mitglied eigene Inhalte schreibt (Vertrauen) oder fuer die Anzeige
-  const SRC = new URL("../src/", import.meta.url), allow = { "blog.js": 1, "entities.js": 3, "wiki.js": 3, "votes.js": 2, "qa.js": 1, "entinvite.js": 6, "index.js": 2, "reviews.js": 0 };
+  // keine Route entscheidet mehr an can() vorbei: die Rollen-Kurzformen stehen nur noch dort, wo ein Mitglied eigene Inhalte schreibt (Vertrauen, seit K28 zentral in badges.js isTrusted) oder fuer die Anzeige
+  const SRC = new URL("../src/", import.meta.url), allow = { "badges.js": 1, "blog.js": 0, "entities.js": 2, "wiki.js": 1, "votes.js": 1, "qa.js": 1, "entinvite.js": 6, "index.js": 2, "reviews.js": 0 };
   for (const f of readdirSync(SRC).filter((x) => x.endsWith(".js") && !["perm.js"].includes(x))) {
     const n = (readFileSync(new URL(f, SRC), "utf-8").match(/user\??\.editor\b|u\.editor\b/g) || []).length;
     assert.ok(n <= (allow[f] ?? 0), `${f}: ${n} Rollen-Abfragen an can() vorbei (erlaubt ${allow[f] ?? 0})`);

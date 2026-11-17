@@ -140,16 +140,14 @@ export async function memberOf(env, uid) {
 }
 
 // Ratelimit: max Aktionen pro Fenster (Sekunden). true = erlaubt
+// Eine einzige Anweisung (UPSERT mit Bedingung): Pruefen und Hochzaehlen sind atomar. Frueher SELECT, dann INSERT/UPDATE - parallele Anfragen
+// (z. B. ein MCP-Batch mit Promise.all) lasen denselben Stand und kamen alle durch (Sicherheitspruefung K37/K40). Erlaubt ist ein Aufruf nur,
+// wenn diese Anweisung eine Zeile anlegt oder hochzaehlt; ist das Fenster voll, aendert sie nichts (changes=0) und n bleibt bei max.
 export async function rateLimit(db, key, max, windowSec) {
   const now = Math.floor(Date.now() / 1000);
-  const row = await db.prepare("SELECT n, win FROM ratelimit WHERE k=?").bind(key).first();
-  if (!row || now - row.win >= windowSec) {
-    await db.prepare("INSERT OR REPLACE INTO ratelimit(k,n,win) VALUES(?,?,?)").bind(key, 1, now).run();
-    return true;
-  }
-  if (row.n >= max) return false;
-  await db.prepare("UPDATE ratelimit SET n=n+1 WHERE k=?").bind(key).run();
-  return true;
+  const r = await db.prepare("INSERT INTO ratelimit(k,n,win) VALUES(?1,1,?2) ON CONFLICT(k) DO UPDATE SET n=CASE WHEN ?2-win>=?3 THEN 1 ELSE n+1 END, win=CASE WHEN ?2-win>=?3 THEN ?2 ELSE win END WHERE ?2-win>=?3 OR n<?4")
+    .bind(key, now, windowSec, max).run();
+  return (r?.meta?.changes || 0) > 0;
 }
 
 const numeric = (value, fallback) => Number.isFinite(Number(value)) && Number(value) >= 0 ? Number(value) : fallback;

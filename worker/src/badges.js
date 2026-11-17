@@ -21,6 +21,17 @@ export async function episodeDates(env) {
   return epCache.map;
 }
 
+// Bestaetigte Speaker-Sessions eines Mitglieds (Sicherheitspruefung K3). Zaehlt nur, was ein anderer geprueft hat: Session live, von jemand
+// anderem angelegt, auf einem freigegebenen oeffentlichen Event eines anderen Veranstalters, und der EIGENE Eintrag (nicht irgendeiner in der
+// Session) ist "confirmed". Vorher reichte ein LIKE ueber das ganze JSON - wer sich selbst als Speaker eintrug (speakersCheck bestaetigt den
+// eigenen Handle), bekam je Session 100 Punkte, auch auf Entwuerfen und in Vorschlaegen.
+export const SPEAKER_SQL = `SELECT COUNT(DISTINCT s.id) n FROM event_sessions s JOIN events e ON e.id=s.event_id
+  JOIN json_each(CASE WHEN json_valid(s.speakers) THEN s.speakers ELSE '[]' END) j
+  WHERE s.status='live' AND s.merged_into=0 AND s.proposer_id<>?1 AND e.owner_id<>?1 AND e.review='approved' AND e.public=1 AND e.merged_into=0
+    AND json_extract(j.value,'$.s')='confirmed' AND json_extract(j.value,'$.h')=(SELECT handle FROM profiles WHERE user_id=?1 AND public=1 AND handle IS NOT NULL)`;
+// Freigegebene, oeffentliche Events (nicht zusammengefuehrt); ein privater Entwurf zaehlt nicht als Event
+const EVENTS_SQL = "SELECT COUNT(*) n FROM events WHERE owner_id=? AND review='approved' AND public=1 AND merged_into=0";
+
 export async function award(db, uid, badge) {
   const r = await db.prepare("INSERT OR IGNORE INTO user_badges(user_id,badge,earned) VALUES(?,?,?)").bind(uid, badge, Math.floor(Date.now() / 1000)).run();
   return (r.meta?.changes || 0) > 0;
@@ -69,8 +80,8 @@ export async function evalBadges(env, uid) {
   const q = {
     founder: await n("SELECT COUNT(*) n FROM org_members WHERE user_id=? AND role='owner' AND status='active'", uid),
     team_member: await n("SELECT COUNT(*) n FROM org_members WHERE user_id=? AND role<>'owner' AND status='active'", uid),
-    organizer: await n("SELECT COUNT(*) n FROM events WHERE owner_id=? AND review='approved'", uid),
-    speaker: await n("SELECT COUNT(*) n FROM event_sessions WHERE speakers LIKE '%\"s\":\"confirmed\"%' AND speakers LIKE '%\"h\":\"' || COALESCE((SELECT handle FROM profiles WHERE user_id=?),'-') || '\"%'", uid),
+    organizer: await n(EVENTS_SQL, uid),
+    speaker: await n(SPEAKER_SQL, uid),
     recommender: await n("SELECT COUNT(*) n FROM recommendations WHERE author_id=? AND status='live'", uid),
     recommended: await n("SELECT COUNT(*) n FROM recommendations WHERE subject_id=? AND status='live'", uid),
     endorsed: await n("SELECT COUNT(*) n FROM endorsements n2 JOIN expertise e ON e.owner_id=n2.owner_id AND e.eid=n2.eid AND e.owner_type='u' WHERE n2.owner_id=?", uid),
@@ -101,16 +112,42 @@ export async function stats(db, uid) {
   const a = {
     wiki: await n("SELECT COUNT(*) n FROM wiki_rev WHERE user_id=? AND status IN ('live','old')", uid), ent: await n("SELECT COUNT(*) n FROM entity_rev WHERE user_id=? AND status IN ('live','old')", uid),
     orgs_owned: await n("SELECT COUNT(*) n FROM org_members WHERE user_id=? AND role='owner' AND status='active'", uid), orgs_joined: await n("SELECT COUNT(*) n FROM org_members WHERE user_id=? AND role<>'owner' AND status='active'", uid),
-    events: await n("SELECT COUNT(*) n FROM events WHERE owner_id=? AND review='approved'", uid), rec_w: await n("SELECT COUNT(*) n FROM recommendations WHERE author_id=? AND status='live'", uid), rec_r: await n("SELECT COUNT(*) n FROM recommendations WHERE subject_id=? AND status='live'", uid),
+    events: await n(EVENTS_SQL, uid), rec_w: await n("SELECT COUNT(*) n FROM recommendations WHERE author_id=? AND status='live'", uid), rec_r: await n("SELECT COUNT(*) n FROM recommendations WHERE subject_id=? AND status='live'", uid),
     endo_r: await n("SELECT COUNT(*) n FROM endorsements WHERE owner_id=?", uid), endo_g: await n("SELECT COUNT(*) n FROM endorsements WHERE by_id=?", uid),
-    speaker: await n("SELECT COUNT(*) n FROM event_sessions WHERE speakers LIKE '%\"s\":\"confirmed\"%' AND speakers LIKE '%\"h\":\"' || COALESCE((SELECT handle FROM profiles WHERE user_id=?),'-') || '\"%'", uid),
+    speaker: await n(SPEAKER_SQL, uid),
     pub: await n("SELECT COUNT(*) n FROM profiles WHERE user_id=? AND public=1", uid),
     blog: await n("SELECT COUNT(*) n FROM blog_posts WHERE user_id=? AND status='live'", uid), vids: await n("SELECT COUNT(*) n FROM yt_videos WHERE user_id=? AND status='published'", uid), pod: await n("SELECT COUNT(*) n FROM pod_episodes WHERE user_id=? AND status='published'", uid), inv: await n("SELECT COUNT(*) n FROM invite_success WHERE inviter_user_id=? AND voided=0", uid), blog_v: await n("SELECT COUNT(*) n FROM blog_votes v JOIN blog_posts b ON b.id=v.post_id WHERE b.user_id=? AND v.user_id<>?", uid, uid),
   };
   // Punkteskala: Kommentar 1, erhaltener Like 1, Wiki-/Entitaets-Aenderung 3, Bestaetigung 2/1, Empfehlung 5/5, Firma gruenden 30, beitreten 5, Event 50, bestaetigter Speaker 100, oeffentliches Profil 10, Abzeichen je 5, erfolgreiche Einladung 2 (bis 100)
-  const earned = c.n * 1 + l.n * 1 + nb * 5 + Math.min(a.inv, 100) * 2 + a.wiki * 3 + a.ent * 3 + a.orgs_owned * 30 + a.orgs_joined * 5 + a.events * 50 + a.speaker * 100 + a.rec_w * 5 + a.rec_r * 5 + Math.min(a.endo_r, 20) * 2 + Math.min(a.endo_g, 20) + a.pub * 10 + Math.min(a.blog, 20) * 5 + Math.min(a.blog_v, 200) + Math.min(a.pod, 20) * 20 + Math.min(a.vids, 20) * 20;
+  const earned = c.n * 1 + l.n * 1 + nb * 5 + Math.min(a.inv, 100) * 2 + a.wiki * 3 + a.ent * 3 + a.orgs_owned * 30 + a.orgs_joined * 5 + Math.min(a.events, 20) * 50 + Math.min(a.speaker, 20) * 100 + a.rec_w * 5 + a.rec_r * 5 + Math.min(a.endo_r, 20) * 2 + Math.min(a.endo_g, 20) + a.pub * 10 + Math.min(a.blog, 20) * 5 + Math.min(a.blog_v, 200) + Math.min(a.pod, 20) * 20 + Math.min(a.vids, 20) * 20;
   const spent = await n("SELECT COALESCE(SUM(cost),0) n FROM points_spent WHERE user_id=?", uid);
   return { comments: c.n, likes: l.n, badges, points: earned, earned, spent, balance: earned - spent };
+}
+
+// Vertrauensschwelle (Sicherheitspruefung K28): ab TRUST_POINTS gehen Wiki-, Entitaets-, Blog- und Event-Aenderungen ohne Pruefung live und das
+// Mitglied darf ueber fremde Aenderungen abstimmen. Gezaehlt werden dafuer nur Punkte, die jemand anderes geprueft oder vergeben hat - nicht
+// oeffentliches Profil, Abzeichen, eigene Kommentare, ungepruefte Blogbeitraege oder selbst gegruendete Firmen (das waren 25 Punkte in drei
+// Anfragen). Dazu ein Mindestalter des Kontos. Redaktion, Admin und bestaetigte Programme bleiben ohne Schwelle vertrauenswuerdig.
+export const TRUST_POINTS = 25, TRUST_MIN_AGE = 7 * 86400;
+export async function trustPoints(db, uid) {
+  const n = async (sql, ...b) => ((await db.prepare(sql).bind(...b).first().catch(() => ({ n: 0 })))?.n) || 0;
+  const likes = await n("SELECT COUNT(*) n FROM likes l JOIN comments c ON c.id=l.comment_id WHERE c.user_id=? AND c.status='ok' AND l.user_id<>?", uid, uid);   // Likes anderer
+  // freigegebene Aenderungen (Redaktion oder Abstimmung) - ohne die eigene, selbst verwaltete Entitaet (Profil, Event, beanspruchte Firma): die geht ohne Pruefung live
+  const edits = await n("SELECT COUNT(*) n FROM wiki_rev WHERE user_id=? AND status IN ('live','old')", uid)
+    + await n("SELECT COUNT(*) n FROM entity_rev r WHERE r.user_id=?1 AND r.status IN ('live','old') AND r.summary<>'Selbst verwaltet' AND NOT EXISTS (SELECT 1 FROM entity_claims c WHERE c.eid=r.eid AND c.user_id=?1 AND c.status='verified')", uid);
+  const events = await n(EVENTS_SQL, uid), speaker = await n(SPEAKER_SQL, uid);
+  const recR = await n("SELECT COUNT(*) n FROM recommendations WHERE subject_id=? AND author_id<>? AND status='live'", uid, uid);
+  const endoR = await n("SELECT COUNT(*) n FROM endorsements WHERE owner_id=? AND by_id<>?", uid, uid);
+  const blogV = await n("SELECT COUNT(*) n FROM blog_votes v JOIN blog_posts b ON b.id=v.post_id WHERE b.user_id=? AND v.user_id<>?", uid, uid);
+  const pod = await n("SELECT COUNT(*) n FROM pod_episodes WHERE user_id=? AND status='published'", uid), vids = await n("SELECT COUNT(*) n FROM yt_videos WHERE user_id=? AND status='published'", uid);   // von der Redaktion veroeffentlicht
+  return likes + edits * 3 + Math.min(events, 20) * 50 + Math.min(speaker, 20) * 100 + recR * 5 + Math.min(endoR, 20) * 2 + Math.min(blogV, 200) + Math.min(pod, 20) * 20 + Math.min(vids, 20) * 20;
+}
+export async function isTrusted(db, user) {
+  if (!user) return false;
+  if (user.admin || user.editor || user.pro) return true;
+  const created = user.created ?? (await db.prepare("SELECT created FROM users WHERE id=?").bind(user.id).first().catch(() => null))?.created;
+  if (!(created > 0) || Math.floor(Date.now() / 1000) - created < TRUST_MIN_AGE) return false;
+  return (await trustPoints(db, user.id)) >= TRUST_POINTS;
 }
 
 // Punkte eines Zeitraums je Sprache (fuer den Kurator): Kommentare x2 + erhaltene Likes x3
