@@ -9,12 +9,12 @@ topics: [avd-regional-host-pools, avd-host-pool]
 keypoints:
   - "Deployment scope decides where metadata lives: Regional means a database in one Azure region, with replicas across availability zones and replication to a paired region where applicable. Geographical, the default, means a database that serves the whole geography. Learn says there are no functional differences."
   - "Scope is set when the object is created and cannot be changed. Host pools, workspaces, application groups and App Attach packages of different scopes cannot be associated with each other."
-  - "Regional host pools have been generally available since 30 September 2026 and are offered in 14 regions. Two Learn pages still show preview wording and only East US 2 and Central US."
+  - "Regional host pools have been generally available since 30 September 2026 and are offered in 14 regions, which Learn's data locations article lists. Some preview wording remains on Learn pages."
   - "Microsoft strongly recommends Regional for new host pools in a supported region, and recommends placing session host VMs in the same region as the regional metadata, although the metadata location is not technically tied to where VMs run."
   - "In PowerShell the scope is the -DeploymentScope parameter. If you omit it, the host pool becomes geographical."
 faq:
   - q: "Are regional host pools generally available?"
-    a: "Yes. A Microsoft Tech Community post from 30 September 2026 (last updated 13 November 2026) and the September 2026 entry of What's new announce general availability, with 14 regions. The Regional Host Pools article on Learn still describes preview and names two regions, and it is the page the post names as the current region list, so expect it to be updated."
+    a: "Yes. A Microsoft Tech Community post from 30 September 2026 (last updated 13 November 2026) and the September 2026 entry of What's new announce general availability, with 14 regions. Learn's Regional Host Pools article says the service now supports regional host pools and refers to the Data locations article, which lists the same 14 regions. A few preview remnants remain on Learn, such as the module version 5.4.5-preview."
   - q: "Can I convert an existing geographical host pool to regional?"
     a: "Not in place. Learn says the scope cannot be changed after creation. The announcement says support for migrating existing geographical host pools is coming in a phased rollout, with no timeline. Until then, deploy a new regional host pool with the same configuration and move users over."
   - q: "Do regional host pools change how users connect?"
@@ -58,9 +58,9 @@ Regional host pools are generally available. The Tech Community post "Now genera
 
 The post does not list a German region. A comment under it says the team is working on Germany West Central; that is not a date or a commitment. The preview announcement said regional databases are being deployed into every Azure region, and the service architecture article says Microsoft-managed components are located in around 40 Azure regions, but neither is a list of regions where regional scope works today.
 
-Some Learn pages are behind the announcement. The [Regional Host Pools article](https://learn.microsoft.com/en-us/azure/virtual-desktop/regional-host-pools) still calls the service preview, names the portal field Deployment Scope (Preview) and says two regions are supported. The [Data locations article](https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations) lists the same two regions. The announcement names the Regional Host Pools article as the current region list, so these pages are expected to catch up. Use the announcement for status and region count and the Learn page for the region list once it is updated.
+Learn matches the announcement on the region count. The [Data locations article](https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations), last updated on 16 November 2026, has a table with a Geographical and a Regional column, and the same 14 regions carry a check in the Regional column. The [Regional Host Pools article](https://learn.microsoft.com/en-us/azure/virtual-desktop/regional-host-pools) says Azure Virtual Desktop now supports regional host pools, refers to the Data locations article for available regions and adds that regional availability is expanding in phases. Some preview wording remains there: module version 5.4.5-preview for `-DeploymentScope`, a sentence that speaks of the service becoming generally available, and the OS disk row. The multiregion BCDR article on Learn still says regional host pools are in public preview, so status labels differ between Learn pages. The announcement and What's new say general availability.
 
-In an unsupported region the option is not offered and host pools are created as geographical, and PowerShell calls with regional scope return "Not Supported".
+In a region without regional support, Learn says the deployment scope is selected as geographical automatically, and the announcement says PowerShell calls with regional scope return "Not Supported".
 
 ## Create a regional host pool
 
@@ -68,7 +68,7 @@ In the Azure portal:
 
 1. Sign in, search for **Azure Virtual Desktop** and select **Host pools**, then **Create**.
 2. On the **Basics** tab, choose subscription, resource group, host pool name and **Location**.
-3. Set **Deployment scope** to **Regional**. The value **Geographical** creates a standard host pool. Learn says the field only appears for a Location that supports regional host pools and is not shown otherwise. The announcement describes a changed portal: the field is shown for any location, where both scopes are available you must choose explicitly, and elsewhere only the supported scope can be selected.
+3. Set **Deployment scope** to **Regional**. The value **Geographical** creates a standard host pool. Learn describes the drop-down as offering regional (recommended) and geographical (not recommended), and says the only available scope is selected automatically when a region supports one scope. The announcement says the field is shown for any location, that where both scopes are available you must choose explicitly, and that elsewhere only the supported scope can be selected.
 4. Complete the remaining tabs as for any host pool. If you register a desktop application group on the Workspace tab, the workspace must be regional too.
 
 In PowerShell, Learn documents the `-DeploymentScope` parameter, added in the 5.4.5-preview version of the `Az.DesktopVirtualization` module, and the announcement shows the same parameter:
@@ -81,7 +81,7 @@ The parameter is optional. If it is not set, the deployment defaults to `Geograp
 
 ## Limits stated in the sources
 
-The Learn article was written during preview, and not every statement has been confirmed or withdrawn since general availability.
+Some statements on the Learn page date from the preview period, and the announcement neither confirms nor withdraws them.
 
 - **Logging.** Learn says errors and checkpoints are not reported to Log Analytics for regional session hosts. This is still on the Learn page; the announcement does not mention it. If your monitoring depends on those records, test it before moving production users.
 - **OS disk, preview wording.** Learn says that during preview only Standard SSD is supported and is selected automatically once ephemeral OS disks are configured. Whether this still holds after general availability is not stated in the sources.
@@ -91,7 +91,7 @@ The Learn article was written during preview, and not every statement has been c
 
 ## Moving from geographical to regional
 
-Because the scope cannot be changed, a move means building new objects. The announcement says existing geographical host pools need no action now and that support for migrating them is coming in a phased rollout, and Learn's workspace article says the same. The BCDR article is the outlier: it says Microsoft provides migration tooling. Until a migration path exists, the preview post describes deploying regional host pools manually with the same configuration and moving users over. A practical sequence follows from the scope rules:
+Because the scope cannot be changed, a move means building new objects. The announcement says existing geographical host pools need no action now and that support for migrating them is coming in a phased rollout. The Regional Host Pools article says Azure Virtual Desktop is working toward transitioning existing geographical host pool metadata to regional infrastructure, with more information to follow, and Learn's workspace article says the same as the announcement. The BCDR article is the outlier: it says Microsoft provides migration tooling. Until a migration path exists, the preview post describes deploying regional host pools manually with the same configuration and moving users over. A practical sequence follows from the scope rules:
 
 1. Create a regional workspace first, because only regional application groups can join it.
 2. Create the regional host pool and its application groups in a supported region.
@@ -102,11 +102,11 @@ The multiregion BCDR article notes that users assigned to host pools in two work
 
 ## Checking what you already have
 
-Learn says the host pool list in the portal has a **Deployment scope** column that shows each host pool's type. Creating host pools, workspaces and application groups needs **Desktop Virtualization Contributor** on the resource group or subscription, and assigning users additionally needs `Microsoft.Authorization/roleAssignments/write`, which User Access Administrator and Owner include. Nothing in the retrieved pages says a regional host pool needs a different role.
+Learn says the host pool list in the portal has a **Deployment scope** column that shows each host pool's type. Creating host pools, workspaces and application groups needs **Desktop Virtualization Contributor** on the resource group or subscription, and assigning users additionally needs `Microsoft.Authorization/roleAssignments/write`, which User Access Administrator and Owner include. Nothing in the sources says a regional host pool needs a different role.
 
 ## Where this fits
 
-For any new host pool in a supported region, Microsoft strongly recommends creating it as a regional host pool, and Learn suggests considering a move of existing geographical host pools. The announcement adds a placement recommendation: put session host VMs in the same region as the regional metadata, even though the BCDR article says metadata location is independent of VM location. The choice covers the metadata location only. It does not make session hosts or profile storage resilient: those remain your responsibility, and Learn's service architecture article lists them as customer-managed. Region pairing and multi-region layouts are covered in "Designing a multi-region Azure Virtual Desktop deployment", and the data residency side in "What regional host pools mean for data residency and resilience".
+For new host pools, Learn strongly recommends regional host pools in the regions you require, marks regional as recommended and geographical as not recommended in the portal drop-down, and suggests considering a move of existing geographical host pools. The announcement adds a placement recommendation: put session host VMs in the same region as the regional metadata, even though the BCDR article says metadata location is independent of VM location. The choice covers the metadata location only. It does not make session hosts or profile storage resilient: those remain your responsibility, and Learn's service architecture article lists them as customer-managed. Region pairing and multi-region layouts are covered in "Designing a multi-region Azure Virtual Desktop deployment", and the data residency side in "What regional host pools mean for data residency and resilience".
 
 ## Sources
 
@@ -115,7 +115,7 @@ All retrieved on 17 November 2026.
 - [Microsoft Tech Community: Now generally available: Regional resiliency for Azure Virtual Desktop](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/now-generally-available-regional-resiliency-for-azure-virtual-desktop/4540458)
 - [Microsoft Learn: Regional Host Pools - Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/regional-host-pools)
 - [Microsoft Learn: Azure Virtual Desktop service architecture and resilience](https://learn.microsoft.com/en-us/azure/virtual-desktop/service-architecture-resilience)
-- [Microsoft Learn: Data locations for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations)
+- [Microsoft Learn: Data locations for Azure Virtual Desktop (list of regions)](https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations)
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
 - [Microsoft Learn: Create a workspace and an application group (create-application-group-workspace page)](https://learn.microsoft.com/en-us/azure/virtual-desktop/create-application-group-workspace)
 - [Microsoft Learn: Multiregion BCDR for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/architecture/example-scenario/azure-virtual-desktop/azure-virtual-desktop-multi-region-bcdr)

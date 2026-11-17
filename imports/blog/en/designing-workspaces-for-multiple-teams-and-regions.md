@@ -39,7 +39,7 @@ On a pooled host pool you can assign one desktop application group and multiple 
 
 **Deployment scope.** Learn's deployment article says the scope is set at creation and cannot be changed, a regional host pool can join only a regional workspace, and application groups inherit the scope of their host pool. A workspace can hold only application groups with the same scope. The portal greys out incompatible objects, and PowerShell or REST requests that mix scopes fail. **Deployment scope** only appears when the selected Location supports regional workspaces. See [regional host pools](/entity/avd-regional-host-pools/).
 
-Regional host pools have been generally available since 30 September 2026, according to the Tech Community announcement, which lists 14 regions; the September 2026 entry of What's new confirms general availability. The Regional Host Pools article on Learn still carries preview wording and names only East US 2 and Central US, and the data locations article also lists only those two regions, so check the current region list before choosing a scope. On that reading, a workspace for regional host pools sits in the same supported region as those pools.
+Regional host pools have been generally available since 30 September 2026, according to the Tech Community announcement, which lists 14 regions; the September 2026 entry of What's new confirms general availability. Learn's data locations article lists the same 14 regions, and the Regional Host Pools article refers to that list and says availability is expanding in phases, so check it before choosing a scope. On that reading, a workspace for regional host pools sits in the same supported region as those pools.
 
 ## Three layouts
 
@@ -59,7 +59,7 @@ The table applies the rules above; it is not Microsoft guidance. If the location
 
 ## Example: two teams in two regions
 
-Take a finance team and an engineering team, each with a pooled host pool in East US 2 and in Central US, all with regional scope. Both regions are named on Learn's Regional Host Pools page. A pool in a region without regional support is geographical, and its application groups can only join a geographical workspace, so the workspace for that region would use geographical scope. Each pool has one desktop application group, so there are four desktop groups, two per location.
+Take a finance team and an engineering team, each with a pooled host pool in East US 2 and in Central US, all with regional scope. Both regions are marked as supporting regional scope in Learn's data locations article. A pool in a region without regional support is geographical, and its application groups can only join a geographical workspace, so the workspace for that region would use geographical scope. Each pool has one desktop application group, so there are four desktop groups, two per location.
 
 With the **by-region** layout you create two workspaces. The East US 2 workspace holds the finance and engineering groups for that region, and the Central US workspace holds the other two. A user assigned to the groups of one region sees one workspace.
 
@@ -117,7 +117,7 @@ All retrieved on 17 November 2026.
 - [Microsoft Learn: Built-in Azure RBAC roles for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/rbac)
 - [Microsoft Learn: Multiregion BCDR for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/architecture/example-scenario/azure-virtual-desktop/azure-virtual-desktop-multi-region-bcdr)
 - [Microsoft Learn: Azure Virtual Desktop service architecture and resilience](https://learn.microsoft.com/en-us/azure/virtual-desktop/service-architecture-resilience)
-- [Microsoft Learn: Azure Virtual Desktop data locations](https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations)
+- [Microsoft Learn: Data locations for Azure Virtual Desktop (list of regions)](https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations)
 - [Microsoft Tech Community: Now generally available: Regional resiliency for Azure Virtual Desktop](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/now-generally-available-regional-resiliency-for-azure-virtual-desktop/4540458)
 - [Microsoft Learn: Azure subscription and service limits, quotas, and constraints](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits)
 - [Microsoft Learn: Regional Host Pools - Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/regional-host-pools)

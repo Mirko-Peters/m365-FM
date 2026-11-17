@@ -9,7 +9,7 @@ topics: [avd-scaling-plan-exclusion-tag, avd-scaling-plan]
 keypoints:
   - "Tag the VM before you turn on drain mode. Autoscale overrides drain mode on every VM it scales, so drain mode alone does not protect a host in a pooled host pool."
   - "Tag with the Azure portal or Update-AzTag with the Merge operation, and remove the tag with the Delete operation or in the portal when the work is done. The Tag Contributor role cannot tag resources in the portal, only through PowerShell or REST."
-  - "Check the capacity of the remaining untagged hosts first. Tagged hosts are still part of the minimum percentage calculation, but autoscale cannot start them, and Learn does not say whether a running tagged host satisfies the minimum."
+  - "Check the capacity of the remaining untagged hosts first. Tagged hosts are still included in the calculation of the minimum percentage of hosts, but autoscale cannot start them, and Learn says a pool that cannot turn hosts back on cannot meet its minimum."
   - "The tag applies in all phases of the schedule and Learn describes no time limit for it, so removing it after the work is your step."
   - "Learn documents the tag for maintenance. Using it for test or always-on hosts follows from its definition and is not described as a use case."
 faq:
@@ -33,7 +33,7 @@ You need three things in place.
 
 ## Check capacity first
 
-Tagged hosts are still part of the calculation of the minimum percentage of hosts, but autoscale cannot turn them on. If you tag too many, autoscale cannot add capacity. The consequences, including Learn's six-host scenario, are walked through in the concept article; here is the check you run before a window.
+Learn says tagged hosts are still considered part of the calculation of the minimum percentage of hosts, but autoscale cannot turn them on, and its six-host scenario says that being unable to turn VMs back on means the pool cannot meet its minimum percentage. If you tag too many, autoscale cannot add capacity. The consequences, including Learn's six-host scenario, are walked through in the concept article; here is the check you run before a window.
 
 A worked example with invented numbers: a pool of eight hosts has a maximum session limit of 10 and a 75 percent capacity threshold, and peak load is 50 sessions. Learn defines available host pool capacity as the maximum session limit times the number of available session hosts, and says autoscale turns on or creates more session hosts when used capacity goes over the capacity threshold. Learn does not say whether a running host in drain mode counts as an available session host. The calculation below is the article's own cautious model, not documented behavior: it counts hosts in maintenance as zero capacity, which fits the fact that a host in drain mode accepts no new sessions. On that assumption, if you take two hosts out for patching and all six remaining hosts are running, they carry 6 x 10 x 0.75 = 45 sessions before the threshold is crossed and autoscale would need another host. At 50 sessions it would need one and could not start a tagged host. With one host out, 7 x 10 x 0.75 = 52.5 sessions, which covers the peak of 50. So in this pool, patch one host at a time during peak, or both outside peak.
 
@@ -41,7 +41,7 @@ The same check applies to the minimum percentage of hosts. With eight hosts and 
 
 ## Maintenance runbook
 
-1. **Tag the VM.** In the Azure portal open the VM, select **Add tags** (if the VM already has tags, Learn's edit section says to select **change**), enter the plan's tag name and a value, and select **Save**. The autoscale pages define the match by tag name and do not say whether the value is compared. For several VMs, select them in a resource list and use **Assign tags**. Tags are not inherited from the resource group, so each VM needs its own. In PowerShell, merge the tag into the existing ones:
+1. **Tag the VM.** In the Azure portal open the VM, select **Add tags** (if the VM already has tags, Learn's edit section says to select **change**), enter the plan's tag name and a value, and select **Save**. The autoscale pages define the match by tag name and do not say whether the value is compared. For several VMs, select them in a resource list and use **Assign tags**. Tags are not inherited from the resource group, so each VM needs its own. Learn does not say how quickly autoscale notices a newly added tag, so do not assume the protection is active the moment you save; use the check in step 7 as a plausibility check before you rely on it. In PowerShell, merge the tag into the existing ones:
 
    ```powershell
    $vm = Get-AzResource -Name "avd-host-03" -ResourceGroup "rg-avd"
@@ -71,7 +71,7 @@ The same check applies to the minimum percentage of hosts. With eight hosts and 
    Update-AzTag -ResourceId $vm.Id -Tag @{ "excludeFromScaling" = "maintenance" } -Operation Delete
    ```
 
-   From that moment autoscale manages the host again. If the phase calls for consolidation, it can put the host in drain mode and turn it off, so do not remove the tag from a host you meant to keep running before you are ready for that.
+   After the tag is removed, autoscale can act on the host again; Learn does not say how quickly it notices the change. If the phase calls for consolidation, it can put the host in drain mode and turn it off, so do not remove the tag from a host you meant to keep running before you are ready for that.
 
 7. **Verify.** Learn's Insights page for autoscale (pooled host pools only) documents the `WVDAutoscaleEvaluationPooled` Log Analytics table, whose `ExcludedSessionHostCount` column is described as the number of session hosts excluded from autoscale management. Query that table in the workspace that receives the autoscale logs. Learn does not tie the column to the exclusion tag, so treat a count that matches the hosts you tagged as a plausibility check, not proof.
 
@@ -93,7 +93,7 @@ For a personal host pool, the tag most likely protects the power state, because 
 
 - **Tagging the resource group.** Tags are not inherited, so VMs stay unprotected.
 - **Draining first, tagging second.** In a pooled pool autoscale can override the drain mode you set, whoever set it.
-- **Forgetting the tag afterwards.** A host that stays tagged never scales. It either stays on and costs money or stays off and removes capacity, and it is still part of the minimum percentage calculation.
+- **Forgetting the tag afterwards.** A host that stays tagged never scales. It either stays on and costs money or stays off and removes capacity; a tagged host that is off does not help the pool meet its minimum percentage, because autoscale cannot start it.
 - **Putting personal data in the tag.** Learn asks you to keep user principal names and similar data out of exclusion tags.
 - **Assuming dynamic autoscaling behaves the same.** Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit. Learn does not say whether dynamic autoscaling, which can delete session hosts, treats tagged hosts differently.
 

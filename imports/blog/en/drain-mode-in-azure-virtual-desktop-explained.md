@@ -1,6 +1,6 @@
 ---
 title: "Drain mode in Azure Virtual Desktop explained"
-summary: "Drain mode stops a session host from accepting new sessions from new users, while existing sessions continue until they end. This article explains what it changes and what it does not, how the load balancer and autoscale treat it, and how to set and read it in the portal and with PowerShell."
+summary: "Drain mode stops a session host from accepting new sessions from new users, while existing sessions continue until they end. This article explains what it changes and what it does not, how the load balancer and autoscale treat it, and how to set it in the portal and set and read it with PowerShell."
 status: review
 publish: false
 author: mirko-p
@@ -21,7 +21,7 @@ faq:
     a: "Learn says that if you refresh the portal immediately after changing drain mode, the status might appear out of sync, and it advises waiting at least 60 seconds before refreshing."
 ---
 
-Drain mode is a per-host setting that stops a session host from accepting new user sessions. Sessions that already exist are not touched. This article explains what the setting changes, what it does not change, how the load balancer and autoscale treat it, and how to set and read it. The step-by-step maintenance runbook is a separate article, "How to use drain mode for patching and maintenance of session hosts", and planning waves across a pool is covered in "Patching AVD without downtime: rolling updates with drain mode".
+Drain mode is a per-host setting that stops a session host from accepting new user sessions. Sessions that already exist are not touched. This article explains what the setting changes, what it does not change, how the load balancer and autoscale treat it, and how to set it in the portal and set and read it in PowerShell. The step-by-step maintenance runbook is a separate article, "How to use drain mode for patching and maintenance of session hosts", and planning waves across a pool is covered in "Patching AVD without downtime: rolling updates with drain mode".
 
 ## What drain mode does
 
@@ -39,7 +39,7 @@ In the Azure PowerShell reference the same state is the `-AllowNewSession` param
 - **It is not a sign-out.** Nothing ends because you turned it on.
 - **It is not a shutdown.** Learn describes no shutdown, so the VM keeps running and its cost continues. That is a conclusion from the description rather than a Learn statement.
 - **It is not a health state.** Learn lists the new-session setting and the status as separate properties. Health checks and statuses are a separate topic; see "Azure Virtual Desktop Session Host Shows Unavailable: A Step-by-Step Checklist".
-- **It is not the same as the maximum session limit.** Under depth-first load balancing a host at its [maximum session limit](/entity/avd-maximum-session-limit/) is left out of the query for new sessions, but only until sessions end and there is room again. A drained host stays excluded until you switch drain mode off.
+- **It is not the same as the maximum session limit.** Under depth-first load balancing a host at its [maximum session limit](/entity/avd-maximum-session-limit/) is left out of the query for new sessions, but only until sessions end and there is room again. A drained host stays excluded until drain mode is switched off, by you or, on pooled host pools with a scaling plan, by autoscale unless the host carries the exclusion tag (see below).
 
 ## How the load balancer treats a drained host
 
@@ -99,7 +99,7 @@ Only the last row ends sessions. Drain mode therefore needs a second step, eithe
 ## Reading the result
 
 - **Sessions.** Check the session count on the host before you start work. Existing sessions are not ended by drain mode. The Insights glossary says its Sessions item shows connected and disconnected sessions, while Idle sessions shows only disconnected ones.
-- **Direct access.** Because administrators can reach the VM without the service, your own testing on a drained host does not prove what users will see.
+- **Direct access.** This is a conclusion from the documented administrator access, not a Learn statement: because administrators can reach the VM without the service, your own testing on a drained host does not prove what users will see.
 
 ## Common misunderstandings
 

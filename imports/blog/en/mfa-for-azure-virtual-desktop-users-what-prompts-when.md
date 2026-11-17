@@ -1,6 +1,6 @@
 ---
 title: "MFA for Azure Virtual Desktop users: what prompts when"
-summary: "Users see Microsoft Entra multifactor authentication prompts in Azure Virtual Desktop when a new access token is needed: at subscribe or feed refresh, at connection through the gateway, and at session host sign-in when single sign-on is on. This article maps each moment to the Entra app and setting that controls it."
+summary: "Users see Microsoft Entra multifactor authentication prompts in Azure Virtual Desktop when a new access token is needed: at subscribe or when the user manually refreshes the resource list, at connection through the gateway, and at session host sign-in when single sign-on is on. This article maps each moment to the Entra app and setting that controls it."
 status: review
 publish: false
 author: mirko-p
@@ -21,7 +21,7 @@ faq:
     a: "With single sign-on, users see a dialog to allow the Remote Desktop connection when they connect to a new session host. Entra remembers up to 15 hosts for 30 days. Administrators can hide it with a trusted device group on the Windows Cloud Login service principal."
 ---
 
-Microsoft Entra multifactor authentication prompts in Azure Virtual Desktop follow one rule: users are prompted only when a new access token is requested from Microsoft Entra ID for a resource. In practice that means at subscribe or feed refresh, at connection through the gateway, and, with single sign-on, at session host sign-in. This article maps each moment to the Entra app that evaluates it and to the setting that decides how often the prompt returns. How to design the policies themselves, including the licensing they need, is covered in "Conditional Access for Azure Virtual Desktop: policies that work", and this article does not repeat it.
+Microsoft Entra multifactor authentication prompts in Azure Virtual Desktop follow one rule: users are prompted only when a new access token is requested from Microsoft Entra ID for a resource. In practice that means at subscribe or when the user manually refreshes the resource list, at connection through the gateway, and, with single sign-on, at session host sign-in. Background feed refresh and diagnostics upload do not prompt; after the sign-in frequency period they fail silently until the next interactive sign-in. This article maps each moment to the Entra app that evaluates it and to the setting that decides how often the prompt returns. How to design the policies themselves, including the licensing they need, is covered in "Conditional Access for Azure Virtual Desktop: policies that work", and this article does not repeat it.
 
 ## Where authentication happens
 
