@@ -20,7 +20,7 @@ faq:
     a: "Learn says the last off-peak parameters of the selected days carry over to the unselected days until the next ramp-up phase."
 ---
 
-A scaling plan schedule in Azure Virtual Desktop divides a day into four phases: ramp-up, peak hours, ramp-down and off-peak hours. Each phase has its own start time and settings, and the start time of one phase ends the previous one. The sections below describe what Microsoft Learn documents for each phase in pooled and personal host pools. Pages were retrieved on 2026-11-16.
+A scaling plan schedule in Azure Virtual Desktop divides a day into four phases: ramp-up, peak hours, ramp-down and off-peak hours. Each phase has its own start time and settings, and the start time of one phase ends the previous one. The sections below describe what Microsoft Learn documents for each phase in pooled and personal host pools.
 
 For the general concept of a [scaling plan](/entity/avd-scaling-plan/) and how it is assigned to a [host pool](/entity/avd-host-pool/), see the article "Azure Virtual Desktop scaling plans explained: schedules, phases and host pools". This article stays with the phase parameters.
 
@@ -35,7 +35,7 @@ Microsoft Learn describes the phases as follows:
 
 Learn gives no clock times; you define them. The portal's default values are suggestions for weekdays. Start times use the time zone set in the scaling plan.
 
-One rule applies to all phases of a pooled plan: for pooled host pools, autoscale ignores the load-balancing algorithm in the host pool settings and applies the one from the schedule. You also need a custom maximum session limit on the host pool, because the capacity calculation depends on it. Learn says not to use the default value.
+One rule applies to all phases of a pooled plan: for pooled host pools, autoscale ignores the load-balancing algorithm in the host pool settings and applies the one from the schedule. You also need a custom maximum session limit on the host pool, and Learn says not to use the default value. The glossary defines available capacity as the limit multiplied by the number of available session hosts, so the threshold percentages below are measured against whatever limit you set. See "Maximum session limit in Azure Virtual Desktop: how it defines host pool capacity" and "How to size the maximum session limit per session host".
 
 ## Ramp-up
 
@@ -60,17 +60,21 @@ Peak is not static: autoscale can turn hosts on and off. In the Learn example, w
 
 ## Ramp-down
 
-The ramp-down tab has the largest set of fields: start time, load-balancing algorithm, minimum percentage of hosts, capacity threshold and force sign-out. The capacity threshold is entered here, and the off-peak phase takes it over.
+The ramp-down tab has the largest set of fields: start time, load-balancing algorithm, minimum percentage of hosts, capacity threshold and force logoff of users. The capacity threshold is entered here, and the off-peak phase takes it over.
 
 Autoscale shuts a host down only when all existing sessions, active and disconnected, fit on fewer hosts without exceeding the capacity threshold. Learn's formula for the hosts needed is total sessions (active plus disconnected) divided by the product of the maximum session limit and the capacity threshold.
 You have two ways to handle users still signed in:
 
 1. **Force sign-out on.** Autoscale chooses the host with the fewest sessions, active and disconnected, and puts it in drain mode. It notifies the users that they will be signed out and ends the sessions after the wait time. Then it deallocates the VM. Only ramp-down supports this. In any other phase the force logoff setting does nothing.
-2. **Force sign-out off.** You choose either "VMs have no active or disconnected sessions" or "VMs have no active sessions". Autoscale then waits for users to sign out on their own.
+2. **Force sign-out off.** You choose either "VMs have no active or disconnected sessions" or "VMs have no active sessions". Learn's scenarios page describes the "no active sessions" behavior as autoscale waiting for users to sign out voluntarily; it does not describe the other option further.
 
-A Learn scenario uses six hosts, depth-first, a 75 percent threshold, a 10 percent minimum and a session limit of 5. Four hosts run with four sessions (20 percent), and with force sign-out enabled two hosts are shut down. With four sessions on two hosts (40 percent), a further shutdown would put 80 percent on one host, so nothing happens. At three sessions one more host is shut down and its user signed out. The last host stays on because of the 10 percent minimum.
+The sequence users see is covered in "Forcing users to sign out during AVD ramp-down: what happens and what users see", and the trade-offs between the two choices in "Force sign out vs wait for sign-out: choosing the ramp-down behaviour".
 
-Learn's FAQ adds a timing trap: if the ramp-down phase is 15 minutes long and the wait time before sign-out is 20 minutes, the schedule moves to off-peak first. Autoscale does not force sign-outs during off-peak, so the sessions stay. Keep the wait time shorter than the phase. Learn states no default wait time and no notification text; the FAQ gives 15 and 20 minutes only as examples.
+Learn's third scenario (six hosts, depth-first, 75 percent threshold, 10 percent minimum, session limit 5) shows both effects. With four hosts running four sessions (20 percent), force sign-out lets autoscale shut down two hosts. With four sessions on two hosts (40 percent), a further shutdown would put 80 percent on one host, so nothing happens. The "Forcing users to sign out" article walks through the full scenario.
+
+Learn's FAQ adds a timing trap: if the ramp-down phase is 15 minutes long and the wait time before sign-out is 20 minutes, the schedule moves to off-peak first. Autoscale does not force sign-outs during off-peak, so the sessions stay, and autoscale waits until all users have signed out before it deallocates the VM. Keep the wait time shorter than the phase.
+
+The wait time and the notification text are settings of the schedule. In Azure PowerShell they are `RampDownWaitTimeMinute` and `RampDownNotificationMessage`; in the ARM template reference they are `rampDownWaitTimeMinutes` and `rampDownNotificationMessage`, next to `rampDownForceLogoffUsers` and `rampDownStopHostsWhen`. Learn's create-and-assign example sets 30 minutes and the text "Please log out of your session." The cmdlet and ARM references describe the wait time as the number of minutes to wait to stop hosts during the ramp-down period and list no default, minimum or maximum for either value. The FAQ's 15 and 20 minutes are examples, not defaults.
 
 ## Off-peak hours
 
@@ -78,7 +82,7 @@ The off-peak tab has a start time, which ends ramp-down, and a load-balancing ch
 
 The off-peak tab has no field for the minimum percentage of hosts. Learn lists that field only in ramp-up and ramp-down, and its pages do not state explicitly which configured value carries over to peak or off-peak. Its examples do apply a minimum in off-peak: with six hosts and 10 percent, one host stays on even when the last users sign out. According to the FAQ, autoscale can turn all VMs off only if the minimum percentage is 0 percent and no sessions, including disconnected ones, remain.
 
-If you tag hosts with the plan's [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/), autoscale does not turn them on or off in any phase. In the Learn off-peak example, five of six hosts carry the tag and the one untagged host runs three sessions (60 percent). A fourth session raises usage to 80 percent, above the 75 percent threshold, but no host starts, because every host that is not running carries the tag. Learn adds that if the admin also tags and turns off the last untagged host, autoscale cannot start any VM, the pool cannot meet its minimum percentage, and a new user sees a "No resources available" error.
+If you tag hosts with the plan's [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/), autoscale does not turn them on or off in any phase. In Learn's fourth scenario, five of six hosts carry the tag and the one untagged host runs three sessions (60 percent). A fourth session raises usage to 80 percent, above the 75 percent threshold, but no host starts, because every host that is not running carries the tag. If the administrator also tags and turns off the last untagged host, autoscale cannot start any VM and a new user sees "No resources available". The scenario is walked through in "Exclusion tags in AVD autoscale: keeping individual VMs out of scaling".
 
 ## Schedule days
 
@@ -112,7 +116,7 @@ Changes to a plan that is already assigned to host pools apply immediately.
 
 ## Sources
 
-Retrieved 2026-11-16.
+Accessed 17 November 2026.
 
 - [Microsoft Learn: Autoscale scaling plans and example scenarios in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)
 - [Microsoft Learn: Create and assign an autoscale scaling plan for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)

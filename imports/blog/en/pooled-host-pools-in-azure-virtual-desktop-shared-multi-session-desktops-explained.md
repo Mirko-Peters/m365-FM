@@ -16,7 +16,7 @@ faq:
   - q: "How many users can share one session host in a pooled host pool?"
     a: "It depends on the maximum session limit you set and on the VM's resources. The multi-session FAQ gives no fixed number and says concurrent sessions depend on vCPU, memory, disk and vGPU, how users work and how heavy the workload is. Learn's sizing guidelines list maximum users per vCPU as a starting estimate: Light 6, Medium 4, Heavy 2, Power 1. Validate on your own system."
   - q: "Do pooled host pools need FSLogix?"
-    a: "Learn says users in pooled host pools should store their profile data in FSLogix, because they can be load balanced to different session hosts. It also says FSLogix comes pre-installed on all available Windows Enterprise multi-session images. Profile containers on Azure Files are also documented for cloud-only and external identities, announced as generally available in May 2026."
+    a: "Learn says users in pooled host pools should store their profile data in FSLogix, because they can be load balanced to different session hosts. It also says FSLogix comes pre-installed on all available Windows Enterprise multi-session images. FSLogix profile containers for cloud-only and external identities were announced as generally available in May 2026, and the FSLogix article describes them on Azure Files."
   - q: "Can a pooled host pool publish RemoteApp?"
     a: "Yes. Learn says RemoteApp application groups are available with pooled host pools only, while desktop application groups work with pooled or personal pools. A pooled pool can have one desktop application group and several RemoteApp application groups."
 ---
@@ -57,7 +57,7 @@ Two load-balancing algorithms exist, set under the pool's **Properties**: breadt
 
 One point matters for capacity planning. The comparison table on Learn's terminology page says that under high concurrent connection load, when several users connect at the same time, the number of sessions on a host can exceed the maximum session limit. As a planning suggestion, not a Learn statement: leave headroom below the hardware ceiling rather than setting the limit at it.
 
-## Profiles: the part that cannot be skipped
+## Profiles: why they should not live on the VM
 
 Because a user can land on a different host at each sign-in, a profile stored on one VM's disk would not follow them. Learn therefore says pooled users should store profile data in [FSLogix](/entity/fslogix/). FSLogix comes pre-installed on all available Windows Enterprise multi-session images. The FSLogix overview says FSLogix uses a filter driver to virtualize and redirect the profile at the file system level, so applications are unaware the profile is on the network.
 
@@ -69,7 +69,11 @@ For pooled pools Learn says Windows is updated by redeploying session hosts from
 
 Session host configuration and update belong to the enhanced host pool management that Microsoft announced as generally available in July 2026. In an automated host pool, [session host update](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update) deallocates or deletes existing VMs and creates new ones with the updated configuration. Files, registry keys or certificates added manually do not survive. Put them in the image, in configuration management such as Intune or Group Policy, or in the custom configuration script. Learn also says to disable autoscale before an update and keep it disabled until it finishes, because an enabled scaling plan can make the update fail with a runtime error.
 
-Limits at creation, per the [host pool creation article](https://learn.microsoft.com/en-us/azure/virtual-desktop/create-host-pools-azure-marketplace): up to 500 session hosts with a session host configuration, and up to 400 with standard management, both depending on subscription quota, and you can add more later.
+Choose this approach deliberately. Learn states that the management approach is set when you create the host pool and cannot be changed later, and that a pool created without a session host configuration cannot get one afterwards. With a session host configuration you also cannot create, update or scale session hosts outside the Azure Virtual Desktop service using tools designed for standard management, and you cannot retrieve a registration token to add hosts created outside the service. Session host update is only available in the global Azure cloud, not in clouds such as Azure US Government or Azure operated by 21Vianet.
+
+### Limits at creation
+
+Per the [host pool creation article](https://learn.microsoft.com/en-us/azure/virtual-desktop/create-host-pools-azure-marketplace): up to 500 session hosts with a session host configuration, and up to 400 with standard management, both depending on subscription quota, and you can add more later.
 
 ## How many users fit on a host
 
@@ -86,7 +90,9 @@ Pooled pools can start and stop hosts to match demand. The terminology page's co
 
 Both methods share one prerequisite for pooled pools that is easy to miss. The [scaling plan article](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan) says that when you use autoscale for a pooled host pool, you must set a custom maximum session limit, and it says not to use the default value. The [load-balancing article](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-load-balancing) gives the breadth-first default as 999999. So breadth-first pools also need an explicit limit before autoscale is switched on.
 
- [Start VM on Connect](https://learn.microsoft.com/en-us/azure/virtual-desktop/start-virtual-machine-connect) behaves differently in pooled pools: it powers on a host only when none are on, and starts further VMs only when the first reaches the session limit. It starts a VM every five minutes at most, so a user may see "No resources available" and need to retry.
+Autoscale also changes which algorithm counts. The scenarios page says that for pooled host pools, autoscale ignores the load-balancing algorithm in the host pool settings and instead applies load balancing based on the schedule configuration. Choosing breadth-first or depth-first in the host pool therefore matters for pools without autoscale; with autoscale, the scaling plan schedule decides. The article "Depth-first load balancing and autoscale: how the schedule overrides the host pool setting" walks through this.
+
+[Start VM on Connect](https://learn.microsoft.com/en-us/azure/virtual-desktop/start-virtual-machine-connect) behaves differently in pooled pools: it powers on a host only when none are on, and starts further VMs only when the first reaches the session limit. It starts a VM every five minutes at most, so a user may see "No resources available" and need to retry.
 
 ## Application groups on pooled pools
 
@@ -96,9 +102,9 @@ Pooled pools support both [application group](/entity/avd-application-group/) ty
 
 1. Confirm that users can share a machine and that their profile can move to FSLogix.
 2. Choose a multi-session image and verify your license entitlement.
-3. Choose a load-balancing algorithm and set a maximum session limit: required for depth-first, and required as a custom value, not the default, for any pooled pool that uses autoscale.
-4. Decide between standard management and a session host configuration, and plan image updates as redeployments, not in-place patches.
-5. Decide how hosts are powered on and off, and and check the current Learn page for the limits of that method.
+3. Set a maximum session limit: required for depth-first, and required as a custom value, not the default, for any pooled pool that uses autoscale. Choose a load-balancing algorithm for pools without autoscale; with autoscale the schedule applies the load balancing instead.
+4. Decide between standard management and a session host configuration before you create the pool. Learn says the approach is set at creation and cannot be changed later, and a pool created without a session host configuration cannot get one afterwards. Plan image updates as redeployments, not in-place patches.
+5. Decide how hosts are powered on and off, and check the current Learn page for the limits of that method.
 6. Pilot, then measure sessions per host and logon times.
 
 ## Sources

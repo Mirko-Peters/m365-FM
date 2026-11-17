@@ -21,7 +21,7 @@ faq:
     a: "It can. Learn's autoscale FAQ says autoscale overrides drain mode on all VMs included in scaling. To keep a VM out of scaling actions, use the exclusion tag set in the scaling plan: Learn says autoscale then does not start, stop or change the drain mode of tagged hosts."
 ---
 
-To patch one session host without cutting users off, tag the VM so autoscale leaves it alone, turn on drain mode, give the remaining users a message and a deadline, end any sessions that are left, patch and restart, and then turn drain mode off. The sources are Microsoft Learn pages retrieved on 17 November 2026.
+To patch one session host without cutting users off, tag the VM so autoscale leaves it alone, turn on drain mode, give the remaining users a message and a deadline, end any sessions that are left, patch and restart, and then turn drain mode off.
 
 This article is the runbook for a single host. What drain mode is belongs to "Drain mode in Azure Virtual Desktop explained". Planning waves across a whole host pool, with wave sizes and capacity, is the subject of "Patching AVD without downtime: rolling updates with drain mode". The mechanics of the exclusion tag, including how to apply it, are in "How to use the exclusion tag for maintenance windows and special session hosts".
 
@@ -34,7 +34,7 @@ This article is the runbook for a single host. What drain mode is belongs to "Dr
 ## Step by step
 
 1. **Keep autoscale away from the host.** Learn's autoscale FAQ says autoscale still turns drained VMs on or off, no matter who put them in drain mode, because it overrides drain mode on all VMs included in scaling. The [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) is a tag name that you enter on the Basics tab of the [scaling plan](/entity/avd-scaling-plan/). Learn's example is `excludeFromScaling`. The field exists for power management plans and for dynamic plans, and Learn states that with the tag on a session host, autoscale does not start, stop or change the drain mode of that host. Add a tag with that name to the VM, and keep personal data out of tag names. Tagged hosts still count toward the minimum percentage of hosts.
-2. **Turn drain mode on.** In the Azure portal, open **Azure Virtual Desktop**, then **Host pools**, select the host pool, select **Session hosts**, check the host and select **Turn drain mode on**. With PowerShell, Learn's reference example for `Update-AzWvdSessionHost` sets the parameter like this:
+2. **Turn drain mode on.** In the Azure portal, open **Azure Virtual Desktop**, then **Host pools**, select the host pool, select **Session hosts**, check the host and select **Turn drain mode on**. With Azure PowerShell, Learn's drain-mode page sets drain mode with the `AllowNewSession` parameter of `Update-AzWvdSessionHost`, run once for each session host. The page writes the call with a splatted hash table; this is the same command in one block:
 
    ```powershell
    Update-AzWvdSessionHost -ResourceGroupName <ResourceGroupName> `
@@ -71,7 +71,7 @@ This article is the runbook for a single host. What drain mode is belongs to "Dr
 
    The reference page also lists a `-Force` parameter ("Specify to force userSession deletion") but shows no example with it. Removing a session ends it, so anything the user did not save is lost. That is why step 4 comes first.
 6. **Do the maintenance.** Learn says that once no sessions remain, you can perform the maintenance you need, and that administrators can still connect to the server directly without going through the Azure Virtual Desktop service. The patching itself, through Windows Update, Intune, WSUS or another tool, is outside this article. If the host does not come back as available afterwards, use the checklist in the sibling article "Azure Virtual Desktop Session Host Shows Unavailable: A Step-by-Step Checklist".
-7. **Turn drain mode off.** In the portal, check the host and select **Turn drain mode off**. In PowerShell, use the same cmdlet with `-AllowNewSession:$true`. Learn's cmdlet reference shows only the `$false` example, so confirm the status in the portal afterwards. Then remove the exclusion tag so that autoscale manages the host again.
+7. **Turn drain mode off.** In the portal, check the host and select **Turn drain mode off**. In PowerShell, run the same cmdlet with `-AllowNewSession:$true`; Learn's drain-mode page shows both directions, `$False` to turn drain mode on and `$True` to turn it off. Wait at least 60 seconds before you check the status in the portal. Then remove the exclusion tag so that autoscale manages the host again.
 
 ## Behavior that surprises people
 
@@ -100,11 +100,11 @@ Learn's FAQ says autoscale does not put a personal desktop into drain mode befor
 
 ## When drain mode is the wrong tool
 
-If you update by replacing the image rather than patching in place, Learn's session host update feature does the work for hosts that use a session host configuration. Learn says it places the selected hosts into drain mode itself and that you must not change drain mode manually during an update. Its page also says to disable autoscale on the host pool before the update, because an enabled scaling plan can make it fail with a runtime error, and that manual customizations such as files, registry keys and certificates are not present after the update. The what's new page lists "Automated host pools" for June 2026 without a preview label, and the session host update page carries none either, but the configuration page still marks the Azure PowerShell cmdlets for such host pools as preview. Compare this approach with rolling drain in "Patching AVD without downtime: rolling updates with drain mode".
+If you update by replacing the image rather than patching in place, Learn's session host update feature does the work for hosts that use a session host configuration. Learn says it places the selected hosts into drain mode itself and that you must not change drain mode manually during an update. Its page also says to disable autoscale on the host pool before the update, because an enabled scaling plan can make it fail with a runtime error, and that manual customizations such as files, registry keys and certificates are not present after the update. Microsoft announced general availability of enhanced host pool management, which includes session host configuration and update, in July 2026 (Tech Community). Some Learn pages still carry preview wording; for example, the configuration page marks the Azure PowerShell cmdlets for such host pools as preview and asks for the preview version of the Az.DesktopVirtualization module. Check the current page before relying on a limit. Compare this approach with rolling drain in "Patching AVD without downtime: rolling updates with drain mode".
 
 ## Sources
 
-Retrieved 17 November 2026.
+Accessed 17 November 2026.
 
 - [Microsoft Learn: Drain session hosts for maintenance in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/drain-mode)
 - [Microsoft Learn: Azure RBAC roles for Azure Virtual Desktop (rbac page)](https://learn.microsoft.com/en-us/azure/virtual-desktop/rbac)
@@ -117,4 +117,4 @@ Retrieved 17 November 2026.
 - [Microsoft Learn: Create and assign an autoscale scaling plan](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)
 - [Microsoft Learn: Session host update](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update)
 - [Microsoft Learn: Update session hosts with a session host configuration](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update-configure)
-- [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
+- [Microsoft Tech Community: Enhanced host pool management for Azure Virtual Desktop is now generally available](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)
