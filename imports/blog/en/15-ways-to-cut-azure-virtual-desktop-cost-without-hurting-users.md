@@ -11,7 +11,7 @@ keypoints:
   - "Each hour lever has a user-facing price. Start VM on Connect makes the first user wait for a VM to power on, and forced sign-out ends sessions after a wait time."
   - "Reserved VM instances and compute savings plans lower the compute rate only, and an unused savings plan hour expires. Storage has separate reservations, such as Azure Files reserved capacity and Premium SSD reservations from P30."
   - "Disks and profile storage keep billing when VMs are deallocated, so size and tier them on purpose. Insights data can be trimmed, but Learn recommends keeping the Windows event logs."
-  - "Microsoft announced general availability of dynamic autoscaling and ephemeral OS disks in July 2026. The announcement describes dynamic autoscaling as able to reduce cost when demand is low, but makes no cost claim for ephemeral OS disks."
+  - "Microsoft announced general availability of dynamic autoscaling and ephemeral OS disks in July 2026. The announcement says dynamic autoscaling can reduce costs when demand is low; its ephemeral OS disks section names no cost effect."
 faq:
   - q: "Which saving is the quickest to apply?"
     a: "Usually a power management scaling plan, because it needs no new infrastructure. Microsoft Learn says autoscale carries no extra charge, and a scaling plan takes effect as soon as you enable it. It needs a custom maximum session limit and a role assignment first."
@@ -21,7 +21,7 @@ faq:
     a: "Some do. Start VM on Connect adds a wait while a VM powers on, forced sign-out ends sessions after a wait time, and consolidation can mean fewer hosts for the same sessions. Each item below names its user-facing cost so you can pilot it."
 ---
 
-The fifteen items below follow five groups: the hours session hosts stay allocated, the rate you pay per hour, storage, monitoring and licensing. Each names what [Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq) documents, the user-facing trade-off and any status caveat. Item 14 has no documented saving and item 15 applies to one licensing setup only, so read the count as fifteen levers, not fifteen proven savings. For what each cost line contains, and the detail behind items 10 to 13 and 15, read "What Azure Virtual Desktop really costs: the full cost model" first.
+The fifteen items below follow five groups: the hours session hosts stay allocated, the rate you pay per hour, storage, monitoring and licensing. Each names what [Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq) documents, the user-facing trade-off and any status caveat. Item 14 has no documented saving and item 15 applies to one licensing setup only, so read the count as fifteen levers, not fifteen proven savings. For the detail behind items 10 to 13 and 15, see "What Azure Virtual Desktop really costs: the full cost model".
 
 Before changing anything, make cost visible: Learn describes a `cm-resource-parent` tag, valued with a host pool resource ID, that lets Cost Management group costs by host pool. It does not affect billing, and the related cost-analysis article is labelled preview.
 
@@ -57,11 +57,11 @@ Before changing anything, make cost visible: Learn describes a `cm-resource-pare
 
 **13. Trim Insights data.** Performance counters make up 80 to 99 percent of Insights ingestion, per Learn's cost page (92 to 145 MB per VM per day in its example). Reduce counter frequency or remove counters, but keep the Windows events and diagnostics, as Learn advises. User cost: fewer data points in some Insights visuals.
 
-**14. Consider ephemeral OS disks for stateless pooled hosts (no documented saving).** Microsoft announced public preview on 15 October 2025, and general availability as part of enhanced host pool management in July 2026. Neither announcement makes a cost claim, so this item is an operating choice, not a documented saving. Hosts need a VM size whose cache or temporary storage fits the OS image, suit stateless workloads and cannot be deallocated, only restarted, reimaged or deleted. Learn recommends dynamic autoscaling with the minimum percentage of active hosts at 100 in every phase for them. The Prerequisites page still lists ephemeral OS disks under items not supported for session hosts, which contradicts the announcement. The AVD ephemeral page keeps preview limits: Standard SSD only, no NVMe or premium SSD, not in Azure Government. User cost: the OS disk returns to its original state on reimage, so keep user data in profiles. See [ephemeral OS disks](/entity/avd-ephemeral-os-disks/).
+**14. Consider ephemeral OS disks for stateless pooled hosts (no documented saving).** Microsoft announced public preview on 15 October 2025, and general availability as part of enhanced host pool management in July 2026. The preview post makes no cost claim. The general availability post credits the three features together with cost-effective scalability, but its ephemeral section names only latency, disk performance and reimaging, so this item is an operating choice, not a documented saving. Hosts need a VM size whose cache or temporary storage fits the OS image, suit stateless workloads and cannot be deallocated, only restarted, reimaged or deleted. Learn recommends dynamic autoscaling with the minimum percentage of active hosts at 100 in every phase for them. The Prerequisites page still lists "Ephemeral OS disks for Azure VMs" among items not supported for session hosts, while the AVD ephemeral page and the announcement describe support for pooled host pools with a session host configuration; check the current pages first. The AVD ephemeral page keeps preview limits: Standard SSD only, no NVMe or premium SSD, not in Azure Government. User cost: the OS disk returns to its original state on reimage, so keep user data in profiles. See [ephemeral OS disks](/entity/avd-ephemeral-os-disks/).
 
 ## Licensing
 
-**15. Avoid paying twice.** This lever applies only to per-user access pricing for external commercial users. Learn warns that enrolling a subscription that also serves internal users with entitled licenses effectively means paying twice, and suggests a separate subscription. In an Azure Dev/Test subscription, end users may connect without separate license entitlement for acceptance tests or feedback. Users notice nothing.
+**15. Avoid paying twice.** This lever applies only to per-user access pricing for external commercial users. Learn warns that enrolling a subscription that also serves internal users with entitled licenses effectively means paying twice, and suggests a separate subscription. Separately, the Prerequisites page says that in an Azure Dev/Test subscription, end users may connect without separate license entitlement for acceptance tests or feedback. Users notice nothing.
 
 ## Measuring the result
 
@@ -76,8 +76,6 @@ Learn's autoscale FAQ says autoscale does not currently support ramping down on 
 Start with 1, 2 and 4: they need role assignments and a Group Policy or Intune setting, not new infrastructure. Then 9 and 12, which need measurement, and 10 and 11 last, once running hours are stable. Pilot 7 and 14 away from production pools, since some Learn pages still show preview wording.
 
 ## Sources
-
-Retrieved 17 November 2026.
 
 - [Microsoft Learn: Azure Virtual Desktop autoscale FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq)
 - [Microsoft Learn: Create and assign an autoscale scaling plan](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)

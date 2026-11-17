@@ -29,7 +29,7 @@ How the threshold works is explained in "Capacity threshold in AVD autoscale: ho
 
 The threshold is a percentage of capacity, and capacity is the [maximum session limit](/entity/avd-maximum-session-limit/) times the available hosts. Learn says to set a custom limit for pooled pools using autoscale and not to keep the default. For a breadth-first pool created with the default, the load-balancing page states the limit is 999999. With that value, capacity is enormous, usage stays near 0 percent, and by the arithmetic no threshold would ever trigger a new host.
 
-Derive the limit from your workload. Learn's sizing table gives maximum users per vCPU: 6 for light, 4 for medium, 2 for heavy and 1 for power workloads, as generic starting points to be refined with your own data. For an 8 vCPU host that means up to 48 (light), 32 (medium), 16 (heavy) sessions. Learn also says to keep multi-session VMs between 6 and 24 vCPUs. Test with a pilot group before fixing the value, because both the limit and the threshold depend on it.
+Derive the limit from your workload. Learn's sizing table gives maximum users per vCPU: 6 for light, 4 for medium, 2 for heavy and 1 for power workloads, as generic starting points to be refined with your own data. For an 8 vCPU host that means up to 48 (light), 32 (medium), 16 (heavy) sessions. Learn also says to keep multi-session VMs between 6 and 24 vCPUs, although the same page later recommends 4 to 24 cores. Test with a pilot group before fixing the value, because both the limit and the threshold depend on it.
 
 ## Step 2: Turn the percentage into sessions
 
@@ -50,11 +50,11 @@ Start-up time depends on your image, VM size and region, and the FAQ says evalua
 3. Multiply the two. This is the number of sessions that arrive while a host starts. It is an inference, not a Learn formula.
 4. Compare it with the buffer. If the buffer is smaller, lower the threshold or raise the minimum percentage of hosts in ramp-up so hosts are already running.
 
-For example, with an invented sign-in rate of 30 per minute and an invented start time of 5 minutes, 150 sessions arrive during the wait. No row in the table covers that, and even a threshold of 30 percent would leave a buffer of only 134 sessions, so the threshold is the wrong tool for that surge: start hosts ahead of time with the [minimum percentage of hosts](/entity/avd-minimum-percentage-of-hosts/) and an earlier ramp-up. The threshold then handles the slower growth afterward.
+For example, with an invented sign-in rate of 30 per minute and an invented start time of 5 minutes, 150 sessions arrive during the wait. No row in the table covers that, and even a threshold of 30 percent would leave a buffer of only 134 sessions in the 6-host pool above, so the threshold is the wrong tool for that surge: start hosts ahead of time with the [minimum percentage of hosts](/entity/avd-minimum-percentage-of-hosts/) and an earlier ramp-up. The threshold then handles the slower growth afterward.
 
 ## Step 3: Use different values per phase
 
-You enter the threshold in the **Capacity threshold** field on the Ramp up and Ramp-down tabs of a schedule. Peak takes the ramp-up value and off-peak takes the ramp-down value; neither tab lets you edit it. Learn says the default values shown when you create a schedule are suggested values for weekdays, but its pages do not list them, so read your portal before saving and test them against Step 2. See [autoscale schedule phases](/entity/avd-autoscale-schedule-phases/).
+You enter the threshold in the **Capacity threshold** field on the Ramp up and Ramp-down tabs of a schedule. Peak takes the ramp-up value and off-peak takes the ramp-down value; neither tab lets you edit it. Learn says the default values shown when you create a schedule are suggested values for weekdays, but the scaling plan article does not list them, so read your portal before saving and test them against Step 2. See [autoscale schedule phases](/entity/avd-autoscale-schedule-phases/).
 
 - **Ramp-up and peak: lower threshold (our rule of thumb).** Sessions arrive quickly, and Learn says pooled autoscale does not turn hosts off during ramp-up. A lower value starts hosts earlier and leaves a bigger buffer. The FAQ gives breadth-first as an example for these phases, so sessions spread across hosts.
 - **Ramp-down and off-peak: higher threshold (our rule of thumb).** For ramp-down, the scenarios page says a high threshold and a low minimum percentage of hosts decrease the need to start new hosts at the end of the workday; off-peak takes the ramp-down value. The FAQ gives depth-first as an example here, to consolidate sessions.
@@ -101,8 +101,6 @@ WVDAutoscaleEvaluationPooled
 Read it this way, as a practical heuristic and not a Learn rule: peak occupancy far below the threshold in a phase (compare it with `ConfigCapacityThresholdPercent`) suggests the value or the minimum is too cautious, while occupancy that regularly sits at the threshold with user complaints about sign-in times suggests too little buffer. Change one number at a time. See [Azure Virtual Desktop Insights](/entity/avd-insights/) and [scaling plans](/entity/avd-scaling-plan/).
 
 ## Sources
-
-Retrieved 17 November 2026.
 
 - [Microsoft Learn: Autoscale glossary for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary)
 - [Microsoft Learn: Autoscale scaling plans and example scenarios](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)
