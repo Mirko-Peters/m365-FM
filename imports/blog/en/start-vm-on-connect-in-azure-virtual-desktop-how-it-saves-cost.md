@@ -23,11 +23,10 @@ faq:
 
 Start VM on Connect saves compute cost by letting session hosts stay deallocated until a user connects. It only turns VMs on. The saving appears when a second mechanism, usually autoscale, turns them off again.
 
-This article explains how the feature behaves and where the saving comes from. The configuration steps, including the role assignment, are in the sibling article "How to configure Start VM on Connect for personal and pooled host pools". The sources are Microsoft Learn pages retrieved on 17 November 2026.
-
+This article explains how the feature behaves and where the saving comes from. The configuration steps, including the role assignment, are in the sibling article "How to configure Start VM on Connect for personal and pooled host pools".
 ## What the feature does
 
-Learn describes [Start VM on Connect](/entity/avd-start-vm-on-connect/) as a way to reduce costs by letting end users power on the VMs used as [session hosts](/entity/avd-session-host/) only when they need them, so that VMs can be powered off when they are not needed. It is configured per host pool, for session hosts on Azure and on Azure Local, in personal or pooled host pools. The billing discussion below applies to Azure VMs; the Learn pages used here make no cost statement for Azure Local.
+Learn describes [Start VM on Connect](/entity/avd-start-vm-on-connect/) as a way to reduce costs by letting end users power on the VMs used as [session hosts](/entity/avd-session-host/) only when they need them, so that VMs can be powered off when they are not needed. It is configured per host pool, for session hosts on Azure and on Azure Local, in personal or pooled host pools. The billing table below applies to Azure VMs.
 
 The trigger differs by pool type:
 
@@ -38,10 +37,10 @@ The trigger differs by pool type:
 
 Learn's FAQ gives an example for pooled pools. A host pool has three VMs with a maximum session limit of five per machine. If two VMs are on, Start VM on Connect does not start the third until both reach five users. The feature therefore waits for the running VMs to fill up before it adds another. Check your [maximum session limit](/entity/avd-maximum-session-limit/): a low value starts VMs sooner, a high value later.
 
-Two timing rules apply to pooled pools:
+Two timing rules apply:
 
-- Start VM on Connect starts a VM every five minutes at most. If other users sign in during that period and there are still no available resources, no new VM is started and those users see "No resources available". Learn says they should wait a few minutes and try again.
-- The user who triggers a start waits for the VM to boot, much like turning on a physical computer, according to Learn. Windows App and the Remote Desktop app tell the user that a VM is being powered on while they connect.
+- On pooled host pools, Start VM on Connect starts a VM every five minutes at most. If other users sign in during that period and there are still no available resources, no new VM is started and those users see "No resources available". Learn says they should wait a few minutes and try again.
+- On any host pool type, the user who triggers a start waits for the VM to boot, much like turning on a physical computer, according to Learn. Windows App and the Remote Desktop app tell the user that a VM is being powered on while they connect.
 
 ## Where the saving comes from
 
@@ -67,7 +66,7 @@ Start VM on Connect needs a partner for the shutdown side:
 1. **Autoscale.** Learn's FAQ names autoscale as the way to deallocate VMs for pooled and personal host pools. See [power management autoscaling](/entity/avd-power-management-autoscaling/) and the article on the four autoscale phases.
 2. **A disconnected-session policy plus automation.** The FAQ describes setting **Set time limit for disconnected sessions** to **Enabled** and **End a disconnected session** under Group Policy (**Computer Configuration > Administrative Templates > Windows Components > Remote Desktop Services > Remote Desktop Session Host > Session Time Limits**). The limit should be greater than five minutes, because a low value can end sessions when a network drops. Signing users out still does not deallocate VMs, so you also need Azure automation scripts.
 
-For personal desktops with autoscale, Learn says that if you choose not to have personal desktops started during ramp-up, autoscale will not start them, and you must either enable Start VM on Connect or start them yourself. The scaling plan article says Learn highly recommends enabling it in that case. Learn's autoscale FAQ adds that a VM turned on by autoscale, by Start VM on Connect or by an admin that nobody signs into is deallocated after a period of inactivity, which the page does not define. The autoscale pages used here describe the Start VM on Connect option for personal host pools only, so test the combination with a pooled scaling plan before you rely on it.
+For personal desktops with autoscale, Learn says that if you choose not to have personal desktops started during ramp-up, autoscale will not start them, and you must either enable Start VM on Connect or start them yourself. The scaling plan article says Learn highly recommends enabling it in that case. Learn's autoscale FAQ adds that a VM turned on by autoscale, by Start VM on Connect or by an admin that nobody signs into is deallocated after a period of inactivity, which the page does not define. Learn's scaling plan article lists the Start VM on Connect option only in the schedules for personal host pools, so test the combination with a pooled scaling plan before you rely on it.
 
 ## Trade-offs
 
@@ -101,7 +100,7 @@ Learn gives no cost-measurement method. A practical check is to compare how many
 
 - Personal host pools where users work fixed hours and each has an assigned VM.
 - Pooled host pools with long idle periods, where waiting for a first boot is acceptable.
-- Personal host pools with autoscale where you chose not to start personal desktops during ramp-up. The scaling plan page highly recommends enabling Start VM on Connect in that case. Learn's pages do not describe this fallback for pooled scaling plans.
+- Personal host pools with autoscale where you chose not to start personal desktops during ramp-up. The scaling plan article highly recommends enabling Start VM on Connect in that case.
 
 It fits less well where the first user in the morning must connect without a delay, or where bursts of simultaneous logins are common. A host pool that must always be warm is better served by autoscale schedules.
 
