@@ -57,6 +57,8 @@ SYSTEM = (
     "- Write every language natively (not a word-for-word translation): " + ", ".join(f"{k} = {v}" for k, v in LANG_NAMES.items()) + ". "
     "Keep product names (Microsoft Teams, SharePoint, Power BI, Copilot ...) in their official form.\n"
     "- decorative: true only for pure patterns, ornaments or stock mood images without information; then every alt is an empty string.\n"
+    "- image_is_link true: the image is the only content of a link (link_target) and its alt text is the link's name. Describe where the link leads "
+    "or the product it shows (e.g. the product name from the heading or context), not just the picture; decorative must be false.\n"
     "- kind: chart, diagram, screenshot, photo, product, illustration, logo or decorative.\n"
     "- chart_points: for charts and diagrams up to 4 key statements in English (only visible facts), otherwise an empty list."
 )
@@ -110,7 +112,10 @@ def collect_images(srcs):
             it = items.get(u)
             if not it:
                 it = items[u] = {"url": u, "src": [], "orig_alts": [], "uses": 0, "where": f"{kind}:{slug}",
-                                 "ctx": {"page_title": title, "heading": im["heading"], "alt": im["alt"] or "", "before": im["before"], "after": im["after"]}}
+                                 "ctx": {"page_title": title, "heading": im["heading"], "alt": im["alt"] or "", "before": im["before"], "after": im["after"],
+                                         "link": im.get("link")}}
+            elif it["ctx"].get("link") is None and im.get("link") is not None:   # irgendwo verlinkt: das Modell soll es wissen
+                it["ctx"]["link"] = im["link"]
             it["uses"] += 1
             if src not in it["src"]: it["src"].append(src)
             a = (im["alt"] or "").strip()
@@ -140,7 +145,11 @@ def image_tokens(url, dims):
 
 def user_text(it):
     c = it["ctx"]
-    return json.dumps({"page_title": c["page_title"], "heading_above": c["heading"], "current_alt": c["alt"], "text_before": c["before"], "text_after": c["after"]}, ensure_ascii=False)
+    d = {"page_title": c["page_title"], "heading_above": c["heading"], "current_alt": c["alt"], "text_before": c["before"], "text_after": c["after"],
+         "image_is_link": c.get("link") is not None}
+    if c.get("link") is not None:
+        d["link_target"] = c["link"][:300]
+    return json.dumps(d, ensure_ascii=False)
 
 
 def estimate(sel, dims):

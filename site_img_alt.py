@@ -8,6 +8,7 @@ Handtexte der Redaktion in data/r2_alt_manual.json ({url: {"alt": {sprache: text
 Ersetzt wird nur ein schwacher Alt-Text: fehlt/leer, Platzhalter ("Generated image", "Product Image", ...), Dateiname, gleich der Ueberschrift direkt
 darueber oder gleich dem Seitentitel. Auf Seiten in einer anderen Sprache als Englisch zusaetzlich der unveraenderte englische Alt-Text der Quelle (orig_alts),
 denn die Uebersetzungen uebernehmen ihn wortgleich. Ein guter vorhandener Alt-Text bleibt. Text in der Seitensprache, sonst Englisch; dekorativ -> alt="".
+Ausnahme: Ein Bild, das allein in einem <a href> steht, gibt dem Link seinen Namen (WCAG 2.4.4/1.1.1) - dort nie alt="", bei dekorativ bleibt der bisherige Text.
 
 URL-Wechsel (tools/r2_upload.py --shrink legt -w1600-Schluessel an und stellt data/r2_map.json um): ein Eintrag gilt auch unter der URL, auf die
 r2_map.json seine Original-URLs (src) heute zeigt, und unter seinem -w1600-Nachfolger, sobald r2_map.json diesen kennt.
@@ -118,8 +119,9 @@ def index():
     return _IDX
 
 
-def choose(entry, lang, cur, heading="", title="", src=""):
-    """Neuer Alt-Text oder None (bleibt). cur None = kein alt-Attribut."""
+def choose(entry, lang, cur, heading="", title="", src="", link=None):
+    """Neuer Alt-Text oder None (bleibt). cur None = kein alt-Attribut. link: Linkziel, wenn das Bild der einzige Inhalt eines <a href> ist -
+    dann wird nie alt="" gesetzt (der Link verloere seinen zugaenglichen Namen)."""
     if not entry:
         return None
     weak = is_weak(cur, heading, title, src)
@@ -128,7 +130,13 @@ def choose(entry, lang, cur, heading="", title="", src=""):
     if not weak:
         return None
     if entry.get("decorative"):
-        new = ""
+        if link is not None:   # verlinktes Bild: Text aus dem Eintrag (Handtext), sonst bleibt der bisherige Alt-Text
+            alt = entry.get("alt") or {}
+            new = (alt.get(lang) or alt.get("en") or "").strip()
+            if not new:
+                return None
+        else:
+            new = ""
     else:
         alt = entry.get("alt") or {}
         new = (alt.get(lang) or alt.get("en") or "").strip()
@@ -138,7 +146,8 @@ def choose(entry, lang, cur, heading="", title="", src=""):
 
 
 class _Scan(HTMLParser):
-    """Bilder mit Kontext: Ueberschrift darueber, Text davor/danach (je ~300 Zeichen), Lage im Quelltext fuer Ersetzungen."""
+    """Bilder mit Kontext: Ueberschrift darueber, Text davor/danach (je ~300 Zeichen), Lage im Quelltext fuer Ersetzungen.
+    link: href, wenn das Bild der einzige Inhalt eines <a href> ist (kein weiterer Text, kein weiteres Bild), sonst None."""
 
     def __init__(self, source, ctx=300):
         super().__init__(convert_charrefs=True)
@@ -148,6 +157,7 @@ class _Scan(HTMLParser):
         self._hbuf = None
         self._before = ""
         self._open = []   # Bilder, deren Text danach noch gesammelt wird
+        self._links = []   # offene <a>: {"href", "imgs", "text"}
         self.lines = [0] + [i + 1 for i, c in enumerate(source) if c == "\n"]
 
     def _offset(self):
@@ -164,8 +174,13 @@ class _Scan(HTMLParser):
             a = dict(attrs)
             start = self._offset(); text = self.get_starttag_text()
             self.imgs.append({"src": a.get("src") or "", "alt": a.get("alt"), "heading": self.heading, "before": self._before[-self.ctx:].strip(), "after": "",
-                              "start": start, "end": start + len(text), "tag": text})
+                              "start": start, "end": start + len(text), "tag": text, "link": None})
             self._open.append(self.imgs[-1])
+            if self._links:
+                self._links[-1]["imgs"].append(self.imgs[-1])
+        elif t == "a":
+            a = dict(attrs)
+            self._links.append({"href": a.get("href"), "imgs": [], "text": False})
         elif t in _BLOCK:
             self._text(" ")
 
@@ -177,10 +192,18 @@ class _Scan(HTMLParser):
         if t in _HEAD and self._hbuf is not None:
             self.heading = re.sub(r"\s+", " ", "".join(self._hbuf)).strip(); self._hbuf = None
             self._before = ""   # neuer Abschnitt: Text davor gehoert nicht mehr zum Bild
-        elif t in _BLOCK:
+        elif t == "a" and self._links:
+            ln = self._links.pop()
+            if ln["href"] is not None and len(ln["imgs"]) == 1 and not ln["text"]:
+                ln["imgs"][0]["link"] = ln["href"]
+            elif self._links:   # verschachtelt (ungueltig): Inhalt zaehlt auch fuer den aeusseren Link
+                self._links[-1]["imgs"] += ln["imgs"]; self._links[-1]["text"] |= ln["text"]
+        if t in _BLOCK:
             self._text(" ")
 
     def handle_data(self, d):
+        if self._links and d.strip():
+            self._links[-1]["text"] = True
         if self._hbuf is not None:
             self._hbuf.append(d)
         self._text(d)
@@ -201,6 +224,9 @@ def scan(source, ctx=300):
     p = _Scan(source or "", ctx)
     p.feed(source or "")
     p.close()
+    for ln in p._links:   # <a> ohne </a> bis zum Ende: der Browser behandelt den Rest als Link
+        if ln["href"] is not None and len(ln["imgs"]) == 1 and not ln["text"]:
+            ln["imgs"][0]["link"] = ln["href"]
     for im in p.imgs:
         im["before"] = re.sub(r"\s+", " ", im["before"]).strip()
         im["after"] = re.sub(r"\s+", " ", im["after"]).strip()[:ctx]
@@ -226,7 +252,7 @@ def apply(source, lang="en", title="", idx=None):
     edits = []
     for im in scan(source, ctx=0):
         e = idx.get(im["src"]) or idx.get(r2_url(im["src"]))
-        new = choose(e, lang, im["alt"], im["heading"], title, im["src"])
+        new = choose(e, lang, im["alt"], im["heading"], title, im["src"], im["link"])
         if new is not None:
             edits.append((im["start"], im["end"], set_alt(im["tag"], new)))
     for start, end, rep in reversed(edits):

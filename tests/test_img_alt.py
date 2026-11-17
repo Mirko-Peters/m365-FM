@@ -58,6 +58,21 @@ class Apply(unittest.TestCase):
         e = dict(ENTRY, decorative=True, kind="decorative", alt={l: "" for l in ALT.LANGS})
         self.assertIn('alt=""', ALT.apply(img("Generated image"), "en", idx=ALT.build_index({U: e}, r2map={})))
 
+    def test_linked_image_never_gets_empty_alt(self):
+        e = dict(ENTRY, decorative=True, kind="decorative", alt={l: "" for l in ALT.LANGS})
+        idx = ALT.build_index({U: e}, r2map={})
+        h = f'<h3>DGX Spark</h3><a href="https://amzn.to/x">{img("DGX Spark")}</a>'
+        out = ALT.apply(h, "en", idx=idx)
+        self.assertEqual(out, h)   # bisheriger Name des Links bleibt
+        self.assertNotIn('alt=""', out)
+        # Handtext fuer ein verlinktes, als dekorativ markiertes Bild wird genommen
+        man = ALT.build_index({U: e}, {U: {"decorative": True, "alt": {"en": "NVIDIA DGX Spark on Amazon"}}}, r2map={})
+        self.assertIn('alt="NVIDIA DGX Spark on Amazon"', ALT.apply(h, "en", idx=man))
+        # nicht dekorativer Eintrag ersetzt auch im Link
+        self.assertIn(ALTS["de"], ALT.apply(h, "de", idx=IDX))
+        # Bild mit Linktext daneben ist nicht der Name des Links: dekorativ -> alt=""
+        self.assertIn('alt=""', ALT.apply(f'<h3>DGX Spark</h3><a href="/x">{img("DGX Spark")} DGX Spark kaufen</a>', "en", idx=idx))
+
     def test_unknown_image_and_html_untouched_idempotent(self):
         h = f'<p>Text &amp; more</p><h3>X</h3>{img("X", src="https://img.m365.fm/i/other.webp")}<p data-alt="x">y</p>'
         self.assertEqual(ALT.apply(h, "en", idx=IDX), h)
@@ -109,6 +124,14 @@ class Scan(unittest.TestCase):
         self.assertEqual(im["heading"], "Teams adoption")
         self.assertIn("Before the image.", im["before"]); self.assertNotIn("Intro", im["before"])
         self.assertEqual(im["after"], "After the image.")
+        self.assertIsNone(im["link"])
+
+    def test_link_only_content(self):
+        h = ("<p><a href='https://amzn.to/a'> <span><img src='a.png' alt='A'></span> </a></p>"
+             "<p><a href='/b'><img src='b.png' alt='B'> Buy B</a></p>"
+             "<p><a href='/c'><img src='c1.png'><img src='c2.png'></a></p>"
+             "<p><a name='d'><img src='d.png'></a></p><a href='/e'><img src='e.png'>")
+        self.assertEqual([im["link"] for im in ALT.scan(h)], ["https://amzn.to/a", None, None, None, None, "/e"])
 
 
 def fake_msg(obj, stop="end_turn"):
@@ -162,8 +185,17 @@ class Tool(unittest.TestCase):
         self.assertEqual(set(p["output_config"]["format"]["schema"]["properties"]["alt"]["required"]), set(ALT.LANGS))
         self.assertEqual(p["messages"][0]["content"][0]["source"], {"type": "url", "url": U})
         ctx = json.loads(p["messages"][0]["content"][1]["text"]); self.assertEqual(ctx["heading_above"], "Teams adoption")
+        self.assertIs(ctx["image_is_link"], False); self.assertNotIn("link_target", ctx)
         b = RA.request_for(items[U], "a1", ("image/webp", "QUJD"))
         self.assertEqual(b["params"]["messages"][0]["content"][0]["source"]["type"], "base64")
+
+    def test_linked_image_context_for_model(self):
+        srcs = [("blog", "p", "Gear", f"<h3>DGX Spark</h3><p>{img('DGX Spark')}</p>"),
+                ("blog", "q", "Gear 2", f"<h3>DGX Spark</h3><a href='https://amzn.to/x'>{img('DGX Spark')}</a>")]
+        items, _ = RA.collect_images(srcs)
+        ctx = json.loads(RA.user_text(items[U]))
+        self.assertIs(ctx["image_is_link"], True); self.assertEqual(ctx["link_target"], "https://amzn.to/x")
+        self.assertIn("image_is_link", RA.SYSTEM); self.assertIn("decorative must be false", RA.SYSTEM)
 
     def test_validate(self):
         e, why = RA.validate(json.dumps(GOOD)); self.assertIsNone(why); self.assertEqual(e["chart_points"], ["Usage doubles"])
