@@ -77,7 +77,7 @@ Learn's [sizing guidelines](https://learn.microsoft.com/en-us/windows-server/rem
 | Heavy | 2 | 8 vCPU, 16 GB |
 | Power | 1 | 6 vCPU, 56 GB |
 
-Learn adds several cautions. It says to limit multi-session VMs to between 6 and 24 vCPUs, although later on the same page it calls 4 to 24 cores the recommended range and 4 cores the lowest number for a stable multi-session VM. It says VMs should not have more than 32 cores. Doubling the cores does not double capacity, because the scaling factor is typically 1.5 to 1.9. For 20 or more users per VM, several smaller VMs perform better than one or two large ones, and smaller VMs are easier to patch and to shut down when idle. Sign-in is CPU-intensive, so plan for peak logon times. Treat all figures as generic and check them with a pilot. Separately, the page on adding session hosts recommends Premium SSD only for production OS disks.
+Learn adds several cautions. It says to limit multi-session VMs to between 6 and 24 vCPUs, although later on the same page it calls 4 to 24 cores the recommended range and 4 cores the lowest number for a stable multi-session VM. It says VMs should not have more than 32 cores. Doubling the cores does not double capacity, because the scaling factor is typically 1.5 to 1.9. For 20 or more users per VM, several smaller VMs perform better than one or two large ones, and smaller VMs are easier to patch and to shut down when idle. Sign-in is CPU-intensive, so plan for peak logon times. Treat all figures as generic and check them with a pilot. Separately, the page on adding session hosts recommends using only Premium SSD for production workloads.
 
 The sizing result feeds the [maximum session limit](/entity/avd-maximum-session-limit/) on the pool and the load balancing choice.
 
