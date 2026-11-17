@@ -5,7 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-12-13
-topics: [azure-ai-foundry, azure-ai-content-safety, prompt-injection, ai-guardrails]
+topics: [microsoft-foundry, azure-ai-content-safety, prompt-injection, ai-guardrails]
 keypoints:
   - "Direct prompt injection is the user prompt attack control, powered by Prompt Shields, and it is enabled by default in Foundry."
   - "Create a guardrail under Build > Guardrails > Create Guardrail, add a control, then assign it to models or agents."
@@ -109,7 +109,7 @@ The standalone Azure AI Content Safety API analyzes one userPrompt and up to fiv
 
 ## Related
 
-- [Azure AI Foundry](https://www.m365.fm/entity/azure-ai-foundry/)
+- [Azure AI Foundry](https://www.m365.fm/entity/microsoft-foundry/)
 - [Azure AI Content Safety](https://www.m365.fm/entity/azure-ai-content-safety/)
 - [Prompt injection](https://www.m365.fm/entity/prompt-injection/)
 - [AI guardrails](https://www.m365.fm/entity/ai-guardrails/)

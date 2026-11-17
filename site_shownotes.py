@@ -96,13 +96,40 @@ def load_all(d=None, qa=None):
 
 
 # ---------------------------------------------------------------- Markdown (kleiner Umsetzer fuer die Vorlage)
-def _inline(s):
+_OWN = ("m365.fm", "www.m365.fm")
+
+
+def clean_url(u):
+    """Interne Adressen (m365.fm, www.m365.fm) ohne utm_*-Parameter: die Show Notes fuer Spreaker tragen Kampagnen-Parameter, auf der eigenen
+    Seite zeigen Links auf die kanonische Adresse (Audit Linktexte SEO-6). Externe Adressen bleiben unveraendert. Erwartet unmaskierten Text."""
+    from urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
+    try:
+        p = urlsplit(u)
+    except ValueError:
+        return u
+    if (p.hostname or "").lower() not in _OWN or "utm_" not in p.query.lower():
+        return u
+    q = [(k, v) for k, v in parse_qsl(p.query, keep_blank_values=True) if not k.lower().startswith("utm_")]
+    return urlunsplit((p.scheme, p.netloc, p.path, urlencode(q), p.fragment))
+
+
+def _same_page(u, own):
+    """Zeigt u (ohne Parameter) auf die Seite own? Vergleich ohne Schema, www und abschliessenden Schraegstrich."""
+    if not own: return False
+    k = lambda x: re.sub(r"^https?://(?:www\.)?", "", x.split("#")[0].split("?")[0]).rstrip("/").lower()
+    return k(u) == k(own)
+
+
+def _inline(s, own=None):
+    """own: Adresse der Seite, auf der die Show Notes stehen - ein Link darauf wird zu Text (kein Selbstverweis)."""
     s = esc(s)
     s = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", s)
     s = re.sub(r"(?<!\*)\*(?!\*)([^*\n]+?)\*(?!\*)", r"<em>\1</em>", s)
     s = re.sub(r"`([^`]+)`", r"<code>\1</code>", s)
-    s = re.sub(r"\[([^\]]+)\]\((https?://[^\s)]+)\)", lambda m: f'<a href="{m.group(2)}">{m.group(1)}</a>', s)
-    return s
+    def _a(m):
+        u = clean_url(_html.unescape(m.group(2)))   # vorher unmaskieren, sonst bleiben Schluessel wie "amp;utm_source" stehen
+        return m.group(1) if _same_page(u, own) else f'<a href="{esc(u)}">{m.group(1)}</a>'
+    return re.sub(r"\[([^\]]+)\]\((https?://[^\s)]+)\)", _a, s)
 
 
 def md_blocks(md):
@@ -204,8 +231,9 @@ def _hover(html, ents, lang):
     return re.sub(r'<a href="([^"]+)"', rep, html)
 
 
-def render(rec, lang, ents, base, labels=None):
-    """-> (html, jsonld_list, faq_list). html: Hook, Kapitel, Takeaways, weitere Abschnitte, FAQ (details)."""
+def render(rec, lang, ents, base, labels=None, own=None):
+    """-> (html, jsonld_list, faq_list). html: Hook, Kapitel, Takeaways, weitere Abschnitte, FAQ (details).
+    own: Adresse der Folgenseite selbst; Links darauf (\"Episode page\") werden zu Text."""
     meta, body = rec["meta"], rec["body"]
     L = {"chapters": {"en": "In this episode", "de": "In dieser Folge"}, "takeaways": {"en": "Key takeaways", "de": "Das Wichtigste"}, "faq": {"en": "FAQ", "de": "Häufige Fragen"}}
     T = lambda k: ((labels or {}).get(k)) or L[k].get(lang) or L[k]["en"]
@@ -218,30 +246,30 @@ def render(rec, lang, ents, base, labels=None):
     out, used_hook = [], False
     hook = str(meta.get("hook") or "").strip()
     if hook and not (blocks and blocks[0][0] == "p" and blocks[0][1][:40] == hook[:40]):
-        out.append(f'<p class="sn-hook"><strong>{_inline(hook)}</strong></p>'); used_hook = True
+        out.append(f'<p class="sn-hook"><strong>{_inline(hook, own)}</strong></p>'); used_hook = True
     for b in blocks:
         if b[0] == "h":
-            lvl, t = b[1]; out.append(f"<h{min(max(lvl, 2), 4)}>{_inline(t)}</h{min(max(lvl, 2), 4)}>")
+            lvl, t = b[1]; out.append(f"<h{min(max(lvl, 2), 4)}>{_inline(t, own)}</h{min(max(lvl, 2), 4)}>")
         elif b[0] == "p":
             first = not used_hook and not any(x.startswith("<p") for x in out) and not any(x.startswith("<h") for x in out)
-            out.append(f'<p class="sn-hook"><strong>{_inline(b[1])}</strong></p>' if first else f"<p>{_inline(b[1])}</p>"); used_hook = used_hook or first
+            out.append(f'<p class="sn-hook"><strong>{_inline(b[1], own)}</strong></p>' if first else f"<p>{_inline(b[1], own)}</p>"); used_hook = used_hook or first
         else:
             items = []
             for it in b[1]:
                 m = _TIME.match(it)
-                items.append(f'<li><time class="sn-t">{esc(m.group(1))}</time> {_inline(m.group(2))}</li>' if m else f"<li>{_inline(it)}</li>")
+                items.append(f'<li><time class="sn-t">{esc(m.group(1))}</time> {_inline(m.group(2), own)}</li>' if m else f"<li>{_inline(it, own)}</li>")
             out.append(f"<{b[0]} class=\"sn-list\">{''.join(items)}</{b[0]}>")
     # Kapitel/Takeaways aus dem Frontmatter nur, wenn der Text sie nicht schon enthaelt
     if not any(b[0] in ("ul", "ol") and any(_TIME.match(x) for x in b[1]) for b in blocks):
         ch = _chapters(meta)
-        if ch: out.append(f"<h2>{esc(T('chapters'))}</h2><ol class=\"sn-list sn-ch\">" + "".join(f'<li><time class="sn-t">{esc(s)}</time> {_inline(t)}</li>' for s, t in ch) + "</ol>")
+        if ch: out.append(f"<h2>{esc(T('chapters'))}</h2><ol class=\"sn-list sn-ch\">" + "".join(f'<li><time class="sn-t">{esc(s)}</time> {_inline(t, own)}</li>' for s, t in ch) + "</ol>")
     if not any(b[0] == "h" and re.search(r"takeaway|wichtigste|erkenntnis", b[1][1], re.I) for b in blocks):
         tk = [str(x) for x in (meta.get("takeaways") or []) if x]
-        if tk: out.append(f"<h2>{esc(T('takeaways'))}</h2><ul class=\"sn-list\">" + "".join(f"<li>{_inline(x)}</li>" for x in tk) + "</ul>")
+        if tk: out.append(f"<h2>{esc(T('takeaways'))}</h2><ul class=\"sn-list\">" + "".join(f"<li>{_inline(x, own)}</li>" for x in tk) + "</ul>")
     html = _hover("".join(out), ents, lang)
     ld = []
     if faq:
-        html += f'<section class="faq sn-faq"><h2>{esc(T("faq"))}</h2>' + "".join(f"<details><summary>{esc(x['q'])}</summary><p>{_inline(x['a'])}</p></details>" for x in faq) + "</section>"
+        html += f'<section class="faq sn-faq"><h2>{esc(T("faq"))}</h2>' + "".join(f"<details><summary>{esc(x['q'])}</summary><p>{_inline(x['a'], own)}</p></details>" for x in faq) + "</section>"
         ld.append({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": x["q"], "acceptedAnswer": {"@type": "Answer", "text": x["a"]}} for x in faq]})
     _qh, _qld = SQ.episode_block(Path(rec.get("path") or "").stem, lang, base, ents)   # Quotes aus der Extraktion, an Personen-Entitaeten gebunden
     html += _qh; ld += _qld

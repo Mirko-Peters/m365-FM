@@ -902,6 +902,20 @@ def _sentences(text, limit):
     return cut[:k + 1] if k > limit * 0.5 else cut.rsplit(" ", 1)[0] + "…"
 
 
+def _merged_refs(xs):
+    """Expertise/Zertifikate des Profils (D1, Feld "e" = Entitaets-id): zusammengefuehrte alte ids (site_learn.merge_targets, z. B.
+    azure-ai-foundry -> microsoft-foundry) auf das Ziel umschreiben und danach je Ziel nur einmal behalten (der erste Eintrag gewinnt,
+    bei gleichem Ziel der bestaetigte bzw. hoehere). Sonst fiele das Thema weg oder stuende zweimal als knowsAbout im Autorenkasten."""
+    mt = LRN.merge_targets()
+    rank = lambda x: (int(bool(x.get("verified") or x.get("via"))), x.get("level") or 0)
+    out = {}
+    for x in xs or []:
+        if not isinstance(x, dict) or not x.get("e"): continue
+        y = dict(x, e=mt.get(x["e"], x["e"]))
+        if y["e"] not in out or rank(y) > rank(out[y["e"]]): out[y["e"]] = y
+    return list(out.values())
+
+
 def author_box(lang):
     """Author-Box mit schema.org-Auszeichnung (Person, gleiche @id wie das JSON-LD), Expertise als Entitaets-Links, Zertifikaten und sameAs-Kanaelen:
     macht den Autor fuer Suchmaschinen und KI-Antworten (GEO) als geprueften Experten erkennbar (E-E-A-T)."""
@@ -919,9 +933,9 @@ def author_box(lang):
         badge = f'<img class="badge" src="{img}" alt="{esc(a["name"])}" width="58" height="58" loading="lazy" itemprop="image">' if img else '<div class="badge">MP</div>'
         badge = ROLE.avatar(badge, ROLE.role_of(a), lang, small=True)   # Editor/Moderator: Ring und Symbol auch im Autorenkasten
         bio = _sentences(a.get("about") or a.get("headline") or "", 360)
-        names = _ent_names(); ex = sorted([e for e in a.get("expertise", []) if e.get("e") in names], key=lambda e: (-int(bool(e.get("verified") or e.get("via"))), -(e.get("level") or 0)))[:6]
+        names = _ent_names(); ex = sorted([e for e in _merged_refs(a.get("expertise", [])) if e.get("e") in names], key=lambda e: (-int(bool(e.get("verified") or e.get("via"))), -(e.get("level") or 0)))[:6]
         exh = "".join(f'<li><a href="{pref}entity/{e["e"]}/" itemprop="knowsAbout">{esc(names[e["e"]])}</a></li>' for e in ex)
-        cs = [c for c in a.get("certs", []) if c.get("e") in names and c.get("verified")][:4]
+        cs = [c for c in _merged_refs(a.get("certs", [])) if c.get("e") in names and c.get("verified")][:4]
         csh = "".join(f'<li itemprop="hasCredential" itemscope itemtype="https://schema.org/EducationalOccupationalCredential"><a href="{pref}entity/{c["e"]}/" itemprop="name">{esc(names[c["e"]])}</a></li>' for c in cs)
         job = esc((a.get("headline") or progs.get(vp[0], "") if vp else a.get("headline") or "")[:100])
         return (f'<aside class="author" itemscope itemtype="https://schema.org/Person" itemid="{ent}" aria-label="{esc(L["about"])}"><link itemprop="sameAs" href="{ent}">{badge}<div>'
@@ -1241,7 +1255,7 @@ def build():
         _nkp, _nnotes, _nfaq, _nld = SNT.blocks(SNT.get(l, ep_id=it["eid"]), l, edited_only=True)   # nur wenn im Editor bearbeitet: Kernpunkte, Show Notes, FAQ als eigene Bloecke
         _snx = SNALL.get(str(it["eid"]))   # T26: Vollfassung der Shownotes fuer die Dub-Folge (shownotes/site/<spreaker_episode_id>.md)
         if _snx:
-            _snh, _snld, _snfaq = SNS.render(_snx, l, LRN.ENTS, BASE)
+            _snh, _snld, _snfaq = SNS.render(_snx, l, LRN.ENTS, BASE, own=canonical)   # Link auf diese Seite wird Text
             _nnotes = _snh + f"<style>{SNS.CSS}</style>"; _nld = [x for x in _nld if x.get("@type") != "FAQPage"] + _snld
             if _snfaq: _nfaq = ""
         notes_block = _nkp + _nnotes + _nfaq + (SNT.CSS if (_nkp or _nnotes or _nfaq) else "")

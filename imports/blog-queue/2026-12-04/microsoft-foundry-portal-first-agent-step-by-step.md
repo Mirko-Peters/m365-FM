@@ -5,7 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-12-04
-topics: [microsoft-foundry, azure-ai-foundry, foundry-agent-service, ai-agent]
+topics: [microsoft-foundry, foundry-agent-service, ai-agent]
 keypoints:
   - "Foundry Agent Service offers prompt agents, voice-based prompt agents and hosted agents. A prompt agent is configuration only: instructions, a model and tools."
   - "The Microsoft Learn lab opens ai.azure.com, turns on New Foundry, picks or creates a project and deploys a chat model such as gpt-5-mini."
@@ -94,7 +94,7 @@ I could not confirm portal menu names beyond those in the lab. Foundry's portal 
 ## Related
 
 - [Microsoft Foundry](https://www.m365.fm/entity/microsoft-foundry/)
-- [Azure AI Foundry](https://www.m365.fm/entity/azure-ai-foundry/)
+- [Azure AI Foundry](https://www.m365.fm/entity/microsoft-foundry/)
 - [Foundry Agent Service](https://www.m365.fm/entity/foundry-agent-service/)
 - [AI agent](https://www.m365.fm/entity/ai-agent/)
 

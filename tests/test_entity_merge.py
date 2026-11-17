@@ -22,7 +22,8 @@ D = ROOT / "data"
 LG = ("de", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko")
 MERGES = SLN.entity_merges()
 EXPECTED = {"iot-hub-device-provisioning-service": "azure-iot-hub-device-provisioning-service", "oauth": "oauth-2-0",
-            "overall-equipment-effectiveness": "oee", "jean-sebastien-duchene": "jean-sebastien-duche"}
+            "overall-equipment-effectiveness": "oee", "jean-sebastien-duchene": "jean-sebastien-duche",
+            "azure-ai-foundry": "microsoft-foundry"}   # Audit Linktexte E1: alter Produktname, gleiches Produkt
 
 
 def repo_ids():
@@ -34,7 +35,7 @@ def repo_ids():
 
 
 class Daten(unittest.TestCase):
-    def test_die_vier_paare(self):
+    def test_die_paare(self):
         for old, new in EXPECTED.items():
             self.assertEqual(MERGES.get(old), new, old)
 

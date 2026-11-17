@@ -655,7 +655,7 @@ def build(g):
         _trf = TRS.REG.publish(g.get("write_r2") or write, BASE, f"show/episodes/{e['slug']}/", txt=_ptx or (None if _pvtt else tr), vtt=_pvtt, title=e["name"], lang="en", page=ep_url(e), sid=_sid)
         snx = SNALL.get(str(_sid)) if _sid else None   # T26: Vollfassung (Hook, Kapitel, Takeaways, Entitaeten mit Hover, FAQ) statt Podpage-Show-Notes
         if snx:
-            _snh, _snld, _snfaq = SNS.render(snx, "en", ENTS_ALL, BASE)
+            _snh, _snld, _snfaq = SNS.render(snx, "en", ENTS_ALL, BASE, own=ep_url(e))   # Link "Episode page" auf diese Seite wird Text
             nnotes, nld = IMG.enhance(_snh) + f"<style>{SNS.CSS}</style>", [x for x in nld if x.get("@type") != "FAQPage"] + _snld
             if _snfaq: nfaq = ""   # die FAQ der Vollfassung ersetzt aeltere FAQ-Bloecke (kein doppeltes FAQPage-Schema)
         elif nrec and nrec.get("markup"):
