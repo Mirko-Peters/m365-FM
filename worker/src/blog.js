@@ -7,6 +7,7 @@ import { decide, noteAuthorSave, dropBlogHistory } from "./editor.js";
 import { gate, inScope } from "./perm.js";
 import { baseIds } from "./entities.js";
 import { sanitize } from "./wiki.js";
+import { HIDDEN_MOD, HIDDEN_OWN } from "./feedpolicy.js";
 import { cleanKeypoints, cleanFaq, jsonList, ensureSectionCols } from "./sections.js";
 
 const TRUST_POINTS = 25, MAX_POSTS_DAY = 5;
@@ -26,11 +27,21 @@ const postUrl = (env, lang, handle, slug) => `${env.SITE}${lang === "en" ? "" : 
 // Creator-Feed: veroeffentlichte Beitraege erscheinen im Feed des Profils (Kanal-Art "blog", ohne eigenen RSS-Abruf)
 export async function syncFeed(env, db, uid, post, handle, live) {
   const url = postUrl(env, post.lang, handle, post.slug);
-  if (!live) { await db.prepare("DELETE FROM feed_items WHERE url=? AND owner_type='u' AND owner_id=?").bind(url, uid).run(); return; }
+  // Nicht (mehr) live: Zeile loeschen - ausser die Moderation hat sie ausgeblendet. Dann bleibt sie als Sperre stehen (eigenes Bit 2 dazu), damit ein
+  // neuer Beitrag mit demselben slug (gleiche Adresse) nach Loeschen und Neuanlegen nicht am Moderations-Bit vorbei wieder im Feed erscheint.
+  if (!live) {
+    await db.batch([db.prepare("UPDATE feed_items SET hidden=hidden|? WHERE url=? AND owner_type='u' AND owner_id=? AND (hidden&?)<>0").bind(HIDDEN_OWN, url, uid, HIDDEN_MOD),
+      db.prepare("DELETE FROM feed_items WHERE url=? AND owner_type='u' AND owner_id=? AND (hidden&?)=0").bind(url, uid, HIDDEN_MOD)]);
+    return;
+  }
   const curl = `${env.SITE}/community/u/${handle}/blog/`;
   await db.prepare("INSERT OR IGNORE INTO channels(owner_type,owner_id,kind,url,feed) VALUES('u',?,'blog',?,'')").bind(uid, curl).run();
   const ch = await db.prepare("SELECT id FROM channels WHERE owner_type='u' AND owner_id=? AND url=?").bind(uid, curl).first(); if (!ch) return;
-  await db.prepare("INSERT INTO feed_items(channel_id,owner_type,owner_id,url,title,published) VALUES(?,?,?,?,?,?) ON CONFLICT(url) DO UPDATE SET title=excluded.title,hidden=0").bind(ch.id, "u", uid, url, post.title, post.published || now()).run();
+  // Die Sperre der Moderation haengt am Beitrag, nicht an der Adresse: neue Sprache oder neuer Profilname ergeben eine neue Adresse (neue Zeile). Hat die
+  // Moderation eine Zeile DESSELBEN Beitrags (eigene Zeilen, gleiche Endung /blog/<slug>/ - der slug ist je Mitglied eindeutig) ausgeblendet, beginnt die neue ausgeblendet.
+  const tail = `/blog/${post.slug}/`;
+  const mod = await db.prepare("SELECT 1 x FROM feed_items WHERE owner_type='u' AND owner_id=? AND url<>? AND (hidden&?)<>0 AND substr(url,1,length(?))=? AND instr(url,'/community/u/')>0 AND substr(url,-length(?))=? LIMIT 1").bind(uid, url, HIDDEN_MOD, env.SITE, env.SITE, tail, tail).first();
+  await db.prepare("INSERT INTO feed_items(channel_id,owner_type,owner_id,url,title,published,hidden) VALUES(?,?,?,?,?,?,?) ON CONFLICT(url) DO UPDATE SET title=excluded.title,hidden=feed_items.hidden&? WHERE feed_items.owner_type='u' AND feed_items.owner_id=excluded.owner_id").bind(ch.id, "u", uid, url, post.title, post.published || now(), mod ? HIDDEN_MOD : 0, HIDDEN_MOD).run();   // nur den eigenen Schalter loeschen: das Ausblenden der Moderation (Bit 1) bleibt
 }
 
 export async function deleteUserBlog(db, uid) {

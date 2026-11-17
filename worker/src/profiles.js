@@ -659,9 +659,10 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const b = await body(), target = +b.user_id; if (!target) return J({ error: "bad_request" }, 400);
     const tr = await db.prepare("SELECT role,status,created FROM org_members WHERE org_id=? AND user_id=?").bind(o.id, target).first(); if (!tr) return J({ error: "not_found" }, 404);
     const role = String(b.role || "member");
-    if (b.action === "approve") {
+    if (b.action === "approve") {   // nur wartende Anfragen; die Rolle aktiver Mitglieder aendert allein der Zweig "role" (Inhaber-/Admin-Schutz, letzter Inhaber)
+      if (tr.status !== "pending") return J({ error: "not_pending" }, 409);
       if (!assignable(me.role, role)) return J({ error: "forbidden" }, 403);
-      await db.prepare("UPDATE org_members SET status='active',role=? WHERE org_id=? AND user_id=?").bind(role, o.id, target).run();
+      await db.prepare("UPDATE org_members SET status='active',role=? WHERE org_id=? AND user_id=? AND status='pending'").bind(role, o.id, target).run();
       // Team-Beitritt: wer kurz nach der Kontoanlage (7 Tage) in eine Firma aufgenommen wird, zaehlt fuer die aufnehmende Person
       if (tr.status === "pending") await recordInvite(env, { inviter: user.id, invitee: target, source: "org", ref: m[1], since: (tr.created || 0) - 7 * 86400 });
     }

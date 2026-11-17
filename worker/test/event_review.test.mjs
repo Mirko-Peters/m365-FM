@@ -59,7 +59,7 @@ test("Scraper-Event kommt zur Pruefung: nirgends oeffentlich, bei erneutem Impor
   assert.deepEqual([e.review, e.public, e.review_at], ["pending", 0, 0]);
   assert.deepEqual(await exportList(env), [], "nicht im Export (Seite, Sitemap, Feeds, Suche bauen darauf)");
   // Erinnerungen und Benachrichtigungen: eine Session des Events loest nichts aus
-  raw.exec(`INSERT INTO event_sessions(id,event_id,title,start,status,proposer_id,created) VALUES(7,${e.id},'Keynote','2027-03-16T09:00','live',0,1); INSERT INTO push_subs(endpoint,p256dh,auth,lang,created,digest) VALUES('https://push.example/r','p','a','en',1,0); INSERT INTO push_topics(endpoint,kind,topic_id,lang,timezone,created) VALUES('https://push.example/r','session','7','en','UTC',1);`);
+  raw.exec(`INSERT INTO event_sessions(id,event_id,title,start,status,proposer_id,created) VALUES(7,${e.id},'Keynote','2027-03-16T09:00','live',0,1); INSERT INTO push_subs(endpoint,p256dh,auth,lang,created,digest) VALUES('https://fcm.googleapis.com/fcm/send/r','p','a','en',1,0); INSERT INTO push_topics(endpoint,kind,topic_id,lang,timezone,created) VALUES('https://fcm.googleapis.com/fcm/send/r','session','7','en','UTC',1);`);
   await queueSessionReminders({ DB: env.DB, SITE: "https://www.m365.fm" }, Math.floor(Date.UTC(2027, 2, 16, 8, 45) / 1000));
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM topic_queue").get().n, 0);
   // MCP-Liste und Einzelabruf (anonym) kennen es nicht

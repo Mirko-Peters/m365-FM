@@ -7,6 +7,13 @@ import { handleMediakit, BRANDS, brandOf } from "../src/mediakit.js";
 import { cors, json, CON_ORIGINS } from "../src/util.js";
 import { handleAds } from "../src/ads.js";
 
+// Turnstile nur als Schein-fetch: Token "ok-token" besteht, alles andere nicht
+const realFetch = globalThis.fetch;
+globalThis.fetch = async (input, init) => {
+  if (String(input?.url || input).startsWith("https://challenges.cloudflare.com/turnstile/")) return new Response(JSON.stringify({ success: new URLSearchParams(init?.body).get("response") === "ok-token" }), { headers: { "content-type": "application/json" } });
+  return realFetch(input, init);
+};
+
 async function mkDb() {
   const { DatabaseSync } = await import("node:sqlite");
   const raw = new DatabaseSync(":memory:");
@@ -35,7 +42,7 @@ function setup(files) {
   const sent = [];
   return mkDb().then(({ db, raw }) => ({
     raw, sent,
-    env: { DB: db, SITE: "https://www.m365.fm", PAGES: pages(files), EMAIL: { send: async (m) => { sent.push(m); return { messageId: "x" }; } }, MAIL_FROM: "M365.FM <system@m365.fm>" },
+    env: { DB: db, SITE: "https://www.m365.fm", TURNSTILE_SECRET: "1x0000000000000000000000000000000AA", TURNSTILE_SITE_KEY: "1x00000000000000000000AA", PAGES: pages(files), EMAIL: { send: async (m) => { sent.push(m); return { messageId: "x" }; } }, MAIL_FROM: "M365.FM <system@m365.fm>" },
   }));
 }
 
@@ -45,7 +52,7 @@ const call = (env, path, init = {}, origin = "https://www.m365.fm") => {
   const J = (d, s = 200, x) => json(d, s, env, request, x);
   return handleMediakit(env, request, url, url.pathname, null, J);
 };
-const body = (o) => ({ method: "POST", body: JSON.stringify({ name: "Ada Lovelace", company: "Contoso", email: `ada${Math.random().toString(36).slice(2, 8)}@contoso.com`, consent: true, lang: "de", source: "/m365con/sponsor/", ...o }) });
+const body = (o) => ({ method: "POST", body: JSON.stringify({ name: "Ada Lovelace", company: "Contoso", email: `ada${Math.random().toString(36).slice(2, 8)}@contoso.com`, consent: true, lang: "de", source: "/m365con/sponsor/", turnstile: "ok-token", ...o }) });
 
 test("Marken: unbekannte Marke faellt auf M365.FM zurueck, Schluessel je Marke", () => {
   assert.equal(brandOf("m365con"), "m365con");
@@ -250,4 +257,37 @@ test("Lead-Status Werbung: GET liefert lead_status, Status setzen, 400/401/403, 
   assert.equal(t.raw.prepare("SELECT COUNT(*) n FROM ad_leads").get().n, 0);
   assert.deepEqual(t.raw.prepare("SELECT key FROM mail_outbox ORDER BY key").all().map(x => x.key), ["adlead:70:5"]);
   assert.equal((await post(t.env, "/api/admin/ads/lead-status", ADMIN, { action: "delete", id: 7 })).status, 404);
+});
+
+// Sicherheits-Audit K13: keine Mail mit frei gewaehltem Text an unbestaetigte Adressen, Turnstile wie beim Lead-Formular (fail closed)
+test("K13: Mediadaten - ohne Turnstile keine Mail; Name und Firma stehen nicht in der Mail", async () => {
+  const { env, sent, raw } = await setup({ "mediakit/m365fm-media-kit-de.pdf": "%PDF-fm" });
+  const rows = () => raw.prepare("SELECT COUNT(*) n FROM mediakit_requests").get().n;
+  const r1 = await call(env, "/api/mediakit", body({ turnstile: undefined }));
+  assert.equal(r1.status, 400); assert.equal((await r1.json()).error, "captcha");
+  const r2 = await call(env, "/api/mediakit", body({ turnstile: "falsch" }));
+  assert.equal(r2.status, 400);
+  assert.equal(sent.length, 0); assert.equal(rows(), 0);
+  const noKey = { ...env }; delete noKey.TURNSTILE_SECRET;
+  const r3 = await call(noKey, "/api/mediakit", body({}));
+  assert.equal(r3.status, 503); assert.equal((await r3.json()).error, "captcha_unavailable");
+  assert.equal(sent.length, 0);
+  const r4 = await call(env, "/api/mediakit", body({ name: "Kunde evil.example", company: "Konto gesperrt - bestaetigen auf evil.example/login" }));
+  assert.equal(r4.status, 200);
+  assert.equal(sent.length, 1);
+  assert.doesNotMatch(sent[0].html, /evil\.example|Kunde|gesperrt/);
+  assert.match(sent[0].html, /Hallo,/);
+  assert.equal(raw.prepare("SELECT company FROM mediakit_requests ORDER BY id DESC").get().company, "Konto gesperrt - bestaetigen auf evil.example/login");   // nur in der Lead-Tabelle
+  const cfg = await call(env, "/api/mediakit", { method: "GET" });
+  assert.deepEqual(await cfg.json(), { turnstile: "1x00000000000000000000AA" });
+});
+
+// Sicherheits-Audit K13 (Rest): Turnstile vor den Ratelimits - Anfragen ohne gueltiges Token verbrauchen nicht das Kontingent einer fremden Adresse
+test("K13: Mediadaten - ungueltige Turnstile-Versuche zaehlen nicht gegen das Tageslimit der Adresse", async () => {
+  const { env, sent } = await setup({ "mediakit/m365fm-media-kit-de.pdf": "%PDF-fm" });
+  const email = "opfer@contoso.com";
+  for (const tok of [undefined, "falsch", "abgelaufen"]) assert.equal((await call(env, "/api/mediakit", body({ email, turnstile: tok }))).status, 400);
+  const ok = await call(env, "/api/mediakit", body({ email }));
+  assert.equal(ok.status, 200);
+  assert.equal(sent.length, 1);
 });

@@ -2,6 +2,15 @@
 import { b64u } from "./util.js";
 const te = new TextEncoder();
 
+// Nur Endpunkte bekannter Web-Push-Dienste (Chrome/Edge-FCM, Firefox, Safari, Windows/WNS): sonst wuerde der Worker auf Zuruf beliebige Hosts anfragen.
+export const PUSH_HOSTS = ["fcm.googleapis.com", "updates.push.services.mozilla.com", "web.push.apple.com", "*.notify.windows.com"];
+export function isPushEndpoint(raw) {
+  let u; try { u = new URL(String(raw || "")); } catch { return false; }
+  if (u.protocol !== "https:" || u.port || u.username || u.password || String(raw).length > 600) return false;
+  const h = u.hostname.toLowerCase();
+  return PUSH_HOSTS.some((x) => (x.startsWith("*.") ? h.endsWith(x.slice(1)) && h.length > x.length - 1 : h === x));
+}
+
 export async function savePushSubscription(db, { endpoint, p256dh, auth, lang, userId = null, digest = 1, created }) {
   return db.prepare("INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES(?,?,?,?,?,?,?) ON CONFLICT(endpoint) DO UPDATE SET p256dh=excluded.p256dh,auth=excluded.auth,lang=excluded.lang,user_id=COALESCE(excluded.user_id,push_subs.user_id),created=excluded.created,digest=MAX(push_subs.digest,excluded.digest)")
     .bind(endpoint, p256dh, auth, lang, userId, created, digest).run();
@@ -43,6 +52,10 @@ async function vapidJwt(env, endpoint) {
 
 // Rueckgabe: {ok, gone}  gone=true -> Abo loeschen (404/410)
 export async function sendPush(env, sub, payloadObj) {
+  if (!isPushEndpoint(sub.endpoint)) {   // aeltere Eintraege mit fremdem Host: nicht anfragen, Abo wie "gone" entfernen
+    if (env.DB) await env.DB.batch([env.DB.prepare("DELETE FROM push_topics WHERE endpoint=?").bind(sub.endpoint), env.DB.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient=?").bind(sub.endpoint), env.DB.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(sub.endpoint)]).catch(() => {});
+    return { ok: false, gone: true, status: 0 };
+  }
   const body = await encryptPayload(JSON.stringify(payloadObj), sub.p256dh, sub.auth);
   const jwt = await vapidJwt(env, sub.endpoint);
   const r = await fetch(sub.endpoint, {

@@ -215,7 +215,7 @@ class Site(unittest.TestCase):
             self.assertIn(js, h, "Skript inline, eine Quelle")
             self.assertNotIn("<script src", h); self.assertNotIn("<link", h); self.assertNotIn("<img", h)
             hosts = set(re.findall(r"https://([a-z0-9.-]+)", h))
-            self.assertTrue(hosts <= {"www.m365.fm", "api-dub.m365.fm", "m365con.net", "de.m365con.net"}, hosts)
+            self.assertTrue(hosts <= {"www.m365.fm", "api-dub.m365.fm", "m365con.net", "de.m365con.net", "challenges.cloudflare.com"}, hosts)   # Turnstile (Bot-Pruefung, Audit K13)
             self.assertIn('"brand": "m365con"', h)
             self.assertNotRegex(re.sub(r"<script>[\s\S]*?</script>", "", h), r"(?m)^\s*(html|body)\s*\{", "Stil nur unter .m365con-mk")
 

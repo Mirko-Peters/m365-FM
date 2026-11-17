@@ -63,13 +63,13 @@ async function posted(x, title, url, actor = { id: 1 }) {
 async function pushEnv(x, uid) {   // echtes VAPID-Schluesselpaar und ein Push-Abo des Mitglieds: Hinweise werden als POST an den Push-Dienst sichtbar
   const v = await crypto.subtle.generateKey({ name: "ECDSA", namedCurve: "P-256" }, true, ["sign"]), e = await crypto.subtle.generateKey({ name: "ECDH", namedCurve: "P-256" }, true, ["deriveBits"]);
   Object.assign(x.env, { VAPID_PRIVATE_JWK: JSON.stringify(await crypto.subtle.exportKey("jwk", v.privateKey)), VAPID_PUBLIC: "pub", VAPID_SUBJECT: "mailto:test@example.com" });
-  x.raw.prepare("INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES('https://push.example.com/sub1',?,?,'en',?,1,1)")
+  x.raw.prepare("INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES('https://fcm.googleapis.com/fcm/send/sub1',?,?,'en',?,1,1)")
     .run(b64u.enc(new Uint8Array(await crypto.subtle.exportKey("raw", e.publicKey))), b64u.enc(crypto.getRandomValues(new Uint8Array(16))), uid);
 }
-const YT = "https://www.youtube.com/feeds/videos.xml?channel_id=UCabcdefghijklmnopqrstuv", PUSH = "https://push.example.com/";
+const YT = "https://www.youtube.com/feeds/videos.xml?channel_id=UCabcdefghijklmnopqrstuv", PUSH = "https://fcm.googleapis.com/fcm/send/";
 
 const queued = (x) => x.one("SELECT COUNT(*) n FROM topic_queue").n;
-const follow = (x, handle) => x.raw.prepare("INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES('https://push.example.com/f','k','a','en',3,1,0)").run() && x.raw.prepare("INSERT INTO push_topics(endpoint,kind,topic_id,lang,user_id,created) VALUES('https://push.example.com/f','creator',?,'en',3,1)").run(handle);
+const follow = (x, handle) => x.raw.prepare("INSERT INTO push_subs(endpoint,p256dh,auth,lang,user_id,created,digest) VALUES('https://fcm.googleapis.com/fcm/send/f','k','a','en',3,1,0)").run() && x.raw.prepare("INSERT INTO push_topics(endpoint,kind,topic_id,lang,user_id,created) VALUES('https://fcm.googleapis.com/fcm/send/f','creator',?,'en',3,1)").run(handle);
 
 test("318-1 Tagesgrenze: hoechstens 5 neue Kurzposts je Mitglied und Tag, ueber Import, Neu gefunden und Batch zusammen", async () => {
   const x = await makeDb();

@@ -1,4 +1,5 @@
-import { sendPush } from "./push.js";
+import { sendPush, isPushEndpoint } from "./push.js";
+import { netOf } from "./inviter.js";
 import { sendMail } from "./mailer.js";
 import { esc, isLang, rateLimit, sign, verify } from "./util.js";
 
@@ -427,11 +428,11 @@ export async function handleTopicSubscriptions(env, request, url, path, user, J)
   const b = await request.json().catch(() => ({}));
   const endpoint = String(b.endpoint || "").slice(0, 600), kind = String(b.kind || ""), topicId = String(b.id || "");
   const ip = request.headers.get("cf-connecting-ip") || "0";
-  if (!(await rateLimit(db, `topic:${user?.id || ip}`, 60, 3600))) return J({ error: "rate_limit" }, 429);
+  if (!(await rateLimit(db, `topic:${user?.id || netOf(ip)}`, 60, 3600))) return J({ error: "rate_limit" }, 429);
   if (path === "/api/topics/follow") {
     if (!validTopic(kind, topicId) || !topicLang(b.lang) || !(await topicExists(env, kind, topicId))) return J({ error: "bad_request" }, 400);
     if (!endpoint && !(user && b.email === true)) return J({ error: "consent_required" }, 400);
-    if (endpoint && !/^https:\/\//.test(endpoint)) return J({ error: "bad_request" }, 400);
+    if (endpoint && !isPushEndpoint(endpoint)) return J({ error: "bad_request" }, 400);   // nur bekannte Push-Dienste
     if (b.email === true && !user) return J({ error: "login" }, 401);
     if (b.email === true && !(await db.prepare("SELECT 1 x FROM mail_addr WHERE user_id=? AND verified=1").bind(user.id).first())) return J({ error: "email_unverified" }, 409);
     if (kind === "creator" && user) {

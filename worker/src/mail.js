@@ -3,6 +3,7 @@ import { mailReady, sendMail } from "./mailer.js";
 import { esc, sign, verify, randomToken, rateLimit } from "./util.js";
 
 const now = () => Math.floor(Date.now() / 1000);
+const CONFIRM_TTL = 2 * 86400;   // Bestaetigungslink der Benachrichtigungsadresse gilt 48 Stunden
 export const KINDS = { weekly: 1, reply: 1, reply_now: 0, wish: 1, show: 1, event: 1, system: 1 };   // 1 = standardmaessig an; "system" = Test/Bestaetigung
 const LABEL = { weekly: ["Wochenübersicht und persönliche Hinweise", "Weekly overview and personal updates"], reply: ["Antworten auf meine Kommentare", "Replies to my comments"], reply_now: ["Antworten sofort statt in der Wochenmail", "Send replies immediately instead of in the weekly mail"], wish: ["Status meiner Wünsche (Roadmap)", "Status of my wishes (roadmap)"], show: ["Freigabe meiner Podcast-Shows", "Approval of my podcast shows"], event: ["Einladungen zu Events und Sessions", "Invitations to events and sessions"] };
 let ready = false;
@@ -74,10 +75,17 @@ export async function flushOutbox(env, limit = 40) {
 export async function handleMail(env, request, url, path, user, J) {
   if (!path.startsWith("/api/mail/") && !path.startsWith("/api/admin/mail")) return null;
   const db = env.DB, method = request.method; await ensure(db);
-  if (path === "/api/mail/confirm" && method === "GET") {
+  // Bestaetigungslink: GET fragt nur nach (Link-Pruefer von Mailfiltern rufen jeden Link per GET ab und wuerden sonst fremde Adressen bestaetigen).
+  // Erst der Knopf (POST, ohne Zusatz-Header, darum in index.js ausgenommen) bestaetigt - nur fuer das angemeldete Konto, das die Adresse eingetragen hat,
+  // und nur innerhalb von CONFIRM_TTL. mail_addr.verified gilt anderswo als Nachweis (Firmen-Domain), darum diese Bindung.
+  if (path === "/api/mail/confirm" && (method === "GET" || method === "POST")) {
     const t = url.searchParams.get("t") || "";
-    const r = t.length > 10 ? await db.prepare("UPDATE mail_addr SET verified=1,token='' WHERE token=?").bind(t).run() : { meta: { changes: 0 } };
-    return r.meta.changes ? page("✓ E-Mail bestätigt / confirmed", `<p><a href="${env.SITE}/community/">${env.SITE.replace("https://", "")}/community</a></p>`) : page("Link ungültig / invalid", "<p>Bitte fordere in deinem Profil eine neue Bestätigung an.</p>", 404);
+    const a = t.length > 10 ? await db.prepare("SELECT user_id,created FROM mail_addr WHERE token=? AND verified=0").bind(t).first() : null;
+    if (!a || (a.created || 0) < now() - CONFIRM_TTL) return page("Link ungültig / invalid", "<p>Bitte fordere in deinem Profil eine neue Bestätigung an.</p><p>Please request a new confirmation in your profile.</p>", 404);
+    if (method === "GET") return page("E-Mail bestätigen? / Confirm e-mail?", `<p>Bestätige hier, dass du diese Adresse für Benachrichtigungen von M365.FM nutzen willst. Du musst dafür mit dem Konto angemeldet sein, in dem du sie eingetragen hast. Warst du das nicht, schließe diese Seite einfach.</p><p>Confirm that you want to use this address for M365.FM notifications. You need to be signed in with the account where you entered it. If this wasn't you, just close this page.</p><form method="post"><button type="submit" style="font:inherit;padding:.6em 1.2em">Bestätigen / Confirm</button></form>`);
+    if (!user) return page("Bitte anmelden / Please sign in", `<p>Melde dich auf <a href="${env.SITE}/community/">${env.SITE.replace("https://", "")}/community</a> mit dem Konto an, in dem du die Adresse eingetragen hast, und öffne dann den Link aus der Mail erneut.</p><p>Sign in with the account where you entered the address, then open the link from the e-mail again.</p>`, 401);
+    const r = await db.prepare("UPDATE mail_addr SET verified=1,token='' WHERE token=? AND user_id=? AND verified=0").bind(t, user.id).run();
+    return r.meta.changes ? page("✓ E-Mail bestätigt / confirmed", `<p><a href="${env.SITE}/community/">${env.SITE.replace("https://", "")}/community</a></p>`) : page("Anderes Konto / other account", "<p>Diese Adresse wurde in einem anderen Konto eingetragen. Melde dich mit jenem Konto an.</p><p>This address was entered in another account. Please sign in with that account.</p>", 403);
   }
   if (path === "/api/mail/unsub" && (method === "GET" || method === "POST")) {
     const [uid, kind, sig] = (url.searchParams.get("t") || "").split("."); 

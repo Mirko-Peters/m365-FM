@@ -661,7 +661,7 @@ test("Unbekanntes bleibt unbekannt (317-16): Import-Events sind weder 'kostenlos
   const x = exp.find((e) => e.handle === sea.handle); assert.equal(x.free, null); assert.equal(x.tz, ""); assert.equal(x.unclaimed, true); assert.equal(exp.find((e) => /Free Day/.test(e.title)).free, true);
   // keine Session-Erinnerung zur falschen Zeit, solange die Zeitzone unbekannt ist
   raw.prepare("INSERT INTO event_sessions(id,event_id,title,start,status,proposer_id,created) VALUES(42,?,'Keynote','2026-11-05T13:00','live',0,1)").run(sea.id);
-  raw.exec("INSERT INTO push_subs(endpoint,p256dh,auth,lang,created,digest) VALUES('https://push.example/r','p','a','en',1,0); INSERT INTO push_topics(endpoint,kind,topic_id,lang,timezone,created) VALUES('https://push.example/r','session','42','en','UTC',1);");
+  raw.exec("INSERT INTO push_subs(endpoint,p256dh,auth,lang,created,digest) VALUES('https://fcm.googleapis.com/fcm/send/r','p','a','en',1,0); INSERT INTO push_topics(endpoint,kind,topic_id,lang,timezone,created) VALUES('https://fcm.googleapis.com/fcm/send/r','session','42','en','UTC',1);");
   const at = Math.floor(new Date("2026-11-05T11:45:00Z").getTime() / 1000);
   await queueSessionReminders({ DB: env.DB, SITE: "https://www.m365.fm" }, at); assert.equal(raw.prepare("SELECT COUNT(*) n FROM topic_queue").get().n, 0);
   // der Veranstalter (hier ein Admin) legt Zeitzone und Preis fest: ab dann gelten sie; ein Speichern ohne Preisangabe (MCP) macht aus "unbekannt" nicht "kostenlos"

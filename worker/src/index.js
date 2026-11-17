@@ -49,7 +49,7 @@ import { handleHardware } from "./hardware.js";
 import { handleMail, flushOutbox, notify } from "./mail.js";
 import { handleReviews } from "./reviews.js";
 import { handleEntityInvite, remindInvites } from "./entinvite.js";
-import { handleInviter, syncInviterBadges, deleteUserInvites } from "./inviter.js";
+import { handleInviter, syncInviterBadges, deleteUserInvites, netOf } from "./inviter.js";
 import { handleDemo } from "./demo.js";
 import { handleGuests, deleteUserGuests } from "./guests.js";
 import { deleteUserEntityInvites } from "./entinvite.js";
@@ -68,7 +68,7 @@ import { handleWiki } from "./wiki.js";
 import { syncExpertise } from "./levels.js";
 import { backfillDirectoryGeocodes, ensureDirectoryCols, handleDirectory } from "./directory.js";
 import { handleTopicSubscriptions, dispatchTopicNotifications, queueTopicArticles, queueSessionReminders } from "./topic_notifications.js";
-import { savePushSubscription } from "./push.js";
+import { savePushSubscription, isPushEndpoint } from "./push.js";
 import { handleContributions, refreshContributions } from "./contributions.js";
 import { findUserByIdentity, createUserWithIdentity, linkIdentity, mergeProof, handleIdentities, MERGE_WINDOW, freshSession, reloginFor } from "./identities.js";
 import { handleSpreakerExchange, spreakerStart } from "./spreaker_connect.js";
@@ -179,12 +179,26 @@ async function auth(env, request, url, path) {
     const r = await oauthCallbackLE(env, request, url, admin);
     return back(r.ok ? "ok" : r.error);
   }
+  if (path === "/auth/claim/linkedin") {   // K1: einzige Stelle, die eine LinkedIn-Uebernahme beginnt - Formular-POST des Knopfs auf der Entitaetsseite (site_entities.py claim_html)
+    if (request.method !== "POST") return html("<p>Method not allowed.</p>", 405);
+    // Nur von unserer Seite: Origin (bei POST immer gesendet, nicht faelschbar) und, falls vorhanden, Sec-Fetch-Site. Ein Link oder Formular einer fremden Seite beansprucht nichts.
+    const sfs = request.headers.get("sec-fetch-site") || "";
+    if (request.headers.get("origin") !== env.SITE || (sfs && sfs !== "same-site" && sfs !== "same-origin")) return html("<p>Claim must be started on the profile page.</p>", 403);
+    const f = await request.formData().catch(() => null), eid = String(f?.get("entity") || ""), lang = String(f?.get("lang") || "en");
+    if (!/^[a-z0-9][a-z0-9-]{1,78}$/.test(eid) || (lang !== "en" && !isLang(lang))) return html("<p>Bad request.</p>", 400);
+    if (!PROVIDERS.linkedin.id(env) || !PROVIDERS.linkedin.secret(env)) return html("<p>Login not configured.</p>", 503);
+    const o = await oauthStart(env, "linkedin", `${env.SITE}${lang === "en" ? "" : "/" + lang}/entity/${eid}/`, "C");   // Absicht "C" steht im signierten state (Cookie m365o)
+    return new Response(null, { status: 302, headers: { location: o.location, "set-cookie": o.setCookie } });
+  }
   if (!m) return null;
   const P = PROVIDERS[m[2]];
   if (!P.id(env) || !P.secret(env)) return html("<p>Login not configured.</p>", 503);
   const redirect = `${env.API}/auth/callback/${m[2]}`;
   if (m[1] === "login") {
-    const o = await oauthStart(env, m[2], safeReturn(env, url.searchParams.get("return") || env.SITE));
+    // Der GET-Login meldet nur an und beansprucht nie etwas, auch nicht mit ?claim=linkedin in der Rueckkehr-URL (die uebernehmen Login-Knoepfe aus location.href).
+    // Die Uebernahme beginnt nur der Formular-POST /auth/claim/linkedin (Absicht "C" im signierten state).
+    const ret = safeReturn(env, url.searchParams.get("return") || env.SITE);
+    const o = await oauthStart(env, m[2], ret);
     return new Response(null, { status: 302, headers: { location: o.location, "set-cookie": o.setCookie } });
   }
   // callback
@@ -205,7 +219,7 @@ async function auth(env, request, url, path) {
   const info = P.profile ? P.profile(raw) : { sub: raw && raw.sub ? String(raw.sub) : "", name: raw && (raw.name || raw.given_name) };
   if (!info.sub) return html("<p>Login failed.</p>", 400);
   const intent = val.split("|")[2] || "";
-  if (intent) {   // #279: weitere Anmeldung an das angemeldete Konto haengen; state ist an genau diese Sitzung gebunden (Hash), max. 10 Minuten
+  if (intent && intent !== "C") {   // #279: weitere Anmeldung an das angemeldete Konto haengen; state ist an genau diese Sitzung gebunden (Hash), max. 10 Minuten
     const sess = await readSessionInfo(env, request), [lu, lt, lh] = intent.slice(1).split(".");
     const ok = intent[0] === "L" && sess && sess.uid === +lu && now() - +lt <= MERGE_WINDOW && (await sha256hex(sess.raw)).slice(0, 32) === lh;
     const cur = ok ? await me(env, sess.uid) : null;
@@ -221,8 +235,9 @@ async function auth(env, request, url, path) {
   if (u.banned) return html("<p>This account is blocked.</p>", 403);
   const h = new Headers({ location: ret });
   if (m[2] === "linkedin") {
-    const target = new URL(ret), claim = target.searchParams.get("claim");
-    const match = claim === "linkedin" && /^\/(?:[a-z]{2}\/)?entity\/([a-z0-9][a-z0-9-]{1,78})\/?$/i.exec(target.pathname);
+    const target = new URL(ret);
+    if (target.searchParams.has("claim")) { target.searchParams.delete("claim"); h.set("location", target.href); }   // alte Links mit ?claim=linkedin: nur anmelden
+    const match = intent === "C" && /^\/(?:[a-z]{2}\/)?entity\/([a-z0-9][a-z0-9-]{1,78})\/?$/i.exec(target.pathname);
     if (match) {
       const result = await claimLinkedinEntity(env, u, raw, match[1]);
       if (result.error === "claimed") {
@@ -280,7 +295,7 @@ function pubComment(c, mine, liked, badges, admin, roles) {
 async function api(env, request, url, path, asUser, ctx) {
   const method = request.method, J = (d, s = 200, x) => json(d, s, env, request, x);
   if (method === "OPTIONS") return new Response(null, { status: 204, headers: cors(env, request) });
-  if (asUser === undefined && method !== "GET" && !["/api/internal/ai-spend", "/api/internal/sponsor-metrics", "/api/email/unsub", "/api/mail/unsub", "/api/topics/email-unsub", "/api/entityinvite/decline"].includes(path) && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);   // interne Routen per CRON_KEY; Abmeldelinks (RFC 8058) senden keinen Zusatz-Header, alle per Token geschuetzt
+  if (asUser === undefined && method !== "GET" && !["/api/internal/ai-spend", "/api/internal/sponsor-metrics", "/api/email/unsub", "/api/mail/unsub", "/api/topics/email-unsub", "/api/entityinvite/decline", "/api/mail/confirm", "/api/email/confirm"].includes(path) && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);   // interne Routen per CRON_KEY; Abmeldelinks (RFC 8058) senden keinen Zusatz-Header, alle per Token geschuetzt
   // asUser: vom MCP-Server (Token bereits geprueft) - dann keine Cookie-Sitzung noetig
   const uid = asUser === undefined ? await readSession(env, request) : null, user = asUser === undefined ? (uid ? await me(env, uid) : null) : asUser;
   const need = () => (user ? null : J({ error: "login" }, 401));
@@ -418,7 +433,8 @@ async function api(env, request, url, path, asUser, ctx) {
     }
     await db.prepare("INSERT OR IGNORE INTO reports(comment_id,user_id,created) VALUES(?,?,?)").bind(id, user.id, now()).run();
     const n = (await db.prepare("SELECT COUNT(*) n FROM reports WHERE comment_id=?").bind(id).first()).n;
-    if (n >= 3 && c.status === "ok") {
+    const au = await db.prepare("SELECT role FROM users WHERE id=?").bind(c.user_id).first();
+    if (n >= 3 && c.status === "ok" && (!au || !au.role || au.role === "user")) {   // Kommentare der Redaktion blendet nur die Moderation aus, nicht drei Meldungen
       await db.prepare("UPDATE comments SET status='hidden' WHERE id=?").bind(id).run();
       const rs = (await db.prepare("SELECT user_id FROM reports WHERE comment_id=?").bind(id).all()).results || [];
       for (const r of rs) await evalBadges(env, r.user_id);
@@ -512,8 +528,8 @@ async function api(env, request, url, path, asUser, ctx) {
   if (path === "/api/push/subscribe" && method === "POST") {
     const b = await request.json().catch(() => ({}));
     const e = b.endpoint, k = b.keys || {};
-    if (!/^https:\/\//.test(e || "") || e.length > 600 || !k.p256dh || !k.auth || !(b.lang === "en" || isLang(b.lang))) return J({ error: "bad_request" }, 400);
-    if (!(await rateLimit(db, `ps:${ip(request)}`, 20, 3600))) return J({ error: "rate" }, 429);
+    if (!isPushEndpoint(e) || !k.p256dh || !k.auth || String(k.p256dh).length > 200 || String(k.auth).length > 100 || !(b.lang === "en" || isLang(b.lang))) return J({ error: "bad_request" }, 400);   // nur bekannte Push-Dienste
+    if (!(await rateLimit(db, `ps:${user ? "u" + user.id : netOf(ip(request))}`, 20, 3600))) return J({ error: "rate" }, 429);   // ohne Anmeldung je Netz (IPv6 /64), nicht je Adresse
     await savePushSubscription(db, {
       endpoint: e, p256dh: String(k.p256dh), auth: String(k.auth), lang: b.lang,
       userId: user?.id ?? null, created: now(), digest: b.digest === 0 ? 0 : 1,
@@ -549,8 +565,13 @@ async function api(env, request, url, path, asUser, ctx) {
       html: `<p>Please confirm your subscription to new M365.FM episodes (${esc(b.lang)}):</p><p><a href="${link}">${link}</a></p><p>Bitte bestätige dein Abo neuer M365.FM-Folgen. Wenn du das nicht warst, ignoriere diese E-Mail.</p>` });
     return J({ ok: true });
   }
-  if (path === "/api/email/confirm" && method === "GET") {
+  if (path === "/api/email/confirm" && (method === "GET" || method === "POST")) {   // GET fragt nur nach (Link-Pruefer der Mailfilter), erst der Knopf (POST) bestaetigt
     const t = url.searchParams.get("token") || "", lang = isLang(url.searchParams.get("lang")) ? url.searchParams.get("lang") : "en";
+    if (method === "GET") {
+      const s = t ? await db.prepare("SELECT confirmed FROM email_subs WHERE token=?").bind(t).first() : null;
+      if (!s) return html("<p>Link invalid or expired.</p>", 404);
+      if (!s.confirmed) return html(`<h2>Confirm subscription? / Abo bestätigen?</h2><p>Click the button to receive new episodes from M365.FM by e-mail. If this wasn't you, just close this page.</p><p>Klicke auf den Knopf, um neue Folgen von M365.FM per E-Mail zu bekommen. Warst du das nicht, schließe diese Seite einfach.</p><form method="post"><button type="submit" style="font:inherit;padding:.6em 1.2em">Confirm / Bestätigen</button></form>`);
+    }
     const r = await db.prepare("UPDATE email_subs SET confirmed=1 WHERE token=?").bind(t).run();
     return html(r.meta.changes ? `<h2>✓ Subscription confirmed</h2><p><a href="${env.SITE}/${lang}/">${env.SITE.replace("https://", "")}</a></p>` : "<p>Link invalid or expired.</p>", r.meta.changes ? 200 : 404);
   }
