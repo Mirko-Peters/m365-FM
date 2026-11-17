@@ -204,8 +204,12 @@ class Tool(unittest.TestCase):
         self.assertEqual(RA.validate(json.dumps(dict(GOOD, alt=dict(ALTS, en="Generated image"))))[1], "Platzhalter als Alt-Text")
         d, _ = RA.validate(json.dumps(dict(GOOD, kind="decorative", alt={l: "x" for l in ALT.LANGS})))
         self.assertTrue(d["decorative"]); self.assertEqual(set(d["alt"].values()), {""})
-        long_, _ = RA.validate(json.dumps(dict(GOOD, kind="photo", alt=dict(ALTS, en="word " * 80))))
-        self.assertLessEqual(len(long_["alt"]["en"]), 161)
+        # zu lang: nicht mit … kuerzen, sondern als Fehlversuch werten (wird erneut angefragt)
+        long_, why = RA.validate(json.dumps(dict(GOOD, kind="photo", alt=dict(ALTS, fr="mot " * 60))))
+        self.assertIsNone(long_); self.assertIn("zu lang", why)
+        ok, why = RA.validate(json.dumps(dict(GOOD, kind="photo", alt=dict(ALTS, fr="x" * 190))))
+        self.assertIsNone(why); self.assertFalse(ok["alt"]["fr"].endswith("…"))
+        self.assertIn("never cut a sentence off", RA.SYSTEM)
 
     def test_apply_results_tries_and_api_failures(self):
         items = {U: {"src": [SRC], "orig_alts": ["Teams adoption"]}, "u2": {}, "u3": {}, "u4": {}}

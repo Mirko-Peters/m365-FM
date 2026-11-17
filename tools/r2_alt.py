@@ -50,7 +50,9 @@ SYSTEM = (
     "You get one image and its context: page title, the heading above the image, text before and after it, and the current alt text (often just a copy of the heading). "
     "Return JSON only, matching the schema.\n"
     "Rules:\n"
-    "- alt: what the image shows or says, as one short phrase or sentence, max 125 characters; for charts and diagrams up to 250 characters with the chart type and its key message. "
+    "- alt: what the image shows or says, as one short phrase or sentence. English: aim for 70-110 characters, never more than 125; charts and diagrams up to 220 characters with the chart type and its key message. "
+    "Other languages may be up to 30 % longer but must stay complete sentences: shorten the content, never cut a sentence off. "
+    "Stock photos: name only the main subject and setting, no minor details. Do not add interpretations taken from the heading ('suggesting ...', 'illustrating ...'). "
     "Use only what is visible in the image; numbers only if they are readable in the image. Never invent product names, brands, people or numbers.\n"
     "- Do not start with 'Image of', 'Picture of', 'Bild von' or similar, and do not repeat the heading word for word; the heading is read right before the image.\n"
     "- Product photos: name the product from the heading or context if the image matches it.\n"
@@ -59,7 +61,7 @@ SYSTEM = (
     "- decorative: true only for pure patterns, ornaments or stock mood images without information; then every alt is an empty string.\n"
     "- image_is_link true: the image is the only content of a link (link_target) and its alt text is the link's name. Describe where the link leads "
     "or the product it shows (e.g. the product name from the heading or context), not just the picture; decorative must be false.\n"
-    "- kind: chart, diagram, screenshot, photo, product, illustration, logo or decorative.\n"
+    "- kind: chart, diagram, screenshot, photo, product, illustration, logo or decorative. screenshot only for screen captures, not for photos of devices; chart only for an actual chart image, not a photo of a screen showing one.\n"
     "- chart_points: for charts and diagrams up to 4 key statements in English (only visible facts), otherwise an empty list."
 )
 
@@ -218,8 +220,11 @@ def validate(txt):
         return None, "falsche Form"
     kind = obj.get("kind") if obj.get("kind") in KINDS else "illustration"
     deco = bool(obj.get("decorative")) or kind == "decorative"
-    n = 250 if kind in ("chart", "diagram") else 160
-    alt = {l: clip(obj["alt"].get(l), n) for l in ALT.LANGS}
+    n = 300 if kind in ("chart", "diagram") else 200   # Sicherheitsgrenze; der Prompt verlangt deutlich kuerzere Texte
+    raw = {l: " ".join(str(obj["alt"].get(l) or "").split()) for l in ALT.LANGS}
+    if not deco and any(len(v) > n for v in raw.values()):
+        return None, "Alt-Text zu lang (wuerde abgeschnitten)"   # lieber erneut anfragen als mit … kuerzen
+    alt = {l: clip(raw[l], n) for l in ALT.LANGS}
     if deco:
         alt = {l: "" for l in ALT.LANGS}
     else:
