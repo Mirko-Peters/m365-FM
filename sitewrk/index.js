@@ -413,17 +413,43 @@ export function partnerToWww(path) {
   const m = PARTNER_DASH.exec(path) || WWW_DASH.exec(path);
   return m ? (m[1] ? "/" + m[1] : "") + "/sponsor/dashboard" + (m[2] ? "/" + m[2] : "") + "/" : "";
 }
+// admin.m365.fm: die Verwaltung (/admin/) auf eigener Subdomain; "/" = /admin/. Kein weiterer Pfad gehoert dazu (alles andere: Website).
+const WWW_ADMIN = /^\/admin\/?$/;
+export function wwwToAdmin(path) { return WWW_ADMIN.test(path) ? "/" : ""; }
+export function adminToWww(path) { return path === "/" || WWW_ADMIN.test(path) ? "/admin/" : ""; }
+// profile.m365.fm: Konto und Profil (die Community-App /community/ mit allen Reitern) auf eigener Subdomain; "/" = /community/, "/de/" = /de/community/.
+// Nur die App selbst zieht um: oeffentliche Profile (/community/u/<kuerzel>/), Blog, Podcast, Gaeste und die Einstiegsseiten bleiben auf www.m365.fm.
+const WWW_PROFILE = new RegExp(`^(?:/(${PARTNER_LANG}))?/community/?$`);
+const PROFILE_ROOT = new RegExp(`^(?:/(${PARTNER_LANG}))?/?$`);
+export function wwwToProfile(path) { const m = WWW_PROFILE.exec(path); return m ? (m[1] ? "/" + m[1] : "") + "/" : ""; }
+export function profileToWww(path) { const m = PROFILE_ROOT.exec(path) || WWW_PROFILE.exec(path); return m ? (m[1] ? "/" + m[1] : "") + "/community/" : ""; }
 const WWW_HOSTS = new Set(["www.m365.fm", "m365.fm", "dub.m365.fm"]);
 const PARTNER_NOINDEX = { "x-robots-tag": "noindex, nofollow" };
 
-async function partnerRequest(request, env, ctx, url) {
+// Anmelde-Sperre auf admin.m365.fm und profile.m365.fm: wer nicht angemeldet ist (bei admin: kein Admin), sieht NUR die Anmelde-Knoepfe (Google, Microsoft, LinkedIn, GitHub),
+// sonst nichts von der Seite. Der Worker setzt das Skript in den <head> der ausgelieferten Seite; Cookie und Pruefung bleiben bei api-dub.m365.fm
+// (/api/me mit Cookie, CORS erlaubt beide Adressen). Sicherer Standard: bis die Antwort da ist, ist die Seite ausgeblendet; bei Fehler gilt "nicht angemeldet".
+export function gateSnippet(kind, api) {
+  const A = JSON.stringify(String(api || "https://api-dub.m365.fm").replace(/\/+$/, "")), K = JSON.stringify(kind === "admin" ? "admin" : "profile");
+  return `<style id="m365-gate-css">html.m365g body>*:not(#m365-gate){display:none!important}#m365-gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}#m365-gate .gbox{display:flex;flex-direction:column;gap:12px;width:100%;max-width:320px}#m365-gate .gbox a{text-align:center;text-decoration:none}</style>` +
+    `<script id="m365-gate-js">(function(){var d=document,r=d.documentElement,A=${A},K=${K};r.className+=" m365g";` +
+    `function ok(){r.className=r.className.split(" m365g").join("");var g=d.getElementById("m365-gate");if(g&&g.parentNode)g.parentNode.removeChild(g)}` +
+    `function card(){if(d.getElementById("m365-gate"))return;if(!d.body){d.addEventListener("DOMContentLoaded",card);return}` +
+    `var g=d.createElement("main");g.id="m365-gate";var b=d.createElement("div");b.className="gbox";var ret=encodeURIComponent(location.href.split("#")[0]);` +
+    `[["google","Google"],["microsoft","Microsoft"],["linkedin","LinkedIn"],["github","GitHub"]].forEach(function(p,i){var a=d.createElement("a");a.className="btn"+(i?"":" main");a.rel="nofollow";a.setAttribute("data-p",p[0]);a.href=A+"/auth/login/"+p[0]+"?return="+ret;a.textContent=p[1];b.appendChild(a)});` +
+    `g.appendChild(b);d.body.appendChild(g);` +
+    `fetch(A+"/api/providers").then(function(x){return x.json()}).then(function(j){if(!j||!j.providers)return;[].slice.call(b.querySelectorAll("a")).forEach(function(a){if(j.providers.indexOf(a.getAttribute("data-p"))<0)a.parentNode.removeChild(a)})}).catch(function(){})}` +
+    `fetch(A+"/api/me",{credentials:"include"}).then(function(x){return x.ok?x.json():null}).then(function(j){var u=j&&j.user;if(u&&(K!=="admin"||u.admin))ok();else card()}).catch(card)})();</script>`;
+}
+
+async function partnerRequest(request, env, ctx, url, toWww = partnerToWww, fromWww = wwwToPartner, gate = "") {   // Standard: Sponsor-Dashboard; admin und profil rufen es mit ihren Zuordnungen auf
   const quiet = (status, extra = {}) => new Response(status === 405 ? "Method not allowed" : null, { status, headers: { ...SEC, ...PARTNER_NOINDEX, "cache-control": "no-store", ...extra } });
   const p = url.pathname;
   if (p === "/robots.txt") return new Response("User-agent: *\nDisallow: /\n", { headers: { ...SEC, "content-type": "text/plain; charset=utf-8", "cache-control": "public, max-age=3600" } });
   if (request.method !== "GET" && request.method !== "HEAD") return quiet(405, { allow: "GET, HEAD" });
   if (/^\/sitemap[^/]*\.xml$/i.test(p)) return quiet(404);   // die Subdomain steht in keiner Sitemap
   const origin = (env.ORIGIN || "https://www.m365.fm").replace(/\/+$/, "");
-  const www = partnerToWww(p);
+  const www = toWww(p);
   // Dashboard-Seiten und statische Dateien (Skripte, Stile, Bilder, Schriften) kommen ueber die normale Kette von www.m365.fm; alles andere gehoert zur Website
   if (!www && !(STATIC.test(p) || FONT.test(p) || IMG.test(p))) return quiet(302, { location: origin + p + url.search });
   const target = new URL(origin + (www || p)); target.search = url.search;
@@ -434,7 +460,13 @@ async function partnerRequest(request, env, ctx, url) {
   if (www) h.set("x-robots-tag", PARTNER_NOINDEX["x-robots-tag"]);
   const loc = h.get("location");
   if (loc && res.status >= 300 && res.status < 400) {
-    try { const l = new URL(loc, target); const back = l.origin === new URL(origin).origin ? wwwToPartner(l.pathname) : ""; if (back) h.set("location", url.origin + back + l.search); } catch { /* Ziel bleibt wie geliefert */ }
+    try { const l = new URL(loc, target); const back = l.origin === new URL(origin).origin ? fromWww(l.pathname) : ""; if (back) h.set("location", url.origin + back + l.search); } catch { /* Ziel bleibt wie geliefert */ }
+  }
+  if (gate && www && res.status === 200 && /text\/html/i.test(h.get("content-type") || "")) {   // Anmelde-Sperre: nur die Seite selbst, nie Skripte, Stile, Bilder
+    const html = (await res.text()).replace(/<\/head>/i, () => gateSnippet(gate, env.API) + "</head>");
+    for (const k of ["content-length", "content-encoding", "etag"]) h.delete(k);
+    h.set("cache-control", "no-store");
+    return new Response(request.method === "HEAD" ? null : html, { status: 200, headers: h });
   }
   return new Response(request.method === "HEAD" ? null : res.body, { status: res.status, statusText: res.statusText, headers: h });
 }
@@ -512,9 +544,16 @@ const site = {
     // partner.m365.fm (PARTNER_HOST): Sponsor-Dashboard auf eigener Subdomain, noindex, nicht in der Sitemap
     const partnerHost = env.PARTNER_HOST || "";
     if (partnerHost && url.hostname === partnerHost) return partnerRequest(request, env, ctx, url);
-    if (partnerHost && env.PARTNER_REDIRECT === "1" && WWW_HOSTS.has(url.hostname) && !request.headers.has("x-partner-rewrite") && (request.method === "GET" || request.method === "HEAD")) {
-      const to = wwwToPartner(url.pathname);   // alte Adresse /sponsor/dashboard/... -> 301 in einem Schritt (auch von m365.fm, dub.m365.fm und http://)
-      if (to) return new Response(null, { status: 301, headers: { ...SEC, location: "https://" + partnerHost + to + url.search, "cache-control": "public, max-age=3600" } });
+    // admin.m365.fm (ADMIN_HOST) und profile.m365.fm (PROFILE_HOST): gleiche Technik wie partner, immer noindex; leer = keine Subdomain, keine Umleitung
+    const adminHost = env.ADMIN_HOST || "", profileHost = env.PROFILE_HOST || "";
+    if (adminHost && url.hostname === adminHost) return partnerRequest(request, env, ctx, url, adminToWww, wwwToAdmin, "admin");
+    if (profileHost && url.hostname === profileHost) return partnerRequest(request, env, ctx, url, profileToWww, wwwToProfile, "profile");
+    if (WWW_HOSTS.has(url.hostname) && !request.headers.has("x-partner-rewrite") && (request.method === "GET" || request.method === "HEAD")) {
+      for (const [host, flag, map] of [[partnerHost, env.PARTNER_REDIRECT, wwwToPartner], [adminHost, env.ADMIN_REDIRECT, wwwToAdmin], [profileHost, env.PROFILE_REDIRECT, wwwToProfile]]) {
+        if (!host || flag !== "1") continue;
+        const to = map(url.pathname);   // alte Adresse (/sponsor/dashboard/..., /admin/, /community/) -> 301 in einem Schritt (auch von m365.fm, dub.m365.fm und http://)
+        if (to) return new Response(null, { status: 301, headers: { ...SEC, location: "https://" + host + to + url.search, "cache-control": "public, max-age=3600" } });
+      }
     }
     // Umzug (MIGRATED=1): dub.m365.fm und m365.fm -> www.m365.fm, alte Podpage-Adressen -> /show/ (301, damit der SEO-Traffic erhalten bleibt)
     // Alle Adressregeln (alte Podpage-Adressen, alter Blog-Profilname, entfernte Sprachen, /en/) in EINEM Schritt bis zum Endziel;

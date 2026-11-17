@@ -12,6 +12,8 @@ import site_press as PRS
 import site_sponsor as SPN   # T37 Sponsor-Seite /sponsor/ (Seite, Fusszeilen-Link)
 import site_landing as LND
 import site_mediakit as MKT
+import site_hardware as HWR   # Hardware-Sponsoring /hardware/ und /hardware/how-we-test/
+import site_hosts as HOSTS   # eigene Subdomains admin.m365.fm und profile.m365.fm (ADMIN_BASE, PROFILE_BASE; leer = wie bisher)
 import site_support as SUP
 import site_expert_connect as ECN
 import site_entities as ENT
@@ -769,7 +771,7 @@ def community_tags(lang, vid=None, mode="", css_async=False):
     css_async: community.css nicht renderblockierend laden (Folgenseiten: die Widgets stehen unten und erscheinen erst nach der API-Antwort;
     Lighthouse zaehlte das Stylesheet am Seitenende als blockierend, ~0,4 s auf dem Handy). Ohne JavaScript gibt es dort ohnehin keine Widgets."""
     priv = f"{BASE}/{'datenschutz' if lang == 'de' else 'privacy'}/"
-    cfg = {"api": COMMUNITY_API, "lang": lang, "vid": vid, "privacy": priv, "communityUrl": f"{BASE}/{lang}/community/", "roles": ROLE.js_cfg(BASE, lang)}
+    cfg = {"api": COMMUNITY_API, "lang": lang, "vid": vid, "privacy": priv, "communityUrl": HOSTS.profile_url(BASE, lang) or f"{BASE}/{lang}/community/", "roles": ROLE.js_cfg(BASE, lang)}
     # Die Oberflaechentexte (ca. 6 KB je Sprache, auf jeder Seite gleich) liegen in assets/cm-<sprache>.js (gecacht), nicht mehr in jeder Seite.
     css_url = f'{BASE}/assets/community.css?v={_cv("assets/community.css")}'
     css = (f'<link rel="preload" as="style" href="{css_url}" onload="this.onload=null;this.rel=\'stylesheet\'">' if css_async
@@ -816,7 +818,7 @@ def header(lang, switch):
         home = f"{BASE}/{L}/"; pre = f"{BASE}/{L}"; all_eps = (f"{BASE}/{L}/podcast/", UI[L][3]); pod = f"{BASE}/{L}/podcast/"   # der gedubbte Podcast der Sprache (Spreaker-Show)
     cl = NAV_CL.get(L, NAV_CL["en"])
     menu = [(ci.get("community", "Community"), [(all_eps[1], all_eps[0])] + [(cl[i], f"{pre}/community/{p}/") for i, p in enumerate(("podcast", "blog", "video", "library", "guests"))]),
-            (DIR.S[L]["title"], f"{pre}/directory/"), (ci.get("profile", "Profile"), f"{pre}/community/"), (LRN.T(L)["learn"], f"{pre}/learn/"), ("Podcast", pod)]
+            (DIR.S[L]["title"], f"{pre}/directory/"), (ci.get("profile", "Profile"), HOSTS.profile_url(BASE, L) or f"{pre}/community/"), (LRN.T(L)["learn"], f"{pre}/learn/"), ("Podcast", pod)]
     if not switch:
         items = [(x, LANGS[x][0], f"{BASE}/{x}/", LANGS[x][1]) for x in LANGS if (ROOT / "episodes").exists()]
         switch = lang_dropdown(lang if lang in LANGS else "en", items, "")
@@ -866,7 +868,7 @@ def footer(lang):
     return (f'<footer><div class="wrap">{_top}{_nw}'   # m365.fm, M365Con, LinkedIn, YouTube seit 4.11. nicht mehr im Footer (Wunsch Mirko); dafuer der Service-Hub /services/
             f'<a href="{ast_url(lang)}">{esc(ast_label(lang))}</a><a href="{BASE}/{"de/" if lang == "de" else ""}press/">{_x("Press kit", "Pressekit")}</a>'
             f'<a href="{BASE}/{"de/" if lang == "de" else ""}media-kit/">{_x("Media kit", "Mediadaten")}</a>'
-            f'<a href="{SPN.url(BASE, _tl)}">{esc(SPN.label(_tl))}</a>' + (f'<a href="{SUP.url(BASE, _tl)}">{_x("Support us", "Unterstützen")}</a>' if SUP.active() else '') + f'<a href="{LND.hub_url(BASE, _tl)}">{LND.footer_label(_tl)}</a><a href="{BASE}/impressum/" rel="nofollow"{_de}>Impressum</a><a href="{BASE}/legal/" rel="nofollow"{_en}>{_x("Legal notice", "Legal notice")}</a>'
+            f'<a href="{SPN.url(BASE, _tl)}">{esc(SPN.label(_tl))}</a>' + HWR.footer_links(BASE, lang) + (f'<a href="{SUP.url(BASE, _tl)}">{_x("Support us", "Unterstützen")}</a>' if SUP.active() else '') + f'<a href="{LND.hub_url(BASE, _tl)}">{LND.footer_label(_tl)}</a><a href="{BASE}/impressum/" rel="nofollow"{_de}>Impressum</a><a href="{BASE}/legal/" rel="nofollow"{_en}>{_x("Legal notice", "Legal notice")}</a>'
             f'<a href="{BASE}/datenschutz/" rel="nofollow"{_de}>Datenschutz</a><a href="{BASE}/privacy/" rel="nofollow"{_en}>{_x("Privacy", "Privacy")}</a><a href="{BASE}/{"sicherheit" if lang == "de" else "security"}/" rel="nofollow"{"" if lang in ("de", "en") else _en}>{_x("Security", "Sicherheit")}</a>'
             f'<div style="margin-top:10px">© {date.today().year} Mirko Peters · M365.FM</div></div></footer>')
 
@@ -1656,6 +1658,7 @@ def build():
                    write_r2=write_r2, sitemap=sitemap, TODAY=TODAY, n_main=_main_archive_episodes, n_langs=len(active), stats=SPN.load_stats()))
     MKT.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, LANGS=LANGS, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API))   # Mediadaten /media-kit/
     MKT.build_con(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, LANGS=LANGS, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API))   # M365Con-Sponsordaten /m365con/sponsor/ (#260)
+    HWR.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, LANGS=LANGS, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API))   # Hardware-Sponsoring /hardware/ (Mirko, 16.11.2026)
     SUP.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, sitemap=sitemap, TODAY=TODAY))   # Unterstuetzen /support/ + /de/unterstuetzen/ (PayPal, data/support.json)
     ECN.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, api=COMMUNITY_API), LRN.ENTS,
               [[l, "English" if l == "en" else LANGS[l][0] if l in LANGS else l] for l in COMM_LANGS])   # Expert Connect /community/expert-connect/ (Publisher-Tool, noindex)
@@ -1996,7 +1999,7 @@ Mirko Peters, {BASE}/about/
                 ".adm-badge{font-size:.75rem;border:1px solid var(--bd);border-radius:1em;padding:.05em .6em;color:var(--mut)}.adm-badge.on{border-color:var(--ac);color:var(--ac)}"
                 ".adm-form{border:1px solid var(--bd);border-radius:.7em;padding:1em 1.2em;background:var(--card);margin:1em 0}.adm-field{display:flex;flex-direction:column;gap:6px;margin:.9em 0;font-weight:600}"
                 ".adm-msg{min-height:1.4em}.adm-msg.bad{color:var(--ac);font-weight:600}</style>")
-    write("admin/index.html", page("de", "Verwaltung – M365.FM", "Verwaltung der Website ohne Code", f"{BASE}/admin/",
+    write("admin/index.html", page("de", "Verwaltung – M365.FM", "Verwaltung der Website ohne Code", HOSTS.admin_url(BASE),
           f'{header("de", "")}<main class="wrap" id="main"><h1>Verwaltung</h1><p class="mut">Inhalte, Datenbank und Schalter der Website, ohne Code. Nur für Admins.</p>'
           f'<div id="adm"><p class="mut">Lädt …</p></div>{_adm_css}'
           f'<script>window.M365ADM={{api:"{COMMUNITY_API}",base:"{BASE}"}}</script><script defer src="{BASE}/assets/admin.js"></script></main>{footer("de")}',
@@ -2007,10 +2010,8 @@ Mirko Peters, {BASE}/about/
         _rt = ROLE._t(_l)["title"]
         write(f"{_pf}rollen/index.html", page(_l, f"{_rt} – M365.FM", _rt, ROLE.about_url(BASE, _l), f'{header(_l, "")}{ROLE.about_page_body(BASE, _l)}{footer(_l)}', og_type="website"))
     ROLE.desk_pages(dict(BASE=BASE, API=COMMUNITY_API, langs=COMM_LANGS, write=write, page=page, header=header, footer=footer))   # noindex, nicht in der Sitemap, ohne Daten im HTML
-    write("callback/index.html", """<!doctype html><meta charset=utf-8><meta name=robots content="noindex,nofollow"><meta name=viewport content="width=device-width,initial-scale=1"><title>Anmeldung</title>
-<body style="font-family:system-ui,sans-serif;background:#101214;color:#e9ecef;padding:40px;max-width:640px;margin:auto"><h2>Anmeldung</h2><p id=m>Kein Code in der Adresse.</p>
-<pre id=c style="white-space:pre-wrap;word-break:break-all;background:#1d2126;padding:14px;border:1px solid #444"></pre><button id=b style="display:none;padding:10px 18px">Code kopieren</button>
-<script>var q=new URLSearchParams(location.search),c=q.get("code");if(c){document.getElementById("m").textContent="Code (in das Programm bzw. den GitHub-Workflow einfügen):";document.getElementById("c").textContent=c;var b=document.getElementById("b");b.style.display="inline-block";b.onclick=function(){navigator.clipboard.writeText(c);b.textContent="Kopiert ✓"}}else if(q.get("error")){document.getElementById("m").textContent="Fehler: "+q.get("error")}</script></body>""")
+    import site_callback as CBK
+    write("callback/index.html", CBK.page(COMMUNITY_API))   # Rueckleitung YouTube/Spreaker; Spreaker-Code wird sofort beim Worker getauscht (site_callback.py)
     write("og-manifest.json", json.dumps(OGLIST, ensure_ascii=False))
     write("404.html", page("en", "Not found", "Page not found", f"{BASE}/404.html", '<main class="wrap"><h1>404</h1><p><a class="btn" href="%s/">M365.FM</a></p></main>' % BASE, noindex=True))
     json.dump([u for u, _, _ in sitemap], open(ROOT / "data" / "urls.json", "w", encoding="utf-8"), indent=0)

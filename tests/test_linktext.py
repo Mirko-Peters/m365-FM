@@ -145,6 +145,13 @@ class Footer(unittest.TestCase):
         fr = G.footer("fr")
         self.assertIn(">Mentions légales</a>", fr); self.assertIn(">Kit presse</a>", fr); self.assertIn('hreflang="en">Confidentialité</a>', fr)
 
+    def test_footer_hardware_in_seitensprache(self):
+        import site_hardware as HWR
+        fr = HWR.footer_links("https://x", "fr")
+        self.assertIn(">Tests de matériel</a>", fr); self.assertIn('hreflang="en"', fr)
+        self.assertIn(">Hardware-Tests</a>", HWR.footer_links("https://x", "de"))
+        self.assertNotIn("hreflang", HWR.footer_links("https://x", "en"))
+
     def test_footer_de_en(self):
         import generate_site as G
         de, en = G.footer("de"), G.footer("en")
@@ -328,7 +335,7 @@ class Translations(unittest.TestCase):
     KEYS = ("{name} on {platform}", "{show} on {platform}", "This episode on {platform}", "Subtitles (WebVTT)", "Original (English)", "Share on {network}",
             "Share by email", "Page {n} of the episode list", "About the author", "Expertise", "Certifications", "Updates & roadmap", "Press kit", "Media kit",
             "Support us", "Security", "Legal notice", "Privacy", "{name} – official website", "{name} – documentation", "Wikidata entry for {name}",
-            "RSS feed: {name}", "Message {name}", "new tab", "Open link", "source", "Video on YouTube")
+            "RSS feed: {name}", "Message {name}", "new tab", "Open link", "source", "Video on YouTube", "Hardware reviews", "How we test")
 
     def test_alle_sprachen_mit_platzhaltern(self):
         d = json.loads((ROOT / "data" / "py_i18n.json").read_text("utf-8"))
