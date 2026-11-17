@@ -72,12 +72,16 @@ def strip_private_items(j):
 
 def repo_copy(j):
     """Fassung fuer data/members_export.json (liegt im oeffentlichen Git-Repo und bleibt dort in der Historie): ohne Kontakt- und Adressdaten
-    der Personen (contact: E-Mail, Telefon, Strasse, PLZ, Ort). Die Seiten dieses Baus nutzen den frischen Export; faellt er aus, entstehen die
+    der Personen (contact: E-Mail, Telefon, Strasse, PLZ, Ort) und der Firmenstandorte (nur Land und Label). Die Seiten dieses Baus nutzen den frischen Export; faellt er aus, entstehen die
     Profilseiten aus dieser Kopie ohne Kontaktzeile. Was ein Mitglied spaeter zuruecknimmt oder loescht, steht so nie dauerhaft im Repo."""
     out = dict(j)
     out["people"] = [{**x, "contact": {}} if isinstance(x, dict) and "contact" in x else x for x in (j.get("people") or [])]
     for x in out["people"]:
         if isinstance(x, dict): x.pop("private", None)
+    # Firmenstandorte nur mit Land und Label: Strasse, PLZ, Ort und Koordinaten (bei Einzelunternehmern personenbezogen) blieben sonst in der
+    # Git-Historie, auch wenn der Standort spaeter zurueckgezogen wird. Die Seiten nutzen locations nicht.
+    out["orgs"] = [{**o, "locations": [{"label": l.get("label", ""), "country": l.get("country", "")} for l in o["locations"] if isinstance(l, dict)]}
+                   if isinstance(o, dict) and isinstance(o.get("locations"), list) else o for o in (j.get("orgs") or [])]
     return out
 
 
