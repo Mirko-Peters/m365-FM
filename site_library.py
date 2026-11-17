@@ -27,7 +27,7 @@ def kl(lang, k):
 
 
 JS = ('(function(){var A="%API%",b=document.querySelector(".bl-vote");if(!b)return;var id=b.dataset.i;'
-      'function f(p,o){o=o||{};o.credentials="include";o.headers=Object.assign({"x-requested-with":"m365"},o.headers||{});return fetch(A+p,o).then(function(r){return r.json()})}'
+      'function f(p,o){o=o||{};o.credentials="include";o.headers=Object.assign(/^(GET|HEAD)?$/i.test(o.method||"")?{}:{"x-requested-with":"m365"},o.headers||{});return fetch(A+p,o).then(function(r){return r.json()})}'
       'f("/api/library/votes").then(function(d){b.querySelector(".n").textContent=(d.votes||{})[id]||0;if((d.mine||[]).indexOf(+id)>-1)b.setAttribute("aria-pressed","true")}).catch(function(){});'
       'b.addEventListener("click",function(){f("/api/library/vote",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({id:+id})}).then(function(d){if(d.error==="login"){location.href=A.replace("api-","")+"/community/";return}'
       'if(d.ok){b.querySelector(".n").textContent=d.votes;b.setAttribute("aria-pressed",d.voted?"true":"false")}}).catch(function(){})});'

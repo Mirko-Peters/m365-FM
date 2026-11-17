@@ -7,6 +7,7 @@ import sys
 import unittest
 from pathlib import Path
 from unittest.mock import patch
+from urllib.parse import quote
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
@@ -53,8 +54,9 @@ def tabs():
 class CommunityPage(unittest.TestCase):
     def test_places_in_order_and_main_reserves_the_viewport(self):
         body, _ = build()
-        self.assertIn('<main class="wrap" style="max-width:48em;min-height:100vh"><h1 id="c-h1">Profil</h1>', body)
-        self.assertIn("".join(f'<div id="{i}"></div>' for i in CPG.SECTIONS) + "</main>", body)
+        self.assertIn('<main class="wrap" style="max-width:48em;min-height:100vh"><h1 id="c-h1">Profil</h1><div role="tablist" class="ctabs" id="c-tabs">', body)
+        # #c-page traegt den Anmeldekasten (erstes Bild ohne Skript), die anderen Plaetze sind leer
+        self.assertIn(f'</div><div id="c-page">{CPG.login_box("de", BASE, API)}</div>' + "".join(f'<div id="{i}"></div>' for i in CPG.SECTIONS[1:]) + "</main>", body)
         self.assertEqual(len(CPG.SECTIONS), 19)
         self.assertLess(body.index("<footer>"), body.index("<!--ct-->"))
         self.assertIn('<script>window.M365X={api:"https://api-dub.m365.fm",base:"https://www.m365.fm",lang:"de"}</script>', body)
@@ -124,7 +126,9 @@ class CommunityPage(unittest.TestCase):
 
     def test_mvp_css_comes_with_the_tracker_and_preconnect_to_api(self):
         body, head = build()
-        self.assertEqual(head, f'<link rel="preconnect" href="{API}"><style>@media print{{header,footer,.ctabs{{display:none!important}}}}</style>')
+        self.assertTrue(head.startswith(f'<link rel="preconnect" href="{API}"><style>@media print{{header,footer,.ctabs{{display:none!important}}}}'), head)
+        self.assertEqual(head.count("<style>"), 1)
+        self.assertNotIn("<link", head.split(">", 1)[1])   # nur Regeln und das kleine Skript, kein weiteres Stylesheet
         # Druckregel aus mvp-tracker.css (Kopf, Fuss, Reiterleiste) gilt weiter auf jedem Reiter, nicht erst nach dem Reiter MVP
         self.assertIn("header,footer,.ctabs{display:none!important}", src("mvp-tracker.css"))
         self.assertNotIn("mvp-tracker.css", head)
@@ -140,6 +144,98 @@ class CommunityPage(unittest.TestCase):
         body, _ = build()
         cfg = re.search(r"<script>window\.M365LZ=(.*?)</script>", body).group(1)
         self.assertNotIn("</", cfg)
+
+
+class FirstView(unittest.TestCase):
+    """Dienstag-Check 17.11.2026: Anmeldekasten (LCP mobil) und Reiterleiste stehen im HTML, mit ihren Regeln im <head>."""
+    CI = json.loads((ROOT / "data" / "community_i18n.json").read_text("utf-8"))
+
+    def test_login_box_in_every_language_from_community_i18n(self):
+        import html as H
+        for lang in self.CI:
+            with self.subTest(lang=lang):
+                t = {**self.CI["en"], **self.CI[lang]}
+                body, _ = build(lang)
+                box = re.search(r'<div class="clogin" id="c-login">.*?</small></div>', body).group(0)
+                self.assertIn(f"<p>{H.escape(t['login_to_comment'])}</p>", box)
+                ret = quote(CPG.page_url(BASE, lang), safe="")
+                for p, key in CPG.PROVIDERS:
+                    self.assertIn(f'href="{API}/auth/login/{p}?return={ret}" rel="nofollow">{H.escape(t[key])}</a>', box)
+                self.assertEqual(len(re.findall(r'class="btn( main)?"', box)), 4)
+                self.assertIn(f'<a href="{CPG.privacy_url(BASE, lang)}">{H.escape(t["privacy"])}</a>', box)
+                self.assertIn(f'{H.escape(t["signin_note"])} <a', box)
+        self.assertEqual(CPG.page_url(BASE, "en"), BASE + "/community/")
+        self.assertEqual(CPG.privacy_url(BASE, "de"), BASE + "/datenschutz/")
+
+    def test_same_buttons_and_texts_as_community_js(self):
+        s = src("community.js")
+        lb = s[s.index("function loginBox()"):s.index("pruneLogin(lb)")]
+        self.assertEqual(re.findall(r'/auth/login/(\w+)\?return=" \+ ret, rel: "nofollow", text: tt\("(\w+)"\)', lb), [tuple(x) for x in CPG.PROVIDERS])
+        for k in ("login_to_comment", "signin_note", "privacy"):
+            self.assertIn(f'tt("{k}")', lb)
+
+    def test_tab_bar_matches_profile_js(self):
+        p = src("profile.js")
+        t0 = p[p.index("T0 = ["):p.index("var bar")]
+        js = re.findall(r'\["(c-[a-z-]+)", (?:de0 \? "([^"]+)" : "([^"]+)"|"([^"]+)"|\(window\.M365CT \|\| \{\}\)\.mvp_tab \|\| "([^"]+)")\]', t0)
+        self.assertEqual([x[0] for x in js], [x[0] for x in CPG.TABS])
+        for (i, de, en, both, mvp), (i2, pde, pen) in zip(js, CPG.TABS):
+            if mvp:
+                self.assertIsNone(pde)
+            else:
+                self.assertEqual((de or both, en or both), (pde, pen), i)
+        for lang in ("de", "en", "fr"):
+            body, _ = build(lang)
+            bar = re.search(r'<div role="tablist" class="ctabs" id="c-tabs">(.*?)</div>', body).group(1)
+            got = re.findall(r'<button type="button" class="ctab" role="tab" data-t="(c-[a-z-]+)" aria-selected="(true|false)">([^<]+)</button>', bar)
+            self.assertEqual([g[0] for g in got], [x[0] for x in CPG.TABS])
+            self.assertEqual([g[0] for g in got if g[1] == "true"], ["c-page"])
+            mvp = {**self.CI["en"], **self.CI.get(lang, {})}["mvp_tab"]
+            self.assertEqual(dict((g[0], g[2]) for g in got)["c-mvp"], mvp)
+            self.assertEqual(dict((g[0], g[2]) for g in got)["c-page"], "Konto" if lang == "de" else "Account")
+        # profile.js uebernimmt die Leiste aus dem HTML statt eine zweite einzufuegen
+        self.assertIn('var bar = document.getElementById("c-tabs"), own = !bar;', p)
+        self.assertIn("if (own) first.parentNode.insertBefore(bar, first);", p)
+
+    def test_head_rules_and_hint(self):
+        _, head = build()
+        css = src("community.css")
+        for rule in (ln for ln in css.splitlines() if ln.startswith((".clogin{", ".ctabs{"))):
+            self.assertIn(rule, head)   # gleiche Regeln wie community.css (die erst nach dem Fuss laedt)
+        self.assertIn(".c-in #c-login,.c-u #c-login,.c-u #c-tabs{display:none}", head)
+        self.assertIn('localStorage.getItem("m365_auth")==="1"', head)
+        self.assertIn('var AUTH_KEY = "m365_auth";', src("community.js"))   # derselbe Schluessel, den community.js nach /api/me setzt/loescht
+        self.assertLess(head.index("<style>"), head.index("<script>"))
+
+    def test_member_cards_only_for_signed_in_users(self):
+        s = src("community.js")
+        self.assertIn("if (u) memberCards(root);", s)
+        mc = s[s.index("function memberCards(root)"):s.index("function mountPage(root)")]
+        for k in ("/api/edits/inbox", "/api/events/mine", "/api/ai-token", "/api/points"):
+            self.assertIn(k, mc)
+        mp = s[s.index("function mountPage(root)"):s.index("function lazy(")]
+        for k in ("/api/edits/inbox", "/api/events/mine", "/api/ai-token", "/api/points"):
+            self.assertNotIn(k, mp)
+
+
+class WriteOnlyCsrfHeader(unittest.TestCase):
+    """x-requested-with nur bei schreibenden Anfragen: der Worker prueft ihn nur bei Nicht-GET (worker/src/index.js); bei GET loeste er einen
+    CORS-Preflight aus (Preflight-Cache je URL, Chrome hoechstens 2 h)."""
+
+    def test_worker_checks_only_non_get(self):
+        w = (ROOT / "worker" / "src" / "index.js").read_text("utf-8")
+        self.assertIn('method !== "GET" && ![', w)
+        self.assertIn('request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);', w)
+
+    def test_no_unconditional_header_in_get_helpers(self):
+        files = sorted((ROOT / "assets").glob("*.js")) + [ROOT / n for n in ("site_blog.py", "site_library.py", "site_events.py", "site_callback.py")]
+        for f in files:
+            for ln in f.read_text("utf-8").splitlines():
+                for m in re.finditer(r'"x-requested-with"', ln):
+                    ctx = ln[max(0, m.start() - 160):m.start()]
+                    with self.subTest(file=f.name, ctx=ctx[-90:]):
+                        # erlaubt: Bedingung auf die Methode im Ausdruck davor, oder ein fester schreibender Aufruf
+                        self.assertTrue(re.search(r'GET\|HEAD|!== "GET"|body \?|method: ?"(POST|DELETE)"', ctx), ctx)
 
 
 class CommunityPageInBuild(unittest.TestCase):

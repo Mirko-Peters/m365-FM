@@ -772,7 +772,7 @@ def community_tags(lang, vid=None, mode="", css_async=False):
     """Skripte/Stile fuer Community-Widgets (blenden sich aus, wenn die API nicht erreichbar ist).
     css_async: community.css nicht renderblockierend laden (Folgenseiten: die Widgets stehen unten und erscheinen erst nach der API-Antwort;
     Lighthouse zaehlte das Stylesheet am Seitenende als blockierend, ~0,4 s auf dem Handy). Ohne JavaScript gibt es dort ohnehin keine Widgets."""
-    priv = f"{BASE}/{'datenschutz' if lang == 'de' else 'privacy'}/"
+    priv = CPG.privacy_url(BASE, lang)   # gleiche Adresse wie im statischen Anmeldekasten der Community-Seite
     cfg = {"api": COMMUNITY_API, "lang": lang, "vid": vid, "privacy": priv, "communityUrl": HOSTS.profile_url(BASE, lang) or f"{BASE}/{lang}/community/", "roles": ROLE.js_cfg(BASE, lang)}
     # Die Oberflaechentexte (ca. 6 KB je Sprache, auf jeder Seite gleich) liegen in assets/cm-<sprache>.js (gecacht), nicht mehr in jeder Seite.
     css_url = f'{BASE}/assets/community.css?v={_cv("assets/community.css")}'

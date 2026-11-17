@@ -25,7 +25,7 @@
     idle(); return box;
   }
   function h(t, a, kids) { var e = document.createElement(t); a = a || {}; for (var k in a) { if (k === "text") e.textContent = a[k]; else if (k === "class") e.className = a[k]; else if (k.slice(0, 2) === "on") e[k] = a[k]; else e.setAttribute(k, a[k]); } (kids || []).forEach(function (x) { if (x != null) e.appendChild(typeof x === "string" ? document.createTextNode(x) : x); }); return e; }
-  function api(p, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign({ "x-requested-with": "m365" }, o.headers || {}); if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(API + p, o).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { s: r.status, j: j }; }); }); }
+  function api(p, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign(/^(GET|HEAD)?$/i.test(o.method || "") ? {} : { "x-requested-with": "m365" }, o.headers || {});   /* nur schreibend: GET ohne CORS-Preflight (Worker prueft nur Nicht-GET) */ if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(API + p, o).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { s: r.status, j: j }; }); }); }
   var TYPES = { product: "Produkt", platform: "Plattform", concept: "Konzept", org: "Firma", person: "Person", cert: "Zertifikat", event: "Event", media: "Medium", category: "Kategorie" };
   var ERR = { bad_name: "Name zu kurz", bad_type: "Typ fehlt", too_short: "Kurzbeschreibung fehlt (mindestens 20 Zeichen in Englisch oder Deutsch)", too_long: "Kurzbeschreibung zu lang (höchstens 300 Zeichen)", bad_url: "Eine Adresse ist ungültig (nur https, Docs nur microsoft.com, azure.com oder github.com)", bad_qid: "Wikidata-ID muss wie Q12345 aussehen", bad_relation: "Eine Beziehung zeigt auf eine unbekannte Entität", unchanged: "Nichts geändert", rate_limit: "Zu viele Änderungen in kurzer Zeit, bitte später", login: "Bitte anmelden", forbidden: "Nur für Admins", email_required: "Kein verifizierter E-Mail-Empfang für diese Person hinterlegt.", mail_off: "E-Mail-Versand ist nicht verfügbar; die Anfrage bleibt offen." };
   var tabs = [["ov", "Übersicht"], ["fr", "Freigaben"], ["sponsor", "Sponsor-Anfragen"], ["slinks", "Sponsorlinks"], ["ads", "Werbung"], ["mk", "Mediadaten-Anfragen"], ["hw", "Hardware-Anfragen"], ["tr", "Übersetzungen"], ["sq", "Suche"], ["ent", "Entitäten"], ["li", "LinkedIn-Events"], ["mem", "Mitglieder"], ["elog", "Redaktions-Protokoll"], ["db", "Datenbank"], ["spurls", "Spreaker-Adressen"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
@@ -583,7 +583,7 @@
       api("/api/admin/ads/house-stats?days=" + hsDays.value).then(function (r) {
         hsSec.textContent = "";
         hsSec.append(h("h3", { text: "Hausanzeigen: Zahlen" }), h("p", {}, ["Zeitraum ", hsDays, " ", h("button", { type: "button", class: "btn", text: "CSV herunterladen", onclick: function () {
-          fetch(API + "/api/admin/ads/house-stats?days=" + hsDays.value + "&format=csv", { credentials: "include", headers: { "x-requested-with": "m365" } }).then(function (x) { return x.blob(); }).then(function (blob) {
+          fetch(API + "/api/admin/ads/house-stats?days=" + hsDays.value + "&format=csv", { credentials: "include" }).then(function (x) { return x.blob(); }).then(function (blob) {
             var a = h("a", { href: URL.createObjectURL(blob), download: "m365fm-hausanzeigen.csv" }); document.body.appendChild(a); a.click(); a.remove(); });
         } })]), h("p", { class: "mut", text: "Cookiefrei gezählt (ohne Bots), Land aus Cloudflare (nur Ländercode). Klicks über den Go-Link; die Ziel-URL trägt utm_source=m365.fm, utm_medium=house_ad, utm_campaign, utm_term (Haupt-Entität der Seite) und utm_content (Slug der Seite)." }));
         if (r.s !== 200) return;
@@ -603,7 +603,7 @@
       api("/api/admin/ads/stats" + q).then(function (r) {
         sSec.textContent = ""; sSec.append(h("h3", { text: "Zahlen" }), h("p", {}, ["Von ", from, " bis ", to, " ", h("button", { type: "button", class: "btn", text: "Anzeigen", onclick: loadStats }), " ",
           h("button", { type: "button", class: "btn", text: "CSV herunterladen", onclick: function () {
-            fetch(API + "/api/admin/ads/stats" + q + "&format=csv", { credentials: "include", headers: { "x-requested-with": "m365" } }).then(function (x) { return x.blob(); }).then(function (blob) {
+            fetch(API + "/api/admin/ads/stats" + q + "&format=csv", { credentials: "include" }).then(function (x) { return x.blob(); }).then(function (blob) {
               var a = h("a", { href: URL.createObjectURL(blob), download: "m365fm-werbung.csv" }); document.body.appendChild(a); a.click(); a.remove(); });
           } })]));
         if (r.s !== 200) return; var t = r.j.totals;

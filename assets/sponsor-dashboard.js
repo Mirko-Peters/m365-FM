@@ -30,7 +30,7 @@
   function api(path, options) {
     options = options || {};
     options.credentials = "include";
-    options.headers = Object.assign({ "x-requested-with": "m365" }, options.headers || {});
+    options.headers = Object.assign(/^(GET|HEAD)?$/i.test(options.method || "") ? {} : { "x-requested-with": "m365" }, options.headers || {});   // nur schreibend: GET ohne CORS-Preflight
     if (options.body) {
       options.headers["content-type"] = "application/json";
       options.body = JSON.stringify(options.body);
