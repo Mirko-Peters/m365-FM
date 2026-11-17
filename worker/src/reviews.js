@@ -55,7 +55,10 @@ export async function handleReviews(env, request, url, path, user, J) {
   if (path === "/api/reviews/delete" && method === "POST") {
     const b = await body(), id = +b.id, r = await db.prepare("SELECT user_id,status FROM show_reviews WHERE id=?").bind(id).first();
     if (!r) return J({ error: "forbidden" }, 403);
-    if (r.user_id === user.id && roleOf(user) !== "admin") { await db.prepare("DELETE FROM show_reviews WHERE id=?").bind(id).run(); return J({ ok: true }); }   // die eigene Bewertung loescht jede und jeder selbst (auch Editoren)
+    if (r.user_id === user.id && roleOf(user) !== "admin") {   // die eigene Bewertung loescht jede und jeder selbst (auch Editoren)
+      if (r.status === "hidden") { await db.prepare("UPDATE show_reviews SET title='',body='',updated=? WHERE id=?").bind(now(), id).run(); return J({ ok: true }); }   // ausgeblendet: Text weg, die Zeile bleibt als Sperre (Konto + Show), sonst kaeme sie per Neuanlegen zurueck
+      await db.prepare("DELETE FROM show_reviews WHERE id=?").bind(id).run(); return J({ ok: true });
+    }
     if (!(await gate(db, user, "queue.review")).ok) return J({ error: "forbidden" }, 403);   // wie bisher nur Editoren und Admin
     const g = await gate(db, user, "review.hide", { ownerId: r.user_id }); if (!g.ok) return J({ error: g.why }, 403);   // can(): eigene Firma, Tageslimit; ohne Thema, also nicht fuer Fach-Editoren
     await db.prepare("UPDATE show_reviews SET status='hidden' WHERE id=?").bind(id).run();   // ausblenden, Autor kann nicht neu schreiben

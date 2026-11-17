@@ -7,6 +7,7 @@ import { decide, noteAuthorSave, dropBlogHistory } from "./editor.js";
 import { gate, inScope } from "./perm.js";
 import { baseIds } from "./entities.js";
 import { sanitize } from "./wiki.js";
+import { HIDDEN_MOD } from "./feedpolicy.js";
 import { cleanKeypoints, cleanFaq, jsonList, ensureSectionCols } from "./sections.js";
 
 const TRUST_POINTS = 25, MAX_POSTS_DAY = 5;
@@ -30,7 +31,7 @@ export async function syncFeed(env, db, uid, post, handle, live) {
   const curl = `${env.SITE}/community/u/${handle}/blog/`;
   await db.prepare("INSERT OR IGNORE INTO channels(owner_type,owner_id,kind,url,feed) VALUES('u',?,'blog',?,'')").bind(uid, curl).run();
   const ch = await db.prepare("SELECT id FROM channels WHERE owner_type='u' AND owner_id=? AND url=?").bind(uid, curl).first(); if (!ch) return;
-  await db.prepare("INSERT INTO feed_items(channel_id,owner_type,owner_id,url,title,published) VALUES(?,?,?,?,?,?) ON CONFLICT(url) DO UPDATE SET title=excluded.title,hidden=0").bind(ch.id, "u", uid, url, post.title, post.published || now()).run();
+  await db.prepare("INSERT INTO feed_items(channel_id,owner_type,owner_id,url,title,published) VALUES(?,?,?,?,?,?) ON CONFLICT(url) DO UPDATE SET title=excluded.title,hidden=feed_items.hidden&? WHERE feed_items.owner_type='u' AND feed_items.owner_id=excluded.owner_id").bind(ch.id, "u", uid, url, post.title, post.published || now(), HIDDEN_MOD).run();   // nur den eigenen Schalter loeschen: das Ausblenden der Moderation (Bit 1) bleibt
 }
 
 export async function deleteUserBlog(db, uid) {
