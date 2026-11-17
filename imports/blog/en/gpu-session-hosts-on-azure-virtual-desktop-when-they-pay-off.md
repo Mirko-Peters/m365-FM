@@ -42,7 +42,7 @@ Full-screen video encoding with AVC/H.264 also works without GPU acceleration. H
 | Applications that require a GPU to start or perform | Yes | Our reading: the vendor requirement decides, not the protocol |
 | Video playback quality in sessions | Test first | Learn says frame encoding on the GPU benefits video playback; multimedia redirection is a different route |
 | Office and web workloads | Test CPU-only first | Our reading: Learn sets no threshold for these |
-| Compute or machine learning on a VM | Not as a session host | NC, NCv2, NCv3, ND and NDv2 target CUDA-style tools |
+| Compute or machine learning on a VM | Not as a session host | NC, NCv2, NCv3, ND and NDv2 target CUDA-style tools; NCasT4_v3 is listed separately |
 
 Our reading on cost: the benefit has to outweigh GPU size pricing, which this guide does not quote. Use the Azure pricing calculator that the VM size pages link to, and compare it with the CPU size that passes your pilot.
 
@@ -76,7 +76,7 @@ The NVadsA10 v5 series uses NVIDIA A10 GPUs with AMD EPYC 74F3V (Milan) processo
 | Standard_NV36adms_A10_v5 | 36 | 880 | 1 | 24 |
 | Standard_NV72ads_A10_v5 | 72 | 880 | 2 | 48 |
 
-Two details matter for planning. Each instance includes a GRID license, usable as a virtual workstation for one user or by 25 concurrent users in a virtual application scenario. Learn's graphics article states the same 25-user figure for NVIDIA GPU sizes in general. And the series page lists Live Migration and Memory Preserving Updates as not supported, so plan host maintenance accordingly. Ephemeral OS disks are listed as supported.
+Two details matter for planning. Each instance includes a GRID license, usable as a virtual workstation for one user or by 25 concurrent users in a virtual application scenario. The Azure Virtual Desktop GPU page on Learn gives the same 25-user figure for NVIDIA GPU sizes in general. And the series page lists Live Migration and Memory Preserving Updates as not supported, so plan host maintenance accordingly. Ephemeral OS disks are listed as supported.
 
 ## What must be in place
 
@@ -109,18 +109,18 @@ Learn says that when both HEVC/H.265 and AVC/H.264 hardware acceleration are ena
 The honest test of whether a GPU size pays off is a side-by-side pilot. The steps are our suggestion; the settings come from Learn.
 
 1. Pick one representative application and one task users complain about, such as rotating a 3D model or scrubbing a timeline.
-2. Build two session hosts in a pilot host pool: one on the CPU size you use today, one on a GPU size that is still available, such as an NVadsA10 v5 or NCasT4_v3 size. If you prefer to keep the two sizes apart, use two small pilot host pools instead. A fractional NVadsA10 v5 size such as Standard_NV6ads_A10_v5 (1/6 GPU, 4 GB) is the smallest NVadsA10 v5 size, so it is a low-commitment way to ask "does the GPU help at all".
+2. Build two small pilot host pools, one with a session host on the CPU size you use today and one with a session host on a GPU size that is still available, such as an NVadsA10 v5 or NCasT4_v3 size. Separate pools let you send the same test users to a chosen host; in one mixed pool the load balancer decides, unless you put one host in drain mode. A fractional NVadsA10 v5 size such as Standard_NV6ads_A10_v5 (1/6 GPU, 4 GB) is the smallest NVadsA10 v5 size, so it is a low-commitment way to ask "does the GPU help at all".
 3. Install the GRID driver and apply the Intune or Group Policy settings from the previous section on the GPU host only. Restart it.
 4. Run the same task on both hosts with the same users and note frame rate, responsiveness and whether the application loads the GPU, using the verification steps.
 5. Repeat on the next larger fractional size if the smallest one is saturated, and compare density against price in the Azure pricing calculator.
 
-Permissions for the configuration matter in practice. Learn lists the Policy and Profile manager built-in role in Microsoft Entra ID for Intune, plus a group of target devices, or a domain account with Group Policy object permissions and a security group or organizational unit for Group Policy.
+Permissions for the configuration matter in practice. For Intune, Learn lists a Microsoft Entra ID account that is assigned the Policy and Profile manager built-in Intune RBAC role, plus a group of target devices, or a domain account with Group Policy object permissions and a security group or organizational unit for Group Policy.
 
 ## Common mistakes
 
 - **A GPU size without the policy.** The VM has a GPU, but sessions are still rendered on the CPU, because the default does not use it.
 - **The CUDA driver on a graphics size.** For NVIDIA sizes in this scenario only GRID drivers support GPU acceleration for most applications and the Windows user interface.
-- **An unsupported or retired series.** NC, NCv2, NCv3, ND and NDv2 are not generally appropriate as session hosts. NCasT4_v3 is the NC-family exception that Learn lists. NVv3 and NVv4 still appear on the Azure Virtual Desktop GPU page but retired on 30 September 2026.
+- **An unsupported or retired series.** NC, NCv2, NCv3, ND and NDv2 are not generally appropriate as session hosts. Our reading: NCasT4_v3 is the one NC-family series that Learn's Azure Virtual Desktop page lists as supported. NVv3 and NVv4 still appear on the Azure Virtual Desktop GPU page but retired on 30 September 2026.
 - **H.264 prioritized without hardware encoding.** Learn says this can result in software (CPU-based) encoding, so the GPU may sit idle for encoding.
 - **HEVC expected on RemoteApp.** The HEVC prerequisites require a desktop application group.
 
@@ -130,6 +130,7 @@ Retrieved 17 November 2026.
 
 - Microsoft Learn, Enable GPU acceleration for Azure Virtual Desktop: https://learn.microsoft.com/en-us/azure/virtual-desktop/graphics-enable-gpu-acceleration
 - Microsoft Learn, NVadsA10_v5 size series: https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/gpu-accelerated/nvadsa10v5-series
+- Microsoft Learn, NCasT4_v3 size series: https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/gpu-accelerated/ncast4v3-series
 - Microsoft Learn, NVv3 size series (retirement note): https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/gpu-accelerated/nvv3-series
 - Microsoft Learn, NVv4 size series (retirement note): https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/gpu-accelerated/nvv4-series
 - Microsoft Learn, Azure VM sizes overview: https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/overview

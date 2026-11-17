@@ -8,20 +8,20 @@ date: 2026-11-18
 topics: [avd-for-azure-local, azure-virtual-desktop]
 keypoints:
   - "Only the session hosts run on-premises. Host pools, workspaces and application groups stay in Azure, and session hosts must be able to reach the Azure Virtual Desktop service for brokering."
-  - "Learn names three drivers: users with poor connectivity to Azure, data locality, and access to legacy on-premises apps and data. If none applies, session hosts in Azure are the simpler default."
+  - "Learn's Benefits list has seven items; three concern location: users with poor connectivity to Azure, data locality, and access to legacy on-premises apps and data. Our reading: if none of the benefits applies, session hosts in Azure are the simpler default."
   - "A host pool holds session hosts either in Azure or on Azure Local, never both. Portal deployment supports standard management and Active Directory domain join; session host configuration is not supported with Azure Local."
-  - "Cost has three parts: user access rights, the Azure Local service fee, and an Azure Virtual Desktop for Azure Local fee per active vCPU. The Azure Local overview gives no density figures of its own and describes the generic sizing guidelines as initial estimates only. The Architecture Center's cost estimate assumes 10 multi-session hosts for roughly 50 to 100 medium-workload users, which is a pricing example, not a sizing guarantee, so pilot before sizing."
+  - "Cost has three parts: user access rights, the Azure Local service fee, and an Azure Virtual Desktop for Azure Local fee per active vCPU. The Architecture Center's cost estimate assumes 10 multi-session hosts for roughly 50 to 100 medium-workload users, a pricing example rather than a sizing guarantee, so pilot before sizing."
   - "FSLogix profiles need an SMB share. The Learn overview recommends a Storage Spaces Direct guest cluster on the Azure Local instance and an external share for large deployments with high resource requirements; the Architecture Center calls the on-instance option more suitable for smaller deployments."
 faq:
   - q: "Does Azure Virtual Desktop for Azure Local work without an internet connection to Azure?"
     a: "No. Microsoft Learn says the service requires a connection to the Azure Virtual Desktop service hosted in Azure for brokering connections and connecting users. The sources do not describe how new or existing sessions behave during an outage of that connection, so test it and plan the network path and monitoring."
   - q: "Can one host pool contain session hosts in Azure and on Azure Local?"
-    a: "No. Learn says each host pool must contain only session hosts on Azure or only on Azure Local. Both kinds can exist in the same subscription, each in its own host pool."
+    a: "No. Learn says each host pool must contain only session hosts on Azure or only on Azure Local. Use a separate host pool for each kind."
   - q: "Is the old name Azure Virtual Desktop for Azure Stack HCI still correct?"
     a: "No. Learn's what's new page records that Azure Virtual Desktop for Azure Stack HCI became Azure Virtual Desktop for Azure Local in November 2024, and that existing features and pricing carry over to the supported versions."
 ---
 
-Use Azure Virtual Desktop for Azure Local when session hosts need to sit physically near users, legacy systems or data that cannot move to an Azure region, and keep everything else in Azure. The control plane stays in Azure either way, so the real question is where the compute should run. This article covers what the offering is, the three drivers Microsoft names, the constraints, and a way to decide.
+Use Azure Virtual Desktop for Azure Local when session hosts need to sit physically near users, legacy systems or data that cannot move to an Azure region, and keep everything else in Azure. The control plane stays in Azure either way, so the real question is where the compute should run. This article covers what the offering is, the location-related benefits Microsoft lists, the constraints, and a way to decide.
 
 ## What runs where
 
@@ -29,13 +29,15 @@ According to [Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-d
 
 Two details matter for design. First, Learn says the service is not an Azure Arc-enabled service and is not supported as a standalone service outside Azure, in a multicloud environment or on other Arc-enabled servers. Second, each session host VM runs the Azure Connected Machine agent so that it can reach the Azure Instance Metadata Service, which Learn calls a required endpoint for [Azure Virtual Desktop](/entity/azure-virtual-desktop/). The portal installs the agent automatically when you add session hosts. The Azure Architecture Center adds that the session hosts run the [Azure Virtual Desktop agent](/entity/avd-agent/) and the Azure Arc agent, and that the Azure resource bridge component of the instance orchestrates Azure Local VM lifecycle operations.
 
-## The three drivers Microsoft names
+## The location-related benefits Microsoft lists
 
-Learn lists these supported scenarios and benefits:
+Learn's Benefits section has seven items. Three of them are about where the session hosts sit:
 
-- **Performance for users far from Azure.** Placing session hosts closer improves the experience for users with poor connectivity to the Azure public cloud. Learn lists [RDP Shortpath](/entity/rdp-shortpath/) for low-latency user access among the benefits.
+- **Performance for users far from Azure.** Placing session hosts closer improves the experience for users with poor connectivity to the Azure public cloud.
 - **Data locality.** App and user data can stay on-premises, including in the session host VMs and in associated services such as file servers.
 - **Proximity to legacy apps and data sources.** Desktops sit next to systems that are hard to move.
+
+The other four are not about location: Windows 10 and Windows 11 Enterprise multi-session, simpler VDI deployment and management through the Azure portal compared with traditional on-premises VDI, [RDP Shortpath](/entity/rdp-shortpath/) for low-latency user access, and quick deployment of patched Azure Marketplace images. The overview also mentions improving an existing on-premises VDI deployment.
 
 One caution on data locality: Learn says some customer data, diagnostic data and service-generated data is still stored in Azure. If a regulation covers more than your own application data, check which data the service stores before you rely on "on-premises". The article on regional host pools in this series covers where host pool metadata lives.
 
@@ -51,11 +53,23 @@ One caution on data locality: Learn says some customer data, diagnostic data and
 | Operating systems | Windows 11 and Windows 10 Enterprise (including multi-session), and Windows Server 2025, 2022 and 2019 on the overview page. The Architecture Center page lists Windows Server 2022 and 2019 but not 2025 |
 | Minimum version | Azure Local 23H2 or later, registered with Azure |
 
-Two of these shape operations most. First, session host configuration is not supported. Learn's autoscale page says dynamic autoscaling can only be used for pooled host pools with session host configuration, and Microsoft's July 2026 general availability announcement for enhanced host pool management says session host update, dynamic autoscale and ephemeral OS disks require a host pool with session host configuration. Some Learn pages, including the autoscale scenarios page, still carry preview wording for dynamic autoscaling, so check the current page before relying on a limit. Our reading is that none of the three is available for Azure Local session hosts. Power management autoscaling is the standard-management option, and the sources differ on it. A Tech Community post of 18 October 2024 announced autoscale as generally available for host pools on Azure Stack HCI, the earlier name of Azure Local, and said the same scaling plans used for Azure VMs can be applied to those VMs. The same post added Start VM on Connect for Azure Stack HCI VMs, and Learn's what's new page records an April 2024 preview of both. The Learn autoscale scenarios page states power management autoscaling for Azure and Azure Government and does not mention Azure Local, and the Architecture Center recommends autoscale to scale available session hosts up or down on a schedule. Our reading is that power management autoscaling is available for Azure Local session hosts and dynamic autoscaling is not, because it requires session host configuration. Check the current Learn page before you plan around it. The [session host configuration](/entity/avd-session-host-configuration/) article explains what that approach adds. Second, performance varies by hardware. Learn's VM sizing guidelines list maximum users per vCPU for multi-session hosts (6 light, 4 medium, 2 heavy, 1 power), but they are based on Azure VMs and described as generic guidelines for initial estimates only, so treat them as a starting point for a pilot, not a commitment.
+Two of these shape operations most: how scaling works, and how many users a host takes.
+
+### Scaling and management approach
+
+- **Session host configuration.** Learn says it is currently not supported with Azure Local. Learn's autoscale page says dynamic autoscaling can only be used for pooled host pools with session host configuration, and Microsoft's July 2026 general availability announcement for enhanced host pool management says session host update, dynamic autoscale and ephemeral OS disks require a host pool with session host configuration. Some Learn pages, including the autoscale scenarios page, still carry preview wording for dynamic autoscaling, so check the current page before relying on a limit. Our reading: none of the three is available for Azure Local session hosts.
+- **Power management autoscaling.** This is the scaling option for standard management, and the sources differ: a Tech Community post of October 2024 announced autoscale as generally available for host pools on Azure Stack HCI, the earlier name of Azure Local, and said the same scaling plans used for Azure VMs can be applied to those VMs; Learn's scaling plan page states power management autoscaling for Azure and Azure Government and does not mention Azure Local. Our reading: power management autoscaling is available for Azure Local session hosts and dynamic autoscaling is not. Check the current Learn page before you plan around it.
+- **Start VM on Connect.** Learn's Start VM on Connect page says you can enable it for session hosts on Azure and Azure Local in personal or pooled host pools. The 2024 post had already added it for Azure Stack HCI VMs, and Learn's what's new page records an April 2024 preview of both features.
+
+The [session host configuration](/entity/avd-session-host-configuration/) article explains what that approach adds.
+
+### Density
+
+Learn's VM sizing guidelines list maximum users per vCPU for multi-session hosts (6 light, 4 medium, 2 heavy, 1 power), but they are based on Azure VMs and described as generic guidelines for initial estimates only. Treat them as a starting point for a pilot, not a commitment.
 
 ### Status
 
-Learn marks Azure Virtual Desktop on Azure Local for Azure Government and for Azure operated by 21Vianet as preview, and says portal provisioning is not available for Azure Government. For Azure Local session hosts in the public cloud, those banners do not apply. The deployment page's preview note on the Azure PowerShell cmdlets covers host pools with a session host configuration, which Azure Local does not support, so it does not touch an Azure Local host pool. In September 2026 Learn's what's new page listed managed identity support as generally available for session host configuration, autoscale, Start VM on Connect and Azure Virtual Desktop for Azure Local. Our reading is that this entry names Azure Virtual Desktop for Azure Local as one of the covered areas without spelling out which managed identity scenarios apply to Azure Local session hosts.
+Learn marks Azure Virtual Desktop on Azure Local for Azure Government and for Azure operated by 21Vianet as preview, and says portal provisioning is not available for Azure Government. For Azure Local session hosts in the public cloud, those banners do not apply. The deployment page's preview note on the Azure PowerShell cmdlets covers host pools with a session host configuration, which Azure Local does not support, so it does not touch an Azure Local host pool. In September 2026 Learn's what's new page listed managed identity support as generally available for session host configuration, autoscale, Start VM on Connect and Azure Virtual Desktop for Azure Local. Our reading: the entry does not spell out which managed identity scenarios apply to Azure Local session hosts.
 
 ## Cost structure
 
@@ -78,12 +92,12 @@ Profile traffic is part of the logon path, so the share's distance to the sessio
 
 ## Resiliency
 
-The Architecture Center says Azure Local supports clustering across physical machines, so virtual desktops can keep running if one node goes offline. For business-critical workloads it suggests two or more separate Azure Local instances, ideally in separate locations, plus Azure Backup or similar tools, optionally Azure Site Recovery to replicate VMs to an Azure region, and Azure Monitor for CPU, memory and storage. It gives no threshold values.
+The Architecture Center says Azure Local supports clustering across physical machines, so virtual desktops can keep running if one node goes offline. For business-critical workloads it suggests two or more separate Azure Local instances, ideally in separate locations, plus Azure Backup or similar tools, optionally Azure Site Recovery to replicate VMs to an Azure region, and Azure Monitor for CPU, memory and storage.
 
 ## Which approach fits
 
-1. **Write down the reason.** If it is none of the three drivers above, session hosts in Azure are the simpler baseline.
-2. **Measure the user experience first.** For latency, compare real sessions from the affected site against an Azure region before buying hardware.
+1. **Write down the reason.** Check it against the benefits above. If it is none of them, our reading is that session hosts in Azure are the simpler baseline.
+2. **Measure the user experience first.** Compare real sessions from the affected site against an Azure region before buying hardware.
 3. **Check the data requirement.** Decide whether the requirement is about user data at rest, about processing next to a legacy system, or about all service data. Learn says some service data stays in Azure.
 4. **Check identity and management constraints.** Confirm domain join, standard management and the minimum Azure Local version fit your environment.
 5. **Plan the profile share and its network path** before the first session host.
@@ -93,7 +107,7 @@ A different on-premises option, Azure Virtual Desktop Hybrid, is a separate offe
 
 ## Third-party management
 
-Nerdio's documentation states that Nerdio Manager supports Azure Virtual Desktop for Azure Local with 23H2 and later starting with version 5.7, requires a cluster with at least one node, and requires the Azure Local cluster to use the Arc resource bridge. It lists Active Directory or Microsoft Entra Domain Services as the identity requirement (Learn's prerequisites page names only AD DS for Azure Local), says Entra ID-joined VMs are not supported, and says cost management is not supported for these hosts. The page also refers to additional Microsoft limitations for 22H2 and 23H2. It says that because of them, and because of upgrading and changes in the Resource Bridge ARM object model, linked Azure Local instances must be relinked. Separately, it says that due to those limitations all Azure Virtual Desktop for Azure Local objects must be recreated. It gives no date or version for this beyond v5.7. The page also says that images cannot be created directly on Azure Local, so a local image repository is needed. Version 5.7 is the lower bound the page names, not necessarily the current release; check the vendor page before planning around it.
+Nerdio's documentation states that Nerdio Manager supports Azure Virtual Desktop for Azure Local with 23H2 and later starting with version 5.7, requires a cluster with at least one node, and requires the Azure Local cluster to use the Arc resource bridge. It lists Active Directory or Microsoft Entra Domain Services as the identity requirement (Learn's prerequisites page names only AD DS for Azure Local), says Entra ID-joined VMs are not supported, and says cost management is not supported for these hosts. The page also refers to additional Microsoft limitations for 22H2 and 23H2, says linked Azure Local instances must be relinked because of them and because of Resource Bridge ARM object model changes, and says all Azure Virtual Desktop for Azure Local objects must be recreated. It gives no date or version beyond v5.7. It also says that images cannot be created directly on Azure Local, so a local image repository is needed. Version 5.7 is the lower bound the page names, not necessarily the current release.
 
 ## Sources
 
@@ -101,6 +115,7 @@ Nerdio's documentation states that Nerdio Manager supports Azure Virtual Desktop
 - [Microsoft Learn: Deploy Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop)
 - [Microsoft Learn: Prerequisites for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/prerequisites)
 - [Microsoft Learn: Autoscale scaling plans and example scenarios](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)
+- [Microsoft Learn: Configure Start VM on Connect](https://learn.microsoft.com/en-us/azure/virtual-desktop/start-virtual-machine-connect)
 - [Microsoft Learn: Session host virtual machine sizing guidelines](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/session-host-virtual-machine-sizing-guidelines)
 - [Tech Community: Enhanced host pool management for Azure Virtual Desktop is now generally available](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)
 - [Tech Community: New features for Azure Virtual Desktop for Azure Stack HCI](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/new-features-for-azure-virtual-desktop-for-azure-stack-hci/4273496)

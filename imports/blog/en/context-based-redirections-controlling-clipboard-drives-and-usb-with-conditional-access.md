@@ -11,7 +11,7 @@ keypoints:
   - "Four redirections are in scope: clipboard, drive and storage, printer and USB. The setting applies to every session host in the host pool, for desktop sessions and, in preview since October 2026, RemoteApp sessions."
   - "The authentication context is only a label shared between Conditional Access and the redirection setting. It does not grant or block anything itself."
   - "Other layers still apply and the most restrictive setting wins. A redirection disabled by an Intune or Group Policy setting on the session host stays disabled."
-  - "Status: public preview announced in June 2026. Learn's configuration article still carries 'Preview' in its title, and Microsoft says a Resultant Set of Policy view is still in development."
+  - "Status: public preview announced in June 2026. Learn's configuration article still carries 'Preview' in its title, and the blog post says a Resultant Set of Policy view is in development."
 faq:
   - q: "Is context-based redirection generally available?"
     a: "No. Microsoft announced the public preview for Azure Virtual Desktop in June 2026, and the October 2026 Azure Virtual Desktop what's new entry adds RemoteApp support, also in preview. Learn's configuration article is titled 'Configure context-based redirections (Preview)'. Check the current page before using it for a production control."
@@ -33,7 +33,7 @@ Microsoft announced the public preview of context-based redirections in the Wind
 
 A host pool's RDP properties are static: a redirection is on or off for every connection to that host pool. Learn's custom RDP properties article lists `redirectclipboard:i:1`, `drivestoredirect:s:*`, `redirectprinters:i:1` and `usbdevicestoredirect:s:*` among the default values. Learn's what's new page, however, records that since July 2025 clipboard, drive, opaque low-level USB and printer redirection are disabled for newly created host pools, and that admins enable them as needed through the host pool RDP properties, Intune or Group Policy. Older host pools can therefore still have these redirections on, and a new host pool starts with them off. Check the current RDP properties of the host pool you plan to use.
 
-Either way the property is a single switch for everyone. Leaving a redirection off blocks users on managed devices as well, and turning it on grants it to every device. The Microsoft blog post frames the gap around bring-your-own-device (BYOD) scenarios: an unmanaged or noncompliant device may not meet the standard of a corporate-managed one. Context-based redirection lets you enable a redirection for sessions you trust and restrict it for the rest, which also makes it a way to switch the July 2025 defaults back on selectively.
+Either way the property is a single switch for everyone. Leaving a redirection off blocks users on managed devices as well, and turning it on grants it to every device. The Microsoft blog post frames the gap around bring-your-own-device (BYOD) scenarios: an unmanaged or noncompliant device may not meet the standard of a corporate-managed one. Context-based redirection lets you enable a redirection for sessions you trust and restrict it for the rest. Our reading, not a Microsoft statement: whether it can also switch a redirection that a new host pool leaves off back on for trusted sessions only is not documented, so test that on a pilot host pool.
 
 ## The three pieces
 
@@ -66,7 +66,7 @@ Context-based redirection does not replace session host settings. The Microsoft 
 
 Two practical consequences follow from the blog post and Learn:
 
-1. For testing, the redirections you want to gate should be "Not Configured" or "Enabled" in other policies, because an existing policy that disables a redirection wins. The post, which is written for Windows 365 Cloud PCs, names recent gallery images as one place where such settings may already exist. Our reading: the same check is sensible for Azure Virtual Desktop session hosts built from those images.
+1. For testing, no other policy should block the redirections you want to gate, because an existing policy that disables a redirection wins. The post says to configure the redirections you want to test as "Not Configured" or "Enabled" and names recent gallery images, written for Windows 365 Cloud PCs, as one place where blocking settings may already exist. Our reading: "Enabled" there means the redirection is allowed, and for a "Do not allow ... redirection" setting the values are the reverse. Learn's clipboard article, for example, says to set "Do not allow Clipboard redirection" to Disabled in Intune to allow clipboard redirection. The same check is sensible for Azure Virtual Desktop session hosts built from those images.
 2. When a result is not what you expect, Learn's troubleshooting list includes "existing redirection policies that might override the configuration" next to the Conditional Access assignment, device compliance status and the host pool RDP properties.
 
 Learn's clipboard article describes the usual pattern for Azure Virtual Desktop: enable clipboard redirection on the session hosts with Intune or Group Policy, then control it with the host pool RDP properties. Context-based redirection adds a conditional layer on top of that pattern. Our reading, not a Learn statement: treat the session host policy as the ceiling and the authentication context as the switch below it.
@@ -81,8 +81,8 @@ Learn's clipboard article describes the usual pattern for Azure Virtual Desktop:
 
 ## Limits and open points
 
-- It is a preview, with the status above.
-- Microsoft says it is developing a Resultant Set of Policy (RSOP) capability so admins can see which redirection settings applied to a connection and which policy produced them. Until then, troubleshooting means checking each layer by hand.
+- It is a preview, with the status above; Learn marks it so in the page title.
+- According to the blog post (updated 19 October 2026), Microsoft is developing a Resultant Set of Policy (RSOP) capability so admins can see which redirection settings applied to a connection and which policy produced them. Until then, troubleshooting means checking each layer by hand.
 - Learn's configuration article documents the mapping through the Azure portal RDP properties page and shows no scripted equivalent.
 - Deleting an authentication context has its own preconditions in Entra; the step-by-step article in this series lists them.
 
