@@ -1,4 +1,5 @@
 """Mitglieder- und Firmenverzeichnis: oeffentliche Experten-Profile (nur Opt-in) mit Schema.org-Verknuepfung zu den Entitaeten."""
+import site_ename as EN   # Namen der Entitaeten in der Sprache der Seite (Linktexte Paket 4)
 import json, re
 from pathlib import Path
 BLOGLANGS = set()
@@ -244,7 +245,7 @@ def kind_ids(x, kind):
 
 
 def kind_links(BASE, lang, ids):
-    return ", ".join(f'<a href="{eurl(BASE, lang, i)}">{esc(ENTS[i]["name"])}</a>' for i in ids)
+    return ", ".join(f'<a href="{eurl(BASE, lang, i)}">{EN.html_name(ENTS[i], lang)}</a>' for i in ids)
 
 
 def person_ld(BASE, p, orgs_by_handle):
@@ -397,7 +398,7 @@ def build(g, people, orgs, extra=None):
                     note.append(s["verified"])
                 if e.get("endorsed"):
                     note.append(s["endorsed"].format(n=e["endorsed"]))
-            out.append(f'<li><a href="{eurl(BASE, lang, e["e"])}">{esc(en["name"])}</a> <span class="mut">· <b class="pf-lvl pf-lvl{int(e.get("level") or 1)}">{esc(LV.get(e.get("level") or 1, LV[1])[li])}</b> · {esc(" · ".join(note))}</span>'
+            out.append(f'<li><a href="{eurl(BASE, lang, e["e"])}">{EN.html_name(en, lang)}</a> <span class="mut">· <b class="pf-lvl pf-lvl{int(e.get("level") or 1)}">{esc(LV.get(e.get("level") or 1, LV[1])[li])}</b> · {esc(" · ".join(note))}</span>'
                        f'<span class="pf-endorse" data-h="{esc(x["handle"])}" data-e="{esc(e.get("e0") or e["e"])}"></span></li>')
         legend = f'<p class="mut pf-levels">{esc(s["levels"])}</p>' if out and x.get("type") != "o" else ""
         return "<ul>" + "".join(out) + "</ul>" + legend if out else ""
@@ -437,7 +438,7 @@ def build(g, people, orgs, extra=None):
             org = p.get("org")
             facts = []
             if p.get("job") or p.get("company") or org:
-                comp = f'<a href="{purl(BASE, lang, "c", org["handle"])}">{esc(org["name"])}</a>' if org and org["handle"] in ob else (f'<a href="{eurl(BASE, lang, p["company_eid"])}">{esc(ENTS[p["company_eid"]]["name"])}</a>' if p.get("company_eid") in ENTS else esc(p.get("company", "")))
+                comp = f'<a href="{purl(BASE, lang, "c", org["handle"])}">{esc(org["name"])}</a>' if org and org["handle"] in ob else (f'<a href="{eurl(BASE, lang, p["company_eid"])}">{EN.html_name(ENTS[p["company_eid"]], lang)}</a>' if p.get("company_eid") in ENTS else esc(p.get("company", "")))
                 _jl = kind_links(BASE, lang, kind_ids(p, "job")) or esc(p.get("job", ""))
                 facts.append((s["company"], _jl + (" · " if _jl and comp else "") + comp))
             if kind_ids(p, "industry"):
@@ -458,11 +459,11 @@ def build(g, people, orgs, extra=None):
                 facts.append((T(lang, "Mobile", "Mobil"), esc(ct["phone"])))
             ft = '<table class="mb-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b}</td></tr>' for a, b in facts) + "</tbody></table>" if facts else ""
             _cs = sorted([c for c in p.get("certs", []) if c["e"] in ENTS], key=lambda c: (-c.get("endorsed", 0), -int(bool(c.get("verified"))), -(c.get("year") or 0)))
-            certs = "<ul>" + "".join(f'<li><a href="{eurl(BASE, lang, c["e"])}">{esc(ENTS[c["e"]]["name"])}</a>{" (" + str(c["year"]) + ")" if c.get("year") else ""}'
+            certs = "<ul>" + "".join(f'<li><a href="{eurl(BASE, lang, c["e"])}">{EN.html_name(ENTS[c["e"]], lang)}</a>{" (" + str(c["year"]) + ")" if c.get("year") else ""}'
                                      + (' · <a href="' + esc(c["url"]) + '" rel="nofollow ugc noopener">✔ ' + (T(lang, "verified", "geprüft")) + "</a>" if c.get("verified") and c.get("url") else (" · ✔ " + (T(lang, "verified", "geprüft")) if c.get("verified") else ""))
                                      + (f' <span class="mut">· {c["endorsed"]} ' + (T(lang, "confirmations", "Bestätigungen")) + "</span>" if c.get("endorsed") else "")
                                      + f' <span class="pf-certend" data-h="{esc(p["handle"])}" data-e="{esc(c.get("e0") or c["e"])}"></span></li>' for c in _cs) + "</ul>" if _cs else ""
-            contrib = "<ul>" + "".join(f'<li><a href="{eurl(BASE, lang, c["t"])}">{esc(ENTS[c["t"]]["name"] if c["t"] in ENTS else c["t"])}</a> <span class="mut">· {esc(s["wiki"] if c["k"] == "wiki" else s["entity"])} · {datetime.fromtimestamp(c["c"], timezone.utc).strftime("%Y-%m-%d")}{" – " + esc(c["s"]) if c.get("s") else ""}</span></li>' for c in p.get("contrib", []) if c["t"] in ENTS) + "</ul>" if p.get("contrib") else ""
+            contrib = "<ul>" + "".join(f'<li><a href="{eurl(BASE, lang, c["t"])}">{EN.html_name(ENTS[c["t"]], lang) if c["t"] in ENTS else esc(c["t"])}</a> <span class="mut">· {esc(s["wiki"] if c["k"] == "wiki" else s["entity"])} · {datetime.fromtimestamp(c["c"], timezone.utc).strftime("%Y-%m-%d")}{" – " + esc(c["s"]) if c.get("s") else ""}</span></li>' for c in p.get("contrib", []) if c["t"] in ENTS) + "</ul>" if p.get("contrib") else ""
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}members/">{esc(s["members"])}</a></nav>{img_tag("u", p, p["name"])}<h1>{esc(p["name"])}{ROLE.chip(BASE, lang, ROLE.role_of(p), p.get("scope"))}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="creator" data-topic-id="{esc(p["handle"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button><p style="font-size:1.1em">{esc(p.get("headline", ""))}</p><p>{tags_of_p(p, li, s)}</p>{ft}'
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(p["about"])}</p>' if p.get("about") else "")
                           + (f'<h2>{esc(s["expertise"])}</h2>{LC.intro(lang, "prof.expertise", s=p["name"])}{exp_ul(p, lang, li, s)}' if p.get("expertise") else "") + (f'<h2>{esc(s["certs"])}</h2>{LC.intro(lang, "prof.certs", s=p["name"])}{certs}' if certs else "")
@@ -503,7 +504,7 @@ def build(g, people, orgs, extra=None):
             progs = sorted({x["p"] for it in lst for x in it.get("programs", [])})
             fb = f'<button type="button" class="mb-f" data-f="" aria-pressed="true">{esc(s["all"])}</button>' + "".join(f'<button type="button" class="mb-f" data-f="{p_}" aria-pressed="false">{esc(PROG[p_][li])}</button>' for p_ in progs)
             cards = "".join(f'<li class="mb-card" data-p="{" ".join(x["p"] for x in it.get("programs", []))}"><a href="{purl(BASE, lang, pk, it["handle"])}"><b>{esc(it["name"])}</b></a>{ROLE.chip(BASE, lang, ROLE.role_of(it), it.get("scope")) if pk == "u" else ""} <span class="mut">{esc(it.get("headline") or it.get("tagline") or "")}</span><br>{tags_of_p(it, li, s)}'
-                            + "".join(f'<span class="mb-tag">{esc(ENTS[e["e"]]["name"])}</span>' for e in it.get("expertise", [])[:5] if e["e"] in ENTS) + "</li>" for it in lst) or f'<li class="mb-card mut">{esc(s["none"])}</li>'
+                            + "".join(f'<span class="mb-tag">{EN.html_name(ENTS[e["e"]], lang)}</span>' for e in it.get("expertise", [])[:5] if e["e"] in ENTS) + "</li>" for it in lst) or f'<li class="mb-card mut">{esc(s["none"])}</li>'
             fjs = '<script>(function(){var b=[].slice.call(document.querySelectorAll(".mb-f")),l=[].slice.call(document.querySelectorAll(".mb-card[data-p]"));b.forEach(function(x){x.addEventListener("click",function(){b.forEach(function(y){y.setAttribute("aria-pressed",y===x?"true":"false")});l.forEach(function(i){i.hidden=!!x.dataset.f&&(" "+i.dataset.p+" ").indexOf(" "+x.dataset.f+" ")<0})})})})()</script>'
             feed = f'<h2>{esc(s["feed"])}</h2><div id="pf-feed" data-top="{esc(s["feedtop"])}" data-new="{esc(s["feed"])}"></div>' if kind == "members" else ""
             if kind == "companies": partners = partner_block(lang, lst)

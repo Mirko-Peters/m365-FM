@@ -81,7 +81,8 @@ def extract(url, html, lang_default, typ, allow_noindex=False):
         for k in ("datePublished", "uploadDate", "startDate", "dateCreated"):
             if not date and isinstance(n.get(k), str) and re.match(r"\d{4}-\d{2}-\d{2}", n[k]): date = n[k][:10]
         for k in ("alternateName", "keywords"):
-            v = n.get(k); kw += v if isinstance(v, list) else [v] if isinstance(v, str) else []
+            v = n.get(k); kw += [x.get("@value") if isinstance(x, dict) else x for x in (v if isinstance(v, list) else [v])
+                                 if isinstance(x, str) or (isinstance(x, dict) and isinstance(x.get("@value"), str))]   # alternateName mit @language (site_ename.ld_alt)
     title = _txt(g("ogt") or re.sub(r"\s+[|–—]\s+M365\.FM.*$", "", _h.unescape(g("title"))), 160)
     if not title: return None
     own = path.rstrip("/").split("/")[-1]

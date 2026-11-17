@@ -5,6 +5,8 @@ und [Microsoft Fabric]." auf der Seite von Power BI, "Microsoft entwickelt [Micr
   Fehlt eine Vorlage in einer Sprache, gibt es fuer diese Beziehung keinen Satz: die vollstaendige Liste der Beziehungen unter dem Text (site_entities, div.en-rel)
   bleibt in jeder Sprache stehen, es geht also nichts verloren.
 - Verlinkt werden die Ziel-Entitaeten mit ihrem Namen als Ankertext (beschreibend, kein "hier"); die Seite selbst ({s}) ist kein Link.
+  Linktext = Name des Ziels in der Sprache der Seite (site_ename.ename, Linktexte Paket 4), wie in Listen und Brotkruemel; Begriffe ohne
+  Uebersetzung als englischer Text (lang="en"), in ar/he jeder Name in <bdi>. Nur der Einleitungssatz (en/de) nimmt die Satzform aus "cat".
 - Listen: hoechstens CAP Namen, dann "und N weitere" als Text (bei CAP+1 Namen stehen alle da, nie "und 1 weitere"); der Sprung auf die vollstaendige Liste
   darunter ist ein eigener Link mit Ziel und Beziehung im Linktext ("Vollstaendige Listen: alle 246 Produkte und Werke von Microsoft", data/link_context.json more.*).
 - Seiten ohne Beziehungen: Rueckfall-Satz aus gemeinsamen Folgen ("In Folgen zu {s} geht es oft auch um ...", cooc/cooc_pick), nie in e["rel"].
@@ -20,6 +22,8 @@ import html
 import json
 import re
 from pathlib import Path
+
+import site_ename as EN   # Namen in der Sprache der Seite (data/entity_names.json), englischer Rest mit lang="en", RTL in <bdi>
 
 FILE = Path(__file__).parent / "data" / "relation_sentences.json"
 CAP = 6   # hoechstens so viele Namen je Satz
@@ -94,11 +98,9 @@ def join(lang, items, more_html=""):
     return sep.join(items[:-1]) + _and(lang, L, items[-1], False) + items[-1]
 
 
-def _link(lang, url, text):
-    t = esc(text)
-    if lang in RTL:
-        t = f"<bdi>{t}</bdi>"
-    return f'<a href="{esc(url)}">{t}</a>'
+def _link(lang, url, text, e=None):
+    """Link mit dem Namen des Ziels als Text: ar/he in <bdi>, Begriff ohne Uebersetzung (site_ename.foreign) als englischer Text (lang="en")."""
+    return f'<a href="{esc(url)}">{EN.wrap(lang, esc(text), EN.foreign(e, lang))}</a>'
 
 
 def build(lang, e, fwd, inv, ents, href, anchor=None, works_for=None, rank=None, cap=CAP, total=None):
@@ -164,9 +166,9 @@ def build(lang, e, fwd, inv, ents, href, anchor=None, works_for=None, rank=None,
                 fulls.append((g["k"], a, total(g["dir"], g["p"], g["k"]) if total else len(g["ids"])))
         else:
             shown, more = ids, ""
-        return join(lang, [_link(lang, href(i), ents[i]["name"]) for i in shown], more)
+        return join(lang, [_link(lang, href(i), EN.ename(ents[i], lang), ents[i]) for i in shown], more)
 
-    subj = f"<bdi>{esc(e['name'])}</bdi>" if lang in RTL else esc(e["name"])
+    subj = EN.html_name(e, lang)   # Name in der Sprache der Seite (site_ename), wie in der Ueberschrift
     sent_f, sent_i, named = [], [], set()
     if "microsoft-tool" in groups.get("f.instance_of", {}).get("ids", []) and any("microsoft" in g["ids"] for k, g in groups.items() if k.startswith("f.developed_by")):
         groups["f.instance_of"]["ids"].remove("microsoft-tool")   # "Kategorie Microsoft-Werkzeug" + "von Microsoft entwickelt" waere dieselbe Aussage zweimal
@@ -226,7 +228,7 @@ def build(lang, e, fwd, inv, ents, href, anchor=None, works_for=None, rank=None,
         return ""
     ss = L.get("sent_sep", " ")
     ps = "".join(f"<p>{ss.join(x)}</p>" for x in (sent_f, sent_i) if x)
-    ps += full_lists(lang, e["name"], fulls)
+    ps += full_lists(lang, EN.label(e, lang), fulls)
     h = esc(L.get("heading") or (D.get("en") or {}).get("heading") or "Relationships")
     return f'<section class="en-rels" data-own-text="no" aria-labelledby="en-rels-h"><h2 id="en-rels-h">{h}</h2>{ps}</section>'
 
@@ -322,7 +324,7 @@ def cooc(lang, e, ids, ents, href, mode="often"):
     hd = c.get("heading" if mode == "often" else "heading_some")
     if not ids or not c.get(tk) or not hd:
         return ""
-    subj = f"<bdi>{esc(e['name'])}</bdi>" if lang in RTL else esc(e["name"])
-    x = join(lang, [_link(lang, href(i), ents[i]["name"]) for i in ids])
+    subj = EN.html_name(e, lang)
+    x = join(lang, [_link(lang, href(i), EN.ename(ents[i], lang), ents[i]) for i in ids])
     return (f'<section class="en-rels en-cooc" data-own-text="no" aria-labelledby="en-rels-h"><h2 id="en-rels-h">{esc(hd)}</h2>'
             f'<p>{fill(lang, c[tk], s=subj, x=x)}</p></section>')

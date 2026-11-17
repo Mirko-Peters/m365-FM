@@ -1,4 +1,5 @@
 """Community-Podcast: Seiten fuer veroeffentlichte (von der Redaktion in Spreaker freigegebene) Folgen, Verzeichnis und RSS."""
+import site_ename as EN   # Namen der Entitaeten in der Sprache der Seite (Linktexte Paket 4)
 from datetime import datetime, timezone
 from site_i18n import COMM_LANGS, pfx, pfx2, T
 import site_entmatch as EM   # Kontext-Links in der Beschreibung
@@ -44,7 +45,7 @@ def build(g, eps, people, api):
         for e in mine:
             u = f"{croot}podcast/{e['slug']}/"; au = f"{BASE}/community/u/{e['handle']}/"
             topics = [t for t in e.get("topics", []) if t in ENTS]
-            tl = "".join(f'<a class="mb-tag" href="{BASE}/entity/{t}/">{esc(ENTS[t]["name"])}</a> ' for t in topics)
+            tl = "".join(f'<a class="mb-tag" href="{BASE}/entity/{t}/">{EN.html_name(ENTS[t], lang)}</a> ' for t in topics)
             player = "" if not e["spreaker_id"] else PL.player("spreaker", e["spreaker_id"], e["title"], T(lang, "Listen on Spreaker", "Bei Spreaker anhören"), link=e.get("ep_url"), height=200)
             gs = [g for g in (e.get("guests") or []) if g.get("handle") != e["handle"]]
             guests_html = (f'<p class="mut">{esc(T(lang, "Guests", "Gäste"))}: ' + ", ".join(f'<a href="{croot}u/{g["handle"]}/">{esc(g["name"])}</a>' for g in gs) + "</p>") if gs else ""

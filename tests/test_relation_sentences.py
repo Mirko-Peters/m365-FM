@@ -53,8 +53,9 @@ def render(lang, eid, ents=None, **k):
 
 
 def text(h):
-    """Satztext mit [Link]-Markierung, ohne Ueberschrift."""
+    """Satztext mit [Link]-Markierung, ohne Ueberschrift. Sprach- und Richtungsmarken (<span lang="en">, <bdi>, Linktexte Paket 4) zaehlen nicht als Wortgrenze."""
     h = re.sub(r"<h2[^>]*>.*?</h2>", "", h)
+    h = re.sub(r"</?(?:span|bdi)\b[^>]*>", "", h)
     h = re.sub(r'<a href="[^"]*">(.*?)</a>', r"[\1]", h)
     return html.unescape(re.sub(r"<[^>]+>", " ", h)).split()
 

@@ -2,6 +2,7 @@
 import json, re, html, os
 from functools import lru_cache
 import site_media as MED
+import site_ename as EN   # Namen der Entitaeten in der Sprache der Seite (Linktexte Paket 4)
 import ontology as ONT   # Oberbegriffe per Regel (Klammer/Praefix) fuer alle Entitaeten beim Laden
 import site_meta_entities as MM   # SEO-Titel und Meta-Descriptions nach Suchabsicht
 from pathlib import Path
@@ -243,7 +244,7 @@ def gloss_links(lang, base):
     gb = f"{base}/glossary/" if lang == "en" else f"{base}/{lang}/glossary/"
     gids = {x["id"] for x in GLOSS}
     eb = f"{base}/de/entity/" if lang == "de" else f"{base}/entity/"
-    return {i: [e["name"], eb + i + "/"] for i, e in ENTS.items()}   # Entitaetsseiten uebernehmen die Glossarfunktion (Kurz- und Langbeschreibung)
+    return {i: [EN.ename(e, lang), eb + i + "/"] for i, e in ENTS.items()}   # Name in der Sprache der Seite (site_ename); Entitaetsseiten uebernehmen die Glossarfunktion (Kurz- und Langbeschreibung)
 
 
 def wiki_block(lang, term_id, api, base, static, links=None):
@@ -312,8 +313,8 @@ def build_learn(ctx):
         stat = fetch_wiki(WIKI_API, lang)
         gb = f"{BASE}/glossary/" if lang == "en" else f"{BASE}/{lang}/glossary/"
         rel = "glossary" if lang == "en" else f"{lang}/glossary"
-        terms = sorted(GLOSS, key=lambda x: x["name"].lower())
-        az = az_html(terms, lang, lambda x, d, o, lang=lang: f'<dt><a href="{BASE}/{"de/" if lang == "de" else ""}entity/{x["id"]}/">{esc(x["name"])}</a></dt><dd>{esc(d)}</dd>')
+        terms = sorted(({**x, "name": EN.ename(ENTS.get(x["id"]) or x, lang)} for x in GLOSS), key=lambda x: x["name"].lower())   # Name in der Sprache der Seite (Buchstaben danach)
+        az = az_html(terms, lang, lambda x, d, o, lang=lang: f'<dt><a href="{BASE}/{"de/" if lang == "de" else ""}entity/{x["id"]}/">{EN.html_name(ENTS.get(x["id"]) or x, lang)}</a></dt><dd>{esc(d)}</dd>')
         body = shell(lang, f'<h1>{esc(t["glossary"])}</h1><p class="mut">{esc(t["glossary_intro"])}</p>{az}')
         _gm = MM.glossary_meta(lang, len(terms)) or (f'{t["glossary"]} – M365.FM', t["glossary_intro"])
         write(f"{rel}/index.html", page(lang, _gm[0], _gm[1], gb, body, None, gloss_ld(lang, gb), og_type="website", extra_head=LCSS))
@@ -331,9 +332,11 @@ def build_learn(ctx):
             gb = f"{BASE}/{lang}/glossary/"
             def row(x, d, o, lang=lang, t=t):
                 eps = eps_for(lang, x, 5)
-                return (f'<dt id="{x["id"]}">{esc(x["name"])}</dt><dd lang="en" dir="ltr">{esc(d)}</dd>'
-                        + (f'<dd><small>{esc(t["term_eps"].replace("{t}", x["name"]))}:</small>{ep_list(eps)}</dd>' if eps else ""))
-            body = shell(lang, f'<h1>{esc(t["glossary"])}</h1><p class="mut">{esc(t["glossary_intro"])} ({esc(t["en_note"])})</p>{az_html(GLOSS, lang, row)}')
+                _e = ENTS.get(x["id"]) or x
+                return (f'<dt id="{x["id"]}">{EN.html_name(_e, lang)}</dt><dd lang="en" dir="ltr">{esc(d)}</dd>'
+                        + (f'<dd><small>{esc(t["term_eps"]).replace("{t}", EN.html_name(_e, lang))}:</small>{ep_list(eps)}</dd>' if eps else ""))
+            _gl = [{**x, "name": EN.ename(ENTS.get(x["id"]) or x, lang)} for x in GLOSS]   # Name in der Sprache der Seite (site_ename), Buchstaben danach
+            body = shell(lang, f'<h1>{esc(t["glossary"])}</h1><p class="mut">{esc(t["glossary_intro"])} ({esc(t["en_note"])})</p>{az_html(_gl, lang, row)}')
             write(f"{lang}/glossary/index.html", page(lang, f'{t["glossary"]} – M365.FM {LANGS[lang][0]}', t["glossary_intro"], gb, body, None, None, og_type="website", extra_head=LCSS, noindex=True))
         # Lernpfade
         paths = {c: sorted(g["catidx"][lang][c], key=lambda i: (i["date"], i["vid"])) for c in ORDER if c in g["catidx"].get(lang, {}) and len(g["catidx"][lang][c]) >= 2}
@@ -536,6 +539,7 @@ def load_entities(api):
                 rec["wikidata"] = base[it["id"]]["wikidata"]
             base[it["id"]] = rec
     ONT.derive(base)   # Oberbegriffe per Regel fuer ALLE Eintraege (auch neue aus D1/Gaesten/Speakern), nur im Speicher
+    EN.apply(base)   # Namen in der Sprache der Seite (data/entity_names.json -> Feld names), auch an D1-Fassungen; nicht in entities-src.json (kein Abgleich nach D1)
     return base
 
 
@@ -601,7 +605,7 @@ def gloss_link(html_, lang, base, max_links=None, ctx=(), used=None, exclude=(),
         e = ENTS.get(i) or {}
         d = e.get("desc") or {}
         dd = (d.get("de") or d.get("en") or "") if lang == "de" else (d.get("en") or "")
-        return f' data-gt="{esc(e.get("name") or "")}" data-gd="{esc(dd)}"' + ("" if lang == "de" else ' data-gl="en"')
+        return f' data-gt="{esc(EN.ename(e, lang))}" data-gd="{esc(dd)}"' + ("" if lang == "de" else ' data-gl="en"')
     h, _ = EM.shared().link_html(html_, etgt, lang=lang, ctx=ctx, exclude=exclude, used=used, cls="ilink gl", attrs=attrs)
     return h
 

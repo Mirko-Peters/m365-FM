@@ -31,6 +31,8 @@ import re
 from functools import lru_cache
 from pathlib import Path
 
+import site_ename as EN
+
 ROOT = Path(__file__).resolve().parent
 D = ROOT / "data"
 COMMON_FILE = D / "entmatch_common.json"
@@ -527,10 +529,13 @@ class Matcher:
         for n, (tok, off, ed) in enumerate(pieces):
             if n in rep:
                 for a, b, t, i, u in sorted(rep[n], reverse=True):
-                    nm = self.live[i].get("name") or ""
+                    nm = EN.ename(self.live[i], lang)   # Name in der Sprache der Seite (site_ename), wie Listen und Brotkruemel
                     extra = attrs(i, t) if attrs else ""
                     ti = "" if t == nm or "title=" in extra else f' title="{_esc(nm)}"'
-                    tok = tok[:a] + f'<a href="{_esc(u)}" class="{cls}"{ti}{extra}>{tok[a:b]}</a>' + tok[b:]
+                    inner = tok[a:b]
+                    if lang in EN.RTL and re.search(r"[A-Za-z]", inner):
+                        inner = f"<bdi>{inner}</bdi>"   # ar/he: lateinischer Name isoliert wie in allen anderen Bloecken (A11Y-7, "SharePoint Framework (SPFx)")
+                    tok = tok[:a] + f'<a href="{_esc(u)}" class="{cls}"{ti}{extra}>{inner}</a>' + tok[b:]
             out.append(tok)
         return _restore("".join(out), keep), links
 

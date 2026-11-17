@@ -55,8 +55,9 @@ def has(lang, key):
 
 
 def _name(lang, s):
-    t = html.escape(s or "", quote=True)
-    return f"<bdi>{t}</bdi>" if lang in RTL and t else t
+    """Name escaped; in ar/he als <bdi>; ein Name mit Merkmal foreign (site_ename.label: Begriff ohne Uebersetzung) als englischer Text (lang="en")."""
+    import site_ename as EN
+    return EN.wrap(lang, html.escape(s or "", quote=True), getattr(s, "foreign", False))
 
 
 def text(lang, key, **vals):

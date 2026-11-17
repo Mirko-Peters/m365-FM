@@ -1,4 +1,5 @@
 """Creator-Videos auf dem YouTube-Kanal m365 Show: Seiten fuer von der Redaktion veroeffentlichte Videos, Verzeichnis und RSS."""
+import site_ename as EN   # Namen der Entitaeten in der Sprache der Seite (Linktexte Paket 4)
 from datetime import datetime, timezone
 from site_i18n import COMM_LANGS, pfx, pfx2, T
 from site_learn import ENTS, esc, _fetch_json, LCSS
@@ -45,7 +46,7 @@ def build(g, vids, people, api):
         for v in mine:
             u = f"{croot}video/{v['slug']}/"; au = f"{BASE}/community/u/{v['handle']}/"
             topics = [t for t in v.get("topics", []) if t in ENTS]
-            tl = "".join(f'<a class="mb-tag" href="{BASE}/entity/{t}/">{esc(ENTS[t]["name"])}</a> ' for t in topics)
+            tl = "".join(f'<a class="mb-tag" href="{BASE}/entity/{t}/">{EN.html_name(ENTS[t], lang)}</a> ' for t in topics)
             player = PL.player("youtube", v["video_id"], v["title"], T(lang, "Watch on YouTube", "Auf YouTube ansehen"), link=f"https://youtu.be/{v['video_id']}")
             gs = [g for g in (v.get("guests") or []) if g.get("handle") != v["handle"]]
             guests_html = (f'<p class="mut">{esc(T(lang, "Guests", "Gäste"))}: ' + ", ".join(f'<a href="{croot}u/{g["handle"]}/">{esc(g["name"])}</a>' for g in gs) + "</p>") if gs else ""

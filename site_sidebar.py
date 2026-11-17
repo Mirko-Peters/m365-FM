@@ -6,6 +6,15 @@ from html import escape as esc
 from pathlib import Path
 D = Path(__file__).parent / "data"
 TYPE_L = {"product": "Product", "concept": "Concept", "cert": "Certification", "platform": "Platform", "org": "Organization", "event": "Event", "person": "Person", "media": "Media", "category": "Topic", "industry": "Industry", "job": "Job / role"}
+TYPE_DE = {"product": "Produkt", "concept": "Konzept", "cert": "Zertifizierung", "platform": "Plattform", "org": "Organisation", "event": "Veranstaltung", "person": "Person", "media": "Medium", "category": "Thema", "industry": "Branche", "job": "Job / Rolle"}
+
+
+def type_label(lang, t):
+    """title der Chips in der Sprache der Seite (Audit A11Y-6: vorher englisch auf allen Sprachseiten); andere Sprachen ueber site_i18n.T."""
+    from site_i18n import T
+    return T(lang, TYPE_L[t], TYPE_DE[t]) if t in TYPE_L else ""
+
+
 STOP = {"access", "project", "compliance", "governance", "automation", "prompt", "actions", "polling", "agent", "agents", "lists", "forms", "flow", "loop", "word", "bing", "stream", "sites", "pages", "tasks", "security", "identity", "copilot", "microsoft", "azure", "m365", "teams"}
 TYPE_PRIO = {"product": 0, "person": 1, "cert": 2, "platform": 3, "concept": 4, "event": 5, "org": 6, "media": 7, "category": 9, "industry": 8, "job": 8}
 GSRC = "https://www.google.com/preferences/source?q=m365.fm"
@@ -129,7 +138,8 @@ def render(ix, BASE, lang, text="", items=(), url_of=None, title_of=None, all_ur
     topics_h: Ueberschrift der Themen-Karte mit der Beziehung zur Seite ("Mit Power BI verknuepfte Themen", "Themen & Personen dieser Folge", site_linkctx side.*);
     ohne Angabe die allgemeine "Themen & Personen auf dieser Seite" (Treffer im Text)."""
     t = L10N.get(lang) or L10N["en"]; shp = shp or {}
-    chips = "".join(f'<li><a class="sb-chip t-{esc(e["type"])}" href="{BASE}{ent_prefix}/entity/{esc(e["id"])}/" title="{esc(TYPE_L.get(e["type"], ""))}"><i></i>{esc(e["name"])}</a></li>' for e in chips_for(ix, text, ids, exclude, lang=lang))
+    import site_ename as EN   # Linktext = Name in der Sprache der Seite (wie Listen und Brotkruemel), englischer Rest mit lang="en", RTL in <bdi>
+    chips = "".join(f'<li><a class="sb-chip t-{esc(e["type"])}" href="{BASE}{ent_prefix}/entity/{esc(e["id"])}/" title="{esc(type_label(lang, e["type"]))}"><i></i>{EN.html_name(e, lang)}</a></li>' for e in chips_for(ix, text, ids, exclude, lang=lang))
     ents = f'<section class="sb-card"><h2>{esc(topics_h or t["topics"])}</h2><ul class="sb-chips">{chips}</ul><a class="sb-more" href="{BASE}{ent_prefix}/entity/">{esc(t["kg"])}</a></section>' if chips else ""
     late = "".join(f'<li><a href="{esc(url_of(x))}">{esc(title_of(x))}</a></li>' for x in list(items)[:5]) if url_of else ""
     new = f'<section class="sb-card"><h2>{esc(t["latest"])}</h2><ol class="sb-list">{late}</ol><a class="sb-more" href="{esc(all_url)}">{esc(t["all"])}</a></section>' if late else ""

@@ -187,7 +187,7 @@ class EntityPages(unittest.TestCase):
                                 ("de", "de/entity/vsm/index.html", ["alle 8 mit Value stream mapping verwandten Themen", "alle 8 Personen, die sich mit Value stream mapping beschäftigen"])):
             h = self.read(rel)
             rels = re.search(r'<section class="en-rels".*?</section>', h, re.S).group(0)
-            full = re.findall(r'<a href="#(en-rel-\d+)">([^<]+)</a>', rels)
+            full = [(a, re.sub(r"<[^>]+>", "", t)) for a, t in re.findall(r'<a href="#(en-rel-\d+)">(.*?)</a>', rels)]   # Name ohne Uebersetzung steht in <span lang="en">
             self.assertEqual([t for _, t in full], want, lang)
             self.assertNotEqual(full[0][0], full[1][0], "eigene Sprungziele")
             for (a, t), kind in zip(full, ("k", "pp")):   # Themen-Liste nur Konzepte, Personen-Liste nur Personen

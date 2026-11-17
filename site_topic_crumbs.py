@@ -31,6 +31,7 @@ Kandidaten je Seitenart (die about-Liste im JSON-LD bleibt unveraendert):
                     werten R4 mit dem Titel des englischen Originals, damit alle Sprachen dasselbe Hauptthema haben.
   Video             topics.
 """
+import site_ename as EN
 import re
 
 import ontology as ONT
@@ -161,7 +162,7 @@ def breadcrumb(BASE, lang, about_ids, ents, page_name, page_url, title=None):
     for x in chain(main, ents) + [main]:
         u = crumb_url(BASE, lang, x, ents)
         if u not in seen and ents[x].get("name"):
-            items.append((ents[x]["name"], u)); seen.add(u)
+            items.append((EN.ename(ents[x], lang), u)); seen.add(u)   # Name in der Sprache der Seite (site_ename, Linktexte Paket 4)
     if page_url in seen:
         return None
     items.append((page_name, page_url))

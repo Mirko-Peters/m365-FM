@@ -36,6 +36,7 @@ import site_text
 import site_ads as ADS
 import site_media as MED
 import site_sidebar as SBR
+import site_ename as EN   # Namen der Entitaeten in der Sprache der Seite (Linktexte Paket 4)
 import site_topweek as TOPW   # Top 10 der Vorwoche (data/top.json): Wochenbezeichnung, ItemList, englische Seite /top/
 import site_meta_podcast as MP   # SEO-Titel und Meta-Descriptions der Podcast-Seiten (suchintent-freundlich, reine Funktionen)
 import site_r2 as R2
@@ -927,9 +928,10 @@ def author_box(lang):
         badge = ROLE.avatar(badge, ROLE.role_of(a), lang, small=True)   # Editor/Moderator: Ring und Symbol auch im Autorenkasten
         bio = _sentences(a.get("about") or a.get("headline") or "", 360)
         names = _ent_names(); ex = sorted([e for e in _merged_refs(a.get("expertise", [])) if e.get("e") in names], key=lambda e: (-int(bool(e.get("verified") or e.get("via"))), -(e.get("level") or 0)))[:6]
-        exh = "".join(f'<li><a href="{pref}entity/{e["e"]}/" itemprop="knowsAbout">{esc(names[e["e"]])}</a></li>' for e in ex)
+        _nm = lambda i: EN.html_name(LRN.ENTS.get(i) or {"name": names[i], "type": "product"}, lang)   # Name in der Sprache der Seite (site_ename), wie auf den Entitaetsseiten
+        exh = "".join(f'<li><a href="{pref}entity/{e["e"]}/" itemprop="knowsAbout">{_nm(e["e"])}</a></li>' for e in ex)
         cs = [c for c in _merged_refs(a.get("certs", [])) if c.get("e") in names and c.get("verified")][:4]
-        csh = "".join(f'<li itemprop="hasCredential" itemscope itemtype="https://schema.org/EducationalOccupationalCredential"><a href="{pref}entity/{c["e"]}/" itemprop="name">{esc(names[c["e"]])}</a></li>' for c in cs)
+        csh = "".join(f'<li itemprop="hasCredential" itemscope itemtype="https://schema.org/EducationalOccupationalCredential"><a href="{pref}entity/{c["e"]}/" itemprop="name">{_nm(c["e"])}</a></li>' for c in cs)
         job = esc((a.get("headline") or progs.get(vp[0], "") if vp else a.get("headline") or "")[:100])
         return (f'<aside class="author" itemscope itemtype="https://schema.org/Person" itemid="{ent}" aria-label="{esc(L["about"])}"><link itemprop="sameAs" href="{ent}">{badge}<div>'
                 f'<strong><a href="{pref}community/u/{a["handle"]}/" rel="author" itemprop="url"><span itemprop="name">{esc(a["name"])}</span></a>{ROLE.chip(BASE, lang, ROLE.role_of(a), a.get("scope"))}{(" · " + esc(lab)) if lab else ""}</strong>'

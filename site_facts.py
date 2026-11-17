@@ -21,6 +21,7 @@ Produkt-/Plattform-Felder
 Personen-Felder
   positions       [{title, org (Entitaets-ID), start (YYYY-MM), end?}]
 """
+import site_ename as EN   # Namen der Entitaeten in der Sprache der Seite (Linktexte Paket 4)
 import html
 import json
 import re
@@ -141,7 +142,7 @@ def sections(lang, e, root, ents):
             if ind or not _url(c.get("case_study_url")):
                 groups.setdefault(ind or "", []).append(c)
         for ind, items in groups.items():
-            lab = (f'<a href="{root}{ind}/">{esc(ents[ind]["name"])}</a>' if ind in ents else esc(ind)) if ind else esc(T(lang, "Further customers", "Weitere Kunden"))
+            lab = (f'<a href="{root}{ind}/">{EN.html_name(ents[ind], lang)}</a>' if ind in ents else esc(ind)) if ind else esc(T(lang, "Further customers", "Weitere Kunden"))
             names = ", ".join((f'<a href="{esc(c["case_study_url"])}" rel="noopener">{esc(c["name"])}</a>' if _url(c.get("case_study_url")) else esc(c["name"])) for c in items)
             h += f'<p><b>{lab}:</b> {names}</p>'
         srcs = [c["source"] for c in cu if _url(c.get("source")) and not _url(c.get("case_study_url"))]

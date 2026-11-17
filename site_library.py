@@ -1,4 +1,5 @@
 """Copilot-Bibliothek: Prompts, Anweisungen, KQL/DAX/PowerShell, Flows ... Einzelseiten + Verzeichnis. Eintraege kommen aus /api/library/export (Google-Index ab 10 Upvotes)."""
+import site_ename as EN   # Namen der Entitaeten in der Sprache der Seite (Linktexte Paket 4)
 from datetime import datetime, timezone
 from site_i18n import COMM_LANGS, pfx, pfx2, T
 import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
@@ -75,7 +76,7 @@ def build(g, items, people, api):
         for p in mine:
             a = pb[p["handle"]]; au = f"{BASE}/community/u/{a['handle']}/"; u = f"{croot}library/{p['handle']}-{p['slug']}/"
             topics = [t for t in p.get("topics", []) if t in ENTS]
-            tl = "".join(f'<a class="mb-tag" href="{links[t]}">{esc(ENTS[t]["name"])}</a> ' for t in topics)
+            tl = "".join(f'<a class="mb-tag" href="{links[t]}">{EN.html_name(ENTS[t], lang)}</a> ' for t in topics)
             vote = f'<button type="button" class="bl-vote" data-i="{p["id"]}" aria-pressed="false" aria-label="Upvote">▲ <span class="n">{p.get("votes", 0)}</span></button>'
             b = shell(lang, f'{CSS}<p class="mut"><a href="{ru}">{esc(t0)}</a> · {esc(kl(lang, p["kind"]))}</p><article><h1>{esc(p["title"])}</h1>'
                             f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{p["handle"]}/">{esc(a["name"])}</a> · {iso(p["published"])} · {esc(T(lang, "Version", "Version"))} {p.get("version", 1)}</p>'

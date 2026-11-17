@@ -1,4 +1,5 @@
 """Blog je Mitglied: oeffentliche Beitragsseiten (BlogPosting) und Verzeichnisse je Sprache. Beitraege kommen freigegeben aus /api/blog/export."""
+import site_ename as EN   # Namen der Entitaeten in der Sprache der Seite (Linktexte Paket 4)
 import json, re
 from datetime import datetime, timezone
 from site_i18n import COMM_LANGS, pfx, pfx2, T
@@ -149,7 +150,7 @@ def build(g, posts, people, api):
             continue
         INDEX_VOTES = 10   # nur noch fuer automatische Sprachfassungen ohne Freigabe (bisherige Regel); Originale stehen immer auf index
         w = WT.get(lang, WT["en"]); croot = f"{BASE}{pfx(lang)}/community/"
-        links_l = {i: [e["name"], f"{BASE}{pfx(lang) if lang == 'de' else ''}/entity/{i}/"] for i, e in ENTS.items()}
+        links_l = {i: [EN.ename(e, lang), f"{BASE}{pfx(lang) if lang == 'de' else ''}/entity/{i}/"] for i, e in ENTS.items()}
         _eu = EM.url_in(BASE, lang)   # Ziel der Kontext-Links (einmal je Sprache, Ergebnis je id zwischengespeichert)
         title_blog = T(lang, "Blog", "Blog")
         _idx_keys = set(); _lifted = 0   # (handle, slug) der indexierbaren Beitraege dieser Sprache: Grundlage der Verzeichnisse; _lifted: Sprachfassungen nur wegen der Laenge auf index
@@ -184,14 +185,14 @@ def build(g, posts, people, api):
             if not _ms: body_html = LST.apply(BASE, body_html, p, lang, ENTS)   # "Anhoeren"-Karten (site_listen): 1-2 passende Folgen und "Show folgen", nur bei guter Uebereinstimmung
             _rel = [] if _ms else TOP.related(_content, p, k=6)
             _rt = TOP.common_topic(p, _rel)   # gemeinsames Thema aller verwandten Artikel: "Weitere Artikel zu {Thema}", sonst "zu verwandten Themen"
-            _rin = LC.intro(lang, "post.more", t=ENTS[_rt]["name"]) if _rt in ENTS else LC.intro(lang, "post.more0")
+            _rin = LC.intro(lang, "post.more", t=EN.label(ENTS[_rt], lang)) if _rt in ENTS else LC.intro(lang, "post.more0")
             relbox = MST.more_box(lang, BASE, posts, p) if _ms else (f'<section class="bl-rel"><h2>{esc(T(lang, "Related articles", "Verwandte Artikel"))}</h2>{_rin}<ul class="bl-list">' + "".join(
                 f'<li><a href="{croot}u/{r["handle"]}/blog/{r["slug"]}/"><b>{esc(r["title"])}</b></a> <span class="mut">· {iso(r["published"])}</span></li>' for r in _rel) + "</ul></section>") if _rel else ""
             if p.get("html") and not p.get("images"): p["images"] = re.findall(r'<img[^>]+src="(https://[^"]+)"', p["html"])
             _spr = SPM.post(p["handle"], p["slug"])   # T37 Sponsor: Beitrag aus einem Sponsoring (alle Sprachfassungen, dauerhaft)
             _spr_ex = SPM.post_extras(_spr, SPM._state()["today"], ENTS)   # Mirko 6.11.2026: Sponsor-Entitaeten extra zur Obergrenze von 10
             topics, _spx = SPM.split_topics([t for t in p.get("topics", []) if t in ENTS], [x for x in _spr_ex if x in ENTS])
-            tl = (f'<section class="bl-ents"><h2>{esc(T(lang, "Entities in this article", "Entitäten in diesem Artikel"))}</h2>{LC.intro(lang, "post.topics")}<p>' + "".join(f'<a class="mb-tag" href="{links_l[t][1]}">{esc(ENTS[t]["name"])}</a> ' + (f'<small class="mut">{esc(SPM.badge(lang, _spr))}</small> ' if t in _spx else '') for t in topics) + '</p></section>') if topics else ""
+            tl = (f'<section class="bl-ents"><h2>{esc(T(lang, "Entities in this article", "Entitäten in diesem Artikel"))}</h2>{LC.intro(lang, "post.topics")}<p>' + "".join(f'<a class="mb-tag" href="{links_l[t][1]}">{EN.html_name(ENTS[t], lang)}</a> ' + (f'<small class="mut">{esc(SPM.badge(lang, _spr))}</small> ' if t in _spx else '') for t in topics) + '</p></section>') if topics else ""
             vote = "" if p.get("legacy") else f'<p><button type="button" class="bl-vote" data-s="{esc(p["slug"])}" aria-pressed="false" aria-label="Upvote">▲ <span class="n">{p.get("votes", 0)}</span></button></p>'
             if p.get("html"): _fq = ""   # FAQ steht schon im Text des Beitrags; nur das Schema (FAQPage) bleibt
             cos = [c for c in (p.get("coauthors") or []) if c.get("handle") in pb and c["handle"] != p["handle"]]

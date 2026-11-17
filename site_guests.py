@@ -1,4 +1,5 @@
 """Gaeste-Boerse: oeffentliche Liste der Speaker (als Gast verfuegbar) und der Hosts (Show/Kanal/Event sucht Gaeste)."""
+import site_ename as EN   # Namen der Entitaeten in der Sprache der Seite (Linktexte Paket 4)
 from site_i18n import COMM_LANGS, pfx, pfx2, T
 from site_learn import ENTS, esc, _fetch_json, LCSS
 import site_meta_community as PM   # Titel/Description (Suchabsicht)
@@ -19,7 +20,7 @@ def build(g, items, people):
     for lang in COMM_LANGS:
         croot = f"{BASE}{pfx(lang)}/community/"; ttl = T(lang, "Guest exchange", "Gäste-Börse")
         def card(i):
-            tp = "".join(f'<a class="mb-tag" href="{BASE}/entity/{t}/">{esc(ENTS[t]["name"])}</a> ' for t in i["topics"] if t in ENTS)
+            tp = "".join(f'<a class="mb-tag" href="{BASE}/entity/{t}/">{EN.html_name(ENTS[t], lang)}</a> ' for t in i["topics"] if t in ENTS)
             nm = i["title"] or i["name"]
             return (f'<li style="padding:.7em 0;border-bottom:1px solid var(--bd);list-style:none"><b>{esc(nm)}</b> <span class="mut">· <a href="{croot}u/{i["handle"]}/">{esc(i["name"])}</a> · '
                     f'{esc(", ".join(FM.get(f, f) for f in i["formats"]))} · {esc(", ".join(i["langs"]))}</span>{("<br>" + esc(i["note"])) if i.get("note") else ""}<br>{tp}'
