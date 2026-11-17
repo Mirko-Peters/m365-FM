@@ -29,7 +29,7 @@ An [AVD scaling plan](/entity/avd-scaling-plan/) scales the session host virtual
 - **Power management autoscaling** powers existing session hosts on and off. It is generally available in Azure and Azure Government.
 - **Dynamic autoscaling** also creates and deletes session hosts. It works only for pooled host pools with session host configuration and is not supported in Azure Government.
 
-On the Learn pages checked on 17 November 2026, dynamic autoscaling carries a preview label (scenarios, glossary) or no general availability label (What's new: "now in preview" in November 2024, "now available" in June 2026). The create page lists a preview module version (5.4.2-preview) for it. This article follows power management.
+Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit. This article follows power management.
 
 Two rules apply to every plan. A host pool can have only one scaling plan, while one plan can serve several host pools of the same type. Autoscale cannot run on the same host pool as the Azure Automation and Azure Logic Apps scaling script.
 
@@ -119,7 +119,7 @@ If days are unselected in a schedule, the last off-peak parameters on the select
 
 You can only assign a plan to host pools whose type matches the type chosen in the plan. If you do not want to enable autoscale yet, leave all check boxes unselected and assign pools later. Changes to a plan that is already assigned to host pools apply immediately.
 
-To assign pools later, open **Azure Virtual Desktop**, then **Scaling plans**, select the plan, and under **Manage** select **Host pool assignments**, then **+ Assign**, select the host pools and select **Assign**. The host pools must be in the same Azure region as the plan. If you enabled the scaling plan during deployment, Learn adds that you can disable it for the selected host pool in the **Scaling plan** menu by unselecting the **Enable autoscale** checkbox.
+To assign pools later, open **Azure Virtual Desktop**, then **Scaling plans**, select the plan, and under **Manage** select **Host pool assignments**, then **+ Assign**, select the host pools and select **Assign**. The host pools must be in the same Azure region as the plan.
 
 ## Step 5: Optional time limit policy
 
@@ -150,3 +150,4 @@ Retrieved 2026-11-17.
 - [Microsoft Learn: Assign Azure RBAC roles or Microsoft Entra roles to the Azure Virtual Desktop service principals](https://learn.microsoft.com/en-us/azure/virtual-desktop/service-principal-assign-roles)
 - [Microsoft Learn: Built-in Azure RBAC roles for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/rbac)
 - [Microsoft Learn: Set up scaling of session hosts using Azure Automation and Azure Logic Apps](https://learn.microsoft.com/en-us/azure/virtual-desktop/set-up-scaling-script)
+- [Microsoft Tech Community: Enhanced host pool management for Azure Virtual Desktop is now generally available](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)

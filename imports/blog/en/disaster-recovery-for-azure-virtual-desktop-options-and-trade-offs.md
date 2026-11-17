@@ -18,7 +18,7 @@ faq:
   - q: "Can I use Azure Site Recovery for pooled host pools?"
     a: "Microsoft's multiregion article uses Site Recovery for personal host pools, where each VM holds user data. For pooled host pools it describes a second host pool with FSLogix Cloud Cache instead. It also says not to use Site Recovery test failover on session hosts."
   - q: "Are regional host pools generally available?"
-    a: "The sources disagree. The multiregion article describes regional host pools as public preview, while the What's new page lists them as generally available in September 2026. Check the current status before you design around them."
+    a: "Yes. Microsoft's Tech Community post "Now generally available: Regional resiliency for Azure Virtual Desktop" (updated 1 October 2026) announces general availability, and the What's new page lists them as generally available in September 2026. The multiregion article may still describe them as public preview, so check the current pages and region list before you design around them."
 ---
 
 Azure Virtual Desktop has no native disaster recovery feature, so recovery is something you assemble from Azure services. Microsoft's guidance describes three patterns: two live pooled host pools in two regions (active-active), a mostly switched-off second pool (active-passive), or Azure Site Recovery for personal desktops. The choice is a trade between recovery time, cost and operational effort.
@@ -98,7 +98,7 @@ Fail over every application group, since a partial failover causes profile confl
 
 ## The control plane scope
 
-Whether the metadata survives a regional database problem depends on the deployment scope. A [regional host pool](/entity/avd-regional-host-pools/) stores metadata in its own region with replicas across availability zones and replication to a paired region where applicable, and the service architecture article says geographical and regional objects cannot be mixed. The multiregion article labels regional host pools public preview and recommends them for new pools. Learn's What's new page lists them as generally available in September 2026. Because the pages disagree, check the current status before you rely on either. The data locations article lists Central US and East US 2 as supported regions for regional scope.
+Whether the metadata survives a regional database problem depends on the deployment scope. A [regional host pool](/entity/avd-regional-host-pools/) stores metadata in its own region with replicas across availability zones and replication to a paired region where applicable, and the service architecture article says geographical and regional objects cannot be mixed. The multiregion article labels regional host pools public preview and recommends them for new pools. Learn's What's new page lists them as generally available in September 2026, and a Tech Community post announces general availability of regional resiliency. Learn pages can lag behind the announcement, so check the current status before you rely on either. The data locations article lists Central US and East US 2 as supported regions for regional scope; check the announcement for the current region list.
 
 ## Checks outside the host pool
 
@@ -121,3 +121,4 @@ Retrieved 17 November 2026.
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
 - [Microsoft Learn: FSLogix high availability options](https://learn.microsoft.com/en-us/fslogix/concepts-container-high-availability)
 - [Microsoft Learn: Configure Cloud Cache for FSLogix profile containers](https://learn.microsoft.com/en-us/fslogix/tutorial-cloud-cache-containers)
+- [Microsoft Tech Community: Now generally available: Regional resiliency for Azure Virtual Desktop](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/now-generally-available-regional-resiliency-for-azure-virtual-desktop/4540458)

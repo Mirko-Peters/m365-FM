@@ -97,7 +97,7 @@ The FAQ says autoscale cannot force users to sign out of personal desktops and d
 
 ## Dynamic autoscaling
 
-Dynamic autoscaling uses the same four phases, but only for pooled host pools with session host configuration. It adds the minimum host pool size, the maximum host pool size and the minimum percentage of active hosts. In ramp-down it can deallocate or delete the VM. The scenarios and glossary pages label dynamic autoscaling as preview, and the PowerShell module is a preview version (5.4.2-preview or later). What's new lists it as preview (November 2024) and as "now available" (June 2026), without a general availability label. No Learn page calls it generally available; power management autoscaling is. Check the status before you rely on it. See [dynamic autoscaling](/entity/avd-dynamic-autoscaling/).
+Dynamic autoscaling uses the same four phases, but only for pooled host pools with session host configuration. It adds the minimum host pool size, the maximum host pool size and the minimum percentage of active hosts. In ramp-down it can deallocate or delete the VM. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit. Power management autoscaling is also generally available. See [dynamic autoscaling](/entity/avd-dynamic-autoscaling/).
 
 ## Worked example schedule
 
@@ -119,3 +119,4 @@ Retrieved 2026-11-16.
 - [Microsoft Learn: Azure Virtual Desktop autoscale glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary)
 - [Microsoft Learn: Azure Virtual Desktop autoscale FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq)
 - [Microsoft Learn: What's new in Azure Virtual Desktop?](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
+- [Microsoft Tech Community: Enhanced host pool management for Azure Virtual Desktop is now generally available](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)

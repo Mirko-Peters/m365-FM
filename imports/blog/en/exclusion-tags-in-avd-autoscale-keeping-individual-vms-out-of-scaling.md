@@ -86,7 +86,7 @@ Several questions have no answer in the pages retrieved for this article, so pla
 - How quickly autoscale notices a newly added or removed tag.
 - Whether the tag value is part of the match.
 - How the tag affects Start VM on Connect when a user connects to a tagged host that is off.
-- How dynamic autoscaling, which can create and delete session hosts, handles tagged hosts. Dynamic autoscaling is documented as preview on the scenarios and glossary pages, while power management autoscaling is generally available.
+- How dynamic autoscaling, which can create and delete session hosts, handles tagged hosts. Microsoft announced general availability of dynamic autoscaling in July 2026 (Tech Community), although some Learn pages, such as the scenarios and glossary pages, still carry preview wording; power management autoscaling is also generally available.
 
 Because of the first gap, tag a host before you put it into drain mode, and confirm in Insights that autoscale leaves it alone before you rely on it.
 
@@ -109,3 +109,4 @@ All retrieved on 2026-11-17.
 - [Microsoft Learn: Monitor autoscale operations with Insights](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-monitor-operations-insights)
 - [Microsoft Learn: Use tags to organize your Azure resources](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/tag-resources)
 - [Microsoft Learn: Use the Azure portal to manage tags](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/tag-resources-portal)
+- [Microsoft Tech Community: Enhanced host pool management for Azure Virtual Desktop is now generally available](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)

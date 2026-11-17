@@ -59,7 +59,7 @@ The rules that matter for workspaces:
 - Application groups created in a regional host pool are automatically regional.
 - Scope is set at creation and cannot be changed afterwards. PowerShell or REST requests that mix scopes fail.
 
-The [data locations](https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations) page lists Central US and East US 2 as the regions where regional scope is supported. Learn's What's new page lists regional host pools as generally available in September 2026, while Microsoft's multiregion article still calls them public preview, so confirm the current status before you build on it. The sibling articles on regional host pools cover the choice in depth. See [regional host pools](/entity/avd-regional-host-pools/).
+The [data locations](https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations) page lists Central US and East US 2 as the regions where regional scope is supported. Learn's What's new page lists regional host pools as generally available in September 2026, and a Tech Community post announces general availability of regional resiliency. Microsoft's multiregion article may still call them public preview, so confirm the current status and region list before you build on it. The sibling articles on regional host pools cover the choice in depth. See [regional host pools](/entity/avd-regional-host-pools/).
 
 The same data locations page says the service stores customer input data, such as object names and settings, and customer data such as application names, VM names and user principal names, in the geography (geographical scope) or region (regional scope) of the resource. It states that the service does not store user documents, databases or config files.
 
@@ -124,3 +124,4 @@ Retrieved 17 November 2026.
 - [Microsoft Learn: Troubleshoot Azure Virtual Desktop set-up issues](https://learn.microsoft.com/en-us/azure/virtual-desktop/troubleshoot-set-up-issues)
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
 - [Microsoft Learn: Multiregion business continuity and disaster recovery for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/architecture/example-scenario/azure-virtual-desktop/azure-virtual-desktop-multi-region-bcdr)
+- [Microsoft Tech Community: Now generally available: Regional resiliency for Azure Virtual Desktop](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/now-generally-available-regional-resiliency-for-azure-virtual-desktop/4540458)

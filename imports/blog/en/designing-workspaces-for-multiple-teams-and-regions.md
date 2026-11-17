@@ -14,7 +14,7 @@ keypoints:
   - "Azure RBAC has separate roles for workspaces and application groups, which lets one team manage its own workspace without owning host pools. In an active-active multi-region design Microsoft advises separate, clearly named workspaces."
 faq:
   - q: "How many workspaces should I create?"
-    a: "Microsoft Learn gives no recommended number. The hard limits are 1,300 workspaces per Microsoft Entra tenant, 400 host pools per workspace and 1,000 application groups per tenant (more application groups by support ticket). The design rules that usually decide the number sooner: each application group belongs to one workspace, scope must match, and users see only the workspaces of their assigned application groups."
+    a: "The Azure service limits page sets only maximums, not a recommended number: 1,300 workspaces per Microsoft Entra tenant, 400 host pools per workspace and 1,000 application groups per tenant (more application groups by support ticket). The design rules that usually decide the number sooner: each application group belongs to one workspace, scope must match, and users see only the workspaces of their assigned application groups."
   - q: "Can an application group be in two workspaces?"
     a: "No. Microsoft Learn says an application group can only be assigned to a single workspace. To show the same host pool resources in two workspaces you need two application groups, subject to the pool rules for desktop groups."
   - q: "Does the workspace decide where a user's session runs?"
@@ -23,7 +23,7 @@ faq:
 
 A workspace is a logical grouping of application groups, and users see a desktop or application only if the application group that publishes it is registered to a workspace. The number and layout of workspaces is therefore the way you decide what each team sees in its feed, and it interacts with host pool regions and with deployment scope.
 
-This article covers the design rules, three layouts for several teams and regions, and the portal steps. The object model itself is explained in the companion article on how users find their desktops and apps. Sources were retrieved on 17 November 2026.
+This article covers the design rules, three layouts for several teams and regions, and the portal steps. The object model itself is explained in the companion article on how users find their desktops and apps.
 
 ## The rules that shape the design
 
@@ -39,7 +39,7 @@ On a pooled host pool you can assign both group types, but only one desktop appl
 
 The deployment scope adds a third rule. Learn's article on creating workspaces says the scope is set at creation and cannot be changed, a regional host pool can join only a regional workspace, and application groups inherit the scope of their host pool. A workspace can hold only application groups with the same scope, so match it to the host pools you publish. The portal greys out incompatible objects, and PowerShell or REST requests that mix scopes fail. See [regional host pools](/entity/avd-regional-host-pools/).
 
-Regional host pools have been generally available since 30 September 2026, according to the Tech Community announcement and the September 2026 entry of What's new. The announcement, last updated on 13 November 2026, lists 14 regions: East US 2, Central US, Australia East, Canada Central, Canada East, Central India, East Asia, Japan East, Japan West, Korea Central, North Europe, South Africa North, Southeast Asia and West Europe. The Regional Host Pools article on Learn still carries preview wording and names only East US 2 and Central US, so it is behind the announcement. Two consequences for layouts: **Deployment scope** only appears when the region you select for Location supports regional scope, and a workspace created in a region without support is geographical, so it cannot take regional application groups. Pick the workspace region from the supported list if you publish regional host pools.
+Regional host pools have been generally available since 30 September 2026, according to the Tech Community announcement and the September 2026 entry of What's new. The announcement lists 14 regions: East US 2, Central US, Australia East, Canada Central, Canada East, Central India, East Asia, Japan East, Japan West, Korea Central, North Europe, South Africa North, Southeast Asia and West Europe. The Regional Host Pools article on Learn still carries preview wording and names only East US 2 and Central US, so it is behind the announcement. Two consequences for layouts: **Deployment scope** only appears when the region you select for Location supports regional scope, and a workspace created in a region without support is geographical, so it cannot take regional application groups. Pick the workspace region from the supported list if you publish regional host pools.
 
 ## Three layouts
 
@@ -49,7 +49,7 @@ Regional host pools have been generally available since 30 September 2026, accor
 | By region | Azure region or user location | Regional host pools, regional data requirements | Same app in several workspaces needs several application groups; the region must support regional scope |
 | By purpose | Environment, such as production and pilot | Validation or phased rollouts | Needs clear names so pilot and production entries are not confused |
 
-The sources do not prescribe a layout, so treat the table as a way to apply the rules rather than as Microsoft guidance.
+The table applies the rules above; it is not Microsoft guidance.
 
 **By team.** Each team gets a workspace and the application groups for its pools. The feed shows each user the resources of the groups they are assigned to, and because one user can be assigned to groups across pools, a person who works for two teams can reach both. Assign user groups rather than individual users, which Learn recommends for easier management.
 
@@ -117,7 +117,7 @@ For more than 1,000 application groups Microsoft asks you to raise a support tic
 All retrieved on 17 November 2026.
 
 - [Microsoft Learn: Azure Virtual Desktop terminology](https://learn.microsoft.com/en-us/azure/virtual-desktop/terminology)
-- [Microsoft Learn: Create a workspace and an application group (create-application-group-workspace page)](https://learn.microsoft.com/en-us/azure/virtual-desktop/create-application-group-workspace)
+- [Microsoft Learn: Deploy Azure Virtual Desktop (steps for host pools, workspaces and application groups)](https://learn.microsoft.com/en-us/azure/virtual-desktop/create-application-group-workspace)
 - [Microsoft Learn: Built-in Azure RBAC roles for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/rbac)
 - [Microsoft Learn: Customize the feed for Azure Virtual Desktop users](https://learn.microsoft.com/en-us/azure/virtual-desktop/customize-feed-for-virtual-desktop-users)
 - [Microsoft Learn: Multiregion BCDR for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/architecture/example-scenario/azure-virtual-desktop/azure-virtual-desktop-multi-region-bcdr)

@@ -23,7 +23,7 @@ faq:
 
 With a scaling plan assigned to a pooled host pool, the load balancing algorithm that runs is the one in the schedule phase, not the one on the host pool. Microsoft Learn says so for the ramp-up phase ("the load balancing preference you select here overrides the one you selected for your original host pool settings") and states more generally that autoscale on pooled pools overrides load balancing settings and applies them from its own schedule. This guide shows how to use that for depth-first.
 
-It covers power management autoscaling on pooled pools. Dynamic autoscaling is labeled preview in Learn's autoscale glossary and is not the subject here. Sources are listed at the end and were retrieved on 17 November 2026. The article "Depth-first load balancing in Azure Virtual Desktop explained" covers the algorithm itself.
+It covers power management autoscaling on pooled pools. Microsoft announced general availability of dynamic autoscaling in July 2026 (Tech Community), although Learn's autoscale glossary still carries preview wording; it is not the subject here. Sources are listed at the end and were retrieved on 17 November 2026. The article "Depth-first load balancing in Azure Virtual Desktop explained" covers the algorithm itself.
 
 ## Where the override happens
 
@@ -112,3 +112,4 @@ Retrieved 17 November 2026.
 - [Microsoft Learn: Azure Virtual Desktop autoscale FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq)
 - [Microsoft Learn: Autoscale glossary for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary)
 - [Microsoft Learn: Configure host pool load balancing in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-load-balancing)
+- [Microsoft Tech Community: Enhanced host pool management for Azure Virtual Desktop is now generally available](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)

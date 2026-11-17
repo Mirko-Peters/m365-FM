@@ -38,7 +38,7 @@ The role of the host depends on the pool type:
 | Default patching | Redeploy hosts from updated images | Windows Update, Configuration Manager or other tools |
 | Maximum sessions | The configured maximum session limit | One |
 
-Learn names two management approaches for host pools. With a [session host configuration](/entity/avd-session-host-configuration/), Azure Virtual Desktop manages the lifecycle of the hosts for you. With standard management, you create, update and scale the hosts yourself. Learn's whats-new page lists automated host pools, which use a session host configuration, as "now available" in June 2026 without a general availability label, so confirm the status before relying on them.
+Learn names two management approaches for host pools. With a [session host configuration](/entity/avd-session-host-configuration/), Azure Virtual Desktop manages the lifecycle of the hosts for you. With standard management, you create, update and scale the hosts yourself. Learn's whats-new page lists automated host pools, which use a session host configuration, as "now available" in June 2026, and Microsoft announced general availability of enhanced host pool management, which includes session host configuration, in July 2026 (Tech Community).
 
 ## What makes a VM a session host
 
@@ -107,3 +107,4 @@ Retrieved 17 November 2026.
 - [Microsoft Learn: Session host update for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update)
 - [Microsoft Learn: Windows Enterprise multi-session remote desktops in Intune](https://learn.microsoft.com/en-us/intune/solutions/azure-virtual-desktop-multi-session)
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
+- [Microsoft Tech Community: Enhanced host pool management for Azure Virtual Desktop is now generally available](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)

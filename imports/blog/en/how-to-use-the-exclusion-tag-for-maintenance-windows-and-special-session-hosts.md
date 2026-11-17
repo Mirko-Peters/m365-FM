@@ -91,7 +91,7 @@ In a personal host pool the picture differs slightly. Learn's FAQ says autoscale
 - **Draining first, tagging second.** In a pooled pool autoscale can switch drain mode off again, whoever set it.
 - **Forgetting the tag afterwards.** A host that stays tagged never scales. It either stays on and costs money or stays off and removes capacity, and it still counts toward the minimum percentage.
 - **Putting personal data in the tag.** Learn asks you to keep user principal names and similar data out of exclusion tags.
-- **Assuming dynamic autoscaling behaves the same.** Dynamic autoscaling, which can create and delete session hosts, is labeled preview on Learn's scenarios and glossary pages. The pages retrieved do not say how it treats tagged hosts.
+- **Assuming dynamic autoscaling behaves the same.** Dynamic autoscaling, which can create and delete session hosts, was announced as generally available in July 2026 (Tech Community), while Learn's scenarios and glossary pages still carry preview wording. The pages retrieved do not say how it treats tagged hosts.
 
 ## Related
 
@@ -116,3 +116,4 @@ All retrieved on 2026-11-17.
 - [Microsoft Learn: Use the Azure portal to manage tags](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/tag-resources-portal)
 - [Microsoft Learn: Manage tags with Azure PowerShell](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/tag-resources-powershell)
 - [Microsoft Learn: Monitor autoscale operations with Insights](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-monitor-operations-insights)
+- [Microsoft Tech Community: Enhanced host pool management for Azure Virtual Desktop is now generally available](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)
