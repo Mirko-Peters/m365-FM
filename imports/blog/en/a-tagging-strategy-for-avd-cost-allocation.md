@@ -1,31 +1,31 @@
 ---
 title: "A tagging strategy for AVD cost allocation"
-summary: "Tag every cost-bearing Azure Virtual Desktop resource with a small fixed schema and enforce it, because Azure does not copy tags from resource groups or host pools on its own. This article compares three ways to get tags onto usage data: creation-time tags, Azure Policy and Cost Management tag inheritance."
+summary: "Tag every cost-bearing Azure Virtual Desktop resource with a small fixed schema and enforce it, because Azure does not copy tags from resource groups to resources on its own. This article compares three ways to get tags onto usage data: creation-time tags, Azure Policy and Cost Management tag inheritance."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [azure-virtual-desktop, showback-chargeback]
 keypoints:
-  - "Resources do not inherit tags from a resource group or subscription, and a host pool's tags are passed on to its VMs only in the portal creation workflow. Plan for hosts added later."
+  - "Resources do not inherit tags from a resource group or subscription. Learn describes host pool tags reaching session hosts in the portal workflow, where tags must be entered again for each host added later, and documents nothing for automation: verify, or enforce with policy."
   - "Session host entries under a host pool cannot be tagged. The tag belongs on the VM, and on the shared storage and monitoring resources that do not follow the host count."
   - "Three mechanisms can put a tag on cost data: tags set at creation, an Azure Policy Modify definition, and Cost Management tag inheritance. They differ in what they change, which agreements they cover and how fast they work."
-  - "Cost data carries a tag only from the time the tag is on a running resource, with about 24 hours of delay, so tags cannot be added retroactively to past months."
+  - "A resource tag reaches cost data only while it is applied and after the resource reports usage, which is typically 8 to 24 hours on EA and MCA and up to 72 hours on pay-as-you-go. Tag inheritance updates the current month."
   - "Keep keys lowercase and values from a fixed list: tag names are case-insensitive, but Production and production are different values and appear as separate rows."
 faq:
   - q: "Do I tag the host pool or the virtual machines?"
-    a: "Both, but the VMs matter most for cost. Learn says VM instances usually cost the most, and the host pool object only passes its tags on to the session hosts created in the portal workflow. The session host entry itself does not support tags, so the tag has to sit on the VM."
+    a: "Both, but the VMs matter most for cost. Learn says host pool VMs are typically the main source of cost and that host pool tags follow the cost-generating components of the session hosts. It describes this for the portal workflow, where tags must be entered again for each host added later. The session host entry itself does not support tags, so check that the VM carries the tag."
   - q: "Can I tag only the resource group and let Azure sort out the rest?"
     a: "Not by default. Learn says resources do not inherit tags from a resource group or subscription. You can enforce inheritance with an Azure Policy Modify definition, or, on Enterprise Agreement, Microsoft Customer Agreement and Microsoft Partner Agreement billing accounts, turn on tag inheritance in Cost Management."
   - q: "Will a new tag show up on last month's cost?"
-    a: "No. Learn says tags are included in usage data only while the tag is applied, and that tags are not applied to historical data. Plan the schema before the month you want to report on."
+    a: "Not for resource tags: Learn says they are included in usage data only while applied and are not applied to historical data. Tag inheritance updates usage records for the current month; Learn describes nothing for earlier months. Plan the schema before the month you want to report on."
 ---
 
-Tag every cost-bearing resource of an Azure Virtual Desktop deployment with a small fixed set of tags, and enforce them with Azure Policy, because Azure does not copy tags down from a resource group or host pool on its own. Cost Management can then group spend by tag about 24 hours after a tagged resource reports usage. This article is about designing and enforcing the tags; turning the result into reports for teams is a separate step.
+Tag every cost-bearing resource of an Azure Virtual Desktop deployment with a small fixed set of tags, and enforce them with Azure Policy, because Azure does not copy tags down from a resource group or host pool on its own. Cost Management can then group spend by tag once a tagged resource has reported usage. This article is about designing and enforcing the tags; turning the result into reports for teams is a separate step.
 
 ## What a tag can and cannot do here
 
-[Azure resource tags](/entity/azure-resource-tags/) are name-value pairs on resources, resource groups and subscriptions, but not on management groups. Learn gives these limits: 50 name-value pairs per entity, a name of up to 512 characters and a value of up to 256 characters (storage accounts allow 128 characters for the name), and the characters `<`, `>`, `%`, `&`, `\`, `?` and `/` are not allowed in names. Tags are stored as plain text, so never put sensitive values in them.
+[Azure resource tags](/entity/azure-resource-tags/) are name-value pairs on resources, resource groups and subscriptions, but not on management groups. Learn gives these limits: 50 name-value pairs per entity, a name of up to 512 characters and a value of up to 256 characters (storage accounts allow 128 characters for the name), and the characters `<`, `>`, `%`, `&`, `\`, `?` and `/` are not allowed in names. Tags are stored as plain text, so keep sensitive values out.
 
 Two rules shape the whole strategy. First, "Resources don't inherit the tags you apply to a resource group or a subscription." Second, Cost Management reads tags from usage records: tags are included in usage data only while the tag is applied to the resource, they are not applied to historical data, and a resource must be active and producing usage records for the tag to appear. Learn also notes that tags only report usage for the resources they are directly assigned to.
 
@@ -33,13 +33,13 @@ Two rules shape the whole strategy. First, "Resources don't inherit the tags you
 
 The Azure Virtual Desktop resource types differ in what they accept. From Learn's tag support table, host pools, application groups, workspaces, scaling plans and app attach packages support tags and carry them in the cost report. The `sessionhosts` entry under a host pool, and user sessions, do not support tags. The cost sits on the virtual machine behind the session host, and VMs and disks both support tags and appear in the cost report.
 
-Learn's guidance for the portal is to tag all host pools to track VM compute cost, because VMs usually cost the most. The tagging article says tags entered in the portal creation workflow are passed to all resources created during host pool creation, and that the host pool's tags follow the cost-generating components of its session hosts. It then adds a limit that matters in operation: when you add a session host to an existing host pool in the portal, you must enter the tags manually every time. The article describes propagation for the portal workflow only, so do not assume hosts created by automation or by dynamic autoscale carry the pool's tags; verify them, or enforce them with policy as described below.
+Learn suggests starting with the host pools, because their VMs are typically the main source of cost. The tagging article says tags entered in the portal creation workflow are passed to all resources created during host pool creation, and that host pool tags follow the cost-generating components of the session hosts. Tags are also applied to session hosts you add to an existing host pool in the portal, but you must enter the tags manually every time. The article does not describe propagation for hosts created by automation or by dynamic autoscale, so verify them, or enforce the tags with policy as described below.
 
-Host pool tags do not reach everything that bills against the deployment. Learn's cost article lists profile storage (Azure Files or Azure NetApp Files), app attach storage, Insights log data in Azure Monitor, image storage and identity infrastructure as separate cost components. Tag those resources yourself, in the same schema.
+Host pool tags do not reach everything that bills against the deployment. The total-costs article lists profile storage (Azure Files or Azure NetApp Files), app attach storage, Insights log data in Azure Monitor, image storage and identity infrastructure as separate cost components. Tag those resources yourself, in the same schema.
 
 ## A minimal schema
 
-The Cloud Adoption Framework groups tags into functional, classification, accounting, purpose and ownership types, and gives examples such as `department`, `costcenter`, `env` and `opsteam`. For allocation you need only the accounting and functional types. A starting set, with illustrative values:
+The Cloud Adoption Framework groups tags into functional, classification, accounting, purpose and ownership types, and gives examples such as `department`, `costcenter`, `env` and `opsteam`. Our reading: allocation needs mainly the accounting and functional types. A starting set, with illustrative values:
 
 | Key | Example value | Question it answers |
 |---|---|---|
@@ -48,9 +48,9 @@ The Cloud Adoption Framework groups tags into functional, classification, accoun
 | `env` | `prod`, `dev` | Production or test spend? |
 | `workload` | `avd-finance-pooled` | Which host pool or service? |
 
-Two conventions from the Framework save work later. Use lowercase keys: names are case-insensitive, but the provider may keep the casing you supply and you see that casing in cost reports. Keep values consistent: values are case-sensitive, so `environment: Production` and `environment: production` appear separately in cost reports and queries. Write the allowed values down; an unchecked free-text field produces typos, and Learn warns that even the smallest typo can affect data reporting.
+Two conventions save work later. The Framework treats tag names as case-insensitive and values as case-sensitive, so `env: Production` and `env: production` appear separately in cost reports. The tag documentation adds that the provider may keep the casing you supply and that you see it in cost reports, so we use lowercase keys. Write the allowed values down; Learn warns that even the smallest typo can affect data reporting.
 
-Keep the allocation tags separate from operational ones. Autoscale's exclusion tag, for example, is a name you choose in the scaling plan, and Learn says to keep sensitive information such as user principal names out of it. Do not reuse your cost tags for that purpose.
+Keep the allocation tags separate from operational ones such as autoscale's exclusion tag, a name you choose in the scaling plan.
 
 ## Three ways to get the tag onto cost data
 
@@ -58,35 +58,36 @@ Keep the allocation tags separate from operational ones. Autoscale's exclusion t
 |---|---|---|---|
 | Tags set at creation | The resources, once, in the portal workflow | Not changed | Manual again for each host added later |
 | Azure Policy Modify definition | The resource's own tags when it is created or updated | Fixed by a remediation task | Needs a managed identity for remediation |
-| Cost Management tag inheritance | Usage records only, not the resources | Current month, within 24 hours | EA, MCA and MPA billing accounts listed |
+| Cost Management tag inheritance | Usage records only, not the resources | Current month only | EA, MCA and MPA billing accounts listed |
 
 **Azure Policy.** [Azure Policy](/entity/azure-policy/) has built-in tag definitions. Modify definitions such as "Inherit a tag from the resource group if missing" add the tag from the parent resource group when a resource is created or updated, and do not change a tag that already has a different value. "Inherit a tag from the resource group" adds or replaces it. Append definitions only act on resources created or changed after assignment. Deny definitions such as "Require a tag on resources" enforce that the tag exists, and "Require a tag and its value on resources" enforces the value too; both exclude resource groups. Learn says existing resources can be remediated by triggering a remediation task, and that policy assignments use a managed identity for remediation (system-assigned or user-assigned). Built-in definitions come with their roles pre-populated.
 
-**Cost Management tag inheritance.** It applies billing, subscription and resource group tags to the usage records of child resources, so you do not need to tag every resource. Learn lists Enterprise Agreement, Microsoft Customer Agreement and Microsoft Partner Agreement billing accounts with Azure plan subscriptions; the page does not mention pay-as-you-go. Updates take about 8 to 24 hours and apply to the current month; the page's example is a setting enabled on 20 October that updates usage from 1 October with the tags that existed on 20 October. By default a matching resource tag wins over the inherited one. The inherited tags are not written to the resources, so a resource query in Azure will not show them.
+**Cost Management tag inheritance.** It applies billing, subscription and resource group tags to the usage records of child resources, so you do not need to tag every resource. Learn lists Enterprise Agreement, Microsoft Customer Agreement and Microsoft Partner Agreement billing accounts with Azure plan subscriptions; the page does not mention pay-as-you-go. Updates take about 8 to 24 hours and apply to the current month; the page's example is a setting enabled on 20 October that updates usage from 1 October with the tags that existed on 20 October. By default a matching resource tag wins over the inherited one. Learn says inherited tags go to the usage records, not to the resources themselves; our reading is that a resource query will not show them as resource tags.
 
-Which to choose is a trade-off. Policy gives the resource a real tag, visible to queries, and prevents gaps from hosts added later, at the price of assignments, remediation and a Deny effect that can block deployments, so test it in a non-production subscription first. Cost Management inheritance is quick to enable and needs no change to resources, but it only reports; it does not govern. Many teams will use inheritance for coverage and a Require policy for the one tag they cannot do without.
+Which to choose is a trade-off. Policy gives the resource a real tag and prevents gaps from hosts added later, at the price of assignments, remediation and a Deny effect that can block deployments, so test it first in a non-production subscription. Cost Management inheritance is quick to enable and needs no change to resources, but it only reports; it does not govern. A workable combination is inheritance for coverage and a Require policy for the one tag you cannot do without.
 
 ## Setting it up
 
-1. **Choose the allocation unit.** Decide whether you report by host pool, by department or by cost center. The host pool is the natural unit for pooled desktops; for personal desktops you may need the user or team.
+1. **Choose the allocation unit.** Decide whether you report by host pool, by department or by cost center.
 2. **Fix the schema and value lists.** Use the four keys above or your own, in lowercase, and record the allowed values.
 3. **Tag the containers.** Put the schema on the resource group and subscription. In the host pool creation flow, use the optional Tags tab to enter the pairs, which are passed to the resources created in that workflow.
 4. **Enforce.** Assign "Inherit a tag from the resource group if missing" for each key, then create a remediation task for existing resources: in the portal, Policy, Remediation, select the assignment, set scope and locations, and Remediate. Add a Require definition for the key you cannot do without.
-5. **Tag shared resources.** Profile storage accounts, Log Analytics workspaces and image storage get the same keys.
-6. **Optionally group by host pool.** Add the `cm-resource-parent` tag, valued with the host pool's resource ID, to related resources so Cost Management can group them under the host pool. Learn says it does not affect billing, links the cost analysis feature with a preview label, supports one parent per resource and one level of grouping, and needs resources to be actively running with charges.
-7. **Check after 24 hours.** In Cost Management cost analysis, group by tag and look at the special groups before trusting the totals.
+5. **Optionally enable tag inheritance.** In the Azure portal open Cost Management (not Cost Management + Billing). For an EA billing account, select the billing account scope, then Settings, Configuration, Tag inheritance, Edit, and "Automatically apply subscription and resource group tags to new data"; editing needs the Enterprise Administrator role. For an MCA billing profile, select the billing profile scope, then Settings, Manage billing profile, Tag inheritance, Edit, and "Automatically apply billing, subscription and resource group tags to new usage data"; editing needs Billing profile contributor. A subscription uses Manage subscription and Cost Management Contributor. A matching resource tag wins by default; "Use the subscription or resource group tag" (EA) or "Use the inherited tag" (MCA) reverses that. Purchases and resources that do not emit usage at subscription scope do not get the subscription tags.
+6. **Tag shared resources.** Profile storage accounts, Log Analytics workspaces and image storage get the same keys.
+7. **Optionally group by host pool.** Add the `cm-resource-parent` tag to the child resources (VMs, disks, network interfaces), with the host pool's resource ID as the value. The tagging page says it does not affect billing and labels the linked cost-analysis article "preview"; the Cost Management page carries no preview label and says grouping related resources is available by default in the Resources view, so check the live page. That page limits each resource to one parent and cost analysis to one level of grouping, and says resources must be actively running with charges.
+8. **Check once the data has arrived.** In cost analysis, group by tag and look at the special groups before trusting the totals.
 
-To change tags on existing resources, the PowerShell command `Update-AzTag -ResourceId $id -Tag $tags -Operation Merge` adds tags and keeps existing ones. `New-AzTag` replaces all tags, and `-Operation Replace` also discards the others, so use Merge on live resources. In Azure CLI the equivalent is `az tag update --resource-id $id --operation Merge --tags costcenter=55332`. Even with Merge, a new value for an existing key overwrites the old value. To list the resources that already carry a key, use `az resource list --tag costcenter` or `Get-AzResource -TagName "costcenter"`; anything missing from the output still needs tagging.
+To change tags on existing resources, the PowerShell command `Update-AzTag -ResourceId $id -Tag $tags -Operation Merge` adds tags and keeps existing ones. `New-AzTag` replaces all tags, and `-Operation Replace` also discards the others, so use Merge on live resources. In Azure CLI the equivalent is `az tag update --resource-id $id --operation Merge --tags costcenter=55332`. Even with Merge, a new value for an existing key overwrites the old value. To list resources that already carry a key, use `az resource list --tag costcenter` or `Get-AzResource -TagName "costcenter"`.
 
 ## Reading the gaps
 
 Cost analysis shows three special tag values. **Tags not supported** covers purchases, tenant resources not tied to subscriptions, subscription resources not in a resource group, and classic resources. **Tags not available** covers services whose usage data does not include tags. **Untagged** means a taggable resource without the tag. Purchases fall into the first group, so they need a separate allocation rule rather than a tag. Whatever remains in Untagged after the policy has run is your audit list.
 
-Data timing also affects the reading. For EA and MCA subscriptions, Learn says cost data is typically available in 8 to 24 hours; for pay-as-you-go it can take up to 72 hours. If a tag does not group yet, check the resource and look again after 24 hours.
+Data timing also affects the reading. A new tag is not visible until the resource reports activity. For EA and MCA subscriptions, Learn says cost data is typically available in 8 to 24 hours; for pay-as-you-go it can take up to 72 hours. If a tag does not show yet, check that it sits directly on the resource and that the resource is running.
 
 ## Limits to accept
 
-Learn says a complete cost report of every supporting Azure service is unlikely. A shared subscription is cheaper to run but can inflate the cost report because shared usage is less accurate; separate subscriptions give clearer per-service costs but may end up more expensive and may need extra storage. A tag cannot split one shared resource between several teams: a profile storage account used by two departments still carries one value per key, so decide on an allocation rule such as share counts or provisioned size and document it.
+The tagging page says a complete cost report of every supporting Azure service is unlikely. A shared subscription is cheaper to run but can inflate the cost report because shared usage is less accurate; separate subscriptions give clearer per-service costs but may end up more expensive and may need extra storage. A tag cannot split one shared resource between several teams: a profile storage account used by two departments still carries one value per key, so decide on and document an allocation rule.
 
 ## Sources
 
