@@ -121,7 +121,7 @@ The guide notes that results cover only the last 30 days. See also [Azure Virtua
 ## A short routine for admins
 
 1. When a host will not register, check the registration key lifetime first, and match it to your rollout window.
-2. Before blaming the agent for a connection problem, run the Agent URL Tool against the FQDN list after allowing the wildcard entries yourself. Check the two fabric addresses separately: a failed IMDS check puts a host in Needs Assistance, and traffic to them must not be intercepted, proxied or redirected.
+2. Before blaming the agent for a connection problem, run the Agent URL Tool against the FQDN list after allowing the wildcard entries yourself. Learn does not say whether the tool tests the two fabric addresses, so check them yourself. A failed IMDS check puts a host in Needs Assistance; do not intercept, proxy or redirect that traffic.
 3. Read the status on the Session hosts tab before opening a VM.
 4. Do not delete old agent or stack versions early. Learn says the VM keeps three versions so it can roll back, and deleting them can leave the VM unavailable after a failed update. Remove components only as the troubleshooting guide describes.
 
