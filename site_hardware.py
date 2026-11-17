@@ -186,7 +186,11 @@ def footer_links(base, lang):
     """Zwei Fusszeilen-Links (Hardware-Seite, Bewertungsbogen); andere Sprachen als Deutsch zeigen die englische Seite."""
     lg = "de" if lang == "de" else "en"
     a, b = FOOT[lg]
-    return f'<a href="{url(base, lg)}">{html.escape(a)}</a><a href="{url(base, lg, True)}">{html.escape(b)}</a>'
+    hl = ""
+    if lang not in ("de", "en"):   # Linktexte F6: Text in der Seitensprache (data/py_i18n.json), Ziel bleibt die englische Seite (hreflang)
+        from site_i18n import T
+        a, b, hl = T(lang, FOOT["en"][0], FOOT["de"][0]), T(lang, FOOT["en"][1], FOOT["de"][1]), ' hreflang="en"'
+    return f'<a href="{url(base, lg)}"{hl}>{html.escape(a)}</a><a href="{url(base, lg, True)}"{hl}>{html.escape(b)}</a>'
 
 
 def _fmt(n, lang):

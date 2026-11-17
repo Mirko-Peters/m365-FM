@@ -15,6 +15,7 @@ def _topic_name(eid):
     return e.get("name") if e.get("type") not in (None, "person", "org", "job", "event", "media") else ""
 from site_entities import TL, eurl, eid_of, tlab
 import site_roles as ROLE
+import site_linktext as LT   # Linktexte: Kanaele nach ihrem Namen statt nach ihrer Art
 import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
 
 PROG_FULL = {"gde": "Google Developer Expert (GDE)", "mvp": "Microsoft Most Valuable Professional (MVP)", "mct": "Microsoft Certified Trainer (MCT)", "rd": "Microsoft Regional Director (RD)", "msa": "Microsoft Student Ambassador (MSA)", "ms_employee": "Microsoft employee", "partner": "Microsoft Partner"}
@@ -399,8 +400,10 @@ def build(g, people, orgs, extra=None):
     MS_A = {"modern_work": ("Modern Work", "Modern Work"), "business_apps": ("Business Applications", "Business Applications"), "data_ai": ("Data & AI", "Data & AI"), "infrastructure": ("Infrastructure", "Infrastructure"), "digital_app": ("Digital & App Innovation", "Digital & App Innovation"), "security": ("Security", "Security"), "csp": ("Cloud Solution Provider (CSP)", "Cloud Solution Provider (CSP)"), "msp": ("Managed Service Provider", "Managed Service Provider"), "isv": ("Software Vendor (ISV)", "Softwarehersteller (ISV)"), "inner_circle": ("Inner Circle", "Inner Circle"), "other": ("Other", "Sonstiges")}
     MS_L = {"solutions_partner": ("Solutions Partner", "Solutions Partner"), "specialization": ("Specialization", "Spezialisierung"), "advanced_specialization": ("Advanced specialization", "Advanced Specialization"), "inner_circle": ("Inner Circle member", "Inner-Circle-Mitglied"), "poty_finalist": ("Partner of the Year finalist", "Partner-of-the-Year-Finalist"), "poty_winner": ("Partner of the Year winner", "Partner-of-the-Year-Gewinner"), "registered": ("Registered partner", "Registrierter Partner"), "other": ("Other", "Sonstiges")}
     def chan_ul(x, lang="en"):
-        chans = shown_channels(BASE, x)
-        return '<ul>' + "".join(f'<li><a href="{esc(c["url"])}" rel="me nofollow ugc noopener" target="_blank">{esc(KIND.get(c["kind"], c["kind"]))}</a> <span class="mut">{esc(c["url"].replace("https://", "").rstrip("/")[:60])}{fol(c.get("followers"), lang)}</span></li>' for c in chans) + "</ul>" if chans else ""
+        # Linktexte F1: Linktext = eigener Name des Kanals (site_linktext.channel_links, eindeutig je Ziel); die Art und die Adresse stehen grau daneben
+        chans = LT.channel_links(shown_channels(BASE, x), lang, x.get("name"))
+        _u = lambda c: c["url"].replace("https://", "").rstrip("/")[:60]
+        return '<ul>' + "".join(f'<li><a href="{esc(c["url"])}" rel="me nofollow ugc noopener" target="_blank"{LT.a_attr(ar)}>{esc(t)}</a> <span class="mut">{esc(KIND.get(c["kind"], c["kind"]))}{(" · " + esc(_u(c))) if _u(c).removeprefix("www.").casefold() not in t.casefold() else ""}{fol(c.get("followers"), lang)}</span></li>' for c, t, ar in chans) + "</ul>" if chans else ""
 
     for lang in COMM_LANGS:
         s = S[lang]; li = 1 if lang == "de" else 0; noidx = lang != "en"

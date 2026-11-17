@@ -99,12 +99,12 @@ def hub(g, lang, base, api, videos, vid_html, root=False, posts=None):
         h = f'<div class="hub-card" data-k="library"><a href="{base}{pfx(it["lang"])}/community/library/{it["handle"]}-{it["slug"]}/"><div class="kicker">{_kl}</div><h3>{esc(it["title"])}</h3></a><p class="mut">{esc(it.get("summary") or "")} {esc(it["name"])} · {d}</p></div>'
         cards.append((d, "library", _fb(h, lang, _kl) if _fbk else h))
         tag(it["name"], it.get("topics"), it["title"])
-    KL = {"youtube": "YouTube", "github": "GitHub", "blog": "Blog", "podcast": "Podcast", "newsletter": "Newsletter", "mastodon": "Mastodon", "bluesky": "Bluesky", "website": "Web"}
+    # Linktexte F1: Plattform mit eigenem Namen (Marke oder Domain) statt der Art ("Web"), wie site_feed.plat_of
     import site_feed
     for f in site_feed.public_items(C["feed"]):   # T6: GitHub-Aktivitaet (Commits, Stars) gehoert nicht in den oeffentlichen Feed
         d = __import__("datetime").datetime.fromtimestamp(f["published"]).strftime("%Y-%m-%d")
         who = f'{base}/community/{"c" if f["type"] == "o" else "u"}/{f["handle"]}/'
-        cards.append((d, "feed", f'<div class="hub-card" data-k="feed"><div class="kicker">{esc(T(lang, "From the creators", "Von den Creatorn"))} · {esc(KL.get(f["kind"], f["kind"].title()))}</div><h3><a href="{(base + ("/de" if lang == "de" else "") + "/" + site_feed.path_of(f)) if f.get("id") else esc(f["url"])}">{esc(f["title"])}</a></h3><p class="mut"><a href="{who}">{esc(f["name"])}</a> · {d}</p></div>'))
+        cards.append((d, "feed", f'<div class="hub-card" data-k="feed"><div class="kicker">{esc(T(lang, "From the creators", "Von den Creatorn"))} · {esc(site_feed.plat_of(f))}</div><h3><a href="{(base + ("/de" if lang == "de" else "") + "/" + site_feed.path_of(f)) if f.get("id") else esc(f["url"])}">{esc(f["title"])}</a></h3><p class="mut"><a href="{who}">{esc(f["name"])}</a> · {d}</p></div>'))
         tag(f["name"], f.get("topics"), f["title"])
     import site_updates as SU
     seen_u = set()

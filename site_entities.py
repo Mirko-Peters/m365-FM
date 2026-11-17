@@ -1,6 +1,7 @@
 import re
 """Entitaetsdatenbank fuer das Microsoft-Oekosystem: Seiten, JSON-Exporte, Schema.org-Graph."""
 from site_i18n import T
+import site_linktext as LT   # Linktexte: Name statt roher URL, aria-labels mit Ziel
 import site_updates as SU
 import site_quotes as SQ   # Quotes an Personen-Entitaeten
 import site_media as MED
@@ -158,7 +159,7 @@ def aka_fact(e, lang, person_aka):
     sources = {x["name"].casefold(): x.get("source") for x in entries}
     value = ", ".join(
         esc(name) + (
-            f' <small><a href="{esc(sources[name.casefold()])}" rel="nofollow noopener">{esc(T(lang, "source", "Quelle"))}</a></small>'
+            f' <small><a href="{esc(sources[name.casefold()])}" rel="nofollow noopener"{LT.a_attr(LT.aria(T(lang, "source", "Quelle"), f"„{name}“ ({LT.host(sources[name.casefold()])})"))}>{esc(T(lang, "source", "Quelle"))}</a></small>'   # Linktexte F4: Ziel im Namen
             if sources.get(name.casefold()) else ""
         )
         for name in names
@@ -761,7 +762,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 facts.append(_aka)
             for k, key in (("website", "web"), ("docs", "docs"), ("wikipedia", "wikipedia")):
                 if e.get(key):
-                    facts.append((s[k], f'<a href="{esc(SPM.link_url(_spr, e[key], "entity"))}" rel="{SPM.link_rel(_spr, e[key], own=_spown and key == "web")}">{esc(e[key].replace("https://", "").rstrip("/"))}</a>'))
+                    facts.append((s[k], f'<a href="{esc(SPM.link_url(_spr, e[key], "entity"))}" rel="{SPM.link_rel(_spr, e[key], own=_spown and key == "web")}">{esc(LT.ext_label(lang, e["name"], key, e[key]))}</a>{LT.domain_note(e[key])}'))   # Linktexte F3: Name statt roher URL
             LIC = {"free": ("free", "kostenlos"), "included": ("included in Microsoft 365", "in Microsoft 365 enthalten"), "addon": ("add-on", "Add-on"), "paid": ("paid", "kostenpflichtig")}
             for lab_en, lab_de, val in (("Version", "Version", e.get("version")), ("Released", "Veröffentlicht", e.get("released")), ("Licence", "Lizenz", (T(lang, *LIC[e["license"]]) if True else "") if e.get("license") in LIC else ""),
                                         ("Level", "Stufe", (e.get("level") or "").capitalize()), ("Exam code", "Prüfungscode", e.get("exam")), ("Valid for", "Gültig für", (f"{e['valid_months']} " + (T(lang, "months", "Monate"))) if e.get("valid_months") else "")):
@@ -781,7 +782,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 facts.append((T(lang, "Founded", "Gegründet"), esc(str(e["founded"]))))
             facts += FX.rows(lang, e, root, ENTS)
             if e.get("wikidata"):
-                facts.append((s["wikidata"], f'<a href="https://www.wikidata.org/wiki/{e["wikidata"]}" rel="noopener">{e["wikidata"]}</a>'))
+                facts.append((s["wikidata"], f'<a href="https://www.wikidata.org/wiki/{e["wikidata"]}" rel="noopener">{esc(LT.ext_label(lang, e["name"], "wikidata", ""))}</a> <small class="mut">{esc(e["wikidata"])}</small>'))
             if e.get("start"):
                 facts.append((T(lang, "Date", "Datum"), esc(e["start"] + (" – " + e["end"] if e.get("end") else ""))))
             ft = '<table class="en-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b}</td></tr>' for a, b in facts) + "</tbody></table>"
@@ -827,7 +828,8 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _epu = lambda x: x.get("url") or url_of(x)
             ept = s.get("eps") or S["en"]["eps"]
             _yt = g.get("yt_of") or (lambda x: "")   # T27: YouTube-Video der Folge
-            _ytl = lambda x: (f' · <a href="https://www.youtube.com/watch?v={esc(_yt(x))}" rel="noopener">{esc(T(lang, "Video on YouTube", "Video auf YouTube"))}</a>') if _yt(x) else ""
+            _ytv = T(lang, "Video on YouTube", "Video auf YouTube")   # Linktexte F4: gleicher Kurztext je Folge, Ziel im aria-label ("Video auf YouTube: {Folgentitel}")
+            _ytl = lambda x: (f' · <a href="https://www.youtube.com/watch?v={esc(_yt(x))}" rel="noopener"{LT.a_attr(LT.aria(_ytv, g["anchor_title"](x["e"]["title"])))}>{esc(_ytv)}</a>') if _yt(x) else ""
             eb = (f'<h2>{esc(ept.format(t=e["name"]))}</h2>' + "".join(
                 f'<article class="en-ep"><h3><a href="{_epu(x)}">{esc(g["anchor_title"](x["e"]["title"]))}</a></h3><p class="mut">{esc(x.get("date", ""))}{_ytl(x)}</p><p>{esc(g["ep_sum"](x))}</p></article>' for x in eps)) if eps else ""
             _tl = tlab(lang, e["type"])   # nicht "tlab" nennen: das verdeckte die Funktion in ganz build() (NameError, Seitenbau bricht ab)
@@ -907,11 +909,13 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _mod = max([MOD.get(e["id"], TODAY), str(e.get("edited") or e.get("dbrev") or "")[:10], *[_iso(p.get("published")) for p in _arts[:1]], *[max((str(x.get("date", ""))[:10] for x in eps), default="")],
                         *[_iso(x.get("created")) for x in _fq[:1]]] + [""])
             _mod = _mod if len(_mod) == 10 and _mod <= TODAY else TODAY
-            _src = [(T(lang, "Official website", "Offizielle Website"), e.get("web")), (T(lang, "Documentation", "Dokumentation"), e.get("docs")), ("Wikipedia", e.get("wikipedia")),
-                    ("Wikidata", f"https://www.wikidata.org/wiki/{e['wikidata']}" if e.get("wikidata") else "")] + [(T(lang, "Profile", "Profil"), u_) for u_ in (e.get("same_as") or [])[:4]]
-            _src = [(n_, u_) for n_, u_ in _src if u_ and str(u_).startswith("http")]
-            srcbox = (f'<section class="en-src"><h2>{esc(T(lang, "Sources", "Quellen"))}</h2><ul>' + "".join(f'<li>{esc(n_)}: <a href="{esc(SPM.link_url(_spr, u_, "entity"))}" rel="{SPM.link_rel(_spr, u_, own=_spown and u_ == e.get("web"))}">{esc(u_.replace("https://", "").rstrip("/"))}</a></li>' for n_, u_ in _src)
-                      + (f'<li>{esc(T(lang, "Feed for this topic (RSS)", "Feed zu diesem Thema (RSS)"))}: <a href="{BASE}/entity/{e["id"]}/feed.xml">entity/{e["id"]}/feed.xml</a></li>' if (eps or _arts) else "")
+            # Linktexte F3: Quellen heissen nach Entitaet und Ziel ("{Name} – Microsoft Learn", "Wikidata-Eintrag zu {Name}", "RSS-Feed: {Name}"), nicht nach der rohen URL; Domain klein daneben
+            _src = [("web", e.get("web")), ("docs", e.get("docs")), ("wikipedia", e.get("wikipedia")),
+                    ("wikidata", f"https://www.wikidata.org/wiki/{e['wikidata']}" if e.get("wikidata") else "")] + [("profile", u_) for u_ in (e.get("same_as") or [])[:4]]
+            _src = [(k_, u_) for k_, u_ in _src if u_ and str(u_).startswith("http")]
+            _srl = LT.unique([(LT.ext_label(lang, e["name"], k_, u_), u_) for k_, u_ in _src])
+            srcbox = (f'<section class="en-src"><h2>{esc(T(lang, "Sources", "Quellen"))}</h2><ul>' + "".join(f'<li><a href="{esc(SPM.link_url(_spr, u_, "entity"))}" rel="{SPM.link_rel(_spr, u_, own=_spown and u_ == e.get("web"))}">{esc(t_)}</a>{LT.domain_note(u_)}</li>' for t_, u_ in _srl)
+                      + (f'<li><a href="{BASE}/entity/{e["id"]}/feed.xml" type="application/rss+xml">{esc(T(lang, "RSS feed: {name}", "RSS-Feed: {name}").format(name=e["name"]))}</a></li>' if (eps or _arts) else "")
                       + (f'<li>{esc(T(lang, "M365.FM episodes on this topic", "M365.FM-Folgen zum Thema"))}: {len(eps)}</li>' if eps else "") + (f'<li>{esc(T(lang, "Articles on this topic", "Artikel zum Thema"))}: {len(_arts)}</li>' if _arts else "") + MEN.src_li(lang, e["id"]) + "</ul></section>") if (_src or eps or _arts or MEN.for_entity(e["id"])) else ""
             _dt = disclosure_of(e, lang)   # Transparenzhinweis (z. B. Arbeitgeber des Hosts), kein Sponsoring: keine rel=sponsored-Links
             _disc = f'<p class="en-disc" role="note" style="{SPM.NOTE_STYLE}">{esc(_dt)}</p>' if _dt else ""

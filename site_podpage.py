@@ -20,6 +20,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 from datetime import datetime
 from site_learn import esc, ENTS
+from site_i18n import T
 from site_taxonomy import TOPICS
 
 D = Path(__file__).parent / "data"
@@ -63,6 +64,11 @@ class _San(HTMLParser):
 
 def san(s):
     p = _San(); p.feed(s or ""); return IMG.enhance("".join(p.o))
+
+
+def pg_label(lang, n):
+    """Linktexte F5: Seitenzahlen der Folgenliste mit Ziel im Namen ('Seite 2 der Folgenliste' statt nur '2')."""
+    return f' aria-label="{esc(T(lang, "Page {n} of the episode list", "Seite {n} der Folgenliste").format(n=n))}"'
 
 
 def platform_episode_links(links, episode_id, legacy_key):
@@ -717,7 +723,7 @@ def build(g):
             lbody = (f'<article><p class="mut">{day(e["create_time"])}</p><h1>{esc(lt)}</h1>{SPM.note(l, _spr, "episode")}{aud}{LST.follow_for(BASE, l)}'
                      f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), cover_alt(l, lt), 160, eager=True)}<div><strong>{esc(ls)}</strong></div></div>'
                      + (f'<div class="pp-notes">{ln_html}{IMG.CSS if IMG.needs_responsive_css(ln_html) else ""}</div>' if ln else "") + (f"<p>{ext}</p>" if ext else "")
-                     + (TRS.links_html(_ltrf, _ldub[1]) if _ltrf else "")
+                     + (TRS.links_html(_ltrf, _ldub[1], l) if _ltrf else "")
                      + f'<p class="mut"><a href="{ep_url(e)}" hreflang="en" lang="en">{esc(e["name"])}</a> (English)</p></article>')
             lald = {"@context": "https://schema.org", "@type": "PodcastEpisode", "name": lt, "url": lu, "datePublished": day(e["create_time"]), "description": ls[:500],
                     "inLanguage": LG[l][1], "partOfSeries": {"@type": "PodcastSeries", "name": NAME, "url": root}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}
@@ -740,7 +746,7 @@ def build(g):
     pages_n = (len(eps) + PER - 1) // PER
     for p in range(pages_n):
         part = eps[p * PER:(p + 1) * PER]
-        pg = "".join(f'<a href="{root}episodes/{"" if q == 0 else f"page/{q + 1}/"}"{" style=font-weight:700 aria-current=page" if q == p else " rel=prev" if q == p - 1 else " rel=next" if q == p + 1 else ""}>{q + 1}</a> ' for q in range(pages_n))
+        pg = "".join(f'<a href="{root}episodes/{"" if q == 0 else f"page/{q + 1}/"}"{" style=font-weight:700 aria-current=page" if q == p else " rel=prev" if q == p - 1 else " rel=next" if q == p + 1 else ""}{pg_label("en", q + 1)}>{q + 1}</a> ' for q in range(pages_n))
         pub("episodes/" if p == 0 else f"episodes/page/{p + 1}/", "All episodes" + (f" – page {p + 1}" if p else ""), f"All {len(eps)} episodes of the {NAME}.", f'<h1>All episodes</h1><ul style="list-style:none;padding:0">{"".join(card(e, eager=LIST_EAGER[i] if i < len(LIST_EAGER) else False) for i, e in enumerate(part))}</ul><p>{pg}</p>', noindex=bool(p), alts=(_list_alts if not p and len(_list_alts) > 1 else None), seo=MP.episodes_list_meta(len(eps)) if not p else None,
             head=SPI.PRECONNECT if part and SPI.is_spreaker(thumb_of(part[0], SNT.get("en", title=part[0]["name"]))) else "")
 
@@ -753,7 +759,7 @@ def build(g):
             part = les[p * PER:(p + 1) * PER]
             _oa_l = lambda e: ((g.get("orig_alts") or {}).get(e["slug"]) or {}).get(l)   # T42: gibt es die Folge als Dub in dieser Sprache, verlinkt die Liste die Dub-Folge
             lis = "".join(f'<li style="margin:.9em 0"><a href="{(_oa_l(e) or (None,))[0] or loc_url(l, "episodes/" + e["slug"] + "/")}"><strong>{esc(TRL[l][e["slug"]][0])}</strong></a><br><span class="mut">{day(e["create_time"])}</span><br>{esc((TRL[l][e["slug"]][1] or "")[:200])}</li>' for e in part)
-            pg = "".join(f'<a href="{loc_url(l, "episodes/" + ("" if q == 0 else f"page/{q + 1}/"))}"{" style=font-weight:700 aria-current=page" if q == p else " rel=prev" if q == p - 1 else " rel=next" if q == p + 1 else ""}>{q + 1}</a> ' for q in range(npg))
+            pg = "".join(f'<a href="{loc_url(l, "episodes/" + ("" if q == 0 else f"page/{q + 1}/"))}"{" style=font-weight:700 aria-current=page" if q == p else " rel=prev" if q == p - 1 else " rel=next" if q == p + 1 else ""}{pg_label(l, q + 1)}>{q + 1}</a> ' for q in range(npg))
             lrel = "episodes/" if p == 0 else f"episodes/page/{p + 1}/"
             lu = loc_url(l, lrel)
             ttl = f"{NAME} – {LG[l][0]}" + (f" ({p + 1})" if p else "")
@@ -769,8 +775,8 @@ def build(g):
         mine = ge.get(gg["slug"], [])
         eid = gmerge.get(gg["slug"]) or next((i for i in (gg["slug"] + "-guest", gg["slug"]) if i in ents), gg["slug"])
         known = eid in ents or eid in baseids   # Gast-Entitaet oder zusammengefuehrte Basis-Entitaet
-        ent = f'<p><a href="{BASE}/entity/{eid}/">Entity page</a></p>' if known else ""
-        ent += "".join(f'<p><a href="{BASE}/entity/{x}/">Entity page: {esc(ents[x]["name"])}</a></p>' for x in galso.get(gg["slug"], []) if x in ents)
+        ent = f'<p><a href="{BASE}/entity/{eid}/">{esc(gg["name"])} in the entity database</a></p>' if known else ""
+        ent += "".join(f'<p><a href="{BASE}/entity/{x}/">{esc(ents[x]["name"])} in the entity database</a></p>' for x in galso.get(gg["slug"], []) if x in ents)
         soc = " · ".join(f'<a href="{esc(gg[k])}" rel="noopener">{n}</a>' for k, n in (("website", "Website"), ("linkedin_link", "LinkedIn"), ("twitter_link", "X"), ("youtube_link", "YouTube")) if gg.get(k))
         img = f'<img src="{esc(gg["image_path"])}" alt="{esc(gg["name"])}" width="120" height="120" style="border-radius:50%;object-fit:cover;float:right;margin:0 0 1em 1em" loading="lazy">' if (gg.get("image_path") or "").startswith("http") else ""
         body = (f'<article>{img}<h1>{esc(gg["name"])}</h1><p class="mut">{esc(gg.get("title") or "")}</p><div>{san(gg.get("bio"))}</div><p>{soc}</p>{ent}'
@@ -824,7 +830,7 @@ def build(g):
     shp = json.loads((D / "platforms.json").read_text("utf-8")).get("en", {}) if (D / "platforms.json").exists() else {}
     listen = " · ".join(f'<a href="{esc(shp[k])}" rel="noopener">{n}</a>' for k, n in (("apple_show", "Apple Podcasts"), ("spotify_show", "Spotify"), ("amazon_show", "Amazon Music"), ("deezer_show", "Deezer"), ("iheart_show", "iHeart"), ("youtube_show", "YouTube"), ("youtube_music_show", "YouTube Music"), ("castbox_show", "Castbox"), ("podcastaddict_show", "Podcast Addict"), ("podchaser_show", "Podchaser")) if shp.get(k))
     hub = (f'<h1>{esc(NAME)}</h1><p>{esc(plain(pod.get("description")))[:600]}</p>' + (f'<p><strong>Listen on:</strong> {listen}</p>' if listen else "") + f'<h2>Latest episodes</h2><ul style="list-style:none;padding:0">{"".join(card(e) for e in eps[:20])}</ul>'
-           f'<p><a href="{root}episodes/">All {len(eps)} episodes →</a></p>' + (f'<h2>Latest articles</h2><ul>{"".join(f"<li><a href=\"{bp_url(p)}\">{esc(p[chr(116)+chr(105)+chr(116)+chr(108)+chr(101)])}</a></li>" for p in bposts[:8])}</ul><p><a href="{BASE}/community/u/mirko-p/blog/">All {len(bposts)} articles →</a></p>' if bposts else "") + (f"<h2>Topics</h2><ul>{ct}</ul>" if ct else "")
+           f'<p><a href="{root}episodes/">All {len(eps)} episodes<span aria-hidden="true"> →</span></a></p>' + (f'<h2>Latest articles</h2><ul>{"".join(f"<li><a href=\"{bp_url(p)}\">{esc(p[chr(116)+chr(105)+chr(116)+chr(108)+chr(101)])}</a></li>" for p in bposts[:8])}</ul><p><a href="{BASE}/community/u/mirko-p/blog/">All {len(bposts)} articles<span aria-hidden="true"> →</span></a></p>' if bposts else "") + (f"<h2>Topics</h2><ul>{ct}</ul>" if ct else "")
            + '<h2>More from the show</h2><ul>' + "".join(f'<li><a href="{p_ if p_.startswith("https://") else root + p_}">{t_}</a></li>' for p_, t_ in showlinks) + "</ul>")
     ld = {"@context": "https://schema.org", "@type": "PodcastSeries", "@id": root + "#series", "name": NAME, "url": root, "description": plain(pod.get("description"))[:500], "inLanguage": "en", "webFeed": "https://www.spreaker.com/show/6704921/episodes/feed",
           "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}, "publisher": {"@id": f"{BASE}/#org"}, **({"image": pod["image"]} if str(pod.get("image", "")).startswith("http") else {}), **({"sameAs": [shp[k] for k in ("apple_show", "spotify_show", "amazon_show", "deezer_show", "iheart_show", "youtube_show", "youtube_music_show", "castbox_show", "podcastaddict_show", "podchaser_show") if shp.get(k)]} if shp else {})}

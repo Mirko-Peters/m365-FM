@@ -20,8 +20,10 @@ def public_items(items):
     return [it for it in (items or []) if is_public(it)]
 
 
-PLAT = {"youtube": "YouTube", "github": "GitHub", "blog": "Blog", "podcast": "Podcast", "newsletter": "Newsletter", "mastodon": "Mastodon", "bluesky": "Bluesky",
-        "spotify": "Spotify", "website": "Website", "other": "Web"}
+def plat_of(it):
+    """Linktexte F1: Plattform eines Beitrags mit eigenem Namen (Marke oder Domain, site_linktext.platform) statt der Art ("Web")."""
+    import site_linktext as LT
+    return LT.platform(it.get("url"), it.get("kind"))
 
 
 def slug(t):
@@ -66,7 +68,7 @@ def build(g, items, api):
             if not it.get("id"):
                 continue
             u = link(BASE, lang, it); own = it.get("body") or ""; has_text = len(own) >= 300
-            who = f'{croot}{"c" if it["type"] == "o" else "u"}/{it["handle"]}/'; plat = PLAT.get(it["kind"], "Web")
+            who = f'{croot}{"c" if it["type"] == "o" else "u"}/{it["handle"]}/'; plat = plat_of(it)
             topics = [t for t in it.get("topics", []) if t in ENTS]
             tl = "".join(f'<a class="mb-tag" href="{links_l[t][1]}">{esc(ENTS[t]["name"])}</a> ' for t in topics)
             body_html = wiki_render(own, links_l, WT.get(lang, WT["en"]))[0] if has_text else ""
@@ -75,7 +77,7 @@ def build(g, items, api):
             ext = f' · <b>{esc(T(lang, "External post", "Externer Beitrag"))}</b>' if it.get("origin") == "kurzpost" else ""
             b = shell(lang, f'{WCSS}<p class="mut"><a href="{who}">{esc(it["name"])}</a> · {esc(plat)} · {iso(it["published"])}{ext}</p><article class="wk-body"><h1>{esc(it["title"])}</h1>{thumb}'
                             f'{("<p>" + esc(it["summary"]) + "</p>") if it.get("summary") else ""}{_kp}{body_html}{_fq}{SNT.CSS if (_kp or _fq) else ""}</article>'
-                            f'<p><a class="btn main" href="{esc(it["url"])}" rel="nofollow ugc noopener" target="_blank">{esc(T(lang, "View the original on", "Original ansehen auf"))} {esc(plat)} ↗</a></p><p>{tl}</p>'
+                            f'<p><a class="btn main" href="{esc(it["url"])}" rel="nofollow ugc noopener" target="_blank">{esc(T(lang, "View the original on", "Original ansehen auf"))} {esc(plat)}<span aria-hidden="true"> ↗</span></a></p><p>{tl}</p>'
                             f'<p class="mut">{esc(T(lang, "Title, description and thumbnail come from the creator’s public feed; the original stays with its author.", "Titel, Beschreibung und Vorschaubild stammen aus dem öffentlichen Feed des Creators; das Original bleibt beim Urheber."))}</p>')
             _yid = re.search(r"(?:v=|youtu\.be/|/shorts/)([\w-]{11})", it.get("url") or "") if it["kind"] == "youtube" else None
             _thumb = it.get("thumb") or (f"https://i.ytimg.com/vi/{_yid.group(1)}/hqdefault.jpg" if _yid else "")
