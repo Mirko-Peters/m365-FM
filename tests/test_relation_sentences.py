@@ -247,6 +247,42 @@ class Templates(unittest.TestCase):
             self.assertEqual(hl.count("<a "), 2, lang); self.assertNotIn("{", hl, lang)
             self.assertNotIn('href="/entity/a/"', hl, f"{lang}: kein Selbstverweis")
 
+    def test_rueckfall_oft_nur_wo_es_stimmt(self):
+        """Gegenpruefung Paket 3: 'oft' nur bei Themen aus mindestens 2 gemeinsamen Folgen; sonst ohne 'oft' bzw. 'die Folge'; Personen sind kein Thema."""
+        es = {"a": ent("a", "concept", "Accounts payable"), "b": ent("b", "product", "Dynamics 365"), "c": ent("c", "concept", "Invoice"),
+              "g": ent("g", "person", "Jane Guest"), "z": ent("z", "concept", "Figma")}
+        about = {"e1": ["a", "b", "c", "g"], "e2": ["a", "b", "g"], "e3": ["a", "z"]}
+        ids, mode = RS.cooc_pick("a", ["e1", "e2", "e3"], about, es)
+        self.assertEqual((ids, mode), (["b"], "often"), "nur das Thema aus 2 gemeinsamen Folgen; Gast g trotz 2 Folgen nicht")
+        self.assertNotIn("g", RS.cooc_rank("a", ["e1", "e2", "e3"], about, es), "Personen nie als Thema")
+        ids, mode = RS.cooc_pick("a", ["e1", "e3"], about, es)
+        self.assertEqual((sorted(ids), mode), (["b", "c", "z"], "some"), "mehrere Folgen, jedes Thema nur in einer")
+        ids, mode = RS.cooc_pick("a", ["e1"], about, es)
+        self.assertEqual((sorted(ids), mode), (["b", "c"], "one"))
+        self.assertEqual(RS.cooc_pick("a", [], about, es), ([], ""))
+        self.assertEqual(RS.cooc_pick("a", ["e1", "x"], {**about, "x": ["a"]}, es)[1], "some", "zweite Folge ohne weitere Themen zaehlt als Folge")
+        href = lambda x: f"/entity/{x}/"
+        self.assertEqual(plain(RS.cooc("en", es["a"], ["b"], es, href, mode="some")), "Episodes about Accounts payable also cover [Dynamics 365].")
+        self.assertEqual(plain(RS.cooc("de", es["a"], ["b"], es, href, mode="one")), "In der Folge zu Accounts payable geht es auch um [Dynamics 365].")
+        self.assertIn("<h2 id=\"en-rels-h\">Also discussed</h2>", RS.cooc("en", es["a"], ["b"], es, href, mode="one"))
+        self.assertEqual(plain(RS.cooc("en", es["g"], ["b"], es, href)), "Episodes with or about Jane Guest often also cover [Dynamics 365].")
+        self.assertEqual(plain(RS.cooc("de", es["g"], ["b"], es, href, mode="one")), "In der Folge mit oder über Jane Guest geht es auch um [Dynamics 365].")
+        often = {"en": "often", "de": "oft", "fr": "souvent", "es": "suelen", "it": "spesso", "nl": "vaak", "pt": "costumam", "pl": "często", "id": "sering",
+                 "ru": "часто", "uk": "часто", "ar": "غالبًا", "he": "לעיתים קרובות", "ja": "よく", "ko": "자주"}
+        for lang in RS.data():
+            if lang.startswith("_"):
+                continue
+            c = RS.data()[lang]["cooc"]
+            for k in ("heading", "heading_some", "t", "t_some", "t_one", "p", "p_some", "p_one"):
+                self.assertTrue(c.get(k), f"{lang}: cooc.{k}")
+            self.assertIn(often[lang], c["t"] + c["p"], lang)
+            for k in ("heading_some", "t_some", "t_one", "p_some", "p_one"):
+                self.assertNotIn(often[lang], c[k], f"{lang}: cooc.{k} ohne 'oft'")
+            for m in ("often", "some", "one"):
+                for x in ("a", "g"):
+                    hl = RS.cooc(lang, es[x], ["b", "c"], es, href, mode=m)
+                    self.assertEqual(hl.count("<a "), 2, (lang, m, x)); self.assertNotIn("{", hl, (lang, m, x))
+
     def test_gegenrichtung_bekanntere_zuerst(self):
         es = {"hub": ent("hub", "org", "Hub")}
         for n in range(3):
@@ -313,7 +349,7 @@ class Page(unittest.TestCase):
             h = (docs / "entity/copilot/index.html").read_text("utf-8")
             self.assertIn('<section class="en-rels" data-own-text="no" aria-labelledby="en-rels-h"><h2 id="en-rels-h">Relationships</h2>', h)
             self.assertIn('is one of the topics of <a href="https://www.m365.fm/entity/mirko-peters/">Mirko Peters</a>.', h)
-            self.assertRegex(h, r'<h3 id="en-rel-\d+">Related to</h3>', "vollstaendige Liste bleibt, mit Sprungziel")
+            self.assertRegex(h, r'<h3 id="en-rel-\d+">People working on this topic</h3>', "vollstaendige Liste bleibt, mit Sprungziel (Personen als eigene Liste)")
             self.assertLess(h.index("en-rels"), h.index('class="en-rel"'), "Saetze oben, Liste unten")
             d = (docs / "de/entity/copilot/index.html").read_text("utf-8")
             self.assertIn("<h2 id=\"en-rels-h\">Beziehungen</h2>", d)

@@ -18,6 +18,7 @@ from site_entities import TL, eurl, eid_of, tlab
 import site_roles as ROLE
 import site_linktext as LT   # Linktexte: Kanaele nach ihrem Namen statt nach ihrer Art
 import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
+import site_linkctx as LC   # Beziehungskontext: Einleitungssatz vor jeder Linkliste (data/link_context.json, prof.* / org.*)
 
 PROG_FULL = {"gde": "Google Developer Expert (GDE)", "mvp": "Microsoft Most Valuable Professional (MVP)", "mct": "Microsoft Certified Trainer (MCT)", "rd": "Microsoft Regional Director (RD)", "msa": "Microsoft Student Ambassador (MSA)", "ms_employee": "Microsoft employee", "partner": "Microsoft Partner"}
 PROG = {"gde": ("Google Developer Expert", "Google Developer Expert"), "mvp": ("Microsoft MVP", "Microsoft MVP"), "mct": ("Microsoft Certified Trainer (MCT)", "Microsoft Certified Trainer (MCT)"), "rd": ("Microsoft Regional Director", "Microsoft Regional Director"),
@@ -372,7 +373,7 @@ def build(g, people, orgs, extra=None):
             return ""
         items = "".join('<li class="mb-card"><span class="mut">' + (f'<a href="{purl(BASE, lang, "u", r["by"]["handle"])}">{esc(r["by"]["name"])}</a>' if r["by"].get("handle") in pb else esc(r["by"]["name"])) + " · " + esc(REL.get(r["relation"], REL["other"])[li])
                         + "</span><br><span style=\"white-space:pre-line\">" + esc(r["body"]) + "</span></li>" for r in p["recs"])
-        return f'<h2>{esc(RS[lang]["recs"])}</h2><ul class="mb-list">{items}</ul>'
+        return f'<h2>{esc(RS[lang]["recs"])}</h2>{LC.intro(lang, "prof.recs", s=p.get("name", ""))}<ul class="mb-list">{items}</ul>'
 
     def tags_of_p(x, li, s):
         return "".join(f'<span class="mb-tag{" ok" if p.get("verified") else ""}">{esc(PROG[p["p"]][li])}{" ✔" if p.get("verified") else ""}</span>' for p in x.get("programs", []))
@@ -464,9 +465,9 @@ def build(g, people, orgs, extra=None):
             contrib = "<ul>" + "".join(f'<li><a href="{eurl(BASE, lang, c["t"])}">{esc(ENTS[c["t"]]["name"] if c["t"] in ENTS else c["t"])}</a> <span class="mut">· {esc(s["wiki"] if c["k"] == "wiki" else s["entity"])} · {datetime.fromtimestamp(c["c"], timezone.utc).strftime("%Y-%m-%d")}{" – " + esc(c["s"]) if c.get("s") else ""}</span></li>' for c in p.get("contrib", []) if c["t"] in ENTS) + "</ul>" if p.get("contrib") else ""
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}members/">{esc(s["members"])}</a></nav>{img_tag("u", p, p["name"])}<h1>{esc(p["name"])}{ROLE.chip(BASE, lang, ROLE.role_of(p), p.get("scope"))}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="creator" data-topic-id="{esc(p["handle"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button><p style="font-size:1.1em">{esc(p.get("headline", ""))}</p><p>{tags_of_p(p, li, s)}</p>{ft}'
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(p["about"])}</p>' if p.get("about") else "")
-                          + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(p, lang, li, s)}' if p.get("expertise") else "") + (f'<h2>{esc(s["certs"])}</h2>{certs}' if certs else "")
-                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(p)}' if items_ul(p) else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(p, lang)}' if chan_ul(p, lang) else "")
-                          + rec_html(p, lang, li, pb) + (f'<h2>{esc(s["contrib"])}</h2>{contrib}' if contrib else "") + mvp_contrib_html(p, s) + ((extra or {}).get(lang, {}).get("u", {}).get(p["handle"], "")) + live_js + topic_js + css)
+                          + (f'<h2>{esc(s["expertise"])}</h2>{LC.intro(lang, "prof.expertise", s=p["name"])}{exp_ul(p, lang, li, s)}' if p.get("expertise") else "") + (f'<h2>{esc(s["certs"])}</h2>{LC.intro(lang, "prof.certs", s=p["name"])}{certs}' if certs else "")
+                          + (f'<h2>{esc(s["latest"])}</h2>{LC.intro(lang, "prof.posts", s=p["name"])}{items_ul(p)}' if items_ul(p) else "") + (f'<h2>{esc(s["channels"])}</h2>{LC.intro(lang, "prof.channels", s=p["name"])}{chan_ul(p, lang)}' if chan_ul(p, lang) else "")
+                          + rec_html(p, lang, li, pb) + (f'<h2>{esc(s["contrib"])}</h2>{LC.intro(lang, "prof.contrib", s=p["name"])}{contrib}' if contrib else "") + mvp_contrib_html(p, s) + ((extra or {}).get(lang, {}).get("u", {}).get(p["handle"], "")) + live_js + topic_js + css)
             node = person_ld(BASE, p, ob)
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "u", p["handle"]) + "#profile", "url": u, "name": p["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": node}]
             ld.extend(mvp_contrib_ld(BASE, p))
@@ -490,8 +491,8 @@ def build(g, people, orgs, extra=None):
             ft = '<table class="mb-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b_}</td></tr>' for a, b_ in facts) + "</tbody></table>" if facts else ""
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}companies/">{esc(s["companies"])}</a></nav>{img_tag("o", o, T(lang, "Logo of {n}", "Logo von {n}").replace("{n}", o["name"]))}<h1>{esc(o["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="creator" data-topic-id="{esc(o["handle"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button><p style="font-size:1.1em">{esc(o.get("tagline", ""))}</p><p>{tags_of_p(o, li, s)}</p>{ft}'
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(o["about"])}</p>' if o.get("about") else "")
-                          + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(o, lang, li, s)}' if o.get("expertise") else "") + (f'<h2>{esc(s["team"])}</h2>{mem}' if mem else "")
-                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(o)}' if items_ul(o) else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(o, lang)}' if chan_ul(o, lang) else "") + ((extra or {}).get(lang, {}).get("c", {}).get(o["handle"], "")) + live_js + topic_js + css)
+                          + (f'<h2>{esc(s["expertise"])}</h2>{LC.intro(lang, "org.expertise", s=o["name"])}{exp_ul(o, lang, li, s)}' if o.get("expertise") else "") + (f'<h2>{esc(s["team"])}</h2>{LC.intro(lang, "org.team", s=o["name"])}{mem}' if mem else "")
+                          + (f'<h2>{esc(s["latest"])}</h2>{LC.intro(lang, "prof.posts", s=o["name"])}{items_ul(o)}' if items_ul(o) else "") + (f'<h2>{esc(s["channels"])}</h2>{LC.intro(lang, "prof.channels", s=o["name"])}{chan_ul(o, lang)}' if chan_ul(o, lang) else "") + ((extra or {}).get(lang, {}).get("c", {}).get(o["handle"], "")) + live_js + topic_js + css)
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "c", o["handle"]) + "#profile", "url": u, "name": o["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": org_ld(BASE, o, pb)}]
             write(f"{pfx2(lang)}community/c/{o['handle']}/index.html", page(lang, *(PM.company_meta(lang, o, _topic_name) or (f'{o["name"]} – {o.get("tagline") or s["companies"]} | M365.FM', (o.get("tagline") or o.get("about") or "")[:155])), u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, (o.get("tagline") or "") + " " + (o.get("about") or "")[:1500], ids=[x["e"] for x in o.get("expertise", [])]) if g.get("side") else "")))
             if not noidx:

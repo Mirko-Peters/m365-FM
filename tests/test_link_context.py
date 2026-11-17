@@ -45,6 +45,10 @@ def ents():
         ent("graph", "product", "Microsoft Graph"), ent("guest", "person", "Jane Example")]}
     es.update({f"p{n}": ent(f"p{n}", "product", f"Hub Product {n}", [("developed_by", "hub")]) for n in range(9)})
     es.update({f"c{n}": ent(f"c{n}", "cert", f"Hub Cert {n}", [("developed_by", "hub")]) for n in range(8)})
+    # Gemischte related_to-Liste (Gegenpruefung Paket 3): 3 Hin- und 5 Gegenkanten von Konzepten, 8 Personen mit related_to -> vsm
+    es["vsm"] = ent("vsm", "concept", "Value stream mapping", [("related_to", f"k{n}") for n in range(3)])
+    es.update({f"k{n}": ent(f"k{n}", "concept", f"Lean topic {n}", [("related_to", "vsm")] if n >= 3 else []) for n in range(8)})
+    es.update({f"pp{n}": ent(f"pp{n}", "person", f"Person {n}", [("related_to", "vsm")]) for n in range(8)})
     return es
 
 
@@ -149,8 +153,10 @@ class EntityPages(unittest.TestCase):
         h = self.read("entity/lonely/index.html")
         sec = re.search(r'<section class="en-rels en-cooc".*?</section>', h, re.S).group(0)
         self.assertIn("Often discussed together", sec)
-        self.assertRegex(text(sec), r"Episodes about Accounts payable often also cover \[(Invoice automation|Dynamics 365 Finance)\], \[[^\]]+\] and \[[^\]]+\]\.")
+        self.assertRegex(text(sec), r"Episodes about Accounts payable often also cover \[(Invoice automation|Dynamics 365 Finance)\] and \[(Invoice automation|Dynamics 365 Finance)\]\.",
+                         "'often' nur mit Themen aus mindestens 2 gemeinsamen Folgen")
         self.assertNotIn("/entity/mirko-peters/", sec, "Host nie im Rueckfall-Satz"); self.assertNotIn("/entity/cat/", sec, "keine Kategorie"); self.assertNotIn("/entity/lonely/", sec)
+        self.assertNotIn("/entity/guest/", sec, "Gaeste sind kein besprochenes Thema")
         ids = re.findall(r'/entity/([^/]+)/', sec)
         side = re.search(r'<aside class="sbar" data-h="([^"]*)" data-ids="([^"]*)"', h)
         self.assertEqual(side.group(1), "Often discussed with Accounts payable")
@@ -162,6 +168,34 @@ class EntityPages(unittest.TestCase):
         hd = self.read("de/entity/lonely/index.html")
         self.assertIn("In Folgen zu Accounts payable geht es oft auch um", text(hd))
         self.assertIn('data-h="Oft zusammen mit Accounts payable besprochen"', hd)
+
+    def test_rueckfall_eine_folge_ohne_oft(self):
+        """Seite mit nur einer Folge (Person): Satz ohne 'oft', Personen-Fassung 'mit oder ueber', Ueberschriften ohne 'oft'."""
+        h = self.read("entity/guest/index.html")
+        sec = re.search(r'<section class="en-rels en-cooc".*?</section>', h, re.S).group(0)
+        self.assertRegex(text(sec), r"^Also discussed The episode with or about Jane Example also covers \[(Accounts payable|Invoice automation)\] and \[(Accounts payable|Invoice automation)\]\.$")
+        self.assertNotIn("often", sec.lower())
+        self.assertIn('data-h="Also discussed with Jane Example"', h)
+        hd = self.read("de/entity/guest/index.html")
+        sd = re.search(r'<section class="en-rels en-cooc".*?</section>', hd, re.S).group(0)
+        self.assertIn("In der Folge mit oder über Jane Example geht es auch um", text(sd)); self.assertNotIn("oft", text(sd))
+        self.assertIn('data-h="Ebenfalls mit Jane Example besprochen"', hd)
+
+    def test_related_to_personen_eigene_liste(self):
+        """Gemischte related_to-Gegenrichtung: Personen in eigener Liste; Zahl und Nomen im Sprunglink = Eintraege der Zielliste."""
+        for lang, rel, want in (("en", "entity/vsm/index.html", ["all 8 topics related to Value stream mapping", "all 8 people who work on Value stream mapping"]),
+                                ("de", "de/entity/vsm/index.html", ["alle 8 mit Value stream mapping verwandten Themen", "alle 8 Personen, die sich mit Value stream mapping beschäftigen"])):
+            h = self.read(rel)
+            rels = re.search(r'<section class="en-rels".*?</section>', h, re.S).group(0)
+            full = re.findall(r'<a href="#(en-rel-\d+)">([^<]+)</a>', rels)
+            self.assertEqual([t for _, t in full], want, lang)
+            self.assertNotEqual(full[0][0], full[1][0], "eigene Sprungziele")
+            for (a, t), kind in zip(full, ("k", "pp")):   # Themen-Liste nur Konzepte, Personen-Liste nur Personen
+                m = re.search(rf'<h3 id="{a}">([^<]+)</h3><ul>(.*?)</ul>', h, re.S)
+                items = re.findall(r'/entity/([^/]+)/', m.group(2))
+                self.assertEqual(len(items), 8, f"{t}: Zahl = Liste")
+                self.assertEqual({re.sub(r"\d+$", "", x) for x in items}, {kind}, f"{t}: Nomen passt zur Liste")
+        self.assertIn("<h3 id=\"en-rel-2\">People working on this topic</h3>", self.read("entity/vsm/index.html"))
 
     def test_folgenliste_einleitung_und_titel(self):
         h = self.read("entity/lonely/index.html")
@@ -230,13 +264,35 @@ class OtherPages(unittest.TestCase):
         self.assertIn("<h2>Themen &amp; Personen dieser Folge</h2>", h)
         self.assertIn("<h2>Themen &amp; Personen auf dieser Seite</h2>", SBR.render(Ix(), BASE, "de", "", [], None, None, ids=["copilot"]), "ohne Angabe wie bisher")
 
+    def test_community_event_bloecke_und_gaeste(self):
+        """Profil/Firma: Sessions und Events mit Einleitungssatz samt Namen; Gaeste-Boerse: Einleitung je Liste (Gegenpruefung Paket 3)."""
+        import site_events as EVT
+        import site_guests as GST
+        ev = {"handle": "ev1", "title": "Cloud Day", "start": "2026-12-01T09:00", "organizer": {"handle": "acme", "kind": "o", "name": "Acme"},
+              "sessions": [{"title": "Copilot in practice", "start": "2026-12-01T10:00", "speakers": [{"h": "jane", "n": "Jane Example"}]}]}
+        res = EVT.blocks(BASE, [ev], "de")
+        self.assertIn('<p class="lc" data-own-text="no">Sessions, in denen Jane Example spricht:</p><ul>', res["u"]["jane"])
+        self.assertIn('<p class="lc" data-own-text="no">Events, die Acme veranstaltet:</p><ul>', res["c"]["acme"])
+        out = {}
+        g = dict(BASE=BASE, write=lambda rel, c: out.__setitem__(rel, c), page=lambda lang, t, d, u, b, *a, **k: b, header=lambda l, x="": "", footer=lambda l: "",
+                 footer_en=lambda: "", LANGS={"de": ("Deutsch", "de")}, sitemap=[], TODAY=TODAY)
+        items = [{"handle": "jane", "name": "Jane Example", "title": "", "kind": "speaker", "topics": [], "formats": ["podcast"], "langs": ["en"]}]
+        with mock.patch.object(GST, "COMM_LANGS", ["en", "de"]):
+            GST.build(g, items, [{"handle": "jane"}])
+        self.assertIn(LC.intro("en", "guests.speakers") + '<ul', out["community/guests/index.html"])
+        self.assertIn(LC.intro("de", "guests.speakers") + '<ul', out["de/community/guests/index.html"])
+        self.assertNotIn(LC.intro("en", "guests.hosts"), out["community/guests/index.html"], "leere Liste ohne Einleitung")
+
     def test_quelltexte_nutzen_die_matrix(self):
         """Jede Seitenart setzt ihren Einleitungssatz (Inventar in site_linkctx); fehlt einer, faellt der Test auf."""
         need = {"site_entities.py": ["ent.eps", "ent.arts", "ent.experts", "ent.experts_rel", "ent.relx", "ent.rellist", "ent.kp", "ent.sessions", "ent.spk_events",
-                                     "ent.spk_sessions", "org.people", "ind.companies", "ind.members", "job.members", "side.entity", "side.cooc", "event.sessions", "event.speakers"],
+                                     "ent.spk_sessions", "org.people", "ind.companies", "ind.members", "job.members", "side.entity", "side.cooc", "side.cooc_some", "event.sessions", "event.speakers"],
                 "site_podpage.py": ["ep.guests", "ep.arts", "guest.eps", "side.episode"], "generate_site.py": ["ep.topics", "ep.more", "ep.more0", "cat.eps", "tag.eps", "side.episode"],
                 "site_blog.py": ["post.topics", "post.more", "post.more0", "side.post"], "site_video.py": ["video.topics", "side.video"], "site_podcast.py": ["ep.topics"],
-                "site_library.py": ["lib.topics"], "site_relsent.py": ["more.full"]}
+                "site_library.py": ["lib.topics"], "site_relsent.py": ["more.full"],
+                "site_members.py": ["prof.expertise", "prof.certs", "prof.posts", "prof.channels", "prof.recs", "prof.contrib", "org.team", "org.expertise"],
+                "site_events.py": ["event.topics", "event.session_topics", "event.sponsors", "event.media", "event.sessions", "event.my", "event.more"],
+                "site_guests.py": ["guests.speakers", "guests.hosts"]}
         keys = set(json.loads(LC.FILE.read_text("utf-8"))["keys"])
         for f, ks in need.items():
             src = (ROOT / f).read_text("utf-8")

@@ -6,15 +6,22 @@ Matrix Quelle-Seitenart x Ziel-Art x Beziehung: data/link_context.json (15 Sprac
 Schluessel, gilt Englisch. Die Einleitungssaetze sind Schablonentext und tragen data-own-text="no" (zaehlen nicht fuer die Index-Regel).
 
 Inventar der Linklisten (Stand Paket 3, alle Seitenarten aus site_*.py):
-- Entitaetsseite (site_entities.build): Beziehungssaetze (site_relsent, Satz = Kontext; Rueckfall "In Folgen zu {s} geht es oft auch um ..."),
+- Entitaetsseite (site_entities.build): Beziehungssaetze (site_relsent, Satz = Kontext; Rueckfall "In Folgen zu {s} geht es (oft) auch um ..."),
   "Vollstaendige Listen" (more.*), Folgenliste (ent.eps / ent.eps.person), Kernpunkte (ent.kp), Artikel (ent.arts), "Verwandte Themen kurz erklaert"
   (ent.relx), vollstaendige Beziehungslisten (ent.rellist), Firmen/Mitglieder einer Branche oder Rolle (ind.*, job.members), Personen einer Firma
-  (org.people), Sessions/Auftritte (ent.sessions, ent.spk_*), Expertinnen und Experten (ent.experts, ent.experts_rel), Seitenleiste (side.entity/side.cooc).
+  (org.people), Sessions/Auftritte (ent.sessions, ent.spk_*), Expertinnen und Experten (ent.experts, ent.experts_rel), Seitenleiste (side.entity,
+  side.cooc / side.cooc_some ohne "oft").
 - Folgenseite Hauptshow (site_podpage): Gaeste (ep.guests), verwandte Artikel (ep.arts), Seitenleiste (side.episode); Gastseite: Folgen (guest.eps).
 - Folgenseite Dub-Sprachen (generate_site): Themen-Chips (ep.topics), weitere Folgen mit gemeinsamem Thema (ep.more / ep.more0), Seitenleiste.
 - Kategorieseite der Dub-Sprachen (generate_site): Folgen der Kategorie (cat.eps).
 - Blogbeitrag (site_blog): Themen (post.topics), verwandte Artikel mit gemeinsamem Thema (post.more), Seitenleiste (side.post).
 - Community-Video, -Podcast, -Bibliothek (site_video, site_podcast, site_library): Themen (video.topics, ep.topics, lib.topics), Seitenleiste.
+- Community-Profil einer Person (site_members): Fachgebiete (prof.expertise), Zertifizierungen (prof.certs), neueste Beitraege (prof.posts), Kanaele
+  (prof.channels), Empfehlungen (prof.recs), Mitarbeit an Entitaetsseiten (prof.contrib); Sessions und Events aus site_events.blocks (event.my, event.more).
+- Firmenprofil (site_members): Fachgebiete (org.expertise), Team (org.team), Beitraege und Kanaele (prof.posts, prof.channels), Events (event.more).
+- Eventseite (site_events): Themen (event.topics), Sessions (event.sessions) mit Themen je Session (event.session_topics) und "Speaker:" vor den
+  Namen, Sponsoren und Medienpartner (event.sponsors, event.media).
+- Gaeste-Boerse (site_guests): Gaeste/Speaker und suchende Shows, je mit Profil und Themen (guests.speakers, guests.hosts).
 Reine Funktionen bis auf das einmalige Lesen der JSON-Datei."""
 import html
 import json

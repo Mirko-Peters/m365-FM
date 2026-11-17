@@ -42,6 +42,8 @@ FWD = {"instance_of": ("Is a", "Ist ein"), "part_of": ("Part of", "Teil von"), "
        "covers": ("Covers", "Behandelt"), "created_by": ("Created by", "Erstellt von"), "organized_by": ("Organized by", "Veranstaltet von"), "similar_to": ("Similar to", "Ähnlich wie")}
 INV = {"instance_of": ("Examples", "Beispiele"), "part_of": ("Includes", "Enthält"), "broader": ("Narrower topics", "Unterbegriffe"), "developed_by": ("Products and works", "Produkte und Werke"), "related_to": ("Related to", "Verwandt mit"),
        "requires": ("Required by", "Benötigt von"), "covers": ("Covered by", "Behandelt in"), "created_by": ("Created", "Erstellt"), "organized_by": ("Organizes", "Veranstaltet"), "similar_to": ("Similar to", "Ähnlich wie")}
+REL_BY = {"person": ("People working on this topic", "Personen, die sich mit dem Thema beschäftigen"), "org": ("Companies working on this topic", "Firmen, die sich mit dem Thema beschäftigen"),
+          "job": ("Roles with this as a typical topic", "Rollen, für die das ein typisches Thema ist")}   # Gegenrichtung related_to nach Art der Quelle (eigene Liste, Sprungziel und Zahl)
 S = {"en": dict(entities="Microsoft ecosystem entity database", intro="Products, platforms, concepts, certifications and organisations around Microsoft – with relationships, described by the community and published as Schema.org data.", new="Add a new topic", all="All", facts="Facts", website="Website", docs="Documentation", wikipedia="Wikipedia", wikidata="Wikidata", type="Type", aka="Also known as", experts="Experts and companies for this topic", noexperts="Nobody has listed this topic yet. Add it to your profile.", eps="Episodes about {t}", export="Data export", edit_e="Edit properties", glossary="Glossary", count="{n} entries", up="Last edited"),
      "de": dict(entities="Entitätsdatenbank zum Microsoft-Ökosystem", intro="Produkte, Plattformen, Konzepte, Zertifizierungen und Organisationen rund um Microsoft – mit Beziehungen, von der Community beschrieben und als Schema.org-Daten veröffentlicht.", new="Neues Thema anlegen", all="Alle", facts="Fakten", website="Webseite", docs="Dokumentation", wikipedia="Wikipedia", wikidata="Wikidata", type="Typ", aka="Auch bekannt als", experts="Experten und Firmen zu diesem Thema", noexperts="Dieses Thema hat noch niemand im Profil angegeben. Trag es in deinem Profil ein.", eps="Folgen zu {t}", export="Datenexport", edit_e="Eigenschaften bearbeiten", glossary="Glossar", count="{n} Einträge", up="Zuletzt bearbeitet")}
 
@@ -723,9 +725,9 @@ def build(g, wiki_links, experts_by_ent, ep_find):
     _about, _COOC = g.get("ep_about") or {}, {}   # Folge der Hauptshow -> Entitaeten, deren Seite sie fuehrt (generate_site._ep_about)
 
     def _cooc_of(e):
-        """Themen aus gemeinsamen Folgen (site_relsent.cooc_rank), einmal je Entitaet fuer alle Sprachen."""
+        """Themen aus gemeinsamen Folgen und Fassung des Satzes (site_relsent.cooc_pick: "often" / "some" / "one"), einmal je Entitaet fuer alle Sprachen."""
         if e["id"] not in _COOC:
-            _COOC[e["id"]] = RS.cooc_rank(e["id"], [x.get("slug") for x in ep_find(e, "en") if x.get("slug")], _about, ENTS) if _about else []
+            _COOC[e["id"]] = RS.cooc_pick(e["id"], [x.get("slug") for x in ep_find(e, "en") if x.get("slug")], _about, ENTS) if _about else ([], "")
         return _COOC[e["id"]]
     _nolink = {}   # Sprache -> Entitaetsseiten (indexierbar) ohne Link auf eine andere Entitaet im Inhalt (Bauwarnung)
     shell = lambda lang, b: f'{header(lang, "")}<main class="wrap" style="max-width:56em">{b}</main>{footer(lang) if lang in LANGS else footer_en()}'
@@ -792,8 +794,10 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 if to in ENTS:
                     groups.setdefault(FWD[p][li], []).append(to)
             _certl = T(lang, "Certifications issued", "Vergebene Zertifizierungen")   # eigene Liste (eigenes Sprungziel) statt gemischt unter "Produkte und Werke" (Audit SEO-9)
+            _rell = {t_: T(lang, *REL_BY[t_]) for t_ in REL_BY}   # Gegenrichtung related_to aus Personen/Firmen/Rollen: eigene Liste statt gemischt unter "Verwandt mit"
             for p, frm in inv.get(e["id"], []):
-                lab = _certl if (p == "developed_by" and ENTS.get(frm, {}).get("type") == "cert") else INV[p][li]
+                _ft = ENTS.get(frm, {}).get("type")
+                lab = _certl if (p == "developed_by" and _ft == "cert") else _rell[_ft] if (p == "related_to" and _ft in _rell) else INV[p][li]
                 if frm not in groups.get(lab, []) and not (p in ("related_to", "similar_to") and frm in groups.get(FWD[p][li], [])):
                     groups.setdefault(lab, []).append(frm)
             _co = company_org(e) if e["type"] == "person" else None
@@ -802,16 +806,25 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _gid = {k: f"en-rel-{n + 1}" for n, k in enumerate(groups)}   # Sprungziele der vollstaendigen Listen (fuer "und N weitere" in den Beziehungssaetzen)
             rb = (LC.intro(lang, "ent.rellist", s=e["name"]) if groups else "") + "".join(f'<h3 id="{_gid[k]}">{esc(k)}</h3><ul>' + "".join(f'<li><a href="{root}{x}/">{esc(ENTS[x]["name"])}</a> <span class="mut">· {esc(tlab(lang, ENTS[x]["type"]))}</span></li>' for x in dict.fromkeys(v)) + "</ul>" for k, v in groups.items())
             _wf = T(lang, "Works for", "Arbeitet bei")
-            _glab = lambda d_, p_, k_=None: _wf if p_ == "works_for" else _certl if (d_ == "i" and p_ == "developed_by" and str(k_ or "").endswith(".src:cert")) else (FWD if d_ == "f" else INV)[p_][li]
+            def _glab(d_, p_, k_=None):
+                """Liste (Ueberschrift) zu einem Satzschluessel aus site_relsent: Sprungziel und Zahl im Link "alle N ..." gehoeren zu genau dieser Liste."""
+                src = str(k_ or "").partition(".src:")[2]
+                if p_ == "works_for":
+                    return _wf
+                if d_ == "i" and p_ == "developed_by" and src == "cert":
+                    return _certl
+                if d_ == "i" and p_ == "related_to" and src in _rell:
+                    return _rell[src]
+                return (FWD if d_ == "f" else INV)[p_][li]
             relsent = RS.build(lang, e, [(p, t) for p, t in e.get("rel", []) if t in ENTS and p in FWD], [(p, f) for p, f in inv.get(e["id"], []) if p in INV], ENTS,
                                lambda x: f"{root}{x}/", anchor=lambda d_, p_, k_=None: _gid.get(_glab(d_, p_, k_), ""),
                                works_for=_co["id"] if _co else None, rank=lambda x: _deg.get(x, 0),
                                total=lambda d_, p_, k_=None: len(dict.fromkeys(groups.get(_glab(d_, p_, k_), []))))   # Beziehungen als Saetze (site_relsent); die Listen darunter bleiben vollstaendig
             # Seiten ohne Beziehungen (Audit Linktexte SEO-1): Themen aus gemeinsamen Folgen als eigener Satz ("In Folgen zu {s} geht es oft auch um ...");
             # nur sichtbar und in mentions, nie in e["rel"]/groups (keine Beziehung im Graphen). Dieselben ids nimmt die Seitenleiste.
-            _cooc = [] if groups else _cooc_of(e)
+            _cooc, _cmode = ([], "") if groups else _cooc_of(e)
             if _cooc:
-                relsent = RS.cooc(lang, e, _cooc, ENTS, lambda x: f"{root}{x}/")
+                relsent = RS.cooc(lang, e, _cooc, ENTS, lambda x: f"{root}{x}/", mode=_cmode)
             if e["type"] in ("industry", "job"):
                 rb += kind_html(BASE, lang, e, root)
             rb += MEN.section_html(lang, e["id"])   # sichtbare Erwaehnungen (nur iFAKT und Polaris, nur geprueft eingetragene)
@@ -1072,7 +1085,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _w = g.get("write_r2") or write   # Entitaetsseiten ALLER Sprachen liegen im R2-Bucket, nicht in GitHub Pages (Site-Worker liefert sie unter derselben Adresse). Englisch (~114 MB) seit 9.11.2026: docs/ lag mit 982 MB ueber der Grenze von 980 MB, jeder Seitenbau brach ab; de seit #310, die anderen 13 Sprachen von Anfang an
             ld = ld + _qld   # Quotation-Knoten der Person
             _sids = [x for v in groups.values() for x in v] or _cooc   # Themen der Seitenleiste = verwandte Entitaeten, ohne Beziehungen die Themen aus gemeinsamen Folgen
-            _sh = LC.plain(lang, "side.entity" if groups else "side.cooc", s=e["name"]) if _sids else ""   # Ueberschrift mit Beziehung zur Seite
+            _sh = LC.plain(lang, "side.entity" if groups else "side.cooc" if _cmode == "often" else "side.cooc_some", s=e["name"]) if _sids else ""   # Ueberschrift mit Beziehung zur Seite
             _side = g["side"](lang, f'{e["name"]} {d} {_lt[:1500]}', ids=_sids, exclude=(e["id"],), topics_h=_sh) if g.get("side") else ""   # Sidebar wie auf allen Inhaltsseiten
             _mt, _md = MM.entity_meta(lang, e, d, n_eps=len(eps), flags=_nf[e["id"]], type_label=tlab(lang, e["type"]))   # Suchabsicht: "Was ist X?" / "Wer ist X?" statt "X – Typ"
             _w(f"{rel}/{e['id']}/index.html", page(lang, _mt, _md, u, b, _alts if (_alts and lang in _alts) else None, ld, xdefault=(_alts or {}).get("en"), og_type="website", extra_head=LCSS + css + _fhead, noindex=_noidx, side=_side))
