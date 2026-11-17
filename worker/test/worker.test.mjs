@@ -477,6 +477,7 @@ test("schema: Migrationen sind idempotent und enthalten jede zur Laufzeit angele
     if (/^ALTER TABLE events ADD COLUMN (?:entity|entity_state) TEXT NOT NULL DEFAULT ''$/i.test(s)) continue;   // 0048: Event-Entitaet (evententity.js), Spalten mit Standardwert (D1 fuehrt jede Migration nur einmal aus)
     if (/^ALTER TABLE yt_videos ADD COLUMN (?:(?:upload_url|nonce) TEXT NOT NULL DEFAULT ''|size INTEGER NOT NULL DEFAULT 0)$/i.test(s)) continue;   // 0053: Upload-Sitzung der Creator-Videos (K35/K36), Spalten mit Standardwert
     if (/^INSERT OR IGNORE INTO person_entity\(eid, user_id, created\)\s+SELECT /i.test(s)) continue;   // 0054: Rueckfuellung der Personen-Entitaeten, idempotent (vorhandene Merker bleiben)
+    if (/^DELETE FROM entity_claims WHERE via = 'owner' AND status = 'verified'\s+AND eid IN \(SELECT eid FROM person_entity WHERE user_id = 0\)\s+AND NOT EXISTS \(SELECT 1 FROM users u WHERE u\.id = entity_claims\.user_id\)$/i.test(s)) continue;   // 0054: verwaiste Owner-Ansprueche geloeschter Konten (Altbestand), idempotent
     assert.match(s, /^CREATE (TABLE|INDEX|UNIQUE INDEX) IF NOT EXISTS /i, "nur idempotente Anweisungen: " + s.slice(0, 60));
   }
   const inMig = new Set([...sql.matchAll(/CREATE (?:TABLE|UNIQUE INDEX|INDEX) IF NOT EXISTS (\w+)/gi)].map((m) => m[1]));

@@ -27,10 +27,12 @@ globalThis.fetch = async (u) => {
 };
 process.on("exit", () => { globalThis.fetch = realFetch; });
 
-async function setup() {
+// legacy(raw): Altzustand nach den Migrationen bis 0053 einspielen, danach laufen 0054 und folgende (Datenbestand vor dem Deploy)
+async function setup(legacy = null) {
   const { DatabaseSync } = await import("node:sqlite");
-  const raw = new DatabaseSync(":memory:"), dir = new URL("../migrations/", import.meta.url);
-  for (const f of readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
+  const raw = new DatabaseSync(":memory:"), dir = new URL("../migrations/", import.meta.url), files = readdirSync(dir).filter((f) => f.endsWith(".sql")).sort();
+  for (const f of files.filter((f) => !legacy || f < "0054")) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
+  if (legacy) { legacy(raw); for (const f of files.filter((f) => f >= "0054")) raw.exec(readFileSync(new URL(f, dir), "utf-8")); }
   const db = {
     prepare(sql) { const st = raw.prepare(sql); let a = []; const o = { bind(...x) { a = x; return o; }, all: async () => ({ results: st.all(...a) }), first: async () => st.get(...a) ?? null, run: async () => { const r = st.run(...a); return { meta: { changes: Number(r.changes), last_row_id: Number(r.lastInsertRowid) } }; } }; return o; },
     batch: async (list) => { raw.exec("BEGIN"); try { const out = []; for (const s of list) out.push(await s.run()); raw.exec("COMMIT"); return out; } catch (e) { raw.exec("ROLLBACK"); throw e; } },
@@ -580,4 +582,59 @@ test("Pruef-Warteschlange: Vorschlag zu einer verborgenen Person gekennzeichnet,
   assert.equal((ui.match(/hidden_person: "/g) || []).length, 2, "Fehlertext hidden_person in en und de");
   assert.ok(/hiddenPerson: "verborgene Person"/.test(ui) && /hiddenPerson: "hidden person"/.test(ui), "Kennzeichnung in de und en");
   assert.ok(/it\.hiddenPerson \?/.test(ui), "Karte zeigt die Kennzeichnung");
+});
+
+test("Migration 0054: Altbestand - vor dem Deploy geloeschtes Konto (Fassung user_id 0, verwaister Owner-Anspruch) bleibt verborgen, Bob erbt nichts (Runde 7)", async () => {
+  const DESC = "Alice Example is a member of the Microsoft community: Senior Consultant at Contoso.";
+  const { raw, env, user } = await setup((r) => {
+    const ins = r.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES (?,?,?,?,?,1)");
+    ins.run("alice", JSON.stringify({ name: "Alice Example", type: "person", desc: { en: DESC } }), "Selbst verwaltet", 0, "live");   // alte Loeschung: user_id 0
+    ins.run("guest", JSON.stringify({ name: "Guest", type: "person", desc: { en: "Podcast guest of the show, imported from the site." } }), "Übernahme aus entities.json", 0, "live");
+    ins.run("carol", JSON.stringify({ name: "Carol Example", type: "person", desc: { en: "Carol Example is a member of the Microsoft community." } }), "Selbst verwaltet", 9, "live");
+    r.prepare("INSERT INTO users(id,provider,sub,name,role,created) VALUES (9,'github','s9','Carol Example','',1)").run();
+    const cl = r.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES (?,?,'verified','owner',1)");
+    cl.run("alice", 7); cl.run("guest", 8); cl.run("carol", 9);   // Konten 7 und 8 gibt es nicht mehr
+  });
+  assert.deepEqual(raw.prepare("SELECT eid,user_id FROM person_entity ORDER BY eid").all().map((r) => ({ ...r })), [{ eid: "alice", user_id: 0 }, { eid: "carol", user_id: 9 }]);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_claims WHERE eid='alice'").get().n, 0, "verwaister Owner-Anspruch entfernt");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_claims WHERE eid IN ('guest','carol')").get().n, 2, "andere Ansprueche bleiben");
+  const hidden = async () => {
+    const exp = await call(env, "GET", "/api/entity/export");
+    assert.ok(!exp.j.items.map((x) => x.id).includes("alice"), "nicht im Export");
+    assert.ok(!JSON.stringify(exp.j).includes("Alice Example"));
+    assert.equal((await call(env, "GET", "/api/entity?id=alice")).s, 404);
+    assert.ok(!JSON.stringify(await callTool(env, null, "get_entity", { id: "alice" })).includes("Alice Example"), "auch nicht per MCP");
+  };
+  await hidden();
+  assert.ok((await entityIds(env)).includes("guest"), "importierte Entitaet ohne Profil-Herkunft bleibt sichtbar");
+  const bob = await user(2, "Bob");
+  assert.equal((await saveProfile(env, bob, "alice", true, "Bob at Fabrikam")).s, 200, "Adresse frei");
+  await hidden();
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_claims WHERE eid='alice' AND user_id=2").get().n, 0, "Bob uebernimmt keinen Anspruch auf die Altdaten");
+});
+
+test("Kontoloeschung: Blog-Abos anderer Mitglieder auf die Adresse gehen nicht an den naechsten Inhaber (Runde 7)", async () => {
+  const { raw, env, user } = await setup();
+  const alice = await user(1, "Alice Example"), fan = await user(2, "Fan"), bob = await user(3, "Bob");
+  assert.equal((await saveProfile(env, alice, "alice-old", true)).s, 200);
+  assert.equal((await saveProfile(env, alice, "alice", true)).s, 200);   // fruehere Adresse alice-old
+  assert.equal((await call(env, "POST", "/api/blog/follow", fan, { handle: "alice", on: true })).s, 200);
+  raw.prepare("INSERT INTO blog_follows(user_id,handle,created) VALUES (2,'alice-old',1)").run();   // Rest unter der frueheren Adresse
+  assert.equal((await call(env, "GET", "/api/blog/followers?handle=alice")).j.followers, 1);
+  assert.equal((await call(env, "DELETE", "/api/me", alice)).s, 200);
+  assert.equal((await saveProfile(env, bob, "alice", true)).s, 200, "Bob uebernimmt die Adresse");
+  assert.equal((await call(env, "GET", "/api/blog/followers?handle=alice")).j.followers, 0, "keine geerbten Abonnenten");
+  assert.deepEqual((await call(env, "GET", "/api/blog/following", fan)).j.following, []);
+});
+
+test("Kontoloeschung: Abos einer frueheren Adresse, die inzwischen ein anderes Konto fuehrt, bleiben dessen Abos (Runde 7)", async () => {
+  const { raw, env, user } = await setup();
+  const alice = await user(1, "Alice Example"), fan = await user(2, "Fan"), bob = await user(3, "Bob");
+  assert.equal((await saveProfile(env, alice, "alice", true)).s, 200);
+  assert.equal((await saveProfile(env, alice, "alice-new", true)).s, 200);
+  assert.equal((await saveProfile(env, bob, "alice", true)).s, 200);
+  assert.equal((await call(env, "POST", "/api/blog/follow", fan, { handle: "alice", on: true })).s, 200, "Fan folgt Bob");
+  assert.equal((await call(env, "DELETE", "/api/me", alice)).s, 200);
+  assert.equal((await call(env, "GET", "/api/blog/followers?handle=alice")).j.followers, 1, "Bobs Abonnent bleibt");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM profiles WHERE handle='alice' AND user_id=3").get().n, 1);
 });

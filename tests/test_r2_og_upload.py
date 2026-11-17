@@ -239,8 +239,8 @@ class EmptyExportTest(unittest.TestCase):
 
 
 class MembersExportMarkTest(unittest.TestCase):
-    """site_members.fetch_members: ein frisch abgerufener, leerer Export ersetzt die gespeicherte Fassung (keine Seiten und Karten entfernter Profile)
-    und setzt den Merker fuer den Upload; ein Ausfall nutzt die gespeicherte Fassung und markiert "cache"."""
+    """site_members.fetch_members: ein frisch abgerufener, leerer Export ergibt keine Profile (keine Seiten und Karten entfernter Profile) und setzt
+    den Merker fuer den Upload; ein Ausfall bricht den Bau ab (Runde 7: keine Profilseiten aus alten Daten) und markiert "fehlt"."""
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory(); t = Path(self.tmp.name)
         sys.path.insert(0, str(ROOT))
@@ -254,18 +254,22 @@ class MembersExportMarkTest(unittest.TestCase):
         from unittest import mock
         url = "https://api.example.test/api/profiles/export"
         with mock.patch.object(self.MEM, "CACHE", self.cache), mock.patch.object(self.MEM, "MARK", self.mark), mock.patch.object(self.MEM, "_fetch_export", return_value=export), \
-                mock.patch.object(self.SF, "states", return_value={url: state}), mock.patch("time.sleep"), contextlib.redirect_stderr(io.StringIO()):
-            people, _ = self.MEM.fetch_members("https://api.example.test")
+                mock.patch.object(self.SF, "states", return_value={url: state}), mock.patch("time.sleep"), mock.patch.dict(os.environ, {"SITE_OFFLINE": "0"}), \
+                contextlib.redirect_stderr(io.StringIO()):
+            try:
+                people, _ = self.MEM.fetch_members("https://api.example.test")
+            except SystemExit as e:
+                return f"abbruch {e.code}", json.loads(self.mark.read_text("utf-8"))
         return [p["handle"] for p in people], json.loads(self.mark.read_text("utf-8"))
 
     def test_frisch_leer(self):
         self.assertEqual(self.fetch({"people": [], "orgs": []}, "frisch"), ([], {"state": "frisch", "people": 0}))
-        self.assertEqual(json.loads(self.cache.read_text("utf-8"))["people"], [], "die gespeicherte Fassung folgt dem Export")
+        self.assertNotIn("max-m", self.cache.read_text("utf-8"), "die Repo-Kopie enthaelt keine Profildaten")
 
     def test_leer_mit_fehlern_oder_aus_zwischenspeicher_gilt_als_ausfall(self):
-        self.assertEqual(self.fetch({"people": [], "orgs": [], "failed": 3}, "frisch"), (["max-m"], {"state": "cache", "people": 1}))
-        self.assertEqual(self.fetch({"people": [], "orgs": []}, "cache"), (["max-m"], {"state": "cache", "people": 1}))
-        self.assertEqual(self.fetch(None, "fehlt"), (["max-m"], {"state": "cache", "people": 1}))
+        for export, state in (({"people": [], "orgs": [], "failed": 3}, "frisch"), ({"people": [], "orgs": []}, "cache"),
+                              ({"people": [{"handle": "alt-x", "name": "Alt", "items": []}], "orgs": []}, "cache"), (None, "fehlt")):
+            self.assertEqual(self.fetch(export, state), ("abbruch 1", {"state": "fehlt", "people": 0}), (export, state))
 
     def test_frisch_mit_profilen(self):
         self.assertEqual(self.fetch({"people": [{"handle": "anna-b", "name": "Anna", "items": []}], "orgs": []}, "frisch"), (["anna-b"], {"state": "frisch", "people": 1}))

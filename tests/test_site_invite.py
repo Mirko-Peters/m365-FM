@@ -87,8 +87,9 @@ def rules(doc):
 
 
 def sample():
-    """Realistische Stichprobe: die Profile des letzten Exports (data/members_export.json) plus Grenzfaelle fuer Namen, Kurzvorstellung und Kuerzel."""
-    f = ROOT / "data" / "members_export.json"
+    """Realistische Stichprobe: erfundene Profile im Aufbau des Exports (tests/fixtures/members_sample.json; data/members_export.json enthaelt keine
+    Profildaten mehr) plus Grenzfaelle fuer Namen, Kurzvorstellung und Kuerzel."""
+    f = ROOT / "tests" / "fixtures" / "members_sample.json"
     people = [dict(p) for p in (json.loads(f.read_text("utf-8")).get("people", []) if f.exists() else [])]
     long_head = "Microsoft MVP | Power Automate & Copilot Studio for SMBs in Switzerland | Founder of KMUpower and many more things to say"
     people += [

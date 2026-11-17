@@ -44,7 +44,7 @@ class FetchedTest(unittest.TestCase):
         self.assertGreater(iso_ts(m["build"]), iso_ts(m["fetched"]) + 3000, "build (Ende) liegt nach fetched (Abruf)")
 
     def test_ohne_pflicht_export_kein_fetched(self):
-        self.fetch_all(fail=("/api/profiles/export",))   # ausgefallen, kein Cache (nur data/members_export.json als Rueckfall)
+        self.fetch_all(fail=("/api/profiles/export",))   # ausgefallen, kein Cache
         self.assertIsNone(SF.data_time())
         self.assertNotIn("fetched", SS.manifest([], 1), "ohne fetched bleibt der Worker gesperrt")
 

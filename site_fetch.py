@@ -4,7 +4,8 @@
 - Bis zu drei Versuche je Endpunkt, Zeitueberschreitung 120 s.
 - Jede erfolgreiche Antwort landet in data/cache/<name>.json (gitignored; in CI per actions/cache von Lauf zu Lauf).
   Faellt der Abruf aus, kommt die letzte gespeicherte Fassung mit Warnung - statt stillschweigend leerer Seiten.
-- check(): fehlen Pflicht-Exporte (Blog, Profile, Entitaeten, Q&A) frisch UND im Cache, bricht der Bau mit Exit 1 ab.
+- check(): fehlen Pflicht-Exporte (Blog, Profile, Entitaeten, Q&A) frisch UND im Cache, bricht der Bau mit Exit 1 ab. Den Profil-Export
+  braucht der Bau frisch: aus einer alten Fassung kaemen geloeschte oder private Profile zurueck.
   SITE_OFFLINE=1 (lokale Testbauten ohne Netz) macht daraus eine Warnung.
 """
 import json, os, re, sys, time, threading, urllib.request
@@ -16,6 +17,7 @@ CACHE = Path(__file__).parent / "data" / "cache"
 API = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm")
 # Pflicht: ohne diese Exporte entstehen leere Bereiche (Blog, Mitglieder, Entitaeten, Fragen) - und kleinere Sitemaps, die Google als Loeschung liest
 ESSENTIAL = ("/api/blog/export", "/api/profiles/export", "/api/entity/export", "/api/qa/export")
+PROFILES = "/api/profiles/export"   # Pflicht und nur frisch: keine Profilseiten aus alten Daten (check, site_members.fetch_members)
 # Vorab parallel: alles, was der Seitenbau an Exporten kennt
 PREFETCH = ESSENTIAL + ("/api/entity/claims", "/api/feed/export", "/api/show/export", "/api/events/export", "/api/guests/export", "/api/library/export",
                         "/api/podcast/export", "/api/video/export", "/api/notes/export", "/api/ui-i18n")
@@ -94,8 +96,11 @@ def check(api=None):
     """Bricht ab, wenn ein Pflicht-Export weder frisch noch gespeichert vorliegt (sonst wuerde eine Seite ohne Blog/Profile/Entitaeten veroeffentlicht)."""
     api = api or API
     missing = [p for p in ESSENTIAL if _STATE.get(api + p, "fehlt") == "fehlt"]
-    if "/api/profiles/export" in missing and (CACHE.parent / "members_export.json").exists():
-        missing.remove("/api/profiles/export")   # Profile haben zusaetzlich die eingecheckte letzte Fassung (site_members.py)
+    # Profile nur frisch (Runde 7): eine alte Fassung (data/cache oder frueher die eingecheckte data/members_export.json) brachte geloeschte,
+    # privat gestellte und umbenannte Profile als statische Seiten zurueck. Abbruch statt Bau ohne Profilseiten: so laeuft kein Upload und kein
+    # Deploy, und r2_site_sync/r2_og_upload markieren die vorhandenen Profilseiten nicht massenhaft als entfernt.
+    if PROFILES not in missing and _STATE.get(api + PROFILES) != "frisch":
+        missing.append(PROFILES + " (nur alte Fassung)")
     if not missing:
         return True
     msg = "Pflicht-Exporte fehlen (frisch und Cache): " + ", ".join(missing)
@@ -110,8 +115,7 @@ def states():
 
 
 def data_time(paths=ESSENTIAL):
-    """Aeltester Datenstand der Pflicht-Exporte dieses Baus (Unix-Zeit) oder None, wenn einer fehlt (nicht geholt, ausgefallen ohne Cache,
-    Profile nur aus der eingecheckten data/members_export.json). site_search.py schreibt ihn als "fetched" ins Such-Manifest: der Worker
+    """Aeltester Datenstand der Pflicht-Exporte dieses Baus (Unix-Zeit) oder None, wenn einer fehlt (nicht geholt, ausgefallen ohne Cache). site_search.py schreibt ihn als "fetched" ins Such-Manifest: der Worker
     (search.js searchBlockActive) nimmt gesperrte Personen-Dokumente (Kontoloeschung, Adresswechsel) erst aus einem Bau wieder auf, dessen
     Exporte NACH der Sperre geholt wurden - nicht schon, weil der Bau danach endet (K41/C)."""
     with _LOCK:

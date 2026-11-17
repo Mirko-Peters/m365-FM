@@ -77,40 +77,44 @@ class MediakitNotPublic(unittest.TestCase):
 
 
 class MembersExport(unittest.TestCase):
-    """K23: data/members_export.json liegt im oeffentlichen Repo (Historie bleibt) - nie Kontakt- oder Adressdaten hineinschreiben."""
+    """K23/Runde 7: data/members_export.json liegt im oeffentlichen Repo (Historie bleibt) - keine Profildaten mehr hineinschreiben (Namen,
+    Kurzzeilen, Profiltexte, Fotos, Inhalte, Kontakt, Standorte, Handles). Die Profilseiten entstehen nur aus dem frischen Export."""
+    PERSONAL = ("people", "orgs", "name", "headline", "about", "img", "items", "contact", "handle", "locations", "tagline", "bio")
 
-    def test_checked_in_file_has_no_contact_data(self):
+    def test_checked_in_file_has_no_profile_data(self):
         d = json.loads((ROOT / "data" / "members_export.json").read_text("utf-8"))
-        for p in d.get("people") or []:
-            self.assertFalse(p.get("contact"), p.get("handle"))
-            self.assertNotIn("private", p)
-        for o in d.get("orgs") or []:
-            for loc in o.get("locations") or []:
-                self.assertLessEqual(set(loc), {"label", "country"}, o.get("handle"))
-
-    def test_repo_copy_cuts_org_locations_to_country_and_label(self):
         import site_members as MEM
-        j = {"people": [], "orgs": [{"handle": "solo", "name": "Solo", "locations": [
-            {"id": 7, "label": "Buero", "address": "Hauptstr. 1", "zip": "12345", "city": "Musterstadt", "country": "Germany",
-             "public": 1, "lat": 52.5, "lng": 13.4, "geo_precision": "street"}]}]}
-        out = MEM.repo_copy(j)
-        self.assertEqual(out["orgs"][0]["locations"], [{"label": "Buero", "country": "Germany"}])
-        self.assertEqual(j["orgs"][0]["locations"][0]["city"], "Musterstadt", "der frische Export fuer die Seiten bleibt unveraendert")
-        raw = json.dumps(out, ensure_ascii=False)
-        for v in ("Hauptstr. 1", "12345", "Musterstadt", "52.5"): self.assertNotIn(v, raw)
+        self.assertEqual(d, MEM.repo_copy({}), "die Datei im Repo ist der feste Platzhalter")
+        raw = json.dumps(d)
+        for k in self.PERSONAL: self.assertNotIn(f'"{k}"', raw)
+
+    def test_repo_copy_has_no_profile_data(self):
+        import site_members as MEM
+        j = {"people": [{"handle": "geloescht-x", "name": "Gelöschte Person", "headline": "Senior Consultant at Contoso", "about": "Mein Profiltext",
+                         "img": 3, "items": [{"title": "Beitrag", "url": "https://blog.example/x"}], "contact": {"email": "x@example.test"}}],
+             "orgs": [{"handle": "solo", "name": "Solo", "tagline": "Einzelfirma", "locations": [
+                 {"id": 7, "label": "Buero", "address": "Hauptstr. 1", "zip": "12345", "city": "Musterstadt", "country": "Germany", "lat": 52.5, "lng": 13.4}]}]}
+        before = json.dumps(j, sort_keys=True)
+        raw = json.dumps(MEM.repo_copy(j), ensure_ascii=False)
+        self.assertEqual(json.dumps(j, sort_keys=True), before, "der frische Export fuer die Seiten bleibt unveraendert")
+        for v in ("geloescht-x", "Gelöschte Person", "Senior Consultant", "Mein Profiltext", "blog.example", "x@example.test", "solo", "Einzelfirma",
+                  "Hauptstr. 1", "12345", "Musterstadt", "52.5", "Buero"):
+            self.assertNotIn(v, raw)
+        for k in self.PERSONAL: self.assertNotIn(f'"{k}"', raw)
 
     def test_fetch_members_writes_cache_without_contact_but_pages_keep_it(self):
-        import site_members as MEM
+        import site_members as MEM, site_fetch as SF
         exp = {"people": [{"handle": "anna", "name": "Anna", "items": [], "channels": [],
                            "contact": {"email": "anna@example.test", "street": "Hauptstr. 1", "zip": "12345", "city": "Musterstadt"}}], "orgs": []}
         with tempfile.TemporaryDirectory() as d:
             cache = Path(d) / "members_export.json"
             with mock.patch.object(MEM, "MARK", Path(d) / "mark.json"), mock.patch.object(MEM, "CACHE", cache), \
-                    mock.patch.object(MEM, "_fetch_export", return_value=json.loads(json.dumps(exp))):
+                    mock.patch.object(MEM, "_fetch_export", return_value=json.loads(json.dumps(exp))), \
+                    mock.patch.object(SF, "states", return_value={"https://api.example.test/api/profiles/export": "frisch"}):
                 people, _orgs = MEM.fetch_members("https://api.example.test")
             raw = cache.read_text("utf-8")
         self.assertEqual(people[0]["contact"]["city"], "Musterstadt", "Seiten dieses Baus zeigen, was das Mitglied freigegeben hat")
-        for v in ("anna@example.test", "Hauptstr. 1", "12345", "Musterstadt"): self.assertNotIn(v, raw)
+        for v in ("anna", "Anna", "anna@example.test", "Hauptstr. 1", "12345", "Musterstadt"): self.assertNotIn(v, raw)
 
 
 if __name__ == "__main__":

@@ -783,6 +783,12 @@ export async function deleteUserData(db, id, env = null) {
       db.prepare("DELETE FROM item_votes WHERE item_id IN (SELECT id FROM feed_items WHERE owner_type='o' AND owner_id=?)").bind(o.org_id), db.prepare("DELETE FROM feed_items WHERE owner_type='o' AND owner_id=?").bind(o.org_id),
       db.prepare("DELETE FROM channels WHERE owner_type='o' AND owner_id=?").bind(o.org_id), db.prepare("DELETE FROM org_locations WHERE org_id=?").bind(o.org_id), db.prepare("DELETE FROM org_members WHERE org_id=?").bind(o.org_id), db.prepare("DELETE FROM orgs WHERE id=?").bind(o.org_id));
   }
+  // Blog-Abos ANDERER Mitglieder auf die Adresse des Kontos (blog_follows.handle): deleteUserBlog loescht nur die eigenen (user_id). Sonst erbte der
+  // naechste Inhaber der Adresse Abonnentenzahl und Abonnenten (Runde 7, wie releaseHandleOps beim Adresswechsel). Fruehere Adressen sind die eids der
+  // Personen-Entitaeten aus dem Profil (ownedEntity: eid = Adresse); deren Abos sind beim Wechsel schon mitgewandert, Reste trotzdem weg - aber nicht,
+  // wenn ein anderes Konto die Adresse inzwischen fuehrt (dessen eigene Abonnenten).
+  const followHandles = [...new Set([handle, ...persons].filter(Boolean))];
+  if (followHandles.length) ops.push(db.prepare("DELETE FROM blog_follows WHERE handle IN (SELECT value FROM json_each(?)) AND NOT EXISTS (SELECT 1 FROM profiles p WHERE p.handle=blog_follows.handle AND p.user_id<>?)").bind(JSON.stringify(followHandles), id));
   ops.push(
     db.prepare("DELETE FROM org_members WHERE user_id=?").bind(id),
     db.prepare("DELETE FROM contributions WHERE user_id=?").bind(id), db.prepare("DELETE FROM contribution_sources WHERE user_id=?").bind(id), db.prepare("DELETE FROM contribution_ignored WHERE user_id=?").bind(id),   // Loeschmarken enthalten URLs geloeschter Beitraege (DSGVO)

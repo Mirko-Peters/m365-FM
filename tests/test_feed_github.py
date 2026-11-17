@@ -1,6 +1,6 @@
 """GitHub-Aktivitaet (Commits, PRs, Stars) erscheint auf keiner oeffentlichen Seite: keine Inhaltsseite /community/feed/<id>-<slug>/,
 kein Sitemap-Eintrag, keine Karte auf der Startseite, kein Eintrag auf Profil-/Firmenseiten, nicht im SEO-Bericht (site_feed.PRIVATE_KINDS)."""
-import json
+import contextlib, io, json, os
 import sys
 import time
 import unittest
@@ -87,16 +87,18 @@ class MembersTest(unittest.TestCase):
 
     def test_fetch_members_filters_live_export_and_cache(self):
         import tempfile
+        import site_fetch as SF
+        url = "https://api.example.test/api/profiles/export"
         with tempfile.TemporaryDirectory() as d:
             cache = Path(d) / "members_export.json"; mark = mock.patch.object(MEM, "MARK", Path(d) / "profiles-export.json"); mark.start(); self.addCleanup(mark.stop)
-            with mock.patch.object(MEM, "CACHE", cache), mock.patch.object(MEM, "_fetch_export", return_value=self.export()):
+            with mock.patch.object(MEM, "CACHE", cache), mock.patch.object(MEM, "_fetch_export", return_value=self.export()), mock.patch.object(SF, "states", return_value={url: "frisch"}):
                 people, orgs = MEM.fetch_members("https://api.example.test")
             self.assertEqual([i["id"] for i in people[0]["items"]], [101]); self.assertEqual(orgs[0]["items"], [])
             self.assertNotIn("github.com/Mirko-Peters/repo", cache.read_text("utf-8"), "gespeicherte Fassung ohne GitHub-Inhalte")
-            cache.write_text(json.dumps(self.export()), "utf-8")   # alter Zwischenspeicher mit GitHub-Inhalten
-            with mock.patch.object(MEM, "CACHE", cache), mock.patch.object(MEM, "_fetch_export", return_value=None), mock.patch("time.sleep"):
-                people, orgs = MEM.fetch_members("https://api.example.test")
-            self.assertEqual([i["id"] for i in people[0]["items"]], [101]); self.assertEqual(orgs[0]["items"], [])
+            cache.write_text(json.dumps(self.export()), "utf-8")   # alter Zwischenspeicher mit GitHub-Inhalten: wird nie mehr gelesen (Runde 7)
+            with mock.patch.object(MEM, "CACHE", cache), mock.patch.object(MEM, "_fetch_export", return_value=None), mock.patch("time.sleep"), \
+                    mock.patch.dict(os.environ, {"SITE_OFFLINE": "1"}), contextlib.redirect_stderr(io.StringIO()):
+                self.assertEqual(MEM.fetch_members("https://api.example.test"), ([], []))
 
 
 class SeoReportTest(unittest.TestCase):
