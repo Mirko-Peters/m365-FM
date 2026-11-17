@@ -27,7 +27,7 @@ Display Protection is a feature of [Azure Virtual Desktop](/entity/azure-virtual
 
 Microsoft Learn's [What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new) lists "Display Protection for Azure Virtual Desktop (Public Preview)" in the September 2026 section. The entry says administrators can configure the required level of display protection for their host pools in the Azure portal. The Windows App release notes also describe it as available in public preview (entry of 24 August 2026) and name Windows App on Windows version 2.0.1236.0 or later as the requirement. The Learn page [Display Protection for Windows 365 and Azure Virtual Desktop](https://learn.microsoft.com/en-us/windows-365/enterprise/display-protection) was last updated on 13 November 2026. It carries no preview label for Display Protection itself; it marks only input protection and Cloud PC monitoring as preview. Because the what's new entry and the feature page differ in labelling, confirm the current status before you plan a production rollout.
 
-The feature is documented for both [Windows 365](/entity/windows-365/) Cloud PCs and Azure Virtual Desktop session hosts. This article covers the Azure Virtual Desktop side.
+The feature is documented for both [Windows 365](/entity/windows-365/) Cloud PCs and Azure Virtual Desktop session hosts; What's new in Windows 365 Enterprise likewise lists "Display Protection for Windows 365 (Public Preview)". This article covers the Azure Virtual Desktop side.
 
 ## The problem it addresses
 
@@ -57,7 +57,7 @@ The level is set by one value per host pool:
 | 1 | Hardware or software enforcement | Uses hardware DRM (SL3000) when available. If the endpoint cannot provide it, software DRM (SL2000) is allowed. |
 | 2 | Hardware enforcement required | Requires SL3000. If the endpoint cannot provide it, the connection is blocked and the user sees an error. There is no software fallback. |
 
-The trade-off is plain. Level 1 keeps more endpoints able to connect. In our reading, a software fallback (SL2000) is a weaker guarantee than hardware DRM (SL3000), though Learn does not rank them in those words. Level 2 requires hardware DRM and blocks every endpoint that cannot meet it. Learn also says software DRM can increase the time needed to establish a session. Which level fits which pool is a separate decision; the companion article on choosing a Display Protection level per host pool works through it.
+The trade-off: level 1 keeps more endpoints able to connect. In our reading, a software fallback (SL2000) is a weaker guarantee than hardware DRM (SL3000), though Learn does not rank them in those words. Level 2 requires hardware DRM and blocks every endpoint that cannot meet it. Learn also says software DRM can increase the time needed to establish a session. Which level fits which pool is a separate decision; the companion article on choosing a Display Protection level per host pool works through it.
 
 ## Where you configure it
 
@@ -105,7 +105,7 @@ Screen capture protection has a wider client list than Display Protection: its L
 
 ## Checking that it works
 
-Learn's validation steps are short. From a physical Windows 11 endpoint with Windows App 2.0.1236.0 or newer, connect to a session host in a pool where Display Protection is enabled, confirm that the connection succeeds without an error, then try a screen capture tool during the session. The remote content should be blocked or blank. For tenant-wide monitoring Learn points to Cloud PC monitoring (preview) in the Intune admin center, under **Reports** > **Cloud PC monitoring (preview)** > **Connection health**, where the `DisplayProtectionState` connection event shows whether protection was negotiated. Learn notes that event names and values might change before general availability. Learn describes the report as tenant-wide monitoring for both Windows 365 and Azure Virtual Desktop; verify in your own tenant that connections to your Azure Virtual Desktop pools appear.
+Learn's validation steps are short. From a physical Windows 11 endpoint with Windows App 2.0.1236.0 or newer, connect to a session host in a pool where Display Protection is enabled, confirm that the connection succeeds without an error, then try a screen capture tool during the session. The remote content should be blocked or blank. For tenant-wide monitoring Learn points to Cloud PC monitoring (preview) in the Intune admin center, under **Reports** > **Cloud PC monitoring (preview)** > **Connection health**, where the `DisplayProtectionState` connection event shows whether protection was negotiated. Learn notes that event names and values might change before general availability. The Cloud PC monitoring overview describes a platform for Windows 365 Cloud PCs managed in Intune and does not say that Azure Virtual Desktop session host connections appear there, so test in your own tenant that connections to your Azure Virtual Desktop pools show up before you rely on the report.
 
 ## When it fits
 
