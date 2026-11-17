@@ -8,7 +8,7 @@ date: 2026-11-18
 topics: [avd-managed-identity, azure-virtual-desktop]
 keypoints:
   - "Learn lists four features that can use a host pool managed identity: autoscale, session host update, Start VM on Connect and Azure Virtual Desktop for Azure Local. App Attach with Azure Files and Entra-joined session hosts is the named exception and keeps the service principal."
-  - "You can use a system-assigned identity, tied to one host pool and deleted with it, or a user-assigned identity, an independent resource that several host pools can share."
+  - "You can use a system-assigned identity, tied to one host pool, or a user-assigned identity, an independent resource that several host pools can share."
   - "Each feature has its own role: Power On Off Contributor for power management autoscale, Power On Contributor for Start VM on Connect, Virtual Machine Contributor for session host creation and update. Autoscale wants the subscription as scope; the Start VM on Connect page allows lower scopes."
   - "Learn's What's new announces managed identity support as generally available (September 2026) and says that in a future service update, host pools with a session host configuration will require one to add session hosts. Learn gives no date."
   - "Session host update needs a managed identity if the key vault uses private network access."
