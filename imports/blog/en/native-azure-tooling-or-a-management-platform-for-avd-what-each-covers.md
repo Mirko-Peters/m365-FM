@@ -1,6 +1,6 @@
 ---
 title: "Native Azure tooling or a management platform for AVD: what each covers"
-summary: "Azure Virtual Desktop has native features for host pool creation, autoscale, session host updates, image building and monitoring. A management platform such as Nerdio Manager for Enterprise adds one console, more scaling triggers and image staging, at the price of another application, permissions and a per-user licence."
+summary: "Azure Virtual Desktop has native features for host pool creation, autoscale, session host updates, image building and monitoring. A management platform such as Nerdio Manager for Enterprise offers one console, more scaling triggers and image staging, at the price of another application, permissions and a per-user licence."
 status: review
 publish: false
 author: mirko-p
@@ -8,22 +8,22 @@ date: 2026-11-18
 topics: [azure-virtual-desktop, nerdio-manager-for-enterprise]
 keypoints:
   - "Native Azure Virtual Desktop covers a lot: scaling plans (power management and dynamic autoscaling), session host configuration with session host update, custom image templates on Azure Image Builder, and Insights on Azure Monitor."
-  - "Nerdio Manager for Enterprise runs as an Azure application in your own subscription and, per Nerdio, adds auto-scale triggers beyond session count (CPU, RAM), image staging, scripted actions and one console. Several features, such as multiple triggers and Global Pools, are Premium-only."
+  - "Nerdio Manager for Enterprise runs as an Azure application in your own subscription and, per Nerdio, offers auto-scale triggers beyond session count (CPU, RAM), image staging, scripted actions and one console. Several features, such as multiple triggers and Global Pools, are Premium-only."
   - "Vendor comparisons age quickly: a Nerdio comparison page says native scaling cannot create hosts, while Learn documents dynamic autoscaling that creates and deletes session hosts for pooled pools with a session host configuration."
   - "Both routes have limits. The native session host configuration approach is chosen at creation and cannot be changed, and existing standard-management tooling does not work with it. Nerdio bills per unique Entra ID user per month and needs an installer with Global Admin and Subscription Owner rights, or a pre-created enterprise app."
   - "Decide per task, not per product: run the native tools where they meet your requirements, and test the platform on a pilot host pool where a documented gap costs you money or admin time."
 faq:
   - q: "Do I need a management platform to run Azure Virtual Desktop?"
-    a: "No. Microsoft Learn documents native features for creating host pools, scaling session hosts, updating them and building images, and it lists 14 built-in RBAC roles for administration. Whether they are enough depends on your size and requirements; the decision steps below show how to test that."
+    a: "No. Microsoft Learn documents native features for creating host pools, scaling session hosts, updating them and building images, and it lists 14 built-in RBAC roles for Azure Virtual Desktop. Whether they are enough depends on your size and requirements; the decision steps below show how to test that."
   - q: "Can I mix native autoscale and a third-party scaling tool on the same host pool?"
     a: "Not according to Learn, which says not to use autoscale in combination with other scaling Microsoft or third-party scaling tools, and to disable those on the host pools a scaling plan applies to. In our reading, that means one scaling owner per host pool: either a native scaling plan or the third-party tool."
   - q: "What does Nerdio Manager for Enterprise cost?"
     a: "Nerdio's billing page says charges are per calendar month and per unique Entra ID user, under either the Windows Cloud or the AVD entitlement model, in Core or Premium edition. The page lists no prices; ask Nerdio or your partner for a quote."
 ---
 
-Azure Virtual Desktop has native features for host pool creation, autoscale, session host updates, image building and monitoring. Whether they are enough depends on the size and requirements of your environment. A management platform such as [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/) offers these tasks in one console and adds features such as CPU- and RAM-based scaling triggers and image staging. Whether that is worth another application and licence depends on the gaps you actually have.
+Azure Virtual Desktop has native features for host pool creation, autoscale, session host updates, image building and monitoring. Whether they are enough depends on your environment. A management platform such as [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/) offers these tasks in one console, with CPU- and RAM-based scaling triggers and image staging. Whether that is worth another application and licence depends on the gaps you actually have.
 
-This guide compares the two routes task by task. It uses Microsoft Learn for the native side and Nerdio's own help pages for the platform. Where a statement comes from Nerdio's marketing material, it is marked as a vendor claim. Nerdio's billing page lists no prices, so costs are not compared here.
+This guide compares the two routes task by task. It uses Microsoft Learn for the native side and Nerdio's own help pages for the platform. Nerdio marketing statements are marked as vendor claims. Nerdio's billing page lists no prices, so costs are not compared here.
 
 ## The scope of the comparison
 
@@ -52,7 +52,7 @@ Native scaling comes in two methods. [Power management autoscaling](/entity/avd-
 
 Two cautions for a fair reading:
 
-- A Nerdio comparison page (last modified 16 June 2026) states that the native session count threshold is the only trigger native autoscale uses, and that native scaling "can only power on hosts that already exist in your pool." The first statement matches the capacity-threshold logic on Learn. The second describes power management; dynamic autoscaling creates and deletes hosts. Treat the page as vendor material: its figures, such as "approximately $900 to $1,200 per month per 100 machines" and the customer savings it cites, are Nerdio's own claims. The same page concedes that native autoscale "works reasonably well" for small deployments with predictable usage.
+- A Nerdio comparison page (last modified 16 June 2026) states that the session count threshold is the only native autoscale trigger, and that native scaling "can only power on hosts that already exist in your pool." The first fits Learn only in part: native scaling reacts to session load, but Learn's capacity threshold is a percentage of host pool capacity, not a session count per host. The second describes power management; dynamic autoscaling creates and deletes hosts. Treat the page as vendor material: its figures, such as "approximately $900 to $1,200 per month per 100 machines", and the customer savings it cites are Nerdio's own claims. The same page concedes that native autoscale "works reasonably well" for small deployments with predictable usage.
 - Learn's autoscale scenarios page says: "Don't use autoscale in combination with other scaling Microsoft or third-party scaling tools," and to disable those on the host pools a scaling plan applies to. The scaling plan page adds that autoscale and Azure Automation or Azure Logic Apps scaling can't run on the same host pool, and that dynamic scaling can't be used with any other scaling script. Our reading: per host pool, use either a native scaling plan or Nerdio auto-scale, and disable the other.
 
 ## Images and updates
@@ -100,7 +100,7 @@ Retrieved on 17 November 2026.
 - [Microsoft Learn: Host pool management approaches](https://learn.microsoft.com/en-us/azure/virtual-desktop/host-pool-management-approaches)
 - [Microsoft Learn: Deploy Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop)
 - [Microsoft Learn: Add session hosts to a host pool](https://learn.microsoft.com/en-us/azure/virtual-desktop/add-session-hosts-host-pool)
-- [Microsoft Learn: Autoscale scaling plans for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scaling-plan)
+- [Microsoft Learn: Create and assign an autoscale scaling plan for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)
 - [Microsoft Learn: Autoscale scaling plans and example scenarios](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)
 - [Microsoft Learn: Session host update](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update)
 - [Microsoft Learn: Custom image templates](https://learn.microsoft.com/en-us/azure/virtual-desktop/custom-image-templates)
