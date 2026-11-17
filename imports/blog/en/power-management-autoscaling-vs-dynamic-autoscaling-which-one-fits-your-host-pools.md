@@ -66,13 +66,13 @@ Personal plans work differently from pooled ones:
 - **Start VM on Connect** is a switch in every phase. Only ramp-up also has a choice of which VMs to start: assigned only, assigned and unassigned, or none.
 - **Disconnect settings** ("When disconnected for (min)") and **sign-out settings** ("When logged off for (min)") take 0 to 360 minutes. The action can be deallocate, hibernate or do nothing.
 - The FAQ says you cannot make autoscale force users to sign out of a personal desktop, and that autoscale for personal desktops "only deallocates session hosts if the user has signed out of their user session". The plan settings above also offer an action for disconnected sessions. Learn does not reconcile the two statements, so test what your personal pool does after a disconnect.
-- Learn warns that FSLogix and App Attach do not currently support hibernate, so do not enable it with either.
+- Learn warns that FSLogix and App Attach do not currently support hibernate.
 
 See [personal host pool](/entity/avd-personal-host-pool/) and [hibernation](/entity/avd-hibernation/).
 
 ## Decision 3: Do you need hosts created and deleted?
 
-Only pooled host pools with a session host configuration reach this question. Dynamic autoscaling changes the number of VMs in the pool, not just the number running. Learn's glossary says that when autoscale shuts down a VM it deallocates and stops it, so you are not charged for the compute resources. What other resources of a deallocated host cost, compared with deleting the host, depends on your own pricing. New hosts are built from the session host configuration: the FAQ says autoscale uses "the latest valid/stable image version defined in the default session host configuration, if you don't already have an active session host configuration". The second half of that sentence is unclear in the FAQ itself, so confirm in a test pool which image a new host receives.
+Only pooled host pools with a session host configuration reach this question. Dynamic autoscaling changes the number of VMs in the pool, not just the number running. Learn's glossary says that when autoscale shuts down a VM it deallocates and stops it, so you are not charged for the compute resources. What a deallocated host's remaining resources cost, compared with deleting it, depends on your pricing. New hosts are built from the session host configuration: the FAQ says autoscale uses "the latest valid/stable image version defined in the default session host configuration, if you don't already have an active session host configuration". That wording is unclear, so confirm in a test pool which image a new host receives.
 
 If you need neither creation nor deletion, power management autoscaling is the narrower choice. When autoscale starts, creates or deletes is the subject of the article "Dynamic autoscaling for Azure Virtual Desktop: creating and deleting session hosts on demand".
 
@@ -91,15 +91,13 @@ Both methods use a schedule with ramp-up, peak, ramp-down and off-peak phases. S
 
 Learn's consolidation scenario (scenario 3) applies to both methods and is worked through in the phase article. In short: with four user sessions, a maximum session limit of 5 and a capacity threshold of 75%, the glossary formula Required Hosts = Total User Sessions / (Max Session Limit x Capacity Threshold), rounded up, gives 4 / (5 x 0.75) = 1.07, so 2 hosts. In Learn's scenario, with four of six hosts available, autoscale turns off two hosts after signing users out.
 
-The final step is where the methods diverge: power management leaves the removed hosts in the host pool, deallocated. Dynamic autoscaling can delete them.
-
 ## Shared settings in brief
 
 - **Maximum session limit.** For pooled host pools, set it explicitly and do not use the default. See [maximum session limit](/entity/avd-maximum-session-limit/).
 - **Exclusion tag.** Tagged hosts are not turned on, turned off or changed in drain mode in any phase, but they still count toward the minimum percentage of hosts. If the tagged hosts are switched off, autoscale cannot start them, so the pool cannot reach the minimum. Learn's scenario 4 shows the result: if the last untagged host is tagged and switched off, a user who tries to sign in sees "No resources available". See [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/).
 - **Drain mode.** For pooled host pools, autoscale overwrites drain mode, so use the exclusion tag for maintenance. See [drain mode](/entity/avd-drain-mode/).
 - **Holidays.** The autoscale FAQ says autoscale "doesn't currently support ramping down on specific dates", so a schedule cannot be tied to a calendar date.
-- **Roles.** Power management needs Desktop Virtualization Power On Off Contributor, dynamic autoscaling also Desktop Virtualization Virtual Machine Contributor. The create-and-assign prerequisites for both methods allow the role to go to a managed identity assigned to the host pool or to the Azure Virtual Desktop service principal. The subsection on assigning permissions names the managed identity option only for power management and the service principal alone for dynamic autoscaling. The scope is the subscription. It says a lower scope prevents autoscale from working properly, while the troubleshooting page lists host pool, resource group or subscription scope as acceptable. Use the subscription scope. Endpoint and network requirements for dynamic autoscaling are in the requirements article.
+- **Roles.** Power management needs Desktop Virtualization Power On Off Contributor, dynamic autoscaling also Desktop Virtualization Virtual Machine Contributor. The create-and-assign prerequisites for both methods allow the role to go to a managed identity assigned to the host pool or to the Azure Virtual Desktop service principal. The subsection on assigning permissions names the managed identity option only for power management and the service principal alone for dynamic autoscaling. The scope is the subscription. It says a lower scope prevents autoscale from working properly, while the troubleshooting page lists host pool, resource group or subscription scope as acceptable. Use the subscription scope.
 
 ## How to pick, in order
 
@@ -108,7 +106,7 @@ The final step is where the methods diverge: power management leaves the removed
 3. Check the pool type. Personal pools use power management autoscaling.
 4. For a pooled host pool with a session host configuration, decide whether the VM count must change. If you only need fewer running VMs, power management autoscaling is enough.
 5. If you want create and delete, check the current Learn pages for limits, assign both roles at subscription level and set the maximum session limit explicitly.
-6. Advice, not from Learn: try the plan on one pilot pool for a full week of schedules before you assign it widely. The troubleshooting article lists maximum session limit, capacity threshold, session mix, minimum active host percentage and sign-out behavior as reasons similar pools scale down differently, so one pool's behavior may not carry over to another.
+6. Advice, not from Learn: try the plan on one pilot pool for a full week of schedules before you assign it widely. The troubleshooting article lists maximum session limit, capacity threshold, session mix, minimum active host percentage and sign-out behavior as reasons similar pools scale down differently.
 7. If hosts stay on after hours, check disconnected sessions first. Learn says disconnected sessions count as active for capacity calculations, and the troubleshooting page names a Group Policy setting for a time limit on disconnected sessions.
 
 ## One more check

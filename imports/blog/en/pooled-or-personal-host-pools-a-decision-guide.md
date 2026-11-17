@@ -8,22 +8,22 @@ date: 2026-11-18
 topics: [avd-pooled-host-pool, avd-personal-host-pool]
 keypoints:
   - "A pooled host pool lets user sessions be load balanced to any session host, with several users on one host. A personal host pool assigns each session host to one user."
-  - "Pooled pools use breadth-first or depth-first load balancing. Personal pools have no load-balancing algorithm, because users always map 1:1 to a session host."
+  - "Pooled pools use breadth-first or depth-first load balancing. Learn says load balancing does not apply to personal host pools: there is no algorithm to choose, and each user maps 1:1 to a session host."
   - "Personal pools use automatic or direct assignment. Automatic is the default for new personal pools; with direct assignment a user without a session host gets 'No resources available'."
-  - "Profile data goes to FSLogix on pooled pools. On personal pools it can stay on the VM's OS disk."
+  - "Profile data goes to FSLogix on pooled pools. On personal pools it can stay on the VM's OS disk. Pooled hosts are updated by redeploying from updated images, personal hosts with Windows Updates or Configuration Manager. RemoteApp is available with pooled host pools only."
   - "Autoscale differs by type: pooled plans can force sign-out in ramp-down, personal schedules offer no forced sign-out setting, only disconnect and sign-out timers, and autoscale does not put a personal host in drain mode before deallocating it."
 faq:
   - q: "Can I change a host pool from pooled to personal later?"
-    a: "The sources used for this article do not describe converting a host pool between types, so this guide makes no claim about it. Treat the type as a design decision and plan a new host pool if you need the other type."
+    a: "No. The Azure Virtual Desktop FAQ says that once you create a host pool, you cannot change its type. You can, however, move any VMs you register to a host pool to a different type of host pool, so the practical route is to create a host pool of the other type and move the VMs."
   - q: "Does load balancing apply to personal host pools?"
-    a: "No. Microsoft Learn says load balancing does not apply to personal host pools because users always have a 1:1 mapping to a session host. Personal pools use an assignment type instead, either automatic or direct."
+    a: "No. Microsoft Learn says load balancing does not apply to personal host pools because users always have a 1:1 mapping to a session host. Personal pools use an assignment type instead, either automatic or direct. With automatic assignment a user without a host gets one at the first connection, as described below."
   - q: "Can one user get more than one personal desktop?"
     a: "Yes, but only in a personal host pool with direct assignment. Microsoft Learn says pooled pools and personal pools with automatic assignment do not support it, and that once multiple desktop assignment is enabled on a host pool it cannot be disabled."
 ---
 
 A pooled host pool fits users who can share session hosts and whose profile lives outside the VM. A personal host pool fits users who need one dedicated desktop that keeps its own state. The rest of this guide sets out the criteria, the load-balancing and assignment rules, and what changes for autoscale.
 
-This comparison is based on Microsoft Learn. It gives no prices, no user-count thresholds and no conversion path between types, because the sources used here do not contain them.
+This comparison is based on Microsoft Learn. Prices and user-count thresholds are outside this guide. On changing the type later, the Azure Virtual Desktop FAQ is clear: you cannot change a host pool's type after you create it, but you can move registered VMs to a host pool of the other type.
 
 ## The two host pool types
 
@@ -39,12 +39,20 @@ Both are made of [session hosts](/entity/avd-session-host/) inside a [host pool]
 | Criterion | Pooled | Personal |
 |---|---|---|
 | Users per session host | Several at the same time | One assigned user |
+| Maximum session limit | Set on the host pool; can be exceeded under high concurrent connection load | One |
 | Mapping | Sessions are load balanced | 1:1 mapping of user to session host |
 | Profile data | Should be stored in FSLogix, because users can land on different hosts | Can be stored on the VM's OS disk, because each user uses one host |
 | Distribution rule | Breadth-first or depth-first | Automatic or direct assignment |
+| Windows updates | Updated by redeploying session hosts from updated images instead of traditional updates | Updated with Windows Updates, Microsoft Configuration Manager or other software distribution tools |
+| Application groups | Desktop and RemoteApp | Desktop only (RemoteApp is available with pooled host pools only) |
+| Management approach | Standard or session host configuration | Standard (session host configuration is for pooled host pools only) |
 | Stated emphasis (Learn) | Lower costs and greater efficiency | Performance and data separation |
 
-If users cannot share a host and each needs a dedicated desktop, personal is the starting point. If users can share hosts and their profile can follow them, pooled is the starting point. These are inferences from the Learn definitions, not Microsoft rules, so test with a pilot group.
+Learn also says personal desktops suit users with resource-intensive workloads, because performance improves when only one session runs on the session host. If users cannot share a host and each needs a dedicated desktop, personal is the starting point. If users can share hosts and their profile can follow them, pooled is the starting point. The starting-point rule is an inference from the Learn definitions, not a Microsoft rule, so test with a pilot group.
+
+### Updates, apps and management approach
+
+Three rows in the table decide how much operating effort each type needs. Pooled hosts are updated by redeploying from updated images, which matches the session host configuration approach (session host update); with standard management you build and replace images with your own tools. Learn's host pool management page says the management approach is set at creation and cannot be changed, and that a session host configuration can be used with pooled host pools only. Anyone who must publish individual applications needs a pooled host pool, because RemoteApp application groups are available only there. The AVD FAQ adds that in-place upgrade of the session host operating system is supported for personal but not for pooled host pools, and that Azure Backup at the compute level is recommended only for personal host pools.
 
 ### Profiles are the practical dividing line
 
@@ -75,26 +83,15 @@ Two assignment types exist:
 - **Automatic** is the default for new personal host pools. The session host does not need to be assigned before the user connects. When an assigned user connects for the first time, the session is load balanced to an available session host. You can still assign a user directly to a session host in an automatic pool.
 - **Direct** requires that the user is assigned both to the host pool and to a specific session host. A user assigned only to the host pool cannot reach resources and sees the error "No resources available".
 
-### Set the assignment type
+### Set the type and assign users
 
-1. In the Azure portal, open **Azure Virtual Desktop**, then **Host pools**, then your personal host pool.
-2. Select **Properties**.
-3. Choose **Automatic** or **Direct** in the **Assignment** dropdown.
-4. Select **Save**.
+In the Azure portal the type is a host pool property: **Host pools**, your pool, **Properties**, the **Assignment** drop-down (**Automatic** or **Direct**), then **Save**. For direct assignment, Learn's portal path is: host pool, **Application groups**, the application group, **Assignments**, **+ Add**, select the users or groups, then **Assign VM** in the information bar, select the session host and **Assign** (or **Assignment** > **Assign user**), select the user and **Select**. To unassign or reassign, open **Session hosts**, select the host, then **Assignment** > **Unassign user** or **Assign to a different user**.
 
-### Assign, unassign and reassign
-
-Learn gives these portal paths:
-
-1. **Assign (direct)**: host pool, **Application groups**, the application group, **Assignments**, **+ Add**, select the users or groups, **Select**. Then select **Assign VM** (or open **Session hosts**), select the session host, select **Assign**, choose the user and select **Select**.
-2. **Unassign**: host pool, **Session hosts**, select the host, **Assignment**, **Unassign user**.
-3. **Reassign**: host pool, **Session hosts**, select the host, **Assignment**, **Assign to a different user**.
-
-Learn says the Azure CLI cannot assign, unassign or reassign users. Friendly names for session hosts can only be set with PowerShell (`Update-AzWvdSessionHost` with the `FriendlyName` parameter).
+Learn says the Azure CLI cannot assign, unassign or reassign users. Friendly names for session hosts can only be set with PowerShell (`Update-AzWvdSessionHost` with the `FriendlyName` parameter). The sibling article "Assigning personal desktops: automatic vs direct assignment" covers the steps in detail.
 
 ### Multiple personal desktops for one user
 
-Learn says you can assign multiple personal desktops to one user only in personal host pools with direct assignment. Pooled pools and automatic assignment are not supported. Once the option is enabled on a host pool, it cannot be disabled. Save direct assignment first, then in a separate save select **Assign multiple desktops to a single user**; doing both at once produces an error. Assigning multiple desktops with PowerShell needs Az.DesktopVirtualization 5.3.0-preview or later, according to the article, so check the module version before you script it. If a single FSLogix profile container serves the pool, Learn says to enable multiple concurrent connections to avoid errors.
+Learn says you can assign multiple personal desktops to one user only in personal host pools with direct assignment. Pooled pools and automatic assignment are not supported. Once the option is enabled on a host pool, it cannot be disabled. Save direct assignment first, then in a separate save select **Assign multiple desktops to a single user**; doing both at once produces an error. In PowerShell this uses `LoadBalancerType = 'MultiplePersistent'` and needs Az.DesktopVirtualization 5.3.0-preview or later, according to the article, so check the module version before you script it. If a single FSLogix profile container serves the pool, Learn says to enable multiple concurrent connections to avoid errors.
 
 ## Autoscale differences
 
@@ -119,16 +116,19 @@ Learn says that personal desktop autoscale with hibernation requires hibernation
 
 1. List the user groups and note for each whether the workload needs a dedicated VM.
 2. Check where profile data must live. If users can land on different hosts, as on a pooled pool, plan FSLogix.
-3. For pooled pools, choose breadth-first or depth-first, and set a maximum session limit (mandatory for depth-first).
-4. For personal pools, choose automatic or direct assignment. Direct assignment fits when you want to control which user gets which VM, and it is required if one user needs several desktops; automatic suits the rest.
-5. Decide how autoscale should end sessions: forced sign-out in pooled ramp-down, or disconnect and sign-out timers on personal pools.
-6. Pilot with a small group and compare the user experience and the VM running hours.
+3. Check the operating model: if users need published RemoteApp applications or you want session host configuration with update and dynamic autoscaling, plan pooled; decide how hosts will be patched (image redeployment or Windows Updates and Configuration Manager).
+4. For pooled pools, choose breadth-first or depth-first, and set a maximum session limit (mandatory for depth-first).
+5. For personal pools, choose automatic or direct assignment. Direct assignment fits when you want to control which user gets which VM, and it is required if one user needs several desktops; automatic suits the rest.
+6. Decide how autoscale should end sessions: forced sign-out in pooled ramp-down, or disconnect and sign-out timers on personal pools.
+7. Pilot with a small group and compare the user experience and the VM running hours.
 
 ## Sources
 
-Retrieved 2026-11-16.
+Retrieved on 17 November 2026.
 
 - [Microsoft Learn: Azure Virtual Desktop terminology](https://learn.microsoft.com/en-us/azure/virtual-desktop/terminology)
+- [Microsoft Learn: Azure Virtual Desktop FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/faq)
+- [Microsoft Learn: Host pool management approaches](https://learn.microsoft.com/en-us/azure/virtual-desktop/host-pool-management-approaches)
 - [Microsoft Learn: Configure host pool load balancing in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-load-balancing)
 - [Microsoft Learn: Configure personal desktop assignment in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-personal-desktop-assignment-type)
 - [Microsoft Learn: Create and assign an autoscale scaling plan for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)
