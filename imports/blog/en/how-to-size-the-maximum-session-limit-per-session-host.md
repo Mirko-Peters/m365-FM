@@ -10,7 +10,7 @@ keypoints:
   - "Learn gives no sizing formula for the maximum session limit. It points to Azure Virtual Desktop Insights for choosing the value, and its VM sizing guidance lists maximum users per vCPU: 6 light, 4 medium, 2 heavy, 1 power."
   - "Learn calls its sizing numbers initial estimates only, so multiply users per vCPU by your vCPU count to get a starting value, then validate with a pilot and watch users per core, input delay, CPU and memory."
   - "Capacity is the limit multiplied by the number of available hosts. As this article's arithmetic, a limit of 32 on two hosts gives 64 sessions, and a 75 percent threshold starts a third host above 48."
-  - "Depth-first load balancing requires a limit, and Learn says not to keep the default of 999999 when autoscale manages a pooled pool."
+  - "Depth-first load balancing requires a limit. A breadth-first pool starts at 999999, and Learn says not to use the default value when autoscale manages a pooled pool."
   - "Lowering the limit on a host that has active sessions does not affect those sessions."
 faq:
   - q: "Is there a recommended maximum session limit value?"
@@ -25,7 +25,7 @@ Microsoft Learn does not publish a formula for the maximum session limit. The pr
 
 ## What the value controls
 
-The [maximum session limit](/entity/avd-maximum-session-limit/) is a host pool property that sets how many user sessions one [session host](/entity/avd-session-host/) accepts. [Depth-first](/entity/avd-depth-first-load-balancing/) load balancing requires it, a pool created with [breadth-first](/entity/avd-breadth-first-load-balancing/) starts at 999999, and Learn says not to keep that default when autoscale manages a pooled [host pool](/entity/avd-host-pool/). Learn's [autoscale glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary) defines available capacity as the limit multiplied by the number of available session hosts.
+The [maximum session limit](/entity/avd-maximum-session-limit/) is a host pool property that sets how many user sessions one [session host](/entity/avd-session-host/) accepts. [Depth-first](/entity/avd-depth-first-load-balancing/) load balancing requires it, a pool created with [breadth-first](/entity/avd-breadth-first-load-balancing/) starts at 999999, and Learn says not to use the default value when autoscale manages a pooled [host pool](/entity/avd-host-pool/). Learn's [autoscale glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary) defines available capacity as the limit multiplied by the number of available session hosts.
 
 Learn states the autoscale requirement without giving a reason. The consequences below are this article's reading of the formula, not Learn statements: a limit that is too high lets a host fill beyond what its CPU and memory support, and a limit that is too low reduces capacity and makes autoscale start hosts earlier.
 
@@ -88,7 +88,7 @@ The Azure CLI equivalent is `az desktopvirtualization hostpool update` with `--m
 
 Autoscale turns on a host when used capacity exceeds the capacity threshold, and used capacity counts active and disconnected sessions. Apply that to the starting value from step 3. With a limit of 32, two hosts give 64 sessions of capacity, and a 75 percent threshold means a third host starts when the sessions exceed 48. If that is too early or too late for your logon pattern, change the limit or the threshold, but not both at once, so you can see which change did what. The [capacity threshold](/entity/avd-capacity-threshold/) and phase settings are covered in the [scaling plan](/entity/avd-scaling-plan/) articles.
 
-The same arithmetic gives a rough host count. For 200 concurrent medium-workload users and a limit of 32, the pool needs at least 200 / 32 = 6.25, so 7 hosts, if every host runs full. At 7 hosts the capacity is 224 sessions and 200 sessions is about 89 percent, above a 75 percent threshold. Keeping used capacity at or below 75 percent needs 200 / (32 x 0.75) = 8.3, so 9 hosts. This reuses the consolidation formula from Learn's autoscale scenarios page and shows why the limit, the threshold and the number of hosts have to be planned together.
+The same arithmetic gives a rough host count. For 200 concurrent medium-workload users and a limit of 32, the pool needs at least 200 / 32 = 6.25, so 7 hosts, if every host runs full. At 7 hosts the capacity is 224 sessions and 200 sessions is about 89 percent, above a 75 percent threshold. Keeping used capacity at or below 75 percent needs 200 / (32 x 0.75) = 8.3, so 9 hosts. This applies the consolidation formula from Learn's autoscale scenarios page, which Learn uses for the ramp-down phase, to peak sizing. The use for sizing is this article's, not a Learn example, and it shows why the limit, the threshold and the number of hosts have to be planned together.
 
 Learn's sizing page says logon is CPU-intensive and tells you to plan for peak logon times such as the start of a work day at 9 AM. Its example: if 30 or more users sign in within 10 minutes on a 16-core host, two 8-core VMs would handle the load better.
 
@@ -106,7 +106,7 @@ Learn gives no CPU or memory threshold for the limit. A working rule, which is t
 
 ## Common mistakes
 
-- **Keeping 999999 on a depth-first pool.** Learn requires a real value, and it recommends changing the value to suit your requirements.
+- **Keeping 999999 on a depth-first pool.** Depth-first requires a limit, Learn says not to use the default value when autoscale manages the pool, and it points to Insights for finding a value that fits your environment.
 - **Reading the table's minimums as sizes.** The Power row lists a minimum of 6 vCPUs, and its example sizes, such as D16ds_v5 and NV6, differ in vCPU count. Check the vCPU count of the size you deploy.
 - **Ignoring disconnected sessions.** Autoscale counts them as used capacity, so a limit that is too tight combined with long-lived disconnected sessions starts hosts earlier than expected.
 - **Treating the number as fixed.** Learn describes its figures as initial estimates, so pilot before you commit.
