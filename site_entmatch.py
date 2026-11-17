@@ -52,6 +52,7 @@ _TERM = set(".!?:;\n。！？•")
 _OPEN = "\"'“„‘«([*>#-–— \t "
 _WORD_L = re.compile(r"([^\W\d_][\w'’.+#-]*)[^\S\n]+$")   # Leerraum jeder Art ausser Zeilenwechsel (Blockgrenze)
 _WORD_R = re.compile(r"[^\S\n]+([^\W\d_][\w'’.+#-]*)")
+_SECTOR = re.compile(r"(?i)\b(industr|sector|vertical|branche|markets?\b)[^.!?\n]*$")
 _PAREN = re.compile(r"^(.*?)\s*\(([^()]+)\)\s*$")
 
 
@@ -218,7 +219,7 @@ class Matcher:
         elif proper:
             common = (lo in self.common_words and not _distinct(f)) or kind == "qual"
         else:
-            common = kind in ("alias", "short", "qual") and not _distinct(f)
+            common = (kind in ("alias", "short", "qual") or t in ("industry", "job")) and not _distinct(f)   # "education", "retail": Branche nur mit Hinweis
         if kind == "alias" and multi and not proper and (not _overlap(f, e.get("name") or "") or _shorter(f, e.get("name") or "")):
             common = True   # Konzept-Alias ohne gemeinsames Wort mit dem Namen ("Change management" bei "Copilot adoption") oder Kurzform ("Task flows"
                             # bei "Fabric task flow"): anderer bzw. allgemeinerer Begriff, nur mit Kontext
@@ -293,7 +294,7 @@ class Matcher:
         b = e
         while b < len(plain) and plain[b] not in _TERM and b - e < 160: b += 1
         words = [w for w in re.findall(r"[^\W\d_][\w'’-]*", plain[a:s] + " " + plain[e:b])
-                 if w.lower() not in _STOPW and not _distinct(w) and w.lower() not in self.forms]   # Produktnamen in Aufzaehlungen sind kein Titel-Beleg
+                 if w.lower() not in _STOPW and not (w.isupper() and len(w) > 1) and w.lower() not in self.forms]   # Produktnamen und Abkuerzungen in Aufzaehlungen sind kein Titel-Beleg
         if not words: return False
         caps = sum(1 for w in words if w[:1].isupper())
         label = (b < len(plain) and plain[b] == ":") or ((a == 0 or plain[a - 1] == "\n") and (b >= len(plain) or plain[b] == "\n") and len(words) <= 6)
@@ -343,7 +344,12 @@ class Matcher:
             for f in fs:
                 if f.common and f.proper and not self._cue(plain, s, e, lang, f):
                     continue
-                if not f.proper and f.common and " " not in f.text:
+                bonus = 0
+                if not f.proper and f.common and " " not in f.text and (self.live.get(f.eid) or {}).get("type") in ("industry", "job"):
+                    if f.eid not in C and not _SECTOR.search(plain, max(0, s - 100), s):
+                        continue   # Branche als Einzelwort ("role-specific education") nur nach "industries/sectors like ..." oder als Thema der Seite
+                    bonus = 1   # der Hinweis selbst ist die Stuetze
+                elif not f.proper and f.common and " " not in f.text:
                     if not f.qual and f.eid not in C:
                         continue   # einteiliger Konzept-Kurzname ("harness", "workspace"): nur, wenn die Entitaet selbst Thema der Seite ist oder voll genannt wird
                     m = _WORD_L.search(plain, max(0, s - 40), s)
@@ -351,7 +357,7 @@ class Matcher:
                         continue   # als Verb gebraucht ("might trigger", "you harness")
                     if f.eid not in C and not self._sentence_start(plain, s) and not (m and m.group(1).lower() in DETS):
                         continue   # Kurzname mit Zusatz nur als Nomen ("the trigger", "Grounding is ..."), nicht "change data, trigger actions"
-                sc = self.support(f.eid, C - {f.eid} if f.eid not in (ctx or ()) else C, strict=not f.proper, qual=f.qual)
+                sc = self.support(f.eid, C - {f.eid} if f.eid not in (ctx or ()) else C, strict=not f.proper, qual=f.qual) + bonus
                 if sc <= 0: continue
                 sc = sc * 10 + (5 if f.is_name else 0)
                 if best is None or sc > bs: best, bs, tie = f, sc, False

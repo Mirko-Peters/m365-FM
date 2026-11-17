@@ -83,6 +83,13 @@ class Bericht(unittest.TestCase):
         self.assertNotIn("microsoft-surface", m.ids(t))
         self.assertIn("microsoft-surface", m.ids("Intune also manages Surface devices in Microsoft 365."))
 
+    def test_branche_nur_mit_hinweis(self):
+        # Stichprobe (Seed 29): "role-specific education" ist keine Branche; "Permission-Driven Access:" ist eine Titel-Zeile, nicht Microsoft Access
+        m = EM.shared(LRN.ENTS)
+        self.assertNotIn("education", m.ids("Centralized, role-specific education is key for adoption in Microsoft 365."))
+        self.assertIn("healthcare", m.ids("In industries like healthcare, AI agents review medical images."))
+        self.assertNotIn("access", m.ids("Permission-Driven Access:\nUse Microsoft 365 and SharePoint for every project."))
+
     def test_konzept_alias_anderer_begriff_nur_mit_kontext(self):
         m = EM.shared(LRN.ENTS)
         self.assertNotIn("copilot-adoption", m.ids("Change management and decision rights are key for any program."))
