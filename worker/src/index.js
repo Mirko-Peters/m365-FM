@@ -184,7 +184,11 @@ async function auth(env, request, url, path) {
   if (!P.id(env) || !P.secret(env)) return html("<p>Login not configured.</p>", 503);
   const redirect = `${env.API}/auth/callback/${m[2]}`;
   if (m[1] === "login") {
-    const o = await oauthStart(env, m[2], safeReturn(env, url.searchParams.get("return") || env.SITE));
+    const ret = safeReturn(env, url.searchParams.get("return") || env.SITE), sfs = request.headers.get("sec-fetch-site") || "";
+    // LinkedIn-Uebernahme nur, wenn der Ablauf auf unserer Seite begonnen wurde (Klick auf "Profil beanspruchen"): Absicht "C" im signierten state.
+    // Ein Link oder eine Weiterleitung von einer fremden Seite (Sec-Fetch-Site cross-site/none/fehlt) meldet nur an, beansprucht nichts (Login-CSRF).
+    const claimIntent = m[2] === "linkedin" && (sfs === "same-site" || sfs === "same-origin") && new URL(ret).searchParams.get("claim") === "linkedin";
+    const o = await oauthStart(env, m[2], ret, claimIntent ? "C" : "");
     return new Response(null, { status: 302, headers: { location: o.location, "set-cookie": o.setCookie } });
   }
   // callback
@@ -205,7 +209,7 @@ async function auth(env, request, url, path) {
   const info = P.profile ? P.profile(raw) : { sub: raw && raw.sub ? String(raw.sub) : "", name: raw && (raw.name || raw.given_name) };
   if (!info.sub) return html("<p>Login failed.</p>", 400);
   const intent = val.split("|")[2] || "";
-  if (intent) {   // #279: weitere Anmeldung an das angemeldete Konto haengen; state ist an genau diese Sitzung gebunden (Hash), max. 10 Minuten
+  if (intent && intent !== "C") {   // #279: weitere Anmeldung an das angemeldete Konto haengen; state ist an genau diese Sitzung gebunden (Hash), max. 10 Minuten
     const sess = await readSessionInfo(env, request), [lu, lt, lh] = intent.slice(1).split(".");
     const ok = intent[0] === "L" && sess && sess.uid === +lu && now() - +lt <= MERGE_WINDOW && (await sha256hex(sess.raw)).slice(0, 32) === lh;
     const cur = ok ? await me(env, sess.uid) : null;
@@ -222,7 +226,8 @@ async function auth(env, request, url, path) {
   const h = new Headers({ location: ret });
   if (m[2] === "linkedin") {
     const target = new URL(ret), claim = target.searchParams.get("claim");
-    const match = claim === "linkedin" && /^\/(?:[a-z]{2}\/)?entity\/([a-z0-9][a-z0-9-]{1,78})\/?$/i.exec(target.pathname);
+    if (claim && intent !== "C") { target.searchParams.delete("claim"); h.set("location", target.href); }   // nicht auf unserer Seite begonnen: nur anmelden
+    const match = claim === "linkedin" && intent === "C" && /^\/(?:[a-z]{2}\/)?entity\/([a-z0-9][a-z0-9-]{1,78})\/?$/i.exec(target.pathname);
     if (match) {
       const result = await claimLinkedinEntity(env, u, raw, match[1]);
       if (result.error === "claimed") {
