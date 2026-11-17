@@ -9,12 +9,12 @@ topics: [avd-workspace, azure-virtual-desktop]
 keypoints:
   - "An application group can be assigned to only one workspace, and users see desktops and apps only through the workspaces their application groups are registered to."
   - "A user can be assigned to application groups across several host pools, so one workspace can combine resources from different pools and regions."
-  - "Workspace and application group must share a deployment scope. A regional workspace holds only regional application groups, and the scope cannot be changed afterwards. Regional scope is available in 14 regions since general availability on 30 September 2026."
+  - "Workspace and application group must share a deployment scope. A regional workspace holds only regional application groups, and the scope cannot be changed afterwards. Regional host pools have been generally available since 30 September 2026, and the announcement now lists 14 regions."
   - "Service limits to design around: 1,300 workspaces per Microsoft Entra tenant, 400 host pools per workspace, 1,000 application groups per tenant and 200 role assignments per Azure Virtual Desktop object."
   - "Azure RBAC has separate roles for workspaces and application groups, which lets one team manage its own workspace without owning host pools. In an active-active multi-region design Microsoft advises separate, clearly named workspaces."
 faq:
   - q: "How many workspaces should I create?"
-    a: "Microsoft gives no recommended number. The hard limits are 1,300 workspaces per Microsoft Entra tenant, 400 host pools per workspace and 1,000 application groups per tenant (more by support ticket). The design rules that usually decide the number sooner: each application group belongs to one workspace, scope must match, and users see only the workspaces of their assigned application groups."
+    a: "Microsoft Learn gives no recommended number. The hard limits are 1,300 workspaces per Microsoft Entra tenant, 400 host pools per workspace and 1,000 application groups per tenant (more application groups by support ticket). The design rules that usually decide the number sooner: each application group belongs to one workspace, scope must match, and users see only the workspaces of their assigned application groups."
   - q: "Can an application group be in two workspaces?"
     a: "No. Microsoft Learn says an application group can only be assigned to a single workspace. To show the same host pool resources in two workspaces you need two application groups, subject to the pool rules for desktop groups."
   - q: "Does the workspace decide where a user's session runs?"
@@ -67,14 +67,15 @@ When you create a workspace in the portal you set a name and, optionally, a **Fr
 
 ## Delegation
 
-Azure RBAC gives you built-in Desktop Virtualization roles at each level. The relevant ones for workspace design:
+Azure RBAC gives you built-in Desktop Virtualization roles at each level. The relevant ones for workspace design, under their full names in the role list (the short forms are used below after that):
 
-- **Workspace Contributor** manages all aspects of workspaces. **Workspace Reader** views them.
-- **Application Group Contributor** manages all aspects of an application group except user or group assignment.
-- **Host Pool Contributor** manages all aspects of a host pool.
+- **Desktop Virtualization Workspace Contributor** manages all aspects of workspaces. **Desktop Virtualization Workspace Reader** views them.
+- **Desktop Virtualization Application Group Contributor** manages all aspects of an application group except user or group assignment. **Desktop Virtualization Application Group Reader** views an application group without allowing changes.
+- **Desktop Virtualization Host Pool Contributor** manages all aspects of a host pool.
+- **Desktop Virtualization Contributor** manages all Azure Virtual Desktop resources except user or group assignment.
 - Assigning users or groups needs User Access Administrator in addition.
 - A Workspace Contributor needs Application Group Reader to see the applications of a related application group.
-- For portal deployments of host pools with new VMs, Learn advises adding Application Group Contributor and Workspace Contributor, or using Desktop Virtualization Contributor instead.
+- For portal deployments of host pools with new VMs, Learn says the Host Pool Contributor also needs Virtual Machine Contributor to create the VMs, plus Application Group Contributor and Workspace Contributor, or you can use Desktop Virtualization Contributor instead.
 
 A team can then own its workspace and application groups while a platform team owns the host pools. The service limits allow 200 role assignments per Azure Virtual Desktop object, so assign roles to groups rather than to individuals, or a delegation model with many people per workspace will run into that ceiling. For user session roles, Learn advises assigning them to specific host pools, because at resource group scope the role grants read access to all host pools in that group.
 
@@ -98,7 +99,7 @@ To add a group later, open the workspace, select **Application groups**, then **
 
 ## Service limits to design around
 
-The Azure subscription and service limits page, last updated on 29 September 2026, lists these maximums for Azure Virtual Desktop:
+The Azure subscription and service limits page lists these maximums for Azure Virtual Desktop:
 
 | Object | Per | Limit |
 |---|---|---|
