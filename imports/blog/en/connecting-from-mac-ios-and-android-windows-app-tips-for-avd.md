@@ -16,7 +16,7 @@ faq:
   - q: "Which Windows App versions and operating systems do I need on Mac, iPhone and Android?"
     a: "For Azure Virtual Desktop, Learn lists macOS 12.0 or later, iOS or iPadOS 17.0 or later, and Android 10 or later (Chrome OS 126 or later). The page also notes that the Windows 365 tab lists macOS 14.0 and iOS/iPadOS 16.0 as minimums, so check the tab that matches your service."
   - q: "Can users on iOS, iPadOS or Android get integrated apps, USB devices or multiple monitors?"
-    a: "Learn's comparison lists integrated apps (RemoteApps integrated with the local device) for Windows and macOS only, so not for iOS/iPadOS or Android. The connect page shows apps appearing next to devices for users to tap, but whether a given RemoteApp launches well on a phone is something to test. Multiple monitors are listed for Windows, macOS and Android/Chrome OS (ChromeOS devices only for Android), and USB redirection for Windows only."
+    a: "Learn's comparison lists integrated apps (RemoteApps integrated with the local device) for Windows and macOS only, so not for iOS/iPadOS or Android. The connect steps for iOS/iPadOS and Android tell users to tap a device or app to connect, so launching a RemoteApp is part of the flow; the integration with the local device is what is missing. Test the apps you publish on each platform. Multiple monitors are listed for Windows, macOS and Android/Chrome OS (ChromeOS devices only for Android), and USB redirection for Windows only."
   - q: "Why is a user on iOS or Android blocked when screen capture protection is enabled?"
     a: "When screen capture protection is enabled on the session hosts, Learn says Android and iOS/iPadOS connections are allowed only if an Intune MAM app protection policy that blocks screen capture applies to Windows App. Without it, the connection is blocked."
 ---
@@ -76,7 +76,7 @@ Details that matter in practice:
 - **Interface language.** The user interface is English (United States) only on macOS and iOS/iPadOS; Android offers many more locales.
 - **WebAuthn.** Passkey redirection into the session is in preview on all three, with minimum Windows App versions: macOS 11.4.2, iOS 11.3.7, Android 11.0.0.119. On Android the passkey must be stored on the device by a software provider such as Microsoft Authenticator; passkeys from a physical key or QR code are not supported.
 
-The practical consequence for pool design: a workload that needs USB tokens, scanners, serial devices or heavy video playback with multimedia redirection has to be limited to Windows clients. Tablet users on iOS/iPadOS will notice that Learn lists neither dynamic resolution nor smart sizing there, so the remote desktop does not resize or scale to the window the way it can on Windows or macOS.
+The practical consequence for pool design: a workload that needs USB tokens, scanners, serial devices or heavy video playback with multimedia redirection has to be limited to Windows clients. Tablet users on iOS/iPadOS will notice that Learn lists neither dynamic resolution nor smart sizing there, where macOS has both.
 
 ## Authentication differences
 
