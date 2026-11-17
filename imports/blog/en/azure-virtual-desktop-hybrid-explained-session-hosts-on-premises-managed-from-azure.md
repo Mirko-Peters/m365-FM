@@ -74,8 +74,8 @@ Identity is a second filter. Windows client session hosts can be Microsoft Entra
 | | Session hosts in Azure | AVD for Azure Local | AVD Hybrid |
 |---|---|---|---|
 | Where hosts run | Azure virtual machines | Azure Local instances, version 23H2 or later and registered with Azure | Your hypervisor or headless physical device, Arc-enabled |
-| Multi-session Windows 11 | Yes | Yes | No |
-| Autoscale, Start VM on Connect | Yes, with their own conditions | Not covered by the sources read for this article | No |
+| Multi-session Windows 11 | Listed as an eligible edition on Learn's licensing page | Yes, per the Azure Local page | No |
+| Autoscale, Start VM on Connect | Documented on their own Learn pages | Not covered by the sources read for this article | No |
 | Fee beyond user rights | Azure compute and storage | Azure Local service fee plus a fee per active vCPU | Hybrid service user license; compute, storage and networking stay in your environment |
 | Arc relationship | Not required | Learn: "isn't an Azure Arc-enabled service" | Required for every session host |
 
