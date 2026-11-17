@@ -50,7 +50,7 @@ Two details matter for planning. First, Learn's FAQ says that when you add apps 
 
 Users are not assigned to individual apps, except with App Attach. They are assigned to the application group and can open every app in it. If a user is in several RemoteApp groups on the same host pool, they get the aggregate of the apps in those groups (terminology article). Each group must be associated with a [workspace](/entity/avd-workspace/) for users to see the apps.
 
-The one conflict to design around is a user who holds both a desktop group and a RemoteApp group on the same host pool. Learn's [preferred application group type article](https://learn.microsoft.com/en-us/azure/virtual-desktop/preferred-application-group-type) says the host pool's preferred type decides what Windows App shows, and that the Azure portal also creates a desktop group with the suffix `-DAG` next to a RemoteApp group unless you remove it. The sibling article on desktop and RemoteApp groups covers the matrix and the `ms-avd:connect` caveat.
+The one conflict to design around is a user who holds both a desktop group and a RemoteApp group on the same host pool. Learn's [preferred application group type article](https://learn.microsoft.com/en-us/azure/virtual-desktop/preferred-application-group-type) says the host pool's preferred type decides what Windows App shows, and that the Azure portal also creates a desktop group with the suffix `-DAG`, even when you choose RemoteApp, which you can remove after creation. The sibling article on desktop and RemoteApp groups covers the matrix and the `ms-avd:connect` caveat.
 
 A simple design that avoids all of this: give app users and desktop users different host pools, or make sure no user holds both group types on one pool.
 
