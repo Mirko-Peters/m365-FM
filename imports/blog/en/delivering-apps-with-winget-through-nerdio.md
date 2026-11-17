@@ -8,9 +8,9 @@ date: 2026-11-18
 topics: [nerdio-unified-app-catalog]
 keypoints:
   - "Nerdio's Unified Application Management (UAM) lets you pick apps from a Winget repository and deploy them to AVD host pools or Intune-managed devices with a deployment policy instead of running winget by hand."
-  - "The public Winget community repository is read-only in UAM. Only a private Winget repository, created in your own Azure subscription, lets you upload installers, set custom install commands and keep several versions."
+  - "The public Winget community repository is read-only in UAM. A private repository in your own Azure subscription lets you upload installers, set custom install commands and keep several versions."
   - "Packages must be installable unattended (for EXE-based apps the silent flag is required), and only Machine scope can be deployed. The console disables User scope."
-  - "AVD policies can use a maintenance window, drain mode, a reboot after installation and a concurrency limit. Intune targets support neither maintenance windows nor drain mode, and take policy-based deployment only."
+  - "AVD policies can use a maintenance window, drain mode, a reboot after installation and a concurrency limit. Intune targets support no maintenance window or drain mode, and only policy-based deployment."
   - "A device that fails a task is skipped for 24 hours. Logs are on the host in C:\\Windows\\Temp\\NMWLogs\\ and can be requested from the Deployment status page."
 faq:
   - q: "Can I use the public Winget repository with Nerdio without building anything?"
@@ -52,7 +52,7 @@ The Enterprise configuration page gives these steps. Navigate to System > Settin
 1. To link a repository, select **Link**, set the type to WinGet, enter a friendly name and the repository URL under **Location**, and select **OK**.
 2. To create a private repository, select **Add** instead.
 3. Enter a display name, then choose a resource group, a storage account, a Log Analytics workspace and an App Service Plan.
-4. Optionally enable private endpoints. The page says this adds endpoints for the storage account, Key Vault, Cosmos DB and the function app, and disables public access on the first three. The function app keeps public access by default so that physical clients can still install Winget apps. You must give subnets for the web app and the endpoints.
+4. Optionally enable private endpoints. The page says this adds endpoints for the storage account, Key Vault, Cosmos DB and the function app, and disables public access on the first three (Azure service IPs stay allowed on Cosmos DB). The function app keeps public access by default so that physical clients can still install Winget apps. The page asks for a subnet for the web app and one for the endpoints.
 5. Optionally set resource name prefixes. Nerdio adds a random suffix. Select **OK**.
 
 The MSP page says an additional repository in another region adds an App Service Plan, which "incurs additional costs".
@@ -72,7 +72,7 @@ The Enterprise "Manage applications" page describes two Winget imports. Both sta
 
 You can also deploy a catalog app directly with **Deploy**. Without the option **Create policy using this configuration**, that deployment is a one-time event and no policy is created.
 
-Test silent behaviour before you import: Nerdio's page suggests running winget locally with `--silent` and the application ID. Learn says `--silent` suppresses all UI and `--accept-package-agreements` accepts the package licence, for example `winget install --id <Id> -e --silent --accept-package-agreements`. If an app cannot install or remove silently, Nerdio says to contact the vendor.
+Test silent behaviour before you import. Nerdio's Supported configurations page says some applications do not support fully silent installs or removals, and their tasks then fail. It suggests validating locally with `winget [install/remove] --id [Application.ID] --silent`; if no silent operation happens, contact the vendor. Learn describes `--silent` as running the installer in silent mode, which suppresses all UI.
 
 The page says packages can be uploaded as APPX, BURN, EXE, INNO, MSI, MSIX, MSSTORE, NULLSOFT, PORTABLE, PWA, WIX or ZIP, while the supported-configurations page names .EXE, .MSI and .MSIX plus .ZIP packages with a single installer. A known issue: some imported apps can be recorded under the Winget community repository ID, which causes policy failure messages even though the app installs. Entering the correct product code on the Installer page is the documented fix.
 
@@ -113,12 +113,12 @@ The same catalog can target Intune-enrolled Windows devices, including Windows 3
 |---|---|
 | Nerdio Winget policy | Installs through a policy onto in-scope AVD hosts (stopped hosts are started for the task and returned to their original state) or onto Intune devices. Maintenance window, drain mode and desired host state apply to AVD only. |
 | App in the image | Installed in the [golden image](/entity/golden-image/). See also [Nerdio desktop image management](/entity/nerdio-desktop-image/). |
-| [MSIX app attach](/entity/msix-app-attach/) | Per Learn, apps are attached to the user session and not installed locally on hosts or images. Needs an SMB share and MSIX, Appx or App-V packages. |
+| [App Attach](/entity/msix-app-attach/) | Per Learn, apps are attached to the user session and not installed locally on hosts or images. Needs an SMB share and MSIX, Appx or App-V packages. |
 
 
 ## Troubleshooting and known issues
 
-- **Logs**: on the device in `C:\Windows\Temp\NMWLogs\`; in Nerdio Manager on the Applications > Deployment status page, where you can request and download the app management logs.
+- **Logs**: on the device in `C:\Windows\Temp\NMWLogs\`; in Nerdio Manager under Applications > Deployment > Deployment Status, where you can request and download the app management logs.
 - **"Application [app name] not found on target host after installation"**: the install did not finish. Check the logs.
 - **"Set-LocalUser: An unspecified error occurred: status = 3221226252"**: Nerdio Manager cannot create a local admin account. Nerdio says the policies "UIA elevation prompt without secure desktop" and "Admin Approval Mode for Built-in Administrator" must be disabled, in Intune or Group Policy.
 - **"Write-ExtendedLog is not recognized"**: an Attack Surface Reduction policy may block the UAM policy. Nerdio has an ASR exclusions page for this.
