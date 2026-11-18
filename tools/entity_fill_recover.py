@@ -17,7 +17,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import fill_entities as FE  # noqa: E402
 
-RICH_GUESS = 2000   # unter RICH_MIN_CHARS (2600): collect prueft die genaue Grenze selbst
+RICH_GUESS = 2400   # ueber der Obergrenze normaler Langtexte (330 Woerter), unter RICH_MIN_CHARS (2600): collect prueft die genaue Grenze selbst
 
 
 def batches(since="", until=""):
