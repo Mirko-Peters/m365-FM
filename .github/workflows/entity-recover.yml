@@ -1,0 +1,70 @@
+name: Entitaeten-Batches bergen (ohne neue KI-Auftraege)
+# Einmalige Bergung des abgebrochenen entity-fill-Laufs 44326936208 (18.11.2026): bezahlte Batch-Ergebnisse bei Anthropic abholen (kostenlos),
+# pruefen wie im normalen Lauf (fill_entities.py collect), sichern (Artefakt + Commit data/entity_fill auf main) und erst DANACH nach D1 schreiben.
+# RECOVER_MODE list = nur auflisten; adopt = uebernehmen, einsammeln, sichern, D1.
+on:
+  push:
+    branches: [claude/entity-recover]
+    paths: [.github/workflows/entity-recover.yml, tools/entity_fill_recover.py]
+permissions:
+  contents: write
+concurrency: { group: entity-fill, cancel-in-progress: false }
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      RECOVER_MODE: list
+      SINCE: "2026-11-18T14:40:00Z"
+      UNTIL: "2026-11-18T15:12:00Z"
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      AI_GATEWAY_ID: ${{ vars.AI_GATEWAY_ID || 'm365fm' }}
+      CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
+      COMMUNITY_API: https://api-dub.m365.fm
+      CRON_KEY: ${{ secrets.CRON_KEY }}
+      HAIKU_USD_PER_MTOK_IN: ${{ vars.HAIKU_USD_PER_MTOK_IN || '0.10' }}
+      HAIKU_USD_PER_MTOK_OUT: ${{ vars.HAIKU_USD_PER_MTOK_OUT || '0.50' }}
+      USD_PER_EUR: ${{ vars.USD_PER_EUR || '1.08' }}
+    steps:
+      - uses: actions/checkout@v7
+        with: { ref: main }
+      - uses: actions/checkout@v7
+        with: { path: recover-src }
+      - uses: actions/setup-python@v7
+        with: { python-version: "3.12" }
+      - name: Batches auflisten / uebernehmen
+        run: cp recover-src/tools/entity_fill_recover.py tools/ && python tools/entity_fill_recover.py "$RECOVER_MODE" --since "$SINCE" --until "$UNTIL" | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Einsammeln und pruefen (wie fill_entities collect)
+        if: env.RECOVER_MODE == 'adopt'
+        run: python fill_entities.py collect | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Daten als Artefakt sichern (immer)
+        if: always() && env.RECOVER_MODE == 'adopt'
+        uses: actions/upload-artifact@v7
+        with: { name: entity-recover-daten, path: data/entity_fill, if-no-files-found: ignore, retention-days: 30 }
+      - name: Sichern auf main (vor D1)
+        if: always() && env.RECOVER_MODE == 'adopt'
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          git add -A data/entity_fill
+          git diff --cached --quiet && { echo "Nichts zu sichern"; exit 0; }
+          git commit -q -m "Entitaeten-Texte: Bergung Lauf 44326936208 (Batches erneut abgeholt, ohne neue Auftraege)"
+          for i in 1 2 3 4 5; do
+            if git pull --rebase --autostash -q origin main && git push -q origin HEAD:main; then echo "Gesichert auf main" | tee -a "$GITHUB_STEP_SUMMARY"; exit 0; fi
+            git rebase --abort 2>/dev/null || true; sleep $((i*7))
+          done
+          echo "::error::Sichern auf main fehlgeschlagen (Artefakt entity-recover-daten)"; exit 1
+      - name: In die Datenbank schreiben
+        if: success() && env.RECOVER_MODE == 'adopt'
+        run: python fill_entities.py push | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Push-Stand sichern
+        if: always() && env.RECOVER_MODE == 'adopt'
+        run: |
+          git add -A data/entity_fill
+          git diff --cached --quiet && exit 0
+          git commit -q -m "Entitaeten-Texte: Bergung, Stand nach D1-Push"
+          for i in 1 2 3 4 5; do
+            if git pull --rebase --autostash -q origin main && git push -q origin HEAD:main; then exit 0; fi
+            git rebase --abort 2>/dev/null || true; sleep $((i*7))
+          done
+          exit 1
