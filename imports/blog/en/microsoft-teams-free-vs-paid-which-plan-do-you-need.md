@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Teams Free vs Paid: Which Plan and License Do You Need?"
 summary: "What changes between Microsoft Teams (free), Teams Essentials and Microsoft 365 Business plans: meeting length, participants, storage, captions, support, and how larger organizations license Teams."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-21
+date: 2026-11-19
 topics: [teams, teams-premium, teams-phone, microsoft-365]
 keypoints:
   - "Microsoft Teams (free) limits group meetings to 60 minutes and 100 participants, with 5 GB of cloud storage per user."

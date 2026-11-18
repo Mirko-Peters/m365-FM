@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Entra Built-in Roles and Privileged Identity Management (PIM) Explained"
 summary: "What Microsoft Entra built-in roles are, how they are grouped, how Privileged Identity Management makes them eligible and time-bound, the role settings that matter, and the best practices Microsoft recommends."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-21
+date: 2026-11-19
 topics: [privileged-identity-management, microsoft-entra, role-based-access-control, global-administrator]
 keypoints:
   - "Microsoft Entra ID has about 60 built-in roles with fixed permissions, plus custom roles where you pick the permissions."

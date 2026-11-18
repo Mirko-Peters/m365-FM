@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Entra Access Reviews: Set Up, Run and Automate Reviews in ID Governance"
 summary: "How to create a Microsoft Entra access review for groups and applications, which settings matter (reviewers, recurrence, auto apply, no response), what licenses and roles apply, and how to automate and monitor reviews."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-21
+date: 2026-11-19
 topics: [access-reviews, entra-id-governance, microsoft-entra]
 keypoints:
   - "Create a review in the Microsoft Entra admin center under ID Governance > Access Reviews > New access review. The minimum role is Identity Governance Administrator."

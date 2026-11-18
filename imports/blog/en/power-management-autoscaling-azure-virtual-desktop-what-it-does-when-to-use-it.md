@@ -1,10 +1,10 @@
 ---
 title: "Power management autoscaling in Azure Virtual Desktop: what it does and when to use it"
 summary: "Power management autoscaling starts and deallocates existing session hosts on a schedule, based on how much of a host pool's session capacity is in use. It fits host pools with a predictable daily pattern, and it does not create or delete VMs."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-19
 render: v2
 topics: [avd-power-management-autoscaling, avd-scaling-plan]
 keypoints:

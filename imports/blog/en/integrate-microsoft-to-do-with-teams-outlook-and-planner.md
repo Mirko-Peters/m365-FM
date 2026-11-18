@@ -1,10 +1,10 @@
 ---
 title: "Integrate Microsoft To Do with Teams, Outlook and Planner: What Connects Where"
 summary: "How Microsoft To Do connects to Outlook flagged email, the Planner app in Teams and Planner plans: which lists show which tasks, how to turn the links on, and the account and mailbox limits that stop sync."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-22
+date: 2026-11-19
 topics: [microsoft-to-do, microsoft-planner, teams]
 keypoints:
   - "To Do is for your own tasks and shared lists. Planner is for team work and needs a business, enterprise or education Microsoft 365 subscription."

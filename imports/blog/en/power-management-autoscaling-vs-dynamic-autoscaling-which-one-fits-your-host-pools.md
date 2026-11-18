@@ -1,10 +1,10 @@
 ---
 title: "Power management autoscaling vs dynamic autoscaling: which one fits your host pools"
 summary: "Power management autoscaling turns existing session hosts on and off, while dynamic autoscaling also creates and deletes them. Which one you can use depends first on how the host pool is managed, not on preference."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-19
 render: v2
 topics: [avd-power-management-autoscaling, avd-scaling-plan]
 keypoints:

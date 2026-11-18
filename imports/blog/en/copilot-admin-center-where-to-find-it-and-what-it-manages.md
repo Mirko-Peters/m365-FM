@@ -1,10 +1,10 @@
 ---
 title: "Copilot Admin Center: Where to Find It and What You Can Manage"
 summary: "Where the Copilot admin console lives in the Microsoft 365 admin center, which role you need, and what each settings category controls, from user access and agents to web search and diagnostics."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-22
+date: 2026-11-19
 topics: [copilot, microsoft-365-admin-center, copilot-chat]
 keypoints:
   - "Microsoft documents no separate Copilot admin center. The controls sit under Copilot > Settings in the Microsoft 365 admin center at admin.microsoft.com."

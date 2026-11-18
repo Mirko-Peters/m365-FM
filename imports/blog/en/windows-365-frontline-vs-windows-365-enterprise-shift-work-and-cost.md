@@ -1,10 +1,10 @@
 ---
 title: "Windows 365 Flex vs Windows 365 Enterprise: shift work and cost"
 summary: "Windows 365 Enterprise assigns one Cloud PC per licensed user, while Windows 365 Flex (formerly Frontline) licenses up to three dedicated or one shared Cloud PC per license. Shift size and mode decide the cost."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-19
 render: v2
 topics: [windows-365-frontline, windows-365]
 keypoints:

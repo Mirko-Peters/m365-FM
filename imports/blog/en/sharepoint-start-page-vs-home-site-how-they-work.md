@@ -1,10 +1,10 @@
 ---
 title: "SharePoint Home Page: How the Start Page and the Home Site Work"
 summary: "What people mean by the SharePoint home page: the personal start page and the organization-wide home site. How to open the start page, what each section shows, and how a home site differs and is set up."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-22
+date: 2026-11-19
 topics: [sharepoint, sharepoint-home-site, viva-connections]
 keypoints:
   - "The SharePoint home page was renamed the SharePoint start page. It is personal: Microsoft Graph drives its content from your activity, followed sites and saved items."

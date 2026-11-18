@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Purview Data Map Explained Simply: What It Does and How It Fits Into Purview"
 summary: "What the Microsoft Purview Data Map is, how scanning fills it, how it differs from the Unified Catalog, how capacity units are billed, and the retirement notice Microsoft now shows on its data governance pages."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-21
+date: 2026-11-19
 topics: [purview-data-map, purview, purview-unified-catalog, data-governance]
 keypoints:
   - "The Data Map is the metadata layer of Purview data governance. It stores metadata about data sources, not the data itself."

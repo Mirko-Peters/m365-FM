@@ -1,10 +1,10 @@
 ---
 title: "Requirements and limits of dynamic autoscaling in Azure Virtual Desktop"
 summary: "Dynamic autoscaling in Azure Virtual Desktop works only for pooled host pools with a session host configuration, in Azure but not Azure Government. Lists prerequisites, roles, limits and documentation conflicts."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-19
 render: v2
 topics: [avd-dynamic-autoscaling, avd-scaling-plan, avd-managed-identity]
 keypoints:

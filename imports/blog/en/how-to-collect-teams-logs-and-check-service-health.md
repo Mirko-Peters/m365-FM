@@ -1,10 +1,10 @@
 ---
 title: "How to Collect Teams Logs and Check Microsoft 365 Service Health"
 summary: "Collect Microsoft Teams debug and support logs with a keyboard shortcut or menu, know what each log type is for, and check Microsoft 365 service health and Call Analytics before opening a support case."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-21
+date: 2026-11-19
 topics: [teams, teams-admin-center, microsoft-365-admin-center]
 keypoints:
   - "On Windows, press Ctrl + Alt + Shift + 1 or use the Teams tray icon and Collect support files. On Mac, press Option + Command + Shift + 1."

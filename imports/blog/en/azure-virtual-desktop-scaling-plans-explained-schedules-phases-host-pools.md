@@ -1,10 +1,10 @@
 ---
 title: "Azure Virtual Desktop scaling plans explained: schedules, phases and host pools"
 summary: "An Azure Virtual Desktop scaling plan holds schedules, and each schedule splits the day into ramp-up, peak, ramp-down and off-peak. The plan is assigned to host pools of one type, and autoscale acts on the phase settings."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-19
 render: v2
 topics: [avd-scaling-plan, azure-virtual-desktop]
 keypoints:

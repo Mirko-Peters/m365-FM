@@ -1,10 +1,10 @@
 ---
 title: "Teams Admin Center Policies Explained: Types, Assignment and Precedence"
 summary: "How Teams policies work in the Teams admin center: the main policy types, the global org-wide default, direct and group assignment, which policy wins, policy packages and how to check rollout status."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-22
+date: 2026-11-19
 topics: [teams-admin-center, teams, teams-administrator]
 keypoints:
   - "Policies control messaging, meetings, apps and calling. You manage them in the Teams admin center or with the Teams PowerShell module."

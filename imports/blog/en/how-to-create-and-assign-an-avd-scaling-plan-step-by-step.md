@@ -1,10 +1,10 @@
 ---
 title: "How to create and assign an AVD scaling plan step by step"
 summary: "In the Azure portal, you create an Azure Virtual Desktop scaling plan under Azure Virtual Desktop, then Scaling Plans, then Create, after giving the service one role at subscription level. Then you define the schedule phases and assign the plan to host pools of the same type."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-19
 render: v2
 topics: [avd-scaling-plan, azure-virtual-desktop]
 keypoints:

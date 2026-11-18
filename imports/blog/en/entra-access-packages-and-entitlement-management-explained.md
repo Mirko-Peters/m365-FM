@@ -1,10 +1,10 @@
 ---
 title: "Entra Access Packages and Entitlement Management Explained"
 summary: "What Microsoft Entra access packages and entitlement management are, how catalogs and policies work, the steps to create a package, the roles and license it needs, and when a package is the right tool."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-21
+date: 2026-11-19
 topics: [access-packages, entra-id-governance, microsoft-entra]
 keypoints:
   - "An access package bundles the resources a person needs for a project or task, such as groups, Teams, apps and SharePoint sites, with rules for who can request them."

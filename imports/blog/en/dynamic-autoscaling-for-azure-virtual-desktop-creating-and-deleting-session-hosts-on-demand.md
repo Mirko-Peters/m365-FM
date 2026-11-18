@@ -1,10 +1,10 @@
 ---
 title: "Dynamic autoscaling for Azure Virtual Desktop: creating and deleting session hosts on demand"
 summary: "Dynamic autoscaling starts existing session hosts while the number needed stays within the minimum host pool size, and creates more beyond it, up to the maximum. Covers when it creates, starts and deletes."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-19
 render: v2
 topics: [avd-dynamic-autoscaling, avd-scaling-plan]
 keypoints:

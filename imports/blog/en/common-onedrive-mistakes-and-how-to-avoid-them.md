@@ -1,10 +1,10 @@
 ---
 title: "Common OneDrive Mistakes and How to Avoid Them"
 summary: "The OneDrive mistakes that Microsoft documentation addresses: long paths, invalid file names, syncing too much, disabling Files On-Demand, skipping Known Folder Move planning and misjudging the recycle bin."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-22
+date: 2026-11-19
 topics: [onedrive, onedrive-files-on-demand, sharepoint]
 keypoints:
   - "Paths over the limits cause sync errors. Microsoft lists 260 characters for File Explorer and desktop Office, 400 for the cloud and 520 for sync."

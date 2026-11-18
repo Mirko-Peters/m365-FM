@@ -1,10 +1,10 @@
 ---
 title: "OneDrive Personal vs OneDrive for Work or School: What Is Different"
 summary: "OneDrive Personal and OneDrive for work or school (formerly OneDrive for Business) share an app but differ in sign-in, management, storage, recovery periods and admin control. A comparison based on Microsoft documentation."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-21
+date: 2026-11-19
 topics: [onedrive, sharepoint, microsoft-365]
 keypoints:
   - "Personal OneDrive uses a Microsoft account and is self-managed. OneDrive for work or school uses an account from your employer or school and is managed by the organization."

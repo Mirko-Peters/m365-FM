@@ -1,10 +1,10 @@
 ---
 title: "Pooled or personal host pools: a decision guide"
 summary: "Choose a pooled host pool when several users can share a session host and keep their profile in FSLogix. Choose a personal host pool when each user needs a dedicated desktop that keeps its state on the VM's OS disk."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-19
 render: v2
 topics: [avd-pooled-host-pool, avd-personal-host-pool]
 keypoints:

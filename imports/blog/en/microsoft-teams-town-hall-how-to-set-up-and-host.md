@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Teams Town Hall: How to Set Up and Host One"
 summary: "How to set up and host a Microsoft Teams town hall: the Events app and calendar routes, the Optimize for large audience setting, capacity tiers, roles, green room, starting and ending the event, and admin policy limits."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-22
+date: 2026-11-19
 topics: [teams, teams-premium, teams-admin-center]
 keypoints:
   - "A town hall is an event with Optimize for large audience turned on. Learn says it then uses the town hall settings in the Teams events policy (CsTeamsEventsPolicy)."

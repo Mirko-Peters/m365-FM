@@ -1,10 +1,10 @@
 ---
 title: "Ramp-up, peak, ramp-down and off-peak: the four AVD autoscale phases explained"
 summary: "An Azure Virtual Desktop scaling plan schedule is split into four phases, and each phase has its own settings and its own rules for starting and stopping session hosts. This article walks through the parameters of each phase for pooled and personal host pools, with example values."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-19
 render: v2
 topics: [avd-autoscale-schedule-phases, avd-scaling-plan]
 keypoints:

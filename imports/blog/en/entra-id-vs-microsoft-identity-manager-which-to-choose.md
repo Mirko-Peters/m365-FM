@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Entra ID vs Microsoft Identity Manager: Which Identity Solution to Choose"
 summary: "Microsoft Entra ID and Microsoft Identity Manager solve different problems. This guide compares what each does, the MIM support dates, and when Microsoft documents MIM as still the right tool."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-22
+date: 2026-11-19
 topics: [entra-id, entra-connect, entra-cloud-sync]
 keypoints:
   - "Entra ID is a cloud identity and access management service. MIM is on-premises software that provisions and synchronizes identities between directories, HR systems and databases."

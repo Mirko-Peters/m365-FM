@@ -1,10 +1,10 @@
 ---
 title: "OneDrive Basics for Beginners: Sign In, Sync, Share and Restore Files"
 summary: "A beginner's guide to OneDrive: what it is, how to sign in, sync a PC, use Files On-Demand, share a file, restore deleted files and stay within storage limits, based on Microsoft documentation."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-21
+date: 2026-11-19
 topics: [onedrive, onedrive-files-on-demand, onedrive-selective-sync]
 keypoints:
   - "OneDrive stores files in the cloud, keeps them private until shared, and syncs them to a PC or phone. Sign in with a personal or a work or school account."

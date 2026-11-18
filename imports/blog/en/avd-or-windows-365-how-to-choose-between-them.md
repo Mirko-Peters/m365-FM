@@ -1,10 +1,10 @@
 ---
 title: "AVD or Windows 365: how to choose between them"
 summary: "Azure Virtual Desktop suits pooled, multi-session or highly customized environments that the organization builds and runs itself. Windows 365 Enterprise and Business suit one dedicated Cloud PC per user, licensed per user per month."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-19
 render: v2
 topics: [azure-virtual-desktop, windows-365]
 keypoints:
