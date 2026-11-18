@@ -19,6 +19,31 @@ BRAND_LEN = len(" | M365.FM")
 TITLE_MAX = 60            # Ziel inkl. Marke
 DESC_LO, DESC_HI = 120, 155
 _STOP = {"and", "or", "of", "the", "with", "for", "to", "in", "a", "an", "by", "on", "at", "as", "und", "oder", "von", "mit", "für", "zu", "im", "der", "die", "das", "ein", "eine"}
+_STOP |= {   # Artikel/Praepositionen weiterer Sprachen: davor endet kein Kurzsatz (18.11.2026: lange KI-Kurzbeschreibungen fr/es/it/nl/id/ar).
+    # Ohne Woerter, die auch Englisch/Deutsch sind (met, do, no, die, per, i, e, o ...): die bekaemen sonst falsche Schnitte im Englischen.
+    "le", "la", "les", "une", "des", "du", "et", "ou", "sur", "à", "au", "aux", "pour", "par", "avec",
+    "los", "las", "una", "del", "con", "para", "por",
+    "gli", "nel", "nella", "della", "dei",
+    "uma", "dos", "het", "een", "van", "voor",
+    "oraz", "dla", "yang", "untuk", "dengan", "dari",
+    "и", "в", "на", "с", "для", "по", "і", "та", "з", "у", "و", "في", "من", "على", "إلى"}
+_JOIN1 = "and|that|which|in which|with|using|by|for|to|from|where|when|while|because|including|as|so|through|via|across|under|into|against|und|mit|für|durch|bei|wobei|sowie|damit|wenn|um|während|weil|sodass|zur|zum|indem"
+_JOIN2 = (   # Stufe 2 (nur wenn Stufe 1 keine Fuge findet): Anschlusswoerter weiterer Sprachen (18.11.2026, lange KI-Kurzbeschreibungen fr/es/it/pt/nl/pl/id/ru/uk/ar)
+    "et|qui|avec|pour|par|dans|afin|lorsque|grâce|sans|selon|notamment|dont|où|permettant|offrant|tandis|"
+    "y|con|para|mediante|donde|cuando|sin|según|incluidos|incluyendo|permitiendo|ofreciendo|mientras|"
+    "che|tramite|dove|quando|senza|grazie|incluso|attraverso|e|ed|mentre|poiché|consentendo|permettendo|offrendo|"
+    "com|onde|sem|incluindo|através|permitindo|oferecendo|enquanto|"
+    "en|dat|voor|waarbij|zodat|zonder|wanneer|waar|om|terwijl|waardoor|"
+    "który|która|które|aby|dla|przez|oraz|gdy|bez|"
+    "yang|dengan|untuk|melalui|tanpa|sehingga|agar|saat|seperti|"
+    "который|которая|которое|которые|для|через|чтобы|при|без|где|"
+    "який|яка|яке|які|щоб|де|"
+    "التي|الذي|مع|عبر|حيث|من خلال|لتمكين|بما في ذلك")
+_FUGE = re.compile(r"[,;،؛](?=\s)|[，、]|\s[–—-](?=\s)|(?<=\s)(?=(?:" + _JOIN1 + r")\s)")   # Stufe 1: Satzzeichen und englische/deutsche Anschlusswoerter (wie bisher)
+_FUGE2 = re.compile(r"(?<=\s)(?=(?:" + _JOIN2 + r")\s)")
+_NO_CUT2 = {"tels", "telles", "tel", "telle", "ainsi", "alors", "bien", "même", "así", "tanto", "tal", "tales", "così", "tanto", "sempre", "assim", "tal", "zowel", "zo", "takie", "tak", "seperti", "так", "такие", "також", "такі",
+             "basado", "basada", "basados", "basadas", "basé", "basée", "basés", "basées", "basato", "basata", "basati", "baseado", "baseada", "gebaseerd"}   # "basado en ..." gehoert zusammen
+
 
 # ---------------------------------------------------------------- Bausteine Entitaeten (15 Sprachen)
 # what/who: Fragekopf mit {n}; who "{n}:" = kein Fragekopf (Sprachen mit Geschlechtsformen). def/use/eps/prof/role/comp/evt/ind/job/ovr/ex/cert: Woerter.
@@ -106,13 +131,19 @@ def lead_text(text, hi=DESC_HI):
         return out
     cut = s[:hi]
     best = 0
-    for m in re.finditer(r"[,;](?=\s)|\s[–—-](?=\s)|(?<=\s)(?=(?:and|that|which|in which|with|using|by|for|to|from|where|when|while|because|including|as|so|through|via|across|under|into|against|und|mit|für|durch|bei|wobei|sowie|damit|wenn|um|während|weil|sodass|zur|zum|indem)\s)", cut):
-        head = cut[:m.start()].rstrip(",;–—- ")
-        punct = cut[m.start():m.start() + 1] in ",;–—-"
+    for m in _FUGE.finditer(cut):
+        head = cut[:m.start()].rstrip(",;،؛，、–—- ")
+        punct = cut[m.start():m.start() + 1] in ",;،؛，、–—-"
         if len(head) >= (45 if punct else 60) and head.rsplit(" ", 1)[-1].lower() not in _STOP and m.start() > best:
             best = m.start()   # laengster Anfang, der an einer Satzfuge endet (Komma, Semikolon, Strich oder vor Nebensatz-/Anschlusswort)
+    if not best:   # Stufe 2: nur Anschlusswoerter weiterer Sprachen, laengerer Mindestanfang, nicht nach "tels", "ainsi", "así" ... (dort gehoert das Wort zum Ausdruck)
+        for m in _FUGE2.finditer(cut):
+            head = cut[:m.start()].rstrip()
+            last = head.rsplit(" ", 1)[-1].lower()
+            if len(head) >= 70 and last not in _STOP and last not in _NO_CUT2 and m.start() > best:
+                best = m.start()
     if best:
-        return cut[:best].rstrip(",;–—- ") + "."
+        return cut[:best].rstrip(",;،؛，、–—- ") + "."
     return cut[:hi - 1].rsplit(" ", 1)[0].rstrip(",;:–—-") + "…"
 
 
