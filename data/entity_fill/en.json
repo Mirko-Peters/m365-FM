@@ -1,4 +1,26 @@
 {
+ "a2a-protocol": {
+  "d1h": "91d32bac7ab1126c",
+  "desc": "Agent2Agent (A2A) is an open protocol, hosted by the Linux Foundation, that lets AI agents from different platforms communicate, delegate tasks and collaborate.",
+  "faq": [
+   {
+    "a": "A2A is an open protocol, hosted by the Linux Foundation, for communication and interoperability between AI agents built on different platforms. It lets agents delegate sub-tasks, exchange information and coordinate actions without exposing their internal memory, tools or proprietary logic.",
+    "q": "What is the Agent2Agent (A2A) protocol?"
+   },
+   {
+    "a": "According to the A2A project site, MCP connects an agent to tools, APIs and data, while A2A connects an agent to other agents. The two are described as complementary, and the site recommends using both.",
+    "q": "How does A2A differ from MCP?"
+   },
+   {
+    "a": "The project lists six official SDKs for Python, Go, Java, JavaScript, C# and .NET, and Rust. All of them implement the A2A v1.0 specification.",
+    "q": "Which SDKs are available for A2A?"
+   }
+  ],
+  "h": "4a639c76220e087a",
+  "long": "The Agent2Agent (A2A) protocol is an open protocol for communication and interoperability between agentic applications that are opaque to one another. It allows AI agents built on different platforms to find each other, delegate sub-tasks, exchange information and coordinate actions. Frameworks named on the project site include LangGraph, CrewAI and Semantic Kernel. The aim is that such agents can connect without a custom integration being built for every pair of systems.\n\nA central design idea is opacity. An agent that takes part in A2A collaboration does not have to expose its internal memory, its tools or its proprietary logic to the agents it works with. Each agent stays a black box that is reached through the protocol, which supports collaboration across vendor and platform boundaries while the implementation details remain private. The project lists secure and opaque collaboration as one of its highlighted features, alongside interoperability, complex multi-agent workflows, working with MCP, and extensibility.\n\nA2A is hosted by the Linux Foundation under neutral governance and is released under the Apache 2.0 license. The project cites more than 170 community partners and says it has joined the Agentic AI Foundation. Changes to the protocol are handled through a formal process. Extensions and custom bindings are added through a tiered promotion process, so the core of the specification can stay stable while new capabilities are developed and tested around it.\n\nFor developers, official SDKs are listed for Python, Go, Java, JavaScript, C# and .NET, and Rust. All of them implement the A2A v1.0 specification, which gives teams a shared baseline regardless of the language in which an agent is written. The short description of the protocol also notes that it builds on standard web technologies such as HTTP and JSON-RPC. The A2A landing page itself does not go into discovery or transport details, so those aspects should be checked in the specification and SDK documentation.\n\nA2A is positioned as complementary to the Model Context Protocol (MCP), not as a replacement for it. According to the project site, MCP connects an agent to tools, APIs and data, whereas A2A connects an agent to other agents. The site recommends using both: MCP for giving an individual agent access to the resources it needs, and A2A for letting several agents work together on a larger task. In practice this separates two questions that come up when designing multi-agent systems, namely what an agent can use and who an agent can delegate work to.\n\nTypical situations where A2A is relevant include multi-agent workflows in which agents come from different vendors or open-source frameworks, and organizations that want to avoid writing point-to-point integrations between each pair of agents. Decisions around adoption usually involve which SDK matches the existing stack, how the agent pairs with MCP-based tool access, and whether any needed capability belongs in the stable core or in an extension.\n\nNo M365.FM episodes are currently linked to this topic, so this page relies on the public description of the protocol only.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
  "ab-100": {
   "d1h": "",
   "desc": "Microsoft Certified: Agentic AI Business Solutions Architect Expert (AB-100) is a 2026 expert certification for architects designing agentic AI business solutions.",
@@ -132,7 +154,6 @@
   "ts": "2026-11-18"
  },
  "ab-900": {
-  "d1h": "992d489ae7229d16",
   "desc": "Microsoft Certified: Copilot and Agent Administration Fundamentals (AB-900) is a 2026 fundamentals certification on administering Microsoft 365 Copilot and agents.",
   "faq": [
    {
@@ -479,7 +500,6 @@
   "ts": "2026-11-18"
  },
  "administrative-units": {
-  "d1h": "ed90df18aa4d24c7",
   "desc": "Administrative units are containers in Microsoft Entra ID that hold users, groups or devices and limit an administrator role to that subset of an organization.",
   "faq": [
    {
@@ -955,7 +975,6 @@
   "ts": "2026-11-18"
  },
  "ai-901": {
-  "d1h": "db41e95bad99a95e",
   "desc": "Microsoft Azure AI Fundamentals (AI-901) is the 2026 entry-level exam for Azure AI Fundamentals, covering AI concepts and Microsoft Foundry and replacing AI-900.",
   "faq": [
    {
@@ -973,6 +992,28 @@
   ],
   "h": "1bb6d69f69221a18",
   "long": "Microsoft Azure AI Fundamentals (AI-901) is an entry-level certification exam from Microsoft. It is the refreshed 2026 exam for the Azure AI Fundamentals certification and, according to the available data, replaces the earlier AI-900 exam. The exam code is AI-901, and the credential sits at the fundamentals level of the Microsoft certification structure.\n\nThe exam is aimed at candidates who are early in their AI solution development career. According to the official Microsoft Learn page, it covers AI workloads and considerations, basic machine learning principles on Azure, and the characteristics of computer vision, natural language processing and generative AI workloads. The skills measured are weighted in two groups: identifying AI concepts and capabilities, and implementing AI solutions with Microsoft Foundry. Microsoft Foundry is the platform the certification covers, which is why the exam also touches on hands-on tasks rather than only terminology.\n\nThe documentation lists several prerequisites for candidates. These include conceptual knowledge of AI solutions in Azure, basic technical skills, knowledge of Python syntax and familiarity with Azure resources. Knowledge of REST APIs, SDKs and command-line tools is also expected. This differs from an assumption sometimes made about fundamentals exams, because the AI-901 skills outline includes working with Microsoft Foundry and therefore some familiarity with code and tooling. Most questions address generally available features.\n\nPractical details come from the same documentation. The pass mark is 700. The exam is offered in many languages and can be booked through Pearson VUE or Certiport, with the price depending on the country. The page states no retirement date for the certification, and it does not give the exam duration or the number of questions. Preparation options named by Microsoft include the course Introduction to AI in Azure, a study guide, an exam sandbox and a practice assessment.\n\nTypical situations in which the exam is considered include IT professionals who want an overview of Azure AI services before choosing a more specialized path, students beginning to explore cloud and AI, and business staff who want to take part in discussions about AI projects. Because AI-901 replaces AI-900, people who already prepared for the older exam should check the official documentation to see how content and certification status are affected by the change, rather than assuming that earlier study material still maps one to one.\n\nThe topic is linked to Microsoft as the developer of the exam and to Microsoft Foundry as the covered platform. The M365.FM episodes currently associated with this knowledge base do not discuss AI-901 directly, so this page relies on the official Microsoft Learn information and the supplied overview rather than on episode content.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
+ "ai-administrator": {
+  "d1h": "8d6b4115c22ac5aa",
+  "desc": "AI Administrator is a built-in Microsoft Entra role for managing Microsoft 365 Copilot and AI agent settings without needing Global Administrator rights.",
+  "faq": [
+   {
+    "a": "It is a built-in Microsoft Entra administrator role for managing Microsoft 365 Copilot and AI agent settings, such as consent and agent lifecycle, without requiring Global Administrator rights.",
+    "q": "What is the AI Administrator role?"
+   },
+   {
+    "a": "The M365.FM episodes list it as a prerequisite for setting up Microsoft Graph connectors and for connecting sources such as Azure SQL to Copilot, where the person configuring the connection must be an AI administrator in the Microsoft 365 admin center.",
+    "q": "When is the AI Administrator role needed?"
+   },
+   {
+    "a": "The episode \"Microsoft 365 Global Admin Power, Identity, and Governance\" recommends limiting Global Admins and applying least privilege, and presents the AI Administrator as a role that helps manage AI tools without granting full Global Admin authority.",
+    "q": "Why use AI Administrator instead of Global Administrator?"
+   }
+  ],
+  "h": "a0db53dff6eaa23f",
+  "long": "AI Administrator is a built-in administrator role in Microsoft Entra. It is intended for managing settings related to Microsoft 365 Copilot and AI agents, such as consent and agent lifecycle, without requiring Global Administrator rights. The role sits within the broader Microsoft Entra role model, where access to administrative tasks is divided across specific roles rather than concentrated in a single all-powerful account.\n\nThe main purpose of the role is to separate AI-related administration from the broadest level of tenant control. The Global Administrator holds very wide authority over user accounts, data access, and security settings. The episode \"Microsoft 365 Global Admin Power, Identity, and Governance\" points out that too many Global Admins can create confusion and risk, and that clear accountability is easier to maintain when the number of Global Admins is limited. The same episode recommends the principle of least privilege, meaning users receive only the permissions they need for their roles. In that discussion, the episode presents the AI Administrator as an example of a new kind of role that helps keep order as AI tools grow in an organization.\n\nIn practice, the role shows up most often as a prerequisite for connecting external data to Microsoft 365 Copilot. The episode \"Microsoft Graph Connectors - Simply Explained\" lists, among the prerequisites for implementing Graph connectors, that you must be an AI administrator in the Microsoft 365 admin center. It also notes that admin access to the external service is needed for prebuilt synced connectors, along with Microsoft 365 licenses and data source credentials. These are separate requirements: the AI administrator role covers the Microsoft 365 side, while access to the external system has to be arranged independently.\n\nThe episode \"Connect Azure SQL to Copilot Studio Through a Data Gateway\" repeats the same requirement for a scenario involving an Azure SQL Database. Among its prerequisites, it states that you must be the AI administrator for your organization's Microsoft 365 tenant. The remaining steps it lists include installing the Microsoft Graph connector agent to reach the SQL Server, using a service account with read permissions, using Microsoft Entra ID for authentication, registering an app in Microsoft Entra ID for indexing, and configuring firewall settings. This shows that the AI Administrator role is one part of a larger setup that also involves identity and network configuration.\n\nThe episode \"Extend Microsoft 365 Copilot with Agents, Plugins, and Connectors\" places the role in a step-by-step view of connector deployment. According to its table of steps and required roles, installing the agent on-premises calls for the AI administrator or Copilot admin, while registering the app in Entra ID is assigned to the Azure App admin or Azure admin. The episode also describes configuring the connection and schema in the Copilot section of the Microsoft 365 admin center by selecting Copilot connectors, choosing a data source from the gallery, and creating the connection. This division of roles illustrates how different administrators can each cover their own part of a deployment.\n\nTaken together, the episodes treat the AI Administrator as a role to assign deliberately. It supports least-privilege thinking by allowing AI and Copilot administration to be delegated instead of handing out Global Administrator rights. Decisions around the role typically involve who in the organization should hold it, how it combines with other roles such as app and Azure administrators during connector projects, and how it fits into the wider Microsoft Entra role assignments. Beyond these points, the available episode material does not describe further details of the role's permissions.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
@@ -2182,7 +2223,6 @@
   "ts": "2026-11-18"
  },
  "az-500": {
-  "d1h": "d60a8af67535c45f",
   "desc": "Microsoft Certified: Azure Security Engineer Associate (AZ-500) was an associate-level Microsoft certification for Azure security, retired on 31 August 2026 and succeeded by SC-500.",
   "faq": [
    {
@@ -3440,7 +3480,6 @@
   "ts": "2026-11-18"
  },
  "azure-iot-hub": {
-  "d1h": "b0363dfe741396a1",
   "desc": "Azure IoT Hub is a managed Azure service acting as a central message hub between IoT applications and devices, with device identities and two-way messaging.",
   "faq": [
    {
@@ -3814,7 +3853,6 @@
   "ts": "2026-11-18"
  },
  "azure-openai": {
-  "d1h": "ce4b06a8548f1f12",
   "desc": "Azure OpenAI Service provides OpenAI models such as GPT through Microsoft Azure, with the security, keys, limits and privacy rules of the customer's own Azure space.",
   "faq": [
    {
@@ -3898,6 +3936,28 @@
   ],
   "h": "eeac152134421ddc",
   "long": "Azure Queue Storage is a service for storing large numbers of messages inside an Azure Storage account. It is part of Microsoft Azure and is used to decouple application components: one part of an application places a message in a queue, and another part, often a background worker, picks it up and processes it later. Because the producer and the consumer do not have to run at the same time or at the same speed, the queue acts as a buffer between them.\n\nAccording to Microsoft Learn, messages are reachable from anywhere through authenticated HTTP or HTTPS calls, and all access goes through an Azure storage account. A queue holds a set of messages, and the queue name must consist of lowercase letters. Queue endpoints follow a pattern made up of the storage account name, the queue service host name and the queue name. A single message can be in any format and can be up to 64 KB in size. A queue can contain millions of messages, limited only by the total capacity of the storage account.\n\nMessages do not stay in a queue indefinitely by default. Time-to-live defaults to seven days. For service versions from 2017-07-29 onward, the time-to-live can be set to any positive number or to -1, which indicates that the message never expires. Earlier service versions cap the time-to-live at seven days. This setting matters when deciding how long unprocessed work may wait before it is discarded.\n\nA common use is building a backlog of work that is processed asynchronously. The Microsoft documentation names the web-queue-worker architecture style as a typical example: a web front end accepts a request, writes a message to the queue and returns quickly, while a worker reads the queue and performs the longer-running task. Because messages are small, they usually carry a reference or a short instruction rather than a large payload.\n\nAzure Queue Storage also appears in the context of Azure Functions. The episode \"Azure Functions - Simply Explained\" lists creating reliable message systems as one scenario for Azure Functions, where message queues are processed using Azure Queue Storage, Service Bus or Event Hubs. In that overview, queue processing sits alongside other event-driven uses such as responding to database changes and building workflows with Durable Functions.\n\nThe episode \"Copilot Studio Code Interpreter vs Azure Functions\" discusses performance and load handling. It lists Azure Queue Storage among the strategies Azure Functions can use to reduce load and improve efficiency, stating that it processes requests asynchronously and therefore reduces the need for high concurrency. The same list names Durable Functions, randomized request times, Azure Event Grid and batch processing as other approaches. In this framing, a queue absorbs bursts of requests so that processing can proceed at a steady pace instead of requiring every request to be handled at the moment it arrives.\n\nWhen choosing a messaging approach, the episodes present Azure Queue Storage as one option next to Service Bus and Event Hubs rather than as a stand-alone answer. The sources available here do not cover pricing, delivery ordering guarantees or resilience details, so those aspects should be checked in the official documentation before a design depends on them.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
+ "azure-relay": {
+  "d1h": "69000e92d856e64c",
+  "desc": "Azure Relay is an Azure service that exposes services in a private network to the cloud without opening inbound firewall ports, using outbound connections.",
+  "faq": [
+   {
+    "a": "Azure Relay exposes services running in a private network to the cloud without opening inbound firewall ports. The on-premises service opens an outbound connection and a bidirectional socket, and the relay forwards client traffic over it.",
+    "q": "What does Azure Relay do?"
+   },
+   {
+    "a": "The on-premises data gateway uses Azure Relay to pick up queued requests over outbound connections. As a result, the gateway does not need inbound firewall ports to serve cloud requests.",
+    "q": "How is Azure Relay related to the on-premises data gateway?"
+   },
+   {
+    "a": "Hybrid Connections is built on HTTP and WebSockets and works across platforms and languages such as .NET and Node.js. WCF Relay uses Windows Communication Foundation, works only with the full .NET Framework rather than .NET Core, and is described as a legacy option.",
+    "q": "What is the difference between Hybrid Connections and WCF Relay?"
+   }
+  ],
+  "h": "422fb4273ba3a50d",
+  "long": "Azure Relay is a service in Microsoft Azure that lets a service running inside a corporate or otherwise private network be reached from the public cloud without opening an inbound firewall port or making invasive changes to the network. Instead of accepting incoming connections, the on-premises service opens an outbound connection to the relay. This approach distinguishes it from a VPN, because a relay can be limited to a single application endpoint on one machine rather than exposing a whole network.\n\nThe mechanism works in a straightforward way. The on-premises service creates a bidirectional socket for a given address through its outbound connection to the relay. Clients then send their traffic to that address, and the relay forwards it over the existing socket to the local service. Clients need no knowledge of where the service actually runs, and the local service needs no inbound ports. The documentation lists several supported scenarios: one-way messaging, request/response messaging, peer-to-peer messaging, internet-scale event distribution, and unbuffered bidirectional sockets across network boundaries.\n\nAzure Relay includes two features that share a gateway but are implemented differently. Hybrid Connections is built on HTTP and WebSockets, works across platforms and languages including .NET and Node.js, and replaces the Hybrid Connections feature of BizTalk Services. WCF Relay is based on Windows Communication Foundation and is used for remote procedure calls. It works only with the full .NET Framework rather than .NET Core, and the documentation describes it as a legacy option. Teams choosing between the two therefore weigh platform and language requirements against the age of the technology.\n\nIn the Power BI context, Azure Relay matters because the on-premises data gateway uses it to pick up queued requests over outbound connections. This is why the gateway can serve cloud-based reports and datasets that query data sources inside a private network without any inbound firewall rules. The service itself sits in the background of that setup, which means problems with it usually surface as gateway or refresh failures rather than as errors labeled with the service name.\n\nThe M365.FM episode \"Power Query Folding and Execution Order in Power BI\" touches on Azure Relay in its discussion of identifying connectivity issues. According to the episode, common network problems that can affect Power BI query connections include firewall and proxy misconfigurations that block required ports, with the examples 443, 5671-5672 and 9350-9354 given. The episode also lists network latency or packet loss affecting Azure Relay connectivity, VPNs or proxies that restrict communication and may prevent the gateway from connecting properly, incorrect gateway or data source credentials that lead to authentication failures, resource limitations such as CPU and memory on the gateway machine causing disconnections, and Azure service interruptions. For diagnosis, the episode points to developer tools in the browser as a starting point.\n\nTypical decisions around Azure Relay follow from these points. Because only outbound connectivity is needed, network teams focus on allowing the required outbound ports and on how proxies and VPNs treat that traffic, rather than on publishing internal services. For custom integration, the choice between Hybrid Connections and WCF Relay depends mainly on whether the application is built on current cross-platform stacks or on the full .NET Framework. The documentation page does not cover pricing, quotas or service limits and refers readers to the FAQ for those topics, so such details should be checked there.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
@@ -4297,6 +4357,28 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
+ "azure-traffic-manager": {
+  "d1h": "0fa037e88de2f3dc",
+  "desc": "Azure Traffic Manager is a Microsoft Azure DNS-based traffic load balancer that routes users to endpoints in different regions by priority, performance, weight or geography.",
+  "faq": [
+   {
+    "a": "Azure Traffic Manager is a DNS-based traffic load balancer from Microsoft that is part of Microsoft Azure. It directs users to application endpoints in different regions based on routing rules such as priority, performance, weight or geography.",
+    "q": "What is Azure Traffic Manager?"
+   },
+   {
+    "a": "No. According to the M365.FM episode \"Azure Traffic Manager - Simply Explained\", the service uses intelligent DNS responses to point clients to a suitable endpoint, rather than carrying or proxying the traffic.",
+    "q": "Does Azure Traffic Manager route the traffic itself?"
+   },
+   {
+    "a": "The episode \"Azure Front Door - Simply Explained\" compares Azure Front Door with Azure Traffic Manager and describes Front Door features such as caching, URL routing, Web Application Firewall and SSL/TLS termination. Azure Traffic Manager, by contrast, works at the DNS level.",
+    "q": "How does Azure Traffic Manager differ from Azure Front Door?"
+   }
+  ],
+  "h": "77d8281cfe4ca8e4",
+  "long": "Azure Traffic Manager is a DNS-based traffic load balancer in Microsoft Azure. It was developed by Microsoft and is part of the Microsoft Azure platform. Its purpose is to route users to application endpoints located in different regions, choosing the endpoint according to a routing method such as priority, performance, weight or geography. Official documentation for the service is published on Microsoft Learn.\n\nThe defining characteristic of Azure Traffic Manager is that it does not route traffic itself. As described in the M365.FM episode \"Azure Traffic Manager - Simply Explained\", the service works through intelligent DNS responses. When a client resolves the name of an application, Traffic Manager answers with the address of an endpoint that fits the configured routing rules, and the client then connects to that endpoint directly. Because the decision happens at the DNS layer, the service is aimed at global distribution of public-facing applications across Azure regions rather than at inspecting or proxying the traffic that follows.\n\nThe routing methods named in the sources map to different design goals. Priority routing is used when one endpoint should serve traffic and others should act as fallbacks. Performance routing is used to reduce latency by directing users to a suitable endpoint. Weighted routing distributes traffic across endpoints in proportions that an administrator chooses. Geographic routing directs users based on their location. The episode summarizes the overall benefits as improved application availability, reduced latency, and automatic failover to healthy endpoints when outages occur.\n\nTypical situations include applications that are deployed in more than one Azure region and need a single entry point name, and scenarios where a primary site should fail over to a secondary one when it becomes unhealthy. The decision around Azure Traffic Manager usually comes down to whether DNS-level steering is sufficient. The M365.FM episode \"Azure Front Door - Simply Explained\" explains how Azure Front Door differs from Azure Load Balancer, Azure Traffic Manager, and Azure Application Gateway. According to that episode, Azure Front Door covers concepts such as global load balancing, health probes, URL routing, caching, Web Application Firewall and SSL/TLS termination, which places it in a different category from a DNS-based routing service.\n\nAzure Traffic Manager also sits alongside the other Azure DNS-related services. In the episode \"Azure DNS - Simply Explained\", the service is listed among the Azure DNS offerings with the role of distributing traffic to public-facing applications across global Azure regions. This differs from Azure Private DNS, which resolves names internally within virtual networks, and from the Azure DNS Private Resolver, which handles DNS queries between Azure DNS private zones and on-premises environments.\n\nThe topic appears in operational guidance as well. The episode \"Azure Firewall - Simply Explained\" lists traffic routing as part of an ongoing maintenance strategy and suggests implementing Azure Traffic Manager or Azure Front Door for effective traffic management. The episode \"Azure Resource Manager - Simply Explained\" refers listeners to the Azure Traffic Manager episode as a related conversation. Together, these episodes position Azure Traffic Manager as one component in a wider set of Azure networking and resilience services, chosen according to whether the requirement is DNS-based steering, application-layer delivery, or internal name resolution.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
  "azure-update-manager": {
   "d1h": "",
   "desc": "Azure Update Manager is an Azure-native service that assesses, schedules, installs and tracks OS updates for Windows and Linux servers across Azure, on-premises and other clouds.",
@@ -4539,6 +4621,28 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
+ "bing-maps": {
+  "d1h": "047d30be376549e4",
+  "desc": "Bing Maps is a Microsoft web mapping service that powered the classic Power BI map visuals and is being replaced by Azure Maps.",
+  "faq": [
+   {
+    "a": "Bing Maps is a Microsoft mapping platform for developers that provides a web map control, geocoding, routing and spatial data services. Its technology also powered the classic Power BI map and filled map visuals.",
+    "q": "What is Bing Maps?"
+   },
+   {
+    "a": "The episode \"Migrate Bing Maps to Azure Maps in Power BI\" says that as of October 2025 Bing Maps visuals are deprecated and unmigrated map visuals become blank boxes.",
+    "q": "What happens to Power BI Bing Maps visuals that are not migrated?"
+   },
+   {
+    "a": "Microsoft Learn states that enterprise customers can keep using Bing Maps for Enterprise until 30 June 2028, after which REST APIs and SDKs must move to Azure Maps. Free basic accounts have already been discontinued.",
+    "q": "Until when can Bing Maps for Enterprise be used?"
+   }
+  ],
+  "h": "b318355178817ac7",
+  "long": "Bing Maps is a Microsoft web mapping platform for developers. According to Microsoft Learn, it offers a web map control, geocoding, routing and spatial data services, and it is positioned as an alternative to the Google Maps JavaScript API. In the Power BI context, Bing Maps is the technology that stood behind the classic map and filled map visuals, which is why changes to the service directly affect reports built with those visuals.\n\nOn the developer side, the basic map control supports pushpins, polylines, polygons and tile layers. A modular framework loads additional capabilities, such as directions, only when they are needed. Several map styles are available, including road, dark, grayscale and high contrast. For data-heavy scenarios there are data binning layers and a spatial math library. The documentation points to business intelligence scenarios in which the map serves as a backdrop, and to applications with large data volumes or mobile browsers. Licensed customers receive a service-level agreement and round-the-clock phone support for production issues.\n\nThe most important practical point about Bing Maps today is its lifecycle. Microsoft Learn states that Bing Maps for Enterprise is deprecated, that free basic accounts have been discontinued, and that enterprise customers can keep using it until 30 June 2028. After that date, REST APIs and SDKs must have moved to Azure Maps. This applies to custom applications that call Bing Maps directly, which is a different track from the Power BI visuals discussed in the episode.\n\nFor Power BI, the situation is framed by the M365.FM episode \"Migrate Bing Maps to Azure Maps in Power BI\" (published 2025-11-04). The episode says that, as of October 2025, Bing Maps visuals are deprecated and that reports which are not migrated end up with map visuals that show as blank boxes. It presents the move to Azure Maps as neither optional nor cosmetic, and not simply a visual upgrade. Instead, it describes Azure Maps as a replacement shaped by compliance requirements, with preparation steps in the tenant needed before the new visuals work.\n\nThe episode also covers migration traps. One is the false comfort of automatic conversion: a visual that appears to convert is not necessarily one that holds up in production. The episode distinguishes between visuals that merely render and visuals that survive production use, and it treats the transition as a countdown rather than a routine warning.\n\nTypical decisions around Bing Maps therefore fall into two groups. Report authors and Power BI administrators need to inventory reports that use the classic map and filled map visuals, plan the move to Azure Maps, and check tenant-level settings before relying on the new visuals. Developers who use Bing Maps for Enterprise in their own applications need to plan the migration of their REST API and SDK calls to Azure Maps before the end of the enterprise support period given by Microsoft Learn. Azure Maps is the named successor in both the Power BI episode and the Microsoft Learn lifecycle note.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
  "bitlocker": {
   "d1h": "",
   "desc": "BitLocker is the full-volume drive encryption feature built into Windows; it can be managed by SCCM and Intune and counts toward Microsoft Secure Score.",
@@ -4558,6 +4662,28 @@
   ],
   "h": "5dc9103e57d2829a",
   "long": "BitLocker is the full-volume drive encryption feature built into Windows. It encrypts the contents of a disk so that data stays protected if a device is lost or stolen. Because the encryption is part of the operating system, it is usually treated as a baseline endpoint control rather than an add-on product.\n\nOne practical point from the available notes concerns developer virtual machines. On a dev box the disk is already encrypted, so enabling BitLocker manually can lock users out. Before turning the feature on by hand, an administrator therefore needs to check whether the environment already applies encryption, since a second, manual activation can cause the access problem described above.\n\nIn managed environments BitLocker is rarely configured device by device. The episode \"SCCM vs Intune: Key Differences | Simply Explained\" lists BitLocker Management among the security features of SCCM, next to Endpoint Protection through Microsoft Defender and compliance monitoring based on SQL queries and built-in reporting. According to the episode, SCCM can manage BitLocker encryption for Windows devices so that sensitive data remains secure, and it fits on-premises environments with strict compliance needs, though it requires skilled administrators.\n\nThe cloud-based counterpart is covered in \"Microsoft Intune - Simply Explained\". The episode describes compliance policies that enforce platform-specific requirements, naming BitLocker for Windows and FileVault for macOS. In this model, encryption is one of the conditions a device must meet. Combined with Conditional Access, the device state can be checked before access to enterprise apps is granted, which fits the Zero Trust design the episode describes.\n\nThe same idea appears in \"Zero Trust Across Microsoft 365 and Dynamics 365\". There, Full Disk Encryption is listed as a device-level measure: BitLocker or FileVault protects lost or stolen devices. It sits in a list with enforcing device integrity checks such as Secure Boot and TPM, blocking non-compliant devices through Conditional Access, deploying Microsoft Defender for Endpoint, and limiting admin access to secure endpoints. In this framing, BitLocker is one layer of a broader device-trust approach and not a standalone safeguard.\n\nBitLocker also matters for measurement. \"Microsoft Secure Score - Simply Explained\" explains that some recommendations award partial credit in proportion to coverage. The example given is that if BitLocker encryption is enabled on 80% of managed devices, Secure Score awards approximately 80% of the available points. This lets an organization see progress while it gradually extends encryption across its device fleet. The episode also notes that not every organization should aim for a score of 100%.\n\nFinally, \"Windows 365 Link - Simply Explained\" mentions BitLocker encryption among the technologies that work together with Microsoft Entra ID, Microsoft Intune, Trusted Platform Module (TPM), Secure Boot, Microsoft Defender and strict application controls. The episode describes how these elements protect both the access device and the cloud-hosted desktop environment, supporting a secure endpoint with reduced operational complexity.\n\nTaken together, the episodes position BitLocker as a built-in Windows encryption feature that is typically governed centrally through SCCM or Intune policy, assessed through compliance rules and Secure Score, and combined with TPM and Secure Boot in Zero Trust designs. The main caution from the notes is that existing encryption, such as on dev boxes, should be verified before BitLocker is enabled manually.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
+ "bm25": {
+  "d1h": "a343d305d67c90d3",
+  "desc": "BM25 (Okapi BM25) is a sparse ranking function that scores documents by exact term overlap with a query and is often paired with vector search in hybrid retrieval.",
+  "faq": [
+   {
+    "a": "BM25 scores and ranks documents by how well they match the terms in a query, which makes it a standard method for full-text search. It is commonly combined with vector search in hybrid retrieval.",
+    "q": "What is BM25 used for?"
+   },
+   {
+    "a": "According to the Azure AI Search documentation, BM25 belongs to the TF-IDF family of retrieval functions but is based on probabilistic information retrieval. It uses term frequency and inverse document frequency, with tunable handling of document length and term frequency.",
+    "q": "How does BM25 relate to TF-IDF?"
+   },
+   {
+    "a": "No. BM25 applies only to full-text queries. Filters, autocomplete, suggestions, wildcard queries and fuzzy queries are not relevance-ranked, and empty searches return a constant score.",
+    "q": "Does BM25 rank all queries in Azure AI Search?"
+   }
+  ],
+  "h": "c0ab54698aa1e67c",
+  "long": "BM25, short for Okapi BM25, is a classic ranking function used in full-text search. It scores each document against a query based on how well the query terms appear in the document, which makes it a sparse, keyword-oriented method. In practice it is used to order search results so that documents with the strongest term overlap appear first, and it is commonly combined with vector search in hybrid retrieval setups.\n\nBM25 belongs to the TF-IDF family of retrieval functions but is grounded in probabilistic information retrieval. According to the Azure AI Search documentation on Microsoft Learn, it produces more intuitive matches than the older classic similarity algorithm. For each pair of document and query it calculates a search score, and a higher value indicates greater relevance. The score is not bounded to a fixed range, so values are meaningful mainly for comparison within the same query. The calculation draws on term frequency and inverse document frequency, and in Azure AI Search, index settings allow tuning how document length and term frequency influence the score.\n\nIn Azure AI Search, BM25 is the algorithm that scores results for full-text search. Only fields marked as searchable, or fields named in the query, contribute to the score. Services created from July 2020 onward use BM25 permanently, while older services default to the classic similarity unless BM25 is enabled per index. The scope is limited to full-text queries: filters, autocomplete, suggestions, wildcard queries and fuzzy queries are not relevance-ranked, and an empty search returns a constant score. The documentation also notes that scores can vary slightly between queries or replicas, and that sharding can distort ranking in small indexes unless global statistics are requested.\n\nThe main reason BM25 appears in discussions about AI search is its complementary relationship to vector embeddings. Vector search captures meaning and user intent even when a question is phrased differently from the source text, while BM25 keyword matching ensures that exact terms are not missed. This matters in situations involving precise identifiers, product names or domain-specific language, where an approximate semantic match may not be sufficient. Combining both approaches is known as hybrid retrieval.\n\nThe M365.FM episode \"Improve Microsoft Copilot Accuracy Beyond Vector Search\" (2026-05-01) places BM25 in this context. The episode describes a hybrid approach that combines vector embeddings with keyword search such as BM25 to address trust, precision and domain-specific language in enterprise AI search. It frames the pairing as a way to understand what users mean through semantic search while still honoring the exact language that matters, and describes it as a benchmark for enterprise AI search that organizations apply to deliver more reliable and accurate results in Copilot scenarios.\n\nWhen deciding how to use BM25, the typical considerations are the type of content and the type of queries. Keyword-heavy content with specific terms benefits from BM25 scoring, whereas conceptual questions benefit from vector search. A hybrid design uses both signals rather than choosing one. Teams working with Azure AI Search should also keep the documented limits in mind, such as BM25 applying only to full-text queries and the possible effect of sharding on ranking in small indexes.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
@@ -4756,6 +4882,28 @@
   ],
   "h": "4ed40238c1087caf",
   "long": "Business Performance Analytics (BPA) is an analytics offering for Dynamics 365 ERP data. It builds prebuilt reports on Microsoft Fabric and Power BI and exposes ERP analytics to agents through a Model Context Protocol (MCP) server, which is why it is also known as the ERP Analytics MCP. Microsoft developed it as part of Dynamics 365, and it is classified as a Microsoft tool and an analytics and BI tool. It is listed as an add-on.\n\nThe purpose of Business Performance Analytics is to turn an organization's operational and financial data into actionable insights without building every report and data model from scratch. According to Microsoft's documentation, it works with Dynamics 365, Dataverse and Power BI. The documented goals are consolidating key performance indicators, automating reporting and allowing custom analysis. Typical business areas named in the documentation are finance, supply chain, project operations and commerce reporting. The offering is related to Dynamics 365 Finance and Operations, whose data it analyses.\n\nThe offering provides preconfigured reports and interactive dashboards for several business areas. It also provides dimensional data models that can be used in a SaaS or data-as-a-service approach. Teams that need more than the standard content can build custom models on top of these models, for example in Microsoft Fabric. Access to the data lake relies on shared Dataverse permissions, so existing security concepts carry over to the analytical layer.\n\nThe link to agents is a distinguishing part of Business Performance Analytics. A preview ERP Analytics MCP server supports natural-language queries, lets AI agents generate DAX, and applies row-level security based on roles. The documentation names integration with Visual Studio Code and Copilot Studio. This means an AI agent can ask questions about business performance in plain language while the results respect the same role-based access rules as the reports. Because this server is described as a preview, its behaviour and scope may change, and current documentation should be consulted before relying on it.\n\nSeveral limits are documented. Reporting covers a maximum of eight quarters, data volume is bound by the Power BI Embedded A6 capacity, and data refreshes twice a day. Near real-time analysis and predictive insights are announced for later releases rather than being part of the current scope. These points matter in practice: organizations that need long history, very large data volumes or frequent refreshes should check whether the limits fit their requirements, and may consider custom models in Fabric for needs beyond the prebuilt content.\n\nOn licensing, the documentation states that the capability is included in the Dynamics 365 Finance license scope, while the product is also described as an add-on. Anyone evaluating it should verify current licensing and availability in Microsoft's own documentation. Typical situations in which it is considered include finance and operations teams that want standard ERP reports in Power BI without a custom data project, analysts who want to work with ERP data in Fabric, and scenarios in which AI agents answer questions about business performance through the MCP server.\n\nNo M365.FM episode is currently recorded for Business Performance Analytics, so this description relies on the product's own documentation and metadata. Related topics on the site include Dynamics 365 Finance and Operations, Microsoft Fabric, Power BI, the Model Context Protocol (MCP) and AI agents, which together describe the data sources, the analytical platform and the agent access that the offering combines.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
+ "business-process-flow": {
+  "d1h": "a89d781e731750e5",
+  "desc": "A business process flow is a guided process bar across a Dynamics 365 record that leads users through defined stages, such as Qualify, Develop, Propose and Close.",
+  "faq": [
+   {
+    "a": "It is a guided process shown as a bar at the top of a record form. It leads users through defined stages and steps, for example Qualify, Develop, Propose and Close for sales opportunities.",
+    "q": "What is a business process flow in Dynamics 365?"
+   },
+   {
+    "a": "Yes. Steps can be marked as required, so the stage cannot be left and the form cannot be saved until the data is entered.",
+    "q": "Can a business process flow enforce that data is filled in?"
+   },
+   {
+    "a": "No, not by itself. According to the Microsoft Learn overview, workflows, business rules or form scripts are needed when conditional business logic is required.",
+    "q": "Does a business process flow include conditional logic?"
+   }
+  ],
+  "h": "c4a3cde7d54c276b",
+  "long": "A business process flow is a guided process that leads users through the steps an organization has defined until a result is reached. In Dynamics 365 it appears as a process bar at the top of a form, and it shows the user which stage a record is in and what remains to be done. A familiar example is the sales pipeline in Dynamics 365 Sales, where an opportunity moves through the stages Qualify, Develop, Propose and Close.\n\nThe main purpose is consistent data entry. According to the Microsoft Learn overview on which this page draws, a business process flow reduces training effort and mistakes, because users see the same defined path for every record instead of deciding on their own what to capture next. Typical scenarios named there are sales and customer service, where a team wants records to be handled in the same order and with the same information.\n\nA business process flow is built from stages and steps. Each step corresponds to a column on the record, and a Next Stage button moves the record forward to the following stage. Steps can be marked as required. A required step means that the stage cannot be left, and the form cannot be saved, until the data has been filled in. This is the mechanism that enforces data quality along the flow.\n\nIn the sales pipeline, the stages carry specific meaning. The episode \"Dynamics 365 Opportunity Management - Simply Explained\" says that Dynamics 365 Sales uses a business process flow to guide opportunities through four standard stages: Qualify, Develop, Propose and Close. During Qualify, sellers establish facts such as the customer, timeframe, potential budget, purchasing process and decision maker. Develop focuses on understanding customer needs, identifying stakeholders and competitors, and defining the proposed solution. The episode also describes how opportunities can arise from several sources, for example customers requesting additional products or services, partners introducing potential buyers, or account managers discovering expansion and renewal opportunities during customer conversations.\n\nA flow does not have to stay within one table. The documentation gives Opportunity to Quote to Order to Invoice as an example of a flow that spans several tables. Several flows can also be attached to one record, and users can switch between them. Flows can be tied to security roles, so that different groups see the processes that apply to them, and the tables used by a flow can also be used for views, charts and dashboards. The documentation states limits, such as a maximum number of active flows per table, stages per process and tables per multi-table process, so larger designs should be checked against those limits.\n\nThere are decisions and constraints to keep in mind when planning a business process flow. Business process flows do not provide conditional business logic by themselves. Where behavior must depend on conditions, the documentation points to workflows, business rules or form scripts. Another point concerns custom tables: enabling the business process flow feature on a custom table cannot be undone, so that choice should be made deliberately.\n\nIn short, a business process flow gives a record a visible, staged path, uses required steps to secure the data that each stage needs, and works alongside other automation options when conditional logic is required. The M365.FM episode on opportunity management shows this in the concrete setting of the Dynamics 365 Sales pipeline.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
@@ -5464,7 +5612,6 @@
   "ts": "2026-11-18"
  },
  "code-apps": {
-  "d1h": "92f1c5175ff2d499",
   "desc": "Power Apps code apps are a Power Apps app type in which developers write the front end in code such as React while using connectors, Dataverse and managed security.",
   "faq": [
    {
@@ -6586,7 +6733,6 @@
   "ts": "2026-11-18"
  },
  "copilot-in-power-bi": {
-  "d1h": "cdf2377bfba01ff9",
   "desc": "Copilot in Power BI is the generative AI assistant in Power BI Desktop and the service that drafts DAX, builds report pages, answers data questions and writes summaries.",
   "faq": [
    {
@@ -7110,6 +7256,28 @@
   ],
   "h": "5cce5b4687af2458",
   "long": "Data access governance reports (DAG) are a set of reports in the SharePoint admin center. They help administrators control access to SharePoint data by surfacing sites that may be overshared or hold sensitive content, so that suitable security and compliance policies can be applied. In short, the reports show where permissions do not match policy and where content may be more widely accessible than intended.\n\nThe reports are opened in the SharePoint admin center under Reports and need SharePoint administrator rights. They fall under the requirements of SharePoint Advanced Management and are unavailable for Microsoft 365 operated by 21Vianet. Organizations that hold Microsoft 365 E5 alone get the reports, but not snapshot reports or remediation actions. Without SharePoint Advanced Management, data collection must be switched on before the activity reports can be used.\n\nThere are two groups of reports. Snapshot reports show the current state of the environment: site permissions across the organization, site permissions for a given user, sensitivity labels applied to files, and content shared through broad groups such as Everyone except external users. Activity reports cover recent events, namely the creation of sharing links and sharing with Everyone except external users. Microsoft suggests running the snapshot reports first as a baseline and the activity reports afterwards for ongoing monitoring.\n\nTypical situations for these reports include a review of oversharing before a wider rollout of content-based tools, a check of which sites expose content to large internal groups, and an assessment of where labeled or sensitive files sit in relation to site permissions. A per-user permission report answers the question of which sites a particular person can reach. Because the activity reports track recent sharing behavior, they support continuous monitoring after the initial baseline has been established and any clean-up has been done.\n\nOne limitation is noted in the documentation: reports may fail when concealed user, group and site names are enabled in the Microsoft 365 admin center. Administrators who see failures should check that setting. Licensing also shapes what is possible, since remediation actions and snapshot reports depend on SharePoint Advanced Management rather than on Microsoft 365 E5 alone.\n\nIn the M365.FM episode \"What Is SharePoint Premium - Simply Explained\", Data Access Governance reports appear within the Content Governance pillar of SharePoint Premium. The episode describes them as providing sitewide reports on overshared content and exposure levels. It lists them alongside restricted access control, which limits site access to specific security groups, the block download policy for view-only access, the inactive site policy that detects inactive sites for review and potential deletion, and site lifecycle governance. Together these features are presented as ways to keep documents in line with industry standards and organizational policies.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
+ "data-analyst": {
+  "d1h": "c16b57b3189dfcdc",
+  "desc": "A data analyst collects, cleans and analyses data and presents findings in reports and dashboards, for example with Power BI, to support business decisions.",
+  "faq": [
+   {
+    "a": "A data analyst collects, cleans and analyses data and presents the findings in reports and dashboards, for example with Power BI, to support decisions.",
+    "q": "What does a data analyst do?"
+   },
+   {
+    "a": "Power BI is named as an example for building the reports and dashboards in which a data analyst presents findings.",
+    "q": "Which Microsoft tool is named for presenting a data analyst's results?"
+   },
+   {
+    "a": "The episode \"Automate Compliance Workflows with Microsoft Power Automate\" says certification helps a person stand out in the growing field of data analytics and that employers value turning raw data into clear reports and dashboards.",
+    "q": "What do the M365.FM episodes say about careers in data analytics?"
+   }
+  ],
+  "h": "590ad6b9cbe4f68e",
+  "long": "A data analyst is a professional role that collects, cleans and analyses data and presents the findings in reports and dashboards so that decisions can rest on evidence rather than assumption. The role is also described with the terms Datenanalyst, Datenanalystin and data analytics. A common tool for presenting results is Power BI, which is named as an example in the role description. The core idea is a path from raw data to clear, usable information: gather the data, correct and prepare it, examine it for patterns, and communicate what it shows.\n\nIn practice, the work covers several connected steps. Data has to be collected from the sources where it lives, then cleaned so that errors, gaps and inconsistencies do not distort the results. The prepared data is then analysed to find trends and answer business questions. Finally, the findings are turned into reports and dashboards that colleagues and decision makers can read without needing to handle the underlying data themselves. This presentation step is what separates analysis that stays on a single desk from analysis that actually informs an organisation.\n\nThe role appears in several M365.FM episodes, mostly as part of the wider data analytics field rather than as the main subject. The episode \"Automate Compliance Workflows with Microsoft Power Automate\" discusses certifications and lists roles that work with data, among them Data Scientist and Business Intelligence Analyst, the latter described as analysing data to help businesses make informed decisions. The episode says that a certification helps a person stand out in the growing field of data analytics, and that employers value the ability to turn raw data into clear reports and dashboards. It also notes that such skills open doors to roles that influence strategy and business growth, and advises planning a certification path around current skills and career goals. According to the episode, fundamentals certifications take about 1 to 2 weeks to prepare, associate certifications 4 to 6 weeks, and expert-level certifications longer.\n\nData analytics as a discipline is also referenced in the episode \"Microsoft Fabric Data Warehouse - Simply Explained\", where it appears alongside real-time intelligence as capabilities that become available once an account for Microsoft Fabric has been created. The episode stresses checking the supported regions before creating an account, since availability depends on the region. In \"GitHub vs Azure DevOps for Microsoft Fabric CI/CD\", Microsoft Fabric is characterised in a comparison table as a platform for data analytics and unified control, linked to either GitHub or Azure DevOps. This is relevant to analysts because the reports and data items they build can be managed in a repository, which matters when several people work on the same analytical content.\n\nThe broader theme of using data to guide decisions comes up in other episodes as well. \"Build Safe Guardrails for Microsoft 365 Copilot\" recommends leveraging data analytics to make informed decisions, using real-time insights to optimise workflows and identify trends that drive growth, together with regular audits and strict access controls to protect sensitive data. \"Public vs Hybrid vs Multi-Cloud Azure Architecture\" lists big data analytics as a cloud use case, in which cloud computing power is used to analyse large datasets for insights and improved decision-making. Taken together, these references show that the work of a data analyst sits within a wider environment of platforms, security practices and cloud capacity.\n\nTypical decisions around the role include which tool to use for reporting, how to keep data trustworthy through cleaning and access control, and how to build skills through certification. The sources describe the role at a general level and do not set out a detailed tool stack, a salary range or a formal career ladder, so these points are left open here. What the material does establish is the purpose of the role: to make data understandable, to present it in reports and dashboards such as those built with Power BI, and to support decisions with the results.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
@@ -8280,7 +8448,6 @@
   "ts": "2026-11-18"
  },
  "docker-hub": {
-  "d1h": "c0cef35aae77762d",
   "desc": "Docker Hub is Docker's default public registry for finding, storing and sharing container images, with public and private repositories and curated base images.",
   "faq": [
    {
@@ -8390,7 +8557,6 @@
   "ts": "2026-11-18"
  },
  "dp-100": {
-  "d1h": "28bdb007b29b57af",
   "desc": "Microsoft Certified: Azure Data Scientist Associate (DP-100) was a Microsoft certification for machine learning on Azure; it was retired on 1 June 2026 and succeeded by AI-300.",
   "faq": [
    {
@@ -10963,6 +11129,28 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
+ "fuzzy-matching": {
+  "d1h": "5e8d93c70a98b0fb",
+  "desc": "Fuzzy matching links records that are not identical by scoring their similarity, using methods such as edit distance or semantic similarity instead of exact equality.",
+  "faq": [
+   {
+    "a": "Fuzzy matching is a technique that links non-identical records by calculating a similarity score, for example with character-based edit distance or semantic similarity. Values that are similar enough are treated as a match even if they are not exactly equal.",
+    "q": "What is fuzzy matching?"
+   },
+   {
+    "a": "Fuzzy merge is enabled with a checkbox in the Merge dialog and uses the Jaccard similarity algorithm to compare text values. Options include a similarity threshold between zero and one, ignore case, combining text parts, a maximum number of matches per row and a transformation table. It works only on text columns.",
+    "q": "How does fuzzy merge work in Power Query?"
+   },
+   {
+    "a": "According to the episode \"SC-900 Exam Prep Part 2/8: Microsoft Entra ID\", Entra ID uses fuzzy matching so that passwords close to entries on the blocked list, such as \"P@ssw0rd1\" versus \"P@ssw0rd\", are still recognised as weak.",
+    "q": "How is fuzzy matching used in Microsoft Entra ID?"
+   }
+  ],
+  "h": "a71f68b962caeec3",
+  "long": "Fuzzy matching is a technique that identifies and links non-identical records by calculating a similarity score. Instead of requiring two values to be exactly equal, it measures how alike they are, for example with a character-based edit distance or with semantic similarity. Values that score above a chosen level are treated as the same thing, even when they differ in spelling, case, word form or wording.\n\nThe most direct use is data preparation. In Power Query, the fuzzy merge feature applies approximate matching when columns of two tables are compared, so rows can be joined even if the values are not exactly equal. According to Microsoft Learn, a typical case is free-text survey answers that contain typos, singular and plural variants, or differences in letter case. Fuzzy matching is switched on with a checkbox at the bottom of the Merge dialog and uses the Jaccard similarity algorithm to measure how alike two values are. It is supported only for merges on text columns, and rows without a match stay empty.\n\nThe fuzzy merge dialog exposes several options that control how loose or strict the matching is. A similarity threshold between zero and one sets the cutoff, where one means an exact match. An ignore-case setting removes capitalisation differences, and an option to combine text parts lets split words, such as two fragments of a name, still match. A maximum number of matches per input row limits how many candidates a single row can pick up. A transformation table with From and To columns maps chosen values explicitly, for cases where the algorithm alone would not connect them. An option to show similarity scores helps decide whether the threshold should be raised or lowered. The example on the documentation page reduces nine different survey answers to four after tuning the settings, which illustrates that the result depends on the configuration and usually needs a few iterations.\n\nThe same idea appears outside of data merging. The episode \"SC-900 Exam Prep Part 2/8: Microsoft Entra ID\" describes it in the context of password protection. Blocked password lists remove predictable passwords, reduce the chance of password spray attacks and enforce a baseline of password security. The episode says that Entra ID employs fuzzy matching techniques to catch variations of blocked passwords: if someone tries \"P@ssw0rd1\" instead of \"P@ssw0rd\", the system can still identify it as a weak password, so that minor tweaks do not slip through.\n\nA broader view comes from the episode \"How Probabilistic AI Changes Power Platform Design\". It argues that workflow designs should embrace uncertainty instead of trying to eliminate it. By combining AI with governance models such as human review and escalation paths, organizations can build workflows that remain resilient even when inputs are imperfect. In that framing, fuzzy matching, semantic understanding and adaptive reasoning become central parts of the design process. The episode describes a move toward what the article calls the \"Approximate Enterprise\", where automation rests less on exact logic and more on contextual judgment and probability, and where success depends on balancing automation speed with oversight.\n\nIn practice, the main decision around fuzzy matching is how permissive it should be. A low threshold links more records but increases the risk of false matches, while a high threshold behaves almost like an exact comparison. Because the similarity score is available, results can be inspected and the settings adjusted. In probabilistic workflows, uncertain matches can additionally be routed to human review rather than being accepted automatically.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
  "gamification": {
   "d1h": "",
   "desc": "Gamification applies game design elements such as points, challenges, progress indicators and competition to business apps and adoption programs to raise engagement.",
@@ -11865,6 +12053,28 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
+ "hipaa": {
+  "d1h": "54887d72bb9c1e61",
+  "desc": "HIPAA is the 1996 US Health Insurance Portability and Accountability Act, cited in Microsoft IT for protecting individually identifiable health information.",
+  "faq": [
+   {
+    "a": "HIPAA is the US Health Insurance Portability and Accountability Act of 1996. In IT it is known for its rules protecting the privacy and security of individually identifiable health information.",
+    "q": "What is HIPAA in an IT context?"
+   },
+   {
+    "a": "M365.FM episodes mention it as a regulation, alongside GDPR, that influences choices around retention policies, data loss prevention, encryption, secure sharing, private network connectivity, permissions management and cloud security posture.",
+    "q": "How does HIPAA come up in the Microsoft ecosystem?"
+   },
+   {
+    "a": "The episodes describe services such as Microsoft Defender for Cloud, Azure Private Link and Microsoft Entra as helping or supporting compliance. They do not present any single product as achieving compliance by itself.",
+    "q": "Does a Microsoft service make an organization HIPAA compliant on its own?"
+   }
+  ],
+  "h": "6ee5ff9a24322658",
+  "long": "HIPAA is the US Health Insurance Portability and Accountability Act of 1996. In IT contexts the term is mostly used for the rules that protect the privacy and security of individually identifiable health information. Organizations that handle such data, and the teams that build or administer the systems holding it, often refer to HIPAA as one of the regulatory requirements their technology has to support.\n\nIn the Microsoft ecosystem, HIPAA rarely appears on its own. It is usually named together with GDPR as an example of the regulations that shape how data is stored, shared, monitored and protected. The M365.FM episodes that mention it treat it as a compliance driver: a reason for choosing particular controls, rather than a product or feature that can be switched on.\n\nThe episode \"Microsoft 365 as an Enterprise Operating System\" places HIPAA within data governance. According to the episode, retention policies are used to align with regulations such as GDPR and HIPAA. The same discussion lists related protective measures: encryption for data at rest and in transit, data loss prevention policies that block unauthorized sharing of sensitive information, secure sharing controls in OneDrive and SharePoint that restrict external access, continuous monitoring and auditing of user activity and device compliance, and multi-factor authentication together with privileged identity management. These measures are presented as parts of a Zero Trust approach in which identity and access management sits at the core.\n\nIn \"Monitor Compliance in Microsoft Defender for Cloud\", HIPAA is mentioned in connection with cloud security posture. The episode says that automated tools and continuous security assessments help align cloud security with business goals and support compliance with regulations like HIPAA and GDPR. It recommends using secure scores to measure cloud security, reviewing them regularly, customizing dashboards and reports to the organization's needs, and acting on prioritized recommendations, starting with high-risk issues, to close compliance gaps.\n\nThe episode \"No-Code vs Low-Code vs Pro-Code: Which Should You Choose?\" raises HIPAA as a factor in the choice of development approach. The episode says that pro-code development allows custom security controls, including custom authentication, encryption and access rules, and that this makes it possible to follow industry standards such as HIPAA or GDPR. It describes this level of customization as important for mission-critical systems and mentions penetration testing as a way to find and fix weaknesses before attackers do.\n\nTwo further episodes connect HIPAA to specific Azure and Microsoft Entra services. In \"Azure Private Link - Simply Explained\", the episode says that Azure Private Link helps organizations comply with regulations like GDPR and HIPAA by keeping data traffic private, removing the need for public IPs and isolating traffic from the public internet. In \"Microsoft Entra Permissions Management - Simply Explained\", the episode says that Microsoft Entra supports compliance with regulations like HIPAA and GDPR, supported by least-privilege permissions throughout the user lifecycle and real-time monitoring and alerts for unusual activity.\n\nAcross these episodes, HIPAA is treated as one regulatory input into architectural and operational decisions: how data is retained, who can reach it, how traffic is routed, how posture is measured and how custom applications are secured. The episodes describe these tools as supporting compliance; they do not present any single product as making an organization HIPAA compliant by itself.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
  "hire-to-retire": {
   "d1h": "",
   "desc": "Hire-to-retire is the end-to-end HR lifecycle of a worker, from recruiting and hiring through transfers to termination or retirement, across many systems.",
@@ -12701,6 +12911,28 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
+ "iot-hub-message-routing": {
+  "d1h": "2a8fc902cea0eedf",
+  "desc": "IoT Hub message routing is an Azure IoT Hub feature that applies rules to device-to-cloud messages and sends them to the built-in endpoint or custom endpoints.",
+  "faq": [
+   {
+    "a": "Once any route exists, data stops flowing to the built-in endpoint unless a route or the fallback route targets it. Messages that match no route go to the built-in endpoint only if the fallback route is in place.",
+    "q": "What happens to the built-in endpoint when a route is created?"
+   },
+   {
+    "a": "By default messages go to the built-in endpoint, which is compatible with Event Hubs. Custom endpoints include storage containers, Service Bus queues and topics, Event Hubs, Cosmos DB, and Fabric eventstreams in preview.",
+    "q": "Which endpoints can IoT Hub message routing send messages to?"
+   },
+   {
+    "a": "Yes, a message can reach several endpoints when several routes match it. It is delivered only once to any single endpoint.",
+    "q": "Can a message be delivered to more than one endpoint?"
+   }
+  ],
+  "h": "147b876d99853889",
+  "long": "IoT Hub message routing is a feature of Azure IoT Hub that evaluates rules against device-to-cloud messages and sends each matching message to one or more endpoints. It is meant to move device data to other cloud services in an automated, scalable and reliable way, without the receiving application having to sort every message itself. Besides ordinary telemetry, routing can also carry non-telemetry events: device lifecycle events, device twin change events, digital twin change events and device connection state events.\n\nA route consists of four parts: a name, a source, a condition and an endpoint. The source defines which kind of message the route looks at, and the condition is a query that decides whether a message matches. According to Microsoft Learn, such queries can filter on message properties, on the message body, and on twin tags or properties. By default, all messages go to the built-in endpoint, which is compatible with Event Hubs. Custom endpoints can be storage containers, Service Bus queues and topics, Event Hubs, Cosmos DB, and Fabric eventstreams, the last of which is listed as a preview option.\n\nSeveral behaviors matter when designing routes. A single message can reach several endpoints if several routes match, but it is delivered only once to any single endpoint. A fallback route sends messages that match no route to the built-in endpoint. Once any route exists, data stops flowing to the built-in endpoint unless a route or the fallback route targets it, so adding a first route to an existing solution can unexpectedly cut off a consumer that reads from the built-in endpoint. Routes can be tested with sample messages before they are relied on. Adding the first route typically raises latency by under 500 ms, according to the documentation.\n\nConnection state events have their own constraints. They appear only for devices that use MQTT or AMQP, and they are reported as snapshots roughly every minute rather than as a continuous stream. This is one reason why lifecycle and connection events should not be treated the same way as high-frequency telemetry.\n\nThat distinction is the subject of the M365.FM episode \"IoT Hub Message Routing vs Event Grid — Why Telemetry and Events Are Not the Same Problem\", which appears twice in the feed. The episode argues that a temperature reading, a vibration sample, a machine cycle and a device disconnect may all be called events, yet they do not represent the same architectural problem. In industrial IoT and manufacturing settings, it says, confusing continuous telemetry with discrete events can lead to noisy workflows, incomplete production histories, unnecessary processing and systems that react without enough context. The episode sets IoT Hub message routing against Event Grid and discusses where services such as Event Hubs, Microsoft Fabric, Power BI, MES, ERP, Functions and Logic Apps fit in such a design.\n\nIn practice, the decision around message routing is usually which messages go where. Continuous machine data such as temperature, vibration, cycle counts and power consumption sent every few seconds suits routing to streaming or storage endpoints, while discrete business or lifecycle events call for different handling. Routing conditions based on message properties or twin data let a single IoT Hub separate these flows at the point of ingestion. The official documentation for device-to-cloud messages in IoT Hub describes the endpoint types, query options and fallback behavior in detail.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
  "isa-95": {
   "d1h": "",
   "desc": "ISA-95 is an international standard that defines how enterprise systems and manufacturing control systems exchange information, using a common hierarchy and object models.",
@@ -13251,6 +13483,50 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
+ "learning-management-system": {
+  "d1h": "5a37281e352ab486",
+  "desc": "A learning management system (LMS) is software for delivering, tracking and managing courses and training, including compliance training in Microsoft 365 governance.",
+  "faq": [
+   {
+    "a": "A learning management system is software for administering, documenting, tracking, reporting, automating and delivering courses, training programmes and learning materials. Core functions include content hosting, assessments, progress tracking, communication tools and user and role management.",
+    "q": "What is a learning management system (LMS)?"
+   },
+   {
+    "a": "The M365.FM episode \"AI-Powered Metadata Classification for Microsoft 365 Governance\" recommends tracking governance training progress with an LMS to help stay compliant and show growth. It also notes that training must be kept current because governance tools and policies change often.",
+    "q": "How does an LMS relate to Microsoft 365 governance?"
+   },
+   {
+    "a": "Yes. In the episode, EC Learn is presented as an LMS built on Dataverse and Power Pages, showing that an LMS can be assembled on the Power Platform rather than only bought as a standalone product.",
+    "q": "Can an LMS be built on Microsoft technology?"
+   }
+  ],
+  "h": "a95622ed26cc92f8",
+  "long": "A learning management system (LMS) is software for administering, documenting, tracking, reporting, automating and delivering courses, training programmes and learning materials. The concept grew out of e-learning, and the first LMS appeared in the late 1990s. LMSs form the largest segment of the learning systems market. In the M365.FM context, the term appears where organisations need a structured way to deliver and record training, for example around governance policies and tools in Microsoft 365.\n\nThe core functions of an LMS are fairly consistent across products. They host content for asynchronous and live learning, support course creation in modules, and offer assessments with many question types. They track and analyse completion and success, provide communication tools such as discussion boards, manage users and roles, and can recommend courses based on skill profiles. An LMS can be hosted by the vendor as cloud software (SaaS) or hosted locally, often with open-source software. Content integration commonly relies on standards such as AICC, SCORM, xAPI and LTI, although SCORM is not always necessary and can be restrictive.\n\nTypical decisions around an LMS include whether to use a hosted or locally run system, which content standards the platform must support, and how closely it should fit existing tooling. The facts available for this page also mention EC Learn, which is presented in an M365.FM episode as an LMS built on Dataverse and Power Pages. That example shows that an LMS does not have to be a separate, standalone product: it can also be assembled on the Microsoft Power Platform. Commonly cited advantages of LMSs are interoperability, accessibility, reusability and maintainability. A frequently noted risk is that moving face-to-face material online without redesign can produce low interactivity, and research results on LMS effectiveness are mixed.\n\nThe episode \"AI-Powered Metadata Classification for Microsoft 365 Governance\" (2026-06-13) touches on the LMS in the setting of governance training. It describes several learning formats, noting that sessions connect learners with experts and other learners, while self-paced modules give flexibility to learn when time allows. According to the episode, each method has strengths and they can be combined to fit a schedule and learning style. Its tip is to track training progress with a learning management system, which helps with staying compliant and shows growth over time.\n\nThe same episode stresses that training has to be kept up to date. Governance tools change often, and new policies and features appear, so updated training helps people stay current and avoid confusion. It also suggests using external resources to learn faster and to reduce the need for custom programmes. In that framing, the LMS serves as the record-keeping and delivery layer: it documents who has completed which training and supports the compliance side of governance work, such as understanding governance policies.\n\nIn practice, an LMS is therefore both a delivery platform and an evidence source. Delivery covers hosting modules, assessments and live or asynchronous sessions. Evidence covers completion tracking, reporting and analytics that can show that required training was done. When governance rules or Microsoft 365 features change, the content hosted in the LMS has to be refreshed so that tracked completions remain meaningful. The M365.FM material connects these ideas to a Microsoft-centred scenario while the general concept remains the same as for any other LMS.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
+ "least-privilege": {
+  "d1h": "ab80bb20fc6e8829",
+  "desc": "Least privilege is the security principle of granting an identity the smallest role, scope and duration needed, limiting what a compromised account can reach.",
+  "faq": [
+   {
+    "a": "It means giving an identity the smallest role at the smallest scope for the shortest time that still allows it to do its work. This limits what an attacker can reach if the account is compromised.",
+    "q": "What does least privilege mean?"
+   },
+   {
+    "a": "According to the episode \"Privileged Identity Management (PIM) - Simply Explained\", PIM supports the principle by letting administrators hold elevated permissions only when needed, which reduces standing privileges.",
+    "q": "How does Privileged Identity Management relate to least privilege?"
+   },
+   {
+    "a": "Yes. The Microsoft Graph episodes advise applying the principle when granting permissions to applications and automation, and reviewing those permissions regularly to reduce the risk of unauthorized access.",
+    "q": "Does least privilege apply to applications and automation?"
+   }
+  ],
+  "h": "33ee12c428770eb2",
+  "long": "Least privilege is a security principle that gives an identity the smallest role at the smallest scope for the shortest time that still lets it do its work. The aim is to limit what an attacker can reach if an account is compromised. Instead of granting broad or permanent access for convenience, access is sized to the task: which role, over which resources, and for how long. The principle applies to people, administrators, applications and automation alike.\n\nThe definition has three dimensions. The first is the role: an identity receives only the permissions its work requires, not a wider role that happens to include them. The second is the scope: those permissions apply only to the resources where they are needed rather than across a whole tenant or environment. The third is time: elevated access exists only while a specific task is being performed. Reducing standing privileges, meaning access that is permanently active whether or not it is being used, is the part of the principle that time-bound access addresses directly.\n\nIn the Microsoft ecosystem, several M365.FM episodes connect least privilege to specific tools. The episode \"Privileged Identity Management (PIM) - Simply Explained\" describes how PIM supports the principle by letting administrators hold elevated permissions only when they need them, for example for maintenance tasks, deployments or troubleshooting. The episode also covers how PIM relates to compliance requirements, Conditional Access, Microsoft Entra ID Governance and broader Zero Trust strategies, and says that reducing standing privileges is one of the most effective ways to strengthen cloud security.\n\nThe episode \"Microsoft Entra Permissions Management - Simply Explained\" approaches the same principle from the multicloud side. It explains Cloud Infrastructure Entitlement Management (CIEM) and describes how Microsoft Entra Permissions Management discovers identities, analyzes permissions, detects excessive privileges and identifies permission creep before attackers can exploit it. Permission creep, the gradual accumulation of unused or unnecessary access rights, is one of the typical ways an environment drifts away from least privilege over time.\n\nLeast privilege also appears in the context of Microsoft Graph and automation. In \"How Microsoft Graph Connects Microsoft 365 Data and Context\", the episode states that understanding permissions is crucial and that the principle of least privilege should always be applied to protect sensitive data. In \"Microsoft Graph and PowerShell for Enterprise Automation\", the episode recommends regularly reviewing permissions and using least privilege principles to minimize the risk of unauthorized access, alongside testing and documenting automation workflows. For applications and scripts, this means requesting only the permissions a workflow actually needs rather than broad access.\n\nThe episode \"Zero Trust AI Security with Microsoft Copilot and Azure – Mourtaza Fazlehoussen [MVP]\" places least privilege within a Zero Trust architecture for AI-first environments. It lists the importance of least privilege together with Conditional Access, identity protection, privileged access management and security monitoring, and discusses how Microsoft Defender, Microsoft Sentinel, Azure security services and Microsoft Security Copilot work together to detect threats and reduce risk.\n\nIn practice, adopting least privilege involves recurring decisions: which roles administrators really need, whether access can be made time-limited instead of permanent, which permissions an application should be granted, and how often existing access is reviewed and removed. The episodes treat it less as a one-time configuration and more as an ongoing discipline that combines role design, time-bound elevation, permission analysis and monitoring.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
  "legacy-authentication": {
   "d1h": "",
   "desc": "Legacy authentication covers older sign-in protocols such as IMAP, SMTP and older Exchange ActiveSync versions that cannot perform multifactor authentication.",
@@ -13581,6 +13857,28 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
+ "managed-environments": {
+  "d1h": "47e8d6b0ba1756ca",
+  "desc": "Managed Environments is a Power Platform governance suite that gives admins usage insights, sharing limits and solution checking to control environments at scale.",
+  "faq": [
+   {
+    "a": "Managed Environments is a suite of premium Power Platform capabilities that lets admins govern environments at scale, for example with usage insights, sharing limits and solution checking.",
+    "q": "What is Managed Environments in the Power Platform?"
+   },
+   {
+    "a": "According to the episode with Michael Roth, DLP policies operate in the context of environments and should be designed together with the environment strategy. Managed Environments and advanced connector policies can add granularity, but a single policy is not a complete governance program.",
+    "q": "How do Managed Environments relate to DLP policies?"
+   },
+   {
+    "a": "The episode \"Power Platform Managed Environments Need Pro-Dev Practices\" argues that organizations misunderstand what the feature solves, so governance can slow work without enabling delivery, with citizen and professional developers working separately.",
+    "q": "Why can Managed Environments fall short in practice?"
+   }
+  ],
+  "h": "d68f7c06e099a070",
+  "long": "Managed Environments is a suite of premium Power Platform capabilities that lets administrators govern environments at scale. It is described as a governance layer meant to bring control, visibility and order to low-code environments. Typical capabilities named in the product description include usage insights, limits on how apps and resources can be shared, and solution checking. Official documentation for the feature is published on Microsoft Learn under the Power Platform admin section.\n\nIn practice, Managed Environments is applied to individual Power Platform environments. An environment is the container in which apps, flows, and Dataverse data live, and the episode \"Power Platform Environments - Simply Explained\" covers this in plain terms: what an environment actually is, the different environment types, the single Dataverse database per environment, who gets access and what they can touch, and environment groups described as folders for environments. In that episode Managed Environments is presented as \"the premium switch\", a setting turned on for an environment to add extra governance on top of the basic environment model. The same episode also touches on moving work safely with application lifecycle management and solutions, data policies as guardrails, and ways to tell which environment one is working in.\n\nManaged Environments does not stand alone in a governance program. The episode \"Power Platform Governance Without Killing Innovation: Security, DLP, Environments & Citizen Development with Michael Roth [MVP]\" places it next to Data Loss Prevention policies. According to that episode, DLP policies operate in the context of environments, so they should be designed together with the environment strategy. Managed Environments and advanced connector policies can provide additional granularity, but the episode stresses that enabling a policy once does not constitute a complete governance program. The episode names four foundations that organizations should understand: tenant security settings, environment architecture, Data Loss Prevention policies, and clearly defined roles and responsibilities around citizen development.\n\nThe episode \"Power Platform Managed Environments Need Pro-Dev Practices\" takes a critical view. It argues that Managed Environments often fail to deliver on their promise because organizations misunderstand what they actually solve. As introduced there, they are meant to bring control and visibility to low-code environments, but in practice they can slow work down without enabling real delivery. The core problem described is that citizen developers are limited by governance while professional developers are not properly integrated into the platform, so the two groups work separately. The outcome the episode describes is neither agility nor quality. Its title points toward combining Managed Environments with professional development practices rather than relying on the feature alone.\n\nThe \"Power Automate - Simply Explained\" episode mentions Managed Environments in the context of data management, describing it as a feature that keeps data secure while providing visibility and control with less effort. In that episode it appears alongside automation across Excel, OneDrive and Teams and document processing built on Power Automate, Power Apps and Microsoft Dataverse.\n\nTaken together, the episodes frame several decisions that surround Managed Environments: which environments warrant the premium governance switch, how environment groups are organized, how DLP and connector policies are aligned with the environment layout, and how both citizen developers and professional developers are supported so that governance enables delivery instead of blocking it. The sources describe the capability set only at a high level, so specific licensing terms, configuration steps and limits should be checked in the official Microsoft Learn documentation.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
  "managed-identity": {
   "d1h": "",
   "desc": "A managed identity gives an Azure application or resource an identity whose credentials Azure creates and rotates, so no secret sits in code or configuration.",
@@ -13780,7 +14078,6 @@
   "ts": "2026-11-18"
  },
  "mb-280": {
-  "d1h": "1bfd7fde39199b96",
   "desc": "Microsoft Certified: Dynamics 365 Customer Experience Analyst Associate (MB-280) was an associate certification for Dynamics 365 Sales; it retired on 31 July 2026, with AB-210 as successor.",
   "faq": [
    {
@@ -14844,6 +15141,28 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
+ "microsoft-designer": {
+  "d1h": "6a905a32e5244798",
+  "desc": "Microsoft Designer is an AI-powered graphic design app from Microsoft that turns text prompts into images, social media posts and other visuals.",
+  "faq": [
+   {
+    "a": "Microsoft Designer is an AI-powered graphic design app from Microsoft that creates images, social media posts and other visuals from text prompts. It is described as part of the Copilot family and as part of Microsoft 365.",
+    "q": "What is Microsoft Designer?"
+   },
+   {
+    "a": "According to the M365.FM episode \"Create Business Content with Microsoft Designer\", Designer auto-applies a brand kit with fonts, colors and logos so that on-brand assets can be created quickly. The episode adds that this works inside Microsoft 365 with collaboration across SharePoint, OneDrive and Teams.",
+    "q": "How does Microsoft Designer support brand consistency?"
+   },
+   {
+    "a": "Microsoft Designer is listed as related to Microsoft 365 Copilot and is described as part of the Copilot family. Both are AI assistants within the Microsoft ecosystem.",
+    "q": "How does Microsoft Designer relate to Microsoft 365 Copilot?"
+   }
+  ],
+  "h": "9fd15904832c6e5a",
+  "long": "Microsoft Designer is an AI-powered graphic design app developed by Microsoft. It is used to create images, social media posts and other visuals from text prompts, and it is described as part of the Copilot family. The product is classed as a Microsoft tool and as an AI assistant, and it is listed as part of Microsoft 365. It is also related to Microsoft 365 Copilot. The product is also referred to simply as Designer, and an official site for it is maintained by Microsoft.\n\nThe core idea is that a user describes the desired result in text, and the app generates a visual starting point instead of requiring a design from scratch. Typical uses named in the available material are social media graphics and general visual content for business communication. This makes it relevant for roles that produce campaign assets regularly, such as marketing and communications teams, where speed and consistency of output matter more than custom illustration work.\n\nOne point stressed in the M365.FM material is brand consistency. The episode \"Create Business Content with Microsoft Designer\" says that Designer auto-applies a brand kit, meaning fonts, colors and logos, so that on-brand assets can be produced in seconds. According to the episode, this happens inside Microsoft 365 and supports real-time collaboration across SharePoint, OneDrive and Teams. In practice, that means design files and finished assets can sit in the same places where other business documents are already stored and shared, rather than moving through a separate tool chain.\n\nThe same episode places Microsoft Designer next to Fabric Dataflows Gen2, presenting both as ways to reduce busywork in marketing and analytics. Designer covers the content creation side, while Dataflows Gen2 is described as bringing AI-assisted Power Query to unify messy campaign data. The episode frames the combination as a way for marketing operations and reporting to become faster and cleaner. It also cites the statement that nearly nine out of ten companies now use AI for content creation, an adoption figure that the episode itself attributes to its own sources.\n\nIn terms of decisions around the product, the main considerations raised by the material are brand governance and collaboration. Teams that need consistent fonts, colors and logos across many assets can look at how a brand kit is applied automatically. Teams that already work in SharePoint, OneDrive and Teams can consider how shared editing fits their existing storage and review habits. Because Microsoft Designer is related to Microsoft 365 Copilot, organizations evaluating Copilot capabilities may also look at it as one of the AI-assisted creation options within the wider Microsoft 365 ecosystem.\n\nSome other M365.FM episodes appear in connection with the term \"designer\", but they concern different tools. Episodes on Azure Logic Apps and Power Automate mention a visual designer for building workflows, which is a workflow-authoring interface and not the graphic design app. These should not be confused with Microsoft Designer, which is focused on image and visual creation from prompts.\n\nFor the most direct coverage of the product, the episode \"Create Business Content with Microsoft Designer\" from August 2025 is the relevant reference on the M365.FM feed. It describes the app in a business setting, covering brand kit application, collaboration across Microsoft 365 services and the pairing with analytics tooling. Detailed feature lists, pricing and licensing terms are not covered in the material summarized here and should be checked against official Microsoft documentation.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
  "microsoft-dev-box": {
   "d1h": "",
   "desc": "Microsoft Dev Box is an Azure service offering developers self-service, preconfigured cloud workstations; new sign-ups have stopped as it moves to Windows 365.",
@@ -15259,6 +15578,15 @@
   ],
   "h": "2f57a489d647c7c0",
   "long": "Microsoft HoloLens is a mixed reality headset developed by Microsoft that overlays holograms on the physical world. It was used mainly in enterprise scenarios such as training and field work, where people needed information or instructions placed directly in their line of sight while their hands stayed free for the task.\n\nThe hardware is described in Microsoft Learn documentation for HoloLens 2, the second-generation device. It is an untethered holographic computer that continues the first-generation HoloLens and runs the Windows Holographic operating system, a variant of Windows 10. The headset has a flip-up visor that holds the sensors and see-through holographic lenses, a headband with an adjustment wheel, buttons for brightness, volume and power, and a USB-C port. Its sensor set includes cameras for head tracking, infrared cameras for eye tracking, a time-of-flight depth sensor, an inertial measurement unit and an 8-megapixel camera. The device runs on a Qualcomm Snapdragon 850 chip with a second-generation holographic processing unit, and the documentation states an active battery life of two to three hours.\n\nInteraction with HoloLens 2 relies on fully articulated two-handed tracking, real-time eye tracking and voice commands, while the headset builds a live mesh of the surrounding space. Natural-language voice input through Cortana needs an internet connection. A user account is required, the documentation says the device is not intended for children under 13, and the eye protection only meets basic impact ratings. These points matter when organizations consider using the headset on a shop floor or in similar environments.\n\nHoloLens 2 ships with preinstalled business software. Dynamics 365 Guides is included for learning new skills, and Dynamics 365 Remote Assist is included for working with remote experts through Teams. These two applications reflect the typical use of the headset: step-by-step instructions anchored in the real workplace, and live help from a person who is somewhere else.\n\nThe M365.FM episode \"Dynamics 365 Guides - Simply Explained\" covers this use in plain English. It explains what the mixed reality application was designed to solve, how Microsoft HoloLens brought instructions into the physical workplace, how companies could capture expert knowledge, how Microsoft Teams enabled remote assistance, and how Dynamics 365, Dataverse, Power Platform, Power BI and AI could extend the experience. The episode also raises a strategic issue for organizations: according to its description, Microsoft has set December 31, 2026 as the end-of-availability date for Dynamics 365 Guides, which is relevant to anyone who built processes around the headset and the application.\n\nThe episode \"Beyond Copilot: Building AI That Works in the Real World with Azure AI Foundry and Agentic AI for Frontline Workers with Fergus Kidd [MVP]\" looks at why HoloLens, VR and consumer glasses struggled in enterprise settings. The discussion between Fergus Kidd and Mirko Peters names cost, hardware fragility, difficult app integration and unclear business value as factors. The episode points out that in industries where a device can be dropped, damaged or used while wearing PPE, a premium headset with a steep learning curve may be hard to justify. It contrasts this with approaches in which technology disappears into the workflow, for example by letting a worker talk to an AI assistant, call a manager through Teams, capture evidence, scan a code or document a repair without stopping the physical task.\n\nTaken together, the sources describe Microsoft HoloLens as a capable but specialized device: a sensor-rich headset with hands, eye and voice input, paired with Dynamics 365 Guides and Remote Assist, whose enterprise adoption was shaped by cost, durability and the availability of the surrounding software.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
+ "microsoft-ignite": {
+  "d1h": "7498f8425caba02c",
+  "desc": "Microsoft Ignite is Microsoft's annual conference for developers, IT professionals and partners, formerly known as TechEd and renamed Ignite from 2015.",
+  "faq": [],
+  "h": "75c16f75aa780077",
+  "long": "Microsoft Ignite is Microsoft's annual conference for developers, IT professionals and partners. The event is the successor to TechEd, which held its first edition in 1993 in Orlando. After the 2014 TechEd in Barcelona, Microsoft adopted the Ignite name from 2015. From 2024 the former partner event Microsoft Inspire was merged into Ignite, so that a single event now serves both audiences.\n\nIn practice, Microsoft Ignite is a place to follow Microsoft's platform news, learn technical practices and meet other professionals. Editions typically run three to five days and combine several formats: presentations, whiteboard sessions, hands-on labs, access to experts and MVPs, and an exhibition area. A large session catalog is published in advance, which allows attendees to plan their schedule around the topics that matter to their role, whether that is development, IT administration or partner business.\n\nThe event has taken place in different cities and formats over time. The North American editions include Chicago in May 2015, Atlanta in September 2016, and Orlando from 2017 to 2019. Digital events followed in 2020 and 2021, a hybrid edition took place in Seattle in 2022, and Seattle hosted again in 2023. Chicago hosted the November 2024 edition, and a hybrid event at Moscone Center in San Francisco was held in November 2025. Before the Ignite name, regional TechEd editions ran in Africa, Australia, India, Israel, Latin America, the Middle East, New Zealand and Europe. Since 2020 the event has increasingly offered digital or hybrid participation, and the host city changes almost every year.\n\nFor professionals deciding how to use the event, the format determines the approach. The session catalog lets attendees prepare in advance, hands-on labs support practical learning, and expert and MVP access offers a way to ask questions directly. The exhibition area is a place to meet partners and vendors. Because digital and hybrid participation is available, attendance does not necessarily require travel.\n\nMicrosoft Ignite also appears as a learning resource in M365.FM content. The episode \"D365FO Integration Architecture with Anitha Eswaran [MVP-MCT]\" lists Microsoft Ignite in a table of resource types for staying current, under webinars and events, alongside user groups. The listed benefit is the latest trends and networking. The episode's accompanying tip is to bookmark favorite resources and visit them regularly to keep knowledge current. In that context the episode frames the D365FO integration strategy as a living process that needs continuous improvement, because technology and business needs change quickly and integrations must adapt to keep up.\n\nTaken together, Microsoft Ignite serves as a recurring checkpoint for people working in the Microsoft ecosystem. It brings together learning content, direct contact with experts and community members, and a partner audience in one annual event, and it is one of several ways, alongside documentation and community forums, to keep skills and strategies up to date.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
@@ -16121,7 +16449,6 @@
   "ts": "2026-11-18"
  },
  "ms-700": {
-  "d1h": "c067211930eb9ed3",
   "desc": "Microsoft 365 Certified: Teams Administrator Associate (MS-700) is a Microsoft associate certification for planning, configuring and managing Teams, meetings and calling.",
   "faq": [
    {
@@ -16384,6 +16711,28 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
+ "now-assist": {
+  "d1h": "d0ea3cc92a1733fe",
+  "desc": "Now Assist is ServiceNow's generative AI capability in Now Platform workflows, with features such as case and incident summarization for IT, customer service and HR.",
+  "faq": [
+   {
+    "a": "Now Assist is ServiceNow's generative AI capability embedded in Now Platform workflows such as IT service management, customer service and HR service delivery. It offers features like case and incident summarization.",
+    "q": "What is Now Assist?"
+   },
+   {
+    "a": "Administrators monitor it through the AI Admin Hub, formerly the Now Assist Admin Console, where they analyse performance, manage user roles and data usage policies, and configure generative AI features and skills. From the Brazil release the hub is being replaced by the AI Admin Center.",
+    "q": "How is Now Assist administered?"
+   },
+   {
+    "a": "Yes. The documentation says AI output may be inaccurate or incomplete and should be validated with human oversight, and that use must follow ServiceNow's AI Acceptable Use Policy.",
+    "q": "Does Now Assist output need to be checked?"
+   }
+  ],
+  "h": "6f7d3526cff83b5a",
+  "long": "Now Assist is ServiceNow's generative AI capability embedded in Now Platform workflows. It is used in areas such as IT service management, customer service and HR service delivery, where it offers features like summarization of cases and incidents. ServiceNow's documentation describes it as the company's AI assistant. Rather than being a separate application, it sits inside the workflows that service teams already use on the Now Platform.\n\nWhich capabilities a customer actually receives depends on the licence tier. According to the documentation, the available Now Assist features, generative AI skills, agentic workflows and AI agents vary by tier. Some AI products are also unavailable or limited for in-country SKUs, FedRAMP and similar regulated environments, and self-hosted setups. Anyone planning a rollout therefore needs to check the licensed scope and the deployment type before assuming a specific feature is available.\n\nAdministration is handled through the AI Admin Hub, which was formerly called the Now Assist Admin Console. Administrators use it to monitor Now Assist, analyse performance, manage user roles and data usage policies, and handle domain separation. They can also explore, configure and analyse generative AI features and skills from the same place. The documentation notes that from the Brazil release, dated 29 October 2026, the AI Admin Hub is being replaced by the AI Admin Center, so teams working with this tooling should expect a change in name and location.\n\nData handling is a central point in the documentation and a typical decision area for organisations. Customer data moves from individual instances to a central ServiceNow environment, which may be in another region and may involve third-party cloud providers. Inputs, outputs and edits are used to improve AI technologies, and there is an opt-out for future collection. The documentation also warns that AI output may be inaccurate or incomplete and should be validated with human oversight. Use is expected to follow ServiceNow's AI Acceptable Use Policy. These points matter for compliance reviews, regional data requirements and for deciding how much a generated summary can be relied on without a person checking it.\n\nIn the M365.FM episode \"ServiceNow and Microsoft 365: From Intent to Business Action\" (26 January 2026), Now Assist appears in the context of collecting feedback and refining processes after a rollout. The episode says that Now Assist can be used to gather customer feedback from several channels, including user-testing data, user satisfaction ratings, user surveys and interviews, IT support incidents, and usage data and telemetry. It recommends monitoring performance metrics and tracking key performance indicators to evaluate service quality, and then applying the insights from feedback to refine processes and improve the user experience. The excerpt places this step between testing with a group of users, which helps confirm functionality and surface issues, and the full deployment.\n\nTaken together, the sources describe Now Assist as a workflow-embedded AI layer whose value depends on licensing, administration through the AI Admin Hub or its successor, and careful treatment of data and output quality. The episode adds a practical angle: using the tool's own feedback-gathering role to drive continuous improvement during and after deployment.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
  "ntlm": {
   "d1h": "",
   "desc": "NTLM (NT LAN Manager) is a suite of Microsoft authentication protocols for Windows networks, still needed by some legacy apps and supported by Microsoft Entra Domain Services.",
@@ -16428,6 +16777,28 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
+ "nvidia": {
+  "d1h": "b3212e0790145541",
+  "desc": "NVIDIA is a technology company that appears in M365.FM episodes on Azure AI infrastructure, Blackwell GPUs, Container Apps, RAG and agent tooling.",
+  "faq": [
+   {
+    "a": "The episode \"Fix AI Data Bottlenecks Before Buying NVIDIA Blackwell GPUs\" argues that the data fabric, not the GPUs, is often the bottleneck. It recommends fixing data pipelines first so that expensive GPU capacity is not left waiting for data.",
+    "q": "Why does the M365.FM episode on Blackwell GPUs focus on data rather than hardware?"
+   },
+   {
+    "a": "The episode \"Azure Container Apps - Simply Explained\" lists serverless GPUs with integration to NVIDIA NIM for AI workloads as a platform feature. It states that this reduces management overhead and improves performance.",
+    "q": "How is NVIDIA connected to Azure Container Apps in the episodes?"
+   },
+   {
+    "a": "The episodes name NVIDIA Blackwell GPUs, NVLink, InfiniBand, NVIDIA NIM, NVIDIA RAG as a technique, and the NVIDIA NeMo Agent Toolkit for deploying and scaling agent applications.",
+    "q": "Which NVIDIA tools or techniques are named in the episodes?"
+   }
+  ],
+  "h": "a95647861441cf50",
+  "long": "NVIDIA is a technology company that appears in the M365.FM knowledge base mainly in connection with AI infrastructure and AI tooling around Microsoft Azure. The episode material available here does not provide a company profile, so this page describes NVIDIA only through the contexts in which the episodes mention it: GPU hardware, high-speed interconnects, inference services for containers, retrieval-augmented generation, and an agent toolkit.\n\nThe most direct treatment is the episode \"Fix AI Data Bottlenecks Before Buying NVIDIA Blackwell GPUs\". Its central argument, as summarized in the show notes, is that GPUs are often not the real limiting factor in AI projects; the data fabric is. The episode describes the combination of Azure and NVIDIA Blackwell as a setup in which thousands of GPUs can act like one large system, with NVLink and InfiniBand reducing latency to microseconds. In this framing, Microsoft Fabric is positioned as the layer that keeps models supplied with data, and the episode warns that building \"AI-ready\" systems on older data plumbing can leave an organization paying for expensive compute that sits underused. The practical takeaway from the episode is to examine and fix data pipelines before committing budget to Blackwell-class GPUs.\n\nNVIDIA also shows up in the strategic discussion in \"How Microsoft Built an Enterprise AI Architecture Advantage\". There, the episode lists partnerships with companies such as OpenAI and NVIDIA as one element of Microsoft's AI position, alongside its Azure cloud market share, its investment in AI research and development, and the integration of Microsoft Copilot into everyday applications. In that context NVIDIA is treated as a partner that contributes tools and capabilities which Microsoft can offer to business customers.\n\nIn the episode \"Azure Container Apps - Simply Explained\", NVIDIA appears in a feature overview of the serverless platform. The show notes describe serverless GPUs with integration to NVIDIA NIM for AI workloads, and state that this reduces management overhead and improves performance. The same overview covers advanced networking such as custom VNet integration, private endpoints and NAT Gateway support, as well as observability features. For teams deciding how to run AI inference without managing infrastructure themselves, this is the part of the episode that connects NVIDIA technology to a managed Azure service.\n\nThe episode \"RAG on Azure — Simply Explained\" mentions NVIDIA in a definitional passage about retrieval-augmented generation. It describes NVIDIA RAG as a technique for improving the accuracy and reliability of generative AI models with information fetched from specific and relevant data sources. The episode places this next to descriptions of ServiceNow RAG and Microsoft Azure RAG, which it presents as variations on the same idea: retrieve information from sources, then use it to inform the generated response, without retraining the model.\n\nFinally, \"Graph-Powered AI Agents: An Enterprise Architecture Guide\" references the NVIDIA NeMo Agent Toolkit as a tool that can be used to deploy and scale applications built around graph-powered agents. The episode advises regular profiling and monitoring of information flow to keep such agent systems performing reliably, and presents the toolkit as one option within a broader checklist that includes choosing the right graph database.\n\nTaken together, the episodes treat NVIDIA as a recurring part of the AI stack around Azure: hardware and interconnects at the infrastructure layer, NIM at the container-hosting layer, RAG as a technique, and the NeMo Agent Toolkit at the agent layer. The recurring advice is architectural rather than product-focused, namely that data movement, retrieval quality and monitoring determine whether NVIDIA-based compute delivers value.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
  "nvidia-blackwell": {
   "d1h": "54fd62d73d5017f1",
   "desc": "NVIDIA Blackwell is NVIDIA's GPU microarchitecture succeeding Hopper, used in the Grace Blackwell GB200 superchip for large-scale AI training and inference.",
@@ -16447,6 +16818,28 @@
   ],
   "h": "e5f7b4002b94f041",
   "long": "NVIDIA Blackwell is a GPU microarchitecture from NVIDIA that succeeds Hopper in the datacenter and Ada Lovelace in consumer products. It is named after the statistician David Blackwell, and Rubin is named as its successor. Blackwell was officially announced at GTC on 18 March 2024. It is used mainly for large-scale AI training and inference, which is why it appears in discussions of AI infrastructure on Azure and of the data pipelines that feed such systems.\n\nThe datacenter lineup centres on the B100 and B200 parts, the eight-GPU HGX B200 board and the 72-GPU NVL72 rack. One well-known product built on the architecture is the Grace Blackwell GB200 superchip, which pairs an Arm-based Grace CPU with Blackwell GPUs. Datacenter parts use the TSMC 4NP process. The GB100 die has 104 billion transistors, and the B100 package joins two dies through a 10 TB/s link so that they behave as one cache-coherent chip of 208 billion transistors. The architecture uses HBM3E memory and PCIe 6.0, and the B200 SXM variant carries 192 GB of memory.\n\nSeveral new features are tied to AI workloads. Blackwell introduces fifth-generation Tensor Cores with native support for low-precision formats such as MXFP6 and MXFP4, together with a second-generation Transformer Engine. NVIDIA claims 20 petaflops of FP4 compute for the GB200 superchip. The design also includes fourth-generation RT cores and a RISC-V AI Management Processor. Consumer products use GDDR7 and PCIe 5.0, led by the RTX 5090 with 24,576 CUDA cores.\n\nSome supply-side points are on record as well. A design flaw reported in October 2024 lowered yields, and production for 2025 was reported as sold out. For organizations planning AI capacity, this means that access to the hardware can be as relevant a decision factor as its specifications.\n\nThe M365.FM episode \"Fix AI Data Bottlenecks Before Buying NVIDIA Blackwell GPUs\" (15 November 2025) approaches Blackwell from the data side rather than the hardware side. Its central argument is that GPUs are not the problem and that the data fabric is. The episode says that placing \"AI-ready\" claims on top of 2013-era plumbing drives up cloud costs, and it describes how Azure combined with NVIDIA Blackwell changes the equation. It points to thousands of GPUs acting like one large system, with NVLink and InfiniBand reducing latency to microseconds, and to Microsoft Fabric feeding models at the speed the hardware can consume data. The practical takeaway is to address data bottlenecks before purchasing or reserving Blackwell capacity.\n\nThe same episode is referenced in the M365.FM episodes \"How to Fix Azure at Scale Without Buying More Tools\" and \"Fix Bad Data Upstream with T-SQL Contracts\", which list it among related listening on Azure scale and data quality. Together these point to a recurring theme: the value of high-end accelerators depends on the quality and throughput of the data and infrastructure around them.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
+ "nvlink": {
+  "d1h": "ded25b5cf50d6196",
+  "desc": "NVLink is NVIDIA's high-bandwidth interconnect for linking GPUs and CPUs, used in GB200 NVL72 racks so 72 GPUs can share a single NVLink domain.",
+  "faq": [
+   {
+    "a": "NVLink is a high-bandwidth interconnect for short-range data and control transfers between CPUs and GPUs and between GPUs. In GB200 NVL72 racks it lets 72 GPUs share one NVLink domain.",
+    "q": "What is NVLink used for?"
+   },
+   {
+    "a": "Unlike PCI Express, a device can have several NVLinks, and devices can form mesh networks instead of depending on a central hub. Since 2018 it has also used NVSwitch, a packet-switched central switch.",
+    "q": "How does NVLink differ from PCI Express?"
+   },
+   {
+    "a": "Listed theoretical bandwidth rises from 160 GB/s for version 1.0 (Pascal) to 1,800 GB/s for version 5.0 (Blackwell). Real-world rates are typically about 90 to 95 percent of those maxima.",
+    "q": "How fast is NVLink?"
+   }
+  ],
+  "h": "5f371b0e71bbea62",
+  "long": "NVLink is NVIDIA's high-bandwidth interconnect for moving data and control traffic over short distances between CPUs and GPUs and between GPUs. It is a wire-based, serial, multi-lane link. NVIDIA announced it in March 2014, and it replaced SLI. It uses a proprietary signalling interconnect rather than an open standard. In the GB200 NVL72 racks, NVLink lets 72 GPUs share one NVLink domain, which is why it matters for large AI training and inference systems.\n\nThe design differs from PCI Express in a way that matters for multi-GPU systems. Where a device on PCI Express depends on a central hub, a device can have several NVLinks, and devices can be connected into mesh networks. Since 2018, NVLink has also used NVSwitch, a packet-switched central switch that lets many GPUs communicate with each other. According to the reference notes, the Hopper-generation switch can run simple in-network operations such as sum and broadcast. NVLink Fusion is a related program that lets chip designers license the technology.\n\nTheoretical bandwidth has grown with each generation. Version 1.0 (Pascal) is listed at 160 GB/s, version 2.0 (Volta) at 300 GB/s, version 3.0 (Ampere) at 600 GB/s, version 4.0 (Hopper) at 900 GB/s, and version 5.0 (Blackwell) at 1,800 GB/s. Version 6.0 is listed at 3.6 TB/s per GPU for Vera Rubin NVL72. Real-world transfer rates are typically about 90 to 95 percent of the listed maxima, so the published figures serve as an upper bound rather than an expected throughput. Consumer support was limited, and the connector was removed from Ada Lovelace cards in 2022, while datacenter use continues.\n\nIn practice, NVLink is one part of a larger system design rather than something configured on its own. Decisions around it usually concern the platform as a whole: how many GPUs must act as one unit, how the racks are cooled, and how data reaches the accelerators. Because NVLink domains are tied to specific hardware generations and rack designs, the choice of GPU platform largely determines which NVLink version and domain size is available.\n\nThe M365.FM episode \"Fix AI Data Bottlenecks Before Buying NVIDIA Blackwell GPUs\" (2025-11-15) places NVLink in the context of Azure and NVIDIA Blackwell. The episode describes thousands of GPUs acting like one giant brain, with NVLink and InfiniBand collapsing latency into microseconds. It also covers the Grace-Blackwell superchip, ND GB200 v6 rack-scale VMs, and liquid-cooled data centers. Its central argument is that the data fabric, rather than the GPUs, is often the real problem, and that Microsoft Fabric needs to feed models at the speed they can consume data. The episode also discusses what a \"35x inference throughput\" claim means for a roadmap rather than a slide deck.\n\nThe practical takeaway from that episode is that a fast GPU interconnect does not remove bottlenecks elsewhere. NVLink addresses communication between GPUs and CPUs inside a system, while the surrounding data pipeline determines whether those GPUs are kept busy. The episode treats fixing the data layer as something to do before buying Blackwell-class hardware.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
@@ -16557,6 +16950,28 @@
   ],
   "h": "b03f16fbb0a6e9af",
   "long": "The Office 365 Management Activity API is a Microsoft API that delivers user, admin, system and policy events from Microsoft 365 and Microsoft Entra audit logs. The events are provided as content blobs organized by record type. The API is part of Microsoft 365 and is used to stream unified audit log data into a store that the organization controls, such as a SIEM, a data lake or another analysis platform.\n\nIn practice, the API serves as the programmatic route to audit data. Where an administrator can search the audit log interactively in the Microsoft Purview compliance portal, the Office 365 Management Activity API allows the same kind of activity information to be pulled by code. This supports automated data collection and analysis, repeatable reporting, and long-term storage under the organization's own retention rules. Because the data is grouped into content blobs by record type, a consuming application can retrieve the categories of events it is interested in, such as SharePoint Online or Microsoft Teams activity, and process them separately.\n\nThe episode \"Audit Microsoft 365 User Activity with Purview\" describes two ways to search for specific activities: the audit search functionality in the Microsoft Purview compliance portal, or a call to the Office 365 Management Activity API. According to the episode, audited activities can be filtered by user, activity type, date range or service, for example SharePoint Online or Microsoft Teams. This makes it possible to find actions performed by a particular user or administrator. The same episode also raises the question of audit retention, which matters when deciding how long event data stays available and whether it should be copied into separate storage.\n\nThe episode \"Fix Microsoft 365 Compliance Drift Beyond Green Dashboards\" places the API within the wider set of Office 365 Management APIs, which it describes as a platform for management tasks, including security and compliance monitoring. In that discussion, the Office 365 Management Activity API is the part that offers detailed information about user, admin, system and policy actions to enhance security. The episode says that APIs enable automated data collection and analysis, making compliance efforts more efficient and accurate, and that they help detect malware activity, unauthorized data access and policy violations in near real time. The framing is that dashboards showing a healthy status do not replace deeper visibility into what users and systems actually did.\n\nThe episode \"Audit SharePoint Online Permissions at Scale\" shows a typical scripting scenario. According to the episode, PowerShell scripts can query the Microsoft 365 audit logs, call the Office 365 Management Activity API, or use SharePoint Online cmdlets to enumerate site collections, unique permissions and permission changes. Such scripts usually filter by date range and event types, then export audit log data to CSV for analysis, or feed the results into automation workflows for repeatable reporting. The episode also advises making sure that audit settings align with the retention period and with whether the audit log is trimmed automatically.\n\nWhen deciding whether to use the API, the main considerations are scale, automation and where the data should live. Manual searches in the compliance portal suit occasional investigations, while the Office 365 Management Activity API suits continuous ingestion into a store the organization manages, for example for correlation with other security data or for retention beyond what the portal provides. The API is documented by Microsoft in its Office 365 Management APIs reference, which describes the available record types and how content is retrieved.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
+ "office-scripts": {
+  "d1h": "b3212e0790145541",
+  "desc": "Office Scripts is an Excel automation feature that records steps or lets users write script code, and scripts can be run from Power Automate flows.",
+  "faq": [
+   {
+    "a": "Office Scripts automates everyday tasks in Excel by recording manual steps or writing script code, then replaying them as reusable scripts. An example from Microsoft Learn is a daily CSV clean-up that removes columns, formats a table, adds formulas and builds a PivotTable.",
+    "q": "What is Office Scripts used for?"
+   },
+   {
+    "a": "Scripts can be called from Power Automate flows, for example in response to emails or on a schedule. The documentation notes that scheduling from within Excel is temporarily disabled and names Power Automate as the alternative.",
+    "q": "How can Office Scripts run outside of Excel?"
+   },
+   {
+    "a": "The episode \"When to Use Python in Power Platform Automation\" says Python suits analytics, machine learning and Fabric notebooks but not everyday orchestration in Microsoft 365. It presents Office Scripts, Copilot and agent-style orchestration as better fits for that glue work.",
+    "q": "How does the M365.FM episode relate Office Scripts to Python?"
+   }
+  ],
+  "h": "2cf1aef01bacec7b",
+  "long": "Office Scripts is a Microsoft product for automating everyday tasks in Excel. Users record manual steps in a workbook and replay them as reusable scripts, or write and refine script code directly. Scripts are described in the M365.FM material as TypeScript-flavoured, and they are stored in OneDrive. The feature sits between manual spreadsheet work and heavier automation approaches, and it connects Excel to the wider Power Platform through Power Automate.\n\nThe feature has two main parts according to Microsoft Learn. The Action Recorder captures actions such as editing cells, formatting and creating tables, and saves them as a script. A Copy as code option turns recorded actions into script code without saving the whole script. The Code Editor is then used to refine recorded or newly written scripts, adding logic such as conditions and loops, or functions that the Excel interface does not offer directly. This makes it possible to start from a recording and extend it into something more flexible.\n\nA typical use is a repeatable data preparation task. The example on the Microsoft Learn page is a daily CSV clean-up: the script removes unneeded columns, formats a table, adds formulas and builds a PivotTable in a new worksheet. Once such a routine is captured as a script, it no longer has to be repeated by hand each day. A script can also be attached to a workbook, so teammates who have access to that workbook can see and run it.\n\nOffice Scripts can run outside the workbook when called from Power Automate flows, for example in response to emails or on a schedule. This is the route for unattended automation. The documentation notes that scheduling from within Excel is temporarily disabled and names Power Automate as the alternative. Licensing details are left to other articles, so they are not covered here.\n\nThe M365.FM episode \"When to Use Python in Power Platform Automation\" places Office Scripts in a decision about tooling. The episode argues that Python is well suited to analytics, machine learning and Fabric notebooks, but a poor choice for everyday orchestration inside Power Automate, Power BI Dataflows Gen2, Dataverse and Microsoft 365. In that framing, Office Scripts, together with Copilot and agent-style orchestration such as type-agent, can write and run the glue code. The episode describes this approach as relying on typed contracts, native connectors and AI-generated scripts that respect schemas and governance, in contrast to brittle Python running in Azure Functions.\n\nThe decision the episode raises is where each language belongs. Python stays in places where it is strong, such as Fabric notebooks and advanced analytics, while workbook-level and flow-level automation in Microsoft 365 is handled with Office Scripts and Power Automate. For teams, this means choosing Office Scripts when the work is centred on Excel files and flows, and reserving Python for analytical workloads rather than routine orchestration.\n\nRelated topics include Power Automate as the runner for scripts outside Excel, Copilot as an aid for generating scripts, and the Power Platform tools mentioned in the episode, such as Dataverse and Power BI Dataflows Gen2, which form the surrounding environment where such automation is evaluated.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
@@ -16780,6 +17195,24 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
+ "ontological-design": {
+  "d1h": "f474041e9ddcb320",
+  "desc": "Ontological design is a design philosophy holding that the things people create in turn shape the people who use them, from software to workplace tools.",
+  "faq": [
+   {
+    "a": "It is a design philosophy holding that the things people design and create in turn shape the people who use them. It was first formulated in the 1986 book Understanding Computers and Cognition by Terry Winograd and Fernando Flores.",
+    "q": "What is ontological design?"
+   },
+   {
+    "a": "In the M365.FM episode with Tracy van der Schyff, the concept is applied to software, Microsoft Teams, intranets, and Copilot: the things people create eventually change them. The episode also says Copilot may expose existing permission and information-management problems rather than create them.",
+    "q": "How does ontological design relate to Microsoft 365 and Copilot?"
+   }
+  ],
+  "h": "b326f0c2be2fea81",
+  "long": "Ontological design is a design philosophy holding that the things people design and create in turn shape the people who use them. Rather than treating design as the neutral production of useful objects, the concept asks what design fundamentally is and does. Its core idea, as summarized by Anne-Marie Willis in an Eye on Design article, is that people design their world while the world acts back on them and designs them. Design therefore shapes the conditions under which people exist and understand themselves.\n\nThe concept was first formulated in the 1986 book Understanding Computers and Cognition by Terry Winograd and Fernando Flores. That work drew on Humberto Maturana and Martin Heidegger and made the claim that in designing tools, people are designing ways of being. Later contributors to the idea include Anne-Marie Willis, Tony Fry, who frames it as design that sustains or diminishes futures, and Arturo Escobar. The perspective is popular in design academia, although the same source admits it is abstract and hard to apply in practice.\n\nSeveral key claims run through the literature. Design structures what is possible, often unnoticed. Unintended consequences are treated as central rather than incidental. People are inside the loop before they become aware of it, which can make alternatives seem unrealistic. For this reason, the perspective suggests that narrow problem-solving should give way to asking what worlds design creates. It also questions the celebration of individual iconic designers and examines topics such as branding.\n\nIn the Microsoft ecosystem, the concept is useful as a way of thinking about digital workplaces. The M365.FM episode \"How Microsoft 365 & Copilot Are Redesigning the Way We Work with Tracy van der Schyff [MVP]\" includes a section titled \"Ontological design: the things we create change us.\" The episode notes describe the concept as sounding complicated, while Tracy van der Schyff explains it in a very practical way: people create things, and the things they create eventually change them. According to the episode, this applies to software, applications, intranets, processes, social media, Microsoft Teams, Copilot, and almost every digital environment people interact with.\n\nThe same episode connects this way of thinking to how organizations experience Copilot. The show notes say that organizations can come to believe Copilot created a problem when the underlying permissions, sharing practices, or information-management issues may have existed for years. In the episode's words, the AI did not necessarily create the mess; it exposed it. Read through the lens of ontological design, a tool introduced into a workplace does not simply perform a task. It also changes how people work, what becomes visible, and which practices are treated as normal.\n\nFor teams that build or roll out Microsoft 365 solutions, the concept points to a practical decision: tools, intranets, and workflows are designed for how people are expected to work, and they in turn influence how people actually work. Asking what kind of working environment a design produces, and not only whether it solves the immediate problem, is the shift in perspective the concept encourages. Because the effects are often unnoticed and unintended consequences are treated as central, the sources suggest paying attention to them early rather than treating them as side issues.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
  "ontology": {
   "d1h": "",
   "desc": "An ontology is a formal set of shared definitions that names the types of things in a domain and the relationships between them, so people and systems read data alike.",
@@ -16935,7 +17368,6 @@
   "ts": "2026-11-18"
  },
  "opentofu": {
-  "d1h": "277122ea26296dc0",
   "desc": "OpenTofu is an open source infrastructure-as-code tool forked from Terraform, governed by the Linux Foundation under the MPL 2.0 license.",
   "faq": [
    {
@@ -17947,7 +18379,6 @@
   "ts": "2026-11-18"
  },
  "power-platform-cli": {
-  "d1h": "81eff4ee77d48b70",
   "desc": "Power Platform CLI (PAC CLI, pac) is a Microsoft command-line tool for developing, packaging and deploying Power Platform components in a repeatable way.",
   "faq": [
    {
@@ -18827,7 +19258,6 @@
   "ts": "2026-11-18"
  },
  "purview": {
-  "d1h": "5b7ac4d5159fb9f6",
   "desc": "Microsoft Purview is Microsoft's family of data governance, protection and compliance tools, covering labels, DLP, retention, eDiscovery, audit and insider risk.",
   "faq": [
    {
@@ -19178,6 +19608,28 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
+ "recovery-time-objective": {
+  "d1h": "208b6cee35118184",
+  "desc": "RTO sets how long a system may stay offline after a failure, RPO how much data loss is acceptable; both are business targets that shape resilient design.",
+  "faq": [
+   {
+    "a": "The recovery time objective (RTO) is the longest period an application may be unavailable after an incident. The recovery point objective (RPO) is the longest period of data loss that is acceptable during an incident.",
+    "q": "What is the difference between RTO and RPO?"
+   },
+   {
+    "a": "According to the Azure Well-Architected Framework guidance, they are derived from failure mode analysis together with continuity and disaster recovery plans and tests, and agreed with stakeholders. The page gives no universal numeric values.",
+    "q": "How are RTO and RPO values determined?"
+   },
+   {
+    "a": "No. The guidance states that Microsoft publishes RTO and RPO guarantees only for certain products, so platform guarantees have to be checked per service when defining targets.",
+    "q": "Does Microsoft guarantee RTO and RPO for all services?"
+   }
+  ],
+  "h": "80598aae266c723f",
+  "long": "Recovery time objective (RTO) and recovery point objective (RPO) are the two central recovery targets in business continuity and disaster recovery planning. The recovery time objective is the longest period an application may be unavailable after an incident. The recovery point objective is the longest period of data loss that is acceptable during an incident. In short, RTO answers the question of how fast a system must be back online, and RPO answers the question of how much data the business can afford to lose. Both are business requirements rather than purely technical settings, and they drive how resilient solutions are designed.\n\nThe Azure Well-Architected Framework page on defining reliability targets places RTO and RPO within a wider set of reliability targets. These fall into availability, correctness and recovery categories, and the recovery category is where RTO and RPO sit. The same page names MTTR and MTBF alongside them. Together, the recovery targets express how effective business continuity and disaster recovery plans and tests are. The page does not give universal numeric values; the right figures depend on the workload and on what the business can tolerate.\n\nAccording to that guidance, RTO and RPO values are derived from failure mode analysis together with continuity and disaster recovery plans and tests. They are not chosen in isolation. For each component, teams should define thresholds that trigger recovery, and those thresholds should allow for transient faults so that recovery does not start too early. Platform guarantees also have to be considered: Microsoft publishes RTO and RPO guarantees only for certain products, so a design cannot assume that every service comes with such a commitment.\n\nTargets have to be agreed with stakeholders, because the acceptable downtime and data loss are business decisions. They are also not fixed for all time. The guidance notes that they can change as workload complexity, customer count or technology changes, which means they should be reviewed rather than set once. The page also warns that workloads not properly tested against recovery metrics should not carry guaranteed SLAs. A target that has never been exercised in a recovery test is an assumption, not a verified capability.\n\nIn practice, RTO and RPO influence concrete design choices such as how often data is backed up or replicated, whether recovery happens within one region or across regions, and how much redundancy is built in. A short RPO generally calls for more frequent protection of data, while a short RTO calls for recovery processes that can bring a system back quickly. These trade-offs are the reason the targets are set early: they frame what backup, restore and replication strategies need to achieve.\n\nThe M365.FM episode \"Harden Azure Backup with Soft Delete, MUA, and Vault Lock\" (2025-12-07) touches on this in the context of governing Azure backups. The episode lists defining recovery objectives as a key component of a governance framework: establish the Recovery Time Objective (RTO) and Recovery Point Objective (RPO) so that they align with business resiliency and compliance needs. It places this alongside designing redundancy, with backup, restore and replication strategies across cloud and on-premises environments and consideration of regional and cross-regional recovery, and alongside implementing protection mechanisms. In that framing, RTO and RPO act as the starting point against which the rest of the backup design is measured.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
  "referential-integrity": {
   "d1h": "86c17eeb67fef26b",
   "desc": "Referential integrity is the database rule that every reference to another record must point to an existing record, which Dataverse enforces but SharePoint lookups do not.",
@@ -19244,6 +19696,28 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
+ "reranking": {
+  "d1h": "2d571f4ae31c3bc4",
+  "desc": "Reranking is a retrieval step in which a second model rescores the top search candidates so the most relevant results go on to a language model, for example in RAG.",
+  "faq": [
+   {
+    "a": "Reranking is a second retrieval step in which a model rescores the top candidates from an initial search so the most relevant ones are passed on to a language model. It reorders existing results rather than finding new ones.",
+    "q": "What is reranking in a RAG pipeline?"
+   },
+   {
+    "a": "No. According to the Azure AI Search documentation, the semantic ranker reorders only the existing result set and generates no new text. Documents missed by the first-stage retrieval are not added.",
+    "q": "Does reranking generate new content or find new documents?"
+   },
+   {
+    "a": "Hybrid retrieval combines vector and keyword search to produce candidates, and reranking can then prioritize the most relevant of them. The episode \"Improve Microsoft Copilot Accuracy Beyond Vector Search\" describes modern tools using semantic reranking alongside hybrid retrieval.",
+    "q": "How does reranking relate to hybrid retrieval?"
+   }
+  ],
+  "h": "3987de3bdf2b3123",
+  "long": "Reranking is a retrieval step in which a second model rescores the top candidates returned by an initial search, so that the most relevant results are passed on, for example to a language model in a retrieval-augmented generation (RAG) pipeline. The first search stage is built to find many plausible candidates quickly. The reranking stage then looks more closely at a limited set of those candidates and reorders them by how well they answer the query.\n\nThe approach can be seen in the semantic ranker of Azure AI Search, described in Microsoft Learn documentation. This ranker is a set of query-side capabilities that re-scores an initial result list produced by keyword ranking or reciprocal-rank-fusion ranking. It works on text queries, on the text part of vector queries, and on hybrid queries, and it relies on multilingual deep-learning models adapted from Bing. Only a limited set of top results is passed to the second stage. For each document, selected fields from a semantic configuration, such as title, keywords, and content, are combined into one summary string, which is truncated if it is too long. The ranker then assigns a new relevance score on a fixed scale, where a higher score means a better answer to the query.\n\nBesides reordering, the semantic ranker can return captions with highlights and, optionally, a direct answer, both taken verbatim from the indexed content. Query rewriting is available in preview. The documentation describes the feature as suited to prose-heavy content such as knowledge bases and documentation. It is a billed premium feature offered in selected regions, with a free monthly allowance. Its limits are stated plainly: it reorders only the existing result set and generates no new text. If the first-stage retrieval misses a relevant document, reranking cannot recover it.\n\nIn practice, reranking is one decision among several in designing a retrieval pipeline. Teams choose how candidates are first retrieved, such as pure vector search, keyword search, or a hybrid of both, and then decide whether a second scoring stage is worth its added cost and processing step. Because reranking only reorders what the first stage returns, its value depends on the quality of that candidate list and on which fields are supplied to the ranking model.\n\nThe M365.FM episode \"Improve Microsoft Copilot Accuracy Beyond Vector Search\" places reranking within a discussion of retrieval accuracy. It states that pure vector search often lacks accuracy and context, and that hybrid retrieval, which combines vectors and keywords, improves precision and trust in AI responses. According to the episode, modern tools use semantic reranking to prioritize relevant answers, and it presents hybrid RAG as essential for business success. The episode also cites approximate figures for BIRD execution accuracy, putting pure vector search on quantitative queries at roughly 0% to 10%.\n\nThe episode \"Build a Copilot That Respects DLP with Context Engineering\" treats reranking from the angle of context engineering. It lists reranking strategies, described as sorting content by relevance so that important information is prioritized, alongside other practices such as defining contextual boundaries to avoid overload and structuring and standardizing context data. In that framing, reranking is one tool for deciding which material reaches the model's limited context, rather than a stand-alone feature.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
  "responsible-ai": {
   "d1h": "b3212e0790145541",
   "desc": "Responsible AI means using AI in safe, accountable and useful ways, with governance, human judgment and monitoring across Microsoft technology initiatives.",
@@ -19263,6 +19737,28 @@
   ],
   "h": "2f605df7335e5d23",
   "long": "Responsible AI is an approach to designing, deploying and operating artificial intelligence so that it is safe, accountable and useful. In the Microsoft ecosystem the term appears in several contexts: governance frameworks for enterprise AI, security and compliance work around Microsoft 365 Copilot, platform capabilities in Azure AI Foundry, and agent building in Copilot Studio. Across the M365.FM episodes that touch on the topic, it is presented less as a stand-alone policy document and more as a set of practices that sit alongside technical delivery.\n\nThe episode \"Responsible AI Is Good Business — Featuring Wiebke Apitzsch\" frames the idea in practical terms. Its quick answer describes responsible AI as a way for organizations to use AI safely and accountably while still gaining value, and it explores how governance, adoption and human judgment can turn responsible AI from a policy discussion into business value across Microsoft technology initiatives. The excerpt also points to post-deployment monitoring as a recommendation of governance frameworks, and names Azure Machine Learning as offering real-time monitoring and explainability features that support this process. The episode's tip is to make continuous improvement part of the AI strategy by regularly reviewing AI governance policies and involving stakeholders.\n\nGovernance is the most recurring theme. In \"Enterprise AI Agents with Sailaja Mantripragada [MVP-MCT]\", the discussion highlights balancing innovation with governance so that AI solutions stay aligned with security, compliance and responsible AI principles. The episode argues that governance has to be built into AI initiatives from the beginning rather than added later. Topics it lists include data access, permissions, agent lifecycle management, citizen development, risk management, and frameworks that let organizations scale AI safely and confidently. In this reading, responsible AI is closely tied to who can build agents, what data those agents can reach, and how their lifecycle is managed.\n\nData protection forms a second angle. \"Microsoft Purview for Copilot Security with Peter Rising [Microsoft]\" connects responsible AI adoption to data governance, security and compliance. The excerpt states that Microsoft Purview helps address AI risks and supports AI enablement, and that a Copilot deployment should respect existing security controls. Its key takeaways mention sensitivity labels, used to classify and protect sensitive information so that Copilot honors those controls, and Data Loss Prevention as a further measure. Here responsible AI is expressed through concrete data-handling controls applied before and during Copilot rollout.\n\nA third angle concerns regulated environments and development platforms. \"Scaling Copilot Studio with Isha Kapoor [MVP]\" says that organizations in regulated industries need to address identity governance, data leakage and compliance with laws such as HIPAA and GDPR, and that operational control while protecting sensitive data supports responsible AI. \"Azure AI Foundry - Simply Explained\" lists responsible AI among the core concepts of the platform, next to the model catalog, AI agents, prompt flows, Retrieval-Augmented Generation (RAG), fine-tuning, evaluations and observability. Evaluations and observability are the kinds of capabilities that make it possible to check AI behavior over time rather than only at launch.\n\nTaken together, the episodes describe responsible AI as a lifecycle concern. Decisions arise before deployment (classifying data, setting permissions, defining who may build agents), at deployment (choosing platform features and compliance settings), and afterwards (monitoring, explainability and regular policy review with stakeholders). Human judgment remains part of the picture in the Wiebke Apitzsch episode, which places it alongside governance and adoption. For anyone searching the term, the practical takeaway from these sources is that responsible AI is carried out through governance structures, data protection tooling and ongoing review, rather than through a single product or one-time checklist.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
+ "responsible-ai-dashboard": {
+  "d1h": "bbbd692f62fa53f6",
+  "desc": "The Responsible AI dashboard is an Azure Machine Learning interface that combines tools such as error analysis, explanations and fairness assessment to debug models.",
+  "faq": [
+   {
+    "a": "It is a single interface in Azure Machine Learning that combines responsible AI tools, such as error analysis, model interpretability and fairness assessment, to evaluate and debug models.",
+    "q": "What is the Responsible AI dashboard?"
+   },
+   {
+    "a": "It supports regression and classification on tabular data, registered MLflow scikit-learn style models and parquet pandas datasets. AutoML models are not supported, and the number of visualized points is capped.",
+    "q": "Which model and data types does the Responsible AI dashboard support?"
+   },
+   {
+    "a": "No. According to the documentation, it is used for assessment and debugging, while mitigation is handled by separate tools.",
+    "q": "Does the Responsible AI dashboard fix the problems it finds?"
+   }
+  ],
+  "h": "3cc331827b6cb21e",
+  "long": "The Responsible AI dashboard is a single interface in Azure Machine Learning that brings several responsible AI tools together. It is used to evaluate and debug machine learning models and to support data-driven decisions about them. Instead of working with separate tools for fairness, error patterns, explanations and causal questions, a team can open one dashboard and move between these views for the same model and dataset.\n\nAccording to the Azure Machine Learning documentation, the dashboard is made up of several components. Data analysis helps examine the dataset. The model overview includes a fairness assessment based on Fairlearn. Error analysis is used to locate cohorts, meaning subsets of data, where a model fails. Model interpretability provides global and local feature importance. Counterfactual what-if analysis lets users explore how changes to inputs would affect predictions, and causal analysis looks at the effect of treatment features. The dashboard can be customized so that only the tools relevant to a specific use case are included, and it is accompanied by a PDF scorecard that exports responsible AI metadata and findings.\n\nThe dashboard can be created through the Azure Machine Learning CLI v2, the Python SDK v2 or the studio. The components are designed to be combined in typical flows. One example is moving from the model overview to error analysis and then to data analysis, which helps trace where a model performs poorly and why. Another is moving from data analysis to causal inference, which helps separate correlation from causation. The documentation names data scientists and risk officers among the intended audiences, which reflects its use both for technical debugging and for review and oversight.\n\nThe documentation also lists limits. The dashboard supports regression and classification on tabular data. It works only with registered MLflow scikit-learn style models and with parquet pandas datasets. The number of points that can be visualized is capped, and AutoML models are not supported. Mitigation of the issues it surfaces is handled by separate tools, so the dashboard is oriented toward assessment and debugging rather than fixing problems itself.\n\nThe M365.FM episode \"Secure and Govern Microsoft 365 Copilot\" mentions the Microsoft Responsible AI Dashboard in a governance context. The episode describes an organization that may develop a Responsible AI Standard covering fairness, reliability, privacy and inclusiveness, with an Office of Responsible AI overseeing these efforts and checking that rules are followed. In that picture, the Responsible AI Dashboard is named as a tool that might be used to monitor AI systems and manage governance. The episode also stresses training on ethical principles for AI use and the importance of having easy ways to report concerns about Copilot or AI use.\n\nTaken together, the product documentation and the episode show two sides of the topic. The documentation describes a concrete, model-level toolset inside Azure Machine Learning with defined components and defined limits. The episode places such tooling within a wider organizational framework of standards, oversight, training and reporting channels. Teams considering the dashboard would need to check whether their models fit the supported model and data types before planning around it.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
@@ -19509,7 +20005,6 @@
   "ts": "2026-11-18"
  },
  "safe-links": {
-  "d1h": "63b30a50de7d0cd7",
   "desc": "Safe Links is a Microsoft Defender for Office 365 feature that rewrites URLs and checks them at the moment of click in email, Microsoft Teams and Office apps.",
   "faq": [
    {
@@ -19640,6 +20135,28 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
+ "sap-hana": {
+  "d1h": "88228b3a64224da9",
+  "desc": "SAP HANA is SAP's in-memory database that holds its data in RAM but still depends on very fast storage for logs, backups and snapshots.",
+  "faq": [
+   {
+    "a": "SAP HANA is SAP's in-memory database. It keeps its data in RAM but still needs very fast storage for logs, backups and snapshots.",
+    "q": "What is SAP HANA?"
+   },
+   {
+    "a": "The episodes name Ultra Disk as a fit for SAP HANA, citing up to 400,000 IOPS and 10,000 MB/s, and list SAP HANA among the workloads supported by Azure NetApp Files.",
+    "q": "Which Azure storage options do the M365.FM episodes link to SAP HANA?"
+   },
+   {
+    "a": "Yes. The episode \"Azure Backup - Simply Explained\" lists SAP HANA among the workloads that Azure Backup protects, together with Azure Virtual Machines, Azure Files, SQL Server and hybrid environments.",
+    "q": "Can Azure Backup protect SAP HANA?"
+   }
+  ],
+  "h": "267b00505e6c7146",
+  "long": "SAP HANA is SAP's in-memory database. It keeps its working data in RAM, which is the core of its design, but it does not run on memory alone: it still needs very fast storage for logs, backups and snapshots. That combination of memory-resident data and demanding persistent storage is what shapes most infrastructure decisions around the product, especially when it runs on cloud platforms.\n\nIn the M365.FM episodes, SAP HANA appears mainly as a workload that other Azure services are built to support or protect. It is not covered as a standalone product in these episodes. Instead, it shows up in the context of storage, backup and automation, and the way it is mentioned reflects the two sides of its profile: data in memory, and performance-sensitive storage underneath.\n\nOn the storage side, the episodes \"Azure Managed Disks - Simply Explained\" and \"Azure Disk Storage - Simply Explained\" both name SAP HANA as a typical use case for Ultra Disk. Ultra Disks are described there as the highest-performance option among Azure Managed Disks, suited to data-intensive applications such as SAP HANA and Oracle Database. The episodes list a maximum disk size of 65,536 GiB, a maximum throughput of 10,000 MB/s and up to 400,000 IOPS, and note that an Ultra Disk cannot be used as an OS disk. They position it for transaction-heavy workloads that need consistent, low-latency performance. \"Azure Disk Storage - Simply Explained\" also mentions Premium SSD v2 as a more flexible alternative, where throughput and IOPS can be adjusted separately, although its examples for that tier refer to SQL Server rather than SAP HANA.\n\nThe episode \"Azure NetApp Files - Simply Explained\" places SAP HANA among the enterprise workloads that Azure NetApp Files supports, alongside Oracle databases, Azure VMware Solution, Azure Virtual Desktop, AI, analytics and high-performance computing. The episode describes the service as providing sub-millisecond latency and dynamic performance scaling, and explains its building blocks: NetApp accounts, capacity pools, volumes, performance tiers, snapshots, replication, backups, security and high availability. For SAP HANA, this offers a file-based storage route as an alternative to disk-based options.\n\nBackup is the other recurring theme. \"Azure Backup - Simply Explained\" states that Azure Backup protects Azure Virtual Machines, Azure Files, SQL Server, SAP HANA and hybrid environments. The episode covers backup policies, recovery points, retention, snapshots, incremental backups, encryption and restore options, and explains how soft delete, immutable backups and geo-redundant storage help protect against ransomware and accidental data loss. It also separates Azure Backup from Azure Site Recovery, which helps clarify when a team needs backup and when it needs disaster recovery for a system such as SAP HANA.\n\nFinally, \"Autonomous AI Agents: Use Cases, Risks, and Governance\" uses SAP HANA as an example of a business system that an AI agent can write to. In its example, an AI agent analyzes invoices and updates SAP HANA automatically, so that people do not have to enter the data by hand. The episode presents this as part of automating repetitive tasks, and the governance and risk discussion in that episode applies equally to agents that touch a core database such as this one.\n\nTaken together, the episodes show SAP HANA as a memory-based database whose operation depends on three decisions: which storage tier backs its logs and persistence, how its data is backed up and restored, and which automated systems are allowed to read from or write to it.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
  "sap-s4hana": {
   "d1h": "",
   "desc": "SAP S/4HANA is SAP's ERP suite, released in 2015 as the successor to SAP ECC, running only on the in-memory SAP HANA database.",
@@ -19751,7 +20268,6 @@
   "ts": "2026-11-18"
  },
  "sc-500": {
-  "d1h": "fc3745157125de94",
   "desc": "Microsoft Certified: Cloud and AI Security Engineer Associate (SC-500) is a 2026 associate certification for securing cloud and AI workloads, replacing AZ-500.",
   "faq": [
    {
@@ -20784,6 +21300,28 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
+ "sharepoint-embedded": {
+  "d1h": "22ada16b737ec839",
+  "desc": "SharePoint Embedded (SPE) is an API-first Microsoft 365 content platform for storing and managing documents in custom apps with built-in security and compliance.",
+  "faq": [
+   {
+    "a": "SharePoint Embedded is an API-first content platform from Microsoft that lets developers store and manage documents for their own apps in Microsoft 365. The files use Microsoft 365 security and compliance without appearing as a SharePoint site.",
+    "q": "What is SharePoint Embedded?"
+   },
+   {
+    "a": "No. The episode \"SharePoint Embedded - Simply Explained\" covers why it is not a SharePoint site: it is a headless backend that stores files for apps, while the app provides its own user interface.",
+    "q": "Is SharePoint Embedded the same as a SharePoint site?"
+   },
+   {
+    "a": "Applications work with the stored content through Microsoft Graph, and Microsoft Purview provides compliance and information governance capabilities for that content.",
+    "q": "How does SharePoint Embedded relate to Microsoft Graph and Microsoft Purview?"
+   }
+  ],
+  "h": "197476a5e5ff5af1",
+  "long": "SharePoint Embedded, also referred to as SPE, is an API-first content platform from Microsoft that lets developers store and manage documents for their own applications inside Microsoft 365. The files kept in it benefit from the security and compliance features of Microsoft 365, yet they do not appear as a SharePoint site. It is a paid offering, classified as a Microsoft tool and a developer tool, and it is part of SharePoint.\n\nThe central idea is that the platform stores files for apps instead of for people. The episode \"SharePoint Embedded - Simply Explained\" describes it as a part of Microsoft 365 that has no screen at all. A related episode, \"What Is SharePoint Premium - Simply Explained\", describes SharePoint Embedded as a headless version of SharePoint. In that description, developers and software vendors create customized user interfaces of their own while relying on SharePoint's secure backend for data storage, which supports compliance and data governance. In other words, the application supplies the interface, and Microsoft 365 supplies the storage layer behind it.\n\nThe typical audience is software vendors and internal development teams who need document storage inside their own products or line-of-business apps. Instead of building a separate file store and then re-implementing security, retention and auditing, they use Microsoft 365 as the backend. The \"SharePoint Embedded - Simply Explained\" episode walks through the main building blocks of the topic: the container idea, where the files live, the security story, what is built in, why it is not a SharePoint site, how billing works and where people tend to meet it in practice.\n\nSharePoint Embedded is related to two other Microsoft topics. Microsoft Graph is the interface through which applications work with the stored content, which fits the API-first nature of the product. Microsoft Purview supplies compliance and information governance capabilities for that content, so organizations can apply their existing governance approach to documents that live in a custom application. Because the content sits in Microsoft 365 rather than in a vendor-specific silo, it can be governed alongside other Microsoft 365 data.\n\nThe topic also appears in neighbouring episodes. In \"What Is SharePoint Premium - Simply Explained\", SharePoint Embedded is listed under the Content Experiences pillar, which focuses on enriching how users interact with documents through a more intuitive and engaging interface. In \"Microsoft Loop Workspaces - Simply Explained\", SharePoint Embedded comes up in the context of storage management. The episode recommends regular audits of storage usage and a review of growth trends in SharePoint Embedded, alongside automated notifications for users nearing storage limits, user training on cleaning up outdated Loop Components, clear governance policies and periodic cleanups.\n\nFor anyone deciding whether the platform fits a project, the main points from the sources are these: it is intended for apps rather than end users, it is not a SharePoint site, it is billed as a paid service, and it works through APIs and Microsoft Graph. Official documentation is available from Microsoft Learn under the SharePoint developer section for SharePoint Embedded.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
  "sharepoint-framework": {
   "d1h": "",
   "desc": "SharePoint Framework (SPFx) is Microsoft's client-side development model for extending SharePoint and Microsoft 365 with web parts, extensions and form customizers.",
@@ -21242,6 +21780,28 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
+ "solution-layers": {
+  "d1h": "91c26a036e89e16d",
+  "desc": "Solution layers in Dataverse stack component definitions from a system layer through managed layers to one unmanaged layer, and the top layer usually sets runtime behavior.",
+  "faq": [
+   {
+    "a": "They are the component-level stacking of definitions in Dataverse: a system layer at the bottom, managed solution layers above it and a single unmanaged layer on top. The top layer usually determines runtime behavior.",
+    "q": "What are solution layers in Dataverse?"
+   },
+   {
+    "a": "The episode \"Deploy Dynamics 365 Customizations with ALM Pipelines\" recommends checking it before every release. It helps reveal which solution defines a component and whether an unmanaged change is overriding it.",
+    "q": "Why should the Solution Layers view be checked before a release?"
+   },
+   {
+    "a": "Managed solutions form the layers above the system layer, while changes made directly in an environment go into the single unmanaged layer on top. The episode advises using managed solutions for production environments.",
+    "q": "How do solution layers relate to managed and unmanaged solutions?"
+   }
+  ],
+  "h": "827b22633c4c4d25",
+  "long": "Solution layers are the component-level stacking of definitions in Dataverse. Each component, such as a table, form or app element, can be defined in more than one place, and Dataverse keeps those definitions in an ordered stack instead of replacing one with another. At the bottom sits the system layer. Above it come managed solution layers, and on top there is a single unmanaged layer. In general, the top layer determines how a component behaves at runtime, which is why the concept matters whenever a change seems to have no effect in an environment.\n\nThe stack is built per component, not per solution. Two managed solutions that touch the same component each contribute a layer, and the order in which they were applied affects what the environment ends up using. Edits made directly in an environment, outside a managed package, land in the unmanaged layer and sit above everything beneath them. Because that unmanaged layer is one layer rather than a history of changes, a direct edit can override what a managed solution delivers without any visible deployment step.\n\nThis behavior ties solution layers closely to managed and unmanaged solutions. The episode \"Power Platform Solutions - Simply Explained\" lists managed and unmanaged as the two modes of a solution and covers solution layers as a topic of their own next to publishers, prefixes, dependencies and moving an app between environments. Together these explain why a component can look different in development than in a downstream environment, and why removing something can be blocked by what depends on it.\n\nThe practical decisions around solution layers concern what is deployed into which environment. The episode \"Deploy Dynamics 365 Customizations with ALM Pipelines\" names deploying unmanaged solutions into UAT or Production for quick fixes as a common mistake that can lead to long-term chaos and painful troubleshooting. Its advice is to use managed solutions for production environments and to check the Solution Layers view before every release. Reviewing the layers of a component shows which solution currently defines it and whether an unmanaged customization is sitting on top of it.\n\nSolution layers also appear as a design device and as a cost of complexity. The episode \"Microsoft Dataverse as a Business Data Backbone\" describes standing up solution layers named Core, Extensions and App as part of application lifecycle management, structuring customizations so that foundation, additions and the application itself are kept apart. The episode \"SharePoint Lists vs Model-Driven Apps: Avoid Overbuilding\" lists solution layers among the things that Dataverse brings along, together with licensing, security matrices, environment sprawl and governance latency. It argues that for simple needs these overheads can outweigh the benefit, so the layering model is worth taking on only when the scenario actually calls for Dataverse.\n\nIn short, solution layers describe where a component's definition comes from and which definition wins. Knowing the order of system, managed and unmanaged layers helps with troubleshooting unexpected behavior after a deployment, with keeping production environments clean, and with planning how customizations are packaged across environments.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-18"
+ },
  "solution-publisher": {
   "d1h": "72a01da6543afb87",
   "desc": "A solution publisher is the owner label of a Power Platform solution that sets a naming prefix and controls which components other publishers may change.",
@@ -21507,7 +22067,6 @@
   "ts": "2026-11-18"
  },
  "sql-server": {
-  "d1h": "90ae44dd30996e6e",
   "desc": "Microsoft SQL Server is Microsoft's relational database management system built on T-SQL, with an engine that also underpins Azure SQL Database and Azure SQL Managed Instance.",
   "faq": [
    {
@@ -21551,7 +22110,6 @@
   "ts": "2026-11-18"
  },
  "sql-server-reporting-services": {
-  "d1h": "9b3fcadd867705ea",
   "desc": "SQL Server Reporting Services (SSRS) is Microsoft's on-premises platform for creating, deploying and managing paginated reports defined in RDL.",
   "faq": [
    {
@@ -21881,7 +22439,6 @@
   "ts": "2026-11-18"
  },
  "tabular-editor": {
-  "d1h": "c8e68c1c1f7ca8fe",
   "desc": "Tabular Editor is a tool for building, managing and scripting tabular semantic models for Power BI, Microsoft Fabric and Analysis Services, with C# script automation.",
   "faq": [
    {
@@ -22101,7 +22658,6 @@
   "ts": "2026-11-18"
  },
  "teams-premium": {
-  "d1h": "ef1f7f220cbb7631",
   "desc": "Teams Premium is an add-on licence for Microsoft Teams that adds meeting protection, branded meetings, AI-generated recaps and webinar features.",
   "faq": [
    {
@@ -23069,7 +23625,6 @@
   "ts": "2026-11-18"
  },
  "viva-topics": {
-  "d1h": "279ccefca331543c",
   "desc": "Viva Topics was a Microsoft Viva knowledge service that used AI to organize content into topic pages; Microsoft retired it in February 2025.",
   "faq": [
    {
@@ -23135,7 +23690,6 @@
   "ts": "2026-11-18"
  },
  "vs-code": {
-  "d1h": "8415d82f755d6d4d",
   "desc": "Visual Studio Code (VS Code) is a free, extensible code editor from Microsoft used to write, debug and manage code through extensions and dev containers.",
   "faq": [
    {
@@ -23685,7 +24239,6 @@
   "ts": "2026-11-18"
  },
  "zero-trust-assessment": {
-  "d1h": "ef35e2b113d14d28",
   "desc": "Zero Trust Assessment is a Microsoft tool that checks a Microsoft 365 and Entra tenant against Zero Trust practices and reports gaps with recommended fixes.",
   "faq": [
    {
