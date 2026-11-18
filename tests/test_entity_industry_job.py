@@ -100,6 +100,17 @@ class Seiten(unittest.TestCase):
         de = E.kind_html(BASE, "de", FAKE["manufacturing"], f"{BASE}/de/entity/")
         self.assertIn("<h3>Firmen</h3>", de); self.assertIn("<h3>Mitglieder</h3>", de)
 
+    def test_kind_html_firmen_entitaeten_mit_list_link(self):
+        """Paket 6: Firmen-Entitaeten der Branche als Listen-Link (site_ename.list_link: Name in der Sprache der Seite, title, Zusatz ohne blossen Typnamen)
+        statt "Name · Organisation"; Community-Firmen behalten ihren Hinweis."""
+        de = E.kind_html(BASE, "de", FAKE["manufacturing"], f"{BASE}/de/entity/")
+        self.assertIn(f'<li><a href="{BASE}/de/entity/acme/" title="Acme.">Acme GmbH</a></li>', de)
+        self.assertNotIn("· Organisation", de)
+        self.assertIn(f'<a href="{BASE}/de/community/c/solo/">Solo Co</a> <span class="mut">· Community-Firma</span>', de)
+        with mock.patch.dict(E.ENTS["acme"], {"names": {"ja": "アクメ"}}):
+            ja = E.kind_html(BASE, "ja", FAKE["manufacturing"], f"{BASE}/ja/entity/")
+        self.assertIn(">アクメ</a>", ja, "Name in der Sprache der Seite (site_ename.ename), nicht ENTS[...]['name']")
+
     def test_kind_html_job_nur_mitglieder_und_leer_ohne_treffer(self):
         h = E.kind_html(BASE, "en", FAKE["marketing-manager"], f"{BASE}/entity/")
         self.assertIn("community/u/mirko/", h); self.assertNotIn("Companies", h)

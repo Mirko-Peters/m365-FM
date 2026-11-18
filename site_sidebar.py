@@ -140,7 +140,9 @@ def render(ix, BASE, lang, text="", items=(), url_of=None, title_of=None, all_ur
     t = L10N.get(lang) or L10N["en"]; shp = shp or {}
     import site_ename as EN   # Linktext = Name in der Sprache der Seite (wie Listen und Brotkruemel), englischer Rest mit lang="en", RTL in <bdi>
     got = chips_for(ix, text, ids, exclude, lang=lang)
-    chips = "".join(f'<li><a class="sb-chip t-{esc(e["type"])}" href="{BASE}{ent_prefix}/entity/{esc(e["id"])}/" title="{esc(type_label(lang, e["type"]))}"><i></i>{EN.html_name(e, lang)}</a></li>' for e in got)
+    _pid = next(iter(exclude), None) if len(tuple(exclude or ())) == 1 else None   # Entitaetsseite: ihre eigene Entitaet (Hersteller/Kategorie gleich der Seite entfallen im Zusatz)
+    # Paket 6: Name mit kurzem Zusatz im Chip ("Power BI – Analyse- und BI-Werkzeug von Microsoft"), title = Kurzbeschreibung der Seitensprache (sonst der Typ)
+    chips = "".join(f'<li>{EN.list_link(BASE + ent_prefix + "/entity/" + e["id"] + "/", e, lang, _pid, ix.all, cls="sb-chip t-" + esc(e["type"]), pre="<i></i>")}</li>' for e in got)
     if not topics_h and got and not set(ids or ()) & {e["id"] for e in got}:
         import site_linkctx as LC   # Treffer im Text der Seite: die Beziehung ist "auf dieser Seite erwaehnt" (Messung Paket 4, misses 5)
         topics_h = LC.plain(lang, "side.page")

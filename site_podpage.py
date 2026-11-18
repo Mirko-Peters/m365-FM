@@ -769,7 +769,7 @@ def build(g):
             # Themen der Folge (about) sichtbar wie die Seitenleisten-Chips der englischen Fassung: die im Text nicht schon verlinkten, mit Einleitungssatz
             _lvis = EM.linked_ids(ls_html + ln_html)
             _ltop = [x for x in _about if x not in _lvis and _lurl(x)]
-            ltop_html = (LC.intro(l, "ep.topics") + '<div class="chips">' + "".join(f'<a class="chip" href="{esc(_lurl(x))}">{EN.html_name(ENTS_ALL[x], l)}</a>' for x in _ltop) + "</div>") if _ltop else ""
+            ltop_html = (LC.intro(l, "ep.topics") + '<div class="chips">' + "".join(EN.list_link(_lurl(x), ENTS_ALL[x], l, ents=ENTS_ALL, cls="chip") for x in _ltop) + "</div>") if _ltop else ""
             _ldub = TRS.REG.dub.get((l, e["slug"]))   # #266: Dub-Folge der Sprache hat ein Transkript -> dieselben Dateien auch unter dieser Adresse
             _ltrf = TRS.REG.publish(g.get("write_r2") or write, BASE, f"{l}/show/episodes/{e['slug']}/", vtt=TRS.dub_vtt(l, _ldub[0]), index=False) if _ldub else {}
             lbody = (f'<article><p class="mut">{day(e["create_time"])}</p><h1>{esc(lt)}</h1>{SPM.note(l, _spr, "episode")}{aud}{LST.follow_for(BASE, l)}'

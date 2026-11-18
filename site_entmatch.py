@@ -627,7 +627,9 @@ class Matcher:
                 for a, b, t, i, u in sorted(rep[n], reverse=True):
                     nm = EN.ename(self.live[i], lang)   # Name in der Sprache der Seite (site_ename), wie Listen und Brotkruemel
                     extra = attrs(i, t) if attrs else ""
-                    ti = "" if t == nm or "title=" in extra else f' title="{_esc(nm)}"'
+                    _d = EN.title_text(self.live[i], lang, ents=self.live)   # Paket 6: jeder Entitaetslink mit Kurzbeschreibung im title (Name in der Seitensprache davor, wenn der Satz ein anderes Wort nutzt)
+                    _tt = (nm + (" – " + _d if _d else "")) if t != nm else _d
+                    ti = "" if not _tt or "title=" in extra else f' title="{_esc(_tt)}"'
                     inner = tok[a:b]
                     en = self._english_word(t, i, lang)   # Linktext bleibt das Wort des Satzes; ein englischer Begriff im fremdsprachigen Satz traegt lang="en"
                     if lang in EN.RTL and re.search(r"[A-Za-z]", inner):

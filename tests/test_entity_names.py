@@ -75,9 +75,11 @@ def ld_of(h):
     return [json.loads(x) for x in re.findall(r'<script type="application/ld\+json">(.*?)</script>', h, re.S)]
 
 
-def a_texts(h, href_part):
-    """Linktexte (HTML) aller <a>, deren href href_part enthaelt."""
-    return [t for u, t in re.findall(r'<a [^>]*?href="([^"]*)"[^>]*>(.*?)</a>', h, re.S) if href_part in u]
+def a_texts(h, href_part, desc=False):
+    """Linktexte (HTML) aller <a>, deren href href_part enthaelt. Ohne desc nur der Name: der kurze Zusatz in Listen und Chips
+    (<span class="ed"> – ...</span>, Paket 6) faellt weg."""
+    out = [t for u, t in re.findall(r'<a [^>]*?href="([^"]*)"[^>]*>(.*?)</a>', h, re.S) if href_part in u]
+    return out if desc else [re.sub(r'<span class="ed">.*?</span>', "", t) for t in out]
 
 
 class Data(unittest.TestCase):
@@ -203,7 +205,7 @@ class EntityPages(unittest.TestCase):
         h = self.read("ja/entity/power-bi/index.html").split("<body>", 1)[1]
         self.assertEqual({re.sub(r"<[^>]+>", "", t) for t in a_texts(h, "/ja/entity/analytics-tool/")}, {"分析・BI ツール"})
         rel = re.search(r'<section class="en-rels".*?</section>', h, re.S).group(0)
-        self.assertIn(">分析・BI ツール</a>のカテゴリーに属します", rel)
+        self.assertIn("の<a href=\"https://www.m365.fm/ja/entity/analytics-tool/\">分析・BI ツール</a>です。", rel, "Einleitungssatz auch auf Japanisch (Paket 6)")
         self.assertIn(">スター スキーマ</a>", h)
         self.assertTrue(all('<span lang="en">' in t for t in a_texts(h, "/ja/entity/vibe/")))
         self.assertNotIn(">Analytics and BI tool<", h)
@@ -227,11 +229,12 @@ class EntityPages(unittest.TestCase):
 
     def test_seitenleiste_name_und_typ_in_seitensprache(self):
         h = self.read("de/entity/power-bi/index.html")
-        chips = re.findall(r'<a class="sb-chip t-(\w+)" href="[^"]*/entity/([\w-]+)/" title="([^"]*)"><i></i>(.*?)</a>', h)
+        chips = re.findall(r'<a class="sb-chip t-(\w+)" href="[^"]*/entity/([\w-]+)/"(?: title="([^"]*)")?><i></i>(.*?)</a>', h)
         by = {i: (t, ti, x) for t, i, ti, x in chips}
-        self.assertEqual(by["star-schema"], ("concept", "Konzept", "Sternschema"))
-        self.assertEqual(by["vibe"][2], '<span lang="en">Performance analyzer (Power BI)</span>')
-        self.assertEqual(by["microsoft"][1], "Organisation")
+        # Paket 6: Chip = Name mit Zusatz in der Seitensprache; title = Kurzbeschreibung der Seitensprache (nur der Typname waere kein Mehrwert)
+        self.assertEqual(by["star-schema"], ("concept", "Star schema ist ein Testeintrag.", 'Sternschema<span class="ed"> – Konzept</span>'))
+        self.assertTrue(by["vibe"][2].startswith('<span lang="en">Performance analyzer (Power BI)</span><span class="ed"> – '), by["vibe"])
+        self.assertNotIn("Organization", by["microsoft"][1] + by["microsoft"][2])
 
 
 class OtherPlaces(unittest.TestCase):
@@ -326,6 +329,7 @@ class DeutschNachPraeposition(unittest.TestCase):
         self.assertIn("Ein Unterbegriff vom Thema Bedingter Zugriff ist Digitaler Zwilling", txt)
         self.assertNotRegex(h, ADJ_RX)
         p = RS.build("de", es["jane-doe"], *rel("jane-doe"), es, href)
+        p = re.sub(r' title="[^"]*"', "", p)   # Paket 6: title mit Kurzbeschreibung an jedem Link; Linktext im Satz bleibt der Zielname
         self.assertIn('beschäftigt sich mit dem Thema <a href="/de/entity/machine-learning/">Maschinelles Lernen</a>', p, "Linktext = Zielname")
         self.assertIn('dem Thema <a href="/de/entity/conditional-access/">Bedingter Zugriff</a>', p)
         self.assertIn('<a href="/de/entity/star-schema/">Sternschema</a>', p)

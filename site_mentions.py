@@ -70,7 +70,9 @@ def section_html(lang, eid, mentions=None):
                 + (f' <small class="mut en-pr">[{E(pr)}]</small>' if m.get("kind") == "press_release" else "") + "</li>")
     press = [m for m in ms if m.get("kind") != "scholarly"]
     sch = [m for m in ms if m.get("kind") == "scholarly"]
-    out = f'<h3 id="mentions">{E(T(lang, "In the press / mentions", "Erwähnungen"))}</h3>'
+    import site_ename as EN, site_linkctx as LC
+    from site_learn import ENTS
+    out = f'<h3 id="mentions">{E(T(lang, "In the press / mentions", "Erwähnungen"))}</h3>' + LC.intro(lang, "ent.mentions", s=EN.label(ENTS.get(eid) or {"name": eid}, lang))   # Einleitungssatz (Paket 6)
     if press:
         out += '<ul class="en-mentions">' + "".join(row(m) for m in press) + "</ul>"
     if sch:

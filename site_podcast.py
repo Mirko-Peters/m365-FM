@@ -45,7 +45,7 @@ def build(g, eps, people, api):
         for e in mine:
             u = f"{croot}podcast/{e['slug']}/"; au = f"{BASE}/community/u/{e['handle']}/"
             topics = [t for t in e.get("topics", []) if t in ENTS]
-            tl = "".join(f'<a class="mb-tag" href="{BASE}/entity/{t}/">{EN.html_name(ENTS[t], lang)}</a> ' for t in topics)
+            tl = "".join(EN.list_link(f"{BASE}/entity/{t}/", ENTS[t], lang, cls="mb-tag") + " " for t in topics)   # Paket 6: Themen-Chips mit Zusatz
             player = "" if not e["spreaker_id"] else PL.player("spreaker", e["spreaker_id"], e["title"], T(lang, "Listen on Spreaker", "Bei Spreaker anhören"), link=e.get("ep_url"), height=200)
             gs = [g for g in (e.get("guests") or []) if g.get("handle") != e["handle"]]
             guests_html = (f'<p class="mut">{esc(T(lang, "Guests", "Gäste"))}: ' + ", ".join(f'<a href="{croot}u/{g["handle"]}/">{esc(g["name"])}</a>' for g in gs) + "</p>") if gs else ""

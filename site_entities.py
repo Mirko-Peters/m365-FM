@@ -65,6 +65,24 @@ CLAIMS = {}   # eid -> Profil-Handle (uebernommene Entitaeten)
 ORGPAGES = {}   # eid -> Firmen-Handle
 
 
+def rel_intro(lang, key, name, n):
+    """Einleitungssatz vor einer Gruppe der vollstaendigen Beziehungslisten (Paket 6). key: Satzschluessel der Gruppe (f.part_of, i.developed_by.src:cert ...).
+    Ab 3 Eintraegen mit Zahl aus den Sprungvorlagen more.* ("Alle 245 Produkte und Werke von Microsoft:"), sonst ohne Zahl (rl.*, nie "alle 1 ..."/"alle 2 ...");
+    ohne passende Vorlage der allgemeine Satz rl._ ("Mit Microsoft verknuepfte Eintraege:")."""
+    if n >= 3 and LC.raw("en", "more." + key):
+        t = LC.text(lang, "more." + key, s=name, n=n)
+        t = t[:1].upper() + t[1:]
+        if t and not t.endswith((":", "：")):
+            t += "：" if lang in ("ja",) else (" :" if lang == "fr" else ":")
+        return f'<p class="lc" data-own-text="no">{t}</p>'
+    return LC.intro(lang, "rl." + key if LC.raw("en", "rl." + key) else "rl._", s=name)
+
+
+def yt_short(t, n=60):
+    """Kurztitel einer Folge fuer den sichtbaren YouTube-Link ("YouTube: {Kurztitel}"): Titel bis n Zeichen, an der Wortgrenze gekuerzt."""
+    return EN.short(t, n)
+
+
 def eurl(BASE, lang, i):
     return TC.eurl(BASE, lang, i)   # eine Quelle fuer die Adresse der Entitaetsseite (auch die Themen-Brotkrumen der Folgen/Beitraege/Videos)
 
@@ -217,15 +235,16 @@ def kind_html(BASE, lang, e, root):
     i, t = e["id"], e["type"]
     out = ""
     if t == "industry":
-        rows = [{"href": f"{root}{x}/", "name": ENTS[x]["name"], "tag": esc(tlab(lang, "org"))} for x in sorted((x["id"] for x in ENTS.values() if x.get("type") == "org" and i in industries_of(x["id"])), key=lambda k: ENTS[k]["name"].lower())]
-        have = {r["name"].lower() for r in rows}
-        ent_ids = {x["id"] for x in ENTS.values() if x.get("type") == "org" and i in industries_of(x["id"])}
+        ent_ids = sorted((x["id"] for x in ENTS.values() if x.get("type") == "org" and i in industries_of(x["id"])), key=lambda k: EN.ename(ENTS[k], lang).lower())
+        # Firmen-Entitaeten: Name in der Sprache der Seite mit Zusatz (site_ename.list_link); der Typname "Organisation" entfaellt, die Ueberschrift nennt ihn schon
+        rows = [f'<li>{EN.list_link(f"{root}{x}/", ENTS[x], lang, i, skip_type=True)}</li>' for x in ent_ids]
+        tag = esc(T(lang, "Community company", "Community-Firma"))
         for c in sorted(KIND_ORGS.get(i, []), key=lambda c: c["name"].lower()):
             if c["eid"] in ent_ids:
                 continue   # dieselbe Firma steht schon als Entitaet da
-            rows.append({"href": f"{BASE}{pfx(lang)}/community/c/{c['handle']}/", "name": c["name"], "tag": esc(T(lang, "Community company", "Community-Firma"))})
+            rows.append(f'<li><a href="{BASE}{pfx(lang)}/community/c/{c["handle"]}/">{esc(c["name"])}</a> <span class="mut">· {tag}</span></li>')
         if rows:
-            out += f'<h3>{esc(T(lang, "Companies", "Firmen"))}</h3>{LC.intro(lang, "ind.companies", s=EN.label(e, lang))}<ul id="en-companies">' + "".join(f'<li><a href="{r["href"]}">{esc(r["name"])}</a> <span class="mut">· {r["tag"]}</span></li>' for r in rows) + "</ul>"
+            out += f'<h3>{esc(T(lang, "Companies", "Firmen"))}</h3>{LC.intro(lang, "ind.companies", s=EN.label(e, lang))}<ul id="en-companies">' + "".join(rows) + "</ul>"
     mem = sorted(KIND_MEMBERS.get(i, []), key=lambda m: _norm(m["name"]))
     if mem:
         prof = f"{BASE}{pfx(lang)}/community/u/"
@@ -301,10 +320,17 @@ def team_html(BASE, lang, oid, root, api):
     mem = T(lang, "Community member", "Community-Mitglied")
     items = []
     for r in rows:
-        href = f"{root}{r['eid']}/" if r["eid"] else f"{prof}{r['handle']}/"
-        note = " · ".join(x for x in ([esc(tlab(lang, 'person'))] if r["eid"] else []) + ([esc(r["job"])] if r["job"] else []) + ([] if r["eid"] or r["job"] else [esc(mem)]))
         extra = f' · <a href="{prof}{r["handle"]}/">{esc(T(lang, "Profile", "Profil"))}</a>' if r["eid"] and r["handle"] else ""
-        items.append(f'<li data-h="{esc(r["handle"])}" data-n="{esc(_norm(r["name"]))}"><a href="{href}">{esc(r["name"])}</a> <span class="mut">· {note}</span>{extra}</li>')
+        if r["eid"] and r["eid"] in ENTS:
+            # Personen-Entitaet: Name in der Sprache der Seite mit Zusatz und title (site_ename.list_link) statt "· Person"; die Rolle bleibt dahinter
+            # (mit Rolle entfaellt der blosse Typname "Person" als Zusatz, die Rolle sagt mehr)
+            a = EN.list_link(f"{root}{r['eid']}/", ENTS[r["eid"]], lang, oid, skip_type=bool(r["job"]))
+            note = f' <span class="mut">· {esc(r["job"])}</span>' if r["job"] else ""
+        else:
+            href = f"{root}{r['eid']}/" if r["eid"] else f"{prof}{r['handle']}/"
+            a = f'<a href="{href}">{esc(r["name"])}</a>'
+            note = f' <span class="mut">· {esc(r["job"] or (tlab(lang, "person") if r["eid"] else mem))}</span>'
+        items.append(f'<li data-h="{esc(r["handle"])}" data-n="{esc(_norm(r["name"]))}">{a}{note}{extra}</li>')
     head = f'<h3>{esc(T(lang, "People", "Personen"))}</h3>' + LC.intro(lang, "org.people", s=EN.label(ENTS.get(oid) or {}, lang))
     if not oh:
         return f'{head}<ul>{"".join(items)}</ul>'
@@ -780,13 +806,15 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             d = (FD.desc(e, lang) or "")[:140]
             old = is_old(e, TODAY)
             _spb = SPM.badge(lang, SPM.entity(e["id"]))   # T37 Sponsor: Badge auch in der Liste (Teaser)
-            return (f'<li class="en-i" data-t="{e["type"]}"{" data-old=1 hidden" if old else ""}><a href="{root}{e["id"]}/"><b>{EN.html_name(e, lang)}</b></a> <span class="mut">· {esc(tlab(lang, e["type"]))}{(" · " + OLD[lang][0]) if old else ""}{(" · <strong>" + esc(_spb) + "</strong>") if _spb else ""}</span><br><span class="mut">{esc(d)}</span></li>')
+            _st = ((" · " + OLD[lang][0]) if old else "") + ((" · <strong>" + esc(_spb) + "</strong>") if _spb else "")   # Paket 6: Zusatz im Linktext statt "· Typ"; Kurzbeschreibung steht sichtbar darunter (kein title)
+            return (f'<li class="en-i" data-t="{e["type"]}"{" data-old=1 hidden" if old else ""}>{EN.list_link(root + e["id"] + "/", e, lang, bold=True, title=False)}'
+                    + (f' <span class="mut">{_st[1:]}</span>' if _st else "") + f'<br><span class="mut">{esc(d)}</span></li>')
         counts = {}
         for e in recs:
             counts[e["type"]] = counts.get(e["type"], 0) + 1
         filt = f'<button type="button" class="en-f" data-f="" aria-pressed="true">{esc(s["all"])} ({len(recs)})</button>' + "".join(f'<button type="button" class="en-f" data-f="{k}" aria-pressed="false">{esc(tlab(lang, k))} ({counts[k]})</button>' for k in TL if k in counts)
         js = ('<script>(function(){var b=[].slice.call(document.querySelectorAll(".en-f")),l=[].slice.call(document.querySelectorAll(".en-i")),o=document.getElementById("en-old"),cur=b[0];function ap(){l.forEach(function(i){i.hidden=(!!cur.dataset.f&&i.dataset.t!==cur.dataset.f)||(!!i.dataset.old&&!(o&&o.checked))})}b.forEach(function(x){x.addEventListener("click",function(){b.forEach(function(y){y.setAttribute("aria-pressed",y===x?"true":"false")});cur=x;ap()})});if(o)o.addEventListener("change",ap)})()</script>')
-        css = '<style>' + MED.CSS + '.en-ep{margin:1em 0}.en-ep h3{margin:.2em 0}.en-ep p{margin:.2em 0}.en-faq details,.wk-q{border:1px solid var(--bd);border-radius:.4em;padding:.5em .8em;margin:.4em 0;background:var(--card)}.en-faq summary{cursor:pointer;font-weight:600}.wk-a{margin:.4em 0 .4em 1em}.en-old{border:1px solid var(--bd);border-left:4px solid #b45309;background:var(--card);padding:.6em .9em;border-radius:.4em}.en-f{font:inherit;cursor:pointer;border:1px solid var(--bd);border-radius:2em;padding:.35em .9em;margin:.2em .3em .2em 0;background:var(--card);color:var(--fg);min-height:2.5rem}.en-f[aria-pressed=true]{background:var(--ac);color:var(--onac);border-color:var(--ac)}.en-list{list-style:none;padding:0}.en-list li{padding:.55em 0;border-bottom:1px solid var(--bd)}.en-list li[hidden]{display:none}.en-facts{border-collapse:collapse;width:100%}.en-facts th{text-align:start;padding:.4em .8em .4em 0;vertical-align:top;white-space:nowrap}.en-facts td{padding:.4em 0;overflow-wrap:anywhere}.en-rel h3{margin:.9em 0 .2em;font-size:1rem}.en-rel ul{margin:.2em 0;padding-inline-start:1.3em}.en-artl{list-style:none;padding:0}.en-artl li{padding:.5em 0;border-bottom:1px solid var(--bd)}.en-arts details{margin:.6em 0}.en-arts summary{cursor:pointer}.en-upd{font-size:.9em}.en-kp{border:1px solid var(--bd);border-inline-start:4px solid var(--ac,#0a5);border-radius:.4em;padding:.4em 1em;margin:1em 0}.en-kp h2{margin:.3em 0;font-size:1.1rem}.en-kp ul{margin:.3em 0;padding-inline-start:1.2em}.en-src ul{padding-inline-start:1.2em}.en-src li{margin:.2em 0;overflow-wrap:anywhere}</style>'
+        css = '<style>' + MED.CSS + '.en-ep{margin:1em 0}.en-ep h3{margin:.2em 0}.en-ep p{margin:.2em 0}.en-faq details,.wk-q{border:1px solid var(--bd);border-radius:.4em;padding:.5em .8em;margin:.4em 0;background:var(--card)}.en-faq summary{cursor:pointer;font-weight:600}.wk-a{margin:.4em 0 .4em 1em}.en-old{border:1px solid var(--bd);border-left:4px solid #b45309;background:var(--card);padding:.6em .9em;border-radius:.4em}.en-f{font:inherit;cursor:pointer;border:1px solid var(--bd);border-radius:2em;padding:.35em .9em;margin:.2em .3em .2em 0;background:var(--card);color:var(--fg);min-height:2.5rem}.en-f[aria-pressed=true]{background:var(--ac);color:var(--onac);border-color:var(--ac)}.en-list{list-style:none;padding:0}.en-list li{padding:.55em 0;border-bottom:1px solid var(--bd)}.en-list li[hidden]{display:none}.en-facts{border-collapse:collapse;width:100%}.en-facts th{text-align:start;padding:.4em .8em .4em 0;vertical-align:top;white-space:nowrap}.en-facts td{padding:.4em 0;overflow-wrap:anywhere}.en-rel h3{margin:.9em 0 .2em;font-size:1rem}.en-rel ul{margin:.2em 0;padding-inline-start:1.3em}.en-artl{list-style:none;padding:0}.en-artl li{padding:.5em 0;border-bottom:1px solid var(--bd)}.en-arts details{margin:.6em 0}.en-arts summary{cursor:pointer}.en-upd{font-size:.9em}.en-kp{border:1px solid var(--bd);border-inline-start:4px solid var(--ac,#0a5);border-radius:.4em;padding:.4em 1em;margin:1em 0}.en-kp h2{margin:.3em 0;font-size:1.1rem}.en-kp ul{margin:.3em 0;padding-inline-start:1.2em}.en-src ul{padding-inline-start:1.2em}.en-src li{margin:.2em 0;overflow-wrap:anywhere}.ed{opacity:.8;font-weight:400}</style>'
         newbtn = f'<div id="en-new" data-lang="{lang}"></div>'
         body = shell(lang, f'<h1>{esc(s["entities"])}</h1><p class="mut">{esc(s["intro"])}</p><p>{esc(s["count"].format(n=len(recs)))} · <a href="{BASE}/entities.json">{esc(s["export"])} (JSON)</a> · <a href="{BASE}/entities.jsonld">JSON-LD</a></p>{newbtn}<p><label><input type="checkbox" id="en-old"> {esc(OLD[lang][1])}</label></p><div role="group" aria-label="{esc(s["type"])}">{filt}</div><ul class="en-list">{"".join(card(e) for e in sorted(recs, key=lambda x: EN.ename(x, lang).lower()))}</ul>{js}'
                       f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("new",)}, ensure_ascii=False)}}}</script><script defer src="{BASE}/assets/entity.js"></script>')
@@ -804,9 +832,10 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             u = f"{root}{e['id']}/"; d = FD.desc(e, lang)
             _en, _enh = EN.label(e, lang), EN.html_name(e, lang)   # Name der Seite in ihrer Sprache: Text (mit Merkmal englischer Rest) und HTML
             groups = {}
+            _gk = {}   # Ueberschrift -> Satzschluessel der Gruppe (f.<p> / i.<p>[.src:<typ>]): Einleitungssatz je Gruppe (Paket 6)
             for p, to in e.get("rel", []):
                 if to in ENTS:
-                    groups.setdefault(FWD[p][li], []).append(to)
+                    groups.setdefault(FWD[p][li], []).append(to); _gk.setdefault(FWD[p][li], f"f.{p}")
             _certl = T(lang, "Certifications issued", "Vergebene Zertifizierungen")   # eigene Liste (eigenes Sprungziel) statt gemischt unter "Produkte und Werke" (Audit SEO-9)
             _rell = {t_: T(lang, *REL_BY[t_]) for t_ in REL_BY}   # Gegenrichtung related_to aus Personen/Firmen/Rollen: eigene Liste statt gemischt unter "Verwandt mit"
             for p, frm in inv.get(e["id"], []):
@@ -814,11 +843,13 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 lab = _certl if (p == "developed_by" and _ft == "cert") else _rell[_ft] if (p == "related_to" and _ft in _rell) else INV[p][li]
                 if frm not in groups.get(lab, []) and not (p in ("related_to", "similar_to") and frm in groups.get(FWD[p][li], [])):
                     groups.setdefault(lab, []).append(frm)
+                    _gk.setdefault(lab, f"f.{p}" if lab == FWD[p][li] else f"i.{p}" + (f".src:{_ft}" if lab in (_certl, *_rell.values()) else ""))
             _co = company_org(e) if e["type"] == "person" else None
             if _co:   # Person -> Arbeitgeber (Feld company) und Gegenrichtung Firma -> Personen
-                groups.setdefault(T(lang, "Works for", "Arbeitet bei"), []).append(_co["id"])
+                groups.setdefault(T(lang, "Works for", "Arbeitet bei"), []).append(_co["id"]); _gk.setdefault(T(lang, "Works for", "Arbeitet bei"), "f.works_for")
             _gid = {k: f"en-rel-{n + 1}" for n, k in enumerate(groups)}   # Sprungziele der vollstaendigen Listen (fuer "und N weitere" in den Beziehungssaetzen)
-            rb = (LC.intro(lang, "ent.rellist", s=_en) if groups else "") + "".join(f'<h3 id="{_gid[k]}">{esc(k)}</h3><ul>' + "".join(f'<li><a href="{root}{x}/">{EN.html_name(ENTS[x], lang)}</a> <span class="mut">· {esc(tlab(lang, ENTS[x]["type"]))}</span></li>' for x in dict.fromkeys(v)) + "</ul>" for k, v in groups.items())
+            # Paket 6: je Gruppe ein Einleitungssatz ("Alle 245 Produkte und Werke von Microsoft:", rel_intro) und Name mit Zusatz statt "Name · Typ"
+            rb = (LC.intro(lang, "ent.rellist", s=_en) if groups else "") + "".join(f'<h3 id="{_gid[k]}">{esc(k)}</h3>{rel_intro(lang, _gk.get(k, "_"), _en, len(dict.fromkeys(v)))}<ul>' + "".join(f'<li>{EN.list_link(f"{root}{x}/", ENTS[x], lang, e["id"])}</li>' for x in dict.fromkeys(v)) + "</ul>" for k, v in groups.items())
             _wf = T(lang, "Works for", "Arbeitet bei")
             def _glab(d_, p_, k_=None):
                 """Liste (Ueberschrift) zu einem Satzschluessel aus site_relsent: Sprungziel und Zahl im Link "alle N ..." gehoeren zu genau dieser Liste."""
@@ -860,7 +891,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 if val:
                     facts.append((T(lang, lab_en, lab_de), esc(str(val))))
             if e["type"] == "org" and industries_of(e["id"]):
-                facts.append((tlab(lang, "industry"), ", ".join(f'<a href="{root}{x}/">{EN.html_name(ENTS[x], lang)}</a>' for x in industries_of(e["id"]))))
+                facts.append((tlab(lang, "industry"), ", ".join(EN.list_link(f"{root}{x}/", ENTS[x], lang, e["id"], skip_type=True) for x in industries_of(e["id"]))))   # Zeile heisst schon "Branche": Zusatz nur, wenn er mehr sagt
             if _co:
                 facts.append((T(lang, "Works for", "Arbeitet bei"), f'<a href="{root}{_co["id"]}/">{esc(_co["name"])}</a>'))
             elif e["type"] == "person" and e.get("company"):
@@ -919,12 +950,12 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _epu = lambda x: x.get("url") or url_of(x)
             ept = s.get("eps") or S["en"]["eps"]
             _yt = g.get("yt_of") or (lambda x: "")   # T27: YouTube-Video der Folge
-            _ytv = T(lang, "Video on YouTube", "Video auf YouTube")   # Linktexte F4: gleicher Kurztext je Folge, Ziel im aria-label ("Video auf YouTube: {Folgentitel}")
+            _ytv = T(lang, "Video on YouTube", "Video auf YouTube")   # aria-label "Video auf YouTube: {Folgentitel}"; sichtbar "YouTube: {Kurztitel}" (Paket 6: nie 12x derselbe Text)
             # Linktexte Folgen (Audit SEO-7): voller Titel statt Kurztitel vor dem Doppelpunkt (der oft genau ein Entitaetsname ist), Kuerzung erst ab 80 Zeichen,
             # nie derselbe Text fuer zwei verschiedene Folgen; dieselben Texte in Kernpunkten, FAQ-Quelle, Zeitleiste und YouTube-aria-label
             _ept = dict(zip((_epu(x) for x in eps), LT.ep_texts([(x["e"]["title"], _epu(x)) for x in eps], names=tuple(dict.fromkeys((e["name"], _en))))))
             _ept_of = lambda x: _ept.get(_epu(x)) or LT.ep_text(x["e"]["title"])
-            _ytl = lambda x: (f' · <a href="https://www.youtube.com/watch?v={esc(_yt(x))}" rel="noopener"{LT.a_attr(LT.aria(_ytv, _ept_of(x)))}>{esc(_ytv)}</a>') if _yt(x) else ""
+            _ytl = lambda x: (f' · <a href="https://www.youtube.com/watch?v={esc(_yt(x))}" rel="noopener"{LT.a_attr(LT.aria(_ytv, _ept_of(x)))}>{LC.text(lang, "ent.yt", t=yt_short(_ept_of(x)))}</a>') if _yt(x) else ""
             eb = (f'<h2>{EN.put(lang, esc(ept), "t", e, _enh)}</h2>' + LC.intro(lang, "ent.eps.person" if e["type"] == "person" else "ent.eps", s=_en) + "".join(
                 f'<article class="en-ep"><h3><a href="{_epu(x)}">{esc(_ept_of(x))}</a></h3><p class="mut">{esc(x.get("date", ""))}{_ytl(x)}</p><p>{esc(g["ep_sum"](x))}</p></article>' for x in eps)) if eps else ""
             _tl = tlab(lang, e["type"])   # nicht "tlab" nennen: das verdeckte die Funktion in ganz build() (NameError, Seitenbau bricht ab)
@@ -934,15 +965,16 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             rel_items = [(k, f"{root}{x}/", EN.ename(ENTS[x], lang)) for k, v in groups.items() for x in dict.fromkeys(v)]
             relmap = MED.relation_svg(_el, rel_items, T(lang, f"Relationship map of {_en}: linked topics", f"Beziehungskarte {_en}: verknüpfte Themen"))
             relx = ""
-            if lang in ("en", "de") and rel_items:   # verknuepfte Themen mit ihrer Kurzbeschreibung: echter Inhalt aus den vorhandenen Entitaeten
+            if rel_items:   # verknuepfte Themen mit ihrer Kurzbeschreibung (Paket 6: alle 15 Sprachen; Name mit Zusatz, darunter die Kurzbeschreibung der Seitensprache,
+                # wo es sie gibt - sonst erklaert der Zusatz; hoechstens 14, der Rest steht in den vollstaendigen Listen mit Zusatz)
                 _seen, _li = set(), []
                 for _k, _u, _n in rel_items:
                     _id = _u.rstrip("/").rsplit("/", 1)[-1]
                     if _id in _seen or _id not in ENTS: continue
-                    _seen.add(_id); _dd = ENTS[_id]["desc"].get(lang) or ENTS[_id]["desc"].get("en") or ""
-                    _li.append(f'<li><a href="{_u}"><b>{EN.html_name(ENTS[_id], lang)}</b></a> <span class="mut">· {esc(_k)} · {esc(tlab(lang, ENTS[_id]["type"]))}</span>' + (f'<br>{esc(_dd)}' if _dd else "") + "</li>")
+                    _seen.add(_id); _dd = EN.own_desc(ENTS[_id], lang)
+                    _li.append(f'<li>{EN.list_link(_u, ENTS[_id], lang, e["id"], bold=True, title=False)}' + (f' <span class="mut">· {esc(_k)}</span>' if lang in ("en", "de") else "") + (f'<br>{esc(_dd)}' if _dd else "") + "</li>")
                     if len(_li) >= 14: break
-                relx = f'<h2>{T(lang, "Related topics in brief", "Verwandte Themen kurz erklärt")}</h2>{LC.intro(lang, "ent.relx", s=_en)}<ul class="en-relx">' + "".join(_li) + "</ul>" if _li else ""
+                relx = f'<h2>{esc(T(lang, "Related topics in brief", "Verwandte Themen kurz erklärt"))}</h2>{LC.intro(lang, "ent.relx", s=_en)}<ul class="en-relx">' + "".join(_li) + "</ul>" if _li else ""
             tline = MED.timeline_svg([(x.get("date", ""), _ept_of(x), _epu(x)) for x in eps], T(lang, f"Timeline of episodes about {_en}", EN.put(lang, "Zeitleiste der Folgen zu {t}", "t", _en, str(_en))))
             ex = experts_by_ent.get(e["id"], [])
             ehtml = ""

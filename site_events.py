@@ -216,7 +216,7 @@ def build(g, events, people, orgs):
                 facts.append((s["lang"], esc(ev["lang"])))
             ser = EVL.series_of(ev)   # bestaetigte Event-Reihe (Entitaet): die Seite der Reihe zeigt alle Termine
             if ser:
-                facts.append((s["series"], f'<a href="{eurl(BASE, lang, ser)}">{EN.html_name(ENTS[ser], lang)}</a>'))
+                facts.append((s["series"], EN.list_link(eurl(BASE, lang, ser), ENTS[ser], lang, skip_type=True)))
             ft = '<table class="mb-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b_}</td></tr>' for a, b_ in facts if b_) + "</tbody></table>"
             tix, web = https_url(ev.get("tickets_url")), https_url(ev.get("url"))
             btn = (f'<a class="btn main" href="{esc(tix)}" rel="nofollow noopener" target="_blank">{esc(s["tickets"])}</a> ' if tix else "") + (f'<a class="btn" href="{esc(web)}" rel="nofollow noopener" target="_blank">{esc(s["website"])}</a>' if web else "")
@@ -225,7 +225,7 @@ def build(g, events, people, orgs):
             # Importiertes Event ohne Veranstalter: Hinweis und Einstieg zum Uebernehmen (POST /api/event/<handle>/claim, ein Admin gibt frei)
             claim = (f'<p class="mut">{esc(s["imported"])} <button type="button" class="btn" id="ev-claim" data-e="{esc(ev["handle"])}">{esc(s["claim"])}</button> <span id="ev-claim-msg" role="status" aria-live="polite"></span></p><script>'
                      + CLAIMJS.replace("%API%", api).replace("%T%", json.dumps(CLAIMT[lang], ensure_ascii=False)).replace("%CROOT%", croot) + "</script>") if ev.get("unclaimed") else ""
-            tp = "".join(f'<a class="ev-tag" href="{eurl(BASE, lang, e)}">{EN.html_name(ENTS[e], lang)}</a>' for e in ev.get("topics", []) if e in ENTS)
+            tp = "".join(EN.list_link(eurl(BASE, lang, e), ENTS[e], lang, cls="ev-tag") for e in ev.get("topics", []) if e in ENTS)   # Paket 6: Themen-Chips mit Zusatz
             pl = {"sponsor": T(lang, "Sponsors", "Sponsoren"), "media": T(lang, "Media partners", "Medienpartner")}
             pt = ""
             for kd in ("sponsor", "media"):
@@ -240,7 +240,7 @@ def build(g, events, people, orgs):
             for se in ev.get("sessions", []):
                 spk = ", ".join((f'<a href="{BASE}{pfx(lang)}/community/u/{x["h"]}/">{esc(x["n"])}</a>{ROLE.chip_for(BASE, lang, x["h"])}' if x.get("h") in pb else f'<a href="{eurl(BASE, lang, x["e"])}">{esc(x["n"])}</a>' if x.get("e") in ENTS else esc(x["n"])) for x in se.get("speakers", []))
                 meta = " · ".join(esc(v) for v in [fdate(se["start"], lang) if se.get("start") else "", f'{s["room"]} {se["room"]}' if se.get("room") else "", f'{s["track"]} {se["track"]}' if se.get("track") else "", f'{s["level"]} {se["level"]}' if se.get("level") else "", se.get("lang", "")] if v)
-                st = "".join(f'<a class="ev-tag" href="{eurl(BASE, lang, e)}">{EN.html_name(ENTS[e], lang)}</a>' for e in se.get("topics", []) if e in ENTS)
+                st = "".join(EN.list_link(eurl(BASE, lang, e), ENTS[e], lang, cls="ev-tag") for e in se.get("topics", []) if e in ENTS)
                 st = f'{LC.intro(lang, "event.session_topics")}<p>{st}</p>' if st else ""   # Session -> Themen: Einleitungssatz vor den Themen-Links
                 ss.append(f'<div class="ev-s"><h3>{esc(se["title"])}</h3><button type="button" class="btn" data-topic-follow data-topic-kind="session" data-topic-id="{esc(str(se["id"]))}" data-topic-label="{esc(T(lang, "Follow session", "Session folgen"))}">🔔 {T(lang, "Follow session", "Session folgen")}</button><p class="mut">{meta}{" · " if meta and spk else ""}{(esc(s["speakers"]) + ": " + spk) if spk else ""}{(" · " + str(se["speakers_open"]) + " " + s["tbc"]) if se.get("speakers_open") else ""}</p>' + (f'<p style="white-space:pre-line">{esc(se["abstract"])}</p>' if se.get("abstract") else "") + st
                           + (f'<p><a href="{esc(https_url(se["recording_url"]))}" rel="nofollow noopener" target="_blank">{esc(s["recording"])}</a></p>' if https_url(se.get("recording_url")) else "") + "</div>")
@@ -255,7 +255,7 @@ def build(g, events, people, orgs):
                 sitemap.append((u, TODAY, None))
         # Verzeichnis
         up = sorted([e for e in events if (e.get("end") or e["start"])[:10] >= TODAY], key=lambda e: e["start"]); pa = sorted([e for e in events if (e.get("end") or e["start"])[:10] < TODAY], key=lambda e: e["start"], reverse=True)
-        li = lambda lst: "".join(f'<li class="ev-card"><a href="{eurl_(BASE, lang, e["handle"])}"><b>{esc(e["title"])}</b></a> <span class="mut">· {esc(span(e, lang))} · {esc({"online": s["online"], "onsite": s["onsite"], "hybrid": s["hybrid"]}[e["mode"]])}</span>{(' <a class="ev-tag" href="' + eurl(BASE, lang, EVL.series_of(e)) + '">' + EN.html_name(ENTS[EVL.series_of(e)], lang) + '</a>') if EVL.series_of(e) else ""}<br>{esc(e.get("summary", ""))}</li>' for e in lst)
+        li = lambda lst: "".join(f'<li class="ev-card"><a href="{eurl_(BASE, lang, e["handle"])}"><b>{esc(e["title"])}</b></a> <span class="mut">· {esc(span(e, lang))} · {esc({"online": s["online"], "onsite": s["onsite"], "hybrid": s["hybrid"]}[e["mode"]])}</span>{(" " + EN.list_link(eurl(BASE, lang, EVL.series_of(e)), ENTS[EVL.series_of(e)], lang, cls="ev-tag", skip_type=True)) if EVL.series_of(e) else ""}<br>{esc(e.get("summary", ""))}</li>' for e in lst)
         ru = f"{croot}events/"
         b = shell(lang, f'<h1>{esc(s["events"])}</h1><p class="mut">{esc(s["intro"])}</p><p><a class="btn main" href="{croot}#c-events">{esc(s["create"])}</a></p>'
                   + (f'<h2>{esc(s["upcoming"])}</h2><ul class="ev-list">{li(up)}</ul>' if up else "") + (f'<details class="ev-past"><summary><h2 style="display:inline">{esc(s["past"])} ({len(pa)})</h2></summary><ul class="ev-list">{li(pa)}</ul></details>' if pa else "") + ("" if events else f'<p class="mut">{esc(s["none"])}</p>') + css)

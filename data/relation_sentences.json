@@ -1,5 +1,5 @@
 {
- "_comment": "Beziehungssaetze der Entitaetsseiten (site_relsent.py). {s} = Name der Seite (kein Link), {x} = verlinkte Namen der Ziel-Entitaeten. Ein Wert ist ein Text oder {\"one\": ..., \"many\": ..., \"more\": ...} (ein Ziel / mehrere Ziele / Linktext fuer \"N weitere\", wenn die Stelle einen anderen Fall braucht, z. B. Dativ \"von A und 5 weiteren\"). Fehlt ein Schluessel in einer Sprache, gibt es fuer diese Beziehung keinen Satz; die vollstaendige Liste darunter bleibt. en und de von Hand geschrieben; fr, es, it, nl, pt, pl, id, ru, uk, ar, he, ja, ko sind maschinell uebersetzt (Claude, 16.11.2026, noch ohne Pruefung durch Muttersprachler, siehe _mt). cooc: Rueckfall-Satz fuer Entitaeten ohne Beziehungen aus gemeinsamen Folgen (site_relsent.cooc, Linktexte Paket 3, 17.11.2026; {s} = Seite, {x} = verlinkte Themen, heading = Ueberschrift; Fassungen nach site_relsent.cooc_pick: t/heading mit \"oft\" nur bei Themen aus mindestens 2 gemeinsamen Folgen, t_some/heading_some ohne \"oft\", t_one fuer Seiten mit einer Folge, p/p_some/p_one fuer Personen-Seiten \"Folgen mit oder ueber {s}\", Gegenpruefung 17.11.2026). Sichere Muster: der Satzgegenstand ist moeglichst der Name selbst oder ein festes Nomen (keine Geschlechts- und Fallformen an Produktnamen); wo das nicht geht, ein Doppelpunkt-Satz oder kein Satz.",
+ "_comment": "Beziehungssaetze der Entitaetsseiten (site_relsent.py). {s} = Name der Seite (kein Link), {x} = verlinkte Namen der Ziel-Entitaeten. Ein Wert ist ein Text oder {\"one\": ..., \"many\": ..., \"more\": ...} (ein Ziel / mehrere Ziele / Linktext fuer \"N weitere\", wenn die Stelle einen anderen Fall braucht, z. B. Dativ \"von A und 5 weiteren\"). Fehlt ein Schluessel in einer Sprache, gibt es fuer diese Beziehung keinen Satz; die vollstaendige Liste darunter bleibt. en und de von Hand geschrieben; fr, es, it, nl, pt, pl, id, ru, uk, ar, he, ja, ko sind maschinell uebersetzt (Claude, 16.11.2026, noch ohne Pruefung durch Muttersprachler, siehe _mt). cooc: Rueckfall-Satz fuer Entitaeten ohne Beziehungen aus gemeinsamen Folgen (site_relsent.cooc, Linktexte Paket 3, 17.11.2026; {s} = Seite, {x} = verlinkte Themen, heading = Ueberschrift; Fassungen nach site_relsent.cooc_pick: t/heading mit \"oft\" nur bei Themen aus mindestens 2 gemeinsamen Folgen, t_some/heading_some ohne \"oft\", t_one fuer Seiten mit einer Folge, p/p_some/p_one fuer Personen-Seiten \"Folgen mit oder ueber {s}\", Gegenpruefung 17.11.2026). Sichere Muster: der Satzgegenstand ist moeglichst der Name selbst oder ein festes Nomen (keine Geschlechts- und Fallformen an Produktnamen); wo das nicht geht, ein Doppelpunkt-Satz oder kein Satz. Paket 6 (18.11.2026): Einleitungssatz (lead, cat, type_noun) und die fehlenden Vorlagen (ar f.covers, i.covers, i.related_to.src:org/person, i.requires; he i.covers, i.related_to.src:org/person, i.requires; pl f/i.created_by) in allen 15 Sprachen; cat/type_noun = [Artikel, Nomen] (leerer Artikel in Sprachen ohne Artikel, Artikel mit Apostroph wie it \"un’\" ohne Leerzeichen); wo die Beugung vom Geschlecht des Namens abhaengt, Doppelpunkt-, Gedankenstrich- oder Appositionsform (pt \"do fabricante {dev}\", ar \"{s}: ... من تطوير {dev}\", pl \"firmy {dev}\").",
  "en": {
   "_mt": false,
   "heading": "Relationships",
@@ -119,6 +119,24 @@
   "cooc": {"heading": "Souvent abordés ensemble", "t": "Les épisodes consacrés à {s} abordent souvent aussi {x}.", "heading_some": "Également abordés", "t_some": "Les épisodes consacrés à {s} abordent aussi {x}.", "t_one": "L’épisode consacré à {s} aborde aussi {x}.", "p": "Les épisodes avec ou sur {s} abordent souvent aussi {x}.", "p_some": "Les épisodes avec ou sur {s} abordent aussi {x}.", "p_one": "L’épisode avec ou sur {s} aborde aussi {x}."},
   "join": {"sep": ", ", "and": " et "},
   "more": {"tail": " et {link}", "link": "{n} autres"},
+  "lead": {
+   "ndp": "{s} est {noun} de {dev} et fait partie de {part}.",
+   "nd": "{s} est {noun} de {dev}.",
+   "np": "{s} est {noun} et fait partie de {part}.",
+   "n": "{s} est {noun}."
+  },
+  "cat": {
+   "microsoft-tool": ["un", "outil Microsoft"],
+   "ai-assistant": ["un", "assistant IA"],
+   "low-code-tool": ["un", "outil low-code"],
+   "analytics-tool": ["un", "outil d’analyse et de BI"],
+   "identity-security-tool": ["un", "outil d’identité et de sécurité"],
+   "collaboration-tool": ["un", "outil de collaboration"],
+   "cloud-platform": ["une", "plateforme cloud"],
+   "developer-tool": ["un", "outil de développement"],
+   "business-application": ["une", "application métier"]
+  },
+  "type_noun": {"product": ["un", "produit"], "platform": ["une", "plateforme"], "cert": ["une", "certification"]},
   "t": {
    "f.instance_of": {"one": "{s} appartient à la catégorie {x}.", "many": "{s} appartient aux catégories {x}."},
    "f.part_of": "{s} fait partie de {x}.",
@@ -157,6 +175,24 @@
   "cooc": {"heading": "Temas que suelen tratarse juntos", "t": "Los episodios sobre {s} suelen tratar también {x}.", "heading_some": "También se tratan", "t_some": "Los episodios sobre {s} tratan también {x}.", "t_one": "El episodio sobre {s} trata también {x}.", "p": "Los episodios con o sobre {s} suelen tratar también {x}.", "p_some": "Los episodios con o sobre {s} tratan también {x}.", "p_one": "El episodio con o sobre {s} trata también {x}."},
   "join": {"sep": ", ", "and": " y "},
   "more": {"tail": " y {link}", "link": "{n} más"},
+  "lead": {
+   "ndp": "{s} es {noun} de {dev} y forma parte de {part}.",
+   "nd": "{s} es {noun} de {dev}.",
+   "np": "{s} es {noun} y forma parte de {part}.",
+   "n": "{s} es {noun}."
+  },
+  "cat": {
+   "microsoft-tool": ["una", "herramienta de Microsoft"],
+   "ai-assistant": ["un", "asistente de IA"],
+   "low-code-tool": ["una", "herramienta low-code"],
+   "analytics-tool": ["una", "herramienta de análisis y BI"],
+   "identity-security-tool": ["una", "herramienta de identidad y seguridad"],
+   "collaboration-tool": ["una", "herramienta de colaboración"],
+   "cloud-platform": ["una", "plataforma en la nube"],
+   "developer-tool": ["una", "herramienta para desarrolladores"],
+   "business-application": ["una", "aplicación empresarial"]
+  },
+  "type_noun": {"product": ["un", "producto"], "platform": ["una", "plataforma"], "cert": ["una", "certificación"]},
   "t": {
    "f.instance_of": {"one": "{s} pertenece a la categoría {x}.", "many": "{s} pertenece a las categorías {x}."},
    "f.part_of": "{s} forma parte de {x}.",
@@ -195,6 +231,24 @@
   "cooc": {"heading": "Spesso trattati insieme", "t": "Gli episodi su {s} parlano spesso anche di {x}.", "heading_some": "Trattati anche", "t_some": "Gli episodi su {s} parlano anche di {x}.", "t_one": "L’episodio su {s} parla anche di {x}.", "p": "Gli episodi con o su {s} parlano spesso anche di {x}.", "p_some": "Gli episodi con o su {s} parlano anche di {x}.", "p_one": "L’episodio con o su {s} parla anche di {x}."},
   "join": {"sep": ", ", "and": " e "},
   "more": {"tail": " e {link}", "link": "altri {n}"},
+  "lead": {
+   "ndp": "{s} è {noun} di {dev} e fa parte di {part}.",
+   "nd": "{s} è {noun} di {dev}.",
+   "np": "{s} è {noun} e fa parte di {part}.",
+   "n": "{s} è {noun}."
+  },
+  "cat": {
+   "microsoft-tool": ["uno", "strumento Microsoft"],
+   "ai-assistant": ["un", "assistente IA"],
+   "low-code-tool": ["uno", "strumento low-code"],
+   "analytics-tool": ["uno", "strumento di analisi e BI"],
+   "identity-security-tool": ["uno", "strumento per identità e sicurezza"],
+   "collaboration-tool": ["uno", "strumento di collaborazione"],
+   "cloud-platform": ["una", "piattaforma cloud"],
+   "developer-tool": ["uno", "strumento per sviluppatori"],
+   "business-application": ["un’", "applicazione aziendale"]
+  },
+  "type_noun": {"product": ["un", "prodotto"], "platform": ["una", "piattaforma"], "cert": ["una", "certificazione"]},
   "t": {
    "f.instance_of": {"one": "{s} appartiene alla categoria {x}.", "many": "{s} appartiene alle categorie {x}."},
    "f.part_of": "{s} fa parte di {x}.",
@@ -233,6 +287,24 @@
   "cooc": {"heading": "Vaak samen besproken", "t": "Afleveringen over {s} gaan vaak ook over {x}.", "heading_some": "Ook besproken", "t_some": "Afleveringen over {s} gaan ook over {x}.", "t_one": "De aflevering over {s} gaat ook over {x}.", "p": "Afleveringen met of over {s} gaan vaak ook over {x}.", "p_some": "Afleveringen met of over {s} gaan ook over {x}.", "p_one": "De aflevering met of over {s} gaat ook over {x}."},
   "join": {"sep": ", ", "and": " en "},
   "more": {"tail": " en {link}", "link": "nog {n} andere"},
+  "lead": {
+   "ndp": "{s} is {noun} van {dev} en maakt deel uit van {part}.",
+   "nd": "{s} is {noun} van {dev}.",
+   "np": "{s} is {noun} en maakt deel uit van {part}.",
+   "n": "{s} is {noun}."
+  },
+  "cat": {
+   "microsoft-tool": ["een", "Microsoft-tool"],
+   "ai-assistant": ["een", "AI-assistent"],
+   "low-code-tool": ["een", "low-codetool"],
+   "analytics-tool": ["een", "analyse- en BI-tool"],
+   "identity-security-tool": ["een", "identiteits- en beveiligingstool"],
+   "collaboration-tool": ["een", "samenwerkingstool"],
+   "cloud-platform": ["een", "cloudplatform"],
+   "developer-tool": ["een", "ontwikkelaarstool"],
+   "business-application": ["een", "bedrijfsapplicatie"]
+  },
+  "type_noun": {"product": ["een", "product"], "platform": ["een", "platform"], "cert": ["een", "certificering"]},
   "t": {
    "f.instance_of": {"one": "{s} hoort bij de categorie {x}.", "many": "{s} hoort bij de categorieën {x}."},
    "f.part_of": "{s} maakt deel uit van {x}.",
@@ -271,6 +343,24 @@
   "cooc": {"heading": "Frequentemente tratados em conjunto", "t": "Os episódios sobre {s} costumam abordar também {x}.", "heading_some": "Também abordados", "t_some": "Os episódios sobre {s} abordam também {x}.", "t_one": "O episódio sobre {s} aborda também {x}.", "p": "Os episódios com ou sobre {s} costumam abordar também {x}.", "p_some": "Os episódios com ou sobre {s} abordam também {x}.", "p_one": "O episódio com ou sobre {s} aborda também {x}."},
   "join": {"sep": ", ", "and": " e "},
   "more": {"tail": " e {link}", "link": "mais {n}"},
+  "lead": {
+   "ndp": "{s} é {noun} do fabricante {dev} e faz parte de {part}.",
+   "nd": "{s} é {noun} do fabricante {dev}.",
+   "np": "{s} é {noun} e faz parte de {part}.",
+   "n": "{s} é {noun}."
+  },
+  "cat": {
+   "microsoft-tool": ["uma", "ferramenta Microsoft"],
+   "ai-assistant": ["um", "assistente de IA"],
+   "low-code-tool": ["uma", "ferramenta low-code"],
+   "analytics-tool": ["uma", "ferramenta de análise e BI"],
+   "identity-security-tool": ["uma", "ferramenta de identidade e segurança"],
+   "collaboration-tool": ["uma", "ferramenta de colaboração"],
+   "cloud-platform": ["uma", "plataforma de nuvem"],
+   "developer-tool": ["uma", "ferramenta de desenvolvimento"],
+   "business-application": ["uma", "aplicação empresarial"]
+  },
+  "type_noun": {"product": ["um", "produto"], "platform": ["uma", "plataforma"], "cert": ["uma", "certificação"]},
   "t": {
    "f.instance_of": {"one": "{s} pertence à categoria {x}.", "many": "{s} pertence às categorias {x}."},
    "f.part_of": "{s} faz parte de {x}.",
@@ -310,6 +400,24 @@
   "cooc": {"heading": "Często omawiane razem", "t": "W odcinkach na temat {s} często pojawiają się też: {x}.", "heading_some": "Omawiane również", "t_some": "W odcinkach na temat {s} pojawiają się też: {x}.", "t_one": "W odcinku na temat {s} pojawiają się też: {x}.", "p": "{s} – w odcinkach z udziałem tej osoby lub o niej często pojawiają się też: {x}.", "p_some": "{s} – w odcinkach z udziałem tej osoby lub o niej pojawiają się też: {x}.", "p_one": "{s} – w odcinku z udziałem tej osoby lub o niej pojawiają się też: {x}."},
   "join": {"sep": ", ", "and": " i "},
   "more": {"tail": " i {link}", "link": "jeszcze {n}"},
+  "lead": {
+   "ndp": "{s} to {noun} firmy {dev} i wchodzi w skład {part}.",
+   "nd": "{s} to {noun} firmy {dev}.",
+   "np": "{s} to {noun} i wchodzi w skład {part}.",
+   "n": "{s} to {noun}."
+  },
+  "cat": {
+   "microsoft-tool": ["", "narzędzie Microsoft"],
+   "ai-assistant": ["", "asystent AI"],
+   "low-code-tool": ["", "narzędzie low-code"],
+   "analytics-tool": ["", "narzędzie analityczne i BI"],
+   "identity-security-tool": ["", "narzędzie do tożsamości i bezpieczeństwa"],
+   "collaboration-tool": ["", "narzędzie do współpracy"],
+   "cloud-platform": ["", "platforma chmurowa"],
+   "developer-tool": ["", "narzędzie dla deweloperów"],
+   "business-application": ["", "aplikacja biznesowa"]
+  },
+  "type_noun": {"product": ["", "produkt"], "platform": ["", "platforma"], "cert": ["", "certyfikat"]},
   "t": {
    "f.instance_of": "{s} należy do kategorii {x}.",
    "f.part_of": "{s} wchodzi w skład {x}.",
@@ -323,6 +431,7 @@
    "f.requires": "{s} wymaga {x}.",
    "f.covers": "{s} obejmuje {x}.",
    "f.covers.subj:cert": "{s} sprawdza wiedzę z zakresu: {x}.",
+   "f.created_by": {"one": "Twórca {s}: {x}.", "many": "Twórcy {s}: {x}."},
    "f.organized_by": {"one": "{x} organizuje {s}.", "many": "{x} organizują {s}."},
    "f.similar_to": "{s} przypomina {x}.",
    "f.works_for": "{s} pracuje w firmie {x}.",
@@ -337,6 +446,7 @@
    "i.requires": {"one": "{x} wymaga {s}.", "many": "{x} wymagają {s}."},
    "i.covers": {"one": "{x} obejmuje {s}.", "many": "{x} obejmują {s}."},
    "i.covers.src:cert": {"one": "Certyfikat {x} sprawdza wiedzę z zakresu {s}.", "many": "Certyfikaty {x} sprawdzają wiedzę z zakresu {s}."},
+   "i.created_by": "Projekty i dzieła stworzone przez {s}: {x}.",
    "i.organized_by": "{s} organizuje {x}."
   }
  },
@@ -346,6 +456,24 @@
   "cooc": {"heading": "Sering dibahas bersama", "t": "Episode tentang {s} sering juga membahas {x}.", "heading_some": "Juga dibahas", "t_some": "Episode tentang {s} juga membahas {x}.", "t_one": "Episode tentang {s} itu juga membahas {x}.", "p": "Episode bersama atau tentang {s} sering juga membahas {x}.", "p_some": "Episode bersama atau tentang {s} juga membahas {x}.", "p_one": "Episode bersama atau tentang {s} itu juga membahas {x}."},
   "join": {"sep": ", ", "and": ", dan ", "and2": " dan "},
   "more": {"tail": ", dan {link}", "link": "{n} lainnya"},
+  "lead": {
+   "ndp": "{s} adalah {noun} dari {dev} dan bagian dari {part}.",
+   "nd": "{s} adalah {noun} dari {dev}.",
+   "np": "{s} adalah {noun} dan bagian dari {part}.",
+   "n": "{s} adalah {noun}."
+  },
+  "cat": {
+   "microsoft-tool": ["", "alat Microsoft"],
+   "ai-assistant": ["", "asisten AI"],
+   "low-code-tool": ["", "alat low-code"],
+   "analytics-tool": ["", "alat analitik dan BI"],
+   "identity-security-tool": ["", "alat identitas dan keamanan"],
+   "collaboration-tool": ["", "alat kolaborasi"],
+   "cloud-platform": ["", "platform cloud"],
+   "developer-tool": ["", "alat pengembang"],
+   "business-application": ["", "aplikasi bisnis"]
+  },
+  "type_noun": {"product": ["", "produk"], "platform": ["", "platform"], "cert": ["", "sertifikasi"]},
   "t": {
    "f.instance_of": "{s} termasuk dalam kategori {x}.",
    "f.part_of": "{s} merupakan bagian dari {x}.",
@@ -385,6 +513,24 @@
   "cooc": {"heading": "Часто обсуждают вместе", "t": "В выпусках на тему {s} часто обсуждаются также: {x}.", "heading_some": "Также обсуждаются", "t_some": "В выпусках на тему {s} обсуждаются также: {x}.", "t_one": "В выпуске на тему {s} обсуждаются также: {x}.", "p": "В выпусках, в которых участвует или упоминается {s}, часто обсуждаются также: {x}.", "p_some": "В выпусках, в которых участвует или упоминается {s}, обсуждаются также: {x}.", "p_one": "В выпуске, в котором участвует или упоминается {s}, обсуждаются также: {x}."},
   "join": {"sep": ", ", "and": " и "},
   "more": {"tail": " и {link}", "link": "ещё {n}"},
+  "lead": {
+   "ndp": "{s} — {noun} от {dev}, входит в состав {part}.",
+   "nd": "{s} — {noun} от {dev}.",
+   "np": "{s} — {noun}, входит в состав {part}.",
+   "n": "{s} — {noun}."
+  },
+  "cat": {
+   "microsoft-tool": ["", "инструмент Microsoft"],
+   "ai-assistant": ["", "ИИ-помощник"],
+   "low-code-tool": ["", "инструмент low-code"],
+   "analytics-tool": ["", "инструмент аналитики и BI"],
+   "identity-security-tool": ["", "инструмент идентификации и безопасности"],
+   "collaboration-tool": ["", "инструмент для совместной работы"],
+   "cloud-platform": ["", "облачная платформа"],
+   "developer-tool": ["", "инструмент разработчика"],
+   "business-application": ["", "бизнес-приложение"]
+  },
+  "type_noun": {"product": ["", "продукт"], "platform": ["", "платформа"], "cert": ["", "сертификация"]},
   "t": {
    "f.instance_of": {"one": "{s} относится к категории {x}.", "many": "{s} относится к категориям {x}."},
    "f.part_of": "{s} входит в состав {x}.",
@@ -424,6 +570,24 @@
   "cooc": {"heading": "Часто обговорюють разом", "t": "У випусках на тему {s} часто обговорюють також: {x}.", "heading_some": "Також обговорюють", "t_some": "У випусках на тему {s} обговорюють також: {x}.", "t_one": "У випуску на тему {s} обговорюють також: {x}.", "p": "У випусках, у яких бере участь або згадується {s}, часто обговорюють також: {x}.", "p_some": "У випусках, у яких бере участь або згадується {s}, обговорюють також: {x}.", "p_one": "У випуску, у якому бере участь або згадується {s}, обговорюють також: {x}."},
   "join": {"sep": ", ", "and": " та "},
   "more": {"tail": " та {link}", "link": "ще {n}"},
+  "lead": {
+   "ndp": "{s} — {noun} від {dev}, входить до складу {part}.",
+   "nd": "{s} — {noun} від {dev}.",
+   "np": "{s} — {noun}, входить до складу {part}.",
+   "n": "{s} — {noun}."
+  },
+  "cat": {
+   "microsoft-tool": ["", "інструмент Microsoft"],
+   "ai-assistant": ["", "ШІ-асистент"],
+   "low-code-tool": ["", "інструмент low-code"],
+   "analytics-tool": ["", "інструмент аналітики та BI"],
+   "identity-security-tool": ["", "інструмент ідентифікації та безпеки"],
+   "collaboration-tool": ["", "інструмент для спільної роботи"],
+   "cloud-platform": ["", "хмарна платформа"],
+   "developer-tool": ["", "інструмент розробника"],
+   "business-application": ["", "бізнес-застосунок"]
+  },
+  "type_noun": {"product": ["", "продукт"], "platform": ["", "платформа"], "cert": ["", "сертифікація"]},
   "t": {
    "f.instance_of": {"one": "{s} належить до категорії {x}.", "many": "{s} належить до категорій {x}."},
    "f.part_of": "{s} входить до складу {x}.",
@@ -463,6 +627,24 @@
   "cooc": {"heading": "مواضيع تُناقش معًا غالبًا", "t": "في الحلقات التي تتناول {s} تُناقش غالبًا أيضًا: {x}.", "heading_some": "مواضيع تُناقش أيضًا", "t_some": "في الحلقات التي تتناول {s} تُناقش أيضًا: {x}.", "t_one": "في الحلقة التي تتناول {s} تُناقش أيضًا: {x}.", "p": "في الحلقات التي يشارك فيها {s} أو يُذكر فيها تُناقش غالبًا أيضًا: {x}.", "p_some": "في الحلقات التي يشارك فيها {s} أو يُذكر فيها تُناقش أيضًا: {x}.", "p_one": "في الحلقة التي يشارك فيها {s} أو يُذكر فيها تُناقش أيضًا: {x}."},
   "join": {"sep": "، ", "and": " و"},
   "more": {"tail": " و{link}", "link": "{n} أخرى"},
+  "lead": {
+   "ndp": "{s}: {noun} من تطوير {dev}، وجزء من {part}.",
+   "nd": "{s}: {noun} من تطوير {dev}.",
+   "np": "{s}: {noun}، وجزء من {part}.",
+   "n": "{s}: {noun}."
+  },
+  "cat": {
+   "microsoft-tool": ["", "أداة من Microsoft"],
+   "ai-assistant": ["", "مساعد ذكاء اصطناعي"],
+   "low-code-tool": ["", "أداة منخفضة التعليمات البرمجية"],
+   "analytics-tool": ["", "أداة تحليلات وذكاء أعمال"],
+   "identity-security-tool": ["", "أداة للهوية والأمان"],
+   "collaboration-tool": ["", "أداة تعاون"],
+   "cloud-platform": ["", "منصة سحابية"],
+   "developer-tool": ["", "أداة للمطورين"],
+   "business-application": ["", "تطبيق أعمال"]
+  },
+  "type_noun": {"product": ["", "منتج"], "platform": ["", "منصة"], "cert": ["", "شهادة"]},
   "t": {
    "f.instance_of": {"one": "{s} ضمن فئة {x}.", "many": "{s} ضمن فئات {x}."},
    "f.part_of": "{s} جزء من {x}.",
@@ -474,6 +656,7 @@
    "f.related_to.subj:org": "مجالات عمل {s}: {x}.",
    "f.related_to.subj:job": "مواضيع نموذجية لدور {s}: {x}.",
    "f.requires": "متطلبات {s}: {x}.",
+   "f.covers": "الموضوعات المشمولة في {s}: {x}.",
    "f.covers.subj:cert": "تختبر شهادة {s} المعرفة في: {x}.",
    "f.created_by": "{s} من إنشاء {x}.",
    "f.organized_by": "{s} من تنظيم {x}.",
@@ -484,7 +667,11 @@
    "i.broader": "مواضيع فرعية ضمن {s}: {x}.",
    "i.developed_by": "من تطوير {s}: {x}.",
    "i.developed_by.src:cert": {"one": "شهادة صادرة عن {s}: {x}.", "many": "شهادات صادرة عن {s}: {x}."},
+   "i.related_to.src:person": "أشخاص يعملون على {s}: {x}.",
+   "i.related_to.src:org": "شركات تعمل على {s}: {x}.",
    "i.related_to.src:job": "{s} موضوع نموذجي لدور {x}.",
+   "i.requires": "عناصر تتطلب {s}: {x}.",
+   "i.covers": "مصادر تتناول {s}: {x}.",
    "i.covers.src:cert": {"one": "شهادة تختبر المعرفة في {s}: {x}.", "many": "شهادات تختبر المعرفة في {s}: {x}."},
    "i.created_by": "من إنشاء {s}: {x}.",
    "i.organized_by": "من تنظيم {s}: {x}."
@@ -497,6 +684,24 @@
   "cooc": {"heading": "נושאים שנדונים לעיתים קרובות יחד", "t": "בפרקים על {s} עולים לעיתים קרובות גם: {x}.", "heading_some": "נושאים שנדונים גם", "t_some": "בפרקים על {s} עולים גם: {x}.", "t_one": "בפרק על {s} עולים גם: {x}.", "p": "בפרקים עם {s} או על {s} עולים לעיתים קרובות גם: {x}.", "p_some": "בפרקים עם {s} או על {s} עולים גם: {x}.", "p_one": "בפרק עם {s} או על {s} עולים גם: {x}."},
   "join": {"sep": ", ", "and": " ו-"},
   "more": {"tail": " ו{link}", "link": "עוד {n}"},
+  "lead": {
+   "ndp": "{s} – {noun} של {dev}, חלק מ-{part}.",
+   "nd": "{s} – {noun} של {dev}.",
+   "np": "{s} – {noun}, חלק מ-{part}.",
+   "n": "{s} – {noun}."
+  },
+  "cat": {
+   "microsoft-tool": ["", "כלי של Microsoft"],
+   "ai-assistant": ["", "עוזר בינה מלאכותית"],
+   "low-code-tool": ["", "כלי Low-Code"],
+   "analytics-tool": ["", "כלי ניתוח ו-BI"],
+   "identity-security-tool": ["", "כלי זהות ואבטחה"],
+   "collaboration-tool": ["", "כלי לשיתוף פעולה"],
+   "cloud-platform": ["", "פלטפורמת ענן"],
+   "developer-tool": ["", "כלי למפתחים"],
+   "business-application": ["", "אפליקציה עסקית"]
+  },
+  "type_noun": {"product": ["", "מוצר"], "platform": ["", "פלטפורמה"], "cert": ["", "הסמכה"]},
   "t": {
    "f.instance_of": {"one": "הקטגוריה של {s}: {x}.", "many": "הקטגוריות של {s}: {x}."},
    "f.part_of": "{s} – חלק מ-{x}.",
@@ -519,7 +724,11 @@
    "i.broader": "נושאי משנה של {s}: {x}.",
    "i.developed_by": "מוצרים ועבודות של {s}: {x}.",
    "i.developed_by.src:cert": "הסמכות של {s}: {x}.",
+   "i.related_to.src:person": "אנשים שעוסקים ב-{s}: {x}.",
+   "i.related_to.src:org": "חברות שעוסקות ב-{s}: {x}.",
    "i.related_to.src:job": "{s} – נושא אופייני לתפקיד {x}.",
+   "i.requires": "רכיבים הדורשים את {s}: {x}.",
+   "i.covers": "מקורות שעוסקים ב-{s}: {x}.",
    "i.covers.src:cert": {"one": "הסמכה הבודקת ידע ב-{s}: {x}.", "many": "הסמכות הבודקות ידע ב-{s}: {x}."},
    "i.created_by": "יצירות של {s}: {x}.",
    "i.organized_by": "אירועים בארגון {s}: {x}."
@@ -532,6 +741,24 @@
   "sent_sep": "",
   "join": {"sep": "、", "and": "、", "and2": "と"},
   "more": {"tail": "、{link}", "link": "ほか{n}件"},
+  "lead": {
+   "ndp": "{s}は{dev}の{noun}で、{part}の一部です。",
+   "nd": "{s}は{dev}の{noun}です。",
+   "np": "{s}は{noun}で、{part}の一部です。",
+   "n": "{s}は{noun}です。"
+  },
+  "cat": {
+   "microsoft-tool": ["", "Microsoft ツール"],
+   "ai-assistant": ["", "AI アシスタント"],
+   "low-code-tool": ["", "ローコード ツール"],
+   "analytics-tool": ["", "分析・BI ツール"],
+   "identity-security-tool": ["", "ID・セキュリティ ツール"],
+   "collaboration-tool": ["", "コラボレーション ツール"],
+   "cloud-platform": ["", "クラウド プラットフォーム"],
+   "developer-tool": ["", "開発者ツール"],
+   "business-application": ["", "ビジネス アプリケーション"]
+  },
+  "type_noun": {"product": ["", "製品"], "platform": ["", "プラットフォーム"], "cert": ["", "資格"]},
   "t": {
    "f.instance_of": "{s}は{x}のカテゴリーに属します。",
    "f.part_of": "{s}は{x}の一部です。",
@@ -571,6 +798,24 @@
   "cooc": {"heading": "함께 자주 다루는 주제", "t": "{s} 관련 에피소드에서는 {x}도 자주 다룹니다.", "heading_some": "함께 다룬 주제", "t_some": "{s} 관련 에피소드에서는 {x}도 다룹니다.", "t_one": "{s} 관련 에피소드에서는 {x}도 다룹니다.", "p": "{s}이(가) 출연하거나 언급된 에피소드에서는 {x}도 자주 다룹니다.", "p_some": "{s}이(가) 출연하거나 언급된 에피소드에서는 {x}도 다룹니다.", "p_one": "{s}이(가) 출연하거나 언급된 에피소드에서는 {x}도 다룹니다."},
   "join": {"sep": ", ", "and": " 및 "},
   "more": {"tail": " 외 {link}", "link": "{n}개"},
+  "lead": {
+   "ndp": "{s}은(는) {dev}의 {noun}이며 {part}의 일부입니다.",
+   "nd": "{s}은(는) {dev}의 {noun}입니다.",
+   "np": "{s}은(는) {noun}이며 {part}의 일부입니다.",
+   "n": "{s}은(는) {noun}입니다."
+  },
+  "cat": {
+   "microsoft-tool": ["", "Microsoft 도구"],
+   "ai-assistant": ["", "AI 도우미"],
+   "low-code-tool": ["", "로우코드 도구"],
+   "analytics-tool": ["", "분석 및 BI 도구"],
+   "identity-security-tool": ["", "ID 및 보안 도구"],
+   "collaboration-tool": ["", "공동 작업 도구"],
+   "cloud-platform": ["", "클라우드 플랫폼"],
+   "developer-tool": ["", "개발자 도구"],
+   "business-application": ["", "비즈니스 애플리케이션"]
+  },
+  "type_noun": {"product": ["", "제품"], "platform": ["", "플랫폼"], "cert": ["", "자격증"]},
   "t": {
    "f.instance_of": "{s}은(는) {x} 카테고리에 속합니다.",
    "f.part_of": "{s}은(는) {x}의 일부입니다.",

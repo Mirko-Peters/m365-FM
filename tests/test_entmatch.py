@@ -97,7 +97,7 @@ class Bericht(unittest.TestCase):
     def test_data_governance_mitten_im_satz(self):
         # 7-surprising-facts-about-copilot-for-power-bi: 'data governance' blieb unverlinkt (Muster mit Beachtung der Schreibung)
         h, al = TOP.autolink_html("<p>Copilot for Power BI depends on clean models and strong data governance across the tenant.</p>", LRN.ENTS, U)
-        self.assertIn('<a href="/entity/data-governance/" class="en-al" title="Data governance">data governance</a>', h)
+        self.assertRegex(h, r'<a href="/entity/data-governance/" class="en-al" title="Data governance(?: – [^"]*)?">data governance</a>', "title: Name, dann Kurzbeschreibung (Paket 6)")
 
     def test_react_nur_als_eigenname(self):
         t = "Star schemas make filters and visuals react quickly for users in Power BI."
@@ -127,7 +127,7 @@ class Regeln(unittest.TestCase):
         self.assertTrue(h.startswith("<h2>SharePoint basics</h2>"))
         self.assertIn("<figcaption>Power BI report</figcaption>", h)
         self.assertIn("<code>Power BI</code>", h)
-        self.assertIn('<a href="/entity/sharepoint/" class="en-al">SharePoint</a> lists', h)
+        self.assertIn('<a href="/entity/sharepoint/" class="en-al">SharePoint</a> lists', re.sub(r' title="[^"]*"', "", h))   # title = Kurzbeschreibung (Paket 6)
 
     def test_kein_selbstverweis(self):
         h, _ = TOP.autolink_html("<p>Power BI connects to Excel and Microsoft Fabric.</p>", LRN.ENTS, U, exclude=("power-bi",))
