@@ -270,8 +270,8 @@ def build(g, posts, people, api):
                     nav = f'<nav class="pages" aria-label="{esc(T(lang, "Pages", "Seiten"))}" style="margin:1em 0">{esc(T(lang, "Page", "Seite"))} {links}</nav>'
                 prev_next = ((f'<link rel="prev" href="{ru if pno == 1 else f"{ru}page/{pno}/"}">' if pno else "") + (f'<link rel="next" href="{ru}page/{pno + 2}/">' if pno + 1 < npg else ""))
                 b = shell(lang, f'{CSS}{head_html}{first_html if pno == 0 else ""}{nav}{lst(part)}{nav}')
-                write(f"{pfx2(lang)}{rel}{'' if pno == 0 else f'page/{pno + 1}/'}index.html", page(lang, title + (f" ({pno + 1})" if pno else ""), desc, pu, b, None, ld if pno == 0 else None, og_type="website", extra_head=LCSS + prev_next, noindex=noidx))
-                if not noidx:
+                write(f"{pfx2(lang)}{rel}{'' if pno == 0 else f'page/{pno + 1}/'}index.html", page(lang, title + (f" ({pno + 1})" if pno else ""), desc, pu, b, None, ld if pno == 0 else None, og_type="website", extra_head=LCSS + prev_next, noindex=noidx or pno > 0))   # Seite 2 ff. der Verzeichnisse: immer noindex,follow (Mirko 18.11.2026)
+                if not noidx and pno == 0:
                     sitemap.append((pu, (iso(part[0]["published"]) if part else TODAY), None))
         for h in sorted({p["handle"] for p in mine} | {c["handle"] for p in mine for c in (p.get("coauthors") or []) if c.get("handle") in pb}):
             noidx = not any(is_by(p, h) and _pub(p) for p in mine)

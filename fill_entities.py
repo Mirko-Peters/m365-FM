@@ -1,6 +1,6 @@
 """Entitaetsseiten fuellen: englischer SEO-Text (Sonnet, Batch) + Uebersetzung in 14 Sprachen (Haiku, Batch).
 
-Aufruf: python fill_entities.py inventory|plan|run|collect|push [--limit N] [--budget USD] [--model ID] [--no-translate] [--stale]
+Aufruf: python fill_entities.py inventory|plan|run|collect|push [--limit N] [--budget USD] [--model ID] [--no-translate] [--stale] [--rich]
   inventory  Bestandsaufnahme ohne API -> reports/entity_fill_inventory.md + data/entity_fill/todo.json
   plan       Anzahl, geschaetzte Kosten (Sonnet/Haiku, Batch = halber Preis) und Rest bis alles fertig; sendet nichts
   collect    fertige Batches abholen, pruefen, speichern
@@ -50,7 +50,13 @@ PRICES = {"claude-sonnet-5-5": (2.0, 10.0), "claude-sonnet-5": (2.0, 10.0), "cla
 BATCH_FACTOR = 0.5
 SPONSORED = ("ifakt", "polaris")   # Eigenfirma/Sponsor: nie anfassen (id == ifakt oder Praefix polaris)
 TYPE_ORDER = ("product", "platform", "cert", "concept", "org", "event", "industry", "job", "category", "media", "person")
-WRITE_OUT_TOK = {"full": 650, "desc": 70}   # Ausgabe-Token je Schreibauftrag (Schaetzung bis Messwerte da sind)
+RICH = False                  # Langtext-Modus (--rich): Entitaeten mit weniger als FD.LONG_MIN Zeichen Langtext auf >= RICH_MIN_CHARS bringen (Mirko 18.11.2026: 2500 ist das unterste Limit)
+RICH_MIN_CHARS = 2600         # Pruefgrenze des Schreibmodus (Puffer ueber der 2500-Index-Schwelle; die Uebersetzungen sind meist laenger, nicht kuerzer)
+RICH_MAX_WORDS = 900
+RICH_MAX_TOKENS = 3200        # Antwort eines Langtext-Auftrags (ca. 3.000-5.000 Zeichen + FAQ)
+RICH_MIN_SOURCE = 1500        # Zeichen belegter Quelltext (Folgen-Auszuege + Ueberblick + Kurzbeschreibung), darunter wird nicht aufgefuellt
+RICH_EXCERPT_TOK = 1500       # Schaetzung der Auszug-Token je Auftrag (plan)
+WRITE_OUT_TOK = {"full": 650, "desc": 70, "rich": 1150}   # Ausgabe-Token je Schreibauftrag (Schaetzung bis Messwerte da sind)
 LANG_FACTOR = {"ru": 2.2, "uk": 2.2, "ar": 2.2, "he": 2.2, "ja": 1.8, "ko": 2.0}   # Ausgabe-Token je Quell-Token (wie translate_blog.py)
 KEEP = ["Microsoft 365", "Microsoft Teams", "SharePoint", "OneDrive", "Copilot Studio", "Copilot", "Power BI", "Power Apps", "Power Automate", "Power Platform", "Dataverse",
         "Azure", "Entra", "Intune", "Purview", "Defender", "Sentinel", "Fabric", "Exchange Online", "Outlook", "Excel", "PowerPoint", "Word", "Viva", "Loop", "Planner",
@@ -178,8 +184,30 @@ def episodes_for(e, limit=6):
     return _EPC[ck]
 
 
-def facts_for(e, ents, eps=None):
-    """Alle Fakten, die das Modell sehen darf (und die der Hash abdeckt)."""
+_ETEXT = None
+def excerpts_for(e, limit=5, per=650, total=3600):
+    """Langtext-Modus: Auszuege aus den Show Notes der Folgen rund um die Nennung der Entitaet (belegte Quelle fuer 2500+ Zeichen)."""
+    global _ETEXT
+    if _ETEXT is None: _ETEXT = {(t, d): x for t, d, x in episodes()}
+    rxs = [re.compile(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])", re.I) for n in names_of(e)]
+    out, used = [], 0
+    for h in episodes_for(e, limit):
+        text = _ETEXT.get((h["title"], h["date"]), ""); wins, last = [], -1
+        for r in rxs:
+            for m in r.finditer(text):
+                if m.start() < last: continue
+                a, b = max(0, m.start() - 250), min(len(text), m.end() + 400); wins.append((a, b)); last = b
+                if len(wins) >= 2: break
+            if len(wins) >= 2: break
+        ex = " ... ".join(re.sub(r"\s+", " ", text[a:b]).strip() for a, b in sorted(wins))[:per]
+        if not ex or used + len(ex) > total: continue
+        used += len(ex); out.append({"title": h["title"], "date": h["date"], "excerpt": ex})
+    return out
+
+
+_GEN = None; _SRC = None
+def facts_for(e, ents, eps=None, rich=False):
+    """Alle Fakten, die das Modell sehen darf (und die der Hash abdeckt). rich: mit Folgen-Auszuegen und dem vorhandenen Ueberblickstext (beide nicht im Hash)."""
     d = e.get("desc") or {}
     rel = [{"relation": p, "name": ents[t]["name"]} for p, t in (e.get("rel") or []) if t in ents][:14]
     f = {"name": e["name"], "type": e["type"], "aliases": (e.get("aliases") or [])[:8], "short_description": d.get("en", ""), "relations": rel,
@@ -187,13 +215,28 @@ def facts_for(e, ents, eps=None):
     for k in ("job", "company", "version", "released", "license", "exam", "level"):
         if e.get(k): f[k] = e[k]
     if e.get("long", {}).get("en"): f["existing_long"] = e["long"]["en"][:1200]
+    if rich:
+        global _GEN
+        if _GEN is None: _GEN = load_gentext()
+        f["episodes"] = excerpts_for(e) if eps is None else eps
+        ov = (_GEN.get(e["id"]) or {}).get("en") or ""
+        if ov: f["overview"] = ov[:1600]
+        global _SRC
+        if _SRC is None: _SRC = FD.load_sources()
+        sx = _SRC.get(e["id"])
+        if sx and sx.get("notes"): f["sources"] = [{"title": sx["title"], "notes": sx["notes"]}]
     return f
+
+
+def source_chars(f):
+    """Zeichen belegter Quelltext eines Langtext-Auftrags."""
+    return sum(len(x.get("excerpt", "")) for x in f.get("episodes") or []) + len(f.get("overview", "")) + sum(len(x.get("notes", "")) for x in f.get("sources") or []) + len(f.get("short_description", "")) + len(f.get("existing_long", ""))
 
 
 def fhash(f):
     """Hash der Fakten OHNE die Folgenliste: eine neue Folge zwischen Absenden und Einsammeln macht einen bezahlten Text nicht ungueltig (die genannten Folgen
     stimmen weiter); aendern sich Name, Beschreibung, Beziehungen oder Links, gilt das Ergebnis als veraltet."""
-    return hsh({k: v for k, v in f.items() if k != "episodes"})
+    return hsh({k: v for k, v in f.items() if k not in ("episodes", "overview", "sources")})
 
 
 def person_has_source(e, f):
@@ -205,6 +248,10 @@ def status(e, gen, fill_en, edited, spons):
     eid = e["id"]
     if is_sponsored(eid, spons): return "sponsored", None
     if eid in edited or e.get("edited"): return "member_edited", None
+    if RICH:   # Langtext-Modus: nur redaktionell nie; Personen nicht
+        if e["type"] == "person" or (e.get("long") or {}).get("en"): return None, None
+        cur = max(len((gen.get(eid) or {}).get("en") or ""), len((fill_en.get(eid) or {}).get("long") or ""))
+        return (None, "rich") if cur < FD.LONG_MIN else (None, None)
     has_long = bool((e.get("long") or {}).get("en")) or eid in gen
     short = len((e.get("desc") or {}).get("en") or "") < FD.SHORT_DESC
     if eid in fill_en and fill_en[eid].get("desc") and (has_long or fill_en[eid].get("long")): return None, None
@@ -229,7 +276,18 @@ Output ONLY one JSON object, no markdown fences:
 "faq" has 2-3 items, or [] if the facts do not support questions. If the user asks for desc only, output {"desc": "..."} only."""
 
 
+SYSTEM_WRITE_RICH = SYSTEM_WRITE.split("Output ONLY one JSON object")[0].replace("Write for people who search for the term: first sentence defines it, then what it is used for, how it relates to the linked topics, where it appears on M365.FM (mention episode titles only if given).",
+    "Write for people who search for the term: first sentence defines it, then what it is used for, how it works, typical situations and decisions around it, how it relates to the linked topics, and what the M365.FM episodes say about it (mention episode titles in quotation marks as given).") + """The JSON contains episode excerpts (show notes of M365.FM episodes), and may contain an existing short overview and notes taken from official documentation ("sources"). Build the text from these sources only; you may restate and combine what they say, but add no fact, number, date, price, version or name that is not in the JSON. Attribute opinions and figures from episodes to the episode ("The episode ... says"). Write the whole text, including the FAQ, in English.
+LENGTH IS A HARD REQUIREMENT: the "long" text must have at least 2,700 characters and at most 5,500 characters (about 450 to 800 words), in 4-7 paragraphs separated by a blank line (\\n\\n). Reach the length with substance (definition, purpose, components or parts named in the sources, how it is used, what the episodes recommend or warn about, related topics), never with repetition or filler. If the JSON does not hold enough material for 2,700 characters, still write as much as the sources support.
+Output ONLY one JSON object, no markdown fences:
+{"desc": "<ONE sentence, 90-170 characters, also used as hover text and meta description>",
+ "long": "<the text, 2,700-5,500 characters>",
+ "faq": [{"q": "<question>", "a": "<answer of 1-3 sentences grounded in the facts>"}]}
+"faq" has 2-3 items."""
+
+
 def write_prompt(f, want):
+    if want == "rich": return "Output desc, long (at least 2,700 characters) and faq.\nFacts:\n" + json.dumps(f, ensure_ascii=False)
     ask = "Output desc, long and faq." if want == "full" else 'Output only {"desc": "..."} (the existing long text is given as context).'
     return ask + "\nFacts:\n" + json.dumps(f, ensure_ascii=False)
 
@@ -263,6 +321,22 @@ def validate_write(out, f, want):
     if re.search(r"[.!?]\s+[A-Z]", desc): return None, "desc_not_one_sentence"
     rec = {"desc": desc}
     texts = [desc]
+    if want == "rich":
+        long = (out.get("long") or "").strip(); n = len(long)
+        if n < RICH_MIN_CHARS or n > 6500 or words(long) > RICH_MAX_WORDS: return None, "long_length"
+        if not any(x.lower() in long.lower() for x in ({f["name"]} | set(f.get("aliases") or []))): return None, "name_missing"
+        blob_f = json.dumps(f, ensure_ascii=False)
+        nolong = long
+        for k in sorted(KEEP, key=len, reverse=True): nolong = nolong.replace(k, " ")   # Produktnamen mit Zahl (Microsoft 365) sind keine erfundenen Zahlen
+        if any(m not in blob_f for m in re.findall(r"\d[\d.,]*\d|\d", nolong)): return None, "invented_number"
+        rec["long"] = long; texts.append(long)
+        faq = out.get("faq") or []
+        if not isinstance(faq, list) or len(faq) > 3: return None, "faq_shape"
+        fq = []
+        for x in faq:
+            if not isinstance(x, dict) or not (x.get("q") or "").strip() or not (x.get("a") or "").strip() or len(x["q"]) > 180 or len(x["a"]) > 500: return None, "faq_shape"
+            fq.append({"q": x["q"].strip(), "a": x["a"].strip()}); texts += [x["q"], x["a"]]
+        rec["faq"] = fq
     if want == "full":
         long = (out.get("long") or "").strip()
         sparse = not (f["episodes"] or f["relations"] or f["docs_url"] or f["official_site"])
@@ -433,7 +507,7 @@ def translate_need(e, lang, src, gen, i18n, restale=False):
     got = lambda k: have.get(k) and k not in old
     d = e.get("desc") or {}; need = {}
     if "desc" in src and not got("desc") and (not d.get(lang) or d.get(lang) == d.get("en")): need["desc"] = src["desc"]
-    if "long" in src and not got("long") and not (e.get("long") or {}).get(lang) and not (gen.get(eid) or {}).get(lang): need["long"] = src["long"]
+    if "long" in src and not got("long") and not (e.get("long") or {}).get(lang) and (not (gen.get(eid) or {}).get(lang) or FD.prefer_ai((gen.get(eid) or {}).get(lang), src["long"])): need["long"] = src["long"]
     if "faq" in src and not got("faq"): need["faq"] = src["faq"]
     return need
 
@@ -461,8 +535,10 @@ def build_todo(ents, gen, fill, i18n, edited, spons, state, with_facts=False, re
             skipped.setdefault(skip, []).append(e["id"]); continue
         f = None
         if want:
-            f = facts_for(e, ents)
-            if e["type"] == "person" and not person_has_source(e, f):
+            f = facts_for(e, ents, rich=(want == "rich"))
+            if want == "rich" and source_chars(f) < RICH_MIN_SOURCE:
+                skipped.setdefault("thin_source", []).append(e["id"]); want = None
+            elif e["type"] == "person" and not person_has_source(e, f):
                 skipped.setdefault("needs_source", []).append(e["id"]); want = None
             elif tries.get("w:" + e["id"], 0) >= MAX_TRIES:
                 skipped.setdefault("max_tries", []).append(e["id"]); want = None
@@ -471,7 +547,7 @@ def build_todo(ents, gen, fill, i18n, edited, spons, state, with_facts=False, re
         if e["type"] == "person" and "needs_source" in skipped and e["id"] in skipped["needs_source"]: src = {}
         tr = {}
         for lang in LANGS:
-            need = translate_need(e, lang, src, gen, i18n, restale)
+            need = translate_need(e, lang, src, gen, i18n, restale or (RICH and want == "rich"))
             if need and tries.get(f"t:{lang}:{e['id']}", 0) < MAX_TRIES: tr[lang] = list(need)
         if tr: row["translate"] = tr   # Sprache -> fehlende Felder; gilt fuer die jetzt vorhandene en-Fassung
         elif want is None and not row.get("write"): continue
@@ -487,7 +563,7 @@ def estimate(todo, ents, gen, fill, i18n):
     for r in todo:
         e = ents[r["id"]]
         if r.get("write"):
-            w_n += 1; w_in += sys_w + tok(json.dumps(facts_for(e, ents, eps=[{"title": "x" * 70, "date": "2026-01-01"}] * 3), ensure_ascii=False))
+            w_n += 1; w_in += (sys_w if r["write"] != "rich" else tok(SYSTEM_WRITE_RICH)) + tok(json.dumps(facts_for(e, ents, eps=[{"title": "x" * 70, "date": "2026-01-01"}] * 3), ensure_ascii=False)) + (RICH_EXCERPT_TOK if r["write"] == "rich" else 0)
             w_out += WRITE_OUT_TOK[r["write"]]
     tr_sys = {l: tok(system_translate(l, [])) for l in LANGS}
     for r in todo:
@@ -583,13 +659,14 @@ def select_writes(todo, ents, budget_room, limit, state, refresh=False, busy=())
         if not r.get("write"): continue
         if limit and len(reqs) >= limit: break
         if f"w_{key(r['id'])}" in busy: continue   # schon in einem offenen Batch bezahlt
-        e = ents[r["id"]]; f = facts_for(e, ents); prompt = write_prompt(f, r["write"])
-        c = cost_cap(MODEL, nbytes(SYSTEM_WRITE, prompt), mt)
+        e = ents[r["id"]]; rich = r["write"] == "rich"; f = facts_for(e, ents, rich=rich); prompt = write_prompt(f, r["write"])
+        sysw = SYSTEM_WRITE_RICH if rich else SYSTEM_WRITE; mt_r = max_tokens(MODEL, RICH_MAX_TOKENS) if rich else mt
+        c = cost_cap(MODEL, nbytes(sysw, prompt), mt_r)
         if est_total + c > budget_room:
             print(f"Budget erreicht - Schreiben stoppt nach {len(reqs)} Auftraegen"); break
-        est_total += c; state.setdefault("d1h", {})[r["id"]] = (D1.get(r["id"]) or {}).get("h", "")   # D1-Stand zum Zeitpunkt der Beauftragung (Hash-Schutz beim Push)
-        reqs.append({"custom_id": f"w_{key(r['id'])}_{fhash(f)[:8]}", "params": {"model": MODEL, "max_tokens": mt, **thinking_off(MODEL),
-                     "system": [{"type": "text", "text": SYSTEM_WRITE, "cache_control": {"type": "ephemeral"}}],
+        est_total += c; state.setdefault("rich", {})[r["id"]] = bool(rich); state.setdefault("d1h", {})[r["id"]] = (D1.get(r["id"]) or {}).get("h", "")   # D1-Stand zum Zeitpunkt der Beauftragung (Hash-Schutz beim Push)
+        reqs.append({"custom_id": f"w_{key(r['id'])}_{fhash(f)[:8]}", "params": {"model": MODEL, "max_tokens": mt_r, **thinking_off(MODEL),
+                     "system": [{"type": "text", "text": sysw, "cache_control": {"type": "ephemeral"}}],
                      "messages": [{"role": "user", "content": prompt}]}})
     return reqs, est_total
 
@@ -663,14 +740,14 @@ def collect(ents, gen, state, edited, spons=None):
             text = "".join(x.get("text", "") for x in msg["content"] if x.get("type") == "text")
             out = parse_json(text); e = ents[eid]
             if kind == "w":
-                f = facts_for(e, ents)
+                rich_job = bool(state.get("rich", {}).get(eid)); f = facts_for(e, ents, rich=rich_job)
                 if h8 not in (fhash(f)[:8], hsh(f)[:8]):   # Fakten (ausser der Folgenliste) inzwischen geaendert: Text passt nicht mehr, zaehlt als Versuch
                     why["stale"] = why.get("stale", 0) + 1; bump(state, "w:" + eid); continue
                 _, want = status(e, gen, fill, edited, spons)
-                want = want or ("full" if not (e.get("long") or {}).get("en") and eid not in gen else "desc")
+                want = "rich" if rich_job else (want or ("full" if not (e.get("long") or {}).get("en") and eid not in gen else "desc"))
                 rec, err = validate_write(out, f, want)
                 if err: bad += 1; why[err] = why.get(err, 0) + 1; bump(state, "w:" + eid); continue
-                if eid in fill and fill[eid].get("long"): continue   # nie ueberschreiben
+                if eid in fill and fill[eid].get("long") and not (rich_job and len(fill[eid]["long"]) < FD.LONG_MIN): continue   # nie ueberschreiben (ausser: der Langtext-Modus ersetzt einen KI-Text unter der Schwelle)
                 rec.update({"h": hsh(f), "d1h": state.get("d1h", {}).get(eid) or "", "m": b["model"], "ts": datetime.now(timezone.utc).strftime("%Y-%m-%d")}); fill[eid] = rec; en_dirty = True; ok += 1
             else:
                 # bezahlte Ergebnisse annehmen, auch fuer veraltete Felder (ein Lauf mit --stale hat sie neu gekauft); vorhandene aktuelle Felder bleiben
@@ -770,7 +847,8 @@ def next_translations(todo, ents, gen, fill, state, limit):
 def main():
     args = sys.argv[1:]; mode = args[0] if args else "plan"
     opt = lambda n, d=None: args[args.index(n) + 1] if n in args else d
-    global MODEL, BUDGET
+    global MODEL, BUDGET, RICH
+    RICH = "--rich" in args or os.environ.get("ENTITY_RICH") == "1"
     if opt("--model"): MODEL = opt("--model")
     if opt("--budget"): BUDGET = float(opt("--budget"))
     check_models(MODEL, TMODEL)
