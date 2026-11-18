@@ -251,7 +251,8 @@ class OtherPlaces(unittest.TestCase):
         h2, _ = m.link_html("<p>A Star schema keeps facts.</p>", lambda i: f"/entity/{i}/", lang="en")
         self.assertNotIn("title=", h2)
         h3, _ = m.link_html("<p>A Star schema keeps facts.</p>", lambda i: f"/ar/entity/{i}/", lang="ar")
-        self.assertIn('class="en-al"><bdi>Star schema</bdi></a>', h3, "RTL: lateinischer Linktext in <bdi>")
+        self.assertIn('class="en-al"><bdi lang="en">Star schema</bdi></a>', h3, "RTL: lateinischer Linktext in <bdi>, englischer Begriff mit lang (Paket 5)")
+        self.assertIn('title="Sternschema" lang="en">Star schema</a>', h, "Wortlaut des Satzes bleibt, englisches Wort mit lang (Paket 5)")
 
     def test_suchindex_liest_alternatename_mit_sprache(self):
         import site_search as SS

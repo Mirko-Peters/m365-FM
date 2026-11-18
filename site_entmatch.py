@@ -242,9 +242,25 @@ class Matcher:
                 if f.proper and not f.is_name and " " not in f.text:
                     f.sib = frozenset(heads.get(f.text, set()) - {f.eid})
         gen = [k for k, fs in self.forms.items() if any(f.langs is None for f in fs)]
-        self.rx = re.compile(r"(?<![\w-])(" + _trie(gen) + r")(?![\w-])", re.I) if gen else None   # sprachneutral (EN-Seiten, Schlagwoerter)
-        self.rx_lang = (re.compile(r"(?<![\w-])(" + _trie(self.forms) + r")(?![\w-])", re.I)
+        tg = _trie(gen) if gen else ""
+        tl = _trie(self.forms) if len(gen) < len(self.forms) else tg
+        self.rx = re.compile(r"(?<![\w-])(" + tg + r")(?![\w-])", re.I) if gen else None   # sprachneutral (EN-Seiten, Schlagwoerter)
+        self.rx_lang = (re.compile(r"(?<![\w-])(" + tl + r")(?![\w-])", re.I)
                         if len(gen) < len(self.forms) else self.rx)   # mit den Namen in den Seitensprachen (raw mit lang)
+        self._tries, self._rxc = {"gen": tg, "lang": tl}, {}
+
+    def _rx_of(self, kind):
+        """Spaet gebaute Muster (nur bei Bedarf, je Index einmal): "open:gen"/"open:lang" ohne rechte Wortgrenze (laengste Form an einer Stelle),
+        "cjk" mit Wortgrenze nur gegen lateinische Zeichen (ja/ko: "Microsoft 365エコシステム", "Teams를", "とCopilot Studioの")."""
+        if kind not in self._rxc:
+            t = self._tries["lang" if kind != "open:gen" else "gen"]
+            if not t:
+                self._rxc[kind] = None
+            elif kind == "cjk":
+                self._rxc[kind] = re.compile(r"(?<![A-Za-z0-9_-])(" + t + r")(?![A-Za-z0-9_-])", re.I)
+            else:
+                self._rxc[kind] = re.compile(r"(?<![\w-])(" + t + r")", re.I)
+        return self._rxc[kind]
 
     # ---------------------------------------------------------------- Formen
     def _forms_of(self, e):
@@ -409,8 +425,10 @@ class Matcher:
         """Alle Kandidaten-Treffer: [(start, end, text, [Form])], laengste Form zuerst, ohne Ueberlappung. lang: Sprache des Textes (Namen in dieser
         Sprache gelten mit); ohne lang nur die sprachneutralen Formen."""
         out = []
-        rx = self.rx_lang if lang and lang != "en" else self.rx
+        cjk = lang in CJK_LANGS
+        rx = self._rx_of("cjk") if cjk else self.rx_lang if lang and lang != "en" else self.rx
         if not rx or not plain: return out
+        rxo = self._rx_of("open:lang" if lang and lang != "en" else "open:gen")
         def acc(t):
             fs = [f.low if f.low is not None and t[:1].islower() else f
                   for f in self.forms.get(t.lower(), ()) if f.accepts(t) and (f.langs is None or (lang and lang in f.langs))]
@@ -422,18 +440,52 @@ class Matcher:
             m = rx.search(plain, pos)
             if not m: break
             s0, e0, t = m.start(1), m.end(1), m.group(1)
-            fs = acc(t)
+            fs = []
+            # ja/ko: Namen in Schriftzeichen stehen als ganzes Wort, auf ko/ja-Seiten auch mit Partikel ("SharePoint 권한으로", "Azure ランディング
+            # ゾーンを"); passt der Name an dieser Stelle nicht, gilt die kuerzere Form an derselben Stelle ("SharePoint"), wie bei lateinischen Namen
+            if not cjk or _cjk_ok(plain, s0, e0, lang):
+                lg = self._longer(plain, s0, e0, rxo, acc)
+                if lg is not None:   # laengere Form an derselben Stelle scheitert nur an der Wortgrenze: sie gilt, nie ihr Anfang (Microsoft 365-Umgebung)
+                    if lg:
+                        out.append((s0, lg[0], plain[s0:lg[0]], lg[1])); pos = lg[0]
+                    else:
+                        pos = s0 + 1
+                    continue
+                fs = acc(t)
             while not fs and e0 - 1 > s0:   # laengste Form passt nicht (z. B. "SharePoint lists" klein): kuerzere Form an derselben Stelle
                 mm = rx.match(plain, s0, e0 - 1)
                 if not mm: break
                 e0, t = mm.end(1), mm.group(1)
-                if e0 < n and (plain[e0].isalnum() or plain[e0] in "_-"): continue
+                if (not _cjk_ok(plain, s0, e0, lang)) if cjk else (e0 < n and (plain[e0].isalnum() or plain[e0] in "_-")): continue
                 fs = acc(t)
             if fs:
                 out.append((s0, e0, t, fs)); pos = e0
             else:
                 pos = s0 + 1
         return out
+
+    @staticmethod
+    def _longer(plain, s0, e0, rxo, acc):
+        """Laengere Form an der Stelle s0 als der Treffer (s0, e0), die nur an der rechten Wortgrenze scheitert: None, wenn es keine gibt; sonst
+        (Ende, [Form]) fuer eine, die gilt (gefolgt von Bindestrich und Buchstabe: deutsches Kompositum "Microsoft 365-Umgebung", "Copilot
+        Studio-Agent"; gefolgt von Schriftzeichen ohne Leerzeichen: "Microsoft MVPで", "Microsoft 365와"), oder () fuer eine, deren kuerzerer
+        Anfang einer anderen Entitaet gehoeren wuerde und deshalb nicht als Treffer gilt (Nachweis Paket 5: Microsoft 365-Umgebung -> "Microsoft")."""
+        if rxo is None: return None
+        end, found = len(plain), None
+        while True:
+            mm = rxo.match(plain, s0, end)
+            if not mm or mm.end(1) <= e0: return found
+            e1 = mm.end(1)
+            if e1 < len(plain) and plain[e1] != " ":
+                c, d = plain[e1], plain[e1 + 1:e1 + 2]
+                if ((c in "-\u2010" and (d.isalpha() or d == " ")) or _NONLATIN.match(c)   # "365-Umgebung", "365- und Power Platform", "365エコ"
+                        or (c == "s" and not (d.isalnum() or d in "_-"))):   # Plural: "Microsoft MVPs"
+                    fs = acc(plain[s0:e1])
+                    if fs: return (e1, fs)
+                    found = ()   # Form passt nur in anderer Schreibung: nicht verlinken, aber auch nicht den Anfang
+                # sonst (Wortteil: "Microsoft Teamsraum") wie bisher die kuerzere Form
+            end = e1 - 1
+            if end <= e0: return found
 
     def resolve(self, plain, lang="en", ctx=(), hits=None):
         """Angenommene Nennungen [(start, end, text, id)] in der Reihenfolge des Textes. ctx: ids der Seite (eigene Entitaet, Themen, Kategorie)."""
@@ -553,6 +605,7 @@ class Matcher:
         P = "".join(plain)
         C = set(ctx or ()) | {i for i in used if i not in HOST}
         hits = self.resolve(P, lang, C)
+        hits = self._outside_titles(P, hits)   # zitierte Titel, Folgentitel, Namenszusaetze ("[MVP]"): Kontext ja, Link nein
         if not hits: return _restore(html, keep), []
         # Treffer auf editierbare Textstuecke abbilden
         spans = [(off, off + len(tok), n) for n, (tok, off, ed) in enumerate(pieces) if ed and off >= 0]
@@ -576,11 +629,211 @@ class Matcher:
                     extra = attrs(i, t) if attrs else ""
                     ti = "" if t == nm or "title=" in extra else f' title="{_esc(nm)}"'
                     inner = tok[a:b]
+                    en = self._english_word(t, i, lang)   # Linktext bleibt das Wort des Satzes; ein englischer Begriff im fremdsprachigen Satz traegt lang="en"
                     if lang in EN.RTL and re.search(r"[A-Za-z]", inner):
-                        inner = f"<bdi>{inner}</bdi>"   # ar/he: lateinischer Name isoliert wie in allen anderen Bloecken (A11Y-7, "SharePoint Framework (SPFx)")
+                        inner = f'<bdi lang="en">{inner}</bdi>' if en else f"<bdi>{inner}</bdi>"   # ar/he: lateinischer Name isoliert wie in allen anderen Bloecken (A11Y-7, "SharePoint Framework (SPFx)")
+                    elif en:
+                        extra += ' lang="en"'
                     tok = tok[:a] + f'<a href="{_esc(u)}" class="{cls}"{ti}{extra}>{inner}</a>' + tok[b:]
             out.append(tok)
         return _restore("".join(out), keep), links
+
+
+    def _english_word(self, t, i, lang):
+        """Linktext t (Wortlaut des Satzes) ist ein englischer Begriff auf einer Nicht-EN-Seite: Begriff (kein Eigenname, keine Abkuerzung), dessen
+        Wortlaut keine Form in der Sprache der Seite ist ("Conditional Access" im deutschen Satz, deutscher Name "Bedingter Zugriff" im title).
+        Uebersetzt wird nichts (Mirko: Linktext im Wortlaut des Satzes); das Merkmal lang="en" gilt wie bei den Listen (site_ename.html_name)."""
+        if not lang or lang == "en": return False
+        e = self.live.get(i) or {}
+        if e.get("type") in PROPER or not re.search(r"[A-Za-z]", t) or re.fullmatch(r"[A-Z0-9][A-Z0-9&./+-]*s?", t): return False
+        loc = (e.get("names") or {}).get(lang) if isinstance(e.get("names"), dict) else None
+        if loc and loc.casefold() == t.casefold(): return False
+        if any(f.eid == i and f.langs is not None and lang in f.langs for f in self.forms.get(t.lower(), ())): return False
+        # Klammerzusatz des Linktexts zaehlt nicht ("robotic process automation (RPA)")
+        mt = _PAREN.match(t)
+        if mt and mt.group(1): t = mt.group(1)
+        # der englische Name selbst (ohne Klammerzusatz, auch mit/ohne Bindestrich, Plural) oder sein Klammerzusatz ("IoT" bei "Internet of Things (IoT)")
+        n = (e.get("name") or "").strip()
+        m = _PAREN.match(n)
+        x = _ennorm(t)
+        if any(x in (y, y + "s", y + "es") or y == x + "s" for y in {_ennorm(n), *([_ennorm(m.group(1)), _ennorm(m.group(2))] if m else [])} if y):
+            return True
+        if re.fullmatch(r"[A-Za-z]{2,8}", t) and t[1:] != t[1:].lower():   # Abkuerzung in gemischter Schreibung aus den Anfaengen des englischen Namens ("IaC")
+            if "".join(w[0] for w in re.findall(r"[A-Za-z][A-Za-z0-9]*", m.group(1) if m else n)).casefold() == t.casefold(): return True
+        # Alias: Aliase tragen keine Sprache und sind oft deutsch ("Zwei-Faktor-Authentifizierung", "KI-Verordnung", "Fertigung", "IT-Leiter"); ein
+        # deutsches Wort mit lang="en" liest ein Screenreader falsch. Englisch ist ein Alias, dessen Woerter alle im englischen Wortschatz des Index
+        # stehen (englische Namen und Beschreibungen aller Eintraege): "Landing Zone", "Data Analysis Expressions", "lifecycle workflows", "dataset";
+        # Abkuerzungen in gemischter Schreibung nur in genau dieser Schreibung ("OAuth", "IaC", "SaaS"), deutsche Buchstaben (ä ö ü ß) nie
+        return self._en_vocab_has(t)
+
+    def _en_vocab_has(self, t):
+        if re.search(r"[^\x00-\x7f\u2010-\u2014’]", t): return False
+        ws = re.findall(r"[A-Za-z][A-Za-z0-9]*|\d+", t)
+        if not ws: return False
+        low, exact = self._en_vocab()
+        for w in ws:
+            if w.isdigit(): continue
+            if (w[1:] != w[1:].lower()) or (len(w) > 1 and w.isupper()):   # Abkuerzung ("OAuth", "IT"): nur in dieser Schreibung
+                if w not in exact and not (w.endswith("s") and w[:-1] in exact): return False
+            else:
+                c = w.casefold()
+                if c in _DE_FUNC or not (c in low or (c.endswith("s") and c[:-1] in low) or (c.endswith("es") and c[:-2] in low)): return False
+        return True
+
+    def _en_vocab(self):
+        """Englischer Wortschatz des Index (einmal je Index) -> (klein, wie geschrieben): Woerter der englischen Namen und Beschreibungen der
+        Begriffe und Produkte, ohne Personen, Firmen, Veranstaltungen und Medien (Lebenslaeufe und Namen, oft deutsch) und ohne Saetze, die ein
+        deutsches Wort nennen ("Corresponds to the German Werksleiter", "Known in German as Wertstrommanager")."""
+        if getattr(self, "_env", None) is None:
+            exact = set()
+            for e in self.live.values():
+                if e.get("type") in ("person", "org", "event", "media"): continue
+                d = e.get("desc")
+                d = d.get("en") if isinstance(d, dict) else d if isinstance(d, str) else ""
+                txt = " ".join([e.get("name") or ""] + [x for x in re.split(r"(?<=[.!?])\s+", d or "") if not _GERMAN_REF.search(x)])
+                exact.update(re.findall(r"[A-Za-z][A-Za-z0-9]*", txt))
+            self._env = ({w.casefold() for w in exact}, exact)
+        return self._env
+
+    def _outside_titles(self, P, hits):
+        """Treffer ohne die Stellen, an denen ein Link mitten in einem fremden Titel oder Zitat saesse (Messung Paket 4, misses 3):
+        - in Anfuehrungszeichen („…“ "…" “…” «…» »…« 「…」 『…』) um einen Titel (Titel-Schreibung, _title_like: "Power Apps Code Apps with Carike
+          Botha [MVP]", "Azure Policy - Simply Explained"); ein zitierter Prompt oder Satz ("Create a checklist in Planner.") und ein Zitat, das genau
+          der Begriff ist ("“single source of truth”", «privilegio mínimo»), behalten ihren Link;
+        - im Folgentitel ohne Anfuehrungszeichen nur bei eindeutigem Muster (_episode_title_zones: "Episode: …", "the episode Power Apps Code Apps
+          with Carike Botha [MVP]"), nie nach "this episode";
+        - Person mit Namenszusatz in eckigen Klammern ("Carike Botha [MVP]") in einer Titel-Reihe, und nie im Zusatz selbst.
+        Die Treffer bleiben Kontext (resolve lief vorher); verlinkt wird die naechste Nennung ausserhalb."""
+        if not hits: return hits
+        zones = _quote_zones(P) + _episode_title_zones(P)
+        suffix = [(m.start(1), m.end(1)) for m in _NAMED_SUFFIX.finditer(P)]   # Zusatz nach einem Namen ("Carike Botha [MVP]")
+        suffix += [(e, _NAME_SUFFIX.match(P, e).end()) for s, e, t, i in hits if (self.live.get(i) or {}).get("type") == "person" and _NAME_SUFFIX.match(P, e)]
+        out = []
+        for s, e, t, i in hits:
+            z = next((q for q in zones if q[0] <= s and e <= q[1]), None)
+            if z and z[2] != t and (z[2] is None or _title_like(z[2])): continue
+            if any(a <= s and e <= b for a, b in suffix): continue   # im Namenszusatz selbst
+            if (self.live.get(i) or {}).get("type") == "person" and _NAME_SUFFIX.match(P, e) and self._titleish(P, s, e): continue   # "… with Shubhangi Goyal [MVP] How …": Titel-Reihe
+            out.append((s, e, t, i))
+        return out
+
+
+_DE_FUNC = {"als", "und", "der", "die", "das", "den", "dem", "des", "mit", "von", "zur", "zum", "im", "ist", "fuer", "ein", "eine", "oder", "bei"}   # deutsche Funktionswoerter im Alias
+_GERMAN_REF = re.compile(r"\bGerman(?:y)?\b|\bDACH\b")   # Satz der englischen Beschreibung, der ein deutsches Wort nennt
+_ennorm = lambda x: re.sub(r"[\s\-\u2010-\u2014]+", "", x or "").casefold()
+CJK_LANGS = {"ja", "ko", "zh"}
+_NONLATIN = re.compile(r"[\u1100-\u11ff\u3040-\u30ff\u3130-\u318f\u3400-\u4dbf\u4e00-\u9fff\uac00-\ud7af\uf900-\ufaff\uff66-\uff9f]")
+
+
+_LATIN_W = re.compile(r"[A-Za-z0-9_-]")
+# Partikel direkt nach einem Namen (ohne Leerzeichen): ko auch gestapelt ("으로는", "에서도") und Plural "들", danach kein Hangul mehr; ja nur das
+# erste Zeichen (danach geht der Satz ohne Leerzeichen weiter)
+_KO_PART = sorted("이 가 을 를 은 는 의 에 에서 에게 께 한테 로 으로 와 과 도 만 까지 부터 보다 처럼 이나 나 랑 이랑 하고 마다 조차 라도 이라도 밖에 뿐 "
+                  "이다 입니다 이며 이고 인 이란 란 이라는 라는 으로서 로서 으로써 로써 별 및".split(), key=len, reverse=True)
+_KO_PART_RX = re.compile(r"(?:들|들?(?:" + "|".join(_KO_PART) + r"){1,3})(?![\uac00-\ud7af])")
+_JA_PART_RX = re.compile(r"(?:を|は|が|の|に|で|と|も|へ|や|から|まで|より|など|って)")
+
+
+def _cjk_ok(P, s, e, lang):
+    """ja/ko: Treffer (s, e) steht an Wortgrenzen. Lateinische Enden grenzen nur gegen lateinische Zeichen ab ("Teams를", "とCopilot Studioの"),
+    Enden in Schriftzeichen gegen jedes Wortzeichen; ein gemischter Name (lateinisch + Schriftzeichen: "SharePoint 권한", "Azure ランディング
+    ゾーン") darf rechts eine Partikel tragen ("SharePoint 권한으로", "Azure ランディング ゾーンを")."""
+    t = P[s:e]
+    if not t: return False
+    left_w = (lambda c: c.isalnum() or c in "_-") if _NONLATIN.match(t[0]) else _LATIN_W.match
+    if s > 0 and left_w(P[s - 1]): return False
+    if e >= len(P): return True
+    c = P[e]
+    if not _NONLATIN.match(t[-1]):
+        return not _LATIN_W.match(c)
+    if not (c.isalnum() or c in "_-"): return True
+    if not _LATIN_W.search(t): return False   # Name nur in Schriftzeichen: weiter nur als ganzes Wort ("条件付きアクセス")
+    rx = _KO_PART_RX if (lang or "")[:2] == "ko" else _JA_PART_RX if (lang or "")[:2] == "ja" else None
+    return bool(rx and rx.match(P, e))
+
+
+_QPAIRS = {"„": "“”\"", "“": "”", "\"": "\"", "«": "»", "»": "«", "「": "」", "『": "』"}
+_QENT_CH = {"&quot;": "\"", "&#34;": "\"", "&#x22;": "\"", "&bdquo;": "„", "&#8222;": "„", "&ldquo;": "“", "&#8220;": "“", "&rdquo;": "”", "&#8221;": "”",
+            "&laquo;": "«", "&#171;": "«", "&raquo;": "»", "&#187;": "»"}
+_QENT = re.compile("|".join(re.escape(k) for k in _QENT_CH), re.I)
+_QTRIM = " \u00a0\t.,;:!?…"
+_NAME_SUFFIX = re.compile(r"[^\S\n]*\[[^\]\n]{1,30}\]")
+_NAMED_SUFFIX = re.compile(r"(?<![\w-])[A-Z][\w'’-]+[^\S\n]+[A-Z][\w'’-]+[^\S\n]*(\[[^\]\n]{1,30}\])")
+_EP_WORD = re.compile(r"(?<![\w-])(?<!this )(?<!This )(?<!that )(?<!each )(?<!every )(?<!next )(?<!our )(?<!dieser )(?<!jeder )(?<!nächsten )"
+                      r"((?i:episode|épisode|episodio|episódio|aflevering|odcinek|odcinku|выпуск|епізод)|Folge)(?:[^\S\n]+#?\d+)?"
+                      r"(?:[^\S\n]*([:–—])|[^\S\n]+(-)(?=[^\S\n]))?[^\S\n]+")   # Gruppe 2/3: Markierung "Episode:", "Folge –", "Episode 12 - …"
+_EP_DEM = {"this", "that", "each", "every", "next", "our", "dieser", "diese", "jeder", "nächsten", "neste", "nesta", "deste", "este", "esta", "cette",
+           "ce", "cet", "questo", "quest", "dit", "deze", "ten", "tym", "этот", "этом", "цей", "цьому"}   # "this episode": kein Titel danach
+_EP_CONN = {"with", "and", "of", "the", "in", "for", "to", "a", "an", "vs", "vs.", "on", "&", "-", "–", "—", ":", "mit", "und", "für", "von", "der", "die", "das", "im"}
+
+
+_TITLE_STOP = {"and", "or", "of", "the", "a", "an", "for", "in", "on", "to", "with", "vs", "at", "by", "from", "is", "und", "oder", "der", "die", "das", "für",
+               "mit", "im", "von", "zu", "de", "la", "le", "les", "et", "des", "du", "el", "y", "en", "los", "las", "di", "il", "e", "del", "van", "het", "een",
+               "w", "i", "z", "do", "da", "dos", "um", "uma"}
+
+
+def _title_like(c):
+    """Zitat-Inhalt in Titel-Schreibung: mindestens zwei bedeutungstragende lateinische Woerter, davon mindestens drei Viertel gross geschrieben
+    (Folgen- und Artikeltitel); Saetze, Prompts und Begriffe in Satzschreibung sowie Text ohne lateinische Woerter (ja/ko) sind kein Titel.
+    Gemessen an 2.000 Zitat-Links im Vollbau (Paket 5): Titel-Schreibung trennt Folgentitel von zitierten Prompts."""
+    ws = [w for w in re.findall(r"[^\W\d_][\w'’-]*", c or "") if w.lower() not in _TITLE_STOP]
+    return len(ws) >= 2 and sum(1 for w in ws if w[:1].isupper()) >= 0.75 * len(ws)
+
+
+def _quote_zones(P):
+    """Inhalt aller Anfuehrungszeichen-Paare innerhalb einer Zeile (Block), hoechstens 300 Zeichen: [(start, ende, Inhalt ohne Rand)] ohne die Zeichen selbst."""
+    out, op, st = [], None, 0
+    P = _QENT.sub(lambda m: _QENT_CH[m.group(0).lower()] + " " * (len(m.group(0)) - 1), P)   # &quot; &bdquo; … wie das Zeichen (gleiche Laenge)
+    for k, ch in enumerate(P):
+        if ch == "\n":
+            op = None; continue
+        if op is None:
+            if ch in _QPAIRS and not (ch == "\"" and k and P[k - 1].isalnum() and k + 1 < len(P) and not P[k + 1].isalpha()):   # 12" Bildschirm
+                op, st = ch, k + 1
+        elif ch in _QPAIRS[op]:
+            if k - st <= 300: out.append((st, k, P[st:k].strip(_QTRIM)))
+            op = None
+        elif k - st > 300:
+            op = None
+    return out
+
+
+_EP_IN = {"in", "im", "into", "covered", "dans", "en", "nella", "nel", "w", "dalam", "no", "na", "em", "в", "у"}   # Praeposition vor "episode:": Aufzaehlung folgt
+
+
+def _episode_title_zones(P):
+    """Folgentitel ohne Anfuehrungszeichen, nur bei eindeutigem Muster (Mirko: lieber ein Link zu viel in Prosa als ein echter Titel verlinkt):
+    - ausdruecklich markiert: "Episode: …", "Folge – …", "From the episode: …", "Épisode 12 : …": Woerter in Titel-Schreibung (mind. zwei gross
+      geschriebene) bis zum ersten klein geschriebenen Wort, Satzende oder Zeilenende; Kommas gehoeren dazu ("Episode: Power BI, Fabric and AI");
+    - Titel-Reihe nach "episode"/"Folge"/… mit Namenszusatz am Ende ("the episode Power Apps Code Apps with Carike Botha [MVP], …").
+    Sonst ist die Reihe ein Satz und behaelt ihre Links, in allen Sprachen gleich: "In the episode Microsoft MVP Andre Baltieri, a Power
+    Platform expert, explains …", "In der Folge Microsoft Teams Premium, Copilot Studio und Power BI geht es um …", "In an episode of Microsoft
+    Teams Premium training …", "Dans l'épisode Microsoft MVP Andre Baltieri explique …", "Episode Highlights: Power BI, …"."""
+    out = []
+    for m in _EP_WORD.finditer(P):
+        k, caps, end, suf, mark = m.end(), 0, m.end(), False, bool(m.group(2) or m.group(3))
+        pw = re.search(r"([^\W\d_]+)[^\S\n]+$", P[max(0, m.start() - 20):m.start()])
+        pw = pw.group(1).lower() if pw else ""
+        if pw in _EP_DEM or (m.group(1) == "Folge" and pw in ("die", "zur", "als")):
+            continue
+        pw2 = [x.lower() for x in re.findall(r"[^\W\d_]+", P[max(0, m.start() - 30):m.start()])[-2:]]
+        if (m.group(2) or m.group(3)) and any(x in _EP_IN for x in pw2):
+            continue   # "Topics covered in the episode: Power BI, …", "In der Folge: Power BI, …": Einleitung einer Aufzaehlung, kein Titel ("From the episode: …" bleibt Titel)   # "Neste Episódio: …" (in dieser Folge, Liste folgt); "Die Folge: Wenn Copilot eingeführt wird, …" (Folge = Konsequenz)
+        for w in re.finditer(r"\[[^\]\n]{1,30}\]|[^\s,.;!?()\[\]\n]+|[,.;!?()\n]", P[k:k + 220]):
+            x = w.group(0)
+            if x == "," and mark: continue
+            if x[0] in ",.;!?()\n": break
+            if x.startswith("["):
+                end, suf = k + w.end(), True; continue
+            if suf: break   # nach dem Zusatz beginnt der Satz
+            if mark:   # markiert: alles bis Satz- oder Zeilenende, danach Titel-Schreibung des Ganzen (_title_like)
+                end = k + w.end(); caps += x[:1].isupper() or x[:1].isdigit(); continue
+            if x.lower() in _EP_CONN: continue
+            if x[:1].isupper() or x[:1].isdigit():
+                caps += 1; end = k + w.end(); continue
+            break
+        if (mark and caps >= 2 and _title_like(P[k:end])) or (suf and caps >= 3): out.append((m.end(), end, None))
+    return out
 
 
 _SKIP = re.compile(r"<(a|h[1-6]|code|pre|script|style|figure|figcaption|summary|button|svg|title|nav|textarea|select|label|kbd|samp|time)\b[^>]*>.*?</\1\s*>", re.S | re.I)
