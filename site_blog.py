@@ -298,9 +298,9 @@ def _fallback_en_index(g, posts, pb, written, shell):
     BASE, write, page = g["BASE"], g["write"], g["page"]
     by = {}
     for p in posts:
-        if is_translation(p):
+        if is_translation(p) or p.get("lang") not in COMM_LANGS:   # nur Beitraege, deren Seite dieser Bau auch schreibt (Teilbau mit SITE_LANGS)
             continue
-        for h in [p["handle"]] + [c["handle"] for c in (p.get("coauthors") or []) if c.get("handle") in pb]:
+        for h in dict.fromkeys([p["handle"]] + [c["handle"] for c in (p.get("coauthors") or []) if c.get("handle") in pb]):   # je Autor einmal, auch bei doppelten Co-Autoren
             if ("en", h) not in written:
                 by.setdefault(h, []).append(p)
     for h, items in sorted(by.items()):

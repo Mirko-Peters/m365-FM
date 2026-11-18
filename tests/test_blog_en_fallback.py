@@ -54,6 +54,20 @@ class EnglischeUebersicht(unittest.TestCase):
         self.assertIn(NOTE, files["community/u/ben/blog/index.html"])
         self.assertIn(f"{BASE}/de/community/u/anna/blog/eins/", files["community/u/ben/blog/index.html"])
 
+    def test_doppelte_co_autoren_nur_einmal(self):
+        people = [{"handle": "anna", "name": "Anna"}, {"handle": "ben", "name": "Ben"}]
+        files, _, _ = build([post("eins", coauthors=[{"handle": "anna"}, {"handle": "ben"}, {"handle": "ben"}])], people)
+        for h in ("anna", "ben"):
+            self.assertEqual(1, files[f"community/u/{h}/blog/index.html"].count(f"{BASE}/de/community/u/anna/blog/eins/"), h)
+
+    def test_sprache_ausserhalb_des_baus_wird_nicht_verlinkt(self):
+        from unittest.mock import patch
+        with patch.object(BLG, "COMM_LANGS", ("en", "de")):
+            files, _, _ = build([post("eins"), post("deux", lang="fr", published=None)])
+        h = files["community/u/anna/blog/index.html"]
+        self.assertIn(f"{BASE}/de/community/u/anna/blog/eins/", h)
+        self.assertNotIn("/fr/community/", h)
+
     def test_brotkrumen_blog_in_der_sprache_des_beitrags(self):
         _, pages, _ = build([post("eins")])
         ld = pages[f"{BASE}/de/community/u/anna/blog/eins/"]["ld"]
