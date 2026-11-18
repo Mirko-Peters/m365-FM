@@ -1,6 +1,6 @@
-# Spreaker-Feed gegen geschriebene Shownotes (2026-11-18T04:29Z)
+# Spreaker-Feed gegen geschriebene Shownotes (2026-11-18T06:36Z)
 
-Geschrieben: 643 · im Feed: 613 · Text gleich: 613 · alle m365-Links im Feed: 613
+Geschrieben: 643 · im Feed: 612 · Text gleich: 612 · alle m365-Links im Feed: 612
 
 | Folge | im Feed | Text gleich | Links Datei | Links Feed | HTML im Feed |
 |---|---|---|---|---|---|
@@ -34,7 +34,7 @@ Geschrieben: 643 · im Feed: 613 · Text gleich: 613 · alle m365-Links im Feed:
 | 67887106 | nein | nein |  |  | nein |
 | 67911130 | nein | nein |  |  | nein |
 | 67927584 | nein | nein |  |  | nein |
-| 67929056 | ja | ja | 7 | 7 | ja |
+| 67929056 | nein | nein |  |  | nein |
 | 67947670 | ja | ja | 6 | 6 | ja |
 | 68001880 | ja | ja | 6 | 6 | ja |
 | 68086528 | ja | ja | 6 | 6 | ja |
