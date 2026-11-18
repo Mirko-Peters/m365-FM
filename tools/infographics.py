@@ -30,6 +30,7 @@ SIZES = {"flow": (1920, 1080), "compare": (1200, 1040), "ladder": (1200, 1800), 
 FIG_TEMPLATES = ("flow", "compare", "ladder", "hub")   # bigfact ist dem Kopfbild vorbehalten
 MAX_TRIES = 3          # Textversuche je Inhalt/Sprache (ab dem zweiten mit Rueckmeldung der Pruefung)
 RENDER_TRIES = 2       # Layoutfehler sind immer gleich: nach zwei Versuchen nicht mehr rendern
+EN_SLACK = 1.15    # englische Texte duerfen die Grenze um 15 % ueberschreiten (die KI zaehlt Zeichen nicht genau; Stresstest bestand bis x 1,4)
 LANG_FACTOR = 1.4   # Textgrenzen der Uebersetzungen: Englisch x 1,4 (Deutsch/Russisch laenger); die Layoutpruefung beim Rendern ist die endgueltige Grenze
 OUT_EST, IN_EST_SPECS, IN_EST_TR = 1300, 2100, 1700   # Token-Schaetzung je Anfrage (aus dem Testlauf)
 BATCH_MAX = 500   # kleine Teile: ein Zeitueberschreiten beim Senden betrifft wenig, Ergebnisse kommen frueher
@@ -177,7 +178,7 @@ def check_spec(spec, lang="en", template=None):
     if not isinstance(spec, dict): return "kein Objekt"
     t = spec.get("template")
     if t not in LIMITS or (template and t != template): return f"Vorlage {t!r}"
-    f = 1 if lang == "en" else LANG_FACTOR
+    f = EN_SLACK if lang == "en" else LANG_FACTOR
     for k, lim in LIMITS[t].items():
         v = _get(spec, k)
         if isinstance(lim, tuple):
