@@ -22,6 +22,11 @@ Regeln (Mirko, 17.11.2026):
   entscheidet der Kontext; kurze Abkuerzungen, die nicht den eigenen Namen buchstabieren (IAM, MVP, CEO), brauchen Stuetze; ein Konzept-Alias ohne
   gemeinsames Wort mit dem Namen nur, wenn die Seite von der Entitaet handelt; Kurznamen mit Zusatz nicht als Verb, Befehl oder nach "that".
 
+Namen in der Sprache der Seite (site_ename, Feld names; Gegenpruefung Paket 4): names[lang] sind sprachgebundene Formen. Sie gelten nur, wenn der Text
+in dieser Sprache erkannt wird (resolve/ids/link_html mit lang), nie auf EN-Seiten und nicht fuer Schlagwoerter (ids_tags) oder die Themen der
+Beitraege (score_topics, Englisch). Fuer sie gelten dieselben Regeln wie fuer den englischen Namen (Allerweltswoerter, Branche nur mit Hinweis,
+Kontext bei Mehrdeutigkeit); ein Zusatz in Klammern wird abgetrennt wie beim Namen ("Verhinderung von Datenverlust (DLP)").
+
 Kontext-Links (link_html): jede Entitaet nur bei der ersten Nennung je Seite, ohne Obergrenze, nie in Ueberschriften, Links, Code, Bildunterschriften,
 Fragen-Ueberschriften (summary), Knoepfen oder Vorlagen-Bausteinen (div.listen-to-box, data-nolink), keine Selbstverweise. Linktext ist das Wort, wie es im Satz steht (Sprache der Seite); weicht es vom
 kanonischen Namen ab, steht der Name im title. Bestehende Entitaets-Links (z. B. a.gl der Show Notes) zaehlen als erste Nennung; weitere Links auf
@@ -130,13 +135,15 @@ class Used(dict):
 
 
 class Form:
-    __slots__ = ("text", "eid", "mode", "common", "qual", "is_name", "proper", "is_abbr", "ctxabbr", "own", "sib")
+    __slots__ = ("text", "eid", "mode", "common", "qual", "is_name", "proper", "is_abbr", "ctxabbr", "own", "sib", "langs", "low")
 
-    def __init__(self, text, eid, mode, common, qual, is_name, proper, is_abbr=False, ctxabbr=False, own=False):
+    def __init__(self, text, eid, mode, common, qual, is_name, proper, is_abbr=False, ctxabbr=False, own=False, langs=None):
         self.text, self.eid, self.mode, self.common, self.qual, self.is_name, self.proper, self.is_abbr = text, eid, mode, common, qual, is_name, proper, is_abbr
         self.ctxabbr = ctxabbr   # kurze Abkuerzung als Alias (CRM, IAM, MVP, SOC, CEO): nur mit Stuetze aus dem Kontext ohne Sammelknoten
         self.own = own           # Konzept-Alias ohne gemeinsames Wort mit dem Namen: nur, wenn die Entitaet selbst Thema der Seite ist oder voll genannt wird
         self.sib = frozenset()   # andere Entitaeten mit diesem Wort als Kopfwort ("Copilot": GitHub Copilot, Copilot in Power BI): Kontext entscheidet
+        self.langs = langs       # None: jede Sprache; sonst Menge der Sprachen (Name in der Sprache der Seite, site_ename names)
+        self.low = None          # Zwilling mit common=True fuer die klein geschriebene Fassung (deutscher Name mit Adjektiv, siehe Matcher._add)
 
     def accepts(self, t):
         if self.mode == "ci": return True
@@ -198,6 +205,13 @@ class Matcher:
             if e.get("type") in SKIP_TYPES: continue
             for f, kind, qual in self._forms_of(e):
                 self._add(f, e, kind, qual)
+        for i, e in live.items():   # Namen in der Sprache der Seite: nach den allgemeinen Formen (gleicher Text wie Name oder Alias bleibt allgemein)
+            if e.get("type") in SKIP_TYPES or e.get("type") in PROPER or not isinstance(e.get("names"), dict): continue
+            for l, n in e["names"].items():
+                if l == "en" or not isinstance(n, str): continue
+                adj = l == "de" and bool(EN.de_adj(e))
+                for f, kind in self._lang_forms(n.strip()):
+                    self._add(f, e, kind, None, lang=l, low=adj and " " in f)
         self.by_name = {}
         for i, e in live.items():
             self.by_name.setdefault((e.get("name") or "").lower(), i)
@@ -227,7 +241,10 @@ class Matcher:
             for f in fs:
                 if f.proper and not f.is_name and " " not in f.text:
                     f.sib = frozenset(heads.get(f.text, set()) - {f.eid})
-        self.rx = re.compile(r"(?<![\w-])(" + _trie(self.forms) + r")(?![\w-])", re.I) if self.forms else None
+        gen = [k for k, fs in self.forms.items() if any(f.langs is None for f in fs)]
+        self.rx = re.compile(r"(?<![\w-])(" + _trie(gen) + r")(?![\w-])", re.I) if gen else None   # sprachneutral (EN-Seiten, Schlagwoerter)
+        self.rx_lang = (re.compile(r"(?<![\w-])(" + _trie(self.forms) + r")(?![\w-])", re.I)
+                        if len(gen) < len(self.forms) else self.rx)   # mit den Namen in den Seitensprachen (raw mit lang)
 
     # ---------------------------------------------------------------- Formen
     def _forms_of(self, e):
@@ -253,7 +270,18 @@ class Matcher:
                     out.append(("Microsoft " + f, "brand", None))
         return out
 
-    def _add(self, f, e, kind, qual):
+    @staticmethod
+    def _lang_forms(n):
+        """Formen eines Namens in einer Seitensprache: der Name; mit Abkuerzung in Klammern auch ohne sie und die Abkuerzung selbst. Ein anderer
+        Zusatz in Klammern ("Engpass (Produktion)") bleibt am Namen (ohne Zusatz waere es ein Allerweltswort)."""
+        if not n: return []
+        out = [(n, "name")]
+        m = _PAREN.match(n)
+        if m and _abbr(m.group(2)):
+            out += [(m.group(1).strip(), "name"), (m.group(2).strip(), "abbr")]
+        return out
+
+    def _add(self, f, e, kind, qual, lang=None, low=False):
         t = e.get("type")
         if not f or f.isdigit(): return
         multi = " " in f
@@ -290,9 +318,17 @@ class Matcher:
             common = True; q = qual
         is_name = kind == "name"
         lst = self.forms.setdefault(lo, [])
-        if any(x.eid == e["id"] and x.text == f for x in lst): return
-        lst.append(Form(f, e["id"], mode, common, q, is_name, proper, kind == "abbr", ctxabbr, own))
-        self.names.setdefault(lo, e["id"])
+        same = [x for x in lst if x.eid == e["id"] and x.text == f and (not lang or x.langs is not None or x.is_name or not x.common)]
+        if same:   # ein Name in der Seitensprache, der zugleich Kurzname (Alias, Allerweltswort) ist ("Sternschema"), bleibt dort ein Name
+            if lang and same[0].langs is not None:
+                same[0].langs = same[0].langs | {lang}   # gleicher Name in zwei Sprachen (es/pt)
+                if same[0].low is not None: same[0].low.langs = same[0].langs
+            return
+        lst.append(Form(f, e["id"], mode, common, q, is_name, proper, kind == "abbr", ctxabbr, own, frozenset({lang}) if lang else None))
+        if low:   # "Erweiterte Suche" (Name, gross) ist Advanced hunting, "erweiterte Suche" klein ist meist irgendeine Suche: klein nur mit Kontext
+            lst[-1].low = Form(f, e["id"], mode, True, q, is_name, proper, False, ctxabbr, own, lst[-1].langs)
+        if not lang:
+            self.names.setdefault(lo, e["id"])   # Fingerabdruck (site_topics) nur aus den sprachneutralen Formen
 
     # ---------------------------------------------------------------- Kontext
     def support(self, eid, C, strict=False, qual=None):
@@ -328,7 +364,7 @@ class Matcher:
         """Name -> id (Name, sonst eindeutiger nicht mehrdeutiger Treffer)."""
         lo = (name or "").strip().lower()
         if lo in self.by_name: return self.by_name[lo]
-        fs = [f for f in self.forms.get(lo, []) if not f.common]
+        fs = [f for f in self.forms.get(lo, []) if not f.common and f.langs is None]
         return fs[0].eid if len({f.eid for f in fs}) == 1 else None
 
     # ---------------------------------------------------------------- Erkennung
@@ -369,19 +405,26 @@ class Matcher:
         if label and caps == len(words): return True
         return len(words) >= 2 and caps >= 0.6 * len(words)
 
-    def raw(self, plain):
-        """Alle Kandidaten-Treffer: [(start, end, text, [Form])], laengste Form zuerst, ohne Ueberlappung."""
+    def raw(self, plain, lang=None):
+        """Alle Kandidaten-Treffer: [(start, end, text, [Form])], laengste Form zuerst, ohne Ueberlappung. lang: Sprache des Textes (Namen in dieser
+        Sprache gelten mit); ohne lang nur die sprachneutralen Formen."""
         out = []
-        if not self.rx or not plain: return out
-        acc = lambda t: [f for f in self.forms.get(t.lower(), ()) if f.accepts(t)]
+        rx = self.rx_lang if lang and lang != "en" else self.rx
+        if not rx or not plain: return out
+        def acc(t):
+            fs = [f.low if f.low is not None and t[:1].islower() else f
+                  for f in self.forms.get(t.lower(), ()) if f.accepts(t) and (f.langs is None or (lang and lang in f.langs))]
+            own = {f.eid for f in fs if f.langs is not None}
+            # Name in der Sprache der Seite schlaegt den gleich lautenden Kurznamen derselben Entitaet ("Sternschema" ist auch englischer Alias)
+            return [f for f in fs if f.langs is not None or f.eid not in own or not f.common] if own else fs
         pos, n = 0, len(plain)
         while True:
-            m = self.rx.search(plain, pos)
+            m = rx.search(plain, pos)
             if not m: break
             s0, e0, t = m.start(1), m.end(1), m.group(1)
             fs = acc(t)
             while not fs and e0 - 1 > s0:   # laengste Form passt nicht (z. B. "SharePoint lists" klein): kuerzere Form an derselben Stelle
-                mm = self.rx.match(plain, s0, e0 - 1)
+                mm = rx.match(plain, s0, e0 - 1)
                 if not mm: break
                 e0, t = mm.end(1), mm.group(1)
                 if e0 < n and (plain[e0].isalnum() or plain[e0] in "_-"): continue
@@ -394,7 +437,7 @@ class Matcher:
 
     def resolve(self, plain, lang="en", ctx=(), hits=None):
         """Angenommene Nennungen [(start, end, text, id)] in der Reihenfolge des Textes. ctx: ids der Seite (eigene Entitaet, Themen, Kategorie)."""
-        hits = self.raw(plain) if hits is None else hits
+        hits = self.raw(plain, (lang or "en")[:2]) if hits is None else hits
         sure, C, sibs = {}, set(ctx or ()), {}
         for k, (s, e, t, fs) in enumerate(hits):
             ids = {f.eid for f in fs}
@@ -466,7 +509,7 @@ class Matcher:
         out = {}
         if not self.rx or not text: return out
         for m in self.rx.finditer(text):
-            fs = [f for f in self.forms.get(m.group(1).lower(), ()) if not f.common and not f.qual]
+            fs = [f for f in self.forms.get(m.group(1).lower(), ()) if not f.common and not f.qual and f.langs is None]
             if len({f.eid for f in fs}) == 1:
                 out[fs[0].eid] = out.get(fs[0].eid, 0) + 1
         return out

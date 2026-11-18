@@ -683,7 +683,7 @@ def articles_block(BASE, e, lang, posts, T_):
         return (f'<li class="en-art"><a href="{purl(p)}"><b>{esc(p["title"])}</b></a><br><span class="mut"><time datetime="{_iso(p.get("published"))}">{_iso(p.get("published"))}</time> · {esc(p.get("name") or p["handle"])}</span>'
                 + (f'<br>{esc(sm)}' if sm else "") + lc.get((p.get("handle"), p["slug"], p.get("lang")), "") + "</li>")
     head, rest = posts[:20], posts[20:100]
-    h = f'<section class="en-arts"><h2>{esc(T_("Articles about {t}", "Artikel zu {t}")).replace("{t}", EN.html_name(e, lang))} <span class="mut">({len(posts)})</span></h2>{LC.intro(lang, "ent.arts", s=EN.label(e, lang))}<ul class="en-artl">' + "".join(item(p) for p in head) + "</ul>"
+    h = f'<section class="en-arts"><h2>{EN.put(lang, esc(T_("Articles about {t}", "Artikel zu {t}")), "t", e, EN.html_name(e, lang))} <span class="mut">({len(posts)})</span></h2>{LC.intro(lang, "ent.arts", s=EN.label(e, lang))}<ul class="en-artl">' + "".join(item(p) for p in head) + "</ul>"
     if rest:
         h += f'<details><summary>{esc(T_("{n} more articles", "{n} weitere Artikel").format(n=len(posts) - 20))}</summary><ul class="en-artl">' + "".join(f'<li><a href="{purl(p)}">{esc(p["title"])}</a> <span class="mut">· {_iso(p.get("published"))}</span>{lc.get((p.get("handle"), p["slug"], p.get("lang")), "")}</li>' for p in rest) + "</ul></details>"
     h += "</section>"
@@ -700,6 +700,14 @@ def _ent_links(body, own):
     b = body.split("<main", 1)[-1].split("</main>", 1)[0]
     b = re.sub(r'<nav aria-label="breadcrumb">.*?</nav>', "", b, flags=re.S)
     return {m for m in _ENT_HREF.findall(b) if m != own}
+
+
+EXPORT_SKIP = ("names",)   # nur im Seitenbau: Namen in den Seitensprachen (site_ename), nicht in /entities.json (Weg nach D1)
+
+
+def export_recs(recs):
+    """Eintraege fuer /entities.json ohne die Felder aus EXPORT_SKIP (die Eintraege selbst bleiben unveraendert)."""
+    return [{k: v for k, v in e.items() if k not in EXPORT_SKIP} for e in recs]
 
 
 def build(g, wiki_links, experts_by_ent, ep_find):
@@ -742,7 +750,9 @@ def build(g, wiki_links, experts_by_ent, ep_find):
     recs = sorted(ENTS.values(), key=lambda e: e["id"])
     person_aka = load_person_aka(recs)
     MOD = mod_dates(recs, TODAY)
-    write("entities.json", json.dumps({"version": 1, "generated": TODAY, "license": "CC BY 4.0, M365.FM community", "entities": recs}, ensure_ascii=False, indent=1))
+    # ohne names (site_ename): der Cron importEntitiesFromSite (worker/src/entities.js) uebernimmt alle Felder neuer Eintraege nach D1; die Uebersetzungen
+    # sollen nur aus data/entity_names.json kommen (Korrekturen dort wirken sonst nicht mehr). Die Namen stehen als alternateName in /entities.jsonld.
+    write("entities.json", json.dumps({"version": 1, "generated": TODAY, "license": "CC BY 4.0, M365.FM community", "entities": export_recs(recs)}, ensure_ascii=False, indent=1))
     import site_learn as _SL   # T30: Repo-Fassung ohne D1 - Grundlage fuer den Abgleich im Worker (syncEntitiesFromSite)
     write("entities-src.json", json.dumps({"version": 1, "generated": TODAY, "entities": sorted(_SL.SRC_ENTS.values(), key=lambda e: e["id"])}, ensure_ascii=False))
     entity_graph = [ent_ld(BASE, e, "en", gl_ids, person_aka) for e in recs]
@@ -915,7 +925,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _ept = dict(zip((_epu(x) for x in eps), LT.ep_texts([(x["e"]["title"], _epu(x)) for x in eps], names=tuple(dict.fromkeys((e["name"], _en))))))
             _ept_of = lambda x: _ept.get(_epu(x)) or LT.ep_text(x["e"]["title"])
             _ytl = lambda x: (f' · <a href="https://www.youtube.com/watch?v={esc(_yt(x))}" rel="noopener"{LT.a_attr(LT.aria(_ytv, _ept_of(x)))}>{esc(_ytv)}</a>') if _yt(x) else ""
-            eb = (f'<h2>{esc(ept).replace("{t}", _enh)}</h2>' + LC.intro(lang, "ent.eps.person" if e["type"] == "person" else "ent.eps", s=_en) + "".join(
+            eb = (f'<h2>{EN.put(lang, esc(ept), "t", e, _enh)}</h2>' + LC.intro(lang, "ent.eps.person" if e["type"] == "person" else "ent.eps", s=_en) + "".join(
                 f'<article class="en-ep"><h3><a href="{_epu(x)}">{esc(_ept_of(x))}</a></h3><p class="mut">{esc(x.get("date", ""))}{_ytl(x)}</p><p>{esc(g["ep_sum"](x))}</p></article>' for x in eps)) if eps else ""
             _tl = tlab(lang, e["type"])   # nicht "tlab" nennen: das verdeckte die Funktion in ganz build() (NameError, Seitenbau bricht ab)
             alt_h = T(lang, f"Title graphic: {_en} ({_tl})", f"Titelbild: {_en} ({_tl})")
@@ -933,7 +943,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                     _li.append(f'<li><a href="{_u}"><b>{EN.html_name(ENTS[_id], lang)}</b></a> <span class="mut">· {esc(_k)} · {esc(tlab(lang, ENTS[_id]["type"]))}</span>' + (f'<br>{esc(_dd)}' if _dd else "") + "</li>")
                     if len(_li) >= 14: break
                 relx = f'<h2>{T(lang, "Related topics in brief", "Verwandte Themen kurz erklärt")}</h2>{LC.intro(lang, "ent.relx", s=_en)}<ul class="en-relx">' + "".join(_li) + "</ul>" if _li else ""
-            tline = MED.timeline_svg([(x.get("date", ""), _ept_of(x), _epu(x)) for x in eps], T(lang, f"Timeline of episodes about {_en}", f"Zeitleiste der Folgen zu {_en}"))
+            tline = MED.timeline_svg([(x.get("date", ""), _ept_of(x), _epu(x)) for x in eps], T(lang, f"Timeline of episodes about {_en}", EN.put(lang, "Zeitleiste der Folgen zu {t}", "t", _en, str(_en))))
             ex = experts_by_ent.get(e["id"], [])
             ehtml = ""
             if ex:
@@ -1054,7 +1064,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             if e["id"] == MUSICGROUP_ID and person_aka.get(e["id"]):
                 ld.append({"@context": "https://schema.org", **musicgroup_ld(BASE)})   # eigener <script>-Block auf der Seite: braucht @context
             if arturls:
-                ld.append({"@context": "https://schema.org", "@type": "ItemList", "@id": u + "#articles", "name": T(lang, "Articles about {t}", "Artikel zu {t}").format(t=_en), "numberOfItems": len(arturls),
+                ld.append({"@context": "https://schema.org", "@type": "ItemList", "@id": u + "#articles", "name": EN.put(lang, T(lang, "Articles about {t}", "Artikel zu {t}"), "t", _en, str(_en)), "numberOfItems": len(arturls),
                            "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": x} for i, x in enumerate(arturls[:50])]})
             if _allq:
                 ld.append({"@context": "https://schema.org", "@type": "FAQPage", "@id": u + "#faq", "mainEntity": [{"@type": "Question", "name": x["q"], "acceptedAnswer": {"@type": "Answer", "text": x["a"]}} for x in _allq]})

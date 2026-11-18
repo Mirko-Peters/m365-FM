@@ -72,7 +72,7 @@ def fill(lang, tpl, **vals):
             before = re.sub(r"(^|(?<=\s))(de|que) $", lambda k: ("d’" if k.group(2) == "de" else "qu’"), before)
         out += [before, val]; pos = m.end()
     out.append(tpl[pos:])
-    return "".join(out)
+    return EN.de_contract("".join(out)) if lang == "de" else "".join(out)   # "von dem Thema" -> "vom Thema" (Apposition, site_ename.put)
 
 
 def _and(lang, L, nxt, two):
@@ -98,9 +98,23 @@ def join(lang, items, more_html=""):
     return sep.join(items[:-1]) + _and(lang, L, items[-1], False) + items[-1]
 
 
-def _link(lang, url, text, e=None):
-    """Link mit dem Namen des Ziels als Text: ar/he in <bdi>, Begriff ohne Uebersetzung (site_ename.foreign) als englischer Text (lang="en")."""
-    return f'<a href="{esc(url)}">{EN.wrap(lang, esc(text), EN.foreign(e, lang))}</a>'
+def _link(lang, url, text, e=None, case=""):
+    """Link mit dem Namen des Ziels als Text: ar/he in <bdi>, Begriff ohne Uebersetzung (site_ename.foreign) als englischer Text (lang="en").
+    case: Fall nach der Praeposition vor der Liste (de, site_ename.de_case); ein Name mit Adjektiv am Anfang bekommt dann die Apposition vor dem Link
+    ("mit dem Thema <a>Maschinelles Lernen</a>"), der Linktext bleibt der Zielname."""
+    pre = EN.de_art(e, case) if lang == "de" else ""
+    return f'{pre}<a href="{esc(url)}">{EN.wrap(lang, esc(text), EN.foreign(e, lang))}</a>'
+
+
+def _case(lang, tpl, slot):
+    """de: Fall nach der Praeposition vor {slot} in der Vorlage ("d"/"a", site_ename.de_case); sonst ''."""
+    k = tpl.find("{" + slot + "}") if lang == "de" else -1
+    return EN.de_case(tpl[:k]) if k >= 0 else ""
+
+
+def _appo(lang, tpl, e):
+    """de: Apposition vor {s}, wenn der Name der Seite mit einem Adjektiv beginnt und eine Praeposition davor steht ("Eng mit dem Thema {s} ...")."""
+    return EN.put(lang, tpl, "s", e, "{s}") if lang == "de" else tpl
 
 
 def build(lang, e, fwd, inv, ents, href, anchor=None, works_for=None, rank=None, cap=CAP, total=None):
@@ -152,7 +166,7 @@ def build(lang, e, fwd, inv, ents, href, anchor=None, works_for=None, rank=None,
         except TypeError:
             return anchor(g["dir"], g["p"])
 
-    def lst(g, ids=None, more_link=None):
+    def lst(g, ids=None, more_link=None, case=""):
         """Verlinkte Namen; more_link ueberschreibt den Text "N weitere" (Deutsch nach Dativ: "von A und 5 weiteren").
         "N weitere" ist Text, kein Link (Audit SEO-9/E9/A11Y-8: gleich klingende Links ohne Ziel); den Sprung auf die vollstaendige Liste
         traegt ein eigener Link mit Beziehung im Linktext (fulls -> Zeile "Vollstaendige Listen: alle 246 Produkte und Werke von Microsoft")."""
@@ -166,10 +180,11 @@ def build(lang, e, fwd, inv, ents, href, anchor=None, works_for=None, rank=None,
                 fulls.append((g["k"], a, total(g["dir"], g["p"], g["k"]) if total else len(g["ids"])))
         else:
             shown, more = ids, ""
-        return join(lang, [_link(lang, href(i), EN.ename(ents[i], lang), ents[i]) for i in shown], more)
+        return join(lang, [_link(lang, href(i), EN.ename(ents[i], lang), ents[i], case) for i in shown], more)
 
     subj = EN.html_name(e, lang)   # Name in der Sprache der Seite (site_ename), wie in der Ueberschrift
     sent_f, sent_i, named = [], [], set()
+    ap = lambda tpl: _appo(lang, tpl, e)   # de: "Eng mit dem Thema Bedingter Zugriff verwandt ..." (site_ename.put)
     if "microsoft-tool" in groups.get("f.instance_of", {}).get("ids", []) and any("microsoft" in g["ids"] for k, g in groups.items() if k.startswith("f.developed_by")):
         groups["f.instance_of"]["ids"].remove("microsoft-tool")   # "Kategorie Microsoft-Werkzeug" + "von Microsoft entwickelt" waere dieselbe Aussage zweimal
         named.add("microsoft-tool")
@@ -194,7 +209,8 @@ def build(lang, e, fwd, inv, ents, href, anchor=None, works_for=None, rank=None,
             tpl = lead.get(key)
             if tpl:
                 ml = lead.get("more")
-                sent_f.append(fill(lang, tpl, s=subj, noun=join(lang, nouns), dev=lst(groups[devk], more_link=ml) if devs else "", part=lst(groups["f.part_of"], more_link=ml) if parts else ""))
+                sent_f.append(fill(lang, ap(tpl), s=subj, noun=join(lang, nouns), dev=lst(groups[devk], more_link=ml, case=_case(lang, tpl, "dev")) if devs else "",
+                                   part=lst(groups["f.part_of"], more_link=ml, case=_case(lang, tpl, "part")) if parts else ""))
                 named.update(used + devs + parts)
                 if "f.instance_of" in groups:
                     groups["f.instance_of"]["ids"] = [c for c in cats if c not in used]
@@ -221,7 +237,7 @@ def build(lang, e, fwd, inv, ents, href, anchor=None, works_for=None, rank=None,
         if not tpl:
             continue   # keine sichere Vorlage in dieser Sprache: nur die Liste darunter
         ml = T[k].get("more") if isinstance(T.get(k), dict) else None
-        (sent_f if g["dir"] == "f" else sent_i).append(fill(lang, tpl, s=subj, x=lst(g, ids, ml)))
+        (sent_f if g["dir"] == "f" else sent_i).append(fill(lang, ap(tpl), s=subj, x=lst(g, ids, ml, _case(lang, tpl, "x"))))
         if g["p"] in WEAK:
             named.update(ids)
     if not sent_f and not sent_i:
@@ -325,6 +341,6 @@ def cooc(lang, e, ids, ents, href, mode="often"):
     if not ids or not c.get(tk) or not hd:
         return ""
     subj = EN.html_name(e, lang)
-    x = join(lang, [_link(lang, href(i), EN.ename(ents[i], lang), ents[i]) for i in ids])
+    x = join(lang, [_link(lang, href(i), EN.ename(ents[i], lang), ents[i], _case(lang, c[tk], "x")) for i in ids])
     return (f'<section class="en-rels en-cooc" data-own-text="no" aria-labelledby="en-rels-h"><h2 id="en-rels-h">{esc(hd)}</h2>'
-            f'<p>{fill(lang, c[tk], s=subj, x=x)}</p></section>')
+            f'<p>{fill(lang, _appo(lang, c[tk], e), s=subj, x=x)}</p></section>')

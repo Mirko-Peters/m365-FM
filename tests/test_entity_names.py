@@ -266,5 +266,135 @@ class OtherPlaces(unittest.TestCase):
         self.assertNotIn("@value", doc["keywords"])
 
 
+ADJ_RX = r"\b(?:mit|von|zu|bei|aus|nach|seit)\s+(?:<[^>]+>)*(?:Bedingter Zugriff|Maschinelles Lernen|Öffentlicher Sektor|Erweiterte Suche)"
+
+
+class DeutschNachPraeposition(unittest.TestCase):
+    """Gegenpruefung Paket 4: deutsche Namen mit Adjektiv am Anfang ("Bedingter Zugriff") stehen nach einer Praeposition als Apposition mit Artikel,
+    der Linktext bleibt der Zielname im Nominativ."""
+
+    def es(self):
+        return EN.apply({x["id"]: x for x in [
+            ent("conditional-access", "concept", "Conditional Access", [("related_to", "machine-learning"), ("related_to", "star-schema")]),
+            ent("machine-learning", "concept", "Machine learning"), ent("star-schema", "concept", "Star schema"),
+            ent("digital-twin", "concept", "Digital twin", [("broader", "conditional-access")]),
+            ent("public-sector", "industry", "Public sector"),
+            ent("jane-doe", "person", "Jane Doe", [("related_to", "machine-learning"), ("related_to", "conditional-access"), ("related_to", "star-schema")])]})
+
+    def test_de_adj_aus_den_daten(self):
+        es = {i: {"id": i, "type": "concept", "name": n} for i, n in (("conditional-access", "Conditional Access"), ("machine-learning", "Machine learning"),
+              ("star-schema", "Star schema"), ("adaptive-scopes", "Adaptive scopes"), ("active-directory-forest", "Active Directory forest"))}
+        EN.apply(es)
+        self.assertEqual({i: EN.de_adj(e) for i, e in es.items()},
+                         {"conditional-access": "m", "machine-learning": "n", "star-schema": "", "adaptive-scopes": "f", "active-directory-forest": ""})
+
+    def test_put_dativ_akkusativ_zusammengezogen(self):
+        es = self.es()
+        ca, ml, ps = es["conditional-access"], es["machine-learning"], es["public-sector"]
+        self.assertEqual(EN.put("de", "Eng mit {s} verwandt", "s", ca, "X"), "Eng mit dem Thema X verwandt")
+        self.assertEqual(EN.put("de", "Alle Beziehungen von {s}:", "s", ca, "X"), "Alle Beziehungen vom Thema X:")
+        self.assertEqual(EN.put("de", "Weitere Artikel zu {t}:", "t", ml, "X"), "Weitere Artikel zum Thema X:")
+        self.assertEqual(EN.put("de", "geht es um {x}", "x", ca, "X"), "geht es um das Thema X", "maskulin: Akkusativ anders als Nominativ")
+        self.assertEqual(EN.put("de", "geht es um {x}", "x", ml, "X"), "geht es um X", "neutral: Akkusativ = Nominativ")
+        self.assertEqual(EN.put("de", "Firmen zu {s}", "s", ps, "X"), "Firmen zur Branche X")
+        self.assertEqual(EN.put("de", "{s} ist ein Konzept", "s", ca, "X"), "X ist ein Konzept", "Nominativ ohne Praeposition")
+        self.assertEqual(EN.put("de", "Folgen mit {s}", "s", es["star-schema"], "X"), "Folgen mit X", "Nomen am Anfang: keine Apposition")
+        self.assertEqual(EN.put("en", "Related to {s}", "s", ca, "X"), "Related to X")
+
+    def test_linkctx_alle_de_vorlagen(self):
+        es = self.es()
+        bad = []
+        for key, tpl in (LC.data().get("de") or {}).items():
+            if not isinstance(tpl, str) or not re.search(r"\{[st]\}", tpl):
+                continue
+            for i in ("conditional-access", "machine-learning", "public-sector"):
+                h = LC.text("de", key, s=EN.label(es[i], "de"), t=EN.label(es[i], "de"), n=3)
+                if re.search(ADJ_RX, h):
+                    bad.append((key, h))
+        self.assertEqual(bad, [])
+        self.assertEqual(LC.text("de", "ent.rellist", s=EN.label(es["conditional-access"], "de")), "Alle Beziehungen vom Thema Bedingter Zugriff, nach Art der Beziehung geordnet:")
+        self.assertEqual(LC.text("de", "post.more", t=EN.label(es["machine-learning"], "de")), "Weitere Artikel zum Thema Maschinelles Lernen:")
+
+    def test_beziehungssaetze_conditional_access(self):
+        es = self.es()
+        href = lambda i: f"/de/entity/{i}/"
+        rel = lambda i: ([(p, t) for p, t in es[i]["rel"]], [(p, x["id"]) for x in es.values() for p, t in x["rel"] if t == i])
+        h = RS.build("de", es["conditional-access"], *rel("conditional-access"), es, href)
+        txt = re.sub(r"<[^>]+>", "", h)
+        self.assertIn("Eng mit dem Thema Bedingter Zugriff verwandt sind", txt)
+        self.assertIn("Ein Unterbegriff vom Thema Bedingter Zugriff ist Digitaler Zwilling", txt)
+        self.assertNotRegex(h, ADJ_RX)
+        p = RS.build("de", es["jane-doe"], *rel("jane-doe"), es, href)
+        self.assertIn('beschäftigt sich mit dem Thema <a href="/de/entity/machine-learning/">Maschinelles Lernen</a>', p, "Linktext = Zielname")
+        self.assertIn('dem Thema <a href="/de/entity/conditional-access/">Bedingter Zugriff</a>', p)
+        self.assertIn('<a href="/de/entity/star-schema/">Sternschema</a>', p)
+        self.assertNotIn("dem Thema <a href=\"/de/entity/star-schema/", p)
+        self.assertNotRegex(p, ADJ_RX)
+        en = RS.build("en", es["conditional-access"], *rel("conditional-access"), es, lambda i: f"/entity/{i}/")
+        self.assertNotIn("Thema", en)
+
+    def test_rueckfallsatz_cooc(self):
+        es = self.es()
+        h = RS.cooc("de", es["conditional-access"], ["digital-twin", "machine-learning"], es, lambda i: f"/de/entity/{i}/")
+        txt = re.sub(r"<[^>]+>", "", h)
+        self.assertIn("In Folgen zum Thema Bedingter Zugriff geht es oft auch um das Thema Digitaler Zwilling und Maschinelles Lernen.", txt)
+
+
+class KontextLinksInSeitensprache(unittest.TestCase):
+    """Gegenpruefung Paket 4: der Name in der Sprache der Seite wird im Fliesstext erkannt (erste Nennung), nur auf Seiten dieser Sprache."""
+
+    def m(self):
+        import site_entmatch as EM
+        es = EN.apply({x["id"]: x for x in [
+            ent("star-schema", "concept", "Star schema", aliases=["Sternschema"]), ent("conditional-access", "concept", "Conditional Access"),
+            ent("advanced-hunting", "concept", "Advanced hunting", [("related_to", "defender")]), ent("defender", "product", "Microsoft Defender"),
+            ent("education", "industry", "Education")]})
+        for e in es.values():
+            e.pop("desc", None)
+        return EM.Matcher(es, common=set(), cooc=({}, {}))
+
+    def test_de_name_verlinkt_nur_auf_de(self):
+        m = self.m()
+        h, links = m.link_html("<p>Ein Sternschema ordnet Fakten. Bedingter Zugriff schützt. Noch ein Sternschema.</p>", lambda i: f"/de/entity/{i}/", lang="de")
+        self.assertEqual(links, [("Sternschema", "star-schema"), ("Bedingter Zugriff", "conditional-access")])
+        self.assertNotIn("title=", h, "Linktext = Name in der Sprache der Seite")
+        _, en = m.link_html("<p>Ein Sternschema ordnet Fakten. Bedingter Zugriff schützt.</p>", lambda i: f"/entity/{i}/", lang="en")
+        self.assertEqual(en, [], "englische Seite: deutsche Namen gelten nicht (Sternschema ist dort nur Kurzname ohne Kontext)")
+        self.assertEqual(m.ids_tags("bedingter zugriff, sternschema"), {}, "Schlagwoerter: nur sprachneutrale Formen")
+
+    def test_ja_name(self):
+        _, links = self.m().link_html("<p>条件付きアクセス と スター スキーマ</p>", lambda i: f"/ja/entity/{i}/", lang="ja")
+        self.assertEqual(links, [("条件付きアクセス", "conditional-access"), ("スター スキーマ", "star-schema")])
+
+    def test_regeln_wie_beim_namen(self):
+        m = self.m()
+        u = lambda i: f"/de/entity/{i}/"
+        self.assertEqual(m.link_html("<p>Die erweiterte Suche in Word findet Dateien.</p>", u, lang="de")[1], [], "klein geschrieben: nur mit Kontext")
+        self.assertEqual(m.link_html("<p>Mit Erweiterte Suche jagen Analysten.</p>", u, lang="de")[1], [("Erweiterte Suche", "advanced-hunting")])
+        self.assertEqual(m.link_html("<p>Die erweiterte Suche in Microsoft Defender.</p>", u, lang="de")[1],
+                         [("erweiterte Suche", "advanced-hunting"), ("Microsoft Defender", "defender")], "Kontext stuetzt")
+        self.assertEqual(m.link_html("<p>Projekte im Bildungswesen.</p>", u, lang="de")[1], [], "Branche als Einzelwort nur mit Hinweis")
+        self.assertEqual(m.link_html("<p>Firmen der Branche Bildungswesen.</p>", u, lang="de")[1], [("Bildungswesen", "education")])
+
+
+class ExportOhneNames(unittest.TestCase):
+    """Gegenpruefung Paket 4: names gehen nicht ueber /entities.json nach D1, und eine D1-Fassung mit alten names gewinnt nicht."""
+
+    def test_export_ohne_names(self):
+        recs = [{"id": "a", "name": "A", "type": "concept", "names": {"de": "Ä"}}]
+        self.assertEqual(ENT.export_recs(recs), [{"id": "a", "name": "A", "type": "concept"}])
+        self.assertIn("names", recs[0], "Eintrag selbst unveraendert")
+
+    def test_d1_names_werden_ueberschrieben(self):
+        import site_learn as SL
+        item = {"id": "conditional-access", "created": 1, "src": "seed",
+                "data": {"name": "Conditional Access", "type": "concept", "desc": {"en": "x", "de": ""}, "names": {"de": "Alter Name", "fr": "Vieux"}}}
+        with mock.patch.object(SL, "_fetch_json", return_value={"items": [item]}):
+            es = SL.load_entities("https://api.example.test")
+        want = EN.load()["conditional-access"]
+        self.assertEqual(es["conditional-access"]["names"], want)
+        self.assertEqual(es["conditional-access"]["names"]["de"], "Bedingter Zugriff")
+
+
 if __name__ == "__main__":
     unittest.main()

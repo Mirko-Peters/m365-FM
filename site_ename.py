@@ -10,9 +10,14 @@
 - Englischer Rest (A11Y-6, WCAG 3.1.2): ein Begriff ohne Uebersetzung auf einer Nicht-EN-Seite ist englischer Text; html() setzt ihn in
   <span lang="en"> (Screenreader sprechen ihn englisch). Eigennamen brauchen das nicht.
 - RTL (A11Y-7): auf ar/he steht jeder Name in <bdi> (lateinische Namen mit ")" am Ende springen sonst im RTL-Absatz), in allen Bloecken gleich.
+- Deutsch nach Praeposition (Gegenpruefung Paket 4): ein deutscher Name, der mit einem Adjektiv beginnt ("Bedingter Zugriff", "Maschinelles Lernen"),
+  bleibt im Nominativ (Linktext = Zielname); nach "mit/von/zu/bei ..." (Dativ) bzw. bei maskulinen Namen nach "um/fuer/ueber ..." (Akkusativ) steht
+  er als Apposition mit Artikel: "Eng mit dem Thema Bedingter Zugriff verwandt", "Weitere Artikel zum Thema Maschinelles Lernen", Branchen mit
+  "der Branche" ("Firmen der Branche Oeffentlicher Sektor"). put() setzt das in Vorlagen ein (site_linkctx.text, site_relsent, Ueberschriften).
 Reine Funktionen bis auf das einmalige Lesen der JSON-Datei."""
 import html
 import json
+import re
 from pathlib import Path
 
 FILE = Path(__file__).parent / "data" / "entity_names.json"
@@ -74,19 +79,100 @@ def foreign(e, lang):
 
 
 class Name(str):
-    """Name als Text mit Sprachmerkmal (foreign = englischer Rest): site_linkctx und site_relsent setzen ihn dann in <span lang="en">."""
+    """Name als Text mit Sprachmerkmal (foreign = englischer Rest): site_linkctx und site_relsent setzen ihn dann in <span lang="en">.
+    art: Artikel fuer die Apposition nach einer Praeposition (de, siehe de_art), {"d": Dativ, "a": Akkusativ}; leer, wenn der Name keine braucht."""
     foreign = False
+    art = None
 
-    def __new__(cls, s, foreign=False):
+    def __new__(cls, s, foreign=False, art=None):
         o = super().__new__(cls, s)
         o.foreign = bool(foreign)
+        o.art = art or None
         return o
 
 
 def label(e, lang):
     """ename als Name (mit Merkmal foreign) fuer Satzvorlagen (site_linkctx.text, site_relsent). Linktext = Zielname, auch mitten im Satz
     (Kategorien gross geschrieben wie in Listen und Brotkruemel); nur der Einleitungssatz en/de nimmt seine Satzform aus relation_sentences "cat"."""
-    return Name(ename(e, lang), foreign(e, lang))
+    return Name(ename(e, lang), foreign(e, lang), _arts(e) if lang == "de" else None)
+
+
+# ---------------------------------------------------------------- Deutsch: Name nach Praeposition
+# Praeposition direkt vor dem Platzhalter -> Fall ("d" Dativ, "a" Akkusativ). "ueber" in den Vorlagen = Thema ("Folgen ueber ..."): Akkusativ.
+DE_PREP = {"mit": "d", "von": "d", "zu": "d", "bei": "d", "aus": "d", "nach": "d", "seit": "d", "gegenüber": "d",
+           "über": "a", "um": "a", "für": "a", "durch": "a", "gegen": "a", "ohne": "a"}
+_DE_PREP_RX = re.compile(r"(?:^|(?<=[\s(„\"'>]))(" + "|".join(sorted(DE_PREP, key=len, reverse=True)) + r")\s+$", re.I)
+# Adjektiv am Anfang des Namens (stark gebeugt, Nominativ): -er maskulin, -es neutral, -e feminin oder Plural; weitere Adjektive klein davor
+# ("Virtuelles privates Netzwerk"), dann ein Nomen (gross).
+_DE_ADJ = re.compile(r"^[A-ZÄÖÜ][a-zäöüß]+?(er|es|e)\s+(?:[a-zäöüß]+(?:er|es|e)\s+)*[A-ZÄÖÜ]")
+_DE_CONTRACT = re.compile(r"\b(von|zu|bei) dem Thema |\bzu der Branche ")
+
+
+def de_adj(e):
+    """Geschlecht des deutschen Namens, wenn er mit einem Adjektiv beginnt: "m", "n" oder "f" (auch Plural); sonst ''.
+    Nur uebersetzte Namen (names.de); beginnt er mit den ersten zwei Woertern des englischen Namens ("Active Directory-Gesamtstruktur"), ist das ein
+    englischer Eigenname, kein Adjektiv ("Adaptive Bereiche", "Generative KI" dagegen schon)."""
+    if not isinstance(e, dict):
+        return ""
+    n = (e.get("names") or {}).get("de") if isinstance(e.get("names"), dict) else None
+    m = _DE_ADJ.match(n or "")
+    if not m:
+        return ""
+    en2 = " ".join(str(e.get("name") or "").split()[:2])
+    if " " in en2 and n.startswith(en2):
+        return ""
+    return {"er": "m", "es": "n", "e": "f"}[m.group(1)]
+
+
+def _arts(e):
+    """Artikel der Apposition je Fall ({"d": ..., "a": ...}) fuer einen Namen mit Adjektiv am Anfang; sonst None.
+    Dativ immer (die Endung des Adjektivs aendert sich); Akkusativ nur maskulin (feminin, neutral und Plural lauten im Akkusativ wie im Nominativ)."""
+    g = de_adj(e)
+    if not g:
+        return None
+    ind = e.get("type") == "industry"
+    out = {"d": "der Branche " if ind else "dem Thema "}
+    if g == "m":
+        out["a"] = "die Branche " if ind else "das Thema "
+    return out
+
+
+def de_case(before):
+    """Fall, den die Praeposition am Ende von before verlangt ("d", "a"), sonst ''. before: Vorlagentext (auch HTML) vor dem Platzhalter."""
+    m = _DE_PREP_RX.search(before or "")
+    return DE_PREP.get(m.group(1).lower(), "") if m else ""
+
+
+def de_art(x, case):
+    """Artikel der Apposition ("dem Thema ", "der Branche ", ...) vor dem Namen x (Entitaet oder Name aus label) im Fall case; '' wenn keiner noetig."""
+    if not case:
+        return ""
+    arts = x.art if isinstance(x, Name) else (_arts(x) if isinstance(x, dict) else None)
+    return (arts or {}).get(case, "")
+
+
+def de_contract(s):
+    """Praeposition + Artikel zusammenziehen: "von dem Thema" -> "vom Thema", "zu dem" -> "zum", "bei dem" -> "beim", "zu der Branche" -> "zur Branche"."""
+    def f(m):
+        t = m.group(0)
+        if t.startswith("zu der"):
+            return "zur Branche "
+        return {"von": "vom", "zu": "zum", "bei": "beim"}[m.group(1)] + " Thema "
+    return _DE_CONTRACT.sub(f, s) if s else s
+
+
+def put(lang, t, key, x, val):
+    """Setzt val (fertiger Text/HTML des Namens x) fuer {key} in die Vorlage t. Deutsch: nach einer Praeposition mit Apposition (de_art), dann
+    zusammengezogen (de_contract). x: Entitaet oder Name aus label; ohne Merkmal (Personen, Titel) wie str.replace."""
+    ph = "{" + key + "}"
+    if lang != "de" or ph not in t or not (x.art if isinstance(x, Name) else _arts(x) if isinstance(x, dict) else None):
+        return t.replace(ph, val)
+    out, pos = [], 0
+    for m in re.finditer(re.escape(ph), t):
+        out += [t[pos:m.start()], de_art(x, de_case(t[:m.start()])), val]
+        pos = m.end()
+    out.append(t[pos:])
+    return de_contract("".join(out))
 
 
 def wrap(lang, t, foreign=False):

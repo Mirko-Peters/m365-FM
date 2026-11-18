@@ -61,12 +61,14 @@ def _name(lang, s):
 
 
 def text(lang, key, **vals):
-    """Fertiger HTML-Text (Namen escaped, in ar/he als <bdi>). Unbekannte Platzhalter bleiben stehen; {n} wird als Zahl eingesetzt."""
+    """Fertiger HTML-Text (Namen escaped, in ar/he als <bdi>). Unbekannte Platzhalter bleiben stehen; {n} wird als Zahl eingesetzt.
+    Deutsch: ein Name mit Adjektiv am Anfang (site_ename.label, Merkmal art) steht nach einer Praeposition als Apposition ("zum Thema Bedingter Zugriff")."""
+    import site_ename as EN
     t = html.escape(raw(lang, key), quote=False)
     for k, v in vals.items():
         if lang == "fr" and k != "n" and str(v)[:1] in _VOWEL:   # Franzoesisch: "de Azure" -> "d’Azure" (wie site_relsent.fill)
             t = re.sub(r"(^|(?<=\s))de \{" + k + r"\}", "d’{" + k + "}", t)
-        t = t.replace("{" + k + "}", str(v) if k == "n" else _name(lang, v))
+        t = t.replace("{" + k + "}", str(v)) if k == "n" else EN.put(lang, t, k, v, _name(lang, v))
     return t
 
 

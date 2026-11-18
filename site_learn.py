@@ -537,9 +537,14 @@ def load_entities(api):
                     rec[k] = base[it["id"]][k]
             if not rec.get("wikidata") and (base.get(it["id"]) or {}).get("wikidata"):   # Wikidata-Nummer der Redaktion gilt, solange sie im Formular leer ist
                 rec["wikidata"] = base[it["id"]]["wikidata"]
+            # Namen in den Seitensprachen nur aus dem Repo (data/entity_names.json bzw. names in data/entities.json), nie aus D1: eine D1-Fassung,
+            # die names aus einer frueheren /entities.json uebernommen hat (Cron importEntitiesFromSite), wuerde sonst alte Uebersetzungen einfrieren
+            rec.pop("names", None)
+            if isinstance((base.get(it["id"]) or {}).get("names"), dict):
+                rec["names"] = base[it["id"]]["names"]
             base[it["id"]] = rec
     ONT.derive(base)   # Oberbegriffe per Regel fuer ALLE Eintraege (auch neue aus D1/Gaesten/Speakern), nur im Speicher
-    EN.apply(base)   # Namen in der Sprache der Seite (data/entity_names.json -> Feld names), auch an D1-Fassungen; nicht in entities-src.json (kein Abgleich nach D1)
+    EN.apply(base)   # Namen in der Sprache der Seite (data/entity_names.json -> Feld names), auch an D1-Fassungen; nicht in entities-src.json und /entities.json (kein Weg nach D1)
     return base
 
 
