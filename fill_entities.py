@@ -61,9 +61,12 @@ LANG_FACTOR = {"ru": 2.2, "uk": 2.2, "ar": 2.2, "he": 2.2, "ja": 1.8, "ko": 2.0}
 KEEP = ["Microsoft 365", "Microsoft Teams", "SharePoint", "OneDrive", "Copilot Studio", "Copilot", "Power BI", "Power Apps", "Power Automate", "Power Platform", "Dataverse",
         "Azure", "Entra", "Intune", "Purview", "Defender", "Sentinel", "Fabric", "Exchange Online", "Outlook", "Excel", "PowerPoint", "Word", "Viva", "Loop", "Planner",
         "Dynamics 365", "GitHub", "Windows", "Microsoft Graph", "PowerShell", "M365.FM", "M365 Show", "M365Con", "MVP"]
-SUPERLATIVES = re.compile(r"\b(best|leading|market[- ]leading|world[- ]class|#1|number one|ultimate|revolutionary|unmatched|unrivall?ed|cutting[- ]edge|game[- ]chang\w+|"
-                          r"most (?:powerful|popular|advanced)|unparalleled|state[- ]of[- ]the[- ]art|industry[- ]leading|perfect)\b", re.I)
-URL_RX = re.compile(r"(https?://|www\.|\b[\w-]+\.(?:com|net|org|io|de|ai|dev|microsoft)\b/?|@[\w.-]+\.\w{2,})", re.I)
+SUPERLATIVES = re.compile(   # Werbesprache. Nicht: "best practices", "fits best", "print-perfect", "leading to errors" (18.11.2026: 373 falsche Treffer allein fuer "best")
+    r"\b((?:the|our|its|their) (?:very )?best(?! practices?\b)(?!-practice)|best[- ]in[- ]class|(?:market|industry)[- ]leading|(?:the |a )?leading (?:provider|vendor|solution|platform|company|tool|choice)s?|"
+    r"world[- ]class|#1|number one|ultimate|revolutionary|unmatched|unrivall?ed|cutting[- ]edge|game[- ]chang\w+|"
+    r"most (?:powerful|popular|advanced)|unparalleled|state[- ]of[- ]the[- ]art|(?<![-\w])perfect (?:solution|tool|choice|fit|platform))\b", re.I)
+URL_RX = re.compile(r"(https?://|www\.|\b(?<!asp\.)(?<!vb\.)(?<!ado\.)(?!(?:asp|vb|ado)\.net\b)(?![\w-]*(?:onmicrosoft|office|sharepoint|outlook|live|cloud)\.(?:com|microsoft)\b)[\w-]+\.(?:com|net|org|io|de|ai|dev|microsoft)\b/?|[\w.+-]+@[\w-]+\.\w{2,})", re.I)
+# Kein Link: ASP.NET/VB.NET/ADO.NET, @odata.nextLink (kein Name vor dem @), Domainnamen als Fachbegriff (contoso.onmicrosoft.com, office.com, cloud.microsoft) - 18.11.2026
 SCRIPT = {"ru": "Ѐ-ӿ", "uk": "Ѐ-ӿ", "ar": "؀-ۿ", "he": "֐-׿", "ja": "぀-ヿ一-鿿", "ko": "가-힯ᄀ-ᇿ"}
 
 
@@ -358,6 +361,15 @@ def validate_write(out, f, want):
     return rec, None
 
 
+def proper_name(n):
+    """Eigenname, der unuebersetzt bleiben muss (Copilot Studio, Microsoft 365, MS-700, PL-300): kein Wort nach dem ersten ist kleingeschrieben.
+    Beschreibende Namen ("Azure portal", "Private channels", "Generative pages", "Fabric data agents") uebersetzt auch Microsoft (18.11.2026: 2.827 falsche
+    Ablehnungen). KEEP-Namen sind immer Eigennamen."""
+    if n in KEEP: return True
+    w = re.findall(r"[^\W\d_][\w'-]*", n)
+    return bool(w) and not any(x[0].islower() for x in w[1:])
+
+
 def validate_translation(lang, src, out, protected):
     """src/out: {desc?, long?, faq?}. -> (record | None, Fehler)"""
     if not out: return None, "no_json"
@@ -374,7 +386,7 @@ def validate_translation(lang, src, out, protected):
             rec[k] = v.strip(); s_txt, t_txt = src[k], rec[k]
         if URL_RX.search(t_txt) and not URL_RX.search(s_txt): return None, "url"
         for n in protected:
-            if n in s_txt and n not in t_txt: return None, "name_changed"
+            if n in s_txt and n not in t_txt and proper_name(n): return None, "name_changed"
         ratio = len(t_txt) / max(1, len(s_txt))
         lo, hi = (0.15, 1.6) if lang in ("ja", "ko") else (0.4, 3.0)
         if not lo <= ratio <= hi: return None, "length_ratio"
@@ -763,8 +775,11 @@ def collect(ents, gen, state, edited, spons=None):
                     cur[k] = v; sh[k] = FD.src_hash(part[k]) if same else "0" * 8
                 cur.update({"m": b["model"], "ts": datetime.now(timezone.utc).strftime("%Y-%m-%d")})
                 touched_l.add(lang); ok += 1
-        c = add_spend("write" if b["kind"] == "write" else "translate", b["model"], tin, tout, b.get("month"))
-        report_usage("fill_entities", b["model"], tin, tout, lang="batch", batch=True, cache_read=cread, cache_write=cwrite)   # Haiku: Kostenbuch des Workers (ai_spend)
+        if b.get("recollect"):   # schon bezahlt und gebucht (erneutes Einsammeln mit neuen Pruefregeln): nicht noch einmal buchen
+            c = cost(b["model"], tin, tout)
+        else:
+            c = add_spend("write" if b["kind"] == "write" else "translate", b["model"], tin, tout, b.get("month"))
+            report_usage("fill_entities", b["model"], tin, tout, lang="batch", batch=True, cache_read=cread, cache_write=cwrite)   # Haiku: Kostenbuch des Workers (ai_spend)
         print(f"{b['id']}: {ok} ok, {bad} abgelehnt {why}, Kosten {c:.3f} USD")
     if en_dirty: jsave(OUT / "en.json", fill)
     for l in touched_l: jsave(OUT / "i18n" / f"{l}.json", i18n[l])
