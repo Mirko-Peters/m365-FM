@@ -55,10 +55,15 @@ jobs:
           [ -n "$LIMIT_IN" ] && ARGS="$ARGS --limit $LIMIT_IN"
           [ -n "$MODEL_IN" ] && ARGS="$ARGS --model $MODEL_IN"
           python fill_entities.py "$MODE_IN" $ARGS | tee -a "$GITHUB_STEP_SUMMARY"
-      - name: In die Datenbank schreiben (KI-Entwurf, nur wo kein Mensch bearbeitet hat)
-        if: always() && inputs.mode != 'plan' && (inputs.mode == 'push' || inputs.d1push)
-        run: python fill_entities.py push | tee -a "$GITHUB_STEP_SUMMARY"
-      - name: Ergebnis committen
+      - name: Daten als Artefakt sichern (immer, vor D1 - bezahlte Ergebnisse und offene Batch-IDs bleiben 30 Tage am Lauf)
+        if: always() && inputs.mode != 'plan'
+        uses: actions/upload-artifact@v7
+        with:
+          name: entity-fill-daten
+          path: data/entity_fill
+          if-no-files-found: ignore
+          retention-days: 30
+      - name: Ergebnis committen (vor D1, damit ein Abbruch waehrend des D1-Schreibens nichts Bezahltes verliert - 18.11.2026)
         if: always() && inputs.mode != 'plan'
         run: |
           git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
@@ -78,11 +83,34 @@ jobs:
           done
           echo "Push fehlgeschlagen: bezahlte Ergebnisse liegen NICHT auf main (Artefakt entity-fill-daten am Lauf)" | tee -a "$GITHUB_STEP_SUMMARY"
           echo "::error::Entitaeten fuellen: Ergebnisse, offene Batches und Kostenbuch konnten nicht gespeichert werden (Push abgelehnt)"; exit 1
-      - name: Daten als Artefakt sichern (nur wenn ein Schritt gescheitert ist - bezahlte Ergebnisse und offene Batch-IDs gehen nicht mit dem Runner verloren)
+      - name: In die Datenbank schreiben (KI-Entwurf, nur wo kein Mensch bearbeitet hat)
+        if: ${{ !cancelled() && inputs.mode != 'plan' && (inputs.mode == 'push' || inputs.d1push) }}   # nach einem Abbruch nicht mehr starten (die Daten sind schon gesichert)
+        run: python fill_entities.py push | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Ergebnis committen (Stand nach D1)
+        if: always() && inputs.mode != 'plan'
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          [ -e data/entity_fill ] && git add -A data/entity_fill
+          if ! git diff --cached --quiet; then git commit -q -m "Entitaeten-Texte: Stand nach D1-Push"; fi
+          git fetch -q origin main
+          N=$(git rev-list --count FETCH_HEAD..HEAD)
+          if [ "$N" = "0" ]; then echo "Nichts Neues zu speichern" | tee -a "$GITHUB_STEP_SUMMARY"; exit 0; fi
+          # nur data/entity_fill (schreibt kein anderer Job): keine theirs-Strategie, die fremde Aenderungen verwerfen koennte; ein Konflikt bricht den Rebase ab und faellt auf
+          for i in 1 2 3 4 5; do
+            if git pull --rebase --autostash -q origin main; then
+              if git push -q origin HEAD:main; then echo "Gespeichert: $N Commit(s) auf main" | tee -a "$GITHUB_STEP_SUMMARY"; exit 0; fi
+            else
+              git rebase --abort 2>/dev/null || true
+            fi
+            sleep $((i*7))
+          done
+          echo "Push fehlgeschlagen: bezahlte Ergebnisse liegen NICHT auf main (Artefakt entity-fill-daten am Lauf)" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "::error::Entitaeten fuellen: Ergebnisse, offene Batches und Kostenbuch konnten nicht gespeichert werden (Push abgelehnt)"; exit 1
+      - name: Daten nach D1 als Artefakt sichern (nur wenn ein Schritt gescheitert ist)
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: entity-fill-daten
+          name: entity-fill-daten-nach-d1
           path: data/entity_fill
           if-no-files-found: ignore
           retention-days: 30

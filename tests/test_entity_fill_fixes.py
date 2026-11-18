@@ -172,7 +172,20 @@ class WorkflowCommit(unittest.TestCase):
         self.paid(); self.rejects.write_text("99")
         r = self.step(); self.assertNotEqual(r.returncode, 0); self.assertIn("Push fehlgeschlagen", (self.tmp / "summary.md").read_text())
         art = next(s for s in self.steps if s.get("uses", "").startswith("actions/upload-artifact"))
-        self.assertEqual(art["if"], "failure()"); self.assertIn("data/entity_fill", art["with"]["path"])
+        self.assertTrue(art["if"].startswith("always()"), art["if"]); self.assertIn("data/entity_fill", art["with"]["path"])   # immer (schliesst den Fehlerfall ein)
+
+    def test_sichern_vor_d1(self):
+        """18.11.2026: ein Abbruch waehrend des D1-Schreibens verlor die bezahlten Ergebnisse (Commit lief danach nicht mehr). Jetzt: Artefakt und Commit
+        vor dem D1-Schreiben, das D1-Schreiben startet nach einem Abbruch nicht mehr, danach wird der Push-Stand noch einmal gesichert."""
+        names = [s.get("name", "") for s in self.steps]
+        i_fill = names.index("Entitaeten fuellen")
+        i_art = next(i for i, s in enumerate(self.steps) if s.get("uses", "").startswith("actions/upload-artifact"))
+        i_pre = next(i for i, n in enumerate(names) if n.startswith("Ergebnis committen"))
+        i_d1 = next(i for i, n in enumerate(names) if n.startswith("In die Datenbank schreiben"))
+        i_post = max(i for i, n in enumerate(names) if n.startswith("Ergebnis committen"))
+        self.assertTrue(i_fill < i_art < i_d1 and i_fill < i_pre < i_d1 < i_post, names)
+        self.assertIn("!cancelled()", self.steps[i_d1]["if"])
+        self.assertTrue(self.steps[i_pre]["if"].startswith("always()") and self.steps[i_post]["if"].startswith("always()"))
 
     def test_no_theirs_and_nothing_outside_entity_fill(self):
         self.assertNotIn("-X theirs", self.commit["run"]); self.assertNotIn("data/spend.json", self.commit["run"])
