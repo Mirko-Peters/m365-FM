@@ -600,7 +600,9 @@ class Matcher:
 
     def _outside_titles(self, P, hits):
         """Treffer ohne die Stellen, an denen ein Link mitten in einem fremden Titel oder Zitat saesse (Messung Paket 4, misses 3):
-        - in Anfuehrungszeichen („…“ "…" “…” «…» »…« 「…」 『…』), ausser das Zitat ist genau der Begriff ("“single source of truth”", «privilegio mínimo»);
+        - in Anfuehrungszeichen („…“ "…" “…” «…» »…« 「…」 『…』) um einen Titel (Titel-Schreibung, _title_like: "Power Apps Code Apps with Carike
+          Botha [MVP]", "Azure Policy - Simply Explained"); ein zitierter Prompt oder Satz ("Create a checklist in Planner.") und ein Zitat, das genau
+          der Begriff ist ("“single source of truth”", «privilegio mínimo»), behalten ihren Link;
         - im Titel nach "episode"/"Folge"/… in Titel-Schreibung ("the episode Power Apps Code Apps with Carike Botha [MVP]"), nicht nach "this episode";
         - Person mit Namenszusatz in eckigen Klammern ("Carike Botha [MVP]") in einer Titel-Reihe, und nie im Zusatz selbst.
         Die Treffer bleiben Kontext (resolve lief vorher); verlinkt wird die naechste Nennung ausserhalb."""
@@ -611,7 +613,7 @@ class Matcher:
         out = []
         for s, e, t, i in hits:
             z = next((q for q in zones if q[0] <= s and e <= q[1]), None)
-            if z and z[2] != t: continue
+            if z and z[2] != t and (z[2] is None or _title_like(z[2])): continue
             if any(a <= s and e <= b for a, b in suffix): continue   # im Namenszusatz selbst
             if (self.live.get(i) or {}).get("type") == "person" and _NAME_SUFFIX.match(P, e) and self._titleish(P, s, e): continue   # "… with Shubhangi Goyal [MVP] How …": Titel-Reihe
             out.append((s, e, t, i))
@@ -628,6 +630,19 @@ _NAMED_SUFFIX = re.compile(r"(?<![\w-])[A-Z][\w'’-]+[^\S\n]+[A-Z][\w'’-]+[^\
 _EP_WORD = re.compile(r"(?<![\w-])(?<!this )(?<!This )(?<!that )(?<!each )(?<!every )(?<!next )(?<!our )(?<!dieser )(?<!jeder )(?<!nächsten )"
                       r"(episode|Episode|Folge|épisode|episodio|episódio|aflevering|odcinek|odcinku|выпуск|епізод)[^\S\n]*[:–—-]?[^\S\n]+")
 _EP_CONN = {"with", "and", "of", "the", "in", "for", "to", "a", "an", "vs", "vs.", "on", "&", "-", "–", "—", ":", "mit", "und", "für", "von", "der", "die", "das", "im"}
+
+
+_TITLE_STOP = {"and", "or", "of", "the", "a", "an", "for", "in", "on", "to", "with", "vs", "at", "by", "from", "is", "und", "oder", "der", "die", "das", "für",
+               "mit", "im", "von", "zu", "de", "la", "le", "les", "et", "des", "du", "el", "y", "en", "los", "las", "di", "il", "e", "del", "van", "het", "een",
+               "w", "i", "z", "do", "da", "dos", "um", "uma"}
+
+
+def _title_like(c):
+    """Zitat-Inhalt in Titel-Schreibung: mindestens zwei bedeutungstragende lateinische Woerter, davon mindestens drei Viertel gross geschrieben
+    (Folgen- und Artikeltitel); Saetze, Prompts und Begriffe in Satzschreibung sowie Text ohne lateinische Woerter (ja/ko) sind kein Titel.
+    Gemessen an 2.000 Zitat-Links im Vollbau (Paket 5): Titel-Schreibung trennt Folgentitel von zitierten Prompts."""
+    ws = [w for w in re.findall(r"[^\W\d_][\w'’-]*", c or "") if w.lower() not in _TITLE_STOP]
+    return len(ws) >= 2 and sum(1 for w in ws if w[:1].isupper()) >= 0.75 * len(ws)
 
 
 def _quote_zones(P):

@@ -106,6 +106,14 @@ class Titel(unittest.TestCase):
         self.assertNotIn("[<a", h)
         self.assertIn('about <a href="/entity/microsoft-mvp/"', h, "erste Nennung ausserhalb des Zusatzes")
 
+    def test_zitierter_prompt_ist_kein_titel(self):
+        # Vollbau Paket 5: 2.802 Links in zitierten Prompts und Saetzen ("Create a checklist in Planner.") behalten ihren Link
+        h = self.lk("<p>Prompt: “Sync deliverable dates across project plans in Teams, Outlook, and Planner.”</p>")
+        self.assertIn("microsoft-planner", linked(h))
+        self.assertTrue(EM._title_like("Azure Policy - Simply Explained"))
+        self.assertFalse(EM._title_like("Create a checklist in Planner."))
+        self.assertFalse(EM._title_like("このデータのインポートを自動化する Python コード"))
+
     def test_zoll_zeichen_oeffnet_kein_zitat(self):
         h = self.lk('<p>A 27" display shows Power BI reports and "Teams" calls.</p>')
         self.assertIn("power-bi", linked(h))
