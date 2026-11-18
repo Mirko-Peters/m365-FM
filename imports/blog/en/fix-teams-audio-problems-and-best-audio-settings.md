@@ -1,10 +1,10 @@
 ---
 title: "Fix Teams Audio Problems and Choose the Best Audio Settings"
 summary: "Which audio settings to check in Microsoft Teams, how to fix a microphone or speaker that does not work, and how noise suppression, test calls and high fidelity music mode behave, based on Microsoft's support pages."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-20
+date: 2026-11-18
 topics: [teams, teams-rooms]
 keypoints:
   - "Find the main audio controls under Settings and more > Settings > Devices > Audio settings, where you pick the speaker and microphone and can run Make a test call."

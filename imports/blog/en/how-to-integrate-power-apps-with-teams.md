@@ -1,10 +1,10 @@
 ---
 title: "How to Integrate Power Apps with Teams: Tabs, Personal Apps and Limits"
 summary: "How to add a Power Apps canvas app to Microsoft Teams as a tab or personal app, which prerequisites and admin settings apply, and what the Dataverse for Teams deprecation means for apps built inside Teams."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-20
+date: 2026-11-18
 topics: [power-apps, teams, power-platform]
 keypoints:
   - "Microsoft documents three routes: embed a canvas app, embed a model-driven app, or build an app inside Teams on Dataverse for Teams."

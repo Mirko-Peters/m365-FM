@@ -1,10 +1,10 @@
 ---
 title: "What Is eDiscovery in Microsoft Purview? Cases, Holds and Export"
 summary: "What eDiscovery in Microsoft Purview is, how cases, searches, holds, review sets and exports fit together, which roles and licenses apply, and the limits that matter, such as the 14-day search export expiry."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-20
+date: 2026-11-18
 topics: [ediscovery, purview]
 keypoints:
   - "eDiscovery in Microsoft Purview searches Exchange Online, Teams, Microsoft 365 Groups, OneDrive, SharePoint and Viva Engage, then lets you hold, review and export the content."

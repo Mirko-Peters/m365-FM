@@ -1,10 +1,10 @@
 ---
 title: "Copilot in Teams Meetings: Notes, Summaries and Recap Setup"
 summary: "How to set up and use Microsoft 365 Copilot in Teams meetings: organizer options, admin policy values, how transcription changes what Copilot can do, intelligent recap without saved transcripts, prompt tips and limits."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-20
+date: 2026-11-18
 topics: [copilot, teams, teams-meeting-transcription]
 keypoints:
   - "Organizers choose Allow Copilot and Facilitator under Online meeting options > Copilot and other AI, with During and after the meeting, Only during the meeting or Off."

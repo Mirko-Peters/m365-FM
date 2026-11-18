@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Authenticator Problems: Sign-in Request Not Arriving, Loops and Resets"
 summary: "Why a Microsoft Authenticator sign-in request does not arrive, what to check first, what number matching changes, how to read common error messages and what admins can reset, based on Microsoft Support and Learn."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-20
+date: 2026-11-18
 topics: [mfa, entra-id, microsoft-entra]
 keypoints:
   - "Start with the basics Microsoft lists: switch between mobile data and Wi-Fi, update the app, check battery optimization and make sure Show notifications is on."

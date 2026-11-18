@@ -1,10 +1,10 @@
 ---
 title: "Best Ways to Share Files in SharePoint: Links, Permissions and External Sharing"
 summary: "How to share a SharePoint file or folder: specific people versus copied links, what Can edit, Can view and Can't download do, which link type to pick, and the admin settings that decide whether external sharing works."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-21
+date: 2026-11-18
 topics: [sharepoint, sharepoint-sharing-links, guest-access]
 keypoints:
   - "Select the item, then Share. Use Specific people to email invitations and track who you invited, or Copy link to share with many people."

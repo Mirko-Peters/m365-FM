@@ -1,10 +1,10 @@
 ---
 title: "Microsoft 365 Copilot Use Cases: Practical Scenarios for Everyday Work"
 summary: "Practical Copilot scenarios drawn from Microsoft's own documentation: drafting in Word, summarizing email threads in Outlook, building decks in PowerPoint, analyzing data in Excel and catching up on Teams meetings, plus how to pick scenarios."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-20
+date: 2026-11-18
 topics: [copilot, copilot-chat, copilot-adoption]
 keypoints:
   - "Documented scenarios: drafting in Word, email thread summaries in Outlook, decks in PowerPoint, data analysis in Excel and Teams meeting catch-up."
