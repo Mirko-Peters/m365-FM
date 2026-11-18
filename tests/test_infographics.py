@@ -73,6 +73,10 @@ class SpecChecks(unittest.TestCase):
         self.assertEqual(IGT.parse_json(_j.dumps(d))["header"]["hero"]["value"], "3")
         self.assertIsNone(IGT.parse_json("kein json")); self.assertIsNone(IGT.parse_json("{kaputt"))
 
+    def test_dotnet_is_not_an_address(self):
+        s = copy.deepcopy(SET); s["figs"][0]["note"] = "Runs on ASP.NET and .NET 9"; self.assertIsNone(IGT.check_set(s))
+        s = copy.deepcopy(SET); s["figs"][0]["note"] = "See example.net now"; self.assertIn("Adresse", IGT.check_set(s))
+
     def test_schema_has_all_templates(self):
         names = [o["properties"]["template"]["enum"][0] for o in IGT.SET_SCHEMA["properties"]["figs"]["items"]["anyOf"]]
         self.assertEqual(names, list(IGT.FIG_TEMPLATES))

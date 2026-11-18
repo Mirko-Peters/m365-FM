@@ -117,7 +117,9 @@ SYSTEM_SPECS = (
     "Prefer concrete, useful content over slogans. If the text cannot honestly fill a template, choose another one.\n"
     "Style: plain, short phrases; no emoji, no marketing words, no quotation marks. kicker = kind and topic, e.g. 'Entity · Azure security', 'Blog · Microsoft Fabric', 'Podcast · Power Apps'.\n"
     "alt = one sentence (at most 125 characters) saying what the image shows or explains, for screen readers. tags = up to 3 product or topic names (each at most 20 characters).\n"
-    "Hard length limits in characters (English): see the list. Aim for about 75% of every limit and count the characters; a set with one text too long is discarded.\n{limits}\n"
+    "Hard length limits in characters (English): see the list. A set with one text too long is discarded, so stay clearly below. Rules of thumb: a chip t is 1-2 short words (max 14 characters), a chip n at most 5 words (max 30); "
+    "any title of a flow at most 3-4 words (26 characters); any kicker at most 5 words (36 characters); hero.value is 1 or 2 characters such as 7, 12 or 3x (never 3 characters); tags at most 3, each at most 20 characters; "
+    "compare heads 1-2 words (18 characters); exactly 2 or 3 infographics, never 1 or 4.\n{limits}\n"
     "Answer with one JSON object only (no text before or after, no code fence). All values are strings except hi (integer) and the lists. Exactly this structure and these field names "
     "(the example shows two of the four figure templates; flow needs hero, hi, steps, note; compare needs left, right, verdict; ladder needs sub, tiers, axis; hub needs core, nodes):\n{example}"
 )
@@ -197,7 +199,7 @@ def check_spec(spec, lang="en", template=None):
     if not isinstance(tags, list) or len(tags) > TAG_MAX[1] or any(not isinstance(x, str) or len(x) > TAG_MAX[2] * f for x in tags): return "tags"
     txt = " ".join(strings({k: v for k, v in spec.items() if k not in ("tags",)}))
     if "<" in txt or ">" in txt or "{" in txt: return "Sonderzeichen"
-    if re.search(r"(?i)https?:|www\.|@|\.(com|net|org|de|fm)\b", txt): return "Adresse im Text"
+    if re.search(r"(?i:https?:|www\.|@|\.(com|org|de|fm)\b)|[a-z0-9-]\.net\b", txt): return "Adresse im Text"
     letters = re.findall(r"[^\W\d_]", txt)
     if letters:
         if lang in SCRIPTS:
