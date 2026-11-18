@@ -30,6 +30,17 @@ class Fuge(unittest.TestCase):
         d = M.lead_text(t)
         self.assertTrue(d.endswith("."), d)
 
+    def test_niederlaendisch_mit_sprache(self):
+        t = ("Een functie van Microsoft Defender for Office 365 Plan 2 die realistische gesimuleerde phishingberichten naar gebruikers stuurt "
+             "en op basis van hun gedrag gerichte training toewijst aan medewerkers")
+        d = M.lead_text(t, lang="nl")
+        self.assertTrue(d.endswith(".") and not d.endswith("…"), d)
+
+    def test_deutsch_ohne_niederlaendische_woerter(self):
+        t = ("Azure Kubernetes Service ist das verwaltete Kubernetes-Angebot von Microsoft bei dem Microsoft die Steuerungsebene betreibt "
+             "und Kunden die Knoten in ihrem eigenen Abonnement verwalten")
+        self.assertFalse(M.lead_text(t, lang="de").endswith("Microsoft."), M.lead_text(t, lang="de"))   # "die" ist im Deutschen ein Artikel, keine Fuge
+
     def test_englisch_unveraendert(self):
         t = ("A Ralph loop (Ralph Wiggum technique) repeatedly re-runs an AI coding agent on the same goal until a completion criterion is met, "
              "so agents keep working through long tasks without a human restarting them each time.")
