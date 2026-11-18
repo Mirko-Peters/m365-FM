@@ -78,3 +78,19 @@ def test_translate_need_for_rich(monkeypatch):
     assert "long" in need   # GENTEXT.de (kurz) blockiert die Uebersetzung des neuen langen en-Textes nicht
     src2 = {"desc": "d" * 90, "long": "x" * 1200}
     assert "long" not in F.translate_need(e, "de", src2, gen, {})
+
+
+def test_sources_loaded_and_used_as_facts(monkeypatch, tmp_path):
+    import json
+    monkeypatch.setattr(FD, "ROOT", tmp_path)
+    (tmp_path / "data" / "entity_sources").mkdir(parents=True)
+    (tmp_path / "data" / "entity_sources" / "x.json").write_text(json.dumps({
+        "hub": {"url": "https://learn.microsoft.com/hub", "title": "Hub overview - Microsoft Learn", "notes": "Hub keeps files together. " * 40},
+        "bad": {"url": "http://insecure.example", "title": "t", "notes": "n"}, "none": None}), encoding="utf-8")
+    src = FD.load_sources()
+    assert set(src) == {"hub"} and src["hub"]["url"].startswith("https://")
+    monkeypatch.setattr(F, "_SRC", src); monkeypatch.setattr(F, "_GEN", {}); monkeypatch.setattr(F, "excerpts_for", lambda e: [])
+    e = ent("hub", name="Contoso Hub", desc={"en": "A hub.", "de": ""})
+    f = F.facts_for(e, {"hub": e}, rich=True)
+    assert f["sources"][0]["title"].startswith("Hub overview") and F.source_chars(f) >= 1000
+    assert F.fhash(f) == F.fhash({k: v for k, v in f.items() if k != "sources"})   # Quellen-Notizen sind nicht im Hash

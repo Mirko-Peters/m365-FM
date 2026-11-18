@@ -46,6 +46,17 @@ def load_gentext():
     return g
 
 
+def load_sources():
+    """Belegte Quellen je Entitaet (data/entity_sources/*.json, von Hand/Agenten gesammelt): {id: {url, title, notes}}. notes = Fakten in eigenen Worten
+    (Quelle fuer den Langtext-Modus von fill_entities), url/title erscheinen im Abschnitt Quellen der Entitaetsseite. Eintraege ohne Quelle (null) fehlen."""
+    out = {}
+    for f in sorted((ROOT / "data" / "entity_sources").glob("*.json")):
+        for k, v in _load(f).items():
+            if isinstance(v, dict) and str(v.get("url", "")).startswith("https://") and (v.get("title") or "").strip():
+                out[k] = {"url": v["url"].strip(), "title": v["title"].strip(), "notes": (v.get("notes") or "").strip()}
+    return out
+
+
 def sponsored_ids():
     ids = set()
     for x in (_load(ROOT / "data" / "sponsorships.json").get("sponsorships") or []):

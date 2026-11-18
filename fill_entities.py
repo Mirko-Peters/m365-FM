@@ -54,7 +54,7 @@ RICH = False                  # Langtext-Modus (--rich): Entitaeten mit weniger 
 RICH_MIN_CHARS = 2600         # Pruefgrenze des Schreibmodus (Puffer ueber der 2500-Index-Schwelle; die Uebersetzungen sind meist laenger, nicht kuerzer)
 RICH_MAX_WORDS = 900
 RICH_MAX_TOKENS = 3200        # Antwort eines Langtext-Auftrags (ca. 3.000-5.000 Zeichen + FAQ)
-RICH_MIN_SOURCE = 1800        # Zeichen belegter Quelltext (Folgen-Auszuege + Ueberblick + Kurzbeschreibung), darunter wird nicht aufgefuellt
+RICH_MIN_SOURCE = 1500        # Zeichen belegter Quelltext (Folgen-Auszuege + Ueberblick + Kurzbeschreibung), darunter wird nicht aufgefuellt
 RICH_EXCERPT_TOK = 1500       # Schaetzung der Auszug-Token je Auftrag (plan)
 WRITE_OUT_TOK = {"full": 650, "desc": 70, "rich": 1150}   # Ausgabe-Token je Schreibauftrag (Schaetzung bis Messwerte da sind)
 LANG_FACTOR = {"ru": 2.2, "uk": 2.2, "ar": 2.2, "he": 2.2, "ja": 1.8, "ko": 2.0}   # Ausgabe-Token je Quell-Token (wie translate_blog.py)
@@ -205,7 +205,7 @@ def excerpts_for(e, limit=5, per=650, total=3600):
     return out
 
 
-_GEN = None
+_GEN = None; _SRC = None
 def facts_for(e, ents, eps=None, rich=False):
     """Alle Fakten, die das Modell sehen darf (und die der Hash abdeckt). rich: mit Folgen-Auszuegen und dem vorhandenen Ueberblickstext (beide nicht im Hash)."""
     d = e.get("desc") or {}
@@ -221,18 +221,22 @@ def facts_for(e, ents, eps=None, rich=False):
         f["episodes"] = excerpts_for(e) if eps is None else eps
         ov = (_GEN.get(e["id"]) or {}).get("en") or ""
         if ov: f["overview"] = ov[:1600]
+        global _SRC
+        if _SRC is None: _SRC = FD.load_sources()
+        sx = _SRC.get(e["id"])
+        if sx and sx.get("notes"): f["sources"] = [{"title": sx["title"], "notes": sx["notes"]}]
     return f
 
 
 def source_chars(f):
     """Zeichen belegter Quelltext eines Langtext-Auftrags."""
-    return sum(len(x.get("excerpt", "")) for x in f.get("episodes") or []) + len(f.get("overview", "")) + len(f.get("short_description", "")) + len(f.get("existing_long", ""))
+    return sum(len(x.get("excerpt", "")) for x in f.get("episodes") or []) + len(f.get("overview", "")) + sum(len(x.get("notes", "")) for x in f.get("sources") or []) + len(f.get("short_description", "")) + len(f.get("existing_long", ""))
 
 
 def fhash(f):
     """Hash der Fakten OHNE die Folgenliste: eine neue Folge zwischen Absenden und Einsammeln macht einen bezahlten Text nicht ungueltig (die genannten Folgen
     stimmen weiter); aendern sich Name, Beschreibung, Beziehungen oder Links, gilt das Ergebnis als veraltet."""
-    return hsh({k: v for k, v in f.items() if k not in ("episodes", "overview")})
+    return hsh({k: v for k, v in f.items() if k not in ("episodes", "overview", "sources")})
 
 
 def person_has_source(e, f):
@@ -273,7 +277,7 @@ Output ONLY one JSON object, no markdown fences:
 
 
 SYSTEM_WRITE_RICH = SYSTEM_WRITE.split("Output ONLY one JSON object")[0].replace("Write for people who search for the term: first sentence defines it, then what it is used for, how it relates to the linked topics, where it appears on M365.FM (mention episode titles only if given).",
-    "Write for people who search for the term: first sentence defines it, then what it is used for, how it works, typical situations and decisions around it, how it relates to the linked topics, and what the M365.FM episodes say about it (mention episode titles in quotation marks as given).") + """The JSON contains episode excerpts (show notes of M365.FM episodes) and may contain an existing short overview. Build the text from these sources only; you may restate and combine what they say, but add no fact, number, date, price, version or name that is not in the JSON. Attribute opinions and figures from episodes to the episode ("The episode ... says"). Write the whole text, including the FAQ, in English.
+    "Write for people who search for the term: first sentence defines it, then what it is used for, how it works, typical situations and decisions around it, how it relates to the linked topics, and what the M365.FM episodes say about it (mention episode titles in quotation marks as given).") + """The JSON contains episode excerpts (show notes of M365.FM episodes), and may contain an existing short overview and notes taken from official documentation ("sources"). Build the text from these sources only; you may restate and combine what they say, but add no fact, number, date, price, version or name that is not in the JSON. Attribute opinions and figures from episodes to the episode ("The episode ... says"). Write the whole text, including the FAQ, in English.
 LENGTH IS A HARD REQUIREMENT: the "long" text must have at least 2,700 characters and at most 5,500 characters (about 450 to 800 words), in 4-7 paragraphs separated by a blank line (\\n\\n). Reach the length with substance (definition, purpose, components or parts named in the sources, how it is used, what the episodes recommend or warn about, related topics), never with repetition or filler. If the JSON does not hold enough material for 2,700 characters, still write as much as the sources support.
 Output ONLY one JSON object, no markdown fences:
 {"desc": "<ONE sentence, 90-170 characters, also used as hover text and meta description>",

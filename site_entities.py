@@ -54,6 +54,7 @@ import entity_fill_data as FD
 import ontology as ONT   # Oberbegriff-Kette fuer Brotkruemel, SKOS broader im JSON-LD-Graph
 import site_topic_crumbs as TC   # Adresse der Entitaetsseite je Sprache (gemeinsam mit den Themen-Brotkrumen)
 import site_entmatch as _EM   # gemeinsamer Namensindex: Kontext-Links und Kernpunkte der Folgen
+SOURCES = FD.load_sources()   # Entitaet -> {url, title, notes}: belegte Quellen aus data/entity_sources/*.json (erscheinen im Abschnitt Quellen)
 GENTEXT = {}   # Entitaet -> {en, de}: Ueberblickstexte aus data/entity_texts/part-*.json (aus Folgen und Fakten geschrieben, tools/entity_text_tasks.py)
 for _f in sorted((Path(__file__).parent / "data" / "entity_texts").glob("part-*.json")) if (Path(__file__).parent / "data" / "entity_texts").exists() else []:
     try: GENTEXT.update(json.loads(_f.read_text("utf-8")))
@@ -1029,6 +1030,8 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                     ("wikidata", f"https://www.wikidata.org/wiki/{e['wikidata']}" if e.get("wikidata") else "")] + [("profile", u_) for u_ in (e.get("same_as") or [])[:4]]
             _src = [(k_, u_) for k_, u_ in _src if u_ and str(u_).startswith("http")]
             _srl = LT.unique([(LT.ext_label(lang, _en, k_, u_), u_) for k_, u_ in _src])
+            _sx = SOURCES.get(e["id"])   # belegte Quelle des Langtexts (data/entity_sources), zusaetzlich zu web/docs/wikipedia
+            if _sx and _sx["url"] not in {u_ for _, u_ in _srl}: _srl = _srl + [(_sx["title"], _sx["url"])]
             srcbox = (f'<section class="en-src"><h2>{esc(T(lang, "Sources", "Quellen"))}</h2><ul>' + "".join(f'<li><a href="{esc(SPM.link_url(_spr, u_, "entity"))}" rel="{SPM.link_rel(_spr, u_, own=_spown and u_ == e.get("web"))}">{esc(t_)}</a>{LT.domain_note(u_)}</li>' for t_, u_ in _srl)
                       + (f'<li><a href="{BASE}/entity/{e["id"]}/feed.xml" type="application/rss+xml">{esc(T(lang, "RSS feed: {name}", "RSS-Feed: {name}")).replace("{name}", _enh)}</a></li>' if (eps or _arts) else "")
                       + (f'<li>{esc(T(lang, "M365.FM episodes on this topic", "M365.FM-Folgen zum Thema"))}: {len(eps)}</li>' if eps else "") + (f'<li>{esc(T(lang, "Articles on this topic", "Artikel zum Thema"))}: {len(_arts)}</li>' if _arts else "") + MEN.src_li(lang, e["id"]) + "</ul></section>") if (_src or eps or _arts or MEN.for_entity(e["id"])) else ""
