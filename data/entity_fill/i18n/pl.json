@@ -8099,12 +8099,29 @@
  },
  "business-application": {
   "desc": "Oprogramowanie do procesów biznesowych, takich jak sprzedaż, finanse czy obsługa klienta.",
+  "faq": [
+   {
+    "a": "Eine Geschäftsanwendung ist Software für Geschäftsprozesse wie Vertrieb, Finanzen oder Kundenservice. Sie verwaltet Datensätze wie Kunden, Bestellungen und Rechnungen und leitet die Schritte an, die Mitarbeitende befolgen.",
+    "q": "Was ist eine Geschäftsanwendung?"
+   },
+   {
+    "a": "Laut der Folge „Microsoft Cloud Adoption Framework - Simply Explained“ kann eine scheinbar einfache Anwendung von einer Datenbank, einem gemeinsamen Dateispeicherort, einem Authentifizierungsdienst, einer geplanten Aufgabe oder einer anderen Geschäftsanwendung abhängen. Wird nur der sichtbare Server ohne diese Beziehungen verschoben, kann die Anwendung nicht mehr funktionieren.",
+    "q": "Warum sind Abhängigkeiten bei der Migration einer Geschäftsanwendung nach Azure wichtig?"
+   },
+   {
+    "a": "Laut „Dynamics 365 Virtual Entities - Simply Explained“ kann ein Provider Datensätze aus einer externen Anwendung abrufen, die OData V4 unterstützt. Für andere Systeme können benutzerdefinierte Data Provider Dataverse mit einer REST-API, einer Datenbank oder einem proprietären Unternehmensdienst verbinden.",
+    "q": "Wie können externe Geschäftsanwendungen mit Dataverse verbunden werden?"
+   }
+  ],
   "h": "06677b49d749e5e8",
-  "m": "autotr",
+  "long": "Eine Geschäftsanwendung ist Software für Geschäftsprozesse wie Vertrieb, Finanzen oder Kundenservice. Diese Anwendungen verwalten Unternehmensdaten, etwa Kunden, Bestellungen und Rechnungen, und leiten die Schritte an, die Mitarbeitende bei ihrer täglichen Arbeit befolgen. Auf M365.FM ist „Geschäftsanwendung“ eine Kategorie und kein einzelnes Produkt. Es bestehen derzeit keine direkten Beziehungen zu einzelnen Produkten. Sie dient als übergeordnetes Thema, unter dem Folgen zu Anwendungen, Integration und Migration zusammengefasst werden.\n\nIn der Praxis stehen Geschäftsanwendungen selten für sich allein. Sie sind auf eine Cloud-Plattform zum Betrieb angewiesen, auf Identitätsdienste für die Anmeldung und auf Automatisierungs- und Low-Code-Werkzeuge, die sie mit der täglichen Arbeit in Microsoft 365 verbinden. Die Folgen auf M365.FM beleuchten dies aus mehreren Blickwinkeln: Migrationsplanung, Workflow-Automatisierung, benutzerdefinierte Oberflächen in SharePoint sowie die Integration mit Dynamics 365 und Dataverse.\n\nMigration ist ein wiederkehrendes Thema. Die Folge „Microsoft Cloud Adoption Framework - Simply Explained“ betont, wie wichtig es ist, Anwendungen, Daten, Abhängigkeiten, Verantwortliche, Kompetenzen, Risiken und Zeitpläne zu verstehen, bevor Workloads nach Azure verschoben werden. Sie weist darauf hin, dass eine scheinbar einfache Anwendung von einer Datenbank, einem gemeinsamen Dateispeicherort, einem Authentifizierungsdienst, einer geplanten Aufgabe und einer weiteren Geschäftsanwendung abhängen kann. Laut der Folge kann es dazu führen, dass eine Migration zwar technisch abgeschlossen wird, die Anwendung aber nicht mehr funktionsfähig ist, wenn nur der sichtbare Server verschoben wird, ohne diese Beziehungen zu verstehen. Außerdem wird erwähnt, dass nicht jeder Workload auf die gleiche Weise nach Azure verschoben werden sollte. Manche Anwendungen können neu gehostet werden, was üblicherweise als Lift and Shift bezeichnet wird, wobei die bestehende Anwendung mit vergleichsweise wenigen Änderungen nach Azure wechselt.\n\nEin zweites Thema ist die Prozessautomatisierung. „Build Audit-Ready Power Automate Approval Workflows“ beschreibt einen Cloud-Flow, der Anfragen an Genehmigende weiterleitet, auf eine Genehmigungsaktion wartet und anschließend Folgeschritte ausführt, etwa die Aktion zum Aktualisieren eines Elements oder das Senden einer E-Mail. Die Folge nennt Dokumente, Einkaufsanfragen, Urlaubsanträge und jede Geschäftsanwendung, bei der Genehmigungen einen einheitlichen, prüfbaren Prozess erfordern, als typische Einsatzbereiche. Der Einstieg umfasst die Anmeldung bei Microsoft Power Automate, das Bestandteil von Microsoft Power Platform ist, das Erstellen eines Flows oder die Auswahl einer Vorlage sowie die Auswahl eines Auslösers, etwa das Erstellen eines Elements in einer SharePoint-Liste oder eine Übermittlung über Microsoft Forms.\n\nEin drittes Thema ist die Benutzererfahrung auf Basis von SharePoint. In „Stop Reinventing SPFx- Building Better SharePoint Solutions with PnP React Controls with Siddharth Vaghasia [MVP]“ wird beschrieben, dass das SharePoint Framework (SPFx) eine einheitliche Anwendungsoberfläche mit Dashboards, Projektansichten, Diagrammen, CRUD-Vorgängen, rollenspezifischen Oberflächen, Aufgabenverwaltung und Navigation bereitstellen kann. Das Ergebnis, so die Folge, kann sich deutlich mehr wie eine eigenständige Geschäftsanwendung anfühlen und dennoch in die SharePoint-Umgebung eingebettet bleiben, die Benutzende bereits kennen. Die Folge ergänzt, dass SharePoint nicht die Datenbank sein muss: SPFx-Anwendungen können Daten aus Dataverse abrufen und externe Systeme einbinden, und wenn Daten in einem System wie Azure SQL liegen, kann eine Backend-API als sichere Zwischenschicht fungieren.\n\nDie Integration mit externen Systemen ist das vierte Thema. „Dynamics 365 Virtual Entities - Simply Explained“ behandelt, wie Dataverse mit Daten einer externen Geschäftsanwendung arbeiten kann. Unterstützt diese Anwendung OData V4, kann ein Provider Datensätze anfordern und sie in einer Struktur zurückgeben, die Dataverse versteht. Unterstützt sie dies nicht, können Organisationen benutzerdefinierte Data Provider einsetzen, etwa einen von Entwicklern erstellten Provider, der Dataverse mit einer REST-API, einer Datenbank oder einem proprietären Unternehmensdienst verbindet. Der Provider nimmt die Dataverse-Anfrage entgegen, kommuniziert mit dem externen System, übersetzt die Antwort und gibt sie zurück.\n\nDie Folge „Dynamics 365 Intelligent Order Management - Simply Explained“ betrachtet die Koordination von Bestellungen über verschiedene Systeme hinweg. Laut der Folge bietet Intelligent Order Management Bestell- und Auftragsabwicklungsinformationen einen strukturierten Ort, auch wenn die ursprünglichen Transaktionen aus unterschiedlichen Systemen stammen. Organisationen müssen zudem nicht jede bestehende Geschäftsanwendung durch ein anderes Dynamics 365-Produkt ersetzen, um Bestellungen zu koordinieren. Die Folge nennt sowohl Microsoft-Systeme, etwa Dynamics 365 Finance oder Supply Chain Management, als auch Nicht-Microsoft-Systeme, etwa Warehouse-Plattformen von Drittanbietern, E-Commerce-Lösungen, Marktplätze und Logistikdienstleister.\n\nZusammengenommen deckt die Kategorie Entscheidungen ab, die bei jeder Geschäftsanwendung anfallen: wo sie läuft, wie sie migriert wird, wie Genehmigungen und andere Schritte automatisiert werden, wie Benutzende sie erreichen und wie ihre Daten mit anderen Systemen verbunden sind.",
+  "m": "claude-haiku-5-5",
   "sh": {
-   "desc": "c4e24c36"
+   "desc": "c4e24c36",
+   "faq": "abe82514",
+   "long": "b088f67c"
   },
-  "ts": "2026-11-10"
+  "ts": "2026-11-18"
  },
  "business-central-agent-designer": {
   "desc": "Agent Designer to funkcja w Dynamics 365 Business Central umożliwiająca tworzenie niestandardowych agentów AI na podstawie instrukcji w języku naturalnym, przypisanego profilu i uprawnień, początkowo w środowiskach piaskownicy.",
@@ -21533,6 +21550,15 @@
   },
   "ts": "2026-11-18"
  },
+ "jannik-reinhard": {
+  "desc": "🚀 Ich verwandle KI-Hype in produktionsreife Systeme, die Menschen tatsächlich nutzen. Als Dual Microsoft MVP in den Bereichen Security (Intune) und Microsoft Foundry (Azure AI Services) habe ich in den letzten zehn Jahren cloud-native, intelligente IT-Lösungen entwickelt – von Grund auf bei einem der weltweit größten Chemieunternehmen bis hin zur Gründung meines eigenen Unternehmens.\n\n𝗪𝗮𝘀 𝗶𝗰𝗵 𝗵𝗲𝘂𝘁𝗲 𝗺𝗮𝗰𝗵𝗲\n🔹 Head of AI und Lead @ Epic Fusion Germany GmbH. Wir helfen Unternehmen, über KI-Demos hinauszugehen und echte, agentische Workflows auf Basis von Microsoft-Technologien aufzubauen.\n🔹 Gründer @ Jannik Reinhard (Freelance).\n\n𝗪𝗮𝘀 𝗶𝗰𝗵 𝗮𝗿𝗰𝗵𝗶𝘁𝗲𝗸𝘁𝗶𝗼𝗻𝗶𝗲𝗿𝘁 𝗵𝗮𝗯𝗲\n🔹 Ein eigenes KI-Framework bei BASF konzipiert und skaliert, das zu einer Produktionsplattform für mehr als 120.000 Mitarbeitende in verschiedenen Geschäftsbereichen wurde.\n🔹 Ein Buch über modernes Endpoint- und KI-gestütztes IT-Management verfasst.\n🔹 Jährlich mehr als 30 öffentliche Vorträge weltweit gehalten.\n🔹 Über 200 technische Blogbeiträge veröffentlicht und zu Open-Source-Projekten beigetragen.\n\n𝗪𝗶𝗲 𝗶𝗰𝗵 𝘇𝘂𝗿𝘂𝗰𝗸𝗴𝗲𝗯𝗲𝘀𝗰𝗵𝗲𝗻𝗸𝗲\n🔹 Offizieller Contributor – LinkedIn-Gruppe Modern Endpoint Management\n🔹 Mentor – Initiative GDEXA Skills-Over-Degree\n🔹 Prüfer – DHBW Mannheim (Bachelor-Kolloquien)\n\nMeine Arbeit ist mein Hobby. Ich stehe aus einem einzigen Grund auf: um weiterzulernen, weiterzubauen und anderen dabei zu helfen, dasselbe zu tun.\n\nOffizielles Microsoft-MVP-Profil: [URL entfernt]",
+  "h": "53e88c08b65f5f20",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "d82ad01c"
+  },
+  "ts": "2026-11-18"
+ },
  "jasmin-simader": {
   "desc": "Jasmin Simader jest prelegentką na konferencjach M365Con DACH 2026 i M365Con 2027 (założycielka Data Therapy) i prowadzi 3 sesje.",
   "h": "89cae1b6a5bab80f",
@@ -30807,6 +30833,32 @@
   },
   "ts": "2026-11-18"
  },
+ "power-platform-developer": {
+  "desc": "Buduje aplikacje, automatyzacje i raporty z użyciem Power Apps, Power Automate, Power BI i Copilot Studio, często z wykorzystaniem konektorów i Dataverse.",
+  "faq": [
+   {
+    "a": "Deweloper Power Platform buduje aplikacje, automatyzacje i raporty z użyciem Power Apps, Power Automate, Power BI i Copilot Studio, często z wykorzystaniem konektorów i Dataverse.",
+    "q": "Czym zajmuje się deweloper Power Platform?"
+   },
+   {
+    "a": "Odcinek \"From SharePoint Developer to Power Platform Architect with Michel Mendes [MVP]\" wymienia certyfikat PL-400: Power Platform Developer Associate, skierowany do zaawansowanych umiejętności deweloperskich. Sugeruje rozpoczęcie od podstaw, takich jak PL-900.",
+    "q": "Który certyfikat jest przeznaczony dla deweloperów Power Platform?"
+   },
+   {
+    "a": "Według odcinka \"Build a Power Platform Career with Nathalie Leenders [MVP-MCT]\" platforma pozwala tworzyć aplikacje, automatyzować zadania i analizować dane bez znajomości dużej ilości kodu.",
+    "q": "Czy deweloperzy Power Platform muszą dużo programować?"
+   }
+  ],
+  "h": "994727f4ca5a44e6",
+  "long": "Deweloper Power Platform to specjalista, który buduje aplikacje, automatyzacje i raporty na platformie Microsoft Power Platform. Rola opiera się na Power Apps, Power Automate, Power BI i Copilot Studio, a często obejmuje również konektory oraz Dataverse. Stanowisko pojawia się także pod pokrewnymi nazwami, takimi jak Power Platform Entwickler czy Power Apps developer. Wspólnym elementem jest wykorzystanie narzędzi low-code do tworzenia rozwiązań biznesowych bez polegania na rozbudowanym tradycyjnym kodowaniu.\n\nPraca obejmuje kilka rodzajów wyników. Tworzone są aplikacje dla użytkowników biznesowych, powtarzalne zadania zamieniane są na zautomatyzowane przepływy pracy, a dane są analizowane i prezentowane w raportach. Konektory łączą te rozwiązania z innymi usługami, a Dataverse zazwyczaj pełni rolę warstwy danych. Dzięki Copilot Studio zakres rozszerza się o agentów AI. Odcinek \"Copilot Studio AI Agents and RAG with Nilüfer Doğan [MVP]\" dotyczy tego obszaru: wyjaśnia, jak agenci mogą pobierać właściwe informacje firmowe zamiast polegać wyłącznie na bazowym modelu językowym, oraz podkreśla znaczenie zarządzania, bezpieczeństwa i wysokiej jakości danych biznesowych dla wiarygodnych wyników AI. Odcinek wskazuje deweloperów Power Platform wśród swoich zamierzonych odbiorców.\n\nOdcinek \"Build a Power Platform Career with Nathalie Leenders [MVP-MCT]\" przygląda się tej roli z perspektywy kariery. Stwierdza, że osoba może zacząć jako deweloper Power Platform, ucząc się narzędzi low-code, a platforma pozwala tworzyć aplikacje, automatyzować zadania i analizować dane bez znajomości dużej ilości kodu. Według odcinka ludzie wybierają tę ścieżkę, ponieważ platforma dobrze współpracuje z innymi narzędziami Microsoft, a firmy szukają osób znających automatyzację. Zaleca także poznawanie nowych ludzi, zdobywanie doświadczenia w realnych projektach i stażach oraz budowanie portfolio, które pokaże umiejętności przyszłym pracodawcom.\n\nCertyfikacja to kolejny powracający temat. Odcinek \"From SharePoint Developer to Power Platform Architect with Michel Mendes [MVP]\" wymienia ścieżkę certyfikatów Microsoft: PL-900 (Power Platform Fundamentals), PL-100 (Power Platform App Maker Associate), PL-200 (Power Platform Functional Consultant Associate), PL-400 (Power Platform Developer Associate) i PL-600 (Power Platform Solution Architect Expert). Certyfikat PL-400 jest skierowany do zaawansowanych umiejętności deweloperskich. Wskazówka z odcinka brzmi: zacząć od podstaw i przejść do zaawansowanych certyfikatów wraz z doświadczeniem, a także poznać powiązane certyfikaty z zakresu Microsoft 365, Azure lub Dynamics 365, aby zrozumieć szerszy ekosystem Microsoft. Sam tytuł odcinka odzwierciedla progresję od dewelopera SharePoint do architekta Power Platform.\n\nRola zmienia się też wraz z pojawieniem się AI w procesie tworzenia oprogramowania. Odcinek \"AI, Power Platform & Developer Experience: The Next Frontier with Reza Niroomand [MVP]\" omawia, jak AI zmienia produktywność deweloperów i jak zacierają się granice między low-code a pro-code. Podkreśla potrzebę równoważenia kodu generowanego przez AI z solidnymi zasadami inżynierskimi, bezpieczeństwem, łatwością utrzymania i skalowalnym projektowaniem rozwiązań, w miarę jak organizacje przyjmują strategie tworzenia oparte przede wszystkim na AI. Odcinek przedstawia te tematy jako istotne dla deweloperów Power Platform, architektów rozwiązań, specjalistów IT i konsultantów Microsoft oraz mówi, jakie umiejętności będą najważniejsze w miarę rozwoju platformy.\n\nW praktyce decyzje związane z tą rolą dotyczą zwykle wyboru właściwego komponentu Power Platform do danego zadania, ustalenia sposobu przechowywania i łączenia danych oraz oceny, kiedy rozwiązanie wymaga większej dyscypliny inżynierskiej. Źródła opisują to stanowisko jako znajdujące się między potrzebami biznesowymi a realizacją techniczną, z ścieżką, która z czasem może prowadzić w stronę konsultingu funkcjonalnego lub architektury rozwiązań.",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "20e1bfc3",
+   "faq": "49f7fc8f",
+   "long": "31b5fabf"
+  },
+  "ts": "2026-11-18"
+ },
  "power-platform-environment": {
   "desc": "Kontener w Microsoft Power Platform, w którym razem przechowywane i zarządzane są dane biznesowe, aplikacje, chatboty i przepływy. Każde środowisko należy do dzierżawy Microsoft Entra, jest przypisane do regionu i może zawierać co najwyżej jedną bazę danych Dataverse.",
   "faq": [
@@ -31234,6 +31286,32 @@
   "m": "claude-haiku-5-5",
   "sh": {
    "desc": "8cb1de4f"
+  },
+  "ts": "2026-11-18"
+ },
+ "private-5g": {
+  "desc": "Private 5G to dedykowana sieć komórkowa obsługiwana dla jednej lokalizacji przedsiębiorstwa, na przykład fabryki, portu lub szpitala. Wykorzystuje zaplanowany dostęp, tożsamość urządzeń opartą na kartach SIM oraz network slicing, aby zapewnić przewidywalne opóźnienia dla obciążeń technologii operacyjnych.",
+  "faq": [
+   {
+    "a": "Private 5G to dedykowana sieć komórkowa obsługiwana dla jednej lokalizacji przedsiębiorstwa, na przykład fabryki, portu lub szpitala. Wykorzystuje zaplanowany dostęp, tożsamość urządzeń opartą na kartach SIM oraz network slicing, aby zapewnić przewidywalne opóźnienia dla obciążeń technologii operacyjnych.",
+    "q": "Czym jest Private 5G?"
+   },
+   {
+    "a": "Odcinek \"Cloud Latency and Edge Computing Strategy\" mówi, że połączenie prywatnej sieci 5G z Multi-access Edge Computing (MEC) przenosi przetwarzanie danych bliżej urządzeń, często do tego samego budynku lub kampusu, zamiast wysyłać wszystkie dane do odległej chmury.",
+    "q": "Jak Private 5G wiąże się z przetwarzaniem brzegowym?"
+   },
+   {
+    "a": "Według Microsoft Learn była to usługa Azure służąca do wdrażania i zarządzania funkcjami rdzenia sieci 5G na urządzeniu Azure Stack Edge, jako część lokalnej prywatnej sieci komórkowej. Strona dokumentacji jest zarchiwizowana, ponieważ ogłoszono wycofanie usługi, a zalecaną ścieżką jest migracja do rozwiązań partnerskich.",
+    "q": "Czym była Azure Private 5G Core?"
+   }
+  ],
+  "h": "81bfae3b4430c4f9",
+  "long": "Private 5G to dedykowana sieć komórkowa, obsługiwana dla jednej lokalizacji przedsiębiorstwa, na przykład fabryki, portu lub szpitala. Zamiast dzielić przepustowość z publicznymi użytkownikami telefonii komórkowej, dana lokalizacja działa we własnym środowisku 5G i kontroluje, kto i co może się do niego połączyć. Podejście to opiera się na zaplanowanym dostępie do zasobów radiowych, tożsamości urządzeń opartej na kartach SIM oraz network slicing, a jego celem jest zapewnienie przewidywalnych opóźnień dla obciążeń technologii operacyjnych.\n\nGłównym celem prywatnej sieci 5G jest zapewnienie maszynom, czujnikom i innym urządzeniom w określonej lokalizacji połączenia, które działa w sposób spójny. Obciążenia technologii operacyjnych często zależą od czasu: odpowiedź, która dotrze zbyt późno, może mieć takie samo znaczenie jak odpowiedź, która w ogóle nie dotrze. Zaplanowany dostęp pomaga utrzymać przewidywalne opóźnienia, tożsamość oparta na kartach SIM wiąże każde urządzenie z poświadczeniem zarządzanym przez operatora lokalizacji, a network slicing pozwala rozdzielać różne typy ruchu w obrębie tej samej sieci.\n\nW ekosystemie Microsoft jednym z udokumentowanych elementów budulcowych była usługa Azure Private 5G Core. Według Microsoft Learn była to usługa chmurowa Azure służąca do wdrażania i zarządzania funkcjami rdzenia sieci 5G na urządzeniu Azure Stack Edge, stanowiąca część lokalnej prywatnej sieci komórkowej przedsiębiorstwa. Instancja rdzenia pakietowego w każdej lokalizacji obejmowała funkcje takie jak AMF, SMF, UPF, PCF, AUSF, UDM i UDR, z opcjonalnym trybem 4G dla prywatnej sieci LTE. Usługa łączyła się ze zgodnymi ze standardami sieciami dostępu radiowego 4G i 5G typu standalone i miała zapewniać bezpieczną łączność o niskim opóźnieniu dla urządzeń IoT oraz lokalne przetwarzanie danych niezależne od łączności z chmurą.\n\nZarządzanie taką konfiguracją odbywało się centralnie za pośrednictwem portalu Azure i interfejsów API ARM. Karty SIM i eSIM były udostępniane przez partnerów SIM, a dokumentacja wymieniała integrację z Azure Monitor, Resource Health, Event Hubs i Azure RBAC. Konfiguracja wysokiej dostępności wykorzystywała dwa urządzenia. Kilka elementów znajdowało się wyraźnie poza zakresem usługi i pochodziło od klienta lub partnerów: sprzęt radiowy, karty SIM, Kubernetes z obsługą Azure Arc oraz routery bramowe. Wymieniane przypadki użycia obejmowały analitykę produkcji, automatyzację magazynów, bezpieczeństwo publiczne, usługi komunalne i inteligentne rolnictwo. Strona Microsoft Learn jest zarchiwizowana, ponieważ ogłoszono wycofanie tej usługi, a zalecaną ścieżką jest migracja do rozwiązań partnerskich. Każdy, kto planuje projekt prywatnej sieci 5G, powinien sprawdzić aktualny status wszystkich produktów, które rozważa.\n\nPrywatna sieć 5G jest ściśle związana z przetwarzaniem brzegowym. Odcinek M365.FM \"Cloud Latency and Edge Computing Strategy\" omawia, jak opóźnienia ograniczają projekty skoncentrowane na chmurze i jak można zmniejszyć ilość danych wysyłanych do chmury. Odcinek mówi, że Azure Stack Edge pomaga obsługiwać obciążenia AI na brzegu sieci, odfiltrowywać szum i wysyłać do chmury tylko to, co istotne, dzięki czemu systemy pozostają responsywne i opłacalne. Mówi także, że barierę opóźnień można przełamać, łącząc prywatne sieci 5G z Multi-access Edge Computing (MEC). W tej integracji przetwarzanie danych przenosi się bliżej miejsca, w którym działają urządzenia, często do tego samego budynku lub kampusu, tak aby nie każdy fragment danych musiał trafiać do odległej chmury.\n\nTypowe decyzje dotyczące prywatnej sieci 5G dotyczą zatem tego, gdzie powinno działać przetwarzanie, które obciążenia wymagają lokalnej obsługi ze względu na opóźnienia lub wymagania dotyczące łączności oraz które komponenty organizacja pozyskuje samodzielnie, a które od partnerów. Ponieważ sieć radiowa, udostępnianie kart SIM i lokalne zasoby obliczeniowe są oddzielnymi elementami, wdrożenie zwykle jest złożeniem kilku części, a nie pojedynczym produktem. Sama koncepcja, czyli lokalizacyjnie dedykowana sieć komórkowa z kontrolowanym dostępem i przewidywalnymi opóźnieniami, pozostaje ta sama niezależnie od tego, który dostawca dostarcza poszczególne komponenty.",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "a42d97a9",
+   "faq": "7f81bde6",
+   "long": "ae942b62"
   },
   "ts": "2026-11-18"
  },
@@ -34449,6 +34527,32 @@
   },
   "ts": "2026-11-18"
  },
+ "security-engineer": {
+  "desc": "Projektuje, wdraża i monitoruje mechanizmy bezpieczeństwa, takie jak ochrona tożsamości, zabezpieczenia punktów końcowych i wykrywanie zagrożeń, aby chronić systemy i dane.",
+  "faq": [
+   {
+    "a": "Inżynier bezpieczeństwa projektuje, wdraża i monitoruje mechanizmy bezpieczeństwa, takie jak ochrona tożsamości, zabezpieczenia punktów końcowych i wykrywanie zagrożeń, aby chronić systemy i dane.",
+    "q": "Czym zajmuje się inżynier bezpieczeństwa?"
+   },
+   {
+    "a": "Odcinek \"7 Levels of Azure Administration: Beginner to Cloud Architect\" wymienia Azure Security Engineer na poziomie 3, po wcześniejszych poziomach administrowania i przed bardziej zaawansowanymi rolami.",
+    "q": "Jak Azure Security Engineer wpisuje się w ścieżkę kariery w Azure?"
+   },
+   {
+    "a": "Odcinek \"Microsoft Security Copilot - Simply Explained\" przedstawia Security Copilot jako mnożnik siły, a nie zamiennik doświadczonych specjalistów bezpieczeństwa.",
+    "q": "Czy narzędzia AI, takie jak Security Copilot, zastąpią inżynierów bezpieczeństwa?"
+   }
+  ],
+  "h": "6eca66e4586fe7c2",
+  "long": "Inżynier bezpieczeństwa to specjalista, który projektuje, wdraża i monitoruje mechanizmy bezpieczeństwa chroniące systemy i dane. Do typowych obszarów odpowiedzialności należą ochrona tożsamości, zabezpieczenia punktów końcowych oraz wykrywanie zagrożeń. W różnych kontekstach to stanowisko zapisuje się również jako \"Security-Engineer\" lub \"Cybersecurity engineer\", a w języku niemieckim używa się określenia \"Sicherheitsingenieur\". W środowiskach skoncentrowanych na Microsoft to stanowisko często występuje w kontekście Azure jako Azure Security Engineer.\n\nPraca inżyniera bezpieczeństwa nie ogranicza się do reagowania na incydenty. Obejmuje budowanie zabezpieczeń w środowisku, sprawdzanie, czy nadal działają poprawnie, oraz obserwowanie sygnałów wskazujących na atak. Odcinek M365.FM \"7 Levels of Azure Administration: Beginner to Cloud Architect\" umieszcza Azure Security Engineer na poziomie 3 ścieżki prowadzącej od początkującego do architekta chmury. Według tego odcinka osoba na tym stanowisku odgrywa kluczową rolę w ochronie środowiska chmurowego organizacji, a bezpieczeństwo jest opisane jako podstawowy element administrowania Azure, a nie dodatek. Odcinek zaznacza, że inżynier bezpieczeństwa musi rozumieć wyzwania bezpieczeństwa pojawiające się w przetwarzaniu w chmurze, a wśród częstych problemów wymienia błędne konfiguracje chmury, wskazując, że odpowiadają one za ponad 20% problemów wymienionych w odcinku.\n\nRola ta wiąże się także z konkretnymi usługami ochronnymi. Odcinek \"Azure DDoS Protection - Simply Explained\" uwzględnia wśród odbiorców inżynierów bezpieczeństwa, obok administratorów Azure, architektów chmury i specjalistów IT. Przedstawia Azure DDoS Protection jako sposób ochrony aplikacji przed atakami typu odmowa usługi oraz pomoc organizacjom w utrzymaniu dostępności, odporności i ciągłości działania. Odcinek podkreśla, że kluczem do projektowania odpornych i bezpiecznych środowisk Azure jest znajomość tego, jak powiązane usługi się uzupełniają, oraz że zaawansowane możliwości mają znaczenie dla obciążeń krytycznych dla biznesu. Wybór odpowiedniego poziomu ochrony dla danego obciążenia to typowe pytanie projektowe dla tej roli.\n\nInżynierowie bezpieczeństwa pracują również z narzędziami wspomaganymi sztuczną inteligencją. Odcinek \"Microsoft Security Copilot - Simply Explained\" kierowany jest do analityków SOC, inżynierów bezpieczeństwa, administratorów IT i osób podejmujących decyzje. Opisuje, gdzie Security Copilot przynosi największą wartość i jakie są jego obecne ograniczenia. Odcinek przedstawia to narzędzie jako mnożnik siły, a nie zamiennik doświadczonych specjalistów bezpieczeństwa, co stawia osąd inżyniera bezpieczeństwa w centrum każdego przepływu pracy w zakresie bezpieczeństwa opartego na AI, i zaleca, by organizacje rozważyły, co wdrożenie takich rozwiązań oznacza, zanim je wprowadzą.\n\nKolejnym obszarem jest automatyzacja. Odcinek \"Build Reliable Intune and Entra ID Agents with Azure AI Foundry\" adresowany jest do inżynierów Azure, Intune i bezpieczeństwa, którzy chcą przekształcić agentów AI w niezawodnych współpracowników, a nie ryzykowne eksperymenty. Opisuje praktyczną architekturę, w której małe modele językowe łączy się z modelami rozumowania klasy GPT-4, aby obniżyć koszty, ograniczyć halucynacje i utrzymać krótkie prompty; jako przykłady podaje się m.in. automatyczne utwardzanie zabezpieczeń BitLocker. Odcinek mówi też, że systemy wieloagentowe usprawniają działanie operacji, pozwalając różnym agentom współpracować, co pomaga szybciej i z mniejszą liczbą błędów kończyć zadania.\n\nRazem te odcinki pokazują rolę obejmującą administrowanie chmurą, ochronę przed atakami, operacje bezpieczeństwa i automatyzację. Związane z nią decyzje dotyczą tego, jakie zabezpieczenia potrzebuje dane obciążenie, jak unikać błędnych konfiguracji, na ile można ufać wynikom generowanym przez AI oraz jak zachować nadzór człowieka nad zautomatyzowanymi agentami. Osoby przechodzące na to stanowisko często wywodzą się z administrowania Azure, na co wskazuje warstwowa ścieżka z pierwszego odcinka, i budują na tym fundamencie dodatkowe, dedykowane obowiązki z zakresu bezpieczeństwa.",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "d3df30f5",
+   "faq": "4c5afc70",
+   "long": "40c41156"
+  },
+  "ts": "2026-11-18"
+ },
  "security-information-and-event-management": {
   "desc": "Kategoria narzędzi bezpieczeństwa, które zbierają logi z wielu systemów, takich jak serwery, zapory sieciowe, aplikacje i systemy tożsamości, i korelują je, aby wykrywać ataki, których pojedyncze wpisy w logach by nie ujawniły.",
   "faq": [
@@ -34933,6 +35037,32 @@
   "m": "claude-haiku-5-5",
   "sh": {
    "desc": "a5e77716"
+  },
+  "ts": "2026-11-18"
+ },
+ "serverless-computing": {
+  "desc": "Ein Cloud-Ausführungsmodell, bei dem der Anbieter die Server betreibt und skaliert, während Sie nur Code oder Workflows bereitstellen, die auf Ereignisse hin ausgeführt werden. Sie zahlen für die genutzten Ausführungen und Ressourcen statt für untätige Maschinen.",
+  "faq": [
+   {
+    "a": "Nein. Die Episode \"Serverless Computing - Simply Explained\" weist darauf hin, dass Computing ohne Server nicht existiert. Der Begriff bedeutet, dass der Anbieter die Server betreibt und skaliert, sodass der Kunde keine Maschinen mietet oder verwaltet, die größtenteils ungenutzt herumstehen.",
+    "q": "Bedeutet Serverless Computing, dass es keine Server gibt?"
+   },
+   {
+    "a": "Die Abrechnung richtet sich nach den tatsächlich genutzten Ausführungen und Ressourcen und nicht nach untätigen Maschinen. Die Episode \"Azure Functions - Simply Explained\" sagt, dass Azure Functions Ressourcen nur verbraucht, solange der Code läuft.",
+    "q": "Wie wird Serverless Computing abgerechnet?"
+   },
+   {
+    "a": "Code wird als Reaktion auf Ereignisse ausgeführt. Die Episode \"Azure Functions - Simply Explained\" nennt Beispiele wie eine in Azure Storage hochgeladene Datei, eine HTTP-Anfrage, einen Timer oder eine Nachricht, die in Azure Service Bus eintrifft.",
+    "q": "Was löst die Ausführung von Serverless-Code aus?"
+   }
+  ],
+  "h": "eb48fb42f8fd5bb5",
+  "long": "Serverless Computing ist ein Cloud-Ausführungsmodell, bei dem der Cloud-Anbieter die Server betreibt und skaliert, während der Kunde nur Code oder Workflows bereitstellt, die auf Ereignisse hin ausgeführt werden. Die Abrechnung richtet sich nach den tatsächlich genutzten Ausführungen und Ressourcen und nicht nach der Zeit, in der eine Maschine ungenutzt bleibt. Der Name gilt weithin als irreführend: Server existieren weiterhin, aber der Kunde mietet, patcht oder dimensioniert sie nicht mehr. Die M365.FM-Episode \"Serverless Computing - Simply Explained\" beginnt genau mit diesem Punkt und beschreibt das Wort \"serverless\" als eines, das nahezu alle in die Irre führt, während die dahinterstehende Idee nützlicher ist, als das Etikett vermuten lässt.\n\nDer zentrale Zweck besteht darin, nicht mehr für kaum genutzte Maschinen zu bezahlen. In einer traditionellen Umgebung wird für eine Arbeitslast eine virtuelle Maschine oder ein Server bereitgestellt, der Kosten verursacht, unabhängig davon, ob er ausgelastet ist. Im Serverless-Modell läuft Code nur, wenn etwas ihn auslöst, und Ressourcen werden nur während der Ausführung verbraucht. Die Episode behandelt, wie Serverless entscheidet, wann Code läuft, und was dies kostet. Das sind die beiden Fragen, die beim Vergleich mit dauerhaft laufender Infrastruktur meist am wichtigsten sind.\n\nEreignisgesteuertes Design ist der Kern des Mechanismus. Laut der Episode \"Azure Functions - Simply Explained\" gehören zu den typischen Auslösern das Hochladen einer Datei in Azure Storage, der Eingang einer HTTP-Anfrage, ein ablaufender Timer oder eine Nachricht, die in Azure Service Bus eintrifft. In jedem dieser Fälle reagiert Azure Functions sofort und verbraucht Ressourcen nur, solange der Code läuft. Die Episode erklärt, wie Azure Functions in moderne Cloud-Architekturen passen und warum sie ein zentraler Baustein für ereignisgesteuerte Anwendungen sind. Außerdem behandelt sie Trigger und Bindings, die verschiedenen Hosting-Pläne und die automatische Skalierung, mit der eine Anwendung alles von wenigen Anfragen pro Tag bis zu Millionen von Ausführungen ohne manuelles Eingreifen bewältigt.\n\nServerless hebt architektonische Entscheidungen nicht auf, und Netzwerkfragen sind ein Beispiel dafür. Die Episode \"Secure Azure Networking with Rex de Koning [MVP-MCT]\" erörtert, wie Virtual-Network-Integration, Private Endpoints und Netzwerkisolation es Serverless-Workloads ermöglichen, auf private Ressourcen zuzugreifen, ohne Dienste dem öffentlichen Internet auszusetzen. Sie betrachtet außerdem die Netzwerkoptionen für Azure Functions über verschiedene Hosting-Pläne hinweg und die dahinterstehende architektonische Begründung. Das zeigt, dass sich die Flexibilität von Serverless Computing mit dem Schutz sensibler Workloads verbinden lässt, eine Kombination, die die Episode als zunehmend unverzichtbar für sichere cloudnative Anwendungen beschreibt.\n\nDie Wahl zwischen Ausführungsoptionen ist ein weiteres wiederkehrendes Thema. Die Episode \"Copilot Studio Code Interpreter vs Azure Functions\" stellt den Code Interpreter in Copilot Studio Azure Functions gegenüber, das sie als die ausgereiftere Laufzeitumgebung darstellt: skalierbar, steuerbar und prüfbar. Sie rahmt die Diskussion um Funktionalität, Anwendungsfälle, Leistung und Kosten sowie um die Frage, wie man von einem Prototyp in den Produktivbetrieb übergeht, ohne Probleme in einem Mandanten zu verursachen. Für alle, die bewerten, wo Code ausgeführt werden soll, behandelt die Episode Serverless Computing als einen Faktor, der gegen die Anforderungen des Projekts abzuwägen ist.\n\nServerless steht außerdem in einer längeren Geschichte von Plattformwechseln. In der Episode \"How AI Changed Software Development Forever — Building the Agentic Future with Andre Baltieri [MVP]\" wird der Weg der Softwareentwicklung über Desktop, Web, Mobile, Cloud, Container, Microservices bis hin zu Serverless Computing beschrieben. Danach argumentiert der Gast, dass sich der Schritt zur KI grundlegend anders anfühlt, weil er verändert, wie Menschen mit Software interagieren, statt lediglich eine weitere Plattform oder ein weiteres Framework einzuführen.\n\nIn der Praxis eignet sich Serverless Computing für Workloads, die durch diskrete Ereignisse ausgelöst werden, stark im Volumen schwanken oder keinen dauerhaft laufenden Server benötigen. Die Entscheidungen dazu betreffen typischerweise, welcher Auslöser den Code startet, welcher Hosting-Plan genutzt wird, wie die Workload skaliert, wie sie sicher mit privaten Ressourcen verbunden wird und wie ihre Kosten im Vergleich zu ungenutzter Kapazität ausfallen. Die hier aufgeführten M365.FM-Episoden nähern sich diesen Fragen aus einer allgemeinverständlichen Einführung, einem konkreten Azure-Dienst, einer Netzwerkperspektive und einem Vergleich mit einer anderen Ausführungsoption.",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "d6f95904",
+   "faq": "de01618a",
+   "long": "d6e34f52"
   },
   "ts": "2026-11-18"
  },
@@ -36277,6 +36407,15 @@
   },
   "ts": "2026-11-18"
  },
+ "sofia-platas": {
+  "desc": "Jestem architektem rozwiązań Power Platform z pasją do projektowania rozwiązań, które łączą potrzeby biznesu z technologią. Poza tym aktywnie angażuję się w społeczność Microsoft, występując na konferencjach technicznych i wspierając specjalistów w rozwoju kariery w ekosystemie Microsoft. Napędza mnie ciągła nauka oraz zasada stoicka, często kojarzona z Markiem Aureliuszem: „Przeszkoda w działaniu staje się motorem działania. To, co stoi na drodze, staje się drogą.” Przypomina mi ona, aby każde wyzwanie traktować jako szansę na doskonalenie, innowację i pomaganie innym w rozwoju. Poza pracą wyzwań szukam w sportach wytrzymałościowych, poznaję nowe kultury podczas podróży i lubię gotować jako twórcze ujście. Uważam, że ciekawość, odporność i hojność w dzieleniu się wiedzą są fundamentem znaczącego wpływu. Moim celem nie jest jedynie budowanie lepszej technologii, lecz także rozwijanie siebie w tym procesie: cel ma znaczenie, ale charakter kształtuje się w drodze.",
+  "h": "ffc90990f487ea5b",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "dc0afca6"
+  },
+  "ts": "2026-11-18"
+ },
  "software-as-a-service": {
   "desc": "Oprogramowanie jako usługa to model dostarczania w chmurze, w którym dostawca hostuje i uruchamia aplikację, a klienci korzystają z niej w ramach subskrypcji, tradycyjnie wycenianej za miejsce dla użytkownika.",
   "faq": [
@@ -37072,6 +37211,51 @@
   },
   "ts": "2026-11-18"
  },
+ "stefano-demiliani": {
+  "desc": "Stefano Demiliani jest prelegentem na M365Con 2027 (CTO BizApp w Lodestar spa) z 1 sesją.",
+  "h": "c7e82ee669053941",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "baa8fd05"
+  },
+  "ts": "2026-11-18"
+ },
+ "stephane-eyskens": {
+  "desc": "Stéphane jest doświadczonym architektem chmury z niemal 30-letnim stażem w branży IT. Jego wielodyscyplinarne doświadczenie obejmuje programowanie, infrastrukturę i bezpieczeństwo, ze szczególnym naciskiem na architektury chmurowe i hybrydowe. Jest także autorem kilku książek o architekturze chmury i oprogramowania oraz przez 19 kolejnych lat otrzymywał tytuł Microsoft MVP w kategoriach Cloud Native i IPaaS.",
+  "h": "ad24f4a927191ab0",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "8eb0434e"
+  },
+  "ts": "2026-11-18"
+ },
+ "stephanie-stasey": {
+  "desc": "Po zbudowaniu ratującej życie aplikacji Power App Stephanie została zatrudniona przez Microsoft, aby prowadzić współpracę z ich największym klientem na świecie, NHS England, w zakresie wdrażania Power Platform oraz wspierać go w pracy z Microsoft podczas skalowania największej aplikacji zdrowotnej na świecie do 39 milionów osób, czyniąc ją główną bramą do największego systemu opieki zdrowotnej na świecie. Po trzech latach odeszłam, aby założyć własną firmę doradczą w obszarze AI oraz partnera Microsoft, ponieważ potrzebujemy wiarygodnych, widocznych kobiet w AI, które zarabiają własnymi pieniędzmi.",
+  "h": "bf07dcd74b9e50b9",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "199c5e3f"
+  },
+  "ts": "2026-11-18"
+ },
+ "steve-corey": {
+  "desc": "Jestem konsultantem ds. produktów Microsoft 365 w firmie Quisitive. Pomagam klientom rozwiązywać problemy. Im bardziej złożone, tym lepiej. Projektuję i wdrażam rozwiązania, a także uczę moich klientów więcej o platformie, w którą zainwestowali. Od ponad 20 lat pracuję z SharePoint, zarówno jako deweloper, jak i architekt rozwiązań. Kiedy pojawił się Copilot, od razu się nim zachwyciłem. Tworzenie agentów bardzo mnie pociągnęło i to właśnie na nim skupiam obecnie większość swoich wysiłków. Prowadzę też niewielki kanał na YouTube, na którym uczę ludzi na całym świecie o agentach i o tym, co mogą zrobić dla organizacji. Oficjalny profil Microsoft MVP: [link]",
+  "h": "c974a5ecb1715c20",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "d1d46efd"
+  },
+  "ts": "2026-11-18"
+ },
+ "steve-gerstner": {
+  "desc": "Steve Gerstner jest prelegentem na konferencji M365Con 2027 (Bridging IT GmbH w firmie Bridging IT GmbH) z 1 sesją.",
+  "h": "4e69409e69457bbc",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "088158c5"
+  },
+  "ts": "2026-11-18"
+ },
  "store-commerce-app": {
   "desc": "Store Commerce to aplikacja punktu sprzedaży Dynamics 365 Commerce dla personelu sklepów stacjonarnych, działająca w systemach Windows, iOS, Android i macOS na komputerach stacjonarnych, tabletach i telefonach.",
   "faq": [
@@ -37203,6 +37387,15 @@
   },
   "ts": "2026-11-18"
  },
+ "sue-bayes": {
+  "desc": "Sue Bayes jest prelegentką na konferencji M365Con 2027 (dyrektorka w Databayes Ltd) z 1 sesją.",
+  "h": "70201b05201531f4",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "f1b31605"
+  },
+  "ts": "2026-11-18"
+ },
  "suggestion-acceptance-rate": {
   "desc": "Wskaźnik akceptacji sugestii mierzy, jak często wyniki generowane przez AI, takie jak szkice lub podsumowania Copilot, są wykorzystywane bez większych przeróbek lub odrzucenia. Służy jako sygnał zaufania, jakości kontekstu i dopasowania do procesu pracy.",
   "h": "38c993f5731d1383",
@@ -37273,6 +37466,15 @@
    "desc": "2a86a641",
    "faq": "42bc93b3",
    "long": "5a2364f2"
+  },
+  "ts": "2026-11-18"
+ },
+ "sven-sieverding": {
+  "desc": "Sven Sieverding jest prelegentem na konferencji M365Con DACH 2026 (konsultant Microsoft 365 w firmie team neusta), z 1 sesją.",
+  "h": "24699d3bc35d3db6",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "9f4ff0cf"
   },
   "ts": "2026-11-18"
  },
@@ -37455,6 +37657,15 @@
   },
   "ts": "2026-11-18"
  },
+ "tchesco-ayih": {
+  "desc": "Ayih Tchesco jest Microsoft Certified Trainer (MCT), Microsoft MVP i doświadczonym prelegentem technologicznym, specjalizującym się w Microsoft Power Platform. Dzięki solidnemu doświadczeniu w tworzeniu rozwiązań biznesowych z wykorzystaniem Power Apps, Power Automate, Power Pages, Dataverse i Copilot Studio, wspiera osoby i organizacje w pełnym wykorzystaniu możliwości tworzenia aplikacji low-code oraz rozwiązań opartych na AI. Tchesco z pasją dzieli się wiedzą i szkolił specjalistów w różnych regionach, prowadząc warsztaty, sesje na żywo i szkolenia na platformach online. Jest znany z tego, że potrafi uprościć złożone zagadnienia techniczne do praktycznych, rzeczywistych rozwiązań, które uczestnicy mogą od razu zastosować. Poza szkoleniami aktywnie uczestniczy w globalnej społeczności technologicznej, angażując się w wystąpienia publiczne i mentoring. Jego misją jest łączenie technologii z ludźmi poprzez czynienie nauki praktyczną, otwartą i przekształcającą.\n\nOficjalny profil Microsoft MVP:",
+  "h": "2bad5b536644f158",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "f69b315d"
+  },
+  "ts": "2026-11-18"
+ },
  "team-building": {
   "desc": "Zbiorcze określenie interwencji, których celem jest poprawa skuteczności zespołu i wyjaśnienie ról, często poprzez wspólne zadania.",
   "faq": [
@@ -37541,6 +37752,32 @@
    "desc": "4b7906f4",
    "faq": "7d86e6be",
    "long": "66961d23"
+  },
+  "ts": "2026-11-18"
+ },
+ "teams-administrator": {
+  "desc": "Zarządza Microsoft Teams w organizacji, w tym zasadami, spotkaniami, połączeniami, urządzeniami oraz nadzorem nad zespołami i kanałami.",
+  "faq": [
+   {
+    "a": "Administrator Teams zarządza Microsoft Teams w organizacji, w tym zasadami, spotkaniami, połączeniami, urządzeniami oraz nadzorem nad zespołami i kanałami. Typowe zadania opisane w odcinkach M365.FM to włączanie Copilota, konfigurowanie zasad udostępnionych kanałów i rozwiązywanie problemów z brakującymi zespołami.",
+    "q": "Czym zajmuje się administrator Teams?"
+   },
+   {
+    "a": "Odcinek \"Microsoft Teams Governance with Entra ID as the Control Plane\" odpowiada, że nie: opisuje Teams Admin Center jako konsolę usług podrzędnych, a rzeczywiste decyzje podejmują nadrzędne usługi tożsamości i zgodności.",
+    "q": "Czy to w Teams Admin Center podejmuje się decyzje dotyczące nadzoru nad Teams?"
+   },
+   {
+    "a": "Odcinek \"Organize Projects Properly in Microsoft Teams\" wspomina o ustawieniach międzydzierżawcowych dla dostępu przychodzącego i wychodzącego, listach domen, zasadach udostępnionych kanałów, uwierzytelnianiu wieloskładnikowym i etykietach poufności, a także o decyzjach dotyczących tego, kto może tworzyć udostępnione kanały i zapraszać użytkowników zewnętrznych.",
+    "q": "Jakie ustawienia administrator Teams konfiguruje dla współpracy zewnętrznej?"
+   }
+  ],
+  "h": "0a1fee0da300cafc",
+  "long": "Administrator Teams, zapisywany także jako Teams admin lub Teams-Administrator, to rola odpowiedzialna za zarządzanie Microsoft Teams w organizacji. Obejmuje ona zasady, spotkania, połączenia, urządzenia oraz nadzór nad zespołami i kanałami. W praktyce osoba pełniąca tę rolę decyduje, jak Teams jest skonfigurowany dla użytkowników, jakie funkcje są dostępne oraz jak tworzone, udostępniane i kontrolowane są przestrzenie współpracy.\n\nGłównym narzędziem roboczym tej roli jest Teams Admin Center, konsola administracyjna, w której konfiguruje się ustawienia i zasady Teams. Odcinki M365.FM pokazują, że wiele rutynowych zadań wykonuje się właśnie tam. Odcinek \"Set Up Microsoft Copilot in Teams Step by Step\" opisuje włączanie Copilota w Teams Admin Center oraz dostosowywanie ustawień dla organizacji, a także przypisywanie licencji użytkownikom i zapewnianie szkoleń. Odcinek \"Organize Projects Properly in Microsoft Teams\" opisuje konfigurowanie zasad udostępnionych kanałów w Teams Admin Center oraz decydowanie, kto może tworzyć udostępnione kanały i zapraszać użytkowników zewnętrznych. Wspomina też o ustawieniach międzydzierżawcowych dla dostępu przychodzącego i wychodzącego, listach domen, uwierzytelnianiu wieloskładnikowym, etykietach poufności, kontroli dostępu opartej na rolach oraz monitorowaniu dzienników aktywności z alertami dotyczącymi nietypowych działań.\n\nNadzór jest centralną częścią tej roli, a odcinki omawiają go dość szczegółowo. Odcinek \"Microsoft Teams Governance with Entra ID as the Control Plane\" kwestionuje powszechne założenie, że Teams Admin Center jest centralnym miejscem kontrolowania zachowania Teams i egzekwowania nadzoru. Według tego odcinka Admin Center działa jako konsola usług podrzędnych, a nie jako organ decydujący o tym, kto otrzymuje dostęp, co zostaje zablokowane i jaka zasada jest egzekwowana. Odcinek wskazuje, że te decyzje podejmują usługi nadrzędne, takie jak narzędzia tożsamości i zgodności. Dla administratora Teams oznacza to, że praca nad nadzorem wykracza poza ekrany ustawień Teams i zależy od tego, jak skonfigurowano kontrole tożsamości i zgodności.\n\nRola pojawia się również w sytuacjach wsparcia i rozwiązywania problemów. Odcinek \"Find Missing Microsoft Teams and Channels\" zauważa, że zespół może nie być widoczny na liście użytkownika z powodu zmian w członkostwie, zasad Teams lub dlatego, że właściciel ukrył lub zarchiwizował zespół. Dodaje, że działania administratora globalnego w Teams Admin Center lub Microsoft 365 mogą zmieniać widoczność, a także sugeruje sprawdzenie ustawień Teams i centrum administracyjnego Microsoft pod kątem ograniczeń zasad. Zwraca też uwagę na kwestie odzyskiwania usuniętych kanałów, którymi administrator może musieć się zająć.\n\nTypowym obszarem są również projekty integracyjne. Odcinek \"Integrate Jira Service Management with Microsoft Teams\" zawiera listę kontrolną, która zaczyna się od potwierdzenia dostępu administracyjnego do Jira i Microsoft Teams. Dalsze punkty obejmują weryfikację obsługiwanych wydań Jira i zgodności z Teams, instalację oficjalnej aplikacji Jira Cloud lub odpowiedniego konektora w Microsoft Teams, konfigurację uwierzytelniania OAuth lub tokenem API oraz nadanie niezbędnych uprawnień na obu platformach. Dostęp administracyjny po stronie Teams jest zatem warunkiem wstępnym podłączenia usług zewnętrznych.\n\nŁącznie źródła opisują administratora Teams jako osobę, która konfiguruje funkcje Teams, zarządza licencjonowaniem i wdrażaniem możliwości takich jak Copilot, ustala zasady współpracy zewnętrznej i utrzymuje zespoły oraz kanały pod nadzorem. Odcinki sugerują też, że skuteczne administrowanie zależy od zrozumienia nadrzędnych usług tożsamości i zgodności, które stoją za Teams Admin Center, zamiast traktowania samej konsoli jako jedynego punktu kontroli.",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "1ce49080",
+   "faq": "aaecdbf9",
+   "long": "fb57ee02"
   },
   "ts": "2026-11-18"
  },
@@ -38044,12 +38281,57 @@
   },
   "ts": "2026-11-18"
  },
+ "therman-trotman": {
+  "desc": "Therman Trotman jest prelegentem na konferencji M365Con 2026 (właściciel i główny trener w The SharePoint Helpdesk), z 1 sesją.",
+  "h": "adb662d3f6aab794",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "8381dffb"
+  },
+  "ts": "2026-11-18"
+ },
  "thin-client": {
   "desc": "Thin client to prosty komputer zoptymalizowany do łączenia się z pulpitem lub środowiskiem obliczeniowym, które działa zdalnie na serwerze lub w chmurze.",
   "h": "a4b94ff2869a33e0",
   "m": "claude-haiku-5-5",
   "sh": {
    "desc": "14b2be79"
+  },
+  "ts": "2026-11-18"
+ },
+ "thomas-maier": {
+  "desc": "Thomas Maier jest prelegentem na konferencji M365Con DACH 2026 (właściciel, MVP, MCT, ekspert ds. szkoleń M365 w 365 Akademie.de) z 1 sesją.",
+  "h": "11a9f207432471d8",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "afe664bb"
+  },
+  "ts": "2026-11-18"
+ },
+ "thomas-sandsr": {
+  "desc": "Strona na Facebooku jest zdecydowanie nieoficjalna, ale wciąż jest świetnym miejscem, w którym można zobaczyć, jak ludzie zmagają się z problemami i wzajemnie sobie pomagają. Grupa na Slacku została stworzona przez byłych MVP i ma całą społeczność z wieloma aktywnymi kanałami. Czasami uczestniczę w kilku dyskusjach tam, dotyczących technologii i sposobów pokonywania przeszkód. Oficjalny profil Microsoft MVP:",
+  "h": "9e4443e12367f1ad",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "f6e6440f"
+  },
+  "ts": "2026-11-18"
+ },
+ "thomas-stensitzki": {
+  "desc": "Thomas Stensitzki jest Principal Technology Consultant i właścicielem firmy Granikos GmbH & Co. KG, która specjalizuje się w konsultingu dla przedsiębiorstw i szkoleniach z zakresu Microsoft Exchange, Microsoft 365 oraz hybrydowych środowisk współpracy. Od kwietnia 2018 roku posiada nagrodę Microsoft MVP w kategoriach Microsoft 365 i Exchange. Jest certyfikowany jako Microsoft Certified Solutions Master Messaging oraz Microsoft Certified Master for Exchange Server – jedne z najbardziej zaawansowanych certyfikatów technicznych, jakie Microsoft kiedykolwiek oferował. Jako Microsoft Certified Trainer oraz były MCT Community Lead Thomas szkolił specjalistów IT w całej Europie i od lat wnosi wkład w szerszą społeczność szkoleniową Microsoft. Jest autorem kilku książek, w tym powszechnie używanej \"Exchange Server – Das Handbuch für Administratoren\", i jest poszukiwanym prelegentem na wydarzeniach takich jak Exchange Summit, Experts Live i Scottish Summit. Oprócz pracy konsultanta Thomas prowadzi podcast \"Exchange Unplugged\" i regularnie dzieli się swoją wiedzą za pośrednictwem kanału YouTube, bloga oraz spotkań społecznościowych.",
+  "h": "fa597afe5a042e23",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "82fd9bc6"
+  },
+  "ts": "2026-11-18"
+ },
+ "thomas-zou": {
+  "desc": "PMM dla Copilot Studio.",
+  "h": "ad8fc988ef39197f",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "c0268c2e"
   },
   "ts": "2026-11-18"
  },
@@ -38201,6 +38483,24 @@
   },
   "ts": "2026-11-18"
  },
+ "thummalacherla-krish": {
+  "desc": "Krishnakanth jest Senior Power BI Developerem w Quest Global, specjalizującym się w Microsoft Power BI, modelowaniu danych, business intelligence, SQL, Snowflake i Databricks. Pasjonuje go przekształcanie złożonych danych w praktyczne wnioski, które wspierają decyzje biznesowe. Ma doświadczenie w tworzeniu rozwiązań analitycznych dla globalnych klientów, w tym Exxon Mobil, Rolls-Royce i Siemens Gamesa. Krishnakanth specjalizuje się w budowie skalowalnych dashboardów, optymalizacji modeli danych i tworzeniu efektownych wizualizacji. Jest certyfikowanym specjalistą Microsoft PL-300 i DP-600 oraz aktywnym uczniem, który stale podnosi swoje kwalifikacje w obszarze analityki, AI i nowych technologii danych. Poza pracą zawodową Krishnakanth aktywnie wspiera społeczność data, dzieląc się wiedzą, zdobył odznakę Fabric Community Super User oraz tworzy materiały edukacyjne i mentoruje początkujących specjalistów od danych. Dzięki temu podcastowi chce dzielić się praktycznymi wskazówkami, doświadczeniami zawodowymi i wnioskami ze swojej drogi w świecie analityki danych.",
+  "h": "28784a839f796f46",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "989eb3d5"
+  },
+  "ts": "2026-11-18"
+ },
+ "tiago-costa": {
+  "desc": "Tiago Costa jest prelegentem na konferencji M365Con 2027 (Owner w LWT), z 1 sesją.",
+  "h": "86e4617a886f34d1",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "55b88e39"
+  },
+  "ts": "2026-11-18"
+ },
  "tier-meeting": {
   "desc": "Krótkie, stałe spotkanie codzienne w układzie poziomów, od zespołu po zakład, przy tablicy. Każdy poziom przegląda bezpieczeństwo, jakość, dostawy i koszty, eskaluje to, czego nie może rozwiązać, i przypisuje właścicieli oraz terminy.",
   "h": "71bcf1c1c5b5e18e",
@@ -38253,6 +38553,15 @@
    "desc": "2ba3bafe",
    "faq": "c549317c",
    "long": "0069f25b"
+  },
+  "ts": "2026-11-18"
+ },
+ "tina-van-heerden": {
+  "desc": "Tina jest architektką rozwiązań w Microsoft w zespole FastTrack Agentic ERP. Dzięki doświadczeniu w całym „trójkącie wdrożeniowym” – partner, klient i Microsoft – ma wyjątkowe, kompleksowe spojrzenie na aplikacje biznesowe. Tina z pasją dąży do realnego wpływu i łączenia ludzi: pomaga organizacjom i osobom przyspieszać adopcję, rozwijać umiejętności związane z AI i agentami, odblokowywać wartość danych oraz osiągać mierzalny zwrot z inwestycji i zadowolenie klientów.",
+  "h": "70be64872ddf4d90",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "bbfd70d8"
   },
   "ts": "2026-11-18"
  },
@@ -38361,12 +38670,39 @@
   },
   "ts": "2026-11-18"
  },
+ "tom-arbuthnot": {
+  "desc": "Tom Arbuthnot jest prelegentem na konferencji M365Con 2027 (współzałożyciel Empowering Cloud), z 1 sesją.",
+  "h": "5e50cf5c1d988e05",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "bbf6fbe1"
+  },
+  "ts": "2026-11-18"
+ },
+ "tommy-puglia": {
+  "desc": "Tommy Puglia jest prelegentem na konferencji M365Con 2027 (założyciel i konsultant w Puglia BI Consulting), z 1 sesją.",
+  "h": "6bfde5f1711da1bf",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "e770953e"
+  },
+  "ts": "2026-11-18"
+ },
  "tool-contract": {
   "desc": "Ustandaryzowana, wersjonowana definicja działania, które agent AI może wywołać, określająca dozwolone dane wejściowe, ustrukturyzowane dane wyjściowe, tożsamość wykonującą, rejestrowanie pochodzenia (provenance) oraz bramki zatwierdzania dla nieodwracalnych kroków, podobna do kontraktu API.",
   "h": "81eee5ef53816229",
   "m": "claude-haiku-5-5",
   "sh": {
    "desc": "a55d241b"
+  },
+  "ts": "2026-11-18"
+ },
+ "tore-nestenius": {
+  "desc": "Tore Nestenius jest prelegentem na konferencji M365Con 2027 (konsultant i trener w Tore Nestenius Datakonsult AB), z 1 sesją.",
+  "h": "7bd69f49ac2283d1",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "02903e4c"
   },
   "ts": "2026-11-18"
  },
@@ -38433,6 +38769,15 @@
   },
   "ts": "2026-11-18"
  },
+ "tracy-van-der-schyff": {
+  "desc": "Tracy jest pasjonatką wzmacniania pozycji ludzi poprzez szkolenia i zarządzanie zmianą. Wierzy w siłę projektowania ontologicznego, zgodnie z którą to, co tworzymy, z kolei kształtuje nas. Jej misją jest pomaganie ludziom w rozwijaniu zdolności do uczenia się, skutecznego działania i projektowania lepszej przyszłości. Wykorzystując Microsoft 365, intranety i Copilot, umożliwia użytkownikom rozwijanie kompetencji cyfrowych, wzmacnianie współpracy i odkrywanie własnego potencjału. Tracy opowiada się za narzędziami, które nie tylko wspierają produktywność, ale także podnoszą możliwości człowieka w świecie cyfrowym. Oficjalny profil Microsoft MVP:",
+  "h": "ff678de2459eeca7",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "4adaa42c"
+  },
+  "ts": "2026-11-18"
+ },
  "trainable-classifiers": {
   "desc": "Klasyfikatory uczące się w Microsoft Purview to klasyfikatory oparte na uczeniu maszynowym, które na podstawie przykładowych dokumentów uczą się rozpoznawać dany rodzaj dokumentu, na przykład umowy lub kod źródłowy. Można ich używać jako warunków w zasadach DLP i zasadach etykietowania.",
   "faq": [
@@ -38494,12 +38839,30 @@
   },
   "ts": "2026-11-18"
  },
+ "trent-allday": {
+  "desc": "Trent Allday jest założycielem Sprocket 365, firmy tworzącej narzędzia do zarządzania wiedzą i produktywności, które działają w obrębie własnego tenanta Microsoft 365 danej organizacji. Produkty Sprocket są wykorzystywane przez organizacje średniej wielkości z sektora usług profesjonalnych, usług finansowych oraz sektora non-profit, a ich dzienna liczba aktywnych użytkowników przekracza 11 000. Zajmuje się architekturą SharePoint, wdrożeniami Copilot oraz praktycznym problemem tego, co dzieje się z wiedzą po jej wygenerowaniu przez AI.",
+  "h": "4ea092a803755827",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "28f2bc6c"
+  },
+  "ts": "2026-11-18"
+ },
  "triple-peak-workday": {
   "desc": "Potrójny szczyt dnia pracy to wzorzec opisany w badaniach Microsoftu, w których aktywność w pracy opartej na wiedzy osiąga szczyty nie tylko rano i po południu, ale także ponownie późnym wieczorem.",
   "h": "1d8cf4128938527d",
   "m": "claude-haiku-5-5",
   "sh": {
    "desc": "fb6eced9"
+  },
+  "ts": "2026-11-18"
+ },
+ "troy-hunt": {
+  "desc": "Troy Hunt to australijski badacz bezpieczeństwa, znany przede wszystkim jako twórca usługi powiadamiania o wyciekach danych Have I Been Pwned.",
+  "h": "066853effc3416ab",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "b9443c34"
   },
   "ts": "2026-11-18"
  },
@@ -38776,6 +39139,15 @@
   },
   "ts": "2026-11-18"
  },
+ "uros-babic": {
+  "desc": "Uroš jest Lead Product Engineer ds. Microsoft Security DevOps w Global Center of Excellence firmy SoftwareOne. Uczestniczy w projektowaniu i innowacjach dotyczących MXDR dla Microsoft Sentinel oraz wzmacnia możliwości Managed SOC dzięki automatyzacji bezpieczeństwa, inżynierii reagowania na incydenty i rozwojowi SOC‑as‑code. Dysponując ponad 20‑letnim doświadczeniem w cyberbezpieczeństwie, koncentruje się na architekturze bezpieczeństwa opartej na Azure, automatyzacji CI/CD oraz inżynierii SecOps na dużą skalę z wykorzystaniem Bicep, Terraform i GitHub Actions. Jako Microsoft Security MVP i Microsoft Certified Trainer aktywnie dzieli się wiedzą podczas wydarzeń społecznościowych, konferencji i w treściach technicznych, ze szczególnym naciskiem na Microsoft Defender, Sentinel oraz automatyzację bezpieczeństwa opartą na AI.",
+  "h": "fd3729b19aa33728",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "5bf3666f"
+  },
+  "ts": "2026-11-18"
+ },
  "user-defined-routes": {
   "desc": "Niestandardowe trasy w tabeli tras platformy Azure, powiązanej z podsiecią, które zastępują domyślne trasy systemowe platformy Azure, na przykład w celu kierowania ruchu wychodzącego przez zaporę lub wirtualne urządzenie jako następny przeskok.",
   "h": "7b095ca1b1417142",
@@ -38802,6 +39174,33 @@
   "sh": {
    "desc": "2f88aae8",
    "long": "6cf905a5"
+  },
+  "ts": "2026-11-18"
+ },
+ "uwe-ansmann": {
+  "desc": "Uwe Ansmann jest prelegentem na konferencji M365Con DACH 2026 (Senior TC Manager Germany Collaboration, Computing & Print w HP Deutschland GmbH), z 1 sesją.",
+  "h": "2cb65f4e57822226",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "6fdaeaca"
+  },
+  "ts": "2026-11-18"
+ },
+ "uzejnovic-ahmed": {
+  "desc": "Jestem Ahmed Uzejnovic, specjalista ds. automatyzacji IT i infrastruktury z Salzburga. Moja pasja do automatyzacji zrodziła się jeszcze w szkole, kiedy zorientowałem się, jak wiele można uprościć dzięki niewielkim skryptom. Z biegiem lat ta ciekawość przerodziła się w prawdziwy profil zawodowy. Obecnie pracuję głównie z PowerShell, Microsoft Graph API, Azure Automation, System Center Orchestrator oraz hybrydowymi środowiskami Microsoft. Dla mnie chodzi nie tylko o samą technologię, ale o budowanie procesów, które naprawdę pomagają w codziennej pracy, oszczędzają czas i działają niezawodnie. Poza codzienną pracą chętnie dzielę się wiedzą poprzez artykuły na blogu, sesje społecznościowe i wystąpienia na konferencjach. Lubię mówić o doświadczeniach z realnych projektów, o błędach, których można uniknąć, oraz o rozwiązaniach, które sprawdziły się w praktyce.",
+  "h": "282548b540ade5e4",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "ae2b6c64"
+  },
+  "ts": "2026-11-18"
+ },
+ "valentin-gasenko": {
+  "desc": "Pracuję w branży IT od 15 lat, w tym 10 lat z Power Platform i Dynamics 365. Widziałem w tym czasie sporo kiepskich rozwiązań, ale też osiągnąłem wiele dobrych rzeczy. Nadal majsterkuję, nadal się uczę, nadal eksperymentuję i dzielę się wiedzą z innymi za darmo.",
+  "h": "74d6dea283f55491",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "02f59f65"
   },
   "ts": "2026-11-18"
  },
@@ -38839,6 +39238,15 @@
    "desc": "e22023d2",
    "faq": "924f807b",
    "long": "bf4665f6"
+  },
+  "ts": "2026-11-18"
+ },
+ "vanessa-toves": {
+  "desc": "Vanessa Toves jest prelegentką na konferencji M365Con 2027 (Microsoft Solutions Architect w firmie Druva), z 1 sesją.",
+  "h": "eaa43d766be23022",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "3572ae1f"
   },
   "ts": "2026-11-18"
  },
@@ -38999,6 +39407,15 @@
   },
   "ts": "2026-11-18"
  },
+ "vesa-nopanen": {
+  "desc": "Vesa Nopanen to prelegent na konferencjach M365Con 2026 i M365Con 2027 (Principal AI Advisor w Fellowmind), z 2 sesjami.",
+  "h": "69a6acbee9793d66",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "5f6baebe"
+  },
+  "ts": "2026-11-18"
+ },
  "vibe-coding": {
   "desc": "Tworzenie oprogramowania poprzez opisywanie żądanych rezultatów w języku naturalnym i pozwalanie sztucznej inteligencji generować oraz udoskonalać kod lub aplikację.",
   "faq": [
@@ -39031,6 +39448,24 @@
   "m": "claude-haiku-5-5",
   "sh": {
    "desc": "b982bd8d"
+  },
+  "ts": "2026-11-18"
+ },
+ "victor-dantas": {
+  "desc": "Victor Dantas jest prelegentem na konferencji M365Con 2027 (Director of Services w Eyedeas Inc) z 1 sesją.",
+  "h": "ccfb85d28d3ea3d0",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "1b4f9afc"
+  },
+  "ts": "2026-11-18"
+ },
+ "viktor-hedberg": {
+  "desc": "Konsultant ds. bezpieczeństwa ze specjalizacją w zakresie Microsoft Security, zarówno lokalnie, jak i w chmurze, z duszą blueteamera. Viktor pracuje w IT od 10 lat, zawsze w obszarze Cyber Security. Przez lata pracował dla sektora publicznego w Szwecji, a obecnie jest specjalistą w Truesec AB, gdzie koncentruje się na proaktywnych środkach bezpieczeństwa, DFIR i doradza we wszystkich kwestiach związanych z cyberbezpieczeństwem. Oficjalny profil Microsoft MVP:",
+  "h": "f74f229cb6e978a8",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "eb53e8f3"
   },
   "ts": "2026-11-18"
  },
@@ -39435,6 +39870,15 @@
   },
   "ts": "2026-11-18"
  },
+ "vladimir-stefanovic": {
+  "desc": "Ponad 20 lat doświadczenia w infrastrukturze IT, w tym 10 lat projektowania rozwiązań Azure na dużą skalę. Pomagam organizacjom projektować systemy chmurowe, które są technicznie solidne, efektywne kosztowo i zbudowane z myślą o długim okresie użytkowania. Jako Azure MVP i Microsoft Certified Trainer od ponad dekady współpracuję z firmami, od startupów po przedsiębiorstwa, aby poruszać się po złożonych wdrożeniach Azure, unikać kosztownych błędów i budować zespoły zdolne do długoterminowego utrzymania tych systemów. Regularnie występuję na konferencjach i wspieram społeczność poprzez publikacje i mentoring. Uważam, że dobra architektura zaczyna się od zrozumienia ograniczeń biznesowych, a nie tylko technologii. Ta filozofia kształtuje sposób, w jaki projektuję rozwiązania, szkolę zespoły i doradzam w kwestiach strategii. Kiedy nie buduję skalowalnych systemów, można mnie znaleźć w podróżach i spędzającego czas z rodziną. Oficjalny profil Microsoft MVP: https://mvp.microsoft.com/en-US/MVP/profile/b7782e2c-2610-ea11-a811-000d3a8ccb3e",
+  "h": "d4a4979e0eec2538",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "a754188c"
+  },
+  "ts": "2026-11-18"
+ },
  "vlan": {
   "desc": "Sieć VLAN (wirtualna sieć LAN) dzieli sieć przełączaną na oddzielne sieci logiczne; egzekwowanie dostępu między sieciami VLAN nadal wymaga kontroli routingu, takich jak zapory sieciowe.",
   "faq": [
@@ -39545,6 +39989,33 @@
    "desc": "489cfab1",
    "faq": "7d2e1c6a",
    "long": "85aca606"
+  },
+  "ts": "2026-11-18"
+ },
+ "walter-calcagno": {
+  "desc": "Walter E. Calcagno to architekt danych i Microsoft MVP w obszarze Data Platform od 2019 roku, a także Microsoft Certified Trainer. Jest współzałożycielem WeData, firmy doradczej specjalizującej się w Microsoft Fabric i Power BI, oraz Unlearni, przedsięwzięcia edukacyjnego w zakresie analityki. Jest autorem książki \"Arquitectura e Ingeniería de Datos\" (Anaya Multimedia, 2024), w której przedstawia ramy stosowane w pracy z klientami: siedmiowarstwowy model architektury, wzorzec medallion, ortodoksję wymiarową Kimballa oraz pięciowymiarową ocenę gotowości danych do AI (AI Data Readiness). Prowadzi zajęcia na Universidad ICESI (Kolumbia), w Platzi oraz w NamasData (Barcelona), a także współprowadzi hiszpańskojęzyczny podcast \"La Belleza de los Datos\". Pracuje z Santiago w Chile i od 1996 roku jest strażakiem ochotnikiem.",
+  "h": "9c136a42540adfbd",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "8659d68f"
+  },
+  "ts": "2026-11-18"
+ },
+ "wario-wario": {
+  "desc": "Wario Wario jest prelegentem na konferencjach M365Con 2026 i M365Con 2027 (założyciel i architekt AI w Haki Solutions), z 2 sesjami.",
+  "h": "605f5ecc5b18c6be",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "e674036b"
+  },
+  "ts": "2026-11-18"
+ },
+ "warren-belz": {
+  "desc": "Mieszkam w Central Queensland w Australii. Jestem w częściowej emeryturze. Od 2017 roku tworzę aplikacje w Power Apps. Super User na Community od 2020 roku (12. sezon), 9 500 zaakceptowanych rozwiązań. Dwukrotnie MVP Business Applications. Programuję w takiej czy innej formie od 1986 roku – Lotus 123/Notes > Access/Excel > Power Apps. Czerpię satysfakcję z pomagania innym.",
+  "h": "94e21d6d6eeb3e1d",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "44d354a0"
   },
   "ts": "2026-11-18"
  },
@@ -40384,12 +40855,30 @@
   },
   "ts": "2026-11-18"
  },
+ "yossi-barishev": {
+  "desc": "Yossi Barishev spent całą swoją karierę na pierwszej linii operacyjnej bezpieczeństwa. Rozpoczął w izraelskim wywiadzie wojskowym, gdzie kierował zespołem DFIR zajmującym się przeciwnikami na poziomie państw narodowych. Następnie kierował Global Cyber Defense & Response Center w CyberArk, był jednym z najbardziej doświadczonych konsultantów ds. bezpieczeństwa przedsiębiorstw w Sygnia, pełnił funkcję głównego specjalisty ds. reagowania na incydenty dla firm z listy Fortune 100 oraz infrastruktury krytycznej, a obecnie kieruje operacjami bezpieczeństwa, strategią i innowacjami w Fireblocks, jednym z najczęściej atakowanych środowisk na świecie.",
+  "h": "5d1578fa96c91463",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "5a624caf"
+  },
+  "ts": "2026-11-18"
+ },
  "yubikey": {
   "desc": "YubiKey to sprzętowy klucz zabezpieczający produkowany przez firmę Yubico, który może przechowywać passkeys i służyć jako odporne na phishing zapasowe poświadczenie.",
   "h": "cafb7f9420e78ef9",
   "m": "claude-haiku-5-5",
   "sh": {
    "desc": "b3f21147"
+  },
+  "ts": "2026-11-18"
+ },
+ "yves-habersaat": {
+  "desc": "Yves Habersaat jest konsultantem ds. aplikacji biznesowych i AI Tech Lead w firmie Sword Group w Szwajcarii. Specjalizuje się w tworzeniu aplikacji i rozwiązań opartych na Microsoft 365, Azure, Dynamics 365 oraz Power Platform. Będąc pasjonatem nowoczesnych technologii deweloperskich i cykli życia aplikacji, Yves koncentruje się na usługach Microsoft 365, takich jak Microsoft Teams, SharePoint Online, OneDrive for Business, Microsoft Viva i Microsoft Copilot. Posiada wiedzę ekspercką w zakresie nowoczesnych narzędzi deweloperskich, w tym SharePoint Framework (SPFx), Teams SDK, Microsoft Graph, Git, TypeScript, React, Visual Studio oraz Azure DevOps. Aktywnie dzieli się swoją wiedzą i doświadczeniem podczas wystąpień publicznych oraz na swoim blogu www.yhabersaat.ch, zawsze gotów wspierać i pomagać społeczności. Oficjalny profil Microsoft MVP: https://mvp.microsoft.com/en-US/MVP/profile/e3bc6506-654b-ec11-8f8e-00224827f7fc",
+  "h": "90f75d814cb8a2ee",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "6c3515b1"
   },
   "ts": "2026-11-18"
  },

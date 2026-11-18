@@ -22151,6 +22151,15 @@
   },
   "ts": "2026-11-18"
  },
+ "julie-m-turner": {
+  "desc": "Officieel Microsoft MVP-profiel: [URL verwijderd]",
+  "h": "0c4c826159bbf5e6",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "27f7116f"
+  },
+  "ts": "2026-11-18"
+ },
  "jump-box": {
   "desc": "Een versterkte server, ook wel jump server of jump host genoemd, waarmee beheerders eerst verbinding maken en vanaf daar doorgaan naar andere machines in een privénetwerk; als gewone VM moet deze worden gepatcht, bewaakt en heeft hij een blootgestelde beheerpoort nodig.",
   "h": "7d58e4ee130002e6",
@@ -29482,6 +29491,32 @@
   },
   "ts": "2026-11-18"
  },
+ "pass-the-hash": {
+  "desc": "Pass-the-hash is een lateral movement-techniek waarbij een gestolen NTLM-wachtwoordhash wordt hergebruikt om te authenticeren bij andere systemen, zonder het wachtwoord in leesbare tekst te kennen.",
+  "faq": [
+   {
+    "a": "Pass-the-hash is een lateral movement-techniek waarbij een gestolen NTLM-wachtwoordhash wordt hergebruikt om te authenticeren bij andere systemen, zonder het wachtwoord in leesbare tekst te kennen.",
+    "q": "Wat is pass-the-hash?"
+   },
+   {
+    "a": "De afleveringen noemen het blokkeren van het stelen van inloggegevens uit LSASS, het gebruik van privileged access workstations voor bevoegde taken, tiering en least privilege, en het detecteren van de techniek met Defender for Identity-waarschuwingen in combinatie met blokkering, wachtwoordreset en isolatie van apparaten.",
+    "q": "Hoe raden de M365.FM-afleveringen aan om pass-the-hash te verdedigen?"
+   },
+   {
+    "a": "Volgens de aflevering \"Harden Azure AD Connect Against Hybrid Identity Breaches\" volgt het op een initieel gephisht account als lateral movement, waarna privilege-escalatie zoals DCSync of een Golden Ticket leidt tot volledige controle over het domein.",
+    "q": "Waar past pass-the-hash in een aanvalsketen?"
+   }
+  ],
+  "h": "c8f71a76c4fb0432",
+  "long": "Pass-the-hash is een lateral movement-techniek waarbij een aanvaller een gestolen NTLM-wachtwoordhash gebruikt om zich bij andere systemen te authenticeren, zonder ooit het wachtwoord in leesbare tekst te achterhalen. Omdat de hash zelf als inloggegevens fungeert, kan een aanvaller die deze van de ene machine verkrijgt, hem proberen op verdere machines en diensten. Daardoor is deze techniek een veelvoorkomende stap zodra een aanvaller binnen een Windows- of hybride omgeving een eerste voet aan de grond heeft gekregen.\n\nIn de M365.FM-afleveringen komt pass-the-hash voor als één fase in een grotere aanvalsketen en niet als een op zichzelf staand incident. In de aflevering \"Harden Azure AD Connect Against Hybrid Identity Breaches\" wordt beschreven dat inbreuken zelden afhankelijk zijn van zero-day-kwetsbaarheden, maar juist versnellen door misbruik van identiteiten. Het voorbeeldpad begint bij één gephisht account, gaat verder met lateral movement via pass-the-hash of het hergebruik van tickets, vervolgt met privilege-escalatie zoals DCSync of een Golden Ticket en eindigt met volledige controle over het domein. De aflevering noemt drie zwakke punten die de meeste schade veroorzaken: een te grote beheerdersreikwijdte zonder tiering of least privilege, slordige PKI- en certificaatsjablonen, en onzorgvuldige synchronisatie van hybride identiteiten, waardoor een compromittering on-premises kan doorwerken naar de cloud.\n\nIn meerdere afleveringen worden verdedigingsmaatregelen besproken die de voorwaarden aanpakken waardoor pass-the-hash mogelijk is. De aflevering \"Detect Microsoft 365 Attack Chains with Entra and Sentinel\" noemt het blokkeren van het stelen van inloggegevens uit LSASS als verdedigingstechniek en stelt dat het voorkomen van ongeautoriseerde toegang tot het LSASS-geheugen veelvoorkomende aanvalspaden zoals Pass-the-Hash en Pass-the-Ticket doorbreekt. Dezelfde aflevering noemt in dezelfde lijst ook andere beschermingen, waaronder het blokkeren van Office-childprocessen en geavanceerde ransomwarebescherming, als onderdeel van het beperken van de ruimte waarin een aanvaller ongezien kan opereren.\n\nDe aflevering \"AD Tiering and Privileged Access with Viktor Hedberg [MVP-MCT]\" benadert het probleem via isolatie van bevoegde werkzaamheden. Er wordt beschreven hoe privileged access workstations (PAWs) uitsluitend bevoegde taken uitvoeren en niet worden gebruikt voor e-mail, webbrowsen of andere dagelijkse werkzaamheden. Volgens de aflevering houdt deze isolatie inloggegevens veilig en voorkomt het lateral movement, en beschermt het ook tegen aanvallen zoals pass-the-hash die gestolen inloggegevens gebruiken om zich door een netwerk te verplaatsen. De aflevering voegt toe dat PAWs de naleving ondersteunen door sterke toegangscontroles en gedetailleerde logs van bevoegde acties, en dat ze de operationele veerkracht vergroten als andere delen van het netwerk gecompromitteerd raken.\n\nDetectie en respons worden behandeld in de aflevering \"Conditional Access with Defender for Identity Signals\". In de koppeling van signalen aan reacties komt credentialdiefstaltechnieken zoals Pass-the-Hash en Pass-the-Ticket overeen met een beveiligingswaarschuwing voor identiteiten van Defender for Identity. De voorgestelde reactie is het account blokkeren en een wachtwoordreset eisen, het apparaat isoleren via Microsoft Defender for Endpoint en verouderde protocollen uitschakelen op de betrokken eindpunten. De aflevering raadt aan om één tot twee weken in de auditmodus of monitoringmodus te beginnen en de reacties pas per waarschuwingsklasse over te zetten naar handhaving.\n\nSamengenomen behandelen de afleveringen pass-the-hash als een techniek die op meerdere lagen moet worden aangepakt: het beperken van de blootstelling van inloggegevens op eindpunten, het beperken van hoe ver één gestolen inloggegeven kan reiken via tiering en speciale beheerwerkstations, het verharden van het hybride identiteitspad tussen on-premises Active Directory en de cloud, en het detecteren van het gedrag met op identiteiten gerichte waarschuwingen die gekoppeld zijn aan geautomatiseerde reacties. Typische beslissingen rond dit onderwerp betreffen welke accounts zich bij welke niveaus van systemen mogen aanmelden, of bevoegde taken op afzonderlijke apparaten worden uitgevoerd, en hoe agressief waarschuwingen moeten leiden tot blokkering of isolatie van apparaten zodra de monitoring is gevalideerd.",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "1804ca8c",
+   "faq": "199e96eb",
+   "long": "52582350"
+  },
+  "ts": "2026-11-18"
+ },
  "pass-through-authentication": {
   "desc": "Pass-through-verificatie is een hybride identiteitsaanmeldingsmethode waarbij Microsoft Entra ID het wachtwoord van een gebruiker op het moment van aanmelden valideert tegen on-premises Active Directory via lokale verificatieagents.",
   "h": "1869cd254f1070e7",
@@ -32194,6 +32229,32 @@
    "desc": "bdc3fd18",
    "faq": "afc29a71",
    "long": "03c13c33"
+  },
+  "ts": "2026-11-18"
+ },
+ "prompt-chaining": {
+  "desc": "Een prompttechniek waarbij de uitvoer van de ene AI-prompt de invoer voor de volgende wordt, waardoor meerdere stappen tot één workflow worden verbonden, bijvoorbeeld over Excel, Word, Outlook en Teams heen met Microsoft 365 Copilot.",
+  "faq": [
+   {
+    "a": "Prompt chaining is een prompttechniek waarbij de uitvoer van de ene AI-prompt de invoer voor de volgende wordt, waardoor meerdere stappen tot één workflow worden verbonden. De documentatie van Claude beschrijft het als het opsplitsen van een taak in opeenvolgende API-aanroepen, waarbij de uitvoer van elke aanroep de volgende voedt.",
+    "q": "Wat is prompt chaining?"
+   },
+   {
+    "a": "De documentatie van Claude noemt twee situaties: wanneer tussentijdse uitvoer moet worden gecontroleerd en wanneer een specifieke pijplijnstructuur moet worden afgedwongen. Anders, zo staat er, handelt het model het meeste meerstapsredeneren nu intern af.",
+    "q": "Wanneer is expliciete prompt chaining nog nuttig?"
+   },
+   {
+    "a": "De aflevering \"Enterprise AI Agents with Sailaja Mantripragada [MVP-MCT]\" noemt het als mogelijkheid van AI-beheerplatformen, naast instructiepijplijnen en agentorkestratie. De aflevering \"Enterprise AI Agent Engineering with Karthikeyan VK [MVP]\" beschrijft het orkestreren van LLM's via prompt chaining en gestructureerd redeneren als een veelgebruikte aanpak in agentontwikkeling.",
+    "q": "Hoe vermelden de M365.FM-afleveringen prompt chaining?"
+   }
+  ],
+  "h": "147004dc4b0f1ec8",
+  "long": "Prompt chaining is een prompttechniek waarbij de uitvoer van de ene AI-prompt de invoer wordt van de volgende, zodat meerdere stappen tot één workflow worden verbonden. In plaats van een model in één verzoek een grote taak te laten uitvoeren, wordt de taak opgesplitst in een reeks kleinere prompts, die elk voortbouwen op het resultaat van de vorige. In het Microsoft-ecosysteem wordt de techniek bijvoorbeeld beschreven als een manier om werk te verbinden over Excel, Word, Outlook en Teams heen met Microsoft 365 Copilot.\n\nHet kernidee is een sequentiële overdracht. Een eerste prompt levert een resultaat op, zoals een analyse, een concept of een samenvatting. Dat resultaat wordt doorgegeven aan een tweede prompt, die het omzet of uitbreidt, en zo verder tot de workflow is afgerond. Volgens de documentatie van het Claude Platform betekent prompt chaining dat een taak wordt opgedeeld in opeenvolgende API-aanroepen, waarbij de uitvoer van elke aanroep de volgende voedt. Omdat elke stap een afzonderlijke aanroep is, kan elke stap worden gelogd, geëvalueerd of gebruikt als vertakkingspunt. De documentatie beschrijft dit als het belangrijkste praktische voordeel ten opzichte van het gebruik van één grote prompt.\n\nEen veelvoorkomend patroon dat in die documentatie wordt genoemd, is zelfcorrectie in drie stappen: een concept genereren, het model het concept laten beoordelen aan de hand van vooraf opgegeven criteria, en vervolgens het concept verfijnen op basis van die beoordeling. Dit laat zien hoe chaining structuur aan een taak toevoegt. Elke fase heeft een beperkt doel, en de uitkomst van de beoordelingsfase bepaalt rechtstreeks de laatste verfijningsstap.\n\nDe documentatie geeft ook aan wanneer expliciete chaining nodig is. Er staat dat Claude met adaptief denken en de orkestratie van subagents nu het meeste meerstapsredeneren intern afhandelt, zodat expliciete chaining niet langer de standaardmanier is om meerstapsredeneren te bereiken. Ze blijft zinvol in twee situaties: wanneer tussentijdse uitvoer moet worden gecontroleerd en wanneer een specifieke pijplijnstructuur moet worden afgedwongen. Waar chaining niet nodig is, suggereert de documentatie om het model in één prompt zijn eigen werk te laten controleren. De bron geeft alleen deze korte beschrijving en geen apart voorbeeld, en gaat niet in op scenario's met Microsoft 365 Copilot.\n\nPrompt chaining komt ook voor in M365.FM-discussies over enterprise AI-agents. De aflevering \"Enterprise AI Agents with Sailaja Mantripragada [MVP-MCT]\" gaat over het monitoren en beheren van agents na implementatie. Er wordt gezegd dat AI-beheerplatformen kunnen worden gebruikt om workflows te definiëren en interacties te orkestreren, en dat deze tools prompt chaining, instructiepijplijnen en agentorkestratie ondersteunen. In dezelfde aflevering komen realtime dashboards en analyses voor het bijhouden van de prestaties van agents aan bod, levenscyclusbeheertools zoals Azure ML of Databricks voor versies en implementaties, en policy engines en contextbewuste autorisatie voor het afdwingen van regels en het toevoegen van beveiliging.\n\nDe aflevering \"Enterprise AI Agent Engineering with Karthikeyan VK [MVP]\" plaatst prompt chaining in de context van de ontwikkeling van LLM-gerichte agents. Er wordt gesteld dat ontwikkelaars en organisaties zich vaak richten op het orkestreren van LLM's via prompt chaining en gestructureerd redeneren, en dat deze trend de productiviteit en flexibiliteit vergroot. De aflevering beschrijft ook multi-agentsystemen waarin gespecialiseerde agents samenwerken, op workflow gerichte frameworks die deterministische pijplijnen combineren met op agents gebaseerde besluitvorming, en platforms op enterprisenniveau die governance- en compliancecontroles toevoegen. Vervolgens wordt een verborgen probleem aan de orde gesteld dat ontstaat wanneer teams te sterk leunen op LLM-gerichte benaderingen.\n\nIn de praktijk komen beslissingen over prompt chaining vaak neer op hoeveel zichtbaarheid en controle een workflow nodig heeft. Een chain biedt expliciete controlepunten, wat geschikt is wanneer tussentijdse resultaten moeten worden beoordeeld of wanneer een vaste volgorde van stappen van belang is. Een enkele, goed opgestelde prompt kan voldoende zijn wanneer die behoeften er niet zijn. De techniek hangt nauw samen met instructiepijplijnen en agentorkestratie, die de afleveringen naast haar noemen als onderdeel van het beheer van AI-workflows.",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "1ce9057d",
+   "faq": "9cbc0dfb",
+   "long": "28c6b511"
   },
   "ts": "2026-11-18"
  },
@@ -36801,6 +36862,15 @@
   },
   "ts": "2026-11-18"
  },
+ "sofia-platas": {
+  "desc": "Ik ben een Power Platform Solution Architect met een passie voor het ontwerpen van oplossingen die zakelijke behoeften en technologie met elkaar verbinden. Daarnaast draag ik actief bij aan de Microsoft-community door technische presentaties te geven en professionals te ondersteunen bij het verder ontwikkelen van hun carrière binnen het Microsoft-ecosysteem. Ik word gedreven door voortdurend leren en door het stoïcijnse principe dat vaak wordt geassocieerd met Marcus Aurelius: \"Het obstakel voor de handeling bevordert de handeling. Wat zich in de weg stelt, wordt de weg.\" Het herinnert me eraan om elke uitdaging te zien als een kans om te verbeteren, te innoveren en anderen te helpen groeien. Buiten het werk daag ik mezelf uit via duursport, ontdek ik nieuwe culturen tijdens het reizen en vind ik plezier in koken als creatieve uitlaatklep. Ik geloof dat nieuwsgierigheid, veerkracht en gulheid in het delen van kennis de basis vormen van zinvolle impact. Mijn doel is niet alleen betere technologie te bouwen, maar ook zelf beter te worden in het proces: de bestemming doet ertoe, maar karakter wordt opgebouwd op de reis.",
+  "h": "ffc90990f487ea5b",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "dc0afca6"
+  },
+  "ts": "2026-11-18"
+ },
  "software-as-a-service": {
   "desc": "Software as a service is a cloud delivery model waarin een leverancier een toepassing hostt en beheert en klanten deze gebruiken op basis van een abonnement, traditioneel geprijsd per gebruikersplek.",
   "faq": [
@@ -36990,6 +37060,15 @@
    "desc": "e06b313f",
    "faq": "6611eab7",
    "long": "797ffaa6"
+  },
+  "ts": "2026-11-18"
+ },
+ "sonny-gillissen": {
+  "desc": "Microsoft MVP die complexe integraties eenvoudig maakt. Officieel Microsoft MVP-profiel:",
+  "h": "a8d8938a5d7aa4da",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "c3d51ad1"
   },
   "ts": "2026-11-18"
  },
@@ -37201,6 +37280,32 @@
    "desc": "dced2b26",
    "faq": "2bc8c986",
    "long": "91ef3a2e"
+  },
+  "ts": "2026-11-18"
+ },
+ "spreadmart": {
+  "desc": "Een denigrerende term voor een op spreadsheets of desktopdatabases gebaseerde rapportageopzet die individuen of teams zelf bouwen in plaats van een beheerde data mart of datawarehouse. In BI staat de term voor gedupliceerde datasets en inconsistente metriclogica.",
+  "faq": [
+   {
+    "a": "Spreadmart is kort voor spreadsheet data mart. Het verwijst naar een opzet op basis van spreadsheets of desktopdatabases die individuen of groepen onderhouden om werk te doen dat een data mart of datawarehouse op een meer gestructureerde manier zou kunnen doen.",
+    "q": "Wat betekent de term spreadmart?"
+   },
+   {
+    "a": "Verschillende mensen bouwen ze op verschillende momenten, met verschillende databronnen en metriekdefinities, wat een versnipperd beeld van de onderneming oplevert. Omdat de data is losgekoppeld van de bron, kan ze niet worden gecontroleerd of automatisch worden ververst, en ongedefinieerde data kan valse conclusies ondersteunen.",
+    "q": "Waarom veroorzaken spreadmarts problemen?"
+   },
+   {
+    "a": "De M365.FM-aflevering \"Build Reusable Semantic Models in Microsoft Fabric\" beschrijft spreadmart-achtige dashboards als gevolg van kopiëren-en-plakken-wildgroei in Power BI. Ze beveelt een model-first aanpak aan waarin het semantische model een gedeeld bedrijfsbezit is dat over rapporten en teams heen wordt hergebruikt.",
+    "q": "Hoe verhoudt Microsoft Fabric zich tot het spreadmart-probleem?"
+   }
+  ],
+  "h": "39f6f31062ad666a",
+  "long": "Spreadmart, kort voor \"spreadsheet data mart\", is een denigrerende term uit de business intelligence. Het beschrijft een rapportage- en analyseopzet die is gebaseerd op spreadsheets of andere desktopdatabases, die individuen of kleine groepen zelf onderhouden, en die werk doen dat een beheerde data mart of datawarehouse op een meer gestructureerde manier zou kunnen doen. Wayne Eckerson van TDWI bedacht de term in 2002 als kritiek op dit patroon.\n\nEen spreadmart ontstaat meestal wanneer standaard BI-rapportage te traag of te inflexibel aanvoelt. Een typische volgorde is dat een analist een tabel naar Excel exporteert en daar een privérapport bouwt. Kopieën van dat bestand worden vervolgens per e-mail rondgestuurd, bewerkt en opnieuw opgeslagen. Eenmaal geëxporteerd is de data losgekoppeld van de bron, waardoor ze niet kan worden gecontroleerd aan het oorspronkelijke systeem en niet automatisch kan worden ververst. Omdat verschillende mensen op verschillende momenten hun eigen versies bouwen, met verschillende databronnen en verschillende definities van dezelfde metric, ontstaat binnen de organisatie een versnipperd, gedecentraliseerd beeld van het bedrijf. Het kernrisico dat de bronnen noemen is dat ongedefinieerde, losgekoppelde data valse conclusies en kostbare verkeerde beslissingen kan ondersteunen.\n\nDe term is een aanduiding voor een symptoom en geen product of functie. In de praktijk gaan discussies over spreadmarts over gedupliceerde datasets, conflicterende berekeningen en een gebrek aan vertrouwen: twee rapporten kunnen verschillende cijfers tonen voor wat schijnbaar dezelfde maatstaf is, en niemand kan makkelijk zeggen welke correct is. De belangrijkste alternatieven zijn de gestructureerde benaderingen waartegen de term wordt gedefinieerd, namelijk data marts en datawarehouses, waar data één keer wordt gemodelleerd, afkomstig is uit beheerde pipelines en wordt gedeeld.\n\nHet concept is niet onbetwist. Stephen Samild stelt dat spreadmarts rollen vervullen die warehouses slecht dekken. Hij noemt het verwerken van ongestructureerde data, lees-schrijfanalyse, het vermijden van lange doorlooptijden wanneer een nieuwe databron nodig is, en vrije presentatie. Deze visie ziet spreadmarts als een reactie op echte tekortkomingen van formele BI en niet alleen als een governancefout, en daarom gaat de beslissing vaak over het balanceren van wendbaarheid tegenover consistentie in plaats van spreadsheets volledig uit te bannen.\n\nBinnen het Microsoft-ecosysteem komt de term naar voren in discussies over Power BI-wildgroei. De M365.FM-aflevering \"Build Reusable Semantic Models in Microsoft Fabric\" (2025-08-12) beschrijft omgevingen die snel beginnen en vervolgens stagneren door kopiëren-en-plakken-wildgroei: gedupliceerde PBIX-bestanden, conflicterende measures en \"spreadmart\"-dashboards die niemand volledig vertrouwt. De aflevering stelt dat de oplossing niet nog een naamgevingsconventie is, maar een model-first architectuur. In die aanpak behandelt Microsoft Fabric het semantische model als een bedrijfsbreed bezit, één definitielaag die over rapporten, werkruimten en teams heen wordt hergebruikt. De aflevering wijst ook op calculation groups als manier om eindeloze YTD-, QTD- en TTM-varianten te voorkomen, zodat tijdintelligentie, KPI's en bedrijfsregels gecentraliseerd en controleerbaar blijven.\n\nSamen presenteren de bronnen de spreadmart als zowel een historische BI-kritiek als een terugkerend modern patroon. De praktische vraag voor teams is waar metriekdefinities worden vastgelegd en wie er eigenaar van is. Wanneer definities verspreid zijn over afzonderlijke bestanden ontstaat het spreadmart-patroon; wanneer ze gecentraliseerd zijn in een gedeeld, beheerd model, kunnen rapporten op één consistente laag worden gebouwd, terwijl zelfbediening voor analyse er bovenop mogelijk blijft.",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "e06b1d06",
+   "faq": "ec21067b",
+   "long": "c217edd7"
   },
   "ts": "2026-11-18"
  },
@@ -37570,6 +37675,51 @@
   },
   "ts": "2026-11-18"
  },
+ "stefano-demiliani": {
+  "desc": "Stefano Demiliani is een spreker op M365Con 2027 (CTO BizApp bij Lodestar spa) met 1 sessie.",
+  "h": "c7e82ee669053941",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "baa8fd05"
+  },
+  "ts": "2026-11-18"
+ },
+ "stephane-eyskens": {
+  "desc": "Stéphane is een ervaren Cloud Architect met bijna 30 jaar ervaring in de IT-sector. Zijn multidisciplinaire achtergrond omvat ontwikkeling, infrastructuur en beveiliging, met een sterke focus op cloud- en hybride architecturen. Hij is tevens auteur van verschillende boeken over cloud- en softwarearchitectuur en heeft de Microsoft MVP-titel 19 jaar achtereen ontvangen in de categorieën Cloud Native en IPaaS.",
+  "h": "ad24f4a927191ab0",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "8eb0434e"
+  },
+  "ts": "2026-11-18"
+ },
+ "stephanie-stasey": {
+  "desc": "Nadat ze een levensreddende Power App had gebouwd, werd Stephanie door Microsoft benaderd om hun grootste klant ter wereld te leiden, NHS England, bij hun adoptie van het Power Platform en om hen te ondersteunen bij de samenwerking met Microsoft toen de grootste gezondheidsapp ter wereld werd opgeschaald naar 39 miljoen mensen, waarmee deze de voordeur werd van het grootste gezondheidssysteem ter wereld. Na drie jaar vertrok ik om mijn eigen AI-consultancy en Microsoft-partner op te richten, omdat we geloofwaardige, zichtbare vrouwen in AI nodig hebben die hun eigen geld verdienen.",
+  "h": "bf07dcd74b9e50b9",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "199c5e3f"
+  },
+  "ts": "2026-11-18"
+ },
+ "steve-corey": {
+  "desc": "Ik ben consultant voor Microsoft 365-producten bij Quisitive. Ik help klanten bij het oplossen van problemen. Hoe complexer, hoe beter. Daarnaast ontwerp en implementeer ik oplossingen en leer ik mijn klanten meer over het platform waarin zij hebben geïnvesteerd. Ik werk al meer dan 20 jaar met SharePoint, zowel als ontwikkelaar als solution architect. Toen Copilot uitkwam, was ik meteen enthousiast. Agentontwikkeling spreekt me bijzonder aan, en daar besteed ik tegenwoordig het meeste van mijn tijd aan. Ik heb ook een klein YouTube-kanaal waarop ik mensen over de hele wereld leer over agents en wat zij voor organisaties kunnen betekenen. Officieel Microsoft MVP-profiel: https://mvp.microsoft.com/en-US/MVP/profile/6f4ee417-9f8f-44fe-97da-bbf28624bec3",
+  "h": "c974a5ecb1715c20",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "d1d46efd"
+  },
+  "ts": "2026-11-18"
+ },
+ "steve-gerstner": {
+  "desc": "Steve Gerstner is een spreker op M365Con 2027 (Bridging IT GmbH bij Bridging IT GmbH) met 1 sessie.",
+  "h": "4e69409e69457bbc",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "088158c5"
+  },
+  "ts": "2026-11-18"
+ },
  "store-commerce-app": {
   "desc": "Store Commerce is de point-of-saleapp van Dynamics 365 Commerce voor medewerkers in de winkel, die draait op Windows, iOS, Android en macOS op desktop-, tablet- en telefoonformaten.",
   "faq": [
@@ -37727,6 +37877,15 @@
   },
   "ts": "2026-11-18"
  },
+ "sue-bayes": {
+  "desc": "Sue Bayes is een spreker op M365Con 2027 (Director bij Databayes Ltd) met 1 sessie.",
+  "h": "70201b05201531f4",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "f1b31605"
+  },
+  "ts": "2026-11-18"
+ },
  "suggestion-acceptance-rate": {
   "desc": "Het acceptatiepercentage van suggesties meet hoe vaak AI-output, zoals concepten of samenvattingen van Copilot, wordt gebruikt zonder zware herschrijving of afwijzing. Het dient als signaal van vertrouwen, kwaliteit van de context en de mate waarin het past bij de werkwijze.",
   "h": "38c993f5731d1383",
@@ -37797,6 +37956,15 @@
    "desc": "2a86a641",
    "faq": "42bc93b3",
    "long": "5a2364f2"
+  },
+  "ts": "2026-11-18"
+ },
+ "sven-sieverding": {
+  "desc": "Sven Sieverding is spreker op M365Con DACH 2026 (M365 Consultant bij team neusta) met 1 sessie.",
+  "h": "24699d3bc35d3db6",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "9f4ff0cf"
   },
   "ts": "2026-11-18"
  },
@@ -37976,6 +38144,41 @@
   "sh": {
    "desc": "39b10987",
    "long": "a6a41078"
+  },
+  "ts": "2026-11-18"
+ },
+ "tchesco-ayih": {
+  "desc": "Ayih Tchesco is een Microsoft Certified Trainer (MCT), Microsoft MVP en ervaren technologiespreker, gespecialiseerd in het Microsoft Power Platform. Met een sterke achtergrond in het bouwen van bedrijfsoplossingen met Power Apps, Power Automate, Power Pages, Dataverse en Copilot Studio, helpt hij personen en organisaties om het volledige potentieel van low-code- en AI-gedreven ontwikkeling te benutten. Tchesco heeft een passie voor kennisdeling en heeft professionals in verschillende regio's getraind via workshops, live sessies en online platforms. Hij staat erom bekend complexe technische concepten te vertalen naar praktische, reële oplossingen die lerenden meteen kunnen toepassen. Naast training is Tchesco actief betrokken bij de wereldwijde tech-gemeenschap, onder meer via sprekersopdrachten, mentorschap. Zijn missie is de kloof tussen technologie en mensen te overbruggen door leren praktisch, inclusief en transformerend te maken. Officieel Microsoft MVP-profiel: https://mvp.microsoft.com/ja-jp/PublicProfile/5005269?fullName=Tchesco++Ayih",
+  "h": "2bad5b536644f158",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "f69b315d"
+  },
+  "ts": "2026-11-18"
+ },
+ "team-building": {
+  "desc": "Een verzamelnaam voor interventies die erop gericht zijn de effectiviteit van teams te verbeteren en rollen te verduidelijken, vaak via samenwerkingsopdrachten.",
+  "faq": [
+   {
+    "a": "Teambuilding is een verzamelnaam voor interventies die erop gericht zijn de effectiviteit van teams te verbeteren en rollen te verduidelijken, vaak via samenwerkingsopdrachten.",
+    "q": "Wat is teambuilding?"
+   },
+   {
+    "a": "De aflevering \"Use Minecraft for Workplace Team Building\" presenteert Minecraft als een gezamenlijke digitale wereld waarin communicatie, coördinatie en samenwerking het succes bepalen, en waarin resultaten worden beoordeeld op hoe het team zich heeft gecoördineerd, aangepast en elkaar heeft ondersteund.",
+    "q": "Hoe beschrijft de M365.FM-aflevering over Minecraft teambuilding?"
+   },
+   {
+    "a": "De aflevering \"Viva Engage - Simply Explained\" zegt dat Viva Engage teambuildingactiviteiten ondersteunt, met voorbeelden zoals teambindingslounges en chatideeën voor het opbouwen van relaties tussen medewerkers.",
+    "q": "Welke tools of platforms worden genoemd in verband met teambuildingactiviteiten?"
+   }
+  ],
+  "h": "f29496ce36009e5b",
+  "long": "Teambuilding is een verzamelnaam voor interventies die erop gericht zijn de effectiviteit van teams te verbeteren en rollen te verduidelijken, vaak via samenwerkingsopdrachten. De term beschrijft geen enkele methode of product. Het omvat een reeks activiteiten waarbij een groep samenwerkt aan een gedeeld resultaat, met als doel de coördinatie, communicatie en een gezamenlijk begrip van wie waarvoor verantwoordelijk is te versterken. In een werkomgeving wordt het toegepast op nieuwe teams, op groepen die zijn gegroeid of veranderd, en op gedistribueerde teams waarvan de leden elkaar zelden persoonlijk ontmoeten.\n\nDe afleveringen van M365.FM raken teambuilding vanuit verschillende invalshoeken. De aflevering \"Use Minecraft for Workplace Team Building\" presenteert het bouwspel als een gezamenlijke digitale wereld in plaats van alleen maar een videospel. Volgens de aflevering zijn communicatie, coördinatie en samenwerking de sleutels tot succes in die gedeelde omgeving. Spelers leren dat ze van elkaar afhankelijk zijn, en de aflevering stelt dat besluitvorming op een organische manier kan worden verfijnd in plaats van geforceerd. Succes wordt omschreven als meetbaar, niet alleen aan wat het team heeft gebouwd, maar ook aan hoe het team zich heeft gecoördineerd, zich heeft aangepast en elkaar heeft ondersteund. Dit illustreert het kernidee van teambuilding via samenwerkingsopdrachten: de opdracht zelf is secundair aan de werkrelaties die ze blootlegt en versterkt.\n\nEen tweede invalshoek komt naar voren in \"Viva Engage - Simply Explained\". De aflevering noemt teambuildingactiviteiten als iets wat Viva Engage ondersteunt, en beschrijft ze als essentieel voor het bevorderen van relaties tussen medewerkers. Er worden voorbeelden genoemd, zoals teambindingslounges, dat zijn ruimten waarin teamleden buiten het werk contact kunnen hebben, en andere chatgebaseerde ideeën om persoonlijke verhalen te delen. In deze lezing is teambuilding minder een eenmalig evenement en meer een doorlopende reeks sociale contactmomenten op een samenwerkingsplatform. Dezelfde aflevering koppelt gestructureerde onboarding, zoals het delen van bronnen en het koppelen van nieuwe medewerkers aan mentoren of collega's, aan het gevoel van steun en integratie in de werkcultuur vanaf de eerste dag.\n\nEen derde invalshoek betreft de duidelijkheid van rollen, wat deel uitmaakt van de definitie van het begrip. Verschillende afleveringen bespreken het samenstellen en structureren van teams rond gedefinieerde verantwoordelijkheden. \"Build an Agentic Workforce with Microsoft Copilot in 30 Days\" stelt dat het bouwen van een hoogpresterende werkgroep vereist dat het juiste team wordt samengesteld, met personen die over de nodige vaardigheden beschikken en de principes van een agentische werkgroep belichamen. Er worden belangrijke rollen en verantwoordelijkheden genoemd, waaronder een Technical Literacy Facilitator die zich richt op het op schaal ontwikkelen van fundamentele technische geletterdheid. \"Azure Governance Is Enforced Architecture, Not Documentation\" maakt een vergelijkbaar punt over cloudmigratie: een sterk cross-functioneel team moet leden met diverse vaardigheden en duidelijke rollen omvatten, en de huidige Azure-vaardigheden van het team moeten worden beoordeeld om hiaten te identificeren, waarbij waar nodig externe experts worden ingeschakeld. Een Azure Architect wordt genoemd als een van de sleutelrollen.\n\nSamen laten de afleveringen zien dat teambuilding binnen het Microsoft-ecosysteem drie verwante praktijken omvat: samenwerkingsoefeningen die onthullen hoe een team communiceert en coördineert, sociale en onboardingactiviteiten die worden ondersteund door samenwerkingstools, en het doelbewust samenstellen van teams met duidelijk gedefinieerde rollen en aanvullende vaardigheden. Typische keuzes rond het begrip zijn onder meer of het doel relatieopbouw, rolduidelijkheid of vaardigheidsdekking is, of de activiteit een gedeelde opdracht of een doorlopende sociale ruimte moet zijn, en hoe succes zal worden beoordeeld. De Minecraft-aflevering suggereert beoordeling op basis van coördinatie en aanpassing, niet alleen op het eindresultaat, terwijl de rolgerichte afleveringen suggereren om voor de start van een project te controleren op vaardigheidshiaten en duidelijke verantwoordelijkheden.\n\nDe aangeleverde bronnen schrijven geen vast raamwerk of schema voor teambuilding voor, en geven geen metingen van het effect ervan. Wat ze wel bieden is een reeks voorbeelden die laten zien hoe samenwerkingsopdrachten, op platforms gebaseerde sociale activiteiten en rolomschrijving elk bijdragen aan het bredere doel om teams effectiever samen te laten werken.",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "d3b91d8b",
+   "faq": "32a4b1bb",
+   "long": "d53d683c"
   },
   "ts": "2026-11-18"
  },
@@ -38551,12 +38754,57 @@
   },
   "ts": "2026-11-18"
  },
+ "therman-trotman": {
+  "desc": "Therman Trotman is een spreker op M365Con 2026 (Owner en Lead Trainer bij The SharePoint Helpdesk) met 1 sessie.",
+  "h": "adb662d3f6aab794",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "8381dffb"
+  },
+  "ts": "2026-11-18"
+ },
  "thin-client": {
   "desc": "Een thin client is een eenvoudige computer die is geoptimaliseerd om verbinding te maken met een bureaublad of rekenomgeving die op afstand draait op een server of in de cloud.",
   "h": "a4b94ff2869a33e0",
   "m": "claude-haiku-5-5",
   "sh": {
    "desc": "14b2be79"
+  },
+  "ts": "2026-11-18"
+ },
+ "thomas-maier": {
+  "desc": "Thomas Maier is een spreker op M365Con DACH 2026 (eigenaar, MVP, MCT, M365 Learning-expert bij 365 Akademie.de) met 1 sessie.",
+  "h": "11a9f207432471d8",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "afe664bb"
+  },
+  "ts": "2026-11-18"
+ },
+ "thomas-sandsr": {
+  "desc": "De Facebookpagina is zeer onofficieel, maar het is nog steeds een geweldige plek om te zien hoe mensen problemen ervaren en elkaar proberen te helpen. De Slackgroep is samengesteld door voormalige MVP's en heeft een hele gemeenschap met veel actieve kanalen. Ik neem soms deel aan enkele discussies daar over technologie en hoe je bepaalde obstakels kunt overwinnen. Officieel Microsoft MVP-profiel:",
+  "h": "9e4443e12367f1ad",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "f6e6440f"
+  },
+  "ts": "2026-11-18"
+ },
+ "thomas-stensitzki": {
+  "desc": "Thomas Stensitzki is a Principal Technology Consultant en eigenaar van Granikos GmbH & Co. KG, een bedrijf dat gespecialiseerd is in enterprise consulting en training voor Microsoft Exchange, Microsoft 365 en hybride samenwerkingsomgevingen. Sinds april 2018 is hij Microsoft MVP voor Microsoft 365 en Exchange, en hij is gecertificeerd als zowel Microsoft Certified Solutions Master Messaging als Microsoft Certified Master for Exchange Server — tot de meest geavanceerde technische certificeringen die Microsoft ooit heeft aangeboden. Als Microsoft Certified Trainer en voormalig MCT Community Lead heeft Thomas IT-professionals in heel Europa opgeleid en al jarenlang bijgedragen aan de bredere Microsoft-trainingsgemeenschap. Hij is de auteur van verschillende boeken, waaronder het veelgebruikte \"Exchange Server – Das Handbuch für Administratoren\", en hij is een gewilde spreker op evenementen zoals Exchange Summit, Experts Live en Scottish Summit. Naast zijn consultancywerk presenteert Thomas de podcast \"Exchange Unplugged\" en deelt hij regelmatig zijn expertise via zijn YouTube-kanaal, blog en community-bijeenkomsten.",
+  "h": "fa597afe5a042e23",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "82fd9bc6"
+  },
+  "ts": "2026-11-18"
+ },
+ "thomas-zou": {
+  "desc": "PMM voor Copilot Studio.",
+  "h": "ad8fc988ef39197f",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "c0268c2e"
   },
   "ts": "2026-11-18"
  },
@@ -38734,6 +38982,24 @@
   },
   "ts": "2026-11-18"
  },
+ "thummalacherla-krish": {
+  "desc": "Krishnakanth is een Senior Power BI Developer bij Quest Global met expertise in Microsoft Power BI, datamodellering, business intelligence, SQL, Snowflake en Databricks. Hij heeft een passie voor het omzetten van complexe data in bruikbare inzichten die zakelijke beslissingen aansturen. Met ervaring in het leveren van analyseoplossingen voor wereldwijde klanten, waaronder Exxon Mobil, Rolls-Royce en Siemens Gamesa, is Krishnakanth gespecialiseerd in het bouwen van schaalbare dashboards, het optimaliseren van datamodellen en het creëren van krachtige visualisaties. Hij is een gecertificeerd professional voor Microsoft PL-300 en DP-600 en een actieve lerende die voortdurend zijn kennis bijspijkert op het gebied van analytics, AI en opkomende datatechnologieën. Buiten zijn professionele rol draagt Krishnakanth actief bij aan de datacommunity door kennis te delen en de Fabric Community Super User Badge te behalen. Ook maakt hij leermateriaal en begeleidt hij aspirant-datamedewerkers. Via deze podcast kijkt hij ernaar uit om praktische inzichten, carrière-ervaringen en lessen uit zijn reis in de wereld van data-analytics te delen.",
+  "h": "28784a839f796f46",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "989eb3d5"
+  },
+  "ts": "2026-11-18"
+ },
+ "tiago-costa": {
+  "desc": "Tiago Costa is een spreker op M365Con 2027 (Owner bij LWT) met 1 sessie.",
+  "h": "86e4617a886f34d1",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "55b88e39"
+  },
+  "ts": "2026-11-18"
+ },
  "tier-meeting": {
   "desc": "Een korte, vaste dagelijkse vergadering in gestapelde niveaus, van team tot fabriek, bij een bord. Elk niveau bespreekt veiligheid, kwaliteit, levering en kosten, escaleert wat het niet kan oplossen en wijst eigenaren en data toe.",
   "h": "71bcf1c1c5b5e18e",
@@ -38786,6 +39052,15 @@
    "desc": "2ba3bafe",
    "faq": "c549317c",
    "long": "0069f25b"
+  },
+  "ts": "2026-11-18"
+ },
+ "tina-van-heerden": {
+  "desc": "Tina is een Solution Architect bij Microsoft in het FastTrack Agentic ERP-team. Met ervaring in de \"implementatietrifecta\" - partner, klant en Microsoft - biedt zij een uniek end-to-end perspectief op business applications. Tina is gedreven om echte impact en verbinding te creëren; ze helpt organisaties en mensen bij het versnellen van adoptie, het opbouwen van AI- en agentvaardigheden, het ontsluiten van datawaarde, en het realiseren van meetbaar rendement op investering en klanttevredenheid.",
+  "h": "70be64872ddf4d90",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "bbfd70d8"
   },
   "ts": "2026-11-18"
  },
@@ -38894,12 +39169,39 @@
   },
   "ts": "2026-11-18"
  },
+ "tom-arbuthnot": {
+  "desc": "Tom Arbuthnot is spreker op M365Con 2027 (medeoprichter van Empowering Cloud) met 1 sessie.",
+  "h": "5e50cf5c1d988e05",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "bbf6fbe1"
+  },
+  "ts": "2026-11-18"
+ },
+ "tommy-puglia": {
+  "desc": "Tommy Puglia is een spreker op M365Con 2027 (oprichter en consultant bij Puglia BI Consulting) met 1 sessie.",
+  "h": "6bfde5f1711da1bf",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "e770953e"
+  },
+  "ts": "2026-11-18"
+ },
  "tool-contract": {
   "desc": "Gestandaardiseerde, geversioneerde definitie van een actie die een AI-agent mag aanroepen, met de toegestane invoer, gestructureerde uitvoer, de uitvoerende identiteit, provenance-logging en goedkeuringspoorten voor onomkeerbare stappen, vergelijkbaar met een API-contract.",
   "h": "81eee5ef53816229",
   "m": "claude-haiku-5-5",
   "sh": {
    "desc": "a55d241b"
+  },
+  "ts": "2026-11-18"
+ },
+ "tore-nestenius": {
+  "desc": "Tore Nestenius is spreker op M365Con 2027 (consultant en trainer bij Tore Nestenius Datakonsult AB) met 1 sessie.",
+  "h": "7bd69f49ac2283d1",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "02903e4c"
   },
   "ts": "2026-11-18"
  },
@@ -38966,6 +39268,15 @@
   },
   "ts": "2026-11-18"
  },
+ "tracy-van-der-schyff": {
+  "desc": "Tracy is gepassioneerd over het versterken van mensen via training en change management. Ze gelooft in de kracht van Ontological Design: wat we creëren, vormt op zijn beurt ons. Haar missie is mensen helpen hun vermogen te vergroten om te leren, effectief te handelen en betere toekomsten te ontwerpen. Door gebruik te maken van Microsoft 365, Intranets en Copilot helpt zij gebruikers hun digitale vaardigheden te ontwikkelen, samenwerking te verbeteren en hun potentieel te benutten. Tracy pleit voor tools die niet alleen de productiviteit ondersteunen, maar ook het menselijk vermogen vergroten in een digitale wereld. Officieel Microsoft MVP-profiel: https://mvp.microsoft.com/en-us/PublicProfile/5002097?fullName=Tracy++Van+der+Schyff",
+  "h": "ff678de2459eeca7",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "4adaa42c"
+  },
+  "ts": "2026-11-18"
+ },
  "trainable-classifiers": {
   "desc": "Machine-leercodes in Microsoft Purview die leren een soort document te herkennen, zoals contracten of broncode, aan de hand van voorbeelddocumenten, en die als voorwaarde kunnen worden gebruikt in DLP- en labelingbeleid.",
   "faq": [
@@ -39027,12 +39338,30 @@
   },
   "ts": "2026-11-18"
  },
+ "trent-allday": {
+  "desc": "Trent Allday is de oprichter van Sprocket 365, dat kennis- en productiviteitstools bouwt die draaien binnen de eigen Microsoft 365-tenant van een organisatie. De producten van Sprocket worden gebruikt door organisaties in het middensegment van het bedrijfsleven, in de sectoren professionele dienstverlening, financiële dienstverlening en de not-for-profitsector, met meer dan 11.000 dagelijkse actieve gebruikers. Hij werkt aan SharePoint-architectuur, Copilot-uitrollen en het praktische vraagstuk van wat er met kennis gebeurt nadat AI die heeft geproduceerd.",
+  "h": "4ea092a803755827",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "28f2bc6c"
+  },
+  "ts": "2026-11-18"
+ },
  "triple-peak-workday": {
   "desc": "Het drievoudige piekpatroon van de werkdag is een patroon dat beschreven wordt in onderzoek van Microsoft, waarbij de activiteit bij kenniswerk niet alleen in de ochtend en de middag piekt, maar ook opnieuw in de late avond.",
   "h": "1d8cf4128938527d",
   "m": "claude-haiku-5-5",
   "sh": {
    "desc": "fb6eced9"
+  },
+  "ts": "2026-11-18"
+ },
+ "troy-hunt": {
+  "desc": "Troy Hunt is een Australische beveiligingsonderzoeker die vooral bekendstaat als de maker van de dienst voor meldingen van datalekken Have I Been Pwned.",
+  "h": "066853effc3416ab",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "b9443c34"
   },
   "ts": "2026-11-18"
  },
@@ -39309,6 +39638,15 @@
   },
   "ts": "2026-11-18"
  },
+ "uros-babic": {
+  "desc": "Uroš is een Lead Product Engineer voor Microsoft Security DevOps bij het Global Center of Excellence van SoftwareOne. Hij draagt bij aan het ontwerp en de innovatie van MXDR voor Microsoft Sentinel en versterkt de Managed SOC-mogelijkheden via beveiligingsautomatisering, engineering van incidentrespons en SOC-as-code-ontwikkeling. Met meer dan 20 jaar ervaring in cybersecurity richt hij zich op op Azure gebaseerde beveiligingsarchitectuur, CI/CD-automatisering en grootschalige SecOps-engineering met Bicep, Terraform en GitHub Actions. Als Microsoft Security MVP en Microsoft Certified Trainer deelt hij actief kennis via communityevenementen, conferenties en technische content, met een sterke focus op Microsoft Defender, Sentinel en AI-gedreven beveiligingsautomatisering.",
+  "h": "fd3729b19aa33728",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "5bf3666f"
+  },
+  "ts": "2026-11-18"
+ },
  "user-defined-routes": {
   "desc": "Aangepaste routes in een Azure-routetabel, gekoppeld aan een subnet, die de standaard systeemroutes van Azure overschrijven, bijvoorbeeld om uitgaand verkeer via een firewall of virtuele applicatie als volgende hop te sturen.",
   "h": "7b095ca1b1417142",
@@ -39335,6 +39673,33 @@
   "sh": {
    "desc": "2f88aae8",
    "long": "6cf905a5"
+  },
+  "ts": "2026-11-18"
+ },
+ "uwe-ansmann": {
+  "desc": "Uwe Ansmann is een spreker op M365Con DACH 2026 (Senior TC Manager Germany Collaboration, Computing & Print bij HP Deutschland GmbH) met 1 sessie.",
+  "h": "2cb65f4e57822226",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "6fdaeaca"
+  },
+  "ts": "2026-11-18"
+ },
+ "uzejnovic-ahmed": {
+  "desc": "Ik ben Ahmed Uzejnovic, een IT-automatiserings- en infrastructuurspecialist uit Salzburg. Mijn passie voor automatisering begon op school, toen ik besefte hoeveel er vereenvoudigd kon worden met kleine scripts. Door de jaren heen is die nieuwsgierigheid uitgegroeid tot een echte professionele focus. Vandaag werk ik vooral met PowerShell, Microsoft Graph API, Azure Automation, System Center Orchestrator en hybride Microsoft-omgevingen. Voor mij gaat het niet alleen om de technologie zelf, maar om het bouwen van processen die in het dagelijkse werk echt helpen, tijd besparen en betrouwbaar draaien. Naast mijn dagelijkse werk deel ik mijn kennis graag via blogartikelen, communitysessies en conferentiepresentaties. Ik spreek graag over echte projectervaringen, fouten die vermeden kunnen worden, en oplossingen die in de praktijk hun waarde hebben bewezen.",
+  "h": "282548b540ade5e4",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "ae2b6c64"
+  },
+  "ts": "2026-11-18"
+ },
+ "valentin-gasenko": {
+  "desc": "Ik werk al 15 jaar in de IT-sector, waarvan 10 jaar met Power Platform/Dynamics 365. Ik heb in al die jaren heel wat rommel gezien, maar ik heb ook veel goeds bereikt. Ik blijf knutselen, blijf leren, blijf experimenteren en deel mijn kennis gratis met anderen.",
+  "h": "74d6dea283f55491",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "02f59f65"
   },
   "ts": "2026-11-18"
  },
@@ -39372,6 +39737,15 @@
    "desc": "e22023d2",
    "faq": "924f807b",
    "long": "bf4665f6"
+  },
+  "ts": "2026-11-18"
+ },
+ "vanessa-toves": {
+  "desc": "Vanessa Toves is een spreker op M365Con 2027 (Microsoft Solutions Architect bij Druva) met 1 sessie.",
+  "h": "eaa43d766be23022",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "3572ae1f"
   },
   "ts": "2026-11-18"
  },
@@ -39532,6 +39906,15 @@
   },
   "ts": "2026-11-18"
  },
+ "vesa-nopanen": {
+  "desc": "Vesa Nopanen is spreker op M365Con 2026 en M365Con 2027 (Principal AI Advisor bij Fellowmind) met 2 sessies.",
+  "h": "69a6acbee9793d66",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "5f6baebe"
+  },
+  "ts": "2026-11-18"
+ },
  "vibe-coding": {
   "desc": "Software bouwen door in natuurlijke taal te beschrijven wat je wilt, waarna een AI de code of app genereert en verfijnt.",
   "faq": [
@@ -39564,6 +39947,24 @@
   "m": "claude-haiku-5-5",
   "sh": {
    "desc": "b982bd8d"
+  },
+  "ts": "2026-11-18"
+ },
+ "victor-dantas": {
+  "desc": "Victor Dantas is een spreker op M365Con 2027 (Director of Services bij Eyedeas Inc) met 1 sessie.",
+  "h": "ccfb85d28d3ea3d0",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "1b4f9afc"
+  },
+  "ts": "2026-11-18"
+ },
+ "viktor-hedberg": {
+  "desc": "Beveiligingsconsultant met een focus op Microsoft Security, on-premises of in de cloud, en een blueteamer in hart en nieren. Viktor werkt al 10 jaar in de IT, altijd binnen Cyber Security. Hij werkte jarenlang voor de publieke sector in Zweden en is nu specialist bij Truesec AB, waar hij zich richt op proactieve beveiligingsmaatregelen, DFIR en advies over alles wat met cyberbeveiliging te maken heeft. Officieel Microsoft MVP-profiel:",
+  "h": "f74f229cb6e978a8",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "eb53e8f3"
   },
   "ts": "2026-11-18"
  },
@@ -39968,6 +40369,15 @@
   },
   "ts": "2026-11-18"
  },
+ "vladimir-stefanovic": {
+  "desc": "20+ jaar ervaring in IT-infrastructuur, 10 jaar Azure-oplossingen op schaal ontworpen. Ik help organisaties cloudsystemen te ontwerpen die technisch solide, kosteneffectief en toekomstbestendig zijn. Als Azure MVP en Microsoft Certified Trainer al meer dan tien jaar begeleid ik bedrijven, van startups tot grote ondernemingen, bij complexe Azure-implementaties, help ik kostbare fouten te voorkomen en bouw ik teams op die deze systemen op de lange termijn kunnen beheren. Ik spreek regelmatig op conferenties en draag bij aan de community via schrijfwerk en mentorschap. Ik geloof dat goede architectuur begint bij het begrijpen van de bedrijfsbeperkingen, niet alleen bij de technologie. Die filosofie bepaalt hoe ik oplossingen ontwerp, teams train en advies geef over strategie. Als ik niet bezig ben met het bouwen van schaalbare systemen, vind je me op reis of bij mijn familie. Officieel Microsoft MVP-profiel: https://mvp.microsoft.com/en-US/MVP/profile/b7782e2c-2610-ea11-a811-000d3a8ccb3e",
+  "h": "d4a4979e0eec2538",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "a754188c"
+  },
+  "ts": "2026-11-18"
+ },
  "vlan": {
   "desc": "Een virtueel lokaal netwerk (VLAN) verdeelt een geschakeld netwerk in afzonderlijke logische netwerken; het afdwingen van toegang tussen VLAN's vereist nog steeds gerouteerde controles zoals firewalls.",
   "faq": [
@@ -40078,6 +40488,33 @@
    "desc": "489cfab1",
    "faq": "7d2e1c6a",
    "long": "85aca606"
+  },
+  "ts": "2026-11-18"
+ },
+ "walter-calcagno": {
+  "desc": "Walter E. Calcagno is een data architect en Microsoft MVP in Data Platform sinds 2019, en een Microsoft Certified Trainer. Hij is medeoprichter van WeData, een adviesbureau gericht op Microsoft Fabric en Power BI, en van Unlearni, een digitaal onderwijsinitiatief op het gebied van analytics. Hij is de auteur van \"Arquitectura e Ingeniería de Datos\" (Anaya Multimedia, 2024), waarin hij de frameworks beschrijft die hij bij klanten toepast: een architectuurmodel met zeven lagen, het medallion-patroon, de dimensionele orthodoxie van Kimball en een AI Data Readiness-beoordeling met vijf dimensies. Hij doceert aan de Universidad ICESI (Colombia), Platzi en NamasData (Barcelona), en is medepresentator van de Spaanstalige podcast \"La Belleza de los Datos\". Hij werkt vanuit Santiago, Chili, en is sinds 1996 vrijwillig brandweerman.",
+  "h": "9c136a42540adfbd",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "8659d68f"
+  },
+  "ts": "2026-11-18"
+ },
+ "wario-wario": {
+  "desc": "Wario Wario is spreker op M365Con 2026 en M365Con 2027 (oprichter en AI-architect bij Haki Solutions) met 2 sessies.",
+  "h": "605f5ecc5b18c6be",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "e674036b"
+  },
+  "ts": "2026-11-18"
+ },
+ "warren-belz": {
+  "desc": "Woon in Centraal Queensland, Australië.半-gepensioneerd. Ontwikkel sinds 2017 Power Apps. Super User in de Community sinds 2020 (12e seizoen), 9.500 geaccepteerde oplossingen. MVP Business Applications x 2. Programmeer in een of andere vorm sinds 1986 - Lotus 123/Notes > Access/Excel > Power Apps. Geniet van de voldoening die het geeft anderen te helpen.",
+  "h": "94e21d6d6eeb3e1d",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "44d354a0"
   },
   "ts": "2026-11-18"
  },
@@ -40917,12 +41354,30 @@
   },
   "ts": "2026-11-18"
  },
+ "yossi-barishev": {
+  "desc": "Yossi Barishev heeft zijn hele loopbaan aan het operationele front van beveiliging gewerkt. Hij begon bij de Israëlische militaire inlichtingendienst, waar hij een DFIR-team leidde tegen door staten gesteunde tegenstanders. Daarna leidde hij het Global Cyber Defense & Response Center van CyberArk, was hij een van de meest senior enterprise security-consultants van Sygnia, en was hij een hoofdincidentresponder voor Fortune 100-bedrijven en kritieke infrastructuur. Vervolgens leidde hij de security operations, strategie en innovatie bij Fireblocks, een van de meest geteisterde omgevingen ter wereld.",
+  "h": "5d1578fa96c91463",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "5a624caf"
+  },
+  "ts": "2026-11-18"
+ },
  "yubikey": {
   "desc": "YubiKey is een hardwarematige beveiligingssleutel van Yubico die passkeys kan opslaan en kan dienen als phishing-resistente back-upcredential.",
   "h": "cafb7f9420e78ef9",
   "m": "claude-haiku-5-5",
   "sh": {
    "desc": "b3f21147"
+  },
+  "ts": "2026-11-18"
+ },
+ "yves-habersaat": {
+  "desc": "Yves Habersaat is een Business Applications Consultant en AI Tech Lead bij Sword Group in Zwitserland, gespecialiseerd in het bouwen van applicaties en oplossingen met Microsoft 365, Azure, Dynamics 365 en het Power Platform. Met een sterke passie voor moderne ontwikkeltechnologieën en applicatielevenscycli richt Yves zich op Microsoft 365-diensten zoals Microsoft Teams, SharePoint Online, OneDrive for Business, Microsoft Viva en Microsoft Copilot. Hij beschikt over expertise in moderne ontwikkeltools, waaronder SharePoint Framework (SPFx), Teams SDK, Microsoft Graph, Git, TypeScript, React, Visual Studio en Azure DevOps. Hij deelt actief zijn kennis en ervaring via sprekersoptredens en zijn blog op www.yhabersaat.ch, en staat altijd klaar om de community te ondersteunen en te helpen. Officieel Microsoft MVP-profiel: https://mvp.microsoft.com/en-US/MVP/profile/e3bc6506-654b-ec11-8f8e-00224827f7fc",
+  "h": "90f75d814cb8a2ee",
+  "m": "claude-haiku-5-5",
+  "sh": {
+   "desc": "6c3515b1"
   },
   "ts": "2026-11-18"
  },
