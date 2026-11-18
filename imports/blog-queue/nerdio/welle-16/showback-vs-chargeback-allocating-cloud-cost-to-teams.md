@@ -28,7 +28,7 @@ This article explains the two models, what they depend on, how shared cost is ha
 
 ## Definitions
 
-Microsoft Learn's page on data analysis and showback defines showback as "enabling cost visibility throughout an organization": transparency into cloud usage and cost across departments, teams and projects. Its page on invoicing and chargeback describes chargeback as receiving, reconciling and paying provider invoices, and then billing internal teams for their cloud costs "using existing internal finance tools and processes". Both belong to [FinOps](https://www.m365.fm/entity/finops/), and the entity page on [showback](https://www.m365.fm/entity/showback/) and [chargeback](https://www.m365.fm/entity/chargeback/) gives the short version.
+Microsoft Learn's page on data analysis and showback defines showback as "enabling cost visibility throughout an organization": transparency into cloud usage and cost across departments, teams and projects. Its page on invoicing and chargeback describes chargeback as receiving, reconciling and paying provider invoices, and then billing internal teams for their cloud costs "using existing internal finance tools and processes". Both belong to [FinOps](https://www.m365.fm/entity/finops/), and the entity pages on [showback](https://www.m365.fm/entity/showback/) and [chargeback](https://www.m365.fm/entity/chargeback/) give the short version.
 
 | | Showback | Chargeback |
 |---|---|---|
