@@ -62,6 +62,21 @@ class SpecChecks(unittest.TestCase):
         s = copy.deepcopy(SET); s["figs"][0]["note"] = "Mehr auf www.example.com"; self.assertIn("Adresse", IGT.check_set(s))
         s = copy.deepcopy(SET); s["figs"][0]["note"] = "Write to a@b.c"; self.assertIn("Adresse", IGT.check_set(s))
 
+    def test_example_and_parser(self):
+        import json as _j
+        self.assertIsNone(IGT.check_set(IGT.EXAMPLE, "en"))   # das Beispiel im Prompt besteht die eigene Pruefung
+        self.assertIn('"template": "flow"', IGT.req_specs({"label": "Blog", "title": "T", "text": "x"}, "c")["params"]["system"])
+        self.assertNotIn("output_config", IGT.req_specs({"label": "Blog", "title": "T", "text": "x"}, "c")["params"])
+        raw = "```json\n" + _j.dumps(IGT.EXAMPLE) + "\n```"
+        self.assertEqual(IGT.parse_json(raw), IGT.EXAMPLE)
+        d = _j.loads(_j.dumps(IGT.EXAMPLE)); d["header"]["hero"]["value"] = 3; d["figs"][0]["hero"]["value"] = 4
+        self.assertEqual(IGT.parse_json(_j.dumps(d))["header"]["hero"]["value"], "3")
+        self.assertIsNone(IGT.parse_json("kein json")); self.assertIsNone(IGT.parse_json("{kaputt"))
+
+    def test_dotnet_is_not_an_address(self):
+        s = copy.deepcopy(SET); s["figs"][0]["note"] = "Runs on ASP.NET and .NET 9"; self.assertIsNone(IGT.check_set(s))
+        s = copy.deepcopy(SET); s["figs"][0]["note"] = "See example.net now"; self.assertIn("Adresse", IGT.check_set(s))
+
     def test_schema_has_all_templates(self):
         names = [o["properties"]["template"]["enum"][0] for o in IGT.SET_SCHEMA["properties"]["figs"]["items"]["anyOf"]]
         self.assertEqual(names, list(IGT.FIG_TEMPLATES))
@@ -103,6 +118,15 @@ class Pipeline(unittest.TestCase):
         b = {"map": {"s0": "blog:p1"}}
         IGT.apply_results([json.dumps({"custom_id": "s0", "result": {"type": "errored"}})], b, None, st, {})
         self.assertEqual(st["tries"], {"blog:p1": 1})
+
+    def test_rejection_reason_goes_back_to_the_model(self):
+        import copy
+        bad = copy.deepcopy(SET); bad["header"]["chips"][0]["t"] = "x" * 40
+        st = {"tries": {}}; b = {"map": {"s0": "blog:p1"}}
+        line = json.dumps({"custom_id": "s0", "result": {"type": "succeeded", "message": {"content": [{"type": "text", "text": json.dumps(bad)}], "usage": {}}}})
+        IGT.apply_results([line], b, {"get": None} and type("S", (), {"get": lambda s, k: None, "put": lambda s, k, v: None})(), st, {"blog:p1": {"key": "blog:p1", "title": "T", "text": "x", "slug": "p1", "kind": "blog", "label": "Blog"}})
+        self.assertEqual(st["tries"], {"blog:p1": 1}); self.assertIn("chips.t", st["why"]["blog:p1"])
+        self.assertIn("rejected by the automatic check", IGT.req_specs({"label": "Blog", "title": "T", "text": "x"}, "c", st["why"]["blog:p1"])["params"]["messages"][0]["content"])
 
     def test_render_failures_are_counted_and_skipped(self):
         with tempfile.TemporaryDirectory() as t, tempfile.TemporaryDirectory() as s:

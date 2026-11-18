@@ -28,7 +28,9 @@ LANG_NAMES = {"en": "English", "de": "German", "fr": "French", "es": "Spanish", 
 RTL = ("ar", "he")
 SIZES = {"flow": (1920, 1080), "compare": (1200, 1040), "ladder": (1200, 1800), "bigfact": (1200, 630), "hub": (1200, 1200)}   # wie templates.mjs
 FIG_TEMPLATES = ("flow", "compare", "ladder", "hub")   # bigfact ist dem Kopfbild vorbehalten
-MAX_TRIES = 2
+MAX_TRIES = 3          # Textversuche je Inhalt/Sprache (ab dem zweiten mit Rueckmeldung der Pruefung)
+RENDER_TRIES = 2       # Layoutfehler sind immer gleich: nach zwei Versuchen nicht mehr rendern
+EN_SLACK = 1.15    # englische Texte duerfen die Grenze um 15 % ueberschreiten (die KI zaehlt Zeichen nicht genau; Stresstest bestand bis x 1,4)
 LANG_FACTOR = 1.4   # Textgrenzen der Uebersetzungen: Englisch x 1,4 (Deutsch/Russisch laenger); die Layoutpruefung beim Rendern ist die endgueltige Grenze
 OUT_EST, IN_EST_SPECS, IN_EST_TR = 1300, 2100, 1700   # Token-Schaetzung je Anfrage (aus dem Testlauf)
 BATCH_MAX = 500   # kleine Teile: ein Zeitueberschreiten beim Senden betrifft wenig, Ergebnisse kommen frueher
@@ -75,10 +77,38 @@ _FIGS = [
 SET_SCHEMA = {"type": "object", "additionalProperties": False, "required": ["header", "figs"],
               "properties": {"header": _BIG, "figs": {"type": "array", "items": {"anyOf": _FIGS}}}}
 
+EXAMPLE = {   # Form der Antwort (die Schema-Grammatik der API ist fuer vier Vorlagen zu gross: "compiled grammar is too large"); geprueft wird streng in check_set
+    "header": {"template": "bigfact", "kicker": "Blog · Microsoft Fabric", "title": "Lakehouse basics", "alt": "Header graphic: three key points of Fabric lakehouses.", "tags": ["Fabric"],
+               "hero": {"value": "3", "label": "key points"}, "chips": [{"t": "OneLake", "n": "One copy of data"}, {"t": "Delta", "n": "Open table format"}, {"t": "Direct Lake", "n": "No import needed"}]},
+    "figs": [
+        {"template": "flow", "kicker": "Blog · Microsoft Fabric", "title": "From data to report", "sub": "Four steps", "alt": "Flow of four steps from ingestion to report.", "tags": ["Fabric"],
+         "hero": {"value": "4", "label": "steps", "sub": "end to end"}, "hi": 2, "steps": [{"t": "Ingest", "n": "Load data into OneLake"}, {"t": "Clean", "n": "Prepare tables"}, {"t": "Model", "n": "Build the semantic model"}, {"t": "Report", "n": "Publish in Power BI"}], "note": "Direct Lake skips the import step."},
+        {"template": "compare", "kicker": "Blog · Microsoft Fabric", "title": "Import vs Direct Lake", "alt": "Comparison of import mode and Direct Lake.", "tags": ["Power BI"],
+         "left": {"head": "Import", "items": ["Copy of the data", "Scheduled refresh"]}, "right": {"head": "Direct Lake", "items": ["Reads OneLake files", "No refresh wait"]}, "verdict": "Direct Lake fits large, fresh data."},
+    ],
+}
+SET_EXAMPLE_JSON = json.dumps(EXAMPLE, ensure_ascii=False)
+
+
+def parse_json(txt):
+    """Antworttext -> Objekt oder None; toleriert ```json-Zaeune und Text davor/danach; Zahlen in value werden zu Text."""
+    t = (txt or "").strip()
+    a, b = t.find("{"), t.rfind("}")
+    if a < 0 or b <= a: return None
+    try: d = json.loads(t[a:b + 1])
+    except ValueError: return None
+    if isinstance(d, dict):
+        for sp in [d.get("header")] + (d.get("figs") if isinstance(d.get("figs"), list) else []):
+            if isinstance(sp, dict):
+                for k in ("hero", "core"):
+                    if isinstance(sp.get(k), dict) and isinstance(sp[k].get("value"), int) and not isinstance(sp[k]["value"], bool): sp[k]["value"] = str(sp[k]["value"])
+    return d
+
+
 SYSTEM_SPECS = (
     "You turn one article, podcast episode or glossary entry of M365.FM (a podcast and knowledge site about Microsoft 365, Azure, Power Platform and AI) into the texts of "
     "one header graphic and 2 or 3 infographics. Return JSON only, matching the schema. A fixed template draws each image; you only fill its fields.\n"
-    "header: template bigfact = one big fact. hero.value is a number of at most 2 characters (e.g. 4, 12, 3x): either the number of chips, or a figure that is stated in the text. hero.label says what the value counts. title = the topic as a headline. chips = 3 or 4 key points.\n"
+    "header: template bigfact = one big fact. hero.value is a number of at most 2 characters: normally simply the number of chips (3 or 4) with hero.label like 'key points' (a figure from the text such as 12 or 3x is allowed only if the text really states it, never a certification number). hero.label says what the value counts. title = the topic as a headline. chips = 3 or 4 key points.\n"
     "figs: 2 or 3 infographics, each with a different template, chosen by what the text offers:\n"
     "- flow: a process with 3 or 4 steps in order (hero.value = exactly the number of steps, 1-2 digits; hi = index (from 0) of the most important step).\n"
     "- compare: two options or before/after, 2-3 short points per side, plus a verdict line.\n"
@@ -88,10 +118,14 @@ SYSTEM_SPECS = (
     "Prefer concrete, useful content over slogans. If the text cannot honestly fill a template, choose another one.\n"
     "Style: plain, short phrases; no emoji, no marketing words, no quotation marks. kicker = kind and topic, e.g. 'Entity · Azure security', 'Blog · Microsoft Fabric', 'Podcast · Power Apps'.\n"
     "alt = one sentence (at most 125 characters) saying what the image shows or explains, for screen readers. tags = up to 3 product or topic names (each at most 20 characters).\n"
-    "Hard length limits in characters (English): see the list; shorter is better, a text that is too long is discarded.\n" + "{limits}"
+    "Hard length limits in characters (English): see the list. A set with one text too long is discarded, so stay clearly below. Rules of thumb: a chip t is 1-2 short words (max 14 characters, e.g. 'Least privilege'), a chip n at most 4 short words (max 30 characters, e.g. 'Checks every request'); every infographic title and step title is short (steps t max 12 characters, e.g. 'Verify'); "
+    "any title of a flow at most 3-4 words (26 characters); any kicker at most 5 words (36 characters); hero.value is 1 or 2 characters such as 7, 12 or 3x (never 3 characters); tags at most 3, each at most 20 characters; "
+    "compare heads 1-2 words (18 characters); exactly 2 or 3 infographics, never 1 or 4.\n{limits}\n"
+    "Answer with one JSON object only (no text before or after, no code fence). All values are strings except hi (integer) and the lists. Exactly this structure and these field names "
+    "(the example shows two of the four figure templates; flow needs hero, hi, steps, note; compare needs left, right, verdict; ladder needs sub, tiers, axis; hub needs core, nodes):\n{example}"
 )
 SYSTEM_TR = (
-    "You translate the texts of an infographic set (JSON) from English into {lang}. Return JSON only, with exactly the same structure: the same templates, the same number of "
+    "You translate the texts of an infographic set (JSON) from English into {lang}. Answer with one JSON object only (no text before or after, no code fence), with exactly the same structure, the same field names and the same template values: the same templates, the same number of "
     "list items, the same numbers and the same hi index. Translate every string natively (not word for word), keep it as short as the English or shorter; hard limit: English length x {f}. "
     "Keep product names (Microsoft Teams, SharePoint, Power BI, Copilot, Azure ...) in their official form; tags stay product names. Keep numbers and symbols (4, 99.9%, 3x) unchanged. "
     "Do not add or remove facts. alt stays one sentence for screen readers. The kicker keeps its pattern (kind · topic) with the kind word translated "
@@ -144,7 +178,7 @@ def check_spec(spec, lang="en", template=None):
     if not isinstance(spec, dict): return "kein Objekt"
     t = spec.get("template")
     if t not in LIMITS or (template and t != template): return f"Vorlage {t!r}"
-    f = 1 if lang == "en" else LANG_FACTOR
+    f = EN_SLACK if lang == "en" else LANG_FACTOR
     for k, lim in LIMITS[t].items():
         v = _get(spec, k)
         if isinstance(lim, tuple):
@@ -154,8 +188,8 @@ def check_spec(spec, lang="en", template=None):
                 if isinstance(sub, dict):
                     if not isinstance(it, dict): return f"{k}: Form"
                     for a, b in sub.items():
-                        if not isinstance(it.get(a), str) or not it[a].strip() or len(it[a]) > b * f: return f"{k}.{a}: Laenge/leer"
-                elif not isinstance(it, str) or not it.strip() or len(it) > sub * f: return f"{k}: Laenge/leer"
+                        if not isinstance(it.get(a), str) or not it[a].strip() or len(it[a]) > b * f: return f"{k}.{a}: Laenge/leer (max {b * f:.0f} Zeichen, war {str(it.get(a))[:60]!r})"
+                elif not isinstance(it, str) or not it.strip() or len(it) > sub * f: return f"{k}: Laenge/leer (max {sub * f:.0f} Zeichen, war {str(it)[:60]!r})"
         else:
             if not isinstance(v, str) or not v.strip() or len(v) > lim * f: return f"{k}: Laenge/leer ({len(v) if isinstance(v, str) else '-'}>{lim * f:.0f})"
     if t == "flow":
@@ -166,7 +200,7 @@ def check_spec(spec, lang="en", template=None):
     if not isinstance(tags, list) or len(tags) > TAG_MAX[1] or any(not isinstance(x, str) or len(x) > TAG_MAX[2] * f for x in tags): return "tags"
     txt = " ".join(strings({k: v for k, v in spec.items() if k not in ("tags",)}))
     if "<" in txt or ">" in txt or "{" in txt: return "Sonderzeichen"
-    if re.search(r"(?i)https?:|www\.|@|\.(com|net|org|de|fm)\b", txt): return "Adresse im Text"
+    if re.search(r"(?i:https?:|www\.|@|\.(com|org|de|fm)\b)|[a-z0-9-]\.net\b", txt): return "Adresse im Text"
     letters = re.findall(r"[^\W\d_]", txt)
     if letters:
         if lang in SCRIPTS:
@@ -345,15 +379,16 @@ def results_lines(url):
     return urlopen(rq, timeout=900).read().decode().splitlines()
 
 
-def req_specs(it, cid):
+def req_specs(it, cid, why=None):
     user = f"Kind: {it['label']}\nTitle: {it['title']}\n\nText:\n{it['text']}"
-    return {"custom_id": cid, "params": {"model": MODEL, "max_tokens": 3000, **thinking_off(MODEL), "system": SYSTEM_SPECS.replace("{limits}", limits_text()),
-            "output_config": {"format": {"type": "json_schema", "schema": SET_SCHEMA}}, "messages": [{"role": "user", "content": user}]}}
+    if why: user += f"\n\nYour previous answer was rejected by the automatic check: {why}. Write the whole set again and keep every text clearly below its limit."
+    return {"custom_id": cid, "params": {"model": MODEL, "max_tokens": 3000, **thinking_off(MODEL), "system": SYSTEM_SPECS.replace("{limits}", limits_text()).replace("{example}", SET_EXAMPLE_JSON),
+            "messages": [{"role": "user", "content": user}]}}
 
 
 def req_tr(en_set, lang, cid):
     return {"custom_id": cid, "params": {"model": MODEL, "max_tokens": 3500, **thinking_off(MODEL), "system": SYSTEM_TR.replace("{lang}", LANG_NAMES[lang]).replace("{f}", str(LANG_FACTOR)),
-            "output_config": {"format": {"type": "json_schema", "schema": SET_SCHEMA}}, "messages": [{"role": "user", "content": json.dumps(en_set, ensure_ascii=False)}]}}
+            "messages": [{"role": "user", "content": json.dumps(en_set, ensure_ascii=False)}]}}
 
 
 def cost_eur(n, tin, tout=OUT_EST): return estimated_eur(n * tin, n * tout, batch=True)   # n Anfragen
@@ -441,7 +476,7 @@ def cmd_specs(kinds, limit, store, st, root=None):
             if it["key"] in busy or st["tries"].get(it["key"], 0) >= MAX_TRIES: continue
             have = store.get(spec_key(it))
             if have and have.get("en"): continue
-            cid = f"s{len(reqs)}"; reqs.append(req_specs(it, cid)); mapping[cid] = it["key"]; n += 1
+            cid = f"s{len(reqs)}"; reqs.append(req_specs(it, cid, (st.get("why") or {}).get(it["key"]))); mapping[cid] = it["key"]; n += 1
     submit("specs", "en", reqs, mapping, st, cost_eur(1, IN_EST_SPECS), root)
 
 
@@ -468,6 +503,7 @@ def apply_results(lines, b, store, st, by_key):
     """Ergebnisse eines Batches pruefen und speichern -> (ok, schlecht, token_ein, token_aus, cache_read, cache_write, unbekannt).
     unbekannt = Ergebnisse zu Inhalten, die es in den Quellen nicht mehr gibt (zaehlt nicht als verloren: Batch bleibt dann im Zustand)."""
     ok = bad = tin = tout = cr = cw = unknown = 0
+    seen_err = set()
     for line in lines:
         if not line.strip(): continue
         r = json.loads(line); tk = b["map"].get(r.get("custom_id"))
@@ -475,7 +511,11 @@ def apply_results(lines, b, store, st, by_key):
         key, _, lang = tk.partition("#"); lang = lang or "en"
         res = r.get("result") or {}
         if res.get("type") == "errored":   # Fehler der Anfrage (z. B. Schema): zaehlt als Versuch, damit nichts endlos neu gesendet wird
-            st["tries"][tk] = st["tries"].get(tk, 0) + 1; continue
+            st["tries"][tk] = st["tries"].get(tk, 0) + 1
+            e = (res.get("error") or {}).get("error") or res.get("error") or {}
+            msg = f"{e.get('type', '?')}: {str(e.get('message', ''))[:400]}"
+            if msg not in seen_err and len(seen_err) < 3: seen_err.add(msg); print(f"Anfrage-Fehler {tk}: {msg}", flush=True)   # Fehlertext der API (ohne Schluessel), je verschiedene Meldung einmal
+            continue
         if res.get("type") != "succeeded": continue   # abgelaufen/abgebrochen: zaehlt nicht
         msg = res["message"]; u = msg.get("usage") or {}
         read, write = int(u.get("cache_read_input_tokens") or 0), int(u.get("cache_creation_input_tokens") or 0)
@@ -483,15 +523,16 @@ def apply_results(lines, b, store, st, by_key):
         it = by_key.get(key)
         if not it: unknown += 1; continue
         txt = "".join(c.get("text", "") for c in msg.get("content") or [] if c.get("type") == "text")
-        try: st_set = json.loads(txt)
-        except ValueError: st_set = None
+        st_set = parse_json(txt)
         doc = store.get(spec_key(it)) or {"v": 1, "src": src_hash(it)}
         err = "kein JSON" if st_set is None else check_set(st_set, lang, None if lang == "en" else doc.get("en"), it["title"] + " " + it["text"] if lang == "en" else None)
         if err:
             st["tries"][tk] = st["tries"].get(tk, 0) + 1; bad += 1
+            if lang == "en": st.setdefault("why", {})[tk] = err[:160]   # beim naechsten Versuch als Rueckmeldung an die KI
             print(f"verworfen {tk}: {err}")
             continue
         doc[lang] = st_set; store.put(spec_key(it), doc); ok += 1
+        if lang == "en" and ok <= 3: print(f"Beispiel {tk}: " + json.dumps(st_set, ensure_ascii=False), flush=True)   # Stichprobe fuer die Durchsicht im Protokoll
     return ok, bad, tin, tout, cr, cw, unknown
 
 
@@ -557,7 +598,7 @@ def cmd_render(kinds, langs, limit, store, root=None, max_min=300, chunk=200, re
             have = store.get(spec_key(it))
             if not have: continue
             for l in langs:
-                if have.get(l) and not (idx.get(it["slug"]) or {}).get(l) and fails.get(f"{it['key']}#{l}", 0) < MAX_TRIES: todo.append((it, l, have))
+                if have.get(l) and not (idx.get(it["slug"]) or {}).get(l) and fails.get(f"{it['key']}#{l}", 0) < RENDER_TRIES: todo.append((it, l, have))
         if limit: todo = todo[:max(0, limit - made)]
         print(f"{k}: {len(todo)} Bildsaetze zu rendern")
         for i in range(0, len(todo), chunk):
