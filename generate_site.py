@@ -1491,7 +1491,7 @@ def build():
             _b = (f'{header(_hl, "")}<main class="wrap"><p class="mut"><a href="{_purl(1)}">{esc(_hname)}</a></p><h1>{esc(_ttl)}</h1>{HUB.CSS}'
                   f'<div class="thumbs">{"".join(_ch)}</div>{PAGER(_hl, _pv, _nx, kind="page")}</main>{footer(_hl) if _hl in LANGS else footer_en()}')
             write(f"{_pre}page/{_n}/index.html", page(_hl, _ttl, f"{_SD.HUB_DESC.get(_hl, _SD.HUB_DESC['en'])} – {_pw} {_n}.", _purl(_n), _b,
-                                                         og_type="website", og_of=_purl(1)))
+                                                         og_type="website", og_of=_purl(1), noindex=True))   # Seite 2 ff. der Hubs: noindex,follow (Mirko 18.11.2026), kanonisch auf sich selbst, nicht in der Sitemap
     # /updates/ (Wochenzusammenfassungen) entsteht nach dem Laden der Blogbeitraege: site_milestones.build weiter unten
 
     # Rechtliche Seiten (noindex)
