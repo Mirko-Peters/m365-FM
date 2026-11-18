@@ -252,7 +252,7 @@ class OtherPlaces(unittest.TestCase):
         self.assertEqual(links, [("Star schema", "star-schema")])
         self.assertIn('title="Sternschema"', h)
         h2, _ = m.link_html("<p>A Star schema keeps facts.</p>", lambda i: f"/entity/{i}/", lang="en")
-        self.assertNotIn("title=", h2)
+        self.assertNotIn('title="Sternschema"', h2)   # englische Seite: kein Name aus einer anderen Sprache (eine Kurzerklaerung aus den Daten darf es geben, Paket 6)
         h3, _ = m.link_html("<p>A Star schema keeps facts.</p>", lambda i: f"/ar/entity/{i}/", lang="ar")
         self.assertIn('class="en-al"><bdi lang="en">Star schema</bdi></a>', h3, "RTL: lateinischer Linktext in <bdi>, englischer Begriff mit lang (Paket 5)")
         self.assertIn('title="Sternschema" lang="en">Star schema</a>', h, "Wortlaut des Satzes bleibt, englisches Wort mit lang (Paket 5)")
