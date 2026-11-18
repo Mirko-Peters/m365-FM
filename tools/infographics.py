@@ -75,6 +75,34 @@ _FIGS = [
 SET_SCHEMA = {"type": "object", "additionalProperties": False, "required": ["header", "figs"],
               "properties": {"header": _BIG, "figs": {"type": "array", "items": {"anyOf": _FIGS}}}}
 
+EXAMPLE = {   # Form der Antwort (die Schema-Grammatik der API ist fuer vier Vorlagen zu gross: "compiled grammar is too large"); geprueft wird streng in check_set
+    "header": {"template": "bigfact", "kicker": "Blog · Microsoft Fabric", "title": "Lakehouse basics", "alt": "Header graphic: three key points of Fabric lakehouses.", "tags": ["Fabric"],
+               "hero": {"value": "3", "label": "key points"}, "chips": [{"t": "OneLake", "n": "One copy of data"}, {"t": "Delta", "n": "Open table format"}, {"t": "Direct Lake", "n": "No import needed"}]},
+    "figs": [
+        {"template": "flow", "kicker": "Blog · Microsoft Fabric", "title": "From data to report", "sub": "Four steps", "alt": "Flow of four steps from ingestion to report.", "tags": ["Fabric"],
+         "hero": {"value": "4", "label": "steps", "sub": "end to end"}, "hi": 2, "steps": [{"t": "Ingest", "n": "Load data into OneLake"}, {"t": "Clean", "n": "Prepare tables"}, {"t": "Model", "n": "Build the semantic model"}, {"t": "Report", "n": "Publish in Power BI"}], "note": "Direct Lake skips the import step."},
+        {"template": "compare", "kicker": "Blog · Microsoft Fabric", "title": "Import vs Direct Lake", "alt": "Comparison of import mode and Direct Lake.", "tags": ["Power BI"],
+         "left": {"head": "Import", "items": ["Copy of the data", "Scheduled refresh"]}, "right": {"head": "Direct Lake", "items": ["Reads OneLake files", "No refresh wait"]}, "verdict": "Direct Lake fits large, fresh data."},
+    ],
+}
+SET_EXAMPLE_JSON = json.dumps(EXAMPLE, ensure_ascii=False)
+
+
+def parse_json(txt):
+    """Antworttext -> Objekt oder None; toleriert ```json-Zaeune und Text davor/danach; Zahlen in value werden zu Text."""
+    t = (txt or "").strip()
+    a, b = t.find("{"), t.rfind("}")
+    if a < 0 or b <= a: return None
+    try: d = json.loads(t[a:b + 1])
+    except ValueError: return None
+    if isinstance(d, dict):
+        for sp in [d.get("header")] + (d.get("figs") if isinstance(d.get("figs"), list) else []):
+            if isinstance(sp, dict):
+                for k in ("hero", "core"):
+                    if isinstance(sp.get(k), dict) and isinstance(sp[k].get("value"), int) and not isinstance(sp[k]["value"], bool): sp[k]["value"] = str(sp[k]["value"])
+    return d
+
+
 SYSTEM_SPECS = (
     "You turn one article, podcast episode or glossary entry of M365.FM (a podcast and knowledge site about Microsoft 365, Azure, Power Platform and AI) into the texts of "
     "one header graphic and 2 or 3 infographics. Return JSON only, matching the schema. A fixed template draws each image; you only fill its fields.\n"
@@ -88,10 +116,12 @@ SYSTEM_SPECS = (
     "Prefer concrete, useful content over slogans. If the text cannot honestly fill a template, choose another one.\n"
     "Style: plain, short phrases; no emoji, no marketing words, no quotation marks. kicker = kind and topic, e.g. 'Entity · Azure security', 'Blog · Microsoft Fabric', 'Podcast · Power Apps'.\n"
     "alt = one sentence (at most 125 characters) saying what the image shows or explains, for screen readers. tags = up to 3 product or topic names (each at most 20 characters).\n"
-    "Hard length limits in characters (English): see the list; shorter is better, a text that is too long is discarded.\n" + "{limits}"
+    "Hard length limits in characters (English): see the list; shorter is better, a text that is too long is discarded.\n{limits}\n"
+    "Answer with one JSON object only (no text before or after, no code fence). All values are strings except hi (integer) and the lists. Exactly this structure and these field names "
+    "(the example shows two of the four figure templates; flow needs hero, hi, steps, note; compare needs left, right, verdict; ladder needs sub, tiers, axis; hub needs core, nodes):\n{example}"
 )
 SYSTEM_TR = (
-    "You translate the texts of an infographic set (JSON) from English into {lang}. Return JSON only, with exactly the same structure: the same templates, the same number of "
+    "You translate the texts of an infographic set (JSON) from English into {lang}. Answer with one JSON object only (no text before or after, no code fence), with exactly the same structure, the same field names and the same template values: the same templates, the same number of "
     "list items, the same numbers and the same hi index. Translate every string natively (not word for word), keep it as short as the English or shorter; hard limit: English length x {f}. "
     "Keep product names (Microsoft Teams, SharePoint, Power BI, Copilot, Azure ...) in their official form; tags stay product names. Keep numbers and symbols (4, 99.9%, 3x) unchanged. "
     "Do not add or remove facts. alt stays one sentence for screen readers. The kicker keeps its pattern (kind · topic) with the kind word translated "
@@ -347,13 +377,13 @@ def results_lines(url):
 
 def req_specs(it, cid):
     user = f"Kind: {it['label']}\nTitle: {it['title']}\n\nText:\n{it['text']}"
-    return {"custom_id": cid, "params": {"model": MODEL, "max_tokens": 3000, **thinking_off(MODEL), "system": SYSTEM_SPECS.replace("{limits}", limits_text()),
-            "output_config": {"format": {"type": "json_schema", "schema": SET_SCHEMA}}, "messages": [{"role": "user", "content": user}]}}
+    return {"custom_id": cid, "params": {"model": MODEL, "max_tokens": 3000, **thinking_off(MODEL), "system": SYSTEM_SPECS.replace("{limits}", limits_text()).replace("{example}", SET_EXAMPLE_JSON),
+            "messages": [{"role": "user", "content": user}]}}
 
 
 def req_tr(en_set, lang, cid):
     return {"custom_id": cid, "params": {"model": MODEL, "max_tokens": 3500, **thinking_off(MODEL), "system": SYSTEM_TR.replace("{lang}", LANG_NAMES[lang]).replace("{f}", str(LANG_FACTOR)),
-            "output_config": {"format": {"type": "json_schema", "schema": SET_SCHEMA}}, "messages": [{"role": "user", "content": json.dumps(en_set, ensure_ascii=False)}]}}
+            "messages": [{"role": "user", "content": json.dumps(en_set, ensure_ascii=False)}]}}
 
 
 def cost_eur(n, tin, tout=OUT_EST): return estimated_eur(n * tin, n * tout, batch=True)   # n Anfragen
@@ -488,8 +518,7 @@ def apply_results(lines, b, store, st, by_key):
         it = by_key.get(key)
         if not it: unknown += 1; continue
         txt = "".join(c.get("text", "") for c in msg.get("content") or [] if c.get("type") == "text")
-        try: st_set = json.loads(txt)
-        except ValueError: st_set = None
+        st_set = parse_json(txt)
         doc = store.get(spec_key(it)) or {"v": 1, "src": src_hash(it)}
         err = "kein JSON" if st_set is None else check_set(st_set, lang, None if lang == "en" else doc.get("en"), it["title"] + " " + it["text"] if lang == "en" else None)
         if err:
