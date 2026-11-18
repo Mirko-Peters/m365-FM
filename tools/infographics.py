@@ -38,7 +38,7 @@ BATCH_MAX = 5000
 LIMITS = {
     "bigfact": {"kicker": 36, "title": 48, "hero.value": 5, "hero.label": 34, "chips": (3, 4, {"t": 14, "n": 30})},
     "flow": {"kicker": 36, "title": 26, "sub": 80, "hero.value": 2, "hero.label": 14, "hero.sub": 28, "steps": (3, 4, {"t": 14, "n": 56}), "note": 60},
-    "compare": {"kicker": 36, "title": 40, "left.head": 18, "left.items": (2, 3, 44), "right.head": 18, "right.items": (2, 3, 44), "verdict": 70},
+    "compare": {"kicker": 36, "title": 40, "left.head": 18, "left.items": (2, 3, 38), "right.head": 18, "right.items": (2, 3, 38), "verdict": 70},
     "ladder": {"kicker": 36, "title": 44, "sub": 100, "tiers": (3, 5, {"t": 22, "n": 60}), "axis": 70},
     "hub": {"kicker": 36, "title": 40, "core.value": 3, "core.label": 22, "nodes": (3, 4, {"t": 22, "n": 48})},
 }
