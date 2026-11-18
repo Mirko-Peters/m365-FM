@@ -16,6 +16,7 @@ on:
       budget: { description: "Gesamtbudget in USD (kumulativ)", required: false, default: "100" }
       model: { description: "Schreibmodell (leer = claude-sonnet-5-5)", required: false, default: "" }
       stale: { description: "Veraltete Uebersetzungen (data/entity_fill/stale.json) neu uebersetzen", type: boolean, default: false }
+      rich: { description: "Langtext-Modus: Entitaeten unter 2500 Zeichen Langtext auf 2600+ Zeichen bringen (Folgen-Auszuege als Quelle; Entitaeten ohne genug Quelle bleiben aussen vor)", type: boolean, default: false }
 permissions:
   contents: write
 concurrency: { group: entity-fill, cancel-in-progress: false }
@@ -45,9 +46,11 @@ jobs:
           LIMIT_IN: ${{ inputs.limit }}
           MODEL_IN: ${{ inputs.model }}
           STALE_IN: ${{ inputs.stale }}
+          RICH_IN: ${{ inputs.rich }}
         run: |
           ARGS=""
           [ "$STALE_IN" = "true" ] && ARGS="$ARGS --stale"
+          [ "$RICH_IN" = "true" ] && ARGS="$ARGS --rich"
           [ -n "$LIMIT_IN" ] && ARGS="$ARGS --limit $LIMIT_IN"
           [ -n "$MODEL_IN" ] && ARGS="$ARGS --model $MODEL_IN"
           python fill_entities.py "$MODE_IN" $ARGS | tee -a "$GITHUB_STEP_SUMMARY"

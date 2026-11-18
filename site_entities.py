@@ -342,6 +342,13 @@ def musicgroup_ld(BASE):
             "founder": person, "member": [person]}
 
 
+def _gen_lang(e, lang):
+    """Ueberblickstext (GENTEXT) der Sprache - aber ein KI-Langtext ab 2500 Zeichen (Langtext-Modus von fill_entities) ersetzt einen kuerzeren GENTEXT."""
+    g = (GENTEXT.get(e["id"]) or {}).get(lang) or ""
+    ai = FD.long_text(e, lang)
+    return ai if FD.prefer_ai(g, ai) else g
+
+
 def long_for(e, lang):
     """Langtext der Seite -> (text, KI-Text ja/nein). Redaktionell vorn (auch der Event-Text). Ein KI-Text aus data/entity_fill, der per push in der D1-Fassung
     steht (FD.is_ai), ist KEIN redaktioneller Text: er bekommt den KI-Hinweis, und auf anderen Sprachseiten gilt die (bezahlte) Uebersetzung statt des
@@ -351,8 +358,7 @@ def long_for(e, lang):
     lt = own(lang) or own("en") or own("de") or (EVENTS[e["id"]].get("about") if e["id"] in EVENTS else "") or ""
     if lt.strip():
         return lt, False
-    g = GENTEXT.get(e["id"]) or {}
-    lt = g.get(lang) or FD.long_text(e, lang) or g.get("en") or FD.long_text(e, "en") or ail or ""
+    lt = _gen_lang(e, lang) or FD.long_text(e, lang) or _gen_lang(e, "en") or FD.long_text(e, "en") or ail or ""
     return lt, bool(lt.strip())
 
 
@@ -364,7 +370,7 @@ def native_long(e, lang):
     """Langtext genau in lang (ohne Rueckfall auf Englisch/Deutsch, ohne Event-Text): redaktionell, sonst Ueberblick aus data/entity_texts, sonst KI-Uebersetzung."""
     L = e.get("long") or {}
     own = "" if FD.is_ai(e, "long", lang) else (L.get(lang) or "")
-    return own or (GENTEXT.get(e["id"]) or {}).get(lang) or FD.long_text(e, lang) or ""
+    return own or _gen_lang(e, lang) or FD.long_text(e, lang) or ""
 
 
 def long_index_langs(e):

@@ -86,3 +86,13 @@ Wichtig: Die Pipeline darf nur Fakten aus dem Auftrag nutzen. Fuer 2500+ Zeichen
 | 58 | telemetry | concept | 172 | 5 | 0 |
 | 59 | machine-learning | concept | 179 | 2 | 0 |
 | 60 | hipaa | concept | 183 | 0 | 0 |
+
+## Langtext-Modus (`fill_entities.py plan --rich`, Stand 18.11.2026)
+
+- Auswahl: alle Nicht-Personen ohne redaktionellen Langtext, deren Langtext (Ueberblick oder KI-Text) unter 2500 Zeichen liegt.
+- Quelle: Auszuege aus den Show Notes der Folgen (bis 5 Folgen, bis 3.600 Zeichen) + vorhandener Ueberblickstext + Kurzbeschreibung. Mindestens 1.800 Zeichen belegte Quelle noetig, sonst wird nicht aufgefuellt (kein Fuelltext).
+- Ergebnis des Plans: **801 Entitaeten** haben genug Quelle; **1.043** nicht (`thin_source`). Kosten fuer die 801: Sonnet ca. 6,5 USD + Haiku (14 Sprachen) ca. 7,7 USD = **ca. 14,2 USD** (Batch-Preis).
+- Pruefung je Text: mindestens 2.600 und hoechstens 6.500 Zeichen, Name kommt vor, keine URL, keine Superlative, keine Zahl, die nicht in den Quellen steht.
+- Ein KI-Langtext ab 2.500 Zeichen ersetzt einen kuerzeren Ueberblickstext (GENTEXT); GENTEXT ab 2.500 Zeichen und redaktionelle Texte bleiben.
+- Haiku-Grenze: 4 EUR je Lauf und 5 EUR je Tag -> die Uebersetzungen laufen ueber 2 Laeufe/Tage.
+- Die 1.043 ohne Quelle brauchen zusaetzliche Quellen (Microsoft-Learn-Seite, Hersteller-Doku) oder bleiben duenn.
