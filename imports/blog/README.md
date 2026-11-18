@@ -14,6 +14,9 @@ status: review                                   # review = liegt, approved = wi
 publish: false                                   # false = wartet in der Verwaltung (Blog-Prüfung), true = sofort live
 author: mirko-p                                  # Profil-Handle, Standard mirko-p
 date: 2026-11-01
+render: v2                                       # optional: Tabellen (| a | b | mit |---|), ```-Codeblöcke und <ol start>; ohne Schalter der frühere Renderer.
+                                                 # Nur für neue Pakete: bei schon übersetzten Paketen ändert er HTML und Hash, die Sprachfassungen fallen weg
+                                                 # und translate_blog schickt die neuen Einheiten an die KI (Review #509)
 topics: [microsoft-365-copilot, copilot-studio]  # Entitäts-IDs (müssen existieren)
 keypoints:                                       # optional, 3–8 Punkte je 10–200 Zeichen: erscheinen als Abschnitt „Key points“ nach dem ersten Absatz (und in allen Sprachfassungen)
   - Lizenzen nach Rollen planen, nicht nach Köpfen

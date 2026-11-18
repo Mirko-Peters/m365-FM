@@ -27,6 +27,12 @@ class Extra(unittest.TestCase):
         out, ext = S.split_topics([f"t{i}" for i in range(12)] + ["acme-backup"], ["acme", "acme-backup"])
         self.assertEqual(len(out), 12); self.assertEqual(out[:2], ["acme", "acme-backup"]); self.assertEqual(ext, {"acme", "acme-backup"})
         self.assertEqual(len(set(out)), len(out))
+    def test_post_extras_nur_bezahlt(self):
+        partner = dict(REC, id="p", label="partner")
+        self.assertEqual(S.post_extras([partner], "2026-03-01", ENTS), [])
+        self.assertEqual(S.post_extras([partner], "2026-03-01", ENTS, paid_only=False), ["acme", "acme-backup", "acme-suite"])
+        self.assertEqual(S.post_extras([REC, partner], "2026-03-01", ENTS), ["acme", "acme-backup", "acme-suite"])
+
     def test_post_extras_grace_vs_expired(self):
         self.assertEqual(len(S.post_extras([REC], "2026-08-01", ENTS)), 3)
         self.assertEqual(S.post_extras([REC], "2027-01-15", ENTS), [])

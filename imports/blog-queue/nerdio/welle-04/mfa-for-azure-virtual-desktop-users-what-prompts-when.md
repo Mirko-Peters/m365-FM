@@ -1,0 +1,95 @@
+---
+title: "MFA for Azure Virtual Desktop users: what prompts when"
+summary: "Users see Microsoft Entra MFA prompts in Azure Virtual Desktop when a new access token is needed: at subscribe or feed refresh, at connection through the gateway, and at session host sign-in with SSO."
+status: review
+publish: false
+author: mirko-p
+date: 2026-11-18
+render: v2
+topics: [azure-virtual-desktop, avd-single-sign-on]
+keypoints:
+  - "Learn says users are prompted only when a new access token is requested. Two apps matter: Azure Virtual Desktop for the service and Windows Cloud Login for session host sign-in with SSO."
+  - "Once connected, users are not prompted again even if the session outlasts the sign-in frequency. A disruption that forces reconnection after that period triggers a new prompt."
+  - "Sign-in frequency Every time is supported only on the Windows Cloud Login app. On the Azure Virtual Desktop app it causes constant prompts on feed refresh and diagnostics upload."
+  - "With single sign-on, a session lock disconnects the session by default, and Conditional Access, including MFA and sign-in frequency, is re-evaluated at reconnect."
+  - "Learn lists four causes of repeated prompts: mismatched sign-in frequency between the two apps, legacy per-user MFA, a missing Windows Cloud Login policy, and a consent dialog that is not hidden."
+faq:
+  - q: "Will a user get an MFA prompt every time they open a remote desktop?"
+    a: "Not necessarily. Microsoft Learn says users are prompted only when a new access token is needed. With periodic sign-in frequency, a connection launched within the period reuses the earlier authentication. With Every time on Windows Cloud Login, a new connection after about 5 to 10 minutes prompts again."
+  - q: "Does a session that stays open for days keep prompting?"
+    a: "No. Learn says that after a connection is established users are not prompted, even if it lasts longer than the sign-in frequency. A re-established session after a network disruption, or a reconnect after a session lock disconnect, is evaluated again."
+  - q: "Why do some users see a prompt that is not MFA?"
+    a: "With single sign-on, users see a dialog to allow the Remote Desktop connection when they connect to a new session host. Entra remembers up to 15 hosts for 30 days. Administrators can hide it with a trusted device group on the Windows Cloud Login service principal."
+---
+
+Microsoft Entra multifactor authentication prompts in Azure Virtual Desktop follow one rule: users are prompted only when a new access token is requested from Microsoft Entra ID for a resource. In practice that means at subscribe or when the user manually refreshes the resource list, at connection through the gateway, and, with single sign-on, at session host sign-in. With periodic sign-in frequency, background feed refresh and diagnostics upload fail silently once the period is over, until the next interactive sign-in; with Every time on the wrong app they cause constant prompts instead. This article maps each moment to the Entra app that evaluates it and to the setting that decides how often the prompt returns. How to design the policies themselves, including the licensing they need, is covered in "Conditional Access for Azure Virtual Desktop: policies that work", and this article does not repeat it.
+
+## Where authentication happens
+
+Learn's authentication overview describes three phases. Cloud service authentication is to the Azure Virtual Desktop service: subscribing to resources, connecting to the gateway when launching a connection, and sending diagnostic information. It runs against Microsoft Entra ID, and Learn's overview says this is where you can enforce Conditional Access policies. The resource is the **Azure Virtual Desktop** app, so a policy for this phase targets that app. Remote session authentication is to the session host. In-session authentication is to applications and websites inside the remote session and is outside this article.
+
+With [single sign-on](https://www.m365.fm/entity/avd-single-sign-on/) enabled, Windows signs the user in to the session host with an Entra token and a second app, **Windows Cloud Login**, is evaluated, so a second Conditional Access policy on that app covers session host sign-in. Without single sign-on, the client prompts for session host credentials on every connection unless the user saves them, and Learn recommends saving credentials only on secure devices. A third app, **Azure Virtual Desktop Azure Resource Manager Provider**, retrieves the user feed only; Learn says not to select it in a Conditional Access policy that requires MFA. The app IDs and the policy layout are in the Conditional Access article. The MFA setup page adds that the Azure Virtual Desktop app was previously named Windows Virtual Desktop in tenants that registered the `Microsoft.DesktopVirtualization` resource provider before the display name changed, with the same app ID.
+
+## What prompts when
+
+The table combines the authentication overview, the MFA article and the single sign-on article.
+
+| Moment | What is evaluated | Prompt behavior |
+|---|---|---|
+| User subscribes or manually refreshes the resource list | Azure Virtual Desktop app | Reauthentication when the sign-in frequency period has elapsed |
+| Background feed refresh and diagnostics upload | Azure Virtual Desktop app | With periodic frequency, they fail silently after the period ends until the user completes the next interactive Entra sign-in; Every time on this app causes constant prompts |
+| Connection through the gateway | Azure Virtual Desktop app | Prompt when a new token is needed |
+| Sign-in to the session host with single sign-on | Windows Cloud Login app | Prompt when a new token is needed |
+| Sign-in to the session host without single sign-on | Session host credentials | Credential prompt on every connection unless saved in the client |
+| First connection to a new session host with single sign-on | Consent dialog | Users see a dialog to allow the Remote Desktop connection |
+| Reconnect after a session lock disconnect | Conditional Access re-evaluated | Can require MFA to return to the session |
+| Session re-established after a network disruption | Whichever app needs a new token | New prompt if the configured sign-in frequency has passed |
+| Established session that outlasts the sign-in frequency | None | No prompt |
+
+When both apps are configured correctly, Learn says users see a single MFA prompt, if required, and then enter the session. If only the Azure Virtual Desktop app has a policy, the user may be prompted twice: at the service layer and again at the session host single sign-on layer.
+
+## Sign-in frequency decides how often
+
+Sign-in frequency is a session control in the Conditional Access policy. In the Microsoft Entra admin center it is under **Access controls**, **Session**, **Sign-in frequency**. There are two modes.
+
+- **Periodic reauthentication** takes a value and a unit. Learn's example is 1 hour, which requires MFA if a connection is launched more than an hour after the last user authentication. Learn gives no recommended value and says to set it by your security requirements.
+- **Every time** is supported only on the Windows Cloud Login app, and only when single sign-on is enabled. Learn says users are then prompted to reauthenticate when launching a new connection after 5 to 10 minutes since their last authentication.
+
+Learn warns about one mistake: setting **Every time** on the Azure Virtual Desktop app instead of Windows Cloud Login causes constant MFA prompts on feed refresh and diagnostics upload. For the two apps, Learn recommends matching the policies except for the sign-in frequency, and for the Windows Cloud Login policy to match or exceed the frequency of the Azure Virtual Desktop policy. A mismatch is a documented cause of reprompts, because one app's session expires before the other.
+
+An illustration with invented values. The Azure Virtual Desktop policy uses periodic reauthentication of 8 hours and the Windows Cloud Login policy uses 4 hours, and assume both authentications happened at the same moment. Five hours after the last sign-in, the service token is still within its period but the session host sign-in is not, so a new connection prompts at the session host layer. Setting Windows Cloud Login to 8 hours or more, as Learn advises, removes that mismatch.
+
+## Session lock and reconnect
+
+With single sign-on, the default behavior when a remote session locks is to disconnect it. The user gets a dialog and can choose **Reconnect**. Learn lists the effects of disconnecting: Conditional Access policies, including MFA and sign-in frequency, are re-evaluated at reconnect; you can require MFA to return to the session and stop users from unlocking with a simple user name and password; and passwordless methods such as passkeys and FIDO2 are fully supported only when the session disconnects, not with the remote lock screen.
+
+You change the behavior in Intune with the settings catalog: under **Administrative templates**, **Windows Components**, **Remote Desktop Services**, **Remote Desktop Session Host**, **Security**, the setting **Disconnect remote session on lock for Microsoft identity platform authentication**. Enabled disconnects the session, disabled shows the remote lock screen. For legacy protocols, the default is the remote lock screen, and users re-enter credentials when they reconnect. After the policy reaches the session hosts, Learn says to restart them for the setting to take effect. Learn lists minimum updates for this feature, for example KB5037770 for Windows 11. If users see repeated prompts after a lock, Learn's troubleshooting page says to configure the host pool so that locking disconnects the session.
+
+## The consent dialog is not MFA
+
+With single sign-on, users see a dialog to allow the Remote Desktop connection when connecting to a new session host. Entra remembers up to 15 hosts for 30 days before prompting again. Learn's troubleshooting page notes that this dialog looks like a sign-in prompt. You hide it by putting the session hosts in one or more Entra groups and adding the group IDs to a property on the Windows Cloud Login service principal. In the portal this is under **Devices**, **Remote connection configuration**, **Windows Cloud Login**, **Target device groups to enable SSO**, with up to 10 device groups. Learn recommends a dynamic group, and says dynamic groups need a Microsoft Entra ID P1 or Intune for Education license.
+
+## Entra joined session hosts
+
+One point affects prompts on [Entra joined](https://www.m365.fm/entity/avd-entra-join/) hosts. Legacy per-user MFA combined with Conditional Access causes the error "The sign-in method you're trying to use isn't allowed" or repeated prompts; Learn says to set per-user MFA to **Disabled** under **Identity**, **Users**, **All users**, **Per-user MFA** and to enforce MFA through Conditional Access. Separately, Learn says that if you do not want to restrict sign-in to strong methods such as Windows Hello for Business, you exclude the **Azure Windows VM Sign-In** app from the policy; that is a policy decision covered in the Conditional Access article, and the step-by-step fix for failing sign-ins is in "Azure Virtual Desktop Sign-In Fails on Entra-Joined Session Hosts: A Checklist". Learn also notes that on devices not registered with Entra, a "Stay signed in to all your apps" prompt can appear, and that users who choose to sign in to the app only may be prompted more often.
+
+## Checking why a prompt appeared
+
+Use the Entra sign-in logs, under **Identity**, **Monitoring & health**, **Sign-in logs**, and look at both apps. Learn notes that web client sign-ins show the client app ID `a85cf173-4192-42f8-81fa-777a763e6e2c`, because it is linked to the server app where the policy was set. See also [Microsoft Entra sign-in logs](https://www.m365.fm/entity/microsoft-entra-sign-in-logs/). Learn's troubleshooting page also maps errors to causes, for example AADSTS50076 for MFA required by Conditional Access or per-user enforcement. Check that the user has a registered method and that the network and device meet the policy conditions.
+
+## Related
+
+- [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/)
+- [Conditional Access](https://www.m365.fm/entity/conditional-access/)
+- [Multifactor authentication](https://www.m365.fm/entity/mfa/)
+- [Windows App](https://www.m365.fm/entity/windows-app/)
+
+## Sources
+
+
+- [Microsoft Learn: Enforce Microsoft Entra multifactor authentication for Azure Virtual Desktop using Conditional Access](https://learn.microsoft.com/en-us/azure/virtual-desktop/set-up-mfa)
+- [Microsoft Learn: Authentication in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/authentication)
+- [Microsoft Learn: Configure single sign-on for Azure Virtual Desktop using Microsoft Entra ID](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-single-sign-on)
+- [Microsoft Learn: Configure the session lock behavior](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-session-lock-behavior)
+- [Microsoft Learn: Troubleshoot single sign-on and Conditional Access for Azure Virtual Desktop](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-desktop/troubleshoot-sso-conditional-access)
+- [Microsoft Learn: Microsoft Entra joined session hosts in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/azure-ad-joined-session-hosts)

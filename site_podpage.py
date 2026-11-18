@@ -741,7 +741,8 @@ def build(g):
         if r and r.get("audio"): ld["associatedMedia"] = {"@type": "AudioObject", "contentUrl": r["audio"]}
         if plat_links: ld["sameAs"] = [u for _, u in plat_links]
         if len(tr) > 200: ld["transcript"] = tr[:5000]
-        if _spr: ld["sponsor"] = SPM.ld(_spr); body = SPM.mark(body, _spr, "episode")   # T37 Sponsor: PodcastEpisode.sponsor, Links zum Sponsor mit rel="sponsored"
+        if SPM.ld(_spr): ld["sponsor"] = SPM.ld(_spr)
+        if _spr: body = SPM.mark(body, _spr, "episode")   # T37 Sponsor: PodcastEpisode.sponsor, Links zum Sponsor mit rel="sponsored"
         # Alternates nur fuer Sprachfassungen mit uebersetzten Show Notes (150 je Sprache); die uebrigen ~14.000 Fassungen (nur Titel + Teaser) bleiben noindex und ausserhalb der Sitemap
         alts = {"en": ep_url(e), **{l: loc_url(l, f"episodes/{e['slug']}/") for l in TRL if e["slug"] in TRL[l] and TRL[l][e["slug"]][0]}}   # alle Sprachfassungen (uebersetzte Titel/Teaser, teils Show Notes) sind indexierbar und verknuepft
         for _dl, (_du, _) in oa.items(): alts[_dl] = _du   # T3: die Dub-Fassung (eigene Folge in der Sprache) ist die Sprachalternative, nicht die duenne Show-Kopie
@@ -782,7 +783,8 @@ def build(g):
             if _about: lald["about"] = ld["about"]   # dieselbe Folge, dieselben Entitaeten wie die englische Fassung
             _lment = EM.mentions(BASE, [i for i in _lused if i in ENTS_ALL and i not in EM.HOST], _about)
             if _lment: lald["mentions"] = _lment   # im Text dieser Fassung verlinkte Entitaeten (Audit E7)
-            if _spr: lald["sponsor"] = SPM.ld(_spr); lbody = SPM.mark(lbody, _spr, "episode")
+            if SPM.ld(_spr): lald["sponsor"] = SPM.ld(_spr)
+            if _spr: lbody = SPM.mark(lbody, _spr, "episode")
             # Sprachfassung (uebersetzter Titel und Teaser, bei 150 Folgen je Sprache auch Show Notes): indexierbar, in Sitemap und hreflang; liegt im R2-Bucket statt in GitHub Pages
             _lalts = None if l in oa else alts   # T3: Sprache mit Dub-Fassung: diese Kopie bleibt ohne hreflang (ein Vertreter je Sprache im Cluster)
             _lcan = oa[l][0] if l in oa else lu   # T42: Kopie in einer Sprache mit Dub-Folge -> kanonisch (auch og:url, Teilen, JSON-LD) die Dub-Folge, nicht in die Sitemap

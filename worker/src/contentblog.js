@@ -22,7 +22,9 @@ export async function importContentBlog(env, now = () => Math.floor(Date.now() /
   const known = new Map();
   for (const r of (await db.prepare("SELECT ci.k k,ci.post_id post_id,ci.hash hash,ci.imported imported,b.status status,b.updated updated FROM content_import ci LEFT JOIN blog_posts b ON b.id=ci.post_id").all()).results || []) known.set(r.k, r);
   res.seen = items.length;
-  for (const p of items.slice(0, 500)) {
+  // Ohne feste Obergrenze (Review #509): bis 18.11.2026 nur die ersten 500 Pakete des alphabetisch sortierten Index; ab Paket 501 (z. B. "using-…",
+  // "windows-365-…") legte der Worker nie mehr etwas an. Unveraenderte bekannte Pakete kosten keine Abfrage, die Arbeit begrenzt BATCH.
+  for (const p of items) {
     if (res.created + res.updated >= BATCH) break;
     const slug = String(p.slug || "").toLowerCase(), lang = String(p.lang || "");
     if (!SLUG.test(slug) || !LANG.test(lang) || !p.title || !p.html || /<\s*(script|iframe|style|form)/i.test(p.html) || !p.hash) { res.skipped++; continue; }

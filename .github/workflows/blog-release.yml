@@ -6,7 +6,7 @@ on:
     inputs:
       date: { description: "Stichtag JJJJ-MM-TT (leer = keine Datumsgrenze, alles freigeben); sonst nur Ordner bis zu diesem Datum", required: false, default: "" }
       limit: { description: "Hoechstens so viele Artikel in diesem Lauf (leer = 15)", required: false, default: "" }
-      article_date: { description: "Datum der freigegebenen Artikel JJJJ-MM-TT (leer = morgen nach Berliner Zeit); fuer den Start-Lauf heute eintragen", required: false, default: "" }
+      article_date: { description: "Datum der freigegebenen Artikel JJJJ-MM-TT (leer = UTC-Tag des Laufs + 1); gilt auch fuer die Welle einer Reihe (Nerdio). Je UTC-Tag gibt es nur eine Welle: ein Hand-Lauf ersetzt den Abend-Lauf desselben Tages", required: false, default: "" }
 permissions:
   contents: write
 concurrency:
@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with: { python-version: "3.12" }
-      - name: Tagesblock freigeben
+      - name: Tagesblock und je Reihe eine Welle freigeben
         env:   # Eingaben ueber die Umgebung, nicht in den Shell-Befehl eingesetzt
           IN_DATE: ${{ inputs.date }}
           IN_LIMIT: ${{ inputs.limit }}
@@ -28,7 +28,7 @@ jobs:
       - name: Speichern (auf die Website kommt es mit dem naechtlichen Seitenbau - Bot-Commits loesen keinen Bau aus)
         run: |
           git config user.name "m365fm-bot"; git config user.email "bot@m365.fm"
-          git add -A imports/blog imports/blog-queue
+          git add -A imports/blog imports/blog-queue data/sponsorships.json   # Reihen mit "sponsoring" (reihe.json) tragen ihre Artikel unter "posts" ein
           if git diff --cached --quiet; then echo "nichts freizugeben"; exit 0; fi
           git commit -m "Blog-Queue: Tagesblock freigegeben"
           for i in 1 2 3; do git pull --rebase -q origin "${GITHUB_REF_NAME}" && git push -q && exit 0; sleep 5; done
