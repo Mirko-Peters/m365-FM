@@ -8,7 +8,7 @@ date: 2026-11-18
 topics: [avd-watermarking, azure-virtual-desktop]
 keypoints:
   - "Watermarking shows QR codes across a remote desktop. Each code contains the Connection ID (default) or the Device ID, which an admin can look up to trace the session."
-  - "It deters and traces. It does not block screenshots or photos; blocking screen capture on the client is the job of screen capture protection, and Learn's screen capture protection page suggests enabling watermarking alongside it."
+  - "It deters and traces but does not block screenshots or photos; blocking capture is the job of screen capture protection, which Learn suggests using alongside watermarking."
   - "It applies to remote desktops only. RemoteApp sessions and direct connections with mstsc.exe are allowed without a watermark."
   - "Once enabled on a session host, only clients that support watermarking can connect; an unsupported client gets an error message that is not specific."
   - "It is configured on the session hosts with Intune or Group Policy, and the lookup of a code uses Azure Virtual Desktop Insights or Log Analytics."
@@ -21,7 +21,7 @@ faq:
     a: "No. Learn says watermarking is for remote desktops only. With RemoteApp it is not applied and the connection is allowed. The same applies to a direct connection to a session host with the Remote Desktop Connection app (mstsc.exe)."
 ---
 
-Watermarking in [Azure Virtual Desktop](/entity/azure-virtual-desktop/) draws QR codes over a remote desktop session. Each code contains an identifier that an administrator can use to trace the session, so a photo or screenshot of the desktop can be tied back to a connection. It is a deterrent and a tracing aid, not a block: it does not stop anyone from capturing the screen. This article explains what [watermarking](/entity/avd-watermarking/) does, where it applies, which clients support it, and what it leaves uncovered. The step-by-step configuration is in the companion article on configuring QR-code watermarking for session hosts.
+Watermarking in [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) draws QR codes over a remote desktop session. Each code contains an identifier that an administrator can use to trace the session, so a photo or screenshot of the desktop can be tied back to a connection. It is a deterrent and a tracing aid, not a block: it does not stop anyone from capturing the screen. This article explains what [watermarking](https://www.m365.fm/entity/avd-watermarking/) does, where it applies, which clients support it, and what it leaves uncovered. The step-by-step configuration is in the companion article on configuring QR-code watermarking for session hosts.
 
 ## What watermarking does
 
@@ -58,7 +58,7 @@ The watermarking page lists these clients:
 | Remote Desktop client | Web browser | No version | Not supported in public cloud since 27 March 2026 |
 | Remote Desktop client | macOS | 10.9.5 or later | No longer available to download; replaced by Windows App |
 | Remote Desktop client | iOS/iPadOS | 10.5.4 or later | No longer available to download; replaced by Windows App |
-| [Windows App](/entity/windows-app/) | Windows, macOS, iOS and iPadOS, web browser | No version | Named as the replacement |
+| [Windows App](https://www.m365.fm/entity/windows-app/) | Windows, macOS, iOS and iPadOS, web browser | No version | Named as the replacement |
 | Windows App | Android/Chrome OS | Marked as preview | Named as the replacement for the Android Remote Desktop client |
 
 The two Learn pages are out of step. The watermarking page (last updated June 2025, according to its page metadata) still lists the Remote Desktop client rows. Learn's archived [Remote Desktop client page](https://learn.microsoft.com/en-us/previous-versions/remote-desktop-client/connect-windows-cloud-services) says that from 27 March 2026 the Windows MSI client and the Remote Desktop web client are no longer supported for public cloud environments. MSI support was extended to 28 September 2026 for Azure Government, Azure operated by 21Vianet and AVD Classic; that date has passed. For the web client, the page states no end-of-support date in Azure Government or Azure operated by 21Vianet. The Microsoft Store Remote Desktop app reached end of support in September 2025, and the page says the macOS and iOS/iPadOS clients can no longer be downloaded. It says the Android client is being replaced. Microsoft tells users to migrate to Windows App.

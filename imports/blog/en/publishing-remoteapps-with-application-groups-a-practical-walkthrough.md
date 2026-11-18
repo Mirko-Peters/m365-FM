@@ -27,9 +27,9 @@ To publish a RemoteApp, create a RemoteApp application group on a pooled host po
 
 Learn's [publishing article](https://learn.microsoft.com/en-us/azure/virtual-desktop/publish-applications-stream-remoteapp) lists these prerequisites:
 
-- An Azure subscription and an existing [host pool](/entity/avd-host-pool/) with session hosts, a RemoteApp application group and a workspace.
+- An Azure subscription and an existing [host pool](https://www.m365.fm/entity/avd-host-pool/) with session hosts, a RemoteApp application group and a workspace.
 - At least one session host powered on in the host pool the group is assigned to.
-- The applications installed on the session hosts of that pool. With App Attach, add and assign an MSIX, Appx or App-V package to the host pool first. See [MSIX app attach](/entity/msix-app-attach/).
+- The applications installed on the session hosts of that pool. With App Attach, add and assign an MSIX, Appx or App-V package to the host pool first. See [MSIX app attach](https://www.m365.fm/entity/msix-app-attach/).
 - As a minimum, the Desktop Virtualization Application Group Contributor built-in role on the resource group, or on the subscription to create the resources. This is the wording of the publishing article; the deployment article names a different role for creating the host pool, workspace and application group together (see Step 1).
 - For the PowerShell route, an Azure session with the right subscription context. To publish App Attach applications with PowerShell the publishing article asks for version 4.2.0 or later of the `Az.DesktopVirtualization` module, while the App Attach article asks for 4.2.1 or later, so use 4.2.1 or later. For Microsoft Store applications you also need the `Appx` module, which is part of Windows.
 
@@ -39,7 +39,7 @@ RemoteApp application groups are available only on pooled host pools, according 
 
 Learn's [deployment article](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop) gives the Basics fields in the portal: Subscription, Resource group, Host pool, Location, Application group type and Application group name. Choose **RemoteApp** as the application group type and select your pooled host pool.
 
-The location follows the host pool, and the group inherits the host pool's deployment scope, so it can only join a workspace with the same scope. According to the deployment article, creating a host pool, workspace and application group together needs at least the Desktop Virtualization Contributor role on the resource group or subscription, while the publishing article names the Application Group Contributor role as the minimum for its procedure. Assigning users also needs `Microsoft.Authorization/roleAssignments/write`, included in User Access Administrator and Owner. A [RemoteApp](/entity/avd-remoteapp/) group is one kind of [application group](/entity/avd-application-group/).
+The location follows the host pool, and the group inherits the host pool's deployment scope, so it can only join a workspace with the same scope. According to the deployment article, creating a host pool, workspace and application group together needs at least the Desktop Virtualization Contributor role on the resource group or subscription, while the publishing article names the Application Group Contributor role as the minimum for its procedure. Assigning users also needs `Microsoft.Authorization/roleAssignments/write`, included in User Access Administrator and Owner. A [RemoteApp](https://www.m365.fm/entity/avd-remoteapp/) group is one kind of [application group](https://www.m365.fm/entity/avd-application-group/).
 
 The wizard also has an **Application groups** tab (**+ Add applications**, which needs at least one session host powered on) and an **Assignments** tab. Its **Workspace** tab, however, registers only the default desktop group of the host pool, according to Learn, so a RemoteApp group is registered after it exists: **Azure Virtual Desktop**, **Workspaces**, the workspace, **Application groups**, **+ Add**, the plus icon next to the group, **Select**. Only groups that are not yet assigned to a workspace appear in the list. Menu names can change, so compare with the live portal.
 
@@ -101,7 +101,7 @@ Check the host pool's preferred application group type before you finish. When a
 
 ## Step 5: test as a user
 
-Sign in to Windows App with a test account in the group. Learn's Windows App page says that after sign-in you open the **Devices** or **Apps** tab to see your remote resources, and that a tab is hidden if you have no resource of that type. Use search and filters to find the app. Learn's page on changing display names says a changed display name appears once the client refreshes. See also [Windows App](/entity/windows-app/).
+Sign in to Windows App with a test account in the group. Learn's Windows App page says that after sign-in you open the **Devices** or **Apps** tab to see your remote resources, and that a tab is hidden if you have no resource of that type. Use search and filters to find the app. Learn's page on changing display names says a changed display name appears once the client refreshes. See also [Windows App](https://www.m365.fm/entity/windows-app/).
 
 If the app does not appear, work through the list in the troubleshooting section below.
 

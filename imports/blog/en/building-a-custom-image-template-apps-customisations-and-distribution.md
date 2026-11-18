@@ -21,7 +21,7 @@ faq:
     a: "No. The template builds an image. You then pick it when you create a host pool or add session hosts, under See all images, from your managed images or Azure Compute Gallery shared images. The VM size must match the image generation."
 ---
 
-To build an image from a custom image template in Azure Virtual Desktop, you fill in seven tabs in the Azure portal, save the template and then select **Start build**. Azure Image Builder runs your customizations in the listed order, generalizes the image with [sysprep](/entity/sysprep/) and writes it to a managed image, an Azure Compute Gallery, or both. This article is the practical sequence: what to decide on each tab, how to arrange apps and settings, how to distribute the result and how to read a failed build.
+To build an image from a custom image template in Azure Virtual Desktop, you fill in seven tabs in the Azure portal, save the template and then select **Start build**. Azure Image Builder runs your customizations in the listed order, generalizes the image with [sysprep](https://www.m365.fm/entity/sysprep/) and writes it to a managed image, an Azure Compute Gallery, or both. This article is the practical sequence: what to decide on each tab, how to arrange apps and settings, how to distribute the result and how to read a failed build.
 
 The concept is explained elsewhere, and prerequisites, the template format and cost notes are in "Azure Image Builder for AVD: building images as code". The release and retirement stages are in "The golden image lifecycle: build, test, release, retire". Here the focus is the portal build itself. Microsoft announced general availability in the Azure public cloud in September 2023, with Azure Government and China in public preview at that time (Azure Virtual Desktop blog). The custom image templates pages on Learn carry no status label, so check the status for your cloud.
 
@@ -62,7 +62,7 @@ Learn's overview gives these built-in scripts as examples, so the list may not b
 - Install language packs, and set the default language
 - Enable time zone redirection
 - Disable Storage Sense
-- Install [FSLogix](/entity/fslogix/) and configure Profile Container, or enable FSLogix with Kerberos
+- Install [FSLogix](https://www.m365.fm/entity/fslogix/) and configure Profile Container, or enable FSLogix with Kerberos
 - Enable RDP Shortpath for managed networks
 - Enable screen capture protection
 - Configure Teams optimizations (the WebRTC redirector service and the Visual C++ Redistributable)
@@ -125,7 +125,7 @@ When adding session hosts, the Virtual Machines tab offers the default image lis
 
 ## When a build fails
 
-Open `customization.log` first. By default it is in the `packerlogs` container of the storage account in the `IT_<ResourceGroupName>_<TemplateName>_<GUID>` resource group, in a folder named by GUID; if you named a staging group, look there. Entries for built-in scripts begin `Starting AVD AIB Customization: {<Script name>}`. Search for `(telemetry)` from the bottom of the log to find the last customizer that ran.
+Open `customization.log` first. By default it is in the `packerlogs` container of the storage account in the `IT_<ResourceGroupName>_<TemplateName>_<GUID>` resource group, in a folder named by GUID; if you named a staging group, look there. Entries for built-in scripts begin `Starting AVD AIB Customization: {Script name}`. Search for `(telemetry)` from the bottom of the log to find the last customizer that ran.
 
 | Symptom | Cause | Fix |
 |---|---|---|

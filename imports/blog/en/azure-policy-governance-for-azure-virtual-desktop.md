@@ -1,17 +1,17 @@
 ---
 title: "Azure Policy governance for Azure Virtual Desktop"
-summary: "Azure Policy governs the Azure resources around Azure Virtual Desktop, such as host pools, workspaces and private endpoints, through built-in definitions with audit, deny, modify and deploy-if-not-exists effects. This guide compares the effects, shows the AVD definitions Microsoft lists, and sets out a staged rollout."
+summary: "Azure Policy governs the resources around Azure Virtual Desktop, such as host pools, workspaces and private endpoints, with audit, deny, modify and deploy-if-not-exists effects. This guide compares them and sets out a staged rollout."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [azure-virtual-desktop, azure-policy]
 keypoints:
-  - "Microsoft lists 11 built-in Azure Policy definitions under Desktop Virtualization, all at version 1.0.0. They cover public network access, Private Link, private endpoints and private DNS zones. Separate Monitoring definitions deploy diagnostic settings for host pools, workspaces, application groups and scaling plans."
-  - "Audit only reports. Deny blocks a create or update request. Modify and DeployIfNotExists change resources and need a managed identity on the assignment, plus a remediation task for resources that already exist."
-  - "Roll out in stages: test on a small scope such as a test resource group with enforcement mode DoNotEnforce, remediate existing resources, use audit where the definition offers it, then widen the scope gradually. The seven Configure definitions have no audit effect."
-  - "Use exclusions (notScopes) to bypass evaluation permanently for a broad scope. Use an exemption with an expiresOn date for a time-bound or specific case that must stay visible as Exempt in compliance reports."
-  - "Azure Policy works on the Azure control plane. For settings inside the session host operating system, Learn points to machine configuration, whose supported OS table you should check against your image."
+  - "Microsoft lists 11 built-in Desktop Virtualization policy definitions for public network access, Private Link, private endpoints and private DNS zones; Monitoring ones add diagnostic settings."
+  - "Audit only reports. Deny blocks a create or update request. Modify and DeployIfNotExists need a managed identity on the assignment and a remediation task for existing resources."
+  - "Roll out in stages: test on a small scope with enforcement mode DoNotEnforce, remediate existing resources, then widen the scope. The seven Configure definitions have no audit effect."
+  - "Use exclusions (notScopes) to skip evaluation permanently for a broad scope; use an exemption with expiresOn for a time-bound case that stays visible as Exempt in compliance reports."
+  - "Azure Policy works on the Azure control plane. For settings inside the session host OS, Learn points to machine configuration; check its supported OS table against your image."
 faq:
   - q: "Does Azure Policy change settings inside the Windows session?"
     a: "Not through the AVD built-in definitions on Learn, which target Azure resources such as host pools, workspaces, private endpoints and private DNS zones, or deploy diagnostic settings. For operating system settings, Learn describes machine configuration, which can audit or configure OS settings as code through Azure Policy. Check that your session host operating system is in its supported table first."
@@ -21,15 +21,15 @@ faq:
     a: "Learn's RequestDisallowedByPolicy article says the error shows the policy assignment and policy definition. The name of each is the last segment of its id, and az policy assignment show and az policy definition show return the details. Learn's AVD troubleshooting article separately points to the deployment operations and, if those show no errors, to the activity log."
 ---
 
-Azure Policy governs [Azure Virtual Desktop](/entity/azure-virtual-desktop/) at the Azure resource level: it audits, blocks or changes properties of host pools, workspaces, private endpoints and private DNS zones, deploys diagnostic settings, and reports compliance across subscriptions. It does not manage what runs inside a user session. The sections below list the AVD definitions Microsoft ships, compare the effects, and give a staged rollout.
+Azure Policy governs [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) at the Azure resource level: it audits, blocks or changes properties of host pools, workspaces, private endpoints and private DNS zones, deploys diagnostic settings, and reports compliance across subscriptions. It does not manage what runs inside a user session. The sections below list the AVD definitions Microsoft ships, compare the effects, and give a staged rollout.
 
 ## What Azure Policy does and where it stops
 
-Learn describes [Azure Policy](/entity/azure-policy/) as a service that evaluates resources and actions in Azure by comparing their properties to business rules written in JSON, called policy definitions. Several definitions can be grouped into an initiative (also called a policySet).
+Learn describes [Azure Policy](https://www.m365.fm/entity/azure-policy/) as a service that evaluates resources and actions in Azure by comparing their properties to business rules written in JSON, called policy definitions. Several definitions can be grouped into an initiative (also called a policySet).
 
 Evaluation happens when a resource is created or updated in a scope with an assignment, when a scope gets a new assignment, when an assigned policy or initiative is updated, and in a standard cycle once every 24 hours. Learn adds that Azure Policy keeps resource state compliant "without concern for who made the change or who has permission to make a change". Although a policy can be assigned at the management group level, only resources at the subscription or resource group level are evaluated.
 
-For AVD this means the policy works on Azure resources such as [host pools](/entity/avd-host-pool/), [workspaces](/entity/avd-workspace/) and the virtual machines behind [session hosts](/entity/avd-session-host/). Settings inside Windows belong to other tools. Learn's machine configuration overview describes "audit or configure operating system settings as code" through Azure Policy, with three enforcement modes per policy assignment (Audit, Apply and Monitor, Apply and Autocorrect). Its supported-OS table lists Windows Client "10 - 11" and Windows Server "2012 - 2025"; confirm that your multi-session image is covered.
+For AVD this means the policy works on Azure resources such as [host pools](https://www.m365.fm/entity/avd-host-pool/), [workspaces](https://www.m365.fm/entity/avd-workspace/) and the virtual machines behind [session hosts](https://www.m365.fm/entity/avd-session-host/). Settings inside Windows belong to other tools. Learn's machine configuration overview describes "audit or configure operating system settings as code" through Azure Policy, with three enforcement modes per policy assignment (Audit, Apply and Monitor, Apply and Autocorrect). Its supported-OS table lists Windows Client "10 - 11" and Windows Server "2012 - 2025"; confirm that your multi-session image is covered.
 
 ## The built-in AVD definitions
 
@@ -49,7 +49,7 @@ Learn's built-in policy list has a Desktop Virtualization section with 11 defini
 | Configure Azure Virtual Desktop hostpool resources to use private DNS zones | DeployIfNotExists, Disabled |
 | Configure Azure Virtual Desktop workspace resources to use private DNS zones | DeployIfNotExists, Disabled |
 
-All 11 in that section point at Private Link and network exposure. Separately, Learn's Azure Monitor article lists built-in policies that create diagnostic settings by category group for host pools, workspaces, application groups and scaling plans, with Log Analytics, event hub or storage destinations. Background: [Azure Private Link](/entity/azure-private-link/).
+All 11 in that section point at Private Link and network exposure. Separately, Learn's Azure Monitor article lists built-in policies that create diagnostic settings by category group for host pools, workspaces, application groups and scaling plans, with Log Analytics, event hub or storage destinations. Background: [Azure Private Link](https://www.m365.fm/entity/azure-private-link/).
 
 ### How the network policies relate to the AVD settings
 

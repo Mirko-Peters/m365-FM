@@ -1,17 +1,17 @@
 ---
 title: "Windows App: the single client for Azure Virtual Desktop and Windows 365"
-summary: "Windows App is Microsoft's client for Azure Virtual Desktop, Windows 365 and Microsoft Dev Box on Windows, macOS, iOS/iPadOS, Android/Chrome OS, web browsers and Meta Quest, with narrower platform support for Remote Desktop Services and remote PCs. This article explains what it replaces, what it connects to, and which behavior comes from the client rather than the host."
+summary: "Windows App is Microsoft's client for Azure Virtual Desktop, Windows 365 and Dev Box across Windows, macOS, mobile, web and Meta Quest. This article explains what it replaces and which behavior comes from the client."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [windows-app, azure-virtual-desktop]
 keypoints:
-  - "Learn says Windows App replaces the Remote Desktop client. For Azure Virtual Desktop and Windows 365 it is the client to migrate to; Learn's connection table lists Remote Desktop Services as not supported on Windows and says to keep using the Remote Desktop app there."
-  - "As of March 27, 2026, the Remote Desktop client for Windows (MSI) and the Remote Desktop web client are no longer supported for public cloud environments. The Microsoft Store Remote Desktop app reached end of support in September 2025."
-  - "Features differ by platform. In the comparison table for Azure Virtual Desktop, integrated apps are listed for Windows and macOS only, and USB redirection, serial redirection, multimedia redirection and token protection for Windows only."
-  - "Redirection depends on administrator configuration, the local platform, the hosting service and where the behavior is controlled; the more restrictive setting wins. Drive, clipboard, printer and USB drive redirection are disabled by default."
-  - "Windows App in a browser opens at windows.cloud.microsoft. For Azure Virtual Desktop, Learn lists Edge 131, Chrome 130, Safari 18 and Firefox 128 as minimums, and the browser must be no more than 12 months old, support the AVC codec and have WebGL enabled."
+  - "Learn says Windows App replaces the Remote Desktop client for AVD and Windows 365. Remote Desktop Services is not supported in Windows App on Windows; keep the Remote Desktop app there."
+  - "From 27 March 2026 the Remote Desktop client for Windows (MSI) and web client are unsupported in public cloud. The Store Remote Desktop app reached end of support in September 2025."
+  - "Features differ by platform: integrated apps on Windows and macOS only; USB, serial and multimedia redirection and token protection on Windows only."
+  - "Redirection depends on admin settings, platform and hosting service; the more restrictive setting wins. Drive, clipboard, printer and USB drive redirection are off by default."
+  - "Windows App in a browser opens at windows.cloud.microsoft. Minimums: Edge 131, Chrome 130, Safari 18, Firefox 128, under 12 months old, with AVC codec and WebGL."
 faq:
   - q: "Does Windows App replace the Remote Desktop client for everything?"
     a: "Not for everything. Learn's client overview says Windows App replaces the Remote Desktop client and tells users to migrate to keep access to Azure Virtual Desktop and Windows 365. The Windows App overview lists Remote Desktop Services as not supported on Windows and says to continue using the Remote Desktop app there."
@@ -29,15 +29,15 @@ Learn's [overview](https://learn.microsoft.com/en-us/windows-app/overview) (last
 
 | Service | Windows | macOS | iOS/iPadOS | Android/Chrome OS | Web browser | Meta Quest |
 |---|---|---|---|---|---|---|
-| [Azure Virtual Desktop](/entity/azure-virtual-desktop/) | Yes | Yes | Yes | Yes | Yes | Yes |
-| [Windows 365](/entity/windows-365/) | Yes | Yes | Yes | Yes | Yes | Yes |
+| [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) | Yes | Yes | Yes | Yes | Yes | Yes |
+| [Windows 365](https://www.m365.fm/entity/windows-365/) | Yes | Yes | Yes | Yes | Yes | Yes |
 | Microsoft Dev Box | Yes | Yes | Yes | Yes | Yes | Yes |
 | Remote Desktop Services | No (use the Remote Desktop app) | Yes | Yes | Yes | No | Yes |
 | Remote PC | Yes | Yes | Yes | Yes | No | Yes |
 
 Two details matter for planning. First, the [get-started page](https://learn.microsoft.com/en-us/windows-app/get-started-connect-devices-desktops-apps) labels Meta Quest support as preview, while the overview page carries no preview label. Second, remote PC connections need no Windows App sign-in, whereas the four hosted services do, and Learn says a personal Microsoft account cannot be used. Remote PC connections on Windows became generally available with Windows App 2.0.1482.0 on 6 October 2026, according to the [Windows App release notes](https://learn.microsoft.com/en-us/windows-app/whats-new).
 
-Users see what an administrator assigned to them. The Learn connect steps say the **Devices** and **Apps** tabs are hidden when no resource of that type is assigned. See [the workspace](/entity/avd-workspace/) for how published resources reach users.
+Users see what an administrator assigned to them. The Learn connect steps say the **Devices** and **Apps** tabs are hidden when no resource of that type is assigned. See [the workspace](https://www.m365.fm/entity/avd-workspace/) for how published resources reach users.
 
 ## What it replaces
 
@@ -66,19 +66,19 @@ The exception in the table is Remote Desktop Services on Windows. The Windows Ap
 
 **Sign-in.** Learn has three tables: service sign-in, remote session sign-in with single sign-on off, and in-session authentication. First, signing in to the service itself accepts passwords and Microsoft Authenticator on all listed platforms, passkeys (FIDO2) on every platform except Meta Quest, and Windows Hello for Business only on Windows and in a browser on a local Windows device. On macOS, iOS and Android, passkeys need minimum Windows App versions.
 
-Second, when [single sign-on](/entity/avd-single-sign-on/) is enabled, Learn says the credentials used to sign in to the service are passed through automatically when you connect to the remote session. Third, with SSO disabled, the remote-session table lists password on every platform, passkeys and Authenticator on none, and smart cards on Windows (with smart card redirection) and macOS (with smart card redirection and Network Level Authentication disabled). Windows Hello for Business certificate trust and key trust are listed for Windows only; cloud trust is listed for no platform.
+Second, when [single sign-on](https://www.m365.fm/entity/avd-single-sign-on/) is enabled, Learn says the credentials used to sign in to the service are passed through automatically when you connect to the remote session. Third, with SSO disabled, the remote-session table lists password on every platform, passkeys and Authenticator on none, and smart cards on Windows (with smart card redirection) and macOS (with smart card redirection and Network Level Authentication disabled). Windows Hello for Business certificate trust and key trust are listed for Windows only; cloud trust is listed for no platform.
 
 A separate table covers authenticating within a remote session. It lists passkeys on Windows, macOS, iOS/iPadOS and Android/Chrome OS, but not in a browser or on Meta Quest, and Windows Hello for Business certificate, cloud and key trust on Windows, each with WebAuthn redirection. In the redirection table, Learn marks WebAuthn redirection as preview on macOS (version 11.4.2 or higher), iOS (11.3.7 or higher) and Android (11.0.0.119 or higher), for Windows 365 and Azure Virtual Desktop connections and passkey sign-ins to Entra ID only. On Android, passkeys from other devices, such as a security key, are not supported.
 
-**Protection features.** [Screen capture protection](/entity/avd-screen-capture-protection/) is listed for Windows, macOS, iOS/iPadOS, Android/Chrome OS and the browser; Learn's feature description adds that it requires session host configuration. On iOS/iPadOS and Android it requires Intune mobile application management (not available for Chrome OS), and in a browser it requires Microsoft Edge for Business on Windows, version 134.0.3124.51 or later, with an Intune MAM app protection policy that targets Edge and a Conditional Access policy that requires app protection. [Display Protection](/entity/avd-display-protection/) and Input Protection are labeled preview, available only on Windows with Windows App 2.0.1236.0 or later, and only for Windows 365 or Azure Virtual Desktop connections (not Microsoft Dev Box). The Windows release notes describe Display Protection as public preview from August 2026. [Watermarking](/entity/avd-watermarking/) is listed for all five of those platforms in the comparison table, although [Learn's watermarking page](https://learn.microsoft.com/en-us/azure/virtual-desktop/watermarking) lists Windows App on Android/Chrome OS as preview; check that page before you promise it to Android users.
+**Protection features.** [Screen capture protection](https://www.m365.fm/entity/avd-screen-capture-protection/) is listed for Windows, macOS, iOS/iPadOS, Android/Chrome OS and the browser; Learn's feature description adds that it requires session host configuration. On iOS/iPadOS and Android it requires Intune mobile application management (not available for Chrome OS), and in a browser it requires Microsoft Edge for Business on Windows, version 134.0.3124.51 or later, with an Intune MAM app protection policy that targets Edge and a Conditional Access policy that requires app protection. [Display Protection](https://www.m365.fm/entity/avd-display-protection/) and Input Protection are labeled preview, available only on Windows with Windows App 2.0.1236.0 or later, and only for Windows 365 or Azure Virtual Desktop connections (not Microsoft Dev Box). The Windows release notes describe Display Protection as public preview from August 2026. [Watermarking](https://www.m365.fm/entity/avd-watermarking/) is listed for all five of those platforms in the comparison table, although [Learn's watermarking page](https://learn.microsoft.com/en-us/azure/virtual-desktop/watermarking) lists Windows App on Android/Chrome OS as preview; check that page before you promise it to Android users.
 
-**Media.** For [Teams media optimization](/entity/avd-teams-media-optimization/), the WebRTC rows are listed for Windows, macOS, iOS/iPadOS and Android/Chrome OS and not for the browser. The SlimCore row is listed for Windows and macOS only; the Windows 365 what's new page for March 2026 describes SlimCore on macOS as preview.
+**Media.** For [Teams media optimization](https://www.m365.fm/entity/avd-teams-media-optimization/), the WebRTC rows are listed for Windows, macOS, iOS/iPadOS and Android/Chrome OS and not for the browser. The SlimCore row is listed for Windows and macOS only; the Windows 365 what's new page for March 2026 describes SlimCore on macOS as preview.
 
 ## Windows 365 behavior in the same app
 
 The same app also exposes Cloud PC actions that Azure Virtual Desktop does not have. Learn's [device actions](https://learn.microsoft.com/en-us/windows-app/device-actions) page lists nine actions in Windows App on Windows. For Windows 365 Enterprise and Windows 365 Flex (Dedicated) all nine apply, including **Restart**, **Restore**, **Reset**, **Rename** and **Inspect connection**. For Azure Virtual Desktop only **Pin to** and **Settings** apply. Windows 365 Flex (Shared) gets **Reset**, **Settings** and **View details**.
 
-Windows 365 Frontline was renamed Windows 365 Flex in the week of 4 May 2026; Learn says the product, licensing and capabilities are unchanged and only the name is different. See [Windows 365 Flex, formerly Frontline](/entity/windows-365-frontline/). In the feature comparison, Flex is listed for every platform except Meta Quest, while [Windows 365 Boot](/entity/windows-365-boot/) and Windows 365 Switch (which switches between the local device and a Cloud PC in Task view) are listed for Windows only. These rows come from the Windows 365 view of the comparison page.
+Windows 365 Frontline was renamed Windows 365 Flex in the week of 4 May 2026; Learn says the product, licensing and capabilities are unchanged and only the name is different. See [Windows 365 Flex, formerly Frontline](https://www.m365.fm/entity/windows-365-frontline/). In the feature comparison, Flex is listed for every platform except Meta Quest, while [Windows 365 Boot](https://www.m365.fm/entity/windows-365-boot/) and Windows 365 Switch (which switches between the local device and a Cloud PC in Task view) are listed for Windows only. These rows come from the Windows 365 view of the comparison page.
 
 ## The web client
 

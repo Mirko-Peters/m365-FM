@@ -7,11 +7,11 @@ author: mirko-p
 date: 2026-11-18
 topics: [avd-power-management-autoscaling, avd-scaling-plan]
 keypoints:
-  - "Power management autoscaling powers existing session hosts on and off. Dynamic autoscaling also creates and deletes hosts and works only for pooled host pools with a session host configuration. Microsoft announced it as generally available in July 2026, while some Learn pages still carry preview wording."
-  - "A scaling plan holds the schedules. Pooled schedules use four phases (ramp-up, peak, ramp-down, off-peak) with a capacity threshold and a minimum percentage of hosts. Personal schedules act on disconnected and signed-out sessions."
-  - "Autoscale turns a host on when used capacity exceeds the threshold. It turns a host off when used capacity is below the threshold and removing the host would not push it over the threshold. At exactly the threshold, nothing happens."
+  - "Power management autoscaling powers existing hosts on and off. Dynamic autoscaling also creates and deletes hosts, only for pooled pools with a session host configuration (GA July 2026)."
+  - "A scaling plan holds the schedules. Pooled schedules have four phases with a capacity threshold and minimum percentage of hosts; personal schedules act on disconnected and signed-out sessions."
+  - "Autoscale turns a host on when used capacity exceeds the threshold, and off when below it and removing a host keeps it below. At exactly the threshold, nothing happens."
   - "The role Desktop Virtualization Power On Off Contributor must be assigned at subscription level. A lower scope can stop autoscale from working properly."
-  - "Learn says not to combine autoscale with other Microsoft or third-party scaling tools, and to disable those for the host pools a scaling plan is applied to. Azure Automation and Logic Apps scaling cannot run on the same host pool."
+  - "Learn says not to combine autoscale with other scaling tools and to disable them for pools with a scaling plan. Azure Automation and Logic Apps scaling cannot run on the same pool."
 faq:
   - q: "Does power management autoscaling cost extra?"
     a: "Microsoft's autoscale FAQ says no: you are not charged extra for using autoscale, and it points to the Azure Virtual Desktop pricing page for rates. For personal host pools, the FAQ adds that autoscale deallocates a session host that was turned on but never used to sign in, after a period of inactivity, to avoid unnecessary compute costs."
@@ -36,7 +36,7 @@ Power management autoscaling is available in Azure and Azure Government, in regi
 
 ## The building blocks
 
-A [scaling plan](/entity/avd-scaling-plan/) is an Azure Resource Manager object that defines the schedules for scaling session hosts. A few rules from Learn shape the design:
+A [scaling plan](https://www.m365.fm/entity/avd-scaling-plan/) is an Azure Resource Manager object that defines the schedules for scaling session hosts. A few rules from Learn shape the design:
 
 - One plan can be assigned to several host pools, but only to pools of the type set in the plan, pooled or personal.
 - Plan configuration data must be stored in the same Azure region as the host pool configuration. The session host VMs themselves can be in other regions.
@@ -86,7 +86,7 @@ In off-peak, the minimum percentage of hosts keeps capacity on. The create-and-a
 
 ## Personal host pools
 
-A personal schedule has no capacity threshold. Each phase acts on sessions that were **disconnected** or **signed out** for 0 to 360 minutes: deallocate, hibernate or do nothing. In ramp-up you choose which VMs to start: assigned only, assigned and unassigned, or none. If autoscale does not start personal desktops, the FAQ says to enable [Start VM on Connect](/entity/avd-start-vm-on-connect/) or start them yourself.
+A personal schedule has no capacity threshold. Each phase acts on sessions that were **disconnected** or **signed out** for 0 to 360 minutes: deallocate, hibernate or do nothing. In ramp-up you choose which VMs to start: assigned only, assigned and unassigned, or none. If autoscale does not start personal desktops, the FAQ says to enable [Start VM on Connect](https://www.m365.fm/entity/avd-start-vm-on-connect/) or start them yourself.
 
 ## Setting it up
 
@@ -94,7 +94,7 @@ The step-by-step procedure is in the article "How to create and assign an AVD sc
 
 1. **Role scope.** Assign **Desktop Virtualization Power On Off Contributor** at subscription level. The create-and-assign page says a lower scope prevents autoscale from working properly, while the troubleshooting page also lists host pool and resource group scope; follow the create-and-assign page. For PowerShell, that page requires `Az.DesktopVirtualization` 4.2.0 or later.
 2. **Weekend.** Off-peak settings of the last selected day carry over to unselected days, so a Monday-to-Friday plan holds Friday's off-peak settings through the weekend.
-3. **Diagnostics.** Autoscale logs can go to a storage account or an event hub. For pooled pools Microsoft recommends the autoscale data in [Insights](/entity/avd-insights/).
+3. **Diagnostics.** Autoscale logs can go to a storage account or an event hub. For pooled pools Microsoft recommends the autoscale data in [Insights](https://www.m365.fm/entity/avd-insights/).
 
 ## When to use it, and when not
 

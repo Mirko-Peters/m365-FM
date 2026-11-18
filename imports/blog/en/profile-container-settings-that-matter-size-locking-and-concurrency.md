@@ -7,10 +7,10 @@ author: mirko-p
 date: 2026-11-18
 topics: [fslogix-profile-container, fslogix]
 keypoints:
-  - "SizeInMBs (default 30000) is the ceiling for a container. You can raise it at any time but not lower it, and IsDynamic (default 1) only controls how much disk space is allocated up front, not how large the container may grow."
-  - "Learn's FAQ advises planning for at least 30% free space in a container and watching for warning events at less than 2 GB and less than 500 MB free. The FAQ says container size does not affect sign-in time; the Insights glossary says large profile sizes can slow launch times, so measure on your own hosts."
-  - "FSLogix keeps an exclusive lock on the container while the user is connected. LockedRetryCount and LockedRetryInterval only decide how long FSLogix retries when a VHD(x) is locked; they do not make two sessions share the file."
-  - "Concurrent connections (second session on the same computer) are not supported on Azure Virtual Desktop session hosts. Multiple connections (sessions on different computers) need differencing disks and ProfileType 3, and Learn's configuration examples list separate pools of virtual machines for multiple connections and say Azure Virtual Desktop does not support them within the same host pool."
+  - "SizeInMBs (default 30000) is the container's ceiling; you can raise it but not lower it. IsDynamic (default 1) controls up-front allocation, not maximum size."
+  - "Learn advises at least 30% free space in a container and warns at less than 2 GB and 500 MB free. Learn's pages differ on whether container size affects sign-in time, so measure."
+  - "FSLogix locks the container exclusively while the user is connected. LockedRetryCount and LockedRetryInterval only set retries on a locked VHD(x); they do not allow sharing."
+  - "Concurrent connections (second session on the same computer) are not supported on AVD hosts. Multiple connections need differencing disks and ProfileType 3, and not within one host pool."
   - "VHD disk compaction runs at sign-out for dynamic containers over 1 GB with at least 20% recoverable space, for up to 5 minutes. A reconnect during compaction finds the disk in use."
 faq:
   - q: "Can I make a profile container smaller by lowering SizeInMBs?"
@@ -23,11 +23,11 @@ faq:
 
 A profile container has a size ceiling, an exclusive lock and, by default, one connection per user. Three groups of settings control those behaviors: SizeInMBs and IsDynamic for size, the LockedRetry values for locking (plus ReAttach for unexpected disconnects), and ProfileType for concurrency. It covers free-space planning, the compaction rule, lock wait arithmetic and the concurrency cases, with the values Microsoft Learn gives.
 
-For Group Policy templates, the full settings list and recovery, see the site's articles on [FSLogix Group Policy settings](/community/u/mirko-p/blog/fslogix-group-policy-settings-that-matter-most/), [profile corruption](/community/u/mirko-p/blog/fslogix-profile-corruption-causes-and-recovery/) and [users who get a local profile](/community/u/mirko-p/blog/fslogix-users-get-local-profile-instead-of-container/).
+For Group Policy templates, the full settings list and recovery, see the site's articles on [FSLogix Group Policy settings](https://www.m365.fm/community/u/mirko-p/blog/fslogix-group-policy-settings-that-matter-most/), [profile corruption](https://www.m365.fm/community/u/mirko-p/blog/fslogix-profile-corruption-causes-and-recovery/) and [users who get a local profile](https://www.m365.fm/community/u/mirko-p/blog/fslogix-users-get-local-profile-instead-of-container/).
 
 ## Size: the ceiling
 
-The [profile container](/entity/fslogix-profile-container/) is a VHD(x) file, and its maximum size comes from Learn's [configuration reference](https://learn.microsoft.com/en-us/fslogix/reference-configuration-settings?tabs=profiles). SizeInMBs defaults to 30000. New containers are created at that size and existing ones are extended to it at sign-in. You can increase it at any time but not decrease it, and lowering it does not shrink existing containers. IsDynamic defaults to 1, a file that grows on disk as needed; 0 means a fixed size that is fully allocated. VHDCompactDisk defaults to 1 and tries to compact the VHD at sign-out.
+The [profile container](https://www.m365.fm/entity/fslogix-profile-container/) is a VHD(x) file, and its maximum size comes from Learn's [configuration reference](https://learn.microsoft.com/en-us/fslogix/reference-configuration-settings?tabs=profiles). SizeInMBs defaults to 30000. New containers are created at that size and existing ones are extended to it at sign-in. You can increase it at any time but not decrease it, and lowering it does not shrink existing containers. IsDynamic defaults to 1, a file that grows on disk as needed; 0 means a fixed size that is fully allocated. VHDCompactDisk defaults to 1 and tries to compact the VHD at sign-out.
 
 Learn states that IsDynamic set to 1 does not let a container grow beyond SizeInMBs. If a user outgrows the limit, the user sees errors. Dynamic therefore saves storage; it does not give headroom.
 
@@ -41,7 +41,7 @@ Learn's [FSLogix FAQ](https://learn.microsoft.com/en-us/fslogix/overview-faq) sa
 
 On sign-in time, Learn's pages differ. The FAQ answers "No" to whether container size affects sign-in performance. The [Insights glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/insights-glossary) says that how long profile loading takes depends on user profile size, and that large profile sizes can slow launch times. The pages do not reconcile this, so measure sign-in on your own hosts.
 
-With the [Office container](/entity/fslogix-office-container/) in a dual-container setup, both containers carry their own SizeInMBs, which also defaults to 30000. In our reading, splitting therefore lifts the combined ceiling per user; set the two values deliberately.
+With the [Office container](https://www.m365.fm/entity/fslogix-office-container/) in a dual-container setup, both containers carry their own SizeInMBs, which also defaults to 30000. In our reading, splitting therefore lifts the combined ceiling per user; set the two values deliberately.
 
 ### Compaction and what it needs
 
@@ -62,11 +62,11 @@ A repeat sign-in inside one pooled host pool usually does not reach that lock. L
 
 LockedRetryCount × LockedRetryInterval defaults to 12 × 5 s, about 60 s of retrying by our multiplication. Learn's recommended value is 3 × 15 s, about 45 s. The recommended values appear in Learn's [configuration examples](https://learn.microsoft.com/en-us/fslogix/concepts-configuration-examples) and in its [how-to for configuring profile containers](https://learn.microsoft.com/en-us/fslogix/how-to-configure-profile-containers), which describes them as decreasing the retry timing to enable a faster fail scenario. Treat both results as estimates and measure on your own hosts.
 
-ReAttachRetryCount × ReAttachIntervalSeconds (default 60 × 10 s, recommended 3 × 15 s) applies when a container disconnects unexpectedly, not to a second sign-in. The [Group Policy article](/community/u/mirko-p/blog/fslogix-group-policy-settings-that-matter-most/) lists the same values next to other settings.
+ReAttachRetryCount × ReAttachIntervalSeconds (default 60 × 10 s, recommended 3 × 15 s) applies when a container disconnects unexpectedly, not to a second sign-in. The [Group Policy article](https://www.m365.fm/community/u/mirko-p/blog/fslogix-group-policy-settings-that-matter-most/) lists the same values next to other settings.
 
-Two related settings, **PreventLoginWithFailure** and **PreventLoginWithTempProfile** (both default 0), decide what the user sees when the wait ends. Set to 1, FSLogix loads the FRXShell and the user's only option is to sign out. Learn's lock page spells the first one PreventLogonWithFailure; the reference spells it PreventLoginWithFailure, so use the reference name in your policy. Which is better, a visible failure or a temporary profile, is a policy choice. A temporary profile lets the user keep working but is not the user's container; blocking sign-in avoids that and, in our reading, creates helpdesk calls. The [local profile article](/community/u/mirko-p/blog/fslogix-users-get-local-profile-instead-of-container/) covers the symptom in detail.
+Two related settings, **PreventLoginWithFailure** and **PreventLoginWithTempProfile** (both default 0), decide what the user sees when the wait ends. Set to 1, FSLogix loads the FRXShell and the user's only option is to sign out. Learn's lock page spells the first one PreventLogonWithFailure; the reference spells it PreventLoginWithFailure, so use the reference name in your policy. Which is better, a visible failure or a temporary profile, is a policy choice. A temporary profile lets the user keep working but is not the user's container; blocking sign-in avoids that and, in our reading, creates helpdesk calls. The [local profile article](https://www.m365.fm/community/u/mirko-p/blog/fslogix-users-get-local-profile-instead-of-container/) covers the symptom in detail.
 
-A different lock cause is a session that ended abruptly, so the VHD(x) is not cleanly detached and the next sign-in may not be able to attach it. For that, Learn's lock page points to **CleanupInvalidSessions** (default 0), but also says to prioritize environmental or system issues that address the root cause rather than the symptom. The [profile corruption article](/community/u/mirko-p/blog/fslogix-profile-corruption-causes-and-recovery/) covers abrupt session ends.
+A different lock cause is a session that ended abruptly, so the VHD(x) is not cleanly detached and the next sign-in may not be able to attach it. For that, Learn's lock page points to **CleanupInvalidSessions** (default 0), but also says to prioritize environmental or system issues that address the root cause rather than the symptom. The [profile corruption article](https://www.m365.fm/community/u/mirko-p/blog/fslogix-profile-corruption-causes-and-recovery/) covers abrupt session ends.
 
 ## Concurrency: standard, concurrent and multiple connections
 
@@ -78,7 +78,7 @@ Learn's [concurrent and multiple connections page](https://learn.microsoft.com/e
 | Concurrent | A second session for the same user on the same computer | Extra registry entries; not supported on session hosts in an Azure Virtual Desktop host pool |
 | Multiple | A new session on a different computer for the same user | Differencing disks only; the configuration examples page says Azure Virtual Desktop does not support multiple connections within the same host pool |
 
-On [Azure Virtual Desktop](/entity/azure-virtual-desktop/), concurrent connections are out. For multiple connections, Example 6 lists separate pools of virtual machines as a prerequisite and says multiple connections within the same host pool are not supported. The concurrent and multiple connections page names the Azure Virtual Desktop limit only for concurrent connections, and the two pages do not reconcile this. Example 6 is also inconsistent: a table says ProfileType 3 while the registry tables show 0. Check the live page before copying a value.
+On [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/), concurrent connections are out. For multiple connections, Example 6 lists separate pools of virtual machines as a prerequisite and says multiple connections within the same host pool are not supported. The concurrent and multiple connections page names the Azure Virtual Desktop limit only for concurrent connections, and the two pages do not reconcile this. Example 6 is also inconsistent: a table says ProfileType 3 while the registry tables show 0. Check the live page before copying a value.
 
 ### ProfileType values
 
@@ -93,7 +93,7 @@ Learn's guidance: sessions that use the VHD concurrently should have matching Pr
 
 With ProfileType 3, the first client takes the read/write role, and the read/write difference disk RW.VHD(x) sits next to the parent file on the share. Later clients take the read-only role, with a local difference disk named %usersid%_RO.VHD(x) in the temp directory. Learn says merges can be interrupted and continued, and only happen when no open handles remain on either disk. The concurrent and multiple connections page describes the read-only difference disk and the merge rules but not what happens to changes made in a read-only session, and Example 6 on the configuration examples page says only that one session allows writes to the base VHD disk. Test the behavior before promising users anything. The reference describes DiffDiskParentFolderPath (default %TEMP%) as the path where difference disks are created; neither page says how that relates to the RW disk's location on the share.
 
-The Office container uses a different setting, VHDAccessMode, with its own values and a session-VHD cap of 10; the [Office container article](/community/u/mirko-p/blog/fslogix-office-container-when-to-separate-office-data-from-the-profile/) covers it. For both container types, Learn is explicit that OneDrive does not support concurrent or multiple connections to the same container. For Cloud Cache, the FAQ's sign-out guidance says not to use ProfileType = 3 or VHDAccessMode = 1, 2 or 3.
+The Office container uses a different setting, VHDAccessMode, with its own values and a session-VHD cap of 10; the [Office container article](https://www.m365.fm/community/u/mirko-p/blog/fslogix-office-container-when-to-separate-office-data-from-the-profile/) covers it. For both container types, Learn is explicit that OneDrive does not support concurrent or multiple connections to the same container. For Cloud Cache, the FAQ's sign-out guidance says not to use ProfileType = 3 or VHDAccessMode = 1, 2 or 3.
 
 ## A short pilot plan
 

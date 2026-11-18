@@ -43,13 +43,13 @@ The Optimized banners carry no error code, so use the hover text there. An endpo
 Learn names error 2000 ("No Plugin"; logged as 16002) and 2003 (a Citrix Studio policy blocks the virtual channels; logged as 16026) as the most likely causes. WebRTC is not a lasting state on Windows endpoints: Learn lists end of support on 1 October 2026 and end of availability on 1 April 2027, when WebRTC stops working and a user who fails to optimize falls back to server-side rendering. On Azure Virtual Desktop, check code 2000:
 
 1. On the endpoint, start Process Explorer, enable the lower pane and open the DLL tab.
-2. Select `msrdc.exe` and confirm `MsTeamsPluginAvd.dll` is loaded. The plugin ships with the [Windows App](/entity/windows-app/).
+2. Select `msrdc.exe` and confirm `MsTeamsPluginAvd.dll` is loaded. The plugin ships with the [Windows App](https://www.m365.fm/entity/windows-app/).
 3. Restart Teams. One restart moves WebRTC to SlimCore when the plugin is first detected.
 4. If it persists, look for Microsoft Teams VDI errors in Event Viewer on the VM (Teams 24123.X.X.X or higher). To filter by that source, first run `New-EventLog -LogName Application -Source "Microsoft Teams VDI"` in elevated PowerShell, then filter Windows Logs, Application by Event ID 0.
 
 Two more codes explain permanent WebRTC:
 
-- **2005** (logged as 16043): Teams runs as a [RemoteApp](/entity/avd-remoteapp/) and the user does not meet the minimum version, so SlimCore is not loaded and the user is always on WebRTC. Microsoft's VDI 2.0 article lists Windows App 2.0.964.0 and Teams 26043.2016.4478.2773 for RemoteApp without a preview label, while the supported-features article labels it preview.
+- **2005** (logged as 16043): Teams runs as a [RemoteApp](https://www.m365.fm/entity/avd-remoteapp/) and the user does not meet the minimum version, so SlimCore is not loaded and the user is always on WebRTC. Microsoft's VDI 2.0 article lists Windows App 2.0.964.0 and Teams 26043.2016.4478.2773 for RemoteApp without a preview label, while the supported-features article labels it preview.
 - **2008** (logged as 16066): the Windows App for Mac comes from the App Store, which is not supported. Only the non-Store build works.
 
 ## Case B: SlimCore Media Not Connected
@@ -110,10 +110,10 @@ Check the engine first: Learn says WebRTC does not support 1080p, QoS, user-uplo
 
 - **Incoming video or screen sharing missing**: WebRTC users do not see it on Windows 11 24H2 or 25H2 (26100.6725 and 26200.6725 or higher) when UAC is disabled. The workaround is to enable UAC on the VM.
 - **Video streams that sometimes do not appear**: fixed in WebRTC Redirector Service 1.54.2408.19001. Version 1.56.2603.20001 (17 September 2026) fixes the wrong shared monitor in a Teams RemoteApp and clipped video on rotating devices.
-- **Black screen when sharing**: with [screen capture protection](/entity/avd-screen-capture-protection/), Learn requires Teams 25060.205.3499.6849 and Remote Desktop client 1.2.6081 or Windows App 2.0.379. Lower versions share a black screen.
+- **Black screen when sharing**: with [screen capture protection](https://www.m365.fm/entity/avd-screen-capture-protection/), Learn requires Teams 25060.205.3499.6849 and Remote Desktop client 1.2.6081 or Windows App 2.0.379. Lower versions share a black screen.
 - **Redirector service missing**: not pre-installed on marketplace images 22631.3593 and 22621.3593. Install it or use a newer image.
 
-Browser video uses [multimedia redirection](/entity/avd-multimedia-redirection/), a separate feature.
+Browser video uses [multimedia redirection](https://www.m365.fm/entity/avd-multimedia-redirection/), a separate feature.
 
 ## Network and sign-in effects
 
@@ -125,7 +125,7 @@ In the Call Quality Dashboard, Learn calls "Second Client VDI Is Optimized" the 
 
 ## Fallback control
 
-Teams 24257.x.x.x or higher reads the `DisableFallback` DWORD under `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Teams`. Value 1 disables fallback, 2 enables audio only, and 0 or absent leaves it enabled. With fallback on, an unoptimized user can still join; media is rendered on the [session host](/entity/avd-session-host/).
+Teams 24257.x.x.x or higher reads the `DisableFallback` DWORD under `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Teams`. Value 1 disables fallback, 2 enables audio only, and 0 or absent leaves it enabled. With fallback on, an unoptimized user can still join; media is rendered on the [session host](https://www.m365.fm/entity/avd-session-host/).
 
 ## Sources
 

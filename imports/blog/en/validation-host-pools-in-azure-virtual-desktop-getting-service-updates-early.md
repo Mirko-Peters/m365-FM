@@ -7,11 +7,11 @@ author: mirko-p
 date: 2026-11-18
 topics: [avd-validation-environment, avd-host-pool]
 keypoints:
-  - "A validation host pool is an ordinary host pool with the validation environment property set to Yes. Learn says service updates are applied there first, so you can see changes before they reach your standard environment."
-  - "The Azure Virtual Desktop agent and the SxS Network Stack each have a Validation and a Production release line. In the release notes, matching validation and production entries for the same changes are dated between zero and two calendar months apart in the cases listed here, and Learn states no fixed lead time."
-  - "Learn says the validation pool should be as similar as possible to the standard pools and that users should connect as often as to the standard pool. If you already run automated tests on a host pool, Learn says to include them on the validation pool too. It also says validation pools should be used only for testing, not in production."
+  - "A validation host pool is a host pool with the validation environment property set to Yes. Service updates are applied there first, before your standard environment."
+  - "The AVD agent and SxS Network Stack each have Validation and Production release lines. Matching entries are dated zero to two months apart here; Learn states no fixed lead time."
+  - "Learn says the validation pool should mirror standard pools, get regular use and run your automated tests, and should be used only for testing, not in production."
   - "Enabling it needs the Desktop Virtualization Host Pool Contributor role at minimum, and it takes one property change in the portal, Azure PowerShell or Azure CLI."
-  - "It does not test your own images, applications or Windows updates by itself, and a host pool with scheduled agent updates receives non-critical agent updates only after full flighting to production, so that setting works against early warning."
+  - "It does not test your own images, apps or Windows updates, and a pool with scheduled agent updates gets non-critical agent updates only after full flighting, which works against early warning."
 faq:
   - q: "Can I use one of my production host pools as the validation host pool?"
     a: "Learn says validation host pools should only be used for testing, and not in production environments. It also says users should connect to the validation pool as frequently as to the standard pool. Our reading: build a separate pool that mirrors production and give it representative test users, instead of switching the flag on a pool that carries real production work."
@@ -21,7 +21,7 @@ faq:
     a: "An existing host pool and, at minimum, the Desktop Virtualization Host Pool Contributor built-in role on that host pool. In the Azure portal, open the host pool, select Properties, set the validation environment field to Yes and select Save. Learn also gives Azure PowerShell and Azure CLI commands, shown below."
 ---
 
-A validation host pool is a normal Azure Virtual Desktop [host pool](/entity/avd-host-pool/) that has the validation environment property switched on. Learn says the service applies updates to it first, so you can see a change that introduces errors before it reaches your standard host pools and users.
+A validation host pool is a normal Azure Virtual Desktop [host pool](https://www.m365.fm/entity/avd-host-pool/) that has the validation environment property switched on. Learn says the service applies updates to it first, so you can see a change that introduces errors before it reaches your standard host pools and users.
 
 ## What Learn says a validation host pool is
 
@@ -35,7 +35,7 @@ Three points from that article:
 
 ## What reaches the validation pool first
 
-The clearest public trace is in the release notes for the two components the service updates on a [session host](/entity/avd-session-host/). Learn's [agent release notes](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new-agent) say new agent versions are rolled out progressively, a process called flighting, which lets Microsoft monitor the rollout in validation environments first. The [SxS Network Stack release notes](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new-sxs) say the same for the stack.
+The clearest public trace is in the release notes for the two components the service updates on a [session host](https://www.m365.fm/entity/avd-session-host/). Learn's [agent release notes](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new-agent) say new agent versions are rolled out progressively, a process called flighting, which lets Microsoft monitor the rollout in validation environments first. The [SxS Network Stack release notes](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new-sxs) say the same for the stack.
 
 Both pages keep a "Latest available versions" table with one row for Production and one for Validation. As of 17 November 2026 the agent page listed 1.0.15732.100 for Production and 1.0.15991.300 for Validation. The stack page listed 1.0.2607.31825 for Production and 1.0.2610.08300 for Validation. Version numbers change often, so read the tables on the day you check.
 
@@ -104,7 +104,7 @@ az desktopvirtualization hostpool update --name "MyHostPool" \
 
 The setting alone only changes when a pool receives updates. The signal comes from what you do with the pool. Learn recommends three things: make the pool as similar to production as possible, connect to it as often as to the standard pool, and, if you have automated testing on your host pool, include it on the validation pool. Our reading of what that means in practice:
 
-- Same ingredients as production. Use the same image source and version, the same applications, the same profile setup such as [FSLogix](/entity/fslogix/), and the same policies. A validation pool built differently will miss problems that production has.
+- Same ingredients as production. Use the same image source and version, the same applications, the same profile setup such as [FSLogix](https://www.m365.fm/entity/fslogix/), and the same policies. A validation pool built differently will miss problems that production has.
 - Representative users, used regularly. Learn asks for connections as frequent as the standard pool. Pick test users from the groups that use production daily, because a pool nobody signs in to cannot show a regression.
 - A fixed check after each new version. Compare the agent version on the validation hosts with the Validation row of the release notes (a difference is not necessarily a fault, because Learn says several versions can be in circulation in validation and production while a rollout runs), sign in as a test user, start the applications that matter and check the connection.
 - A place to look when an update fails. Learn's [agent overview](https://learn.microsoft.com/en-us/azure/virtual-desktop/agent-overview) says that in Event Viewer under Windows Logs, then Application, an event labeled "ID 3277" means the agent update did not work. If you do not see that event, the VM is in a different flight and will be updated later.
@@ -113,16 +113,16 @@ The agent overview also says agent updates are not connected to Azure Virtual De
 
 ## What a validation pool does not do
 
-- **It does not test your own changes.** Our reading: an image, application or Windows update you build needs its own test host pool. If you use a [session host configuration](/entity/avd-session-host-configuration/), that test pool is a second pool next to the validation pool.
+- **It does not test your own changes.** Our reading: an image, application or Windows update you build needs its own test host pool. If you use a [session host configuration](https://www.m365.fm/entity/avd-session-host-configuration/), that test pool is a second pool next to the validation pool.
 - **It does not tell you the lead time.** Learn says rollouts can take several weeks and gives no guaranteed interval before production.
 - **It does not announce changes.** Learn's validation article points to the agent release notes as the way to keep up with updates, so someone has to read them.
 - **It does not undo a bad update.** Learn's agent overview says a VM keeps three versions of the agent and of the side-by-side stack, which allows quick recovery if something goes wrong with an update. Our reading: that is a separate mechanism from the validation pool.
 
 ## Scheduled agent updates change the picture
 
-[Scheduled agent updates](/entity/avd-scheduled-agent-updates/) restrict non-critical agent component updates to maintenance windows you define. Learn's [scheduled agent updates article](https://learn.microsoft.com/en-us/azure/virtual-desktop/scheduled-agent-updates) says host pools with the feature enabled receive the agent update after the agent has been fully flighted to production. It also says critical agent component updates are installed by force for security.
+[Scheduled agent updates](https://www.m365.fm/entity/avd-scheduled-agent-updates/) restrict non-critical agent component updates to maintenance windows you define. Learn's [scheduled agent updates article](https://learn.microsoft.com/en-us/azure/virtual-desktop/scheduled-agent-updates) says host pools with the feature enabled receive the agent update after the agent has been fully flighted to production. It also says critical agent component updates are installed by force for security.
 
-Our reading: if you enable scheduled agent updates on the validation pool, it waits for the production flight and no longer gives early warning. Keep the validation pool on the default flighting behaviour and use maintenance windows on the production pools. Write the difference in [agent](/entity/avd-agent/) update behaviour between the pools into your runbook.
+Our reading: if you enable scheduled agent updates on the validation pool, it waits for the production flight and no longer gives early warning. Keep the validation pool on the default flighting behaviour and use maintenance windows on the production pools. Write the difference in [agent](https://www.m365.fm/entity/avd-agent/) update behaviour between the pools into your runbook.
 
 ## Sources
 

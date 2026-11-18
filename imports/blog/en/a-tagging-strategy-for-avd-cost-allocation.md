@@ -1,16 +1,16 @@
 ---
 title: "A tagging strategy for AVD cost allocation"
-summary: "Tag every cost-bearing Azure Virtual Desktop resource with a small fixed schema and enforce it, because Azure does not copy tags from resource groups to resources on its own. This article compares three ways to get tags onto usage data: creation-time tags, Azure Policy and Cost Management tag inheritance."
+summary: "Tag every cost-bearing Azure Virtual Desktop resource with a small fixed schema and enforce it, because Azure does not copy resource group tags to resources. Compared here: creation-time tags, Azure Policy and tag inheritance."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
-topics: [azure-virtual-desktop, showback-chargeback]
+topics: [azure-virtual-desktop, showback, chargeback]
 keypoints:
-  - "Resources do not inherit tags from a resource group or subscription. The AVD tagging article describes host pool tags reaching session hosts in the portal workflow, where tags must be entered again for each host added later, and does not say how this works for hosts created by automation: verify, or enforce with policy."
+  - "Resources do not inherit tags from a resource group or subscription. Host pool tags reach session hosts only in the portal workflow, so enforce tags with policy for hosts created by automation."
   - "Session host entries under a host pool cannot be tagged. The tag belongs on the VM, and on the shared storage and monitoring resources that exist once per deployment, not once per host."
-  - "Three mechanisms can put a tag on cost data: tags set at creation, an Azure Policy Modify definition, and Cost Management tag inheritance. They differ in what they change, which agreements they cover and how fast they work."
-  - "A resource tag reaches cost data only while it is applied and after the resource reports usage; cost data is typically available in 8 to 24 hours on EA and MCA and up to 72 hours on pay-as-you-go. Tag inheritance updates the current month."
+  - "Three mechanisms put a tag on cost data: tags set at creation, an Azure Policy Modify definition and Cost Management tag inheritance. They differ in what they change, scope and speed."
+  - "A tag reaches cost data only while applied and after the resource reports usage: typically 8 to 24 hours on EA and MCA, up to 72 hours on pay-as-you-go. Tag inheritance updates the current month."
   - "Keep keys lowercase and values from a fixed list: tag names are case-insensitive, but Production and production are different values and appear as separate rows."
 faq:
   - q: "Do I tag the host pool or the virtual machines?"
@@ -25,7 +25,7 @@ Tag every cost-bearing resource of an Azure Virtual Desktop deployment with a sm
 
 ## What a tag can and cannot do here
 
-[Azure resource tags](/entity/azure-resource-tags/) are name-value pairs on resources, resource groups and subscriptions, but not on management groups. Learn gives these limits: 50 name-value pairs per entity, a name of up to 512 characters and a value of up to 256 characters (storage accounts allow 128 characters for the name), and the characters `<`, `>`, `%`, `&`, `\`, `?` and `/` are not allowed in names. Tags are stored as plain text, so keep sensitive values out.
+[Azure resource tags](https://www.m365.fm/entity/azure-resource-tags/) are name-value pairs on resources, resource groups and subscriptions, but not on management groups. Learn gives these limits: 50 name-value pairs per entity, a name of up to 512 characters and a value of up to 256 characters (storage accounts allow 128 characters for the name), and the characters `<`, `>`, `%`, `&`, `\`, `?` and `/` are not allowed in names. Tags are stored as plain text, so keep sensitive values out.
 
 Two rules shape the whole strategy. First, "Resources don't inherit the tags you apply to a resource group or a subscription." Second, Cost Management reads tags from usage records: tags are included in usage data only while the tag is applied to the resource, they are not applied to historical data, and a resource must be active and producing usage records for the tag to appear.
 
@@ -58,7 +58,7 @@ The Framework treats tag names as case-insensitive and values as case-sensitive,
 | Azure Policy Modify definition | The resource's own tags when it is created or updated | Can be fixed by a remediation task | Needs a managed identity for remediation |
 | Cost Management tag inheritance | Usage records only, not the resources | Current month only | EA, MCA and MPA billing accounts listed |
 
-**Azure Policy.** [Azure Policy](/entity/azure-policy/) has built-in tag definitions. Modify definitions such as "Inherit a tag from the resource group if missing" add the tag from the parent resource group when a resource is created or updated, and do not change a tag that already has a different value. "Inherit a tag from the resource group" adds or replaces it. Append definitions only act on resources created or changed after assignment. Deny definitions such as "Require a tag on resources" enforce that the tag exists, and "Require a tag and its value on resources" enforces the value too; both exclude resource groups. Learn says existing resources can be remediated by triggering a remediation task, and that policy assignments use a managed identity for remediation (system-assigned or user-assigned). Built-in definitions come with their roles pre-populated.
+**Azure Policy.** [Azure Policy](https://www.m365.fm/entity/azure-policy/) has built-in tag definitions. Modify definitions such as "Inherit a tag from the resource group if missing" add the tag from the parent resource group when a resource is created or updated, and do not change a tag that already has a different value. "Inherit a tag from the resource group" adds or replaces it. Append definitions only act on resources created or changed after assignment. Deny definitions such as "Require a tag on resources" enforce that the tag exists, and "Require a tag and its value on resources" enforces the value too; both exclude resource groups. Learn says existing resources can be remediated by triggering a remediation task, and that policy assignments use a managed identity for remediation (system-assigned or user-assigned). Built-in definitions come with their roles pre-populated.
 
 **Cost Management tag inheritance.** It applies billing, subscription and resource group tags to the usage records of child resources, so you do not need to tag every resource. Learn lists Enterprise Agreement, Microsoft Customer Agreement and Microsoft Partner Agreement billing accounts with Azure plan subscriptions; the page does not mention pay-as-you-go. Updates take about 8 to 24 hours and apply to the current month; the page's example is a setting enabled on 20 October that updates usage from 1 October with the tags that existed on 20 October. By default a matching resource tag wins over the inherited one. Learn says inherited tags go to the usage records, not to the resources themselves; our reading is that a resource query will not show them as resource tags.
 

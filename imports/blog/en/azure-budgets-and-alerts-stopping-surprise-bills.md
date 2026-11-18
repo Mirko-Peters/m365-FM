@@ -9,8 +9,8 @@ topics: [azure-budgets, microsoft-cost-management]
 keypoints:
   - "A budget is a notification tool. Learn says that when a threshold is met, resources are not affected and consumption is not stopped."
   - "Per the portal tutorial, a budget needs at least one threshold and one email address and allows up to five of each. Thresholds run from 0.01% to 1000%, and can be based on actual or forecasted cost."
-  - "Alerts are not real time: cost data is typically available within 8 to 24 hours, budgets are evaluated every 24 hours, and emails normally follow within an hour of the evaluation. A different Learn page says recipients get alerts within 24 hours of crossing the threshold."
-  - "Learn calls action groups the only endpoint you integrate with a budget, and they are supported only at subscription and resource group scope. They can call runbooks, Functions, Logic Apps and webhooks."
+  - "Alerts are not real time: cost data typically arrives within 8 to 24 hours, budgets are evaluated every 24 hours, and emails normally follow within an hour of evaluation."
+  - "Learn calls action groups the only endpoint you integrate with a budget, supported only at subscription and resource group scope. They can call runbooks, Functions, Logic Apps and webhooks."
   - "A budget resets monthly, quarterly or annually, and Learn says it is deleted automatically when its expiration date passes, so check the end date."
 faq:
   - q: "Does an Azure budget stop my virtual machines when the limit is reached?"
@@ -27,13 +27,13 @@ This article covers what a budget is, how it evaluates cost, which other cost al
 
 ## What a budget is
 
-Budgets are a feature of [Microsoft Cost Management](/entity/microsoft-cost-management/), the suite of FinOps tools for analysing, monitoring and optimising Microsoft cloud costs. Learn says [Azure budgets](/entity/azure-budgets/) help you plan for and drive organizational accountability, proactively inform others about their spending and monitor how spending progresses over time. You can base alerts on actual or forecasted cost.
+Budgets are a feature of [Microsoft Cost Management](https://www.m365.fm/entity/microsoft-cost-management/), the suite of FinOps tools for analysing, monitoring and optimising Microsoft cloud costs. Learn says [Azure budgets](https://www.m365.fm/entity/azure-budgets/) help you plan for and drive organizational accountability, proactively inform others about their spending and monitor how spending progresses over time. You can base alerts on actual or forecasted cost.
 
 A budget is created for a scope. Learn lists these:
 
 | Agreement type | Scopes |
 |---|---|
-| Azure RBAC | [Management group](/entity/azure-management-group/), [subscription](/entity/azure-subscription/), [resource group](/entity/azure-resource-group/) |
+| Azure RBAC | [Management group](https://www.m365.fm/entity/azure-management-group/), [subscription](https://www.m365.fm/entity/azure-subscription/), [resource group](https://www.m365.fm/entity/azure-resource-group/) |
 | Enterprise Agreement | Billing account, department, enrollment account |
 | Individual agreements | Billing account |
 | Microsoft Customer Agreement | Billing account, billing profile, invoice section, customer |

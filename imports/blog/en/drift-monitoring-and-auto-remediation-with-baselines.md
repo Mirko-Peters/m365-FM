@@ -1,17 +1,17 @@
 ---
 title: "Drift monitoring and auto-remediation with baselines"
-summary: "In Nerdio Manager for MSP, drift on a solution baseline shows up as a Mismatch or Unavailable setting on the baseline's status page. This guide covers a monitored rollout from Report-only to Enforce, triage of Unavailable states, accepting drift on purpose, and what Nerdio's documentation does and does not say about auto-remediation."
+summary: "In Nerdio Manager for MSP, drift on a solution baseline shows as a Mismatch or Unavailable setting. This guide covers a rollout from Report-only to Enforce, triage, accepted drift and auto-remediation."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [nerdio-solution-baselines, nerdio-manager-for-msp]
 keypoints:
-  - "On a solution baseline, drift means a setting is Mismatch or Unavailable. Nerdio shows drift red when the baseline is enforced and amber when it is not, and the status page lists the setting per account."
-  - "Nerdio's 2024 announcement says solution baselines can be configured to auto-remediate drift. The current help pages document Enforce, which applies the baseline to assigned accounts, and re-applying the baseline for a Mismatch. They do not say whether or how often Nerdio corrects drift on its own, so test the behaviour on one account."
+  - "Drift means a baseline setting is Mismatch or Unavailable. Nerdio shows it red when the baseline is enforced, amber when not, and lists the setting per account."
+  - "Nerdio's 2024 announcement mentions auto-remediation of drift; current help pages document Enforce and re-applying, but not whether Nerdio corrects drift on its own. Test it on one account."
   - "A safe rollout assigns in Report-only mode with Process after saving cleared, reads the status page, resolves or accepts each difference, and only then switches the assignment to Enforce."
-  - "Unavailable has named reasons (Loading Failed, Invalid Configuration, Prerequisites Not Met, API Check Error, API Apply Error, Unknown). Nerdio names a next step for only three of them; the other steps in this article are our suggestions."
-  - "Accepted drift carries an expiry setting, can carry a description and an Allow processing flag, and is meant for deliberate exceptions, such as a customer whose own standard differs from the baseline value."
+  - "Unavailable has six named reasons, from Loading Failed to Unknown. Nerdio names a next step for only three; the other steps in this article are our suggestions."
+  - "Accepted drift has an expiry setting, an optional description and an Allow processing flag, for deliberate exceptions such as a customer whose standard differs from the baseline."
 faq:
   - q: "Does Nerdio Manager for MSP fix drift on a solution baseline automatically?"
     a: "Nerdio's 2024 announcement says baselines can be configured to auto-remediate drift by forcing the correct setting, and the help center says Enforce mode applies the baseline to assigned accounts and that a Mismatch is resolved by re-applying the baseline. Whether Enforce re-corrects drift continuously, and at what interval, is not documented in Nerdio's solution baseline help pages, so verify on a test account how soon a changed setting is detected and corrected."
@@ -21,9 +21,9 @@ faq:
     a: "Select Accept Drift on the setting, choose an expiry from the drop-down or enter a date, add a description and decide whether to Allow processing on the next republish. The setting stays in the drifted group with the status Accepted drift, and you can remove the acceptance later."
 ---
 
-On a solution baseline in [Nerdio Manager for MSP](/entity/nerdio-manager-for-msp/), [configuration drift](/entity/configuration-drift/) means a setting is shown as Mismatch or Unavailable on the baseline's status page. Nerdio's help pages describe Enforce mode as applying the baseline to assigned accounts, and re-applying the baseline as the response to a Mismatch. Our suggested order is to assign in Report-only mode, read the status, resolve or accept each difference, and then switch to Enforce.
+On a solution baseline in [Nerdio Manager for MSP](https://www.m365.fm/entity/nerdio-manager-for-msp/), [configuration drift](https://www.m365.fm/entity/configuration-drift/) means a setting is shown as Mismatch or Unavailable on the baseline's status page. Nerdio's help pages describe Enforce mode as applying the baseline to assigned accounts, and re-applying the baseline as the response to a Mismatch. Our suggested order is to assign in Report-only mode, read the status, resolve or accept each difference, and then switch to Enforce.
 
-This guide covers [Nerdio Solution Baselines](/entity/nerdio-solution-baselines/) only; concepts, requirements and the Prerequisites action are in the companion article on solution baselines. Drift on Intune policies and Intune policy baselines is a separate feature with its own status window. Menu labels follow Nerdio's help center and can differ between versions.
+This guide covers [Nerdio Solution Baselines](https://www.m365.fm/entity/nerdio-solution-baselines/) only; concepts, requirements and the Prerequisites action are in the companion article on solution baselines. Drift on Intune policies and Intune policy baselines is a separate feature with its own status window. Menu labels follow Nerdio's help center and can differ between versions.
 
 ## What counts as drift
 
@@ -94,7 +94,7 @@ The ninth account shows Unavailable with Prerequisites Not Met, and the tooltip 
 
 ## Alternatives
 
-Microsoft 365 Lighthouse is a separate [Microsoft tool](/entity/microsoft-365-lighthouse/) with a default SMB security baseline; the companion article compares it with Nerdio's baselines. Nerdio's own policy baselines cover Intune policies separately. Choose by the tool your team already operates, not by feature names.
+Microsoft 365 Lighthouse is a separate [Microsoft tool](https://www.m365.fm/entity/microsoft-365-lighthouse/) with a default SMB security baseline; the companion article compares it with Nerdio's baselines. Nerdio's own policy baselines cover Intune policies separately. Choose by the tool your team already operates, not by feature names.
 
 ## Sources
 

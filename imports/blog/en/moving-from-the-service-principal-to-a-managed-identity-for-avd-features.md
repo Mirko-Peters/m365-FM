@@ -1,17 +1,17 @@
 ---
 title: "Moving from the service principal to a managed identity for AVD features"
-summary: "To move an Azure Virtual Desktop host pool from the Azure Virtual Desktop service principal to a managed identity, assign the identity to the host pool, grant it the role each feature needs, check the feature, and only then remove the service principal's role assignment. Learn describes these tasks on separate pages, so this sequence combines them and marks where the ordering is our own."
+summary: "To move an Azure Virtual Desktop host pool from the service principal to a managed identity, assign the identity, grant each feature's role, check the feature, then remove the service principal's role."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-managed-identity, azure-virtual-desktop]
 keypoints:
-  - "Order matters: assign the identity and its roles first, verify the feature, and remove the service principal's role assignment last. A subscription-level assignment of the service principal serves every host pool in that subscription, so remove it only after every pool has an identity."
-  - "Assigning the identity needs Desktop Virtualization Host Pool Contributor on the host pool (plus Managed Identity Operator for a user-assigned identity). Assigning roles to it needs Microsoft.Authorization/roleAssignments/write, which Owner and User Access Administrator include."
+  - "Assign the identity and roles first, verify, and remove the service principal's role last. A subscription-level service principal assignment serves every pool, so remove it only after all have one."
+  - "Assigning the identity needs Host Pool Contributor on the pool (plus Managed Identity Operator if user-assigned). Granting roles needs roleAssignments/write, as in Owner or User Access Administrator."
   - "Learn's PowerShell for a host pool identity uses New-AzWvdHostPool with the existing values and only IdentityType changed, and Get-AzWvdHostPool with Format-Table Name, IdentityType checks the result."
   - "App Attach with Azure Files and Entra-joined session hosts cannot use a managed identity, so leave its service principal assignment in place."
-  - "Learn says an assigned identity acts in place of the service principal for session host creation and update. For autoscale and Start VM on Connect it does not say which identity is used while both hold the role, so our suggested test is to remove the service principal assignment and test again."
+  - "The identity acts in place of the service principal for session host creation and update. For autoscale and Start VM on Connect Learn does not say, so remove the service principal role and test."
 faq:
   - q: "Can I keep the service principal role assignments while I test the managed identity?"
     a: "Yes. For autoscale and Start VM on Connect, Learn lists both identities as options and does not say that adding an identity removes the service principal assignment. The catch is that it also does not say which one these features use while both hold the role, so a feature that keeps working does not show which identity it used; see steps 4 and 5 for our suggested test. For session host creation and update, the deployment page says the assigned identity acts in place of the service principal."
@@ -23,7 +23,7 @@ faq:
 
 To move a host pool from the Azure Virtual Desktop service principal to a managed identity, assign the identity to the host pool, grant that identity the role each feature needs, confirm the feature still works, and remove the service principal's role assignment last. This article gives that sequence with the portal and PowerShell steps Learn publishes.
 
-Learn describes the concept and the individual tasks on separate pages; this order is our own, built from those pages. For which features can use an identity and which roles they need, see the explainer "Managed identity in Azure Virtual Desktop: autoscale, Start VM on Connect and session host configuration". Learn's What's new announced general availability of host pool [managed identity](/entity/avd-managed-identity/) support in September 2026 and says that host pools with a session host configuration will require one "in a future service update".
+Learn describes the concept and the individual tasks on separate pages; this order is our own, built from those pages. For which features can use an identity and which roles they need, see the explainer "Managed identity in Azure Virtual Desktop: autoscale, Start VM on Connect and session host configuration". Learn's What's new announced general availability of host pool [managed identity](https://www.m365.fm/entity/avd-managed-identity/) support in September 2026 and says that host pools with a session host configuration will require one "in a future service update".
 
 ## Before you start
 

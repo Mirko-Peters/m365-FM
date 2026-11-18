@@ -1,17 +1,17 @@
 ---
 title: "Sysprep pitfalls when preparing an AVD golden image"
-summary: "Sysprep failures on an Azure Virtual Desktop golden image come from a documented set of causes: apps installed for one user, security software, BitLocker, pending updates and leftover state. This article maps each documented error to its cause and fix, and shows how to read the log to find the first real error."
+summary: "Sysprep failures on an Azure Virtual Desktop golden image have documented causes: per-user apps, security software, BitLocker, pending updates and leftover state. This article maps each error to its cause and fix."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [sysprep, golden-image]
 keypoints:
-  - "Read the generalize log in %WINDIR%\\System32\\Sysprep\\Panther first. Nerdio's help page says the first Error entry in setupact.log usually identifies the root cause and later errors are typically side effects."
-  - "An app installed for a user but not provisioned for all users produces the error 'was installed for a user, but not provisioned for all users' and code 0x80073cf2. Learn gives a per-user removal followed by removal of the provisioning."
+  - "Read the generalize log in %WINDIR%\\System32\\Sysprep\\Panther first. Nerdio says the first Error in setupact.log usually shows the root cause; later errors are side effects."
+  - "An app installed for a user but not provisioned for all users causes error 0x80073cf2. Learn gives a per-user removal followed by removal of the provisioning."
   - "BitLocker on the OS volume blocks sysprep, and Microsoft Defender for Endpoint state on the source image can block it too. Learn advises not onboarding the primary image."
-  - "Failures after sysprep succeeded are a separate group: a disabled CD/DVD-ROM can leave new Azure VMs stuck at OOBE, and a generalized image uploaded or captured as specialized causes a provisioning timeout."
-  - "After a sysprep error the tool cannot be run again on the same image until it is redeployed, so keep a snapshot taken before the first run. In Nerdio Manager, do not sysprep the image VM yourself: Power off & set as image generalizes a clone."
+  - "Failures after a successful sysprep are separate: a disabled CD/DVD-ROM can leave new VMs stuck at OOBE, and a generalized image captured as specialized causes a provisioning timeout."
+  - "After a sysprep error it cannot run again on the image until redeployed, so snapshot first. In Nerdio Manager, do not sysprep the image VM yourself: Power off & set as image uses a clone."
 faq:
   - q: "Why does sysprep fail with 'was installed for a user, but not provisioned for all users'?"
     a: "Learn explains that sysprep's Appx provider only handles per-user packages and all-user (provisioned) packages. It fails when an all-user package was deprovisioned but not removed for a user, or when a user updated an all-user package on the reference computer, for example through the Microsoft Store. The documented fix is to remove the package for the user that is running sysprep, and then remove the provisioning."
@@ -21,11 +21,11 @@ faq:
     a: "Only some of them. Nerdio Manager runs Sysprep /generalize on a temporary clone of the image VM, so the image VM itself is not sysprepped. It also removes local user accounts to prevent Sysprep from failing due to per-user modern apps, but its help page says the apps remain after the accounts are removed and can still block Sysprep. For BitLocker, security software and domain join, the page lists them under common mistakes: do not enable BitLocker, do not install security software on the image, and do not join the image to your identity provider. A failed task shows an Error status with downloadable Sysprep logs."
 ---
 
-Sysprep failures on an Azure Virtual Desktop image come from a documented set of causes: an app installed for one user, security software, an encrypted OS disk, pending updates, or state left behind by an earlier run. The first error entry in the generalize log usually names the cause. This article is the troubleshooting companion to [Sysprep explained](/entity/sysprep/).
+Sysprep failures on an Azure Virtual Desktop image come from a documented set of causes: an app installed for one user, security software, an encrypted OS disk, pending updates, or state left behind by an earlier run. The first error entry in the generalize log usually names the cause. This article is the troubleshooting companion to [Sysprep explained](https://www.m365.fm/entity/sysprep/).
 
 ## Find the first error before changing anything
 
-For a [golden image](/entity/golden-image/) the generalize log in `%WINDIR%\System32\Sysprep\Panther` matters, and `setupact.log` is its main file; specialize and OOBE logs sit in `%WINDIR%\Panther` and `%WINDIR%\Panther\Unattendgc`.
+For a [golden image](https://www.m365.fm/entity/golden-image/) the generalize log in `%WINDIR%\System32\Sysprep\Panther` matters, and `setupact.log` is its main file; specialize and OOBE logs sit in `%WINDIR%\Panther` and `%WINDIR%\Panther\Unattendgc`.
 
 Nerdio's help page gives the reading rule: open `setupact.log` and find the first Error entry, because it usually identifies the root cause and later errors are typically side effects. Learn's Store apps page shows its example in `SetupErr.log`: the first entry says a package "was installed for a user, but not provisioned for all users", followed by lines naming `SysprepGeneralize`, `RunExternalDlls` and `0x80073cf2`. Our reading is that those later lines are the same failure propagating.
 
@@ -62,7 +62,7 @@ Language packs interact with this. Learn's language pack page, written for Windo
 
 ## Pitfall 2: security software on the image
 
-The AVD golden image page says an antivirus app may cause issues when sysprep starts and advises disabling all antivirus programs first. [Microsoft Defender for Endpoint](/entity/microsoft-defender-for-endpoint/) has two documented problems that are not the same:
+The AVD golden image page says an antivirus app may cause issues when sysprep starts and advises disabling all antivirus programs first. [Microsoft Defender for Endpoint](https://www.m365.fm/entity/microsoft-defender-for-endpoint/) has two documented problems that are not the same:
 
 - **A sysprep error (Nerdio).** Nerdio's page, which uses the older name Defender for ATP, describes sysprep failing to delete the `senseGuid` value (`RegDeleteValueW`, `dwRet = 0x5`); in Nerdio Manager it surfaces as "Wait for temp VM to stop timed out". The fix: download the offboarding package from Settings > Endpoints (Local Script method), run it on the source image, and confirm the service is stopped with startup type Manual. Nerdio advises installing it on session hosts after deployment, not on the source image.
 - **A duplicate device identity (Learn).** Learn's page on non-persistent VDI devices says not to onboard the primary image, template VMs or replica VMs, because cloning can duplicate `senseGuid` and stop provisioned VMs appearing as new devices in the Defender portal. It gives this reason, not a sysprep error. For an already onboarded image, its "Update VDI images" steps offboard the machine and, with local administrator permissions and PsExec, delete `senseGuid`, `senseId` and related values from a SYSTEM shell; copy the exact list from the page.
@@ -71,7 +71,7 @@ Nerdio also says other security software on the image often interferes with gene
 
 ## Pitfall 3: BitLocker and encrypted disks
 
-Nerdio's page says an encrypted OS disk prevents sysprep from completing, and the Azure generalize page requires fully decrypted drives. The Sysprep overview adds that running sysprep on an NTFS partition with encrypted files or folders makes that data unreadable and unrecoverable. Check [BitLocker](/entity/bitlocker/) on every drive of the image VM, since Nerdio lists BitLocker on any image drive as a cause.
+Nerdio's page says an encrypted OS disk prevents sysprep from completing, and the Azure generalize page requires fully decrypted drives. The Sysprep overview adds that running sysprep on an NTFS partition with encrypted files or folders makes that data unreadable and unrecoverable. Check [BitLocker](https://www.m365.fm/entity/bitlocker/) on every drive of the image VM, since Nerdio lists BitLocker on any image drive as a cause.
 
 ## Pitfall 4: state the image should not carry
 
@@ -87,11 +87,11 @@ Learn documents these deployment-time failures:
 
 - **Stuck at OOBE.** Azure mounts an ISO to the DVD-ROM when it creates a VM from a generalized image, and a disabled CD/DVD-ROM driver leaves the VM stuck at OOBE. Before generalizing, run `reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\cdrom /v start /t REG_DWORD /d 1 /f`. The same list says to verify that no policy restricts removable storage access, for example All Removable Storage classes: Deny all access; it does not state what happens if one applies.
 - **Wrong generalized setting.** Learn's custom image provisioning errors page covers a mismatch at upload or capture: A generalized OS uploaded as specialized gives a provisioning timeout with the VM stuck at the OOBE screen; captured as specialized, it times out because the original VM is marked as generalized. A specialized OS uploaded or captured as generalized gives a provisioning failure. The fix is the matching setting: re-upload the original VHD, or delete the image and recapture from the current VHDs. The golden image page instead says never to capture the same VM twice and to create a new VM from the latest snapshot. The two pages differ; our reading is that the golden image rule is the one written for AVD golden images.
-- **Image Builder timing.** Learn says the D1_V2 size might be the reason for a sysprep timing problem: with customizations that run in under three seconds, the sysprep command checks for `WindowsAzureGuestAgent`, which might not be fully installed. The fix is a bigger VM size or a 60-second PowerShell sleep customization. For a Windows 10 image showing "Please wait for the Windows Modules Installer" at first logon, Learn suggests a restart customizer as the last customization and `/mode:vm`. See [Azure Image Builder](/entity/azure-image-builder/) and [custom image templates](/entity/avd-custom-image-templates/).
+- **Image Builder timing.** Learn says the D1_V2 size might be the reason for a sysprep timing problem: with customizations that run in under three seconds, the sysprep command checks for `WindowsAzureGuestAgent`, which might not be fully installed. The fix is a bigger VM size or a 60-second PowerShell sleep customization. For a Windows 10 image showing "Please wait for the Windows Modules Installer" at first logon, Learn suggests a restart customizer as the last customization and `/mode:vm`. See [Azure Image Builder](https://www.m365.fm/entity/azure-image-builder/) and [custom image templates](https://www.m365.fm/entity/avd-custom-image-templates/).
 
 ## What you cannot undo
 
-After a sysprep error the image must be redeployed before the tool can run on it again (Sysprep overview). Azure says a generalized VM cannot be restarted. For a manual build, a snapshot taken before the first run is the recovery path. Nerdio's page says sysprepping an Azure VM makes it unusable in Azure, which is why Nerdio Manager generalizes a clone; see [Nerdio desktop image](/entity/nerdio-desktop-image/).
+After a sysprep error the image must be redeployed before the tool can run on it again (Sysprep overview). Azure says a generalized VM cannot be restarted. For a manual build, a snapshot taken before the first run is the recovery path. Nerdio's page says sysprepping an Azure VM makes it unusable in Azure, which is why Nerdio Manager generalizes a clone; see [Nerdio desktop image](https://www.m365.fm/entity/nerdio-desktop-image/).
 
 ## Pre-sysprep checklist
 

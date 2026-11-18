@@ -1,16 +1,16 @@
 ---
 title: "What the new RemoteApp enhancements change for users and admins"
-summary: "RemoteApp enhancements change how published apps behave on the client: window moving and resizing, Windows Snap, full-screen mode, multi-monitor handling and window appearance. This article lists the requirements, the registry value, how to verify the new mode and the known issues, and flags where Learn's status wording differs."
+summary: "RemoteApp enhancements change how published apps behave on the client: moving and resizing, Snap, full screen, multi-monitor and appearance. Covers requirements, the registry value, verification and known issues."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-remoteapp, avd-application-group]
 keypoints:
-  - "Learn lists improved Windows Snap and full-screen support, better multi-monitor handling and refined visuals such as borders, shadows and theme integration. The what's new page adds window moving and resizing and z-ordering."
-  - "Status as of 17 November 2026: the what's new page says RemoteApp enhancements are generally available for Azure Virtual Desktop (November 2026). The enhancements article, dated 2 September 2026, still says preview, so check both before you plan the rollout."
-  - "Both sides need updates: session hosts on Windows 11 Enterprise 24H2 or 25H2 (or multi-session) with KB5070311 or later, SxS Network Stack 1.0.2507.25750 or newer, and a Windows 11 24H2 or 25H2 device with Windows App 2.0.864.0 or newer."
-  - "The opt-in is the registry value EnableRemoteAppV2 = 1 under HKLM\\Software\\Policies\\Microsoft\\Windows NT\\Terminal Services, followed by a reboot. You verify it in Connection information: Remote session type must show RemoteAppV2."
+  - "Learn lists improved Windows Snap and full-screen support, better multi-monitor handling and refined visuals. The what's new page adds window moving, resizing and z-ordering."
+  - "As of 17 November 2026, what's new lists RemoteApp enhancements as GA (November 2026), while the enhancements article (2 September 2026) still says preview. Check both."
+  - "Both sides need updates: hosts on Windows 11 24H2 or 25H2 with KB5070311, SxS stack 1.0.2507.25750 or newer, and a Windows 11 24H2 or 25H2 device with Windows App 2.0.864.0 or newer."
+  - "Opt in with EnableRemoteAppV2 = 1 under HKLM\\Software\\Policies\\Microsoft\\Windows NT\\Terminal Services and a reboot. Connection information must show RemoteAppV2."
   - "Learn lists known issues: some enhancements do not apply to Microsoft Edge and Chrome, narrowing a window at minimum width can move it, and closing a window can change the foreground window."
 faq:
   - q: "Do I have to enable the RemoteApp enhancements myself?"
@@ -23,7 +23,7 @@ faq:
 
 The RemoteApp enhancements make published applications in Azure Virtual Desktop behave more like local windows: moving and resizing, Windows Snap, full-screen mode, multi-monitor handling, borders, shadows and theme integration. They need updated session hosts and an updated Windows client, and administrators switch them on with one registry value. This article sets out what changes, what you must have in place, how to enable and verify the mode, and where Microsoft's own pages still disagree on the status.
 
-If you are new to the topic, the sibling article "RemoteApp in Azure Virtual Desktop: single apps instead of a full desktop" explains what [RemoteApp](/entity/avd-remoteapp/) is. This one is about the rendering and integration changes.
+If you are new to the topic, the sibling article "RemoteApp in Azure Virtual Desktop: single apps instead of a full desktop" explains what [RemoteApp](https://www.m365.fm/entity/avd-remoteapp/) is. This one is about the rendering and integration changes.
 
 ## What changes for users
 
@@ -76,7 +76,7 @@ The requirement for a Windows 11 local device matters for planning. The article 
 
 ## Enable the enhancements
 
-Per Learn, enhancements are enabled by default for host pools in the [validation environment](/entity/avd-validation-environment/) as part of a staged rollout at a 75% chance. Production host pools keep the existing experience by default. Administrators can opt in with the registry value set to 1, or opt out in the validation environment by setting it to 0.
+Per Learn, enhancements are enabled by default for host pools in the [validation environment](https://www.m365.fm/entity/avd-validation-environment/) as part of a staged rollout at a 75% chance. Production host pools keep the existing experience by default. Administrators can opt in with the registry value set to 1, or opt out in the validation environment by setting it to 0.
 
 1. Set this value on the session hosts or Cloud PCs:
    - Key: `HKLM\Software\Policies\Microsoft\Windows NT\Terminal Services`
@@ -88,7 +88,7 @@ Per Learn, enhancements are enabled by default for host pools in the [validation
    - **Enable enhanced shell experience for RemoteApp**
 3. Reboot the session hosts or Cloud PCs.
 
-For Windows 365 Cloud Apps, Learn says you can deploy the registry value with [Remediations in Intune](https://learn.microsoft.com/en-us/mem/intune/fundamentals/remediations). For session hosts, the article does not name a deployment tool; your image, [Intune](/entity/intune/) or Group Policy process applies. If you build session hosts from a golden image, put the value in the image so that new hosts start with it. That is our suggestion, not a Learn step.
+For Windows 365 Cloud Apps, Learn says you can deploy the registry value with [Remediations in Intune](https://learn.microsoft.com/en-us/mem/intune/fundamentals/remediations). For session hosts, the article does not name a deployment tool; your image, [Intune](https://www.m365.fm/entity/intune/) or Group Policy process applies. If you build session hosts from a golden image, put the value in the image so that new hosts start with it. That is our suggestion, not a Learn step.
 
 Because the setting is per host, apply it to every host in a pool. The article says nothing about pools with a mix of enabled and disabled hosts. Our reading: such a pool is likely to give users a different experience from one session to the next, so test it before you accept it.
 
@@ -117,7 +117,7 @@ If your published apps include Edge or Chrome, tell users that part of the impro
 
 1. **Inventory.** List host pools with RemoteApp groups, their operating system versions, and the clients your users have. Note which users are on Windows 11 24H2 or 25H2.
 2. **Update.** Bring session hosts to the required Windows update and a current SxS Network Stack version through your normal image or update process.
-3. **Pilot in validation.** Use a [validation host pool](/entity/avd-validation-environment/) or a small production pool with the registry value set to 1. Verify with Connection information.
+3. **Pilot in validation.** Use a [validation host pool](https://www.m365.fm/entity/avd-validation-environment/) or a small production pool with the registry value set to 1. Verify with Connection information.
 4. **Collect feedback.** Ask pilot users about Snap, full-screen and multi-monitor behavior, and about Edge and Chrome if you publish them.
 5. **Roll out per pool.** Set the value on the remaining pools, reboot, verify, and keep the opt-out value (0) in mind for the validation environment.
 6. **Document the status.** Note the date on which you checked the Learn pages, because the preview and generally available wording differs between pages.
@@ -126,7 +126,7 @@ The same rollout applies to Cloud Apps, with the Intune Remediations route for t
 
 ## What these enhancements do not change
 
-Learn's enhancements and what's new pages describe windowing, integration and visual behavior and mention no change to assignment, the preferred application group type or host pool settings. Our reading, not a Learn statement: those settings stay as they were, so check them in a pilot; the sibling article "Application groups in Azure Virtual Desktop: desktop and RemoteApp groups explained" covers them. Newer RemoteApp features on the what's new page are separate: pinning RemoteApp shortcuts to the local desktop (public preview, September 2026), RemoteApp support for context-based redirections (preview, October 2026, see [context-based redirections](/entity/avd-context-based-redirections/)) and Intune Remote Help in RemoteApp sessions (July 2026).
+Learn's enhancements and what's new pages describe windowing, integration and visual behavior and mention no change to assignment, the preferred application group type or host pool settings. Our reading, not a Learn statement: those settings stay as they were, so check them in a pilot; the sibling article "Application groups in Azure Virtual Desktop: desktop and RemoteApp groups explained" covers them. Newer RemoteApp features on the what's new page are separate: pinning RemoteApp shortcuts to the local desktop (public preview, September 2026), RemoteApp support for context-based redirections (preview, October 2026, see [context-based redirections](https://www.m365.fm/entity/avd-context-based-redirections/)) and Intune Remote Help in RemoteApp sessions (July 2026).
 
 ## Sources
 

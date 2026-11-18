@@ -1,14 +1,14 @@
 ---
 title: "Rolling out Windows App to users: settings and tips"
-summary: "To roll out Windows App on Windows PCs, install it from the Microsoft Store or as a standalone MSIX, then set the five Windows App policies in the Intune settings catalog or the Group Policy template. This guide covers the install options, the policies, updates and release rings, and the move away from the old Remote Desktop client."
+summary: "To roll out Windows App on Windows PCs, install it from the Microsoft Store or as a standalone MSIX, then set the five Windows App policies in Intune or Group Policy. Covers updates, rings and the old client."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [windows-app, azure-virtual-desktop]
 keypoints:
-  - "Learn lists two ways to get Windows App onto a Windows PC: the Microsoft Store, or a standalone .msix installer. Intune can deploy it as a Microsoft Store app (new), and device groups install it before the user signs in."
-  - "Five Windows App policies exist in the Intune settings catalog and in the windowsapp.admx template: release ring, desktop shortcuts for RemoteApps, auto logoff after inactivity, skip first run experience, and turn off automatic updates. They are device-scoped."
+  - "Windows App comes from the Microsoft Store or a standalone .msix. Intune can deploy it as a Microsoft Store app (new), and device groups install it before the user signs in."
+  - "Five device-scoped Windows App policies exist in Intune and windowsapp.admx: release ring, RemoteApp desktop shortcuts, auto logoff, skip first run and turn off automatic updates."
   - "Store installs cannot have automatic updates disabled; standalone MSIX installs can. Learn does not recommend disabling updates and says Microsoft can block outdated clients."
   - "Redirection cannot be configured in Windows App on Windows. The administrator sets it for the session, and Learn lists clipboard, drive and printer redirection as disabled by default."
   - "The Remote Desktop client (MSI) reached end of support on March 27, 2026 for public cloud customers, so plan to uninstall it after users have moved."
@@ -21,7 +21,7 @@ faq:
     a: "No. Learn says it signs the user out of Windows App only and does not affect active Azure Virtual Desktop or Windows 365 sessions unless session idle settings are also configured on the remote resource. It does remove cached sign-in data, RDP files and other app data, and it erases local logs, so use it for shared devices and kiosks and not as a security control."
 ---
 
-Roll out [Windows App](/entity/windows-app/) to Windows PCs by installing it from the Microsoft Store (or as a standalone MSIX), then setting its five policies in the Intune settings catalog or the Group Policy template. Plan for update sources and the retirement of the old Remote Desktop client.
+Roll out [Windows App](https://www.m365.fm/entity/windows-app/) to Windows PCs by installing it from the Microsoft Store (or as a standalone MSIX), then setting its five policies in the Intune settings catalog or the Group Policy template. Plan for update sources and the retirement of the old Remote Desktop client.
 
 This article covers Windows PCs.
 
@@ -32,13 +32,13 @@ This article covers Windows PCs.
 | Supported systems | Windows 11, Windows 10 version 1809 and later (including LTSC and IoT Enterprise), Windows Server 2019 or later. Windows 10 devices out of mainstream support need Extended Security Updates. |
 | Install source | Microsoft Store, or a standalone `.msix` installer (64-bit, 32-bit and Arm64 downloads are linked from What's new). |
 | Accounts | A work or school account. Personal Microsoft accounts are not supported. |
-| Network | Devices need the end-user endpoints for [Azure Virtual Desktop](/entity/azure-virtual-desktop/), including `*.cdn.office.net` for automatic updates. Learn says blocking them is not supported. |
+| Network | Devices need the end-user endpoints for [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/), including `*.cdn.office.net` for automatic updates. Learn says blocking them is not supported. |
 | Remote Desktop Services | Windows App on Windows does not yet support it. Learn's footnote says to continue using the Remote Desktop app on Windows for those connections; see the last section. |
 
 ## Step-by-step: a managed rollout with Intune
 
 1. **Confirm the OS and network.** Check the table above and test the endpoints from a pilot PC.
-2. **Create the app.** In the [Microsoft Intune](/entity/intune/) admin center go to **Apps** > **All apps** > **Add**. Set **App type** to **Microsoft Store app (new)**, search for **Windows app**, select it and keep the defaults on the **App information** page.
+2. **Create the app.** In the [Microsoft Intune](https://www.m365.fm/entity/intune/) admin center go to **Apps** > **All apps** > **Add**. Set **App type** to **Microsoft Store app (new)**, search for **Windows app**, select it and keep the defaults on the **App information** page.
 3. **Assign it.** Under **Required**, add device groups so the app installs automatically. Under **Available for enrolled devices**, add user groups if users should install it from the Company Portal. Learn notes that a user-group assignment on a Cloud PC installs only after the user has signed in, while a device-group assignment installs before sign-in.
 4. **Create the settings policy.** Go to **Devices** > **Configuration** > **Create** > **New policy**, set **Platform** to **Windows 10 and later** and **Profile type** to **Settings catalog**. On **Configuration settings** select **Add settings**, search for **Windows App**, and pick the settings from the next section. Assign the policy to the same device groups.
 5. **Verify.** Open the policy under **Devices** > **Configuration** and review the **Device status**, **User status** and **Per-setting status** reports.
@@ -60,7 +60,7 @@ Intune added these settings to the settings catalog in service release 2607 (wee
 | Skip First Run Experience (FRE) | Enabled (1), Disabled (0) | Users go straight to the Connection Center. |
 | Turn off automatic updates for Windows App | 0 to 3, see below | Restricts update sources. |
 
-The shortcut policy has two halves. In Azure Virtual Desktop, the portal toggle **Create desktop shortcut (Preview)** on a [RemoteApp](/entity/avd-remoteapp/) marks the app, and the Intune policy must also be set or the configuration takes no effect. Learn's administrative template page labels the feature Preview while the Windows App settings page carries no label, so check its status before relying on it. Shortcuts appear after the user signs in to Windows App again or refreshes it.
+The shortcut policy has two halves. In Azure Virtual Desktop, the portal toggle **Create desktop shortcut (Preview)** on a [RemoteApp](https://www.m365.fm/entity/avd-remoteapp/) marks the app, and the Intune policy must also be set or the configuration takes no effect. Learn's administrative template page labels the feature Preview while the Windows App settings page carries no label, so check its status before relying on it. Shortcuts appear after the user signs in to Windows App again or refreshes it.
 
 ### Auto logoff in practice
 
@@ -69,7 +69,7 @@ Before you use auto logoff on a shared PC:
 - It removes all credentials, RDP files and other identifiable data from the app caches on the device, not just for the current user, and it erases local logs. Logging resumes only when the app reopens, which limits troubleshooting.
 - Windows App checks OS inactivity every N minutes. With N = 5 the logoff can take up to 9 minutes 59 seconds, or up to twice the interval.
 - Closing Windows App by hand triggers it immediately.
-- It is intended for connections from the Windows App connection center. It is not supported for Windows 365 Boot, Windows 365 Switch or connections pinned to the taskbar, and Learn says it is for operational convenience and data hygiene, not a security control. See [Windows 365 Boot](/entity/windows-365-boot/).
+- It is intended for connections from the Windows App connection center. It is not supported for Windows 365 Boot, Windows 365 Switch or connections pinned to the taskbar, and Learn says it is for operational convenience and data hygiene, not a security control. See [Windows 365 Boot](https://www.m365.fm/entity/windows-365-boot/).
 
 Legacy registry equivalents sit under `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsApp` (`AutoLogoffEnable`, `AutoLogoffOnSuccessfulConnect`, `AutoLogoffTimeInterval`, REG_DWORD). The skip-FRE value `SkipFRE` is documented under `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows365`. For managed devices Learn recommends the settings catalog over the registry.
 
@@ -101,7 +101,7 @@ Two things surprise admins:
 - **Redirection is not set in the client.** Learn says you cannot configure redirection settings in Windows App on Windows. The administrator decides what is available, and the more restrictive setting wins. Clipboard, drive and printer redirection are listed as disabled by default.
 - **Display settings are set per device.** A user opens **Devices**, selects **...** on the device card, then **Settings**, and turns **Use default settings** off. Options are **All displays**, **Single display** or **Select displays** (adjacent displays only). Custom display settings are available for devices, not for apps. For Cloud PCs, admins can choose default display settings, generally available since the week of October 12, 2026, and users can override them.
 
-The device actions on the card depend on the service. For example, **Inspect connection** and **Restore** apply to Windows 365 Enterprise and Windows 365 Flex (Dedicated), which [Learn renamed from Windows 365 Frontline](/entity/windows-365-frontline/) in the week of May 4, 2026; product, licensing and capabilities are unchanged. Azure Virtual Desktop users get **Pin to** and **Settings**, but not the Cloud PC actions.
+The device actions on the card depend on the service. For example, **Inspect connection** and **Restore** apply to Windows 365 Enterprise and Windows 365 Flex (Dedicated), which [Learn renamed from Windows 365 Frontline](https://www.m365.fm/entity/windows-365-frontline/) in the week of May 4, 2026; product, licensing and capabilities are unchanged. Azure Virtual Desktop users get **Pin to** and **Settings**, but not the Cloud PC actions.
 
 ## Retire the old client
 

@@ -1,15 +1,15 @@
 ---
 title: "How to configure hibernate with autoscale for personal host pools"
-summary: "Enable hibernation on the session hosts first, then give Azure Virtual Desktop the Power On Off Contributor role and create a personal scaling plan whose timers use the Hibernate action. If the hosts lack hibernation, autoscale does nothing to them, so verify one host by hand before you assign the plan."
+summary: "Enable hibernation on the session hosts first, then give Azure Virtual Desktop the Power On Off Contributor role and create a personal scaling plan using the Hibernate action. Verify one host by hand first."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-hibernation, avd-personal-host-pool]
 keypoints:
-  - "The order matters: enable hibernation on the VMs, verify a manual hibernate and resume, assign the Desktop Virtualization Power On Off Contributor role at subscription scope, then create the scaling plan."
-  - "In the portal the host option is the Hibernate checkbox on the Virtual machines tab of the standard-management host pool flow, which is the flow for personal host pools. For existing VMs, Learn documents deallocating the VM, setting supportsHibernation on the OS disk and enabling hibernation on the VM."
-  - "In the personal schedule, Disconnect settings and Sign out settings each take 0 to 360 minutes and an action of deallocate, hibernate or do nothing. The PowerShell module must be Az.DesktopVirtualization 4.2.0 or later."
+  - "Order matters: enable hibernation on the VMs, verify a manual hibernate and resume, assign Power On Off Contributor at subscription scope, then create the scaling plan."
+  - "In the portal it is the Hibernate checkbox on the Virtual machines tab of the standard-management flow. For existing VMs: deallocate, set supportsHibernation on the OS disk and enable hibernation."
+  - "In the personal schedule, Disconnect and Sign out settings each take 0 to 360 minutes and an action: deallocate, hibernate or nothing. PowerShell needs Az.DesktopVirtualization 4.2.0 or later."
   - "If a plan says hibernate but the desktops do not have hibernation enabled, autoscale neither hibernates nor deallocates them."
   - "Insights supports autoscale monitoring for pooled host pools only. For personal pools Learn describes sending Autoscale logs to a storage account or an event hub."
 faq:
@@ -27,13 +27,13 @@ To use hibernate with autoscale on a personal host pool, enable hibernation on e
 
 From Learn's [scaling plan article](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan) and the [hibernation overview](https://learn.microsoft.com/en-us/azure/virtual-machines/hibernate-resume):
 
-- A [personal host pool](/entity/avd-personal-host-pool/). Do not enable hibernate if you use FSLogix or App Attach for it.
+- A [personal host pool](https://www.m365.fm/entity/avd-personal-host-pool/). Do not enable hibernate if you use FSLogix or App Attach for it.
 - A VM size in a series that Learn lists for hibernation (the listed general purpose series support up to 64 GB RAM, the NVv4 and NVadsA10v5 GPU series up to 112 GB), an OS that supports it, and an OS disk large enough for memory, OS and applications. Ephemeral OS disks, Azure Backup and managed images are listed as unsupported; the concept article covers the full list.
 - The scaling plan's configuration data must be in the same Azure region as the host pool configuration. The session hosts can be in any supported region.
 - For PowerShell, the Az.DesktopVirtualization module version 4.2.0 or later.
 - The `Microsoft.Authorization/roleAssignments/write` permission on the subscription for the role assignment (part of Owner and User Access Administrator).
 
-Autoscale for personal host pools falls under [power management autoscaling](/entity/avd-power-management-autoscaling/), which is generally available. Hibernate support for personal session hosts and for autoscale is listed as generally available in May 2024 on Learn's What's new page.
+Autoscale for personal host pools falls under [power management autoscaling](https://www.m365.fm/entity/avd-power-management-autoscaling/), which is generally available. Hibernate support for personal session hosts and for autoscale is listed as generally available in May 2024 on Learn's What's new page.
 
 ## Step 1: enable hibernation on the session hosts
 
@@ -55,7 +55,7 @@ az vm start --resource-group myResourceGroup --name myVM
 
 The page gives equivalent Azure PowerShell steps (`$disk.SupportsHibernation = $True`, then `Update-AzVM ... -HibernationEnabled`). It also says that creating a VM with hibernation enabled installs the `Microsoft.CPlat.Core.WindowsHibernateExtension` extension automatically. It does not state this for existing VMs, so run the checks in step 2.
 
-**Images.** To create hosts from an [Azure Compute Gallery](/entity/azure-compute-gallery/) image, Learn says the image definition needs the hibernation property (portal: **Enable hibernation**; CLI: `--features IsHibernateSupported=true`).
+**Images.** To create hosts from an [Azure Compute Gallery](https://www.m365.fm/entity/azure-compute-gallery/) image, Learn says the image definition needs the hibernation property (portal: **Enable hibernation**; CLI: `--features IsHibernateSupported=true`).
 
 ## Step 2: verify one host by hand
 

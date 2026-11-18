@@ -1,16 +1,16 @@
 ---
 title: "Delivering apps with Nerdio: Winget, SCCM connector and policies"
-summary: "In Nerdio Manager an app reaches a host in two steps: it first has to be in a repository, through Winget, an SCCM import or a Shell App, and a deployment policy then installs it on the target pool. This guide walks through the SCCM connector setup, the import of SCCM apps, what changes in a policy for imported apps, and the documented errors."
+summary: "In Nerdio Manager an app reaches a host in two steps: into a repository via Winget, an SCCM import or a Shell App, then onto the pool via a deployment policy. Covers the SCCM connector, imports and documented errors."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [nerdio-unified-app-catalog, nerdio-manager-for-enterprise]
 keypoints:
-  - "Choose the entry route by installer type: a Winget package for a standard silent installer, an SCCM import for apps you already package in Configuration Manager, a Shell App for scripted installs. A deployment policy then handles scope, timing and status for all three."
-  - "The SCCM connector is Premium edition only. It uses the Azure Arc agent on the SCCM server or a proxy VM (an SCCM server that runs as an Azure VM is linked directly instead), needs the Read only analyst role in all scopes, and requires a private Winget repository that exists before you import a single-file app."
-  - "Single-file SCCM apps are imported into a private Winget repository. Scripted apps such as PSADT packages go to a Shell Apps repository, and their detection rules are not imported, so you write a new detection script. Nerdio's Shell Apps overview still calls Shell Apps a preview feature and lists SCCM integration and secure variables as not currently available, while other Nerdio pages document both, so check the current pages first."
-  - "A policy sets scope, timing and status whichever route the app took. For imported apps three points matter: a Shell App must be public before it can be deployed, Nerdio advises testing it against a test pool first, and Global Pools are in public preview. The general policy settings are in the companion article on Winget."
+  - "Choose by installer type: Winget for standard silent installers, an SCCM import for Configuration Manager packages, a Shell App for scripted installs. A policy then handles all three."
+  - "The SCCM connector is Premium only, uses the Azure Arc agent on the SCCM server or a proxy VM, needs the Read only analyst role in all scopes and a private Winget repository."
+  - "Single-file SCCM apps go to a private Winget repository; scripted apps go to Shell Apps, and their detection rules are not imported. Nerdio pages disagree on Shell Apps' status, so check them."
+  - "For imported apps: a Shell App must be public before deployment, Nerdio advises testing against a test pool first, and Global Pools are in public preview."
   - "A device that fails a task is skipped for 24 hours. Logs sit in C:\\Windows\\Temp\\NMWLogs\\ on the device, and SCCM export logs are on the SCCM server."
 faq:
   - q: "Do I need the SCCM connector to deliver apps with Nerdio?"
@@ -23,16 +23,16 @@ faq:
 
 An app reaches a Nerdio-managed host in two steps. First it has to be in a repository that Nerdio Manager can read, as a Winget package, an SCCM import or a Shell App. Then a deployment policy installs it on the target pool or devices and reports the status per device.
 
-This guide covers the SCCM connector, the import of SCCM apps and what changes in a policy for imported apps. The Winget route and the general policy settings (maintenance window, drain mode, desired host state, concurrency, Intune behaviour) are in "Delivering apps with Winget through Nerdio", and the concept is in "Nerdio Unified App Catalog explained". The feature is documented as Unified Application Management (UAM) in [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/); see also the [Nerdio Unified App Catalog](/entity/nerdio-unified-app-catalog/) entity.
+This guide covers the SCCM connector, the import of SCCM apps and what changes in a policy for imported apps. The Winget route and the general policy settings (maintenance window, drain mode, desired host state, concurrency, Intune behaviour) are in "Delivering apps with Winget through Nerdio", and the concept is in "Nerdio Unified App Catalog explained". The feature is documented as Unified Application Management (UAM) in [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/); see also the [Nerdio Unified App Catalog](https://www.m365.fm/entity/nerdio-unified-app-catalog/) entity.
 
 ## Pick the entry route first
 
 | Route | Use when | Where it ends up |
 |---|---|---|
 | Winget package | The app has a standard installer that runs silently | Public community repository (read-only) or a private Winget repository |
-| SCCM import, single file | The app is already packaged in [Microsoft Configuration Manager](/entity/configuration-manager/) | A private Winget repository |
+| SCCM import, single file | The app is already packaged in [Microsoft Configuration Manager](https://www.m365.fm/entity/configuration-manager/) | A private Winget repository |
 | SCCM import, scripted | The package is script-driven, for example a PSADT package | A Shell Apps repository |
-| Shell App | Detect, install and uninstall need your own [PowerShell](/entity/powershell/) | A Shell Apps repository |
+| Shell App | Detect, install and uninstall need your own [PowerShell](https://www.m365.fm/entity/powershell/) | A Shell Apps repository |
 
 Shell Apps need a note before you build on them. Nerdio's Shell Apps overview page says "this is a preview feature" and lists SCCM integration (ingesting scripted installations with their binaries) and secure variable support as not currently available. Other Nerdio pages disagree on both. The SCCM integration page describes importing scripted applications into Shell Apps. The pages "UAM: Shell apps secure variables" and "UAM: Shell apps technical reference guide" document secure variables for Shell Apps, the latter from Nerdio Manager v6.1 and with the remark that secure variables are not supported for Intune devices and cause a deployment error. Check these pages and test the import in a non-production environment first. Shell Apps run only in the device system context, which avoids a service account, and PowerShell remoting (WSMan) must be enabled on the target devices.
 
@@ -54,7 +54,7 @@ Nerdio's SCCM integration page says the feature is only available in the Premium
 
 **Steps:**
 
-1. Install the Azure Arc agent. In the Azure portal open **Azure Arc resources > Machines**, select **Add/Create > Add a machine**, and under **Add a single server** select **Generate script**. Run the script in an elevated PowerShell session on the SCCM server or proxy VM, sign in in the browser window that opens, and confirm the machine shows as connected. [Azure Arc](/entity/azure-arc/) is the management channel Nerdio uses for the remote SCCM server. For an SCCM server that already runs in Azure, the page recommends linking it directly without Arc, and says Arc management for Azure-hosted servers is supported only for evaluation and non-production. If the SCCM server is already registered with and managed by Azure Arc, or runs as an Azure VM that Arc does not manage, skip ahead to step 2, where you link it in Nerdio Manager.
+1. Install the Azure Arc agent. In the Azure portal open **Azure Arc resources > Machines**, select **Add/Create > Add a machine**, and under **Add a single server** select **Generate script**. Run the script in an elevated PowerShell session on the SCCM server or proxy VM, sign in in the browser window that opens, and confirm the machine shows as connected. [Azure Arc](https://www.m365.fm/entity/azure-arc/) is the management channel Nerdio uses for the remote SCCM server. For an SCCM server that already runs in Azure, the page recommends linking it directly without Arc, and says Arc management for Azure-hosted servers is supported only for evaluation and non-production. If the SCCM server is already registered with and managed by Azure Arc, or runs as an Azure VM that Arc does not manage, skip ahead to step 2, where you link it in Nerdio Manager.
 2. In Nerdio Manager go to **System > Settings > Azure** and make sure the SCCM server's resource group is linked in the **Linked resource groups** area.
 3. Go to **System > Settings > Nerdio**. In the **Unified Application Management** area, under **SCCM servers**, select **Link**.
 4. Choose the execution mode (with a proxy machine, or directly on the SCCM server), select the proxy machine or SCCM server, enter the server FQDN (for a proxy VM, the primary site server) and a domain username and password. The optional **Automatic Synchronization** toggle sets a regular sync interval with time zone, start time and repeat.

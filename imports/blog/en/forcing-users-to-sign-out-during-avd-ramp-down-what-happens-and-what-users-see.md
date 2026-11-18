@@ -1,16 +1,16 @@
 ---
 title: "Forcing users to sign out during AVD ramp-down: what happens and what users see"
-summary: "When force sign-out is enabled in the ramp-down phase, autoscale drains the host with the fewest sessions, notifies its users, waits, ends the remaining sessions and deallocates the VM. This article follows that sequence, shows Microsoft's worked scenario and explains where the wait time and the notification text are set."
+summary: "With force sign-out in ramp-down, autoscale drains the host with the fewest sessions, notifies users, waits, ends the remaining sessions and deallocates the VM. Includes Microsoft's worked scenario and where settings live."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-force-logoff, avd-scaling-plan]
 keypoints:
-  - "Force sign-out works only in the ramp-down phase of a scaling plan schedule. Learn says the setting does not sign out users in any other phase, and autoscale cannot force users out of a personal desktop."
+  - "Force sign-out works only in the ramp-down phase. Learn says it does not sign out users in other phases, and autoscale cannot force users out of a personal desktop."
   - "The sequence is: select the host with the fewest sessions, put it in drain mode, notify its users, wait, end the remaining sessions, deallocate the VM."
   - "Idle, disconnected and active sessions are all forced to sign out if the users do not sign out during the wait time."
-  - "The wait time and the notification text are settings of the schedule, not fixed values: RampDownWaitTimeMinute and RampDownNotificationMessage in PowerShell. The cmdlet reference example uses 30 minutes and a short sample message."
+  - "Wait time and notification text are schedule settings, RampDownWaitTimeMinute and RampDownNotificationMessage in PowerShell; the cmdlet example uses 30 minutes."
   - "Learn states no default and no allowed range for the wait time, and how the message appears in the client is something to check in a pilot host pool."
 faq:
   - q: "Does force sign-out also sign out disconnected sessions?"
@@ -27,19 +27,19 @@ Force sign-out is a setting in the ramp-down phase of an autoscale schedule. Whe
 
 Microsoft Learn's glossary defines a forced sign-out as the service ending an active or disconnected user session without the user's consent. In the scaling plan schedule it appears on the ramp-down tab. The portal label for pooled plans with power management autoscaling is **Force logoff of users**. For dynamic autoscaling the label is **Force logoff users**, and the FAQ says the force sign-out and consolidation logic is the same for both methods.
 
-On status: Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 ([Tech Community](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording, so check the current page before relying on a limit. Power management autoscaling is generally available. See [force sign-out](/entity/avd-force-logoff/) and the [scaling plan](/entity/avd-scaling-plan/) for the surrounding objects.
+On status: Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 ([Tech Community](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording, so check the current page before relying on a limit. Power management autoscaling is generally available. See [force sign-out](https://www.m365.fm/entity/avd-force-logoff/) and the [scaling plan](https://www.m365.fm/entity/avd-scaling-plan/) for the surrounding objects.
 
 Three scope rules come from Learn:
 
 - **Only ramp-down.** The scenarios page says the force logoff setting does not sign out users in any other phase. The FAQ adds that if the wait time is longer than the phase, the schedule moves to off-peak and sessions are not forced out. Its example is a 15-minute phase with a 20-minute wait.
 - **Pooled pools only.** The FAQ answers "Can I configure autoscale to force users to sign out of their personal desktop?" with no: autoscale for personal desktops only deallocates a host if the user has signed out. Learn is not uniform here, because another FAQ entry speaks of a session being "signed out or disconnected", and the personal schedule has a **When disconnected for (min)** setting with a deallocate action. What Learn does not offer for personal pools is a forced sign-out.
-- **Consolidation still applies.** Autoscale shuts down hosts only if all existing sessions, active and disconnected, fit on fewer hosts without exceeding the [capacity threshold](/entity/avd-capacity-threshold/), and the minimum percentage of hosts is respected.
+- **Consolidation still applies.** Autoscale shuts down hosts only if all existing sessions, active and disconnected, fit on fewer hosts without exceeding the [capacity threshold](https://www.m365.fm/entity/avd-capacity-threshold/), and the minimum percentage of hosts is respected.
 
 ## The sequence, step by step
 
 1. **Consolidation check.** The scenarios page gives the minimum number of hosts as the total sessions (active plus disconnected) divided by the product of the maximum session limit and the capacity threshold. The glossary adds that the result is rounded up to the nearest whole number. Only hosts beyond that number are candidates.
 2. **Host selection.** Autoscale selects the host with the fewest sessions. If several hosts have equal numbers, the scenarios page says it chooses at random.
-3. **Drain mode.** The host goes into [drain mode](/entity/avd-drain-mode/) and accepts no sessions from new users.
+3. **Drain mode.** The host goes into [drain mode](https://www.m365.fm/entity/avd-drain-mode/) and accepts no sessions from new users.
 4. **Notification.** Users on that host receive a notification that they will be signed out after a certain time.
 5. **Wait.** Autoscale waits for the configured time. Users can sign out themselves.
 6. **Forced sign-out.** Users still connected, idle or disconnected are signed out.
@@ -83,14 +83,14 @@ Write the message so that it stands on its own, with the time and the action, an
 
 The decision between forcing and waiting, the time limit for disconnected sessions, and the cost of each are covered in "Force sign out vs wait for sign-out: choosing the ramp-down behaviour". Two facts matter for the sequence itself:
 
-- **Exclusion tag.** Hosts that carry the [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) are not started, stopped or changed in drain mode, so their users are not signed out by the scale-down.
+- **Exclusion tag.** Hosts that carry the [exclusion tag](https://www.m365.fm/entity/avd-scaling-plan-exclusion-tag/) are not started, stopped or changed in drain mode, so their users are not signed out by the scale-down.
 - **Manual drain mode.** Autoscale overrides drain mode on all VMs included in scaling, no matter who set it. See "Drain mode in Azure Virtual Desktop explained".
 
 ## Practical checks
 
 - Set the wait time shorter than the ramp-down phase, with margin.
 - Put the end-of-day behaviour and the sign-out deadline in the message text, and tell users in advance what a sign-out means for open files.
-- Test in a pilot how your profile solution, for example [FSLogix](/entity/fslogix/), behaves at a forced sign-out.
+- Test in a pilot how your profile solution, for example [FSLogix](https://www.m365.fm/entity/fslogix/), behaves at a forced sign-out.
 - Keep the maximum session limit realistic, because the consolidation maths depends on it. See "How to size the maximum session limit per session host".
 - For a single host outside autoscale, `Send-AzWvdUserSessionMessage` takes a message title and body, and `Remove-AzWvdUserSession` has a `-Force` switch. "How to use drain mode for patching and maintenance of session hosts" shows the order of the commands.
 

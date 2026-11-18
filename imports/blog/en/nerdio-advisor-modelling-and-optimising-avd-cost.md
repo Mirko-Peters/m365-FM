@@ -1,17 +1,17 @@
 ---
 title: "Nerdio Advisor: modelling and optimising AVD cost"
-summary: "Nerdio Advisor is a group of capabilities in Nerdio Manager that models the cost of a planned Azure Virtual Desktop deployment and produces recommendations for existing ones, such as VM right-sizing. The Modeler's estimate comes from the values you enter, and recommendations for deployed pools use public pricing and observed usage; neither is an Azure invoice."
+summary: "Nerdio Advisor in Nerdio Manager models the cost of a planned Azure Virtual Desktop deployment and gives recommendations for existing ones, such as right-sizing. Its figures are estimates, not an Azure invoice."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [nerdio-advisor, nerdio-manager-for-enterprise]
 keypoints:
-  - "Nerdio Advisor does two jobs: the Modeler estimates the cost of a host pool design before any Azure resources exist (Observability > Advisor > Models), and rules analyse existing resources and produce recommendations (Observability > Advisor > Rules and Recommendations)."
-  - "Rules are criteria you create. Nerdio lists six: right-sizing for AVD personal and pooled desktops, Platform TCO for AVD personal and for Cloud PC Enterprise, right-sizing for Cloud PCs, and licence suitability for Cloud PC Enterprise and Flex."
-  - "An administrator chooses what happens to a recommendation: apply it now or on a schedule, optionally message active users first, apply several in bulk, or hide it for 7 days or permanently. Nerdio recommends 1 to 4 weeks of assessment data before accepting changes."
-  - "The figures are estimates. Nerdio's cost-data page says Nerdio Manager cannot calculate figures using Microsoft Reserved Instances or Savings Plans, and the Modeler warns that actual costs vary with usage and price changes."
-  - "Nerdio's sources disagree on editions: the entitlement page lists Advisor Recommendations for AVD as Premium-only, while the pricing page ticks Advisor and TCO analysis for both Premium and Core. Confirm what your licence includes."
+  - "Nerdio Advisor has two jobs: the Modeler estimates a host pool design's cost before deployment (Observability > Advisor > Models), and rules produce recommendations for existing resources."
+  - "Rules are criteria you create. Nerdio lists six, covering right-sizing for AVD and Cloud PCs, Platform TCO for AVD personal and Cloud PC Enterprise, and licence suitability."
+  - "Admins apply a recommendation now or on schedule, optionally messaging users, in bulk, or hide it for 7 days or permanently. Nerdio recommends 1 to 4 weeks of data before accepting changes."
+  - "The figures are estimates. Nerdio says it cannot calculate with Reserved Instances or Savings Plans, and the Modeler warns that actual costs vary with usage and price changes."
+  - "Nerdio's sources disagree on editions: the entitlement page lists Advisor Recommendations for AVD as Premium-only, the pricing page lists it for Premium and Core. Confirm your licence."
 faq:
   - q: "Is Nerdio Advisor the same as Azure Advisor?"
     a: "No. Azure Advisor is Microsoft's built-in service that gives recommendations across Azure resources, and it looks at VMs generally. Nerdio Advisor is part of Nerdio Manager and works on host pools, with rules for AVD pooled and personal desktops, Cloud PCs and licences, and it can apply a size change from its own recommendation page. The two use different thresholds and lookback periods, so they can disagree."
@@ -21,9 +21,9 @@ faq:
     a: "The Recommendations help page describes actions you choose: Apply (now or scheduled, with optional messaging to active users), bulk apply, and hide for 7 days or permanently. It does not describe automatic application. Treat every recommendation as a proposal and check it against how your users work."
 ---
 
-Nerdio Advisor is a set of capabilities inside [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/) with two jobs. It models what an Azure Virtual Desktop deployment should cost before any Azure resource exists, and it analyses existing deployments to recommend changes, such as a different VM size. Both outputs are estimates, and this article explains what each job needs, what it returns and where it stops.
+Nerdio Advisor is a set of capabilities inside [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/) with two jobs. It models what an Azure Virtual Desktop deployment should cost before any Azure resource exists, and it analyses existing deployments to recommend changes, such as a different VM size. Both outputs are estimates, and this article explains what each job needs, what it returns and where it stops.
 
-Nerdio introduced [Nerdio Advisor](/entity/nerdio-advisor/) in 2023 according to its April 2024 release announcement, which describes the models as a way "to fully understand the costs before deploying any Azure resources" and the recommendations as a way to "continuously optimize an existing deployment". This guide describes Nerdio's own documentation; the claims are the vendor's, and the numbers your environment produces will differ.
+Nerdio introduced [Nerdio Advisor](https://www.m365.fm/entity/nerdio-advisor/) in 2023 according to its April 2024 release announcement, which describes the models as a way "to fully understand the costs before deploying any Azure resources" and the recommendations as a way to "continuously optimize an existing deployment". This guide describes Nerdio's own documentation; the claims are the vendor's, and the numbers your environment produces will differ.
 
 ## Where Advisor sits in Nerdio Manager
 
@@ -71,9 +71,9 @@ Learn says Windows 365 Frontline was renamed Windows 365 Flex in the week of 4 M
 
 ### What the right-sizing rules look at
 
-The pooled and personal right-sizing rules share their logic, per the help pages. By default they compare the 90th percentile of CPU and memory use over the last 30 days with an 80% increase trigger and a 60% decrease trigger. (The trigger descriptions on the rule page say "average", while its data sections use the 90th percentile; this article follows the data sections.) At least 72 hours of power-on time are needed for a reliable result, A and B-series sizes are excluded, and Nerdio stores and shows the first three candidate sizes. The pooled rule needs a dynamic host pool with auto-scale on and CPU and RAM collection enabled, while the personal rule reads from a [Log Analytics](/entity/log-analytics/) workspace linked to the host pool.
+The pooled and personal right-sizing rules share their logic, per the help pages. By default they compare the 90th percentile of CPU and memory use over the last 30 days with an 80% increase trigger and a 60% decrease trigger. (The trigger descriptions on the rule page say "average", while its data sections use the 90th percentile; this article follows the data sections.) At least 72 hours of power-on time are needed for a reliable result, A and B-series sizes are excluded, and Nerdio stores and shows the first three candidate sizes. The pooled rule needs a dynamic host pool with auto-scale on and CPU and RAM collection enabled, while the personal rule reads from a [Log Analytics](https://www.m365.fm/entity/log-analytics/) workspace linked to the host pool.
 
-[Nerdio host pool and VM right-sizing](/entity/nerdio-right-sizing/) has its own entity page. Reading the figures is covered in "VM right-sizing in Nerdio: reading the utilisation recommendations", and a worked example is "Right-sizing host pools with Nerdio Advisor: a worked example".
+[Nerdio host pool and VM right-sizing](https://www.m365.fm/entity/nerdio-right-sizing/) has its own entity page. Reading the figures is covered in "VM right-sizing in Nerdio: reading the utilisation recommendations", and a worked example is "Right-sizing host pools with Nerdio Advisor: a worked example".
 
 ### Acting on a recommendation
 
@@ -85,13 +85,13 @@ Two statements in Nerdio's documentation shape how much weight to put on Advisor
 
 First, the Modeler "only generates estimates". Actual costs vary with usage, price changes and other factors. The Modeler does not include Log Analytics workspace costs. Nerdio's pricing page advertises "75% Azure compute savings" for Nerdio Manager without stating a method or baseline, so treat that as marketing, not a forecast for your model. The model reflects your inputs, so a wrong working-hours assumption gives a wrong answer.
 
-Second, Nerdio's page on where cost data appears says Advisor, auto-scale savings and user cost attribution figures are estimates based on public pricing and observed usage, so they may differ from Azure billing. It also says Nerdio Manager cannot account for Microsoft Reserved Instances or Savings Plans because it lacks the permissions to see them. The Modeler accepts a Reserved Instance count and term as an input, but the recommendation views for deployed resources cannot see your existing commitments. If you hold [Azure Reservations](/entity/azure-reservations/) or [savings plans](/entity/azure-savings-plans/), compare a proposed size change with those commitments before applying it. Microsoft documents the same hazard for Azure Advisor: cross-series changes can increase cost if reservations cover the original SKUs.
+Second, Nerdio's page on where cost data appears says Advisor, auto-scale savings and user cost attribution figures are estimates based on public pricing and observed usage, so they may differ from Azure billing. It also says Nerdio Manager cannot account for Microsoft Reserved Instances or Savings Plans because it lacks the permissions to see them. The Modeler accepts a Reserved Instance count and term as an input, but the recommendation views for deployed resources cannot see your existing commitments. If you hold [Azure Reservations](https://www.m365.fm/entity/azure-reservations/) or [savings plans](https://www.m365.fm/entity/azure-savings-plans/), compare a proposed size change with those commitments before applying it. Microsoft documents the same hazard for Azure Advisor: cross-series changes can increase cost if reservations cover the original SKUs.
 
-For cost actuals, the same page points elsewhere: Executive Insights uses the Azure Cost Management API and needs read access enabled per subscription, and [user cost attribution](/entity/nerdio-finops-user-cost-attribution/) depends on correct resource tagging.
+For cost actuals, the same page points elsewhere: Executive Insights uses the Azure Cost Management API and needs read access enabled per subscription, and [user cost attribution](https://www.m365.fm/entity/nerdio-finops-user-cost-attribution/) depends on correct resource tagging.
 
 ## Advisor next to Azure Advisor
 
-[Azure Advisor](/entity/azure-advisor/) also gives VM resize recommendations, so a fair question is whether you need both. They differ in method:
+[Azure Advisor](https://www.m365.fm/entity/azure-advisor/) also gives VM resize recommendations, so a fair question is whether you need both. They differ in method:
 
 | | Azure Advisor (Microsoft Learn) | Nerdio Advisor right-sizing (Nerdio help) |
 |---|---|---|

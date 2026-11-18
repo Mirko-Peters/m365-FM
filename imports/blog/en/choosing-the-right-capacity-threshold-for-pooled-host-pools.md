@@ -7,7 +7,7 @@ author: mirko-p
 date: 2026-11-18
 topics: [avd-capacity-threshold, avd-scaling-plan]
 keypoints:
-  - "Microsoft Learn gives example thresholds (30, 60, 75, 80 and 90 percent) but names no recommended value, although it calls the values pre-filled in the portal suggested weekday values. The right number depends on your session limit, sign-in pattern and host start-up time."
+  - "Learn gives example thresholds (30 to 90 percent) but no recommended value. The right number depends on your session limit, sign-in pattern and host start-up time."
   - "Set a custom maximum session limit first. The threshold is a percentage of limit times hosts, and the 999999 default of a new breadth-first pool makes it meaningless."
   - "The buffer between the trigger point and the session limit has to absorb sign-ins while the next host starts. Start-up time varies by environment, so measure it."
   - "As a rule of thumb, which is our inference and not a Learn statement, use a lower threshold in ramp-up, which carries over to peak, and a higher one in ramp-down, which carries over to off-peak."
@@ -23,11 +23,11 @@ faq:
 
 Choose the capacity threshold by working out how many sessions must still fit between the trigger point and the maximum session limit while the next host starts. A higher threshold uses fewer hosts but leaves a smaller buffer for sign-ins, so as a rule of thumb (our inference) use a lower value in ramp-up and a higher one in ramp-down, then adjust with measurements. Microsoft Learn names no single number, and the portal pre-fills values that Learn calls suggested weekday values, so this guide gives a method for checking them and marks which statements are inferences.
 
-How the threshold works is explained in "Capacity threshold in AVD autoscale: how the percentage decides when another host starts". Here we assume you know that autoscale starts hosts when used capacity goes above the [capacity threshold](/entity/avd-capacity-threshold/) and that in ramp-down and off-peak it consolidates using the formula sessions divided by (limit times threshold), rounded up.
+How the threshold works is explained in "Capacity threshold in AVD autoscale: how the percentage decides when another host starts". Here we assume you know that autoscale starts hosts when used capacity goes above the [capacity threshold](https://www.m365.fm/entity/avd-capacity-threshold/) and that in ramp-down and off-peak it consolidates using the formula sessions divided by (limit times threshold), rounded up.
 
 ## Step 1: Fix the maximum session limit
 
-The threshold is a percentage of capacity, and capacity is the [maximum session limit](/entity/avd-maximum-session-limit/) times the available hosts. Learn says to set a custom limit for pooled pools using autoscale and not to keep the default. For a breadth-first pool created with the default, the load-balancing page states the limit is 999999. With that value, capacity is enormous, usage stays near 0 percent, and by the arithmetic no threshold would ever trigger a new host.
+The threshold is a percentage of capacity, and capacity is the [maximum session limit](https://www.m365.fm/entity/avd-maximum-session-limit/) times the available hosts. Learn says to set a custom limit for pooled pools using autoscale and not to keep the default. For a breadth-first pool created with the default, the load-balancing page states the limit is 999999. With that value, capacity is enormous, usage stays near 0 percent, and by the arithmetic no threshold would ever trigger a new host.
 
 Derive the limit from your workload. Learn's sizing table gives maximum users per vCPU: 6 for light, 4 for medium, 2 for heavy and 1 for power workloads, as generic starting points to be refined with your own data. For an 8 vCPU host that means up to 48 (light), 32 (medium), 16 (heavy) sessions. Learn also says to keep multi-session VMs between 6 and 24 vCPUs, although the same page later recommends 4 to 24 cores. Test with a pilot group before fixing the value, because both the limit and the threshold depend on it.
 
@@ -50,11 +50,11 @@ Start-up time depends on your image, VM size and region, and the FAQ says evalua
 3. Multiply the two. This is the number of sessions that arrive while a host starts. It is an inference, not a Learn formula.
 4. Compare it with the buffer. If the buffer is smaller, lower the threshold or raise the minimum percentage of hosts in ramp-up so hosts are already running.
 
-For example, with an invented sign-in rate of 30 per minute and an invented start time of 5 minutes, 150 sessions arrive during the wait. No row in the table covers that, and even a threshold of 30 percent would leave a buffer of only 134 sessions in the 6-host pool above, so the threshold is the wrong tool for that surge: start hosts ahead of time with the [minimum percentage of hosts](/entity/avd-minimum-percentage-of-hosts/) and an earlier ramp-up. The threshold then handles the slower growth afterward.
+For example, with an invented sign-in rate of 30 per minute and an invented start time of 5 minutes, 150 sessions arrive during the wait. No row in the table covers that, and even a threshold of 30 percent would leave a buffer of only 134 sessions in the 6-host pool above, so the threshold is the wrong tool for that surge: start hosts ahead of time with the [minimum percentage of hosts](https://www.m365.fm/entity/avd-minimum-percentage-of-hosts/) and an earlier ramp-up. The threshold then handles the slower growth afterward.
 
 ## Step 3: Use different values per phase
 
-You enter the threshold in the **Capacity threshold** field on the Ramp up and Ramp-down tabs of a schedule. Peak takes the ramp-up value and off-peak takes the ramp-down value; neither tab lets you edit it. Learn says the default values shown when you create a schedule are suggested values for weekdays, but the scaling plan article does not list them, so read your portal before saving and test them against Step 2. See [autoscale schedule phases](/entity/avd-autoscale-schedule-phases/).
+You enter the threshold in the **Capacity threshold** field on the Ramp up and Ramp-down tabs of a schedule. Peak takes the ramp-up value and off-peak takes the ramp-down value; neither tab lets you edit it. Learn says the default values shown when you create a schedule are suggested values for weekdays, but the scaling plan article does not list them, so read your portal before saving and test them against Step 2. See [autoscale schedule phases](https://www.m365.fm/entity/avd-autoscale-schedule-phases/).
 
 - **Ramp-up and peak: lower threshold (our rule of thumb).** Sessions arrive quickly, and Learn says pooled autoscale does not turn hosts off during ramp-up. A lower value starts hosts earlier and leaves a bigger buffer. The FAQ gives breadth-first as an example for these phases, so sessions spread across hosts.
 - **Ramp-down and off-peak: higher threshold (our rule of thumb).** For ramp-down, the scenarios page says a high threshold and a low minimum percentage of hosts decrease the need to start new hosts at the end of the workday; off-peak takes the ramp-down value. The FAQ gives depth-first as an example here, to consolidate sessions.
@@ -82,10 +82,10 @@ If the pool's host count is too small for the peak at the chosen threshold, no t
 ## Step 5: Check the interactions
 
 - **Disconnected sessions count.** Learn's FAQ and troubleshooting article say autoscale treats them as active for capacity because users may reconnect, and the glossary formula counts active plus disconnected sessions, so lingering disconnected sessions push usage up. A time limit policy for disconnected sessions lowers used capacity.
-- **Excluded hosts.** Hosts with the [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) never start. If all remaining hosts are tagged, a threshold breach starts nothing, and Learn warns that new users may see "No resources available".
-- **Forced sign-out.** In ramp-down, a high threshold means more consolidation, which means more users on hosts that autoscale removes (our inference; Learn says only that autoscale picks the host with the fewest sessions). With [force sign-out](/entity/avd-force-logoff/) on, those users are signed out after the wait time. With it off, you choose a ramp-down stop condition (no active or disconnected sessions, or no active sessions), and Learn says autoscale shuts a host down only if all sessions can be consolidated onto fewer hosts without exceeding the threshold.
+- **Excluded hosts.** Hosts with the [exclusion tag](https://www.m365.fm/entity/avd-scaling-plan-exclusion-tag/) never start. If all remaining hosts are tagged, a threshold breach starts nothing, and Learn warns that new users may see "No resources available".
+- **Forced sign-out.** In ramp-down, a high threshold means more consolidation, which means more users on hosts that autoscale removes (our inference; Learn says only that autoscale picks the host with the fewest sessions). With [force sign-out](https://www.m365.fm/entity/avd-force-logoff/) on, those users are signed out after the wait time. With it off, you choose a ramp-down stop condition (no active or disconnected sessions, or no active sessions), and Learn says autoscale shuts a host down only if all sessions can be consolidated onto fewer hosts without exceeding the threshold.
 - **Minimum percentage.** It sets a floor regardless of the threshold, so a threshold that looks too high may be hidden behind a high minimum.
-- **Power management or dynamic.** The threshold also applies in [dynamic autoscaling](/entity/avd-dynamic-autoscaling/), where hosts are created and deleted. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026. Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit.
+- **Power management or dynamic.** The threshold also applies in [dynamic autoscaling](https://www.m365.fm/entity/avd-dynamic-autoscaling/), where hosts are created and deleted. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026. Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit.
 
 ## Step 6: Validate with Insights
 
@@ -98,7 +98,7 @@ WVDAutoscaleEvaluationPooled
 | order by _ResourceId asc, TimeGenerated asc, ConfigScheduleName, ConfigSchedulePhase asc
 ```
 
-Read it this way, as a practical heuristic and not a Learn rule: peak occupancy far below the threshold in a phase (compare it with `ConfigCapacityThresholdPercent`) suggests the value or the minimum is too cautious, while occupancy that regularly sits at the threshold with user complaints about sign-in times suggests too little buffer. Change one number at a time. See [Azure Virtual Desktop Insights](/entity/avd-insights/) and [scaling plans](/entity/avd-scaling-plan/).
+Read it this way, as a practical heuristic and not a Learn rule: peak occupancy far below the threshold in a phase (compare it with `ConfigCapacityThresholdPercent`) suggests the value or the minimum is too cautious, while occupancy that regularly sits at the threshold with user complaints about sign-in times suggests too little buffer. Change one number at a time. See [Azure Virtual Desktop Insights](https://www.m365.fm/entity/avd-insights/) and [scaling plans](https://www.m365.fm/entity/avd-scaling-plan/).
 
 ## Sources
 

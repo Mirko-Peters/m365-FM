@@ -8,8 +8,8 @@ date: 2026-11-18
 topics: [avd-session-host, azure-virtual-desktop]
 keypoints:
   - "A session host is a VM registered to Azure Virtual Desktop. Learn says all session hosts in a host pool should come from the same image for a consistent user experience."
-  - "The Azure Virtual Desktop agent, its bootloader, the side-by-side stack and the Geneva Monitoring agent turn a VM into a session host. A registration key authorizes it to join a host pool and can be valid for up to 27 days."
-  - "Learn's sizing guidance lists maximum users per vCPU for multi-session hosts: 6 for light, 4 for medium, 2 for heavy and 1 for power workloads. It calls the figures generic starting estimates to validate with a pilot."
+  - "The AVD agent, bootloader, side-by-side stack and Geneva Monitoring agent make a VM a session host. A registration key, valid up to 27 days, authorizes joining a host pool."
+  - "Learn's sizing lists maximum users per vCPU for multi-session: 6 light, 4 medium, 2 heavy, 1 power. It calls them generic starting estimates to validate with a pilot."
   - "Host pools are managed either with a session host configuration, where the service manages the host lifecycle, or in the standard way, where you create, update and scale hosts yourself."
   - "Retiring a host safely starts with drain mode, which stops new sessions while existing ones continue. Deleting VMs can leave orphaned records, for example in Intune."
 faq:
@@ -25,18 +25,18 @@ An Azure Virtual Desktop session host is a virtual machine that is registered to
 
 ## What a session host is
 
-Microsoft Learn's [terminology page](https://learn.microsoft.com/en-us/azure/virtual-desktop/terminology) describes a [host pool](/entity/avd-host-pool/) as a collection of Azure virtual machines that are registered to [Azure Virtual Desktop](/entity/azure-virtual-desktop/) as session hosts. All session hosts in a host pool should come from the same image, so that users get a consistent experience. You control which resources users see through application groups.
+Microsoft Learn's [terminology page](https://learn.microsoft.com/en-us/azure/virtual-desktop/terminology) describes a [host pool](https://www.m365.fm/entity/avd-host-pool/) as a collection of Azure virtual machines that are registered to [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) as session hosts. All session hosts in a host pool should come from the same image, so that users get a consistent experience. You control which resources users see through application groups.
 
 The role of the host depends on the pool type:
 
-| | [Pooled](/entity/avd-pooled-host-pool/) | [Personal](/entity/avd-personal-host-pool/) |
+| | [Pooled](https://www.m365.fm/entity/avd-pooled-host-pool/) | [Personal](https://www.m365.fm/entity/avd-personal-host-pool/) |
 |---|---|---|
 | Users on one host | Several at once | One assigned user |
-| User profile | Should be in [FSLogix](/entity/fslogix/), because the next sign-in can reach another host | Can sit on the VM's OS disk |
+| User profile | Should be in [FSLogix](https://www.m365.fm/entity/fslogix/), because the next sign-in can reach another host | Can sit on the VM's OS disk |
 | Default patching | Redeploy hosts from updated images | Windows Update, Configuration Manager or other tools |
 | Maximum sessions | The configured maximum session limit, which can be exceeded under high concurrent connection load | One |
 
-Learn names two management approaches for host pools. With a [session host configuration](/entity/avd-session-host-configuration/), Azure Virtual Desktop manages the lifecycle of the hosts for you. With standard management, you create, update and scale the hosts yourself. Learn's whats-new page lists automated host pools, which use a session host configuration, as "now available" in June 2026, and Microsoft announced general availability of enhanced host pool management, which includes session host configuration, in July 2026 (Tech Community). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit.
+Learn names two management approaches for host pools. With a [session host configuration](https://www.m365.fm/entity/avd-session-host-configuration/), Azure Virtual Desktop manages the lifecycle of the hosts for you. With standard management, you create, update and scale the hosts yourself. Learn's whats-new page lists automated host pools, which use a session host configuration, as "now available" in June 2026, and Microsoft announced general availability of enhanced host pool management, which includes session host configuration, in July 2026 (Tech Community). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit.
 
 ## What makes a VM a session host
 
@@ -46,7 +46,7 @@ Learn's agent overview describes the pieces that sit on the VM:
 - The **side-by-side stack**, which users need to establish reverse server-to-client connections securely.
 - The **Geneva Monitoring agent**, which monitors the health of the agent.
 
-Learn says the agent installs the other two components and that all three are essential for end-to-end connectivity. VMs provisioned through the Azure portal or Azure Marketplace get the agent automatically. If you provision with PowerShell, you install the `.msi` files yourself. On Windows Server, Learn also has you install the Remote Desktop Session Host role first. After a manual installation Learn expects four applications to appear: Remote Desktop Agent Boot Loader, Remote Desktop Services Infrastructure Agent, Remote Desktop Services Infrastructure Geneva Agent and Remote Desktop Services SxS Network Stack. See the entity page for the [agent](/entity/avd-agent/).
+Learn says the agent installs the other two components and that all three are essential for end-to-end connectivity. VMs provisioned through the Azure portal or Azure Marketplace get the agent automatically. If you provision with PowerShell, you install the `.msi` files yourself. On Windows Server, Learn also has you install the Remote Desktop Session Host role first. After a manual installation Learn expects four applications to appear: Remote Desktop Agent Boot Loader, Remote Desktop Services Infrastructure Agent, Remote Desktop Services Infrastructure Geneva Agent and Remote Desktop Services SxS Network Stack. See the entity page for the [agent](https://www.m365.fm/entity/avd-agent/).
 
 A **registration key** authorizes a host to join the pool. Per Learn it is valid only for the duration you set. Learn suggests 1 to 4 hours for an interactive rollout and says the lifetime can go up to 27 days for staged rollouts. It also says pre-provisioned hosts that stay powered off for more than 90 days have their machine token expire, and that you should power them on for at least 20 minutes every 90 days.
 
@@ -79,13 +79,13 @@ Learn's [sizing guidelines](https://learn.microsoft.com/en-us/windows-server/rem
 
 Learn adds several cautions. It says to limit multi-session VMs to between 6 and 24 vCPUs, although later on the same page it calls 4 to 24 cores the recommended range and 4 cores the lowest number for a stable multi-session VM. It says VMs should not have more than 32 cores. Doubling the cores does not double capacity, because the scaling factor is typically 1.5 to 1.9. For 20 or more users per VM, several smaller VMs perform better than one or two large ones, and smaller VMs are easier to patch and to shut down when idle. Sign-in is CPU-intensive, so plan for peak logon times. Treat all figures as generic and check them with a pilot. Separately, the page on adding session hosts recommends using only Premium SSD for production workloads.
 
-The sizing result feeds the [maximum session limit](/entity/avd-maximum-session-limit/) on the pool and the load balancing choice.
+The sizing result feeds the [maximum session limit](https://www.m365.fm/entity/avd-maximum-session-limit/) on the pool and the load balancing choice.
 
 ## The lifecycle
 
 1. **Create.** With a session host configuration you set the number of hosts to add in the portal, and the service creates them. With standard management you create VMs through the service or outside it and register them. The portal path is **Host pools**, the pool, **Session hosts**, **+ Add**.
 2. **Register and verify.** The host appears as *Unavailable* at first and should become *Available*. Learn says to restart manually registered VMs once it does.
-3. **Operate.** Autoscale can start and stop pooled hosts. [Drain mode](/entity/avd-drain-mode/) isolates a host for maintenance. The service updates the agent, and [scheduled agent updates](/entity/avd-scheduled-agent-updates/) let you set maintenance windows.
+3. **Operate.** Autoscale can start and stop pooled hosts. [Drain mode](https://www.m365.fm/entity/avd-drain-mode/) isolates a host for maintenance. The service updates the agent, and [scheduled agent updates](https://www.m365.fm/entity/avd-scheduled-agent-updates/) let you set maintenance windows.
 4. **Update.** Learn's session host update replaces hosts from a new configuration in batches, and it is only available for host pools with a session host configuration. Learn says to disable autoscale during such an update.
 5. **Retire.** Put the host in drain mode (**Session hosts**, select the host, **Turn drain mode on**). It then accepts no new sessions and existing connections stay until users sign out or an administrator ends them. Remove it after the last session ends.
 

@@ -7,7 +7,7 @@ author: mirko-p
 date: 2026-11-18
 topics: [avd-scaling-plan, azure-virtual-desktop]
 keypoints:
-  - "Before the plan works, set a custom MaxSessionLimit on pooled host pools and assign Desktop Virtualization Power On Off Contributor at subscription level. Dynamic autoscaling additionally needs Desktop Virtualization Virtual Machine Contributor."
+  - "First set a custom MaxSessionLimit on pooled host pools and assign Power On Off Contributor at subscription level. Dynamic autoscaling also needs Virtual Machine Contributor."
   - "Each schedule has four phases: ramp-up, peak hours, ramp-down and off-peak hours, and a plan can hold several schedules. Capacity threshold and minimum percentage of hosts drive power decisions."
   - "A plan applies only to host pools of its own type, and each host pool can have only one scaling plan."
   - "Changes to a plan that is already assigned take effect immediately. As a suggestion, not a Learn requirement, test with the exclusion tag first."
@@ -24,7 +24,7 @@ To create an Azure Virtual Desktop scaling plan, assign the **Desktop Virtualiza
 
 ## What a scaling plan does
 
-An [AVD scaling plan](/entity/avd-scaling-plan/) scales the session host virtual machines of a host pool up or down on a schedule to reduce deployment cost. Microsoft Learn describes two methods:
+An [AVD scaling plan](https://www.m365.fm/entity/avd-scaling-plan/) scales the session host virtual machines of a host pool up or down on a schedule to reduce deployment cost. Microsoft Learn describes two methods:
 
 - **Power management autoscaling** powers existing session hosts on and off. It is generally available in Azure and Azure Government.
 - **Dynamic autoscaling** also creates and deletes session hosts. It works only for pooled host pools with session host configuration and is not supported in Azure Government.
@@ -33,15 +33,15 @@ Microsoft announced general availability of enhanced host pool management, inclu
 
 Two rules apply to every plan. A host pool can have only one scaling plan, while one plan can serve several host pools of the same type. Autoscale cannot run on the same host pool as the Azure Automation and Azure Logic Apps scaling script, and Learn says not to combine it with other Microsoft or third-party scaling tools: disable those on the host pools you assign.
 
-See also [Azure Virtual Desktop](/entity/azure-virtual-desktop/) and [AVD host pool](/entity/avd-host-pool/).
+See also [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) and [AVD host pool](https://www.m365.fm/entity/avd-host-pool/).
 
 ## Prerequisites
 
 1. **Region.** The scaling plan configuration data must be stored in the same Azure region as the host pool configuration.
 2. **MaxSessionLimit.** For pooled host pools, set a custom **MaxSessionLimit** in the host pool settings. Learn says not to use the default value. You can also set it with `New-AzWvdHostPool` or `Update-AzWvdHostPool`.
-3. **Permissions.** You need the `Microsoft.Authorization/roleAssignments/write` permission on your subscriptions. It is part of the built-in **User Access Administrator** and **Owner** roles. See [Azure RBAC](/entity/azure-rbac/).
+3. **Permissions.** You need the `Microsoft.Authorization/roleAssignments/write` permission on your subscriptions. It is part of the built-in **User Access Administrator** and **Owner** roles. See [Azure RBAC](https://www.m365.fm/entity/azure-rbac/).
 4. **PowerShell (only if you script it instead of the portal).** Learn lists the Az.DesktopVirtualization module, version 4.2.0 or later, for power management plans, with `New-AzWvdScalingPlan` and `New-AzWvdScalingPlanPooledSchedule` or `New-AzWvdScalingPlanPersonalSchedule`.
-5. **Hibernation (personal host pools only).** To let personal desktops hibernate, enable hibernation on the session hosts. FSLogix and App Attach do not support hibernate, so do not enable it for personal host pools that use them. See [FSLogix](/entity/fslogix/).
+5. **Hibernation (personal host pools only).** To let personal desktops hibernate, enable hibernation on the session hosts. FSLogix and App Attach do not support hibernate, so do not enable it for personal host pools that use them. See [FSLogix](https://www.m365.fm/entity/fslogix/).
 
 ## Step 1: Assign the role to the service
 
@@ -112,7 +112,7 @@ To assign pools later, open **Azure Virtual Desktop**, then **Scaling plans**, s
 
 Disconnected sessions count toward used capacity. Learn describes a time limit policy that signs out disconnected users after a set time; the autoscale FAQ suggests 15 to 30 minutes, completed before ramp-down ends. Use one of two routes.
 
-- **[Intune](/entity/intune/):** the account needs the **Policy and Profile manager** role. In the Microsoft Intune admin center, create or edit a configuration profile for **Windows 10 and later** with profile type **Session Time Limits**. In the settings picker go to **Administrative templates**, **Windows Components**, **Remote Desktop Services**, **Remote Desktop Session Host**, **Session Time Limits**, select **Set time limit for disconnected sessions**, set it to **Enabled** and choose a time value. Assign the profile to a group containing the session hosts, create it, and restart the computers after the policy applies.
+- **[Intune](https://www.m365.fm/entity/intune/):** the account needs the **Policy and Profile manager** role. In the Microsoft Intune admin center, create or edit a configuration profile for **Windows 10 and later** with profile type **Session Time Limits**. In the settings picker go to **Administrative templates**, **Windows Components**, **Remote Desktop Services**, **Remote Desktop Session Host**, **Session Time Limits**, select **Set time limit for disconnected sessions**, set it to **Enabled** and choose a time value. Assign the profile to a group containing the session hosts, create it, and restart the computers after the policy applies.
 - **Group Policy:** you need a domain account that can create or edit Group Policy objects and a group or OU containing the hosts. In the Group Policy Management console, create or edit a policy that targets the hosts, go to **Computer Configuration**, **Policies**, **Administrative Templates**, **Windows Components**, **Remote Desktop Services**, **Remote Desktop Session Host**, **Session Time Limits**, open **Set time limit for disconnected sessions**, select **Enabled**, choose a time value and select **OK**. Restart the hosts.
 
 The prerequisites page says that hosts joined to Microsoft Entra Domain Services cannot be managed with Intune, and that Windows Server hosts with Microsoft Entra join cannot be enrolled in Intune. Use Group Policy for those.
@@ -121,7 +121,7 @@ The prerequisites page says that hosts joined to Microsoft Entra Domain Services
 
 A suggested test, not a Learn requirement: Tag one test host and confirm that autoscale leaves its power state and drain mode alone.
 
-To see what autoscale did, enable diagnostics: in the Azure portal open **Azure Virtual Desktop**, **Scaling plans**, select the plan, then **Diagnostic Settings** and **Add diagnostic setting**. Enter a name for the diagnostic setting, select **Autoscale logs** and choose **Archive to a storage account** or **Stream to an event hub**, and select **Save**. The storage account must be in the same region as the plan, and the logs appear in the `insight-logs-autoscaling` container. For pooled host pools, Learn recommends the autoscale data integrated with [Insights](/entity/avd-insights/) in Azure Virtual Desktop for a more complete view.
+To see what autoscale did, enable diagnostics: in the Azure portal open **Azure Virtual Desktop**, **Scaling plans**, select the plan, then **Diagnostic Settings** and **Add diagnostic setting**. Enter a name for the diagnostic setting, select **Autoscale logs** and choose **Archive to a storage account** or **Stream to an event hub**, and select **Save**. The storage account must be in the same region as the plan, and the logs appear in the `insight-logs-autoscaling` container. For pooled host pools, Learn recommends the autoscale data integrated with [Insights](https://www.m365.fm/entity/avd-insights/) in Azure Virtual Desktop for a more complete view.
 
 ## Known limits
 

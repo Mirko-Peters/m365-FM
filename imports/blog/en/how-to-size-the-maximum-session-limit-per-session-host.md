@@ -1,17 +1,17 @@
 ---
 title: "How to size the maximum session limit per session host"
-summary: "Learn's host pool load-balancing page gives no recommended maximum session limit and points to Azure Virtual Desktop Insights, while its VM sizing guidance lists maximum users per vCPU. This guide turns those figures into a starting value from the vCPU count and workload type, then corrects it with monitoring data, with a worked example and the effects on load balancing and autoscale."
+summary: "Learn gives no recommended maximum session limit and points to Insights, while its sizing guidance lists maximum users per vCPU. This guide derives a starting value and corrects it with monitoring data."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-maximum-session-limit, avd-host-pool]
 keypoints:
-  - "Learn's load-balancing page names no recommended maximum session limit and points to Azure Virtual Desktop Insights for choosing it. Its VM sizing guidance lists maximum users per vCPU: 6 light, 4 medium, 2 heavy, 1 power."
-  - "Learn calls its sizing numbers initial estimates only, so multiply users per vCPU by your vCPU count to get a starting value, then validate with a pilot and watch users per core, input delay, CPU and memory."
+  - "Learn names no recommended maximum session limit and points to Insights. Its sizing guidance lists maximum users per vCPU: 6 light, 4 medium, 2 heavy, 1 power."
+  - "Learn calls its sizing numbers initial estimates, so multiply users per vCPU by vCPUs for a starting value, pilot it and watch users per core, input delay, CPU and memory."
   - "Capacity is the limit multiplied by the number of available hosts. As this article's arithmetic, a limit of 32 on two hosts gives 64 sessions, and a 75 percent threshold starts a third host above 48."
   - "Depth-first load balancing requires a limit. A breadth-first pool starts at 999999, and Learn says not to use the default value when autoscale manages a pooled pool."
-  - "Lowering the limit on a host that has active sessions does not affect those sessions. Learn also says that under high concurrent connection load the number of sessions on a host can exceed the limit, so treat it as a target and leave headroom."
+  - "Lowering the limit does not affect active sessions. Under high concurrent load a host's session count can exceed the limit, so treat it as a target and leave headroom."
 faq:
   - q: "Is there a recommended maximum session limit value?"
     a: "Not as a single number. Learn's host pool load-balancing page gives no recommended value and says to use Azure Virtual Desktop Insights to find a limit that fits your environment. Learn's VM sizing guidance lists maximum users per vCPU by workload type, which this guide uses as a starting point and describes as initial estimates only."
@@ -25,7 +25,7 @@ Learn's host pool load-balancing page gives no recommended value for the maximum
 
 ## What the value controls
 
-The [maximum session limit](/entity/avd-maximum-session-limit/) is a host pool property that sets how many user sessions load balancing aims to place on one [session host](/entity/avd-session-host/). It is not a hard cap: Learn's terminology page says that under high concurrent connection load, when several users connect to the host pool at the same time, the number of sessions created on a session host can exceed the limit. [Depth-first](/entity/avd-depth-first-load-balancing/) load balancing requires it, a pool created with [breadth-first](/entity/avd-breadth-first-load-balancing/) starts at 999999, and Learn says not to use the default value when autoscale manages a pooled [host pool](/entity/avd-host-pool/). Learn's [autoscale glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary) defines available capacity as the limit multiplied by the number of available session hosts.
+The [maximum session limit](https://www.m365.fm/entity/avd-maximum-session-limit/) is a host pool property that sets how many user sessions load balancing aims to place on one [session host](https://www.m365.fm/entity/avd-session-host/). It is not a hard cap: Learn's terminology page says that under high concurrent connection load, when several users connect to the host pool at the same time, the number of sessions created on a session host can exceed the limit. [Depth-first](https://www.m365.fm/entity/avd-depth-first-load-balancing/) load balancing requires it, a pool created with [breadth-first](https://www.m365.fm/entity/avd-breadth-first-load-balancing/) starts at 999999, and Learn says not to use the default value when autoscale manages a pooled [host pool](https://www.m365.fm/entity/avd-host-pool/). Learn's [autoscale glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary) defines available capacity as the limit multiplied by the number of available session hosts.
 
 Learn states the autoscale requirement without giving a reason. The consequences below are this article's reading of the formula, not Learn statements: a limit that is too high lets a host fill beyond what its CPU and memory support, and a limit that is too low reduces capacity and makes autoscale start hosts earlier.
 
@@ -86,7 +86,7 @@ The Azure CLI equivalent is `az desktopvirtualization hostpool update` with `--m
 
 ## Step 5: Check the effect on autoscale
 
-Autoscale turns on a host when used capacity exceeds the capacity threshold, and used capacity counts active and disconnected sessions. Apply that to the starting value from step 3. With a limit of 32, two hosts give 64 sessions of capacity, and a 75 percent threshold means a third host starts when the sessions exceed 48. If the third host starts too early or too late for your logon pattern, change the limit or the threshold, but not both at once, so you can see which change did what. Because Learn says concurrent logons can push a host past its limit, keep headroom below the calculated value and measure the logon peak in the pilot. The [capacity threshold](/entity/avd-capacity-threshold/) and phase settings are covered in the [scaling plan](/entity/avd-scaling-plan/) articles.
+Autoscale turns on a host when used capacity exceeds the capacity threshold, and used capacity counts active and disconnected sessions. Apply that to the starting value from step 3. With a limit of 32, two hosts give 64 sessions of capacity, and a 75 percent threshold means a third host starts when the sessions exceed 48. If the third host starts too early or too late for your logon pattern, change the limit or the threshold, but not both at once, so you can see which change did what. Because Learn says concurrent logons can push a host past its limit, keep headroom below the calculated value and measure the logon peak in the pilot. The [capacity threshold](https://www.m365.fm/entity/avd-capacity-threshold/) and phase settings are covered in the [scaling plan](https://www.m365.fm/entity/avd-scaling-plan/) articles.
 
 The same arithmetic gives a rough host count. For 200 concurrent medium-workload users and a limit of 32, the pool needs at least 200 / 32 = 6.25, so 7 hosts, if every host runs full. At 7 hosts the capacity is 224 sessions and 200 sessions is about 89 percent, above a 75 percent threshold. Keeping used capacity at or below 75 percent needs 200 / (32 x 0.75) = 8.3, so 9 hosts. This applies the consolidation formula from Learn's autoscale scenarios page, which Learn uses for the ramp-down phase, to peak sizing. The use for sizing is this article's, not a Learn example, and it shows why the limit, the threshold and the number of hosts have to be planned together.
 
@@ -94,7 +94,7 @@ Learn's sizing page says logon is CPU-intensive and tells you to plan for peak l
 
 ## Step 6: Validate with Insights and adjust
 
-Learn recommends [Azure Virtual Desktop Insights](/entity/avd-insights/) to monitor the number of sessions on each session host and the host's performance. Insights needs diagnostics, performance counters and Windows event logs collected into a Log Analytics workspace, and the monitoring users need the Desktop Virtualization Reader and Log Analytics Reader roles.
+Learn recommends [Azure Virtual Desktop Insights](https://www.m365.fm/entity/avd-insights/) to monitor the number of sessions on each session host and the host's performance. Insights needs diagnostics, performance counters and Windows event logs collected into a Log Analytics workspace, and the monitoring users need the Desktop Virtualization Reader and Log Analytics Reader roles.
 
 Useful measures from the Insights glossary:
 
@@ -114,9 +114,9 @@ Neither the load-balancing page nor the sizing page gives a CPU or memory thresh
 
 ## Related
 
-- [AVD host pool](/entity/avd-host-pool/)
-- [Maximum session limit](/entity/avd-maximum-session-limit/)
-- [Azure Virtual Desktop Insights](/entity/avd-insights/)
+- [AVD host pool](https://www.m365.fm/entity/avd-host-pool/)
+- [Maximum session limit](https://www.m365.fm/entity/avd-maximum-session-limit/)
+- [Azure Virtual Desktop Insights](https://www.m365.fm/entity/avd-insights/)
 
 ## Sources
 

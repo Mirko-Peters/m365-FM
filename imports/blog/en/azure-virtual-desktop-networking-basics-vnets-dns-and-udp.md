@@ -1,17 +1,17 @@
 ---
 title: "Azure Virtual Desktop networking basics: vNets, DNS and UDP"
-summary: "Azure Virtual Desktop needs a virtual network and subnet in the session hosts' region, working DNS, and outbound access to a published list of endpoints, mostly on TCP 443. The default transport needs no inbound ports. UDP through RDP Shortpath is a second transport that falls back to TCP when it is blocked."
+summary: "Azure Virtual Desktop needs a virtual network in the session hosts' region, working DNS and outbound access to published endpoints, mostly on TCP 443. No inbound ports are needed; UDP through RDP Shortpath falls back to TCP."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [azure-virtual-desktop, rdp-shortpath]
 keypoints:
-  - "Azure Virtual Desktop uses reverse connect: session hosts and clients make outbound TLS connections to the service, so the default transport needs no inbound ports. Only the optional managed-network Shortpath listener uses an inbound UDP port. Learn advises against opening 3389 and against public IP addresses on session hosts."
+  - "AVD uses reverse connect: hosts and clients connect outbound over TLS, so no inbound ports are needed by default. Learn advises against opening 3389 and against public IPs on session hosts."
   - "The virtual network must be in the same region as the session hosts and must reach the domain controllers and DNS servers when you use AD DS or Microsoft Entra Domain Services."
-  - "168.63.129.16 is the Azure DNS address and an Azure platform endpoint. Learn says traffic to it must not be intercepted, proxied or redirected, and port 53 is needed there only with Azure-provided DNS."
-  - "TCP 443 to the required FQDNs is the default transport. RDP Shortpath adds UDP: port 3390 for the listener on managed networks, UDP 1024 to 65535 (default 49152 to 65535) for direct STUN connections on public networks and UDP 3478 for STUN queries and the TURN relay. It falls back to TCP if UDP is blocked."
-  - "In new virtual networks created with API versions released after 31 March 2026, subnets are private by default. Session hosts there need an explicit outbound method, such as a NAT gateway, to reach the required endpoints."
+  - "168.63.129.16 is the Azure DNS address and a platform endpoint. Traffic to it must not be intercepted, proxied or redirected; port 53 matters there only with Azure-provided DNS."
+  - "TCP 443 is the default transport. RDP Shortpath adds UDP: 3390 for the managed-network listener, high ports for direct STUN and 3478 for STUN and TURN. It falls back to TCP if UDP is blocked."
+  - "In new virtual networks created with API versions after 31 March 2026, subnets are private by default, so session hosts need an explicit outbound method such as a NAT gateway."
 faq:
   - q: "Do I need to open inbound ports for Azure Virtual Desktop?"
     a: "Not for the default transport. Microsoft Learn says the service uses a reverse connection, so no inbound ports are needed. The exception is the optional RDP Shortpath listener for managed networks, which needs an inbound UDP port on each session host. Learn recommends not opening inbound port 3389 or assigning public IP addresses to session hosts, and suggests just-in-time VM access if you must open 3389."
@@ -43,7 +43,7 @@ The [prerequisites article](https://learn.microsoft.com/en-us/azure/virtual-desk
 
 Learn also advises that the round-trip time from the client network to the Azure region of the host pools stays below 150 ms and that you create session hosts in the region closest to users. It recommends not opening inbound port 3389 and not assigning public IP addresses to session hosts.
 
-DNS servers are set on the virtual network, or on a network interface, where they take precedence. If you choose custom DNS servers for the virtual network, specify at least one IP address, otherwise the virtual network ignores the setting and uses Azure-provided DNS. For hub-and-spoke designs, see the Azure Firewall guidance below. [Azure Virtual Network](/entity/azure-virtual-network/) covers the product itself.
+DNS servers are set on the virtual network, or on a network interface, where they take precedence. If you choose custom DNS servers for the virtual network, specify at least one IP address, otherwise the virtual network ignores the setting and uses Azure-provided DNS. For hub-and-spoke designs, see the Azure Firewall guidance below. [Azure Virtual Network](https://www.m365.fm/entity/azure-virtual-network/) covers the product itself.
 
 ## Outbound internet access in a new virtual network
 
@@ -95,7 +95,7 @@ Learn's [RDP Shortpath article](https://learn.microsoft.com/en-us/azure/virtual-
 | Public networks, direct | STUN between client and session host; Symmetric NAT can use TURN instead (see above) | Outbound from the session host subnet on UDP 1024 to 65535, default range 49152 to 65535 (Learn says port 65330 is ignored in the default range because Azure uses it internally); the session host's STUN query uses UDP 3478 |
 | Public networks, relayed | TURN | UDP 3478 to `51.5.0.0/16` in the Azure cloud; Learn names this rule STUN/TURN relay |
 
-Public network Shortpath via STUN and TURN is generally available in the Azure cloud, according to the page. It works without extra configuration when networks and firewalls allow the traffic and the RDP transport settings are at their defaults, so for public networks the questions are whether UDP may pass your firewalls and which outbound method the subnet uses. If both modes are available, the connection that is established first is used. Learn recommends avoiding force tunneling, double or carrier-grade NAT, cloud packet-inspection services and TCP-based VPNs, and enabling IPv6 connectivity or Teredo. If a firewall blocks UDP, Shortpath fails and the connection continues over TCP. Learn says the TURN relay is chosen by the client's location, and a distant client might fall back to TCP. See [RDP Shortpath](/entity/rdp-shortpath/) for the settings.
+Public network Shortpath via STUN and TURN is generally available in the Azure cloud, according to the page. It works without extra configuration when networks and firewalls allow the traffic and the RDP transport settings are at their defaults, so for public networks the questions are whether UDP may pass your firewalls and which outbound method the subnet uses. If both modes are available, the connection that is established first is used. Learn recommends avoiding force tunneling, double or carrier-grade NAT, cloud packet-inspection services and TCP-based VPNs, and enabling IPv6 connectivity or Teredo. If a firewall blocks UDP, Shortpath fails and the connection continues over TCP. Learn says the TURN relay is chosen by the client's location, and a distant client might fall back to TCP. See [RDP Shortpath](https://www.m365.fm/entity/rdp-shortpath/) for the settings.
 
 ## Bandwidth and latency
 

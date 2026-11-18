@@ -7,11 +7,11 @@ author: mirko-p
 date: 2026-11-18
 topics: [fslogix-redirections-xml, fslogix]
 keypoints:
-  - "FSLogix does not create redirections.xml. You write it, store it in the folder named by the RedirXMLSourceFolder setting, and FSLogix copies it into the user's profile container at sign-in when it differs from the existing copy."
-  - "Excluded folders are redirected to C:\\Users\\local_%username% on the session host, and that folder is deleted at sign-out. Copy values 0 to 3 decide whether data is copied from or back into the container."
+  - "FSLogix does not create redirections.xml. You write it into the RedirXMLSourceFolder location, and FSLogix copies it into the container at sign-in when it differs."
+  - "Excluded folders are redirected to C:\\Users\\local_%username%, which is deleted at sign-out. Copy values 0 to 3 decide whether data is copied from or back into the container."
   - "The file applies to profile containers only and has no effect on ODFC containers. Changes are read at sign-in and sign-out, so a running session keeps the old rules."
   - "Removing an exclusion, or adding one for an existing profile, does not delete data already in the container. Microsoft's FAQ says to delete the container or run a cleanup script."
-  - "Microsoft gives no recommended values and says to exclude data only when the application owner documents it as safe. Every file system request is checked against the list, so many statements reduce VM performance, and container size does not affect sign-in time."
+  - "Microsoft gives no recommended values and says to exclude only what the app owner documents as safe. Every file request is checked against the list, so many entries reduce performance."
 faq:
   - q: "Does redirections.xml work with ODFC containers?"
     a: "No. Microsoft Learn states that redirections.xml is only applicable when used with profile containers and has no effect when using ODFC containers. If Office data is split into an Office container, the file does not reach it."
@@ -27,12 +27,12 @@ Microsoft is cautious about the file. Learn's page on [custom profile redirectio
 
 ## What the file is and where it lives
 
-FSLogix does not create the file. You write it and place a copy where session hosts can read it. The [FSLogix redirections.xml](/entity/fslogix-redirections-xml/) entity has the short definition; the mechanics are these:
+FSLogix does not create the file. You write it and place a copy where session hosts can read it. The [FSLogix redirections.xml](https://www.m365.fm/entity/fslogix-redirections-xml/) entity has the short definition; the mechanics are these:
 
 - **Source folder.** The registry value `RedirXMLSourceFolder` (REG_SZ, no default) under `HKEY_LOCAL_MACHINE\SOFTWARE\FSLogix\Profiles` holds a folder path, for example `\\<server-name>\<share-name>` or a local path such as `C:\Windows\System32`. Learn says to give the folder only, never the file name. A local path can make sense when the file is part of a gold image.
 - **Copy at sign-in.** If FSLogix finds a file there that differs from the existing copy, it copies it into the profile container and processes it. The copy inside the container sits at `%userprofile%\AppData\Local\FSLogix\redirections.xml`.
 - **Permissions.** Users need read access to the share, or they cannot copy the file at sign-in. When the file is stored next to the containers, Learn says users should have read permission only on it. The file name is not case sensitive.
-- **Scope.** It applies to [profile containers](/entity/fslogix-profile-container/) and has no effect on ODFC containers. If you have split Office data into an [Office container](/entity/fslogix-office-container/), rules in this file do not reach it.
+- **Scope.** It applies to [profile containers](https://www.m365.fm/entity/fslogix-profile-container/) and has no effect on ODFC containers. If you have split Office data into an [Office container](https://www.m365.fm/entity/fslogix-office-container/), rules in this file do not reach it.
 
 ## What happens to an excluded folder
 
@@ -90,7 +90,7 @@ An Include entry keeps a subdirectory of an excluded path in the container. The 
 
 ## Learn's example file
 
-Learn's own example file is marked as an illustration that must not be used in production. It sets `ExcludeCommonFolders="49"`, which is 32 (Music) plus 16 (Links) plus 1 (Contacts), excludes a fictional sales app folder with `Copy="3"`, excludes a fictional web app folder with `Copy="0"`, and includes back that web app's `Settings` subfolder. The [practical examples article](/community/u/mirko-p/blog/exclusions-that-shrink-fslogix-profiles-practical-examples/) in this series walks through patterns of this kind, with the Teams folders from Learn's tutorial.
+Learn's own example file is marked as an illustration that must not be used in production. It sets `ExcludeCommonFolders="49"`, which is 32 (Music) plus 16 (Links) plus 1 (Contacts), excludes a fictional sales app folder with `Copy="3"`, excludes a fictional web app folder with `Copy="0"`, and includes back that web app's `Settings` subfolder. The [practical examples article](https://www.m365.fm/community/u/mirko-p/blog/exclusions-that-shrink-fslogix-profiles-practical-examples/) in this series walks through patterns of this kind, with the Teams folders from Learn's tutorial.
 
 ## Behavior to plan for
 
@@ -118,7 +118,7 @@ If the answer to the first question is no, leave the folder alone, and keep the 
 
 The FAQ names three common causes: `RedirXMLSourceFolder` contains the full file path instead of the folder only, users have no read access to the file share, or the path to the share cannot be found (network, DNS or a wrong name).
 
-For the product as a whole, see [FSLogix](/entity/fslogix/).
+For the product as a whole, see [FSLogix](https://www.m365.fm/entity/fslogix/).
 
 ## Sources
 

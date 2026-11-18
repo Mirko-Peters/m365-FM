@@ -7,9 +7,9 @@ author: mirko-p
 date: 2026-11-18
 topics: [azure-virtual-desktop, windows-365]
 keypoints:
-  - "Windows 365 Enterprise and Business assign each Cloud PC to one user and are licensed per user per month. Flex is the exception: its licenses are pooled at tenant level. Azure Virtual Desktop uses consumption-based pricing and offers multi-session."
+  - "Windows 365 Enterprise and Business assign each Cloud PC to one user, licensed per user per month; Flex licenses are pooled at tenant level. AVD uses consumption pricing and offers multi-session."
   - "Windows 11 and Windows 10 Enterprise multi-session is exclusive to Azure Virtual Desktop. Windows Server session hosts are also an AVD option."
-  - "Windows 365 Enterprise can run on a Microsoft-hosted network without an Azure subscription. AVD in Azure needs an Azure subscription, a virtual network for the session hosts and the relevant Azure RBAC roles for deployment."
+  - "Windows 365 Enterprise can run on a Microsoft-hosted network without an Azure subscription. AVD in Azure needs a subscription, a virtual network for session hosts and Azure RBAC roles."
   - "Windows 365 Cloud PC connectivity is provided by Azure Virtual Desktop, but Cloud PCs are hosted in a Microsoft-owned subscription and do not support third-party connection brokers."
   - "Learn notes that some organizations use both services, because each suits particular workloads. Which workloads go where is the administrator's own assessment."
 faq:
@@ -36,9 +36,9 @@ Choose Azure Virtual Desktop (AVD) when you need pooled multi-session hosts, Win
 
 ## What each service is
 
-Microsoft Learn describes [Azure Virtual Desktop](/entity/azure-virtual-desktop/) as "a desktop and app virtualization service that runs on Azure."
+Microsoft Learn describes [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) as "a desktop and app virtualization service that runs on Azure."
 
-[Windows 365](/entity/windows-365/) Enterprise is, in Learn's words, "a cloud-based service that automatically creates a new type of Windows virtual machine (Cloud PCs) for your end users." Each Cloud PC is assigned to an individual user. Admins do not create Cloud PCs by hand: after Cloud PC support is set up in Intune, a Cloud PC is provisioned automatically when a licensed user is assigned to an appropriate Microsoft Entra group.
+[Windows 365](https://www.m365.fm/entity/windows-365/) Enterprise is, in Learn's words, "a cloud-based service that automatically creates a new type of Windows virtual machine (Cloud PCs) for your end users." Each Cloud PC is assigned to an individual user. Admins do not create Cloud PCs by hand: after Cloud PC support is set up in Intune, a Cloud PC is provisioned automatically when a licensed user is assigned to an appropriate Microsoft Entra group.
 
 The two services are connected. The Windows 365 architecture page states that Cloud PC connectivity is provided by Azure Virtual Desktop and that no inbound connections from the internet are made to the Cloud PC. It also says Cloud PCs do not support third-party connection brokers.
 
@@ -47,13 +47,13 @@ The two services are connected. The Windows 365 architecture page states that Cl
 ### 1. Dedicated desktop or shared host
 
 - An Enterprise or Business Cloud PC belongs to one user. Flex is the exception (see below).
-- AVD offers both. Learn says single-session assigns devices to one user, and multi-session provides scalability. Windows 11 and Windows 10 Enterprise multi-session is "exclusive to Azure Virtual Desktop" and can "greatly reduce the number of virtual machines and operating system overhead." The multi-session FAQ adds that running Windows Enterprise multi-session in production outside the AVD service violates the licensing agreement. Only Microsoft and the Approved Providers Citrix and Omnissa may provide access. See [pooled host pools](/entity/avd-pooled-host-pool/) and [personal host pools](/entity/avd-personal-host-pool/).
+- AVD offers both. Learn says single-session assigns devices to one user, and multi-session provides scalability. Windows 11 and Windows 10 Enterprise multi-session is "exclusive to Azure Virtual Desktop" and can "greatly reduce the number of virtual machines and operating system overhead." The multi-session FAQ adds that running Windows Enterprise multi-session in production outside the AVD service violates the licensing agreement. Only Microsoft and the Approved Providers Citrix and Omnissa may provide access. See [pooled host pools](https://www.m365.fm/entity/avd-pooled-host-pool/) and [personal host pools](https://www.m365.fm/entity/avd-personal-host-pool/).
 
 Of the two services, only AVD offers multi-session hosts, with several users signed in on one host at the same time. Windows 365 Flex lets users share Cloud PCs one at a time. If every user needs a persistent personal desktop with no host sizing, Windows 365 fits more directly. AVD covers that case through personal host pools, but the hosts must be managed.
 
 ### 2. Operating system and application scope
 
-Learn lists Windows 11, Windows 10 and Windows Server for AVD, and Windows 10 and Windows 11 for Windows 365. AVD can publish a full desktop or individual applications (see [RemoteApp](/entity/avd-remoteapp/)). If an application requires Windows Server session hosts, only AVD applies.
+Learn lists Windows 11, Windows 10 and Windows Server for AVD, and Windows 10 and Windows 11 for Windows 365. AVD can publish a full desktop or individual applications (see [RemoteApp](https://www.m365.fm/entity/avd-remoteapp/)). If an application requires Windows Server session hosts, only AVD applies.
 
 ### 3. How billing works
 
@@ -66,7 +66,7 @@ Learn's comparison lists AVD with a "consumption-based pricing model" and Window
 A practical comparison method:
 
 1. List users by profile: dedicated, shared, part-time, occasional.
-2. For AVD, estimate VM size per session count, storage for profiles and images, networking and operations effort. [Autoscale](/entity/avd-power-management-autoscaling/) can help manage compute cost.
+2. For AVD, estimate VM size per session count, storage for profiles and images, networking and operations effort. [Autoscale](https://www.m365.fm/entity/avd-power-management-autoscaling/) can help manage compute cost.
 3. For Windows 365, take the per-user price for the Cloud PC size each profile needs, plus network costs if ANC is used.
 4. Compare totals per profile, not for the whole company.
 
@@ -89,15 +89,15 @@ Windows 365 Business has no virtual network option: Learn's comparison lists Mic
 
 ### 6. Management model
 
-For AVD, the overview lists the Azure portal, Azure CLI, Azure PowerShell and REST API, the Learn comparison with Windows 365 also lists Intune, and AVD Insights covers monitoring. Windows 365 Enterprise Cloud PCs are enrolled in and managed through Intune. Business Cloud PCs are managed in the Microsoft 365 admin center or the Windows App. Intune is optional for Business, and enrolling in it does not unlock Enterprise-only capabilities such as custom images or provisioning policies. Third-party AVD tools such as [Nerdio](/entity/nerdio/) are a separate decision.
+For AVD, the overview lists the Azure portal, Azure CLI, Azure PowerShell and REST API, the Learn comparison with Windows 365 also lists Intune, and AVD Insights covers monitoring. Windows 365 Enterprise Cloud PCs are enrolled in and managed through Intune. Business Cloud PCs are managed in the Microsoft 365 admin center or the Windows App. Intune is optional for Business, and enrolling in it does not unlock Enterprise-only capabilities such as custom images or provisioning policies. Third-party AVD tools such as [Nerdio](https://www.m365.fm/entity/nerdio/) are a separate decision.
 
 ### 7. Image and customization
 
-Learn's comparison lists AVD provisioning as manual and fully customizable, Windows 365 provisioning as automatic, with no customization for Business and a fully customizable image for Enterprise (gallery or custom images). AVD is fully customizable, with profile solutions such as [FSLogix](/entity/fslogix/).
+Learn's comparison lists AVD provisioning as manual and fully customizable, Windows 365 provisioning as automatic, with no customization for Business and a fully customizable image for Enterprise (gallery or custom images). AVD is fully customizable, with profile solutions such as [FSLogix](https://www.m365.fm/entity/fslogix/).
 
 ### 8. Where the desktop runs
 
-Windows 365 Cloud PCs exist in a subscription owned by Microsoft ("hosted on behalf of"), and the region of the virtual network determines where the Cloud PC is created. AVD session hosts run in the organization's subscription. For on-premises hosting, Learn names [AVD Hybrid and AVD for Azure Local](/entity/avd-for-azure-local/) for this.
+Windows 365 Cloud PCs exist in a subscription owned by Microsoft ("hosted on behalf of"), and the region of the virtual network determines where the Cloud PC is created. AVD session hosts run in the organization's subscription. For on-premises hosting, Learn names [AVD Hybrid and AVD for Azure Local](https://www.m365.fm/entity/avd-for-azure-local/) for this.
 
 ## Windows 365 Flex
 
@@ -124,11 +124,11 @@ Windows 365 Frontline was renamed Windows 365 Flex in the week of May 4, 2026, a
 
 ## Related
 
-- [Azure Virtual Desktop](/entity/azure-virtual-desktop/)
-- [Windows 365](/entity/windows-365/)
-- [Windows 365 Flex (formerly Frontline)](/entity/windows-365-frontline/)
-- [FSLogix](/entity/fslogix/)
-- [Intune](/entity/intune/)
+- [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/)
+- [Windows 365](https://www.m365.fm/entity/windows-365/)
+- [Windows 365 Flex (formerly Frontline)](https://www.m365.fm/entity/windows-365-frontline/)
+- [FSLogix](https://www.m365.fm/entity/fslogix/)
+- [Intune](https://www.m365.fm/entity/intune/)
 
 ## Sources
 

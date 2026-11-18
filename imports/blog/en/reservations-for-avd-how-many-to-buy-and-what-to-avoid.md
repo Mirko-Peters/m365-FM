@@ -1,17 +1,17 @@
 ---
 title: "Reservations for AVD: how many to buy and what to avoid"
-summary: "Start from the cores that are powered on in every hour of the week, then add cores only while each extra core runs more than one minus the discount of the hours, and test any recommended number against your own usage before you buy. This guide walks through the steps, a worked example with invented rates, and the mistakes Microsoft Learn and Nerdio's help pages point to."
+summary: "Start from the cores powered on every hour of the week, add cores only while each runs more than (1 - discount) of the hours, and test any recommended number against your own usage before you buy."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [nerdio-reserved-instance-management, nerdio-manager-for-enterprise]
 keypoints:
-  - "Learn says reservations are bought on consistent base usage, apply hour by hour, and unused hours are not carried forward. Each additional reserved core adds savings only if it runs in more than one minus the discount of the hours (60 percent at a 40 percent discount); a whole reservation beats pay-as-you-go only if its average utilisation is above that share."
-  - "In a worked example with invented numbers, reserving the 8-core floor of an autoscaled pool saves most at a 40 percent discount, while reserving 24 cores (about the weekly average of 20.6, rounded up to whole hosts) turns negative. At a 60 percent discount 16 cores edge ahead of the floor, which is why term and rate matter."
-  - "Nerdio's RI analytics recommends a region, VM family and total cores from a host pool's auto-scale history. Nerdio's RI analytics help article does not document the formula. Its cost-data page says Nerdio Manager cannot calculate figures using Microsoft Reserved Instances or Savings Plans; our reading is that the recommendation does not net out what you already hold, so check the number yourself."
-  - "Convert cores to VMs with the instance size flexibility ratio of the VM group. In Learn's Ddsv5 example the ratios match the vCPU count in the size names, but other groups differ, so fetch the ratios for your region."
-  - "Check the family is still purchasable (several older series cannot be bought or renewed since 1 July 2026), the reservation is for compute only, it guarantees no capacity, and auto-renew will repeat an old choice unless you change it."
+  - "Reservations apply hour by hour and unused hours are lost. An extra reserved core saves only if it runs more than (1 - discount) of the hours: 60 percent at a 40 percent discount."
+  - "In a worked example with invented numbers, reserving an autoscaled pool's 8-core floor saves most at 40 percent discount, while 24 cores turn negative. At 60 percent, 16 cores edge ahead."
+  - "Nerdio's RI analytics recommends region, VM family and cores from auto-scale history without a documented formula. Our reading: it does not net out existing reservations, so check yourself."
+  - "Convert cores to VMs with the VM group's instance size flexibility ratios. In Learn's Ddsv5 example they match vCPU counts, but other groups differ, so fetch ratios for your region."
+  - "Check the family can still be bought (several older series cannot since 1 July 2026). Reservations cover compute only, guarantee no capacity, and auto-renew repeats an old choice."
 faq:
   - q: "Should I reserve my peak number of hosts?"
     a: "Learn says to buy based on consistent base usage, and that usage above the reserved quantity is charged at pay-as-you-go rates while unused reserved hours are lost. Peak hosts run only for part of the week, so reserving them leaves paid hours unused. In the worked example below, the pool's peak of 48 cores is used in 45 of 168 hours."
@@ -23,7 +23,7 @@ faq:
 
 Start from the cores that are powered on in every hour of the week, the floor of your autoscaled pool, and add cores only while each extra core runs in more than one minus the discount of the hours. Do not size to the average or the peak. Nerdio's RI analytics gives a starting core count, but its help article does not document how it is derived, so test it against your own usage. This guide shows the steps, a worked example with invented rates, and the mistakes to avoid.
 
-It covers [Azure Reservations](/entity/azure-reservations/) for [session hosts](/entity/avd-session-host/) in an autoscaled [host pool](/entity/avd-host-pool/), using [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/) and Microsoft Learn. It is arithmetic and documentation, not advice. The reservation-versus-savings-plan comparison is in [Reservations or savings plans for AVD: which to buy](/community/u/mirko-p/blog/reservations-or-savings-plans-for-avd-which-to-buy/), and the RI analytics and purchase screens are in [Reserved Instance management in Nerdio: guided purchases](/community/u/mirko-p/blog/reserved-instance-management-in-nerdio-guided-purchases/); this guide only summarises them.
+It covers [Azure Reservations](https://www.m365.fm/entity/azure-reservations/) for [session hosts](https://www.m365.fm/entity/avd-session-host/) in an autoscaled [host pool](https://www.m365.fm/entity/avd-host-pool/), using [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/) and Microsoft Learn. It is arithmetic and documentation, not advice. The reservation-versus-savings-plan comparison is in [Reservations or savings plans for AVD: which to buy](https://www.m365.fm/community/u/mirko-p/blog/reservations-or-savings-plans-for-avd-which-to-buy/), and the RI analytics and purchase screens are in [Reserved Instance management in Nerdio: guided purchases](https://www.m365.fm/community/u/mirko-p/blog/reserved-instance-management-in-nerdio-guided-purchases/); this guide only summarises them.
 
 ## The rule behind the number
 
@@ -85,14 +85,14 @@ With the deeper discount the picture flattens and 16 cores edge ahead, but this 
 
 - **Reserving the average or the peak.** The example shows both lose against the floor at 40 percent. Nerdio's "projected CPU-months" reads like an average, but its page does not say the recommendation equals it.
 - **A window that is not typical.** A range with a holiday or a pilot skews the floor. Learn's engine uses 7, 30 and 60 days; Nerdio lets you choose, so pick normal weeks.
-- **Hosts that are stopped, not deallocated.** Stopped VMs keep using reservation hours; deallocated or deleted VMs free them, as the article on [Nerdio's reservation features](/community/u/mirko-p/blog/reserved-instance-management-in-nerdio-guided-purchases/) explains. Freed hours go to other matching VMs in the scope; if none match, they go unused and do not carry over to the next hour.
+- **Hosts that are stopped, not deallocated.** Stopped VMs keep using reservation hours; deallocated or deleted VMs free them, as the article on [Nerdio's reservation features](https://www.m365.fm/community/u/mirko-p/blog/reserved-instance-management-in-nerdio-guided-purchases/) explains. Freed hours go to other matching VMs in the scope; if none match, they go unused and do not carry over to the next hour.
 - **Wrong family or storage variant.** Learn gives an example: a reservation for Standard_D1 does not apply to Standard_DS1, which is in a different group.
 - **Series that can no longer be bought.** Since 1 July 2026 several older series, including Dv3, Dsv3, Ev3 and Esv3, cannot be bought or renewed as reservations, and for some other series the one-year term is affected; the article on reservations or savings plans lists them. Check the family against Learn's transition guide.
 - **Sizing at deployment time.** The Purchase Reserved Instance toggle on Hosts > Add new, documented for Nerdio Manager for MSP, buys for the VM size, region and quantity being created, which is a deployment count, not necessarily an always-on count.
 - **Forgetting auto-renew.** Learn says the renewal setting is turned on by default when you make a purchase, and the replacement has the same SKU, region, scope, billing subscription, term and quantity unless you change quantity, billing frequency or term. Learn lists an expiring SKU that is no longer active as a reason a renewal may not be processed. Nerdio's purchase form also has an Auto renew option. If the pool will change, review it before expiry; Learn suggests starting 6 to 12 months ahead for retiring series.
-- **Expecting capacity or licensing.** Learn says a reserved VM instance is a billing discount and does not guarantee capacity, and it covers compute only; [Azure Hybrid Benefit](/entity/azure-hybrid-benefit/) can cover the Windows software cost.
+- **Expecting capacity or licensing.** Learn says a reserved VM instance is a billing discount and does not guarantee capacity, and it covers compute only; [Azure Hybrid Benefit](https://www.m365.fm/entity/azure-hybrid-benefit/) can cover the Windows software cost.
 
-After the purchase, watch utilisation. Nerdio's tracking note says to aim close to 100 percent: lower may mean too many reservations, above 100 percent may mean more reservations are cost effective. Also compare it with the usage billed above the reservation in [Microsoft Cost Management](/entity/microsoft-cost-management/).
+After the purchase, watch utilisation. Nerdio's tracking note says to aim close to 100 percent: lower may mean too many reservations, above 100 percent may mean more reservations are cost effective. Also compare it with the usage billed above the reservation in [Microsoft Cost Management](https://www.m365.fm/entity/microsoft-cost-management/).
 
 ## Sources
 

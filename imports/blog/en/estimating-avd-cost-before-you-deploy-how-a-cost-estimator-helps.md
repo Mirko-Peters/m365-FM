@@ -1,16 +1,16 @@
 ---
 title: "Estimating AVD cost before you deploy: how a cost estimator helps"
-summary: "A cost estimator turns assumptions such as users, working hours, VM size and profile storage into a monthly figure before any Azure resource exists. This article compares three tools (the Azure pricing calculator, the Nerdio Modeler and the Nerdio Cost Estimator for MSPs), shows what each leaves out and explains how to use an estimate as a decision aid, not a forecast."
+summary: "A cost estimator turns assumptions such as users, working hours, VM size and profile storage into a monthly figure before deployment. Compared here: the Azure pricing calculator, the Nerdio Modeler and the Nerdio Cost Estimator."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [nerdio-cost-estimator, nerdio-advisor]
 keypoints:
-  - "Microsoft's calculator module for Azure Virtual Desktop estimates session host VMs and the aggregate extra storage of optional features. Internal licensing is added separately, and other AVD features can be estimated in separate modules on the same calculator page."
-  - "Nerdio has two estimators for different readers: the Modeler (Observability > Advisor > Models, plus a free web version) for an organisation that runs its own environment, and the Cost Estimator (Tools > Azure Cost Estimator at MSP level) for partners pricing customers."
-  - "Nerdio's help says working hours have the single largest impact on a Modeler prediction when configured economically, and its review step compares the model with a standard 'always on' deployment, so judge the saving against your own baseline."
-  - "Both Nerdio tools state that they only generate estimates. The Modeler leaves out Log Analytics costs, and a Nerdio licence option adds at least USD 1,000 per month to a model, so say which options a figure includes."
+  - "Microsoft's calculator module for AVD estimates session host VMs and extra storage of optional features. Internal licensing is added separately; other features have their own modules."
+  - "Nerdio has two estimators: the Modeler (Observability > Advisor > Models, also free on the web) for own environments, and the Cost Estimator (Tools > Azure Cost Estimator) for MSPs pricing customers."
+  - "Nerdio says working hours have the largest impact on a Modeler prediction, and its review compares the model with an 'always on' deployment, so judge savings against your own baseline."
+  - "Both Nerdio tools only generate estimates. The Modeler leaves out Log Analytics costs, and a Nerdio licence option adds at least USD 1,000 per month, so state which options a figure includes."
   - "Record each input with its source and re-test it after a pilot; after go-live, compare the estimate with actual cost in Microsoft Cost Management."
 faq:
   - q: "Which estimator should I use first?"
@@ -23,7 +23,7 @@ faq:
 
 A cost estimator turns a list of assumptions (users, working hours, VM size, profile storage) into a monthly figure before any Azure resource exists. Used well, it shows which assumption moves the number most and where the estimate stops. Used badly, it produces a precise-looking figure that nobody can reconcile with the first invoice.
 
-This article looks at three tools for planning [Azure Virtual Desktop](/entity/azure-virtual-desktop/) (AVD): the AVD module in the Azure pricing calculator, the Modeler in [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/) (with a free web version), and the [Nerdio Cost Estimator](/entity/nerdio-cost-estimator/) in [Nerdio Manager for MSP](/entity/nerdio-manager-for-msp/). It explains what each takes in, what each leaves out and how to use an estimate to decide. The Modeler walk-through and the recommendations for deployed pools are covered in "Nerdio Advisor: modelling and optimising AVD cost", and the cost lines themselves in "What Azure Virtual Desktop really costs: the full cost model".
+This article looks at three tools for planning [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) (AVD): the AVD module in the Azure pricing calculator, the Modeler in [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/) (with a free web version), and the [Nerdio Cost Estimator](https://www.m365.fm/entity/nerdio-cost-estimator/) in [Nerdio Manager for MSP](https://www.m365.fm/entity/nerdio-manager-for-msp/). It explains what each takes in, what each leaves out and how to use an estimate to decide. The Modeler walk-through and the recommendations for deployed pools are covered in "Nerdio Advisor: modelling and optimising AVD cost", and the cost lines themselves in "What Azure Virtual Desktop really costs: the full cost model".
 
 ## What an estimate is for
 

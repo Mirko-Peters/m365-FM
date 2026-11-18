@@ -36880,6 +36880,10 @@
   "long": {
    "en": "Nerdio is a software company headquartered in Chicago, Illinois. Its company fact sheet gives 2020 as the founding year and names two products: Nerdio Manager for Enterprise and Nerdio Manager for MSP. The company's website describes its platform as one place to manage Azure Virtual Desktop, Windows 365, Intune and Microsoft 365, and also lists pages on FSLogix, Azure Local, Microsoft Defender and AVD Hybrid.\n\nNerdio Manager for Enterprise and Nerdio Manager for MSP are the two products. On its About us page, Nerdio says it began as an internal tool at the MSP Adar, spun off as its own company in 2020, and wants to help IT teams and MSPs succeed. It describes Nerdio Manager as bringing Microsoft cloud technologies together in one solution so that everything can be managed in one place. Azure Virtual Desktop, Windows 365 and Intune are Microsoft services that Nerdio Manager is used to manage.\n\nNerdio's announcement of April 2024 for Nerdio Manager for Enterprise 6 and Nerdio Manager for MSP 5 said that the Standard edition of the Enterprise product would be replaced by Core, and it described Premium as the edition that includes all features. Nerdio's current help center lists two editions, Core and Premium, and notes that advanced cost optimization features such as the Azure Capacity Extender are not supported in Core. Individual capabilities, such as Nerdio Advisor for cost modeling and right-sizing or the Azure Capacity Extender for fallback VM sizes, are documented by Nerdio per product and edition, so check the current Nerdio help pages before assuming a feature is part of a given edition.",
    "de": "Nerdio ist ein Softwareunternehmen mit Hauptsitz in Chicago, Illinois. Das Unternehmensdatenblatt nennt 2020 als Gründungsjahr und führt zwei Produkte auf: Nerdio Manager for Enterprise und Nerdio Manager for MSP. Auf seiner Website beschreibt das Unternehmen die Plattform als einen Ort, um Azure Virtual Desktop, Windows 365, Intune und Microsoft 365 zu verwalten, und führt außerdem Seiten zu FSLogix, Azure Local, Microsoft Defender und AVD Hybrid auf.\n\nNerdio Manager for Enterprise und Nerdio Manager for MSP sind die beiden Produkte. Auf der Seite About us schreibt Nerdio, das Unternehmen sei aus einem internen Werkzeug des MSP Adar entstanden, 2020 als eigenes Unternehmen ausgegründet worden und wolle IT-Teams und MSPs zum Erfolg verhelfen. Nerdio Manager führe Microsoft-Cloud-Technologien in einer Lösung zusammen, sodass sich alles an einem Ort verwalten lasse. Azure Virtual Desktop, Windows 365 und Intune sind Microsoft-Dienste, die man mit Nerdio Manager verwaltet.\n\nIn Nerdios Ankündigung vom April 2024 zu Nerdio Manager for Enterprise 6 und Nerdio Manager for MSP 5 hieß es, die Standard-Edition des Enterprise-Produkts werde durch Core ersetzt, und Premium wurde als die Edition beschrieben, die alle Funktionen enthält. Das aktuelle Nerdio-Hilfecenter nennt zwei Editionen, Core und Premium, und weist darauf hin, dass erweiterte Funktionen zur Kostenoptimierung wie der Azure Capacity Extender in Core nicht unterstützt werden. Einzelne Funktionen, etwa Nerdio Advisor für Kostenmodellierung und Right-Sizing oder der Azure Capacity Extender für Ersatz-VM-Größen, dokumentiert Nerdio je Produkt und Edition. Welche Edition eine Funktion enthält, sollte man daher in den aktuellen Nerdio-Hilfeseiten prüfen."
+  },
+  "disclosure": {
+   "en": "Disclosure: Nerdio is a partner of M365.FM and does not pay for this content. M365.FM describes Nerdio's products factually, like any other product.",
+   "de": "Transparenzhinweis: Nerdio ist Partner von M365.FM und bezahlt nicht für diese Inhalte. M365.FM beschreibt die Produkte von Nerdio sachlich wie jedes andere Produkt."
   }
  },
  {
@@ -62421,7 +62425,7 @@
  {
   "id": "avd-autoscale-schedule-phases",
   "type": "concept",
-  "name": "Autoscale schedule phases (ramp-up, peak, ramp-down, off-peak)",
+  "name": "Autoscale schedule phases (Azure Virtual Desktop)",
   "aliases": [
    "Ramp-up",
    "Peak",
@@ -62460,7 +62464,7 @@
  {
   "id": "avd-capacity-threshold",
   "type": "concept",
-  "name": "Capacity threshold (Azure Virtual Desktop autoscale)",
+  "name": "Capacity threshold (Azure Virtual Desktop)",
   "aliases": [],
   "desc": {
    "en": "The capacity threshold in Azure Virtual Desktop autoscale is the percentage of used host pool capacity that triggers scaling. Autoscale turns on hosts above it and turns hosts off only if usage stays at or below it.",
@@ -62494,7 +62498,7 @@
  {
   "id": "avd-minimum-percentage-of-hosts",
   "type": "concept",
-  "name": "Minimum percentage of hosts (Azure Virtual Desktop autoscale)",
+  "name": "Minimum percentage of hosts (Azure Virtual Desktop)",
   "aliases": [],
   "desc": {
    "en": "The minimum percentage of hosts is the share of session hosts that autoscale keeps on during a phase and never turns off. Results are rounded up, so 10% of 7 hosts keeps one host on.",
@@ -62562,7 +62566,7 @@
   "type": "concept",
   "name": "Force sign out users during ramp-down (Azure Virtual Desktop)",
   "aliases": [
-   "Force logoff"
+   "Force logoff users"
   ],
   "desc": {
    "en": "Force sign out is an autoscale option in the ramp-down phase of Azure Virtual Desktop. Autoscale puts the host with the fewest sessions in drain mode, notifies users, waits, then signs them out and turns the host off.",
@@ -62855,7 +62859,7 @@
  {
   "id": "avd-personal-host-pool",
   "type": "concept",
-  "name": "Personal host pool (Azure Virtual Desktop)",
+  "name": "Personal host pool",
   "aliases": [],
   "desc": {
    "en": "In a personal host pool, each session host is assigned to one user, who always gets sessions on that host. Assignment is either direct, by an administrator, or automatic to the first available session host.",
@@ -62885,7 +62889,7 @@
  {
   "id": "avd-pooled-host-pool",
   "type": "concept",
-  "name": "Pooled host pool (Azure Virtual Desktop)",
+  "name": "Pooled host pool",
   "aliases": [],
   "desc": {
    "en": "In a pooled host pool, user sessions are load balanced across session hosts, so several users can share one host. The load balancing algorithm is either breadth-first or depth-first.",
@@ -63059,7 +63063,7 @@
  {
   "id": "avd-hibernation",
   "type": "concept",
-  "name": "Hibernate (Azure Virtual Desktop personal host pools)",
+  "name": "Hibernate (Azure Virtual Desktop)",
   "aliases": [
    "Hibernation"
   ],
@@ -63280,9 +63284,7 @@
   "id": "avd-multimedia-redirection",
   "type": "concept",
   "name": "Multimedia redirection (Azure Virtual Desktop)",
-  "aliases": [
-   "MMR"
-  ],
+  "aliases": [],
   "desc": {
    "en": "Multimedia redirection offloads browser video playback and WebRTC calls from the remote session to the local device, improving rendering and call quality. It needs a session host service and a browser extension for Microsoft Edge or Google Chrome.",
    "de": "Multimedia Redirection lagert Videowiedergabe im Browser und WebRTC-Anrufe aus der Remotesitzung auf das lokale Gerät aus und verbessert so Darstellung und Anrufqualität. Nötig sind ein Dienst auf dem Sitzungshost und eine Browsererweiterung für Edge oder Chrome."
@@ -63655,9 +63657,9 @@
  {
   "id": "avd-validation-environment",
   "type": "concept",
-  "name": "Validation host pool (Azure Virtual Desktop)",
+  "name": "Validation environment (Azure Virtual Desktop)",
   "aliases": [
-   "Validation environment"
+   "Validation host pool"
   ],
   "desc": {
    "en": "A validation host pool receives Azure Virtual Desktop service updates before production host pools, so admins can find update-related problems before users are affected. It is enabled as a per-host-pool setting and should mirror production.",
@@ -63991,7 +63993,7 @@
  {
   "id": "sysprep",
   "type": "concept",
-  "name": "Sysprep (Windows image preparation)",
+  "name": "Sysprep",
   "aliases": [],
   "desc": {
    "en": "Windows tool whose /generalize option removes computer-specific information such as the SID so an installation can be captured and deployed to other PCs. Windows 8.1 and Windows Server 2012 or later allow up to 1001 runs per image.",
@@ -64299,56 +64301,6 @@
   }
  },
  {
-  "id": "showback-chargeback",
-  "type": "concept",
-  "name": "Showback and chargeback",
-  "aliases": [],
-  "desc": {
-   "en": "Showback gives teams visibility into the cloud costs they cause without billing them. Chargeback bills internal teams for their cloud costs through existing finance processes. Both rely on a cost allocation strategy, with showback usually first.",
-   "de": "Showback macht Teams die von ihnen verursachten Cloud-Kosten sichtbar, ohne sie zu belasten. Chargeback verrechnet Cloud-Kosten über bestehende Finanzprozesse intern an die Teams. Beides beruht auf einer Kostenallokation, meist zuerst Showback."
-  },
-  "web": "",
-  "wikidata": "",
-  "wikipedia": "",
-  "docs": "https://learn.microsoft.com/en-us/cloud-computing/finops/framework/manage/invoicing-chargeback",
-  "rel": [
-   [
-    "broader",
-    "finops"
-   ],
-   [
-    "related_to",
-    "cost-to-serve"
-   ],
-   [
-    "related_to",
-    "microsoft-cost-management"
-   ],
-   [
-    "related_to",
-    "cloud-cost-optimization"
-   ],
-   [
-    "related_to",
-    "showback"
-   ],
-   [
-    "related_to",
-    "chargeback"
-   ]
-  ],
-  "kind": "practice",
-  "source": {
-   "import": "nerdio_new_entities.json",
-   "lang": "en",
-   "approved_by": "Mirko Peters (16.11.2026: Nerdio-Reihe; Texte und Quellen am 16.11.2026 neu geprueft, nicht einzeln freigegeben)"
-  },
-  "long": {
-   "en": "Showback and chargeback are two FinOps capabilities for giving teams insight into cloud costs. With showback, each team has visibility of the charges it is responsible for. Chargeback goes a step further: the FinOps Framework on Microsoft Learn describes invoicing and chargeback as receiving, reconciling and paying provider invoices and then billing internal teams for their respective cloud costs, using existing internal finance tools and processes. Learn says this enables increased transparency, more direct accountability for the costs each department incurs and reduced overhead costs.\n\nLearn calls chargeback, cost allocation and showback important components of a FinOps practice and says the three can be implemented in any order. It generally recommends that most organizations start with showback, so each team has visibility of its charges, at least at cloud scope level. The next step is cost allocation, which aligns cloud costs to the organizational reporting hierarchy, and the last is chargeback based on that cost allocation strategy. The chargeback model should be planned with the IT and Finance departments, and the allocation should reflect how stakeholders agreed to account for shared costs and commitment discounts. Without an established allocation strategy, Learn suggests simpler chargeback models that are fair and agreed upon by all stakeholders, and it advises documenting how chargeback works.\n\nLearn names tagging as a way to automate the cost allocation strategy. For a chargeback that covers commitment discounts, it points to the rate optimization capability. Beyond the basics, it suggests a one-way synchronization from the budget system to Microsoft Cost Management budgets, and Cost Management budgets for forecast values. The capability is part of the FinOps Framework by the FinOps Foundation, a non-profit organization.",
-   "de": "Showback und Chargeback sind zwei FinOps-Disziplinen, mit denen Teams Einblick in Cloud-Kosten erhalten. Beim Showback hat jedes Team Einsicht in die Kosten, für die es verantwortlich ist. Chargeback geht einen Schritt weiter: Das FinOps Framework auf Microsoft Learn beschreibt Invoicing und Chargeback als Entgegennahme, Abstimmung und Bezahlung der Rechnungen des Anbieters und anschließende Weiterbelastung der jeweiligen Cloud-Kosten an interne Teams mit den vorhandenen internen Finanzwerkzeugen und -prozessen. Laut Learn ermöglicht das mehr Transparenz, direktere Verantwortung für die Kosten jeder Abteilung und geringeren Overhead.\n\nLearn nennt Chargeback, Kostenallokation und Showback wichtige Bestandteile einer FinOps-Praxis und sagt, die drei ließen sich in beliebiger Reihenfolge einführen. Den meisten Organisationen empfiehlt es im Allgemeinen, mit Showback zu beginnen, damit jedes Team seine Kosten sieht, mindestens auf Ebene des Cloud-Bereichs. Danach folgt die Kostenallokation, die Cloud-Kosten an die organisatorische Berichtshierarchie anpasst, und zuletzt Chargeback auf Grundlage dieser Allokationsstrategie. Das Chargeback-Modell sollte mit IT und Finanzabteilung geplant werden, und die Allokation sollte abbilden, wie die Beteiligten gemeinsame Kosten und Commitment-Rabatte verbuchen wollen. Gibt es keine etablierte Allokationsstrategie, rät Learn zu einfacheren Chargeback-Modellen, die fair sind und von allen Beteiligten getragen werden, und dazu, die Funktionsweise zu dokumentieren.\n\nLearn nennt Tagging als Weg, die Allokationsstrategie zu automatisieren. Für ein Chargeback, das Commitment-Rabatte abdeckt, verweist es auf die Disziplin Rate Optimization. Über die Grundlagen hinaus schlägt es eine einseitige Synchronisierung vom Budgetsystem zu den Budgets in Microsoft Cost Management vor sowie Cost-Management-Budgets für Prognosewerte. Die Disziplin ist Teil des FinOps Framework der FinOps Foundation, einer gemeinnützigen Organisation."
-  }
- },
- {
   "id": "azure-budgets",
   "type": "concept",
   "name": "Azure budgets",
@@ -64429,6 +64381,10 @@
   "long": {
    "en": "Nerdio Manager for Enterprise is a Nerdio product for IT teams that manage Azure Virtual Desktop (AVD), Windows 365 and Intune environments from one console. Nerdio's product page describes automatic scaling of resources to control cost, monitoring of AVD, Windows 365 and Intune in one place, built-in security policies, migration from legacy VDI platforms, and central deployment of physical and virtual desktops. Listed features include a cost modeler, application deployment, scripted actions, granular role-based access control, Auto-Heal, Nerdio Advisor, MSIX image management, Intune Insights and Azure Local support.\n\nAccording to the Nerdio help center, the core is a self-contained Azure web app with supporting components. It handles VM creation and deletion, auto-scale for desktops, disks and storage, scripted actions and runbooks, creation, versioning and backup of desktop images, Azure Files, application deployment and FSLogix for profiles, with Azure NetApp Files for larger AVD environments. Deployment is possible in single-subscription, multi-subscription and multi-tenant scenarios; Nerdio calls multi-tenant setups advanced and recommends discussing them with its support team first.\n\nNerdio Manager needs specific permissions in Entra ID, as an enterprise application, and on the Azure subscriptions and resource groups it manages. With Entra Domain Services, the desktops need line-of-sight connectivity to the domain, as in a native AVD deployment. Nerdio Manager for MSP is listed as a separate Nerdio product.",
    "de": "Nerdio Manager for Enterprise ist ein Nerdio-Produkt für IT-Teams, die Azure Virtual Desktop (AVD), Windows 365 und Intune über eine zentrale Konsole verwalten. Auf der Produktseite beschreibt Nerdio die automatische Skalierung von Ressourcen zur Kostenkontrolle, die Überwachung von AVD, Windows 365 und Intune an einem Ort, integrierte Sicherheitsrichtlinien, die Migration von älteren VDI-Plattformen sowie die zentrale Bereitstellung physischer und virtueller Desktops. Genannte Funktionen sind unter anderem ein Cost Modeler, Anwendungsbereitstellung, Scripted Actions, granulare rollenbasierte Zugriffssteuerung, Auto-Heal, Nerdio Advisor, MSIX-Image-Verwaltung, Intune Insights und Unterstützung für Azure Local.\n\nLaut Hilfecenter von Nerdio besteht der Kern aus einer in sich geschlossenen Azure-Web-App mit unterstützenden Komponenten. Sie übernimmt das Erstellen und Löschen von VMs, Auto-Scale für Desktops, Datenträger und Speicher, Scripted Actions und Runbooks, Erstellung, Versionierung und Sicherung von Desktop-Images, Azure Files, die Anwendungsbereitstellung und FSLogix für Profile; für größere AVD-Umgebungen kommt Azure NetApp Files hinzu. Die Bereitstellung ist in Szenarien mit einem Abonnement, mehreren Abonnements und mehreren Mandanten möglich. Mandantenübergreifende Setups bezeichnet Nerdio als fortgeschritten und empfiehlt, sie vorab mit dem Support zu besprechen.\n\nNerdio Manager benötigt bestimmte Berechtigungen in Entra ID, als Unternehmensanwendung, sowie für die verwalteten Azure-Abonnements und Ressourcengruppen. Bei Entra Domain Services brauchen die Desktops Sichtverbindung zur Domäne, wie bei einer nativen AVD-Bereitstellung. Nerdio Manager for MSP wird als eigenständiges Nerdio-Produkt geführt."
+  },
+  "disclosure": {
+   "en": "Disclosure: Nerdio is a partner of M365.FM and does not pay for this content. M365.FM describes Nerdio's products factually, like any other product.",
+   "de": "Transparenzhinweis: Nerdio ist Partner von M365.FM und bezahlt nicht für diese Inhalte. M365.FM beschreibt die Produkte von Nerdio sachlich wie jedes andere Produkt."
   }
  },
  {
@@ -64478,6 +64434,10 @@
   "long": {
    "en": "Nerdio Manager for MSP, or NMM, is Nerdio's multi-tenant management product for managed service providers and has been available since April 2021. Nerdio Manager for Enterprise, available since March 2020, is a separate product. Nerdio's announcement of NMM version 5, published on 2 April 2024 together with Nerdio Manager for Enterprise version 6, says NMM is now much more than an Azure Virtual Desktop deployment, management and optimization platform and is becoming a complete Microsoft cloud management platform for MSPs that encompasses administration of Azure infrastructure, Intune endpoints, Entra ID identity, Defender security and other Microsoft 365 suite components. Nerdio's website presents the Nerdio platform as one platform for Azure Virtual Desktop, Windows 365, Intune and Microsoft 365.\n\nThe announcement names several multi-customer features. Solution Baselines let an MSP customize baselines, apply them to all or selected customers and monitor drift from the desired state; baselines can remediate drift automatically, with initial support for Defender for Endpoint policies. Unified Application Management (generally available in version 5) centralizes app storage using Microsoft's Winget technology and delivers apps by user, group, device or device type without third-party agents on the devices. Backup and disaster recovery of policies takes daily snapshots at MSP and customer level so that Intune policies, baselines and assignments can be restored. Reserved Instance Management recommends Azure reservation purchases, and a Defender integration is meant to ease onboarding customers to Defender for Business and Defender for Endpoint.\n\nConsole Connect was described in April 2024 as a private preview. It lets technicians support physical and virtual endpoints across the customer base by sharing screens; it can administer any VM with admin rights, and by default users must authorize the connection. Nerdio's help center for NMM has articles on enabling Console Connect and troubleshooting it; the enabling article, updated 13 October 2026, says it is currently offered in the United States, Canada, the EU and Australia, not in the Gov Edition.",
    "de": "Nerdio Manager for MSP, kurz NMM, ist Nerdios mandantenfähiges Management-Produkt für Managed Service Provider und seit April 2021 verfügbar. Nerdio Manager for Enterprise, seit März 2020 verfügbar, ist ein eigenes Produkt. Nerdios Ankündigung von NMM Version 5 vom 2. April 2024 (mit Nerdio Manager for Enterprise 6) sagt, NMM sei weit mehr als eine AVD-Bereitstellungs-, Verwaltungs- und Optimierungsplattform und entwickle sich zu einer vollständigen Microsoft-Cloud-Management-Plattform für MSPs, die die Verwaltung von Azure-Infrastruktur, Intune-Endpunkten, Entra-ID-Identitäten, Defender-Sicherheit und weiteren Komponenten der Microsoft-365-Suite umfasst. Die Nerdio-Website beschreibt Nerdio als Plattform für Azure Virtual Desktop, Windows 365, Intune und Microsoft 365.\n\nDie Ankündigung nennt mehrere Multikunden-Funktionen. Solution Baselines lassen MSPs Baselines anpassen, auf alle oder ausgewählte Kunden anwenden und Abweichungen vom Sollzustand überwachen; sie können Abweichungen automatisch korrigieren, zunächst für Defender-for-Endpoint-Richtlinien. Unified Application Management (in Version 5 allgemein verfügbar) zentralisiert die App-Ablage mit Microsofts Winget und liefert Apps nach Benutzer, Gruppe, Gerät oder Gerätetyp ohne Drittanbieter-Agenten auf den Geräten aus. Backup und Disaster Recovery von Richtlinien erstellt täglich Snapshots auf MSP- und Kundenebene, damit sich Intune-Richtlinien, Baselines und Zuweisungen wiederherstellen lassen. Reserved Instance Management empfiehlt den Kauf von Azure-Reservierungen, und eine Defender-Integration soll das Kunden-Onboarding zu Defender for Business und Defender for Endpoint erleichtern.\n\nConsole Connect wurde im April 2024 als Private Preview beschrieben. Techniker können damit physische und virtuelle Endpunkte aller Kunden per Bildschirmfreigabe unterstützen; es kann jede VM mit Administratorrechten verwalten, und standardmäßig müssen Benutzer die Verbindung genehmigen. Die NMM-Hilfe von Nerdio enthält Artikel zum Aktivieren und zur Fehlerbehebung von Console Connect; der Aktivierungsartikel (Stand 13. Oktober 2026) nennt es derzeit für USA, Kanada, EU und Australien, nicht für die Gov Edition."
+  },
+  "disclosure": {
+   "en": "Disclosure: Nerdio is a partner of M365.FM and does not pay for this content. M365.FM describes Nerdio's products factually, like any other product.",
+   "de": "Transparenzhinweis: Nerdio ist Partner von M365.FM und bezahlt nicht für diese Inhalte. M365.FM beschreibt die Produkte von Nerdio sachlich wie jedes andere Produkt."
   }
  },
  {
@@ -64649,9 +64609,7 @@
   "id": "nerdio-unified-app-catalog",
   "type": "concept",
   "name": "Nerdio Unified App Catalog",
-  "aliases": [
-   "Unified Application Management"
-  ],
+  "aliases": [],
   "desc": {
    "en": "Nerdio catalog that centralizes application storage using native Microsoft Winget and delivers apps by policy without third-party agents on devices. Nerdio Manager for Enterprise 6.0 adds an SCCM connector to discover existing deployments.",
    "de": "Nerdio-Katalog, der Anwendungen zentral über das native Microsoft Winget ablegt und per Richtlinie ohne Agenten von Drittanbietern auf Geräte verteilt. Nerdio Manager for Enterprise 6.0 ergänzt einen SCCM-Connector, um bestehende Bereitstellungen zu erkennen."

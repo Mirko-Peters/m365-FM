@@ -7,11 +7,11 @@ author: mirko-p
 date: 2026-11-18
 topics: [nerdio-manager-for-msp, intune]
 keypoints:
-  - "Per Nerdio's pages, Intune policies are imported from a source tenant (the MSP tenant or a specific tenant) or a JSON or TXT file into Nerdio Manager for MSP and published to customer accounts. Nerdio Manager can also clone a policy or create a built-in device compliance policy. Later source changes are pulled in by re-import or Update."
-  - "Assignments to customers use a sync type, manual by default or automatic, and Add or Overwrite. Per Nerdio's Sync Type note, a policy assigned to All customers is also published automatically to newly added accounts."
-  - "Drift status compares a customer's policy with the MSP source. For a policy outside a Policy Baseline, Fix drift only works in Enforced mode; Rollback and Accept drift (with an expiry) are the alternatives."
+  - "Per Nerdio, Intune policies are imported from a source tenant or a JSON or TXT file into Nerdio Manager for MSP and published to customer accounts. Source changes come in by re-import or Update."
+  - "Customer assignments use a sync type (manual by default, or automatic) and Add or Overwrite. A policy assigned to All customers is also published to newly added accounts."
+  - "Drift status compares a customer's policy with the MSP source. Outside a Policy Baseline, Fix drift only works in Enforced mode; Rollback and Accept drift are alternatives."
   - "Nerdio checks source tenants for unimported changes every 4 hours. Nerdio validates only the JSON syntax of an edited policy, not whether the Intune settings are valid."
-  - "Microsoft 365 Lighthouse is a no-additional-cost Microsoft option with its own limits (CSP partners, up to 2,500 licensed users per customer tenant). Microsoft's September 2025 post names Nerdio and inforcer as independent companion solutions; a March 2026 post adds three validated partners, including CIPP."
+  - "Microsoft 365 Lighthouse is a no-additional-cost option for CSP partners, up to 2,500 licensed users per customer tenant. Microsoft names Nerdio and inforcer among companion solutions."
 faq:
   - q: "Does Nerdio replace Intune for an MSP?"
     a: "No. Intune remains the underlying service. Nerdio's help pages describe policies, profiles and baselines that are published to customer accounts. On the account-level page, changes to assigned policies and profiles made in Nerdio Manager or in the admin center are reflected in the other. The Microsoft post that announces the collaboration calls Nerdio and inforcer independent companion solutions."
@@ -34,7 +34,7 @@ An MSP therefore has several routes:
 | Route | What the sources say |
 |---|---|
 | Intune admin center per customer tenant | Configured per tenant; the Microsoft post describes repeated tasks and portal switching |
-| [Microsoft 365 Lighthouse](/entity/microsoft-365-lighthouse/) | A Microsoft admin portal for managing customers at scale; no additional cost. Learn lists a default SMB security baseline, multi-tenant device-compliance insights and tools to compare policies. Requires CSP enrollment and, per customer tenant, delegated access (GDAP or DAP), at most 2,500 licensed users and the partner's region |
+| [Microsoft 365 Lighthouse](https://www.m365.fm/entity/microsoft-365-lighthouse/) | A Microsoft admin portal for managing customers at scale; no additional cost. Learn lists a default SMB security baseline, multi-tenant device-compliance insights and tools to compare policies. Requires CSP enrollment and, per customer tenant, delegated access (GDAP or DAP), at most 2,500 licensed users and the partner's region |
 | Nerdio, inforcer | Named in Microsoft's September 2025 post as independent companion solutions building on top of Intune |
 | CIPP | One of three further validated partners in Microsoft's March 2026 post (the September post mentions it as a community tool) |
 
@@ -91,7 +91,7 @@ A baseline groups Intune policies under a desired state. Create one under Baseli
 
 When you view the status of a Policy Baseline, each policy has its own Fix drift action. Per Nerdio, it is available for policies in a Report-only baseline and for policies in an Enforce baseline that are not yet published. In a Report-only baseline it publishes the policy to that account once, after you tick a check box to override Report-only mode.
 
-Baselines are processed from top to bottom, and a lower-priority baseline skips a policy that a higher one already evaluated or published. Nerdio advises against overlapping baselines. [Nerdio Solution Baselines](/entity/nerdio-solution-baselines/) are a separate feature, not covered here.
+Baselines are processed from top to bottom, and a lower-priority baseline skips a policy that a higher one already evaluated or published. Nerdio advises against overlapping baselines. [Nerdio Solution Baselines](https://www.m365.fm/entity/nerdio-solution-baselines/) are a separate feature, not covered here.
 
 To use the Center for Internet Security (CIS) Intune policies, enable them first: at the MSP level go to System > System Settings > Integrations, select Disabled next to CIS Intune Policies in the Center for Internet Security area, then select I Agree and Enable. CIS policy baselines then appear in Policy Management.
 
@@ -105,22 +105,21 @@ To use the Center for Internet Security (CIS) Intune policies, enable them first
 
 ## Which route fits
 
-If your customer tenants meet the Lighthouse requirements, it costs nothing extra; tenants above 2,500 licensed users, or a partner without a CSP relationship, fall outside them. If you also run [Azure Virtual Desktop](/entity/azure-virtual-desktop/) for the same customers, our reading is that publishing Intune policies with drift checks from the same Nerdio Manager may suit you. Microsoft's posts also name inforcer and CIPP. Nerdio's Intune Cross-Tenant Management (Public Preview, Nerdio Manager for Enterprise help center) links secondary Intune tenants to one Nerdio Manager instance; that page does not mention MSP policy publishing, baselines or drift.
+If your customer tenants meet the Lighthouse requirements, it costs nothing extra; tenants above 2,500 licensed users, or a partner without a CSP relationship, fall outside them. If you also run [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) for the same customers, our reading is that publishing Intune policies with drift checks from the same Nerdio Manager may suit you. Microsoft's posts also name inforcer and CIPP. Nerdio's Intune Cross-Tenant Management (Public Preview, Nerdio Manager for Enterprise help center) links secondary Intune tenants to one Nerdio Manager instance; that page does not mention MSP policy publishing, baselines or drift.
 
 Before a wide rollout, run one policy through the whole cycle on a test customer: import, assign with manual sync, republish, change a setting in the customer tenant, read the drift status, then fix or accept it.
 
 ## Related
 
-- [Nerdio Manager for MSP](/entity/nerdio-manager-for-msp/)
-- [Microsoft Intune](/entity/intune/)
-- [Nerdio](/entity/nerdio/)
-- [Microsoft 365 Lighthouse](/entity/microsoft-365-lighthouse/)
-- [Conditional Access](/entity/conditional-access/)
-- [Configuration drift](/entity/configuration-drift/)
+- [Nerdio Manager for MSP](https://www.m365.fm/entity/nerdio-manager-for-msp/)
+- [Microsoft Intune](https://www.m365.fm/entity/intune/)
+- [Nerdio](https://www.m365.fm/entity/nerdio/)
+- [Microsoft 365 Lighthouse](https://www.m365.fm/entity/microsoft-365-lighthouse/)
+- [Conditional Access](https://www.m365.fm/entity/conditional-access/)
+- [Configuration drift](https://www.m365.fm/entity/configuration-drift/)
 
 ## Sources
 
-All retrieved on 17 November 2026.
 
 - [Nerdio Help: Intune policy: MSP level general management](https://nmmhelp.getnerdio.com/hc/en-us/articles/26125624563085)
 - [Nerdio Help: Intune policy: MSP-level advanced management](https://nmmhelp.getnerdio.com/hc/en-us/articles/26125615807629)

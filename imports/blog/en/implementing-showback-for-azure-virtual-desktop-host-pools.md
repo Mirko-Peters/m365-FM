@@ -5,13 +5,13 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
-topics: [showback-chargeback, finops]
+topics: [showback, chargeback, finops]
 keypoints:
-  - "Session host VMs usually cost the most in an Azure Virtual Desktop deployment, but Learn also lists profile storage, app attach storage, Insights log data, image template storage and identity components as cost sources. Our reading: because tags report only for resources they are directly assigned to, these need their own tags."
-  - "A personal host pool maps each session host to one user, so its VM cost can be attributed directly. In a pooled host pool users are not assigned to hosts, so splitting cost between teams needs usage data such as session hours."
-  - "Cost analysis can group by tag, and the cm-resource-parent tag with a host pool's resource ID groups child resources under it. A resource links to one parent and cost analysis supports one level of grouping."
-  - "Cost allocation rules (Enterprise Agreement and Microsoft Customer Agreement only) can redistribute shared cost between subscriptions, resource groups or tags, but do not change the invoice and do not support reservations or savings plans."
-  - "Saved views can be emailed on a schedule to up to 20 recipients, and exports to a storage account give the raw data. Nerdio Manager's user cost attribution (Premium edition) is one tool that attributes cost to users."
+  - "Session host VMs usually cost the most, but Learn also lists profile and app attach storage, Insights data, image templates and identity. Tags report only where assigned, so tag these too."
+  - "A personal host pool maps each host to one user, so VM cost is directly attributable. In pooled pools users are not assigned to hosts, so splitting cost needs usage data such as session hours."
+  - "Cost analysis can group by tag, and the cm-resource-parent tag groups child resources under a host pool. A resource links to one parent; cost analysis supports one grouping level."
+  - "Cost allocation rules (EA and MCA only) redistribute shared cost between subscriptions, resource groups or tags, but do not change the invoice or support reservations and savings plans."
+  - "Saved views can be emailed on a schedule to up to 20 recipients, and exports give raw data. Nerdio Manager's user cost attribution (Premium) is one tool that attributes cost to users."
 faq:
   - q: "Do I need Nerdio to run showback for host pools?"
     a: "No. Cost Management, tags and exports are enough for per-host-pool showback. Splitting a shared pooled pool by user needs session data, which you can query from Log Analytics or get from a tool. Nerdio Manager's user cost attribution is one such tool; its documentation says it is available only in the Premium edition."
@@ -27,14 +27,14 @@ The concept and the choice between showback and chargeback are covered in "Showb
 
 ## What you are allocating
 
-Microsoft Learn says Azure Virtual Desktop cost comes from two sources, Azure resource consumption and licensing, and is charged to the organisation that owns the deployment, not to end users. For [session hosts](/entity/avd-session-host/), Learn lists the VM instance, managed disks and network bandwidth, and says the VM instances usually cost the most. Other cost sources sit outside the host pool:
+Microsoft Learn says Azure Virtual Desktop cost comes from two sources, Azure resource consumption and licensing, and is charged to the organisation that owns the deployment, not to end users. For [session hosts](https://www.m365.fm/entity/avd-session-host/), Learn lists the VM instance, managed disks and network bandwidth, and says the VM instances usually cost the most. Other cost sources sit outside the host pool:
 
 | Cost source | Learn's description | Direct or shared (our reading) |
 |---|---|---|
 | Session host VMs and disks | Compute, OS and data disks, bandwidth | Direct to one host pool |
-| [FSLogix](/entity/fslogix/) profile storage | User profile storage, such as Azure Files or Azure NetApp Files | Direct if one share per pool, otherwise shared |
+| [FSLogix](https://www.m365.fm/entity/fslogix/) profile storage | User profile storage, such as Azure Files or Azure NetApp Files | Direct if one share per pool, otherwise shared |
 | App attach storage | Application storage | Usually shared |
-| [AVD Insights](/entity/avd-insights/) | Log data in Azure Monitor | Shared |
+| [AVD Insights](https://www.m365.fm/entity/avd-insights/) | Log data in Azure Monitor | Shared |
 | Custom image templates | Storage and network for managed disks and bandwidth | Shared |
 | Identity | Domain controller VMs, or Microsoft Entra Domain Services | Shared |
 
@@ -88,7 +88,7 @@ Mapping a user to a team is your job, for example from a directory export. Cavea
 
 ## A tool option: Nerdio Manager
 
-Nerdio's user cost attribution assigns the cost of an Azure Virtual Desktop deployment to users, based on how long each user used desktops in the selected period. Its documentation says it is available only in the Premium edition, only for subscriptions that support Azure Cost Management, and not with the Split Identity install method. It treats personal VM cost as belonging to the assigned user, allocated session cost by minutes used, and splits unallocated and shared cost in one of three ways: Uniform (equal per active user), Proportional (by relative usage duration) or Unallocated (not assigned). The analytics view is under Observability, Insights, Costs & Efficiency, with per-user and per-host-pool areas, CSV export and Power BI. Its page lists conditions: all host pools must send diagnostics to the Log Analytics workspace, tags must be on all AVD resources, including the virtual networks with session hosts and the Log Analytics workspaces that receive AVD diagnostics, and a new month can take from a few minutes to an hour to build. Its analytics show the share of VM and disk cost that did not support at least one session ("% unused"), and the ratio of running hours of VMs that had a session to session hours. Nerdio expects that ratio below 100% in pooled environments because users share a VM, and says a value above 100% leaves room for optimization. See the entity page on [Nerdio FinOps user cost attribution](/entity/nerdio-finops-user-cost-attribution/); the Azure-native route above covers per-pool cost without it, and the per-user split is then your own query.
+Nerdio's user cost attribution assigns the cost of an Azure Virtual Desktop deployment to users, based on how long each user used desktops in the selected period. Its documentation says it is available only in the Premium edition, only for subscriptions that support Azure Cost Management, and not with the Split Identity install method. It treats personal VM cost as belonging to the assigned user, allocated session cost by minutes used, and splits unallocated and shared cost in one of three ways: Uniform (equal per active user), Proportional (by relative usage duration) or Unallocated (not assigned). The analytics view is under Observability, Insights, Costs & Efficiency, with per-user and per-host-pool areas, CSV export and Power BI. Its page lists conditions: all host pools must send diagnostics to the Log Analytics workspace, tags must be on all AVD resources, including the virtual networks with session hosts and the Log Analytics workspaces that receive AVD diagnostics, and a new month can take from a few minutes to an hour to build. Its analytics show the share of VM and disk cost that did not support at least one session ("% unused"), and the ratio of running hours of VMs that had a session to session hours. Nerdio expects that ratio below 100% in pooled environments because users share a VM, and says a value above 100% leaves room for optimization. See the entity page on [Nerdio FinOps user cost attribution](https://www.m365.fm/entity/nerdio-finops-user-cost-attribution/); the Azure-native route above covers per-pool cost without it, and the per-user split is then your own query.
 
 ## Limits to accept
 

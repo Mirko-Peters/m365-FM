@@ -1,16 +1,16 @@
 ---
 title: "What to back up in an AVD environment"
-summary: "In an Azure Virtual Desktop environment the data worth backing up is mostly outside the session hosts: FSLogix profile containers, the VMs of personal host pools and, if you cannot rebuild them, the storage accounts that hold MSIX packages. This article lists what Microsoft's guidance says to protect, what it says to skip, and the Azure Files backup limits that shape the policy."
+summary: "In an Azure Virtual Desktop environment the data worth backing up is mostly outside the session hosts: FSLogix profiles, personal host pool VMs and, if not rebuildable, MSIX package storage. Includes Azure Files backup limits."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [azure-virtual-desktop, fslogix-profile-container]
 keypoints:
-  - "Pooled session hosts are stateless, so state sits in the profile and data stores. Whether to back up profile containers is a decision: Learn's FSLogix guidance says roaming profiles are not commonly described as business-critical and points to OneDrive or SharePoint for critical data. Personal session hosts hold state, and Microsoft's multiregion article says to use replication and backup for them."
-  - "If you use separate Office containers, which Learn calls an advanced scenario, give them their own storage account. Learn says an Office container that holds only cached data you can rebuild from Microsoft 365 needs no backup."
-  - "Azure Files backup in the snapshot tier allows 200 recovery points per share. A schedule of six daily snapshots with 30 days of daily retention, 11 monthly and 8 yearly points adds up to 205 and breaks that limit. In the snapshot tier the snapshots stay in the same storage account as the share."
-  - "Microsoft operates the service components. Learn lists session hosts, image customizations, applications, network connectivity, the resiliency, backup and recovery of session hosts, and user identities as customer responsibilities. User and app data sits in the region you choose and is not managed by the service."
+  - "Pooled hosts are stateless; state sits in profile and data stores. Learn says roaming profiles are not commonly business-critical. Personal hosts hold state and need replication and backup."
+  - "Separate Office containers, an advanced scenario per Learn, belong in their own storage account. One holding only cached data rebuildable from Microsoft 365 needs no backup."
+  - "Azure Files snapshot-tier backup allows 200 recovery points per share; six daily snapshots with 30 days, 11 monthly and 8 yearly points add up to 205. Snapshots stay in the same account."
+  - "Microsoft operates the service components. Session hosts, images, apps, network, host backup and recovery, and identities are customer responsibilities."
   - "MSIX package storage is covered by storage replication and its own storage account, with backup if you cannot rebuild the repository. Test restores and record the limits in the runbook."
 faq:
   - q: "Do I need to back up pooled session hosts?"
@@ -27,7 +27,7 @@ This article sorts the parts of an environment into back up, replicate, rebuild 
 
 ## Who owns what
 
-Learn's service architecture article says most components are Microsoft-managed. The customer is responsible for session hosts, including image customizations and applications, for virtual network connectivity, for the resiliency, backup and recovery of those session hosts, and for user identities and access control. The data locations article adds that the service stores metadata such as host pool, application group and workspace names and user principal names, and that user data and app settings reside in the region you choose and are not managed by the service. Learn names Azure Backup, Azure Site Recovery and availability zones as helpful services. The disaster recovery concepts article also lists profile management, usually with FSLogix, applications and user data as customer-managed or partner-managed. See [Azure Backup](/entity/azure-backup/) and [Azure Site Recovery](/entity/azure-site-recovery/).
+Learn's service architecture article says most components are Microsoft-managed. The customer is responsible for session hosts, including image customizations and applications, for virtual network connectivity, for the resiliency, backup and recovery of those session hosts, and for user identities and access control. The data locations article adds that the service stores metadata such as host pool, application group and workspace names and user principal names, and that user data and app settings reside in the region you choose and are not managed by the service. Learn names Azure Backup, Azure Site Recovery and availability zones as helpful services. The disaster recovery concepts article also lists profile management, usually with FSLogix, applications and user data as customer-managed or partner-managed. See [Azure Backup](https://www.m365.fm/entity/azure-backup/) and [Azure Site Recovery](https://www.m365.fm/entity/azure-site-recovery/).
 
 ## The inventory
 
@@ -44,7 +44,7 @@ Learn's service architecture article says most components are Microsoft-managed.
 | Service metadata | Microsoft-managed | No customer backup described in the sources |
 | Identity (Microsoft Entra ID, AD DS) | Own design, outside this article | Learn lists identities as customer-managed |
 
-The multiregion article says backing up primary-region storage addresses typical needs and that the disaster recovery environment usually needs none. See [FSLogix profile container](/entity/fslogix-profile-container/), [FSLogix Office container](/entity/fslogix-office-container/), [MSIX app attach](/entity/msix-app-attach/), [Azure NetApp Files](/entity/azure-netapp-files/) and [Azure Compute Gallery](/entity/azure-compute-gallery/).
+The multiregion article says backing up primary-region storage addresses typical needs and that the disaster recovery environment usually needs none. See [FSLogix profile container](https://www.m365.fm/entity/fslogix-profile-container/), [FSLogix Office container](https://www.m365.fm/entity/fslogix-office-container/), [MSIX app attach](https://www.m365.fm/entity/msix-app-attach/), [Azure NetApp Files](https://www.m365.fm/entity/azure-netapp-files/) and [Azure Compute Gallery](https://www.m365.fm/entity/azure-compute-gallery/).
 
 ## Back up profiles or let users start over
 
@@ -52,7 +52,7 @@ Learn's FSLogix business continuity article says roaming profiles are not common
 
 ## Profile containers on Azure Files
 
-Learn's FSLogix storage article recommends Azure Files for most customers and lists Azure backup snapshot integration as the backup option. Its workload guidance: light workloads below 200 users use Standard shares, light workloads above 200 users use Premium or Standard with multiple shares, and medium, heavy and power workloads use Premium. See [Azure Files](/entity/azure-files/).
+Learn's FSLogix storage article recommends Azure Files for most customers and lists Azure backup snapshot integration as the backup option. Its workload guidance: light workloads below 200 users use Standard shares, light workloads above 200 users use Premium or Standard with multiple shares, and medium, heavy and power workloads use Premium. See [Azure Files](https://www.m365.fm/entity/azure-files/).
 
 Azure Backup for Azure Files has two tiers. The snapshot tier creates a share snapshot through the file share API and stores only the snapshot URL in the metadata store. In the vault-standard tier, once the snapshot exists, the changed files and data blocks since the last backup are identified and transferred to a Recovery Services vault. Azure Backup enables soft delete at the storage account level with a 14-day retention period, and it locks the snapshots from scheduled and on-demand backups with a lease of infinite duration. The FAQ adds that the snapshot tier keeps snapshots in the same storage account as the file share, so deleting the account deletes the snapshots, which is why Azure Backup takes a delete lock on the account. Those snapshots follow the replication setting of the storage account, not of the vault.
 
@@ -110,7 +110,6 @@ For rebuildable parts, keep golden images in Azure Compute Gallery. The multireg
 
 ## Sources
 
-All retrieved on 17 November 2026.
 
 - [Microsoft Learn: Multiregion BCDR for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/architecture/example-scenario/azure-virtual-desktop/azure-virtual-desktop-multi-region-bcdr)
 - [Microsoft Learn: Azure Virtual Desktop service architecture and resilience](https://learn.microsoft.com/en-us/azure/virtual-desktop/service-architecture-resilience)

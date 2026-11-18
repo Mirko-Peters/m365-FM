@@ -7,7 +7,7 @@ author: mirko-p
 date: 2026-11-18
 topics: [azure-advisor, azure]
 keypoints:
-  - "Advisor's resize recommendation targets a size on which P95 of CPU and outbound network stays at 40 percent or lower and P99 of memory at 60 percent or lower for user-facing workloads. Learn says the last seven days are analyzed and lets you change the lookback to 7, 14, 21, 30, 60 or 90 days."
+  - "Advisor's resize targets P95 CPU and network at or below 40 percent and P99 memory at or below 60 percent. It analyzes 7 days by default; the lookback can be up to 90 days."
   - "The right-size page does not mention Azure Virtual Desktop. A smaller VM changes how many sessions fit, so recalculate the maximum session limit and the host count before you accept a suggestion."
   - "In a pool with a session host configuration, session host update changes the VM size for all hosts in batches. Disable autoscale before it starts and keep it off until it finishes."
   - "Savings in Advisor use retail rates and ignore reservations and savings plans, so a size change can cost more than shown if a reservation covers the current series."
@@ -38,9 +38,9 @@ Learn's right-size page describes two recommendation types for VMs and scale set
 
 Advisor decides whether a workload is user-facing from its CPU utilization characteristics. The new size must have the same Accelerated Networking and Premium Storage capabilities, be supported in the VM's region and be cheaper. A suggestion can be a smaller size in the same family, a newer version or a different family. Metrics are sampled every 30 seconds and aggregated to 30-minute values. Learn says the last seven days of data are analyzed and that the lookback period can be changed in the configurations to 7, 14, 21, 30, 60 or 90 days, with updates taking up to 48 hours.
 
-The page does not mention Azure Virtual Desktop. It says a recommendation may not apply when a VM was provisioned for upcoming traffic, uses resources Advisor does not consider, is under test or is used for disaster recovery. Learn does not say how deallocated hours are treated, which matters when [autoscale](/entity/avd-power-management-autoscaling/) deallocates hosts in ramp-down.
+The page does not mention Azure Virtual Desktop. It says a recommendation may not apply when a VM was provisioned for upcoming traffic, uses resources Advisor does not consider, is under test or is used for disaster recovery. Learn does not say how deallocated hours are treated, which matters when [autoscale](https://www.m365.fm/entity/avd-power-management-autoscaling/) deallocates hosts in ramp-down.
 
-The opposite direction exists too. The performance recommendation "Upgrade size of most active virtual machines to prevent resource exhaustion and improve performance" fires when CPU and memory are both at 90 percent or more of the current size's limits (P50 of the 30-minute averages), or when cached IOPS or uncached bandwidth reach 95 percent, each with an extra condition on disk limits. Learn's page for highly used VMs gives the observation period as the past seven days and says metrics are aggregated over a minimum of seven days. In a [pooled host pool](/entity/avd-pooled-host-pool/) with depth-first load balancing, in our reading the first hosts can appear here while the last ones appear in the cost list, because depth-first fills one host at a time up to the limit.
+The opposite direction exists too. The performance recommendation "Upgrade size of most active virtual machines to prevent resource exhaustion and improve performance" fires when CPU and memory are both at 90 percent or more of the current size's limits (P50 of the 30-minute averages), or when cached IOPS or uncached bandwidth reach 95 percent, each with an extra condition on disk limits. Learn's page for highly used VMs gives the observation period as the past seven days and says metrics are aggregated over a minimum of seven days. In a [pooled host pool](https://www.m365.fm/entity/avd-pooled-host-pool/) with depth-first load balancing, in our reading the first hosts can appear here while the last ones appear in the cost list, because depth-first fills one host at a time up to the limit.
 
 ## Step 1: collect the candidates
 
@@ -56,11 +56,11 @@ New VMs can take up to 24 hours to appear.
 
 Advisor sees one VM. For each candidate, collect what it cannot see:
 
-- Peak concurrent sessions per host and pool, and the [maximum session limit](/entity/avd-maximum-session-limit/).
-- The pool's [capacity threshold](/entity/avd-capacity-threshold/) and scaling plan phases.
+- Peak concurrent sessions per host and pool, and the [maximum session limit](https://www.m365.fm/entity/avd-maximum-session-limit/).
+- The pool's [capacity threshold](https://www.m365.fm/entity/avd-capacity-threshold/) and scaling plan phases.
 - The workload type (light, medium, heavy or power) of the users on that pool.
 
-[Azure Virtual Desktop Insights](/entity/avd-insights/) is the usual source for sessions per host and host performance, and the load balancing page recommends it for choosing a limit. It needs the Azure Monitor Agent on every session host, a data collection rule and a Log Analytics workspace, with standard storage charges.
+[Azure Virtual Desktop Insights](https://www.m365.fm/entity/avd-insights/) is the usual source for sessions per host and host performance, and the load balancing page recommends it for choosing a limit. It needs the Azure Monitor Agent on every session host, a data collection rule and a Log Analytics workspace, with standard storage charges.
 
 Then check the arithmetic. Learn's autoscale scenarios page gives, for ramp-down consolidation, Required Hosts = Total Sessions (Active + Disconnected) / (Max Session Limit x Capacity Threshold %), where autoscale assumes disconnected users may reconnect immediately. Using it for a peak check, and rounding up to whole hosts, is our own arithmetic.
 
@@ -81,7 +81,7 @@ Check three practical limits first:
 - **Availability:** if a running VM does not list the size you want, stopping it can reveal more sizes.
 - **Quota:** confirm subscription quota before an update on a whole pool.
 
-If a reservation or savings plan covers the current series, Learn warns that a cross-series change might raise cost, because the recommendations ignore them; see [Azure Reservations](/entity/azure-reservations/) and [savings plans](/entity/azure-savings-plans/).
+If a reservation or savings plan covers the current series, Learn warns that a cross-series change might raise cost, because the recommendations ignore them; see [Azure Reservations](https://www.m365.fm/entity/azure-reservations/) and [savings plans](https://www.m365.fm/entity/azure-savings-plans/).
 
 ## Step 4: apply the change
 
@@ -105,7 +105,7 @@ Learn's cautions: disable autoscale before the update and keep it disabled until
 
 ## An AVD-aware alternative
 
-Nerdio Manager has a similar rule, "Right-size AVD pooled desktops", described on its help site; its recommendations appear on Nerdio's own Advisor > Recommendations page, not in Azure Advisor. It recommends size increases or decreases from the guest counters Processor Information/% Processor Time and Memory/Available MBytes over the last 30 days, with default triggers of 80 percent (increase) and 60 percent (decrease). The help page describes the triggers in two ways: the rule settings speak of average CPU and RAM use, the calculation section of a 90th-percentile baseline. It is also unclear for "Active session only": the rule settings say enabled by default, while the calculation section says periods with any sessions count by default, and always when the active period is under 72 hours. Check the flag in your rule. The VM should be powered on for at least 72 hours (not necessarily continuous); with 24 to 72 hours of data, recommendations show a warning; data from before a resize is not used. A and B-series sizes are excluded, and optional settings respect quota and limit allowed VM sizes. The rule requires a dynamic host pool with auto-scale on and CPU and RAM data collection enabled. It recommends only; the help page does not describe automatic resizing. See [Nerdio host pool and VM right-sizing](/entity/nerdio-right-sizing/). The trade-off: Advisor needs no additional product but ignores sessions; the Nerdio rule needs Nerdio Manager and session-aware data collection.
+Nerdio Manager has a similar rule, "Right-size AVD pooled desktops", described on its help site; its recommendations appear on Nerdio's own Advisor > Recommendations page, not in Azure Advisor. It recommends size increases or decreases from the guest counters Processor Information/% Processor Time and Memory/Available MBytes over the last 30 days, with default triggers of 80 percent (increase) and 60 percent (decrease). The help page describes the triggers in two ways: the rule settings speak of average CPU and RAM use, the calculation section of a 90th-percentile baseline. It is also unclear for "Active session only": the rule settings say enabled by default, while the calculation section says periods with any sessions count by default, and always when the active period is under 72 hours. Check the flag in your rule. The VM should be powered on for at least 72 hours (not necessarily continuous); with 24 to 72 hours of data, recommendations show a warning; data from before a resize is not used. A and B-series sizes are excluded, and optional settings respect quota and limit allowed VM sizes. The rule requires a dynamic host pool with auto-scale on and CPU and RAM data collection enabled. It recommends only; the help page does not describe automatic resizing. See [Nerdio host pool and VM right-sizing](https://www.m365.fm/entity/nerdio-right-sizing/). The trade-off: Advisor needs no additional product but ignores sessions; the Nerdio rule needs Nerdio Manager and session-aware data collection.
 
 ## Sources
 

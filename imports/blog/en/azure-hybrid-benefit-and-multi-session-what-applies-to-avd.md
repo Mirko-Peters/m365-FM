@@ -1,6 +1,6 @@
 ---
 title: "Azure Hybrid Benefit and multi-session: what applies to AVD"
-summary: "On Azure Virtual Desktop, Windows 11 Enterprise multi-session hosts get their Windows license through the user's eligible license and the Windows_Client license type, not through Azure Hybrid Benefit for Windows Server. The Windows Server benefit is relevant only for session hosts that run Windows Server, which also need Remote Desktop Services client access licenses."
+summary: "Windows 11 Enterprise multi-session hosts get their Windows license through the user's eligible license and the Windows_Client license type, not Azure Hybrid Benefit for Windows Server, which applies only to Windows Server hosts."
 status: review
 publish: false
 author: mirko-p
@@ -8,10 +8,10 @@ date: 2026-11-18
 topics: [azure-hybrid-benefit, azure-reservations]
 keypoints:
   - "Three layers are separate: the user's access right, the Windows license on the session host VM (LicenseType), and for Windows Server hosts the RDS client access license."
-  - "For Windows 11 and Windows 10 Enterprise multi-session, an eligible license such as Microsoft 365 E3 or Windows VDA per user entitles the user, and the VM carries LicenseType Windows_Client. Learn documents the Windows_Server license type on its Azure Hybrid Benefit for Windows VMs page, and Windows_Client on the apply-license page."
-  - "Creating session hosts through the Azure Virtual Desktop service applies the license automatically. VMs built outside it, for example when created with PowerShell or the Azure CLI, may need the license applied by hand."
-  - "Windows Server session hosts need an RDS CAL with Software Assurance or an RDS User Subscription License, and a reachable RDS license server. Per-user access pricing is not available for Windows Server."
-  - "Reservations and savings plans do not cover software. Learn says the Windows software meters are charged for Windows VMs unless Azure Hybrid Benefit covers them; for multi-session hosts with Windows_Client the Learn pages cited under Sources do not say whether such a meter appears, so check cost analysis."
+  - "For Windows Enterprise multi-session, an eligible license such as Microsoft 365 E3 or Windows VDA per user entitles the user, and the VM carries LicenseType Windows_Client."
+  - "Session hosts created through the Azure Virtual Desktop service get the license applied automatically. VMs built outside it, for example with PowerShell or Azure CLI, may need it applied by hand."
+  - "Windows Server session hosts need an RDS CAL with Software Assurance or an RDS User Subscription License, and a reachable license server. Per-user access pricing does not cover Windows Server."
+  - "Reservations and savings plans do not cover software. Learn does not say whether a Windows software meter appears for multi-session hosts with Windows_Client, so check cost analysis."
 faq:
   - q: "Can I use my Windows Server core licenses to cover Windows 11 multi-session session hosts?"
     a: "Learn's Azure Hybrid Benefit for Windows Server pages describe Windows Server core licenses for VMs running Windows Server. For Windows 11 multi-session, Learn's licensing table lists user licenses such as Microsoft 365 E3 or Windows VDA per user, and the VM license type is Windows_Client. Neither Learn's Azure Hybrid Benefit for Windows Server page nor its Azure Hybrid Benefit for Windows VMs page describes Windows Server core licenses as the entitlement for multi-session hosts."
@@ -33,7 +33,7 @@ A session host involves three licensing questions that are easy to blur together
 | Windows license on the VM | Is the VM's Windows license applied correctly in Azure? | Apply Windows license to session host VMs |
 | Client access license | For Windows Server hosts: does each user or device have an RDS CAL? | RDS client access licenses |
 
-[Azure Hybrid Benefit](/entity/azure-hybrid-benefit/) touches the second layer, and only for Windows Server. Learn's [Windows Server benefit page](https://learn.microsoft.com/en-us/windows-server/get-started/azure-hybrid-benefit) is about on-premises Windows Server core licenses with active Software Assurance or qualifying subscription licenses. For what the benefit does on the bill, see the companion article "Azure Hybrid Benefit for Windows: how it lowers VM cost".
+[Azure Hybrid Benefit](https://www.m365.fm/entity/azure-hybrid-benefit/) touches the second layer, and only for Windows Server. Learn's [Windows Server benefit page](https://learn.microsoft.com/en-us/windows-server/get-started/azure-hybrid-benefit) is about on-premises Windows Server core licenses with active Software Assurance or qualifying subscription licenses. For what the benefit does on the bill, see the companion article "Azure Hybrid Benefit for Windows: how it lowers VM cost".
 
 ## Windows 11 multi-session session hosts
 
@@ -71,7 +71,7 @@ Three pages frame the cost side, and they leave one question to your own billing
 - The [Azure Virtual Desktop pricing page](https://azure.microsoft.com/en-us/pricing/details/virtual-desktop/) carries a footnote that Azure Virtual Desktop VMs for Windows 11 and Windows 10, single-session and multi-session, are charged at Linux compute rates. That footnote sits in the page's section for external users (Remote App Streaming), so confirm in your own price sheet how it applies to internal deployments.
 - Learn's reservation page says that for Windows VMs without Azure Hybrid Benefit you are charged for Windows software, and the compute savings plan page says savings plans do not cover software costs. Neither page says whether a multi-session host with `Windows_Client` shows a Windows software meter.
 
-So the rule for multi-session hosts is to read the meters. Open cost analysis in [Microsoft Cost Management](/entity/microsoft-cost-management/), filter to one multi-session host, and check whether a Windows software meter appears next to the compute meter. If it does and the license type is `Windows_Client`, ask your licensing partner or Microsoft support before buying anything, because the Learn pages cited under Sources do not describe Windows Server core licenses as the entitlement for client hosts. See also [Windows Enterprise multi-session](/entity/windows-enterprise-multi-session/) for the operating system itself.
+So the rule for multi-session hosts is to read the meters. Open cost analysis in [Microsoft Cost Management](https://www.m365.fm/entity/microsoft-cost-management/), filter to one multi-session host, and check whether a Windows software meter appears next to the compute meter. If it does and the license type is `Windows_Client`, ask your licensing partner or Microsoft support before buying anything, because the Learn pages cited under Sources do not describe Windows Server core licenses as the entitlement for client hosts. See also [Windows Enterprise multi-session](https://www.m365.fm/entity/windows-enterprise-multi-session/) for the operating system itself.
 
 ## Windows Server session hosts
 
@@ -98,7 +98,7 @@ What the apply-license page, the host pool deployment article and the Windows Se
 - **Hosts created outside the service.** Learn says you might have to apply the license separately. The apply-license page lists host pool creation with PowerShell or the Azure CLI as the route where you apply the license afterwards, so check `LicenseType` after any build outside the Azure Virtual Desktop service.
 - **Azure Image Builder.** The Image Builder overview lists, under Costs, no current support for Azure Hybrid Benefit for Windows Server. It does not say what that means for hosts deployed from the image, so check `LicenseType` on each host.
 - **Enrolled subscriptions and licensed users.** The licensing page says Azure Virtual Desktop also charges users with separate assigned licenses in a subscription enrolled in per-user access pricing. For internal users you license, it recommends a separate subscription that is not enrolled, to avoid effectively paying twice.
-- **Commitments.** A reservation covers infrastructure only and Learn says stopped VMs continue to use reservation hours. Check [Azure reservations](/entity/azure-reservations/) coverage against the autoscale pattern of your host pool before buying.
+- **Commitments.** A reservation covers infrastructure only and Learn says stopped VMs continue to use reservation hours. Check [Azure reservations](https://www.m365.fm/entity/azure-reservations/) coverage against the autoscale pattern of your host pool before buying.
 - **Expiry.** Windows Server benefit workloads may run only during the Software Assurance or subscription term.
 
 ## Checklist

@@ -78,9 +78,13 @@ def _host(u):
     return m.group(1).lower().removeprefix("www.") if m else ""
 
 
+NEUTRAL_SPM = {"partner"}   # site_sponsorships.NEUTRAL_LABELS
+
+
 def sponsor_check(h, f, sp):
-    """T37 Sponsor: Kennzeichnung <-> JSON-LD sponsor, Lage unter der H1, rel="sponsored" auf Links zum Sponsor."""
-    disc = h.find('data-spm="')
+    """T37 Sponsor: Kennzeichnung <-> JSON-LD sponsor, Lage unter der H1, rel="sponsored" auf Links zum Sponsor.
+    Neutraler Partner (data-spm nur "partner", Mirko 17.11.2026, #509) ist keine Werbung: dafuer kein sponsor im JSON-LD und kein rel="sponsored"."""
+    disc = next((m.start() for m in re.finditer(r'data-spm="([^"]*)"', h) if set(m.group(1).split()) - NEUTRAL_SPM), -1)
     if disc >= 0 and not sp:
         note("E", "Kennzeichnung (Sponsored/Anzeige) ohne sponsor im JSON-LD", f)
     if sp and disc < 0:
@@ -107,7 +111,7 @@ for base in (DOCS, DOCS.parent / "r2out"):
         blocks = re.findall(r'<script type="application/ld\+json">(.*?)</script>', h, re.S)
         f = ("/r2out" if R2[0] else "") + p.replace(str(base), "")
         if not blocks:
-            if 'data-spm="' in h:
+            if any(set(v.split()) - NEUTRAL_SPM for v in re.findall(r'data-spm="([^"]*)"', h)):
                 note("E", "Kennzeichnung (Sponsored/Anzeige) ohne sponsor im JSON-LD", f)
             continue
         n += 1

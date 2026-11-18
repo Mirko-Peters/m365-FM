@@ -1,14 +1,14 @@
 ---
 title: "MFA for Azure Virtual Desktop users: what prompts when"
-summary: "Users see Microsoft Entra multifactor authentication prompts in Azure Virtual Desktop when a new access token is needed: at subscribe or when the user manually refreshes the resource list, at connection through the gateway, and at session host sign-in when single sign-on is on. This article maps each moment to the Entra app and setting that controls it."
+summary: "Users see Microsoft Entra MFA prompts in Azure Virtual Desktop when a new access token is needed: at subscribe or feed refresh, at connection through the gateway, and at session host sign-in with SSO."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [azure-virtual-desktop, avd-single-sign-on]
 keypoints:
-  - "Learn says users are prompted only when a new access token is requested from Microsoft Entra ID for a resource. Two apps matter: Azure Virtual Desktop for the service and Windows Cloud Login for session host sign-in with single sign-on."
-  - "Once a connection is established, users are not prompted again, even if the session outlasts the sign-in frequency. A network disruption that forces the session to be re-established after that period triggers a new prompt."
+  - "Learn says users are prompted only when a new access token is requested. Two apps matter: Azure Virtual Desktop for the service and Windows Cloud Login for session host sign-in with SSO."
+  - "Once connected, users are not prompted again even if the session outlasts the sign-in frequency. A disruption that forces reconnection after that period triggers a new prompt."
   - "Sign-in frequency Every time is supported only on the Windows Cloud Login app. On the Azure Virtual Desktop app it causes constant prompts on feed refresh and diagnostics upload."
   - "With single sign-on, a session lock disconnects the session by default, and Conditional Access, including MFA and sign-in frequency, is re-evaluated at reconnect."
   - "Learn lists four causes of repeated prompts: mismatched sign-in frequency between the two apps, legacy per-user MFA, a missing Windows Cloud Login policy, and a consent dialog that is not hidden."
@@ -27,7 +27,7 @@ Microsoft Entra multifactor authentication prompts in Azure Virtual Desktop foll
 
 Learn's authentication overview describes three phases. Cloud service authentication is to the Azure Virtual Desktop service: subscribing to resources, connecting to the gateway when launching a connection, and sending diagnostic information. It runs against Microsoft Entra ID, and Learn's overview says this is where you can enforce Conditional Access policies. The resource is the **Azure Virtual Desktop** app, so a policy for this phase targets that app. Remote session authentication is to the session host. In-session authentication is to applications and websites inside the remote session and is outside this article.
 
-With [single sign-on](/entity/avd-single-sign-on/) enabled, Windows signs the user in to the session host with an Entra token and a second app, **Windows Cloud Login**, is evaluated, so a second Conditional Access policy on that app covers session host sign-in. Without single sign-on, the client prompts for session host credentials on every connection unless the user saves them, and Learn recommends saving credentials only on secure devices. A third app, **Azure Virtual Desktop Azure Resource Manager Provider**, retrieves the user feed only; Learn says not to select it in a Conditional Access policy that requires MFA. The app IDs and the policy layout are in the Conditional Access article. The MFA setup page adds that the Azure Virtual Desktop app was previously named Windows Virtual Desktop in tenants that registered the `Microsoft.DesktopVirtualization` resource provider before the display name changed, with the same app ID.
+With [single sign-on](https://www.m365.fm/entity/avd-single-sign-on/) enabled, Windows signs the user in to the session host with an Entra token and a second app, **Windows Cloud Login**, is evaluated, so a second Conditional Access policy on that app covers session host sign-in. Without single sign-on, the client prompts for session host credentials on every connection unless the user saves them, and Learn recommends saving credentials only on secure devices. A third app, **Azure Virtual Desktop Azure Resource Manager Provider**, retrieves the user feed only; Learn says not to select it in a Conditional Access policy that requires MFA. The app IDs and the policy layout are in the Conditional Access article. The MFA setup page adds that the Azure Virtual Desktop app was previously named Windows Virtual Desktop in tenants that registered the `Microsoft.DesktopVirtualization` resource provider before the display name changed, with the same app ID.
 
 ## What prompts when
 
@@ -70,22 +70,21 @@ With single sign-on, users see a dialog to allow the Remote Desktop connection w
 
 ## Entra joined session hosts
 
-One point affects prompts on [Entra joined](/entity/avd-entra-join/) hosts. Legacy per-user MFA combined with Conditional Access causes the error "The sign-in method you're trying to use isn't allowed" or repeated prompts; Learn says to set per-user MFA to **Disabled** under **Identity**, **Users**, **All users**, **Per-user MFA** and to enforce MFA through Conditional Access. Separately, Learn says that if you do not want to restrict sign-in to strong methods such as Windows Hello for Business, you exclude the **Azure Windows VM Sign-In** app from the policy; that is a policy decision covered in the Conditional Access article, and the step-by-step fix for failing sign-ins is in "Azure Virtual Desktop Sign-In Fails on Entra-Joined Session Hosts: A Checklist". Learn also notes that on devices not registered with Entra, a "Stay signed in to all your apps" prompt can appear, and that users who choose to sign in to the app only may be prompted more often.
+One point affects prompts on [Entra joined](https://www.m365.fm/entity/avd-entra-join/) hosts. Legacy per-user MFA combined with Conditional Access causes the error "The sign-in method you're trying to use isn't allowed" or repeated prompts; Learn says to set per-user MFA to **Disabled** under **Identity**, **Users**, **All users**, **Per-user MFA** and to enforce MFA through Conditional Access. Separately, Learn says that if you do not want to restrict sign-in to strong methods such as Windows Hello for Business, you exclude the **Azure Windows VM Sign-In** app from the policy; that is a policy decision covered in the Conditional Access article, and the step-by-step fix for failing sign-ins is in "Azure Virtual Desktop Sign-In Fails on Entra-Joined Session Hosts: A Checklist". Learn also notes that on devices not registered with Entra, a "Stay signed in to all your apps" prompt can appear, and that users who choose to sign in to the app only may be prompted more often.
 
 ## Checking why a prompt appeared
 
-Use the Entra sign-in logs, under **Identity**, **Monitoring & health**, **Sign-in logs**, and look at both apps. Learn notes that web client sign-ins show the client app ID `a85cf173-4192-42f8-81fa-777a763e6e2c`, because it is linked to the server app where the policy was set. See also [Microsoft Entra sign-in logs](/entity/microsoft-entra-sign-in-logs/). Learn's troubleshooting page also maps errors to causes, for example AADSTS50076 for MFA required by Conditional Access or per-user enforcement. Check that the user has a registered method and that the network and device meet the policy conditions.
+Use the Entra sign-in logs, under **Identity**, **Monitoring & health**, **Sign-in logs**, and look at both apps. Learn notes that web client sign-ins show the client app ID `a85cf173-4192-42f8-81fa-777a763e6e2c`, because it is linked to the server app where the policy was set. See also [Microsoft Entra sign-in logs](https://www.m365.fm/entity/microsoft-entra-sign-in-logs/). Learn's troubleshooting page also maps errors to causes, for example AADSTS50076 for MFA required by Conditional Access or per-user enforcement. Check that the user has a registered method and that the network and device meet the policy conditions.
 
 ## Related
 
-- [Azure Virtual Desktop](/entity/azure-virtual-desktop/)
-- [Conditional Access](/entity/conditional-access/)
-- [Multifactor authentication](/entity/mfa/)
-- [Windows App](/entity/windows-app/)
+- [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/)
+- [Conditional Access](https://www.m365.fm/entity/conditional-access/)
+- [Multifactor authentication](https://www.m365.fm/entity/mfa/)
+- [Windows App](https://www.m365.fm/entity/windows-app/)
 
 ## Sources
 
-All retrieved on 2026-11-17.
 
 - [Microsoft Learn: Enforce Microsoft Entra multifactor authentication for Azure Virtual Desktop using Conditional Access](https://learn.microsoft.com/en-us/azure/virtual-desktop/set-up-mfa)
 - [Microsoft Learn: Authentication in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/authentication)

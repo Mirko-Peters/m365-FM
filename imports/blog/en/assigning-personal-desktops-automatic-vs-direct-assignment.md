@@ -1,16 +1,16 @@
 ---
 title: "Assigning personal desktops: automatic vs direct assignment"
-summary: "Personal host pools use either automatic assignment, where a user gets a desktop on first connection, or direct assignment, where an admin ties each user to a named session host. This guide gives the portal, PowerShell and Azure CLI routes for assignment type and user assignment, the multiple-desktop rules and the errors to expect."
+summary: "Personal host pools use automatic assignment, where a user gets a desktop on first connection, or direct assignment to a named session host. This guide covers the portal, PowerShell and Azure CLI routes and the errors to expect."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-personal-host-pool, avd-host-pool]
 keypoints:
-  - "Automatic assignment is the default for new personal host pools: the user is assigned a desktop the first time they connect. Direct assignment requires you to assign the user to both the host pool and a specific session host."
+  - "Automatic assignment is the default for new personal host pools: users get a desktop at first connection. Direct assignment needs the user assigned to the host pool and a session host."
   - "With direct assignment, a user who is assigned to the host pool but not to a session host sees 'No resources available'."
   - "Assigning, unassigning and reassigning work in the Azure portal and PowerShell, but not in the Azure CLI. Session host friendly names can be set only with PowerShell."
-  - "Multiple personal desktops per user need direct assignment, cannot be switched off once enabled, and, when scripted, need the preview module Az.DesktopVirtualization 5.3.0-preview or a later preview version, which is what Learn names."
+  - "Multiple personal desktops per user need direct assignment, cannot be switched off once enabled, and when scripted need Az.DesktopVirtualization 5.3.0-preview or a later preview."
   - "Direct assignment must be saved first. Enabling multiple desktops in the same step produces an error."
 faq:
   - q: "Can I assign users to specific session hosts when the pool uses automatic assignment?"

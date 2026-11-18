@@ -1,6 +1,6 @@
 ---
 title: "Azure Hybrid Benefit for Windows: how it lowers VM cost"
-summary: "Azure Hybrid Benefit for Windows Server lets you apply on-premises Windows Server core licenses with active Software Assurance or a qualifying subscription to Azure VMs, so the VM is billed at the base compute rate, which equals the Linux rate. This article covers eligibility, the core-license arithmetic, how to switch it on and verify it, and how it combines with reservations and savings plans."
+summary: "Azure Hybrid Benefit for Windows Server applies Windows Server core licenses with active Software Assurance or a qualifying subscription to Azure VMs, billed at the base compute rate. Covers eligibility, core counts and setup."
 status: review
 publish: false
 author: mirko-p
@@ -8,10 +8,10 @@ date: 2026-11-18
 topics: [azure-hybrid-benefit, azure-reservations]
 keypoints:
   - "Learn says the Windows Server license is covered by the benefit, so you pay only the base compute rate of the VM, and that rate equals the Linux rate."
-  - "Eligibility needs Windows Server Standard or Datacenter core licenses with active Software Assurance or qualifying subscription licenses. Each VM needs at least 8 core licenses, and a processor license counts as 16 core licenses."
-  - "Switching the benefit on or off changes only a metadata licensing flag (LicenseType Windows_Server). It does not restart the VM, but billing is not applied in real time and can take several hours to show."
+  - "Eligibility needs Windows Server Standard or Datacenter core licenses with active Software Assurance or a qualifying subscription. Each VM needs at least 8 core licenses."
+  - "Switching the benefit changes only a licensing flag (LicenseType Windows_Server). It does not restart the VM, but billing can take several hours to reflect the change."
   - "A reservation covers infrastructure costs and a compute savings plan does not cover software, so the Windows software charge on a Windows Server VM is removed only if Azure Hybrid Benefit is enabled."
-  - "Centrally managed Azure Hybrid Benefit is for SQL Server only. For Windows Server the benefit is managed on each resource, and workloads may run only during the Software Assurance or subscription term."
+  - "Centrally managed Azure Hybrid Benefit is for SQL Server only. For Windows Server it is managed per resource, and workloads may run only during the Software Assurance or subscription term."
 faq:
   - q: "Does Azure Hybrid Benefit make a Windows Server VM free?"
     a: "No. Microsoft Learn says the Windows Server license is covered, so you pay only the base compute rate of the VM, which equals the Linux rate. Storage, networking and any additional software, for example SQL Server, are still charged separately."
@@ -25,7 +25,7 @@ Azure Hybrid Benefit for Windows Server lets you bring on-premises Windows Serve
 
 ## What the benefit changes on the bill
 
-An Azure VM that runs Windows has two cost parts: the compute (infrastructure) rate and a Windows software charge. [Azure Hybrid Benefit](/entity/azure-hybrid-benefit/) removes the second part for eligible Windows Server licenses. Learn's [Windows Server page](https://learn.microsoft.com/en-us/windows-server/get-started/azure-hybrid-benefit) puts it this way: the license for Windows Server is covered, so you only pay for the base compute rate, and that rate is equal to the Linux rate.
+An Azure VM that runs Windows has two cost parts: the compute (infrastructure) rate and a Windows software charge. [Azure Hybrid Benefit](https://www.m365.fm/entity/azure-hybrid-benefit/) removes the second part for eligible Windows Server licenses. Learn's [Windows Server page](https://learn.microsoft.com/en-us/windows-server/get-started/azure-hybrid-benefit) puts it this way: the license for Windows Server is covered, so you only pay for the base compute rate, and that rate is equal to the Linux rate.
 
 Three details from Learn matter when you plan:
 
@@ -99,7 +99,7 @@ Virtual machine scale sets use the same `licenseType` property inside `virtualMa
 
 ## Combining it with reservations and savings plans
 
-[Azure reservations](/entity/azure-reservations/) and [Azure savings plans](/entity/azure-savings-plans/) discount the infrastructure part of a VM. Neither removes the Windows software part. Learn's VM reservation page lays out the cases for Windows VMs:
+[Azure reservations](https://www.m365.fm/entity/azure-reservations/) and [Azure savings plans](https://www.m365.fm/entity/azure-savings-plans/) discount the infrastructure part of a VM. Neither removes the Windows software part. Learn's VM reservation page lays out the cases for Windows VMs:
 
 | VM | What a Reserved VM Instance covers |
 |---|---|

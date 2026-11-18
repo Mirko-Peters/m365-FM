@@ -1,13 +1,13 @@
 ---
 title: "Conditional Access for Azure Virtual Desktop: policies that work"
-summary: "With single sign-on, Azure Virtual Desktop needs two separate, aligned Conditional Access policies: one for the Azure Virtual Desktop app and one for Windows Cloud Login. Leave the Azure Resource Manager Provider app out and check any broad All cloud apps policy, because one that requires device compliance can break sign-in."
+summary: "With single sign-on, Azure Virtual Desktop needs two aligned Conditional Access policies: one for the Azure Virtual Desktop app and one for Windows Cloud Login. Leave the Azure Resource Manager Provider app out."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [azure-virtual-desktop, conditional-access]
 keypoints:
-  - "Target two apps with two separate policies: Azure Virtual Desktop (the service and gateway) and Windows Cloud Login (the session host sign-in when single sign-on is on). Never target the Azure Virtual Desktop Azure Resource Manager Provider app."
+  - "Target two apps with separate policies: Azure Virtual Desktop and Windows Cloud Login (session host sign-in with SSO). Never target the Azure Virtual Desktop Azure Resource Manager Provider app."
   - "A policy that targets All cloud apps with device compliance can break sign-in. Learn's fix is to exclude Windows Cloud Login and Azure Virtual Desktop from it and create AVD-specific policies."
   - "Sign-in frequency on Windows Cloud Login should match or exceed the one on Azure Virtual Desktop. Every time is supported only on Windows Cloud Login."
   - "Learn says to disable legacy per-user MFA and use Conditional Access exclusively. Security Defaults cannot be used together with Conditional Access."
@@ -75,7 +75,7 @@ Learn's example for periodic reauthentication is 1 hour and it gives no default.
 
 **Device compliance.** Learn says Microsoft Entra joined session hosts may not satisfy compliance policies designed for user endpoints. Its troubleshooting page for error AADSTS530002 separates two cases:
 
-- A **connection-time** policy, targeting Azure Virtual Desktop or Windows Cloud Login, applies to the client device. Onboard the client to [Intune](/entity/intune/) and make it compliant, or exclude that device population.
+- A **connection-time** policy, targeting Azure Virtual Desktop or Windows Cloud Login, applies to the client device. Onboard the client to [Intune](https://www.m365.fm/entity/intune/) and make it compliant, or exclude that device population.
 - An **in-session** policy, for example on a Microsoft 365 app, applies to the session host. Enroll the host and make it compliant, or exclude hosts with a device filter.
 
 Learn's guidance is to scope connection-time compliance to client endpoints, not session hosts.
@@ -86,7 +86,7 @@ Learn's guidance is to scope connection-time compliance to client endpoints, not
 
 ## Entra-joined session hosts
 
-Two rules from Learn apply to [Entra-joined](/entity/avd-entra-join/) session hosts. First, disable legacy per-user MFA (**Identity > Users > All users > Per-user MFA**, status **Disabled**) and use Conditional Access exclusively; otherwise users can see "The sign-in method you're trying to use isn't allowed". Second, if you do not want to restrict sign-in to strong methods such as Windows Hello for Business, exclude the **Microsoft Azure Windows Virtual Machine Sign-in** app (application ID `372140e0-b3b7-4226-8ef9-d57986796201`, shown as **Azure Windows VM Sign-in** in some tenants). Our reading: excluding it removes that enforcement for RDP sign-ins to the VM, so treat it as a fallback. The step-by-step fix, and the Azure role users need on the VMs, are in the sign-in failure article.
+Two rules from Learn apply to [Entra-joined](https://www.m365.fm/entity/avd-entra-join/) session hosts. First, disable legacy per-user MFA (**Identity > Users > All users > Per-user MFA**, status **Disabled**) and use Conditional Access exclusively; otherwise users can see "The sign-in method you're trying to use isn't allowed". Second, if you do not want to restrict sign-in to strong methods such as Windows Hello for Business, exclude the **Microsoft Azure Windows Virtual Machine Sign-in** app (application ID `372140e0-b3b7-4226-8ef9-d57986796201`, shown as **Azure Windows VM Sign-in** in some tenants). Our reading: excluding it removes that enforcement for RDP sign-ins to the VM, so treat it as a fallback. The step-by-step fix, and the Azure role users need on the VMs, are in the sign-in failure article.
 
 ## Checks before you enable single sign-on
 
@@ -97,7 +97,7 @@ Learn's pre-configuration checklist adds items beyond the ones above:
 3. Confirm that per-user MFA is **Disabled** for all Azure Virtual Desktop users.
 4. If the tenant uses Security Defaults, disable them first, because Conditional Access cannot be used while they are on.
 
-Enabling Windows Cloud Login under **Microsoft Entra ID > Devices > Remote connection configuration** is part of the single sign-on setup, not of the policies. See [single sign-on](/entity/avd-single-sign-on/).
+Enabling Windows Cloud Login under **Microsoft Entra ID > Devices > Remote connection configuration** is part of the single sign-on setup, not of the policies. See [single sign-on](https://www.m365.fm/entity/avd-single-sign-on/).
 
 ## An example policy set
 
@@ -108,7 +108,7 @@ The names and values below are an example that combines the settings Learn descr
 | AVD-01 Require MFA | Azure Virtual Desktop | Group "AVD users" | Browser, mobile apps and desktop clients | Require multifactor authentication | Periodic, 8 hours |
 | AVD-02 Require MFA host sign-in | Windows Cloud Login | Group "AVD users" | Browser, mobile apps and desktop clients | Require multifactor authentication | Periodic, 8 hours (matches AVD-01) |
 
-Keep the Azure Resource Manager Provider app out of both policies. If an All cloud apps policy with device compliance blocks sign-in, Learn's resolution is to exclude both apps from that policy; the two policies above then have to carry the controls you need. Exclude your [emergency access accounts](/entity/emergency-access-accounts/) (Microsoft recommends two or more) from policies that block or restrict sign-in.
+Keep the Azure Resource Manager Provider app out of both policies. If an All cloud apps policy with device compliance blocks sign-in, Learn's resolution is to exclude both apps from that policy; the two policies above then have to carry the controls you need. Exclude your [emergency access accounts](https://www.m365.fm/entity/emergency-access-accounts/) (Microsoft recommends two or more) from policies that block or restrict sign-in.
 
 ## Verify
 

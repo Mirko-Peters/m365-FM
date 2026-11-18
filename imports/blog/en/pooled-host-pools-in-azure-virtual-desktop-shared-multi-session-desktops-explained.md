@@ -8,10 +8,10 @@ date: 2026-11-18
 topics: [avd-pooled-host-pool, avd-host-pool]
 keypoints:
   - "In a pooled host pool several users share one session host, and users are not assigned to hosts. Learn describes the result as a shared experience with lower costs and greater efficiency."
-  - "Pooled pools use breadth-first or depth-first load balancing. Depth-first requires a maximum session limit, autoscale on a pooled pool requires a custom one even with breadth-first, and under high concurrent load a host can exceed the limit."
+  - "Pooled pools use breadth-first or depth-first. Depth-first needs a maximum session limit, autoscale needs a custom one, and under high concurrent load a host can exceed it."
   - "Users in pooled pools should keep their profile in FSLogix, because a new sign-in can land on a different session host."
   - "Windows is kept current by redeploying session hosts from updated images, and in-place upgrades from Windows 10 to Windows 11 are not supported on pooled session hosts."
-  - "Power management autoscaling is generally available. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, in July 2026, while some Learn pages still carry preview wording."
+  - "Power management autoscaling is GA. Microsoft announced GA of enhanced host pool management, including dynamic autoscaling, in July 2026; some Learn pages still say preview."
 faq:
   - q: "How many users can share one session host in a pooled host pool?"
     a: "It depends on the maximum session limit you set and on the VM's resources. The multi-session FAQ gives no fixed number. Learn's sizing guidelines list maximum users per vCPU as a starting estimate: Light 6, Medium 4, Heavy 2, Power 1. Validate on your own system."
@@ -27,7 +27,7 @@ Comparison with personal pools, sizing, load-balancing algorithms and scaling pl
 
 ## What makes a pool "pooled"
 
-Microsoft Learn's [terminology article](https://learn.microsoft.com/en-us/azure/virtual-desktop/terminology) defines the type: user sessions can be load balanced to any session host in the [host pool](/entity/avd-host-pool/), and there can be multiple different users on a single [session host](/entity/avd-session-host/) at the same time. Learn says a [pooled host pool](/entity/avd-pooled-host-pool/) provides a shared remote experience that ensures lower costs and greater efficiency.
+Microsoft Learn's [terminology article](https://learn.microsoft.com/en-us/azure/virtual-desktop/terminology) defines the type: user sessions can be load balanced to any session host in the [host pool](https://www.m365.fm/entity/avd-host-pool/), and there can be multiple different users on a single [session host](https://www.m365.fm/entity/avd-session-host/) at the same time. Learn says a [pooled host pool](https://www.m365.fm/entity/avd-pooled-host-pool/) provides a shared remote experience that ensures lower costs and greater efficiency.
 
 Compared with a personal pool, the page states:
 
@@ -52,19 +52,19 @@ Shared sessions need a multi-session capable OS. Learn's [FAQ for Windows Enterp
 
 Learn's terminology page distinguishes the session states active, disconnected and pending. A pending session is a placeholder that reserves a spot on the VM while the user signs in; sign-in can take between 30 seconds and five minutes depending on the user profile.
 
-Two load-balancing algorithms exist, set under the pool's **Properties**: breadth-first spreads new sessions across hosts, and depth-first fills one host before moving to the next and requires a [maximum session limit](/entity/avd-maximum-session-limit/). Learn's [load-balancing article](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-load-balancing) has the details; see also [breadth-first](/entity/avd-breadth-first-load-balancing/), [depth-first](/entity/avd-depth-first-load-balancing/) and [drain mode](/entity/avd-drain-mode/).
+Two load-balancing algorithms exist, set under the pool's **Properties**: breadth-first spreads new sessions across hosts, and depth-first fills one host before moving to the next and requires a [maximum session limit](https://www.m365.fm/entity/avd-maximum-session-limit/). Learn's [load-balancing article](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-load-balancing) has the details; see also [breadth-first](https://www.m365.fm/entity/avd-breadth-first-load-balancing/), [depth-first](https://www.m365.fm/entity/avd-depth-first-load-balancing/) and [drain mode](https://www.m365.fm/entity/avd-drain-mode/).
 
 One point matters for capacity planning. The terminology page's comparison table says that when several users connect at the same time under high load, the number of sessions on a host can exceed the maximum session limit. As a planning suggestion, not a Learn statement: leave headroom below the hardware ceiling rather than setting the limit at it.
 
 ## Profiles: why they should not live on the VM
 
-Because a user can land on a different host at each sign-in, a profile on one VM's disk would not follow them, so Learn says pooled users should store profile data in [FSLogix](/entity/fslogix/). FSLogix comes pre-installed on all available Windows Enterprise multi-session images. The FSLogix overview says it uses a filter driver to redirect the profile at the file system level, so applications are unaware the profile is on the network.
+Because a user can land on a different host at each sign-in, a profile on one VM's disk would not follow them, so Learn says pooled users should store profile data in [FSLogix](https://www.m365.fm/entity/fslogix/). FSLogix comes pre-installed on all available Windows Enterprise multi-session images. The FSLogix overview says it uses a filter driver to redirect the profile at the file system level, so applications are unaware the profile is on the network.
 
 The same overview says profile containers can be used with Cloud Cache for high availability and disaster recovery solutions. FSLogix storage design, permissions and sizing need their own planning.
 
 ## Updates: replace rather than patch
 
-For pooled pools Learn says Windows is updated by redeploying session hosts from updated images. Learn's What's new page for June 2026 introduces "automated host pools": pools where a single session host configuration (SHC) enforces settings across all session hosts, so updates are made by changing the configuration. This article uses the term for that case. Learn's [host pool management approaches](https://learn.microsoft.com/en-us/azure/virtual-desktop/host-pool-management-approaches) page says the session host configuration approach can be used with pooled host pools only. See [session host configuration](/entity/avd-session-host-configuration/) for the object itself, and the article "The golden image lifecycle: build, test, release, retire" for building the images.
+For pooled pools Learn says Windows is updated by redeploying session hosts from updated images. Learn's What's new page for June 2026 introduces "automated host pools": pools where a single session host configuration (SHC) enforces settings across all session hosts, so updates are made by changing the configuration. This article uses the term for that case. Learn's [host pool management approaches](https://learn.microsoft.com/en-us/azure/virtual-desktop/host-pool-management-approaches) page says the session host configuration approach can be used with pooled host pools only. See [session host configuration](https://www.m365.fm/entity/avd-session-host-configuration/) for the object itself, and the article "The golden image lifecycle: build, test, release, retire" for building the images.
 
 Session host configuration and update belong to the enhanced host pool management that Microsoft announced as generally available in July 2026. In an automated host pool, [session host update](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update) deallocates or deletes existing VMs and creates new ones with the updated configuration. Files, registry keys or certificates added manually do not survive; put them in the image, in configuration management such as Intune or Group Policy, or in the custom configuration script. Learn also says to disable autoscale before an update and keep it disabled until it finishes, because an enabled scaling plan can make the update fail with a runtime error.
 
@@ -82,8 +82,8 @@ The Windows multi-session FAQ gives no fixed user count and suggests validating 
 
 Pooled pools can start and stop hosts to match demand. Learn names two scaling methods:
 
-- **[Power management autoscaling](/entity/avd-power-management-autoscaling/)** powers hosts on and off. The [autoscale scenarios page](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios) labels it generally available, and it is the option for pools with standard management.
-- **[Dynamic autoscaling](/entity/avd-dynamic-autoscaling/)** also creates and deletes session hosts. It can only be used for pooled host pools with a session host configuration. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 ([Tech Community announcement](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview that the scaling plan article requires for PowerShell, still carry preview wording; check the current page before relying on a limit. What's new says in June 2026 that it is "now available" for pooled host pools with session host configuration. The scenarios page says it is not supported in Azure Government.
+- **[Power management autoscaling](https://www.m365.fm/entity/avd-power-management-autoscaling/)** powers hosts on and off. The [autoscale scenarios page](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios) labels it generally available, and it is the option for pools with standard management.
+- **[Dynamic autoscaling](https://www.m365.fm/entity/avd-dynamic-autoscaling/)** also creates and deletes session hosts. It can only be used for pooled host pools with a session host configuration. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 ([Tech Community announcement](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview that the scaling plan article requires for PowerShell, still carry preview wording; check the current page before relying on a limit. What's new says in June 2026 that it is "now available" for pooled host pools with session host configuration. The scenarios page says it is not supported in Azure Government.
 
 "Power management autoscaling vs dynamic autoscaling: which one fits your host pools" compares them.
 
@@ -95,7 +95,7 @@ Autoscale also changes which algorithm counts. The scenarios page says that for 
 
 ## Application groups on pooled pools
 
-Pooled pools support both [application group](/entity/avd-application-group/) types, while [RemoteApp](/entity/avd-remoteapp/) groups are available with pooled pools only. See "Application groups in Azure Virtual Desktop: desktop and RemoteApp groups explained".
+Pooled pools support both [application group](https://www.m365.fm/entity/avd-application-group/) types, while [RemoteApp](https://www.m365.fm/entity/avd-remoteapp/) groups are available with pooled pools only. See "Application groups in Azure Virtual Desktop: desktop and RemoteApp groups explained".
 
 ## Checklist before you build
 

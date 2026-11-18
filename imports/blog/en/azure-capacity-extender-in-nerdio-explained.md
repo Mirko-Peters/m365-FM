@@ -1,15 +1,15 @@
 ---
 title: "Azure Capacity Extender in Nerdio explained"
-summary: "Azure Capacity Extender is a host pool setting in Nerdio Manager for Enterprise that lets an admin list fallback VM sizes, which Nerdio says keeps host creation, auto-scale, auto-grow and auto-heal from failing when Azure has no capacity for the preferred size. Nerdio's help center says it is available only in the Premium edition."
+summary: "Azure Capacity Extender is a Nerdio Manager for Enterprise host pool setting that lists fallback VM sizes for when Azure lacks capacity for the preferred size. Nerdio's help center says it is Premium only."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [nerdio-azure-capacity-extender, nerdio-manager-for-enterprise]
 keypoints:
-  - "Nerdio describes the Azure Capacity Extender as a way to specify fallback VM sizes that are used in sequence if the preferred size is not available in the Azure region, so that host creation, auto-scale, auto-grow and auto-heal do not fail on capacity constraints."
-  - "It is configured per host pool under Settings > Azure Capacity Extender, with a read-only default VM size, an ordered list of alternate sizes and four further settings: resizing of hibernated VMs, Availability Zone Awareness, the Intelligent Azure Capacity Extender and a separate Manageable Restrictions switch. Nerdio's release notes for version 8.1.0 (Public Preview) also list an auto-revert option."
-  - "With Availability Zone Awareness on, Nerdio's example tries the default size in every zone before it moves to the first alternate size. With it off (the logic before version 7.4) only the least-used zone was tried."
+  - "Nerdio describes Azure Capacity Extender as fallback VM sizes used in sequence when the preferred size is unavailable, so host creation, auto-scale, auto-grow and auto-heal do not fail."
+  - "It is set per host pool under Settings > Azure Capacity Extender: a read-only default size, an ordered list of alternate sizes and four further settings. 8.1.0 release notes add an auto-revert option."
+  - "With Availability Zone Awareness on, the default size is tried in every zone before the first alternate size. With it off (before version 7.4) only the least-used zone was tried."
   - "Nerdio warns that alternate sizes with a different resource profile may affect user performance, and the size picker marks sizes whose size or cost differs significantly from the default."
   - "Nerdio's entitlement page lists the Azure Capacity Extender among the Premium-only features, so it is not part of Core."
 faq:
@@ -21,7 +21,7 @@ faq:
     a: "Per host pool. In Nerdio Manager locate the host pool, select the more options menu, then Settings > Azure Capacity Extender, enable it, choose the alternate VM sizes and save."
 ---
 
-[Azure Capacity Extender](/entity/nerdio-azure-capacity-extender/) is a host pool setting in [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/). You list fallback VM sizes, and if Azure has no capacity left in the region for the preferred size, Nerdio Manager tries the alternates in the order you set. With the intelligent option on, Nerdio Manager selects sizes dynamically; the configuration page does not say how that combines with the manual list. It only works with the Premium edition. This article explains the problem it addresses, how the settings behave, what the documentation does not say, and how it compares with other ways to handle capacity.
+[Azure Capacity Extender](https://www.m365.fm/entity/nerdio-azure-capacity-extender/) is a host pool setting in [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/). You list fallback VM sizes, and if Azure has no capacity left in the region for the preferred size, Nerdio Manager tries the alternates in the order you set. With the intelligent option on, Nerdio Manager selects sizes dynamically; the configuration page does not say how that combines with the manual list. It only works with the Premium edition. This article explains the problem it addresses, how the settings behave, what the documentation does not say, and how it compares with other ways to handle capacity.
 
 The Nerdio help pages behind this article are dated November 2026, and the configuration page refers to behaviour that changed in version 7.4. Check the current pages and your Nerdio Manager version before you rely on a detail.
 
@@ -29,7 +29,7 @@ The Nerdio help pages behind this article are dated November 2026, and the confi
 
 When you create, start or resize a VM, Azure must allocate compute resources in a region or zone. Microsoft Learn's troubleshooting page for allocation failures links this to unprecedented growth in demand for Azure services in specific regions, and it lists error codes such as `AllocationFailed` and `ZonalAllocationFailed`. The message says there is not sufficient capacity for the requested VM size in the region. Learn also describes "overconstrained" failures (`OverconstrainedAllocationRequest` and `OverconstrainedZonalAllocationRequest`), where the combination of constraints in a request, such as VM size, availability zone or ephemeral disk, cannot be met.
 
-For an [Azure Virtual Desktop](/entity/azure-virtual-desktop/) [host pool](/entity/avd-host-pool/) this matters at the moments when you need hosts most: an auto-scale scale-out, an auto-grow step, the creation of new hosts or an auto-heal operation. These are the cases Nerdio's page names. Our reading: a pool that is configured for exactly one [VM size](/entity/azure-virtual-machines/) has no automatic fallback when that size is short, although you can still resize a VM manually or try another zone.
+For an [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) [host pool](https://www.m365.fm/entity/avd-host-pool/) this matters at the moments when you need hosts most: an auto-scale scale-out, an auto-grow step, the creation of new hosts or an auto-heal operation. These are the cases Nerdio's page names. Our reading: a pool that is configured for exactly one [VM size](https://www.m365.fm/entity/azure-virtual-machines/) has no automatic fallback when that size is short, although you can still resize a VM manually or try another zone.
 
 ## What the Azure Capacity Extender does
 
@@ -84,7 +84,7 @@ Nerdio's note is direct: select VM sizes that match the resources of the preferr
 
 ## Edition and licensing
 
-Nerdio's help article opens with a note that the feature is only available in the Nerdio Manager Premium edition. Nerdio's entitlement and billing page confirms this: the Azure Capacity Extender is in its list of Premium edition features, which are not included with Windows Cloud Core or AVD Core. The same list includes the Azure API Limit Booster, covered in the companion article on [capacity and API limit helpers in large environments](/community/u/mirko-p/blog/when-large-environments-need-capacity-and-api-limit-helpers/). The edition is selected under **System** > **Settings** > **Nerdio** > **Services Managed** > **Azure Virtual Desktop**, according to that page. Our guide to [Nerdio Manager for Enterprise editions, Core versus Premium](/community/u/mirko-p/blog/nerdio-manager-for-enterprise-editions-core-vs-premium/) covers the edition decision. Prices are not covered here.
+Nerdio's help article opens with a note that the feature is only available in the Nerdio Manager Premium edition. Nerdio's entitlement and billing page confirms this: the Azure Capacity Extender is in its list of Premium edition features, which are not included with Windows Cloud Core or AVD Core. The same list includes the Azure API Limit Booster, covered in the companion article on [capacity and API limit helpers in large environments](https://www.m365.fm/community/u/mirko-p/blog/when-large-environments-need-capacity-and-api-limit-helpers/). The edition is selected under **System** > **Settings** > **Nerdio** > **Services Managed** > **Azure Virtual Desktop**, according to that page. Our guide to [Nerdio Manager for Enterprise editions, Core versus Premium](https://www.m365.fm/community/u/mirko-p/blog/nerdio-manager-for-enterprise-editions-core-vs-premium/) covers the edition decision. Prices are not covered here.
 
 ## What it does not cover, and alternatives
 

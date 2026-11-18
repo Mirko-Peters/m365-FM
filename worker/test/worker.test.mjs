@@ -644,6 +644,25 @@ test("contentblog: viele unveraenderte Pakete kosten nur eine Abfrage, neue Pake
   } finally { globalThis.fetch = old; }
 });
 
+test("contentblog: auch Pakete nach Nummer 500 im Index werden angelegt (Review #509, SQLite)", async () => {
+  const { DatabaseSync } = await import("node:sqlite");
+  const raw = new DatabaseSync(":memory:");
+  const dir = new URL("../migrations/", import.meta.url);
+  for (const f of readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
+  const db = { prepare(sql) { const st = raw.prepare(sql); let args = []; const o = { bind(...a) { args = a; return o; }, all: async () => ({ results: st.all(...args) }), first: async () => st.get(...args) ?? null, run: async () => st.run(...args) }; return o; } };
+  raw.exec(`INSERT INTO users(id,provider,sub,name,role,banned,created) VALUES(1,'g','1','Mirko','user',0,1);
+    INSERT INTO profiles(user_id,public,handle,headline,about,company,job,country,show_org,updated) VALUES(1,1,'mirko-p','','','','','',1,1)`);
+  const P = (n) => ({ slug: "post-" + String(n).padStart(4, "0"), lang: "en", title: "Beitrag " + n, summary: "Kurz", html: "<p>Text</p>", author: "mirko-p", topics: [], faq: [], publish: true, published: 100, hash: "h" + n });
+  const items = Array.from({ length: 520 }, (_, i) => P(i));
+  const old = globalThis.fetch; globalThis.fetch = async () => ({ ok: true, json: async () => ({ items }) });
+  try {
+    const { importContentBlog } = await import("../src/contentblog.js");
+    for (let i = 0; i < 14; i++) await importContentBlog({ DB: db, SITE: "https://x" }, () => 1000 + i);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM blog_posts WHERE status='live'").get().n, 520);
+    assert.ok(raw.prepare("SELECT id FROM blog_posts WHERE slug='post-0519'").get(), "Paket 520 angelegt");
+  } finally { globalThis.fetch = old; }
+});
+
 test("register: applyRenames gibt der vorhandenen Folge den neuen Slug, nimmt Uebersetzungen mit und legt keine zweite Zeile an (SQLite)", async () => {
   const { DatabaseSync } = await import("node:sqlite");
   const raw = new DatabaseSync(":memory:");

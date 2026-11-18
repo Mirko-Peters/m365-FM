@@ -7,9 +7,9 @@ author: mirko-p
 date: 2026-11-18
 topics: [rdp-shortpath, remote-desktop-protocol]
 keypoints:
-  - "Every connection starts on the TCP reverse connect transport through the gateway. The client then tries UDP in the background, and if UDP succeeds the TCP connection drops. If it fails, the session stays on TCP."
-  - "Learn describes four options: managed networks with the listener, managed networks with ICE/STUN, public networks with direct STUN and public networks relayed through TURN. Only the listener variant needs a setting on the session host."
-  - "Public networks prefer a direct STUN path and use a TURN relay when a firewall or NAT blocks it. Learn gives Symmetric NAT, as with Azure Firewall and Azure NAT Gateway, as an example for using the relayed connection."
+  - "Every connection starts on TCP reverse connect through the gateway. The client tries UDP in the background; if it succeeds the TCP connection drops, otherwise the session stays on TCP."
+  - "Learn describes four options: managed networks with the listener or ICE/STUN, and public networks with direct STUN or TURN relay. Only the listener variant needs a session host setting."
+  - "Public networks prefer direct STUN and fall back to a TURN relay when a firewall or NAT blocks it, for example Symmetric NAT with Azure Firewall or Azure NAT Gateway."
   - "When managed and public paths are both available, the first connection established is used, and Learn says the managed path is likely to win because it needs fewer steps."
   - "The security level is the same as the TCP reverse connect transport: TLS over reliable UDP using the session host's certificate, set up only after the service has authenticated the session."
 faq:
@@ -21,7 +21,7 @@ faq:
     a: "Learn says TURN-based connections are susceptible to drops during relay updates, which usually happen in planned maintenance windows but can occur outside them for urgent Azure infrastructure fixes. It says the client reconnects automatically within a few seconds."
 ---
 
-RDP Shortpath is a UDP-based transport for [Remote Desktop Protocol](/entity/remote-desktop-protocol/) sessions in Azure Virtual Desktop. It runs next to the default TCP reverse connect transport: every session starts on TCP, the client then tries to build a UDP path, and if that works the TCP connection is dropped and the session moves to UDP. If UDP cannot be established, the session simply stays on TCP. This article explains the concept and the decisions behind it; the configuration steps are in the companion article on configuring RDP Shortpath, and ports, firewall rules and DNS are covered in the networking basics article in this series.
+RDP Shortpath is a UDP-based transport for [Remote Desktop Protocol](https://www.m365.fm/entity/remote-desktop-protocol/) sessions in Azure Virtual Desktop. It runs next to the default TCP reverse connect transport: every session starts on TCP, the client then tries to build a UDP path, and if that works the TCP connection is dropped and the session moves to UDP. If UDP cannot be established, the session simply stays on TCP. This article explains the concept and the decisions behind it; the configuration steps are in the companion article on configuring RDP Shortpath, and ports, firewall rules and DNS are covered in the networking basics article in this series.
 
 ## What problem it addresses
 
@@ -43,7 +43,7 @@ How step 3 works differs between the two modes.
 
 ## The two modes and four options
 
-[RDP Shortpath](/entity/rdp-shortpath/) can be used in two ways, and Learn's configuration page splits them into four options.
+[RDP Shortpath](https://www.m365.fm/entity/rdp-shortpath/) can be used in two ways, and Learn's configuration page splits them into four options.
 
 | Option | Path | What it needs |
 |---|---|---|
@@ -52,7 +52,7 @@ How step 3 works differs between the two modes.
 | Public networks with ICE/STUN | Direct UDP over the internet | No listener and no inbound port; the port range is configurable |
 | Public networks via TURN | Relayed UDP through a Microsoft relay server | No listener and no inbound port; the port range is configurable |
 
-**Managed networks** means a private connection with direct line of sight: [Azure ExpressRoute](/entity/azure-expressroute/) private peering, or a site-to-site or point-to-site IPsec VPN such as [Azure VPN Gateway](/entity/azure-vpn-gateway/). Learn defines line of sight as the client being able to reach the session host without being blocked by firewalls. For other VPN types it recommends a UDP-based VPN, because TCP-based VPNs add the overhead of TCP congestion control, which slows RDP.
+**Managed networks** means a private connection with direct line of sight: [Azure ExpressRoute](https://www.m365.fm/entity/azure-expressroute/) private peering, or a site-to-site or point-to-site IPsec VPN such as [Azure VPN Gateway](https://www.m365.fm/entity/azure-vpn-gateway/). Learn defines line of sight as the client being able to reach the session host without being blocked by firewalls. For other VPN types it recommends a UDP-based VPN, because TCP-based VPNs add the overhead of TCP congestion control, which slows RDP.
 
 In the listener variant, the session host sends the client the list of its IPv4 and IPv6 addresses, and the client probes them directly. Learn lists the listener and its inbound port as a requirement on every session host; in our reading the two belong together, because the client probes the session host directly.
 
@@ -70,7 +70,7 @@ For public networks, Learn says Interactive Connectivity Establishment (ICE) coo
 4. The session host passes its candidate list to the client over the existing reverse connect transport. The client gathers its own candidates and sends them back.
 5. Both sides then try to connect to each other at the same moment. Learn explains why: many NAT devices accept incoming traffic on a socket once outbound traffic has opened it, so simultaneous attempts often succeed without any inbound firewall rule.
 
-**TURN** is the fallback. When STUN fails because a firewall or NAT device blocks the direct path, traffic is relayed through an intermediate server. Learn's order of preference puts the direct STUN connection first and the relayed connection second. It names Symmetric NAT, which maps one private source address and port to a unique public destination address and port, as an example of when a relay is used, and says this is the case with [Azure Firewall](/entity/azure-firewall/) and [Azure NAT Gateway](/entity/azure-nat-gateway/). If UDP is blocked completely, the connection falls back to TCP.
+**TURN** is the fallback. When STUN fails because a firewall or NAT device blocks the direct path, traffic is relayed through an intermediate server. Learn's order of preference puts the direct STUN connection first and the relayed connection second. It names Symmetric NAT, which maps one private source address and port to a unique public destination address and port, as an example of when a relay is used, and says this is the case with [Azure Firewall](https://www.m365.fm/entity/azure-firewall/) and [Azure NAT Gateway](https://www.m365.fm/entity/azure-nat-gateway/). If UDP is blocked completely, the connection falls back to TCP.
 
 A TURN relay is chosen by the client's physical location. Learn notes that a client far from any relay might fall back to TCP. According to Learn, the TURN range moved from a shared Azure Communication Services subnet to a dedicated range for Azure Virtual Desktop and Windows 365 across 39 Azure regions. The page lists those regions; check it for your users' locations. For the address range and ports, use the networking basics article or the Learn page itself.
 
@@ -103,7 +103,7 @@ Per the configuration page, the client must be Windows App or the Remote Desktop
 
 For cloud availability, the pages disagree on TURN in Azure Government, as the FAQ above describes. Check the current wording of both pages for your cloud.
 
-[Windows 365](/entity/windows-365/) Cloud PCs can use the same feature. The Windows 365 page on Learn lists STUN and TURN as generally available in the Azure public cloud and in Azure Government, and says the Cloud PC needs outbound UDP to the public address space because the client's address is usually unknown.
+[Windows 365](https://www.m365.fm/entity/windows-365/) Cloud PCs can use the same feature. The Windows 365 page on Learn lists STUN and TURN as generally available in the Azure public cloud and in Azure Government, and says the Cloud PC needs outbound UDP to the public address space because the client's address is usually unknown.
 
 ## A short decision guide
 

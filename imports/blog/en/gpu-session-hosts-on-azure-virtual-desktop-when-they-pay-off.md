@@ -1,16 +1,16 @@
 ---
 title: "GPU session hosts on Azure Virtual Desktop: when they pay off"
-summary: "A GPU session host pays off when users run graphics-intensive applications or need higher frame rates, because remote sessions are rendered on the CPU by default. This guide covers the VM size options (including two series that Azure retired on 30 September 2026), the licensing detail, the HEVC trade-offs and how to verify the GPU is actually used."
+summary: "A GPU session host pays off when users run graphics-intensive applications or need higher frame rates, because remote sessions render on the CPU by default. Covers VM sizes, licensing, HEVC trade-offs and verification."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [azure-virtual-desktop, gpu]
 keypoints:
-  - "By default, Azure Virtual Desktop remote sessions are rendered with the CPU and do not use an available GPU. GPU rendering and GPU frame encoding are switched on separately, with Intune or Group Policy."
-  - "Learn's Azure Virtual Desktop GPU page (last updated August 2025) lists NVv3, NVv4, NVadsA10 v5 and NCasT4_v3, but the NVv3 and NVv4 size pages say both series retired on 30 September 2026. That leaves NVadsA10 v5 and NCasT4_v3 from that list. NC, NCv2, NCv3, ND and NDv2 series are not generally appropriate as session hosts."
+  - "By default, AVD remote sessions render on the CPU and do not use an available GPU. GPU rendering and GPU frame encoding are switched on separately, with Intune or Group Policy."
+  - "Learn's AVD GPU page lists NVv3, NVv4, NVadsA10 v5 and NCasT4_v3, but NVv3 and NVv4 retired on 30 September 2026, leaving NVadsA10 v5 and NCasT4_v3 from that list."
   - "NVadsA10 v5 offers fractional GPUs from 1/6 of an A10 (4 GiB frame buffer) up to two GPUs, and NVIDIA sizes include a GRID license for 25 concurrent users."
-  - "HEVC/H.265 encoding has been generally available since June 2025, but it needs a desktop application group, the host's multimedia redirection component disabled, a newer GRID driver and a capable client."
+  - "HEVC/H.265 encoding is GA since June 2025 but needs a desktop application group, multimedia redirection disabled on the host, a newer GRID driver and a capable client."
   - "Verify with Task Manager, nvidia-smi, the Connection Information window and event IDs 170 and 162. A GPU that is installed but not configured does nothing for the session."
 faq:
   - q: "Does adding a GPU VM size speed up every remote session?"

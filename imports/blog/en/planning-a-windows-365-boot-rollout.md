@@ -7,11 +7,11 @@ author: mirko-p
 date: 2026-11-18
 topics: [windows-365-boot, windows-365]
 keypoints:
-  - "Every physical device and every Cloud PC must run Windows 11 Enterprise, Windows 11 Professional or Windows IoT Enterprise, version 22621.3374 or later, and Learn's troubleshooting page lists Windows App 2.0.285 and Azure Virtual Desktop (HostApp) 1.2.4159 or later. Learn's manual steps install only the Windows App. The guided scenario needs the Intune Service Administrator role, and each user needs a Windows 365 license and a provisioned Cloud PC."
-  - "Learn calls the Intune guided scenario (Devices > Cloud PC Overview > Windows 365 Boot) the recommended way. It sets device naming, updates, VPN or Wi-Fi, language, security baseline, connection timeout, branding and group assignment. A manual Settings Catalog setup is documented for environments where the guided scenario is unavailable or does not complete, and it does not cover Autopilot profiles, enrollment status pages, update rings, Wi-Fi, VPN, language packs or baselines."
-  - "Autopilot self-deploying mode needs TPM 2.0 with attestation, works for Microsoft Entra join only, and fails on virtual machines including Hyper-V virtual TPMs. The guided scenario creates a user-driven profile."
-  - "Devices that are in the group and online start receiving the Boot policies automatically, so decide the Ctrl+Alt+Del and error-screen return option, task manager, password change, drive redirection and application control first. Learn's pages differ on how much Boot restricts by itself, so check a pilot device."
-  - "Learn's recovery path for a misbehaving device is to check the default Cloud PC and registry values, confirm Windows App 2.0.285 or later, and remove and re-add the device in the Windows 365 Boot group. Intune can take up to 8 hours to remove the policies."
+  - "Devices and Cloud PCs need Windows 11 Enterprise, Pro or IoT Enterprise 22621.3374 or later, and Windows App 2.0.285 or later. Each user needs a Windows 365 license and a Cloud PC."
+  - "Learn recommends the Intune guided scenario (Devices > Cloud PC Overview > Windows 365 Boot). A manual Settings Catalog setup exists but does not cover Autopilot, update rings, Wi-Fi or VPN."
+  - "Autopilot self-deploying mode needs TPM 2.0 with attestation, works for Entra join only and fails on VMs including Hyper-V vTPMs. The guided scenario creates a user-driven profile."
+  - "Online devices in the group get the Boot policies automatically, so decide sign-out, task manager, password change, drive redirection and application control options first."
+  - "To recover a device, check the default Cloud PC and registry values, confirm Windows App 2.0.285 or later, and re-add it to the Boot group. Intune can take 8 hours to remove policies."
 faq:
   - q: "Which role and licenses does a Windows 365 Boot rollout need?"
     a: "Learn's guided scenario page lists the Intune Service Administrator role, and says a Windows 365 Enterprise license is required to create Boot provisioning policies. For the manual setup, it says each user needs a Windows 365 license and a provisioned Cloud PC. The Boot overview and device requirements pages do not state which Cloud PC types are supported, so test Flex Cloud PCs in your pilot if you plan to use them."
@@ -21,7 +21,7 @@ faq:
     a: "Remove the device from the Windows 365 Boot group in Intune (Groups > All groups > the group > Members), then go to Devices > All devices, select the device and choose Overview > Sync. Learn says Intune can take up to 8 hours to remove the policies. To re-add, add the device to the group, wait about 10 minutes and sync again."
 ---
 
-Plan a Windows 365 Boot rollout in six stages: confirm the prerequisites, choose Dedicated or Shared mode, build the Intune configuration (guided scenario or Settings Catalog), decide how much of the local PC to expose, prepare and add devices through Windows Autopilot, and pilot with an exit path. Learn says devices that are in the group and online start receiving the policies automatically, so the decisions in Stage 4 come before the devices join. This article covers the stages for [Windows 365 Boot](/entity/windows-365-boot/); behavior, modes and history are in [the explainer before it in this series](/community/u/mirko-p/blog/windows-365-boot-explained-signing-in-straight-to-a-cloud-pc/).
+Plan a Windows 365 Boot rollout in six stages: confirm the prerequisites, choose Dedicated or Shared mode, build the Intune configuration (guided scenario or Settings Catalog), decide how much of the local PC to expose, prepare and add devices through Windows Autopilot, and pilot with an exit path. Learn says devices that are in the group and online start receiving the policies automatically, so the decisions in Stage 4 come before the devices join. This article covers the stages for [Windows 365 Boot](https://www.m365.fm/entity/windows-365-boot/); behavior, modes and history are in [the explainer before it in this series](https://www.m365.fm/community/u/mirko-p/blog/windows-365-boot-explained-signing-in-straight-to-a-cloud-pc/).
 
 ## Stage 1: check the prerequisites
 
@@ -37,7 +37,7 @@ Learn's guided scenario, device requirements, restriction and troubleshooting pa
 
 Two caveats. Learn's manual steps (Stage 3, Option B) deploy only the Windows App. The guided scenario's example resource name, Windows 365 Boot Azure Virtual Desktop (HostApp), suggests it also creates a HostApp resource (our reading), but Learn does not describe it or say how the HostApp reaches a device in the manual setup, so check the version on a pilot device. And the CloudDesktop CSP page lists the two return-option user nodes under Windows Insider Preview, so confirm on your build that the return buttons appear.
 
-Single sign-on is a setting on the [Windows 365](/entity/windows-365/) provisioning policy (**Use Microsoft Entra single sign-on**). Learn's Boot overview describes only the case with it turned on, so test the case without it in the pilot.
+Single sign-on is a setting on the [Windows 365](https://www.m365.fm/entity/windows-365/) provisioning policy (**Use Microsoft Entra single sign-on**). Learn's Boot overview describes only the case with it turned on, so test the case without it in the pilot.
 
 Learn's Boot overview and device requirements pages do not state which Cloud PC types Boot supports; a July 2026 Tech Community article describes Flex Dedicated Cloud PCs in a call center proof of concept. Windows 365 Flex is the name for Windows 365 Frontline since the week of May 4, 2026; pilot that combination first if you use it.
 

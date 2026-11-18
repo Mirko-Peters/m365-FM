@@ -1,13 +1,13 @@
 ---
 title: "Depth-first load balancing in Azure Virtual Desktop explained"
-summary: "Depth-first load balancing sends each new session to the available session host that already has the most sessions, until that host reaches its maximum session limit. This article explains the selection rule step by step, what the required limit does, and where the algorithm stops being the whole story."
+summary: "Depth-first load balancing sends each new session to the available session host with the most sessions until it reaches its maximum session limit. This article explains the rule step by step and its limits."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-depth-first-load-balancing, avd-host-pool]
 keypoints:
-  - "Depth-first queries session hosts that allow new connections and have not reached their maximum session limit, then selects the one with the most sessions. On a tie it takes the first host from the query."
+  - "Depth-first queries hosts that allow new connections and are below their maximum session limit, then picks the one with the most sessions; on a tie, the first host from the query."
   - "A maximum session limit is required. When every host has reached it, you must raise the limit or add session hosts."
   - "A user with an active or disconnected session is routed back to that host even if drain mode is on. A user without a session is never routed to a host in drain mode."
   - "A host at its limit still shows as Available in the portal if it passes its health checks, so the status does not tell you whether it can take new sessions."
@@ -23,11 +23,11 @@ faq:
 
 Depth-first load balancing sends each new user session to the session host that already has the most sessions, as long as that host has not reached its maximum session limit. When a host is full, the next one starts to fill. The rule is simple, and it is the reason a pooled host pool can end up with some hosts full and others empty.
 
-This article explains the algorithm for a pooled [host pool](/entity/avd-host-pool/). For a side-by-side decision against breadth-first, see the article "Breadth-first vs depth-first: which load balancing algorithm should a host pool use". Sources are listed at the end and were retrieved on 17 November 2026.
+This article explains the algorithm for a pooled [host pool](https://www.m365.fm/entity/avd-host-pool/). For a side-by-side decision against breadth-first, see the article "Breadth-first vs depth-first: which load balancing algorithm should a host pool use". Sources are listed at the end.
 
 ## What depth-first does
 
-Microsoft Learn's [load-balancing article](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-load-balancing) describes [depth-first](/entity/avd-depth-first-load-balancing/) as aiming to saturate one session host at a time. Learn calls it ideal for cost-conscious organizations that want more granular control over the number of session hosts available in a host pool, because it lets them scale down the number of powered-on hosts more easily when there are fewer users. In practice, starting sessions stay on one host until its maximum session limit is reached, then move to the next.
+Microsoft Learn's [load-balancing article](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-load-balancing) describes [depth-first](https://www.m365.fm/entity/avd-depth-first-load-balancing/) as aiming to saturate one session host at a time. Learn calls it ideal for cost-conscious organizations that want more granular control over the number of session hosts available in a host pool, because it lets them scale down the number of powered-on hosts more easily when there are fewer users. In practice, starting sessions stay on one host until its maximum session limit is reached, then move to the next.
 
 The algorithm applies only to pooled host pools, where several users share a host and a returning user may land on a different host. In a personal pool, Learn says, the user always maps 1:1 to a host and load balancing does not apply.
 
@@ -42,7 +42,7 @@ When a user with no existing session in the pool connects, the load balancer doe
 Two consequences follow from the wording.
 
 - **Hosts at the limit are skipped.** A host that has reached its limit is not in the candidate list.
-- **Hosts not accepting connections are skipped.** Learn's status table lists *Shutdown* and *Unavailable* hosts as not available for load balancing, and a host in [drain mode](/entity/avd-drain-mode/) is not considered for a user without a session.
+- **Hosts not accepting connections are skipped.** Learn's status table lists *Shutdown* and *Unavailable* hosts as not available for load balancing, and a host in [drain mode](https://www.m365.fm/entity/avd-drain-mode/) is not considered for a user without a session.
 
 ### A worked example
 
@@ -61,9 +61,9 @@ The last row matters. Gaps on the fuller hosts are refilled before emptier hosts
 
 ## What the maximum session limit does
 
-Learn calls the maximum session limit required for depth-first. It is the trigger for moving on to the next host, so without it the algorithm would have no stopping point. Learn's guidance on choosing it is short: use [Azure Virtual Desktop Insights](/entity/avd-insights/) to monitor sessions per host and review host performance. For breadth-first the default limit is 999999, which is also the highest allowed value. A Learn note says that with depth-first you should change the limit to a number that suits your requirements, to keep the user experience good.
+Learn calls the maximum session limit required for depth-first. It is the trigger for moving on to the next host, so without it the algorithm would have no stopping point. Learn's guidance on choosing it is short: use [Azure Virtual Desktop Insights](https://www.m365.fm/entity/avd-insights/) to monitor sessions per host and review host performance. For breadth-first the default limit is 999999, which is also the highest allowed value. A Learn note says that with depth-first you should change the limit to a number that suits your requirements, to keep the user experience good.
 
-The limit is the same value that feeds [autoscale](/entity/avd-scaling-plan/) capacity. Learn's autoscale glossary defines available host pool capacity as the host pool's maximum session limit multiplied by the number of available session hosts. The scaling plan article tells you not to use the default value on a pooled host pool with autoscale.
+The limit is the same value that feeds [autoscale](https://www.m365.fm/entity/avd-scaling-plan/) capacity. Learn's autoscale glossary defines available host pool capacity as the host pool's maximum session limit multiplied by the number of available session hosts. The scaling plan article tells you not to use the default value on a pooled host pool with autoscale.
 
 ### Starting points for the value
 

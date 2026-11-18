@@ -11,7 +11,7 @@ keypoints:
   - "Drain mode is not a sign-out, a shutdown or a health status. It changes only whether the host can be chosen for new connections."
   - "A user who already has an active or disconnected session on a drained host is still redirected to that host when signing in again. New users are not placed there."
   - "On pooled host pools autoscale turns drain mode on and off no matter who set it. Use the exclusion tag to protect a host. On personal pools autoscale does not use drain mode."
-  - "In PowerShell, Update-AzWvdSessionHost with AllowNewSession set to $False turns drain on and $True turns it off. Learn lists the Desktop Virtualization Session Host Operator role as the prerequisite for the portal and the PowerShell procedure alike."
+  - "In PowerShell, Update-AzWvdSessionHost with AllowNewSession $False turns drain on and $True off. Learn lists the Desktop Virtualization Session Host Operator role as prerequisite."
 faq:
   - q: "Does drain mode sign users out?"
     a: "No. Microsoft Learn says existing connections remain active until the user signs out or an administrator ends the session. Drain mode only affects where new sessions are placed."
@@ -25,7 +25,7 @@ Drain mode is a per-host setting that stops a session host from accepting new us
 
 ## What drain mode does
 
-Microsoft Learn describes [drain mode](/entity/avd-drain-mode/) as a way to isolate a [session host](/entity/avd-session-host/) so you can perform maintenance without disrupting the service. The documented effects are:
+Microsoft Learn describes [drain mode](https://www.m365.fm/entity/avd-drain-mode/) as a way to isolate a [session host](https://www.m365.fm/entity/avd-session-host/) so you can perform maintenance without disrupting the service. The documented effects are:
 
 - **New sessions.** A drained host does not accept new sessions. New connections are redirected to the next available session host.
 - **Existing sessions.** They remain active until the user signs out or an administrator ends the session.
@@ -39,7 +39,7 @@ In the Azure PowerShell reference the same state is the `-AllowNewSession` param
 - **It is not a sign-out.** Nothing ends because you turned it on.
 - **It is not a shutdown.** Learn describes no shutdown, so the VM keeps running and its cost continues. That is a conclusion from the description rather than a Learn statement.
 - **It is not a health state.** Learn lists the new-session setting and the status as separate properties. Health checks and statuses are a separate topic; see "Azure Virtual Desktop Session Host Shows Unavailable: A Step-by-Step Checklist".
-- **It is not the same as the maximum session limit.** Under depth-first load balancing a host at its [maximum session limit](/entity/avd-maximum-session-limit/) is left out of the query for new sessions, but only until sessions end and there is room again. A drained host stays excluded until drain mode is switched off, by you or, on pooled host pools with a scaling plan, by autoscale unless the host carries the exclusion tag (see below).
+- **It is not the same as the maximum session limit.** Under depth-first load balancing a host at its [maximum session limit](https://www.m365.fm/entity/avd-maximum-session-limit/) is left out of the query for new sessions, but only until sessions end and there is room again. A drained host stays excluded until drain mode is switched off, by you or, on pooled host pools with a scaling plan, by autoscale unless the host carries the exclusion tag (see below).
 
 ## How the load balancer treats a drained host
 
@@ -48,7 +48,7 @@ Learn's load-balancing page states two rules that explain what users experience:
 1. For new users, the load balancer does not consider session hosts in drain mode.
 2. A user who has an active or disconnected session and signs in again is redirected to that session host, even if drain mode is enabled.
 
-The second rule matters for planning. A user with a disconnected session on a drained host returns to that host, so the host does not empty by itself while such sessions exist. The host is empty only when its users have signed out or you have ended their sessions. Learn lists both rules as behaviors shared by [breadth-first](/entity/avd-breadth-first-load-balancing/) and [depth-first](/entity/avd-depth-first-load-balancing/) load balancing. It adds that load balancing does not apply to personal host pools.
+The second rule matters for planning. A user with a disconnected session on a drained host returns to that host, so the host does not empty by itself while such sessions exist. The host is empty only when its users have signed out or you have ended their sessions. Learn lists both rules as behaviors shared by [breadth-first](https://www.m365.fm/entity/avd-breadth-first-load-balancing/) and [depth-first](https://www.m365.fm/entity/avd-depth-first-load-balancing/) load balancing. It adds that load balancing does not apply to personal host pools.
 
 ## Who can set it, and how
 
@@ -79,7 +79,7 @@ To read the state, `Get-AzWvdSessionHost` returns an `ISessionHost` object. Its 
 
 ## How autoscale uses and overrides drain mode
 
-Autoscale uses drain mode itself, which is easy to overlook. On pooled host pools it puts a host in drain mode before it deallocates it, sets AllowNewSessions back to true afterwards, and turns drain mode on or off on any VM in scope, no matter who put it there. Only a host that carries the [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) is left alone. On personal host pools autoscale does not use drain mode, and a user who connects during deallocation receives "No resources available". The runbook article shows how to tag a host before you drain it, and the [force sign-out](/entity/avd-force-logoff/) article describes the ramp-down sequence.
+Autoscale uses drain mode itself, which is easy to overlook. On pooled host pools it puts a host in drain mode before it deallocates it, sets AllowNewSessions back to true afterwards, and turns drain mode on or off on any VM in scope, no matter who put it there. Only a host that carries the [exclusion tag](https://www.m365.fm/entity/avd-scaling-plan-exclusion-tag/) is left alone. On personal host pools autoscale does not use drain mode, and a user who connects during deallocation receives "No resources available". The runbook article shows how to tag a host before you drain it, and the [force sign-out](https://www.m365.fm/entity/avd-force-logoff/) article describes the ramp-down sequence.
 
 ## A short example
 

@@ -9,7 +9,7 @@ topics: [avd-capacity-threshold, avd-scaling-plan]
 keypoints:
   - "Available capacity is the maximum session limit times the number of available session hosts. Used capacity is active plus disconnected sessions divided by that figure."
   - "Autoscale acts only when usage is above or below the threshold. If used capacity equals the threshold, nothing happens."
-  - "In ramp-down and off-peak, the formula gives required hosts as total sessions divided by the product of maximum session limit and threshold, rounded up. Disconnected sessions count and are assumed to reconnect. The minimum percentage of hosts can keep more hosts running than the formula."
+  - "In ramp-down and off-peak, required hosts = total sessions / (maximum session limit x threshold), rounded up. Disconnected sessions count. The minimum percentage can keep more hosts running."
   - "The threshold is entered in ramp-up and ramp-down. Peak takes the ramp-up value and off-peak takes the ramp-down value."
   - "The threshold counts sessions, not CPU or memory, and Learn requires a custom maximum session limit for pooled autoscale and says not to keep the default."
 faq:
@@ -27,12 +27,12 @@ The capacity threshold is the percentage of a host pool's session capacity that 
 
 Learn's glossary defines both:
 
-- **Available host pool capacity** = the host pool's [maximum session limit](/entity/avd-maximum-session-limit/) multiplied by the number of available session hosts.
+- **Available host pool capacity** = the host pool's [maximum session limit](https://www.m365.fm/entity/avd-maximum-session-limit/) multiplied by the number of available session hosts.
 - **Used host pool capacity** = the number of active and disconnected user sessions divided by the available capacity.
 
-The [capacity threshold](/entity/avd-capacity-threshold/) is then the used-capacity percentage at which autoscale acts. Learn's create-and-assign page gives an example: two running hosts with a limit of 20 sessions give a capacity of 40. With a threshold of 75 percent and more than 30 sessions, autoscale turns on a third host, which raises capacity from 40 to 60.
+The [capacity threshold](https://www.m365.fm/entity/avd-capacity-threshold/) is then the used-capacity percentage at which autoscale acts. Learn's create-and-assign page gives an example: two running hosts with a limit of 20 sessions give a capacity of 40. With a threshold of 75 percent and more than 30 sessions, autoscale turns on a third host, which raises capacity from 40 to 60.
 
-Two details matter in practice. Disconnected sessions count as used capacity, because users may reconnect at any moment. And a host that is turned off adds no capacity until autoscale starts it. [Drain mode](/entity/avd-drain-mode/) is the state autoscale uses before it removes a host.
+Two details matter in practice. Disconnected sessions count as used capacity, because users may reconnect at any moment. And a host that is turned off adds no capacity until autoscale starts it. [Drain mode](https://www.m365.fm/entity/avd-drain-mode/) is the state autoscale uses before it removes a host.
 
 ## The rule in three sentences
 
@@ -56,7 +56,7 @@ These examples use invented values and Learn's formulas. Take a pooled pool with
 
 ## What the threshold does in each phase
 
-The same value works differently depending on the phase of the schedule, according to Learn's scenarios page. See also [autoscale schedule phases](/entity/avd-autoscale-schedule-phases/).
+The same value works differently depending on the phase of the schedule, according to Learn's scenarios page. See also [autoscale schedule phases](https://www.m365.fm/entity/avd-autoscale-schedule-phases/).
 
 | Phase | Role of the threshold |
 |---|---|
@@ -65,7 +65,7 @@ The same value works differently depending on the phase of the schedule, accordi
 | Ramp-down | Autoscale consolidates sessions onto fewer hosts, only if all active and disconnected sessions fit within the threshold. |
 | Off-peak | Autoscale keeps the minimum percentage of hosts on and applies the same consolidation logic. How that minimum is set for each plan type is covered in the phase article "Ramp-up, peak, ramp-down and off-peak: the four AVD autoscale phases explained". |
 
-Where you enter the value: Learn says the ramp-up and ramp-down tabs have a capacity threshold field. On the peak and off-peak tabs you cannot change it. The ramp-up value carries over to peak, and the ramp-down value carries over to off-peak. In Learn's ramp-down scenario, a high threshold and a low minimum percentage of hosts decrease the need to turn on new hosts at the end of the workday; its example values are 75 percent and 10 percent. Learn says the default values you see when you create a schedule are suggested values for weekdays that you can change. See also [minimum percentage of hosts](/entity/avd-minimum-percentage-of-hosts/), which sets a floor independent of the threshold.
+Where you enter the value: Learn says the ramp-up and ramp-down tabs have a capacity threshold field. On the peak and off-peak tabs you cannot change it. The ramp-up value carries over to peak, and the ramp-down value carries over to off-peak. In Learn's ramp-down scenario, a high threshold and a low minimum percentage of hosts decrease the need to turn on new hosts at the end of the workday; its example values are 75 percent and 10 percent. Learn says the default values you see when you create a schedule are suggested values for weekdays that you can change. See also [minimum percentage of hosts](https://www.m365.fm/entity/avd-minimum-percentage-of-hosts/), which sets a floor independent of the threshold.
 
 ## How and when autoscale evaluates
 
@@ -73,18 +73,18 @@ The FAQ says autoscale monitors sign-ins and sign-outs, which it records as sess
 
 ## Seeing the threshold at work
 
-For pooled host pools, autoscale writes the results of each scaling plan evaluation to the table `WVDAutoscaleEvaluationPooled`, once you send the diagnostic category "Autoscale logs for pooled host pools" to a Log Analytics workspace. Learn describes `SessionOccupancyPercent` as the "Percent of session host capacity occupied by user sessions" and `ConfigCapacityThresholdPercent` as the "Capacity threshold percent". Reading the two side by side is a reasonable way to compare usage with the configured threshold; Learn does not say that this field is the exact number autoscale compares, and `SessionCount` includes only sessions on hosts that autoscale considers active. `ScalingReasonMessage` holds the actions autoscale decided to perform and why. Together they show whether the threshold or something else, such as an excluded host or a failed evaluation, explains a start or stop. The setup steps and a ready-made query are in "Choosing the right capacity threshold for pooled host pools". See [Azure Virtual Desktop Insights](/entity/avd-insights/).
+For pooled host pools, autoscale writes the results of each scaling plan evaluation to the table `WVDAutoscaleEvaluationPooled`, once you send the diagnostic category "Autoscale logs for pooled host pools" to a Log Analytics workspace. Learn describes `SessionOccupancyPercent` as the "Percent of session host capacity occupied by user sessions" and `ConfigCapacityThresholdPercent` as the "Capacity threshold percent". Reading the two side by side is a reasonable way to compare usage with the configured threshold; Learn does not say that this field is the exact number autoscale compares, and `SessionCount` includes only sessions on hosts that autoscale considers active. `ScalingReasonMessage` holds the actions autoscale decided to perform and why. Together they show whether the threshold or something else, such as an excluded host or a failed evaluation, explains a start or stop. The setup steps and a ready-made query are in "Choosing the right capacity threshold for pooled host pools". See [Azure Virtual Desktop Insights](https://www.m365.fm/entity/avd-insights/).
 
 ## What the threshold does not cover
 
 - **Load.** It counts sessions. A pool of 10 heavy sessions can be busier than 30 light ones, and the threshold cannot tell the difference. Size the maximum session limit from your workload first; Learn's sizing table lists 6, 4, 2 and 1 maximum users per vCPU for light, medium, heavy and power workloads as generic starting points.
 - **The default session limit.** Learn's autoscale prerequisites say that for pooled host pools you must set a custom maximum session limit and not use the default value; they give no reason. The load-balancing page states that the default for a breadth-first pool is 999999. Our own reading, not a Learn statement: capacity is the limit times the number of hosts, so a limit of 999999 would make the percentage meaningless.
-- **Excluded hosts.** Hosts with the [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) are not started or stopped. In Learn's off-peak scenario, usage reaches 80 percent against a 75 percent threshold, yet no host starts because every other host is tagged.
+- **Excluded hosts.** Hosts with the [exclusion tag](https://www.m365.fm/entity/avd-scaling-plan-exclusion-tag/) are not started or stopped. In Learn's off-peak scenario, usage reaches 80 percent against a 75 percent threshold, yet no host starts because every other host is tagged.
 - **Personal host pools.** Learn describes personal schedules by session state (when disconnected, when logged off) and lists no capacity threshold field for them.
 
 ## Dynamic autoscaling uses the same definition
 
-The glossary describes the threshold for [dynamic autoscaling](/entity/avd-dynamic-autoscaling/) in the same terms: when usage goes over, autoscale turns on or creates more hosts; when below, it turns off or deletes them. The threshold is not the only limit there: the FAQ says the total number of active session hosts will not exceed the maximum host pool size set in the scaling plan. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit. [Power management autoscaling](/entity/avd-power-management-autoscaling/) is generally available.
+The glossary describes the threshold for [dynamic autoscaling](https://www.m365.fm/entity/avd-dynamic-autoscaling/) in the same terms: when usage goes over, autoscale turns on or creates more hosts; when below, it turns off or deletes them. The threshold is not the only limit there: the FAQ says the total number of active session hosts will not exceed the maximum host pool size set in the scaling plan. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit. [Power management autoscaling](https://www.m365.fm/entity/avd-power-management-autoscaling/) is generally available.
 
 ## A comparison with Nerdio's triggers
 

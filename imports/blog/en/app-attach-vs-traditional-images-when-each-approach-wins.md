@@ -7,7 +7,7 @@ author: mirko-p
 date: 2026-11-18
 topics: [msix-app-attach, azure-virtual-desktop]
 keypoints:
-  - "In the golden-image model, an app change typically means a new image version and a session host update. With App Attach, Learn says a new app version comes from a new disk image and needs no maintenance window; users get it at their next sign-in."
+  - "With golden images, an app change typically means a new image version and a host update. With App Attach, a new app version comes from a new disk image, without a maintenance window."
   - "App Attach assigns apps per user and per host pool, so users on the same multi-session host can see different apps. An image gives every user of the host the same installed apps."
   - "App Attach adds dependencies: an SMB file share in the same region, read access for each session host's computer account, trusted code signing certificates, and packages in MSIX, Appx or App-V format."
   - "Learn lists Microsoft Entra Domain Services as not supported for App Attach and lists Windows Server 2022 and 2025 as supported as of 14 April 2026."

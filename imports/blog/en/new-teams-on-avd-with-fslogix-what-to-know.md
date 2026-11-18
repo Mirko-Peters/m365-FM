@@ -7,11 +7,11 @@ author: mirko-p
 date: 2026-11-18
 topics: [avd-teams-media-optimization, fslogix]
 keypoints:
-  - "Learn's Teams on AVD page requires FSLogix 2210 hotfix 3 (2.9.8716.30241) or later for new Teams. Learn's Teams for VDI page recommends 2210 hotfix 4 (2.9.8884.27471), and the FSLogix release notes say customers are required to use the latest version, currently 26.08 (3.26.826.17182, published on 31 August 2026)."
-  - "Learn recommends the single Profile container and calls a dual Profile plus ODFC setup neither necessary nor recommended. If you do use ODFC, Learn says to add IncludeTeams (DWORD 1), a value that the tutorial's PowerShell sample does not set."
-  - "Folder Redirection and Roaming User Profiles are not supported for new Teams in VDI, because they cannot roam the MSTeams_8wekyb3d8bbwe LocalCache folder. Learn names FSLogix, Citrix Profile Manager or Omnissa DEM as complementary tools."
+  - "Learn requires FSLogix 2210 hotfix 3 or later for new Teams on AVD and recommends hotfix 4 for VDI, while the FSLogix notes require the latest version, 26.08 (31 August 2026)."
+  - "Learn recommends the single Profile container and calls Profile plus ODFC unnecessary. With ODFC, add IncludeTeams (DWORD 1), which the tutorial's PowerShell sample does not set."
+  - "Folder Redirection and Roaming User Profiles are not supported for new Teams in VDI, as they cannot roam its LocalCache folder. Learn names FSLogix, Citrix Profile Manager or Omnissa DEM."
   - "In a pooled host pool, Teams must be installed per machine. Learn recommends the teamsbootstrapper.exe -p command for VDI, which provisions the latest client for all users on the machine."
-  - "Classic Teams on VDI ended support on 1 October 2026 and reaches end of availability on 1 April 2027. Learn splits cache exclusions into recommended ones and ones that trade profile size against launch speed. FSLogix pages also say LocalCache contents are deleted at sign-out, which the pages cited here do not reconcile with the Teams guidance, so test sign-out and sign-in."
+  - "Classic Teams on VDI ended support on 1 October 2026 and is unavailable from 1 April 2027. FSLogix pages say LocalCache is deleted at sign-out, so test sign-out and sign-in."
 faq:
   - q: "Do I need IncludeTeams if I only use a Profile container?"
     a: "Learn's Teams for VDI page asks only customers using Profile and ODFC, or ODFC only, to add IncludeTeams. The ODFC configuration page says: \"All benefits of the ODFC container are automatic when using profile containers in a single container configuration.\" One caveat: FSLogix's container types page lists AppData\\Local\\Packages\\*\\LocalCache among folders deleted at sign-out, and the pages cited here do not explain how that fits with Teams data under LocalCache. Test sign-out and sign-in in a pilot."
@@ -25,9 +25,9 @@ New Teams on Azure Virtual Desktop works with FSLogix, but only from a minimum F
 
 ## Why the profile layer matters for new Teams
 
-New Teams is installed as an MSIX package, and its user data sits under `C:\Users\<username>\AppData\Local\Packages\MSTeams_8wekyb3d8bbwe`. On a pooled [session host](/entity/avd-session-host/) a user can land on a different VM at every sign-in, so that data has to follow the user, or Teams starts from scratch each time. [FSLogix](/entity/fslogix/) is the tool Microsoft names for this. Learn's Teams for VDI page says Folder Redirection and Roaming User Profiles are not supported for Teams in VDI, because they cannot roam `AppData\Local\Packages\MSTeams_8wekyb3d8bbwe\LocalCache\Microsoft\MSTeams`. It lists FSLogix, Citrix Profile Manager and Omnissa DEM as complementary tools.
+New Teams is installed as an MSIX package, and its user data sits under `C:\Users\<username>\AppData\Local\Packages\MSTeams_8wekyb3d8bbwe`. On a pooled [session host](https://www.m365.fm/entity/avd-session-host/) a user can land on a different VM at every sign-in, so that data has to follow the user, or Teams starts from scratch each time. [FSLogix](https://www.m365.fm/entity/fslogix/) is the tool Microsoft names for this. Learn's Teams for VDI page says Folder Redirection and Roaming User Profiles are not supported for Teams in VDI, because they cannot roam `AppData\Local\Packages\MSTeams_8wekyb3d8bbwe\LocalCache\Microsoft\MSTeams`. It lists FSLogix, Citrix Profile Manager and Omnissa DEM as complementary tools.
 
-The media offload itself, covered in the entry for [Teams media optimization](/entity/avd-teams-media-optimization/), is independent of the profile. Optimization is switched on per session host with the `IsWVDEnvironment` registry value under `HKLM\SOFTWARE\Microsoft\Teams`. The profile only decides whether sign-in state, settings and cache persist.
+The media offload itself, covered in the entry for [Teams media optimization](https://www.m365.fm/entity/avd-teams-media-optimization/), is independent of the profile. Optimization is switched on per session host with the `IsWVDEnvironment` registry value under `HKLM\SOFTWARE\Microsoft\Teams`. The profile only decides whether sign-in state, settings and cache persist.
 
 ## FSLogix version requirements
 
@@ -51,7 +51,7 @@ The newest release in the notes is FSLogix 26.08, version 3.26.826.17182, publis
 
 ## Profile container, ODFC container and IncludeTeams
 
-FSLogix has two container types. Learn describes the Profile container as holding nearly all files and folders under the user's profile folder, minus exclusions. The Office Data File Container (ODFC) holds content unique to Office applications; its default content list covers Office activation, Outlook, SharePoint, OneDrive and legacy Skype for Business. Teams is not in that default list. See also the entities for the [profile container](/entity/fslogix-profile-container/) and the [Office container](/entity/fslogix-office-container/).
+FSLogix has two container types. Learn describes the Profile container as holding nearly all files and folders under the user's profile folder, minus exclusions. The Office Data File Container (ODFC) holds content unique to Office applications; its default content list covers Office activation, Outlook, SharePoint, OneDrive and legacy Skype for Business. Teams is not in that default list. See also the entities for the [profile container](https://www.m365.fm/entity/fslogix-profile-container/) and the [Office container](https://www.m365.fm/entity/fslogix-office-container/).
 
 By default the Profile container holds both profile and ODFC content in one VHD(x) file, and Learn calls that the recommended configuration. The ODFC configuration page goes further: "If you've already configured a profile container, you don't need to configure an ODFC container", and "Using the ODFC container in a dual container configuration isn't necessary or recommended." It recommends single-container ODFC with third-party roaming profile solutions. If you still split them, Learn's Teams for VDI page says customers using Profile and ODFC, or ODFC only, must add the setting `IncludeTeams` so Teams user data and cache persist.
 

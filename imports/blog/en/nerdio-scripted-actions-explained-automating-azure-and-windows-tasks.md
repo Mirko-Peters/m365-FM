@@ -7,9 +7,9 @@ author: mirko-p
 date: 2026-11-18
 topics: [nerdio-scripted-actions, nerdio-manager-for-enterprise]
 keypoints:
-  - "Windows scripts run on the VM through the Azure Custom Script Extension. Azure runbooks run in an Automation account that Nerdio Manager creates, as the Nerdio Manager service principal. Use runbooks for Azure changes."
+  - "Windows scripts run on the VM via the Custom Script Extension. Azure runbooks run in an Automation account Nerdio creates, as Nerdio's service principal; use them for Azure changes."
   - "Triggers are host pool VM events (provisioned, re-imaged, destroyed, stopped, started), a bulk Hosts > Run script run, and Run script on a desktop image, with an optional schedule."
-  - "Scripted Actions Groups bundle scripts in a set order, with optional default parameters, and add no isolation. Scripted Sequences are a separate feature with a GUI, in Public Preview, with documented limits."
+  - "Scripted Actions Groups run scripts in a set order, with optional default parameters. Scripted Sequences are a separate GUI feature in Public Preview, with documented limits."
   - "Nerdio's default-scripts page lists 8 Windows scripts and 3 runbooks and calls the list partial. Defaults are locked, so you clone one to change it."
   - "Two failure sources to plan for: Windows scripts fail after the 90-minute Azure timeout, and a runbook job can show Complete although the script failed."
 faq:
@@ -21,11 +21,11 @@ faq:
     a: "A group is an ordered list of existing scripts that behaves as if you had added each script to the task yourself. A sequence is a different feature: a GUI-built list of tasks such as install app, registry change, PowerShell script and restart, which Nerdio documents as Public Preview with task and device limits."
 ---
 
-Nerdio scripted actions are PowerShell scripts that [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/) runs either on a Windows VM or in an Azure Automation account. Use a Windows script when the change belongs on the machine, and an Azure runbook when the change targets Azure resources. The rest of this article shows how each kind runs, when Nerdio starts them and where the limits are.
+Nerdio scripted actions are PowerShell scripts that [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/) runs either on a Windows VM or in an Azure Automation account. Use a Windows script when the change belongs on the machine, and an Azure runbook when the change targets Azure resources. The rest of this article shows how each kind runs, when Nerdio starts them and where the limits are.
 
 ## The two kinds side by side
 
-[Nerdio](/entity/nerdio/)'s overview describes [scripted actions](/entity/nerdio-scripted-actions/) as scripts that "extend and customize" Nerdio Manager. They can use pre-populated variables such as `$AzureVMName`.
+[Nerdio](https://www.m365.fm/entity/nerdio/)'s overview describes [scripted actions](https://www.m365.fm/entity/nerdio-scripted-actions/) as scripts that "extend and customize" Nerdio Manager. They can use pre-populated variables such as `$AzureVMName`.
 
 | | Windows script | Azure runbook |
 |---|---|---|
@@ -51,7 +51,7 @@ Nerdio's default-scripts page lists eight Windows scripts: Install MS Teams, Ins
 
 Nerdio calls the list partial and says defaults change over time. Defaults carry the Nerdio tag and are locked for editing, so you clone one to get an editable copy.
 
-Your own scripts are created under **Endpoints > Automation > Scripted Actions**: select **Windows Scripts** or **Azure Runbooks**, then **Add scripted action**. You give a name, description, optional tags and an execution mode, then enter the code. Script repositories are marked Premium-only in Nerdio's help. Nerdio's own repository, called NMW, is linked by default and is built from Nerdio's public GitHub repositories; you can unlink it. You can also link your own GitHub, GitLab or [Azure DevOps](/entity/azure-devops/) repository, which syncs hourly when auto-synchronization is on. The overview page does not state an edition requirement for scripted actions themselves.
+Your own scripts are created under **Endpoints > Automation > Scripted Actions**: select **Windows Scripts** or **Azure Runbooks**, then **Add scripted action**. You give a name, description, optional tags and an execution mode, then enter the code. Script repositories are marked Premium-only in Nerdio's help. Nerdio's own repository, called NMW, is linked by default and is built from Nerdio's public GitHub repositories; you can unlink it. You can also link your own GitHub, GitLab or [Azure DevOps](https://www.m365.fm/entity/azure-devops/) repository, which syncs hourly when auto-synchronization is on. The overview page does not state an edition requirement for scripted actions themselves.
 
 ## When scripts run
 
@@ -80,7 +80,7 @@ Release 8.0 (Public Preview, 2 June 2026) lets existing Windows scripted actions
 
 ## Windows 365 Cloud PCs
 
-Nerdio's page says you can use the same scripts for AVD and [Windows 365](/entity/windows-365/) "without any significant modifications", and that only Windows scripts apply. In the script's settings you enable **Enable Cloud PC**, which is required. You choose whether to run with logged-on credentials (default: system context), enforce a signature check, run in a 64-bit PowerShell host, and assign to all users, all devices or selected groups; the page recommends groups. Submission can take several hours, and results appear in the Scripts column under **Windows 365 > Cloud PCs**. Nerdio's usage page lists "Custom scripts are not supported on Cloud PCs" under the same "custom" heading discussed above, so treat Cloud PC support as something to test on one device first.
+Nerdio's page says you can use the same scripts for AVD and [Windows 365](https://www.m365.fm/entity/windows-365/) "without any significant modifications", and that only Windows scripts apply. In the script's settings you enable **Enable Cloud PC**, which is required. You choose whether to run with logged-on credentials (default: system context), enforce a signature check, run in a 64-bit PowerShell host, and assign to all users, all devices or selected groups; the page recommends groups. Submission can take several hours, and results appear in the Scripts column under **Windows 365 > Cloud PCs**. Nerdio's usage page lists "Custom scripts are not supported on Cloud PCs" under the same "custom" heading discussed above, so treat Cloud PC support as something to test on one device first.
 
 ## Limits worth planning for
 
@@ -95,11 +95,11 @@ Scripted actions are not the only route. Learn documents the Custom Script Exten
 
 ## Related
 
-- [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/)
-- [Nerdio scripted actions](/entity/nerdio-scripted-actions/)
-- [Azure Automation](/entity/azure-automation/)
-- [PowerShell](/entity/powershell/)
-- [Azure Virtual Desktop](/entity/azure-virtual-desktop/)
+- [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/)
+- [Nerdio scripted actions](https://www.m365.fm/entity/nerdio-scripted-actions/)
+- [Azure Automation](https://www.m365.fm/entity/azure-automation/)
+- [PowerShell](https://www.m365.fm/entity/powershell/)
+- [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/)
 
 ## Sources
 

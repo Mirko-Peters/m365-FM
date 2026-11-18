@@ -1,17 +1,17 @@
 ---
 title: "Nerdio Manager for MSP explained: multi-tenant management for service providers"
-summary: "Nerdio Manager for MSP is a web application that a service provider installs from the Azure Marketplace in its own tenant and uses to manage many customer tenants from one console. This article explains how it is built, how access and billing work, what Nerdio supports, and where Microsoft's own Lighthouse services overlap."
+summary: "Nerdio Manager for MSP is a web application a service provider installs from the Azure Marketplace in its own tenant to manage many customer tenants. Covers architecture, access, billing and Lighthouse overlap."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [nerdio-manager-for-msp, nerdio]
 keypoints:
-  - "Nerdio Manager for MSP (NMM) is an Azure web application installed from the Azure Marketplace in the MSP's own Azure subscription. Nerdio says installation takes about five to 10 minutes and ends with registration at Nerdio's licensing server."
-  - "The console has two levels. At the MSP level you manage global settings, RBAC, templates and shared objects. At the account level you work inside one customer, and an account selector switches between customers."
-  - "Customer access runs through an app registration in each customer tenant. Nerdio describes two independent settings, the API permission model (Classic or Granular) and the directory privilege model (Global Admin or Least Privilege), which together form the account's Access Model: Classic, In Transition or Modern. Least Privilege is a Public Preview and requires Granular."
+  - "Nerdio Manager for MSP (NMM) is an Azure web app installed from the Azure Marketplace in the MSP's subscription. Nerdio says installation takes five to 10 minutes, then licence registration."
+  - "The console has two levels: the MSP level for global settings, RBAC, templates and shared objects, and the account level for one customer, with an account selector."
+  - "Customer access runs through an app registration per customer tenant. API permission model and directory privilege model form the Access Model; Least Privilege is Public Preview."
   - "Per-user billing is the default. Per-tenant billing is enabled by contacting Nerdio, and Intune-only users are not billed under the per-tenant model."
-  - "Microsoft 365 Lighthouse and Azure Lighthouse cost nothing extra and cover part of the same ground. NMM adds Nerdio's own deployment, policy, app and baseline features and is a paid product with its own support scope."
+  - "Microsoft 365 Lighthouse and Azure Lighthouse cost nothing extra and overlap in part. NMM adds Nerdio's deployment, policy, app and baseline features as a paid product."
 faq:
   - q: "Where does Nerdio Manager for MSP run, and who maintains it?"
     a: "It runs as an Azure App Service in the MSP's own subscription, installed from the Azure Marketplace by a user with Global Administrator in Entra ID and Owner on the subscription. Nerdio does not update it automatically. The MSP chooses when to redeploy from the Updates page, using a user with the same two roles, which changes only the MSP installation, and Nerdio says the process usually takes about five minutes."
@@ -25,11 +25,11 @@ Nerdio Manager for MSP, usually shortened to NMM, is a web application that a ma
 
 ## What it is and how it grew
 
-In a post dated 2 February 2021, Nerdio announced a public preview of NMM as a multi-tenant management product for [Azure Virtual Desktop](/entity/azure-virtual-desktop/) and Azure IaaS, designed from the ground up and deployed through the [Azure Marketplace](/entity/azure-marketplace/). Nerdio's announcement of NMM 5.0, dated 2 April 2024, describes it as a multi-tenant, workflow-powered platform covering Azure, Intune, Entra ID, Defender and Microsoft 365.
+In a post dated 2 February 2021, Nerdio announced a public preview of NMM as a multi-tenant management product for [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) and Azure IaaS, designed from the ground up and deployed through the [Azure Marketplace](https://www.m365.fm/entity/azure-marketplace/). Nerdio's announcement of NMM 5.0, dated 2 April 2024, describes it as a multi-tenant, workflow-powered platform covering Azure, Intune, Entra ID, Defender and Microsoft 365.
 
 The scope moves quickly. Nerdio's release notes list preview releases ahead of GA ones, for example v7.0 as a preview on 4 May 2026 and v7.0.1 as GA on 13 May, and v7.3.0 on 8 September with the Granular Permission Model generally available and Least Privilege offered as a public preview. v7.4.2 (13 November 2026) is the latest release listed as GA. Items carry their own labels: v7.0 marked the Reporting Engine and User Flows GA, and PSA integration and the Tenant Assessment Wizard Public Preview. Check the label of a feature in your own version before you sell it to a customer.
 
-[Nerdio](/entity/nerdio/) announced [Nerdio Manager for MSP](/entity/nerdio-manager-for-msp/) 5.0 together with [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/) 6.0 as separate products. This article covers only the MSP product.
+[Nerdio](https://www.m365.fm/entity/nerdio/) announced [Nerdio Manager for MSP](https://www.m365.fm/entity/nerdio-manager-for-msp/) 5.0 together with [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/) 6.0 as separate products. This article covers only the MSP product.
 
 ## Architecture: one installation, many tenants
 
@@ -66,9 +66,9 @@ The page also lists actions such as Set IUL, which flags an Internal Use License
 
 ## What you manage per customer
 
-Nerdio's blog post of 5 November 2024 separates two plans. The Modern Work plan covers Microsoft 365 management and "does not include AVD management". The AVD plan covers both. Nerdio's billing page counts AVD and [Windows 365](/entity/windows-365/) Cloud PC users, and its permissions page lists permission sets such as [Intune](/entity/intune/), Windows 365 Business and Windows 365 Enterprise that you enable per account under the Granular model. In that model all features appear in the account's left-hand navigation pane. A feature that is enabled shows its normal screens; a feature that is not enabled shows a list of the missing prerequisites (deployment model, licenses, permissions, account features and enterprise applications), marked with a green check or a red exclamation mark.
+Nerdio's blog post of 5 November 2024 separates two plans. The Modern Work plan covers Microsoft 365 management and "does not include AVD management". The AVD plan covers both. Nerdio's billing page counts AVD and [Windows 365](https://www.m365.fm/entity/windows-365/) Cloud PC users, and its permissions page lists permission sets such as [Intune](https://www.m365.fm/entity/intune/), Windows 365 Business and Windows 365 Enterprise that you enable per account under the Granular model. In that model all features appear in the account's left-hand navigation pane. A feature that is enabled shows its normal screens; a feature that is not enabled shows a list of the missing prerequisites (deployment model, licenses, permissions, account features and enterprise applications), marked with a green check or a red exclamation mark.
 
-Shared objects are a main reason to run a multi-tenant console: global images, policies and baselines assigned from the MSP level, and apps from a unified catalog. These features are a topic of their own. See [Nerdio Solution Baselines](/entity/nerdio-solution-baselines/) and the [Unified App Catalog](/entity/nerdio-unified-app-catalog/) for the entities.
+Shared objects are a main reason to run a multi-tenant console: global images, policies and baselines assigned from the MSP level, and apps from a unified catalog. These features are a topic of their own. See [Nerdio Solution Baselines](https://www.m365.fm/entity/nerdio-solution-baselines/) and the [Unified App Catalog](https://www.m365.fm/entity/nerdio-unified-app-catalog/) for the entities.
 
 ## Billing in one paragraph
 

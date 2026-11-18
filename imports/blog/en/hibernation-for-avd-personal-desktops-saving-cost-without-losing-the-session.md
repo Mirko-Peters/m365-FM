@@ -8,7 +8,7 @@ date: 2026-11-18
 topics: [avd-hibernation, avd-personal-host-pool]
 keypoints:
   - "Hibernation stores the VM's memory on the OS disk and then deallocates the VM. Learn says a hibernated VM is not billed for VM usage, while disks and networking resources attached to it are."
-  - "Compute is not billed in either the deallocated or the hibernated state, so hibernation does not save more compute than deallocation. What it adds is the restored session state, and what it costs is a larger OS disk."
+  - "Compute is not billed when deallocated or hibernated, so hibernation saves no more compute than deallocation. It adds the restored session state and costs a larger OS disk."
   - "In a personal scaling plan, hibernate is one of three actions (deallocate, hibernate, do nothing) for the disconnect and sign-out timers, each set to 0 to 360 minutes."
   - "Learn lists limits that matter for planning: listed VM series with up to 64 GB RAM (general purpose) or 112 GB (GPU), no ephemeral OS disks, no Azure Backup, no capacity guarantee on resume."
   - "Hibernation for personal host pool session hosts and for autoscale reached general availability in May 2024, according to Learn's What's new page."
@@ -23,7 +23,7 @@ faq:
 
 Hibernation lets Azure save a personal desktop's memory to its OS disk and then deallocate the VM, so you stop paying for compute while the user's open applications return on the next start. It does not save more compute than a plain deallocation. The reason to use it is the preserved session, and the price is a larger OS disk plus several platform limits. This article covers the concept, the cost model and the decision. The portal and PowerShell steps are in the companion article "How to configure hibernate with autoscale for personal host pools".
 
-The basics of when hibernation applies are already in "Personal host pools in Azure Virtual Desktop: when one desktop per user makes sense": it is available only for [personal host pools](/entity/avd-personal-host-pool/), FSLogix and App Attach do not support it, and the OS disk must hold the memory contents. This article repeats only what the hibernation decision needs.
+The basics of when hibernation applies are already in "Personal host pools in Azure Virtual Desktop: when one desktop per user makes sense": it is available only for [personal host pools](https://www.m365.fm/entity/avd-personal-host-pool/), FSLogix and App Attach do not support it, and the OS disk must hold the memory contents. This article repeats only what the hibernation decision needs.
 
 ## What hibernation does to a session host
 
@@ -36,7 +36,7 @@ Other effects from the same page:
 - In the portal the VM shows **Hibernated (deallocated)**. Learn's Windows page shows the instance view status code `HibernationState/Hibernated` next to `PowerState/deallocated`.
 - Hibernation must be triggered through the Azure portal, CLI, PowerShell, SDKs or APIs. Hibernating from inside the guest does not move the VM to a hibernated state, and the VM continues to be billed.
 
-On status: Learn's [What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new) lists two entries under May 2024. Deploying session hosts in a personal host pool with hibernate support is generally available, and autoscale support for VMs that use hibernate is generally available. [Hibernation](/entity/avd-hibernation/) in AVD is therefore not a preview feature, although individual Azure VM limits still apply.
+On status: Learn's [What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new) lists two entries under May 2024. Deploying session hosts in a personal host pool with hibernate support is generally available, and autoscale support for VMs that use hibernate is generally available. [Hibernation](https://www.m365.fm/entity/avd-hibernation/) in AVD is therefore not a preview feature, although individual Azure VM limits still apply.
 
 ## Hibernate, deallocate or keep running
 
@@ -70,14 +70,14 @@ Assessment, not a Learn statement: for a personal desktop, hibernation is most u
 
 ## What triggers hibernation in AVD
 
-Hibernation can be triggered by an administrator in the portal, CLI or PowerShell, or by autoscale. In a [scaling plan](/entity/avd-scaling-plan/) for personal host pools, each phase has **Disconnect settings** (**When disconnected for (min)**) and **Sign out settings** (**When logged off for (min)**). Both accept 0 to 360 minutes, and **Perform** offers deallocate, hibernate or do nothing, according to Learn's [scaling plan article](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan). That page's PowerShell example mixes the actions across phases, for instance hibernate after 10 minutes of disconnection in peak hours and hibernate after 15 minutes of sign-out in ramp-down.
+Hibernation can be triggered by an administrator in the portal, CLI or PowerShell, or by autoscale. In a [scaling plan](https://www.m365.fm/entity/avd-scaling-plan/) for personal host pools, each phase has **Disconnect settings** (**When disconnected for (min)**) and **Sign out settings** (**When logged off for (min)**). Both accept 0 to 360 minutes, and **Perform** offers deallocate, hibernate or do nothing, according to Learn's [scaling plan article](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan). That page's PowerShell example mixes the actions across phases, for instance hibernate after 10 minutes of disconnection in peak hours and hibernate after 15 minutes of sign-out in ramp-down.
 
 Two cautions from Learn's [autoscale FAQ](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-faq):
 
 - If the plan says hibernate but the hosts do not have hibernation enabled, autoscale does nothing to them: no hibernate and no deallocate.
 - Autoscale for personal desktops does not force users to sign out, and the FAQ words the deallocation condition in two ways (after sign-out, and "signed out or disconnected"). Check how your timers behave in a pilot pool before you rely on one reading.
 
-[Start VM on Connect](/entity/avd-start-vm-on-connect/) powers on an existing personal session host that is assigned or can be assigned to the user. Learn's [Start VM on Connect page](https://learn.microsoft.com/en-us/azure/virtual-desktop/start-virtual-machine-connect) does not mention hibernated VMs, so test that a hibernated desktop starts and resumes through that path before you depend on it for the first connection of the day.
+[Start VM on Connect](https://www.m365.fm/entity/avd-start-vm-on-connect/) powers on an existing personal session host that is assigned or can be assigned to the user. Learn's [Start VM on Connect page](https://learn.microsoft.com/en-us/azure/virtual-desktop/start-virtual-machine-connect) does not mention hibernated VMs, so test that a hibernated desktop starts and resumes through that path before you depend on it for the first connection of the day.
 
 ## Limits to check before you choose it
 

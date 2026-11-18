@@ -1,6 +1,6 @@
 ---
 title: "How to use drain mode for patching and maintenance of session hosts"
-summary: "Runbook for taking one Azure Virtual Desktop session host out of service: protect it from autoscale, turn on drain mode, warn and end the remaining sessions, do the work, then switch drain mode off. Roles, commands and pitfalls are included; waves across a whole host pool are covered in a separate article."
+summary: "Runbook for taking one Azure Virtual Desktop session host out of service: protect it from autoscale, turn on drain mode, warn and end remaining sessions, do the work, then switch drain mode off."
 status: review
 publish: false
 author: mirko-p
@@ -9,8 +9,8 @@ topics: [avd-drain-mode, avd-session-host]
 keypoints:
   - "Drain mode stops new sessions on a host. Existing sessions stay until the user signs out or an administrator ends them."
   - "A user who already has an active or disconnected session in the pool is still routed back to that host, even in drain mode, so list and end sessions before you patch."
-  - "In pooled host pools, Learn says autoscale overrides drain mode on every VM in scope, so tag the VM with the scaling plan's exclusion tag first. For personal host pools, Learn's FAQ says autoscale does not put the session host in drain mode."
-  - "Turning drain mode on needs the Desktop Virtualization Session Host Operator role. Messaging and signing users out is covered by the User Session Operator role; check the effective permissions of the account that runs the runbook."
+  - "In pooled host pools autoscale overrides drain mode on every VM in scope, so set the scaling plan's exclusion tag first. In personal pools, autoscale does not set drain mode."
+  - "Drain mode needs the Desktop Virtualization Session Host Operator role; messaging and signing users out need User Session Operator. Check the runbook account's effective permissions."
   - "For image-based updates of hosts that use a session host configuration, session host update handles drain mode itself, and Learn says not to change it manually during an update."
 faq:
   - q: "What happens to users who are connected when I turn drain mode on?"
@@ -29,11 +29,11 @@ This article is the runbook for a single host. What drain mode is belongs to "Dr
 
 - **Roles.** Learn says turning drain mode on or off requires the Desktop Virtualization Session Host Operator role. Its description on the RBAC page adds that the role can view and remove session hosts and change drain mode. Sending messages, disconnecting sessions and signing users out is covered by the Desktop Virtualization User Session Operator role, which the RBAC page says does not allow changing drain mode. The built-in definition of the Session Host Operator role lists `Microsoft.DesktopVirtualization/hostpools/sessionhosts/*`, while the User Session Operator definition lists `.../sessionhosts/usersessions/*` explicitly. Whether one account can do both steps therefore depends on the roles actually assigned, so test with the account that will run the runbook.
 - **Azure PowerShell** with the Az.DesktopVirtualization module, or Azure Cloud Shell, if you want to script it.
-- **Capacity.** Learn says new connections go to the next available session host, so check that the remaining hosts can take the load. For a depth-first pool, check the [maximum session limit](/entity/avd-maximum-session-limit/) too, because Learn says that once all hosts have reached it you must raise it or add hosts.
+- **Capacity.** Learn says new connections go to the next available session host, so check that the remaining hosts can take the load. For a depth-first pool, check the [maximum session limit](https://www.m365.fm/entity/avd-maximum-session-limit/) too, because Learn says that once all hosts have reached it you must raise it or add hosts.
 
 ## Step by step
 
-1. **Keep autoscale away from the host (pooled host pools).** Learn's scenarios page says that for pooled host pools autoscale overwrites drain mode, and the autoscale FAQ says autoscale still turns drained VMs on or off, no matter who put them in drain mode, because it overrides drain mode on all VMs included in scaling. The [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) is a tag name that you enter on the Basics tab of the [scaling plan](/entity/avd-scaling-plan/) (on the Properties tab of an existing plan). Learn's example is `excludeFromScaling`. The field exists for power management plans and for dynamic plans, which apply only to pooled host pools with session host configuration. With the tag on a session host, autoscale does not start, stop or change the drain mode of that host. Add a tag with that name to the VM. Tag permissions and further details are in the exclusion tag article named above. For personal host pools see the section further down.
+1. **Keep autoscale away from the host (pooled host pools).** Learn's scenarios page says that for pooled host pools autoscale overwrites drain mode, and the autoscale FAQ says autoscale still turns drained VMs on or off, no matter who put them in drain mode, because it overrides drain mode on all VMs included in scaling. The [exclusion tag](https://www.m365.fm/entity/avd-scaling-plan-exclusion-tag/) is a tag name that you enter on the Basics tab of the [scaling plan](https://www.m365.fm/entity/avd-scaling-plan/) (on the Properties tab of an existing plan). Learn's example is `excludeFromScaling`. The field exists for power management plans and for dynamic plans, which apply only to pooled host pools with session host configuration. With the tag on a session host, autoscale does not start, stop or change the drain mode of that host. Add a tag with that name to the VM. Tag permissions and further details are in the exclusion tag article named above. For personal host pools see the section further down.
 2. **Turn drain mode on.** In the Azure portal, open **Azure Virtual Desktop**, then **Host pools**, select the host pool, select **Session hosts**, check the host and select **Turn drain mode on**. With Azure PowerShell, Learn's drain-mode page sets drain mode with the `AllowNewSession` parameter of `Update-AzWvdSessionHost`, run once for each session host. The page uses a `$params` hash table with `AllowNewSession = $False` and splats it into the cmdlet; the same call in one block, in the form of the cmdlet reference example, is:
 
    ```powershell

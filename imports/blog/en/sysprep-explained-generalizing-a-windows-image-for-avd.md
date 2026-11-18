@@ -1,6 +1,6 @@
 ---
 title: "Sysprep explained: generalizing a Windows image for AVD"
-summary: "Sysprep with the /generalize option removes computer-specific information such as the SID from a Windows installation, so that one captured image can create many session hosts. This article explains what it changes, which options matter, and how the manual, Azure Image Builder and Nerdio build paths each run it."
+summary: "Sysprep with /generalize removes computer-specific information such as the SID from a Windows installation, so one captured image can create many session hosts. Covers options and the manual, Image Builder and Nerdio paths."
 status: review
 publish: false
 author: mirko-p
@@ -21,7 +21,7 @@ faq:
     a: "No. According to the Nerdio help pages, the Power off & set as image task clones the OS disk, starts a temporary VM, runs Sysprep /generalize on that clone, captures the image version and deletes the temporary VM. Nerdio's troubleshooting page says not to Sysprep the image VM manually, because Sysprepping an Azure VM makes it unusable in Azure, which is one reason Nerdio Manager Syspreps a clone. The set-as-image dialog also offers Leave desktop image VM running."
 ---
 
-Sysprep is the Windows System Preparation tool, and its `/generalize` option removes computer-specific information from a Windows installation so that one captured image can create many VMs. For Azure Virtual Desktop it is the step between a customized base VM and a reusable [golden image](/entity/golden-image/). This article explains what [sysprep](/entity/sysprep/) changes, which options matter, and how the manual, Azure Image Builder and Nerdio build paths each run it. Failure cases are left to a separate article on sysprep pitfalls.
+Sysprep is the Windows System Preparation tool, and its `/generalize` option removes computer-specific information from a Windows installation so that one captured image can create many VMs. For Azure Virtual Desktop it is the step between a customized base VM and a reusable [golden image](https://www.m365.fm/entity/golden-image/). This article explains what [sysprep](https://www.m365.fm/entity/sysprep/) changes, which options matter, and how the manual, Azure Image Builder and Nerdio build paths each run it. Failure cases are left to a separate article on sysprep pitfalls.
 
 ## What generalize does
 
@@ -79,7 +79,7 @@ The point that matters most is irreversibility. Learn says a generalized VM "can
 
 ## Azure Image Builder and custom image templates
 
-[Custom image templates](/entity/avd-custom-image-templates/) are built on [Azure Image Builder](/entity/azure-image-builder/), and the Learn page says that when creating the image, Azure Image Builder "also takes care of generalizing the image with sysprep".
+[Custom image templates](https://www.m365.fm/entity/avd-custom-image-templates/) are built on [Azure Image Builder](https://www.m365.fm/entity/azure-image-builder/), and the Learn page says that when creating the image, Azure Image Builder "also takes care of generalizing the image with sysprep".
 
 The Image Builder reference explains the details. By default it runs deprovision code at the end of each image customization phase, and for Windows it uses Sysprep. The default script waits for the guest agent services (RdAgent, WindowsAzureTelemetryService, WindowsAzureGuestAgent) to run, removes WinRM certificates created by Packer, deletes `Sysprep\unattend.xml` and `Panther\unattend.xml` if present, calls the sysprep command shown above, and then waits until `ImageState` is `IMAGE_STATE_GENERALIZE_RESEAL_TO_OOBE`. Source images must already be generalized; the reference says specialized images are not supported at this time. Two more details matter:
 
@@ -90,7 +90,7 @@ The reference says that if a Windows custom image builds successfully but VMs cr
 
 ## Nerdio Manager
 
-[Nerdio desktop image management](/entity/nerdio-desktop-image/) wraps the same operation in a task. In Nerdio Manager, go to Cloud Desktops > Desktop Images and choose Power off & set as image, or Set as image, depending on the power state of the image VM. The troubleshooting page lists these steps for the Power off & set as image operation:
+[Nerdio desktop image management](https://www.m365.fm/entity/nerdio-desktop-image/) wraps the same operation in a task. In Nerdio Manager, go to Cloud Desktops > Desktop Images and choose Power off & set as image, or Set as image, depending on the power state of the image VM. The troubleshooting page lists these steps for the Power off & set as image operation:
 
 1. Power off the desktop image VM.
 2. Clone the OS disk, then create and start a temporary VM from the clone.

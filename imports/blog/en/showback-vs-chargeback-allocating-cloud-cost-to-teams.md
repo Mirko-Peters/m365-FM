@@ -5,13 +5,13 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
-topics: [showback-chargeback, finops]
+topics: [showback, chargeback, finops]
 keypoints:
-  - "The FinOps Foundation says the primary difference between showback and chargeback is formality: chargeback posts expenses to official accounting budgets, showback does not. It also says neither type of reporting should be considered more mature than the other."
+  - "The FinOps Foundation says the difference is formality: chargeback posts expenses to official budgets, showback does not. Neither should be considered more mature than the other."
   - "Microsoft Learn says the three pieces can be implemented in any order, but generally recommends starting with showback, then cost allocation, and lastly chargeback based on that allocation strategy."
-  - "Both need cost tied to an owner through accounts, tags and other metadata. Showback can start at cloud-scope level, while Learn recommends basing chargeback on a cost allocation strategy. Learn warns to expect multiple tagging cycles once teams can see their costs."
+  - "Both need cost tied to an owner through accounts and tags. Showback can start at cloud-scope level; Learn bases chargeback on a cost allocation strategy and expects several tagging cycles."
   - "Shared costs need a documented rule. The FinOps Foundation names fixed, proportional and even-split models; Learn says not every shared cost needs to be redistributed."
-  - "Microsoft Cost Management cost allocation rules move cost between subscriptions, resource groups or tags in cost views, but do not change the invoice, and do not support purchases such as reservations and savings plans."
+  - "Cost allocation rules move cost between subscriptions, resource groups or tags in cost views, but do not change the invoice or support reservations and savings plans."
 faq:
   - q: "Do I need chargeback if I already run showback?"
     a: "Not necessarily. The FinOps Foundation says showback is required in every FinOps practice, while chargeback depends on organisational accounting policy and may be unwarranted when technology costs go to a single cost center or an easily allocated set of cost centers. Our reading: add chargeback when finance wants each P&L owner to pay for what it consumes."
@@ -27,7 +27,7 @@ This article explains the two models, what they depend on, how shared cost is ha
 
 ## Definitions
 
-Microsoft Learn's page on data analysis and showback defines showback as "enabling cost visibility throughout an organization": transparency into cloud usage and cost across departments, teams and projects. Its page on invoicing and chargeback describes chargeback as receiving, reconciling and paying provider invoices, and then billing internal teams for their cloud costs "using existing internal finance tools and processes". Both belong to [FinOps](/entity/finops/), and the entity page on [showback and chargeback](/entity/showback-chargeback/) gives the short version.
+Microsoft Learn's page on data analysis and showback defines showback as "enabling cost visibility throughout an organization": transparency into cloud usage and cost across departments, teams and projects. Its page on invoicing and chargeback describes chargeback as receiving, reconciling and paying provider invoices, and then billing internal teams for their cloud costs "using existing internal finance tools and processes". Both belong to [FinOps](https://www.m365.fm/entity/finops/), and the entity page on [showback and chargeback](https://www.m365.fm/entity/showback-chargeback/) gives the short version.
 
 | | Showback | Chargeback |
 |---|---|---|
@@ -43,7 +43,7 @@ The last row comes from the FinOps Foundation's capability page for invoicing an
 
 Both models need a way to tie each cost to an owner. Showback can start at the cloud scope level, for example per subscription, and Learn recommends basing chargeback on a cost allocation strategy. Learn's allocation page defines it as "the process of attributing, assigning, and redistributing shared cost and usage using accounts, tags, and other metadata to establish accountability among teams and projects". It lists the questions your metadata should answer: which cost center, which level of the organisational hierarchy, who is accountable, which project or application, and what the engineering purpose is.
 
-In Azure, that metadata comes from scopes (subscriptions, resource groups) and [Azure resource tags](/entity/azure-resource-tags/), reported in [Microsoft Cost Management](/entity/microsoft-cost-management/). The allocation page says that once resources are tagged or organised into the right resource groups and subscriptions, you can report against that data as part of showback. It also says to use [Azure Policy](/entity/azure-policy/) to enforce the tagging strategy and to use compliance as a KPI. The article "A tagging strategy for AVD cost allocation" covers the tagging mechanics.
+In Azure, that metadata comes from scopes (subscriptions, resource groups) and [Azure resource tags](https://www.m365.fm/entity/azure-resource-tags/), reported in [Microsoft Cost Management](https://www.m365.fm/entity/microsoft-cost-management/). The allocation page says that once resources are tagged or organised into the right resource groups and subscriptions, you can report against that data as part of showback. It also says to use [Azure Policy](https://www.m365.fm/entity/azure-policy/) to enforce the tagging strategy and to use compliance as a KPI. The article "A tagging strategy for AVD cost allocation" covers the tagging mechanics.
 
 Plan for iteration. Learn's allocation page says tagging "takes time to apply, review, and clean up" and to expect multiple tagging cycles after everyone has visibility into the cost data, because many people only notice a problem once they can see it.
 
@@ -61,7 +61,7 @@ If you do move to chargeback, Learn says to collaborate with finance, business a
 
 ## Handling shared cost
 
-Shared cost needs its own rule. Learn's allocation page lists shared services such as application hosting (including Azure Virtual Desktop), observability (Azure Monitor, [Log Analytics](/entity/log-analytics/)), management and security, networking, databases and collaboration. It recommends a plan with "rules and methods for dividing the shared costs fairly and equitably" and notes that not all shared costs need to be redistributed. The FinOps Foundation says some early practices fund shared items centrally rather than allocating them to cost centers.
+Shared cost needs its own rule. Learn's allocation page lists shared services such as application hosting (including Azure Virtual Desktop), observability (Azure Monitor, [Log Analytics](https://www.m365.fm/entity/log-analytics/)), management and security, networking, databases and collaboration. It recommends a plan with "rules and methods for dividing the shared costs fairly and equitably" and notes that not all shared costs need to be redistributed. The FinOps Foundation says some early practices fund shared items centrally rather than allocating them to cost centers.
 
 The Foundation's allocation page names three families of rules: fixed amounts, proportional splits, and proxy metrics for variable splits. Its Walk level lists the models as proportional, fixed and even-split.
 

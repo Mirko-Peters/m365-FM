@@ -1,17 +1,17 @@
 ---
 title: "Minimum percentage of hosts in AVD autoscale explained"
-summary: "The minimum percentage of hosts is the lowest share of all session hosts in a pooled host pool that autoscale keeps turned on in a phase of the schedule. It works as a floor next to the capacity threshold, and in Microsoft Learn's examples the resulting host count is rounded up to a whole number of hosts."
+summary: "The minimum percentage of hosts is the lowest share of session hosts in a pooled host pool that autoscale keeps on in a schedule phase. It works as a floor next to the capacity threshold and rounds up to whole hosts."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-minimum-percentage-of-hosts, avd-scaling-plan]
 keypoints:
-  - "The minimum percentage of hosts is the lowest percentage of all session hosts in the host pool that must be turned on in a phase. Learn's field text says a percentage that is not a whole number is rounded up; its examples round the resulting host count up to whole hosts."
-  - "The portal shows the field on the ramp-up and ramp-down tabs of a pooled power management schedule. During ramp-down and off-peak, Learn's troubleshooting article says autoscale uses the higher of the formula result for current sessions and the 'Minimum percentage of active hosts' setting. This article treats that as the same setting, an inference described below."
+  - "The minimum percentage of hosts is the lowest share of all hosts that must be on in a phase. A percentage that is not a whole number is rounded up; Learn's examples round to whole hosts."
+  - "The field is on the ramp-up and ramp-down tabs of a pooled schedule. In ramp-down and off-peak, autoscale uses the higher of the formula result and the minimum percentage of active hosts."
   - "The setting is a floor on running hosts, not a session target. The capacity threshold decides when hosts are added above that floor."
   - "Zero running hosts needs a minimum of 0 percent and no user sessions at all. Disconnected sessions count as sessions, so Learn points to a time limit policy for disconnected sessions."
-  - "Hosts with the exclusion tag still count in the calculation, but autoscale cannot turn them on. Dynamic autoscaling uses a related field, minimum percentage of active hosts, that is based on the minimum host pool size."
+  - "Hosts with the exclusion tag still count in the calculation, but autoscale cannot turn them on. Dynamic autoscaling uses a related field based on the minimum host pool size."
 faq:
   - q: "What is the difference between the minimum percentage of hosts and the capacity threshold?"
     a: "The minimum percentage is a floor: it sets how many hosts stay on whatever the load. The capacity threshold decides when another host is added, when used capacity goes above it. Learn's scenario with six hosts, 30 percent and 30 percent shows two hosts on at the start of ramp-up, since 30 percent of six is 1.8 and is rounded up."
@@ -21,11 +21,11 @@ faq:
     a: "They count in the calculation, according to the portal text on the scaling plan page. Autoscale does not start, stop or change drain mode on tagged hosts, so, as an inference from the tag definition, a tagged host that is turned off cannot be started to meet the minimum."
 ---
 
-The minimum percentage of hosts is the lowest percentage of all session hosts in a host pool that autoscale keeps turned on in a given phase of a scaling plan schedule. It is a floor on running hosts, not a target for sessions, and Microsoft Learn says that a percentage you enter that is not a whole number is rounded up to the nearest whole number. Its examples show the effect on hosts: 10 percent of seven hosts keeps one host on, and 30 percent of six keeps two. This article explains what the setting does, where it applies, how it combines with the capacity threshold and which details are inferred. Sources are listed at the end and were retrieved on 17 November 2026.
+The minimum percentage of hosts is the lowest percentage of all session hosts in a host pool that autoscale keeps turned on in a given phase of a scaling plan schedule. It is a floor on running hosts, not a target for sessions, and Microsoft Learn says that a percentage you enter that is not a whole number is rounded up to the nearest whole number. Its examples show the effect on hosts: 10 percent of seven hosts keeps one host on, and 30 percent of six keeps two. This article explains what the setting does, where it applies, how it combines with the capacity threshold and which details are inferred. Sources are listed at the end.
 
 ## What the setting is
 
-Learn's [autoscale glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary) defines it as the lowest percentage of all session hosts in the host pool that must be turned on for each phase of the schedule. The percentage is taken from all session hosts in the pool, not only from hosts that are currently running. It belongs to pooled host pools. Personal schedules have no such field; see the entity page for the [scaling plan](/entity/avd-scaling-plan/) and the sibling article on the four autoscale phases. The short definition is on the entity page for the [minimum percentage of hosts](/entity/avd-minimum-percentage-of-hosts/).
+Learn's [autoscale glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary) defines it as the lowest percentage of all session hosts in the host pool that must be turned on for each phase of the schedule. The percentage is taken from all session hosts in the pool, not only from hosts that are currently running. It belongs to pooled host pools. Personal schedules have no such field; see the entity page for the [scaling plan](https://www.m365.fm/entity/avd-scaling-plan/) and the sibling article on the four autoscale phases. The short definition is on the entity page for the [minimum percentage of hosts](https://www.m365.fm/entity/avd-minimum-percentage-of-hosts/).
 
 ## Where you set it
 
@@ -54,7 +54,7 @@ Note the name. That page says "Minimum percentage of active hosts", which is als
 
 ## Floor versus threshold
 
-The minimum percentage and the [capacity threshold](/entity/avd-capacity-threshold/) answer different questions.
+The minimum percentage and the [capacity threshold](https://www.m365.fm/entity/avd-capacity-threshold/) answer different questions.
 
 | Setting | Question it answers | Effect |
 |---|---|---|
@@ -65,7 +65,7 @@ Learn defines available host pool capacity as the maximum session limit multipli
 
 An example calculated from these formulas, not taken from Learn: a pool of 20 hosts, a maximum session limit of 10, a capacity threshold of 75 percent and a minimum percentage of 10 percent. The minimum keeps 2 hosts on, which gives a capacity of 20 sessions. The threshold is reached at 15 sessions, so the sixteenth session makes autoscale start a third host. Raising the minimum to 25 percent keeps 5 hosts on, a capacity of 50 sessions, and the threshold would not trigger until the pool holds more than 37 sessions. With the threshold unchanged, the minimum sets the base capacity (20 or 50 sessions) and with it the session count at which the next host starts (the 16th or the 38th).
 
-Because the capacity comes from the [maximum session limit](/entity/avd-maximum-session-limit/), Learn says not to use the default value for pooled pools that use autoscale.
+Because the capacity comes from the [maximum session limit](https://www.m365.fm/entity/avd-maximum-session-limit/), Learn says not to use the default value for pooled pools that use autoscale.
 
 ## Reaching zero hosts
 
@@ -77,7 +77,7 @@ The autoscale FAQ says autoscale can turn off all VMs in a host pool if the mini
 
 ## Excluded hosts
 
-A VM that carries the scaling plan's [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) is not turned on, off or changed in drain mode by autoscale. Learn's scaling plan article notes that tagged hosts are still part of the calculation of the minimum percentage of hosts. In Learn's scenario, five of six hosts carry the tag and the one untagged host stays on in off-peak because of the minimum percentage. If the admin then tags that last host as well and turns it off, autoscale cannot start any host, and a user who signs in sees "No resources available".
+A VM that carries the scaling plan's [exclusion tag](https://www.m365.fm/entity/avd-scaling-plan-exclusion-tag/) is not turned on, off or changed in drain mode by autoscale. Learn's scaling plan article notes that tagged hosts are still part of the calculation of the minimum percentage of hosts. In Learn's scenario, five of six hosts carry the tag and the one untagged host stays on in off-peak because of the minimum percentage. If the admin then tags that last host as well and turns it off, autoscale cannot start any host, and a user who signs in sees "No resources available".
 
 Following from the tag definition, which is an inference and not a Learn sentence, a tagged host can count toward the percentage while being unable to help meet it.
 

@@ -7,9 +7,9 @@ author: mirko-p
 date: 2026-11-18
 topics: [avd-multimedia-redirection, azure-virtual-desktop]
 keypoints:
-  - "Multimedia redirection has two parts on the session host: the Remote Desktop Multimedia Redirection Service and a browser extension for Microsoft Edge or Google Chrome. It covers two things only, embedded video playback and WebRTC audio calls."
-  - "Learn lists two supported ways to connect: Windows App on Windows, version 2.0.297.0 or later, and Cloud PC devices such as Windows 365 Link. From any other client the extension shows that multimedia redirection is not available on this remote client."
-  - "Only listed sites are redirected by default, for example YouTube, Vimeo and LinkedIn Learning for video, or Dialpad, Five9 and Genesys for calls. You can add sites with an allow list, but Learn says that does not guarantee compatibility. Protected content is not supported."
+  - "Multimedia redirection has two parts on the session host: the Multimedia Redirection Service and an Edge or Chrome extension. It covers embedded video playback and WebRTC audio calls."
+  - "Learn lists two supported clients: Windows App on Windows 2.0.297.0 or later, and Cloud PC devices such as Windows 365 Link. Other clients show that redirection is not available."
+  - "Only listed sites are redirected by default, such as YouTube and Vimeo for video or Dialpad and Genesys for calls. Allow-listed sites may not work; protected content is unsupported."
   - "Multimedia redirection is a different mechanism from Teams media optimization. Teams uses SlimCore or the WebRTC Redirector Service, while Learn lists Teams for the web as unsupported in VDI."
   - "The service does not update itself. The extension does. Learn lists service version 1.0.2604.16004, published on 14 July 2026, as the latest release in its version history."
 faq:
@@ -25,7 +25,7 @@ Multimedia redirection (MMR) moves two kinds of browser media work from a remote
 
 ## What multimedia redirection does
 
-In a normal remote session, a browser plays a video on the session host, and the result reaches the user as screen updates over the remote connection. [Multimedia redirection](/entity/avd-multimedia-redirection/) changes who does the work. Learn says it redirects video playback and calls in a remote session from [Azure Virtual Desktop](/entity/azure-virtual-desktop/), a Windows 365 Cloud PC or a Microsoft Dev Box to the local device for faster processing and rendering. For video, the bitstream is sent to the local device, which decodes and renders it in the correct place on the screen. For calls, WebRTC is offloaded from the session host to the local device, which Learn says reduces latency and improves quality.
+In a normal remote session, a browser plays a video on the session host, and the result reaches the user as screen updates over the remote connection. [Multimedia redirection](https://www.m365.fm/entity/avd-multimedia-redirection/) changes who does the work. Learn says it redirects video playback and calls in a remote session from [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/), a Windows 365 Cloud PC or a Microsoft Dev Box to the local device for faster processing and rendering. For video, the bitstream is sent to the local device, which decodes and renders it in the correct place on the screen. For calls, WebRTC is offloaded from the session host to the local device, which Learn says reduces latency and improves quality.
 
 There are two features, and each has its own list of supported sites:
 
@@ -39,11 +39,11 @@ Both depend on the same two components, described next. Two optional extension t
 Two components make it work on the session host:
 
 1. **The Remote Desktop Multimedia Redirection Service**, installed with local administrator rights.
-2. **A browser extension** for [Microsoft Edge](/entity/microsoft-edge/) or Google Chrome.
+2. **A browser extension** for [Microsoft Edge](https://www.m365.fm/entity/microsoft-edge/) or Google Chrome.
 
 Learn says you install both from a single `.msi` file (`https://aka.ms/avdmmr/msi`), and the statement applies to Azure Virtual Desktop, Windows 365 and Dev Box alike.
 
-Users are prompted to enable the extension when they open the browser, unless you manage it centrally. Learn lists the benefits of central management: silent enablement, restricting which web pages use redirection, showing or hiding advanced settings and pinning the extension to the toolbar. You can manage it with [Microsoft Intune](/entity/intune/), [Group Policy](/entity/group-policy/) or, for Edge only, the Microsoft Edge management service. The extension IDs are `joeclbldhdmoijbaagobkhlpfjglcihd` for Edge and `lfmemoeeciijgkjkgbgikoonlkabmlno` for Chrome.
+Users are prompted to enable the extension when they open the browser, unless you manage it centrally. Learn lists the benefits of central management: silent enablement, restricting which web pages use redirection, showing or hiding advanced settings and pinning the extension to the toolbar. You can manage it with [Microsoft Intune](https://www.m365.fm/entity/intune/), [Group Policy](https://www.m365.fm/entity/group-policy/) or, for Edge only, the Microsoft Edge management service. The extension IDs are `joeclbldhdmoijbaagobkhlpfjglcihd` for Edge and `lfmemoeeciijgkjkgbgikoonlkabmlno` for Chrome.
 
 The service and the extension update differently. The extension updates automatically. The service does not: Learn says you must install the new version manually, using the same installer, which replaces the previous version.
 
@@ -59,7 +59,7 @@ The service and the extension update differently. The extension updates automati
 | Intune management | A Microsoft Entra ID account with the Policy and Profile manager role, and a group with the target devices |
 | Group Policy management | A domain account that can create or edit GPOs, and a group or OU with the target devices |
 
-On [Windows 365](/entity/windows-365/), Learn says the feature is already installed on Microsoft gallery images, so you only install it on a Cloud PC that uses a custom image. The same page covers [Microsoft Dev Box](/entity/microsoft-dev-box/) as a third product.
+On [Windows 365](https://www.m365.fm/entity/windows-365/), Learn says the feature is already installed on Microsoft gallery images, so you only install it on a Cloud PC that uses a custom image. The same page covers [Microsoft Dev Box](https://www.m365.fm/entity/microsoft-dev-box/) as a third product.
 
 ## Which sites are redirected
 
@@ -89,9 +89,9 @@ The limits matter more than the feature list when you decide whether to roll thi
 
 Three things are easy to confuse, and each has a different job.
 
-**Teams media optimization** redirects calling and meetings media of the Teams app. Learn's Teams on AVD page names SlimCore or the WebRTC Redirector Service for new Teams and the WebRTC Redirector Service for classic Teams, and recommends installing the WebRTC Redirector Service with new Teams too, as a fallback. Learn's Teams for VDI page sets dates for the WebRTC-based optimization on Windows endpoints: end of support was 1 October 2026, and on 1 April 2027 (end of availability) WebRTC stops working and the new optimization is enforced. See [Teams media optimization](/entity/avd-teams-media-optimization/) and [Microsoft Teams](/entity/teams/). Our reading: multimedia redirection is not part of that Teams path. Separately, Learn's Teams for VDI page says Teams for Web isn't supported in VDI environments.
+**Teams media optimization** redirects calling and meetings media of the Teams app. Learn's Teams on AVD page names SlimCore or the WebRTC Redirector Service for new Teams and the WebRTC Redirector Service for classic Teams, and recommends installing the WebRTC Redirector Service with new Teams too, as a fallback. Learn's Teams for VDI page sets dates for the WebRTC-based optimization on Windows endpoints: end of support was 1 October 2026, and on 1 April 2027 (end of availability) WebRTC stops working and the new optimization is enforced. See [Teams media optimization](https://www.m365.fm/entity/avd-teams-media-optimization/) and [Microsoft Teams](https://www.m365.fm/entity/teams/). Our reading: multimedia redirection is not part of that Teams path. Separately, Learn's Teams for VDI page says Teams for Web isn't supported in VDI environments.
 
-**Device redirection over the [Remote Desktop Protocol](/entity/remote-desktop-protocol/)** is a third path. Learn's Teams page lists the RDP properties `audiocapturemode:i:1`, `audiomode:i:0` and `camerastoredirect:s:*` for microphone and camera redirection, and says device redirection is not required when media optimization is in use. It is a different feature from moving media rendering to the client.
+**Device redirection over the [Remote Desktop Protocol](https://www.m365.fm/entity/remote-desktop-protocol/)** is a third path. Learn's Teams page lists the RDP properties `audiocapturemode:i:1`, `audiomode:i:0` and `camerastoredirect:s:*` for microphone and camera redirection, and says device redirection is not required when media optimization is in use. It is a different feature from moving media rendering to the client.
 
 **Browser video on an unlisted site**: Learn says video playback redirection is limited by default to the listed sites and any extra sites you configure, and its troubleshooting page shows the status "Not active on this site" for a page that is not supported for redirection. Our reading is that the video then plays without redirection, as Learn says for protected content ("regular video playback").
 

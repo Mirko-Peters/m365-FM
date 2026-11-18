@@ -1,16 +1,16 @@
 ---
 title: "Nerdio Unified App Catalog explained: one catalog, many delivery methods"
-summary: "Nerdio's Unified App Catalog, documented as Unified Application Management (UAM), is one searchable list of apps from several linked repositories, deployed to Azure Virtual Desktop hosts or Intune-enrolled Windows devices once (AVD only) or by policy. This article explains the parts, what each repository type can do, and where Nerdio's own pages set limits."
+summary: "Nerdio's Unified App Catalog, part of Unified Application Management (UAM), lists apps from linked repositories for deployment to AVD hosts or Intune-enrolled Windows devices. Explains repository types and limits."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [nerdio-unified-app-catalog, nerdio-manager-for-enterprise]
 keypoints:
-  - "The catalog is the search view of Nerdio's Unified Application Management (UAM). It lists apps from linked repositories: the Winget community repository, private Winget repositories, Intune and Shell Apps. SCCM is an import source, not a repository type."
-  - "Deployment targets are Azure Virtual Desktop (workspaces, host pools and global pools, which are Premium only and in public preview) and Intune-enrolled Windows devices. A deployment is either a one-time event or a policy that keeps assessing devices."
-  - "Winget apps are installed in an administrative context through a service account. Shell Apps run PowerShell detect, install and uninstall scripts in the device system context; Nerdio's overview page still calls the feature a preview, and Nerdio recommends fully testing packages before they are assigned to production desktops."
-  - "The AVD and Intune targets differ: maintenance windows, drain mode and one-time deployment apply to AVD only. Intune app import and the Task Worker option are labelled public preview, and the SCCM integration is Premium edition only."
+  - "The catalog is UAM's search view across linked repositories: Winget community, private Winget, Intune and Shell Apps. SCCM is an import source, not a repository type."
+  - "Targets are AVD (workspaces, host pools and Premium-only global pools in preview) and Intune-enrolled Windows devices. A deployment is one-time or a policy that keeps assessing devices."
+  - "Winget apps install in an admin context via a service account. Shell Apps run PowerShell scripts in system context; Nerdio still calls them preview and recommends full testing first."
+  - "Maintenance windows, drain mode and one-time deployment apply to AVD only. Intune app import and Task Worker are public preview; SCCM integration is Premium only."
   - "The catalog is not the only way to get apps onto session hosts. Golden images and MSIX app attach stay valid, and Microsoft Learn describes app attach as not installing apps on hosts or images."
 faq:
   - q: "Is the Unified App Catalog the same thing as Unified Application Management?"
@@ -21,13 +21,13 @@ faq:
     a: "Nerdio's supported-configurations page lists Intune-enrolled Windows devices as a target, including Windows 365 Cloud PCs, physical desktops and laptops. Intune targets have fewer options than AVD targets, because maintenance windows and drain mode are not supported there."
 ---
 
-The Unified App Catalog is the part of [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/) where you search apps across several linked repositories in one list and deploy them, once or by policy, to Azure Virtual Desktop session hosts or Intune-enrolled Windows devices. It does not replace the sources the apps come from. It puts one search view and one deployment entry point in front of them.
+The Unified App Catalog is the part of [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/) where you search apps across several linked repositories in one list and deploy them, once or by policy, to Azure Virtual Desktop session hosts or Intune-enrolled Windows devices. It does not replace the sources the apps come from. It puts one search view and one deployment entry point in front of them.
 
 This article explains the concept and the decisions behind it. For the Winget route in detail, see our article "Delivering apps with Winget through Nerdio". The SCCM connector and policy settings follow in "Delivering apps with Nerdio: Winget, SCCM connector and policies".
 
 ## One feature, several names
 
-You will meet three names for the same feature. Nerdio's help pages call it Unified Application Management (UAM), and the page where you search apps is the Unified catalog under **Applications > Catalog > All Apps**. Nerdio's announcement of Nerdio Manager for Enterprise 6 (2 April 2024) says Unified App Catalog and describes consolidating application delivery "from a single catalog using existing app repositories". Nerdio's functional overview uses Unified Application Catalog. The entity page for the [Nerdio Unified App Catalog](/entity/nerdio-unified-app-catalog/) covers the same feature.
+You will meet three names for the same feature. Nerdio's help pages call it Unified Application Management (UAM), and the page where you search apps is the Unified catalog under **Applications > Catalog > All Apps**. Nerdio's announcement of Nerdio Manager for Enterprise 6 (2 April 2024) says Unified App Catalog and describes consolidating application delivery "from a single catalog using existing app repositories". Nerdio's functional overview uses Unified Application Catalog. The entity page for the [Nerdio Unified App Catalog](https://www.m365.fm/entity/nerdio-unified-app-catalog/) covers the same feature.
 
 ## The original concept
 
@@ -45,7 +45,7 @@ Across the help pages, five kinds of source appear. Their capabilities differ, w
 | Shell Apps | Repository type | Apps defined by PowerShell scripts for detection, installation and removal, with an optional file. Added under **Applications > Catalog > Shell Apps**. |
 | SCCM | Import source only | Existing Configuration Manager applications are imported into a private Winget repository or into Shell Apps. The page says the feature is only available in the Premium edition. |
 
-Private Winget repositories can also be filled from a local desktop or network share, an internet URL, or the Winget community repository, according to the supported-configurations page. The SCCM integration is built around [Microsoft Configuration Manager](/entity/configuration-manager/), which Nerdio documents as a connector that queries SCCM applications and imports them.
+Private Winget repositories can also be filled from a local desktop or network share, an internet URL, or the Winget community repository, according to the supported-configurations page. The SCCM integration is built around [Microsoft Configuration Manager](https://www.m365.fm/entity/configuration-manager/), which Nerdio documents as a connector that queries SCCM applications and imports them.
 
 ## Two kinds of target
 
@@ -53,14 +53,14 @@ A deployment goes to one of two target types, and the options change with the ch
 
 | | Azure Virtual Desktop | Intune-enrolled Windows devices |
 |---|---|---|
-| Targets | AVD workspaces, global pools and pool groups (Premium edition; Nerdio's Global Pools Overview page says the feature is in Public Preview), multi-session and single-session [host pools](/entity/avd-host-pool/) | User groups and device groups; includes Windows 365 Cloud PCs, physical desktops and laptops |
+| Targets | AVD workspaces, global pools and pool groups (Premium edition; Nerdio's Global Pools Overview page says the feature is in Public Preview), multi-session and single-session [host pools](https://www.m365.fm/entity/avd-host-pool/) | User groups and device groups; includes Windows 365 Cloud PCs, physical desktops and laptops |
 | Maintenance window | Supported | Not supported; tasks follow the Intune agent's schedule |
-| [Drain mode](/entity/avd-drain-mode/) | Supported | Not supported |
+| [Drain mode](https://www.m365.fm/entity/avd-drain-mode/) | Supported | Not supported |
 | One-time deployment | Supported | Not supported; policy-based only |
 | Winget apps | Installed through the UAM task | Deployed through Intune scripts, so they do not appear on the Intune applications page |
 | Status | Policy details page | Policy details page |
 
-Global pools came with the 8.1.0 release notes (21 July 2026, marked [Preview] and Premium-only), and the 8.2.0 notes (17 September 2026) added global pools and their pool groups as options in application deployment policies. For [Microsoft Intune](/entity/intune/) targets, the supported app types for Intune-sourced apps are MSI line-of-business and EXE Win32 apps in the Device/System context, and Nerdio says other types will follow.
+Global pools came with the 8.1.0 release notes (21 July 2026, marked [Preview] and Premium-only), and the 8.2.0 notes (17 September 2026) added global pools and their pool groups as options in application deployment policies. For [Microsoft Intune](https://www.m365.fm/entity/intune/) targets, the supported app types for Intune-sourced apps are MSI line-of-business and EXE Win32 apps in the Device/System context, and Nerdio says other types will follow.
 
 ## One-time or policy
 
@@ -89,8 +89,8 @@ Nerdio's own content treats the catalog as one of several strategies. A Nerdio O
 | Method | Where the app lives | Note |
 |---|---|---|
 | Catalog deployment (UAM) | Installed on the session host or device by a task | Policy keeps assessing the scope; you need a silent install |
-| [Golden image](/entity/golden-image/) | Installed in the image | See [Nerdio desktop image management](/entity/nerdio-desktop-image/) for the image workflow |
-| [MSIX app attach](/entity/msix-app-attach/) | Mounted from an SMB file share at sign-in | Learn says apps are not installed locally on session hosts or images, and that apps can be assigned per user |
+| [Golden image](https://www.m365.fm/entity/golden-image/) | Installed in the image | See [Nerdio desktop image management](https://www.m365.fm/entity/nerdio-desktop-image/) for the image workflow |
+| [MSIX app attach](https://www.m365.fm/entity/msix-app-attach/) | Mounted from an SMB file share at sign-in | Learn says apps are not installed locally on session hosts or images, and that apps can be assigned per user |
 
 These methods are not exclusive. Our reading, not a Nerdio or Microsoft rule: the catalog suits apps that must be installed on the host and that change often enough to justify a policy, while an image suits the common base set. Test with a pilot host pool before you decide.
 

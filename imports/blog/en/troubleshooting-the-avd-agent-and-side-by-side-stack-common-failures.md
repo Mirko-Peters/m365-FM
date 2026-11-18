@@ -7,10 +7,10 @@ author: mirko-p
 date: 2026-11-18
 topics: [avd-agent, avd-session-host]
 keypoints:
-  - "Start in Event Viewer under Windows Logs, Application, and filter on the sources WVD-Agent, WVD-Agent-Updater, RDAgentBootLoader and MsiInstaller. The event text (for example INVALID_FORM or InstallMsiException) tells you which of the documented fixes applies."
+  - "Start in Event Viewer (Windows Logs > Application), filtering on WVD-Agent, WVD-Agent-Updater, RDAgentBootLoader and MsiInstaller. The event text shows which documented fix applies."
   - "Run qwinsta on the session host. If rdp-tcp and rdp-sxs do not show Listen, the side-by-side stack is the problem, and Learn's health check table treats a failed stack listener check as fatal."
-  - "Installs and updates fail for narrow, checkable reasons: a Group Policy that blocks msiexec.exe or cmd.exe, too little disk space, .NET Framework below 4.7.2 as a possible cause, a DisableRegistryTools value of 1, or an operating system SKU such as Windows Pro that cannot run the stack."
-  - "INVALID_FORM, event 3703 and event 3019 are network and policy problems between the agent and the service. Our reading: test the broker with /api/health and run WVDAgentUrlTool.exe before you touch the registration."
+  - "Installs fail for checkable reasons: Group Policy blocking msiexec.exe or cmd.exe, low disk space, .NET below 4.7.2, DisableRegistryTools = 1, or an OS SKU such as Windows Pro."
+  - "INVALID_FORM and events 3703 and 3019 are network and policy problems. Our reading: test the broker with /api/health and run WVDAgentUrlTool.exe before touching registration."
   - "A registration key must be valid for at least one hour and at most 27 days. Learn's full reset with a new key is for the cases it names and for problems the earlier sections did not resolve."
 faq:
   - q: "How do I check whether the side-by-side stack is healthy?"
@@ -23,7 +23,7 @@ faq:
 
 For a broken Azure Virtual Desktop agent or side-by-side stack, Learn recommends starting in the session host's Application log; for stack problems it uses the `qwinsta` output. Match the event text or the output to the narrow fix first. Learn keeps the full uninstall and reinstall for the cases it names and for problems the earlier sections did not resolve.
 
-This article covers the [Azure Virtual Desktop agent](/entity/avd-agent/) and stack on one [session host](/entity/avd-session-host/). For a running host marked Unavailable, including domain join, autoscale and URL checks, the article "Azure Virtual Desktop Session Host Shows Unavailable: A Step-by-Step Checklist" is the broader starting point.
+This article covers the [Azure Virtual Desktop agent](https://www.m365.fm/entity/avd-agent/) and stack on one [session host](https://www.m365.fm/entity/avd-session-host/). For a running host marked Unavailable, including domain join, autoscale and URL checks, the article "Azure Virtual Desktop Session Host Shows Unavailable: A Step-by-Step Checklist" is the broader starting point.
 
 ## What the agent, the boot loader and the stack are
 
@@ -96,7 +96,7 @@ If `rdp-tcp` and `rdp-sxs` still do not show `Listen`, Learn says to re-register
 
 The output lists reachable and unreachable endpoints. The tool does not check wildcard entries, only specific entries beneath them.
 
-**`ENDPOINT_NOT_FOUND` (3277).** The broker found no endpoint. Learn lists four causes: no hosts in the pool, hosts not active, all hosts over the [maximum session limit](/entity/avd-maximum-session-limit/), or no agent service running. For "Connection not found: RDAgent does not have an active connection to the broker", a host at its connection limit, Learn suggests lowering the session limit or adding resources.
+**`ENDPOINT_NOT_FOUND` (3277).** The broker found no endpoint. Learn lists four causes: no hosts in the pool, hosts not active, all hosts over the [maximum session limit](https://www.m365.fm/entity/avd-maximum-session-limit/), or no agent service running. For "Connection not found: RDAgent does not have an active connection to the broker", a host at its connection limit, Learn suggests lowering the session limit or adding resources.
 
 ## Registration and token failures
 
@@ -113,7 +113,7 @@ The output lists reachable and unreachable endpoints. The tool does not check wi
 
 ## Slow start at boot
 
-If the loader is stopped after a restart, the host shows Needs Assistance or Unavailable, or Windows logs event 7000 or 7011, Learn describes a startup that is too slow. Set **Remote Desktop Agent Loader** to **Automatic (Delayed Start)** and raise the timeout with `reg add "HKLM\SYSTEM\CurrentControlSet\Control" /v ServicesPipeTimeout /t REG_DWORD /d 60000 /f`. Learn says to start at 60,000 ms; a reboot is required. Also check disk IOPS and antivirus scans, logon scripts or large GPOs that starve the agent. Release notes for 1.0.15294.200 (September 2026) add a scheduled task that helps ensure the boot loader is running after startup. The "Latest available versions" table showed production 1.0.15732.100 and validation 1.0.15991.300 as of 17 November 2026. [Validation host pools](/entity/avd-validation-environment/) receive agent updates first.
+If the loader is stopped after a restart, the host shows Needs Assistance or Unavailable, or Windows logs event 7000 or 7011, Learn describes a startup that is too slow. Set **Remote Desktop Agent Loader** to **Automatic (Delayed Start)** and raise the timeout with `reg add "HKLM\SYSTEM\CurrentControlSet\Control" /v ServicesPipeTimeout /t REG_DWORD /d 60000 /f`. Learn says to start at 60,000 ms; a reboot is required. Also check disk IOPS and antivirus scans, logon scripts or large GPOs that starve the agent. Release notes for 1.0.15294.200 (September 2026) add a scheduled task that helps ensure the boot loader is running after startup. The "Latest available versions" table showed production 1.0.15732.100 and validation 1.0.15991.300 as of 17 November 2026. [Validation host pools](https://www.m365.fm/entity/avd-validation-environment/) receive agent updates first.
 
 ## The full reset
 

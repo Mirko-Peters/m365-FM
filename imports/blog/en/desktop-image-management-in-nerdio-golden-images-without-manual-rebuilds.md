@@ -1,6 +1,6 @@
 ---
 title: "Desktop image management in Nerdio: golden images without manual rebuilds"
-summary: "In Nerdio Manager for Enterprise a desktop image is an Azure VM you change plus an image object that session hosts deploy from, and Nerdio automates the generalize-and-capture steps between them. This article explains what the product takes over, what stays with you, and the settings that cannot be changed later."
+summary: "In Nerdio Manager for Enterprise a desktop image is an Azure VM you change plus an image object hosts deploy from; Nerdio automates generalize and capture. Covers what stays with you and settings fixed at creation."
 status: review
 publish: false
 author: mirko-p
@@ -8,9 +8,9 @@ date: 2026-11-18
 topics: [nerdio-desktop-image, nerdio-manager-for-enterprise]
 keypoints:
   - "A Nerdio desktop image has two Azure parts: a VM used to manage the image, and the image object used to deploy session hosts. Powering on a desktop image powers on the VM."
-  - "Set as image automates Sysprep and sealing. Nerdio also removes local user profiles before Sysprep by default, can remove Citrix and Omnissa agents, and removes the FSLogix agent by default because current FSLogix is installed on the hosts."
+  - "Set as image automates Sysprep and sealing. By default Nerdio also removes local profiles and the FSLogix agent before Sysprep, and it can remove Citrix and Omnissa agents."
   - "Gallery replication is on by default. Nerdio lists a maximum of 20 concurrent clone operations per replica and up to 100 replicas per region."
-  - "Hibernation support cannot be changed after creation, and Set as image shows the security type and the gallery field as locked to the choice made at creation or import. Nerdio's Stage page also describes turning the gallery on in that dialog, so whether a gallery can be added later is not clear. For images created from an Azure VM, Nerdio says the image VM is Gen1 unless you select Gen2."
+  - "Hibernation support cannot be changed after creation, and Set as image shows security type and gallery as locked. For images from an Azure VM, Nerdio says the image VM is Gen1 unless you select Gen2."
   - "Importing images is optional: Nerdio says custom Azure images in your subscription can build and re-image host pools without being imported, but import unlocks the management features described here."
 faq:
   - q: "Do I have to import my images into Nerdio Manager to use them?"
@@ -27,7 +27,7 @@ This article is the concept view: what the object is, how you create it, what th
 
 ## What a desktop image is in Nerdio
 
-Nerdio's host pool documentation says a desktop image consists of two Azure objects: a VM that is used to manage the image, and the image that is used to deploy session hosts. When you power on a desktop image, you are powering on the VM. Virtual machines in a host pool are created from a desktop image, which holds the operating system, your applications and anything else you add. This is what Microsoft calls a [golden image](/entity/golden-image/), and [Nerdio desktop images](/entity/nerdio-desktop-image/) manages its lifecycle.
+Nerdio's host pool documentation says a desktop image consists of two Azure objects: a VM that is used to manage the image, and the image that is used to deploy session hosts. When you power on a desktop image, you are powering on the VM. Virtual machines in a host pool are created from a desktop image, which holds the operating system, your applications and anything else you add. This is what Microsoft calls a [golden image](https://www.m365.fm/entity/golden-image/), and [Nerdio desktop images](https://www.m365.fm/entity/nerdio-desktop-image/) manages its lifecycle.
 
 Nerdio makes one point that is easy to miss: you do not have to import images to use them. Its help center says custom Azure images in your subscription can build new host pools and re-image existing ones in exactly the same way as imported images. Importing adds management features that are otherwise not available, and keeps lifecycle work in one portal. For a team with a working image pipeline outside Nerdio, the choice is about management features, not about whether host pools can use the image.
 
@@ -56,16 +56,16 @@ Microsoft's own golden image guide describes a manual sequence: create a base VM
 | Remove user profiles before Sysprep | Nerdio removes all local user profiles during image creation, which it says increases the likelihood of Sysprep success. **Skip removal of local profiles** bypasses this, and its page says Sysprep will fail to remove partially installed APPX apps on the image VM |
 | Run Sysprep, seal, capture | **Power off & set as image** starts an automation process that commits the changes to an image object, including Sysprep and sealing, with progress in the logs |
 | Additional Nerdio step: remove other agents | **Uninstall legacy VDI agents** tries to remove Citrix and Omnissa agents; only detected agents are removed |
-| Additional Nerdio step: FSLogix agent | **Remove FSLogix apps** is selected by default. The agent is not needed in the image, and Nerdio installs the latest [FSLogix](/entity/fslogix/) agent on session hosts created from it |
+| Additional Nerdio step: FSLogix agent | **Remove FSLogix apps** is selected by default. The agent is not needed in the image, and Nerdio installs the latest [FSLogix](https://www.m365.fm/entity/fslogix/) agent on session hosts created from it |
 | Customize the VM | Scripted actions and applications run during creation, against the clone of the image VM by default |
 
-Two details deserve attention. First, Nerdio says Windows scripts run through the Azure Custom Script extension as LocalSystem, on the clone of the image VM before it is sysprepped, and not on the image VM itself. You can switch the target to the source VM. That matters if a script installs something you expect on the VM afterwards. Second, Azure runbooks run in the context of the Nerdio Manager app service principal. The scripts receive variables such as the VM name and region, and Nerdio's Run script page lists `$DesktopImageActiveVersion` and `$DesktopImageStagedVersion`. See [scripted actions](/entity/nerdio-scripted-actions/) for the wider feature, and use the **Restart VM after script execution** option instead of restarting inside a script, because Nerdio says the Custom Script extension fails if a script restarts the VM.
+Two details deserve attention. First, Nerdio says Windows scripts run through the Azure Custom Script extension as LocalSystem, on the clone of the image VM before it is sysprepped, and not on the image VM itself. You can switch the target to the source VM. That matters if a script installs something you expect on the VM afterwards. Second, Azure runbooks run in the context of the Nerdio Manager app service principal. The scripts receive variables such as the VM name and region, and Nerdio's Run script page lists `$DesktopImageActiveVersion` and `$DesktopImageStagedVersion`. See [scripted actions](https://www.m365.fm/entity/nerdio-scripted-actions/) for the wider feature, and use the **Restart VM after script execution** option instead of restarting inside a script, because Nerdio says the Custom Script extension fails if a script restarts the VM.
 
 Applications can be added in the same wizard as install or uninstall actions for single applications or groups, in a set order, with an optional reboot.
 
 ## Versions, gallery and replication
 
-**Geographic distribution & Azure compute gallery** is enabled by default in the wizard. It stores the image in an [Azure Compute Gallery](/entity/azure-compute-gallery/) and distributes it to the regions you pick. Nerdio's rules:
+**Geographic distribution & Azure compute gallery** is enabled by default in the wizard. It stores the image in an [Azure Compute Gallery](https://www.m365.fm/entity/azure-compute-gallery/) and distributes it to the regions you pick. Nerdio's rules:
 
 - Only one gallery can be selected, and it must be in a linked resource group in the same subscription as the image VM.
 - The current Azure region must be among the replication regions.
@@ -80,7 +80,7 @@ Replica count is also a sizing question. The Resize/re-image page describes **Pr
 Choose these at creation or import:
 
 - **Hibernation supported**: Nerdio says it cannot be enabled or disabled after the image is created.
-- **Security type**: Standard is the default. Trusted launch and Confidential VM options need a generation 2 VM with the gallery option enabled, and Set as image shows the choice as locked afterwards. Nerdio lists limitations for those options, including no support for backup, managed disks and ephemeral OS disks. Compare that with Microsoft's [trusted launch](/entity/trusted-launch/) documentation before you decide.
+- **Security type**: Standard is the default. Trusted launch and Confidential VM options need a generation 2 VM with the gallery option enabled, and Set as image shows the choice as locked afterwards. Nerdio lists limitations for those options, including no support for backup, managed disks and ephemeral OS disks. Compare that with Microsoft's [trusted launch](https://www.m365.fm/entity/trusted-launch/) documentation before you decide.
 - **Azure Compute Gallery**: Set as image shows the field as locked to the choice made at creation or import. The Stage page tells you to toggle the gallery on in that dialog if it is not already on, and Nerdio does not say whether that works for an image created without a gallery. Deciding at the start is safe either way.
 
 Nerdio's backup page says Enhanced backup policies are required to back up Trusted launch desktops, while other pages list lack of backup support for it. Test a restore before you rely on it.
@@ -89,14 +89,14 @@ Nerdio's backup page says Enhanced backup policies are required to back up Trust
 
 - **Clone** creates a new image with the same properties, so customizations need not be rebuilt. Nerdio says that to move an image to another region you select a network in that region during the clone.
 - **Change log**: text you type at Set as image is attached to the image, and **Change Log** in the action menu shows changes made manually or automatically.
-- **Enable for Cloud PCs** requires Windows 10/11 Enterprise and is not available for AVD, EVD or CIS images. Nerdio says the image is uploaded and tested for compatibility, which can take a long time, with a limit of 20 images uploaded to [Windows 365](/entity/windows-365/).
+- **Enable for Cloud PCs** requires Windows 10/11 Enterprise and is not available for AVD, EVD or CIS images. Nerdio says the image is uploaded and tested for compatibility, which can take a long time, with a limit of 20 images uploaded to [Windows 365](https://www.m365.fm/entity/windows-365/).
 - **Tags** entered in the wizard apply to the image VM, OS disk, network interface, image object and gallery image.
 
 ## What stays your job
 
 Automation covers the mechanical steps; it does not decide content. The lifecycle page runs from import through power on, RDP, the changes and Power off & set as image. Scripted actions and applications can run before Set as image, and in the endpoint management example the VM is left running so that a tool can apply Windows updates to it. Backups are described inconsistently: Set as image says a current version kept as a backup is not visible or manageable in Nerdio Manager, while Manage versions offers a **Backup Version Limit** that deletes the oldest backup. "An image update workflow with Nerdio" and "Image update workflow: test, validate, roll out" cover this in detail.
 
-The native alternative is [custom image templates](/entity/avd-custom-image-templates/), which Learn describes as built on Azure Image Builder, defined in a JSON file, and able to store the result in an Azure Compute Gallery, a managed image or both. The Custom image templates page does not compare effort with a management tool. Learn's golden image guide says only that other approaches exist, such as Intune or Azure Image Builder with Azure DevOps, and that the choice depends on the size and complexity of your environment and your current application deployment processes.
+The native alternative is [custom image templates](https://www.m365.fm/entity/avd-custom-image-templates/), which Learn describes as built on Azure Image Builder, defined in a JSON file, and able to store the result in an Azure Compute Gallery, a managed image or both. The Custom image templates page does not compare effort with a management tool. Learn's golden image guide says only that other approaches exist, such as Intune or Azure Image Builder with Azure DevOps, and that the choice depends on the size and complexity of your environment and your current application deployment processes.
 
 ## Sources
 

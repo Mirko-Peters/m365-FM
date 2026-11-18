@@ -1,17 +1,17 @@
 ---
 title: "Profile container vs Office container: how to decide"
-summary: "Microsoft Learn recommends a single FSLogix profile container and calls the separate Office container (ODFC) optional. Its container types page lists four reasons to use both, while its ODFC page says a dual container configuration is not necessary or recommended. This guide shows how to decide between them."
+summary: "Microsoft Learn recommends a single FSLogix profile container and calls the Office container (ODFC) optional; its pages differ on when to use both. This guide shows how to decide between them."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [fslogix-office-container, fslogix]
 keypoints:
-  - "Learn calls a single profile container, holding profile and Office data in the same VHD(x) file, the recommended configuration. The FAQ says to use a single profile container unless business or workload requirements need the separation."
-  - "Two Learn pages do not say the same thing. The container types page says profile and Office containers should be used together and lists four conditions. The ODFC configuration page says a dual container configuration is not necessary or recommended. Our reading: single container is the default, and you add a second container for a requirement you can name."
-  - "The four conditions are a separate storage location, isolation from loss or corruption in one container, a choice of Office components, and different container sizes. Learn's sizing note says: configure 10 GB profile container with a 50 GB ODFC container."
-  - "With a third-party roaming profile product, Learn recommends the Office container in a single container configuration and says to exclude the paths it manages from that product. Learn uses the phrase single container in two meanings, even on the ODFC page, so check which one a sentence intends."
-  - "You can convert a single container to profile plus Office container later. FSLogix copies the data from the profile container into the new container, but the original data stays in the profile container until you remove it manually."
+  - "Learn calls a single profile container with profile and Office data in one VHD(x) the recommended configuration, unless business or workload requirements need separation."
+  - "Learn's container types page lists four conditions for using both containers; the ODFC page calls the dual setup unnecessary. Our reading: single container by default, a second for a named need."
+  - "The four conditions: separate storage location, isolation from corruption in one container, a choice of Office components, and different sizes (e.g. 10 GB profile, 50 GB ODFC)."
+  - "With a third-party roaming profile product, Learn recommends the Office container in a single container configuration and excluding its paths from that product. Learn uses that term two ways."
+  - "You can convert a single container to profile plus Office later. FSLogix copies the data into the new container, but the original stays in the profile container until removed manually."
 faq:
   - q: "Do I need an Office container to use Microsoft 365 apps with FSLogix?"
     a: "No. The FSLogix FAQ says the Office container is primarily used in VDI solutions where another roaming profile product is used, and to always use a single profile container unless business or workload requirements need the separation. The ODFC page adds that all benefits of the Office container are automatic with profile containers in a single container configuration."
@@ -21,11 +21,11 @@ faq:
     a: "The FAQ says FSLogix copies the data from the profile container when the Office container is created, and that the original data is not removed. Plan to remove the old copy manually and to check container sizes afterwards."
 ---
 
-Use one FSLogix profile container per user unless you can name a specific reason for a second one. Microsoft Learn describes the single container, which holds profile and Office data in the same VHD(x) file, as the recommended configuration, and the separate Office container (ODFC) as optional. This guide gives a short way to decide, then the points that differ per outcome. For the settings, the Include table and verification, see [FSLogix Office container: when to separate Office data from the profile](/community/u/mirko-p/blog/fslogix-office-container-when-to-separate-office-data-from-the-profile/) in this series.
+Use one FSLogix profile container per user unless you can name a specific reason for a second one. Microsoft Learn describes the single container, which holds profile and Office data in the same VHD(x) file, as the recommended configuration, and the separate Office container (ODFC) as optional. This guide gives a short way to decide, then the points that differ per outcome. For the settings, the Include table and verification, see [FSLogix Office container: when to separate Office data from the profile](https://www.m365.fm/community/u/mirko-p/blog/fslogix-office-container-when-to-separate-office-data-from-the-profile/) in this series.
 
 ## What each container holds
 
-The [profile container](/entity/fslogix-profile-container/) stores the user profile data, which Learn describes as nearly everything under `C:\Users\<username>`, apart from the exclusions FSLogix applies. The [Office container](/entity/fslogix-office-container/), short for Office Data and Files Container (ODFC), is meant for profile content that is unique to Microsoft Office applications. Learn's examples of Office data are the Office apps, OneDrive, Teams, SharePoint and OneNote, and Learn calls the Office container a subset of the profile container.
+The [profile container](https://www.m365.fm/entity/fslogix-profile-container/) stores the user profile data, which Learn describes as nearly everything under `C:\Users\<username>`, apart from the exclusions FSLogix applies. The [Office container](https://www.m365.fm/entity/fslogix-office-container/), short for Office Data and Files Container (ODFC), is meant for profile content that is unique to Microsoft Office applications. Learn's examples of Office data are the Office apps, OneDrive, Teams, SharePoint and OneNote, and Learn calls the Office container a subset of the profile container.
 
 ## Where the two Learn pages differ
 
@@ -53,7 +53,7 @@ The last four rows rest on the container types page. The ODFC page's "isn't nece
 ## The four conditions on the container types page
 
 1. **Separate storage location.** You want discretion over where Office data sits compared with the rest of the profile. Each container has its own `VHDLocations` value, and Nerdio's help page says the two containers can be stored on different file shares.
-2. **Isolation.** Data loss or corruption in one container does not affect the other. Learn's footnote says the Office container is not backed up or replicated to alternate locations, because its data is recoverable from the source. The same page says Cloud Cache is an optional configuration for profile and ODFC containers; see the [Cloud Cache](/entity/fslogix-cloud-cache/) articles in this series.
+2. **Isolation.** Data loss or corruption in one container does not affect the other. Learn's footnote says the Office container is not backed up or replicated to alternate locations, because its data is recoverable from the source. The same page says Cloud Cache is an optional configuration for profile and ODFC containers; see the [Cloud Cache](https://www.m365.fm/entity/fslogix-cloud-cache/) articles in this series.
 3. **Component choice.** You choose which Office components have their data included in the container. Learn notes this is not available with a single container configuration.
 4. **Different sizes.** Learn's footnote says: configure 10 GB profile container with a 50 GB ODFC container. The page ties different sizes to specific workloads or data synced from OneDrive. The default `SizeInMBs` for both container types is 30000 MB. Our reading: use the 10 GB and 50 GB figures as Learn's example for that case, and measure your own data before you size.
 
@@ -71,7 +71,7 @@ The last four rows rest on the container types page. The ODFC page's "isn't nece
 4. **If one fits, decide the Include settings and sizes**, then pilot with a small group.
 5. **Record the decision**, so that the next administrator knows why two VHD(x) files exist per user.
 
-One caution for step 4: the Include settings decide which data is redirected into the Office container, and `IncludeTeams` does more than that. The reference page's default is 0. With 0, Teams data is not redirected to the ODFC container and the new Teams AppX package is not registered during sign-in. With 1, Teams data is redirected and the new Teams AppX package is registered by family name during sign-in. The ODFC page lists `IncludeTeams = 1` as recommended. The reference page does not say whether the setting keeps that data out of the profile. To keep folders out of a container, see the [redirections.xml](/entity/fslogix-redirections-xml/) article in this series. The series article "New Teams on AVD with FSLogix: what to know" covers the Teams details.
+One caution for step 4: the Include settings decide which data is redirected into the Office container, and `IncludeTeams` does more than that. The reference page's default is 0. With 0, Teams data is not redirected to the ODFC container and the new Teams AppX package is not registered during sign-in. With 1, Teams data is redirected and the new Teams AppX package is registered by family name during sign-in. The ODFC page lists `IncludeTeams = 1` as recommended. The reference page does not say whether the setting keeps that data out of the profile. To keep folders out of a container, see the [redirections.xml](https://www.m365.fm/entity/fslogix-redirections-xml/) article in this series. The series article "New Teams on AVD with FSLogix: what to know" covers the Teams details.
 
 ## Add an Office container next to a profile container
 
@@ -85,7 +85,7 @@ Learn recommends the Office container in a single container configuration here. 
 
 ## If you manage the hosts with Nerdio
 
-Nerdio's FSLogix help page for [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/) describes the Office container as a part of a profile storage configuration. Under **Cloud Desktops > Azure Virtual Desktop > Host Pool Profiles**, select **New profile**, then **FSLogix**, and under FSLogix Profiles storage select **Add**. The page says Office containers separate Microsoft Office data, for example OST files, from the overall user profile for easier troubleshooting. It describes these Office container options:
+Nerdio's FSLogix help page for [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/) describes the Office container as a part of a profile storage configuration. Under **Cloud Desktops > Azure Virtual Desktop > Host Pool Profiles**, select **New profile**, then **FSLogix**, and under FSLogix Profiles storage select **Add**. The page says Office containers separate Microsoft Office data, for example OST files, from the overall user profile for easier troubleshooting. It describes these Office container options:
 
 - A toggle to redirect only the areas of the profile that are specific to Microsoft Office.
 - A field for the FSLogix Office Container path (VHDLocation).

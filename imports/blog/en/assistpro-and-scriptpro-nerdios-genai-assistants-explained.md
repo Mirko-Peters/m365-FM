@@ -1,17 +1,17 @@
 ---
 title: "AssistPro and ScriptPro: Nerdio's GenAI assistants explained"
-summary: "AssistPro appeared in private preview in February 2024, and in April 2024 Nerdio announced it as a public preview alongside ScriptPro. In Nerdio Manager for Enterprise the assistant appears as Nerdio Copilot from release 6.4.0, with Script Pro and AnalyticsPro, while Nerdio Manager for MSP still documents AssistPro; this article sorts out the names, deployment, cost, data handling and the points where the sources disagree."
+summary: "AssistPro appeared in private preview in February 2024 and as a public preview in April 2024. In Nerdio Manager for Enterprise it is Nerdio Copilot from 6.4.0; this article sorts out names, deployment, cost and data handling."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [nerdio-assistpro, nerdio-manager-for-enterprise]
 keypoints:
-  - "The names depend on the product. Nerdio Manager for Enterprise (NME) release notes list AssistPro in v5.7 (February 2024), Nerdio Copilot from v6.4.0 (September 2024), Script Pro inside Copilot in v6.7.0 (January 2025) and Analytics Pro in v7.0.0 (April 2025). Nerdio Manager for MSP still documents AssistPro, and its v7.4.0 (21 October 2026) and v7.4.1 (27 October 2026) notes record changes to it."
+  - "Names depend on the product: NME lists AssistPro in v5.7, Nerdio Copilot from v6.4.0 and Analytics Pro in v7.0.0. Nerdio Manager for MSP still documents AssistPro, with changes in v7.4.0 and v7.4.1."
   - "Our reading is that in NME, Copilot took over AssistPro's job. Nerdio's release notes and help pages do not announce a rename, and nothing shows the MSP product's AssistPro being retired."
-  - "Today's NME Copilot is enabled under System > Settings > Nerdio, runs on Azure OpenAI in your own Azure tenant, and needs a resource group, a model and a deployment type (Data Zone Standard or Global Standard). Cost depends on tokens used; Nerdio says an enabled but unused Copilot has no standing cost."
+  - "NME Copilot is enabled under System > Settings > Nerdio and runs on Azure OpenAI in your own tenant. Cost depends on tokens; Nerdio says an enabled but unused Copilot has no standing cost."
   - "The deployment type is a data-location choice: Learn says Global Standard can process prompts in any geography where the model is deployed, Data Zone Standard only inside the chosen zone."
-  - "AssistPro's status is described differently across Nerdio pages (private preview, public preview, generally available, \"remains a preview feature\"), so confirm it with Nerdio before you plan around it."
+  - "Nerdio pages describe AssistPro's status differently (private preview, public preview, generally available), so confirm it with Nerdio before you plan around it."
 faq:
   - q: "Is AssistPro still a separate product from Nerdio Copilot?"
     a: "It depends on the product. In Nerdio Manager for Enterprise the release notes list Nerdio Copilot from v6.4.0 (September 2024), and the Copilot help page does not mention AssistPro. In Nerdio Manager for MSP, AssistPro is still documented (help page dated 13 October 2026) and its release notes record changes on 21 and 27 October 2026 (v7.4.0 and v7.4.1), so it is still maintained there. Nerdio's release notes and help pages do not announce a rename; treating Copilot as the NME counterpart of AssistPro is our reading."
@@ -21,7 +21,7 @@ faq:
     a: "Nerdio's page says Azure OpenAI is deployed as a private resource in your tenant and that data does not leave it. Microsoft Learn adds that Global Standard deployments may process prompts and responses in any geography where the model is deployed, and describes an abuse-monitoring store for human review of flagged content. Read both before choosing a deployment type."
 ---
 
-AssistPro and ScriptPro are the names Nerdio used in 2024 for two generative AI assistants. [AssistPro](/entity/nerdio-assistpro/) appeared in private preview in February 2024 and answers support and how-to questions from Nerdio's documentation; ScriptPro was announced in April 2024, when AssistPro became a public preview, for writing scripted actions. In [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/) the current help center documents Nerdio Copilot, which includes Script Pro and AnalyticsPro for KQL queries. In Nerdio Manager for MSP, AssistPro remains the documented name.
+AssistPro and ScriptPro are the names Nerdio used in 2024 for two generative AI assistants. [AssistPro](https://www.m365.fm/entity/nerdio-assistpro/) appeared in private preview in February 2024 and answers support and how-to questions from Nerdio's documentation; ScriptPro was announced in April 2024, when AssistPro became a public preview, for writing scripted actions. In [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/) the current help center documents Nerdio Copilot, which includes Script Pro and AnalyticsPro for KQL queries. In Nerdio Manager for MSP, AssistPro remains the documented name.
 
 ## Which name belongs to which source
 
@@ -103,11 +103,11 @@ Nerdio Copilot is not Microsoft 365 Copilot; it is a chat assistant inside Nerdi
 
 ## Related
 
-- [Nerdio AssistPro](/entity/nerdio-assistpro/)
-- [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/)
-- [Nerdio scripted actions](/entity/nerdio-scripted-actions/)
-- [Azure OpenAI](/entity/azure-openai/)
-- [KQL](/entity/kql/)
+- [Nerdio AssistPro](https://www.m365.fm/entity/nerdio-assistpro/)
+- [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/)
+- [Nerdio scripted actions](https://www.m365.fm/entity/nerdio-scripted-actions/)
+- [Azure OpenAI](https://www.m365.fm/entity/azure-openai/)
+- [KQL](https://www.m365.fm/entity/kql/)
 
 ## Sources
 

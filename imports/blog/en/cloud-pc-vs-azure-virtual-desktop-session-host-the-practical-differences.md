@@ -7,10 +7,10 @@ author: mirko-p
 date: 2026-11-18
 topics: [windows-365]
 keypoints:
-  - "A Windows 365 Enterprise Cloud PC exists in a subscription owned by Microsoft and is created automatically when a licensed user is in a group targeted by a provisioning policy. An Azure Virtual Desktop session host is a VM in your subscription that you create and manage, including image, applications, network, resiliency, backup and recovery."
-  - "Repair tools differ. Enterprise Cloud PCs have Intune remote actions: restart, resize (data kept), restore from a restore point, and reprovision (everything on the Cloud PC deleted). Session hosts are fixed with drain mode, VM-level tools, or replacement from an updated image."
-  - "Images differ. Cloud PC custom images must be generalized, single-session, free of FSLogix components and, if newly created, Generation 2, and existing Cloud PCs get a new image only by reprovisioning. Session hosts can use pooled multi-session images and FSLogix, and session host update replaces VMs in batches."
-  - "Scaling differs. A Windows 365 Enterprise Cloud PC size is tied to the user's license and is changed with resize; Flex works differently. Session hosts are scaled with autoscale, which starts and deallocates hosts and, for dynamic autoscale, can create and delete them."
+  - "A Windows 365 Enterprise Cloud PC lives in a Microsoft-owned subscription and is provisioned by policy. An AVD session host is a VM in your subscription that you create and manage."
+  - "Repair differs. Enterprise Cloud PCs have Intune remote actions: restart, resize, restore and reprovision. Session hosts are fixed with drain mode, VM-level tools or replacement from an updated image."
+  - "Cloud PC custom images must be generalized, single-session and free of FSLogix; existing Cloud PCs need reprovisioning for a new image. Session hosts can use multi-session images and FSLogix."
+  - "A Windows 365 Enterprise Cloud PC size is tied to the license and changed with resize. Session hosts scale with autoscale, which starts and deallocates hosts and, if dynamic, creates and deletes them."
   - "Monitoring differs. Cloud PCs are reported in Intune. Azure Virtual Desktop Insights needs a Log Analytics workspace, data collection and the Azure Monitor Agent on the session hosts."
 faq:
   - q: "Is a Cloud PC just an Azure Virtual Desktop session host that Microsoft runs for me?"
@@ -27,13 +27,13 @@ This article covers operations, not the buying decision, licensing or pricing, w
 
 ## What stays the same
 
-[Windows 365](/entity/windows-365/) and [Azure Virtual Desktop](/entity/azure-virtual-desktop/) share a connection layer. Learn's Windows 365 architecture page says Cloud PC connectivity is provided by Azure Virtual Desktop and that no inbound connections from the internet are made to the Cloud PC. The Windows IT Pro Blog describes [Windows App](/entity/windows-app/) as connecting to both. [Intune](/entity/intune/) is a management option for both.
+[Windows 365](https://www.m365.fm/entity/windows-365/) and [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) share a connection layer. Learn's Windows 365 architecture page says Cloud PC connectivity is provided by Azure Virtual Desktop and that no inbound connections from the internet are made to the Cloud PC. The Windows IT Pro Blog describes [Windows App](https://www.m365.fm/entity/windows-app/) as connecting to both. [Intune](https://www.m365.fm/entity/intune/) is a management option for both.
 
 ## Who owns the machine
 
 For a Cloud PC, the architecture page says the "hosted on behalf of" model means the Cloud PCs exist in a subscription owned by Microsoft, which also manages capacity and in-region availability and picks the VM size from the license assigned to the user. Learn's comparison unit summarizes this as "Microsoft-managed, fixed cost, no access to VMs".
 
-For a session host, the AVD service architecture page splits the duties differently. Microsoft provides the web, broker and gateway services. You are responsible for creating and managing session hosts, including images, applications, network connectivity, resiliency, and backup and recovery, and for user identities and access control. The same page points to Azure Availability Zones, [Azure Backup](/entity/azure-backup/), Site Recovery and Advisor for that work.
+For a session host, the AVD service architecture page splits the duties differently. Microsoft provides the web, broker and gateway services. You are responsible for creating and managing session hosts, including images, applications, network connectivity, resiliency, and backup and recovery, and for user identities and access control. The same page points to Azure Availability Zones, [Azure Backup](https://www.m365.fm/entity/azure-backup/), Site Recovery and Advisor for that work.
 
 ## How a machine comes into existence
 
@@ -41,14 +41,14 @@ For a session host, the AVD service architecture page splits the duties differen
 
 Other Windows 365 types differ. Learn says Reserve Cloud PCs are provisioned through the **Provision** device action in Intune, or by users in the Windows App if you enable that setting, not automatically when the policy is created. A Flex Shared assignment takes a friendly name and a Cloud PC number for the group rather than one Cloud PC per user.
 
-**Session host.** You add VMs yourself. With the standard management approach you create the VM with your preferred method and register it with a registration token. With a session host configuration (pooled host pools only), you add hosts by increasing the host pool size, and you cannot retrieve a registration token for hosts created outside the service. The management approach cannot be changed after creation. See [session host configuration](/entity/avd-session-host-configuration/) and [session hosts](/entity/avd-session-host/).
+**Session host.** You add VMs yourself. With the standard management approach you create the VM with your preferred method and register it with a registration token. With a session host configuration (pooled host pools only), you add hosts by increasing the host pool size, and you cannot retrieve a registration token for hosts created outside the service. The management approach cannot be changed after creation. See [session host configuration](https://www.m365.fm/entity/avd-session-host-configuration/) and [session hosts](https://www.m365.fm/entity/avd-session-host/).
 
 ## Images and updates
 
 | Task | Cloud PC | Session host |
 |---|---|---|
 | Image source | Gallery images (updated monthly) or up to 20 custom images | Azure Marketplace, Azure Compute Gallery or managed image |
-| Image rules | Generalized, single-session, Generation 2 for new images, no recovery partition, no [FSLogix](/entity/fslogix/) components | Must be supported for AVD (the prerequisites page lists Windows 10 and 11 Enterprise multi-session) and match the VM generation |
+| Image rules | Generalized, single-session, Generation 2 for new images, no recovery partition, no [FSLogix](https://www.m365.fm/entity/fslogix/) components | Must be supported for AVD (the prerequisites page lists Windows 10 and 11 Enterprise multi-session) and match the VM generation |
 | Apply a new image to existing machines | Reprovision the Cloud PC | Standard: your own pipeline. Session host configuration: session host update |
 | What the update does | Wipes the Cloud PC and deploys a new one | Drains and removes each batch from the host pool, creates replacements from the updated configuration, adds them to the pool, then deletes the original VMs |
 
@@ -67,7 +67,7 @@ The table describes Windows 365 Enterprise:
 | Restore | Changes after the restore point are lost | Short-term points every 4, 6, 12, 16 or 24 hours, long-term points every 7 days, one manual point per Cloud PC |
 | Reprovision | All data, apps and settings deleted | Learn says organizations often reserve it as a last resort; needs status **Failed** or **Provisioned** |
 
-For a session host, the first tool is [drain mode](/entity/avd-drain-mode/): the host accepts no new sessions while existing connections stay (portal path **Azure Virtual Desktop** > **Host pools** > your pool > **Session hosts**, then **Turn drain mode on**; the Desktop Virtualization Session Host Operator role is required). What comes next depends on the management approach. With standard management you manage the hosts yourself, so in our reading the usual Azure VM tools apply: restart, resize, restore from your own backup, or replace the VM. With a session host configuration, Learn says session hosts cannot be updated individually or changed outside the service with standard-management tools. You change size or image in the configuration and apply it with session host update, which replaces the VMs.
+For a session host, the first tool is [drain mode](https://www.m365.fm/entity/avd-drain-mode/): the host accepts no new sessions while existing connections stay (portal path **Azure Virtual Desktop** > **Host pools** > your pool > **Session hosts**, then **Turn drain mode on**; the Desktop Virtualization Session Host Operator role is required). What comes next depends on the management approach. With standard management you manage the hosts yourself, so in our reading the usual Azure VM tools apply: restart, resize, restore from your own backup, or replace the VM. With a session host configuration, Learn says session hosts cannot be updated individually or changed outside the service with standard-management tools. You change size or image in the configuration and apply it with session host update, which replaces the VMs.
 
 ## Scaling and capacity
 
@@ -75,7 +75,7 @@ A Cloud PC does not scale in the host-pool sense. For Windows 365 Enterprise, Le
 
 Flex differs. In Dedicated mode you pick the size per group in the provisioning policy assignment and change it there; Shared mode Cloud PCs cannot be resized. Learn's Flex overview still lists the Resize remote action as not yet supported.
 
-Session hosts scale with autoscale. Power management autoscaling is generally available and works for pooled and personal host pools. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit. [Dynamic autoscale](/entity/avd-dynamic-autoscaling/) needs a pooled host pool with a session host configuration and can also create and delete session hosts, which [power management autoscaling](/entity/avd-power-management-autoscaling/) cannot.
+Session hosts scale with autoscale. Power management autoscaling is generally available and works for pooled and personal host pools. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community). Some Learn pages, for example the scenarios and glossary pages and the module version 5.4.2-preview, still carry preview wording; check the current page before relying on a limit. [Dynamic autoscale](https://www.m365.fm/entity/avd-dynamic-autoscaling/) needs a pooled host pool with a session host configuration and can also create and delete session hosts, which [power management autoscaling](https://www.m365.fm/entity/avd-power-management-autoscaling/) cannot.
 
 ## Ending the machine's life
 
@@ -85,7 +85,7 @@ For Windows 365 Enterprise, removing a user's license or targeted provisioning p
 
 Cloud PC monitoring lives in Intune: the Cloud PC actions report (**Devices** > **Monitor**) shows action status. With your own network, Azure network connection health checks cover domain join, endpoint connectivity, subnet IP usage, enrollment restrictions and single sign-on.
 
-AVD monitoring is something you assemble. [AVD Insights](/entity/avd-insights/) is built on Azure Monitor workbooks and needs a Log Analytics workspace, diagnostic settings on host pools and workspaces, and data collection from session hosts through the [Azure Monitor Agent](/entity/azure-monitor-agent/) with a managed identity. The Desktop Virtualization Reader and Log Analytics Reader roles are required, and standard Log Analytics storage charges apply. The agent is not installed automatically on hosts replaced by session host update.
+AVD monitoring is something you assemble. [AVD Insights](https://www.m365.fm/entity/avd-insights/) is built on Azure Monitor workbooks and needs a Log Analytics workspace, diagnostic settings on host pools and workspaces, and data collection from session hosts through the [Azure Monitor Agent](https://www.m365.fm/entity/azure-monitor-agent/) with a managed identity. The Desktop Virtualization Reader and Log Analytics Reader roles are required, and standard Log Analytics storage charges apply. The agent is not installed automatically on hosts replaced by session host update.
 
 ## A short operations checklist
 

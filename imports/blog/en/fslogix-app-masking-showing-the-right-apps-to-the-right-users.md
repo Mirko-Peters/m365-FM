@@ -7,11 +7,11 @@ author: mirko-p
 date: 2026-11-18
 topics: [fslogix-app-masking, fslogix]
 keypoints:
-  - "App Masking is done with hiding rules in Rule Sets. A hiding rule hides items such as files, folders, registry keys, registry values, printers or fonts from a user or group, so an app can stay in the image but not appear for some users."
-  - "A Rule Set is saved as two files: an .fxr rule file and an .fxa assignment file. Copied to C:\\Program Files\\FSLogix\\Apps\\Rules on a session host, they are used immediately by the FSLogix Apps Services."
+  - "App Masking uses hiding rules in Rule Sets that hide files, folders, registry items, printers or fonts from a user or group, so an app can stay in the image but not appear for some users."
+  - "A Rule Set is two files, .fxr rules and .fxa assignments. Copied to C:\\Program Files\\FSLogix\\Apps\\Rules on a host, they are used immediately by the FSLogix Apps Services."
   - "Assignments can target users, groups, processes, network locations, computers, directory containers and environment variables. New rules start with Everyone assigned and Applies set to No."
   - "Assignments do not support Microsoft Entra ID cloud-only accounts. Users and groups must be synced from Active Directory, and the VMs need line of sight to a domain controller to resolve SIDs."
-  - "Nerdio Manager can discover installed apps on a host pool, build rule sets and push them to hosts. Its help says App Masking is currently not supported in AAD joined host pool scenarios (Nerdio's wording; Microsoft now calls this Microsoft Entra joined)."
+  - "Nerdio Manager can discover apps on a host pool, build rule sets and push them. Its help says App Masking is not supported in AAD joined (now Microsoft Entra joined) host pools."
 faq:
   - q: "Does App Masking remove an application from the image?"
     a: "No. Hiding rules hide specified items, such as an application's files, folders and registry entries, from the users or groups the assignment names. The application itself stays installed on the session host."
@@ -25,9 +25,9 @@ FSLogix App Masking hides applications and other items from selected users or gr
 
 ## What App Masking does
 
-App Masking works through Rule Sets. You describe the item in the FSLogix Rules Editor, assign the Rule Set to users or groups, and the FSLogix Apps Services process the resulting files on the session host. Learn describes a hiding rule as one that hides specific items from a user or group of users. See also the entity page for [FSLogix App Masking](/entity/fslogix-app-masking/).
+App Masking works through Rule Sets. You describe the item in the FSLogix Rules Editor, assign the Rule Set to users or groups, and the FSLogix Apps Services process the resulting files on the session host. Learn describes a hiding rule as one that hides specific items from a user or group of users. See also the entity page for [FSLogix App Masking](https://www.m365.fm/entity/fslogix-app-masking/).
 
-A pooled image tends to collect applications for several departments. Nerdio's MSP blog (published 23 May 2023) says a shared AVD environment can amount to upwards of 80-100 applications, and that a user who launches an app they should not have could trigger a license issue or take a license out of the available pool. Treat this as the vendor's framing for MSPs, not a benchmark. Our reading: the alternatives are separate images or host pools per group, or delivering apps with [App Attach](/entity/msix-app-attach/), which Learn describes as dynamically attaching applications from an application package to a user session, without installing them on session hosts or images. Which option takes less effort depends on how many groups and applications you have.
+A pooled image tends to collect applications for several departments. Nerdio's MSP blog (published 23 May 2023) says a shared AVD environment can amount to upwards of 80-100 applications, and that a user who launches an app they should not have could trigger a license issue or take a license out of the available pool. Treat this as the vendor's framing for MSPs, not a benchmark. Our reading: the alternatives are separate images or host pools per group, or delivering apps with [App Attach](https://www.m365.fm/entity/msix-app-attach/), which Learn describes as dynamically attaching applications from an application package to a user session, without installing them on session hosts or images. Which option takes less effort depends on how many groups and applications you have.
 
 ## Rule Sets and rule types
 
@@ -86,7 +86,7 @@ Nerdio's help describes a managed workflow for the same technique. Nerdio Manage
 - **Save & apply** applies the rule at once to all session hosts; **Save & close** saves it for later application, for example when hosts are created or re-imaged.
 - Applying offers three clearing modes: clear all existing FSLogix rule sets on hosts, clear only Nerdio-created ones, or overwrite only the rule sets being applied.
 - Rule sets can be exported to JSON or to another host pool and imported again.
-- The help states that FSLogix App Masking is currently not supported in AAD joined host pool scenarios (Nerdio's wording; Microsoft now calls this Microsoft Entra joined). This is a different limit from Learn's: Learn restricts by identity source (cloud-only accounts), while Nerdio's help names the join type of the host pool. Check both for your design. See [Nerdio](/entity/nerdio/) for the platform.
+- The help states that FSLogix App Masking is currently not supported in AAD joined host pool scenarios (Nerdio's wording; Microsoft now calls this Microsoft Entra joined). This is a different limit from Learn's: Learn restricts by identity source (cloud-only accounts), while Nerdio's help names the join type of the host pool. Check both for your design. See [Nerdio](https://www.m365.fm/entity/nerdio/) for the platform.
 
 The Nerdio page lists App Container among its rule types while Learn says that type was retired in February 2025, so check the Nerdio console before relying on that type.
 

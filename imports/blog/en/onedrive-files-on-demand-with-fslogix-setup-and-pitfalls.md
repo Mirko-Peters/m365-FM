@@ -1,16 +1,16 @@
 ---
 title: "OneDrive Files On-Demand with FSLogix: setup and pitfalls"
-summary: "Microsoft Learn supports the OneDrive sync app on non-persistent virtual desktops that use FSLogix, with a Microsoft 365 subscription, a per-machine install and the latest FSLogix version. Files On-Demand keeps files online-only until they are opened; in our reading, opened files are then stored in the user's container, so container size, disk-space policies and concurrent sessions need attention."
+summary: "Learn supports the OneDrive sync app on non-persistent desktops with FSLogix, given a per-machine install and the latest FSLogix. In our reading, opened Files On-Demand files land in the container, so watch size."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [fslogix, onedrive]
 keypoints:
-  - "Learn lists the OneDrive sync app as supported on non-persistent virtual desktops with FSLogix Apps or the Office container, but requires a per-machine install and the latest FSLogix version. The OS list on that page names Windows 11 and Windows Server 2025 or newer."
-  - "Files On-Demand is a OneDrive setting, not an FSLogix one. The FilesOnDemandEnabled policy turns it on for new users; Learn recommends keeping it enabled and says the feature needs Windows 10 version 1709 or later."
-  - "The FSLogix FAQ says that with the default OneDrive location, all the data is saved to the user's container, and that OneDrive's disk-space policies check the FSLogix VHD, not the operating system disk. Our reading is that files a user opens are therefore downloaded into the container."
-  - "The documented pitfalls are an old FSLogix version (error FSLogix_unsupported_environment before 2009 hotfix 1), several concurrent connections to the same container, a full container, and fixes in FSLogix 26.08 for cloud-only placeholder corruption and OneDrive data loss."
+  - "Learn supports the OneDrive sync app on non-persistent desktops with FSLogix, with a per-machine install and the latest FSLogix. The OS list names Windows 11 and Windows Server 2025 or newer."
+  - "Files On-Demand is a OneDrive setting. FilesOnDemandEnabled turns it on for new users; Learn recommends keeping it on and says it needs Windows 10 version 1709 or later."
+  - "The FSLogix FAQ says with the default OneDrive location all data is saved to the container, and disk-space policies check the VHD. Our reading: opened files are downloaded into the container."
+  - "Documented pitfalls: old FSLogix versions, concurrent connections to one container, a full container, and FSLogix 26.08 fixes for placeholder corruption and OneDrive data loss."
   - "A single profile container is the default advice; a separate Office container (ODFC) includes OneDrive data by default and allows a different container size for it."
 faq:
   - q: "Does FSLogix handle OneDrive Files On-Demand by itself?"
@@ -21,17 +21,17 @@ faq:
     a: "Run C:\\Program Files\\FSLogix\\Apps\\frx.exe version, or read the InstallVersion value under HKLM:\\SOFTWARE\\FSLogix\\Apps. Learn's error page for FSLogix_unsupported_environment names both methods and says versions before FSLogix 2009 hotfix 1 block the OneDrive sync client."
 ---
 
-Microsoft Learn supports the OneDrive sync app on non-persistent virtual desktops that use FSLogix when the sync app is installed per machine, FSLogix is the latest version and the user has a Microsoft 365 subscription. Files On-Demand keeps files online-only until they are opened. In our reading, whatever a user opens is then stored in the [FSLogix](/entity/fslogix/) container, which makes container size, free-space policies and the one-session-per-container rule the main things to plan. This article sets out what Microsoft Learn documents, a setup sequence, and the pitfalls that are written down.
+Microsoft Learn supports the OneDrive sync app on non-persistent virtual desktops that use FSLogix when the sync app is installed per machine, FSLogix is the latest version and the user has a Microsoft 365 subscription. Files On-Demand keeps files online-only until they are opened. In our reading, whatever a user opens is then stored in the [FSLogix](https://www.m365.fm/entity/fslogix/) container, which makes container size, free-space policies and the one-session-per-container rule the main things to plan. This article sets out what Microsoft Learn documents, a setup sequence, and the pitfalls that are written down.
 
 ## What Learn says is supported
 
-The [sync app on virtual desktops](https://learn.microsoft.com/en-us/sharepoint/sync-vdi-support) page lists three supported cases for the [OneDrive](/entity/onedrive/) sync app: virtual desktops that persist between sessions, non-persistent virtual desktops that use [Azure Virtual Desktop](/entity/azure-virtual-desktop/), and non-persistent virtual desktops with FSLogix Apps or the FSLogix Office container plus a Microsoft 365 subscription. For the last case, the page names two operating systems: Windows 11, 32-bit or 64-bit, which it says supports VMDK files, and Windows Server 2025 or newer, which supports VHDX. It does not list other Windows versions in that sentence, so check the page before you plan a different host operating system. For Windows Server the SMB protocol is also required.
+The [sync app on virtual desktops](https://learn.microsoft.com/en-us/sharepoint/sync-vdi-support) page lists three supported cases for the [OneDrive](https://www.m365.fm/entity/onedrive/) sync app: virtual desktops that persist between sessions, non-persistent virtual desktops that use [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/), and non-persistent virtual desktops with FSLogix Apps or the FSLogix Office container plus a Microsoft 365 subscription. For the last case, the page names two operating systems: Windows 11, 32-bit or 64-bit, which it says supports VMDK files, and Windows Server 2025 or newer, which supports VHDX. It does not list other Windows versions in that sentence, so check the page before you plan a different host operating system. For Windows Server the SMB protocol is also required.
 
 Two conditions apply to every non-persistent case. The sync app must be installed per machine, and FSLogix must be the latest version; the page says all non-persistent VDI environments require it. Learn also states that the sync app with FSLogix does not support running multiple instances of the same container simultaneously.
 
 ## What Files On-Demand adds
 
-[OneDrive Files On-Demand](/entity/onedrive-files-on-demand/) shows files in File Explorer as online-only entries and downloads content when a file is opened. In Learn's OneDrive policy reference, the setting is **Use OneDrive Files On-Demand**, with the policy name `FilesOnDemandEnabled`. Learn describes three states:
+[OneDrive Files On-Demand](https://www.m365.fm/entity/onedrive-files-on-demand/) shows files in File Explorer as online-only entries and downloads content when a file is opened. In Learn's OneDrive policy reference, the setting is **Use OneDrive Files On-Demand**, with the policy name `FilesOnDemandEnabled`. Learn describes three states:
 
 - **Enabled**: new users who set up the sync app see online-only files by default, and file contents do not download until a file is opened.
 - **Disabled**: users have the earlier sync behaviour and cannot turn Files On-Demand on.
@@ -64,7 +64,7 @@ In our reading, a Files On-Demand deployment shifts the sizing question from "ho
 | Question | Single profile container | Profile container plus ODFC |
 |---|---|---|
 | Learn's default advice | Always use a single profile container unless business or workload needs require separation | Optional configuration |
-| OneDrive cache | Part of the [profile container](/entity/fslogix-profile-container/) | In the [Office container](/entity/fslogix-office-container/), which includes OneDrive by default |
+| OneDrive cache | Part of the [profile container](https://www.m365.fm/entity/fslogix-profile-container/) | In the [Office container](https://www.m365.fm/entity/fslogix-office-container/), which includes OneDrive by default |
 | Container size | One size for everything | Allows a different size for data synced from OneDrive |
 | Failure isolation | One container | Isolation from loss or corruption in one of the two |
 

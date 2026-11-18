@@ -1,17 +1,17 @@
 ---
 title: "How to run a validation host pool before changes reach production"
-summary: "Run the validation host pool as a routine: a small pool that mirrors production, a weekly comparison with the release notes, a written check after each new agent or stack version, and a rule for what you do when it fails. Learn supplies the setting and the principles; the routine around it is our suggestion."
+summary: "Run the validation host pool as a routine: a small pool mirroring production, a weekly check against release notes, a check after each new agent or stack version, and a rule for failures."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-validation-environment, avd-host-pool]
 keypoints:
-  - "Azure Advisor flags a subscription with no validation host pool, and also flags one where too many pools are validation pools: Learn recommends fewer than half of your host pools be validation pools, so keep validation pools fewer than production pools. One small validation pool is a workable start."
-  - "Keep scheduled agent updates off the validation pool. Learn says hosts with the feature receive the agent update after full flighting to production; our reading is that this removes the early view. Learn's powered-on rule for maintenance windows applies to pools that use the feature. Keeping validation hosts running is our suggestion."
-  - "Compare the agent and stack versions on the validation hosts with the Validation row of the release notes every week. The WVDAgentHealthStatus table has AgentVersion, SxSStackVersion and UpgradeState columns; turn on the Agent Health Status diagnostic category and check that the table fills."
+  - "Azure Advisor flags subscriptions with no validation pool and with too many: Learn recommends fewer than half your pools be validation pools. One small validation pool is a workable start."
+  - "Keep scheduled agent updates off the validation pool: hosts with the feature get the agent after full flighting to production, which removes the early view. Keeping hosts running is our suggestion."
+  - "Compare agent and stack versions on validation hosts with the release notes weekly. WVDAgentHealthStatus has AgentVersion and SxSStackVersion; enable the Agent Health Status category."
   - "After each new version run the same short check: host status, update state, a sign-in and a profile load by test users, and the key applications. Write down pass, hold or fail."
-  - "A failed check gives you time and evidence, not a way to stop the service update. Collect the CorrelationID, drain affected hosts if needed, and use scheduled agent updates on production pools for non-critical updates."
+  - "A failed check gives time and evidence, not a way to stop the update. Collect the CorrelationID, drain affected hosts if needed and use scheduled agent updates on production pools."
 faq:
   - q: "How many validation host pools do I need?"
     a: "At least one, according to the Azure Advisor recommendation page, which asks for one host pool with a validation environment. The same page recommends that fewer than half of your host pools be validation pools. Our suggestion: start with one small pool. A second one for another kind of production pool, for example personal next to pooled, only fits under Learn's limit while production pools outnumber validation pools. With one production and one validation pool, validation is exactly half, which is not fewer than half, so weigh the Advisor hint against the value of the test."
@@ -27,7 +27,7 @@ The facts below come from Microsoft Learn and Nerdio's help pages. Where a step 
 
 ## What Learn asks of you
 
-Learn's [validation environment article](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-validation-environment) gives the principles: make the validation [host pool](/entity/avd-host-pool/) as similar as possible to your standard host pools, have users connect as often as they connect to the standard pool, include any automated tests you already run, and use it only for testing, not in production. The [validation host pool](/entity/avd-validation-environment/) setting is a property of the pool. In Nerdio Manager for Enterprise, the help page "Host Pool AVD Configuration" lists a "Validation environment" option that designates the host pool as a validation host pool. A note there says validation host pools receive service updates at a faster cadence than non-validation host pools.
+Learn's [validation environment article](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-validation-environment) gives the principles: make the validation [host pool](https://www.m365.fm/entity/avd-host-pool/) as similar as possible to your standard host pools, have users connect as often as they connect to the standard pool, include any automated tests you already run, and use it only for testing, not in production. The [validation host pool](https://www.m365.fm/entity/avd-validation-environment/) setting is a property of the pool. In Nerdio Manager for Enterprise, the help page "Host Pool AVD Configuration" lists a "Validation environment" option that designates the host pool as a validation host pool. A note there says validation host pools receive service updates at a faster cadence than non-validation host pools.
 
 ## Step 1: Size and place the pool
 
@@ -36,8 +36,8 @@ Azure Advisor has two recommendations about this. Per Learn's [Advisor recommend
 Our suggestion for a first build:
 
 1. Create a separate pool for validation. Do not switch the flag on a pool that carries real production work, because Learn says validation pools should be used only for testing.
-2. Match the production pool type, [pooled or personal](/entity/avd-pooled-host-pool/). If you run both and they behave differently, one validation pool of each type is easier to reason about than one pool that approximates both, but it needs enough production pools to stay under the limit above. In a small estate, weigh a known Advisor hint against mirroring only the larger production pool.
-3. Use the same image source, applications, [FSLogix](/entity/fslogix/) profile setup, policies and network path as the production pool. Two or three session hosts are usually enough to show a regression (our judgement, not a Learn figure).
+2. Match the production pool type, [pooled or personal](https://www.m365.fm/entity/avd-pooled-host-pool/). If you run both and they behave differently, one validation pool of each type is easier to reason about than one pool that approximates both, but it needs enough production pools to stay under the limit above. In a small estate, weigh a known Advisor hint against mirroring only the larger production pool.
+3. Use the same image source, applications, [FSLogix](https://www.m365.fm/entity/fslogix/) profile setup, policies and network path as the production pool. Two or three session hosts are usually enough to show a regression (our judgement, not a Learn figure).
 4. Assign the application group to a dedicated security group of test users, and keep the membership current.
 
 ## Step 2: Let the pool receive updates
@@ -98,9 +98,9 @@ Write the rule before you need it. A simple version:
 
 - **Pass:** all checks pass. Note the versions and move on. Learn says not every validation version reaches production, because updates are repacked under a new version number first.
 - **Hold:** a check fails but the cause looks local, such as a host that was off or a test user with a stale profile. Fix the cause and repeat the check within a day.
-- **Fail:** the same check fails on a clean host. Collect the CorrelationID from `WVDErrors`, the event text, the versions and the time, and open a support case. The [agent](/entity/avd-agent/) troubleshooting page linked in Step 4 covers causes of a failed agent update.
+- **Fail:** the same check fails on a clean host. Collect the CorrelationID from `WVDErrors`, the event text, the versions and the time, and open a support case. The [agent](https://www.m365.fm/entity/avd-agent/) troubleshooting page linked in Step 4 covers causes of a failed agent update.
 
-Our reading of the sources: the result gives you time, evidence and a chance to warn users. For non-critical agent components, [scheduled agent updates](/entity/avd-scheduled-agent-updates/) on the production pools let you choose when those updates install, and per Learn the update arrives only after full flighting to production. Learn also says critical agent component updates are installed by force for security. If a production host does fail an update, [drain mode](/entity/avd-drain-mode/) stops new sessions on that host while you investigate, and the agent overview warns against deleting the older agent and stack versions a VM keeps, because that can leave it unable to roll back and unavailable.
+Our reading of the sources: the result gives you time, evidence and a chance to warn users. For non-critical agent components, [scheduled agent updates](https://www.m365.fm/entity/avd-scheduled-agent-updates/) on the production pools let you choose when those updates install, and per Learn the update arrives only after full flighting to production. Learn also says critical agent component updates are installed by force for security. If a production host does fail an update, [drain mode](https://www.m365.fm/entity/avd-drain-mode/) stops new sessions on that host while you investigate, and the agent overview warns against deleting the older agent and stack versions a VM keeps, because that can leave it unable to roll back and unavailable.
 
 ## Step 6: Keep the pool honest
 
@@ -110,7 +110,7 @@ A validation pool drifts when production changes and nobody updates it. Add thre
 2. Test users are reviewed each quarter against the people who use production daily.
 3. Someone owns the weekly routine and the log. A pool with no owner produces no early warning.
 
-Remember what the pool does not cover. Learn describes validation host pools as a way to monitor service updates before they reach your standard pools. Our reading: that does not include your own images or Windows updates, which need a separate test pool or stage in your image process. If you use [Azure Virtual Desktop Insights](/entity/avd-insights/), our suggestion is to include the validation pool there.
+Remember what the pool does not cover. Learn describes validation host pools as a way to monitor service updates before they reach your standard pools. Our reading: that does not include your own images or Windows updates, which need a separate test pool or stage in your image process. If you use [Azure Virtual Desktop Insights](https://www.m365.fm/entity/avd-insights/), our suggestion is to include the validation pool there.
 
 ## Sources
 

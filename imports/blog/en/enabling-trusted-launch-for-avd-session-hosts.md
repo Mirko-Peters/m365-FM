@@ -1,6 +1,6 @@
 ---
 title: "Enabling trusted launch for AVD session hosts"
-summary: "How you enable trusted launch depends on how the host pool is managed: in a pool with a session host configuration you change the security type in a session host update, otherwise you change each stopped Generation 2 VM or replace it. This guide covers prerequisites, the image, the commands and the checks."
+summary: "How you enable trusted launch depends on host pool management: with a session host configuration you change the security type in a session host update, otherwise you change or replace each VM. Covers prerequisites and checks."
 status: review
 publish: false
 author: mirko-p
@@ -8,9 +8,9 @@ date: 2026-11-18
 topics: [trusted-launch, azure-virtual-desktop]
 keypoints:
   - "Pick the path first: a pooled pool with a session host configuration changes the security type in a session host update. A pool with standard management means changing each Gen 2 VM or replacing it."
-  - "An in-place upgrade needs a stopped Generation 2 VM, a supported size and OS, no unsupported features, and the Enhanced policy if Azure Backup is on. Azure Site Recovery has to be disabled first; Learn's Site Recovery page calls migrating protected VMs unsupported yet lists steps, and protection has to be set up again afterwards."
+  - "An in-place upgrade needs a stopped Gen2 VM, a supported size and OS, and the Enhanced policy if Azure Backup is on. Azure Site Recovery must be disabled first and set up again afterwards."
   - "Images must be Generation 2. For an Azure Compute Gallery image, Learn recommends the TrustedLaunchSupported security type on the image definition, which creates both Gen2 and trusted launch VMs."
-  - "For a single VM changed in place (paths B and C), rolling back to Standard is one-way: trusted launch cannot be re-enabled on that VM. The portal does not support that rollback, which needs newer CLI, PowerShell or API versions."
+  - "For a VM changed in place, rolling back to Standard is one-way: trusted launch cannot be re-enabled on it. The portal does not support the rollback; it needs newer CLI, PowerShell or API versions."
   - "Verify afterwards: security type on the VM, Secure Boot and vTPM, the Guest Attestation extension, and outbound access to the Azure Attestation endpoint."
 faq:
   - q: "Can I enable trusted launch on a running session host?"
@@ -21,9 +21,9 @@ faq:
     a: "For a single VM changed in place (paths B and C), yes, but it is one-way. Learn describes setting the security type back to Standard with newer Azure CLI, Azure PowerShell or API versions, not in the portal, and warns that trusted launch cannot be re-enabled on that VM afterwards. For path A, the service tries to roll back a host that fails to update to the previous configuration, and a failed update can only be retried or cancelled; see Rollback and pitfalls."
 ---
 
-To enable trusted launch on [Azure Virtual Desktop](/entity/azure-virtual-desktop/) session hosts, first check how the host pool is managed. In a pooled host pool with a session host configuration, you set **Security type** to Trusted launch virtual machines in a session host update, and the service replaces the hosts. Otherwise you stop each Generation 2 VM and switch its security type, or you deploy new hosts from a Generation 2 image.
+To enable trusted launch on [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) session hosts, first check how the host pool is managed. In a pooled host pool with a session host configuration, you set **Security type** to Trusted launch virtual machines in a session host update, and the service replaces the hosts. Otherwise you stop each Generation 2 VM and switch its security type, or you deploy new hosts from a Generation 2 image.
 
-This is the how-to companion to [Trusted launch for Azure VMs and session hosts explained](/community/u/mirko-p/blog/trusted-launch-for-azure-vms-and-session-hosts-explained/), which covers what [trusted launch](/entity/trusted-launch/) does.
+This is the how-to companion to [Trusted launch for Azure VMs and session hosts explained](https://www.m365.fm/community/u/mirko-p/blog/trusted-launch-for-azure-vms-and-session-hosts-explained/), which covers what [trusted launch](https://www.m365.fm/entity/trusted-launch/) does.
 
 ## Choose the path
 
@@ -33,7 +33,7 @@ Learn says the management approach cannot be changed after the pool is created, 
 
 | Situation | Path | Effect on hosts |
 |---|---|---|
-| Pooled pool with a [session host configuration](/entity/avd-session-host-configuration/) | Session host update (path A) | Existing VMs are deleted or deallocated and new ones created |
+| Pooled pool with a [session host configuration](https://www.m365.fm/entity/avd-session-host-configuration/) | Session host update (path A) | Existing VMs are deleted or deallocated and new ones created |
 | Standard-management pool, Gen2 VMs | Change each VM (path B) | Same VM, stopped and restarted |
 | Standard-management pool, Gen1 VMs | Gen1 upgrade or new hosts (path C) | Disk conversion, or replacement |
 | Any pool, your own image | Prepare a Gen2 image first (path D) | New hosts only |
@@ -52,7 +52,7 @@ Learn's page for [existing Gen2 VMs](https://learn.microsoft.com/en-us/azure/vir
 
 ## Path A: session host update
 
-This path needs a pooled pool with a session host configuration and hosts in one region and resource group. The general workflow and known issues are in our article on [session host updates](/community/u/mirko-p/blog/managing-session-host-updates-with-a-session-host-configuration/); this section covers the trusted launch specifics.
+This path needs a pooled pool with a session host configuration and hosts in one region and resource group. The general workflow and known issues are in our article on [session host updates](https://www.m365.fm/community/u/mirko-p/blog/managing-session-host-updates-with-a-session-host-configuration/); this section covers the trusted launch specifics.
 
 1. Use a generation 2 image, which Learn says a trusted launch VM needs. Replicas and images from another subscription, where Learn's pages differ, are covered in the session host update article linked above.
 2. Disable autoscale for the pool until the update finishes, and remove any resource locks on the session hosts or their resource group (both per the update pages).
@@ -103,7 +103,7 @@ Afterwards, set the security type as in path B. In the portal the Gen1 VM must b
 
 ## Path D: a Gen2 image that supports trusted launch
 
-For your own [golden images](/entity/golden-image/) in [Azure Compute Gallery](/entity/azure-compute-gallery/), Learn recommends an image definition with security type `TrustedLaunchSupported`. The source must contain no VM guest state; the image can create Gen2 or trusted launch VMs.
+For your own [golden images](https://www.m365.fm/entity/golden-image/) in [Azure Compute Gallery](https://www.m365.fm/entity/azure-compute-gallery/), Learn recommends an image definition with security type `TrustedLaunchSupported`. The source must contain no VM guest state; the image can create Gen2 or trusted launch VMs.
 
 ```azurecli
 az sig image-definition create --resource-group MyResourceGroup --location eastus \

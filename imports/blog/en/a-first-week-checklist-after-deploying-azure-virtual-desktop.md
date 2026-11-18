@@ -7,10 +7,10 @@ author: mirko-p
 date: 2026-11-18
 topics: [azure-virtual-desktop]
 keypoints:
-  - "Day 1: confirm every powered-on session host shows Available on the host pool's Session hosts tab (a shut-down host shows Shutdown, or Unavailable if it shut down before reporting; check the VM power state), and run the Azure Virtual Desktop Agent URL Tool on session hosts. The tool does not verify wildcard entries, so allow those first."
-  - "Day 2: sign in as a standard test user and confirm the profile container exists: run frx list-redirects and look for the user's VHDX in the VHDLocations folder. Check the Kerberos RC4 to AES-SHA1 notice if profiles sit on an Active Directory-integrated SMB share."
-  - "Day 3: before relying on autoscale or Start VM on Connect, check the prerequisites. For pooled host pools, power management autoscaling needs a custom maximum session limit; it also needs the Power On Off Contributor role at subscription scope. Dynamic autoscaling adds further requirements. Start VM on Connect needs the Power On Contributor role."
-  - "Day 4: Insights needs diagnostic settings and session host data collection. Learn says to run Check Configuration if dashboard items do not display correctly; the workbook shows which counters and event logs are missing."
+  - "Day 1: check that every powered-on session host shows Available and run the Agent URL Tool on session hosts. The tool does not verify wildcard entries, so allow those first."
+  - "Day 2: sign in as a standard test user, run frx list-redirects and look for the user's VHDX in the VHDLocations folder. On AD-integrated SMB shares, check the Kerberos RC4 to AES-SHA1 notice."
+  - "Day 3: check prerequisites first. Autoscaling needs the Power On Off Contributor role (and a custom maximum session limit for pooled pools); Start VM on Connect needs Power On Contributor."
+  - "Day 4: Insights needs diagnostic settings and session host data collection. If items do not display, run Check Configuration to see which counters and event logs are missing."
   - "Day 5: create a budget. Learn says budgets send notifications but do not stop resources, and that they are evaluated every 24 hours."
 faq:
   - q: "What does the status Needs Assistance mean for a session host?"
@@ -88,7 +88,7 @@ Background: "How to create and assign an AVD scaling plan step by step" and "How
 
 ## Day 4: monitoring
 
-[Azure Virtual Desktop Insights](/entity/avd-insights/) is a dashboard built on Azure Monitor Workbooks. Learn lists a Log Analytics workspace, diagnostics from the environment, the recommended performance counters and the recommended Windows event logs as prerequisites. The [Azure Monitor Agent](/entity/azure-monitor-agent/) collects session host data through a data collection rule. Tables and roles are covered in "Setting up AVD Insights with Azure Monitor and Log Analytics".
+[Azure Virtual Desktop Insights](https://www.m365.fm/entity/avd-insights/) is a dashboard built on Azure Monitor Workbooks. Learn lists a Log Analytics workspace, diagnostics from the environment, the recommended performance counters and the recommended Windows event logs as prerequisites. The [Azure Monitor Agent](https://www.m365.fm/entity/azure-monitor-agent/) collects session host data through a data collection rule. Tables and roles are covered in "Setting up AVD Insights with Azure Monitor and Log Analytics".
 
 To check the setup, open Insights at `aka.ms/avdi`, select **Workbooks**, then **Check Configuration**. Learn says to check the configuration if dashboard items are not displaying correctly. The workbook shows configured and missing counters and event logs. Learn says automated deployment of session host data settings in the workbook is limited to 1,000 session hosts or fewer, and standard Log Analytics storage charges apply.
 

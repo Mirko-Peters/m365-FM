@@ -1,15 +1,15 @@
 ---
 title: "Azure Virtual Desktop Insights: monitoring users, hosts and connection quality"
-summary: "Azure Virtual Desktop Insights is a dashboard built on Azure Monitor Workbooks that turns service diagnostics, session host performance counters and event logs into views for connections, hosts, clients, utilization and autoscale. This article explains which tab answers which question, how Learn defines the main metrics, and where the data has limits."
+summary: "Azure Virtual Desktop Insights is a dashboard on Azure Monitor Workbooks that turns diagnostics, performance counters and event logs into views for connections, hosts, clients, utilization and autoscale."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-insights, azure-virtual-desktop]
 keypoints:
-  - "Insights is a dashboard on Azure Monitor Workbooks. It reads three data sets from Log Analytics workspaces: Azure Virtual Desktop diagnostics, recommended performance counters and recommended Windows event logs. The session host data can go to a different workspace than the diagnostics."
-  - "Different tabs answer different questions: Connection Performance for round-trip time, Connection Reliability for disconnections, Host Performance and Host Diagnostics for session host load and input delay, Utilization for capacity and cost, Clients for outdated client versions, Autoscale for scaling operations."
-  - "Learn's input delay categories are good below 150 ms, acceptable 150 to 500 ms, poor 500 to 2,000 ms and bad at 2,000 ms and above (Learn words that edge two ways). Its use cases page separately says ideal latency is generally below 100 ms and sessions become low quality above 200 ms."
+  - "Insights is an Azure Monitor Workbooks dashboard. It reads AVD diagnostics, recommended performance counters and Windows event logs from Log Analytics; host data can use a separate workspace."
+  - "Tabs answer different questions: Connection Performance (round-trip time), Connection Reliability, Host Performance and Diagnostics, Utilization, Clients (outdated versions) and Autoscale."
+  - "Learn's input delay categories: good below 150 ms, acceptable 150 to 500 ms, poor 500 to 2,000 ms, bad from 2,000 ms. Another page calls latency below 100 ms ideal and above 200 ms low quality."
   - "Autoscale monitoring in Insights works for pooled host pools only. Time to connect, available sessions and total session counts have documented caveats, so read single spikes with care."
   - "Learn's cost example estimates 92 to 145 MB of data per session host per day, roughly 3 to 5 GB per host per 31 days, with performance counters making up 80 to 99% of ingestion."
 faq:
@@ -27,13 +27,13 @@ Setup is covered in "Setting up AVD Insights with Azure Monitor and Log Analytic
 
 ## What Insights is and where its data comes from
 
-Learn describes [Azure Virtual Desktop Insights](/entity/avd-insights/) as a dashboard built on [Azure Monitor Workbooks](/entity/azure-monitor-workbooks/) that helps IT professionals understand their environments. Open it at `aka.ms/avdi` or per host pool under **Host pools**, then **Insights**. It draws on three kinds of data in [Log Analytics](/entity/log-analytics/) workspaces. The workspace that receives session host data does not have to be the one that receives the diagnostic data:
+Learn describes [Azure Virtual Desktop Insights](https://www.m365.fm/entity/avd-insights/) as a dashboard built on [Azure Monitor Workbooks](https://www.m365.fm/entity/azure-monitor-workbooks/) that helps IT professionals understand their environments. Open it at `aka.ms/avdi` or per host pool under **Host pools**, then **Insights**. It draws on three kinds of data in [Log Analytics](https://www.m365.fm/entity/log-analytics/) workspaces. The workspace that receives session host data does not have to be the one that receives the diagnostic data:
 
 - **Service diagnostics** from the host pool and workspace diagnostic settings (connections, errors, checkpoints, feeds, management, host registration, agent health).
 - **Performance counters** from the session hosts, such as processor time, memory, disk queue length, sessions and user input delay.
 - **Windows event logs** from the session hosts, including FSLogix and Remote Desktop Services logs.
 
-The [Azure Monitor Agent](/entity/azure-monitor-agent/) collects the session host data. Insights based on that agent became generally available in version 3.0.0 (18 September 2023), with an "Insights (Legacy)" view for the Log Analytics agent, which version 4.0.5 (7 October 2024) marks as deprecated.
+The [Azure Monitor Agent](https://www.m365.fm/entity/azure-monitor-agent/) collects the session host data. Insights based on that agent became generally available in version 3.0.0 (18 September 2023), with an "Insights (Legacy)" view for the Log Analytics agent, which version 4.0.5 (7 October 2024) marks as deprecated.
 
 Viewers need the Desktop Virtualization Reader role on the resource group or subscription that holds the host pools, workspaces and session hosts, and the Log Analytics Reader role on the workspace.
 
@@ -82,7 +82,7 @@ The use cases page adds that ideally each host's input delay is below 100 ms.
 
 In the use cases workflow, open **Host Performance** and compare the **Input delay by host** table and the **Median input delay over time** graph with the **Host CPU and memory metrics**, **Host disk timing metrics** and **Host disk queue length** graphs.
 
-The **Host Diagnostics** tab flags devices that cross thresholds for available memory, page faults, CPU, disk space and input delay per session. Learn's glossary and use cases pages do not state which threshold values the tab uses; the only value they show is 60% CPU over one minute in the use cases example. For extended high utilization Learn suggests a larger VM size for the [session host](/entity/avd-session-host/).
+The **Host Diagnostics** tab flags devices that cross thresholds for available memory, page faults, CPU, disk space and input delay per session. Learn's glossary and use cases pages do not state which threshold values the tab uses; the only value they show is 60% CPU over one minute in the use cases example. For extended high utilization Learn suggests a larger VM size for the [session host](https://www.m365.fm/entity/avd-session-host/).
 
 ## Reading connection quality: round-trip time and reliability
 
@@ -96,7 +96,7 @@ On the source of RTT: the glossary lists the `RemoteFX Network(*)\Current TCP RT
 
 ## Using Insights for capacity and cost
 
-The **Utilization** tab holds the session history chart (active and idle, meaning disconnected, sessions) and the session host count chart. Learn says a regular, repeated pattern, such as midday weekday peaks and little weekend activity, usually indicates an opportunity for a [scaling plan](/entity/avd-scaling-plan/); Learn's example also shows long periods where idle session hosts stay powered on, which raises cost. Review all host pools together first, then narrow the scope to one host pool to find the pattern for that pool's scaling plan.
+The **Utilization** tab holds the session history chart (active and idle, meaning disconnected, sessions) and the session host count chart. Learn says a regular, repeated pattern, such as midday weekday peaks and little weekend activity, usually indicates an opportunity for a [scaling plan](https://www.m365.fm/entity/avd-scaling-plan/); Learn's example also shows long periods where idle session hosts stay powered on, which raises cost. Review all host pools together first, then narrow the scope to one host pool to find the pattern for that pool's scaling plan.
 
 The **Autoscale** tab shows scaling operations, including host power state changes over time. Learn says this works for pooled host pools only, with an assigned scaling plan. The host pool diagnostic setting needs the category "Autoscale logs for pooled host pools" on top of the minimum categories the autoscale page lists: checkpoint, error, management, connection, host registration and agent health. Release notes list autoscale reporting as preview in version 3.3.1 (April 2024) with no later status change; the Learn autoscale page has no preview label. Autoscale evaluations are written to the `WVDAutoscaleEvaluationPooled` table. Its `ScalingReasonMessage` column holds the actions autoscale decided to perform and why. Learn's Insights autoscale page does not mention dynamic autoscale, so it does not say whether the tab covers it.
 

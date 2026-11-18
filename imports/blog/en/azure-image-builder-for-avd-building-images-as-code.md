@@ -7,8 +7,8 @@ author: mirko-p
 date: 2026-11-18
 topics: [azure-image-builder, azure-virtual-desktop]
 keypoints:
-  - "Azure VM Image Builder is a managed Azure service built on HashiCorp Packer. You submit a template that names a source, customizations and distribution targets, and the service builds and distributes the image."
-  - "AVD custom image templates are built on Azure Image Builder and have been generally available in the Azure public cloud since September 2023. The portal route adds built-in scripts for common AVD settings, while a direct template gives full control of the JSON."
+  - "Azure VM Image Builder is a managed service built on HashiCorp Packer. You submit a template naming a source, customizations and distribution targets, and the service builds the image."
+  - "AVD custom image templates run on Azure Image Builder, GA in Azure public cloud since September 2023. The portal adds built-in scripts; a direct template gives full JSON control."
   - "The template has three main sections: a source (platform image, managed image or gallery image version), a list of customizers that run in order, and one or more distribution targets."
   - "Build timeout defaults to 240 minutes, with a range of 6 to 960 minutes. For Windows, Learn advises not going below 60 minutes and using at least a Standard_D2_v2 build VM."
   - "Image Builder does not support Azure Hybrid Benefit for Windows Server, and the image template resource is immutable and cannot be moved."
@@ -122,7 +122,7 @@ az resource invoke-action --resource-group $imageResourceGroup --resource-type M
 
 ## Where the logs are
 
-By default the service creates a staging resource group named `IT_<ResourceGroupName>_<TemplateName>_<GUID>`; you can name your own with `stagingResourceGroup` (or on the Build properties tab). Learn says most resources in it are temporary and deleted after the build, except the storage account. In that account, the `packerlogs` container has one folder per build, and each holds `customization.log` and, when validation ran, `validation.log`. The [custom image templates troubleshooting page](https://learn.microsoft.com/en-us/azure/virtual-desktop/troubleshoot-custom-image-templates) says entries for built-in scripts begin `Starting AVD AIB Customization: {<script name>}`. The [Image Builder troubleshooting page](https://learn.microsoft.com/en-us/azure/virtual-machines/linux/image-builder-troubleshoot) gives the download path: storage account, **Data Storage**, the **Container** option, the `packerlogs` container, then the folder of the build you want. For a running build, open the container instance `vmimagebuilder-build-container-...` in the staging group, under **Settings** and **Containers**, on the **Logs** tab.
+By default the service creates a staging resource group named `IT_<ResourceGroupName>_<TemplateName>_<GUID>`; you can name your own with `stagingResourceGroup` (or on the Build properties tab). Learn says most resources in it are temporary and deleted after the build, except the storage account. In that account, the `packerlogs` container has one folder per build, and each holds `customization.log` and, when validation ran, `validation.log`. The [custom image templates troubleshooting page](https://learn.microsoft.com/en-us/azure/virtual-desktop/troubleshoot-custom-image-templates) says entries for built-in scripts begin `Starting AVD AIB Customization: {script name}`. The [Image Builder troubleshooting page](https://learn.microsoft.com/en-us/azure/virtual-machines/linux/image-builder-troubleshoot) gives the download path: storage account, **Data Storage**, the **Container** option, the `packerlogs` container, then the folder of the build you want. For a running build, open the container instance `vmimagebuilder-build-container-...` in the staging group, under **Settings** and **Containers**, on the **Logs** tab.
 
 ## Limits, costs and recent changes
 

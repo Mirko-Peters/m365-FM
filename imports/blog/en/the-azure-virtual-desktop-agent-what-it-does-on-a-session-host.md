@@ -7,7 +7,7 @@ author: mirko-p
 date: 2026-11-18
 topics: [avd-agent, avd-session-host]
 keypoints:
-  - "Learn describes the agent as the intermediate communicator between the Azure Virtual Desktop service and the session host VM. The agent installs the side-by-side stack and the Geneva Monitoring agent, and all three are essential for end-to-end connectivity."
+  - "Learn calls the agent the communicator between the AVD service and the session host. It installs the side-by-side stack and Geneva Monitoring agent; all three are needed for connectivity."
   - "A registration key authorizes the host to join a host pool. Learn allows a key lifetime of no less than an hour and no longer than 27 days."
   - "Session hosts connect outbound: reverse connect transport uses no TCP listener for incoming RDP connections, and both the client and the session host connect to the Azure Virtual Desktop gateway."
   - "New agent versions are flighted over five-day periods, with 24 hours for all VMs in a broker region to receive the update. A VM keeps three versions of the agent and of the side-by-side stack."
@@ -34,11 +34,11 @@ Learn's [agent overview](https://learn.microsoft.com/en-us/azure/virtual-desktop
 | Side-by-side (SxS) stack | Required for users to securely establish reverse server-to-client connections | Remote Desktop Services SxS Network Stack |
 | Geneva Monitoring agent | Monitors the health of the agent | Remote Desktop Services Infrastructure Geneva Agent |
 
-Once the agent is installed, it installs the stack and the Geneva Monitoring agent. Learn says all three are essential for end-to-end user connectivity to function properly. See the entity page for the [agent](/entity/avd-agent/).
+Once the agent is installed, it installs the stack and the Geneva Monitoring agent. Learn says all three are essential for end-to-end user connectivity to function properly. See the entity page for the [agent](https://www.m365.fm/entity/avd-agent/).
 
 ## What the agent does, in outline
 
-**1. It registers the host.** A registration key authorizes a [session host](/entity/avd-session-host/) to join a [host pool](/entity/avd-host-pool/), and it is valid only for the duration you specify. The troubleshooting guide says the expiration can be no less than an hour and no longer than 27 days from generation. By hand, you run the agent installer, paste the key at the token prompt, then run the bootloader installer. After a short time the VM is listed as a session host, its status may first appear as Unavailable, and once it is Available, Learn has you restart the VM.
+**1. It registers the host.** A registration key authorizes a [session host](https://www.m365.fm/entity/avd-session-host/) to join a [host pool](https://www.m365.fm/entity/avd-host-pool/), and it is valid only for the duration you specify. The troubleshooting guide says the expiration can be no less than an hour and no longer than 27 days from generation. By hand, you run the agent installer, paste the key at the token prompt, then run the bootloader installer. After a short time the VM is listed as a session host, its status may first appear as Unavailable, and once it is Available, Learn has you restart the VM.
 
 - For staged rollouts spanning multiple days, Learn says to set the lifetime to cover the full window, up to 27 days, so hosts you provision later do not fail to register with `EXPIRED_MACHINE_TOKEN`. If the deployment exceeds 27 days, generate a new key before the previous one expires.
 - Pre-provisioned hosts that stay powered off for more than 90 days also have their machine token expire. Learn says to power affected VMs on for at least 20 minutes every 90 days so the token refreshes automatically.
@@ -55,7 +55,7 @@ Learn says Azure Virtual Desktop uses reverse connect transport to establish the
 
 In the network connectivity article's connection sequence, the broker uses the previously established persistent channel to initialize the connection, the Remote Desktop stack initiates a TLS connection to the same gateway instance the client used, and after both are connected the gateway starts relaying the data.
 
-The [service architecture and resilience article](https://learn.microsoft.com/en-us/azure/virtual-desktop/service-architecture-resilience) words the same moment differently: the broker instructs the Azure Virtual Desktop agent running on the session host to connect to the same gateway service the user's device used, and the gateway then relays the RDP traffic over TCP. Reverse connect transport is the default there. These two pages name the host-side connection differently and neither says which installed component holds the RDP stream. For the UDP-based alternative, see [RDP Shortpath](/entity/rdp-shortpath/).
+The [service architecture and resilience article](https://learn.microsoft.com/en-us/azure/virtual-desktop/service-architecture-resilience) words the same moment differently: the broker instructs the Azure Virtual Desktop agent running on the session host to connect to the same gateway service the user's device used, and the gateway then relays the RDP traffic over TCP. Reverse connect transport is the default there. These two pages name the host-side connection differently and neither says which installed component holds the RDP stream. For the UDP-based alternative, see [RDP Shortpath](https://www.m365.fm/entity/rdp-shortpath/).
 
 ## Outbound access session hosts need
 
@@ -92,7 +92,7 @@ Learn says the agent update is not connected to Azure Virtual Desktop infrastruc
 - A VM keeps three versions of the agent and of the side-by-side stack. If you delete these components prematurely and the agent or stack fails, it cannot roll back, which puts the VM in an unavailable state.
 - For the Geneva Monitoring agent, the earlier version is disabled, not deleted, so it can be re-enabled if the latest version has a problem.
 
-Two options change the timing. A [validation host pool](/entity/avd-validation-environment/) lets you monitor service updates before the service applies them to your standard environment, as [Learn's validation environment article](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-validation-environment) puts it, and [What's new in the agent](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new-agent) lists current versions. [Scheduled agent updates](/entity/avd-scheduled-agent-updates/) create up to two maintenance windows so that updates do not happen during peak business hours. The feature is disabled by default and can only be configured for existing host pools, under Azure Virtual Desktop, Host pools, the pool, Scheduled Agent Updates. Non-critical updates after installation then happen only within your two-hour windows. The broker tries each window up to four times and then installs the update by force, and a critical update is installed by force for security purposes. The companion articles on validation host pools and on scheduled agent updates cover both in detail.
+Two options change the timing. A [validation host pool](https://www.m365.fm/entity/avd-validation-environment/) lets you monitor service updates before the service applies them to your standard environment, as [Learn's validation environment article](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-validation-environment) puts it, and [What's new in the agent](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new-agent) lists current versions. [Scheduled agent updates](https://www.m365.fm/entity/avd-scheduled-agent-updates/) create up to two maintenance windows so that updates do not happen during peak business hours. The feature is disabled by default and can only be configured for existing host pools, under Azure Virtual Desktop, Host pools, the pool, Scheduled Agent Updates. Non-critical updates after installation then happen only within your two-hour windows. The broker tries each window up to four times and then installs the update by force, and a critical update is installed by force for security purposes. The companion articles on validation host pools and on scheduled agent updates cover both in detail.
 
 ## Reading the agent's state
 
@@ -116,7 +116,7 @@ WVDAgentHealthStatus
 | sort by TimeGenerated asc
 ```
 
-The guide notes that results cover only the last 30 days. See also [Azure Virtual Desktop Insights](/entity/avd-insights/).
+The guide notes that results cover only the last 30 days. See also [Azure Virtual Desktop Insights](https://www.m365.fm/entity/avd-insights/).
 
 ## A short routine for admins
 

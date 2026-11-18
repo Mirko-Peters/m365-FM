@@ -1,17 +1,17 @@
 ---
 title: "Cost estimation for Windows 365 vs AVD: how to compare fairly"
-summary: "Windows 365 Enterprise is priced per user and month, while Azure Virtual Desktop is billed on consumption, so a fair comparison puts both on the same workload, the same hours and the same list of cost lines. This guide gives the steps, a break-even formula with invented example numbers, and the Nerdio Modeler and Platform TCO rules that can cross-check the result."
+summary: "Windows 365 Enterprise is priced per user and month, while Azure Virtual Desktop is billed on consumption, so a fair comparison puts both on the same workload, hours and cost lines. Includes a break-even formula."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [nerdio-cost-estimator, nerdio-advisor]
 keypoints:
-  - "Microsoft describes Windows 365 as subscription-based at a fixed per-user cost regardless of usage, and Azure Virtual Desktop as consumption-based. Compare the matching pair: Windows 365 Enterprise (one Cloud PC per user) against an AVD personal host pool."
-  - "A Windows 365 price is not the whole Windows 365 cost. Users also need licences for Windows E3, Intune and Microsoft Entra ID P1 on top of the plan, and a customer-managed Azure network adds Azure charges that a Microsoft-hosted network does not."
-  - "For one user, AVD costs hours times the VM rate plus fixed monthly lines such as disk. The break-even hours are (Cloud PC price minus fixed lines) divided by the hourly rate. The example uses a real list price of 41 dollars and invented AVD rates."
-  - "In-product, the Nerdio Modeler offers a Windows 365 Cloud PC desktop experience and a Windows 365 discount setting. The help page for the web Modeler documents four AVD desktop experiences and no Windows 365 discount, so check the tool itself. Two Nerdio Platform TCO rules work in each direction: one has Windows 365 Enterprise as its target platform, the other has AVD Personal."
-  - "Windows 365 Flex (formerly Frontline, renamed in May 2026) is, per Learn, a licence for Cloud PCs used non-concurrently; in our reading it belongs in the comparison when users do not work at the same time."
+  - "Microsoft describes Windows 365 as a fixed per-user cost and AVD as consumption-based. Compare the matching pair: Windows 365 Enterprise against an AVD personal host pool."
+  - "The plan price is not the whole Windows 365 cost: users also need Windows E3, Intune and Entra ID P1 licenses, and a customer-managed Azure network adds Azure charges."
+  - "For one user, AVD costs hours x VM rate plus fixed lines such as disk. Break-even hours = (Cloud PC price - fixed lines) / hourly rate. The example uses a $41 list price and invented AVD rates."
+  - "The Nerdio Modeler offers a Windows 365 Cloud PC experience in-product, but its web help page documents only AVD experiences, so check the tool. Two Platform TCO rules compare in each direction."
+  - "Windows 365 Flex (formerly Frontline, renamed May 2026) licenses Cloud PCs for non-concurrent use; in our reading it belongs in the comparison when users do not work at the same time."
 faq:
   - q: "Is Windows 365 or Azure Virtual Desktop cheaper?"
     a: "Neither is cheaper in general. Microsoft's own comparison says the consumption pricing of AVD may be more efficient than Windows 365 in some cases and that the answer comes from planning and forecasting usage. In our reading, with a fixed Cloud PC price, the number of hours per month an AVD VM actually runs is the main lever, next to the fixed lines each side carries."
@@ -29,13 +29,13 @@ This article gives a method with a worked break-even example. The choice between
 
 Microsoft's training unit that compares the services puts the cost difference this way: the pricing model for AVD is consumption-based, so it varies with usage and service options, while Windows 365 is subscription-based with per-user licensing at a fixed cost that depends on the plan, regardless of usage. It adds that the flexibility of the AVD model may be more efficient in some cases, and that finding the most cost-effective option is a matter of planning and forecasting usage.
 
-The Learn overview of [Windows 365](/entity/windows-365/) Enterprise says Cloud PCs are billed per user and month, so you do not manage the variability of compute and storage costs. For [Azure Virtual Desktop](/entity/azure-virtual-desktop/), Learn lists the charged components as the VM instance, managed disks and network bandwidth, plus identity, monitoring and storage for features such as FSLogix profiles.
+The Learn overview of [Windows 365](https://www.m365.fm/entity/windows-365/) Enterprise says Cloud PCs are billed per user and month, so you do not manage the variability of compute and storage costs. For [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/), Learn lists the charged components as the VM instance, managed disks and network bandwidth, plus identity, monitoring and storage for features such as FSLogix profiles.
 
 ## Step 1: choose the matching pair
 
-Learn says that in Windows 365 Enterprise, Business and Government, users have a 1:1 relationship with their Cloud PC. In our reading, the like-for-like AVD design is therefore a [personal host pool](/entity/avd-personal-host-pool/), with one VM per user. A [pooled host pool](/entity/avd-pooled-host-pool/), where several users share a session host, is a different design with a different cost structure. Compare it as a third option, not as the equivalent of a Cloud PC.
+Learn says that in Windows 365 Enterprise, Business and Government, users have a 1:1 relationship with their Cloud PC. In our reading, the like-for-like AVD design is therefore a [personal host pool](https://www.m365.fm/entity/avd-personal-host-pool/), with one VM per user. A [pooled host pool](https://www.m365.fm/entity/avd-pooled-host-pool/), where several users share a session host, is a different design with a different cost structure. Compare it as a third option, not as the equivalent of a Cloud PC.
 
-For users who need a Cloud PC only part of the day, add [Windows 365 Flex](/entity/windows-365-frontline/) as a fourth. Learn's What's new page says Windows 365 Frontline was renamed Windows 365 Flex in the week of 4 May 2026, and that the product, licensing and capabilities are unchanged.
+For users who need a Cloud PC only part of the day, add [Windows 365 Flex](https://www.m365.fm/entity/windows-365-frontline/) as a fourth. Learn's What's new page says Windows 365 Frontline was renamed Windows 365 Flex in the week of 4 May 2026, and that the product, licensing and capabilities are unchanged.
 
 ## Step 2: fix the workload before looking at prices
 

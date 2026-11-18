@@ -1,17 +1,17 @@
 ---
 title: "How to set up SSO and what it changes for passwordless sign-in"
-summary: "Setting up Microsoft Entra single sign-on for Azure Virtual Desktop takes five tasks, from enabling Entra authentication for RDP on the Windows Cloud Login app to setting the host pool property. Once it is on, passwordless methods used at cloud sign-in carry through to the session host, while passkeys and Windows Hello for Business inside the session depend on WebAuthn redirection and the client."
+summary: "Setting up Microsoft Entra single sign-on for Azure Virtual Desktop takes five tasks. Afterwards, passwordless methods used at cloud sign-in carry into the session; in-session passkeys depend on WebAuthn redirection."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-single-sign-on, azure-virtual-desktop]
 keypoints:
-  - "Learn lists five tasks: enable Microsoft Entra authentication for RDP on the Windows Cloud Login service principal, hide the consent dialog, create a Kerberos server object if Active Directory is involved, review Conditional Access, and set the host pool to use Microsoft Entra single sign-on (RDP property enablerdsaadauth:i:1)."
+  - "Five tasks: enable Entra authentication for RDP on Windows Cloud Login, hide the consent dialog, create a Kerberos server object if AD is involved, review Conditional Access, set enablerdsaadauth:i:1."
   - "With single sign-on, the remote session phase accepts any method that works for cloud sign-in, including passwordless ones. Without it, Learn's table lists only smart card and password for that phase."
   - "Passkeys and FIDO2 devices need the session to disconnect on lock. The remote lock screen does not support them, and with single sign-on disconnect is the default."
-  - "Passwordless sign-in to apps and sites inside the session is a separate path: WebAuthn requests are redirected to the local device (RDP property redirectwebauthn, default 1), with the Windows App on Windows. Windows App on macOS, iOS and Android is in preview for this."
-  - "Use Conditional Access policies, not per-user MFA, and give Windows Cloud Login its own policy next to the Azure Virtual Desktop one. Use the same sign-in frequency on both, or an equal or longer one on Windows Cloud Login, to avoid repeated prompts."
+  - "Passwordless sign-in inside the session is separate: WebAuthn requests are redirected to the local device (redirectwebauthn, default 1). Windows App on macOS, iOS and Android is in preview."
+  - "Use Conditional Access, not per-user MFA, with a separate Windows Cloud Login policy. Use the same sign-in frequency on both, or equal or longer on Windows Cloud Login, to avoid repeated prompts."
 faq:
   - q: "Do I need to change anything for users to use passkeys or Windows Hello for Business after I enable single sign-on?"
     a: "For signing in to the session host, no separate switch: Learn says the remote session phase accepts any cloud-service method when single sign-on is configured. For signing in to apps and sites inside the session, WebAuthn requests must be redirected to the local device, which is the host pool default, and the user must be on a client that supports it."
@@ -23,7 +23,7 @@ faq:
 
 Setting up single sign-on for Azure Virtual Desktop means completing five tasks: enable Microsoft Entra authentication for RDP on the Windows Cloud Login app, hide the consent dialog, create a Kerberos server object if Active Directory is part of the environment, review Conditional Access, and set the host pool to use Microsoft Entra single sign-on. After that, any method a user can use to sign in to the cloud service, including passwordless ones, also signs them in to the session host. Passkeys and Windows Hello for Business inside the session are a separate path that depends on WebAuthn redirection.
 
-[Single sign-on](/entity/avd-single-sign-on/) is generally available; Learn's What's new dates this to November 2023. This article is the how-to. The concept, the supported join types and the minimum Windows builds are in "Single sign-on for Azure Virtual Desktop with Microsoft Entra authentication", and the Conditional Access policy design is in "Conditional Access for Azure Virtual Desktop: policies that work".
+[Single sign-on](https://www.m365.fm/entity/avd-single-sign-on/) is generally available; Learn's What's new dates this to November 2023. This article is the how-to. The concept, the supported join types and the minimum Windows builds are in "Single sign-on for Azure Virtual Desktop with Microsoft Entra authentication", and the Conditional Access policy design is in "Conditional Access for Azure Virtual Desktop: policies that work".
 
 ## What you need first
 
@@ -49,9 +49,9 @@ Learn advises against connecting with domain administrator accounts, because the
    Set-AzureADKerberosServer -Domain $domain -UserPrincipalName $userPrincipalName -DomainCredential $domainCred
    ```
 
-   The cloud account needs the Hybrid Identity Administrator role, and the domain account must be in Domain Admins and Enterprise Admins. Without it on hybrid joined hosts, users may see an error that the specific session does not exist, or get a standard credential dialog instead of single sign-on. See [Microsoft Entra Kerberos](/entity/microsoft-entra-kerberos/).
+   The cloud account needs the Hybrid Identity Administrator role, and the domain account must be in Domain Admins and Enterprise Admins. Without it on hybrid joined hosts, users may see an error that the specific session does not exist, or get a standard credential dialog instead of single sign-on. See [Microsoft Entra Kerberos](https://www.m365.fm/entity/microsoft-entra-kerberos/).
 
-4. **Review Conditional Access.** Single sign-on adds Windows Cloud Login to the sign-in path. Learn recommends two policies: one for **Azure Virtual Desktop** (`9cdead84-a844-4324-93f2-b2e6bb768d07`) and one for **Windows Cloud Login**, both requiring MFA. Do not add the Azure Virtual Desktop Azure Resource Manager Provider app, and do not block the Windows 365 app, which the Windows App uses. Set sign-in frequency to the same value on both, or set the Windows Cloud Login policy to match or exceed the Azure Virtual Desktop one. The option **Every time** is supported only on Windows Cloud Login; on the Azure Virtual Desktop app it causes constant prompts on feed refresh and diagnostics upload. Disable per-user MFA for these users and enforce MFA through [Conditional Access](/entity/conditional-access/) only. For Entra joined hosts, connections require the legacy per-user MFA sign-in method to be off, and if you do not want to limit sign-in to strong methods such as Windows Hello for Business, exclude the **Azure Windows VM Sign-In** app from the policy.
+4. **Review Conditional Access.** Single sign-on adds Windows Cloud Login to the sign-in path. Learn recommends two policies: one for **Azure Virtual Desktop** (`9cdead84-a844-4324-93f2-b2e6bb768d07`) and one for **Windows Cloud Login**, both requiring MFA. Do not add the Azure Virtual Desktop Azure Resource Manager Provider app, and do not block the Windows 365 app, which the Windows App uses. Set sign-in frequency to the same value on both, or set the Windows Cloud Login policy to match or exceed the Azure Virtual Desktop one. The option **Every time** is supported only on Windows Cloud Login; on the Azure Virtual Desktop app it causes constant prompts on feed refresh and diagnostics upload. Disable per-user MFA for these users and enforce MFA through [Conditional Access](https://www.m365.fm/entity/conditional-access/) only. For Entra joined hosts, connections require the legacy per-user MFA sign-in method to be off, and if you do not want to limit sign-in to strong methods such as Windows Hello for Business, exclude the **Azure Windows VM Sign-In** app from the policy.
 
 5. **Choose the lock behavior.** With single sign-on, a locked session disconnects by default. To change it in Intune, create a **Settings catalog** profile for Windows 10 and later, browse to **Administrative templates > Windows Components > Remote Desktop Services > Remote Desktop Session Host > Security**, and set **Disconnect remote session on lock for Microsoft identity platform authentication** (Enabled disconnects, Disabled shows the remote lock screen). The setting needs Windows 11 with KB5037770, Windows 10 21H2 or later with KB5039211, or Windows Server 2022 with KB5037782, or later. Restart the session hosts after the policy applies.
 
@@ -59,7 +59,7 @@ Learn advises against connecting with domain administrator accounts, because the
 
 7. **Test.** Connect with the Windows App. Then open **Identity > Monitoring & health > Sign-in logs** in Entra and confirm that the Azure Virtual Desktop and Windows Cloud Login entries both show **Success** with the expected policies applied.
 
-For Entra joined hosts in host pools without a session host configuration, users also need the **Virtual Machine User Login** role (or **Virtual Machine Administrator Login** for local admin rights) on the VMs, resource group or subscription. Host pools that use a session host configuration do not need this assignment. See [Microsoft Entra joined session hosts](/entity/avd-entra-join/).
+For Entra joined hosts in host pools without a session host configuration, users also need the **Virtual Machine User Login** role (or **Virtual Machine Administrator Login** for local admin rights) on the VMs, resource group or subscription. Host pools that use a session host configuration do not need this assignment. See [Microsoft Entra joined session hosts](https://www.m365.fm/entity/avd-entra-join/).
 
 ## What changes for passwordless sign-in
 
@@ -73,11 +73,11 @@ Learn splits authentication into three phases. Single sign-on changes the second
 
 Without single sign-on, the remote session column offers only smart card and password, and the client prompts for session host credentials on every connection unless the user saves them. Learn's Windows App comparison shows the same for passkeys: with single sign-on disabled, passkeys and Microsoft Authenticator are not available for remote session sign-in on any listed platform, while the cloud service phase supports them.
 
-A user who signs in to the service with a passkey, [Windows Hello for Business](/entity/windows-hello-for-business/) or Authenticator is carried through to Windows on the session host with the Entra token, with no second password.
+A user who signs in to the service with a passkey, [Windows Hello for Business](https://www.m365.fm/entity/windows-hello-for-business/) or Authenticator is carried through to Windows on the session host with the Entra token, with no second password.
 
 ### Disconnect on lock is what keeps passkeys working
 
-Learn says disconnecting on lock is required for full support of passkeys and [FIDO2](/entity/fido2/) devices, because the remote lock screen does not support them. The same default re-evaluates Conditional Access, including MFA and sign-in frequency, when the user reconnects. If users are asked for full credentials after a manual or idle lock, Learn's troubleshooting page names a host pool that is not configured to disconnect on lock as the cause.
+Learn says disconnecting on lock is required for full support of passkeys and [FIDO2](https://www.m365.fm/entity/fido2/) devices, because the remote lock screen does not support them. The same default re-evaluates Conditional Access, including MFA and sign-in frequency, when the user reconnects. If users are asked for full credentials after a manual or idle lock, Learn's troubleshooting page names a host pool that is not configured to disconnect on lock as the cause.
 
 ### In-session passwordless is a separate setting
 
@@ -85,7 +85,7 @@ Passkeys, Windows Hello for Business or a security key used to sign in to a site
 
 - **Default:** the host pool RDP property `redirectwebauthn:i:1` redirects requests. Set it to `0` to keep them in the session. In the portal, the setting is **WebAuthn redirection** under **RDP Properties > Device redirection**.
 - **Session host policy:** the Intune setting is **Do not allow WebAuthn redirection** under **Administrative templates > Windows Components > Remote Desktop Services > Remote Desktop Session Host > Device and Resource Redirection**, where Enabled disables redirection. Restart the machines afterwards. The most restrictive setting wins: disabling it on the host overrides the host pool property.
-- **Client:** Learn says in-session passwordless works with the [Windows App](/entity/windows-app/), and enables automatically on session hosts and local PCs with Windows 11 KB5018418, Windows 10 KB5018410 or Windows Server 2022 KB5018421, or later.
+- **Client:** Learn says in-session passwordless works with the [Windows App](https://www.m365.fm/entity/windows-app/), and enables automatically on session hosts and local PCs with Windows 11 KB5018418, Windows 10 KB5018410 or Windows Server 2022 KB5018421, or later.
 - **Entra side:** to use Windows Hello for Business or security devices with Microsoft Entra resources, Learn says to enable the FIDO2 security key method for users.
 - **Test:** in the session, open a WebAuthn-enabled site such as `https://windows.cloud.microsoft/` in an InPrivate window and look for a Windows Security prompt on the local device.
 
@@ -117,12 +117,11 @@ Start in the sign-in logs: filter by user, find the Azure Virtual Desktop and Wi
 
 ## Related
 
-- [Azure Virtual Desktop](/entity/azure-virtual-desktop/)
-- [Microsoft Intune](/entity/intune/)
+- [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/)
+- [Microsoft Intune](https://www.m365.fm/entity/intune/)
 
 ## Sources
 
-All retrieved on 17 November 2026.
 
 - [Microsoft Learn: Configure single sign-on for Azure Virtual Desktop using Microsoft Entra ID](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-single-sign-on)
 - [Microsoft Learn: Authentication in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/authentication)

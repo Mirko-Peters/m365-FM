@@ -1,16 +1,16 @@
 ---
 title: "Microsoft Entra joined session hosts in AVD: no domain controller needed"
-summary: "A Microsoft Entra joined session host needs no line of sight to a domain controller and no Entra Domain Services, and it can be enrolled in Intune automatically. This article lists what the domain controller used to do and what replaces it: roles, sign-in, profiles, management and the limits that remain."
+summary: "A Microsoft Entra joined session host needs no line of sight to a domain controller and no Entra Domain Services, and it can enroll in Intune automatically. This article lists what replaces the domain controller."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-entra-join, azure-virtual-desktop]
 keypoints:
-  - "Learn says Microsoft Entra joined VMs in Azure Virtual Desktop do not require line of sight to a domain controller and do not require Microsoft Entra Domain Services. Learn's wording is that in some cases no domain controller is needed at all."
+  - "Learn says Entra joined VMs in Azure Virtual Desktop need neither line of sight to a domain controller nor Entra Domain Services; in some cases no domain controller is needed at all."
   - "A host pool should contain session hosts of one join type only. The Microsoft Entra ID option joins VMs to the same tenant as the subscription you deploy in."
-  - "For host pools without a session host configuration, users need the Virtual Machine User Login role (administrators the Virtual Machine Administrator Login role). Learn says host pools with a session host configuration do not need this extra assignment, though its troubleshooting page does not mention that exception."
-  - "FSLogix profiles on Azure Files work through Microsoft Entra Kerberos for hybrid, cloud-only and external identities. Cloud-only and external identities are supported in the Azure cloud only, on Windows 11 or Windows Server 2025."
+  - "Without a session host configuration, users need Virtual Machine User Login (admins: Virtual Machine Administrator Login). Learn says pools with a session host configuration do not."
+  - "FSLogix profiles on Azure Files use Entra Kerberos for hybrid, cloud-only and external identities; cloud-only and external need the Azure cloud and Windows 11 or Windows Server 2025."
   - "Access to on-premises resources still needs an Active Directory and line of sight to it, and Windows Server session hosts cannot be enrolled in Intune."
 faq:
   - q: "Can an Azure Virtual Desktop deployment run with no domain controller at all?"
@@ -25,7 +25,7 @@ A Microsoft Entra joined session host is joined directly to your Microsoft Entra
 
 ## What the join type changes
 
-With [Microsoft Entra joined session hosts](/entity/avd-entra-join/), the computer account lives in [Microsoft Entra ID](/entity/entra-id/) instead of [Active Directory](/entity/active-directory/). Learn's [prerequisites](https://learn.microsoft.com/en-us/azure/virtual-desktop/prerequisites) state that Microsoft Entra ID is always used to authenticate users for [Azure Virtual Desktop](/entity/azure-virtual-desktop/); the join type does not change how users authenticate to the service; it changes where the host's computer account lives and what the host can reach.
+With [Microsoft Entra joined session hosts](https://www.m365.fm/entity/avd-entra-join/), the computer account lives in [Microsoft Entra ID](https://www.m365.fm/entity/entra-id/) instead of [Active Directory](https://www.m365.fm/entity/active-directory/). Learn's [prerequisites](https://learn.microsoft.com/en-us/azure/virtual-desktop/prerequisites) state that Microsoft Entra ID is always used to authenticate users for [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/); the join type does not change how users authenticate to the service; it changes where the host's computer account lives and what the host can reach.
 
 Learn's supported identity scenarios include "Microsoft Entra-only": Entra joined hosts with user accounts in Microsoft Entra ID, including external identities. Personal Microsoft accounts are not supported, and the user account must exist in the tenant you use for Azure Virtual Desktop.
 
@@ -37,14 +37,14 @@ Learn's supported identity scenarios include "Microsoft Entra-only": Entra joine
 | Who may sign in to the VM | Rights granted through the domain | Azure role assignment (Virtual Machine User Login) for pools without a session host configuration |
 | Sign-in to Windows | Domain credentials, Kerberos or NTLM | Single sign-on with Microsoft Entra authentication, or credential prompts |
 | Profile share access | AD DS or Entra Domain Services identity on the share | Microsoft Entra Kerberos on Azure Files |
-| Device settings | Group Policy | [Intune](/entity/intune/) (Windows client); local Group Policy for Windows Server |
+| Device settings | Group Policy | [Intune](https://www.m365.fm/entity/intune/) (Windows client); local Group Policy for Windows Server |
 | On-premises resources | Reachable through the domain | Needs Active Directory and line of sight |
 
 ## Requirements and the join path
 
 Learn's [Microsoft Entra joined session hosts](https://learn.microsoft.com/en-us/azure/virtual-desktop/azure-ad-joined-session-hosts) page says to open the **Virtual Machines** tab when you create or expand a host pool and choose between **Active Directory** and **Microsoft Entra ID**. The Microsoft Entra ID option only joins VMs to the same tenant as the subscription you are in, and lets you enroll the VMs in Intune automatically.
 
-Learn's pages differ on whether Entra join works with a [session host configuration](/entity/avd-session-host-configuration/). In the [deployment article](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop), the portal row for the session host configuration flow says to select **Active Directory** and a key vault, while the standard row offers Microsoft Entra ID or Active Directory. The article on [updating session hosts with a session host configuration](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update-configure) says to select either **Microsoft Entra** or **Active Directory** for the domain to join. [What's new](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new) lists Entra-joined support for a session host configuration in June 2025. Our reading: the deployment article's row has not caught up, so confirm the option in the portal when you create the pool.
+Learn's pages differ on whether Entra join works with a [session host configuration](https://www.m365.fm/entity/avd-session-host-configuration/). In the [deployment article](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop), the portal row for the session host configuration flow says to select **Active Directory** and a key vault, while the standard row offers Microsoft Entra ID or Active Directory. The article on [updating session hosts with a session host configuration](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update-configure) says to select either **Microsoft Entra** or **Active Directory** for the domain to join. [What's new](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new) lists Entra-joined support for a session host configuration in June 2025. Our reading: the deployment article's row has not caught up, so confirm the option in the portal when you create the pool.
 
 Further requirements and limits from Learn:
 
@@ -56,7 +56,7 @@ Further requirements and limits from Learn:
 
 For a host pool without a session host configuration, the Entra joined page says to assign **Virtual Machine User Login** so users can sign in, and **Virtual Machine Administrator Login** for administrators who need local administrative privileges. Learn recommends assigning Virtual Machine User Login to the application group's user group at the resource group level. Owner or Contributor alone does not grant sign-in rights. A missing role shows up as "Your account is configured to prevent you from using this device". Learn's troubleshooting page answers that error with the Virtual Machine User Login role and names no session host configuration exception, so the pages differ; on such a pool, check the role assignment.
 
-Learn recommends [single sign-on](/entity/avd-single-sign-on/) with Microsoft Entra authentication. Without it, behavior depends on the client:
+Learn recommends [single sign-on](https://www.m365.fm/entity/avd-single-sign-on/) with Microsoft Entra authentication. Without it, behavior depends on the client:
 
 1. **Windows Desktop client.** The local PC must be Microsoft Entra joined, hybrid joined or (Windows 11, or Windows 10 version 2004 or later) registered to the same tenant. Otherwise add the custom RDP property `targetisaadjoined:i:1` to the host pool.
 2. **Web, Android, macOS and iOS clients.** Add `targetisaadjoined:i:1` to the host pool. Learn states that these connections are restricted to entering user name and password.
@@ -69,7 +69,7 @@ Learn is also inconsistent on the trust model. The [Microsoft Entra sign-in arti
 
 ## Profiles without a domain controller
 
-[FSLogix](/entity/fslogix/) profile containers work on Entra joined hosts when stored on [Azure Files](/entity/azure-files/) with [Microsoft Entra Kerberos](/entity/entra-kerberos-azure-files/). Learn's [FSLogix article](https://learn.microsoft.com/en-us/fslogix/how-to-configure-profile-container-entra-id-hybrid) describes the hybrid case; the cloud-only and external rows combine it with the authentication and Azure Files articles:
+[FSLogix](https://www.m365.fm/entity/fslogix/) profile containers work on Entra joined hosts when stored on [Azure Files](https://www.m365.fm/entity/azure-files/) with [Microsoft Entra Kerberos](https://www.m365.fm/entity/entra-kerberos-azure-files/). Learn's [FSLogix article](https://learn.microsoft.com/en-us/fslogix/how-to-configure-profile-container-entra-id-hybrid) describes the hybrid case; the cloud-only and external rows combine it with the authentication and Azure Files articles:
 
 | Identity type | Session host | Clouds |
 |---|---|---|
@@ -114,11 +114,11 @@ This is our reading, not a Microsoft rule. Entra join fits when users are in Ent
 
 ## Related
 
-- [Microsoft Entra joined session hosts (Azure Virtual Desktop)](/entity/avd-entra-join/)
-- [Single sign-on (Azure Virtual Desktop)](/entity/avd-single-sign-on/)
-- [Microsoft Entra hybrid join](/entity/hybrid-entra-join/)
-- [Microsoft Entra Domain Services](/entity/entra-domain-services/)
-- [Microsoft Entra Kerberos for Azure Files](/entity/entra-kerberos-azure-files/)
+- [Microsoft Entra joined session hosts (Azure Virtual Desktop)](https://www.m365.fm/entity/avd-entra-join/)
+- [Single sign-on (Azure Virtual Desktop)](https://www.m365.fm/entity/avd-single-sign-on/)
+- [Microsoft Entra hybrid join](https://www.m365.fm/entity/hybrid-entra-join/)
+- [Microsoft Entra Domain Services](https://www.m365.fm/entity/entra-domain-services/)
+- [Microsoft Entra Kerberos for Azure Files](https://www.m365.fm/entity/entra-kerberos-azure-files/)
 
 ## Sources
 

@@ -1,17 +1,17 @@
 ---
 title: "Ephemeral OS disks for Azure Virtual Desktop: what they are and when to use them"
-summary: "An ephemeral OS disk keeps the session host's operating system on the VM's local storage instead of remote Azure Storage, so the host is reimaged or deleted rather than stopped and started. In Azure Virtual Desktop it works only in pooled host pools that use a session host configuration, and it comes with a clear list of size, placement and feature limits."
+summary: "An ephemeral OS disk keeps the session host's OS on the VM's local storage, so the host is reimaged or deleted rather than stopped. In Azure Virtual Desktop it works only in pooled host pools with a session host configuration."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-ephemeral-os-disks, avd-session-host]
 keypoints:
-  - "An ephemeral OS disk lives on the VM's local storage (OS cache or temp disk in Azure Virtual Desktop) and is not saved to remote Azure Storage. Everything on it is lost when the host is reimaged or deleted."
+  - "An ephemeral OS disk lives on the VM's local storage (OS cache or temp disk) and is not saved to Azure Storage. Everything on it is lost when the host is reimaged or deleted."
   - "Azure Virtual Desktop supports it only in pooled host pools configured with a session host configuration. Personal host pools and pooled pools without a configuration are out."
-  - "The image's OS disk must fit into the cache or temp disk of the chosen VM size. Learn's Standard_D8s_v3 temp-disk example (200 GiB temp, 73 GiB left) conflicts with the Dsv3 size page, which lists 64 GiB temp and 200 GiB cache, so check sizes before you plan."
-  - "Hosts can be restarted, reimaged or deleted but not deallocated, and backup, snapshots, image capture and Azure Disk Encryption are not supported. With dynamic autoscaling, set the minimum percentage of active hosts to 100 in every phase."
-  - "Microsoft announced general availability in July 2026, but the Azure Virtual Desktop Learn page still says NVMe and Premium SSD are unsupported during preview and that only Standard SSD is selected. Check the page before you plan around a limit."
+  - "The image's OS disk must fit into the VM size's cache or temp disk. Learn's Standard_D8s_v3 example conflicts with the Dsv3 size page, so check sizes before you plan."
+  - "Hosts can be restarted, reimaged or deleted but not deallocated; backup, snapshots, image capture and Azure Disk Encryption are unsupported. With dynamic autoscaling, set minimum active hosts to 100."
+  - "Microsoft announced GA in July 2026, but the AVD Learn page still says NVMe and Premium SSD are unsupported during preview. Check the page before planning around a limit."
 faq:
   - q: "Can I use ephemeral OS disks in a personal host pool?"
     a: "No. The Learn page says ephemeral OS disks in Azure Virtual Desktop are supported only in pooled host pools configured with a session host configuration, and it names pooled as the only host pool type supported with session host configuration and ephemeral OS disks. The October 2025 preview post also says they are not available for personal host pools or for pooled pools without a session host configuration."
@@ -46,7 +46,7 @@ The Tech Community announcement names lower network latency, better disk perform
 
 Learn's Azure Virtual Desktop page sets these conditions:
 
-1. **Pooled host pool with a session host configuration.** The host pool type must be pooled. A [session host configuration](/entity/avd-session-host-configuration/) is chosen when the host pool is created.
+1. **Pooled host pool with a session host configuration.** The host pool type must be pooled. A [session host configuration](https://www.m365.fm/entity/avd-session-host-configuration/) is chosen when the host pool is created.
 2. **An image value.** The image must be configured before the ephemeral option can be selected.
 3. **A VM size with enough local space.** The image's OS disk size must be less than or equal to the temp or cache size of the chosen VM size; otherwise you cannot configure an ephemeral OS disk.
 4. **Azure, not Azure Government**, during preview, according to Learn.
@@ -76,7 +76,7 @@ The Azure Virtual Desktop page says the OS disk can sit on the VM's OS cache or 
 
 Learn lists these as unsupported with ephemeral OS disks: deallocation, VM image capture, disk snapshots, Azure Disk Encryption, Azure Backup, Azure Site Recovery and OS disk swap. The Azure VM page adds that customer-managed key rotation is not supported and that keys or secrets sealed by the vTPM might be lost when a VM is reimaged or healed.
 
-In our reading, two consequences follow. Anything written to the OS disk is gone after a reimage or delete, so profile data belongs elsewhere, usually [FSLogix](/entity/fslogix/) in a pooled host pool. And the [golden image](/entity/golden-image/) and the session host configuration become the only durable definition of a host, because backup, snapshots and image capture are unsupported.
+In our reading, two consequences follow. Anything written to the OS disk is gone after a reimage or delete, so profile data belongs elsewhere, usually [FSLogix](https://www.m365.fm/entity/fslogix/) in a pooled host pool. And the [golden image](https://www.m365.fm/entity/golden-image/) and the session host configuration become the only durable definition of a host, because backup, snapshots and image capture are unsupported.
 
 ### Disk type and cost
 
@@ -110,11 +110,11 @@ Learn's update page gives this portal path: **Host pools**, select the host pool
 
 Learn's update concept page says an update deallocates or deletes the existing VMs and creates new ones, and its process ends with the original VMs being deleted. In PowerShell, the session host management policy has an `UpdateDeleteOriginalVM` setting, and Learn recommends `$true` so that you do not need to clean up session host resources afterwards. Learn does not describe how this applies to hosts with ephemeral OS disks.
 
-If you use autoscale, Learn says to disable it on the host pool before you start an update and keep it disabled until the update has finished, because a scaling plan that is enabled during an update can make the update fail with a runtime error. Session host update is available only in the global Azure cloud. An update takes around 20 minutes per session host, users are asked to sign out with a 0 to 60 minute notice period, and you can schedule it up to two weeks ahead. Do not remove VMs or change [drain mode](/entity/avd-drain-mode/) during an update.
+If you use autoscale, Learn says to disable it on the host pool before you start an update and keep it disabled until the update has finished, because a scaling plan that is enabled during an update can make the update fail with a runtime error. Session host update is available only in the global Azure cloud. An update takes around 20 minutes per session host, users are asked to sign out with a 0 to 60 minute notice period, and you can schedule it up to two weeks ahead. Do not remove VMs or change [drain mode](https://www.m365.fm/entity/avd-drain-mode/) during an update.
 
 ## Working with autoscale
 
-Learn recommends [dynamic autoscaling](/entity/avd-dynamic-autoscaling/) for host pools with ephemeral OS disks. Learn's Azure Virtual Desktop page sets one rule: each phase of the scaling plan should have **Minimum percentage of active hosts (%)** set to 100, because these hosts do not support starting and deallocating, so the scaling process then only creates and deletes hosts.
+Learn recommends [dynamic autoscaling](https://www.m365.fm/entity/avd-dynamic-autoscaling/) for host pools with ephemeral OS disks. Learn's Azure Virtual Desktop page sets one rule: each phase of the scaling plan should have **Minimum percentage of active hosts (%)** set to 100, because these hosts do not support starting and deallocating, so the scaling process then only creates and deletes hosts.
 
 ## Checklist before you rely on it
 

@@ -1,17 +1,17 @@
 ---
 title: "Setting up Entra Kerberos authentication for FSLogix profile shares"
-summary: "Setting up Microsoft Entra Kerberos for an FSLogix profile share on Azure Files takes eight steps: enable it on the storage account, grant admin consent, set share and file permissions, push two client settings, and point FSLogix at the share. This runbook gives the portal paths, values and commands from Microsoft Learn, plus the errors and fixes Microsoft documents."
+summary: "Setting up Microsoft Entra Kerberos for an FSLogix profile share on Azure Files takes eight steps, from enabling it on the storage account to pointing FSLogix at the share. Includes paths, values, errors and fixes."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [entra-kerberos-azure-files, azure-files]
 keypoints:
-  - "This runbook follows one order, assembled from several Learn pages: create the storage account and share, enable Microsoft Entra Kerberos, grant admin consent, exclude the storage app from MFA, set share-level and file-level permissions, configure the clients, set the FSLogix registry values, then test with a new user."
-  - "Two client settings are needed on every session host: CloudKerberosTicketRetrievalEnabled = 1 under the Kerberos parameters key, and LoadCredKeyFromProfile = 1 under HKLM\\Software\\Policies\\Microsoft\\AzureADAccount. In Intune use the settings catalog, because OMA-URI does not work on multi-session devices."
-  - "Cloud-only users need the kdc_enable_cloud_group_sids tag in the storage app's manifest, and their ACLs are set in the Azure portal (Manage access) or with the RestSetAcls module. icacls and File Explorer do not work for cloud-only identities."
-  - "Learn documents these causes: MFA on the storage app (error 1327, enable page), a private link name missing from the app (error 1326), Assignment required switched on (AADSTS50105), and a SupportedEncryptionTypes registry value without AES (troubleshooting page)."
-  - "Status differs by page: AVD what's new lists FSLogix support for cloud-only and external identities as generally available in May 2026, while the Microsoft Entra Kerberos concept page still labels its cloud-only sections Preview."
+  - "Runbook order: create storage and share, enable Entra Kerberos, grant consent, exclude the storage app from MFA, set share and file permissions, configure clients and FSLogix, test a new user."
+  - "Every session host needs CloudKerberosTicketRetrievalEnabled = 1 and LoadCredKeyFromProfile = 1. In Intune use the settings catalog, because OMA-URI does not work on multi-session devices."
+  - "Cloud-only users need the kdc_enable_cloud_group_sids manifest tag, and ACLs are set in the portal or with RestSetAcls; icacls and File Explorer do not work for cloud-only identities."
+  - "Documented causes: MFA on the storage app (1327), a private link name missing from the app (1326), Assignment required on (AADSTS50105) and SupportedEncryptionTypes without AES."
+  - "Status differs: AVD what's new lists FSLogix with cloud-only and external identities as GA in May 2026, while the Entra Kerberos page still labels its cloud-only sections Preview."
 faq:
   - q: "Which role and permissions do FSLogix users need on the share?"
     a: "Learn recommends Storage File Data SMB Share Contributor as the default share-level permission for all authenticated identities, and Storage File Data SMB Share Elevated Contributor for the identities that set Windows ACLs. At file level, Learn's recommended ACLs are CREATOR OWNER with Modify on subfolders and files only, an admin group with Full Control, and the user group with Modify on this folder only. Share-level changes usually take effect within 30 minutes."
@@ -21,7 +21,7 @@ faq:
     a: "Entra Kerberos does not support MFA for the file share. If a Conditional Access policy requires MFA for all apps, exclude the Entra application named after the storage account's file endpoint. Learn says that without the exclusion, mounting with net use fails with system error 1327, account restrictions are preventing this user from signing in."
 ---
 
-To put FSLogix profile containers on Azure Files with Microsoft Entra Kerberos, you enable the feature on the storage account, grant admin consent to the app it creates, set share and file permissions, push two settings to the session hosts, and point FSLogix at the share. Learn says session hosts then need no line of sight to a domain controller. The ticket flow is in the [Entra Kerberos explainer](/entity/entra-kerberos-azure-files/); this runbook gives order, values and checks.
+To put FSLogix profile containers on Azure Files with Microsoft Entra Kerberos, you enable the feature on the storage account, grant admin consent to the app it creates, set share and file permissions, push two settings to the session hosts, and point FSLogix at the share. Learn says session hosts then need no line of sight to a domain controller. The ticket flow is in the [Entra Kerberos explainer](https://www.m365.fm/entity/entra-kerberos-azure-files/); this runbook gives order, values and checks.
 
 Status: AVD what's new lists FSLogix support for cloud-only and external identities as generally available in May 2026, while the Entra Kerberos concept page still labels its cloud-only sections Preview and lists "No NTFS ACL enforcement; uses Azure RBAC" for them. This runbook follows the Azure Files and FSLogix pages, which apply Windows ACLs.
 
@@ -29,13 +29,13 @@ Status: AVD what's new lists FSLogix support for cloud-only and external identit
 
 - **One identity source per storage account.** Entra Kerberos cannot be combined with AD DS or Microsoft Entra Domain Services; Learn says disabling the current source removes identity-based access to all shares immediately.
 - **Scope.** Hybrid identities work in the Azure public, US Government and 21Vianet clouds; cloud-only identities only in the public cloud. External identities: FSLogix on AVD only, public cloud only. Cross-tenant access is not supported.
-- **Clients.** Session hosts must be [Microsoft Entra joined or hybrid joined](/entity/avd-entra-join/), not AD DS-only. For cloud-only identities Learn recommends at least Windows 11 26H1 with KB5079489 (build 28000.1764), or 25H2 or 24H2 with KB5079391 (26200.8116 and 26100.8116), and lists Windows Server 2025. For hybrid identities it also lists Windows 10 version 2004 or later and Windows Server 2022, all with the latest cumulative updates. Other clients need a cloud trust.
+- **Clients.** Session hosts must be [Microsoft Entra joined or hybrid joined](https://www.m365.fm/entity/avd-entra-join/), not AD DS-only. For cloud-only identities Learn recommends at least Windows 11 26H1 with KB5079489 (build 28000.1764), or 25H2 or 24H2 with KB5079391 (26200.8116 and 26100.8116), and lists Windows Server 2025. For hybrid identities it also lists Windows 10 version 2004 or later and Windows Server 2022, all with the latest cumulative updates. Other clients need a cloud trust.
 - **Services and SMB.** `WinHttpAutoProxySvc` and `iphlpsvc` must run, and the account's SMB security settings must allow Kerberos.
 - **Policies.** If application management policies block symmetric key addition or limit key lifetime, grant the "Storage Resource Provider" service (app ID `a6aa9161-5291-40bb-8c5c-923b567bee3b`) an exception. Learn states the limit as below 366 days (enable page) and 365.5 days (troubleshooting page).
 
 ## Step 1: Create the storage account and file share
 
-Create the storage account and an [Azure Files](/entity/azure-files/) share in the same region as the session host VMs, per Learn. UNC path: `\\<storage-account-name>.file.core.windows.net\<file-share-name>`.
+Create the storage account and an [Azure Files](https://www.m365.fm/entity/azure-files/) share in the same region as the session host VMs, per Learn. UNC path: `\\<storage-account-name>.file.core.windows.net\<file-share-name>`.
 
 ## Step 2: Enable Microsoft Entra Kerberos
 
@@ -98,7 +98,7 @@ A policy refresh or reboot applies changes. Once the first setting is on, client
 
 ## Step 7: Point FSLogix at the share
 
-[FSLogix](/entity/fslogix/) is pre-installed on session hosts created with the Azure Virtual Desktop service. In `HKLM\SOFTWARE\FSLogix\Profiles` set `Enabled` to 1 (DWORD) and `VHDLocations` to the UNC path from Step 1. Learn's profile container page recommends `DeleteLocalProfileWhenVHDShouldApply` = 1, `FlipFlopProfileDirectoryName` = 1 and `VolumeType` = `VHDX`. The first permanently deletes a matching local profile.
+[FSLogix](https://www.m365.fm/entity/fslogix/) is pre-installed on session hosts created with the Azure Virtual Desktop service. In `HKLM\SOFTWARE\FSLogix\Profiles` set `Enabled` to 1 (DWORD) and `VHDLocations` to the UNC path from Step 1. Learn's profile container page recommends `DeleteLocalProfileWhenVHDShouldApply` = 1, `FlipFlopProfileDirectoryName` = 1 and `VolumeType` = `VHDX`. The first permanently deletes a matching local profile.
 
 ## Step 8: Test
 

@@ -7,9 +7,9 @@ author: mirko-p
 date: 2026-11-18
 topics: [fslogix-office-container, fslogix]
 keypoints:
-  - "By default a profile container holds all profile and Office content in one VHD(x). Learn calls that the recommended configuration and says the ODFC container brings no extra benefit when profile containers are your primary solution."
-  - "Learn names four reasons to use both containers: a separate storage location, isolation from loss or corruption in one container, control over which Office components are included, and different container sizes (its example is a 10 GB profile container with a 50 GB ODFC container)."
-  - "Two Learn pages pull in different directions: the ODFC configuration page says the dual-container setup is not necessary or recommended, the container types page lists four situations for using both. Learn recommends ODFC in a single container configuration with third-party roaming profile products; it does not define the term, and in our reading it means ODFC without a profile container."
+  - "By default one profile container holds all profile and Office content. Learn calls that recommended and says ODFC adds no benefit when profile containers are your primary solution."
+  - "Learn's reasons for both containers: separate storage, isolation from corruption, control over Office components and different sizes (e.g. 10 GB profile, 50 GB ODFC)."
+  - "Learn's ODFC page says the dual-container setup is not recommended; the container types page lists four situations for it. ODFC alone is recommended with third-party roaming profiles."
   - "ODFC includes Office activation, Outlook, Outlook personalization, SharePoint, OneDrive and Skype for Business by default. IncludeTeams, IncludeOneNote and IncludeOneNote_UWP default to 0."
   - "Converting from single to dual is possible: FSLogix copies the data into the new ODFC container and leaves the original data in the profile container for you to remove manually."
 faq:
@@ -23,11 +23,11 @@ faq:
 
 Microsoft Learn's default answer is not to separate: a single profile container holds both profile and Office data, and Learn's FAQ says to use one profile container unless business or workload requirements need the separation. A separate Office container (ODFC) is worth the extra file only when you need a different storage location, isolation between the two data sets, per-component control or different sizes. This article explains what the container holds, the four reasons Learn gives, and the settings that change once you split.
 
-To decide step by step, see [Profile container vs Office container: how to decide](/community/u/mirko-p/blog/profile-container-vs-office-container-how-to-decide/).
+To decide step by step, see [Profile container vs Office container: how to decide](https://www.m365.fm/community/u/mirko-p/blog/profile-container-vs-office-container-how-to-decide/).
 
 ## What the Office container is
 
-An [FSLogix Office container](/entity/fslogix-office-container/) is a VHD(x) that stores profile content unique to Microsoft Office applications. Learn's [container types page](https://learn.microsoft.com/en-us/fslogix/concepts-container-types) lists Office apps, OneDrive, Teams, SharePoint and OneNote as examples and says ODFC is most commonly implemented alongside other roaming profile solutions, for example traditional roaming profiles, Citrix User Profile Management or VMware Dynamic Environment Manager. The default contents are:
+An [FSLogix Office container](https://www.m365.fm/entity/fslogix-office-container/) is a VHD(x) that stores profile content unique to Microsoft Office applications. Learn's [container types page](https://learn.microsoft.com/en-us/fslogix/concepts-container-types) lists Office apps, OneDrive, Teams, SharePoint and OneNote as examples and says ODFC is most commonly implemented alongside other roaming profile solutions, for example traditional roaming profiles, Citrix User Profile Management or VMware Dynamic Environment Manager. The default contents are:
 
 - Office activation
 - Outlook
@@ -40,7 +40,7 @@ Learn adds that most of this data comes from remote systems and is easily replac
 
 ## The default: one container
 
-The same page says that, unless configured otherwise, the [profile container](/entity/fslogix-profile-container/) holds all profile and ODFC content in the same VHD(x), and that this is the recommended configuration. The [Configure ODFC containers page](https://learn.microsoft.com/en-us/fslogix/how-to-configure-odfc-containers) is more direct: all ODFC benefits are automatic in a single-container configuration, there is no need or benefit to ODFC when profile containers are your primary solution, and if you have already configured a profile container you do not need an ODFC container.
+The same page says that, unless configured otherwise, the [profile container](https://www.m365.fm/entity/fslogix-profile-container/) holds all profile and ODFC content in the same VHD(x), and that this is the recommended configuration. The [Configure ODFC containers page](https://learn.microsoft.com/en-us/fslogix/how-to-configure-odfc-containers) is more direct: all ODFC benefits are automatic in a single-container configuration, there is no need or benefit to ODFC when profile containers are your primary solution, and if you have already configured a profile container you do not need an ODFC container.
 
 Its Important box separates two cases:
 
@@ -66,7 +66,7 @@ If none of the four applies to your environment, the page gives no reason to spl
 
 ## What changes when you split
 
-**Two files, two ceilings.** Each container has its own SizeInMBs, and Learn's reference gives 30000 as the default for both. With defaults left in place, a split therefore allows more total space per user (our reading), so set both values on purpose. The mechanics of sizing are covered in [the profile container settings article](/community/u/mirko-p/blog/profile-container-settings-that-matter-size-locking-and-concurrency/).
+**Two files, two ceilings.** Each container has its own SizeInMBs, and Learn's reference gives 30000 as the default for both. With defaults left in place, a split therefore allows more total space per user (our reading), so set both values on purpose. The mechanics of sizing are covered in [the profile container settings article](https://www.m365.fm/community/u/mirko-p/blog/profile-container-settings-that-matter-size-locking-and-concurrency/).
 
 **Two sets of settings.** The reference documents ODFC settings only under HKEY_LOCAL_MACHINE\SOFTWARE\Policies\FSLogix\ODFC, and the steps on the Configure ODFC containers page use that path. Learn's [Group Policy templates page](https://learn.microsoft.com/en-us/fslogix/how-to-use-group-policy-templates) explains the two branches: settings under HKLM\SOFTWARE\FSLogix are preferences, not policies, so if a Group Policy is removed or set to Not Configured the registry value stays on the machine, while ODFC settings under SOFTWARE\Policies\FSLogix\ODFC reset themselves. The PowerShell example on the Configure ODFC containers page writes to HKLM:\SOFTWARE\FSLogix\ODFC instead, a key the reference does not list for ODFC, and Learn does not say why the example uses it. If you copy the example, confirm which key your hosts and policies actually use, and check the result with frx list-redirects as shown below. The example also does not set IncludeTeams, although the table on the same page lists IncludeTeams = 1 as recommended.
 
@@ -90,7 +90,7 @@ The ODFC reference lists these toggles. Each is a DWORD, and 1 means redirected 
 | IncludeSkype | 1 | Skype for Business Global Address List |
 | IncludeTeams | 0 | Classic and new Teams; when 1, new Teams is registered by family name at sign-in |
 
-Two cautions follow. IncludeTeams is off by default, so if you run a separate ODFC container and want Teams data in it, set it; [the article on new Teams with FSLogix](/community/u/mirko-p/blog/new-teams-on-avd-with-fslogix-what-to-know/) covers version requirements. And the Outlook paths differ by client: classic Outlook uses the Roaming and Local Microsoft\Outlook folders, while new Outlook for Windows uses a package folder and %LocalAppData%\Microsoft\olk. Settings such as OutlookCachedMode and MirrorLocalOSTToVHD are likewise documented as not applying to new Outlook.
+Two cautions follow. IncludeTeams is off by default, so if you run a separate ODFC container and want Teams data in it, set it; [the article on new Teams with FSLogix](https://www.m365.fm/community/u/mirko-p/blog/new-teams-on-avd-with-fslogix-what-to-know/) covers version requirements. And the Outlook paths differ by client: classic Outlook uses the Roaming and Local Microsoft\Outlook folders, while new Outlook for Windows uses a package folder and %LocalAppData%\Microsoft\olk. Settings such as OutlookCachedMode and MirrorLocalOSTToVHD are likewise documented as not applying to new Outlook.
 
 ### Excluding the same paths from another roaming product
 
@@ -109,7 +109,7 @@ Profile containers use ProfileType. The ODFC container uses VHDAccessMode, which
 
 Learn's conditions: all sessions using the VHD concurrently must have a matching VHDAccessMode, and if access is not concurrent it should be 0. Modes 1 and 2 should not be used with Outlook cached mode; if the ODFC container is used with cached mode, use 0 or 3. NumSessionVHDsToKeep, default 2, applies to mode 3 and sets how many session VHDs persist.
 
-The [concurrent connections page](https://learn.microsoft.com/en-us/fslogix/concepts-multi-concurrent-connections) separates two cases. Concurrent connections are a second session of the same user on the same computer; its warning says they are not supported by session hosts in an [Azure Virtual Desktop](/entity/azure-virtual-desktop/) host pool. Multiple connections are a new session on a different computer, supported only with difference disks; however, the Configuration Examples page states that Azure Virtual Desktop does not support multiple connections within the same host pool. For ODFC the page says VHDAccessMode needs to be 3 to use either, while the reference describes modes 1 and 2 as allowing simultaneous session access. Learn does not reconcile the two pages; treating the narrower statement as the safer one is our reading. The page also lists fDenyTSConnections and fSingleSessionPerUser, both set to 0 under HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server, as required settings for concurrent connections. Session-based files are named ODFC-%username%-SESSION-<SessionNumber>.VHD(x), numbered 0 to 9, so at most 10 exist.
+The [concurrent connections page](https://learn.microsoft.com/en-us/fslogix/concepts-multi-concurrent-connections) separates two cases. Concurrent connections are a second session of the same user on the same computer; its warning says they are not supported by session hosts in an [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) host pool. Multiple connections are a new session on a different computer, supported only with difference disks; however, the Configuration Examples page states that Azure Virtual Desktop does not support multiple connections within the same host pool. For ODFC the page says VHDAccessMode needs to be 3 to use either, while the reference describes modes 1 and 2 as allowing simultaneous session access. Learn does not reconcile the two pages; treating the narrower statement as the safer one is our reading. The page also lists fDenyTSConnections and fSingleSessionPerUser, both set to 0 under HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server, as required settings for concurrent connections. Session-based files are named ODFC-%username%-SESSION-<SessionNumber>.VHD(x), numbered 0 to 9, so at most 10 exist.
 
 Separately, a warning on the concurrent connections page says that OneDrive does not support concurrent or multiple connections using the same container, under any circumstance. IncludeOneDrive defaults to 1.
 
@@ -117,7 +117,7 @@ Separately, a warning on the concurrent connections page says that OneDrive does
 
 Learn notes that the ODFC container is not backed up or replicated to alternate locations because its data is recoverable from the source. That holds for data that exists elsewhere. If users keep data in the container that exists nowhere else, for example OneNote notebook files stored locally after you set IncludeOneNote to 1, that data would need the same protection as the profile. That is our reading; Learn does not state it.
 
-Some behavior applies to both containers regardless. Learn describes [Cloud Cache](/entity/fslogix-cloud-cache/) as an optional configuration for profile and ODFC containers, not a container type. Learn says VHD disk compaction affects Profile and ODFC containers and runs every time a user signs out. The CleanupInvalidSessions setting, off by default, applies to the next sign-in after a session ended abruptly: FSLogix then tries to clean up the invalid session so the container can attach, and the setting affects both container types.
+Some behavior applies to both containers regardless. Learn describes [Cloud Cache](https://www.m365.fm/entity/fslogix-cloud-cache/) as an optional configuration for profile and ODFC containers, not a container type. Learn says VHD disk compaction affects Profile and ODFC containers and runs every time a user signs out. The CleanupInvalidSessions setting, off by default, applies to the next sign-in after a session ended abruptly: FSLogix then tries to clean up the invalid session so the container can attach, and the setting affects both container types.
 
 ## Verify the split
 

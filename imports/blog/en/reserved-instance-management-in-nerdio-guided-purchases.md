@@ -1,16 +1,16 @@
 ---
 title: "Reserved Instance management in Nerdio: guided purchases"
-summary: "Nerdio's help covers two separate reservation features: RI analytics in Nerdio Manager for Enterprise recommends a region, VM family and core count from a host pool's auto-scale history, and Reservations Management in Nerdio Manager for MSP buys and tracks Azure reservations. Only RI analytics produces a recommendation; Nerdio's cost-data page says Nerdio Manager cannot calculate figures using existing reservations or savings plans, and the RI analytics page does not say whether it nets them out."
+summary: "Nerdio's RI analytics in Nerdio Manager for Enterprise recommends region, VM family and cores from auto-scale history; Reservations Management in Nerdio Manager for MSP buys and tracks reservations."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [nerdio-reserved-instance-management, nerdio-manager-for-enterprise]
 keypoints:
-  - "Nerdio's help describes two separate pieces: RI analytics (Nerdio Manager for Enterprise) recommends a region, VM family and total CPU cores from a dynamic host pool's auto-scale history, and Reservations Management (Nerdio Manager for MSP) purchases, tracks and monitors reservations. Only RI analytics gives a recommendation."
-  - "RI analytics is reached from a dynamic host pool's more actions menu under Auto-scale > RI analytics. It shows CPU-hours for the chosen dates and projected CPU-months (based on 730 hours per month), and the cores can be bought in any mix of VM sizes inside the recommended family and region."
-  - "Purchasing in Nerdio Manager for MSP needs Customer Permissions in Partner Center, a Reservation Administrator role (Reservations Administrator in Nerdio's command) plus Subscription Owner for the authorising user, and authorisation under Settings > Integrations. Pay-as-you-go and CSP subscriptions are supported, with CSP conditions."
-  - "Nerdio's cost-data page says Nerdio Manager cannot calculate figures using Microsoft Reserved Instances or Savings Plans. Our reading: RI analytics does not net out commitments you already hold, so subtract them yourself. Learn says Azure's own recommendation engine excludes existing reservations and savings plans."
+  - "Two pieces: RI analytics (NME) recommends region, VM family and CPU cores from a dynamic pool's auto-scale history; Reservations Management (NMM) buys and tracks reservations."
+  - "RI analytics is under Auto-scale > RI analytics of a dynamic host pool. It shows CPU-hours and projected CPU-months (730 hours each); cores can be bought in any size mix in the family."
+  - "Purchasing in NMM needs Customer Permissions in Partner Center, Reservation Administrator plus Subscription Owner, and authorisation under Settings > Integrations. PAYG and CSP are supported."
+  - "Nerdio says it cannot calculate with Reserved Instances or Savings Plans. Our reading: RI analytics does not net out existing commitments, so subtract them yourself."
   - "A reserved VM instance discounts compute only. Learn says it does not cover Windows software, networking or storage, and does not reserve or guarantee capacity."
 faq:
   - q: "Does Nerdio buy reservations on its own?"
@@ -23,22 +23,22 @@ faq:
 
 Nerdio's help covers reservations in two separate features, and only one of them recommends anything. In Nerdio Manager for Enterprise, **RI analytics** reads a dynamic host pool's auto-scale history and recommends a region, a VM family and a number of CPU cores to reserve. In Nerdio Manager for MSP, **Reservations Management** lets a partner buy an Azure reservation, track its utilisation and receive renewal reminders.
 
-This article explains what each feature does, what it needs and where its view stops. For the choice between a reservation and a savings plan, see [Reservations or savings plans for AVD: which to buy](/community/u/mirko-p/blog/reservations-or-savings-plans-for-avd-which-to-buy/) and the entity pages for [Azure Reservations](/entity/azure-reservations/) and [Azure savings plans](/entity/azure-savings-plans/). The companion article [Reservations for AVD: how many to buy and what to avoid](/community/u/mirko-p/blog/reservations-for-avd-how-many-to-buy-and-what-to-avoid/) covers sizing.
+This article explains what each feature does, what it needs and where its view stops. For the choice between a reservation and a savings plan, see [Reservations or savings plans for AVD: which to buy](https://www.m365.fm/community/u/mirko-p/blog/reservations-or-savings-plans-for-avd-which-to-buy/) and the entity pages for [Azure Reservations](https://www.m365.fm/entity/azure-reservations/) and [Azure savings plans](https://www.m365.fm/entity/azure-savings-plans/). The companion article [Reservations for AVD: how many to buy and what to avoid](https://www.m365.fm/community/u/mirko-p/blog/reservations-for-avd-how-many-to-buy-and-what-to-avoid/) covers sizing.
 
 ## What Nerdio documents
 
 | | RI analytics | Reservations Management |
 |---|---|---|
-| Product | [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/) help | [Nerdio Manager for MSP](/entity/nerdio-manager-for-msp/) help |
+| Product | [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/) help | [Nerdio Manager for MSP](https://www.m365.fm/entity/nerdio-manager-for-msp/) help |
 | Job | Recommend what to reserve | Purchase and track reservations; renewal reminders |
 | Input | Auto-scale history of one dynamic host pool, for a date range you choose | Your decision; the purchase form asks for name, term, billing plan, region, VM series and quantity |
 | Output | Region, VM family and total CPU cores | A purchased Azure reservation and a utilisation rate |
 
-Nerdio's release post for Nerdio Manager for MSP 5.0, dated 2 April 2024, introduced [Nerdio Reserved Instance Management](/entity/nerdio-reserved-instance-management/). It says the feature was built from partner feedback to "guide Reserved Instance purchases based on recommendations" while keeping the right resources available when needed. It gives no technical detail. The RI analytics article calls the feature "a simple guide" that looks at a host pool's auto-scale history and provides RI recommendations, and describes only that recommendation. The Reservations Management article does not use the word "guide"; it describes purchase, tracking, utilisation and renewal reminders, and gives no quantity recommendation. Neither article mentions the other, and a feature request on Nerdio's community forum asks whether RI analytics, which exists in Nerdio Manager for Enterprise, can be added to Nerdio Manager for MSP. Do not assume one product line has both. The RI analytics article states no edition requirement, so confirm your entitlement first.
+Nerdio's release post for Nerdio Manager for MSP 5.0, dated 2 April 2024, introduced [Nerdio Reserved Instance Management](https://www.m365.fm/entity/nerdio-reserved-instance-management/). It says the feature was built from partner feedback to "guide Reserved Instance purchases based on recommendations" while keeping the right resources available when needed. It gives no technical detail. The RI analytics article calls the feature "a simple guide" that looks at a host pool's auto-scale history and provides RI recommendations, and describes only that recommendation. The Reservations Management article does not use the word "guide"; it describes purchase, tracking, utilisation and renewal reminders, and gives no quantity recommendation. Neither article mentions the other, and a feature request on Nerdio's community forum asks whether RI analytics, which exists in Nerdio Manager for Enterprise, can be added to Nerdio Manager for MSP. Do not assume one product line has both. The RI analytics article states no edition requirement, so confirm your entitlement first.
 
 ## RI analytics: how the recommendation is built
 
-The starting point is a premise in Nerdio's article: it rarely makes sense to reserve every host of every pool when [auto-scaling](/entity/nerdio-auto-scaling/) is in use, but it can make sense to reserve the cores that remain after auto-scaling has reduced demand. Nerdio gives a worked illustration: auto-scaling might reduce a pool from 100 cores to 25 for a typical 40-hour week, and the 25 cores can then be reserved.
+The starting point is a premise in Nerdio's article: it rarely makes sense to reserve every host of every pool when [auto-scaling](https://www.m365.fm/entity/nerdio-auto-scaling/) is in use, but it can make sense to reserve the cores that remain after auto-scaling has reduced demand. Nerdio gives a worked illustration: auto-scaling might reduce a pool from 100 cores to 25 for a typical 40-hour week, and the 25 cores can then be reserved.
 
 To generate a recommendation, Nerdio's steps are:
 
@@ -114,7 +114,7 @@ Learn adds limits for reserved VM instances, which is the kind Nerdio's analytic
 
 Learn also warns that if resources are shut down regularly the simulation can find no savings and give no recommendation, and, under its notes on API behavior, that with a 7-day look-back you might get none when VMs are shut down for more than a day. Our reading: a pool that scales to zero can therefore show a Nerdio figure and no Azure one. Use both as inputs and compare the numbers with your own hourly profile.
 
-The Modeler in Nerdio Advisor (Observability > Advisor > Models) has a Reserved instances field for the number of reservations and the term. Nerdio's page says it only generates estimates. See [Nerdio Advisor](/entity/nerdio-advisor/) for what it can and cannot model.
+The Modeler in Nerdio Advisor (Observability > Advisor > Models) has a Reserved instances field for the number of reservations and the term. Nerdio's page says it only generates estimates. See [Nerdio Advisor](https://www.m365.fm/entity/nerdio-advisor/) for what it can and cannot model.
 
 ## Sources
 

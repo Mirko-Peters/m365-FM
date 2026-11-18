@@ -27,16 +27,16 @@ This article explains how the feature behaves and where the saving comes from. T
 
 ## What the feature does
 
-Learn describes [Start VM on Connect](/entity/avd-start-vm-on-connect/) as a way to reduce costs by letting end users power on the VMs used as [session hosts](/entity/avd-session-host/) only when they need them, so that VMs can be powered off when they are not needed. It is configured per host pool, for session hosts on Azure and on Azure Local, in personal or pooled host pools. The billing table below applies to Azure VMs.
+Learn describes [Start VM on Connect](https://www.m365.fm/entity/avd-start-vm-on-connect/) as a way to reduce costs by letting end users power on the VMs used as [session hosts](https://www.m365.fm/entity/avd-session-host/) only when they need them, so that VMs can be powered off when they are not needed. It is configured per host pool, for session hosts on Azure and on Azure Local, in personal or pooled host pools. The billing table below applies to Azure VMs.
 
 The trigger differs by pool type:
 
 | Host pool type | What a connection starts |
 |---|---|
-| [Personal](/entity/avd-personal-host-pool/) | An existing session host VM that is already assigned, or can be assigned, to the user |
-| [Pooled](/entity/avd-pooled-host-pool/) | A VM only when none is turned on. More VMs are turned on only when the first VM reaches the session limit |
+| [Personal](https://www.m365.fm/entity/avd-personal-host-pool/) | An existing session host VM that is already assigned, or can be assigned, to the user |
+| [Pooled](https://www.m365.fm/entity/avd-pooled-host-pool/) | A VM only when none is turned on. More VMs are turned on only when the first VM reaches the session limit |
 
-Learn's FAQ gives an example for pooled pools. A host pool has three VMs with a maximum session limit of five per machine. If two VMs are on, Start VM on Connect does not start the third until both reach five users. The feature therefore waits for the running VMs to fill up before it adds another. Check your [maximum session limit](/entity/avd-maximum-session-limit/): a low value starts VMs sooner, a high value later.
+Learn's FAQ gives an example for pooled pools. A host pool has three VMs with a maximum session limit of five per machine. If two VMs are on, Start VM on Connect does not start the third until both reach five users. The feature therefore waits for the running VMs to fill up before it adds another. Check your [maximum session limit](https://www.m365.fm/entity/avd-maximum-session-limit/): a low value starts VMs sooner, a high value later.
 
 Two timing rules apply:
 
@@ -64,7 +64,7 @@ An illustration, using no prices: suppose a personal desktop is needed only betw
 
 Start VM on Connect needs a partner for the shutdown side:
 
-1. **Autoscale.** Learn's FAQ names autoscale as the way to deallocate VMs for pooled and personal host pools. See [power management autoscaling](/entity/avd-power-management-autoscaling/) and the article on the four autoscale phases.
+1. **Autoscale.** Learn's FAQ names autoscale as the way to deallocate VMs for pooled and personal host pools. See [power management autoscaling](https://www.m365.fm/entity/avd-power-management-autoscaling/) and the article on the four autoscale phases.
 2. **A disconnected-session policy plus automation.** The FAQ describes setting **Set time limit for disconnected sessions** to **Enabled** and **End a disconnected session** on the VM in the local Group Policy settings (**Computer Configuration > Administrative Templates > Windows Components > Remote Desktop Services > Remote Desktop Session Host > Session Time Limits**). The limit should be greater than five minutes, because a low value can end sessions when a network drops. Signing users out still does not deallocate VMs, so you also need Azure automation scripts.
 
 For personal desktops with autoscale, Learn says that if you choose not to have personal desktops started during ramp-up, autoscale will not start them, and you must either enable Start VM on Connect or start them yourself. The scaling plan article says Learn highly recommends enabling it in that case. Learn's autoscale FAQ adds that a VM turned on by autoscale, by Start VM on Connect or by an admin that nobody signs into is deallocated after a period of inactivity, which the page does not define. Learn's scaling plan article lists the Start VM on Connect option only in the schedules for personal host pools, so test the combination with a pooled scaling plan before you rely on it.
@@ -91,7 +91,7 @@ The example shows where users feel the feature: a login burst can meet the error
 
 - It does not start a VM when someone connects directly to it by IP address or name, according to Learn.
 - It does not apply to a host pool that does not exist yet. Learn says you can only configure it on existing host pools and not while you create one.
-- It does not remove the need to check health. If a VM does not power on, Learn says to check the health of that VM first, then look at Azure Virtual Desktop logs in Log Analytics and at [Insights](/entity/avd-insights/) for suggestions.
+- It does not remove the need to check health. If a VM does not power on, Learn says to check the health of that VM first, then look at Azure Virtual Desktop logs in Log Analytics and at [Insights](https://www.m365.fm/entity/avd-insights/) for suggestions.
 
 ## How to check the effect
 

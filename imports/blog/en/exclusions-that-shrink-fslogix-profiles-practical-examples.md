@@ -7,8 +7,8 @@ author: mirko-p
 date: 2026-11-18
 topics: [fslogix-redirections-xml, fslogix]
 keypoints:
-  - "The tutorial on Learn is the real-world example: it excludes five Teams folders with Copy 0 (media-stack, the meeting-addin Cache, Logs, PerfLogs and WebStorage). The current Teams for VDI page covers only three of them and recommends no exclusions beyond its own tables, so test media-stack and meeting-addin Cache first. The reference page marks its own Contoso example as not for production."
-  - "ExcludeCommonFolders adds up folder values: Downloads (8), Music (32) and Pictures and Videos (64) give 104 (our arithmetic). Learn does not say what happens to files in these folders. Our reading of the container types page is that new files are lost at sign-out, so test with an existing profile and announce it."
+  - "Learn's tutorial excludes five Teams folders with Copy 0. The current Teams for VDI page covers only three and recommends no further exclusions, so test media-stack and meeting-addin Cache first."
+  - "ExcludeCommonFolders adds folder values: Downloads (8), Music (32) and Pictures and Videos (64) give 104. Our reading: new files there are lost at sign-out, so test with an existing profile."
   - "Copy 1 copies container data to the local folder at sign-in and discards new data at sign-out. Copy 3 also copies it back. Copy 2 is not to be used unless Microsoft support asks for it."
   - "A new exclusion does not shrink an existing container. Delete the container or script a cleanup. Verify with the Profile log, which prints Redirections.xml copy success, and with frx list-redirects."
   - "The FAQ gives no recommended values, and many statements slow every file system request. Start with documented, large, disposable folders and test with a pilot group."
@@ -21,7 +21,7 @@ faq:
     a: "The FAQ says there is no technical limitation, but less is more. It warns that numerous exclude or include statements cause a performance issue, because each file system request is checked against the list, and that redirections for small folders do not help the user experience."
 ---
 
-Exclusions shrink an FSLogix profile when you point `redirections.xml` at folders that are large, rebuildable and documented as safe to drop. The tutorial on Learn builds one real-world file, for Teams, and the reference page adds a bitmask for well-known folders; everything else is your own decision and needs a pilot. This article focuses on patterns, trade-offs and a pilot routine. The field rules for the file are in [the explainer article](/community/u/mirko-p/blog/redirections-xml-in-fslogix-keeping-bulky-data-out-of-the-profile/), and the [FSLogix redirections.xml entity page](/entity/fslogix-redirections-xml/) gives a short overview.
+Exclusions shrink an FSLogix profile when you point `redirections.xml` at folders that are large, rebuildable and documented as safe to drop. The tutorial on Learn builds one real-world file, for Teams, and the reference page adds a bitmask for well-known folders; everything else is your own decision and needs a pilot. This article focuses on patterns, trade-offs and a pilot routine. The field rules for the file are in [the explainer article](https://www.m365.fm/community/u/mirko-p/blog/redirections-xml-in-fslogix-keeping-bulky-data-out-of-the-profile/), and the [FSLogix redirections.xml entity page](https://www.m365.fm/entity/fslogix-redirections-xml/) gives a short overview.
 
 Two rules from Microsoft frame all of it. The FAQ says FSLogix provides no recommended values for the file and relies on application owners to document what can be excluded. And Learn's tutorial warns that non-Microsoft redirections.xml files can exclude items that affect the operating system or applications, so exclude and include statements should be used sparingly.
 
@@ -55,7 +55,7 @@ The [tutorial](https://learn.microsoft.com/en-us/fslogix/tutorial-redirections-x
 
 The same page recommends three more exclusions that the tutorial file lacks. One is `GPUCache` under `EBWebView\WV2Profile_tfw`. The other two are `TempState` folders of the Start menu packages: `AppData\Local\Packages\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\TempState`, and for Windows Server 2019 only the matching `Microsoft.Windows.ShellExperienceHost_cw5n1h2txyewy\TempState`. It rates both as no impact and recommends them to solve a missing Teams icon in the Start menu. Service Worker, IndexedDB and Cache appear as trade-offs that need testing.
 
-The page also states that, other than the folders in its two tables, Microsoft does not recommend excluding additional directories. The tutorial's first two paths, `media-stack` and `meeting-addin\Cache`, are in neither table. Our reading: test them in the pilot or leave them out. The [new Teams article in this series](/community/u/mirko-p/blog/new-teams-on-avd-with-fslogix-what-to-know/) covers the folders from the Teams page's two tables.
+The page also states that, other than the folders in its two tables, Microsoft does not recommend excluding additional directories. The tutorial's first two paths, `media-stack` and `meeting-addin\Cache`, are in neither table. Our reading: test them in the pilot or leave them out. The [new Teams article in this series](https://www.m365.fm/community/u/mirko-p/blog/new-teams-on-avd-with-fslogix-what-to-know/) covers the folders from the Teams page's two tables.
 
 Does this shrink the container? Three of the five paths sit under `LocalCache`. The Teams page says the package's folder structure, including `LocalCache`, must exist as directories and roam with the profile, and the FSLogix release notes list a fix in 2210 hotfix 4 for MSIX folders that shouldn't be backed up: they were removed at sign-out instead of only their contents. The AppX troubleshooting page says the contents of `AppData\Local\Packages\*\LocalCache` are deleted at sign-out regardless of any redirections.xml configuration. The pages do not say how these fit together. Our reading, not a Learn statement: for Logs, PerfLogs and WebStorage the exclusion may save little container space, because the contents are discarded at sign-out anyway. Compare container sizes with and without the file before you count on a saving.
 
@@ -122,7 +122,7 @@ A new exclusion does not touch what a container already holds. The FAQ says to d
 | Include for a folder that may not exist yet | The include may not work as intended | Do not include data that may not exist yet, as the FAQ tip says |
 | Expecting a smaller container after rollout | Size unchanged or larger | Delete the container or clean up by script |
 
-For the product overview, see [FSLogix](/entity/fslogix/).
+For the product overview, see [FSLogix](https://www.m365.fm/entity/fslogix/).
 
 ## Sources
 

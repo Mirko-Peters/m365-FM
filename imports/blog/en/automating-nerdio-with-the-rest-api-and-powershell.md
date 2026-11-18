@@ -1,13 +1,13 @@
 ---
 title: "Automating Nerdio with the REST API and PowerShell"
-summary: "Nerdio Manager for Enterprise can be automated from outside through its REST API and the NerdioManagerPowerShell module, and from inside through scripted actions that run on session hosts or in Azure Automation. This article compares the three routes, walks through enabling the API and connecting, and lists the pitfalls Nerdio documents."
+summary: "Nerdio Manager for Enterprise can be automated through its REST API and the NerdioManagerPowerShell module, and from inside through scripted actions. This article compares the routes and lists documented pitfalls."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [nerdio-manager-for-enterprise, nerdio-scripted-actions]
 keypoints:
-  - "Three routes: the REST API and the PowerShell module call Nerdio Manager from outside; scripted actions run code on session hosts (Windows scripts) or in Azure Automation (runbooks) from inside Nerdio."
+  - "Three routes: the REST API and PowerShell module call Nerdio Manager from outside; scripted actions run on session hosts (Windows scripts) or in Azure Automation (runbooks)."
   - "The REST API is off by default. System > Settings > Integrations > REST API runs a three-step wizard (Run, Grant, Generate) that creates an application under nerdio-nmw-app and a client secret."
   - "The NerdioManagerPowerShell module wraps the REST API, authenticates with Connect-NME and is in public preview; Nerdio's help pages state it needs the Premium edition."
   - "Nerdio lists 15 deprecated REST endpoints (all dated 2024-04-25) and several deprecated properties; scripted-action schedule endpoints are among them."
@@ -27,16 +27,16 @@ Nerdio Manager for Enterprise can be automated in two directions: from outside, 
 
 | | REST API | PowerShell module | Scripted actions |
 |---|---|---|---|
-| Direction | Your tool calls [Nerdio Manager](/entity/nerdio-manager-for-enterprise/) | Same, wrapped in cmdlets | Nerdio runs your code |
+| Direction | Your tool calls [Nerdio Manager](https://www.m365.fm/entity/nerdio-manager-for-enterprise/) | Same, wrapped in cmdlets | Nerdio runs your code |
 | Typical use | ITSM or onboarding workflows | Admin scripts, reports, exports | Configure a VM, or change Azure resources |
 | Auth | Entra application, client secret | `Connect-NME` with the same credentials | Windows scripts: system context on the VM by default; runbooks: Nerdio Manager service principal |
 | Status in docs | Documented; Swagger per install | Public preview | Documented; many built-in scripts |
 
-[Nerdio](/entity/nerdio/)'s REST API overview names the use cases: provisioning a new employee's [Azure Virtual Desktop](/entity/azure-virtual-desktop/) desktop in an onboarding workflow, removing access in an offboarding workflow, applying Windows updates to desktop images from an ITSM trigger, exporting logs to a data store, and a self-service portal for session management. Anything that must change a VM or an Azure resource as part of a Nerdio task fits a [scripted action](/entity/nerdio-scripted-actions/).
+[Nerdio](https://www.m365.fm/entity/nerdio/)'s REST API overview names the use cases: provisioning a new employee's [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) desktop in an onboarding workflow, removing access in an offboarding workflow, applying Windows updates to desktop images from an ITSM trigger, exporting logs to a data store, and a self-service portal for session management. Anything that must change a VM or an Azure resource as part of a Nerdio task fits a [scripted action](https://www.m365.fm/entity/nerdio-scripted-actions/).
 
 ## Edition and status
 
-Nerdio's help pages for the [PowerShell](/entity/powershell/) module state "This feature is only available in the Nerdio Manager Premium edition" and call the module a public preview. For the [REST API](/entity/rest-api/), Nerdio's April 2022 Premium announcement lists it as a Premium feature, and a February 2024 Premium features PDF places the REST API and the module under its Premium headings. Script repository integration is also marked Premium-only. The REST API pages themselves do not state an edition, so confirm yours before planning around it.
+Nerdio's help pages for the [PowerShell](https://www.m365.fm/entity/powershell/) module state "This feature is only available in the Nerdio Manager Premium edition" and call the module a public preview. For the [REST API](https://www.m365.fm/entity/rest-api/), Nerdio's April 2022 Premium announcement lists it as a Premium feature, and a February 2024 Premium features PDF places the REST API and the module under its Premium headings. Script repository integration is also marked Premium-only. The REST API pages themselves do not state an edition, so confirm yours before planning around it.
 
 The API keeps changing. Nerdio's release notes list full create, read, update and delete endpoints for scripted action profiles and groups first in the 8.1.0 entry (Public Preview, 21 July 2026), and multiple REST API client secrets plus more manageable areas (RDP profiles, VM profiles, linked resources) first in the 8.2.0 entry (Public Preview, 17 September 2026). GA releases follow both: 8.1.1 on 4 August 2026, and 8.2.1 on 29 September 2026. The notes do not repeat the earlier entries; our reading is that the GA releases carry those features. The notes name 8.2.3 GA of 13 November 2026 as the current release, so compare your installed version with these entries.
 
@@ -90,14 +90,14 @@ Practical points from Nerdio's pages:
 - **Timeout:** Windows scripts run as custom script extensions, which have a 90-minute timeout set by Azure. Inline Script mode for runbooks may fail with scripts above 500 KB; Nerdio points to a hybrid worker for those. Runbooks in Individual mode also have an Execution Timeout field, in minutes.
 - **Variables:** built-ins include `$HostPoolName`, `$AzureSubscriptionId`, `$AzureResourceGroupName`, `$AzureRegionName` and `$AzureVMName`. A runbook declares its own in a `<# Variables: ... #>` block and Nerdio prompts for them on **Run now**.
 - **Secrets:** global secure variables live in Azure Key Vault, are managed under **System > Settings > Nerdio** (Secure variables), take names of 1 to 20 alphanumeric characters and are read as `$SecureVars.Variable_Name`. Leaving "Pass variable to specified scripted actions only" cleared sends the variable to every scripted action.
-- **Source control:** the Premium script repository integration links GitHub, GitLab or [Azure DevOps](/entity/azure-devops/) and, with auto-synchronization on, syncs hourly.
+- **Source control:** the Premium script repository integration links GitHub, GitLab or [Azure DevOps](https://www.m365.fm/entity/azure-devops/) and, with auto-synchronization on, syncs hourly.
 
 Nerdio's Windows scripted actions page adds that, as of version 5.3, the REST API takes a `ScriptedActions` list; it says `ScriptedActionsIds` should still work but cannot pass parameters. Its deprecation table, however, lists `ScriptedActionsIds` as deprecated on 2023-07-03 and removed in 6.3. Treat your Swagger page as the answer.
 
 ## Pitfalls Nerdio documents
 
 - **Deprecations:** 15 endpoints are deprecated, all dated 2024-04-25, including `scripted-actions/{id}/schedule`, `schedule/reimage` and `schedule/script-execution` paths. The page names replacements only for two renames (TimeRangeWithTimeZone to TimeRange, TimeIntervalWithTimeZone to TimeInterval).
-- **Secret handling:** the secret cannot be retrieved after you leave the credentials page. Store it in a secure location such as [Azure Key Vault](/entity/azure-key-vault/) and regenerate it if lost.
+- **Secret handling:** the secret cannot be retrieved after you leave the credentials page. Store it in a secure location such as [Azure Key Vault](https://www.m365.fm/entity/azure-key-vault/) and regenerate it if lost.
 - **Execution policy:** the manual test runs `Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser` before the script. Nerdio's page gives no warning or revert step; our recommendation is to keep that change to the test account and set the policy back afterwards.
 - **AADSTS90014:** the module troubleshooting page attributes this error on connect to a missing `-ApiScope` switch or a stray character, such as a trailing space after a line-continuation backtick.
 - **"Complete" is not always success:** a script can show Complete although it failed. Nerdio suggests opening the Automation account and matching the runbook log by timestamp, and making error-producing commands exit the script so the job shows Fail.
@@ -110,12 +110,12 @@ Use the REST API when another system owns the trigger and you need a documented,
 
 ## Related
 
-- [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/)
-- [Nerdio scripted actions](/entity/nerdio-scripted-actions/)
-- [REST API](/entity/rest-api/)
-- [PowerShell](/entity/powershell/)
-- [Azure Automation](/entity/azure-automation/)
-- [Microsoft Entra ID](/entity/entra-id/)
+- [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/)
+- [Nerdio scripted actions](https://www.m365.fm/entity/nerdio-scripted-actions/)
+- [REST API](https://www.m365.fm/entity/rest-api/)
+- [PowerShell](https://www.m365.fm/entity/powershell/)
+- [Azure Automation](https://www.m365.fm/entity/azure-automation/)
+- [Microsoft Entra ID](https://www.m365.fm/entity/entra-id/)
 
 ## Sources
 

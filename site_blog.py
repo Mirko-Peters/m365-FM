@@ -41,6 +41,17 @@ def disclosures(p, body_html, lang, skip=()):
     return list(dict.fromkeys(d for i in ids if i in ENTS and i not in skip for d in [SENT.disclosure_of(ENTS[i], lang)] if d))
 
 
+def faq_in_html(p):
+    """Steht die FAQ des Beitrags schon in seinem HTML (uebernommene Podpage- oder Altbeitraege)? Content-Pakete (imports/blog, site_content_blog)
+    bringen HTML ohne FAQ mit: dann zeigt die Seite die FAQ sichtbar, sonst stuende sie nur im FAQPage-Schema (Review #509)."""
+    import html as _h
+    qs = [str(x.get("q") or "").strip() for x in (p.get("faq") or []) if isinstance(x, dict) and str(x.get("q") or "").strip()]
+    if not qs: return True
+    text = _h.unescape(re.sub(r"<[^>]+>", " ", p.get("html") or ""))
+    norm = lambda s: re.sub(r"\s+", " ", s).strip().lower()
+    return norm(qs[0]) in norm(text)
+
+
 def fetch_posts(api):
     items = (_fetch_json(f"{api}/api/blog/export", timeout=120) or {}).get("items", [])
     if any(p.get("has_html") for p in items):   # uebernommene Beitraege: HTML seitenweise nachladen
@@ -194,7 +205,7 @@ def build(g, posts, people, api):
             topics, _spx = SPM.split_topics([t for t in p.get("topics", []) if t in ENTS], [x for x in _spr_ex if x in ENTS])
             tl = (f'<section class="bl-ents"><h2>{esc(T(lang, "Entities in this article", "Entitäten in diesem Artikel"))}</h2>{LC.intro(lang, "post.topics")}<p>' + "".join(f'<a class="mb-tag" href="{links_l[t][1]}">{EN.html_name(ENTS[t], lang)}</a> ' + (f'<small class="mut">{esc(SPM.badge(lang, _spr))}</small> ' if t in _spx else '') for t in topics) + '</p></section>') if topics else ""
             vote = "" if p.get("legacy") else f'<p><button type="button" class="bl-vote" data-s="{esc(p["slug"])}" aria-pressed="false" aria-label="Upvote">▲ <span class="n">{p.get("votes", 0)}</span></button></p>'
-            if p.get("html"): _fq = ""   # FAQ steht schon im Text des Beitrags; nur das Schema (FAQPage) bleibt
+            if p.get("html") and faq_in_html(p): _fq = ""   # FAQ steht schon im Text des Beitrags; nur das Schema (FAQPage) bleibt
             cos = [c for c in (p.get("coauthors") or []) if c.get("handle") in pb and c["handle"] != p["handle"]]
             co_html = "".join(f' {esc(T(lang, "and", "und"))} <a href="{croot}u/{c["handle"]}/" rel="author">{esc(pb[c["handle"]]["name"])}</a>' for c in cos) if len(cos) == 1 else "".join(f', <a href="{croot}u/{c["handle"]}/" rel="author">{esc(pb[c["handle"]]["name"])}</a>' for c in cos)
             upd_html = f' · {esc(T(lang, "Updated", "Aktualisiert"))} <time datetime="{iso(p["updated"])}">{iso(p["updated"])}</time>' if p.get("updated") and iso(p["updated"]) != iso(p["published"]) else ""
@@ -217,7 +228,7 @@ def build(g, posts, people, api):
                        {"@type": "ListItem", "position": 3, "name": "Blog", "item": au + "blog/"}, {"@type": "ListItem", "position": 4, "name": p["title"], "item": u}]}]
             _tbc = TC.breadcrumb(BASE, lang, topics, ENTS, p["title"], u, title=_en_title.get((p["handle"], p["slug"])) if is_translation(p) else None)   # zweite Spur nach dem Hauptthema (nur JSON-LD); Wochenzusammenfassungen (Thema m365fm) bleiben ohne
             if _tbc: ld.append(_tbc)
-            if _spr:
+            if SPM.ld(_spr):   # neutraler Partner (label "partner"): kein sponsor
                 ld[0]["sponsor"] = SPM.ld(_spr)   # T37 Sponsor: BlogPosting.sponsor
             b = SPM.mark(b, _spr + [r for r in _running if r not in _spr], "post")   # Links zur Website eines laufenden Sponsors tragen rel="sponsored", auch ohne Eintrag unter "posts" (Cognillo-Reihe); ohne Sponsoring unveraendert
             if not is_translation(p):

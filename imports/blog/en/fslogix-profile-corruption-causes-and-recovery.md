@@ -1,16 +1,16 @@
 ---
 title: "FSLogix profile corruption: causes and recovery"
-summary: "A failed attach, a temporary profile or a hung sign-out can point to a damaged FSLogix container, but look-alikes such as locks, permissions, full disks or a changed naming setting are often the real cause and should be ruled out first. This article sorts the documented causes, shows how to tell them apart from the logs and status codes, and compares recovery options built from the tools Learn documents."
+summary: "A failed attach, temporary profile or hung sign-out can point to a damaged FSLogix container, but locks, permissions, full disks or a changed naming setting are often the cause. Sorts causes, logs and recovery options."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [fslogix-profile-container]
 keypoints:
-  - "Triage first: locks, permissions, a full container or share, and a changed folder-naming setting all look like corruption but have documented fixes that leave the VHD(x) intact. Learn says the user's data is not lost after a naming change."
-  - "Learn ties container corruption to antivirus scanning, the older VHD format, deleting the wrong data inside a container and, in Cloud Cache failover designs, ungraceful disaster events. A misconfigured redirections.xml is documented on the same page as a source of unexpected results. Abrupt sessions, a sector size mismatch and unsupported concurrent access are documented as lock, sign-in or crash problems, not as damage."
-  - "The FSLogix status and reason codes in the Profile log and under HKLM\\Software\\FSLogix\\Profiles\\Sessions\\<SID> separate open, attach, initialize and format failures (codes 11, 12, 15, 17); locks show up in the Windows error code and text on the same log lines."
-  - "Azure Backup restore and the frx utility are documented, but the Learn pages listed under Sources give no recovery procedure for a damaged VHD(x). The options below are our combination of those tools, so work on copies."
+  - "Triage first: locks, permissions, a full container or share and a changed naming setting look like corruption but have fixes that keep the VHD(x) intact."
+  - "Learn ties corruption to antivirus scanning, the older VHD format, deleting data inside a container and ungraceful Cloud Cache failovers. Abrupt sessions are documented as lock problems, not damage."
+  - "FSLogix status and reason codes in the Profile log and the Sessions registry key separate open, attach, initialize and format failures (codes 11, 12, 15, 17); locks show in the Windows error code."
+  - "Azure Backup restore and frx are documented, but Learn gives no recovery procedure for a damaged VHD(x). The options here are our combination of those tools, so work on copies."
   - "Prevention is mostly configuration: VHDX, the antivirus exclusion list, a simple redirections.xml, monitored capacity, a current FSLogix version and a tested backup."
 faq:
   - q: "Does FSLogix repair a corrupted VHDX automatically?"
@@ -27,7 +27,7 @@ One limit up front. Learn's page on container corruption covers antivirus scanni
 
 ## Step 1: Rule out the look-alikes
 
-These causes, listed on Learn's troubleshooting pages, give the same symptom as a damaged [profile container](/entity/fslogix-profile-container/):
+These causes, listed on Learn's troubleshooting pages, give the same symptom as a damaged [profile container](https://www.m365.fm/entity/fslogix-profile-container/):
 
 | Symptom in the log or on screen | Cause documented by Learn | Fix documented by Learn |
 |---|---|---|
@@ -72,7 +72,7 @@ Learn's page on container corruption or missing data says antivirus products are
 
 **Product bugs.** The known issues page lists 25.02 defects, among them containers that did not detach and a Recycle Bin corrupted message; the release notes list fixes in 25.04. FSLogix 26.08 (3.26.826.17182) fixed a locked or unresponsive container that could block all sign-ins and sign-outs on a host until reboot, and a stuck storage provider that could hang sign-out and leave containers attached. Learn says customers are required to install and use the latest version.
 
-**Cloud Cache.** If a read cannot be hydrated from any remote provider, Learn warns of a session hang or a system crash. See [FSLogix Cloud Cache](/entity/fslogix-cloud-cache/).
+**Cloud Cache.** If a read cannot be hydrated from any remote provider, Learn warns of a session hang or a system crash. See [FSLogix Cloud Cache](https://www.m365.fm/entity/fslogix-cloud-cache/).
 
 ## Step 4: Recover, from least to most invasive
 
@@ -81,7 +81,7 @@ This order combines documented tools with ordinary file handling. Our own steps 
 1. **Stop users and sessions touching the file.** FSLogix holds an exclusive lock while the user is connected, so confirm the user is signed out everywhere and clear orphaned handles as described in Step 1.
 2. **Work on a copy** (own recommendation, not from Learn). Copy the VHD(x) to a separate location before you try anything.
 3. **Inspect with the frx utility.** From `C:\Program Files\FSLogix\Apps`, `frx edit-profile -filename <path>` attaches the file and opens Explorer and the Registry Editor on its contents. `begin-edit-profile` and `end-edit-profile` attach and detach the VHD(x) and its registry hive, the latter using the cookie that the former prints. They show whether the data can be read.
-4. **Restore from backup.** For [Azure Files](/entity/azure-files/) shares protected by [Azure Backup](/entity/azure-backup/), the portal offers full-share and item-level recovery, to the original or an alternate location, with skip or overwrite on conflict. Vaulted backup supports full-share recovery only. A full-share restore to the original location needs a recovery point with the Snapshot or Snapshot and Vault-tier recovery tier; in our reading, a vault-only recovery point therefore needs an alternate location, where the target share needs 20 percent more free space than the restored data. Because overwrite on a full-share restore touches every container, in our reading restore to an alternate location and copy back the one file.
+4. **Restore from backup.** For [Azure Files](https://www.m365.fm/entity/azure-files/) shares protected by [Azure Backup](https://www.m365.fm/entity/azure-backup/), the portal offers full-share and item-level recovery, to the original or an alternate location, with skip or overwrite on conflict. Vaulted backup supports full-share recovery only. A full-share restore to the original location needs a recovery point with the Snapshot or Snapshot and Vault-tier recovery tier; in our reading, a vault-only recovery point therefore needs an alternate location, where the target share needs 20 percent more free space than the restored data. Because overwrite on a full-share restore touches every container, in our reading restore to an alternate location and copy back the one file.
 5. **Move the data into a new container.** `frx migrate-vhd -src <old> -dest <new>` creates and formats a VHD(x) and mirrors the source; it defaults to 30 GB and dynamic sizing. `frx copyto-vhd` copies a folder into a VHD(x); `frx copy-profile` copies a local profile and needs `-size-mbs` above 5000 for profiles over 5 GB. Learn does not say how they behave on a damaged source, so test first.
 6. **Let FSLogix create a fresh container** (own recommendation, not from Learn). With the user signed out and a copy kept, move or rename the damaged VHD(x) out of the user's folder. Learn's `VHDLocations` description says that if no container is found, one is created in the first listed location, and the naming-setting page describes the same for a changed naming setting. Neither presents this as a recovery step for a damaged container, so test with one user first.
 

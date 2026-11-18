@@ -1,16 +1,16 @@
 ---
 title: "Reservations or savings plans for AVD: which to buy"
-summary: "Buy a reservation for session host compute that stays in one VM family and region every hour, and a compute savings plan where size, family or region may change. For session hosts, both discount only the VM compute part and both lose unused hours, so size them to the hosts you always run, not to peak."
+summary: "Buy a reservation for session host compute that stays in one VM family and region every hour, and a savings plan where size, family or region may change. Both lose unused hours, so size to always-on hosts."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [azure-reservations, azure-savings-plans]
 keypoints:
-  - "A reservation commits to a specific instance type or family in a specific region. A compute savings plan commits to an hourly spend across eligible compute services in all regions. Learn says reservations offer deeper discounts but suit stable, predictable usage, while savings plans suit changing workloads."
+  - "A reservation commits to an instance type or family in one region; a savings plan commits to hourly spend across regions. Reservations discount more but suit stable usage."
   - "Both are use-it-or-lose-it each hour. For session hosts, a VM reservation covers only the compute part of VM usage, and a compute savings plan does not cover software, networking or storage."
-  - "Autoscale leaves hours with no running host. In a worked example with invented rates, reserving the always-on floor of 2 hosts pays off, while reserving 2 hosts in a pool that scales to zero overnight loses money."
-  - "Savings plans cannot be cancelled, refunded or exchanged. Reservations can be refunded up to USD 50,000 in a 12-month rolling window, and Learn says reservations bought after 1 February 2027 lose exchange rights for services that savings plans support."
+  - "Autoscale leaves hours with no running host. In a worked example with invented rates, reserving the always-on floor of 2 hosts pays off; reserving 2 in a pool that scales to zero loses money."
+  - "Savings plans cannot be cancelled, refunded or exchanged. Reservations can be refunded up to USD 50,000 per 12 months; those bought after 1 February 2027 lose some exchange rights."
   - "Since 1 July 2026 several older VM series, including Dsv3 and Ev3, can no longer be bought or renewed as reserved instances. Learn points to a compute savings plan as the alternative."
 faq:
   - q: "Can I use a reservation and a savings plan for the same AVD environment?"
@@ -23,7 +23,7 @@ faq:
 
 Buy a reservation for compute that will run in the same VM family and region every hour of the term, and a compute savings plan for compute that may change size, family or region. For session hosts the decision usually comes down to one question: how many hours per week does a host run no matter what autoscale does? Commit to that floor, not to the peak.
 
-This article compares [Azure Reservations](/entity/azure-reservations/) and [Azure savings plans](/entity/azure-savings-plans/) for [Azure Virtual Desktop](/entity/azure-virtual-desktop/) session hosts, based on Microsoft Learn.
+This article compares [Azure Reservations](https://www.m365.fm/entity/azure-reservations/) and [Azure savings plans](https://www.m365.fm/entity/azure-savings-plans/) for [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) session hosts, based on Microsoft Learn.
 
 ## What each one commits you to
 
@@ -52,9 +52,9 @@ A deallocated host frees its hours for other matching VMs in the same scope, so 
 
 ## What neither one covers
 
-- **Windows software.** A reserved instance covers infrastructure, not software costs. Compute savings plans likewise exclude software, and Learn notes that [Azure Hybrid Benefit](/entity/azure-hybrid-benefit/) might cover licensing. The reservation software-cost page lists Windows Server meters by core count and does not mention multi-session images or Azure Virtual Desktop, so check your own usage data for software meters on your session hosts.
+- **Windows software.** A reserved instance covers infrastructure, not software costs. Compute savings plans likewise exclude software, and Learn notes that [Azure Hybrid Benefit](https://www.m365.fm/entity/azure-hybrid-benefit/) might cover licensing. The reservation software-cost page lists Windows Server meters by core count and does not mention multi-session images or Azure Virtual Desktop, so check your own usage data for software meters on your session hosts.
 - **Storage and networking.** Learn says a VM reservation covers only the compute part of VM usage, and compute savings plans do not cover networking or storage.
-- **Spot VMs.** Learn says Azure does not offer reservations for [Spot VMs](/entity/azure-spot-virtual-machines/). Its Spot VM article does not say whether savings plans apply, so confirm that first.
+- **Spot VMs.** Learn says Azure does not offer reservations for [Spot VMs](https://www.m365.fm/entity/azure-spot-virtual-machines/). Its Spot VM article does not say whether savings plans apply, so confirm that first.
 - **Capacity.** Learn says reserved VM instances provide a billing discount only and do not guarantee compute capacity. Microsoft's savings plan pricing page says savings plans "do not infer capacity guarantees".
 - **Older VM series.** Learn says that from 1 July 2026 one-year reserved instances for Av2, Amv2, Bv1, D, Ds, Dv2, Dsv2, F, Fs, Fsv2, G, Gs, Ls and Lsv2, and one- and three-year reserved instances for Dv3, Dsv3, Ev3 and Esv3, can no longer be purchased or renewed. Existing ones run to the end of their term. If your host pools run on one of these series, the savings plan is Learn's suggested alternative, or you can move to a newer size.
 
@@ -90,7 +90,7 @@ A savings plan follows the same logic with a different break-even. At an invente
 ## A purchase sequence for session hosts
 
 1. **Right-size and tune autoscale first.** Learn's optimisation sequence says discounts reduce rates, not waste.
-2. **Measure the floor.** Using [Microsoft Cost Management](/entity/microsoft-cost-management/) usage data, find the number of VMs of one size that run in every hour of the week.
+2. **Measure the floor.** Using [Microsoft Cost Management](https://www.m365.fm/entity/microsoft-cost-management/) usage data, find the number of VMs of one size that run in every hour of the week.
 3. **Reserve a stable floor.** If it sits in one family and region, buy a reservation for that quantity, scoped to the subscription or shared scope that holds the pool.
 4. **Use a savings plan where the shape moves.** Cover floors that change size, family or region, or are shared with other eligible compute, with an hourly commitment sized to the discounted hourly spend you always incur.
 5. **Check recommendations, then override them.** Azure Advisor and the portal recommend commitments from a 30-day lookback for savings plans. Learn says regularly shut-down resources can yield no reservation recommendation, so compare the number with your own floor.

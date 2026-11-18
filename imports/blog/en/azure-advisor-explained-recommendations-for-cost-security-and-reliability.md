@@ -1,6 +1,6 @@
 ---
 title: "Azure Advisor explained: recommendations for cost, security and reliability"
-summary: "Azure Advisor analyzes resource configuration and usage telemetry and returns recommendations in five categories: reliability, security, performance, cost and operational excellence. This article explains how to read them, how the Advisor score is calculated, who may act on them and where the limits are for Azure Virtual Desktop environments."
+summary: "Azure Advisor analyzes resource configuration and usage telemetry and returns recommendations in five categories. This article explains how to read them, how the Advisor score works and the limits for Azure Virtual Desktop."
 status: review
 publish: false
 author: mirko-p
@@ -8,8 +8,8 @@ date: 2026-11-18
 topics: [azure-advisor, azure]
 keypoints:
   - "Advisor has five recommendation categories: reliability, security, performance, cost and operational excellence. The overall Advisor score is usually the average of the five category scores."
-  - "Reader access is enough to view recommendations. Postponing or dismissing one needs Contributor or better on the affected resource, and configuring Advisor needs Contributor or Owner on the subscription or resource group (one Learn page says subscription owner for some settings)."
-  - "Advisor also includes recommendations from Microsoft Defender for Cloud. Postponing and dismissing are not supported for security recommendations, and Advisor alerts for new recommendations do not support the security category."
+  - "Reader can view recommendations. Postponing or dismissing needs Contributor on the resource; configuring Advisor needs Contributor or Owner on the subscription or resource group."
+  - "Advisor includes Defender for Cloud recommendations, but security recommendations cannot be postponed or dismissed, and Advisor alerts do not support the security category."
   - "Cost savings and the cost score use pay-as-you-go retail rates, so Learn says listed savings may be higher than what you can achieve with discounts or commitments."
   - "Advisor is not specific to Azure Virtual Desktop. The reference pages list only a few recommendations that name it, so treat the rest as prompts to check against how your host pools are used."
 faq:
@@ -25,7 +25,7 @@ Azure Advisor is the Azure service that looks at your resource configuration and
 
 ## What Advisor analyzes and which categories it uses
 
-Learn describes [Azure Advisor](/entity/azure-advisor/) as a digital cloud assistant that analyzes resource configuration and usage telemetry and recommends solutions to improve cost effectiveness, performance, reliability and security. The overview lists more than 30 services and resource types it covers, among them Azure Virtual Machines, Azure Storage accounts and Azure SQL Server. It also includes recommendations from [Microsoft Defender for Cloud](/entity/microsoft-defender-for-cloud/), which may cover other resource types.
+Learn describes [Azure Advisor](https://www.m365.fm/entity/azure-advisor/) as a digital cloud assistant that analyzes resource configuration and usage telemetry and recommends solutions to improve cost effectiveness, performance, reliability and security. The overview lists more than 30 services and resource types it covers, among them Azure Virtual Machines, Azure Storage accounts and Azure SQL Server. It also includes recommendations from [Microsoft Defender for Cloud](https://www.m365.fm/entity/microsoft-defender-for-cloud/), which may cover other resource types.
 
 | Category | What Learn says it addresses |
 |---|---|
@@ -35,7 +35,7 @@ Learn describes [Azure Advisor](/entity/azure-advisor/) as a digital cloud assis
 | Cost | Optimizing and reducing overall Azure spending |
 | Operational excellence | Process and workflow efficiency, resource manageability and deployment practices |
 
-Learn's Advisor score training module says the five category scores each represent one of the five pillars of Azure Advisor and the [Azure Well-Architected Framework](/entity/azure-well-architected-framework/). For security, the overview page says only that Advisor also includes recommendations from Defender for Cloud. Learn's Defender page on reviewing recommendations is Defender documentation, not Advisor documentation: it says resources are assessed against security policies and compliance frameworks across Azure, AWS and GCP, that individual recommendations in a new format are marked Preview and do not yet affect Secure Score, and that risk prioritization needs Defender Cloud Security Posture Management.
+Learn's Advisor score training module says the five category scores each represent one of the five pillars of Azure Advisor and the [Azure Well-Architected Framework](https://www.m365.fm/entity/azure-well-architected-framework/). For security, the overview page says only that Advisor also includes recommendations from Defender for Cloud. Learn's Defender page on reviewing recommendations is Defender documentation, not Advisor documentation: it says resources are assessed against security policies and compliance frameworks across Azure, AWS and GCP, that individual recommendations in a new format are marked Preview and do not yet affect Secure Score, and that risk prioritization needs Defender Cloud Security Posture Management.
 
 ## Reading the dashboard
 
@@ -87,22 +87,22 @@ For notifications, Advisor stores an event in the Azure activity log whenever it
 1. In **Advisor**, open **Alerts** under **Monitoring** and select **New Advisor Alert**.
 2. Choose the subscription and, optionally, a resource group as scope.
 3. Configure by **Category and impact level** or by **Recommendation type**.
-4. Select an existing [Azure Monitor](/entity/azure-monitor/) action group or create one.
+4. Select an existing [Azure Monitor](https://www.m365.fm/entity/azure-monitor/) action group or create one.
 5. Name the rule and keep **Enable rule upon creation** set to **Yes**.
 
 The alerts page says these alerts support only High Availability, Performance and Cost recommendations, not Security. That page is older than most of the Advisor documentation, so confirm the options in the portal. For ticketing tools, the webhook payload identifies Advisor events by `eventSource` equal to `Recommendation` and `operationName` equal to `Microsoft.Advisor/recommendations/available/action`.
 
 ## What this means for Azure Virtual Desktop
 
-Advisor evaluates Azure resources, so [session hosts](/entity/avd-session-host/) show up as virtual machines. The cost reference page for the right-size recommendation does not mention [Azure Virtual Desktop](/entity/azure-virtual-desktop/). A few recommendations do name it:
+Advisor evaluates Azure resources, so [session hosts](https://www.m365.fm/entity/avd-session-host/) show up as virtual machines. The cost reference page for the right-size recommendation does not mention [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/). A few recommendations do name it:
 
-- **Performance**: "Set the max session limit setting for the depth first load balanced host pool" (High). With [depth-first load balancing](/entity/avd-depth-first-load-balancing/), a [maximum session limit](/entity/avd-maximum-session-limit/) that is too high sends all sessions to the same host. A second item advises deploying VMs to a region closer to users.
+- **Performance**: "Set the max session limit setting for the depth first load balanced host pool" (High). With [depth-first load balancing](https://www.m365.fm/entity/avd-depth-first-load-balancing/), a [maximum session limit](https://www.m365.fm/entity/avd-maximum-session-limit/) that is too high sends all sessions to the same host. A second item advises deploying VMs to a region closer to users.
 - **Reliability**: "Provide access to mandatory URLs missing for your Azure Virtual Desktop environment" (Medium, listed under Virtual Machines) and "Classic (Azure Virtual Desktop) is retiring" (High, listed under Subscriptions), which matters if classic resources remain.
 - **GPU retirements**: the reliability reference lists "Resize or migrate NVv3-series virtual machines" and the NVv4 equivalent (both High), pointing to NVadsA10_v5 and NVads_V710_v5. Learn's size pages say both series retired on 30 September 2026, so these apply to a GPU host pool that has not yet been migrated.
 
-In the same references, the operational excellence page has an **Azure Virtual Desktop** heading with no recommendations listed under it, and it recommends enabling VM Insights on virtual machines. AVD has its own dashboard, [Azure Virtual Desktop Insights](/entity/avd-insights/), which Advisor does not replace.
+In the same references, the operational excellence page has an **Azure Virtual Desktop** heading with no recommendations listed under it, and it recommends enabling VM Insights on virtual machines. AVD has its own dashboard, [Azure Virtual Desktop Insights](https://www.m365.fm/entity/avd-insights/), which Advisor does not replace.
 
-Three limits matter for a pooled environment. Advisor sees VM metrics, not user sessions, so a size change can conflict with a host pool designed around a session limit. Cost savings use retail rates and, according to Learn, do not account for reservations or savings plans, which can overstate the saving; see [Azure Reservations](/entity/azure-reservations/) and [Azure savings plans](/entity/azure-savings-plans/). And [autoscale](/entity/avd-power-management-autoscaling/) deallocates excess hosts during ramp-down, while the right-size page does not say how deallocated hours are treated. Use the dashboard to find candidates and your own host pool data to decide.
+Three limits matter for a pooled environment. Advisor sees VM metrics, not user sessions, so a size change can conflict with a host pool designed around a session limit. Cost savings use retail rates and, according to Learn, do not account for reservations or savings plans, which can overstate the saving; see [Azure Reservations](https://www.m365.fm/entity/azure-reservations/) and [Azure savings plans](https://www.m365.fm/entity/azure-savings-plans/). And [autoscale](https://www.m365.fm/entity/avd-power-management-autoscaling/) deallocates excess hosts during ramp-down, while the right-size page does not say how deallocated hours are treated. Use the dashboard to find candidates and your own host pool data to decide.
 
 ## A short routine for admins
 

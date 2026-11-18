@@ -1,17 +1,17 @@
 ---
 title: "FSLogix profile containers explained: roaming profiles for pooled desktops"
-summary: "An FSLogix profile container keeps a user's whole Windows profile in a VHD(x) file on SMB storage and attaches it at sign-in, so a pooled desktop user gets the same profile on any session host. This article explains how that works, what the container holds, and what you need in place before you turn it on."
+summary: "An FSLogix profile container keeps a user's whole Windows profile in a VHD(x) file on SMB storage and attaches it at sign-in, so pooled desktop users get the same profile on any host. Covers how it works and prerequisites."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [fslogix-profile-container, fslogix]
 keypoints:
-  - "A profile container is a VHD or VHDX file that holds the user's profile data. At sign-in it is attached to the session, so the profile appears in the system like a local profile. Learn contrasts this with copy-based roaming profile solutions."
+  - "A profile container is a VHD(x) file attached at sign-in, so the profile appears like a local profile. Learn contrasts this with copy-based roaming profile solutions."
   - "Pooled host pools are the reason it matters: Learn says a user may connect to a different session host at each sign-in, so profile data has to live outside the operating system."
-  - "Only two settings are required for profile containers, Enabled (default 0) and VHDLocations (no default). SizeInMBs defaults to 30000, IsDynamic to 1 and VolumeType to vhd, although Learn's how-to recommends vhdx."
+  - "Only Enabled and VHDLocations are required. SizeInMBs defaults to 30000, IsDynamic to 1 and VolumeType to vhd, although Learn's how-to recommends vhdx."
   - "Plan storage before you plan the container: Learn's rule of thumb is 10 IOPS per user at steady state and 50 per user at sign-in and sign-out, so 100 users need about 1,000 and 5,000 IOPS."
-  - "Prerequisites go beyond the setting: an eligible licence, SMB storage in the same region with correct permissions, antivirus exclusions for the FSLogix files and paths, and, if the share relies on Active Directory Kerberos, a setup that supports AES-SHA1."
+  - "Prerequisites: an eligible licence, SMB storage in the same region with correct permissions, antivirus exclusions and, with AD Kerberos shares, a setup that supports AES-SHA1."
 faq:
   - q: "Do I need a separate Office container with a profile container?"
     a: "No. Learn's how-to for configuring profile containers says the profile container includes all Microsoft 365 application data, so a separate ODFC container is not needed, and it recommends the single-container configuration. The container types article says that by default the profile container holds both profile and ODFC content in the same VHD(x). Learn lists reasons to use both, such as isolating loss to one container or sizing them differently; those are covered in the Office container articles of this series."
@@ -25,7 +25,7 @@ An FSLogix profile container stores a user's complete Windows profile in one VHD
 
 ## Why pooled desktops need a roaming profile
 
-By default Windows stores a profile locally and ties it to the operating system. Learn's [FSLogix profile containers in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/fslogix-profile-containers) article says a remote profile separates user data from the OS, which matters when the OS is upgraded, a session host is replaced, or a user connects to a different session host in a [pooled host pool](/entity/avd-pooled-host-pool/) at each sign-in. Microsoft recommends profile containers for managing and roaming profiles and personalization there. Learn highlights three key benefits. Performance: profile containers "can resolve" performance issues that historically blocked cached Exchange mode in Outlook. OneDrive: Learn says that without FSLogix profile containers, OneDrive isn't supported in non-persistent VDI environments. Additional folders: user profiles can be extended to include other folders.
+By default Windows stores a profile locally and ties it to the operating system. Learn's [FSLogix profile containers in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/fslogix-profile-containers) article says a remote profile separates user data from the OS, which matters when the OS is upgraded, a session host is replaced, or a user connects to a different session host in a [pooled host pool](https://www.m365.fm/entity/avd-pooled-host-pool/) at each sign-in. Microsoft recommends profile containers for managing and roaming profiles and personalization there. Learn highlights three key benefits. Performance: profile containers "can resolve" performance issues that historically blocked cached Exchange mode in Outlook. OneDrive: Learn says that without FSLogix profile containers, OneDrive isn't supported in non-persistent VDI environments. Additional folders: user profiles can be extended to include other folders.
 
 ## How it works: mount instead of copy
 
@@ -47,25 +47,25 @@ Two kinds of exclusion exist:
 - **Redirection-based.** Content that cannot live inside the VHD(x) goes to `C:\Users\local_%username%`, which is deleted at sign-out. Examples are `AppData\Roaming\Microsoft\Protect`, `AppData\Roaming\Microsoft\Credentials`, `AppData\Local\Microsoft\Credentials` and `AppData\Local\Microsoft\Office\16.0\OfficeFileCache`.
 - **Deletion-based.** Content not designed to roam between VMs is deleted at sign-out, for example non-roamable MSIX application data and non-roamable identity data such as `TokenBroker`, `OneAuth` and `IdentityCache`. Learn says roaming identity data through the `RoamIdentity` setting is not recommended.
 
-By default the profile container also holds the Office data (for example Outlook, OneDrive, Teams, SharePoint and OneNote), and Learn calls this the recommended configuration. Splitting it into an [Office container](/entity/fslogix-office-container/) is optional. Custom exclusions and bulky folders are the subject of the [redirections.xml](/entity/fslogix-redirections-xml/) article.
+By default the profile container also holds the Office data (for example Outlook, OneDrive, Teams, SharePoint and OneNote), and Learn calls this the recommended configuration. Splitting it into an [Office container](https://www.m365.fm/entity/fslogix-office-container/) is optional. Custom exclusions and bulky folders are the subject of the [redirections.xml](https://www.m365.fm/entity/fslogix-redirections-xml/) article.
 
 ## The FSLogix parts around the container
 
 | Component | What Learn says it does |
 |---|---|
-| [Profile container](/entity/fslogix-profile-container/) | Redirects the full user profile to a storage provider |
+| [Profile container](https://www.m365.fm/entity/fslogix-profile-container/) | Redirects the full user profile to a storage provider |
 | ODFC container | Redirects only the Office data portion; under most circumstances not used with a profile container at the same time |
-| [Cloud Cache](/entity/fslogix-cloud-cache/) | Works with profile containers for high availability and disaster recovery; an optional configuration, not a container type |
-| [Application masking](/entity/fslogix-app-masking/) | Rule sets that control access to applications, fonts, printers and more by user, group, IP address and other criteria |
+| [Cloud Cache](https://www.m365.fm/entity/fslogix-cloud-cache/) | Works with profile containers for high availability and disaster recovery; an optional configuration, not a container type |
+| [Application masking](https://www.m365.fm/entity/fslogix-app-masking/) | Rule sets that control access to applications, fonts, printers and more by user, group, IP address and other criteria |
 | Filter driver | Virtualizes and redirects the profile at file system level |
 
 ## What must be in place first
 
 **Licence.** Learn lists eligible licences, including Microsoft 365 E3/E5, A3/A5, F1/F3 and Business, Windows 10 Enterprise E3/E5, RDS CAL or SAL, and the Azure Virtual Desktop per-user access license. **Operating systems.** FSLogix runs on Microsoft-supported systems, including Windows 10 and 11 and Windows Server 2016 to 2025.
 
-**Storage.** The standard design mounts a container from an SMB share, such as `\\<storage-account-name>.file.core.windows.net\<share-name>`. Learn's [storage options](https://learn.microsoft.com/en-us/fslogix/concepts-container-storage-options) page gives a planning estimate of 10 steady-state IOPS and 50 sign-in/sign-out IOPS per user, so 100 users need about 1,000 and 5,000. It compares [Azure Files](/entity/azure-files/) (redundancy options LRS to GZRS, 10,000 open handles per file share), [Azure NetApp Files](/entity/azure-netapp-files/) (select regions) and self-managed Storage Spaces Direct, and says that outside Azure the most important factor is latency to your desktops. In Azure, Learn's AVD page says the storage account must be in the same region as the session hosts and that handle limits apply to root directories, directories and files. Permissions follow Learn's storage permissions article and have two levels. At share level, for Azure Files Learn recommends the default share-level permission Storage File Data SMB Share Contributor for all authenticated identities. To set the Windows ACLs, a user or group needs the Storage File Data SMB Share Elevated Contributor role, or you mount the share with the storage account key. At NTFS level, the recommended ACLs are CREATOR OWNER with Modify on subfolders and files only, an admin group with Full Control, and users with Modify on this folder only. Azure NetApp Files relies on Windows ACLs alone.
+**Storage.** The standard design mounts a container from an SMB share, such as `\\<storage-account-name>.file.core.windows.net\<share-name>`. Learn's [storage options](https://learn.microsoft.com/en-us/fslogix/concepts-container-storage-options) page gives a planning estimate of 10 steady-state IOPS and 50 sign-in/sign-out IOPS per user, so 100 users need about 1,000 and 5,000. It compares [Azure Files](https://www.m365.fm/entity/azure-files/) (redundancy options LRS to GZRS, 10,000 open handles per file share), [Azure NetApp Files](https://www.m365.fm/entity/azure-netapp-files/) (select regions) and self-managed Storage Spaces Direct, and says that outside Azure the most important factor is latency to your desktops. In Azure, Learn's AVD page says the storage account must be in the same region as the session hosts and that handle limits apply to root directories, directories and files. Permissions follow Learn's storage permissions article and have two levels. At share level, for Azure Files Learn recommends the default share-level permission Storage File Data SMB Share Contributor for all authenticated identities. To set the Windows ACLs, a user or group needs the Storage File Data SMB Share Elevated Contributor role, or you mount the share with the storage account key. At NTFS level, the recommended ACLs are CREATOR OWNER with Modify on subfolders and files only, an admin group with Full Control, and users with Modify on this folder only. Azure NetApp Files relies on Windows ACLs alone.
 
-**Identity.** The session host needs a way to authenticate to the share. [Microsoft Entra Kerberos](/entity/entra-kerberos-azure-files/) is one of the options; the setup article in this series walks through it.
+**Identity.** The session host needs a way to authenticate to the share. [Microsoft Entra Kerberos](https://www.m365.fm/entity/entra-kerberos-azure-files/) is one of the options; the setup article in this series walks through it.
 
 **Antivirus.** Learn's prerequisites list exclusions: `frxsvc.exe` and `frxccds.exe`, the drivers `frxdrv.sys`, `frxdrvvt.sys` and `frxccd.sys`, the FSLogix program and data folders, and `.VHD`/`.VHDX` files with their `.lock`, `.meta` and `.metadata` companions on the share. It says missing exclusions can produce delayed logons, mount timeouts, temporary profiles, sharing violations and logoff hangs.
 

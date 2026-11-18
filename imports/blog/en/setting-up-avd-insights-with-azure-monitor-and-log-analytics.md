@@ -1,16 +1,16 @@
 ---
 title: "Setting up AVD Insights with Azure Monitor and Log Analytics"
-summary: "Azure Virtual Desktop Insights needs three kinds of data collection: diagnostics from the environment, the recommended performance counters and the recommended Windows event logs from the session hosts. The Azure Monitor Agent with a data collection rule carries the last two. This article walks through the setup order, the configuration workbook steps and the checks that tell you it worked."
+summary: "Azure Virtual Desktop Insights needs diagnostics from the environment plus recommended performance counters and Windows event logs from the hosts, collected by the Azure Monitor Agent. Covers setup order and checks."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-insights, azure-virtual-desktop]
 keypoints:
-  - "Setup has two halves: resource diagnostic settings on the host pool and the Azure Virtual Desktop workspace, and session host data through the Azure Monitor Agent and a data collection rule. The configuration workbook can deploy both."
-  - "Learn lists seven diagnostic tables for the host pool (Management Activities, Feed, Connections, Errors, Checkpoints, HostRegistration, AgentHealthStatus) and four for the workspace (Management Activities, Feed, Errors, Checkpoints)."
+  - "Setup has two halves: diagnostic settings on the host pool and workspace, and session host data through the Azure Monitor Agent and a DCR. The configuration workbook can deploy both."
+  - "Learn lists seven diagnostic tables for the host pool (incl. Connections, Errors, HostRegistration, AgentHealthStatus) and four for the workspace (Management Activities, Feed, Errors, Checkpoints)."
   - "Insights asks for a designated Log Analytics workspace for the session hosts. The session host workspace does not have to be the one that receives the diagnostics."
-  - "The workbook's automated agent deployment supports 1,000 session hosts or fewer. For larger pools, or if deployment fails, Learn says to install the Azure Monitor Agent when you create the hosts, using an ARM template."
+  - "The workbook's agent deployment supports up to 1,000 session hosts. For larger pools or failures, install the Azure Monitor Agent at host creation with an ARM template."
   - "After setup, allow time: Learn says Azure Monitor has a 15-minute latency for log data, and the diagnostics page says data can take a few hours after first set-up."
 faq:
   - q: "Do I need to create the data collection rule by hand?"
@@ -25,11 +25,11 @@ To set up Azure Virtual Desktop Insights, create a Log Analytics workspace, send
 
 ## What you are setting up
 
-[Azure Virtual Desktop Insights](/entity/avd-insights/) is a dashboard built on [Azure Monitor Workbooks](/entity/azure-monitor-workbooks/). Learn's prerequisites say monitored environments must be based on the latest Azure Virtual Desktop release that is compatible with Azure Resource Manager, and list three things to enable: diagnostics from your Azure Virtual Desktop environment, the recommended performance counters from the session hosts and the recommended Windows event logs from the session hosts.
+[Azure Virtual Desktop Insights](https://www.m365.fm/entity/avd-insights/) is a dashboard built on [Azure Monitor Workbooks](https://www.m365.fm/entity/azure-monitor-workbooks/). Learn's prerequisites say monitored environments must be based on the latest Azure Virtual Desktop release that is compatible with Azure Resource Manager, and list three things to enable: diagnostics from your Azure Virtual Desktop environment, the recommended performance counters from the session hosts and the recommended Windows event logs from the session hosts.
 
-The data lands in [Log Analytics](/entity/log-analytics/) workspaces. Learn recommends a designated workspace for your session hosts so that counters and events come only from your Azure Virtual Desktop deployment, and says you can disable other items that send data to it to save costs. The workspace for session host data does not have to be the one that receives the diagnostics.
+The data lands in [Log Analytics](https://www.m365.fm/entity/log-analytics/) workspaces. Learn recommends a designated workspace for your session hosts so that counters and events come only from your Azure Virtual Desktop deployment, and says you can disable other items that send data to it to save costs. The workspace for session host data does not have to be the one that receives the diagnostics.
 
-The session host data comes from the [Azure Monitor Agent](/entity/azure-monitor-agent/) (AMA). The older Log Analytics agent is out of scope: the Insights version history says version 4.0.5 (7 October 2024) changed the wording to say it is deprecated.
+The session host data comes from the [Azure Monitor Agent](https://www.m365.fm/entity/azure-monitor-agent/) (AMA). The older Log Analytics agent is out of scope: the Insights version history says version 4.0.5 (7 October 2024) changed the wording to say it is deprecated.
 
 ## Before you start: roles and cost
 

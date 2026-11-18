@@ -1,14 +1,14 @@
 ---
 title: "Right-sizing host pools with Nerdio Advisor: a worked example"
-summary: "A worked example for a pooled Azure Virtual Desktop host pool: set up the Nerdio Advisor right-sizing rule, compare CPU and memory utilisation with the 60% and 80% triggers, check candidate VM sizes by arithmetic and apply the change on a schedule. The utilisation figures are invented for illustration; the thresholds, formula and menu paths come from Nerdio's help, while applying the triggers to the 90th percentile is our reading."
+summary: "A worked example for a pooled Azure Virtual Desktop host pool: set up the Nerdio Advisor right-sizing rule, compare CPU and memory with the 60% and 80% triggers, check sizes and apply on a schedule. Figures are invented."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [nerdio-advisor, nerdio-manager-for-enterprise]
 keypoints:
-  - "The pooled right-sizing rule needs a dynamic host pool, auto-scale turned on and CPU and RAM collection enabled. It compares CPU and memory utilisation over the last 30 days with defaults of 60% (decrease) and 80% (increase). Nerdio's rule dialog calls this average utilisation while its data sections use the 90th percentile; we read the 90th percentile as the compared value."
-  - "In the example, a pool of D16s_v5 hosts reads 31% CPU and 44% RAM. Halving to D8s_v5 would push RAM to about 88%, above the 80% trigger. A memory-preserving 8 vCPU size keeps RAM near 44% and CPU near 62%: RAM stays below the 60% decrease trigger and CPU lands about two points above it, so the rule may ask again."
+  - "The pooled rule needs a dynamic pool with auto-scale and CPU and RAM collection. It compares 30 days of utilisation with 60% (decrease) and 80% (increase); we read the 90th percentile as compared."
+  - "Example: D16s_v5 hosts at 31% CPU and 44% RAM. D8s_v5 would push RAM to about 88%, above 80%. A memory-preserving 8 vCPU size keeps RAM near 44%, CPU near 62%."
   - "Check every candidate size against both triggers before applying it, because a size that fixes one resource can create a new recommendation on the other."
   - "Apply from Observability > Advisor > Recommendations with a schedule outside working hours and an optional message to active users. After a resize, Nerdio excludes data from before the change."
   - "Nerdio recommends 1 to 4 weeks of assessment data before accepting changes; below 72 hours of power-on time the result is not reliable."
@@ -23,7 +23,7 @@ faq:
 
 To right-size a pooled host pool with Nerdio Advisor, you create a right-sizing rule for the pool, let it collect enough usage data, compare the recommended size with both the CPU and memory triggers, and apply the change on a schedule. This article walks through that sequence for one invented pool, so that you can see where the arithmetic decides between candidates.
 
-The background on what [Nerdio Advisor](/entity/nerdio-advisor/) is and how it relates to Azure Advisor is in the explainer article "Nerdio Advisor: modelling and optimising AVD cost". Here we assume you have [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/) and a pooled [host pool](/entity/avd-host-pool/) in production.
+The background on what [Nerdio Advisor](https://www.m365.fm/entity/nerdio-advisor/) is and how it relates to Azure Advisor is in the explainer article "Nerdio Advisor: modelling and optimising AVD cost". Here we assume you have [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/) and a pooled [host pool](https://www.m365.fm/entity/avd-host-pool/) in production.
 
 ## The example pool
 
@@ -92,7 +92,7 @@ Learn's sizing guidance lists 8 vCPU and 16 GB as the minimum configuration for 
 
 ## Step 7: check what else changes
 
-Before applying, look at two settings that were chosen for the old size. First, the maximum session limit per host: Learn's medium-workload ceiling is 4 users per vCPU, so an 8 vCPU host has a lower ceiling (32) than a 16 vCPU host (64). If the limit was set for the larger size, revisit it. With all 180 users signed in, 6 hosts carry 30 each; on 8 vCPU hosts that is 3.75 users per vCPU, close to the medium ceiling, so more hosts may be needed. Second, the Nerdio auto-scale settings. Nerdio's page on changing machine size names the Session limit per host in Host Pool Properties; Base host pool capacity, Min active host capacity and Burst beyond base capacity in Host Pool Sizing; and Hosts to be active by start of work hours under Pre-stage Hosts. Its example moves from D4as_v5 to D8as_v5, a larger size, at the same density of 1 user per CPU, and says a smaller size follows the same steps. It changes four of these settings (session limit 4 to 8, base capacity 30 to 15, burst 8 to 4, pre-staged hosts 15 to 8) and leaves Min active host capacity at 2. See [maximum session limits](/entity/avd-maximum-session-limit/) and [Nerdio auto-scaling](/entity/nerdio-auto-scaling/).
+Before applying, look at two settings that were chosen for the old size. First, the maximum session limit per host: Learn's medium-workload ceiling is 4 users per vCPU, so an 8 vCPU host has a lower ceiling (32) than a 16 vCPU host (64). If the limit was set for the larger size, revisit it. With all 180 users signed in, 6 hosts carry 30 each; on 8 vCPU hosts that is 3.75 users per vCPU, close to the medium ceiling, so more hosts may be needed. Second, the Nerdio auto-scale settings. Nerdio's page on changing machine size names the Session limit per host in Host Pool Properties; Base host pool capacity, Min active host capacity and Burst beyond base capacity in Host Pool Sizing; and Hosts to be active by start of work hours under Pre-stage Hosts. Its example moves from D4as_v5 to D8as_v5, a larger size, at the same density of 1 user per CPU, and says a smaller size follows the same steps. It changes four of these settings (session limit 4 to 8, base capacity 30 to 15, burst 8 to 4, pre-staged hosts 15 to 8) and leaves Min active host capacity at 2. See [maximum session limits](https://www.m365.fm/entity/avd-maximum-session-limit/) and [Nerdio auto-scaling](https://www.m365.fm/entity/nerdio-auto-scaling/).
 
 ## Step 8: apply on a schedule
 

@@ -7,11 +7,11 @@ author: mirko-p
 date: 2026-11-18
 topics: [azure-virtual-desktop, avd-agent]
 keypoints:
-  - "Sort the failure by stage before you change anything: no sign-in, signed in but no resources, resource visible but launch fails, or connected but unstable. Each stage has a different owner and a different fix."
-  - "An empty feed is usually an assignment problem: the user is not assigned to an application group, the application group is not in a workspace, or the user comes from a distribution group. Learn says distribution groups are not supported."
-  - "On Microsoft Entra joined session hosts, launch errors about credentials or 'account is configured to prevent you from using this device' point to the Virtual Machine User Login role or to a Conditional Access policy. With AD DS-joined hosts, look elsewhere first."
+  - "Sort the failure by stage before changing anything: no sign-in, no resources, launch fails, or connected but unstable. Each stage has a different owner and fix."
+  - "An empty feed is usually an assignment problem: no application group assignment, an application group outside a workspace, or a distribution group, which is not supported."
+  - "On Entra joined hosts, credential or 'account is configured to prevent you from using this device' errors point to the Virtual Machine User Login role or Conditional Access."
   - "TCP-based reverse connect always starts first and UDP (RDP Shortpath) is tried afterwards. Blocked UDP or a proxy as the only path leaves users on TCP, which is slower but still connects."
-  - "Connections that never reach the Azure Virtual Desktop service do not appear in the diagnostics tables. If diagnostics were enabled before the attempt and WVDConnections shows nothing for a user who got as far as starting a resource, look at the client network, the proxy and the sign-in."
+  - "Connections that never reach the service do not appear in diagnostics. If WVDConnections shows nothing for a user who started a resource, check the client network, proxy and sign-in."
 faq:
   - q: "Where do I see whether a failed connection reached Azure Virtual Desktop at all?"
     a: "In Log Analytics. Learn says connections that do not reach Azure Virtual Desktop do not show up in diagnostics results, because the diagnostics role service is part of the service. Query WVDConnections for the user's UPN. If there is a Started row for the attempt, the request reached the service. If there is none, check first that the diagnostic setting was enabled before the attempt, because data appears only after enabling and can take a few hours. If it was, and the user got as far as starting a resource, look at the client network, the proxy and the sign-in."
@@ -21,9 +21,9 @@ faq:
     a: "No. Learn says RDP starts with a TCP-based reverse connect transport and then tries UDP. If a firewall blocks UDP, RDP Shortpath fails and the connection falls back to TCP. Users get lower responsiveness, not a failed connection. A proxy configured as the only path also forces RDP over TCP."
 ---
 
-A connection to Azure Virtual Desktop fails at one of four stages: sign-in, feed, launch or transport. Find the stage first, then fix the layer that owns it. This checklist covers the client, identity and network side of the problem. For a host that is running but shows Unavailable, use the article "Azure Virtual Desktop Session Host Shows Unavailable: A Step-by-Step Checklist". Problems inside the agent and side-by-side stack belong in a separate article about the [Azure Virtual Desktop agent](/entity/avd-agent/).
+A connection to Azure Virtual Desktop fails at one of four stages: sign-in, feed, launch or transport. Find the stage first, then fix the layer that owns it. This checklist covers the client, identity and network side of the problem. For a host that is running but shows Unavailable, use the article "Azure Virtual Desktop Session Host Shows Unavailable: A Step-by-Step Checklist". Problems inside the agent and side-by-side stack belong in a separate article about the [Azure Virtual Desktop agent](https://www.m365.fm/entity/avd-agent/).
 
-The Learn page on the Remote Desktop client for Windows is archived under "previous versions" and the successor client is [Windows App](/entity/windows-app/), so treat its client-specific steps as dated.
+The Learn page on the Remote Desktop client for Windows is archived under "previous versions" and the successor client is [Windows App](https://www.m365.fm/entity/windows-app/), so treat its client-specific steps as dated.
 
 ## Start with scope and status
 
@@ -51,9 +51,9 @@ Learn names two documented causes in this stage.
 **Conditional Access.** The service connection page describes an error where the user is subject to a Conditional Access policy that blocks access to a Microsoft Entra resource, either at sign-in to Windows App or when connecting to a resource. It gives two reasons:
 
 - The user signs in to Windows App in a web browser but lacks access to both the Azure Virtual Desktop and the Windows 365 apps through Conditional Access. Learn notes that Windows App authenticates against both apps even if the user has no Cloud PC.
-- The user signs in to a resource with Microsoft Entra-based [single sign-on](/entity/avd-single-sign-on/) but lacks access to the Windows Cloud Login app.
+- The user signs in to a resource with Microsoft Entra-based [single sign-on](https://www.m365.fm/entity/avd-single-sign-on/) but lacks access to the Windows Cloud Login app.
 
-Check the user's sign-in identity in the Entra sign-in logs, then follow Learn's page on enforcing multifactor authentication for Azure Virtual Desktop with [Conditional Access](/entity/conditional-access/).
+Check the user's sign-in identity in the Entra sign-in logs, then follow Learn's page on enforcing multifactor authentication for Azure Virtual Desktop with [Conditional Access](https://www.m365.fm/entity/conditional-access/).
 
 **AD FS.** For federated domains, Windows App sign-in can fail with the AD FS event `MSIS7102: Requested Authentication Method is not supported on the STS`. Learn's cause is that Windows App sends `prompt=login`, and if the federated domain's `PromptLoginBehavior` is unset, Entra ID can turn that into a password authentication request that AD FS does not support. The documented resolution for supported AD FS versions is `PromptLoginBehavior = nativeSupport`.
 
@@ -82,7 +82,7 @@ For Microsoft Entra joined hosts, Learn points to a separate troubleshooting pag
 
 ## Stage 4: the transport
 
-Every connection starts as a TCP-based reverse connect transport through the Azure Virtual Desktop gateway. The client and host then try [RDP Shortpath](/entity/rdp-shortpath/), a UDP transport. If UDP works, the TCP path is dropped. If not, TCP stays. So blocked UDP rarely causes a failed connection, but it explains poor responsiveness.
+Every connection starts as a TCP-based reverse connect transport through the Azure Virtual Desktop gateway. The client and host then try [RDP Shortpath](https://www.m365.fm/entity/rdp-shortpath/), a UDP transport. If UDP works, the TCP path is dropped. If not, TCP stays. So blocked UDP rarely causes a failed connection, but it explains poor responsiveness.
 
 Check these in order:
 
@@ -111,7 +111,7 @@ WVDErrors
 
 A connection row moves through Started, Connected and Completed. A Started row with no Connected row for the same `CorrelationId` suggests the user never reached the VM (our reading of the documented states, not a Learn statement; the user may also have cancelled). Check `WVDErrors` and `WVDCheckpoints` for the same `CorrelationId`. In `WVDErrors`, `ServiceError` equal to `false` marks an issue an administrator can fix, and `true` means escalate to Microsoft with the CorrelationId. Diagnostics start only after you enable the setting and can take a few hours to appear. Learn also says that client information can be missing from `WVDConnections` and `WVDCheckpoints` even when the connection completed.
 
-For the client itself, the Remote Desktop client page gives the log folder `%temp%\DiagOutputDir\RdClientAutoTrace` (ETL files, convertible with `tracerpt`) and a reset with `msrdcw.exe /reset`, which restores the client's default settings and unsubscribes the user from all workspaces. For Windows App, Learn suggests repairing the app in Windows or reinstalling it on other platforms. [Azure Virtual Desktop Insights](/entity/avd-insights/) is the dashboard that Learn's troubleshooting overview names for finding issues quickly.
+For the client itself, the Remote Desktop client page gives the log folder `%temp%\DiagOutputDir\RdClientAutoTrace` (ETL files, convertible with `tracerpt`) and a reset with `msrdcw.exe /reset`, which restores the client's default settings and unsubscribes the user from all workspaces. For Windows App, Learn suggests repairing the app in Windows or reinstalling it on other platforms. [Azure Virtual Desktop Insights](https://www.m365.fm/entity/avd-insights/) is the dashboard that Learn's troubleshooting overview names for finding issues quickly.
 
 ## Escalation order
 

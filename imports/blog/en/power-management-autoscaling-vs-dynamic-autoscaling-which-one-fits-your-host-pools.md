@@ -9,7 +9,7 @@ topics: [avd-power-management-autoscaling, avd-scaling-plan]
 keypoints:
   - "Power management autoscaling starts and deallocates existing session hosts. Dynamic autoscaling can also create and delete session hosts."
   - "Dynamic autoscaling works only for pooled host pools with a session host configuration, and Learn lists it for Azure only, not Azure Government. Power management autoscaling is generally available."
-  - "Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, in July 2026. Some Learn pages, such as the scenarios and glossary pages, still carry preview wording."
+  - "Microsoft announced GA of enhanced host pool management, including dynamic autoscaling, in July 2026. Some Learn pages, such as scenarios and glossary, still say preview."
   - "The management approach is set when the host pool is created and cannot be changed later, so the choice is often made before the scaling plan exists."
   - "For pooled host pools, both methods use the same consolidation calculation and force sign-out behavior. The difference is the final action: deallocate or delete."
 faq:
@@ -55,11 +55,11 @@ Otherwise, the way the host pool was created settles most cases. With standard m
 - The approach is set at creation. If you create a host pool without a session host configuration, you cannot add one afterwards.
 - A session host configuration can be used with pooled host pools only.
 
-The autoscale prerequisites repeat the consequence: a standard host pool needs the power management method. Hosts built with pipelines or scripts mean standard management. Learn's June 2026 What's new also introduces the term "Automated host pools" for pools where one session host configuration is enforced across all session hosts. One more point if you plan a new pool for this: Learn's What's new (September 2025) gave an estimated schedule for requiring a managed identity on host pools with a session host configuration, while the September 2026 entry and the managed identity page now say the requirement comes "in a future service update". Check the current state before you plan a new pool. See [AVD host pool](/entity/avd-host-pool/) and [AVD session host configuration](/entity/avd-session-host-configuration/).
+The autoscale prerequisites repeat the consequence: a standard host pool needs the power management method. Hosts built with pipelines or scripts mean standard management. Learn's June 2026 What's new also introduces the term "Automated host pools" for pools where one session host configuration is enforced across all session hosts. One more point if you plan a new pool for this: Learn's What's new (September 2025) gave an estimated schedule for requiring a managed identity on host pools with a session host configuration, while the September 2026 entry and the managed identity page now say the requirement comes "in a future service update". Check the current state before you plan a new pool. See [AVD host pool](https://www.m365.fm/entity/avd-host-pool/) and [AVD session host configuration](https://www.m365.fm/entity/avd-session-host-configuration/).
 
 ## Decision 2: Pooled or personal?
 
-A [scaling plan](/entity/avd-scaling-plan/) has a type, pooled or personal, and you can assign it only to host pools of that type. In the portal, the scaling method option appears if you select pooled for the host pool type. Personal host pools therefore use power management autoscaling.
+A [scaling plan](https://www.m365.fm/entity/avd-scaling-plan/) has a type, pooled or personal, and you can assign it only to host pools of that type. In the portal, the scaling method option appears if you select pooled for the host pool type. Personal host pools therefore use power management autoscaling.
 
 Personal plans work differently from pooled ones:
 
@@ -68,7 +68,7 @@ Personal plans work differently from pooled ones:
 - The FAQ says you cannot make autoscale force users to sign out of a personal desktop, and that autoscale for personal desktops "only deallocates session hosts if the user has signed out of their user session". The plan settings above also offer an action for disconnected sessions. Another FAQ answer, on drain mode, says autoscale deallocates a personal desktop when the session is "signed out or disconnected", so the FAQ is not consistent with itself, and the plan settings do not settle it either. Test what your personal pool does after a disconnect.
 - Learn warns that FSLogix and App Attach do not currently support hibernate.
 
-See [personal host pool](/entity/avd-personal-host-pool/) and [hibernation](/entity/avd-hibernation/).
+See [personal host pool](https://www.m365.fm/entity/avd-personal-host-pool/) and [hibernation](https://www.m365.fm/entity/avd-hibernation/).
 
 ## Decision 3: Do you need hosts created and deleted?
 
@@ -78,9 +78,9 @@ If you need neither creation nor deletion, power management autoscaling is the n
 
 ## Settings that differ
 
-Both methods use a schedule with ramp-up, peak, ramp-down and off-peak phases. See [autoscale schedule phases](/entity/avd-autoscale-schedule-phases/) and the phase article in this series.
+Both methods use a schedule with ramp-up, peak, ramp-down and off-peak phases. See [autoscale schedule phases](https://www.m365.fm/entity/avd-autoscale-schedule-phases/) and the phase article in this series.
 
-**Power management, pooled.** Ramp-up has a start time, load balancing algorithm, [minimum percentage of hosts](/entity/avd-minimum-percentage-of-hosts/) and [capacity threshold](/entity/avd-capacity-threshold/). Learn recommends breadth-first at ramp-up and depth-first at off-peak. Ramp-down adds [force logoff](/entity/avd-force-logoff/).
+**Power management, pooled.** Ramp-up has a start time, load balancing algorithm, [minimum percentage of hosts](https://www.m365.fm/entity/avd-minimum-percentage-of-hosts/) and [capacity threshold](https://www.m365.fm/entity/avd-capacity-threshold/). Learn recommends breadth-first at ramp-up and depth-first at off-peak. Ramp-down adds [force logoff](https://www.m365.fm/entity/avd-force-logoff/).
 
 **Dynamic, pooled.** The General tab holds three values: minimum percentage of active hosts, minimum host pool size and maximum host pool size. Ramp-up and ramp-down let you change them for those phases; peak and off-peak have only a start time and a load balancing algorithm. Learn says the ramp-up minimum percentage, minimum host pool size and capacity threshold carry over to peak, and the ramp-down capacity threshold to off-peak. It does not say what happens to the other off-peak values. The FAQ gives two levers:
 
@@ -93,9 +93,9 @@ Learn's consolidation scenario (scenario 3) applies to both methods; the full se
 
 ## Shared settings in brief
 
-- **Maximum session limit.** For pooled host pools, set it explicitly and do not use the default. See [maximum session limit](/entity/avd-maximum-session-limit/).
-- **Exclusion tag.** Tagged hosts are not turned on, turned off or changed in drain mode in any phase, but they still count toward the minimum percentage of hosts. If the tagged hosts are switched off, autoscale cannot start them, so the pool cannot reach the minimum. Learn's scenario 4 shows the result: if the last untagged host is tagged and switched off, a user who tries to sign in sees "No resources available". See [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/).
-- **Drain mode.** For pooled host pools, autoscale overwrites drain mode, so use the exclusion tag for maintenance. See [drain mode](/entity/avd-drain-mode/).
+- **Maximum session limit.** For pooled host pools, set it explicitly and do not use the default. See [maximum session limit](https://www.m365.fm/entity/avd-maximum-session-limit/).
+- **Exclusion tag.** Tagged hosts are not turned on, turned off or changed in drain mode in any phase, but they still count toward the minimum percentage of hosts. If the tagged hosts are switched off, autoscale cannot start them, so the pool cannot reach the minimum. Learn's scenario 4 shows the result: if the last untagged host is tagged and switched off, a user who tries to sign in sees "No resources available". See [exclusion tag](https://www.m365.fm/entity/avd-scaling-plan-exclusion-tag/).
+- **Drain mode.** For pooled host pools, autoscale overwrites drain mode, so use the exclusion tag for maintenance. See [drain mode](https://www.m365.fm/entity/avd-drain-mode/).
 - **Holidays.** The autoscale FAQ says autoscale "doesn't currently support ramping down on specific dates", so a schedule cannot be tied to a calendar date.
 - **Roles.** Power management needs Desktop Virtualization Power On Off Contributor, dynamic autoscaling also Desktop Virtualization Virtual Machine Contributor. The create-and-assign prerequisites for both methods allow the role to go to a managed identity assigned to the host pool or to the Azure Virtual Desktop service principal. The subsection on assigning permissions names the managed identity option only for power management and the service principal alone for dynamic autoscaling. The scope is the subscription. It says a lower scope prevents autoscale from working properly, while the troubleshooting page lists host pool, resource group or subscription scope as acceptable. Use the subscription scope.
 
@@ -115,13 +115,12 @@ Force sign-out can only happen in the ramp-down phase. The create-and-assign pag
 
 ## Related
 
-- [AVD power management autoscaling](/entity/avd-power-management-autoscaling/)
-- [AVD dynamic autoscaling](/entity/avd-dynamic-autoscaling/)
-- [AVD scaling plan](/entity/avd-scaling-plan/)
+- [AVD power management autoscaling](https://www.m365.fm/entity/avd-power-management-autoscaling/)
+- [AVD dynamic autoscaling](https://www.m365.fm/entity/avd-dynamic-autoscaling/)
+- [AVD scaling plan](https://www.m365.fm/entity/avd-scaling-plan/)
 
 ## Sources
 
-All pages retrieved on 17 November 2026.
 
 - [Microsoft Tech Community: Enhanced host pool management for Azure Virtual Desktop is now generally available (9 July 2026)](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)
 - [Microsoft Learn: Autoscale scaling plans and example scenarios in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)

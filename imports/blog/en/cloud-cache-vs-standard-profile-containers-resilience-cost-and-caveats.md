@@ -1,17 +1,17 @@
 ---
 title: "Cloud Cache vs standard profile containers: resilience, cost and caveats"
-summary: "Standard profile containers (VHDLocations) rely on one storage provider for availability, while FSLogix Cloud Cache (CCDLocations) replicates the profile to several providers from a local cache. Learn says Cloud Cache is not required for high availability; it buys resilience at the price of extra storage, local cache disks, longer sign-out and more operating effort."
+summary: "Standard profile containers (VHDLocations) rely on one storage provider, while FSLogix Cloud Cache (CCDLocations) replicates to several from a local cache. Learn says Cloud Cache is not required for high availability; it costs storage and effort."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [fslogix-cloud-cache, fslogix]
 keypoints:
-  - "Standard containers use VHDLocations and give no FSLogix-level resiliency. Learn's FSLogix FAQ says Cloud Cache is not needed for high availability if a highly available provider is used; Azure Files with zone-redundant storage (ZRS) is its recommended example."
-  - "Cloud Cache works from a local cache, writes to all listed providers asynchronously and hydrates from one. It targets short-term, same-region storage problems and, with providers in different regions, can be part of a BCDR plan."
-  - "The costs are a second storage location, a local cache disk (Learn's multiregion article suggests at least 30 GB per concurrent user as a starting point), more I/O on the VM and longer sign-in and sign-out times."
-  - "Caveats from Learn: reads move to the next provider automatically, but moving users to a failover region is a manual decision; replication is asynchronous, a hydration failure can hang a session or crash the system, and ungraceful failovers can cause data loss or container corruption."
-  - "In Nerdio Manager, Cloud Cache allows up to four paths. Nerdio's guidance says to use Cloud Cache only when there is a clear resiliency requirement, and describes accepting added complexity as the trade-off."
+  - "Standard containers use VHDLocations with no FSLogix-level resiliency. Learn says Cloud Cache is not needed with a highly available provider such as Azure Files with ZRS."
+  - "Cloud Cache works from a local cache, writes to all providers asynchronously and hydrates from one. It targets short-term storage problems and, across regions, can be part of a BCDR plan."
+  - "Costs: a second storage location, a local cache disk (Learn suggests at least 30 GB per concurrent user to start), more I/O on the VM and longer sign-in and sign-out times."
+  - "Learn's caveats: failover to another region is a manual decision, replication is asynchronous, and ungraceful failovers can cause data loss or container corruption."
+  - "In Nerdio Manager, Cloud Cache allows up to four paths. Nerdio advises using it only for a clear resiliency requirement, accepting added complexity as the trade-off."
 faq:
   - q: "Do I need Cloud Cache for high availability of profile containers?"
     a: "No. Microsoft's FSLogix FAQ says a standard container on a highly available provider can be an acceptable solution, and names Azure Files with zone-redundant storage as a recommended provider. Cloud Cache is the option when you want FSLogix itself to keep replicas on several providers, for example across regions."
@@ -23,7 +23,7 @@ faq:
 
 Standard profile containers keep one copy of the VHD(x) on one storage provider and depend on that provider for availability. Cloud Cache keeps a local copy on the session host and replicates it to several providers. Microsoft's FSLogix FAQ says Cloud Cache is not required for high availability, so the question is whether you need FSLogix-level replication enough to pay for it in storage, VM resources, sign-out time and complexity.
 
-The sources give no prices, so this article compares cost drivers, not amounts. For the mechanics of Cloud Cache itself, see the entity page for [FSLogix Cloud Cache](/entity/fslogix-cloud-cache/).
+The sources give no prices, so this article compares cost drivers, not amounts. For the mechanics of Cloud Cache itself, see the entity page for [FSLogix Cloud Cache](https://www.m365.fm/entity/fslogix-cloud-cache/).
 
 ## The two setups side by side
 
@@ -38,7 +38,7 @@ Learn's page on [high availability options](https://learn.microsoft.com/en-us/fs
 | Added VM load | Network I/O to the share | Extra I/O and a local cache; Learn calls it a performance and storage requirement |
 | Typical resilience design | Azure Files with ZRS | Two or more providers, same region or different regions |
 
-Learn warns that any network, connection, configuration or dependent-resource issue affecting access to an Azure file share can make a session unstable or unresponsive. See also [Azure Files](/entity/azure-files/) and [Azure NetApp Files](/entity/azure-netapp-files/).
+Learn warns that any network, connection, configuration or dependent-resource issue affecting access to an Azure file share can make a session unstable or unresponsive. See also [Azure Files](https://www.m365.fm/entity/azure-files/) and [Azure NetApp Files](https://www.m365.fm/entity/azure-netapp-files/).
 
 ## What resilience each one actually gives
 
@@ -60,7 +60,7 @@ With providers in different regions, Cloud Cache can be part of a business conti
 
 ### Storage in two places
 
-Learn's BCDR page lists extra cost for storing profile data in two locations, and each provider holds a full copy. If you enable Cloud Cache for both the [profile container](/entity/fslogix-profile-container/) and the [Office container](/entity/fslogix-office-container/), both are replicated; the multiregion article suggests separate storage accounts for the two.
+Learn's BCDR page lists extra cost for storing profile data in two locations, and each provider holds a full copy. If you enable Cloud Cache for both the [profile container](https://www.m365.fm/entity/fslogix-profile-container/) and the [Office container](https://www.m365.fm/entity/fslogix-office-container/), both are replicated; the multiregion article suggests separate storage accounts for the two.
 
 ### A local cache disk
 
@@ -68,7 +68,7 @@ Cloud Cache stages data by default in `C:\ProgramData\FSLogix\Cache` on every se
 
 Learn's Cloud Cache page says that reusing an existing local cache at the second and later sign-ins is the default and "may lead to low disk space events". The [configuration examples](https://learn.microsoft.com/en-us/fslogix/concepts-configuration-examples) set `ClearCacheOnLogoff` to 1, recommended to save disk space and reduce the risk of data loss with pooled desktops.
 
-In Learn's high availability example the local cache sits on the OS disk, with a managed data disk or the temporary disk as alternatives; Learn says temporary disks have many caveats. Nerdio's help strongly recommends Premium SSD and ephemeral OS disks with Cloud Cache, and Standard SSD only for very small environments or testing. Our reading: with [ephemeral OS disks](/entity/avd-ephemeral-os-disks/), check that the VM size's local storage can hold the cache.
+In Learn's high availability example the local cache sits on the OS disk, with a managed data disk or the temporary disk as alternatives; Learn says temporary disks have many caveats. Nerdio's help strongly recommends Premium SSD and ephemeral OS disks with Cloud Cache, and Standard SSD only for very small environments or testing. Our reading: with [ephemeral OS disks](https://www.m365.fm/entity/avd-ephemeral-os-disks/), check that the VM size's local storage can hold the cache.
 
 ### Slower sign-in and sign-out
 
@@ -106,7 +106,7 @@ The reference defines `HealthyProvidersRequiredForRegister` as the number of hea
 
 ## Where Nerdio Manager fits
 
-In [Nerdio](/entity/nerdio/) Manager you go to **Cloud Desktops > Azure Virtual Desktop > Host Pool Profiles**, select **New profile** at the bottom right, choose **FSLogix**, select **Add** in the **FSLogix Profiles storage** area and select **Use Cloud Cache**. You can enter up to four paths and reorder them. The default FSLogix storage is set under **System > Settings > Integrations**, where Nerdio also lists **Use Azure page blobs**. Nerdio's storage comparison says to start with Azure Files Premium. Its guidance says to use Cloud Cache only when there is a clear resiliency requirement, and describes accepting added complexity as the trade-off. Nerdio says replication is asynchronous and that, if one location is unavailable, the session host automatically fails over to an alternate location. Our reading: this is the provider-level failover described above, not a region switch for users.
+In [Nerdio](https://www.m365.fm/entity/nerdio/) Manager you go to **Cloud Desktops > Azure Virtual Desktop > Host Pool Profiles**, select **New profile** at the bottom right, choose **FSLogix**, select **Add** in the **FSLogix Profiles storage** area and select **Use Cloud Cache**. You can enter up to four paths and reorder them. The default FSLogix storage is set under **System > Settings > Integrations**, where Nerdio also lists **Use Azure page blobs**. Nerdio's storage comparison says to start with Azure Files Premium. Its guidance says to use Cloud Cache only when there is a clear resiliency requirement, and describes accepting added complexity as the trade-off. Nerdio says replication is asynchronous and that, if one location is unavailable, the session host automatically fails over to an alternate location. Our reading: this is the provider-level failover described above, not a region switch for users.
 
 ## How to decide
 

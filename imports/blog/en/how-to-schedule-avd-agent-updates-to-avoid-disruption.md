@@ -1,6 +1,6 @@
 ---
 title: "How to schedule AVD agent updates to avoid disruption"
-summary: "To keep non-critical Azure Virtual Desktop agent updates out of working hours, enable Scheduled Agent Updates on each host pool, place the windows where the session hosts are powered on, and check the first run in Log Analytics. This guide covers window planning, time zones, staggering several host pools and diagnosing a run that went wrong."
+summary: "To keep non-critical Azure Virtual Desktop agent updates out of working hours, enable Scheduled Agent Updates per host pool, set windows when hosts are on and check the first run in Log Analytics."
 status: review
 publish: false
 author: mirko-p
@@ -11,7 +11,7 @@ keypoints:
   - "Each window is two hours long, set as a day of the week and an hour from 0 to 23. You need one window and may add a second on another day or hour."
   - "Choose between one fixed Windows time zone for the pool and each host's own local time. VMs created in the Azure portal default to UTC, so check what your hosts actually use."
   - "The windows belong to one host pool each. You stagger several pools by giving them different days or hours; Learn describes no setting that staggers hosts inside a pool."
-  - "Learn documents the portal steps. For scripts, the REST host pool update takes an agentUpdate body, the Az.DesktopVirtualization module lists four agent update parameters without an example, and the Azure CLI host pool update reference lists none."
+  - "Learn documents the portal steps. For scripts, the REST update takes an agentUpdate body; the PowerShell module lists four parameters without an example, the Azure CLI none."
 faq:
   - q: "Which day and hour should I pick for the window?"
     a: "One when users are away and the hosts are running. Learn gives no recommended time; it only says the window is two hours long and that the hosts must be on. Pick the quietest slot in your own session data, then make sure autoscale keeps the hosts on at that time."
@@ -21,11 +21,11 @@ faq:
     a: "Yes. Learn describes Scheduled Agent Updates as a host pool setting, so each pool has its own windows and time zone. The same windows on several pools mean the pools update at the same time, so decide deliberately whether that is what you want."
 ---
 
-To keep routine Azure Virtual Desktop agent updates out of working hours, enable Scheduled Agent Updates on each host pool and give it one or two two-hour windows in which the session hosts are running. This guide is the practical companion to the [explainer on scheduled agent updates](/entity/avd-scheduled-agent-updates/), which covers what the feature does and what it does not control.
+To keep routine Azure Virtual Desktop agent updates out of working hours, enable Scheduled Agent Updates on each host pool and give it one or two two-hour windows in which the session hosts are running. This guide is the practical companion to the [explainer on scheduled agent updates](https://www.m365.fm/entity/avd-scheduled-agent-updates/), which covers what the feature does and what it does not control.
 
 ## Before you start: what to have ready
 
-Per Learn, the feature can be configured only for existing host pools, and each window is two hours long. The setting belongs to the [host pool](/entity/avd-host-pool/), so the time zone and windows apply to all its session hosts.
+Per Learn, the feature can be configured only for existing host pools, and each window is two hours long. The setting belongs to the [host pool](https://www.m365.fm/entity/avd-host-pool/), so the time zone and windows apply to all its session hosts.
 
 Collect for each pool the time zone its hosts use, the hours when users are signed in, and any scaling plan schedule.
 
@@ -45,7 +45,7 @@ Our reading: for a Saturday window, add a Saturday schedule whose ramp-up starts
 
 For personal host pools, Learn's ramp-up tab has **VMs to start**: **Assigned VMs only** starts desktops with an assigned user, **Assigned and unassigned VMs** starts all of them. The disconnect and sign-out settings can deallocate or hibernate VMs in each phase. Our reading: set them to do nothing in the phases the window touches; Learn does not say how a hibernated host treats the update. Dynamic autoscaling also creates and deletes session hosts, and its ramp-up fields **Minimum percentage of active hosts** and **Minimum host pool size** carry over to peak. Our reading: a deleted host cannot take the update, so test the first run on one pool.
 
-Learn says that in a pooled host pool [Start VM on Connect](/entity/avd-start-vm-on-connect/) powers on a VM only when none are on, and further VMs only when the first reaches the session limit. Our reading: it does not bring every host up for a window.
+Learn says that in a pooled host pool [Start VM on Connect](https://www.m365.fm/entity/avd-start-vm-on-connect/) powers on a VM only when none are on, and further VMs only when the first reaches the session limit. Our reading: it does not bring every host up for a window.
 
 ## Step 2: Choose the day, the hour and the second window
 
@@ -79,7 +79,7 @@ The Learn page documents the Azure portal path:
 4. Select a day and time for the **Maintenance window**. Add a second window if you want one.
 5. Select **Apply**.
 
-For [Nerdio Manager](/entity/nerdio/), Nerdio's help describes the same setting after you locate the host pool, in its action menu under **Settings**, then **AVD**, with the toggle **Use Scheduled AVD Agent Update**, a time zone, **Use local session host time zone** and an optional additional maintenance window. Check which label your version shows.
+For [Nerdio Manager](https://www.m365.fm/entity/nerdio/), Nerdio's help describes the same setting after you locate the host pool, in its action menu under **Settings**, then **AVD**, with the toggle **Use Scheduled AVD Agent Update**, a time zone, **Use local session host time zone** and an optional additional maintenance window. Check which label your version shows.
 
 For scripts, the documentation is uneven. The REST host pool update (reference version 2024-04-03) accepts an `agentUpdate` object; the Learn sample sets `type` to `Scheduled`, `useSessionHostLocalTime` to `false`, a `maintenanceWindowTimeZone` and two windows, Friday at hour 7 and Saturday at hour 8. The `Update-AzWvdHostPool` reference lists `-AgentUpdateType`, `-AgentUpdateMaintenanceWindow`, `-AgentUpdateMaintenanceWindowTimeZone` and `-AgentUpdateUseSessionHostLocalTime` without an example or accepted type values. The `az desktopvirtualization hostpool update` reference lists no agent update parameter. Test on one pool and read the setting back in the portal.
 
@@ -96,7 +96,7 @@ An example for four pools, built only from the documented window rules:
 | Production B | Second region or department | Sunday, hour 9 | Does not overlap A's two-hour window |
 | Validation | Sees new agent versions before production | Leave the setting off | Our reading, explained below |
 
-The last row is our reading of two statements. Learn says pools with the setting enabled receive the agent update after it has been fully flighted to production. The agent what's new page says Microsoft monitors the rollout in validation environments first, which can take several weeks, and repacks validation versions with a new version number before production. Together they suggest that a [validation host pool](/entity/avd-validation-environment/) with the setting enabled would take an update only at the production stage, so we would leave it off there.
+The last row is our reading of two statements. Learn says pools with the setting enabled receive the agent update after it has been fully flighted to production. The agent what's new page says Microsoft monitors the rollout in validation environments first, which can take several weeks, and repacks validation versions with a new version number before production. Together they suggest that a [validation host pool](https://www.m365.fm/entity/avd-validation-environment/) with the setting enabled would take an update only at the production stage, so we would leave it off there.
 
 ## Step 6: Diagnose the first run
 

@@ -7,10 +7,10 @@ author: mirko-p
 date: 2026-11-18
 topics: [nerdio-desktop-image, nerdio-manager-for-enterprise]
 keypoints:
-  - "To test before users see a change, create the new version with Stage new image as inactive. Nerdio documents a toggle, Use the \"staged\" image version, that creates a desktop image from the staged version; using it as a test VM is our approach, and Nerdio's pages do not show how the staged image is selected in the Azure image field, so confirm that in your console."
-  - "Activation is manual (Activate staged image) or timed (Activate staged image after a number of days). Nerdio says linked pools then have their image updated, without saying whether hosts are re-imaged."
-  - "Rollback has to be chosen before the update: keep the current version as a backup, back up the image VM object with Azure Backup before the change, or accept that Remove current version after activation leaves no older version."
-  - "Nerdio's pages are in tension on kept backup versions: Set as image says they are not visible or manageable in Nerdio Manager, while Manage versions describes deleting versions and a Backup Version Limit that applies to backups saved when a new version is created. Check what you see in your console before relying on an old version."
+  - "To test first, create the new version with Stage new image as inactive. Nerdio's toggle Use the \"staged\" image version can create a test desktop image; confirm the Azure image field in your console."
+  - "Activation is manual (Activate staged image) or timed (after a number of days). Nerdio says linked pools then get the new image, without saying whether hosts are re-imaged."
+  - "Choose rollback before the update: keep the current version as a backup, back up the image VM with Azure Backup, or accept that removing the current version leaves no older one."
+  - "Nerdio's pages differ on kept backup versions: one says they are not visible in Nerdio Manager, another describes a Backup Version Limit. Check your console before relying on an old version."
   - "The Resize/re-image page documents no pause between re-image groups for manual validation. If you need a pause, use a small pool first or separate schedules."
 faq:
   - q: "How do I test a new Nerdio desktop image version without affecting users?"
@@ -23,7 +23,7 @@ faq:
 
 To test a Nerdio image update before it reaches users, create the new version with **Stage new image as inactive**, build a test desktop image from the staged version if your console offers it, check it, and only then activate it and re-image the host pools. Nerdio documents the staging and the toggle, but not the test-VM workflow itself; that part is our approach. Decide the rollback path before you start, because most of the options are set during the update, not after it.
 
-This runbook covers what happens around the re-image: test, validate, activate and roll back. The dialog fields of Set as image and Resize/Re-image are explained in "An image update workflow with Nerdio", and image concepts in "Desktop image management in Nerdio"; this article names only the settings that matter for testing and rollback. Menu names come from Nerdio's help center for [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/) and can change between releases.
+This runbook covers what happens around the re-image: test, validate, activate and roll back. The dialog fields of Set as image and Resize/Re-image are explained in "An image update workflow with Nerdio", and image concepts in "Desktop image management in Nerdio"; this article names only the settings that matter for testing and rollback. Menu names come from Nerdio's help center for [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/) and can change between releases.
 
 ## What Nerdio documents for testing
 

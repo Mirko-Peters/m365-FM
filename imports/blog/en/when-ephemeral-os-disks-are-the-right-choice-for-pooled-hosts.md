@@ -1,6 +1,6 @@
 ---
 title: "When ephemeral OS disks are the right choice for pooled hosts"
-summary: "Ephemeral OS disks fit pooled Azure Virtual Desktop hosts that hold no user state: profiles in FSLogix, apps in the image, and capacity that is created and deleted instead of deallocated. They are the wrong choice when hosts must be deallocated, keep local data, run in Azure Government, or depend on features such as Azure Backup."
+summary: "Ephemeral OS disks fit pooled Azure Virtual Desktop hosts that hold no user state and are created and deleted rather than deallocated. They are wrong when hosts must be deallocated, keep local data or need Azure Backup."
 status: review
 publish: false
 author: mirko-p
@@ -9,9 +9,9 @@ topics: [avd-ephemeral-os-disks, avd-session-host]
 keypoints:
   - "Ephemeral OS disks suit stateless pooled session hosts. Microsoft's Azure documentation names workloads that tolerate individual VM failures but are sensitive to deployment and reimage time."
   - "Learn's Azure Virtual Desktop page says these VMs cannot be deallocated and can only be restarted, reimaged or deleted. The cost model is delete and recreate, not deallocate and start."
-  - "They are supported only in pooled host pools configured with a session host configuration, and Learn says they are not supported in Azure Government during preview. Personal pools and pools without a configuration are out."
+  - "They are supported only in pooled host pools with a session host configuration, and not in Azure Government during preview. Personal pools and pools without a configuration are out."
   - "For dynamic autoscaling, Learn says to set Minimum percentage of active hosts to 100 percent in every phase, so that scaling only creates and deletes hosts."
-  - "Everything on the OS disk is lost on resize, redeploy or healing. Azure Backup, Azure Disk Encryption, snapshots and image capture are unsupported, and Learn's Azure Virtual Desktop page excludes NVMe and Premium SSD during preview."
+  - "Everything on the OS disk is lost on resize, redeploy or healing. Backup, Disk Encryption, snapshots and image capture are unsupported; NVMe and Premium SSD are excluded in preview."
 faq:
   - q: "Can I use ephemeral OS disks on a personal host pool?"
     a: "No. Learn says ephemeral OS disks in Azure Virtual Desktop are supported only in pooled host pools configured with a session host configuration, and the October 2025 preview post says the same."
@@ -44,7 +44,7 @@ One wording difference matters for runbooks. The Azure VM page lists stop-deallo
 
 ## Check 1: pool type, management approach and cloud
 
-Learn's Azure Virtual Desktop page says ephemeral OS disks are supported only in pooled host pools configured with a session host configuration. The October 2025 preview post says the same. Learn's host pool management approaches page adds that the approach is set when the pool is created and cannot be changed, so an existing pool without a session host configuration means a new pool. The decision is made before deployment. See [pooled host pools](/entity/avd-pooled-host-pool/) and, for the other type, [personal host pools](/entity/avd-personal-host-pool/).
+Learn's Azure Virtual Desktop page says ephemeral OS disks are supported only in pooled host pools configured with a session host configuration. The October 2025 preview post says the same. Learn's host pool management approaches page adds that the approach is set when the pool is created and cannot be changed, so an existing pool without a session host configuration means a new pool. The decision is made before deployment. See [pooled host pools](https://www.m365.fm/entity/avd-pooled-host-pool/) and, for the other type, [personal host pools](https://www.m365.fm/entity/avd-personal-host-pool/).
 
 Cloud matters too. The Azure Virtual Desktop page says ephemeral OS disks are only available in Azure and are not supported in Azure Government during preview. The autoscale scenarios page says dynamic autoscaling is not supported in Azure Government either, and the session host update page limits session host update to the global Azure cloud. For an Azure Government tenant, this check ends the decision.
 
@@ -57,21 +57,21 @@ Status: Microsoft announced general availability of enhanced host pool managemen
 
 ## Check 2: where the state lives
 
-Learn says pooled users should store profile data in [FSLogix](/entity/fslogix/). With an ephemeral OS disk this becomes a requirement in practice: a local profile on the C: drive disappears with the host.
+Learn says pooled users should store profile data in [FSLogix](https://www.m365.fm/entity/fslogix/). With an ephemeral OS disk this becomes a requirement in practice: a local profile on the C: drive disappears with the host.
 
 Walk through what else writes to the OS disk:
 
 1. **User data outside the profile.** Files saved to a local folder outside the redirected profile are lost on reimage, deletion, resize or healing.
-2. **Per-machine apps installed after deployment.** Learn's session host update page says manual customizations are not present after an update and lists three homes for them: the image, configuration management (Intune or Group Policy) and the custom configuration PowerShell script. Our reading is that the same logic applies to every replaced ephemeral host. Add apps to the [golden image](/entity/golden-image/); [MSIX app attach](/entity/msix-app-attach/) is our suggestion for apps that change more often than the image.
+2. **Per-machine apps installed after deployment.** Learn's session host update page says manual customizations are not present after an update and lists three homes for them: the image, configuration management (Intune or Group Policy) and the custom configuration PowerShell script. Our reading is that the same logic applies to every replaced ephemeral host. Add apps to the [golden image](https://www.m365.fm/entity/golden-image/); [MSIX app attach](https://www.m365.fm/entity/msix-app-attach/) is our suggestion for apps that change more often than the image.
 3. **Monitoring agents.** The same page says that if you use Azure Virtual Desktop Insights, the Azure Monitor agent is not installed automatically on updated session hosts, and that you can use Azure Policy to install it automatically.
 
 Learn's FAQ recommends compute-level Azure Backup only for personal host pools. In our reading, that leaves the image and the profile storage as the things to protect for a pooled pool with ephemeral hosts, and the host itself as disposable.
 
 ## Check 3: capacity pattern and cost
 
-Learn's ephemeral OS disk page lists deallocation of VMs as unsupported and recommends [dynamic autoscaling](/entity/avd-dynamic-autoscaling/) for these pools. It sets one rule: in each phase of the scaling plan, set **Minimum percentage of active hosts (%)** to 100 percent. The reason it gives is that these hosts do not support starting and deallocating, so with 100 percent the scaling process only creates and deletes session hosts. Power management autoscaling remains generally available.
+Learn's ephemeral OS disk page lists deallocation of VMs as unsupported and recommends [dynamic autoscaling](https://www.m365.fm/entity/avd-dynamic-autoscaling/) for these pools. It sets one rule: in each phase of the scaling plan, set **Minimum percentage of active hosts (%)** to 100 percent. The reason it gives is that these hosts do not support starting and deallocating, so with 100 percent the scaling process only creates and deletes session hosts. Power management autoscaling remains generally available.
 
-Nerdio's help article (see also Nerdio [auto-scaling](/entity/nerdio-auto-scaling/)) describes the same constraint in its own terms: such a host must be destroyed to free its compute capacity, and the base host pool capacity is always set to the minimum active host capacity and cannot be edited. With a minimum active host capacity of 0, the article says there are no compute and no storage costs.
+Nerdio's help article (see also Nerdio [auto-scaling](https://www.m365.fm/entity/nerdio-auto-scaling/)) describes the same constraint in its own terms: such a host must be destroyed to free its compute capacity, and the base host pool capacity is always set to the minimum active host capacity and cannot be edited. With a minimum active host capacity of 0, the article says there are no compute and no storage costs.
 
 For cost, the sources differ in what they promise:
 

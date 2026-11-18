@@ -1,14 +1,14 @@
 ---
 title: "Designing an AVD autoscale schedule that matches real working hours"
-summary: "Build an Azure Virtual Desktop autoscale schedule from measured session counts, not from office hours on paper. This guide takes you from hourly session data to the four phase start times, the minimum percentage of hosts and capacity threshold you enter in ramp-up and ramp-down, and a check with Insights."
+summary: "Build an Azure Virtual Desktop autoscale schedule from measured session counts, not office hours on paper. This guide goes from hourly session data to phase start times, minimum percentage, capacity threshold and a check."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-autoscale-schedule-phases, avd-scaling-plan]
 keypoints:
-  - "Start with data: hourly counts of new connections from the WVDConnections table show when sign-ins begin, and the Terminal Services session counters, which you chart yourself, should show where open sessions hold, fall and reach the evening floor. Phase start times come from those turning points."
-  - "The ramp-up start must leave time for hosts to power on before the first users arrive. Measure how long hosts take to start in your environment; the scenarios and create-and-assign pages give no figure."
+  - "Start with data: hourly new connections from WVDConnections show when sign-ins begin, and session counters show where sessions hold, fall and reach the evening floor. Phase starts follow."
+  - "Ramp-up must start early enough for hosts to power on before the first users arrive. Measure start times in your environment; the Learn pages give no figure."
   - "A ramp-down wait time must be shorter than the ramp-down phase. Learn's FAQ example is a 15-minute phase with a 20-minute wait, where forced sign-out never happens."
   - "Autoscale cannot ramp down on specific dates and a plan runs in one time zone. Use separate schedules for weekdays and weekends, and plan holidays by hand."
   - "Disconnected sessions keep hosts running. A time limit policy that signs them out, combined with a minimum of 0 percent, is the documented way to reach zero hosts after hours."
@@ -41,14 +41,14 @@ WVDConnections
 
 The table reference lists `TimeGenerated` as UTC. Convert the hours to the plan's time zone before you read start times, for example with the KQL function `datetime_utc_to_local`, and allow for daylight saving. With a half-hour offset, one-hour bins do not match local hours.
 
-3. Open sessions show the peak, the fall and the evening floor. [Azure Virtual Desktop Insights](/entity/avd-insights/) collects performance counters through a data collection rule into the workspace you chose for session host data, which can differ from the diagnostics workspace, so query the one that holds the counters. Learn's cost page lists the counters Terminal Services Active Sessions, Inactive Sessions and Total Sessions, each sampled every 60 seconds per VM. The page does not define them, so query them yourself, check what they report and add the hosts together for a pool figure.
+3. Open sessions show the peak, the fall and the evening floor. [Azure Virtual Desktop Insights](https://www.m365.fm/entity/avd-insights/) collects performance counters through a data collection rule into the workspace you chose for session host data, which can differ from the diagnostics workspace, so query the one that holds the counters. Learn's cost page lists the counters Terminal Services Active Sessions, Inactive Sessions and Total Sessions, each sampled every 60 seconds per VM. The page does not define them, so query them yourself, check what they report and add the hosts together for a pool figure.
 4. After a plan is assigned to a pooled host pool and its Autoscale logs reach Log Analytics, the Autoscale tab in Insights shows the power-state changes of the session hosts over time and summary information. The underlying table, `WVDAutoscaleEvaluationPooled`, has the columns `SessionCount`, `SessionOccupancyPercent`, `ActiveSessionHostCount` and `ConfigSchedulePhase`, so you can read these values per schedule phase. Learn defines `SessionCount` as the sessions on hosts that autoscale considers active.
 
 Write down four numbers per weekday: when sign-ins first appear (sign-in profile), and, from the session counters, when sessions reach the daily maximum, when they start to fall, and when they reach the evening floor.
 
 ## Step 2: Place the four phase start times
 
-Learn defines the phases by session behavior: ramp-up is when sessions climb, peak is when they hold steady, ramp-down is when they fall, and off-peak is the daily minimum ([autoscale schedule phases](/entity/avd-autoscale-schedule-phases/)).
+Learn defines the phases by session behavior: ramp-up is when sessions climb, peak is when they hold steady, ramp-down is when they fall, and off-peak is the daily minimum ([autoscale schedule phases](https://www.m365.fm/entity/avd-autoscale-schedule-phases/)).
 
 - **Ramp-up start:** before your first sign-in wave. Learn says this is when autoscale starts "preparing session hosts" for peak hours. Time how long a deallocated host takes to accept connections and add a margin; the page states no start-up duration.
 - **Peak start:** where the curve flattens. This is also the end of ramp-up. Use the time zone you set for the plan.
@@ -61,7 +61,7 @@ Learn says a plan operates only in its configured time zone, and the peak start 
 
 This step covers power management autoscaling for pooled host pools. Dynamic autoscaling has different fields in its own section of Learn's create-and-assign page.
 
-The [capacity threshold](/entity/avd-capacity-threshold/) and the [minimum percentage of hosts](/entity/avd-minimum-percentage-of-hosts/) are entered only in ramp-up and ramp-down. Learn's create-and-assign page says:
+The [capacity threshold](https://www.m365.fm/entity/avd-capacity-threshold/) and the [minimum percentage of hosts](https://www.m365.fm/entity/avd-minimum-percentage-of-hosts/) are entered only in ramp-up and ramp-down. Learn's create-and-assign page says:
 
 - The ramp-up capacity threshold carries over to peak, and the ramp-down value carries over to off-peak. Peak and off-peak have no threshold or minimum field of their own.
 - Learn's troubleshooting page applies the minimum percentage during ramp-down and off-peak, but the create-and-assign page states the carry-over only for the capacity threshold. After a schedule change, check in Insights that hosts really reach zero.
@@ -79,7 +79,7 @@ Choosing the threshold value is covered in "Choosing the right capacity threshol
 
 The ramp-down field **Force logoff of users** decides what happens to users on hosts that autoscale wants to remove:
 
-- **On.** Autoscale picks the host with the fewest sessions, puts it in [drain mode](/entity/avd-drain-mode/), notifies users, signs them out after the wait time and deallocates the VM. See [force sign-out](/entity/avd-force-logoff/).
+- **On.** Autoscale picks the host with the fewest sessions, puts it in [drain mode](https://www.m365.fm/entity/avd-drain-mode/), notifies users, signs them out after the wait time and deallocates the VM. See [force sign-out](https://www.m365.fm/entity/avd-force-logoff/).
 - **Off.** You must choose **VMs have no active or disconnected sessions** or **VMs have no active sessions**. The autoscale FAQ recommends the second ("Stop VMs when no active sessions"). The worked example below uses it.
 
 Learn's FAQ gives this trap for forced sign-out, which happens only in ramp-down: with a 15-minute ramp-down and a 20-minute wait time, the schedule moves to off-peak before the sign-out occurs. Make the phase longer than the wait.
@@ -90,8 +90,8 @@ To reach zero hosts, Learn's FAQ says you need zero sessions including disconnec
 
 - Create separate schedules where behavior differs. A plan can have several, for example weekday and weekend schedules, each with a "Repeat on" setting.
 - On unselected days, the last off-peak settings of the selected days carry over until the next ramp-up.
-- Autoscale does not support ramping down on specific dates such as holidays. The FAQ names no workaround; because changes to an assigned plan apply immediately, one option is to edit the plan by hand on the day. The [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) keeps individual hosts out of scaling.
-- Nerdio Manager, a separate product, offers a Default and an Alternative schedule for specific dates such as holidays: [Nerdio auto-scaling](/entity/nerdio-auto-scaling/).
+- Autoscale does not support ramping down on specific dates such as holidays. The FAQ names no workaround; because changes to an assigned plan apply immediately, one option is to edit the plan by hand on the day. The [exclusion tag](https://www.m365.fm/entity/avd-scaling-plan-exclusion-tag/) keeps individual hosts out of scaling.
+- Nerdio Manager, a separate product, offers a Default and an Alternative schedule for specific dates such as holidays: [Nerdio auto-scaling](https://www.m365.fm/entity/nerdio-auto-scaling/).
 
 ## Worked example: three user groups
 

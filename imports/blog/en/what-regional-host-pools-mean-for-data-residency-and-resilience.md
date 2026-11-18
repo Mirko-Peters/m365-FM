@@ -1,17 +1,17 @@
 ---
 title: "What regional host pools mean for data residency and resilience"
-summary: "Regional deployment scope stores host pool metadata in the single Azure region you choose and limits a metadata database problem to that region, with documented exceptions such as Azure Resource Manager paths, diagnostic data and a paired-region replica. It does not move session hosts, profile storage or identity, and Microsoft's pages do not yet use one status label for the feature."
+summary: "Regional deployment scope stores host pool metadata in one Azure region and limits a metadata database problem to it, with documented exceptions. It does not move session hosts, profile storage or identity."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-regional-host-pools, avd-host-pool]
 keypoints:
-  - "Regional scope stores customer input data and customer data for the host pool and its related objects within the single Azure region you choose. Geographical scope stores them in the geography of that region."
-  - "Exceptions to the scope setting: Azure Resource Manager paths are organizational information stored outside the chosen geography, session diagnostic data goes to the location closest to the user and to the host pool's location, and service-generated data sent to the US geography includes scrubbed data. Learn says customer data is not aggregated."
+  - "Regional scope stores customer input data and customer data for the host pool and related objects in the chosen region; Geographical scope stores them in its geography."
+  - "Exceptions: Azure Resource Manager paths are stored outside the geography, session diagnostics go near the user and the host pool, and scrubbed service data goes to the US. No aggregation."
   - "Regional metadata is replicated across availability zones in the region and, where applicable, to a paired region for disaster recovery. Learn does not say which paired region."
-  - "The scope setting does not cover session hosts, applications, network connectivity or identities, which Learn lists as customer responsibilities. User and app data resides in the region you choose and is not managed by the service."
-  - "Status labels differ between pages. What's new and a Tech Community post from 30 September 2026 describe general availability, while the multiregion BCDR article on Learn still says public preview and the Regional Host Pools article keeps a few preview remnants."
+  - "The scope does not cover session hosts, apps, network or identities, which are customer responsibilities. User and app data stays in the chosen region and is not managed by the service."
+  - "Status labels differ: What's new and a 30 September 2026 Tech Community post describe GA, while the multiregion BCDR article still says public preview."
 faq:
   - q: "Does a regional host pool keep all my users' data in one region?"
     a: "No. The scope setting applies to Azure Virtual Desktop service metadata such as host pool and application group names and user principal names. Microsoft Learn says user and app data resides in the region you choose and is not managed by the service, and that Microsoft does not control the regions from which you or your users access it."
@@ -49,8 +49,8 @@ Learn states that Azure Virtual Desktop does not directly store user data or app
 In practice the residency of the data users care most about is decided by choices outside the scope setting:
 
 - The region of the session host VMs. Metadata location is independent of where they run.
-- The storage account for [FSLogix profile containers](/entity/fslogix-profile-container/), commonly [Azure Files](/entity/azure-files/).
-- Where users keep documents, for example [OneDrive](/entity/onedrive/).
+- The storage account for [FSLogix profile containers](https://www.m365.fm/entity/fslogix-profile-container/), commonly [Azure Files](https://www.m365.fm/entity/azure-files/).
+- Where users keep documents, for example [OneDrive](https://www.m365.fm/entity/onedrive/).
 - Log Analytics and diagnostic settings that you configure yourself. The Regional Host Pools article also states that errors and checkpoints are not being reported into Log Analytics for regional session hosts.
 
 ## Resilience: what changes
@@ -82,11 +82,10 @@ Suppose a team wants the host pool metadata for a pooled host pool kept in East 
 
 ## What it does not solve
 
-Regional scope reduces the blast radius for the metadata. It is not a disaster recovery design, and in our reading, a host pool in one region with profiles in another still has two failure domains. For design choices on that layer, see the articles on multi-region deployments and disaster recovery in this series. For the object model, see [AVD host pool](/entity/avd-host-pool/) and [regional host pools](/entity/avd-regional-host-pools/).
+Regional scope reduces the blast radius for the metadata. It is not a disaster recovery design, and in our reading, a host pool in one region with profiles in another still has two failure domains. For design choices on that layer, see the articles on multi-region deployments and disaster recovery in this series. For the object model, see [AVD host pool](https://www.m365.fm/entity/avd-host-pool/) and [regional host pools](https://www.m365.fm/entity/avd-regional-host-pools/).
 
 ## Sources
 
-All retrieved on 17 November 2026.
 
 - [Microsoft Tech Community: Now generally available: regional resiliency for Azure Virtual Desktop](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/now-generally-available-regional-resiliency-for-azure-virtual-desktop/4540458)
 - [Microsoft Learn: What's new in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)

@@ -1,17 +1,17 @@
 ---
 title: "Nerdio auto-scaling explained: scaling personal and pooled host pools to demand"
-summary: "Nerdio auto-scaling is a function of Nerdio Manager that keeps only as many session host VMs running as current demand requires, for both pooled and personal host pools. This article explains what it controls, which settings belong to which pool type and which auto-scale features Nerdio lists as Premium only."
+summary: "Nerdio auto-scaling in Nerdio Manager keeps only as many session host VMs running as demand requires, for pooled and personal host pools. This article covers what it controls and which features are Premium only."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [nerdio-auto-scaling, nerdio-manager-for-enterprise]
 keypoints:
-  - "Auto-scaling is disabled by default in Nerdio Manager. It is switched on per host pool under Auto-scale, then Configure, and it can start or stop VMs and create or remove them (pooled pools: scale-out and scale-in; personal pools: auto-grow and auto-shrink)."
+  - "Auto-scaling is off by default and enabled per host pool under Auto-scale > Configure. It starts, stops, creates or removes VMs (pooled: scale-out/in; personal: auto-grow/shrink)."
   - "A pooled pool is sized with a base capacity, a minimum of active hosts and a burst range. Values can be counts or percentages that are rounded up to whole hosts."
   - "Scale-in aggressiveness (high, medium, low) decides whether hosts with active or disconnected sessions may be removed outside working hours. High is the default."
   - "Personal host pools use either user-driven mode (stop after sign-out) or schedule-based mode (power on and off in working hours), with optional auto-grow, auto-shrink (Premium only) and auto-heal."
-  - "Nerdio's entitlement page lists these as Premium only: Advanced Auto-scale, multiple triggers, intelligent pre-stage, rolling drain mode, a secondary configuration and personal auto-grow and auto-shrink. Basic AVD Auto-scale and Auto-heal are in both Core and Premium."
+  - "Nerdio lists Advanced Auto-scale, multiple triggers, intelligent pre-stage, rolling drain mode and personal auto-grow as Premium only. Basic auto-scale and Auto-heal are in Core and Premium."
 faq:
   - q: "Is Nerdio auto-scaling on by default?"
     a: "No. Nerdio's help pages say auto-scale is disabled by default. You enable it per host pool under Auto-scale, then Configure, by switching the Auto-scale toggle to Enabled and saving."
@@ -25,7 +25,7 @@ Nerdio auto-scaling is a function of Nerdio Manager that keeps only as many sess
 
 ## What auto-scaling controls
 
-[Nerdio auto-scaling](/entity/nerdio-auto-scaling/) belongs to [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/) from [Nerdio](/entity/nerdio/). It is switched off by default.
+[Nerdio auto-scaling](https://www.m365.fm/entity/nerdio-auto-scaling/) belongs to [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/) from [Nerdio](https://www.m365.fm/entity/nerdio/). It is switched off by default.
 
 It acts at three levels:
 
@@ -35,7 +35,7 @@ It acts at three levels:
 
 Nerdio's host pool overview distinguishes two kinds of pool. A *static* host pool has a fixed number of hosts set by the administrator, with auto-scale off. A pool with auto-scale enabled creates and removes hosts based on demand. The help page notes that this kind was previously called a "dynamic" host pool. Pools that exist when Nerdio Manager is first deployed to an existing environment start as static. To convert one, go to Cloud Desktops, Azure Virtual Desktop, Workspaces, select the workspace and choose **Convert Host Pool** in the Static Host Pools area. Active sessions are not affected, and auto-scale stays off until you enable it.
 
-Nerdio's "dynamic" is its own host pool type, separate from Microsoft's [dynamic autoscaling](/entity/avd-dynamic-autoscaling/) in Azure Virtual Desktop scaling plans.
+Nerdio's "dynamic" is its own host pool type, separate from Microsoft's [dynamic autoscaling](https://www.m365.fm/entity/avd-dynamic-autoscaling/) in Azure Virtual Desktop scaling plans.
 
 ## Where to switch it on
 
@@ -54,7 +54,7 @@ A host counts as active either when the VM is started in Azure or when the AVD a
 - **Available sessions:** maintain a number of free sessions, with separate values for working hours and for outside them.
 - **User-driven:** hosts start on connect and stop a set number of minutes after the last user signs out.
 
-With the Premium edition you can combine up to three triggers. Scale-out happens when any scale-out condition is met, and scale-in only when all scale-in conditions are met. Nerdio's example is CPU at 65 percent for 15 minutes or 90 percent for 5 minutes, whichever comes first. The session limit per host and the load balancing mode ([breadth-first](/entity/avd-breadth-first-load-balancing/) or [depth-first](/entity/avd-depth-first-load-balancing/)) also apply, and [Start VM on Connect](/entity/avd-start-vm-on-connect/) can be enabled.
+With the Premium edition you can combine up to three triggers. Scale-out happens when any scale-out condition is met, and scale-in only when all scale-in conditions are met. Nerdio's example is CPU at 65 percent for 15 minutes or 90 percent for 5 minutes, whichever comes first. The session limit per host and the load balancing mode ([breadth-first](https://www.m365.fm/entity/avd-breadth-first-load-balancing/) or [depth-first](https://www.m365.fm/entity/avd-depth-first-load-balancing/)) also apply, and [Start VM on Connect](https://www.m365.fm/entity/avd-start-vm-on-connect/) can be enabled.
 
 **Scale-in restrictions** limit when hosts are removed and how far sessions are consolidated:
 
@@ -64,13 +64,13 @@ With the Premium edition you can combine up to three triggers. Scale-out happens
 | Medium | Only hosts with disconnected sessions are removed. Hosts with active sessions stay. |
 | Low | Only hosts with no sessions at all are removed. This is the least disruptive setting, but it does not guarantee any scale-in. |
 
-**Rolling drain mode** (Premium only) creates one or more windows, outside the scale-in restriction window, that put a percentage of hosts into [drain mode](/entity/avd-drain-mode/) so that they can shut down sooner. Scale-in then prefers hosts with the fewest active sessions, then hosts in drain mode, then hosts with the fewest total sessions. **Pre-staging** (Nerdio's Premium list names "Intelligent pre-stage"; see the edition section) makes a set number of hosts active by the start of work hours, with a scale-in delay during which they are not removed. An **alternative schedule**, for example for weekends or holidays, can be selected by days or dates. The alternative schedule page names no edition. Nerdio's Premium list names a "Secondary Auto-scale configuration" without saying what it covers; it may be this feature, so check with Nerdio before you rely on it in Core. The estimated monthly cost at the top of the page reflects only the default schedule.
+**Rolling drain mode** (Premium only) creates one or more windows, outside the scale-in restriction window, that put a percentage of hosts into [drain mode](https://www.m365.fm/entity/avd-drain-mode/) so that they can shut down sooner. Scale-in then prefers hosts with the fewest active sessions, then hosts in drain mode, then hosts with the fewest total sessions. **Pre-staging** (Nerdio's Premium list names "Intelligent pre-stage"; see the edition section) makes a set number of hosts active by the start of work hours, with a scale-in delay during which they are not removed. An **alternative schedule**, for example for weekends or holidays, can be selected by days or dates. The alternative schedule page names no edition. Nerdio's Premium list names a "Secondary Auto-scale configuration" without saying what it covers; it may be this feature, so check with Nerdio before you rely on it in Core. The estimated monthly cost at the top of the page reflects only the default schedule.
 
 **Automatically Re-image Used Hosts** can be Disabled, Always (after a user has signed in, and for multi-session hosts as soon as the last user signs out) or During scale-in restrictions only, which Nerdio says limits the risk of reduced session capacity at other times.
 
 ## Personal host pools: two modes
 
-Nerdio treats [personal host pools](/entity/avd-personal-host-pool/) differently because each desktop belongs to one user, and offers two auto-scale modes.
+Nerdio treats [personal host pools](https://www.m365.fm/entity/avd-personal-host-pool/) differently because each desktop belongs to one user, and offers two auto-scale modes.
 
 **User-driven mode** offers a Start VM on Connect option. A desktop starts when the user connects and stops a configurable time after all users have signed out, but only if there are no active or disconnected sessions. There is a switch to bypass drain mode before shutdown. Two pre-staging blocks exist only in this mode. **Pre-stage hosts** starts stopped hosts, activates hosts in drain mode, switches stopped disks to the running type and keeps hosts from stopping, from the start of work hours until a scale-in delay ends. **Pre-stage Host OS Disks** converts disks on chosen days and times and can leave unassigned desktops on the stopped disk type.
 

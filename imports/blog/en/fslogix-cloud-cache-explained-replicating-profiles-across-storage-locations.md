@@ -7,11 +7,11 @@ author: mirko-p
 date: 2026-11-18
 topics: [fslogix-cloud-cache, fslogix]
 keypoints:
-  - "Cloud Cache is not a container type. It is an optional configuration for profile and Office containers: the session works against a local cache, and changes are flushed to every provider listed in CCDLocations, which supports SMB and Azure page blob providers, up to four locations."
+  - "Cloud Cache is not a container type but an option for profile and Office containers: sessions use a local cache, and changes are flushed to up to four providers in CCDLocations (SMB or page blob)."
   - "Reads come from the first listed provider unless it becomes unhealthy; writes go to all providers. Order providers by proximity, then preference."
-  - "At sign-out Cloud Cache holds the user until the providers are at the same sequence. HealthyProvidersRequiredForUnregister defaults to 1 and CcdUnregisterTimeout to 0, which can hold a sign-out indefinitely."
-  - "Cloud Cache needs VM resources: Learn names a performance and storage requirement for the extra I/O and the local cache. If a read cannot be hydrated from any provider, Learn warns of a session hang or worse a system crash."
-  - "Microsoft's FAQ says Cloud Cache is not required for high availability and that standard containers on zone-redundant Azure Files are acceptable; the high availability page lists Cloud Cache containers as the preferred option."
+  - "At sign-out Cloud Cache holds the user until providers match. HealthyProvidersRequiredForUnregister defaults to 1 and CcdUnregisterTimeout to 0, which can hold a sign-out indefinitely."
+  - "Cloud Cache needs VM resources for extra I/O and the local cache. If a read cannot be hydrated from any provider, Learn warns of a session hang or a system crash."
+  - "Microsoft's FAQ says Cloud Cache is not required for high availability and standard containers on zone-redundant Azure Files are acceptable; another page calls Cloud Cache preferred."
 faq:
   - q: "Is Cloud Cache a different kind of profile container?"
     a: "No. Learn says Cloud Cache is not a type of container but an optional configuration for the profile and Office container types. You switch it on by using CCDLocations instead of VHDLocations; the two must not both be present."
@@ -25,7 +25,7 @@ Cloud Cache is an FSLogix configuration in which each session works against a lo
 
 ## What it is, and what it is not
 
-[Cloud Cache](/entity/fslogix-cloud-cache/) works with the [profile container](/entity/fslogix-profile-container/) and the [Office container](/entity/fslogix-office-container/). Learn says it is not a container type but an optional configuration of those two. You enable it by listing providers in `CCDLocations` instead of `VHDLocations`, and the two settings must not both be present.
+[Cloud Cache](https://www.m365.fm/entity/fslogix-cloud-cache/) works with the [profile container](https://www.m365.fm/entity/fslogix-profile-container/) and the [Office container](https://www.m365.fm/entity/fslogix-office-container/). Learn says it is not a container type but an optional configuration of those two. You enable it by listing providers in `CCDLocations` instead of `VHDLocations`, and the two settings must not both be present.
 
 Learn also names the cost: Cloud Cache puts a performance and storage requirement on the virtual machine, to accommodate the extra I/O and the local cache. FSLogix is not a storage provider itself and relies on the architecture of the providers you choose.
 

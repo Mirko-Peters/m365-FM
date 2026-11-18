@@ -1,17 +1,17 @@
 ---
 title: "How to build and test App Masking rules with the Rules Editor"
-summary: "On one reference machine with FSLogix Apps, the Rules Editor and the target application, scan the application to create a Rule Set, test it with Apply Rules to System and add a group assignment, then copy the .fxr and .fxa files to each session host that should apply the rule. This guide follows Microsoft Learn's tutorial and adds a test plan and a list of things to check."
+summary: "On one reference machine with FSLogix Apps and the Rules Editor, scan the app to create a Rule Set, test it with Apply Rules to System, add a group assignment and copy the .fxr and .fxa files to each session host."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [fslogix-app-masking, fslogix]
 keypoints:
-  - "The Rules Editor is installed from FSLogixAppsRuleEditorSetup.exe in the x64 (64-bit) > Release folder of the FSLogix download. Open it as Administrator if you plan to test, then use File > New, name the Rule Set, pick the installed program and select Scan."
-  - "Apply Rules to System turns the rules on immediately on the machine where you built them, and selecting it again turns them off. Learn calls testing there one way to validate that the rules work as intended."
+  - "The Rules Editor installs from FSLogixAppsRuleEditorSetup.exe in the x64 > Release folder. Open it as Administrator to test, then File > New, name the Rule Set, pick the program and Scan."
+  - "Apply Rules to System turns the rules on immediately on the build machine, and selecting it again turns them off. Learn calls this one way to validate the rules."
   - "Manage Assignments controls who is affected. A new rule has Everyone with Applies set to No; the tutorial adds a group, such as Domain Users, with Applies set to Yes."
   - "Deploy both files, the .fxr rule file and the .fxa assignment file, to C:\\Program Files\\FSLogix\\Apps\\Rules on each session host. The FSLogix Apps Services use them immediately."
-  - "Assignments do not support Microsoft Entra ID cloud-only accounts, and Learn says to test and validate Rule Sets before production because hiding rules manipulate the file system at a fundamental level."
+  - "Assignments do not support Entra ID cloud-only accounts. Test Rule Sets before production, because hiding rules manipulate the file system at a fundamental level."
 faq:
   - q: "Do I need to restart the session host after copying the rule files?"
     a: "The tutorial does not mention a restart. It says the FSLogix Apps Services use the .fxr and .fxa files immediately after they are copied to C:\\Program Files\\FSLogix\\Apps\\Rules. Verify with a test user anyway, because Learn also tells you to test and validate Rule Sets before production."
@@ -21,7 +21,7 @@ faq:
     a: "In the Rules Editor, select the Rule Set in the left pane and choose Manage Assignments on the action bar. Add a group, user or other assignment and set whether it applies. Learn says the assignments are processed from top to bottom and reordered with Move Up and Move Down."
 ---
 
-To build an App Masking rule, install the FSLogix Rules Editor, create a Rule Set from an installed application with **Scan**, test it with **Apply Rules to System**, assign it to a group, and copy the resulting `.fxr` and `.fxa` files to `C:\Program Files\FSLogix\Apps\Rules` on each session host that should apply the rule. This guide follows Microsoft Learn's tutorial, uses Google Chrome as Learn does, and adds a test plan. For the concepts behind rules and assignments, read the article "FSLogix App Masking: showing the right apps to the right users" first; this one covers the procedure only. The entity page for [FSLogix App Masking](/entity/fslogix-app-masking/) has the summary.
+To build an App Masking rule, install the FSLogix Rules Editor, create a Rule Set from an installed application with **Scan**, test it with **Apply Rules to System**, assign it to a group, and copy the resulting `.fxr` and `.fxa` files to `C:\Program Files\FSLogix\Apps\Rules` on each session host that should apply the rule. This guide follows Microsoft Learn's tutorial, uses Google Chrome as Learn does, and adds a test plan. For the concepts behind rules and assignments, read the article "FSLogix App Masking: showing the right apps to the right users" first; this one covers the procedure only. The entity page for [FSLogix App Masking](https://www.m365.fm/entity/fslogix-app-masking/) has the summary.
 
 ## Before you start
 
@@ -71,7 +71,7 @@ The Rule Set is saved as two files: the assignment file `.fxa` and the rule file
 
 `C:\Program Files\FSLogix\Apps\Rules`
 
-Learn says to copy the files "to the virtual machine" and that the FSLogix Apps Services use them immediately. Our reading: every session host that should apply the rule needs its own copy of both files, and Learn does not describe how to distribute them. For [pooled host pools](/entity/avd-pooled-host-pool/) this means adding the two files to whatever process you already use to change hosts, so new hosts get them as well.
+Learn says to copy the files "to the virtual machine" and that the FSLogix Apps Services use them immediately. Our reading: every session host that should apply the rule needs its own copy of both files, and Learn does not describe how to distribute them. For [pooled host pools](https://www.m365.fm/entity/avd-pooled-host-pool/) this means adding the two files to whatever process you already use to change hosts, so new hosts get them as well.
 
 ## Step 5: Test with real users
 
@@ -99,7 +99,7 @@ Learn has no troubleshooting section for this tutorial, so the table below combi
 
 ## If you manage hosts with Nerdio Manager
 
-Nerdio's help says App Masking is currently not supported in AAD joined host pool scenarios (Nerdio's wording; Microsoft now calls this Microsoft Entra joined). This is separate from Learn's limit on cloud-only accounts. Otherwise, the help describes a console workflow under the host pool's action menu, **Applications** > **Installed apps**, where you add a rule set and apply it to the session hosts. It does not mention the Rules Editor. Our reading: you do not build or copy `.fxr` and `.fxa` files yourself there, so this guide applies to hosts you manage by hand. Two points matter in the user fields. With **Apply to all users** on (the default), the applications are available only to the users listed under **Exclude users and groups**, and hidden for everyone else. With it off, the applications are available to all users, and the users and groups you list under **Apply only the following users and groups** are the ones whose access is restricted. Nerdio also says only rule sets that are enabled are applied to hosts. The full walk-through is in the companion article. See [Nerdio](/entity/nerdio/) for the platform.
+Nerdio's help says App Masking is currently not supported in AAD joined host pool scenarios (Nerdio's wording; Microsoft now calls this Microsoft Entra joined). This is separate from Learn's limit on cloud-only accounts. Otherwise, the help describes a console workflow under the host pool's action menu, **Applications** > **Installed apps**, where you add a rule set and apply it to the session hosts. It does not mention the Rules Editor. Our reading: you do not build or copy `.fxr` and `.fxa` files yourself there, so this guide applies to hosts you manage by hand. Two points matter in the user fields. With **Apply to all users** on (the default), the applications are available only to the users listed under **Exclude users and groups**, and hidden for everyone else. With it off, the applications are available to all users, and the users and groups you list under **Apply only the following users and groups** are the ones whose access is restricted. Nerdio also says only rule sets that are enabled are applied to hosts. The full walk-through is in the companion article. See [Nerdio](https://www.m365.fm/entity/nerdio/) for the platform.
 
 ## A short checklist
 

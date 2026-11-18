@@ -8,8 +8,8 @@ date: 2026-11-18
 topics: [azure-virtual-desktop, fslogix-cloud-cache]
 keypoints:
   - "Azure Virtual Desktop has no native disaster recovery features. Microsoft runs the control plane, and you own session hosts, profiles, apps, user data and identities."
-  - "Microsoft's multiregion article estimates active-active with Cloud Cache at near-zero RTO, active-passive at 15 to 60 minutes, and Azure Site Recovery for personal pools at minutes per VM plus domain rejoin time. It calls these estimates, not guarantees."
-  - "Cloud Cache replicates profiles asynchronously to a second storage account. Microsoft recommends it instead of storage-specific replication, and geo-redundant storage is not usable in some cases, for example with Azure Files Premium or in a region without a region pair."
+  - "Microsoft estimates active-active with Cloud Cache at near-zero RTO, active-passive at 15 to 60 minutes and Site Recovery for personal pools at minutes per VM, as estimates, not guarantees."
+  - "Cloud Cache replicates profiles asynchronously to a second storage account; Microsoft recommends it over storage replication. GRS is not usable in some cases, such as Azure Files Premium."
   - "Availability zones are not disaster recovery, a reservation does not reserve capacity, and Site Recovery test failover must not be used on session hosts."
   - "In an active-passive pooled design, failover works through user assignments: you remove users from the primary application groups and assign them to the secondary groups."
 faq:
@@ -52,13 +52,13 @@ Microsoft describes a single host pool across regions as an option for specific 
 
 ## Profiles: Cloud Cache or storage replication
 
-Learn's [FSLogix high availability](https://learn.microsoft.com/en-us/fslogix/concepts-container-high-availability) page is about the same region or data center only: it recommends zone-redundant storage for Azure Files and says standard containers (`VHDLocations`) provide no resiliency of their own. For cross-region recovery the multiregion article uses [FSLogix Cloud Cache](/entity/fslogix-cloud-cache/), which lets you specify several profile storage locations and replicates data asynchronously without relying on storage replication. The article recommends Cloud Cache instead of storage-specific replication because of the possible combinations of storage types, replication options, service capabilities and regional availability limits. It lists situations where geo-redundant storage (GRS) cannot be used: a region without a region pair and the Azure Files Premium tier, which does not support GRS. It also notes that GRS gives higher RPO and RTO than Cloud Cache and that failover and failback testing in production is not simple.
+Learn's [FSLogix high availability](https://learn.microsoft.com/en-us/fslogix/concepts-container-high-availability) page is about the same region or data center only: it recommends zone-redundant storage for Azure Files and says standard containers (`VHDLocations`) provide no resiliency of their own. For cross-region recovery the multiregion article uses [FSLogix Cloud Cache](https://www.m365.fm/entity/fslogix-cloud-cache/), which lets you specify several profile storage locations and replicates data asynchronously without relying on storage replication. The article recommends Cloud Cache instead of storage-specific replication because of the possible combinations of storage types, replication options, service capabilities and regional availability limits. It lists situations where geo-redundant storage (GRS) cannot be used: a region without a region pair and the Azure Files Premium tier, which does not support GRS. It also notes that GRS gives higher RPO and RTO than Cloud Cache and that failover and failback testing in production is not simple.
 
 Configuration from the article, under `HKEY_LOCAL_MACHINE > SOFTWARE > FSLogix > Profiles`, value `CCDLocations`:
 
 `type=smb,connectionString=\\primarystgprofiles\profiles;type=smb,connectionString=\\secondarystgprofiles\profiles`
 
-On the secondary host pool you reverse the order, so local storage comes first. Per FSLogix's Cloud Cache overview, Cloud Cache works from a local cache, flushes changes asynchronously to every listed provider, and reads from one provider, following the listed order. Set it up twice, once for the [profile container](/entity/fslogix-profile-container/) and once for the Office container (key under `SOFTWARE > Policy > FSLogix > ODFC`); the article warns that leaving the Office setting off can misalign data between regions.
+On the secondary host pool you reverse the order, so local storage comes first. Per FSLogix's Cloud Cache overview, Cloud Cache works from a local cache, flushes changes asynchronously to every listed provider, and reads from one provider, following the listed order. Set it up twice, once for the [profile container](https://www.m365.fm/entity/fslogix-profile-container/) and once for the Office container (key under `SOFTWARE > Policy > FSLogix > ODFC`); the article warns that leaving the Office setting off can misalign data between regions.
 
 Points that cost people time:
 
@@ -67,21 +67,21 @@ Points that cost people time:
 - Size the local cache disk at least as large as the biggest profile, and start with 30 GB per concurrent user. Too small a disk causes sign-in failures. The article recommends Premium managed disks for it.
 - Use separate storage accounts for profile and Office containers, plus one for MSIX packages.
 
-For file storage with [Azure NetApp Files](/entity/azure-netapp-files/), the article says cross-region and cross-zone replication are mutually exclusive per volume, that failover is not transparent, and that failback needs storage reconfiguration. [Azure Files](/entity/azure-files/) can use ZRS for zone resilience where available.
+For file storage with [Azure NetApp Files](https://www.m365.fm/entity/azure-netapp-files/), the article says cross-region and cross-zone replication are mutually exclusive per volume, that failover is not transparent, and that failback needs storage reconfiguration. [Azure Files](https://www.m365.fm/entity/azure-files/) can use ZRS for zone resilience where available.
 
 ## Session hosts
 
 Microsoft's guidance for compute:
 
-- Spread hosts across [availability zones](/entity/availability-zones/), or use an availability set where zones are missing. Do not treat zones as DR, because they do not protect against region-wide disasters.
-- Use the same golden image in both regions, replicated through [Azure Compute Gallery](/entity/azure-compute-gallery/).
-- Use [scaling plans](/entity/avd-scaling-plan/) to keep most secondary hosts deallocated.
+- Spread hosts across [availability zones](https://www.m365.fm/entity/availability-zones/), or use an availability set where zones are missing. Do not treat zones as DR, because they do not protect against region-wide disasters.
+- Use the same golden image in both regions, replicated through [Azure Compute Gallery](https://www.m365.fm/entity/azure-compute-gallery/).
+- Use [scaling plans](https://www.m365.fm/entity/avd-scaling-plan/) to keep most secondary hosts deallocated.
 - Quota and Azure reservations do not guarantee physical capacity; on-demand capacity reservations do.
 - A deallocated session host must be started periodically to refresh its authentication token. The multiregion article says a few hours at least once every 90 days, while Learn's FAQ recommends 20 minutes every 90 days. In our reading, plan for the longer figure.
 
 ## Personal host pools and Azure Site Recovery
 
-For personal pools each VM stores user data, so the article uses [Azure Site Recovery](/entity/azure-site-recovery/) with the Azure-to-Azure architecture. There is no direct Azure Virtual Desktop integration, so protection is configured per VM, and recovery plans orchestrate groups of VMs. Failover is manual, from the portal, API or PowerShell, and can be scripted.
+For personal pools each VM stores user data, so the article uses [Azure Site Recovery](https://www.m365.fm/entity/azure-site-recovery/) with the Azure-to-Azure architecture. There is no direct Azure Virtual Desktop integration, so protection is configured per VM, and recovery plans orchestrate groups of VMs. Failover is manual, from the portal, API or PowerShell, and can be scripted.
 
 Cautions:
 
@@ -99,11 +99,11 @@ Per the multiregion article, users keep one workspace in active-passive; Learn's
 3. Assign the same groups to the matching application groups in the secondary pool.
 4. Raise secondary capacity by starting session hosts through autoscale or manually.
 
-Fail over every application group, since users who reach different groups in different pools can cause profile conflicts. To test, Microsoft describes a dedicated test group: assign it the secondary application groups and remove the primary ones. Selective failover of a subset of users or application groups tests limited active-active behavior, with each user on only one host pool at a time. Microsoft advises separate workspaces per region for active-active, where users see duplicate feed entries; name them clearly. Failback follows similar steps and can be repeated. Before it, confirm that host pool configuration and compute are restored; if the primary region lost storage data, Cloud Cache replicates the profile data back from the secondary storage. See [application groups](/entity/avd-application-group/) and [workspaces](/entity/avd-workspace/).
+Fail over every application group, since users who reach different groups in different pools can cause profile conflicts. To test, Microsoft describes a dedicated test group: assign it the secondary application groups and remove the primary ones. Selective failover of a subset of users or application groups tests limited active-active behavior, with each user on only one host pool at a time. Microsoft advises separate workspaces per region for active-active, where users see duplicate feed entries; name them clearly. Failback follows similar steps and can be repeated. Before it, confirm that host pool configuration and compute are restored; if the primary region lost storage data, Cloud Cache replicates the profile data back from the secondary storage. See [application groups](https://www.m365.fm/entity/avd-application-group/) and [workspaces](https://www.m365.fm/entity/avd-workspace/).
 
 ## The control plane scope
 
-Where host pool metadata is stored depends on the deployment scope. A [regional host pool](/entity/avd-regional-host-pools/) stores its metadata in its own region, with replicas across availability zones and, according to Learn's data locations page, metadata replicated to a paired region (where applicable) for disaster recovery purposes. A geographical host pool stores it in a database shared across the geography. The scope cannot be changed after creation, and Learn's [Deploy Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop) page says regional and geographical objects cannot be mixed, so both pools, workspaces and application groups of a DR design need the same scope.
+Where host pool metadata is stored depends on the deployment scope. A [regional host pool](https://www.m365.fm/entity/avd-regional-host-pools/) stores its metadata in its own region, with replicas across availability zones and, according to Learn's data locations page, metadata replicated to a paired region (where applicable) for disaster recovery purposes. A geographical host pool stores it in a database shared across the geography. The scope cannot be changed after creation, and Learn's [Deploy Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop) page says regional and geographical objects cannot be mixed, so both pools, workspaces and application groups of a DR design need the same scope.
 
 Microsoft announced general availability of regional host pools on 30 September 2026 in the Tech Community post "Now generally available: Regional resiliency for Azure Virtual Desktop", updated on 13 November 2026, and Learn's What's new page lists them as generally available in September 2026. The post recommends Regional for new host pools and describes Geographical as not recommended. Learn's Data locations page, last updated on 16 November 2026, shows 14 regions in its Regional column; take the region list from there and check it before you design around a region. Some Learn text still reads as preview: the Regional host pools page shows the 5.4.5-preview PowerShell module for the `-DeploymentScope` parameter, and the multiregion article still says "Regional host pools are in public preview". "Designing a multi-region Azure Virtual Desktop deployment" and "Regional host pools in Azure Virtual Desktop: where host pool metadata is stored" cover the scope choice.
 
@@ -112,7 +112,7 @@ Microsoft announced general availability of regional host pools on 30 September 
 - Network: Deploy each host pool in its own spoke VNet and connect the hubs, and confirm that DNS, domain controllers and application back ends are reachable from the secondary region.
 - Identity: Microsoft Entra ID is multiregion and needs no action. For AD DS, the article advises at least two domain controllers in the primary region and at least one in the secondary. With Microsoft Entra Connect, the article suggests a second instance in the secondary region in staging mode, promoted if needed, and a replica set for Microsoft Entra Domain Services.
 - Monitoring: a shared Log Analytics workspace gives one view in Insights, but the secondary region cannot use a workspace in an unavailable region. If that does not meet your resiliency requirements, the article lists two options: a separate workspace for each region, or testing Log Analytics workspace replication and failover.
-- Backup: Use [Azure Backup](/entity/azure-backup/) for Azure Files.
+- Backup: Use [Azure Backup](https://www.m365.fm/entity/azure-backup/) for Azure Files.
 
 ## Choosing
 

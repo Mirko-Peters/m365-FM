@@ -1,17 +1,17 @@
 ---
 title: "Scheduled agent updates in Azure Virtual Desktop explained"
-summary: "Scheduled agent updates is a host pool setting that confines non-critical updates of the Azure Virtual Desktop agent, the side-by-side stack and the Geneva Monitoring agent to one or two two-hour maintenance windows. It is off by default, critical updates are installed by force, and it only works if the session hosts are running during the window."
+summary: "Scheduled agent updates is a host pool setting that confines non-critical updates of the AVD agent, side-by-side stack and Geneva agent to maintenance windows. Off by default; hosts must be running."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-scheduled-agent-updates, avd-agent]
 keypoints:
-  - "The setting covers three components together: the Azure Virtual Desktop agent, the side-by-side stack and the Geneva Monitoring agent. It does not apply to the initial installation of these components."
+  - "The setting covers the Azure Virtual Desktop agent, the side-by-side stack and the Geneva Monitoring agent together, but not their initial installation."
   - "You set one required and one optional maintenance window. Every window is two hours long, and the time zone is either one fixed zone for the pool or the local time of each session host."
   - "The setting is disabled by default and can be configured only for existing host pools, not while you create a new one."
-  - "An update does not succeed if the session host is shut down or deallocated during the window. After four tries in a window the broker installs the update by force, and Learn says a critical update is installed by force for security purposes without naming a time."
-  - "Learn points to the WVDAgentHealthStatus table in Log Analytics and to event ID 3277 in the VM's Application log to check on updates. The agent overview ties 3277 to a failed update, but the troubleshooting guide lists the same ID with other descriptions, so read the event text."
+  - "An update fails if the host is off during the window. After four tries the broker installs it by force, and critical updates are forced for security without a stated time."
+  - "Check updates in the WVDAgentHealthStatus table and event ID 3277 in the Application log. Learn's pages give 3277 different descriptions, so read the event text."
 faq:
   - q: "What does the Scheduled Agent Updates setting actually schedule?"
     a: "Updates of the Azure Virtual Desktop agent, the side-by-side stack and the Geneva Monitoring agent. Learn says the feature updates all three if any one of them needs an update, and that it does not apply to the initial installation of the components."
@@ -25,17 +25,17 @@ Scheduled agent updates is a setting on an Azure Virtual Desktop host pool that 
 
 ## What gets updated, and what the default looks like
 
-Learn names three components that this feature updates: the Azure Virtual Desktop agent, the side-by-side stack and the Geneva Monitoring agent. The [Azure Virtual Desktop agent](/entity/avd-agent/) acts as the intermediate communicator between the service and the virtual machines. The side-by-side stack is required for users to securely establish reverse server-to-client connections. The Geneva Monitoring agent monitors the health of the agent.
+Learn names three components that this feature updates: the Azure Virtual Desktop agent, the side-by-side stack and the Geneva Monitoring agent. The [Azure Virtual Desktop agent](https://www.m365.fm/entity/avd-agent/) acts as the intermediate communicator between the service and the virtual machines. The side-by-side stack is required for users to securely establish reverse server-to-client connections. The Geneva Monitoring agent monitors the health of the agent.
 
 Without the setting, the process works like this, according to Learn's agent overview. After the first installation, the agent regularly queries the service to see whether a newer version of the agent, stack or monitoring agent exists. If one does, the flighting system installs it automatically. New versions are deployed in five-day periods to all Azure subscriptions, and these periods are called flights. It takes 24 hours for all VMs in a single broker region to receive the update in a flight, so hosts in one pool can update at different times, and hosts in different regions can update on different days within the five days.
 
-The what's-new page for the agent adds the wider picture: new versions are rolled out progressively, validation environments see them first, and the whole rollout can take several weeks across all environments. Not every validation version reaches production, because updates are repacked and given a new version number before they go to production. A [validation host pool](/entity/avd-validation-environment/) therefore tells you about changes early, while scheduled agent updates tells the service when your production hosts may take them. The two address different questions.
+The what's-new page for the agent adds the wider picture: new versions are rolled out progressively, validation environments see them first, and the whole rollout can take several weeks across all environments. Not every validation version reaches production, because updates are repacked and given a new version number before they go to production. A [validation host pool](https://www.m365.fm/entity/avd-validation-environment/) therefore tells you about changes early, while scheduled agent updates tells the service when your production hosts may take them. The two address different questions.
 
 Learn gives the typical effect of an update on a new VM: it normally lasts two to three minutes and should not cause the VM to lose connection or shut down. The page does not give a figure for hosts that already carry user sessions, so do not assume one.
 
 ## What the setting changes
 
-Scheduled agent updates is a [host pool](/entity/avd-host-pool/) setting and is disabled by default. Learn states the consequence directly: unless you enable it, the agent can be updated at any time by the agent update flighting service. Once it is enabled, the agent installs updated components only during the maintenance windows you specify.
+Scheduled agent updates is a [host pool](https://www.m365.fm/entity/avd-host-pool/) setting and is disabled by default. Learn states the consequence directly: unless you enable it, the agent can be updated at any time by the agent update flighting service. Once it is enabled, the agent installs updated components only during the maintenance windows you specify.
 
 Four boundaries follow from the Learn text:
 
@@ -70,7 +70,7 @@ Our reading of the three rules together: the windows control timing for routine 
 
 ### Interaction with autoscale
 
-The first rule matters most for pools that use [autoscale](/entity/avd-scaling-plan/). Learn's autoscale glossary says that when autoscale shuts down a VM based on the defined schedule, it deallocates and stops the VM; see [power management](/entity/avd-power-management-autoscaling/) autoscaling. A window placed in a phase where the plan has turned hosts off meets rule 1. Our reading: place at least one window in a period when your plan keeps the affected hosts running. Learn does not describe this combination; it is a consequence of the two documented behaviours, so test it on a non-production pool first.
+The first rule matters most for pools that use [autoscale](https://www.m365.fm/entity/avd-scaling-plan/). Learn's autoscale glossary says that when autoscale shuts down a VM based on the defined schedule, it deallocates and stops the VM; see [power management](https://www.m365.fm/entity/avd-power-management-autoscaling/) autoscaling. A window placed in a phase where the plan has turned hosts off meets rule 1. Our reading: place at least one window in a period when your plan keeps the affected hosts running. Learn does not describe this combination; it is a consequence of the two documented behaviours, so test it on a non-production pool first.
 
 ## Checking that it works
 
@@ -94,7 +94,7 @@ The feature adds a dependency (hosts running in the window) in exchange for pred
 | Users work across several time zones | Decide between one fixed zone and local session host time; test with one host per zone. |
 | You need to see changes before production | A validation host pool addresses this; the setting does not. Our reading: enabling the setting on the validation pool itself delays its update until the production flight, so it loses the early view. |
 
-A few limits to keep in view. Scheduled agent updates covers only the three agent components. Learn's agent overview says the agent update is not connected to Azure Virtual Desktop infrastructure build updates, and nothing on the feature page ties it to Windows updates of the guest operating system. It therefore cannot replace a patching plan. Our reading: treat it as one control among several, next to your [session host](/entity/avd-session-host/) patching approach.
+A few limits to keep in view. Scheduled agent updates covers only the three agent components. Learn's agent overview says the agent update is not connected to Azure Virtual Desktop infrastructure build updates, and nothing on the feature page ties it to Windows updates of the guest operating system. It therefore cannot replace a patching plan. Our reading: treat it as one control among several, next to your [session host](https://www.m365.fm/entity/avd-session-host/) patching approach.
 
 The feature page carries no preview label.
 

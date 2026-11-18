@@ -1,16 +1,16 @@
 ---
 title: "How to configure RDP Shortpath for managed and public networks"
-summary: "RDP Shortpath for public networks works without configuration when networks and firewalls allow UDP, while the managed-network listener needs a policy, a firewall rule and a restart on every session host. This guide covers the policy paths, the host pool networking settings, the port range limit and the checks that show which transport a session uses."
+summary: "RDP Shortpath for public networks works without configuration when UDP is allowed; the managed-network listener needs a policy, a firewall rule and a host restart. Covers host pool settings and transport checks."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [rdp-shortpath, remote-desktop-protocol]
 keypoints:
-  - "Only the managed-network listener variant needs session host configuration: enable Enable RDP Shortpath for managed networks through Intune or Group Policy, allow the inbound port (default 3390) and restart the session hosts."
-  - "The host pool has its own RDP Shortpath settings under Networking. Each of the four options can be Default, Enabled or Disabled, and where host pool and session host disagree the most restrictive setting applies."
-  - "Learn says the Azure PowerShell parameters ManagedPrivateUdp, DirectUdp, PublicUdp and RelayUdp were added in version 5.2.1 preview of the Az.DesktopVirtualization module. The cmdlet reference for Update-AzWvdHostPool does not list them, so check your module version before scripting."
-  - "Learn advises keeping TURN enabled unless you disable it for troubleshooting, because it gives a reliable path when direct UDP fails and disabling it can push connections to TCP. Learn's configuration page says TURN is available only in the Azure public cloud, while other Learn pages list it as generally available in Azure Government."
+  - "Only the managed-network listener needs host configuration: enable it through Intune or Group Policy, allow the inbound port (default 3390) and restart the session hosts."
+  - "The host pool has its own RDP Shortpath settings under Networking: four options, each Default, Enabled or Disabled. Where pool and host disagree, the most restrictive setting applies."
+  - "Learn says ManagedPrivateUdp, DirectUdp, PublicUdp and RelayUdp were added in Az.DesktopVirtualization 5.2.1 preview; the Update-AzWvdHostPool reference does not list them, so check your module."
+  - "Learn advises keeping TURN enabled except for troubleshooting, because it gives a path when direct UDP fails. Learn's pages disagree on whether TURN is available in Azure Government."
   - "Verify with the Connection Information dialog (UDP (Private Network), UDP or UDP (Relay)), event ID 135 on the session host, or the UdpUse column in the WVDConnections table."
 faq:
   - q: "Do I have to configure anything for RDP Shortpath on public networks?"
@@ -28,7 +28,7 @@ RDP Shortpath for public networks needs no configuration in a default setup: it 
 Learn lists these prerequisites:
 
 - A client that supports it. Windows App on Windows qualifies. Learn lists a macOS beta (version 11.3.8, build 3048) and Android and ChromeOS as preview.
-- For the managed-network listener, direct connectivity from the client to the session host on the listener port, not blocked by Windows Firewall, another firewall or a network security group. Examples are [Azure ExpressRoute](/entity/azure-expressroute/) private peering or an IPsec site-to-site or point-to-site VPN.
+- For the managed-network listener, direct connectivity from the client to the session host on the listener port, not blocked by Windows Firewall, another firewall or a network security group. Examples are [Azure ExpressRoute](https://www.m365.fm/entity/azure-expressroute/) private peering or an IPsec site-to-site or point-to-site VPN.
 - For public networks, internet access for clients and session hosts, with outbound UDP from the session hosts to the internet or to the STUN and TURN servers.
 - For Azure PowerShell, the Az.DesktopVirtualization module. Learn says the Shortpath parameters were added in version 5.2.1 preview and tells you to use that version. The cmdlet reference page for `Update-AzWvdHostPool` (Azure PowerShell 16.5.0) does not list the four parameters, so run `Get-Help Update-AzWvdHostPool -Parameter ManagedPrivateUdp` in your session first, or use the portal steps below.
 

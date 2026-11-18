@@ -7,10 +7,10 @@ author: mirko-p
 date: 2026-11-18
 topics: [windows-365]
 keypoints:
-  - "Microsoft Learn defines a Cloud PC as a highly available, optimized and scalable virtual machine hosted by the Windows 365 service. In Enterprise, Business and Government it has a 1:1 relationship with one user. Windows 365 Flex works differently: in Shared mode a group of users shares one Cloud PC non-concurrently."
-  - "Per Learn's overview, admins do not create Cloud PCs manually: Windows 365 creates them when a license is assigned to a user in an appropriate Microsoft Entra group. Windows 365 Reserve works differently: its Cloud PCs are provisioned on demand from Intune or the Windows App. Enterprise adds a provisioning policy and Intune enrollment, Business uses default settings, and Windows 365 for Agents has its own provisioning policies and a pool model."
+  - "Learn defines a Cloud PC as a VM hosted by Windows 365. Enterprise, Business and Government assign one per user; Windows 365 Flex Shared mode lets a group share one non-concurrently."
+  - "Admins do not create Cloud PCs manually: Windows 365 creates them when a licensed user is in the right Entra group. Windows 365 Reserve provisions on demand instead."
   - "Windows 365 Frontline was renamed Windows 365 Flex in the week of 4 May 2026. Learn says the product, licensing and capabilities are unchanged."
-  - "Enterprise needs licenses for Windows E3, Intune, Microsoft Entra ID P1 and Windows 365. Cloud PCs run on a Microsoft hosted network, which needs no Azure subscription for Entra joined devices, or on your own network through an Azure network connection."
+  - "Enterprise needs Windows E3, Intune, Entra ID P1 and Windows 365 licenses. Cloud PCs use a Microsoft hosted network (no Azure subscription for Entra joined) or an Azure network connection."
   - "In Enterprise, day-two actions include resize, which can upgrade or downgrade RAM and CPU but never shrinks the disk, and restore from short-term, long-term or manual restore points."
 faq:
   - q: "Is a Cloud PC the same as an Azure Virtual Desktop session host?"
@@ -29,7 +29,7 @@ This article covers editions, licensing, identity, network, image and day-two ac
 
 According to Learn's [Windows 365 overview](https://learn.microsoft.com/en-us/windows-365/overview), Windows 365 is a cloud-based software-as-a-service that automatically creates Cloud PCs for end users. In Windows 365 Enterprise, Business and Government, users have a 1:1 relationship with their Cloud PC: it is their own personal PC in the cloud. Windows 365 Flex differs, as the editions table shows: one license covers up to three Cloud PCs (Dedicated mode) or one shared Cloud PC (Shared mode), both for non-concurrent use.
 
-Windows 365 Enterprise builds on three services: Microsoft Intune manages the Cloud PCs, [Microsoft Entra ID](/entity/entra-id/) provides identity and access control, and [Azure Virtual Desktop](/entity/azure-virtual-desktop/) provides remote connectivity.
+Windows 365 Enterprise builds on three services: Microsoft Intune manages the Cloud PCs, [Microsoft Entra ID](https://www.m365.fm/entity/entra-id/) provides identity and access control, and [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) provides remote connectivity.
 
 ## Editions and the Flex rename
 
@@ -42,13 +42,13 @@ Windows 365 Enterprise builds on three services: Microsoft Intune manages the Cl
 | Reserve | A version of Windows 365 for users who mainly work on physical PCs: short-term Cloud PC access during disruptions, up to 10 days per user per year |
 | For Agents | Compute platform for AI-powered computer-using agents; sandbox Cloud PCs for user-prompted tasks. The Windows 365 overview page still labels it "(preview)", while the Agents what's new page lists general availability in the week of 1 June 2026 |
 
-Learn's what's new page says that in the week of 4 May 2026 Windows 365 Frontline was renamed Windows 365 Flex, and that product, licensing and capabilities are unchanged. The [Windows 365 Flex (formerly Frontline)](/entity/windows-365-frontline/) entity page has the short definition.
+Learn's what's new page says that in the week of 4 May 2026 Windows 365 Frontline was renamed Windows 365 Flex, and that product, licensing and capabilities are unchanged. The [Windows 365 Flex (formerly Frontline)](https://www.m365.fm/entity/windows-365-frontline/) entity page has the short definition.
 
 The editions differ in how much an admin configures. Learn's Business and Enterprise comparison says Business provisioning is simplified: Cloud PCs are provisioned automatically with a standard image after a license is assigned, and policy management is not supported. Business device management is limited to assigning and unassigning licenses in the Microsoft 365 admin center; app deployment is supported only with an Intune license, and Windows Update runs on default client policies that can be edited only with one. With an Intune license some device management is possible, but those Cloud PCs are not visible on the Windows 365 page. Enterprise admins select the network and assign a policy to a Microsoft Entra group. Windows 365 for Agents has its own provisioning policies (agents), groups Cloud PCs into pools, and uses a check-out/check-in model; Learn's Windows 365 overview says agent Cloud PCs are billed pay-as-you-go.
 
 Windows 365 Reserve is provisioned differently. Learn says admins provision its Cloud PCs on demand with the Provision action under Cloud PC Users in the Reserve policy in Intune, not automatically when the policy is created, or users can do it from the Windows App if the admin enables that setting. Provisioning is possible seven days after a license is assigned, and the 10-day period starts when the Cloud PC is provisioned. The what's new page lists Reserve as generally available since the week of 17 November 2025. The Windows 365 overview does not mention it, but the policy wizard offers it as a license type.
 
-Microsoft also sells [Windows 365 Link](/entity/windows-365-link/), described as a device built to connect users directly to a Cloud PC, available in select markets.
+Microsoft also sells [Windows 365 Link](https://www.m365.fm/entity/windows-365-link/), described as a device built to connect users directly to a Cloud PC, available in select markets.
 
 ## How an Enterprise Cloud PC comes into being
 

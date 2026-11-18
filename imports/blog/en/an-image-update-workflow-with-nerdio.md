@@ -1,6 +1,6 @@
 ---
 title: "An image update workflow with Nerdio"
-summary: "In Nerdio Manager for Enterprise, an image update is three linked jobs: patch or change the desktop image VM, run Set as image to create a new version, then re-image the host pool from it. This article lays out the monthly cycle, the staging and backup options, and where it differs from the native Azure Virtual Desktop route."
+summary: "In Nerdio Manager for Enterprise, an image update is three linked jobs: patch the desktop image VM, run Set as image to create a new version, then re-image the host pool. Covers the monthly cycle, staging and backup."
 status: review
 publish: false
 author: mirko-p
@@ -23,11 +23,11 @@ faq:
 
 An image update in Nerdio Manager for Enterprise is a chain of three jobs. You change the desktop image VM, run **Set as image** to turn that VM into a new image version, and then run **Resize/Re-image** on each host pool that should use it. This article sets out the chain as a monthly cycle, explains staging and backups, and compares it with the native Azure Virtual Desktop route.
 
-The facts below come from the help center for [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/); menu names can change between releases, so check them in your tenant. The lifecycle page covers imported desktop images. Nerdio says custom Azure images that are not imported can build host pools and re-image them in the same way, and that importing makes many management features available that otherwise are not. For generic image design see the [golden image](/entity/golden-image/) articles.
+The facts below come from the help center for [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/); menu names can change between releases, so check them in your tenant. The lifecycle page covers imported desktop images. Nerdio says custom Azure images that are not imported can build host pools and re-image them in the same way, and that importing makes many management features available that otherwise are not. For generic image design see the [golden image](https://www.m365.fm/entity/golden-image/) articles.
 
 ## How the pieces fit
 
-In Nerdio's model a [desktop image](/entity/nerdio-desktop-image/) consists of two Azure objects: a VM used to manage the image, and the image itself, used to deploy session hosts.
+In Nerdio's model a [desktop image](https://www.m365.fm/entity/nerdio-desktop-image/) consists of two Azure objects: a VM used to manage the image, and the image itself, used to deploy session hosts.
 
 Nerdio's lifecycle page lists the loop:
 
@@ -36,19 +36,19 @@ Nerdio's lifecycle page lists the loop:
 3. Select **Power off & set as image**. An automated process commits the changes to an image object, including Sysprep and sealing. Progress appears in the logs.
 4. Use the image to build host pools or re-image existing ones.
 
-Native guidance on Microsoft Learn differs at step 3: run [sysprep](/entity/sysprep/) yourself, capture the VM, delete it, and build the next base from your last snapshot.
+Native guidance on Microsoft Learn differs at step 3: run [sysprep](https://www.m365.fm/entity/sysprep/) yourself, capture the VM, delete it, and build the next base from your last snapshot.
 
 ## What Set as image decides
 
 The options in the Set as image dialog that matter for an update cycle:
 
-- **Run scripted actions before set as image**, for example to optimize the image, install software or install updates. See [scripted actions](/entity/nerdio-scripted-actions/).
+- **Run scripted actions before set as image**, for example to optimize the image, install software or install updates. See [scripted actions](https://www.m365.fm/entity/nerdio-scripted-actions/).
 - **Refresh image from Azure Marketplace**: replace the image with the latest version of the selected Marketplace image (see below).
-- **Geographic distribution & Azure compute gallery**: store the image in an [Azure Compute Gallery](/entity/azure-compute-gallery/) and replicate it to selected regions. Only one gallery can be chosen, in a linked resource group in the image VM's subscription, and the current region must be among the replication regions.
+- **Geographic distribution & Azure compute gallery**: store the image in an [Azure Compute Gallery](https://www.m365.fm/entity/azure-compute-gallery/) and replicate it to selected regions. Only one gallery can be chosen, in a linked resource group in the image VM's subscription, and the current region must be among the replication regions.
 - **Version Increment Type**: Major, Minor or Revision. From 1.4.3 these give 2.0.0, 1.5.0 and 1.4.4.
 - **Stage new image as inactive**, **Backup Version Limit**, **Change log** and **Apply tags**.
 
-Three settings are fixed once the image exists: hibernation support cannot be changed after creation, and the security type and the Azure Compute Gallery are locked to the selection made when the image was created or imported. Standard is the default security type; the other options need a generation 2 VM with the gallery option enabled. Nerdio's page lists limitations of the Trusted launch and Confidential VM options, such as no support for backup, managed disks and ephemeral OS disks, whereas Microsoft's Trusted Launch page lists only managed images and Linux VM hibernation under unsupported features. Check the current state before choosing a security type; see [trusted launch](/entity/trusted-launch/).
+Three settings are fixed once the image exists: hibernation support cannot be changed after creation, and the security type and the Azure Compute Gallery are locked to the selection made when the image was created or imported. Standard is the default security type; the other options need a generation 2 VM with the gallery option enabled. Nerdio's page lists limitations of the Trusted launch and Confidential VM options, such as no support for backup, managed disks and ephemeral OS disks, whereas Microsoft's Trusted Launch page lists only managed images and Linux VM hibernation under unsupported features. Check the current state before choosing a security type; see [trusted launch](https://www.m365.fm/entity/trusted-launch/).
 
 Nerdio also says it removes all local user profiles during image creation, which increases the likelihood of Sysprep success; **Skip removal of local profiles** bypasses this.
 
@@ -95,7 +95,7 @@ Select **Hosts > Resize/Re-image** on the host pool. The dialog offers:
 | VM Size and OS Disk | Optional fields to change host size or OS disk |
 | Process Host in Groups Of | Concurrent re-imaging operations; larger groups finish faster, but a bad image or an Azure issue can leave many hosts in error. For 150 hosts the page suggests groups of 25. The patching FAQ gives a default of 1 |
 | Number of failures before aborting | Stops the run after that many failed tasks. The patching FAQ gives a default of 1 |
-| After first group is done, set remaining hosts to drain mode | Users then connect only to re-imaged hosts. See [drain mode](/entity/avd-drain-mode/) |
+| After first group is done, set remaining hosts to drain mode | Users then connect only to re-imaged hosts. See [drain mode](https://www.m365.fm/entity/avd-drain-mode/) |
 | Force Users to Log Off | Immediately, after a period, or Never; Never waits indefinitely, and a re-image that comes due meanwhile is skipped |
 | Log off users with disconnected sessions | When disabled, disconnected sessions are not forcibly logged off |
 | Set hosts to drain mode while waiting | Selected by default; can be cleared only when forcing logoff is set to Never |
@@ -111,7 +111,7 @@ Set as image has two backup options. **Keep current version as backup** retains 
 
 Nerdio thus calls backups unmanaged and also describes an automatic limit on them. It does not say whether the limit covers the versions listed as unmanaged, so check the gallery after the first few cycles.
 
-For Windows 365, the same dialog has **Enable for Cloud PCs**, with a limit of 20 uploaded images. For an alternative build route see the [custom image templates](/entity/avd-custom-image-templates/) articles.
+For Windows 365, the same dialog has **Enable for Cloud PCs**, with a limit of 20 uploaded images. For an alternative build route see the [custom image templates](https://www.m365.fm/entity/avd-custom-image-templates/) articles.
 
 ## Native route in comparison
 
@@ -119,7 +119,7 @@ For Windows 365, the same dialog has **Enable for Cloud PCs**, with a limit of 2
 |---|---|---|
 | Change the image | Power on the image VM and change it, or use scripts | New base VM from your last snapshot, patched |
 | Generalize and capture | Set as image automates Sysprep and sealing | Run sysprep, capture, delete the VM; never capture the same VM twice |
-| Roll out | Resize/Re-image, in groups | Session host update, only for [host pools with a session host configuration](/entity/avd-session-host-configuration/) |
+| Roll out | Resize/Re-image, in groups | Session host update, only for [host pools with a session host configuration](https://www.m365.fm/entity/avd-session-host-configuration/) |
 | Staging | Inactive version, then manual or timed activation | Test the update process on a test host pool aligned to the host pool |
 
 Session host update deallocates or deletes the existing VMs and creates new ones; an update first targets a single initial host to test the end-to-end process, then continues with the remaining hosts in batches. Its Learn page says autoscale should be disabled before an update and kept disabled until it finishes, that manual customizations are not present afterwards, and that it is available only in the global Azure cloud. Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, session host configuration and update, and ephemeral OS disks, in July 2026 (Tech Community). Some Learn pages, such as the scenarios and glossary pages, still carry preview wording; check the current page before relying on a limit. Nerdio's Resize/re-image page does not say whether Nerdio's autoscale must be paused during a re-image, so test that case before the first scheduled run.

@@ -1,15 +1,15 @@
 ---
 title: "Depth-first load balancing and autoscale: how the schedule overrides the host pool setting"
-summary: "When a scaling plan is assigned to a pooled host pool and enabled, the load balancing algorithm in each schedule phase overrides the one on the host pool, according to Microsoft Learn. This guide shows the algorithm field in each schedule phase, where to set depth-first, which values carry over between phases and days, and how to check the result."
+summary: "When a scaling plan is assigned to a pooled host pool and enabled, the load balancing algorithm in each schedule phase overrides the host pool setting, says Learn. This guide shows where to set depth-first and how to check it."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-depth-first-load-balancing, avd-host-pool]
 keypoints:
-  - "Learn says the load balancing preference chosen in the scaling plan schedule overrides the one in the original host pool settings, and that for pooled pools autoscale overwrites drain mode and ignores the host pool load balancing algorithm. This applies while autoscale is enabled for the host pool."
+  - "Learn says the scaling plan's load balancing overrides the host pool setting, and for pooled pools autoscale overwrites drain mode, while autoscale is enabled for the pool."
   - "Each pooled schedule phase has its own algorithm field. Learn recommends breadth-first for ramp-up and depth-first for off-peak, and offers either for peak."
-  - "Depth-first lets autoscale consolidate sessions onto fewer hosts. It only turns a host off if all sessions can be consolidated without exceeding the capacity threshold and the minimum percentage of hosts is kept."
+  - "Depth-first lets autoscale consolidate sessions. It turns a host off only if all sessions fit without exceeding the capacity threshold and the minimum percentage of hosts is kept."
   - "Pooled host pools with autoscale need a custom maximum session limit. Learn says not to use the default value."
   - "Autoscale changes drain mode on every host in scope, whoever set it. Use an exclusion tag to keep a host out of scaling."
 faq:
@@ -27,7 +27,7 @@ It covers power management autoscaling on pooled pools, which is generally avail
 
 ## Where the override happens
 
-A [scaling plan](/entity/avd-scaling-plan/) holds schedules, and each schedule has four phases. In the Azure portal, each pooled phase has its own field:
+A [scaling plan](https://www.m365.fm/entity/avd-scaling-plan/) holds schedules, and each schedule has four phases. In the Azure portal, each pooled phase has its own field:
 
 | Phase | Algorithm field | What Learn says |
 |---|---|---|
@@ -36,7 +36,7 @@ A [scaling plan](/entity/avd-scaling-plan/) holds schedules, and each schedule h
 | Ramp-down | Load-balancing algorithm | No recommendation on the page |
 | Off-peak hours | Load-balancing algorithm | Recommends depth-first, to gradually reduce the number of hosts based on sessions on each VM |
 
-The autoscale FAQ explains the reasoning: breadth-first in the first two phases gives an even distribution of sessions, which Learn says optimizes performance, and depth-first in the last two helps autoscale consolidate sessions until it reaches the minimal possible number of [session hosts](/entity/avd-session-host/).
+The autoscale FAQ explains the reasoning: breadth-first in the first two phases gives an even distribution of sessions, which Learn says optimizes performance, and depth-first in the last two helps autoscale consolidate sessions until it reaches the minimal possible number of [session hosts](https://www.m365.fm/entity/avd-session-host/).
 
 Learn's [scenarios page](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios) uses breadth-first for ramp-up, peak and off-peak in its examples, and depth-first for ramp-down. They are examples, not a rule, so follow the recommendation text when you design a schedule.
 
@@ -52,10 +52,10 @@ Learn also says that changes to a plan already assigned to host pools apply imme
 
 Depth-first only consolidates well if the neighboring settings fit. Learn's prerequisites and scenarios give these.
 
-- **Custom maximum session limit.** Learn says that autoscale on pooled pools needs a configured [maximum session limit](/entity/avd-maximum-session-limit/) and not the default value. Depth-first also requires one. A pool created with breadth-first carries the default of 999999, which would make the capacity calculation meaningless; this is an inference from the formula, so replace it.
-- **[Capacity threshold](/entity/avd-capacity-threshold/).** Entered in ramp-up and carried over to peak, where Learn says you cannot change it separately. Ramp-down has its own field, and off-peak takes that value. Autoscale only turns hosts off if used capacity stays at or below the threshold.
-- **[Minimum percentage of hosts](/entity/avd-minimum-percentage-of-hosts/).** The lowest share of hosts that must stay on. Learn says the result is rounded up to a whole number: in a pool of seven hosts, 10% in ramp-up keeps one host on.
-- **[Force sign-out](/entity/avd-force-logoff/).** Applies only in ramp-down. Without it you choose between waiting for no active and disconnected sessions, or for no active sessions.
+- **Custom maximum session limit.** Learn says that autoscale on pooled pools needs a configured [maximum session limit](https://www.m365.fm/entity/avd-maximum-session-limit/) and not the default value. Depth-first also requires one. A pool created with breadth-first carries the default of 999999, which would make the capacity calculation meaningless; this is an inference from the formula, so replace it.
+- **[Capacity threshold](https://www.m365.fm/entity/avd-capacity-threshold/).** Entered in ramp-up and carried over to peak, where Learn says you cannot change it separately. Ramp-down has its own field, and off-peak takes that value. Autoscale only turns hosts off if used capacity stays at or below the threshold.
+- **[Minimum percentage of hosts](https://www.m365.fm/entity/avd-minimum-percentage-of-hosts/).** The lowest share of hosts that must stay on. Learn says the result is rounded up to a whole number: in a pool of seven hosts, 10% in ramp-up keeps one host on.
+- **[Force sign-out](https://www.m365.fm/entity/avd-force-logoff/).** Applies only in ramp-down. Without it you choose between waiting for no active and disconnected sessions, or for no active sessions.
 - **Disconnected sessions.** They count as sessions. Learn's FAQ says reaching zero hosts requires zero sessions including disconnected ones, and recommends a Group Policy timeout for disconnected sessions.
 
 ## What depth-first adds to consolidation
@@ -85,12 +85,12 @@ Learn adds that on days not selected in a schedule, the last off-peak settings c
 
 ## Keeping a host out of the logic
 
-Learn says that for pooled host pools autoscale overwrites drain mode, and its FAQ says this holds no matter who put a host in drain mode. To exclude a host, use an [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/); the setup is covered in "Exclusion tags in AVD autoscale: keeping individual VMs out of scaling". For depth-first, note that autoscale does not start, stop or drain a tagged host, although Learn says tagged hosts still count in the minimum percentage of hosts. Our reading: sessions that land on a tagged host are not consolidated away; Learn does not say whether tagged hosts enter the consolidation calculation.
+Learn says that for pooled host pools autoscale overwrites drain mode, and its FAQ says this holds no matter who put a host in drain mode. To exclude a host, use an [exclusion tag](https://www.m365.fm/entity/avd-scaling-plan-exclusion-tag/); the setup is covered in "Exclusion tags in AVD autoscale: keeping individual VMs out of scaling". For depth-first, note that autoscale does not start, stop or drain a tagged host, although Learn says tagged hosts still count in the minimum percentage of hosts. Our reading: sessions that land on a tagged host are not consolidated away; Learn does not say whether tagged hosts enter the consolidation calculation.
 
 ## Checks after the change
 
 1. Confirm the maximum session limit on the host pool is a custom value.
-2. In off-peak, look at sessions per host in [Insights](/entity/avd-insights/). Our recommendation: sessions should concentrate on few hosts; this is a practical check, not a Learn statement.
+2. In off-peak, look at sessions per host in [Insights](https://www.m365.fm/entity/avd-insights/). Our recommendation: sessions should concentrate on few hosts; this is a practical check, not a Learn statement.
 3. In ramp-down, watch whether hosts reach drain mode and shut down.
 4. Look for disconnected sessions that keep hosts on.
 5. Check that autoscale is enabled for the host pool; if it is disabled, the schedule is not what places sessions.

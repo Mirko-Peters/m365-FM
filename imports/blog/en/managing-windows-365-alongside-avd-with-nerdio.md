@@ -25,14 +25,14 @@ Nerdio Manager for Enterprise can manage Windows 365 Cloud PCs in the same conso
 
 ## What the integration is
 
-[Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/) from [Nerdio](/entity/nerdio/) is known for [Azure Virtual Desktop](/entity/azure-virtual-desktop/) management. Its Windows 365 support works through [Intune](/entity/intune/), where the Windows 365 permission is set. [Windows 365](/entity/windows-365/) stays the Microsoft service that provisions the Cloud PCs.
+[Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/) from [Nerdio](https://www.m365.fm/entity/nerdio/) is known for [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) management. Its Windows 365 support works through [Intune](https://www.m365.fm/entity/intune/), where the Windows 365 permission is set. [Windows 365](https://www.m365.fm/entity/windows-365/) stays the Microsoft service that provisions the Cloud PCs.
 
 ## Prerequisites
 
 Per Nerdio's help page "Windows 365: Enable and configure Cloud PCs":
 
 - The person enabling the feature must be a Global Administrator.
-- The [Microsoft Entra ID](/entity/entra-id/) tenant where Nerdio Manager is installed needs an Intune license and a Windows 365 license.
+- The [Microsoft Entra ID](https://www.m365.fm/entity/entra-id/) tenant where Nerdio Manager is installed needs an Intune license and a Windows 365 license.
 - Entra ID must approve the application permission consent request.
 - Network: Nerdio's page says Enterprise Cloud PCs need Active Directory with hybrid Entra ID sync and a network connection. Learn is more specific: Microsoft Entra join can use a Microsoft hosted network or an Azure network connection (ANC); only Hybrid Microsoft Entra join requires an ANC.
 
@@ -51,7 +51,7 @@ A forced region change shuts down Cloud PCs and can take hours. **Force apply co
 
 ## The Nerdio menus after the Flex rename
 
-Microsoft's What's new page says that in the week of 4 May 2026 Windows 365 Frontline was renamed [Windows 365 Flex](/entity/windows-365-frontline/), with product, licensing and capabilities unchanged. Nerdio's release notes list the rename under 8.1.0 (21 July 2026) and, under 8.2.0, a menu with pages for Enterprise, Flex Dedicated, Flex Shared and Cloud Apps.
+Microsoft's What's new page says that in the week of 4 May 2026 Windows 365 Frontline was renamed [Windows 365 Flex](https://www.m365.fm/entity/windows-365-frontline/), with product, licensing and capabilities unchanged. Nerdio's release notes list the rename under 8.1.0 (21 July 2026) and, under 8.2.0, a menu with pages for Enterprise, Flex Dedicated, Flex Shared and Cloud Apps.
 
 Per Learn, one Dedicated license provisions up to three Cloud PCs, each for one user. One Shared license provisions one Cloud PC that a group shares, one user at a time; user data is deleted after each session unless User Experience Sync is enabled. Learn's Flex overview still lists Resize as not yet supported, but What's new (March 2026) says resize for Flex dedicated Cloud PCs is generally available, so check the current page.
 
@@ -113,12 +113,12 @@ Nerdio documents three migration paths.
 
 ## Related
 
-- [Windows 365](/entity/windows-365/)
-- [Windows 365 Flex (formerly Frontline)](/entity/windows-365-frontline/)
-- [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/)
-- [Azure Virtual Desktop](/entity/azure-virtual-desktop/)
-- [Personal host pools](/entity/avd-personal-host-pool/)
-- [Intune](/entity/intune/)
+- [Windows 365](https://www.m365.fm/entity/windows-365/)
+- [Windows 365 Flex (formerly Frontline)](https://www.m365.fm/entity/windows-365-frontline/)
+- [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/)
+- [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/)
+- [Personal host pools](https://www.m365.fm/entity/avd-personal-host-pool/)
+- [Intune](https://www.m365.fm/entity/intune/)
 
 ## Sources
 

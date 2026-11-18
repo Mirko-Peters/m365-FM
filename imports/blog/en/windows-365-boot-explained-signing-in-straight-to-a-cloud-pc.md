@@ -7,10 +7,10 @@ author: mirko-p
 date: 2026-11-18
 topics: [windows-365-boot, windows-365]
 keypoints:
-  - "Windows 365 Boot is a setup for Windows 11 physical devices: after the user signs in at the device sign-in screen, the device connects straight to their Cloud PC. With single sign-on turned on for the Cloud PC, they do not sign in again."
-  - "Dedicated mode assigns the device to one user. Shared mode lets several users each sign in to their own Cloud PC, and signing out returns the device to the Windows 11 sign-in screen. Windows Hello for Business is supported in dedicated mode only."
-  - "Learn's What's new lists Boot as preview from May 2023 and generally available from the week of September 25, 2023, with shared and dedicated modes generally available in the week of February 26, 2024. The Boot overview page itself carries no status label."
-  - "The Boot setting applies a bundle of device policies, but Learn's pages differ on how much it restricts the local device, so check a pilot device. A return-to-physical-PC option can be offered on the Ctrl+Alt+Del and error screens."
+  - "Windows 365 Boot sends Windows 11 physical devices straight to the user's Cloud PC after device sign-in. With single sign-on on for the Cloud PC, users do not sign in again."
+  - "Dedicated mode assigns the device to one user. Shared mode lets several users reach their own Cloud PCs, and sign-out returns to the sign-in screen. Windows Hello works in dedicated mode only."
+  - "Learn's What's new lists Boot as GA from the week of 25 September 2023, with shared and dedicated modes GA in the week of 26 February 2024. The overview page has no status label."
+  - "Boot applies a bundle of device policies, but Learn's pages differ on how much it restricts the device, so check a pilot. A return-to-physical-PC option can be offered."
   - "Windows 365 Boot, Windows 365 Link and Windows App are different ways to reach a Cloud PC. Boot reuses existing Windows 11 hardware and keeps the local OS present, which Link does not."
 faq:
   - q: "Is Windows 365 Boot generally available?"
@@ -25,7 +25,7 @@ Windows 365 Boot lets an administrator configure a Windows 11 physical device so
 
 ## What happens at sign-in
 
-Learn's overview says Windows 365 Boot lets admins configure Windows 11 physical devices so that users can avoid signing in to the physical device and sign in directly to their [Windows 365](/entity/windows-365/) Cloud PC. If single sign-on is turned on for the Cloud PC, the user does not have to sign in to the Cloud PC again.
+Learn's overview says Windows 365 Boot lets admins configure Windows 11 physical devices so that users can avoid signing in to the physical device and sign in directly to their [Windows 365](https://www.m365.fm/entity/windows-365/) Cloud PC. If single sign-on is turned on for the Cloud PC, the user does not have to sign in to the Cloud PC again.
 
 At the core of Boot is one device setting. In the Intune Settings Catalog it is **Boot To Cloud PC Enhanced**, which Learn's guided scenario page says to find by searching for **Cloud Desktop**. It maps to the CloudDesktop CSP node `BootToCloudPCEnhanced` with the values 0 (not configured, the default), 1 (**Enable Boot to Cloud Shared PC Mode**) and 2 (**Enable Boot to Cloud Dedicated Mode (Cloud only)**). The CSP page says that enabling it applies multiple policies, among them `CloudDesktop/BootToCloudMode` = 1 and `WindowsLogon/OverrideShellProgram` = 1 (Apply Lightweight Shell), and advises not setting those enforced policies to different values. A cloud provider application must be installed (the policy page's example is Win365), and the guide's manual steps install the Windows App in System context.
 
@@ -103,7 +103,7 @@ Learn's comparison of Windows 365 connection methods on Windows covers three opt
 | Entra hybrid joined local device | No | Yes | Yes |
 | Self-deployment with Autopilot | No | Yes | Not applicable |
 
-The blog post summarizes Boot as a fit for repurposed PCs, frontline workers, and shared or dedicated devices. In Learn's comparison table, [Windows 365 Link](/entity/windows-365-link/) is the purpose-built OS for Cloud PC connections, and [Windows App](/entity/windows-app/) runs on an existing device that is also used for other tasks.
+The blog post summarizes Boot as a fit for repurposed PCs, frontline workers, and shared or dedicated devices. In Learn's comparison table, [Windows 365 Link](https://www.m365.fm/entity/windows-365-link/) is the purpose-built OS for Cloud PC connections, and [Windows App](https://www.m365.fm/entity/windows-app/) runs on an existing device that is also used for other tasks.
 
 ## Boot and Windows 365 Reserve
 

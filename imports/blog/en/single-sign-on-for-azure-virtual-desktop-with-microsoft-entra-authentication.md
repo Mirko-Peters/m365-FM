@@ -1,16 +1,16 @@
 ---
 title: "Single sign-on for Azure Virtual Desktop with Microsoft Entra authentication"
-summary: "With single sign-on, Windows on an Azure Virtual Desktop session host signs the user in with a Microsoft Entra ID token instead of a second credential prompt. It needs Microsoft Entra joined or hybrid joined session hosts, a supported Windows build and a new Entra app, Windows Cloud Login, in your Conditional Access review."
+summary: "With single sign-on, Windows on an Azure Virtual Desktop session host signs the user in with an Entra ID token instead of a second prompt. It needs Entra joined or hybrid joined hosts and a review of Windows Cloud Login."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-single-sign-on, azure-virtual-desktop]
 keypoints:
-  - "Learn describes three authentication phases: cloud service, remote session and in-session. Single sign-on affects only the second: it lets the connection skip the session host credential prompt and sign the user in to Windows through Microsoft Entra authentication."
+  - "Learn describes three authentication phases. SSO affects only the remote session phase: it skips the session host credential prompt and signs the user in through Entra authentication."
   - "Session hosts must be Microsoft Entra joined or Microsoft Entra hybrid joined. Hosts joined only to Microsoft Entra Domain Services or only to Active Directory Domain Services are not supported."
-  - "The single sign-on page lists Windows 11 or Windows 10 Enterprise, single or multi-session, and Windows Server 2022, each with the October 2022 cumulative update (KB5018418, KB5018410, KB5018421) or later. External identities have higher minimums, including Windows Server 2025."
-  - "Single sign-on adds the Windows Cloud Login app to the sign-in path, so Conditional Access, the consent dialog and, for hosts that reach domain controllers, a Kerberos server object all need a decision before you switch it on."
+  - "SSO needs Windows 11 or 10 Enterprise (single or multi-session) or Windows Server 2022 with the October 2022 cumulative update or later; external identities need higher minimums."
+  - "SSO adds the Windows Cloud Login app to sign-in, so Conditional Access, the consent dialog and, for hosts reaching DCs, a Kerberos server object need a decision first."
   - "A locked remote session is disconnected by default with single sign-on, so Conditional Access is evaluated again on reconnect. External identities require single sign-on on the host pool."
 faq:
   - q: "Does single sign-on mean users never see a prompt?"
@@ -68,19 +68,19 @@ Two behaviors are new to users:
 
 The single sign-on page does not name Windows Server 2025. The authentication overview names it, with Windows 11 24H2, for external identities (see below).
 
-The Entra joined host itself has its own prerequisites that single sign-on does not replace. For host pools without a session host configuration, Learn says to assign users the **Virtual Machine User Login** role, and administrators the **Virtual Machine Administrator Login** role, on the VMs, the resource group or the subscription; Learn recommends the resource group with a user group. For host pools that use a session host configuration, this additional role assignment is not required. See [Microsoft Entra joined session hosts](/entity/avd-entra-join/) for the join model.
+The Entra joined host itself has its own prerequisites that single sign-on does not replace. For host pools without a session host configuration, Learn says to assign users the **Virtual Machine User Login** role, and administrators the **Virtual Machine Administrator Login** role, on the VMs, the resource group or the subscription; Learn recommends the resource group with a user group. For host pools that use a session host configuration, this additional role assignment is not required. See [Microsoft Entra joined session hosts](https://www.m365.fm/entity/avd-entra-join/) for the join model.
 
 ## The Kerberos server object
 
 Whether you need a Kerberos server object depends on what the hosts must reach. Learn says to create one if the session host is Microsoft Entra hybrid joined, because it is needed to authenticate to a domain controller, or if the host is Microsoft Entra joined and the environment has Active Directory domain controllers, because it is needed for SMB shares and Windows-integrated authentication to websites.
 
-If you enable single sign-on on hybrid joined hosts without the object, Learn says one of two things can happen: an error that "the specific session doesn't exist", or the single sign-on step is skipped and a standard authentication dialog appears. The fix is to create the object and connect again. An Entra joined environment with no domain controllers falls under neither condition. For the background, see [Microsoft Entra Kerberos](/entity/microsoft-entra-kerberos/).
+If you enable single sign-on on hybrid joined hosts without the object, Learn says one of two things can happen: an error that "the specific session doesn't exist", or the single sign-on step is skipped and a standard authentication dialog appears. The fix is to create the object and connect again. An Entra joined environment with no domain controllers falls under neither condition. For the background, see [Microsoft Entra Kerberos](https://www.m365.fm/entity/microsoft-entra-kerberos/).
 
 Learn adds a caution: the default Password Replication Policy on read-only domain controllers denies password replication for members of Domain Admins and Administrators. That can keep prompting those accounts for credentials and prevents them from reaching on-premises Kerberos resources from Entra joined hosts. Learn does not recommend connecting with a domain administrator account for security reasons; it suggests Run as administrator or `runas` instead.
 
 ## Conditional Access and the new app
 
-Single sign-on adds the Windows Cloud Login app to the sign-in path. A Conditional Access policy that covers only the Azure Virtual Desktop app does not govern the session host sign-in. Learn's single sign-on page points to its MFA article for the recommended two-policy structure and the common misconfigurations, and to a troubleshooting page for repeated prompts. See [Conditional Access](/entity/conditional-access/) for the feature. The article "Conditional Access for Azure Virtual Desktop: policies that work" walks through the policy design; the point here is that the review is part of the prerequisites, and Learn lists it as one of five required tasks: enable Entra authentication for RDP, hide the consent dialog, create a Kerberos server object if Active Directory is part of the environment, review Conditional Access, and configure the host pool.
+Single sign-on adds the Windows Cloud Login app to the sign-in path. A Conditional Access policy that covers only the Azure Virtual Desktop app does not govern the session host sign-in. Learn's single sign-on page points to its MFA article for the recommended two-policy structure and the common misconfigurations, and to a troubleshooting page for repeated prompts. See [Conditional Access](https://www.m365.fm/entity/conditional-access/) for the feature. The article "Conditional Access for Azure Virtual Desktop: policies that work" walks through the policy design; the point here is that the review is part of the prerequisites, and Learn lists it as one of five required tasks: enable Entra authentication for RDP, hide the consent dialog, create a Kerberos server object if Active Directory is part of the environment, review Conditional Access, and configure the host pool.
 
 ## Limits and neighbouring features
 
@@ -102,15 +102,14 @@ When prompts appear is covered in "MFA for Azure Virtual Desktop users: what pro
 
 ## Related
 
-- [Single sign-on (Azure Virtual Desktop)](/entity/avd-single-sign-on/)
-- [Azure Virtual Desktop](/entity/azure-virtual-desktop/)
-- [Microsoft Entra ID](/entity/entra-id/)
-- [Microsoft Entra hybrid join](/entity/hybrid-entra-join/)
-- [Windows App](/entity/windows-app/)
+- [Single sign-on (Azure Virtual Desktop)](https://www.m365.fm/entity/avd-single-sign-on/)
+- [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/)
+- [Microsoft Entra ID](https://www.m365.fm/entity/entra-id/)
+- [Microsoft Entra hybrid join](https://www.m365.fm/entity/hybrid-entra-join/)
+- [Windows App](https://www.m365.fm/entity/windows-app/)
 
 ## Sources
 
-All retrieved on 17 November 2026.
 
 - [Microsoft Learn: Configure single sign-on for Azure Virtual Desktop using Microsoft Entra ID](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-single-sign-on)
 - [Microsoft Learn: Authentication in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/authentication)

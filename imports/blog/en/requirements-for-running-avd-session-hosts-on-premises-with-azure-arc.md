@@ -8,9 +8,9 @@ date: 2026-11-18
 topics: [avd-hybrid, azure-virtual-desktop]
 keypoints:
   - "Four resource providers matter: Microsoft.DesktopVirtualization for AVD, plus Microsoft.HybridCompute, Microsoft.GuestConfiguration and Microsoft.HybridConnectivity for Azure Arc-enabled servers."
-  - "The host pool needs a managed identity, and that identity needs the Reader role on the resource group that holds the Arc-enabled servers. Learn warns that a future release will keep session hosts from becoming available without it."
+  - "The host pool needs a managed identity with Reader on the resource group holding the Arc-enabled servers. Learn warns hosts will not become available without it in a future release."
   - "Create a standard host pool without adding VMs. Session host configuration is not supported on Azure Virtual Desktop Hybrid."
-  - "Arc traffic is outbound on TCP 443, and the Azure Virtual Desktop endpoints are outbound too. No inbound ports are needed. Learn's Azure fabric IP page calls two Azure addresses non-routable from on-premises networks, and its Hybrid troubleshooting page treats an unreachable 169.254.169.254 on Arc machines as expected."
+  - "Arc and AVD traffic is outbound on TCP 443; no inbound ports are needed. Learn treats an unreachable 169.254.169.254 on Arc machines as expected."
   - "Learn says Azure Arc is not recommended for short-lived or VDI virtual machines. Plan Hybrid session hosts as long-lived machines that you do not delete and recreate under the same name."
 faq:
   - q: "Which Azure resource providers do I have to register for Azure Virtual Desktop Hybrid?"
@@ -21,7 +21,7 @@ faq:
     a: "No inbound ports are listed. The Azure Connected Machine agent communicates outbound over TCP port 443. The Azure Virtual Desktop required-endpoints page says all entries are outbound and that you do not need to open inbound ports for Azure Virtual Desktop."
 ---
 
-Running session hosts on-premises with Azure Virtual Desktop Hybrid needs three things in place before the first host registers: the Azure resources and roles, a supported and Arc-enabled Windows machine, and outbound access to the Azure Arc and Azure Virtual Desktop endpoints. For the concept, the decision to use Hybrid and the comparison with Azure Local, see the [Hybrid explainer](/entity/avd-hybrid/). The page on [Azure Arc](/entity/azure-arc/) covers the connection layer in general.
+Running session hosts on-premises with Azure Virtual Desktop Hybrid needs three things in place before the first host registers: the Azure resources and roles, a supported and Arc-enabled Windows machine, and outbound access to the Azure Arc and Azure Virtual Desktop endpoints. For the concept, the decision to use Hybrid and the comparison with Azure Local, see the [Hybrid explainer](https://www.m365.fm/entity/avd-hybrid/). The page on [Azure Arc](https://www.m365.fm/entity/azure-arc/) covers the connection layer in general.
 
 Azure Virtual Desktop Hybrid was announced as generally available on 1 September 2026. Learn's overview and deployment pages carry the page date 2 September 2026 and show no preview notice.
 
@@ -37,9 +37,9 @@ Register-AzResourceProvider -ProviderNamespace Microsoft.HybridConnectivity
 
 **Roles.** Host pool management needs the Desktop Virtualization Contributor role. To onboard machines to Arc, you need the Azure Connected Machine Onboarding role or Contributor on the resource group you manage the servers in. To read, modify and delete a machine, you need Azure Connected Machine Resource Administrator on that resource group.
 
-**Host pool, workspace, application group.** Create a standard [host pool](/entity/avd-host-pool/) by following the normal deployment instructions, without adding virtual machines. Learn says not to add VMs to this pool. Session host configuration is not supported. Then create a workspace and application group if you have none, add the group to the workspace, and assign users.
+**Host pool, workspace, application group.** Create a standard [host pool](https://www.m365.fm/entity/avd-host-pool/) by following the normal deployment instructions, without adding virtual machines. Learn says not to add VMs to this pool. Session host configuration is not supported. Then create a workspace and application group if you have none, add the group to the workspace, and assign users.
 
-**Managed identity.** On the host pool's **Identity** tab, assign a managed identity. Learn links to its page on configuring a [managed identity for a host pool](/entity/avd-managed-identity/). That identity needs the **Reader** role on the resource group that contains your Arc-enabled servers. Learn marks this as important: if the identity lacks Reader access to the Arc resource group, "a future release will prevent session hosts from becoming available". In the portal:
+**Managed identity.** On the host pool's **Identity** tab, assign a managed identity. Learn links to its page on configuring a [managed identity for a host pool](https://www.m365.fm/entity/avd-managed-identity/). That identity needs the **Reader** role on the resource group that contains your Arc-enabled servers. Learn marks this as important: if the identity lacks Reader access to the Arc resource group, "a future release will prevent session hosts from becoming available". In the portal:
 
 1. Open **Resource groups** and select the group with your Arc-enabled servers.
 2. Select **Access control (IAM)**, then **Add** and **Add role assignment**.
@@ -84,7 +84,7 @@ The Azure Virtual Desktop Agent URL Tool checks the other endpoints. It ships wi
 
 **Proxies.** Learn recommends bypassing proxies for AVD traffic, because the traffic is already encrypted. It advises against SSL termination, which replaces the certificates of the AVD components and can stop the agent by interfering with its trusted connection to the service. It also advises against authenticating proxies, which the AVD components do not support because they run in the context of the operating system.
 
-**Clients.** Users need the end-user endpoints from the same page, for example `graph.microsoft.com` on TCP 443. [Windows App](/entity/windows-app/) is the client that Learn names for Hybrid.
+**Clients.** Users need the end-user endpoints from the same page, for example `graph.microsoft.com` on TCP 443. [Windows App](https://www.m365.fm/entity/windows-app/) is the client that Learn names for Hybrid.
 
 ## 4. Register the host
 

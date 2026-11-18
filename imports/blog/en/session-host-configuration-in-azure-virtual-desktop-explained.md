@@ -1,6 +1,6 @@
 ---
 title: "Session host configuration in Azure Virtual Desktop explained"
-summary: "A session host configuration, a sub-resource of the session host configuration management approach, stores what the session hosts of a pooled host pool should look like: image, size, disk, domain join, network and more. The service builds and updates hosts from it, but the choice is made at host pool creation and cannot be reversed."
+summary: "A session host configuration stores what a pooled host pool's session hosts should look like: image, size, disk, domain join, network and more. The service builds and updates hosts from it; the choice is permanent."
 status: review
 publish: false
 author: mirko-p
@@ -11,7 +11,7 @@ keypoints:
   - "Session host configuration works only with pooled host pools on Azure. Learn lists it as not supported on Azure Local, and tools built for standard management do not work with it."
   - "The configuration says what hosts look like, the session host management policy says how they are created and updated, and session host update applies changes in batches."
   - "The management policy defaults in the portal are UTC, a batch size of 1, a 2-minute logoff delay, and keeping all failed hosts."
-  - "Microsoft announced general availability of enhanced host pool management, including session host configuration and update, in July 2026. Some Learn pages and the PowerShell module version 5.4.2-preview still carry preview wording."
+  - "Microsoft announced GA of enhanced host pool management, including session host configuration and update, in July 2026. Some Learn pages and module 5.4.2-preview still say preview."
 faq:
   - q: "Can I add a session host configuration to an existing host pool?"
     a: "No. Microsoft Learn says the management approach is set when you create the host pool and cannot be changed later. If you create a pool without a session host configuration you cannot add one afterwards."
@@ -25,7 +25,7 @@ A session host configuration is, in Learn's words, a sub-resource of the session
 
 ## Two management approaches
 
-Microsoft Learn's article on host pool management approaches defines a [host pool](/entity/avd-host-pool/) as a logical grouping of session host VMs that share one configuration and serve one workload. It names two approaches:
+Microsoft Learn's article on host pool management approaches defines a [host pool](https://www.m365.fm/entity/avd-host-pool/) as a logical grouping of session host VMs that share one configuration and serve one workload. It names two approaches:
 
 - **Standard management.** You create, update and scale session hosts yourself, for example with pipelines or scripts. You register hosts with a registration token.
 - **Session host configuration.** Four integrated features work together: the configuration, the session host management policy, session host update, and autoscale.
@@ -34,7 +34,7 @@ Learn adds a caution that matters before anything else: the approach is set at c
 
 ## What the configuration contains
 
-The [session host configuration](/entity/avd-session-host-configuration/) persists for the life of the pool. Learn lists these properties:
+The [session host configuration](https://www.m365.fm/entity/avd-session-host-configuration/) persists for the life of the pool. Learn lists these properties:
 
 - VM image
 - VM name prefix
@@ -65,7 +65,7 @@ The session host management policy is a single policy per host pool and cannot b
 | Leave in drain mode | Whether new hosts stay in drain mode for post-creation actions. Does not apply to session host update | False |
 | Failed session host cleanup policy | Whether to keep none, some or all hosts that fail during creation. Does not apply to session host update | KeepAll |
 
-In effect the configuration is the "what" and the policy is the "how". Both are separate from the image in your [Azure Compute Gallery](/entity/azure-compute-gallery/), which only supplies the image that the configuration points to.
+In effect the configuration is the "what" and the policy is the "how". Both are separate from the image in your [Azure Compute Gallery](https://www.m365.fm/entity/azure-compute-gallery/), which only supplies the image that the configuration points to.
 
 ## Creating a pool with a configuration
 
@@ -78,7 +78,7 @@ In the Azure portal, search for Azure Virtual Desktop, select **Host pools** and
 - Domain to join. The deploy page tells you to select Active Directory and the key vault that holds the secrets for the domain join account, with an optional domain name and OU path. It mentions no Entra option here, and the pages do not agree on Entra join, covered below.
 - The local administrator account, again through a key vault secret, and an optional custom configuration script URL that must be resolvable from the public internet.
 
-Credentials therefore live in [Azure Key Vault](/entity/azure-key-vault/), not in the pool. The Management tab offers a [managed identity](/entity/avd-managed-identity/), system assigned or user assigned. Learn lists roles for the account that creates the pool (Desktop Virtualization Contributor, Virtual Machine Contributor, Key Vault Secrets User) and, for the managed identity, Desktop Virtualization Virtual Machine Contributor plus Key Vault Secrets User on the vault.
+Credentials therefore live in [Azure Key Vault](https://www.m365.fm/entity/azure-key-vault/), not in the pool. The Management tab offers a [managed identity](https://www.m365.fm/entity/avd-managed-identity/), system assigned or user assigned. Learn lists roles for the account that creates the pool (Desktop Virtualization Contributor, Virtual Machine Contributor, Key Vault Secrets User) and, for the managed identity, Desktop Virtualization Virtual Machine Contributor plus Key Vault Secrets User on the vault.
 
 **Learn's pages give different timelines for the managed identity requirement.** The deploy page says you can choose whether to assign a managed identity at creation. The What's new entry of September 2025 gave an estimated progression: from September 19, 2025, new pools created in the portal must use one; from October 15, 2025, pools without one cannot update their configuration; from November 15, 2025, they cannot create hosts. The September 2026 entry announces generally available managed identity support and says that in a future service update a configuration will require one to add hosts, which reads as if the requirement were not yet in force. The pages do not reconcile this, so check the Management tab of a new pool and the state of your existing pools in your own tenant.
 
@@ -110,7 +110,7 @@ Practical reading: the general availability announcement covers session host con
 
 ## Relation to autoscale
 
-Dynamic autoscaling, which can create and delete hosts, can only be used with pooled pools that have a configuration. Dynamic autoscale is part of the July 2026 general availability announcement, although Learn's scenarios page still carries preview wording. The autoscale FAQ says that autoscale creates hosts with the latest valid and stable image version defined in the default configuration if you have no active one. Power management autoscaling, which only starts and stops hosts, works with either approach. See [dynamic autoscaling](/entity/avd-dynamic-autoscaling/). During a session host update, disable autoscale.
+Dynamic autoscaling, which can create and delete hosts, can only be used with pooled pools that have a configuration. Dynamic autoscale is part of the July 2026 general availability announcement, although Learn's scenarios page still carries preview wording. The autoscale FAQ says that autoscale creates hosts with the latest valid and stable image version defined in the default configuration if you have no active one. Power management autoscaling, which only starts and stops hosts, works with either approach. See [dynamic autoscaling](https://www.m365.fm/entity/avd-dynamic-autoscaling/). During a session host update, disable autoscale.
 
 ## Choosing between the approaches
 
@@ -132,7 +132,6 @@ Extended validation checks the configuration at creation, but resources live in 
 
 ## Sources
 
-All retrieved on 17 November 2026.
 
 - [Microsoft Tech Community: Enhanced host pool management for Azure Virtual Desktop is now generally available (9 July 2026)](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)
 - [Microsoft Learn: Host pool management approaches](https://learn.microsoft.com/en-us/azure/virtual-desktop/host-pool-management-approaches)

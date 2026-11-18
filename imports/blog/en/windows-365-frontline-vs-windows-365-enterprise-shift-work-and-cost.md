@@ -1,6 +1,6 @@
 ---
 title: "Windows 365 Flex vs Windows 365 Enterprise: shift work and cost"
-summary: "Windows 365 Enterprise assigns one licensed Cloud PC to each user, while Windows 365 Flex (formerly Frontline, renamed in May 2026) licenses concurrent use, either as up to three dedicated Cloud PCs per license or as one shared Cloud PC per license. For shift work, the number of users per shift and the mode decide which model costs less."
+summary: "Windows 365 Enterprise assigns one Cloud PC per licensed user, while Windows 365 Flex (formerly Frontline) licenses up to three dedicated or one shared Cloud PC per license. Shift size and mode decide the cost."
 status: review
 publish: false
 author: mirko-p
@@ -10,8 +10,8 @@ keypoints:
   - "Enterprise is a 1:1 model: one license, one Cloud PC, one user. Flex licenses concurrent sessions instead of named users."
   - "Dedicated mode gives each user a persistent Cloud PC, up to three per license, but only one of them can be active at a time."
   - "Shared mode provides one Cloud PC per license for a group, used one user at a time, and deletes user data at sign-out unless User Experience Sync is enabled."
-  - "On the en-US list prices retrieved on 17 November 2026, a 2 vCPU, 8 GB, 128 GB plan costs $41 per user and month (Enterprise) or $62 per license and month (Flex), so Flex costs less once a license serves two or more shift users. Those pages show a dollar sign without a currency code; other locales show local currencies and tax notes."
-  - "Microsoft renamed Windows 365 Frontline to Windows 365 Flex in the week of 4 May 2026. Product, licensing and capabilities are unchanged. In both models each user still needs Windows Enterprise, Intune and Microsoft Entra ID P1."
+  - "On en-US list prices as of 17 November 2026, a 2 vCPU, 8 GB, 128 GB plan costs $41 per user (Enterprise) or $62 per license (Flex) monthly, so Flex is cheaper from two shift users."
+  - "Microsoft renamed Windows 365 Frontline to Flex in the week of 4 May 2026, with product and licensing unchanged. Each user still needs Windows Enterprise, Intune and Entra ID P1."
 faq:
   - q: "Is Windows 365 Frontline still called Frontline?"
     a: "Microsoft's What's new page says that in the week of 4 May 2026 Windows 365 Frontline was renamed Windows 365 Flex, with product, licensing and capabilities unchanged. The Windows 365 Flex pages on Learn and the Microsoft price page use Flex; some older Learn pages and training units still say Frontline."
@@ -23,15 +23,15 @@ faq:
 
 Windows 365 Enterprise gives every user a personal Cloud PC under one license per user. Windows 365 Flex (formerly Windows 365 Frontline) licenses concurrent sessions instead, so one license can serve several people who work in different shifts. For a team where only part of the staff is online at any time, Flex can be the cheaper model on paper. For people who work all day, one license per user avoids the concurrency rules.
 
-This article compares the two for shift work, using Microsoft Learn and the Microsoft price pages retrieved on 17 November 2026.
+This article compares the two for shift work, using Microsoft Learn and the en-US list prices as of 17 November 2026.
 
 ## A note on the name
 
-The What's new page for Windows 365 Enterprise says that in the week of 4 May 2026 Windows 365 Frontline was renamed Windows 365 Flex, and that product, licensing and capabilities are unchanged. Microsoft's announcement on the Windows IT Pro Blog adds that the change does not affect how the service works or how it is purchased. The Windows 365 Flex pages on Learn and the Microsoft price page use Flex, while some older Learn pages and training units still say Frontline. Both names refer to the same product. The M365.FM entity page is [Windows 365 Flex (formerly Frontline)](/entity/windows-365-frontline/).
+The What's new page for Windows 365 Enterprise says that in the week of 4 May 2026 Windows 365 Frontline was renamed Windows 365 Flex, and that product, licensing and capabilities are unchanged. Microsoft's announcement on the Windows IT Pro Blog adds that the change does not affect how the service works or how it is purchased. The Windows 365 Flex pages on Learn and the Microsoft price page use Flex, while some older Learn pages and training units still say Frontline. Both names refer to the same product. The M365.FM entity page is [Windows 365 Flex (formerly Frontline)](https://www.m365.fm/entity/windows-365-frontline/).
 
 ## How the two models differ
 
-[Windows 365](/entity/windows-365/) Enterprise creates Windows Cloud PCs for end users. Learn says it uses Microsoft Intune for management, Microsoft Entra ID for identity and Azure Virtual Desktop for remote connectivity. Each Cloud PC is assigned to one user and is that user's dedicated Windows device. Assigning a license to a user starts provisioning, and billing is per user per month.
+[Windows 365](https://www.m365.fm/entity/windows-365/) Enterprise creates Windows Cloud PCs for end users. Learn says it uses Microsoft Intune for management, Microsoft Entra ID for identity and Azure Virtual Desktop for remote connectivity. Each Cloud PC is assigned to one user and is that user's dedicated Windows device. Assigning a license to a user starts provisioning, and billing is per user per month.
 
 Flex is the exception to the 1:1 relationship. One Flex license serves several users who never work at the same time, either as up to three dedicated Cloud PCs (Dedicated mode) or as one shared Cloud PC (Shared mode). The mode changes both the user experience and the cost.
 
@@ -78,7 +78,7 @@ Further points from Learn and the What's new page:
 
 ## What the licenses cost
 
-The en-US Microsoft price pages, retrieved on 17 November 2026, list monthly subscriptions that renew automatically. They show a dollar sign without a currency code and carry no tax note. Flex prices are per license, and Enterprise prices are per user. Prices depend on the billing country: the worldwide Flex page shows a generic currency sign and the note "Price does not include tax", and the Irish Flex page lists euro prices excluding VAT. Check the page for your billing country before you calculate.
+The en-US Microsoft price pages (list prices as of 17 November 2026) list monthly subscriptions that renew automatically. They show a dollar sign without a currency code and carry no tax note. Flex prices are per license, and Enterprise prices are per user. Prices depend on the billing country: the worldwide Flex page shows a generic currency sign and the note "Price does not include tax", and the Irish Flex page lists euro prices excluding VAT. Check the page for your billing country before you calculate.
 
 | Plan | Enterprise, per user and month | Flex, per license and month |
 |---|---|---|

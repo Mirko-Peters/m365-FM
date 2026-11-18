@@ -7,9 +7,9 @@ author: mirko-p
 date: 2026-11-18
 topics: [nerdio-scripted-actions, nerdio-manager-for-enterprise]
 keypoints:
-  - "Declare inputs instead of hard-coding them: Windows scripts take a param block with attributes such as Mandatory and ValidateSet, runbooks take a Variables comment block with IsRequired and DefaultValue."
+  - "Declare inputs instead of hard-coding: Windows scripts use a param block with Mandatory and ValidateSet; runbooks use a Variables comment block with IsRequired and DefaultValue."
   - "Keep secrets in Nerdio secure variables (stored in Azure Key Vault, referenced as $SecureVars.Name) and limit each to the scripted actions that need it."
-  - "Make failures visible: for runbooks, Nerdio says a failing command can leave a job at Complete, so make errors exit the script; we suggest the same check for native programs. For Windows scripts, read output through the task's script logs. Never restart the VM inside the script."
+  - "Make failures visible: Nerdio says a failing runbook command can leave a job Complete, so make errors exit. Read Windows script output in task logs. Never restart the VM inside the script."
   - "Test in layers: directly on an isolated development host, then through Nerdio on one VM, then in bulk with a small group size and a failure threshold."
   - "Running a copy of a runbook in the Azure Automation Test pane performs real actions, so use non-production resources."
 faq:
@@ -21,7 +21,7 @@ faq:
     a: "Only against non-production resources. Learn states that a test runs the Draft version and the runbook still performs its actions. Nerdio's troubleshooting page says its Automation account runs a specialized runbook that copies the code from Nerdio Manager, so our recommendation is to paste the script into a separate test runbook and supply the variables by hand."
 ---
 
-A safe scripted action declares its inputs, reads secrets from Nerdio secure variables, exits with an error when a command fails and has run on one isolated host before it touches a pool. This guide takes those steps in order for [Nerdio scripted actions](/entity/nerdio-scripted-actions/) in [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/). It assumes you know what Windows scripts and Azure runbooks are; the companion article "Nerdio scripted actions explained" covers that.
+A safe scripted action declares its inputs, reads secrets from Nerdio secure variables, exits with an error when a command fails and has run on one isolated host before it touches a pool. This guide takes those steps in order for [Nerdio scripted actions](https://www.m365.fm/entity/nerdio-scripted-actions/) in [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/). It assumes you know what Windows scripts and Azure runbooks are; the companion article "Nerdio scripted actions explained" covers that.
 
 ## 1. Start from the documented structure
 
@@ -139,11 +139,11 @@ Module errors such as "does not have an implementation" often point to an outdat
 
 ## Related
 
-- [Nerdio scripted actions](/entity/nerdio-scripted-actions/)
-- [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/)
-- [Azure Key Vault](/entity/azure-key-vault/)
-- [Azure Automation](/entity/azure-automation/)
-- [PowerShell](/entity/powershell/)
+- [Nerdio scripted actions](https://www.m365.fm/entity/nerdio-scripted-actions/)
+- [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/)
+- [Azure Key Vault](https://www.m365.fm/entity/azure-key-vault/)
+- [Azure Automation](https://www.m365.fm/entity/azure-automation/)
+- [PowerShell](https://www.m365.fm/entity/powershell/)
 
 ## Sources
 

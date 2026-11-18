@@ -1,6 +1,6 @@
 ---
 title: "How to add, replace and retire session hosts without disrupting users"
-summary: "Adding a session host depends on the management approach: standard pools register hosts you build, pools with a session host configuration create them from the pool size. Replacing means adding first in a standard pool, while session host update takes capacity out first and signs users out; retiring means draining, removing the host and deleting what remains."
+summary: "Adding a session host depends on management: standard pools register hosts you build, session host configuration pools create them. Replacing and retiring follow from that, with drain mode and cleanup."
 status: review
 publish: false
 author: mirko-p
@@ -9,8 +9,8 @@ topics: [avd-session-host, azure-virtual-desktop]
 keypoints:
   - "The management approach is chosen when the host pool is created and cannot be changed later. It decides how hosts are added and replaced, and the session host configuration article covers the details."
   - "A registration key authorizes hosts to join a standard pool. For staged rollouts set its lifetime to cover the whole window, up to 27 days, or hosts fail with EXPIRED_MACHINE_TOKEN."
-  - "In a standard pool, add and test the new host first, then drain and remove the old one so capacity never drops. Session host update works the other way round: it drains and removes hosts first, and users are asked to log off."
-  - "To retire a host, turn drain mode on, let users sign out, remove it from the pool, then delete the VM and its leftovers yourself. Learn's article on deleting a host pool says the VMs remain in the subscription."
+  - "In a standard pool, add and test the new host first, then drain and remove the old one. Session host update works the other way: it drains and removes hosts first, and users are asked to log off."
+  - "To retire a host, turn drain mode on, let users sign out, remove it from the pool, then delete the VM and its leftovers yourself; removed VMs remain in the subscription."
   - "Name prefixes are short: Learn gives 11 characters on the add page and 10 for a session host configuration at host pool creation, with 15 characters for the full name."
 faq:
   - q: "How many session hosts can I add in one operation?"
@@ -25,7 +25,7 @@ Adding, replacing and retiring session hosts are three different operations. Wha
 
 ## Check the management approach first
 
-Learn describes two approaches for a [host pool](/entity/avd-host-pool/): standard management and a [session host configuration](/entity/avd-session-host-configuration/). The approach is set at creation and cannot be changed, and the companion article "Session host configuration in Azure Virtual Desktop explained" covers the differences.
+Learn describes two approaches for a [host pool](https://www.m365.fm/entity/avd-host-pool/): standard management and a [session host configuration](https://www.m365.fm/entity/avd-session-host-configuration/). The approach is set at creation and cannot be changed, and the companion article "Session host configuration in Azure Virtual Desktop explained" covers the differences.
 
 What matters here is the lifecycle. With a session host configuration, which only works with pooled pools, you add hosts by raising the pool size and replace them with session host update. You cannot create, update or scale hosts outside the service with tools built for standard management, and you cannot retrieve a registration token for externally created hosts. With standard management you build the hosts yourself and register them with a token. In a pool with a session host configuration, the **Session hosts** page offers **Manage session host configuration** and **Manage session host update**, which the update steps on Learn use.
 
@@ -70,7 +70,7 @@ Replacement means a new image, size or setting. The approaches differ in what ha
 
 1. Build the new hosts from the new image with the same size and prefix scheme, and register them.
 2. Wait until they show as available and a test user can sign in.
-3. Put one or more old hosts in drain mode, which stops new sessions without ending the current ones. If a [scaling plan](/entity/avd-scaling-plan/) is assigned, tag the old hosts with its exclusion tag first, because autoscale turns drain mode on or off on every VM included in scaling. The steps are in the article on [drain mode](/entity/avd-drain-mode/) and in the rolling-update article.
+3. Put one or more old hosts in drain mode, which stops new sessions without ending the current ones. If a [scaling plan](https://www.m365.fm/entity/avd-scaling-plan/) is assigned, tag the old hosts with its exclusion tag first, because autoscale turns drain mode on or off on every VM included in scaling. The steps are in the article on [drain mode](https://www.m365.fm/entity/avd-drain-mode/) and in the rolling-update article.
 4. When the old hosts are empty, remove them as described below.
 
 **Session host configuration: capacity goes down first**
@@ -121,7 +121,6 @@ For pools with a session host configuration, Learn says tools built for standard
 
 ## Sources
 
-All retrieved on 17 November 2026.
 
 - [Tech Community: Enhanced host pool management is now generally available (9 July 2026)](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/enhanced-host-pool-management-for-azure-virtual-desktop-is-now-generally-availab/4534612)
 - [Microsoft Learn: Add session hosts to a host pool](https://learn.microsoft.com/en-us/azure/virtual-desktop/add-session-hosts-host-pool)

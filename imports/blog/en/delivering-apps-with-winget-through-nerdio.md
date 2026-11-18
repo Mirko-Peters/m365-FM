@@ -1,16 +1,16 @@
 ---
 title: "Delivering apps with Winget through Nerdio"
-summary: "Nerdio Manager's Unified Application Management uses Winget packages from the public community repository or a private repository in your own Azure subscription, and installs them on session hosts through deployment policies. This article covers the repository setup, the import and policy steps, and the documented limits."
+summary: "Nerdio Manager's Unified Application Management uses Winget packages from the public repository or a private one in your Azure subscription and installs them through deployment policies. Covers setup, policies and limits."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [nerdio-unified-app-catalog]
 keypoints:
-  - "Nerdio's Unified Application Management (UAM) lets you pick apps from a Winget repository and deploy them to AVD host pools or Intune-managed devices with a deployment policy instead of running winget by hand."
+  - "Nerdio's Unified Application Management (UAM) deploys apps from a Winget repository to AVD host pools or Intune-managed devices through a deployment policy instead of manual winget."
   - "The public Winget community repository is read-only in UAM. A private repository in your own Azure subscription lets you upload installers, set custom install commands and keep several versions."
   - "Packages must be installable unattended (for EXE-based apps the silent flag is required), and only Machine scope can be deployed. The console disables User scope."
-  - "AVD policies can use a maintenance window, drain mode, a reboot after installation and a concurrency limit. Intune targets support no maintenance window or drain mode, and only policy-based deployment."
+  - "AVD policies can use a maintenance window, drain mode, a reboot and a concurrency limit. Intune targets support only policy-based deployment, without maintenance window or drain mode."
   - "A device that fails a task is skipped for 24 hours. Logs are on the host in C:\\Windows\\Temp\\NMWLogs\\ and can be requested from the Deployment status page."
 faq:
   - q: "Can I use the public Winget repository with Nerdio without building anything?"
@@ -23,7 +23,7 @@ faq:
 
 Nerdio Manager delivers Winget packages to Azure Virtual Desktop session hosts through its Unified Application Management feature. You choose an app from a Winget repository, import it if needed, and create a deployment policy that installs it on the target host pools.
 
-Nerdio's help pages call the feature Unified Application Management (UAM); the release notes use both "Unified App Management" and "Unified Application Management". See also the [Nerdio Unified App Catalog](/entity/nerdio-unified-app-catalog/) entity. This article covers Winget delivery only, not SCCM import or Shell Apps.
+Nerdio's help pages call the feature Unified Application Management (UAM); the release notes use both "Unified App Management" and "Unified Application Management". See also the [Nerdio Unified App Catalog](https://www.m365.fm/entity/nerdio-unified-app-catalog/) entity. This article covers Winget delivery only, not SCCM import or Shell Apps.
 
 ## What Winget is, and what Nerdio adds
 
@@ -81,7 +81,7 @@ The page says packages can be uploaded as APPX, BURN, EXE, INNO, MSI, MSIX, MSST
 1. Go to **Applications > Deployment > Deployment Policies** and select **New**.
 2. Name the policy. It is enabled by default.
 3. Under **Applications**, pick an action: install or uninstall an app or a group. Nerdio recommends not mixing install and uninstall tasks in one policy.
-4. Under **Deploy to**, choose Azure Virtual Desktop and add targets: an AVD workspace, a global pool (Nerdio lists Global Pools as public preview), or a multi-session or single-session [host pool](/entity/avd-host-pool/).
+4. Under **Deploy to**, choose Azure Virtual Desktop and add targets: an AVD workspace, a global pool (Nerdio lists Global Pools as public preview), or a multi-session or single-session [host pool](https://www.m365.fm/entity/avd-host-pool/).
 5. Set the scheduling options described below and select **Save**.
 
 Once saved, a policy starts deploying to the desktops in scope. The Supported-configurations page says policy assessment runs on new AVD devices every 15 minutes, and that a stopped in-scope AVD desktop is started for the task and returned to its original state afterwards.
@@ -89,7 +89,7 @@ Once saved, a policy starts deploying to the desktops in scope. The Supported-co
 ### Settings that matter on session hosts
 
 - **Maintenance window**: tasks run only inside it, either the target pool's own window or a manual one with days, time zone and times. Nerdio recommends using one.
-- **Drain mode**: hosts enter [drain mode](/entity/avd-drain-mode/) before tasks run, and tasks wait until no sessions are present. You set a delay in minutes and a message for users.
+- **Drain mode**: hosts enter [drain mode](https://www.m365.fm/entity/avd-drain-mode/) before tasks run, and tasks wait until no sessions are present. You set a delay in minutes and a message for users.
 - **Reboot after installation**: drains the host and restarts it once no sessions remain. It applies to install actions only.
 - **Desired host state**: All (the default, applies immediately even with active sessions), Shutdown only, or No sessions.
 - **Concurrency balancer**: a maximum job count, either global or per host pool.
@@ -112,8 +112,8 @@ The same catalog can target Intune-enrolled Windows devices, including Windows 3
 | Method | What the sources say |
 |---|---|
 | Nerdio Winget policy | Installs through a policy onto in-scope AVD hosts (stopped hosts are started for the task and returned to their original state) or onto Intune devices. Maintenance window, drain mode and desired host state apply to AVD only. |
-| App in the image | Installed in the [golden image](/entity/golden-image/). See also [Nerdio desktop image management](/entity/nerdio-desktop-image/). |
-| [App Attach](/entity/msix-app-attach/) | Per Learn, apps are attached to the user session and not installed locally on hosts or images. Needs an SMB share and MSIX, Appx or App-V packages. |
+| App in the image | Installed in the [golden image](https://www.m365.fm/entity/golden-image/). See also [Nerdio desktop image management](https://www.m365.fm/entity/nerdio-desktop-image/). |
+| [App Attach](https://www.m365.fm/entity/msix-app-attach/) | Per Learn, apps are attached to the user session and not installed locally on hosts or images. Needs an SMB share and MSIX, Appx or App-V packages. |
 
 
 ## Troubleshooting and known issues

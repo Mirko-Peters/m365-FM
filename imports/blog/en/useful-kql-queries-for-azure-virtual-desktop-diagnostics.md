@@ -1,6 +1,6 @@
 ---
 title: "Useful KQL queries for Azure Virtual Desktop diagnostics"
-summary: "These KQL queries come word for word from Microsoft Learn pages and answer four admin questions: why a user's connection failed, whether others hit the same error, whether autoscale evaluations fail, and how the network behaves. Each section names the table, the setting that fills it and the limits of the data."
+summary: "These KQL queries come word for word from Microsoft Learn and answer four admin questions: failed connections, shared errors, failing autoscale evaluations and network behaviour. Each names its table and limits."
 status: review
 publish: false
 author: mirko-p
@@ -21,11 +21,11 @@ faq:
     a: "Learn says the value should be false for issues an admin can resolve. If it is true, escalate to Microsoft and provide the CorrelationId of the failing activity."
 ---
 
-A practical order for diagnosing an Azure Virtual Desktop problem in Log Analytics, in our reading, is to query WVDErrors for the affected user, then join the connection and checkpoint tables on the correlation ID to see where the attempt stopped. This article collects the queries that Microsoft Learn publishes for that, grouped by the question they answer. Every query block below is copied from a Learn page; replace placeholders such as `userupn` before you run it. For the dashboards built on the same data, see "Key metrics and alerts for Azure Virtual Desktop" and [AVD Insights](/entity/avd-insights/), and for fixing a failed connection once you know the cause, see "Troubleshooting Azure Virtual Desktop connection failures: a checklist".
+A practical order for diagnosing an Azure Virtual Desktop problem in Log Analytics, in our reading, is to query WVDErrors for the affected user, then join the connection and checkpoint tables on the correlation ID to see where the attempt stopped. This article collects the queries that Microsoft Learn publishes for that, grouped by the question they answer. Every query block below is copied from a Learn page; replace placeholders such as `userupn` before you run it. For the dashboards built on the same data, see "Key metrics and alerts for Azure Virtual Desktop" and [AVD Insights](https://www.m365.fm/entity/avd-insights/), and for fixing a failed connection once you know the cause, see "Troubleshooting Azure Virtual Desktop connection failures: a checklist".
 
 ## What must be switched on first
 
-Learn's [diagnostics article](https://learn.microsoft.com/en-us/azure/virtual-desktop/diagnostics-log-analytics) says to open the object in Azure Virtual Desktop (host pool, application group or workspace), select **Diagnostic settings**, then **Add diagnostic setting**, and **Send to Log Analytics**. Select the categories you want. Remember to enable it for each Azure Resource Manager object you monitor; data exists only for activity after you enable diagnostics and can take a few hours to appear after first set-up. To query, open your [Log Analytics](/entity/log-analytics/) workspace and select **Logs**, or use **Monitor** then **Logs**. All diagnostics tables have the prefix WVD.
+Learn's [diagnostics article](https://learn.microsoft.com/en-us/azure/virtual-desktop/diagnostics-log-analytics) says to open the object in Azure Virtual Desktop (host pool, application group or workspace), select **Diagnostic settings**, then **Add diagnostic setting**, and **Send to Log Analytics**. Select the categories you want. Remember to enable it for each Azure Resource Manager object you monitor; data exists only for activity after you enable diagnostics and can take a few hours to appear after first set-up. To query, open your [Log Analytics](https://www.m365.fm/entity/log-analytics/) workspace and select **Logs**, or use **Monitor** then **Logs**. All diagnostics tables have the prefix WVD.
 
 Learn's Insights setup page lists the categories to enable on a host pool: Management Activities, Feed, Connections, Errors, Checkpoints, HostRegistration and AgentHealthStatus. For a workspace it lists Management Activities, Feed, Errors and Checkpoints. The same page says standard Log Analytics data storage charges apply.
 
@@ -101,7 +101,7 @@ WVDAutoscaleEvaluationPooled
 | order by _ResourceId asc, TimeGenerated asc, CorrelationId, TimeGenerated1 asc
 ```
 
-This returns evaluations that failed, including partial failures, with the matching WVDErrors rows where `ServiceError` is false. The table also holds `ScalingReasonMessage`, which Learn describes as the actions autoscale decided to perform and why, so it is a good column to read when a host pool did not scale as planned. The related [scaling plan](/entity/avd-scaling-plan/) articles explain the settings behind the decisions.
+This returns evaluations that failed, including partial failures, with the matching WVDErrors rows where `ServiceError` is false. The table also holds `ScalingReasonMessage`, which Learn describes as the actions autoscale decided to perform and why, so it is a good column to read when a host pool did not scale as planned. The related [scaling plan](https://www.m365.fm/entity/avd-scaling-plan/) articles explain the settings behind the decisions.
 
 ## Question 4: how is the network behaving?
 
@@ -132,7 +132,7 @@ Learn's Azure Monitor reference pages hold more examples that follow the same pa
 
 - WVDConnections: session duration, top 10 users by average connection duration, average connection duration by host pool, client operating systems by user count, and average session logon time by host pool.
 - WVDCheckpoints: published remote resources by count of users, which only reflects apps published as RemoteApp.
-- WVDAgentHealthStatus: peak active sessions per host pool as a time chart (the Learn query is titled "Active sessions on SessionHost", but it sums the hosts of each pool), and a health check summary whose query maps the check indexes to names such as DomainJoin, DomainTrust, FSLogix, SxSStack, URLCheck, DomainReachable, WebRTCRedirector and IMDSReachable. Our suggestion: use it after the [agent](/entity/avd-agent/) shows as unavailable.
+- WVDAgentHealthStatus: peak active sessions per host pool as a time chart (the Learn query is titled "Active sessions on SessionHost", but it sums the hosts of each pool), and a health check summary whose query maps the check indexes to names such as DomainJoin, DomainTrust, FSLogix, SxSStack, URLCheck, DomainReachable, WebRTCRedirector and IMDSReachable. Our suggestion: use it after the [agent](https://www.m365.fm/entity/avd-agent/) shows as unavailable.
 
 Learn's glossary defines time to connect as starting at a WVDConnections row with state Started and ending at a WVDCheckpoints row named ShellReady for desktops, or RdpShellAppExecuted for RemoteApp (first launch only). That tells you where to look if you build your own logon-time query.
 

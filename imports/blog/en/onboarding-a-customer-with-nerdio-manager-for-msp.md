@@ -1,15 +1,15 @@
 ---
 title: "Onboarding a customer with Nerdio Manager for MSP"
-summary: "In Nerdio Manager for MSP you onboard a customer under Accounts > Add account, after a Global Administrator and Subscription Owner in the customer tenant gives consent. This guide walks through the wizard, the deployment and identity choices, what to link afterwards and how Partner Center and billing fit in."
+summary: "In Nerdio Manager for MSP you onboard a customer under Accounts > Add account after a Global Administrator and Subscription Owner of the customer tenant consents. Covers the wizard, choices and billing."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [nerdio-manager-for-msp]
 keypoints:
-  - "Onboarding starts at the MSP level under Accounts > Add account. A user with the Global Administrator and Subscription Owner roles in the customer's Entra ID tenant consents on behalf of the organization, and Nerdio Manager creates a service principal in that tenant."
-  - "You choose one or two desktop deployment models (Azure Virtual Desktop, Windows 365 Enterprise, Windows 365 Business, Intune endpoint management) and an identity setup. Entra ID is the only identity option for Intune-only accounts."
-  - "An AVD account adds an Azure region, resource group and network, optional Entra Domain Services (Nerdio states 60 to 90 minutes) and FSLogix profile storage. An Intune-only account finishes after the first step."
+  - "Onboarding starts under Accounts > Add account. A Global Administrator and Subscription Owner in the customer tenant consents, and Nerdio Manager creates a service principal there."
+  - "You choose one or two deployment models (AVD, Windows 365 Enterprise or Business, Intune) and an identity setup; Entra ID is the only option for Intune-only accounts."
+  - "An AVD account adds region, resource group and network, optional Entra Domain Services (60 to 90 minutes per Nerdio) and FSLogix storage. Intune-only accounts finish after step one."
   - "Linking Partner Center is a separate step under System > System Settings > Integrations. It does not by itself switch an installation to per-tenant billing."
   - "A Modern Work account can enable Azure Virtual Desktop later, after a subscription, resource group and network are linked. Nerdio says per-user billing then starts for users assigned to a host pool."
 faq:
@@ -21,7 +21,7 @@ faq:
     a: "Yes. The wizard offers Endpoint Management with Intune, which manages Entra ID-joined physical or virtual endpoints. Leave the subscription as no subscription (an Intune subscription is still required) and finish with Save & done. Nerdio also describes a Modern Work plan for Microsoft 365 management without AVD management; AVD can be enabled later."
 ---
 
-To onboard a customer in [Nerdio Manager for MSP](/entity/nerdio-manager-for-msp/), sign in at the MSP level, open **Accounts**, select **Add account**, and have a user with the Global Administrator and Subscription Owner roles in the customer's Microsoft Entra ID tenant consent to the connection. The wizard then asks for the deployment model, the identity setup, an Azure region, resource group and network, and for AVD a location for FSLogix profiles.
+To onboard a customer in [Nerdio Manager for MSP](https://www.m365.fm/entity/nerdio-manager-for-msp/), sign in at the MSP level, open **Accounts**, select **Add account**, and have a user with the Global Administrator and Subscription Owner roles in the customer's Microsoft Entra ID tenant consent to the connection. The wizard then asks for the deployment model, the identity setup, an Azure region, resource group and network, and for AVD a location for FSLogix profiles.
 
 This guide follows Nerdio's help center. Labels can differ between product versions, so compare them with your own console.
 
@@ -40,10 +40,10 @@ The first step of the wizard asks for two choices that decide which later steps 
 
 | Model (Nerdio's label) | What Nerdio says it does |
 |---|---|
-| [Azure Virtual Desktop](/entity/azure-virtual-desktop/) | Deploys personal and pooled AVD desktops |
+| [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) | Deploys personal and pooled AVD desktops |
 | Windows 365 Enterprise Cloud PC (MEM-managed) | Deploys AD-joined Cloud PCs managed from the endpoint manager |
 | Windows 365 Business Cloud PC (Self-managed) | Deploys Cloud PCs that are not AD-joined |
-| Endpoint Management with Intune | Manages Entra ID-joined physical or virtual endpoints with [Intune](/entity/intune/) |
+| Endpoint Management with Intune | Manages Entra ID-joined physical or virtual endpoints with [Intune](https://www.m365.fm/entity/intune/) |
 
 Then you indicate the Active Directory setup:
 
@@ -51,10 +51,10 @@ Then you indicate the Active Directory setup:
 |---|---|
 | Entra ID | No traditional AD, accepting Entra ID limitations including limited FSLogix support. The only option for Intune endpoint management |
 | Use existing Active Directory | An existing domain controller; a DC VM should exist in Azure and the network's DNS servers must point to it |
-| Create new Entra Domain Services | Greenfield environments that need AD DS; Nerdio Manager creates [Entra Domain Services](/entity/entra-domain-services/) in the subscription, and Nerdio links to cost information for it |
+| Create new Entra Domain Services | Greenfield environments that need AD DS; Nerdio Manager creates [Entra Domain Services](https://www.m365.fm/entity/entra-domain-services/) in the subscription, and Nerdio links to cost information for it |
 | Use existing Entra Domain Services | Reusing a service already configured in the customer's environment; all prerequisites apply |
 
-For the Entra ID option, Nerdio's article on Entra ID accounts adds that you cannot name a particular Entra ID: VMs join the Entra ID that the Azure subscription is connected to. You must also tick a checkbox in a warning message to confirm you understand the limitations. Nerdio's separate Add an Entra ID account page still describes the Entra ID joined feature's limitations with "while it's in preview" wording. It says FSLogix support is offered in limited scenarios and that legacy per-user MFA must be disabled. Check Microsoft's current documentation before promising a customer a specific feature set. Background on the join type is on the [Entra joined session hosts](/entity/avd-entra-join/) page.
+For the Entra ID option, Nerdio's article on Entra ID accounts adds that you cannot name a particular Entra ID: VMs join the Entra ID that the Azure subscription is connected to. You must also tick a checkbox in a warning message to confirm you understand the limitations. Nerdio's separate Add an Entra ID account page still describes the Entra ID joined feature's limitations with "while it's in preview" wording. It says FSLogix support is offered in limited scenarios and that legacy per-user MFA must be disabled. Check Microsoft's current documentation before promising a customer a specific feature set. Background on the join type is on the [Entra joined session hosts](https://www.m365.fm/entity/avd-entra-join/) page.
 
 ## Add an AVD account step by step
 
@@ -66,7 +66,7 @@ For the Entra ID option, Nerdio's article on Entra ID accounts adds that you can
 6. Choose the Active Directory setup, then select **Save & next**. Nerdio Manager creates a service principal in the customer's tenant, which can take a few minutes. For Intune-only accounts select **Save & done** instead; no further steps are needed.
 7. On the Azure step, select the **Azure region** for the initial deployment, ideally closest to most users, then a resource group (existing or **Create new**) and a network. For a new network enter its name, address space, subnet name and subnet address prefix. Select **Save & next** and follow progress in **Account Provisioning Tasks** at the bottom of the page.
 8. Only if you chose new Entra Domain Services: enter the domain name and a domain admin username and password, then **Save & next**. Nerdio states that setup typically takes 60 to 90 minutes.
-9. Choose FSLogix profile storage: an existing Azure Files share (AD integrated), a new share, or an existing UNC path. For a new share you enter the storage account name (globally unique, lowercase, no spaces), the location (same region as the vNet and hosts), performance (Nerdio recommends Premium to avoid profile-loading bottlenecks at sign-in), provisioned capacity in GiB, and the user groups with access. Nerdio says to use a group containing all AVD users. See [FSLogix](/entity/fslogix/) and [Azure Files](/entity/azure-files/).
+9. Choose FSLogix profile storage: an existing Azure Files share (AD integrated), a new share, or an existing UNC path. For a new share you enter the storage account name (globally unique, lowercase, no spaces), the location (same region as the vNet and hosts), performance (Nerdio recommends Premium to avoid profile-loading bottlenecks at sign-in), provisioned capacity in GiB, and the user groups with access. Nerdio says to use a group containing all AVD users. See [FSLogix](https://www.m365.fm/entity/fslogix/) and [Azure Files](https://www.m365.fm/entity/azure-files/).
 10. Select **Save & done**. The account is fully provisioned and appears on the **Accounts** page.
 
 For a new Entra Domain Services domain name the help center sets rules (letters, numbers, periods and hyphens only; at least two segments; a prefix of 15 characters or fewer). Non-routable domains are allowed but not recommended and may cause DNS resolution problems. Nerdio Manager does not check for DNS conflicts with custom domain names.
@@ -77,7 +77,7 @@ A fictional customer, Contoso Dental, has 25 users and no domain controller. You
 
 ## Cloud PC accounts differ in a few places
 
-For Windows 365, Nerdio documents a separate article. The prerequisites add an existing Active Directory. In step 1 you select **Windows 365 Enterprise Cloud PC (MEM-managed)** and **Use existing Active Directory**. The next step is called Networking and has region, resource group and network fields. The last step asks for the AD admin username and password. Nerdio says it stores these credentials securely and uses them to AD-join Cloud PCs when they are assigned to users. See [Windows 365](/entity/windows-365/).
+For Windows 365, Nerdio documents a separate article. The prerequisites add an existing Active Directory. In step 1 you select **Windows 365 Enterprise Cloud PC (MEM-managed)** and **Use existing Active Directory**. The next step is called Networking and has region, resource group and network fields. The last step asks for the AD admin username and password. Nerdio says it stores these credentials securely and uses them to AD-join Cloud PCs when they are assigned to users. See [Windows 365](https://www.m365.fm/entity/windows-365/).
 
 ## Four starting points and their time estimates
 
@@ -94,20 +94,20 @@ These are vendor estimates. The help center's 60 to 90 minutes for new Entra Dom
 
 The Azure step links the first resource group and network. More can be added later on the **Settings** page. At the MSP level, **System > System Settings > Environment > Linked Resource Groups** lets you link or create a resource group for use across customer accounts; this requires a resource group with at least one VNet in the MSP Azure tenant.
 
-For an Entra ID account, Nerdio's AADJ join script article gives this order: configure FSLogix profile storage before adding a host pool, because the host pool creation uses the storage definition; add a desktop image; create a security group; create the host pool; configure auto-scaling and host pool properties. It also has the host pool run the scripted action `AADJWindowsCredentialManager` when hosts are created and started; see [scripted actions](/entity/nerdio-scripted-actions/). Backups, monitoring, multifactor authentication through Conditional Access and a sign-in test follow.
+For an Entra ID account, Nerdio's AADJ join script article gives this order: configure FSLogix profile storage before adding a host pool, because the host pool creation uses the storage definition; add a desktop image; create a security group; create the host pool; configure auto-scaling and host pool properties. It also has the host pool run the scripted action `AADJWindowsCredentialManager` when hosts are created and started; see [scripted actions](https://www.m365.fm/entity/nerdio-scripted-actions/). Backups, monitoring, multifactor authentication through Conditional Access and a sign-in test follow.
 
 A customer who starts on Microsoft 365 management can add AVD later. Nerdio's Modern Work plan is described as not including AVD management; the AVD plan covers both. For an existing Modern Work account, link a subscription, a resource group and a network, then at the account level go to **Settings > Integrations**, find **Desktop deployment model**, select **Azure Virtual Desktop** and confirm. Nerdio notes that this automatically starts per-user billing for any user assigned to a host pool and refers readers to their Partner Success Manager for AVD billing details.
 
 ## Partner Center and billing
 
-Linking [Partner Center](/entity/microsoft-partner-center/) is separate from onboarding a customer, and Nerdio says it is not available in Nerdio Manager for MSP: Gov Edition. You use an Azure account associated with Partner Center. At the MSP level go to **System > System Settings > Integrations**, select **Connect to Partner Center**, sign in, review the permissions, select **Consent on behalf of your organization** and **Accept**. A dialog then offers **Switch to the per-tenant model**, but the help center says linking does not enable per-tenant billing automatically. If the account fails to connect after approval, check the redirect URL, for example when you use a custom domain.
+Linking [Partner Center](https://www.m365.fm/entity/microsoft-partner-center/) is separate from onboarding a customer, and Nerdio says it is not available in Nerdio Manager for MSP: Gov Edition. You use an Azure account associated with Partner Center. At the MSP level go to **System > System Settings > Integrations**, select **Connect to Partner Center**, sign in, review the permissions, select **Consent on behalf of your organization** and **Accept**. A dialog then offers **Switch to the per-tenant model**, but the help center says linking does not enable per-tenant billing automatically. If the account fails to connect after approval, check the redirect URL, for example when you use a custom domain.
 
 On billing, Nerdio says an installation is on per-user billing by default and that switching to per-tenant billing goes through your Nerdio sales representative or partner success manager. Per-tenant charges are calculated monthly from the number of accounts and the average number of AVD and Windows 365 users. An AVD user is anyone assigned a desktop or RemoteApp, counted once however many assignments they have. Intune-only users are not billed. The installation must be able to reach the licensing system at IP address 52.146.28.219.
 
 ## Limits and alternatives
 
-- [Azure Lighthouse](/entity/azure-lighthouse/) is a separate Microsoft service for delegated resource management at subscription or resource group level, with no extra cost according to Learn.
-- [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/) has a different model for several tenants: a registered app in each target tenant and role assignments such as Reader, Backup Reader and Contributor. Its documentation lists limitations, including no User Cost Attribution.
+- [Azure Lighthouse](https://www.m365.fm/entity/azure-lighthouse/) is a separate Microsoft service for delegated resource management at subscription or resource group level, with no extra cost according to Learn.
+- [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/) has a different model for several tenants: a registered app in each target tenant and role assignments such as Reader, Backup Reader and Contributor. Its documentation lists limitations, including no User Cost Attribution.
 - Nerdio's help center says the subscription list shows only subscriptions the signed-in user can access, based on the user chosen when you selected **Connect**. If one is missing, check that user first. For Entra ID accounts, Nerdio's AADJ join script article also says to ensure you have the Owner role for any in-scope Azure subscriptions.
 
 ## Sources

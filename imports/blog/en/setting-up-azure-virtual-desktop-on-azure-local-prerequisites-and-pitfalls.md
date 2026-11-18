@@ -1,16 +1,16 @@
 ---
 title: "Setting up Azure Virtual Desktop on Azure Local: prerequisites and pitfalls"
-summary: "Before you add session hosts on Azure Local you need a registered instance on 23H2 or later, a Windows image, a logical network, an Active Directory domain join account and the right Azure roles. This guide walks through those prerequisites, the portal fields for the host pool and session hosts, and the constraints that cause rework."
+summary: "Before adding session hosts on Azure Local you need a registered 23H2 or later instance, a Windows image, a logical network, an AD domain join account and Azure roles. Covers portal fields and constraints."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-for-azure-local, azure-virtual-desktop]
 keypoints:
-  - "Prerequisites per Learn: an Azure Local instance registered with Azure on version 23H2 or later, a stable connection to Azure, at least one Windows image on the instance, and a logical network (DHCP, or static with automatic IP allocation)."
+  - "Prerequisites per Learn: an Azure Local instance on 23H2 or later registered with Azure, a stable connection, a Windows image on the instance and a logical network."
   - "Roles: Azure Stack HCI VM Contributor for session hosts on Azure Local, and Desktop Virtualization Contributor for creating the host pool, workspace and application group."
   - "In the portal you choose Azure Local as the virtual machine type and a custom location. The vCPU and memory values are not validated against the instance, and domain join offers Active Directory only."
-  - "Pitfalls: standard management only (no session host configuration), no mixing Azure and Azure Local hosts in one pool, logical network settings that cannot be changed after creation, and VMs that must be licensed and activated before use."
+  - "Pitfalls: standard management only, no mixing Azure and Azure Local hosts in one pool, logical network settings fixed after creation, and VMs that must be licensed and activated."
   - "Do not delete the Azure Arc resource bridge unless you plan to reimage or decommission the instance: Learn says that removes the Azure control plane for Azure Local VMs."
 faq:
   - q: "Which Azure Local version do I need for Azure Virtual Desktop?"
@@ -21,11 +21,11 @@ faq:
     a: "The prefix can be a maximum of 11 characters because it is used in the computer name, and the prefix and suffix combined can be a maximum of 15 characters. Session host names must be unique."
 ---
 
-To add session hosts on Azure Local you need an instance on version 23H2 or later that is registered with Azure, at least one Windows image on it, a logical network, a domain account that can join computers to Active Directory, and the right Azure roles. This guide lists each prerequisite with its source, shows the portal fields for [Azure Virtual Desktop for Azure Local](/entity/avd-for-azure-local/), and collects the constraints that tend to force rework. For the decision whether Azure Local is the right place for session hosts, see the companion article on when to keep session hosts close to the data.
+To add session hosts on Azure Local you need an instance on version 23H2 or later that is registered with Azure, at least one Windows image on it, a logical network, a domain account that can join computers to Active Directory, and the right Azure roles. This guide lists each prerequisite with its source, shows the portal fields for [Azure Virtual Desktop for Azure Local](https://www.m365.fm/entity/avd-for-azure-local/), and collects the constraints that tend to force rework. For the decision whether Azure Local is the right place for session hosts, see the companion article on when to keep session hosts close to the data.
 
 ## Prerequisites
 
-[Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop) lists these items for session hosts on [Azure Local](/entity/azure-local/):
+[Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop) lists these items for session hosts on [Azure Local](https://www.m365.fm/entity/azure-local/):
 
 - An Azure Local instance registered with Azure, running at least version 23H2. Azure Arc VM management is installed automatically.
 - A stable connection to Azure from your on-premises network.
@@ -78,7 +78,7 @@ Afterwards, license and activate the VMs before use. Learn says to use Azure ver
 
 ## Plan the FSLogix profile storage
 
-[FSLogix](/entity/fslogix/) profile containers need an SMB share. The Learn overview recommends a VM-based file share cluster using Storage Spaces Direct on the Azure Local instance, and for large deployments with high resource requirements a separate SMB share on the same network as the session hosts. The Architecture Center describes the on-instance option as more suitable for smaller deployments. The companion article compares the two options; the [profile container](/entity/fslogix-profile-container/) entity covers the concept.
+[FSLogix](https://www.m365.fm/entity/fslogix/) profile containers need an SMB share. The Learn overview recommends a VM-based file share cluster using Storage Spaces Direct on the Azure Local instance, and for large deployments with high resource requirements a separate SMB share on the same network as the session hosts. The Architecture Center describes the on-instance option as more suitable for smaller deployments. The companion article compares the two options; the [profile container](https://www.m365.fm/entity/fslogix-profile-container/) entity covers the concept.
 
 ## Pitfalls
 

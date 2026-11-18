@@ -1,16 +1,16 @@
 ---
 title: "FSLogix Group Policy settings that matter most"
-summary: "To configure FSLogix with Group Policy you copy fslogix.admx and fslogix.adml into a policy store, then set at least Enabled and VHDLocations. This article uses Learn's registry value names to cover the profile container settings Microsoft marks as required or recommended, the ones that need a decision, and what Group Policy does not reset."
+summary: "To configure FSLogix with Group Policy, copy fslogix.admx and fslogix.adml into a policy store, then set at least Enabled and VHDLocations. Covers required, recommended and decision settings and what Group Policy does not reset."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [fslogix]
 keypoints:
-  - "FSLogix ships fslogix.admx and fslogix.adml. For a domain, copy them to the SYSVOL central store (PolicyDefinitions and the language folder), then edit a GPO under Computer Configuration > Policies > Administrative Templates > FSLogix."
-  - "Learn marks only Enabled and VHDLocations as required for a profile container. It recommends several more, including DeleteLocalProfileWhenVHDShouldApply, FlipFlopProfileDirectoryName and VolumeType set to vhdx."
-  - "Settings under HKLM\\SOFTWARE\\FSLogix are treated as preferences: removing the GPO or setting it to Not Configured leaves the registry value on the machine. ODFC settings under Policies reset correctly."
-  - "Some settings change data handling for good. DeleteLocalProfileWhenVHDShouldApply permanently deletes a matching local profile, and changing FlipFlopProfileDirectoryName on a live system makes FSLogix create new containers."
+  - "Copy fslogix.admx and fslogix.adml to the SYSVOL central store, then edit a GPO under Computer Configuration > Policies > Administrative Templates > FSLogix."
+  - "Learn marks only Enabled and VHDLocations as required. It recommends more, including DeleteLocalProfileWhenVHDShouldApply, FlipFlopProfileDirectoryName and VolumeType vhdx."
+  - "Settings under HKLM\\SOFTWARE\\FSLogix are preferences: removing the GPO leaves the registry value in place. ODFC settings under Policies reset correctly."
+  - "Some settings are permanent: DeleteLocalProfileWhenVHDShouldApply deletes a matching local profile, and changing FlipFlopProfileDirectoryName live makes FSLogix create new containers."
   - "GroupPolicyState cannot be set with Group Policy, and RoamSearch is applied before GPOs on hosts that start from a gold image. Many settings have defaults and need no entry."
 faq:
   - q: "Which FSLogix settings are required to use profile containers?"

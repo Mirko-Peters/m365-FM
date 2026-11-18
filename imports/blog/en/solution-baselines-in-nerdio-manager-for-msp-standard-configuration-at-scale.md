@@ -1,17 +1,17 @@
 ---
 title: "Solution Baselines in Nerdio Manager for MSP: standard configuration at scale"
-summary: "A solution baseline in Nerdio Manager for MSP is a configuration defined once at the MSP level and assigned to many customer accounts, covering Microsoft 365 services such as Entra ID, Intune, Exchange Online, Teams and Defender. This article explains what is covered, how Enforce, Report-only and Exclude differ, what the Prerequisites action checks and where the feature stops."
+summary: "A solution baseline in Nerdio Manager for MSP is a configuration defined once at MSP level and assigned to many customer accounts, covering Microsoft 365 services such as Entra ID, Intune, Exchange Online and Teams."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [nerdio-solution-baselines, nerdio-manager-for-msp]
 keypoints:
-  - "A solution baseline is defined at the MSP level under Solution Baselines and assigned to customer accounts. Changes to the baseline then flow to every assigned account, so settings are not edited tenant by tenant."
-  - "Nerdio's help center covers Defender for Endpoint, Defender for Office 365, Entra ID, Exchange Online, Intune, SharePoint and OneDrive, Teams and Purview. Each baseline starts with a Prerequisites action that must show Passed for an account."
-  - "Settings can be set to Enforce, Report-only or Exclude. Nerdio's own testing advice is to assign in Report-only mode first and switch to Enforce after checking the result against customer requirements."
+  - "A solution baseline is defined at MSP level under Solution Baselines and assigned to customer accounts. Changes flow to every assigned account instead of tenant-by-tenant edits."
+  - "Nerdio covers Defender for Endpoint and Office 365, Entra ID, Exchange Online, Intune, SharePoint and OneDrive, Teams and Purview. Each baseline's Prerequisites action must show Passed."
+  - "Settings can be Enforce, Report-only or Exclude. Nerdio advises assigning in Report-only first and switching to Enforce after checking results against customer requirements."
   - "The settings Nerdio ships are suggestions, not a mandate. Nerdio tells MSPs to review them with their security and operations teams and to clone a baseline before changing it."
-  - "Nerdio documents solution baselines separately from Intune policy baselines, although account assignments can pass from one to the other as Inherited entries. Microsoft 365 Lighthouse is a different MSP tool with its own default baseline."
+  - "Nerdio documents solution baselines separately from Intune policy baselines, though assignments can pass between them as Inherited. Microsoft 365 Lighthouse is a different tool."
 faq:
   - q: "What is the difference between a solution baseline and an Intune policy baseline in Nerdio Manager?"
     a: "A solution baseline configures a Microsoft 365 service such as Entra ID, Exchange Online or Teams through a wizard of settings (Solution Baselines at the MSP level). An Intune policy baseline groups existing Intune policies under a desired state. Nerdio's help pages name two menu paths for it, Baselines > Policy Baselines and Policy management > Policy baselines, so use the one your console shows. Nerdio documents the two kinds of baseline on separate help pages."
@@ -21,7 +21,7 @@ faq:
     a: "Yes, Nerdio describes assigning the baseline with Mode set to Report-only, which evaluates it without enforcing it. Leave the option to process the baseline after saving cleared, because that option applies the baseline to assigned accounts immediately."
 ---
 
-A solution baseline in [Nerdio Manager for MSP](/entity/nerdio-manager-for-msp/) is a configuration you define once at the MSP level and assign to customer accounts, so the same Microsoft 365 settings apply across tenants and later changes reach every assigned account. [Nerdio Solution Baselines](/entity/nerdio-solution-baselines/) cover services such as Entra ID, Intune, Exchange Online, Teams and Defender, and each setting can be enforced, reported on or left out.
+A solution baseline in [Nerdio Manager for MSP](https://www.m365.fm/entity/nerdio-manager-for-msp/) is a configuration you define once at the MSP level and assign to customer accounts, so the same Microsoft 365 settings apply across tenants and later changes reach every assigned account. [Nerdio Solution Baselines](https://www.m365.fm/entity/nerdio-solution-baselines/) cover services such as Entra ID, Intune, Exchange Online, Teams and Defender, and each setting can be enforced, reported on or left out.
 
 This article explains the concept and the decisions it involves. Step-by-step handling of status and drift is in the companion article on drift monitoring. Menu labels come from Nerdio's help center and can differ between versions.
 
@@ -34,7 +34,7 @@ The idea was announced with Nerdio Manager for MSP version 5 on 2 April 2024. Ne
 Two terms are easy to confuse:
 
 - A **solution baseline** configures a Microsoft 365 service through a wizard with tabs and settings, found under **Solution Baselines** at the MSP level.
-- An **Intune policy baseline** groups Intune policies under a desired state. Nerdio's current policy-baselines page opens it with **Baselines > Policy Baselines**, while the older getting-started guide for policy baselines (July 2025) says **Policy management > Policy baselines**; use the path your console shows. Nerdio documents it separately, and the article on managing [Intune](/entity/intune/) for MSP clients with Nerdio covers it. The policy-baselines page also says that account assignments that come from a solution baseline are listed as Inherited, read-only and traceable to their source, so the two overlap in places.
+- An **Intune policy baseline** groups Intune policies under a desired state. Nerdio's current policy-baselines page opens it with **Baselines > Policy Baselines**, while the older getting-started guide for policy baselines (July 2025) says **Policy management > Policy baselines**; use the path your console shows. Nerdio documents it separately, and the article on managing [Intune](https://www.m365.fm/entity/intune/) for MSP clients with Nerdio covers it. The policy-baselines page also says that account assignments that come from a solution baseline are listed as Inherited, read-only and traceable to their source, so the two overlap in places.
 
 ## Which services are covered
 
@@ -42,14 +42,14 @@ Nerdio's baseline-management page lists these baselines, with the requirements e
 
 | Baseline | Nerdio's stated requirements |
 |---|---|
-| [Intune](/entity/intune/) | Intune license, Intune feature, Intune admin consent, Intune permission set |
-| [Entra ID](/entity/entra-id/) | Entra license and permission set; no account feature needed |
-| [Defender for Endpoint](/entity/microsoft-defender-for-endpoint/) | Defender for Endpoint license, feature and permission set |
-| [Defender for Office 365](/entity/defender-for-office-365/) | Defender for Office 365 license, feature and permission set |
-| [Exchange Online](/entity/exchange-online/) | Exchange Online license and permission set |
-| [SharePoint](/entity/sharepoint/) and [OneDrive](/entity/onedrive/) | SharePoint Online license and permission set |
-| [Teams](/entity/teams/) | Teams license and permission set |
-| [Purview](/entity/purview/) | Exchange Online license, Purview Management feature, Purview permission set |
+| [Intune](https://www.m365.fm/entity/intune/) | Intune license, Intune feature, Intune admin consent, Intune permission set |
+| [Entra ID](https://www.m365.fm/entity/entra-id/) | Entra license and permission set; no account feature needed |
+| [Defender for Endpoint](https://www.m365.fm/entity/microsoft-defender-for-endpoint/) | Defender for Endpoint license, feature and permission set |
+| [Defender for Office 365](https://www.m365.fm/entity/defender-for-office-365/) | Defender for Office 365 license, feature and permission set |
+| [Exchange Online](https://www.m365.fm/entity/exchange-online/) | Exchange Online license and permission set |
+| [SharePoint](https://www.m365.fm/entity/sharepoint/) and [OneDrive](https://www.m365.fm/entity/onedrive/) | SharePoint Online license and permission set |
+| [Teams](https://www.m365.fm/entity/teams/) | Teams license and permission set |
+| [Purview](https://www.m365.fm/entity/purview/) | Exchange Online license, Purview Management feature, Purview permission set |
 
 Nerdio's getting-started article for Microsoft 365 baselines names six of these (Defender for Endpoint, Entra ID, Exchange Online, Intune, SharePoint and OneDrive, Teams) and does not list Defender for Office 365 or Purview. Release notes say a Purview baseline was added in version 6.8.0 (a preview release of 17 March 2026, with GA in 6.8.1 on 31 March 2026), which may explain part of the gap. The getting-started article also sets three requirements: at least one Intune license in the MSP account, Super Admin permissions in Nerdio Manager, and Microsoft 365 enabled in each customer account. Features are switched per account under **Settings > Integrations** in the Modern Work area; the help article notes that the toggle labels are reversed, so you select Disabled to enable a component.
 
@@ -91,7 +91,7 @@ A fictional MSP supports 14 small customers and wants the same Entra ID sign-in 
 
 - **Scope.** Nerdio's baseline pages state no numeric limits, such as a maximum number of baselines or accounts, and give no preview or GA label for the baseline feature itself. The release-notes entry for 6.8.0 (a preview release, with GA in 6.8.1) does mention a fix for cancelling long-running operations when a baseline is applied to 100 or more accounts.
 - **Tenant Assessment Wizard.** Nerdio's overview presents it as a check to run before baselines are applied, and says it is in Public Preview as of version 7.0. Treat it as optional and check its status before depending on it.
-- **Microsoft 365 Lighthouse.** Microsoft's [Lighthouse](/entity/microsoft-365-lighthouse/) overview describes a portal for managing multiple customer tenants, with a default SMB security baseline. It requires enrollment in the Cloud Solution Provider program and carries no additional charge. It is a Microsoft tool, not a Nerdio feature, so the choice depends on which tool your team already uses for [security baselines](/entity/security-baselines/).
+- **Microsoft 365 Lighthouse.** Microsoft's [Lighthouse](https://www.m365.fm/entity/microsoft-365-lighthouse/) overview describes a portal for managing multiple customer tenants, with a default SMB security baseline. It requires enrollment in the Cloud Solution Provider program and carries no additional charge. It is a Microsoft tool, not a Nerdio feature, so the choice depends on which tool your team already uses for [security baselines](https://www.m365.fm/entity/security-baselines/).
 - **Customer fit.** Nerdio's recommendations are not mandatory. Customers with Conditional Access, strict retention or regulated data may need Exclude or Report-only on several settings.
 
 ## Sources

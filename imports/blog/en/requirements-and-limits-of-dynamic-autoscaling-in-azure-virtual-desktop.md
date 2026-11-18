@@ -1,6 +1,6 @@
 ---
 title: "Requirements and limits of dynamic autoscaling in Azure Virtual Desktop"
-summary: "Dynamic autoscaling in Azure Virtual Desktop only works for pooled host pools that use a session host configuration, in Azure but not Azure Government. This article lists the prerequisites, roles, limits and restrictions that Microsoft Learn documents, and marks where the documentation disagrees with itself."
+summary: "Dynamic autoscaling in Azure Virtual Desktop works only for pooled host pools with a session host configuration, in Azure but not Azure Government. Lists prerequisites, roles, limits and documentation conflicts."
 status: review
 publish: false
 author: mirko-p
@@ -8,8 +8,8 @@ date: 2026-11-18
 topics: [avd-dynamic-autoscaling, avd-scaling-plan, avd-managed-identity]
 keypoints:
   - "Dynamic autoscaling needs a pooled host pool with a session host configuration. That choice is made when the host pool is created and cannot be added later."
-  - "Microsoft announced general availability of enhanced host pool management, including dynamic autoscaling, in July 2026. Some Learn pages, such as the glossary and scenarios pages, still carry preview wording, so check the current page before relying on a limit."
-  - "Learn gives two different statements on the managed identity requirement for host pools with a session host configuration: an estimated schedule from September 2025 and 'a future service update' in September 2026 and on the configuration page. Check the current state."
+  - "Microsoft announced GA of enhanced host pool management, including dynamic autoscaling, in July 2026. Some Learn pages still say preview, so check the page before relying on a limit."
+  - "Learn makes two different statements on when pools with a session host configuration will require a managed identity: September 2025, and 'a future service update'. Check the current state."
   - "A custom max session limit is required, session hosts must reach one extra storage endpoint, and one scaling plan can be assigned per host pool."
   - "Autoscale overrides drain mode and ignores the host pool's load balancing setting. Use the exclusion tag for hosts you want to keep out of scaling."
 faq:
@@ -25,7 +25,7 @@ Dynamic autoscaling in Azure Virtual Desktop can start, stop, create and delete 
 
 ## Status: generally available, with preview wording left on some pages
 
-An [AVD scaling plan](/entity/avd-scaling-plan/) uses one of two methods:
+An [AVD scaling plan](https://www.m365.fm/entity/avd-scaling-plan/) uses one of two methods:
 
 - **Power management autoscaling** starts and stops (deallocates) session hosts. The scaling plan page calls it "already generally available". It is available in Azure and Azure Government.
 - **Dynamic autoscaling** also creates and deletes session hosts. It is only available in Azure.
@@ -34,20 +34,20 @@ Microsoft announced general availability of enhanced host pool management, inclu
 
 ## Host pool requirements
 
-[Dynamic autoscaling](/entity/avd-dynamic-autoscaling/) can only be used for pooled host pools with a session host configuration. The details come from the page on host pool management approaches:
+[Dynamic autoscaling](https://www.m365.fm/entity/avd-dynamic-autoscaling/) can only be used for pooled host pools with a session host configuration. The details come from the page on host pool management approaches:
 
 - The management approach is set when you create the host pool. It cannot be changed later.
-- A session host configuration works with [pooled host pools](/entity/avd-pooled-host-pool/) only. [Personal host pools](/entity/avd-personal-host-pool/) can use power management autoscaling, not dynamic autoscaling.
-- Once a pool has a [session host configuration](/entity/avd-session-host-configuration/), you cannot create, update or scale its session hosts outside the Azure Virtual Desktop service with tools built for standard management. You also cannot retrieve a registration token to add hosts created outside the service.
+- A session host configuration works with [pooled host pools](https://www.m365.fm/entity/avd-pooled-host-pool/) only. [Personal host pools](https://www.m365.fm/entity/avd-personal-host-pool/) can use power management autoscaling, not dynamic autoscaling.
+- Once a pool has a [session host configuration](https://www.m365.fm/entity/avd-session-host-configuration/), you cannot create, update or scale its session hosts outside the Azure Virtual Desktop service with tools built for standard management. You also cannot retrieve a registration token to add hosts created outside the service.
 - On the deployment page, Learn says the session host configuration is not supported with Azure Local.
 
-If you want to scale a standard [host pool](/entity/avd-host-pool/) without a session host configuration, use power management autoscaling.
+If you want to scale a standard [host pool](https://www.m365.fm/entity/avd-host-pool/) without a session host configuration, use power management autoscaling.
 
 The deployment page names one number: the portal lets you deploy up to 500 session host VMs at creation time for a pool with a session host configuration, depending on quota, and 400 for standard management. These are limits of the deployment form, not of autoscale.
 
 ## Managed identity
 
-What's new announces a [managed identity](/entity/avd-managed-identity/) requirement for host pools with a session host configuration. The September 2025 entry introduces it with "In upcoming service updates" and gives an "estimated progression":
+What's new announces a [managed identity](https://www.m365.fm/entity/avd-managed-identity/) requirement for host pools with a session host configuration. The September 2025 entry introduces it with "In upcoming service updates" and gives an "estimated progression":
 
 - Starting 19 September 2025, new such host pools created in the Azure portal must use a managed identity.
 - Starting 15 October 2025, existing pools cannot update their session host configuration until a managed identity is added.
@@ -95,9 +95,9 @@ Learn lists these limits for autoscale in general:
 
 ## Behavior that affects other settings
 
-- **[Drain mode](/entity/avd-drain-mode/).** For pooled host pools, autoscale overwrites drain mode. Use the exclusion tag when updating VMs.
+- **[Drain mode](https://www.m365.fm/entity/avd-drain-mode/).** For pooled host pools, autoscale overwrites drain mode. Use the exclusion tag when updating VMs.
 - **Load balancing.** For pooled host pools, autoscale ignores the load balancing algorithm in the host pool settings and applies load balancing based on the schedule configuration.
-- **[Exclusion tag](/entity/avd-scaling-plan-exclusion-tag/).** Learn's example is `excludeFromScaling`. Autoscale does not start, stop or change the drain mode of tagged hosts, in all phases of the schedule.
+- **[Exclusion tag](https://www.m365.fm/entity/avd-scaling-plan-exclusion-tag/).** Learn's example is `excludeFromScaling`. Autoscale does not start, stop or change the drain mode of tagged hosts, in all phases of the schedule.
 - **Disconnected sessions.** They count toward capacity. The FAQ formula is required hosts = disconnected sessions / (max session limit x capacity threshold). With 9 disconnected users, a limit of 5 and a threshold of 90%, 9 / 4.5 gives 2 hosts that stay on. To reach zero hosts after hours, no sessions may remain, including disconnected ones, and the minimum percentage must be 0%. The FAQ suggests a Group Policy timeout of 15 to 30 minutes.
 
 ## Check before you create the plan
@@ -118,12 +118,12 @@ The 500 and 400 session host figures belong to the deployment form, not to a pla
 
 ## Related
 
-- [Azure Virtual Desktop](/entity/azure-virtual-desktop/)
-- [AVD scaling plan](/entity/avd-scaling-plan/)
-- [AVD dynamic autoscaling](/entity/avd-dynamic-autoscaling/)
-- [AVD session host configuration](/entity/avd-session-host-configuration/)
-- [AVD power management autoscaling](/entity/avd-power-management-autoscaling/)
-- [AVD managed identity](/entity/avd-managed-identity/)
+- [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/)
+- [AVD scaling plan](https://www.m365.fm/entity/avd-scaling-plan/)
+- [AVD dynamic autoscaling](https://www.m365.fm/entity/avd-dynamic-autoscaling/)
+- [AVD session host configuration](https://www.m365.fm/entity/avd-session-host-configuration/)
+- [AVD power management autoscaling](https://www.m365.fm/entity/avd-power-management-autoscaling/)
+- [AVD managed identity](https://www.m365.fm/entity/avd-managed-identity/)
 
 ## Sources
 

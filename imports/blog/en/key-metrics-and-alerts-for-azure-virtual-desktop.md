@@ -1,15 +1,15 @@
 ---
 title: "Key metrics and alerts for Azure Virtual Desktop"
-summary: "In our grouping, Azure Virtual Desktop monitoring rests on three data sources: connection and error diagnostics in Log Analytics, performance counters from the session hosts, and autoscale evaluations, which Insights charts and Azure Monitor alerts can act on. Learn recommends Service Health alerts; its Insights, diagnostics and service-alert pages name no thresholds for log or metric alert rules, so you set those yourself or start from the Azure Monitor baseline alerts project."
+summary: "In our grouping, Azure Virtual Desktop monitoring rests on connection and error diagnostics, session host performance counters and autoscale evaluations. Learn names no alert thresholds, so you set those yourself."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-insights, azure-virtual-desktop]
 keypoints:
-  - "Insights is a dashboard built on Azure Monitor Workbooks. It needs diagnostic settings on host pools and workspaces, the Azure Monitor Agent with a data collection rule on the session hosts, and a Log Analytics workspace. Alerts are optional and set up separately."
-  - "Learn's Insights pages give two yardsticks for input delay: ideal below 100 ms in the use cases, and good below 150 ms, acceptable 150 to 500 ms in the glossary. For latency it says generally below 100 ms, low quality above 200 ms."
-  - "Most Azure Virtual Desktop diagnostics are logs, so log search alerts on the WVD tables are the natural fit. Learn warns that log alerts are a poor fit for detecting missing data and suggests metric alerts for that."
+  - "Insights is an Azure Monitor Workbooks dashboard. It needs diagnostic settings on host pools and workspaces, the Azure Monitor Agent with a DCR on hosts and a Log Analytics workspace."
+  - "Learn gives two yardsticks for input delay: ideal below 100 ms, or good below 150 ms and acceptable 150 to 500 ms. Latency: generally below 100 ms, low quality above 200 ms."
+  - "Most AVD diagnostics are logs, so log search alerts on the WVD tables fit. Learn warns log alerts are poor at detecting missing data and suggests metric alerts for that."
   - "Learn describes the Insights Overview page as showing active Azure Monitor alerts classified as severity 0. Alert rules, action groups and severity are configured in Azure Monitor."
   - "Session host update does not install the Azure Monitor Agent on the new hosts, so monitoring can go quiet after an update unless Azure Policy installs the agent."
 faq:
@@ -27,11 +27,11 @@ It does not cover query-by-query diagnostics, which belong to the separate artic
 
 ## What has to be in place first
 
-[Azure Virtual Desktop Insights](/entity/avd-insights/) is, in Learn's words, a dashboard built on [Azure Monitor Workbooks](/entity/azure-monitor-workbooks/). The Insights setup page (ms.date January 2025, updated June 2025) lists what it needs:
+[Azure Virtual Desktop Insights](https://www.m365.fm/entity/avd-insights/) is, in Learn's words, a dashboard built on [Azure Monitor Workbooks](https://www.m365.fm/entity/azure-monitor-workbooks/). The Insights setup page (ms.date January 2025, updated June 2025) lists what it needs:
 
-- A [Log Analytics workspace](/entity/log-analytics/). Learn recommends a designated workspace for the session hosts so that counters and events come only from your Azure Virtual Desktop deployment.
+- A [Log Analytics workspace](https://www.m365.fm/entity/log-analytics/). Learn recommends a designated workspace for the session hosts so that counters and events come only from your Azure Virtual Desktop deployment.
 - Diagnostic settings on each host pool for Management Activities, Feed, Connections, Errors, Checkpoints, HostRegistration and AgentHealthStatus, and on each workspace for Management Activities, Feed, Errors and Checkpoints. Diagnostics start flowing only after you enable them.
-- The [Azure Monitor Agent](/entity/azure-monitor-agent/) on every session host, with a data collection rule for performance counters and Windows Event Logs. The Insights glossary names the required event logs, including FSLogix's Operational and Admin logs.
+- The [Azure Monitor Agent](https://www.m365.fm/entity/azure-monitor-agent/) on every session host, with a data collection rule for performance counters and Windows Event Logs. The Insights glossary names the required event logs, including FSLogix's Operational and Admin logs.
 - For people who read the dashboard: Desktop Virtualization Reader on the resource group or subscription and Log Analytics Reader on the workspace.
 
 Autoscale health needs one more setting. Learn's autoscale monitoring page says that, in addition to the host pool logs above, you also send the category **Autoscale logs for pooled host pools** to Log Analytics. Our reading: without it the `WVDAutoscaleEvaluationPooled` table has nothing for an alert rule to evaluate.

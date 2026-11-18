@@ -8,8 +8,8 @@ date: 2026-11-18
 topics: [avd-personal-host-pool, avd-host-pool]
 keypoints:
   - "In a personal host pool each session host is assigned to one user, the maximum session limit is one, and the user can keep profile data on the VM's OS disk instead of in FSLogix."
-  - "Learn describes personal pools as dedicated desktops for performance and data separation, and pooled pools as the shared option for lower costs and greater efficiency. A personal pool means one dedicated VM per assigned user."
-  - "Per Learn's autoscale FAQ, autoscale for personal desktops deallocates a host only if the user has signed out, cannot force a sign-out, and does not set drain mode first, so a user who connects during deallocation sees 'No resources available'. The scaling plan's disconnect timer can also act on disconnected sessions, and the pages do not reconcile the two, so test with your timer settings."
+  - "Learn describes personal pools as dedicated desktops for performance and data separation, and pooled pools as shared for lower cost. A personal pool means one dedicated VM per user."
+  - "Autoscale for personal desktops deallocates a host only after sign-out and sets no drain mode, so a user connecting during deallocation sees 'No resources available'. Test your timers."
   - "Hibernation is available only for personal host pools. FSLogix and App Attach do not support it, and the OS disk must be large enough to hold the VM's memory contents."
   - "Session host configuration supports only pooled host pools, so personal pools use standard management: you create, update and scale the session hosts yourself."
 faq:
@@ -27,7 +27,7 @@ Prices are outside the scope of this article. For the side-by-side comparison wi
 
 ## What a personal host pool is
 
-Microsoft Learn's [terminology article](https://learn.microsoft.com/en-us/azure/virtual-desktop/terminology) defines a [host pool](/entity/avd-host-pool/) as a collection of Azure virtual machines registered as [session hosts](/entity/avd-session-host/). In a [personal host pool](/entity/avd-personal-host-pool/), each session host is assigned to an individual user. Learn describes the result as dedicated desktops that optimize environments for performance and data separation.
+Microsoft Learn's [terminology article](https://learn.microsoft.com/en-us/azure/virtual-desktop/terminology) defines a [host pool](https://www.m365.fm/entity/avd-host-pool/) as a collection of Azure virtual machines registered as [session hosts](https://www.m365.fm/entity/avd-session-host/). In a [personal host pool](https://www.m365.fm/entity/avd-personal-host-pool/), each session host is assigned to an individual user. Learn describes the result as dedicated desktops that optimize environments for performance and data separation.
 
 Three consequences matter for planning:
 
@@ -47,7 +47,7 @@ Learn describes use cases for each pool type rather than a formal selection rule
 4. **One person needs several environments.** Learn describes multiple personal desktops per user for cases such as a developer switching between backend and frontend work, or between testing and production. This works only with direct assignment.
 5. **The extra cost is acceptable.** Learn's terminology page says pooled host pools provide a shared remote experience that ensures lower costs and greater efficiency. In our reading, a personal pool trades that sharing for isolation.
 
-This is an assessment, not a Learn statement: personal is a weaker fit when many users run light, similar workloads and keep their profile in [FSLogix](/entity/fslogix/).
+This is an assessment, not a Learn statement: personal is a weaker fit when many users run light, similar workloads and keep their profile in [FSLogix](https://www.m365.fm/entity/fslogix/).
 
 ## Sizing starting points
 
@@ -67,7 +67,7 @@ A personal pool has one VM per user, so in our reading the main cost question is
 
 - Autoscale for personal desktops only deallocates session hosts if the user has signed out of their user session, and it cannot force users to sign out.
 - Autoscale does not put the host in drain mode before it deallocates. A user who connects during deallocation receives "No resources available".
-- If a session host is turned on by autoscale, [Start VM on Connect](/entity/avd-start-vm-on-connect/) or an admin and nobody signs in, autoscale deallocates it after a period of inactivity. The page does not say how long.
+- If a session host is turned on by autoscale, [Start VM on Connect](https://www.m365.fm/entity/avd-start-vm-on-connect/) or an admin and nobody signs in, autoscale deallocates it after a period of inactivity. The page does not say how long.
 - If you choose not to have autoscale start personal desktops in ramp-up, you must either enable Start VM on Connect or start the desktops yourself.
 
 The FAQ is not fully consistent on disconnected sessions: one answer says autoscale deallocates only after sign-out, another says it deallocates when the session is "signed out or disconnected". The scaling plan article, [Create and assign an autoscale scaling plan](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan), documents separate timers for personal schedules. **When disconnected for** and **When logged off for** accept 0 to 360 minutes, and the action is deallocate, hibernate or do nothing. Check in a pilot pool what happens to disconnected sessions with your timer settings before you rely on either wording.
@@ -88,7 +88,7 @@ The [Azure VM hibernation article](https://learn.microsoft.com/en-us/azure/virtu
 
 The same deployment article states that session host configuration supports only pooled host pools. A personal pool therefore uses standard management, where you manage creating, updating and scaling the session hosts. In the portal this is **Host pools**, **Create**, with **Host pool type** set to **Personal**. You can deploy up to 400 session hosts in the creation flow, depending on subscription quota.
 
-Because each VM is a long-lived machine, you patch it in place with the tools Learn lists, or you replace it from a new image. As a suggestion rather than a Learn rule, keep the image in an [Azure Compute Gallery](/entity/azure-compute-gallery/) so that new personal desktops start from the same baseline; the sibling article on gallery versions and replication covers that. If you plan to use hibernation, the Azure VM hibernation article says an image used for creation must support it.
+Because each VM is a long-lived machine, you patch it in place with the tools Learn lists, or you replace it from a new image. As a suggestion rather than a Learn rule, keep the image in an [Azure Compute Gallery](https://www.m365.fm/entity/azure-compute-gallery/) so that new personal desktops start from the same baseline; the sibling article on gallery versions and replication covers that. If you plan to use hibernation, the Azure VM hibernation article says an image used for creation must support it.
 
 ## A selection checklist
 

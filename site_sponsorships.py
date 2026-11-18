@@ -16,6 +16,7 @@ unbekannte Felder sind deshalb ein Fehler):
                                                    "advertisement": vom Sponsor beauftragter Inhalt (PR-Artikel) - EN "Advertisement · Paid content on behalf of Acme",
                                                    DE "Anzeige · Bezahlter Inhalt im Auftrag von Acme"
                                                    "partner": neutraler Partner ohne Bezahlung (Nerdio) - EN "Partner · Neutral partner: Acme", DE "Partner · Neutraler Partner: Acme"
+                                                   (keine Werbung: kein Lead-Formular, kein sponsor im JSON-LD, kein rel="sponsored", nicht in sponsors.json)
                                                    "device": Testgerät kostenlos vom Hersteller gestellt (Hardware-Test) - EN "Test device · Test device provided by the manufacturer: Acme",
                                                    DE "Testgerät · Testgerät vom Hersteller bereitgestellt: Acme"
         "start": "2026-12-01", "end": "2027-05-31",
@@ -63,6 +64,10 @@ FILE = Path(__file__).parent / "data" / "sponsorships.json"
 I18N = Path(__file__).parent / "data" / "py_i18n.json"
 ENV = "M365_SPONSORSHIPS"
 LABELS = ("sponsored", "advertisement", "partner", "device")
+# Mirko 17.11.2026 (Nerdio, #509): "partner" ist KEINE Werbung. Kein Lead-Formular, kein sponsors.json-Eintrag (LEAD_LABELS), kein "sponsor" im JSON-LD,
+# kein rel="sponsored" und keine "Anzeige"-Ueberschrift (NEUTRAL_LABELS). Sichtbar bleibt nur die neutrale Kennzeichnung "Partner".
+LEAD_LABELS = ("sponsored", "advertisement")
+NEUTRAL_LABELS = ("partner",)
 TOPIC_TYPES = ("product", "platform", "concept", "category", "cert")
 REC_KEYS = ("id", "sponsor", "label", "start", "end", "entities", "topics", "episodes", "posts", "go", "note", "manager", "lead_topics")
 # Mirko 6.11.2026: Entitaeten des Sponsors (Firma + Produkte) sind bei gesponserten Inhalten EXTRA zur Obergrenze von 10 Themen, solange das Sponsoring
@@ -300,7 +305,7 @@ def _index(recs, today, dubs, orig):
     for r in sorted(recs, key=lambda r: (r["start"], r["id"])):
         if _active(r, st["today"]):   # Banner auf Entitaetsseiten waehrend der Laufzeit und der Karenzzeit (182 Tage nach "end")
             for x in list(r.get("entities") or []) + list(r.get("topics") or []): add(st["ent"], x, r)
-            st["own"].update(r.get("entities") or [])
+            if r.get("label") not in NEUTRAL_LABELS: st["own"].update(r.get("entities") or [])   # "Offizielle Website" als bezahlter Link nur bei Werbung
         for x in r.get("episodes") or []:   # Folgen und Beitraege behalten die Kennzeichnung dauerhaft
             k = episode_ref(x)
             if not k: continue
@@ -321,7 +326,7 @@ def lead_index(recs, today, ents):
     """Lead-Formular auf Beitraegen und Folgen: [{"org": id der Sponsor-Firma, "name", "topics": {ids}}] fuer laufende Sponsorings mit "lead_topics".
     Themen = lead_topics (nur bekannte ids) plus Firma und ihre Produkte. -> (Liste, unbekannte ids)"""
     out, unknown = [], set()
-    for o in active_sponsor_orgs(today, ents, recs):
+    for o in lead_orgs(today, ents, recs):
         lt = list(dict.fromkeys(t for r in sorted(recs, key=lambda r: (r["start"], r["id"])) if _active(r, today) and o["id"] in (r.get("entities") or []) for t in (r.get("lead_topics") or [])))   # alle aktiven Sponsorings der Firma: bei Verlaengerung steht der alte Vertrag in der Karenzzeit noch vorn
         if not lt or any(x["org"] == o["id"] for x in out): continue
         known = [t for t in lt if t in ents]; unknown.update(t for t in lt if t not in ents)
@@ -332,7 +337,7 @@ def lead_index(recs, today, ents):
 def lead_entities(recs, today, ents):
     """Entitaetsseiten mit Lead-Formular: {entity-id: {"org", "name"}} = Sponsor-Firma und ihre Produkte (Polaris und die Module bei iFAKT)."""
     out = {}
-    for o in active_sponsor_orgs(today, ents, recs):
+    for o in lead_orgs(today, ents, recs):
         for x in sponsor_extra_entities(o["id"], today, ents, recs):
             out.setdefault(x, {"org": o["id"], "name": o["name"]})
     return out
@@ -383,9 +388,16 @@ def active_sponsor_orgs(today, ents, recs=None):
     return out
 
 
+def lead_orgs(today, ents, recs=None):
+    """Firmen mit Lead-Formular: wie active_sponsor_orgs, aber nur bezahlte Sponsorings (LEAD_LABELS). Ein neutraler Partner (Nerdio, Mirko 17.11.2026:
+    kein Lead-Formular) oder ein Testgeraet-Hersteller bekommt kein Formular und keinen Eintrag in sponsors.json."""
+    recs = _state()["recs"] if recs is None else recs
+    return active_sponsor_orgs(today, ents, [r for r in recs if r.get("label") in LEAD_LABELS])
+
+
 def sponsors_json(today, ents, recs=None):
-    """Inhalt von sponsors.json: nur ids und Namen der aktiven Sponsor-Firmen (keine Vertragsdaten)."""
-    return {"orgs": [{"id": o["id"], "name": o["name"], "manager": (o["rec"].get("manager") or {}).get("handle", "")} for o in active_sponsor_orgs(today, ents, recs)]}
+    """Inhalt von sponsors.json: nur ids und Namen der Firmen mit Lead-Formular (lead_orgs, keine Vertragsdaten)."""
+    return {"orgs": [{"id": o["id"], "name": o["name"], "manager": (o["rec"].get("manager") or {}).get("handle", "")} for o in lead_orgs(today, ents, recs)]}
 
 
 def split_topics(topics, extras, cap=TOPIC_CAP):
@@ -484,6 +496,11 @@ def badge(lang, recs):
     return T(lang, b_en, b_de)
 
 
+def _paid(recs):
+    """Sponsorings ohne neutrale Partner: nur sie machen Links zu bezahlten Links und stehen als "sponsor" im JSON-LD."""
+    return [r for r in recs or [] if r.get("label") not in NEUTRAL_LABELS]
+
+
 def _sponsors(recs):
     out = []
     for r in recs:
@@ -519,14 +536,16 @@ def note(lang, recs, surface="sponsor-page"):
     lines = []
     for l in _labels(recs):
         b_en, b_de, x_en, x_de = TEXT[l]
-        names = ", ".join(f'<a href="{escape(link_url(recs, u, surface))}" rel="sponsored noopener"><bdi>{escape(n)}</bdi></a>' for n, u in _sponsors([r for r in recs if r["label"] == l]))
+        rel = "noopener" if l in NEUTRAL_LABELS else "sponsored noopener"
+        names = ", ".join(f'<a href="{escape(link_url(recs, u, surface))}" rel="{rel}"><bdi>{escape(n)}</bdi></a>' for n, u in _sponsors([r for r in recs if r["label"] == l]))
         lines.append(f'<strong>{escape(T(lang, b_en, b_de))}</strong> · ' + escape(T(lang, x_en, x_de)).replace("{sponsor}", names))
     return f'<p class="spm-note" role="note" data-spm="{" ".join(_labels(recs))}" style="{NOTE_STYLE}">' + "<br>".join(lines) + "</p>"
 
 
 def ld(recs):
-    """Wert fuer "sponsor" am WebPage-, PodcastEpisode- oder BlogPosting-Knoten: Organization (eine) oder Liste; None ohne Sponsoring."""
-    o = [{"@type": "Organization", "name": n, "url": u} for n, u in _sponsors(recs)]
+    """Wert fuer "sponsor" am WebPage-, PodcastEpisode- oder BlogPosting-Knoten: Organization (eine) oder Liste; None ohne Sponsoring.
+    Neutrale Partner (label "partner") sind kein schema.org-"sponsor" (Unterstuetzung durch Zusage oder Geld): None, wenn nur sie die Seite kennzeichnen."""
+    o = [{"@type": "Organization", "name": n, "url": u} for n, u in _sponsors(_paid(recs))]
     return (o[0] if len(o) == 1 else o) if o else None
 
 
@@ -538,7 +557,8 @@ SHARED_HOSTS = {"linkedin.com", "youtube.com", "youtu.be", "github.com", "github
 
 
 def hosts(recs):
-    return {_host(u) for _, u in _sponsors(recs)} - {""}
+    """Hosts der Websites bezahlter Sponsorings (neutrale Partner zaehlen nicht: ihre Links bleiben normale Links ohne rel="sponsored")."""
+    return {_host(u) for _, u in _sponsors(_paid(recs))} - {""}
 
 
 def _is_sponsor_host(h, hs):
@@ -548,7 +568,7 @@ def _is_sponsor_host(h, hs):
 def link_rel(recs, url, own=False):
     """rel fuer einen externen Link auf einer gekennzeichneten Seite: "sponsored noopener", wenn es ein bezahlter Link ist
     (Website einer Entitaet des Sponsors oder Adresse des Sponsors), sonst wie bisher "noopener"."""
-    if recs and (own or _is_sponsor_host(_host(url), hosts(recs))): return "sponsored noopener"
+    if _paid(recs) and (own or _is_sponsor_host(_host(url), hosts(recs))): return "sponsored noopener"
     return "noopener"
 
 

@@ -7,11 +7,11 @@ author: mirko-p
 date: 2026-11-18
 topics: [azure-virtual-desktop, finops]
 keypoints:
-  - "For session hosts in Azure, Microsoft's pricing page lists user access rights (no additional cost with an eligible Windows or Microsoft 365 license) plus Azure infrastructure: virtual machines, storage and networking. No separate service fee is listed for this model."
+  - "For session hosts in Azure, Microsoft's pricing page lists user access rights (included with eligible licenses) plus Azure VMs, storage and networking, with no separate service fee."
   - "A deallocated VM is not billed for instance usage, but disks and networking can still incur charges. A VM that is only shut down inside the guest OS (Stopped, allocated) is still billed."
-  - "Internal users are covered by eligible licenses such as Microsoft 365 E3, E5, A3, A5, F3 or Business Premium. External commercial users need per-user access pricing, which charges only users who connect at least once in the month."
+  - "Internal users are covered by eligible licenses such as Microsoft 365 E3 or Business Premium. External users need per-user access pricing, charged only for users who connect in the month."
   - "Reservations are use-it-or-lose-it, and compute savings plans expire for an unused hour. Neither covers Windows software, networking or storage charges."
-  - "In a 30-day example, 10 always-on hosts are 7,200 host-hours, while an autoscale schedule with 2, 8 and 4 hosts across three weekday phases and no hosts at night or on weekends is 1,672 host-hours, about 23 percent."
+  - "In a 30-day example, 10 always-on hosts are 7,200 host-hours, while a weekday schedule of 2, 8 and 4 hosts with none at night or weekends is 1,672 host-hours, about 23 percent."
 faq:
   - q: "Does Azure Virtual Desktop have a service fee per host or per user?"
     a: "For session hosts in Azure, Microsoft's pricing page lists access rights at no additional cost with an eligible Windows or Microsoft 365 license, plus Azure infrastructure, and no separate service fee. Fees do appear for other models: a per-virtual-core hourly fee for Azure Local, a per-user monthly fee for Azure Virtual Desktop Hybrid, and per-user access pricing for external commercial users."
@@ -32,13 +32,13 @@ It gives host-hours rather than currency amounts, because rates depend on region
 | Session host compute | Hours the VM is allocated | Direct: deallocated hours are not billed |
 | OS and data disks | Provisioned size | None while deallocated: disks keep incurring charges |
 | Image storage | Storage for operating system images, listed on the pricing page | None described |
-| Profile storage ([FSLogix](/entity/fslogix/) share) | Depends on the storage service and billing model | None described |
+| Profile storage ([FSLogix](https://www.m365.fm/entity/fslogix/) share) | Depends on the storage service and billing model | None described |
 | Networking | Azure networking charges, listed as a component on the pricing page | None described |
 | Licensing | License entitlement or, for external users, per-user access pricing | None |
 | Monitoring | Log Analytics ingestion and retention | Not described; depends on what you collect |
 | Identity and supporting services | Entra ID tier, domain controller VMs if you use AD DS, App Attach and image-template storage | None described |
 
-The pricing page splits the model into two parts: user access rights and Azure infrastructure. For session hosts in Azure it lists no separate Azure Virtual Desktop service fee. Learn says you run no gateway or broker servers yourself. See [Azure Virtual Desktop](/entity/azure-virtual-desktop/) and [FinOps](/entity/finops/) for background.
+The pricing page splits the model into two parts: user access rights and Azure infrastructure. For session hosts in Azure it lists no separate Azure Virtual Desktop service fee. Learn says you run no gateway or broker servers yourself. See [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) and [FinOps](https://www.m365.fm/entity/finops/) for background.
 
 Other deployment models carry their own fees. The same page lists a per-virtual-core hourly service fee for Azure Local and a per-user monthly service fee for Azure Virtual Desktop Hybrid, and says Hybrid users are billed per user per month. Those are outside this article, as are services you attach yourself, such as backup or a firewall, which have their own pricing.
 
@@ -48,7 +48,7 @@ Learn's page on VM power states says a VM is billed for instance usage while it 
 
 Two design choices set the compute line:
 
-- **Session host type.** Windows 11 Enterprise multi-session lets several users share one VM. Learn says multi-session, which is exclusive to Azure Virtual Desktop, or Windows Server, can greatly reduce the number of VMs and the operating system overhead. In a [personal host pool](/entity/avd-personal-host-pool/) each session host is assigned to an individual user, so the VM count follows the user count, while Learn says pooled pools offer lower costs and greater efficiency.
+- **Session host type.** Windows 11 Enterprise multi-session lets several users share one VM. Learn says multi-session, which is exclusive to Azure Virtual Desktop, or Windows Server, can greatly reduce the number of VMs and the operating system overhead. In a [personal host pool](https://www.m365.fm/entity/avd-personal-host-pool/) each session host is assigned to an individual user, so the VM count follows the user count, while Learn says pooled pools offer lower costs and greater efficiency.
 - **VM size and count.** Learn's sizing table lists maximum users per vCPU for multi-session hosts: 6 for light, 4 for medium, 2 for heavy and 1 for power workloads. These are generic guidelines for initial estimates. The same page names four cores as the lowest recommended size for a stable multi-session VM and says VMs can incur a 15 to 20 percent capacity cost compared with bare metal.
 
 ## Storage: disks, images and profiles
@@ -57,7 +57,7 @@ Two design choices set the compute line:
 
 **Images.** The pricing page lists storage for operating system images, data disks and user profiles under infrastructure. Look up the pricing of the storage service you keep images in.
 
-**Profile storage.** For [FSLogix](/entity/fslogix/) profile containers, Learn recommends Azure Files for most customers and lists [Azure NetApp Files](/entity/azure-netapp-files/) and Storage Spaces Direct as alternatives. Billing differs by option:
+**Profile storage.** For [FSLogix](https://www.m365.fm/entity/fslogix/) profile containers, Learn recommends Azure Files for most customers and lists [Azure NetApp Files](https://www.m365.fm/entity/azure-netapp-files/) and Storage Spaces Direct as alternatives. Billing differs by option:
 
 - Premium Azure Files shares use a provisioned model: you pay for the amount you provision regardless of use.
 - Standard shares are described on the FSLogix page as pay-as-you-go: you pay for data stored and transactions. Learn's Azure Files billing page adds that pay-as-you-go is available only for HDD, and says to use the provisioned v2 model for all new Azure Files deployments, which bills provisioned storage, IOPS and throughput separately. HDD shares can use provisioned v2 as well.
@@ -79,7 +79,7 @@ Learn's licensing page splits the question by user type.
 
 ## Monitoring: the line people forget
 
-Azure Virtual Desktop Insights stores data in a Log Analytics workspace. Learn's cost page estimates 92 to 145 MB ingested per VM per day, or roughly 3 to 5 GB per VM per 31 days, and says performance counters should make up 80 to 99 percent of that. Learn stresses these are examples; actual cost depends on size, health, usage and pricing model. See [Azure Virtual Desktop Insights](/entity/avd-insights/) and [Log Analytics](/entity/log-analytics/).
+Azure Virtual Desktop Insights stores data in a Log Analytics workspace. Learn's cost page estimates 92 to 145 MB ingested per VM per day, or roughly 3 to 5 GB per VM per 31 days, and says performance counters should make up 80 to 99 percent of that. Learn stresses these are examples; actual cost depends on size, health, usage and pricing model. See [Azure Virtual Desktop Insights](https://www.m365.fm/entity/avd-insights/) and [Log Analytics](https://www.m365.fm/entity/log-analytics/).
 
 ## Identity and supporting services
 
@@ -87,9 +87,9 @@ Learn's cost page treats identity as its own component. Microsoft Entra ID has a
 
 ## Commitment discounts and Azure Hybrid Benefit
 
-- **[Reservations](/entity/azure-reservations/).** One- or three-year commitments, with discounts of up to 72 percent from pay-as-you-go prices according to Learn. A VM reservation covers compute only, not Windows software, networking or storage. Learn calls a reservation discount use-it-or-lose-it: if you have no matching resource for an hour, you lose the reserved quantity for that hour and cannot carry it forward. If another matching resource exists in the scope, the discount applies to it.
-- **[Savings plans](/entity/azure-savings-plans/).** An hourly spend commitment over one or three years. Learn says unused commitment for an hour expires and does not roll over, and that compute savings plans do not cover software, networking or storage.
-- **[Azure Hybrid Benefit](/entity/azure-hybrid-benefit/).** Learn's page covers Windows Server: on-premises core licenses with active Software Assurance or qualifying subscription licenses, at least 8 core licenses per VM. It does not describe Windows client or multi-session eligibility; check your agreement.
+- **[Reservations](https://www.m365.fm/entity/azure-reservations/).** One- or three-year commitments, with discounts of up to 72 percent from pay-as-you-go prices according to Learn. A VM reservation covers compute only, not Windows software, networking or storage. Learn calls a reservation discount use-it-or-lose-it: if you have no matching resource for an hour, you lose the reserved quantity for that hour and cannot carry it forward. If another matching resource exists in the scope, the discount applies to it.
+- **[Savings plans](https://www.m365.fm/entity/azure-savings-plans/).** An hourly spend commitment over one or three years. Learn says unused commitment for an hour expires and does not roll over, and that compute savings plans do not cover software, networking or storage.
+- **[Azure Hybrid Benefit](https://www.m365.fm/entity/azure-hybrid-benefit/).** Learn's page covers Windows Server: on-premises core licenses with active Software Assurance or qualifying subscription licenses, at least 8 core licenses per VM. It does not describe Windows client or multi-session eligibility; check your agreement.
 
 Because unused hours are lost under both commitment types, they fit a stable baseline.
 

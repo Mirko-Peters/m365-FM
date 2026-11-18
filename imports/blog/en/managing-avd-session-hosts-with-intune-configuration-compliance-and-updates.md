@@ -1,6 +1,6 @@
 ---
 title: "Managing AVD session hosts with Intune: configuration, compliance and updates"
-summary: "Microsoft Intune manages Azure Virtual Desktop session hosts as Windows Enterprise devices once they are enrolled, but personal single-session hosts and pooled multi-session hosts follow different rules. This article compares the two on enrollment, configuration, compliance and update control, with the documented limits."
+summary: "Microsoft Intune manages Azure Virtual Desktop session hosts as Windows Enterprise devices once enrolled, but personal single-session and pooled multi-session hosts follow different rules. Compared with documented limits."
 status: review
 publish: false
 author: mirko-p
@@ -8,10 +8,10 @@ date: 2026-11-18
 topics: [azure-virtual-desktop, intune]
 keypoints:
   - "Intune supports personal single-session hosts running Windows Enterprise and pooled Windows Enterprise multi-session hosts. Multi-session management is documented as generally available."
-  - "Entra joined hosts are enrolled with the Enroll the VM with Intune option in the Azure portal. Hybrid joined hosts use group policy auto-enrollment or Configuration Manager co-management. Multi-session does not support enrollment with user credentials."
-  - "On multi-session hosts only the certificate templates (trusted certificate, SCEP, PKCS) and the VPN template (device tunnel only) are supported, so other configuration goes through the settings catalog, and user-scope and device-scope settings must be assigned to users and devices respectively."
+  - "Entra joined hosts enroll with the Enroll the VM with Intune portal option; hybrid joined hosts use GPO auto-enrollment or co-management. Multi-session does not support user-credential enrollment."
+  - "Multi-session supports only certificate templates and the device-tunnel VPN template, so other settings go through the settings catalog, with user and device scope assigned accordingly."
   - "Compliance policies for multi-session must target the device group, and only a listed set of settings is evaluated; the rest report Not applicable."
-  - "Windows Update ring policies are not supported on multi-session hosts, and Learn's update management page recommends session host update or Azure Compute Gallery images for multi-session, not Windows Update. Session host update needs a host pool with a session host configuration, is limited to the global Azure cloud and does not keep manual customizations. Cloned images of enrolled machines are not supported."
+  - "Update rings are not supported on multi-session hosts; Learn recommends session host update or gallery images instead. Session host update needs a session host configuration and global Azure."
 faq:
   - q: "Can I enroll a golden image in Intune and clone it for new session hosts?"
     a: "No. Microsoft Learn says Intune does not support using a cloned image of a computer that is already enrolled, and it names Azure Virtual Desktop VMs explicitly. Enroll the session hosts after they are created from the image."
@@ -27,8 +27,8 @@ Microsoft Intune manages Azure Virtual Desktop session hosts like other Windows 
 
 | | Personal, single-session | Pooled, multi-session |
 |---|---|---|
-| Edition | Windows Enterprise | [Windows Enterprise multi-session](/entity/windows-enterprise-multi-session/) |
-| Host pool type | [Personal](/entity/avd-personal-host-pool/) remote desktops | [Pooled](/entity/avd-pooled-host-pool/) host pools deployed through Azure Resource Manager |
+| Edition | Windows Enterprise | [Windows Enterprise multi-session](https://www.m365.fm/entity/windows-enterprise-multi-session/) |
+| Host pool type | [Personal](https://www.m365.fm/entity/avd-personal-host-pool/) remote desktops | [Pooled](https://www.m365.fm/entity/avd-pooled-host-pool/) host pools deployed through Azure Resource Manager |
 | How Learn describes management | Treated like Windows Enterprise physical desktops | Treated as a separate OS edition; some Windows Enterprise configurations are not supported (see Configuration) |
 | Join type | Entra hybrid joined or Entra joined, enrolled in Intune | Entra hybrid joined or Entra joined, enrolled in Intune |
 | Agent requirement | Not specified on the single-session page | Azure Virtual Desktop agent 1.0.2944.1400 or later |
@@ -60,11 +60,11 @@ Multi-session has more constraints, because it is treated as a separate OS editi
 4. **Assign scripts by context.** Learn's script deployment section says scripts must be targeted to devices, with **Run this script using the logged on credentials** set to No for the system context or Yes for the user context. Its overview also lists PowerShell scripts in the user context under user configuration, so test how your assignment behaves.
 5. **Deploy apps with Required or Uninstall.** Learn says all apps must install in the system or device context, targeted to devices. The Available intent is not supported. Web apps do not apply, RemoteApp and MSIX app attach are not supported, and a system context Win32 app with a dependency on a user context app does not install.
 
-If you use FSLogix, Learn adds two cautions. First, Intune does not currently support token roaming between devices, so make sure tokens are not unexpectedly roamed or duplicated, and confirm that you run a supported FSLogix version and configuration with token roaming disabled. Second, do not configure modern apps where FSLogix is configured, which is a known single-session issue. See [FSLogix](/entity/fslogix/).
+If you use FSLogix, Learn adds two cautions. First, Intune does not currently support token roaming between devices, so make sure tokens are not unexpectedly roamed or duplicated, and confirm that you run a supported FSLogix version and configuration with token roaming disabled. Second, do not configure modern apps where FSLogix is configured, which is a known single-session issue. See [FSLogix](https://www.m365.fm/entity/fslogix/).
 
 ## Compliance
 
-Intune compliance policies evaluate managed devices against rules, and a noncompliant result can trigger actions. By default each policy marks a device noncompliant if it fails a rule. The tenant setting for devices with no policy defaults to Compliant; Learn advises changing it to Not compliant if you use Conditional Access with compliance policies. See [device compliance](/entity/device-compliance/) and [Conditional Access](/entity/conditional-access/).
+Intune compliance policies evaluate managed devices against rules, and a noncompliant result can trigger actions. By default each policy marks a device noncompliant if it fails a rule. The tenant setting for devices with no policy defaults to Compliant; Learn advises changing it to Not compliant if you use Conditional Access with compliance policies. See [device compliance](https://www.m365.fm/entity/device-compliance/) and [Conditional Access](https://www.m365.fm/entity/conditional-access/).
 
 For multi-session hosts, the rules are narrower. Compliance policies must target the device group; user-targeted compliance is not supported. Only these settings are evaluated: minimum and maximum OS version, valid OS builds, simple passwords, password type, length, complexity, expiration and history, Microsoft Defender Antimalware including security intelligence and minimum version, firewall, antivirus, antispyware, real-time protection and Defender for Endpoint risk score. Every other policy reports Not applicable. Conditional Access policies themselves support both user and device based configurations for multi-session. Review the "Not applicable" results before you read a compliant status as proof that a setting was checked.
 
@@ -91,7 +91,7 @@ Learn says image-based servicing through session host update is recommended for 
 
 For multi-session, Windows Update ring policies are not currently supported in Intune; check the Intune page before you plan around that. Learn says to use the settings catalog, Windows Update for Business category, for quality (security) update settings: Active Hours Start, End and Max Range, Block "Pause Updates" ability, Configure Deadline Grace Period, Defer Quality Updates Period (Days), Pause Quality Updates Start Time and Quality Update Deadline Period (Days). Given the table, treat these settings as a way to shape the in-place option that Learn marks Not recommended for multi-session hosts, not as the primary route.
 
-For personal hosts, the single-session page does not discuss updates. The update management page marks Windows Update and Windows Autopatch as Recommended for Windows client Enterprise. It says hotpatching is supported on Windows 11 Enterprise 24H2 or later with virtualization-based security enabled and updates managed through Windows Autopatch and Intune, and not on multi-session. Our suggestion: try your method on a pilot host first. See [update rings](/entity/intune-update-rings/) and [Windows Update for Business](/entity/windows-update-for-business/).
+For personal hosts, the single-session page does not discuss updates. The update management page marks Windows Update and Windows Autopatch as Recommended for Windows client Enterprise. It says hotpatching is supported on Windows 11 Enterprise 24H2 or later with virtualization-based security enabled and updates managed through Windows Autopatch and Intune, and not on multi-session. Our suggestion: try your method on a pilot host first. See [update rings](https://www.m365.fm/entity/intune-update-rings/) and [Windows Update for Business](https://www.m365.fm/entity/windows-update-for-business/).
 
 For multi-session hosts, Learn says security baselines are available and recommends reviewing them and configuring the recommended policies and values in the settings catalog. Endpoint security profiles can be configured for multi-session hosts when **Windows** is offered as the platform; if it is not offered, the profile is not supported there.
 
@@ -101,14 +101,13 @@ Several remote actions are not supported or recommended on session hosts, and th
 
 ## Related
 
-- [Azure Virtual Desktop](/entity/azure-virtual-desktop/)
-- [Microsoft Intune](/entity/intune/)
-- [AVD session host](/entity/avd-session-host/)
-- [Microsoft Entra join for AVD](/entity/avd-entra-join/)
+- [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/)
+- [Microsoft Intune](https://www.m365.fm/entity/intune/)
+- [AVD session host](https://www.m365.fm/entity/avd-session-host/)
+- [Microsoft Entra join for AVD](https://www.m365.fm/entity/avd-entra-join/)
 
 ## Sources
 
-All retrieved on 2026-11-17.
 
 - [Microsoft Learn: Using Azure Virtual Desktop with Intune](https://learn.microsoft.com/en-us/intune/solutions/azure-virtual-desktop)
 - [Microsoft Learn: Windows Enterprise multi-session remote desktops](https://learn.microsoft.com/en-us/intune/solutions/azure-virtual-desktop-multi-session)

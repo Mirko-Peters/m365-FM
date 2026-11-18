@@ -7,11 +7,11 @@ author: mirko-p
 date: 2026-11-18
 topics: [fslogix, azure-virtual-desktop]
 keypoints:
-  - "Insights splits time to connect into a connection stage and a logon stage, and the logon stage into Profiles, Group Policy Objects, Shell Start and FSLogix (Frxsvc). Use it to see which part of the logon is slow before touching storage."
-  - "The FSLogix profile log under C:\\ProgramData\\FSLogix\\Logs\\Profile records loadProfile and unloadProfile times for each sign-in once logging is configured; Learn lists Milliseconds as a keyword to search for."
+  - "Insights splits time to connect into connection and logon stages, and logon into Profiles, Group Policy, Shell Start and FSLogix (Frxsvc). Find the slow part before touching storage."
+  - "The FSLogix profile log in C:\\ProgramData\\FSLogix\\Logs\\Profile records loadProfile and unloadProfile times per sign-in; Learn suggests searching for Milliseconds."
   - "Learn's FSLogix troubleshooting names five causes: an overloaded or small VM, a full container, third-party firewall or IPS software, network or DNS problems, and storage provider space issues."
   - "For Azure Files, compare Success E2E Latency with Success Server Latency and split Transactions by response type to see throttling. A large gap points at the network or client, not the share."
-  - "Two Learn pages differ on profile size: the FSLogix FAQ says container size does not affect sign-in time, while the Insights glossary says profile size can lengthen the Profiles and FSLogix stages. Separately, a container needs more than 200 MB free to attach."
+  - "Learn's pages differ on whether profile size affects sign-in time, so measure. Separately, a container needs more than 200 MB free to attach."
 faq:
   - q: "Does a large profile container slow down logon?"
     a: "Two Learn pages give different answers. The FSLogix FAQ says container size does not affect sign-in times or performance and that other factors are much more important. The Insights glossary says that how long the Profiles stage takes depends on user profile size or the profile solution in use, and that large profile sizes can slow the FSLogix (Frxsvc) stage. The two pages do not reconcile the statements; our reading is that the FAQ speaks about the container file and the glossary about the profile content, so measure your own stages. Free space matters for a different reason: Learn says a container needs more than 200 MB free to attach, and the FAQ recommends planning for at least 30% free space."
@@ -25,7 +25,7 @@ Start by splitting the logon into stages, then read the FSLogix profile log for 
 
 ## Step 1: find the slow stage
 
-[Azure Virtual Desktop Insights](/entity/avd-insights/) defines **time to connect** as the time between a user opening a resource and the desktop being loaded and ready, per the [Insights glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/insights-glossary). It has two stages: **connection**, the time for the service to route the user to a session host, and **logon**, the time for the service to sign the user in and establish the session on the host. For a desktop, the measurement ends when the `ShellReady` checkpoint appears.
+[Azure Virtual Desktop Insights](https://www.m365.fm/entity/avd-insights/) defines **time to connect** as the time between a user opening a resource and the desktop being loaded and ready, per the [Insights glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/insights-glossary). It has two stages: **connection**, the time for the service to route the user to a session host, and **logon**, the time for the service to sign the user in and establish the session on the host. For a desktop, the measurement ends when the `ShellReady` checkpoint appears.
 
 The glossary breaks the logon stage into four parts:
 
@@ -82,7 +82,7 @@ The [FSLogix prerequisites page](https://learn.microsoft.com/en-us/fslogix/overv
 
 ## Step 4: check the storage side
 
-The FSLogix prerequisites page says network latency, bandwidth and proximity to the storage provider are pivotal to the user's experience. For [Azure Files](/entity/azure-files/), Learn's performance troubleshooting and metrics pages suggest this routine:
+The FSLogix prerequisites page says network latency, bandwidth and proximity to the storage provider are pivotal to the user's experience. For [Azure Files](https://www.m365.fm/entity/azure-files/), Learn's performance troubleshooting and metrics pages suggest this routine:
 
 1. In the Azure portal, open the storage account, then **Monitoring > Metrics**, and set the metric namespace to **File**.
 2. Chart **Success E2E Latency** and **Success Server Latency** (average aggregation). Learn says a high difference between them points at the network or the client rather than the share.
@@ -90,15 +90,15 @@ The FSLogix prerequisites page says network latency, bandwidth and proximity to 
 4. Look at the metadata metrics. Learn describes **Success with Metadata Warning** as metadata IOPS approaching the limit and **Success with Metadata Throttling** as the limit exceeded. Operations such as opening and closing files and querying directories are metadata-heavy, and Learn lists them as a cause of higher latency.
 5. Check where the client is. Learn lists a client VM in a different region from the file share as a cause of high latency.
 
-For metadata-heavy load, Learn's performance guide lists reducing the number of metadata operations, using metadata caching on premium SMB shares, and splitting the data across multiple file shares in the same storage account. Possible fixes named on Learn: moving from standard (HDD) to premium (SSD) shares often avoids throttling, and for premium shares you increase the provisioned share size to raise the IOPS limit. For premium shares, Learn also says to enable SMB Multichannel and keep the total channels at four or fewer, then unmount, wait 60 seconds and remount after changing settings. If the storage choice itself is open, see the article comparing Azure Files and Azure NetApp Files, and the [Azure NetApp Files](/entity/azure-netapp-files/) entity.
+For metadata-heavy load, Learn's performance guide lists reducing the number of metadata operations, using metadata caching on premium SMB shares, and splitting the data across multiple file shares in the same storage account. Possible fixes named on Learn: moving from standard (HDD) to premium (SSD) shares often avoids throttling, and for premium shares you increase the provisioned share size to raise the IOPS limit. For premium shares, Learn also says to enable SMB Multichannel and keep the total channels at four or fewer, then unmount, wait 60 seconds and remount after changing settings. If the storage choice itself is open, see the article comparing Azure Files and Azure NetApp Files, and the [Azure NetApp Files](https://www.m365.fm/entity/azure-netapp-files/) entity.
 
 ### Cloud Cache
 
-[FSLogix Cloud Cache](/entity/fslogix-cloud-cache/) changes the picture. The FSLogix FAQ says it updates remote storage lazily and asynchronously during the session, then merges the local cache to all listed providers at sign-out, and FSLogix holds the sign-out until that finishes. Its recommendations for slow sign-outs are to review network topology and latency to every provider, move to a higher-performing storage tier, disable `VHDCompactDisk`, and avoid `ProfileType = 3` and `VHDAccessMode` values of 1, 2 or 3.
+[FSLogix Cloud Cache](https://www.m365.fm/entity/fslogix-cloud-cache/) changes the picture. The FSLogix FAQ says it updates remote storage lazily and asynchronously during the session, then merges the local cache to all listed providers at sign-out, and FSLogix holds the sign-out until that finishes. Its recommendations for slow sign-outs are to review network topology and latency to every provider, move to a higher-performing storage tier, disable `VHDCompactDisk`, and avoid `ProfileType = 3` and `VHDAccessMode` values of 1, 2 or 3.
 
 ### Other settings
 
-The FAQ says many `redirections.xml` include or exclude statements cost performance, because each file system request is checked against the list, and that redirections for small folders do not help the user experience. See [redirections.xml](/entity/fslogix-redirections-xml/) for the file itself. Separately, Learn warns that a Windows change included in the April 2026 Windows Server update moves the default Kerberos encryption type from RC4 to AES-SHA1, and that file shares hosting FSLogix containers not yet upgraded to AES-SHA1 might have access issues. If failed sign-ins start after that update, check whether the share has been upgraded to AES-SHA1; the linked FSLogix blog post has the details, and the Learn note describes the change as upcoming, so check the current status there.
+The FAQ says many `redirections.xml` include or exclude statements cost performance, because each file system request is checked against the list, and that redirections for small folders do not help the user experience. See [redirections.xml](https://www.m365.fm/entity/fslogix-redirections-xml/) for the file itself. Separately, Learn warns that a Windows change included in the April 2026 Windows Server update moves the default Kerberos encryption type from RC4 to AES-SHA1, and that file shares hosting FSLogix containers not yet upgraded to AES-SHA1 might have access issues. If failed sign-ins start after that update, check whether the share has been upgraded to AES-SHA1; the linked FSLogix blog post has the details, and the Learn note describes the change as upcoming, so check the current status there.
 
 ## A worked reading (illustrative)
 

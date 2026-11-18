@@ -7,8 +7,8 @@ author: mirko-p
 date: 2026-11-18
 topics: [avd-context-based-redirections, azure-virtual-desktop]
 keypoints:
-  - "Context-based redirection links a Microsoft Entra Conditional Access authentication context to the host pool's device redirection settings. A connection that meets the policy behind the context gets the configured redirections; a connection that does not gets them restricted."
-  - "Four redirections are in scope: clipboard, drive and storage, printer and USB. The setting applies to every session host in the host pool, for desktop sessions and, in preview since October 2026, RemoteApp sessions."
+  - "Context-based redirection links an Entra Conditional Access authentication context to the host pool's redirection settings. Connections meeting the policy get them; others are restricted."
+  - "Four redirections are in scope: clipboard, drive and storage, printer and USB. It applies to every host in the pool, for desktops and, in preview since October 2026, RemoteApp sessions."
   - "The authentication context is only a label shared between Conditional Access and the redirection setting. It does not grant or block anything itself."
   - "Other layers still apply and the most restrictive setting wins. A redirection disabled by an Intune or Group Policy setting on the session host stays disabled."
   - "Status: public preview announced in June 2026. Learn's configuration article still carries 'Preview' in its title, and the blog post says a Resultant Set of Policy view is in development."
@@ -23,7 +23,7 @@ faq:
 
 Context-based redirections let you decide, per connection, whether clipboard, drive and storage, printer and USB redirection works in an Azure Virtual Desktop session. The decision depends on whether the connection meets a Microsoft Entra Conditional Access requirement that you attach through an authentication context. As of 17 November 2026 the feature is in preview.
 
-This article explains the model and the design choices. The click-by-click configuration, validation and troubleshooting are in a separate article in this series, "Securing redirection in Azure Virtual Desktop with Entra authentication context". Background on the feature itself is on the [context-based redirections](/entity/avd-context-based-redirections/) entity page.
+This article explains the model and the design choices. The click-by-click configuration, validation and troubleshooting are in a separate article in this series, "Securing redirection in Azure Virtual Desktop with Entra authentication context". Background on the feature itself is on the [context-based redirections](https://www.m365.fm/entity/avd-context-based-redirections/) entity page.
 
 ## Status in one paragraph
 

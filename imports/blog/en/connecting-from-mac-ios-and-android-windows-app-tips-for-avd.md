@@ -7,8 +7,8 @@ author: mirko-p
 date: 2026-11-18
 topics: [windows-app, azure-virtual-desktop]
 keypoints:
-  - "Learn's requirements for Azure Virtual Desktop: macOS 12.0 or later, iOS or iPadOS 17.0 or later, Android 10 or later, Chrome OS 126 or later. The Windows 365 tab of the same page lists different minimums for macOS and iOS."
-  - "Several features are Windows-only or limited elsewhere: multimedia redirection, USB and serial redirection, scanners, third-party virtual channel plugins and Display Protection. Dynamic resolution is missing on iOS/iPadOS and Android."
+  - "Learn's requirements for AVD: macOS 12.0, iOS or iPadOS 17.0, Android 10, Chrome OS 126 or later. The Windows 365 tab lists different minimums for macOS and iOS."
+  - "Several features are Windows-only or limited elsewhere: multimedia redirection, USB and serial redirection, scanners, third-party plugins and Display Protection."
   - "Integrated apps (RemoteApps integrated with the local device) are listed for Windows and macOS only, not for iOS/iPadOS or Android."
   - "Screen capture protection on iOS/iPadOS and Android works through an Intune MAM policy that blocks screen capture, and a connection is blocked if that policy is missing."
   - "With single sign-on off, iOS and Android can authenticate to the remote session with a password only; Learn lists smart cards and Windows Hello for Business as not supported there."
@@ -21,7 +21,7 @@ faq:
     a: "When screen capture protection is enabled on the session hosts, Learn says Android and iOS/iPadOS connections are allowed only if an Intune MAM app protection policy that blocks screen capture applies to Windows App. Without it, the connection is blocked."
 ---
 
-Windows App connects to [Azure Virtual Desktop](/entity/azure-virtual-desktop/) from macOS, iOS/iPadOS and Android/Chrome OS, with the same work or school account as on Windows. What differs is the feature set: several things that users know from a Windows PC are not offered on a Mac, an iPad or an Android phone, and a few security controls depend on Intune settings that only apply to mobile apps. This article lists the requirements, the sign-in steps, the gaps that cause support tickets, and what an admin should check before assigning pools to these devices.
+Windows App connects to [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) from macOS, iOS/iPadOS and Android/Chrome OS, with the same work or school account as on Windows. What differs is the feature set: several things that users know from a Windows PC are not offered on a Mac, an iPad or an Android phone, and a few security controls depend on Intune settings that only apply to mobile apps. This article lists the requirements, the sign-in steps, the gaps that cause support tickets, and what an admin should check before assigning pools to these devices.
 
 ## Platform requirements
 
@@ -33,7 +33,7 @@ Microsoft Learn's [Connect to Windows devices and apps with Windows App](https:/
 | iOS/iPadOS | App Store | iOS or iPadOS 17.0 |
 | Android/Chrome OS | Google Play Store | Android 10, Chrome OS 126 |
 
-The device must be actively supported by its manufacturer, and users need a work or school account: Learn says you can't sign in to [Windows App](/entity/windows-app/) with a personal Microsoft account. The same page shows different minimums on its Windows 365 tab (macOS 14.0 and iOS/iPadOS 16.0), so use the tab that matches the service. Learn also says visionOS is supported only in compatibility mode, and that Meta Quest support is in preview. Windows App in a web browser does not support mobile browsers.
+The device must be actively supported by its manufacturer, and users need a work or school account: Learn says you can't sign in to [Windows App](https://www.m365.fm/entity/windows-app/) with a personal Microsoft account. The same page shows different minimums on its Windows 365 tab (macOS 14.0 and iOS/iPadOS 16.0), so use the tab that matches the service. Learn also says visionOS is supported only in compatibility mode, and that Meta Quest support is in preview. Windows App in a web browser does not support mobile browsers.
 
 ## Signing in on each platform
 

@@ -1,6 +1,6 @@
 ---
 title: "The golden image lifecycle: build, test, release, retire"
-summary: "A golden image for Azure Virtual Desktop goes through four stages: build it from a fresh base, test it on a pool that matches production, release it as a versioned gallery image, and retire old versions once nothing references them. Each stage has documented traps, from sysprep to the fact that an end of life date does not block a version."
+summary: "A golden image for Azure Virtual Desktop goes through build, test on a production-like pool, release as a versioned gallery image, and retirement. Each stage has documented traps, from sysprep to end of life dates."
 status: review
 publish: false
 author: mirko-p
@@ -21,7 +21,7 @@ faq:
     a: "Set Exclude from latest to Yes on the version. Learn ties this to creating a VM with latest in place of a version number, so a deployment that names the version can still use it. The session host update pages do not say whether a configuration accepts latest, so pin a version number you have tested. The flag can be changed after creation."
 ---
 
-A golden image is the prepared operating system image from which session hosts are built. Treat it as a product with a lifecycle in four stages: build it from a clean base, test it on a pool that matches production, release it as a numbered version, and retire versions once nothing references them. This article follows Microsoft Learn's guidance through each stage, compares the two main build methods, and lists the traps Learn documents. It covers the process, not a single tool. For the entity background, see [golden image](/entity/golden-image/).
+A golden image is the prepared operating system image from which session hosts are built. Treat it as a product with a lifecycle in four stages: build it from a clean base, test it on a pool that matches production, release it as a numbered version, and retire versions once nothing references them. This article follows Microsoft Learn's guidance through each stage, compares the two main build methods, and lists the traps Learn documents. It covers the process, not a single tool. For the entity background, see [golden image](https://www.m365.fm/entity/golden-image/).
 
 ## Stage 1: build
 
@@ -53,7 +53,7 @@ On capture, Learn recommends an Azure Compute Gallery for production. Learn's im
 
 ### Custom image templates
 
-The portal path is **Azure Virtual Desktop > Custom image templates > + Add custom image template**, with tabs for Basics, Source image, Distribution targets, Build properties, Customizations, Tags and Review and create. You set a build timeout in minutes, and Learn recommends a higher value for language pack installation or Windows Optimization because they trigger Windows Update. It gives no default or range. The feature is described as generally available in the What's new entry of September 2023; the template pages themselves carry no label. Prerequisites, the built-in script list and the template anatomy are covered in the article on Azure Image Builder for AVD. [Custom image templates](/entity/avd-custom-image-templates/) sit on top of [Azure Image Builder](/entity/azure-image-builder/).
+The portal path is **Azure Virtual Desktop > Custom image templates > + Add custom image template**, with tabs for Basics, Source image, Distribution targets, Build properties, Customizations, Tags and Review and create. You set a build timeout in minutes, and Learn recommends a higher value for language pack installation or Windows Optimization because they trigger Windows Update. It gives no default or range. The feature is described as generally available in the What's new entry of September 2023; the template pages themselves carry no label. Prerequisites, the built-in script list and the template anatomy are covered in the article on Azure Image Builder for AVD. [Custom image templates](https://www.m365.fm/entity/avd-custom-image-templates/) sit on top of [Azure Image Builder](https://www.m365.fm/entity/azure-image-builder/).
 
 ## Stage 2: test
 
@@ -61,7 +61,7 @@ The session host update page asks you to test an update on a test host pool that
 
 - The image deploys on the intended VM size and generation. Learn says Trusted launch and Confidential VMs need a Generation 2 image.
 - A host built from it registers and reports as available.
-- Your applications start, and the profile setup you rely on (for example [FSLogix](/entity/fslogix/)) works for a test user.
+- Your applications start, and the profile setup you rely on (for example [FSLogix](https://www.m365.fm/entity/fslogix/)) works for a test user.
 - Domain join or Entra join succeeds, and policies apply.
 - Monitoring works. If you use Azure Virtual Desktop Insights, Learn says the Azure Monitor agent or Log Analytics agent is not installed automatically on updated hosts. Options are Azure Policy for the Azure Monitor agent, Azure Automation for the Log Analytics agent, or adding the hosts manually in Insights.
 
@@ -71,13 +71,13 @@ A validation host pool is different. Learn describes it as the pool that receive
 
 Release means publishing a version, deciding it is approved, and pointing pools at it.
 
-**Version it.** In an [Azure Compute Gallery](/entity/azure-compute-gallery/), a version number has the form MajorVersion.MinorVersion.Patch, uses integers and periods, and must fit a 32-bit integer. A scheme such as 2026.11.0 fits that rule; the scheme is your choice, not Learn's. Versioning, replication and sharing are covered in the article on Azure Compute Gallery for AVD images.
+**Version it.** In an [Azure Compute Gallery](https://www.m365.fm/entity/azure-compute-gallery/), a version number has the form MajorVersion.MinorVersion.Patch, uses integers and periods, and must fit a 32-bit integer. A scheme such as 2026.11.0 fits that rule; the scheme is your choice, not Learn's. Versioning, replication and sharing are covered in the article on Azure Compute Gallery for AVD images.
 
 **Replicate it.** Replication time depends on the amount of data and the number of target regions, and Learn says it can take a few hours in some cases. The page on updating session hosts recommends at least two replicas of a gallery image used with session host update, and the Azure Compute Gallery page recommends at least three replicas for production images.
 
 **Stage it.** The **Exclude from latest** field defaults to No, and Learn describes it as the way to keep a version from being used when a VM is created with `latest` in place of a version number. It does not hide the version from anyone who names it. The session host update pages do not say whether a session host configuration accepts `latest`, so a practical approach, not a Learn rule, is to leave candidates unreferenced and give the configuration the version number only after the test pool passes. Exclude from latest and the end of life date can be changed after creation.
 
-**Roll it out.** For a pool with a [session host configuration](/entity/avd-session-host-configuration/), point the configuration to the new version and schedule a session host update. Learn's image requirement is that the image is supported for Azure Virtual Desktop and for the generation of virtual machine in use. Batches, timing, notifications, the purchase plan and OS disk limits, and the `C:\packages\plugin` trap are covered in "Managing session host updates with a session host configuration". Two limits matter at release time:
+**Roll it out.** For a pool with a [session host configuration](https://www.m365.fm/entity/avd-session-host-configuration/), point the configuration to the new version and schedule a session host update. Learn's image requirement is that the image is supported for Azure Virtual Desktop and for the generation of virtual machine in use. Batches, timing, notifications, the purchase plan and OS disk limits, and the `C:\packages\plugin` trap are covered in "Managing session host updates with a session host configuration". Two limits matter at release time:
 
 - Session host update is only available in the global Azure cloud, not in clouds such as Azure US Government or Azure operated by 21Vianet.
 - Learn's session host update pages say a gallery image in a different Azure subscription than the host pool is not currently supported, while the What's new entry of September 2025 announces support for images in another subscription within the same tenant. The pages disagree, so test it before you rely on it. The article "Session host configuration in Azure Virtual Desktop explained" discusses this.

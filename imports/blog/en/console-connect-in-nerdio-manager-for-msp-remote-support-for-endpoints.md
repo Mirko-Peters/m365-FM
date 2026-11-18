@@ -9,9 +9,9 @@ topics: [nerdio-console-connect, nerdio-manager-for-msp]
 keypoints:
   - "Console Connect lets technicians connect from the Nerdio Manager portal to a user session, session host, server, Intune device or desktop image. The session opens in a browser tab."
   - "It is delivered in partnership with Zoho, who provide the underlying infrastructure. Zoho branding still shows in executable names, parts of the UI and the required network rules."
-  - "In Nerdio Manager for MSP it is switched on twice: at the MSP level under System > System Settings > Integrations, then per customer account. An agent must then be installed on each device, and the device must be powered on."
-  - "A session can be interactive, where the user is asked to approve only if the Session confirmation option is selected for the account, or a toolbox session with PowerShell, services, Task Manager and registry tools that can run unattended."
-  - "Nerdio announced it in April 2024 as a private preview. Today's help pages carry no preview label, list supported regions, and state limits such as one technician per device, no session recording and no task logging."
+  - "In Nerdio Manager for MSP it is switched on twice: at MSP level under System > System Settings > Integrations, then per customer. Each device needs an agent and must be powered on."
+  - "A session is interactive (user approval only if Session confirmation is selected) or a toolbox session with PowerShell, services, Task Manager and registry tools that can run unattended."
+  - "Nerdio announced it in April 2024 as a private preview. Current help pages carry no preview label and state limits such as one technician per device, no session recording and no task logging."
 faq:
   - q: "Does Console Connect cost extra?"
     a: "For Nerdio Manager for Enterprise, Nerdio's FAQ says it is included with all existing SKUs for AVD, Windows 365 and physical endpoints, with no additional licensing, and names a default of 5,000 devices per region. The Enterprise release notes for version 8.2.1 (29 September 2026) say the default license cap was raised from 5,000 to 15,000, so confirm the current limit with Nerdio. The two MSP Console Connect pages (setup and FAQ) state no price or device limit, so confirm the terms for Nerdio Manager for MSP with Nerdio or your agreement."
@@ -21,9 +21,9 @@ faq:
     a: "The MSP FAQ says Console Connect supports Windows endpoints only. The technician can connect from any modern browser, whatever the technician's own operating system is."
 ---
 
-Console Connect is the remote support feature built into Nerdio Manager. A technician selects a device in the portal, and a session opens in a browser tab. It is delivered in partnership with Zoho, and in [Nerdio Manager for MSP](/entity/nerdio-manager-for-msp/) it works at both the partner level and the customer-account level. An agent has to be installed on each device before anyone can connect.
+Console Connect is the remote support feature built into Nerdio Manager. A technician selects a device in the portal, and a session opens in a browser tab. It is delivered in partnership with Zoho, and in [Nerdio Manager for MSP](https://www.m365.fm/entity/nerdio-manager-for-msp/) it works at both the partner level and the customer-account level. An agent has to be installed on each device before anyone can connect.
 
-This article explains what [Console Connect](/entity/nerdio-console-connect/) is, what it can reach, how it is enabled, what a session looks like, and where its limits are. Consent prompts, the cases in which no prompt appears, and what is logged are covered in the companion article on privacy and consent; this article stays with setup and behaviour.
+This article explains what [Console Connect](https://www.m365.fm/entity/nerdio-console-connect/) is, what it can reach, how it is enabled, what a session looks like, and where its limits are. Consent prompts, the cases in which no prompt appears, and what is logged are covered in the companion article on privacy and consent; this article stays with setup and behaviour.
 
 ## What Console Connect is
 
@@ -35,9 +35,9 @@ The feature is delivered in partnership with Zoho, who provide the underlying in
 
 The MSP help page says Nerdio Manager currently supports Console Connect on servers, host pools, desktop images and Intune devices. It does not mention Windows 365 or Azure Local. Nerdio's Enterprise help center, which documents the same feature for the Enterprise edition, lists these targets, so check in your MSP portal which of them apply:
 
-- [Azure Virtual Desktop](/entity/azure-virtual-desktop/) [session hosts](/entity/avd-session-host/), including AVD for Azure Local and AVD Hybrid on Nutanix
-- [Windows 365](/entity/windows-365/) Cloud PC sessions
-- Endpoints managed through [Intune](/entity/intune/)
+- [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) [session hosts](https://www.m365.fm/entity/avd-session-host/), including AVD for Azure Local and AVD Hybrid on Nutanix
+- [Windows 365](https://www.m365.fm/entity/windows-365/) Cloud PC sessions
+- Endpoints managed through [Intune](https://www.m365.fm/entity/intune/)
 - Desktop images, including images that have no direct network line of sight for RDP
 
 Only Windows endpoints are supported, according to the MSP FAQ. A device must be powered on to connect, and for Intune devices the agent is deployed through Intune, so the install is subject to Intune's check-in cycle. Nerdio's FAQ says a sync can take up to 8 hours and suggests running the install task and then rebooting the device to prompt a check-in.
@@ -94,11 +94,11 @@ Nerdio's FAQ lists these limits:
 
 ## Alternatives
 
-Console Connect is not the only way to support users. Microsoft's [Remote Help](/entity/intune-remote-help/) for Intune is a cloud-based service in which helpers and sharers sign in with Microsoft Entra accounts of the same organization, and it is not enabled by default for a tenant. Microsoft's page lists Windows, macOS and Android, and uses Intune role-based access control for helpers. Its overview does not mention Azure Virtual Desktop or multi-session Windows. It also states that both parties must sign in with corporate Entra ID accounts, so Remote Help only works within one organization's tenant and helpers cannot assist users in another tenant or external organization. For an MSP supporting several customer tenants, that is a point to check against how Console Connect is documented. Teams screen sharing, which Nerdio itself suggests for multi-person viewing, is another route for ad-hoc cases.
+Console Connect is not the only way to support users. Microsoft's [Remote Help](https://www.m365.fm/entity/intune-remote-help/) for Intune is a cloud-based service in which helpers and sharers sign in with Microsoft Entra accounts of the same organization, and it is not enabled by default for a tenant. Microsoft's page lists Windows, macOS and Android, and uses Intune role-based access control for helpers. Its overview does not mention Azure Virtual Desktop or multi-session Windows. It also states that both parties must sign in with corporate Entra ID accounts, so Remote Help only works within one organization's tenant and helpers cannot assist users in another tenant or external organization. For an MSP supporting several customer tenants, that is a point to check against how Console Connect is documented. Teams screen sharing, which Nerdio itself suggests for multi-person viewing, is another route for ad-hoc cases.
 
 ## A worked example
 
-A fictional [managed service provider](/entity/managed-service-provider/) supports four customers: two with AVD host pools and two with Intune-managed laptops. It enables Console Connect at the MSP level, leaves the uninstall and stop-service options off, and keeps default branding. It then enables the feature for the first customer, selects an Intune group of 12 pilot laptops, and selects Session confirmation with a short confirmation text. The agent reaches the laptops through the group, so the provider allows for the Intune check-in, which can take up to 8 hours, and checks the status filter until a laptop shows Online. A technician then opens Endpoints > Console Connect > All Devices and connects to that laptop, and the user sees the prompt and approves. Without the Session confirmation option, the connection would be established without a prompt. Names and counts are illustrative.
+A fictional [managed service provider](https://www.m365.fm/entity/managed-service-provider/) supports four customers: two with AVD host pools and two with Intune-managed laptops. It enables Console Connect at the MSP level, leaves the uninstall and stop-service options off, and keeps default branding. It then enables the feature for the first customer, selects an Intune group of 12 pilot laptops, and selects Session confirmation with a short confirmation text. The agent reaches the laptops through the group, so the provider allows for the Intune check-in, which can take up to 8 hours, and checks the status filter until a laptop shows Online. A technician then opens Endpoints > Console Connect > All Devices and connects to that laptop, and the user sees the prompt and approves. Without the Session confirmation option, the connection would be established without a prompt. Names and counts are illustrative.
 
 ## Sources
 

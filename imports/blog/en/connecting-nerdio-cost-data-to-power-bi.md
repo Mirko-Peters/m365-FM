@@ -1,6 +1,6 @@
 ---
 title: "Connecting Nerdio cost data to Power BI"
-summary: "Nerdio Manager provides a NerdioReporting custom connector and an optional Power BI template that load user cost attribution reports into Power BI Desktop. This guide covers the connector setup, loading and combining configurations, scheduled refresh through an on-premises data gateway and the limits to plan for."
+summary: "Nerdio Manager provides a NerdioReporting custom connector and an optional template that load user cost attribution reports into Power BI Desktop. This guide covers setup, scheduled refresh through a gateway and limits."
 status: review
 publish: false
 author: mirko-p
@@ -8,10 +8,10 @@ date: 2026-11-18
 topics: [nerdio-finops-user-cost-attribution, nerdio-manager-for-enterprise]
 keypoints:
   - "The connection needs Nerdio Manager Premium with user cost attribution enabled, Power BI Desktop and the NerdioReporting custom connector, installed either by a Nerdio PowerShell script or manually."
-  - "In Power BI Desktop you enter three values from Nerdio Manager: the configuration name, the base URL and the Power BI access key. The connector talks to the user cost attribution App Service and never reads the storage account directly."
-  - "Several report configurations can be loaded into one file by entering their names separated by commas. Configurations that share a subscription or a Log Analytics workspace are likely to produce duplicated cost, session or VM data when combined."
-  - "A published report refreshes only through an on-premises data gateway that has the connector file, stays online and is signed in with a licensed account. The data source needs the same three values and the skip test connection option."
-  - "Azure cost exports and FinOps toolkit reports cover Azure cost without Nerdio, but our reading is that they carry no session-based user allocation. Microsoft marks its Cost Management connector as deprecated and recommends exports for new work."
+  - "In Power BI Desktop you enter the configuration name, base URL and Power BI access key from Nerdio Manager. The connector talks to the App Service, not the storage account."
+  - "Several configurations can be loaded into one file, separated by commas. Configurations sharing a subscription or Log Analytics workspace are likely to duplicate data when combined."
+  - "A published report refreshes only through an on-premises data gateway that has the connector file, stays online and uses a licensed account. The data source needs the same three values."
+  - "Azure cost exports and FinOps toolkit reports cover Azure cost without Nerdio, but in our reading carry no session-based user allocation. Microsoft's Cost Management connector is deprecated."
 faq:
   - q: "Can I use Power BI without Nerdio's Premium edition?"
     a: "Not for this connector. Nerdio's pages say user cost attribution, including its export to Power BI, is only available in the Premium edition. Without it you can use exports from Azure Cost Management, which Microsoft recommends over its deprecated Cost Management connector. Both have the limits described in the alternatives section."
@@ -23,18 +23,18 @@ faq:
 
 To connect Nerdio cost data to Power BI, enable the Power BI connector in Nerdio Manager, install the NerdioReporting custom connector on the machine that runs Power BI Desktop, enter the configuration name, base URL and access key, and load the tables. For a report that refreshes in the Power BI service you also need an on-premises data gateway.
 
-This guide is about the connection. How the numbers are calculated, the report types and the validation steps are in [User cost attribution in Nerdio: showback and chargeback per host pool](/community/u/mirko-p/blog/user-cost-attribution-in-nerdio-showback-and-chargeback-per-host-pool/).
+This guide is about the connection. How the numbers are calculated, the report types and the validation steps are in [User cost attribution in Nerdio: showback and chargeback per host pool](https://www.m365.fm/community/u/mirko-p/blog/user-cost-attribution-in-nerdio-showback-and-chargeback-per-host-pool/).
 
 ## Requirements
 
-- [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/) in the Premium edition, with [user cost attribution](/entity/nerdio-finops-user-cost-attribution/) enabled and at least one report configuration.
-- [Power BI Desktop](/entity/power-bi-desktop/) on the machine where you build the report.
+- [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/) in the Premium edition, with [user cost attribution](https://www.m365.fm/entity/nerdio-finops-user-cost-attribution/) enabled and at least one report configuration.
+- [Power BI Desktop](https://www.m365.fm/entity/power-bi-desktop/) on the machine where you build the report.
 - For combined reports, configurations that each have a complete previous month of data. Nerdio lists this as an assumption.
 - For publishing, a Power BI environment with the minimum licence needed to share reports, and a server for the gateway.
 
 ## How the data travels
 
-Nerdio's resources page describes the path. The user cost attribution App Service in Azure builds the reports and controls the files in the storage account. The custom connector, installed on a PC, asks that App Service for report files and imports them into a .pbix file. The Power BI import is authenticated with a secondary API key that authorises only specific Power BI functions, the App Service is the intermediary and the connector never accesses the storage account directly. The keys are held in the dedicated key vault. For the service, the [on-premises data gateway](/entity/on-premises-data-gateway/) uses the same connector.
+Nerdio's resources page describes the path. The user cost attribution App Service in Azure builds the reports and controls the files in the storage account. The custom connector, installed on a PC, asks that App Service for report files and imports them into a .pbix file. The Power BI import is authenticated with a secondary API key that authorises only specific Power BI functions, the App Service is the intermediary and the connector never accesses the storage account directly. The keys are held in the dedicated key vault. For the service, the [on-premises data gateway](https://www.m365.fm/entity/on-premises-data-gateway/) uses the same connector.
 
 ## Step 1: install the connector
 
@@ -88,7 +88,7 @@ Nerdio recommends publishing to the Power BI platform instead of sharing the des
 
 Nerdio advises using the same connector version in the file and on the gateway; after a connector update, reset the gateway and republish. Microsoft Learn adds that a custom connector used on the gateway must implement TestConnection, that DirectQuery supports only one custom connector data source, and that Kerberos with Windows authentication is not supported for custom connectors. With Nerdio's connector, follow Nerdio's Skip test connection step. Our reading: the TestConnection rule mainly explains why a self-built connector can fail on the gateway.
 
-Nerdio's performance page says reports rebuild once daily by default and that Azure cost data updates daily, so multiple refreshes in a day have diminishing returns. Our reading: schedule the Power BI refresh after the daily build. Nerdio does not state the build time, so check it in your environment. If credentials are greyed out in the service, see [Power BI data source credentials greyed out](/community/u/mirko-p/blog/power-bi-data-source-credentials-greyed-out-scheduled-refresh-gateway/).
+Nerdio's performance page says reports rebuild once daily by default and that Azure cost data updates daily, so multiple refreshes in a day have diminishing returns. Our reading: schedule the Power BI refresh after the daily build. Nerdio does not state the build time, so check it in your environment. If credentials are greyed out in the service, see [Power BI data source credentials greyed out](https://www.m365.fm/community/u/mirko-p/blog/power-bi-data-source-credentials-greyed-out-scheduled-refresh-gateway/).
 
 ## Sharing through Excel
 

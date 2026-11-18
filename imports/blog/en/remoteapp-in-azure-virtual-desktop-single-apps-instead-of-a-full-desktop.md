@@ -7,11 +7,11 @@ author: mirko-p
 date: 2026-11-18
 topics: [avd-remoteapp, avd-application-group]
 keypoints:
-  - "RemoteApp lets users open individual published applications from a session host in a pooled host pool. Learn lists RemoteApp as available with pooled host pools only; personal host pools publish desktops."
+  - "RemoteApp lets users open individual published apps from a session host in a pooled host pool. Learn lists it for pooled host pools only; personal pools publish desktops."
   - "Apps come from three sources in the portal: App Attach, the Start menu or a file path. Learn says apps installed locally or delivered with App Attach both work in a RemoteApp group."
   - "Users are assigned to the application group and can open every app in it. Apps are not assigned one by one, except with App Attach."
-  - "A RemoteApp group does not turn the session host into a locked-down appliance. Learn's Cloud Apps page says a published app can open other apps on the Cloud PC and recommends Application Control for Windows to control access fully; check whether the same applies to your session hosts."
-  - "Status as of 17 November 2026: Learn's what's new page says RemoteApp enhancements are generally available for Azure Virtual Desktop, while the enhancements page still has 'preview' in its title. Pinning RemoteApp shortcuts to the local desktop and RemoteApp support for context-based redirections are preview features."
+  - "A RemoteApp group does not lock down the host: a published app can open other apps, and Learn recommends Application Control for Windows. Check whether this applies to your hosts."
+  - "As of 17 November 2026 Learn's what's new lists RemoteApp enhancements as GA, while their page still says preview. Pinning shortcuts and context-based redirections for RemoteApp are preview."
 faq:
   - q: "Can I publish single apps from a personal host pool?"
     a: "No. Microsoft Learn's terminology article says RemoteApp application groups are available with pooled host pools only. A personal host pool publishes a full desktop through a desktop application group."
@@ -21,7 +21,7 @@ faq:
     a: "They deliver the same kind of experience, individual apps in Windows App, but the back end differs. Cloud Apps run on Windows 365 Flex Cloud PCs in shared mode and need a Windows 365 Flex license, while RemoteApp runs on Azure Virtual Desktop session hosts in a pooled host pool that you manage."
 ---
 
-RemoteApp is the Azure Virtual Desktop option for publishing individual applications instead of a full Windows desktop. Users see the apps you select in Windows App, open them like local programs, and the apps run on a session host in a pooled [host pool](/entity/avd-host-pool/). This article is the concept and decision guide; the sibling articles cover [application groups](/entity/avd-application-group/) in detail and the step-by-step publishing procedure.
+RemoteApp is the Azure Virtual Desktop option for publishing individual applications instead of a full Windows desktop. Users see the apps you select in Windows App, open them like local programs, and the apps run on a session host in a pooled [host pool](https://www.m365.fm/entity/avd-host-pool/). This article is the concept and decision guide; the sibling articles cover [application groups](https://www.m365.fm/entity/avd-application-group/) in detail and the step-by-step publishing procedure.
 
 ## What RemoteApp is
 
@@ -30,7 +30,7 @@ Learn's [terminology article](https://learn.microsoft.com/en-us/azure/virtual-de
 - **Desktop**: users access the full Windows desktop from a session host. Available with pooled or personal host pools.
 - **RemoteApp**: users access individual applications you select and publish to the application group. Available with pooled host pools only.
 
-[RemoteApp](/entity/avd-remoteapp/) is therefore a way of publishing, not a separate product. The same pooled [session hosts](/entity/avd-session-host/) that can serve desktops can serve apps. What changes is what the user is given: a window for one application instead of a desktop with a Start menu and taskbar.
+[RemoteApp](https://www.m365.fm/entity/avd-remoteapp/) is therefore a way of publishing, not a separate product. The same pooled [session hosts](https://www.m365.fm/entity/avd-session-host/) that can serve desktops can serve apps. What changes is what the user is given: a window for one application instead of a desktop with a Start menu and taskbar.
 
 Learn's [publishing article](https://learn.microsoft.com/en-us/azure/virtual-desktop/publish-applications-stream-remoteapp) adds that the applications in a RemoteApp group are either installed locally on the session hosts or delivered dynamically with App Attach.
 
@@ -44,11 +44,11 @@ You control the names. Learn's [feed customization article](https://learn.micros
 
 In the portal, you add an application from one of three sources according to the publishing article: **App Attach** (a package already added and assigned to the host pool), **Start menu** (an application picked from the session host's Start menu) or **File path** (the path to the `.exe` on the session hosts). The sibling article "Publishing RemoteApps with application groups: a practical walkthrough" covers the fields and the procedure, so this article does not repeat them.
 
-Two details matter for planning. First, Learn's FAQ says that when you add apps to a RemoteApp application group you need a session host to determine the Start menu apps, and the publishing article says at least one session host must be powered on. Second, [App Attach](/entity/msix-app-attach/) packages come in MSIX, Appx and App-V formats according to Learn's [App Attach overview](https://learn.microsoft.com/en-us/azure/virtual-desktop/app-attach-overview). That page says user configuration files are supported only on desktop connections, not on remote app connections, so check whether an App-V package depends on them before you publish it as a RemoteApp.
+Two details matter for planning. First, Learn's FAQ says that when you add apps to a RemoteApp application group you need a session host to determine the Start menu apps, and the publishing article says at least one session host must be powered on. Second, [App Attach](https://www.m365.fm/entity/msix-app-attach/) packages come in MSIX, Appx and App-V formats according to Learn's [App Attach overview](https://learn.microsoft.com/en-us/azure/virtual-desktop/app-attach-overview). That page says user configuration files are supported only on desktop connections, not on remote app connections, so check whether an App-V package depends on them before you publish it as a RemoteApp.
 
 ## How assignment works
 
-Users are not assigned to individual apps, except with App Attach. They are assigned to the application group and can open every app in it. If a user is in several RemoteApp groups on the same host pool, they get the aggregate of the apps in those groups (terminology article). Each group must be associated with a [workspace](/entity/avd-workspace/) for users to see the apps.
+Users are not assigned to individual apps, except with App Attach. They are assigned to the application group and can open every app in it. If a user is in several RemoteApp groups on the same host pool, they get the aggregate of the apps in those groups (terminology article). Each group must be associated with a [workspace](https://www.m365.fm/entity/avd-workspace/) for users to see the apps.
 
 The one conflict to design around is a user who holds both a desktop group and a RemoteApp group on the same host pool. Learn's [preferred application group type article](https://learn.microsoft.com/en-us/azure/virtual-desktop/preferred-application-group-type) says the host pool's preferred type decides what Windows App shows, and that the Azure portal also creates a desktop group with the suffix `-DAG`, even when you choose RemoteApp, which you can remove after creation. The sibling article on desktop and RemoteApp groups covers the matrix and the `ms-avd:connect` caveat.
 
@@ -85,7 +85,7 @@ Check these before you promise them to users, because Learn marks several as pre
 
 - **RemoteApp enhancements.** The what's new page and the enhancements article differ on preview or general availability; the sibling article "What the new RemoteApp enhancements change for users and admins" sets out the status and the requirements.
 - **Pin RemoteApp shortcuts to the local desktop.** Public preview, according to the September 2026 what's new entry. The publishing article says the **Create desktop shortcut (Preview)** option also needs additional Intune setup.
-- **Context-based redirections for RemoteApp.** Preview, according to the October 2026 what's new entry. See [context-based redirections](/entity/avd-context-based-redirections/).
+- **Context-based redirections for RemoteApp.** Preview, according to the October 2026 what's new entry. See [context-based redirections](https://www.m365.fm/entity/avd-context-based-redirections/).
 - **Remote assistance in RemoteApp sessions.** The July 2026 what's new entry says Intune Remote Help now supports remote assistance within RemoteApp sessions.
 
 ## A short checklist before you publish

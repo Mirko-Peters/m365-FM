@@ -1,6 +1,6 @@
 ---
 title: "Nerdio Manager for Enterprise editions: Core vs Premium"
-summary: "Nerdio Manager for Enterprise comes in two editions. Core covers day-to-day host pool, image, app and endpoint management; Premium adds features such as advanced auto-scale, Global Pools (Public Preview), Azure Capacity Extender and per-user cost reporting. This guide lists the differences, shows how to check or change the edition and explains how billing counts users."
+summary: "Nerdio Manager for Enterprise has two editions. Core covers host pool, image, app and endpoint management; Premium adds advanced auto-scale, Global Pools, Azure Capacity Extender and per-user cost reporting."
 status: review
 publish: false
 author: mirko-p
@@ -8,10 +8,10 @@ date: 2026-11-18
 topics: [nerdio-manager-for-enterprise, nerdio]
 keypoints:
   - "Nerdio's help center says there are two editions, Core and Premium, and that Premium includes everything in Core plus more. Before version 6.0 the choice was Standard or Premium."
-  - "Nerdio's current pricing table lists these as Premium only: Advanced AVD Auto-scale, Global Pools (listed as Public Preview on Nerdio's Global Pools Overview page), multi-region management, Azure Capacity Extender, Intune multi-tenant management, executive and operational insights and per-user cost reporting."
+  - "Nerdio's pricing table lists as Premium only: Advanced AVD Auto-scale, Global Pools (Public Preview), multi-region management, Azure Capacity Extender, Intune multi-tenant and cost reporting."
   - "Nerdio's own pages disagree on some items, for example Azure Government support and SCCM integration. Check the live pricing page and the edition pop-up in your console before you decide."
   - "You can change the edition at any time in Nerdio Manager. Downgrading to Core can lose functionality, and the confirmation pop-up lists what you will lose."
-  - "Billing is per unique Entra ID user per calendar month, at the highest entitlement that user consumed. Nerdio's current pricing page lists no Core or Premium price and links to a pricing request, so ask for a quote."
+  - "Billing is per unique Entra ID user per month at the highest entitlement used. Nerdio's pricing page lists no Core or Premium price, so ask for a quote."
 faq:
   - q: "Can I switch between Core and Premium later?"
     a: "Yes. Nerdio's Edition Management page says you can change the edition at any time in Nerdio Manager. Going from Premium to Core could result in loss of functionality; Nerdio names advanced cost optimization features such as Azure Capacity Extender as not available in Core. When you downgrade, the confirmation pop-up lists the functionality you lose, so read it before you select OK."
@@ -21,7 +21,7 @@ faq:
     a: "Nerdio's current Enterprise pricing page lists no price for Windows Cloud Core or Windows Cloud Premium and links to a pricing request. An April 2024 Nerdio announcement named $6 (Core) and $10 (Premium) per MAU at the time of the version 6 launch; the announcement does not define the term, but treat those as dated and confirm with Nerdio. Azure costs for VMs, storage and the Nerdio components are separate."
 ---
 
-[Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/) has two editions, Core and Premium, and Premium contains everything in Core plus additional features. Core covers daily management of [Azure Virtual Desktop](/entity/azure-virtual-desktop/) (AVD), Windows 365 and Intune; the Premium-only items are mostly about advanced scaling, multi-region operation, cost optimisation and cost reporting. This guide lists the differences as Nerdio documents them, points out where Nerdio's own pages disagree, and shows how to check, change and budget for an edition.
+[Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/) has two editions, Core and Premium, and Premium contains everything in Core plus additional features. Core covers daily management of [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) (AVD), Windows 365 and Intune; the Premium-only items are mostly about advanced scaling, multi-region operation, cost optimisation and cost reporting. This guide lists the differences as Nerdio documents them, points out where Nerdio's own pages disagree, and shows how to check, change and budget for an edition.
 
 ## Where the two editions come from
 

@@ -1,6 +1,6 @@
 ---
 title: "How to use the exclusion tag for maintenance windows and special session hosts"
-summary: "To patch an Azure Virtual Desktop session host without autoscale interfering, tag the VM with the scaling plan's exclusion tag first, then turn on drain mode, wait for sessions to end, do the work, and undo both. This article covers the tag mechanics, the commands and the capacity check to run before you tag."
+summary: "To patch an Azure Virtual Desktop session host without autoscale interfering, set the scaling plan's exclusion tag, turn on drain mode, wait for sessions to end, do the work and undo both."
 status: review
 publish: false
 author: mirko-p
@@ -8,8 +8,8 @@ date: 2026-11-18
 topics: [avd-scaling-plan-exclusion-tag, avd-scaling-plan]
 keypoints:
   - "Tag the VM before you turn on drain mode. Autoscale overrides drain mode on every VM it scales, so drain mode alone does not protect a host in a pooled host pool."
-  - "Tag with the Azure portal or Update-AzTag with the Merge operation, and remove the tag with the Delete operation or in the portal when the work is done. The Tag Contributor role cannot tag resources in the portal, only through PowerShell or REST."
-  - "Check the capacity of the remaining untagged hosts first. Tagged hosts are still included in the calculation of the minimum percentage of hosts, but autoscale cannot start them, and Learn says a pool that cannot turn hosts back on cannot meet its minimum."
+  - "Tag in the portal or with Update-AzTag -Operation Merge, and remove it with Delete afterwards. The Tag Contributor role can tag only through PowerShell or REST, not the portal."
+  - "Check capacity of untagged hosts first. Tagged hosts still count toward the minimum percentage of hosts, but autoscale cannot start them, so the pool may miss its minimum."
   - "The tag applies in all phases of the schedule and Learn describes no time limit for it, so removing it after the work is your step."
   - "Learn documents the tag for maintenance. Using it for test or always-on hosts follows from its definition and is not described as a use case."
 faq:
@@ -99,15 +99,14 @@ For a personal host pool, the tag most likely protects the power state, because 
 
 ## Related
 
-- [Exclusion tag](/entity/avd-scaling-plan-exclusion-tag/)
-- [Drain mode](/entity/avd-drain-mode/)
-- [AVD scaling plan](/entity/avd-scaling-plan/)
-- [Azure resource tags](/entity/azure-resource-tags/)
-- [AVD session host](/entity/avd-session-host/)
+- [Exclusion tag](https://www.m365.fm/entity/avd-scaling-plan-exclusion-tag/)
+- [Drain mode](https://www.m365.fm/entity/avd-drain-mode/)
+- [AVD scaling plan](https://www.m365.fm/entity/avd-scaling-plan/)
+- [Azure resource tags](https://www.m365.fm/entity/azure-resource-tags/)
+- [AVD session host](https://www.m365.fm/entity/avd-session-host/)
 
 ## Sources
 
-All retrieved on 2026-11-17.
 
 - [Microsoft Learn: Create and assign an autoscale scaling plan](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)
 - [Microsoft Learn: Autoscale scenarios for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)

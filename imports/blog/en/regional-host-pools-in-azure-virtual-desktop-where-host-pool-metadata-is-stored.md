@@ -7,10 +7,10 @@ author: mirko-p
 date: 2026-11-18
 topics: [avd-regional-host-pools, avd-host-pool]
 keypoints:
-  - "Deployment scope decides where metadata lives: Regional means a database in one Azure region, with replicas across availability zones and replication to a paired region where applicable. Geographical, the default in PowerShell, means a database that serves the whole geography. Learn says there are no functional differences between the two types of host pool."
+  - "Deployment scope decides where metadata lives: Regional is one Azure region with zone replicas; Geographical (the PowerShell default) serves the geography. No functional differences."
   - "Scope is set when the object is created and cannot be changed. Host pools, workspaces, application groups and App Attach packages of different scopes cannot be associated with each other."
   - "Regional host pools have been generally available since 30 September 2026 and are offered in 14 regions, which Learn's data locations article lists. Some preview wording remains on Learn pages."
-  - "Microsoft strongly recommends Regional for new host pools in a supported region. The announcement's portal steps also recommend placing session host VMs in the same region as the regional metadata; the metadata location is not technically tied to where VMs run."
+  - "Microsoft strongly recommends Regional for new host pools in supported regions, and suggests session host VMs in the same region, though metadata location is not tied to VM location."
   - "In PowerShell the scope is the -DeploymentScope parameter. If you omit it, the host pool becomes geographical."
 faq:
   - q: "Are regional host pools generally available?"
@@ -32,7 +32,7 @@ Azure Virtual Desktop splits into Microsoft-managed components and the parts you
 - The **geographical database** serves host pools with Geographical scope. It serves all Azure regions in its geography.
 - The **regional database** serves host pools with Regional scope. It is stored within a single region.
 
-The resource directory tells the web service which database holds a given user's connection information. During feed discovery, Traffic Manager sends the user to the nearest web service instance, which asks the broker in the same region for the files and icons, and the broker queries the resource directory and the relevant database. Your own resources are not in this path: Learn says session hosts can be in any region, and the BCDR article says the metadata location is independent of session host VM locations. See also the entity pages for [regional host pools](/entity/avd-regional-host-pools/) and [host pools](/entity/avd-host-pool/).
+The resource directory tells the web service which database holds a given user's connection information. During feed discovery, Traffic Manager sends the user to the nearest web service instance, which asks the broker in the same region for the files and icons, and the broker queries the resource directory and the relevant database. Your own resources are not in this path: Learn says session hosts can be in any region, and the BCDR article says the metadata location is independent of session host VM locations. See also the entity pages for [regional host pools](https://www.m365.fm/entity/avd-regional-host-pools/) and [host pools](https://www.m365.fm/entity/avd-host-pool/).
 
 ## Deployment scope
 
@@ -125,7 +125,6 @@ For new host pools, the announcement strongly recommends Regional wherever it is
 
 ## Sources
 
-All retrieved on 17 November 2026.
 
 - [Microsoft Tech Community: Now generally available: Regional resiliency for Azure Virtual Desktop](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/now-generally-available-regional-resiliency-for-azure-virtual-desktop/4540458)
 - [Microsoft Learn: Regional Host Pools - Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/regional-host-pools)

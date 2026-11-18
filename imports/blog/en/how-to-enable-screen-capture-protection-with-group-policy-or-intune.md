@@ -7,7 +7,7 @@ author: mirko-p
 date: 2026-11-18
 topics: [avd-screen-capture-protection, azure-virtual-desktop]
 keypoints:
-  - "Both routes configure the same policy, Enable screen capture protection, on the session hosts. In Intune it is in the Settings catalog under Administrative templates; in Group Policy it needs the Azure Virtual Desktop administrative template first."
+  - "Both routes set the same policy, Enable screen capture protection, on the session hosts: Intune via the Settings catalog, Group Policy after adding the AVD administrative template."
   - "Choose between Block screen capture on client and Block screen capture on client and server. In the Intune toggle, off means client only and on means client and server."
   - "Restart the session hosts after the policy applies, and test from a new session. Reconnecting to an existing session does not pick up the change."
   - "Native Windows and macOS clients follow this policy without an Intune MAM policy. Android, iOS/iPadOS and web connections need MAM and Conditional Access on top."
@@ -23,14 +23,14 @@ faq:
 
 To enable screen capture protection on Azure Virtual Desktop session hosts, turn on the policy setting **Enable screen capture protection** and choose whether it blocks capture on the client only or on the client and the server. You set it either with an Intune Settings catalog profile or with Group Policy, restart the session hosts, and test from a new session. This guide walks through both routes, the checks Learn gives, and what to do when it does not seem to work. For what the feature does and does not block, see the explainer on screen capture protection.
 
-Both routes configure the same policy on the VMs. Learn says that native Windows and macOS clients enforce it without an Intune MAM app protection policy. The same Learn page covers Android, iOS/iPadOS and web connections, which need MAM and [Conditional Access](/entity/conditional-access/) as well; those are outside the steps below. The page was last updated on 8 October 2026 and carries no preview label.
+Both routes configure the same policy on the VMs. Learn says that native Windows and macOS clients enforce it without an Intune MAM app protection policy. The same Learn page covers Android, iOS/iPadOS and web connections, which need MAM and [Conditional Access](https://www.m365.fm/entity/conditional-access/) as well; those are outside the steps below. The page was last updated on 8 October 2026 and carries no preview label.
 
 ## Before you start
 
-Confirm these items, all from Learn's prerequisites for [screen capture protection](/entity/avd-screen-capture-protection/):
+Confirm these items, all from Learn's prerequisites for [screen capture protection](https://www.m365.fm/entity/avd-screen-capture-protection/):
 
 - Session hosts (or Windows 365 Cloud PCs) run Windows 11, version 22H2 or later, or Windows 10, version 22H2 or later.
-- Users connect with a supported native client. For [Windows App](/entity/windows-app/) on Windows and macOS Learn lists any version for desktop sessions; the Remote Desktop client needs 1.2.1672 on Windows or 10.7.0 on macOS. RemoteApp sessions from Windows need a local Windows 11, version 22H2 or later.
+- Users connect with a supported native client. For [Windows App](https://www.m365.fm/entity/windows-app/) on Windows and macOS Learn lists any version for desktop sessions; the Remote Desktop client needs 1.2.1672 on Windows or 10.7.0 on macOS. RemoteApp sessions from Windows need a local Windows 11, version 22H2 or later.
 - For Intune: a Microsoft Entra account with the **Policy and Profile manager** built-in role, and a group that contains the VMs or Cloud PCs.
 - For Group Policy: a domain account in **Domain Admins**, and a security group or organizational unit with the session hosts.
 
@@ -38,7 +38,7 @@ Decide the value first. **Block screen capture on client** stops capture on the 
 
 ## Option 1: Microsoft Intune
 
-Learn's steps for [Intune](/entity/intune/), in the order shown on the page:
+Learn's steps for [Intune](https://www.m365.fm/entity/intune/), in the order shown on the page:
 
 1. Sign in to the Microsoft Intune admin center at intune.microsoft.com.
 2. Create or edit a configuration profile for **Windows 10 and later** with the **Settings catalog** profile type.
@@ -55,7 +55,7 @@ Two notes on this route. First, the Learn page for the administrative template s
 
 ## Option 2: Group Policy
 
-For [Group Policy](/entity/group-policy/) the Azure Virtual Desktop administrative template must be available first. Learn's steps for an Active Directory domain:
+For [Group Policy](https://www.m365.fm/entity/group-policy/) the Azure Virtual Desktop administrative template must be available first. Learn's steps for an Active Directory domain:
 
 1. Download the Azure Virtual Desktop administrative template files from aka.ms/avdgpo and extract the contents of the `.cab` file and the `.zip` archive.
 2. On your domain controllers, copy `terminalserver-avd.admx` and `en-US\terminalserver-avd.adml` to the right place. In the local folders these are `C:\Windows\PolicyDefinitions\` and `C:\Windows\PolicyDefinitions\en-US\`. In a Central Store they are `\\contoso.com\SYSVOL\contoso.com\Policies\PolicyDefinitions` and the same path with `\en-US`. Replace `contoso.com` with your domain, and `en-US` for another language.
@@ -93,7 +93,7 @@ Learn does not document a rollback procedure for these two routes. Our reading i
 
 ## What to configure alongside it
 
-Learn's tip is to disable clipboard, drive and printer redirection too, since screen capture protection does not stop copying out of the session, and to consider [watermarking](/entity/avd-watermarking/) against photographs. Watermarking appears in the same administrative template, so the Group Policy template you just installed also holds it.
+Learn's tip is to disable clipboard, drive and printer redirection too, since screen capture protection does not stop copying out of the session, and to consider [watermarking](https://www.m365.fm/entity/avd-watermarking/) against photographs. Watermarking appears in the same administrative template, so the Group Policy template you just installed also holds it.
 
 ## Sources
 

@@ -21,7 +21,7 @@ faq:
     a: "Not for trusted launch itself, which applies to Generation 2 VMs. The Windows 11 requirements page also lists generation 2 for Windows 11 VMs and says in-place upgrade of existing generation 1 VMs to Windows 11 is not possible. Learn describes separate paths to move an existing Gen1 VM to Gen2 with trusted launch; this article does not cover the steps."
 ---
 
-Trusted launch is a group of security features for Generation 2 Azure virtual machines that protects the boot process: Secure Boot allows only signed boot components, a virtual TPM (vTPM) records measurements of the boot, and boot integrity monitoring uses those records for remote attestation. For [Azure Virtual Desktop](/entity/azure-virtual-desktop/) it matters in two ways: the Azure portal selects it by default when you add session hosts, and Windows 11 on Azure needs trusted launch with vTPM enabled.
+Trusted launch is a group of security features for Generation 2 Azure virtual machines that protects the boot process: Secure Boot allows only signed boot components, a virtual TPM (vTPM) records measurements of the boot, and boot integrity monitoring uses those records for remote attestation. For [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) it matters in two ways: the Azure portal selects it by default when you add session hosts, and Windows 11 on Azure needs trusted launch with vTPM enabled.
 
 This article explains the concept and the decisions around it, not the steps for enabling it on existing session hosts.
 
@@ -29,7 +29,7 @@ This article explains the concept and the decisions around it, not the steps for
 
 Learn's [trusted launch overview](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch) describes it as a way to improve the security of Generation 2 VMs with enhanced protection against bootkits, rootkits and low-level malware. It uses several coordinated infrastructure technologies that you can enable independently. The page lists benefits such as verified boot loaders, OS kernels and drivers, protected keys, certificates and secrets, and visibility into the integrity of the boot chain.
 
-The [Trusted launch (Azure virtual machines)](/entity/trusted-launch/) feature is built from these parts:
+The [Trusted launch (Azure virtual machines)](https://www.m365.fm/entity/trusted-launch/) feature is built from these parts:
 
 - **Secure Boot.** Implemented in platform firmware. Learn says it ensures that only signed operating systems and drivers can boot, and that if it cannot authenticate a signed component from a trusted publisher, the VM fails to boot.
 - **vTPM.** A virtualized TPM that follows the TPM 2.0 specification. Learn says each VM gets its own dedicated TPM instance running in a secure environment outside the reach of the VM, and that it serves as a vault for keys and measurements.
@@ -57,15 +57,15 @@ Two practical notes from separate Learn pages: the FAQ says the paravisor typica
 
 Learn's [Azure Virtual Desktop security recommendations](https://learn.microsoft.com/en-us/azure/virtual-desktop/security-recommendations) say: "When you add session hosts using the Azure portal, the default security type is Trusted virtual machines. This ensures that your VM meets the mandatory requirements for Windows 11." The [Windows 11 requirements page](https://learn.microsoft.com/en-us/windows/whats-new/windows-11-requirements) backs this up. For VMs it lists generation 2, and for Azure it lists trusted launch with vTPM enabled.
 
-The [deployment article](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop) shows the choice in the portal. When you create a host pool with a [session host configuration](/entity/avd-session-host-configuration/), you select a security type of Standard, Trusted launch virtual machines or Confidential virtual machines, and the article says Trusted launch virtual machines is the default. Selecting it turns on Secure Boot and vTPM automatically. The standard management tab offers the same three options and the same automatic selections.
+The [deployment article](https://learn.microsoft.com/en-us/azure/virtual-desktop/deploy-azure-virtual-desktop) shows the choice in the portal. When you create a host pool with a [session host configuration](https://www.m365.fm/entity/avd-session-host-configuration/), you select a security type of Standard, Trusted launch virtual machines or Confidential virtual machines, and the article says Trusted launch virtual machines is the default. Selecting it turns on Secure Boot and vTPM automatically. The standard management tab offers the same three options and the same automatic selections.
 
 So for a new Windows 11 multi-session pool created in the portal, you usually get trusted launch without doing anything, as long as the image and VM size support it. The decisions that remain are about images, sizes, drivers and how you monitor.
 
 ## Checks before you rely on it
 
-**Image.** Trusted launch needs a Generation 2 image. Learn's FAQ shows how to check a Marketplace image with `az vm image show` and look for `"hyperVGeneration": "V2"` and a `SecurityType` value that contains `TrustedLaunch`. For your own images, Learn says managed images are not supported; use Azure Compute Gallery instead. If you maintain [golden images](/entity/golden-image/), build and publish them as Gen2 gallery images, and test them on the VM size you will deploy. The FAQ lists cases where you must bypass the trusted launch default, among them using a Gen2 VM to generate `TrustedLaunchSupported` gallery images through Azure Image Builder or Packer. To bypass it, set `securityType` to `Standard` (API version 2025-11-01 or higher, Azure PowerShell v15.6.1 or higher, Azure CLI v2.86.0 or higher).
+**Image.** Trusted launch needs a Generation 2 image. Learn's FAQ shows how to check a Marketplace image with `az vm image show` and look for `"hyperVGeneration": "V2"` and a `SecurityType` value that contains `TrustedLaunch`. For your own images, Learn says managed images are not supported; use Azure Compute Gallery instead. If you maintain [golden images](https://www.m365.fm/entity/golden-image/), build and publish them as Gen2 gallery images, and test them on the VM size you will deploy. The FAQ lists cases where you must bypass the trusted launch default, among them using a Gen2 VM to generate `TrustedLaunchSupported` gallery images through Azure Image Builder or Packer. To bypass it, set `securityType` to `Standard` (API version 2025-11-01 or higher, Azure PowerShell v15.6.1 or higher, Azure CLI v2.86.0 or higher).
 
-**Operating system.** Learn's supported list includes Windows 10 and 11 (Pro, Enterprise, Enterprise multi-session) and Windows Server 2016 to 2025, which covers the usual [session host](/entity/avd-session-host/) choices.
+**Operating system.** Learn's supported list includes Windows 10 and 11 (Pro, Enterprise, Enterprise multi-session) and Windows Server 2016 to 2025, which covers the usual [session host](https://www.m365.fm/entity/avd-session-host/) choices.
 
 **VM size.** Not every size family supports it. The overview's table has columns for supported size families, currently not supported size families and not supported size families. Supported families include B, D, E, F and L, and the NC, ND and NV GPU families. Dpsv5, Dpdsv5, Dplsv5, Dpldsv5 and Mbdsv4 (Preview) sit in the "currently not supported" column. Not supported are the A family, Dv2, Dv3, the DC and EC confidential families, the M family except Mbdsv4 (Preview), and the older NC-series, NV-series and NP-series. Learn's note under the table says the not-supported families do not support Generation 2 VMs, so the fix there is an equivalent supported size family. Learn does not explain the "currently not supported" column further; check those sizes with the query below.
 
@@ -77,11 +77,11 @@ To check a specific size, the FAQ gives a CLI query (`az vm list-skus ... --quer
 
 ## Pooled hosts, the vTPM and encryption
 
-The vTPM is per VM. Learn's AVD security recommendations say any feature that uses the vTPM results in secrets bound to that specific VM, and in a pooled scenario users can be redirected to any VM in the host pool, so depending on how a feature is designed, this can have an impact. Our reading: test any feature that stores a secret in the vTPM on a real [pooled host pool](/entity/avd-pooled-host-pool/) before rollout, because a later session may land on a host that does not hold that secret.
+The vTPM is per VM. Learn's AVD security recommendations say any feature that uses the vTPM results in secrets bound to that specific VM, and in a pooled scenario users can be redirected to any VM in the host pool, so depending on how a feature is designed, this can have an impact. Our reading: test any feature that stores a secret in the vTPM on a real [pooled host pool](https://www.m365.fm/entity/avd-pooled-host-pool/) before rollout, because a later session may land on a host that does not hold that secret.
 
 The same page recommends enabling vTPM to use remote attestation, and says that with vTPM enabled you can also use BitLocker through Azure Disk Encryption. It warns: do not use BitLocker to encrypt the specific disk where FSLogix profile data is stored.
 
-For [ephemeral OS disks](/entity/avd-ephemeral-os-disks/), the FAQ says trusted launch supports them, but keys and secrets that the vTPM generates or seals after VM creation might not persist across reimaging and platform events such as service healing.
+For [ephemeral OS disks](https://www.m365.fm/entity/avd-ephemeral-os-disks/), the FAQ says trusted launch supports them, but keys and secrets that the vTPM generates or seals after VM creation might not persist across reimaging and platform events such as service healing.
 
 ## Secure Boot, custom images and drivers
 
@@ -91,7 +91,7 @@ The FAQ adds that COM ports require disabling Secure Boot, and that you should n
 
 ## Monitoring in Defender for Cloud
 
-The overview lists what [Microsoft Defender for Cloud](/entity/microsoft-defender-for-cloud/) reports for compatible VMs:
+The overview lists what [Microsoft Defender for Cloud](https://www.m365.fm/entity/microsoft-defender-for-cloud/) reports for compatible VMs:
 
 | Item | Severity (Learn) | Meaning |
 |---|---|---|
@@ -108,7 +108,7 @@ The portal offers both as security types, and the AVD security recommendations t
 
 | | Trusted launch | Confidential VM |
 |---|---|---|
-| What it protects | Boot chain against rootkits, boot kits and kernel-level malware | Desktop in memory, in use, backed by a hardware root of trust ([confidential computing](/entity/azure-confidential-computing/)) |
+| What it protects | Boot chain against rootkits, boot kits and kernel-level malware | Desktop in memory, in use, backed by a hardware root of trust ([confidential computing](https://www.m365.fm/entity/azure-confidential-computing/)) |
 | Portal options set automatically | Secure Boot, vTPM | Secure Boot, vTPM and integrity monitoring; you cannot opt out of vTPM |
 | Portal default | Yes, when creating a host pool with a session host configuration | Not the default |
 

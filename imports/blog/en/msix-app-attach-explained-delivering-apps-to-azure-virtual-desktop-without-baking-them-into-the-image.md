@@ -1,16 +1,16 @@
 ---
 title: "MSIX app attach explained: delivering apps to Azure Virtual Desktop without baking them into the image"
-summary: "App Attach mounts an application disk image or App-V package from an SMB file share into a user's session at sign-in, so the app is not installed on the session host or in the image. This article explains the moving parts: package formats, disk images, the file share, registration, assignment and certificates, and how current App Attach differs from the older MSIX app attach."
+summary: "App Attach mounts an application disk image or App-V package from an SMB share into a user's session at sign-in, so the app is not installed on the host or image. Explains formats, share, assignment and certificates."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [msix-app-attach, azure-virtual-desktop]
 keypoints:
-  - "App Attach attaches an application from a package to a user session. Learn says apps are not installed locally on session hosts or images, and that they run in containers that separate user data, the operating system and other applications."
-  - "A user gets an app only if three conditions hold at sign-in: the app is assigned to the host pool, the user is in a desktop or RemoteApp application group, and the app is assigned to the user or a group."
+  - "App Attach attaches an app from a package to a user session. Apps are not installed on session hosts or images, and run in containers separating user data, OS and other apps."
+  - "A user gets an app only if it is assigned to the host pool, the user is in a desktop or RemoteApp application group, and the app is assigned to the user or a group."
   - "Disk images can be CimFS, VHDX or VHD. Learn does not recommend VHD and recommends CimFS only when session hosts run Windows 11."
-  - "Images sit on an SMB file share that each session host reads with its computer account, and Learn recommends Azure Files for it. Separately, Learn's identity table lists Microsoft Entra Domain Services as not supported."
+  - "Images sit on an SMB share that each host reads with its computer account; Learn recommends Azure Files. Learn's identity table lists Entra Domain Services as not supported."
   - "Every MSIX or Appx package needs a code signing certificate whose whole chain the session hosts trust. Learn advises timestamping the package so it outlasts the certificate."
 faq:
   - q: "Is App Attach the same as MSIX app attach?"
@@ -76,7 +76,7 @@ For a single VHDX file, the same article uses `-destination "C:\msix\myapp.vhdx"
 
 ## The file share
 
-Images live on an SMB file share that each session host mounts at sign-in. Learn says App Attach has no dependency on the storage type and recommends [Azure Files](/entity/azure-files/); Azure NetApp Files also works but, in that sentence, requires session hosts joined to Active Directory Domain Services. The overview's permissions list for Azure NetApp Files also names Microsoft Entra Domain Services, which its identity table lists as not supported; this article follows the table.
+Images live on an SMB file share that each session host mounts at sign-in. Learn says App Attach has no dependency on the storage type and recommends [Azure Files](https://www.m365.fm/entity/azure-files/); Azure NetApp Files also works but, in that sentence, requires session hosts joined to Active Directory Domain Services. The overview's permissions list for Azure NetApp Files also names Microsoft Entra Domain Services, which its identity table lists as not supported; this article follows the table.
 
 Permissions follow the session host, not the user. Each session host computer object needs read access through NTFS and share permissions. With Azure Files and session hosts joined to Microsoft Entra ID, Learn tells you to assign the Reader and Data Access role to both the Azure Virtual Desktop and the Azure Virtual Desktop ARM Provider service principals. For Azure Files with Entra-joined hosts, the setup article adds that the storage account must be in the same subscription as the session host VMs. Learn warns that this grants the service access to all data in that storage account, so keep only App Attach content there and rotate the access keys. With Azure Files and Active Directory Domain Services, the default share-level role is Storage File Data SMB Share Reader plus NTFS read access for each computer object.
 
@@ -99,10 +99,10 @@ Assignment is separate from creation. Open the package, then **Manage** > **Host
 At sign-in three conditions must all be true:
 
 1. The application is assigned to the host pool.
-2. The user can sign in to the pool, meaning the user is in a Desktop or RemoteApp [application group](/entity/avd-application-group/). For a RemoteApp group, the App Attach application must be added to that group.
+2. The user can sign in to the pool, meaning the user is in a Desktop or RemoteApp [application group](https://www.m365.fm/entity/avd-application-group/). For a RemoteApp group, the App Attach application must be added to that group.
 3. The application is assigned to the user, directly or through a group.
 
-This is why two users on one multi-session host can see different apps. For desktop sessions, assignment alone makes the app available; you cannot add App Attach applications to a desktop application group. For [RemoteApp](/entity/avd-remoteapp/), open the application group, choose **Applications** > **+ Add** and select App Attach as the application source.
+This is why two users on one multi-session host can see different apps. For desktop sessions, assignment alone makes the app available; you cannot add App Attach applications to a desktop application group. For [RemoteApp](https://www.m365.fm/entity/avd-remoteapp/), open the application group, choose **Applications** > **+ Add** and select App Attach as the application source.
 
 ## Registration, state and versions
 

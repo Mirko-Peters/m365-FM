@@ -1,16 +1,16 @@
 ---
 title: "Teams media optimization for Azure Virtual Desktop: how the offload works"
-summary: "With media optimization, Teams keeps running on the session host while the audio and video of calls and meetings are processed on the user's local device. Microsoft now offers two engines for this, SlimCore and the older WebRTC Redirector Service, and the WebRTC path has fixed end dates on Windows endpoints."
+summary: "With media optimization, Teams runs on the session host while call and meeting audio and video are processed on the local device. Microsoft offers SlimCore and the older WebRTC Redirector Service, which has end dates."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-teams-media-optimization, azure-virtual-desktop]
 keypoints:
-  - "Teams itself runs on the session host. With media optimization, calling and meeting media is redirected to the local device, using either SlimCore or the WebRTC Redirector Service. Without it, Teams falls back to server-side rendering."
+  - "Teams runs on the session host. Media optimization redirects call and meeting media to the local device via SlimCore or the WebRTC Redirector Service; without it, rendering is server-side."
   - "For Windows endpoints, Learn says WebRTC-based optimization lost official support on 1 October 2026 and stops working on 1 April 2027, when SlimCore-based optimization is enforced."
-  - "On the session host you set the IsWVDEnvironment registry value to 1 and, for new Teams, install the WebRTC Redirector Service as a fallback. On the SlimCore path, the plugin comes with the Windows App and the media engine downloads from Microsoft's CDN."
-  - "Learn's pages disagree on the minimum Windows App version for SlimCore (1.3.252, 2.0.352.0 and 2.0.360.0), and the SlimCore page names higher minimums for the split package (2.0.550.0) and published apps (2.0.964.0). Choose the baseline by the features you use."
+  - "On the host, set IsWVDEnvironment to 1 and, for new Teams, install the WebRTC Redirector Service as fallback. With SlimCore, the plugin comes with Windows App and the engine from Microsoft's CDN."
+  - "Learn's pages disagree on the minimum Windows App version for SlimCore, and higher minimums apply to the split package and published apps. Choose the baseline by the features you use."
   - "You confirm the result in Teams under Settings and About: 'AVD SlimCore Media Optimized' means SlimCore, 'AVD Media Optimized' means WebRTC."
 faq:
   - q: "Does media optimization move the whole Teams app to the user's PC?"
@@ -34,9 +34,9 @@ So the split looks like this:
 - **On the session host**: the Teams app (`msteams.exe`), which supports chat and collaboration.
 - **On the endpoint**: the calling and meeting media. On the SlimCore path, the media engine `MsTeamsVdi.exe` on the endpoint executes all network activity of a call.
 
-Without optimization, the media work happens on the [session host](/entity/avd-session-host/), and the Teams for VDI page describes the result as server-side rendering with a degraded user experience.
+Without optimization, the media work happens on the [session host](https://www.m365.fm/entity/avd-session-host/), and the Teams for VDI page describes the result as server-side rendering with a degraded user experience.
 
-This is a different feature from [multimedia redirection](/entity/avd-multimedia-redirection/), which offloads browser video playback and WebRTC audio calls from Edge or Chrome. Media optimization is a separate feature for the Teams app itself.
+This is a different feature from [multimedia redirection](https://www.m365.fm/entity/avd-multimedia-redirection/), which offloads browser video playback and WebRTC audio calls from Edge or Chrome. Media optimization is a separate feature for the Teams app itself.
 
 ## Two engines: SlimCore and WebRTC
 
@@ -134,10 +134,10 @@ The SlimCore page lists Microsoft 365 endpoint ID 11, marked Optimize and requir
 ## Status labels and limits to check
 
 - **macOS**: the SlimCore page says Mac is rolled out to general availability for Azure Virtual Desktop and Windows 365. The "Supported features for Teams on Azure Virtual Desktop" page, last updated in March 2026, still labels macOS as preview. Treat the SlimCore page as newer, and check both.
-- **Teams as a RemoteApp**: the supported-features page says optimization for Teams as a [RemoteApp](/entity/avd-remoteapp/) is supported with the Windows App for Windows (new Teams), in preview. The SlimCore page lists published apps as supported with Windows App 2.0.964.0 or later and Teams 26043.2016.4478.2773 or later. Verify the current label before you publish Teams as an app.
+- **Teams as a RemoteApp**: the supported-features page says optimization for Teams as a [RemoteApp](https://www.m365.fm/entity/avd-remoteapp/) is supported with the Windows App for Windows (new Teams), in preview. The SlimCore page lists published apps as supported with Windows App 2.0.964.0 or later and Teams 26043.2016.4478.2773 or later. Verify the current label before you publish Teams as an app.
 - **Large-scale event attendees**: optimization for town hall attendees is labeled public preview for Windows endpoints (Windows App 2.0.1186.0, Teams 26225.1803.5037.3180).
 - **Mac endpoints** lack several features, among them cross-cloud on Azure Virtual Desktop, system audio sharing and RemoteApp.
-- **Profiles**: Learn does not support Roaming User Profiles or Folder Redirection for Teams data in VDI; [FSLogix](/entity/fslogix/) is one of the named tools. Details are in a separate article.
+- **Profiles**: Learn does not support Roaming User Profiles or Folder Redirection for Teams data in VDI; [FSLogix](https://www.m365.fm/entity/fslogix/) is one of the named tools. Details are in a separate article.
 
 ## A decision checklist
 

@@ -8,10 +8,10 @@ date: 2026-11-18
 topics: [avd-for-azure-local, azure-virtual-desktop]
 keypoints:
   - "Only the session hosts run on-premises. Host pools, workspaces and application groups stay in Azure, and session hosts must be able to reach the Azure Virtual Desktop service for brokering."
-  - "Learn's Benefits list has seven items; three concern location: users with poor connectivity to Azure, data locality, and access to legacy on-premises apps and data. Our reading: if none of the benefits applies, session hosts in Azure are the simpler default."
-  - "A host pool holds session hosts either in Azure or on Azure Local, never both. Portal deployment supports standard management and Active Directory domain join; session host configuration is not supported with Azure Local."
-  - "Cost has three parts: user access rights, the Azure Local service fee, and an Azure Virtual Desktop for Azure Local fee per active vCPU. The Architecture Center's cost estimate assumes 10 multi-session hosts for roughly 50 to 100 medium-workload users, a pricing example rather than a sizing guarantee, so pilot before sizing."
-  - "FSLogix profiles need an SMB share. The Learn overview recommends a Storage Spaces Direct guest cluster on the Azure Local instance and an external share for large deployments with high resource requirements; the Architecture Center calls the on-instance option more suitable for smaller deployments."
+  - "Three of Learn's seven benefits concern location: poor connectivity to Azure, data locality and legacy on-premises apps and data. Our reading: if none applies, session hosts in Azure are simpler."
+  - "A host pool holds session hosts either in Azure or on Azure Local, never both. Portal deployment supports standard management and AD domain join; session host configuration is not supported."
+  - "Cost has three parts: user access rights, the Azure Local service fee and an AVD for Azure Local fee per active vCPU. The Architecture Center's estimate is a pricing example, so pilot before sizing."
+  - "FSLogix profiles need an SMB share. Learn recommends a Storage Spaces Direct guest cluster on the instance, and an external share for large deployments with high resource requirements."
 faq:
   - q: "Does Azure Virtual Desktop for Azure Local work without an internet connection to Azure?"
     a: "No. Microsoft Learn says the service requires a connection to the Azure Virtual Desktop service hosted in Azure for brokering connections and connecting users. Learn's overview page does not say what happens to existing sessions if that connection is lost, so test this in your pilot and plan the network path and monitoring."
@@ -25,9 +25,9 @@ Use Azure Virtual Desktop for Azure Local when session hosts need to sit physica
 
 ## What runs where
 
-According to [Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-desktop/azure-local-overview), the Azure Virtual Desktop control-plane components (host pools, workspaces and application groups) stay in Azure. Only the session hosts run on your [Azure Local](/entity/azure-local/) instance. The service is called [Azure Virtual Desktop for Azure Local](/entity/avd-for-azure-local/); until November 2024 it was named Azure Virtual Desktop for Azure Stack HCI, and the existing features and pricing carried over, per Learn's what's new page.
+According to [Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-desktop/azure-local-overview), the Azure Virtual Desktop control-plane components (host pools, workspaces and application groups) stay in Azure. Only the session hosts run on your [Azure Local](https://www.m365.fm/entity/azure-local/) instance. The service is called [Azure Virtual Desktop for Azure Local](https://www.m365.fm/entity/avd-for-azure-local/); until November 2024 it was named Azure Virtual Desktop for Azure Stack HCI, and the existing features and pricing carried over, per Learn's what's new page.
 
-Two details matter for design. First, Learn says the service is not an Azure Arc-enabled service and is not supported as a standalone service outside Azure, in a multicloud environment or on other Arc-enabled servers. Second, each session host VM runs the Azure Connected Machine agent so that it can reach the Azure Instance Metadata Service, which Learn calls a required endpoint for [Azure Virtual Desktop](/entity/azure-virtual-desktop/). The portal installs the agent automatically when you add session hosts. The Azure Architecture Center adds that the session hosts run the [Azure Virtual Desktop agent](/entity/avd-agent/) and the Azure Arc agent, and that the Azure resource bridge component of the instance orchestrates Azure Local VM lifecycle operations.
+Two details matter for design. First, Learn says the service is not an Azure Arc-enabled service and is not supported as a standalone service outside Azure, in a multicloud environment or on other Arc-enabled servers. Second, each session host VM runs the Azure Connected Machine agent so that it can reach the Azure Instance Metadata Service, which Learn calls a required endpoint for [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/). The portal installs the agent automatically when you add session hosts. The Azure Architecture Center adds that the session hosts run the [Azure Virtual Desktop agent](https://www.m365.fm/entity/avd-agent/) and the Azure Arc agent, and that the Azure resource bridge component of the instance orchestrates Azure Local VM lifecycle operations.
 
 ## The location-related benefits Microsoft lists
 
@@ -37,7 +37,7 @@ Learn's Benefits section has seven items. Three of them are about where the sess
 - **Data locality.** App and user data can stay on-premises, including in the session host VMs and in associated services such as file servers.
 - **Proximity to legacy apps and data sources.** Desktops sit next to systems that are hard to move.
 
-The other four are not about location: Windows 10 and Windows 11 Enterprise multi-session, simpler VDI deployment and management through the Azure portal compared with traditional on-premises VDI, [RDP Shortpath](/entity/rdp-shortpath/) for low-latency user access, and quick deployment of patched Azure Marketplace images. The overview also mentions improving an existing on-premises VDI deployment.
+The other four are not about location: Windows 10 and Windows 11 Enterprise multi-session, simpler VDI deployment and management through the Azure portal compared with traditional on-premises VDI, [RDP Shortpath](https://www.m365.fm/entity/rdp-shortpath/) for low-latency user access, and quick deployment of patched Azure Marketplace images. The overview also mentions improving an existing on-premises VDI deployment.
 
 One caution on data locality: Learn says some customer data, diagnostic data and service-generated data is still stored in Azure. If a regulation covers more than your own application data, check which data the service stores before you rely on "on-premises". The article on regional host pools in this series covers where host pool metadata lives.
 
@@ -61,7 +61,7 @@ Two of these shape operations most: how scaling works, and how many users a host
 - **Power management autoscaling.** This is the scaling option for standard management, and the sources differ: a Tech Community post of October 2024 announced autoscale as generally available for host pools on Azure Stack HCI, the earlier name of Azure Local, and said the same scaling plans used for Azure VMs can be applied to those VMs; [Learn's scaling plan page](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan) states that power management autoscaling is available in Azure and Azure Government and does not mention Azure Local. Our reading: power management autoscaling is available for Azure Local session hosts and dynamic autoscaling is not. Check the current Learn page before you plan around it.
 - **Start VM on Connect.** Learn's Start VM on Connect page says you can enable it for session hosts on Azure and Azure Local in personal or pooled host pools. The 2024 post had already added it for Azure Stack HCI VMs, and Learn's what's new page records an April 2024 preview of both features.
 
-The [session host configuration](/entity/avd-session-host-configuration/) article explains what that approach adds.
+The [session host configuration](https://www.m365.fm/entity/avd-session-host-configuration/) article explains what that approach adds.
 
 ### Density
 
@@ -86,9 +86,9 @@ The Azure Architecture Center's reference design uses a pricing calculator estim
 FSLogix profile containers need an SMB share. The overview page gives two options:
 
 - **Same Azure Local instance.** A VM-based file share cluster using Storage Spaces Direct, built from VMs on the instance, with SMB permissions and FSLogix configured afterwards. The overview says Microsoft recommends this approach. The Architecture Center describes it as giving faster access to profile data and a simpler deployment architecture, but possibly limiting scalability, more suitable for smaller deployments, and suggests all-flash storage rather than hybrid storage because storage requirements increase.
-- **Separate share outside Azure Local.** For large deployments with high resource requirements, the overview recommends a separate SMB file share on the same network as the session hosts so storage can scale independently of the instance. The Architecture Center says this share must provide high availability and minimal latency, and mentions [Azure Files](/entity/azure-files/) or [Azure NetApp Files](/entity/azure-netapp-files/) for scale beyond on-premises capacity, with attention to latency, bandwidth and throughput.
+- **Separate share outside Azure Local.** For large deployments with high resource requirements, the overview recommends a separate SMB file share on the same network as the session hosts so storage can scale independently of the instance. The Architecture Center says this share must provide high availability and minimal latency, and mentions [Azure Files](https://www.m365.fm/entity/azure-files/) or [Azure NetApp Files](https://www.m365.fm/entity/azure-netapp-files/) for scale beyond on-premises capacity, with attention to latency, bandwidth and throughput.
 
-Profile traffic is part of the logon path, so the share's distance to the session hosts matters. See the [FSLogix profile container](/entity/fslogix-profile-container/) entity and the article on finding the FSLogix logon bottleneck.
+Profile traffic is part of the logon path, so the share's distance to the session hosts matters. See the [FSLogix profile container](https://www.m365.fm/entity/fslogix-profile-container/) entity and the article on finding the FSLogix logon bottleneck.
 
 ## Resiliency
 
@@ -103,7 +103,7 @@ The Architecture Center says Azure Local supports clustering across physical mac
 5. **Plan the profile share and its network path** before the first session host.
 6. **Pilot** with one workload type and compare density and cost against your estimate.
 
-A different on-premises option, Azure Virtual Desktop Hybrid, is a separate offering covered elsewhere in this series: see [Azure Virtual Desktop Hybrid](/entity/avd-hybrid/).
+A different on-premises option, Azure Virtual Desktop Hybrid, is a separate offering covered elsewhere in this series: see [Azure Virtual Desktop Hybrid](https://www.m365.fm/entity/avd-hybrid/).
 
 ## Third-party management
 

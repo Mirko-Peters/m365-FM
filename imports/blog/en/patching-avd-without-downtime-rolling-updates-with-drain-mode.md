@@ -1,16 +1,16 @@
 ---
 title: "Patching AVD without downtime: rolling updates with drain mode"
-summary: "To patch Azure Virtual Desktop session hosts without downtime, update them in small waves: tag, drain, empty, patch, restart and return each wave to service before the next. Microsoft recommends image-based servicing for pooled multi-session hosts and rates pooled single-session Windows client as not recommended, so rolling drain fits mainly pooled Windows Server hosts and the retirement of old hosts."
+summary: "To patch Azure Virtual Desktop session hosts without downtime, update them in small waves: tag, drain, empty, patch, restart and return each wave. It fits mainly pooled Windows Server hosts."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-drain-mode, avd-session-host]
 keypoints:
-  - "Drain mode stops a session host from accepting new sessions. Existing sessions stay active until users sign out or an administrator ends them, and administrators can still connect to the host directly."
+  - "Drain mode stops a host from accepting new sessions. Existing sessions stay until users sign out or an admin ends them, and admins can still connect to the host directly."
   - "Autoscale turns drain mode on or off on every host included in scaling, no matter who set it. Microsoft Learn says to use the scaling plan's exclusion tag for hosts you maintain."
   - "A rolling update is limited by capacity. Hosts in drain mode do not take new sessions, so the remaining hosts must be able to hold the users who reconnect."
-  - "Learn's September 2026 servicing guidance recommends session host update or Azure Compute Gallery images for Windows client multi-session pools and rates Windows Update there as not recommended. It also rates pooled single-session Windows client as not recommended, so rolling drain is mainly the pattern for patch-in-place Windows Server hosts."
+  - "Learn's September 2026 guidance recommends session host update or gallery images for client multi-session pools, so rolling drain is mainly for patch-in-place Windows Server hosts."
   - "A user with a disconnected session is sent back to that host even when drain mode is on, so a host with disconnected sessions does not empty by itself."
 faq:
   - q: "Does drain mode disconnect users who are already signed in?"
@@ -25,7 +25,7 @@ To patch Azure Virtual Desktop session hosts without downtime, work in waves. Ta
 
 ## What drain mode does
 
-Microsoft Learn describes drain mode as a way to isolate a session host for maintenance without disrupting service. The host does not accept new user sessions, and new connections go to the next available session host. Existing connections stay active until the user signs out or an administrator ends the session. Administrators can still connect directly to the server without going through the Azure Virtual Desktop service. See also the entity pages for [drain mode](/entity/avd-drain-mode/) and [session hosts](/entity/avd-session-host/).
+Microsoft Learn describes drain mode as a way to isolate a session host for maintenance without disrupting service. The host does not accept new user sessions, and new connections go to the next available session host. Existing connections stay active until the user signs out or an administrator ends the session. Administrators can still connect directly to the server without going through the Azure Virtual Desktop service. See also the entity pages for [drain mode](https://www.m365.fm/entity/avd-drain-mode/) and [session hosts](https://www.m365.fm/entity/avd-session-host/).
 
 One detail changes how a wave behaves. **Disconnected sessions come back:** the load balancing page says a user with an active or disconnected session who signs in again is sent to the host that holds that session, even if drain mode is on for it. A host that still has disconnected sessions therefore does not empty by itself. Plan a cut-off at which you end those sessions.
 
@@ -58,9 +58,9 @@ The page does not use the term rolling drain, but its image-based workflow ends 
 
 ## Autoscale can undo drain mode
 
-If the pool has a [scaling plan](/entity/avd-scaling-plan/), drain mode is not yours alone. The autoscale FAQ says autoscale still turns VMs in drain mode on or off no matter who put them there, and that it overrides drain mode on all VMs included in scaling. The scenarios page repeats this for pooled pools and tells you to use exclusion tags when updating VMs.
+If the pool has a [scaling plan](https://www.m365.fm/entity/avd-scaling-plan/), drain mode is not yours alone. The autoscale FAQ says autoscale still turns VMs in drain mode on or off no matter who put them there, and that it overrides drain mode on all VMs included in scaling. The scenarios page repeats this for pooled pools and tells you to use exclusion tags when updating VMs.
 
-The [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) is a tag name that you define on the scaling plan. The glossary calls it a property of the plan that you apply to the VMs to leave out of scaling actions. In practice that is an ordinary Azure resource tag on the VM whose name matches the plan's exclusion tag, for example `excludeFromScaling`, Learn's example. Autoscale then does not turn the VM on or off or change its drain mode. The autoscale pages speak only of the tag name, and the exclusion tag runbook covers the portal and `Update-AzTag` steps. Two further points matter for patching:
+The [exclusion tag](https://www.m365.fm/entity/avd-scaling-plan-exclusion-tag/) is a tag name that you define on the scaling plan. The glossary calls it a property of the plan that you apply to the VMs to leave out of scaling actions. In practice that is an ordinary Azure resource tag on the VM whose name matches the plan's exclusion tag, for example `excludeFromScaling`, Learn's example. Autoscale then does not turn the VM on or off or change its drain mode. The autoscale pages speak only of the tag name, and the exclusion tag runbook covers the portal and `Update-AzTag` steps. Two further points matter for patching:
 
 - Tagged hosts still count toward the minimum percentage of hosts calculation, but autoscale cannot start them.
 - Learn asks you to keep sensitive information, such as user principal names, out of exclusion tags.
@@ -108,7 +108,7 @@ Pools created with a session host configuration have a second option. Session ho
 | Time per host | Depends on your patching | About 20 minutes according to Learn |
 | Manual host changes | Kept | Lost, unless they are in the image, in management tools or in the custom script |
 
-Learn notes that with a batch size of 3 and 10 hosts, at least 7 stay available after the first host. For the mechanics, see [session host configuration](/entity/avd-session-host-configuration/) and the companion article on managing updates with it. The capacity thinking from the sizing section applies there too.
+Learn notes that with a batch size of 3 and 10 hosts, at least 7 stay available after the first host. For the mechanics, see [session host configuration](https://www.m365.fm/entity/avd-session-host-configuration/) and the companion article on managing updates with it. The capacity thinking from the sizing section applies there too.
 
 ## Pitfalls
 
@@ -120,7 +120,6 @@ Learn notes that with a batch size of 3 and 10 hosts, at least 7 stay available 
 
 ## Sources
 
-All retrieved on 17 November 2026.
 
 - [Microsoft Learn: Windows update management methodologies for session hosts](https://learn.microsoft.com/en-us/azure/virtual-desktop/windows-update-management-methodologies-session-hosts)
 - [Microsoft Learn: Drain session hosts for maintenance in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/drain-mode)

@@ -1,16 +1,16 @@
 ---
 title: "When large environments need capacity and API limit helpers"
-summary: "Large Azure Virtual Desktop estates managed with Nerdio can hit two different ceilings: Azure has no capacity for the VM size, or Azure Resource Manager throttles the API calls. This guide separates the two, lists the tuning steps Nerdio documents before the Booster, and shows when the Azure Capacity Extender and the Azure API Limit Booster, both Premium only, come in."
+summary: "Large Azure Virtual Desktop estates managed with Nerdio can hit two ceilings: no Azure capacity for the VM size, or Azure Resource Manager throttling. This guide separates them and shows when the Premium-only helpers apply."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [nerdio-azure-capacity-extender, nerdio-manager-for-enterprise]
 keypoints:
-  - "Capacity and API limits are different problems. An allocation failure means Azure has no capacity for the VM size in the region or zone. Throttling means Azure Resource Manager returns HTTP 429 Too many requests because a request limit was reached."
-  - "Nerdio says API usage optimisation becomes relevant above 500 session host VMs, and, above 2,500 VMs, recommends splitting a deployment across subscriptions of up to 2,500 VMs each. Azure's VM operation limits are region specific, so more regions raise the limit."
-  - "Nerdio says to work through its throttling overview and its scale-up page before adding Booster apps. Both lists include App Service settings, SQL and App Service plan sizing; the order of steps 2 to 4 below is our arrangement."
-  - "The Booster links extra Entra ID app registrations, and Nerdio Manager round-robins its Azure calls across them. Nerdio says in practice 1 to 2 extra apps usually suffice and very large environments may need 3 or more."
+  - "Capacity and API limits differ. An allocation failure means no capacity for the VM size in the region or zone; throttling means Azure Resource Manager returns HTTP 429."
+  - "Nerdio says API optimisation matters above 500 session host VMs and, above 2,500, recommends subscriptions of up to 2,500 VMs each. Azure's VM operation limits are per region."
+  - "Nerdio says to work through its throttling overview and scale-up page before adding Booster apps. Both include App Service settings, SQL and plan sizing; the step order is ours."
+  - "The Booster links extra Entra ID app registrations and Nerdio round-robins Azure calls across them; 1 to 2 extra apps usually suffice, very large environments may need 3 or more."
   - "The Azure Capacity Extender and the Azure API Limit Booster are both listed as Premium edition features. Nerdio advises not to change App Service settings without consulting Nerdio support."
 faq:
   - q: "Do I need the API Limit Booster for a few hundred session hosts?"
@@ -23,7 +23,7 @@ faq:
 
 Large Nerdio-managed estates can hit two separate ceilings. If Azure cannot allocate the VM size you asked for, the Azure Capacity Extender supplies fallback sizes. If Azure Resource Manager throttles the API calls Nerdio Manager makes, you reduce calls first and add Azure API Limit Booster app registrations only if that is not enough. Both helpers need the Premium edition. This guide shows how to tell the problems apart. Nerdio says to work through its throttling overview and its scale-up page before adding Booster apps; the order of the steps in between is our arrangement.
 
-For the concept behind the first helper, see the companion article on the [Azure Capacity Extender](/community/u/mirko-p/blog/azure-capacity-extender-in-nerdio-explained/). This one is about when to use which lever.
+For the concept behind the first helper, see the companion article on the [Azure Capacity Extender](https://www.m365.fm/community/u/mirko-p/blog/azure-capacity-extender-in-nerdio-explained/). This one is about when to use which lever.
 
 ## Two ceilings, two sets of symptoms
 
@@ -32,7 +32,7 @@ For the concept behind the first helper, see the companion article on the [Azure
 | What happens | Azure cannot allocate compute for the requested VM size in the region or zone | Azure Resource Manager throttles management requests |
 | Typical message | `AllocationFailed`, `ZonalAllocationFailed` and overconstrained variants (Microsoft Learn) | HTTP 429 Too many requests; Resource Manager responses carry a Retry-After value (Microsoft Learn) |
 | Where it bites | Create, start or resize of VMs | Auto-scale checks, re-images, VM creation and, in very large estates, loading host and pool details |
-| Nerdio helper | [Azure Capacity Extender](/entity/nerdio-azure-capacity-extender/) | Azure API Limit Booster |
+| Nerdio helper | [Azure Capacity Extender](https://www.m365.fm/entity/nerdio-azure-capacity-extender/) | Azure API Limit Booster |
 | First step | Choose matching fallback sizes | Reduce the number of calls |
 
 Microsoft Learn's page on Azure Resource Manager throttling describes a token bucket model. For subscription and tenant scopes in public and sovereign clouds it lists a bucket size of 250 with a refill rate of 25 per second for reads, and 200 with 10 per second for writes and for deletes. The page says subscription limits apply per subscription, per service principal and per operation type, and that there are also global subscription limits equal to 15 times the individual service principal limits. When a limit is reached the response is HTTP 429 with a Retry-After value. Learn also lists response headers such as `x-ms-ratelimit-remaining-subscription-reads` that show how much of the bucket remains. Learn says that since 2024 these limits apply per region, and points to "Accessing Azure Resource Manager metrics" for viewing throttled requests. The Nerdio pages listed under Sources do not describe a console view of API consumption.
@@ -46,7 +46,7 @@ Nerdio's throttling overview adds that API limits are scoped to the security pri
 Nerdio's throttling overview lists the main consumers of API calls:
 
 - Interactive use of the UI, which it calls relatively low.
-- [Auto-scaling](/entity/nerdio-auto-scaling/): every 5 minutes by default, per [host pool](/entity/avd-host-pool/), Nerdio checks the status of VMs and session hosts. More pools and more VMs per pool mean more calls.
+- [Auto-scaling](https://www.m365.fm/entity/nerdio-auto-scaling/): every 5 minutes by default, per [host pool](https://www.m365.fm/entity/avd-host-pool/), Nerdio checks the status of VMs and session hosts. More pools and more VMs per pool mean more calls.
 - The VM Deallocator, which runs every 10 minutes by default and deallocates VMs that are stopped but not deallocated.
 - Metrics collection during each auto-scale operation (CPU, RAM and AVD session usage).
 - Scheduled tasks such as a re-image of a host pool, which consume calls while the VMs are processed.
@@ -62,7 +62,7 @@ Nerdio says API usage optimisations become relevant above 500 session host VMs, 
 
 From the throttling overview:
 
-1. If you run more than 2,500 VMs, split the deployment across multiple [Azure subscriptions](/entity/azure-subscription/) with up to 2,500 VMs each, using hub-and-spoke connected by virtual network peering.
+1. If you run more than 2,500 VMs, split the deployment across multiple [Azure subscriptions](https://www.m365.fm/entity/azure-subscription/) with up to 2,500 VMs each, using hub-and-spoke connected by virtual network peering.
 2. Create FSLogix storage in the subscription where the VMs are deployed, to avoid heavy traffic over peering links.
 3. Avoid a single host pool whose VMs sit in two subscriptions. Nerdio Manager can manage a deployment that spans subscriptions.
 4. Use more than one Azure region where practical, because limits on VM operations are region specific. Nerdio suggests this for more than 2,500 VMs in one subscription, and mentions its Active/Active host pool disaster recovery to split VMs across two subscriptions.
@@ -92,7 +92,7 @@ To change a setting, go in the Azure portal to the Nerdio App Service (named lik
 
 ## Step 4: Scale Nerdio's own resources
 
-Nerdio's scale-up page says the Azure SQL database is likely the first resource to need more. It advises a tier with at least 100 DTUs (for example S3+ or P1+), then monitoring the Compute utilization graph on the Overview page and increasing gradually if utilisation stays between 80% and 100%. For the [App Service plan](/entity/azure-app-service-plan/), Nerdio's condition is that CPU or memory utilization is consistently very high; you can see both on the plan (the `nmw-app-plan-*` link on the App Service overview). Then it scales up from the default B3, recommends starting with P2v3, allows up to P3v3 and says Premium v4 sizes are supported. Both changes are described as non-disruptive and possible during production hours. Nerdio lists the SQL and App Service plan increases among its recommendations for optimizing API usage, and its scale-up page also describes faster loading of workspace and pool details.
+Nerdio's scale-up page says the Azure SQL database is likely the first resource to need more. It advises a tier with at least 100 DTUs (for example S3+ or P1+), then monitoring the Compute utilization graph on the Overview page and increasing gradually if utilisation stays between 80% and 100%. For the [App Service plan](https://www.m365.fm/entity/azure-app-service-plan/), Nerdio's condition is that CPU or memory utilization is consistently very high; you can see both on the plan (the `nmw-app-plan-*` link on the App Service overview). Then it scales up from the default B3, recommends starting with P2v3, allows up to P3v3 and says Premium v4 sizes are supported. Both changes are described as non-disruptive and possible during production hours. Nerdio lists the SQL and App Service plan increases among its recommendations for optimizing API usage, and its scale-up page also describes faster loading of workspace and pool details.
 
 ## Step 5: Add Azure API Limit Booster app registrations
 

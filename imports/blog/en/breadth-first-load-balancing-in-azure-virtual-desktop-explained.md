@@ -11,7 +11,7 @@ keypoints:
   - "A maximum session limit is optional for breadth-first. When a pool is created with breadth-first, the default is 999999, the highest value possible."
   - "Learn describes breadth-first as optimizing session performance because host resources are generally less contended, and depth-first as the choice for cost-conscious organizations."
   - "Both algorithms still route a returning user to the host that holds their active or disconnected session, even if drain mode is on, and skip drained hosts for new users."
-  - "With autoscale, Learn recommends breadth-first for ramp-up, and the autoscale FAQ names ramp-up and peak as phases where it can be used. The ramp-up algorithm in the schedule overrides the host pool setting, and you must set a custom maximum session limit."
+  - "With autoscale, Learn recommends breadth-first for ramp-up. The ramp-up algorithm in the schedule overrides the host pool setting, and you must set a custom maximum session limit."
 faq:
   - q: "Is breadth-first the default load balancing algorithm?"
     a: "The portal offers both algorithms when you create a pooled host pool, where Learn's deployment page says to choose either breadth-first or depth-first based on your usage pattern. Learn's load balancing page does not name a default algorithm. It does say that if you use breadth-first when first creating a host pool, the maximum session limit defaults to 999999, which is also the highest value you can set."
@@ -31,11 +31,11 @@ Learn's own example: nine session hosts have 11, 12, 13, 14, 15, 16, 17, 18 and 
 
 ## Rules shared with depth-first
 
-Learn lists three behaviors that both algorithms share. The ones that matter most for breadth-first: a user who already has an active or disconnected session is redirected to the host with that session when signing in again, even if [drain mode](/entity/avd-drain-mode/) is on for that host, while for a user without a session the load balancer does not consider a drained host. The comparison article in this series walks through all three rules. You can configure one algorithm at a time per pooled host pool and change it at any time.
+Learn lists three behaviors that both algorithms share. The ones that matter most for breadth-first: a user who already has an active or disconnected session is redirected to the host with that session when signing in again, even if [drain mode](https://www.m365.fm/entity/avd-drain-mode/) is on for that host, while for a user without a session the load balancer does not consider a drained host. The comparison article in this series walks through all three rules. You can configure one algorithm at a time per pooled host pool and change it at any time.
 
 ## The maximum session limit
 
-Learn says you do not have to specify a maximum session limit for breadth-first. The [maximum session limit](/entity/avd-maximum-session-limit/) still exists, though. If you use breadth-first when first creating a host pool, the default value is 999999, which is also the highest possible number. The deployment page says to enter the maximum number of users that you want load-balanced to a single session host, and the terminology page adds that under high concurrent connection load, when several users connect at the same time, the number of sessions on a session host can exceed the limit. Learn also says that if you lower the limit on a session host while it has active user sessions, the change doesn't affect those sessions.
+Learn says you do not have to specify a maximum session limit for breadth-first. The [maximum session limit](https://www.m365.fm/entity/avd-maximum-session-limit/) still exists, though. If you use breadth-first when first creating a host pool, the default value is 999999, which is also the highest possible number. The deployment page says to enter the maximum number of users that you want load-balanced to a single session host, and the terminology page adds that under high concurrent connection load, when several users connect at the same time, the number of sessions on a session host can exceed the limit. Learn also says that if you lower the limit on a session host while it has active user sessions, the change doesn't affect those sessions.
 
 Autoscale changes this. The create-and-assign page says that when you use autoscale for a pooled host pool, you must configure a custom MaxSessionLimit and must not use the default. Learn's autoscale glossary defines the numbers involved: available host pool capacity is the maximum session limit multiplied by the number of available session hosts, and used host pool capacity is the number of active and disconnected sessions divided by that capacity. The create-and-assign page's own example: two session hosts with a limit of 20 sessions give an available capacity of 40 sessions; with a capacity threshold of 75 percent, autoscale turns on a third host once the hosts have more than 30 sessions, and the capacity becomes 60.
 
@@ -43,7 +43,7 @@ Autoscale changes this. The create-and-assign page says that when you use autosc
 
 A scaling plan sets a load balancing algorithm per phase. The scenarios page says that for pooled host pools autoscale ignores the algorithm in the host pool settings and applies load balancing based on the schedule, and the create-and-assign page says the preference chosen in the schedule overrides the one in the original host pool settings. That page also recommends breadth-first for ramp-up, to distribute users across existing hosts and keep access times fast. The autoscale FAQ gives an example for the whole day: breadth-first in ramp-up and peak, depth-first in ramp-down and off-peak so autoscale can consolidate sessions.
 
-See [autoscale schedule phases](/entity/avd-autoscale-schedule-phases/) for how the phases of a schedule are defined.
+See [autoscale schedule phases](https://www.m365.fm/entity/avd-autoscale-schedule-phases/) for how the phases of a schedule are defined.
 
 Learn's first autoscale scenario uses breadth-first in ramp-up. The pool has six session hosts, a 30 percent capacity threshold, a 30 percent minimum percentage of hosts and a maximum session limit of 5. Autoscale starts two hosts to meet the minimum, because 30 percent of six is 1.8, rounded up to two. Available capacity is 10.
 
@@ -57,7 +57,7 @@ Learn's table continues from there: 6 sessions on 4 hosts is 30 percent, so noth
 
 Learn frames the trade-off directly. Breadth-first is described as ideal for organizations that want to prioritize the user experience, because host resources such as CPU, memory and disk are generally less contended. Depth-first is described as ideal for cost-conscious organizations, because saturating one host at a time makes it easier to scale down the number of powered-on hosts when fewer users are signed in.
 
-The two algorithms can be combined in one scaling plan, as the autoscale FAQ example described under breadth-first and autoscale above shows. What autoscale does in ramp-down, including forced sign-out and running zero hosts after hours, is covered in the depth-first and scaling plan articles of this series; see also the [scaling plan](/entity/avd-scaling-plan/) entity.
+The two algorithms can be combined in one scaling plan, as the autoscale FAQ example described under breadth-first and autoscale above shows. What autoscale does in ramp-down, including forced sign-out and running zero hosts after hours, is covered in the depth-first and scaling plan articles of this series; see also the [scaling plan](https://www.m365.fm/entity/avd-scaling-plan/) entity.
 
 ## How to configure it
 
@@ -87,15 +87,14 @@ To check the result, the same page uses `Get-AzWvdHostPool @parameters | Format-
 
 ## Related
 
-- [Breadth-first load balancing](/entity/avd-breadth-first-load-balancing/)
-- [Depth-first load balancing](/entity/avd-depth-first-load-balancing/)
-- [AVD host pool](/entity/avd-host-pool/)
-- [Pooled host pool](/entity/avd-pooled-host-pool/)
-- [Azure Virtual Desktop](/entity/azure-virtual-desktop/)
+- [Breadth-first load balancing](https://www.m365.fm/entity/avd-breadth-first-load-balancing/)
+- [Depth-first load balancing](https://www.m365.fm/entity/avd-depth-first-load-balancing/)
+- [AVD host pool](https://www.m365.fm/entity/avd-host-pool/)
+- [Pooled host pool](https://www.m365.fm/entity/avd-pooled-host-pool/)
+- [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/)
 
 ## Sources
 
-All retrieved on 2026-11-17.
 
 - [Microsoft Learn: Configure host pool load balancing in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-host-pool-load-balancing)
 - [Microsoft Learn: Create and assign an autoscale scaling plan](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)

@@ -1,16 +1,16 @@
 ---
 title: "Managed identity in Azure Virtual Desktop: autoscale, Start VM on Connect and session host configuration"
-summary: "A managed identity assigned to an Azure Virtual Desktop host pool lets autoscale, session host update, Start VM on Connect and Azure Virtual Desktop for Azure Local act on Azure resources without the Azure Virtual Desktop service principal. Learn announced general availability in September 2026 and says host pools with a session host configuration will require one in a future service update."
+summary: "A managed identity on an Azure Virtual Desktop host pool lets autoscale, session host update, Start VM on Connect and AVD for Azure Local act without the service principal. GA since September 2026."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-managed-identity, azure-virtual-desktop]
 keypoints:
-  - "Learn lists four features that can use a host pool managed identity: autoscale, session host update, Start VM on Connect and Azure Virtual Desktop for Azure Local. App Attach with Azure Files and Entra-joined session hosts is the named exception and keeps the service principal."
+  - "Learn lists four features that can use a host pool managed identity: autoscale, session host update, Start VM on Connect and AVD for Azure Local. App Attach with Azure Files is the exception."
   - "You can use a system-assigned identity, tied to one host pool, or a user-assigned identity, an independent resource that several host pools can share."
-  - "Each feature has its own role: Power On Off Contributor for power management autoscale, Power On Contributor for Start VM on Connect, Virtual Machine Contributor for session host creation and update. Autoscale wants the subscription as scope; the Start VM on Connect page allows lower scopes."
-  - "Learn's What's new announces managed identity support as generally available (September 2026) and says that in a future service update, host pools with a session host configuration will require one to add session hosts. Learn gives no date."
+  - "Each feature has its role: Power On Off Contributor (autoscale), Power On Contributor (Start VM on Connect), Virtual Machine Contributor (session host creation and update)."
+  - "Learn announced managed identity GA in September 2026 and says pools with a session host configuration will later require one to add session hosts. No date is given."
   - "Session host update needs a managed identity if the key vault uses private network access."
 faq:
   - q: "Do I have to use a managed identity for autoscale today?"
@@ -32,7 +32,7 @@ Learn describes the problem this way: some Azure Virtual Desktop features need t
 - **The Azure Virtual Desktop service principal.** Learn calls it the single-tenant identity that is created to represent the multi-tenant service in your tenant. Its name starts with either *Azure Virtual Desktop* or *Windows Virtual Desktop*, depending on when you registered the *Microsoft.DesktopVirtualization* resource provider, and its application ID is 9cdead84-a844-4324-93f2-b2e6bb768d07. Learn says a subscription-level assignment lets Azure Virtual Desktop manage the power state of any session hosts in that subscription.
 - **A managed identity assigned to the host pool.** Learn describes it as a service principal that exists only in your Entra tenant, with permissions you grant per host pool.
 
-Microsoft's September 2025 What's new entry listed what the host pool identity adds for pools that use a [session host configuration](/entity/avd-session-host-configuration/): per-host-pool control of the permissions needed to create and update session hosts, permissions that are assigned automatically from the session host configuration parameters, support for key vaults with public access disabled that allow trusted Microsoft services, and access to images in another Azure subscription of the same tenant. The deployment page adds that the identity performs the create, delete and update operations for session hosts in place of the service principal. Entra's overview of [managed identities](/entity/managed-identity/) adds the general benefit: you do not manage the credentials, and they are not even accessible to you.
+Microsoft's September 2025 What's new entry listed what the host pool identity adds for pools that use a [session host configuration](https://www.m365.fm/entity/avd-session-host-configuration/): per-host-pool control of the permissions needed to create and update session hosts, permissions that are assigned automatically from the session host configuration parameters, support for key vaults with public access disabled that allow trusted Microsoft services, and access to images in another Azure subscription of the same tenant. The deployment page adds that the identity performs the create, delete and update operations for session hosts in place of the service principal. Entra's overview of [managed identities](https://www.m365.fm/entity/managed-identity/) adds the general benefit: you do not manage the credentials, and they are not even accessible to you.
 
 ## Which features can use it
 
@@ -40,10 +40,10 @@ Learn's "Configure managed identity in Azure Virtual Desktop" page (ms.date 25 S
 
 | Feature | Managed identity | Service principal |
 |---|---|---|
-| [Autoscale](/entity/avd-scaling-plan/) | Yes | Yes |
+| [Autoscale](https://www.m365.fm/entity/avd-scaling-plan/) | Yes | Yes |
 | Session host update | Yes | Yes |
-| [Start VM on Connect](/entity/avd-start-vm-on-connect/) | Yes | Yes |
-| Azure Virtual Desktop for [Azure Local](/entity/azure-local/) | Yes | Learn says the service principal is available for host pools in Azure and Azure Local |
+| [Start VM on Connect](https://www.m365.fm/entity/avd-start-vm-on-connect/) | Yes | Yes |
+| Azure Virtual Desktop for [Azure Local](https://www.m365.fm/entity/azure-local/) | Yes | Learn says the service principal is available for host pools in Azure and Azure Local |
 | App Attach (Azure Files, session hosts joined to Microsoft Entra ID) | No | Required |
 
 The What's new entry of September 2026 words the same scope as "session host configuration, autoscale, Start VM on Connect, and Azure Virtual Desktop for Azure local".

@@ -1,16 +1,16 @@
 ---
 title: "Azure Virtual Desktop licensing explained"
-summary: "For session hosts in Azure, Azure Virtual Desktop costs come from two sources: the Azure resources you consume and the license that gives each user access rights. Internal users need an eligible Windows, Microsoft 365 or RDS license, and external customers need per-user access pricing on an enrolled Azure subscription."
+summary: "For session hosts in Azure, Azure Virtual Desktop costs come from consumed Azure resources and the per-user license. Internal users need an eligible Windows, Microsoft 365 or RDS license; external customers need per-user access pricing."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [azure-virtual-desktop, microsoft-365-e3]
 keypoints:
-  - "For session hosts in Azure, Learn splits Azure Virtual Desktop costs into Azure resource consumption (VMs, storage, networking) and licensing. The license is a per-user access right; for eligible Windows, Microsoft 365 and RDS licenses it is billed through licensing channels."
-  - "For Windows 10 and 11 session hosts, internal users are covered by Microsoft 365 E3, E5, A3, A5, F3, Business Premium or Student Use Benefit, Windows Enterprise E3 or E5, Windows Education A3 or A5, or Windows VDA per user. Windows Server session hosts need an RDS CAL with Software Assurance or an RDS User Subscription License."
-  - "External users cannot use those licenses. They are covered by per-user access pricing, charged through an enrolled Azure subscription for each user who connects in the billing month. It is not available for Windows Server session hosts."
-  - "Microsoft 365 E3 grants Azure Virtual Desktop access rights in your tenant, including for B2B collaborators who are assigned the license in your tenant. A license in one tenant does not carry over to another tenant of a multitenant organization."
+  - "For session hosts in Azure, Learn splits AVD costs into Azure consumption (VMs, storage, networking) and licensing, a per-user access right billed through licensing channels."
+  - "Windows 10 and 11 hosts: internal users are covered by eligible Microsoft 365, Windows Enterprise, Education or VDA licenses. Windows Server hosts need an RDS CAL with SA or an RDS USL."
+  - "External users cannot use those licenses. Per-user access pricing covers them, charged through an enrolled Azure subscription per connecting user and month; not for Windows Server hosts."
+  - "Microsoft 365 E3 grants AVD access rights in your tenant, including for B2B collaborators licensed there. A license in one tenant does not carry over to another tenant."
   - "Per-user access pricing covers Azure Virtual Desktop and FSLogix access rights only. It does not include Microsoft Office, Microsoft Defender XDR or Universal Print."
 faq:
   - q: "Does Microsoft 365 E3 include Azure Virtual Desktop?"
@@ -27,7 +27,7 @@ For session hosts that run in Azure, Azure Virtual Desktop has two separate cost
 
 Microsoft Learn's page [Understand and estimate costs for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/understand-estimate-costs) says Azure Virtual Desktop costs come from two sources: underlying Azure resource consumption and licensing. The Azure pricing page for the service says the same in other words: pricing includes user access rights and the Azure infrastructure costs.
 
-- **Resource consumption** covers session host VM instances, managed disks for the operating system and data, and network bandwidth. Learn adds that VM instances usually cost the most. Related services add their own charges: Azure Monitor log data for Azure Virtual Desktop Insights, Azure Files or Azure NetApp Files for [FSLogix](/entity/fslogix/) profile containers and app attach, and an identity provider such as [Microsoft Entra ID](/entity/entra-id/) with or without domain controllers.
+- **Resource consumption** covers session host VM instances, managed disks for the operating system and data, and network bandwidth. Learn adds that VM instances usually cost the most. Related services add their own charges: Azure Monitor log data for Azure Virtual Desktop Insights, Azure Files or Azure NetApp Files for [FSLogix](https://www.m365.fm/entity/fslogix/) profile containers and app attach, and an identity provider such as [Microsoft Entra ID](https://www.m365.fm/entity/entra-id/) with or without domain controllers.
 - **Licensing** gives the user the right to access Azure Virtual Desktop. For internal commercial purposes you must buy an eligible license for each user who accesses it. For external commercial purposes, per-user access pricing lets you pay for access rights on behalf of external users.
 
 Learn says costs are charged to the organization that owns the deployment, not to the end users.
@@ -45,7 +45,7 @@ The [licensing page](https://learn.microsoft.com/en-us/azure/virtual-desktop/lic
 
 The practical consequences:
 
-- A tenant on [Microsoft 365 E3](/entity/microsoft-365-e3/) or [E5](/entity/microsoft-365-e5/) already holds the access rights for Windows client session hosts, including [multi-session](/entity/windows-enterprise-multi-session/). So do tenants on [Microsoft 365 F3](/entity/microsoft-365-f3/) and [Business Premium](/entity/microsoft-365-business-premium/), according to the same table. Check the exact SKU of each user rather than assuming a plan name implies the right to use Azure Virtual Desktop.
+- A tenant on [Microsoft 365 E3](https://www.m365.fm/entity/microsoft-365-e3/) or [E5](https://www.m365.fm/entity/microsoft-365-e5/) already holds the access rights for Windows client session hosts, including [multi-session](https://www.m365.fm/entity/windows-enterprise-multi-session/). So do tenants on [Microsoft 365 F3](https://www.m365.fm/entity/microsoft-365-f3/) and [Business Premium](https://www.m365.fm/entity/microsoft-365-business-premium/), according to the same table. Check the exact SKU of each user rather than assuming a plan name implies the right to use Azure Virtual Desktop.
 - Windows Server session hosts are licensed through RDS, not through Microsoft 365. A Microsoft 365 license does not appear in that row of the table.
 - The prerequisites page says that if your license entitles you to use Azure Virtual Desktop, you do not need to install or apply a separate license for the access right itself.
 - The Azure pricing page has a footnote on access from non-Windows Pro endpoints: customers can access Azure Virtual Desktop from them if they have a Microsoft 365 E3, E5, F3, Business, A3, A5 or Student Use Benefits license, or a Windows 11 or Windows 10 VDA per user license.
@@ -71,7 +71,7 @@ How it works, according to Learn:
 - You enroll an Azure subscription. In the Azure portal: search for **Azure Virtual Desktop**, open the overview page, select **Per-user access pricing**, check the subscription, select **Enroll**, review the terms and select **Enroll** again. Enrollment can take up to an hour, and the column changes from **Enrolling** to **Enrolled**. All subscription types are applicable, including Enterprise Agreement, Cloud Solution Provider and Microsoft Customer Agreement. External users cannot connect until the subscription is enrolled.
 - You are billed through an Azure meter, on top of VM, storage and other Azure charges.
 - Only users who connect at least once in the billing month are charged. Each gets a flat charge per billing cycle, regardless of the hours used.
-- The tier is assigned automatically each cycle: **Apps** for a user who accesses at least one published [RemoteApp](/entity/avd-remoteapp/) but no published full desktop, and **Desktops + apps** for a user who accesses at least one published full desktop.
+- The tier is assigned automatically each cycle: **Apps** for a user who accesses at least one published [RemoteApp](https://www.m365.fm/entity/avd-remoteapp/) but no published full desktop, and **Desktops + apps** for a user who accesses at least one published full desktop.
 - At most one charge per user per billing period, even across several subscriptions in the same tenant.
 - Per-user access pricing does not currently support Citrix DaaS or Omnissa Horizon Cloud.
 

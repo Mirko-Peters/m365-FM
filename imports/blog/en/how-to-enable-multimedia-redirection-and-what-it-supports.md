@@ -1,17 +1,17 @@
 ---
 title: "How to enable multimedia redirection and what it supports"
-summary: "To enable multimedia redirection, install the Remote Desktop Multimedia Redirection Service on the session host, force-install the Edge or Chrome extension with a policy, restart the host and test on a listed site. This guide gives the steps, the policy values and the checks Microsoft Learn describes."
+summary: "To enable multimedia redirection, install the Remote Desktop Multimedia Redirection Service on the session host, force-install the Edge or Chrome extension by policy, restart and test on a listed site."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-multimedia-redirection, azure-virtual-desktop]
 keypoints:
-  - "One .msi file installs both the multimedia redirection service and the browser extension on the session host. Learn documents the installer at aka.ms/avdmmr/msi, with a silent option of msiexec /i <path> /qn, and says Edge and Chrome must not be running during the install."
-  - "Central management is optional but removes the user prompt. In Intune, the Edge extension is set under Settings catalog, Microsoft Edge, Extensions, Configure extension management settings, with the extension ID joeclbldhdmoijbaagobkhlpfjglcihd and installation_mode force_installed."
+  - "One .msi installs the service and the browser extension on the session host (aka.ms/avdmmr/msi, silent with /qn). Edge and Chrome must not be running during the install."
+  - "Central management removes the user prompt. In Intune, set the Edge extension ID joeclbldhdmoijbaagobkhlpfjglcihd with installation_mode force_installed in the settings catalog."
   - "Restart the session hosts after the policy applies. Then open a listed site in Edge or Chrome and check for the blue-bordered extension icon and a green check mark next to the feature."
-  - "Extra sites are added with the registry values AllowedVideoRedirectionSites and AllowedCallRedirectionSites, as semicolon-separated FQDNs with at most one subdirectory. Learn says a listed site is not guaranteed to work."
-  - "The service never updates itself, the extension does. If the MSI did not install the extension, install it from the Edge Add-ons or Chrome Web Store using the direct links in this guide, because the store search does not find it."
+  - "Extra sites go in AllowedVideoRedirectionSites and AllowedCallRedirectionSites as semicolon-separated FQDNs with at most one subdirectory. A listed site is not guaranteed to work."
+  - "The service never updates itself; the extension does. If the MSI did not install the extension, use the direct store links in this guide, because store search does not find it."
 faq:
   - q: "What do the extension status messages \"The extension is not loaded\" and \"Not active on this site\" mean?"
     a: "Learn's troubleshooting page says \"The extension is not loaded\" (multimedia redirection is not available on this remote client) means the client you connected with does not support the feature, so connect from a supported client. \"Not active on this site\" with the prompt to refresh means the page was opened before the extension connected to the client, for example after a reconnect, and refreshing the page fixes it. Without the refresh prompt, the page is not supported for redirection."
@@ -21,7 +21,7 @@ faq:
     a: "In the extension pop-up, select Show Advanced Settings, then for Collect logs select Start, reproduce the issue, open the pop-up again and select Stop. The browser then prompts you to download the log files. Learn says users can still collect logs when the advanced settings button is hidden by policy."
 ---
 
-To enable multimedia redirection (MMR) in Azure Virtual Desktop, install the Remote Desktop Multimedia Redirection Service on each session host, install the browser extension for Microsoft Edge or Google Chrome, restart the hosts and test on a supported site. This guide walks through those steps with the values Microsoft Learn documents. For what the feature does and where it stops, see the explainer on [multimedia redirection](/entity/avd-multimedia-redirection/).
+To enable multimedia redirection (MMR) in Azure Virtual Desktop, install the Remote Desktop Multimedia Redirection Service on each session host, install the browser extension for Microsoft Edge or Google Chrome, restart the hosts and test on a supported site. This guide walks through those steps with the values Microsoft Learn documents. For what the feature does and where it stops, see the explainer on [multimedia redirection](https://www.m365.fm/entity/avd-multimedia-redirection/).
 
 ## Before you start
 
@@ -34,7 +34,7 @@ Check these items from Learn's prerequisites first:
 - For Intune: a Microsoft Entra ID account with the Policy and Profile manager role and a group containing the devices. For Group Policy: a domain account that can create or edit GPOs and a group or OU with the devices.
 - Not supported: Azure US Government, Windows 365 for Microsoft 365 Government (GCC, GCC-High) and Microsoft 365 DoD.
 
-On Windows 365 Cloud PCs, Learn says the feature is already installed on Microsoft gallery images, so you only install it on a custom image. The steps below apply to [session hosts](/entity/avd-session-host/) in [Azure Virtual Desktop](/entity/azure-virtual-desktop/).
+On Windows 365 Cloud PCs, Learn says the feature is already installed on Microsoft gallery images, so you only install it on a custom image. The steps below apply to [session hosts](https://www.m365.fm/entity/avd-session-host/) in [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/).
 
 ## Step 1: Install the service and the extension
 

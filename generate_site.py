@@ -1292,7 +1292,7 @@ def build():
         _tbc = TC.breadcrumb(BASE, l, _xids + TC.named_in(e["title"], LRN.ENTS), LRN.ENTS, e["title"], canonical)   # zweite Spur nach dem Hauptthema (nur JSON-LD): Extraktion, sonst im Titel genannte Entitaeten (wie _ep_find der Entitaetsseiten)
         if _tbc: ld.insert(2, _tbc)
         ld[0]["video"] = {"@id": canonical + "#video"}
-        for _n in (ld if _spr else []):   # T37 Sponsor: PodcastEpisode und VideoObject derselben Folge
+        for _n in (ld if SPM.ld(_spr) else []):   # T37 Sponsor: PodcastEpisode und VideoObject derselben Folge (neutraler Partner: kein sponsor)
             if _n.get("@type") in ("PodcastEpisode", "VideoObject"): _n["sponsor"] = SPM.ld(_spr)
         for _n in ld:
             if _xab and _n.get("@type") == "VideoObject": _n["about"] = _xab   # T27: das Video behandelt dieselben Entitaeten wie die Folge

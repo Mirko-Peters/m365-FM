@@ -1,17 +1,17 @@
 ---
 title: "Microsoft Entra Kerberos for Azure Files: FSLogix profiles without a domain controller"
-summary: "Microsoft Entra Kerberos lets Microsoft Entra ID issue the Kerberos tickets that session hosts use to open an Azure Files share over SMB, so the hosts need no line of sight to a domain controller. This article explains the ticket flow, what a domain controller is still needed for, and the settings and limits that decide whether it works for FSLogix."
+summary: "Microsoft Entra Kerberos lets Entra ID issue the Kerberos tickets session hosts use for Azure Files over SMB, so hosts need no line of sight to a domain controller. Covers the ticket flow, settings and limits for FSLogix."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [entra-kerberos-azure-files, azure-files]
 keypoints:
-  - "With Microsoft Entra Kerberos, Microsoft Entra ID issues the Kerberos tickets for SMB access to Azure Files. Learn says that for cloud-only users the file shares no longer need a domain controller for authentication or authorization."
-  - "The session hosts need no line of sight to a domain controller. For setting Windows ACLs, Learn's pages differ: icacls and File Explorer (hybrid identities only) need a device with unimpeded connectivity to Active Directory, while the Azure portal and the RestSetAcls module have no domain controller dependency for hybrid and cloud-only identities when Entra Kerberos is the identity source."
-  - "Clients must be Microsoft Entra joined or hybrid joined. For cloud-only identities the Azure Files article lists Windows 11 Enterprise or Pro and Windows Server 2025; hybrid adds Windows 10 and Windows Server 2022. Cloud-only identities are supported in the public cloud only."
-  - "Learn's prerequisites include one identity source per storage account, Kerberos allowed in the SMB security settings, no MFA on the storage account app, an app management policy exception where policies block service principal keys, a client policy to retrieve the cloud Kerberos ticket, and, for cloud-only groups, the kdc_enable_cloud_group_sids manifest tag."
-  - "Learn's pages differ on status: Azure Virtual Desktop what's new announced FSLogix support for cloud-only and external identities as generally available in May 2026, while the Microsoft Entra Kerberos page still labels its cloud-only sections Preview."
+  - "With Entra Kerberos, Entra ID issues the Kerberos tickets for SMB access to Azure Files. For cloud-only users the shares no longer need a domain controller for authentication or authorization."
+  - "Session hosts need no line of sight to a DC. Setting ACLs with icacls or File Explorer needs AD connectivity; the Azure portal and RestSetAcls do not, when Entra Kerberos is the identity source."
+  - "Clients must be Entra joined or hybrid joined. Cloud-only identities need Windows 11 Enterprise or Pro or Windows Server 2025 and the public cloud; hybrid adds Windows 10 and Server 2022."
+  - "Prerequisites include one identity source per storage account, Kerberos allowed in SMB settings, no MFA on the storage app, a client policy for the cloud ticket and a tag for cloud-only groups."
+  - "Learn's pages differ on status: AVD what's new announced FSLogix with cloud-only and external identities as GA in May 2026, while the Entra Kerberos page still labels them Preview."
 faq:
   - q: "Do I need a domain controller at all for FSLogix profiles on Azure Files with Entra Kerberos?"
     a: "Not for the session hosts. Learn says that when used for FSLogix profiles in Azure Virtual Desktop, session hosts do not need network line of sight to the domain controller. Setting permissions is where Learn's pages differ: icacls and File Explorer for hybrid identities need a device with unimpeded connectivity to Active Directory, while the Azure portal and the RestSetAcls module have no domain controller dependency when Entra Kerberos is the identity source."
@@ -21,19 +21,19 @@ faq:
     a: "Learn names MFA as one documented cause. Microsoft Entra Kerberos does not support MFA for access to the share, and a Conditional Access policy that requires MFA for all apps applies to the Entra app that represents the storage account. The Azure Files article says that without an exclusion, mapping the share with net use returns 'System error 1327: Account restrictions are preventing this user from signing in'. Exclude the app named after the storage account's file endpoint from that policy. The Entra Kerberos article adds that generic SMB errors such as 86 or 1327 can also come from other policy conflicts, so if the error remains, check other Conditional Access policies and the Entra sign-in log, where error 140011 marks an exceeded group SID limit."
 ---
 
-Microsoft Entra Kerberos lets [Microsoft Entra ID](/entity/entra-id/) issue the Kerberos tickets that clients use to open an [Azure Files](/entity/azure-files/) share over SMB, so a session host holding an [FSLogix](/entity/fslogix/) profile container does not need to reach a domain controller. Learn says that for cloud-only users the share no longer needs a domain controller for authentication or authorization, while for hybrid identities Learn ties a domain controller connection to setting Windows ACLs with icacls or File Explorer.
+Microsoft Entra Kerberos lets [Microsoft Entra ID](https://www.m365.fm/entity/entra-id/) issue the Kerberos tickets that clients use to open an [Azure Files](https://www.m365.fm/entity/azure-files/) share over SMB, so a session host holding an [FSLogix](https://www.m365.fm/entity/fslogix/) profile container does not need to reach a domain controller. Learn says that for cloud-only users the share no longer needs a domain controller for authentication or authorization, while for hybrid identities Learn ties a domain controller connection to setting Windows ACLs with icacls or File Explorer.
 
 ## How the ticket flow differs
 
-Learn describes [Microsoft Entra Kerberos](/entity/microsoft-entra-kerberos/) as turning Microsoft Entra ID into a cloud-based Key Distribution Center. When a user signs in to a Microsoft Entra joined or hybrid joined Windows device, the device receives a Primary Refresh Token and Entra ID issues a Cloud TGT for the realm `KERBEROS.MICROSOFTONLINE.COM`. Learn says the Cloud TGT enables access to cloud resources such as Azure Files, has no dependency on domain controllers, and does not replace the on-premises TGT. It names Windows Hello for Business and FIDO2 as supported credentials; the client policy `CloudKerberosTicketRetrievalEnabled`, covered below, lets the client retrieve a cloud TGT during logon.
+Learn describes [Microsoft Entra Kerberos](https://www.m365.fm/entity/microsoft-entra-kerberos/) as turning Microsoft Entra ID into a cloud-based Key Distribution Center. When a user signs in to a Microsoft Entra joined or hybrid joined Windows device, the device receives a Primary Refresh Token and Entra ID issues a Cloud TGT for the realm `KERBEROS.MICROSOFTONLINE.COM`. Learn says the Cloud TGT enables access to cloud resources such as Azure Files, has no dependency on domain controllers, and does not replace the on-premises TGT. It names Windows Hello for Business and FIDO2 as supported credentials; the client policy `CloudKerberosTicketRetrievalEnabled`, covered below, lets the client retrieve a cloud TGT during logon.
 
 A separate partial TGT for on-premises resources is issued only when the environment supports it, for example after a passwordless sign-in with a Kerberos server object in Active Directory. Only on-premises Active Directory recognizes it, and in our reading it plays no part in reaching Azure Files.
 
-For Azure Files the client sends a service ticket request to Entra ID, not a domain controller, for `cifs/<storageaccount>.file.core.windows.net`. The KDC Proxy protocol carries the Kerberos traffic over the internet. Entra ID returns a service ticket, the Kerberos stack passes it to SMB, and Azure Files decrypts it. The Azure Files overview says the service receives only the Kerberos ticket, not the user's credentials. [Microsoft Entra Kerberos for Azure Files](/entity/entra-kerberos-azure-files/) applies to SMB shares; Learn says identity-based authentication is not supported for NFS.
+For Azure Files the client sends a service ticket request to Entra ID, not a domain controller, for `cifs/<storageaccount>.file.core.windows.net`. The KDC Proxy protocol carries the Kerberos traffic over the internet. Entra ID returns a service ticket, the Kerberos stack passes it to SMB, and Azure Files decrypts it. The Azure Files overview says the service receives only the Kerberos ticket, not the user's credentials. [Microsoft Entra Kerberos for Azure Files](https://www.m365.fm/entity/entra-kerberos-azure-files/) applies to SMB shares; Learn says identity-based authentication is not supported for NFS.
 
 ## What a domain controller still does
 
-Hybrid identities are AD DS identities synced to Entra ID with [Microsoft Entra Connect](/entity/entra-connect/) Sync or [Cloud Sync](/entity/entra-cloud-sync/). Cloud-only identities exist only in Entra ID.
+Hybrid identities are AD DS identities synced to Entra ID with [Microsoft Entra Connect](https://www.m365.fm/entity/entra-connect/) Sync or [Cloud Sync](https://www.m365.fm/entity/entra-cloud-sync/). Cloud-only identities exist only in Entra ID.
 
 | Question | Hybrid identities | Cloud-only identities |
 |---|---|---|
@@ -45,11 +45,11 @@ Hybrid identities are AD DS identities synced to Entra ID with [Microsoft Entra 
 
 On the ACL row, Learn's pages do not agree. The FSLogix page requires network line of sight to the domain controller for hybrid identities, and the Entra Kerberos article lists ACL configuration under network connectivity requirements. The Azure Files page words it two ways: its introduction ties ACLs for hybrid identities to domain controller connectivity without naming a tool, while its permissions section limits that to icacls and File Explorer. The file-level permissions page says the Azure portal and RestSetAcls have no domain controller dependency for hybrid and cloud-only identities when Entra Kerberos is the identity source; hybrid identities must be synced to Entra ID, or their ACLs are not enforced. The Entra article adds that Entra Kerberos reduces, and in some cases eliminates, domain controller connectivity, and recommends enough domain controllers close to Azure Virtual Desktop environments. Our reading: the session hosts need no line of sight to a domain controller for the share, the on-premises directory stays in use for hybrid identities, and an Active Directory-connected device stays available for icacls or File Explorer.
 
-The Azure Files article lists Windows 11 Enterprise or Pro and recommends at least 24H2 or 25H2 with KB5079391 (builds 26100.8116 and 26200.8116 or later) or 26H1 with KB5079489 (build 28000.1764 or later). Windows Server 2025 needs the latest updates. Learn says clients that do not meet these prerequisites can still use Entra Kerberos with a [cloud Kerberos trust](/entity/cloud-kerberos-trust/).
+The Azure Files article lists Windows 11 Enterprise or Pro and recommends at least 24H2 or 25H2 with KB5079391 (builds 26100.8116 and 26200.8116 or later) or 26H1 with KB5079489 (build 28000.1764 or later). Windows Server 2025 needs the latest updates. Learn says clients that do not meet these prerequisites can still use Entra Kerberos with a [cloud Kerberos trust](https://www.m365.fm/entity/cloud-kerberos-trust/).
 
 The Entra Kerberos article words cloud-only support more broadly, as an Entra joined Windows 10 or 11 device. Our reading is to plan with the narrower Azure Files list.
 
-Clients must be [Microsoft Entra joined or hybrid joined](/entity/avd-entra-join/). Learn says they cannot be joined to [Microsoft Entra Domain Services](/entity/entra-domain-services/) or to AD only.
+Clients must be [Microsoft Entra joined or hybrid joined](https://www.m365.fm/entity/avd-entra-join/). Learn says they cannot be joined to [Microsoft Entra Domain Services](https://www.m365.fm/entity/entra-domain-services/) or to AD only.
 
 ## Permissions: two layers, set in two places
 
@@ -89,7 +89,7 @@ The FSLogix pages carry an April 2026 notice that the default Kerberos encryptio
 
 Learn suggests Entra Kerberos for cloud-first or hybrid environments with Entra-joined clients, FSLogix profiles, or clients without domain-controller connectivity. AD DS fits organizations whose clients reach their domain controllers; Entra Domain Services fits those that need a managed domain and can join clients to it.
 
-Before you start, list the user identity types, session host operating systems, the storage account's identity source, and any Conditional Access or app management policies that apply. If any session host runs Windows Server 2022 or Windows 10 and the users are cloud-only, the feature is outside the Azure Files article's list. If the storage account serves AD DS, plan the identity source change first. The client settings above apply to each [session host](/entity/avd-session-host/) in an [Azure Virtual Desktop](/entity/azure-virtual-desktop/) host pool, so put them in the image, Intune or Group Policy.
+Before you start, list the user identity types, session host operating systems, the storage account's identity source, and any Conditional Access or app management policies that apply. If any session host runs Windows Server 2022 or Windows 10 and the users are cloud-only, the feature is outside the Azure Files article's list. If the storage account serves AD DS, plan the identity source change first. The client settings above apply to each [session host](https://www.m365.fm/entity/avd-session-host/) in an [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) host pool, so put them in the image, Intune or Group Policy.
 
 ## Sources
 

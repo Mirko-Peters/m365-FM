@@ -10,7 +10,7 @@ keypoints:
   - "The exclusion tag is a property of the scaling plan. Autoscale performs scaling actions only on VMs whose tag names do not match it."
   - "A tagged VM is not turned on, not turned off and its drain mode is not changed, in all phases of the schedule. Tagged hosts still count toward the minimum percentage of hosts."
   - "For pooled host pools autoscale overwrites drain mode on every VM it scales, whoever set it, so the exclusion tag is the documented way to protect a host during maintenance."
-  - "Tagging too many hosts can leave autoscale unable to add capacity. In Microsoft's example, with five of six hosts tagged autoscale starts no further host at 80 percent used capacity; once the last host is tagged and off, the next user sees No resources available."
+  - "Tagging too many hosts can block scale-out: in Microsoft's example, with five of six hosts tagged, no host starts at 80 percent, and once all are tagged and off, users see No resources available."
   - "Azure tags are not inherited from a resource group, so each session host VM needs its own tag."
 faq:
   - q: "Does the exclusion tag stop autoscale for the whole host pool?"
@@ -27,7 +27,7 @@ The exclusion tag is a tag name that you enter on an Azure Virtual Desktop scali
 
 Learn's glossary defines it as a property of a scaling plan: a tag name you can apply to VMs that you want to exclude from scaling actions. Autoscale only performs scaling actions on VMs without tag names that match the exclusion tag. A scaling action, in the glossary's wording, is when autoscale turns VMs on or off.
 
-The scenarios page adds the exact scope. When a VM has a tag name that matches the exclusion tag, autoscale won't turn it on, off, or change its drain mode setting. The tag applies in all phases of the schedule: ramp-up, peak, ramp-down and off-peak. See the entity page for the [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/) and the [scaling plan](/entity/avd-scaling-plan/) it belongs to.
+The scenarios page adds the exact scope. When a VM has a tag name that matches the exclusion tag, autoscale won't turn it on, off, or change its drain mode setting. The tag applies in all phases of the schedule: ramp-up, peak, ramp-down and off-peak. See the entity page for the [exclusion tag](https://www.m365.fm/entity/avd-scaling-plan-exclusion-tag/) and the [scaling plan](https://www.m365.fm/entity/avd-scaling-plan/) it belongs to.
 
 ## Where you set it
 
@@ -63,7 +63,7 @@ Learn's fourth scenario shows what happens when the tag removes the capacity aut
 3. The administrator tags the last untagged host and turns it off. Now every host is excluded and off. Autoscale cannot turn on a VM for the next user, who sees a "No resources available" error.
 4. The administrator removes the tag from two VMs. Autoscale turns on only one of them, because one host is enough to meet the 10 percent minimum.
 
-The lesson is arithmetic you can do in advance. This is the article's own simplified model, not a statement from Learn. It assumes that every tagged host is switched off. Learn's glossary defines available host pool capacity as the maximum session limit multiplied by the number of available session hosts, and available session hosts as hosts that pass the agent health checks and have powered-on VMs. A tagged host that is running therefore also adds capacity by that definition, and the ceiling is higher; Learn does not say whether a host in drain mode counts. With all tagged hosts off and all untagged hosts running, untagged hosts times the maximum session limit times the capacity threshold is the number of sessions the pool can carry before used capacity goes over the threshold and autoscale has no host left to turn on. Four untagged hosts, a limit of 10 and a 75 percent threshold give 4 x 10 x 0.75 = 30 sessions. If some untagged hosts are still off, autoscale can start them, so the ceiling is reached only when they are all on. Learn's final table for the scenario lists a 19 percent minimum although its text says 10 percent; the text and the arithmetic agree on 10 percent, so this article uses that. See [capacity threshold](/entity/avd-capacity-threshold/), [maximum session limit](/entity/avd-maximum-session-limit/) and [minimum percentage of hosts](/entity/avd-minimum-percentage-of-hosts/); the rounding rule has its own article, "How rounding up works with the minimum percentage of hosts, with worked examples".
+The lesson is arithmetic you can do in advance. This is the article's own simplified model, not a statement from Learn. It assumes that every tagged host is switched off. Learn's glossary defines available host pool capacity as the maximum session limit multiplied by the number of available session hosts, and available session hosts as hosts that pass the agent health checks and have powered-on VMs. A tagged host that is running therefore also adds capacity by that definition, and the ceiling is higher; Learn does not say whether a host in drain mode counts. With all tagged hosts off and all untagged hosts running, untagged hosts times the maximum session limit times the capacity threshold is the number of sessions the pool can carry before used capacity goes over the threshold and autoscale has no host left to turn on. Four untagged hosts, a limit of 10 and a 75 percent threshold give 4 x 10 x 0.75 = 30 sessions. If some untagged hosts are still off, autoscale can start them, so the ceiling is reached only when they are all on. Learn's final table for the scenario lists a 19 percent minimum although its text says 10 percent; the text and the arithmetic agree on 10 percent, so this article uses that. See [capacity threshold](https://www.m365.fm/entity/avd-capacity-threshold/), [maximum session limit](https://www.m365.fm/entity/avd-maximum-session-limit/) and [minimum percentage of hosts](https://www.m365.fm/entity/avd-minimum-percentage-of-hosts/); the rounding rule has its own article, "How rounding up works with the minimum percentage of hosts, with worked examples".
 
 ## How Azure tags behave
 
@@ -93,14 +93,13 @@ Because of the first gap, tag a host before you put it into drain mode, and conf
 
 ## Related
 
-- [Azure Virtual Desktop](/entity/azure-virtual-desktop/)
-- [Drain mode](/entity/avd-drain-mode/)
-- [Azure resource tags](/entity/azure-resource-tags/)
-- [AVD Insights](/entity/avd-insights/)
+- [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/)
+- [Drain mode](https://www.m365.fm/entity/avd-drain-mode/)
+- [Azure resource tags](https://www.m365.fm/entity/azure-resource-tags/)
+- [AVD Insights](https://www.m365.fm/entity/avd-insights/)
 
 ## Sources
 
-All retrieved on 2026-11-17.
 
 - [Microsoft Learn: Autoscale glossary for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-glossary)
 - [Microsoft Learn: Autoscale scenarios for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)

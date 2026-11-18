@@ -1,6 +1,6 @@
 ---
 title: "Designing a multi-region Azure Virtual Desktop deployment"
-summary: "A multi-region Azure Virtual Desktop design starts with the region choice: where users are, which regions can hold regional metadata, and whether the second region serves resilience or proximity. This article covers those decisions and the parts you repeat per region; recovery models and failover steps are in the disaster recovery article."
+summary: "A multi-region Azure Virtual Desktop design starts with the region choice: where users are, which regions hold regional metadata, and whether the second region serves resilience or proximity."
 status: review
 publish: false
 author: mirko-p
@@ -8,10 +8,10 @@ date: 2026-11-18
 topics: [azure-virtual-desktop, avd-regional-host-pools]
 keypoints:
   - "Microsoft manages the control plane and its regional failover. Session hosts, networking, identity, images and profile storage in each region are your design."
-  - "Regional host pools have been generally available since 30 September 2026 and are offered in 14 regions, which Learn's data locations page also lists. Some Learn pages still carry preview wording, for example the multiregion architecture article, so the announcement and What's new are the current status."
-  - "Learn advises that primary and secondary host pools, workspaces and application groups use the same deployment scope. If a region does not support regional scope, host pools created there are geographical."
+  - "Regional host pools have been GA since 30 September 2026 in 14 regions. Some Learn pages still carry preview wording, so the announcement and What's new reflect the current status."
+  - "Learn advises the same deployment scope for primary and secondary host pools, workspaces and application groups. Without regional scope in a region, host pools there are geographical."
   - "Metadata location is independent of where session hosts run, according to Learn, but the announcement recommends placing session host VMs in the same region as the regional metadata."
-  - "Network, identity, images, profiles and capacity per region are covered in the disaster recovery article. Learn's Regional Host Pools page notes that errors and checkpoints are not reported into Log Analytics for regional session hosts, which matters for monitoring design."
+  - "Network, identity, images, profiles and capacity are in the disaster recovery article. Learn notes that errors and checkpoints of regional session hosts are not reported to Log Analytics."
 faq:
   - q: "Do I need two regions just to get high availability?"
     a: "No. Microsoft's multiregion article describes availability zones as a high-availability feature that does not protect against a region-wide disaster. For pooled host pools, Microsoft's design table says spreading session hosts across zones can achieve a formal 99.99 percent high-availability SLA inside one region. A second region is for disaster recovery or for users who are far from the first region."
@@ -37,12 +37,12 @@ Write down which one you are solving before choosing regions.
 Three inputs decide the pair.
 
 1. **Latency to users and back ends.** In a disaster, users connect to session hosts in the secondary region, which may be farther from both users and back-end resources. Microsoft names real-time databases, voice over IP and interactive design tools as the workloads that suffer. For some region pairs, such as West Europe and North Europe, inter-region latency is low enough that failover causes little to no impact. Measure with the Azure network latency statistics and run user acceptance testing from the secondary region.
-2. **Pairing.** Using [paired regions](/entity/azure-region-pairs/) is recommended, but the article says Azure Virtual Desktop does not require it: any combination of regions works as long as network latency allows it.
+2. **Pairing.** Using [paired regions](https://www.m365.fm/entity/azure-region-pairs/) is recommended, but the article says Azure Virtual Desktop does not require it: any combination of regions works as long as network latency allows it.
 3. **Regional metadata support.** Not every region can hold regional metadata; the next section covers the list. Learn's service architecture and data locations pages also say regional metadata is replicated to a paired region (where applicable) for cross-region failover.
 
 ## Deployment scope and the region list
 
-A host pool stores its metadata either in a geographical database that serves a whole geography or, with Regional scope, in a database inside the single region you pick. The scope is set at creation. The multiregion article says to ensure that primary and secondary host pools, workspaces and application groups use the same deployment scope. Learn's deployment article describes the mechanism: objects of different scopes cannot be associated with each other. See [regional host pools](/entity/avd-regional-host-pools/) for the mechanics.
+A host pool stores its metadata either in a geographical database that serves a whole geography or, with Regional scope, in a database inside the single region you pick. The scope is set at creation. The multiregion article says to ensure that primary and secondary host pools, workspaces and application groups use the same deployment scope. Learn's deployment article describes the mechanism: objects of different scopes cannot be associated with each other. See [regional host pools](https://www.m365.fm/entity/avd-regional-host-pools/) for the mechanics.
 
 Regional host pools were announced as generally available on 30 September 2026 in the Tech Community post "Now generally available: Regional resiliency for Azure Virtual Desktop", and the September 2026 entry of What's new says the same. The post, last updated on 13 November 2026, names East US 2 and Central US as the first regions and 12 more, 14 in total: East US 2, Central US, Australia East, Canada Central, Canada East, Central India, East Asia, Japan East, Japan West, Korea Central, North Europe, South Africa North, Southeast Asia and West Europe. Learn's data locations page, updated on 16 November 2026, shows the same 14 in its Regional column, and the Regional Host Pools page says availability is expanding in phases. Some Learn pages still carry preview wording: the multiregion architecture article ("Last updated on 03/25/2026") says "Regional host pools are in public preview". Use the announcement and What's new for status, and the data locations page for the region list. The sibling article "Regional host pools in Azure Virtual Desktop: where host pool metadata is stored" covers status and limits in full.
 
@@ -65,7 +65,7 @@ With two pools, the feed decides how users experience it:
 - **Both pools in use (active-active).** Users assigned to application groups in both pools see duplicate entries in the client. The article advises separate workspaces with clear names and labels that reflect the purpose of each resource.
 - **Secondary on standby (active-passive).** The multiregion article says the client shows no duplicates and users keep the same workspace. Learn's FAQ, however, says workspaces must be in the same location as their application groups, and neither article states how one workspace works across two regions. Treat a single shared workspace as unconfirmed and test it first.
 
-Workspace layout across teams and regions, including the scope rule for workspaces, is the subject of "Designing workspaces for multiple teams and regions". For user groups with different continuity needs, Microsoft recommends separate host pools with different configurations: for example, users of a mission-critical application get a fully redundant host pool with geo-disaster recovery, while development and test users use a separate host pool with no DR. See [pooled host pools](/entity/avd-pooled-host-pool/) and [personal host pools](/entity/avd-personal-host-pool/).
+Workspace layout across teams and regions, including the scope rule for workspaces, is the subject of "Designing workspaces for multiple teams and regions". For user groups with different continuity needs, Microsoft recommends separate host pools with different configurations: for example, users of a mission-critical application get a fully redundant host pool with geo-disaster recovery, while development and test users use a separate host pool with no DR. See [pooled host pools](https://www.m365.fm/entity/avd-pooled-host-pool/) and [personal host pools](https://www.m365.fm/entity/avd-personal-host-pool/).
 
 ## An example layout
 
@@ -80,8 +80,8 @@ This layout is built from the rules above, not taken from a Learn walkthrough. T
 
 Network, identity, images, profile storage and capacity follow the same checklist for any second region; the disaster recovery article "Disaster recovery for Azure Virtual Desktop: options and trade-offs" works through it, including the Cloud Cache configuration, quota versus physical capacity and the 90-day start rule for standby hosts. Three points belong to the design itself:
 
-1. **Pooled and personal pools differ.** Learn's multiregion table lists FSLogix Cloud Cache for pooled host pools, and for personal host pools no Cloud Cache, with Azure Site Recovery set up per VM. Decide per pool type before you count what the second region costs. See [pooled host pools](/entity/avd-pooled-host-pool/) and [personal host pools](/entity/avd-personal-host-pool/).
-2. **Monitoring needs a decision.** One Log Analytics workspace for both regions gives a single view in [Azure Virtual Desktop Insights](/entity/avd-insights/), but the secondary region cannot use a workspace in an unavailable region. Use a workspace per region or test the workspace's replication and failover capabilities. Learn's Regional Host Pools page also notes that errors and checkpoints are not reported into Log Analytics for regional session hosts, so check what your dashboards and alerts still receive.
+1. **Pooled and personal pools differ.** Learn's multiregion table lists FSLogix Cloud Cache for pooled host pools, and for personal host pools no Cloud Cache, with Azure Site Recovery set up per VM. Decide per pool type before you count what the second region costs. See [pooled host pools](https://www.m365.fm/entity/avd-pooled-host-pool/) and [personal host pools](https://www.m365.fm/entity/avd-personal-host-pool/).
+2. **Monitoring needs a decision.** One Log Analytics workspace for both regions gives a single view in [Azure Virtual Desktop Insights](https://www.m365.fm/entity/avd-insights/), but the secondary region cannot use a workspace in an unavailable region. Use a workspace per region or test the workspace's replication and failover capabilities. Learn's Regional Host Pools page also notes that errors and checkpoints are not reported into Log Analytics for regional session hosts, so check what your dashboards and alerts still receive.
 3. **Capacity is a per-region decision.** Quota alone does not guarantee that physical capacity is available during a regional disaster. For an active-passive pool, capacity is guaranteed only if VMs are running or on-demand capacity reservations exist, so decide per workload how much of the secondary to keep running or reserved.
 
 ## Putting the decisions together
@@ -99,7 +99,6 @@ Whatever you choose, test failover from the secondary region with a dedicated te
 
 ## Sources
 
-All retrieved on 17 November 2026.
 
 - [Microsoft Tech Community: Now generally available: Regional resiliency for Azure Virtual Desktop](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/now-generally-available-regional-resiliency-for-azure-virtual-desktop/4540458)
 - [Microsoft Learn: Multiregion BCDR for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/architecture/example-scenario/azure-virtual-desktop/azure-virtual-desktop-multi-region-bcdr)

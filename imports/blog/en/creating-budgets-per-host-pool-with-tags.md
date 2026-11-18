@@ -7,11 +7,11 @@ author: mirko-p
 date: 2026-11-18
 topics: [azure-budgets, microsoft-cost-management]
 keypoints:
-  - "Learn says resource tags are included in usage data only while the tag is applied and are not applied to historical data. Our reading is that a tag-filtered budget counts only usage records that carry the tag, so tag first and wait for the data."
-  - "The Budgets API filter takes a tag name, the operator In and a list of values. Learn lists only In and documents no way to select untagged cost; our reading is that a budget cannot select it, so test before relying on it."
+  - "Tags appear in usage data only while applied and not on historical data. Our reading: a tag-filtered budget counts only tagged usage, so tag first and wait for the data."
+  - "The Budgets API filter takes a tag name, the operator In and values. Learn documents no way to select untagged cost, so in our reading a budget cannot select it; test first."
   - "Learn's az consumption budget create page documents resource, resource group and meter filters but no tag parameter, and the group is marked preview. Use Bicep or the REST API for tag filters."
   - "Budgets that call an action group must be at subscription or resource group scope. A tag-filtered budget at subscription scope can still use one."
-  - "Tags are name-value pairs, so in our reading a shared resource such as profile storage carries one value per tag key and a per-pool budget will not contain it. Give shared resources their own tag value and budget."
+  - "Tags are name-value pairs, so in our reading shared resources such as profile storage carry one value per key and fall outside per-pool budgets. Give them their own tag value and budget."
 faq:
   - q: "Can I create a tag-filtered budget in the Azure portal?"
     a: "Learn's budget tutorial says to confirm the scope and add any filters in Create budget, and links to a group and filter page that lists Tag among the options for cost analysis and budgets, but the tutorial does not describe tag filters and Learn does not say explicitly whether the portal's budget filter offers Tag. The documented route is the Budgets API or Bicep, whose filter has a tags element. Check the filter list in your portal before relying on it."
@@ -33,14 +33,14 @@ A budget evaluates cost records. Our reading is that a tag filter keeps only the
 - The Cost Management data page says resource tags are included in usage data only while the tag is applied, and are not applied to historical data. Our reading: a budget created today for a tag added today counts from the next usage that carries the tag, not from the start of the month.
 - Cost Management data is based on past usage records and includes resources that might be stopped or deleted. Tags, though, are only available when the resource is active and producing usage records.
 
-The [host pool](/entity/avd-host-pool/) object itself does not carry the compute charge. The cost sits on the VMs behind the [session hosts](/entity/avd-session-host/), plus disks, network and shared services. Learn's cost page says VMs usually cost the most, and that session host costs are joined by profile storage, application storage, Azure Monitor log data and identity infrastructure.
+The [host pool](https://www.m365.fm/entity/avd-host-pool/) object itself does not carry the compute charge. The cost sits on the VMs behind the [session hosts](https://www.m365.fm/entity/avd-session-host/), plus disks, network and shared services. Learn's cost page says VMs usually cost the most, and that session host costs are joined by profile storage, application storage, Azure Monitor log data and identity infrastructure.
 
 ## Prerequisites
 
 1. **Tags on the VMs.** Use one key for the pool, for example `workload`, with a distinct value per pool such as `avd-finance-pooled`. Learn says tags entered in the portal's creation workflow are passed to all resources created there. For session hosts added later in the portal you must enter them manually each time. Learn also warns that small typos affect reporting, so write the allowed values down.
 2. **Time.** Learn says tags are only available in Cost Management after the data is refreshed and while the resource is producing usage records. For Enterprise Agreement and Microsoft Customer Agreement subscriptions, data is typically available within 8 to 24 hours; for pay-as-you-go it can take up to 72.
 3. **Permissions.** At subscription scope an Owner can create, modify or delete budgets. A Contributor or Cost Management Contributor can create, modify or delete their own budgets.
-4. **A scope.** Pick a [subscription](/entity/azure-subscription/) or [resource group](/entity/azure-resource-group/) if you want an action group to be callable. Learn says action groups are only supported at those two scopes.
+4. **A scope.** Pick a [subscription](https://www.m365.fm/entity/azure-subscription/) or [resource group](https://www.m365.fm/entity/azure-resource-group/) if you want an action group to be callable. Learn says action groups are only supported at those two scopes.
 
 ## Three ways to isolate one pool
 

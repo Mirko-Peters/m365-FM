@@ -1,16 +1,16 @@
 ---
 title: "Acting on right-sizing recommendations safely"
-summary: "Apply a Nerdio right-sizing recommendation to one host pool first, on a schedule outside business hours and with a message to active users, because a size change restarts a running Azure VM. This article gives a checklist for before, during and after, including the session-limit changes that a size change can require."
+summary: "Apply a Nerdio right-sizing recommendation to one host pool first, scheduled outside business hours and with a message to active users, because resizing restarts a running Azure VM. Includes a before, during and after checklist."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [nerdio-right-sizing, nerdio-advisor]
 keypoints:
-  - "The Apply dialog offers Run now or a schedule, and an optional message to active users with a delay in minutes. Nerdio's 6.0 announcement says a change can be implemented non-disruptively by scheduling it outside business hours."
-  - "Azure says changing the size of a running VM restarts it. A Windows VM can only move between sizes that both have a temp disk or both lack one, and a size not available on the current hardware cluster may need deallocation first. After a failed resize the portal still shows the requested size, so check inside the guest OS."
+  - "The Apply dialog offers Run now or a schedule and an optional message to active users. Nerdio says a change can be non-disruptive when scheduled outside business hours."
+  - "Resizing a running VM restarts it. Windows VMs can only move between sizes that both have or both lack a temp disk. After a failed resize the portal shows the requested size; check the guest OS."
   - "Check the data before applying: 72 hours of power-on time is the reliable minimum, and Nerdio recommends 1 to 4 weeks before accepting changes. Data from before a resize is excluded."
-  - "A size change can need new session limits. Nerdio's example for a manual size change moves from D4as_v5 to D8as_v5 and, to keep the same density of 1 user per CPU, doubles the session limit from 4 to 8, which raises the pool maximum to 304 unless base and burst capacity are lowered."
+  - "A size change can need new session limits: Nerdio's D4as_v5 to D8as_v5 example doubles the session limit from 4 to 8 to keep 1 user per CPU, raising the pool maximum to 304."
   - "The pages listed under Sources do not describe an undo, the per-VM sequence of an Advisor apply, or whether Apply changes session limits, so test on one pool and keep the previous size noted."
 faq:
   - q: "Will users be disconnected when I apply a recommendation?"
@@ -23,7 +23,7 @@ faq:
 
 Apply a Nerdio right-sizing recommendation to one host pool first, on a schedule outside business hours and with a message to active users, because Azure restarts a running VM when its size changes. Then check session limits and user experience before repeating it elsewhere.
 
-The checklist covers the AVD rules (pooled and personal), not the Right-sizing (Cloud PC) rule for Windows 365 that the Recommendations dashboard also lists. It assumes you can already read a recommendation: "VM right-sizing in Nerdio: reading the utilisation recommendations" covers rules, thresholds and data windows, and "Right-sizing host pools with Nerdio Advisor: a worked example" follows one pool. Confirm menu names in your own [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/) tenant.
+The checklist covers the AVD rules (pooled and personal), not the Right-sizing (Cloud PC) rule for Windows 365 that the Recommendations dashboard also lists. It assumes you can already read a recommendation: "VM right-sizing in Nerdio: reading the utilisation recommendations" covers rules, thresholds and data windows, and "Right-sizing host pools with Nerdio Advisor: a worked example" follows one pool. Confirm menu names in your own [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/) tenant.
 
 ## Before you apply
 
@@ -34,19 +34,19 @@ The checklist covers the AVD rules (pooled and personal), not the Right-sizing (
    - A SCSI-based VM cannot be resized to a remote NVMe-enabled size.
    - If the VM uses Premium Storage, pick an **s** size, for example Standard_E4s_v3 rather than Standard_E4_v3.
    - If the new size is not available on the hardware cluster hosting the VM, deallocation may be needed first, which releases dynamic IP addresses.
-4. **Check the density.** For a pooled pool, compare the recommended size with Microsoft's [session host](/entity/avd-session-host/) sizing guidance, whose vCPU and user-count ranges the reading article quotes. Then see the next section on session limits.
+4. **Check the density.** For a pooled pool, compare the recommended size with Microsoft's [session host](https://www.m365.fm/entity/avd-session-host/) sizing guidance, whose vCPU and user-count ranges the reading article quotes. Then see the next section on session limits.
 5. **Note the current state.** Write down the pool's current size, session limit and auto-scale settings. The pages listed under Sources describe no undo, so our reading is that the way back is another size change.
 
 ## Session limits and capacity change with the size
 
-For [pooled](/entity/avd-pooled-host-pool/) pools, a larger VM can go with a higher session limit, and a higher limit can multiply the pool's maximum capacity. Nerdio's help article on machine size and density shows the arithmetic for a manual size change in the auto-scale configuration, not the Advisor apply, for a pool that must regularly accommodate 120 user sessions:
+For [pooled](https://www.m365.fm/entity/avd-pooled-host-pool/) pools, a larger VM can go with a higher session limit, and a higher limit can multiply the pool's maximum capacity. Nerdio's help article on machine size and density shows the arithmetic for a manual size change in the auto-scale configuration, not the Advisor apply, for a pool that must regularly accommodate 120 user sessions:
 
 - Current: D4as_v5, session limit per host 4, base host pool capacity 30, minimum active host capacity 2, burst beyond base capacity 8 (up to 150 users), 15 hosts pre-staged for the start of work hours.
 - Target: D8as_v5, keeping the same density of 1 user per CPU. Change the VM size, set the session limit per host to 8 in **Host Pool Properties**, which raises the maximum host pool sessions to 304.
 - Offset it in **Host Pool Sizing**: base capacity 15, minimum active host capacity 2, burst 4 (still up to 150 users). Under **Pre-stage Hosts**, set the hosts to be active by the start of work hours to 8.
 - If the pool has several schedules, adjust the pre-stage value in each one. Nerdio's article says moving to a smaller size follows the same steps.
 
-The [maximum session limit](/entity/avd-maximum-session-limit/), the capacity values and the pre-stage count were tuned for the old size, so review them with the size change, not afterwards. [Nerdio auto-scaling](/entity/nerdio-auto-scaling/) interacts here: the pages listed under Sources do not describe what happens if an auto-scale event coincides with an applied size change, so avoid scheduling the change in a ramp-up window (our suggestion). Nerdio documents **Exclude from auto-scale** for single hosts (scale in, or scale in and scale out, indefinitely or until a set time) but does not link it to Advisor, so treat it as an option to test.
+The [maximum session limit](https://www.m365.fm/entity/avd-maximum-session-limit/), the capacity values and the pre-stage count were tuned for the old size, so review them with the size change, not afterwards. [Nerdio auto-scaling](https://www.m365.fm/entity/nerdio-auto-scaling/) interacts here: the pages listed under Sources do not describe what happens if an auto-scale event coincides with an applied size change, so avoid scheduling the change in a ramp-up window (our suggestion). Nerdio documents **Exclude from auto-scale** for single hosts (scale in, or scale in and scale out, indefinitely or until a set time) but does not link it to Advisor, so treat it as an option to test.
 
 ## What the Apply dialog offers
 
@@ -62,11 +62,11 @@ What the pages listed under Sources do not say: the order in which hosts are pro
 
 ### Draining hosts yourself
 
-If you want certainty about who is signed in, [drain mode](/entity/avd-drain-mode/) is the native tool. Microsoft Learn says a host in drain mode accepts no new sessions, existing connections stay active until the user signs out or an administrator ends the session, and you should wait until no sessions remain before maintenance. In the Azure portal, open the host pool, **Session hosts**, select the host and choose **Turn drain mode on** (role: Desktop Virtualization Session Host Operator).
+If you want certainty about who is signed in, [drain mode](https://www.m365.fm/entity/avd-drain-mode/) is the native tool. Microsoft Learn says a host in drain mode accepts no new sessions, existing connections stay active until the user signs out or an administrator ends the session, and you should wait until no sessions remain before maintenance. In the Azure portal, open the host pool, **Session hosts**, select the host and choose **Turn drain mode on** (role: Desktop Virtualization Session Host Operator).
 
 ### The Resize/Re-image alternative
 
-Nerdio also has **Resize/Re-image**, opened from the more options menu of a host pool under **Hosts** > **Resize/Re-image**. The "Bulk Host Actions" page lists it as **Re-size/Re-image** under the **Manage Hosts** action menu. Its dialog includes **Run now** or a schedule, a **Desktop Image**, an optional **VM Size**, **Process Host in Groups Of**, **Number of failures before aborting**, an option to set the remaining hosts to drain mode after the first group is done, and **Force Users to Log Off**. Drain mode while waiting for users is on by default and can be cleared only when **Force Users to Log Off** is Never. You confirm by typing CONFIRM. Nerdio's page does not connect this dialog to recommendations, and it deploys an image, so it is a re-image and not only a resize. Use it when you were planning an image update anyway, and check first what it does to local data on a [personal](/entity/avd-personal-host-pool/) desktop.
+Nerdio also has **Resize/Re-image**, opened from the more options menu of a host pool under **Hosts** > **Resize/Re-image**. The "Bulk Host Actions" page lists it as **Re-size/Re-image** under the **Manage Hosts** action menu. Its dialog includes **Run now** or a schedule, a **Desktop Image**, an optional **VM Size**, **Process Host in Groups Of**, **Number of failures before aborting**, an option to set the remaining hosts to drain mode after the first group is done, and **Force Users to Log Off**. Drain mode while waiting for users is on by default and can be cleared only when **Force Users to Log Off** is Never. You confirm by typing CONFIRM. Nerdio's page does not connect this dialog to recommendations, and it deploys an image, so it is a re-image and not only a resize. Use it when you were planning an image update anyway, and check first what it does to local data on a [personal](https://www.m365.fm/entity/avd-personal-host-pool/) desktop.
 
 ## What happens in Azure
 
@@ -79,7 +79,7 @@ Microsoft Learn calls resizing a running VM "a disruptive operation, especially 
 3. For personal pools, tell the owners; for pooled pools, check when users are normally signed in.
 4. Schedule the apply outside business hours with a message and a delay of a few minutes.
 5. After the task, check the vCPU count and RAM inside the guest OS of a host, then the session limit and the auto-scale values. Sign in with a test user.
-6. Watch user experience for a few days. Nerdio's article on AVD user workload performance calls user input delay its north-star metric and, quoting Microsoft's AVD Insights documentation, says it should ideally stay below 100 ms per host. Microsoft's sizing guidance separately cites a 200 ms response time users expect for their actions, a different figure. [AVD Insights](/entity/avd-insights/), a dashboard built on Azure Monitor Workbooks, is one place to look.
+6. Watch user experience for a few days. Nerdio's article on AVD user workload performance calls user input delay its north-star metric and, quoting Microsoft's AVD Insights documentation, says it should ideally stay below 100 ms per host. Microsoft's sizing guidance separately cites a 200 ms response time users expect for their actions, a different figure. [AVD Insights](https://www.m365.fm/entity/avd-insights/), a dashboard built on Azure Monitor Workbooks, is one place to look.
 7. Wait for new data before judging the next recommendation. The rule needs power-on time on the new size, and with auto-scale shutting hosts down that takes more calendar days than hours.
 8. Then repeat for similar pools, with **Bulk apply** if they share a configuration.
 

@@ -1,13 +1,13 @@
 ---
 title: "Azure Virtual Desktop Hybrid explained: session hosts on-premises, managed from Azure"
-summary: "Azure Virtual Desktop Hybrid keeps the Azure Virtual Desktop service in Azure and puts the session hosts on your own on-premises hypervisor or hardware, connected through Azure Arc. You trade Azure-side features such as autoscale and Windows 11 multi-session for local placement, so check the limits before you choose it."
+summary: "Azure Virtual Desktop Hybrid keeps the service in Azure and puts session hosts on your own on-premises hardware, connected through Azure Arc. You give up Azure-side features such as autoscale, so check the limits first."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-hybrid, azure-virtual-desktop]
 keypoints:
-  - "Azure Virtual Desktop Hybrid runs session hosts on-premises while host pools, workspaces and the brokering service stay in Azure. Each session host must be Azure Arc-enabled, and an Arc extension installs the AVD components and registers it."
+  - "AVD Hybrid runs session hosts on-premises while host pools, workspaces and brokering stay in Azure. Each host must be Azure Arc-enabled; an Arc extension installs the AVD components."
   - "Microsoft announced general availability on 1 September 2026. Learn's what's-new page lists the public preview under May 2026."
   - "Power management, autoscale, Start VM on Connect and session host configuration are not supported. You provision, patch and power on the machines with your own tools."
   - "Windows 11 and Windows 10 Enterprise multi-session are not supported. Supported are Windows Server 2016 to 2025 and single-session Windows 11 and Windows 10 Enterprise."
@@ -32,11 +32,11 @@ Microsoft Learn describes it as an extension of cloud-native desktop virtualizat
 1. You deploy a Windows virtual machine or headless physical device on your on-premises infrastructure.
 2. You install the Azure Arc connected machine agent, which registers the machine in Azure as an Arc-enabled server.
 3. You run the Azure Virtual Desktop Arc extension on that machine. It installs the AVD software and registers the machine with a host pool.
-4. Users connect through [Windows App](/entity/windows-app/), the same way they connect to any other Azure Virtual Desktop session host.
+4. Users connect through [Windows App](https://www.m365.fm/entity/windows-app/), the same way they connect to any other Azure Virtual Desktop session host.
 
 Learn states the split of duties plainly: Microsoft manages the Azure Virtual Desktop service in Azure, and you manage the on-premises machines, the networking and the hosting infrastructure. The Tech Community announcement adds that all communication is outbound over HTTPS, so no inbound connectivity is needed. The Learn page on required endpoints says the same for Azure Virtual Desktop in general: all entries are outbound.
 
-The product page for the entity is [Azure Virtual Desktop Hybrid](/entity/avd-hybrid/). The service itself is [Azure Virtual Desktop](/entity/azure-virtual-desktop/), and the connection layer is [Azure Arc](/entity/azure-arc/).
+The product page for the entity is [Azure Virtual Desktop Hybrid](https://www.m365.fm/entity/avd-hybrid/). The service itself is [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/), and the connection layer is [Azure Arc](https://www.m365.fm/entity/azure-arc/).
 
 ## Status and naming
 
@@ -53,7 +53,7 @@ Learn lists what Azure Virtual Desktop Hybrid does not support, because the serv
 - Start VM on Connect
 - Session host configuration
 
-The deployment page repeats the last point: when you create the host pool, it must be a standard host pool without added virtual machines, and session host configuration is not supported. If you came from Azure-hosted pools, this removes the features behind [power management autoscaling](/entity/avd-power-management-autoscaling/), [Start VM on Connect](/entity/avd-start-vm-on-connect/) and the [session host configuration](/entity/avd-session-host-configuration/). Learn says organizations deploy and manage their on-premises session hosts with hypervisor tools, scripts, partner solutions or other tools.
+The deployment page repeats the last point: when you create the host pool, it must be a standard host pool without added virtual machines, and session host configuration is not supported. If you came from Azure-hosted pools, this removes the features behind [power management autoscaling](https://www.m365.fm/entity/avd-power-management-autoscaling/), [Start VM on Connect](https://www.m365.fm/entity/avd-start-vm-on-connect/) and the [session host configuration](https://www.m365.fm/entity/avd-session-host-configuration/). Learn says organizations deploy and manage their on-premises session hosts with hypervisor tools, scripts, partner solutions or other tools.
 
 Practical result: patching, image replacement, power-on schedules and capacity for the day are your job, or your partner tool's job. Learn lists both power management and Start VM on Connect among the unsupported features, so powering hosts on is not an Azure-side function of Hybrid.
 
@@ -80,11 +80,11 @@ Identity is a second filter. Windows client session hosts can be Microsoft Entra
 | Fee beyond user rights | Azure compute and storage | Azure Local service fee plus a fee per active vCPU | Hybrid service user license; compute, storage and networking stay in your environment |
 | Arc relationship | Not used; Learn advises against installing Arc on Azure VMs | Not an Arc-enabled service in Learn's wording, but the Connected Machine agent is installed on the session host VMs, automatically when you add hosts in the portal | Required for every session host |
 
-The Azure Local column comes from the [Azure Virtual Desktop on Azure Local](/entity/avd-for-azure-local/) overview page. It lists Windows 11 and Windows 10 Enterprise multi-session among the supported images, an Azure Local service fee, a fee per active vCPU, and the rule that one host pool holds hosts either in Azure or on Azure Local. The Azure Arc prerequisites page lists Azure Local among the environments where the agent can be installed.
+The Azure Local column comes from the [Azure Virtual Desktop on Azure Local](https://www.m365.fm/entity/avd-for-azure-local/) overview page. It lists Windows 11 and Windows 10 Enterprise multi-session among the supported images, an Azure Local service fee, a fee per active vCPU, and the rule that one host pool holds hosts either in Azure or on Azure Local. The Azure Arc prerequisites page lists Azure Local among the environments where the agent can be installed.
 
 Learn's Hybrid overview speaks of "your preferred on-premises hypervisor" without naming products, and the announcement names VMware vSphere, Nutanix AHV and Hyper-V.
 
-The Hybrid overview page does not mention Azure Local. Our reading: if your hardware is Azure Local, start from the Azure Local offer and confirm with Microsoft before planning Hybrid on it. The article on [Azure Virtual Desktop for Azure Local](/entity/avd-for-azure-local/) on this site covers that offer, including autoscale, in detail.
+The Hybrid overview page does not mention Azure Local. Our reading: if your hardware is Azure Local, start from the Azure Local offer and confirm with Microsoft before planning Hybrid on it. The article on [Azure Virtual Desktop for Azure Local](https://www.m365.fm/entity/avd-for-azure-local/) on this site covers that offer, including autoscale, in detail.
 
 ## When it fits and when it does not
 

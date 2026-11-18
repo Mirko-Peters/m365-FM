@@ -1,16 +1,16 @@
 ---
 title: "VM right-sizing in Nerdio: reading the utilisation recommendations"
-summary: "Nerdio Advisor's right-sizing rules work from the 90th-percentile CPU and memory use of a host pool's VMs over the last 30 days and from triggers set by default at 80 percent (increase) and 60 percent (decrease), and they offer up to three sizes. This article explains the data they need, how the verdict is derived and what the recommendation cannot see."
+summary: "Nerdio Advisor's right-sizing rules use 30 days of 90th-percentile CPU and memory use, with default triggers at 80 percent (increase) and 60 percent (decrease), and offer up to three sizes."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [nerdio-right-sizing, nerdio-advisor]
 keypoints:
-  - "By default the rules use the 90th percentile of CPU and memory use over the last 30 days, with triggers at 80 percent (increase) and 60 percent (decrease). Check the Active sessions only flag in your own rule, because the pooled page states its default two ways."
-  - "Data volume decides how far to trust a result: under 1 hour nothing is shown, under 24 hours the sizes are hidden, under 72 hours of power-on time the recommendation carries a warning. Nerdio suggests 1 to 4 weeks of data before accepting changes."
+  - "By default the rules use 30 days of 90th-percentile CPU and memory, triggers at 80 and 60 percent. Check the Active sessions only flag, as the pooled page states its default two ways."
+  - "Data volume decides trust: under 1 hour nothing shows, under 24 hours sizes are hidden, under 72 hours a warning appears. Nerdio suggests 1 to 4 weeks of data before changes."
   - "The pooled rule needs a dynamic host pool with auto-scale on and CPU and RAM gathering enabled. The personal rule reads performance counters from the host pool's Log Analytics workspace."
-  - "Candidate sizes are filtered (A- and B-series, exhausted quota, missing benchmarks or prices, GPU or feature mismatch) and the top three are shown. A resize shortens the analysis window, because earlier data is excluded."
+  - "Candidate sizes are filtered (A- and B-series, quota, missing benchmarks or prices, GPU or feature mismatch) and the top three shown. A resize shortens the analysis window."
   - "The rule works from utilisation. Session limits, user input delay, logon peaks and storage are outside its inputs, so the recommendation is a starting point for a decision, not the decision."
 faq:
   - q: "Why does a host pool show no recommendation although the VMs look busy or idle?"
@@ -23,11 +23,11 @@ faq:
 
 A right-sizing recommendation in Nerdio Advisor says whether the VMs in a host pool run below or above the load you want and, if so, which sizes would move them toward it. By default the rule works from the 90th percentile of CPU and memory use over the last 30 days, with triggers at 80 percent (increase) and 60 percent (decrease), and shows up to three candidate sizes. This article explains how to read that output. The companion article, "Acting on right-sizing recommendations safely", covers what to do next.
 
-Menu names and defaults can change between releases, so check them in your own [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/) tenant.
+Menu names and defaults can change between releases, so check them in your own [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/) tenant.
 
 ## Where the feature sits
 
-Host pool and VM right-sizing is part of [Nerdio Advisor](/entity/nerdio-advisor/), described by Nerdio as a suite of capabilities introduced in 2023. Nerdio's announcement of version 6.0 (2 April 2024) lists [host pool and VM right-sizing](/entity/nerdio-right-sizing/) as generally available, with monitoring of utilisation, flagging of oversized or undersized VMs, and recommendations with an impact analysis.
+Host pool and VM right-sizing is part of [Nerdio Advisor](https://www.m365.fm/entity/nerdio-advisor/), described by Nerdio as a suite of capabilities introduced in 2023. Nerdio's announcement of version 6.0 (2 April 2024) lists [host pool and VM right-sizing](https://www.m365.fm/entity/nerdio-right-sizing/) as generally available, with monitoring of utilisation, flagging of oversized or undersized VMs, and recommendations with an impact analysis.
 
 In the portal the pieces are under **Observability** > **Advisor**: **Rules** define how an analyzer assesses usage, and **Recommendations** lists the results. Nerdio's rules overview lists the two AVD right-sizing rules covered here, plus rules for Cloud PC right-sizing, platform TCO and license suitability. Nerdio's version 7 article says Advisor right-sizing uses AI, while the rule pages describe fixed thresholds, percentiles and a scale factor and mention no model. Judge the output by the documented rules.
 
@@ -42,7 +42,7 @@ On editions, Nerdio's current pages do not agree. The [entitlement and billing p
 | Counters | Processor Information/% Processor Time, Memory/Available MBytes | The same two counters |
 | Window | Last 30 days | Last 30 days |
 
-For the personal rule, memory use is a percentage derived from Available MBytes. Nerdio's personal rule page says the Log Analytics agent should be running. Microsoft Learn states that this legacy agent has been deprecated since 31 August 2024 in favour of the Azure Monitor Agent, which Microsoft's [AVD Insights](/entity/avd-insights/) page describes with a data collection rule. Nerdio's host pool monitoring settings offer **Use Azure Monitor Agent (AMA)** and call the legacy Microsoft Monitoring Agent "not recommended". The personal rule page does not say whether it reads counters sent through the Azure Monitor Agent, so confirm with Nerdio if your VMs use it. The personal rule reads from a [Log Analytics](/entity/log-analytics/) workspace; the pooled page names none.
+For the personal rule, memory use is a percentage derived from Available MBytes. Nerdio's personal rule page says the Log Analytics agent should be running. Microsoft Learn states that this legacy agent has been deprecated since 31 August 2024 in favour of the Azure Monitor Agent, which Microsoft's [AVD Insights](https://www.m365.fm/entity/avd-insights/) page describes with a data collection rule. Nerdio's host pool monitoring settings offer **Use Azure Monitor Agent (AMA)** and call the legacy Microsoft Monitoring Agent "not recommended". The personal rule page does not say whether it reads counters sent through the Azure Monitor Agent, so confirm with Nerdio if your VMs use it. The personal rule reads from a [Log Analytics](https://www.m365.fm/entity/log-analytics/) workspace; the pooled page names none.
 
 ## How the verdict is derived
 
@@ -79,7 +79,7 @@ The personal rule page adds that benchmarks are retrieved periodically and cache
 | 24 to 72 hours | Recommendation with a reliability warning |
 | 72 hours or more | Reliable; hours may add up non-continuously |
 
-These are defaults of service settings (HideDataBelowDuration 1 hour, HideOptionsBelowDuration 24 hours, ReliableStatisticsDuration 72 hours, MaxStatisticsPeriod 30 days). The pooled page lists them under the prefix Advisor:HostPoolRightSize; the personal page uses Advisor:PersonalRightSize without MaxStatisticsPeriod. The rules overview adds that a VM can take up to 72 hours to be assessed and recommends 1 to 4 weeks of data before accepting changes. Power-on time counts, not calendar time. Our reading: a host that auto-scale keeps stopped most of the day collects data slowly, and a just-resized [pooled](/entity/avd-pooled-host-pool/) pool gives a thinner picture than the 30-day label suggests.
+These are defaults of service settings (HideDataBelowDuration 1 hour, HideOptionsBelowDuration 24 hours, ReliableStatisticsDuration 72 hours, MaxStatisticsPeriod 30 days). The pooled page lists them under the prefix Advisor:HostPoolRightSize; the personal page uses Advisor:PersonalRightSize without MaxStatisticsPeriod. The rules overview adds that a VM can take up to 72 hours to be assessed and recommends 1 to 4 weeks of data before accepting changes. Power-on time counts, not calendar time. Our reading: a host that auto-scale keeps stopped most of the day collects data slowly, and a just-resized [pooled](https://www.m365.fm/entity/avd-pooled-host-pool/) pool gives a thinner picture than the 30-day label suggests.
 
 ## Reading the Recommendations page
 
@@ -94,13 +94,13 @@ Questions to ask of each row:
 
 ## What the recommendation does not see
 
-The inputs are CPU and memory percentages, session presence, benchmarks and prices. The two rule pages do not list session limits, user input delay, logon peaks, storage latency or application licensing among them. Microsoft's [session host sizing guidance](/entity/avd-session-host/), which covers both Azure Virtual Desktop and Remote Desktop Services, offers context a reviewer can add by hand:
+The inputs are CPU and memory percentages, session presence, benchmarks and prices. The two rule pages do not list session limits, user input delay, logon peaks, storage latency or application licensing among them. Microsoft's [session host sizing guidance](https://www.m365.fm/entity/avd-session-host/), which covers both Azure Virtual Desktop and Remote Desktop Services, offers context a reviewer can add by hand:
 
 - For multi-session VMs it says to limit VM size to between 6 and 24 vCPUs, although the same page also recommends a range of 4 to 24 cores and calls four cores the lowest recommended number. It says that with 20 or more users on one VM, several smaller VMs would perform better.
 - Its table gives maximum users per vCPU of 6 for light and 4 for medium workloads (2 for heavy, 1 for power), with a response time under 200 milliseconds expected.
 - User logon is CPU-intensive, so plan for logon patterns such as many users signing in at the start of a work day.
 
-If a recommended size lands outside these ranges, or a pool's [maximum session limit](/entity/avd-maximum-session-limit/) was set for the old size, review it. [Nerdio's article on analysing AVD user workload performance](https://getnerdio.com/blog/how-to-analyze-avd-user-workload-performance/) warns that Azure Advisor may flag an underutilised VM for shutdown and deallocation without recognising it as a session host. The Nerdio rules work from the thresholds above and can be scoped to chosen host pools.
+If a recommended size lands outside these ranges, or a pool's [maximum session limit](https://www.m365.fm/entity/avd-maximum-session-limit/) was set for the old size, review it. [Nerdio's article on analysing AVD user workload performance](https://getnerdio.com/blog/how-to-analyze-avd-user-workload-performance/) warns that Azure Advisor may flag an underutilised VM for shutdown and deallocation without recognising it as a session host. The Nerdio rules work from the thresholds above and can be scoped to chosen host pools.
 
 ## Sources
 

@@ -1,16 +1,16 @@
 ---
 title: "Using AI assistants for AVD operations: benefits and limits"
-summary: "Nerdio's AI assistant can find documented answers, draft scripts and draft KQL queries, but Nerdio itself says every generated script and query must be tested and validated manually. This article shows where that helps, what the documented limits are and how to review a draft, using the sample from Nerdio's ChatGPT guide as the worked example."
+summary: "Nerdio's AI assistant can find documented answers and draft scripts and KQL queries, but Nerdio says every generated script and query must be tested manually. This article shows where it helps and how to review a draft."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [nerdio-assistpro, nerdio-manager-for-enterprise]
 keypoints:
-  - "Documented uses are three: answers from Nerdio Help Center articles with citations, script drafts (Script Pro) and KQL drafts (AnalyticsPro). Output is text you copy; the help page does not describe the assistant running anything."
+  - "Three documented uses: answers from Nerdio Help Center articles with citations, script drafts (Script Pro) and KQL drafts (AnalyticsPro). Output is text you copy; it runs nothing."
   - "Nerdio warns twice that AI-generated scripts and queries must be tested and validated manually before production. Treat every draft as unreviewed code."
-  - "Documented limits: answers are not deterministic, no control over daily or monthly throttling, no notifications, no way to filter false positives, older conversation text is dropped when a chat grows past the token limit."
-  - "Nerdio's own ChatGPT sample (a general model, not Copilot) shows why review matters: its Variables block carries an example description that does not fit the script, is marked required although the value is only logged, has unbalanced braces, and the script writes to an event-log source it never registers."
+  - "Documented limits: non-deterministic answers, no throttling control, no notifications, no false-positive filter, and older chat text is dropped past the token limit."
+  - "Nerdio's own ChatGPT sample shows why review matters: a mismatched variable description, a wrongly required value, unbalanced braces and an unregistered event-log source."
   - "Use the assistant for drafting and explaining; keep deployment, bulk runs and policy decisions with a human and a test host."
 faq:
   - q: "Can I let the assistant fix problems in my host pools directly?"
@@ -21,13 +21,13 @@ faq:
     a: "No. Nerdio's help pages say answers are not deterministic because the assistant is a large language model, and they offer feedback through a comment or the standard support escalation path when you notice an incorrect answer."
 ---
 
-Nerdio Copilot, the AI assistant in [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/), can be used for three drafting jobs: finding what the documentation says, writing a first version of a script, and writing a first version of a KQL query. Nerdio says all generated scripts and queries must be tested and validated manually before they reach production. This article covers what the documentation supports, where the limits are, and a review routine you can apply, with the sample from Nerdio's ChatGPT guide as the example. For the names, deployment steps, cost and data handling, see the companion article "AssistPro and ScriptPro: Nerdio's GenAI assistants explained".
+Nerdio Copilot, the AI assistant in [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/), can be used for three drafting jobs: finding what the documentation says, writing a first version of a script, and writing a first version of a KQL query. Nerdio says all generated scripts and queries must be tested and validated manually before they reach production. This article covers what the documentation supports, where the limits are, and a review routine you can apply, with the sample from Nerdio's ChatGPT guide as the example. For the names, deployment steps, cost and data handling, see the companion article "AssistPro and ScriptPro: Nerdio's GenAI assistants explained".
 
 ## Where an assistant helps
 
 **Finding the documented answer.** Nerdio Copilot answers from Nerdio Help Center articles, which it caches and refreshes daily. The **Citations** option lists the articles behind an answer, so a quick check against the source takes a click. The cache means a very recent help page change may not appear yet.
 
-**A first draft of a script.** [Script Pro](/entity/nerdio-assistpro/) is part of Copilot. Nerdio's example asks for a management script for a Windows VM that sets a registry key, then you answer follow-up prompts and copy the code. Nerdio's ChatGPT guide for scripted actions adds practical advice for a general chat model: be as specific as possible, say so if the script must run as an Azure runbook, give an existing scripted action as a sample, and supply the table of global variables as context.
+**A first draft of a script.** [Script Pro](https://www.m365.fm/entity/nerdio-assistpro/) is part of Copilot. Nerdio's example asks for a management script for a Windows VM that sets a registry key, then you answer follow-up prompts and copy the code. Nerdio's ChatGPT guide for scripted actions adds practical advice for a general chat model: be as specific as possible, say so if the script must run as an Azure runbook, give an existing scripted action as a sample, and supply the table of global variables as context.
 
 **A first draft of a KQL query.** AnalyticsPro turns a question such as "the number of active users from the past hour" into a query you copy and run in your Azure Log Analytics workspace. It supports follow-up questions and refinement.
 
@@ -89,11 +89,11 @@ AnalyticsPro's example asks for active users in the past hour. Before running an
 
 ## Related
 
-- [Nerdio AssistPro](/entity/nerdio-assistpro/)
-- [Nerdio Manager for Enterprise](/entity/nerdio-manager-for-enterprise/)
-- [Nerdio scripted actions](/entity/nerdio-scripted-actions/)
-- [KQL](/entity/kql/)
-- [Azure Virtual Desktop](/entity/azure-virtual-desktop/)
+- [Nerdio AssistPro](https://www.m365.fm/entity/nerdio-assistpro/)
+- [Nerdio Manager for Enterprise](https://www.m365.fm/entity/nerdio-manager-for-enterprise/)
+- [Nerdio scripted actions](https://www.m365.fm/entity/nerdio-scripted-actions/)
+- [KQL](https://www.m365.fm/entity/kql/)
+- [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/)
 
 ## Sources
 

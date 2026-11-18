@@ -7,11 +7,11 @@ author: mirko-p
 date: 2026-11-18
 topics: [avd-entra-join, azure-virtual-desktop]
 keypoints:
-  - "Learn lets you join Azure Virtual Desktop session hosts to the same Microsoft Entra tenant or to an Active Directory domain. An Entra joined host needs no domain controller to deploy or access it, while a hybrid joined device needs periodic line of sight to one."
-  - "Entra joined devices are managed through MDM such as Intune; Learn says Group Policy is not supported on them. Windows Server session hosts joined to Entra cannot be enrolled in Intune, and Learn points to hybrid join with Group Policy or to local Group Policy on each host."
-  - "Learn supports cloud-only identities with Entra joined VMs. External identities also need an Entra joined session host. If users also exist in AD DS, their accounts must be hybrid identities with a matching UPN or SID."
+  - "Session hosts can join an Entra tenant or an AD domain. An Entra joined host needs no domain controller to deploy or access it; a hybrid joined device needs periodic line of sight to one."
+  - "Entra joined devices are managed through MDM such as Intune, not Group Policy. Entra-joined Windows Server hosts cannot enroll in Intune; Learn points to hybrid join or local Group Policy."
+  - "Learn supports cloud-only identities with Entra joined VMs; external identities also need them. Users who exist in AD DS must be hybrid identities with a matching UPN or SID."
   - "Keep one join type per host pool. Learn says Entra joined VMs should only be paired with other Entra joined VMs, and vice versa."
-  - "Check three things before you choose: apps that rely on machine authentication, the profile storage and identity route for FSLogix, and how the host pool is created (standard management or session host configuration)."
+  - "Check three things first: apps relying on machine authentication, the storage and identity route for FSLogix, and how the host pool is created (standard or session host configuration)."
 faq:
   - q: "Do Entra joined session hosts need a domain controller?"
     a: "Not to deploy or access them, with one exception. Learn says you do not need an Active Directory to deploy or access Microsoft Entra joined VMs, but you need an Active Directory and line of sight to it to reach on-premises resources from those VMs. The exception is smart card and Windows Hello for Business sign-in to a session host: Learn says these use Kerberos, so the client needs line of sight to a domain controller, whichever join type the hosts use. For FSLogix profile access on Azure Files with Microsoft Entra Kerberos and hybrid identities, session hosts need no line of sight to a domain controller, although a system with line of sight is needed to configure share permissions. This does not remove the periodic line of sight that a hybrid joined host needs for the join itself."
@@ -23,14 +23,14 @@ faq:
 
 Join session hosts to Microsoft Entra ID when your users are cloud or hybrid identities and nothing inside the session depends on Group Policy or machine authentication. Use Microsoft Entra hybrid join when the hosts must stay in Active Directory and you accept the line-of-sight requirement to a domain controller.
 
-This guide compares the two options for [session hosts](/entity/avd-session-host/) in [Azure Virtual Desktop](/entity/azure-virtual-desktop/). Joining to [Microsoft Entra Domain Services](/entity/entra-domain-services/) is a third route that is not compared here.
+This guide compares the two options for [session hosts](https://www.m365.fm/entity/avd-session-host/) in [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/). Joining to [Microsoft Entra Domain Services](https://www.m365.fm/entity/entra-domain-services/) is a third route that is not compared here.
 
 ## What each option means
 
 Microsoft Learn's prerequisites page says session hosts must join the same Microsoft Entra tenant as the users, or an Active Directory domain (AD DS or Microsoft Entra Domain Services). Microsoft Entra ID always authenticates users for Azure Virtual Desktop, whichever join type you pick.
 
-- **Microsoft Entra joined:** the host is joined only to [Microsoft Entra ID](/entity/entra-id/). Learn says this runs session hosts without line of sight to a domain controller or Domain Services, and in some cases without any domain controller.
-- **Microsoft Entra hybrid joined:** the host is [joined to on-premises Active Directory](/entity/hybrid-entra-join/) and also registered in Entra ID. Learn says these devices require periodic network line of sight to your domain controllers, and that without this connection, "devices become unusable."
+- **Microsoft Entra joined:** the host is joined only to [Microsoft Entra ID](https://www.m365.fm/entity/entra-id/). Learn says this runs session hosts without line of sight to a domain controller or Domain Services, and in some cases without any domain controller.
+- **Microsoft Entra hybrid joined:** the host is [joined to on-premises Active Directory](https://www.m365.fm/entity/hybrid-entra-join/) and also registered in Entra ID. Learn says these devices require periodic network line of sight to your domain controllers, and that without this connection, "devices become unusable."
 
 ## Side-by-side comparison
 
@@ -75,7 +75,7 @@ Without SSO, the Entra joined article sets conditions for connecting. From the W
 
 ## Profiles with FSLogix
 
-Both options work with [FSLogix](/entity/fslogix/) on Azure Files through [Microsoft Entra Kerberos for Azure Files](/entity/entra-kerberos-azure-files/). The identity types are the difference.
+Both options work with [FSLogix](https://www.m365.fm/entity/fslogix/) on Azure Files through [Microsoft Entra Kerberos for Azure Files](https://www.m365.fm/entity/entra-kerberos-azure-files/). The identity types are the difference.
 
 - **Hybrid identities:** Learn's FSLogix article names Entra joined or hybrid joined session hosts for this route and says it works "without requiring network line-of-sight to domain controllers". That covers access to the profile share only; a hybrid joined host still needs periodic line of sight to a domain controller.
 - **Entra joined hosts, prerequisites page:** Learn says that when you join session hosts to Entra ID, you store profiles on Azure Files or Azure NetApp Files and your user accounts must be hybrid identities, created in AD DS and synchronized.

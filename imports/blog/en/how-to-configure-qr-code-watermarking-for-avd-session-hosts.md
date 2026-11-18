@@ -7,10 +7,10 @@ author: mirko-p
 date: 2026-11-18
 topics: [avd-watermarking, azure-virtual-desktop]
 keypoints:
-  - "In Intune, add Enable watermarking from the settings catalog under Administrative templates > Windows Components > Remote Desktop Services > Remote Desktop Session Host > Azure Virtual Desktop. Do not pick the entry marked [Deprecated]."
+  - "In Intune, use Enable watermarking under Administrative templates > Windows Components > Remote Desktop Services > Remote Desktop Session Host > Azure Virtual Desktop, not [Deprecated]."
   - "In Group Policy, the same setting sits under Computer Configuration > Policies > Administrative Templates, in the same folder path, and needs the Azure Virtual Desktop administrative template."
   - "Defaults: scale factor 4, opacity 2000, grid width 320, grid height 180, embedded content Connection ID. Learn suggests changing only the opacity."
-  - "After the policy applies, sync (Intune) or refresh Group Policy or restart (Group Policy). Learn says existing sessions must sign out and back in for Group Policy changes to take effect. Unsupported clients can no longer connect."
+  - "After the policy applies, sync Intune or refresh Group Policy. Existing sessions must sign out and back in for Group Policy changes; unsupported clients can no longer connect."
   - "To trace a code, search the Connection ID in Azure Virtual Desktop Insights or query WVDConnections by CorrelationId in Log Analytics."
 faq:
   - q: "Why does Learn warn against the entry marked [Deprecated] Enable watermarking in Intune?"
@@ -21,15 +21,15 @@ faq:
     a: "Read the code, then search for its value in Azure Virtual Desktop Insights (Connection Diagnostics tab) or run a WVDConnections query that filters CorrelationId on the full or partial value. Both depend on Azure Virtual Desktop Insights being configured."
 ---
 
-To enable QR-code watermarking for [Azure Virtual Desktop](/entity/azure-virtual-desktop/) session hosts, turn on the **Enable watermarking** policy for the machines that provide the remote sessions, using Microsoft Intune or Group Policy. Once it applies, new sessions to a remote desktop show a grid of QR codes that contain a Connection ID or Device ID. This guide follows Microsoft Learn's [Watermarking in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/watermarking) page and adds checks and pitfalls. For what the feature protects and what it leaves open, see the companion explainer on [watermarking](/entity/avd-watermarking/).
+To enable QR-code watermarking for [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) session hosts, turn on the **Enable watermarking** policy for the machines that provide the remote sessions, using Microsoft Intune or Group Policy. Once it applies, new sessions to a remote desktop show a grid of QR codes that contain a Connection ID or Device ID. This guide follows Microsoft Learn's [Watermarking in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/watermarking) page and adds checks and pitfalls. For what the feature protects and what it leaves open, see the companion explainer on [watermarking](https://www.m365.fm/entity/avd-watermarking/).
 
 ## Before you start
 
 Learn lists these prerequisites:
 
-- An existing [host pool](/entity/avd-host-pool/) with session hosts.
+- An existing [host pool](https://www.m365.fm/entity/avd-host-pool/) with session hosts.
 - A Microsoft Entra ID account with at least the **Desktop Virtualization Host Pool Contributor** built-in role on the host pool.
-- A client that supports watermarking. The page lists [Windows App](/entity/windows-app/) for Windows, macOS, iOS and iPadOS, web browser, and Android/Chrome OS (marked preview). It also still lists the Remote Desktop client: Windows Desktop 1.2.3317 or later on Windows 10 and later, web browser, macOS 10.9.5 or later, iOS/iPadOS 10.5.4 or later. Learn's archived [Remote Desktop client page](https://learn.microsoft.com/en-us/previous-versions/remote-desktop-client/connect-windows-cloud-services) says the Windows MSI client and the web client are no longer supported in public cloud environments since 27 March 2026, and that the macOS and iOS/iPadOS clients can no longer be downloaded and are replaced by Windows App. In our reading, plan on Windows App; the explainer article has the full status table.
+- A client that supports watermarking. The page lists [Windows App](https://www.m365.fm/entity/windows-app/) for Windows, macOS, iOS and iPadOS, web browser, and Android/Chrome OS (marked preview). It also still lists the Remote Desktop client: Windows Desktop 1.2.3317 or later on Windows 10 and later, web browser, macOS 10.9.5 or later, iOS/iPadOS 10.5.4 or later. Learn's archived [Remote Desktop client page](https://learn.microsoft.com/en-us/previous-versions/remote-desktop-client/connect-windows-cloud-services) says the Windows MSI client and the web client are no longer supported in public cloud environments since 27 March 2026, and that the macOS and iOS/iPadOS clients can no longer be downloaded and are replaced by Windows App. In our reading, plan on Windows App; the explainer article has the full status table.
 - Azure Virtual Desktop Insights configured for your environment.
 - For Intune: an Entra ID account with the **Policy and Profile manager** role, and a group containing the devices to configure.
 - For Group Policy: a domain account in **Domain Admins**, and a security group or organizational unit (OU) containing the session hosts.

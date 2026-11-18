@@ -1,16 +1,16 @@
 ---
 title: "RDP Multipath, Shortpath and TURN relay: how the three fit together"
-summary: "Reverse connect TCP starts every Azure Virtual Desktop session, RDP Shortpath moves it to UDP through a managed, direct STUN or TURN relay path, and RDP Multipath keeps standby paths for when the active one degrades. This guide maps each layer to the setting that controls it, the network rules it needs and the check that shows which layer a session is using."
+summary: "Reverse connect TCP starts every Azure Virtual Desktop session, RDP Shortpath moves it to UDP (managed, STUN or TURN), and RDP Multipath keeps standby paths. This guide maps each layer to its setting and check."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [rdp-multipath, remote-desktop-protocol]
 keypoints:
-  - "Three layers, three jobs: TCP reverse connect through the gateway brokers every session, Shortpath adds a UDP transport (managed network, direct STUN or TURN relay), and Multipath keeps standby UDP and TCP paths and switches when the active path degrades."
-  - "Only the managed-network listener needs session host configuration. Shortpath for public networks works without configuration if networks and firewalls allow it. The Multipath page lists no separate switch for it, but recommends Shortpath as its primary transport."
-  - "Keep TURN enabled unless disabling it for troubleshooting. The Shortpath configuration page calls TURN a predictable path when direct UDP cannot be established, for example behind Symmetric NAT or restrictive firewalls, and says disabling it lowers the connection success rate and can force TCP."
-  - "Network rules to allow: TCP 443 to the gateway range, UDP 3478 to the TURN range 51.5.0.0/16, and outbound UDP for direct STUN, default ports 49152 to 65535. Multipath can use up to three UDP and two TCP ports per session."
+  - "Three layers: TCP reverse connect through the gateway brokers every session, Shortpath adds UDP (managed, direct STUN or TURN), and Multipath keeps standby paths for when the active one degrades."
+  - "Only the managed-network listener needs host configuration. Shortpath for public networks works without it if firewalls allow. Multipath has no separate switch and prefers Shortpath."
+  - "Keep TURN enabled except for troubleshooting: it gives a path when direct UDP fails, e.g. behind Symmetric NAT, and disabling it lowers connection success and can force TCP."
+  - "Allow TCP 443 to the gateway range, UDP 3478 to the TURN range 51.5.0.0/16 and outbound UDP 49152 to 65535 for STUN. Multipath can use up to three UDP and two TCP ports per session."
   - "Verify layer by layer: Connection Information shows UDP (Private Network), UDP or UDP (Relay), the connection bar shows Multipath, and UdpUse in the WVDConnections table reports 1, 2 or 4."
 faq:
   - q: "If I disable TURN on the host pool, does Multipath still work?"
@@ -21,7 +21,7 @@ faq:
     a: "Neither page says. The Shortpath configuration page describes a smaller range, for example 38300 to 39299, for STUN and TURN options, and says that if the range is exhausted, connections fall back to the default range. The Multipath page says a session can use up to three UDP ports. Whether each of those comes from the narrowed range is not stated, so test with realistic session counts."
 ---
 
-Reverse connect TCP brokers every Azure Virtual Desktop session, RDP Shortpath adds a UDP transport when the network allows it, and RDP Multipath keeps standby paths so that the session can survive a path change. The three are layers of one design, not alternatives. This guide maps each layer to the setting that controls it, the network rule it needs and the check that shows it is in use. The concepts are explained in the articles on [RDP Shortpath](/entity/rdp-shortpath/) and RDP Multipath in this series, and the click-by-click configuration is in the article "How to configure RDP Shortpath for managed and public networks". Here the focus is on how the layers interact when you plan or troubleshoot a rollout.
+Reverse connect TCP brokers every Azure Virtual Desktop session, RDP Shortpath adds a UDP transport when the network allows it, and RDP Multipath keeps standby paths so that the session can survive a path change. The three are layers of one design, not alternatives. This guide maps each layer to the setting that controls it, the network rule it needs and the check that shows it is in use. The concepts are explained in the articles on [RDP Shortpath](https://www.m365.fm/entity/rdp-shortpath/) and RDP Multipath in this series, and the click-by-click configuration is in the article "How to configure RDP Shortpath for managed and public networks". Here the focus is on how the layers interact when you plan or troubleshoot a rollout.
 
 ## The stack in one table
 

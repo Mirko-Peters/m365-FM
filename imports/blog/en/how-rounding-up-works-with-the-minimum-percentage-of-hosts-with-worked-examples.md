@@ -1,17 +1,17 @@
 ---
 title: "How rounding up works with the minimum percentage of hosts, with worked examples"
-summary: "Learn says a minimum percentage that is not a whole number is rounded up to the nearest whole number, and by the rounding rule any value above 0 percent keeps at least one host on. This article works through the rule with tables, Learn's own examples and the separate round-up in the ramp-down consolidation formula."
+summary: "Learn says a minimum percentage that is not a whole number is rounded up, so any value above 0 percent keeps at least one host on. This article works through the rule with tables and Learn's examples."
 status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
 topics: [avd-minimum-percentage-of-hosts, avd-scaling-plan]
 keypoints:
-  - "Learn's wording is: if the percentage you enter is not a whole number, it is rounded up to the nearest whole number. In its examples this means hosts: 30 percent of six is 1.8 and autoscale turns on two."
+  - "Learn says a percentage that is not a whole number is rounded up to the nearest whole number. In its examples that means hosts: 30 percent of six is 1.8, so autoscale turns on two."
   - "It follows from the rounding rule, and is not a Learn quotation, that any percentage above 0 keeps at least one host on and that the effective share can be well above the typed value in small pools."
-  - "A second round-up exists in the ramp-down and off-peak consolidation formula, Required Hosts = CEILING(sessions / (maximum session limit x capacity threshold)). Learn's troubleshooting article says autoscale uses the higher of that result and the 'Minimum percentage of active hosts' setting, which this article reads as the minimum percentage of hosts."
+  - "Ramp-down and off-peak round up again: Required Hosts = CEILING(sessions / (max session limit x threshold)). Autoscale uses the higher of that and the minimum percentage of active hosts."
   - "To get exactly k hosts out of N, choose a percentage greater than (k-1)/N and at most k/N. The tables in this article are arithmetic from the Learn rule, not Learn tables."
-  - "The Azure resource reference types the ramp-up and ramp-down minimum host percentage as an integer from 0 to 100. The scaling plan and scenarios articles do not say whether the portal field accepts decimals, whether unhealthy hosts count, or how the dynamic autoscaling field rounds, so test those on a pilot pool."
+  - "The Azure resource reference types the minimum host percentage as an integer from 0 to 100. Learn does not say whether the portal accepts decimals, so test edge cases on a pilot pool."
 faq:
   - q: "Which percentage keeps exactly N hosts on?"
     a: "For k hosts in a pool of N, use a percentage greater than (k-1)/N and at most k/N, times 100. In a pool of 7, 1 to 14 percent keeps one host, 15 to 28 keeps two and 29 to 42 keeps three. This is arithmetic from Learn's rounding rule, not a Learn table."
@@ -21,7 +21,7 @@ faq:
     a: "It also rounds up. Learn gives Required Hosts = CEILING(Total User Sessions / (Max Session Limit x Capacity Threshold)). During ramp-down and off-peak, the troubleshooting article says autoscale uses the higher of that result and the 'Minimum percentage of active hosts' setting. Applying that to the minimum percentage of hosts is an inference."
 ---
 
-Learn says that if the percentage you enter for the minimum percentage of hosts is not a whole number, it is rounded up to the nearest whole number. In Learn's examples that means hosts: thirty percent of six hosts is 1.8, so two hosts stay on. By that rule, any percentage above 0 keeps at least one host running. This article shows the rule with tables you can check by hand, then covers the second round-up in the ramp-down consolidation formula and the cases where Learn is silent. Sources are listed at the end and were retrieved on 17 November 2026. For the concept itself, see the sibling article "Minimum percentage of hosts in AVD autoscale explained".
+Learn says that if the percentage you enter for the minimum percentage of hosts is not a whole number, it is rounded up to the nearest whole number. In Learn's examples that means hosts: thirty percent of six hosts is 1.8, so two hosts stay on. By that rule, any percentage above 0 keeps at least one host running. This article shows the rule with tables you can check by hand, then covers the second round-up in the ramp-down consolidation formula and the cases where Learn is silent. Sources are listed at the end. For the concept itself, see the sibling article "Minimum percentage of hosts in AVD autoscale explained".
 
 ## The rule as Learn states it
 
@@ -34,7 +34,7 @@ The [glossary](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale
 
 hosts kept on = CEILING(total session hosts x percentage / 100)
 
-Learn states the rounding on the ramp-up field and in scenario 1. Its ramp-down and off-peak scenarios are consistent with the same rule: ten percent of six hosts is 0.6, and the scenarios keep one host on. Applying the rule to those phases is an inference from the scenarios. The Learn sentence also says "percentage", not "hosts"; reading it as rounding the host count follows from its seven-host example and from scenario 1. The [minimum percentage of hosts](/entity/avd-minimum-percentage-of-hosts/) entity page has the short definition.
+Learn states the rounding on the ramp-up field and in scenario 1. Its ramp-down and off-peak scenarios are consistent with the same rule: ten percent of six hosts is 0.6, and the scenarios keep one host on. Applying the rule to those phases is an inference from the scenarios. The Learn sentence also says "percentage", not "hosts"; reading it as rounding the host count follows from its seven-host example and from scenario 1. The [minimum percentage of hosts](https://www.m365.fm/entity/avd-minimum-percentage-of-hosts/) entity page has the short definition.
 
 ## Table: hosts kept on
 
@@ -111,7 +111,7 @@ Status of dynamic autoscaling: Microsoft announced general availability of enhan
 
 - **Decimals.** The Azure resource reference gives integers from 0 to 100 for the ramp-up and ramp-down properties. The scaling plan article gives no range for the portal field and does not say whether decimal percentages are accepted.
 - **Unhealthy hosts.** The glossary defines the percentage against all session hosts. It does not say whether a host that fails agent health checks, and so is not an available session host, changes the count.
-- **Tagged hosts.** Learn's scaling plan article notes that hosts with the exclusion tag still count in the calculation of the minimum percentage. Because autoscale cannot turn them on, an excluded host that is off cannot help meet the minimum. See [exclusion tag](/entity/avd-scaling-plan-exclusion-tag/).
+- **Tagged hosts.** Learn's scaling plan article notes that hosts with the exclusion tag still count in the calculation of the minimum percentage. Because autoscale cannot turn them on, an excluded host that is off cannot help meet the minimum. See [exclusion tag](https://www.m365.fm/entity/avd-scaling-plan-exclusion-tag/).
 - **The dynamic field.** For dynamic autoscaling, the field "Minimum percentage of active hosts (%)" is based on the minimum host pool size. Learn's example, 10 percent of a minimum size of 10, gives exactly one host, so it shows no rounding. The scenarios article does not state how a fractional result is handled.
 - **A typo.** At the time of writing, the final table of scenario 4 shows 19 percent where the text shows 10 percent.
 
@@ -119,7 +119,7 @@ Status of dynamic autoscaling: Microsoft announced general availability of enhan
 
 1. Write down the number of session hosts, including tagged ones.
 2. Compute CEILING(hosts x percentage / 100) for each phase and compare it with the number you intended. For example, 24 hosts at 15 percent gives 3.6, so 4 hosts stay on.
-3. For ramp-down and off-peak, compute the consolidation formula with your [maximum session limit](/entity/avd-maximum-session-limit/) and [capacity threshold](/entity/avd-capacity-threshold/) for a few session counts, and note which value is higher.
+3. For ramp-down and off-peak, compute the consolidation formula with your [maximum session limit](https://www.m365.fm/entity/avd-maximum-session-limit/) and [capacity threshold](https://www.m365.fm/entity/avd-capacity-threshold/) for a few session counts, and note which value is higher.
 4. Run a test day and compare the number of running hosts in each phase with the calculation.
 5. Repeat the check whenever the pool size changes.
 
