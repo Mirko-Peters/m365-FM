@@ -10,11 +10,6 @@
 - Produkte/Plattformen ohne Wikidata: 736 von 793; ohne Wikipedia: 722; ohne Docs-Link: 334
 - Ohne deutschen Kurztext: 1560 von 2329
 
-## Neu zugeordnet (3)
-- business-central-agent-designer -> dynamics-365-business-central (part_of, Regel praefix)
-- business-central-extensions -> dynamics-365-business-central (broader, Regel praefix)
-- model-router -> microsoft-foundry (part_of, Regel klammer)
-
 
 ## Warnungen
 - 1 Eintraege tiefer als 4 Ebenen
