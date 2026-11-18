@@ -66,8 +66,9 @@ def drop_redirected(sitemap, table):
     return keep, [x[0] for x in gone]
 
 
-def write_all(sitemap, write, base, langs, today):
-    """Schreibt alle Dateien und den Index; -> Liste der Dateinamen."""
+def write_all(sitemap, write, base, langs, today, extra=()):
+    """Schreibt alle Dateien und den Index; -> Liste der Dateinamen. extra: weitere, schon geschriebene Sitemaps (name, lastmod, anzahl), z. B. die Bild-Sitemaps
+    von site_images; sie kommen hinter den normalen Dateien in den Index."""
     groups = {}
     seen = set()
     for u, lm, alts in sitemap:
@@ -87,6 +88,7 @@ def write_all(sitemap, write, base, langs, today):
             name = f"sitemap-{lang}-{typ}{'' if n == 0 else '-' + str(n + 1)}.xml"
             write(name, _xml(part, langs))
             files.append((name, max((e[1] for e in part), default=today), len(part)))
+    files += [tuple(x) for x in extra]
     idx = ['<?xml version="1.0" encoding="UTF-8"?>', '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for name, lm, _ in files:
         idx.append(f"<sitemap><loc>{base}/{name}</loc><lastmod>{lm}</lastmod></sitemap>")
