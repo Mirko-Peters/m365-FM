@@ -192,7 +192,7 @@ def build(g, posts, people, api):
             _spr = SPM.post(p["handle"], p["slug"])   # T37 Sponsor: Beitrag aus einem Sponsoring (alle Sprachfassungen, dauerhaft)
             _spr_ex = SPM.post_extras(_spr, SPM._state()["today"], ENTS)   # Mirko 6.11.2026: Sponsor-Entitaeten extra zur Obergrenze von 10
             topics, _spx = SPM.split_topics([t for t in p.get("topics", []) if t in ENTS], [x for x in _spr_ex if x in ENTS])
-            tl = (f'<section class="bl-ents"><h2>{esc(T(lang, "Entities in this article", "Entitäten in diesem Artikel"))}</h2>{LC.intro(lang, "post.topics")}<p>' + "".join(f'<a class="mb-tag" href="{links_l[t][1]}">{EN.html_name(ENTS[t], lang)}</a> ' + (f'<small class="mut">{esc(SPM.badge(lang, _spr))}</small> ' if t in _spx else '') for t in topics) + '</p></section>') if topics else ""
+            tl = (f'<section class="bl-ents"><h2>{esc(T(lang, "Entities in this article", "Entitäten in diesem Artikel"))}</h2>{LC.intro(lang, "post.topics")}<p>' + "".join(EN.list_link(links_l[t][1], ENTS[t], lang, cls="mb-tag") + " " + (f'<small class="mut">{esc(SPM.badge(lang, _spr))}</small> ' if t in _spx else '') for t in topics) + '</p></section>') if topics else ""
             vote = "" if p.get("legacy") else f'<p><button type="button" class="bl-vote" data-s="{esc(p["slug"])}" aria-pressed="false" aria-label="Upvote">▲ <span class="n">{p.get("votes", 0)}</span></button></p>'
             if p.get("html"): _fq = ""   # FAQ steht schon im Text des Beitrags; nur das Schema (FAQPage) bleibt
             cos = [c for c in (p.get("coauthors") or []) if c.get("handle") in pb and c["handle"] != p["handle"]]

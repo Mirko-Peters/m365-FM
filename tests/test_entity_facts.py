@@ -91,7 +91,8 @@ class Abschnitte(unittest.TestCase):
         h = self.h
         self.assertIn("<h2>Referenzkunden</h2>", h)
         self.assertIn('href="https://www.ifakt.de/references/Silhouette_Customer_Success_Story.pdf"', h)
-        self.assertIn('<a href="/entity/automotive/">', h)
+        self.assertRegex(h, r'<a href="/entity/automotive/"(?: title="[^"]*")?>', "Branche verlinkt, title mit Kurzbeschreibung (Paket 6)")
+        self.assertIn("Referenzkunden von iFAKT GmbH, nach Branche geordnet:", h, "Einleitungssatz (Paket 6)")
         self.assertIn("Magna, Vitesco, ZF, Junghans", h)
         self.assertIn("Quelle: Website des Unternehmens", h)
 

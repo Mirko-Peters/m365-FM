@@ -37,7 +37,10 @@ def block(pid, lang, ep_url):
         src = (f' <a href="{esc(u)}{("#t=" + str(int(q["time_s"]))) if q.get("time_s") is not None else ""}">{esc(t[1])}{(": " + esc(title)) if title else ""}{(" (" + t[2] + " " + ts + ")") if ts else ""}</a>') if u else ""
         out.append(f'<figure class="en-quote" lang="{esc(q["lang"])}"><blockquote><p>{esc(q["text"])}</p></blockquote><figcaption class="mut">{src}</figcaption></figure>')
     css = "<style>.en-quote{margin:1em 0;border-inline-start:4px solid var(--ac);padding:.2em 1em}.en-quote blockquote{margin:0;font-size:1.05em}.en-quote figcaption{font-size:.9em}</style>"
-    return f'{css}<section class="en-quotes"><h2>{esc(t[0])}</h2>{"".join(out)}</section>'
+    import site_ename as EN, site_linkctx as LC   # Einleitungssatz mit der Beziehung zur Seite (Paket 6)
+    from site_learn import ENTS
+    lc = LC.intro(lang, "ent.quotes", s=EN.label(ENTS.get(pid) or {"name": pid}, lang))
+    return f'{css}<section class="en-quotes"><h2>{esc(t[0])}</h2>{lc}{"".join(out)}</section>'
 
 
 def ld(base, pid, lang, ep_url):

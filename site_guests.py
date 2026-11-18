@@ -20,7 +20,7 @@ def build(g, items, people):
     for lang in COMM_LANGS:
         croot = f"{BASE}{pfx(lang)}/community/"; ttl = T(lang, "Guest exchange", "Gäste-Börse")
         def card(i):
-            tp = "".join(f'<a class="mb-tag" href="{BASE}/entity/{t}/">{EN.html_name(ENTS[t], lang)}</a> ' for t in i["topics"] if t in ENTS)
+            tp = "".join(EN.list_link(f"{BASE}/entity/{t}/", ENTS[t], lang, cls="mb-tag") + " " for t in i["topics"] if t in ENTS)   # Paket 6: Themen-Chips mit Zusatz
             nm = i["title"] or i["name"]
             return (f'<li style="padding:.7em 0;border-bottom:1px solid var(--bd);list-style:none"><b>{esc(nm)}</b> <span class="mut">· <a href="{croot}u/{i["handle"]}/">{esc(i["name"])}</a> · '
                     f'{esc(", ".join(FM.get(f, f) for f in i["formats"]))} · {esc(", ".join(i["langs"]))}</span>{("<br>" + esc(i["note"])) if i.get("note") else ""}<br>{tp}'

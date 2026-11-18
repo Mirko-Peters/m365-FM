@@ -56,7 +56,7 @@ def text(h):
     """Satztext mit [Link]-Markierung, ohne Ueberschrift. Sprach- und Richtungsmarken (<span lang="en">, <bdi>, Linktexte Paket 4) zaehlen nicht als Wortgrenze."""
     h = re.sub(r"<h2[^>]*>.*?</h2>", "", h)
     h = re.sub(r"</?(?:span|bdi)\b[^>]*>", "", h)
-    h = re.sub(r'<a href="[^"]*">(.*?)</a>', r"[\1]", h)
+    h = re.sub(r'<a href="[^"]*"[^>]*>(.*?)</a>', r"[\1]", h)
     return html.unescape(re.sub(r"<[^>]+>", " ", h)).split()
 
 
@@ -296,7 +296,7 @@ class Templates(unittest.TestCase):
         self.assertIn("B &quot;x&quot; falls under", h); self.assertIn(">A &lt;b&gt;&amp;</a>", h); self.assertNotIn("<b>", h)
 
     def test_fehlende_uebersetzung_faellt_auf_liste_zurueck(self):
-        d = copy.deepcopy(RS.data()); del d["fr"]["t"]["f.part_of"]; d["xx"] = {"t": {}}
+        d = copy.deepcopy(RS.data()); del d["fr"]["t"]["f.part_of"]; del d["fr"]["lead"]; d["xx"] = {"t": {}}   # ohne Einleitungssatz (Paket 6: alle Sprachen haben einen)
         with mock.patch.object(RS, "_DATA", d):
             t = plain(render("fr", "power-bi"))
             self.assertNotIn("Power Platform", t, "ohne Vorlage kein Satz (die Liste darunter bleibt)")
@@ -306,8 +306,8 @@ class Templates(unittest.TestCase):
 
     def test_andere_sprachen_grammatik(self):
         es = copy.deepcopy(ENTS); es["intune"]["rel"] = [["part_of", "azure"]]; es["dax"]["rel"] = [["similar_to", "power-bi"], ["similar_to", "intune"]]
-        self.assertEqual(plain(render("fr", "intune", es)), "Intune fait partie d’[Azure]. Intune est comparable à [DAX].", "franzoesische Elision vor Vokal")
-        self.assertEqual(plain(render("fr", "power-bi", es)).split(". ")[1], "Power BI fait partie de [Power Platform] et [Microsoft Fabric]")
+        self.assertEqual(plain(render("fr", "intune", es)), "Intune est un produit et fait partie d’[Azure]. Intune est comparable à [DAX].", "franzoesische Elision vor Vokal (Einleitungssatz, Paket 6)")
+        self.assertEqual(plain(render("fr", "power-bi", es)).split(". ")[0], "Power BI est un [outil d’analyse et de BI] de [Microsoft] et fait partie de [Power Platform] et [Microsoft Fabric]")
         self.assertIn("[Power BI] e [Intune]", plain(render("es", "dax", es)), "spanisch: y -> e vor i-Laut")
         self.assertIn("[Intune] y [Power BI]", plain(render("es", "dax", {**es, "dax": {**es["dax"], "rel": [["similar_to", "intune"], ["similar_to", "power-bi"]]}})))
         self.assertIn("[Power Platform] dan [Microsoft Fabric]", plain(render("id", "power-bi")), "zwei Namen ohne Komma")
@@ -320,7 +320,7 @@ class Templates(unittest.TestCase):
             h = render(lang, "power-bi")
             self.assertIn('<section class="en-rels" data-own-text="no"', h, lang)
             self.assertNotRegex(plain(h), r"\{\w+\}", f"{lang}: keine offenen Platzhalter")
-        self.assertEqual(plain(render("pl", "m365fm")), "", "polnisch ohne sichere created_by-Vorlage: kein Satz, nur Liste")
+        self.assertEqual(plain(render("pl", "m365fm")), "Twórca M365.FM: [Mirko Peters].", "polnisch: created_by als Doppelpunkt-Satz ohne Geschlechtsform (Paket 6)")
 
 
 class IndexRule(unittest.TestCase):
@@ -349,12 +349,12 @@ class Page(unittest.TestCase):
         try:
             h = (docs / "entity/copilot/index.html").read_text("utf-8")
             self.assertIn('<section class="en-rels" data-own-text="no" aria-labelledby="en-rels-h"><h2 id="en-rels-h">Relationships</h2>', h)
-            self.assertIn('is one of the topics of <a href="https://www.m365.fm/entity/mirko-peters/">Mirko Peters</a>.', h)
+            self.assertRegex(h, r'is one of the topics of <a href="https://www.m365.fm/entity/mirko-peters/"(?: title="[^"]*")?>Mirko Peters</a>\.')
             self.assertRegex(h, r'<h3 id="en-rel-\d+">People working on this topic</h3>', "vollstaendige Liste bleibt, mit Sprungziel (Personen als eigene Liste)")
             self.assertLess(h.index("en-rels"), h.index('class="en-rel"'), "Saetze oben, Liste unten")
             d = (docs / "de/entity/copilot/index.html").read_text("utf-8")
             self.assertIn("<h2 id=\"en-rels-h\">Beziehungen</h2>", d)
-            self.assertRegex(d, r'Mit [^<]+ beschäftigt sich <a href="https://www.m365.fm/de/entity/mirko-peters/">Mirko Peters</a>\.')
+            self.assertRegex(d, r'Mit [^<]+ beschäftigt sich <a href="https://www.m365.fm/de/entity/mirko-peters/"(?: title="[^"]*")?>Mirko Peters</a>\.')
         finally:
             tmp.cleanup()
 

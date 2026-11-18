@@ -109,7 +109,8 @@ class Matrix(unittest.TestCase):
                 if not k.startswith(("more.", "side.")):
                     self.assertNotIn("{n}", v, f"{l}: {k} ohne Zahl (Pluralformen)")
                 self.assertNotIn("<", v, f"{l}: {k} ohne HTML")
-            self.assertEqual(set(k for k in d[l] if not k.startswith("_")), set(keys), f"{l}: keine fremden Schluessel")
+            extra = {"desc.by.m", "desc.maker.m", "desc.maker_m"} if l == "pt" else set()   # Paket 6: maskuline Marken im Portugiesischen ("do GitHub")
+            self.assertEqual(set(k for k in d[l] if not k.startswith("_")) - extra, set(keys), f"{l}: keine fremden Schluessel")
         self.assertFalse(d["en"]["_mt"]); self.assertFalse(d["de"]["_mt"]); self.assertTrue(d["ja"]["_mt"])
 
     def test_intro_ausserhalb_des_links_escaped_bdi(self):
@@ -191,7 +192,7 @@ class EntityPages(unittest.TestCase):
             self.assertEqual([t for _, t in full], want, lang)
             self.assertNotEqual(full[0][0], full[1][0], "eigene Sprungziele")
             for (a, t), kind in zip(full, ("k", "pp")):   # Themen-Liste nur Konzepte, Personen-Liste nur Personen
-                m = re.search(rf'<h3 id="{a}">([^<]+)</h3><ul>(.*?)</ul>', h, re.S)
+                m = re.search(rf'<h3 id="{a}">([^<]+)</h3>(?:<p class="lc"[^>]*>.*?</p>)?<ul>(.*?)</ul>', h, re.S)
                 items = re.findall(r'/entity/([^/]+)/', m.group(2))
                 self.assertEqual(len(items), 8, f"{t}: Zahl = Liste")
                 self.assertEqual({re.sub(r"\d+$", "", x) for x in items}, {kind}, f"{t}: Nomen passt zur Liste")
@@ -214,7 +215,7 @@ class EntityPages(unittest.TestCase):
         self.assertEqual([t for _, t in full], ["all 9 products and works by Hubco", "all 8 certifications issued by Hubco"])
         self.assertNotEqual(full[0][0], full[1][0], "eigene Sprungziele")
         for a, t in full:
-            m = re.search(rf'<h3 id="{a}">([^<]+)</h3><ul>(.*?)</ul>', h, re.S)
+            m = re.search(rf'<h3 id="{a}">([^<]+)</h3>(?:<p class="lc"[^>]*>.*?</p>)?<ul>(.*?)</ul>', h, re.S)
             self.assertIsNotNone(m, a)
             self.assertEqual(len(re.findall("<li>", m.group(2))), int(re.search(r"\d+", t).group(0)), f"{t}: Zahl = Liste")
         self.assertIn("Certifications issued", h)

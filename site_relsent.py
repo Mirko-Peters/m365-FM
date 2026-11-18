@@ -6,7 +6,7 @@ und [Microsoft Fabric]." auf der Seite von Power BI, "Microsoft entwickelt [Micr
   bleibt in jeder Sprache stehen, es geht also nichts verloren.
 - Verlinkt werden die Ziel-Entitaeten mit ihrem Namen als Ankertext (beschreibend, kein "hier"); die Seite selbst ({s}) ist kein Link.
   Linktext = Name des Ziels in der Sprache der Seite (site_ename.ename, Linktexte Paket 4), wie in Listen und Brotkruemel; Begriffe ohne
-  Uebersetzung als englischer Text (lang="en"), in ar/he jeder Name in <bdi>. Nur der Einleitungssatz (en/de) nimmt die Satzform aus "cat".
+  Uebersetzung als englischer Text (lang="en"), in ar/he jeder Name in <bdi>. Nur der Einleitungssatz (alle Sprachen mit "lead") nimmt die Satzform aus "cat".
 - Listen: hoechstens CAP Namen, dann "und N weitere" als Text (bei CAP+1 Namen stehen alle da, nie "und 1 weitere"); der Sprung auf die vollstaendige Liste
   darunter ist ein eigener Link mit Ziel und Beziehung im Linktext ("Vollstaendige Listen: alle 246 Produkte und Werke von Microsoft", data/link_context.json more.*).
 - Seiten ohne Beziehungen: Rueckfall-Satz aus gemeinsamen Folgen ("In Folgen zu {s} geht es oft auch um ...", cooc/cooc_pick), nie in e["rel"].
@@ -29,7 +29,7 @@ FILE = Path(__file__).parent / "data" / "relation_sentences.json"
 CAP = 6   # hoechstens so viele Namen je Satz
 SYM = ("related_to", "similar_to")   # symmetrische Beziehungen: Gegenrichtung = gleiche Aussage
 WEAK = ("related_to", "similar_to")   # schwache Beziehungen: nennen nichts, was ein anderer Satz schon nennt
-LEAD = ("instance_of", "developed_by", "part_of")   # gehen (en/de) in den Einleitungssatz "X ist ein ... von ... und Teil von ..."
+LEAD = ("instance_of", "developed_by", "part_of")   # gehen (alle Sprachen mit "lead") in den Einleitungssatz "X ist ein ... von ... und Teil von ..."
 ORDER = ("instance_of", "part_of", "broader", "developed_by", "covers", "requires", "created_by", "organized_by", "works_for", "similar_to", "related_to")
 RTL = ("ar", "he")
 _DATA = None
@@ -98,12 +98,19 @@ def join(lang, items, more_html=""):
     return sep.join(items[:-1]) + _and(lang, L, items[-1], False) + items[-1]
 
 
-def _link(lang, url, text, e=None, case=""):
+def _link(lang, url, text, e=None, case="", pid=None):
     """Link mit dem Namen des Ziels als Text: ar/he in <bdi>, Begriff ohne Uebersetzung (site_ename.foreign) als englischer Text (lang="en").
     case: Fall nach der Praeposition vor der Liste (de, site_ename.de_case); ein Name mit Adjektiv am Anfang bekommt dann die Apposition vor dem Link
-    ("mit dem Thema <a>Maschinelles Lernen</a>"), der Linktext bleibt der Zielname."""
+    ("mit dem Thema <a>Maschinelles Lernen</a>"), der Linktext bleibt der Zielname. Im Satz kein Zusatz im Linktext (Paket 6: der Satz erklaert die
+    Beziehung), aber ein title mit der Kurzbeschreibung des Ziels (site_ename.title_attr; pid = Entitaet der Seite)."""
     pre = EN.de_art(e, case) if lang == "de" else ""
-    return f'{pre}<a href="{esc(url)}">{EN.wrap(lang, esc(text), EN.foreign(e, lang))}</a>'
+    return f'{pre}<a href="{esc(url)}"{EN.title_attr(e, lang, pid) if e else ""}>{EN.wrap(lang, esc(text), EN.foreign(e, lang))}</a>'
+
+
+def _art(a):
+    """Artikel vor dem Nomen im Einleitungssatz: "ein " / "" (Sprachen ohne Artikel) / "un’" (it, ohne Leerzeichen)."""
+    a = a or ""
+    return a if not a or a.endswith(("’", "'")) else a + " "
 
 
 def _case(lang, tpl, slot):
@@ -180,7 +187,7 @@ def build(lang, e, fwd, inv, ents, href, anchor=None, works_for=None, rank=None,
                 fulls.append((g["k"], a, total(g["dir"], g["p"], g["k"]) if total else len(g["ids"])))
         else:
             shown, more = ids, ""
-        return join(lang, [_link(lang, href(i), EN.ename(ents[i], lang), ents[i], case) for i in shown], more)
+        return join(lang, [_link(lang, href(i), EN.ename(ents[i], lang), ents[i], case, e["id"]) for i in shown], more)
 
     subj = EN.html_name(e, lang)   # Name in der Sprache der Seite (site_ename), wie in der Ueberschrift
     sent_f, sent_i, named = [], [], set()
@@ -189,7 +196,8 @@ def build(lang, e, fwd, inv, ents, href, anchor=None, works_for=None, rank=None,
         groups["f.instance_of"]["ids"].remove("microsoft-tool")   # "Kategorie Microsoft-Werkzeug" + "von Microsoft entwickelt" waere dieselbe Aussage zweimal
         named.add("microsoft-tool")
 
-    # Einleitungssatz (nur Sprachen mit "lead", d. h. en/de): Art + Entwickler + Teil von in einem Satz
+    # Einleitungssatz (alle 15 Sprachen, Paket 6): Art + Entwickler + Teil von in einem Satz; cat/type_noun = [Artikel, Nomen], leerer Artikel ohne Leerzeichen
+    # (pl, ru, ja ...), Artikel mit Apostroph direkt vor dem Nomen (it "un’applicazione")
     lead = L.get("lead") or {}
     if lead:
         cats = groups.get("f.instance_of", {}).get("ids", [])
@@ -199,9 +207,9 @@ def build(lang, e, fwd, inv, ents, href, anchor=None, works_for=None, rank=None,
         catn = L.get("cat") or {}
         used = [c for c in cats if c in catn]
         if used:
-            nouns = [f"{catn[c][0]} {_link(lang, href(c), catn[c][1])}" for c in used]
+            nouns = [_art(catn[c][0]) + _link(lang, href(c), catn[c][1], ents.get(c), "", e["id"]) for c in used]
         elif et in (L.get("type_noun") or {}) and (devs or parts):
-            tn = L["type_noun"][et]; nouns = [f"{tn[0]} {esc(tn[1])}"]
+            tn = L["type_noun"][et]; nouns = [_art(tn[0]) + esc(tn[1])]
         else:
             nouns = []
         if nouns:
@@ -341,6 +349,6 @@ def cooc(lang, e, ids, ents, href, mode="often"):
     if not ids or not c.get(tk) or not hd:
         return ""
     subj = EN.html_name(e, lang)
-    x = join(lang, [_link(lang, href(i), EN.ename(ents[i], lang), ents[i], _case(lang, c[tk], "x")) for i in ids])
+    x = join(lang, [_link(lang, href(i), EN.ename(ents[i], lang), ents[i], _case(lang, c[tk], "x"), e["id"]) for i in ids])
     return (f'<section class="en-rels en-cooc" data-own-text="no" aria-labelledby="en-rels-h"><h2 id="en-rels-h">{esc(hd)}</h2>'
             f'<p>{fill(lang, _appo(lang, c[tk], e), s=subj, x=x)}</p></section>')

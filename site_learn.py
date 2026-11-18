@@ -314,7 +314,7 @@ def build_learn(ctx):
         gb = f"{BASE}/glossary/" if lang == "en" else f"{BASE}/{lang}/glossary/"
         rel = "glossary" if lang == "en" else f"{lang}/glossary"
         terms = sorted(({**x, "name": EN.ename(ENTS.get(x["id"]) or x, lang)} for x in GLOSS), key=lambda x: x["name"].lower())   # Name in der Sprache der Seite (Buchstaben danach)
-        az = az_html(terms, lang, lambda x, d, o, lang=lang: f'<dt><a href="{BASE}/{"de/" if lang == "de" else ""}entity/{x["id"]}/">{EN.html_name(ENTS.get(x["id"]) or x, lang)}</a></dt><dd>{esc(d)}</dd>')
+        az = az_html(terms, lang, lambda x, d, o, lang=lang: f'<dt>{EN.list_link(BASE + ("/de/" if lang == "de" else "/") + "entity/" + x["id"] + "/", ENTS.get(x["id"]) or x, lang, title=False)}</dt><dd>{esc(d)}</dd>')
         body = shell(lang, f'<h1>{esc(t["glossary"])}</h1><p class="mut">{esc(t["glossary_intro"])}</p>{az}')
         _gm = MM.glossary_meta(lang, len(terms)) or (f'{t["glossary"]} – M365.FM', t["glossary_intro"])
         write(f"{rel}/index.html", page(lang, _gm[0], _gm[1], gb, body, None, gloss_ld(lang, gb), og_type="website", extra_head=LCSS))

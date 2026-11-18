@@ -128,7 +128,7 @@ class EventEntitySite(unittest.TestCase):
         # Event-Seite: dasselbe Event, superEvent auf die Reihe, Link in den Fakten
         eh = self.read("community/events/ignite-2026/index.html"); evn = ld_of(eh)[0]
         self.assertEqual(evn["superEvent"], {"@id": f"{BASE}/entity/microsoft-ignite/#entity"}); self.assertEqual(len(evn["subEvent"]), 2)
-        self.assertIn('<th scope="row">Event series</th><td><a href="https://www.m365.fm/entity/microsoft-ignite/">Microsoft Ignite</a></td>', eh)
+        self.assertRegex(eh, r'<th scope="row">Event series</th><td><a href="https://www.m365.fm/entity/microsoft-ignite/"(?: title="[^"]+")?>Microsoft Ignite</a></td>', "Zeile nennt den Typ: kein Zusatz, nur title (Paket 6)")
         # Entitaet mit eigenem Datum (M365Con): bleibt ein Event, kein subEvent/superEvent-Zirkel
         m = next(x["mainEntity"] for x in ld_of(self.read("entity/m365con/index.html")) if x.get("@type") == "WebPage")
         self.assertEqual(m["@type"], "Event"); self.assertNotIn("subEvent", m)
@@ -140,7 +140,7 @@ class EventEntitySite(unittest.TestCase):
             if p.exists():
                 t = p.read_text("utf-8"); self.assertNotIn("superEvent", t, h); self.assertNotIn("Event series", t, h)
         lst = self.read("community/events/index.html")
-        self.assertIn('<a class="ev-tag" href="https://www.m365.fm/entity/microsoft-ignite/">Microsoft Ignite</a>', lst)
+        self.assertRegex(lst, r'<a class="ev-tag" href="https://www.m365.fm/entity/microsoft-ignite/"(?: title="[^"]+")?>Microsoft Ignite</a>')
         self.assertEqual(lst.count('class="ev-tag"'), 2, "nur die beiden Ignite-Termine tragen die Reihe")
 
     def test_alter_block_bleibt_ohne_zuordnung_und_doppelt_nichts(self):

@@ -127,15 +127,15 @@ class EnglischerBegriff(unittest.TestCase):
 
     def test_wortlaut_bleibt_lang_en_title_deutsch(self):
         h = self.m.link_html("<p>Mit Conditional Access und Microsoft Intune schützen Sie Geräte.</p>", U, "de")[0]
-        self.assertIn('<a href="/entity/conditional-access/" class="en-al" title="Bedingter Zugriff" lang="en">Conditional Access</a>', h)
-        self.assertIn('<a href="/entity/intune/" class="en-al">Microsoft Intune</a>', h, "Produktname ohne lang")
+        self.assertRegex(h, r'<a href="/entity/conditional-access/" class="en-al" title="Bedingter Zugriff(?: – [^"]*)?" lang="en">Conditional Access</a>')
+        self.assertIn('<a href="/entity/intune/" class="en-al">Microsoft Intune</a>', re.sub(r' title="[^"]*"', "", h), "Produktname ohne lang")
 
     def test_deutscher_name_ohne_lang(self):
         h = self.m.link_html("<p>Bedingter Zugriff schützt Anmeldungen in Microsoft Entra ID.</p>", U, "de")[0]
         a = re.search(r'<a href="/entity/conditional-access/"[^>]*>', h)
         self.assertIsNotNone(a)
         self.assertNotIn('lang="en"', a.group(0))
-        self.assertNotIn("title=", a.group(0))
+        self.assertNotIn('title="Bedingter Zugriff', a.group(0), "Wortlaut = Name: im title nur die Kurzbeschreibung (Paket 6), nicht noch einmal der Name")
 
     def test_englische_seite_und_rtl(self):
         h = self.m.link_html("<p>Conditional Access protects sign-ins.</p>", U, "en")[0]
@@ -160,7 +160,7 @@ class Wortgrenze(unittest.TestCase):
         return self.m.link_html(h, U, lang)[0]
 
     def test_kompositum_de(self):
-        h = self.lk("<p>Richten Sie Ihre Microsoft 365-Umgebung ein und bauen Sie einen Copilot Studio-Agent.</p>", "de")
+        h = re.sub(r' title="[^"]*"', "", self.lk("<p>Richten Sie Ihre Microsoft 365-Umgebung ein und bauen Sie einen Copilot Studio-Agent.</p>", "de"))
         self.assertIn('<a href="/entity/microsoft-365/" class="en-al">Microsoft 365</a>-Umgebung', h)
         self.assertIn('<a href="/entity/copilot-studio/" class="en-al">Copilot Studio</a>-Agent', h)
         self.assertNotIn("/entity/microsoft/", h)
@@ -173,12 +173,12 @@ class Wortgrenze(unittest.TestCase):
         self.assertNotIn("/entity/microsoft/", h)
 
     def test_partikel_ja_ko(self):
-        h = self.lk("<p>Microsoft 365エコシステムとCopilot Studioの使い方。Microsoft MVPで有名。</p>", "ja")
+        h = re.sub(r' title="[^"]*"', "", self.lk("<p>Microsoft 365エコシステムとCopilot Studioの使い方。Microsoft MVPで有名。</p>", "ja"))
         self.assertIn('<a href="/entity/microsoft-365/" class="en-al">Microsoft 365</a>エコシステム', h)
         self.assertIn('<a href="/entity/copilot-studio/" class="en-al">Copilot Studio</a>の', h)
         self.assertIn('<a href="/entity/microsoft-mvp/" class="en-al">Microsoft MVP</a>で', h)
         self.assertNotIn("/entity/microsoft/", h)
-        h = self.lk("<p>Microsoft 365와 Teams를 사용합니다.</p>", "ko")
+        h = re.sub(r' title="[^"]*"', "", self.lk("<p>Microsoft 365와 Teams를 사용합니다.</p>", "ko"))
         self.assertIn('<a href="/entity/microsoft-365/" class="en-al">Microsoft 365</a>와', h)
         self.assertNotIn("/entity/microsoft/", h)
 
@@ -376,7 +376,7 @@ class CommunityVideo(unittest.TestCase):
                  description='We build reports in Power BI. See the episode "Azure MCP Server - Simply Explained" and our Dataverse notes.')
         with patch.object(site_video, "COMM_LANGS", ("en",)):
             site_video.build(g, [v], [{"handle": "host"}], "")
-        body = pages["community/video/vtest/index.html"]
+        body = re.sub(r' title="[^"]*"', "", pages["community/video/vtest/index.html"])   # title = Kurzbeschreibung (Paket 6)
         self.assertIn('class="en-al">Power BI</a>', body)
         self.assertIn('class="en-al">Dataverse</a>', body)
         self.assertNotIn("/entity/azure-mcp-server/", body)

@@ -76,7 +76,7 @@ def build(g, items, people, api):
         for p in mine:
             a = pb[p["handle"]]; au = f"{BASE}/community/u/{a['handle']}/"; u = f"{croot}library/{p['handle']}-{p['slug']}/"
             topics = [t for t in p.get("topics", []) if t in ENTS]
-            tl = "".join(f'<a class="mb-tag" href="{links[t]}">{EN.html_name(ENTS[t], lang)}</a> ' for t in topics)
+            tl = "".join(EN.list_link(links[t], ENTS[t], lang, cls="mb-tag") + " " for t in topics)   # Paket 6: Themen-Chips mit Zusatz
             vote = f'<button type="button" class="bl-vote" data-i="{p["id"]}" aria-pressed="false" aria-label="Upvote">▲ <span class="n">{p.get("votes", 0)}</span></button>'
             b = shell(lang, f'{CSS}<p class="mut"><a href="{ru}">{esc(t0)}</a> · {esc(kl(lang, p["kind"]))}</p><article><h1>{esc(p["title"])}</h1>'
                             f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{p["handle"]}/">{esc(a["name"])}</a> · {iso(p["published"])} · {esc(T(lang, "Version", "Version"))} {p.get("version", 1)}</p>'
