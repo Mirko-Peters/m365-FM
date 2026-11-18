@@ -532,6 +532,7 @@ def apply_results(lines, b, store, st, by_key):
             print(f"verworfen {tk}: {err}")
             continue
         doc[lang] = st_set; store.put(spec_key(it), doc); ok += 1
+        if lang == "en" and ok <= 3: print(f"Beispiel {tk}: " + json.dumps(st_set, ensure_ascii=False), flush=True)   # Stichprobe fuer die Durchsicht im Protokoll
     return ok, bad, tin, tout, cr, cw, unknown
 
 
