@@ -8,6 +8,7 @@ from pathlib import Path
 from site_learn import esc, ENTS
 import site_player as PL   # Player erst nach Klick (wie der Live-Player oben)
 import site_meta_podcast as MP   # suchintent-freundliche <title>/meta description
+import site_entmatch as EM   # Kontext-Links in den Stream-Beschreibungen (erste Nennung je Entitaet, Kontext aus dem Titel)
 
 D = Path(__file__).parent / "data"
 T = {"en": dict(title="M365 Show – the live stream", h="M365 Show", kicker="Live on YouTube", lede="The M365 Show is a running live stream show: conversations and demos with Microsoft community experts about Microsoft 365, Copilot, Azure, the Power Platform and AI agents. Hosted by Mirko Peters, Microsoft MVP.",
@@ -92,14 +93,27 @@ def build(g):
                            "videoFormat": "HD", "publishedOn": {"@type": "BroadcastService", "name": "YouTube", "url": yt}})
         write(f"{'de/' if lang == 'de' else ''}live/index.html", page(lang, *MP.live_hub_meta(lang, desc), root, shell(body), None, ld, og_type="website"))
         sitemap.append((root, TODAY, None))
+        _eu = EM.url_in(BASE, lang)
+        # Zeilen, die in vielen Beschreibungen gleich stehen ("Simply Explained by M365.FM breaks down Microsoft 365, Azure ..."), sind Vorlage: ohne Kontext-Links
+        _lc = {}
+        for x in streams:
+            for ln in {y.strip() for y in (x.get("description") or "").split("\n") if y.strip()}: _lc[ln] = _lc.get(ln, 0) + 1
+        _boiler = {ln for ln, n in _lc.items() if n >= 5}
+        _para = lambda p: "\n".join(f"<span data-nolink>{esc(y)}</span>" if y.strip() in _boiler else esc(y) for y in p.split("\n"))
         for s in streams:
             u = f'{root}{s["slug"]}/'; d = (s.get("description") or "").strip(); dn = s.get("start") or s.get("published") or ""
-            paras = "".join(f"<p>{esc(p)}</p>" for p in re.split(r"\n\s*\n", d)[:12] if p.strip())
+            paras = "".join(f"<p>{_para(p)}</p>" for p in re.split(r"\n\s*\n", d)[:12] if p.strip())
+            _used = EM.Used()
+            if paras:   # Kontext = die im Titel erkannten Entitaeten; Ziel wie bei Folgen und Beitraegen (url_in)
+                _em = EM.shared(ENTS)
+                paras, _ = _em.link_html(paras, _eu, lang, list(_em.ids(s["title"], lang)), used=_used)
             vid = {"@context": "https://schema.org", "@type": "VideoObject", "@id": u + "#video", "name": s["title"], "description": short(d, 500) or s["title"], "thumbnailUrl": [thumb(s["id"])],
                    "uploadDate": (s.get("published") or dn)[:10] or TODAY, "embedUrl": f"https://www.youtube-nocookie.com/embed/{s['id']}", "contentUrl": f"https://www.youtube.com/watch?v={s['id']}",
                    "inLanguage": lang, "isFamilyFriendly": True, "isPartOf": {"@id": f"{BASE}/live/#show"}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}
             if s.get("live_status") in ("was_live", "post_live", "is_live", "is_upcoming") and (s.get("start") or s.get("published")):
                 vid["publication"] = {"@type": "BroadcastEvent", "isLiveBroadcast": True, "startDate": s.get("start") or s["published"]}
+            _ment = EM.mentions(BASE, [i for i in _used if i in ENTS and i not in EM.HOST])
+            if _ment: vid["mentions"] = _ment   # im Text verlinkte Entitaeten (Audit E7)
             if s.get("duration"):
                 m, sec = divmod(int(s["duration"]), 60); hh, m = divmod(m, 60); vid["duration"] = f"PT{hh}H{m}M{sec}S"
             sb = (f'<p class="mut"><a href="{root}">{esc(t["back"])}</a></p><article><h1>{esc(s["title"])}</h1><p class="mut">{when(s)}{" · " + str(s["views"]) + " " + t["views"] if s.get("views") else ""}</p>'

@@ -1,4 +1,5 @@
 """Mitglieder- und Firmenverzeichnis: oeffentliche Experten-Profile (nur Opt-in) mit Schema.org-Verknuepfung zu den Entitaeten."""
+import site_ename as EN   # Namen der Entitaeten in der Sprache der Seite (Linktexte Paket 4)
 import json, re
 from pathlib import Path
 BLOGLANGS = set()
@@ -6,6 +7,7 @@ BLOGS = {}   # handle -> Sprachen mit Beiträgen
 from site_i18n import COMM_LANGS, pfx, pfx2, overlay, T
 from datetime import datetime, timezone
 from site_learn import ENTS, esc, _fetch_json, LCSS
+import site_learn as LRN   # resolve_profile: zusammengefuehrte Entitaets-ids in Expertise/Zertifikaten
 import site_meta_community as PM   # Titel/Description der Profile und Verzeichnisse (Suchabsicht)
 
 
@@ -17,6 +19,7 @@ from site_entities import TL, eurl, eid_of, tlab
 import site_roles as ROLE
 import site_linktext as LT   # Linktexte: Kanaele nach ihrem Namen statt nach ihrer Art
 import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
+import site_linkctx as LC   # Beziehungskontext: Einleitungssatz vor jeder Linkliste (data/link_context.json, prof.* / org.*)
 
 PROG_FULL = {"gde": "Google Developer Expert (GDE)", "mvp": "Microsoft Most Valuable Professional (MVP)", "mct": "Microsoft Certified Trainer (MCT)", "rd": "Microsoft Regional Director (RD)", "msa": "Microsoft Student Ambassador (MSA)", "ms_employee": "Microsoft employee", "partner": "Microsoft Partner"}
 PROG = {"gde": ("Google Developer Expert", "Google Developer Expert"), "mvp": ("Microsoft MVP", "Microsoft MVP"), "mct": ("Microsoft Certified Trainer (MCT)", "Microsoft Certified Trainer (MCT)"), "rd": ("Microsoft Regional Director", "Microsoft Regional Director"),
@@ -119,7 +122,9 @@ def fetch_members(api):
         j = j or {}; state = "fehlt"
     _mark(state, len(j.get("people") or []))
     print(f"Profile: {len(j.get('people', []))} Personen, {len(j.get('orgs', []))} Firmen", file=sys.stderr)
-    return j.get("people", []), public_orgs(j.get("orgs", []))
+    # Zusammengefuehrte Entitaeten (data/guest_merge.json, z. B. azure-ai-foundry -> microsoft-foundry): D1 behaelt die alte id. Einmal hier auf das
+    # Ziel umschreiben, damit Profilseite (Liste, knowsAbout, Seitenleiste), Expertenlisten der Entitaet, Karten und Autorenkasten dieselbe Entitaet nennen.
+    return [LRN.resolve_profile(p) for p in j.get("people", [])], [LRN.resolve_profile(o) for o in public_orgs(j.get("orgs", []))]
 
 
 def experts_index(people, orgs):
@@ -240,7 +245,7 @@ def kind_ids(x, kind):
 
 
 def kind_links(BASE, lang, ids):
-    return ", ".join(f'<a href="{eurl(BASE, lang, i)}">{esc(ENTS[i]["name"])}</a>' for i in ids)
+    return ", ".join(f'<a href="{eurl(BASE, lang, i)}">{EN.html_name(ENTS[i], lang)}</a>' for i in ids)
 
 
 def person_ld(BASE, p, orgs_by_handle):
@@ -369,7 +374,7 @@ def build(g, people, orgs, extra=None):
             return ""
         items = "".join('<li class="mb-card"><span class="mut">' + (f'<a href="{purl(BASE, lang, "u", r["by"]["handle"])}">{esc(r["by"]["name"])}</a>' if r["by"].get("handle") in pb else esc(r["by"]["name"])) + " · " + esc(REL.get(r["relation"], REL["other"])[li])
                         + "</span><br><span style=\"white-space:pre-line\">" + esc(r["body"]) + "</span></li>" for r in p["recs"])
-        return f'<h2>{esc(RS[lang]["recs"])}</h2><ul class="mb-list">{items}</ul>'
+        return f'<h2>{esc(RS[lang]["recs"])}</h2>{LC.intro(lang, "prof.recs", s=p.get("name", ""))}<ul class="mb-list">{items}</ul>'
 
     def tags_of_p(x, li, s):
         return "".join(f'<span class="mb-tag{" ok" if p.get("verified") else ""}">{esc(PROG[p["p"]][li])}{" ✔" if p.get("verified") else ""}</span>' for p in x.get("programs", []))
@@ -393,8 +398,8 @@ def build(g, people, orgs, extra=None):
                     note.append(s["verified"])
                 if e.get("endorsed"):
                     note.append(s["endorsed"].format(n=e["endorsed"]))
-            out.append(f'<li><a href="{eurl(BASE, lang, e["e"])}">{esc(en["name"])}</a> <span class="mut">· <b class="pf-lvl pf-lvl{int(e.get("level") or 1)}">{esc(LV.get(e.get("level") or 1, LV[1])[li])}</b> · {esc(" · ".join(note))}</span>'
-                       f'<span class="pf-endorse" data-h="{esc(x["handle"])}" data-e="{e["e"]}"></span></li>')
+            out.append(f'<li><a href="{eurl(BASE, lang, e["e"])}">{EN.html_name(en, lang)}</a> <span class="mut">· <b class="pf-lvl pf-lvl{int(e.get("level") or 1)}">{esc(LV.get(e.get("level") or 1, LV[1])[li])}</b> · {esc(" · ".join(note))}</span>'
+                       f'<span class="pf-endorse" data-h="{esc(x["handle"])}" data-e="{esc(e.get("e0") or e["e"])}"></span></li>')
         legend = f'<p class="mut pf-levels">{esc(s["levels"])}</p>' if out and x.get("type") != "o" else ""
         return "<ul>" + "".join(out) + "</ul>" + legend if out else ""
 
@@ -433,7 +438,7 @@ def build(g, people, orgs, extra=None):
             org = p.get("org")
             facts = []
             if p.get("job") or p.get("company") or org:
-                comp = f'<a href="{purl(BASE, lang, "c", org["handle"])}">{esc(org["name"])}</a>' if org and org["handle"] in ob else (f'<a href="{eurl(BASE, lang, p["company_eid"])}">{esc(ENTS[p["company_eid"]]["name"])}</a>' if p.get("company_eid") in ENTS else esc(p.get("company", "")))
+                comp = f'<a href="{purl(BASE, lang, "c", org["handle"])}">{esc(org["name"])}</a>' if org and org["handle"] in ob else (f'<a href="{eurl(BASE, lang, p["company_eid"])}">{EN.html_name(ENTS[p["company_eid"]], lang)}</a>' if p.get("company_eid") in ENTS else esc(p.get("company", "")))
                 _jl = kind_links(BASE, lang, kind_ids(p, "job")) or esc(p.get("job", ""))
                 facts.append((s["company"], _jl + (" · " if _jl and comp else "") + comp))
             if kind_ids(p, "industry"):
@@ -454,16 +459,16 @@ def build(g, people, orgs, extra=None):
                 facts.append((T(lang, "Mobile", "Mobil"), esc(ct["phone"])))
             ft = '<table class="mb-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b}</td></tr>' for a, b in facts) + "</tbody></table>" if facts else ""
             _cs = sorted([c for c in p.get("certs", []) if c["e"] in ENTS], key=lambda c: (-c.get("endorsed", 0), -int(bool(c.get("verified"))), -(c.get("year") or 0)))
-            certs = "<ul>" + "".join(f'<li><a href="{eurl(BASE, lang, c["e"])}">{esc(ENTS[c["e"]]["name"])}</a>{" (" + str(c["year"]) + ")" if c.get("year") else ""}'
+            certs = "<ul>" + "".join(f'<li><a href="{eurl(BASE, lang, c["e"])}">{EN.html_name(ENTS[c["e"]], lang)}</a>{" (" + str(c["year"]) + ")" if c.get("year") else ""}'
                                      + (' · <a href="' + esc(c["url"]) + '" rel="nofollow ugc noopener">✔ ' + (T(lang, "verified", "geprüft")) + "</a>" if c.get("verified") and c.get("url") else (" · ✔ " + (T(lang, "verified", "geprüft")) if c.get("verified") else ""))
                                      + (f' <span class="mut">· {c["endorsed"]} ' + (T(lang, "confirmations", "Bestätigungen")) + "</span>" if c.get("endorsed") else "")
-                                     + f' <span class="pf-certend" data-h="{esc(p["handle"])}" data-e="{c["e"]}"></span></li>' for c in _cs) + "</ul>" if _cs else ""
-            contrib = "<ul>" + "".join(f'<li><a href="{eurl(BASE, lang, c["t"])}">{esc(ENTS[c["t"]]["name"] if c["t"] in ENTS else c["t"])}</a> <span class="mut">· {esc(s["wiki"] if c["k"] == "wiki" else s["entity"])} · {datetime.fromtimestamp(c["c"], timezone.utc).strftime("%Y-%m-%d")}{" – " + esc(c["s"]) if c.get("s") else ""}</span></li>' for c in p.get("contrib", []) if c["t"] in ENTS) + "</ul>" if p.get("contrib") else ""
+                                     + f' <span class="pf-certend" data-h="{esc(p["handle"])}" data-e="{esc(c.get("e0") or c["e"])}"></span></li>' for c in _cs) + "</ul>" if _cs else ""
+            contrib = "<ul>" + "".join(f'<li><a href="{eurl(BASE, lang, c["t"])}">{EN.html_name(ENTS[c["t"]], lang) if c["t"] in ENTS else esc(c["t"])}</a> <span class="mut">· {esc(s["wiki"] if c["k"] == "wiki" else s["entity"])} · {datetime.fromtimestamp(c["c"], timezone.utc).strftime("%Y-%m-%d")}{" – " + esc(c["s"]) if c.get("s") else ""}</span></li>' for c in p.get("contrib", []) if c["t"] in ENTS) + "</ul>" if p.get("contrib") else ""
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}members/">{esc(s["members"])}</a></nav>{img_tag("u", p, p["name"])}<h1>{esc(p["name"])}{ROLE.chip(BASE, lang, ROLE.role_of(p), p.get("scope"))}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="creator" data-topic-id="{esc(p["handle"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button><p style="font-size:1.1em">{esc(p.get("headline", ""))}</p><p>{tags_of_p(p, li, s)}</p>{ft}'
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(p["about"])}</p>' if p.get("about") else "")
-                          + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(p, lang, li, s)}' if p.get("expertise") else "") + (f'<h2>{esc(s["certs"])}</h2>{certs}' if certs else "")
-                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(p)}' if items_ul(p) else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(p, lang)}' if chan_ul(p, lang) else "")
-                          + rec_html(p, lang, li, pb) + (f'<h2>{esc(s["contrib"])}</h2>{contrib}' if contrib else "") + mvp_contrib_html(p, s) + ((extra or {}).get(lang, {}).get("u", {}).get(p["handle"], "")) + live_js + topic_js + css)
+                          + (f'<h2>{esc(s["expertise"])}</h2>{LC.intro(lang, "prof.expertise", s=p["name"])}{exp_ul(p, lang, li, s)}' if p.get("expertise") else "") + (f'<h2>{esc(s["certs"])}</h2>{LC.intro(lang, "prof.certs", s=p["name"])}{certs}' if certs else "")
+                          + (f'<h2>{esc(s["latest"])}</h2>{LC.intro(lang, "prof.posts", s=p["name"])}{items_ul(p)}' if items_ul(p) else "") + (f'<h2>{esc(s["channels"])}</h2>{LC.intro(lang, "prof.channels", s=p["name"])}{chan_ul(p, lang)}' if chan_ul(p, lang) else "")
+                          + rec_html(p, lang, li, pb) + (f'<h2>{esc(s["contrib"])}</h2>{LC.intro(lang, "prof.contrib", s=p["name"])}{contrib}' if contrib else "") + mvp_contrib_html(p, s) + ((extra or {}).get(lang, {}).get("u", {}).get(p["handle"], "")) + live_js + topic_js + css)
             node = person_ld(BASE, p, ob)
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "u", p["handle"]) + "#profile", "url": u, "name": p["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": node}]
             ld.extend(mvp_contrib_ld(BASE, p))
@@ -487,8 +492,8 @@ def build(g, people, orgs, extra=None):
             ft = '<table class="mb-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b_}</td></tr>' for a, b_ in facts) + "</tbody></table>" if facts else ""
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}companies/">{esc(s["companies"])}</a></nav>{img_tag("o", o, T(lang, "Logo of {n}", "Logo von {n}").replace("{n}", o["name"]))}<h1>{esc(o["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="creator" data-topic-id="{esc(o["handle"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button><p style="font-size:1.1em">{esc(o.get("tagline", ""))}</p><p>{tags_of_p(o, li, s)}</p>{ft}'
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(o["about"])}</p>' if o.get("about") else "")
-                          + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(o, lang, li, s)}' if o.get("expertise") else "") + (f'<h2>{esc(s["team"])}</h2>{mem}' if mem else "")
-                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(o)}' if items_ul(o) else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(o, lang)}' if chan_ul(o, lang) else "") + ((extra or {}).get(lang, {}).get("c", {}).get(o["handle"], "")) + live_js + topic_js + css)
+                          + (f'<h2>{esc(s["expertise"])}</h2>{LC.intro(lang, "org.expertise", s=o["name"])}{exp_ul(o, lang, li, s)}' if o.get("expertise") else "") + (f'<h2>{esc(s["team"])}</h2>{LC.intro(lang, "org.team", s=o["name"])}{mem}' if mem else "")
+                          + (f'<h2>{esc(s["latest"])}</h2>{LC.intro(lang, "prof.posts", s=o["name"])}{items_ul(o)}' if items_ul(o) else "") + (f'<h2>{esc(s["channels"])}</h2>{LC.intro(lang, "prof.channels", s=o["name"])}{chan_ul(o, lang)}' if chan_ul(o, lang) else "") + ((extra or {}).get(lang, {}).get("c", {}).get(o["handle"], "")) + live_js + topic_js + css)
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "c", o["handle"]) + "#profile", "url": u, "name": o["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": org_ld(BASE, o, pb)}]
             write(f"{pfx2(lang)}community/c/{o['handle']}/index.html", page(lang, *(PM.company_meta(lang, o, _topic_name) or (f'{o["name"]} – {o.get("tagline") or s["companies"]} | M365.FM', (o.get("tagline") or o.get("about") or "")[:155])), u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, (o.get("tagline") or "") + " " + (o.get("about") or "")[:1500], ids=[x["e"] for x in o.get("expertise", [])]) if g.get("side") else "")))
             if not noidx:
@@ -499,7 +504,7 @@ def build(g, people, orgs, extra=None):
             progs = sorted({x["p"] for it in lst for x in it.get("programs", [])})
             fb = f'<button type="button" class="mb-f" data-f="" aria-pressed="true">{esc(s["all"])}</button>' + "".join(f'<button type="button" class="mb-f" data-f="{p_}" aria-pressed="false">{esc(PROG[p_][li])}</button>' for p_ in progs)
             cards = "".join(f'<li class="mb-card" data-p="{" ".join(x["p"] for x in it.get("programs", []))}"><a href="{purl(BASE, lang, pk, it["handle"])}"><b>{esc(it["name"])}</b></a>{ROLE.chip(BASE, lang, ROLE.role_of(it), it.get("scope")) if pk == "u" else ""} <span class="mut">{esc(it.get("headline") or it.get("tagline") or "")}</span><br>{tags_of_p(it, li, s)}'
-                            + "".join(f'<span class="mb-tag">{esc(ENTS[e["e"]]["name"])}</span>' for e in it.get("expertise", [])[:5] if e["e"] in ENTS) + "</li>" for it in lst) or f'<li class="mb-card mut">{esc(s["none"])}</li>'
+                            + "".join(f'<span class="mb-tag">{EN.html_name(ENTS[e["e"]], lang)}</span>' for e in it.get("expertise", [])[:5] if e["e"] in ENTS) + "</li>" for it in lst) or f'<li class="mb-card mut">{esc(s["none"])}</li>'
             fjs = '<script>(function(){var b=[].slice.call(document.querySelectorAll(".mb-f")),l=[].slice.call(document.querySelectorAll(".mb-card[data-p]"));b.forEach(function(x){x.addEventListener("click",function(){b.forEach(function(y){y.setAttribute("aria-pressed",y===x?"true":"false")});l.forEach(function(i){i.hidden=!!x.dataset.f&&(" "+i.dataset.p+" ").indexOf(" "+x.dataset.f+" ")<0})})})})()</script>'
             feed = f'<h2>{esc(s["feed"])}</h2><div id="pf-feed" data-top="{esc(s["feedtop"])}" data-new="{esc(s["feed"])}"></div>' if kind == "members" else ""
             if kind == "companies": partners = partner_block(lang, lst)

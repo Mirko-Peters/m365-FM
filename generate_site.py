@@ -36,6 +36,7 @@ import site_text
 import site_ads as ADS
 import site_media as MED
 import site_sidebar as SBR
+import site_ename as EN   # Namen der Entitaeten in der Sprache der Seite (Linktexte Paket 4)
 import site_topweek as TOPW   # Top 10 der Vorwoche (data/top.json): Wochenbezeichnung, ItemList, englische Seite /top/
 import site_meta_podcast as MP   # SEO-Titel und Meta-Descriptions der Podcast-Seiten (suchintent-freundlich, reine Funktionen)
 import site_r2 as R2
@@ -51,7 +52,8 @@ import site_money as SM
 import site_cover
 import site_player as PL   # Player (YouTube, Spreaker) erst nach Klick: Platzhalter mit festen Massen statt iframe
 from site_content import FAQ
-from site_taxonomy import (CATS, ORDER, TOPICS, TAGW, cat_name, classify, tags_of, tag_slug, tag_url, related, autolink, _rx_i)
+from site_taxonomy import (CATS, ORDER, TOPICS, TAGW, cat_name, classify, tags_of, tag_slug, tag_url, related, autolink, _rx_i, common_topic)
+import site_linkctx as LC   # Beziehungskontext der Linklisten: Einleitungssatz je Liste (data/link_context.json)
 
 ROOT = Path(__file__).parent
 OUT = ROOT / "docs"
@@ -902,6 +904,12 @@ def _sentences(text, limit):
     return cut[:k + 1] if k > limit * 0.5 else cut.rsplit(" ", 1)[0] + "…"
 
 
+def _merged_refs(xs):
+    """Expertise/Zertifikate des Profils mit zusammengefuehrten alten ids auf das Ziel und je Ziel einmal (site_learn.resolve_refs, Zuordnung
+    einmal je Bau zwischengespeichert). fetch_members liefert die Profile schon aufgeloest; das hier sichert AUTHOR aus anderen Quellen ab."""
+    return LRN.resolve_refs(xs)
+
+
 def author_box(lang):
     """Author-Box mit schema.org-Auszeichnung (Person, gleiche @id wie das JSON-LD), Expertise als Entitaets-Links, Zertifikaten und sameAs-Kanaelen:
     macht den Autor fuer Suchmaschinen und KI-Antworten (GEO) als geprueften Experten erkennbar (E-E-A-T)."""
@@ -919,10 +927,11 @@ def author_box(lang):
         badge = f'<img class="badge" src="{img}" alt="{esc(a["name"])}" width="58" height="58" loading="lazy" itemprop="image">' if img else '<div class="badge">MP</div>'
         badge = ROLE.avatar(badge, ROLE.role_of(a), lang, small=True)   # Editor/Moderator: Ring und Symbol auch im Autorenkasten
         bio = _sentences(a.get("about") or a.get("headline") or "", 360)
-        names = _ent_names(); ex = sorted([e for e in a.get("expertise", []) if e.get("e") in names], key=lambda e: (-int(bool(e.get("verified") or e.get("via"))), -(e.get("level") or 0)))[:6]
-        exh = "".join(f'<li><a href="{pref}entity/{e["e"]}/" itemprop="knowsAbout">{esc(names[e["e"]])}</a></li>' for e in ex)
-        cs = [c for c in a.get("certs", []) if c.get("e") in names and c.get("verified")][:4]
-        csh = "".join(f'<li itemprop="hasCredential" itemscope itemtype="https://schema.org/EducationalOccupationalCredential"><a href="{pref}entity/{c["e"]}/" itemprop="name">{esc(names[c["e"]])}</a></li>' for c in cs)
+        names = _ent_names(); ex = sorted([e for e in _merged_refs(a.get("expertise", [])) if e.get("e") in names], key=lambda e: (-int(bool(e.get("verified") or e.get("via"))), -(e.get("level") or 0)))[:6]
+        _nm = lambda i: EN.html_name(LRN.ENTS.get(i) or {"name": names[i], "type": "product"}, lang)   # Name in der Sprache der Seite (site_ename), wie auf den Entitaetsseiten
+        exh = "".join(f'<li><a href="{pref}entity/{e["e"]}/" itemprop="knowsAbout">{_nm(e["e"])}</a></li>' for e in ex)
+        cs = [c for c in _merged_refs(a.get("certs", [])) if c.get("e") in names and c.get("verified")][:4]
+        csh = "".join(f'<li itemprop="hasCredential" itemscope itemtype="https://schema.org/EducationalOccupationalCredential"><a href="{pref}entity/{c["e"]}/" itemprop="name">{_nm(c["e"])}</a></li>' for c in cs)
         job = esc((a.get("headline") or progs.get(vp[0], "") if vp else a.get("headline") or "")[:100])
         return (f'<aside class="author" itemscope itemtype="https://schema.org/Person" itemid="{ent}" aria-label="{esc(L["about"])}"><link itemprop="sameAs" href="{ent}">{badge}<div>'
                 f'<strong><a href="{pref}community/u/{a["handle"]}/" rel="author" itemprop="url"><span itemprop="name">{esc(a["name"])}</span></a>{ROLE.chip(BASE, lang, ROLE.role_of(a), a.get("scope"))}{(" · " + esc(lab)) if lab else ""}</strong>'
@@ -1093,18 +1102,18 @@ def build():
     def url_of(it): return episode_url(BASE, it["lang"], it["slug"])
     SBX = SBR.Index()
     _SHP = json.loads((ROOT / "data" / "platforms.json").read_text("utf-8")) if (ROOT / "data" / "platforms.json").exists() else {}
-    def sidebar(l, text="", ids=None, exclude=(), home=False):
+    def sidebar(l, text="", ids=None, exclude=(), home=False, topics_h=""):
         """Die eine Sidebar aller Inhaltsseiten (site_sidebar.render), gleich in allen Sprachen: Englisch mit den Folgen der Hauptshow (/show/),
         die Dub-Sprachen mit den Folgen ihrer Sprache. ids: feste Themenliste der Seite (Entitaets-IDs), sonst Treffer im Text."""
         if l in LANGS:
             return SBR.render(SBX, BASE, l, text, by_lang.get(l, []), url_of, lambda x: anchor_title(x["e"]["title"]), f"{BASE}/{l}/podcast/", _SHP.get(l), "",
-                              f"https://www.spreaker.com/show/{LANGS[l][3]}/episodes/feed", pfx(l), f"{BASE}/{l}/community/", ids, exclude, home)
+                              f"https://www.spreaker.com/show/{LANGS[l][3]}/episodes/feed", pfx(l), f"{BASE}/{l}/community/", ids, exclude, home, topics_h)
         import site_podpage as _PP
         _en = _PP.episode_index(BASE)["items"]
         return SBR.render(SBX, BASE, "en", text, _en, lambda x: x["url"], lambda x: x["e"]["title"], f"{BASE}/show/episodes/", _SHP.get("en"),
-                          f"{BASE}/show/listen/" if _SHP.get("en") else "", "https://www.spreaker.com/show/6704921/episodes/feed", "", f"{BASE}/community/", ids, exclude, home)
-    def side_for(l, title, body_html, home=False):   # Sidebar der Sprachseiten: Themen der Seite (Treffer im Text), neueste Folgen der Sprache, Community
-        return sidebar(l, strip_tags(title + " " + body_html.split("<main", 1)[-1])[:2500], home=home)
+                          f"{BASE}/show/listen/" if _SHP.get("en") else "", "https://www.spreaker.com/show/6704921/episodes/feed", "", f"{BASE}/community/", ids, exclude, home, topics_h)
+    def side_for(l, title, body_html, home=False, topics_h=""):   # Sidebar der Sprachseiten: Themen der Seite (Treffer im Text), neueste Folgen der Sprache, Community
+        return sidebar(l, strip_tags(title + " " + body_html.split("<main", 1)[-1])[:2500], home=home, topics_h=topics_h)
 
     R2OUT = ROOT / "r2out"   # Seiten, die nicht in GitHub Pages liegen, sondern im R2-Bucket (tools/r2_pages_upload.py laedt sie hoch, der Site-Worker liefert sie aus)
     write, write_r2, _r2n = writers(OUT, R2OUT, R2.rewrite, LANGS)   # write: docs/, ausser was site_size.r2_only nach r2out/ legt (Seiten der Sprachen ausser en/de, Exporte); write_r2: immer r2out/
@@ -1151,7 +1160,7 @@ def build():
                 out += f'<a class="chip" rel="tag" href="{tag_url(BASE, l, t)}">{esc(t)}</a>'
             elif s:
                 out += f'<span class="chip">{esc(t)}</span>'
-        return f'<div class="chips">{out}</div>' if out else ""
+        return (LC.intro(l, "ep.topics") + f'<div class="chips">{out}</div>') if out else ""   # Einleitungssatz: Beziehung Folge -> Themen (site_linkctx)
 
     def top_real(l, n=10):
         rows = (topdata.get("langs") or {}).get(l) or []
@@ -1219,6 +1228,17 @@ def build():
     SNT.load(COMMUNITY_API); SNT.publish(OUT)   # Show Notes aus Spreaker (data/show_notes) + Bearbeitungen aus dem Editor; Rohdaten fuer den Editor unter /show-notes/
     EN_TOP = TOPW.en_items(topdata, _PPs.episode_index(BASE)["by_sid"])   # Top 10 der Hauptshow (erst nach SNT.load: episode_index wird je Bau zwischengespeichert)
     if EN_TOP: TOP_REAL.add("en")   # Fusszeile englischer Seiten -> /top/
+    import site_entmatch as _EM   # gemeinsamer Namensindex: Folgen je Entitaet (Dub), Kontext-Links der Folgenseiten
+    _EMX = _EM.shared(LRN.ENTS); _EMU = {}
+    _dhc = {}
+    def _dub_hits(lang, it):
+        """Entitaeten einer Dub-Folge aus Titel (Schreibung beachtet, Kontext: Extraktion der Folge) und Tags (nur eindeutige Formen), einmal je Folge."""
+        k = (lang, it["slug"])
+        if k not in _dhc:
+            _m = _EMX
+            _cx = {s for s, _ in (SX.BY_EPISODE.get(str(it.get("eid"))) or {}).get("entities", [])}
+            _dhc[k] = set(_m.ids(it["e"]["title"], lang, _cx)) | set(_m.ids_tags(it["e"].get("tags") or ""))
+        return _dhc[k]
     # Episoden-Seiten
     DPOS = {l: {i["vid"]: n for n, i in enumerate(seq)} for l, seq in by_lang.items()}   # Stelle jeder Folge in ihrer Sprache (neueste zuerst) fuer Vor/Zurueck
     MPU = MP.Uniq()   # SEO-Titel der Folgenseiten: je Sprache einmalig
@@ -1241,7 +1261,7 @@ def build():
         _nkp, _nnotes, _nfaq, _nld = SNT.blocks(SNT.get(l, ep_id=it["eid"]), l, edited_only=True)   # nur wenn im Editor bearbeitet: Kernpunkte, Show Notes, FAQ als eigene Bloecke
         _snx = SNALL.get(str(it["eid"]))   # T26: Vollfassung der Shownotes fuer die Dub-Folge (shownotes/site/<spreaker_episode_id>.md)
         if _snx:
-            _snh, _snld, _snfaq = SNS.render(_snx, l, LRN.ENTS, BASE)
+            _snh, _snld, _snfaq = SNS.render(_snx, l, LRN.ENTS, BASE, own=canonical)   # Link auf diese Seite wird Text
             _nnotes = _snh + f"<style>{SNS.CSS}</style>"; _nld = [x for x in _nld if x.get("@type") != "FAQPage"] + _snld
             if _snfaq: _nfaq = ""
         notes_block = _nkp + _nnotes + _nfaq + (SNT.CSS if (_nkp or _nnotes or _nfaq) else "")
@@ -1279,12 +1299,18 @@ def build():
         pc = [c for c in ORDER if c in cat_of[vid]][0]
         ld[0]["genre"] = cat_name(pc, l)
         ld[0]["keywords"] = ", ".join(tagraw[l][vid]) or e.get("tags", "")
+        # Kontext-Links (site_entmatch) in Teaser, Stichpunkten, Hoerhinweis, Artikel, FAQ und Show Notes der Folge: erste Nennung je Entitaet auf der
+        # Seite, Ziel in der Sprache der Seite (wenn dort auf index, sonst englisch), Kontext = Extraktion der Folge und Treffer im Titel
+        _dused = _EM.Used(); _dctx = set(_xids) | _dub_hits(l, it); _du = _EMU.setdefault(l, _EM.url_in(BASE, l))
+        _intro_h, _ = _EMX.link_html(intro, _du, l, _dctx, used=_dused)
+        _lis_h, _ = _EMX.link_html("".join(f"<li>{x}</li>" for x in bullets), _du, l, _dctx, used=_dused)
+        _aud_h, _ = _EMX.link_html(f'<p class="lede" style="margin-top:1.4em">{aud}</p>', _du, l, _dctx, used=_dused)
         art = articles.get(vid, {}).get(l, {})
         art_html = art.get("html", "")
         if art_html:
             art_html, _lk = autolink(art_html, it, [], tagraw[l], url_of, money=LRN.drop_glossed(SM.registry_for(MONEY, l)))
             autolink_log.append(((vid, l), _lk))
-            art_html = LRN.gloss_link(art_html, l, BASE)
+            art_html = LRN.gloss_link(art_html, l, BASE, ctx=_dctx, used=_dused, url_of=_du)
         if art_html and art.get("info"):
             ih = info_html(art["info"])
             art_html = re.sub(r"(</p>)", r"\1" + ih.replace("\\", "\\\\"), art_html, count=1) if ih else art_html
@@ -1316,29 +1342,37 @@ def build():
                          + "".join(f"<details><summary>{esc(x['q'])}</summary><p>{esc(x['a'])}</p></details>" for x in faq_items) + "</section>")
             ld.append({"@context": "https://schema.org", "@type": "FAQPage", "inLanguage": LANGS[l][1], "mainEntity": [
                 {"@type": "Question", "name": x["q"], "acceptedAnswer": {"@type": "Answer", "text": x["a"]}} for x in faq_items]})
-        lis = "".join(f"<li>{x}</li>" for x in bullets)
+        lis = _lis_h
+        faq_block, _ = _EMX.link_html(faq_block, _du, l, _dctx, used=_dused)
+        notes_block, _ = _EMX.link_html(notes_block, _du, l, _dctx, used=_dused)
+        _dm = _EM.mentions(BASE, [i for i in _dused if i in LRN.ENTS], _xids)
+        for _n in (ld if _dm else []):   # im Text verlinkte Entitaeten (Audit E7); about bleibt die Extraktion
+            if _n.get("@type") in ("PodcastEpisode", "VideoObject"): _n["mentions"] = _dm
         el = _ep_links; sh = plat.get(l, {})
         btns = ep_btns(l, el, sh, spk, yt, e["title"], _trf, tr)
         showrow = show_row(l, sh)
-        rel = "".join(f'<a class="row" href="{url_of(x)}" title="{esc(x["e"]["title"])}"><h3>{esc(anchor_title(x["e"]["title"]))}</h3></a>' for x in more)
+        _mtx = LT.ep_texts([(x["e"]["title"], url_of(x)) for x in more])   # voller Titel, nie derselbe Text fuer zwei Folgen (Audit SEO-7)
+        rel = "".join(f'<a class="row" href="{url_of(x)}" title="{esc(x["e"]["title"])}"><h3>{esc(t_)}</h3></a>' for x, t_ in zip(more, _mtx))
+        _ct = common_topic(it, more, tagraw[l], tagsets[l], catsets[l])   # gemeinsames Thema aller verwandten Folgen: "Weitere Folgen zu {Thema}"
+        _rel_in = LC.intro(l, "ep.more", t=(_ct[1] if _ct[0] == "tag" else cat_name(_ct[1], l))) if _ct else LC.intro(l, "ep.more0")
         body = f"""{header(l, lang_switch(l, alts, active))}
 <main class="wrap"><article>
 <nav class="crumbs" aria-label="breadcrumb"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])} / {it["date"]}</nav>
 <div class="kicker">M365.FM · {esc(LANGS[l][0])}</div>{orig_link(l, ORIG.get(vid), ORIG_T.get(vid))}
 <h1>{esc(h1_main)}</h1>{("<p class=sub>" + esc(h1_rest) + "</p>") if h1_rest else ""}{SPM.note(l, _spr, "episode")}
-{chips_html(l, it)}<p class="lede">{intro}</p>
+{chips_html(l, it)}<p class="lede">{_intro_h}</p>
 <figure class="cover" style="margin-inline:0">{art_svg(vid, LANGS[l][0], "M365.FM · " + ui[0], l)}</figure>
 <div class="panel">{PL.player("spreaker", it["eid"], e["title"], ui[0], link=spk)}
 <div class="btns">{btns}</div>{"<p class=showrow>" + showrow + "</p>" if showrow else ""}</div>{LST.follow_for(BASE, l)}
 <div style="margin:22px 0">{PL.player("youtube", vid, e["title"], ui[1], link=yt)}</div>
 <p class="mut">▶ {esc(e["title"])}</p>
 <h2>{esc(hdr)}</h2><ol class="points">{lis}</ol>
-<p class="lede" style="margin-top:1.4em">{aud}</p>
+{_aud_h}
 {("<section class=article>" + art_html + "</section>") if art_html else ""}{quiz_block}{faq_block}{notes_block}
 {author_box(l)}
 </article>
 {PAGER(l, *[(url_of(x), x['e']['title']) if x else None for x in NEIGH(by_lang[l], DPOS[l][vid])])}
-{('<h2>' + esc(ui[4]) + '</h2><div class="list">' + rel + '</div>') if rel else ''}
+{('<h2>' + esc(ui[4]) + '</h2>' + _rel_in + '<div class="list">' + rel + '</div>') if rel else ''}
 <p style="margin-top:1.6em">{all_eps_btn(l)}</p>
 <section id="c-comments"></section><section id="c-sub"></section></main>
 {footer(l)}{community_tags(l, vid, css_async=True)}"""
@@ -1346,7 +1380,7 @@ def build():
         OG_COVER[canonical] = art_svg(vid, LANGS[l][0], lang=l)
         _mt = MP.episode_title(l, e["title"], uniq=MPU); _md = MP.episode_desc(l, intro, prefer_answer=True, has_video=True, has_transcript=bool(_trf or tr)) or short(intro)   # Thema zuerst, dann Format und Marke; Description = Kernaussage
         write(f'{l}/{it["slug"]}/index.html',
-              page(l, _mt, _md, canonical, body, alts, ld + _nld, xdefault=alts.get("en"), side=side_for(l, e["title"], body), extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))
+              page(l, _mt, _md, canonical, body, alts, ld + _nld, xdefault=alts.get("en"), side=side_for(l, e["title"], body, topics_h=LC.plain(l, "side.episode")), extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))
         sitemap.append((canonical, it["date"], alts))
         if vid in ORIG: ORIG_ALTS.setdefault(ORIG[vid], {})[l] = (canonical, e["title"])
 
@@ -1560,12 +1594,11 @@ def build():
         k = (e["id"], lang)
         if k not in _epc:
             if lang == "en":
-                _epc[k] = PP.find_episodes(BASE, e, LRN.ent_names(e))
+                _epc[k] = PP.find_episodes(BASE, e)
             else:
-                rx = [_rx_i(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])") for n in LRN.ent_names(e)]   # je Name einmal je Bau kompiliert (re.I)
                 _bye = {str(it["eid"]): it for it in by_lang.get(lang, [])}
                 _ext = [_bye[sid] for sid in SX.episodes_for(e["id"]) if sid in _bye]   # T27: QA-gepruefte Extraktion der Dub-Folge nennt die Entitaet
-                _hit = [it for it in by_lang.get(lang, []) if any(r.search(it["e"]["title"] + " " + (it["e"].get("tags") or "")) for r in rx)] if rx else []
+                _hit = [it for it in by_lang.get(lang, []) if e["id"] in _dub_hits(lang, it)]   # gemeinsamer Namensindex (site_entmatch): Titel mit Schreibung, Tags nur eindeutige Formen
                 _epc[k] = list({it["slug"]: it for it in _ext + _hit}.values())[:12]
         return _epc[k]
     _yt_by_slug = {v: k for k, v in ORIG.items()}   # Hauptshow-Folge -> YouTube-Video (gleiches Video wie die Dub-Fassungen)
@@ -1690,7 +1723,7 @@ def build():
 <main class="wrap"><nav class="crumbs" aria-label="breadcrumb"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])}</nav>
 <div class="kicker">{esc(kind)} · {esc(LANGS[l][0])}</div><h1>{esc(label)}</h1>{hero}
 <p class="mut">{len(lst)} × {esc(ui[3])}</p>
-<h2>{esc(ui[3])}</h2><div class="list">{rows_html(lst)}</div>
+<h2>{esc(ui[3])}</h2>{LC.intro(l, "tag.eps" if noindex else "cat.eps", s=label)}<div class="list">{rows_html(lst)}</div>
 <h2>{esc(TOPICS.get(l, "Topics"))}</h2><div class="chips">{others}</div>
 <p style="margin-top:1.6em">{all_eps_btn(l)}</p></main>{footer(l)}"""
         _mt, _md = (label, desc) if noindex else MP.category_meta(l, label, len(lst), [x["e"]["title"] for x in lst[:6]])   # Tag-Seiten (noindex) bleiben unveraendert

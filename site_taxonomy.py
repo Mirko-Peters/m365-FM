@@ -150,3 +150,21 @@ def autolink(html, it, pool, tagsets_raw, url_of, max_links=10, money=None):
 
 def tagsets_lower(lst):
     return {x.lower() for x in lst}
+
+
+def common_topic(it, more, tags_raw, tagsets, catset):
+    """Gemeinsames Thema der verwandten Folgen fuer den Einleitungssatz "Weitere Folgen zu {Thema}" (site_linkctx ep.more): ein Tag dieser Folge,
+    den ALLE verwandten Folgen tragen (in der Reihenfolge der Tags der Folge), sonst eine gemeinsame Kategorie aller, sonst None
+    (dann "Weitere Folgen dieser Show"). Rueckgabe ("tag", Anzeigename) oder ("cat", Kategorie-Schluessel)."""
+    if not more:
+        return None
+    for t in tags_raw.get(it["vid"], []):
+        if all(t.lower() in tagsets.get(o["vid"], set()) for o in more):
+            return ("tag", t)
+    cs = set(catset.get(it["vid"], set()))
+    for o in more:
+        cs &= set(catset.get(o["vid"], set()))
+    for c in ORDER:
+        if c in cs:
+            return ("cat", c)
+    return None

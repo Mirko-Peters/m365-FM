@@ -5,7 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-12-04
-topics: [ai-103, azure-ai-foundry, foundry-agent-service, ai-agent]
+topics: [ai-103, microsoft-foundry, foundry-agent-service, ai-agent]
 keypoints:
   - "Exam AI-103 is Developing AI Apps and Agents on Azure. Learn's skills measured are dated April 16, 2026, and the passing score is 700 or greater."
   - "Implement generative AI and agentic solutions carries the most weight at 30 to 35 percent, followed by Plan and manage an Azure AI solution at 25 to 30 percent."
@@ -114,7 +114,7 @@ Learn's page does not list a retirement date and gives no formal prerequisites.
 ## Related
 
 - [AI-103](https://www.m365.fm/entity/ai-103/)
-- [Azure AI Foundry](https://www.m365.fm/entity/azure-ai-foundry/)
+- [Azure AI Foundry](https://www.m365.fm/entity/microsoft-foundry/)
 - [Foundry Agent Service](https://www.m365.fm/entity/foundry-agent-service/)
 - [AI agent](https://www.m365.fm/entity/ai-agent/)
 

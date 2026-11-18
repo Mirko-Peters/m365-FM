@@ -5,7 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-12-13
-topics: [purview, dspm-for-ai, copilot, azure-ai-foundry]
+topics: [purview, dspm-for-ai, copilot, microsoft-foundry]
 keypoints:
   - "Microsoft Learn describes DSPM for AI (classic) as replaced by the new Data Security Posture Management, with no further investment in the classic version."
   - "Turn on Purview Audit first. Third-party AI sites also need the Purview browser extension and onboarded devices."
@@ -114,7 +114,7 @@ For the current list of third-party sites, use Microsoft's page on supported AI 
 - [Microsoft Purview](https://www.m365.fm/entity/purview/)
 - [Data Security Posture Management for AI (DSPM for AI)](https://www.m365.fm/entity/dspm-for-ai/)
 - [Microsoft 365 Copilot](https://www.m365.fm/entity/copilot/)
-- [Azure AI Foundry](https://www.m365.fm/entity/azure-ai-foundry/)
+- [Azure AI Foundry](https://www.m365.fm/entity/microsoft-foundry/)
 
 ## Sources
 

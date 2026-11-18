@@ -130,9 +130,11 @@ def build_desc(lead, more="", prefix="", lo=DESC_LO, hi=DESC_HI):
 _CODE = re.compile(r"\b([A-Z]{1,3}-\d{3})\b")
 
 
-def _name(e):
-    """Anzeigename: bei Zertifizierungen ohne das Praefix 'Microsoft Certified:'."""
-    n = e["name"].strip()
+def _name(e, lang="en"):
+    """Anzeigename in der Sprache der Seite (site_ename.ename, data/entity_names.json; wie H1 und Brotkruemel): bei Zertifizierungen ohne das
+    Praefix 'Microsoft Certified:'."""
+    import site_ename as EN
+    n = EN.ename(e, lang).strip()
     return re.sub(r"^Microsoft Certified:\s*", "", n) if e.get("type") == "cert" else n
 
 
@@ -145,7 +147,7 @@ def _short(n):
 def entity_title(lang, e, n_eps=0, dup=0, keep=False):
     t = tok(lang)
     typ = e.get("type")
-    n = _name(e)
+    n = _name(e, lang)
     if dup:
         n = f"{n} ({dup + 1})"   # gleicher Name unter zwei Kennungen (4 Paare): der zweite Eintrag bekommt eine Zahl, sonst identische Titel
     hs = t["hs"]
@@ -186,7 +188,7 @@ def entity_title(lang, e, n_eps=0, dup=0, keep=False):
 
 def entity_desc(lang, e, desc, n_eps=0, type_label=""):
     t = tok(lang)
-    n = _name(e)
+    n = _name(e, lang)
     core = re.sub(r"\s*\(.*?\)", "", n).strip().lower()
     d = _clean(desc)
     if not d:

@@ -1,8 +1,9 @@
 {
- "_comment": "Beziehungssaetze der Entitaetsseiten (site_relsent.py). {s} = Name der Seite (kein Link), {x} = verlinkte Namen der Ziel-Entitaeten. Ein Wert ist ein Text oder {\"one\": ..., \"many\": ..., \"more\": ...} (ein Ziel / mehrere Ziele / Linktext fuer \"N weitere\", wenn die Stelle einen anderen Fall braucht, z. B. Dativ \"von A und 5 weiteren\"). Fehlt ein Schluessel in einer Sprache, gibt es fuer diese Beziehung keinen Satz; die vollstaendige Liste darunter bleibt. en und de von Hand geschrieben; fr, es, it, nl, pt, pl, id, ru, uk, ar, he, ja, ko sind maschinell uebersetzt (Claude, 16.11.2026, noch ohne Pruefung durch Muttersprachler, siehe _mt). Sichere Muster: der Satzgegenstand ist moeglichst der Name selbst oder ein festes Nomen (keine Geschlechts- und Fallformen an Produktnamen); wo das nicht geht, ein Doppelpunkt-Satz oder kein Satz.",
+ "_comment": "Beziehungssaetze der Entitaetsseiten (site_relsent.py). {s} = Name der Seite (kein Link), {x} = verlinkte Namen der Ziel-Entitaeten. Ein Wert ist ein Text oder {\"one\": ..., \"many\": ..., \"more\": ...} (ein Ziel / mehrere Ziele / Linktext fuer \"N weitere\", wenn die Stelle einen anderen Fall braucht, z. B. Dativ \"von A und 5 weiteren\"). Fehlt ein Schluessel in einer Sprache, gibt es fuer diese Beziehung keinen Satz; die vollstaendige Liste darunter bleibt. en und de von Hand geschrieben; fr, es, it, nl, pt, pl, id, ru, uk, ar, he, ja, ko sind maschinell uebersetzt (Claude, 16.11.2026, noch ohne Pruefung durch Muttersprachler, siehe _mt). cooc: Rueckfall-Satz fuer Entitaeten ohne Beziehungen aus gemeinsamen Folgen (site_relsent.cooc, Linktexte Paket 3, 17.11.2026; {s} = Seite, {x} = verlinkte Themen, heading = Ueberschrift; Fassungen nach site_relsent.cooc_pick: t/heading mit \"oft\" nur bei Themen aus mindestens 2 gemeinsamen Folgen, t_some/heading_some ohne \"oft\", t_one fuer Seiten mit einer Folge, p/p_some/p_one fuer Personen-Seiten \"Folgen mit oder ueber {s}\", Gegenpruefung 17.11.2026). Sichere Muster: der Satzgegenstand ist moeglichst der Name selbst oder ein festes Nomen (keine Geschlechts- und Fallformen an Produktnamen); wo das nicht geht, ein Doppelpunkt-Satz oder kein Satz.",
  "en": {
   "_mt": false,
   "heading": "Relationships",
+  "cooc": {"heading": "Often discussed together", "t": "Episodes about {s} often also cover {x}.", "heading_some": "Also discussed", "t_some": "Episodes about {s} also cover {x}.", "t_one": "The episode about {s} also covers {x}.", "p": "Episodes with or about {s} often also cover {x}.", "p_some": "Episodes with or about {s} also cover {x}.", "p_one": "The episode with or about {s} also covers {x}."},
   "join": {"sep": ", ", "and": " and "},
   "more": {"tail": " and {link}", "link": "{n} more"},
   "lead": {
@@ -58,6 +59,7 @@
  "de": {
   "_mt": false,
   "heading": "Beziehungen",
+  "cooc": {"heading": "Oft gemeinsam besprochen", "t": "In Folgen zu {s} geht es oft auch um {x}.", "heading_some": "Ebenfalls besprochen", "t_some": "In Folgen zu {s} geht es auch um {x}.", "t_one": "In der Folge zu {s} geht es auch um {x}.", "p": "In Folgen mit oder über {s} geht es oft auch um {x}.", "p_some": "In Folgen mit oder über {s} geht es auch um {x}.", "p_one": "In der Folge mit oder über {s} geht es auch um {x}."},
   "join": {"sep": ", ", "and": " und "},
   "more": {"tail": " und {link}", "link": "{n} weitere"},
   "lead": {
@@ -114,6 +116,7 @@
  "fr": {
   "_mt": true,
   "heading": "Relations",
+  "cooc": {"heading": "Souvent abordés ensemble", "t": "Les épisodes consacrés à {s} abordent souvent aussi {x}.", "heading_some": "Également abordés", "t_some": "Les épisodes consacrés à {s} abordent aussi {x}.", "t_one": "L’épisode consacré à {s} aborde aussi {x}.", "p": "Les épisodes avec ou sur {s} abordent souvent aussi {x}.", "p_some": "Les épisodes avec ou sur {s} abordent aussi {x}.", "p_one": "L’épisode avec ou sur {s} aborde aussi {x}."},
   "join": {"sep": ", ", "and": " et "},
   "more": {"tail": " et {link}", "link": "{n} autres"},
   "t": {
@@ -151,6 +154,7 @@
  "es": {
   "_mt": true,
   "heading": "Relaciones",
+  "cooc": {"heading": "Temas que suelen tratarse juntos", "t": "Los episodios sobre {s} suelen tratar también {x}.", "heading_some": "También se tratan", "t_some": "Los episodios sobre {s} tratan también {x}.", "t_one": "El episodio sobre {s} trata también {x}.", "p": "Los episodios con o sobre {s} suelen tratar también {x}.", "p_some": "Los episodios con o sobre {s} tratan también {x}.", "p_one": "El episodio con o sobre {s} trata también {x}."},
   "join": {"sep": ", ", "and": " y "},
   "more": {"tail": " y {link}", "link": "{n} más"},
   "t": {
@@ -188,6 +192,7 @@
  "it": {
   "_mt": true,
   "heading": "Relazioni",
+  "cooc": {"heading": "Spesso trattati insieme", "t": "Gli episodi su {s} parlano spesso anche di {x}.", "heading_some": "Trattati anche", "t_some": "Gli episodi su {s} parlano anche di {x}.", "t_one": "L’episodio su {s} parla anche di {x}.", "p": "Gli episodi con o su {s} parlano spesso anche di {x}.", "p_some": "Gli episodi con o su {s} parlano anche di {x}.", "p_one": "L’episodio con o su {s} parla anche di {x}."},
   "join": {"sep": ", ", "and": " e "},
   "more": {"tail": " e {link}", "link": "altri {n}"},
   "t": {
@@ -225,6 +230,7 @@
  "nl": {
   "_mt": true,
   "heading": "Relaties",
+  "cooc": {"heading": "Vaak samen besproken", "t": "Afleveringen over {s} gaan vaak ook over {x}.", "heading_some": "Ook besproken", "t_some": "Afleveringen over {s} gaan ook over {x}.", "t_one": "De aflevering over {s} gaat ook over {x}.", "p": "Afleveringen met of over {s} gaan vaak ook over {x}.", "p_some": "Afleveringen met of over {s} gaan ook over {x}.", "p_one": "De aflevering met of over {s} gaat ook over {x}."},
   "join": {"sep": ", ", "and": " en "},
   "more": {"tail": " en {link}", "link": "nog {n} andere"},
   "t": {
@@ -262,6 +268,7 @@
  "pt": {
   "_mt": true,
   "heading": "Relações",
+  "cooc": {"heading": "Frequentemente tratados em conjunto", "t": "Os episódios sobre {s} costumam abordar também {x}.", "heading_some": "Também abordados", "t_some": "Os episódios sobre {s} abordam também {x}.", "t_one": "O episódio sobre {s} aborda também {x}.", "p": "Os episódios com ou sobre {s} costumam abordar também {x}.", "p_some": "Os episódios com ou sobre {s} abordam também {x}.", "p_one": "O episódio com ou sobre {s} aborda também {x}."},
   "join": {"sep": ", ", "and": " e "},
   "more": {"tail": " e {link}", "link": "mais {n}"},
   "t": {
@@ -300,6 +307,7 @@
   "_mt": true,
   "_note": "Nazwy produktów nie są odmieniane (Power BI, Microsoft 365); tam, gdzie forma przeszła zależy od rodzaju, brak zdania (created_by).",
   "heading": "Powiązania",
+  "cooc": {"heading": "Często omawiane razem", "t": "W odcinkach na temat {s} często pojawiają się też: {x}.", "heading_some": "Omawiane również", "t_some": "W odcinkach na temat {s} pojawiają się też: {x}.", "t_one": "W odcinku na temat {s} pojawiają się też: {x}.", "p": "{s} – w odcinkach z udziałem tej osoby lub o niej często pojawiają się też: {x}.", "p_some": "{s} – w odcinkach z udziałem tej osoby lub o niej pojawiają się też: {x}.", "p_one": "{s} – w odcinku z udziałem tej osoby lub o niej pojawiają się też: {x}."},
   "join": {"sep": ", ", "and": " i "},
   "more": {"tail": " i {link}", "link": "jeszcze {n}"},
   "t": {
@@ -335,6 +343,7 @@
  "id": {
   "_mt": true,
   "heading": "Hubungan",
+  "cooc": {"heading": "Sering dibahas bersama", "t": "Episode tentang {s} sering juga membahas {x}.", "heading_some": "Juga dibahas", "t_some": "Episode tentang {s} juga membahas {x}.", "t_one": "Episode tentang {s} itu juga membahas {x}.", "p": "Episode bersama atau tentang {s} sering juga membahas {x}.", "p_some": "Episode bersama atau tentang {s} juga membahas {x}.", "p_one": "Episode bersama atau tentang {s} itu juga membahas {x}."},
   "join": {"sep": ", ", "and": ", dan ", "and2": " dan "},
   "more": {"tail": ", dan {link}", "link": "{n} lainnya"},
   "t": {
@@ -373,6 +382,7 @@
   "_mt": true,
   "_note": "Латинские названия не склоняются; там, где сказуемое зависело бы от рода названия, используется именная конструкция или двоеточие.",
   "heading": "Связи",
+  "cooc": {"heading": "Часто обсуждают вместе", "t": "В выпусках на тему {s} часто обсуждаются также: {x}.", "heading_some": "Также обсуждаются", "t_some": "В выпусках на тему {s} обсуждаются также: {x}.", "t_one": "В выпуске на тему {s} обсуждаются также: {x}.", "p": "В выпусках, в которых участвует или упоминается {s}, часто обсуждаются также: {x}.", "p_some": "В выпусках, в которых участвует или упоминается {s}, обсуждаются также: {x}.", "p_one": "В выпуске, в котором участвует или упоминается {s}, обсуждаются также: {x}."},
   "join": {"sep": ", ", "and": " и "},
   "more": {"tail": " и {link}", "link": "ещё {n}"},
   "t": {
@@ -411,6 +421,7 @@
   "_mt": true,
   "_note": "Латинські назви не відмінюються; де присудок залежав би від роду назви, використано іменну конструкцію або двокрапку.",
   "heading": "Зв’язки",
+  "cooc": {"heading": "Часто обговорюють разом", "t": "У випусках на тему {s} часто обговорюють також: {x}.", "heading_some": "Також обговорюють", "t_some": "У випусках на тему {s} обговорюють також: {x}.", "t_one": "У випуску на тему {s} обговорюють також: {x}.", "p": "У випусках, у яких бере участь або згадується {s}, часто обговорюють також: {x}.", "p_some": "У випусках, у яких бере участь або згадується {s}, обговорюють також: {x}.", "p_one": "У випуску, у якому бере участь або згадується {s}, обговорюють також: {x}."},
   "join": {"sep": ", ", "and": " та "},
   "more": {"tail": " та {link}", "link": "ще {n}"},
   "t": {
@@ -449,6 +460,7 @@
   "_mt": true,
   "_note": "جمل اسمية أو بنقطتين حتى لا يتوقف الفعل على جنس اسم المنتج؛ حيث لا يوجد نمط آمن لا توجد جملة (تبقى القائمة).",
   "heading": "العلاقات",
+  "cooc": {"heading": "مواضيع تُناقش معًا غالبًا", "t": "في الحلقات التي تتناول {s} تُناقش غالبًا أيضًا: {x}.", "heading_some": "مواضيع تُناقش أيضًا", "t_some": "في الحلقات التي تتناول {s} تُناقش أيضًا: {x}.", "t_one": "في الحلقة التي تتناول {s} تُناقش أيضًا: {x}.", "p": "في الحلقات التي يشارك فيها {s} أو يُذكر فيها تُناقش غالبًا أيضًا: {x}.", "p_some": "في الحلقات التي يشارك فيها {s} أو يُذكر فيها تُناقش أيضًا: {x}.", "p_one": "في الحلقة التي يشارك فيها {s} أو يُذكر فيها تُناقش أيضًا: {x}."},
   "join": {"sep": "، ", "and": " و"},
   "more": {"tail": " و{link}", "link": "{n} أخرى"},
   "t": {
@@ -482,6 +494,7 @@
   "_mt": true,
   "_note": "משפטים שמניים או עם נקודתיים כדי שהפועל לא יהיה תלוי במין של שם המוצר; כשאין תבנית בטוחה אין משפט (הרשימה נשארת).",
   "heading": "קשרים",
+  "cooc": {"heading": "נושאים שנדונים לעיתים קרובות יחד", "t": "בפרקים על {s} עולים לעיתים קרובות גם: {x}.", "heading_some": "נושאים שנדונים גם", "t_some": "בפרקים על {s} עולים גם: {x}.", "t_one": "בפרק על {s} עולים גם: {x}.", "p": "בפרקים עם {s} או על {s} עולים לעיתים קרובות גם: {x}.", "p_some": "בפרקים עם {s} או על {s} עולים גם: {x}.", "p_one": "בפרק עם {s} או על {s} עולים גם: {x}."},
   "join": {"sep": ", ", "and": " ו-"},
   "more": {"tail": " ו{link}", "link": "עוד {n}"},
   "t": {
@@ -515,6 +528,7 @@
  "ja": {
   "_mt": true,
   "heading": "関係",
+  "cooc": {"heading": "よく一緒に取り上げられるテーマ", "t": "{s}に関するエピソードでは、{x}もよく取り上げられます。", "heading_some": "あわせて取り上げられたテーマ", "t_some": "{s}に関するエピソードでは、{x}も取り上げられています。", "t_one": "{s}に関するエピソードでは、{x}も取り上げられています。", "p": "{s}が出演または話題になったエピソードでは、{x}もよく取り上げられます。", "p_some": "{s}が出演または話題になったエピソードでは、{x}も取り上げられています。", "p_one": "{s}が出演または話題になったエピソードでは、{x}も取り上げられています。"},
   "sent_sep": "",
   "join": {"sep": "、", "and": "、", "and2": "と"},
   "more": {"tail": "、{link}", "link": "ほか{n}件"},
@@ -554,6 +568,7 @@
   "_mt": true,
   "_note": "라틴 문자 이름 뒤의 조사는 받침 여부를 알 수 없어 은(는), 이(가), 을(를), 와(과) 형식을 씁니다.",
   "heading": "관계",
+  "cooc": {"heading": "함께 자주 다루는 주제", "t": "{s} 관련 에피소드에서는 {x}도 자주 다룹니다.", "heading_some": "함께 다룬 주제", "t_some": "{s} 관련 에피소드에서는 {x}도 다룹니다.", "t_one": "{s} 관련 에피소드에서는 {x}도 다룹니다.", "p": "{s}이(가) 출연하거나 언급된 에피소드에서는 {x}도 자주 다룹니다.", "p_some": "{s}이(가) 출연하거나 언급된 에피소드에서는 {x}도 다룹니다.", "p_one": "{s}이(가) 출연하거나 언급된 에피소드에서는 {x}도 다룹니다."},
   "join": {"sep": ", ", "and": " 및 "},
   "more": {"tail": " 외 {link}", "link": "{n}개"},
   "t": {

@@ -65,7 +65,7 @@ class Seiten(unittest.TestCase):
         E.set_kinds(ORGS, PEOPLE)
 
     def tearDown(self):
-        for x in self.p:
+        for x in reversed(self.p):   # E.ENTS und M.ENTS sind dasselbe dict (site_learn.ENTS): in umgekehrter Reihenfolge, sonst bliebe FAKE stehen
             x.stop()
 
     def node(self, i):
