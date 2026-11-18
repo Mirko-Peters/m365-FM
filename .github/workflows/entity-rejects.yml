@@ -1,0 +1,29 @@
+name: Entitaeten - Ablehnungen auswerten (nur lesen, ohne KI-Auftraege)
+# Holt fertige Batch-Ergebnisse vom 18.11.2026 (kostenlos) und zaehlt, welche Regel von fill_entities sie abgelehnt hat. Aendert nichts.
+on:
+  push:
+    branches: [claude/entity-recover]
+    paths: [.github/workflows/entity-rejects.yml, tools/entity_fill_rejects.py]
+permissions:
+  contents: read
+jobs:
+  rejects:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      BATCHES: "msgbatch_01U8QXHXyNBeJYeykZtrABTY msgbatch_014nnpVghsWsmTqtfGupXDCL msgbatch_01PoWFtc81F1yAiyPtN8KBF4 msgbatch_01GETA1uYmqKqLvSRLighrqe msgbatch_01T2GDjcHX43D5FYomTyt2YP msgbatch_01CtoYfAhFVNcHvRKUXop5Ek"
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      AI_GATEWAY_ID: ${{ vars.AI_GATEWAY_ID || 'm365fm' }}
+      CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
+    steps:
+      - uses: actions/checkout@v7
+        with: { ref: main }
+      - uses: actions/checkout@v7
+        with: { path: recover-src }
+      - uses: actions/setup-python@v7
+        with: { python-version: "3.12" }
+      - name: Ablehnungen auswerten
+        run: cp recover-src/tools/entity_fill_rejects.py tools/ && python tools/entity_fill_rejects.py $BATCHES | tee -a "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v7
+        with: { name: entity-fill-rejects, path: reports/entity_fill_rejects.json, retention-days: 14 }
