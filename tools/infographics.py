@@ -108,7 +108,7 @@ def parse_json(txt):
 SYSTEM_SPECS = (
     "You turn one article, podcast episode or glossary entry of M365.FM (a podcast and knowledge site about Microsoft 365, Azure, Power Platform and AI) into the texts of "
     "one header graphic and 2 or 3 infographics. Return JSON only, matching the schema. A fixed template draws each image; you only fill its fields.\n"
-    "header: template bigfact = one big fact. hero.value is a number of at most 2 characters (e.g. 4, 12, 3x): either the number of chips, or a figure that is stated in the text. hero.label says what the value counts. title = the topic as a headline. chips = 3 or 4 key points.\n"
+    "header: template bigfact = one big fact. hero.value is a number of at most 2 characters: normally simply the number of chips (3 or 4) with hero.label like 'key points' (a figure from the text such as 12 or 3x is allowed only if the text really states it, never a certification number). hero.label says what the value counts. title = the topic as a headline. chips = 3 or 4 key points.\n"
     "figs: 2 or 3 infographics, each with a different template, chosen by what the text offers:\n"
     "- flow: a process with 3 or 4 steps in order (hero.value = exactly the number of steps, 1-2 digits; hi = index (from 0) of the most important step).\n"
     "- compare: two options or before/after, 2-3 short points per side, plus a verdict line.\n"
@@ -118,7 +118,7 @@ SYSTEM_SPECS = (
     "Prefer concrete, useful content over slogans. If the text cannot honestly fill a template, choose another one.\n"
     "Style: plain, short phrases; no emoji, no marketing words, no quotation marks. kicker = kind and topic, e.g. 'Entity · Azure security', 'Blog · Microsoft Fabric', 'Podcast · Power Apps'.\n"
     "alt = one sentence (at most 125 characters) saying what the image shows or explains, for screen readers. tags = up to 3 product or topic names (each at most 20 characters).\n"
-    "Hard length limits in characters (English): see the list. A set with one text too long is discarded, so stay clearly below. Rules of thumb: a chip t is 1-2 short words (max 14 characters), a chip n at most 5 words (max 30); "
+    "Hard length limits in characters (English): see the list. A set with one text too long is discarded, so stay clearly below. Rules of thumb: a chip t is 1-2 short words (max 14 characters, e.g. 'Least privilege'), a chip n at most 4 short words (max 30 characters, e.g. 'Checks every request'); every infographic title and step title is short (steps t max 12 characters, e.g. 'Verify'); "
     "any title of a flow at most 3-4 words (26 characters); any kicker at most 5 words (36 characters); hero.value is 1 or 2 characters such as 7, 12 or 3x (never 3 characters); tags at most 3, each at most 20 characters; "
     "compare heads 1-2 words (18 characters); exactly 2 or 3 infographics, never 1 or 4.\n{limits}\n"
     "Answer with one JSON object only (no text before or after, no code fence). All values are strings except hi (integer) and the lists. Exactly this structure and these field names "
