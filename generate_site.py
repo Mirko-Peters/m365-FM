@@ -512,7 +512,7 @@ def _jsonld_script(value):
     return '<script type="application/ld+json">' + payload + "</script>\n"
 
 
-def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, og_type="article", extra_head="", noindex=False, side="", og_of=None, switch=None, self_url=None, share=True, og_image=None):
+def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, og_type="article", extra_head="", noindex=False, side="", og_of=None, switch=None, self_url=None, share=True, og_image=None, og_share=False):
     if lang in COMM_LANGS[2:] and any(k in canonical for k in ("/community/", "/entity/", "/glossary/")):
         extra_head += f'<script defer src="{BASE}/assets/ui-{lang}.js"></script>'
     hl = LANGS[lang][1] if lang in LANGS else "en"
@@ -536,6 +536,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
         ogimg = f"{BASE}/assets/og-default.png"
     elif og_image:   # eigenes Bild der Seite (z. B. Service-Landingpages: og-<variante>.png in img.m365.fm/services/, site_landing.py): (url, breite, hoehe)
         ogimg, ogw, ogh = og_image
+        if og_share and share: body = body.replace("<footer>", share_html(lang, canonical, title) + "<footer>", 1)   # Infografiken: Kopfbild als Teilen-Bild, Teilen-Schaltflaechen wie sonst
     elif og_of:   # lokalisierte Show-Seiten teilen das Teilen-Bild der englischen Seite (spart Zehntausende Bilder)
         ogimg = f"{OG_BASE}/{og_of.replace(BASE, '').strip('/') or 'index'}.png"
         if share: body = body.replace("<footer>", share_html(lang, canonical, title) + "<footer>", 1)

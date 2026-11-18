@@ -51,6 +51,7 @@ S = {"en": dict(entities="Microsoft ecosystem entity database", intro="Products,
 
 SPEAKERS = {}   # Entitaets-ID -> zusammengefuehrter Speaker (data/speakers.json) mit Events und Sessions
 import entity_fill_data as FD
+import site_infographics as IG   # Kopfbild, Infografiken und og:image (nur mit Freigabe data/infographics_live.json)
 import ontology as ONT   # Oberbegriff-Kette fuer Brotkruemel, SKOS broader im JSON-LD-Graph
 import site_topic_crumbs as TC   # Adresse der Entitaetsseite je Sprache (gemeinsam mit den Themen-Brotkrumen)
 import site_entmatch as _EM   # gemeinsamer Namensindex: Kontext-Links und Kernpunkte der Folgen
@@ -968,7 +969,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _tl = tlab(lang, e["type"])   # nicht "tlab" nennen: das verdeckte die Funktion in ganz build() (NameError, Seitenbau bricht ab)
             alt_h = T(lang, f"Title graphic: {_en} ({_tl})", f"Titelbild: {_en} ({_tl})")
             _el = dict(e, name=str(_en))   # Grafiken mit dem Namen in der Sprache der Seite
-            hero = MED.hero_svg(_el, _tl, alt_h)
+            hero = IG.hero_figure("entity", e["id"], lang) or MED.hero_svg(_el, _tl, alt_h)   # neues Kopfbild ersetzt das erzeugte SVG (nur mit Freigabe)
             rel_items = [(k, f"{root}{x}/", EN.ename(ENTS[x], lang)) for k, v in groups.items() for x in dict.fromkeys(v)]
             relmap = MED.relation_svg(_el, rel_items, T(lang, f"Relationship map of {_en}: linked topics", f"Beziehungskarte {_en}: verknüpfte Themen"))
             relx = ""
@@ -1008,6 +1009,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             if _isgen:
                 _gen = f'<p class="mut" style="font-size:.85em">{esc(T(lang, "Overview compiled with AI from M365.FM episodes and the facts on this page. You can improve it with the edit button below.", "Überblick, mit KI aus M365.FM-Folgen und den Fakten dieser Seite zusammengestellt. Du kannst ihn unten über „Bearbeiten“ verbessern."))}</p>' if _lt.strip() else ""
             longbox = ("<h2>" + (T(lang, "Description", "Beschreibung")) + "</h2>" + "".join(f"<p>{esc(par).replace(chr(10), '<br>')}</p>" for par in _lt.split("\n\n") if par.strip())) if _lt.strip() else ""   # KI-Hinweis _gen erst nach den Kontext-Links
+            longbox = IG.inject(longbox, "entity", e["id"], lang)   # 2-3 Infografiken im Beschreibungstext verteilen (nur mit Freigabe)
             # KI-Kurzbeschreibung (data/entity_fill, auch nach push in D1) immer sichtbar kennzeichnen; steht schon der Ueberblick-Hinweis, reicht der
             _dnote = f'<p class="mut" style="font-size:.85em">{esc(T(lang, "Short description written with AI from the facts on this page. You can improve it with the edit button below.", "Kurzbeschreibung, mit KI aus den Fakten dieser Seite geschrieben. Du kannst sie unten über „Bearbeiten“ verbessern."))}</p>' if not _gen and FD.desc_is_ai(e, lang, d) else ""
             w = WT.get(lang, WT["en"])
@@ -1146,7 +1148,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _sh = LC.plain(lang, "side.entity" if groups else "side.cooc" if _cmode == "often" else "side.cooc_some" if _sids else "side.named", s=_en)   # Ueberschrift mit Beziehung zur Seite; ohne Beziehungen: in Beschreibung/Langtext genannt
             _side = g["side"](lang, f'{e["name"]} {_en} {d} {_lt[:1500]}', ids=_sids, exclude=(e["id"],), topics_h=_sh) if g.get("side") else ""   # Sidebar wie auf allen Inhaltsseiten
             _mt, _md = MM.entity_meta(lang, e, d, n_eps=len(eps), flags=_nf[e["id"]], type_label=tlab(lang, e["type"]))   # Suchabsicht: "Was ist X?" / "Wer ist X?" statt "X – Typ"
-            _w(f"{rel}/{e['id']}/index.html", page(lang, _mt, _md, u, b, _alts if (_alts and lang in _alts) else None, ld, xdefault=(_alts or {}).get("en"), og_type="website", extra_head=LCSS + css + _fhead, noindex=_noidx, side=_side))
+            _w(f"{rel}/{e['id']}/index.html", page(lang, _mt, _md, u, b, _alts if (_alts and lang in _alts) else None, ld, xdefault=(_alts or {}).get("en"), og_type="website", extra_head=LCSS + css + _fhead, noindex=_noidx, side=_side, **IG.page_kw("entity", e["id"], lang)))
             if not _noidx: sitemap.append((u, _mod, _alts))
             if not _noidx and not _ent_links(b.replace(updline, ""), e["id"]):   # Bauwarnung (Audit SEO-1): indexierbare Seite ohne Link auf eine andere Entitaet im Inhalt
                 _nolink.setdefault(lang, []).append(e["id"])

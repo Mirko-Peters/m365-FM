@@ -59,9 +59,9 @@ class Pages(unittest.TestCase):
         self.assertIn("SPI.src_attrs(u, size)", src)   # img_tag: kleine Variante
         self.assertIn('fetchpriority="high" \' if eager', src)   # Folgenkopf: nicht lazy, hohe Prioritaet
         self.assertIn('**({"image": thumb_of(e, nrec)} if thumb_of(e, nrec) else {})', src)   # JSON-LD: Original
-        self.assertEqual(src.count("self_url=lu, extra_head=_pc)"), 1)   # Sprachfassungen: preconnect
-        self.assertIn("head=_pc)", src)   # englische Folgenseite: preconnect
-        self.assertIn("noindex=noindex, extra_head=head)", src)   # pub reicht head an page weiter
+        self.assertEqual(src.count("self_url=lu, extra_head=_pc"), 1)   # Sprachfassungen: preconnect (danach ggf. Infografiken-Argumente)
+        self.assertIn("head=_pc", src)   # englische Folgenseite: preconnect
+        self.assertIn("noindex=noindex, extra_head=head", src)   # pub reicht head an page weiter
 
     def test_episode_list_first_covers_not_lazy(self):
         """Folgenliste: erste Karte fetchpriority=high, Karten 2-3 ohne loading=lazy, der Rest lazy; preconnect zu Spreaker-CloudFront."""

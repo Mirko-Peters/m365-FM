@@ -12,6 +12,7 @@ import site_entmatch as EM   # JSON-LD mentions der Kontext-Links
 import site_topic_crumbs as TC   # zweite BreadcrumbList nach dem Hauptthema (M365.FM > Oberbegriffe > Thema > Beitrag)
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung bezahlter Beitraege (data/sponsorships.json)
 import site_img_dims as IMG
+import site_infographics as IG   # Kopfbild, Infografiken und og:image je Beitrag (nur mit Freigabe data/infographics_live.json)
 import site_listen as LST   # Anhoeren-Karten (Stoerer) in den Beitraegen
 import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026), gilt weiter fuer Sprachfassungen
 import site_milestones as MST   # Wochenzusammenfassungen: eigene Vor/Zurueck-Reihe, darunter nur weitere Zusammenfassungen statt Inhaltslisten
@@ -191,6 +192,7 @@ def build(g, posts, people, api):
             if not p.get("legacy"):
                 body_html = IMG.enhance(body_html)
             body_html = IMG.alt_text(body_html, lang, p["title"])   # Alt-Texte: schwache Alt-Texte (Ueberschrift, Platzhalter, englisch auf Sprachfassungen) aus data/r2_alt.json.gz in der Seitensprache
+            body_html, _igkw = IG.apply_post(body_html, p["slug"], lang) if p.get("legacy") else (body_html, {})   # neues Kopfbild ersetzt das alte, 2-3 Infografiken im Text; ohne Freigabe unveraendert
             body_html = IMG.eager_first(body_html)   # erstes Bild oben im Beitrag (oft das LCP-Element) nicht lazy laden
             _own_txt = IR.plain_text(body_html)   # Haupttext vor den Anhoeren-Karten (die zeigen Folgentitel, keinen Beitragstext)
             _ms = MST.is_milestone(p)
@@ -248,7 +250,7 @@ def build(g, posts, people, api):
                 _alt = {"en": f"{BASE}/community/u/{p['handle']}/blog/{p['slug']}/", **{l: f"{BASE}{pfx(l)}/community/u/{p['handle']}/blog/{p['slug']}/" for l in tr_langs[(p["slug"], p["handle"])]}}
                 if noidx or len(_alt) < 2: _alt = None
             _og = f"{BASE}/community/u/{p['handle']}/blog/{p['slug']}/" if p.get("tr_of") else None   # Sprachfassungen teilen das Teilen-Bild des Originals (sonst Tausende neue Bilder)
-            (g.get("write_r2") if (p.get("tr_of") and g.get("write_r2")) else write)(f"{pfx2(lang)}community/u/{p['handle']}/blog/{p['slug']}/index.html", page(lang, f'{p["title"]} – {a["name"]} | M365.FM', (p.get("summary") or "")[:155], u, b, _alt, ld, xdefault=(_alt or {}).get("en"), og_type="article", extra_head=LCSS, noindex=noidx, og_of=_og, side=(g["side"](lang, p["title"] + " " + (p.get("summary") or ""), ids=topics, topics_h=LC.plain(lang, "side.post") if topics else "") if g.get("side") else "")))   # Sprachfassungen liegen im R2-Bucket
+            (g.get("write_r2") if (p.get("tr_of") and g.get("write_r2")) else write)(f"{pfx2(lang)}community/u/{p['handle']}/blog/{p['slug']}/index.html", page(lang, f'{p["title"]} – {a["name"]} | M365.FM', (p.get("summary") or "")[:155], u, b, _alt, ld, xdefault=(_alt or {}).get("en"), og_type="article", extra_head=LCSS, noindex=noidx, og_of=_og, **_igkw, side=(g["side"](lang, p["title"] + " " + (p.get("summary") or ""), ids=topics, topics_h=LC.plain(lang, "side.post") if topics else "") if g.get("side") else "")))   # Sprachfassungen liegen im R2-Bucket
             if not noidx:
                 sitemap.append((u, iso(p.get("updated") or p["published"]), _alt))
         if _lifted: print(f"Blog {lang}: {_lifted} Sprachfassungen ab {IR.MIN_CHARS} Zeichen Text auf index")
