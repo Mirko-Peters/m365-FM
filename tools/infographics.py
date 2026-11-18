@@ -468,6 +468,7 @@ def apply_results(lines, b, store, st, by_key):
     """Ergebnisse eines Batches pruefen und speichern -> (ok, schlecht, token_ein, token_aus, cache_read, cache_write, unbekannt).
     unbekannt = Ergebnisse zu Inhalten, die es in den Quellen nicht mehr gibt (zaehlt nicht als verloren: Batch bleibt dann im Zustand)."""
     ok = bad = tin = tout = cr = cw = unknown = 0
+    seen_err = set()
     for line in lines:
         if not line.strip(): continue
         r = json.loads(line); tk = b["map"].get(r.get("custom_id"))
@@ -475,7 +476,11 @@ def apply_results(lines, b, store, st, by_key):
         key, _, lang = tk.partition("#"); lang = lang or "en"
         res = r.get("result") or {}
         if res.get("type") == "errored":   # Fehler der Anfrage (z. B. Schema): zaehlt als Versuch, damit nichts endlos neu gesendet wird
-            st["tries"][tk] = st["tries"].get(tk, 0) + 1; continue
+            st["tries"][tk] = st["tries"].get(tk, 0) + 1
+            e = (res.get("error") or {}).get("error") or res.get("error") or {}
+            msg = f"{e.get('type', '?')}: {str(e.get('message', ''))[:400]}"
+            if msg not in seen_err and len(seen_err) < 3: seen_err.add(msg); print(f"Anfrage-Fehler {tk}: {msg}", flush=True)   # Fehlertext der API (ohne Schluessel), je verschiedene Meldung einmal
+            continue
         if res.get("type") != "succeeded": continue   # abgelaufen/abgebrochen: zaehlt nicht
         msg = res["message"]; u = msg.get("usage") or {}
         read, write = int(u.get("cache_read_input_tokens") or 0), int(u.get("cache_creation_input_tokens") or 0)
