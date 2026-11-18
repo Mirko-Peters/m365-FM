@@ -115,6 +115,15 @@ class Descriptor(unittest.TestCase):
         self.assertEqual(D("lonely", "ja"), "概念"); self.assertEqual(D("lonely", "ar"), "مفهوم")
         self.assertEqual(D("p0", "de", "analytics-tool"), "Produkt von Microsoft", "Kategorie gleich der Seite: Typ und Hersteller")
 
+    def test_unterbegriff_pl_ru_uk_nominativ(self):
+        """pl/ru/uk: nach "w ramach"/"в рамках"/"в межах" stuende der Genitiv; der Name bleibt im Nominativ, daher "tematu/темы/теми" und Anfuehrungszeichen."""
+        es = EN.apply({x["id"]: x for x in [ent("generative-ai", "concept", "Generative AI"), ent("rag-x", "concept", "RAG X", [("broader", "generative-ai")])]})
+        want = {"pl": "Podtemat w ramach tematu „Generatywna AI”", "ru": "Подтема в рамках темы «Генеративный ИИ»", "uk": "Підтема в межах теми «Генеративний ШІ»"}
+        for l, w in want.items():
+            self.assertEqual(EN.descriptor(es["rag-x"], l, None, es), w, l)
+        for l in ("pl", "ru", "uk"):
+            self.assertRegex(LC.raw(l, "desc.broader"), r"(tematu „\{x\}”|темы «\{x\}»|теми «\{x\}»)$", l)
+
     def test_laenge_hoechstens_60(self):
         self.assertEqual(D("widget", "en"), "Analytics and BI tool", "zu lang mit Hersteller: Kategorie ohne Hersteller")
         self.assertEqual(D("widget", "de"), "Analyse- und BI-Werkzeug")
@@ -233,6 +242,17 @@ class Pages(unittest.TestCase):
         self.assertNotIn("is a test entry", ja, "keine englische Kurzbeschreibung auf der japanischen Seite")
         de = re.search(r'<ul class="en-relx">(.*?)</ul>', self.read("de/entity/power-bi/index.html"), re.S).group(1)
         self.assertIn("<br>Microsoft ist ein Testeintrag.", de)
+
+    def test_kurzerklaerungen_ueberschrift_in_der_sprache_der_seite(self):
+        for rel, want in (("ja/entity/power-bi/index.html", "<h2>関連テーマの概要</h2>"), ("ar/entity/power-bi/index.html", "<h2>مواضيع مرتبطة باختصار</h2>"),
+                          ("de/entity/power-bi/index.html", "<h2>Verwandte Themen kurz erklärt</h2>"), ("entity/power-bi/index.html", "<h2>Related topics in brief</h2>")):
+            h = self.read(rel)
+            self.assertIn('<ul class="en-relx">', h, rel)
+            self.assertIn(want + '<p class="lc"', h, rel)
+            if not rel.startswith("entity/"):
+                self.assertNotIn("Related topics in brief", h, rel)
+        d = json.loads((ROOT / "data" / "py_i18n.json").read_text("utf-8"))["Related topics in brief"]
+        self.assertEqual(set(d), set(LANGS) - {"en", "de"}, "Ueberschrift in allen 13 weiteren Sprachen")
 
     def test_kein_zusatz_in_brotkrumen_h1_jsonld(self):
         raw = (self.docs / "de/entity/power-bi/index.html").read_text("utf-8")

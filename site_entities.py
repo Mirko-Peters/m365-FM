@@ -235,15 +235,16 @@ def kind_html(BASE, lang, e, root):
     i, t = e["id"], e["type"]
     out = ""
     if t == "industry":
-        rows = [{"href": f"{root}{x}/", "name": ENTS[x]["name"], "tag": esc(tlab(lang, "org"))} for x in sorted((x["id"] for x in ENTS.values() if x.get("type") == "org" and i in industries_of(x["id"])), key=lambda k: ENTS[k]["name"].lower())]
-        have = {r["name"].lower() for r in rows}
-        ent_ids = {x["id"] for x in ENTS.values() if x.get("type") == "org" and i in industries_of(x["id"])}
+        ent_ids = sorted((x["id"] for x in ENTS.values() if x.get("type") == "org" and i in industries_of(x["id"])), key=lambda k: EN.ename(ENTS[k], lang).lower())
+        # Firmen-Entitaeten: Name in der Sprache der Seite mit Zusatz (site_ename.list_link); der Typname "Organisation" entfaellt, die Ueberschrift nennt ihn schon
+        rows = [f'<li>{EN.list_link(f"{root}{x}/", ENTS[x], lang, i, skip_type=True)}</li>' for x in ent_ids]
+        tag = esc(T(lang, "Community company", "Community-Firma"))
         for c in sorted(KIND_ORGS.get(i, []), key=lambda c: c["name"].lower()):
             if c["eid"] in ent_ids:
                 continue   # dieselbe Firma steht schon als Entitaet da
-            rows.append({"href": f"{BASE}{pfx(lang)}/community/c/{c['handle']}/", "name": c["name"], "tag": esc(T(lang, "Community company", "Community-Firma"))})
+            rows.append(f'<li><a href="{BASE}{pfx(lang)}/community/c/{c["handle"]}/">{esc(c["name"])}</a> <span class="mut">· {tag}</span></li>')
         if rows:
-            out += f'<h3>{esc(T(lang, "Companies", "Firmen"))}</h3>{LC.intro(lang, "ind.companies", s=EN.label(e, lang))}<ul id="en-companies">' + "".join(f'<li><a href="{r["href"]}">{esc(r["name"])}</a> <span class="mut">· {r["tag"]}</span></li>' for r in rows) + "</ul>"
+            out += f'<h3>{esc(T(lang, "Companies", "Firmen"))}</h3>{LC.intro(lang, "ind.companies", s=EN.label(e, lang))}<ul id="en-companies">' + "".join(rows) + "</ul>"
     mem = sorted(KIND_MEMBERS.get(i, []), key=lambda m: _norm(m["name"]))
     if mem:
         prof = f"{BASE}{pfx(lang)}/community/u/"
@@ -319,10 +320,17 @@ def team_html(BASE, lang, oid, root, api):
     mem = T(lang, "Community member", "Community-Mitglied")
     items = []
     for r in rows:
-        href = f"{root}{r['eid']}/" if r["eid"] else f"{prof}{r['handle']}/"
-        note = " · ".join(x for x in ([esc(tlab(lang, 'person'))] if r["eid"] else []) + ([esc(r["job"])] if r["job"] else []) + ([] if r["eid"] or r["job"] else [esc(mem)]))
         extra = f' · <a href="{prof}{r["handle"]}/">{esc(T(lang, "Profile", "Profil"))}</a>' if r["eid"] and r["handle"] else ""
-        items.append(f'<li data-h="{esc(r["handle"])}" data-n="{esc(_norm(r["name"]))}"><a href="{href}">{esc(r["name"])}</a> <span class="mut">· {note}</span>{extra}</li>')
+        if r["eid"] and r["eid"] in ENTS:
+            # Personen-Entitaet: Name in der Sprache der Seite mit Zusatz und title (site_ename.list_link) statt "· Person"; die Rolle bleibt dahinter
+            # (mit Rolle entfaellt der blosse Typname "Person" als Zusatz, die Rolle sagt mehr)
+            a = EN.list_link(f"{root}{r['eid']}/", ENTS[r["eid"]], lang, oid, skip_type=bool(r["job"]))
+            note = f' <span class="mut">· {esc(r["job"])}</span>' if r["job"] else ""
+        else:
+            href = f"{root}{r['eid']}/" if r["eid"] else f"{prof}{r['handle']}/"
+            a = f'<a href="{href}">{esc(r["name"])}</a>'
+            note = f' <span class="mut">· {esc(r["job"] or (tlab(lang, "person") if r["eid"] else mem))}</span>'
+        items.append(f'<li data-h="{esc(r["handle"])}" data-n="{esc(_norm(r["name"]))}">{a}{note}{extra}</li>')
     head = f'<h3>{esc(T(lang, "People", "Personen"))}</h3>' + LC.intro(lang, "org.people", s=EN.label(ENTS.get(oid) or {}, lang))
     if not oh:
         return f'{head}<ul>{"".join(items)}</ul>'
@@ -966,7 +974,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                     _seen.add(_id); _dd = EN.own_desc(ENTS[_id], lang)
                     _li.append(f'<li>{EN.list_link(_u, ENTS[_id], lang, e["id"], bold=True, title=False)}' + (f' <span class="mut">· {esc(_k)}</span>' if lang in ("en", "de") else "") + (f'<br>{esc(_dd)}' if _dd else "") + "</li>")
                     if len(_li) >= 14: break
-                relx = f'<h2>{T(lang, "Related topics in brief", "Verwandte Themen kurz erklärt")}</h2>{LC.intro(lang, "ent.relx", s=_en)}<ul class="en-relx">' + "".join(_li) + "</ul>" if _li else ""
+                relx = f'<h2>{esc(T(lang, "Related topics in brief", "Verwandte Themen kurz erklärt"))}</h2>{LC.intro(lang, "ent.relx", s=_en)}<ul class="en-relx">' + "".join(_li) + "</ul>" if _li else ""
             tline = MED.timeline_svg([(x.get("date", ""), _ept_of(x), _epu(x)) for x in eps], T(lang, f"Timeline of episodes about {_en}", EN.put(lang, "Zeitleiste der Folgen zu {t}", "t", _en, str(_en))))
             ex = experts_by_ent.get(e["id"], [])
             ehtml = ""

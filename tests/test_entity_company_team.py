@@ -74,7 +74,9 @@ class Team(unittest.TestCase):
         root = f"{BASE}/de/entity/"
         h = E.team_html(BASE, "de", "acme", root, "https://api.example.test")
         self.assertIn("<h3>Personen</h3>", h)
-        self.assertIn(f'<a href="{root}jane-entity/">Jane Doe</a> <span class="mut">· Person · Geschäftsführerin</span> · <a href="{BASE}/de/community/u/jane/">Profil</a>', h)
+        self.assertIn(f'<a href="{root}jane-entity/" title="x">Jane Doe</a> <span class="mut">· Geschäftsführerin</span> · <a href="{BASE}/de/community/u/jane/">Profil</a>', h,
+                      "Personen-Entitaet ueber site_ename.list_link (title), ohne '· Person'; mit Rolle kein Typname als Zusatz")
+        self.assertNotIn("· Person", h)
         self.assertIn(f'<a href="{BASE}/de/community/u/lisa/">Lisa &lt;Test&gt;</a> <span class="mut">· Community-Mitglied</span>', h)
         self.assertNotIn("Lisa <Test>", h, "Namen werden escaped")
         self.assertEqual(h.count("<li "), 3)
@@ -83,6 +85,15 @@ class Team(unittest.TestCase):
         en = E.team_html(BASE, "en", "acme", f"{BASE}/entity/", "https://api.example.test")
         self.assertIn("<h3>People</h3>", en)
         self.assertIn(f'href="{BASE}/community/u/lisa/"', en)
+
+    def test_html_personen_entitaet_ohne_rolle_mit_zusatz(self):
+        """Paket 6: Personen-Entitaet ohne Rolle (nur aus dem Feld company) zeigt den Zusatz im Linktext statt '· Person', Name in der Sprache der Seite."""
+        E.set_teams([], [], {})
+        h = E.team_html(BASE, "de", "acme", f"{BASE}/de/entity/", "https://api.example.test")
+        self.assertIn(f'<a href="{BASE}/de/entity/jane-entity/" title="x">Jane Doe<span class="ed"> – Person</span></a></li>', h)
+        self.assertNotIn('<span class="mut">', h)
+        fr = E.team_html(BASE, "fr", "acme", f"{BASE}/fr/entity/", "https://api.example.test")
+        self.assertIn('Jane Doe<span class="ed"> – Personne</span></a>', fr)
 
     def test_html_leer_ohne_personen(self):
         self.assertEqual(E.team_html(BASE, "en", "other-co", f"{BASE}/entity/", "https://api.example.test"), "")
