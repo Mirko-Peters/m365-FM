@@ -440,21 +440,23 @@ class Matcher:
             m = rx.search(plain, pos)
             if not m: break
             s0, e0, t = m.start(1), m.end(1), m.group(1)
-            if cjk and _NONLATIN.search(t) and not _wordgap(plain, s0, e0):
-                pos = s0 + 1; continue   # Name in Schriftzeichen ("条件付きアクセス"): weiter nur als ganzes Wort
-            lg = self._longer(plain, s0, e0, rxo, acc)
-            if lg is not None:   # laengere Form an derselben Stelle scheitert nur an der Wortgrenze: sie gilt, nie ihr Anfang (Microsoft 365-Umgebung)
-                if lg:
-                    out.append((s0, lg[0], plain[s0:lg[0]], lg[1])); pos = lg[0]
-                else:
-                    pos = s0 + 1
-                continue
-            fs = acc(t)
+            fs = []
+            # ja/ko: Namen in Schriftzeichen stehen als ganzes Wort, auf ko/ja-Seiten auch mit Partikel ("SharePoint 권한으로", "Azure ランディング
+            # ゾーンを"); passt der Name an dieser Stelle nicht, gilt die kuerzere Form an derselben Stelle ("SharePoint"), wie bei lateinischen Namen
+            if not cjk or _cjk_ok(plain, s0, e0, lang):
+                lg = self._longer(plain, s0, e0, rxo, acc)
+                if lg is not None:   # laengere Form an derselben Stelle scheitert nur an der Wortgrenze: sie gilt, nie ihr Anfang (Microsoft 365-Umgebung)
+                    if lg:
+                        out.append((s0, lg[0], plain[s0:lg[0]], lg[1])); pos = lg[0]
+                    else:
+                        pos = s0 + 1
+                    continue
+                fs = acc(t)
             while not fs and e0 - 1 > s0:   # laengste Form passt nicht (z. B. "SharePoint lists" klein): kuerzere Form an derselben Stelle
                 mm = rx.match(plain, s0, e0 - 1)
                 if not mm: break
                 e0, t = mm.end(1), mm.group(1)
-                if e0 < n and (plain[e0].isalnum() or plain[e0] in "_-"): continue
+                if (not _cjk_ok(plain, s0, e0, lang)) if cjk else (e0 < n and (plain[e0].isalnum() or plain[e0] in "_-")): continue
                 fs = acc(t)
             if fs:
                 out.append((s0, e0, t, fs)); pos = e0
@@ -603,7 +605,7 @@ class Matcher:
         P = "".join(plain)
         C = set(ctx or ()) | {i for i in used if i not in HOST}
         hits = self.resolve(P, lang, C)
-        hits = self._outside_titles(P, hits, lang)   # zitierte Titel, Folgentitel, Namenszusaetze ("[MVP]"): Kontext ja, Link nein
+        hits = self._outside_titles(P, hits)   # zitierte Titel, Folgentitel, Namenszusaetze ("[MVP]"): Kontext ja, Link nein
         if not hits: return _restore(html, keep), []
         # Treffer auf editierbare Textstuecke abbilden
         spans = [(off, off + len(tok), n) for n, (tok, off, ed) in enumerate(pieces) if ed and off >= 0]
@@ -647,23 +649,63 @@ class Matcher:
         loc = (e.get("names") or {}).get(lang) if isinstance(e.get("names"), dict) else None
         if loc and loc.casefold() == t.casefold(): return False
         if any(f.eid == i and f.langs is not None and lang in f.langs for f in self.forms.get(t.lower(), ())): return False
-        # nur der englische Name selbst (ohne Klammerzusatz, auch mit/ohne Bindestrich, Plural): Aliase tragen keine Sprache und sind oft deutsch
-        # ("Zwei-Faktor-Authentifizierung", "KI-Verordnung", "Fertigung"), ein deutsches Wort mit lang="en" liest ein Screenreader falsch
+        # Klammerzusatz des Linktexts zaehlt nicht ("robotic process automation (RPA)")
+        mt = _PAREN.match(t)
+        if mt and mt.group(1): t = mt.group(1)
+        # der englische Name selbst (ohne Klammerzusatz, auch mit/ohne Bindestrich, Plural) oder sein Klammerzusatz ("IoT" bei "Internet of Things (IoT)")
         n = (e.get("name") or "").strip()
         m = _PAREN.match(n)
         x = _ennorm(t)
-        return any(x in (y, y + "s", y + "es") or y == x + "s" for y in {_ennorm(n), _ennorm(m.group(1)) if m else ""} if y)
+        if any(x in (y, y + "s", y + "es") or y == x + "s" for y in {_ennorm(n), *([_ennorm(m.group(1)), _ennorm(m.group(2))] if m else [])} if y):
+            return True
+        if re.fullmatch(r"[A-Za-z]{2,8}", t) and t[1:] != t[1:].lower():   # Abkuerzung in gemischter Schreibung aus den Anfaengen des englischen Namens ("IaC")
+            if "".join(w[0] for w in re.findall(r"[A-Za-z][A-Za-z0-9]*", m.group(1) if m else n)).casefold() == t.casefold(): return True
+        # Alias: Aliase tragen keine Sprache und sind oft deutsch ("Zwei-Faktor-Authentifizierung", "KI-Verordnung", "Fertigung", "IT-Leiter"); ein
+        # deutsches Wort mit lang="en" liest ein Screenreader falsch. Englisch ist ein Alias, dessen Woerter alle im englischen Wortschatz des Index
+        # stehen (englische Namen und Beschreibungen aller Eintraege): "Landing Zone", "Data Analysis Expressions", "lifecycle workflows", "dataset";
+        # Abkuerzungen in gemischter Schreibung nur in genau dieser Schreibung ("OAuth", "IaC", "SaaS"), deutsche Buchstaben (ä ö ü ß) nie
+        return self._en_vocab_has(t)
 
-    def _outside_titles(self, P, hits, lang="en"):
+    def _en_vocab_has(self, t):
+        if re.search(r"[^\x00-\x7f\u2010-\u2014’]", t): return False
+        ws = re.findall(r"[A-Za-z][A-Za-z0-9]*|\d+", t)
+        if not ws: return False
+        low, exact = self._en_vocab()
+        for w in ws:
+            if w.isdigit(): continue
+            if (w[1:] != w[1:].lower()) or (len(w) > 1 and w.isupper()):   # Abkuerzung ("OAuth", "IT"): nur in dieser Schreibung
+                if w not in exact and not (w.endswith("s") and w[:-1] in exact): return False
+            else:
+                c = w.casefold()
+                if c in _DE_FUNC or not (c in low or (c.endswith("s") and c[:-1] in low) or (c.endswith("es") and c[:-2] in low)): return False
+        return True
+
+    def _en_vocab(self):
+        """Englischer Wortschatz des Index (einmal je Index) -> (klein, wie geschrieben): Woerter der englischen Namen und Beschreibungen der
+        Begriffe und Produkte, ohne Personen, Firmen, Veranstaltungen und Medien (Lebenslaeufe und Namen, oft deutsch) und ohne Saetze, die ein
+        deutsches Wort nennen ("Corresponds to the German Werksleiter", "Known in German as Wertstrommanager")."""
+        if getattr(self, "_env", None) is None:
+            exact = set()
+            for e in self.live.values():
+                if e.get("type") in ("person", "org", "event", "media"): continue
+                d = e.get("desc")
+                d = d.get("en") if isinstance(d, dict) else d if isinstance(d, str) else ""
+                txt = " ".join([e.get("name") or ""] + [x for x in re.split(r"(?<=[.!?])\s+", d or "") if not _GERMAN_REF.search(x)])
+                exact.update(re.findall(r"[A-Za-z][A-Za-z0-9]*", txt))
+            self._env = ({w.casefold() for w in exact}, exact)
+        return self._env
+
+    def _outside_titles(self, P, hits):
         """Treffer ohne die Stellen, an denen ein Link mitten in einem fremden Titel oder Zitat saesse (Messung Paket 4, misses 3):
         - in Anfuehrungszeichen („…“ "…" “…” «…» »…« 「…」 『…』) um einen Titel (Titel-Schreibung, _title_like: "Power Apps Code Apps with Carike
           Botha [MVP]", "Azure Policy - Simply Explained"); ein zitierter Prompt oder Satz ("Create a checklist in Planner.") und ein Zitat, das genau
           der Begriff ist ("“single source of truth”", «privilegio mínimo»), behalten ihren Link;
-        - im Titel nach "episode"/"Folge"/… in Titel-Schreibung ("the episode Power Apps Code Apps with Carike Botha [MVP]"), nicht nach "this episode";
+        - im Folgentitel ohne Anfuehrungszeichen nur bei eindeutigem Muster (_episode_title_zones: "Episode: …", "the episode Power Apps Code Apps
+          with Carike Botha [MVP]"), nie nach "this episode";
         - Person mit Namenszusatz in eckigen Klammern ("Carike Botha [MVP]") in einer Titel-Reihe, und nie im Zusatz selbst.
         Die Treffer bleiben Kontext (resolve lief vorher); verlinkt wird die naechste Nennung ausserhalb."""
         if not hits: return hits
-        zones = _quote_zones(P) + _episode_title_zones(P, lang)
+        zones = _quote_zones(P) + _episode_title_zones(P)
         suffix = [(m.start(1), m.end(1)) for m in _NAMED_SUFFIX.finditer(P)]   # Zusatz nach einem Namen ("Carike Botha [MVP]")
         suffix += [(e, _NAME_SUFFIX.match(P, e).end()) for s, e, t, i in hits if (self.live.get(i) or {}).get("type") == "person" and _NAME_SUFFIX.match(P, e)]
         out = []
@@ -676,14 +718,38 @@ class Matcher:
         return out
 
 
+_DE_FUNC = {"als", "und", "der", "die", "das", "den", "dem", "des", "mit", "von", "zur", "zum", "im", "ist", "fuer", "ein", "eine", "oder", "bei"}   # deutsche Funktionswoerter im Alias
+_GERMAN_REF = re.compile(r"\bGerman(?:y)?\b|\bDACH\b")   # Satz der englischen Beschreibung, der ein deutsches Wort nennt
 _ennorm = lambda x: re.sub(r"[\s\-\u2010-\u2014]+", "", x or "").casefold()
 CJK_LANGS = {"ja", "ko", "zh"}
 _NONLATIN = re.compile(r"[\u1100-\u11ff\u3040-\u30ff\u3130-\u318f\u3400-\u4dbf\u4e00-\u9fff\uac00-\ud7af\uf900-\ufaff\uff66-\uff9f]")
 
 
-def _wordgap(P, s, e):
-    """Treffer (s, e) steht als ganzes Wort (keine Wortzeichen und kein Bindestrich davor oder danach)."""
-    return not (s > 0 and (P[s - 1].isalnum() or P[s - 1] in "_-")) and not (e < len(P) and (P[e].isalnum() or P[e] in "_-"))
+_LATIN_W = re.compile(r"[A-Za-z0-9_-]")
+# Partikel direkt nach einem Namen (ohne Leerzeichen): ko auch gestapelt ("으로는", "에서도") und Plural "들", danach kein Hangul mehr; ja nur das
+# erste Zeichen (danach geht der Satz ohne Leerzeichen weiter)
+_KO_PART = sorted("이 가 을 를 은 는 의 에 에서 에게 께 한테 로 으로 와 과 도 만 까지 부터 보다 처럼 이나 나 랑 이랑 하고 마다 조차 라도 이라도 밖에 뿐 "
+                  "이다 입니다 이며 이고 인 이란 란 이라는 라는 으로서 로서 으로써 로써 별 및".split(), key=len, reverse=True)
+_KO_PART_RX = re.compile(r"(?:들|들?(?:" + "|".join(_KO_PART) + r"){1,3})(?![\uac00-\ud7af])")
+_JA_PART_RX = re.compile(r"(?:を|は|が|の|に|で|と|も|へ|や|から|まで|より|など|って)")
+
+
+def _cjk_ok(P, s, e, lang):
+    """ja/ko: Treffer (s, e) steht an Wortgrenzen. Lateinische Enden grenzen nur gegen lateinische Zeichen ab ("Teams를", "とCopilot Studioの"),
+    Enden in Schriftzeichen gegen jedes Wortzeichen; ein gemischter Name (lateinisch + Schriftzeichen: "SharePoint 권한", "Azure ランディング
+    ゾーン") darf rechts eine Partikel tragen ("SharePoint 권한으로", "Azure ランディング ゾーンを")."""
+    t = P[s:e]
+    if not t: return False
+    left_w = (lambda c: c.isalnum() or c in "_-") if _NONLATIN.match(t[0]) else _LATIN_W.match
+    if s > 0 and left_w(P[s - 1]): return False
+    if e >= len(P): return True
+    c = P[e]
+    if not _NONLATIN.match(t[-1]):
+        return not _LATIN_W.match(c)
+    if not (c.isalnum() or c in "_-"): return True
+    if not _LATIN_W.search(t): return False   # Name nur in Schriftzeichen: weiter nur als ganzes Wort ("条件付きアクセス")
+    rx = _KO_PART_RX if (lang or "")[:2] == "ko" else _JA_PART_RX if (lang or "")[:2] == "ja" else None
+    return bool(rx and rx.match(P, e))
 
 
 _QPAIRS = {"„": "“”\"", "“": "”", "\"": "\"", "«": "»", "»": "«", "「": "」", "『": "』"}
@@ -694,8 +760,10 @@ _QTRIM = " \u00a0\t.,;:!?…"
 _NAME_SUFFIX = re.compile(r"[^\S\n]*\[[^\]\n]{1,30}\]")
 _NAMED_SUFFIX = re.compile(r"(?<![\w-])[A-Z][\w'’-]+[^\S\n]+[A-Z][\w'’-]+[^\S\n]*(\[[^\]\n]{1,30}\])")
 _EP_WORD = re.compile(r"(?<![\w-])(?<!this )(?<!This )(?<!that )(?<!each )(?<!every )(?<!next )(?<!our )(?<!dieser )(?<!jeder )(?<!nächsten )"
-                      r"(episode|Episode|Folge|épisode|episodio|episódio|aflevering|odcinek|odcinku|выпуск|епізод)[^\S\n]*[:–—-]?[^\S\n]+")
-_EP_SENT = {"with", "on", "in", "for", "to", "and", "&", "vs", "vs.", "mit", "und", "für", "im"}   # direkt nach "episode": Satz
+                      r"((?i:episode|épisode|episodio|episódio|aflevering|odcinek|odcinku|выпуск|епізод)|Folge)(?:[^\S\n]+#?\d+)?"
+                      r"(?:[^\S\n]*([:–—])|[^\S\n]+(-)(?=[^\S\n]))?[^\S\n]+")   # Gruppe 2/3: Markierung "Episode:", "Folge –", "Episode 12 - …"
+_EP_DEM = {"this", "that", "each", "every", "next", "our", "dieser", "diese", "jeder", "nächsten", "neste", "nesta", "deste", "este", "esta", "cette",
+           "ce", "cet", "questo", "quest", "dit", "deze", "ten", "tym", "этот", "этом", "цей", "цьому"}   # "this episode": kein Titel danach
 _EP_CONN = {"with", "and", "of", "the", "in", "for", "to", "a", "an", "vs", "vs.", "on", "&", "-", "–", "—", ":", "mit", "und", "für", "von", "der", "die", "das", "im"}
 
 
@@ -730,37 +798,35 @@ def _quote_zones(P):
     return out
 
 
-def _episode_title_zones(P, lang=None):
-    """Titel nach "episode"/"Folge" ohne Anfuehrungszeichen: Folge von Woertern in Titel-Schreibung (mind. drei gross geschriebene) bis zum ersten
-    klein geschriebenen Wort, Komma oder Satzende; "[MVP]" gehoert dazu."""
+def _episode_title_zones(P):
+    """Folgentitel ohne Anfuehrungszeichen, nur bei eindeutigem Muster (Mirko: lieber ein Link zu viel in Prosa als ein echter Titel verlinkt):
+    - ausdruecklich markiert: "Episode: …", "Folge – …", "From the episode: …", "Épisode 12 : …": Woerter in Titel-Schreibung (mind. zwei gross
+      geschriebene) bis zum ersten klein geschriebenen Wort, Satzende oder Zeilenende; Kommas gehoeren dazu ("Episode: Power BI, Fabric and AI");
+    - Titel-Reihe nach "episode"/"Folge"/… mit Namenszusatz am Ende ("the episode Power Apps Code Apps with Carike Botha [MVP], …").
+    Sonst ist die Reihe ein Satz und behaelt ihre Links, in allen Sprachen gleich: "In the episode Microsoft MVP Andre Baltieri, a Power
+    Platform expert, explains …", "In der Folge Microsoft Teams Premium, Copilot Studio und Power BI geht es um …", "In an episode of Microsoft
+    Teams Premium training …", "Dans l'épisode Microsoft MVP Andre Baltieri explique …", "Episode Highlights: Power BI, …"."""
     out = []
     for m in _EP_WORD.finditer(P):
-        k, caps, end, first, stop, suf = m.end(), 0, m.end(), True, None, False
-        mark = bool(re.search(r"[:–—-]", m.group(0)))   # "Episode: …", "Folge – …": ausdruecklich ein Titel
+        k, caps, end, suf, mark = m.end(), 0, m.end(), False, bool(m.group(2) or m.group(3))
+        pw = re.search(r"([^\W\d_]+)[^\S\n]+$", P[max(0, m.start() - 20):m.start()])
+        pw = pw.group(1).lower() if pw else ""
+        if pw in _EP_DEM or (m.group(1) == "Folge" and pw in ("die", "zur", "als")):
+            continue   # "Neste Episódio: …" (in dieser Folge, Liste folgt); "Die Folge: Wenn Copilot eingeführt wird, …" (Folge = Konsequenz)
         for w in re.finditer(r"\[[^\]\n]{1,30}\]|[^\s,.;!?()\[\]\n]+|[,.;!?()\n]", P[k:k + 220]):
             x = w.group(0)
-            if first and x.isdigit():   # "episode 12 …": Nummer der Folge, kein Titelwort
-                first = None; continue
-            if x[0] in ",.;!?()\n" and x != "-":
-                stop = "end"; break
+            if x == "," and mark: continue
+            if x[0] in ",.;!?()\n": break
             if x.startswith("["):
                 end, suf = k + w.end(), True; continue
-            if x.lower() in _EP_CONN:
-                if first is True and x.lower() in ("of", "von"):
-                    mark = True   # "another episode of Microsoft Knowledge Nuggets here on …": Name der Reihe
-                if first is not False and not mark and x.lower() in _EP_SENT:
-                    stop = "conn"; break   # "episode with Microsoft MVP Andre Baltieri on …", "episode 12 with …": Satz, kein Titel ("episode of <Show>" bleibt)
-                continue
-            first = False
+            if suf: break   # nach dem Zusatz beginnt der Satz
+            if mark:   # markiert: alles bis Satz- oder Zeilenende, danach Titel-Schreibung des Ganzen (_title_like)
+                end = k + w.end(); caps += x[:1].isupper() or x[:1].isdigit(); continue
+            if x.lower() in _EP_CONN: continue
             if x[:1].isupper() or x[:1].isdigit():
                 caps += 1; end = k + w.end(); continue
-            stop = "word"; break
-        # Titel nur, wenn er als Titel abgeschlossen ist (Satzzeichen, Zeilenende, Zusatz "[MVP]") oder ausdruecklich markiert: ein klein
-        # geschriebenes Wort danach macht die Reihe zum Satzsubjekt ("In the episode Microsoft MVP Andre Baltieri explains …",
-        # "In der Folge Microsoft Teams Premium und Copilot zeigt der Gast …")
-        # (nur en/de gemessen; in anderen Sprachen folgt dem Namen der Reihe oft ein klein geschriebenes Wort: "Dalam episode Microsoft Knowledge
-        # Nuggets ini", "W tym odcinku M365 FM – Simply Explained omawiamy", dort bleibt die Reihe ein Titel)
-        if caps >= 3 and stop != "conn" and (mark or suf or stop != "word" or (lang or "en")[:2] not in ("en", "de")): out.append((m.end(), end, None))
+            break
+        if (mark and caps >= 2 and _title_like(P[k:end])) or (suf and caps >= 3): out.append((m.end(), end, None))
     return out
 
 

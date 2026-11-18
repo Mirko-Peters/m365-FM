@@ -225,9 +225,102 @@ class FolgentitelNurEindeutig(unittest.TestCase):
 
     def test_titel_bleiben_titel(self):
         self.assertTrue(EM._episode_title_zones("In the episode Power Apps Code Apps with Carike Botha [MVP], Mirko explains Dataverse."))
-        self.assertTrue(EM._episode_title_zones("Episode: Power Apps Code Apps With Carike Botha explains", "en"), "ausdruecklich markiert")
-        self.assertTrue(EM._episode_title_zones("Welcome to another episode of Microsoft Knowledge Nuggets here on M365FM.", "en"))
-        self.assertTrue(EM._episode_title_zones("Dalam episode Microsoft Knowledge Nuggets ini, Mirko Peters menjelaskan", "id"))
+        self.assertTrue(EM._episode_title_zones("Episode: Power Apps Code Apps With Carike Botha explains"), "ausdruecklich markiert")
+
+
+class GemischteNamenJaKo(unittest.TestCase):
+    """Gegenpruefung Runde 1, Befund 1: gemischte Namen (lateinisch + Schriftzeichen) mit Partikel fielen ganz weg, auch die kuerzere lateinische
+    Form an derselben Stelle ("상속된 SharePoint 권한으로": vorher sharepoint, dann kein Link)."""
+    @classmethod
+    def setUpClass(cls):
+        cls.m = EM.shared(LRN.ENTS)
+
+    def lk(self, h, lang):
+        return re.findall(r'<a href="/entity/([a-z0-9-]+)/"[^>]*>([^<]*)</a>', self.m.link_html(f"<p>{h}</p>", U, lang)[0])
+
+    def test_gemischter_name_mit_partikel(self):
+        for lang, h, want in (("ko", "상속된 SharePoint 권한으로 접근합니다.", ("sharepoint-permissions", "SharePoint 권한")),
+                              ("ko", "Azure 랜딩 존을 설계합니다.", ("azure-landing-zone", "Azure 랜딩 존")),
+                              ("ko", "SharePoint 허브 사이트를 만듭니다.", ("sharepoint-hub-sites", "SharePoint 허브 사이트")),
+                              ("ja", "Azure ランディング ゾーンを設計します。", ("azure-landing-zone", "Azure ランディング ゾーン")),
+                              ("ko", "Microsoft 365의 사용자 지정 도메인을 설정합니다.", ("custom-domain", "Microsoft 365의 사용자 지정 도메인"))):
+            self.assertEqual([want], self.lk(h, lang), h)
+
+    def test_sonst_kuerzere_lateinische_form(self):
+        self.assertEqual([("azure", "Azure")], self.lk("Azure ランディング ゾーン構成を説明します。", "ja"), "kein Partikel: Wortteil, zurueck auf Azure")
+        self.assertEqual([("sharepoint", "SharePoint")], self.lk("SharePoint 권한상속 문제", "ko"))
+
+    def test_namen_in_schriftzeichen_bleiben_ganze_woerter(self):
+        self.assertFalse(EM._cjk_ok("条件付きアクセスを使う", 0, 8, "ja"))
+        self.assertTrue(EM._cjk_ok("「条件付きアクセス」", 1, 9, "ja"))
+        self.assertTrue(EM._cjk_ok("Teams를", 0, 5, "ko"), "lateinisches Ende: Wortgrenze nur gegen lateinische Zeichen")
+        self.assertFalse(EM._cjk_ok("SharePoint 권한상속", 0, 13, "ko"))
+
+
+class LangEnAliase(unittest.TestCase):
+    """Gegenpruefung Runde 1, Befund 2: lang="en" fiel an englischen Aliasen weg (OAuth, IoT, SaaS, Landing Zone, …)."""
+    @classmethod
+    def setUpClass(cls):
+        cls.m = EM.shared(LRN.ENTS)
+
+    def test_englische_aliase_und_abkuerzungen(self):
+        for t, i in (("OAuth", "oauth-2-0"), ("IoT", "internet-of-things"), ("SaaS", "software-as-a-service"),
+                     ("CoE", "power-platform-center-of-excellence"), ("IaC", "infrastructure-as-code"), ("ViDA", "vat-in-the-digital-age"),
+                     ("QoS", "mqtt-quality-of-service"), ("Data Analysis Expressions", "dax"), ("Copilot Skills", "agent-skill"),
+                     ("Landing Zone", "azure-landing-zone"), ("Change Notifications", "change-notifications"), ("Lean Manufacturing", "lean-management"),
+                     ("lifecycle workflows", "identity-lifecycle"), ("dataset", "semantic-model"), ("robotic process automation (RPA)", "rpa")):
+            self.assertTrue(self.m._english_word(t, i, "de"), t)
+
+    def test_deutsche_aliase_bleiben_ohne_lang(self):
+        for t, i in (("IT-Leiter", "it-manager"), ("Finanzwesen", "financial-services"), ("Zwei-Faktor-Authentifizierung", "mfa"),
+                     ("KI-Verordnung", "eu-ai-act"), ("Fertigung", "manufacturing"), ("Infrastruktur als Code", "infrastructure-as-code"),
+                     ("Werksleiter", "plant-manager")):   # "Corresponds to the German Werksleiter" in der englischen Beschreibung zaehlt nicht
+            self.assertFalse(self.m._english_word(t, i, "de"), t)
+
+    def test_im_satz(self):
+        h = self.m.link_html("<p>Die Anmeldung läuft über OAuth, der IT-Leiter plant die Landing Zone für Azure.</p>", U, "de")[0]
+        self.assertIn('lang="en">OAuth</a>', h)
+        self.assertIn('lang="en">Landing Zone</a>', h)
+        self.assertRegex(h, r'<a href="/entity/it-manager/"(?![^>]*lang=)[^>]*>IT-Leiter</a>')
+
+
+class FolgentitelMuster(unittest.TestCase):
+    """Gegenpruefung Runde 1, Befund 3: Titel ohne Anfuehrungszeichen nur bei eindeutigem Muster ("Episode:", Zusatz "[MVP]"), in allen Sprachen
+    gleich; Komma, "episode of" und "Episode Highlights:" machen keinen Titel."""
+    @classmethod
+    def setUpClass(cls):
+        cls.m = EM.shared(LRN.ENTS)
+
+    def lk(self, h, lang="en"):
+        return linked(self.m.link_html(f"<p>{h}</p>", U, lang)[0])
+
+    def test_prosa_behaelt_links(self):
+        self.assertEqual(["microsoft-mvp", "andre-baltieri", "power-platform", "dataverse"],
+                         self.lk("In the episode Microsoft MVP Andre Baltieri, a Power Platform expert, explains Dataverse."))
+        self.assertIn("teams-premium", self.lk("In der Folge Microsoft Teams Premium, Copilot Studio und Power BI geht es um Lizenzen.", "de"))
+        self.assertIn("power-bi", self.lk("Episode Highlights: Power BI, Copilot Studio and Dataverse."))
+        self.assertIn("teams-premium", self.lk("In an episode of Microsoft Teams Premium training we covered Power BI."))
+
+    def test_alle_sprachen_wie_de_en(self):
+        for lang, h in (("fr", "Dans l'épisode Microsoft MVP Andre Baltieri explique Dataverse."),
+                        ("es", "En el episodio Microsoft MVP Andre Baltieri explica Dataverse."),
+                        ("it", "Nell'episodio Microsoft MVP Andre Baltieri spiega Dataverse."),
+                        ("nl", "In de aflevering Microsoft MVP Andre Baltieri legt Dataverse uit."),
+                        ("pl", "W odcinku Microsoft MVP Andre Baltieri omawia Dataverse."),
+                        ("pt", "No episódio Microsoft MVP Andre Baltieri explica Dataverse."),
+                        ("id", "Dalam episode Microsoft MVP Andre Baltieri menjelaskan Dataverse.")):
+            self.assertIn("andre-baltieri", self.lk(h, lang), lang)
+        self.assertFalse(EM._episode_title_zones("Dalam episode Microsoft Knowledge Nuggets ini, Mirko Peters menjelaskan"))
+        self.assertFalse(EM._episode_title_zones("Welcome to another episode of Microsoft Knowledge Nuggets here on M365FM."))
+        self.assertFalse(EM._episode_title_zones("Die Folge: Wenn Copilot eingeführt wird, legt es sensible Daten offen."), "Folge = Konsequenz")
+        self.assertFalse(EM._episode_title_zones("O Que Vai Aprender Neste Episódio: Porque Qualquer Pessoa Pode Enviar E-mails"), "in dieser Folge: Liste")
+
+    def test_markierte_titel(self):
+        self.assertEqual(["dataverse"], self.lk("Episode: Power Apps Code Apps With Carike Botha. Later Dataverse."))
+        self.assertEqual(["dataverse"], self.lk("From the episode: Power BI, Copilot Studio and Fabric Explained<br>Dataverse here."))
+        self.assertEqual(["dataverse"], self.lk("Folge – Microsoft Teams Premium Erklärt. Danach Dataverse.", "de"))
+        self.assertEqual(["dataverse"], self.lk("Épisode 12 : Power Apps Code Apps With Carike Botha. Puis Dataverse.", "fr"))
+        self.assertEqual(["dataverse"], self.lk("In the episode Power Apps Code Apps with Carike Botha [MVP], Mirko explains Dataverse."))
 
 
 class Seitenleiste(unittest.TestCase):
