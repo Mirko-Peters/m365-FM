@@ -382,3 +382,23 @@ class CommunityVideo(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class FolgentitelAufzaehlung(unittest.TestCase):
+    """'in the episode:' / 'In der Folge:' leitet eine Aufzaehlung ein, keinen Titel (Gegenpruefung Runde 2); 'From the episode:' bleibt Titel."""
+
+    @classmethod
+    def setUpClass(cls):
+        import site_entmatch as EM
+        cls.m = EM.shared()
+
+    def ids(self, t, lang="en"):
+        return [x[1] for x in self.m.link_html("<p>" + t + "</p>", lambda i: "/entity/%s/" % i, lang)[1]]
+
+    def test_aufzaehlung_behaelt_links(self):
+        self.assertIn("power-bi", self.ids("Topics covered in the episode: Power BI, Microsoft Fabric and Copilot Studio."))
+        self.assertIn("power-bi", self.ids("In der Folge: Power BI, Microsoft Fabric und Copilot Studio.", "de"))
+
+    def test_titel_bleibt_ohne_link(self):
+        self.assertEqual(self.ids("From the episode: Power Apps Code Apps with Carike Botha"), [])
+        self.assertEqual(self.ids("Related episode: Power BI Premium Costs Explained."), [])

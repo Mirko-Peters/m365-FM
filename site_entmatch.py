@@ -798,6 +798,9 @@ def _quote_zones(P):
     return out
 
 
+_EP_IN = {"in", "im", "into", "covered", "dans", "en", "nella", "nel", "w", "dalam", "no", "na", "em", "в", "у"}   # Praeposition vor "episode:": Aufzaehlung folgt
+
+
 def _episode_title_zones(P):
     """Folgentitel ohne Anfuehrungszeichen, nur bei eindeutigem Muster (Mirko: lieber ein Link zu viel in Prosa als ein echter Titel verlinkt):
     - ausdruecklich markiert: "Episode: …", "Folge – …", "From the episode: …", "Épisode 12 : …": Woerter in Titel-Schreibung (mind. zwei gross
@@ -812,7 +815,10 @@ def _episode_title_zones(P):
         pw = re.search(r"([^\W\d_]+)[^\S\n]+$", P[max(0, m.start() - 20):m.start()])
         pw = pw.group(1).lower() if pw else ""
         if pw in _EP_DEM or (m.group(1) == "Folge" and pw in ("die", "zur", "als")):
-            continue   # "Neste Episódio: …" (in dieser Folge, Liste folgt); "Die Folge: Wenn Copilot eingeführt wird, …" (Folge = Konsequenz)
+            continue
+        pw2 = [x.lower() for x in re.findall(r"[^\W\d_]+", P[max(0, m.start() - 30):m.start()])[-2:]]
+        if (m.group(2) or m.group(3)) and any(x in _EP_IN for x in pw2):
+            continue   # "Topics covered in the episode: Power BI, …", "In der Folge: Power BI, …": Einleitung einer Aufzaehlung, kein Titel ("From the episode: …" bleibt Titel)   # "Neste Episódio: …" (in dieser Folge, Liste folgt); "Die Folge: Wenn Copilot eingeführt wird, …" (Folge = Konsequenz)
         for w in re.finditer(r"\[[^\]\n]{1,30}\]|[^\s,.;!?()\[\]\n]+|[,.;!?()\n]", P[k:k + 220]):
             x = w.group(0)
             if x == "," and mark: continue
