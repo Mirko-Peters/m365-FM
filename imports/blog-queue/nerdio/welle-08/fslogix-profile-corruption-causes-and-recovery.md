@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [fslogix-profile-container]
 keypoints:
   - "Triage first: locks, permissions, a full container or share and a changed naming setting look like corruption but have fixes that keep the VHD(x) intact."

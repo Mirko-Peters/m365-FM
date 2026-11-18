@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-force-logoff, avd-scaling-plan]
 keypoints:
   - "Force sign-out works only in the ramp-down phase. Learn says it does not sign out users in other phases, and autoscale cannot force users out of a personal desktop."

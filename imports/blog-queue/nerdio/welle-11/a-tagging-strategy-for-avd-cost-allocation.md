@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-virtual-desktop, showback, chargeback]
 keypoints:
   - "Resources do not inherit tags from a resource group or subscription. Host pool tags reach session hosts only in the portal workflow, so enforce tags with policy for hosts created by automation."

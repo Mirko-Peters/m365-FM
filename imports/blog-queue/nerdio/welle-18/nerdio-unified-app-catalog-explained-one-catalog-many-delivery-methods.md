@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-unified-app-catalog, nerdio-manager-for-enterprise]
 keypoints:
   - "The catalog is UAM's search view across linked repositories: Winget community, private Winget, Intune and Shell Apps. SCCM is an import source, not a repository type."

@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-screen-capture-protection, azure-virtual-desktop]
 keypoints:
   - "Screen capture protection blocks or hides remote content in local screenshots and screen sharing. It uses standard OS features, provides no DRM-level protection and is not a DRM substitute."

@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-capacity-threshold, avd-scaling-plan]
 keypoints:
   - "Available capacity is the maximum session limit times the number of available session hosts. Used capacity is active plus disconnected sessions divided by that figure."

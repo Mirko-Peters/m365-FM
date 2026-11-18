@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [rdp-shortpath, remote-desktop-protocol]
 keypoints:
   - "Only the managed-network listener needs host configuration: enable it through Intune or Group Policy, allow the inbound port (default 3390) and restart the session hosts."

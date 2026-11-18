@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-unified-app-catalog, nerdio-manager-for-enterprise]
 keypoints:
   - "Choose by installer type: Winget for standard silent installers, an SCCM import for Configuration Manager packages, a Shell App for scripted installs. A policy then handles all three."

@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-application-group, azure-virtual-desktop]
 keypoints:
   - "RemoteApp groups need a pooled host pool, at least one powered-on session host, and the applications installed on the session hosts, or an App Attach package added and assigned to the host pool."

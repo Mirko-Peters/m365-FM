@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-drain-mode, avd-session-host]
 keypoints:
   - "A drained session host accepts no new sessions. Existing sessions stay connected until the user signs out or an administrator ends them, and administrators can still connect to the server directly."

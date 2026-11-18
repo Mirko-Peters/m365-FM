@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-virtual-desktop, fslogix-cloud-cache]
 keypoints:
   - "Azure Virtual Desktop has no native disaster recovery features. Microsoft runs the control plane, and you own session hosts, profiles, apps, user data and identities."

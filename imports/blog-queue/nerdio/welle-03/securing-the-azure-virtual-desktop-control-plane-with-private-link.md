@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-virtual-desktop, azure-private-link]
 keypoints:
   - "Three private workflows: feed discovery (workspace sub-resource global, one per deployment), feed download (feed, per workspace) and host pool connections (connection, per host pool)."

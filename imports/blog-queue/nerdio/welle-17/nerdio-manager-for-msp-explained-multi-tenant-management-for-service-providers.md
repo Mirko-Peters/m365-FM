@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-manager-for-msp, nerdio]
 keypoints:
   - "Nerdio Manager for MSP (NMM) is an Azure web app installed from the Azure Marketplace in the MSP's subscription. Nerdio says installation takes five to 10 minutes, then licence registration."

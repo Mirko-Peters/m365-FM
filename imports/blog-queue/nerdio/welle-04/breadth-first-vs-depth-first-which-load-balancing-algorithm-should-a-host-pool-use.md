@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-breadth-first-load-balancing, avd-depth-first-load-balancing, avd-host-pool]
 keypoints:
   - "Learn describes breadth-first as the choice when user experience matters most, and depth-first for cost-conscious organizations that want control over how many hosts are powered on."

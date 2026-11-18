@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-validation-environment, avd-host-pool]
 keypoints:
   - "A validation host pool is a host pool with the validation environment property set to Yes. Service updates are applied there first, before your standard environment."

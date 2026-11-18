@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [rdp-multipath, remote-desktop-protocol]
 keypoints:
   - "Three layers: TCP reverse connect through the gateway brokers every session, Shortpath adds UDP (managed, direct STUN or TURN), and Multipath keeps standby paths for when the active one degrades."

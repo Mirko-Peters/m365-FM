@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-minimum-percentage-of-hosts, avd-scaling-plan]
 keypoints:
   - "Learn says a percentage that is not a whole number is rounded up to the nearest whole number. In its examples that means hosts: 30 percent of six is 1.8, so autoscale turns on two."

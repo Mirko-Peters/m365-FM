@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-virtual-desktop, nerdio-manager-for-enterprise]
 keypoints:
   - "Native AVD covers a lot: scaling plans (power management and dynamic), session host configuration with update, custom image templates on Image Builder, and Insights on Azure Monitor."

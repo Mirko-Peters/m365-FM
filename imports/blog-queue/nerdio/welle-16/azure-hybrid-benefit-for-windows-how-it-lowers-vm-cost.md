@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-hybrid-benefit, azure-reservations]
 keypoints:
   - "Learn says the Windows Server license is covered by the benefit, so you pay only the base compute rate of the VM, and that rate equals the Linux rate."

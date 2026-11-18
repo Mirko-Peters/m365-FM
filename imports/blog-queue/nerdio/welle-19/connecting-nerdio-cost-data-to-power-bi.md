@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-finops-user-cost-attribution, nerdio-manager-for-enterprise]
 keypoints:
   - "The connection needs Nerdio Manager Premium with user cost attribution enabled, Power BI Desktop and the NerdioReporting custom connector, installed either by a Nerdio PowerShell script or manually."

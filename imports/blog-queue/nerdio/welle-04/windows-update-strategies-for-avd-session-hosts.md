@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-virtual-desktop, avd-session-host]
 keypoints:
   - "Learn separates two servicing models. Patch in-place updates the existing VM. Image-based servicing builds a new image version, deploys new hosts and drains the old ones."

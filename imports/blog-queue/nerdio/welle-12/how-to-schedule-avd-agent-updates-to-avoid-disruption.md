@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-scheduled-agent-updates, avd-agent]
 keypoints:
   - "A window only works if the session hosts are running in it. With autoscale, give the window day a scaling plan schedule that keeps the hosts on, then confirm it on the first run."

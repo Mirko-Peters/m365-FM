@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [sysprep, golden-image]
 keypoints:
   - "Microsoft Learn says an image must be generalized before it is deployed to new PCs. Generalizing resets the SID, clears system restore points and deletes event logs."

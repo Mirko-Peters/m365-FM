@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-agent, avd-session-host]
 keypoints:
   - "Start in Event Viewer (Windows Logs > Application), filtering on WVD-Agent, WVD-Agent-Updater, RDAgentBootLoader and MsiInstaller. The event text shows which documented fix applies."

@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-budgets, microsoft-cost-management]
 keypoints:
   - "A budget is a notification tool. Learn says that when a threshold is met, resources are not affected and consumption is not stopped."

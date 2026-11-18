@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [entra-domain-services, azure-virtual-desktop]
 keypoints:
   - "Azure Virtual Desktop supports session hosts joined to Microsoft Entra Domain Services, with users synchronized one way from Entra ID, which still authenticates users for the service."

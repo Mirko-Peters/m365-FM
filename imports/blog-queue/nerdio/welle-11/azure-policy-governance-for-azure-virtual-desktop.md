@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-virtual-desktop, azure-policy]
 keypoints:
   - "Microsoft lists 11 built-in Desktop Virtualization policy definitions for public network access, Private Link, private endpoints and private DNS zones; Monitoring ones add diagnostic settings."

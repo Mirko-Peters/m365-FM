@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-single-sign-on, azure-virtual-desktop]
 keypoints:
   - "Learn describes three authentication phases. SSO affects only the remote session phase: it skips the session host credential prompt and signs the user in through Entra authentication."

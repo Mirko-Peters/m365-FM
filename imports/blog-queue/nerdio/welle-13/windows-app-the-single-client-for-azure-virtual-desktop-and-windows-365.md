@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [windows-app, azure-virtual-desktop]
 keypoints:
   - "Learn says Windows App replaces the Remote Desktop client for AVD and Windows 365. Remote Desktop Services is not supported in Windows App on Windows; keep the Remote Desktop app there."

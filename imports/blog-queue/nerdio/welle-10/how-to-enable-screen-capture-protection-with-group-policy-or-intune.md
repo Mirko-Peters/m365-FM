@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-screen-capture-protection, azure-virtual-desktop]
 keypoints:
   - "Both routes set the same policy, Enable screen capture protection, on the session hosts: Intune via the Settings catalog, Group Policy after adding the AVD administrative template."

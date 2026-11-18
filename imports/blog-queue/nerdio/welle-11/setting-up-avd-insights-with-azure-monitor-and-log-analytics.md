@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-insights, azure-virtual-desktop]
 keypoints:
   - "Setup has two halves: diagnostic settings on the host pool and workspace, and session host data through the Azure Monitor Agent and a DCR. The configuration workbook can deploy both."

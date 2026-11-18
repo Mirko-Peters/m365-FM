@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-virtual-desktop, rdp-shortpath]
 keypoints:
   - "AVD uses reverse connect: hosts and clients connect outbound over TLS, so no inbound ports are needed by default. Learn advises against opening 3389 and against public IPs on session hosts."

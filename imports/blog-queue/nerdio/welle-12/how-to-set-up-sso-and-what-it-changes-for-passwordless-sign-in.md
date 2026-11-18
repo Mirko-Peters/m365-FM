@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-single-sign-on, azure-virtual-desktop]
 keypoints:
   - "Five tasks: enable Entra authentication for RDP on Windows Cloud Login, hide the consent dialog, create a Kerberos server object if AD is involved, review Conditional Access, set enablerdsaadauth:i:1."

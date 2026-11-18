@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-manager-for-msp, nerdio]
 keypoints:
   - "NMM has two baseline types sharing a name: policy baselines group Intune policies; solution baselines cover Intune, Entra ID, Defender, Exchange, Teams and more, each with a Prerequisites check."

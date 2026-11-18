@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [windows-365, nerdio-manager-for-enterprise]
 keypoints:
   - "Enabling Windows 365 in Nerdio Manager needs a Global Administrator, plus an Intune license and a Windows 365 license in the tenant where Nerdio Manager is installed."

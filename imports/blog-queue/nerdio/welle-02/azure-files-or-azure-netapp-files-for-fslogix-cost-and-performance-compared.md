@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-files, azure-netapp-files, fslogix]
 keypoints:
   - "Learn recommends Azure Files for FSLogix profile containers for most customers. Azure NetApp Files states higher ceilings: up to 460K IOPS at about 1 ms, against 100K IOPS at about 3 ms."

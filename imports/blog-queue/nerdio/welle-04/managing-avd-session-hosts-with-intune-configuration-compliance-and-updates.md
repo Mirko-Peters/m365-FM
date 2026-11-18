@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-virtual-desktop, intune]
 keypoints:
   - "Intune supports personal single-session hosts running Windows Enterprise and pooled Windows Enterprise multi-session hosts. Multi-session management is documented as generally available."

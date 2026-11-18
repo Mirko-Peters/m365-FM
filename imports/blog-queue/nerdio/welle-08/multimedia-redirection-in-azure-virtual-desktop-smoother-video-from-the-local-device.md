@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-multimedia-redirection, azure-virtual-desktop]
 keypoints:
   - "Multimedia redirection has two parts on the session host: the Multimedia Redirection Service and an Edge or Chrome extension. It covers embedded video playback and WebRTC audio calls."

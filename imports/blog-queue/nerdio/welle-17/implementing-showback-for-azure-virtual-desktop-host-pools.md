@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [showback, chargeback, finops]
 keypoints:
   - "Session host VMs usually cost the most, but Learn also lists profile and app attach storage, Insights data, image templates and identity. Tags report only where assigned, so tag these too."

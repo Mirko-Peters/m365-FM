@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-ephemeral-os-disks, avd-session-host]
 keypoints:
   - "Ephemeral OS disks suit stateless pooled session hosts. Microsoft's Azure documentation names workloads that tolerate individual VM failures but are sensitive to deployment and reimage time."

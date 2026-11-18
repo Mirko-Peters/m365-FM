@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-auto-scaling, nerdio-manager-for-enterprise]
 keypoints:
   - "Native autoscale scales on session-based capacity. Nerdio can also use CPU, RAM, average active and available sessions, combining up to three triggers (Premium only per Nerdio's pages)."

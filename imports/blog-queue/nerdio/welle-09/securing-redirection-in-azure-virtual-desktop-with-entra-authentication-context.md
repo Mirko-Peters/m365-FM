@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-context-based-redirections, azure-virtual-desktop]
 keypoints:
   - "Three steps: create and publish an authentication context in Entra, create a Conditional Access policy targeting it, and map it under the host pool's RDP Properties > Device redirection."

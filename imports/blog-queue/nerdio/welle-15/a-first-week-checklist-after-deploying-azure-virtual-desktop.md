@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-virtual-desktop]
 keypoints:
   - "Day 1: check that every powered-on session host shows Available and run the Agent URL Tool on session hosts. The tool does not verify wildcard entries, so allow those first."

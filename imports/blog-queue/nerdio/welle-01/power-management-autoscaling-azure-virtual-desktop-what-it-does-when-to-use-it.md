@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-power-management-autoscaling, avd-scaling-plan]
 keypoints:
   - "Power management autoscaling powers existing hosts on and off. Dynamic autoscaling also creates and deletes hosts, only for pooled pools with a session host configuration (GA July 2026)."

@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-hibernation, avd-personal-host-pool]
 keypoints:
   - "Hibernation stores the VM's memory on the OS disk and then deallocates the VM. Learn says a hibernated VM is not billed for VM usage, while disks and networking resources attached to it are."

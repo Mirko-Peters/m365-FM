@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-scripted-actions, nerdio-manager-for-enterprise]
 keypoints:
   - "Declare inputs instead of hard-coding: Windows scripts use a param block with Mandatory and ValidateSet; runbooks use a Variables comment block with IsRequired and DefaultValue."

@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-virtual-desktop, finops, avd-scaling-plan]
 keypoints:
   - "Compute hours are the line autoscale changes directly: autoscale, Start VM on Connect, depth-first consolidation and a disconnected-session time limit all reduce the hours a VM is allocated."

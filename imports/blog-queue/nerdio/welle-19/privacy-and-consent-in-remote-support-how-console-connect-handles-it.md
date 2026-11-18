@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-console-connect, nerdio-manager-for-msp]
 keypoints:
   - "Nerdio says that without Session confirmation, a Console Connect connection starts without prompting the user. Our recommendation, not Nerdio's: turn it on for every customer account."

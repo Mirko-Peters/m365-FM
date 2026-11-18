@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-virtual-desktop, fslogix-profile-container]
 keypoints:
   - "Pooled hosts are stateless; state sits in profile and data stores. Learn says roaming profiles are not commonly business-critical. Personal hosts hold state and need replication and backup."

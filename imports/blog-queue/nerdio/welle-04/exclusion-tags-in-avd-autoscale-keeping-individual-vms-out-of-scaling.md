@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-scaling-plan-exclusion-tag, avd-scaling-plan]
 keypoints:
   - "The exclusion tag is a property of the scaling plan. Autoscale performs scaling actions only on VMs whose tag names do not match it."

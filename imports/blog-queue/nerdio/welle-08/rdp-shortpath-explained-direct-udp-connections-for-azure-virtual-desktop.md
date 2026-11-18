@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [rdp-shortpath, remote-desktop-protocol]
 keypoints:
   - "Every connection starts on TCP reverse connect through the gateway. The client tries UDP in the background; if it succeeds the TCP connection drops, otherwise the session stays on TCP."

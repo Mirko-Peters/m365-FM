@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-agent, avd-session-host]
 keypoints:
   - "Learn calls the agent the communicator between the AVD service and the session host. It installs the side-by-side stack and Geneva Monitoring agent; all three are needed for connectivity."

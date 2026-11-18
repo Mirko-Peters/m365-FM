@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-depth-first-load-balancing, avd-host-pool]
 keypoints:
   - "Learn says the scaling plan's load balancing overrides the host pool setting, and for pooled pools autoscale overwrites drain mode, while autoscale is enabled for the pool."

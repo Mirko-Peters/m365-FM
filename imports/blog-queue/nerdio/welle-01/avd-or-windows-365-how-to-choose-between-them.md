@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-virtual-desktop, windows-365]
 keypoints:
   - "Windows 365 Enterprise and Business assign each Cloud PC to one user, licensed per user per month; Flex licenses are pooled at tenant level. AVD uses consumption pricing and offers multi-session."

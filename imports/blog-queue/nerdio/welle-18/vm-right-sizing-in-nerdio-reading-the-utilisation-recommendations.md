@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-right-sizing, nerdio-advisor]
 keypoints:
   - "By default the rules use 30 days of 90th-percentile CPU and memory, triggers at 80 and 60 percent. Check the Active sessions only flag, as the pooled page states its default two ways."

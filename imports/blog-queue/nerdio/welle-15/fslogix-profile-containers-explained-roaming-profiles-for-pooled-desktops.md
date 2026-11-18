@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [fslogix-profile-container, fslogix]
 keypoints:
   - "A profile container is a VHD(x) file attached at sign-in, so the profile appears like a local profile. Learn contrasts this with copy-based roaming profile solutions."

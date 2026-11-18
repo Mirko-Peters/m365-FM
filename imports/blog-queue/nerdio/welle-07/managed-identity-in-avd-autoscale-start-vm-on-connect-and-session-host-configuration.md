@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-managed-identity, azure-virtual-desktop]
 keypoints:
   - "Learn lists four features that can use a host pool managed identity: autoscale, session host update, Start VM on Connect and AVD for Azure Local. App Attach with Azure Files is the exception."

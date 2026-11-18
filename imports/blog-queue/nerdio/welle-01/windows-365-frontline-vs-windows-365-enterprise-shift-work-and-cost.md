@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [windows-365-frontline, windows-365]
 keypoints:
   - "Enterprise is a 1:1 model: one license, one Cloud PC, one user. Flex licenses concurrent sessions instead of named users."

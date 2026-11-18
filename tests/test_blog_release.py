@@ -1,4 +1,5 @@
 """tools/blog_release.py: Tagesordner wie bisher, Reihen (reihe.json) geben je Artikeldatum genau eine Welle frei, ohne KI."""
+import datetime
 import json
 import os
 import sys
@@ -40,9 +41,34 @@ class Reihe(unittest.TestCase):
         if d is None: return json.loads(p.read_text("utf-8"))
         p.write_text(json.dumps(d), "utf-8")
 
-    def run_series(self, day):
+    def run_series(self, day, run=None):
+        run = run or (datetime.date.fromisoformat(day) - datetime.timedelta(days=1)).isoformat()   # Abend-Lauf am Vortag (UTC)
         with redirect_stdout(StringIO()):
-            return BR.release_series(str(self.series), str(self.dest), day, sponsorships=str(self.spons))
+            return BR.release_series(str(self.series), str(self.dest), day, sponsorships=str(self.spons), run=run)
+
+    def test_hand_lauf_und_abend_lauf_am_selben_tag_nur_eine_welle(self):
+        # Review #509: Start-Lauf von Hand mit article_date heute, danach der Abend-Lauf am selben UTC-Tag
+        self.assertEqual(self.run_series("2026-11-18", run="2026-11-18"), ["a", "b"])
+        self.assertEqual(self.run_series("2026-11-19", run="2026-11-18"), [])
+        self.assertEqual(self.cfg()["lauf"], "2026-11-18"); self.assertEqual(self.cfg()["zuletzt"], "2026-11-18")
+        self.assertEqual(self.run_series("2026-11-20", run="2026-11-19"), ["c"])
+
+    def test_verspaeteter_abend_lauf_laesst_keinen_tag_aus(self):
+        # Review #509: Lauf 19.11. um 23:05 UTC (00:05 Berlin) -> Artikeldatum 20.11. (UTC + 1), am 20.11. kommt die naechste Welle
+        self.assertEqual(self.run_series("2026-11-19", run="2026-11-18"), ["a", "b"])
+        self.assertEqual(self.run_series("2026-11-20", run="2026-11-19"), ["c"])
+        self.assertEqual(self.run_series("2026-11-21", run="2026-11-20"), ["dep", "e"])
+
+    def test_artikeldatum_utc_plus_eins(self):
+        class Fake(datetime.datetime):
+            @classmethod
+            def now(cls, tz=None): return datetime.datetime(2026, 11, 19, 23, 5, tzinfo=datetime.timezone.utc).astimezone(tz)
+        old = BR.datetime.datetime
+        BR.datetime.datetime = Fake
+        try:
+            self.assertEqual(BR._utc_today().isoformat(), "2026-11-19")
+        finally:
+            BR.datetime.datetime = old
 
     def test_eine_welle_je_datum_in_reihenfolge(self):
         self.assertEqual(self.run_series("2026-11-19"), ["a", "b"])
@@ -85,14 +111,14 @@ class Reihe(unittest.TestCase):
     def test_main_gibt_reihe_und_tagesordner_frei(self):
         old = (BR.QUEUE, BR.DEST, BR.SPONSORSHIPS, sys.argv)
         BR.QUEUE, BR.DEST = str(self.queue), str(self.dest)
-        BR.release_series.__defaults__ = (str(self.spons),)
+        BR.release_series.__defaults__ = (str(self.spons), None)
         try:
             sys.argv = ["blog_release.py", "", "", "2026-11-19"]
             with redirect_stdout(StringIO()):
                 BR.main()
         finally:
             BR.QUEUE, BR.DEST, BR.SPONSORSHIPS, sys.argv = old
-            BR.release_series.__defaults__ = (BR.SPONSORSHIPS,)
+            BR.release_series.__defaults__ = (BR.SPONSORSHIPS, None)
         self.assertEqual(sorted(os.listdir(self.dest)), ["a.md", "b.md", "x.md", "y.md"])
 
 

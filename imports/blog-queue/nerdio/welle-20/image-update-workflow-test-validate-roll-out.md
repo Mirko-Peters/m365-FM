@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-desktop-image, nerdio-manager-for-enterprise]
 keypoints:
   - "To test first, create the new version with Stage new image as inactive. Nerdio's toggle Use the \"staged\" image version can create a test desktop image; confirm the Azure image field in your console."

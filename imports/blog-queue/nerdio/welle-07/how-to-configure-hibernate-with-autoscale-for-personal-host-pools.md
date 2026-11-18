@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-hibernation, avd-personal-host-pool]
 keypoints:
   - "Order matters: enable hibernation on the VMs, verify a manual hibernate and resume, assign Power On Off Contributor at subscription scope, then create the scaling plan."

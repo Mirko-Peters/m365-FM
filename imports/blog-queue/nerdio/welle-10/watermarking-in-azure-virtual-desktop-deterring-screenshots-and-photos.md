@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-watermarking, azure-virtual-desktop]
 keypoints:
   - "Watermarking shows QR codes across a remote desktop. Each code contains the Connection ID (default) or the Device ID, which an admin can look up to trace the session."

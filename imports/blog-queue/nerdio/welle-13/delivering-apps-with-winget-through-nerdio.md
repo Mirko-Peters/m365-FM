@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-unified-app-catalog]
 keypoints:
   - "Nerdio's Unified Application Management (UAM) deploys apps from a Winget repository to AVD host pools or Intune-managed devices through a deployment policy instead of manual winget."

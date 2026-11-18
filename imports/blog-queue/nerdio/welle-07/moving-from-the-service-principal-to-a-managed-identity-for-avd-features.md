@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-managed-identity, azure-virtual-desktop]
 keypoints:
   - "Assign the identity and roles first, verify, and remove the service principal's role last. A subscription-level service principal assignment serves every pool, so remove it only after all have one."

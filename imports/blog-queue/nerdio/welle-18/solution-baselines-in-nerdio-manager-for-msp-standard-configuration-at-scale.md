@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-solution-baselines, nerdio-manager-for-msp]
 keypoints:
   - "A solution baseline is defined at MSP level under Solution Baselines and assigned to customer accounts. Changes flow to every assigned account instead of tenant-by-tenant edits."

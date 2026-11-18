@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [golden-image, avd-custom-image-templates]
 keypoints:
   - "Learn says to build each image from a fresh base VM, not from an existing custom image, never to capture a VM that is registered in a host pool, and not to capture the same VM twice."

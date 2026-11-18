@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [fslogix-office-container, fslogix]
 keypoints:
   - "Learn calls a single profile container with profile and Office data in one VHD(x) the recommended configuration, unless business or workload requirements need separation."

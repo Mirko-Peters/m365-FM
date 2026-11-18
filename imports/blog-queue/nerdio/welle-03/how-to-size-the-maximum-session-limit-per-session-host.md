@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-maximum-session-limit, avd-host-pool]
 keypoints:
   - "Learn names no recommended maximum session limit and points to Insights. Its sizing guidance lists maximum users per vCPU: 6 light, 4 medium, 2 heavy, 1 power."

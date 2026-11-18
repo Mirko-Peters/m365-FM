@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [fslogix-cloud-cache, fslogix]
 keypoints:
   - "Cloud Cache is not a container type but an option for profile and Office containers: sessions use a local cache, and changes are flushed to up to four providers in CCDLocations (SMB or page blob)."

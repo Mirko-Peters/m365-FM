@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-personal-host-pool, avd-host-pool]
 keypoints:
   - "In a personal host pool each session host is assigned to one user, the maximum session limit is one, and the user can keep profile data on the VM's OS disk instead of in FSLogix."

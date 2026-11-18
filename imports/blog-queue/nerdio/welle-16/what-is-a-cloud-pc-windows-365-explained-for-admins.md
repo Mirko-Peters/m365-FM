@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [windows-365]
 keypoints:
   - "Learn defines a Cloud PC as a VM hosted by Windows 365. Enterprise, Business and Government assign one per user; Windows 365 Flex Shared mode lets a group share one non-concurrently."

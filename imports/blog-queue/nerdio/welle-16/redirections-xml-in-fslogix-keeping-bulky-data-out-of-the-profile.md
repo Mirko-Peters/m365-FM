@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [fslogix-redirections-xml, fslogix]
 keypoints:
   - "FSLogix does not create redirections.xml. You write it into the RedirXMLSourceFolder location, and FSLogix copies it into the container at sign-in when it differs."

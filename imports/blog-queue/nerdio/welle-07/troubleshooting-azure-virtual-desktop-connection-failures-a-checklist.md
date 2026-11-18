@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-virtual-desktop, avd-agent]
 keypoints:
   - "Sort the failure by stage before changing anything: no sign-in, no resources, launch fails, or connected but unstable. Each stage has a different owner and fix."

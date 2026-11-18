@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [windows-365]
 keypoints:
   - "A Windows 365 Enterprise Cloud PC lives in a Microsoft-owned subscription and is provisioned by policy. An AVD session host is a VM in your subscription that you create and manage."

@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-session-host, azure-virtual-desktop]
 keypoints:
   - "A session host is a VM registered to Azure Virtual Desktop. Learn says all session hosts in a host pool should come from the same image for a consistent user experience."

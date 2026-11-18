@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [fslogix-redirections-xml, fslogix]
 keypoints:
   - "Learn's tutorial excludes five Teams folders with Copy 0. The current Teams for VDI page covers only three and recommends no further exclusions, so test media-stack and meeting-addin Cache first."

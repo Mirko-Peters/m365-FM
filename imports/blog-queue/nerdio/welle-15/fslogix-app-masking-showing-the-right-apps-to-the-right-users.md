@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [fslogix-app-masking, fslogix]
 keypoints:
   - "App Masking uses hiding rules in Rule Sets that hide files, folders, registry items, printers or fonts from a user or group, so an app can stay in the image but not appear for some users."

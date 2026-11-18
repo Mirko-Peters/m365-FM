@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-virtual-desktop, avd-single-sign-on]
 keypoints:
   - "Learn says users are prompted only when a new access token is requested. Two apps matter: Azure Virtual Desktop for the service and Windows Cloud Login for session host sign-in with SSO."

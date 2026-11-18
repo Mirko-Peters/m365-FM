@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-assistpro, nerdio-manager-for-enterprise]
 keypoints:
   - "Names depend on the product: NME lists AssistPro in v5.7, Nerdio Copilot from v6.4.0 and Analytics Pro in v7.0.0. Nerdio Manager for MSP still documents AssistPro, with changes in v7.4.0 and v7.4.1."

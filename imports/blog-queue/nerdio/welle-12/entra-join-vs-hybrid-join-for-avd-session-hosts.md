@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-entra-join, azure-virtual-desktop]
 keypoints:
   - "Session hosts can join an Entra tenant or an AD domain. An Entra joined host needs no domain controller to deploy or access it; a hybrid joined device needs periodic line of sight to one."

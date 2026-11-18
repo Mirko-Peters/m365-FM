@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-auto-scaling, nerdio-manager-for-enterprise]
 keypoints:
   - "Auto-scaling is off by default and enabled per host pool under Auto-scale > Configure. It starts, stops, creates or removes VMs (pooled: scale-out/in; personal: auto-grow/shrink)."

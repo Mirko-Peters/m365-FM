@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-finops-user-cost-attribution, nerdio-manager-for-enterprise]
 keypoints:
   - "User cost attribution is Premium only. It reads cost from Cost Management and sessions from Log Analytics, and allocates cost by each user's share of session time."
@@ -23,7 +24,7 @@ faq:
 
 Nerdio Manager's user cost attribution takes the Azure cost of an [Azure Virtual Desktop](https://www.m365.fm/entity/azure-virtual-desktop/) deployment, splits it across users by how long each user worked in a desktop, and rolls the result up per user and per [host pool](https://www.m365.fm/entity/avd-host-pool/). It needs the Premium edition and is only as good as your tagging and diagnostics.
 
-This article goes deeper into the Nerdio mechanism than [Implementing showback for Azure Virtual Desktop host pools](https://www.m365.fm/community/u/mirko-p/blog/implementing-showback-for-azure-virtual-desktop-host-pools/), which covers the Azure-native route. Tag design is in [A tagging strategy for AVD cost allocation](https://www.m365.fm/community/u/mirko-p/blog/a-tagging-strategy-for-avd-cost-allocation/), and Power BI in [Connecting Nerdio cost data to Power BI](https://www.m365.fm/community/u/mirko-p/blog/connecting-nerdio-cost-data-to-power-bi/). For the two models, see [showback and chargeback](https://www.m365.fm/entity/showback-chargeback/).
+This article goes deeper into the Nerdio mechanism than [Implementing showback for Azure Virtual Desktop host pools](https://www.m365.fm/community/u/mirko-p/blog/implementing-showback-for-azure-virtual-desktop-host-pools/), which covers the Azure-native route. Tag design is in [A tagging strategy for AVD cost allocation](https://www.m365.fm/community/u/mirko-p/blog/a-tagging-strategy-for-avd-cost-allocation/), and Power BI in [Connecting Nerdio cost data to Power BI](https://www.m365.fm/community/u/mirko-p/blog/connecting-nerdio-cost-data-to-power-bi/). For the two models, see [showback](https://www.m365.fm/entity/showback/) and [chargeback](https://www.m365.fm/entity/chargeback/).
 
 ## What it is and what it needs
 

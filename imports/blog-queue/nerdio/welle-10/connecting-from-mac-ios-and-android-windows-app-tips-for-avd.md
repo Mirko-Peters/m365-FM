@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [windows-app, azure-virtual-desktop]
 keypoints:
   - "Learn's requirements for AVD: macOS 12.0, iOS or iPadOS 17.0, Android 10, Chrome OS 126 or later. The Windows 365 tab lists different minimums for macOS and iOS."

@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-autoscale-schedule-phases, avd-scaling-plan]
 keypoints:
   - "A schedule has four phases: ramp-up, peak hours, ramp-down and off-peak hours. Each phase start time is also the end time of the previous phase."

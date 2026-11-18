@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-virtual-desktop, finops]
 keypoints:
   - "For session hosts in Azure, Microsoft's pricing page lists user access rights (included with eligible licenses) plus Azure VMs, storage and networking, with no separate service fee."

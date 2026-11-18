@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-cost-estimator, nerdio-advisor]
 keypoints:
   - "Microsoft describes Windows 365 as a fixed per-user cost and AVD as consumption-based. Compare the matching pair: Windows 365 Enterprise against an AVD personal host pool."

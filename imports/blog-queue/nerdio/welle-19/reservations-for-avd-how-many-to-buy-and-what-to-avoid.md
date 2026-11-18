@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-reserved-instance-management, nerdio-manager-for-enterprise]
 keypoints:
   - "Reservations apply hour by hour and unused hours are lost. An extra reserved core saves only if it runs more than (1 - discount) of the hours: 60 percent at a 40 percent discount."

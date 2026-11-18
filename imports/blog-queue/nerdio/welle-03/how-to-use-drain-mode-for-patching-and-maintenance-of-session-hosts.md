@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-drain-mode, avd-session-host]
 keypoints:
   - "Drain mode stops new sessions on a host. Existing sessions stay until the user signs out or an administrator ends them."

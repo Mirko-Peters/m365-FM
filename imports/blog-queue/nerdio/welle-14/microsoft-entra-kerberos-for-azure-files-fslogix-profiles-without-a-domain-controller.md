@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [entra-kerberos-azure-files, azure-files]
 keypoints:
   - "With Entra Kerberos, Entra ID issues the Kerberos tickets for SMB access to Azure Files. For cloud-only users the shares no longer need a domain controller for authentication or authorization."

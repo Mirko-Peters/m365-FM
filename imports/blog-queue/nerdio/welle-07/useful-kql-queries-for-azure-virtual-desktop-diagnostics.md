@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-insights, kql]
 keypoints:
   - "All queries run against the WVD-prefixed tables that fill after you add a diagnostic setting with Send to Log Analytics on the host pool, application group or workspace."

@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-for-azure-local, azure-virtual-desktop]
 keypoints:
   - "Prerequisites per Learn: an Azure Local instance on 23H2 or later registered with Azure, a stable connection, a Windows image on the instance and a logical network."

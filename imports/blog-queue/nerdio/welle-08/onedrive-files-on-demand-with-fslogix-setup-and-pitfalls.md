@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [fslogix, onedrive]
 keypoints:
   - "Learn supports the OneDrive sync app on non-persistent desktops with FSLogix, with a per-machine install and the latest FSLogix. The OS list names Windows 11 and Windows Server 2025 or newer."

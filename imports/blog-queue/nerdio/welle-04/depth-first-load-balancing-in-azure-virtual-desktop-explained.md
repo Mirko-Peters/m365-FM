@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-depth-first-load-balancing, avd-host-pool]
 keypoints:
   - "Depth-first queries hosts that allow new connections and are below their maximum session limit, then picks the one with the most sessions; on a tie, the first host from the query."

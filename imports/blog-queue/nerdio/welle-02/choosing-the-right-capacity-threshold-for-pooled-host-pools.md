@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-capacity-threshold, avd-scaling-plan]
 keypoints:
   - "Learn gives example thresholds (30 to 90 percent) but no recommended value. The right number depends on your session limit, sign-in pattern and host start-up time."

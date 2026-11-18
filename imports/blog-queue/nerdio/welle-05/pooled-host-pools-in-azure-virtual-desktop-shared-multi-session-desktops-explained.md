@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-pooled-host-pool, avd-host-pool]
 keypoints:
   - "In a pooled host pool several users share one session host, and users are not assigned to hosts. Learn describes the result as a shared experience with lower costs and greater efficiency."

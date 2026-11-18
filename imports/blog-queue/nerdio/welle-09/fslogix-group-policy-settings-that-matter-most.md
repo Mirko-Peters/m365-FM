@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [fslogix]
 keypoints:
   - "Copy fslogix.admx and fslogix.adml to the SYSVOL central store, then edit a GPO under Computer Configuration > Policies > Administrative Templates > FSLogix."

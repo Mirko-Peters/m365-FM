@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-force-logoff, avd-scaling-plan]
 keypoints:
   - "Ramp-down offers force sign-out or, with it off, a choice between VMs with no active or disconnected sessions and VMs with no active sessions. Learn does not describe the difference beyond the labels."

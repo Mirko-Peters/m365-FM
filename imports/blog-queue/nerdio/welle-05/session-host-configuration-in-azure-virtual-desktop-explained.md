@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-session-host-configuration, avd-host-pool]
 keypoints:
   - "A host pool uses either standard management or a session host configuration. The approach is set when the pool is created, and a pool created without one cannot get one later."

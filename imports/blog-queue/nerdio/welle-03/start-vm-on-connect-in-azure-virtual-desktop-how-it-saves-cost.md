@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-start-vm-on-connect, azure-virtual-desktop]
 keypoints:
   - "Start VM on Connect powers a session host on when a user connects. It never powers one off, so the saving comes from the shutdown mechanism you pair it with."

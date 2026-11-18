@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-console-connect, nerdio-manager-for-msp]
 keypoints:
   - "Console Connect lets technicians connect from the Nerdio Manager portal to a user session, session host, server, Intune device or desktop image. The session opens in a browser tab."

@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-scaling-plan, azure-virtual-desktop]
 keypoints:
   - "First set a custom MaxSessionLimit on pooled host pools and assign Power On Off Contributor at subscription level. Dynamic autoscaling also needs Virtual Machine Contributor."

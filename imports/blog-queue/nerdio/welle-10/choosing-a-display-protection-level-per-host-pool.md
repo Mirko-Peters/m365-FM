@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-display-protection, azure-virtual-desktop]
 keypoints:
   - "The level is one RDP property on the host pool: enableWindowsCloudIODisplayProtection:i:0, 1 or 2. Our reading: it applies to every user of the pool, so different endpoint classes need separate pools."

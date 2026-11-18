@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-virtual-desktop]
 keypoints:
   - "A disconnected session is one the user has not signed out of. With 'Stop VMs when VMs have no active sessions', autoscale counts disconnected sessions as active."

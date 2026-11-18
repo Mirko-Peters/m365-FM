@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-scripted-actions, nerdio-manager-for-enterprise]
 keypoints:
   - "Windows scripts run on the VM via the Custom Script Extension. Azure runbooks run in an Automation account Nerdio creates, as Nerdio's service principal; use them for Azure changes."

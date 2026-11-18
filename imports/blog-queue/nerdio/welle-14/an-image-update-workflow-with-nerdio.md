@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-desktop-image, golden-image]
 keypoints:
   - "Nerdio's cycle: power on the image VM, change it, then Power off & set as image. An automated process runs Sysprep and sealing; the image can then build new host pools or re-image existing ones."

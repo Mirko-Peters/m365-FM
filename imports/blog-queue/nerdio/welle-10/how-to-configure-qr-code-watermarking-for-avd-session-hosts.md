@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-watermarking, azure-virtual-desktop]
 keypoints:
   - "In Intune, use Enable watermarking under Administrative templates > Windows Components > Remote Desktop Services > Remote Desktop Session Host > Azure Virtual Desktop, not [Deprecated]."

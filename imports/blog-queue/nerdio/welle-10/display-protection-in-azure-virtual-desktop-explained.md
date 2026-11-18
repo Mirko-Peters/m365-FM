@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-display-protection, azure-virtual-desktop]
 keypoints:
   - "Display Protection helps protect session video from screen capture malware on the Windows App endpoint, encrypting it with PlayReady via hardware (SL3000) or software (SL2000) DRM."

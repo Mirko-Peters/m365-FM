@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-advisor, azure]
 keypoints:
   - "Advisor's resize targets P95 CPU and network at or below 40 percent and P99 memory at or below 60 percent. It analyzes 7 days by default; the lookback can be up to 90 days."

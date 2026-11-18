@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [rdp-multipath, remote-desktop-protocol]
 keypoints:
   - "Multipath monitors UDP via STUN, UDP via TURN and redundant TCP paths for one session and moves traffic to a standby path if the active one degrades; if all are lost, the client reconnects."

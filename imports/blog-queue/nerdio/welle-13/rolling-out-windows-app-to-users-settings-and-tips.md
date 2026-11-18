@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [windows-app, azure-virtual-desktop]
 keypoints:
   - "Windows App comes from the Microsoft Store or a standalone .msix. Intune can deploy it as a Microsoft Store app (new), and device groups install it before the user signs in."

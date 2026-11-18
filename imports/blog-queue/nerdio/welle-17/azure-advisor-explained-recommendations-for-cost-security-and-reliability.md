@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-advisor, azure]
 keypoints:
   - "Advisor has five recommendation categories: reliability, security, performance, cost and operational excellence. The overall Advisor score is usually the average of the five category scores."

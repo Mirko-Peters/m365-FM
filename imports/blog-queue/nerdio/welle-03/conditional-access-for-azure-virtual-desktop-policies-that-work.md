@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-virtual-desktop, conditional-access]
 keypoints:
   - "Target two apps with separate policies: Azure Virtual Desktop and Windows Cloud Login (session host sign-in with SSO). Never target the Azure Virtual Desktop Azure Resource Manager Provider app."

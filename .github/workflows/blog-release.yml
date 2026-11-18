@@ -6,7 +6,7 @@ on:
     inputs:
       date: { description: "Stichtag JJJJ-MM-TT (leer = keine Datumsgrenze, alles freigeben); sonst nur Ordner bis zu diesem Datum", required: false, default: "" }
       limit: { description: "Hoechstens so viele Artikel in diesem Lauf (leer = 15)", required: false, default: "" }
-      article_date: { description: "Datum der freigegebenen Artikel JJJJ-MM-TT (leer = morgen nach Berliner Zeit); fuer den Start-Lauf heute eintragen", required: false, default: "" }
+      article_date: { description: "Datum der freigegebenen Artikel JJJJ-MM-TT (leer = UTC-Tag des Laufs + 1); gilt auch fuer die Welle einer Reihe (Nerdio). Je UTC-Tag gibt es nur eine Welle: ein Hand-Lauf ersetzt den Abend-Lauf desselben Tages", required: false, default: "" }
 permissions:
   contents: write
 concurrency:

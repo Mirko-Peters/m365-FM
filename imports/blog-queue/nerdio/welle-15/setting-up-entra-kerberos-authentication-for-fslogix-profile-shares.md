@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [entra-kerberos-azure-files, azure-files]
 keypoints:
   - "Runbook order: create storage and share, enable Entra Kerberos, grant consent, exclude the storage app from MFA, set share and file permissions, configure clients and FSLogix, test a new user."

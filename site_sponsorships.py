@@ -407,10 +407,13 @@ def split_topics(topics, extras, cap=TOPIC_CAP):
     return ex + [t for t in dict.fromkeys(topics or []) if t not in ex][:cap], set(ex)
 
 
-def post_extras(recs, today, ents):
-    """Extras fuer einen gesponserten Beitrag: Vereinigung ueber alle zugehoerigen Sponsorings (nur Sponsor-Entitaeten aus "entities")."""
+def post_extras(recs, today, ents, paid_only=True):
+    """Extras fuer einen gesponserten Beitrag: Vereinigung ueber alle zugehoerigen Sponsorings (nur Sponsor-Entitaeten aus "entities").
+    Nur bezahlte Sponsorings (_paid): ein neutraler Partner (Nerdio, Review #509) bekommt keine Extra-Themen, kein "about" und keine
+    Themen-Brotkrume nach seinen Produkten; der Beitrag behaelt seine eigenen Themen, sichtbar bleibt nur SPM.note unter der H1.
+    paid_only=False: alle Sponsorings (nur fuer skip der Transparenzhinweise, die SPM.note schon abdeckt)."""
     out = []
-    for r in recs or []:
+    for r in (_paid(recs) if paid_only else recs or []):
         for o in r.get("entities") or []:
             for x in sponsor_extra_entities(o, today, ents, [r]):
                 if x not in out: out.append(x)

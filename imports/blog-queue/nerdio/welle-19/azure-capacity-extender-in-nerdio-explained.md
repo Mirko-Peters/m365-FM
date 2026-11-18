@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-azure-capacity-extender, nerdio-manager-for-enterprise]
 keypoints:
   - "Nerdio describes Azure Capacity Extender as fallback VM sizes used in sequence when the preferred size is unavailable, so host creation, auto-scale, auto-grow and auto-heal do not fail."

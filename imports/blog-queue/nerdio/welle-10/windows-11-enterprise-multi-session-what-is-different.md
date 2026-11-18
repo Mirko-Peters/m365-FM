@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [windows-enterprise-multi-session, azure-virtual-desktop]
 keypoints:
   - "Multi-session allows several concurrent sessions per VM under the same per-user licenses, but only as an AVD session host in production (incl. Azure Local). It does not activate against on-prem KMS."

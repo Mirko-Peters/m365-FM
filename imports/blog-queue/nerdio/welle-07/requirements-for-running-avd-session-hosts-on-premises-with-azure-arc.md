@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-hybrid, azure-virtual-desktop]
 keypoints:
   - "Four resource providers matter: Microsoft.DesktopVirtualization for AVD, plus Microsoft.HybridCompute, Microsoft.GuestConfiguration and Microsoft.HybridConnectivity for Azure Arc-enabled servers."

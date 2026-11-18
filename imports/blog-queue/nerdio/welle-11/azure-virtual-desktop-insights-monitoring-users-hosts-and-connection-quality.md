@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-insights, azure-virtual-desktop]
 keypoints:
   - "Insights is an Azure Monitor Workbooks dashboard. It reads AVD diagnostics, recommended performance counters and Windows event logs from Log Analytics; host data can use a separate workspace."

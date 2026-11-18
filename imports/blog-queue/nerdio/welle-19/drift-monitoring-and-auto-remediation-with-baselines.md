@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-solution-baselines, nerdio-manager-for-msp]
 keypoints:
   - "Drift means a baseline setting is Mismatch or Unavailable. Nerdio shows it red when the baseline is enforced, amber when not, and lists the setting per account."

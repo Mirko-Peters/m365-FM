@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-azure-capacity-extender, nerdio-manager-for-enterprise]
 keypoints:
   - "Capacity and API limits differ. An allocation failure means no capacity for the VM size in the region or zone; throttling means Azure Resource Manager returns HTTP 429."

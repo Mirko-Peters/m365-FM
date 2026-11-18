@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-remoteapp, avd-application-group]
 keypoints:
   - "Learn lists improved Windows Snap and full-screen support, better multi-monitor handling and refined visuals. The what's new page adds window moving, resizing and z-ordering."

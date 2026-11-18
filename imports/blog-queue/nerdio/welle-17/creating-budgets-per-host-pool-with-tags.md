@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-budgets, microsoft-cost-management]
 keypoints:
   - "Tags appear in usage data only while applied and not on historical data. Our reading: a tag-filtered budget counts only tagged usage, so tag first and wait for the data."

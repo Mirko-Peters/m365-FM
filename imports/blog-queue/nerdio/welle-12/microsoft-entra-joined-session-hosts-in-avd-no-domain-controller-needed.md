@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-entra-join, azure-virtual-desktop]
 keypoints:
   - "Learn says Entra joined VMs in Azure Virtual Desktop need neither line of sight to a domain controller nor Entra Domain Services; in some cases no domain controller is needed at all."

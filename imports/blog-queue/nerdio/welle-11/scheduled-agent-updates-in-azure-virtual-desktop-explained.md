@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-scheduled-agent-updates, avd-agent]
 keypoints:
   - "The setting covers the Azure Virtual Desktop agent, the side-by-side stack and the Geneva Monitoring agent together, but not their initial installation."

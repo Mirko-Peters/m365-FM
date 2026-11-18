@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-custom-image-templates, golden-image]
 keypoints:
   - "The portal has seven tabs, from Basics to Review and create. Creating the template builds nothing: a build only starts when you select Start build."

@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-maximum-session-limit, avd-host-pool]
 keypoints:
   - "Learn defines available capacity as the maximum session limit times the number of available hosts. Used capacity is active plus disconnected sessions divided by that capacity."

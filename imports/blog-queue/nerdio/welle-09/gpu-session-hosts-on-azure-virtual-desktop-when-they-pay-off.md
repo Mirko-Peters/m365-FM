@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-virtual-desktop, gpu]
 keypoints:
   - "By default, AVD remote sessions render on the CPU and do not use an available GPU. GPU rendering and GPU frame encoding are switched on separately, with Intune or Group Policy."

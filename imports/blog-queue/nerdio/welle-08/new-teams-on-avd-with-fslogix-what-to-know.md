@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-teams-media-optimization, fslogix]
 keypoints:
   - "Learn requires FSLogix 2210 hotfix 3 or later for new Teams on AVD and recommends hotfix 4 for VDI, while the FSLogix notes require the latest version, 26.08 (31 August 2026)."

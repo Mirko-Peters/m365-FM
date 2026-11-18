@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-scaling-plan, azure-virtual-desktop]
 keypoints:
   - "A scaling plan is an Azure Resource Manager object. It can be assigned to several host pools, but only to pools of the same type, and the type cannot be changed after creation."

@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-autoscale-schedule-phases, avd-scaling-plan]
 keypoints:
   - "Start with data: hourly new connections from WVDConnections show when sign-ins begin, and session counters show where sessions hold, fall and reach the evening floor. Phase starts follow."

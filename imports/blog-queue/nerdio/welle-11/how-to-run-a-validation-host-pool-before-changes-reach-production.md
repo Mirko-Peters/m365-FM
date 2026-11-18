@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-validation-environment, avd-host-pool]
 keypoints:
   - "Azure Advisor flags subscriptions with no validation pool and with too many: Learn recommends fewer than half your pools be validation pools. One small validation pool is a workable start."

@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-compute-gallery, azure-virtual-desktop]
 keypoints:
   - "A gallery holds image definitions, and each definition holds image versions. You deploy from a version, never from the definition itself."

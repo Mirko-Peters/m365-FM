@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-image-builder, azure-virtual-desktop]
 keypoints:
   - "Azure VM Image Builder is a managed service built on HashiCorp Packer. You submit a template naming a source, customizations and distribution targets, and the service builds the image."

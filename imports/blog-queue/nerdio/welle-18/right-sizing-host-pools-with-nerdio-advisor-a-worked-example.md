@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-advisor, nerdio-manager-for-enterprise]
 keypoints:
   - "The pooled rule needs a dynamic pool with auto-scale and CPU and RAM collection. It compares 30 days of utilisation with 60% (decrease) and 80% (increase); we read the 90th percentile as compared."

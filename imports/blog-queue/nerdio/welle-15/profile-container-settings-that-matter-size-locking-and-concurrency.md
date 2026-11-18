@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [fslogix-profile-container, fslogix]
 keypoints:
   - "SizeInMBs (default 30000) is the container's ceiling; you can raise it but not lower it. IsDynamic (default 1) controls up-front allocation, not maximum size."

@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-remoteapp, avd-application-group]
 keypoints:
   - "RemoteApp lets users open individual published apps from a session host in a pooled host pool. Learn lists it for pooled host pools only; personal pools publish desktops."

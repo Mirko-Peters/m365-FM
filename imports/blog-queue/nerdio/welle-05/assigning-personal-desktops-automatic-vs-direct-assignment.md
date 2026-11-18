@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-personal-host-pool, avd-host-pool]
 keypoints:
   - "Automatic assignment is the default for new personal host pools: users get a desktop at first connection. Direct assignment needs the user assigned to the host pool and a session host."

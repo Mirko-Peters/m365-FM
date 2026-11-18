@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-hybrid-benefit, azure-reservations]
 keypoints:
   - "Three layers are separate: the user's access right, the Windows license on the session host VM (LicenseType), and for Windows Server hosts the RDS client access license."

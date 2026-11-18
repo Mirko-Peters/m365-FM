@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [trusted-launch, azure-virtual-desktop]
 keypoints:
   - "Trusted launch combines Secure Boot, a virtual TPM (vTPM) and boot integrity monitoring for Generation 2 Azure VMs. Learn says you can enable them independently and that it adds no VM price."

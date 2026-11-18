@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [windows-365-boot, windows-365]
 keypoints:
   - "Devices and Cloud PCs need Windows 11 Enterprise, Pro or IoT Enterprise 22621.3374 or later, and Windows App 2.0.285 or later. Each user needs a Windows 365 license and a Cloud PC."

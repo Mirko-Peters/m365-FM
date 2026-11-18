@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-multimedia-redirection, azure-virtual-desktop]
 keypoints:
   - "One .msi installs the service and the browser extension on the session host (aka.ms/avdmmr/msi, silent with /qn). Edge and Chrome must not be running during the install."

@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-start-vm-on-connect, azure-virtual-desktop]
 keypoints:
   - "Two things are required: a role assignment that lets Azure Virtual Desktop power on the VMs, and the Start VM on connect setting on an existing host pool."

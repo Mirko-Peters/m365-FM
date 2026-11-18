@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [fslogix-office-container, fslogix]
 keypoints:
   - "By default one profile container holds all profile and Office content. Learn calls that recommended and says ODFC adds no benefit when profile containers are your primary solution."

@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-hybrid, azure-virtual-desktop]
 keypoints:
   - "AVD Hybrid runs session hosts on-premises while host pools, workspaces and brokering stay in Azure. Each host must be Azure Arc-enabled; an Arc extension installs the AVD components."

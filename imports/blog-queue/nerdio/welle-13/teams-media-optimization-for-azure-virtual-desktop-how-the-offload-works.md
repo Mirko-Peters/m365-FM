@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-teams-media-optimization, azure-virtual-desktop]
 keypoints:
   - "Teams runs on the session host. Media optimization redirects call and meeting media to the local device via SlimCore or the WebRTC Redirector Service; without it, rendering is server-side."

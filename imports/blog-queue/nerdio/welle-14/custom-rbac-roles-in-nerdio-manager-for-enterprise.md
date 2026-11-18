@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-manager-for-enterprise]
 keypoints:
   - "NME has five built-in roles; only AVD Admins manage users and roles. A custom role is defined under System > RBAC > Definitions from modules and access modes such as Read Only or Manage."

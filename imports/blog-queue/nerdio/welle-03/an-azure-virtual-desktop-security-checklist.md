@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-virtual-desktop, avd-screen-capture-protection]
 keypoints:
   - "Microsoft runs the control plane, physical hosts and network. Identity, user devices, apps, the session host OS, deployment configuration and network controls stay with you."

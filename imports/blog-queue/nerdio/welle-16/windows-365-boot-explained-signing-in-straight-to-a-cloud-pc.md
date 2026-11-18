@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [windows-365-boot, windows-365]
 keypoints:
   - "Windows 365 Boot sends Windows 11 physical devices straight to the user's Cloud PC after device sign-in. With single sign-on on for the Cloud PC, users do not sign in again."

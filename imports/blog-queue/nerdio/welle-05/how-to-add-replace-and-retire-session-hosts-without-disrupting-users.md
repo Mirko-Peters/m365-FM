@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-session-host, azure-virtual-desktop]
 keypoints:
   - "The management approach is chosen when the host pool is created and cannot be changed later. It decides how hosts are added and replaced, and the session host configuration article covers the details."

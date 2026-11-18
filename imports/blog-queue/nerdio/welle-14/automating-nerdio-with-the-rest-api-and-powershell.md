@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-manager-for-enterprise, nerdio-scripted-actions]
 keypoints:
   - "Three routes: the REST API and PowerShell module call Nerdio Manager from outside; scripted actions run on session hosts (Windows scripts) or in Azure Automation (runbooks)."

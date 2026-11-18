@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [msix-app-attach, azure-virtual-desktop]
 keypoints:
   - "App Attach attaches an app from a package to a user session. Apps are not installed on session hosts or images, and run in containers separating user data, OS and other apps."

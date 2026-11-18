@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-breadth-first-load-balancing, avd-host-pool]
 keypoints:
   - "Breadth-first queries the session hosts that allow new connections and picks one at random from the half with the fewest sessions, so distribution is balanced but not strictly even."

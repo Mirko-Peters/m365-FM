@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-minimum-percentage-of-hosts, avd-scaling-plan]
 keypoints:
   - "The minimum percentage of hosts is the lowest share of all hosts that must be on in a phase. A percentage that is not a whole number is rounded up; Learn's examples round to whole hosts."

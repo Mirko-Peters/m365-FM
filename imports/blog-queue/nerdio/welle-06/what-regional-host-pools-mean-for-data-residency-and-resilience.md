@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-regional-host-pools, avd-host-pool]
 keypoints:
   - "Regional scope stores customer input data and customer data for the host pool and related objects in the chosen region; Geographical scope stores them in its geography."

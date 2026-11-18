@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-cost-estimator, nerdio-advisor]
 keypoints:
   - "Microsoft's calculator module for AVD estimates session host VMs and extra storage of optional features. Internal licensing is added separately; other features have their own modules."

@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-session-host-configuration, avd-host-pool]
 keypoints:
   - "Session host update replaces the VMs of a pooled pool that uses a session host configuration. It updates one host first, then batches of the size you set, and each host takes about 20 minutes."

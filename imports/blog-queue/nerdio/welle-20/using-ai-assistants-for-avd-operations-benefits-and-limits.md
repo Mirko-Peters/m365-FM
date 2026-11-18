@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-assistpro, nerdio-manager-for-enterprise]
 keypoints:
   - "Three documented uses: answers from Nerdio Help Center articles with citations, script drafts (Script Pro) and KQL drafts (AnalyticsPro). Output is text you copy; it runs nothing."

@@ -125,6 +125,25 @@ class Partner(unittest.TestCase):
         self.assertEqual(SPM.ld([cog, self.rec])["name"], "Cognillo")
         self.assertIn("cognillo", [o["id"] for o in SPM.lead_orgs(day, RAW, self.recs)])
 
+    def test_partner_beitrag_ohne_extra_themen(self):
+        """Review #509: ein Nerdio-Artikel unter "posts" behaelt nur seine eigenen Themen (Chips, BlogPosting.about, Themen-Brotkrume);
+        keine Nerdio-Entitaeten vorn und kein Badge "Partner" an Chips. Bezahlte Sponsorings (Cognillo, iFAKT) behalten ihre Extras."""
+        import site_topic_crumbs as TC
+        day = "2026-11-20"
+        own = ["avd-pooled-host-pool", "avd-personal-host-pool"]
+        self.assertEqual(SPM.post_extras([self.rec], day, RAW), [])
+        topics, spx = SPM.split_topics(own, [x for x in SPM.post_extras([self.rec], day, RAW) if x in RAW])
+        self.assertEqual((topics, spx), (own, set()))
+        bc = TC.breadcrumb("https://www.m365.fm", "en", topics, RAW, "Pooled or personal", "https://www.m365.fm/x/")
+        self.assertNotIn("Nerdio", json.dumps(bc or {}))
+        self.assertTrue(set(NERDIO) >= set(SPM.post_extras([self.rec], day, RAW, paid_only=False)) >= {"nerdio", "nerdio-manager-for-msp"})   # nur fuer skip der Transparenzhinweise
+        cog = next(r for r in self.recs if r["id"] == "cognillo-2026-11")
+        ifk = next(r for r in self.recs if r["id"] == "ifakt-eigenes-unternehmen")
+        self.assertEqual(SPM.post_extras([cog], day, RAW), SPM.post_extras([cog], day, RAW, paid_only=False))
+        self.assertIn("cognillo", SPM.post_extras([cog], day, RAW))
+        self.assertIn("ifakt", SPM.post_extras([ifk], day, RAW))
+        self.assertEqual(SPM.post_extras([cog, self.rec], day, RAW), SPM.post_extras([cog], day, RAW))
+
     def test_firmenverzeichnis_partner_ohne_anzeige(self):
         """Review #509: Nerdio steht im Firmenverzeichnis in einem eigenen Block "Partner", ohne "Anzeige"/"Sponsoren" und ohne sponsor im JSON-LD;
         bezahlte Eintraege bleiben unter "Partner und Sponsoren · Anzeige"."""
@@ -196,6 +215,15 @@ class Artikel(unittest.TestCase):
             self.assertIsNone(re.search(r"retrieved on", t, re.I), f.name)
             self.assertIsNone(re.search(r"sponsor", t, re.I), f.name)
 
+    def test_entitaets_links_zeigen_auf_vorhandene_ids(self):
+        """Review #509: jede /entity/<id>/-URL der Nerdio-Warteschlange trifft eine Entitaet in data/entities.json (kein 404, z. B. das gestrichene showback-chargeback)."""
+        import re
+        tot = {}
+        for f in sorted((ROOT / "imports" / "blog-queue").rglob("*.md")):
+            for i in re.findall(r"https://www\.m365\.fm/entity/([^/)\s]+)/", f.read_text("utf-8")):
+                if i not in RAW: tot.setdefault(f.name, []).append(i)
+        self.assertEqual(tot, {})
+
     def test_renderer_tabellen_codebloecke_faq(self):
         import site_content_blog as C
         import site_blog as B
@@ -204,11 +232,28 @@ class Artikel(unittest.TestCase):
         self.assertIn("<pre><code>Get-Item &lt;Pfad&gt;</code></pre>", h); self.assertIn('<ol start="2">', h)
         self.assertNotIn("|---", h); self.assertNotIn("```", h)
         for f in self.files:
-            self.assertNotIn("|---", C.render(self.SNS.parse_file(f)["body"]), f.name)
+            rec = self.SNS.parse_file(f)
+            self.assertTrue(C.rich_of(rec["meta"]), f.name)   # Schalter render: v2 im Kopf jedes Nerdio-Artikels
+            h = C.check(rec, "en", f.stem, RAW)[0]["html"]
+            self.assertNotIn("|---", h, f.name); self.assertNotIn("```", h, f.name)
         faq = [{"q": "Does it cost extra?", "a": "No."}]
         self.assertFalse(B.faq_in_html({"html": "<p>Text</p>", "faq": faq}))   # Content-Paket: FAQ sichtbar zeigen
         self.assertTrue(B.faq_in_html({"html": "<h2>FAQ</h2><h3>Does it cost  extra?</h3><p>No.</p>", "faq": faq}))   # Altbeitrag: steht schon im Text
         self.assertTrue(B.faq_in_html({"html": "<p>Text</p>", "faq": []}))
+
+    def test_altpakete_ohne_schalter_unveraendert(self):
+        """Review #509: ohne render: v2 bleibt der fruehere Renderer (gleiches HTML und gleicher Hash wie vorher, keine neuen Uebersetzungs-Einheiten)."""
+        import site_content_blog as C
+        md = "Text\n\n| A | B |\n|---|---|\n| 1 | 2 |\n\n```\ncode\n```\n\n2. Zwei"
+        old = C.render(md, rich=False)
+        self.assertNotIn("<table>", old); self.assertNotIn("<pre>", old); self.assertNotIn("start=", old)
+        self.assertIn("|---|", old)
+        body = "Word " * 320 + "\n\n" + md
+        meta = {"title": "A package title", "summary": "x" * 60, "status": "approved", "author": "mirko-p", "date": "2026-11-12"}
+        a = C.check({"meta": meta, "body": body}, "en", "alt-paket", RAW)[0]
+        b = C.check({"meta": dict(meta, render="v2"), "body": body}, "en", "alt-paket", RAW)[0]
+        self.assertNotIn("<table>", a["html"]); self.assertIn("<table>", b["html"]); self.assertNotEqual(a["hash"], b["hash"])
+        self.assertNotIn("render", a); self.assertNotIn("render", b)
 
 
 class Wellen(unittest.TestCase):
@@ -242,7 +287,7 @@ class Wellen(unittest.TestCase):
 
     def test_reihe_json(self):
         cfg = json.loads((self.SERIES / "reihe.json").read_text("utf-8"))
-        self.assertEqual((cfg["zuletzt"], cfg["sponsoring"]), ("", "nerdio-partner"))
+        self.assertEqual((cfg["zuletzt"], cfg["lauf"], cfg["sponsoring"]), ("", "", "nerdio-partner"))
         slug = {a["nr"]: a["datei"].rsplit("/", 1)[1][:-3] for a in PLAN if a.get("datei")}
         self.assertEqual(cfg["nach"], {slug[196]: [slug[174], slug[65]]})
 
@@ -263,7 +308,8 @@ class Wellen(unittest.TestCase):
             seq, start = [], date(2026, 11, 19)
             for i in range(22):
                 with redirect_stdout(StringIO()):
-                    out = BR.release_series(str(series), str(dest), (start + timedelta(days=i)).isoformat(), sponsorships=str(sp))
+                    out = BR.release_series(str(series), str(dest), (start + timedelta(days=i)).isoformat(), sponsorships=str(sp),
+                                            run=(start + timedelta(days=i - 1)).isoformat())   # Abend-Lauf am Vortag (UTC)
                 seq.append(sorted(nr[s] for s in out))
             self.assertEqual([len(x) for x in seq], [10] * 19 + [5, 0, 0])
             flat = [n for x in seq for n in x]

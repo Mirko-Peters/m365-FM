@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-spot-virtual-machines, azure-virtual-desktop]
 keypoints:
   - "Azure Spot VMs run on unused capacity and can be evicted whenever Azure needs the capacity back, or when the price passes your maximum price. Azure gives 30 seconds' notice, and there is no SLA."

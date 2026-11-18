@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-virtual-desktop, avd-regional-host-pools]
 keypoints:
   - "Microsoft manages the control plane and its regional failover. Session hosts, networking, identity, images and profile storage in each region are your design."

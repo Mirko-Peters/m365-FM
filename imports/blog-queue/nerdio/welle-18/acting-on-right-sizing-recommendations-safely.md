@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-right-sizing, nerdio-advisor]
 keypoints:
   - "The Apply dialog offers Run now or a schedule and an optional message to active users. Nerdio says a change can be non-disruptive when scheduled outside business hours."

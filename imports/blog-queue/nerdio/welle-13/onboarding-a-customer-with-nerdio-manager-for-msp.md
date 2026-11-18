@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-manager-for-msp]
 keypoints:
   - "Onboarding starts under Accounts > Add account. A Global Administrator and Subscription Owner in the customer tenant consents, and Nerdio Manager creates a service principal there."

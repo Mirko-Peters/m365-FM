@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-context-based-redirections, azure-virtual-desktop]
 keypoints:
   - "Context-based redirection links an Entra Conditional Access authentication context to the host pool's redirection settings. Connections meeting the policy get them; others are restricted."

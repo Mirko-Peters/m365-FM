@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-workspace, azure-virtual-desktop]
 keypoints:
   - "An application group can be assigned to only one workspace, and users see desktops and apps only through the workspaces their application groups are registered to."

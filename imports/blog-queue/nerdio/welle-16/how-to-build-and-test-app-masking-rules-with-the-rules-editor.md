@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [fslogix-app-masking, fslogix]
 keypoints:
   - "The Rules Editor installs from FSLogixAppsRuleEditorSetup.exe in the x64 > Release folder. Open it as Administrator to test, then File > New, name the Rule Set, pick the program and Scan."

@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [msix-app-attach, azure-virtual-desktop]
 keypoints:
   - "With golden images, an app change typically means a new image version and a host update. With App Attach, a new app version comes from a new disk image, without a maintenance window."

@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-scaling-plan-exclusion-tag, avd-scaling-plan]
 keypoints:
   - "Tag the VM before you turn on drain mode. Autoscale overrides drain mode on every VM it scales, so drain mode alone does not protect a host in a pooled host pool."

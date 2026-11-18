@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-custom-image-templates, golden-image]
 keypoints:
   - "A custom image template is a JSON file with source image, distribution targets, build properties and customizations. A separate build step submits it to Azure Image Builder, which creates the image."

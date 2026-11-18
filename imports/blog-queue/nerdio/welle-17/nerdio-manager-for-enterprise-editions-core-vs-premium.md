@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-manager-for-enterprise, nerdio]
 keypoints:
   - "Nerdio's help center says there are two editions, Core and Premium, and that Premium includes everything in Core plus more. Before version 6.0 the choice was Standard or Premium."

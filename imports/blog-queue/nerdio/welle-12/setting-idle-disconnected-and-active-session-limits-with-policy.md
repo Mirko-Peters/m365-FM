@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-virtual-desktop]
 keypoints:
   - "Four Session Time Limits policies: disconnected, active but idle, active, and End session when time limits are reached. Without the last, idle and active limits only disconnect the user."

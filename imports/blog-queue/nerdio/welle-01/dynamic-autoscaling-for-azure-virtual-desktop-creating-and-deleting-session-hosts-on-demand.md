@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-dynamic-autoscaling, avd-scaling-plan]
 keypoints:
   - "When hosts needed do not exceed the minimum host pool size, autoscale only turns hosts on. Above it, autoscale starts stopped hosts and creates more, up to the maximum."

@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-manager-for-msp, intune]
 keypoints:
   - "Per Nerdio, Intune policies are imported from a source tenant or a JSON or TXT file into Nerdio Manager for MSP and published to customer accounts. Source changes come in by re-import or Update."

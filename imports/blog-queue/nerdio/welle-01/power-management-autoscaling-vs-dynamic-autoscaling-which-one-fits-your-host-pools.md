@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-power-management-autoscaling, avd-scaling-plan]
 keypoints:
   - "Power management autoscaling starts and deallocates existing session hosts. Dynamic autoscaling can also create and delete session hosts."

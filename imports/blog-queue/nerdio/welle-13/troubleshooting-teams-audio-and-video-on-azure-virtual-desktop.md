@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-teams-media-optimization, azure-virtual-desktop]
 keypoints:
   - "Read the status first: Settings, About shows whether the session is optimized, with SlimCore or WebRTC, or not connected."

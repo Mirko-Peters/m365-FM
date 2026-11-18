@@ -78,8 +78,21 @@ def _table(rows):
     return f'<div class="tbl" style="overflow-x:auto"><table><thead><tr>{th}</tr></thead><tbody>{tb}</tbody></table></div>'
 
 
-def render(md):
-    """Markdown -> HTML (gleiche Grundlage wie die Shownotes); Bildzeilen werden zu <figure>, Tabellen zu <table>, ```-Bloecke zu <pre><code>."""
+RICH = "v2"   # Kopfzeile "render: v2": Tabellen, ```-Bloecke und <ol start> (Review #509). Nur mit diesem Schalter, damit freigegebene Altpakete
+# Byte fuer Byte gleich bleiben: ein neuer Renderer aenderte HTML und Hash von 64 uebersetzten Paketen, die Sprachfassungen fielen weg und
+# translate_blog schickte die neuen Tabellenzellen an die KI (keine neuen KI-Kosten, Mirko 17.11.2026). Die Nerdio-Warteschlange traegt den Schalter.
+
+
+def rich_of(meta):
+    """Paket mit dem Schalter render: v2?"""
+    return str((meta or {}).get("render") or "").strip().lower() == RICH
+
+
+def render(md, rich=True):
+    """Markdown -> HTML (gleiche Grundlage wie die Shownotes); Bildzeilen werden zu <figure>, mit rich zusaetzlich Tabellen zu <table>,
+    ```-Bloecke zu <pre><code> und nummerierte Listen nach einem Codeblock mit start. rich=False: der fruehere Weg (Pakete ohne render: v2)."""
+    if not rich:
+        return "\n".join(_render_md(md, rich=False))
     out = []
     for kind, seg in _segments(md):
         if kind == "code":
@@ -91,9 +104,9 @@ def render(md):
     return "\n".join(out)
 
 
-def _render_md(md):
+def _render_md(md, rich=True):
     out = []
-    m0 = re.match(r"\s*(\d+)[.)]\s", md.lstrip("\n"))   # nummerierte Liste, die nach einem Codeblock weitergeht: Nummer behalten
+    m0 = re.match(r"\s*(\d+)[.)]\s", md.lstrip("\n")) if rich else None   # nummerierte Liste, die nach einem Codeblock weitergeht: Nummer behalten
     start = int(m0.group(1)) if m0 and int(m0.group(1)) > 1 else 0
     for b in SNS.md_blocks(IMG.sub(lambda m: f"\n\n@@IMG@@{m.group(2)}@@{m.group(1)}@@\n\n", md)):
         if b[0] == "h":
@@ -130,7 +143,7 @@ def check(rec, lang, slug, ents):
     kp = [str(x).strip() for x in (m.get("keypoints") or []) if str(x).strip()]   # Kernpunkte (3-8, je 10-200 Zeichen): Liste nach dem ersten Absatz, wird mit dem Text uebersetzt
     if kp and (not 3 <= len(kp) <= 8 or any(not 10 <= len(x) <= 200 for x in kp)): err.append("Kernpunkte: 3-8 Punkte mit je 10-200 Zeichen")
     if err: return None, err
-    html = render(body)
+    html = render(body, rich=rich_of(m))
     if kp:
         box = f"<h2>{esc(T(lang, 'Key points', 'Kernpunkte'))}</h2>\n<ul>" + "".join(f"<li>{SNS._inline(x)}</li>" for x in kp) + "</ul>"   # Ueberschrift in der Paketsprache (data/py_i18n.json); englische Pakete uebersetzt translate_blog samt h2
         cut = html.find("</p>")

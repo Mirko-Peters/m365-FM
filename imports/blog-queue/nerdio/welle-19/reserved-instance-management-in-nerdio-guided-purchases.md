@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-reserved-instance-management, nerdio-manager-for-enterprise]
 keypoints:
   - "Two pieces: RI analytics (NME) recommends region, VM family and CPU cores from a dynamic pool's auto-scale history; Reservations Management (NMM) buys and tracks reservations."

@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-manager-for-enterprise, nerdio]
 keypoints:
   - "Nerdio Manager for Enterprise runs as a set of Azure services in your own subscription and orchestrates Azure Virtual Desktop through API integration. Microsoft still runs the AVD service itself."

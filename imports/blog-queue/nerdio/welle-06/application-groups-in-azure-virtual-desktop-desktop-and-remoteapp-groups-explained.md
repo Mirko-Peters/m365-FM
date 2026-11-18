@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-application-group, azure-virtual-desktop]
 keypoints:
   - "An application group controls access to a full desktop or to a logical grouping of applications on session hosts in a single host pool. Users get access by being assigned to application groups."

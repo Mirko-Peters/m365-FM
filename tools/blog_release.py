@@ -3,15 +3,19 @@
 
 Tagesordner: Alle Artikel werden nach imports/blog/en/ verschoben (Ordnerdatum nur als Reihenfolge, aelteste
 zuerst), dabei bekommen die Dateien status: approved, publish: true und das Freigabedatum (morgen nach Berliner Zeit,
-also der Tag, an dem sie mit dem Seitenbau live gehen). Wird ein Stichtag angegeben, werden nur Ordner bis dahin
+genauer: UTC-Datum des Laufs + 1, also der Tag, an dem sie mit dem Seitenbau um 01:07 UTC live gehen; bis 22:00/23:00 UTC
+gleich "morgen nach Berliner Zeit", ein verspaeteter Abend-Lauf nach Mitternacht Berlin springt so nicht auf uebermorgen). Wird ein Stichtag angegeben, werden nur Ordner bis dahin
 freigegeben. Je Lauf hoechstens LIMIT Artikel,
 damit Seitenbau und Uebersetzung nachts nicht ueberlaufen. Vorhandene Slugs werden nie ueberschrieben.
 
-Reihen (Ordner mit reihe.json, z. B. imports/blog-queue/nerdio/): je Artikeldatum genau EINE Welle (der Ordner welle-NN mit der
-kleinsten Nummer), unabhaengig vom LIMIT der Tagesordner und ohne KI. Damit gehen ab dem ersten Abend-Lauf nach dem Merge jeden Tag
-die Artikel einer Welle live, in der Reihenfolge der Wellen. reihe.json:
+Reihen (Ordner mit reihe.json, z. B. imports/blog-queue/nerdio/): je Lauf-Tag (UTC-Datum des Laufs) und je Artikeldatum hoechstens
+EINE Welle (der Ordner welle-NN mit der kleinsten Nummer), unabhaengig vom LIMIT der Tagesordner und ohne KI. Damit gehen ab dem ersten
+Abend-Lauf nach dem Merge jeden Tag die Artikel einer Welle live, in der Reihenfolge der Wellen; ein Hand-Lauf (auch mit ARTIKELDATUM
+heute) und der Abend-Lauf am selben UTC-Tag geben zusammen nur eine Welle frei. reihe.json:
   {"zuletzt": "JJJJ-MM-TT",                 Artikeldatum der letzten freigegebenen Welle (schreibt dieses Skript; ein zweiter Lauf fuer
                                             dasselbe Datum gibt keine weitere Welle frei)
+   "lauf": "JJJJ-MM-TT",                    UTC-Datum des Laufs, der die letzte Welle freigegeben hat (schreibt dieses Skript; ein zweiter
+                                            Lauf am selben UTC-Tag gibt keine weitere Welle frei, egal mit welchem Artikeldatum)
    "sponsoring": "<id>",                    optional: Eintrag in data/sponsorships.json; jeder freigegebene Artikel kommt unter dessen
                                             "posts" (Kennzeichnung auf der Beitragsseite, im selben Commit wie publish: true)
    "nach": {"<slug>": ["<slug>", ...]}}     optional: ein Artikel geht erst, wenn diese schon in imports/blog/en/ liegen oder in derselben
@@ -19,10 +23,11 @@ die Artikel einer Welle live, in der Reihenfolge der Wellen. reihe.json:
 Ein Artikel, dessen Slug in imports/blog/en/ schon existiert, wird nicht ueberschrieben, sondern nach <reihe>/_blockiert/ gelegt (Meldung im Log).
 
 Aufruf: python3 tools/blog_release.py [STICHTAG JJJJ-MM-TT] [LIMIT] [ARTIKELDATUM JJJJ-MM-TT]
-Ohne Stichtag: alles freigeben, Datum der Artikel = morgen nach Berliner Zeit (der Lauf liegt abends, vor dem Seitenbau um 01:07 UTC).
+Ohne Stichtag: alles freigeben. Datum der Artikel = UTC-Datum des Laufs + 1 (der Lauf liegt abends, vor dem Seitenbau um 01:07 UTC).
+Grenze: startet der Abend-Lauf erst nach 00:00 UTC (ueber 80 Minuten Verspaetung), zaehlt er schon zum naechsten Lauf-Tag; dann faellt
+der Abend-Lauf dieses Tages aus (Gesamtzahl und Reihenfolge bleiben richtig).
 """
 import datetime, json, os, re, shutil, sys
-from zoneinfo import ZoneInfo
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 QUEUE = os.path.join(ROOT, "imports", "blog-queue")
@@ -82,11 +87,19 @@ def add_posts(path, rid, refs):
     open(path, "w", encoding="utf-8").write(json.dumps(d, ensure_ascii=False, indent=1) + "\n")
 
 
-def release_series(series, dest, day, sponsorships=SPONSORSHIPS):
-    """Gibt die naechste Welle einer Reihe frei (hoechstens eine je Artikeldatum). Rueckgabe: Liste der freigegebenen Slugs."""
+def _utc_today():
+    return datetime.datetime.now(datetime.timezone.utc).date()
+
+
+def release_series(series, dest, day, sponsorships=SPONSORSHIPS, run=None):
+    """Gibt die naechste Welle einer Reihe frei (hoechstens eine je Artikeldatum und je Lauf-Tag run, UTC-Datum des Laufs).
+    Rueckgabe: Liste der freigegebenen Slugs."""
+    run = run or _utc_today().isoformat()
     cfg_path = os.path.join(series, "reihe.json")
     cfg = json.load(open(cfg_path, encoding="utf-8"))
     name = os.path.basename(series)
+    if str(cfg.get("lauf") or "") >= run:   # Hand-Lauf und Abend-Lauf am selben Tag: nur eine Welle (Review #509)
+        print("Reihe %s: am Lauf-Tag %s (UTC) schon eine Welle freigegeben (Artikeldatum %s)" % (name, run, cfg.get("zuletzt"))); return []
     if str(cfg.get("zuletzt") or "") >= day:
         print("Reihe %s: Welle fuer %s schon freigegeben (zuletzt %s)" % (name, day, cfg.get("zuletzt"))); return []
     ws = waves(series)
@@ -116,6 +129,7 @@ def release_series(series, dest, day, sponsorships=SPONSORSHIPS):
     if cfg.get("sponsoring"):
         add_posts(sponsorships, cfg["sponsoring"], refs)
     cfg["zuletzt"] = day
+    cfg["lauf"] = run
     open(cfg_path, "w", encoding="utf-8").write(json.dumps(cfg, ensure_ascii=False, indent=1) + "\n")
     print("Reihe %s: welle-%02d, %d Artikel freigegeben (Datum %s)" % (name, nr, len(moved), day))
     return moved
@@ -142,7 +156,8 @@ def release_days(queue, dest, day, cutoff, limit):
 
 
 def main():
-    tomorrow = (datetime.datetime.now(ZoneInfo("Europe/Berlin")).date() + datetime.timedelta(days=1)).isoformat()
+    today = _utc_today()
+    tomorrow = (today + datetime.timedelta(days=1)).isoformat()   # Tag des naechsten Seitenbaus (01:07 UTC)
     cutoff = sys.argv[1] if len(sys.argv) > 1 and sys.argv[1] else ""
     limit = int(sys.argv[2]) if len(sys.argv) > 2 and sys.argv[2] else 15
     if len(sys.argv) > 3 and sys.argv[3]:
@@ -152,7 +167,7 @@ def main():
     os.makedirs(DEST, exist_ok=True)
     for d in sorted(os.listdir(QUEUE)):
         if os.path.isfile(os.path.join(QUEUE, d, "reihe.json")):
-            release_series(os.path.join(QUEUE, d), DEST, tomorrow)
+            release_series(os.path.join(QUEUE, d), DEST, tomorrow, run=today.isoformat())
     moved = release_days(QUEUE, DEST, tomorrow, cutoff, limit)
     print("%d Artikel aus Tagesordnern freigegeben (Stichtag %s, Datum %s)" % (moved, cutoff or "keiner", tomorrow))
 

@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [fslogix, fslogix-profile-container]
 keypoints:
   - "The FSLogix FAQ says there is no direct migration path from other roaming profile solutions. It points to OneDrive known folder move for user data and frx for copying local profiles."

@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [trusted-launch, azure-virtual-desktop]
 keypoints:
   - "Pick the path first: a pooled pool with a session host configuration changes the security type in a session host update. A pool with standard management means changing each Gen 2 VM or replacing it."

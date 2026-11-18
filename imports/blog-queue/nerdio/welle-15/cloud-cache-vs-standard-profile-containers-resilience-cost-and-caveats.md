@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [fslogix-cloud-cache, fslogix]
 keypoints:
   - "Standard containers use VHDLocations with no FSLogix-level resiliency. Learn says Cloud Cache is not needed with a highly available provider such as Azure Files with ZRS."

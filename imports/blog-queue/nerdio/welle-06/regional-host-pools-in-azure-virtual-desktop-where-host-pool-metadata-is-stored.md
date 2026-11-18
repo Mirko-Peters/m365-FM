@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-regional-host-pools, avd-host-pool]
 keypoints:
   - "Deployment scope decides where metadata lives: Regional is one Azure region with zone replicas; Geographical (the PowerShell default) serves the geography. No functional differences."

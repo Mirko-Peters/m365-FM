@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [avd-workspace, azure-virtual-desktop]
 keypoints:
   - "A workspace is a logical grouping of application groups. An application group must be associated with a workspace for users to see its desktops and apps, and it can belong to only one."

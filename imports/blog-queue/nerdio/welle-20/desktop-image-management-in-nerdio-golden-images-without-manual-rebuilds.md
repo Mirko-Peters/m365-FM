@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [nerdio-desktop-image, nerdio-manager-for-enterprise]
 keypoints:
   - "A Nerdio desktop image has two Azure parts: a VM used to manage the image, and the image object used to deploy session hosts. Powering on a desktop image powers on the VM."

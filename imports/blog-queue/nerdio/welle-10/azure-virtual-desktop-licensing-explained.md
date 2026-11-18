@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-virtual-desktop, microsoft-365-e3]
 keypoints:
   - "For session hosts in Azure, Learn splits AVD costs into Azure consumption (VMs, storage, networking) and licensing, a per-user access right billed through licensing channels."

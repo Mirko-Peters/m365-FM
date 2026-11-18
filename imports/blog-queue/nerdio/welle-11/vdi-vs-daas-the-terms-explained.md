@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [virtual-desktop-infrastructure, azure-virtual-desktop]
 keypoints:
   - "VDI describes an architecture of central VMs with remote access; DaaS describes buying desktops as a service. Learn labels Windows 365 SaaS and AVD PaaS, and also calls AVD VDI."

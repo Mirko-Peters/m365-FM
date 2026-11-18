@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [azure-reservations, azure-savings-plans]
 keypoints:
   - "A reservation commits to an instance type or family in one region; a savings plan commits to hourly spend across regions. Reservations discount more but suit stable usage."

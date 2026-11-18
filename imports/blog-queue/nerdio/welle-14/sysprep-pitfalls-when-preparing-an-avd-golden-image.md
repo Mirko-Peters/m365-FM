@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [sysprep, golden-image]
 keypoints:
   - "Read the generalize log in %WINDIR%\\System32\\Sysprep\\Panther first. Nerdio says the first Error in setupact.log usually shows the root cause; later errors are side effects."

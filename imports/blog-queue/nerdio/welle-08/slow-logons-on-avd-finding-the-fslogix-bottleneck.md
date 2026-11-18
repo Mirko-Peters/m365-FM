@@ -5,6 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-11-18
+render: v2
 topics: [fslogix, azure-virtual-desktop]
 keypoints:
   - "Insights splits time to connect into connection and logon stages, and logon into Profiles, Group Policy, Shell Start and FSLogix (Frxsvc). Find the slow part before touching storage."
