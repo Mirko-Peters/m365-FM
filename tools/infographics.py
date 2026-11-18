@@ -187,8 +187,8 @@ def check_spec(spec, lang="en", template=None):
                 if isinstance(sub, dict):
                     if not isinstance(it, dict): return f"{k}: Form"
                     for a, b in sub.items():
-                        if not isinstance(it.get(a), str) or not it[a].strip() or len(it[a]) > b * f: return f"{k}.{a}: Laenge/leer"
-                elif not isinstance(it, str) or not it.strip() or len(it) > sub * f: return f"{k}: Laenge/leer"
+                        if not isinstance(it.get(a), str) or not it[a].strip() or len(it[a]) > b * f: return f"{k}.{a}: Laenge/leer (max {b * f:.0f} Zeichen, war {str(it.get(a))[:60]!r})"
+                elif not isinstance(it, str) or not it.strip() or len(it) > sub * f: return f"{k}: Laenge/leer (max {sub * f:.0f} Zeichen, war {str(it)[:60]!r})"
         else:
             if not isinstance(v, str) or not v.strip() or len(v) > lim * f: return f"{k}: Laenge/leer ({len(v) if isinstance(v, str) else '-'}>{lim * f:.0f})"
     if t == "flow":
