@@ -151,6 +151,7 @@ def build(g, posts, people, api):
         if p.get("tr_of"): _ntr[p["lang"]] = _ntr.get(p["lang"], 0) + 1
     for _l, _n in sorted(_ntr.items()): print(f"Blog: {_n} Sprachfassungen {_l}, indexierbar: {sum(1 for p in posts if p.get('tr_of') and p['lang'] == _l and p.get('tr_index'))}")
     _en_title = {(p["handle"], p["slug"]): p["title"] for p in posts if p.get("lang") == "en" and not is_translation(p)}   # Themen-Brotkrumen: Sprachfassungen waehlen das Hauptthema nach dem Titel des Originals (gleiches Thema in allen Sprachen)
+    _written = set()   # (Sprache, Autor) mit eigener Blog-Uebersicht; fehlt die englische, baut der Rueckfall am Ende sie (Kanal-Link im Profil zeigt dorthin)
     for lang in COMM_LANGS:
         mine = [p for p in posts if p["lang"] == lang]
         if not mine:
@@ -226,7 +227,7 @@ def build(g, posts, people, api):
                    "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics], **({"mentions": EM.mentions(BASE, _ment, topics)} if EM.mentions(BASE, _ment, topics) else {}), "citation": [{"@type": "CreativeWork", "name": r["title"], "url": r["url"]} for r in refs],
                    "publisher": {"@id": f"{BASE}/#org"}}] + _fld + [{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [   # T4: Verlag und Brotkrumen
                        {"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"}, {"@type": "ListItem", "position": 2, "name": a["name"], "item": au},
-                       {"@type": "ListItem", "position": 3, "name": "Blog", "item": au + "blog/"}, {"@type": "ListItem", "position": 4, "name": p["title"], "item": u}]}]
+                       {"@type": "ListItem", "position": 3, "name": "Blog", "item": f"{croot}u/{a['handle']}/blog/"}, {"@type": "ListItem", "position": 4, "name": p["title"], "item": u}]}]
             _tbc = TC.breadcrumb(BASE, lang, topics, ENTS, p["title"], u, title=_en_title.get((p["handle"], p["slug"])) if is_translation(p) else None)   # zweite Spur nach dem Hauptthema (nur JSON-LD); Wochenzusammenfassungen (Thema m365fm) bleiben ohne
             if _tbc: ld.append(_tbc)
             if SPM.ld(_spr):   # neutraler Partner (label "partner"): kein sponsor
@@ -275,7 +276,7 @@ def build(g, posts, people, api):
         for h in sorted({p["handle"] for p in mine} | {c["handle"] for p in mine for c in (p.get("coauthors") or []) if c.get("handle") in pb}):
             noidx = not any(is_by(p, h) and _pub(p) for p in mine)
             it = sorted([p for p in mine if is_by(p, h)], key=lambda x: -x["published"]); ru = f"{croot}u/{h}/blog/"
-            nm = pb[h]["name"]
+            nm = pb[h]["name"]; _written.add((lang, h))
             paged(it, ru, f"community/u/{h}/blog/", f'<h1>{esc(title_blog)} – {esc(nm)}</h1><p><a href="{croot}u/{h}/">{esc(nm)}</a></p>', f'{title_blog} – {nm} | M365.FM', nm, noidx)
             write(f"{pfx2(lang)}community/u/{h}/blog/feed.xml", rss(f"{title_blog} – {nm}", ru, it, croot, pb, lang))
         noidx = not any(_pub(p) for p in mine)
@@ -285,6 +286,31 @@ def build(g, posts, people, api):
                "blogPost": [{"@id": f"{croot}u/{p['handle']}/blog/{p['slug']}/#post"} for p in it[:50]]}]
         write(f"{pfx2(lang)}community/blog/feed.xml", rss("M365.FM " + title_blog, ru, it, croot, pb, lang))
         paged(it, ru, "community/blog/", f'<h1>{esc(title_blog)}</h1><p class="mut">{esc(intro)}</p>', f'{title_blog} – M365.FM', intro, noidx, ld, first_html=top_block(lang, mine, croot, api))
+    _fallback_en_index(g, posts, pb, _written, shell)
+
+
+def _fallback_en_index(g, posts, pb, written, shell):
+    """Autorin/Autor ohne Beitrag auf Englisch: /community/u/<handle>/blog/ gaebe es sonst nicht (404), obwohl der Blog-Kanal im Profil
+    (worker/src/blog.js syncFeed) dorthin zeigt. Die Seite listet die Originalbeitraege mit Links auf ihre Sprachfassung, noindex und ohne Sitemap
+    (kein eigener Inhalt). Sobald es einen englischen Beitrag oder eine englische Sprachfassung gibt, baut die normale Uebersicht die Seite."""
+    if "en" not in COMM_LANGS:
+        return
+    BASE, write, page = g["BASE"], g["write"], g["page"]
+    by = {}
+    for p in posts:
+        if is_translation(p) or p.get("lang") not in COMM_LANGS:   # nur Beitraege, deren Seite dieser Bau auch schreibt (Teilbau mit SITE_LANGS)
+            continue
+        for h in dict.fromkeys([p["handle"]] + [c["handle"] for c in (p.get("coauthors") or []) if c.get("handle") in pb]):   # je Autor einmal, auch bei doppelten Co-Autoren
+            if ("en", h) not in written:
+                by.setdefault(h, []).append(p)
+    for h, items in sorted(by.items()):
+        items = sorted(items, key=lambda x: -(x.get("published") or 0)); nm = pb[h]["name"]
+        ru = f"{BASE}/community/u/{h}/blog/"
+        li = "".join(f'<li><a href="{BASE}{pfx(p["lang"])}/community/u/{p["handle"]}/blog/{p["slug"]}/" hreflang="{p["lang"]}" lang="{p["lang"]}"><b>{esc(p["title"])}</b></a> '
+                     f'<span class="mut">· {esc(pb[p["handle"]]["name"])} · {iso(p["published"])}</span>{("<br><span lang=" + chr(34) + p["lang"] + chr(34) + ">" + esc(p["summary"]) + "</span>") if p.get("summary") else ""}</li>' for p in items)
+        note = "No posts in English yet. These posts are available in their original language:"
+        b = shell("en", f'{CSS}<h1>Blog – {esc(nm)}</h1><p><a href="{BASE}/community/u/{h}/">{esc(nm)}</a></p><p class="mut">{esc(note)}</p><ul class="bl-list">{li}</ul>')
+        write(f"community/u/{h}/blog/index.html", page("en", f"Blog – {nm} | M365.FM", nm, ru, b, None, None, og_type="website", extra_head=LCSS, noindex=True))
 
 
 def rss(title, link, items, croot, pb, lang):
