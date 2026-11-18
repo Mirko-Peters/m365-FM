@@ -149,6 +149,87 @@ class EnglischerBegriff(unittest.TestCase):
         self.assertFalse(self.m._english_word("RBAC", "rbac", "de"))
 
 
+class Wortgrenze(unittest.TestCase):
+    """Gegenpruefung Paket 5, Befund 1: laengere Form scheitert nur an der rechten Wortgrenze (deutsches Kompositum, ja/ko-Partikel ohne
+    Leerzeichen); der Link fiel auf den kuerzeren Anfang einer anderen Entitaet zurueck ("Microsoft" statt Microsoft 365)."""
+    @classmethod
+    def setUpClass(cls):
+        cls.m = EM.shared(LRN.ENTS)
+
+    def lk(self, h, lang):
+        return self.m.link_html(h, U, lang)[0]
+
+    def test_kompositum_de(self):
+        h = self.lk("<p>Richten Sie Ihre Microsoft 365-Umgebung ein und bauen Sie einen Copilot Studio-Agent.</p>", "de")
+        self.assertIn('<a href="/entity/microsoft-365/" class="en-al">Microsoft 365</a>-Umgebung', h)
+        self.assertIn('<a href="/entity/copilot-studio/" class="en-al">Copilot Studio</a>-Agent', h)
+        self.assertNotIn("/entity/microsoft/", h)
+        self.assertNotIn("/entity/copilot/", h)
+
+    def test_ergaenzungsstrich_und_plural(self):
+        h = self.lk("<p>Für Microsoft 365- und Power-Platform-Admins.</p>", "de")
+        self.assertNotIn("/entity/microsoft/", h)
+        h = self.lk("<p>Several Microsoft MVPs joined.</p>", "en")
+        self.assertNotIn("/entity/microsoft/", h)
+
+    def test_partikel_ja_ko(self):
+        h = self.lk("<p>Microsoft 365エコシステムとCopilot Studioの使い方。Microsoft MVPで有名。</p>", "ja")
+        self.assertIn('<a href="/entity/microsoft-365/" class="en-al">Microsoft 365</a>エコシステム', h)
+        self.assertIn('<a href="/entity/copilot-studio/" class="en-al">Copilot Studio</a>の', h)
+        self.assertIn('<a href="/entity/microsoft-mvp/" class="en-al">Microsoft MVP</a>で', h)
+        self.assertNotIn("/entity/microsoft/", h)
+        h = self.lk("<p>Microsoft 365와 Teams를 사용합니다.</p>", "ko")
+        self.assertIn('<a href="/entity/microsoft-365/" class="en-al">Microsoft 365</a>와', h)
+        self.assertNotIn("/entity/microsoft/", h)
+
+    def test_wortteil_bleibt_wie_bisher(self):
+        self.assertEqual([], [x for x in self.m.raw("Microsoftware", "de")])
+        h = self.lk("<p>Microsoft 365 ist da.</p>", "de")
+        self.assertIn("/entity/microsoft-365/", h)
+
+
+class EnglischNurAmEnglischenNamen(unittest.TestCase):
+    """Gegenpruefung Paket 5, Befunde 2 und 4: deutsche Aliase ohne Sprachbindung bekamen lang="en"."""
+    @classmethod
+    def setUpClass(cls):
+        cls.m = EM.shared(LRN.ENTS)
+
+    def test_deutsche_aliase_ohne_lang(self):
+        h = self.m.link_html("<p>Für die Anmeldung empfiehlt sich die Zwei-Faktor-Authentifizierung, die KI-Verordnung gilt auch in der Fertigung.</p>", U, "de")[0]
+        self.assertIn("/entity/mfa/", h)
+        self.assertNotIn('lang="en"', h)
+        for t, i in (("Zwei-Faktor-Authentifizierung", "mfa"), ("KI-Verordnung", "eu-ai-act"), ("Fertigung", "manufacturing")):
+            self.assertFalse(self.m._english_word(t, i, "de"), t)
+
+    def test_englischer_name_behaelt_lang(self):
+        self.assertTrue(self.m._english_word("Conditional Access", "conditional-access", "de"))
+        self.assertTrue(self.m._english_word("Multi-factor authentication", "mfa", "de"), "Name ohne Klammerzusatz, mit Bindestrich")
+        self.assertTrue(self.m._english_word("Manufacturing", "manufacturing", "de"))
+
+
+class FolgentitelNurEindeutig(unittest.TestCase):
+    """Gegenpruefung Paket 5, Befund 5: gewoehnliche Saetze nach "episode"/"Folge" galten als Titel und verloren alle Links."""
+    @classmethod
+    def setUpClass(cls):
+        cls.m = EM.shared(LRN.ENTS)
+
+    def lk(self, h, lang="en"):
+        return linked(self.m.link_html(h, U, lang)[0])
+
+    def test_saetze_behalten_links(self):
+        self.assertEqual(["microsoft-mvp", "andre-baltieri", "power-automate"],
+                         self.lk("<p>Listen to the full episode with Microsoft MVP Andre Baltieri on Power Automate.</p>"))
+        self.assertIn("andre-baltieri", self.lk("<p>In the episode Microsoft MVP Andre Baltieri explains Dataverse.</p>"))
+        self.assertIn("andre-baltieri", self.lk("<p>In episode 12 with Microsoft MVP Andre Baltieri we talk about Dataverse.</p>"))
+        self.assertIn("teams-premium", self.lk("<p>In der Folge Microsoft Teams Premium und Copilot zeigt der Gast, wie es geht.</p>", "de"))
+
+    def test_titel_bleiben_titel(self):
+        self.assertTrue(EM._episode_title_zones("In the episode Power Apps Code Apps with Carike Botha [MVP], Mirko explains Dataverse."))
+        self.assertTrue(EM._episode_title_zones("Episode: Power Apps Code Apps With Carike Botha explains", "en"), "ausdruecklich markiert")
+        self.assertTrue(EM._episode_title_zones("Welcome to another episode of Microsoft Knowledge Nuggets here on M365FM.", "en"))
+        self.assertTrue(EM._episode_title_zones("Dalam episode Microsoft Knowledge Nuggets ini, Mirko Peters menjelaskan", "id"))
+
+
 class Seitenleiste(unittest.TestCase):
     def test_vorlagen_in_allen_sprachen(self):
         d = json.loads(LC.FILE.read_text("utf-8"))
