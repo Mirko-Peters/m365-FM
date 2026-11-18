@@ -29,20 +29,20 @@ _STOP |= {   # Artikel/Praepositionen weiterer Sprachen: davor endet kein Kurzsa
     "и", "в", "на", "с", "для", "по", "і", "та", "з", "у", "و", "في", "من", "على", "إلى"}
 _JOIN1 = "and|that|which|in which|with|using|by|for|to|from|where|when|while|because|including|as|so|through|via|across|under|into|against|und|mit|für|durch|bei|wobei|sowie|damit|wenn|um|während|weil|sodass|zur|zum|indem"
 _JOIN2 = (   # Stufe 2 (nur wenn Stufe 1 keine Fuge findet): Anschlusswoerter weiterer Sprachen (18.11.2026, lange KI-Kurzbeschreibungen fr/es/it/pt/nl/pl/id/ru/uk/ar)
-    "et|qui|avec|pour|par|dans|afin|lorsque|grâce|sans|selon|notamment|dont|où|permettant|offrant|tandis|"
-    "y|con|para|mediante|donde|cuando|sin|según|incluidos|incluyendo|permitiendo|ofreciendo|mientras|"
-    "che|tramite|dove|quando|senza|grazie|incluso|attraverso|e|ed|mentre|poiché|consentendo|permettendo|offrendo|"
+    "et|qui|que|avec|pour|par|dans|afin|lorsque|grâce|sans|selon|notamment|dont|où|permettant|offrant|tandis|"
+    "y|que|con|para|mediante|donde|cuando|sin|según|incluidos|incluyendo|permitiendo|ofreciendo|mientras|sobre|"
+    "che|tramite|dove|quando|senza|grazie|incluso|attraverso|e|ed|mentre|poiché|consentendo|permettendo|offrendo|di|da|tra|fra|su|nel|nella|nei|del|della|"
     "com|onde|sem|incluindo|através|permitindo|oferecendo|enquanto|"
-    "en|dat|voor|waarbij|zodat|zonder|wanneer|waar|om|terwijl|waardoor|"
-    "który|która|które|aby|dla|przez|oraz|gdy|bez|"
-    "yang|dengan|untuk|melalui|tanpa|sehingga|agar|saat|seperti|"
-    "который|которая|которое|которые|для|через|чтобы|при|без|где|"
-    "який|яка|яке|які|щоб|де|"
-    "التي|الذي|مع|عبر|حيث|من خلال|لتمكين|بما في ذلك")
+    "en|dat|voor|waarbij|zodat|zonder|wanneer|waar|om|terwijl|waardoor|bij|naar|binnen|tussen|zoals|"
+    "który|która|które|aby|dla|przez|oraz|gdy|bez|dotyczący|dotycząca|dotyczące|obejmujący|w zakresie|z wykorzystaniem|na|w|z|do|od|poprzez|między|"
+    "yang|dengan|untuk|melalui|tanpa|sehingga|agar|saat|seperti|di|ke|dari|pada|dalam|antara|bagi|"
+    "который|которая|которое|которые|для|через|чтобы|при|без|где|по|на базе|с помощью|в|на|с|из|к|между|"
+    "який|яка|яке|які|щоб|де|в|у|на|з|із|до|між|для|через|"
+    "التي|الذي|مع|عبر|حيث|من خلال|لتمكين|بما في ذلك|على|باستخدام|تُسمى|يتيح|تتيح|في|من|إلى")
 _FUGE = re.compile(r"[,;،؛](?=\s)|[，、]|\s[–—-](?=\s)|(?<=\s)(?=(?:" + _JOIN1 + r")\s)")   # Stufe 1: Satzzeichen und englische/deutsche Anschlusswoerter (wie bisher)
 _FUGE2 = re.compile(r"(?<=\s)(?=(?:" + _JOIN2 + r")\s)")
 _NO_CUT2 = {"tels", "telles", "tel", "telle", "ainsi", "alors", "bien", "même", "así", "tanto", "tal", "tales", "così", "tanto", "sempre", "assim", "tal", "zowel", "zo", "takie", "tak", "seperti", "так", "такие", "також", "такі",
-             "basado", "basada", "basados", "basadas", "basé", "basée", "basés", "basées", "basato", "basata", "basati", "baseado", "baseada", "gebaseerd"}   # "basado en ..." gehoert zusammen
+             "más", "menos", "mismo", "misma", "plus", "moins", "basado", "basada", "basados", "basadas", "basé", "basée", "basés", "basées", "basato", "basata", "basati", "baseado", "baseada", "gebaseerd"}   # "basado en ..." gehoert zusammen
 
 
 # ---------------------------------------------------------------- Bausteine Entitaeten (15 Sprachen)
@@ -140,7 +140,7 @@ def lead_text(text, hi=DESC_HI):
         for m in _FUGE2.finditer(cut):
             head = cut[:m.start()].rstrip()
             last = head.rsplit(" ", 1)[-1].lower()
-            if len(head) >= 70 and last not in _STOP and last not in _NO_CUT2 and m.start() > best:
+            if len(head) >= min(70, hi // 2) and last not in _STOP and last not in _NO_CUT2 and m.start() > best:   # nach einem Namen vorn ist hi kleiner
                 best = m.start()
     if best:
         return cut[:best].rstrip(",;،؛，、–—- ") + "."
