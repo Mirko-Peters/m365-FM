@@ -136,10 +136,14 @@ def render(ix, BASE, lang, text="", items=(), url_of=None, title_of=None, all_ur
     items/url_of/title_of: neueste Folgen der Sprache; all_url: alle Folgen; shp: Plattform-Links der Show der Sprache (data/platforms.json);
     listen_url: Seite mit allen Plattformen (nur wenn es sie gibt); rss: Feed der Show; home: Sprach-Startseite (ohne Hoeren-Karte, Aufbau wie bisher).
     topics_h: Ueberschrift der Themen-Karte mit der Beziehung zur Seite ("Mit Power BI verknuepfte Themen", "Themen & Personen dieser Folge", site_linkctx side.*);
-    ohne Angabe die allgemeine "Themen & Personen auf dieser Seite" (Treffer im Text)."""
+    ohne Angabe bei Treffern im Text "Auf dieser Seite erwaehnt" (site_linkctx side.page), bei fester Liste die allgemeine "Themen & Personen auf dieser Seite"."""
     t = L10N.get(lang) or L10N["en"]; shp = shp or {}
     import site_ename as EN   # Linktext = Name in der Sprache der Seite (wie Listen und Brotkruemel), englischer Rest mit lang="en", RTL in <bdi>
-    chips = "".join(f'<li><a class="sb-chip t-{esc(e["type"])}" href="{BASE}{ent_prefix}/entity/{esc(e["id"])}/" title="{esc(type_label(lang, e["type"]))}"><i></i>{EN.html_name(e, lang)}</a></li>' for e in chips_for(ix, text, ids, exclude, lang=lang))
+    got = chips_for(ix, text, ids, exclude, lang=lang)
+    chips = "".join(f'<li><a class="sb-chip t-{esc(e["type"])}" href="{BASE}{ent_prefix}/entity/{esc(e["id"])}/" title="{esc(type_label(lang, e["type"]))}"><i></i>{EN.html_name(e, lang)}</a></li>' for e in got)
+    if not topics_h and got and not set(ids or ()) & {e["id"] for e in got}:
+        import site_linkctx as LC   # Treffer im Text der Seite: die Beziehung ist "auf dieser Seite erwaehnt" (Messung Paket 4, misses 5)
+        topics_h = LC.plain(lang, "side.page")
     ents = f'<section class="sb-card"><h2>{esc(topics_h or t["topics"])}</h2><ul class="sb-chips">{chips}</ul><a class="sb-more" href="{BASE}{ent_prefix}/entity/">{esc(t["kg"])}</a></section>' if chips else ""
     late = "".join(f'<li><a href="{esc(url_of(x))}">{esc(title_of(x))}</a></li>' for x in list(items)[:5]) if url_of else ""
     new = f'<section class="sb-card"><h2>{esc(t["latest"])}</h2><ol class="sb-list">{late}</ol><a class="sb-more" href="{esc(all_url)}">{esc(t["all"])}</a></section>' if late else ""

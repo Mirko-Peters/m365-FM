@@ -1102,7 +1102,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _w = g.get("write_r2") or write   # Entitaetsseiten ALLER Sprachen liegen im R2-Bucket, nicht in GitHub Pages (Site-Worker liefert sie unter derselben Adresse). Englisch (~114 MB) seit 9.11.2026: docs/ lag mit 982 MB ueber der Grenze von 980 MB, jeder Seitenbau brach ab; de seit #310, die anderen 13 Sprachen von Anfang an
             ld = ld + _qld   # Quotation-Knoten der Person
             _sids = [x for v in groups.values() for x in v] or _cooc   # Themen der Seitenleiste = verwandte Entitaeten, ohne Beziehungen die Themen aus gemeinsamen Folgen
-            _sh = LC.plain(lang, "side.entity" if groups else "side.cooc" if _cmode == "often" else "side.cooc_some", s=_en) if _sids else ""   # Ueberschrift mit Beziehung zur Seite
+            _sh = LC.plain(lang, "side.entity" if groups else "side.cooc" if _cmode == "often" else "side.cooc_some" if _sids else "side.named", s=_en)   # Ueberschrift mit Beziehung zur Seite; ohne Beziehungen: in Beschreibung/Langtext genannt
             _side = g["side"](lang, f'{e["name"]} {_en} {d} {_lt[:1500]}', ids=_sids, exclude=(e["id"],), topics_h=_sh) if g.get("side") else ""   # Sidebar wie auf allen Inhaltsseiten
             _mt, _md = MM.entity_meta(lang, e, d, n_eps=len(eps), flags=_nf[e["id"]], type_label=tlab(lang, e["type"]))   # Suchabsicht: "Was ist X?" / "Wer ist X?" statt "X – Typ"
             _w(f"{rel}/{e['id']}/index.html", page(lang, _mt, _md, u, b, _alts if (_alts and lang in _alts) else None, ld, xdefault=(_alts or {}).get("en"), og_type="website", extra_head=LCSS + css + _fhead, noindex=_noidx, side=_side))
