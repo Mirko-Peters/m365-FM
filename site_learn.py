@@ -543,9 +543,28 @@ def load_entities(api):
             if isinstance((base.get(it["id"]) or {}).get("names"), dict):
                 rec["names"] = base[it["id"]]["names"]
             base[it["id"]] = rec
+    strip_removed_aliases(base)   # entfernte Fehl-Aliase (data/alias_removed.json) auch aus der D1-Fassung nehmen
     ONT.derive(base)   # Oberbegriffe per Regel fuer ALLE Eintraege (auch neue aus D1/Gaesten/Speakern), nur im Speicher
     EN.apply(base)   # Namen in der Sprache der Seite (data/entity_names.json -> Feld names), auch an D1-Fassungen; nicht in entities-src.json und /entities.json (kein Weg nach D1)
     return base
+
+
+def strip_removed_aliases(base, path=None):
+    """Aliase aus data/alias_removed.json ({id: [alias, ...]}) aus allen Eintraegen nehmen, auch aus der D1-Fassung, die sie noch tragen kann.
+    Vergleich ohne Gross-/Kleinschreibung. Gibt die Zahl entfernter Aliase zurueck."""
+    f = Path(path) if path else Path(__file__).parent / "data" / "alias_removed.json"
+    if not f.exists():
+        return 0
+    rm = {k: {str(a).strip().lower() for a in v} for k, v in json.loads(f.read_text("utf-8")).items() if not k.startswith("_") and isinstance(v, list)}
+    n = 0
+    for i, bad in rm.items():
+        e = base.get(i)
+        if not e or not e.get("aliases"):
+            continue
+        keep = [a for a in e["aliases"] if str(a).strip().lower() not in bad]
+        n += len(e["aliases"]) - len(keep)
+        e["aliases"] = keep
+    return n
 
 
 REPO_KEYS = ("city", "country", "street", "zip", "founded", "company", "disclosure", "logo_src", "logo_bg", "award",

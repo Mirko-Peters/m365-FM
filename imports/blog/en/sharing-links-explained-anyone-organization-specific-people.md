@@ -1,8 +1,8 @@
 ---
 title: "Sharing links explained: anyone, organization, specific people"
 summary: "Anyone, organization, existing access or specific people: this guide explains what each SharePoint sharing link scope does, who can open it, and how it relates to guest access and tenant settings."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-18
 topics: [sharepoint-sharing-links, sharepoint, guest-access]
