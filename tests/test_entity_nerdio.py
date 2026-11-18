@@ -211,5 +211,69 @@ class Artikel(unittest.TestCase):
         self.assertTrue(B.faq_in_html({"html": "<p>Text</p>", "faq": []}))
 
 
+class Wellen(unittest.TestCase):
+    """Freigabe in Wellen (Mirko 17.11.): imports/blog-queue/nerdio/welle-NN, 10 je Tag in Nummernfolge, Nr. 196 nicht vor 174 und 65, 143/177-180 nie."""
+    SERIES = ROOT / "imports" / "blog-queue" / "nerdio"
+
+    def test_wellen_in_plan_reihenfolge(self):
+        inc = sorted((a for a in PLAN if a["status"] != "ausgelassen"), key=lambda a: a["nr"])
+        self.assertEqual(len(inc), 195)
+        for i, a in enumerate(inc):
+            self.assertEqual(a["welle"], i // 10 + 1, a["nr"])
+            self.assertEqual(a["datei"], f"imports/blog-queue/nerdio/welle-{a['welle']:02d}/" + a["datei"].rsplit("/", 1)[1])
+        dirs = sorted(d.name for d in self.SERIES.iterdir() if d.is_dir())
+        self.assertEqual(dirs, [f"welle-{n:02d}" for n in range(1, 21)])
+        self.assertEqual([len(list((self.SERIES / d).glob("*.md"))) for d in dirs], [10] * 19 + [5])
+        self.assertEqual(sorted(str(f.relative_to(ROOT)) for f in self.SERIES.glob("*/*.md")), sorted(a["datei"] for a in inc))
+        for a in PLAN:
+            if a["nr"] in (143, 177, 178, 179, 180):
+                self.assertEqual((a["status"], a.get("datei"), a.get("welle")), ("ausgelassen", None, None))
+        w = {a["nr"]: a["welle"] for a in inc}
+        self.assertGreaterEqual(w[196], max(w[174], w[65]))
+
+    def test_nichts_vorab_live(self):
+        en = {f.name for f in (ROOT / "imports" / "blog" / "en").glob("*.md")}
+        for f in self.SERIES.glob("*/*.md"):
+            self.assertNotIn(f.name, en)
+            t = f.read_text("utf-8")
+            self.assertIn("\nstatus: review\n", t, f.name); self.assertIn("\npublish: false\n", t, f.name)
+        posts = next(r for r in json.loads((ROOT / "data" / "sponsorships.json").read_text("utf-8"))["sponsorships"] if r["id"] == "nerdio-partner").get("posts")
+        self.assertFalse(posts)   # Eintraege schreibt erst tools/blog_release.py im Lauf, der den Artikel freigibt (sonst bricht check_posts den Bau ab)
+
+    def test_reihe_json(self):
+        cfg = json.loads((self.SERIES / "reihe.json").read_text("utf-8"))
+        self.assertEqual((cfg["zuletzt"], cfg["sponsoring"]), ("", "nerdio-partner"))
+        slug = {a["nr"]: a["datei"].rsplit("/", 1)[1][:-3] for a in PLAN if a.get("datei")}
+        self.assertEqual(cfg["nach"], {slug[196]: [slug[174], slug[65]]})
+
+    def test_ablauf_20_naechte(self):
+        """Simuliert die 20 Abend-Laeufe auf einer Kopie: je Tag die naechste Welle, Nr. 196 nach 174 und 65, posts gueltig."""
+        import shutil
+        import tempfile
+        from contextlib import redirect_stdout
+        from datetime import date, timedelta
+        from io import StringIO
+        sys.path.insert(0, str(ROOT / "tools"))
+        import blog_release as BR
+        nr = {a["datei"].rsplit("/", 1)[1][:-3]: a["nr"] for a in PLAN if a.get("datei")}
+        with tempfile.TemporaryDirectory() as tmp:
+            series, dest, sp = Path(tmp) / "nerdio", Path(tmp) / "en", Path(tmp) / "s.json"
+            shutil.copytree(self.SERIES, series); dest.mkdir()
+            shutil.copy(ROOT / "data" / "sponsorships.json", sp)
+            seq, start = [], date(2026, 11, 19)
+            for i in range(22):
+                with redirect_stdout(StringIO()):
+                    out = BR.release_series(str(series), str(dest), (start + timedelta(days=i)).isoformat(), sponsorships=str(sp))
+                seq.append(sorted(nr[s] for s in out))
+            self.assertEqual([len(x) for x in seq], [10] * 19 + [5, 0, 0])
+            flat = [n for x in seq for n in x]
+            self.assertEqual(flat, sorted(flat))
+            self.assertEqual(len(flat), 195)
+            recs, errs = SPM.check_structure(json.loads(sp.read_text("utf-8")))
+            self.assertEqual(errs, [])
+            self.assertEqual(len(next(r for r in recs if r["id"] == "nerdio-partner")["posts"]), 195)
+            self.assertIn("date: 2026-11-19\n", (dest / (next(s for s, n in nr.items() if n == 1) + ".md")).read_text("utf-8"))
+
+
 if __name__ == "__main__":
     unittest.main()

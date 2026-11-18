@@ -12,3 +12,10 @@ lässt sich über die Ordner allein nicht steuern, nur über den Stichtag (manue
 Mit dem nächsten Seitenbau (01:07 UTC) und dem Import-Cron (`importContentBlog`) werden die Artikel live; die Übersetzungen laufen wie bei allen
 englischen Blogartikeln über den bestehenden Weg.
 Manuell: Actions → „Blog-Queue freigeben" → Run workflow, optional mit Stichtag (dann nur Ordner bis zu diesem Datum), `limit` und Artikeldatum.
+
+## Reihen in Wellen (z. B. `nerdio/`)
+Ein Ordner mit `reihe.json` ist eine Reihe: `imports/blog-queue/<reihe>/welle-NN/<slug>.md`. Der Abend-Lauf gibt je Reihe genau **eine** Welle frei
+(kleinste Nummer zuerst, alle Artikel des Ordners), zusätzlich zu den Tagesordnern und unabhängig von deren Limit. `reihe.json` hält das Datum der
+letzten Welle (`zuletzt`, ein zweiter Lauf für dasselbe Artikeldatum gibt keine weitere frei), optional `sponsoring` (jeder freigegebene Artikel kommt im
+selben Commit unter `posts` dieses Eintrags in `data/sponsorships.json`) und `nach` (ein Artikel geht erst mit oder nach den genannten Slugs, sonst rückt
+er eine Welle weiter). Belegte Slugs werden nicht überschrieben, sondern nach `<reihe>/_blockiert/` gelegt. Anhalten: `reihe.json` entfernen.
