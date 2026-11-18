@@ -41,6 +41,21 @@ class Fuge(unittest.TestCase):
              "und Kunden die Knoten in ihrem eigenen Abonnement verwalten")
         self.assertFalse(M.lead_text(t, lang="de").endswith("Microsoft."), M.lead_text(t, lang="de"))   # "die" ist im Deutschen ein Artikel, keine Fuge
 
+    def test_nicht_in_offener_klammer(self):
+        t = ("Une méthode d'organisation du lieu de travail en cinq étapes (trier, ranger, nettoyer, standardiser, maintenir) qui garde les outils "
+             "à leur place et rend les problèmes visibles pour toute l'équipe")
+        self.assertNotIn("(trier, ranger", M.lead_text(t, lang="fr").rsplit("(", 1)[-1] if M.lead_text(t, lang="fr").count("(") > M.lead_text(t, lang="fr").count(")") else "")
+
+    def test_deutsch_nicht_im_nebensatz(self):
+        t = ("Chain-of-Thought-Reasoning ist eine Technik, bei der ein Sprachmodell vor der endgültigen Antwort schrittweise Zwischenschritte "
+             "formuliert und so komplexe Aufgaben besser löst als mit einer direkten Antwort")
+        d = M.lead_text(t, 120, "de")
+        self.assertFalse(d.endswith("vor."), d)
+        t2 = ("Private Verbindung aus virtuellen Netzwerken zu Azure-PaaS-Diensten und Partnerdiensten über private Endpunkte statt über das öffentliche "
+              "Internet, ohne dass Datenverkehr das Netz verlässt")
+        d2 = M.lead_text(t2, 118, "de")
+        self.assertFalse(d2.endswith("statt."), d2)   # nie auf einem Bindewort enden
+
     def test_englisch_unveraendert(self):
         t = ("A Ralph loop (Ralph Wiggum technique) repeatedly re-runs an AI coding agent on the same goal until a completion criterion is met, "
              "so agents keep working through long tasks without a human restarting them each time.")

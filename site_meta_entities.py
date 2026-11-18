@@ -30,8 +30,8 @@ _STOP |= {   # Artikel/Praepositionen weiterer Sprachen: davor endet kein Kurzsa
 _JOIN1 = "and|that|which|in which|with|using|by|for|to|from|where|when|while|because|including|as|so|through|via|across|under|into|against|und|mit|für|durch|bei|wobei|sowie|damit|wenn|um|während|weil|sodass|zur|zum|indem"
 _JOIN2_LANG = {   # Stufe 2 (nur wenn Stufe 1 keine Fuge findet): Anschlusswoerter je Sprache (18.11.2026, lange KI-Kurzbeschreibungen). Mit Sprache nur deren
     # Woerter (nl darf "die"/"met"/"door", ohne deutsche oder englische Saetze zu treffen); ohne Sprache die Vereinigung ohne Woerter, die auch en/de sind.
-    "fr": "et|qui|que|avec|pour|par|dans|afin|lorsque|grâce|sans|selon|notamment|dont|où|permettant|offrant|tandis|sur|entre|depuis|via",
-    "es": "y|que|con|para|mediante|donde|cuando|sin|según|incluidos|incluyendo|permitiendo|ofreciendo|mientras|sobre|entre|desde|en",
+    "fr": "et|qui|que|avec|pour|par|dans|afin|lorsque|grâce|sans|selon|notamment|dont|où|permettant|offrant|tandis|sur|entre|depuis|via|de|à|au|aux|en|comme|si|sous|vers|chez|lors|d'\\S+",
+    "es": "y|que|con|para|mediante|donde|cuando|sin|según|incluidos|incluyendo|permitiendo|ofreciendo|mientras|sobre|entre|desde|en|de|a|al|del|como|si|bajo|hacia",
     "it": "che|tramite|dove|quando|senza|grazie|incluso|attraverso|e|ed|mentre|poiché|consentendo|permettendo|offrendo|di|da|tra|fra|su|nel|nella|nei|del|della|per|con|in",
     "pt": "e|que|com|para|por|onde|quando|sem|incluindo|através|permitindo|oferecendo|enquanto|entre|desde|em|no|na",
     "nl": "en|die|dat|met|door|voor|waarbij|zodat|zonder|wanneer|waar|om|terwijl|waardoor|bij|naar|binnen|tussen|zoals|in|van|op|als|over",
@@ -39,16 +39,19 @@ _JOIN2_LANG = {   # Stufe 2 (nur wenn Stufe 1 keine Fuge findet): Anschlusswoert
     "id": "yang|dengan|untuk|melalui|tanpa|sehingga|agar|saat|seperti|di|ke|dari|pada|dalam|antara|bagi|dan",
     "ru": "который|которая|которое|которые|для|через|чтобы|при|без|где|по|на базе|с помощью|в|на|с|из|к|между|и",
     "uk": "який|яка|яке|які|щоб|де|в|у|на|з|із|до|між|для|через|і|та",
-    "ar": "التي|الذي|مع|عبر|حيث|من خلال|لتمكين|بما في ذلك|على|باستخدام|تُسمى|يتيح|تتيح|في|من|إلى",
+    "ar": "التي|الذي|مع|عبر|حيث|من خلال|لتمكين|بما في ذلك|على|باستخدام|تُسمى|يتيح|تتيح|في|من|إلى|عن|بين|قبل|بعد|مثل|لـ|ل|و\\S+",
     "he": "אשר|שבו|שבה|עם|כדי|באמצעות|על|של|בין|כמו|המאפשר|המאפשרת|ללא|עבור|מול|תוך",
+    "de": "über|statt|anhand|auf|von|aus|vor|nach|ohne|innerhalb|zwischen|gegen|unter|in|im|bei|mit|für|durch|zur|zum|sowie|damit|wenn|um|während|weil|indem|als|wie|des|der|mithilfe|bis|seit|samt|einschließlich",
 }
 _EN_DE = set(_JOIN1.split("|")) | {"die", "met", "in", "van", "op", "als", "over", "per", "con", "en", "e", "i", "y", "no", "na", "do", "da", "di", "em", "via"}
-_JOIN2 = "|".join(sorted({w for v in _JOIN2_LANG.values() for w in v.split("|")} - _EN_DE, key=lambda w: (-len(w), w)))   # ohne Sprache: Vereinigung ohne en/de-Woerter (wie bisher)
+_JOIN2 = "|".join(sorted({w for l, v in _JOIN2_LANG.items() if l != "de" for w in v.split("|")} - _EN_DE, key=lambda w: (-len(w), w)))   # ohne Sprache: Vereinigung ohne en/de-Woerter (wie bisher)   # ohne Sprache: Vereinigung ohne en/de-Woerter (wie bisher)
 _FUGE = re.compile(r"[,;،؛](?=\s)|[，、]|\s[–—-](?=\s)|(?<=\s)(?=(?:" + _JOIN1 + r")\s)")   # Stufe 1: Satzzeichen und englische/deutsche Anschlusswoerter (wie bisher)
 _FUGE2 = re.compile(r"(?<=\s)(?=(?:" + _JOIN2 + r")\s)")
 _FUGE2_LANG = {l: re.compile(r"(?<=\s)(?=(?:" + w + r")\s)") for l, w in _JOIN2_LANG.items()}
+_JOIN_WORDS = {l: set(w.split("|")) for l, w in _JOIN2_LANG.items()}
+_DE_NEBENSATZ = re.compile(r"(?:^|,\s+)(?:\w+\s+)?(?:der|die|das|dem|den|deren|dessen|welche[rsmn]?|wenn|weil|dass|damit|indem|während|ob|sodass|bevor|nachdem|sobald|wobei|wodurch|womit)\s", re.I)
 _NO_CUT2 = {"tels", "telles", "tel", "telle", "ainsi", "alors", "bien", "même", "así", "tanto", "tal", "tales", "così", "tanto", "sempre", "assim", "tal", "zowel", "zo", "takie", "tak", "seperti", "так", "такие", "також", "такі",
-             "más", "menos", "mismo", "misma", "plus", "moins", "basado", "basada", "basados", "basadas", "basé", "basée", "basés", "basées", "basato", "basata", "basati", "baseado", "baseada", "gebaseerd"}   # "basado en ..." gehoert zusammen
+             "más", "menos", "mismo", "misma", "plus", "moins", "sie", "ihn", "ihm", "ihnen", "uns", "basado", "basada", "basados", "basadas", "basé", "basée", "basés", "basées", "basato", "basata", "basati", "baseado", "baseada", "gebaseerd"}   # "basado en ..." gehoert zusammen
 
 
 # ---------------------------------------------------------------- Bausteine Entitaeten (15 Sprachen)
@@ -139,6 +142,8 @@ def lead_text(text, hi=DESC_HI, lang=None):
     best = 0
     for m in _FUGE.finditer(cut):
         head = cut[:m.start()].rstrip(",;،؛，、–—- ")
+        if head.count("(") > head.count(")"):
+            continue   # nie in einer offenen Klammer schneiden ("(trier, ranger." waere kaputt)
         punct = cut[m.start():m.start() + 1] in ",;،؛，、–—-"
         if len(head) >= (45 if punct else 60) and head.rsplit(" ", 1)[-1].lower() not in _STOP and m.start() > best:
             best = m.start()   # laengster Anfang, der an einer Satzfuge endet (Komma, Semikolon, Strich oder vor Nebensatz-/Anschlusswort)
@@ -146,7 +151,11 @@ def lead_text(text, hi=DESC_HI, lang=None):
         for m in _FUGE2_LANG.get(lang, _FUGE2).finditer(cut):
             head = cut[:m.start()].rstrip()
             last = head.rsplit(" ", 1)[-1].lower()
-            if len(head) >= min(55, hi // 2) and last not in _STOP and last not in _NO_CUT2 and m.start() > best:   # nach einem Namen vorn ist hi kleiner
+            if head.count("(") > head.count(")"):
+                continue
+            if lang == "de" and _DE_NEBENSATZ.search(head):
+                continue   # deutscher Nebensatz: das Verb steht am Ende, ein Schnitt mittendrin zerreisst den Satz (dann lieber "…")
+            if len(head) >= min(45, hi // 2) and last not in _STOP and last not in _NO_CUT2 and last not in _JOIN_WORDS.get(lang, ()) and m.start() > best:   # nach einem Namen vorn ist hi kleiner; nie auf einem Bindewort enden
                 best = m.start()
     if best:
         return cut[:best].rstrip(",;،؛，、–—- ") + "."
