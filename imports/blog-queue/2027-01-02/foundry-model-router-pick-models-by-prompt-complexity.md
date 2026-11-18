@@ -5,7 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2027-01-02
-topics: [model-router, azure-ai-foundry]
+topics: [model-router, microsoft-foundry]
 keypoints:
   - "Model router is a trained language model that selects an LLM for each prompt in real time, packaged as one deployment."
   - "Routing modes are Balanced (default), Quality and Cost. A mode change can take up to five minutes to take effect."
@@ -108,7 +108,7 @@ I did not read the pages on routing logic, pricing or the monitoring metadata, s
 ## Related
 
 - [Model router](https://www.m365.fm/entity/model-router/)
-- [Azure AI Foundry](https://www.m365.fm/entity/azure-ai-foundry/)
+- [Azure AI Foundry](https://www.m365.fm/entity/microsoft-foundry/)
 - [Foundry model catalog](https://www.m365.fm/entity/foundry-model-catalog/)
 - [Azure OpenAI](https://www.m365.fm/entity/azure-openai/)
 

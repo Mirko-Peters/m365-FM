@@ -226,7 +226,7 @@
     (kids || []).forEach(function (c) { if (c) n.appendChild(typeof c === "string" ? document.createTextNode(c) : c); }); return n;
   }
   function call(path, opt) {
-    opt = opt || {}; opt.credentials = "include"; opt.headers = { "x-requested-with": "m365", "content-type": "application/json" };
+    opt = opt || {}; opt.credentials = "include"; opt.headers = /^(GET)?$/i.test(opt.method || "") ? {} : { "x-requested-with": "m365", "content-type": "application/json" };   // GET ohne Zusatz-Kopf und ohne content-type: kein CORS-Preflight
     return fetch(C0.api + path, opt).then(function (r) { return r.json().then(function (j) { return { s: r.status, j: j }; }, function () { return { s: r.status, j: {} }; }); },
       function () { return { s: 0, j: {} }; });
   }

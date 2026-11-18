@@ -117,8 +117,11 @@ export async function syncEntitiesFromSite(env, opts = {}) {
   const live = new Map(((await db.prepare("SELECT eid,data FROM entity_rev WHERE status='live'").all()).results || []).map((r) => [r.eid, r.data]));
   const owned = await ownedEntities(db), sys = await aiUserId(db, false);   // selbst verwaltet: nie abgleichen; sys = Systemnutzer der KI-Entwuerfe
   const cand = [];
-  for (const e of list) {   // Vorauswahl ohne Historie: nur Eintraege, deren JSON-Felder nicht schon so in D1 stehen
-    if (!e?.id || !live.has(e.id) || owned.has(e.id)) continue;
+  for (let e of list) {   // Vorauswahl ohne Historie: nur Eintraege, deren JSON-Felder nicht schon so in D1 stehen
+    if (!e?.id || !live.has(e.id)) continue;
+    // selbst verwaltet: nur die Zusammenfuehrung (replaced_by aus data/guest_merge.json "entities") wird markiert - die alte Adresse leitet ohnehin weiter;
+    // sonst bliebe die Zeile fuer MCP-Suche, SEO, Events und Auto-Uebersetzung aktuell. Inhalte des Inhabers bleiben unberuehrt.
+    if (owned.has(e.id)) { if (!e.replaced_by) continue; e = { id: e.id, replaced_by: e.replaced_by, outdated: true }; }
     let d; try { d = JSON.parse(live.get(e.id)); } catch { continue; }
     const { id, ...j } = e;
     if (paths(j).some((p) => !blank(at(j, p)) && canon(at(d, p)) !== canon(at(j, p)))) cand.push(e);

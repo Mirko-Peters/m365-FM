@@ -110,7 +110,7 @@ def build(g):
                       f'<h3>Claude Code</h3><pre class="mcp-pre">{esc(agent_command)}</pre>'
                       f'<h3>VS Code / GitHub Copilot (.vscode/mcp.json)</h3><pre class="mcp-pre">{esc(copilot_config)}</pre>' +
                       '</section>')
-        b = shell(lang, f'<h1>{esc(t["title"])}</h1><p style="font-size:1.1em">{esc(t["intro"])}</p><p><a class="btn main" href="{croot}#c-page">{esc(t["go"])}</a></p>'
+        b = shell(lang, f'<h1>{esc(t["title"])}</h1><p style="font-size:1.1em">{esc(t["intro"])}</p><p><a class="btn main" href="{croot}">{esc(t["go"])}</a></p>'
                   f'<h2>{esc(t["s1"])}</h2><p>{esc(t["s1p"])}</p><p><code>{MCP_URL}</code></p>'
                   f'<h2>{esc(t["tools"])}</h2><table class="mcp-t"><thead><tr><th>{esc(t["tool"])}</th><th>{esc(t["does"])}</th><th>{esc(t["auth"])}</th></tr></thead><tbody>{rows}</tbody></table><p><small>{esc(t["more"])}</small></p>'
                   f'<h2>{esc(t["howh"])}</h2><p>{esc(t["howp"])}</p><ul>{how}</ul><h2>{esc(t["conn"])}</h2><ol><li><b>{esc(t["st1"])}</b><br>{esc(t["st1p"])}</li><li><b>{esc(t["st2"])}</b><br>{esc(t["st2p"])} <code>{MCP_URL}</code><p>{esc(t["st2c"])}</p><pre class="mcp-pre">{cc}</pre><p>{esc(t["st2d"])}</p><pre class="mcp-pre">{js}</pre><p>{esc(t["st2e"])}</p></li>'

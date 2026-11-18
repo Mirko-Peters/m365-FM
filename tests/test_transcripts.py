@@ -125,8 +125,12 @@ class RegistryTests(unittest.TestCase):
     def test_links_html(self):
         self.assertEqual(TRS.links_html({}), "")
         h = TRS.links_html({"txt": "https://x/a/transcript.txt", "vtt": "https://x/a/transcript.vtt"})
-        self.assertIn(">Transcript (TXT)</a>", h); self.assertIn('href="https://x/a/transcript.vtt" type="text/vtt"', h); self.assertIn(">VTT</a>", h)
-        self.assertNotIn("VTT</a>", TRS.links_html({"txt": "https://x/a/transcript.txt", "vtt": None}, "Lire la transcription"))
+        self.assertIn(">Transcript (TXT)</a>", h); self.assertIn('href="https://x/a/transcript.vtt" type="text/vtt"', h)
+        self.assertIn(">Subtitles (WebVTT)</a>", h); self.assertNotIn(">VTT</a>", h)   # Linktexte F2: beschreibend statt "VTT"
+        self.assertIn(">Untertitel (WebVTT)</a>", TRS.links_html({"txt": "t", "vtt": "v"}, "Transkript", "de"))
+        self.assertIn(">Sous-titres (WebVTT)</a>", TRS.links_html({"txt": "t", "vtt": "v"}, "Lire la transcription", "fr"))
+        self.assertIn('<span aria-hidden="true">📄</span>', h)
+        self.assertNotIn("VTT)</a>", TRS.links_html({"txt": "https://x/a/transcript.txt", "vtt": None}, "Lire la transcription"))
 
     def test_source_files(self):
         with tempfile.TemporaryDirectory() as d:

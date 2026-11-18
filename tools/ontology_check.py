@@ -52,7 +52,7 @@ def main(argv):
                                      ("\n## FEHLER\n" + "\n".join("- " + b for b in bad) + "\n" if bad else ""), "utf-8")
     (OUT / "ontology.json").write_text(json.dumps({"generated": stamp, **m}, ensure_ascii=False, indent=1) + "\n", "utf-8")
     if set_base:
-        BASE.write_text(json.dumps({"duplicate_names": m["duplicate_names"], "alias_collisions": m["alias_collisions"], "no_parent_share": m["no_parent_share"]},
+        BASE.write_text(json.dumps({"duplicate_names": m["duplicate_names"], "alias_collisions": m["alias_collisions"], "name_alias_collisions": m["name_alias_collisions"], "no_parent_share": m["no_parent_share"]},
                                    ensure_ascii=False, indent=1) + "\n", "utf-8")
     print(f"Ontologie: {m['live']} Eintraege, ohne Oberbegriff {m['no_parent']}/{m['no_parent_of']} ({m['no_parent_share']:.0%}), verwaist {m['orphans']}, neu zugeordnet {len(added)}")
     for w in warn:

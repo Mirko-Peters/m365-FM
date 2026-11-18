@@ -54,12 +54,15 @@ jobs:
         run: |
           mkdir -p out/lh
           export CHROME_PATH="$(command -v google-chrome || command -v chromium)"
+          # Lighthouse 12.2.1 brach mit Chrome 14x in TraceElements/RootCauses ab (frame_sequence), LCP-Element und
+          # Layout-Verschiebungen fehlten. 13.6.0 liest die neuen Traces; tools/crp_live.mjs versteht beide Fassungen.
+          "$CHROME_PATH" --version
           for p in $PATHS_IN; do
             enc=$(python3 -c "import sys,urllib.parse;print(urllib.parse.quote(sys.argv[1],safe=''))" "$p")
             for form in mobile desktop; do
               extra=""; [ "$form" = desktop ] && extra="--preset=desktop"
               for i in 1 2 3; do
-                npx -y lighthouse@12.2.1 "https://www.m365.fm$p" $extra --only-categories=performance --output=json --quiet \
+                npx -y lighthouse@13.6.0 "https://www.m365.fm$p" $extra --only-categories=performance --output=json --quiet \
                   --chrome-flags="--headless=new --no-sandbox" --output-path="out/lh/${form}__${enc}__$i.json" || echo "Lauf fehlgeschlagen: $form $p $i"
               done
             done

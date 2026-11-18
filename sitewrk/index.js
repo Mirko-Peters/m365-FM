@@ -9,7 +9,8 @@ const SEC = {
 const IMG = /\.(png|jpe?g|gif|webp|avif|svg|ico)$/i, STATIC = /^\/(assets|covers|og)\//i, FONT = /\.(woff2?|ttf|otf)$/i;
 const HASHED = /^\/assets\/(site\.[0-9a-f]{8,}\.css|(page|a11y)\.[0-9a-f]{8,}\.js)$/i;   // Dateiname traegt den Inhalts-Hash: darf ein Jahr im Browser bleiben
 // T41 Caching: HTML 4 h am Rand statt 10 Min (nach jedem Deploy leert tools/purge_changed.py genau die geaenderten Adressen),
-// Sprachseiten aus R2 ebenfalls 4 h im Kanten-Cache (Cache API, Schluessel /__r2c/<pfad>/, Purge nach dem Upload), Browser fragt bei HTML immer nach (304 per ETag/Last-Modified)
+// Sprachseiten aus R2 ebenfalls 4 h im Kanten-Cache (Cache API, Schluessel /__r2c/<pfad>/ bzw. mit R2 als Ursprung /__r2f<pfad>, s. r2CacheKey; Purge nach
+// dem Upload bzw. vor der Bau-Kennung), Browser fragt bei HTML immer nach (304 per ETag/Last-Modified)
 const EDGE_HTML = 14400, R2_TTL = 14400, R2_MISS_TTL = 600;
 const HTML_CC = "public, max-age=0, s-maxage=600, stale-while-revalidate=86400";
 const r2Path = (p) => (p.endsWith("/") ? p : p + "/");
@@ -64,33 +65,72 @@ export function r2Key(p) {   // Adresse (dekodiert) -> Schluessel im Bucket ("" 
   if (p.endsWith("/")) return "pages" + p + "index.html";
   return extOf(p) ? "pages" + p : "";
 }
-const READY_TTL = 30000;   // Bau-Kennung je Isolate 30 s merken; aufgefrischt wird im Hintergrund, keine Anfrage wartet darauf
+export const READY_TTL = 30000;   // Bau-Kennung 30 s merken (je Isolate und geteilt im Kanten-Cache); aufgefrischt wird im Hintergrund, keine Anfrage wartet auf die Pruefung
 let READY = { t: -1e15, v: "", busy: 0 };
 export function __resetR2Ready() { READY = { t: -1e15, v: "", busy: 0 }; }   // nur fuer Tests
+export function __r2ReadyState() { return { ...READY }; }   // nur fuer Tests
 const withTimeout = (p, ms) => Promise.race([p, new Promise((r) => setTimeout(() => r(null), ms))]);
+const BUILD_RX = /^[A-Za-z0-9._-]{1,64}$/;
 async function checkBuild(env, url) {
   const [a, b] = await Promise.all([
     fetch(url.origin + "/r2-build.txt?r2check=" + Math.floor(Date.now() / READY_TTL), { signal: AbortSignal.timeout(3000) }).then((x) => (x.ok ? x.text() : "")).catch(() => ""),   // mit Query: nie aus dem Kanten-Cache
     withTimeout(env.PAGES.get("pages/r2-build.txt").then((x) => (x ? x.text() : "")), 3000).then((x) => x || "").catch(() => "")]);
   const o = String(a).trim(), r = String(b).trim();
-  return o === r && /^[A-Za-z0-9._-]{1,64}$/.test(o) ? o : "";
+  return o === r && BUILD_RX.test(o) ? o : "";
 }
-// Liefert die Bau-Kennung, wenn R2 genau den Bau von GitHub Pages enthaelt, sonst "". Nie auf eine Pruefung warten, die eine andere Anfrage
-// gestartet hat (bricht sie ab, haengen sonst alle): die Pruefung laeuft ueber ctx.waitUntil dieser Anfrage, bis dahin gilt der letzte Stand
-// (nach dem Start eines Isolates: "" = GitHub Pages).
-function r2Ready(env, url, ctx) {
+// Kaltes Isolat (Dienstag-Check 17.11.2026): ohne gemerkte Kennung nahm die erste Anfrage eines Isolats den Weg ueber GitHub Pages - fuer Seiten,
+// die es nur im Bucket gibt (/entity/*, Sprachseiten), mit 404 und danach dem R2-Rueckfall (zwei Ursprungs-Wege). Deshalb legt jede Pruefung ihr
+// Ergebnis mit Pruefzeit 30 s im Kanten-Cache des Rechenzentrums ab (Schluessel /__r2c/~ready, oeffentlich 404 wie alle /__r2c/). Ein neues Isolat
+// liest es einmal (hoechstens READY_WAIT ms, eigener Abruf dieser Anfrage) und uebernimmt es nur, wenn die Pruefung juenger als 30 s ist - so ist
+// der Stand nie aelter als im Isolat selbst. Auf checkBuild (nie gecachter Abruf bei GitHub Pages) wartet weiterhin keine Anfrage.
+// Grenze: Das hilft nur, wenn im selben Rechenzentrum in den letzten 30 s eine Pruefung lief. Bei wenig Verkehr (Messung 17.11.: ~1,7 Seitenaufrufe/min
+// weltweit) ist der Eintrag nach einer Ruhepause meist abgelaufen (ready=cold) - eine Senkung der TTFB ist damit NICHT belegt. Erst messen
+// (Server-Timing ready/src auf /entity/*). Bleibt ready=cold mit src=r2fallback haeufig, ist der naechste Hebel, im kalten Zustand Pfade, die es nur
+// im Bucket gibt (site_size.r2_only, Entitaeten nach site_entities.py), gleich ueber r2Page zu holen (derselbe Inhalt wie heute der 404-Rueckfall).
+// READY_TTL NICHT einfach verlaengern: nach einem Deploy gaelte die alte Kennung weiter, und r2First laese unter /__r2c/@<alter Bau>/ bis zu 4 h alte Seiten.
+const READY_KEY = "/__r2c/~ready", READY_WAIT = 50;
+async function sharedReady(url) {
+  const read = caches.default.match(new Request(url.origin + READY_KEY)).then(async (c) => (c ? { t: c.headers.get("x-r2-build-t"), v: (await c.text()).trim() } : null));
+  const c = await withTimeout(read.catch(() => null), READY_WAIT);
+  if (!c || !/^\d{10,16}$/.test(c.t || "") || (c.v && !BUILD_RX.test(c.v))) return null;
+  const now = Date.now(), t = Math.min(Number(c.t), now);   // Uhrabweichung: hoechstens ab jetzt gueltig
+  return now - t < READY_TTL ? { t, v: c.v } : null;
+}
+function storeReady(url, t, v) {
+  const age = Math.max(1, Math.ceil((READY_TTL - (Date.now() - t)) / 1000));
+  return caches.default.put(new Request(url.origin + READY_KEY), new Response(v, { headers: { "content-type": "text/plain; charset=utf-8", "cache-control": `public, max-age=${age}`, "x-r2-build-t": String(t) } })).catch(() => {});
+}
+// Liefert { v, src }: v = Bau-Kennung, wenn R2 genau den Bau von GitHub Pages enthaelt, sonst ""; src fuer Server-Timing (mem = Isolat,
+// cache = geteilt aus dem Kanten-Cache, cold = kein gueltiger Stand: GitHub Pages). Nie auf eine Pruefung warten, die eine andere Anfrage
+// gestartet hat (bricht sie ab, haengen sonst alle): die Pruefung laeuft ueber ctx.waitUntil dieser Anfrage, bis dahin gilt der letzte Stand.
+async function r2Ready(env, url, ctx) {
+  let src = "mem";
+  if (Date.now() - READY.t >= READY_TTL && !READY.v) {   // nach dem Start eines Isolates (oder zuletzt "nicht bereit"): geteilten Stand lesen
+    const sh = await sharedReady(url);
+    if (sh && sh.t > READY.t) { READY = { t: sh.t, v: sh.v, busy: READY.busy }; src = "cache"; } else src = "cold";
+  }
   const now = Date.now();
   if (now - READY.t >= READY_TTL && now - READY.busy > 10000) {
     READY.busy = now;
-    ctx.waitUntil(checkBuild(env, url).then((v) => { READY = { t: Date.now(), v, busy: 0 }; }).catch(() => { READY = { t: Date.now(), v: "", busy: 0 }; }));
+    ctx.waitUntil(checkBuild(env, url).then((v) => { const t = Date.now(); READY = { t, v, busy: 0 }; return storeReady(url, t, v); })
+      .catch(() => { READY = { t: Date.now(), v: "", busy: 0 }; }));
   }
-  return READY.v;
+  return { v: READY.v, src };
 }
+// Kanten-Cache des R2-Ursprungs. Bau-Kennung mit Endung "-pfad" (site.yml seit 17.11.2026): Schluessel nur aus dem Pfad (/__r2f<pfad>) - ein Eintrag
+// ueberlebt den naechsten Deploy, wenn sich die Datei nicht geaendert hat. Geaenderte, neue und entfallene Adressen leert der Deploy-Job nach dem
+// vollstaendigen Spiegel und vor dem Setzen der Kennung (tools/purge_changed.py --r2): was ein Isolat mit einer alten Kennung bis dahin gecacht hat, ist
+// weg, was es danach cacht, ist schon neu. Gelingt der Purge nicht, bleibt die alte Kennung (dann GitHub Pages).
+// "Geaendert" heisst: Purge-Hash ohne die Liste "neueste Folgen" (tools/page_hashes.py) - die Seitenleiste eines
+// sonst unveraenderten Eintrags ist hoechstens R2_TTL (4 h) alt. Eigener Praefix /__r2f: den Schluessel /__r2c<pfad> bildet der alte R2-Rueckfall aus
+// jeder angefragten Adresse (z. B. /@x/... -> /__r2c/@x/...), er darf hier nie treffen. Kennung ohne "-pfad" (Deploy-Job ohne diesen Purge): wie bisher
+// mit Bau-Kennung im Schluessel (/__r2c/@<kennung><pfad>), Eintraege eines frueheren Baus treffen nie.
+export const PATH_KEY = /-pfad$/;
+export const r2CacheKey = (origin, build, cp) => origin + (PATH_KEY.test(build) ? "/__r2f" + cp : "/__r2c/@" + build + cp);
 async function r2First(request, env, ctx, url, p, key, build) {
   const html = key.endsWith("/index.html"), ext = html ? "html" : extOf(key);
   const cp = html ? (p.endsWith("/index.html") ? p.slice(0, -"index.html".length) : r2Path(p)) : p;   // /a/index.html und /a/ teilen den Eintrag
-  // Bau-Kennung im Schluessel: Eintraege eines frueheren Baus treffen nie (kein Purge noetig), getrennt vom alten R2-Rueckfall (/__r2c<pfad>)
-  const cache = caches.default, ck = new Request(url.origin + "/__r2c/@" + build + cp);
+  const cache = caches.default, ck = new Request(r2CacheKey(url.origin, build, cp));
   let hit = await cache.match(ck).catch(() => null), state = "HIT";
   if (!hit) {
     state = "MISS";
@@ -413,17 +453,43 @@ export function partnerToWww(path) {
   const m = PARTNER_DASH.exec(path) || WWW_DASH.exec(path);
   return m ? (m[1] ? "/" + m[1] : "") + "/sponsor/dashboard" + (m[2] ? "/" + m[2] : "") + "/" : "";
 }
+// admin.m365.fm: die Verwaltung (/admin/) auf eigener Subdomain; "/" = /admin/. Kein weiterer Pfad gehoert dazu (alles andere: Website).
+const WWW_ADMIN = /^\/admin\/?$/;
+export function wwwToAdmin(path) { return WWW_ADMIN.test(path) ? "/" : ""; }
+export function adminToWww(path) { return path === "/" || WWW_ADMIN.test(path) ? "/admin/" : ""; }
+// profile.m365.fm: Konto und Profil (die Community-App /community/ mit allen Reitern) auf eigener Subdomain; "/" = /community/, "/de/" = /de/community/.
+// Nur die App selbst zieht um: oeffentliche Profile (/community/u/<kuerzel>/), Blog, Podcast, Gaeste und die Einstiegsseiten bleiben auf www.m365.fm.
+const WWW_PROFILE = new RegExp(`^(?:/(${PARTNER_LANG}))?/community/?$`);
+const PROFILE_ROOT = new RegExp(`^(?:/(${PARTNER_LANG}))?/?$`);
+export function wwwToProfile(path) { const m = WWW_PROFILE.exec(path); return m ? (m[1] ? "/" + m[1] : "") + "/" : ""; }
+export function profileToWww(path) { const m = PROFILE_ROOT.exec(path) || WWW_PROFILE.exec(path); return m ? (m[1] ? "/" + m[1] : "") + "/community/" : ""; }
 const WWW_HOSTS = new Set(["www.m365.fm", "m365.fm", "dub.m365.fm"]);
 const PARTNER_NOINDEX = { "x-robots-tag": "noindex, nofollow" };
 
-async function partnerRequest(request, env, ctx, url) {
+// Anmelde-Sperre auf admin.m365.fm und profile.m365.fm: wer nicht angemeldet ist (bei admin: kein Admin), sieht NUR die Anmelde-Knoepfe (Google, Microsoft, LinkedIn, GitHub),
+// sonst nichts von der Seite. Der Worker setzt das Skript in den <head> der ausgelieferten Seite; Cookie und Pruefung bleiben bei api-dub.m365.fm
+// (/api/me mit Cookie, CORS erlaubt beide Adressen). Sicherer Standard: bis die Antwort da ist, ist die Seite ausgeblendet; bei Fehler gilt "nicht angemeldet".
+export function gateSnippet(kind, api) {
+  const A = JSON.stringify(String(api || "https://api-dub.m365.fm").replace(/\/+$/, "")), K = JSON.stringify(kind === "admin" ? "admin" : "profile");
+  return `<style id="m365-gate-css">html.m365g body>*:not(#m365-gate){display:none!important}#m365-gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}#m365-gate .gbox{display:flex;flex-direction:column;gap:12px;width:100%;max-width:320px}#m365-gate .gbox a{text-align:center;text-decoration:none}</style>` +
+    `<script id="m365-gate-js">(function(){var d=document,r=d.documentElement,A=${A},K=${K};r.className+=" m365g";` +
+    `function ok(){r.className=r.className.split(" m365g").join("");var g=d.getElementById("m365-gate");if(g&&g.parentNode)g.parentNode.removeChild(g)}` +
+    `function card(){if(d.getElementById("m365-gate"))return;if(!d.body){d.addEventListener("DOMContentLoaded",card);return}` +
+    `var g=d.createElement("main");g.id="m365-gate";var b=d.createElement("div");b.className="gbox";var ret=encodeURIComponent(location.href.split("#")[0]);` +
+    `[["google","Google"],["microsoft","Microsoft"],["linkedin","LinkedIn"],["github","GitHub"]].forEach(function(p,i){var a=d.createElement("a");a.className="btn"+(i?"":" main");a.rel="nofollow";a.setAttribute("data-p",p[0]);a.href=A+"/auth/login/"+p[0]+"?return="+ret;a.textContent=p[1];b.appendChild(a)});` +
+    `g.appendChild(b);d.body.appendChild(g);` +
+    `fetch(A+"/api/providers").then(function(x){return x.json()}).then(function(j){if(!j||!j.providers)return;[].slice.call(b.querySelectorAll("a")).forEach(function(a){if(j.providers.indexOf(a.getAttribute("data-p"))<0)a.parentNode.removeChild(a)})}).catch(function(){})}` +
+    `fetch(A+"/api/me",{credentials:"include"}).then(function(x){return x.ok?x.json():null}).then(function(j){var u=j&&j.user;if(u&&(K!=="admin"||u.admin))ok();else card()}).catch(card)})();</script>`;
+}
+
+async function partnerRequest(request, env, ctx, url, toWww = partnerToWww, fromWww = wwwToPartner, gate = "") {   // Standard: Sponsor-Dashboard; admin und profil rufen es mit ihren Zuordnungen auf
   const quiet = (status, extra = {}) => new Response(status === 405 ? "Method not allowed" : null, { status, headers: { ...SEC, ...PARTNER_NOINDEX, "cache-control": "no-store", ...extra } });
   const p = url.pathname;
   if (p === "/robots.txt") return new Response("User-agent: *\nDisallow: /\n", { headers: { ...SEC, "content-type": "text/plain; charset=utf-8", "cache-control": "public, max-age=3600" } });
   if (request.method !== "GET" && request.method !== "HEAD") return quiet(405, { allow: "GET, HEAD" });
   if (/^\/sitemap[^/]*\.xml$/i.test(p)) return quiet(404);   // die Subdomain steht in keiner Sitemap
   const origin = (env.ORIGIN || "https://www.m365.fm").replace(/\/+$/, "");
-  const www = partnerToWww(p);
+  const www = toWww(p);
   // Dashboard-Seiten und statische Dateien (Skripte, Stile, Bilder, Schriften) kommen ueber die normale Kette von www.m365.fm; alles andere gehoert zur Website
   if (!www && !(STATIC.test(p) || FONT.test(p) || IMG.test(p))) return quiet(302, { location: origin + p + url.search });
   const target = new URL(origin + (www || p)); target.search = url.search;
@@ -434,7 +500,13 @@ async function partnerRequest(request, env, ctx, url) {
   if (www) h.set("x-robots-tag", PARTNER_NOINDEX["x-robots-tag"]);
   const loc = h.get("location");
   if (loc && res.status >= 300 && res.status < 400) {
-    try { const l = new URL(loc, target); const back = l.origin === new URL(origin).origin ? wwwToPartner(l.pathname) : ""; if (back) h.set("location", url.origin + back + l.search); } catch { /* Ziel bleibt wie geliefert */ }
+    try { const l = new URL(loc, target); const back = l.origin === new URL(origin).origin ? fromWww(l.pathname) : ""; if (back) h.set("location", url.origin + back + l.search); } catch { /* Ziel bleibt wie geliefert */ }
+  }
+  if (gate && www && res.status === 200 && /text\/html/i.test(h.get("content-type") || "")) {   // Anmelde-Sperre: nur die Seite selbst, nie Skripte, Stile, Bilder
+    const html = (await res.text()).replace(/<\/head>/i, () => gateSnippet(gate, env.API) + "</head>");
+    for (const k of ["content-length", "content-encoding", "etag"]) h.delete(k);
+    h.set("cache-control", "no-store");
+    return new Response(request.method === "HEAD" ? null : html, { status: 200, headers: h });
   }
   return new Response(request.method === "HEAD" ? null : res.body, { status: res.status, statusText: res.statusText, headers: h });
 }
@@ -512,9 +584,16 @@ const site = {
     // partner.m365.fm (PARTNER_HOST): Sponsor-Dashboard auf eigener Subdomain, noindex, nicht in der Sitemap
     const partnerHost = env.PARTNER_HOST || "";
     if (partnerHost && url.hostname === partnerHost) return partnerRequest(request, env, ctx, url);
-    if (partnerHost && env.PARTNER_REDIRECT === "1" && WWW_HOSTS.has(url.hostname) && !request.headers.has("x-partner-rewrite") && (request.method === "GET" || request.method === "HEAD")) {
-      const to = wwwToPartner(url.pathname);   // alte Adresse /sponsor/dashboard/... -> 301 in einem Schritt (auch von m365.fm, dub.m365.fm und http://)
-      if (to) return new Response(null, { status: 301, headers: { ...SEC, location: "https://" + partnerHost + to + url.search, "cache-control": "public, max-age=3600" } });
+    // admin.m365.fm (ADMIN_HOST) und profile.m365.fm (PROFILE_HOST): gleiche Technik wie partner, immer noindex; leer = keine Subdomain, keine Umleitung
+    const adminHost = env.ADMIN_HOST || "", profileHost = env.PROFILE_HOST || "";
+    if (adminHost && url.hostname === adminHost) return partnerRequest(request, env, ctx, url, adminToWww, wwwToAdmin, "admin");
+    if (profileHost && url.hostname === profileHost) return partnerRequest(request, env, ctx, url, profileToWww, wwwToProfile, "profile");
+    if (WWW_HOSTS.has(url.hostname) && !request.headers.has("x-partner-rewrite") && (request.method === "GET" || request.method === "HEAD")) {
+      for (const [host, flag, map] of [[partnerHost, env.PARTNER_REDIRECT, wwwToPartner], [adminHost, env.ADMIN_REDIRECT, wwwToAdmin], [profileHost, env.PROFILE_REDIRECT, wwwToProfile]]) {
+        if (!host || flag !== "1") continue;
+        const to = map(url.pathname);   // alte Adresse (/sponsor/dashboard/..., /admin/, /community/) -> 301 in einem Schritt (auch von m365.fm, dub.m365.fm und http://)
+        if (to) return new Response(null, { status: 301, headers: { ...SEC, location: "https://" + host + to + url.search, "cache-control": "public, max-age=3600" } });
+      }
     }
     // Umzug (MIGRATED=1): dub.m365.fm und m365.fm -> www.m365.fm, alte Podpage-Adressen -> /show/ (301, damit der SEO-Traffic erhalten bleibt)
     // Alle Adressregeln (alte Podpage-Adressen, alter Blog-Profilname, entfernte Sprachen, /en/) in EINEM Schritt bis zum Endziel;
@@ -529,7 +608,7 @@ const site = {
       if (to) return redirect(request, url.origin, to, url.search);
     }
     const p = url.pathname, isImg = IMG.test(p), isStatic = STATIC.test(p) || FONT.test(p);
-    if (p.startsWith("/__r2c/")) return new Response("Not found", { status: 404 });   // interner Cache-Schluessel, keine oeffentliche Adresse
+    if (p.startsWith("/__r2c/") || p.startsWith("/__r2f/")) return new Response("Not found", { status: 404 });   // interne Cache-Schluessel, keine oeffentlichen Adressen
     if (p === SPEC_PATH && WWW_HOSTS.has(url.hostname) && (request.method === "GET" || request.method === "HEAD")) return speculationRules(request);   // Regeln fuer den Vorabruf (s. withSpeculation)
     if (p === "/") { const hl = homeLang(request); if (hl) return langRedirect(url.origin, hl, url.search); }   // vor jedem Cache: eine englische Startseite aus dem Cache erreicht nie einen deutschen Browser
     const cf = isImg ? { cacheEverything: true, cacheTtl: 604800, polish: "lossy", mirage: true }
@@ -537,16 +616,22 @@ const site = {
       : { cacheEverything: true, cacheTtlByStatus: { "200-299": EDGE_HTML, "404": 60, "500-599": 0 } };   // HTML: 4 h am Rand, Purge nach jedem Deploy
     // T41: ohne Query zum Ursprung - GitHub Pages ist statisch, so landen ?utm_…/?fbclid=… im selben Cache-Eintrag (Zone steht auf Caching-Level "basic": mit Query sonst gar kein Cache)
     const page = !isImg && !isStatic && isHtmlPath(p), rq = request;   // Seiten: R2 zuerst auch bei Range-Anfragen (s. u.)
+    // Messung (Server-Timing, nur Seiten): src = r2 (R2 zuerst), pages (GitHub Pages), r2fallback (GitHub Pages 404, dann Bucket);
+    // ready = mem/cache/cold (Herkunft der Bau-Kennung, s. r2Ready) oder off (R2 zuerst nicht moeglich: Notschalter, Methode, Pfad); Dauern in ms
+    let ready = "off";
     if (env.R2_PRIMARY === "1" && env.PAGES && !isImg && (request.method === "GET" || request.method === "HEAD") && !p.startsWith("/search/") && p !== "/r2-build.txt" && (page || !request.headers.has("range"))) {
       let dp = p; try { dp = decodeURIComponent(p); } catch { /* ungueltige Kodierung: wie angefragt */ }   // Schluessel im Bucket sind UTF-8 (z. B. /ru/tag/облако/)
       const key = r2Key(dp);
-      const build = key ? r2Ready(env, url, ctx) : "";
-      if (build) {
-        const r2 = await r2First(rq, env, ctx, url, p, key, build);
-        if (r2) return r2;
+      if (key) {
+        const rd = await r2Ready(env, url, ctx);
+        ready = rd.src;
+        if (rd.v) {
+          const t0 = Date.now(), r2 = await r2First(rq, env, ctx, url, p, key, rd.v);
+          if (r2) { r2.headers.set("server-timing", `src;desc="r2", ready;desc="${ready}", r2;dur=${Date.now() - t0}`); return r2; }
+        }
       }
     }
-    const res = await fetch(url.search ? new Request(url.origin + p, rq) : rq, { cf });
+    const t0 = Date.now(), res = await fetch(url.search ? new Request(url.origin + p, rq) : rq, { cf }), tOrigin = Date.now() - t0;
     // Weiterleitung des Ursprungs (z. B. GitHub Pages /callback -> /callback/) bekam keine Query, weil wir ohne Query abrufen (T41).
     // Query wieder anhaengen, sonst verliert die OAuth-Rueckleitung den Code (?code=…) - so geschehen am 4.11. beim YouTube-Verbinden.
     if (url.search && res.status >= 301 && res.status <= 308) {
@@ -599,7 +684,8 @@ const site = {
       }
     }
     if (res.status === 404 && env.PAGES && !IMG.test(p) && (request.method === "GET" || request.method === "HEAD")) {
-      const r2 = await r2Page(rq, env, ctx, url, p);
+      const t1 = Date.now(), r2 = await r2Page(rq, env, ctx, url, p);
+      if (r2 && page) r2.headers.set("server-timing", `src;desc="r2fallback", ready;desc="${ready}", origin;dur=${tOrigin}, r2;dur=${Date.now() - t1}`);
       if (r2 && !p.endsWith("/") && !/\.[a-z0-9]{1,8}$/i.test(p)) return new Response(null, { status: 301, headers: { ...SEC, location: url.origin + p + "/" + url.search, "cache-control": "public, max-age=600" } });   // wie GitHub Pages: Verzeichnis ohne "/" -> 301 auf "/"
       if (r2) return r2;
       const m = LANG_EP.exec(p);   // noch nicht hochgeladen: englisches Original statt 404 - umbenannt gleich auf den neuen Slug (ein Schritt)
@@ -616,6 +702,7 @@ const site = {
     if (res.status === 404 && FEED_ITEM.test(p) && (request.method === "GET" || request.method === "HEAD")) return feedGone(request, p);
     const h = new Headers(res.headers);
     finishHeaders(h, p);
+    if (page) h.append("server-timing", `src;desc="pages", ready;desc="${ready}", origin;dur=${tOrigin}`);
     return new Response(request.method === "HEAD" ? null : res.body, { status: res.status, statusText: res.statusText, headers: h });
   },
 };

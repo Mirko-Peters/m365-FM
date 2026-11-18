@@ -35,7 +35,7 @@ def build(g, shows):
             aud = f'<audio controls preload="none" style="width:100%" src="{esc(e["audio"])}"></audio>' if e.get("audio") else ""
             tr = e.get("transcript") or ""
             tx = f'<h2>Transcript</h2><details open><summary>Read the full transcript</summary><p style="white-space:pre-wrap;line-height:1.6">{esc(tr)}</p></details>' if len(tr) > 200 else ""
-            nav = '<p style="display:flex;justify-content:space-between;gap:1em;margin-top:2em">' + (f'<a href="{su}{eps[k + 1]["slug"]}/">← {esc(eps[k + 1]["title"][:60])}</a>' if k + 1 < len(eps) else "<span></span>") + (f'<a href="{su}{eps[k - 1]["slug"]}/">{esc(eps[k - 1]["title"][:60])} →</a>' if k else "") + "</p>"
+            nav = '<p style="display:flex;justify-content:space-between;gap:1em;margin-top:2em">' + (f'<a href="{su}{eps[k + 1]["slug"]}/"><span aria-hidden="true">← </span>{esc(eps[k + 1]["title"][:60])}</a>' if k + 1 < len(eps) else "<span></span>") + (f'<a href="{su}{eps[k - 1]["slug"]}/">{esc(eps[k - 1]["title"][:60])}<span aria-hidden="true"> →</span></a>' if k else "") + "</p>"
             body = (f'<article><p class="mut"><a href="{su}">{esc(s["title"])}</a> · {d(e["pub"])}{" · S" + str(e["season"]) if e.get("season") else ""}</p><h1>{esc(e["title"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="show" data-topic-id="{esc(s["slug"])}" data-topic-label="Follow this show">🔔 Follow this show</button>{aud}'
                     f'<div>{san(e.get("descr"))}</div><p class="mut">Host: {who}</p>{tx}</article>{nav}')
             ld = {"@context": "https://schema.org", "@type": "PodcastEpisode", "name": e["title"], "url": eu, "datePublished": d(e["pub"]), "description": plain(e.get("descr"))[:500],

@@ -1,5 +1,6 @@
 """Eigene Seiten für gezogene Inhalte (YouTube-Videos, Beiträge aus Creator-Feeds): Titel, gezogene Beschreibung, Thumbnail, Quellenangabe,
 optional eigener Creator-Text (per MCP). Google-Index erst mit eigenem Text (≥300 Zeichen), sonst noindex."""
+import site_ename as EN   # Namen der Entitaeten in der Sprache der Seite (Linktexte Paket 4)
 import re
 from datetime import datetime, timezone
 from site_i18n import pfx, pfx2, T
@@ -20,8 +21,10 @@ def public_items(items):
     return [it for it in (items or []) if is_public(it)]
 
 
-PLAT = {"youtube": "YouTube", "github": "GitHub", "blog": "Blog", "podcast": "Podcast", "newsletter": "Newsletter", "mastodon": "Mastodon", "bluesky": "Bluesky",
-        "spotify": "Spotify", "website": "Website", "other": "Web"}
+def plat_of(it):
+    """Linktexte F1: Plattform eines Beitrags mit eigenem Namen (Marke oder Domain, site_linktext.platform) statt der Art ("Web")."""
+    import site_linktext as LT
+    return LT.platform(it.get("url"), it.get("kind"))
 
 
 def slug(t):
@@ -61,21 +64,21 @@ def build(g, items, api):
     shell = lambda lang, b: f'{header(lang, "")}<main class="wrap" style="max-width:48em">{b}</main>{footer(lang) if lang in LANGS else footer_en()}'
     for lang in LANGS2:
         croot = f"{BASE}{pfx(lang)}/community/"
-        links_l = {i: [e["name"], f"{BASE}{pfx(lang) if lang == 'de' else ''}/entity/{i}/"] for i, e in ENTS.items()}
+        links_l = {i: [EN.ename(e, lang), f"{BASE}{pfx(lang) if lang == 'de' else ''}/entity/{i}/"] for i, e in ENTS.items()}
         for it in public_items(items):
             if not it.get("id"):
                 continue
             u = link(BASE, lang, it); own = it.get("body") or ""; has_text = len(own) >= 300
-            who = f'{croot}{"c" if it["type"] == "o" else "u"}/{it["handle"]}/'; plat = PLAT.get(it["kind"], "Web")
+            who = f'{croot}{"c" if it["type"] == "o" else "u"}/{it["handle"]}/'; plat = plat_of(it)
             topics = [t for t in it.get("topics", []) if t in ENTS]
-            tl = "".join(f'<a class="mb-tag" href="{links_l[t][1]}">{esc(ENTS[t]["name"])}</a> ' for t in topics)
+            tl = "".join(f'<a class="mb-tag" href="{links_l[t][1]}">{EN.html_name(ENTS[t], lang)}</a> ' for t in topics)
             body_html = wiki_render(own, links_l, WT.get(lang, WT["en"]))[0] if has_text else ""
             _kp, _fq, _fld = SNT.sections(it.get("keypoints"), it.get("faq"), lang) if has_text else ("", "", [])   # Kernpunkte und FAQ aus eigenen Feldern
             thumb = f'<p><a href="{esc(it["url"])}" rel="nofollow ugc noopener" target="_blank"><img src="{esc(it["thumb"])}" alt="{esc(it["title"])}" loading="lazy" style="max-width:100%;border-radius:.5em"></a></p>' if it.get("thumb") else ""
             ext = f' · <b>{esc(T(lang, "External post", "Externer Beitrag"))}</b>' if it.get("origin") == "kurzpost" else ""
             b = shell(lang, f'{WCSS}<p class="mut"><a href="{who}">{esc(it["name"])}</a> · {esc(plat)} · {iso(it["published"])}{ext}</p><article class="wk-body"><h1>{esc(it["title"])}</h1>{thumb}'
                             f'{("<p>" + esc(it["summary"]) + "</p>") if it.get("summary") else ""}{_kp}{body_html}{_fq}{SNT.CSS if (_kp or _fq) else ""}</article>'
-                            f'<p><a class="btn main" href="{esc(it["url"])}" rel="nofollow ugc noopener" target="_blank">{esc(T(lang, "View the original on", "Original ansehen auf"))} {esc(plat)} ↗</a></p><p>{tl}</p>'
+                            f'<p><a class="btn main" href="{esc(it["url"])}" rel="nofollow ugc noopener" target="_blank">{esc(T(lang, "View the original on", "Original ansehen auf"))} {esc(plat)}<span aria-hidden="true"> ↗</span></a></p><p>{tl}</p>'
                             f'<p class="mut">{esc(T(lang, "Title, description and thumbnail come from the creator’s public feed; the original stays with its author.", "Titel, Beschreibung und Vorschaubild stammen aus dem öffentlichen Feed des Creators; das Original bleibt beim Urheber."))}</p>')
             _yid = re.search(r"(?:v=|youtu\.be/|/shorts/)([\w-]{11})", it.get("url") or "") if it["kind"] == "youtube" else None
             _thumb = it.get("thumb") or (f"https://i.ytimg.com/vi/{_yid.group(1)}/hqdefault.jpg" if _yid else "")

@@ -69,7 +69,7 @@ class Pages(unittest.TestCase):
         src = (ROOT / "site_podpage.py").read_text("utf-8")
         self.assertIn("""'fetchpriority="high" ' if eager is True else ("" if eager else 'loading="lazy" ')""", src)
         self.assertIn("card(e, eager=LIST_EAGER[i] if i < len(LIST_EAGER) else False) for i, e in enumerate(part)", src)
-        self.assertIn('img_tag(thumb_of(e, nr), e["name"], 96, eager=eager)', src)
+        self.assertIn('img_tag(thumb_of(e, nr), "", 96, eager=eager)', src)   # Alt-Texte: alt="", der Folgentitel steht daneben als Link
         self.assertIn("head=SPI.PRECONNECT if part and SPI.is_spreaker(", src)
 
     def test_shows_cover_object_fit(self):

@@ -8,6 +8,7 @@ from pathlib import Path
 from site_learn import esc, ENTS
 import site_player as PL   # Player erst nach Klick (wie der Live-Player oben)
 import site_meta_podcast as MP   # suchintent-freundliche <title>/meta description
+import site_entmatch as EM   # Kontext-Links in den Stream-Beschreibungen (erste Nennung je Entitaet, Kontext aus dem Titel)
 
 D = Path(__file__).parent / "data"
 T = {"en": dict(title="M365 Show – the live stream", h="M365 Show", kicker="Live on YouTube", lede="The M365 Show is a running live stream show: conversations and demos with Microsoft community experts about Microsoft 365, Copilot, Azure, the Power Platform and AI agents. Hosted by Mirko Peters, Microsoft MVP.",
@@ -69,7 +70,7 @@ def build(g):
         embed = f"https://www.youtube-nocookie.com/embed/live_stream?channel={cid}&autoplay=1&rel=0"
         lead = upcoming[0] if upcoming else (arch[0] if arch else None)
         player = (f'<h2>{esc(t["watchh"])}</h2><div class="lv-hero"><button type="button" id="live-load" class="lv-play" data-src="{esc(embed)}" data-t="{esc(t["h"])}" style="background-image:linear-gradient(#0008,#0008),url({thumb(lead["id"])})" aria-label="{esc(t["load"])}">▶ {esc(t["load"])}</button>'
-                  f'<p><a class="btn main" href="{yt}/live" rel="noopener">{esc(t["open"])} ↗</a> <a class="btn" href="{yt}?sub_confirmation=1" rel="noopener">{esc(t["sub"])}</a></p><p class="mut">{esc(t["watchp"])}</p></div>') if lead else ""
+                  f'<p><a class="btn main" href="{yt}/live" rel="noopener">{esc(t["open"])}<span aria-hidden="true"> ↗</span></a> <a class="btn" href="{yt}?sub_confirmation=1" rel="noopener">{esc(t["sub"])}</a></p><p class="mut">{esc(t["watchp"])}</p></div>') if lead else ""
 
         def when(s):
             st = s.get("start") or s.get("published") or ""
@@ -77,7 +78,7 @@ def build(g):
 
         def row(s, up=False):
             lnk = f'{root}{s["slug"]}/'
-            return (f'<li data-start="{esc(s.get("start", ""))}"><a href="{lnk}"><img src="{thumb(s["id"])}" alt="{esc(s["title"])}" width="176" height="99" loading="lazy" decoding="async"></a>'
+            return (f'<li data-start="{esc(s.get("start", ""))}"><a href="{lnk}" tabindex="-1" aria-hidden="true"><img src="{thumb(s["id"])}" alt="{esc(s["title"])}" width="176" height="99" loading="lazy" decoding="async"></a>'
                     f'<div><a href="{lnk}"><strong>{esc(s["title"])}</strong></a>{f"<span class=live-badge hidden>{esc(t["livenow"])}</span>" if up else ""}<br><span class="mut">{when(s)}</span><br>{esc(short(s.get("description")))}</div></li>')
         up_html = (f'<h2>{esc(t["upc"])}</h2><ul class="lv-list">' + "".join(row(s, True) for s in upcoming) + "</ul>") if upcoming else f'<h2>{esc(t["upc"])}</h2><p class="mut">{esc(t["noupc"])}</p>'
         ar_html = (f'<h2>{esc(t["past"] if pastl else t["recent"])}</h2><ul class="lv-list">' + "".join(row(s) for s in arch[:40]) + "</ul>") if arch else ""
@@ -92,19 +93,32 @@ def build(g):
                            "videoFormat": "HD", "publishedOn": {"@type": "BroadcastService", "name": "YouTube", "url": yt}})
         write(f"{'de/' if lang == 'de' else ''}live/index.html", page(lang, *MP.live_hub_meta(lang, desc), root, shell(body), None, ld, og_type="website"))
         sitemap.append((root, TODAY, None))
+        _eu = EM.url_in(BASE, lang)
+        # Zeilen, die in vielen Beschreibungen gleich stehen ("Simply Explained by M365.FM breaks down Microsoft 365, Azure ..."), sind Vorlage: ohne Kontext-Links
+        _lc = {}
+        for x in streams:
+            for ln in {y.strip() for y in (x.get("description") or "").split("\n") if y.strip()}: _lc[ln] = _lc.get(ln, 0) + 1
+        _boiler = {ln for ln, n in _lc.items() if n >= 5}
+        _para = lambda p: "\n".join(f"<span data-nolink>{esc(y)}</span>" if y.strip() in _boiler else esc(y) for y in p.split("\n"))
         for s in streams:
             u = f'{root}{s["slug"]}/'; d = (s.get("description") or "").strip(); dn = s.get("start") or s.get("published") or ""
-            paras = "".join(f"<p>{esc(p)}</p>" for p in re.split(r"\n\s*\n", d)[:12] if p.strip())
+            paras = "".join(f"<p>{_para(p)}</p>" for p in re.split(r"\n\s*\n", d)[:12] if p.strip())
+            _used = EM.Used()
+            if paras:   # Kontext = die im Titel erkannten Entitaeten; Ziel wie bei Folgen und Beitraegen (url_in)
+                _em = EM.shared(ENTS)
+                paras, _ = _em.link_html(paras, _eu, lang, list(_em.ids(s["title"], lang)), used=_used)
             vid = {"@context": "https://schema.org", "@type": "VideoObject", "@id": u + "#video", "name": s["title"], "description": short(d, 500) or s["title"], "thumbnailUrl": [thumb(s["id"])],
                    "uploadDate": (s.get("published") or dn)[:10] or TODAY, "embedUrl": f"https://www.youtube-nocookie.com/embed/{s['id']}", "contentUrl": f"https://www.youtube.com/watch?v={s['id']}",
                    "inLanguage": lang, "isFamilyFriendly": True, "isPartOf": {"@id": f"{BASE}/live/#show"}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}
             if s.get("live_status") in ("was_live", "post_live", "is_live", "is_upcoming") and (s.get("start") or s.get("published")):
                 vid["publication"] = {"@type": "BroadcastEvent", "isLiveBroadcast": True, "startDate": s.get("start") or s["published"]}
+            _ment = EM.mentions(BASE, [i for i in _used if i in ENTS and i not in EM.HOST])
+            if _ment: vid["mentions"] = _ment   # im Text verlinkte Entitaeten (Audit E7)
             if s.get("duration"):
                 m, sec = divmod(int(s["duration"]), 60); hh, m = divmod(m, 60); vid["duration"] = f"PT{hh}H{m}M{sec}S"
             sb = (f'<p class="mut"><a href="{root}">{esc(t["back"])}</a></p><article><h1>{esc(s["title"])}</h1><p class="mut">{when(s)}{" · " + str(s["views"]) + " " + t["views"] if s.get("views") else ""}</p>'
                   f'<div style="margin:22px 0">{PL.player("youtube", s["id"], s["title"], t["play"])}</div>'
-                  f'{("<h2>" + esc(t["desc"]) + "</h2>" + paras) if paras else ""}<p><a class="btn" href="https://www.youtube.com/watch?v={s["id"]}" rel="noopener">{esc(t["open"])} ↗</a></p></article>')
+                  f'{("<h2>" + esc(t["desc"]) + "</h2>" + paras) if paras else ""}<p><a class="btn" href="https://www.youtube.com/watch?v={s["id"]}" rel="noopener">{esc(t["open"])}<span aria-hidden="true"> ↗</span></a></p></article>')
             write(f"{'de/' if lang == 'de' else ''}live/{s['slug']}/index.html", page(lang, *MP.live_stream_meta(lang, s["title"], d), u, shell(sb), None, [vid], og_type="video.other", side=(g["side"](lang, s["title"] + " " + d[:2000]) if g.get("side") else "")))
             sitemap.append((u, (s.get("published") or TODAY)[:10], None))
     write("de/live/index.html", f'<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url={BASE}/de/podcast/"><link rel="canonical" href="{BASE}/de/podcast/"><title>Podcast auf Deutsch</title></head><body><p><a href="{BASE}/de/podcast/">Weiter zum deutschen Podcast</a></p></body></html>')

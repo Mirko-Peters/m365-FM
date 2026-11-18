@@ -1,7 +1,9 @@
 """Copilot-Bibliothek: Prompts, Anweisungen, KQL/DAX/PowerShell, Flows ... Einzelseiten + Verzeichnis. Eintraege kommen aus /api/library/export (Google-Index ab 10 Upvotes)."""
+import site_ename as EN   # Namen der Entitaeten in der Sprache der Seite (Linktexte Paket 4)
 from datetime import datetime, timezone
 from site_i18n import COMM_LANGS, pfx, pfx2, T
 import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
+import site_linkctx as LC   # Beziehungskontext der Linklisten (data/link_context.json)
 from site_learn import ENTS, esc, _fetch_json, LCSS
 
 INDEX_VOTES = 10
@@ -27,7 +29,7 @@ def kl(lang, k):
 
 
 JS = ('(function(){var A="%API%",b=document.querySelector(".bl-vote");if(!b)return;var id=b.dataset.i;'
-      'function f(p,o){o=o||{};o.credentials="include";o.headers=Object.assign({"x-requested-with":"m365"},o.headers||{});return fetch(A+p,o).then(function(r){return r.json()})}'
+      'function f(p,o){o=o||{};o.credentials="include";o.headers=Object.assign(/^(GET)?$/i.test(o.method||"")?{}:{"x-requested-with":"m365"},o.headers||{});return fetch(A+p,o).then(function(r){return r.json()})}'
       'f("/api/library/votes").then(function(d){b.querySelector(".n").textContent=(d.votes||{})[id]||0;if((d.mine||[]).indexOf(+id)>-1)b.setAttribute("aria-pressed","true")}).catch(function(){});'
       'b.addEventListener("click",function(){f("/api/library/vote",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({id:+id})}).then(function(d){if(d.error==="login"){location.href=A.replace("api-","")+"/community/";return}'
       'if(d.ok){b.querySelector(".n").textContent=d.votes;b.setAttribute("aria-pressed",d.voted?"true":"false")}}).catch(function(){})});'
@@ -42,6 +44,16 @@ def is_indexable(p):
     der Seitensprache, bei ihnen zaehlt nur die Beschreibung."""
     code = bool(KINDS.get(p.get("kind"), KINDS["other"])[2])
     return IR.index_or_long(p.get("votes", 0) >= INDEX_VOTES, p.get("summary"), None if code else p.get("body"))
+
+
+def open_link(lang, p):
+    """Linktexte F4: Knopf "Link öffnen" mit Ziel im aria-label ("Link öffnen: {Titel} – {Domain}, neuer Tab"), Pfeil fuer Screenreader versteckt."""
+    if not str(p.get("link") or "").startswith("https://"):
+        return ""
+    import site_linktext as LT
+    v = T(lang, "Open link", "Link öffnen")
+    lab = LT.aria(v, f'{p.get("title") or ""} – {LT.host(p["link"])}, {T(lang, "new tab", "neuer Tab")}'.lstrip(" –"))
+    return f'<p><a class="btn" rel="nofollow ugc noopener" target="_blank" href="{esc(p["link"])}"{LT.a_attr(lab)}>{esc(v)}{LT.arrow("↗")}</a></p>'
 
 
 def build(g, items, people, api):
@@ -64,12 +76,12 @@ def build(g, items, people, api):
         for p in mine:
             a = pb[p["handle"]]; au = f"{BASE}/community/u/{a['handle']}/"; u = f"{croot}library/{p['handle']}-{p['slug']}/"
             topics = [t for t in p.get("topics", []) if t in ENTS]
-            tl = "".join(f'<a class="mb-tag" href="{links[t]}">{esc(ENTS[t]["name"])}</a> ' for t in topics)
+            tl = "".join(f'<a class="mb-tag" href="{links[t]}">{EN.html_name(ENTS[t], lang)}</a> ' for t in topics)
             vote = f'<button type="button" class="bl-vote" data-i="{p["id"]}" aria-pressed="false" aria-label="Upvote">▲ <span class="n">{p.get("votes", 0)}</span></button>'
             b = shell(lang, f'{CSS}<p class="mut"><a href="{ru}">{esc(t0)}</a> · {esc(kl(lang, p["kind"]))}</p><article><h1>{esc(p["title"])}</h1>'
                             f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{p["handle"]}/">{esc(a["name"])}</a> · {iso(p["published"])} · {esc(T(lang, "Version", "Version"))} {p.get("version", 1)}</p>'
-                            f'{("<p>" + esc(p["summary"]) + "</p>") if p.get("summary") else ""}{("<p><a class=\"btn\" rel=\"nofollow ugc noopener\" target=\"_blank\" href=\"" + esc(p["link"]) + "\">" + esc(T(lang, "Open link", "Link öffnen")) + " ↗</a></p>") if str(p.get("link") or "").startswith("https://") else ""}<pre class="lib-code" id="lib-code">{esc(p["body"])}</pre></article>'
-                            f'<p><button type="button" class="btn main" id="lib-copy" data-ok="{esc(T(lang, "Copied", "Kopiert"))}">{esc(T(lang, "Copy", "Kopieren"))}</button> {vote}</p><p>{tl}</p><section id="c-comments"></section>'
+                            f'{("<p>" + esc(p["summary"]) + "</p>") if p.get("summary") else ""}{open_link(lang, p)}<pre class="lib-code" id="lib-code">{esc(p["body"])}</pre></article>'
+                            f'<p><button type="button" class="btn main" id="lib-copy" data-ok="{esc(T(lang, "Copied", "Kopiert"))}">{esc(T(lang, "Copy", "Kopieren"))}</button> {vote}</p>{(LC.intro(lang, "lib.topics") + "<p>" + tl + "</p>") if tl else ""}<section id="c-comments"></section>'
                             f'<script>{JS.replace("%API%", api)}</script>' + (ctags(lang, "lib%d" % p["id"]) if ctags else ""))
             lang_code = KINDS.get(p["kind"], KINDS["other"])[2]
             node = {"@type": "SoftwareSourceCode" if lang_code else "CreativeWork", "@id": u + "#item", "name": p["title"], "description": p.get("summary") or "", "inLanguage": lang,

@@ -174,3 +174,23 @@ test("T30-Abgleich: KI-Entwurf ist keine Menschen-Aenderung - unveraenderte JSON
     assert.match(JSON.parse(raw.prepare("SELECT data FROM entity_rev WHERE eid='other' AND status='live'").get().data).desc.en, /organising shared team/);
   } finally { globalThis.fetch = old; }
 });
+
+test("T30-Abgleich: zusammengefuehrte Dublette wird auch bei selbst verwalteter Entitaet markiert (nur replaced_by/outdated, Inhalt bleibt)", async () => {
+  const { raw, env } = await setup(), old = globalThis.fetch;
+  const own = { name: "OAuth 2.0", type: "concept", aliases: [], desc: { en: "Owner text about OAuth.", de: "" }, rel: [], outdated: false };
+  seedRev(raw, "oauth", thin, 0, "Übernahme aus entities.json", "old"); seedRev(raw, "oauth", own, 7, "Bearbeitet");
+  raw.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES('oauth',7,'verified','manual',1)").run();
+  seedRev(raw, "hub", thin); raw.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES('hub',7,'verified','manual',1)").run();
+  const src = [{ id: "oauth", outdated: true, replaced_by: "oauth-2-0", desc: { en: "Repo text that must not replace the owner's.", de: "" } },
+    { id: "hub", ...thin, desc: { en: "Repo text for an owned entity, never synced.", de: "" } }];
+  globalThis.fetch = async (u) => (String(u).endsWith("/entities-src.json") ? { ok: true, json: async () => ({ entities: src }) } : { ok: false, json: async () => ({}) });
+  try {
+    const r = await syncEntitiesFromSite(env);
+    assert.equal(r.updated, 1, JSON.stringify(r));
+    const d = JSON.parse(raw.prepare("SELECT data FROM entity_rev WHERE eid='oauth' AND status='live'").get().data);
+    assert.equal(d.replaced_by, "oauth-2-0");
+    assert.equal(d.desc.en, "Owner text about OAuth.", "Inhalt des Inhabers bleibt");
+    assert.equal(d.outdated, false, "vom Inhaber gesetztes outdated:false bleibt; Verbraucher pruefen outdated || replaced_by");
+    assert.equal(JSON.parse(raw.prepare("SELECT data FROM entity_rev WHERE eid='hub' AND status='live'").get().data).desc.en, "A hub.", "ohne Zusammenfuehrung bleibt selbst verwaltet unberuehrt");
+  } finally { globalThis.fetch = old; }
+});

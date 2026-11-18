@@ -6,36 +6,90 @@ from html import escape as esc
 from pathlib import Path
 D = Path(__file__).parent / "data"
 TYPE_L = {"product": "Product", "concept": "Concept", "cert": "Certification", "platform": "Platform", "org": "Organization", "event": "Event", "person": "Person", "media": "Media", "category": "Topic", "industry": "Industry", "job": "Job / role"}
+TYPE_DE = {"product": "Produkt", "concept": "Konzept", "cert": "Zertifizierung", "platform": "Plattform", "org": "Organisation", "event": "Veranstaltung", "person": "Person", "media": "Medium", "category": "Thema", "industry": "Branche", "job": "Job / Rolle"}
+
+
+def type_label(lang, t):
+    """title der Chips in der Sprache der Seite (Audit A11Y-6: vorher englisch auf allen Sprachseiten); andere Sprachen ueber site_i18n.T."""
+    from site_i18n import T
+    return T(lang, TYPE_L[t], TYPE_DE[t]) if t in TYPE_L else ""
+
+
 STOP = {"access", "project", "compliance", "governance", "automation", "prompt", "actions", "polling", "agent", "agents", "lists", "forms", "flow", "loop", "word", "bing", "stream", "sites", "pages", "tasks", "security", "identity", "copilot", "microsoft", "azure", "m365", "teams"}
 TYPE_PRIO = {"product": 0, "person": 1, "cert": 2, "platform": 3, "concept": 4, "event": 5, "org": 6, "media": 7, "category": 9, "industry": 8, "job": 8}
 GSRC = "https://www.google.com/preferences/source?q=m365.fm"
 CON = "https://m365con.net/?utm_source=m365.fm&utm_medium=sidebar&utm_campaign=attending2027"
+# Bild der M365Con-Karte: verkleinerte Fassungen im R2-Bucket (tools/sidebar_con_img.py -> design/sidebar/, data/r2_local.json, Workflow r2-images.yml).
+# Auf dem Desktop ist es oft das LCP-Element (Lighthouse /entity/copilot/, 17.11.2026: 675 px / 68,5 KB fuer ~310 CSS-px, loading=lazy).
+CON_WIDTHS = (340, 480, 675)   # 1x, 1,25-1,5x und 2x der Desktop-Breite (19,4rem); 675 = Breite der Quelle, nicht hochskaliert
+CON_WH = (675, 563)   # Seitenverhaeltnis fuer width/height (Platz reserviert, keine Verschiebung)
+CON_DESK = "(min-width: 62.01rem)"   # ab hier steht die Seitenleiste rechts neben dem Inhalt (assets/sbar.css: max-width:62rem = darunter)
+# Desktop: Spalte 20.5rem minus 2 x .55rem Innenabstand der Karte; darunter 3 Spalten ab 52.75rem (30vw), 2 Spalten (50vw) (minmax(16rem,1fr)) bzw. eine Spalte (100vw - 2 x 22px .wrap - 1.1rem)
+CON_SIZES = CON_DESK + " 19.4rem, (min-width: 52.75rem) 30vw, (min-width: 36rem) 50vw, calc(100vw - 62px)"
+CON_ALT = "I'm attending M365Con International 2027, January 11–22, 2027, free online event"
+
+
+def con_file(w, ext):
+    return f"design/sidebar/attending-m365con-{w}.{ext}"
+
+
+def con_sources():
+    """(avif-srcset oder "", webp-srcset, webp-URL der groessten Fassung) aus img.m365.fm, oder None, solange r2-images.yml die WebP-Fassungen
+    nicht hochgeladen hat (dann bleibt das bisherige Bild /assets/attending-m365con.webp). AVIF nur, wenn alle Breiten hochgeladen sind
+    (tools/sidebar_con_img.py legt sie nur an, wenn sie kleiner als WebP sind)."""
+    import site_r2 as R2
+    webp = [(R2.local(con_file(w, "webp")), w) for w in CON_WIDTHS]
+    if not all(u for u, _ in webp):
+        return None
+    avif = [(R2.local(con_file(w, "avif")), w) for w in CON_WIDTHS]
+    ss = lambda xs: ", ".join(f"{u} {w}w" for u, w in xs)
+    return (ss(avif) if all(u for u, _ in avif) else ""), ss(webp), webp[-1][0]
+
+
+def con_img(BASE):
+    """Bild der M365Con-Karte. Mit R2-Fassungen: <picture> (AVIF, sonst WebP) mit srcset/sizes, ohne loading=lazy. fetchpriority=low am <img>:
+    auf dem Handy steht die Seitenleiste unter dem Inhalt (sonst hebt Chrome es als eines der ersten Bilder auf "Medium"); auf dem Desktop holt
+    con_preload im Kopf dieselbe Datei mit hoher Prioritaet, das <img> nimmt sie aus dem Preload (eine Anfrage, im Browsertest geprueft).
+    Ohne R2-Fassungen: das bisherige Bild unveraendert (lazy, kein Preload)."""
+    src = con_sources()
+    w, h = CON_WH
+    if not src:
+        return f'<img src="{BASE}/assets/attending-m365con.webp" alt="{CON_ALT}" width="{w}" height="{h}" loading="lazy">'
+    avif, webp, big = src
+    a = f'<source type="image/avif" srcset="{esc(avif)}" sizes="{CON_SIZES}">' if avif else ""
+    return f'<picture class="sb-conp">{a}<img src="{esc(big)}" srcset="{esc(webp)}" sizes="{CON_SIZES}" alt="{CON_ALT}" width="{w}" height="{h}" fetchpriority="low"></picture>'
+
+
+def con_preload(body):
+    """Desktop-Preload des Kartenbilds fuer den <head>, nur wenn die Seite die Karte mit den R2-Fassungen enthaelt (faellt mit der Karte weg).
+    media: nur Desktop, dort ist das Bild das LCP-Element; dieselben srcset/sizes wie im <picture>, damit der Browser dieselbe Datei waehlt.
+    Mit AVIF: type=image/avif (Browser ohne AVIF ueberspringen den Preload und laden das WebP wie bisher ueber das <img>)."""
+    if '<picture class="sb-conp">' not in body:
+        return ""
+    src = con_sources()
+    if not src:
+        return ""
+    avif, webp, _ = src
+    t = ' type="image/avif"' if avif else ""
+    return (f'<link rel="preload" as="image"{t} imagesrcset="{esc(avif or webp)}" imagesizes="{CON_SIZES}" media="{CON_DESK}" fetchpriority="high">')
 
 
 class Index:
-    def __init__(self):
-        ents = json.loads((D / "entities.json").read_text("utf-8"))
-        gp = D / "guest_entities.json"
-        if gp.exists(): ents += json.loads(gp.read_text("utf-8"))
-        self.by = {}; names = {}
-        self.all = {e["id"]: e for e in ents}   # auch Kategorien: fuer feste Themenlisten (Entitaetsseite, Blogbeitrag)
-        for e in ents:
-            if e["type"] in ("category",) or e["id"] == "mirko-peters": continue
-            for n in [e["name"]] + list(e.get("aliases") or []):
-                n = (n or "").strip()
-                if " " not in n and n.lower() in STOP and n.lower() != e["name"].lower(): continue
-                if len(n) < (6 if e.get("guest") else 4) and n not in ("Teams", "Excel", "Word", "Azure", "Loop", "Viva", "Bing"): continue
-                names.setdefault(n.lower(), e["id"])
-            self.by[e["id"]] = e
-        keys = sorted(names, key=len, reverse=True)
-        self.names = names
-        self.rx = re.compile(r"(?<![\w-])(" + "|".join(re.escape(k) for k in keys) + r")(?![\w-])", re.I) if keys else None
+    """Themen-Chips der Seitenleiste ueber den gemeinsamen Namensindex (site_entmatch): Eigennamen mit Beachtung der Schreibung, Allerweltswoerter
+    ("surface", "react", "Teams" am Satzanfang) nur in Eigennamen-Stellung und mit Kontext der Seite (Audit Linktexte E2)."""
+    def __init__(self, ents=None):
+        import site_entmatch as EM
+        self.m = EM.shared(ents)
+        self.all = dict(self.m.ents)   # auch Kategorien: fuer feste Themenlisten (Entitaetsseite, Blogbeitrag)
+        self.by = {i: e for i, e in self.m.live.items() if e.get("type") not in ("category",) and i != "mirko-peters"}
+        self.names = self.m.names   # Fingerabdruck des Index (site_topics._fp)
 
-    def match(self, text, k=8):
-        if not self.rx: return []
-        cnt = {}
-        for m in self.rx.finditer(text):
-            i = self.names.get(m.group(1).lower()); cnt[i] = cnt.get(i, 0) + 1
+    def ids(self, text, lang="en", ctx=()):
+        """{id: Nennungen} (ohne Kategorien und Host) in der Reihenfolge der ersten Nennung."""
+        return {i: n for i, n in self.m.ids(text, lang, ctx, generic=False).items() if i in self.by}
+
+    def match(self, text, k=8, lang="en", ctx=()):
+        cnt = self.ids(text, lang, ctx)
         ids = sorted(cnt, key=lambda i: (self.by[i]["name"].lower() in STOP, -min(cnt[i], 3), TYPE_PRIO.get(self.by[i]["type"], 8), -cnt[i]))
         return [self.by[i] for i in ids[:k]]
 
@@ -63,8 +117,9 @@ L10N = {
 LISTEN = (("apple_show", "Apple Podcasts"), ("spotify_show", "Spotify"), ("amazon_show", "Amazon Music"), ("deezer_show", "Deezer"), ("iheart_show", "iHeart"))
 
 
-def chips_for(ix, text="", ids=None, exclude=(), k=12):
-    """Themen & Personen der Seite: feste Liste (ids, z. B. verwandte Entitaeten einer Entitaetsseite oder Themen eines Beitrags), sonst Treffer im Text."""
+def chips_for(ix, text="", ids=None, exclude=(), k=12, lang="en"):
+    """Themen & Personen der Seite: feste Liste (ids, z. B. verwandte Entitaeten einer Entitaetsseite oder Themen eines Beitrags), sonst Treffer im Text
+    (Kontext der Seite: ihre festen ids und die eigene Entitaet aus exclude)."""
     out, seen = [], set(exclude or ())
     for i in ids or ():
         e = ix.all.get(i)
@@ -72,20 +127,23 @@ def chips_for(ix, text="", ids=None, exclude=(), k=12):
             seen.add(i); out.append(e)
         if len(out) >= k: break
     if not out and text:
-        out = [e for e in ix.match(text, k + len(seen)) if e["id"] not in seen][:k]
+        out = [e for e in ix.match(text, k + len(seen), lang=lang, ctx=set(ids or ()) | set(exclude or ())) if e["id"] not in seen][:k]
     return out
 
 
-def render(ix, BASE, lang, text="", items=(), url_of=None, title_of=None, all_url="", shp=None, listen_url="", rss="", ent_prefix="", community_url="", ids=None, exclude=(), home=False):
+def render(ix, BASE, lang, text="", items=(), url_of=None, title_of=None, all_url="", shp=None, listen_url="", rss="", ent_prefix="", community_url="", ids=None, exclude=(), home=False, topics_h=""):
     """Die Sidebar einer Seite in ihrer Sprache: M365Con-Karte, Google-Quelle, Themen/Personen der Seite, neueste Folgen der Sprache, Hoeren & folgen, Community.
     items/url_of/title_of: neueste Folgen der Sprache; all_url: alle Folgen; shp: Plattform-Links der Show der Sprache (data/platforms.json);
-    listen_url: Seite mit allen Plattformen (nur wenn es sie gibt); rss: Feed der Show; home: Sprach-Startseite (ohne Hoeren-Karte, Aufbau wie bisher)."""
+    listen_url: Seite mit allen Plattformen (nur wenn es sie gibt); rss: Feed der Show; home: Sprach-Startseite (ohne Hoeren-Karte, Aufbau wie bisher).
+    topics_h: Ueberschrift der Themen-Karte mit der Beziehung zur Seite ("Mit Power BI verknuepfte Themen", "Themen & Personen dieser Folge", site_linkctx side.*);
+    ohne Angabe die allgemeine "Themen & Personen auf dieser Seite" (Treffer im Text)."""
     t = L10N.get(lang) or L10N["en"]; shp = shp or {}
-    chips = "".join(f'<li><a class="sb-chip t-{esc(e["type"])}" href="{BASE}{ent_prefix}/entity/{esc(e["id"])}/" title="{esc(TYPE_L.get(e["type"], ""))}"><i></i>{esc(e["name"])}</a></li>' for e in chips_for(ix, text, ids, exclude))
-    ents = f'<section class="sb-card"><h2>{esc(t["topics"])}</h2><ul class="sb-chips">{chips}</ul><a class="sb-more" href="{BASE}{ent_prefix}/entity/">{esc(t["kg"])}</a></section>' if chips else ""
+    import site_ename as EN   # Linktext = Name in der Sprache der Seite (wie Listen und Brotkruemel), englischer Rest mit lang="en", RTL in <bdi>
+    chips = "".join(f'<li><a class="sb-chip t-{esc(e["type"])}" href="{BASE}{ent_prefix}/entity/{esc(e["id"])}/" title="{esc(type_label(lang, e["type"]))}"><i></i>{EN.html_name(e, lang)}</a></li>' for e in chips_for(ix, text, ids, exclude, lang=lang))
+    ents = f'<section class="sb-card"><h2>{esc(topics_h or t["topics"])}</h2><ul class="sb-chips">{chips}</ul><a class="sb-more" href="{BASE}{ent_prefix}/entity/">{esc(t["kg"])}</a></section>' if chips else ""
     late = "".join(f'<li><a href="{esc(url_of(x))}">{esc(title_of(x))}</a></li>' for x in list(items)[:5]) if url_of else ""
     new = f'<section class="sb-card"><h2>{esc(t["latest"])}</h2><ol class="sb-list">{late}</ol><a class="sb-more" href="{esc(all_url)}">{esc(t["all"])}</a></section>' if late else ""
-    con = (f'<section class="sb-card sb-con"><a href="{CON}" rel="noopener" aria-label="M365Con International 2027"><img src="{BASE}/assets/attending-m365con.webp" alt="I\'m attending M365Con International 2027, January 11–22, 2027, free online event" width="675" height="563" loading="lazy"></a>'
+    con = (f'<section class="sb-card sb-con"><a href="{CON}" rel="noopener" aria-label="M365Con International 2027">{con_img(BASE)}</a>'
            f'<a class="sb-btn" href="{CON}" rel="noopener">{esc(t["seat"])}</a></section>')
     goog = (f'<section class="sb-card sb-g"><a class="gb" href="{GSRC}" rel="noopener" target="_blank"><img src="{BASE}/assets/gsource.webp" alt="Add M365.fm as a preferred source on Google" width="647" height="192" loading="lazy"></a><p>{t["google"]}</p></section>')
     links = " ".join(f'<a href="{esc(shp[k])}" rel="noopener">{n}</a>' for k, n in LISTEN if shp.get(k))

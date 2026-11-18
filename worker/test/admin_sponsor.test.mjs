@@ -164,7 +164,7 @@ test("sponsor admin: Paket v1 der Sponsor-Seite - Nachricht, Sprache, Themen, Pr
   assert.equal(location.hash, "sponsor");
   const get = calls.find((c) => c.path.startsWith("/api/admin/panel/sponsor-requests"));
   assert.equal(get.path, "/api/admin/panel/sponsor-requests?limit=50&offset=0");
-  assert.equal(get.credentials, "include"); assert.equal(get.headers["x-requested-with"], "m365");
+  assert.equal(get.credentials, "include"); assert.equal(get.headers["x-requested-with"], undefined);   // GET ohne Zusatz-Kopf: kein CORS-Preflight (der Worker prueft ihn nur schreibend)
 
   const t = table(root);
   assert.deepEqual(t.head, ["Datum", "Firma", "Name", "E-Mail", "Sprache", "Paket", "Themen", "Preis", "Status"]);

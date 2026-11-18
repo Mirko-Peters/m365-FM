@@ -66,3 +66,54 @@ test("analyse: ohne LCP-Element und Verschiebungen steht der Grund dabei, Insigh
   assert.match(md, /LCP-Element: `nicht ermittelt` \(Audits: largest-contentful-paint-element=error \(NO_LCP\)/);
   assert.match(md, /Layout-Verschiebungen \(groesste\): 0\.300 ul\.tabs/);
 });
+
+// Lighthouse 13 (ab 13.0): largest-contentful-paint-element, critical-request-chains, dom-size, render-blocking-resources,
+// uses-responsive-images usw. sind entfernt; die Werte stehen in Insight-Audits (Aufbau wie in einem echten 13.6.0-Lauf).
+const lh13 = () => ({
+  lighthouseVersion: "13.6.0",
+  environment: { hostUserAgent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/146.0.0.0 Safari/537.36" },
+  categories: { performance: { score: 0.9 } },
+  audits: {
+    "first-contentful-paint": { numericValue: 1200 }, "largest-contentful-paint": { numericValue: 2500 },
+    "total-blocking-time": { numericValue: 10 }, "cumulative-layout-shift": { numericValue: 0.05 }, "speed-index": { numericValue: 1800 },
+    "server-response-time": { numericValue: 30 }, "total-byte-weight": { numericValue: 102400 },
+    "network-requests": { details: { items: [{ url: "https://www.m365.fm/", transferSize: 10240, resourceType: "Document" }] } },
+    "lcp-breakdown-insight": { id: "lcp-breakdown-insight", score: 1, scoreDisplayMode: "informative", details: { type: "list", items: [
+      { type: "table", items: [{ subpart: "timeToFirstByte", label: "Time to first byte", duration: 30.4 }, { subpart: "elementRenderDelay", label: "Element render delay", duration: 210.6 }] },
+      { type: "node", selector: "body > main > h1", snippet: "<h1 class=\"t\">" }] } },
+    "lcp-discovery-insight": { id: "lcp-discovery-insight", score: 0, scoreDisplayMode: "numeric", numericValue: 0, numericUnit: "millisecond", details: { type: "list", items: [
+      { type: "checklist", items: { priorityHinted: { label: "fetchpriority=high should be applied", value: false }, eagerlyLoaded: { label: "LCP resources shouldn’t use loading=lazy", value: true } } },
+      { type: "node", selector: "body > main > h1", snippet: "<h1 class=\"t\">" }] } },
+    "layout-shifts": { details: { type: "table", items: [{ node: { type: "node", selector: "body > main", snippet: "<main>" }, score: 0.05 }] } },
+    "dom-size-insight": { id: "dom-size-insight", score: 1, numericValue: 812, numericUnit: "element" },
+    "network-dependency-tree-insight": { id: "network-dependency-tree-insight", score: 1, details: { type: "list", items: [
+      { type: "list-section", value: { type: "network-tree", longestChain: { duration: 640 }, chains: {
+        A: { url: "https://www.m365.fm/", navStartToEndTime: 120, transferSize: 10240, children: {
+          B: { url: "https://www.m365.fm/s.css", navStartToEndTime: 640, transferSize: 20480, children: {} } } } } } },
+      { type: "list-section", title: "Preconnected origins", value: { type: "text", value: "No origins were preconnected" } }] } },
+    "render-blocking-insight": { id: "render-blocking-insight", score: 0, scoreDisplayMode: "metricSavings", numericValue: 300, numericUnit: "millisecond",
+      displayValue: "Est savings of 300 ms", details: { type: "table", items: [{ url: "https://www.m365.fm/s.css", totalBytes: 20480, wastedMs: 300 }] } },
+    "image-delivery-insight": { id: "image-delivery-insight", score: 0.5, scoreDisplayMode: "metricSavings", numericValue: 51200, numericUnit: "byte", displayValue: "Est savings of 50 KiB", details: { type: "table", items: [] } },
+  },
+});
+
+test("analyse: Lighthouse 13 (Insight-Audits) liefert LCP-Element, Phasen, DOM, Kette, Renderblockierend, Einsparungen", () => {
+  const dir = mkdtempSync(join(tmpdir(), "crp-"));
+  writeFileSync(join(dir, "mobile__%2F__1.json"), JSON.stringify(lh13()));
+  const md = analyse(dir);
+  assert.match(md, /Messung mit Lighthouse 13\.6\.0, HeadlessChrome\/146\.0\.0\.0/);
+  assert.match(md, /\| mobile \/ \| 90 \| 1200 \| 2500 \| 10 \| 0\.050 \| 1800 \| 30 \| 100 \| 1 \| 812 \| 640 \|/);
+  assert.match(md, /LCP-Element: `body > main > h1 <h1 class="t">`/);
+  assert.match(md, /LCP-Phasen: Time to first byte 30 ms, Element render delay 211 ms/);
+  assert.match(md, /Layout-Verschiebungen \(groesste\): 0\.050 body > main <main>/);
+  assert.match(md, /- \/ 10 KB, ende 120 ms\n  - \/s\.css 20 KB, ende 640 ms/);
+  assert.match(md, /Renderblockierend: \/s\.css \(300 ms\)/);
+  assert.match(md, /render-blocking-insight: Est savings of 300 ms, ~300 ms/);
+  assert.match(md, /image-delivery-insight: Est savings of 50 KiB, ~50 KB/);
+  assert.match(md, /lcp-discovery-insight: offen: fetchpriority=high should be applied/);
+  assert.match(md, /Preload-Vorschlaege: – \(Audit in dieser Lighthouse-Fassung nicht vorhanden\)/);
+});
+
+test("lcpPhases liest auch die Lighthouse-13-Tabelle (subpart/duration)", () => {
+  assert.deepEqual(lcpPhases(lh13().audits["lcp-breakdown-insight"]), ["Time to first byte 30 ms", "Element render delay 211 ms"]);
+});

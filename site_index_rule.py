@@ -10,6 +10,9 @@ Bereits indexierte Seiten bleiben unveraendert: die Regel kann nur von noindex a
 
 Entitaetsseiten haben ihre eigene, gleichlautende Regel (site_entities.py, LONG_INDEX_MIN); dieses Modul fasst sie nicht an.
 
+Aus Vorlagen erzeugte Saetze (Beziehungssaetze der Entitaetsseiten, site_relsent.py, 16.11.2026) zaehlen NICHT als eigener Text: sie sind auf tausenden
+Seiten gleich gebaut und wuerden duenne Seiten allein durch Schablonentext in den Index heben. Solche Abschnitte tragen data-own-text="no"; plain_text laesst sie weg.
+
 Reine Funktionen, keine Abhaengigkeiten ausser der Standardbibliothek."""
 import html as _html
 import re
@@ -19,6 +22,8 @@ MIN_CHARS = 2500   # "ab 2500 Zeichen" (>=): genau 2500 Zeichen reichen
 # Bloecke, die nie Haupttext sind: Skripte, Stile, Menues, Kopf/Fuss, Seitenleisten, Formulare, Knoepfe, Grafiken
 _BLOCK = re.compile(r"<(script|style|nav|header|footer|aside|form|button|noscript|template|svg|select|textarea|figcaption|iframe)\b[^>]*>.*?</\1\s*>", re.I | re.S)
 _COMMENT = re.compile(r"<!--.*?-->", re.S)
+# Aus Vorlagen erzeugter Text (z. B. Beziehungssaetze der Entitaetsseiten, site_relsent.py) ist kein eigener Text: Abschnitte mit data-own-text="no" zaehlen nie
+_TEMPLATED = re.compile(r"<(section|div|p)\b[^>]*\bdata-own-text=\"no\"[^>]*>.*?</\1\s*>", re.I | re.S)
 _HASTAG = re.compile(r"<[a-zA-Z/!][^>]*>")
 _LI = re.compile(r"<li\b[^>]*>(.*?)</li\s*>", re.I | re.S)
 _A = re.compile(r"<a\b[^>]*>(.*?)</a\s*>", re.I | re.S)
@@ -52,7 +57,7 @@ def plain_text(html_or_text):
         return ""
     if not _HASTAG.search(s):
         return _WS.sub(" ", s).strip()
-    s = _COMMENT.sub(" ", s)
+    s = _TEMPLATED.sub(" ", _COMMENT.sub(" ", s))
     prev = None
     while prev != s:   # verschachtelte Bloecke (nav in header) bis zum Ende abraeumen
         prev = s

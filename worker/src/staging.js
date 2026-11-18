@@ -14,7 +14,7 @@ export const isStaging = (env) => String(env?.ENVIRONMENT || "").toLowerCase() =
 export const STAGING_STRIPPED = [
   "EMAIL", "RESEND_API_KEY",                                   // Mailversand
   "AI", "VEC", "ANTHROPIC_API_KEY", "CF_AIG_TOKEN", "AI_GATEWAY_ID",   // KI (Workers AI, Vectorize, Claude ueber das Gateway)
-  "SPREAKER_TOKEN", "SPREAKER_API",                            // Spreaker
+  "SPREAKER_TOKEN", "SPREAKER_API", "SPREAKER_CLIENT_ID", "SPREAKER_CLIENT_SECRET",   // Spreaker (auch die OAuth-App: /auth/spreaker/start, /api/admin/spreaker-exchange)
   "YT_CLIENT_ID", "YT_CLIENT_SECRET", "YT_REFRESH_TOKEN", "YT_API", "YT_TOKEN_URL",   // YouTube
   "LINKEDIN_CLIENT_ID", "LINKEDIN_CLIENT_SECRET", "LINKEDIN_EVENTS_CLIENT_ID", "LINKEDIN_EVENTS_CLIENT_SECRET", "LINKEDIN_TOKEN_KEY",   // LinkedIn
   "HEYSUMMIT_API_KEY",                                         // HeySummit

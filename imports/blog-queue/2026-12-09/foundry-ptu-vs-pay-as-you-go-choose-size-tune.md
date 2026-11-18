@@ -5,7 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-12-09
-topics: [microsoft-foundry, provisioned-throughput-units, azure-ai-foundry, azure-openai]
+topics: [microsoft-foundry, provisioned-throughput-units, azure-openai]
 keypoints:
   - "Provisioned deployments hold fixed capacity and bill per PTU per hour. Standard and Global Standard deployments bill per token and share capacity."
   - "Learn says provisioned fits predictable, latency-sensitive, high-volume traffic. Standard fits development, testing, low volume and variable traffic."
@@ -95,7 +95,7 @@ In the Azure portal, open the Foundry resource, select **Metrics** and add **Pro
 
 - [Microsoft Foundry](https://www.m365.fm/entity/microsoft-foundry/)
 - [Provisioned throughput units](https://www.m365.fm/entity/provisioned-throughput-units/)
-- [Azure AI Foundry](https://www.m365.fm/entity/azure-ai-foundry/)
+- [Azure AI Foundry](https://www.m365.fm/entity/microsoft-foundry/)
 - [Azure OpenAI](https://www.m365.fm/entity/azure-openai/)
 
 ## Sources

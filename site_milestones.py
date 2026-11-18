@@ -116,7 +116,7 @@ def body(lang, base, items):
                   f'<span><time datetime="{mo.isoformat()}">{_fmt(mo, lang)}</time> – <time datetime="{su.isoformat()}">{_fmt(su, lang)}</time></span></p>'
                   f'<h2><a href="{u}"{hl}>{esc(p["title"])}</a></h2>'
                   + (f'<p>{esc(p["summary"])}</p>' if p.get("summary") else "")
-                  + f'<p><a href="{u}"{hl}>{esc(T(lang, "Read the full summary", "Ganze Zusammenfassung lesen"))}</a>'
+                  + f'<p><a href="{u}"{hl} tabindex="-1" aria-hidden="true">{esc(T(lang, "Read the full summary", "Ganze Zusammenfassung lesen"))}</a>'   # Linktexte F4: zweiter Link zum Ziel der Ueberschrift, fuer Tastatur und Screenreader ausgeblendet
                   + (f' <span class="mut">({esc(T(lang, "in English", "auf Englisch"))})</span>' if other else "") + '</p></article></li>')
     return CSS + head + f'<ol class="ms-list">{"".join(li)}</ol>'
 

@@ -1,6 +1,6 @@
 /* MVP-Tracker (#231, Klickdummy design/mvp-tracker/): Beitraege sammeln, fuers MVP-Portal vorbereiten, Wirkung je Zeitraum, Export, Quellen.
    Laeuft als Reiter im Profil (#c-mvp) und als eigene App "M365.FM Contributor" (#mvp-app, /community/contributor/, PWA).
-   Daten nur ueber /api/contributions/* (Sitzung + x-requested-with). Texte aus assets/cm-<sprache>.js (window.M365CT, Schluessel mvp_*), nur per textContent.
+   Daten nur ueber /api/contributions/* (Sitzung; schreibend mit x-requested-with). Texte aus assets/cm-<sprache>.js (window.M365CT, Schluessel mvp_*), nur per textContent.
    Status "im Portal" wird hier gefuehrt - es gibt keine Portal-Schnittstelle, nichts wird an Microsoft gesendet. */
 // Berichtsjahr (#231): beginnt im gewaehlten Monat (1-12, Standard 4 = April: ab April zaehlen Beitraege fuer die MVP-Verlaengerung)
 // und endet am letzten Tag vor diesem Monat im Folgejahr; Monat 1 = Kalenderjahr. Alles in UTC. Rein und testbar (worker/test/mvp_tracker.test.mjs).
@@ -44,7 +44,7 @@ window.M365MVPPeriod = (function () {
   }
   function nid(p) { uid += 1; return "mvp-" + p + "-" + uid; }
   function api(path, body) {
-    var o = { method: body ? "POST" : "GET", credentials: "include", headers: { "x-requested-with": "m365" } };
+    var o = { method: body ? "POST" : "GET", credentials: "include", headers: body ? { "x-requested-with": "m365" } : {} };   // nur schreibend: GET ohne CORS-Preflight
     if (body) { o.headers["content-type"] = "application/json"; o.body = JSON.stringify(body); }
     return fetch(X.api + path, o).then(function (r) {
       return r.json().catch(function () { return {}; }).then(function (j) { return { s: r.status, j: j || {} }; });

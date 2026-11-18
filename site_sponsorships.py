@@ -16,6 +16,8 @@ unbekannte Felder sind deshalb ein Fehler):
                                                    "advertisement": vom Sponsor beauftragter Inhalt (PR-Artikel) - EN "Advertisement · Paid content on behalf of Acme",
                                                    DE "Anzeige · Bezahlter Inhalt im Auftrag von Acme"
                                                    "partner": neutraler Partner ohne Bezahlung (Nerdio) - EN "Partner · Neutral partner: Acme", DE "Partner · Neutraler Partner: Acme"
+                                                   "device": Testgerät kostenlos vom Hersteller gestellt (Hardware-Test) - EN "Test device · Test device provided by the manufacturer: Acme",
+                                                   DE "Testgerät · Testgerät vom Hersteller bereitgestellt: Acme"
         "start": "2026-12-01", "end": "2027-05-31",
                                                    Laufzeit, ISO-Datum, beide Tage eingeschlossen. "end": null (oder fehlt) = unbefristet: immer aktiv, keine Nachfrist.
                                                    Karenzzeit (Mirko 11.11.2026, fuer ALLE Sponsorings): alles, was waehrend der Laufzeit gilt, bleibt GRACE_DAYS = 182 Tage
@@ -60,7 +62,7 @@ from site_ads import go_link
 FILE = Path(__file__).parent / "data" / "sponsorships.json"
 I18N = Path(__file__).parent / "data" / "py_i18n.json"
 ENV = "M365_SPONSORSHIPS"
-LABELS = ("sponsored", "advertisement", "partner")
+LABELS = ("sponsored", "advertisement", "partner", "device")
 TOPIC_TYPES = ("product", "platform", "concept", "category", "cert")
 REC_KEYS = ("id", "sponsor", "label", "start", "end", "entities", "topics", "episodes", "posts", "go", "note", "manager", "lead_topics")
 # Mirko 6.11.2026: Entitaeten des Sponsors (Firma + Produkte) sind bei gesponserten Inhalten EXTRA zur Obergrenze von 10 Themen, solange das Sponsoring
@@ -76,7 +78,9 @@ REF_KEYS = ("entities", "topics", "episodes", "posts")
 TEXT = {"sponsored": ("Sponsored", "Anzeige", "Paid partnership with {sponsor}", "Bezahlte Partnerschaft mit {sponsor}"),
         "advertisement": ("Advertisement", "Anzeige", "Paid content on behalf of {sponsor}", "Bezahlter Inhalt im Auftrag von {sponsor}"),
         # Mirko 16.11.2026: Nerdio heisst "Partner", nicht "Sponsor" (Cognillo und iFAKT bleiben "sponsored"). Nur verwenden, wenn KEIN Geld fliesst; sonst "sponsored" (UWG: bezahlte Platzierung kennzeichnen)
-        "partner": ("Partner", "Partner", "Neutral partner: {sponsor}", "Neutraler Partner: {sponsor}")}
+        "partner": ("Partner", "Partner", "Neutral partner: {sponsor}", "Neutraler Partner: {sponsor}"),
+        # Mirko 16.11.2026 (Hardware-Sponsoring /hardware/): Gerät kostenlos vom Hersteller gestellt, Test unabhängig und kostenlos. Kein bezahlter Inhalt (der heisst "sponsored" bzw. "advertisement")
+        "device": ("Test device", "Testgerät", "Test device provided by the manufacturer: {sponsor}", "Testgerät vom Hersteller bereitgestellt: {sponsor}")}
 NOTE_STYLE = ("border:1px solid var(--bd);border-inline-start:4px solid var(--ac,#0a5);background:var(--card);"
               "padding:.45em .9em;border-radius:.4em;margin:.5em 0 .8em;font-size:.95em")
 _ID = re.compile(r"^[a-z0-9][a-z0-9-]{1,63}$")
@@ -158,7 +162,7 @@ def check_structure(d):
                 errs.append(f'{w}: "sponsor.url" darf nicht auf m365.fm zeigen')
             elif _is_sponsor_host(_host(u), SHARED_HOSTS):
                 errs.append(f'{w}: "sponsor.url" muss die eigene Website des Sponsors sein, keine Seite auf {_host(u)} (sonst bekaemen auch eigene und fremde Links dort rel="sponsored")')
-        if r.get("label") not in LABELS: errs.append(f'{w}: "label" muss "sponsored", "advertisement" oder "partner" sein')
+        if r.get("label") not in LABELS: errs.append(f'{w}: "label" muss "sponsored", "advertisement", "partner" oder "device" sein')
         if "go" in r and (not isinstance(r["go"], str) or not re.fullmatch(r"[a-z0-9-]{3,40}", r["go"])):
             errs.append(f'{w}: "go" muss ein aktiver Linkcode aus a-z, 0-9 und Bindestrich sein')
         s, e = _day(r.get("start")), _day(r.get("end"))
@@ -476,7 +480,7 @@ def badge(lang, recs):
     """Kurzes Badge fuer Listen: "Sponsored" / "Advertisement", deutsch "Anzeige"; '' ohne Sponsoring."""
     if not recs: return ""
     ls = _labels(recs)
-    b_en, b_de = TEXT[next(l for l in ("advertisement", "sponsored", "partner") if l in ls)][:2]   # bezahlte Kennzeichnung geht vor, wenn eine Seite beides traegt
+    b_en, b_de = TEXT[next(l for l in ("advertisement", "sponsored", "partner", "device") if l in ls)][:2]   # bezahlte Kennzeichnung geht vor, wenn eine Seite beides traegt
     return T(lang, b_en, b_de)
 
 

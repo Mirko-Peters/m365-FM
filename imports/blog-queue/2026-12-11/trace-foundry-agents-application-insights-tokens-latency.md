@@ -5,7 +5,7 @@ status: review
 publish: false
 author: mirko-p
 date: 2026-12-11
-topics: [azure-ai-foundry, application-insights, ai-agent, opentelemetry]
+topics: [microsoft-foundry, application-insights, ai-agent, opentelemetry]
 keypoints:
   - "In the new Foundry portal, connect Application Insights under Build > Agents > Traces > Connect. After that, server-side tracing starts without code changes."
   - "Querying telemetry needs the Log Analytics Reader role on the Application Insights resource, plus Privileged Monitoring Data Reader if the tables are protected."
@@ -107,7 +107,7 @@ Traces can contain user inputs, model outputs and tool arguments. Learn says to 
 
 ## Related
 
-- [Azure AI Foundry](https://www.m365.fm/entity/azure-ai-foundry/)
+- [Azure AI Foundry](https://www.m365.fm/entity/microsoft-foundry/)
 - [Application Insights](https://www.m365.fm/entity/application-insights/)
 - [AI agent](https://www.m365.fm/entity/ai-agent/)
 - [OpenTelemetry](https://www.m365.fm/entity/opentelemetry/)
