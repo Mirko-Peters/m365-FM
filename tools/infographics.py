@@ -1,0 +1,563 @@
+#!/usr/bin/env python3
+"""Infografiken fuer Entitaeten, Blogbeitraege und Podcast-Folgen: je Inhalt 1 Kopfbild (1200x630, wird og:image) + 2-3 Infografiken,
+je Seitensprache (15), als WebP im R2-Bucket (img.m365.fm/ig/...), Index in data/infographics/<art>.json.gz. Nur Standbilder, keine Videos.
+
+  python tools/infographics.py plan   [--kinds ..] [--langs ..] [--limit N]    zaehlen, Kosten und Laufzeit schaetzen (nichts wird gesendet/bezahlt)
+  python tools/infographics.py specs  [--kinds ..] [--limit N]                  Haiku-Batch: englische Bildtexte (Kopfbild + Infografiken) je Inhalt
+  python tools/infographics.py translate --langs de,fr,.. [--kinds ..] [--limit N]   Haiku-Batch je Sprache: Bildtexte uebersetzen
+  python tools/infographics.py collect [--wait SEK]                             fertige Batches einsammeln, pruefen, speichern
+  python tools/infographics.py render --langs ..  [--kinds ..] [--limit N] [--max-min M]   rendern (Playwright), pruefen, WebP nach R2, Index schreiben
+
+Ablauf, Kosten, Notschalter: INFOGRAPHICS.md. Nur von Hand ueber .github/workflows/infographics.yml. Bildtexte (Specs) liegen im Bucket unter ig/_specs/<art>/<slug>.json
+(eine Datei je Inhalt mit allen Sprachen), der Index in Git. Auf der Seite erscheinen Bilder erst, wenn data/infographics_live.json Sprache und Art freigibt
+(site_infographics.py); ohne Freigabe ist die Seite Byte fuer Byte wie vorher. Fertige Bilder werden nie ein zweites Mal bezahlt oder gerendert."""
+import argparse, gzip, hashlib, html as htmlmod, io, json, os, re, subprocess, sys, tempfile, time
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+from ai_gateway import anthropic_request, check_budget, estimated_eur, report_usage, thinking_off, urlopen  # noqa: E402
+
+MODEL = os.environ.get("INFOGRAPHICS_MODEL", "claude-haiku-5-5")
+JOB = "infographics"
+PUBLIC = "https://img.m365.fm"
+KINDS = ("entity", "blog", "episode")
+LANGS = ("en", "de", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko")
+LANG_NAMES = {"en": "English", "de": "German", "fr": "French", "es": "Spanish", "it": "Italian", "nl": "Dutch", "pt": "Portuguese (Brazil)", "pl": "Polish",
+              "id": "Indonesian", "ru": "Russian", "uk": "Ukrainian", "ar": "Arabic", "he": "Hebrew", "ja": "Japanese", "ko": "Korean"}
+RTL = ("ar", "he")
+SIZES = {"flow": (1920, 1080), "compare": (1200, 1040), "ladder": (1200, 1800), "bigfact": (1200, 630), "hub": (1200, 1200)}   # wie templates.mjs
+FIG_TEMPLATES = ("flow", "compare", "ladder", "hub")   # bigfact ist dem Kopfbild vorbehalten
+MAX_TRIES = 2
+LANG_FACTOR = 1.4   # Textgrenzen der Uebersetzungen: Englisch x 1,4 (Deutsch/Russisch laenger); die Layoutpruefung beim Rendern ist die endgueltige Grenze
+OUT_EST, IN_EST_SPECS, IN_EST_TR = 1300, 2100, 1700   # Token-Schaetzung je Anfrage (aus dem Testlauf)
+BATCH_MAX = 5000
+
+# ------------------------------------------------------------------ Spezifikation der Bildtexte
+# Grenzen in Zeichen (Englisch). Vorlage -> {Feld: Grenze}; Listen: (Mindestanzahl, Hoechstanzahl, {Unterfeld: Grenze})
+LIMITS = {
+    "bigfact": {"kicker": 36, "title": 48, "hero.value": 5, "hero.label": 34, "chips": (3, 4, {"t": 14, "n": 30})},
+    "flow": {"kicker": 36, "title": 26, "sub": 80, "hero.value": 2, "hero.label": 14, "hero.sub": 28, "steps": (3, 4, {"t": 14, "n": 56}), "note": 60},
+    "compare": {"kicker": 36, "title": 40, "left.head": 18, "left.items": (2, 3, 44), "right.head": 18, "right.items": (2, 3, 44), "verdict": 70},
+    "ladder": {"kicker": 36, "title": 44, "sub": 100, "tiers": (3, 5, {"t": 22, "n": 60}), "axis": 70},
+    "hub": {"kicker": 36, "title": 40, "core.value": 3, "core.label": 22, "nodes": (3, 4, {"t": 22, "n": 48})},
+}
+ALT_MAX = 125
+TAG_MAX = (0, 3, 20)
+
+
+def _s():
+    return {"type": "string"}
+
+
+def _list(item, extra=None):
+    return {"type": "array", "items": item}
+
+
+_TN = {"type": "object", "additionalProperties": False, "required": ["t", "n"], "properties": {"t": _s(), "n": _s()}}
+_VL = {"type": "object", "additionalProperties": False, "required": ["value", "label"], "properties": {"value": _s(), "label": _s()}}
+_VLS = {"type": "object", "additionalProperties": False, "required": ["value", "label", "sub"], "properties": {"value": _s(), "label": _s(), "sub": _s()}}
+_HI = {"type": "object", "additionalProperties": False, "required": ["head", "items"], "properties": {"head": _s(), "items": {"type": "array", "items": _s()}}}
+
+
+def _obj(template, props):
+    p = {"template": {"type": "string", "enum": [template]}, "alt": _s(), "tags": {"type": "array", "items": _s()}, **props}
+    return {"type": "object", "additionalProperties": False, "required": list(p), "properties": p}
+
+
+_BIG = _obj("bigfact", {"kicker": _s(), "title": _s(), "hero": _VL, "chips": {"type": "array", "items": _TN}})
+_FIGS = [
+    _obj("flow", {"kicker": _s(), "title": _s(), "sub": _s(), "hero": _VLS, "hi": {"type": "integer"}, "steps": {"type": "array", "items": _TN}, "note": _s()}),
+    _obj("compare", {"kicker": _s(), "title": _s(), "left": _HI, "right": _HI, "verdict": _s()}),
+    _obj("ladder", {"kicker": _s(), "title": _s(), "sub": _s(), "tiers": {"type": "array", "items": _TN}, "axis": _s()}),
+    _obj("hub", {"kicker": _s(), "title": _s(), "core": _VL, "nodes": {"type": "array", "items": _TN}}),
+]
+SET_SCHEMA = {"type": "object", "additionalProperties": False, "required": ["header", "figs"],
+              "properties": {"header": _BIG, "figs": {"type": "array", "items": {"anyOf": _FIGS}}}}
+
+SYSTEM_SPECS = (
+    "You turn one article, podcast episode or glossary entry of M365.FM (a podcast and knowledge site about Microsoft 365, Azure, Power Platform and AI) into the texts of "
+    "one header graphic and 2 or 3 infographics. Return JSON only, matching the schema. A fixed template draws each image; you only fill its fields.\n"
+    "header: template bigfact = one big fact. hero.value is a short number or figure (at most 5 characters, e.g. 4, 99.9%, 3x, 12) that really appears in or follows from the text "
+    "(count of steps, options, tiers, a stated percentage). hero.label says what the value counts. title = the topic as a headline. chips = 3 or 4 key points.\n"
+    "figs: 2 or 3 infographics, each with a different template, chosen by what the text offers:\n"
+    "- flow: a process with 3 or 4 steps in order (hero.value = number of steps, 1-2 digits; hi = index (from 0) of the most important step).\n"
+    "- compare: two options or before/after, 2-3 short points per side, plus a verdict line.\n"
+    "- ladder: 3-5 ranked tiers, levels or priorities (axis = what rises or falls along them).\n"
+    "- hub: one core idea (core.value a number of at most 3 digits, core.label what it counts) with 3 or 4 parts around it.\n"
+    "Use only facts from the text. Never invent numbers, product names, prices or dates. Keep product names (Microsoft Teams, SharePoint, Copilot ...) in their official form. "
+    "Prefer concrete, useful content over slogans. If the text cannot honestly fill a template, choose another one.\n"
+    "Style: plain, short phrases; no emoji, no marketing words, no quotation marks. kicker = kind and topic, e.g. 'Entity · Azure security', 'Blog · Microsoft Fabric', 'Podcast · Power Apps'.\n"
+    "alt = one sentence (at most 125 characters) saying what the image shows or explains, for screen readers. tags = up to 3 product or topic names (each at most 20 characters).\n"
+    "Hard length limits in characters (English): see the list; shorter is better, a text that is too long is discarded.\n" + "{limits}"
+)
+SYSTEM_TR = (
+    "You translate the texts of an infographic set (JSON) from English into {lang}. Return JSON only, with exactly the same structure: the same templates, the same number of "
+    "list items, the same numbers and the same hi index. Translate every string natively (not word for word), keep it as short as the English or shorter; hard limit: English length x {f}. "
+    "Keep product names (Microsoft Teams, SharePoint, Power BI, Copilot, Azure ...) in their official form; tags stay product names. Keep numbers and symbols (4, 99.9%, 3x) unchanged. "
+    "Do not add or remove facts. alt stays one sentence for screen readers. The kicker keeps its pattern (kind · topic) with the kind word translated "
+    "(Entity, Blog, Podcast)."
+)
+
+
+def limits_text():
+    out = []
+    for t, spec in LIMITS.items():
+        parts = []
+        for k, v in spec.items():
+            if isinstance(v, tuple):
+                n = f"{v[0]}-{v[1]} items" + ("" if isinstance(v[2], int) else ", " + ", ".join(f"{a} <= {b}" for a, b in v[2].items()))
+                parts.append(f"{k}: {n}" + (f", each <= {v[2]}" if isinstance(v[2], int) else ""))
+            else:
+                parts.append(f"{k} <= {v}")
+        out.append(f"{t}: " + "; ".join(parts))
+    return "\n".join(out)
+
+
+# ------------------------------------------------------------------ Pruefung
+SCRIPTS = {"ru": r"[Ѐ-ӿ]", "uk": r"[Ѐ-ӿ]", "ar": r"[؀-ۿ]", "he": r"[֐-׿]", "ja": r"[぀-ヿ一-鿿]", "ko": r"[가-힯ᄀ-ᇿ]"}
+ANY_NON_LATIN = re.compile(r"[Ѐ-ӿ֐-ۿ぀-ヿ一-鿿가-힯]")
+
+
+def _get(spec, path):
+    cur = spec
+    for p in path.split("."):
+        cur = cur.get(p) if isinstance(cur, dict) else None
+    return cur
+
+
+def strings(spec):
+    """Alle sichtbaren Texte eines Bildes (ohne template/hi)."""
+    out = []
+    def walk(v, key=""):
+        if isinstance(v, str):
+            if key not in ("template",): out.append(v)
+        elif isinstance(v, list):
+            for x in v: walk(x, key)
+        elif isinstance(v, dict):
+            for k, x in v.items(): walk(x, k)
+    walk(spec)
+    return out
+
+
+def check_spec(spec, lang="en", template=None):
+    """None = in Ordnung, sonst Grund. Pruefung von Form, Anzahl, Laengen und Schrift."""
+    if not isinstance(spec, dict): return "kein Objekt"
+    t = spec.get("template")
+    if t not in LIMITS or (template and t != template): return f"Vorlage {t!r}"
+    f = 1 if lang == "en" else LANG_FACTOR
+    for k, lim in LIMITS[t].items():
+        v = _get(spec, k)
+        if isinstance(lim, tuple):
+            lo, hi, sub = lim
+            if not isinstance(v, list) or not lo <= len(v) <= hi: return f"{k}: Anzahl"
+            for it in v:
+                if isinstance(sub, dict):
+                    if not isinstance(it, dict): return f"{k}: Form"
+                    for a, b in sub.items():
+                        if not isinstance(it.get(a), str) or not it[a].strip() or len(it[a]) > b * f: return f"{k}.{a}: Laenge/leer"
+                elif not isinstance(it, str) or not it.strip() or len(it) > sub * f: return f"{k}: Laenge/leer"
+        else:
+            if not isinstance(v, str) or not v.strip() or len(v) > lim * f: return f"{k}: Laenge/leer ({len(v) if isinstance(v, str) else '-'}>{lim * f:.0f})"
+    if t == "flow":
+        if not isinstance(spec.get("hi"), int) or not -1 <= spec["hi"] < len(spec["steps"]): return "hi"
+    alt = spec.get("alt")
+    if not isinstance(alt, str) or not alt.strip() or len(alt) > ALT_MAX * f: return "alt"
+    tags = spec.get("tags")
+    if not isinstance(tags, list) or len(tags) > TAG_MAX[1] or any(not isinstance(x, str) or len(x) > TAG_MAX[2] * f for x in tags): return "tags"
+    txt = " ".join(strings({k: v for k, v in spec.items() if k not in ("tags",)}))
+    if "<" in txt or ">" in txt or "{" in txt: return "Sonderzeichen"
+    letters = re.findall(r"[^\W\d_]", txt)
+    if letters:
+        if lang in SCRIPTS:
+            if len(re.findall(SCRIPTS[lang], txt)) < 0.5 * len(letters): return f"Schrift passt nicht zu {lang}"
+        elif ANY_NON_LATIN.search(txt): return f"fremde Schrift in {lang}"
+    return None
+
+
+def check_set(st, lang="en", en=None):
+    """Satz = {"header":..., "figs":[...]} -> None oder Grund. en: englischer Satz; die Uebersetzung muss dieselbe Struktur und Zahlen haben."""
+    if not isinstance(st, dict) or not isinstance(st.get("header"), dict) or not isinstance(st.get("figs"), list): return "Form"
+    if not 2 <= len(st["figs"]) <= 3: return "Anzahl Infografiken"
+    if st["header"].get("template") != "bigfact": return "Kopfbild nicht bigfact"
+    seen = [f.get("template") if isinstance(f, dict) else None for f in st["figs"]]
+    if len(set(seen)) != len(seen) or any(s not in FIG_TEMPLATES for s in seen): return "Vorlagen"
+    for i, s in enumerate([st["header"]] + st["figs"]):
+        r = check_spec(s, lang)
+        if r: return f"Bild {i}: {r}"
+    if en is not None:
+        if [f["template"] for f in en["figs"]] != seen: return "Vorlagen weichen vom Englischen ab"
+        pairs = list(zip([en["header"]] + en["figs"], [st["header"]] + st["figs"]))
+        for a, b in pairs:
+            for k in ("hero", "core"):
+                if k in a and a[k].get("value") != b[k].get("value"): return "Zahl weicht ab"
+            if "hi" in a and a["hi"] != b["hi"]: return "hi weicht ab"
+            for k in ("chips", "steps", "tiers", "nodes"):
+                if k in a and len(a[k]) != len(b[k]): return "Anzahl weicht ab"
+            for k in ("left", "right"):
+                if k in a and len(a[k]["items"]) != len(b[k]["items"]): return "Anzahl weicht ab"
+    return None
+
+
+# ------------------------------------------------------------------ Inhalte
+def jload(p, default):
+    try:
+        p = Path(p)
+        return json.loads(gzip.open(p, "rt", encoding="utf-8").read() if p.suffix == ".gz" else p.read_text("utf-8"))
+    except (OSError, ValueError):
+        return default
+
+
+def plain(h, n=3500):
+    h = re.sub(r"(?is)<(script|style).*?</\1>", " ", h or "")
+    h = re.sub(r"(?i)</(p|li|h[1-6]|div|tr)>", "\n", h)
+    t = htmlmod.unescape(re.sub(r"<[^>]+>", " ", h))
+    t = re.sub(r"[ \t]+", " ", t)
+    t = re.sub(r"\s*\n\s*", "\n", t).strip()
+    return t[:n]
+
+
+def items(kind, root=None):
+    """-> [{key, kind, slug, title, text, label}] fuer eine Art. Entitaeten: englischer Entitaetstext; Blog: fruehere Podpage-Beitraege; Folgen: Show Notes."""
+    D = Path(root or ROOT) / "data"
+    out = []
+    if kind == "entity":
+        names = {e["id"]: e for e in jload(D / "entities.json", []) if isinstance(e, dict) and e.get("id")}
+        texts = {}
+        for k, v in (jload(D / "entity_fill" / "en.json", {}) or {}).items():   # KI-Entwurf (nur Rueckfall, wie site_entities.long_for)
+            if isinstance(v, dict) and isinstance(v.get("long"), str) and len(v["long"]) > 200:
+                faq = " ".join(f"{x.get('q', '')} {x.get('a', '')}" for x in (v.get("faq") or []) if isinstance(x, dict))
+                texts[k] = (v["long"] + "\n" + faq).strip()
+        for f in sorted((D / "entity_texts").glob("part-*.json")):   # Ueberblick aus Folgen und Fakten gewinnt
+            for k, v in (jload(f, {}) or {}).items():
+                if isinstance(v, dict) and isinstance(v.get("en"), str) and len(v["en"]) > 200: texts[k] = v["en"]
+        for k, t in sorted(texts.items()):
+            e = names.get(k)
+            if e and e.get("name") and e.get("type") != "category":
+                out.append({"key": f"entity:{k}", "kind": kind, "slug": k, "title": e["name"], "text": t[:3500], "label": "Entity"})
+    elif kind == "blog":
+        for p in jload(D / "podpage" / "blog_posts.json.gz", []):
+            t = plain(p.get("html"))
+            if p.get("slug") and p.get("title") and len(t) > 300:
+                out.append({"key": f"blog:{p['slug']}", "kind": kind, "slug": p["slug"], "title": p["title"], "text": t, "label": "Blog"})
+    elif kind == "episode":
+        for p in jload(D / "podpage" / "episodes.json.gz", []):
+            if p.get("hidden") or not p.get("published", True): continue
+            t = plain(p.get("show_notes"))
+            if p.get("slug") and p.get("name") and len(t) > 200:
+                out.append({"key": f"episode:{p['slug']}", "kind": kind, "slug": p["slug"], "title": p["name"], "text": t, "label": "Podcast"})
+    return out
+
+
+def src_hash(it):
+    return hashlib.sha1((it["title"] + "\n" + it["text"]).encode()).hexdigest()[:8]
+
+
+# ------------------------------------------------------------------ Speicher (R2 oder Ordner) und Index
+class DirStore:
+    def __init__(self, d): self.d = Path(d)
+    def get(self, key):
+        p = self.d / key
+        return json.loads(p.read_text("utf-8")) if p.exists() else None
+    def put(self, key, obj):
+        p = self.d / key; p.parent.mkdir(parents=True, exist_ok=True); p.write_text(json.dumps(obj, ensure_ascii=False, separators=(",", ":")), "utf-8")
+    def put_image(self, key, data):
+        p = self.d / key; p.parent.mkdir(parents=True, exist_ok=True); p.write_bytes(data)
+
+
+class R2Store:
+    def __init__(self):
+        sys.path.insert(0, str(ROOT / "tools"))
+        import r2_common
+        self.s3, self.bucket = r2_common.client()
+        if not self.s3: raise SystemExit("R2-Zugang fehlt (GitHub-Secrets R2_ACCOUNT_ID, R2_BUCKET, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY)")
+    def get(self, key):
+        try:
+            return json.loads(self.s3.get_object(Bucket=self.bucket, Key=key)["Body"].read().decode("utf-8"))
+        except Exception as e:
+            if "NoSuchKey" in type(e).__name__ or str(((getattr(e, "response", None) or {}).get("Error") or {}).get("Code", "")) in ("NoSuchKey", "404", "NotFound"): return None
+            raise
+    def put(self, key, obj):
+        self.s3.put_object(Bucket=self.bucket, Key=key, Body=json.dumps(obj, ensure_ascii=False, separators=(",", ":")).encode(), ContentType="application/json; charset=utf-8", CacheControl="no-store")
+    def put_image(self, key, data):
+        self.s3.put_object(Bucket=self.bucket, Key=key, Body=data, ContentType="image/webp", CacheControl="public, max-age=31536000, immutable")
+
+
+def spec_key(it): return f"ig/_specs/{it['kind']}/{it['slug']}.json"
+
+
+def img_key(kind, slug, lang, i, h): return f"ig/{kind}/{slug}/{lang}-{i}-{h}.webp"
+
+
+def index_path(kind, root=None): return Path(root or ROOT) / "data" / "infographics" / f"{kind}.json.gz"
+
+
+def load_index(kind, root=None): return jload(index_path(kind, root), {})
+
+
+def save_index(kind, idx, root=None):
+    p = index_path(kind, root); p.parent.mkdir(parents=True, exist_ok=True)
+    raw = json.dumps(dict(sorted(idx.items())), ensure_ascii=False, separators=(",", ":"), sort_keys=True).encode()
+    buf = io.BytesIO()
+    with gzip.GzipFile(fileobj=buf, mode="wb", mtime=0, compresslevel=9) as g: g.write(raw)
+    if not p.exists() or p.read_bytes() != buf.getvalue(): p.write_bytes(buf.getvalue())   # deterministisch: ohne Aenderung kein Diff
+
+
+def state_path(root=None): return Path(root or ROOT) / "data" / "infographics_state.json"
+
+
+def load_state(root=None): return jload(state_path(root), {"batches": [], "tries": {}, "runs": []})
+
+
+def save_state(st, root=None):
+    p = state_path(root); p.parent.mkdir(parents=True, exist_ok=True); p.write_text(json.dumps(st, ensure_ascii=False, indent=1, sort_keys=True), "utf-8")
+
+
+# ------------------------------------------------------------------ Anfragen an Claude
+def api(method, path, body=None):
+    req = anthropic_request(path, body, job=JOB, lang="batch", model=MODEL, api_key=os.environ["ANTHROPIC_API_KEY"]); req.method = method
+    import urllib.error
+    try:
+        return json.loads(urlopen(req, timeout=300).read())
+    except urllib.error.HTTPError as e:
+        try: d = e.read().decode("utf-8", "replace")[:600]
+        except Exception: d = ""
+        print(f"API-Fehler {e.code} {method} {path.split('?')[0][-60:]}: {d}", flush=True); raise
+
+
+def results_lines(url):
+    rq = anthropic_request(url, headers={"x-api-key": os.environ["ANTHROPIC_API_KEY"]}, job=JOB, lang="batch", model=MODEL)
+    return urlopen(rq, timeout=900).read().decode().splitlines()
+
+
+def req_specs(it, cid):
+    user = f"Kind: {it['label']}\nTitle: {it['title']}\n\nText:\n{it['text']}"
+    return {"custom_id": cid, "params": {"model": MODEL, "max_tokens": 3000, **thinking_off(MODEL), "system": SYSTEM_SPECS.replace("{limits}", limits_text()),
+            "output_config": {"format": {"type": "json_schema", "schema": SET_SCHEMA}}, "messages": [{"role": "user", "content": user}]}}
+
+
+def req_tr(en_set, lang, cid):
+    return {"custom_id": cid, "params": {"model": MODEL, "max_tokens": 3500, **thinking_off(MODEL), "system": SYSTEM_TR.replace("{lang}", LANG_NAMES[lang]).replace("{f}", str(LANG_FACTOR)),
+            "output_config": {"format": {"type": "json_schema", "schema": SET_SCHEMA}}, "messages": [{"role": "user", "content": json.dumps(en_set, ensure_ascii=False)}]}}
+
+
+def cost_eur(n, tin, tout=OUT_EST): return estimated_eur(n * tin, n * tout, batch=True)
+
+
+# ------------------------------------------------------------------ Auswahl
+def want_langs(s):
+    ls = [x.strip() for x in (s or "").split(",") if x.strip()]
+    bad = [x for x in ls if x not in LANGS]
+    if bad: raise SystemExit("unbekannte Sprachen: " + ",".join(bad))
+    return ls
+
+
+def want_kinds(s):
+    ks = [x.strip() for x in (s or ",".join(KINDS)).split(",") if x.strip()]
+    bad = [x for x in ks if x not in KINDS]
+    if bad: raise SystemExit("unbekannte Arten: " + ",".join(bad))
+    return ks
+
+
+def plan(kinds, langs, root=None, store=None, limit=None):
+    """Zaehlt je Art: Inhalte, fehlende englische Bildtexte, fehlende Uebersetzungen je Sprache, fehlende Bilder. Liest Specs nur, wenn store gegeben."""
+    rep, tot_spec, tot_tr = {}, 0, 0
+    for k in kinds:
+        its = items(k, root)
+        idx = load_index(k, root)
+        r = {"n": len(its), "spec_todo": 0, "tr_todo": {}, "img_todo": {}}
+        for it in its:
+            have = store.get(spec_key(it)) if store else None
+            if not have or not have.get("en"): r["spec_todo"] += 1
+            for l in langs:
+                if l != "en" and (not have or not have.get(l)): r["tr_todo"][l] = r["tr_todo"].get(l, 0) + 1
+                if not (idx.get(it["slug"]) or {}).get(l): r["img_todo"][l] = r["img_todo"].get(l, 0) + 1
+        rep[k] = r
+    return rep
+
+
+def plan_text(rep, langs, limit=None):
+    lines, eur = [], 0.0
+    for k, r in rep.items():
+        n_sp = min(r["spec_todo"], limit) if limit else r["spec_todo"]
+        lines.append(f"{k}: {r['n']} Inhalte; Bildtexte EN offen {r['spec_todo']}; Uebersetzung offen " + (", ".join(f"{l}:{n}" for l, n in sorted(r["tr_todo"].items())) or "-")
+                     + "; Bilder offen " + (", ".join(f"{l}:{n}" for l, n in sorted(r["img_todo"].items())) or "-"))
+        eur += cost_eur(n_sp, IN_EST_SPECS)
+        for l, n in r["tr_todo"].items(): eur += cost_eur(min(n, limit) if limit else n, IN_EST_TR)
+    imgs = sum(sum(r["img_todo"].values()) for r in rep.values()) * 3.7
+    lines.append(f"Schaetzung Haiku (Batch, halber Preis): ca. {eur:.2f} EUR; Bilder ca. {imgs:.0f} (Kopfbild + 2-3), Rendern ca. {imgs * 0.5 / 60:.0f} Minuten reine Rechenzeit (2 Kerne)")
+    return "\n".join(lines)
+
+
+# ------------------------------------------------------------------ Batch senden und einsammeln
+def submit(stage, lang, reqs, mapping, st, est, root=None):
+    if not reqs: print(f"{stage} {lang}: nichts zu tun"); return
+    if not check_budget(JOB, MODEL, est):
+        print("Abbruch: kein Haiku-Budget"); return
+    for i in range(0, len(reqs), BATCH_MAX):
+        part = reqs[i:i + BATCH_MAX]
+        b = api("POST", "/v1/messages/batches", {"requests": part})
+        st["batches"].append({"id": b["id"], "stage": stage, "lang": lang, "map": {r["custom_id"]: mapping[r["custom_id"]] for r in part}, "est_eur": round(est * len(part) / len(reqs), 3),
+                              "ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())})
+        save_state(st, root)
+        print(f"Batch {b['id']} ({stage} {lang}): {len(part)} Anfragen, ca. {est * len(part) / len(reqs):.2f} EUR")
+
+
+def cmd_specs(kinds, limit, store, st, root=None):
+    reqs, mapping, n = [], {}, 0
+    for k in kinds:
+        for it in items(k, root):
+            if limit and n >= limit: break
+            have = store.get(spec_key(it))
+            if (have and have.get("en")) or st["tries"].get(it["key"], 0) >= MAX_TRIES or any(it["key"] in b["map"].values() and b["stage"] == "specs" for b in st["batches"]): continue
+            cid = f"s{len(reqs)}"; reqs.append(req_specs(it, cid)); mapping[cid] = it["key"]; n += 1
+    submit("specs", "en", reqs, mapping, st, cost_eur(len(reqs), IN_EST_SPECS), root)
+
+
+def cmd_translate(kinds, langs, limit, store, st, root=None):
+    for l in langs:
+        if l == "en": continue
+        reqs, mapping, n = [], {}, 0
+        for k in kinds:
+            for it in items(k, root):
+                if limit and n >= limit: break
+                have = store.get(spec_key(it))
+                tk = it["key"] + "#" + l
+                if not have or not have.get("en") or have.get(l) or st["tries"].get(tk, 0) >= MAX_TRIES or any(tk in b["map"].values() for b in st["batches"]): continue
+                cid = f"t{len(reqs)}"; reqs.append(req_tr(have["en"], l, cid)); mapping[cid] = tk; n += 1
+        submit("translate", l, reqs, mapping, st, cost_eur(len(reqs), IN_EST_TR), root)
+
+
+def apply_results(lines, b, store, st, by_key):
+    """Ergebnisse eines Batches pruefen und speichern -> (ok, schlecht, token_ein, token_aus, cache_read, cache_write)."""
+    ok = bad = tin = tout = cr = cw = 0
+    for line in lines:
+        if not line.strip(): continue
+        r = json.loads(line); tk = b["map"].get(r.get("custom_id"))
+        if not tk: continue
+        res = r.get("result") or {}
+        if res.get("type") != "succeeded": continue   # Ausfall der API: zaehlt nicht als Versuch
+        msg = res["message"]; u = msg.get("usage") or {}
+        read, write = int(u.get("cache_read_input_tokens") or 0), int(u.get("cache_creation_input_tokens") or 0)
+        tin += int(u.get("input_tokens") or 0) + read + write; tout += int(u.get("output_tokens") or 0); cr += read; cw += write
+        key, _, lang = tk.partition("#"); lang = lang or "en"
+        it = by_key.get(key)
+        if not it: continue
+        txt = "".join(c.get("text", "") for c in msg.get("content") or [] if c.get("type") == "text")
+        try: st_set = json.loads(txt)
+        except ValueError: st_set = None
+        doc = store.get(spec_key(it)) or {"v": 1, "src": src_hash(it)}
+        err = "kein JSON" if st_set is None else check_set(st_set, lang, None if lang == "en" else doc.get("en"))
+        if err:
+            st["tries"][tk] = st["tries"].get(tk, 0) + 1; bad += 1
+            print(f"verworfen {tk}: {err}")
+            continue
+        doc[lang] = st_set; store.put(spec_key(it), doc); ok += 1
+    return ok, bad, tin, tout, cr, cw
+
+
+def cmd_collect(wait_s, store, st, kinds=KINDS, root=None, api_fn=None, results_fn=None, sleep=time.sleep):
+    api_fn, results_fn = api_fn or api, results_fn or results_lines
+    by_key = {it["key"]: it for k in kinds for it in items(k, root)}
+    deadline = time.time() + wait_s
+    while st["batches"]:
+        done = []
+        for b in st["batches"]:
+            info = api_fn("GET", f"/v1/messages/batches/{b['id']}")
+            print(b["stage"], b["lang"], info.get("processing_status"), info.get("request_counts"), flush=True)
+            if info.get("processing_status") != "ended": continue
+            ok, bad, tin, tout, cr, cw = apply_results(results_fn(info["results_url"]), b, store, st, by_key)
+            report_usage(JOB, MODEL, tin, tout, b["lang"], batch=True, cache_read=cr, cache_write=cw)   # bezahlt: immer melden
+            st["runs"].append({"id": b["id"], "stage": b["stage"], "lang": b["lang"], "ok": ok, "bad": bad, "tin": tin, "tout": tout, "eur": round(estimated_eur(tin, tout, batch=True), 4)})
+            print(f"fertig {b['stage']} {b['lang']}: {ok} ok, {bad} verworfen; ca. {estimated_eur(tin, tout, batch=True):.2f} EUR (Schaetzung {b.get('est_eur', 0):.2f})")
+            done.append(b)
+        st["batches"] = [b for b in st["batches"] if b not in done]; save_state(st, root)
+        if not st["batches"] or time.time() >= deadline: break
+        sleep(60)
+    if st["batches"]: print(f"{len(st['batches'])} Batch(es) laufen noch; beim naechsten collect")
+
+
+# ------------------------------------------------------------------ Rendern, Pruefen, Hochladen
+def to_webp(png_bytes):
+    from PIL import Image
+    im = Image.open(io.BytesIO(png_bytes)).convert("RGB")
+    out = io.BytesIO(); im.save(out, "WEBP", quality=82, method=6)
+    return out.getvalue()
+
+
+def render_jobs(jobs, workdir):
+    """jobs: [{out, spec}] -> Ergebnisse von render.mjs."""
+    jf, rf = Path(workdir) / "jobs.json", Path(workdir) / "res.json"
+    jf.write_text(json.dumps(jobs), "utf-8")
+    subprocess.run(["node", str(ROOT / "tools" / "infographics" / "render.mjs"), str(jf), str(rf)], check=True)
+    return json.loads(rf.read_text("utf-8"))
+
+
+def spec_for_render(spec, it, lang):
+    d = dict(spec); d["lang"] = lang; d["rtl"] = lang in RTL; d["src"] = "m365.fm"
+    return d
+
+
+def cmd_render(kinds, langs, limit, store, root=None, max_min=300, chunk=200, render_fn=None, webp_fn=None):
+    render_fn, webp_fn = render_fn or render_jobs, webp_fn or to_webp
+    t0, made, bad = time.time(), 0, 0
+    for k in kinds:
+        idx = load_index(k, root)
+        todo = []
+        for it in items(k, root):
+            have = store.get(spec_key(it))
+            if not have: continue
+            for l in langs:
+                if have.get(l) and not (idx.get(it["slug"]) or {}).get(l): todo.append((it, l, have))
+        if limit: todo = todo[:max(0, limit - made)]
+        print(f"{k}: {len(todo)} Bildsaetze zu rendern")
+        for i in range(0, len(todo), chunk):
+            if time.time() - t0 > max_min * 60: print("Zeitgrenze erreicht; Rest beim naechsten Lauf"); break
+            part = todo[i:i + chunk]
+            with tempfile.TemporaryDirectory() as wd:
+                jobs = []
+                for n, (it, l, have) in enumerate(part):
+                    for j, spec in enumerate([have[l]["header"]] + have[l]["figs"]):
+                        jobs.append({"out": str(Path(wd) / f"{n}-{j}"), "spec": spec_for_render(spec, it, l), "meta": [n, j]})
+                res = {r["out"]: r for r in render_fn([{"out": j["out"], "spec": j["spec"]} for j in jobs], wd)}
+                by_set = {}
+                for j in jobs: by_set.setdefault(j["meta"][0], []).append(j)
+                for n, js in by_set.items():
+                    it, l, have = part[n]
+                    rs = [res.get(j["out"]) for j in js]
+                    if not all(r and r["ok"] for r in rs):   # Kopfbild und alle Infografiken muessen tadellos sein; sonst nichts hochladen, Grund ins Protokoll
+                        bad += 1; print(f"Layoutfehler {it['key']} {l}: " + "; ".join(sorted({x for r in rs if r for x in r.get("issues", [])})[:4])); continue
+                    entry = []
+                    for j, r in zip(js, rs):
+                        data = webp_fn(Path(j["out"] + ".png").read_bytes()); h = hashlib.sha1(data).hexdigest()[:8]
+                        store.put_image(img_key(it["kind"], it["slug"], l, j["meta"][1], h), data)
+                        spec = j["spec"]; entry.append([spec["template"], h, spec["alt"]])
+                    idx.setdefault(it["slug"], {"s": src_hash(it)})[l] = entry; made += 1
+            save_index(k, idx, root)
+    print(f"gerendert: {made} Bildsaetze, {bad} mit Layoutfehler")
+    return made, bad
+
+
+# ------------------------------------------------------------------ Aufruf
+def main(argv=None):
+    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    ap.add_argument("mode", choices=["plan", "specs", "translate", "collect", "render"])
+    ap.add_argument("--kinds"); ap.add_argument("--langs", default=",".join(LANGS)); ap.add_argument("--limit", type=int, default=0)
+    ap.add_argument("--wait", type=int, default=0); ap.add_argument("--max-min", type=int, default=300)
+    ap.add_argument("--root"); ap.add_argument("--store-dir", help="Ordner statt R2 (Tests)")
+    a = ap.parse_args(argv)
+    kinds, langs = want_kinds(a.kinds), want_langs(a.langs)
+    store = DirStore(a.store_dir) if a.store_dir else (R2Store() if a.mode != "plan" or os.environ.get("R2_BUCKET") else None)
+    if a.mode == "plan":
+        print(plan_text(plan(kinds, langs, a.root, store, a.limit), langs, a.limit)); return 0
+    st = load_state(a.root)
+    if a.mode == "specs": cmd_specs(kinds, a.limit, store, st, a.root)
+    elif a.mode == "translate": cmd_translate(kinds, langs, a.limit, store, st, a.root)
+    elif a.mode == "collect": cmd_collect(a.wait, store, st, kinds, a.root)
+    elif a.mode == "render": cmd_render(kinds, langs, a.limit, store, a.root, a.max_min)
+    save_state(st, a.root)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

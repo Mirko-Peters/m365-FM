@@ -9,6 +9,7 @@ import site_entmatch as EM   # gemeinsamer Namensindex: Folgen je Entitaet, Kont
 import site_ename as EN   # Namen der Entitaeten in der Sprache der Seite (Themen-Chips der Sprachfassungen)
 import site_media as MED
 import site_img_dims as IMG
+import site_infographics as IG   # Kopfbild, Infografiken und og:image (nur mit Freigabe data/infographics_live.json)
 from site_design import pager as PG   # Vor/Zurueck am Seitenende (rel=prev/next)
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung gesponserter Folgen (data/sponsorships.json)
 import site_shownotes_seo as SSEO   # neu geschriebene englische Show Notes (rewrite_shownotes.py)
@@ -563,11 +564,11 @@ def build(g):
 
     sidebar = g["side"]   # die eine Sidebar aller Inhaltsseiten (generate_site.sidebar, site_sidebar.render)
 
-    def pub(rel, title, desc, body, ld=None, og="website", noindex=False, last=TODAY, alts=None, canon=None, seo=None, head="", ids=None, topics_h=""):
+    def pub(rel, title, desc, body, ld=None, og="website", noindex=False, last=TODAY, alts=None, canon=None, seo=None, head="", ids=None, topics_h="", igkw=None):
         u = f"{root}{rel}"
         side = sidebar("en", (title + " " + plain(body)[:8000]) if not noindex else "", ids=ids or None, topics_h=topics_h)   # ids: feste Themen der Seite (Folgen: about + im Text verlinkt); topics_h: Ueberschrift mit Beziehung
         _st, _sd = seo if seo else ((title if title == NAME else f"{title} – {NAME}"), desc[:300])   # seo = (Titel mit Marke, Description) aus site_meta_podcast
-        h = page("en", _st, _sd, u, shell(body, side), alts, ld, xdefault=u, og_type=og, noindex=noindex, extra_head=head)
+        h = page("en", _st, _sd, u, shell(body, side), alts, ld, xdefault=u, og_type=og, noindex=noindex, extra_head=head, **(igkw or {}))
         if canon:   # T12: Seite bleibt erreichbar, die kanonische Adresse ist eine andere (z. B. Personen-Entitaet); nicht in die Sitemap
             h = h.replace(f'<link rel="canonical" href="{u}">', f'<link rel="canonical" href="{canon}">', 1)
         write(f"show/{rel}index.html", h)
@@ -687,6 +688,7 @@ def build(g):
         # Mirko, 9.11.2026: neu geschriebene Notes ersetzen NUR duenne Show Notes (unter 1.500 Zeichen), nie eine Vollfassung oder eine im Editor bearbeitete Fassung; jede andere Seite bleibt unveraendert
         nkp, nnotes, nfaq, nld, _rwm, _rwr, _rwn = SSEO.for_page(e, nrec, bool(snx), (nkp, nnotes, nfaq, nld), ENTS_ALL, BASE, html=None if (nrec and nrec.get("markup")) else nnotes)
         _rw = bool(_rwn); _RWC[_rwr] = _RWC.get(_rwr, 0) + 1; _RWC["used"] = _RWC.get("used", 0) + _rw
+        nnotes = IG.inject(nnotes, "episode", e["slug"], "en")   # 2-3 Infografiken in den Show Notes (nur mit Freigabe)
         nnotes = rename_links(nnotes)   # T12: Show Notes verlinken die Folge oft ueber die alte Podpage-Adresse
         _nn_en = nnotes   # vor dem Linktext-Durchlauf: Abgleich der Anker fuer die uebersetzten Show Notes
         if not snx and not (nrec and nrec.get("markup")): nnotes = _anc(nnotes, "en")   # nur die alten Podpage-Show-Notes (und ihre Neufassung), nie die Vollfassung oder Editor-Texte
@@ -719,7 +721,7 @@ def build(g):
         tx = (f'<h2>Transcript</h2>{TRS.links_html(_trf)}<details open><summary>Read the full transcript</summary><p style="white-space:pre-wrap;line-height:1.6">{esc(tr)}</p></details>' if len(tr) > 200
               else f'<h2>Transcript</h2>{TRS.links_html(_trf)}' if _trf else "")   # #266: Dateien sichtbar verlinkt, Transkript im HTML unveraendert
         body = (f'<article><p class="mut">{day(e["create_time"])}{" · Season " + str(e["season"]) if e.get("season") else ""}</p><h1>{esc(e["name"])}</h1>{SPM.note("en", _spr, "episode")}{aud}{LST.follow_for(BASE, "en")}'
-                f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), cover_alt("en", e["name"]), 160, eager=True)}<div><strong>{esc(_rwm or short_desc(e, nrec, 300))}</strong></div></div>{nkp}<div class="pp-notes">{nnotes}{IMG.CSS if IMG.needs_responsive_css(nnotes) else ""}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
+                f'{IG.hero_figure("episode", e["slug"], "en")}<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), cover_alt("en", e["name"]), 160, eager=True)}<div><strong>{esc(_rwm or short_desc(e, nrec, 300))}</strong></div></div>{nkp}<div class="pp-notes">{nnotes}{IMG.CSS if IMG.needs_responsive_css(nnotes) else ""}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
                 + (f"<p>{ext}</p>" if ext else "") + (f'<p class="mut">Host: {hl}</p>' if hl else "") + (f'<h2>Guests</h2>{LC.intro("en", "ep.guests")}<ul>{gl}</ul>' if gl else "") + also
                 + (("<h2>Related articles</h2>" + LC.intro("en", "ep.arts") + "<ul>" + "".join(f'<li><a href="{bp_url(p)}">{esc(p["title"])}</a></li>' for p in related_posts(e["slug"])) + "</ul>") if related_posts(e["slug"]) else "") + tx + "</article>" + (g.get("author_box")("en") if g.get("author_box") else "")
                 + PG("en", (ep_url(prev_), prev_["name"]) if prev_ else None, (ep_url(next_), next_["name"]) if next_ else None))
@@ -748,7 +750,7 @@ def build(g):
         for _dl, (_du, _) in oa.items(): alts[_dl] = _du   # T3: die Dub-Fassung (eigene Folge in der Sprache) ist die Sprachalternative, nicht die duenne Show-Kopie
         _seo = MP.en_episode_meta(e["name"], e.get("meta_title"), _rwm, e.get("summary"), short_desc(e, nrec, 600), uniq=_MPU, has_transcript=len(tr) > 200 or bool(_trf))   # Thema zuerst, Format und Marke hinten; Schablonen-Felder (X Explained | M365 FM) fallen weg
         pub(f"episodes/{e['slug']}/", e.get("meta_title") or e["name"], _rwm or short_desc(e, nrec, 155), body, ([ld] + nld) if nld else ld, "article", last=day(e.get("update_time")) or TODAY, alts=alts if len(alts) > 1 else None, seo=_seo,
-            noindex=episode_noindex(e, nrec, bool(snx), _rw, (short_desc(e, nrec, 300), nkp, nnotes, nfaq, tr if len(tr) > 200 else "")), head=_pc,
+            noindex=episode_noindex(e, nrec, bool(snx), _rw, (short_desc(e, nrec, 300), nkp, nnotes, nfaq, tr if len(tr) > 200 else "")), head=_pc, igkw=IG.page_kw("episode", e["slug"], "en"),
             ids=list(dict.fromkeys(_about + [i for i in _ment if ENTS_ALL[i].get("type") != "category"]))[:12], topics_h=LC.plain("en", "side.episode"))
         # lokalisierte Fassungen dieser Folge
         for l in TRL:
@@ -756,7 +758,7 @@ def build(g):
             if not tt or not tt[0]: continue
             lt, ls = tt[0], tt[1] or short_desc(e, nrec, 300)
             ln = NTL.get(l, {}).get(e["slug"])
-            ln_html = _anc(san(ln), l, _nn_en) if ln else ""   # uebersetzte Show Notes: Linktexte nach dem Nachschlagen der Uebersetzung
+            ln_html = _anc(san(ln), l, _nn_en) if ln else ""   # (Infografiken: unten bei lbody)   # uebersetzte Show Notes: Linktexte nach dem Nachschlagen der Uebersetzung
             if ln and _rwn: ln_html += SSEO.topics_html(_rwn, ENTS_ALL, BASE, TOPICS.get(l, "Topics"), lang=l)   # Themen-Zeile mit Entitaetslinks setzt der Bau, sie wird nicht mituebersetzt
             lu = loc_url(l, f"episodes/{e['slug']}/")
             if ln: ln_html = IMG.alt_text(ln_html, l, lt)   # Alt-Texte in der Sprache der Fassung (die Uebersetzung uebernimmt den englischen Alt-Text)
@@ -773,8 +775,8 @@ def build(g):
             _ldub = TRS.REG.dub.get((l, e["slug"]))   # #266: Dub-Folge der Sprache hat ein Transkript -> dieselben Dateien auch unter dieser Adresse
             _ltrf = TRS.REG.publish(g.get("write_r2") or write, BASE, f"{l}/show/episodes/{e['slug']}/", vtt=TRS.dub_vtt(l, _ldub[0]), index=False) if _ldub else {}
             lbody = (f'<article><p class="mut">{day(e["create_time"])}</p><h1>{esc(lt)}</h1>{SPM.note(l, _spr, "episode")}{aud}{LST.follow_for(BASE, l)}'
-                     f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), cover_alt(l, lt), 160, eager=True)}<div><strong>{ls_html}</strong></div></div>'
-                     + (f'<div class="pp-notes">{ln_html}{IMG.CSS if IMG.needs_responsive_css(ln_html) else ""}</div>' if ln else "") + ltop_html + (f"<p>{ext}</p>" if ext else "")
+                     f'{IG.hero_figure("episode", e["slug"], l)}<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), cover_alt(l, lt), 160, eager=True)}<div><strong>{ls_html}</strong></div></div>'
+                     + (f'<div class="pp-notes">{IG.inject(ln_html, "episode", e["slug"], l)}{IMG.CSS if IMG.needs_responsive_css(ln_html) else ""}</div>' if ln else IG.inject("", "episode", e["slug"], l)) + ltop_html + (f"<p>{ext}</p>" if ext else "")
                      + (TRS.links_html(_ltrf, _ldub[1], l) if _ltrf else "")
                      + f'<p class="mut"><a href="{ep_url(e)}" hreflang="en" lang="en">{esc(e["name"])}</a> (English)</p></article>')
             lald = {"@context": "https://schema.org", "@type": "PodcastEpisode", "name": lt, "url": lu, "datePublished": day(e["create_time"]), "description": ls[:500],
@@ -789,7 +791,7 @@ def build(g):
             _lalts = None if l in oa else alts   # T3: Sprache mit Dub-Fassung: diese Kopie bleibt ohne hreflang (ein Vertreter je Sprache im Cluster)
             _lcan = oa[l][0] if l in oa else lu   # T42: Kopie in einer Sprache mit Dub-Folge -> kanonisch (auch og:url, Teilen, JSON-LD) die Dub-Folge, nicht in die Sitemap
             if l in oa: lald["url"] = _lcan
-            _lh = g["page"](l, MP.episode_title(l, e["name"] if MP.junk(lt) else lt, uniq=_MPL), MP.episode_desc(l, ls) or MP.episode_desc("en", short_desc(e, nrec, 600)) or short_desc(e, nrec, 155), _lcan, f'{g["header"](l, "")}<main class="wrap">{lbody}{loc_pager(l, k)}</main>{g["footer"](l)}', _lalts, [lald], xdefault=ep_url(e), og_type="article", og_of=ep_url(e), switch=alts, self_url=lu, extra_head=_pc)   # generate_site.page: extra_head="" ist der Standard; page haengt fuer /community/, /entity/, /glossary/ ui-<lang>.js an eine Kopie an
+            _lh = g["page"](l, MP.episode_title(l, e["name"] if MP.junk(lt) else lt, uniq=_MPL), MP.episode_desc(l, ls) or MP.episode_desc("en", short_desc(e, nrec, 600)) or short_desc(e, nrec, 155), _lcan, f'{g["header"](l, "")}<main class="wrap">{lbody}{loc_pager(l, k)}</main>{g["footer"](l)}', _lalts, [lald], xdefault=ep_url(e), og_type="article", og_of=ep_url(e), switch=alts, self_url=lu, extra_head=_pc, **IG.page_kw("episode", e["slug"], l))   # generate_site.page: extra_head="" ist der Standard; page haengt fuer /community/, /entity/, /glossary/ ui-<lang>.js an eine Kopie an
             (g.get("write_r2") or write)(f"{l}/show/episodes/{e['slug']}/index.html", _lh)
             if l not in oa: sitemap.append((lu, day(e.get("update_time")) or TODAY, _lalts))
     if _RWC.get("thin") or _RWC.get("unknown"):
