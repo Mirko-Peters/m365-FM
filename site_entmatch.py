@@ -553,6 +553,7 @@ class Matcher:
         P = "".join(plain)
         C = set(ctx or ()) | {i for i in used if i not in HOST}
         hits = self.resolve(P, lang, C)
+        hits = self._outside_titles(P, hits)   # zitierte Titel, Folgentitel, Namenszusaetze ("[MVP]"): Kontext ja, Link nein
         if not hits: return _restore(html, keep), []
         # Treffer auf editierbare Textstuecke abbilden
         spans = [(off, off + len(tok), n) for n, (tok, off, ed) in enumerate(pieces) if ed and off >= 0]
@@ -576,11 +577,93 @@ class Matcher:
                     extra = attrs(i, t) if attrs else ""
                     ti = "" if t == nm or "title=" in extra else f' title="{_esc(nm)}"'
                     inner = tok[a:b]
+                    en = self._english_word(t, i, lang)   # Linktext bleibt das Wort des Satzes; ein englischer Begriff im fremdsprachigen Satz traegt lang="en"
                     if lang in EN.RTL and re.search(r"[A-Za-z]", inner):
-                        inner = f"<bdi>{inner}</bdi>"   # ar/he: lateinischer Name isoliert wie in allen anderen Bloecken (A11Y-7, "SharePoint Framework (SPFx)")
+                        inner = f'<bdi lang="en">{inner}</bdi>' if en else f"<bdi>{inner}</bdi>"   # ar/he: lateinischer Name isoliert wie in allen anderen Bloecken (A11Y-7, "SharePoint Framework (SPFx)")
+                    elif en:
+                        extra += ' lang="en"'
                     tok = tok[:a] + f'<a href="{_esc(u)}" class="{cls}"{ti}{extra}>{inner}</a>' + tok[b:]
             out.append(tok)
         return _restore("".join(out), keep), links
+
+
+    def _english_word(self, t, i, lang):
+        """Linktext t (Wortlaut des Satzes) ist ein englischer Begriff auf einer Nicht-EN-Seite: Begriff (kein Eigenname, keine Abkuerzung), dessen
+        Wortlaut keine Form in der Sprache der Seite ist ("Conditional Access" im deutschen Satz, deutscher Name "Bedingter Zugriff" im title).
+        Uebersetzt wird nichts (Mirko: Linktext im Wortlaut des Satzes); das Merkmal lang="en" gilt wie bei den Listen (site_ename.html_name)."""
+        if not lang or lang == "en": return False
+        e = self.live.get(i) or {}
+        if e.get("type") in PROPER or not re.search(r"[A-Za-z]", t) or re.fullmatch(r"[A-Z0-9][A-Z0-9&./+-]*s?", t): return False
+        loc = (e.get("names") or {}).get(lang) if isinstance(e.get("names"), dict) else None
+        if loc and loc.casefold() == t.casefold(): return False
+        return not any(f.eid == i and f.langs is not None and lang in f.langs for f in self.forms.get(t.lower(), ()))
+
+    def _outside_titles(self, P, hits):
+        """Treffer ohne die Stellen, an denen ein Link mitten in einem fremden Titel oder Zitat saesse (Messung Paket 4, misses 3):
+        - in Anfuehrungszeichen („…“ "…" “…” «…» »…« 「…」 『…』), ausser das Zitat ist genau der Begriff ("“single source of truth”", «privilegio mínimo»);
+        - im Titel nach "episode"/"Folge"/… in Titel-Schreibung ("the episode Power Apps Code Apps with Carike Botha [MVP]"), nicht nach "this episode";
+        - Person mit Namenszusatz in eckigen Klammern ("Carike Botha [MVP]") in einer Titel-Reihe, und nie im Zusatz selbst.
+        Die Treffer bleiben Kontext (resolve lief vorher); verlinkt wird die naechste Nennung ausserhalb."""
+        if not hits: return hits
+        zones = _quote_zones(P) + _episode_title_zones(P)
+        suffix = [(m.start(1), m.end(1)) for m in _NAMED_SUFFIX.finditer(P)]   # Zusatz nach einem Namen ("Carike Botha [MVP]")
+        suffix += [(e, _NAME_SUFFIX.match(P, e).end()) for s, e, t, i in hits if (self.live.get(i) or {}).get("type") == "person" and _NAME_SUFFIX.match(P, e)]
+        out = []
+        for s, e, t, i in hits:
+            z = next((q for q in zones if q[0] <= s and e <= q[1]), None)
+            if z and z[2] != t: continue
+            if any(a <= s and e <= b for a, b in suffix): continue   # im Namenszusatz selbst
+            if (self.live.get(i) or {}).get("type") == "person" and _NAME_SUFFIX.match(P, e) and self._titleish(P, s, e): continue   # "… with Shubhangi Goyal [MVP] How …": Titel-Reihe
+            out.append((s, e, t, i))
+        return out
+
+
+_QPAIRS = {"„": "“”\"", "“": "”", "\"": "\"", "«": "»", "»": "«", "「": "」", "『": "』"}
+_QENT_CH = {"&quot;": "\"", "&#34;": "\"", "&#x22;": "\"", "&bdquo;": "„", "&#8222;": "„", "&ldquo;": "“", "&#8220;": "“", "&rdquo;": "”", "&#8221;": "”",
+            "&laquo;": "«", "&#171;": "«", "&raquo;": "»", "&#187;": "»"}
+_QENT = re.compile("|".join(re.escape(k) for k in _QENT_CH), re.I)
+_QTRIM = " \u00a0\t.,;:!?…"
+_NAME_SUFFIX = re.compile(r"[^\S\n]*\[[^\]\n]{1,30}\]")
+_NAMED_SUFFIX = re.compile(r"(?<![\w-])[A-Z][\w'’-]+[^\S\n]+[A-Z][\w'’-]+[^\S\n]*(\[[^\]\n]{1,30}\])")
+_EP_WORD = re.compile(r"(?<![\w-])(?<!this )(?<!This )(?<!that )(?<!each )(?<!every )(?<!next )(?<!our )(?<!dieser )(?<!jeder )(?<!nächsten )"
+                      r"(episode|Episode|Folge|épisode|episodio|episódio|aflevering|odcinek|odcinku|выпуск|епізод)[^\S\n]*[:–—-]?[^\S\n]+")
+_EP_CONN = {"with", "and", "of", "the", "in", "for", "to", "a", "an", "vs", "vs.", "on", "&", "-", "–", "—", ":", "mit", "und", "für", "von", "der", "die", "das", "im"}
+
+
+def _quote_zones(P):
+    """Inhalt aller Anfuehrungszeichen-Paare innerhalb einer Zeile (Block), hoechstens 300 Zeichen: [(start, ende, Inhalt ohne Rand)] ohne die Zeichen selbst."""
+    out, op, st = [], None, 0
+    P = _QENT.sub(lambda m: _QENT_CH[m.group(0).lower()] + " " * (len(m.group(0)) - 1), P)   # &quot; &bdquo; … wie das Zeichen (gleiche Laenge)
+    for k, ch in enumerate(P):
+        if ch == "\n":
+            op = None; continue
+        if op is None:
+            if ch in _QPAIRS and not (ch == "\"" and k and P[k - 1].isalnum() and k + 1 < len(P) and not P[k + 1].isalpha()):   # 12" Bildschirm
+                op, st = ch, k + 1
+        elif ch in _QPAIRS[op]:
+            if k - st <= 300: out.append((st, k, P[st:k].strip(_QTRIM)))
+            op = None
+        elif k - st > 300:
+            op = None
+    return out
+
+
+def _episode_title_zones(P):
+    """Titel nach "episode"/"Folge" ohne Anfuehrungszeichen: Folge von Woertern in Titel-Schreibung (mind. drei gross geschriebene) bis zum ersten
+    klein geschriebenen Wort, Komma oder Satzende; "[MVP]" gehoert dazu."""
+    out = []
+    for m in _EP_WORD.finditer(P):
+        k, caps, end = m.end(), 0, m.end()
+        for w in re.finditer(r"\[[^\]\n]{1,30}\]|[^\s,.;!?()\[\]\n]+|[,.;!?()\n]", P[k:k + 220]):
+            x = w.group(0)
+            if x[0] in ",.;!?()\n" and x != "-": break
+            if x.startswith("["): end = k + w.end(); continue
+            if x.lower() in _EP_CONN: continue
+            if x[:1].isupper() or x[:1].isdigit():
+                caps += 1; end = k + w.end(); continue
+            break
+        if caps >= 3: out.append((m.end(), end, None))
+    return out
 
 
 _SKIP = re.compile(r"<(a|h[1-6]|code|pre|script|style|figure|figcaption|summary|button|svg|title|nav|textarea|select|label|kbd|samp|time)\b[^>]*>.*?</\1\s*>", re.S | re.I)

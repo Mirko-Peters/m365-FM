@@ -6,6 +6,7 @@ import site_shownotes as SNS   # T26: Vollfassungen shownotes/site/<episode_id>.
 import site_extract as SX   # T27: Folgen <-> Entitaeten aus der QA-geprueften Extraktion
 import site_topic_crumbs as TC   # zweite BreadcrumbList nach dem Hauptthema (M365.FM > Oberbegriffe > Thema > Folge)
 import site_entmatch as EM   # gemeinsamer Namensindex: Folgen je Entitaet, Kontext-Links der Show Notes
+import site_ename as EN   # Namen der Entitaeten in der Sprache der Seite (Themen-Chips der Sprachfassungen)
 import site_media as MED
 import site_img_dims as IMG
 from site_design import pager as PG   # Vor/Zurueck am Seitenende (rel=prev/next)
@@ -759,12 +760,20 @@ def build(g):
             lu = loc_url(l, f"episodes/{e['slug']}/")
             if ln: ln_html = IMG.alt_text(ln_html, l, lt)   # Alt-Texte in der Sprache der Fassung (die Uebersetzung uebernimmt den englischen Alt-Text)
             _lused = EM.Used()   # Kontext-Links dieser Sprachfassung (fuer mentions wie in der englischen Fassung)
-            if ln: ln_html, _ = EMX.link_html(ln_html, _EMU.setdefault(l, EM.url_in(BASE, l)), l, _ectx, used=_lused)   # Kontext-Links wie in der englischen Fassung, in der Sprache der Seite
+            _lurl = _EMU.setdefault(l, EM.url_in(BASE, l))
+            # Kontext-Links wie in der englischen Fassung, in der Sprache der Seite: zuerst der uebersetzte Teaser (steht oben, auf den meisten Fassungen
+            # der einzige Text), dann die uebersetzten Show Notes; Linktext ist das Wort des Satzes (Namen, Aliase und names[l] sind Formen des Index)
+            ls_html, _ = EMX.link_html(esc(ls), _lurl, l, _ectx, used=_lused)
+            if ln: ln_html, _ = EMX.link_html(ln_html, _lurl, l, _ectx, used=_lused)
+            # Themen der Folge (about) sichtbar wie die Seitenleisten-Chips der englischen Fassung: die im Text nicht schon verlinkten, mit Einleitungssatz
+            _lvis = EM.linked_ids(ls_html + ln_html)
+            _ltop = [x for x in _about if x not in _lvis and _lurl(x)]
+            ltop_html = (LC.intro(l, "ep.topics") + '<div class="chips">' + "".join(f'<a class="chip" href="{esc(_lurl(x))}">{EN.html_name(ENTS_ALL[x], l)}</a>' for x in _ltop) + "</div>") if _ltop else ""
             _ldub = TRS.REG.dub.get((l, e["slug"]))   # #266: Dub-Folge der Sprache hat ein Transkript -> dieselben Dateien auch unter dieser Adresse
             _ltrf = TRS.REG.publish(g.get("write_r2") or write, BASE, f"{l}/show/episodes/{e['slug']}/", vtt=TRS.dub_vtt(l, _ldub[0]), index=False) if _ldub else {}
             lbody = (f'<article><p class="mut">{day(e["create_time"])}</p><h1>{esc(lt)}</h1>{SPM.note(l, _spr, "episode")}{aud}{LST.follow_for(BASE, l)}'
-                     f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), cover_alt(l, lt), 160, eager=True)}<div><strong>{esc(ls)}</strong></div></div>'
-                     + (f'<div class="pp-notes">{ln_html}{IMG.CSS if IMG.needs_responsive_css(ln_html) else ""}</div>' if ln else "") + (f"<p>{ext}</p>" if ext else "")
+                     f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), cover_alt(l, lt), 160, eager=True)}<div><strong>{ls_html}</strong></div></div>'
+                     + (f'<div class="pp-notes">{ln_html}{IMG.CSS if IMG.needs_responsive_css(ln_html) else ""}</div>' if ln else "") + ltop_html + (f"<p>{ext}</p>" if ext else "")
                      + (TRS.links_html(_ltrf, _ldub[1], l) if _ltrf else "")
                      + f'<p class="mut"><a href="{ep_url(e)}" hreflang="en" lang="en">{esc(e["name"])}</a> (English)</p></article>')
             lald = {"@context": "https://schema.org", "@type": "PodcastEpisode", "name": lt, "url": lu, "datePublished": day(e["create_time"]), "description": ls[:500],
