@@ -28,7 +28,8 @@ LANG_NAMES = {"en": "English", "de": "German", "fr": "French", "es": "Spanish", 
 RTL = ("ar", "he")
 SIZES = {"flow": (1920, 1080), "compare": (1200, 1040), "ladder": (1200, 1800), "bigfact": (1200, 630), "hub": (1200, 1200)}   # wie templates.mjs
 FIG_TEMPLATES = ("flow", "compare", "ladder", "hub")   # bigfact ist dem Kopfbild vorbehalten
-MAX_TRIES = 2
+MAX_TRIES = 3          # Textversuche je Inhalt/Sprache (ab dem zweiten mit Rueckmeldung der Pruefung)
+RENDER_TRIES = 2       # Layoutfehler sind immer gleich: nach zwei Versuchen nicht mehr rendern
 LANG_FACTOR = 1.4   # Textgrenzen der Uebersetzungen: Englisch x 1,4 (Deutsch/Russisch laenger); die Layoutpruefung beim Rendern ist die endgueltige Grenze
 OUT_EST, IN_EST_SPECS, IN_EST_TR = 1300, 2100, 1700   # Token-Schaetzung je Anfrage (aus dem Testlauf)
 BATCH_MAX = 500   # kleine Teile: ein Zeitueberschreiten beim Senden betrifft wenig, Ergebnisse kommen frueher
@@ -116,7 +117,7 @@ SYSTEM_SPECS = (
     "Prefer concrete, useful content over slogans. If the text cannot honestly fill a template, choose another one.\n"
     "Style: plain, short phrases; no emoji, no marketing words, no quotation marks. kicker = kind and topic, e.g. 'Entity · Azure security', 'Blog · Microsoft Fabric', 'Podcast · Power Apps'.\n"
     "alt = one sentence (at most 125 characters) saying what the image shows or explains, for screen readers. tags = up to 3 product or topic names (each at most 20 characters).\n"
-    "Hard length limits in characters (English): see the list; shorter is better, a text that is too long is discarded.\n{limits}\n"
+    "Hard length limits in characters (English): see the list. Aim for about 75% of every limit and count the characters; a set with one text too long is discarded.\n{limits}\n"
     "Answer with one JSON object only (no text before or after, no code fence). All values are strings except hi (integer) and the lists. Exactly this structure and these field names "
     "(the example shows two of the four figure templates; flow needs hero, hi, steps, note; compare needs left, right, verdict; ladder needs sub, tiers, axis; hub needs core, nodes):\n{example}"
 )
@@ -375,8 +376,9 @@ def results_lines(url):
     return urlopen(rq, timeout=900).read().decode().splitlines()
 
 
-def req_specs(it, cid):
+def req_specs(it, cid, why=None):
     user = f"Kind: {it['label']}\nTitle: {it['title']}\n\nText:\n{it['text']}"
+    if why: user += f"\n\nYour previous answer was rejected by the automatic check: {why}. Write the whole set again and keep every text clearly below its limit."
     return {"custom_id": cid, "params": {"model": MODEL, "max_tokens": 3000, **thinking_off(MODEL), "system": SYSTEM_SPECS.replace("{limits}", limits_text()).replace("{example}", SET_EXAMPLE_JSON),
             "messages": [{"role": "user", "content": user}]}}
 
@@ -471,7 +473,7 @@ def cmd_specs(kinds, limit, store, st, root=None):
             if it["key"] in busy or st["tries"].get(it["key"], 0) >= MAX_TRIES: continue
             have = store.get(spec_key(it))
             if have and have.get("en"): continue
-            cid = f"s{len(reqs)}"; reqs.append(req_specs(it, cid)); mapping[cid] = it["key"]; n += 1
+            cid = f"s{len(reqs)}"; reqs.append(req_specs(it, cid, (st.get("why") or {}).get(it["key"]))); mapping[cid] = it["key"]; n += 1
     submit("specs", "en", reqs, mapping, st, cost_eur(1, IN_EST_SPECS), root)
 
 
@@ -523,6 +525,7 @@ def apply_results(lines, b, store, st, by_key):
         err = "kein JSON" if st_set is None else check_set(st_set, lang, None if lang == "en" else doc.get("en"), it["title"] + " " + it["text"] if lang == "en" else None)
         if err:
             st["tries"][tk] = st["tries"].get(tk, 0) + 1; bad += 1
+            if lang == "en": st.setdefault("why", {})[tk] = err[:160]   # beim naechsten Versuch als Rueckmeldung an die KI
             print(f"verworfen {tk}: {err}")
             continue
         doc[lang] = st_set; store.put(spec_key(it), doc); ok += 1
@@ -591,7 +594,7 @@ def cmd_render(kinds, langs, limit, store, root=None, max_min=300, chunk=200, re
             have = store.get(spec_key(it))
             if not have: continue
             for l in langs:
-                if have.get(l) and not (idx.get(it["slug"]) or {}).get(l) and fails.get(f"{it['key']}#{l}", 0) < MAX_TRIES: todo.append((it, l, have))
+                if have.get(l) and not (idx.get(it["slug"]) or {}).get(l) and fails.get(f"{it['key']}#{l}", 0) < RENDER_TRIES: todo.append((it, l, have))
         if limit: todo = todo[:max(0, limit - made)]
         print(f"{k}: {len(todo)} Bildsaetze zu rendern")
         for i in range(0, len(todo), chunk):
