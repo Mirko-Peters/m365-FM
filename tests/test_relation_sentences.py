@@ -138,8 +138,8 @@ class Templates(unittest.TestCase):
         self.assertIn("Mit Power BI beschäftigt sich [Mirko Peters].", d)
         self.assertIn("Wissen zu Power BI prüft die Zertifizierung [PL-300].", d)
         h = render("en", "power-bi")
-        self.assertIn('an <a href="/entity/analytics-tool/">analytics and BI tool</a>', h, "Kategorie verlinkt, Artikel ausserhalb des Links")
-        self.assertIn('<a href="/entity/microsoft/">Microsoft</a>', h)
+        self.assertRegex(h, r'an <a href="/entity/analytics-tool/"(?: title="[^"]*")?>analytics and BI tool</a>', "Kategorie verlinkt, Artikel ausserhalb des Links (title je nach Datenstand)")
+        self.assertRegex(h, r'<a href="/entity/microsoft/"(?: title="[^"]*")?>Microsoft</a>')
         self.assertNotIn('href="/entity/power-bi/"', h, "die Seite verlinkt nicht auf sich selbst")
 
     def test_einleitung_ohne_kategorie_und_unbekannte_kategorie(self):
