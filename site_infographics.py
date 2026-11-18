@@ -26,7 +26,8 @@ def _jload(p, default):
 def live():
     """-> (Sprachen, Arten) als Mengen; leer = nichts freigegeben."""
     if not _LIVE:
-        d = _jload(D / "infographics_live.json", {}) or {}
+        d = _jload(D / "infographics_live.json", {})
+        d = d if isinstance(d, dict) else {}
         _LIVE.append((frozenset(x for x in d.get("langs") or [] if isinstance(x, str)), frozenset(x for x in d.get("kinds") or [] if isinstance(x, str))))
     return _LIVE[0]
 
@@ -70,7 +71,7 @@ def hero_figure(kind, slug, lang):
 def og(kind, slug, lang):
     """(url, breite, hoehe) fuer page(og_image=...) oder None."""
     g = get(kind, slug, lang)
-    return (g[0]["u"], g[0]["w"], g[0]["h"]) if g else None
+    return (g[0]["u"][:-5] + ".jpg", g[0]["w"], g[0]["h"]) if g else None   # Teilen-Bild als JPEG (LinkedIn/Facebook), Seitenbild bleibt WebP
 
 
 def page_kw(kind, slug, lang):
@@ -86,7 +87,7 @@ _BLOCK = re.compile(r"<(/?)(ul|ol|table|figure|blockquote|details|pre|dl)\b[^>]*
 def replace_hero(html):
     """Altes Titelbild am Textanfang (erzeugtes SVG der Reihe en-fig oder Folgen-Cover 640x360 aus site_legacy_blog.hero_html) entfernen; sonst unveraendert."""
     m = _HERO_AT_START.match(html or "")
-    if m and ('class="en-fig"' in m.group(0) or 'width="640" height="360"' in m.group(0)):
+    if m and ('class="en-fig"' in m.group(0) or ('<figure style="margin:1em 0"><img ' in m.group(0) and 'width="640" height="360" fetchpriority="high"' in m.group(0) and "aspect-ratio:16/9" in m.group(0))):
         return html[m.end():]
     return html
 

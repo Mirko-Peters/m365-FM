@@ -5,6 +5,8 @@
 // results.json: [{ out, ok, w, h, issues: [...] }]. Ein Bild mit Layoutfehlern (Ueberlauf, ausserhalb der Flaeche, Text auf Text) gilt als fehlgeschlagen: kein Upload.
 import fs from 'node:fs';
 import path from 'node:path';
+import os from 'node:os';
+import { pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';
 import { render } from './templates.mjs';
 import { SIZES } from './templates.mjs';
@@ -25,9 +27,10 @@ const QA = () => {   // laeuft im Browser: Layoutpruefung
     const fs_ = parseFloat(getComputedStyle(e).fontSize) || 16;  // Zeilenbox kleiner als Glyphen (line-height<1) ist kein Ueberlauf
     if (!e.matches('.gr') && !(e.hasAttribute('data-hero') && !e.classList.contains('p')) && (e.scrollHeight > e.clientHeight + 0.6 * fs_ || e.scrollWidth > e.clientWidth + 3)) issues.push('ueberlauf:' + nm);
   }
-  const txt = els.filter(e => e.matches('.t,.n,.h,.s,.k,.m,.ft'));
+  const txt = els.filter(e => e.matches('.t,.n,.h,.s,.k,.m,.ft,.gr,[data-hero]:not(.p)'));
   for (let i = 0; i < txt.length; i++) for (let j = i + 1; j < txt.length; j++) {
     if (txt[i].contains(txt[j]) || txt[j].contains(txt[i])) continue;
+    if (txt[i].matches('.gr,[data-hero]') && txt[j].matches('.gr,[data-hero]')) continue;
     const a = txt[i].getBoundingClientRect(), b = txt[j].getBoundingClientRect();
     const ox = Math.min(a.right, b.right) - Math.max(a.left, b.left), oy = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
     if (ox > 6 && oy > 6) issues.push('text-auf-text:' + (txt[i].className || '') + '/' + (txt[j].className || ''));
@@ -47,10 +50,11 @@ async function worker() {
       const [W, H] = SIZES[j.spec.template]; res.w = W; res.h = H;
       fs.mkdirSync(path.dirname(j.out), { recursive: true });
       await page.setViewportSize({ width: W, height: H });
-      await page.setContent(render({ ...j.spec, anim: false }), { waitUntil: 'load' });
+      const hf = j.out + '.html'; fs.writeFileSync(hf, render({ ...j.spec, anim: false }));   // als Datei laden: aus about:blank darf Chromium die Schriften (file://) nicht lesen
+      await page.goto(pathToFileURL(hf).href, { waitUntil: 'load' });
       await page.evaluate(() => document.fonts.ready);
       res.issues = await page.evaluate(QA);
-      await page.screenshot({ path: j.out + '.png' });
+      await page.screenshot({ path: j.out + '.png' }); fs.rmSync(hf, { force: true });
       res.ok = res.issues.length === 0;
     } catch (e) { res.issues.push('fehler:' + String(e.message).slice(0, 160)); }
     results.push(res);

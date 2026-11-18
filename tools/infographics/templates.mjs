@@ -6,12 +6,11 @@ const F=pathToFileURL(path.resolve(path.dirname(fileURLToPath(import.meta.url)),
 const esc=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 export const SIZES={flow:[1920,1080],compare:[1200,1040],ladder:[1200,1800],bigfact:[1200,630],hub:[1200,1200]};
 const CH=['#2B8CC4','#12A379','#BF7A20','#8B6CF0','#E05590'];
-const CSS=`@font-face{font-family:Sora;font-weight:600;src:url(${F}sora-latin-600-normal.woff2)}
-@font-face{font-family:Sora;font-weight:800;src:url(${F}sora-latin-800-normal.woff2)}
-@font-face{font-family:'Albert Sans';font-weight:400;src:url(${F}albert-sans-latin-400-normal.woff2)}
-@font-face{font-family:'Albert Sans';font-weight:500;src:url(${F}albert-sans-latin-500-normal.woff2)}
-@font-face{font-family:'Albert Sans';font-weight:700;src:url(${F}albert-sans-latin-700-normal.woff2)}
-@font-face{font-family:'IBM Plex Mono';font-weight:500;src:url(${F}ibm-plex-mono-latin-500-normal.woff2)}
+const LAT='U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD';
+const EXT='U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF';
+const face=(fam,w,base)=>`@font-face{font-family:${fam};font-weight:${w};src:url(${F}${base}-latin-${w}-normal.woff2);unicode-range:${LAT}}@font-face{font-family:${fam};font-weight:${w};src:url(${F}${base}-latin-ext-${w}-normal.woff2);unicode-range:${EXT}}`;
+const FACES=[['Sora',600,'sora'],['Sora',800,'sora'],["'Albert Sans'",400,'albert-sans'],["'Albert Sans'",500,'albert-sans'],["'Albert Sans'",700,'albert-sans'],["'IBM Plex Mono'",500,'ibm-plex-mono']].map(x=>face(...x)).join('\n');
+const CSS=`${FACES}
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#0B0E17;--bg2:#10141F;--glass:rgb(255 255 255/.05);--gb:1px solid rgb(255 255 255/.12);--ink:#EDF1FA;--mute:#8B93A7;--ac:#2B8CC4;--c1:#2B8CC4;--c2:#12A379;--c3:#BF7A20;--c4:#8B6CF0;--c5:#E05590;--dim:#3A4157;
 --fd:Sora,'Noto Sans','Noto Sans Arabic','Noto Sans Hebrew','Noto Sans CJK JP','Noto Sans CJK KR',sans-serif;--fb:'Albert Sans','Noto Sans','Noto Sans Arabic','Noto Sans Hebrew','Noto Sans CJK JP','Noto Sans CJK KR',sans-serif;--fm:'IBM Plex Mono','Noto Sans Mono','Noto Sans','Noto Sans Arabic','Noto Sans Hebrew','Noto Sans CJK JP',monospace}
@@ -28,6 +27,7 @@ html,body{background:var(--bg)}body{font-family:var(--fb);color:var(--ink)}
 .t{font:600 30px/1.15 var(--fd);letter-spacing:-.01em}
 .n{font:400 23px/1.35 var(--fb);color:var(--mute)}
 .m{font:500 18px/1 var(--fm);letter-spacing:.12em;color:var(--mute)}
+[dir=rtl] .k,[dir=rtl] .m{letter-spacing:0}.ft{direction:ltr;unicode-bidi:isolate}
 .gr{background:linear-gradient(135deg,#2B8CC4,#8B6CF0);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 12px rgba(43,140,196,.55)) drop-shadow(0 0 40px rgba(139,108,240,.4))}
 .ft{font:500 16px/1 var(--fm);color:var(--mute);letter-spacing:.04em}`;
 const ANIM=`@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}@keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
@@ -81,7 +81,7 @@ export function ladder(d){
 export function bigfact(d){
  return shell(d,'bigfact',`
  <div class="k" style="left:64px;top:56px">${esc(d.kicker)}</div>
- <div data-hero class="gr" style="left:50px;top:70px;font:800 400px/1 var(--fd);letter-spacing:-.05em">${esc(d.hero.value)}</div>
+ <div data-hero class="gr" style="left:50px;top:70px;font:800 ${String(d.hero.value).length>1?320:400}px/1 var(--fd);letter-spacing:-.05em">${esc(d.hero.value)}</div>
  <div class="t" style="left:64px;top:474px;width:430px;font-size:34px">${esc(d.hero.label)}</div>
  <div class="h" style="left:520px;top:92px;width:620px;font-size:40px">${esc(d.title)}</div>
  <div style="left:520px;top:236px;width:616px;display:flex;flex-direction:column;gap:12px">${d.chips.map((c,i)=>`<div class="p" style="padding:13px 20px;display:flex;gap:16px;align-items:baseline;border-left:4px solid ${CH[i%5]}"><span class="t" style="font-size:26px;white-space:nowrap">${esc(c.t)}</span><span class="n" style="font-size:21px">${esc(c.n||'')}</span></div>`).join('')}</div>

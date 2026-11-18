@@ -20,19 +20,15 @@ jobs:
   ig:
     runs-on: ubuntu-latest
     timeout-minutes: 355
+    defaults:
+      run:
+        shell: bash   # bash -eo pipefail: ein Absturz vor `| tee` bricht den Schritt ab
     env:
-      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       AI_GATEWAY_ID: ${{ vars.AI_GATEWAY_ID || 'm365fm' }}
-      CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
       COMMUNITY_API: https://api-dub.m365.fm
-      CRON_KEY: ${{ secrets.CRON_KEY }}
       HAIKU_USD_PER_MTOK_IN: ${{ vars.HAIKU_USD_PER_MTOK_IN || '0.10' }}
       HAIKU_USD_PER_MTOK_OUT: ${{ vars.HAIKU_USD_PER_MTOK_OUT || '0.50' }}
       USD_PER_EUR: ${{ vars.USD_PER_EUR || '1.08' }}
-      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
-      R2_BUCKET: ${{ secrets.R2_BUCKET }}
-      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
       MODE_IN: ${{ inputs.mode }}
       KINDS_IN: ${{ inputs.kinds }}
       LANGS_IN: ${{ inputs.langs }}
@@ -51,14 +47,26 @@ jobs:
           mkdir -p /tmp/pw && cd /tmp/pw && npm init -y >/dev/null && npm i --silent playwright@1.56.1
           npx playwright install --with-deps chromium >/dev/null
           echo "NODE_PATH=/tmp/pw/node_modules" >> "$GITHUB_ENV"
+      - name: Eingaben pruefen
+        run: |
+          [[ "$KINDS_IN" =~ ^[a-z]+(,[a-z]+)*$ ]] || { echo "kinds ungueltig"; exit 1; }
+          [[ "$LANGS_IN" =~ ^[a-z]{2}(,[a-z]{2})*$ ]] || { echo "langs ungueltig"; exit 1; }
+          [[ -z "$LIMIT_IN" || "$LIMIT_IN" =~ ^[0-9]+$ ]] || { echo "limit ungueltig"; exit 1; }
       - name: Ausfuehren
         env:
           ANTHROPIC_API_KEY: ${{ (inputs.mode == 'specs' || inputs.mode == 'translate' || inputs.mode == 'collect') && secrets.ANTHROPIC_API_KEY_SHOW || '' }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
+          CRON_KEY: ${{ secrets.CRON_KEY }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: |
-          ARGS="--kinds $KINDS_IN --langs $LANGS_IN"
-          [ -n "$LIMIT_IN" ] && ARGS="$ARGS --limit $LIMIT_IN"
-          [ "$MODE_IN" = "render" ] && ARGS="$ARGS --max-min 320"
-          python tools/infographics.py "$MODE_IN" $ARGS | tee -a "$GITHUB_STEP_SUMMARY"
+          ARGS=(--kinds "$KINDS_IN" --langs "$LANGS_IN")
+          [ -n "$LIMIT_IN" ] && ARGS+=(--limit "$LIMIT_IN")
+          [ "$MODE_IN" = "render" ] && ARGS+=(--max-min 320)
+          python tools/infographics.py "$MODE_IN" "${ARGS[@]}" | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Stand sichern (Batch-IDs, Index)
         if: always() && inputs.mode != 'plan'
         run: |
@@ -71,7 +79,14 @@ jobs:
         if: inputs.mode == 'specs' || inputs.mode == 'translate' || inputs.mode == 'collect'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
-        run: python tools/infographics.py collect --wait 12600 --kinds "$KINDS_IN" | tee -a "$GITHUB_STEP_SUMMARY"
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
+          CRON_KEY: ${{ secrets.CRON_KEY }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: python tools/infographics.py collect --wait 12600 | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Ergebnis sichern
         if: always() && (inputs.mode == 'specs' || inputs.mode == 'translate' || inputs.mode == 'collect')
         run: |

@@ -16,7 +16,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
-from ai_gateway import anthropic_request, check_budget, estimated_eur, report_usage, thinking_off, urlopen  # noqa: E402
+from ai_gateway import anthropic_request, check_budget, estimated_eur, remaining_eur, report_usage, thinking_off, urlopen  # noqa: E402
 
 MODEL = os.environ.get("INFOGRAPHICS_MODEL", "claude-haiku-5-5")
 JOB = "infographics"
@@ -31,15 +31,15 @@ FIG_TEMPLATES = ("flow", "compare", "ladder", "hub")   # bigfact ist dem Kopfbil
 MAX_TRIES = 2
 LANG_FACTOR = 1.4   # Textgrenzen der Uebersetzungen: Englisch x 1,4 (Deutsch/Russisch laenger); die Layoutpruefung beim Rendern ist die endgueltige Grenze
 OUT_EST, IN_EST_SPECS, IN_EST_TR = 1300, 2100, 1700   # Token-Schaetzung je Anfrage (aus dem Testlauf)
-BATCH_MAX = 5000
+BATCH_MAX = 500   # kleine Teile: ein Zeitueberschreiten beim Senden betrifft wenig, Ergebnisse kommen frueher
 
 # ------------------------------------------------------------------ Spezifikation der Bildtexte
 # Grenzen in Zeichen (Englisch). Vorlage -> {Feld: Grenze}; Listen: (Mindestanzahl, Hoechstanzahl, {Unterfeld: Grenze})
 LIMITS = {
-    "bigfact": {"kicker": 36, "title": 48, "hero.value": 5, "hero.label": 34, "chips": (3, 4, {"t": 14, "n": 30})},
-    "flow": {"kicker": 36, "title": 26, "sub": 80, "hero.value": 2, "hero.label": 14, "hero.sub": 28, "steps": (3, 4, {"t": 14, "n": 56}), "note": 60},
-    "compare": {"kicker": 36, "title": 40, "left.head": 18, "left.items": (2, 3, 38), "right.head": 18, "right.items": (2, 3, 38), "verdict": 70},
-    "ladder": {"kicker": 36, "title": 44, "sub": 100, "tiers": (3, 5, {"t": 22, "n": 60}), "axis": 70},
+    "bigfact": {"kicker": 36, "title": 48, "hero.value": 2, "hero.label": 34, "chips": (3, 4, {"t": 14, "n": 30})},
+    "flow": {"kicker": 36, "title": 26, "sub": 80, "hero.value": 2, "hero.label": 14, "hero.sub": 28, "steps": (3, 4, {"t": 12, "n": 44}), "note": 60},
+    "compare": {"kicker": 36, "title": 40, "left.head": 18, "left.items": (2, 3, 34), "right.head": 18, "right.items": (2, 3, 34), "verdict": 70},
+    "ladder": {"kicker": 36, "title": 36, "sub": 100, "tiers": (3, 5, {"t": 22, "n": 60}), "axis": 70},
     "hub": {"kicker": 36, "title": 40, "core.value": 3, "core.label": 22, "nodes": (3, 4, {"t": 22, "n": 48})},
 }
 ALT_MAX = 125
@@ -78,13 +78,12 @@ SET_SCHEMA = {"type": "object", "additionalProperties": False, "required": ["hea
 SYSTEM_SPECS = (
     "You turn one article, podcast episode or glossary entry of M365.FM (a podcast and knowledge site about Microsoft 365, Azure, Power Platform and AI) into the texts of "
     "one header graphic and 2 or 3 infographics. Return JSON only, matching the schema. A fixed template draws each image; you only fill its fields.\n"
-    "header: template bigfact = one big fact. hero.value is a short number or figure (at most 5 characters, e.g. 4, 99.9%, 3x, 12) that really appears in or follows from the text "
-    "(count of steps, options, tiers, a stated percentage). hero.label says what the value counts. title = the topic as a headline. chips = 3 or 4 key points.\n"
+    "header: template bigfact = one big fact. hero.value is a number of at most 2 characters (e.g. 4, 12, 3x): either the number of chips, or a figure that is stated in the text. hero.label says what the value counts. title = the topic as a headline. chips = 3 or 4 key points.\n"
     "figs: 2 or 3 infographics, each with a different template, chosen by what the text offers:\n"
-    "- flow: a process with 3 or 4 steps in order (hero.value = number of steps, 1-2 digits; hi = index (from 0) of the most important step).\n"
+    "- flow: a process with 3 or 4 steps in order (hero.value = exactly the number of steps, 1-2 digits; hi = index (from 0) of the most important step).\n"
     "- compare: two options or before/after, 2-3 short points per side, plus a verdict line.\n"
     "- ladder: 3-5 ranked tiers, levels or priorities (axis = what rises or falls along them).\n"
-    "- hub: one core idea (core.value a number of at most 3 digits, core.label what it counts) with 3 or 4 parts around it.\n"
+    "- hub: one core idea (core.value = exactly the number of nodes, core.label what it counts) with 3 or 4 parts around it.\n"
     "Use only facts from the text. Never invent numbers, product names, prices or dates. Keep product names (Microsoft Teams, SharePoint, Copilot ...) in their official form. "
     "Prefer concrete, useful content over slogans. If the text cannot honestly fill a template, choose another one.\n"
     "Style: plain, short phrases; no emoji, no marketing words, no quotation marks. kicker = kind and topic, e.g. 'Entity · Azure security', 'Blog · Microsoft Fabric', 'Podcast · Power Apps'.\n"
@@ -167,6 +166,7 @@ def check_spec(spec, lang="en", template=None):
     if not isinstance(tags, list) or len(tags) > TAG_MAX[1] or any(not isinstance(x, str) or len(x) > TAG_MAX[2] * f for x in tags): return "tags"
     txt = " ".join(strings({k: v for k, v in spec.items() if k not in ("tags",)}))
     if "<" in txt or ">" in txt or "{" in txt: return "Sonderzeichen"
+    if re.search(r"(?i)https?:|www\.|@|\.(com|net|org|de|fm)\b", txt): return "Adresse im Text"
     letters = re.findall(r"[^\W\d_]", txt)
     if letters:
         if lang in SCRIPTS:
@@ -175,8 +175,9 @@ def check_spec(spec, lang="en", template=None):
     return None
 
 
-def check_set(st, lang="en", en=None):
-    """Satz = {"header":..., "figs":[...]} -> None oder Grund. en: englischer Satz; die Uebersetzung muss dieselbe Struktur und Zahlen haben."""
+def check_set(st, lang="en", en=None, source=None):
+    """Satz = {"header":..., "figs":[...]} -> None oder Grund. en: englischer Satz; die Uebersetzung muss dieselbe Struktur und Zahlen haben.
+    source: Text des Inhalts (nur Englisch): die Kopfbild-Zahl ist die Zahl der Punkte oder steht im Text."""
     if not isinstance(st, dict) or not isinstance(st.get("header"), dict) or not isinstance(st.get("figs"), list): return "Form"
     if not 2 <= len(st["figs"]) <= 3: return "Anzahl Infografiken"
     if st["header"].get("template") != "bigfact": return "Kopfbild nicht bigfact"
@@ -185,6 +186,13 @@ def check_set(st, lang="en", en=None):
     for i, s in enumerate([st["header"]] + st["figs"]):
         r = check_spec(s, lang)
         if r: return f"Bild {i}: {r}"
+    for f in st["figs"]:   # die grosse Zahl ist genau die Zahl der Elemente (sonst steht im Bild eine falsche Zahl)
+        if f["template"] == "flow" and f["hero"]["value"] != str(len(f["steps"])): return "flow: Zahl passt nicht zu den Schritten"
+        if f["template"] == "hub" and f["core"]["value"] != str(len(f["nodes"])): return "hub: Zahl passt nicht zu den Teilen"
+    hv = st["header"]["hero"]["value"]
+    if lang == "en" and source is not None and hv != str(len(st["header"]["chips"])):
+        digits = re.sub(r"\D", "", hv)
+        if not digits or not re.search(r"(?<!\d)" + re.escape(digits) + r"(?!\d)", source): return "Kopfbild: Zahl weder Anzahl noch im Text"
     if en is not None:
         if [f["template"] for f in en["figs"]] != seen: return "Vorlagen weichen vom Englischen ab"
         pairs = list(zip([en["header"]] + en["figs"], [st["header"]] + st["figs"]))
@@ -246,7 +254,10 @@ def items(kind, root=None):
             t = plain(p.get("show_notes"))
             if p.get("slug") and p.get("name") and len(t) > 200:
                 out.append({"key": f"episode:{p['slug']}", "kind": kind, "slug": p["slug"], "title": p["name"], "text": t, "label": "Podcast"})
-    return out
+    return [i for i in out if SLUG.fullmatch(i["slug"])]   # nur harmlose Namen: der slug steht in R2-Schluesseln und Bild-Adressen
+
+
+SLUG = re.compile(r"[a-z0-9][a-z0-9._-]{0,120}")
 
 
 def src_hash(it):
@@ -256,13 +267,17 @@ def src_hash(it):
 # ------------------------------------------------------------------ Speicher (R2 oder Ordner) und Index
 class DirStore:
     def __init__(self, d): self.d = Path(d)
+    def _p(self, key):
+        p = (self.d / key).resolve()
+        if self.d.resolve() not in p.parents: raise ValueError("Schluessel ausserhalb: " + key)
+        return p
     def get(self, key):
-        p = self.d / key
+        p = self._p(key)
         return json.loads(p.read_text("utf-8")) if p.exists() else None
     def put(self, key, obj):
-        p = self.d / key; p.parent.mkdir(parents=True, exist_ok=True); p.write_text(json.dumps(obj, ensure_ascii=False, separators=(",", ":")), "utf-8")
-    def put_image(self, key, data):
-        p = self.d / key; p.parent.mkdir(parents=True, exist_ok=True); p.write_bytes(data)
+        p = self._p(key); p.parent.mkdir(parents=True, exist_ok=True); p.write_text(json.dumps(obj, ensure_ascii=False, separators=(",", ":")), "utf-8")
+    def put_image(self, key, data, ctype="image/webp"):
+        p = self._p(key); p.parent.mkdir(parents=True, exist_ok=True); p.write_bytes(data)
 
 
 class R2Store:
@@ -279,8 +294,8 @@ class R2Store:
             raise
     def put(self, key, obj):
         self.s3.put_object(Bucket=self.bucket, Key=key, Body=json.dumps(obj, ensure_ascii=False, separators=(",", ":")).encode(), ContentType="application/json; charset=utf-8", CacheControl="no-store")
-    def put_image(self, key, data):
-        self.s3.put_object(Bucket=self.bucket, Key=key, Body=data, ContentType="image/webp", CacheControl="public, max-age=31536000, immutable")
+    def put_image(self, key, data, ctype="image/webp"):
+        self.s3.put_object(Bucket=self.bucket, Key=key, Body=data, ContentType=ctype, CacheControl="public, max-age=31536000, immutable")
 
 
 def spec_key(it): return f"ig/_specs/{it['kind']}/{it['slug']}.json"
@@ -318,7 +333,7 @@ def api(method, path, body=None):
     req = anthropic_request(path, body, job=JOB, lang="batch", model=MODEL, api_key=os.environ["ANTHROPIC_API_KEY"]); req.method = method
     import urllib.error
     try:
-        return json.loads(urlopen(req, timeout=300).read())
+        return json.loads(urlopen(req, timeout=600).read())
     except urllib.error.HTTPError as e:
         try: d = e.read().decode("utf-8", "replace")[:600]
         except Exception: d = ""
@@ -341,7 +356,7 @@ def req_tr(en_set, lang, cid):
             "output_config": {"format": {"type": "json_schema", "schema": SET_SCHEMA}}, "messages": [{"role": "user", "content": json.dumps(en_set, ensure_ascii=False)}]}}
 
 
-def cost_eur(n, tin, tout=OUT_EST): return estimated_eur(n * tin, n * tout, batch=True)
+def cost_eur(n, tin, tout=OUT_EST): return estimated_eur(n * tin, n * tout, batch=True)   # n Anfragen
 
 
 # ------------------------------------------------------------------ Auswahl
@@ -390,90 +405,115 @@ def plan_text(rep, langs, limit=None):
 
 
 # ------------------------------------------------------------------ Batch senden und einsammeln
-def submit(stage, lang, reqs, mapping, st, est, root=None):
+RUN_EST = [0.0]   # in diesem Lauf schon vorgemerkte Kosten (EUR): der Verbrauch wird erst beim Einsammeln gemeldet, die Tagespruefung sieht ihn sonst nicht
+
+
+def open_keys(st):
+    return {v for b in st["batches"] for v in b["map"].values()}
+
+
+def submit(stage, lang, reqs, mapping, st, per_req_eur, root=None):
+    """Batch(es) senden: Teile zu hoechstens BATCH_MAX Anfragen. Vor jedem Teil Budget pruefen (inklusive dessen, was dieser Lauf schon vorgemerkt hat) und
+    notfalls auf das Restbudget kuerzen. Nach einem Fehler beim Senden wird nichts wiederholt (ein Teil koennte schon angelegt sein: erst collect/Konsole pruefen)."""
     if not reqs: print(f"{stage} {lang}: nichts zu tun"); return
-    if not check_budget(JOB, MODEL, est):
-        print("Abbruch: kein Haiku-Budget"); return
     for i in range(0, len(reqs), BATCH_MAX):
         part = reqs[i:i + BATCH_MAX]
+        left = remaining_eur(JOB, MODEL)
+        if left is not None:
+            fit = int(max(0.0, left - RUN_EST[0]) / max(per_req_eur, 1e-9))
+            if fit < len(part): print(f"Budget: Rest {left:.2f} EUR, schon vorgemerkt {RUN_EST[0]:.2f} EUR: nur {fit} von {len(part)} Anfragen"); part = part[:fit]
+        est = per_req_eur * len(part)
+        if not part or not check_budget(JOB, MODEL, est + RUN_EST[0]):
+            print("Abbruch: kein Haiku-Budget (Rest folgt beim naechsten Lauf)"); return
         b = api("POST", "/v1/messages/batches", {"requests": part})
-        st["batches"].append({"id": b["id"], "stage": stage, "lang": lang, "map": {r["custom_id"]: mapping[r["custom_id"]] for r in part}, "est_eur": round(est * len(part) / len(reqs), 3),
+        RUN_EST[0] += est
+        st["batches"].append({"id": b["id"], "stage": stage, "lang": lang, "map": {r["custom_id"]: mapping[r["custom_id"]] for r in part}, "est_eur": round(est, 3),
                               "ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())})
-        save_state(st, root)
-        print(f"Batch {b['id']} ({stage} {lang}): {len(part)} Anfragen, ca. {est * len(part) / len(reqs):.2f} EUR")
+        save_state(st, root)   # Batch-ID sofort sichern
+        print(f"Batch {b['id']} ({stage} {lang}): {len(part)} Anfragen, ca. {est:.2f} EUR")
 
 
 def cmd_specs(kinds, limit, store, st, root=None):
-    reqs, mapping, n = [], {}, 0
+    reqs, mapping, n, busy = [], {}, 0, open_keys(st)
     for k in kinds:
         for it in items(k, root):
             if limit and n >= limit: break
+            if it["key"] in busy or st["tries"].get(it["key"], 0) >= MAX_TRIES: continue
             have = store.get(spec_key(it))
-            if (have and have.get("en")) or st["tries"].get(it["key"], 0) >= MAX_TRIES or any(it["key"] in b["map"].values() and b["stage"] == "specs" for b in st["batches"]): continue
+            if have and have.get("en"): continue
             cid = f"s{len(reqs)}"; reqs.append(req_specs(it, cid)); mapping[cid] = it["key"]; n += 1
-    submit("specs", "en", reqs, mapping, st, cost_eur(len(reqs), IN_EST_SPECS), root)
+    submit("specs", "en", reqs, mapping, st, cost_eur(1, IN_EST_SPECS), root)
 
 
 def cmd_translate(kinds, langs, limit, store, st, root=None):
+    docs, busy = {}, open_keys(st)
+    def doc(it):
+        if it["key"] not in docs: docs[it["key"]] = store.get(spec_key(it))   # je Inhalt nur einmal aus R2 lesen, nicht je Sprache
+        return docs[it["key"]]
+    its = [it for k in kinds for it in items(k, root)]
     for l in langs:
         if l == "en": continue
         reqs, mapping, n = [], {}, 0
-        for k in kinds:
-            for it in items(k, root):
-                if limit and n >= limit: break
-                have = store.get(spec_key(it))
-                tk = it["key"] + "#" + l
-                if not have or not have.get("en") or have.get(l) or st["tries"].get(tk, 0) >= MAX_TRIES or any(tk in b["map"].values() for b in st["batches"]): continue
-                cid = f"t{len(reqs)}"; reqs.append(req_tr(have["en"], l, cid)); mapping[cid] = tk; n += 1
-        submit("translate", l, reqs, mapping, st, cost_eur(len(reqs), IN_EST_TR), root)
+        for it in its:
+            if limit and n >= limit: break
+            tk = it["key"] + "#" + l
+            if tk in busy or st["tries"].get(tk, 0) >= MAX_TRIES: continue
+            have = doc(it)
+            if not have or not have.get("en") or have.get(l): continue
+            cid = f"t{len(reqs)}"; reqs.append(req_tr(have["en"], l, cid)); mapping[cid] = tk; n += 1
+        submit("translate", l, reqs, mapping, st, cost_eur(1, IN_EST_TR), root)
 
 
 def apply_results(lines, b, store, st, by_key):
-    """Ergebnisse eines Batches pruefen und speichern -> (ok, schlecht, token_ein, token_aus, cache_read, cache_write)."""
-    ok = bad = tin = tout = cr = cw = 0
+    """Ergebnisse eines Batches pruefen und speichern -> (ok, schlecht, token_ein, token_aus, cache_read, cache_write, unbekannt).
+    unbekannt = Ergebnisse zu Inhalten, die es in den Quellen nicht mehr gibt (zaehlt nicht als verloren: Batch bleibt dann im Zustand)."""
+    ok = bad = tin = tout = cr = cw = unknown = 0
     for line in lines:
         if not line.strip(): continue
         r = json.loads(line); tk = b["map"].get(r.get("custom_id"))
         if not tk: continue
+        key, _, lang = tk.partition("#"); lang = lang or "en"
         res = r.get("result") or {}
-        if res.get("type") != "succeeded": continue   # Ausfall der API: zaehlt nicht als Versuch
+        if res.get("type") == "errored":   # Fehler der Anfrage (z. B. Schema): zaehlt als Versuch, damit nichts endlos neu gesendet wird
+            st["tries"][tk] = st["tries"].get(tk, 0) + 1; continue
+        if res.get("type") != "succeeded": continue   # abgelaufen/abgebrochen: zaehlt nicht
         msg = res["message"]; u = msg.get("usage") or {}
         read, write = int(u.get("cache_read_input_tokens") or 0), int(u.get("cache_creation_input_tokens") or 0)
         tin += int(u.get("input_tokens") or 0) + read + write; tout += int(u.get("output_tokens") or 0); cr += read; cw += write
-        key, _, lang = tk.partition("#"); lang = lang or "en"
         it = by_key.get(key)
-        if not it: continue
+        if not it: unknown += 1; continue
         txt = "".join(c.get("text", "") for c in msg.get("content") or [] if c.get("type") == "text")
         try: st_set = json.loads(txt)
         except ValueError: st_set = None
         doc = store.get(spec_key(it)) or {"v": 1, "src": src_hash(it)}
-        err = "kein JSON" if st_set is None else check_set(st_set, lang, None if lang == "en" else doc.get("en"))
+        err = "kein JSON" if st_set is None else check_set(st_set, lang, None if lang == "en" else doc.get("en"), it["title"] + " " + it["text"] if lang == "en" else None)
         if err:
             st["tries"][tk] = st["tries"].get(tk, 0) + 1; bad += 1
             print(f"verworfen {tk}: {err}")
             continue
         doc[lang] = st_set; store.put(spec_key(it), doc); ok += 1
-    return ok, bad, tin, tout, cr, cw
+    return ok, bad, tin, tout, cr, cw, unknown
 
 
 def cmd_collect(wait_s, store, st, kinds=KINDS, root=None, api_fn=None, results_fn=None, sleep=time.sleep):
+    """Fertige Batches einsammeln. Immer ueber ALLE Arten (ein Batch kann von einem Lauf mit anderen Arten stammen); Zustand nach jedem Batch gesichert."""
     api_fn, results_fn = api_fn or api, results_fn or results_lines
-    by_key = {it["key"]: it for k in kinds for it in items(k, root)}
+    by_key = {it["key"]: it for k in KINDS for it in items(k, root)}
     deadline = time.time() + wait_s
     while st["batches"]:
-        done = []
-        for b in st["batches"]:
+        for b in list(st["batches"]):
             info = api_fn("GET", f"/v1/messages/batches/{b['id']}")
             print(b["stage"], b["lang"], info.get("processing_status"), info.get("request_counts"), flush=True)
             if info.get("processing_status") != "ended": continue
-            ok, bad, tin, tout, cr, cw = apply_results(results_fn(info["results_url"]), b, store, st, by_key)
+            ok, bad, tin, tout, cr, cw, unknown = apply_results(results_fn(info["results_url"]), b, store, st, by_key)
             report_usage(JOB, MODEL, tin, tout, b["lang"], batch=True, cache_read=cr, cache_write=cw)   # bezahlt: immer melden
-            st["runs"].append({"id": b["id"], "stage": b["stage"], "lang": b["lang"], "ok": ok, "bad": bad, "tin": tin, "tout": tout, "eur": round(estimated_eur(tin, tout, batch=True), 4)})
-            print(f"fertig {b['stage']} {b['lang']}: {ok} ok, {bad} verworfen; ca. {estimated_eur(tin, tout, batch=True):.2f} EUR (Schaetzung {b.get('est_eur', 0):.2f})")
-            done.append(b)
-        st["batches"] = [b for b in st["batches"] if b not in done]; save_state(st, root)
+            st["runs"].append({"id": b["id"], "stage": b["stage"], "lang": b["lang"], "ok": ok, "bad": bad, "unknown": unknown, "tin": tin, "tout": tout, "eur": round(estimated_eur(tin, tout, batch=True), 4)})
+            print(f"fertig {b['stage']} {b['lang']}: {ok} ok, {bad} verworfen, {unknown} ohne Inhalt in den Quellen; ca. {estimated_eur(tin, tout, batch=True):.2f} EUR (Schaetzung {b.get('est_eur', 0):.2f})")
+            if unknown: print(f"::warning::Batch {b['id']}: {unknown} Ergebnisse ohne passenden Inhalt in den Quellen (bezahlt, nicht verwendbar)")
+            st["batches"] = [x for x in st["batches"] if x["id"] != b["id"]]; save_state(st, root)
         if not st["batches"] or time.time() >= deadline: break
         sleep(60)
+    save_state(st, root)
     if st["batches"]: print(f"{len(st['batches'])} Batch(es) laufen noch; beim naechsten collect")
 
 
@@ -482,6 +522,14 @@ def to_webp(png_bytes):
     from PIL import Image
     im = Image.open(io.BytesIO(png_bytes)).convert("RGB")
     out = io.BytesIO(); im.save(out, "WEBP", quality=82, method=6)
+    return out.getvalue()
+
+
+def to_jpeg(png_bytes):
+    """Teilen-Bild: LinkedIn/Facebook zeigen JPEG zuverlaessiger als WebP (die bisherigen Teilen-Bilder sind PNG)."""
+    from PIL import Image
+    im = Image.open(io.BytesIO(png_bytes)).convert("RGB")
+    out = io.BytesIO(); im.save(out, "JPEG", quality=86, optimize=True, progressive=True)
     return out.getvalue()
 
 
@@ -498,8 +546,9 @@ def spec_for_render(spec, it, lang):
     return d
 
 
-def cmd_render(kinds, langs, limit, store, root=None, max_min=300, chunk=200, render_fn=None, webp_fn=None):
-    render_fn, webp_fn = render_fn or render_jobs, webp_fn or to_webp
+def cmd_render(kinds, langs, limit, store, root=None, max_min=300, chunk=200, render_fn=None, webp_fn=None, jpeg_fn=None):
+    render_fn, webp_fn, jpeg_fn = render_fn or render_jobs, webp_fn or to_webp, jpeg_fn or to_jpeg
+    st = load_state(root); fails = st.setdefault("rfail", {})
     t0, made, bad = time.time(), 0, 0
     for k in kinds:
         idx = load_index(k, root)
@@ -508,7 +557,7 @@ def cmd_render(kinds, langs, limit, store, root=None, max_min=300, chunk=200, re
             have = store.get(spec_key(it))
             if not have: continue
             for l in langs:
-                if have.get(l) and not (idx.get(it["slug"]) or {}).get(l): todo.append((it, l, have))
+                if have.get(l) and not (idx.get(it["slug"]) or {}).get(l) and fails.get(f"{it['key']}#{l}", 0) < MAX_TRIES: todo.append((it, l, have))
         if limit: todo = todo[:max(0, limit - made)]
         print(f"{k}: {len(todo)} Bildsaetze zu rendern")
         for i in range(0, len(todo), chunk):
@@ -525,15 +574,19 @@ def cmd_render(kinds, langs, limit, store, root=None, max_min=300, chunk=200, re
                 for n, js in by_set.items():
                     it, l, have = part[n]
                     rs = [res.get(j["out"]) for j in js]
-                    if not all(r and r["ok"] for r in rs):   # Kopfbild und alle Infografiken muessen tadellos sein; sonst nichts hochladen, Grund ins Protokoll
-                        bad += 1; print(f"Layoutfehler {it['key']} {l}: " + "; ".join(sorted({x for r in rs if r for x in r.get("issues", [])})[:4])); continue
+                    if not all(r and r["ok"] for r in rs):   # Kopfbild und alle Infografiken muessen tadellos sein; sonst nichts hochladen, Grund ins Protokoll, Fehlversuch zaehlen
+                        bad += 1; fails[f"{it['key']}#{l}"] = fails.get(f"{it['key']}#{l}", 0) + 1
+                        print(f"Layoutfehler {it['key']} {l}: " + "; ".join(sorted({x for r in rs if r for x in r.get("issues", [])})[:4])); continue
                     entry = []
                     for j, r in zip(js, rs):
-                        data = webp_fn(Path(j["out"] + ".png").read_bytes()); h = hashlib.sha1(data).hexdigest()[:8]
+                        png = Path(j["out"] + ".png").read_bytes()
+                        data = webp_fn(png); h = hashlib.sha1(data).hexdigest()[:8]
                         store.put_image(img_key(it["kind"], it["slug"], l, j["meta"][1], h), data)
+                        if j["meta"][1] == 0: store.put_image(img_key(it["kind"], it["slug"], l, 0, h)[:-5] + ".jpg", jpeg_fn(png), "image/jpeg")   # Teilen-Bild (og:image)
                         spec = j["spec"]; entry.append([spec["template"], h, spec["alt"]])
                     idx.setdefault(it["slug"], {"s": src_hash(it)})[l] = entry; made += 1
-            save_index(k, idx, root)
+            save_index(k, idx, root); save_state(st, root)
+    save_state(st, root)
     print(f"gerendert: {made} Bildsaetze, {bad} mit Layoutfehler")
     return made, bad
 

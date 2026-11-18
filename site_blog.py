@@ -192,8 +192,8 @@ def build(g, posts, people, api):
             if not p.get("legacy"):
                 body_html = IMG.enhance(body_html)
             body_html = IMG.alt_text(body_html, lang, p["title"])   # Alt-Texte: schwache Alt-Texte (Ueberschrift, Platzhalter, englisch auf Sprachfassungen) aus data/r2_alt.json.gz in der Seitensprache
-            body_html = IMG.eager_first(body_html)   # erstes Bild oben im Beitrag (oft das LCP-Element) nicht lazy laden
             body_html, _igkw = IG.apply_post(body_html, p["slug"], lang) if p.get("legacy") else (body_html, {})   # neues Kopfbild ersetzt das alte, 2-3 Infografiken im Text; ohne Freigabe unveraendert
+            body_html = IMG.eager_first(body_html)   # erstes Bild oben im Beitrag (oft das LCP-Element) nicht lazy laden
             _own_txt = IR.plain_text(body_html)   # Haupttext vor den Anhoeren-Karten (die zeigen Folgentitel, keinen Beitragstext)
             _ms = MST.is_milestone(p)
             if not _ms: body_html = LST.apply(BASE, body_html, p, lang, ENTS)   # "Anhoeren"-Karten (site_listen): 1-2 passende Folgen und "Show folgen", nur bei guter Uebereinstimmung
