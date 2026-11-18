@@ -11,7 +11,7 @@ on:
         options: [plan, specs, translate, collect, render]
         default: plan
       kinds: { description: "Arten (Komma): entity, blog, episode", required: false, default: "entity,blog,episode" }
-      langs: { description: "Sprachen (Komma), fuer translate und render", required: false, default: "en,de,es,fr,it,pt,nl,pl,id,ru,uk,ar,he,ja,ko" }
+      langs: { description: "Sprachen (Komma), fuer translate und render. Zuerst en,de; spaeter alle: en,de,es,fr,it,pt,nl,pl,id,ru,uk,ar,he,ja,ko", required: false, default: "en,de" }
       limit: { description: "Hoechstens N Inhalte (leer = alle offenen); fuer die Probe 20", required: false, default: "" }
 permissions:
   contents: write

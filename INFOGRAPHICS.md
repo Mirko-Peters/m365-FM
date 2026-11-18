@@ -10,6 +10,9 @@ Für Entitäten, Blogbeiträge und Podcast-Folgen entstehen automatisch **1 Kopf
 ## Freigabe und Notschalter
 `data/infographics_live.json`, z. B. `{"langs": ["en", "de"], "kinds": ["blog"]}`. Fehlt die Datei oder ist sie leer, ist der Seitenbau **Byte für Byte wie vorher** (Test `tests/test_infographics.py`). Notschalter: Datei leeren, danach Seitenbau (`site.yml`). Gestaffelt freigeben (z. B. erst `en,de` und eine Art) und in der Search Console vergleichen.
 
+## Einführung in Stufen
+Erste Stufe: **Englisch und Deutsch** (Workflow-Standard `langs=en,de`, Freigabe `{"langs": ["en", "de"], ...}`). Danach die übrigen 13 Sprachen mit derselben Befehlsfolge (`translate`/`render` mit `langs=es,fr,...`); die englischen Bildtexte (`specs`) entstehen nur einmal.
+
 ## Ablauf (Workflow `infographics.yml`, nur von Hand)
 1. `plan`: zählt, schätzt Haiku-Kosten und Rechenzeit. Nichts wird bezahlt.
 2. `specs` mit `limit=20`: Haiku-Batch schreibt je Inhalt die englischen Bildtexte (Kopfbild + 2–3 Infografiken, Vorlagen flow/compare/ladder/hub, Kopfbild bigfact). Danach `collect` (läuft im selben Workflow bis zu 3,5 h). Ergebnis prüfen, dann ohne `limit`.
