@@ -34,6 +34,8 @@ TMODEL = os.environ.get("ENTITY_TRANSLATE_MODEL", "claude-haiku-5-5")
 BUDGET = float(os.environ.get("ENTITY_BUDGET_USD") or 100)
 SONNET_MONTH_CAP_USD = 30.0   # feste Monatsgrenze fuer das Schreiben (wie rewrite_shownotes.HARD_CAP_USD); ENTITY_MONTH_USD kann sie nur senken
 MONTH_CAP = min(SONNET_MONTH_CAP_USD, float(os.environ.get("ENTITY_MONTH_USD") or SONNET_MONTH_CAP_USD))
+_wk = (os.environ.get("ENTITY_WEEK_USD") or "").strip()
+WEEK_CAP = max(0.0, float(_wk)) if _wk else None   # None = keine Wochengrenze (von Hand); 0 = gesperrt; der Zeitplan setzt 10 USD: Schreiben + Uebersetzen je Kalenderwoche, inkl. offener Batches
 HAIKU_RUN_CAP_EUR = 4.0       # je Lauf, innerhalb des Haiku-Tagesbudgets von 5 EUR (ai_gateway.check_budget); ENTITY_HAIKU_RUN_EUR kann sie nur senken
 HAIKU_RUN_EUR = min(HAIKU_RUN_CAP_EUR, float(os.environ.get("ENTITY_HAIKU_RUN_EUR") or HAIKU_RUN_CAP_EUR))
 WRITE_MAX_TOKENS = 1800       # Antwort eines Schreibauftrags (Denken aus); TR_MAX_TOKENS ist die Obergrenze je Uebersetzung
@@ -112,6 +114,11 @@ def sponsored_ids():
 
 def month_key():
     return datetime.now(timezone.utc).strftime("%Y-%m")
+
+
+def week_key():
+    y, w, _ = datetime.now(timezone.utc).isocalendar()
+    return f"{y}-W{w:02d}"
 
 
 def max_tokens(model, base):
@@ -537,7 +544,15 @@ def stale_report(ents, gen, fill, i18n):
     return out
 
 
-def build_todo(ents, gen, fill, i18n, edited, spons, state, with_facts=False, restale=False):
+def too_young(rec, min_age_days, today=None):
+    """True, wenn der KI-Text (en.json-Eintrag mit ts = Schreibtag) juenger als min_age_days Kalendertage ist: erst danach uebersetzen (Zeit fuer Korrekturen)."""
+    if not min_age_days or not rec or not rec.get("ts"): return False
+    try: d = datetime.strptime(rec["ts"][:10], "%Y-%m-%d").date()
+    except ValueError: return False
+    return ((today or datetime.now(timezone.utc).date()) - d).days < min_age_days
+
+
+def build_todo(ents, gen, fill, i18n, edited, spons, state, with_facts=False, restale=False, min_age_days=0, today=None):
     todo, skipped = [], {}
     tries = state.get("tries", {})
     for e in sorted(ents.values(), key=lambda x: (TYPE_ORDER.index(x["type"]) if x["type"] in TYPE_ORDER else 99, x["id"])):
@@ -558,9 +573,11 @@ def build_todo(ents, gen, fill, i18n, edited, spons, state, with_facts=False, re
         src = effective_en(e, gen, fill)
         if e["type"] == "person" and "needs_source" in skipped and e["id"] in skipped["needs_source"]: src = {}
         tr = {}
+        young = too_young(fill.get(e["id"]), min_age_days, today)
         for lang in LANGS:
             need = translate_need(e, lang, src, gen, i18n, restale or (RICH and want == "rich"))
             if need and tries.get(f"t:{lang}:{e['id']}", 0) < MAX_TRIES: tr[lang] = list(need)
+        if young and tr: skipped.setdefault("too_young", []).append(e["id"]); tr = {}   # zu jung: erst am naechsten Tag uebersetzen (nur gezaehlt, wenn etwas zu tun waere)
         if tr: row["translate"] = tr   # Sprache -> fehlende Felder; gilt fuer die jetzt vorhandene en-Fassung
         elif want is None and not row.get("write"): continue
         # Entitaeten, deren en-Text erst noch geschrieben wird, brauchen spaeter alle 14 Sprachen
@@ -609,6 +626,10 @@ def add_spend(kind, model, tin, tout, month=None):
     k["input_tokens"] += tin; k["output_tokens"] += tout; k["usd"] = round(k["usd"] + c, 4)
     mo = sp.setdefault("months", {}).setdefault(month or month_key(), {})
     mo[kind + "_usd"] = round(mo.get(kind + "_usd", 0.0) + c, 4)
+    if "weeks" not in sp:   # erstes Wochenbuch: schon Ausgegebenes dieser Woche (Altbestand) als Startwert, sonst fiele es aus der Wochengrenze
+        sp["weeks"] = {week_key(): legacy_week(sp)}
+    wk = sp["weeks"].setdefault(week_key(), {})
+    wk[kind + "_usd"] = round(wk.get(kind + "_usd", 0.0) + c, 4)
     sp["updated"] = datetime.now(timezone.utc).isoformat()[:19]
     jsave(OUT / SPEND, sp)
     return c
@@ -626,6 +647,24 @@ def month_room(state, month=None):
     """Rest der Monatsgrenze fuer das Schreiben: verbucht plus Obergrenze offener Schreib-Batches dieses Monats."""
     m = month or month_key()
     return MONTH_CAP - spend_entities().get("months", {}).get(m, {}).get("write_usd", 0.0) - pending_usd(state, "write", m)
+
+
+def legacy_week(sp):
+    """Altbestand ohne Wochenbuch: lag die letzte Buchung in dieser Kalenderwoche, zaehlt der ganze Monat dieser Buchung (vorsichtig, einmalig).
+    Der Monat ist der der letzten Buchung, nicht der heutige (Woche ueber einen Monatswechsel). Ergebnis {kind_usd: Betrag}."""
+    try:
+        d = datetime.strptime((sp.get("updated") or "")[:10], "%Y-%m-%d"); y, w, _ = d.isocalendar()
+    except ValueError:
+        return {}
+    return dict(sp.get("months", {}).get(d.strftime("%Y-%m"), {})) if f"{y}-W{w:02d}" == week_key() else {}
+
+
+def week_room(state):
+    """Rest der Wochengrenze (ENTITY_WEEK_USD, nur im Zeitplan gesetzt): in dieser Kalenderwoche verbucht plus Obergrenze aller offenen Batches. Ohne Grenze unbegrenzt."""
+    if WEEK_CAP is None: return float("inf")
+    sp = spend_entities()
+    wk = sp["weeks"].get(week_key(), {}) if "weeks" in sp else legacy_week(sp)
+    return WEEK_CAP - sum(v for k, v in wk.items() if k.endswith("_usd")) - pending_usd(state)
 
 
 def haiku_room_usd(state=None):
@@ -849,14 +888,14 @@ def next_writes(todo, ents, state, limit):
     """Schreibauftraege dieses Laufs: nie, was in einem offenen Batch liegt; Obergrenze im kumulativen Budget UND in der Monatsgrenze."""
     busy, blind = busy_keys(state)
     if "write" in blind: print("::warning::Offener Schreib-Batch ohne Auftragsliste (aelterer Lauf) - erst einsammeln, nichts Neues gesendet"); return [], 0.0
-    return select_writes(todo, ents, min(room(BUDGET, state), month_room(state)), limit, state, busy=busy)
+    return select_writes(todo, ents, min(room(BUDGET, state), month_room(state), week_room(state)), limit, state, busy=busy)
 
 
 def next_translations(todo, ents, gen, fill, state, limit):
     """Uebersetzungsauftraege dieses Laufs: nie, was in einem offenen Batch liegt; Obergrenze im Budget, je Lauf und im Haiku-Tagesbudget."""
     busy, blind = busy_keys(state)
     if "translate" in blind: print("::warning::Offener Uebersetzungs-Batch ohne Auftragsliste (aelterer Lauf) - erst einsammeln, nichts Neues gesendet"); return [], 0.0
-    return select_translations(todo, ents, gen, fill, min(room(BUDGET, state), haiku_room_usd(state)), limit, busy)
+    return select_translations(todo, ents, gen, fill, min(room(BUDGET, state), haiku_room_usd(state), week_room(state)), limit, busy)
 
 
 def main():
@@ -867,7 +906,7 @@ def main():
     if opt("--model"): MODEL = opt("--model")
     if opt("--budget"): BUDGET = float(opt("--budget"))
     check_models(MODEL, TMODEL)
-    limit = int(opt("--limit") or 0); no_tr = "--no-translate" in args; restale = "--stale" in args
+    limit = int(opt("--limit") or 0); no_tr = "--no-translate" in args; restale = "--stale" in args; min_age = int(opt("--min-age-days") or 0)
     strict = mode in ("run", "collect", "push")
     ents, gen = load_entities(), load_gentext(); fill = jload(OUT / "en.json", {}); i18n = {l: jload(OUT / "i18n" / f"{l}.json", {}) for l in LANGS}
     state = jload(OUT / "state.json", {"batches": [], "tries": {}}); spons = sponsored_ids()
@@ -875,7 +914,7 @@ def main():
     if mode in ("run", "plan", "inventory"):   # schon vorhandene Auto-Uebersetzungen (ent_tr) nicht noch einmal kaufen; gespeichert nur in run
         for l in adopt_ent_tr(ents, gen, fill, i18n, fetch_tr(), edited, spons):
             if mode == "run": jsave(OUT / "i18n" / f"{l}.json", i18n[l])
-    todo, skipped = build_todo(ents, gen, fill, i18n, edited, spons, state, restale=restale)
+    todo, skipped = build_todo(ents, gen, fill, i18n, edited, spons, state, restale=restale, min_age_days=min_age)
     est = estimate(todo, ents, gen, fill, i18n)
     if mode == "inventory":
         todo, skipped, types, lm, bw = inventory(ents, gen, fill, i18n, edited, spons, state)
@@ -888,6 +927,7 @@ def main():
     print(f"Entitaeten {len(ents)} | schreiben {est['write_n']} | Sonnet-Batch ~{est['write_usd']} USD | Uebersetzungsauftraege {est['tr_n']} | Haiku-Batch ~{est['tr_usd']} USD | Rest gesamt ~{est['total_usd']} USD")
     print(f"Budget {BUDGET:.2f} USD, bisher {sp.get('usd', 0):.2f}, offene Batches hoechstens {pending_usd(state):.2f}, frei {room(BUDGET, state):.2f}; "
           f"Schreiben im Monat {month_key()} frei {month_room(state):.2f} von {MONTH_CAP:.2f} USD; uebersprungen: " + ", ".join(f"{k} {len(v)}" for k, v in skipped.items()))
+    if WEEK_CAP is not None: print(f"Woche {week_key()}: Grenze {WEEK_CAP:.2f} USD, frei {max(0.0, week_room(state)):.2f}" + (f"; Uebersetzen erst ab {min_age} Tag(en) Textalter" if min_age else ""))
     st = stale_report(ents, gen, fill, i18n)
     if st: print(f"Veraltete Uebersetzungen (englische Quelle geaendert, nicht gezeigt): {sum(len(v) for v in st.values())} -> data/entity_fill/stale.json; neu nur mit --stale")
     if mode == "plan": return
@@ -897,13 +937,13 @@ def main():
     collect(ents, gen, state, edited, spons)
     if mode != "collect":
         fill = jload(OUT / "en.json", {}); i18n = {l: jload(OUT / "i18n" / f"{l}.json", {}) for l in LANGS}
-        todo, skipped = build_todo(ents, gen, fill, i18n, edited, spons, state, restale=restale)
+        todo, skipped = build_todo(ents, gen, fill, i18n, edited, spons, state, restale=restale, min_age_days=min_age)
         reqs, c = next_writes(todo, ents, state, limit)
         if submit(reqs, c, "write", MODEL, state):
             wait_batches(state); collect(ents, gen, state, edited, spons)
         if not no_tr:
             fill = jload(OUT / "en.json", {}); i18n = {l: jload(OUT / "i18n" / f"{l}.json", {}) for l in LANGS}
-            todo, skipped = build_todo(ents, gen, fill, i18n, edited, spons, state, restale=restale)
+            todo, skipped = build_todo(ents, gen, fill, i18n, edited, spons, state, restale=restale, min_age_days=min_age)
             reqs, c = next_translations(todo, ents, gen, fill, state, limit)
             if submit(reqs, c, "translate", TMODEL, state):
                 wait_batches(state); collect(ents, gen, state, edited, spons)
