@@ -1307,7 +1307,7 @@ def build():
         # Seite, Ziel in der Sprache der Seite (wenn dort auf index, sonst englisch), Kontext = Extraktion der Folge und Treffer im Titel
         _dused = _EM.Used(); _dctx = set(_xids) | _dub_hits(l, it); _du = _EMU.setdefault(l, _EM.url_in(BASE, l))
         _intro_h, _ = _EMX.link_html(intro, _du, l, _dctx, used=_dused)
-        _lis_h, _ = _EMX.link_html("".join(f"<li>{x}</li>" for x in bullets), _du, l, _dctx, used=_dused)
+        _lis_h, _ = _EMX.link_html("".join(f"<li><span>{x}</span></li>" for x in bullets), _du, l, _dctx, used=_dused)   # <span>: .points li ist ein 2-Spalten-Grid, ohne Huelle wird jeder Entitaets-Link zu einer eigenen Zelle
         _aud_h, _ = _EMX.link_html(f'<p class="lede" style="margin-top:1.4em">{aud}</p>', _du, l, _dctx, used=_dused)
         art = articles.get(vid, {}).get(l, {})
         art_html = art.get("html", "")
