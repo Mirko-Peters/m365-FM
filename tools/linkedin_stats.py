@@ -12,7 +12,10 @@ Modi (python tools/linkedin_stats.py MODE):
           bei ~100.000 Followern dauert ein Lauf also gut 1,5 Stunden. Mit LINKEDIN_TRUST_TOTAL=1 wird stattdessen paging.total der ersten
           Antwort uebernommen (erst setzen, wenn probe gezeigt hat, dass total die Gesamtzahl ist). --dry-run: nichts speichern.
 
-Umgebung: LINKEDIN_ACCESS_TOKEN (Token eines Seiten-Admins mit r_dma_admin_pages_content; nur als GitHub-Secret, wird nie ausgegeben),
+Umgebung: LINKEDIN_ACCESS_TOKEN (Token eines Seiten-Admins mit r_dma_admin_pages_content; nur als GitHub-Secret, wird nie ausgegeben).
+          Optional zur Erneuerung: LINKEDIN_REFRESH_TOKEN + LINKEDIN_CLIENT_ID + LINKEDIN_CLIENT_SECRET - sind alle drei gesetzt, holt jeder Lauf damit
+          zuerst einen frischen Access-Token (Access-Token 60 Tage, Refresh-Token 365 Tage ab erstem Login, danach einmal neu anmelden); schlaegt das fehl,
+          wird der gespeicherte LINKEDIN_ACCESS_TOKEN versucht.
           LINKEDIN_PAGE_ID (Zahl der Seite, steht in der Admin-URL linkedin.com/company/<ZAHL>/admin/), LINKEDIN_VERSION (optional, JJJJMM, Standard 202611).
 Unterlagen: Followee-Finder https://learn.microsoft.com/en-us/linkedin/dma/pages-data-portability/pages-follows/organizational-page-follow
 Schutz: Eine Zahl unter der Haelfte des bisherigen Wertes (oder 0) wird nicht gespeichert (z. B. wenn die API wegen fehlender Mitglieder-Freigabe
@@ -48,6 +51,36 @@ def http_get(url, headers, timeout=60):
     except Exception as e:   # noqa: BLE001
         print("Abruf fehlgeschlagen:", type(e).__name__)
         return 0, {}
+
+
+def http_post_form(url, fields, timeout=60):
+    """(Statuscode, JSON-Objekt) fuer einen Formular-POST. Gibt nichts aus."""
+    rq = urllib.request.Request(url, data=urllib.parse.urlencode(fields).encode(), headers={"Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json"})
+    try:
+        with urllib.request.urlopen(rq, timeout=timeout) as r:
+            return r.status, json.loads(r.read().decode("utf-8") or "{}")
+    except urllib.error.HTTPError as e:
+        try: return e.code, json.loads(e.read().decode("utf-8") or "{}")
+        except Exception:   # noqa: BLE001
+            return e.code, {}
+    except Exception as e:   # noqa: BLE001
+        print("Token-Erneuerung fehlgeschlagen:", type(e).__name__)
+        return 0, {}
+
+
+def get_token(env=None, post=http_post_form):
+    """Access-Token: per Refresh-Token erneuert (wenn Refresh-Token, Client-ID und -Secret gesetzt sind), sonst der gespeicherte. '' wenn keiner da.
+    Ein erneuertes Refresh-Token wird nicht weiterverwendet: laut Doku laeuft das urspruengliche 365 Tage ab dem ersten Login und bleibt gueltig."""
+    env = os.environ if env is None else env
+    rt, cid, sec = (str(env.get(k, "")).strip() for k in ("LINKEDIN_REFRESH_TOKEN", "LINKEDIN_CLIENT_ID", "LINKEDIN_CLIENT_SECRET"))
+    if rt and cid and sec:
+        st, b = post("https://www.linkedin.com/oauth/v2/accessToken", {"grant_type": "refresh_token", "refresh_token": rt, "client_id": cid, "client_secret": sec})
+        tok = str(b.get("access_token") or "").strip() if isinstance(b, dict) else ""
+        if st == 200 and tok:
+            print("Access-Token per Refresh-Token erneuert.")
+            return tok
+        print("Erneuerung per Refresh-Token fehlgeschlagen:", _err(st, b), "- versuche gespeicherten Access-Token")
+    return str(env.get("LINKEDIN_ACCESS_TOKEN", "")).strip()
 
 
 def url_for(page_id, count, cursor=None):
@@ -132,9 +165,9 @@ def main(argv=None):
     ap.add_argument("mode", choices=["probe", "fetch"])
     ap.add_argument("--dry-run", action="store_true"); ap.add_argument("--force", action="store_true")
     a = ap.parse_args(argv)
-    token = os.environ.get("LINKEDIN_ACCESS_TOKEN", "").strip(); page_id = os.environ.get("LINKEDIN_PAGE_ID", "").strip()
+    token = get_token(); page_id = os.environ.get("LINKEDIN_PAGE_ID", "").strip()
     if not token or not page_id.isdigit():
-        print("LINKEDIN_ACCESS_TOKEN oder LINKEDIN_PAGE_ID fehlt (Seiten-ID nur Ziffern). Nichts getan."); return 2
+        print("Kein Token (LINKEDIN_ACCESS_TOKEN oder Refresh-Token mit Client-ID/-Secret) oder LINKEDIN_PAGE_ID fehlt (Seiten-ID nur Ziffern). Nichts getan."); return 2
     if a.mode == "probe":
         return 0 if probe(token, page_id).get("status") == 200 else 1
     try:
