@@ -53,6 +53,8 @@ class T(unittest.TestCase):
         self.assertEqual([h[2] for h in ok["h"]], ["Intro to Azure", "Costs"]); self.assertEqual(ok["s"], s); self.assertEqual(ok["b"][0], 0)
         self.assertIn(20, ok["b"])   # Ueberschrift steht an einem Absatzanfang
         self.assertIsNone(TX.make_entry(TEXT, s, {"p": [0, 10], "h": []}))        # lang, aber keine Ueberschrift
+        n = len(TF.sentences(TEXT)); self.assertGreaterEqual(n, 40)
+        self.assertIsNone(TX.make_entry(TEXT, s, {"p": list(range(n)), "h": [[0, 3, "Intro to Azure"]]}))   # jeder Satz ein Absatz: abgelehnt
         self.assertIsNone(TX.make_entry(TEXT, s, "not json")); self.assertIsNone(TX.make_entry(TEXT, s, {"h": []}))
         fb = TX.fallback_entry(TEXT, s); self.assertEqual(fb["h"], []); self.assertTrue(TF.render_html(TEXT, fb))
 

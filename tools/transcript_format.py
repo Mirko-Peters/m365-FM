@@ -26,7 +26,7 @@ SOURCES = {"en": ("data/en_transcripts", ".txt")}
 
 SYSTEM = """You format a podcast transcript for reading on a web page. You do NOT rewrite it. The transcript is given as numbered sentences, one per line: "<number>: <sentence>".
 Return ONLY a JSON object: {"p": [..], "h": [[number, level, "heading"], ..]}
-- "p": the numbers of the sentences that start a new paragraph (a paragraph is 3 to 8 sentences about one point; always include 0).
+- "p": the numbers of the sentences that start a new paragraph (a paragraph is 3 to 8 sentences about one point; always include 0). NEVER list every sentence or most sentences: for 100 sentences return only about 12 to 30 numbers, for 1000 sentences about 120 to 300.
 - "h": section headings. Each heading sits at the first sentence of a paragraph (that number must also be in "p"). Level 3 = main section, level 4 = sub-section inside it.
   Use 1 heading per ~25-40 sentences (at least 2 for long transcripts, none for very short ones). The first heading belongs to sentence 0.
 - Heading text: 3 to 8 words, plain text, in the language of the transcript, describing what that section is about. No quotes, no markdown, no HTML, no numbering, no clickbait, nothing that is not in the text.
@@ -119,6 +119,7 @@ def make_entry(text, s, answer):
     if n >= 40 and not heads: return None   # lange Transkripte brauchen Ueberschriften
     b = TF.repair(n, answer["p"], heads)
     if len(b) < max(1, n // (TF.MAX_PAR + 3)): return None
+    if n >= 12 and len(b) > n / 2.5: return None   # fast jeder Satz ein eigener Absatz: die KI hat die Anweisung missverstanden
     return {"s": s, "v": TF.PROMPT_V, "b": b, "h": heads}
 
 
