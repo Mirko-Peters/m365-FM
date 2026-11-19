@@ -13,6 +13,7 @@ import site_sponsor as SPN   # T37 Sponsor-Seite /sponsor/ (Seite, Fusszeilen-Li
 import site_landing as LND
 import site_mediakit as MKT
 import site_imglicense as ILC   # Bildlizenz CC BY 4.0 (/image-license/, /de/bildlizenz/)
+import site_infographics as IG   # Infografiken: Kopfbild und Bilder im Text (nur mit Freigabe data/infographics_live.json)
 import site_infohub as IH   # Infografiken-Seite (/infographics/, /de/infografiken/), faellt sich bei jedem Bau selbst
 import site_hardware as HWR   # Hardware-Sponsoring /hardware/ und /hardware/how-we-test/
 import site_hosts as HOSTS   # eigene Subdomains admin.m365.fm und profile.m365.fm (ADMIN_BASE, PROFILE_BASE; leer = wie bisher)
@@ -1360,20 +1361,24 @@ def build():
         rel = "".join(f'<a class="row" href="{url_of(x)}" title="{esc(x["e"]["title"])}"><h3>{esc(t_)}</h3></a>' for x, t_ in zip(more, _mtx))
         _ct = common_topic(it, more, tagraw[l], tagsets[l], catsets[l])   # gemeinsames Thema aller verwandten Folgen: "Weitere Folgen zu {Thema}"
         _rel_in = LC.intro(l, "ep.more", t=(_ct[1] if _ct[0] == "tag" else cat_name(_ct[1], l))) if _ct else LC.intro(l, "ep.more0")
+        _igs = ORIG.get(vid)   # Infografiken der englischen Folge (Art "episode") auch auf der Videoseite; ohne Freigabe oder ohne Zuordnung alles wie vorher
+        _ig_hero = IG.hero_figure("episode", _igs, l) if _igs else ""
+        _art_ig = IG.inject(art_html, "episode", _igs, l) if _igs else art_html
+        _ig_ld = IG.image_ld(BASE, "episode", _igs, l, canonical) if _igs else []   # ohne title: die Bilder stehen schon mit der englischen Folge auf der Infografiken-Seite
         body = f"""{header(l, lang_switch(l, alts, active))}
 <main class="wrap"><article>
 <nav class="crumbs" aria-label="breadcrumb"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])} / {it["date"]}</nav>
 <div class="kicker">M365.FM · {esc(LANGS[l][0])}</div>{orig_link(l, ORIG.get(vid), ORIG_T.get(vid))}
 <h1>{esc(h1_main)}</h1>{("<p class=sub>" + esc(h1_rest) + "</p>") if h1_rest else ""}{SPM.note(l, _spr, "episode")}
 {chips_html(l, it)}<p class="lede">{_intro_h}</p>
-<figure class="cover" style="margin-inline:0">{art_svg(vid, LANGS[l][0], "M365.FM · " + ui[0], l)}</figure>
+{_ig_hero or f'<figure class="cover" style="margin-inline:0">{art_svg(vid, LANGS[l][0], "M365.FM · " + ui[0], l)}</figure>'}
 <div class="panel">{PL.player("spreaker", it["eid"], e["title"], ui[0], link=spk)}
 <div class="btns">{btns}</div>{"<p class=showrow>" + showrow + "</p>" if showrow else ""}</div>{LST.follow_for(BASE, l)}
 <div style="margin:22px 0">{PL.player("youtube", vid, e["title"], ui[1], link=yt)}</div>
 <p class="mut">▶ {esc(e["title"])}</p>{VSEO.section(l, vid)}
 <h2>{esc(hdr)}</h2><ol class="points">{lis}</ol>
 {_aud_h}
-{("<section class=article>" + art_html + "</section>") if art_html else ""}{quiz_block}{faq_block}{notes_block}
+{("<section class=article>" + _art_ig + "</section>") if _art_ig else ""}{quiz_block}{faq_block}{notes_block}
 {author_box(l)}
 </article>
 {PAGER(l, *[(url_of(x), x['e']['title']) if x else None for x in NEIGH(by_lang[l], DPOS[l][vid])])}
@@ -1385,7 +1390,7 @@ def build():
         OG_COVER[canonical] = art_svg(vid, LANGS[l][0], lang=l)
         _mt = MP.episode_title(l, VSEO.title(l, vid, e["title"]), uniq=MPU); _md = VSEO.meta(l, vid, None) or MP.episode_desc(l, intro, prefer_answer=True, has_video=True, has_transcript=bool(_trf or tr)) or short(intro)   # Thema zuerst, dann Format und Marke; Description = Kernaussage
         write(f'{l}/{it["slug"]}/index.html',
-              page(l, _mt, _md, canonical, body, alts, ld + _nld, xdefault=alts.get("en"), side=side_for(l, e["title"], body, topics_h=LC.plain(l, "side.episode")), extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))
+              page(l, _mt, _md, canonical, body, alts, ld + _nld + _ig_ld, xdefault=alts.get("en"), side=side_for(l, e["title"], body, topics_h=LC.plain(l, "side.episode")), extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid]), **(IG.page_kw("episode", _igs, l) if _igs else {})))
         sitemap.append((canonical, it["date"], alts))
         if vid in ORIG: ORIG_ALTS.setdefault(ORIG[vid], {})[l] = (canonical, e["title"])
 
