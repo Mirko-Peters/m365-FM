@@ -43,7 +43,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: ${{ inputs.ref || github.sha }}
+          ref: ${{ inputs.ref || github.ref }}   # Zweig (nicht SHA): sonst detached HEAD und der Push der Stand-Commits schluege fehl
       - uses: actions/setup-python@v7
         with: { python-version: "3.12" }
       - name: Python-Pakete

@@ -157,10 +157,18 @@ class Pipeline(unittest.TestCase):
 
     def test_saturday_workflow_is_gated_and_chained(self):
         y = (ROOT / ".github/workflows/infographics-auto.yml").read_text("utf-8"); w = (ROOT / ".github/workflows/infographics.yml").read_text("utf-8")
-        for need in ('cron: "23 4 * * 6"', "INFOGRAPHICS_AUTO", "infographics_live.json", "needs.check.outputs.render > 0", "mode: specs", "mode: translate", "mode: render", "secrets: inherit"):
+        for need in ('cron: "23 4 * * 6"', "INFOGRAPHICS_AUTO", "infographics_live.json", "recheck:", "needs.recheck.outputs.render > 0", "shell: bash", "mode: specs", "mode: translate", "mode: render", "secrets: inherit"):
             self.assertIn(need, y)
-        for need in ("workflow_call:", "ref: ${{ inputs.ref || github.sha }}", "ubuntu-24.04"): self.assertIn(need, w)
+        for need in ("workflow_call:", "ref: ${{ inputs.ref || github.ref }}", "ubuntu-24.04"): self.assertIn(need, w)
         self.assertNotIn("runs-on: ubuntu-latest", w)
+
+    def test_renderer_crash_counts_as_failed_try_and_run_continues(self):
+        with tempfile.TemporaryDirectory() as t, tempfile.TemporaryDirectory() as s:
+            root = fixture_root(t); store = IGT.DirStore(s)
+            store.put(IGT.spec_key(IGT.items("blog", root)[0]), {"v": 1, "en": SET})
+            def crash(jobs, wd): raise RuntimeError("node weg")
+            made, bad = IGT.cmd_render(["blog"], ["en"], 0, store, root, render_fn=crash, webp_fn=lambda b: b, jpeg_fn=lambda b: b)
+            self.assertEqual((made, bad), (0, 1)); self.assertEqual(IGT.load_state(root)["rfail"], {"blog:p1#en": 1})
 
     def test_header_also_uploaded_as_jpeg(self):
         with tempfile.TemporaryDirectory() as t, tempfile.TemporaryDirectory() as s:

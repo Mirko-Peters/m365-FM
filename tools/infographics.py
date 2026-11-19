@@ -629,7 +629,11 @@ def cmd_render(kinds, langs, limit, store, root=None, max_min=300, chunk=200, re
                 for n, (it, l, have) in enumerate(part):
                     for j, spec in enumerate([have[l]["header"]] + have[l]["figs"]):
                         jobs.append({"out": str(Path(wd) / f"{n}-{j}"), "spec": spec_for_render(spec, it, l), "meta": [n, j]})
-                res = {r["out"]: r for r in render_fn([{"out": j["out"], "spec": j["spec"]} for j in jobs], wd)}
+                try: res = {r["out"]: r for r in render_fn([{"out": j["out"], "spec": j["spec"]} for j in jobs], wd)}
+                except Exception as ex:   # Absturz des Renderers (Node, Haenger): zaehlt als Fehlversuch dieser Saetze, der Lauf geht weiter statt jede Woche am selben Satz zu scheitern
+                    print(f"Renderer abgestuerzt ({type(ex).__name__}); Saetze dieses Blocks zaehlen als Fehlversuch")
+                    for it, l, have in part: fails[f"{it['key']}#{l}"] = fails.get(f"{it['key']}#{l}", 0) + 1; bad += 1
+                    save_state(st, root); continue
                 by_set = {}
                 for j in jobs: by_set.setdefault(j["meta"][0], []).append(j)
                 for n, js in by_set.items():
