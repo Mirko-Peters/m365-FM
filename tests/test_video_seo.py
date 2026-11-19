@@ -48,6 +48,21 @@ class T(unittest.TestCase):
             self.assertIsNone(VS.make_entry_en(a, marks, "s1"), key)
         self.assertIsNone(VS.make_entry_en("kein dict", marks, "s"))
 
+    def test_make_entry_en_nachsichtig_bei_einzelnen_kapiteln(self):
+        marks = {0, 40, 120, 200, 280}
+        a = good_answer(); a["chapters"] = [[5, "Why bots hallucinate"], [42, "Connect grounding sources"], [44, "Same mark twice"], [118, "<b>bad</b> name"], [30, "Out of order"], [205, "Test the answers"], [281, "Publish with confidence"]]
+        e = VS.make_entry_en(a, marks, "s1")
+        self.assertEqual([x[0] for x in e["c"]], [0, 40, 200, 280])       # Duplikat, kaputter Name und Rueckwaerts-Sekunden uebersprungen, erstes bei 0
+        a["chapters"] = [[0, "One chapter only"], [40, "Second chapter here"]]
+        self.assertIsNone(VS.make_entry_en(a, marks, "s1"))              # zu wenige bleiben abgelehnt
+        a["chapters"] = [[i * 40, f"Chapter number {i}"] for i in range(7)]
+        self.assertEqual(len(VS.make_entry_en(a, set(range(0, 281, 40)), "s1")["c"]), 7)
+        many = {i * 40 for i in range(20)}; a["chapters"] = [[i * 40, f"Chapter number {i}"] for i in range(20)]
+        c = VS.make_entry_en(a, many, "s1")["c"]; self.assertEqual(len(c), 12); self.assertEqual((c[0][0], c[-1][0]), (0, 760))   # gleichmaessig ausgeduennt
+        self.assertEqual(VS.reject_reason(dict(good_answer(), title="Hi"), marks), "title zu kurz")
+        self.assertEqual(VS.reject_reason(dict(good_answer(), chapters=[]), marks), "Kapitel unbrauchbar")
+        self.assertEqual(VS.reject_reason(None, marks), "keine JSON-Antwort")
+
     def test_make_entry_tr(self):
         a = {"title": "Copilot Studio Grounding: Halluzinationen stoppen", "meta": "So haelt Grounding Ihren Copilot-Studio-Bot bei den Fakten: welche Quellen Sie verbinden und wie Sie Antworten vor der Veroeffentlichung testen.",
              "summary": "Dieses Video erklaert, wie Grounding in Copilot Studio funktioniert und warum Bots ohne es Antworten erfinden. " * 3, "chapters": ["Warum Bots halluzinieren", "Quellen verbinden", "Antworten testen"],

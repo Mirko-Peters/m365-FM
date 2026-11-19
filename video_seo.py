@@ -92,24 +92,40 @@ def clean_text(s, max_w, min_w=1):
     return t
 
 
-def clean_chapters(ch, marks=None, n_expected=None, min_n=3, max_n=14, title_w=90):
-    """Kapitel pruefen: aufsteigende Sekunden (Zeitmarken des Quelltextes, sonst abgelehnt), das erste bei 0, Namen als einfacher Text."""
-    if not isinstance(ch, list) or not (min_n <= len(ch) <= max_n): return None
+def clean_chapters(ch, marks=None, n_expected=None, min_n=3, max_n=14, title_w=90, lenient=False):
+    """Kapitel pruefen: aufsteigende Sekunden (Zeitmarken des Quelltextes, sonst abgelehnt), das erste bei 0, Namen als einfacher Text.
+    lenient (nur fuer die KI-Antwort mit Zeitmarken): ein einzelnes schlechtes Kapitel (doppelte Marke, Name unbrauchbar, Sekunden ausser Reihenfolge)
+    wird uebersprungen statt den ganzen Text abzulehnen; Sekunden rasten immer auf die naechste Zeitmarke; zu viele Kapitel werden gleichmaessig ausgeduennt."""
+    if not isinstance(ch, list): return None
+    if not lenient and not (min_n <= len(ch) <= max_n): return None
     if n_expected is not None and len(ch) != n_expected: return None
     out, last = [], -1
     for it in ch:
-        if not (isinstance(it, (list, tuple)) and len(it) == 2): return None
+        if not (isinstance(it, (list, tuple)) and len(it) == 2):
+            if lenient: continue
+            return None
         try: sec = int(it[0])
-        except (TypeError, ValueError): return None
+        except (TypeError, ValueError):
+            if lenient: continue
+            return None
         name = clean_text(it[1], title_w, 3)
-        if name is None or sec <= last: return None
+        if name is None or sec <= last:
+            if lenient: continue
+            return None
         if marks:
             near = min(marks, key=lambda m: abs(m - sec))
-            if abs(near - sec) > 30: return None
+            if abs(near - sec) > 30 and not lenient: return None
             sec = near
-            if sec <= last: return None
+            if sec <= last:
+                if lenient: continue
+                return None
         out.append([sec, name]); last = sec
-    if out[0][0] > 20: return None
+    if not out: return None
+    if lenient:
+        if len(out) > max_n: out = [out[round(i * (len(out) - 1) / (max_n - 1))] for i in range(max_n)]
+        if len(out) < min_n: return None
+        out[0][0] = 0                      # das erste Kapitel beginnt immer am Anfang des Videos
+    elif out[0][0] > 20: return None
     out[0][0] = 0
     return out
 
@@ -138,9 +154,23 @@ def make_entry_en(answer, marks, s):
     """Antwort der KI (Sonnet) -> Eintrag oder None. Regeln: Titel bis 62 Zeichen, Meta 120-160, Zusammenfassung 250-1100, 5-12 Kapitel."""
     if not isinstance(answer, dict): return None
     t = clean_text(answer.get("title"), 70, 15); d = clean_text(answer.get("meta"), 160, 100); u = clean_text(answer.get("summary"), 1100, 250)
-    c = clean_chapters(answer.get("chapters"), marks, None, 4, 12)
+    c = clean_chapters(answer.get("chapters"), marks, None, 4, 12, lenient=True)
     if not (t and d and u and c): return None
     return {"s": s, "v": PROMPT_V, "t": t, "d": d, "u": u, "c": c, "h": ["Summary", "Chapters"]}
+
+
+def reject_reason(answer, marks):
+    """Kurzer Grund, warum make_entry_en eine Antwort ablehnt (nur fuer das Protokoll)."""
+    if not isinstance(answer, dict): return "keine JSON-Antwort"
+    for k, mx, mn in (("title", 70, 15), ("meta", 160, 100), ("summary", 1100, 250)):
+        v = answer.get(k)
+        if not isinstance(v, str): return f"{k} fehlt"
+        w = width(re.sub(r"\s+", " ", v).strip())
+        if w < mn: return f"{k} zu kurz"
+        if w > mx: return f"{k} zu lang"
+        if clean_text(v, mx, mn) is None: return f"{k} Zeichen/Link"
+    if clean_chapters(answer.get("chapters"), marks, None, 4, 12, lenient=True) is None: return "Kapitel unbrauchbar"
+    return "unbekannt"
 
 
 def make_entry_tr(answer, en, lang):
