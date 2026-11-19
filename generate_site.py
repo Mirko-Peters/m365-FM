@@ -877,6 +877,7 @@ def footer(lang):
             f'<a href="{ast_url(lang)}">{esc(ast_label(lang))}</a><a href="{BASE}/{"de/" if lang == "de" else ""}press/">{_x("Press kit", "Pressekit")}</a>'
             f'<a href="{BASE}/{"de/" if lang == "de" else ""}media-kit/">{_x("Media kit", "Mediadaten")}</a>'
             f'<a href="{IH.url(BASE, "de" if lang == "de" else "en")}">{_x("Infographics", "Infografiken")}</a>'   # Infografiken-Seite (nur Englisch und Deutsch), Footer auf allen Seiten (Mirko 19.11.2026)
+            f'<a href="https://event-showcase-1sqdic.grigora.app/en/" rel="noopener" target="_blank">weorganise.events</a>'   # Eventseite von Mirko (Wunsch 19.11.2026), Footer auf allen Seiten
             f'<a href="{SPN.url(BASE, _tl)}">{esc(SPN.label(_tl))}</a>' + HWR.footer_links(BASE, lang) + (f'<a href="{SUP.url(BASE, _tl)}">{_x("Support us", "Unterstützen")}</a>' if SUP.active() else '') + f'<a href="{LND.hub_url(BASE, _tl)}">{LND.footer_label(_tl)}</a><a href="{BASE}/impressum/" rel="nofollow"{_de}>Impressum</a><a href="{BASE}/legal/" rel="nofollow"{_en}>{_x("Legal notice", "Legal notice")}</a>'
             f'<a href="{BASE}/datenschutz/" rel="nofollow"{_de}>Datenschutz</a><a href="{BASE}/privacy/" rel="nofollow"{_en}>{_x("Privacy", "Privacy")}</a><a href="{BASE}/{"sicherheit" if lang == "de" else "security"}/" rel="nofollow"{"" if lang in ("de", "en") else _en}>{_x("Security", "Sicherheit")}</a>'
             f'<div style="margin-top:10px">© {date.today().year} Mirko Peters · M365.FM</div></div></footer>')
