@@ -69,7 +69,7 @@ class T(unittest.TestCase):
              "chapters": ["Warum Bots halluzinieren", "Quellen verbinden", "Antworten testen"], "labels": {"summary": "Zusammenfassung", "chapters": "Kapitel"}}
         self.assertIsNotNone(VS.make_entry_tr(a, EN, "de")); self.assertEqual(VS.reject_reason_tr(a, EN, "de"), "unbekannt")
         self.assertEqual(VS.reject_reason_tr(dict(a, chapters=["x"]), EN, "de"), "Kapitelzahl")
-        self.assertEqual(VS.reject_reason_tr(dict(a, meta="m" * 250), EN, "de"), "meta zu lang")
+        self.assertEqual(VS.reject_reason_tr(dict(a, meta="m" * 300), EN, "de"), "meta zu lang")
         self.assertEqual(VS.reject_reason_tr(a, EN, "ja"), "Schrift")
 
     def test_make_entry_tr(self):

@@ -146,7 +146,7 @@ def script_ok(lang, text):
 def valid_entry(e, lang="en"):
     """Gespeicherter Eintrag (nach dem Lesen) ist benutzbar."""
     if not isinstance(e, dict): return False
-    return bool(clean_text(e.get("t"), 90, 6) and clean_text(e.get("d"), 200, 30) and clean_text(e.get("u"), 1800, 60)
+    return bool(clean_text(e.get("t"), 90, 6) and clean_text(e.get("d"), 260, 30) and clean_text(e.get("u"), 1800, 60)
                 and clean_chapters(e.get("c"), None, None, 3, 14, 100) and clean_labels(e.get("h")) and script_ok(lang, e.get("u") or ""))
 
 
@@ -181,7 +181,7 @@ def reject_reason_tr(answer, en, lang):
     if not isinstance(names, list): return "Kapitel fehlen"
     if len(names) != len(en["c"]): return "Kapitelzahl"
     if clean_chapters([[sec, nm] for (sec, _), nm in zip(en["c"], names)], None, len(en["c"]), 3, 14, 100) is None: return "Kapitelname"
-    for k, mx, mn in (("title", 90, 6), ("meta", 200, 30), ("summary", 1800, 60)):
+    for k, mx, mn in (("title", 90, 6), ("meta", 260, 30), ("summary", 1800, 60)):
         v = answer.get(k)
         if not isinstance(v, str): return f"{k} fehlt"
         w = width(re.sub(r"\s+", " ", v).strip())
@@ -190,7 +190,7 @@ def reject_reason_tr(answer, en, lang):
         if clean_text(v, mx, mn) is None: return f"{k} Zeichen/Link"
     lab = answer.get("labels") or {}
     if not (isinstance(lab, dict) and clean_labels([lab.get("summary"), lab.get("chapters")])): return "Labels"
-    if not all(script_ok(lang, answer.get(k) or "") for k in ("title", "meta", "summary")): return "Schrift"
+    if not script_ok(lang, answer.get("summary") or ""): return "Schrift"
     return "Verhaeltnis" if not (0.25 <= len(answer["summary"]) / max(1, len(en["u"])) <= 3.0) else "unbekannt"
 
 
@@ -200,10 +200,10 @@ def make_entry_tr(answer, en, lang):
     names = answer.get("chapters")
     if not isinstance(names, list) or len(names) != len(en["c"]): return None
     c = clean_chapters([[sec, nm] for (sec, _), nm in zip(en["c"], names)], None, len(en["c"]), 3, 14, 100)
-    t = clean_text(answer.get("title"), 90, 6); d = clean_text(answer.get("meta"), 200, 30); u = clean_text(answer.get("summary"), 1800, 60)
+    t = clean_text(answer.get("title"), 90, 6); d = clean_text(answer.get("meta"), 260, 30); u = clean_text(answer.get("summary"), 1800, 60)
     lab = answer.get("labels") or {}; h = clean_labels([lab.get("summary"), lab.get("chapters")]) if isinstance(lab, dict) else None
     if not (t and d and u and c and h): return None
-    if not all(script_ok(lang, x) for x in (t, d, u)): return None
+    if not script_ok(lang, u): return None   # Titel und Meta enthalten oft Produktnamen in lateinischer Schrift: nur die Zusammenfassung muss die Schrift der Sprache tragen
     ratio = len(u) / max(1, len(en["u"]))
     if not (0.25 <= ratio <= 3.0): return None
     return {"s": entry_sig(en), "v": PROMPT_V, "t": t, "d": d, "u": u, "c": c, "h": h}

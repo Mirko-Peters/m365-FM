@@ -23,7 +23,7 @@ from ai_gateway import anthropic_request, check_budget, estimated_eur, remaining
 WRITE_MODEL = os.environ.get("VIDEO_SEO_WRITE_MODEL", "claude-sonnet-5-5")
 TR_MODEL = os.environ.get("VIDEO_SEO_TR_MODEL", "claude-haiku-5-5")
 JOB = "video_seo"
-MAX_TRIES = 3
+MAX_TRIES = 5
 REASONS = {}   # Ablehnungsgruende dieses Laufs (nur Protokoll)
 BATCH_MAX = {"write": 50, "translate": 400}
 OUT_EST = {"write": 1500, "translate": 1100}
