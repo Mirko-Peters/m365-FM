@@ -1,8 +1,8 @@
 ---
 title: "Cleaning up sharing links in bulk without breaking collaboration"
 summary: "Sharing links pile up over time and can expose content more broadly than intended. Here is how to review them, prioritize by risk, and clean up in bulk with a pilot and a way back, so collaboration keeps working."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-19
 topics: [sharepoint-sharing-links, oversharing, sharepoint-essentials-toolkit, cognillo]
