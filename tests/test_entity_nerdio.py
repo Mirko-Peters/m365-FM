@@ -14,6 +14,19 @@ LIST = json.loads((ROOT / "data" / "entities.json").read_text("utf-8"))
 RAW = {e["id"]: e for e in LIST}
 CAND = json.loads((ROOT / "data" / "nerdio_new_entities.json").read_text("utf-8"))["entities"]
 PLAN = json.loads((ROOT / "data" / "nerdio_plan.json").read_text("utf-8"))["articles"]
+EN_DIR = ROOT / "imports" / "blog" / "en"
+
+
+def released(a):
+    """Nerdio-Artikel schon freigegeben? (tools/blog_release.py hat ihn aus welle-NN nach imports/blog/en verschoben; seit Welle 1 am 18.11.2026)"""
+    return bool(a.get("datei")) and not (ROOT / a["datei"]).exists() and (EN_DIR / a["datei"].rsplit("/", 1)[1]).exists()
+
+
+def where(a):
+    """Aktuelle Datei eines Artikels: in der Warteschlange oder, nach der Freigabe, in imports/blog/en."""
+    return EN_DIR / a["datei"].rsplit("/", 1)[1] if released(a) else ROOT / a["datei"]
+
+
 # nicht belegbar (Quelle nennt nur den Namen oder fehlt): bewusst nicht angelegt, Artikel 112, 114, 177-180 brauchen eine neue Fassung.
 # showback-chargeback (Review #509): doppelte die bestehenden Entitaeten showback und chargeback und schluckte als laengste Form ihre Links; gestrichen.
 OMITTED = {"avd-session-time-limits", "nerdio-predictive-drain-mode", "nerdio-os-disk-swapping"}
@@ -197,7 +210,7 @@ class Artikel(unittest.TestCase):
     def setUpClass(cls):
         import site_shownotes as SNS
         cls.SNS = SNS
-        cls.files = [ROOT / a["datei"] for a in PLAN if a.get("datei") and (ROOT / a["datei"]).exists()]
+        cls.files = [where(a) for a in PLAN if a.get("datei") and where(a).exists()]   # Warteschlange oder schon freigegeben (Stand unabhaengig)
 
     def test_dateien_vorhanden(self):
         self.assertEqual(len(self.files), 195)
@@ -260,16 +273,24 @@ class Wellen(unittest.TestCase):
     """Freigabe in Wellen (Mirko 17.11.): imports/blog-queue/nerdio/welle-NN, 10 je Tag in Nummernfolge, Nr. 196 nicht vor 174 und 65, 143/177-180 nie."""
     SERIES = ROOT / "imports" / "blog-queue" / "nerdio"
 
+    def inc(self):
+        return sorted((a for a in PLAN if a["status"] != "ausgelassen"), key=lambda a: a["nr"])
+
     def test_wellen_in_plan_reihenfolge(self):
-        inc = sorted((a for a in PLAN if a["status"] != "ausgelassen"), key=lambda a: a["nr"])
+        inc = self.inc()
         self.assertEqual(len(inc), 195)
         for i, a in enumerate(inc):
             self.assertEqual(a["welle"], i // 10 + 1, a["nr"])
             self.assertEqual(a["datei"], f"imports/blog-queue/nerdio/welle-{a['welle']:02d}/" + a["datei"].rsplit("/", 1)[1])
-        dirs = sorted(d.name for d in self.SERIES.iterdir() if d.is_dir())
-        self.assertEqual(dirs, [f"welle-{n:02d}" for n in range(1, 21)])
-        self.assertEqual([len(list((self.SERIES / d).glob("*.md"))) for d in dirs], [10] * 19 + [5])
-        self.assertEqual(sorted(str(f.relative_to(ROOT)) for f in self.SERIES.glob("*/*.md")), sorted(a["datei"] for a in inc))
+        done = {a["welle"] for a in inc if released(a)}
+        k = len(done)
+        self.assertEqual(done, set(range(1, k + 1)), "freigegeben werden ganze Wellen in Nummernfolge")
+        for a in inc:
+            self.assertEqual(released(a), a["welle"] <= k, a["nr"])   # Welle 1..k komplett frei, der Rest komplett in der Warteschlange
+        dirs = sorted(d.name for d in self.SERIES.iterdir() if d.is_dir() and any(d.glob("*.md")))
+        self.assertEqual(dirs, [f"welle-{n:02d}" for n in range(k + 1, 21)])
+        self.assertEqual([len(list((self.SERIES / d).glob("*.md"))) for d in dirs], ([10] * 19 + [5])[k:])
+        self.assertEqual(sorted(str(f.relative_to(ROOT)) for f in self.SERIES.glob("*/*.md")), sorted(a["datei"] for a in inc if not released(a)))
         for a in PLAN:
             if a["nr"] in (143, 177, 178, 179, 180):
                 self.assertEqual((a["status"], a.get("datei"), a.get("welle")), ("ausgelassen", None, None))
@@ -277,17 +298,27 @@ class Wellen(unittest.TestCase):
         self.assertGreaterEqual(w[196], max(w[174], w[65]))
 
     def test_nichts_vorab_live(self):
-        en = {f.name for f in (ROOT / "imports" / "blog" / "en").glob("*.md")}
+        """Warteschlange: nichts davon live (status review, publish false). Freigegeben: publish true; posts von nerdio-partner = genau die freigegebenen Artikel."""
+        en = {f.name for f in EN_DIR.glob("*.md")}
         for f in self.SERIES.glob("*/*.md"):
             self.assertNotIn(f.name, en)
             t = f.read_text("utf-8")
             self.assertIn("\nstatus: review\n", t, f.name); self.assertIn("\npublish: false\n", t, f.name)
-        posts = next(r for r in json.loads((ROOT / "data" / "sponsorships.json").read_text("utf-8"))["sponsorships"] if r["id"] == "nerdio-partner").get("posts")
-        self.assertFalse(posts)   # Eintraege schreibt erst tools/blog_release.py im Lauf, der den Artikel freigibt (sonst bricht check_posts den Bau ab)
+        rel = [a for a in self.inc() if released(a)]
+        for a in rel:
+            t = where(a).read_text("utf-8")
+            self.assertIn("\npublish: true\n", t, a["nr"])
+        posts = next(r for r in json.loads((ROOT / "data" / "sponsorships.json").read_text("utf-8"))["sponsorships"] if r["id"] == "nerdio-partner").get("posts") or []
+        self.assertEqual(sorted(posts), sorted(f"/community/u/mirko-p/blog/{a['datei'].rsplit('/', 1)[1][:-3]}/" for a in rel))   # Eintraege schreibt erst tools/blog_release.py beim Freigeben
 
     def test_reihe_json(self):
+        from datetime import date, timedelta
         cfg = json.loads((self.SERIES / "reihe.json").read_text("utf-8"))
-        self.assertEqual((cfg["zuletzt"], cfg["lauf"], cfg["sponsoring"]), ("", "", "nerdio-partner"))
+        self.assertEqual(cfg["sponsoring"], "nerdio-partner")
+        if any(released(a) for a in self.inc()):   # nach der ersten Welle: Artikeldatum = Lauf-Tag + 1
+            self.assertEqual(date.fromisoformat(cfg["zuletzt"]), date.fromisoformat(cfg["lauf"]) + timedelta(days=1))
+        else:
+            self.assertEqual((cfg["zuletzt"], cfg["lauf"]), ("", ""))
         slug = {a["nr"]: a["datei"].rsplit("/", 1)[1][:-3] for a in PLAN if a.get("datei")}
         self.assertEqual(cfg["nach"], {slug[196]: [slug[174], slug[65]]})
 
@@ -301,24 +332,31 @@ class Wellen(unittest.TestCase):
         sys.path.insert(0, str(ROOT / "tools"))
         import blog_release as BR
         nr = {a["datei"].rsplit("/", 1)[1][:-3]: a["nr"] for a in PLAN if a.get("datei")}
+        rel = [a for a in self.inc() if released(a)]
+        rest = ([10] * 19 + [5])[len({a["welle"] for a in rel}):]
+        cfg = json.loads((self.SERIES / "reihe.json").read_text("utf-8"))
         with tempfile.TemporaryDirectory() as tmp:
             series, dest, sp = Path(tmp) / "nerdio", Path(tmp) / "en", Path(tmp) / "s.json"
             shutil.copytree(self.SERIES, series); dest.mkdir()
+            for a in rel: shutil.copy(where(a), dest / where(a).name)   # schon Freigegebenes (fuer die Reihenfolge-Regel "nach")
             shutil.copy(ROOT / "data" / "sponsorships.json", sp)
-            seq, start = [], date(2026, 11, 19)
-            for i in range(22):
+            seq = []
+            start = date.fromisoformat(cfg["zuletzt"]) + timedelta(days=1) if cfg.get("zuletzt") else date(2026, 11, 19)
+            for i in range(len(rest) + 2):
                 with redirect_stdout(StringIO()):
                     out = BR.release_series(str(series), str(dest), (start + timedelta(days=i)).isoformat(), sponsorships=str(sp),
                                             run=(start + timedelta(days=i - 1)).isoformat())   # Abend-Lauf am Vortag (UTC)
                 seq.append(sorted(nr[s] for s in out))
-            self.assertEqual([len(x) for x in seq], [10] * 19 + [5, 0, 0])
+            self.assertEqual([len(x) for x in seq], rest + [0, 0])
             flat = [n for x in seq for n in x]
             self.assertEqual(flat, sorted(flat))
-            self.assertEqual(len(flat), 195)
+            self.assertEqual(len(flat) + len(rel), 195)
+            if rel: self.assertGreater(min(flat), max(a["nr"] for a in rel))
             recs, errs = SPM.check_structure(json.loads(sp.read_text("utf-8")))
             self.assertEqual(errs, [])
             self.assertEqual(len(next(r for r in recs if r["id"] == "nerdio-partner")["posts"]), 195)
-            self.assertIn("date: 2026-11-19\n", (dest / (next(s for s, n in nr.items() if n == 1) + ".md")).read_text("utf-8"))
+            first = min(flat)
+            self.assertIn(f"date: {start.isoformat()}\n", (dest / (next(s for s, n in nr.items() if n == first) + ".md")).read_text("utf-8"))
 
 
 if __name__ == "__main__":
