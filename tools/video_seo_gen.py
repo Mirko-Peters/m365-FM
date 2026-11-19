@@ -9,7 +9,7 @@
 Stufe 1 (write): je Video einmal ein englisches SEO-Set (Titel, Meta-Description, Zusammenfassung, Kapitel mit Zeitmarken) aus dem Transkript der ersten Sprache mit Transkript
 (transcripts/<sprache>/<video>.vtt; die Videos sind synchronisiert, die Zeitmarken stimmen mit dem Video ueberein). Stufe 2 (translate): Haiku uebersetzt das Set in die Sprachen,
 in denen es die Videoseite gibt (episodes/<video>.json). Die Kapitel-Sekunden werden nie uebersetzt, sondern aus dem englischen Eintrag uebernommen.
-Kostenschutz: Sonnet hat kein Tagesbudget im Gateway; der Lauf bricht ab, wenn die Schaetzung VIDEO_SEO_MAX_EUR (Standard 10) uebersteigt oder die bisherigen Ausgaben
+Kostenschutz: Sonnet hat kein Tagesbudget im Gateway; der Lauf bricht ab, wenn die Schaetzung VIDEO_SEO_MAX_EUR (Standard 7) uebersteigt oder die bisherigen Ausgaben
 (data/video_seo_state.json, spent_eur) plus Schaetzung darueber liegen. Haiku laeuft im Tagesbudget des Gateways (Job video_seo).
 Auf der Seite wirkt es erst mit data/video_seo_live.json. Nichts wird nach YouTube geschrieben (Titel/Beschreibung/Tags dort macht Taja AI)."""
 import argparse, gzip, json, os, sys, time, urllib.error
@@ -27,7 +27,7 @@ MAX_TRIES = 3
 BATCH_MAX = {"write": 50, "translate": 400}
 OUT_EST = {"write": 1500, "translate": 1100}
 OVERHEAD = {"write": 700, "translate": 450}
-MAX_EUR = float(os.environ.get("VIDEO_SEO_MAX_EUR", "10"))
+MAX_EUR = float(os.environ.get("VIDEO_SEO_MAX_EUR", "7"))
 S_IN, S_OUT = float(os.environ.get("SONNET_USD_PER_MTOK_IN", "2")), float(os.environ.get("SONNET_USD_PER_MTOK_OUT", "10"))   # Preisliste 19.11.2026
 USD_PER_EUR = max(1e-6, float(os.environ.get("USD_PER_EUR", "1.08")))
 

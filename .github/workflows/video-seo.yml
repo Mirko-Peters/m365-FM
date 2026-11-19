@@ -3,7 +3,7 @@ name: Video-SEO der Sticky-Man-Videoseiten (Sonnet schreibt, Haiku übersetzt)
 # Stufe translate = Haiku uebersetzt das Set in die Sprachen, in denen es die Videoseite gibt. Ergebnis: data/video_seo/<sprache>.json.gz.
 # Auf den Seiten wirkt es erst mit data/video_seo_live.json (Sprachen freigeben); ohne Freigabe aendert sich keine Seite. YouTube wird nicht angefasst (Taja AI).
 # Nur von Hand: mode plan (zaehlen, Kosten schaetzen, nichts wird bezahlt) | run (senden + einsammeln) | collect (nur einsammeln). Probe: limit 10.
-# Kostenschutz: Sonnet bricht ab, wenn Schaetzung/bisherige Ausgaben VIDEO_SEO_MAX_EUR (Repo-Variable, Standard 10) uebersteigen; Haiku laeuft im Tagesbudget des Gateways (Job video_seo).
+# Kostenschutz: Sonnet bricht ab, wenn Schaetzung/bisherige Ausgaben VIDEO_SEO_MAX_EUR (Repo-Variable, Standard 7) uebersteigen; Haiku laeuft im Tagesbudget des Gateways (Job video_seo).
 # Kosten: alle 271 Videos ca. 4 EUR (Sonnet-Batch) + ca. 1,5 EUR (Haiku-Batch).
 on:
   workflow_dispatch:
@@ -34,7 +34,7 @@ jobs:
       HAIKU_USD_PER_MTOK_OUT: ${{ vars.HAIKU_USD_PER_MTOK_OUT || '0.50' }}
       SONNET_USD_PER_MTOK_IN: ${{ vars.SONNET_USD_PER_MTOK_IN || '2' }}
       SONNET_USD_PER_MTOK_OUT: ${{ vars.SONNET_USD_PER_MTOK_OUT || '10' }}
-      VIDEO_SEO_MAX_EUR: ${{ vars.VIDEO_SEO_MAX_EUR || '10' }}
+      VIDEO_SEO_MAX_EUR: ${{ vars.VIDEO_SEO_MAX_EUR || '7' }}
       USD_PER_EUR: ${{ vars.USD_PER_EUR || '1.08' }}
       MODE_IN: ${{ inputs.mode }}
       STAGE_IN: ${{ inputs.stage }}
