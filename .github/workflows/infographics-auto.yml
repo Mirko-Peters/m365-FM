@@ -1,0 +1,112 @@
+name: Infografiken automatisch (samstags)
+# Jeden Samstag 04:23 UTC: nur fuer FREIGEGEBENE Sprachen/Arten (data/infographics_live.json) fehlende Bildtexte schreiben, uebersetzen, rendern.
+# Erst check (zaehlt, kostet Minuten): ohne offene Arbeit laufen die teuren Stufen (Browser-Installation ~30 Min) gar nicht.
+# Kosten: Haiku-Bildtexte nur fuer neue Inhalte (Cent-Bereich, Haiku-Tagesbudget schuetzt), Rechenzeit nur bei offenen Bildern.
+# Notschalter: Repository-Variable INFOGRAPHICS_AUTO = 0 (oder false/off/aus); ein schon laufender Lauf muss von Hand abgebrochen werden.
+on:
+  schedule:
+    - cron: "23 4 * * 6"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: { group: infographics-auto, cancel-in-progress: false }
+jobs:
+  check:
+    if: ${{ github.event_name != 'schedule' || !contains(fromJSON('["0","false","off","aus"]'), format('{0}', vars.INFOGRAPHICS_AUTO)) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions: { contents: read }
+    defaults: { run: { shell: bash } }   # bash -eo pipefail: ein Absturz von check vor `| tee` darf nicht als "nichts zu tun" durchgehen
+    outputs:
+      langs: ${{ steps.live.outputs.langs }}
+      kinds: ${{ steps.live.outputs.kinds }}
+      spec: ${{ steps.chk.outputs.spec }}
+      tr: ${{ steps.chk.outputs.tr }}
+      render: ${{ steps.chk.outputs.render }}
+      open: ${{ steps.chk.outputs.open }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event_name == 'schedule' && 'main' || github.ref_name }}
+      - uses: actions/setup-python@v7
+        with: { python-version: "3.12" }
+      - run: pip install boto3 pillow
+      - name: Freigegebene Sprachen und Arten lesen
+        id: live
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, re
+          try: d = json.load(open("data/infographics_live.json"))
+          except Exception: d = {}
+          ok = lambda xs, rx: ",".join(x for x in (d.get(xs) or []) if re.fullmatch(rx, str(x)))
+          print("langs=" + ok("langs", r"[a-z]{2}")); print("kinds=" + ok("kinds", r"[a-z]+"))
+          PY
+      - name: Offene Arbeit zaehlen
+        id: chk
+        if: steps.live.outputs.langs != '' && steps.live.outputs.kinds != ''
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          LANGS: ${{ steps.live.outputs.langs }}
+          KINDS: ${{ steps.live.outputs.kinds }}
+        run: python tools/infographics.py check --kinds "$KINDS" --langs "$LANGS" | tee -a "$GITHUB_OUTPUT" "$GITHUB_STEP_SUMMARY"
+  specs:
+    needs: check
+    if: ${{ needs.check.outputs.spec > 0 || needs.check.outputs.open > 0 }}
+    permissions: { contents: write }
+    uses: ./.github/workflows/infographics.yml
+    with: { mode: specs, kinds: "${{ needs.check.outputs.kinds }}", langs: "${{ needs.check.outputs.langs }}", ref: "${{ github.event_name == 'schedule' && 'main' || github.ref_name }}" }
+    secrets: inherit
+  translate:
+    needs: [check, specs]
+    if: ${{ !cancelled() && contains(fromJSON('["success","skipped"]'), needs.specs.result) && needs.check.result == 'success' && needs.check.outputs.langs != 'en' && (needs.check.outputs.tr > 0 || needs.check.outputs.spec > 0 || needs.check.outputs.open > 0) }}
+    permissions: { contents: write }
+    uses: ./.github/workflows/infographics.yml
+    with: { mode: translate, kinds: "${{ needs.check.outputs.kinds }}", langs: "${{ needs.check.outputs.langs }}", ref: "${{ github.event_name == 'schedule' && 'main' || github.ref_name }}" }
+    secrets: inherit
+  recheck:
+    needs: [check, specs, translate]
+    if: ${{ !cancelled() && needs.check.result == 'success' && needs.check.outputs.langs != '' && contains(fromJSON('["success","skipped"]'), needs.specs.result) && contains(fromJSON('["success","skipped"]'), needs.translate.result) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions: { contents: read }
+    defaults: { run: { shell: bash } }   # bash -eo pipefail: ein Absturz von check vor `| tee` darf nicht als "nichts zu tun" durchgehen
+    outputs:
+      render: ${{ steps.chk.outputs.render }}   # nach Texten und Uebersetzung neu gezaehlt: die teure Browser-Stufe nur bei wirklich renderbaren Bildern
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event_name == 'schedule' && 'main' || github.ref_name }}
+      - uses: actions/setup-python@v7
+        with: { python-version: "3.12" }
+      - run: pip install boto3 pillow
+      - name: Freigegebene Sprachen und Arten lesen
+        id: live
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, re
+          try: d = json.load(open("data/infographics_live.json"))
+          except Exception: d = {}
+          ok = lambda xs, rx: ",".join(x for x in (d.get(xs) or []) if re.fullmatch(rx, str(x)))
+          print("langs=" + ok("langs", r"[a-z]{2}")); print("kinds=" + ok("kinds", r"[a-z]+"))
+          PY
+      - name: Offene Arbeit zaehlen
+        id: chk
+        if: steps.live.outputs.langs != '' && steps.live.outputs.kinds != ''
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          LANGS: ${{ steps.live.outputs.langs }}
+          KINDS: ${{ steps.live.outputs.kinds }}
+        run: python tools/infographics.py check --kinds "$KINDS" --langs "$LANGS" | tee -a "$GITHUB_OUTPUT" "$GITHUB_STEP_SUMMARY"
+  render:
+    needs: [check, recheck]
+    if: ${{ !cancelled() && needs.recheck.result == 'success' && needs.recheck.outputs.render > 0 }}
+    permissions: { contents: write }
+    uses: ./.github/workflows/infographics.yml
+    with: { mode: render, kinds: "${{ needs.check.outputs.kinds }}", langs: "${{ needs.check.outputs.langs }}", ref: "${{ github.event_name == 'schedule' && 'main' || github.ref_name }}" }
+    secrets: inherit

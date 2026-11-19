@@ -1,6 +1,7 @@
 """Infografiken: Pruefung der Bildtexte, Seitenanbindung (ohne Freigabe Byte fuer Byte unveraendert), Rendern/Index mit Attrappen, Batch-Auswertung."""
 import copy, gzip, json, sys, tempfile, unittest
 from pathlib import Path
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT)); sys.path.insert(0, str(ROOT / "tools"))
@@ -137,6 +138,74 @@ class Pipeline(unittest.TestCase):
                 return [{"out": j["out"], "ok": False, "issues": ["ueberlauf:t"]} for j in jobs]
             for _ in range(3): IGT.cmd_render(["blog"], ["en"], 0, store, root, render_fn=bad, webp_fn=lambda b: b, jpeg_fn=lambda b: b)
             self.assertEqual(IGT.load_state(root)["rfail"], {"blog:p1#en": 2})   # nach MAX_TRIES Versuchen nicht mehr gerendert
+
+    def test_check_counts_only_open_work(self):
+        with tempfile.TemporaryDirectory() as t, tempfile.TemporaryDirectory() as s:
+            root = fixture_root(t); store = IGT.DirStore(s); it = IGT.items("blog", root)[0]
+            self.assertEqual(IGT.cmd_check(["blog"], ["en", "de"], store, root), {"spec": 1, "tr": 0, "render": 0, "open": 0})
+            store.put(IGT.spec_key(it), {"v": 1, "en": SET})
+            self.assertEqual(IGT.cmd_check(["blog"], ["en", "de"], store, root), {"spec": 0, "tr": 1, "render": 1, "open": 0})
+            store.put(IGT.spec_key(it), {"v": 1, "en": SET, "de": de_set()})
+            self.assertEqual(IGT.cmd_check(["blog"], ["en", "de"], store, root), {"spec": 0, "tr": 0, "render": 2, "open": 0})
+            st = IGT.load_state(root); st["rfail"] = {"blog:p1#en": 2, "blog:p1#de": 2}; IGT.save_state(st, root)   # Fehlversuchs-Grenze erreicht: keine Arbeit mehr
+            self.assertEqual(IGT.cmd_check(["blog"], ["en", "de"], store, root)["render"], 0)
+
+    def test_check_skips_items_with_too_many_tries_and_reports_open_batches(self):
+        with tempfile.TemporaryDirectory() as t, tempfile.TemporaryDirectory() as s:
+            root = fixture_root(t); store = IGT.DirStore(s)
+            st = IGT.load_state(root); st["tries"] = {"blog:p1": IGT.MAX_TRIES}; st["batches"] = [{"id": "b", "stage": "specs", "lang": "en", "map": {"s0": "blog:other"}}]; IGT.save_state(st, root)
+            self.assertEqual(IGT.cmd_check(["blog"], ["en"], store, root), {"spec": 0, "tr": 0, "render": 0, "open": 1})
+
+    def test_saturday_workflow_is_gated_and_chained(self):
+        y = (ROOT / ".github/workflows/infographics-auto.yml").read_text("utf-8"); w = (ROOT / ".github/workflows/infographics.yml").read_text("utf-8")
+        for need in ('cron: "23 4 * * 6"', "INFOGRAPHICS_AUTO", "infographics_live.json", "recheck:", "needs.recheck.outputs.render > 0", "shell: bash", "mode: specs", "mode: translate", "mode: render", "secrets: inherit"):
+            self.assertIn(need, y)
+        for need in ("workflow_call:", "ref: ${{ inputs.ref || github.ref }}", "ubuntu-24.04"): self.assertIn(need, w)
+        self.assertNotIn("runs-on: ubuntu-latest", w)
+
+    def test_renderer_crash_counts_as_failed_try_and_run_continues(self):
+        with tempfile.TemporaryDirectory() as t, tempfile.TemporaryDirectory() as s:
+            root = fixture_root(t); store = IGT.DirStore(s)
+            store.put(IGT.spec_key(IGT.items("blog", root)[0]), {"v": 1, "en": SET})
+            def crash(jobs, wd): raise RuntimeError("node weg")
+            made, bad = IGT.cmd_render(["blog"], ["en"], 0, store, root, render_fn=crash, webp_fn=lambda b: b, jpeg_fn=lambda b: b)
+            self.assertEqual((made, bad), (0, 1)); self.assertEqual(IGT.load_state(root)["rfail"], {"blog:p1#en": 1})
+
+    def two_posts(self, t, s):
+        root = fixture_root(t); store = IGT.DirStore(s)
+        posts = [{"slug": n, "title": n, "html": "<p>" + "Text über Copilot und SharePoint. " * 30 + "</p>"} for n in ("p1", "p2")]
+        with gzip.open(root / "data" / "podpage" / "blog_posts.json.gz", "wt", encoding="utf-8") as f: json.dump(posts, f)
+        for it in IGT.items("blog", root): store.put(IGT.spec_key(it), {"v": 1, "en": SET})
+        return root, store
+
+    def test_crash_in_block_counts_only_the_crashing_set(self):
+        """Gegenpruefung #560: ein Absturz im 200er-Block zaehlt nur fuer den ausloesenden Satz, die anderen werden einzeln gerendert."""
+        with tempfile.TemporaryDirectory() as t, tempfile.TemporaryDirectory() as s:
+            root, store = self.two_posts(t, s)
+            def render(jobs, wd):
+                if len({Path(j["out"]).name.split("-")[0] for j in jobs}) > 1 or any(Path(j["out"]).name.startswith("0-") for j in jobs): raise RuntimeError("Satz 0 bringt Node um")
+                for j in jobs: Path(j["out"] + ".png").write_bytes(b"P")
+                return [{"out": j["out"], "ok": True, "issues": []} for j in jobs]
+            made, bad = IGT.cmd_render(["blog"], ["en"], 0, store, root, render_fn=render, webp_fn=lambda b: b, jpeg_fn=lambda b: b)
+            self.assertEqual((made, bad), (1, 1)); self.assertEqual(IGT.load_state(root)["rfail"], {"blog:p1#en": 1})
+
+    def test_broken_environment_counts_nothing_and_fails_loudly(self):
+        """Gegenpruefung #560: startet der Browser gar nicht (jeder Satz stuerzt ab), wird kein Fehlversuch gezaehlt und der Lauf endet rot."""
+        with tempfile.TemporaryDirectory() as t, tempfile.TemporaryDirectory() as s:
+            root, store = self.two_posts(t, s)
+            def crash(jobs, wd): raise RuntimeError("chromium fehlt")
+            with self.assertRaises(RuntimeError): IGT.cmd_render(["blog"], ["en"], 0, store, root, render_fn=crash, webp_fn=lambda b: b, jpeg_fn=lambda b: b)
+            self.assertEqual(IGT.load_state(root).get("rfail") or {}, {})
+
+    def test_main_render_keeps_failed_tries(self):
+        """Gegenpruefung #560: main() schrieb nach render den alten Zustand ohne rfail zurueck - Fehlversuche gingen verloren."""
+        with tempfile.TemporaryDirectory() as t, tempfile.TemporaryDirectory() as s:
+            root = fixture_root(t); store = IGT.DirStore(s)
+            store.put(IGT.spec_key(IGT.items("blog", root)[0]), {"v": 1, "en": SET})
+            def crash(jobs, wd): raise RuntimeError("node weg")
+            with mock.patch.object(IGT, "render_jobs", crash):
+                IGT.main(["render", "--kinds", "blog", "--langs", "en", "--root", str(root), "--store-dir", s])
+            self.assertEqual(IGT.load_state(root)["rfail"], {"blog:p1#en": 1})
 
     def test_header_also_uploaded_as_jpeg(self):
         with tempfile.TemporaryDirectory() as t, tempfile.TemporaryDirectory() as s:

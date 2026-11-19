@@ -3,6 +3,13 @@ name: Infografiken (Kopfbild + 2-3 Infografiken je Inhalt, 15 Sprachen)
 # -> render (Standbilder mit Playwright, Pruefung auf Layoutfehler, WebP nach R2, Index data/infographics/*.json.gz) -> in data/infographics_live.json Sprache/Art freigeben.
 # Ohne Freigabe aendert sich keine Seite. Details, Kosten und Notschalter: INFOGRAPHICS.md. Fertiges wird nie ein zweites Mal bezahlt oder gerendert.
 on:
+  workflow_call:   # aufgerufen von infographics-auto.yml (samstags); gleiche Eingaben, ref = Zweig, damit jede Stufe den Stand der vorigen sieht
+    inputs:
+      mode: { type: string, required: true }
+      kinds: { type: string, required: false, default: "entity,blog,episode" }
+      langs: { type: string, required: false, default: "en,de" }
+      limit: { type: string, required: false, default: "" }
+      ref: { type: string, required: false, default: "" }
   workflow_dispatch:
     inputs:
       mode:
@@ -35,6 +42,8 @@ jobs:
       LIMIT_IN: ${{ inputs.limit }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref || github.ref }}   # Zweig (nicht SHA): sonst detached HEAD und der Push der Stand-Commits schluege fehl
       - uses: actions/setup-python@v7
         with: { python-version: "3.12" }
       - name: Python-Pakete
