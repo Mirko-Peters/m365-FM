@@ -24,6 +24,7 @@ WRITE_MODEL = os.environ.get("VIDEO_SEO_WRITE_MODEL", "claude-sonnet-5-5")
 TR_MODEL = os.environ.get("VIDEO_SEO_TR_MODEL", "claude-haiku-5-5")
 JOB = "video_seo"
 MAX_TRIES = 3
+REASONS = {}   # Ablehnungsgruende dieses Laufs (nur Protokoll)
 BATCH_MAX = {"write": 50, "translate": 400}
 OUT_EST = {"write": 1500, "translate": 1100}
 OVERHEAD = {"write": 700, "translate": 450}
@@ -231,7 +232,10 @@ def apply_results(lines, b, st, root=None, sources=None):
             try:
                 ans = parse("".join(c.get("text", "") for c in m.get("content", []) if c.get("type") == "text"))
                 entry = VS.make_entry_en(ans, marks, s) if stage == "write" else VS.make_entry_tr(ans, idx_of("en")[vid], lang)
-            except ValueError: entry = None
+            except ValueError: entry = None; ans = None
+            if not entry and stage == "write":
+                why = VS.reject_reason(ans, marks) + (" (abgeschnitten)" if m.get("stop_reason") == "max_tokens" else ""); REASONS[why] = REASONS.get(why, 0) + 1
+        elif stage == "write": why = "Batch-Fehler " + str(res.get("type")); REASONS[why] = REASONS.get(why, 0) + 1
         if entry: idx_of(lang)[key] = entry; done += 1
         else: st["tries"][tk] = st["tries"].get(tk, 0) + 1; bad += 1   # tk = Referenz = Schluessel in todo_*
     for l, idx in cache.items(): save_index(l, idx, root)
@@ -251,6 +255,7 @@ def collect(wait_s=0, root=None, sleep=time.sleep):
         st["batches"] = left; save_state(st, root)
         if not left or time.time() - t0 >= wait_s: break
         print(f"noch {len(left)} Batch(es) offen, warte ...", flush=True); sleep(60)
+    if REASONS: print("Ablehnungsgruende:", ", ".join(f"{k} x{v}" for k, v in sorted(REASONS.items(), key=lambda x: -x[1])))
     return total
 
 
