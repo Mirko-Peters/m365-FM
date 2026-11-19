@@ -17,7 +17,7 @@ _CJK = re.compile(r"[　-ヿ㐀-鿿가-힯＀-￯]")
 _IDX, _LIVE = {}, []
 MAX_PAR = 9      # hoechstens so viele Saetze je Absatz (sonst setzt repair() Umbrueche)
 LEVELS = (3, 4)  # auf der Folgenseite steht schon eine h2 "Transcript"
-PROMPT_V = 1     # Version der Anweisung an die KI: bei Aenderung werden Eintraege mit alter Version beim naechsten Lauf neu gesetzt
+PROMPT_V = 2     # Version der Anweisung an die KI: bei Aenderung werden Eintraege mit alter Version beim naechsten Lauf neu gesetzt
 
 
 def sentences(text):
