@@ -34,7 +34,20 @@ class MinAge(Base):
 
 class WeekCap(Base):
     def test_no_cap_means_unlimited(self):
-        with mock.patch.object(F, "WEEK_CAP", 0.0): self.assertEqual(F.week_room({}), float("inf"))
+        with mock.patch.object(F, "WEEK_CAP", None): self.assertEqual(F.week_room({}), float("inf"))
+
+    def test_zero_blocks_instead_of_unlimited(self):
+        with mock.patch.dict(F.os.environ, {"ENTITY_WEEK_USD": "0"}):
+            import importlib; m = importlib.reload(F)
+            try: self.assertEqual(m.WEEK_CAP, 0.0)
+            finally: F.os.environ.pop("ENTITY_WEEK_USD", None); importlib.reload(F)
+
+    def test_old_ledger_without_weeks_counts_this_weeks_month_spend(self):
+        today = F.datetime.now(F.timezone.utc).isoformat()[:19]
+        F.jsave(F.OUT / F.SPEND, {"usd": 31.0, "months": {F.month_key(): {"write_usd": 31.0}}, "updated": today})
+        with mock.patch.object(F, "WEEK_CAP", 10.0): self.assertLess(F.week_room({}), 0)
+        F.jsave(F.OUT / F.SPEND, {"usd": 31.0, "months": {F.month_key(): {"write_usd": 31.0}}, "updated": "2020-01-01T00:00:00"})
+        with mock.patch.object(F, "WEEK_CAP", 10.0): self.assertAlmostEqual(F.week_room({}), 10.0)
 
     def test_spend_and_pending_reduce_the_room(self):
         with mock.patch.object(F, "WEEK_CAP", 10.0):
@@ -55,7 +68,7 @@ class WeekCap(Base):
 class Workflow(unittest.TestCase):
     def test_schedule_has_kill_switch_and_week_cap(self):
         y = (ROOT / ".github/workflows/entity-fill.yml").read_text("utf-8")
-        for need in ("schedule:", "vars.ENTITY_AUTO != '0'", "ENTITY_WEEK_USD", "--min-age-days $MINAGE_IN", "github.event_name == 'schedule' && '1'"):
+        for need in ("schedule:", "vars.ENTITY_AUTO", "ref: ${{ github.event_name == 'schedule'", "ENTITY_WEEK_USD", "--min-age-days $MINAGE_IN", "github.event_name == 'schedule' && '1'"):
             self.assertIn(need, y)
 
 

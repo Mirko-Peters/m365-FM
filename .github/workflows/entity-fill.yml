@@ -26,7 +26,7 @@ permissions:
 concurrency: { group: entity-fill, cancel-in-progress: false }
 jobs:
   fill:
-    if: ${{ github.event_name != 'schedule' || vars.ENTITY_AUTO != '0' }}   # Notschalter fuer den Zeitplan
+    if: ${{ github.event_name != 'schedule' || !contains(fromJSON('["0","false","off","aus"]'), vars.ENTITY_AUTO) }}   # Notschalter fuer den Zeitplan (0/false/off/aus); ein schon laufender Lauf muss von Hand abgebrochen werden
     runs-on: ubuntu-latest
     timeout-minutes: 350
     env:
@@ -41,13 +41,15 @@ jobs:
       ENTITY_WEEK_USD: ${{ github.event_name == 'schedule' && (vars.ENTITY_WEEK_USD || '10') || '' }}   # nur im Zeitplan; zaehlt auch von Hand Verbrauchtes derselben Kalenderwoche
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event_name == 'schedule' && 'main' || github.sha }}   # Zeitplan: immer der neueste Stand (Kostenbuch, offene Batches), nicht der Stand zum Startzeitpunkt
       - uses: actions/setup-python@v7
         with: { python-version: "3.12" }
       - name: Entitaeten fuellen
         if: inputs.mode != 'push'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
-          ENTITY_BUDGET_USD: ${{ inputs.budget || '100' }}
+          ENTITY_BUDGET_USD: ${{ inputs.budget || vars.ENTITY_BUDGET_USD || '100' }}
           MODE_IN: ${{ inputs.mode || 'run' }}
           MINAGE_IN: ${{ github.event_name == 'schedule' && '1' || inputs.min_age_days }}
           LIMIT_IN: ${{ inputs.limit }}
