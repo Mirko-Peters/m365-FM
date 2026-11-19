@@ -749,7 +749,7 @@ def build(g):
         alts = {"en": ep_url(e), **{l: loc_url(l, f"episodes/{e['slug']}/") for l in TRL if e["slug"] in TRL[l] and TRL[l][e["slug"]][0]}}   # alle Sprachfassungen (uebersetzte Titel/Teaser, teils Show Notes) sind indexierbar und verknuepft
         for _dl, (_du, _) in oa.items(): alts[_dl] = _du   # T3: die Dub-Fassung (eigene Folge in der Sprache) ist die Sprachalternative, nicht die duenne Show-Kopie
         _seo = MP.en_episode_meta(e["name"], e.get("meta_title"), _rwm, e.get("summary"), short_desc(e, nrec, 600), uniq=_MPU, has_transcript=len(tr) > 200 or bool(_trf))   # Thema zuerst, Format und Marke hinten; Schablonen-Felder (X Explained | M365 FM) fallen weg
-        pub(f"episodes/{e['slug']}/", e.get("meta_title") or e["name"], _rwm or short_desc(e, nrec, 155), body, ([ld] + nld) if nld else ld, "article", last=day(e.get("update_time")) or TODAY, alts=alts if len(alts) > 1 else None, seo=_seo,
+        pub(f"episodes/{e['slug']}/", e.get("meta_title") or e["name"], _rwm or short_desc(e, nrec, 155), body, ([ld] + list(nld or []) + IG.image_ld(BASE, "episode", e["slug"], "en", ep_url(e))) if (nld or IG.image_ld(BASE, "episode", e["slug"], "en", ep_url(e))) else ld, "article", last=day(e.get("update_time")) or TODAY, alts=alts if len(alts) > 1 else None, seo=_seo,
             noindex=episode_noindex(e, nrec, bool(snx), _rw, (short_desc(e, nrec, 300), nkp, nnotes, nfaq, tr if len(tr) > 200 else "")), head=_pc, igkw=IG.page_kw("episode", e["slug"], "en"),
             ids=list(dict.fromkeys(_about + [i for i in _ment if ENTS_ALL[i].get("type") != "category"]))[:12], topics_h=LC.plain("en", "side.episode"))
         # lokalisierte Fassungen dieser Folge
@@ -791,7 +791,7 @@ def build(g):
             _lalts = None if l in oa else alts   # T3: Sprache mit Dub-Fassung: diese Kopie bleibt ohne hreflang (ein Vertreter je Sprache im Cluster)
             _lcan = oa[l][0] if l in oa else lu   # T42: Kopie in einer Sprache mit Dub-Folge -> kanonisch (auch og:url, Teilen, JSON-LD) die Dub-Folge, nicht in die Sitemap
             if l in oa: lald["url"] = _lcan
-            _lh = g["page"](l, MP.episode_title(l, e["name"] if MP.junk(lt) else lt, uniq=_MPL), MP.episode_desc(l, ls) or MP.episode_desc("en", short_desc(e, nrec, 600)) or short_desc(e, nrec, 155), _lcan, f'{g["header"](l, "")}<main class="wrap">{lbody}{loc_pager(l, k)}</main>{g["footer"](l)}', _lalts, [lald], xdefault=ep_url(e), og_type="article", og_of=ep_url(e), switch=alts, self_url=lu, extra_head=_pc, **IG.page_kw("episode", e["slug"], l))   # generate_site.page: extra_head="" ist der Standard; page haengt fuer /community/, /entity/, /glossary/ ui-<lang>.js an eine Kopie an
+            _lh = g["page"](l, MP.episode_title(l, e["name"] if MP.junk(lt) else lt, uniq=_MPL), MP.episode_desc(l, ls) or MP.episode_desc("en", short_desc(e, nrec, 600)) or short_desc(e, nrec, 155), _lcan, f'{g["header"](l, "")}<main class="wrap">{lbody}{loc_pager(l, k)}</main>{g["footer"](l)}', _lalts, [lald] + IG.image_ld(BASE, "episode", e["slug"], l, lu), xdefault=ep_url(e), og_type="article", og_of=ep_url(e), switch=alts, self_url=lu, extra_head=_pc, **IG.page_kw("episode", e["slug"], l))   # generate_site.page: extra_head="" ist der Standard; page haengt fuer /community/, /entity/, /glossary/ ui-<lang>.js an eine Kopie an
             (g.get("write_r2") or write)(f"{l}/show/episodes/{e['slug']}/index.html", _lh)
             if l not in oa: sitemap.append((lu, day(e.get("update_time")) or TODAY, _lalts))
     if _RWC.get("thin") or _RWC.get("unknown"):

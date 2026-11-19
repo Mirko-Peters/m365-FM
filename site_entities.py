@@ -1144,6 +1144,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _fhead = f'<link rel="alternate" type="application/rss+xml" title="{esc(e["name"])} – M365.FM" href="{_feedu}">' if (_arts or eps) else ""
             _w = g.get("write_r2") or write   # Entitaetsseiten ALLER Sprachen liegen im R2-Bucket, nicht in GitHub Pages (Site-Worker liefert sie unter derselben Adresse). Englisch (~114 MB) seit 9.11.2026: docs/ lag mit 982 MB ueber der Grenze von 980 MB, jeder Seitenbau brach ab; de seit #310, die anderen 13 Sprachen von Anfang an
             ld = ld + _qld   # Quotation-Knoten der Person
+            ld = ld + IG.image_ld(BASE, "entity", e["id"], lang, u)   # Urheber, Credit und Lizenz der Kopf- und Infografik-Bilder (nur mit Freigabe)
             _sids = [x for v in groups.values() for x in v] or _cooc   # Themen der Seitenleiste = verwandte Entitaeten, ohne Beziehungen die Themen aus gemeinsamen Folgen
             _sh = LC.plain(lang, "side.entity" if groups else "side.cooc" if _cmode == "often" else "side.cooc_some" if _sids else "side.named", s=_en)   # Ueberschrift mit Beziehung zur Seite; ohne Beziehungen: in Beschreibung/Langtext genannt
             _side = g["side"](lang, f'{e["name"]} {_en} {d} {_lt[:1500]}', ids=_sids, exclude=(e["id"],), topics_h=_sh) if g.get("side") else ""   # Sidebar wie auf allen Inhaltsseiten

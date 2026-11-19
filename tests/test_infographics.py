@@ -308,6 +308,18 @@ class Site(unittest.TestCase):
         self.assertNotIn("en-0-", out)   # das Kopfbild steht nie im Text
         self.assertEqual(IG.inject("<p>kurz</p>", "blog", "p1", "en").count("<figure"), 2)   # wenig Text: Bilder am Ende
 
+    def test_image_ld_has_creator_credit_copyright_and_cc_by_license(self):
+        self.assertEqual(IG.image_ld("https://www.m365.fm", "blog", "p1", "en", "https://x/p"), [])   # ohne Freigabe: nichts
+        self.live()
+        ld = IG.image_ld("https://www.m365.fm", "blog", "p1", "en", "https://x/p")
+        self.assertEqual(len(ld), 3)
+        for i, n in enumerate(ld):
+            self.assertEqual(n["@type"], "ImageObject"); self.assertEqual(n["@id"], f"https://x/p#ig{i}")
+            self.assertTrue(n["contentUrl"].startswith("https://img.m365.fm/ig/blog/p1/en-")); self.assertEqual(n["creator"]["name"], "M365.FM")
+            self.assertEqual(n["creditText"], "M365.FM"); self.assertEqual(n["copyrightNotice"], "© M365.FM"); self.assertEqual(n["license"], "https://creativecommons.org/licenses/by/4.0/")
+        self.assertEqual(ld[0]["caption"], "Header"); json.dumps(ld)
+        self.assertEqual(IG.image_ld("https://www.m365.fm", "blog", "p1", "de", "https://x/p"), [])   # de nicht freigegeben
+
     def test_post_gets_hero_og_and_loses_old_hero(self):
         self.live()
         old = '<figure class="en-fig"><svg></svg></figure>' + self.html
