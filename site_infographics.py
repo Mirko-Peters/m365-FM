@@ -12,7 +12,7 @@ from pathlib import Path
 D = Path(__file__).resolve().parent / "data"
 PUBLIC = "https://img.m365.fm"
 SIZES = {"flow": (1920, 1080), "compare": (1200, 1040), "ladder": (1200, 1800), "bigfact": (1200, 630), "hub": (1200, 1200)}   # wie tools/infographics/templates.mjs
-_IDX, _LIVE = {}, []
+_IDX, _LIVE, _SEEN = {}, [], {}
 
 
 def _jload(p, default):
@@ -33,7 +33,7 @@ def live():
 
 
 def reset():   # Tests
-    _IDX.clear(); _LIVE.clear()
+    _IDX.clear(); _LIVE.clear(); _SEEN.clear()
 
 
 def _index(kind):
@@ -59,10 +59,11 @@ def get(kind, slug, lang):
 LICENSE = "https://creativecommons.org/licenses/by/4.0/"   # CC BY 4.0: Nutzung mit Namensnennung (Mirko, 19.11.2026)
 
 
-def image_ld(base, kind, slug, lang, page_url):
+def image_ld(base, kind, slug, lang, page_url, title="", date=""):
     """ImageObject-Knoten fuer Kopfbild und Infografiken dieser Seite (Google Bilder: Urheber, Credit, Copyright, Lizenz -> Abzeichen "Lizenzierbar"); [] ohne Freigabe.
     Nur fuer eigene Bilder; Google verlangt contentUrl und mindestens eines von creator/creditText/copyrightNotice/license."""
     g = get(kind, slug, lang)
+    if g and title: _SEEN[(kind, slug, lang)] = {"title": str(title), "url": page_url, "date": str(date or ""), "imgs": g}   # fuer die Infografiken-Seite (site_infohub.py): nur Seiten, die die Bilder wirklich ausgeben
     return [{"@context": "https://schema.org", "@type": "ImageObject", "@id": f"{page_url}#ig{i}", "contentUrl": im["u"], "url": im["u"], "width": im["w"], "height": im["h"],
              "caption": im["a"], "inLanguage": lang, "creator": {"@type": "Organization", "@id": f"{base}/#org", "name": "M365.FM", "url": f"{base}/"},
              "creditText": "M365.FM", "copyrightNotice": "© M365.FM", "license": LICENSE,
@@ -137,3 +138,8 @@ def apply_post(html, slug, lang, kind="blog"):
     """Blogbeitrag: altes Titelbild ersetzen, Kopfbild voranstellen, Infografiken verteilen -> (html, page_kw). Ohne Freigabe: (html, {})."""
     if not get(kind, slug, lang): return html, {}
     return hero_figure(kind, slug, lang) + inject(replace_hero(html), kind, slug, lang), page_kw(kind, slug, lang)
+
+
+def seen():
+    """Seiten, die in diesem Bau Kopfbild und Infografiken ausgeben: {(art, slug, sprache): {title, url, date, imgs}}. Fuellt sich ueber image_ld(title=...) waehrend des Seitenbaus."""
+    return dict(_SEEN)
