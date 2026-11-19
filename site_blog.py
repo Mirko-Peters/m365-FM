@@ -192,7 +192,7 @@ def build(g, posts, people, api):
             if not p.get("legacy"):
                 body_html = IMG.enhance(body_html)
             body_html = IMG.alt_text(body_html, lang, p["title"])   # Alt-Texte: schwache Alt-Texte (Ueberschrift, Platzhalter, englisch auf Sprachfassungen) aus data/r2_alt.json.gz in der Seitensprache
-            _ig = p.get("legacy") or p["handle"] == "mirko-p"   # Infografiken gibt es zu den frueheren Podpage-Beitraegen (tools/infographics.py); die meisten stehen inzwischen in der Datenbank (kein "legacy"), gleicher Slug
+            _ig = p.get("legacy") or (p["handle"] == "mirko-p" and bool(p.get("html")))   # Infografiken gibt es zu den frueheren Podpage-Beitraegen (tools/infographics.py); die meisten stehen inzwischen in der Datenbank (kein "legacy"), gleicher Slug. Nur solange der uebernommene Text unveraendert ist (im Editor ueberarbeitet: html leer, Bilder passten nicht mehr)
             body_html, _igkw = IG.apply_post(body_html, p["slug"], lang) if _ig else (body_html, {})   # neues Kopfbild ersetzt das alte, 2-3 Infografiken im Text; ohne Freigabe unveraendert
             body_html = IMG.eager_first(body_html)   # erstes Bild oben im Beitrag (oft das LCP-Element) nicht lazy laden
             _own_txt = IR.plain_text(body_html)   # Haupttext vor den Anhoeren-Karten (die zeigen Folgentitel, keinen Beitragstext)

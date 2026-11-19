@@ -52,6 +52,11 @@ class D1Beitraege(unittest.TestCase):
         pg = pages[f"{BASE}/community/u/anna/blog/eins/"]
         self.assertNotIn("img.m365.fm/ig/", pg["body"]); self.assertNotIn("og_image", pg["kw"])
 
+    def test_im_editor_ueberarbeiteter_beitrag_ohne_html_bleibt_unveraendert(self):   # worker/src/blog.js leert html beim Bearbeiten; die Bilder passen dann nicht mehr zum Text
+        pages = self.build([post("eins", html="", body="Neuer Text " * 80)], [{"handle": "mirko-p", "name": "Mirko Peters"}])
+        pg = pages[f"{BASE}/community/u/mirko-p/blog/eins/"]
+        self.assertNotIn("img.m365.fm/ig/", pg["body"]); self.assertNotIn("og_image", pg["kw"])
+
 
 if __name__ == "__main__":
     unittest.main()
