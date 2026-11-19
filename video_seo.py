@@ -130,7 +130,7 @@ def script_ok(lang, text):
 def valid_entry(e, lang="en"):
     """Gespeicherter Eintrag (nach dem Lesen) ist benutzbar."""
     if not isinstance(e, dict): return False
-    return bool(clean_text(e.get("t"), 90, 10) and clean_text(e.get("d"), 200, 40) and clean_text(e.get("u"), 1500, 80)
+    return bool(clean_text(e.get("t"), 90, 6) and clean_text(e.get("d"), 200, 30) and clean_text(e.get("u"), 1800, 60)
                 and clean_chapters(e.get("c"), None, None, 3, 14, 100) and clean_labels(e.get("h")) and script_ok(lang, e.get("u") or ""))
 
 
