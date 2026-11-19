@@ -18,6 +18,9 @@ Werkzeug: `tools/linkedin_stats.py` · Workflow: `.github/workflows/linkedin-sta
 4. **In GitHub eintragen** (nur dort, nie in den Chat):
    - Secret `LINKEDIN_ACCESS_TOKEN`: <https://github.com/Mirko-Peters/m365-FM/settings/secrets/actions/new>
    - Variable `LINKEDIN_PAGE_ID` (die Zahl aus Schritt 2): <https://github.com/Mirko-Peters/m365-FM/settings/variables/actions/new>
+   - Wenn das OAuth-Werkzeug zusätzlich einen **Refresh-Token** zeigt (bei dir der Fall): ebenfalls als Secrets `LINKEDIN_REFRESH_TOKEN` ([anlegen](https://github.com/Mirko-Peters/m365-FM/settings/secrets/actions/new)),
+     `LINKEDIN_CLIENT_ID` und `LINKEDIN_CLIENT_SECRET` (beide im Reiter **Auth** der App, direkt unter „Application credentials“). Dann erneuert sich der Access-Token bei jedem Lauf selbst;
+     der Refresh-Token gilt 365 Tage ab dem ersten Login, danach einmal neu anmelden.
 5. **Probelauf**: <https://github.com/Mirko-Peters/m365-FM/actions/workflows/linkedin-stats.yml> → „Run workflow“ → Modus **probe**. Das schickt eine Anfrage
    und schreibt nur die *Form* der Antwort ins Protokoll (Feldnamen, `paging.total`), keine Personendaten, und speichert nichts.
 6. Danach Modus **fetch** mit `dry_run` an (zählt und zeigt die Zahl), zuletzt mit `dry_run` aus (speichert in die Datei).

@@ -91,9 +91,22 @@ class T(unittest.TestCase):
                 self.assertTrue(L.save(5000, path=p, today="2026-11-20"))
             self.assertEqual(C.linkedin(p).get("page"), {"page_followers": 5000})
 
+    def test_get_token_refresh_and_fallback(self):
+        env = {"LINKEDIN_ACCESS_TOKEN": "OLD", "LINKEDIN_REFRESH_TOKEN": "RT", "LINKEDIN_CLIENT_ID": "CID", "LINKEDIN_CLIENT_SECRET": "CSEC"}
+        sent = []
+        def ok(url, f): sent.append((url, f)); return 200, {"access_token": "NEW", "expires_in": 5184000}
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            self.assertEqual(L.get_token(env, post=ok), "NEW")
+            self.assertEqual(L.get_token(env, post=lambda u, f: (400, {"error": "invalid_grant"})), "OLD")   # Erneuerung scheitert -> gespeicherter Token
+            self.assertEqual(L.get_token({"LINKEDIN_ACCESS_TOKEN": "OLD", "LINKEDIN_REFRESH_TOKEN": "RT"}, post=ok), "OLD")   # unvollstaendig -> kein Aufruf
+        self.assertEqual(len(sent), 1); self.assertEqual(sent[0][1]["grant_type"], "refresh_token")
+        for secret in ("NEW", "OLD", "RT", "CSEC"): self.assertNotIn(secret, buf.getvalue())
+        self.assertEqual(L.get_token({}, post=ok), "")
+
     def test_main_needs_env(self):
         import os
-        for k in ("LINKEDIN_ACCESS_TOKEN", "LINKEDIN_PAGE_ID"): os.environ.pop(k, None)
+        for k in ("LINKEDIN_ACCESS_TOKEN", "LINKEDIN_PAGE_ID", "LINKEDIN_REFRESH_TOKEN"): os.environ.pop(k, None)
         with contextlib.redirect_stdout(io.StringIO()):
             self.assertEqual(L.main(["probe"]), 2)
 

@@ -3,6 +3,7 @@ name: LinkedIn-Follower in die Mediadaten (woechentlich + manuell)
 # traegt die Summe in data/stats/m365con_linkedin.json ein (page.page_followers). Es werden nur Summen gespeichert, nie Follower-Daten.
 # Einrichtung (einmalig, Schritt fuer Schritt in LINKEDIN.md):
 #   Secret LINKEDIN_ACCESS_TOKEN  Token eines Seiten-Admins mit Recht r_dma_admin_pages_content (laeuft nach 60 Tagen ab - dann neu erzeugen)
+#   Optional zur automatischen Erneuerung: Secrets LINKEDIN_REFRESH_TOKEN, LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET (Refresh-Token 365 Tage)
 #   Variable oder Secret LINKEDIN_PAGE_ID  Zahl der Seite (Admin-URL linkedin.com/company/<ZAHL>/admin/)
 # Reihenfolge: erst Modus "probe" (prueft nur die Form der Antwort, speichert nichts), dann "fetch" mit dry_run, dann "fetch".
 # Zeitplan: sonntags 03:29 UTC liest der Lauf nur die aktuelle Follower-Zahl aus und speichert sie (fetch, ohne dry_run, ohne trust_total).
@@ -54,6 +55,9 @@ jobs:
         if: ${{ steps.setup.outputs.ok == '1' }}
         env:
           LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_REFRESH_TOKEN: ${{ secrets.LINKEDIN_REFRESH_TOKEN }}   # optional: dann holt jeder Lauf einen frischen Access-Token (Client-ID und -Secret noetig)
+          LINKEDIN_CLIENT_ID: ${{ secrets.LINKEDIN_CLIENT_ID }}
+          LINKEDIN_CLIENT_SECRET: ${{ secrets.LINKEDIN_CLIENT_SECRET }}
           LINKEDIN_PAGE_ID: ${{ vars.LINKEDIN_PAGE_ID || secrets.LINKEDIN_PAGE_ID }}
           LINKEDIN_TRUST_TOTAL: ${{ inputs.trust_total && '1' || '0' }}
         run: python tools/linkedin_stats.py ${{ inputs.mode || 'fetch' }} ${{ (inputs.mode || 'fetch') == 'fetch' && inputs.dry_run && '--dry-run' || '' }}
