@@ -26,7 +26,7 @@ permissions:
 concurrency: { group: entity-fill, cancel-in-progress: false }
 jobs:
   fill:
-    if: ${{ github.event_name != 'schedule' || !contains(fromJSON('["0","false","off","aus"]'), vars.ENTITY_AUTO) }}   # Notschalter fuer den Zeitplan (0/false/off/aus); ein schon laufender Lauf muss von Hand abgebrochen werden
+    if: ${{ github.event_name != 'schedule' || !contains(fromJSON('["0","false","off","aus"]'), format('{0}', vars.ENTITY_AUTO)) }}   # Notschalter fuer den Zeitplan (0/false/off/aus); ein schon laufender Lauf muss von Hand abgebrochen werden
     runs-on: ubuntu-latest
     timeout-minutes: 350
     env:
