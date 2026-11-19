@@ -233,7 +233,7 @@ def build(g, posts, people, api):
                        {"@type": "ListItem", "position": 3, "name": "Blog", "item": f"{croot}u/{a['handle']}/blog/"}, {"@type": "ListItem", "position": 4, "name": p["title"], "item": u}]}]
             _tbc = TC.breadcrumb(BASE, lang, topics, ENTS, p["title"], u, title=_en_title.get((p["handle"], p["slug"])) if is_translation(p) else None)   # zweite Spur nach dem Hauptthema (nur JSON-LD); Wochenzusammenfassungen (Thema m365fm) bleiben ohne
             if _tbc: ld.append(_tbc)
-            if _ig: ld += IG.image_ld(BASE, "blog", p["slug"], lang, u)   # Urheber, Credit und Lizenz der Kopf- und Infografik-Bilder (nur mit Freigabe)
+            if _ig: ld += IG.image_ld(BASE, "blog", p["slug"], lang, u, title=p["title"], date=iso(p["published"]))   # Urheber, Credit und Lizenz der Kopf- und Infografik-Bilder (nur mit Freigabe)
             if SPM.ld(_spr):   # neutraler Partner (label "partner"): kein sponsor
                 ld[0]["sponsor"] = SPM.ld(_spr)   # T37 Sponsor: BlogPosting.sponsor
             b = SPM.mark(b, _spr + [r for r in _running if r not in _spr], "post")   # Links zur Website eines laufenden Sponsors tragen rel="sponsored", auch ohne Eintrag unter "posts" (Cognillo-Reihe); ohne Sponsoring unveraendert

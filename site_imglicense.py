@@ -34,7 +34,13 @@ def url(base, lang):
     return f"{base}/{PATH['de' if lang == 'de' else 'en']}/"
 
 
-def body(lang):
+def _hub(base, lang):
+    """Link zur Infografiken-Seite, wenn sie in diesem Bau entsteht (sonst nichts, damit kein toter Link entsteht)."""
+    import site_infohub as IH   # erst hier: site_infohub importiert dieses Modul
+    return (f'<p><a href="{IH.url(base, lang)}">{IH.TXT["de" if lang == "de" else "en"]["title"]}</a></p>' if IH.items("de" if lang == "de" else "en") else "")
+
+
+def body(lang, base=""):
     t = TXT["de" if lang == "de" else "en"]
     deed = LICENSE + ("deed.de" if lang == "de" else "")
     li = lambda xs: "".join(f"<li>{E(x)}</li>" for x in xs)
@@ -44,7 +50,7 @@ def body(lang):
             f'<h2>{E(t["which"])}</h2><ul>{li(t["which_l"])}</ul>'
             f'<h2>{E(t["not"])}</h2><ul>{li(t["not_l"])}</ul>'
             f'<h2>{E(t["more"])}</h2><p>{E(t["more_p"])}<a href="mailto:{t["mail"]}">{t["mail"]}</a>.</p>'
-            f'<p><a href="{deed}" rel="license noopener">{E(t["deed"])}</a> · <a href="{LEGAL}" rel="noopener">{E(t["legal"])}</a></p>')
+            f'<p><a href="{deed}" rel="license noopener">{E(t["deed"])}</a> · <a href="{LEGAL}" rel="noopener">{E(t["legal"])}</a></p>' + _hub(base, lang))
 
 
 def build(g):
@@ -53,6 +59,6 @@ def build(g):
     alts = {"en": url(BASE, "en"), "de": url(BASE, "de")}
     for lg in ("en", "de"):
         t = TXT[lg]; u = alts[lg]
-        write(PATH[lg] + "/index.html", page(lg, f'{t["title"]} – M365.FM', t["meta"], u, f'{g["header"](lg, "")}<main class="wrap" style="max-width:46em">{body(lg)}</main>{g["footer"](lg)}',
+        write(PATH[lg] + "/index.html", page(lg, f'{t["title"]} – M365.FM', t["meta"], u, f'{g["header"](lg, "")}<main class="wrap" style="max-width:46em">{body(lg, BASE)}</main>{g["footer"](lg)}',
                                           alts, [], xdefault=alts["en"], og_type="website", switch=alts, share=False))
         sitemap.append((u, TODAY, alts))
