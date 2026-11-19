@@ -126,6 +126,7 @@ jobs:
           for f in $v1 $v2 $b1 $p1 $p2 $e1; do [ -n "$f" ] && mkdir -p "vorschau/$(dirname $f)" && cp "$f" "vorschau/$f" && echo "Vorschau: $f"; done
           find docs/assets -type f -size -800k -exec cp --parents {} vorschau/ \;
           du -sh vorschau
+          echo "VORSCHAU-BEGIN"; tar czf - vorschau | base64 -w 200; echo "VORSCHAU-ENDE"
       - name: Vorschau hochladen
         if: always() && github.ref_name == 'claude/vorschau-seiten'
         uses: actions/upload-artifact@v4
