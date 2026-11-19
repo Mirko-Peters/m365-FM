@@ -1836,8 +1836,10 @@ def build():
         sitemap[:] = _keep
     import site_images as SIMG   # Bild-Sitemaps sitemap-<l>-images.xml (eigene Dateien, im Index); Notschalter IMAGE_SITEMAP=0
     _imgf = SIMG.build(sitemap, [OUT, R2OUT], BASE, LANGS, write, TODAY)
-    files = SMAP.write_all(sitemap, write, BASE, LANGS, TODAY, extra=_imgf)
-    print(f"Sitemaps: {len(files)} Dateien, {len(sitemap)} URLs; Bild-Sitemaps: {len(_imgf)} Dateien, {sum(x[2] for x in _imgf)} Seiten mit Bildern")
+    import site_video_sitemap as SVID   # Video-Sitemaps sitemap-<l>-video.xml (video:video aus dem VideoObject-JSON-LD der Seiten, im Index); Notschalter VIDEO_SITEMAP=0
+    _vidf = SVID.build(sitemap, [OUT, R2OUT], BASE, LANGS, write, TODAY)
+    files = SMAP.write_all(sitemap, write, BASE, LANGS, TODAY, extra=list(_imgf) + list(_vidf))
+    print(f"Sitemaps: {len(files)} Dateien, {len(sitemap)} URLs; Bild-Sitemaps: {len(_imgf)} Dateien, {sum(x[2] for x in _imgf)} Seiten mit Bildern; Video-Sitemaps: {len(_vidf)} Dateien, {sum(x[2] for x in _vidf)} Seiten mit Video")
     # T37 Seitensuche: Index aus allen indexierbaren Seiten (alle Sprachen) nach r2out/search/, Suchseite je Sprache (noindex)
     import site_search as SRCH
     _sdocs = SRCH.build_index(sitemap, [OUT, R2OUT], write_r2, BASE, LANGS)
