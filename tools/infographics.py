@@ -630,10 +630,16 @@ def cmd_render(kinds, langs, limit, store, root=None, max_min=300, chunk=200, re
                     for j, spec in enumerate([have[l]["header"]] + have[l]["figs"]):
                         jobs.append({"out": str(Path(wd) / f"{n}-{j}"), "spec": spec_for_render(spec, it, l), "meta": [n, j]})
                 try: res = {r["out"]: r for r in render_fn([{"out": j["out"], "spec": j["spec"]} for j in jobs], wd)}
-                except Exception as ex:   # Absturz des Renderers (Node, Haenger): zaehlt als Fehlversuch dieser Saetze, der Lauf geht weiter statt jede Woche am selben Satz zu scheitern
-                    print(f"Renderer abgestuerzt ({type(ex).__name__}); Saetze dieses Blocks zaehlen als Fehlversuch")
-                    for it, l, have in part: fails[f"{it['key']}#{l}"] = fails.get(f"{it['key']}#{l}", 0) + 1; bad += 1
-                    save_state(st, root); continue
+                except Exception as ex:   # Absturz des Renderers (Node, Haenger): jeden Satz einzeln nachrendern, damit nur der ausloesende Satz einen Fehlversuch bekommt
+                    print(f"Renderer abgestuerzt ({type(ex).__name__}); Saetze dieses Blocks einzeln")
+                    res, crashed = {}, 0
+                    for n in range(len(part)):
+                        mine = [j for j in jobs if j["meta"][0] == n]
+                        try: res.update({r["out"]: r for r in render_fn([{"out": j["out"], "spec": j["spec"]} for j in mine], wd)})
+                        except Exception: crashed += 1   # fehlende Ergebnisse zaehlen unten wie ein Layoutfehler dieses einen Satzes
+                    if len(part) > 1 and crashed == len(part):   # jeder Satz stuerzt ab: Umgebung kaputt (Browser startet nicht) - kein Fehlversuch zaehlen, Lauf rot
+                        save_index(k, idx, root); save_state(st, root)
+                        raise RuntimeError(f"Renderer startet nicht ({type(ex).__name__}: {ex}); keine Fehlversuche gezaehlt") from ex
                 by_set = {}
                 for j in jobs: by_set.setdefault(j["meta"][0], []).append(j)
                 for n, js in by_set.items():
@@ -674,7 +680,8 @@ def main(argv=None):
     if a.mode == "specs": cmd_specs(kinds, a.limit, store, st, a.root)
     elif a.mode == "translate": cmd_translate(kinds, langs, a.limit, store, st, a.root)
     elif a.mode == "collect": cmd_collect(a.wait, store, st, kinds, a.root)
-    elif a.mode == "render": cmd_render(kinds, langs, a.limit, store, a.root, a.max_min)
+    elif a.mode == "render":
+        cmd_render(kinds, langs, a.limit, store, a.root, a.max_min); return 0   # cmd_render liest und speichert den Zustand selbst (Fehlversuche rfail); st hier nicht darueber schreiben
     save_state(st, a.root)
     return 0
 

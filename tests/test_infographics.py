@@ -1,6 +1,7 @@
 """Infografiken: Pruefung der Bildtexte, Seitenanbindung (ohne Freigabe Byte fuer Byte unveraendert), Rendern/Index mit Attrappen, Batch-Auswertung."""
 import copy, gzip, json, sys, tempfile, unittest
 from pathlib import Path
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT)); sys.path.insert(0, str(ROOT / "tools"))
@@ -169,6 +170,42 @@ class Pipeline(unittest.TestCase):
             def crash(jobs, wd): raise RuntimeError("node weg")
             made, bad = IGT.cmd_render(["blog"], ["en"], 0, store, root, render_fn=crash, webp_fn=lambda b: b, jpeg_fn=lambda b: b)
             self.assertEqual((made, bad), (0, 1)); self.assertEqual(IGT.load_state(root)["rfail"], {"blog:p1#en": 1})
+
+    def two_posts(self, t, s):
+        root = fixture_root(t); store = IGT.DirStore(s)
+        posts = [{"slug": n, "title": n, "html": "<p>" + "Text über Copilot und SharePoint. " * 30 + "</p>"} for n in ("p1", "p2")]
+        with gzip.open(root / "data" / "podpage" / "blog_posts.json.gz", "wt", encoding="utf-8") as f: json.dump(posts, f)
+        for it in IGT.items("blog", root): store.put(IGT.spec_key(it), {"v": 1, "en": SET})
+        return root, store
+
+    def test_crash_in_block_counts_only_the_crashing_set(self):
+        """Gegenpruefung #560: ein Absturz im 200er-Block zaehlt nur fuer den ausloesenden Satz, die anderen werden einzeln gerendert."""
+        with tempfile.TemporaryDirectory() as t, tempfile.TemporaryDirectory() as s:
+            root, store = self.two_posts(t, s)
+            def render(jobs, wd):
+                if len({Path(j["out"]).name.split("-")[0] for j in jobs}) > 1 or any(Path(j["out"]).name.startswith("0-") for j in jobs): raise RuntimeError("Satz 0 bringt Node um")
+                for j in jobs: Path(j["out"] + ".png").write_bytes(b"P")
+                return [{"out": j["out"], "ok": True, "issues": []} for j in jobs]
+            made, bad = IGT.cmd_render(["blog"], ["en"], 0, store, root, render_fn=render, webp_fn=lambda b: b, jpeg_fn=lambda b: b)
+            self.assertEqual((made, bad), (1, 1)); self.assertEqual(IGT.load_state(root)["rfail"], {"blog:p1#en": 1})
+
+    def test_broken_environment_counts_nothing_and_fails_loudly(self):
+        """Gegenpruefung #560: startet der Browser gar nicht (jeder Satz stuerzt ab), wird kein Fehlversuch gezaehlt und der Lauf endet rot."""
+        with tempfile.TemporaryDirectory() as t, tempfile.TemporaryDirectory() as s:
+            root, store = self.two_posts(t, s)
+            def crash(jobs, wd): raise RuntimeError("chromium fehlt")
+            with self.assertRaises(RuntimeError): IGT.cmd_render(["blog"], ["en"], 0, store, root, render_fn=crash, webp_fn=lambda b: b, jpeg_fn=lambda b: b)
+            self.assertEqual(IGT.load_state(root).get("rfail") or {}, {})
+
+    def test_main_render_keeps_failed_tries(self):
+        """Gegenpruefung #560: main() schrieb nach render den alten Zustand ohne rfail zurueck - Fehlversuche gingen verloren."""
+        with tempfile.TemporaryDirectory() as t, tempfile.TemporaryDirectory() as s:
+            root = fixture_root(t); store = IGT.DirStore(s)
+            store.put(IGT.spec_key(IGT.items("blog", root)[0]), {"v": 1, "en": SET})
+            def crash(jobs, wd): raise RuntimeError("node weg")
+            with mock.patch.object(IGT, "render_jobs", crash):
+                IGT.main(["render", "--kinds", "blog", "--langs", "en", "--root", str(root), "--store-dir", s])
+            self.assertEqual(IGT.load_state(root)["rfail"], {"blog:p1#en": 1})
 
     def test_header_also_uploaded_as_jpeg(self):
         with tempfile.TemporaryDirectory() as t, tempfile.TemporaryDirectory() as s:
