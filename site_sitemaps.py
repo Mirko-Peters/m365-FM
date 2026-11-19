@@ -86,6 +86,7 @@ def effective_lastmods(sitemap, langs, today):
 def write_all(sitemap, write, base, langs, today, extra=()):
     """Schreibt alle Dateien und den Index; -> Liste der Dateinamen. extra: weitere, schon geschriebene Sitemaps (name, lastmod, anzahl), z. B. die Bild-Sitemaps
     von site_images; sie kommen hinter den normalen Dateien in den Index."""
+    sitemap = list(sitemap)   # wird zweimal gelesen (effective_lastmods, Gruppen)
     groups = {}
     seen = set()
     eff = effective_lastmods(sitemap, langs, today)

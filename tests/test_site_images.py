@@ -40,6 +40,11 @@ class Extract(unittest.TestCase):
         got = SI.extract(BASE + "/show/episodes/x/", f"<main><article>{cover}<ul><li>{card}</li></ul></article></main>", BASE)
         self.assertEqual(got, [SPI.variant(u, SPI.SIZES[-1])] if SPI.is_spreaker(u) else [u])
 
+    def test_spreaker_original_not_downsized(self):   # Titelbild frueherer Beitraege: Original 1400 bleibt (site_legacy_blog.hero_html)
+        u = "https://d3wo5wojvuv7l.cloudfront.net/t_rss_itunes_square_1400/images.spreaker.com/original/abc.jpg"
+        got = SI.extract(BASE + "/x/", f'<main><img src="{u}" alt="Titel" width="640" height="640" fetchpriority="high"></main>', BASE)
+        self.assertEqual(got, [u])
+
     def test_limit_per_page(self):
         html = "<main>" + "".join(f'<img src="https://i.m365.fm/{n}.jpg" width="900" height="500">' for n in range(50)) + "</main>"
         self.assertEqual(len(SI.extract(BASE + "/x/", html, BASE)), SI.MAX_PER_PAGE)
