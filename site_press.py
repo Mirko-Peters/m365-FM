@@ -1,6 +1,7 @@
 """Presskit-Seite (Mirko Peters / M365.FM) – /press/ (en) und /de/press/ plus Downloads in /press/files/."""
 import html, json, shutil, zipfile
 import site_mentions as MEN   # Erwaehnungen in fremden Medien (data/press_mentions.json)
+import site_imglicense as ILC   # Bildlizenz-Seite (CC BY 4.0), im Abschnitt Medien verlinkt
 from pathlib import Path
 
 ROOT = Path(__file__).parent
@@ -104,7 +105,7 @@ def build_press(g):
         pl = "".join(f'<li><a href="{sub.get(u, u)}"{" rel=\"me\"" if u in ("{MVP}", "{LIN}") else ""}>{E(n)}</a></li>' for n, u in t["press_l"])
         body = (f'{g["header"](lang, "")}<main class="wrap pk" id="main"><p class="kicker" style="color:var(--mut)">{E(t["tag"])}</p><h1>{E(t["h1"])}</h1><nav class="kpn" aria-label="{E(t["h1"])}">{nav}</nav>'
                 f'<section id="about"><h2>{E(t["about"])}</h2><p style="font-size:1.1em;max-width:46em">{E(t["about_p"])}</p><h3>{E(t["facts"])}</h3><dl class="kfacts">{facts}</dl><h3>{E(t["topics"])}</h3><ul class="kpl">{topics}</ul></section>'
-                f'<section id="media"><h2>{E(t["media"])}</h2><p>{E(t["media_p"])}</p>{media}</section>'
+                f'<section id="media"><h2>{E(t["media"])}</h2><p>{E(t["media_p"])}</p>{media}<p class="mut"><a href="{ILC.url(BASE, lang)}">{E(ILC.TXT["de" if lang == "de" else "en"]["title"])}</a></p></section>'
                 f'<section id="files"><h2>{E(t["files"])}</h2><p>{E(t["files_p"])}</p><p><a class="kcta" href="{base_files}m365fm-presskit.zip" download>{E(t["zip"])}</a></p><ul class="kfl">{files}</ul></section>'
                 f'<section id="colors"><h2>{E(t["colors"])}</h2><p>{E(t["colors_p"])}</p><div class="ksw">{sw}</div><p class="mut">{E(t["fonts"])}</p></section>'
                 f'<section id="team"><h2>{E(t["team"])}</h2><div class="kg"><figure class="ktile"><img src="{base_files}mirko-peters.jpg" width="120" height="120" alt="Mirko Peters" loading="lazy"><small><b>Mirko Peters</b><br>Microsoft MVP · Host M365.FM</small></figure></div><p>{E(t["team_p"])}</p></section>'

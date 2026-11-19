@@ -12,6 +12,7 @@ import site_press as PRS
 import site_sponsor as SPN   # T37 Sponsor-Seite /sponsor/ (Seite, Fusszeilen-Link)
 import site_landing as LND
 import site_mediakit as MKT
+import site_imglicense as ILC   # Bildlizenz CC BY 4.0 (/image-license/, /de/bildlizenz/)
 import site_hardware as HWR   # Hardware-Sponsoring /hardware/ und /hardware/how-we-test/
 import site_hosts as HOSTS   # eigene Subdomains admin.m365.fm und profile.m365.fm (ADMIN_BASE, PROFILE_BASE; leer = wie bisher)
 import site_support as SUP
@@ -1696,6 +1697,7 @@ def build():
                    n_main=_main_archive_episodes, n_langs=len(active), ents=LRN.ENTS, day=_SU.day))
     LND.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, LANGS=LANGS,
                    write_r2=write_r2, sitemap=sitemap, TODAY=TODAY, n_main=_main_archive_episodes, n_langs=len(active), stats=SPN.load_stats()))
+    ILC.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, sitemap=sitemap, TODAY=TODAY))   # Bildlizenz-Seiten (Ziel von acquireLicensePage)
     MKT.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, LANGS=LANGS, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API))   # Mediadaten /media-kit/
     MKT.build_con(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, LANGS=LANGS, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API))   # M365Con-Sponsordaten /m365con/sponsor/ (#260)
     HWR.build(dict(write=write, page=page, header=header, footer=footer, BASE=BASE, LANGS=LANGS, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API))   # Hardware-Sponsoring /hardware/ (Mirko, 16.11.2026)

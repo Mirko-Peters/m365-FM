@@ -65,7 +65,8 @@ def image_ld(base, kind, slug, lang, page_url):
     g = get(kind, slug, lang)
     return [{"@context": "https://schema.org", "@type": "ImageObject", "@id": f"{page_url}#ig{i}", "contentUrl": im["u"], "url": im["u"], "width": im["w"], "height": im["h"],
              "caption": im["a"], "inLanguage": lang, "creator": {"@type": "Organization", "@id": f"{base}/#org", "name": "M365.FM", "url": f"{base}/"},
-             "creditText": "M365.FM", "copyrightNotice": "© M365.FM", "license": LICENSE} for i, im in enumerate(g or [])]
+             "creditText": "M365.FM", "copyrightNotice": "© M365.FM", "license": LICENSE,
+             "acquireLicensePage": f"{base}/{'de/bildlizenz' if lang == 'de' else 'image-license'}/"} for i, im in enumerate(g or [])]
 
 
 def _fig(im, hero=False):
