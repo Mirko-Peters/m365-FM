@@ -1823,8 +1823,10 @@ def build():
     if _gone:
         print(f"Sitemap: {len(_gone)} weitergeleitete Adressen ausgelassen, z. B. " + ", ".join(_gone[:5]))
         sitemap[:] = _keep
-    files = SMAP.write_all(sitemap, write, BASE, LANGS, TODAY)
-    print(f"Sitemaps: {len(files)} Dateien, {len(sitemap)} URLs")
+    import site_images as SIMG   # Bild-Sitemaps sitemap-<l>-images.xml (eigene Dateien, im Index); Notschalter IMAGE_SITEMAP=0
+    _imgf = SIMG.build(sitemap, [OUT, R2OUT], BASE, LANGS, write, TODAY)
+    files = SMAP.write_all(sitemap, write, BASE, LANGS, TODAY, extra=_imgf)
+    print(f"Sitemaps: {len(files)} Dateien, {len(sitemap)} URLs; Bild-Sitemaps: {len(_imgf)} Dateien, {sum(x[2] for x in _imgf)} Seiten mit Bildern")
     # T37 Seitensuche: Index aus allen indexierbaren Seiten (alle Sprachen) nach r2out/search/, Suchseite je Sprache (noindex)
     import site_search as SRCH
     _sdocs = SRCH.build_index(sitemap, [OUT, R2OUT], write_r2, BASE, LANGS)

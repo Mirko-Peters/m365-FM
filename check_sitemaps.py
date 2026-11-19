@@ -15,7 +15,8 @@ ROOT = Path(__file__).parent
 DOCS = ROOT / "docs"
 R2OUT = None   # None: r2out/ neben DOCS
 BASE = "https://" + ((ROOT / "domain.txt").read_text().strip() if (ROOT / "domain.txt").exists() else "www.m365.fm")
-NS = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9", "x": "http://www.w3.org/1999/xhtml"}
+NS = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9", "x": "http://www.w3.org/1999/xhtml", "i": "http://www.google.com/schemas/sitemap-image/1.1"}
+IMG_FILE = re.compile(r"^sitemap-[a-z]{2}-images(-\d+)?\.xml$")   # Bild-Sitemaps (site_images.py): dieselben Seiten-URLs wie in den normalen Sitemaps, dazu image:image
 DATE = re.compile(r"^\d{4}-\d{2}-\d{2}(T[0-9:+\-Z.]+)?$")
 
 
@@ -35,6 +36,7 @@ def main(argv=()):
     if len(argv) > 1: DOCS = Path(argv[1])
     r2 = Path(argv[2]) if len(argv) > 2 else (R2OUT or DOCS.parent / "r2out")
     errs, seen, total, n_r2 = [], {}, 0, 0
+    img_seen, n_imgfiles, n_imgs = {}, 0, 0
     idx = DOCS / "sitemap.xml"
     if not idx.exists():
         print("docs/sitemap.xml fehlt"); return 1
@@ -59,12 +61,23 @@ def main(argv=()):
             errs.append(f"{f.name}: nicht wohlgeformt ({e})"); continue
         urls = r.findall("s:url", NS)
         if len(urls) > 50000: errs.append(f"{f.name}: {len(urls)} URLs (> 50.000)")
-        total += len(urls)
+        is_img = bool(IMG_FILE.match(f.name))
+        if is_img: n_imgfiles += 1
+        else: total += len(urls)
         for u in urls:
             loc_el, lm = u.find("s:loc", NS), u.find("s:lastmod", NS)
             l = (loc_el.text or "").strip() if loc_el is not None else ""
             if not l.startswith(BASE + "/") and l != BASE + "/": errs.append(f"{f.name}: loc nicht absolut/eigene Domain: {l[:80]}")
             if lm is None or not DATE.match((lm.text or "").strip()): errs.append(f"{f.name}: lastmod fehlt/ungültig bei {l[:80]}")
+            if is_img:   # Bild-Sitemap: jede Seite einmal (Doppelte nur innerhalb der Bild-Sitemaps pruefen), mit 1-1000 Bildern auf https
+                if l in img_seen: errs.append(f"doppelt: {l[:80]} in {img_seen[l]} und {f.name}")
+                img_seen[l] = f.name
+                ims = [(e.text or "").strip() for e in u.findall("i:image/i:loc", NS)]
+                if not ims or len(ims) > 1000: errs.append(f"{f.name}: {len(ims)} Bilder bei {l[:80]}")
+                n_imgs += len(ims)
+                for im in ims:
+                    if not im.startswith("https://"): errs.append(f"{f.name}: Bild nicht https: {im[:80]}")
+                continue
             if l in seen: errs.append(f"doppelt: {l[:80]} in {seen[l]} und {f.name}")
             seen[l] = f.name
             alts = u.findall("x:link", NS)
@@ -72,8 +85,10 @@ def main(argv=()):
                 _en = [a.get("href") for a in alts if a.get("hreflang") == "en"]; _xd = [a.get("href") for a in alts if a.get("hreflang") == "x-default"]
                 if _en and _xd != _en[:1]: errs.append(f"{f.name}: x-default fehlt oder ist nicht die englische Fassung bei {l[:80]}")
                 if not _en and _xd: errs.append(f"{f.name}: x-default ohne englische Fassung bei {l[:80]}")
+    for l, n in img_seen.items():   # jede Seite der Bild-Sitemaps steht auch in einer normalen Sitemap
+        if l not in seen: errs.append(f"{n}: Seite steht in keiner normalen Sitemap: {l[:80]}")
     for e in errs[:40]: print("FEHLER", e)
-    print(f"{len(files)} Sitemap-Dateien ({n_r2} davon in r2out/), {total} URLs, {len(errs)} Fehler")
+    print(f"{len(files)} Sitemap-Dateien ({n_r2} davon in r2out/), {total} URLs, {len(errs)} Fehler" + (f"; Bild-Sitemaps: {n_imgfiles} Dateien, {len(img_seen)} Seiten, {n_imgs} Bilder" if n_imgfiles else ""))
     return 1 if errs else 0
 
 
