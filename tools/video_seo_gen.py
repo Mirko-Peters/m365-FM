@@ -233,9 +233,11 @@ def apply_results(lines, b, st, root=None, sources=None):
                 ans = parse("".join(c.get("text", "") for c in m.get("content", []) if c.get("type") == "text"))
                 entry = VS.make_entry_en(ans, marks, s) if stage == "write" else VS.make_entry_tr(ans, idx_of("en")[vid], lang)
             except ValueError: entry = None; ans = None
+            if not entry and stage != "write":
+                why = f"{lang}: " + VS.reject_reason_tr(ans, idx_of("en").get(vid), lang) + (" (abgeschnitten)" if m.get("stop_reason") == "max_tokens" else ""); REASONS[why] = REASONS.get(why, 0) + 1
             if not entry and stage == "write":
                 why = VS.reject_reason(ans, marks) + (" (abgeschnitten)" if m.get("stop_reason") == "max_tokens" else ""); REASONS[why] = REASONS.get(why, 0) + 1
-        elif stage == "write": why = "Batch-Fehler " + str(res.get("type")); REASONS[why] = REASONS.get(why, 0) + 1
+        else: why = "Batch-Fehler " + str(res.get("type")); REASONS[why] = REASONS.get(why, 0) + 1
         if entry: idx_of(lang)[key] = entry; done += 1
         else: st["tries"][tk] = st["tries"].get(tk, 0) + 1; bad += 1   # tk = Referenz = Schluessel in todo_*
     for l, idx in cache.items(): save_index(l, idx, root)
@@ -255,7 +257,7 @@ def collect(wait_s=0, root=None, sleep=time.sleep):
         st["batches"] = left; save_state(st, root)
         if not left or time.time() - t0 >= wait_s: break
         print(f"noch {len(left)} Batch(es) offen, warte ...", flush=True); sleep(60)
-    if REASONS: print("Ablehnungsgruende:", ", ".join(f"{k} x{v}" for k, v in sorted(REASONS.items(), key=lambda x: -x[1])))
+    if REASONS: print("Ablehnungsgruende:", ", ".join(f"{k} x{v}" for k, v in sorted(REASONS.items(), key=lambda x: -x[1])[:60]))
     return total
 
 
