@@ -66,22 +66,37 @@ def drop_redirected(sitemap, table):
     return keep, [x[0] for x in gone]
 
 
+def effective_lastmods(sitemap, langs, today):
+    """-> {url: lastmod} wie in den Sitemap-Dateien: Hubs (lastmod = Baudatum) bekommen den juengsten echten Inhalt ihrer Gruppe (Sprache, Typ).
+    Auch von site_images genutzt, damit Bild- und normale Sitemap dasselbe Datum zeigen."""
+    groups, out = {}, {}
+    for u, lm, _alts in sitemap:
+        if u in out: continue
+        out[u] = (lm or today)[:10]
+        groups.setdefault(classify(urlsplit(u).path, langs), []).append(u)
+    for urls in groups.values():
+        real = [out[u] for u in urls if out[u] != today]
+        if not real: continue
+        newest = max(real)
+        for u in urls:
+            if out[u] == today: out[u] = newest   # Hubs: juengster Inhalt statt Baudatum
+    return out
+
+
 def write_all(sitemap, write, base, langs, today, extra=()):
     """Schreibt alle Dateien und den Index; -> Liste der Dateinamen. extra: weitere, schon geschriebene Sitemaps (name, lastmod, anzahl), z. B. die Bild-Sitemaps
     von site_images; sie kommen hinter den normalen Dateien in den Index."""
     groups = {}
     seen = set()
+    eff = effective_lastmods(sitemap, langs, today)
     for u, lm, alts in sitemap:
         if u in seen: continue
         seen.add(u)
         lang, typ = classify(urlsplit(u).path, langs)
-        groups.setdefault((lang, typ), []).append((u, (lm or today)[:10], alts))
+        groups.setdefault((lang, typ), []).append((u, eff[u], alts))
     files = []
     for (lang, typ) in sorted(groups, key=lambda k: (k[0] != "en", k[0], TYPES.index(k[1]))):
         ents = groups[(lang, typ)]
-        real = [e[1] for e in ents if e[1] != today]
-        newest = max(real) if real else today
-        ents = [(u, newest if lm == today and real else lm, alts) for u, lm, alts in ents]   # Hubs: juengster Inhalt statt Baudatum
         ents.sort(key=lambda e: (e[1], e[0]), reverse=True)
         parts = [ents[i:i + MAX_URLS] for i in range(0, len(ents), MAX_URLS)] or [[]]
         for n, part in enumerate(parts):

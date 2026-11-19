@@ -32,6 +32,14 @@ class Extract(unittest.TestCase):
     def test_no_main_no_images(self):
         self.assertEqual(SI.extract(BASE + "/x/", '<img src="https://a.b/c.jpg" width="900" height="900">', BASE), [])
 
+    def test_lead_image_kept_despite_small_display_size(self):   # Folgencover: img_tag(..., 160, eager=True) in site_podpage, Spreaker -> groesste Variante
+        import site_spreaker_img as SPI
+        u = "https://d3wo5wojvuv7l.cloudfront.net/t_square_limited_160/images.spreaker.com/original/abc.jpg"
+        cover = f'<img {SPI.src_attrs(u, 160)} alt="Cover der Folge" width="160" height="160" fetchpriority="high" decoding="async">'
+        card = f'<img {SPI.src_attrs(u.replace("abc", "def"), 96)} alt="" width="96" height="96" fetchpriority="high" decoding="async">'
+        got = SI.extract(BASE + "/show/episodes/x/", f"<main><article>{cover}<ul><li>{card}</li></ul></article></main>", BASE)
+        self.assertEqual(got, [SPI.variant(u, SPI.SIZES[-1])] if SPI.is_spreaker(u) else [u])
+
     def test_limit_per_page(self):
         html = "<main>" + "".join(f'<img src="https://i.m365.fm/{n}.jpg" width="900" height="500">' for n in range(50)) + "</main>"
         self.assertEqual(len(SI.extract(BASE + "/x/", html, BASE)), SI.MAX_PER_PAGE)
@@ -66,6 +74,17 @@ class Build(unittest.TestCase):
         for n in ("sitemap-en-images.xml", "sitemap-de-images.xml", "sitemap-fr-images.xml"): self.assertIn(f"<loc>{BASE}/{n}</loc>", idx)
         self.assertIn("sitemap-en-blog.xml", idx)   # normale Sitemaps unveraendert im Index
         self.assertNotIn("image:", "".join(v for k, v in self.out.items() if "images" not in k))
+
+    def test_hub_lastmod_matches_normal_sitemap(self):   # Hub mit Baudatum: in beiden Sitemaps der juengste Inhalt seiner Gruppe, nicht das Baudatum
+        (self.docs / "community/u/m/blog/c").mkdir(parents=True); (self.docs / "community/u/m/blog/c/index.html").write_text(PAGE, "utf-8")
+        sm = self.sm + [(f"{BASE}/community/u/m/blog/c/", "2026-11-18", None)]
+        SI.build(sm, [self.docs, self.r2], BASE, LANGS, self.write, "2026-11-18")
+        SMAP.write_all(sm, self.write, BASE, LANGS, "2026-11-18")
+        hub = f"<loc>{BASE}/community/u/m/blog/c/</loc><lastmod>"
+        img = self.out["sitemap-en-images.xml"]; lm = img.split(hub)[1][:10]
+        self.assertEqual(lm, SMAP.effective_lastmods(sm, LANGS, "2026-11-18")[f"{BASE}/community/u/m/blog/c/"])
+        self.assertNotEqual(lm, "2026-11-18")
+        self.assertTrue(any(hub + lm in v for k, v in self.out.items() if "images" not in k))
 
     def test_split_by_url_count(self):
         old = SI.MAX_URLS; SI.MAX_URLS = 1
