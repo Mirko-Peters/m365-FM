@@ -499,6 +499,26 @@ def cmd_translate(kinds, langs, limit, store, st, root=None):
         submit("translate", l, reqs, mapping, st, cost_eur(1, IN_EST_TR), root)
 
 
+def cmd_check(kinds, langs, store, root=None):
+    """Was ist offen? -> {"spec","tr","render","open"} (Zeitplan: nur starten, wenn etwas zu tun ist). Zaehlt wie specs/translate/render auswaehlen:
+    Inhalte ohne en-Bildtexte, ohne Uebersetzung, ohne Bild; ausgenommen Fehlversuchs-Grenzen und Inhalte in offenen Batches. open = offene Batches (einsammeln)."""
+    st = load_state(root); busy = open_keys(st); fails = st.get("rfail", {}); out = {"spec": 0, "tr": 0, "render": 0, "open": len(st["batches"])}
+    for k in kinds:
+        idx = load_index(k, root)
+        for it in items(k, root):
+            have = store.get(spec_key(it)) or {}
+            if not have.get("en"):
+                if it["key"] not in busy and st["tries"].get(it["key"], 0) < MAX_TRIES: out["spec"] += 1
+                continue
+            for l in langs:
+                if have.get(l):
+                    if not (idx.get(it["slug"]) or {}).get(l) and fails.get(f"{it['key']}#{l}", 0) < RENDER_TRIES: out["render"] += 1
+                elif l != "en":
+                    tk = it["key"] + "#" + l
+                    if tk not in busy and st["tries"].get(tk, 0) < MAX_TRIES: out["tr"] += 1
+    return out
+
+
 def apply_results(lines, b, store, st, by_key):
     """Ergebnisse eines Batches pruefen und speichern -> (ok, schlecht, token_ein, token_aus, cache_read, cache_write, unbekannt).
     unbekannt = Ergebnisse zu Inhalten, die es in den Quellen nicht mehr gibt (zaehlt nicht als verloren: Batch bleibt dann im Zustand)."""
@@ -635,7 +655,7 @@ def cmd_render(kinds, langs, limit, store, root=None, max_min=300, chunk=200, re
 # ------------------------------------------------------------------ Aufruf
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("mode", choices=["plan", "specs", "translate", "collect", "render"])
+    ap.add_argument("mode", choices=["plan", "specs", "translate", "collect", "render", "check"])
     ap.add_argument("--kinds"); ap.add_argument("--langs", default=",".join(LANGS)); ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--wait", type=int, default=0); ap.add_argument("--max-min", type=int, default=300)
     ap.add_argument("--root"); ap.add_argument("--store-dir", help="Ordner statt R2 (Tests)")
@@ -644,6 +664,8 @@ def main(argv=None):
     store = DirStore(a.store_dir) if a.store_dir else (R2Store() if a.mode != "plan" or os.environ.get("R2_BUCKET") else None)
     if a.mode == "plan":
         print(plan_text(plan(kinds, langs, a.root, store, a.limit), langs, a.limit)); return 0
+    if a.mode == "check":
+        r = cmd_check(kinds, langs, store, a.root); print(*(f"{k}={v}" for k, v in r.items()), sep="\n"); return 0   # key=value: geht in GITHUB_OUTPUT
     st = load_state(a.root)
     if a.mode == "specs": cmd_specs(kinds, a.limit, store, st, a.root)
     elif a.mode == "translate": cmd_translate(kinds, langs, a.limit, store, st, a.root)
