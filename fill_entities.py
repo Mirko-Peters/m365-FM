@@ -626,7 +626,9 @@ def add_spend(kind, model, tin, tout, month=None):
     k["input_tokens"] += tin; k["output_tokens"] += tout; k["usd"] = round(k["usd"] + c, 4)
     mo = sp.setdefault("months", {}).setdefault(month or month_key(), {})
     mo[kind + "_usd"] = round(mo.get(kind + "_usd", 0.0) + c, 4)
-    wk = sp.setdefault("weeks", {}).setdefault(week_key(), {})
+    if "weeks" not in sp:   # erstes Wochenbuch: schon Ausgegebenes dieser Woche (Altbestand) als Startwert, sonst fiele es aus der Wochengrenze
+        sp["weeks"] = {week_key(): legacy_week(sp)}
+    wk = sp["weeks"].setdefault(week_key(), {})
     wk[kind + "_usd"] = round(wk.get(kind + "_usd", 0.0) + c, 4)
     sp["updated"] = datetime.now(timezone.utc).isoformat()[:19]
     jsave(OUT / SPEND, sp)
@@ -647,15 +649,21 @@ def month_room(state, month=None):
     return MONTH_CAP - spend_entities().get("months", {}).get(m, {}).get("write_usd", 0.0) - pending_usd(state, "write", m)
 
 
+def legacy_week(sp):
+    """Altbestand ohne Wochenbuch: lag die letzte Buchung in dieser Kalenderwoche, zaehlt der ganze Monat dieser Buchung (vorsichtig, einmalig).
+    Der Monat ist der der letzten Buchung, nicht der heutige (Woche ueber einen Monatswechsel). Ergebnis {kind_usd: Betrag}."""
+    try:
+        d = datetime.strptime((sp.get("updated") or "")[:10], "%Y-%m-%d"); y, w, _ = d.isocalendar()
+    except ValueError:
+        return {}
+    return dict(sp.get("months", {}).get(d.strftime("%Y-%m"), {})) if f"{y}-W{w:02d}" == week_key() else {}
+
+
 def week_room(state):
     """Rest der Wochengrenze (ENTITY_WEEK_USD, nur im Zeitplan gesetzt): in dieser Kalenderwoche verbucht plus Obergrenze aller offenen Batches. Ohne Grenze unbegrenzt."""
     if WEEK_CAP is None: return float("inf")
     sp = spend_entities()
-    if "weeks" in sp: wk = sp["weeks"].get(week_key(), {})
-    else:   # Altbestand ohne Wochenbuch: war die letzte Buchung in dieser Woche, zaehlt der ganze Monat (vorsichtig, einmalig)
-        try: y, w, _ = datetime.strptime((sp.get("updated") or "")[:10], "%Y-%m-%d").isocalendar(); same = f"{y}-W{w:02d}" == week_key()
-        except ValueError: same = False
-        wk = sp.get("months", {}).get(month_key(), {}) if same else {}
+    wk = sp["weeks"].get(week_key(), {}) if "weeks" in sp else legacy_week(sp)
     return WEEK_CAP - sum(v for k, v in wk.items() if k.endswith("_usd")) - pending_usd(state)
 
 

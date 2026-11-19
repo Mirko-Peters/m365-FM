@@ -49,6 +49,21 @@ class WeekCap(Base):
         F.jsave(F.OUT / F.SPEND, {"usd": 31.0, "months": {F.month_key(): {"write_usd": 31.0}}, "updated": "2020-01-01T00:00:00"})
         with mock.patch.object(F, "WEEK_CAP", 10.0): self.assertAlmostEqual(F.week_room({}), 10.0)
 
+    def test_first_week_book_keeps_this_weeks_old_spend(self):
+        """Gegenpruefung #559: die erste Buchung legt das Wochenbuch an - die schon verbuchten 31 USD dieser Woche (Altbestand) bleiben darin."""
+        today = F.datetime.now(F.timezone.utc).isoformat()[:19]
+        F.jsave(F.OUT / F.SPEND, {"usd": 31.0, "months": {today[:7]: {"write_usd": 31.0}}, "updated": today})
+        F.add_spend("translate", F.TMODEL, 1000, 1000)
+        with mock.patch.object(F, "WEEK_CAP", 10.0): self.assertLess(F.week_room({}), 0)
+        self.assertGreaterEqual(F.spend_entities()["weeks"][F.week_key()].get("write_usd", 0), 31.0)
+
+    def test_legacy_uses_month_of_last_booking(self):
+        """Woche ueber einen Monatswechsel: es zaehlt der Monat der letzten Buchung, nicht der heutige."""
+        d = F.datetime.now(F.timezone.utc)
+        sp = {"months": {d.strftime("%Y-%m"): {"write_usd": 5.0}}, "updated": d.isoformat()[:19]}
+        self.assertEqual(F.legacy_week(sp), {"write_usd": 5.0})
+        self.assertEqual(F.legacy_week({"months": {}, "updated": "kaputt"}), {})
+
     def test_spend_and_pending_reduce_the_room(self):
         with mock.patch.object(F, "WEEK_CAP", 10.0):
             self.assertAlmostEqual(F.week_room({}), 10.0)
@@ -68,8 +83,10 @@ class WeekCap(Base):
 class Workflow(unittest.TestCase):
     def test_schedule_has_kill_switch_and_week_cap(self):
         y = (ROOT / ".github/workflows/entity-fill.yml").read_text("utf-8")
-        for need in ("schedule:", "vars.ENTITY_AUTO", "ref: ${{ github.event_name == 'schedule'", "ENTITY_WEEK_USD", "--min-age-days $MINAGE_IN", "github.event_name == 'schedule' && '1'"):
+        for need in ("schedule:", "vars.ENTITY_AUTO", "ref: ${{ github.event_name == 'schedule'", "ENTITY_WEEK_USD", "--min-age-days $MINAGE_IN", "github.event_name == 'schedule' && '1'",
+                     "|| github.ref }}", "ENTITY_HAIKU_RUN_EUR"):
             self.assertIn(need, y)
+        self.assertNotIn("|| github.sha }}", y)   # Gegenpruefung #559: ein wartender Handlauf muss den Stand beim Start sehen, nicht den beim Ausloesen
 
 
 if __name__ == "__main__":

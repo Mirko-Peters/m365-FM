@@ -38,11 +38,12 @@ jobs:
       HAIKU_USD_PER_MTOK_IN: ${{ vars.HAIKU_USD_PER_MTOK_IN || '0.10' }}
       HAIKU_USD_PER_MTOK_OUT: ${{ vars.HAIKU_USD_PER_MTOK_OUT || '0.50' }}
       USD_PER_EUR: ${{ vars.USD_PER_EUR || '1.08' }}
-      ENTITY_WEEK_USD: ${{ github.event_name == 'schedule' && (vars.ENTITY_WEEK_USD || '10') || '' }}   # nur im Zeitplan; zaehlt auch von Hand Verbrauchtes derselben Kalenderwoche
+      ENTITY_WEEK_USD: ${{ github.event_name == 'schedule' && (vars.ENTITY_WEEK_USD || '10') || '' }}
+      ENTITY_HAIKU_RUN_EUR: ${{ github.event_name == 'schedule' && (vars.ENTITY_HAIKU_RUN_EUR || '2') || '' }}   # Zeitplan: hoechstens 2 der 5 EUR Haiku-Tagesbudget (gemeinsam mit Blog-, Show-, Infografik-Uebersetzungen), von Hand bis 4 EUR   # nur im Zeitplan; zaehlt auch von Hand Verbrauchtes derselben Kalenderwoche
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: ${{ github.event_name == 'schedule' && 'main' || github.sha }}   # Zeitplan: immer der neueste Stand (Kostenbuch, offene Batches), nicht der Stand zum Startzeitpunkt
+          ref: ${{ github.event_name == 'schedule' && 'main' || github.ref }}   # immer der neueste Stand des Zweigs beim Start (Kostenbuch, offene Batches): auch ein Handlauf, der hinter dem Zeitplan gewartet hat, sieht dessen Ergebnisse (nicht github.sha vom Auslösen)
       - uses: actions/setup-python@v7
         with: { python-version: "3.12" }
       - name: Entitaeten fuellen
