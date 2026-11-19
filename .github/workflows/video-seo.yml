@@ -1,0 +1,75 @@
+name: Video-SEO der Sticky-Man-Videoseiten (Sonnet schreibt, Haiku übersetzt)
+# tools/video_seo_gen.py: Stufe write = Sonnet schreibt je Video SEO-Titel, Meta-Description, Zusammenfassung und Kapitel aus dem Transkript (englisch);
+# Stufe translate = Haiku uebersetzt das Set in die Sprachen, in denen es die Videoseite gibt. Ergebnis: data/video_seo/<sprache>.json.gz.
+# Auf den Seiten wirkt es erst mit data/video_seo_live.json (Sprachen freigeben); ohne Freigabe aendert sich keine Seite. YouTube wird nicht angefasst (Taja AI).
+# Nur von Hand: mode plan (zaehlen, Kosten schaetzen, nichts wird bezahlt) | run (senden + einsammeln) | collect (nur einsammeln). Probe: limit 10.
+# Kostenschutz: Sonnet bricht ab, wenn Schaetzung/bisherige Ausgaben VIDEO_SEO_MAX_EUR (Repo-Variable, Standard 10) uebersteigen; Haiku laeuft im Tagesbudget des Gateways (Job video_seo).
+# Kosten: alle 271 Videos ca. 4 EUR (Sonnet-Batch) + ca. 1,5 EUR (Haiku-Batch).
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "plan = nur zaehlen/schaetzen | run = senden und einsammeln | collect = nur einsammeln"
+        type: choice
+        options: [plan, run, collect]
+        default: plan
+      stage:
+        description: "write = Sonnet schreibt (englisch) | translate = Haiku uebersetzt | all (nur fuer plan)"
+        type: choice
+        options: [write, translate, all]
+        default: write
+      limit: { description: "Hoechstens N Videos bzw. Uebersetzungen (leer = alle offenen); fuer die Probe 10", required: false, default: "" }
+      vids: { description: "Nur diese YouTube-IDs (Komma), leer = alle", required: false, default: "" }
+permissions:
+  contents: write
+concurrency: { group: video-seo, cancel-in-progress: false }
+jobs:
+  seo:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    env:
+      AI_GATEWAY_ID: ${{ vars.AI_GATEWAY_ID || 'm365fm' }}
+      COMMUNITY_API: https://api-dub.m365.fm
+      HAIKU_USD_PER_MTOK_IN: ${{ vars.HAIKU_USD_PER_MTOK_IN || '0.10' }}
+      HAIKU_USD_PER_MTOK_OUT: ${{ vars.HAIKU_USD_PER_MTOK_OUT || '0.50' }}
+      SONNET_USD_PER_MTOK_IN: ${{ vars.SONNET_USD_PER_MTOK_IN || '2' }}
+      SONNET_USD_PER_MTOK_OUT: ${{ vars.SONNET_USD_PER_MTOK_OUT || '10' }}
+      VIDEO_SEO_MAX_EUR: ${{ vars.VIDEO_SEO_MAX_EUR || '10' }}
+      USD_PER_EUR: ${{ vars.USD_PER_EUR || '1.08' }}
+      MODE_IN: ${{ inputs.mode }}
+      STAGE_IN: ${{ inputs.stage }}
+      LIMIT_IN: ${{ inputs.limit }}
+      VIDS_IN: ${{ inputs.vids }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.ref }}
+      - uses: actions/setup-python@v7
+        with: { python-version: "3.12" }
+      - name: Selbsttest (ohne Netz, ohne Secrets)
+        run: python -m unittest tests/test_video_seo.py
+      - name: Eingaben pruefen
+        run: |
+          [[ -z "$LIMIT_IN" || "$LIMIT_IN" =~ ^[0-9]+$ ]] || { echo "limit ungueltig"; exit 1; }
+          [[ -z "$VIDS_IN" || "$VIDS_IN" =~ ^[A-Za-z0-9_-]{6,20}(,[A-Za-z0-9_-]{6,20})*$ ]] || { echo "vids ungueltig"; exit 1; }
+          [[ "$MODE_IN" = "plan" || "$STAGE_IN" != "all" ]] || { echo "fuer run bitte write oder translate waehlen"; exit 1; }
+      - name: Ausfuehren
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
+          CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
+          CRON_KEY: ${{ secrets.CRON_KEY }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          ARGS=(--stage "$STAGE_IN")
+          [ -n "$LIMIT_IN" ] && ARGS+=(--limit "$LIMIT_IN")
+          [ -n "$VIDS_IN" ] && ARGS+=(--vids "$VIDS_IN")
+          [ "$MODE_IN" != "plan" ] && ARGS+=(--wait 20000)
+          python tools/video_seo_gen.py "$MODE_IN" "${ARGS[@]}" | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Ergebnis sichern
+        if: always() && env.MODE_IN != 'plan'
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          git add data/video_seo data/video_seo_state.json 2>/dev/null || true
+          if git diff --cached --quiet; then echo "Nichts zu sichern"; exit 0; fi
+          git commit -q -m "Video-SEO-Texte aktualisiert $(date -u +%Y-%m-%dT%H:%MZ)"
+          for i in 1 2 3 4 5; do (git pull --rebase -q -X theirs && git push -q) && exit 0; sleep 5; done; exit 1

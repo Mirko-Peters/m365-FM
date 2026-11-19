@@ -51,6 +51,7 @@ from pathlib import Path
 import hashlib
 import site_money as SM
 import site_cover
+import video_seo as VSEO   # Video-SEO der Sticky-Man-Videoseiten (SEO-Titel, Meta, Zusammenfassung, Kapitel; nur mit Freigabe data/video_seo_live.json)
 import site_player as PL   # Player (YouTube, Spreaker) erst nach Klick: Platzhalter mit festen Massen statt iframe
 from site_content import FAQ
 from site_taxonomy import (CATS, ORDER, TOPICS, TAGW, cat_name, classify, tags_of, tag_slug, tag_url, related, autolink, _rx_i, common_topic)
@@ -1271,6 +1272,7 @@ def build():
         _el = {k: u for k, u in _ep_links.items() if u}   # zugeordnete Plattform-Folgenlinks -> sameAs
         more = related(it, by_lang[l], tagsets[l], catsets[l])
         _spr = SPM.episode(vid=vid)   # T37 Sponsor: Dub-Folge aus einem Sponsoring (dauerhaft)
+        _vcl = VSEO.clips(l, vid)   # Kapitel als Clips (Schluesselmomente); leer ohne Freigabe
         ld = [
             {"@context": "https://schema.org", "@type": "PodcastEpisode", "@id": canonical + "#episode", "name": e["title"], "description": strip_tags(intro),
              "url": canonical, "inLanguage": LANGS[l][1], "datePublished": it["date"],
@@ -1287,7 +1289,7 @@ def build():
             {"@context": "https://schema.org", "@type": "VideoObject", "@id": canonical + "#video", "name": e["title"], "description": strip_tags(intro),
              "thumbnailUrl": [f"https://i.ytimg.com/vi/{vid}/maxresdefault.jpg", f"https://i.ytimg.com/vi/{vid}/hqdefault.jpg"],
              "uploadDate": videos.get(vid, {}).get("date", it["date"]), "contentUrl": f"https://www.youtube.com/watch?v={vid}",
-             "embedUrl": f"https://www.youtube-nocookie.com/embed/{vid}", "isFamilyFriendly": True, "inLanguage": LANGS[l][1],
+             "embedUrl": f"https://www.youtube-nocookie.com/embed/{vid}", "isFamilyFriendly": True, "inLanguage": LANGS[l][1], **({"hasPart": _vcl} if _vcl else {}),
              "publisher": {"@id": f"{BASE}/#org"}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}},
             person_ld(), org_ld(),
         ]
@@ -1367,7 +1369,7 @@ def build():
 <div class="panel">{PL.player("spreaker", it["eid"], e["title"], ui[0], link=spk)}
 <div class="btns">{btns}</div>{"<p class=showrow>" + showrow + "</p>" if showrow else ""}</div>{LST.follow_for(BASE, l)}
 <div style="margin:22px 0">{PL.player("youtube", vid, e["title"], ui[1], link=yt)}</div>
-<p class="mut">▶ {esc(e["title"])}</p>
+<p class="mut">▶ {esc(e["title"])}</p>{VSEO.section(l, vid)}
 <h2>{esc(hdr)}</h2><ol class="points">{lis}</ol>
 {_aud_h}
 {("<section class=article>" + art_html + "</section>") if art_html else ""}{quiz_block}{faq_block}{notes_block}
@@ -1380,7 +1382,7 @@ def build():
 {footer(l)}{community_tags(l, vid, css_async=True)}"""
         if _spr: body = SPM.mark(body, _spr, "episode")   # T37 Sponsor: Links zum Sponsor mit rel="sponsored"
         OG_COVER[canonical] = art_svg(vid, LANGS[l][0], lang=l)
-        _mt = MP.episode_title(l, e["title"], uniq=MPU); _md = MP.episode_desc(l, intro, prefer_answer=True, has_video=True, has_transcript=bool(_trf or tr)) or short(intro)   # Thema zuerst, dann Format und Marke; Description = Kernaussage
+        _mt = MP.episode_title(l, VSEO.title(l, vid, e["title"]), uniq=MPU); _md = VSEO.meta(l, vid, None) or MP.episode_desc(l, intro, prefer_answer=True, has_video=True, has_transcript=bool(_trf or tr)) or short(intro)   # Thema zuerst, dann Format und Marke; Description = Kernaussage
         write(f'{l}/{it["slug"]}/index.html',
               page(l, _mt, _md, canonical, body, alts, ld + _nld, xdefault=alts.get("en"), side=side_for(l, e["title"], body, topics_h=LC.plain(l, "side.episode")), extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))
         sitemap.append((canonical, it["date"], alts))
