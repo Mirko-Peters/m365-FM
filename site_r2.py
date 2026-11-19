@@ -131,3 +131,22 @@ def local(path):
     solange die Datei nicht hochgeladen ist: Seiten bauen dann ohne dieses Bild (z. B. mit CSS-Ersatz) statt mit einem kaputten Link."""
     u = MAP.get(path)
     return u if isinstance(u, str) and u.startswith("https://img.m365.fm/") else None
+
+
+_DIMS = []
+
+
+def _dims():
+    if not _DIMS:
+        f = _D / "r2_dims.json"
+        try: _DIMS.append(json.loads(f.read_text(encoding="utf-8")) if f.exists() else {})
+        except ValueError: _DIMS.append({})
+    return _DIMS[0]
+
+
+def og_video(vid, min_w=1200, mp=None, dims=None):
+    """Teilen-/Discover-Bild eines YouTube-Videos aus dem eigenen Bucket: (url, breite, hoehe) oder None, solange das Vorschaubild
+    nicht kopiert ist oder schmaler als min_w (Google Discover: mindestens 1200 px breit). mp/dims: Tests."""
+    u = (MAP if mp is None else mp).get(f"https://i.ytimg.com/vi/{vid}/maxresdefault.jpg")
+    d = (_dims() if dims is None else dims).get(u) if isinstance(u, str) and u.startswith("https://img.m365.fm/") else None
+    return (u, int(d[0]), int(d[1])) if d and len(d) == 2 and int(d[0]) >= min_w else None
