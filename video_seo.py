@@ -173,6 +173,27 @@ def reject_reason(answer, marks):
     return "unbekannt"
 
 
+def reject_reason_tr(answer, en, lang):
+    """Kurzer Grund, warum make_entry_tr eine Uebersetzung ablehnt (nur fuer das Protokoll)."""
+    if not isinstance(answer, dict): return "keine JSON-Antwort"
+    if not valid_entry(en): return "englischer Eintrag ungueltig"
+    names = answer.get("chapters")
+    if not isinstance(names, list): return "Kapitel fehlen"
+    if len(names) != len(en["c"]): return "Kapitelzahl"
+    if clean_chapters([[sec, nm] for (sec, _), nm in zip(en["c"], names)], None, len(en["c"]), 3, 14, 100) is None: return "Kapitelname"
+    for k, mx, mn in (("title", 90, 6), ("meta", 200, 30), ("summary", 1800, 60)):
+        v = answer.get(k)
+        if not isinstance(v, str): return f"{k} fehlt"
+        w = width(re.sub(r"\s+", " ", v).strip())
+        if w < mn: return f"{k} zu kurz"
+        if w > mx: return f"{k} zu lang"
+        if clean_text(v, mx, mn) is None: return f"{k} Zeichen/Link"
+    lab = answer.get("labels") or {}
+    if not (isinstance(lab, dict) and clean_labels([lab.get("summary"), lab.get("chapters")])): return "Labels"
+    if not all(script_ok(lang, answer.get(k) or "") for k in ("title", "meta", "summary")): return "Schrift"
+    return "Verhaeltnis" if not (0.25 <= len(answer["summary"]) / max(1, len(en["u"])) <= 3.0) else "unbekannt"
+
+
 def make_entry_tr(answer, en, lang):
     """Antwort der KI (Haiku) -> Eintrag oder None. Gleiche Kapitelzahl und Sekunden wie im englischen Eintrag; Schrift passt zur Sprache."""
     if not isinstance(answer, dict) or not valid_entry(en): return None
