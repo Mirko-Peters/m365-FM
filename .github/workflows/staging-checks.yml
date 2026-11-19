@@ -113,6 +113,23 @@ jobs:
           if [ -d docs ]; then
             { echo "### Seitenbau-Probelauf"; echo; echo "Sprachen: \`${SITE_LANGS}\`"; echo; echo "Größe docs/: $(du -sh docs | cut -f1), Seiten (index.html): $(find docs -name index.html | wc -l)"; } >> "$GITHUB_STEP_SUMMARY"
           fi
+      - name: Vorschau-Seiten sichern (nur Probe von Claude, Zweig claude/vorschau-seiten)
+        if: always() && github.ref_name == 'claude/vorschau-seiten'
+        run: |
+          mkdir -p vorschau
+          vid=$(grep -rl 'class="vseo"' docs/de --include=index.html 2>/dev/null || true)
+          v1=$(echo "$vid" | xargs -r grep -l 'ig-fig' | head -1); v2=$(echo "$vid" | grep -v "^$v1$" | head -1)
+          b1=$(grep -rl 'ig-fig' docs/de/blog docs/blog --include=index.html 2>/dev/null | head -1)
+          p1=$(grep -rl 'ig-fig' docs/de/show docs/show --include=index.html 2>/dev/null | head -1)
+          p2=$(grep -rl 'ig-fig' docs/show --include=index.html 2>/dev/null | head -2 | tail -1)
+          e1=$(grep -rl 'ig-fig' docs/de/entity docs/entity --include=index.html 2>/dev/null | head -1)
+          for f in $v1 $v2 $b1 $p1 $p2 $e1; do [ -n "$f" ] && mkdir -p "vorschau/$(dirname $f)" && cp "$f" "vorschau/$f" && echo "Vorschau: $f"; done
+          find docs/assets -type f -size -800k -exec cp --parents {} vorschau/ \;
+          du -sh vorschau
+      - name: Vorschau hochladen
+        if: always() && github.ref_name == 'claude/vorschau-seiten'
+        uses: actions/upload-artifact@v4
+        with: { name: vorschau, path: vorschau, retention-days: 3 }
 
   staging-trennung:
     name: Trennung von Live (Staging-Konfiguration)
