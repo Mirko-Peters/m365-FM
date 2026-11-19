@@ -58,7 +58,15 @@ def urls():
             found |= set(URL_RX.findall(gzip.open(f, "rt", encoding="utf-8").read() if f.suffix == ".gz" else f.read_text("utf-8")))
     found = {u.rstrip(".,;") for u in found}
     return sorted({u for u in found if u.startswith("http") and any(h in u for h in HOSTS)
-                   and (re.search(r"\.(jpe?g|jfif|png|gif|webp|svg|avif|pdf)(\?|$)", u, re.I) or "redwood-labs" in u or "neuroncdn" in u)} | entity_logos())
+                   and (re.search(r"\.(jpe?g|jfif|png|gif|webp|svg|avif|pdf)(\?|$)", u, re.I) or "redwood-labs" in u or "neuroncdn" in u)} | entity_logos() | youtube_thumbs())
+
+
+def youtube_thumbs():
+    """Vorschaubilder der Sticky-Man-Videos (data/videos.json) in den drei Groessen, die die Seiten nutzen (mq 320, hq 480, maxres 1280).
+    Fehlt eine Groesse bei YouTube (404), landet sie in data/r2_dead.json und die Seite nimmt die naechste."""
+    f = ROOT / "data" / "videos.json"
+    vids = json.loads(f.read_text("utf-8")) if f.exists() else {}
+    return {f"https://i.ytimg.com/vi/{v}/{n}.jpg" for v in vids if re.fullmatch(r"[A-Za-z0-9_-]{6,20}", str(v)) for n in ("mqdefault", "hqdefault", "maxresdefault")}
 
 
 def entity_logos():

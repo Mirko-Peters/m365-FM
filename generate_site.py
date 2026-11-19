@@ -1392,7 +1392,7 @@ def build():
         OG_COVER[canonical] = art_svg(vid, LANGS[l][0], lang=l)
         _mt = MP.episode_title(l, VSEO.title(l, vid, e["title"]), uniq=MPU); _md = VSEO.meta(l, vid, None) or MP.episode_desc(l, intro, prefer_answer=True, has_video=True, has_transcript=bool(_trf or tr)) or short(intro)   # Thema zuerst, dann Format und Marke; Description = Kernaussage
         write(f'{l}/{it["slug"]}/index.html',
-              page(l, _mt, _md, canonical, body, alts, ld + _nld + _ig_ld, xdefault=alts.get("en"), side=side_for(l, e["title"], body, topics_h=LC.plain(l, "side.episode")), extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid]), **(IG.page_kw("episode", _igs, l) if _igs else {})))
+              page(l, _mt, _md, canonical, body, alts, ld + _nld + _ig_ld, xdefault=alts.get("en"), side=side_for(l, e["title"], body, topics_h=LC.plain(l, "side.episode")), extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid]), **((IG.page_kw("episode", _igs, l) if _igs else {}) or ({"og_image": _ogv, "og_share": True} if (_ogv := R2.og_video(vid)) else {}))))   # Teilen-/Discover-Bild: Infografik-Kopfbild, sonst das YouTube-Vorschaubild aus dem eigenen Bucket (>= 1200 px), sonst wie bisher
         sitemap.append((canonical, it["date"], alts))
         if vid in ORIG: ORIG_ALTS.setdefault(ORIG[vid], {})[l] = (canonical, e["title"])
 
