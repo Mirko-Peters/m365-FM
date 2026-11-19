@@ -1,10 +1,10 @@
 ---
 title: "Microsoft 365 Copilot License Types Explained: Options, Base Plans and Requirements"
 summary: "Copilot license types and requirements per Microsoft Learn: Microsoft 365 E7, the Copilot Business add-on, the standard add-on, eligible base plans, and the technical prerequisites."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-24
+date: 2026-11-20
 topics: [copilot, microsoft-365-e7, microsoft-365-admin-center, copilot-chat]
 keypoints:
   - "Microsoft Learn lists three routes: Microsoft 365 E7, the Copilot Business add-on for up to 300 users, and the Copilot add-on for eligible plans."

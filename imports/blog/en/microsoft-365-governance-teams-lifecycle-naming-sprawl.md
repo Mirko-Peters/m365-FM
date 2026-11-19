@@ -1,10 +1,10 @@
 ---
 title: "Microsoft 365 Governance for Teams: Lifecycle, Naming Policy and Sprawl Control"
 summary: "Which built-in Microsoft 365 controls enforce governance for Teams: group creation limits, naming policy, expiration, sensitivity labels and archiving. Steps, licensing notes and what each control cannot do."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-23
+date: 2026-11-20
 topics: [teams, governance, microsoft-365-groups, group-expiration-policy]
 keypoints:
   - "Every team sits on a Microsoft 365 group, so group-level policies in Microsoft Entra ID (creation limits, naming, expiration) govern Teams."

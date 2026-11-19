@@ -1,10 +1,10 @@
 ---
 title: "OneDrive for Business Sign In Problems: Fixes for Work or School Accounts"
 summary: "Fix OneDrive for Business sign-in problems: check the account, firewall, unlink and relink, reset the app, and verify licenses for errors like 0x8004de85, using Microsoft documentation."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-24
+date: 2026-11-20
 topics: [onedrive, onedrive-sync-engine, entra-id]
 keypoints:
   - "A grayed-out OneDrive icon with a line through it means the account is signed out. Select it and sign in again."

@@ -1,10 +1,10 @@
 ---
 title: "Teams Connectors and Webhooks: Retirement Status and How to Replace Them With Workflows"
 summary: "Office 365 connectors and connector-based incoming webhooks in Teams were retired in May 2026. This guide covers what stopped working, what replaces it, how to migrate and where Workflows still differs."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-23
+date: 2026-11-20
 topics: [teams, power-automate, connector, adaptive-cards]
 keypoints:
   - "Per Microsoft Learn, Office 365 connectors in Teams, including connector-based incoming webhooks, were retired in May 2026. The final rollout window in the dev blog was May 18 to May 22, 2026."

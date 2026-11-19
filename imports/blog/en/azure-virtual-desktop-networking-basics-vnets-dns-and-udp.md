@@ -1,10 +1,10 @@
 ---
 title: "Azure Virtual Desktop networking basics: vNets, DNS and UDP"
 summary: "Azure Virtual Desktop needs a virtual network in the session hosts' region, working DNS and outbound access to published endpoints, mostly on TCP 443. No inbound ports are needed; UDP through RDP Shortpath falls back to TCP."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-20
 render: v2
 topics: [azure-virtual-desktop, rdp-shortpath]
 keypoints:

@@ -1,10 +1,10 @@
 ---
 title: "How to Use Multiple OneDrive Accounts on One PC: Work, School and Personal"
 summary: "How to add and manage several OneDrive accounts on one Windows PC or Mac: the one personal account rule, adding accounts, choosing folders per account, unlinking and fixing the different account error."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-23
+date: 2026-11-20
 topics: [onedrive, onedrive-sync-engine, onedrive-selective-sync]
 keypoints:
   - "You can sync several work or school accounts in the OneDrive app, but only one personal OneDrive account on the same computer."

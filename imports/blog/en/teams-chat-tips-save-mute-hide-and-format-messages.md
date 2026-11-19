@@ -1,10 +1,10 @@
 ---
 title: "Teams Chat Tips: Save, Mute, Hide, Mark Unread and Format Messages"
 summary: "How to save messages in Teams and find them again, mute or hide a chat, mark one as unread for follow-up, add chats to Favorites and format messages with the toolbar or Markdown, with the exact menu labels."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-22
+date: 2026-11-20
 topics: [teams]
 keypoints:
   - "Save a message: hover over it, select More options, then Save this message. A Saved section then appears at the top of your chat and channel list."

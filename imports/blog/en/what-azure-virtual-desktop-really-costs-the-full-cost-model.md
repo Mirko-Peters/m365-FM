@@ -1,10 +1,10 @@
 ---
 title: "What Azure Virtual Desktop really costs: the full cost model"
 summary: "For session hosts in Azure, Azure Virtual Desktop cost is the sum of compute hours, disks, image and profile storage, networking, licensing, monitoring and identity. This article lists each line item, how Microsoft documents its billing, and a worked host-hour example."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-20
 render: v2
 topics: [azure-virtual-desktop, finops]
 keypoints:

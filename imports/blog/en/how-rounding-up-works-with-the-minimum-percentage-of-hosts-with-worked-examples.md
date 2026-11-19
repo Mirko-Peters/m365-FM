@@ -1,10 +1,10 @@
 ---
 title: "How rounding up works with the minimum percentage of hosts, with worked examples"
 summary: "Learn says a minimum percentage that is not a whole number is rounded up, so any value above 0 percent keeps at least one host on. This article works through the rule with tables and Learn's examples."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-20
 render: v2
 topics: [avd-minimum-percentage-of-hosts, avd-scaling-plan]
 keypoints:

@@ -1,10 +1,10 @@
 ---
 title: "How to Schedule a Teams Meeting: From Teams, From Outlook and as a Recurring Series"
 summary: "Step-by-step ways to schedule a Microsoft Teams meeting from the Teams calendar, a chat, a channel and Outlook, how to make it recurring, which accounts work, and what to check when the option is missing."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-23
+date: 2026-11-20
 topics: [teams, outlook, teams-admin-center]
 keypoints:
   - "In the Teams calendar, select New or click a time slot, add details and attendees, turn on the Teams meeting toggle and save."

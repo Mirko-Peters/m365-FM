@@ -1,10 +1,10 @@
 ---
 title: "Teams No Internet Connection: Fix Sign-In and Connection Problems"
 summary: "Steps for Microsoft Teams that shows no internet connection or fails to sign in: run the diagnostics, read the error code, check firewall and proxy access, update, clear the cache or reinstall."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-22
+date: 2026-11-20
 topics: [teams, microsoft-365-admin-center]
 keypoints:
   - "Learn says most Teams client issues trace back to firewall or proxy connectivity, so confirm that the required URLs, IP addresses and ports are reachable first."

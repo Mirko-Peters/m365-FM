@@ -1,10 +1,10 @@
 ---
 title: "Designing an AVD autoscale schedule that matches real working hours"
 summary: "Build an Azure Virtual Desktop autoscale schedule from measured session counts, not office hours on paper. This guide goes from hourly session data to phase start times, minimum percentage, capacity threshold and a check."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-20
 render: v2
 topics: [avd-autoscale-schedule-phases, avd-scaling-plan]
 keypoints:

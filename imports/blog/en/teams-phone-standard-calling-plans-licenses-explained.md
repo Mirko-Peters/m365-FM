@@ -1,10 +1,10 @@
 ---
 title: "Teams Phone Licenses Explained: Teams Phone Standard, Calling Plans and PSTN Options"
 summary: "What Teams Phone Standard is, how it differs from Teams Phone with Calling Plan, when you need a Calling Plan, Operator Connect or Direct Routing, and how to assign the licenses in the admin center."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-23
+date: 2026-11-20
 topics: [teams-phone, teams-calling-plans, pstn, microsoft-365-admin-center]
 keypoints:
   - "Teams Phone needs two parts: a Teams Phone license per user or resource account, and at least one PSTN solution for external numbers."

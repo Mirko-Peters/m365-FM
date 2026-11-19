@@ -1,10 +1,10 @@
 ---
 title: "Entra Connect Sync vs Cloud Sync: Differences, Staging Mode and Soft and Hard Match"
 summary: "Cloud Sync vs Connect Sync compared using Microsoft Learn: architecture, feature gaps, limits, staging mode on Connect Sync, and how soft and hard match work."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-24
+date: 2026-11-20
 topics: [entra-connect, entra-cloud-sync, hybrid-entra-join, password-hash-synchronization]
 keypoints:
   - "Cloud Sync runs provisioning orchestration in the cloud with a lightweight agent. Connect Sync runs the sync engine on a server you manage."

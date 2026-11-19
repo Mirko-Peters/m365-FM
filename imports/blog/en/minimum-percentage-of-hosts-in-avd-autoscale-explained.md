@@ -1,10 +1,10 @@
 ---
 title: "Minimum percentage of hosts in AVD autoscale explained"
 summary: "The minimum percentage of hosts is the lowest share of session hosts in a pooled host pool that autoscale keeps on in a schedule phase. It works as a floor next to the capacity threshold and rounds up to whole hosts."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-20
 render: v2
 topics: [avd-minimum-percentage-of-hosts, avd-scaling-plan]
 keypoints:

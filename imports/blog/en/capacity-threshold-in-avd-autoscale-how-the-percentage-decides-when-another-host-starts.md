@@ -1,10 +1,10 @@
 ---
 title: "Capacity threshold in AVD autoscale: how the percentage decides when another host starts"
 summary: "In Azure Virtual Desktop autoscale, the capacity threshold is the share of host pool capacity, counted in sessions, that triggers a scaling action. Another host starts when used capacity goes above it, and a host is removed only if usage stays at or below it afterwards."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-20
 render: v2
 topics: [avd-capacity-threshold, avd-scaling-plan]
 keypoints:

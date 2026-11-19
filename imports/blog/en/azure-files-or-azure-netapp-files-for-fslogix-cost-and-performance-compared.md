@@ -1,10 +1,10 @@
 ---
 title: "Azure Files or Azure NetApp Files for FSLogix: cost and performance compared"
 summary: "Both Azure Files and Azure NetApp Files can host FSLogix profile containers over SMB, and Microsoft Learn recommends Azure Files for most customers. This comparison sets billing, published limits, Learn's workload tier tables, region and identity prerequisites side by side."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-20
 render: v2
 topics: [azure-files, azure-netapp-files, fslogix]
 keypoints:

@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Copilot Privacy Controls: Sensitivity Labels, Permissions, DLP and Audit Logs"
 summary: "The privacy controls that apply to Microsoft Copilot: permissions, sensitivity labels with usage rights, the DLP Copilot location, audit records and retention, per Microsoft Learn."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-24
+date: 2026-11-20
 topics: [copilot, sensitivity-labels, microsoft-purview-audit, dlp]
 keypoints:
   - "Copilot only surfaces organizational data the user has at least view permissions for. Prompts and responses aren't used to train foundation LLMs."

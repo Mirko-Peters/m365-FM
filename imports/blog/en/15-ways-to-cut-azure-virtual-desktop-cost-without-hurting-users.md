@@ -1,10 +1,10 @@
 ---
 title: "Azure Virtual Desktop cost levers: 15 options and what each one trades off"
 summary: "Fifteen levers for lowering Azure Virtual Desktop cost, grouped into compute hours, compute rate, storage and monitoring, and licensing, each with its trade-off and source. Item 14 has no documented saving and item 15 only avoids paying twice."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-20
 render: v2
 topics: [azure-virtual-desktop, finops, avd-scaling-plan]
 keypoints:

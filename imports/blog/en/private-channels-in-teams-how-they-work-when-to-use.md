@@ -1,10 +1,10 @@
 ---
 title: "Private Channels in Teams: How They Work, How to Create One and When to Use Them"
 summary: "How private channels in Microsoft Teams work: who can create them, who can see them, the separate SharePoint site, guest rules, limits and how they differ from standard and shared channels."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-23
+date: 2026-11-20
 topics: [teams, private-channels, teams-channels, shared-channels]
 keypoints:
   - "A private channel is visible only to its owners and members. Everyone you add must already be a member of the parent team, guests included."

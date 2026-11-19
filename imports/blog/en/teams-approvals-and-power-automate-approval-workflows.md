@@ -1,10 +1,10 @@
 ---
 title: "Teams Approvals and Power Automate Approval Workflows: How They Work and How to Set Them Up"
 summary: "How the Approvals app in Teams works, how to send an approval, when to build a Power Automate approval flow instead, the approval types, prerequisites, licensing, admin controls and limits."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-23
+date: 2026-11-20
 topics: [teams, power-automate, dataverse, microsoft-forms]
 keypoints:
   - "The Approvals app is a personal Teams app for all users and is enabled by default. Send a request with New approval request, then check the Sent tab."

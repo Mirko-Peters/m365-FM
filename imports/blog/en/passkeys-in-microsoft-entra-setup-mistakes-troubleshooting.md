@@ -1,10 +1,10 @@
 ---
 title: "Passkeys in Microsoft Entra: Setup Steps, Common Mistakes and Troubleshooting"
 summary: "How to enable passkeys in Microsoft Entra ID, the settings that most often block registration or sign-in, and a troubleshooting list for Microsoft Authenticator, synced passkeys and security keys, based on Microsoft Learn."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-23
+date: 2026-11-20
 topics: [passkey, microsoft-entra, microsoft-authenticator, phishing-resistant-mfa]
 keypoints:
   - "Enable passkeys under Entra ID > Security > Authentication methods > Policies > Passkey (FIDO2). Allow self-service set up must be Yes or users cannot register in Security info."

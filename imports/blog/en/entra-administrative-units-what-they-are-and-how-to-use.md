@@ -1,10 +1,10 @@
 ---
 title: "Entra Administrative Units: What They Are and How to Create and Use Them"
 summary: "Microsoft Entra administrative units explained: what they contain, licenses, steps to create one, add members and scope roles, restricted management AUs, and limits."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-24
+date: 2026-11-20
 topics: [administrative-units, entra-id, role-based-access-control]
 keypoints:
   - "An administrative unit is a container for users, groups or devices that limits the scope of a role to part of the organization. AUs can't be nested."

@@ -1,10 +1,10 @@
 ---
 title: "Choosing the right capacity threshold for pooled host pools"
 summary: "Pick the capacity threshold of an Azure Virtual Desktop pooled host pool by working out how many sessions must fit between the trigger point and the session limit while the next host starts. As a rule of thumb, start lower in ramp-up and higher in ramp-down, and confirm with Insights."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-20
 render: v2
 topics: [avd-capacity-threshold, avd-scaling-plan]
 keypoints:
