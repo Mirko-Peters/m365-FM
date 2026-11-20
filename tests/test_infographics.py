@@ -223,6 +223,22 @@ class Pipeline(unittest.TestCase):
             its = IGT.items("blog", fixture_root(t))
             self.assertEqual([i["key"] for i in its], ["blog:p1"])
 
+    def test_items_include_approved_content_posts(self):
+        with tempfile.TemporaryDirectory() as t:
+            root = fixture_root(t); d = root / "imports" / "blog" / "en"; d.mkdir(parents=True)
+            body = "Absatz mit [Link](https://example.org/x) und **fett**. " * 20
+            (d / "neu-1.md").write_text(f'---\ntitle: "Neuer Beitrag"\nstatus: approved\npublish: true\n---\n\n## Ueberschrift\n\n{body}\n', "utf-8")
+            (d / "entwurf.md").write_text(f'---\ntitle: "Entwurf"\nstatus: review\npublish: true\n---\n\n{body}\n', "utf-8")
+            (d / "ungeplant.md").write_text(f'---\ntitle: "Ohne Freigabe"\nstatus: approved\npublish: false\n---\n\n{body}\n', "utf-8")
+            (d / "kurz.md").write_text('---\ntitle: "Kurz"\nstatus: approved\npublish: true\n---\n\nzu kurz\n', "utf-8")
+            (d / "p1.md").write_text(f'---\ntitle: "Doppelt"\nstatus: approved\npublish: true\n---\n\n{body}\n', "utf-8")   # Slug gibt es schon bei den frueheren Beitraegen
+            its = IGT.items("blog", root)
+            self.assertEqual([i["key"] for i in its], ["blog:p1", "blog:neu-1"])
+            new = its[1]
+            self.assertEqual(new["title"], "Neuer Beitrag")
+            self.assertNotIn("](", new["text"]); self.assertNotIn("**", new["text"]); self.assertIn("Link", new["text"])
+            self.assertEqual(its[0]["title"], "Post 1")   # der frühere Beitrag gewinnt
+
     def test_render_writes_index_and_images_only_for_clean_sets(self):
         with tempfile.TemporaryDirectory() as t, tempfile.TemporaryDirectory() as s:
             root = fixture_root(t); store = IGT.DirStore(s)
