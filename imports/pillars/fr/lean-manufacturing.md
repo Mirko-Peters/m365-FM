@@ -1,0 +1,948 @@
+# SEO metadata
+
+| Field | Value |
+|---|---|
+| Meta title | Production allégée : principes, outils et démarrage |
+| Meta description | Production allégée expliquée : 5 principes, les 8 gaspillages, 17 outils avec exemples, une feuille de route sur 12 mois, KPI et limites. Entièrement sourcé. |
+| Slug | `lean-manufacturing` |
+
+# Production allégée (lean manufacturing) : principes, outils, mise en œuvre et limites
+
+> **Réponse courte :** La production allégée (lean manufacturing) est une manière de piloter un site de production qui aligne chaque activité sur ce que le client valorise et élimine le reste, étape par étape. Elle est issue du Toyota Production System, repose sur cinq principes (valeur, flux de valeur, flux, tirage, perfection) et se concrétise avec des outils tels que 5S, kanban, SMED, travail standard et kaizen [1][5].
+
+> **Points clés**
+> - John Krafcik a forgé l'expression « lean production » en 1988 ; le livre du MIT *The Machine That Changed the World*, publié en 1990, l'a fait connaître dans le monde entier [2][3][4].
+> - Womack et Jones ont formulé les cinq principes du lean dans *Lean Thinking* (1996) [5].
+> - Le Toyota Production System repose sur deux piliers : le juste-à-temps et le jidoka [1][25].
+> - Taiichi Ohno a défini sept gaspillages ; la plupart des sources occidentales en ajoutent un huitième, le talent inutilisé des collaborateurs (mnémoniques DOWNTIME ou TIMWOODS) [8][40].
+> - Le lean est un système de management. Le kanban ou les 5S ne fonctionnent que s'ils s'accompagnent d'un leadership, de standards et d'une résolution quotidienne des problèmes.
+> - Une séquence d'implantation éprouvée : stabilité avant flux, flux avant tirage, tirage avant lissage.
+> - Le lean ne signifie pas « zéro stock de sécurité à tout prix » : depuis un plan de continuité mis en place après 2011, Toyota exige de ses fournisseurs qu'ils détiennent deux à six mois de stock de semi-conducteurs [31].
+> - Les indicateurs centraux sont le délai de traversée, le ratio de flux, le TRS (OEE), le taux de qualité au premier passage et le respect des délais de livraison ; ils doivent figurer chaque jour sur le tableau de bord de l'atelier, sur papier ou en version numérique.
+
+## Table des matières
+
+1. [Qu'est-ce que la production allégée ? Définition et idée centrale](#quest-ce-que-la-fabrication-allégée--définition-et-idée-centrale)
+2. [Histoire : de Ford et Toyota au MIT](#histoire--de-ford-et-toyota-au-mit)
+3. [Les 5 principes de la production allégée (Womack et Jones)](#les-5-principes-du-lean-manufacturing-womack-et-jones)
+4. [Muda, mura, muri et les 8 gaspillages du lean](#muda-mura-muri-et-les-8-gaspillages-du-lean)
+5. [La maison du Toyota Production System](#la-maison-du-système-de-production-toyota)
+6. [Outils de la production allégée : la boîte à outils en un coup d'œil](#outils-de-production-allégée--la-boîte-à-outils-en-un-coup-dœil)
+7. [Lean vs Six Sigma vs Lean Six Sigma](#lean-vs-six-sigma-vs-lean-six-sigma)
+8. [Leadership et culture lean](#leadership-et-culture-lean)
+9. [Comment mettre en œuvre la production allégée : une feuille de route en cinq phases](#comment-mettre-en-œuvre-le-lean-manufacturing--une-feuille-de-route-en-cinq-phases)
+10. [Indicateurs lean (KPI) : comment mesurer les progrès](#indicateurs-kpi-lean--comment-mesurer-les-progrès)
+11. [Erreurs courantes dans la mise en œuvre du lean](#erreurs-courantes-dans-la-mise-en-œuvre-du-lean)
+12. [Inconvénients et limites de la production allégée](#inconvénients-et-limites-de-la-production-lean)
+13. [Lean et numérique : lean 4.0, jumeaux numériques et Microsoft 365](#lean-et-numérique--lean-40-jumeaux-numériques-et-microsoft-365)
+14. [Exemples documentés de production allégée](#exemples-documentés-de-production-lean)
+15. [Support logiciel : iFAKT Polaris en exemple](#support-logiciel--ifakt-polaris-comme-exemple)
+16. [Glossaire lean : termes clés de A à Z](#glossaire-lean--termes-clés-de-a-à-z)
+17. [FAQ : questions sur la production allégée](#faq--questions-sur-le-lean-manufacturing)
+18. [Conclusion et premières étapes](#conclusion-et-premières-étapes)
+
+## Qu'est-ce que la fabrication allégée ? Définition et idée centrale
+
+La fabrication allégée (lean manufacturing) est un système de management qui conçoit la manière dont une entreprise crée de la valeur du point de vue du client, et qui élimine, étape par étape, tout ce qui n'apporte pas de valeur. Le mot « lean » est souvent mal interprété comme une réduction des effectifs. L'objectif est un système qui fournit davantage de valeur client avec moins d'espace au sol, moins de stocks, des délais plus courts et moins de défauts. Les chercheurs du MIT ont résumé cette idée en 1990 : par rapport à la production de masse, la production allégée utilise « moins de tout » : la moitié de l'effort humain dans l'usine, la moitié de l'espace de fabrication et la moitié de l'investissement en outillage [4].
+
+Le Lean Enterprise Institute (LEI), organisation à but non lucratif américaine fondée par James P. Womack, décrit le lean comme une manière de penser et d'agir qui améliore un processus en cinq étapes : spécifier la valeur, identifier le flux de valeur, créer le flux, instaurer le tirage et rechercher la perfection [5]. L'Institut Fraunhofer allemand pour l'ingénierie de la fabrication et l'automatisation (IPA), institut de recherche appliquée pour la production, traite le management lean à la fois comme une philosophie et comme une méthode dont l'objectif est d'éliminer le gaspillage et d'accroître la création de valeur dans tous les domaines de la production (paraphrasé) ; l'amélioration continue impliquant l'ensemble des salariés et des managers en est un élément central [37].
+
+### Fabrication allégée, production allégée et management lean
+
+Ces termes sont souvent utilisés comme synonymes, mais leur centre d'intérêt diffère :
+
+| Terme | Centre d'intérêt | Périmètre typique |
+|---|---|---|
+| Fabrication allégée / production allégée | conception de la fabrication et de l'assemblage selon les principes lean | usine, ligne, cellule, logistique interne |
+| [Management lean](https://www.m365.fm/entity/lean-management/) | le système de direction et d'organisation qui étend le lean à l'ensemble de l'entreprise | stratégie, leadership, fonctions support, chaîne d'approvisionnement |
+| Système de production Toyota (TPS) | le modèle historique ; système propre à Toyota | Toyota et ses fournisseurs |
+| Système de production d'entreprise (« XPS » ; en Allemagne *Ganzheitliches Produktionssystem*, GPS) | un référentiel propre à l'entreprise de principes et de méthodes, souvent désigné d'après le nom de l'entreprise | fabricants multi-sites, entreprises de taille moyenne |
+
+La fabrication allégée est l'application de la pensée lean dans l'atelier ; le management lean en est le cadre général. Aux États-Unis, les deux termes se recoupent tellement que la plupart des résultats de recherche les emploient indifféremment. Les lecteurs allemands connaissent un troisième terme : le « système de production holistique » (GPS), défini dans la directive d'ingénierie allemande VDI 2870 partie 1 de juillet 2012. Selon le VDI, cette directive reste en partie valable mais fait l'objet d'une révision, notamment pour y intégrer la sécurité au travail [36]. L'équivalent américain le plus proche n'est pas une norme mais un cadre : le modèle Shingo, de l'Institut Shingo de la Jon M. Huntsman School of Business de l'Utah State University, qui évalue les organisations au regard de principes directeurs de l'excellence opérationnelle et décerne le prix Shingo, créé en 1988 [64]. La manière dont le lean se rapporte à l'idée plus large de l'excellence opérationnelle est traitée dans [Operational Excellence vs. Lean](https://www.m365.fm/community/u/mirko-p/blog/operational-excellence-vs-lean/) et dans le [guide de l'excellence opérationnelle](https://www.m365.fm/en/learn/operational-excellence/).
+
+### L'idée centrale en une phrase
+
+Le lean considère un processus comme un flux à travers lequel un produit circule jusqu'au client, et seulement secondairement comme une suite de services. Chaque minute pendant laquelle un produit attend, est déplacé, recherché ou retravaillé allonge le délai, immobilise de la trésorerie et masque les problèmes. Le lean rend ce temps visible et le traite comme un potentiel d'amélioration.
+
+Un calcul simple montre l'ampleur du phénomène. Une pièce tournée passe par le sciage (2 minutes), le tournage (12 minutes) et l'ébavurage (6 minutes), soit 20 minutes de travail à valeur ajoutée. Entre ces étapes, elle reste dans des en-cours et atteint l'expédition après cinq jours ouvrés de huit heures chacun, soit après 2 400 minutes. La part du temps à valeur ajoutée dans le délai total (le taux de flux) est de 20 / 2 400 = 0,83 %. L'exemple est illustratif, mais il correspond au schéma que révèlent les cartes de flux de valeur dans de nombreuses usines : le temps d'usinage est rarement le goulot d'étranglement ; le temps d'attente l'est presque toujours.
+
+### Avantages de la fabrication allégée
+
+La plupart des pages présentent les avantages sous forme de pourcentages sans source. Les effets documentés sont plus modestes en chiffres, mais plus clairs dans leur mécanisme :
+
+- **Moins d'effort, d'espace et de capital pour le même volume :** les chercheurs du MIT ont constaté que la production lean utilisait environ la moitié de l'effort humain, la moitié de l'espace de fabrication et la moitié de l'investissement en outillage de la production de masse [4] ; les usines japonaises au Japon ont nécessité 16,8 heures de main-d'œuvre par véhicule en 1989, contre 24,9 pour les usines américaines en Amérique du Nord [6].
+- **Délais plus courts et moins de stocks :** chez Porsche, le stock est passé de sept jours de couverture à un jour, et le nombre d'heures par 911 a été divisé par deux en plusieurs années [34].
+- **Qualité intégrée au processus :** les Corolla de NUMMI ont été jugées de qualité équivalente à celles fabriquées au Japon, avec une main-d'œuvre en grande partie issue de l'ancien personnel de GM [56].
+- **Les problèmes apparaissent plus tôt :** des stocks faibles et l'andon rendent les anomalies visibles au lieu de les dissimuler dans des stocks tampons [3][23].
+- **Une implication accrue des salariés :** les suggestions d'amélioration chez Porsche sont passées de 0,09 à 4,3 par salarié [34].
+
+Chacun de ces résultats s'est accompagné d'un changement de direction et s'est étalé sur plusieurs années ; la section des exemples ci-dessous montre aussi les limites de la démarche.
+
+## Histoire : de Ford et Toyota au MIT
+
+Le lean n'a pas été inventé dans les années 1990. Les idées se sont constituées sur plus d'un siècle, et de nombreuses pages concurrentes datent ces étapes de manière incohérente. La chronologie ci-dessous s'appuie sur des sources primaires et des sources d'entreprise.
+
+| Année | Événement | Source |
+|---|---|---|
+| 1896 | Sakichi Toyoda met au point le métier à tisser automatique Toyoda, doté d'un dispositif qui l'arrête automatiquement lorsqu'un fil de trame casse : l'origine du jidoka | [1] |
+| 1913 | Le 7 octobre, Ford lance une chaîne de montage mobile à Highland Park, dans le Michigan ; le temps d'assemblage de la Model T passe de 12,5 heures à 93 minutes | [30] |
+| 1924 | Le métier Type G de Sakichi Toyoda, selon Toyota le premier métier automatique au monde à changement de navette sans arrêt | [1] |
+| 1927 / 1938 | Kiichiro Toyoda introduit la production en flux avec un convoyeur à chaîne dans l'assemblage des métiers à tisser (1927), puis applique ce principe à la production de carrosseries à l'usine de Koromo, achevée en 1938 : la racine du juste-à-temps | [1] |
+| Années 1930 | L'industrie aéronautique allemande utilise le takt comme paramètre de pilotage ; Toyota adopte ce concept dans les années 1950 | [19] |
+| 1940 | Le gouvernement américain lance le Training Within Industry (TWI) ; à la fin de la Seconde Guerre mondiale, plus de 1,6 million de travailleurs dans plus de 16 500 usines sont certifiés. Après la guerre, le TWI est enseigné au Japon et devient l'une des bases de la culture kaizen | [59] |
+| 1950 | W. Edwards Deming donne au Japon des conférences sur l'amélioration statistique de la qualité, à l'invitation de la JUSE ; le prix Deming est créé en 1951 | [29] |
+| Années 1950–1960 | Shigeo Shingo développe les fondements de la réduction des temps de changement de série (SMED), dans les presses de Toyota à partir de 1969 | [11][12] |
+| 1978 | Taiichi Ohno publie son livre sur le Toyota Production System (édition anglaise en 1988) | [7] |
+| 1984 | NUMMI, la coentreprise GM-Toyota de Fremont, en Californie, démarre sa production | [3][56] |
+| 1985 | Le MIT lance l'International Motor Vehicle Program (IMVP) | [4] |
+| 1986 | Masaaki Imai publie *Kaizen: The Key to Japan's Competitive Success* | [35] |
+| 1988 | John Krafcik forge l'expression « lean production » dans la *Sloan Management Review* ; le prix Shingo est créé à l'Utah State University ; Motorola, l'entreprise associée à Six Sigma, reçoit le Malcolm Baldrige National Quality Award | [2][3][45][64] |
+| 1990 | Womack, Jones et Roos publient *The Machine That Changed the World* | [4] |
+| 1996 | *Lean Thinking* expose les cinq principes du lean | [5] |
+| 2004 | Jeffrey Liker publie *The Toyota Way* avec 14 principes de management | [10] |
+| 2011 | Après le séisme et le tsunami au Japon, Toyota élabore un plan de continuité d'activité avec des stocks de puces | [31] |
+| 2012 | La directive VDI 2870 Partie 1 sur les systèmes de production holistiques est publiée en Allemagne | [36] |
+
+### Ford et la production de masse
+
+Henry Ford est considéré comme le père de la production de masse. Lorsqu'un châssis de Model T fut tiré pour la première fois à la corde et au treuil devant 140 ouvriers à Highland Park, le 7 octobre 1913, le temps d'assemblage est tombé de 12,5 heures à 93 minutes, et le prix de la Model T a ensuite chuté de 850 à 260 dollars [30]. Ce travail répétitif avait aussi un coût : le taux de rotation du personnel était si élevé que Ford a doublé les salaires pour les porter à 5 dollars par jour [30]. Ford a créé le flux, mais pour un produit unique et en très grands volumes. La situation de Toyota était différente. Après la Seconde Guerre mondiale, l'entreprise japonaise ne disposait ni du capital ni du marché nécessaires pour un volume à la Ford et devait fabriquer de nombreuses variantes en petites quantités tout en restant rentable.
+
+### Toyota : jidoka et juste-à-temps
+
+Toyota fait remonter son système de production à deux fondateurs [1]. Sakichi Toyoda (1867–1930) pose la racine du jidoka avec son métier à tisser qui s'arrête dès qu'un fil casse : une machine détecte une anomalie et s'arrête pour qu'aucun défaut ne se propage, et une seule personne peut surveiller plusieurs machines. Son fils Kiichiro Toyoda (1894–1952) développe l'idée du juste-à-temps : ne produire que ce qui est nécessaire, au moment où il est nécessaire, et dans la quantité nécessaire. Eiji Toyoda (1913–2013) et Taiichi Ohno (1912–1990) appliquent l'ensemble de manière constante et créent le véritable Toyota Production System [1]. Ohno, passé de Toyoda Spinning à Toyota Motor en 1943 et devenu contremaître d'atelier, le décrit dans son livre de 1978, publié en anglais en 1988 [7][54].
+
+### Deming, TWI et le mouvement qualité
+
+Deux influences américaines façonnent en parallèle le management japonais. La première est le Training Within Industry. Le département de la Guerre américain lance le TWI en 1940 pour former rapidement les superviseurs à la production de guerre, avec trois programmes standardisés : Job Instruction (enseigner un poste étape par étape), Job Methods (améliorer un poste en supprimant, combinant, réarrangeant et simplifiant les étapes) et Job Relations (traiter les personnes équitablement en tant qu'individus) [59]. Après la guerre, le programme est enseigné au Japon, où il est bien accueilli et devient une base de la culture kaizen ; Toyota le combine avec les principes du juste-à-temps d'Ohno [59].
+
+La seconde est le mouvement qualité. L'Union of Japanese Scientists and Engineers (JUSE) invite W. Edwards Deming en 1950 pour enseigner les méthodes statistiques d'amélioration de la qualité ; en 1951, la JUSE crée le prix Deming [29]. Le cycle d'apprentissage et d'amélioration qui remonte à Walter Shewhart (PDCA, également écrit PDSA) reste l'épine dorsale du kaizen et de l'A3 [29].
+
+### MIT, Krafcik et le mot « lean »
+
+Dans les années 1980, les constructeurs automobiles occidentaux perdent des parts de marché au profit de concurrents japonais. En 1985, le MIT lance l'International Motor Vehicle Program, avec un budget de 5 millions de dollars financé par les constructeurs, les fournisseurs et les gouvernements ; son enquête mondiale sur les usines d'assemblage couvre 90 usines dans 15 pays [4]. John Krafcik, qui avait travaillé pendant deux ans comme ingénieur chez NUMMI, oppose deux systèmes dans « Triumph of the Lean Production System », publié dans le numéro de l'automne 1988 de la *Sloan Management Review* [2][3] : le système « tamponné » des usines occidentales, qui accumule des stocks pour que les machines tournent toujours, et le système « lean », qui réduit les stocks au strict minimum afin que les problèmes de qualité et les arrêts apparaissent immédiatement [3].
+
+En 1990, *The Machine That Changed the World* de James P. Womack, Daniel T. Jones et Daniel Roos présente la synthèse de l'étude [4]. Les écarts de performance sont importants : selon les données de l'IMVP, les usines à capitaux japonais situées au Japon ont nécessité en moyenne 16,8 heures de main-d'œuvre par véhicule en 1989, les usines à capitaux américains en Amérique du Nord 24,9 heures, et les usines européennes en Europe 35,3 heures [6]. Les chercheurs constatent de fortes différences entre régions et au sein de chaque région, et concluent que les meilleures usines appliquent une approche lean plutôt qu'une approche de production de masse [6].
+
+En 1996, Womack et Jones étendent le concept à des entreprises entières dans *Lean Thinking* et énoncent les cinq principes [5]. En 2007, ils les condensent en trois thèmes : finalité, processus et personnes [5]. Une présentation plus courte des routines quotidiennes de management lean destinées aux responsables d'usine se trouve dans l'article de m365.fm [Lean Management in Manufacturing: The Complete Guide](https://www.m365.fm/community/u/mirko-p/blog/lean-management-in-manufacturing-complete-guide/).
+
+## Les 5 principes du lean manufacturing (Womack et Jones)
+
+Les cinq principes sont conçus comme des étapes de réflexion, à parcourir dans l'ordre puis à répéter [5].
+
+| Principe | Formulation d'origine (paraphrasée) [5] | Exemple en atelier | Outils typiques |
+|---|---|---|---|
+| 1. Valeur | définir la valeur du point de vue du client final, par famille de produits | le client paie un boîtier conforme aux tolérances et livré en trois jours, pas un stockage ni des retouches | exigences client, matrice des familles de produits |
+| 2. Flux de valeur | identifier toutes les étapes du flux de valeur de chaque famille de produits et éliminer les étapes qui ne créent pas de valeur | parcours du flux de valeur, de la réception à l'expédition | cartographie du flux de valeur, gemba walk |
+| 3. Flux | faire se succéder étroitement les étapes créatrices de valeur afin que le produit circule sans heurt vers le client | cellules au lieu d'un atelier par procédé, lots plus petits | lignes de flux, SMED, équilibrage de ligne, takt |
+| 4. Tirage | à mesure que le flux s'installe, laisser les clients tirer la valeur de l'activité amont suivante | la production ne démarre que sur un signal kanban émis par le client ou le procédé suivant | kanban, supermarché, voies FIFO, heijunka |
+| 5. Perfection | répéter le processus jusqu'à atteindre un état de valeur parfaite, sans gaspillage | amélioration quotidienne, standards relevés en continu | kaizen, PDCA, A3, travail standardisé |
+
+### Principe 1 : Définir la valeur du point de vue du client
+
+La valeur n'existe que là où un client est prêt à payer pour une activité. Trois questions permettent de la classer : l'activité modifie-t-elle la forme, l'ajustement ou la fonction du produit ? Le client est-il prêt à la payer ? Est-elle réalisée correctement du premier coup ? Ce n'est que si les trois réponses sont positives que l'activité crée de la valeur. Viennent ensuite les activités nécessaires mais sans valeur ajoutée (comme les contrôles imposés par la réglementation), qu'il faut réduire au minimum, et le gaspillage pur, qu'il faut éliminer. Le LEI distingue donc deux types de muda : les gaspillages qui ne peuvent pas être supprimés immédiatement et ceux qui peuvent être éliminés rapidement par le kaizen [9].
+
+### Principe 2 : Identifier le flux de valeur
+
+Le flux de valeur regroupe toutes les activités, à valeur ajoutée ou non, qu'un produit traverse depuis la matière première jusqu'au client, ainsi que le flux d'informations qui les pilote [18]. Il est rattaché à une famille de produits : une usine n'a pas « un » flux de valeur, mais autant de flux de valeur que de familles de produits aux étapes de procédé similaires.
+
+### Principe 3 : Créer le flux
+
+Le flux signifie qu'un produit passe d'une étape à l'autre sans attente, sans stockage intermédiaire ni retour en arrière. L'idéal est le flux unitaire ; en pratique, un flux continu en petits lots. Les prérequis sont des changements de série courts, des équipements stables, un contenu de travail équilibré et une implantation qui place les étapes de procédé les unes à côté des autres. Les leviers concrets sont décrits dans [Shop Floor Optimization : Ways to Improve Flow](https://www.m365.fm/community/u/mirko-p/blog/shop-floor-optimization-improve-flow-ways/).
+
+### Principe 4 : Tirer au lieu de pousser
+
+Dans un système en poussée, la production suit un planning et les produits sont poussés vers le procédé suivant, qu'il en ait besoin ou non. Dans un [système en tirage](https://www.m365.fm/entity/pull-system/), seule la consommation réelle du procédé aval déclenche le réapprovisionnement [5]. Le tirage limite les stocks dans le système, et donc le délai de traversée ; là où le flux n'est pas possible, des supermarchés avec du [kanban](https://www.m365.fm/entity/kanban/) relient les procédés.
+
+### Principe 5 : Viser la perfection
+
+La perfection désigne une direction, non un état final que l'on peut atteindre. Chaque amélioration révèle le gaspillage suivant ; c'est pourquoi les principes sont conçus comme un cycle [5]. Au quotidien, le principe 5 prend la forme du kaizen : de nombreuses petites améliorations, mises en œuvre chaque jour, sur la base de standards.
+
+## Muda, mura, muri et les 8 gaspillages du lean
+
+La pensée Toyota distingue trois formes de perte liées entre elles. Le LEI les décrit ainsi [9] :
+
+- **Muda (gaspillage) :** activités qui consomment des ressources sans créer de valeur pour le client.
+- **Mura (irrégularité) :** variation du flux de travail, comme des pics de demande que le système de production crée lui-même, ou un cycle alternant précipitation et attente.
+- **Muri (surcharge) :** des personnes ou des équipements sont poussés plus fort, plus vite ou plus longtemps que ne le permettent leur conception ou une organisation raisonnable du travail.
+
+Le LEI illustre ce lien avec un camion prévu pour trois tonnes qui doit en livrer six [9]. Un seul trajet avec six tonnes relève du muri (surcharge, risque de panne). Deux trajets de quatre et deux tonnes relèvent du mura (des livraisons irrégulières encombrent le quai puis le laissent inactif) et contiennent aussi du muri. Trois trajets de deux tonnes chacun constituent du muda (trajets à moitié vides). Seuls deux trajets de trois tonnes chacun évitent les trois. La leçon pour l'usine : chasser le muda en ignorant le mura et le muri revient à traiter des symptômes. Le heijunka et le travail standard s'attaquent aux causes.
+
+### Les sept gaspillages d'Ohno et le huitième
+
+Taiichi Ohno a regroupé les gaspillages typiques de la production de masse en sept catégories [8]. La littérature lean occidentale en a ajouté un huitième, le talent inutilisé des salariés ; il ne vient pas d'Ohno [40]. Deux mnémotechniques sont courantes : **DOWNTIME** (Defects, Overproduction, Waiting, Non-utilized talent, Transportation, Inventory, Motion, Extra-processing), celle que la plupart des usines américaines utilisent ; **TIMWOODS** énumère les mêmes huit dans un ordre différent et est courante en Europe. Une vue d'ensemble compacte se trouve sur la page d'entité m365.fm consacrée aux [huit gaspillages](https://www.m365.fm/entity/eight-wastes/).
+
+| DOWNTIME | Gaspillage | Description [8] | Exemple en atelier | Contre-mesures |
+|---|---|---|---|---|
+| D | Défauts | contrôle, retouche, rebut | 5 % de rebut et 3 % de retouche à un poste de soudure | poka-yoke, jidoka, analyse des causes racines |
+| O | Surproduction | produire plus ou plus tôt que ne l'exige le processus suivant | 100 pièces fabriquées, 80 commandées | tirage, takt, heijunka |
+| W | Attente | personnes et machines à l'arrêt | l'opérateur attend la machine, la matière ou une validation | équilibrage de ligne, TPM, andon |
+| N | Talent inutilisé | les connaissances et les idées des salariés ne sont pas exploitées | les suggestions d'amélioration disparaissent | kaizen, système de suggestions, formation |
+| T | Transport | déplacements inutiles de pièces et de produits | les pièces passent par un entrepôt central entre deux étapes qui pourraient être côte à côte | implantation en flux, cellules, milk run |
+| I | Stocks | plus de matière que n'en exige un système en tirage strictement maîtrisé | trois semaines d'en-cours devant l'atelier de peinture | tirage, kanban, lots plus petits, SMED |
+| M | Mouvements | mouvements corporels inutiles ou pénibles | chercher des outils, se pencher pour prendre des pièces | 5S, conception ergonomique du poste de travail |
+| E | Sur-traitement (surtraitement) | étapes non requises par le client, ou résultant d'outils inadaptés | tolérances plus serrées que nécessaire, double saisie de données | analyse de la valeur, travail standard |
+
+**Pourquoi la surproduction est le pire gaspillage :** Le LEI qualifie la surproduction de pire forme parce qu'elle contribue aux six autres [8]. Produire trop tôt ou en trop grande quantité exige de l'espace de stockage (stocks), du transport et de la manutention (mouvements), immobilise une capacité qui manque ailleurs (attente) et masque des défauts qui n'apparaissent que des semaines plus tard.
+
+**Liste de contrôle : repérer le gaspillage à votre poste de travail**
+
+- [ ] Y a-t-il de la matière en attente devant un poste pendant plus d'un poste de travail ?
+- [ ] Les opérateurs doivent-ils chercher des outils, des pièces ou des informations ?
+- [ ] Quelqu'un attend-il régulièrement une machine, une validation ou de la matière ?
+- [ ] Des pièces sont-elles manutentionnées ou stockées plus d'une fois ?
+- [ ] Existe-t-il des contrôles qui n'existent que parce que des problèmes connus n'ont pas été résolus ?
+- [ ] Produit-on plus que ce que le processus suivant prend aujourd'hui ?
+- [ ] Les idées des salariés sont-elles recueillies, travaillées et suivies d'une réponse ?
+
+## La maison du Système de production Toyota
+
+Le Système de production Toyota est souvent représenté sous la forme d'une maison. Toyota nomme lui-même le jidoka et le just-in-time comme ses deux concepts fondamentaux [1] ; le LEI présente le jidoka comme l'un des deux piliers du TPS, aux côtés du just-in-time [25]. Le schéma exact de la maison varie selon les auteurs ; la version ci-dessous montre la structure commune.
+
+| Niveau | Contenu | Fonction |
+|---|---|---|
+| Toit | qualité la plus élevée, coût le plus bas, délai le plus court, sécurité et moral | objectif du système |
+| Pilier gauche : just-in-time | takt, flux, tirage (kanban), changement rapide | fabriquer le bon article au bon moment, en bonne quantité [1] |
+| Pilier droit : jidoka | arrêt sur anomalie, andon, poka-yoke, séparation du travail humain et du travail machine | intégrer la qualité au processus, ne jamais transmettre un défaut [1][25] |
+| Centre | personnes et équipes, kaizen, réduction des gaspillages | moteur de l'amélioration |
+| Fondation | heijunka, travail standard, processus stables, kaizen | stabilité comme condition préalable au flux |
+
+### Just-in-time
+
+Toyota définit le [just-in-time](https://www.m365.fm/entity/just-in-time/) comme le fait de ne produire que ce qui est nécessaire, au moment où il est nécessaire et dans la quantité nécessaire [1]. Le LEI décrit trois éléments de fonctionnement : le système de tirage, le takt time et le flux continu, avec le heijunka comme fondation [49]. En pratique, le JIT est souvent réduit aux livraisons fournisseurs (« livraison JIT » ou livraison séquencée vers une ligne automobile). Le sens visé est celui d'un principe de production qui maintient volontairement les stocks bas afin que les problèmes deviennent visibles ; la livraison juste-à-temps par les fournisseurs n'en est qu'une application.
+
+### Jidoka
+
+Le jidoka, souvent traduit par « autonomation » ou « automatisation avec une touche humaine », donne aux machines et aux opérateurs la capacité de détecter une anomalie et d'arrêter immédiatement le travail [25]. La qualité est intégrée à chaque étape du processus, et les personnes n'ont plus à surveiller les machines. En pratique, le jidoka suit une séquence simple : détecter l'anomalie, arrêter, réagir immédiatement et traiter la cause racine. Ses principaux outils sont l'andon et le poka-yoke.
+
+### Pourquoi la fondation vient en premier
+
+De nombreux déploiements commencent par le kanban, parce qu'il est visible et concret. Sans demande nivelée (heijunka), sans travail standard ni équipements stables, le tirage crée cependant des ruptures et une gestion permanente de l'urgence. Les principes 2 à 6 de Liker traitent le flux, le tirage, le nivellement, l'arrêt pour résoudre les problèmes et les tâches standardisées comme un ensemble cohérent ; il qualifie les standards de fondation de l'amélioration continue [10].
+
+## Outils de production allégée : la boîte à outils en un coup d'œil
+
+Les outils Lean sont les moyens de mettre les principes en pratique. Le tableau les classe selon leur finalité, leur effort et leur moment d'utilisation. La cotation de l'effort est une estimation fondée sur l'expérience pour un site de taille moyenne (ici : environ 100 à 500 salariés) et dépend fortement du point de départ et du périmètre.
+
+| Outil | Finalité | Effort | Quand l'utiliser |
+|---|---|---|---|
+| 5S | un poste de travail ordonné, sûr et autoexplicatif | faible | comme point d'entrée et fondation de tous les autres outils |
+| Cartographie de la chaîne de valeur | rendre visibles les flux de matières et d'informations, quantifier les gaspillages | moyen | au démarrage, pour fixer les priorités ; puis chaque année |
+| Takt time | aligner le rythme de production sur la demande client | faible | lors de la conception des lignes et cellules, en cas d'évolution de la demande |
+| Travail standard | définir la meilleure méthode connue, base de l'amélioration | moyen | dès que le processus est suffisamment stable |
+| Équilibrage de ligne | répartir le contenu du travail de façon homogène entre les postes | moyen | sur les lignes d'assemblage à plusieurs postes |
+| SMED (changement rapide de série) | raccourcir les changements de série, permettre des lots plus petits | moyen | lorsque les changements de série dictent la taille des lots et les stocks |
+| Kanban | réapprovisionnement piloté par la consommation | moyen | pour les pièces utilisées régulièrement à demande stable |
+| Système en flux tiré | plafonner les stocks, éviter la surproduction | moyen à élevé | une fois les processus et les changements de série stabilisés |
+| Juste-à-temps | production synchronisée sur la demande | élevé | comme état cible, atteint grâce au takt, au flux et au tirage |
+| Heijunka | lissage de la production par volume et par mix | élevé | avec une demande fluctuante et de nombreuses variantes |
+| Poka-yoke | prévenir les défauts ou les détecter immédiatement | faible à moyen | pour les erreurs de manutention et d'assemblage récurrentes |
+| Andon | rendre les anomalies visibles immédiatement, déclencher une réaction rapide | faible à moyen | lorsque les problèmes sont remontés trop tard |
+| TPM | garantir la disponibilité et la performance des équipements | élevé | lorsque les pertes de TRS proviennent de pannes, de micro-arrêts, de problèmes qualité |
+| Kaizen / amélioration continue | amélioration continue par petits pas | faible par action, élevé pour l'ancrer | en permanence, dès le premier jour |
+| Résolution de problèmes A3 | résolution structurée de problèmes sur une seule feuille | faible à moyen | pour les problèmes sans cause évidente |
+| Gemba walk | dirigeants sur le terrain, compréhension du travail réel | faible | régulièrement, à chaque niveau de management |
+| Hoshin kanri | aligner la stratégie jusqu'à l'atelier | élevé | une fois une certaine maturité atteinte, généralement en deuxième année |
+
+Les industriels américains qui souhaitent un accompagnement externe peuvent se tourner vers le NIST Manufacturing Extension Partnership (MEP). Ses centres proposent des services Lean incluant la cartographie de la chaîne de valeur, les 5S, le changement rapide de série, le flux cellulaire, le kanban, le Six Sigma et le Toyota Kata ; le NIST indique que le réseau national MEP a mené à bien plus de 80 000 projets de production allégée [60].
+
+### 5S : l'organisation du poste de travail comme fondation
+
+[5S](https://www.m365.fm/entity/5s/) est une méthode d'organisation du poste de travail qui rend possibles le management visuel et les opérations Lean. Le LEI présente les cinq étapes comme suit [14] :
+
+| Japonais | Anglais | Contenu |
+|---|---|---|
+| Seiri | Sort | retirer de la zone de travail tout ce qui est inutile |
+| Seiton | Set in order (Straighten) | ranger ce qui reste afin qu'il soit facile à trouver et à utiliser |
+| Seiso | Shine | nettoyer la zone de travail, les équipements et les outils, et inspecter en nettoyant |
+| Seiketsu | Standardize | maintenir l'ordre et la propreté au moyen de standards |
+| Shitsuke | Sustain | construire la discipline nécessaire pour maintenir durablement les quatre premières étapes |
+
+Certaines entreprises ajoutent un sixième S pour la sécurité (« 6S ») [14]. L'essentiel est que les 5S ne se résument pas à une journée de grand nettoyage. Le but est un poste de travail où toute anomalie, comme un outil manquant ou une fuite d'huile, est remarquée immédiatement. C'est pourquoi Shine signifie aussi inspection : celui qui nettoie une machine repère les boulons desserrés et les fuites.
+
+**Comment procéder :** événement red-tag pour les éléments non nécessaires, panneaux d'ombre et marquages au sol, plan de nettoyage et d'inspection, standard 5S avec photos de l'état cible, audits 5S réguliers réalisés par les équipes elles-mêmes.
+
+**Erreurs fréquentes :** les 5S présentés comme un événement ponctuel, des audits sans conséquences, des standards imposés de l'extérieur plutôt que élaborés par l'équipe.
+
+### Cartographie de la chaîne de valeur
+
+[Cartographie de la chaîne de valeur](https://www.m365.fm/entity/value-stream-mapping/) (VSM) représente toutes les étapes du flux de matières et d'informations qu'un produit traverse entre la commande et la livraison [18]. Toyota utilisait l'outil sous le nom de « diagramme des flux de matières et d'informations » ; en Occident, il s'est fait connaître grâce au cahier LEI *Learning to See* de Mike Rother et John Shook, qui a reçu le Shingo Research Prize en 1999 [18][39].
+
+**Étapes :**
+
+1. **Choisir une famille de produits :** regrouper les produits qui partagent des étapes de process similaires [18].
+2. **Désigner un responsable :** une seule personne dirige la cartographie et est propriétaire de la chaîne de valeur [18].
+3. **Cartographier l'état actuel :** de bout en bout, en remontant le flux de matières depuis l'expédition jusqu'à la réception, avec un chronomètre et un carnet sur le terrain. Pour chaque process, noter le temps de cycle, le temps de changement de série, le taux de disponibilité, le nombre d'opérateurs et le stock devant le process.
+4. **Ajouter le flux d'informations :** comment les commandes clients, les plannings et les signaux de pilotage parviennent-ils aux process [18] ?
+5. **Tracer la chronologie :** comparer les temps de traitement aux temps d'attente ; on obtient ainsi le taux de valeur ajoutée.
+6. **Concevoir l'état futur :** fixer le takt, un flux continu lorsque c'est possible, des supermarchés et un flux tiré là où c'est nécessaire, définir un process pilote (pacemaker), lisser la production [18].
+7. **Établir un plan d'action :** structurer les améliorations en boucles, fixer des échéances et des responsables.
+
+La LEI souligne qu'une « cartographie de l'état actuel parfaitement dessinée n'est pas le but » ; l'objectif est de comprendre le flux [18]. Pour les délais de stock, la loi de Little s'applique : délai = stock / débit. Si 600 pièces attendent devant un poste et que le client en consomme 300 par jour, ce stock représente deux jours d'attente. Les outils numériques complètent le crayon et le papier lorsque les chaînes de valeur doivent être évaluées avec des variantes, des capacités et des scénarios ; voir la section sur les outils numériques et le [guide de cartographie de la chaîne de valeur](https://www.m365.fm/en/learn/value-stream-mapping/).
+
+### Temps takt
+
+Le [temps takt](https://www.m365.fm/entity/takt-time/) correspond au temps de production disponible divisé par la demande client [19]. Il fixe le rythme auquel un produit doit sortir pour répondre exactement à la demande. Le mot vient de l'allemand *Takt* (battement, au sens de la mesure musicale) ; l'industrie aéronautique allemande utilisait ce principe dès les années 1930, et Toyota l'a largement déployé dans les années 1950 [19].
+
+**Exemple détaillé (d'après la LEI) :** une usine fonctionne 480 minutes par jour, et le client a besoin de 240 pièces par jour. Temps takt = 480 / 240 = 2 minutes [19].
+
+À distinguer des indicateurs voisins :
+
+| Indicateur | Définition | Piloté par |
+|---|---|---|
+| Temps takt | temps disponible / demande client | demande |
+| Temps de cycle | temps réel nécessaire à un process pour réaliser une pièce | capacité du process |
+| Délai (lead time) | temps entre l'entrée d'une pièce et sa sortie de la chaîne de valeur | flux, stock |
+
+Si le temps de cycle d'un process est supérieur au temps takt, il ne peut pas satisfaire la demande ; s'il est très inférieur, on aboutit à une surproduction ou à des attentes. Selon la LEI, Toyota revoit généralement le takt d'un process chaque mois et procède à de petits ajustements tous les dix jours [19].
+
+### Travail standardisé
+
+Le [travail standardisé](https://www.m365.fm/entity/standard-work/) (standardisation du travail) définit la méthode de travail précise de chaque opérateur sur un process et, une fois affiché, devient la référence de base pour le kaizen [17]. Il comporte trois éléments [17] :
+
+1. **Temps takt :** le rythme auquel la production doit s'effectuer.
+2. **Séquence de travail :** l'ordre exact des tâches dans le temps takt.
+3. **Stock standard :** le stock en cours de fabrication, y compris les pièces présentes dans les machines, nécessaire au bon fonctionnement.
+
+La LEI décrit trois formes : la fiche de capacité du process, le tableau de combinaison du travail standardisé (temps manuel, temps de marche, temps machine) et le graphique du travail standardisé avec les trajets de marche [17]. Le travail standardisé n'est pas un règlement rigide. Il décrit la meilleure méthode connue à ce jour et est amélioré par les personnes qui réalisent le travail. Liker le formule ainsi : les tâches standardisées constituent le fondement de l'amélioration continue et de l'autonomisation des salariés [10]. La méthode TWI *Job Instruction*, décrite dans la section historique, qui décompose un poste en étapes et points clés, est un moyen concret de le former [59].
+
+**Erreurs courantes :** des instructions de travail de 30 pages au lieu d'un support visuel d'une page, des standards sans lien avec le takt, aucun processus de modification des standards.
+
+### Équilibrage de ligne
+
+[L'équilibrage de ligne](https://www.m365.fm/entity/line-balancing/) répartit le contenu de travail entre les postes ou les opérateurs de sorte que chaque poste soit aussi proche que possible du temps takt sans le dépasser. L'outil central est le graphique d'équilibrage des opérateurs (appelé aussi graphique yamazumi) : chaque personne est représentée par une barre d'éléments de travail empilés, comparée au temps takt [24].
+
+**Exemple détaillé (illustratif) :** Une équipe dure 7,5 heures, soit 27 000 secondes de temps disponible ; la demande est de 450 unités. Temps takt = 27 000 / 450 = 60 secondes. Les éléments de travail totalisent 99 secondes (A = 25, B = 20, C = 14, D = 22, E = 18). Effectif minimal = 99 / 60 = 1,65, soit deux personnes. La personne 1 prend A, B et C (59 secondes), la personne 2 prend D et E (40 secondes). Le graphique rend visibles les 20 secondes de temps mort de la personne 2 ; l'étape suivante consiste à réduire le gaspillage pour la personne 1 ou à répartir le travail de façon judicieuse. Selon le LEI, l'objectif est de redistribuer les éléments de travail de sorte que la charge de chaque opérateur soit proche du temps takt, mais inférieure à celui-ci [24].
+
+Deux remarques pratiques complètent l'exemple. Premièrement, de nombreuses usines ne planifient pas sur la base du temps takt complet, mais sur un temps de cycle planifié légèrement plus court, afin d'absorber les variations et les perturbations mineures ; à 59 secondes sur 60, la personne 1 ne dispose pratiquement d'aucune marge. Deuxièmement, le temps mort est volontairement concentré sur le dernier opérateur au lieu d'être réparti uniformément. Cela le rend visible, et si un kaizen réduit le contenu de travail de 20 secondes, le poste pourra être fusionné ultérieurement. Un temps mort réparti uniformément se dilue dans le travail et est souvent absorbé par un rythme plus lent.
+
+### SMED : changement rapide par étapes
+
+SMED signifie « single-minute exchange of die », c'est-à-dire des changements d'outillage en moins de dix minutes, à un seul chiffre en minutes [12]. Shigeo Shingo (1909–1990) a développé ses idées clés dans les années 1950 et 1960 [12], notamment à Toyo Kogyo (aujourd'hui Mazda) en 1950, chez Mitsubishi Heavy Industries en 1957 et chez Toyota à partir de 1969, où les changements de presses sont passés de une à deux heures à quelques minutes [11]. Il a publié la méthode en anglais en 1985 sous le titre *A Revolution in Manufacturing: The SMED System* [11].
+
+Pourquoi le [SMED](https://www.m365.fm/entity/smed/) est-il si important pour le lean : des [temps de préparation](https://www.m365.fm/entity/setup-time/) longs entraînent de grands lots, et les grands lots entraînent des stocks élevés et de longs délais. Des changements courts rendent les petits lots économiques et permettent, en premier lieu, le flux et le heijunka.
+
+**Le SMED en six étapes :**
+
+1. **Enregistrer le changement actuel :** filmer l'intégralité du changement, depuis la dernière bonne pièce de l'ancien ordre jusqu'à la première bonne pièce du nouveau. Consigner chaque activité avec sa durée.
+2. **Séparer la préparation interne et externe :** la préparation interne ne peut être réalisée que machine à l'arrêt (par exemple monter le nouvel outil) ; la préparation externe peut être réalisée pendant que la machine tourne (par exemple préparer l'outil) [12]. Cette seule séparation réduit souvent nettement les temps d'arrêt, car la recherche et la récupération disparaissent du temps d'arrêt.
+3. **Transformer la préparation interne en préparation externe :** déplacer hors machine autant de tâches internes que possible [12], par exemple en préchauffant les outils, en utilisant des montages préréglés ou en standardisant les hauteurs d'outils.
+4. **Optimiser la préparation interne :** serre-joints rapides au lieu de boulons, pions de centrage au lieu de réglages, deux personnes travaillant en parallèle, suppression des réglages.
+5. **Optimiser la préparation externe :** chariots de changement, listes de contrôle, emplacements de préparation fixes selon les 5S.
+6. **Standardiser et s'entraîner :** documenter le nouveau changement comme standard de travail, le former et le mesurer ; puis le cycle recommence.
+
+**Erreurs courantes :** investir dans du matériel coûteux avant d'avoir épuisé les étapes organisationnelles 1 à 3 ; ne pas transformer les gains de changement en lots plus petits, de sorte que les stocks restent les mêmes.
+
+### Kanban
+
+Un kanban est un signal qui déclenche et pilote la production ou le déplacement des pièces dans un système à flux tiré ; le mot japonais signifie « signal » ou « panneau » [15]. Les kanbans peuvent être des cartes, des plaques métalliques, des billes colorées ou des signaux électroniques ; une carte type indique le nom et le numéro de la pièce, le fournisseur, la quantité par conteneur, ainsi que les emplacements de stockage et de point d'utilisation [15].
+
+Le LEI distingue deux types fondamentaux [15] :
+
+- **Kanban de production :** indique à le processus amont ce qu'il faut fabriquer et en quelle quantité. Dans le cas le plus simple, une carte correspond à un conteneur. Pour les processus à longs changements de série, comme l'emboutissage, un kanban de signal ne déclenche la production que lorsqu'un niveau de stock minimum est atteint.
+- **Kanban de prélèvement (kanban de transfert) :** autorise le déplacement des pièces vers le processus aval, en interne entre processus ou sous forme de kanban fournisseur avec des fournisseurs externes, de plus en plus électronique sur les longues distances.
+
+**Les six règles du kanban de Toyota (Ohno 1988) :** Ohno décrit six règles dans son ouvrage [7][51] :
+
+1. Le processus aval prélève exactement la quantité indiquée par le kanban auprès du processus amont.
+2. Le processus amont produit dans la quantité et la séquence indiquées par le kanban.
+3. Rien n'est fabriqué ni déplacé sans kanban.
+4. Le kanban est toujours attaché à la pièce ou au conteneur.
+5. Les pièces défectueuses ne sont pas transmises au processus aval.
+6. Le nombre de kanbans est réduit progressivement ; cela rend le système plus sensible et met les problèmes en évidence.
+
+**Exemple détaillé : nombre de kanbans (à titre indicatif) :** Une formule de base courante est : nombre de kanbans = demande par période × délai de réapprovisionnement × (1 + facteur de sécurité) / quantité par conteneur. Si un atelier d'assemblage utilise 400 pièces par jour, que le réapprovisionnement depuis l'amont prend une demi-journée, que le facteur de sécurité est de 10 % et qu'un conteneur contient 50 pièces, le résultat est 400 × 0,5 × 1,1 / 50 = 4,4, soit cinq kanbans. Cela limite la boucle à 250 pièces, un peu plus d'une demi-journée de demande. Si le SMED divise ensuite par deux le temps de réapprovisionnement, le nombre de kanbans peut être réduit dans l'esprit de la règle 6, dans cet exemple de cinq à trois.
+
+**Quand le kanban ne convient pas :** avec une demande très volatile, des pièces rarement utilisées ou des pièces uniques propres à un client. Les voies FIFO, la commande par ordre ou le CONWIP sont souvent préférables dans ces cas.
+
+### Systèmes à flux tiré et supermarchés
+
+Un système à flux tiré plafonne le stock entre deux processus et laisse le processus aval fixer le rythme [5]. Il existe trois formes de base : le système à flux tiré par supermarché (on réapprovisionne ce qui a été prélevé), le système à flux tiré séquentiel (fabrication à la commande en séquence, plafonnée par des voies FIFO) et les formes mixtes. Un supermarché est un stock maîtrisé avec des quantités maximales et minimales définies, dans lequel le processus aval effectue ses prélèvements. Le flux tiré s'oppose à la planification centrale de chaque poste : seul un processus pilote reçoit le planning, et tous les processus amont suivent les signaux kanban. Dans les usines américaines, cela signifie souvent que le système MRP/ERP continue de planifier les matières et la capacité, tandis que le planning du processus pilote et les boucles kanban déterminent ce qui est réellement fabriqué chaque jour.
+
+### Heijunka : production nivelée
+
+[Heijunka](https://www.m365.fm/entity/heijunka/) nivelle le type et la quantité de production sur une période fixe [16]. Cela réduit les stocks, le capital immobilisé, les besoins en personnel et le délai de fabrication, car les processus amont n'ont pas à être dimensionnés pour les pics.
+
+**Nivellement par volume (exemple d'après LEI) :** Un fabricant reçoit 500 commandes par semaine, arrivant de façon irrégulière : 200 le lundi, 100 le mardi, 50 le mercredi, 100 le jeudi et 50 le vendredi. Au lieu de suivre cette variation, il conserve un petit stock tampon de produits finis et produit un rythme régulier de 100 unités par jour [16].
+
+**Nivellement par mix (exemple d'après LEI) :** Avec une demande hebdomadaire de 5 × A, 3 × B, 2 × C et 2 × D, un producteur de masse fabrique dans la séquence « A A A A A B B B C C D D », tandis qu'un producteur lean fabrique « A A B C D A A B C D A B » [16].
+
+L'outil correspondant est la boîte heijunka, un planning visuel avec les types de produits en ordonnée et les intervalles de temps en abscisse [16]. La largeur d'un intervalle correspond généralement au pitch, soit le temps pour un conteneur : avec un takt time d'une minute et 20 pièces par conteneur, le pitch est de 20 minutes [55]. Sur une équipe de 450 minutes de temps disponible, la boîte heijunka compte donc 22 créneaux par rangée, et toutes les 20 minutes un cariste prend le kanban suivant. Cela montre aussi d'un coup d'œil si la ligne respecte le planning. Des changements de série courts sont un prérequis : la séquence mixte de l'exemple ci-dessus nécessite environ dix changements de type par cycle avec quatre variantes, ce qui n'est rentable qu'avec le SMED.
+
+### Poka-yoke : prévenir les défauts plutôt que les contrôler
+
+[Poka-yoke](https://www.m365.fm/entity/poka-yoke/) (détrompage) désigne des dispositifs simples et peu coûteux qui empêchent les erreurs, comme l'utilisation d'une mauvaise pièce, l'oubli d'une pièce ou le montage d'une pièce à l'envers ; « poka » signifie erreur involontaire et « yoke » évitement [13]. L'objectif est une qualité à 100 pour cent, en détectant les erreurs à la source [13]. Le poka-yoke est attribué à Shigeo Shingo [11].
+
+Le LEI distingue deux types [13] :
+
+- **Poka-yoke d'arrêt :** il empêche l'erreur, par exemple lorsqu'une machine refuse de démarrer tant qu'une pièce est mal chargée. Le LEI considère cette forme comme la plus efficace [13].
+- **Poka-yoke d'alerte :** il signale une anomalie à l'opérateur par un son ou une lumière.
+
+**Exemples en atelier :**
+
+- des pièces dont la géométrie n'autorise l'assemblage que dans la bonne orientation [13]
+- des barrages lumineux placés devant les bacs à pièces, qui ne libèrent la ligne qu'après que l'opérateur a atteint chacun des bacs requis ; les systèmes plus avancés vérifient en outre la bonne combinaison de pièces pour chaque variante [13]
+- des gabarits dotés de broches de positionnement qui n'acceptent que la variante correcte
+- des outils de serrage au couple qui comptent les vissages et bloquent le transfert suivant tant qu'un vissage manque
+- des connecteurs qui ne peuvent s'insérer que dans un seul sens
+
+**Exemples du quotidien** (d'après le LEI) : des lave-linge qui refusent de démarrer porte ouverte ; des tondeuses qui ne fonctionnent que si la barre de sécurité est maintenue enfoncée ; des scies circulaires de table avec arrêt automatique [13].
+
+Selon le LEI, les bonnes solutions de poka-yoke sont simples, durables et peu exigeantes en maintenance, très fiables, peu coûteuses et conçues pour la situation de travail précise [13]. Shingo distinguait également trois méthodes de détection [50] : la méthode de contact vérifie des caractéristiques physiques telles que la forme, la taille ou la couleur (par exemple, une broche de positionnement). La méthode à valeur fixe signale lorsqu'un nombre déterminé de mouvements n'a pas été atteint (par exemple, l'outil de serrage à compteur). La méthode par étapes de mouvement vérifie que les étapes prescrites ont été réalisées dans le bon ordre.
+
+### Andon : rendre les problèmes visibles immédiatement
+
+Andon (en japonais « lampe ») est un outil de gestion visuelle qui montre l'état d'une zone d'un coup d'œil et signale l'apparition d'une anomalie [23]. Une configuration type consiste en un tableau d'affichage au-dessus de la ligne, sur lequel un numéro de poste s'allume lorsqu'un capteur détecte un problème ou qu'un opérateur tire sur un cordon ou appuie sur un bouton ; le chef d'équipe intervient alors immédiatement [23].
+
+Sur les lignes d'assemblage final de Toyota, la ligne ne s'arrête pas au moment où le cordon est tiré, mais seulement lorsque le véhicule atteint une position fixe en fin de poste (arrêt en position fixe). Si l'équipe parvient à résoudre le problème dans le temps takt, la ligne continue de tourner ; dans le cas contraire, elle s'arrête à cette position. Les défauts ne sont pas transmis et les arrêts restent brefs [23].
+
+**Condition préalable à l'andon :** une culture de management dans laquelle tirer le cordon est bienvenu. Si les personnes sont critiquées pour les arrêts de ligne, les signaux cessent et les problèmes restent cachés.
+
+### TPM : maintenance productive totale
+
+[TPM](https://www.m365.fm/entity/total-productive-maintenance/) est un ensemble d'activités qui garantit que chaque machine d'un processus puisse toujours remplir la tâche requise [20]. Selon le LEI, « totale » recouvre trois dimensions : l'implication de tous les salariés, l'accent mis sur la productivité globale des équipements et la prise en compte de l'ensemble du cycle de vie [20]. Contrairement à la maintenance préventive classique, la TPM associe les opérateurs à la maintenance courante, à l'amélioration et aux réparations simples. Le LEI cite Denso, membre du groupe Toyota, comme pionnier [20].
+
+La TPM cible six grandes pertes qui alimentent directement le TRS [21] :
+
+| Facteur du TRS | Perte | Exemple |
+|---|---|---|
+| Disponibilité | pannes | défaillance hydraulique |
+| Disponibilité | réglages et mises en train | changement de moule, démarrage |
+| Performance | micro-arrêts | pièce coincée, déclenchement d'un capteur |
+| Performance | ralentissement | machine tournant en deçà de sa vitesse nominale |
+| Qualité | rebuts | pièces inutilisables |
+| Qualité | retouches | pièces à corriger |
+
+La TPM a été formalisée au Japon par le Japan Institute of Plant Maintenance (JIPM) [52]. Une représentation courante repose sur huit piliers [52] : l'amélioration ciblée (kobetsu kaizen), la maintenance autonome par les opérateurs (nettoyage, inspection, lubrification), la maintenance planifiée, la formation et l'éducation, la maintenance qualité, la gestion précoce des équipements pour les nouveaux matériels, la sécurité, la santé et l'environnement, ainsi que la TPM dans les fonctions administratives. Pour démarrer, les trois premiers suffisent généralement ; les autres suivent à mesure que la maturité progresse.
+
+**Exemple détaillé : facteurs du TRS (à titre illustratif) :** Une machine est planifiée pour 450 minutes dans un poste et reste à l'arrêt pendant 45 minutes à cause de pannes et de changements de format : disponibilité = 405 / 450 = 90 %. Avec un temps de cycle idéal de 0,5 minute, 810 pièces étaient possibles en 405 minutes ; 770 ont été produites : performance = 770 / 810 = 95 %. Parmi elles, 762 sont bonnes : qualité = 762 / 770 = 99 %. Sans arrondi, le TRS est de 84,7 % ; vérification : 762 bonnes pièces × 0,5 minute / 450 minutes = 84,7 %. C'est presque l'exemple LEI de la section KPI, mais il montre quelle perte coûte combien de minutes.
+
+### Kaizen et amélioration continue
+
+Kaizen (japonais, en gros « changement pour le mieux ») désigne une amélioration continue, par petites étapes, menée par l'ensemble des collaborateurs. Le terme s'est fait connaître en Occident grâce à Masaaki Imai, dont le livre *Kaizen: The Key to Japan's Competitive Success* est paru en 1986 ; Imai a fondé le Kaizen Institute en 1985 [35]. Dans les usines américaines, le programme fonctionne en général sous le nom de continuous improvement (CI) ; les usines allemandes l'appellent KVP (*kontinuierlicher Verbesserungsprozess*).
+
+Il existe deux formes :
+
+- **Kaizen quotidien :** de petites améliorations au sein de l'équipe, souvent via des fiches d'idées sur le tableau d'atelier, mises en œuvre en quelques jours.
+- **Événement kaizen (kaizen blitz, rapid improvement event) :** une équipe pluridisciplinaire améliore un périmètre clairement délimité en peu de temps, par exemple une implantation ou un changement de format. Selon la LEI, ces ateliers durent généralement cinq jours ; la LEI met aussi en garde contre le fait de s'appuyer uniquement sur les événements, car la capacité de résolution de problèmes sur le terrain ne se développe que par le kaizen quotidien [53].
+
+La méthode repose sur le cycle PDCA (plan, do, check, act), qui remonte à Shewhart et a été diffusé par Deming [29]. Un standard est toujours le point de départ : sans standard, il n'existe aucune référence pour mesurer une amélioration.
+
+### Résolution de problèmes avec le rapport A3
+
+Le rapport A3 est une pratique de Toyota qui consiste à consigner le problème, l'analyse, les contre-mesures et le plan d'action sur une seule feuille de papier A3 (297 × 420 mm ; les usines américaines utilisent en général le format voisin 11 × 17 in., dit tabloid) [22]. La LEI souligne que l'A3 est avant tout un processus de management, et pas seulement un document [22]. Plus d'informations sur la méthode figurent sur la page de référence [A3 problem solving](https://www.m365.fm/entity/a3-problem-solving/).
+
+**Structure type (à gauche : le problème, à droite : la solution) :**
+
+1. Contexte et raison pour laquelle le sujet compte
+2. Situation actuelle avec des faits et des données issus du gemba
+3. Objectif (mesurable, avec une échéance)
+4. Analyse des causes profondes (par exemple 5 Pourquoi, diagramme de causes-effets/Ishikawa)
+5. Contre-mesures, depuis plusieurs options jusqu'à la meilleure
+6. Plan d'action : qui fait quoi et quand
+7. Suivi : preuve de l'effet et standardisation
+
+La structure suit clairement le cycle PDCA. La LEI nomme explicitement un responsable dont les initiales figurent sur l'A3 [22]. La vraie valeur réside dans le dialogue : le manager accompagne à partir de l'A3 au lieu de livrer des solutions toutes faites.
+
+### Gemba walk
+
+*Gemba* signifie en japonais « le lieu réel » ; dans le lean, il désigne l'endroit où la valeur est créée [26]. Selon la LEI, la [gemba walk](https://www.m365.fm/entity/gemba-walk/) est une pratique de management qui consiste à saisir la situation actuelle par l'observation directe et le questionnement avant d'agir [26]. La LEI recommande de suivre un produit ou un processus du début à la fin, avec toutes les personnes concernées, et de poser trois questions : quel est le but du processus, comment le travail est-il réellement effectué, et les personnes sont-elles engagées [26] ? Un guide pratique est [What Is a Gemba Walk?](https://www.m365.fm/community/u/mirko-p/blog/what-is-a-gemba-walk/) ; la routine est traitée plus en profondeur dans le [guide de management de l'atelier](https://www.m365.fm/en/learn/shop-floor-management/).
+
+### Hoshin kanri
+
+Le hoshin kanri (déploiement de la politique, parfois appelé déploiement de la stratégie) est un cadre stratégique qui aligne les objectifs de l'entreprise verticalement, de la direction jusqu'à l'atelier, et horizontalement entre les services, en s'appuyant sur le PDCA [27]. La LEI recommande de combiner hoshin et A3 afin que chaque niveau travaille sur les priorités fixées par le hoshin [27]. Pour les débutants, le hoshin kanri n'est en général pas le point de départ mais l'étape où le lean passe des projets individuels à la manière dont l'entreprise est gérée, d'après notre expérience, au bout d'un à deux ans [unverified: estimation de praticien].
+
+## Lean vs. Six Sigma vs. Lean Six Sigma
+
+Lean et Six Sigma sont souvent cités ensemble, mais leurs priorités diffèrent. Lean vise le flux et l'élimination des gaspillages ; Six Sigma vise la réduction de la variabilité et des défauts à l'aide de méthodes statistiques. Selon l'opinion courante, Six Sigma a été développé chez Motorola au milieu des années 1980 [58] ; Motorola a reçu le Malcolm Baldrige National Quality Award en 1988, et le profil de ce prix décrit Six Sigma comme un objectif de pas plus de 3,4 défauts par million [45]. L'ASQ définit la performance qualité Six Sigma comme 3,4 défauts par million d'opportunités, en tenant compte d'un décalage de 1,5 sigma de la moyenne [28].
+
+| Caractéristique | Lean | Six Sigma | Lean Six Sigma |
+|---|---|---|---|
+| Question centrale | Où le processus ne circule-t-il pas, où naissent les gaspillages ? | Pourquoi le processus varie-t-il, d'où viennent les défauts ? | les deux, selon le type de problème |
+| Origine | Toyota Production System [1] | Motorola [45][58] | combinaison des deux |
+| Approche | PDCA, kaizen, conception de la chaîne de valeur | DMAIC : définir, mesurer, analyser, améliorer, contrôler [28] | DMAIC avec des outils lean |
+| Outils | 5S, kanban, SMED, travail standard, VSM | maîtrise statistique des procédés, plans d'expériences, analyse de régression et de capabilité | combinaison |
+| Organisation | tous les collaborateurs, amélioration quotidienne | experts dans des rôles (ceintures), gestion de projet | structure de ceintures plus participation large |
+| Horizon temporel | de quelques jours à quelques semaines par amélioration | généralement plusieurs mois par projet [unverified: durée typique non vérifiée] | mixte |
+| Force | rapide, visible, participatif | précis pour les problèmes qualité complexes | large éventail de problèmes |
+| Risque | activisme d'outils sans données | projets d'experts sans impact large | surcharge due aux structures en double |
+
+### DMAIC en bref
+
+1. **Définir :** fixer le problème, les exigences client et le périmètre du projet.
+2. **Mesurer :** mesurer la performance de référence, vérifier le système de mesure.
+3. **Analyser :** démontrer les causes à l'aide de données.
+4. **Améliorer :** développer, tester et mettre en œuvre les solutions.
+5. **Contrôler :** pérenniser l'amélioration, par exemple avec des cartes de contrôle et des standards [28].
+
+### Les rôles des ceintures
+
+Six Sigma organise l'amélioration à travers des rôles nommés d'après les ceintures des arts martiaux. Selon l'ASQ, les Black Belts sont des personnes clés disposant d'une formation approfondie en statistiques avancées et en gestion de projet [28]. Sont également courants dans la pratique les Yellow Belts (connaissances de base, membres d'équipe sur les projets), les Green Belts (pilotent des projets plus petits en parallèle de leur poste habituel), les Master Black Belts (coaching, responsabilité des méthodes) et les Champions (dirigeants qui parrainent les projets). Les rôles et les durées de formation ne sont pas normalisés au niveau international ; le contenu et la durée varient selon les prestataires. Aux États-Unis, l'ASQ est l'un des plusieurs organismes qui certifient les ceintures.
+
+**Règle empirique :** si la cause d'un problème est visible dans le flux de travail (attentes, recherches, stocks), les outils lean aident plus rapidement. Si la cause est cachée et dépend des données (variation d'une cote, défauts sporadiques), un projet [Lean Six Sigma](https://www.m365.fm/entity/lean-six-sigma/) avec DMAIC est le bon choix. Une comparaison détaillée figure dans [Lean vs. Six Sigma: Differences and How to Combine Them](https://www.m365.fm/community/u/mirko-p/blog/lean-vs-six-sigma-differences-combine/).
+
+## Leadership et culture Lean
+
+La pérennité du lean dépend moins des outils que du leadership. La structure de *The Toyota Way* de Liker (2004) va déjà dans ce sens : sur les 14 principes, seuls sept concernent le processus au sens strict ; les autres portent sur la philosophie, les personnes et la résolution de problèmes [10].
+
+| Section selon Liker [10] | Principes (version abrégée) |
+|---|---|
+| Philosophie à long terme | 1. fonder les décisions de management sur une philosophie à long terme, quitte à sacrifier les objectifs financiers à court terme |
+| Le bon processus produira les bons résultats | 2. créer un flux continu pour faire remonter les problèmes à la surface ; 3. utiliser des systèmes en flux tiré pour éviter la surproduction ; 4. lisser la charge de travail ; 5. instaurer une culture de l'arrêt pour corriger les problèmes ; 6. les tâches standardisées sont le socle de l'amélioration ; 7. utiliser le contrôle visuel ; 8. n'utiliser que des technologies fiables et soigneusement testées |
+| Développer les personnes et les partenaires | 9. former des leaders qui comprennent le travail et savent l'enseigner ; 10. développer des personnes et des équipes d'exception ; 11. respecter ses partenaires et fournisseurs en les stimulant et en les aidant |
+| Résolution continue de problèmes | 12. aller voir par soi-même (genchi genbutsu) ; 13. prendre les décisions lentement par consensus, les mettre en œuvre rapidement ; 14. devenir une organisation apprenante par la réflexion (hansei) et l'amélioration continue |
+
+### Ce que font différemment les leaders lean
+
+- **Ils vont là où le travail se fait :** les décisions reposent sur leur propre observation au gemba, et non sur les seuls rapports [10][26].
+- **Ils questionnent au lieu d'imposer :** le leader développe la capacité de résolution de problèmes, par exemple par le coaching A3 [22].
+- **Ils rendent les problèmes visibles et valorisent le signalement :** l'andon ne fonctionne que si un arrêt de ligne est compté comme une contribution et non comme une perturbation [23].
+- **Ils dirigent par les standards :** un écart par rapport au standard déclenche une résolution de problème, non la recherche de coupables.
+- **Ils alignent les objectifs :** grâce au hoshin kanri, ils relient la stratégie de l'entreprise et l'amélioration quotidienne [27].
+
+### Le management visuel de production comme outil de leadership
+
+La plupart des usines ancrent le leadership lean dans le management visuel de production, souvent appelé système de management quotidien à plusieurs niveaux aux États-Unis : de brefs points quotidiens devant des tableaux visuels présentant des indicateurs de sécurité, qualité, délais et coûts (SQDC), une cascade d'escalade sur plusieurs niveaux (équipe, zone, usine) et un suivi régulier des actions. Le management visuel de production est le lieu où se rencontrent standards, signaux andon et idées kaizen. La méthode est détaillée dans le [guide du management visuel de production](https://www.m365.fm/en/learn/shop-floor-management/).
+
+### Le lean au-delà de l'atelier
+
+Les principes sont transposables aux fonctions de bureau telles que la gestion des commandes, la planification de production, les achats ou l'ingénierie (lean office, lean développement produit). Là, le flux de valeur est un flux d'informations : un devis, une modification d'ingénierie ou une facture « attend » dans les boîtes de réception et les circuits de validation au lieu de s'entasser dans des stocks tampons. Les outils typiques sont l'analyse de processus et de couloirs de responsabilité, les tableaux visuels d'équipe, la standardisation des tâches récurrentes et la limitation des travaux en cours. Cela touche directement la production, car une part importante du délai de fabrication d'une commande client est souvent générée avant la première opération en atelier.
+
+**Lean vert :** le *Lean & Environment Toolkit* (2016) de l'Environmental Protection Agency américaine aide les spécialistes du lean et de l'environnement à identifier les gaspillages liés à la consommation d'énergie, d'eau et de matières, et à éliminer les déchets environnementaux dans le cadre du travail lean courant [61]. Une manière simple de commencer consiste à ajouter des colonnes énergie, eau et matières aux encadrés de données d'une cartographie du flux de valeur actuel.
+
+### Respect des personnes
+
+Mener le lean comme un programme de réduction des coûts habillé de vocabulaire japonais gaspille sa ressource la plus précieuse. Une usine qui transforme régulièrement les gains de productivité en suppressions de postes perd la volonté des salariés de révéler les gaspillages. Une approche courante consiste donc à s'engager dès le lancement à ce que personne ne perde son emploi à cause des améliorations lean ; la capacité libérée est affectée à la croissance, à l'internalisation d'activités ou aux équipes d'amélioration.
+
+Les relations sociales font partie de la conception, et les règles diffèrent selon les pays :
+
+- **Usines syndiquées aux États-Unis :** les normes, les changements d'effectifs, le contenu des postes et les nouveaux indicateurs peuvent toucher à la convention collective. Impliquer le syndicat tôt ; NUMMI a montré que le lean peut fonctionner avec une main-d'œuvre représentée par l'UAW [56].
+- **Usines non syndiquées aux États-Unis :** les comités permanents de salariés qui discutent de salaires, d'horaires ou de conditions de travail avec la direction peuvent poser des questions au regard de la section 8(a)(2) du National Labor Relations Act, qui interdit à l'employeur de dominer une organisation syndicale. Dans l'affaire *Electromation, Inc. v. NLRB* (1994), la Cour d'appel du septième circuit a confirmé une telle conclusion pour des « comités d'action » créés par l'employeur, en soulignant que sa décision se limitait à ces comités et en reconnaissant l'importance croissante de l'implication des salariés [62]. Savoir si une équipe permanente d'amélioration relève de ce cadre dépend de sa charte et des sujets qu'elle aborde ; faites donc examiner la charte par un conseil en droit du travail avant le lancement.
+- **Sécurité :** réduire le muri relève aussi de la sécurité au travail. L'OSHA décrit les troubles musculo-squelettiques liés au travail comme évitables et définit l'ergonomie comme « l'adaptation du travail à la personne » [63] ; le risque ergonomique doit figurer sur chaque feuille de travail standard et à chaque modification du takt.
+- **Usines allemandes :** les normes, les indicateurs et les systèmes techniques susceptibles de suivre les performances ou les comportements exigent une implication précoce du comité d'entreprise (*Betriebsrat*), qui dispose de droits de cogestion en vertu de la loi allemande sur la constitution des entreprises (Betriebsverfassungsgesetz). Les entreprises américaines disposant de sites en Allemagne doivent intégrer cette contrainte dans leur déploiement mondial.
+
+## Comment mettre en œuvre le lean manufacturing : une feuille de route en cinq phases
+
+Il n'existe pas de recette standard, mais il existe un schéma éprouvé : commencer petit, apprendre dans une zone pilote, stabiliser les résultats, puis déployer. La feuille de route ci-dessous sert de guide pour une usine de taille moyenne ; les délais sont des estimations de praticiens [unverified: estimations empiriques non sourcées] et dépendent de la taille, du point de départ et des ressources.
+
+| Phase | Délai (indicatif) | Objectifs | Livrables |
+|---|---|---|---|
+| 0. Préparation | mois 1 | clarifier l'objectif et le pourquoi, aligner la direction, impliquer le syndicat ou les représentants des salariés | vision lean, comité de pilotage, coordinateur lean désigné |
+| 1. Diagnostic | mois 1–2 | comprendre l'état actuel, quantifier les gaspillages | cartographies de flux de valeur des principales familles de produits, référence des KPI, zone pilote choisie |
+| 2. Pilote | mois 3–6 | faire fonctionner les outils dans une zone | 5S, travail standard, tableau de pilotage d'atelier, SMED sur le goulot, premiers événements kaizen, amélioration mesurable |
+| 3. Stabiliser et standardiser | mois 6–9 | pérenniser le pilote, définir un standard lean pour l'usine | système de production documenté (principes, outils, rôles), plan de formation, audits |
+| 4. Déploiement | mois 9–12 et au-delà | autres flux de valeur, tirage et lissage, hoshin kanri | réunions hiérarchisées à l'échelle de l'usine, boucles de tirage, déclinaison des objectifs |
+
+### Choisir la zone pilote
+
+La zone pilote détermine la crédibilité de l'ensemble du programme. Critères éprouvés :
+
+- [ ] **Pertinence :** la zone influence un indicateur important (goulot, délais, qualité).
+- [ ] **Périmètre maîtrisable :** une ligne ou une cellule avec une famille de produits clairement délimitée.
+- [ ] **Leadership :** un chef d'équipe qui souhaite le changement.
+- [ ] **Visibilité :** les résultats sont visibles et transférables aux autres zones.
+- [ ] **Faisabilité :** aucun grand projet parallèle, comme un déménagement d'équipements ou une mise en service d'ERP.
+- [ ] **Mesurabilité :** des valeurs de référence pour le délai de traversée, le TRS, la qualité et les stocks existent ou peuvent être collectées rapidement.
+
+### Des outils dans le bon ordre
+
+Une séquence qui fonctionne souvent : stabilité avant flux, flux avant tirage, tirage avant lissage.
+
+1. **Stabilité :** 5S, travail standard, bases de la TPM, tableau de pilotage d'atelier, résolution de problèmes.
+2. **Flux :** conception du flux de valeur, implantation en flux, équilibrage de ligne, SMED, lots réduits.
+3. **Tirage :** supermarchés, kanban, voies FIFO, processus cadencier.
+4. **Lissage :** heijunka, séquences en production mixte, pilotage par le takt.
+5. **Alignement :** hoshin kanri, lean dans les fonctions administratives, développement fournisseurs.
+
+### Rôles pendant la mise en œuvre
+
+| Rôle | Responsabilité |
+|---|---|
+| Équipe de direction / directeur d'usine | vision, ressources, présence personnelle au gemba, président du comité de pilotage |
+| Coordinateur Lean (responsable amélioration continue, manager Lean) | expertise méthodologique, formation, coaching, pilotage du programme |
+| Responsables de secteur et chefs d'équipe | management quotidien des standards, réunions à plusieurs niveaux, escalade |
+| Équipes de production | application des standards, signalement des anomalies, mise en œuvre des idées kaizen |
+| Maintenance, logistique, qualité | soutien au TPM, boucles pull, résolution de problèmes |
+| Représentants syndicaux ou des salariés (comité d'entreprise en Allemagne) | contribution sur les standards, les indicateurs, le temps de travail et les questions de charge de travail |
+| EHS (environnement, santé et sécurité) | revue ergonomique et sécuritaire des nouveaux standards et implantations |
+
+**Soutien extérieur aux États-Unis :** Le NIST MEP National Network, qui compte plus de 450 points de service et des partenariats dans les 50 États et à Porto Rico, se concentre sur les petits et moyens industriels américains et propose des formations Lean et un accompagnement à la mise en œuvre [60][65]. L'Association for Manufacturing Excellence (AME), qui affirme être née du mouvement Lean, organise conférences et événements pour les praticiens [66] ; le Shingo Institute évalue les organisations selon le Shingo Model [64] ; le Lean Enterprise Institute publie le lexique et les cahiers de travail cités tout au long de ce guide [5][39].
+
+## Indicateurs KPI Lean : comment mesurer les progrès
+
+Le succès Lean se lit dans quelques indicateurs significatifs. Plus important que leur nombre est qu'ils soient discutés chaque jour sur le terrain. Le [guide des KPI de fabrication](https://www.m365.fm/en/learn/manufacturing-kpis/) va plus loin.
+
+| KPI | Formule ou définition | Ce qu'il indique | Lien avec le Lean |
+|---|---|---|---|
+| Délai de traversée (lead time) | temps entre la réception des matières et l'expédition, par ex. stock / débit (loi de Little) | À quelle vitesse une commande circule-t-elle ? | flux, pull |
+| Taux de flux (efficacité du cycle de process) | temps de traitement / délai de traversée | part du temps à valeur ajoutée | chaîne de valeur |
+| TRS (efficacité globale des équipements, OEE) | disponibilité × performance × qualité [21] | Quelle est la productivité des équipements ? | TPM, SMED |
+| Jours de couverture | stock / demande quotidienne moyenne | Combien de jours le stock couvre-t-il ? | pull, kanban |
+| Taux de rendement synthétique au premier passage (FPY) | pièces bonnes au premier passage / pièces produites | qualité sans reprise | jidoka, poka-yoke |
+| Livraison à temps et complète (OTIF) | commandes livrées à temps et complètes / total des commandes | vision client | takt, heijunka |
+| Temps de changement de série | dernière bonne pièce de l'ancienne série à la première bonne pièce de la nouvelle | flexibilité | SMED |
+| Productivité | production / heures de main-d'œuvre | efficacité | travail standard, équilibrage de ligne |
+| Sécurité | incidents déclarables et quasi-accidents par période (aux États-Unis, souvent le taux d'accidents déclarables OSHA) | protection des personnes | 5S, travail standard |
+| Améliorations par salarié | idées mises en œuvre / salariés par an | implication | kaizen |
+
+**Exemple chiffré : TRS (d'après LEI) :** disponibilité 90 %, performance 95 %, qualité 99 % donnent 0,90 × 0,95 × 0,99 = 84,6 % de TRS [21]. L'indicateur ne vaut que par ses données : si vous sortez les changements de série du temps planifié, vous obtenez de beaux chiffres mais aucune indication du potentiel SMED.
+
+**Liste de contrôle pour un bon système d'indicateurs**
+
+- [ ] Pas plus de cinq à sept KPI par niveau [unverified: guideline]
+- [ ] Chaque KPI a un responsable et une cible
+- [ ] Les KPI sont affichés visuellement là où le travail se fait
+- [ ] Les écarts déclenchent une réponse définie (action, escalade, A3)
+- [ ] Les résultats et les indicateurs de process sont équilibrés (par exemple, OTIF et temps de changement de série)
+- [ ] La collecte des données prend moins de temps que leur discussion
+
+## Erreurs courantes dans la mise en œuvre du lean
+
+| Erreur | Conséquence | Meilleure approche |
+|---|---|---|
+| copier les outils sans comprendre les principes | le kanban sans processus stables crée des pénuries | respecter la stabilité de séquence, le flux, le tirage, le lissage |
+| 5S comme simple événement de nettoyage | après trois mois, l'ancien état est revenu | standards, audits, appropriation par l'équipe |
+| lean comme programme de réduction des coûts | les salariés cachent le gaspillage, résistance | sécurité de l'emploi, utiliser les gains pour la croissance |
+| la direction délègue le lean à une fonction support | outils sans comportement de management | les dirigeants sur le gemba eux-mêmes, standard de travail du manager |
+| trop de zones pilotes en même temps | les ressources s'épuisent, pas de succès visible | un pilote, puis déploiement |
+| ignorer le muri | la compression du takt conduit à la surcharge, aux blessures et aux erreurs | intégrer l'ergonomie et la charge de travail dans le travail standard |
+| réduire les stocks sans analyse des risques | défaillances de livraison lors de perturbations | définir des stocks de sécurité stratégiques pour les pièces critiques |
+| indicateurs KPI sans réaction | les tableaux deviennent de la décoration | chaque écart donne lieu à une action |
+| impliquer le syndicat ou les représentants du personnel trop tard | retards, méfiance | les intégrer dès le départ au comité de pilotage |
+| numériser avant de stabiliser | des processus instables sont figés dans le logiciel | d'abord le standard, puis le support numérique |
+
+## Inconvénients et limites de la production lean
+
+Un guide qui ne présente que les avantages est incomplet. Les critiques du lean se regroupent en quatre domaines.
+
+### 1. Intensification du travail et contraintes
+
+Une revue systématique de la littérature menée par Rampasso et ses collègues (2017) a recensé 22 catégories de problèmes que la production lean peut causer pour la santé et le bien-être des salariés ; le plus souvent cité était l'intensification du travail, qui apparaît dans 13 des 27 articles examinés [33]. Les auteurs citent également l'augmentation du stress ainsi que l'accroissement des responsabilités, des exigences et de la pression [33]. Cela ne contredit pas la pensée lean ; cela montre ce qui se produit lorsque le muda est combattu tandis que le muri est ignoré. Toyota nomme lui-même explicitement le muri comme un type de perte [9], Liker plaide pour le lissage de la charge de travail [10], et les recommandations ergonomiques de l'OSHA traitent les troubles musculosquelettiques liés au travail comme évitables [63].
+
+### 2. Résilience des chaînes d'approvisionnement après 2020 et 2021
+
+La pandémie de COVID-19 et la pénurie de semi-conducteurs de 2021 ont mis le just-in-time sous pression. Willy Shih (Harvard Business School) a écrit en 2020 que la pandémie avait mis à nu la vulnérabilité des stratégies de production et des chaînes d'approvisionnement partout ; les entreprises devraient évaluer leurs risques et recourir à l'innovation de procédés plutôt que de simplement délocaliser leurs sources d'approvisionnement [32].
+
+Toyota en avait tiré la leçon dix ans plus tôt. Après le séisme et le tsunami du 11 mars 2011, Toyota a constaté que plus de 1 200 pièces et matières pouvaient être affectées et a établi une liste de 500 articles prioritaires dont l'approvisionnement devait être sécurisé [31]. Dans le cadre du plan de continuité d'activité élaboré à partir de ce constat, les fournisseurs devaient stocker l'équivalent de deux à six mois de puces pour Toyota, selon le délai entre la commande et la livraison [31]. Lorsque la pénurie de puces de 2021 a contraint de nombreux constructeurs automobiles à réduire leur production, Toyota a largement maintenu son plan de production jusqu'en mai, selon Fortune [47] ; une personne proche du fournisseur Harman a déclaré à Reuters que Toyota était, à sa connaissance, le seul constructeur réellement équipé pour faire face aux pénuries de puces [31]. Un porte-parole de Toyota a qualifié ce plan de « solution lean classique » [31]. Toyota n'était toutefois pas à l'abri : en août 2021, l'entreprise a annoncé qu'elle réduirait sa production mondiale de septembre de 40 % par rapport à son plan initial [48]. Les stocks de sécurité achètent du temps ; ils ne remplacent pas la gestion des risques sur l'ensemble de la chaîne d'approvisionnement.
+
+La leçon : le lean ne signifie pas zéro stock à tout prix. Le lean signifie justifier délibérément les stocks. Un stock de sécurité pour une pièce critique, dont le délai de réapprovisionnement est long et les sources peu nombreuses, relève d'une décision fondée sur une analyse des risques, et est donc justifié. Le gaspillage, c'est le stock non maîtrisé que personne ne peut justifier. Krafcik avait montré dès 1988 que le système « tamponné » accumule des stocks qui masquent les problèmes [3] ; un stock de sécurité stratégique, en revanche, est dimensionné délibérément et de façon transparente.
+
+**Liste de contrôle : intégrer la résilience dans un système lean**
+
+- [ ] Identifier les pièces critiques (délai de réapprovisionnement, nombre de sources, impact d'une pénurie)
+- [ ] Définir, dimensionner et visualiser les stocks de sécurité stratégiques pour ces pièces
+- [ ] Rendre la structure des fournisseurs transparente jusqu'aux rangs inférieurs lorsque cela est possible
+- [ ] Simuler des scénarios (perte d'un fournisseur, hausse brutale de la demande)
+- [ ] Réviser les stocks de sécurité régulièrement et les réduire à mesure que le risque baisse
+
+### 3. Limites de la production en grande variété et petites séries, et en ingénierie sur commande
+
+Le lean s'est développé dans la production répétitive. Dans les ateliers de production à l'unité (job shops), en grande variété et petites séries, et dans la fabrication sur commande en ingénierie (engineer-to-order), comme les machines spéciales, le kanban et le heijunka ne conviennent que dans une mesure limitée. Les principes restent valables, mais les outils doivent être adaptés : au lieu du kanban, l'ordonnancement par goulot d'étranglement, le CONWIP, l'assemblage cadencé au takt (pulsé) et la gestion visuelle de projet sont généralement plus utiles.
+
+### 4. Le lean comme phénomène de mode et la copie d'outils
+
+De nombreux déploiements copient les outils visibles de Toyota sans le système de management qui les sous-tend. En 2007, Womack et Jones ont condensé leurs cinq principes en trois thèmes : finalité, processus et personnes [5]. Le troisième thème décrit précisément le volet management que la copie d'outils laisse de côté : un responsable par flux de valeur, déploiement de la stratégie, cycles d'amélioration fréquents avec A3 et standards de travail [5]. Les chercheurs de l'IMVP, MacDuffie et Pil, concluent eux aussi que l'organisation du système de production compte davantage que de lourds investissements dans des équipements de haute technologie [6].
+
+Même au sein de GM, le transfert n'a pas été automatique : bien que GM ait eu un accès direct au système Toyota grâce à NUMMI à partir de 1984, environ quinze ans plus tard, le lean n'était toujours pas déployé dans les autres usines américaines de GM [56]. Connaître les outils ne suffit pas ; il faut des dirigeants qui ancrent le système dans leur propre usine.
+
+## Lean et numérique : lean 4.0, jumeaux numériques et Microsoft 365
+
+Le lean et l'Industrie 4.0 sont souvent présentés comme des opposés : cartes et tableaux simples d'un côté, capteurs, logiciels et IA de l'autre. En pratique, ils se complètent. L'expression « lean 4.0 » (parfois « lean numérique ») désigne la combinaison des principes lean avec les technologies numériques ; elle n'est pas normalisée et est utilisée de différentes manières.
+
+### Ce que les outils numériques peuvent apporter au lean
+
+| Élément lean | Version analogique | Version soutenue par le numérique |
+|---|---|---|
+| Cartographie du flux de valeur | papier, crayon, chronomètre | modèle numérique du flux de valeur alimenté par les données de l'ERP et du MES, scénarios, simulation |
+| Kanban | cartes en circulation | e-kanban avec réapprovisionnement automatique, scanners ou balances |
+| Andon | cordon et voyant lumineux | alertes automatiques issues des données machine, escalade sur mobile |
+| TRS | feuille de comptage | collecte de données machine en temps réel |
+| Tableau d'atelier | tableau blanc | tableaux numériques avec indicateurs KPI mis à jour automatiquement |
+| Standard de travail | fiche imprimée | instructions de travail numériques, instructions en vidéo |
+| Équilibrage de ligne | tableau yamazumi | simulation de différentes options d'équilibrage avant la reconfiguration de la ligne |
+
+### Le jumeau numérique dans un contexte lean
+
+Un jumeau numérique est une représentation virtuelle de produits, de processus ou d'équipements connectée à des données réelles. Pour le lean, le jumeau de processus est le plus intéressant : un modèle du flux de valeur avec capacités, temps de cycle, temps de changement de série et stocks, dans lequel on peut tester des scénarios avant de reconfigurer une ligne. On peut par exemple vérifier l'effet de la division par deux de la taille des lots sur la part de temps de changement, les stocks et le délai, ou savoir si un nouvel équilibrage de ligne tient le takt. Le [guide sur le jumeau numérique en production](https://www.m365.fm/en/learn/digital-twin-manufacturing/) traite le sujet en profondeur.
+
+### Limites et séquence
+
+Une étude de Winkler et Lugert à la BTU Cottbus-Senftenberg en Allemagne (2017, 170 experts, principalement d'Allemagne, d'Autriche et de Suisse) soutient que les concepts de l'Industrie 4.0, comme les systèmes de production cyber-physiques à autorégulation, créent des flux de matière dynamiques dans lesquels la cartographie classique du flux de valeur perd en pouvoir explicatif ; la méthode doit donc évoluer [38]. Cela plaide pour faire évoluer les outils du lean, et non pour les abandonner.
+
+En pratique, une séquence simple s'applique : d'abord stabiliser et standardiser le processus, ensuite le soutenir numériquement. Liker formule cela dans le principe 8 : n'utiliser que des technologies fiables, rigoureusement testées, qui servent les personnes et les processus [10]. Un modèle numérique d'un processus instable reproduit sa variabilité sans en supprimer les causes.
+
+### Les données comme sujet lean
+
+Les données ont un rôle spécifique dans la pensée lean : elles doivent rendre les problèmes visibles, et non surveiller les personnes. Lors de l'introduction de la collecte de données machine ou de tableaux numériques, définissez quelles données sont analysées au niveau de l'équipement et du processus, qui y a accès et comment l'analyse individuelle est exclue. Cela instaure la confiance avec les salariés et les syndicats là où ils existent ; dans les usines allemandes, c'est aussi une condition préalable à l'accord du comité d'entreprise, et pour les sites de l'UE, le RGPD s'applique à toute donnée personnelle.
+
+### Microsoft 365 dans le travail lean quotidien : ce qui est réaliste
+
+De nombreuses usines utilisent déjà Microsoft 365. Pour les équipes de production en première ligne, Microsoft décrit notamment Shifts pour les plannings, Planner pour les tâches, Approvals pour les validations (par exemple, un opérateur demandant l'approbation d'un réglage d'équipement), Updates pour les points récurrents tels que les inspections, Walkie Talkie pour la communication sur la ligne, Lists pour un suivi simple, Power BI pour les rapports KPI et Power Apps pour les workflows personnalisés [57]. Quelques usages pratiques pour les routines lean en découlent :
+
+| Routine lean | Configuration Microsoft 365 possible | Points de vigilance |
+|---|---|---|
+| Tableau d'atelier, réunion à plusieurs niveaux | Rapport Power BI avec délai de traversée, TRS, FPY et OTIF affiché sur un écran au tableau | les données doivent provenir du MES ou de l'ERP ; la mise à jour manuelle sous Excel annule le bénéfice |
+| Liste d'actions | un plan Planner par secteur avec responsables et échéances | une liste par niveau de réunion, et non en plus de la liste papier |
+| Idées Kaizen, audits 5S | Lists ou une Power App simple sur tablette au poste de travail | retour aux auteurs des suggestions dans des délais fixes |
+| Escalade | canal Teams par ligne, notifications automatisées lorsque c'est utile | ne remplace pas un voyant andon physique sur la ligne |
+| Standard de travail | fiches de standard de travail et instructions vidéo stockées de façon centralisée dans SharePoint, ouvertes par QR code au poste | une seule version valide, processus de modification clair |
+| Passation de poste | message ou formulaire Teams avec champs fixes (sécurité, qualité, arrêts, points ouverts) | rester bref, sinon la passation elle-même devient du gaspillage |
+
+Deux limites doivent être posées ici. Microsoft 365 n'est ni un MES ni un système de collecte de données machines ; les valeurs en temps réel du TRS ou les signaux andon proviennent du niveau automates et MES. Et un tableau numérique ne remplace pas le gemba : la réunion à plusieurs niveaux se tient toujours sur la ligne ; l'écran ne fait que montrer les chiffres. Pour les administrateurs M365, cela signifie qu'il faut convenir tôt avec la production (et avec les représentants du personnel, le cas échéant) des données visibles à chaque niveau, et régler la licence des équipes de terrain, le concept d'appareils (tablettes partagées) et les autorisations avant le pilote. La manière dont Azure s'insère sous cette couche fait l'objet du [guide Azure pour l'industrie manufacturière](https://www.m365.fm/en/learn/manufacturing-it-azure/).
+
+## Exemples documentés de production lean
+
+De nombreux témoignages de réussite en ligne proviennent d'éditeurs ou ne peuvent pas être vérifiés. Les exemples ci-dessous sont documentés publiquement.
+
+### Toyota : le système de référence
+
+Toyota est le système de référence historique. Toyota décrit lui-même son système de production comme l'interaction de deux concepts, le juste-à-temps et le jidoka [1] ; les recherches de l'IMVP ont attribué l'avance des meilleures usines à l'approche de production lean dans son ensemble [6]. La gestion de la pénurie de puces en 2021 montre que le système ne cherche pas à minimiser dogmatiquement les stocks, mais pondère délibérément les risques [31].
+
+### NUMMI : même main-d'œuvre, système différent
+
+NUMMI, la coentreprise GM-Toyota lancée en 1984 à Fremont, en Californie, est l'exemple le plus connu du transfert du lean vers une usine occidentale [3][56]. Elle a été implantée sur le site de l'usine Fremont de GM, fermée en 1982 ; la plupart des effectifs initiaux, plus de 85 pour cent, avaient été licenciés de cette usine, et le syndicat United Auto Workers (UAW) est resté partie prenante [56]. Les Corolla produites à NUMMI ont été jugées de qualité équivalente à celles fabriquées au Japon, et l'usine a rapidement atteint les cadences japonaises après son lancement [56]. John Krafcik y a travaillé pendant deux ans comme ingénieur et a décrit l'environnement de management comme très différent de celui des usines traditionnelles ; son expérience a nourri son article de 1988 [3]. NUMMI a montré que le lean peut fonctionner avec la même main-d'œuvre et le même syndicat lorsque le système de management change. Le cas montre aussi la limite : GM a pendant des années transféré peu de ce qu'il avait appris vers ses autres usines, et l'usine a fermé en 2010 [56]. Une partie du site a été vendue à Tesla la même année et a rouvert sous le nom de Tesla Fremont Factory [56].
+
+### Porsche : le lean en situation de crise
+
+Porsche, le constructeur allemand de voitures de sport, a traversé une crise existentielle au début des années 1990 : selon IndustryWeek, les ventes sont passées de 50 000 véhicules en 1986 à 14 000 en 1993, et une perte d'environ 150 millions de dollars se profilait pour 1991 [34]. Wendelin Wiedeking, responsable de la production et de la gestion des matériaux à partir de 1991, a fait appel à des consultants japonais dirigés par Chihiro Nakao ; à l'automne 1992, Nakao a fait couper en deux les racks de stockage de l'usine de Zuffenhausen [34]. Selon IndustryWeek, les stocks sont alors passés de sept jours de couverture à un jour, les heures de fabrication par 911 de 120 (1992/93) à 60 à la fin des années 1990, et le nombre de suggestions d'amélioration est passé de 0,09 à 4,3 par salarié [34]. Le lean n'était pas le seul levier : Wiedeking a réduit le nombre de managers de 35 pour cent, fixé un objectif de réduction des coûts de 30 pour cent, impliqué les fournisseurs et lancé en 1996 un nouveau modèle, la Boxster, qui partageait de nombreuses pièces avec la nouvelle 911 [34]. Ce cas montre que le lean fonctionne chez un constructeur allemand haut de gamme à faibles volumes lorsque la direction en est le moteur ; il montre aussi que le redressement était un ensemble de mesures.
+
+### Ce que les trois exemples ont en commun
+
+Dans les trois cas, c'est un système de principes, de leadership et d'outils qui a fait la différence, et non un outil isolé, et la direction générale s'est personnellement impliquée. NUMMI montre aussi qu'un modèle qui fonctionne au sein de sa propre entreprise ne suffit pas si les dirigeants de nos autres usines ne l'adoptent pas.
+
+## Support logiciel : iFAKT Polaris comme exemple
+
+> **Remarque : l'auteur travaille chez iFAKT GmbH.**
+
+Le logiciel ne remplace pas la compréhension du lean, mais il peut soutenir le travail sur les flux de valeur, les scénarios et les KPI. Plusieurs catégories d'outils sont pertinentes pour les méthodes de ce guide : les systèmes d'exécution de fabrication (MES) et la collecte de données machines pour l'OEE et le reporting de production, les outils BI pour les KPI, la simulation à événements discrets pour l'implantation et la capacité, ainsi que les solutions spécialisées pour les modèles numériques de flux de valeur.
+
+Un exemple de cette dernière catégorie, issu d'Allemagne, est [iFAKT Polaris](https://www.m365.fm/entity/polaris/) de [iFAKT GmbH](https://www.m365.fm/entity/ifakt/), dont le siège se trouve à Stuttgart, en Allemagne [44]. Selon l'entreprise, iFAKT a été fondée en 2001 et compte environ 25 salariés [46] ; l'entreprise affiche sur son site les certifications ISO 9001 et ISO/IEC 27001 (TÜV SÜD) [41]. Le produit Polaris IMS a été classé deuxième dans la catégorie production du Best of Technology Award 2025 du magazine économique allemand *WirtschaftsWoche* [67]. Deux modules figurent sur la place de marché commerciale de Microsoft (AppSource) : Polaris VSM, pour la cartographie numérique des flux de valeur avec calcul des KPI ainsi que des tableaux kanban et kaizen [43], et Polaris BSM, pour la modélisation des processus métier sous forme de diagrammes en couloirs (swimlanes) [42].
+
+Rapporté aux méthodes de ce guide, une solution de ce type répond principalement à quatre tâches (description du fournisseur, et non test indépendant) :
+
+- **Flux de valeur :** modéliser numériquement les flux de valeur et évaluer, sur la base de données, les délais, les stocks et les goulots d'étranglement.
+- **Simulation :** tester l'implantation, la capacité et les scénarios de takt avant la mise en œuvre, par exemple un nouvel équilibrage de ligne ou des lots plus petits après un projet SMED.
+- **Planification :** relier la planification de la production et des capacités au modèle de flux de valeur.
+- **Analyse des KPI :** analyser des KPI tels que le délai, le taux de flux ou l'OEE et préparer les comparaisons plan-réalisé pour les réunions à plusieurs niveaux.
+
+Quel que soit le fournisseur, vérifiez si l'outil reflète vos standards et votre modèle de données, s'il s'intègre dans le paysage informatique existant (ERP, MES, Microsoft 365) et si ses résultats alimentent réellement les gemba walks, les réunions à plusieurs niveaux et les décisions d'amélioration. Un examen plus approfondi du produit figure dans le [profil d'iFAKT Polaris](https://www.m365.fm/en/learn/ifakt-polaris/) ; les logiciels d'ordonnancement en général font l'objet du [guide de l'ordonnancement de production et de l'APS](https://www.m365.fm/en/learn/production-scheduling-aps/).
+
+## Glossaire Lean : termes clés de A à Z
+
+| Terme | Définition courte |
+|---|---|
+| Rapport A3 | analyse de problème, plan d'analyse et d'action sur une seule feuille au format A3 (environ 29,7 × 42 cm) |
+| Andon | signal (voyant, cordon, bouton) qui rend une anomalie visible immédiatement |
+| CONWIP | pilotage avec une quantité constante d'en-cours dans le système ; adapté à la production à forte variété |
+| Temps de cycle | temps réel nécessaire à un processus pour réaliser une pièce |
+| DOWNTIME | mnémotechnique américaine des huit gaspillages : défauts, surproduction, attente, talents non exploités, transport, stocks, mouvements, sur-traitement |
+| Voie FIFO | tampon à capacité limitée qui transmet les pièces dans l'ordre de leur arrivée |
+| Taux de flux | part du temps de traitement dans le délai de traversée (aussi appelé efficacité du cycle de processus) |
+| Gemba | le lieu où la valeur est créée ; en atelier, la ligne ou la cellule |
+| Genchi genbutsu | aller voir sur place plutôt que de se fier aux rapports |
+| Hansei | réflexion structurée après un projet ou une erreur |
+| Heijunka | lissage de la production en volume et en mix |
+| Hoshin kanri | déploiement de la stratégie (politique) depuis la direction jusqu'à l'atelier |
+| Jidoka | arrêt sur anomalie, qualité intégrée au processus ; second pilier du TPS |
+| Juste-à-temps | ne produire que ce qui est nécessaire, au moment où il est nécessaire, en la quantité nécessaire |
+| Kaizen | amélioration continue par petits pas, menée par l'ensemble des salariés (amélioration continue, CI) |
+| Kanban | signal déclenchant la production ou le déplacement dans un système à flux tiré |
+| Standard de travail du management | standard de travail pour les managers, comme des horaires fixes de gemba walks et des réunions à plusieurs niveaux |
+| Délai de traversée | temps écoulé entre l'entrée d'une pièce ou d'une commande et sa sortie du flux de valeur |
+| Muda, mura, muri | gaspillage, irrégularité, surcharge |
+| TRS | taux de rendement synthétique : disponibilité × performance × qualité |
+| Flux unitaire | fabrication et transmission des pièces une par une au lieu de par lots |
+| Processus pilote | le seul processus qui reçoit le programme de production ; tous les processus amont le suivent par flux tiré |
+| Pas (pitch) | temps takt × quantité par conteneur ; intervalle de temps de la boîte heijunka |
+| Poka-yoke | dispositif simple qui empêche une erreur ou la signale immédiatement |
+| SMED | changement de série en moins de dix minutes par séparation et conversion des tâches de préparation |
+| Supermarché | stock maîtrisé avec quantités minimale et maximale, dans lequel le processus aval prélève |
+| Temps takt | temps de production disponible / demande client |
+| TIMWOODS | mnémotechnique européenne des mêmes huit gaspillages |
+| TPM | maintenance productive totale : entretien des équipements avec la participation de tous |
+| TWI | Training Within Industry : programme américain de 1940 pour l'instruction au poste, les méthodes de travail et les relations humaines |
+| Yamazumi | diagramme à barres empilées du contenu de travail de chaque opérateur comparé au temps takt |
+
+## FAQ : questions sur le lean manufacturing
+
+### Qu'est-ce que le lean manufacturing, en termes simples ?
+
+Le lean manufacturing est une manière de faire fonctionner une usine dans laquelle tout est aligné sur ce que le client valorise. Tout ce pour quoi le client ne paierait pas, comme l'attente, la recherche, le stockage ou la reprise, est considéré comme du gaspillage et est éliminé étape par étape. Les personnes qui réalisent le travail améliorent elles-mêmes leurs processus.
+
+### Quels sont les 5 principes du lean manufacturing ?
+
+Selon Womack et Jones (1996) : spécifier la valeur du point de vue du client, identifier le flux de valeur, créer le flux, établir le tirage et rechercher la perfection [5]. Ces principes s'appuient les uns sur les autres et se répètent sous forme de cycle.
+
+### Quels sont les 8 gaspillages du lean ?
+
+Défauts, surproduction, attente, talent non exploité, transport, stocks, mouvements et sur-traitement, résumés dans le mnémotechnique américain DOWNTIME (TIMWOODS énumère les mêmes huit). Les sept premiers remontent à Taiichi Ohno [8] ; le huitième a été ajouté dans la littérature occidentale [40].
+
+### Quelle différence y a-t-il entre lean manufacturing et lean management ?
+
+Le lean manufacturing (ou production lean) est l'application des principes lean à la fabrication et à l'assemblage. Le lean management est l'approche globale de direction et d'organisation qui étend la pensée lean à l'ensemble de l'entreprise, y compris les fonctions administratives, l'ingénierie et la chaîne d'approvisionnement. Dans l'usage courant aux États-Unis, les deux termes se recoupent largement.
+
+### Qui a inventé le lean manufacturing ?
+
+Les fondements ont été développés chez Toyota à partir des années 1950, principalement par Taiichi Ohno et Eiji Toyoda, en s'appuyant sur les idées de Sakichi et Kiichiro Toyoda [1]. Les influences américaines comprennent la production en flux de Ford, le programme Training Within Industry et l'enseignement de la qualité de Deming [30][59][29]. John Krafcik a forgé le terme « lean production » en 1988 [2][3], et le livre du MIT de 1990 *The Machine That Changed the World* l'a largement fait connaître [4].
+
+### Que signifient muda, mura et muri ?
+
+Muda désigne le gaspillage, mura l'irrégularité et muri la surcharge [9]. Les trois sont liés : des flux de travail irréguliers (mura) entraînent une surcharge (muri), qui à son tour crée des défauts et du gaspillage (muda).
+
+### Par quel outil lean faut-il commencer ?
+
+Un démarrage éprouvé consiste à réaliser une cartographie du flux de valeur pour voir les priorités, ainsi que le 5S et le travail standard dans une zone pilote afin de créer de la stabilité. Le kanban et l'heijunka supposent des processus stables et des changements de série courts ; ils viennent plus tard.
+
+### Comment calculer le takt time ?
+
+Takt time = temps de production disponible / demande client [19]. Exemple : 480 minutes de temps de travail par jour et 240 pièces requises donnent un takt time de 2 minutes.
+
+### Quelle différence y a-t-il entre takt time, temps de cycle et délai de traversée ?
+
+Le takt time découle de la demande : il indique à quelle fréquence une pièce doit être terminée. Le temps de cycle est le temps qu'un processus nécessite réellement pour une pièce ; il doit être inférieur au takt time. Le délai de traversée mesure la durée qu'une pièce met pour parcourir le flux de valeur de l'entrée à la sortie, attente comprise. Il est généralement plusieurs fois supérieur à la somme des temps de cycle.
+
+### Quels KPI mesurent les progrès du lean ?
+
+Quelques indicateurs discutés chaque jour sont les plus efficaces : délai de traversée et ratio de flux pour le flux, TRS pour les équipements, rendement au premier passage pour la qualité, livraison à temps et en quantité complète pour la vision client, ainsi que le temps de changement de série, la sécurité et le nombre d'améliorations mises en œuvre. L'essentiel est que chaque écart déclenche une action.
+
+### Quelle différence y a-t-il entre lean et Six Sigma ?
+
+Le lean élimine le gaspillage et crée le flux ; le Six Sigma réduit la variation et les défauts grâce à des méthodes statistiques et au cycle DMAIC [28]. Le Lean Six Sigma combine les deux.
+
+### Quels sont les inconvénients du lean manufacturing ?
+
+Les principaux risques sont l'intensification du travail lorsque muri est ignoré [33], la fragilité de la chaîne d'approvisionnement lorsque les stocks sont réduits sans analyse des risques [31][48], un ajustement limité d'outils comme le kanban dans une production à forte variété et faible volume, et des résultats décevants lorsque les entreprises copient les outils sans le système de management [6][56]. Ces quatre risques sont évitables, mais seulement avec l'attention de la direction.
+
+### Le lean fonctionne-t-il pour les petits fabricants et les ateliers à la commande ?
+
+Oui, les principes s'appliquent quelle que soit la taille de l'entreprise, et des chemins de décision courts sont un avantage pour les petits fabricants. Les entreprises américaines peuvent obtenir de l'aide auprès des centres NIST MEP, qui se concentrent sur les petits et moyens fabricants [65]. Dans les ateliers à la commande et la production sur étude, les outils doivent être adaptés, par exemple l'ordonnancement sur goulot d'étranglement et l'assemblage cadencé au takt plutôt que le kanban.
+
+### Le juste-à-temps reste-t-il viable après la pénurie de puces ?
+
+Oui, si je l'ai bien compris. Le juste-à-temps vise le flux et la visibilité des problèmes, et non un stock nul à tout prix. Depuis un plan de continuité mis en place après 2011, Toyota exige de ses fournisseurs qu'ils détiennent deux à six mois de stock de semi-conducteurs, et a maintenu sa production plus stable que beaucoup de concurrents en 2021, bien qu'il ait dû réduire sa production à partir de septembre [31][47][48].
+
+### Combien de temps faut-il pour mettre en œuvre la production allégée ?
+
+Des premiers résultats mesurables dans une zone pilote sont réalistes en quelques mois ; un système de production à l'échelle de l'usine demande en général un à deux ans, et une culture lean durable plusieurs années [unverified: estimations de praticiens]. Le lean n'est pas un projet avec une date de fin, mais un système de management permanent.
+
+### Microsoft 365 peut-il soutenir la production allégée ?
+
+Oui, pour les réunions à plusieurs niveaux, le suivi des actions et les KPI. Power BI convient aux KPI d'atelier, Planner aux listes d'actions, Teams et Shifts à la communication avec les équipes postées [57]. Mais Microsoft 365 ne remplace ni un MES ni la visite gemba, et il ne rentabilise son usage qu'une fois les standards en place. Voir la section « Microsoft 365 dans le travail lean quotidien ».
+
+## Conclusion et premières étapes
+
+La production allégée est plus qu'une boîte à outils venue du Japon. C'est un système de management qui s'est construit sur plus d'un siècle, depuis le métier à tisser à arrêt automatique de Toyoda, la chaîne de montage de Ford et le programme américain Training Within Industry, jusqu'au Toyota Production System d'Ohno et aux études du MIT qui lui ont donné son nom en 1988. Ses cinq principes sont simples : valeur, chaîne de valeur, flux, tirage et perfection. La mise en œuvre est difficile, car elle exige du leadership, des standards et une résolution quotidienne des problèmes.
+
+Les outils de ce guide ne fonctionnent que dans le bon ordre et ensemble : la stabilité avant le flux, le flux avant le tirage, le tirage avant le lissage. Les critiques du lean méritent d'être prises au sérieux. L'intensification du travail survient lorsque le muri est ignoré, et les chaînes d'approvisionnement deviennent fragiles lorsque le stock est réduit sans analyse des risques. Le stock de puces de Toyota montre qu'un bon lean pèse délibérément les risques. Les outils numériques, comme les modèles de chaîne de valeur et la simulation, rendent le lean plus rapide et plus précis, mais ils supposent des processus stables.
+
+**Vos premières étapes dans les 30 prochains jours**
+
+- [ ] Réaliser une visite gemba le long d'une famille de produits importante, de l'expédition jusqu'à la réception
+- [ ] Mesurer le délai de production de cette famille de produits et calculer le ratio de flux
+- [ ] Déterminer le takt time de la famille de produits et le comparer aux temps de cycle
+- [ ] Choisir une zone pilote en appliquant les critères ci-dessus
+- [ ] Lancer le 5S et un tableau de bord d'atelier simple avec trois à cinq KPI dans la zone pilote
+- [ ] Traiter le problème le plus important de la zone pilote avec un A3
+- [ ] Informer l'équipe de direction et, le cas échéant, les représentants syndicaux ou du personnel, sur les objectifs, la démarche et la sécurité de l'emploi
+- [ ] Demander à votre service informatique ou à votre équipe Microsoft 365 quels systèmes pourraient alimenter automatiquement les KPI du tableau à l'avenir ; commencer d'abord le tableau sur papier
+- [ ] Vérifier si le centre NIST MEP de votre État propose une formation ou un diagnostic lean adapté à votre zone pilote [65]
+
+---
+
+## Pour aller plus loin sur m365.fm
+
+**Articles approfondis**
+- [Lean Management in Manufacturing: The Complete Guide](https://www.m365.fm/community/u/mirko-p/blog/lean-management-in-manufacturing-complete-guide/) (article plus court sur les routines quotidiennes du lean management)
+- [Lean vs. Six Sigma: Differences and How to Combine Them](https://www.m365.fm/community/u/mirko-p/blog/lean-vs-six-sigma-differences-combine/)
+- [Shop Floor Optimization: Ways to Improve Flow](https://www.m365.fm/community/u/mirko-p/blog/shop-floor-optimization-improve-flow-ways/)
+- [Operational Excellence vs. Lean](https://www.m365.fm/community/u/mirko-p/blog/operational-excellence-vs-lean/)
+- [What Is a Gemba Walk?](https://www.m365.fm/community/u/mirko-p/blog/what-is-a-gemba-walk/)
+
+**Termes du glossaire (entités)**
+[Lean management](https://www.m365.fm/entity/lean-management/) · [5S](https://www.m365.fm/entity/5s/) · [Kanban](https://www.m365.fm/entity/kanban/) · [Just-in-time](https://www.m365.fm/entity/just-in-time/) · [Pull system](https://www.m365.fm/entity/pull-system/) · [Poka-yoke](https://www.m365.fm/entity/poka-yoke/) · [Standard work](https://www.m365.fm/entity/standard-work/) · [SMED](https://www.m365.fm/entity/smed/) · [Setup time](https://www.m365.fm/entity/setup-time/) · [Lean Six Sigma](https://www.m365.fm/entity/lean-six-sigma/) · [Eight wastes](https://www.m365.fm/entity/eight-wastes/) · [Heijunka](https://www.m365.fm/entity/heijunka/) · [Takt time](https://www.m365.fm/entity/takt-time/) · [Value stream mapping](https://www.m365.fm/entity/value-stream-mapping/) · [TPM](https://www.m365.fm/entity/total-productive-maintenance/) · [A3 problem solving](https://www.m365.fm/entity/a3-problem-solving/) · [Line balancing](https://www.m365.fm/entity/line-balancing/) · [Gemba walk](https://www.m365.fm/entity/gemba-walk/)
+
+**Guides associés**
+- [Operational Excellence](https://www.m365.fm/en/learn/operational-excellence/)
+- [Shop Floor Management and Gemba Walks](https://www.m365.fm/en/learn/shop-floor-management/)
+- [Value Stream Mapping](https://www.m365.fm/en/learn/value-stream-mapping/)
+- [Manufacturing KPIs](https://www.m365.fm/en/learn/manufacturing-kpis/)
+- [Digital Twin in Manufacturing](https://www.m365.fm/en/learn/digital-twin-manufacturing/)
+- [Production Scheduling and APS](https://www.m365.fm/en/learn/production-scheduling-aps/)
+- [Azure for Manufacturing](https://www.m365.fm/en/learn/manufacturing-it-azure/)
+- [iFAKT Polaris](https://www.m365.fm/en/learn/ifakt-polaris/)
+
+# Author box
+
+**[Mirko Peters](https://www.m365.fm/entity/mirko-peters/)** est l'animateur de m365.fm et travaille chez iFAKT GmbH. Sur m365.fm, il écrit sur la production allégée, l'excellence opérationnelle et la transformation numérique de la production, en mettant l'accent sur la manière dont les modèles de chaîne de valeur, la simulation et l'analyse des KPI aident les usines à mettre le lean en pratique.
+
+**Remarque : l'auteur travaille chez iFAKT GmbH.**
+
+# Sources
+
+All sources accessed November 20, 2026. Sources [58] to [67] were added for the US version and opened and checked on that date.
+
+1. Toyota Production System. Toyota Motor Corporation. https://global.toyota/en/company/vision-and-philosophy/production-system/index.html
+2. Triumph of the Lean Production System (Krafcik, J. F., Sloan Management Review, Fall 1988, pp. 41–52), title page and context. AllAboutLean (Christoph Roser). https://www.allaboutlean.com/definition-of-lean/triumph-of-the-lean-production-system/
+3. The Term "Lean Production" Is 25 Years Old: My Thoughts on the Original Article. Lean Blog (Mark Graban). https://leanblog.org/2013/09/the-term-lean-production-is-25-years-old-my-thoughts-on-the-original-article
+4. The Machine That Changed the World (Womack, J. P.; Jones, D. T.; Roos, D.), sample of the introduction. Free Press / Simon & Schuster, via boekhuis.nl. https://download.boekhuis.nl/9780743299794_fragm-docb.pdf
+5. Lean Thinking and Practice. Lean Enterprise Institute. https://www.lean.org/lexicon-terms/lean-thinking-and-practice/
+6. MacDuffie, J. P.; Pil, F. K.: Changes in Auto Industry Employment Practices (chapter 9 in "Lean Work"). The Wharton School, University of Pennsylvania. https://faculty.wharton.upenn.edu/wp-content/uploads/2012/05/MacDuffiePil_LeanWork_Chap9.pdf
+7. Ohno, T.: Toyota Production System: Beyond Large-Scale Production. Productivity Press / Routledge. https://www.routledge.com/Toyota-Production-System/Ohno/p/book/9780915299140
+8. Seven Wastes. Lean Enterprise Institute. https://www.lean.org/lexicon-terms/seven-wastes/
+9. Muda, Mura, Muri. Lean Enterprise Institute. https://www.lean.org/lexicon-terms/muda-mura-muri/
+10. The Toyota Way (Liker, J. K., McGraw-Hill 2004), overview of the 14 principles. Wikipedia. https://en.wikipedia.org/wiki/The_Toyota_Way
+11. Shigeo Shingo. Wikipedia. https://en.wikipedia.org/wiki/Shigeo_Shingo
+12. Single-Minute Exchange of Die (SMED). Lean Enterprise Institute. https://www.lean.org/lexicon-terms/single-minute-exchange-of-die/
+13. Poka-Yoke. Lean Enterprise Institute. https://www.lean.org/lexicon-terms/poka-yoke/
+14. 5S. Lean Enterprise Institute. https://www.lean.org/lexicon-terms/five-s/
+15. Kanban. Lean Enterprise Institute. https://www.lean.org/lexicon-terms/kanban/
+16. Heijunka. Lean Enterprise Institute. https://www.lean.org/lexicon-terms/heijunka/
+17. Standardized Work. Lean Enterprise Institute. https://www.lean.org/lexicon-terms/standardized-work/
+18. Value-Stream Mapping. Lean Enterprise Institute. https://www.lean.org/lexicon-terms/value-stream-mapping/
+19. Takt Time. Lean Enterprise Institute. https://www.lean.org/lexicon-terms/takt-time/
+20. Total Productive Maintenance. Lean Enterprise Institute. https://www.lean.org/lexicon-terms/total-productive-maintenance/
+21. Overall Equipment Effectiveness. Lean Enterprise Institute. https://www.lean.org/lexicon-terms/overall-equipment-effectiveness/
+22. A3 Report. Lean Enterprise Institute. https://www.lean.org/lexicon-terms/a3-report/
+23. Andon. Lean Enterprise Institute. https://www.lean.org/lexicon-terms/andon/
+24. Operator Balance Chart. Lean Enterprise Institute. https://www.lean.org/lexicon-terms/operator-balance-chart/
+25. Jidoka. Lean Enterprise Institute. https://www.lean.org/lexicon-terms/jidoka/
+26. Gemba Walk. Lean Enterprise Institute. https://www.lean.org/lexicon-terms/gemba-walk/
+27. Hoshin Kanri. Lean Enterprise Institute. https://www.lean.org/lexicon-terms/hoshin-kanri/
+28. What Is Six Sigma? American Society for Quality (ASQ). https://asq.org/quality-resources/six-sigma
+29. Timeline: W. Edwards Deming. The W. Edwards Deming Institute. https://deming.org/timeline/
+30. Ford Launched the Modern Assembly Line a Century Ago and Changed Society. IndustryWeek. https://www.industryweek.com/innovation/process-improvement/article/21961364/ford-launched-the-modern-assembly-line-a-century-ago-and-changed-society
+31. Shirouzu, N.: How Toyota thrives when the chips are down. Reuters, via nippon.com (March 2021). https://www.nippon.com/en/news/reu20210309KBN2B1004/
+32. Shih, W.: Global Supply Chains in a Post-Pandemic World: Companies Need to Make Their Networks More Resilient (September/October 2020). Harvard Kennedy School, M-RCBG. https://www.hks.harvard.edu/centers/mrcbg/programs/growthpolicy/global-supply-chains-post-pandemic-world-companies-need-make
+33. Rampasso, I. S. et al.: Primary problems associated with the health and welfare of employees observed when implementing lean manufacturing projects. Work, Vol. 58, No. 3 (2017), pp. 263–275. IOS Press. https://content.iospress.com/articles/work/wor2632
+34. Mudd, T.: Back in High Gear. IndustryWeek. https://www.industryweek.com/leadership/companies-executives/article/21954759/back-in-high-gear
+35. Kaizen Institute Success Story (history timeline). Kaizen Institute. https://kaizen.com/forty-years/kaizen-institute-success-story/
+36. VDI 2870 Part 1: Lean production systems; basic principles, introduction and review (German: Ganzheitliche Produktionssysteme). Verein Deutscher Ingenieure (VDI, Association of German Engineers). https://vdi.de/richtlinien/details/vdi-2870-blatt-1-lean-production-systems-basic-principles-introduction-and-review
+37. Lean Management. Fraunhofer Institute for Manufacturing Engineering and Automation IPA. https://www.ipa.fraunhofer.de/en/current-research/factory-planning-and-production-management/Operational_excellence_production_logistics/lean-management.html
+38. Die Wertstrommethode im Zeitalter von Industrie 4.0 [Value stream mapping in the age of Industry 4.0] (Winkler, H.; Lugert, A.). BTU Cottbus-Senftenberg, Chair of Production Economics (in German). https://www.b-tu.de/fg-produktionswirtschaft/aktuelles/ansicht/11318-die-wertstrommethode-im-zeitalter-von-industrie-4-0
+39. Learning to See (Rother, M.; Shook, J.). Lean Enterprise Institute. https://www.lean.org/store/book/learning-to-see/
+40. What About the 8th Waste? Gemba Academy. https://www.gembaacademy.com/gemba-insights/what-about-the-8th-waste
+41. iFAKT GmbH, website (home page with certification badge and Polaris modules). iFAKT GmbH. https://www.ifakt.de/
+42. Polaris BSM (Business Swimlane Modeling). Microsoft AppSource. https://appsource.microsoft.com/bg-bg/product/saas/ifaktgmbh.ifakt_bsm_1
+43. Learn about iFAKT GmbH's ISV Success for Business Applications solution in Microsoft AppSource (Polaris VSM). Microsoft Tech Community. https://techcommunity.microsoft.com/t5/marketplace-blog/learn-about-ifakt-gmbh-s-isv-success-for-business-applications/ba-p/4182536
+44. iFakt VSM (Polaris): product profile. erp-software.org. https://erp-software.org/software/ifakt-vsm/
+45. Baldrige Award Recipients: Motorola Inc. (1988), award profile. National Institute of Standards and Technology (NIST). https://www.nist.gov/system/files/documents/2017/10/11/1988_Motorola_Inc.pdf
+46. iFAKT GmbH (entity page, company information). m365.fm. https://www.m365.fm/entity/ifakt/
+47. Toyota cars and the chip shortage (August 2021). Fortune. https://fortune.com/2021/08/02/toyota-cars-chip-shortage-semiconductors/
+48. Shiraki, M.; Ando, R.: Toyota to slash September production due to global chip shortage (August 19, 2021). Reuters, via Investing.com. https://www.investing.com/news/stock-market-news/toyota-to-slash-september-production-due-to-global-chip-shortage--nikkei-2593993
+49. Just-in-Time. Lean Enterprise Institute. https://www.lean.org/lexicon-terms/just-in-time/
+50. Poka-yoke (citing Shingo, S.; Dillon, A.: A Study of the Toyota Production System from an Industrial Engineering Viewpoint, Productivity Press 1989). Wikipedia. https://en.wikipedia.org/wiki/Poka-yoke
+51. Kanban (Toyota's six kanban rules, citing Ohno 1988, p. 176). Wikipedia. https://en.wikipedia.org/wiki/Kanban
+52. Total Productive Maintenance (TPM): Principles, pillars, and implementation. Kaizen Institute. https://kaizen.com/insights/tpm-principles-pillars-implementation/
+53. Kaizen. Lean Enterprise Institute. https://www.lean.org/lexicon-terms/kaizen/
+54. Taiichi Ohno. Wikipedia. https://en.wikipedia.org/wiki/Taiichi_Ohno
+55. Pitch. Lean Enterprise Institute. https://www.lean.org/lexicon-terms/pitch/
+56. NUMMI. Wikipedia. https://en.wikipedia.org/wiki/NUMMI
+57. Microsoft 365 for Manufacturing (Teams for manufacturing frontline). Microsoft Learn. https://learn.microsoft.com/en-us/microsoft-365/frontline/teams-for-manufacturing
+58. Bill Smith (Motorola engineer). Wikipedia. https://en.wikipedia.org/wiki/Bill_Smith_(Motorola_engineer)
+59. Training Within Industry. Wikipedia. https://en.wikipedia.org/wiki/Training_Within_Industry
+60. Lean and Process Improvement. NIST Manufacturing Extension Partnership (MEP). https://www.nist.gov/mep/lean-and-process-improvement
+61. Lean & Environment Toolkit: Preface (2016). US Environmental Protection Agency (EPA). https://www.epa.gov/lean/lean-environment-toolkit-preface
+62. Electromation, Inc. v. National Labor Relations Board, 35 F.3d 1148 (7th Cir. 1994). Justia. https://law.justia.com/cases/federal/appellate-courts/F3/35/1148/605691/
+63. Ergonomics. Occupational Safety and Health Administration (OSHA), US Department of Labor. https://www.osha.gov/ergonomics
+64. About the Shingo Institute. Shingo Institute, Jon M. Huntsman School of Business, Utah State University. https://shingo.org/about-the-shingo-institute/
+65. Manufacturing Extension Partnership (MEP). National Institute of Standards and Technology (NIST). https://www.nist.gov/mep
+66. About AME. Association for Manufacturing Excellence. https://www.ame.org/about-ame
+67. Best of Technology Award 2025: winners (category Produktion / production). WirtschaftsWoche. https://award.wiwo.de/bot/gewinner-2025/
