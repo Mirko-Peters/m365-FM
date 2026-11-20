@@ -1,0 +1,1408 @@
+WEBVTT
+
+00:00:00.340 --> 00:00:06.980
+Siap untuk 12 hari penuh Microsoft 365, Copilot, AI, Azure, dan para tokoh yang membentuk masa depan dunia kerja.
+
+00:00:07.860 --> 00:00:11.980
+Januari ini, M305-Chan kembali hadir dan kami hadir dengan skala lebih besar.
+
+00:00:12.880 --> 00:00:18.400
+Bergabunglah bersama kami untuk sesi langsung demo dunia nyata dan pengetahuan praktis dari MVP serta pakar industri di seluruh dunia.
+
+00:00:18.860 --> 00:00:21.200
+Tanpa seret generik, tanpa jargon yang berteletek.
+
+00:00:22.000 --> 00:00:23.360
+Kami akan menangani tantangannya sempurna.
+
+00:00:23.900 --> 00:00:28.480
+Copilot Studio, Aken AI, Fabric, Keamanan, Tata Kelola, dan Otomatisasi.
+
+00:00:28.480 --> 00:00:34.400
+Baik Anda seorang profesional TI, pengembang, atau pemimpin bisnis, ada sesi yang dirancang khusus untuk Anda.
+
+00:00:35.580 --> 00:00:39.860
+Selama 10 hari penuh, Anda bisa menjelajahi berbagai teknologi dan terhubung dengan komunitas global.
+
+00:00:40.920 --> 00:00:44.240
+Tonton secara langsung dan bawa wasam praktis kembali ke organisasi Anda.
+
+00:00:45.260 --> 00:00:48.860
+Januari 2027, 10 hari, satu komunitas Microsoft.
+
+00:00:49.500 --> 00:00:50.440
+Pendaftaran sudah dibuka sekarang.
+
+00:00:51.560 --> 00:00:55.340
+Kunjungi M365-Chan.net dan amankan tempat Anda hari ini.
+
+00:00:55.340 --> 00:00:58.580
+Itu adalah M365-Chan.net.
+
+00:01:00.100 --> 00:01:04.700
+Bergabunglah sekarang di M365-Chan.net dan sampai jumpa secara langsung di bulan Januari.
+
+00:01:05.500 --> 00:01:13.000
+Jika tenang Microsoft 365 Anda terhubung dengan Dynamics 365 Azure dan sejumlah alat saat lainnya, permukaan serangannya lebih besar dari yang Anda kira.
+
+00:01:14.060 --> 00:01:20.400
+Bagian yang menakutkan, kebanyakan peluncuran Zero Trust hanya berfokus pada satu produk, mengabaikan efek domino pada sistem yang saling terhubung.
+
+00:01:20.400 --> 00:01:24.180
+Dalam beberapa menit ke depan, kami akan membahas mengapa hal itu menjadi masalah.
+
+00:01:24.660 --> 00:01:30.060
+Dan bagaimana desain Zero Trust memperlakukan lingkungan M365 dan D365 Anda sebagai satu kesatuan yang saling bergantung.
+
+00:01:31.220 --> 00:01:35.440
+Karena memperbaiki satu dinding saja di gedung dengan banyak ruangan tidak akan melindungi Anda saat atapnya terbakar.
+
+00:01:36.360 --> 00:01:37.400
+Zero Trust bukan sekadar MFA.
+
+00:01:37.940 --> 00:01:41.460
+Kebanyakan orang mengira mereka sudah menerapkan Zero Trust saat MFA diaktifkan untuk semua orang.
+
+00:01:41.940 --> 00:01:42.680
+Rasanya seperti kemenangan.
+
+00:01:42.680 --> 00:01:48.460
+Setiap pengguna mendapatkan permintaan, setiap login memerlukan faktor kedua, dan di atas kertas, lingkungan tersebut tampak aman.
+
+00:01:48.980 --> 00:01:51.040
+Masalahnya adalah disinilah upaya tersebut sering terhenti.
+
+00:01:51.940 --> 00:01:59.760
+Empty kan penuh selama peluncuran, tetapi platform yang terhubung seperti Dynamics 365 terus berjalan sendiri seringkali dengan aturan yang berbeda atau tanpa aturan sama sekali.
+
+00:02:00.340 --> 00:02:03.540
+Itu bukan hanya tidak lengkap, tetapi juga menciptakan rasa aman yang palsu.
+
+00:02:03.880 --> 00:02:05.100
+Beginilah wujudnya dalam praktek.
+
+00:02:05.100 --> 00:02:11.180
+Seorang admin menghabiskan waktu berminggu-minggu untuk membangun dan menguji akses bersyarat untuk SharePoint, Teams, dan Exchange Online.
+
+00:02:11.940 --> 00:02:17.580
+Mereka mewajibkan MFA pada semua login, memblokir autentikasi lama, dan merasa yakin bahwa ternan sudah terkunci dengan aman.
+
+00:02:18.640 --> 00:02:23.980
+Namun, D305 berada di sisi lain, mengandalkan Azure AD untuk autentikasi, tetapi tanpa lingkup kebijakan yang sama.
+
+00:02:24.740 --> 00:02:30.540
+Pengguna yang masuk lingkungan D365 melalui URL yang dibookmark mungkin tidak akan pernah menemui alur akses bersyarat yang sama,
+
+00:02:30.540 --> 00:02:33.440
+dan admin tidak akan menyadarinya sampai terjadi sesuatu yang salah.
+
+00:02:33.440 --> 00:02:35.720
+Di sinilah celah tersebut mulai merugikan Anda.
+
+00:02:36.280 --> 00:02:38.800
+Katakanlah kredensial seseorang dicuri melalui kampanye phishing.
+
+00:02:39.960 --> 00:02:41.860
+Penyerang mencoba masuk ke SharePoint terlebih dahulu.
+
+00:02:42.460 --> 00:02:44.860
+MF aktif, mereka gagal masuk, dan Anda mengira masalah yang selesai.
+
+00:02:45.760 --> 00:02:54.600
+Namun, karena aturan akses bersyarat D365 tidak diselaraskan dengan M365, penyerang yang sama bisa saja terhubung langsung ke modul keuangan di Dynamics dan masuk begitu saja.
+
+00:02:56.220 --> 00:02:58.540
+Dinding MF memang ada, hanya saja tidak menutupi setiap pintu.
+
+00:02:59.100 --> 00:03:02.700
+Tiba-tiba pertahanan terpadu yang Anda kira sudah terpasang ternyata sebenarnya terfragmentasi.
+
+00:03:03.440 --> 00:03:06.820
+Dalam satu contoh yang kami lihat, kebijakan yang tidak selaras membiarkan hal itu tribut.
+
+00:03:07.280 --> 00:03:11.540
+Akun SharePoint pengguna dilindungi oleh persyaratan masuk yang ketat, namun akses Dynamics mereka tidak.
+
+00:03:12.700 --> 00:03:14.220
+Penyerang melewati SharePoint sebenarnya.
+
+00:03:14.860 --> 00:03:18.500
+Masuk ke Dynamics menjalankan laporan dan mengekspor data pembayaran pelanggan yang sensitif.
+
+00:03:19.480 --> 00:03:21.100
+Dari sudut pandang pengguna, tidak ada yang terlihat salah.
+
+00:03:21.500 --> 00:03:24.300
+Mereka bahkan tidak pernah menerima pemberitahuan bahwa akun mereka tidak diakses di tempat.
+
+00:03:24.720 --> 00:03:29.440
+Terangga tersebut dimungkinkan bukan karena MFA lemah, tetapi karena tidak diterapkan secara konsisten di semua tempat yang seharusnya.
+
+00:03:29.440 --> 00:03:35.080
+Posisi Microsoft sendiri memperjelas bahwa Zero Trust bukan sekadar mengaktifkan MFA lalu selesai.
+
+00:03:36.220 --> 00:03:38.760
+Ini adalah kerangka kerja yang dibangun untuk memvalidasi identitas,
+
+00:03:39.080 --> 00:03:42.960
+memverifikasi kebatuan perangkat, dan memeriksa konteks sesi secara berkelanjutan.
+
+00:03:43.660 --> 00:03:45.360
+MFA hanyalah satu bagian dari pilar identitas.
+
+00:03:45.360 --> 00:03:50.560
+Jika pilar itu tidak diterapkan di setiap layanan yang terhubung, ia gagal menjadi kontrol yang andal.
+
+00:03:51.160 --> 00:03:55.260
+Dan dalam lingkungan yang terhubung seperti M3, M3-antam-5, dan D3-antam-5,
+
+00:03:55.620 --> 00:03:58.940
+penyerang hanya perlu menemukan satu layanan di mana kontrol tersebut tidak diterapkan.
+
+00:03:59.500 --> 00:04:02.260
+Kami bekerja dengan tim yang membelajari pelajaran ini dengan cara yang sulit.
+
+00:04:03.100 --> 00:04:08.020
+Akun M3-antam-5 CFO, pemilik MFA, dan tim TI sangat ketat dalam akses email, namun dinamis.
+
+00:04:08.020 --> 00:04:10.180
+Tiga-antam-5 dikonfigurasi secara berbeda.
+
+00:04:10.180 --> 00:04:13.640
+Penyerang mendapatkan akses ke akun CFO melalui token penyegaran,
+
+00:04:13.840 --> 00:04:17.340
+refresh token yang dicuri dari aplikasi seluler pihak ketiga yang kurang aman.
+
+00:04:18.080 --> 00:04:19.400
+Akses M3-antam-5 diblokir,
+
+00:04:19.580 --> 00:04:22.860
+tetapi penggunaan kembali token di Dynamics tidak dipicu oleh kebijakan risiko yang sama.
+
+00:04:23.760 --> 00:04:25.720
+Mereka membuat faktur palsu di dalam modul keuangan,
+
+00:04:25.820 --> 00:04:27.840
+dan mendorongnya melalui alur persetujuan yang normal.
+
+00:04:28.820 --> 00:04:31.100
+Pada saat insiden itu ditemukan, dananya sudah hilang.
+
+00:04:31.840 --> 00:04:34.120
+Setiap tinjaman pas keinsiden menunjukkan akar penyebab yang sama,
+
+00:04:34.120 --> 00:04:35.520
+yaitu ketidak konsistenan kebijakan.
+
+00:04:35.920 --> 00:04:38.100
+Bukan berarti MFA gagal, masalahnya adalah
+
+00:04:38.100 --> 00:04:42.560
+Batas antara layanan Microsoft yang terintegrasi seringkali merupakan tempat kebijakan tidak selaras.
+
+00:04:43.420 --> 00:04:46.220
+Pengguna berpindah-pindah antara SharePoint, Outlook, OneDrive, Dynamics,
+
+00:04:46.300 --> 00:04:48.340
+dan aplikasi saat lain yang terhubung tanpa memikirkannya.
+
+00:04:49.140 --> 00:04:52.640
+Penyerang mengetahui hal ini dan mengunci pintu mana yang memiliki kunci paling lemah.
+
+00:04:53.180 --> 00:04:55.720
+Itulah mengapa Zero Trust secara desain lebih mengutamakan untuk memastikan
+
+00:04:55.720 --> 00:04:58.040
+setiap titik masuk menerapkan standar yang sama tanpa kecuali
+
+00:04:58.040 --> 00:05:00.940
+daripada hanya satu kontrol saja, daripada hanya satu kontrol saja.
+
+00:05:01.440 --> 00:05:04.300
+Aturan akses bersyarat, pemeriksaan kesehatan perangkat, kontrol sesi,
+
+00:05:04.500 --> 00:05:07.440
+semuanya harus menjadi bagian dari standar dasar yang diterapkan secara terpadu,
+
+00:05:08.100 --> 00:05:12.300
+Ketika setiap layanan Microsoft menerapkan tingkat pengawasan yang sama,
+
+00:05:12.800 --> 00:05:15.940
+memvalidasi identitas perangkat dan konteks sesi pada setiap interaksi,
+
+00:05:16.220 --> 00:05:18.280
+Anda menutup pintu samping yang dicari oleh penyerang.
+
+00:05:20.020 --> 00:05:22.500
+Permintaan MFA di M3-AMP5 tidak ada gunanya
+
+00:05:22.500 --> 00:05:25.600
+jika D365 meloloskan pengguna yang sama 5 detik kemudian.
+
+00:05:27.100 --> 00:05:30.900
+Tujuan desainnya adalah setiap transaksi, login, dan panggilan API
+
+00:05:30.900 --> 00:05:34.900
+melewati serangkaian pemeriksaan yang sama apapun produknya.
+
+00:05:34.900 --> 00:05:38.500
+Jika penyelarasan antar beban kerja adalah perbaikan pertama,
+
+00:05:38.920 --> 00:05:42.320
+perubahan nyata terjadi saat kebijakan ini benar-benar saling terhubung secara real time.
+
+00:05:43.180 --> 00:05:46.400
+Disitulah Zero Trust beralih dari sekadar item daftar periksa menjadi pertanian hidup.
+
+00:05:47.800 --> 00:05:49.120
+Saat sistem mulai saling terhubung,
+
+00:05:49.640 --> 00:05:52.600
+bagaimana jika kebijakan akses bersyarat yang Anda buat di Microsoft 365
+
+00:05:52.600 --> 00:05:55.600
+bisa langsung memicu respons keamanan di Dynamics 365
+
+00:05:55.600 --> 00:05:58.860
+tanpa harus meruplikasi aturan atau melakukan sinkronisasi manual?
+
+00:05:58.860 --> 00:06:02.860
+Itu bukanlah realitas bawaan di sebagian besar lingkungan.
+
+00:06:04.000 --> 00:06:07.220
+Biasanya, setiap sistem menerapkan aturannya sendiri secara terisolasi.
+
+00:06:08.960 --> 00:06:12.020
+M35 mungkin meminta MFA untuk login berisi call,
+
+00:06:12.520 --> 00:06:16.900
+sementara D365 memberi atau menolak akses hanya berdasarkan izin peran dalam modelnya sendiri.
+
+00:06:19.100 --> 00:06:21.160
+Keduanya mengambil dari identitas Azure AD yang sama,
+
+00:06:21.280 --> 00:06:23.900
+tetapi belum tentu berbagi data risiko langsung yang sama satu sama lain.
+
+00:06:23.900 --> 00:06:28.520
+Pendekatan terpisah ini berarti Anda bisa mengamankan satu platform dengan sempurna,
+
+00:06:28.640 --> 00:06:31.260
+namun tetap memiliki celah di platform lainnya.
+
+00:06:31.880 --> 00:06:32.420
+Pikirkanlah,
+
+00:06:32.940 --> 00:06:36.320
+tenon M35 Anda mendeteksi login dari node keluarator pada jam 2 pagi,
+
+00:06:36.440 --> 00:06:38.580
+menandai akun sebagai berisi ketinggi dan memblokirnya.
+
+00:06:39.400 --> 00:06:42.860
+Namun Dynamics, kecuali kontrolnya terikat pada sinyal risiko real time yang sama,
+
+00:06:43.080 --> 00:06:44.760
+mungkin membiarkan sesi tersebut berlanjut.
+
+00:06:45.740 --> 00:06:49.900
+Token pengguna mungkin masih valid untuk Dynamics meskipun sudah masuk daftar blokir di M365.
+
+00:06:49.900 --> 00:06:55.740
+Sekarang Anda berada dalam situasi di mana satu bagian lingkungan Anda menganggap akun tersebut sedang diserang,
+
+00:06:55.860 --> 00:06:58.020
+sementara yang lain memproses persetujuan faktur.
+
+00:06:59.120 --> 00:07:02.280
+Peluang yang terlewatkan di sini adalah kemampuan kebijakan dan penilaian risiko
+
+00:07:02.280 --> 00:07:04.260
+untuk menyebar ke kedua lingkungan secara instan.
+
+00:07:05.300 --> 00:07:09.000
+Microsoft sebenarnya memberi Anda fondasi untuk ini dengan akses persyarat Azure AD
+
+00:07:09.000 --> 00:07:11.760
+dan keamanan berbasis peran D365.
+
+00:07:12.800 --> 00:07:16.100
+Akses bersyarat mengevaluasi risiko login secara real time,
+
+00:07:16.100 --> 00:07:20.800
+menggunakan sinyal seperti lokasi asing, pola perjalanan mustahil, atau rentang IP berbahaya.
+
+00:07:21.480 --> 00:07:23.020
+Keamanan berbasis peran di Dynamics,
+
+00:07:23.160 --> 00:07:27.880
+kemudian menentukan apa yang bisa dilakukan pengguna setelah masuk hingga ke tingkat kolom, hingga ke tingkat kolom.
+
+00:07:28.460 --> 00:07:31.160
+Saat kedua lapisan tetap terputus, Anda akan mendapatkan kesenjangan kebijakan.
+
+00:07:31.400 --> 00:07:32.360
+Namun saat terhubung,
+
+00:07:32.880 --> 00:07:36.160
+tanda risiko tinggi di Azure AD bisa langsung mengubah tindakan
+
+00:07:36.160 --> 00:07:39.780
+yang diizinkan akun tersebut di Dynamics tanpa intervensi pengguna.
+
+00:07:40.440 --> 00:07:41.380
+Bayangkan ini beraksi,
+
+00:07:41.960 --> 00:07:44.060
+seorang tenaga penjualan login dari lokasi yang tidak biasa.
+
+00:07:44.060 --> 00:07:47.100
+Azure AD menandai mereka sebagai risiko,
+
+00:07:47.540 --> 00:07:52.080
+menengah dan menerapkan kebijakan bersyarat yang memerlukan autentikasi tambahan untuk tindakan sensitif.
+
+00:07:53.100 --> 00:07:55.720
+Dynamics 365 alih-alih mengabaikan konteks tersebut,
+
+00:07:56.000 --> 00:07:59.680
+menggunakan status risiko Azure AD dan secara otomatis mengunci fitur
+
+00:07:59.680 --> 00:08:04.200
+seperti mengekspor daftar pelanggan atau mengubah data harga hingga sesi terverifikasi.
+
+00:08:05.260 --> 00:08:08.800
+Pemberlakuan ini terjadi secara apa penyata dan tidak bergantung pada seseorang yang secara manual
+
+00:08:08.800 --> 00:08:10.920
+melakukan perubahan atau membangun logika yang sama dua kali.
+
+00:08:10.920 --> 00:08:14.820
+Ini mirip seperti memiliki dua penjaga keamanan di dua pintu kantor Anda yang berbeda.
+
+00:08:15.820 --> 00:08:17.880
+Satu orang melihat seorang mencoba masuk di luar jam kerja,
+
+00:08:18.020 --> 00:08:20.620
+menghentikannya, lalu memberitahu penjaga lain melalui radio agar waspada.
+
+00:08:21.180 --> 00:08:22.480
+Jika para penjaga tidak berkomunikasi,
+
+00:08:22.560 --> 00:08:26.020
+penjaga kedua mungkin dengan senang hati membiarkan orang tersebut masuk lewat pintu samping sementara
+
+00:08:26.020 --> 00:08:27.380
+yang pertama masih mencatat kejadiannya.
+
+00:08:28.060 --> 00:08:29.220
+Tanpa sinyal lintas layanan,
+
+00:08:29.420 --> 00:08:32.660
+itulah yang bisa terjadi antara M365 dan D365.
+
+00:08:33.520 --> 00:08:35.540
+Satu pintu terkunci tetapi pintu yang lain terbuka lebar.
+
+00:08:35.540 --> 00:08:40.300
+Secara teknis, integrasi semacam ini mungkinkan sinyal risiko dari Azure AD
+
+00:08:40.300 --> 00:08:44.200
+mengalir langsung ke D365 dan menjadi bagian dari pengambilan keputusan aksesnya.
+
+00:08:45.640 --> 00:08:47.280
+Klaim waktu nyata mengenai risiko pengguna,
+
+00:08:47.660 --> 00:08:51.220
+kepetuhan perangkat atau lokasi dapat disertakan dalam token yang diberikan ke Dynamics.
+
+00:08:52.100 --> 00:08:55.220
+Kemudian, Dynamics memperlakukan pembatasan tingkat peran
+
+00:08:55.220 --> 00:08:58.440
+atau menolak operasi tertentu berdasarkan klaim tersebut.
+
+00:08:58.440 --> 00:09:02.020
+Hal ini memperpendek celah waktu yang dimiliki penyerang
+
+00:09:02.020 --> 00:09:05.520
+untuk mengeksploitasi akun yang disusupi dari jam atau pakan hari menjadi hitungan detik.
+
+00:09:06.360 --> 00:09:09.300
+Ini juga berarti kebijakan keamanan Anda tidak lagi menjadi dokumen statis
+
+00:09:09.300 --> 00:09:11.960
+dan mulai bertindak seperti sistem saraf bersama di berbagai platform.
+
+00:09:13.360 --> 00:09:16.820
+Ketika keputusan akses di Dynamics mencerminkan postur keamanan langsung yang sama
+
+00:09:16.820 --> 00:09:18.420
+seperti yang dilihat Microsoft 365,
+
+00:09:18.720 --> 00:09:21.500
+pertahanan Anda menjadi terkoordinasi, bukan paralel.
+
+00:09:22.520 --> 00:09:25.380
+Koordinasi itulah yang menutup celah mikro yang diandakan oleh para penyerang.
+
+00:09:25.380 --> 00:09:28.120
+Mereka tidak lagi dapat bergerak secara lateral antar layanan
+
+00:09:28.120 --> 00:09:30.820
+tanpa memicu alam yang sama dan menemui hambatan yang sama di setiap layanan.
+
+00:09:32.060 --> 00:09:34.900
+Namun sebelum Anda dapat mengaktifkan berbagai sinyal waktunya tersebut,
+
+00:09:35.020 --> 00:09:39.440
+Anda harus memastikan identitas itu sendiri disusun dengan cara yang masuk akal bagi kedua sistem.
+
+00:09:40.860 --> 00:09:43.800
+Itu berarti melakukan segmentasi agar setiap peran, setiap jenis akses data,
+
+00:09:43.940 --> 00:09:46.280
+dan setiap profil risiko dapat dikelola dengan bersiko,
+
+00:09:46.280 --> 00:09:48.980
+dapat dikelola dengan bersih tanpa mengganggu cara kerja yang sebenarnya.
+
+00:09:50.740 --> 00:09:53.060
+Segmentasi identitas tanpa mengganggu alur kerja.
+
+00:09:53.060 --> 00:09:55.780
+Semua orang berbicara tentang mengunci identitas,
+
+00:09:55.940 --> 00:09:59.400
+tetapi tidak banyak yang ingin mencari cara melakukannya tanpa merusak produktivitas.
+
+00:10:00.200 --> 00:10:03.480
+Segmentasi identitas bukan tentang membuat orang bersusah payah untuk setiap klik.
+
+00:10:04.420 --> 00:10:07.200
+Ini tentang merancang akses dengan cara yang mengakui bahwa
+
+00:10:07.200 --> 00:10:11.080
+tidak semua pengguna, data, atau tindakan memiliki tingkat risiko yang sama,
+
+00:10:11.080 --> 00:10:15.540
+lalu menerapkan kontrol yang mencerminkan realitas itu di Microsoft 365 dan Dynamics 365.
+
+00:10:15.540 --> 00:10:20.020
+Dalam prakteknya, ini berarti menentukan batasan yang jelas antara grup
+
+00:10:20.020 --> 00:10:22.820
+berdasarkan apa yang mereka lakukan, sensitivitas data yang mereka tangani,
+
+00:10:22.940 --> 00:10:25.200
+dan risiko yang mereka wakili, dan risiko yang mereka wakili.
+
+00:10:25.680 --> 00:10:28.060
+Inilah perbedaan antara memberikan kunci induk kepada setiap pengguna
+
+00:10:28.060 --> 00:10:29.980
+atau hanya memberikan kunci yang benar-benar mereka butuhkan.
+
+00:10:31.420 --> 00:10:36.920
+Di MT65 dan D365, segmentasi ini biasanya berbentuk penetapan akses berbasis peran
+
+00:10:36.920 --> 00:10:38.860
+yang terikat pada beban kerja tertentu.
+
+00:10:38.860 --> 00:10:43.320
+Seorang koordinator pemasaran mungkin hanya membutuhkan
+
+00:10:43.320 --> 00:10:47.780
+Teams, SharePoint, dan akses baca saja ke catatan pelanggan di Dynamics
+
+00:10:47.780 --> 00:10:51.020
+sementara staf keuangan mungkin perlu menyetujui pembayaran
+
+00:10:51.020 --> 00:10:52.820
+dan menarik laporan sensitif.
+
+00:10:54.320 --> 00:10:56.860
+Prinsipnya sederhan, semakin tinggi hak akses suatu tindakan,
+
+00:10:56.980 --> 00:10:57.900
+semakin ketat kontrolnya.
+
+00:10:58.980 --> 00:11:01.260
+Tantangannya adalah melakukan itu tanpa membuat setiap login
+
+00:11:01.260 --> 00:11:04.580
+menjadi proses yang lamban atau menyuritkan tugas sehari-hari.
+
+00:11:05.460 --> 00:11:07.040
+Itulah bagian yang membuat para admin merasa cemas.
+
+00:11:07.540 --> 00:11:08.360
+Ketakutannya seperti ini.
+
+00:11:08.360 --> 00:11:12.340
+Jika kita mulai membuat jalur autentikasi terpisah untuk setiap peran,
+
+00:11:12.660 --> 00:11:14.520
+pengguna akan terus dibombar dari permintaan,
+
+00:11:14.720 --> 00:11:17.300
+alur kerja melambat, dan tim akan sangat keberatan.
+
+00:11:19.720 --> 00:11:21.940
+Anda menerapkan persyaratan multifaktor yang berbeda
+
+00:11:21.940 --> 00:11:23.180
+untuk tim penjualan dan keuangan,
+
+00:11:23.360 --> 00:11:25.500
+lalu tiba-tiba separuh tim penjualan menelpon IT
+
+00:11:25.500 --> 00:11:28.440
+karena tidak bisa mengakses proposal saat panggilan klien
+
+00:11:28.440 --> 00:11:31.800
+atau tim keuangan membuka Teams untuk kolaborasi anggaran,
+
+00:11:31.980 --> 00:11:35.520
+tetapi proses masuk yang ditingkatkan muncul di setiap utas percakapan.
+
+00:11:36.700 --> 00:11:37.600
+Namun sisi budutnya jauh lebih.
+
+00:11:37.600 --> 00:11:41.680
+Tanpa segmentasi, penyerang yang membobol akun koordinator pemasaran tersebut
+
+00:11:41.680 --> 00:11:43.580
+akan memiliki jalur yang jauh.
+
+00:11:43.660 --> 00:11:46.520
+Lebih mudah untuk bergerak secara lateral meluju data bernilai tinggi.
+
+00:11:47.480 --> 00:11:49.440
+Itulah mengapa tujuannya bukan untuk mempersulit login semua.
+
+00:11:49.780 --> 00:11:51.860
+Tujuannya adalah mempersulit akses ke hal-hal sensitif
+
+00:11:51.860 --> 00:11:54.060
+sambil tetap menjaga kelancaran tindakan berisiko rendah.
+
+00:11:54.560 --> 00:11:55.540
+Berikut adalah contoh yang berhasil.
+
+00:11:55.540 --> 00:12:00.360
+Tenaga penjualan login dengan MFI standar untuk alat sehari-hari seperti Teams dan Outlook.
+
+00:12:01.100 --> 00:12:03.000
+Pengguna keuangan memiliki dasar login yang sama,
+
+00:12:03.140 --> 00:12:07.360
+tetapi mendapatkan tantangan autentikasi tambahan saat mereka mencoba menyetujui transfer kawat di Dynamics
+
+00:12:07.360 --> 00:12:09.800
+atau mengekspor data keuangan terperinci di Power BI.
+
+00:12:10.860 --> 00:12:13.480
+Di balik layar, manajemen identitas sistemnya WAPI MX
+
+00:12:13.480 --> 00:12:17.160
+memberi tahu Dynamics untuk memberikan izin yang ditingkatkan secara tepat waktu just in time
+
+00:12:17.160 --> 00:12:19.000
+kepada peran keuangan tersebut untuk tindakan tersebut,
+
+00:12:19.080 --> 00:12:21.120
+untuk tindakan tersebut izin yang kedawarsan secara digunakan.
+
+00:12:21.120 --> 00:12:25.800
+Dengan begitu, tim keuangan tidak terhambat saat melakukan pekerjaan rutin,
+
+00:12:26.120 --> 00:12:28.580
+tetapi tetap ada rintangan untuk operasi berisiko lebih tinggi.
+
+00:12:29.400 --> 00:12:32.040
+Saat Anda melapisi segmentasi melalui PIM dan akses tepat waktu,
+
+00:12:32.200 --> 00:12:35.040
+Anda mulai menghapus hak istimewa permanen dari akun sepenuhnya.
+
+00:12:35.680 --> 00:12:38.420
+Alih-alih, seorang manajer keuangan selalu memiliki hak persetujuan faktur
+
+00:12:38.420 --> 00:12:41.480
+mereka hanya memilikinya selama satu jam saat mereka perlu memproses pembayaran bulanan.
+
+00:12:42.680 --> 00:12:44.180
+Bahkan jika krediensial mereka dicuri,
+
+00:12:44.180 --> 00:12:46.980
+penyerang harus menyesuaikan waktu pembobolan dengan jendela izin yang tepat
+
+00:12:46.980 --> 00:12:51.040
+dan itu pun dengan asumsi mereka bisa melewati pemeriksaan kontekstual pada kepatuhan pelangkat dan lokasi.
+
+00:12:52.120 --> 00:12:55.220
+Memetakan hal ini ketugas sehari-hari ada tempat pekerjaan desain dilakukan.
+
+00:12:56.840 --> 00:12:58.980
+Pengguna penjualan mungkin berada di obrolan tim sepanjang hari
+
+00:12:58.980 --> 00:13:03.200
+mengakses SharePoint untuk proposal dan sesekali memeriksa data CRM di Dynamics.
+
+00:13:04.200 --> 00:13:06.760
+Semua itu tidak memerlukan autentikasi dengan hambatan tinggi
+
+00:13:06.760 --> 00:13:08.700
+kecuali mereka mencoba mengubah catatan keuangan.
+
+00:13:09.880 --> 00:13:14.000
+Pengguna keuangan mungkin menghabiskan waktu di dashboard Power BI dan modul keuangan Dynamics
+
+00:13:14.000 --> 00:13:18.540
+tetapi mereka tidak memerlukan izin yang ditingkatkan hanya untuk berkolaborasi di saluran tims.
+
+00:13:18.540 --> 00:13:23.800
+Anda menentukan batasan ini dalam kebijakan sehingga alur kerja umum setiap peran tetap cepat
+
+00:13:23.800 --> 00:13:26.480
+sementara tindakan sensitif tetap terkunci rapat.
+
+00:13:27.200 --> 00:13:30.360
+Bayangkan ini seperti memiliki kunci yang berbeda untuk ruangan yang berbeda di gedung kantor
+
+00:13:30.360 --> 00:13:32.200
+tetapi semuanya ada dalam satu kartu kunci pintar.
+
+00:13:32.200 --> 00:13:35.440
+Anda menggesek sekali dan bergerak bebas di mana Anda diberi wawenang
+
+00:13:35.440 --> 00:13:37.960
+tetapi saat mencapai ruang server atau arsip catatan
+
+00:13:37.960 --> 00:13:41.700
+kartu akan meminta pin sebelum pintu terbuka.
+
+00:13:43.060 --> 00:13:45.200
+Langkah ekstra itu hanya terjadi di tempat yang penting
+
+00:13:45.200 --> 00:13:48.740
+dan Anda tidak perlu repot dengan gantungan kunci besar untuk setiap pintu di sepanjang jalan.
+
+00:13:50.000 --> 00:13:52.360
+Desain segmentasi dengan cara ini membuat pengguna tetap bergerak
+
+00:13:52.360 --> 00:13:54.360
+dengan kecepatan penuh untuk pekerjaan berisiko rendah
+
+00:13:54.360 --> 00:13:57.580
+namun tetap memaksa validasi yang disengaja sebelum mereka menyentuh apapun yang kritis.
+
+00:13:57.580 --> 00:14:02.780
+Ini adalah keseimbangan yang cukup kuat untuk memblokir penyerang yang masuk dengan kredensial curian
+
+00:14:02.780 --> 00:14:04.840
+tetapi cukup tidak terlihat dalam penggunaan sehari-hari
+
+00:14:04.840 --> 00:14:07.000
+sehingga tim Anda tidak menyadari adanya pagar pembatas.
+
+00:14:07.900 --> 00:14:09.380
+Dan bahkan dengan segmen akses yang tepat
+
+00:14:09.380 --> 00:14:13.280
+kepercayaan yang Anda bangun saat masuk tidak bisa menjadi satu-satunya pemeriksaan yang Anda jalankan.
+
+00:14:14.100 --> 00:14:15.600
+Dalam pengaturan yang benar-benar tangguh
+
+00:14:15.600 --> 00:14:17.580
+setiap sesi aktif dinilai kembali saat berlangsung
+
+00:14:17.580 --> 00:14:19.160
+bukan hanya pada titik masuk.
+
+00:14:20.360 --> 00:14:22.600
+Kekuatan verifikasi berkelanjutan di multi-cloud
+
+00:14:22.600 --> 00:14:26.840
+di dunia di mana satu sekretensial cloud dapat membuka pintu di berbagai platform
+
+00:14:26.840 --> 00:14:29.560
+memeriksanya hanya sekali berarti mengundang masalah.
+
+00:14:30.680 --> 00:14:32.420
+Itu tidak masalah dalam model on-premise lama
+
+00:14:32.420 --> 00:14:36.360
+di mana kami memercayai perangkat di dalam perimeter jaringan sampai pengguna keluar.
+
+00:14:37.300 --> 00:14:40.000
+Namun dalam lingkungan Microsoft 365 dan Dynamics 365
+
+00:14:40.000 --> 00:14:42.380
+yang juga terhubung ke AWS, Google Services
+
+00:14:42.380 --> 00:14:44.080
+atau aplikasi saas pihak ketiga
+
+00:14:44.080 --> 00:14:46.840
+tingkat risiko tidak tetap sejak seseorang masuk.
+
+00:14:47.900 --> 00:14:48.840
+Tingkat diperubah terus merah.
+
+00:14:48.840 --> 00:14:52.160
+Verifikasi berkelanjutan mengubah pola pikir tradisional.
+
+00:14:52.940 --> 00:14:56.160
+Alih-alih keputusan tunggal di muka saat masuk akses
+
+00:14:56.160 --> 00:14:59.680
+dinilai berulang kali selama sesi berlangsung.
+
+00:15:00.980 --> 00:15:04.140
+Artinya sistem bertanya kembali apakah pengguna masih orang yang mengaku dirinya.
+
+00:15:04.860 --> 00:15:05.880
+Apakah perangkat masih patuh?
+
+00:15:06.760 --> 00:15:08.360
+Apakah lokasi koneksi masih terpercaya?
+
+00:15:08.360 --> 00:15:11.440
+Pemeriksaan ini dapat dipicu oleh peristiwa tertentu,
+
+00:15:11.760 --> 00:15:12.620
+interval terjadwal,
+
+00:15:12.800 --> 00:15:15.380
+atau sinyal risiko yang muncul secara real time.
+
+00:15:16.000 --> 00:15:17.460
+Anda tidak hanya memvalidasi entry,
+
+00:15:17.580 --> 00:15:19.700
+Anda memantau perilaku dan konteks di setiap langkah.
+
+00:15:20.500 --> 00:15:22.420
+Mudah untuk melihat celahnya ketika Anda membandingkan ini
+
+00:15:22.420 --> 00:15:24.180
+dengan pendekatan masuk sekali dan tetap tidur.
+
+00:15:24.980 --> 00:15:25.840
+Di dunia on-premise,
+
+00:15:25.960 --> 00:15:28.000
+begitu Anda menghubungkan laptop ke jaringan perusahaan
+
+00:15:28.000 --> 00:15:29.100
+dan lolos pemeriksaan pertama,
+
+00:15:29.100 --> 00:15:31.220
+Anda dianggap aman sepanjang sisa hari.
+
+00:15:32.200 --> 00:15:34.840
+Namun layanan cloud tidak memiliki perimeter fisik yang stabil tersebut.
+
+00:15:35.820 --> 00:15:37.740
+Pengguna berpindah antar perangkat jaringan
+
+00:15:37.740 --> 00:15:39.720
+dan geografi sepanjang satu sesi kerja.
+
+00:15:40.760 --> 00:15:42.820
+Aktor ancaman dapat mencuri token sesi aktif
+
+00:15:42.820 --> 00:15:43.760
+dan menggunakannya kembali
+
+00:15:43.760 --> 00:15:45.880
+tanpa pernah melihat prom MFI lagi, terutai.
+
+00:15:46.740 --> 00:15:48.940
+Keputusan kepercayaan statis yang dibuat pada pukul 9 pagi
+
+00:15:48.940 --> 00:15:50.620
+mungkin sama sekali tidak relevan pada pukul 9.
+
+00:15:51.060 --> 00:15:52.080
+Bayangkan skenario ini.
+
+00:15:52.660 --> 00:15:55.660
+Seorang pengguna masuk ke M365 dari laptop terpercaya di kantor pusat.
+
+00:15:56.060 --> 00:15:56.200
+Tik.
+
+00:15:56.540 --> 00:15:59.640
+Mereka membuka Outlook, Teams, dan Dynamics 365 Finance.
+
+00:16:00.620 --> 00:16:04.040
+Di tengah sesi, alamat IP mereka beralih ke lokasi sejauh 2000 mil,
+
+00:16:04.420 --> 00:16:06.400
+mungkin, karena wifi rumah terputus
+
+00:16:06.400 --> 00:16:08.780
+dan perangkat otomatis terhubung ke hotspot 4G
+
+00:16:08.780 --> 00:16:10.380
+yang dirutakan ke luar negeri.
+
+00:16:12.060 --> 00:16:13.460
+Perlindungan identitas Azure AD
+
+00:16:13.460 --> 00:16:16.560
+menandai tingkat risiko masuk dari tidak ada menjadi tinggi dalam hitungan detik.
+
+00:16:17.980 --> 00:16:19.540
+Dalam dunia verifikasi berkelanjutan,
+
+00:16:19.820 --> 00:16:21.260
+tingkat risiko tersebut langsung menyebar.
+
+00:16:21.920 --> 00:16:25.000
+Microsoft 365 meminta pengguna untuk melakukan autentikasi ulang
+
+00:16:25.000 --> 00:16:26.880
+sebelum mereka dapat mengirim file Teams tersebut.
+
+00:16:26.880 --> 00:16:31.340
+Pada saat yang sama, Dynamics 365 bereaksi dengan menceder alur kerja persetujuan
+
+00:16:31.340 --> 00:16:34.360
+yang sedang dibuka pengguna secara efektif mengunci tindakan sensitif
+
+00:16:34.360 --> 00:16:37.140
+hingga sesi divalidasi kembali, hingga sesi divalidasi kembali.
+
+00:16:37.780 --> 00:16:41.580
+Koordinasi semacam ini didukung oleh Microsoft Graph dan perlindungan identitas Azure AD.
+
+00:16:42.840 --> 00:16:44.740
+Microsoft Graph menyediakan infrastruktur,
+
+00:16:44.740 --> 00:16:47.760
+aliran data identitas perangkat dan aktivitas secara waktu nyata
+
+00:16:47.760 --> 00:16:50.260
+yang tersedia bagi setiap aplikasi yang terhubung.
+
+00:16:51.640 --> 00:16:53.440
+Perlindungan identitas menggunakan data tersebut
+
+00:16:53.440 --> 00:16:55.760
+untuk menetapkan skor risiko dinamis berdasarkan sinyal
+
+00:16:55.760 --> 00:16:57.920
+yang diketahui seperti perjalanannya yang tidak biasa
+
+00:16:57.920 --> 00:17:00.960
+masuk dari IP yang terkait malware atau urutan perubahan lokasi yang mustahil.
+
+00:17:02.500 --> 00:17:04.800
+Aplikasi apapun yang terintegrasi ke dalam kerangka kerja ini
+
+00:17:04.800 --> 00:17:06.960
+dapat berdasarkan perubahan risiko tersebut di tengah sesi tersebut
+
+00:17:06.960 --> 00:17:08.300
+di tengah sesi bukan hanya satu lagi now.
+
+00:17:08.700 --> 00:17:11.620
+Manfaatnya sangat besar ketika Anda beroperasi di lingkungan multi-cloud.
+
+00:17:11.620 --> 00:17:15.100
+Bayangkan seorang pengembang berpindah antara Azure DevOps,
+
+00:17:15.280 --> 00:17:17.980
+konsol AWS, dan jira dalam rangkaian tab Browser.
+
+00:17:19.440 --> 00:17:22.640
+Jika perangkat gagal dalam pemeriksaan kepatuhan di Microsoft Endpoint Manager
+
+00:17:22.640 --> 00:17:25.080
+saat berada di Azure, sinyal itu dapat menyebar keluar.
+
+00:17:25.920 --> 00:17:28.660
+Aplikasi terintegrasi di cloud lain dapat menangkap tanda perangkat
+
+00:17:28.660 --> 00:17:30.560
+yang tidak terpercaya yang sama
+
+00:17:30.560 --> 00:17:34.400
+dan meminta autentikasi ulang atau mengunci fitur sensitif.
+
+00:17:34.760 --> 00:17:37.080
+Tidak ada manusia yang perlu mendorong perubahan tersebut
+
+00:17:37.080 --> 00:17:39.800
+dan tidak ada penyerang yang dapat mengeksploitasi status kepercayaan yang kedua.
+
+00:17:39.800 --> 00:17:42.080
+Ini seperti penjaga keamanan yang berjalan dalam pesta,
+
+00:17:42.280 --> 00:17:43.440
+bukan hanya menjaga pintu depan.
+
+00:17:44.340 --> 00:17:46.040
+Seseorang mungkin masuk dengan penampilan yang baik,
+
+00:17:46.140 --> 00:17:47.960
+tetapi jika perilaku mereka berubah, mengambil tas,
+
+00:17:48.060 --> 00:17:50.700
+mengulai pertengkaran, mereka akan dikawal keluar sebelum keadaan buruk.
+
+00:17:51.560 --> 00:17:53.320
+Verifikasi berkelanjutan bekerja dengan cara yang sama.
+
+00:17:54.300 --> 00:17:55.680
+Lingkungan terus memindai anomali
+
+00:17:55.680 --> 00:17:57.240
+dan menerapkan tindakan di tengah sesi
+
+00:17:57.240 --> 00:17:58.820
+bahkan jika entry awal tampak sah.
+
+00:18:00.120 --> 00:18:01.040
+Dalam pengaturan multi-cloud,
+
+00:18:01.140 --> 00:18:03.140
+biaya karena tidak melakukan pemeriksaan ulang menjadi berlipat kebun.
+
+00:18:03.140 --> 00:18:06.980
+Satu sesi berisiku yang tidak terbatas pada satu batas pada satu aplikasi saja.
+
+00:18:07.500 --> 00:18:09.280
+Hal itu dapat menjelar ke berbagai layanan
+
+00:18:09.280 --> 00:18:11.660
+melalui penggunaan kembali token atau integrasi API.
+
+00:18:12.700 --> 00:18:14.600
+Jika Anda hanya meriksa identitas di awal,
+
+00:18:14.780 --> 00:18:16.860
+Anda bertaruh bahwa tidak ada konteks yang akan berubah,
+
+00:18:17.000 --> 00:18:18.420
+tidak ada kredensial yang akan dicuri,
+
+00:18:18.680 --> 00:18:22.180
+dan tidak ada perangkat yang akan berubah menjadi tidak patuh selama berjam-jam aktivitas.
+
+00:18:23.260 --> 00:18:24.280
+Itu bukan taruhannya layak ilap.
+
+00:18:24.820 --> 00:18:27.720
+Ketika veri kelanjutan diotomatisasi melalui layanan Microsoft yang tepat,
+
+00:18:27.720 --> 00:18:30.340
+Anda berhenti menganggapnya sebagai lapisan keamanan yang terpisah.
+
+00:18:30.340 --> 00:18:33.520
+Ini menjadi bagian alami dari cara kerja akses selalu aktif,
+
+00:18:33.600 --> 00:18:36.000
+selalu waspada, dan selalu siap untuk menilai kembali kepercayaan
+
+00:18:36.000 --> 00:18:37.260
+sebelum kerusakan nyata terjadi.
+
+00:18:38.400 --> 00:18:40.700
+Hasil akhirnya adalah zero trust bukan sekadar peristiwa masuk log.
+
+00:18:41.240 --> 00:18:42.940
+Ini adalah denguan konstan di latar belakang
+
+00:18:42.940 --> 00:18:45.020
+yang melindungi setiap tindakan di setiap sistem yang terhubung.
+
+00:18:46.320 --> 00:18:48.900
+Zero trust yang tidak membuat pengguna kelelahan.
+
+00:18:49.880 --> 00:18:51.620
+Jika peluncuran zero trust Anda membuat orang harus
+
+00:18:51.620 --> 00:18:53.020
+mereka akan setuju masuk 12 kali sehari,
+
+00:18:53.100 --> 00:18:54.520
+mereka akan mencari cara untuk menghindarinya.
+
+00:18:54.860 --> 00:18:56.620
+Itu bukan kemalasan, itu adalah cara berhenti.
+
+00:18:57.020 --> 00:18:58.340
+Hanya ada batas jumlah gangguan
+
+00:18:58.340 --> 00:19:00.460
+sebelum seseorang memutuskan untuk memprioritaskan
+
+00:19:00.460 --> 00:19:02.820
+penyelesaian pekerjaan daripada mengikuti aturan,
+
+00:19:03.040 --> 00:19:03.960
+daripada mengikuti aturan.
+
+00:19:04.240 --> 00:19:06.340
+Masalahnya adalah jalan pintas yang mereka pilih
+
+00:19:06.880 --> 00:19:08.460
+seringkali merusak kontrol keamanan
+
+00:19:08.460 --> 00:19:10.000
+yang telah Anda upayakan dengan keras.
+
+00:19:10.740 --> 00:19:12.200
+Disinilah kelelahan autentikasi muncul.
+
+00:19:12.940 --> 00:19:14.380
+Ini terjadi ketika pengguna diminta
+
+00:19:14.380 --> 00:19:16.240
+untuk membuktikan identitas mereka begitu sering,
+
+00:19:16.460 --> 00:19:18.200
+hingga proses tersebut menjadi gangguan yang biasa.
+
+00:19:18.900 --> 00:19:20.980
+Perintah tersebut tidak lagi menjadi pemeriksaan yang bermakna
+
+00:19:20.980 --> 00:19:22.520
+dan mulai menjadi kotak lain untuk dicentang
+
+00:19:22.520 --> 00:19:24.100
+atau lebih buruk sesuatu untuk dilewati.
+
+00:19:24.800 --> 00:19:25.820
+Dalam model zero trust,
+
+00:19:25.820 --> 00:19:28.900
+tantangan berulang ditujukan untuk melindungi tindakan bernilai tinggi.
+
+00:19:30.120 --> 00:19:31.880
+Namun, ketika tantangan yang sama disisipkan
+
+00:19:31.880 --> 00:19:33.020
+ke dalam setiap tugas rutin,
+
+00:19:33.500 --> 00:19:35.620
+orang berhenti membedakan antara peristiwa keamanan yang sah
+
+00:19:35.620 --> 00:19:36.540
+dan gangguan sistem.
+
+00:19:37.580 --> 00:19:38.560
+Hilangnya perhatian untuk berisiko.
+
+00:19:39.420 --> 00:19:41.420
+Kebijakan yang bermaksud baik bisa merusak diri sendiri
+
+00:19:41.420 --> 00:19:43.760
+jika menghabiskan kesediaan pengguna terlalu cepat.
+
+00:19:45.000 --> 00:19:46.440
+Jika kebijakan melentuk perintah MFI
+
+00:19:46.440 --> 00:19:47.800
+baru setiap kali seseorang beralih
+
+00:19:47.800 --> 00:19:49.460
+dari Outlook ke Teams ke SharePoint Anda,
+
+00:19:49.960 --> 00:19:51.640
+mengondisikan mereka untuk menyetujui apa saja
+
+00:19:51.640 --> 00:19:53.620
+secara membayar buta agar bisa terus bekerja.
+
+00:19:53.620 --> 00:19:55.360
+Dan dalam keadaan itu,
+
+00:19:55.540 --> 00:19:56.840
+perintah berbahaya katakanlah
+
+00:19:56.840 --> 00:19:58.880
+dari penyerang yang mencoba mendapatkan kontrol sesi
+
+00:19:58.880 --> 00:20:00.220
+melalui teknik kelelahan MFA
+
+00:20:00.220 --> 00:20:02.100
+memiliki peluang jauh lebih besar untuk diterima.
+
+00:20:03.060 --> 00:20:04.420
+Anda telah menghabiskan anggaran
+
+00:20:04.420 --> 00:20:06.000
+untuk teknologi keamanan yang kuat,
+
+00:20:06.100 --> 00:20:08.500
+tetapi lapisan perilaku kini menjadi mata rantai terlemah.
+
+00:20:09.320 --> 00:20:10.200
+Berikut adalah contoh doi ada.
+
+00:20:10.800 --> 00:20:12.640
+Seorang karyawan yang frustrasi dengan perintah masuk
+
+00:20:12.640 --> 00:20:13.780
+yang konstan mengatur Outlook
+
+00:20:13.780 --> 00:20:14.940
+di laptop pribadi mereka
+
+00:20:14.940 --> 00:20:17.020
+untuk mengingat kredensial tanpa batas waktu.
+
+00:20:17.720 --> 00:20:18.480
+Terasa tidak berbahaya.
+
+00:20:18.800 --> 00:20:20.200
+Mereka menghemat beberapa detik dari hari mereka.
+
+00:20:20.200 --> 00:20:21.760
+Namun kini,
+
+00:20:22.460 --> 00:20:24.100
+perangkat pribadi tersebut memiliki token
+
+00:20:24.100 --> 00:20:26.160
+yang selalu aktif ke email organisasi
+
+00:20:26.160 --> 00:20:27.440
+di luar aturan akses bersyarat
+
+00:20:27.440 --> 00:20:29.660
+yang Anda tetapkan untuk perangkat perusahaan.
+
+00:20:30.780 --> 00:20:32.600
+Jika laptop hilang atau disusupi penyerang
+
+00:20:32.600 --> 00:20:34.180
+bahkan tidak perlu mencoba MFA,
+
+00:20:35.180 --> 00:20:36.860
+mereka sudah memiliki sesi aktif yang berjalan.
+
+00:20:37.400 --> 00:20:38.480
+Pendekatan yang lebih cerdas adalah
+
+00:20:38.480 --> 00:20:39.660
+mendasarkan tentangan pada konteks.
+
+00:20:40.160 --> 00:20:42.080
+Kebijakan akses adaptif dibangun di sekitar diri tersebut.
+
+00:20:42.560 --> 00:20:44.700
+Alih-alih memperlakukan setiap masuk sama kebijakan ini,
+
+00:20:44.700 --> 00:20:46.320
+melihat tingkat risiko secara real-time.
+
+00:20:46.320 --> 00:20:48.820
+Sistem mengetahui apakah perangkat mematuhi aturan,
+
+00:20:49.020 --> 00:20:50.400
+apakah lokasi sudah diharapkan,
+
+00:20:50.500 --> 00:20:52.180
+apakah sesi telah berperilaku normal.
+
+00:20:52.540 --> 00:20:54.220
+Ketika semua pemeriksaan itu berwarna hijau,
+
+00:20:54.300 --> 00:20:55.940
+kebutuhan untuk autentikasi ulang yang berulang
+
+00:20:55.940 --> 00:20:57.560
+jadi jauh berkurang, jadi jauh berkurang.
+
+00:20:58.160 --> 00:20:59.040
+Pengguna tetap ditantang,
+
+00:20:59.140 --> 00:21:01.280
+tetapi hanya ketika ada sesuatu yang berubah secara berarti.
+
+00:21:01.980 --> 00:21:03.460
+Beginilah cara Anda menyeimbangkan
+
+00:21:03.460 --> 00:21:05.300
+antara kontrol yang kuat dan kegunaan.
+
+00:21:06.140 --> 00:21:08.720
+Anda meningkatkan sensitivitas pada skenario berisiko tinggi
+
+00:21:08.720 --> 00:21:10.060
+seperti mengakses catatan keuangan
+
+00:21:10.060 --> 00:21:11.420
+dari perangkat yang tidak terkelola
+
+00:21:11.420 --> 00:21:12.700
+dan menjaganya tetap lancar
+
+00:21:12.700 --> 00:21:14.900
+saat pengguna menggunakan laptop terpercaya di kantor.
+
+00:21:15.800 --> 00:21:16.540
+Itu bukan pelongganan.
+
+00:21:16.880 --> 00:21:18.560
+Itu adalah alokasi sumber daya yang strategis.
+
+00:21:19.520 --> 00:21:21.360
+Anda mengarahkan waktu dan perhatian pengguna
+
+00:21:21.360 --> 00:21:22.300
+pada hal yang penting,
+
+00:21:22.560 --> 00:21:24.680
+bukan membuangnya untuk pindahkan sepele
+
+00:21:24.680 --> 00:21:26.240
+yang tidak secara berarti.
+
+00:21:26.700 --> 00:21:28.080
+Meningkatkan level ancaman.
+
+00:21:28.700 --> 00:21:29.640
+Bayangkan keamanan bandara.
+
+00:21:30.800 --> 00:21:32.520
+Semua orang melalui pemeriksaan dasar,
+
+00:21:32.660 --> 00:21:33.820
+tetapi penggeradaan tas lengkap
+
+00:21:33.820 --> 00:21:34.720
+dan pemindahan sekunder
+
+00:21:34.720 --> 00:21:36.580
+hanya untuk kasus yang memicu kekhawatiran
+
+00:21:36.580 --> 00:21:37.520
+barang yang ditandai,
+
+00:21:37.980 --> 00:21:38.740
+pola tidak wajar,
+
+00:21:38.880 --> 00:21:39.800
+atau pemeriksaan acak.
+
+00:21:39.800 --> 00:21:42.600
+Tidak ada yang melepas patu
+
+00:21:42.600 --> 00:21:44.040
+di setiap pintu di dalam terminal
+
+00:21:44.040 --> 00:21:45.660
+karena sistem dirancang
+
+00:21:45.660 --> 00:21:46.940
+untuk menyeimbangkan kelancaran
+
+00:21:46.940 --> 00:21:48.080
+dengan deteksi ancaman.
+
+00:21:49.720 --> 00:21:50.300
+Dalam istilah,
+
+00:21:50.560 --> 00:21:52.040
+zero trust pemeriksaan acak Anda
+
+00:21:52.040 --> 00:21:53.260
+berbentuk tantangan sesi
+
+00:21:53.260 --> 00:21:54.380
+saat konteks berubah
+
+00:21:54.380 --> 00:21:56.100
+meskipun login awal sudah aman.
+
+00:21:57.500 --> 00:21:59.300
+Saat Anda menghilangkan hambatan yang tidak perlu,
+
+00:21:59.800 --> 00:22:01.580
+Anda tidak hanya mempermudah kehidupan pengguna,
+
+00:22:01.940 --> 00:22:03.400
+Anda membuat kontrol menjadi lebih efektif.
+
+00:22:03.780 --> 00:22:04.940
+Semakin sedikit perintah mereka lihat,
+
+00:22:04.940 --> 00:22:06.260
+semakin serius mereka menanggapinya.
+
+00:22:07.240 --> 00:22:08.420
+Permintaan autentikasi ulang
+
+00:22:08.420 --> 00:22:10.120
+saat menyetujui transaksi bernilai tinggi
+
+00:22:10.120 --> 00:22:11.880
+di dinamik 365 tidak akan diabaikan
+
+00:22:11.880 --> 00:22:12.720
+karena jarang terjadi
+
+00:22:12.720 --> 00:22:13.760
+sehingga cukup menonjol.
+
+00:22:14.920 --> 00:22:15.720
+Perhatian itulah
+
+00:22:15.720 --> 00:22:16.440
+yang Anda butuhkan
+
+00:22:16.440 --> 00:22:17.500
+saat mengandalkan manusia
+
+00:22:17.500 --> 00:22:19.140
+untuk memverifikasi tindakan penting.
+
+00:22:20.980 --> 00:22:22.660
+Tujuan akhir dari zero trust by design
+
+00:22:22.660 --> 00:22:23.600
+dalam konteks ini
+
+00:22:23.600 --> 00:22:25.000
+adalah keamanan yang selalu ada
+
+00:22:25.000 --> 00:22:25.980
+namun jarang mengganggu.
+
+00:22:27.820 --> 00:22:29.440
+Otomatisasi yang berjalan di latar belakang,
+
+00:22:29.720 --> 00:22:31.000
+terus memeriksa kepatuan perangkat,
+
+00:22:31.120 --> 00:22:31.720
+integritas sesi,
+
+00:22:31.720 --> 00:22:32.660
+dan sinyal identitas
+
+00:22:32.660 --> 00:22:33.660
+tanpa memberikan peringatan
+
+00:22:33.660 --> 00:22:34.800
+untuk setiap hasil yang aman.
+
+00:22:34.800 --> 00:22:37.360
+Saat sesuatu memicumeteran risiko,
+
+00:22:37.480 --> 00:22:38.220
+pengguna akan merasakan
+
+00:22:38.220 --> 00:23:08.200
+selamat menikmati.
