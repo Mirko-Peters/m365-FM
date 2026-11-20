@@ -50,7 +50,7 @@ def is_indexable(p):
 def reviewed_badge(lang, p):
     """Kennzeichen "von der Redaktion geprueft" (nur bei reviewed=1)."""
     if not p.get("reviewed"): return ""
-    return f' · <span class="mut" title="{esc(T(lang, "Checked by an independent reviewer before publication; test it in your own tenant before you rely on it.", "Vor der Veröffentlichung von einem unabhängigen Prüfer durchgesehen; teste es vor dem Einsatz im eigenen Tenant."))}">✓ {esc(T(lang, "Reviewed by the editorial team", "Von der Redaktion geprüft"))}</span>'
+    return f' · <span class="mut" title="{esc(T(lang, "Checked against the Microsoft documentation by independent AI reviewers and released by the editors. Not run in a live tenant: test it in your own tenant before you rely on it.", "Von unabhängigen KI-Prüfern gegen die Microsoft-Dokumentation durchgesehen und von der Redaktion freigegeben. Nicht in einem echten Tenant ausgeführt: teste es vor dem Einsatz im eigenen Tenant."))}">✓ {esc(T(lang, "Reviewed by the editorial team", "Von der Redaktion geprüft"))}</span>'
 
 
 def open_link(lang, p):

@@ -30,7 +30,10 @@ test("Import ist wiederholbar: unveraendert bleibt, geaendert wird aktualisiert,
   const { env, raw } = await fixture();
   await importLibrarySeed(env, [item(1), item(2)]);
   const again = await importLibrarySeed(env, [item(1), item(2)]);
-  assert.deepEqual([again.created, again.updated, again.same], [0, 0, 2]);
+  assert.match(again.skipped, /fertig/, "alles eingespielt, Datei unveraendert: nichts mehr zu tun");
+  raw.exec("DELETE FROM meta WHERE k='lib_seed_done'");   // Marke weg: ein neuer Lauf prueft alles und findet alles unveraendert
+  const forced = await importLibrarySeed(env, [item(1), item(2)]);
+  assert.deepEqual([forced.created, forced.updated, forced.same], [0, 0, 2]);
   const ch = await importLibrarySeed(env, [item(1, { body: "y".repeat(80) })]);
   assert.equal(ch.updated, 1);
   assert.equal(raw.prepare("SELECT version FROM lib_items WHERE title=?").get("Starter prompt number 1").version, 2);
@@ -76,4 +79,64 @@ test("Gebaute Datei: alle Eintraege bestehen die Regeln des Imports (Themen exis
   for (const e of ents) env.DB.prepare("INSERT OR IGNORE INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,0,'live',1)").bind(e, "{}", "").run();
   const r = await importLibrarySeed(env, seed, { cap: 100000 });
   assert.deepEqual(r.rejected, []); assert.equal(r.created, seed.length);
+});
+
+// ---- Pruefbefunde des Code-Reviews (20.11.2026) ----
+test("Import ueberschreibt keinen von Hand geschriebenen Eintrag mit gleichem Slug, auch nicht beim Kennzeichen (K1)", async () => {
+  const { env, raw } = await fixture();
+  raw.prepare("INSERT INTO lib_items(user_id,slug,kind,title,summary,body,lang,topics,version,status,created,updated,published) VALUES(7,'starter-prompt-number-1','prompt','Starter prompt number 1','mein Text','Mein eigener Text, von Hand geschrieben, lang genug fuer die Pruefung.','en','[]',1,'live',1,1,1)").run();
+  const r = await importLibrarySeed(env, [item(1), item(2)]);
+  assert.deepEqual(r.rejected, [{ title: "Starter prompt number 1", why: "slug_taken" }]);
+  const row = raw.prepare("SELECT body,reviewed,origin FROM lib_items WHERE slug='starter-prompt-number-1'").get();
+  assert.match(row.body, /Mein eigener Text/); assert.equal(row.reviewed, 0); assert.equal(row.origin, "");
+  assert.equal(raw.prepare("SELECT origin FROM lib_items WHERE slug='starter-prompt-number-2'").get().origin, "seed");
+});
+
+test("Bearbeiten eines importierten Eintrags ueber /api/library/save nimmt reviewed zurueck und macht ihn zum eigenen (K2)", async () => {
+  const { env, raw } = await fixture();
+  await importLibrarySeed(env, [item(1)]);
+  const { handleLibrary } = await import("../src/library.js");
+  const id = raw.prepare("SELECT id FROM lib_items").get().id;
+  const J = (b, s = 200) => new Response(JSON.stringify(b), { status: s });
+  const req = new Request("https://x/api/library/save", { method: "POST", body: JSON.stringify({ id, kind: "prompt", title: "Starter prompt number 1", summary: "s", body: "Ganz neuer, ungeprueft eingefuegter Text " + "y".repeat(40), topics: ["copilot-studio"], lang: "en" }) });
+  const res = await handleLibrary(env, req, new URL(req.url), "/api/library/save", { id: 7, admin: 0 }, J);
+  assert.equal(res.status, 200);
+  const row = raw.prepare("SELECT reviewed,origin FROM lib_items WHERE id=?").get(id);
+  assert.deepEqual([row.reviewed, row.origin], [0, ""]);
+  const again = await importLibrarySeed(env, [item(1), item(9)]);   // geaenderte Datei: der Lauf ist wieder aktiv
+  assert.deepEqual(again.rejected.map((x) => x.why), ["slug_taken"], "ein bearbeiteter Eintrag wird nie mehr vom Import angefasst");
+});
+
+test("Import merkt sich das Profil: wechselt der Inhaber der Kennung, passiert nichts (K4)", async () => {
+  const { env, raw } = await fixture();
+  await importLibrarySeed(env, [item(1)], { cap: 1 });
+  assert.equal(raw.prepare("SELECT v FROM meta WHERE k='lib_seed_uid'").get().v, "7");
+  raw.exec("INSERT INTO users(id,provider,sub,name,created) VALUES(8,'x','8','Fremd',1); UPDATE profiles SET handle='alt' WHERE user_id=7; INSERT INTO profiles(user_id,public,handle,updated) VALUES(8,1,'mirko-p',1)");
+  const r = await importLibrarySeed(env, [item(1), item(2)]);
+  assert.match(r.skipped, /gewechselt/); assert.equal(raw.prepare("SELECT COUNT(*) n FROM lib_items").get().n, 1);
+});
+
+test("Import ist nach dem letzten Lauf erledigt, bis sich die Datei aendert; geloeschte Eintraege kommen nicht zurueck (K1)", async () => {
+  const { env, raw } = await fixture();
+  const seed = [item(1), item(2)];
+  const a = await importLibrarySeed(env, seed); assert.equal(a.created, 2); assert.equal(a.pending, 0);
+  raw.exec("DELETE FROM lib_items WHERE slug='starter-prompt-number-2'");
+  const b = await importLibrarySeed(env, seed);
+  assert.match(b.skipped, /fertig/); assert.equal(raw.prepare("SELECT COUNT(*) n FROM lib_items").get().n, 1);
+  const c = await importLibrarySeed(env, [item(1), item(2, { body: "z".repeat(70) })]);   // Datei geaendert: Lauf wieder aktiv, Eintrag 2 fehlt und wird neu angelegt
+  assert.equal(c.created, 1);
+});
+
+test("Zwischenstand meldet pending zuerst; abgelehnte Eintraege verhindern die Erledigt-Marke", async () => {
+  const { env, raw } = await fixture();
+  const r = await importLibrarySeed(env, [item(1, { kind: "nope" }), item(2), item(3)], { cap: 1 });
+  assert.deepEqual(Object.keys(r).slice(0, 2), ["pending", "created"]);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM meta WHERE k='lib_seed_done'").get().n, 0);
+  const s = await importLibrarySeed(env, [item(1, { kind: "nope" }), item(2), item(3)]);
+  assert.equal(s.pending, 0); assert.equal(raw.prepare("SELECT COUNT(*) n FROM meta WHERE k='lib_seed_done'").get().n, 0, "mit Ablehnung nie 'fertig'");
+});
+
+test("Wochenmail: Start-Eintraege (origin seed) stehen nicht im Digest", () => {
+  const sql = readFileSync(new URL("../src/digest.js", import.meta.url), "utf-8");
+  assert.match(sql, /l\.status='live' AND l\.origin<>'seed'/);
 });

@@ -58,7 +58,8 @@ BYOD = "0"
 # Blog-Import per Feed (BLOG_OWN_DOMAIN.md, Teil 3): "1" schaltet /api/byod/import/* und die Oberflaeche ein, Standard "0" = aus. Unabhaengig von BYOD.
 BYOD_IMPORT = "0"
 # Copilot-Bibliothek: Start-Eintraege (worker/src/library_seed.json) einmalig unter dem Profil LIB_SEED_HANDLE anlegen. "1" schaltet den Import im Cron ein
-# (je Lauf hoechstens 40 neue oder geaenderte Eintraege), Standard "0" = aus. Nach dem Lauf wieder auf "0" stellen; der Import ist wiederholbar.
+# (je Cron-Lauf um :00 und :30 hoechstens 40 neue oder geaenderte Eintraege), Standard "0" = aus. Nach dem Lauf wieder auf "0" stellen; der Import ist wiederholbar
+# und merkt sich, wenn alles eingespielt ist (meta lib_seed_done).
 LIB_SEED_IMPORT = "0"
 LIB_SEED_HANDLE = "mirko-p"
 # BYOD_CNAME_TARGET = "blogs.example.net"   # CNAME-Ziel, auf das Mitglieder zeigen (Zone der Blog-Domains, Cloudflare for SaaS); Mirko setzt es nach dem Anlegen der Zone
