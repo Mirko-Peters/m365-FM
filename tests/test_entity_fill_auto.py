@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "tests"))
 import fill_entities as F
-from test_entity_fill_fixes import Base, GOOD
+from test_entity_fill_fixes import Base, GOOD, ent
 
 
 class MinAge(Base):
@@ -78,6 +78,28 @@ class WeekCap(Base):
         with mock.patch.object(F, "WEEK_CAP", 0.001):
             reqs, c = F.next_writes(todo, self.ents, {"batches": [], "tries": {}}, 0)
         self.assertEqual(reqs, [])
+
+
+class SkipTypes(Base):   # Mirko 20.11.2026: Personen nein, Entitaeten ja
+    def todo(self):
+        self.ents = {"hub": ent("hub"), "anna": ent("anna", "person", name="Anna Example")}
+        return F.build_todo(self.ents, {}, {}, {l: {} for l in F.LANGS}, set(), set(), {})
+
+    def test_person_off_entities_on(self):
+        with mock.patch.dict("os.environ", {"ENTITY_SKIP_TYPES": "person"}):
+            todo, sk = self.todo()
+        self.assertEqual([r["id"] for r in todo], ["hub"]); self.assertEqual(sk.get("type_off"), ["anna"])
+
+    def test_none_or_empty_means_all_types(self):
+        for v in ("none", "", "-"):
+            with mock.patch.dict("os.environ", {"ENTITY_SKIP_TYPES": v}):
+                self.assertEqual(F.skip_types(), frozenset(), v)
+        with mock.patch.dict("os.environ", {"ENTITY_SKIP_TYPES": " Person , org "}):
+            self.assertEqual(F.skip_types(), {"person", "org"})
+
+    def test_workflow_defaults_to_person_off(self):
+        y = (ROOT / ".github/workflows/entity-fill.yml").read_text("utf-8")
+        self.assertIn("ENTITY_SKIP_TYPES: ${{ vars.ENTITY_SKIP_TYPES || 'person' }}", y)
 
 
 class Workflow(unittest.TestCase):
