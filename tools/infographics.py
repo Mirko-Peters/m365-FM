@@ -259,6 +259,25 @@ def plain(h, n=3500):
     return t[:n]
 
 
+def content_posts(root):
+    """Freigegebene englische Beitragspakete (imports/blog/en/<slug>.md, status approved, publish true) -> [(slug, Titel, Text)]. Text ohne Markdown-Zeichen, wie plain() gekuerzt."""
+    out = []
+    for f in sorted((Path(root) / "imports" / "blog" / "en").glob("*.md")):
+        try: t = f.read_text("utf-8")
+        except OSError: continue
+        m = re.match(r"---\s*\n(.*?)\n---\s*\n(.*)\Z", t, re.S)
+        if not m: continue
+        head, body = m.groups()
+        fm = lambda k: (re.search(rf"(?m)^{k}:\s*(.+?)\s*$", head) or [None, ""])[1].strip().strip("\"'")
+        if fm("status") != "approved" or fm("publish").lower() not in ("true", "yes", "1") or not fm("title"): continue
+        body = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", body)
+        body = re.sub(r"(?m)^\s*[#>|]+\s*|[*_`]+", "", body)
+        body = re.sub(r"(?m)^\s*[-+]\s+", "", body)
+        text = plain(body.replace("\n", "\n</p>"))
+        out.append((f.stem, fm("title"), text))
+    return out
+
+
 def items(kind, root=None):
     """-> [{key, kind, slug, title, text, label}] fuer eine Art. Entitaeten: englischer Entitaetstext; Blog: fruehere Podpage-Beitraege; Folgen: Show Notes."""
     D = Path(root or ROOT) / "data"
@@ -282,6 +301,10 @@ def items(kind, root=None):
             t = plain(p.get("html"))
             if p.get("slug") and p.get("title") and len(t) > 300:
                 out.append({"key": f"blog:{p['slug']}", "kind": kind, "slug": p["slug"], "title": p["title"], "text": t, "label": "Blog"})
+        have = {i["slug"] for i in out}
+        for slug, title, body in content_posts(Path(root or ROOT)):   # neue, freigegebene Beitraege (imports/blog/en); seit dem 19.11. fehlten sie, weil nur die frueheren Podpage-Beitraege gelesen wurden
+            if slug not in have and len(body) > 300:
+                out.append({"key": f"blog:{slug}", "kind": kind, "slug": slug, "title": title, "text": body, "label": "Blog"})
     elif kind == "episode":
         for p in jload(D / "podpage" / "episodes.json.gz", []):
             if p.get("hidden") or not p.get("published", True): continue
