@@ -1,39 +1,39 @@
 <translation>
-## 4. Waardestroomanalyse-symbolen: volledige referentietabel
+## 4. Waardestroomvisualisatie-symbolen: volledige referentietabel
 
-De symbolen gaan terug op *Learning to See* [1][2] en zijn bewust eenvoudig gehouden, zodat iedereen ze met een potlood kan tekenen. Boeken en softwarebibliotheken verschillen enigszins. Belangrijk is dat je team het eens wordt over een legenda en die consequent gebruikt. De onderstaande tabellen beschrijven de gangbare symbolen zoals gebruikt door Rother/Shook en Erlach [1][3].
+De symbolen gaan terug op *Learning to See* [1][2] en zijn bewust eenvoudig gehouden, zodat iedereen ze met een potlood kan tekenen. Boeken en softwarebibliotheken verschillen enigszins. Belangrijk is dat je team het eens wordt over een legenda en die consequent gebruikt. De onderstaande tabellen beschrijven de gangbare symbolen zoals ze gebruikt worden door Rother/Shook en Erlach [1][3].
 
 ### Symbolen voor proces- en materiaalstroom
 
 | Symbool (uiterlijk) | Naam | Betekenis en gebruik |
 |---|---|---|
-| fabrieksgebouw met zaagtandvormig dak | klant / leverancier (externe bron) | klant rechtsboven, leverancier linksboven; daaronder een datavak met vraag, leverfrequentie en verpakking |
-| rechthoek met een kopregel en de procesnaam | procesvak | één proces waardoor materiaal continu stroomt; een nieuw vak begint waar de stroom stopt en voorraad zich opbouwt |
-| rechthoek onder het procesvak | datavak | procesgegevens: cyclustijd, omsteltijd, uptime/beschikbaarheid, batchgrootte, aantal operators, ploegen, uitval |
-| driehoek met een "I" | voorraad | materiaal dat tussen twee processen ligt; hoeveelheid en voorraaddagen worden eronder genoteerd |
-| brede gestreepte pijl | duwpijl | materiaal wordt door het bovenliggende proces geduwd volgens zijn eigen planning, niet volgens de behoefte van het volgende proces |
+| fabrieksgebouw met zaagtandvormig dak | klant / leverancier (externe bron) | klant rechtsboven, leverancier linksboven; daaronder een databox met vraag, leverfrequentie en verpakking |
+| rechthoek met een kopregel en de procesnaam | procesbox | één proces waardoor materiaal continu stroomt; een nieuwe box begint waar de stroom stopt en voorraad zich opbouwt |
+| rechthoek onder de procesbox | databox | procesgegevens: cyclustijd, omsteltijd, uptime/beschikbaarheid, batchgrootte, aantal operators, shifts, afval |
+| driehoek met een "I" | voorraad | materiaal dat tussen twee processen ligt; hoeveelheid en voorraaddagen staan eronder geschreven |
+| brede gestreepte pijl | duwpijl (push) | materiaal wordt door het stroomopwaartse proces geduwd volgens zijn eigen planning, niet volgens de behoefte van het volgende proces |
 | brede holle pijl | zending | grondstof van de leverancier naar de fabriek, of eindproducten van de fabriek naar de klant |
 | vrachtwagen (of trein, vliegtuig, schip) | externe zending | transportmiddel met leverfrequentie, bijvoorbeeld "2× per week" |
-| aan de linkerkant open schap | supermarkt | gecontroleerde buffervoorraad waaruit het klantproces afneemt; het leverende proces vult alleen aan wat is weggenomen |
+| links open plank | supermarkt | gecontroleerde buffervoorraad waaruit het klantproces afneemt; het leverende proces vervangt alleen wat is weggenomen |
 | cirkelpijl | afname (pull) | fysieke afname uit de supermarkt door het stroomafwaartse proces |
-| pijl met "FIFO" en een maximumhoeveelheid | FIFO-baan | beperkte wachtrij tussen twee processen; onderdelen gaan in volgorde van aankomst, en het leverende proces stopt wanneer het maximum is bereikt |
+| pijl met "FIFO" en een maximale hoeveelheid | FIFO-baan | beperkte wachtrij tussen twee processen; onderdelen gaan in volgorde van aankomst, en het leverende proces stopt wanneer het maximum is bereikt |
 | driehoek met een veiligheidsaantekening | veiligheids- of buffervoorraad | voorraad tegen vraagschommelingen (buffer) of procesuitval (veiligheid) |
-| cirkel met het hoofd van een operator | operator | aantal personen bij een proces |
+| cirkel met een hoofd van een operator | operator | aantal personen bij een proces |
 
 ### Symbolen voor informatiestroom
 
 | Symbool (uiterlijk) | Naam | Betekenis en gebruik |
 |---|---|---|
 | dunne rechte pijl | handmatige informatiestroom | informatie op papier of mondeling, bijvoorbeeld routekaart, pakbon, mondelinge instructie |
-| bliksempijl (zigzag) | elektronische informatiestroom | EDI-, ERP- of MES-berichten, e-mail |
+| bliksemschicht-pijl (zigzag) | elektronische informatiestroom | EDI-, ERP- of MES-berichten, e-mail |
 | rechthoek "Productiebesturing" | productiebesturing | planning, MRP of ERP, vaak met de planningsfrequentie |
-| kaart met afgesneden hoek, ingevuld | productiekanban | signaal aan een proces om een vastgestelde hoeveelheid te maken |
-| kaart met afgesneden hoek, gearceerd of anders gemarkeerd afhankelijk van de bibliotheek | afnamekanban | instructie aan een materiaalhandelaar om onderdelen uit de supermarkt op te halen |
-| driehoek op zijn punt | signaalkanban | activeert een batch wanneer de supermarktvoorraad het bestelpunt bereikt; typisch voor processen met omsteltijden |
-| brievenbusachtig symbool | kanbanpost | plaats waar kanbans worden verzameld voor ophaling |
-| stippellijnpijl met kanban | kanbanroute | route van de kaarten terug naar het leverende proces |
-| doos met een raster van vakjes "OXOX" | heijunkadoos (nivelleringsdoos) | hulpmiddel om volume en mix te nivelleren bij het pacemakerproces |
+| kaart met afgesneden hoek, ingevuld | productie-kanban | signaal aan een proces om een vastgestelde hoeveelheid te maken |
+| kaart met afgesneden hoek, gearceerd of anders gemarkeerd afhankelijk van de bibliotheek | afname-kanban | opdracht aan een materiaalverzorger om onderdelen uit de supermarkt op te halen |
+| driehoek op zijn punt | signaal-kanban | start een batch wanneer de voorraad in de supermarkt een bestelpunt bereikt; typisch voor processen met omstellingen |
+| brievenbusachtig symbool | kanban-postbus | plaats waar kanbans worden verzameld voor ophaling |
+| gestreepte pijl met kanban | kanban-route | route van de kaarten terug naar het leverende proces |
+| doos met een raster van vakjes "OXOX" | heijunka-box (nivelleringsbox) | hulpmiddel om volume en mix te nivelleren bij het pacemakerproces |
 | bril | go-see-planning | planning op basis van visuele controle in plaats van systematische signalen; een teken dat verbetering nodig is |
 
-Sommige online gidsen beschrijven de stippellijnpijl als elektronische informatiestroom [38]. In *Learning to See* staat de bliksempijl voor elektronische informatie en de dunne rechte pijl voor handmatige informatie [1]. Houd je aan die conventie, zodat mappen leesbaar blijven over fabrieken en softwaretools heen. Een geïllustreerde toelichting bij de symbolen staat in de post [Value Stream Mapping Symbols and Icons Explained](https://www.m365.fm/community/u/mirko-p/blog/value-stream-mapping-symbols-icons/).
+Sommige online gidsen beschrijven de gestreepte pijl als elektronische informatiestroom [38]. In *Learning to See* staat de bliksemschicht-pijl voor elektronische informatie en de dunne rechte pijl voor handmatige informatie [1]. Houd je aan die conventie, zodat visualisaties leesbaar blijven over fabrieken en softwaretools heen. Een geïllustreerde toelichting bij de symbolen vind je in de post [Value Stream Mapping Symbols and Icons Explained](https://www.m365.fm/community/u/mirko-p/blog/value-stream-mapping-symbols-icons/).
 </translation>
