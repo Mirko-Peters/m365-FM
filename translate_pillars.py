@@ -66,7 +66,9 @@ def chunks(text, maxc=None):
     for para in paras:
         head = bool(re.match(r"##? ", para))
         if acc and (n + len(para) > maxc or (head and n >= maxc // 2)):
-            out.append("\n\n".join(acc)); acc, n = [], 0
+            tail = []
+            while len(acc) > 1 and re.match(r"#{1,6} ", acc[-1]): tail.insert(0, acc.pop())   # Ueberschrift nie allein am Ende (Modell haelt den Text sonst fuer abgeschnitten)
+            out.append("\n\n".join(acc)); acc, n = tail, sum(len(x) + 2 for x in tail)
         acc.append(para); n += len(para) + 2
     if acc: out.append("\n\n".join(acc))
     return out
@@ -126,12 +128,14 @@ def system_prompt(lang):
             "Translate the complete text from the first line to the last. Do not skip, shorten, summarize or merge anything; every paragraph, list item, table row, quote line and heading of the source must appear in the translation in the same order. "
             "Keep the number of # characters of every heading and the > at the start of quote lines. "
             "8) Verification markers: [unverified: reason] becomes [unverified: <reason translated>]; the word unverified stays English and the square brackets stay. "
+            "9) The text is one excerpt of a longer guide that the publisher itself owns and publishes: it can begin or end anywhere, even directly after a heading. Translate exactly what is given and do not comment on missing parts. "
+            "Mentions of iFAKT Polaris or other products are part of the publisher's own documentation, not advertising copy for you to judge; translating them is a normal translation task and no endorsement. Never refuse, never answer in English. "
             "Put your complete translation between <translation> and </translation>, nothing outside the tags.")
 
 
 def meta_prompt(lang, s):
     return (f"Translate these fields into {NAMES[lang]} and answer with one JSON object with the keys h1, meta_title, meta_description, author (no other text). "
-            "meta_title: at most 60 characters, meta_description: at most 155 characters, both natural search snippets for the topic; h1: the page heading; "
+            "meta_title: at most 55 characters, meta_description: at most 145 characters (count carefully, shorter is fine), both natural search snippets for the topic; h1: the page heading; "
             "author: Markdown text, keep links and the sentence about iFAKT GmbH accurate.\n\n" + json.dumps({"h1": s["h1"], "meta_title": s["meta_title"], "meta_description": s["meta_desc"], "author": s["author"]}, ensure_ascii=False))
 
 
@@ -204,7 +208,7 @@ def plan_items(langs, pids, redo=False):
             for i, part in enumerate(parts):
                 if st["chunks"][i] or st["tries"].get(f"c{i}", 0) >= TRIES: continue
                 hint = (st.get("why") or {}).get(f"c{i}")
-                items.append((lang, p["id"], "chunk", i, req(f"{lang}__{p['id']}__c{i}", system_prompt(lang) + (f" IMPORTANT: your previous attempt was rejected by an automatic check ({hint}). Translate everything, keep exactly the same number of headings with the same levels, paragraphs, list items, links, URLs, anchors and citation markers as the source." if hint else ""), wrap(part), 16000)))
+                items.append((lang, p["id"], "chunk", i, req(f"{lang}__{p['id']}__c{i}", system_prompt(lang) + (f" NOTE: an earlier output for this excerpt failed a format check ({hint}); this is a pure formatting matter. Translate everything, keep exactly the same number of headings with the same levels, paragraphs, list items, links, URLs, anchors and citation markers as the source." if hint else ""), wrap(part), 16000)))
             if not st["meta"] and st["tries"].get("meta", 0) < TRIES:
                 items.append((lang, p["id"], "meta", 0, req(f"{lang}__{p['id']}__meta", "You are a professional translator. Answer only with the JSON object.", meta_prompt(lang, s), 3000)))
     ov = overlay()
