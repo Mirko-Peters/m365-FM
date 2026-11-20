@@ -50,6 +50,15 @@ class Chunks(unittest.TestCase):
             joined = "\n\n".join(parts)
             self.assertEqual(T.facts(joined)["rows"], T.facts(SAMPLE)["rows"])
 
+    def test_heading_never_ends_a_chunk(self):
+        txt = "\n\n".join(["# T"] + [f"## H{i}\n\n" + ("Absatz mit Text. " * 8) for i in range(12)])
+        for n in (150, 300, 600):
+            parts = T.chunks(txt, n)
+            self.assertGreater(len(parts), 2)
+            for x in parts[:-1]:
+                self.assertNotRegex(x.rstrip().split("\n\n")[-1], r"^#{1,6} [^\n]*$", (n, x[-60:]))
+            self.assertEqual("\n\n".join(parts), txt)
+
     def test_real_sources_chunk_under_limit(self):
         for p in PIL.pillars():
             s = T.source(p)
