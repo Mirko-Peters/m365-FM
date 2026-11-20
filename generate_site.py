@@ -313,6 +313,19 @@ def seo_title(t, limit=62, hard=70):   # hard 70 statt 78: Bing-SEO-Bericht "Tit
     return b[: hard - 2].rsplit(" ", 1)[0].rstrip(",;:–—-") + "…"
 
 
+def _load_seo_overrides():
+    """CTR-Texte (Search-Console-Auswertung 20.11.2026): Pfad -> {title, description}. Betrifft nur <title> und meta/og/twitter description;
+    sichtbare Ueberschrift, og:title und Teilen-Bild bleiben unveraendert. Gepflegt von tools/build_seo_overrides.py."""
+    try:
+        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "seo_overrides.json"), encoding="utf-8") as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return {}
+
+
+SEO_OVERRIDES = _load_seo_overrides()
+
+
 def meta_desc(s, n=160):
     """Beschreibung fuer meta/og/twitter: hoechstens n Zeichen, bevorzugt am Satzende, sonst an einer Wortgrenze."""
     s = re.sub(r"\s+", " ", strip_tags(s or "")).strip()
@@ -534,7 +547,9 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
         if _auto: alt = "<!--hl-auto-->"
     body = switch_from(body, {**(switch or alternates or {}), (lang if lang in LANGS else "en"): _self})   # T42: eigene Sprache = diese Seite
     ld = "".join(_jsonld_script(j) for j in complete_ld(jsonld))
-    desc = meta_desc(desc)   # T7: Beschreibung einheitlich begrenzt
+    _ov = SEO_OVERRIDES.get(canonical[len(BASE):]) if canonical.startswith(BASE + "/") else None   # CTR-Texte fuer einzelne Seiten
+    tag_title = _ov["title"] if _ov else title
+    desc = meta_desc(_ov["description"] if _ov else desc)   # T7: Beschreibung einheitlich begrenzt
     ogw, ogh = 1200, 630
     if canonical.endswith("404.html") or noindex:
         ogimg = f"{BASE}/assets/og-default.png"
@@ -559,7 +574,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <html lang="{hl}" dir="{d}">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{esc(seo_title(title))}</title>
+<title>{esc(seo_title(tag_title))}</title>
 <meta name="description" content="{esc(desc)}">
 <meta name="author" content="Mirko Peters"><meta name="robots" content="{'noindex,follow' if noindex else 'index,follow,max-image-preview:large,max-snippet:-1'}">
 <link rel="canonical" href="{canonical}">{pn_head(body, extra_head)}
