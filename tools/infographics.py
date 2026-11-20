@@ -28,11 +28,11 @@ LANG_NAMES = {"en": "English", "de": "German", "fr": "French", "es": "Spanish", 
 RTL = ("ar", "he")
 SIZES = {"flow": (1920, 1080), "compare": (1200, 1040), "ladder": (1200, 1800), "bigfact": (1200, 630), "hub": (1200, 1200)}   # wie templates.mjs
 FIG_TEMPLATES = ("flow", "compare", "ladder", "hub")   # bigfact ist dem Kopfbild vorbehalten
-FIGS = {"pillar": (9, 10)}   # Infografiken je Inhalt nach Art (ohne Kopfbild): Leitfaeden sind lang und bekommen insgesamt 10 Bilder; sonst 2-3
+FIGS = {"pillar": (8, 10)}   # Infografiken je Inhalt nach Art (ohne Kopfbild): Leitfaeden sind lang und bekommen insgesamt 10 Bilder; sonst 2-3
 FIGS_DEFAULT = (2, 3)
 MAX_SAME = 4         # bei Leitfaeden duerfen sich Vorlagen wiederholen, aber hoechstens so oft
 PILLAR_TEXT = 90000  # Zeichen des Leitfadens, die an die KI gehen (ganze Leitfaeden sind 70-95 Tsd.)
-MAX_TRIES = 3          # Textversuche je Inhalt/Sprache (ab dem zweiten mit Rueckmeldung der Pruefung)
+MAX_TRIES = 5          # Textversuche je Inhalt/Sprache (ab dem zweiten mit Rueckmeldung der Pruefung)
 RENDER_TRIES = 2       # Layoutfehler sind immer gleich: nach zwei Versuchen nicht mehr rendern
 EN_SLACK = 1.15    # englische Texte duerfen die Grenze um 15 % ueberschreiten (die KI zaehlt Zeichen nicht genau; Stresstest bestand bis x 1,4)
 LANG_FACTOR = 1.4   # Textgrenzen der Uebersetzungen: Englisch x 1,4 (Deutsch/Russisch laenger); die Layoutpruefung beim Rendern ist die endgueltige Grenze
@@ -137,8 +137,8 @@ PILLAR_EXTRA = (
 def system_specs(kind=None):
     lo, hi = FIGS.get(kind, FIGS_DEFAULT)
     if kind in FIGS:
-        n = f"{lo} or {hi}" if lo != hi else str(lo)
-        tmpl, cnt, extra = f"templates may repeat but each at most {MAX_SAME} times", f"exactly {n} infographics, never fewer or more", PILLAR_EXTRA
+        n = f"{lo} to {hi} (aim for {hi})"
+        tmpl, cnt, extra = f"templates may repeat but each at most {MAX_SAME} times; every figure uses exactly one of flow, compare, ladder, hub (never bigfact, no other names)", f"the figs array has {lo} to {hi} items: count them before you answer; a set outside this range is discarded", PILLAR_EXTRA
     else:
         n, tmpl, cnt, extra = f"{lo} or {hi}", "each with a different template", "exactly 2 or 3 infographics, never 1 or 4", ""
     return (SYSTEM_SPECS.replace("{nfigs}", n).replace("{tmpl_rule}", tmpl).replace("{count_rule}", cnt).replace("{extra}", extra)
@@ -228,12 +228,27 @@ def check_spec(spec, lang="en", template=None):
     return None
 
 
+def salvage(st, kind):
+    """Leitfaeden haben bis zu 10 Infografiken: einzelne fehlerhafte (falsche Vorlage, zu lange Texte, falsche Zahl, zu oft dieselbe Vorlage) werden weggelassen, statt den ganzen Satz zu verwerfen.
+    Ob genug uebrig bleiben, entscheidet danach check_set. Nur Englisch (Uebersetzungen muessen die Struktur des englischen Satzes behalten)."""
+    if not isinstance(st, dict) or not isinstance(st.get("figs"), list): return st
+    lo, hi = FIGS.get(kind, FIGS_DEFAULT)
+    keep, used = [], {}
+    for f in st["figs"]:
+        t = f.get("template") if isinstance(f, dict) else None
+        if t not in FIG_TEMPLATES or check_spec(f, "en") or used.get(t, 0) >= MAX_SAME: continue
+        if t == "flow" and f["hero"]["value"] != str(len(f["steps"])): continue
+        if t == "hub" and f["core"]["value"] != str(len(f["nodes"])): continue
+        keep.append(f); used[t] = used.get(t, 0) + 1
+    return {**st, "figs": keep[:hi]}
+
+
 def check_set(st, lang="en", en=None, source=None, kind=None):
     """Satz = {"header":..., "figs":[...]} -> None oder Grund. en: englischer Satz; die Uebersetzung muss dieselbe Struktur und Zahlen haben.
     source: Text des Inhalts (nur Englisch): die Kopfbild-Zahl ist die Zahl der Punkte oder steht im Text."""
     if not isinstance(st, dict) or not isinstance(st.get("header"), dict) or not isinstance(st.get("figs"), list): return "Form"
     lo, hi = FIGS.get(kind, FIGS_DEFAULT)
-    if not lo <= len(st["figs"]) <= hi: return "Anzahl Infografiken"
+    if not lo <= len(st["figs"]) <= hi: return f"Anzahl Infografiken ({len(st['figs'])}, erlaubt {lo}-{hi})"
     if st["header"].get("template") != "bigfact": return "Kopfbild nicht bigfact"
     seen = [f.get("template") if isinstance(f, dict) else None for f in st["figs"]]
     if any(s not in FIG_TEMPLATES for s in seen): return "Vorlagen"
@@ -625,6 +640,7 @@ def apply_results(lines, b, store, st, by_key):
         if not it: unknown += 1; continue
         txt = "".join(c.get("text", "") for c in msg.get("content") or [] if c.get("type") == "text")
         st_set = parse_json(txt)
+        if lang == "en" and it.get("kind") in FIGS: st_set = salvage(st_set, it["kind"])
         doc = store.get(spec_key(it)) or {"v": 1, "src": src_hash(it)}
         err = "kein JSON" if st_set is None else check_set(st_set, lang, None if lang == "en" else doc.get("en"), it["title"] + " " + it["text"] if lang == "en" else None, it.get("kind"))
         if err:
