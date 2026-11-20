@@ -127,7 +127,7 @@ async function topicItems(db, ids, since, until, site) {
     SELECT DISTINCT r.user_id,'library',l.title,l.summary,l.lang,l.published,l.link,''
     FROM recipients r JOIN email_topics f ON f.user_id=r.user_id AND f.kind='entity'
     JOIN content_topic ct ON ct.eid=f.topic_id AND ct.kind='library'
-    JOIN lib_items l ON CAST(l.id AS TEXT)=ct.item_id AND l.status='live'
+    JOIN lib_items l ON CAST(l.id AS TEXT)=ct.item_id AND l.status='live' AND l.origin<>'seed'   -- Start-Eintraege fluten die Wochenmail nicht
     WHERE l.published>=? AND l.published<=?
     UNION ALL
     SELECT DISTINCT r.user_id,'session',s.title,s.abstract,s.lang,s.created,e.handle,''

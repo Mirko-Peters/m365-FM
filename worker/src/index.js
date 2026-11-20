@@ -40,7 +40,7 @@ import { handleByodServe, handleByodApi, runByodChecks, deleteUserByod } from ".
 import { handleBlogImport, deleteUserBlogImport } from "./blog_import.js";
 import { handleUpdates, pollUpdates } from "./updates.js";
 import { ensurePastEvents, linkSpeakers, linkSpeakerEntities } from "./pastevents.js";
-import { handleLibrary, deleteUserLibrary } from "./library.js";
+import { handleLibrary, deleteUserLibrary, importLibrarySeed } from "./library.js";
 import { handleOrgOffers } from "./orgoffers.js";
 import { handleWish, seedRoadmap } from "./wish.js";
 import { handleShows, syncShows } from "./shows.js";
@@ -706,6 +706,7 @@ const handlers = {
     T("syncLiveEvents", () => syncLiveEvents(env, entityMap));
     T("syncContentTopics", () => syncContentTopics(env));
     T("importEntitiesFromSite", () => importEntitiesFromSite(env));
+    T("importLibrarySeed", async () => (env.LIB_SEED_IMPORT === "1" ? importLibrarySeed(env, (await import("./library_seed.json")).default) : { skipped: "aus (LIB_SEED_IMPORT)" }));   // Start-Eintraege der Bibliothek, Standard aus
     T("importQuotesFromSite", () => importQuotesFromSite(env));
     T("importEpisodeUrls", () => importEpisodeUrls(env));   // Spreaker-Folge <-> Adresse (Admin-Reiter Spreaker-Adressen); Korrektur bei Spreaker: GitHub-Workflow spreaker-urls.yml
     T("importEpisodes", () => importEpisodes(env));
