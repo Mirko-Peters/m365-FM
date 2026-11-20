@@ -383,7 +383,8 @@ def build_learn(ctx):
                  f'<a class="ln-card" href="{BASE}/{"de/" if lang == "de" else ""}community/companies/"><b>{esc("Firmen" if lang == "de" else "Companies")}</b><span>{esc("Unternehmen und Organisationen der Community" if lang == "de" else "Companies and organizations of the community")}</span></a>'
                  f'<a class="ln-card" href="{BASE}/{"de/" if lang == "de" else ""}community/events/"><b>Events</b><span>{esc("Konferenzen, Sessions und Speaker der Community" if lang == "de" else "Conferences, sessions and speakers of the community")}</span></a>')
         pl = "".join(f'<a class="ln-card" href="{BASE}/{lang}/path/{c}/"><b>{esc(cat_name(c, lang))}</b><span>{len(paths[c])}</span></a>' for c in ORDER if c in paths)
-        b = shell(lang, f'<h1>{esc(t["learn"])}</h1><p class="mut">{esc(t["learn_intro"])}</p><h2>{esc(t["paths"])}</h2><div class="ln-grid">{pl}</div><div class="ln-grid">{cards}</div>')
+        import site_pillars as PIL   # Lernpfad Manufacturing Excellence (nur de)
+        b = shell(lang, f'<h1>{esc(t["learn"])}</h1><p class="mut">{esc(t["learn_intro"])}</p><h2>{esc(t["paths"])}</h2><div class="ln-grid">{PIL.hub_card(lang, BASE)}{pl}</div><div class="ln-grid">{cards}</div>')
         write(f"{lang}/learn/index.html", page(lang, *MM.learn_meta(lang), hu, b, None, None, og_type="website", extra_head=LCSS))
         sitemap.append((hu, TODAY, None))
     # Englischer Lern-Hub /learn/ (Menuepunkt "Learn" wie in allen Sprachen, Mirko 6.11.2026): Glossar, Entitaeten, Mitglieder, Firmen, Events.
@@ -395,7 +396,8 @@ def build_learn(ctx):
              f'<a class="ln-card" href="{BASE}/community/companies/"><b>Companies</b><span>Companies and organizations of the community</span></a>'
              f'<a class="ln-card" href="{BASE}/community/events/"><b>Events</b><span>Conferences, sessions and speakers of the community</span></a>')
     _li = "Free resources to learn Microsoft 365, Copilot, Azure and security: the glossary, the entity database and the experts, companies and events of the community."
-    b = shell("en", f'<h1>{esc(t["learn"])}</h1><p class="mut">{esc(_li)}</p><div class="ln-grid">{cards}</div>')
+    import site_pillars as PIL   # Lernpfad Manufacturing Excellence (Pillar-Kompendien)
+    b = shell("en", f'<h1>{esc(t["learn"])}</h1><p class="mut">{esc(_li)}</p>{PIL.hub_html("en", BASE)}<div class="ln-grid">{cards}</div>')
     write("learn/index.html", page("en", *MM.learn_en_meta(), hu, b, None, None, og_type="website", extra_head=LCSS))
     sitemap.append((hu, TODAY, None))
 
