@@ -52,6 +52,11 @@ class Content(unittest.TestCase):
             d = S.parse_file(ROOT / "imports" / "pillars" / lang / f"{S.slug_of(p, lang)}.md")
             for part in ("article", "author", "sources"): self.assertIsNone(rx.search(d[part]), f"{lang}/{p['id']} {part}")
 
+    def test_toulouse_never_published(self):
+        for lang, p in ALL:
+            d = S.parse_file(ROOT / "imports" / "pillars" / lang / f"{S.slug_of(p, lang)}.md")
+            for part in ("article", "author", "sources"): self.assertNotIn("toulouse", d[part].lower(), f"{lang}/{p['id']} {part}")
+
     def test_ifakt_disclosure_in_every_author_box(self):
         for lang, p in ALL:
             d = S.parse_file(ROOT / "imports" / "pillars" / lang / f"{S.slug_of(p, lang)}.md")
