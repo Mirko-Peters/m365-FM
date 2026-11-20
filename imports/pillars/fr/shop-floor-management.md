@@ -764,36 +764,36 @@ Dès que les réseaux machines sont connectés à des services cloud, la sécuri
 
 ### Principes de l'architecture des données
 
-1. **Une seule vérité par KPI.** Définissez chaque KPI une seule fois (formule, source, granularité) et utilisez cette définition à tous les niveaux. Ainsi, le TRS affiché au tableau de bord de niveau 1 correspond à celui du rapport de l'usine.
-2. **Automatiser ce qui est stable.** Les quantités et les arrêts proviennent de la machine ou du MES. Les motifs d'arrêt qui exigent un jugement humain sont saisis manuellement, de manière simple et rapide.
+1. **Une seule vérité par KPI.** Définissez chaque KPI une seule fois (formule, source, granularité) et utilisez cette définition à tous les niveaux. Ainsi, le TRS affiché au tableau de bord de niveau 1 correspond au TRS du rapport d'usine.
+2. **Automatiser ce qui est stable.** Les quantités et les arrêts proviennent de la machine ou du MES. Les motifs d'arrêt qui exigent un jugement humain sont saisis manuellement, de façon simple et rapide.
 3. **Une latence adaptée à la décision.** Le niveau 1 a besoin de valeurs horaires ou en temps réel, le niveau 4 de valeurs quotidiennes ou hebdomadaires. Tout n'a pas besoin d'être en temps réel.
-4. **Protection des données personnelles et règles relatives aux salariés dès le départ.** Les données personnelles sont agrégées ; les rôles et les droits d'accès sont documentés.
+4. **Respect de la vie privée et des règles relatives aux salariés dès le départ.** Les données personnelles sont agrégées ; les rôles et les droits d'accès sont documentés.
 
-Le recueil [Manufacturing IT with Azure](https://www.m365.fm/en/learn/manufacturing-it-azure/) traite en profondeur ces questions d'informatique industrielle, et [Digital twin in manufacturing](https://www.m365.fm/en/learn/digital-twin-manufacturing/) montre où les données de l'usine en temps réel mènent ensuite.
+Le recueil [Manufacturing IT with Azure](https://www.m365.fm/en/learn/manufacturing-it-azure/) traite en profondeur ces questions d'informatique industrielle, et [Digital twin in manufacturing](https://www.m365.fm/en/learn/digital-twin-manufacturing/) montre où mènent ensuite les données de l'usine en temps réel.
 
 ## Support logiciel : l'exemple d'iFAKT Polaris
 
 > **Remarque : l'auteur travaille chez iFAKT GmbH.**
 
-Outre la création de votre propre tableau de bord avec Microsoft 365, il existe des logiciels spécialisés pour le management Lean numérique. L'un d'eux est [Polaris](https://www.m365.fm/entity/polaris/) de [iFAKT GmbH](https://www.m365.fm/entity/ifakt/), dont le siège est à Stuttgart, en Allemagne. Les solutions Polaris sont référencées sur Microsoft AppSource, notamment Polaris VSM pour la cartographie numérique des flux de valeur [39] et Polaris BSM pour la modélisation des processus métier dans le management Lean numérique [40]. Le recueil [iFAKT Polaris](https://www.m365.fm/en/learn/ifakt-polaris/) décrit en détail cette famille de produits.
+Outre la création de votre propre tableau avec Microsoft 365, il existe des logiciels spécialisés dans le management lean numérique. Un exemple est [Polaris](https://www.m365.fm/entity/polaris/) de [iFAKT GmbH](https://www.m365.fm/entity/ifakt/), dont le siège se trouve à Stuttgart, en Allemagne. Les solutions Polaris sont référencées sur Microsoft AppSource, notamment Polaris VSM pour la cartographie numérique de la chaîne de valeur [39] et Polaris BSM pour la modélisation des processus métier dans le management lean numérique [40]. Le recueil [iFAKT Polaris](https://www.m365.fm/en/learn/ifakt-polaris/) décrit en détail la gamme de produits.
 
-Selon le fournisseur, deux modules sont pertinents pour le management de proximité en atelier [unverified : affirmation du fournisseur non vérifiée de manière indépendante] :
+Selon le fournisseur, deux modules sont pertinents pour le management en atelier [unverified: information non vérifiée] :
 
-- **[Polaris Operator](https://www.m365.fm/entity/polaris-operator/)** apporte les tâches directement à l'atelier, par exemple les actions issues des réunions de niveau ou des gemba walks, afin qu'elles parviennent aux responsables sur la ligne et que leur réalisation puisse être suivie.
+- **[Polaris Operator](https://www.m365.fm/entity/polaris-operator/)** achemine les tâches directement vers l'atelier, par exemple les actions issues des réunions par niveaux ou des gemba walks, afin qu'elles parviennent aux responsables sur la ligne et que leur réalisation puisse être suivie.
 - **[Polaris Analyzer](https://www.m365.fm/entity/polaris-analyzer/)** affiche les KPI dans des tableaux de bord et alimente le mur des KPI du tableau aux différents niveaux.
 
-Évaluation : une solution spécialisée ne conçoit pas plus à votre place la cascade, les règles d'escalade et la discipline d'animation qu'une solution développée en interne. Elle peut toutefois pré-structurer le lien entre KPI, action et effet vérifié, et raccourcir ainsi le travail sur votre propre modèle de données. L'essentiel est de savoir si la solution s'intègre à votre environnement informatique existant ; la fiche AppSource indique une orientation vers l'écosystème Microsoft.
+Évaluation : une solution spécialisée ne conçoit pas davantage à votre place votre cascade, vos règles d'escalade et la discipline d'animation qu'une solution développée en interne. Elle peut en revanche pré-structurer le lien entre KPI, action et effet vérifié, et ainsi réduire le travail de conception de votre propre modèle de données. L'essentiel est de savoir si la solution s'intègre à votre environnement informatique existant ; la fiche AppSource indique un accent mis sur l'écosystème Microsoft.
 
-Outre Polaris, il existe de nombreux autres éditeurs, par exemple des modules d'atelier des éditeurs de MES ou des plateformes autonomes dédiées au Lean et aux réunions à plusieurs niveaux. Quel que soit l'éditeur, ces questions facilitent le choix :
+Outre Polaris, de nombreux autres éditeurs existent, comme les modules d'atelier des éditeurs de MES ou les plateformes autonomes de lean et de réunions par niveaux. Quel que soit l'éditeur, ces questions aident à la sélection :
 
-- Le logiciel représente-t-il la cascade avec escalade et réaction sur plusieurs niveaux ?
-- Une action ne peut-elle être clôturée qu'une fois son effet démontré ?
+- Le logiciel modélise-t-il la cascade avec escalade et réaction sur plusieurs niveaux ?
+- Une action ne peut-elle être clôturée qu'une fois son effet prouvé ?
 - Quelles interfaces existent avec l'ERP, le MES et les machines, et qui les maintient ?
-- Le logiciel peut-il agréger les KPI conformément aux règles de données que vous imposent votre convention collective, la législation de votre Land ou votre accord d'entreprise ?
+- Le logiciel peut-il agréger les KPI selon les règles de données qui vous sont imposées (convention collective, législation d'un Land, accord d'entreprise) ?
 - Que se passe-t-il lorsque le réseau de la ligne tombe en panne ?
 - Comment les utilisateurs en lecture sont-ils licenciés, et combien coûte un écran à la ligne ?
 
-À propos de l'entreprise : iFAKT GmbH a son siège à Curiestrasse 2, 70563 Stuttgart, Allemagne (registre du commerce de Stuttgart HRB 22661) [61]. Selon l'entreprise, elle a été fondée en 2001 et compte environ 25 salariés (informations fournies par l'entreprise, non vérifiées de manière indépendante). Son site web affiche le sceau TÜV SÜD attestant la certification ISO 9001 et ISO/IEC 27001 [61], et elle a obtenu la deuxième place dans la catégorie production du Best of Technology Award 2025 du magazine économique allemand WirtschaftsWoche avec son système Polaris IMS [60].
+À propos de l'entreprise : iFAKT GmbH a son siège Curiestrasse 2, 70563 Stuttgart, Allemagne (registre du commerce de Stuttgart HRB 22661) [61]. Selon la société, elle a été fondée en 2001 et compte environ 25 salariés (informations de l'entreprise, non vérifiées de manière indépendante). Son site affiche un sceau TÜV SÜD attestant la certification ISO 9001 et ISO/IEC 27001 [61], et elle a obtenu la deuxième place dans la catégorie production du Best of Technology Award 2025 du magazine économique allemand WirtschaftsWoche avec son système Polaris IMS [60].
 
 ## Glossaire
 
