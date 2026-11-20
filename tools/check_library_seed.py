@@ -7,7 +7,7 @@ KINDS = ["prompt", "instructions", "agent", "skill", "plugin", "manifest", "copi
 BAD_HOST = re.compile(r"(^|\.)(bit\.ly|t\.co|tinyurl\.com|goo\.gl|is\.gd|ow\.ly|buff\.ly|cutt\.ly|rebrand\.ly|shorturl\.at)$", re.I)
 URL = re.compile(r"https?://\S+", re.I)
 SLUG = lambda t: re.sub(r"^-+|-+$", "", re.sub(r"[^a-z0-9]+", "-", t.lower().replace("ß", "ss")))[:60]
-PLACEHOLDER = re.compile(r"lorem ipsum|TODO|TBD|<your[ -]|\[insert|xxx{3,}", re.I)
+PLACEHOLDER = re.compile(r"lorem ipsum|\bTODO\b|\bTBD\b|<your[ -]|\[insert|\bx{5,}\b", re.I)
 
 
 def main():
