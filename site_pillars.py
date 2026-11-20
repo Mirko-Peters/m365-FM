@@ -471,8 +471,8 @@ def _post_url(BASE, post, lang):
 
 
 def article_box(post, lang, BASE):
-    """Kasten "Teil des Lernpfads" unter einem Blogbeitrag (nur en/de, nur zugeordnete Beiträge)."""
-    if lang not in active(): return ""
+    """Kasten "Teil des Lernpfads" unter einem Blogbeitrag (nur freigegebene Sprachen, nur zugeordnete Beiträge)."""
+    if lang not in active() or not indexed(lang): return ""   # Blogseiten verlinken nur auf freigegebene Sprachfassungen (die anderen sind noindex)
     ids = ASSIGN.get((post.get("handle"), post.get("slug")))
     if not ids: return ""
     p = by_id(ids[0])
