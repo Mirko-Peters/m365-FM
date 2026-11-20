@@ -1,10 +1,10 @@
 ---
 title: "What Is a Semantic Model in Fabric? Lakehouse, Warehouse, Data Factory and Security Basics"
 summary: "A plain explanation of the semantic model in Microsoft Fabric and how it relates to the lakehouse, the warehouse, Data Factory and the Fabric security layers, based on Microsoft Learn."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-25
+date: 2026-11-21
 topics: [fabric, semantic-model, fabric-lakehouse, fabric-warehouse]
 keypoints:
   - "A semantic model is data ready for reporting. It holds data or queries, the model design (relationships, calculations) and optional row-level security rules."

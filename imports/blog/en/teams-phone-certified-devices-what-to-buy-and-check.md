@@ -1,10 +1,10 @@
 ---
 title: "Teams Phone Certified Devices: What Certification Means and What to Check Before Buying"
 summary: "Teams Phone certified devices explained from Microsoft Learn: what Certified for Microsoft Teams means, where the lists are, certification end dates, licensing and Intune notes."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-24
+date: 2026-11-21
 topics: [teams-phone, teams-certified-devices, teams-admin-center, intune]
 keypoints:
   - "Certified for Microsoft Teams is awarded only to devices that pass all requirements of the Teams Device Certification Program."

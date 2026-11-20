@@ -1,10 +1,10 @@
 ---
 title: "Azure CAF vs WAF: Cloud Adoption Framework and Well-Architected Framework Explained"
 summary: "How the Azure Cloud Adoption Framework (CAF) and the Azure Well-Architected Framework (WAF) differ, what each covers, who uses them, and how they fit together, based on Microsoft Learn."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-25
+date: 2026-11-21
 topics: [cloud-adoption-framework, azure-well-architected-framework, azure-landing-zone]
 keypoints:
   - "The Cloud Adoption Framework (CAF) is a structured roadmap that helps organizations adopt Azure and integrate it into their existing IT environments."

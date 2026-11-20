@@ -1,10 +1,10 @@
 ---
 title: "An Azure Virtual Desktop security checklist"
 summary: "A seven-part checklist for Azure Virtual Desktop: trust boundary, identity, network, session host hardening, data leaving the session, platform protection, and patching and monitoring, based on Microsoft's security recommendations."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-21
 render: v2
 topics: [azure-virtual-desktop, avd-screen-capture-protection]
 keypoints:

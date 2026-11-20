@@ -1,10 +1,10 @@
 ---
 title: "Insider Risk Management in Microsoft Purview: Basics With Trainable Classifiers and Retention"
 summary: "What Insider Risk Management does in Microsoft Purview, how it works with trainable classifiers and retention, and what to set up first, based on Microsoft Learn."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-24
+date: 2026-11-21
 topics: [insider-risk-management, trainable-classifiers, retention-policies, purview]
 keypoints:
   - "Insider Risk Management correlates signals to find malicious or inadvertent insider risks such as IP theft, data leakage and security violations, in five stages from policy to action."

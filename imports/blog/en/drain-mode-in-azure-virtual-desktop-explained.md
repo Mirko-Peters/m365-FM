@@ -1,10 +1,10 @@
 ---
 title: "Drain mode in Azure Virtual Desktop explained"
 summary: "Drain mode stops a session host from accepting new sessions from new users, while existing sessions continue until they end. This article explains what it changes and what it does not, how the load balancer and autoscale treat it, and how to set it in the portal and set and read it with PowerShell."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-21
 render: v2
 topics: [avd-drain-mode, avd-session-host]
 keypoints:

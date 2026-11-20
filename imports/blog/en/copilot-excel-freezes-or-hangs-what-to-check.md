@@ -1,10 +1,10 @@
 ---
 title: "Copilot Makes Excel Freeze: Causes and Fixes You Can Verify"
 summary: "Excel frozen while Copilot works? Microsoft documents no Copilot-specific freeze fix, so this follows its Excel hang guide, the Copilot in Excel file-state checks and labeled forum reports."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-26
+date: 2026-11-21
 topics: [copilot, excel]
 keypoints:
   - "The Microsoft pages I read do not describe a Copilot-caused Excel freeze or give a size limit. The steps here combine Microsoft's general Excel hang guide with Copilot file-state checks."

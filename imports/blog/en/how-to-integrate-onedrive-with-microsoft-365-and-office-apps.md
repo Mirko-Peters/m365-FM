@@ -1,10 +1,10 @@
 ---
 title: "How to Integrate OneDrive with Microsoft 365 and Office Apps"
 summary: "How OneDrive connects to Microsoft 365 and the Office apps: the sync app, Files On-Demand, Known Folder Move, co-authoring and AutoSave, plus checks when AutoSave or sync does not work."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-25
+date: 2026-11-21
 topics: [onedrive, microsoft-365-apps, microsoft-365]
 keypoints:
   - "OneDrive integrates with Office through the OneDrive sync app, co-authoring, and AutoSave. A Microsoft Community moderator says AutoSave doesn't work for locally stored files."

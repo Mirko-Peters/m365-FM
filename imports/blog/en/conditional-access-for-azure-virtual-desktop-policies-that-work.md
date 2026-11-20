@@ -1,10 +1,10 @@
 ---
 title: "Conditional Access for Azure Virtual Desktop: policies that work"
 summary: "With single sign-on, Azure Virtual Desktop needs two aligned Conditional Access policies: one for the Azure Virtual Desktop app and one for Windows Cloud Login. Leave the Azure Resource Manager Provider app out."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-21
 render: v2
 topics: [azure-virtual-desktop, conditional-access]
 keypoints:

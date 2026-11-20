@@ -1,10 +1,10 @@
 ---
 title: "Securing the Azure Virtual Desktop control plane with Private Link"
 summary: "Private Link for Azure Virtual Desktop puts private endpoints in your virtual network so feed discovery, feed download and session traffic can use private routes. Covers the four scenarios, setup, DNS and Shortpath."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-21
 render: v2
 topics: [azure-virtual-desktop, azure-private-link]
 keypoints:

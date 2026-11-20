@@ -1,10 +1,10 @@
 ---
 title: "How to size the maximum session limit per session host"
 summary: "Learn gives no recommended maximum session limit and points to Insights, while its sizing guidance lists maximum users per vCPU. This guide derives a starting value and corrects it with monitoring data."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-21
 render: v2
 topics: [avd-maximum-session-limit, avd-host-pool]
 keypoints:

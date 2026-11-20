@@ -1,10 +1,10 @@
 ---
 title: "Copilot Error Messages Explained: 'Sorry, I Wasn't Able to Respond' and More"
 summary: "What common Copilot error messages mean and what to check first: license errors, network and WebSocket blocks, service incidents, Excel file states. Marks which fixes Microsoft documents and which are forum advice."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-26
+date: 2026-11-21
 topics: [copilot, copilot-chat, copilot-governance]
 keypoints:
   - "Learn ties 'Couldn't update license', 'Error code: 29' and 'Something went wrong. Let's try again.' to license timing, account mix, network, device licensing, update channel and privacy settings."

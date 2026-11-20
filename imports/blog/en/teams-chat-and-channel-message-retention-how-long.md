@@ -1,10 +1,10 @@
 ---
 title: "Teams Chat and Channel Message Retention: How Long Are Messages Kept?"
 summary: "How Teams retention policies decide how long chats and channel messages are kept, why deletion can take days, what users see, and what to check when a policy shows an error."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-25
+date: 2026-11-21
 topics: [teams, retention-policies, purview]
 keypoints:
   - "Retention policies decide whether Teams chat and channel messages are kept, deleted, or kept and then deleted after a period you choose."

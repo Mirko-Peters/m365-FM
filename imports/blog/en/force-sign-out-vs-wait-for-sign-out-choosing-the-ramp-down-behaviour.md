@@ -1,10 +1,10 @@
 ---
 title: "Force sign out vs wait for sign-out: choosing the ramp-down behaviour"
 summary: "In the ramp-down phase of a pooled scaling plan you either force remaining users to sign out after a wait time or let autoscale wait for them. This guide compares the portal choices, relates them to the configuration listed in Microsoft's autoscale FAQ, and gives a short decision procedure."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-21
 render: v2
 topics: [avd-force-logoff, avd-scaling-plan]
 keypoints:

@@ -1,10 +1,10 @@
 ---
 title: "Adaptive Cards in Teams: How to Use the Designer, with Examples"
 summary: "How to design an Adaptive Card for Microsoft Teams with the Adaptive Card Designer, which schema version and actions Teams supports, layout rules for mobile, and a minimal JSON example."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-25
+date: 2026-11-21
 topics: [adaptive-cards, adaptive-card-designer, teams]
 keypoints:
   - "The browser-based Adaptive Card Designer is at adaptivecards.microsoft.com/designer.html. Add elements visually, copy the JSON payload and use it in your app."

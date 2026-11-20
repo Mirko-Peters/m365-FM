@@ -1,10 +1,10 @@
 ---
 title: "Copilot Prompts for Excel, PowerPoint and Power BI: Examples That Work"
 summary: "Prompt examples quoted from Microsoft's own pages for Copilot in Excel, PowerPoint and Power BI, plus what each app needs from you: named columns, audience and length, report scope. Includes limits."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-26
+date: 2026-11-21
 topics: [copilot, excel, powerpoint, copilot-in-power-bi]
 keypoints:
   - "Microsoft's Excel tip is to be specific and name the columns Copilot should analyze. Hovering over the superscript number in an answer shows the source data."

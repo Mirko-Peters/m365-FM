@@ -1,10 +1,10 @@
 ---
 title: "How to configure Start VM on Connect for personal and pooled host pools"
 summary: "Assign the Desktop Virtualization Power On Contributor role to the Azure Virtual Desktop service principal or a managed identity, then set Start VM on connect to Yes in the host pool's properties. Test with a deallocated host and add a deallocation mechanism, because the feature only starts VMs."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-21
 render: v2
 topics: [avd-start-vm-on-connect, azure-virtual-desktop]
 keypoints:

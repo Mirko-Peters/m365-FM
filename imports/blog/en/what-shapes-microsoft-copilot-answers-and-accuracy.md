@@ -1,10 +1,10 @@
 ---
 title: "How Accurate Is Microsoft Copilot? What Shapes the Response It Gives You"
 summary: "What shapes a Copilot answer in Microsoft 365: prompt, grounding data, permissions, model mode and license. Plus Microsoft's own limits on accuracy and how to check output."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-24
+date: 2026-11-21
 topics: [copilot, copilot-grounding, copilot-governance]
 keypoints:
   - "A Copilot answer depends on the prompt, the data it is grounded in, the user's permissions, the license tier and the model mode."

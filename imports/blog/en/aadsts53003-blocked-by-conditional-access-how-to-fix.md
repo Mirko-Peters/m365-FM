@@ -1,10 +1,10 @@
 ---
 title: "Blocked by Conditional Access: How to Fix AADSTS53003 and Related Errors"
 summary: "What AADSTS53003 and the related Conditional Access error codes mean, how to find the blocking policy in the Entra sign-in logs, and how to test and fix it without locking out admins."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-25
+date: 2026-11-21
 topics: [conditional-access, entra-id, microsoft-entra-sign-in-logs]
 keypoints:
   - "AADSTS53003 (BlockedByConditionalAccess) means a Conditional Access policy did not allow token issuance. The fix starts with finding which policy applied."

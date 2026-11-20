@@ -1,10 +1,10 @@
 ---
 title: "Sensitivity Labels in Microsoft 365: Create, Apply and Troubleshoot"
 summary: "How sensitivity labels work in Microsoft 365, including the metadata they leave on files and emails, how to create and publish them in Purview, how users apply them, and what to check when they are missing."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-25
+date: 2026-11-21
 topics: [sensitivity-labels, purview, microsoft-365]
 keypoints:
   - "A sensitivity label is stored in clear text in the metadata of files and emails and stays with the content wherever it is saved. Each item can have one sensitivity label."

@@ -1,10 +1,10 @@
 ---
 title: "Teams Meet Now, Lobby and Waiting Room: Settings Explained"
 summary: "How the Teams lobby works for Meet now and scheduled meetings: who bypasses it, who can admit people, the admin policy settings and their defaults, and how to turn the lobby off."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-25
+date: 2026-11-21
 topics: [teams, teams-admin-center]
 keypoints:
   - "Teams documentation calls the waiting room the lobby. People who do not bypass it wait there until an organizer, co-organizer or presenter admits them."

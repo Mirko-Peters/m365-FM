@@ -1,10 +1,10 @@
 ---
 title: "SharePoint Site Collection vs Site vs Hub Site: What Is the Difference?"
 summary: "A clear comparison of a SharePoint site collection, a site or subsite, and a hub site: how they are related, what modern SharePoint recommends, and the documented hub limits."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-25
+date: 2026-11-21
 topics: [sharepoint, sharepoint-hub-sites, sharepoint-subsites]
 keypoints:
   - "A site collection is a top-level site plus all sites below it. In modern SharePoint, each new team or communication site is created as its own site collection."

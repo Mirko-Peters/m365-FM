@@ -1,10 +1,10 @@
 ---
 title: "How to use drain mode for patching and maintenance of session hosts"
 summary: "Runbook for taking one Azure Virtual Desktop session host out of service: protect it from autoscale, turn on drain mode, warn and end remaining sessions, do the work, then switch drain mode off."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-21
 render: v2
 topics: [avd-drain-mode, avd-session-host]
 keypoints:

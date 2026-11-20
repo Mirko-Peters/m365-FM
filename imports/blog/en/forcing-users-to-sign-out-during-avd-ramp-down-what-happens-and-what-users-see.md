@@ -1,10 +1,10 @@
 ---
 title: "Forcing users to sign out during AVD ramp-down: what happens and what users see"
 summary: "With force sign-out in ramp-down, autoscale drains the host with the fewest sessions, notifies users, waits, ends the remaining sessions and deallocates the VM. Includes Microsoft's worked scenario and where settings live."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-21
 render: v2
 topics: [avd-force-logoff, avd-scaling-plan]
 keypoints:

@@ -1,10 +1,10 @@
 ---
 title: "Start VM on Connect in Azure Virtual Desktop: how it saves cost"
 summary: "Start VM on Connect lets a user's connection power on a deallocated session host, so VMs can stay off while nobody needs them. It only starts VMs; something else, usually autoscale, has to deallocate them for the saving to happen."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-21
 render: v2
 topics: [avd-start-vm-on-connect, azure-virtual-desktop]
 keypoints:
