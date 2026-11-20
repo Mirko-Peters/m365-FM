@@ -376,41 +376,41 @@ Untuk klasifikasi sebagai aplikasi bisnis dalam taksonomi m365.fm, lihat halaman
 - skenario tanpa batas (saat ini, masa depan, alternatif) dengan analisis dampak
 - kartu kaizen yang dibuat saat pemodelan dan dikaitkan dengan aktivitas, diatur dalam siklus PDCA atau DMAIC
 
-**Paket menurut AppSource** [16]: P0 "Read Only" (membaca semua konten), P1 "Basic" (rekaman BPMN, templat swimlane, rumus dasar, lead time, diagram keseimbangan, tampilan edit cepat), P2 "Excellence" (semua fitur dari P0 dan P1) dan P3 "Integrate & Customize" (tanpa deskripsi). Daftar AppSource tidak mencantumkan harga.
+**Paket menurut AppSource** [16]: P0 "Read Only" (membaca seluruh konten), P1 "Basic" (rekaman BPMN, templat swimlane, rumus dasar, lead time, diagram keseimbangan, tampilan edit cepat), P2 "Excellence" (semua fitur dari P0 dan P1) dan P3 "Integrate & Customize" (tanpa deskripsi). Daftar AppSource tidak mencantumkan harga.
 
-**Batasan dan hal yang tidak didokumentasikan:** Halaman modul tidak menyebutkan standar notasi apa pun; hanya daftar AppSource yang menyebut rekaman BPMN pada paket P1 [7][16]. Apakah model BSM dapat diimpor atau diekspor dalam format yang sesuai BPMN tidak didokumentasikan. Halaman BSM tidak menyebutkan format ekspor. Jika Anda mencari suite BPM lengkap dengan eksekusi proses (mesin workflow), BSM, menurut deskripsinya, adalah alat analisis dan perbaikan, bukan otomatisasi proses.
+**Batasan dan hal yang tidak didokumentasikan:** Halaman modul tidak menyebutkan standar notasi apa pun; hanya daftar AppSource yang menyebut rekaman BPMN pada paket P1 [7][16]. Apakah model BSM dapat diimpor atau diekspor dalam format yang sesuai BPMN tidak didokumentasikan. Halaman BSM tidak menyebutkan format ekspor. Jika Anda mencari suite BPM lengkap dengan eksekusi proses (mesin workflow), BSM menurut deskripsinya adalah alat analisis dan perbaikan, bukan otomatisasi proses.
 
 ### 12.3 Polaris Designer: model produk-proses-sumber daya
 
-**Tujuan:** Menurut vendor, [Polaris Designer](https://www.m365.fm/entity/polaris-designer/) mengubah data masukan menjadi graf pengetahuan produk-proses-sumber daya (graf pengetahuan PPR) yang terstruktur dan menjadi dasar bersama untuk simulasi dan optimisasi [8]. Modul ini menjadi penghubung antara tampilan value stream dan modul simulasi serta penjadwalan.
+**Tujuan:** Menurut vendor, [Polaris Designer](https://www.m365.fm/entity/polaris-designer/) mengubah data masukan menjadi graf pengetahuan produk-proses-sumber daya (graf pengetahuan PPR) yang terstruktur dan berfungsi sebagai dasar bersama untuk simulasi dan optimasi [8]. Modul ini menjadi penghubung antara tampilan value stream dan modul simulasi serta penjadwalan.
 
 **Fungsi menurut halaman vendor** [8]:
-- pemodelan PPR: produk sebagai bill of materials manufaktur atau rekayasa (MBOM/EBOM), proses dengan waktu setup, mesin dan penanganan, sumber daya sebagai stasiun, tim dan zona
-- data masukan: data ERP, BOM manufaktur, waktu proses, struktur sumber daya dan batasan
+- pemodelan PPR: produk sebagai bill of materials manufaktur atau rekayasa (MBOM/EBOM), proses dengan waktu setup, mesin, dan penanganan, sumber daya sebagai stasiun, tim, dan zona
+- data masukan: data ERP, BOM manufaktur, waktu proses, struktur sumber daya, dan batasan
 - pembuatan otomatis diagram jaringan dari logika produksi, perhitungan jalur kritis
-- skenario what-if dan perbandingan lead time saat ini dan yang dioptimalkan
+- skenario what-if dan perbandingan lead time saat ini dengan lead time yang dioptimalkan
 - zona berbasis produk yang mengelompokkan proses menurut keluarga produk dan mendukung penyeimbangan kapasitas
 
-**Penilaian:** Untuk masalah varian yang dijelaskan pada Bagian 5.4, model PPR umumnya lebih cocok daripada peta value stream, karena varian direpresentasikan melalui BOM dan routing-nya, bukan kotak proses individual. Halaman beranda menggunakan istilah "digital twin" untuk model ini [1]; untuk berbagai arti "digital twin," lihat kompendium [Digital Twin in Manufacturing](https://www.m365.fm/en/learn/digital-twin-manufacturing/).
+**Penilaian:** Untuk masalah varian yang dijelaskan di Bagian 5.4, model PPR umumnya lebih sesuai daripada peta value stream, karena varian direpresentasikan melalui BOM dan routing-nya, bukan kotak proses per proses. Halaman beranda menggunakan istilah "digital twin" untuk model ini [1]; untuk berbagai arti "digital twin," lihat kompendium [Digital Twin in Manufacturing](https://www.m365.fm/en/learn/digital-twin-manufacturing/).
 
-**Batasan dan hal yang tidak didokumentasikan:** Halaman tidak menyebutkan format atau mekanisme impor, hasil kuantitatif, maupun konfigurasi varian yang eksplisit (misalnya rangkaian aturan untuk produk yang dapat dikonfigurasi) [8]. Cara batasan dimodelkan dalam graf masih terbuka.
+**Batasan dan hal yang tidak didokumentasikan:** Halaman ini tidak menyebutkan format impor atau mekanisme impor, hasil kuantitatif, ataupun konfigurasi varian yang eksplisit (seperti aturan untuk produk yang dapat dikonfigurasi) [8]. Cara batasan dimodelkan dalam graf masih terbuka.
 
 ### 12.4 Polaris Simulator: skenario dari waktu ke waktu
 
-**Tujuan:** Menurut vendor, [Polaris Simulator](https://www.m365.fm/entity/polaris-simulator/) menjalankan diagram jaringan dari Designer melalui model stasiun, lini dan hall (tingkat bangunan) yang dapat dikonfigurasi, untuk lini tunggal maupun ganda [9].
+**Tujuan:** Menurut vendor, [Polaris Simulator](https://www.m365.fm/entity/polaris-simulator/) menjalankan diagram jaringan dari Designer melalui model stasiun, lini, dan hall (tingkat bangunan) yang dapat dikonfigurasi, untuk lini tunggal maupun banyak lini [9].
 
 **Fungsi menurut halaman vendor** [9]:
 - simulasi berdasarkan logika proses nyata dari model PPR
-- skenario untuk kapasitas, penugasan personel dan buffer
+- skenario untuk kapasitas, staffing, dan buffer
 - analisis campuran produk dinamis pada sumber daya bersama
 - deteksi bottleneck dan ketidakseimbangan utilisasi dari waktu ke waktu
-- utilisasi orang dan sumber daya teknis berbasis waktu, kelebihan dan kekurangan utilisasi
+- utilisasi waktu-berbasis untuk tenaga kerja dan sumber daya teknis, over- dan under-utilization
 - transparansi kapasitas lintas shift dan skenario
 - konfigurasi stasiun dan rute produksi yang fleksibel
 
-**Penilaian:** Modul ini dengan demikian mencakup pertanyaan yang di Bagian A ditetapkan pada kategori simulasi, terutama campuran produk dan sumber daya bersama. Kutipan pelanggan di halaman beranda (Everllance) menyatakan: "The Polaris simulation helped us identify problems in our planning data" [1]; itu adalah satu kutipan di situs vendor, bukan studi.
+**Penilaian:** Modul ini dengan demikian mencakup pertanyaan yang oleh Bagian A ditugaskan ke kategori simulasi, terutama campuran produk dan sumber daya bersama. Kutipan pelanggan di halaman beranda (Everllance) menyatakan: "The Polaris simulation helped us identify problems in our planning data" [1]; itu adalah satu kutipan di situs vendor, bukan sebuah studi.
 
-**Batasan dan hal yang tidak didokumentasikan:** Halaman tidak menyatakan secara eksplisit jenis simulasi (misalnya discrete-event), tidak mendefinisikan secara rinci metrik keluaran seperti throughput atau WIP, dan tidak memberikan informasi tentang masukan stokastik seperti distribusi kerusakan [9]. Tidak dijelaskan apakah hasil disajikan sebagai distribusi atau nilai tunggal. Untuk sistem konveyor, robotika atau virtual commissioning, alat spesialis dari Bagian 3.3 adalah pilihan yang dimaksudkan; Polaris tidak menyebut dirinya sebagai simulator aliran material 3D.
+**Batasan dan hal yang tidak didokumentasikan:** Halaman ini tidak menyatakan secara eksplisit jenis simulasi (misalnya discrete-event), tidak mendefinisikan secara rinci metrik keluaran seperti throughput atau WIP, dan tidak memberikan informasi tentang masukan stokastik seperti distribusi breakdown [9]. Apakah hasil dilaporkan sebagai distribusi atau nilai tunggal tidak dijelaskan. Untuk sistem konveyor, robotika, atau virtual commissioning, alat spesialis dari Bagian 3.3 adalah pilihan yang dimaksud; Polaris tidak menggambarkan dirinya sebagai simulator aliran material 3D.
 
 ### 12.5 Polaris Optimizer: penjadwalan di bawah batasan
 

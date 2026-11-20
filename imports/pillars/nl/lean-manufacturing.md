@@ -8,17 +8,17 @@
 
 # Lean Manufacturing: Principes, Tools, Implementatie en Grenzen
 
-> **Kort antwoord:** Lean manufacturing is een manier van fabrieksbeheer waarbij elke activiteit wordt afgestemd op wat de klant waardeert, en al het overige stap voor stap wordt verwijderd. Het komt uit het Toyota Production System, rust op vijf principes (waarde, waardestroom, flow, pull, perfectie) en wordt in de praktijk gebracht met tools zoals 5S, kanban, SMED, standaardwerk en kaizen [1][5].
+> **Kort antwoord:** Lean manufacturing is een manier van fabrieksbeheer waarbij elke activiteit wordt afgestemd op wat de klant waardeert en al het overige stap voor stap wordt weggehaald. Het komt uit het Toyota Production System, rust op vijf principes (waarde, waardestroom, flow, pull, perfectie) en wordt in de praktijk gebracht met tools als 5S, kanban, SMED, standaardwerk en kaizen [1][5].
 
 > **Belangrijkste punten**
-> - John Krafcik bedacht in 1988 de term "lean production"; het MIT-boek *The Machine That Changed the World* uit 1990 maakte deze wereldwijd bekend [2][3][4].
+> - John Krafcik bedacht de term "lean production" in 1988; het boek *The Machine That Changed the World* van MIT uit 1990 maakte deze wereldwijd bekend [2][3][4].
 > - Womack en Jones beschreven de vijf lean-principes in *Lean Thinking* (1996) [5].
 > - Het Toyota Production System rust op twee pijlers: just-in-time en jidoka [1][25].
 > - Taiichi Ohno definieerde zeven verspillingen; de meeste westerse bronnen voegen een achtste toe, het onbenut laten van medewerkerstalent (de mnemonics DOWNTIME of TIMWOODS) [8][40].
-> - Lean is een managementsysteem. Kanban of 5S werken alleen wanneer leiderschap, standaarden en dagelijkse probleemoplossing erbij horen.
+> - Lean is een managementsysteem. Kanban of 5S werken alleen wanneer leiderschap, standaarden en dagelijkse probleemoplossing erbij komen.
 > - Een beproefde volgorde voor implementatie: stabiliteit vóór flow, flow vóór pull, pull vóór nivellering.
-> - Lean betekent niet "nul buffer ten koste van alles": sinds een continuïteitsplan dat na 2011 werd ingevoerd, heeft Toyota van leveranciers geëist twee tot zes maanden halfgeleidervoorraad aan te houden [31].
-> - De kernmetrieken zijn doorlooptijd, flowratio, OEE, first pass yield en levering op tijd; ze horen dagelijks op het productiebord, op papier of digitaal.
+> - Lean betekent niet "nul buffer ten koste van alles": sinds een continuïteitsplan dat na 2011 werd ingevoerd, eist Toyota van leveranciers dat zij twee tot zes maanden halfgeleidervoorraad aanhouden [31].
+> - De kerncijfers zijn doorlooptijd, flowratio, OEE, first pass yield en levering op tijd; ze horen dagelijks op het productiebord, op papier of digitaal.
 
 ## Inhoudsopgave
 
@@ -27,17 +27,17 @@
 3. [De 5 principes van lean manufacturing (Womack en Jones)](#de-5-principes-van-lean-manufacturing-womack-en-jones)
 4. [Muda, mura, muri en de 8 verspillingen van lean](#muda-mura-muri-en-de-8-verspillingen-van-lean)
 5. [Het huis van het Toyota Production System](#het-huis-van-het-toyota-productiesysteem)
-6. [Lean manufacturing-tools: de gereedschapskist in één overzicht](#lean-productietools-de-gereedschapskist-in-één-oogopslag)
+6. [Lean manufacturing tools: de gereedschapskist in het kort](#lean-productietools-de-gereedschapskist-in-één-oogopslag)
 7. [Lean vs. Six Sigma vs. Lean Six Sigma](#lean-vs-six-sigma-vs-lean-six-sigma)
-8. [Lean-leiderschap en -cultuur](#lean-leiderschap-en-cultuur)
-9. [Lean manufacturing implementeren: een routekaart in vijf fasen](#lean-manufacturing-implementeren-een-vijffasig-stappenplan)
-10. [Lean-KPI's: hoe voortgang te meten](#lean-kpis-zo-meet-je-voortgang)
-11. [Veelgemaakte fouten bij lean-implementatie](#veelvoorkomende-fouten-bij-de-invoering-van-lean)
+8. [Lean leiderschap en cultuur](#lean-leiderschap-en-cultuur)
+9. [Hoe lean manufacturing implementeren: een routekaart in vijf fasen](#lean-manufacturing-implementeren-een-vijffasig-stappenplan)
+10. [Lean KPI's: hoe voortgang te meten](#lean-kpis-zo-meet-je-voortgang)
+11. [Veelvoorkomende fouten bij lean-implementatie](#veelvoorkomende-fouten-bij-de-invoering-van-lean)
 12. [Nadelen en grenzen van lean manufacturing](#nadelen-en-grenzen-van-lean-manufacturing)
 13. [Lean en digitaal: lean 4.0, digitale tweelingen en Microsoft 365](#lean-en-digitaal-lean-40-digitale-tweelingen-en-microsoft-365)
 14. [Gedocumenteerde voorbeelden van lean manufacturing](#gedocumenteerde-voorbeelden-van-lean-productie)
 15. [Softwareondersteuning: iFAKT Polaris als voorbeeld](#softwareondersteuning-ifakt-polaris-als-voorbeeld)
-16. [Lean-woordenlijst: kernbegrippen van A tot Z](#lean-woordenlijst-kernbegrippen-van-a-tot-z)
+16. [Lean woordenlijst: kernbegrippen van A tot Z](#lean-woordenlijst-kernbegrippen-van-a-tot-z)
 17. [FAQ: vragen over lean manufacturing](#faq-vragen-over-lean-manufacturing)
 18. [Conclusie en eerste stappen](#conclusie-en-eerste-stappen)
 
