@@ -35,6 +35,7 @@ jobs:
           PILLARS_IN: ${{ inputs.pillars }}
           LIMIT_IN: ${{ inputs.limit }}
           REDO_IN: ${{ inputs.redo }}
+          PILLARS_TRIES: "5"
         run: |
           MODE="${MODE_IN:-plan}"
           if [ -z "$ANTHROPIC_API_KEY" ] && [ "$MODE" = "run" ]; then

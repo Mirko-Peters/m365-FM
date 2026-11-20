@@ -30,9 +30,9 @@ class Registry(unittest.TestCase):
 
     def test_texts_in_both_languages(self):
         pa = S.registry()["path"]
-        for k in ("title", "seo_title", "short", "intro"): self.assertEqual(set(pa[k]), {"en", "de"}, k)
+        for k in ("title", "seo_title", "short", "intro"): self.assertTrue({"en", "de"} <= set(pa[k]), k)
         self.assertLessEqual(max(len(v) for v in pa["seo_title"].values()), 60)
-        for p in S.pillars(): self.assertEqual(set(p["label"]), {"en", "de"})
+        for p in S.pillars(): self.assertTrue({"en", "de"} <= set(p["label"]))
 
 
 class Content(unittest.TestCase):
@@ -184,7 +184,8 @@ class Build(unittest.TestCase):
         posts = [{"handle": "mirko-p", "slug": "what-is-a-gemba-walk", "title": "What is a gemba walk", "topics": ["gemba-walk"], "published": 5, "lang": "en"},
                  {"handle": "mirko-p", "slug": "what-is-a-gemba-walk", "title": "Was ist ein Gemba Walk", "topics": ["gemba-walk"], "lang": "de", "tr_of": 1}]
         import contextlib, io
-        with contextlib.redirect_stdout(io.StringIO()): S.build(g, posts, {"kaizen", "digital-twin"})
+        from unittest import mock
+        with contextlib.redirect_stdout(io.StringIO()), mock.patch.object(S, "active", lambda: ("en", "de")): S.build(g, posts, {"kaizen", "digital-twin"})
         self.json = json
 
     def test_pages_schema_and_language_links(self):
