@@ -552,10 +552,20 @@ def too_young(rec, min_age_days, today=None):
     return ((today or datetime.now(timezone.utc).date()) - d).days < min_age_days
 
 
+def skip_types():
+    """Typen, die weder geschrieben noch uebersetzt werden: ENTITY_SKIP_TYPES (Komma-Liste, z. B. "person"); "none" oder leer = alle Typen.
+    Mirko 20.11.2026: Personen nein, Entitaeten ja (der Workflow setzt standardmaessig "person")."""
+    v = (os.environ.get("ENTITY_SKIP_TYPES") or "").strip().lower()
+    return frozenset() if v in ("", "none", "-", "0") else frozenset(x.strip() for x in v.split(",") if x.strip())
+
+
 def build_todo(ents, gen, fill, i18n, edited, spons, state, with_facts=False, restale=False, min_age_days=0, today=None):
     todo, skipped = [], {}
     tries = state.get("tries", {})
+    off = skip_types()
     for e in sorted(ents.values(), key=lambda x: (TYPE_ORDER.index(x["type"]) if x["type"] in TYPE_ORDER else 99, x["id"])):
+        if e["type"] in off:
+            skipped.setdefault("type_off", []).append(e["id"]); continue
         skip, want = status(e, gen, fill, edited, spons)
         row = {"id": e["id"], "type": e["type"], "name": e["name"]}
         if skip:
