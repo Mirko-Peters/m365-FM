@@ -37,8 +37,8 @@ def pillar_set(n, mix=("flow", "hub", "compare", "ladder")):
 
 class PillarKind(unittest.TestCase):
     def test_figure_counts_per_kind(self):
-        for n in (8, 9, 10): self.assertIsNone(IGT.check_set(pillar_set(n), "en", None, None, "pillar"), n)
-        for n in (2, 3, 7, 11): self.assertIn("Anzahl Infografiken", IGT.check_set(pillar_set(n), "en", None, None, "pillar") or "", n)
+        for n in (6, 7, 8, 9, 10): self.assertIsNone(IGT.check_set(pillar_set(n), "en", None, None, "pillar"), n)
+        for n in (2, 3, 5, 11): self.assertIn("Anzahl Infografiken", IGT.check_set(pillar_set(n), "en", None, None, "pillar") or "", n)
         self.assertEqual(IGT.check_set(pillar_set(10, ("flow", "hub")), "en", None, None, "pillar"), "Vorlagen: zu oft dieselbe")   # 5 gleiche
         self.assertIsNone(IGT.check_set(pillar_set(9, ("flow", "hub", "compare")), "en", None, None, "pillar"))
         self.assertIn("Anzahl Infografiken", IGT.check_set(pillar_set(9), "en", None, None, "blog") or "")   # andere Arten bleiben bei 2-3
@@ -51,7 +51,7 @@ class PillarKind(unittest.TestCase):
 
     def test_prompt_and_tokens(self):
         sp = IGT.system_specs("pillar")
-        self.assertIn("8 to 10 (aim for 10) infographics", sp); self.assertIn("whole guide", sp); [self.assertNotIn(x, sp) for x in ("{nfigs}", "{tmpl_rule}", "{count_rule}", "{extra}", "{limits}", "{example}")]
+        self.assertIn("10 infographics", sp); self.assertIn("at least 6", sp); self.assertIn("whole guide", sp); [self.assertNotIn(x, sp) for x in ("{nfigs}", "{tmpl_rule}", "{count_rule}", "{extra}", "{limits}", "{example}")]
         self.assertIn("2 or 3 infographics", IGT.system_specs("blog")); self.assertNotIn("whole guide", IGT.system_specs("blog"))
         big = IGT.req_specs({"kind": "pillar", "label": "Guide", "title": "T", "text": "x"}, "c")["params"]
         self.assertGreaterEqual(big["max_tokens"], 8000)
@@ -67,7 +67,7 @@ class PillarKind(unittest.TestCase):
         st["figs"][4]["hero"]["value"] = "9"; st["figs"][4]["template"] = "flow"   # Zahl passt nicht zu den Schritten
         out = IGT.salvage(copy.deepcopy(st), "pillar")
         self.assertEqual(len(out["figs"]), 6)
-        self.assertIsNone(IGT.check_set(out, "en", None, None, "pillar") or None) if len(out["figs"]) >= 8 else self.assertIn("Anzahl", IGT.check_set(out, "en", None, None, "pillar"))
+        self.assertIsNone(IGT.check_set(out, "en", None, None, "pillar") or None) if len(out["figs"]) >= 6 else self.assertIn("Anzahl", IGT.check_set(out, "en", None, None, "pillar"))
         ok = IGT.salvage(pillar_set(10, ("flow", "hub")), "pillar")        # 10 flow/hub: nur 4 + 4 behalten (MAX_SAME), das reicht fuer 8
         self.assertEqual(len(ok["figs"]), 8); self.assertIsNone(IGT.check_set(ok, "en", None, None, "pillar"))
         self.assertEqual(len(IGT.salvage(pillar_set(12), "pillar")["figs"]), 10)   # mehr als 10: auf 10 gekuerzt
