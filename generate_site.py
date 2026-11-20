@@ -1673,7 +1673,10 @@ def build():
     INV.build(_ctx, _people)   # persoenliche Einladungsseiten mit eigener Teilen-Vorschau (site_invite.py)
     DIR.build(_ctx)
     EVT.build(_ctx, _events, _people, _orgs)
+    import site_pillars as PIL   # Pillar-Kompendien und Lernpfad (imports/pillars, data/pillars.json): Zuordnung der Beitraege vor dem Blog (Kasten "Teil des Lernpfads")
+    PIL.assign(_posts)
     BLG.build(_ctx, _posts, _people, COMMUNITY_API)
+    PIL.build(_ctx, _posts, LRN.ENTS)
     import site_library as LIB
     LIB.build(_ctx, LIB.fetch_items(COMMUNITY_API), _people, COMMUNITY_API)
     import site_guests as GST
