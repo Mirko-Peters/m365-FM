@@ -50,6 +50,10 @@ class Chunks(unittest.TestCase):
             joined = "\n\n".join(parts)
             self.assertEqual(T.facts(joined)["rows"], T.facts(SAMPLE)["rows"])
 
+    def test_prompt_keeps_unverified_marker_without_colon(self):
+        sp = T.system_prompt("pt")
+        self.assertIn("no colon", sp); self.assertIn("[unverified for", sp)
+
     def test_heading_never_ends_a_chunk(self):
         txt = "\n\n".join(["# T"] + [f"## H{i}\n\n" + ("Absatz mit Text. " * 8) for i in range(12)])
         for n in (150, 300, 600):

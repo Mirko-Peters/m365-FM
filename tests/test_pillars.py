@@ -109,7 +109,7 @@ class Cluster(unittest.TestCase):
         box = S.article_box(posts[0], "en", BASE)
         self.assertIn(f"{BASE}/learn/shop-floor-management/", box); self.assertIn(f"{BASE}/learn/path/manufacturing-excellence/", box)
         self.assertIn(f"{BASE}/de/learn/shop-floor-management/", S.article_box(posts[0], "de", BASE))
-        self.assertEqual(S.article_box(posts[0], "fr", BASE), ""); self.assertEqual(S.article_box(posts[1], "en", BASE), "")
+        self.assertEqual(S.article_box(posts[0], "ja", BASE), ""); self.assertEqual(S.article_box(posts[1], "en", BASE), "")
 
     def test_finish(self):
         h = S.finish("<p>Text [2] und [99] (planned) <a href='x'>l</a> [unverified]</p>", 3, "en")
