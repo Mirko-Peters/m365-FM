@@ -16,7 +16,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 DIR = ROOT / "imports" / "pillars"
-LANGS = ("en", "de")
+LANGS = ("en", "de")   # handgepflegte Fassungen (imports/pillars/en, /de)
+TR_LANGS = ("fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko")   # Haiku-Uebersetzungen der englischen Fassung (translate_pillars.py)
 UPDATED = "2026-11-20"
 AUTHOR = "mirko-p"
 
@@ -33,8 +34,32 @@ UI = {
 }
 
 
+@lru_cache(maxsize=1)
+def overlay():
+    """data/pillars_i18n.json: {"ui": {lang: {key: text}}, "reg": {lang: {path, pillars}}, "index": [lang]} - Texte der uebersetzten Sprachen (translate_pillars.py)."""
+    f = ROOT / "data" / "pillars_i18n.json"
+    try: return json.loads(f.read_text("utf-8"))
+    except (OSError, ValueError): return {}
+
+
+def active():
+    """Sprachen mit Seiten: en, de und jede uebersetzte Sprache, deren Texte und mindestens ein Leitfaden vorliegen."""
+    ov = overlay()
+    return LANGS + tuple(l for l in TR_LANGS if (ov.get("reg") or {}).get(l) and (ov.get("ui") or {}).get(l) and any((DIR / l).glob("*.md")))
+
+
+def indexed(lang):
+    """en/de immer; uebersetzte Sprachen erst nach Freigabe (data/pillars_i18n.json "index"), vorher noindex und ohne hreflang."""
+    return lang in LANGS or lang in (overlay().get("index") or ())
+
+
+def lp(lang):
+    return "" if lang == "en" else f"/{lang}"
+
+
 def tx(lang, key, **kw):
-    s = UI[key][1 if lang == "de" else 0]
+    if lang in LANGS: s = UI[key][1 if lang == "de" else 0]
+    else: s = ((overlay().get("ui") or {}).get(lang) or {}).get(key) or UI[key][1 if key == "other" else 0]
     return s.format(**kw) if kw else s
 
 
@@ -44,7 +69,18 @@ def esc(s):
 
 @lru_cache(maxsize=1)
 def registry():
-    return json.loads((ROOT / "data" / "pillars.json").read_text("utf-8"))
+    r = json.loads((ROOT / "data" / "pillars.json").read_text("utf-8"))
+    for lang, d in ((overlay().get("reg")) or {}).items():   # Texte der uebersetzten Sprachen daneben legen; fehlt ein Feld, gilt Englisch
+        pa, dp = r["path"], d.get("path") or {}
+        for k in ("title", "seo_title", "short", "intro"):
+            pa[k][lang] = dp.get(k) or pa[k]["en"]
+        for i, st in enumerate(pa["stages"]):
+            stg = dp.get("stages") or []
+            ds = stg[i] if i < len(stg) else {}
+            for k in ("title", "text"): st[k][lang] = ds.get(k) or st[k]["en"]
+        for p in r["pillars"]:
+            p["label"][lang] = ((d.get("pillars") or {}).get(p["id"]) or {}).get("label") or p["label"]["en"]
+    return r
 
 
 def pillars():
@@ -56,15 +92,15 @@ def by_id(pid):
 
 
 def slug_of(p, lang):
-    return p["slug"][lang]
+    return p["slug"].get(lang) or p["slug"]["en"]   # uebersetzte Sprachen behalten den englischen Slug
 
 
 def url(BASE, p, lang):
-    return f"{BASE}{'/de' if lang == 'de' else ''}/learn/{slug_of(p, lang)}/"
+    return f"{BASE}{lp(lang)}/learn/{slug_of(p, lang)}/"
 
 
 def path_url(BASE, lang):
-    return f"{BASE}{'/de' if lang == 'de' else ''}/learn/path/{registry()['path']['id']}/"
+    return f"{BASE}{lp(lang)}/learn/path/{registry()['path']['id']}/"
 
 
 def order():
@@ -196,8 +232,9 @@ def slugify(s):
 
 class Ctx:
     """Prüfstand für Links: ents (Entitäts-IDs), posts (en: {slug}, de: {slug} mit Sprachfassung), pillars. warn sammelt Hinweise."""
-    def __init__(self, BASE, ents, en_posts, de_posts, episodes=None):
+    def __init__(self, BASE, ents, en_posts, de_posts, episodes=None, tr_posts=None):
         self.BASE, self.ents, self.en_posts, self.de_posts, self.episodes = BASE, ents, en_posts, de_posts, episodes
+        self.tr_posts = tr_posts or {}   # {lang: {slug}} Sprachfassungen der Beitraege (ausser de)
         self.warn = []
 
     def link(self, u, lang):
@@ -205,7 +242,7 @@ class Ctx:
         m = re.match(r"https?://(?:www\.)?m365\.fm(/[^#?\s]*)?(#\S*)?$", u)
         if not m: return u
         path, frag = m.group(1) or "/", m.group(2) or ""
-        pre = "/de" if lang == "de" else ""
+        pre = lp(lang)
         mm = re.match(r"/(?:en/)?learn/([a-z0-9-]+)/?$", path)
         if mm:
             p = next((q for q in pillars() if mm.group(1) in (q["slug"]["en"], q["slug"]["de"])), None)
@@ -218,7 +255,7 @@ class Ctx:
         mm = re.match(r"/community/u/([a-z0-9-]+)/blog/([a-z0-9-]+)/?$", path)
         if mm:
             h, s = mm.groups()
-            if lang == "de" and s in self.de_posts: return f"{self.BASE}/de/community/u/{h}/blog/{s}/{frag}"
+            if (s in self.de_posts if lang == "de" else s in self.tr_posts.get(lang, ())) and lang != "en": return f"{self.BASE}{pre}/community/u/{h}/blog/{s}/{frag}"
             if s in self.en_posts: return f"{self.BASE}/community/u/{h}/blog/{s}/{frag}"
             self.warn.append(f"Beitrag nicht live: {s}"); return None
         mm = re.match(r"/show/episodes/([a-z0-9-]+)/?$", path)
@@ -428,12 +465,12 @@ def assign(posts):
 
 
 def _post_url(BASE, post, lang):
-    return f"{BASE}{'/de' if lang == 'de' else ''}/community/u/{post['handle']}/blog/{post['slug']}/"
+    return f"{BASE}{lp(lang)}/community/u/{post['handle']}/blog/{post['slug']}/"
 
 
 def article_box(post, lang, BASE):
     """Kasten "Teil des Lernpfads" unter einem Blogbeitrag (nur en/de, nur zugeordnete Beiträge)."""
-    if lang not in LANGS: return ""
+    if lang not in active(): return ""
     ids = ASSIGN.get((post.get("handle"), post.get("slug")))
     if not ids: return ""
     p = by_id(ids[0])
@@ -503,7 +540,7 @@ def _crumb_ld(BASE, items):
 
 def hub_card(lang, BASE):
     """Karte des Lernpfads für die Lern-Hubs /learn/ (en) und /de/learn/."""
-    if lang not in LANGS or not registry().get("path"): return ""
+    if lang not in active() or not registry().get("path"): return ""
     pa = registry()["path"]
     return f'<a class="ln-card" href="{path_url(BASE, lang)}"><b>{esc(pa["title"][lang])}</b><span>{esc(pa["short"][lang])}</span></a>'
 
@@ -520,13 +557,15 @@ def build(g, posts, ents, written=None):
     en_posts = {x["slug"] for x in posts if (x.get("lang") or "en") == "en" and not x.get("tr_of")}
     de_by_slug = {x["slug"]: x for x in posts if x.get("lang") == "de"}
     de_posts = set(de_by_slug)
-    ttl = lambda x, lang: (de_by_slug.get(x["slug"]) or x)["title"] if lang == "de" else x["title"]   # deutsche Seiten zeigen den deutschen Titel der Übersetzung
-    cx = Ctx(BASE, ents, en_posts, de_posts, g.get("episode_slugs"))
+    by_lang = {l: {x["slug"]: x for x in posts if x.get("lang") == l} for l in active() if l not in ("en",)}   # Sprachfassungen der Beitraege je Sprache
+    ttl = lambda x, lang: (by_lang.get(lang, {}).get(x["slug"]) or x)["title"] if lang != "en" else x["title"]   # Seiten zeigen den Titel der Übersetzung
+    cx = Ctx(BASE, ents, en_posts, de_posts, g.get("episode_slugs"), {l: set(v) for l, v in by_lang.items() if l != "de"})
     counts = assign(posts)
     ordered = order(); n_pillars = len(ordered)
-    made = {l: 0 for l in LANGS}
+    langs = active()
+    made = {l: 0 for l in langs}
     cards = {}
-    for lang in LANGS:
+    for lang in langs:
         for p in pillars():
             res = _article(p, lang, BASE, cx)
             if not res: print(f"Pillars: Datei fehlt oder leer: {lang}/{slug_of(p, lang)}.md"); continue
@@ -536,18 +575,19 @@ def build(g, posts, ents, written=None):
             words = len(re.sub(r"<[^>]+>", " ", body).split()); mins = max(1, round(words / 220))
             title = meta_value(d["meta"], "meta title", "meta-title") or d["h1"]
             desc = meta_value(d["meta"], "meta description", "meta-description")
-            alts = {l: url(BASE, p, l) for l in LANGS if (ROOT / "imports" / "pillars" / l / f"{slug_of(p, l)}.md").exists()}
+            alts = {l: url(BASE, p, l) for l in langs if indexed(l) and (ROOT / "imports" / "pillars" / l / f"{slug_of(p, l)}.md").exists()}   # hreflang nur zwischen indexierbaren Fassungen
+            noidx = not indexed(lang)
             pv, nx = (ordered[idx - 1] if idx else None), (ordered[idx + 1] if idx + 1 < n_pillars else None)
             step = "".join(f'<a href="{url(BASE, q, lang)}"{" rel=" + chr(34) + rel + chr(34)}><small>{esc(tx(lang, key))}</small><b>{esc(q["label"][lang])}</b></a>' for q, key, rel in ((pv, "prev", "prev"), (nx, "next", "next")) if q)
             rel_posts = CLUSTER.get(p["id"], [])
-            if lang == "de": rel_posts = [x for x in rel_posts if x["slug"] in de_posts]
+            if lang != "en": rel_posts = [x for x in rel_posts if x["slug"] in by_lang.get(lang, {})]
             ol = "de" if lang == "en" else "en"
             other = f' · <a href="{alts[ol]}" hreflang="{ol}" lang="{ol}">{esc(tx(lang, "other"))}</a>' if ol in alts else ""
             deeper = ""
             if rel_posts:
                 deeper = f'<section class="pl-deeper"><h2>{esc(tx(lang, "deeper"))}</h2><ul>' + "".join(f'<li><a href="{_post_url(BASE, x, lang)}">{esc(ttl(x, lang))}</a></li>' for x in rel_posts[:12]) + "</ul></section>"
             auth = _author_html(d["author"], lang, cx, g.get("author_box")) if d["author"] else ""
-            crumbs = [(tx(lang, "learn"), f"{BASE}{'/de' if lang == 'de' else ''}/learn/"), (pa["title"][lang], path_url(BASE, lang)), (p["label"][lang], u)]
+            crumbs = [(tx(lang, "learn"), f"{BASE}{lp(lang)}/learn/"), (pa["title"][lang], path_url(BASE, lang)), (p["label"][lang], u)]
             nav = '<nav aria-label="breadcrumb">' + " › ".join(f'<a href="{x}">{esc(n)}</a>' for n, x in crumbs[:-1]) + f" › {esc(crumbs[-1][0])}</nav>"
             b = _shell(g, lang, f'{CSS}{nav}<article class="pl-art"><h1>{esc(d["h1"])}</h1><p class="pl-meta">{esc(tx(lang, "guide"))} · {esc(tx(lang, "step", n=idx + 1, m=n_pillars))} · '
                        f'{mins} {esc(tx(lang, "min"))} · {esc(tx(lang, "updated"))} <time datetime="{UPDATED}">{UPDATED}</time> · <a href="{path_url(BASE, lang)}">{esc(tx(lang, "overview"))}</a>{other}</p>'
@@ -563,12 +603,12 @@ def build(g, posts, ents, written=None):
             ld = [art, _crumb_ld(BASE, crumbs)]
             faq = faq_of(d["article"])
             if faq: ld.append({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]})
-            write(f"{'de/' if lang == 'de' else ''}learn/{slug_of(p, lang)}/index.html", page(lang, title, desc, u, b, alts if len(alts) > 1 else None, ld, xdefault=alts.get("en"), og_type="article"))
-            sitemap.append((u, UPDATED, alts if len(alts) > 1 else None))
+            write(f"{lp(lang)[1:] + '/' if lang != 'en' else ''}learn/{slug_of(p, lang)}/index.html", page(lang, title, desc, u, b, alts if len(alts) > 1 and not noidx else None, ld, xdefault=alts.get("en"), og_type="article", noindex=noidx))
+            if not noidx: sitemap.append((u, UPDATED, alts if len(alts) > 1 else None))
             made[lang] += 1
             cards[(lang, p["id"])] = (desc, mins)
     # Pfadseiten
-    for lang in LANGS:
+    for lang in langs:
         pu = path_url(BASE, lang)
         stages = ""
         items = []
@@ -580,7 +620,7 @@ def build(g, posts, ents, written=None):
                 if (lang, pid) not in cards: continue
                 n += 1; desc, mins = cards[(lang, pid)]
                 rel = CLUSTER.get(pid, [])
-                if lang == "de": rel = [x for x in rel if x["slug"] in de_posts]
+                if lang != "en": rel = [x for x in rel if x["slug"] in by_lang.get(lang, {})]
                 lst = ("<ul>" + "".join(f'<li><a href="{_post_url(BASE, x, lang)}">{esc(ttl(x, lang))}</a></li>' for x in rel[:5]) + "</ul>") if rel else ""
                 blk += (f'<div class="pl-card"><h3><span class="pl-step-n">{n}</span><a href="{url(BASE, p, lang)}">{esc(p["label"][lang])}</a></h3><p>{esc(desc)}</p>'
                         f'<p class="mut">{mins} {esc(tx(lang, "min"))}</p>{lst}</div>')
@@ -588,20 +628,21 @@ def build(g, posts, ents, written=None):
             if blk: stages += f'<h2 class="pl-stage">{esc(st["title"][lang])}</h2><p class="mut">{esc(st["text"][lang])}</p>{blk}'
         if not items: continue
         first = url(BASE, items[0][1], lang)
-        crumbs = [(tx(lang, "learn"), f"{BASE}{'/de' if lang == 'de' else ''}/learn/"), (pa["title"][lang], pu)]
+        crumbs = [(tx(lang, "learn"), f"{BASE}{lp(lang)}/learn/"), (pa["title"][lang], pu)]
         nav = f'<nav aria-label="breadcrumb"><a href="{crumbs[0][1]}">{esc(crumbs[0][0])}</a> › {esc(crumbs[1][0])}</nav>'
         b = _shell(g, lang, f'{CSS}{nav}<h1>{esc(pa["title"][lang])}</h1><p class="pl-meta">{esc(tx(lang, "path"))} · {len(items)} {esc(tx(lang, "guides"))}</p>'
                    f'<p>{esc(pa["intro"][lang])}</p><p><a class="btn main" href="{first}">{esc(tx(lang, "start"))}</a></p>{stages}')
-        alts = {l: path_url(BASE, l) for l in LANGS}
+        alts = {l: path_url(BASE, l) for l in langs if indexed(l)}
+        noidx = not indexed(lang)
         ld = [{"@context": "https://schema.org", "@type": "Course", "@id": pu + "#course", "name": pa["title"][lang], "description": pa["short"][lang], "inLanguage": lang, "url": pu,
                "provider": {"@id": f"{BASE}/#org"}, "isAccessibleForFree": True,
                "hasPart": [{"@type": "WebPage", "name": q["label"][lang], "url": url(BASE, q, lang)} for _, q in items]},
               {"@context": "https://schema.org", "@type": "ItemList", "name": pa["title"][lang], "itemListElement": [{"@type": "ListItem", "position": i, "url": url(BASE, q, lang), "name": q["label"][lang]} for i, q in items]},
               _crumb_ld(BASE, crumbs)]
-        write(f"{'de/' if lang == 'de' else ''}learn/path/{pa['id']}/index.html", page(lang, pa["seo_title"][lang], pa["short"][lang], pu, b, alts, ld, xdefault=alts["en"], og_type="website"))
-        sitemap.append((pu, UPDATED, alts))
+        write(f"{lp(lang)[1:] + '/' if lang != 'en' else ''}learn/path/{pa['id']}/index.html", page(lang, pa["seo_title"][lang], pa["short"][lang], pu, b, None if noidx else alts, ld, xdefault=alts["en"], og_type="website", noindex=noidx))
+        if not noidx: sitemap.append((pu, UPDATED, alts))
     if cx.warn:
         print(f"Pillars: {len(cx.warn)} Hinweise zu Links (Link entfällt, Text bleibt):")
         for w in sorted(set(cx.warn))[:40]: print("  ", w)
-    print(f"Pillars: {made['en']} englische und {made['de']} deutsche Seiten, Pfad mit {len(pillars())} Leitfäden; Cluster-Artikel je Pillar:", {k: v for k, v in counts.items()})
+    print(f"Pillars: {made['en']} englische und {made['de']} deutsche Seiten" + "".join(f", {n} {l}" for l, n in made.items() if l not in LANGS) + f"; Pfad mit {len(pillars())} Leitfäden; Cluster-Artikel je Pillar:", {k: v for k, v in counts.items()})
     return made
