@@ -1,8 +1,8 @@
-# Entitäten: JSON gegen D1 (2026-11-19T06:55Z)
+# Entitäten: JSON gegen D1 (2026-11-20T06:56Z)
 
 JSON-Basis 2420 · D1 live 2464 · in beiden 2420 · nur JSON 0 · nur D1 44
 
-**516 Entitäten** weichen ab (letzte live-Fassung: person 424, import/auto 92).
+**371 Entitäten** weichen ab (letzte live-Fassung: person 308, import/auto 63).
 
 | Feld | JSON anders als D1 | davon in D1 leer | Beispiele |
 |---|---|---|---|
@@ -13,9 +13,9 @@ JSON-Basis 2420 · D1 live 2464 · in beiden 2420 · nur JSON 0 · nur D1 44
 | wikipedia | 1 | 1 | oee |
 | web | 2 | 1 | nerdio, ifakt |
 | same_as | 1 | 1 | ifakt |
-| aliases | 11 | 4 | exchange-online, dynamics-365, gdpr, change-notifications, copilot-adoption, azure-iot-hub-device-provisioning-service |
-| rel | 426 | 376 | mfa, zero-trust, ai-agent, rag, prompt, prompt-injection |
-| image | 34 | 0 | david-benaim, danilo-nogueira, patrick-kelbch, thomas-stensitzki, daniel-barber, rob-sewell |
+| aliases | 10 | 3 | exchange-online, dynamics-365, gdpr, change-notifications, copilot-adoption, oauth-2-0 |
+| rel | 287 | 251 | mfa, zero-trust, rag, prompt, prompt-injection, mcp |
+| image | 28 | 0 | david-benaim, danilo-nogueira, patrick-kelbch, thomas-stensitzki, daniel-barber, rob-sewell |
 | job | 1 | 1 | marcel-lehmann |
 | desc.en | 30 | 0 | microsoft-tool, ai-assistant, low-code-tool, analytics-tool, identity-security-tool, collaboration-tool |
 | desc.de | 16 | 1 | nerdio, christian-abata, fernando-tudela-desa, billur-samdancioglu, nathalie-leenders, valentin-gasenko |
