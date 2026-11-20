@@ -174,7 +174,8 @@ def plan_items(langs, pids, redo=False):
                 st = {"h": hashes, "chunks": [None] * len(parts), "meta": None, "tries": {}}
             for i, part in enumerate(parts):
                 if st["chunks"][i] or st["tries"].get(f"c{i}", 0) >= TRIES: continue
-                items.append((lang, p["id"], "chunk", i, req(f"{lang}__{p['id']}__c{i}", system_prompt(lang), part, 16000)))
+                hint = (st.get("why") or {}).get(f"c{i}")
+                items.append((lang, p["id"], "chunk", i, req(f"{lang}__{p['id']}__c{i}", system_prompt(lang) + (f" IMPORTANT: your previous attempt was rejected by an automatic check ({hint}). Keep exactly the same number of headings with the same levels, the same links, URLs, anchors and citation markers as the source." if hint else ""), part, 16000)))
             if not st["meta"] and st["tries"].get("meta", 0) < TRIES:
                 items.append((lang, p["id"], "meta", 0, req(f"{lang}__{p['id']}__meta", "You are a professional translator. Answer only with the JSON object.", meta_prompt(lang, s), 3000)))
     ov = overlay()
@@ -325,25 +326,29 @@ def main():
             states[(lang, pid)] = st
         tk = f"c{i}" if kind == "chunk" else kind
 
-        def fail(reason):
+        def fail(reason, text=""):
             nonlocal bad
             bad += 1; why[reason] = why.get(reason, 0) + 1
-            if pid != "_ui": st.setdefault("tries", {})[tk] = st["tries"].get(tk, 0) + 1
+            print(f"abgelehnt {r['custom_id']}: {reason}", flush=True)
+            if pid != "_ui":
+                st.setdefault("tries", {})[tk] = st["tries"].get(tk, 0) + 1; st.setdefault("why", {})[tk] = reason[:80]
+            if text:   # zur Fehlersuche: letzte abgelehnte Antwort je Anfrage
+                f = OUT / "rejected" / f"{r['custom_id']}.txt"; f.parent.mkdir(parents=True, exist_ok=True); f.write_text(text, "utf-8")
         if res["type"] != "succeeded": fail(res["type"]); continue
         u = res["message"]["usage"]; tin += u["input_tokens"]; tout += u["output_tokens"]
         text = text_of(res["message"])
         if res["message"].get("stop_reason") in ("max_tokens", "refusal"): fail(res["message"]["stop_reason"]); continue
         if kind == "chunk":
             why_not = qa(lang, chunks(srcs[pid]["article"])[i], text.strip("\n"))
-            if why_not: fail("qa: " + why_not); continue
-            st["chunks"][i] = text.strip("\n")
+            if why_not: fail("qa: " + why_not, text); continue
+            st["chunks"][i] = text.strip("\n"); (st.get("why") or {}).pop(tk, None)
         elif kind == "meta":
             got = parse_json(text); why_not = check_meta(got, srcs[pid])
-            if why_not: fail("meta: " + why_not); continue
+            if why_not: fail("meta: " + why_not, text); continue
             st["meta"] = {k: got[k].strip() for k in ("h1", "meta_title", "meta_description", "author")}
         else:
             got = check_ui(lang, parse_json(text))
-            if isinstance(got, str): fail("ui: " + got); continue
+            if isinstance(got, str): fail("ui: " + got, text); continue
             write_overlay(lang, *got)
         ok += 1
     for (lang, pid), st in states.items(): save_state(lang, pid, st)

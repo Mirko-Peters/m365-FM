@@ -52,8 +52,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if [ -n "$(git status --porcelain data/pillars_i18n data/pillars_i18n.json imports/pillars | grep -v 'data/pillars_i18n/stale.json')" ]; then
+          PATHS="data/pillars_i18n imports/pillars"; [ -f data/pillars_i18n.json ] && PATHS="$PATHS data/pillars_i18n.json"
+          if [ -n "$(git status --porcelain $PATHS | grep -v 'data/pillars_i18n/stale.json')" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
-            git add data/pillars_i18n data/pillars_i18n.json imports/pillars && git commit -q -m "Pillar-Uebersetzungen (Haiku, Batch)"
+            git add -A -- $PATHS && git commit -q -m "Pillar-Uebersetzungen (Haiku, Batch)"
             (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
           fi
