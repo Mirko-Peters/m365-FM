@@ -1,6 +1,6 @@
 # Infografiken: Kopfbild + 2–3 Infografiken je Inhalt
 
-Für Entitäten, Blogbeiträge und Podcast-Folgen entstehen automatisch **1 Kopfbild (1200×630) und 2–3 Infografiken**, in allen 15 Seitensprachen (en, de, es, fr, it, pt, nl, pl, id, ru, uk, ar, he, ja, ko), nur als Standbilder (WebP, Dark-Glass-Stil). Keine Videos (Entscheidung vom 18.11.2026: geteilt wird das Standbild, Link-Vorschauen zeigen ohnehin nur ein Standbild).
+Für Entitäten, Blogbeiträge, Podcast-Folgen und die Lernpfad-Leitfäden (Art `pillar`) entstehen automatisch **1 Kopfbild (1200×630) und 2–3 Infografiken**, in allen 15 Seitensprachen (en, de, es, fr, it, pt, nl, pl, id, ru, uk, ar, he, ja, ko), nur als Standbilder (WebP, Dark-Glass-Stil). Keine Videos (Entscheidung vom 18.11.2026: geteilt wird das Standbild, Link-Vorschauen zeigen ohnehin nur ein Standbild).
 
 ## Was auf der Seite passiert (erst nach Freigabe)
 - Das **Kopfbild ersetzt das bisherige** (erzeugtes SVG der Entität bzw. Titelbild/Cover am Textanfang früherer Blogbeiträge) und wird das **Teilen-Bild (`og:image`, 1200×630, als JPEG neben dem WebP, weil LinkedIn/Facebook JPEG zuverlässiger zeigen; `twitter:card` = `summary_large_image`)**. Die Teilen-Schaltflächen bleiben. Die alten Dateien bleiben im Bucket. Das kleine Folgen-Cover (160 px) bleibt, es ist kein Kopfbild.
@@ -41,3 +41,10 @@ Erste Stufe: **Englisch und Deutsch** (Workflow-Standard `langs=en,de`, Freigabe
 - Textgrenzen wurden mit den echten Schriften und den längsten erlaubten Texten (×1,4) gemessen. Dateien für Polnisch u. a. (latin-ext) liegen bei den Schriften.
 - Vor der Freigabe prüfen: LinkedIn Post Inspector und Facebook-Debugger mit einem Beitrag; Search-Console-Vergleich.
 - Offen: JSON-LD `image` zeigt weiter auf das alte Bild; ändert sich ein Quelltext, bleibt das Bild stehen (Quellhash `s` ist gespeichert, wird noch nicht verglichen).
+
+
+## Leitfäden (Art `pillar`)
+- Quelle: die 10 englischen Leitfäden (`imports/pillars/en/<slug>.md`, Registry `data/pillars.json`); Schlüssel ist die Pillar-ID, die Bilder gelten für alle Sprachfassungen der Seite (`/learn/<slug>/`).
+- Je Leitfaden **1 Kopfbild + 9–10 Infografiken** (statt 2–3), über den ganzen Text verteilt (je Abschnitt ein eigenes Thema). Vorlagen dürfen sich wiederholen, höchstens 4-mal je Vorlage (`FIGS`, `MAX_SAME` in `tools/infographics.py`).
+- Haiku bekommt den ganzen Leitfaden (bis 90 000 Zeichen); Kosten je Leitfaden etwa 1 Cent (Bildtexte) plus je Sprache etwa 1 Cent (Übersetzung); gerendert wird kostenlos in Actions.
+- Auf der Seite erscheinen die Bilder erst, wenn `data/infographics_live.json` die Art `pillar` und die Sprache freigibt (`site_pillars.py`). Der Samstagslauf (`infographics-auto.yml`) erzeugt sie für alle freigegebenen Arten und Sprachen, auch für künftige neue Leitfäden.

@@ -21,18 +21,23 @@ from ai_gateway import anthropic_request, check_budget, estimated_eur, remaining
 MODEL = os.environ.get("INFOGRAPHICS_MODEL", "claude-haiku-5-5")
 JOB = "infographics"
 PUBLIC = "https://img.m365.fm"
-KINDS = ("entity", "blog", "episode")
+KINDS = ("entity", "blog", "episode", "pillar")
 LANGS = ("en", "de", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko")
 LANG_NAMES = {"en": "English", "de": "German", "fr": "French", "es": "Spanish", "it": "Italian", "nl": "Dutch", "pt": "Portuguese (Brazil)", "pl": "Polish",
               "id": "Indonesian", "ru": "Russian", "uk": "Ukrainian", "ar": "Arabic", "he": "Hebrew", "ja": "Japanese", "ko": "Korean"}
 RTL = ("ar", "he")
 SIZES = {"flow": (1920, 1080), "compare": (1200, 1040), "ladder": (1200, 1800), "bigfact": (1200, 630), "hub": (1200, 1200)}   # wie templates.mjs
 FIG_TEMPLATES = ("flow", "compare", "ladder", "hub")   # bigfact ist dem Kopfbild vorbehalten
+FIGS = {"pillar": (9, 10)}   # Infografiken je Inhalt nach Art (ohne Kopfbild): Leitfaeden sind lang und bekommen insgesamt 10 Bilder; sonst 2-3
+FIGS_DEFAULT = (2, 3)
+MAX_SAME = 4         # bei Leitfaeden duerfen sich Vorlagen wiederholen, aber hoechstens so oft
+PILLAR_TEXT = 90000  # Zeichen des Leitfadens, die an die KI gehen (ganze Leitfaeden sind 70-95 Tsd.)
 MAX_TRIES = 3          # Textversuche je Inhalt/Sprache (ab dem zweiten mit Rueckmeldung der Pruefung)
 RENDER_TRIES = 2       # Layoutfehler sind immer gleich: nach zwei Versuchen nicht mehr rendern
 EN_SLACK = 1.15    # englische Texte duerfen die Grenze um 15 % ueberschreiten (die KI zaehlt Zeichen nicht genau; Stresstest bestand bis x 1,4)
 LANG_FACTOR = 1.4   # Textgrenzen der Uebersetzungen: Englisch x 1,4 (Deutsch/Russisch laenger); die Layoutpruefung beim Rendern ist die endgueltige Grenze
 OUT_EST, IN_EST_SPECS, IN_EST_TR = 1300, 2100, 1700   # Token-Schaetzung je Anfrage (aus dem Testlauf)
+PILLAR_EST = {"specs": (24000, 4200), "tr": (4500, 4200)}   # Leitfaden: (Token ein, Token aus) je Anfrage; 10 Bilder statt 3
 BATCH_MAX = 500   # kleine Teile: ein Zeitueberschreiten beim Senden betrifft wenig, Ergebnisse kommen frueher
 
 # ------------------------------------------------------------------ Spezifikation der Bildtexte
@@ -107,9 +112,9 @@ def parse_json(txt):
 
 SYSTEM_SPECS = (
     "You turn one article, podcast episode or glossary entry of M365.FM (a podcast and knowledge site about Microsoft 365, Azure, Power Platform and AI) into the texts of "
-    "one header graphic and 2 or 3 infographics. Return JSON only, matching the schema. A fixed template draws each image; you only fill its fields.\n"
+    "one header graphic and {nfigs} infographics. Return JSON only, matching the schema. A fixed template draws each image; you only fill its fields.\n"
     "header: template bigfact = one big fact. hero.value is a number of at most 2 characters: normally simply the number of chips (3 or 4) with hero.label like 'key points' (a figure from the text such as 12 or 3x is allowed only if the text really states it, never a certification number). hero.label says what the value counts. title = the topic as a headline. chips = 3 or 4 key points.\n"
-    "figs: 2 or 3 infographics, each with a different template, chosen by what the text offers:\n"
+    "figs: {nfigs} infographics, {tmpl_rule}, chosen by what the text offers:\n"
     "- flow: a process with 3 or 4 steps in order (hero.value = exactly the number of steps, 1-2 digits; hi = index (from 0) of the most important step).\n"
     "- compare: two options or before/after, 2-3 short points per side, plus a verdict line.\n"
     "- ladder: 3-5 ranked tiers, levels or priorities (axis = what rises or falls along them).\n"
@@ -120,16 +125,30 @@ SYSTEM_SPECS = (
     "alt = one sentence (at most 125 characters) saying what the image shows or explains, for screen readers. tags = up to 3 product or topic names (each at most 20 characters).\n"
     "Hard length limits in characters (English): see the list. A set with one text too long is discarded, so stay clearly below. Rules of thumb: a chip t is 1-2 short words (max 14 characters, e.g. 'Least privilege'), a chip n at most 4 short words (max 30 characters, e.g. 'Checks every request'); every infographic title and step title is short (steps t max 12 characters, e.g. 'Verify'); "
     "any title of a flow at most 3-4 words (26 characters); any kicker at most 5 words (36 characters); hero.value is 1 or 2 characters such as 7, 12 or 3x (never 3 characters); tags at most 3, each at most 20 characters; "
-    "compare heads 1-2 words (18 characters); exactly 2 or 3 infographics, never 1 or 4.\n{limits}\n"
+    "compare heads 1-2 words (18 characters); {count_rule}.\n{limits}\n"
     "Answer with one JSON object only (no text before or after, no code fence). All values are strings except hi (integer) and the lists. Exactly this structure and these field names "
-    "(the example shows two of the four figure templates; flow needs hero, hi, steps, note; compare needs left, right, verdict; ladder needs sub, tiers, axis; hub needs core, nodes):\n{example}"
+    "(the example shows two figures only, you deliver {nfigs}; flow needs hero, hi, steps, note; compare needs left, right, verdict; ladder needs sub, tiers, axis; hub needs core, nodes):\n{example}{extra}"
 )
+PILLAR_EXTRA = (
+    "\nThis text is a long guide with many sections. Give every infographic its own topic from a different part of the guide, in the order of the guide, so that together they cover the whole guide; never two infographics on the same point. "
+    "kicker = 'Guide · <short topic>' (for example 'Guide · Lean manufacturing'). Use the facts, numbers and terms of the guide exactly; a number appears only if the guide states it.")
+
+
+def system_specs(kind=None):
+    lo, hi = FIGS.get(kind, FIGS_DEFAULT)
+    if kind in FIGS:
+        n = f"{lo} or {hi}" if lo != hi else str(lo)
+        tmpl, cnt, extra = f"templates may repeat but each at most {MAX_SAME} times", f"exactly {n} infographics, never fewer or more", PILLAR_EXTRA
+    else:
+        n, tmpl, cnt, extra = f"{lo} or {hi}", "each with a different template", "exactly 2 or 3 infographics, never 1 or 4", ""
+    return (SYSTEM_SPECS.replace("{nfigs}", n).replace("{tmpl_rule}", tmpl).replace("{count_rule}", cnt).replace("{extra}", extra)
+            .replace("{limits}", limits_text()).replace("{example}", SET_EXAMPLE_JSON))
 SYSTEM_TR = (
     "You translate the texts of an infographic set (JSON) from English into {lang}. Answer with one JSON object only (no text before or after, no code fence), with exactly the same structure, the same field names and the same template values: the same templates, the same number of "
     "list items, the same numbers and the same hi index. Translate every string natively (not word for word), keep it as short as the English or shorter; hard limit: English length x {f}. "
     "Keep product names (Microsoft Teams, SharePoint, Power BI, Copilot, Azure ...) in their official form; tags stay product names. Keep numbers and symbols (4, 99.9%, 3x) unchanged. "
     "Do not add or remove facts. alt stays one sentence for screen readers. The kicker keeps its pattern (kind · topic) with the kind word translated "
-    "(Entity, Blog, Podcast)."
+    "(Entity, Blog, Podcast, Guide)."
 )
 
 
@@ -209,14 +228,18 @@ def check_spec(spec, lang="en", template=None):
     return None
 
 
-def check_set(st, lang="en", en=None, source=None):
+def check_set(st, lang="en", en=None, source=None, kind=None):
     """Satz = {"header":..., "figs":[...]} -> None oder Grund. en: englischer Satz; die Uebersetzung muss dieselbe Struktur und Zahlen haben.
     source: Text des Inhalts (nur Englisch): die Kopfbild-Zahl ist die Zahl der Punkte oder steht im Text."""
     if not isinstance(st, dict) or not isinstance(st.get("header"), dict) or not isinstance(st.get("figs"), list): return "Form"
-    if not 2 <= len(st["figs"]) <= 3: return "Anzahl Infografiken"
+    lo, hi = FIGS.get(kind, FIGS_DEFAULT)
+    if not lo <= len(st["figs"]) <= hi: return "Anzahl Infografiken"
     if st["header"].get("template") != "bigfact": return "Kopfbild nicht bigfact"
     seen = [f.get("template") if isinstance(f, dict) else None for f in st["figs"]]
-    if len(set(seen)) != len(seen) or any(s not in FIG_TEMPLATES for s in seen): return "Vorlagen"
+    if any(s not in FIG_TEMPLATES for s in seen): return "Vorlagen"
+    if kind in FIGS:
+        if any(seen.count(s) > MAX_SAME for s in set(seen)): return "Vorlagen: zu oft dieselbe"
+    elif len(set(seen)) != len(seen): return "Vorlagen"
     for i, s in enumerate([st["header"]] + st["figs"]):
         r = check_spec(s, lang)
         if r: return f"Bild {i}: {r}"
@@ -278,6 +301,28 @@ def content_posts(root):
     return out
 
 
+def pillar_guides(root):
+    """Englische Leitfaeden (data/pillars.json + imports/pillars/en/<slug>.md) -> [(id, Titel, Text)]. Text ohne Links und Quellenmarken, bis PILLAR_TEXT Zeichen. Der Schluessel ist die Pillar-ID (steht auch in den Seitenadressen der anderen Sprachen)."""
+    out = []
+    reg = jload(Path(root) / "data" / "pillars.json", {})
+    for p in (reg.get("pillars") if isinstance(reg, dict) else None) or []:
+        if not isinstance(p, dict): continue
+        pid = p.get("id")
+        slug = (p.get("slug") or {}).get("en") or pid
+        f = Path(root) / "imports" / "pillars" / "en" / f"{slug}.md"
+        if not pid or not f.exists(): continue
+        import site_pillars   # gleiche Aufteilung der Datei wie beim Seitenbau (Metadaten, Artikel, Quellen)
+        d = site_pillars.parse_file(f)
+        if not d or not d.get("h1") or not d.get("article"): continue
+        title, body = d["h1"].strip(), d["article"]
+        body = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", body)
+        body = re.sub(r"\[(?:\d{1,3}|unverified[^\]]*)\]", "", body)
+        body = re.sub(r"(?m)^\s*[>|]+\s*|[*_`]+", "", body)
+        text = re.sub(r"[ \t]+", " ", re.sub(r"\n{3,}", "\n\n", body)).strip()[:PILLAR_TEXT]
+        if len(text) > 2000: out.append((pid, title, text))
+    return out
+
+
 def items(kind, root=None):
     """-> [{key, kind, slug, title, text, label}] fuer eine Art. Entitaeten: englischer Entitaetstext; Blog: fruehere Podpage-Beitraege; Folgen: Show Notes."""
     D = Path(root or ROOT) / "data"
@@ -305,6 +350,9 @@ def items(kind, root=None):
         for slug, title, body in content_posts(Path(root or ROOT)):   # neue, freigegebene Beitraege (imports/blog/en); seit dem 19.11. fehlten sie, weil nur die frueheren Podpage-Beitraege gelesen wurden
             if slug not in have and len(body) > 300:
                 out.append({"key": f"blog:{slug}", "kind": kind, "slug": slug, "title": title, "text": body, "label": "Blog"})
+    elif kind == "pillar":
+        for slug, title, body in pillar_guides(Path(root or ROOT)):
+            out.append({"key": f"pillar:{slug}", "kind": kind, "slug": slug, "title": title, "text": body, "label": "Guide"})
     elif kind == "episode":
         for p in jload(D / "podpage" / "episodes.json.gz", []):
             if p.get("hidden") or not p.get("published", True): continue
@@ -405,16 +453,22 @@ def results_lines(url):
 def req_specs(it, cid, why=None):
     user = f"Kind: {it['label']}\nTitle: {it['title']}\n\nText:\n{it['text']}"
     if why: user += f"\n\nYour previous answer was rejected by the automatic check: {why}. Write the whole set again and keep every text clearly below its limit."
-    return {"custom_id": cid, "params": {"model": MODEL, "max_tokens": 3000, **thinking_off(MODEL), "system": SYSTEM_SPECS.replace("{limits}", limits_text()).replace("{example}", SET_EXAMPLE_JSON),
+    return {"custom_id": cid, "params": {"model": MODEL, "max_tokens": 9000 if it.get("kind") in FIGS else 3000, **thinking_off(MODEL), "system": system_specs(it.get("kind")),
             "messages": [{"role": "user", "content": user}]}}
 
 
-def req_tr(en_set, lang, cid):
-    return {"custom_id": cid, "params": {"model": MODEL, "max_tokens": 3500, **thinking_off(MODEL), "system": SYSTEM_TR.replace("{lang}", LANG_NAMES[lang]).replace("{f}", str(LANG_FACTOR)),
+def req_tr(en_set, lang, cid, kind=None):
+    return {"custom_id": cid, "params": {"model": MODEL, "max_tokens": 12000 if kind in FIGS else 3500, **thinking_off(MODEL), "system": SYSTEM_TR.replace("{lang}", LANG_NAMES[lang]).replace("{f}", str(LANG_FACTOR)),
             "messages": [{"role": "user", "content": json.dumps(en_set, ensure_ascii=False)}]}}
 
 
 def cost_eur(n, tin, tout=OUT_EST): return estimated_eur(n * tin, n * tout, batch=True)   # n Anfragen
+
+
+def est_kind(kind, stage, n=1):
+    """Kosten (EUR) von n Anfragen einer Art; stage: specs | tr."""
+    if kind in FIGS: tin, tout = PILLAR_EST[stage]; return cost_eur(n, tin, tout)
+    return cost_eur(n, IN_EST_SPECS if stage == "specs" else IN_EST_TR)
 
 
 # ------------------------------------------------------------------ Auswahl
@@ -455,9 +509,9 @@ def plan_text(rep, langs, limit=None):
         n_sp = min(r["spec_todo"], limit) if limit else r["spec_todo"]
         lines.append(f"{k}: {r['n']} Inhalte; Bildtexte EN offen {r['spec_todo']}; Uebersetzung offen " + (", ".join(f"{l}:{n}" for l, n in sorted(r["tr_todo"].items())) or "-")
                      + "; Bilder offen " + (", ".join(f"{l}:{n}" for l, n in sorted(r["img_todo"].items())) or "-"))
-        eur += cost_eur(n_sp, IN_EST_SPECS)
-        for l, n in r["tr_todo"].items(): eur += cost_eur(min(n, limit) if limit else n, IN_EST_TR)
-    imgs = sum(sum(r["img_todo"].values()) for r in rep.values()) * 3.7
+        eur += est_kind(k, "specs", n_sp)
+        for l, n in r["tr_todo"].items(): eur += est_kind(k, "tr", min(n, limit) if limit else n)
+    imgs = sum(sum(r["img_todo"].values()) * (11 if k in FIGS else 3.7) for k, r in rep.items())
     lines.append(f"Schaetzung Haiku (Batch, halber Preis): ca. {eur:.2f} EUR; Bilder ca. {imgs:.0f} (Kopfbild + 2-3), Rendern ca. {imgs * 0.5 / 60:.0f} Minuten reine Rechenzeit (2 Kerne)")
     return "\n".join(lines)
 
@@ -492,15 +546,17 @@ def submit(stage, lang, reqs, mapping, st, per_req_eur, root=None):
 
 
 def cmd_specs(kinds, limit, store, st, root=None):
-    reqs, mapping, n, busy = [], {}, 0, open_keys(st)
+    groups, n, busy = {}, 0, open_keys(st)   # Leitfaeden (viele Bilder, grosse Anfragen) getrennt von den uebrigen: andere Kosten je Anfrage
     for k in kinds:
         for it in items(k, root):
             if limit and n >= limit: break
             if it["key"] in busy or st["tries"].get(it["key"], 0) >= MAX_TRIES: continue
             have = store.get(spec_key(it))
             if have and have.get("en"): continue
-            cid = f"s{len(reqs)}"; reqs.append(req_specs(it, cid, (st.get("why") or {}).get(it["key"]))); mapping[cid] = it["key"]; n += 1
-    submit("specs", "en", reqs, mapping, st, cost_eur(1, IN_EST_SPECS), root)
+            g = groups.setdefault(k in FIGS, ([], {})); cid = f"s{len(g[0])}"; g[0].append(req_specs(it, cid, (st.get("why") or {}).get(it["key"]))); g[1][cid] = it["key"]; n += 1
+    if not groups: submit("specs", "en", [], {}, st, 0, root)
+    for big, (reqs, mapping) in sorted(groups.items()):
+        submit("specs", "en", reqs, mapping, st, est_kind("pillar" if big else "blog", "specs"), root)
 
 
 def cmd_translate(kinds, langs, limit, store, st, root=None):
@@ -511,15 +567,17 @@ def cmd_translate(kinds, langs, limit, store, st, root=None):
     its = [it for k in kinds for it in items(k, root)]
     for l in langs:
         if l == "en": continue
-        reqs, mapping, n = [], {}, 0
+        groups, n = {}, 0
         for it in its:
             if limit and n >= limit: break
             tk = it["key"] + "#" + l
             if tk in busy or st["tries"].get(tk, 0) >= MAX_TRIES: continue
             have = doc(it)
             if not have or not have.get("en") or have.get(l): continue
-            cid = f"t{len(reqs)}"; reqs.append(req_tr(have["en"], l, cid)); mapping[cid] = tk; n += 1
-        submit("translate", l, reqs, mapping, st, cost_eur(1, IN_EST_TR), root)
+            g = groups.setdefault(it["kind"] in FIGS, ([], {})); cid = f"t{len(g[0])}"; g[0].append(req_tr(have["en"], l, cid, it["kind"])); g[1][cid] = tk; n += 1
+        if not groups: submit("translate", l, [], {}, st, 0)
+        for big, (reqs, mapping) in sorted(groups.items()):
+            submit("translate", l, reqs, mapping, st, est_kind("pillar" if big else "blog", "tr"), root)
 
 
 def cmd_check(kinds, langs, store, root=None):
@@ -568,7 +626,7 @@ def apply_results(lines, b, store, st, by_key):
         txt = "".join(c.get("text", "") for c in msg.get("content") or [] if c.get("type") == "text")
         st_set = parse_json(txt)
         doc = store.get(spec_key(it)) or {"v": 1, "src": src_hash(it)}
-        err = "kein JSON" if st_set is None else check_set(st_set, lang, None if lang == "en" else doc.get("en"), it["title"] + " " + it["text"] if lang == "en" else None)
+        err = "kein JSON" if st_set is None else check_set(st_set, lang, None if lang == "en" else doc.get("en"), it["title"] + " " + it["text"] if lang == "en" else None, it.get("kind"))
         if err:
             st["tries"][tk] = st["tries"].get(tk, 0) + 1; bad += 1
             if lang == "en": st.setdefault("why", {})[tk] = err[:160]   # beim naechsten Versuch als Rueckmeldung an die KI

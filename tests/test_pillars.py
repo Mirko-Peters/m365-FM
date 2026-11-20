@@ -202,6 +202,29 @@ class Build(unittest.TestCase):
         h1s = [len(re.findall(r"<h1[ >]", h)) for h in self.files.values()]
         self.assertEqual(set(h1s), {1})
 
+    def test_infographics_only_with_release(self):
+        import contextlib, io, json
+        from unittest import mock
+        import site_infographics as IG
+        self.assertNotIn("ig-fig", self.files["learn/lean-manufacturing/index.html"])   # ohne Freigabe: Seite wie vorher
+        imgs = [{"u": f"https://img.m365.fm/ig/pillar/lean-manufacturing/en-{i}-abcd1234.webp", "w": 1200, "h": 630 if i == 0 else 1040, "a": f"Bild {i}", "t": "bigfact" if i == 0 else "flow"} for i in range(10)]
+        seen = {}
+        g = dict(BASE=BASE, write=lambda rel, html: seen.__setitem__(rel, html), sitemap=[], author_box=None, LANGS=("en", "de"),
+                 page=lambda lang, title, desc, canon, body, alts, ld, **kw: json.dumps({"ld": ld, "kw": kw, "lang": lang}, ensure_ascii=False, default=str) + "\n" + body,
+                 header=lambda l, x: "", footer=lambda l: "", footer_en=lambda: "")
+        posts = [{"handle": "mirko-p", "slug": "what-is-a-gemba-walk", "title": "What is a gemba walk", "topics": ["gemba-walk"], "published": 5, "lang": "en"}]
+        get = lambda kind, slug, lang: imgs if (kind, slug, lang) == ("pillar", "lean-manufacturing", "en") else None
+        with contextlib.redirect_stdout(io.StringIO()), mock.patch.object(S, "active", lambda: ("en", "de")), mock.patch.object(IG, "get", get):
+            S.build(g, posts, {"kaizen", "digital-twin"})
+        head, body = seen["learn/lean-manufacturing/index.html"].split("\n", 1)
+        meta = json.loads(head)
+        self.assertEqual(body.count("ig-fig"), 10)   # Kopfbild + 9 Infografiken
+        self.assertTrue(body.index("ig-fig") < body.index("<h2"))   # Kopfbild steht vor dem Text
+        self.assertEqual(meta["kw"]["og_image"][0], imgs[0]["u"][:-5] + ".jpg")
+        self.assertTrue(any(n.get("@type") == "ImageObject" for n in meta["ld"]))
+        other = seen["de/learn/lean-management/index.html"]
+        self.assertNotIn("ig-fig", other); self.assertNotIn("og_image", json.loads(other.split("\n", 1)[0])["kw"])   # nur die freigegebene Sprachfassung
+
     def test_german_pages_show_german_titles(self):
         de = self.files["de/learn/shop-floor-management/index.html"]
         self.assertIn("Was ist ein Gemba Walk", de); self.assertNotIn("What is a gemba walk", de)

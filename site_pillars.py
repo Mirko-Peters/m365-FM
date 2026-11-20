@@ -14,6 +14,8 @@ import re
 from functools import lru_cache
 from pathlib import Path
 
+import site_infographics as IG   # Kopfbild und Infografiken der Leitfäden (nur mit Freigabe data/infographics_live.json)
+
 ROOT = Path(__file__).resolve().parent
 DIR = ROOT / "imports" / "pillars"
 LANGS = ("en", "de")   # handgepflegte Fassungen (imports/pillars/en, /de)
@@ -586,12 +588,14 @@ def build(g, posts, ents, written=None):
             deeper = ""
             if rel_posts:
                 deeper = f'<section class="pl-deeper"><h2>{esc(tx(lang, "deeper"))}</h2><ul>' + "".join(f'<li><a href="{_post_url(BASE, x, lang)}">{esc(ttl(x, lang))}</a></li>' for x in rel_posts[:12]) + "</ul></section>"
+            _ig = bool(IG.get("pillar", p["id"], lang))   # Kopfbild (Teilen-Bild) und 9-10 Infografiken im Text; ohne Freigabe in data/infographics_live.json bleibt die Seite unveraendert
+            if _ig: body = IG.inject(body, "pillar", p["id"], lang)
             auth = _author_html(d["author"], lang, cx, g.get("author_box")) if d["author"] else ""
             crumbs = [(tx(lang, "learn"), f"{BASE}{lp(lang)}/learn/"), (pa["title"][lang], path_url(BASE, lang)), (p["label"][lang], u)]
             nav = '<nav aria-label="breadcrumb">' + " › ".join(f'<a href="{x}">{esc(n)}</a>' for n, x in crumbs[:-1]) + f" › {esc(crumbs[-1][0])}</nav>"
             b = _shell(g, lang, f'{CSS}{nav}<article class="pl-art"><h1>{esc(d["h1"])}</h1><p class="pl-meta">{esc(tx(lang, "guide"))} · {esc(tx(lang, "step", n=idx + 1, m=n_pillars))} · '
                        f'{mins} {esc(tx(lang, "min"))} · {esc(tx(lang, "updated"))} <time datetime="{UPDATED}">{UPDATED}</time> · <a href="{path_url(BASE, lang)}">{esc(tx(lang, "overview"))}</a>{other}</p>'
-                       f'{body}</article>{deeper}<nav class="pl-step" aria-label="{esc(tx(lang, "path"))}">{step}</nav>'
+                       f'{IG.hero_figure("pillar", p["id"], lang) if _ig else ""}{body}</article>{deeper}<nav class="pl-step" aria-label="{esc(tx(lang, "path"))}">{step}</nav>'
                        + (f'<section class="pl-author">{"" if g.get("author_box") else "<h2>" + esc(tx(lang, "author")) + "</h2>"}{auth}</section>' if auth else "")
                        + (f'<section class="pl-sources" id="sources"><h2>{esc(tx(lang, "sources"))}</h2>{src_html}</section>' if src_html else ""))
             author_id = f"{BASE}/community/u/{AUTHOR}/#person"
@@ -600,10 +604,10 @@ def build(g, posts, ents, written=None):
                    "author": {"@type": "Person", "@id": author_id, "name": "Mirko Peters", "url": f"{BASE}/community/u/{AUTHOR}/"},
                    "publisher": {"@id": f"{BASE}/#org"},
                    "isPartOf": {"@type": "Course", "@id": path_url(BASE, lang) + "#course", "name": pa["title"][lang], "url": path_url(BASE, lang)}}
-            ld = [art, _crumb_ld(BASE, crumbs)]
+            ld = [art, _crumb_ld(BASE, crumbs)] + (IG.image_ld(BASE, "pillar", p["id"], lang, u, title=d["h1"], date=UPDATED) if _ig else [])
             faq = faq_of(d["article"])
             if faq: ld.append({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]})
-            write(f"{lp(lang)[1:] + '/' if lang != 'en' else ''}learn/{slug_of(p, lang)}/index.html", page(lang, title, desc, u, b, alts if len(alts) > 1 and not noidx else None, ld, xdefault=alts.get("en"), og_type="article", noindex=noidx))
+            write(f"{lp(lang)[1:] + '/' if lang != 'en' else ''}learn/{slug_of(p, lang)}/index.html", page(lang, title, desc, u, b, alts if len(alts) > 1 and not noidx else None, ld, xdefault=alts.get("en"), og_type="article", noindex=noidx, **(IG.page_kw("pillar", p["id"], lang) if _ig else {})))
             if not noidx: sitemap.append((u, UPDATED, alts if len(alts) > 1 else None))
             made[lang] += 1
             cards[(lang, p["id"])] = (desc, mins)
