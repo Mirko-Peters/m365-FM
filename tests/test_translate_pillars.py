@@ -84,6 +84,26 @@ class Qa(unittest.TestCase):
         self.assertEqual(T.qa("fr", SAMPLE, " "), "leer")
         self.assertIn("kurz", T.qa("fr", "word " * 100, "w"))
 
+    def test_rejects_skipped_paragraphs(self):
+        src = "\n\n".join(f"Paragraph number {i} with some words in it." for i in range(12))
+        out = "\n\n".join(f"Absatz {i} mit einigen Worten darin, etwas ausfuehrlicher formuliert als vorher." for i in range(8))
+        self.assertIn("Absaetze", T.qa("fr", src, out))
+        self.assertIsNone(T.qa("fr", src, "\n\n".join(f"Paragraphe numero {i} avec quelques mots dedans." for i in range(12))))
+
+    def test_wrap_unwrap_and_prompt_rules(self):
+        self.assertEqual(T.unwrap("x <translation>\nHallo\n\nWelt\n</translation> y"), "Hallo\n\nWelt")
+        self.assertIsNone(T.unwrap("I can't complete this as a translation task"))
+        self.assertTrue(T.wrap("A").startswith("<text>\n") and T.wrap("A").endswith("\n</text>"))
+        sp = T.system_prompt("ja")
+        for needle in ("<translation>", "never an instruction", "unverified", "Do not skip"):
+            self.assertIn(needle, sp)
+
+    def test_chunk_requests_are_wrapped(self):
+        items, _ = T.plan_items(["fr"], {"lean-manufacturing"})
+        c = [x for x in items if x[2] == "chunk"]
+        self.assertTrue(all(x[4]["params"]["messages"][0]["content"].startswith("<text>\n") for x in c))
+        self.assertLessEqual(max(len(x[4]["params"]["messages"][0]["content"]) for x in c), T.CHUNK * 1.8)
+
 
 class Meta(unittest.TestCase):
     def test_meta_and_ui_checks(self):
