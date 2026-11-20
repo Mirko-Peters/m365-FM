@@ -185,7 +185,9 @@ class Build(unittest.TestCase):
                  {"handle": "mirko-p", "slug": "what-is-a-gemba-walk", "title": "Was ist ein Gemba Walk", "topics": ["gemba-walk"], "lang": "de", "tr_of": 1}]
         import contextlib, io
         from unittest import mock
-        with contextlib.redirect_stdout(io.StringIO()), mock.patch.object(S, "active", lambda: ("en", "de")): S.build(g, posts, {"kaizen", "digital-twin"})
+        import site_infographics as _IG
+        with contextlib.redirect_stdout(io.StringIO()), mock.patch.object(S, "active", lambda: ("en", "de")), mock.patch.object(_IG, "get", lambda *a: None):   # unabhaengig von den echten Infografik-Daten
+            S.build(g, posts, {"kaizen", "digital-twin"})
         self.json = json
 
     def test_pages_schema_and_language_links(self):
