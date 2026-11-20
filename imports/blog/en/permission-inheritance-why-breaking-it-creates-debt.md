@@ -1,8 +1,8 @@
 ---
 title: "Permission inheritance: why breaking it creates debt"
 summary: "Breaking permission inheritance in SharePoint solves a short-term sharing need but builds up unique permissions that are hard to review later. Learn how that turns into permission debt and what to do instead."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-20
 topics: [permission-inheritance, permission-debt, sharepoint-permissions]
