@@ -24,6 +24,56 @@ def de_set():
     return s
 
 
+COMPARE = {"template": "compare", "alt": "Two ways to plan production", "tags": [], "kicker": "Guide · Production planning", "title": "Push vs pull", "left": {"head": "Push", "items": ["Plan from forecasts", "Stock buffers"]},
+           "right": {"head": "Pull", "items": ["Plan from demand", "Small buffers"]}, "verdict": "Pull fits stable, repeating demand."}
+LADDER = {"template": "ladder", "alt": "Maturity levels of daily management", "tags": [], "kicker": "Guide · Shop floor", "title": "Maturity levels", "sub": "From ad hoc to routine.",
+          "tiers": [{"t": "Ad hoc", "n": "No fixed routine"}, {"t": "Defined", "n": "Boards and meetings exist"}, {"t": "Routine", "n": "Daily, with actions tracked"}], "axis": "Discipline rises"}
+
+
+def pillar_set(n, mix=("flow", "hub", "compare", "ladder")):
+    by = {"flow": FLOW, "hub": HUB, "compare": COMPARE, "ladder": LADDER}
+    return {"header": HEADER, "figs": [copy.deepcopy(by[mix[i % len(mix)]]) for i in range(n)]}
+
+
+class PillarKind(unittest.TestCase):
+    def test_figure_counts_per_kind(self):
+        for n in (9, 10): self.assertIsNone(IGT.check_set(pillar_set(n), "en", None, None, "pillar"), n)
+        for n in (2, 3, 8, 11): self.assertEqual(IGT.check_set(pillar_set(n), "en", None, None, "pillar"), "Anzahl Infografiken", n)
+        self.assertEqual(IGT.check_set(pillar_set(10, ("flow", "hub")), "en", None, None, "pillar"), "Vorlagen: zu oft dieselbe")   # 5 gleiche
+        self.assertIsNone(IGT.check_set(pillar_set(9, ("flow", "hub", "compare")), "en", None, None, "pillar"))
+        self.assertEqual(IGT.check_set(pillar_set(9), "en", None, None, "blog"), "Anzahl Infografiken")   # andere Arten bleiben bei 2-3
+        self.assertEqual(IGT.check_set({"header": HEADER, "figs": [FLOW, FLOW]}, "en", None, None, "blog"), "Vorlagen")
+
+    def test_translation_keeps_structure_for_pillars(self):
+        en = pillar_set(10); de = copy.deepcopy(en)
+        self.assertIsNone(IGT.check_set(de, "de", en, None, "pillar"))
+        de["figs"] = de["figs"][::-1]; self.assertIn("Vorlagen", IGT.check_set(de, "de", en, None, "pillar") or "")
+
+    def test_prompt_and_tokens(self):
+        sp = IGT.system_specs("pillar")
+        self.assertIn("9 or 10 infographics", sp); self.assertIn("whole guide", sp); [self.assertNotIn(x, sp) for x in ("{nfigs}", "{tmpl_rule}", "{count_rule}", "{extra}", "{limits}", "{example}")]
+        self.assertIn("2 or 3 infographics", IGT.system_specs("blog")); self.assertNotIn("whole guide", IGT.system_specs("blog"))
+        big = IGT.req_specs({"kind": "pillar", "label": "Guide", "title": "T", "text": "x"}, "c")["params"]
+        self.assertGreaterEqual(big["max_tokens"], 8000)
+        self.assertEqual(IGT.req_specs({"kind": "blog", "label": "Blog", "title": "T", "text": "x"}, "c")["params"]["max_tokens"], 3000)
+        self.assertGreaterEqual(IGT.req_tr(pillar_set(10), "de", "c", "pillar")["params"]["max_tokens"], 10000)
+        self.assertGreater(IGT.est_kind("pillar", "specs"), 5 * IGT.est_kind("blog", "specs"))
+
+    def test_items_are_the_english_guides(self):
+        its = IGT.items("pillar")
+        self.assertGreaterEqual(len(its), 10)
+        for it in its:
+            self.assertEqual(it["kind"], "pillar"); self.assertEqual(it["label"], "Guide"); self.assertTrue(it["key"].startswith("pillar:"))
+            self.assertGreater(len(it["text"]), 20000); self.assertLessEqual(len(it["text"]), IGT.PILLAR_TEXT)
+            self.assertNotIn("](", it["text"]); self.assertNotRegex(it["text"], r"\[\d{1,3}\]")
+
+    def test_pillar_is_a_known_kind_and_planned(self):
+        self.assertIn("pillar", IGT.KINDS)
+        rep = IGT.plan(["pillar"], ["en", "de"])
+        self.assertGreaterEqual(rep["pillar"]["n"], 10)
+        self.assertIn("pillar:", IGT.plan_text(rep, ["en", "de"]))
+
+
 class SpecChecks(unittest.TestCase):
     def test_valid_set(self):
         self.assertIsNone(IGT.check_set(SET))

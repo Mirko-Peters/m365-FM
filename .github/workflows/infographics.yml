@@ -6,7 +6,7 @@ on:
   workflow_call:   # aufgerufen von infographics-auto.yml (samstags); gleiche Eingaben, ref = Zweig, damit jede Stufe den Stand der vorigen sieht
     inputs:
       mode: { type: string, required: true }
-      kinds: { type: string, required: false, default: "entity,blog,episode" }
+      kinds: { type: string, required: false, default: "entity,blog,episode,pillar" }
       langs: { type: string, required: false, default: "en,de" }
       limit: { type: string, required: false, default: "" }
       ref: { type: string, required: false, default: "" }
@@ -17,7 +17,7 @@ on:
         type: choice
         options: [plan, specs, translate, collect, render]
         default: plan
-      kinds: { description: "Arten (Komma): entity, blog, episode", required: false, default: "entity,blog,episode" }
+      kinds: { description: "Arten (Komma): entity, blog, episode, pillar", required: false, default: "entity,blog,episode,pillar" }
       langs: { description: "Sprachen (Komma), fuer translate und render. Zuerst en,de; spaeter alle: en,de,es,fr,it,pt,nl,pl,id,ru,uk,ar,he,ja,ko", required: false, default: "en,de" }
       limit: { description: "Hoechstens N Inhalte (leer = alle offenen); fuer die Probe 20", required: false, default: "" }
 permissions:
