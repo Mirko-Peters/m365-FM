@@ -28,11 +28,12 @@ LANG_NAMES = {"en": "English", "de": "German", "fr": "French", "es": "Spanish", 
 RTL = ("ar", "he")
 SIZES = {"flow": (1920, 1080), "compare": (1200, 1040), "ladder": (1200, 1800), "bigfact": (1200, 630), "hub": (1200, 1200)}   # wie templates.mjs
 FIG_TEMPLATES = ("flow", "compare", "ladder", "hub")   # bigfact ist dem Kopfbild vorbehalten
-FIGS = {"pillar": (8, 10)}   # Infografiken je Inhalt nach Art (ohne Kopfbild): Leitfaeden sind lang und bekommen insgesamt 10 Bilder; sonst 2-3
+FIGS = {"pillar": (6, 10)}   # Infografiken je Inhalt nach Art (ohne Kopfbild): Leitfaeden sind lang und bekommen insgesamt 10 Bilder; sonst 2-3
 FIGS_DEFAULT = (2, 3)
+EN_SLACK_BIG = 1.3   # Leitfaeden: laengere englische Texte (die KI haelt 30-Zeichen-Grenzen oft nicht); ob es passt, entscheidet das Rendern (Layoutpruefung)
 MAX_SAME = 4         # bei Leitfaeden duerfen sich Vorlagen wiederholen, aber hoechstens so oft
 PILLAR_TEXT = 90000  # Zeichen des Leitfadens, die an die KI gehen (ganze Leitfaeden sind 70-95 Tsd.)
-MAX_TRIES = 5          # Textversuche je Inhalt/Sprache (ab dem zweiten mit Rueckmeldung der Pruefung)
+MAX_TRIES = 8          # Textversuche je Inhalt/Sprache (ab dem zweiten mit Rueckmeldung der Pruefung)
 RENDER_TRIES = 2       # Layoutfehler sind immer gleich: nach zwei Versuchen nicht mehr rendern
 EN_SLACK = 1.15    # englische Texte duerfen die Grenze um 15 % ueberschreiten (die KI zaehlt Zeichen nicht genau; Stresstest bestand bis x 1,4)
 LANG_FACTOR = 1.4   # Textgrenzen der Uebersetzungen: Englisch x 1,4 (Deutsch/Russisch laenger); die Layoutpruefung beim Rendern ist die endgueltige Grenze
@@ -137,8 +138,8 @@ PILLAR_EXTRA = (
 def system_specs(kind=None):
     lo, hi = FIGS.get(kind, FIGS_DEFAULT)
     if kind in FIGS:
-        n = f"{lo} to {hi} (aim for {hi})"
-        tmpl, cnt, extra = f"templates may repeat but each at most {MAX_SAME} times; every figure uses exactly one of flow, compare, ladder, hub (never bigfact, no other names)", f"the figs array has {lo} to {hi} items: count them before you answer; a set outside this range is discarded", PILLAR_EXTRA
+        n = str(hi)
+        tmpl, cnt, extra = f"templates may repeat but each at most {MAX_SAME} times; every figure uses exactly one of flow, compare, ladder, hub (never bigfact, no other names)", f"the figs array has {hi} items (at least {lo}, never more than {hi}): count them before you answer; a set with fewer than {lo} or more than {hi} is discarded", PILLAR_EXTRA
     else:
         n, tmpl, cnt, extra = f"{lo} or {hi}", "each with a different template", "exactly 2 or 3 infographics, never 1 or 4", ""
     return (SYSTEM_SPECS.replace("{nfigs}", n).replace("{tmpl_rule}", tmpl).replace("{count_rule}", cnt).replace("{extra}", extra)
@@ -192,12 +193,12 @@ def strings(spec):
     return out
 
 
-def check_spec(spec, lang="en", template=None):
+def check_spec(spec, lang="en", template=None, slack=None):
     """None = in Ordnung, sonst Grund. Pruefung von Form, Anzahl, Laengen und Schrift."""
     if not isinstance(spec, dict): return "kein Objekt"
     t = spec.get("template")
     if t not in LIMITS or (template and t != template): return f"Vorlage {t!r}"
-    f = EN_SLACK if lang == "en" else LANG_FACTOR
+    f = (slack or EN_SLACK) if lang == "en" else LANG_FACTOR
     for k, lim in LIMITS[t].items():
         v = _get(spec, k)
         if isinstance(lim, tuple):
@@ -236,7 +237,7 @@ def salvage(st, kind):
     keep, used = [], {}
     for f in st["figs"]:
         t = f.get("template") if isinstance(f, dict) else None
-        if t not in FIG_TEMPLATES or check_spec(f, "en") or used.get(t, 0) >= MAX_SAME: continue
+        if t not in FIG_TEMPLATES or check_spec(f, "en", None, EN_SLACK_BIG) or used.get(t, 0) >= MAX_SAME: continue
         if t == "flow" and f["hero"]["value"] != str(len(f["steps"])): continue
         if t == "hub" and f["core"]["value"] != str(len(f["nodes"])): continue
         keep.append(f); used[t] = used.get(t, 0) + 1
@@ -256,7 +257,7 @@ def check_set(st, lang="en", en=None, source=None, kind=None):
         if any(seen.count(s) > MAX_SAME for s in set(seen)): return "Vorlagen: zu oft dieselbe"
     elif len(set(seen)) != len(seen): return "Vorlagen"
     for i, s in enumerate([st["header"]] + st["figs"]):
-        r = check_spec(s, lang)
+        r = check_spec(s, lang, None, EN_SLACK_BIG if kind in FIGS else None)
         if r: return f"Bild {i}: {r}"
     for f in st["figs"]:   # die grosse Zahl ist genau die Zahl der Elemente (sonst steht im Bild eine falsche Zahl)
         if f["template"] == "flow" and f["hero"]["value"] != str(len(f["steps"])): return "flow: Zahl passt nicht zu den Schritten"
