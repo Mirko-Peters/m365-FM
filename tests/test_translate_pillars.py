@@ -138,6 +138,21 @@ class Plan(unittest.TestCase):
             items, stale = T.plan_items(["fr"], {p["id"]}, redo=True)
             self.assertGreater(len(items), 5)
 
+    def test_retry_carries_reason_of_last_rejection(self):
+        with tempfile.TemporaryDirectory() as d, mock.patch.object(T, "OUT", Path(d)):
+            p = PIL.by_id("lean-manufacturing"); parts = T.chunks(T.source(p)["article"])
+            T.save_state("fr", p["id"], {"h": [T.h8(x) for x in parts], "chunks": [None] * len(parts), "meta": None, "tries": {"c0": 1}, "why": {"c0": "qa: heads weichen ab"}})
+            items, _ = T.plan_items(["fr"], {p["id"]})
+            first = next(x for x in items if x[2] == "chunk" and x[3] == 0)[4]["params"]["system"]
+            second = next(x for x in items if x[2] == "chunk" and x[3] == 1)[4]["params"]["system"]
+            self.assertIn("heads weichen ab", first)
+            self.assertNotIn("previous attempt", second)
+
+    def test_workflow_commit_step_tolerates_missing_overlay(self):
+        w = (ROOT / ".github" / "workflows" / "translate-pillars.yml").read_text("utf-8")
+        self.assertNotIn("git add data/pillars_i18n data/pillars_i18n.json", w)
+        self.assertIn("[ -f data/pillars_i18n.json ]", w)
+
 
 class Translated(unittest.TestCase):
     """site_pillars baut uebersetzte Sprachen nur mit Texten und Datei; vorher noindex, ohne hreflang und ohne Sitemap."""
