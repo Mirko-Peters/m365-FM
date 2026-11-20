@@ -1,0 +1,977 @@
+# SEO metadata
+
+| Field | Value |
+|---|---|
+| Meta title | Software per la pianificazione della produzione: guida APS (2026) |
+| Meta description | Software di pianificazione della produzione e APS spiegati: capacità finita, colli di bottiglia, drum-buffer-rope, EOQ, scorte di sicurezza, esempi pratici e checklist. |
+| Slug | `production-scheduling-aps` |
+
+# Software per la pianificazione della produzione e APS: la guida completa a programmi che reggono in officina
+
+> **Risposta breve:** Il software di pianificazione della produzione con APS (advanced planning and scheduling) pianifica gli ordini di produzione tenendo conto contemporaneamente della capacità finita e della disponibilità di materiale. La logica MRP classica di un sistema ERP presuppone capacità illimitata e tempi di attraversamento fissi. Un APS modella macchine, personale, attrezzature, cambi di formato, turni e colli di bottiglia, quindi la sequenza e le date che produce sono date che lo stabilimento può effettivamente rispettare.
+
+È lunedì mattina nell'ufficio di controllo della produzione. La procedura MRP del fine settimana ha generato 140 ordini di lavoro con data di inizio "questa settimana". La cella di lavorazione meccanica ha quasi due settimane di lavoro in coda, il montaggio è in attesa di componenti e le vendite chiedono una data di spedizione che nessuno può garantire con serietà. Quindi il piano viene rifatto: in Excel, sulla lavagna, in una conversazione nel corridoio con il capoturno. Entro mercoledì è di nuovo superato.
+
+Se la situazione è familiare, la causa raramente è una mancanza di disciplina. È la logica di pianificazione. La pianificazione dei fabbisogni di materiale (MRP, material requirements planning) è stata costruita per rispondere a una sola domanda: *Di quale materiale ho bisogno, e quando?* Risponde solo in modo approssimativo, o non risponde affatto, alla domanda *Il mio stabilimento può effettivamente eseguire questo lavoro in questa sequenza?* È a questa seconda domanda che servono la schedulazione di dettaglio e l'APS.
+
+Questa guida tratta i fondamenti della pianificazione e del controllo della produzione, i punti deboli strutturali dell'MRP, la fisica di una fabbrica, il funzionamento dei sistemi APS, la teoria dei vincoli con drum-buffer-rope, gli elementi di base del lean come heijunka e il bilanciamento di linea, le formule classiche per la dimensione del lotto e lo stock di sicurezza con esempi svolti, nonché la selezione e l'implementazione di software di schedulazione della produzione con capacità APS. Per una breve definizione, consultare la pagina dell'entità m365.fm [Advanced Planning and Scheduling](https://www.m365.fm/entity/advanced-planning-and-scheduling/).
+
+### Punti chiave
+
+- **L'ERP pianifica il materiale, l'APS pianifica la fattibilità.** La logica MRP all'interno di un ERP, nella sua forma di base, presuppone capacità illimitata e tempi di attraversamento pianificati fissi. Un APS schedula tenendo conto contemporaneamente della capacità finita e della disponibilità di materiale.
+- **Il tempo di attraversamento è per lo più tempo di attesa.** La legge di Little afferma che tempo di ciclo = lavoro in corso ÷ produttività [9]. Ridurre il WIP senza far mancare materiale al collo di bottiglia abbassa i tempi di attraversamento.
+- **L'alta saturazione costa tempo.** Il tempo di coda cresce con il fattore u/(1−u), non linearmente. Al 95% di utilizzo l'attesa è quasi cinque volte quella all'80% [10][11].
+- **Il collo di bottiglia fissa il ritmo.** La teoria dei vincoli (TOC, theory of constraints) e drum-buffer-rope (DBR) allineano il rilascio degli ordini e la sequenza al vincolo [1][2].
+- **Le formule classiche sono punti di partenza, non verità.** La quantità economica d'ordine (EOQ, economic order quantity) e la formula dello stock di sicurezza si basano su ipotesi semplificate. La curva di costo dell'EOQ è piatta e il tempo di attrezzaggio è di solito la leva più importante.
+- **Un APS vale quanto i suoi dati anagrafici.** Cicli di lavorazione, tempi standard, matrici dei cambi di formato e calendari di capacità determinano la qualità della schedulazione più dell'algoritmo.
+
+### Da dove iniziare, per ruolo
+
+| Sei … | Leggi prima |
+|---|---|
+| Un pianificatore o schedulatore della produzione alle prese con schedule ERP irrealistiche | Sezioni 3, 4 e 5 (punti deboli dell'MRP, fisica di fabbrica, funzionamento dell'APS) |
+| Nel controllo produzione, nell'ingegneria di produzione o nella leadership di reparto | Sezioni 7 e 8 (collo di bottiglia, DBR, takt, heijunka) |
+| Nella supply chain, nella pianificazione materiali o delle scorte | Sezioni 9 e 10 (dimensione del lotto, stock di sicurezza) |
+| Responsabile di una selezione o implementazione APS | Sezioni da 13 a 16 (selezione, dati, roadmap, errori) |
+| Un direttore di stabilimento o un dirigente delle operations | Risposta breve, Sezione 11 (KPI) e Sezione 21 (Conclusioni) |
+
+## Indice
+
+1. [Perché le pianificazioni ERP falliscono in officina](#1-perché-le-pianificazioni-erp-falliscono-in-officina)
+2. [Fondamenti: cosa comprende la pianificazione e il controllo della produzione](#2-fondamenti-cosa-comprende-la-pianificazione-e-il-controllo-della-produzione)
+3. [I punti deboli della classica logica MRP](#3-i-punti-deboli-della-classica-logica-mrp)
+4. [Fisica della fabbrica: legge di Little, curve di funzionamento e variabilità](#4-fisica-della-fabbrica-legge-di-little-curve-di-funzionamento-e-variabilità)
+5. [Cos'è un sistema APS e come calcola](#5-cosè-un-sistema-aps-e-come-calcola)
+6. [ERP vs. APS vs. MES](#6-erp-vs-aps-vs-mes)
+7. [Teoria dei vincoli, drum-buffer-rope e gestione dei buffer](#7-teoria-dei-vincoli-drum-buffer-rope-e-gestione-dei-buffer)
+8. [Elementi Lean nella schedulazione: takt, heijunka, bilanciamento di linea, pull](#8-elementi-lean-nella-schedulazione-takt-heijunka-bilanciamento-di-linea-pull)
+9. [Dimensionamento dei lotti: EOQ, esempio svolto e limiti](#9-dimensionamento-dei-lotti-eoq-esempio-svolto-e-limiti)
+10. [Scorta di sicurezza: formula ed esempio svolto](#10-scorta-di-sicurezza-formula-ed-esempio-svolto)
+11. [KPI della pianificazione della produzione](#11-kpi-della-pianificazione-della-produzione)
+12. [Gemello digitale e simulazione](#12-gemello-digitale-e-simulazione)
+13. [Come scegliere un software di schedulazione della produzione: criteri e checklist](#13-come-scegliere-un-software-di-schedulazione-della-produzione-criteri-e-checklist)
+14. [Requisiti sui dati e qualità dei dati anagrafici](#14-requisiti-sui-dati-e-qualità-dei-dati-anagrafici)
+15. [Roadmap di implementazione dell'APS](#15-roadmap-di-implementazione-dellaps)
+16. [Errori comuni e come evitarli](#16-errori-comuni-e-come-evitarli)
+17. [Evidenze: cosa riportano studi e utenti](#17-evidenze-cosa-riportano-studi-e-utenti)
+18. [Pianificazione basata sui vincoli con iFAKT Polaris](#18-pianificazione-basata-sui-vincoli-con-ifakt-polaris)
+19. [Glossario](#19-glossario)
+20. [FAQ: software di schedulazione della produzione e APS](#20-faq-software-di-schedulazione-della-produzione-e-aps)
+21. [Conclusioni](#21-conclusioni)
+
+## 1. Perché le pianificazioni ERP falliscono in officina
+
+La maggior parte dei produttori pianifica la produzione nel proprio sistema ERP, e a ragione: lì risiedono ordini clienti, distinte base, cicli di lavorazione e giacenze. Un sistema [Enterprise Resource Planning](https://www.m365.fm/entity/enterprise-resource-planning/) è il sistema di riferimento per quantità, valori e date. La logica di pianificazione della maggior parte dei sistemi ERP, però, si basa su un metodo sviluppato negli anni Sessanta e Settanta e documentato da Joseph Orlicky nel suo testo standard del 1975: la material requirements planning [24].
+
+I pianificatori riconoscono i sintomi nel momento in cui questa logica raggiunge i suoi limiti:
+
+- **Centri di lavoro sovraccarichi sulla carta:** l'ERP schedula gli ordini in una settimana in cui la capacità del centro di lavoro è già esaurita.
+- **Date di spedizione a intuito:** le date promesse si basano su lead time standard, non sul carico attuale.
+- **Schedulazione ombra in Excel:** la schedulazione dettagliata reale vive fuori dall'ERP, in fogli di calcolo, su lavagne o nella testa dei capisquadra più esperti.
+- **Le urgenze spingono fuori tutto il resto:** ogni accelerazione crea nuovi ritardi altrove.
+- **Scorte elevate e comunque carenze:** c'è molto materiale in reparto, solo non quello che serve in quel momento al montaggio.
+- **Pianificatori come vigili del fuoco:** una quota consistente della settimana va nel riprogrammare invece che nel pianificare.
+
+La diffusione di questo fenomeno emerge da un sondaggio che IDC ha condotto per il fornitore di software di pianificazione Kinaxis. IDC ha intervistato oltre 1.800 responsabili della supply chain in nove Paesi, tra cui Stati Uniti e Canada, nel dicembre 2023; l'83% ha dichiarato che la propria organizzazione non era in grado di rispondere a un'interruzione della supply chain entro 24 ore [32]. Per i 200 intervistati tedeschi, la rivista specializzata tedesca Logistik Heute ha riportato che il 37% si affidava solo a Excel o a Excel combinato con strumenti autonomi per la pianificazione della supply chain, e l'89% non era in grado di rispondere alle interruzioni entro 24 ore [25]. Lo studio è sponsorizzato dal fornitore e riguarda la pianificazione della supply chain in generale, non specificamente la schedulazione di officina, e il comunicato pubblicato non riporta una cifra specifica per gli Stati Uniti relativa ai fogli di calcolo. Resta comunque indicativo della portata del problema.
+
+La buona notizia: le cause sono ben comprese. Si trovano in tre ambiti che questa guida tratta in sequenza: la logica di pianificazione (Sezione 3), la fisica di code e scorte (Sezione 4) e la mancata attenzione sul collo di bottiglia (Sezione 7). Una versione più breve della prima argomentazione è nel post di m365.fm [Beyond MRP: Why Enterprise Resource Planning Fails at Finite Production Scheduling](https://www.m365.fm/community/u/mirko-p/blog/beyond-mrp-enterprise-resource-planning-finite-scheduling/).
+
+## 2. Fondamenti: che cosa copre la pianificazione e il controllo della produzione
+
+### 2.1 Definizioni
+
+La **pianificazione e controllo della produzione (PPC)** comprende tutte le attività con cui un'azienda decide *che cosa*, *quanto*, *quando* e *dove* produrre, e con cui avvia e monitora l'esecuzione. La pianificazione definisce gli obiettivi; il controllo li esegue in reparto e reagisce agli scostamenti. Nella pratica statunitense lo stesso ambito è spesso chiamato manufacturing planning and control (MPC). Il corpo di conoscenze di riferimento è curato dall'ASCM, la Association for Supply Chain Management, attraverso la certificazione APICS CPIM, i cui moduli comprendono la pianificazione delle vendite e delle operations, l'approvvigionamento interno, le scorte e i programmi di dettaglio [33].
+
+Due termini generano spesso confusione: **pianificazione** e **schedulazione**. La pianificazione (rough-cut o aggregate planning) lavora con quantità aggregate, periodi settimanali o mensili e gruppi di centri di lavoro. La **schedulazione di dettaglio** stabilisce, per ogni singola operazione, su quale risorsa viene eseguita, in quale sequenza e a quale ora. Lavora su giorni, turni o minuti ed è il nucleo di ciò che fa un sistema APS. La prassi tedesca usa la coppia *Grobplanung* e *Feinplanung* per la stessa distinzione; nella letteratura dei fornitori tedeschi compare il termine "Feinplanung".
+
+### 2.2 I livelli di pianificazione in sintesi
+
+La letteratura organizza la pianificazione in modo gerarchico, dal piano di vendita e capacità a lungo termine fino alla sequenza su una singola macchina [7][12]. La tabella riassume i livelli. Gli orizzonti sono ordini di grandezza tipici e variano in base al settore e al tipo di produzione.
+
+| Livello | Orizzonte tipico | Domanda chiave | Output | Sistema tipico |
+|---|---|---|---|---|
+| Sales and operations planning (S&OP) | da 12 a 24 mesi | Che cosa venderemo e di quale capacità avremo bisogno? | Piano vendite e capacità per famiglia di prodotti | ERP, strumenti di pianificazione, Excel |
+| Master production schedule (MPS) | da settimane a mesi | Quali prodotti finiti costruiamo, quando e in quale quantità? | Domanda indipendente, programma di produzione | ERP |
+| Material requirements planning (MRP) | settimane | Di quali semilavorati, componenti e materie prime abbiamo bisogno, e quando? | Domanda dipendente, ordini pianificati, richieste di acquisto | ERP |
+| Capacity requirements planning (CRP) | da giorni a settimane | Quando vengono eseguite le operazioni e c'è capacità sufficiente? | Date intermedie, carico di capacità | ERP (grossolano), APS (preciso) |
+| Schedulazione di dettaglio | da ore a giorni, con estensione fino a poche settimane | Quale operazione viene eseguita su quale risorsa, in quale sequenza? | Programma delle risorse, sequenza (diagramma di Gantt) | APS, modulo di schedulazione MES, lavagna di schedulazione |
+| Controllo dell'attività produttiva / dispatching | da turno a minuto | Quale ordine viene rilasciato, che cosa succede se qualcosa si guasta? | Rilasci, conferme, trigger di riprogrammazione | MES, APS, reparto |
+
+Hermann Lödding, ricercatore tedesco nel campo del controllo della produzione, suddivide il controllo della produzione in quattro compiti: generazione degli ordini, rilascio degli ordini, controllo della capacità e sequenziamento [12]. La suddivisione è utile perché mostra che una buona schedulazione da sola non basta. La decisione su *quando* un ordine entra in reparto incide spesso sul WIP e sul lead time più della sequenza su una qualsiasi macchina.
+
+### 2.3 Modelli di riferimento: ISA-95, ASCM e il modello PPC di Aquisgrana
+
+I produttori statunitensi si orientano di solito su due framework. La gerarchia di pianificazione ASCM/APICS mostrata nella tabella sopra (S&OP, MPS, MRP, CRP, schedulazione di dettaglio, esecuzione) è il linguaggio comune di pianificatori e professionisti della supply chain [33]. ANSI/ISA-95 (pubblicato a livello internazionale come IEC 62264) traccia la linea di demarcazione tra pianificazione aziendale e logistica (Livello 4, tipicamente ERP) e gestione delle operations di produzione (Livello 3, tipicamente MES e moduli di schedulazione). La Parte 3, ANSI/ISA-95.00.03-2013, descrive i modelli di attività della gestione delle operations di produzione e definisce la schedulazione a capacità finita come un metodo in cui il lavoro viene schedulato per un insieme di risorse produttive in modo che nessuna capacità programmata superi la capacità disponibile [31].
+
+Nei paesi di lingua tedesca, il modello di riferimento dominante è il **modello PPC di Aquisgrana** (*Aachener PPS-Modell*) dell'istituto FIR della RWTH Aachen University. È descritto in diverse edizioni del testo standard tedesco *Produktionsplanung und -steuerung*; la quarta edizione è stata curata da Günther Schuh e Volker Stich nel 2012 [7]. Il modello raggruppa i compiti di pianificazione e controllo in tre categorie:
+
+- **Compiti di rete:** progettazione strategica della rete produttiva, come le decisioni su siti e fornitori.
+- **Compiti centrali:** i compiti che fanno avanzare un ordine, vale a dire pianificazione del programma di produzione, pianificazione dei fabbisogni di produzione, pianificazione e controllo della produzione interna e pianificazione e controllo dell'approvvigionamento esterno.
+- **Compiti trasversali:** gestione degli ordini, gestione delle scorte e controllo di gestione, che integrano e ottimizzano tra le diverse funzioni.
+
+Il valore di tutti e tre i modelli sta nella chiara separazione dei compiti. Aiutano a stabilire quale sistema debba occuparsi di quale attività: l'ERP copre di norma la pianificazione del programma e dei fabbisogni, un APS copre la schedulazione dettagliata della produzione interna e un MES copre l'esecuzione e le conferme.
+
+### 2.4 Dall'MRP all'MRP II fino all'APS
+
+La storia dei sistemi di pianificazione spiega molti dei problemi odierni:
+
+1. **Punti di riordino e formule del lotto economico (dal 1913):** Ford Whitman Harris pubblicò la formula del lotto economico nel 1913 [17]. Nei paesi di lingua tedesca divenne noto attraverso Kurt Andler (1929) ed è ancora chiamato *formula di Andler* in quell'area [18].
+2. **MRP (anni '60 e '70):** I computer resero possibile far esplodere la domanda attraverso le distinte base e sfasarla nel tempo in base ai tempi di approvvigionamento pianificati. Orlicky descrisse il metodo in modo esaustivo nel 1975 [24].
+3. **MRP II (inizio anni '80):** La pianificazione delle risorse di produzione aggiunse la pianificazione master, la pianificazione della capacità a grandi linee, la pianificazione del fabbisogno di capacità (CRP) e il collegamento con la pianificazione finanziaria. Il controllo della capacità restava però una fase successiva: prima si schedulava, poi si visualizzava il carico [10].
+4. **ERP (anni '90):** I sistemi ERP integrarono finanza, vendite, acquisti e risorse umane. Il nucleo di pianificazione restava spesso l'MRP II.
+5. **APS (dagli anni '90):** I sistemi di pianificazione avanzata affrontano il controllo della capacità a valle, pianificando materiali e capacità insieme con metodi di ottimizzazione. Non sostituiscono l'ERP; aggiungono una pianificazione che tiene conto della capacità finita [13].
+
+## 3. I punti deboli della logica MRP classica
+
+La logica MRP non è sbagliata. Per determinare quale materiale serve e in quale quantità, è indispensabile. Diventa un problema quando il suo risultato viene usato senza verifiche come piano di produzione. Wallace Hopp e Mark Spearman criticano in *Factory Physics* che il modello MRP di base presuppone tempi di attraversamento fissi che non dipendono dal carico. Tempi di attraversamento fissi, però, sarebbero possibili solo con una capacità illimitata [10].
+
+### 3.1 Capacità infinita
+
+L'MRP programma ogni ordine pianificato retrocedendo il tempo di attraversamento pianificato dalla data di scadenza. Non verifica se il centro di lavoro è libero in quel momento. Questo si chiama **pianificazione a capacità infinita**. La successiva pianificazione dei fabbisogni di capacità (CRP) mostra i sovraccarichi ma non li risolve. Questo compito resta al pianificatore.
+
+**Esempio svolto: il sovraccarico che l'MRP non vede**
+
+Un centro di lavoro per la lavorazione meccanica opera su due turni, cinque giorni a settimana, 8 ore per turno: 80 ore di capacità a settimana. L'elaborazione MRP genera questo carico:
+
+| Settimana | Capacità (h) | Carico MRP (h) | Differenza (h) | Carico |
+|---|---|---|---|---|
+| Settimana 12 | 80 | 112 | −32 | 140% |
+| Settimana 13 | 80 | 54 | +26 | 68% |
+| Settimana 14 | 80 | 96 | −16 | 120% |
+| **Totale** | **240** | **262** | **−22** | **109%** |
+
+Anche se il pianificatore livella perfettamente e sposta lavoro dalla settimana 12 alla settimana 13, restano 22 ore che non possono essere eseguite nelle tre settimane. Si pianifica allora lo straordinario, l'esternalizzazione o una macchina alternativa, oppure almeno un ordine termina in ritardo. L'ERP, però, mostra ancora ogni ordine con la data originale, e le vendite promettono le date di spedizione su quella base. Un APS programmerebbe gli ordini su 80 ore a settimana e segnalerebbe la data di completamento più vicina realisticamente possibile.
+
+### 3.2 Tempi di attraversamento pianificati fissi
+
+La seconda ipotesi è un **tempo di attraversamento pianificato fisso** per articolo o ciclo di lavorazione, ad esempio "fresatura: 5 giorni lavorativi". In realtà, il tempo di attraversamento dipende fortemente dal carico attuale, come mostra la Sezione 4. Quando il reparto è vuoto, un ordine attraversa in due giorni. Quando è pieno, ne richiede due settimane. Un valore fisso risulta quindi quasi sempre troppo lungo (effetto: scorte elevate, rilasci anticipati) o troppo corto (effetto: ordini in ritardo).
+
+Il tempo di attraversamento pianificato contiene inoltre di solito una quota rilevante di tempi di movimentazione e di coda. Peter Nyhuis e Hans-Peter Wiendahl della Leibniz Universität Hannover distinguono tra tempo di operazione (attrezzaggio e lavorazione) e tempo tra le operazioni (attese prima e dopo la lavorazione, più il trasporto) [8]. Nelle job shop, il tempo tra le operazioni è di solito la parte maggiore. Inserire quel tempo di attesa nei dati anagrafici come costante fissa lo cristallizza.
+
+### 3.3 La sindrome del tempo di attraversamento
+
+Che cosa succede quando i pianificatori, di fronte a ordini in ritardo, aumentano i tempi di attraversamento pianificati? L'effetto è noto da decenni come **sindrome del tempo di attraversamento** ed è discusso soprattutto nel contesto dell'MRP [23]:
+
+1. Gli ordini terminano in ritardo.
+2. I pianificatori aumentano i tempi di attraversamento pianificati per stare sul sicuro.
+3. Di conseguenza, gli ordini vengono rilasciati prima.
+4. Più ordini sono in produzione contemporaneamente; il WIP aumenta.
+5. Secondo la legge di Little, con una produttività costante, il tempo di attraversamento effettivo cresce.
+6. Gli ordini terminano di nuovo in ritardo, e il ciclo ricomincia.
+
+Nel 2023, Matthias Thürer, Nuno Fernandes, Stefan Haeussler e Mark Stevenson hanno usato la simulazione per verificare se tempi di attraversamento pianificati adattati dinamicamente danneggino le officine a commessa. La risposta: sì, ma non nel modo che ci si aspetterebbe. Il danno deriva principalmente dalla riduzione dei tempi di attraversamento pianificati nei periodi a basso carico, che poi aumenta il carico nei successivi periodi ad alto carico [23]. In pratica: adattare i tempi di attraversamento pianificati senza controllare il rilascio degli ordini sposta soltanto il problema.
+
+I rimedi sono il rilascio degli ordini basato sul carico di lavoro o sul collo di bottiglia (Sezioni 7 e 8) e la programmazione a capacità finita, che ricava i tempi di attraversamento dal programma effettivo invece di prescriverli.
+
+### 3.4 Pianificazione sequenziale
+
+Il terzo punto debole è la **pianificazione sequenziale**: prima il programma, poi i materiali, poi le date, infine la capacità. Ogni fase considera fisso il risultato della precedente. Un riscontro del tipo "questa macchina è piena, quindi sposto il fabbisogno e con esso l'ordine d'acquisto" non fa parte della progettazione. Il risultato sono piani coerenti in ogni fase ma non realizzabili nel loro complesso.
+
+| Ipotesi MRP | Realtà in officina | Conseguenza |
+|---|---|---|
+| La capacità è illimitata | La capacità è limitata in ogni centro di lavoro | settimane sovraccariche, date irrealistiche |
+| I tempi di attraversamento sono fissi | I tempi di attraversamento dipendono dal carico | ordini rilasciati troppo presto o troppo tardi |
+| Le dimensioni dei lotti sono indipendenti dalla sequenza | I tempi di attrezzaggio dipendono dalla variante precedente | capacità perduta al collo di bottiglia |
+| I passi di pianificazione si susseguono uno dopo l'altro | Materiali, capacità e date interagiscono | piani che funzionano solo sulla carta |
+| Domanda e giacenze sono noti con esattezza | Le previsioni variano e le registrazioni di magazzino contengono errori | nervosismo, carenze, scorte di sicurezza gonfiate |
+
+## 4. Fisica della fabbrica: legge di Little, curve operative e variabilità
+
+Per capire perché i programmi di produzione falliscono servono tre relazioni, valide indipendentemente dal settore o dal software. Hopp e Spearman le hanno riassunte sotto il nome di *Factory Physics* [10].
+
+### 4.1 Legge di Little: WIP, throughput e tempo di ciclo
+
+Nel 1961 John D. C. Little ha dimostrato una relazione valida per qualsiasi sistema stabile con arrivi e partenze [9]. In termini produttivi:
+
+> **Tempo di ciclo (CT) = lavoro in corso (WIP) ÷ throughput (TH)**
+
+La formula vale per le medie di lungo periodo, indipendentemente dalla distribuzione dei tempi di lavorazione o dalla regola di sequenziamento. Nota sui termini: nella legge di Little, "tempo di ciclo" indica il tempo che un ordine trascorre nel sistema (il suo tempo di flusso o tempo di attraversamento produttivo), non il tempo di ciclo di stazione che si confronta con il takt time nella Sezione 8.
+
+**Esempio svolto:** Un'officina di componenti completa in media 40 ordini di lavoro al giorno lavorativo. In media, sul pavimento di produzione ci sono 600 ordini rilasciati e non ancora completati.
+
+- CT = 600 ÷ 40 = **15 giorni lavorativi**
+
+Se il rilascio controllato degli ordini riduce il WIP a 320 ordini, mantenendo il collo di bottiglia pienamente alimentato e il throughput a 40 ordini al giorno:
+
+- CT = 320 ÷ 40 = **8 giorni lavorativi**
+
+Il tempo di attraversamento si è quasi dimezzato senza che una sola macchina giri più velocemente. Per questo il controllo del WIP e il rilascio degli ordini sono tra le leve più efficaci ed economiche della pianificazione della produzione. Per approfondire la metrica, vedere la pagina dell'entità [Lead Time](https://www.m365.fm/entity/lead-time/).
+
+**Avvertenza importante:** La legge di Little non dice che ogni riduzione del WIP abbrevi il tempo di attraversamento senza effetti collaterali. Se il WIP davanti al collo di bottiglia scende a tal punto da farlo restare senza lavoro, anche il throughput cala. Le curve operative descrivono esattamente questa relazione.
+
+### 4.2 Curve operative e modello a imbuto
+
+I ricercatori dell'Institute of Production Systems and Logistics (IFA) della Leibniz Universität Hannover hanno sviluppato il **modello a imbuto**: un centro di lavoro viene trattato come un imbuto in cui gli ordini entrano e da cui escono dopo la lavorazione. Il **diagramma di throughput** derivato mostra WIP, produzione e tempo di attraversamento nel tempo [8]. Partendo da questo, Nyhuis e Wiendahl hanno formulato le **curve operative logistiche**, che mostrano come produzione e tempo di attraversamento di un sistema di lavoro dipendano dal WIP [8]:
+
+- Con **WIP basso**, la produzione cresce quasi linearmente con ogni ordine aggiunto, e il tempo di attraversamento resta vicino al puro tempo di lavorazione. Ma il centro di lavoro rischia di restare senza lavoro per mancanza di materiale.
+- Da un **WIP medio** in poi, la produzione si avvicina al suo massimo. Altro WIP aggiunge quasi nulla in termini di produzione.
+- Con **WIP alto**, la produzione resta piatta mentre il tempo di attraversamento continua a crescere in proporzione al WIP. Il WIP in eccesso è puro tempo di attesa.
+
+Da ciò deriva una regola fondamentale di pianificazione: ogni centro di lavoro ha un intervallo di WIP in cui la produzione è garantita e il tempo di attraversamento è ancora breve. Il sequenziamento e il rilascio devono mirare a mantenere l'officina in quell'intervallo. Hopp e Spearman descrivono un concetto correlato, il **WIP critico**: il livello di WIP al quale una linea ideale raggiunge appena il massimo throughput con il minimo tempo di ciclo [10]. Nyhuis e Wiendahl uniscono esplicitamente i due approcci, collegando la teoria delle curve operative con la legge di Little [8].
+
+### 4.3 Variabilità e utilizzo: perché il 95% può essere troppo
+
+Il terzo principio riguarda il tempo di attesa davanti a una risorsa. John Kingman ha pubblicato nel 1961 un'approssimazione per le code in condizioni di traffico intenso [11]. Hopp e Spearman la utilizzano in *Factory Physics* come **equazione VUT** (variabilità × utilizzo × tempo) [10]:
+
+> **Tempo medio di coda alla risorsa ≈ V × U × T**
+>
+> V = (c_a² + c_e²) ÷ 2 (variabilità degli arrivi e dei tempi di lavorazione)
+> U = u ÷ (1 − u) (fattore di utilizzo, u = utilizzo compreso tra 0 e 1)
+> T = t_e (tempo medio effettivo di lavorazione)
+
+c_a e c_e sono i coefficienti di variazione (deviazione standard divisa per la media) dei tempi tra gli arrivi e dei tempi di lavorazione. L'approssimazione si applica a una singola risorsa ed è più accurata ad alta saturazione.
+
+**Esempio svolto:** Una macchina ha un tempo di lavorazione effettivo medio di 1 ora per ordine. Gli arrivi e i tempi di lavorazione variano in modo moderato; entrambi i coefficienti di variazione valgono 1, quindi V = (1 + 1) ÷ 2 = 1.
+
+| Saturazione u | U = u ÷ (1 − u) | Tempo medio di coda (h) | Tempo alla macchina compresa la lavorazione (h) |
+|---|---|---|---|
+| 80% | 4,0 | 4,0 | 5,0 |
+| 85% | 5,7 | 5,7 | 6,7 |
+| 90% | 9,0 | 9,0 | 10,0 |
+| 95% | 19,0 | 19,0 | 20,0 |
+
+Passando dall'80% al 95% di saturazione, il carico aumenta di 15 punti percentuali, ma il tempo di coda si moltiplica quasi per cinque. Ne derivano tre lezioni per la pianificazione:
+
+1. **La saturazione completa ovunque non è un obiettivo sensato.** Se ogni centro di lavoro viene pianificato al 95%, si ottengono lead time lunghi e molto variabili.
+2. **Ridurre la variabilità equivale ad aggiungere capacità.** Dimezzare V, per esempio attraverso setup più stabili, lotti più piccoli e più regolari o un rilascio livellato, dimezza il tempo di coda a parità di saturazione.
+3. **Un'alta saturazione è desiderabile al collo di bottiglia, ma solo con un polmone.** Il collo di bottiglia non deve mai restare senza lavoro. Ciò funziona solo se davanti ad esso è collocato un polmone dimensionato in modo deliberato e le altre risorse dispongono di capacità residua (Sezione 7).
+
+## 5. Che cos'è un sistema APS e come calcola
+
+### 5.1 Definizione
+
+**Advanced planning and scheduling (APS)** indica sistemi software e metodi che pianificano e schedulano gli ordini di produzione considerando contemporaneamente la disponibilità dei materiali e la capacità finita. La letteratura sulla supply chain adotta una definizione più ampia: Bernhard Fleischmann, Herbert Meyr e Michael Wagner collocano la pianificazione avanzata in una matrice di pianificazione che va dalla progettazione della rete nel lungo periodo alla schedulazione nel breve periodo, lungo approvvigionamento, produzione, distribuzione e vendite [13]. Sul fronte della produzione, "APS" indica di solito la parte responsabile della schedulazione di dettaglio e del sequenziamento. Molti prodotti elencati sotto "production scheduling software" nelle directory di software statunitensi coprono questo livello, come prodotto autonomo o come modulo di un ERP o di un MES; altri nelle stesse liste sono strumenti di pianificazione di progetto o di risorse (Sezione 13.1).
+
+La parola **"advanced"** si riferisce a tre differenze rispetto alla logica classica di MRP:
+
+- **Schedulazione a capacità finita:** ogni risorsa ha una capacità limitata e dipendente dal calendario. Un'operazione viene schedulata solo dove la risorsa è libera. ISA-95 definisce la schedulazione a capacità finita proprio in questi termini: nessuna capacità programmata può superare la capacità disponibile [31].
+- **Pianificazione simultanea:** materiali, capacità e date vengono considerati insieme. Se manca un materiale, l'operazione si sposta; se la macchina è occupata, si sposta il fabbisogno di materiale.
+- **Ottimizzazione:** invece di calcolare una sola risposta, il sistema cerca tra molte soluzioni ammissibili quella buona, idealmente la migliore secondo obiettivi definiti.
+
+### 5.2 Schedulazione basata sui vincoli: che cosa modella un APS
+
+Un APS non schedula rispetto alla "capacità" come a un unico numero, ma rispetto a una rete di vincoli. Si parla di **[schedulazione basata sui vincoli](https://www.m365.fm/entity/constraint-based-scheduling/)**. Vincoli tipici:
+
+| Vincolo | Esempio | Perché conta |
+|---|---|---|
+| Capacità delle risorse | Macchina A: 2 turni, dal lunedì al venerdì | base di ogni schedulazione di dettaglio |
+| Risorse alternative | Il pezzo può girare sulla macchina A o B, del 20% più lento su B | via d'uscita quando una risorsa è sovraccarica |
+| Manodopera e competenze | Solo tre operatori sono certificati sul banco di prova | la manodopera è spesso il vero collo di bottiglia |
+| Utensili e attrezzature | Un solo stampo a iniezione per variante | due macchine non possono lavorare la stessa variante contemporaneamente |
+| Setup dipendenti dalla sequenza | Da colore chiaro a scuro: 10 min; da scuro a chiaro: 45 min | la sequenza determina la capacità disponibile |
+| Sequenza delle operazioni e sovrapposizione | L'assemblaggio inizia solo dopo la verniciatura; trasferimento in lotti parziali consentito | lead time e sincronizzazione |
+| Tempi minimi e massimi di attesa | La colla deve maturare 24 h; il pezzo non può restare più di 4 h tra lavaggio e rivestimento | tempi tecnologici minimi e massimi |
+| Materiali e componenti acquistati | I componenti elettronici arrivano il giovedì | il materiale limita l'inizio più precoce |
+| Zone e spazio a pavimento | In una zona di assemblaggio entrano solo due sezioni di fusoliera alla volta | tipico dell'assemblaggio di grandi attrezzature e dell'aerospaziale |
+| Campagne e lotti | Il forno esegue solo lotti completi alla stessa temperatura | raggruppamento rispetto alle date di consegna |
+
+Più questi vincoli sono presenti, meno affidabilmente una schedulazione può essere costruita a mano o in Excel, e maggiore è il beneficio di un APS.
+
+### 5.3 Quanto è grande il problema: esplosione combinatoria
+
+Anche su una singola macchina, il numero di sequenze possibili cresce con il fattoriale del numero di ordini:
+
+- 4 ordini: 4! = 24 sequenze
+- 10 ordini: 10! = 3.628.800 sequenze
+- 15 ordini: 15! = 1.307.674.368.000 sequenze, circa 1,3 trilioni
+
+In un job shop reale con decine di macchine, centinaia di ordini e cicli multi-step, provare ogni opzione è impossibile. Nel 1976 Michael Garey, David Johnson e Ravi Sethi hanno dimostrato che la minimizzazione del makespan è NP-completa in un flow shop con tre o più macchine e in un job shop con due o più macchine [14]. Per questi problemi non si conosce alcun metodo che garantisca di trovare l'ottimo per istanze di dimensioni arbitrarie in tempi ragionevoli. Per questo i sistemi APS combinano regole, euristiche e ottimizzazione.
+
+### 5.4 Metodi: dalle regole di dispatching all'ottimizzazione matematica
+
+**Regole di dispatching** (regole di priorità) decidono quale ordine in attesa viene eseguito per primo. Sono semplici, rapide e trasparenti:
+
+| Regola | Logica | Punto di forza | Punto debole |
+|---|---|---|---|
+| FIFO (first in, first out) | primo arrivato, primo servito | equa, semplice, bassa varianza | ignora le date di consegna |
+| EDD (earliest due date) | prima la data di consegna più vicina | su una macchina, minimizza il ritardo massimo | ignora i tempi di lavorazione |
+| SPT (shortest processing time) | prima l'operazione più breve | su una macchina, minimizza il tempo medio di flusso | i lavori lunghi possono essere penalizzati all'infinito |
+| CR (critical ratio) | tempo residuo alla data di consegna ÷ lavoro residuo | considera data di consegna e lavoro residuo | instabile con riprogrammazioni frequenti |
+| Slack | tempo alla data di consegna meno tempo di lavorazione residuo, il più piccolo per primo | adatta agli ordini multi-step | richiede tempi residui affidabili |
+| Ottimizzata sui setup | raggruppa i lavori della stessa famiglia di setup | riduce i tempi di setup al collo di bottiglia | può violare le date di consegna |
+
+Che EDD minimizzi il ritardo massimo e SPT minimizzi il tempo medio di flusso su una singola macchina sono risultati classici della teoria della schedulazione [29].
+
+**Esempio svolto: tre regole, quattro ordini, una macchina**
+
+Quattro ordini attendono a una macchina al tempo 0, in ordine di arrivo A, B, C, D. Tempi in ore:
+
+| Ordine | Tempo di lavorazione | Scadenza |
+|---|---|---|
+| A | 4 | 6 |
+| B | 2 | 4 |
+| C | 6 | 14 |
+| D | 3 | 9 |
+
+| Regola | Sequenza | Tempi di completamento | Ritardo | Ordini in ritardo | Ritardo totale | Tempo medio di flusso |
+|---|---|---|---|---|---|---|
+| FIFO | A, B, C, D | A 4, B 6, C 12, D 15 | B 2, D 6 | 2 | 8 h | (4+6+12+15)÷4 = 9,25 h |
+| SPT | B, D, A, C | B 2, D 5, A 9, C 15 | A 3, C 1 | 2 | 4 h | (2+5+9+15)÷4 = 7,75 h |
+| EDD | B, A, D, C | B 2, A 6, D 9, C 15 | C 1 | 1 | 1 h | (2+6+9+15)÷4 = 8,00 h |
+
+Stessa macchina, stesso lavoro, stessa capacità: la sola sequenza decide se uno o due ordini sono in ritardo e se il ritardo totale è di 1 o di 8 ore. SPT dà il tempo medio di flusso più breve, EDD la migliore performance rispetto alle date di consegna. Quale regola sia "quella giusta" dipende dall'obiettivo. In un'officina multi-step con setup dipendenti dalla sequenza nessuna regola singola basta, ed è qui che un APS comincia a ripagarsi.
+
+**Euristiche** forniscono rapidamente soluzioni buone ma non necessariamente ottimali. Comprendono metodi costruttivi, che costruiscono un piano ordine per ordine (ad esempio bottleneck-first: si carica il collo di bottiglia e si allineano poi le altre risorse ad esso), e metodi migliorativi, che modificano passo dopo passo un piano esistente.
+
+**Metaeuristiche** come gli algoritmi genetici, la simulated annealing o la tabu search esplorano lo spazio delle soluzioni in modo sistematico e possono sfuggire agli ottimi locali. Sono diffuse nei sistemi APS commerciali per l'ottimizzazione della sequenza.
+
+**Ottimizzazione matematica** formula il problema di scheduling come un modello con una funzione obiettivo e dei vincoli, ad esempio come programma lineare misto intero (MILP) o come modello di programmazione a vincoli (CP). I solutori trovano soluzioni ottimali per problemi di piccola e media dimensione, oppure almeno forniscono un limite su quanto la soluzione trovata possa distare dall'ottimo. I grandi problemi di scheduling dettagliato vengono spesso scomposti, ad esempio per finestra temporale o per gruppo di risorse.
+
+**L'intelligenza artificiale** svolge diversi ruoli nei sistemi APS: prevedere i tempi di lavorazione e di attrezzaggio a partire dai dati reali, prevedere le interruzioni, apprendere politiche di scheduling (ad esempio con il reinforcement learning) e l'interazione in linguaggio naturale. I fornitori affidabili la utilizzano per migliorare gli input e accelerare la ricerca, non per sostituire l'ottimizzazione. Lo scheduling assistito dall'IA è valido solo quanto i dati di conferma di reparto da cui apprende.
+
+### 5.5 Obiettivi e compromessi
+
+Un APS non ottimizza mai "il piano" in sé; ottimizza una combinazione ponderata di obiettivi. Obiettivi tipici:
+
+- consegna puntuale (minimizzazione del ritardo o del ritardo ponderato)
+- tempi di attraversamento brevi e basso WIP
+- elevata utilizzazione del collo di bottiglia
+- tempi di attrezzaggio ridotti
+- poco lavoro straordinario e carico di lavoro equilibrato per il personale
+- stabilità del piano (poche modifiche rispetto al piano precedente)
+
+Questi obiettivi sono in conflitto. La letteratura economica tedesca chiama il nucleo di questo conflitto il "dilemma della pianificazione" (*Dilemma der Ablaufplanung*): un'elevata utilizzazione richiede code, mentre tempi di attraversamento brevi richiedono capacità inutilizzata. La Sezione 4.3 mostra perché ciò sia matematicamente vero. Uno dei compiti più importanti in una implementazione di APS è quindi concordare la ponderazione degli obiettivi con vendite, produzione e logistica.
+
+### 5.6 Direzione di scheduling, ATP e CTP
+
+La domanda "quali sono i tipi di scheduling della produzione?" si riduce di solito a due coppie: capacità finita contro capacità infinita (Sezione 3.1) e direzione di scheduling:
+
+- **Scheduling in avanti (forward):** le operazioni vengono pianificate a partire dall'inizio più precoce possibile. Il risultato è la data di completamento più precoce possibile.
+- **Scheduling all'indietro (backward):** le operazioni vengono pianificate a ritroso a partire dalla data di consegna. Il risultato è l'inizio più tardivo possibile, che riduce le scorte ma non lascia margini.
+- **Scheduling basato sul collo di bottiglia:** il collo di bottiglia viene caricato per primo; le operazioni a monte vengono poi pianificate all'indietro e quelle a valle in avanti.
+
+Due funzioni sono particolarmente preziose per le vendite:
+
+- **Available to promise (ATP):** quale quantità può essere promessa entro quale data a partire dalle scorte e dai ricevimenti pianificati?
+- **Capable to promise (CTP):** quale data è raggiungibile per un nuovo ordine, considerando sia il materiale *sia* la capacità?
+
+La CTP è una funzione tipica degli APS perché pianifica in prova un nuovo ordine rispetto al carico corrente. Trasforma la promessa di data di spedizione da una stima in un calcolo.
+
+## 6. ERP vs. APS vs. MES
+
+I tre tipi di sistema non sono in concorrenza tra loro; si completano a vicenda. La norma ANSI/ISA-95 colloca l'ERP al Livello 4 (pianificazione aziendale e logistica) e la gestione delle operazioni di produzione al Livello 3; i modelli di attività della Parte 3 coprono il programma di lavoro (denominato "detailed production schedule" nell'edizione 2005) e la sua esecuzione [31]. La linea guida tedesca VDI 5600 Parte 1 (ottobre 2016), ampiamente utilizzata in Europa, va oltre e include esplicitamente la "detailed planning and detailed control" tra i dieci compiti di un sistema di esecuzione della produzione (MES), accanto a gestione degli ordini, gestione delle attrezzature, gestione dei materiali, gestione del personale, acquisizione dei dati, analisi delle prestazioni, gestione della qualità, gestione delle informazioni e gestione dell'energia [15]. In pratica, lo scheduling di dettaglio viene realizzato nel MES, in un APS autonomo oppure in un modulo APS dell'ERP.
+
+| Caratteristica | ERP (modulo di pianificazione) | APS | MES |
+|---|---|---|---|
+| Funzione principale | quantità, valori, materiali, date di milestone | date e sequenze fattibili nel rispetto dei vincoli | esecuzione, conferma, visibilità in tempo reale |
+| Orizzonte di pianificazione | da settimane a mesi | da ore a settimane, a scorrimento | da turno a minuti |
+| Modello di capacità | infinita nella sua forma base, visualizzazione del carico a valle | finita, molte risorse contemporaneamente | misura la capacità effettivamente utilizzata |
+| Granularità temporale | giorni, settimane | minuti, ore | secondi, minuti |
+| Logica di pianificazione | MRP, schedulazione a ritroso con tempi di attraversamento fissi | euristiche, metaeuristiche, ottimizzazione matematica | regole di rilascio e di dispatching, talvolta uno scheduler proprio |
+| Domanda tipica | Cosa deve essere fatto entro quando, quale materiale manca? | Quale operazione viene eseguita quando e su quale risorsa? | Cosa è in esecuzione ora, a che punto è ciascun ordine, perché la macchina è ferma? |
+| Dati | anagrafiche, ordini cliente e ordini pianificati | dati ERP più matrici dei cambi formato, calendari, vincoli, conferme | dati di macchina, di produzione e di qualità |
+| Risposta alle perturbazioni | prossima elaborazione del piano, spesso durante la notte | ripianificazione in pochi minuti, confronto di scenari | acquisizione, allarme, attivazione della ripianificazione |
+| Utenti | pianificazione dei materiali, acquisti, vendite, finanza | pianificazione della produzione, controllo della produzione, supply chain | capi turno, operatori, manutenzione, qualità |
+| Limite | pianifica sulla base di ipotesi anziché della realtà | richiede buone anagrafiche e conferme affidabili | spesso pianifica solo nel breve termine e a livello locale |
+
+**Come lavorano insieme i sistemi:** L'ERP trasmette ordini, distinte base, cicli di lavorazione e giacenze all'APS. L'APS programma tenendo conto della capacità finita e restituisce date e sequenze realistiche, che l'ERP utilizza per le date di spedizione e per i fabbisogni di materiale. Il MES esegue la sequenza in reparto e riporta a APS ed ERP i tempi effettivi, le quantità e le perturbazioni. Solo questo ciclo chiuso rende affidabile un programma. Come il percorso dall'ERP al reparto possa essere chiuso con un digital twin è descritto nel post [From ERP to Shop Floor: Why Production Plans Need a Digital Twin](https://www.m365.fm/community/u/mirko-p/blog/erp-to-shop-floor-digital-twin/).
+
+**Quando l'ERP è sufficiente?** Se i vostri ordini hanno poche operazioni, i cambi formato dipendono poco dalla sequenza, un collo di bottiglia chiaramente visibile può essere gestito con una semplice regola di rilascio e la capacità è raramente critica, spesso un piano ERP ben mantenuto unito a una lavagna di schedulazione è sufficiente. Più si applicano i vincoli della Sezione 5.2, più chiaro diventa il caso per un APS.
+
+## 7. Teoria dei vincoli, drum-buffer-rope e gestione dei buffer
+
+### 7.1 Teoria dei vincoli
+
+Eliyahu M. Goldratt ha introdotto la **[teoria dei vincoli](https://www.m365.fm/entity/theory-of-constraints/)** (TOC) nel 1984 con il romanzo aziendale *The Goal*, scritto insieme a Jeff Cox [1]. Il messaggio centrale: ogni sistema ha almeno un vincolo che ne limita la capacità produttiva. Un'ora persa al collo di bottiglia è un'ora persa per l'intero sistema. Un'ora risparmiata in un punto non collo di bottiglia non ha valore, finché non alleggerisce il collo di bottiglia.
+
+Goldratt ha formulato cinque passi di focalizzazione, noti come processo di miglioramento continuo (POOGI) [3]:
+
+1. **Identificare** il vincolo del sistema.
+2. **Sfruttare** il vincolo: nessun tempo di inattività, nessuna lavorazione di scarti, attrezzaggi al di fuori del tempo di collo di bottiglia dove possibile.
+3. **Subordinare** tutto il resto al vincolo: rilascio, dimensioni dei lotti e sequenze delle altre risorse seguono il collo di bottiglia.
+4. **Elevare** il vincolo: solo a questo punto si aggiungono turni, si investe o si esternalizza.
+5. **Prevenire l'inerzia:** se il vincolo si è spostato, tornare al passo 1.
+
+L'ordine conta. Molte aziende passano direttamente al passo 4 e acquistano una nuova macchina, sebbene il collo di bottiglia esistente perda ancora capacità a causa di tempi morti, attese di materiale, sequenze inefficienti o attrezzaggi non necessari.
+
+### 7.2 Individuare il collo di bottiglia: analisi del collo di bottiglia nella pratica
+
+Il collo di bottiglia non è sempre la macchina con più guasti o con il costo più elevato. Indicatori consolidati:
+
+- **Code:** Gli ordini si accumulano in modo permanente davanti al collo di bottiglia, mentre le risorse a valle restano inattive.
+- **Carico rispetto alla capacità:** Per ciascuna risorsa, confrontare il carico pianificato (compresi i tempi di attrezzaggio) con la capacità disponibile su più settimane. La risorsa con il rapporto più alto è il candidato.
+- **Diagrammi di produttività:** Dove il WIP resta elevato e la curva della produzione non si impenna ancora, esiste un collo di bottiglia di capacità [8].
+- **Chiedere agli esperti, poi verificare:** I capireparto di solito sanno dove si creano gli ingorghi. Verificare con i dati, perché i colli di bottiglia "percepiti" sono spesso risorse con molti guasti visibili.
+
+Attenzione ai **colli di bottiglia mobili**. Con un mix di prodotti variabile, il collo di bottiglia può spostarsi tra le risorse da una settimana all'altra. Il controllo statico del collo di bottiglia non basta allora, e un APS che calcola il carico futuro per ciascuna risorsa sul portafoglio ordini attuale diventa particolarmente prezioso. Anche i colli di bottiglia non sono sempre macchine: spesso sono persone qualificate, postazioni di controllo, utensili o lo stesso ufficio pianificazione.
+
+### 7.3 Drum-buffer-rope
+
+In *The Race* (1986), Goldratt e Robert E. Fox hanno descritto un metodo di controllo che traduce i cinque passi in controllo del reparto produttivo: **drum-buffer-rope** (DBR) [2]. La metafora deriva da *The Goal*, dove un gruppo di boy scout può procedere solo alla velocità del membro più lento:
+
+- **Tamburo (drum):** Il collo di bottiglia stabilisce il ritmo. La sua schedulazione è l'unica schedulazione dettagliata che va rispettata.
+- **Buffer:** Un **buffer temporale** si trova davanti al collo di bottiglia (e davanti ai punti di spedizione e di assemblaggio dove le parti provenienti dal collo di bottiglia si uniscono ad altre parti). Protegge il collo di bottiglia dalla variabilità a monte.
+- **Fune (rope):** Il materiale viene immesso nel reparto solo alla velocità con cui il collo di bottiglia riesce a lavorarlo. La fune lega il rilascio alla schedulazione del collo di bottiglia, sfalsata del tempo di buffer.
+
+**Esempio svolto del rilascio DBR:** Il collo di bottiglia è un'operazione di trattamento termico. L'ordine 4711 è schedulato per iniziare lì giovedì alle 6:00. Il buffer temporale davanti al collo di bottiglia è di 3 giorni lavorativi. Quindi il materiale per l'ordine 4711 viene rilasciato lunedì alle 6:00, non prima. Rilasciarlo in anticipo aumenta solo il WIP e, secondo la legge di Little, il lead time, senza aggiungere produttività.
+
+Il buffer temporale viene inizialmente impostato in modo pragmatico. Un valore iniziale spesso citato nella pratica TOC è circa la metà del lead time attuale fino al collo di bottiglia [unverified: valore riportato in letteratura, non verificato su dati aziendali]. Viene poi regolato tramite la gestione dei buffer.
+
+### 7.4 Gestione dei buffer
+
+La **[gestione dei buffer](https://www.m365.fm/entity/buffer-management/)** è il meccanismo di feedback del DBR [4]. Per ogni ordine rilasciato si monitora quanta parte del suo buffer temporale è stata consumata. È comune una suddivisione in tre zone:
+
+| Zona | Buffer consumato | Significato | Reazione |
+|---|---|---|---|
+| Verde | fino a circa un terzo | l'ordine è in linea con il piano | nessuna azione |
+| Gialla | da circa un terzo a due terzi | l'ordine si sta stringendo | individuare la causa, preparare l'azione |
+| Rossa | oltre due terzi | il collo di bottiglia potrebbe restare senza materiale o la data di consegna è a rischio | accelerare: dare priorità all'ordine, rimuovere l'ostacolo |
+
+La suddivisione in terzi è una convenzione diffusa, non una legge di natura. Due vantaggi sono i più importanti:
+
+1. **Priorità quotidiane:** invece di molte liste di urgenze in conflitto, c'è un'unica regola: prima gli ordini rossi, poi i gialli, poi i verdi.
+2. **Miglioramento sistematico:** registrando e analizzando le cause degli ordini rossi si ottiene un elenco Pareto delle fonti di disturbo. Se molti ordini sono sempre rossi, il buffer è troppo piccolo o il processo è troppo instabile. Se quasi tutti sono verdi, il buffer può essere ridotto, il che abbassa il WIP e il lead time.
+
+La variante **DBR semplificato** (S-DBR) per i produttori make-to-order rinuncia a una programmazione dettagliata del collo di bottiglia e lavora con un buffer di spedizione più un controllo del carico del collo di bottiglia al momento dell'accettazione dell'ordine. È descritta nel *Theory of Constraints Handbook* accanto al DBR classico [4].
+
+### 7.5 DBR e APS: opposti o complementari?
+
+I praticanti della TOC sono stati a lungo scettici nei confronti dei software di pianificazione complessi, perché una schedulazione dettagliata per ogni risorsa diventa obsoleta rapidamente quando si verificano disturbi. I moderni sistemi APS, però, possono modellare bene i principi del DBR: la schedulazione basata sul collo di bottiglia, il rilascio con buffer temporale e la visualizzazione dello stato del buffer sono configurabili in molti sistemi. Viceversa, il DBR trae beneficio da un APS quando il collo di bottiglia si sposta, quando le sequenze di setup al collo di bottiglia devono essere ottimizzate o quando si applicano molti vincoli contemporaneamente. La posizione sensata: il DBR fornisce la filosofia di controllo, l'APS fornisce la potenza di calcolo.
+
+## 8. Elementi base del Lean nella schedulazione: takt, heijunka, bilanciamento di linea, pull
+
+La produzione Lean e l'APS sono spesso presentate come opposti: da un lato pull e controllo visivo, dall'altro pianificazione centrale affidata a un algoritmo. In pratica si completano a vicenda. Il Lean stabilizza il flusso e riduce la variabilità; l'APS pianifica dove il solo flusso non basta, ad esempio con un'elevata varietà di prodotti, lunghi lead time o risorse condivise. Per un approfondimento sul lato Lean, si veda la guida di m365.fm [Lean Manufacturing](https://www.m365.fm/en/learn/lean-manufacturing/).
+
+### 8.1 Takt time
+
+Il **[Takt time](https://www.m365.fm/entity/takt-time/)** è l'intervallo con cui deve essere completata un'unità per soddisfare la domanda del cliente:
+
+> **Takt time = tempo di lavoro disponibile per periodo ÷ domanda del cliente per periodo**
+
+**Esempio svolto:** una linea di assemblaggio opera su due turni da 7,5 ore nette di lavoro ciascuno (dopo le pause pianificate), quindi 900 minuti al giorno. La domanda del cliente è di 450 unità al giorno.
+
+- Takt time = 900 min ÷ 450 unità = **2,0 minuti per unità** (120 secondi)
+
+Il takt time è una velocità della domanda, non una misura di prestazione. Il tempo ciclo effettivo di ogni stazione deve essere inferiore a esso perché la domanda sia soddisfatta.
+
+### 8.2 Bilanciamento di linea
+
+Il **[bilanciamento di linea](https://www.m365.fm/entity/line-balancing/)** distribuisce il contenuto di lavoro tra le stazioni in modo che ciascuna resti al di sotto del takt time con il minor tempo morto possibile. Nils Boysen, Malte Fliedner e Armin Scholl hanno classificato sistematicamente le numerose varianti del problema [22].
+
+**Esempio svolto (seguito):** il contenuto di lavoro totale per unità è di 9,6 minuti.
+
+- Numero minimo teorico di stazioni = 9,6 min ÷ 2,0 min = 4,8, arrotondato per eccesso a **5 stazioni**
+- A causa del grafo di precedenza e degli elementi di lavoro indivisibili, in pratica servono **6 stazioni**.
+- Efficienza di bilanciamento = 9,6 min ÷ (6 × 2,0 min) = 9,6 ÷ 12,0 = **80%**
+- Ritardo di bilanciamento = 100% − 80% = **20%** della capacità della linea
+
+Per la schedulazione, ciò significa: con 6 stazioni la linea copre 450 unità al giorno, ma ogni stazione attende in media il 20% del tempo. Se la domanda aumenta, la linea deve essere ribilanciata o il tempo di lavoro esteso.
+
+### 8.3 Heijunka
+
+L'**[Heijunka](https://www.m365.fm/entity/heijunka/)** (in giapponese livellamento) è un principio centrale del Toyota Production System descritto da Taiichi Ohno [20]. Il Lean Enterprise Institute lo definisce come il livellamento del tipo e della quantità di produzione su un periodo di tempo fisso [34]. Invece di produrre grandi lotti di una variante dopo l'altra, il mix viene distribuito uniformemente nel tempo.
+
+**Esempio:** uno stabilimento produce 200 unità della variante A, 100 della variante B e 100 della variante C a settimana, su cinque giorni.
+
+| Approccio | Lunedì | Martedì | Mercoledì | Giovedì | Venerdì |
+|---|---|---|---|---|---|
+| Lotto dopo lotto | 80 A | 80 A | 40 A, 40 B | 60 B, 20 C | 80 C |
+| Livellato (heijunka) | 40 A, 20 B, 20 C | 40 A, 20 B, 20 C | 40 A, 20 B, 20 C | 40 A, 20 B, 20 C | 40 A, 20 B, 20 C |
+
+Nel piano livellato, il picco di carico sui processi a monte diminuisce, la scorta di prodotti finiti per variante si riduce e i clienti di ogni variante possono essere riforniti ogni giorno. Il prezzo da pagare sono cambi di produzione più frequenti. Heijunka richiede quindi tempi di attrezzaggio brevi, ed è qui che lean e APS si incontrano: un APS può calcolare, all'interno di una giornata, la sequenza più favorevole agli attrezzaggi per un mix livellato.
+
+### 8.4 Kanban, pull e CONWIP
+
+Un **[sistema pull](https://www.m365.fm/entity/pull-system/)** limita il WIP avviando nuovo lavoro solo quando un consumatore a valle segnala una domanda. La forma più nota è il **[kanban](https://www.m365.fm/entity/kanban/)**: cartellini o segnali elettronici tra i processi attivano il rifornimento, e il numero di cartellini pone un limite alle scorte.
+
+Il kanban si adatta a componenti con domanda regolare e un numero gestibile di varianti. Nelle job shop e nella produzione a basso volume e alta varietà raggiunge i suoi limiti, perché ogni variante richiederebbe una scorta. Un'alternativa è il **CONWIP** (constant work in process), proposto nel 1990 da Mark Spearman, David Woodruff e Wallace Hopp come alternativa pull al kanban [21]. Il CONWIP non limita le scorte per componente, ma il numero totale di ordini in una linea: un nuovo ordine viene rilasciato solo quando ne termina un altro. La legge di Little diventa così una regola di controllo. Un metodo affine dell'IFA di Hannover è il **rilascio degli ordini orientato al carico** (*belastungsorientierte Auftragsfreigabe*), che rilascia gli ordini solo finché il carico davanti a un centro di lavoro resta sotto un limite; Lödding lo descrive insieme al CONWIP e al controllo del collo di bottiglia come metodi di rilascio degli ordini [12]. Nella ricerca in lingua inglese, questa famiglia di metodi è di solito trattata sotto il titolo di workload control.
+
+**Che cosa significa per la schedulazione:** kanban e CONWIP decidono *quando* rilasciare e limitano il WIP. Un APS decide *che cosa* produrre e in quale sequenza, e se le date sono raggiungibili. Molti stabilimenti usano entrambi: i componenti standard girano in un anello kanban, gli ordini specifici per il cliente vengono schedulati nell'APS e rilasciati con un limite di WIP.
+
+## 9. Dimensionamento dei lotti: EOQ, esempio svolto e limiti
+
+### 9.1 Il problema di base
+
+Ogni lotto comporta costi fissi di attrezzaggio, gestione dell'ordine e avviamento, indipendentemente dalla quantità. I lotti grandi distribuiscono questi costi su molte unità, ma aumentano le giacenze e il capitale immobilizzato. I lotti piccoli riducono le scorte, ma comportano attrezzaggi più frequenti. La **[dimensione del lotto](https://www.m365.fm/entity/batch-size/)** è quindi un classico compromesso.
+
+### 9.2 La formula classica: Harris (EOQ) e Andler
+
+Ford Whitman Harris pubblicò nel 1913 la formula della radice quadrata per il lotto economico sulla rivista *Factory, The Magazine of Management*. Oggi è nota come economic order quantity (EOQ); Donald Erlenkotter ne ricostruì la paternità nel 1990 [17]. Quando la formula viene usata per i lotti di produzione anziché per gli ordini d'acquisto, i testi statunitensi la chiamano spesso economic production o economic lot size. Nei paesi di lingua tedesca è nota come **formula di Andler**, dal nome di Kurt Andler e del suo libro del 1929 [18]:
+
+> **Q* = √(2 × D × S ÷ H)**
+>
+> Q* = dimensione ottimale del lotto (unità)
+> D = domanda per periodo (unità all'anno)
+> S = costo fisso per lotto, cioè costo di attrezzaggio e di ordinazione (€ per lotto)
+> H = costo di mantenimento per unità e periodo (€ per unità all'anno), spesso calcolato come costo unitario × tasso di costo del capitale immobilizzato
+
+La formula minimizza la somma dei costi di attrezzaggio (D ÷ Q × S) e dei costi di mantenimento (Q ÷ 2 × H). All'ottimo, le due componenti di costo sono uguali.
+
+### 9.3 Esempio svolto
+
+Un pezzo tornito (al tornio) ha una domanda annua di 12.000 unità. Un attrezzaggio costa 300 € includendo tempo macchina e tempo di manodopera. Il costo unitario è di 40 €, il tasso di costo del capitale immobilizzato è del 20% annuo. (Il testo originale tedesco usa le stesse cifre in euro; i numeri sono illustrativi e non convertiti.)
+
+- H = 40 € × 0,20 = 8 € per unità all'anno
+- Q* = √(2 × 12.000 × 300 ÷ 8) = √(7.200.000 ÷ 8) = √900.000 ≈ **949 unità**
+- Lotti all'anno = 12.000 ÷ 949 ≈ 12,6
+- Costo di attrezzaggio annuo = 12.000 ÷ 949 × 300 € ≈ 3.793 €
+- Costo di mantenimento annuo = 949 ÷ 2 × 8 € = 3.796 €
+- **Costo totale ≈ 7.589 €** all'anno
+
+Quanto è sensibile il costo agli scostamenti da Q*?
+
+| Dimensione del lotto | Costo di attrezzaggio (€/anno) | Costo di mantenimento (€/anno) | Costo totale (€/anno) | Scostamento dall'ottimo |
+|---|---|---|---|---|
+| 500 | 7.200 | 2.000 | 9.200 | +21,2% |
+| 600 | 6.000 | 2.400 | 8.400 | +10,7% |
+| 949 | 3.793 | 3.796 | 7.589 | 0% |
+| 1.200 | 3.000 | 4.800 | 7.800 | +2,8% |
+| 2.000 | 1.800 | 8.000 | 9.800 | +29,1% |
+
+La curva dei costi è piatta intorno all'ottimo: una dimensione del lotto circa un quarto più grande costa meno del 3% in più. In pratica, è possibile arrotondare le dimensioni dei lotti a valori pratici, come quantità di contenitore o domanda giornaliera, senza una penalizzazione di costo significativa.
+
+**Il tempo di setup è la leva più importante:** se la riduzione del setup dimezza il costo di setup, da 300 $ a 150 $, la dimensione ottimale del lotto scende a √(2 × 12.000 × 150 ÷ 8) ≈ **671 unità**. Il costo totale scende a circa 5.367 $ annui, ovvero circa il 29% in meno, perché il costo totale nell'ottimo è proporzionale alla radice quadrata di S. Anche lo stock medio di ciclo si riduce di circa il 29%. I metodi di riduzione del setup, come lo SMED (single-minute exchange of die), ripagano quindi due volte. Maggiori informazioni nella pagina dell'entità [Tempo di setup](https://www.m365.fm/entity/setup-time/).
+
+### 9.4 Limiti della formula EOQ
+
+La formula è un punto di partenza utile, ma le sue ipotesi non vengono quasi mai soddisfatte in reparto:
+
+- **Domanda costante e nota:** la domanda reale fluttua ed è incerta.
+- **Capacità illimitata:** la formula ignora che i setup consumano capacità al collo di bottiglia. Al collo di bottiglia, un'ora di setup equivale a un'ora di throughput perso; su una risorsa non collo di bottiglia costa quasi nulla. La TOC conclude che i lotti dovrebbero tendere a essere più grandi al collo di bottiglia e più piccoli nelle risorse non collo di bottiglia.
+- **Prodotto singolo, nessuna interazione:** più prodotti condividono le stesse macchine; i setup dipendenti dalla sequenza non sono modellati.
+- **Produzione istantanea:** nella forma di base, l'intero lotto è disponibile contemporaneamente. Per una velocità di produzione finita esiste una formula estesa (quantità economica di produzione) in cui i costi di giacenza sono ponderati per il fattore (1 − velocità della domanda ÷ velocità di produzione).
+- **Nessun effetto sul lead time:** lotti grandi allungano il lead time di ogni ordine successivo sulla stessa macchina e aumentano la variabilità. Questo effetto manca nel calcolo dei costi.
+- **Tassi di costo difficili da determinare:** il costo di setup e il tasso di costo di giacenza sono spesso valori imputati con ampia discrezionalità.
+
+Per una domanda dinamica esistono metodi come l'algoritmo di Wagner-Whitin ed euristiche come il part-period balancing e il Silver-Meal. Un APS va oltre: decide dimensioni dei lotti e sequenza insieme, considerando capacità, matrici di cambio e date di consegna.
+
+## 10. Scorta di sicurezza: formula ed esempio svolto
+
+### 10.1 A cosa serve la scorta di sicurezza
+
+La **[scorta di sicurezza](https://www.m365.fm/entity/safety-stock/)** protegge da due incertezze: la variazione della domanda durante il lead time di riapprovvigionamento e la variazione del lead time stesso. Non è una correzione di una pianificazione carente, ma un'assicurazione deliberatamente pagata contro la casualità.
+
+### 10.2 Formula per domanda variabile
+
+Se la domanda giornaliera è approssimativamente distribuita in modo normale e il lead time di riapprovvigionamento è costante [19]:
+
+> **SS = z × σ_D × √L**
+>
+> SS = scorta di sicurezza (unità)
+> z = fattore di sicurezza dalla distribuzione normale standard per il livello di servizio desiderato
+> σ_D = deviazione standard della domanda giornaliera (unità)
+> L = lead time di riapprovvigionamento (giorni)
+
+Il livello di servizio qui usato è il **livello di servizio di ciclo** (probabilità di nessuna rottura di stock durante un ciclo di riapprovvigionamento, detto livello di servizio α nei testi in tedesco). Non coincide con il **fill rate** (quota della quantità domandata consegnata immediatamente da magazzino, il livello di servizio β). Confonderli porta a dimensionare le giacenze in modo sistematicamente errato.
+
+**Esempio svolto:** un componente acquistato viene consumato in media a 100 unità al giorno; la deviazione standard è di 30 unità al giorno. Il lead time di riapprovvigionamento è di 9 giorni lavorativi.
+
+| Livello di servizio di ciclo | z | Calcolo | Scorta di sicurezza |
+|---|---|---|---|
+| 90% | 1,282 | 1,282 × 30 × √9 = 1,282 × 30 × 3 | ≈ 115 unità |
+| 95% | 1,645 | 1,645 × 30 × 3 | ≈ 148 unità |
+| 99% | 2,326 | 2,326 × 30 × 3 | ≈ 209 unità |
+
+Passare dal 95% al 99% costa oltre il 40% di scorta di sicurezza in più. I livelli di servizio elevati diventano sproporzionatamente costosi.
+
+### 10.3 Formula per domanda variabile e lead time variabile
+
+Se anche il lead time varia, la formula si estende [19]:
+
+> **SS = z × √(L × σ_D² + d² × σ_L²)**
+>
+> d = domanda giornaliera media, σ_L = deviazione standard del lead time (giorni)
+
+**Esempio svolto (seguito):** il fornitore consegna in 9 giorni in media, ma con una deviazione standard di 2 giorni.
+
+- L × σ_D² = 9 × 30² = 8.100
+- d² × σ_L² = 100² × 2² = 40.000
+- √(8.100 + 40.000) = √48.100 ≈ 219,3
+- SS (95%) = 1,645 × 219,3 ≈ **361 unità**
+
+Le scorte di sicurezza salgono da 148 a 361 unità, quasi due volte e mezzo, esclusivamente a causa del lead time non affidabile. La variabilità del lead time contribuisce per circa l'83% della varianza in questo caso. Migliorare la puntualità di consegna del fornitore spesso riduce le scorte più di qualsiasi miglioramento delle previsioni.
+
+### 10.4 Limiti della formula
+
+- La distribuzione normale si adatta male alla domanda intermittente (molti periodi senza consumo). In questi casi sono più appropriate altre distribuzioni o la simulazione.
+- La formula presuppone una domanda indipendente. Per i componenti con domanda dipendente dalle distinte base, la scorta di sicurezza è di solito lo strumento sbagliato; funzionano meglio il lead time di sicurezza o i buffer posizionati in punti mirati.
+- Una scorta di sicurezza che viene consumata di continuo non è una scorta di sicurezza, ma un errore di pianificazione. Verificate regolarmente con quale frequenza e per quale motivo viene superata.
+
+## 11. KPI della pianificazione della produzione
+
+Senza KPI non è possibile dimostrare il valore di un APS né migliorare la pianificazione. Definite ogni KPI in modo univoco prima dell'avvio e misurate una baseline. Una guida separata di m365.fm sui [KPI di produzione](https://www.m365.fm/en/learn/manufacturing-kpis/) copre l'insieme più ampio.
+
+| KPI | Formula | Cosa indica | Insidie |
+|---|---|---|---|
+| On time in full (OTIF) | righe consegnate puntualmente e complete ÷ tutte le righe scadute | prospettiva del cliente | definire il riferimento: data richiesta o data confermata; fissare una finestra di tolleranza |
+| On-time delivery (OTD) | righe consegnate puntualmente ÷ tutte le righe scadute | come l'OTIF ma senza il criterio sulla quantità | le spedizioni parziali falsano il quadro |
+| Lead time (tempo di ciclo di produzione) | completamento meno rilascio (per ordine), media e dispersione | velocità del flusso | la media non basta; la dispersione determina l'affidabilità della data di spedizione |
+| Flow factor | lead time medio ÷ tempo medio di lavorazione | quanto più a lungo un ordine attende rispetto al tempo in cui viene lavorato [8] | usare la stessa unità di tempo (ore lavorative o ore di calendario) |
+| Work in process (WIP) | numero o contenuto di lavoro degli ordini rilasciati e non completati | driver del lead time secondo la Legge di Little | misurare in ore di contenuto di lavoro, non solo in unità |
+| Utilizzo | tempo occupato ÷ tempo disponibile | uso della capacità | un utilizzo elevato nelle non-strozzature non è un successo |
+| Utilizzo del collo di bottiglia | tempo produttivo sul collo di bottiglia ÷ tempo disponibile sul collo di bottiglia | il KPI di utilizzo più importante nella TOC | riportare separatamente i tempi di setup e di inattività sul collo di bottiglia |
+| Setup ratio | tempo di setup ÷ (tempo di setup + tempo di lavorazione) | capacità persa nei cambi | particolarmente critico sul collo di bottiglia |
+| Overall equipment effectiveness (OEE) | disponibilità × prestazione × qualità | efficacia di una macchina | adatto alle attrezzature, non alla valutazione di un programma |
+| Schedule adherence | operazioni avviate o concluse secondo programma ÷ tutte le operazioni programmate | quanto è realistico e stabile il programma? | definire una tolleranza, ad es. ± 1 turno |
+| Schedule stability | operazioni modificate nell'orizzonte congelato ÷ tutte le operazioni | nervosismo della pianificazione | troppe modifiche indicano dati scadenti o un'area congelata mancante |
+| Buffer status | quota di ordini in rosso, giallo e verde | allerta precoce con la gestione a buffer | significativo solo con buffer definiti |
+
+**Esempio svolto, prestazioni di consegna:** Ad ottobre, 480 righe d'ordine erano scadute alla data confermata. 432 sono state spedite in tempo; di queste, 410 sono state spedite anche complete.
+
+- On-time delivery = 432 ÷ 480 = **90,0%**
+- OTIF = 410 ÷ 480 ≈ **85,4%**
+
+**Esempio svolto, setup ratio e flow factor:** In una settimana, il collo di bottiglia ha impiegato 18 ore in setup e 62 ore in lavorazione. Setup ratio = 18 ÷ (18 + 62) = **22,5%**. Un ordine con 6 ore di tempo di lavorazione ha trascorso 120 ore lavorative (15 giorni da 8 ore) in officina. Flow factor = 120 ÷ 6 = **20**: l'ordine è rimasto in officina venti volte più a lungo di quanto qualcuno vi abbia lavorato.
+
+**Insieme di KPI per l'avvio di un APS:** Come minimo, misurate OTIF, lead time (media e dispersione), WIP e utilizzo del collo di bottiglia prima dell'avvio e poi mensilmente. Questi quattro indicatori sono collegati tramite la Legge di Little e le curve operative e, nel complesso, mostrano se un programma migliore ha portato a un flusso migliore.
+
+## 12. Gemello digitale e simulazione
+
+La **simulazione** modella un sistema produttivo e lo fa funzionare nel tempo. La linea guida tedesca VDI 3633 Parte 1 tratta i fondamenti della simulazione di sistemi logistici, di flusso dei materiali e di produzione [16]. La simulazione risponde a domande che un calcolo statico della capacità non può affrontare, perché tiene conto di casualità, disturbi e interazioni: come incide il guasto di una macchina sulle date di spedizione delle prossime due settimane? Cosa produce un terzo turno sul collo di bottiglia? Come cambiano i lead time con un nuovo mix di prodotti?
+
+Un **gemello digitale della produzione** va oltre: è un modello sincronizzato in continuo con i dati di ERP, MES e macchine. Per la schedulazione della produzione svolge tre funzioni:
+
+1. **Base di pianificazione:** l'APS schedula su un modello che riflette in tempo reale risorse, vincoli e stato effettivo.
+2. **Analisi di scenario:** prima di una decisione, come accettare un ordine urgente o effettuare un investimento, le alternative vengono simulate e confrontate sui KPI.
+3. **Ciclo di apprendimento:** gli scostamenti tra piano ed effettivo rientrano nel sistema e migliorano i tempi standard e i vincoli.
+
+Distinguete tra un modello di simulazione costruito una volta per uno studio e un gemello gestito in modo continuativo e usato in esercizio. Il secondo offre più valore, ma richiede un'integrazione dei dati stabile e una chiara responsabilità per la manutenzione del modello. Come collegare dati ERP, gemello e reparto produttivo è illustrato nel post [From ERP to Shop Floor: Why Production Plans Need a Digital Twin](https://www.m365.fm/community/u/mirko-p/blog/erp-to-shop-floor-digital-twin/). La guida di m365.fm [Digital Twin in Manufacturing](https://www.m365.fm/en/learn/digital-twin-manufacturing/) approfondisce l'argomento; la parte relativa a cloud e dati è trattata in [Azure for Manufacturing](https://www.m365.fm/en/learn/manufacturing-it-azure/).
+
+**Prima la mappatura del flusso del valore:** prima di modellare un gemello o un APS, mappate il flusso del valore. Mostra dove si trovano le scorte, dove si sospetta sia il collo di bottiglia e quali flussi informativi guidano oggi la pianificazione. Vedere la guida [Value Stream Mapping](https://www.m365.fm/en/learn/value-stream-mapping/).
+
+## 13. Come scegliere un software di schedulazione della produzione: criteri e checklist
+
+### 13.1 Prima della shortlist: chiarire obiettivi e punto di partenza
+
+Che cerchiate "production scheduling software," "APS software," "finite capacity scheduling software" o "capacity planning software," in produzione conta una cosa sola: se il sistema schedula la capacità come finita e con i vostri vincoli reali. Molti strumenti che compaiono con questi termini sono strumenti di gestione progetti o di pianificazione delle risorse di team. Sono utili per i progetti, ma di solito non modellano cicli di lavorazione, setup dipendenti dalla sequenza o disponibilità dei materiali. Le liste "best production scheduling software" su google.com mescolano entrambe le categorie, quindi verificate ogni candidato rispetto alla tabella dei vincoli della Sezione 5.2.
+
+Prima di parlare con i fornitori, rispondete a tre domande:
+
+1. **Quale problema va risolto?** Ad esempio: portare l'OTIF dal 78% a oltre il 90%, dimezzare il lead time, ridurre lo sforzo di pianificazione, garantire date di spedizione affidabili già all'inserimento dell'ordine.
+2. **Quali vincoli contano davvero?** Scorrete la tabella della Sezione 5.2 e segnate quelli che si applicano nel vostro stabilimento.
+3. **Quanto sono buoni i vostri dati?** Verificate cicli di lavorazione, tempi standard e qualità delle conferme prima della selezione (Sezione 14).
+
+### 13.2 Criteri di selezione
+
+| Criterio | Domanda da porre | Peso (esempio) |
+|---|---|---|
+| Modellazione dei vincoli | Il sistema modella tutti i vincoli rilevanti senza codice personalizzato? | alto |
+| Qualità della schedulazione | Quanto sono buone le schedulazioni per *i vostri* dati, misurate sui vostri obiettivi? | alto |
+| Tempo di calcolo | Quanto tempo richiede una rischedulazione completa con volumi di dati realistici? | da medio ad alto |
+| Schedulazione interattiva | I pianificatori possono trascinare e rilasciare gli ordini, e il sistema verifica immediatamente le conseguenze? | alto |
+| Spiegabilità | I pianificatori possono capire perché un ordine è collocato in una determinata posizione? | alto |
+| Scenari e simulazione | È possibile calcolare varianti in parallelo e confrontarle sui KPI? | medio |
+| Integrazione ERP | Esistono connettori standard verso il vostro ERP, in quale direzione e con quale frequenza? | alto |
+| Integrazione MES e conferme | In che modo i consuntivi raggiungono l'APS, e con quale rapidità? | alto |
+| Usabilità | Pianificatori e capireparto accettano l'interfaccia? | alto |
+| Scalabilità | Più stabilimenti, più risorse, più ordini? | medio |
+| Esercizio e sicurezza | Cloud o on-premises, regione di hosting, certificazioni (ad esempio ISO/IEC 27001, SOC 2), modello di ruoli e permessi, compatibilità con il vostro framework di sicurezza (ad esempio NIST CSF 2.0 [35]); per i fornitori della difesa statunitense, i requisiti CMMC applicabili ai dati coinvolti [36] | medio |
+| Fornitore e partner | Esperienza nel settore, referenze con produzione comparabile, supporto, roadmap | medio |
+| Costo totale di proprietà | Licenze, implementazione, pulizia dei dati, formazione, esercizio in 5 anni | medio |
+
+**E il prezzo?** I prezzi in questa categoria vanno da abbonamenti SaaS per utente per gli strumenti semplici fino a preventivi enterprise per APS multi-stabilimento, e la maggior parte dei fornitori di APS non pubblica listini. Le directory di software che compaiono ai primi posti per il termine principale mostrano lo stesso schema: molti elenchi riportano "prezzo su richiesta", e almeno una directory di classifica mostra ancora dati di prezzo raccolti nel 2019. Confrontate il costo totale di proprietà in cinque anni, includendo l'impegno interno per la pulizia dei dati e l'integrazione, anziché il solo prezzo della licenza.
+
+### 13.3 Checklist di selezione
+
+Usate l'elenco come checklist per gli incontri con i fornitori e per i test di proof of concept:
+
+- [ ] Obiettivi e KPI con valori di riferimento sono documentati.
+- [ ] I vincoli rilevanti sono prioritizzati (obbligatori, desiderabili, opzionali).
+- [ ] È pronto un dataset di test rappresentativo con ordini, cicli e tempi di attrezzaggio reali.
+- [ ] Ogni fornitore schedula lo **stesso** dataset di test; i risultati sono confrontati sugli stessi KPI.
+- [ ] È stato testato uno scenario di disturbo (guasto macchina, ordine urgente, materiale in ritardo).
+- [ ] È stato misurato il tempo di calcolo di una rischedulazione completa.
+- [ ] I vostri pianificatori hanno lavorato direttamente con il sistema, non si sono limitati a guardare una dimostrazione.
+- [ ] L'interfaccia ERP è specificata (oggetti, direzione, frequenza, gestione degli errori).
+- [ ] Il percorso delle conferme dal reparto produttivo è definito (MES, terminale, app mobile).
+- [ ] Il sistema spiega le proprie decisioni di schedulazione in modo comprensibile per i pianificatori.
+- [ ] È possibile modellare ruoli e permessi (chi può schedulare, rilasciare, congelare?).
+- [ ] Almeno una referenza con un tipo di produzione comparabile è stata intervistata di persona.
+- [ ] Il costo totale in cinque anni è calcolato, incluso l'impegno interno.
+- [ ] Protezione dei dati, hosting e sicurezza delle informazioni sono concordati con l'IT (e, per il lavoro per la difesa, con chi gestisce la conformità CMMC).
+- [ ] È chiarita un'opzione di uscita (esportazione dei dati, durata del contratto).
+
+**Suggerimento:** Il test più significativo è un **pilota con i vostri dati**. Le dimostrazioni dei fornitori con dati di esempio puliti dicono poco su come un sistema gestisce i vostri cicli incompleti e i casi particolari.
+
+## 14. Requisiti dei dati e qualità dei dati anagrafici
+
+Un APS calcola con precisione, anche con dati sbagliati. Un piano basato su tempi standard errati del 30% è preciso ma sbagliato. La qualità dei dati è quindi il motivo più comune per cui i progetti APS richiedono più tempo del previsto.
+
+| Oggetto dati | Requisito minimo | Lacune tipiche | Come verificare |
+|---|---|---|---|
+| Cicli di lavorazione | sequenza completa delle operazioni, gruppo di centri di lavoro corretto | operazioni mancanti, risorse obsolete | confrontare campioni con il flusso reale in officina |
+| Tempi standard (lavorazione) | scostamento dai valori effettivi entro una fascia di tolleranza definita | standard provenienti dalla contabilità dei costi invece che dalla misurazione | piano vs. consuntivo dalle conferme |
+| Tempi di attrezzaggio | dipendenti dalla sequenza dove rilevante (matrice dei cambi) | un unico tempo di attrezzaggio fisso per operazione | analizzare i registri di attrezzaggio |
+| Risorse e calendari | turni, pause, finestre di manutenzione, fermate di stabilimento | calendari non mantenuti nell'ERP | confrontare con il piano dei turni |
+| Risorse alternative | alternative ammesse con fattore di prestazione | conosciute solo dai capisquadra | interviste, poi inserimento nel sistema |
+| Manodopera e competenze | matrice delle competenze, pianificazione delle presenze | non disponibili in forma digitale | costruire una matrice delle competenze |
+| Utensili e attrezzature | quantità, assegnazione alle operazioni | non modellati come risorsa | riconciliare con l'elenco utensili |
+| Giacenze e date di approvvigionamento | giacenze corrette, date di consegna affidabili | arretrati di registrazione, date di consegna non confermate | scostamenti dell'inventario ciclico, puntualità dei fornitori |
+| Conferme | tempestive, per operazione, con quantità e tempo | conferma per lotto a fine turno o assente | misurare il tasso di conferma e il ritardo |
+| Ordini e priorità | date di scadenza chiare, priorità del cliente | date anticipate "per sicurezza" | verificare lo storico delle date di scadenza |
+
+**Regola pratica per la sequenza:** iniziare dal collo di bottiglia. Se cicli di lavorazione, tempi standard e tempi di attrezzaggio alle risorse collo di bottiglia sono corretti, la schedulazione è già molto migliore di prima, anche se i non collo di bottiglia presentano ancora imprecisioni. Poi procedere lungo il flusso dei materiali.
+
+**Le conferme sono la chiave:** senza conferme tempestive dal reparto produttivo, l'APS non sa dove si trova un ordine e schedula su uno stato che non esiste più. Altrettanto importante: solo le conferme consentono il confronto piano vs. consuntivo che migliora nel tempo i tempi standard.
+
+## 15. Roadmap per l'implementazione di APS
+
+La roadmap seguente descrive fasi collaudate. Le durate sono valori indicativi per uno stabilimento di media dimensione con un solo sito e dipendono fortemente dalla qualità dei dati, dallo sforzo di integrazione e dalle risorse di progetto [unverified: non è stato trovato alcuno studio solido sulla durata dell'implementazione].
+
+| Fase | Contenuto | Risultato | Valore indicativo |
+|---|---|---|---|
+| 1. Assessment | obiettivi, KPI con baseline, flusso del valore e colli di bottiglia, vincoli, qualità dei dati | specifica dei requisiti, risultati sui dati, business case | da 4 a 8 settimane |
+| 2. Selezione | long list dei fornitori, dataset di test, proof of concept, referenze | decisione sul sistema, contratto | da 6 a 12 settimane |
+| 3. Pulizia dei dati | cicli di lavorazione, tempi standard e di attrezzaggio, calendari, competenze; partendo dal collo di bottiglia | dati anagrafici pianificabili | in parallelo alle fasi 2 e 4, spesso il blocco più lungo |
+| 4. Modellazione e integrazione | modello delle risorse, vincoli, pesi degli obiettivi, interfacce con ERP e MES | modello di schedulazione funzionante | da 8 a 16 settimane |
+| 5. Pilota | un'area, idealmente con il collo di bottiglia; marcia parallela con il vecchio processo | prova della qualità della schedulazione, accettazione da parte degli utenti | da 6 a 12 settimane |
+| 6. Estensione | altre aree, dismissione della schedulazione ombra, regole di rilascio, orizzonte congelato | operatività a regime | dipende dal perimetro |
+| 7. Miglioramento continuo | piano vs. consuntivo, manutenzione dei tempi standard, analisi delle cause dei buffer, revisione dei KPI | un sistema di pianificazione che apprende | continuo |
+
+**Fattori di successo in tutte le fasi:**
+
+- **Coinvolgere i pianificatori fin dal primo giorno.** Un APS di cui i pianificatori non si fidano viene aggirato, e il foglio Excel resta in uso.
+- **Definire le regole di pianificazione prima del software.** Chi può modificare le priorità? Quanto dura l'orizzonte congelato? Quale regola governa il rilascio?
+- **Partire in piccolo, imparare in fretta.** Un pilota sul collo di bottiglia mostra in poche settimane se dati e modello reggono.
+- **Misurare il successo.** Senza baseline il valore non può essere dimostrato e la discussione di progetto si riduce a opinioni.
+- **Coinvolgere il reparto produttivo.** Una schedulazione serve solo se arriva in officina come attività e se le conferme tornano indietro. Per le routine quotidiane che rendono possibile tutto questo, vedere la guida [Shop Floor Management](https://www.m365.fm/en/learn/shop-floor-management/).
+
+## 16. Errori comuni e come evitarli
+
+| Errore | Conseguenza | Soluzione migliore |
+|---|---|---|
+| APS come sostituto del miglioramento di processo | processi instabili vengono solo schedulati con maggiore precisione | stabilizzare prima attrezzaggi, guasti e rilasci, schedulare in parallelo |
+| Modellare tutti i vincoli contemporaneamente | il progetto slitta, il modello diventa incomprensibile | iniziare dai vincoli che agiscono sul collo di bottiglia |
+| Prendere i tempi standard dalla contabilità industriale | schedulazioni sistematicamente troppo ottimistiche o troppo pessimistiche | usare i consuntivi delle conferme e aggiornarli regolarmente |
+| Schedulare tutte le risorse al massimo utilizzo | code lunghe, tempi di attraversamento irregolari | caricare completamente il collo di bottiglia, lasciare margine sulle non-colli di bottiglia |
+| Nessun orizzonte congelato | continui riprogrammazioni, nervosismo in officina | definire una zona congelata, ad esempio i successivi 1-3 turni |
+| Rilascio senza limite al WIP | sindrome del lead time, accumulo di scorte | rilasciare in funzione del collo di bottiglia o con un limite al WIP |
+| Aumenti generalizzati dei lead time pianificati quando gli ordini sono in ritardo | rilasci anticipati fanno crescere il WIP e i ritardi | eliminare le cause al collo di bottiglia, controllare il rilascio |
+| Obiettivi non concordati | vendite, produzione e logistica giudicano la schedulazione in modo diverso | concordare e documentare insieme i pesi degli obiettivi |
+| Pianificatori non coinvolti | il sistema viene aggirato, resta la schedulazione ombra | coinvolgere i pianificatori nella selezione, nella modellazione e nel pilota |
+| Conferme solo a fine turno | l'APS schedula su uno stato non aggiornato | conferma tempestiva per ogni operazione |
+| Successo non misurato | il valore resta una affermazione | raccogliere le baseline prima del go-live |
+| Ottimizzazione a scatola nera | i pianificatori non capiscono né si fidano della schedulazione | scegliere un sistema con decisioni di schedulazione spiegabili |
+
+**Quick win senza nuovo software:** se si vuole iniziare già domani, cinque passi non richiedono alcun investimento:
+
+1. Per le ultime otto settimane, confronta carico e capacità di ogni risorsa e individua il collo di bottiglia.
+2. Conta il WIP e usa la Legge di Little per calcolare il lead time medio. Se si discosta sensibilmente dai lead time pianificati nell'ERP, saprai perché le date non vengono rispettate.
+3. Imposta una regola di rilascio: i nuovi ordini entrano in officina solo quando la coda davanti al collo di bottiglia scende sotto un limite definito.
+4. Al collo di bottiglia, dai priorità in base alla data di consegna e alla famiglia di setup, non a chi urla più forte.
+5. Confronta i tempi standard e di setup del collo di bottiglia con i valori effettivi e correggi gli scostamenti maggiori.
+
+## 17. Evidenze: cosa riportano studi e utenti
+
+**Teoria dei vincoli nella letteratura:** Victoria Mabin e Steven Balderstone hanno analizzato più di 80 applicazioni di successo della TOC con risultati quantitativi riportati in letteratura [5]. Secondo la sintesi di Roberto Panizzolo, questi casi hanno riportato miglioramenti medi del 70% nel lead time dall'ordine alla consegna, del 65% nel tempo ciclo di produzione, del 49% nelle scorte, del 63% nel throughput o nei ricavi e del 44% nelle prestazioni sulle date di consegna [6]. Leggi questi numeri con attenzione: sono stati analizzati solo casi di successo pubblicati e nessun fallimento è stato trovato in letteratura [5]. Si tratta di una selezione positiva, non della media attesa di una qualsiasi implementazione. La direzione dei risultati è comunque coerente con la Legge di Little e con le curve operative: meno WIP con un collo di bottiglia protetto significa lead time più brevi.
+
+**Segnalazioni degli utenti dai fornitori di APS:** I fornitori pubblicano molti casi di esempio. Il fornitore tedesco di MES MPDV, ad esempio, riporta per il suo cliente VACOM, che schedula circa 1.200 ordini con fino a 20 operazioni ciascuno, un risparmio di tempo di pianificazione di circa il 50% [30]. Cifre di questo tipo sono affermazioni dei fornitori senza un metodo di misura dichiarato. Mostrano quali effetti siano possibili ma non sostituiscono un pilota con i propri dati. Lo stesso vale per i casi riportati nelle pagine dei fornitori statunitensi che compaiono per "production scheduling software".
+
+**Aerospaziale come caso estremo:** La produzione aerospaziale combina lead time lunghi, zone di assemblaggio con spazio limitato, requisiti di competenza e certificazione e tracciabilità completa. Lo scheduling in questo settore deve proteggere non solo le date ma anche le registrazioni. I requisiti di lead time e tracciabilità sono descritti nel post [Production Planning for Aerospace Suppliers: Lead Time and Traceability](https://www.m365.fm/community/u/mirko-p/blog/aerospace-production-planning-lead-time-traceability/). Una guida completa: [Aerospace Production Planning](https://www.m365.fm/en/learn/aerospace-production-planning/).
+
+**Cosa si generalizza:** Attraverso studi e report emergono tre schemi ricorrenti. Primo, gran parte del beneficio deriva non dall'algoritmo ma dalla trasparenza sulla capacità e sul collo di bottiglia. Secondo, i limiti di WIP e il rilascio controllato funzionano in fretta e a basso costo. Terzo, la durata dei risultati dipende dal fatto che le conferme in officina e il confronto tra pianificato ed effettivo continuino a funzionare.
+
+## 18. Pianificazione basata sui vincoli con iFAKT Polaris
+
+> **Nota: l'autore lavora presso iFAKT GmbH.**
+
+[iFAKT GmbH](https://www.m365.fm/entity/ifakt/), con sede a Stoccarda, in Germania, sviluppa la famiglia di software [iFAKT Polaris](https://www.m365.fm/entity/polaris/). Secondo il sito web dell'azienda, Polaris collega i dati ERP con un gemello digitale della produzione e indica tra le sue funzioni la pianificazione basata sui vincoli (risorse, competenze, turni, buffer), le simulazioni what-if per disturbi e cambi di mix, e un cockpit KPI con lead time, WIP, utilizzo e rispetto delle scadenze [28]. Il sito cita come settori l'aerospaziale, l'automotive, le macchine e l'automazione, e l'energia e le infrastrutture [28]. Due moduli sono rilevanti per i temi di questa guida:
+
+**[Polaris Optimizer](https://www.m365.fm/entity/polaris-optimizer/)**, secondo la pagina del fornitore, crea a partire dai dati ERP, dalla disponibilità delle risorse e dai vincoli operativi un programma di produzione ottimizzato ed eseguibile [26]. Funzionalità elencate:
+
+- pianificazione automatica di macchine, personale e attrezzature, considerando turni, zone, competenze e capacità
+- individuazione dei colli di bottiglia, priorizzazione degli ordini e visibilità degli ordini in ritardo e dei rischi di consegna
+- analisi d'impatto e riottimizzazione dopo i disturbi, anche sulla base del feedback dal reparto produttivo
+- un modulo di ottimizzazione delle dimensioni dei lotti che determina i lotti per variante e per macchina, una sequenza ottimizzata per i setup, e livelli di scorta che bilanciano il costo di stoccaggio con la prontezza alla consegna
+- supporto alla pianificazione operativa di breve termine e alla previsione della capacità di lungo termine
+
+**[Polaris Operator](https://www.m365.fm/entity/polaris-operator/)**, secondo la pagina del fornitore, prende i programmi ottimizzati e li consegna come attività temporizzate a operatori e capiturno in reparto [27]. Sono elencati una vista individuale delle attività per ogni operatore, la visibilità del percorso critico per i capiturno, istruzioni di lavoro incorporate nelle attività, la possibilità di mettere in pausa, bloccare o segnalare le attività con un feedback strutturato, e una panoramica WIP in tempo reale per i pianificatori. Il feedback su avanzamento, ritardi e disturbi confluisce nuovamente nella pianificazione [27].
+
+Le funzioni descritte affrontano quindi due punti che questa guida identifica come critici: la schedulazione rispetto ai vincoli reali (Sezione 5.2) e il ciclo chiuso di pianificazione, esecuzione e feedback (Sezioni 6 e 14). iFAKT GmbH mostra sul proprio sito le certificazioni ISO 9001 e ISO/IEC 27001 [27]. Le pagine di prodotto non riportano numeri di clienti né risultati quantificati con un metodo dichiarato [26][27]. Tutte le affermazioni sulle funzionalità sopra riportate sono dichiarazioni del fornitore.
+
+**Prospettiva:** Polaris è una delle molte soluzioni sul mercato. Valutatelo come qualsiasi altro sistema, con la checklist della Sezione 13.3 e un pilota con i vostri dati. È in preparazione una guida dedicata, [iFAKT Polaris](https://www.m365.fm/en/learn/ifakt-polaris/).
+
+## 19. Glossario
+
+| Termine | Spiegazione |
+|---|---|
+| APS (advanced planning and scheduling) | software e metodi per la schedulazione a capacità finita e con disponibilità di materiali, con ottimizzazione |
+| ATP (available to promise) | quantità che può essere promessa dal magazzino e dagli arrivi pianificati |
+| Buffer management | controllo basato sul consumo dei buffer temporali nelle zone (verde, giallo, rosso) |
+| Changeover matrix | tabella dei tempi di setup dipendenti dalla sequenza tra le varianti |
+| CONWIP | controllo pull con un numero totale costante di ordini in una linea |
+| CTP (capable to promise) | data di spedizione realizzabile considerando materiali e capacità |
+| CRP (capacity requirements planning) | fase di pianificazione della capacità in MRP II; mostra il carico ma non risolve i sovraccarichi |
+| Cycle time (legge di Little) | tempo che un ordine trascorre nel sistema dal rilascio al completamento; vedi [Lead Time](https://www.m365.fm/entity/lead-time/) |
+| Detailed scheduling | schedulazione delle singole operazioni sulle risorse con sequenza e tempi (tedesco: *Feinplanung*) |
+| Drum-buffer-rope (DBR) | controllo TOC: il collo di bottiglia determina il ritmo, un buffer temporale lo protegge e il rilascio è vincolato ad esso |
+| EOQ (economic order quantity) | formula della radice quadrata per il lotto economico di Harris (1913); nei testi tedeschi è detta formula di Andler |
+| Finite capacity scheduling | schedulazione in cui nessuna capacità pianificata supera la capacità disponibile (ISA-95) |
+| Flow factor | rapporto tra lead time e tempo di lavorazione |
+| Frozen zone | orizzonte di pianificazione congelato in cui non avvengono ulteriori riprogrammazioni |
+| Heijunka | livellamento di volume e mix nel tempo |
+| Lead time syndrome | circolo vizioso di tempi di attraversamento pianificati più lunghi, rilasci anticipati, più WIP e tempi ancora più lunghi |
+| Legge di Little | cycle time = WIP ÷ throughput |
+| Lot size | quantità prodotta senza interruzioni da un setup; vedi [Batch Size](https://www.m365.fm/entity/batch-size/) |
+| MES (manufacturing execution system) | sistema per l'esecuzione, la raccolta dati e il controllo di reparto (ISA-95 Livello 3; VDI 5600) |
+| MPS (master production schedule) | programma di produzione dei prodotti finiti |
+| MRP (material requirements planning) | pianificazione dei materiali tramite esplosione della distinta base con lead time pianificati |
+| MRP II (manufacturing resource planning) | estensione di MRP con pianificazione master, di capacità e finanziaria |
+| OTIF (on time in full) | quota di righe consegnate in tempo e complete |
+| PPC | pianificazione e controllo della produzione (tedesco: PPS) |
+| Setup time | tempo necessario per riconvertire una risorsa tra due ordini; vedi [Setup Time](https://www.m365.fm/entity/setup-time/) |
+| Safety stock | scorta mantenuta per proteggersi da variazioni di domanda e lead time |
+| Takt time | tempo disponibile ÷ domanda del cliente |
+| Bottleneck (constraint) | risorsa che limita il throughput dell'intero sistema |
+| TOC (theory of constraints) | approccio gestionale che allinea il sistema al proprio vincolo |
+| WIP (work in process) | ordini rilasciati e non ancora completati in reparto |
+
+## 20. FAQ: software di pianificazione della produzione e APS
+
+### Che cos'è un software di pianificazione della produzione?
+
+Un software di pianificazione della produzione decide quale operazione viene eseguita su quale macchina o centro di lavoro, in quale sequenza e a quale ora. Gli strumenti validi pianificano in base alla capacità finita e ai vincoli reali, come turni, competenze, utensili e setup dipendenti dalla sequenza. Molti strumenti venduti con questo nome sono in realtà pianificatori di progetti o di risorse; per la manifattura, verificate se modellano cicli di lavorazione, setup e disponibilità dei materiali.
+
+### Che cos'è un sistema APS?
+
+Un APS (advanced planning and scheduling) è un software di pianificazione che programma gli ordini di produzione in base alla capacità finita di macchine, personale e utensili e alla disponibilità dei materiali. Crea sequenze e date realizzabili usando euristiche e ottimizzazione matematica.
+
+### Qual è la differenza tra APS e MRP?
+
+L'MRP calcola quale materiale serve e quando, esplodendo le distinte base e retrocedendo in base a tempi di approvvigionamento fissi. Nella sua forma di base presuppone una capacità illimitata. L'APS pianifica le operazioni con capacità finita e materiali contemporaneamente, quindi le sue date sono realizzabili. L'MRP risponde a "di cosa abbiamo bisogno"; l'APS risponde a "cosa possiamo effettivamente costruire, e quando".
+
+### Qual è la differenza tra APS ed ERP? L'APS sostituisce l'ERP?
+
+No, l'APS non sostituisce l'ERP. L'ERP è il sistema di riferimento per ordini, materiali, scorte e contabilità. La sua logica di pianificazione (MRP), nella forma di base, presuppone capacità illimitata e tempi di approvvigionamento fissi. Un APS aggiunge la programmazione in base alla capacità reale e ai vincoli e restituisce all'ERP date realistiche.
+
+### Qual è la differenza tra APS e MES?
+
+Un APS pianifica cosa deve essere eseguito quando e su quale risorsa. Un MES controlla e registra l'esecuzione in tempo reale. L'ISA-95 colloca sia il piano di lavoro sia la sua esecuzione nella gestione delle operazioni di produzione (Livello 3) [31], e la norma tedesca VDI 5600 elenca la schedulazione di dettaglio tra i compiti del MES [15]. In pratica, la programmazione viene svolta o da un modulo MES o da un APS autonomo che scambia dati con il MES.
+
+### Qual è la differenza tra pianificazione della produzione e schedulazione della produzione?
+
+La pianificazione lavora con quantità aggregate, periodi settimanali o mensili e gruppi di centri di lavoro, per definire il programma e i fabbisogni di materiale. La schedulazione assegna le singole operazioni alle risorse con una sequenza e un orario di inizio, tipicamente in ore o turni.
+
+### Quali sono i tipi di schedulazione della produzione?
+
+Le distinzioni più utili sono la schedulazione a capacità finita contro quella a capacità infinita e la direzione di schedulazione: schedulazione in avanti (inizio più prossimo, fine più prossima), schedulazione all'indietro (dalla data di consegna, inizio più tardivo) e schedulazione basata sul collo di bottiglia (si carica prima il collo di bottiglia, poi si schedulano a ritroso le fasi a monte e in avanti quelle a valle).
+
+### Excel basta per la schedulazione della produzione?
+
+A volte. Con pochi ordini, setup che dipendono poco dalla sequenza e un collo di bottiglia stabile, spesso funzionano un foglio di calcolo o una lavagna di schedulazione insieme a un controllo disciplinato del collo di bottiglia (DBR). Il software diventa necessario quando il numero di vincoli e di riprogrammazioni supera ciò che la pianificazione manuale può gestire in modo affidabile, cosa che la tabella dei vincoli nella Sezione 5.2 aiuta a valutare.
+
+### Quando un APS si ripaga?
+
+Di solito quando si verificano diverse di queste condizioni: molte operazioni per ordine, setup dipendenti dalla sequenza, colli di bottiglia variabili o multipli, scarsità di manodopera qualificata, frequenti ordini urgenti, forte impegno di riprogrammazione e consegne puntuali deludenti nonostante scorte elevate. Non esiste una soglia universale di dimensione aziendale.
+
+### L'APS è adatto a piccole e medie imprese manifatturiere?
+
+Sì. Conta più la complessità della pianificazione che le dimensioni dell'azienda. Per le piccole e medie imprese manifatturiere sono adatti sistemi con connettori ERP standard, configurazione senza codice personalizzato e un avvio graduale a partire dal collo di bottiglia.
+
+### Quanto costa un software di pianificazione della produzione?
+
+Non esiste un riferimento di prezzo pubblico affidabile. Gli strumenti semplici si vendono come abbonamenti per utente; la maggior parte dei fornitori di APS quota in base allo stabilimento, alle risorse e al perimetro. Calcolate il costo totale di proprietà su cinque anni, includendo pulizia dei dati, integrazione, formazione e impegno interno, e chiedete a ogni fornitore un preventivo sullo stesso perimetro.
+
+### Come trovo il collo di bottiglia nel mio stabilimento?
+
+Per ogni risorsa, confronta il carico pianificato, inclusi i setup, con la capacità disponibile su più settimane, osserva dove si formano code permanenti e verifica quale risorsa lascia inattive le aree a valle. I colli di bottiglia possono anche essere persone, postazioni di ispezione o utensili, e si spostano quando cambia il mix.
+
+### Che cos'è il drum-buffer-rope in parole semplici?
+
+Il collo di bottiglia è il tamburo che detta il ritmo. Un buffer temporale davanti ad esso lo protegge dalle interruzioni. La fune (rope) lega il rilascio dei materiali alla schedulazione del collo di bottiglia, in modo che non entri in reparto più lavoro di quanto il collo di bottiglia riesca a elaborare [2].
+
+### Come posso ridurre il lead time di produzione?
+
+La leva più rapida è di solito limitare il WIP, perché secondo la Legge di Little il lead time diminuisce in proporzione al WIP a parità di throughput [9]. Altre leve sono lotti più piccoli con setup brevi, minore variabilità e mantenere l'utilizzo delle risorse non critiche al di sotto del punto in cui le code esplodono.
+
+### Come posso migliorare la consegna puntuale?
+
+Schedula in base alla capacità finita, in modo che le date promesse siano fattibili, controlla il rilascio al collo di bottiglia, dai priorità al lavoro giornaliero in base allo stato del buffer e analizza sistematicamente le cause degli ordini in ritardo. Misura le prestazioni di consegna in modo coerente, ad esempio come OTIF rispetto alla data confermata.
+
+### Come si calcola il lotto economico di riordino?
+
+La formula classica dell'EOQ è Q* = √(2 × domanda annua × costo di setup o di ordinazione per lotto ÷ costo di mantenimento per unità all'anno). Con una domanda di 12.000 unità, un costo di setup di 300 $ e un costo di mantenimento di 8 $, il risultato è circa 949 unità. La formula ignora capacità e sequenza ed è solo un valore di partenza.
+
+### Come si calcola lo stock di sicurezza?
+
+Con domanda variabile e lead time costante: SS = z × σ_D × √L. Con una deviazione standard di 30 unità al giorno, un lead time di 9 giorni e un livello di servizio del ciclo del 95% (z = 1,645), si ottengono circa 148 unità. Se anche il lead time varia, il valore cresce sensibilmente.
+
+### L'AI può prendere in carico la schedulazione della produzione?
+
+L'AI migliora le previsioni dei tempi di lavorazione e di setup, individua schemi di disturbo e accelera la ricerca di buone schedulazioni. Non sostituisce dati anagrafici puliti né l'accordo su obiettivi e regole. Senza dati di conferma affidabili, l'AI apprende anche dai dati errati.
+
+### Quanto dura l'implementazione di un APS?
+
+Dipende soprattutto dalla qualità dei dati, dallo sforzo di integrazione e dal perimetro. Un pilota in un'area collo di bottiglia può essere operativo in pochi mesi; un'estensione completa su più aree richiede più tempo. Non esistono studi indipendenti solidi sui tempi tipici di implementazione.
+
+### L'APS sostituisce i pianificatori di produzione?
+
+No. Un APS assume il calcolo, non le decisioni. I pianificatori stabiliscono le priorità, mantengono regole e dati, gestiscono le eccezioni e scelgono tra gli scenari. Nelle implementazioni riuscite, i pianificatori dedicano meno tempo a ricostruire le schedulazioni e più tempo alle cause dei ritardi.
+
+## 21. Conclusione
+
+Le pianificazioni della produzione raramente falliscono perché i pianificatori non si impegnano abbastanza. Falliscono perché la logica di pianificazione presuppone una capacità illimitata e tempi di attraversamento fissi. La fisica della fabbrica è chiara: il lead time deriva dal WIP e dalla produttività, le code esplodono con un'elevata utilizzazione e il collo di bottiglia determina ciò che lo stabilimento può consegnare.
+
+Un APS affronta esattamente questo problema. Schedula in base a capacità finita e vincoli reali, rende calcolabili le date di spedizione e mostra le conseguenze di interruzioni e ordini urgenti prima che si verifichino. Produce risultati solo insieme a tre elementi che nessun software può fornire: un'attenzione precisa al collo di bottiglia, un rilascio controllato degli ordini e dati anagrafici e conferme che corrispondano alla realtà.
+
+Quindi partite con un ordine semplice: individuate il collo di bottiglia, misurate e limitate il WIP, mettete in ordine i dati del collo di bottiglia, poi testate un software di schedulazione della produzione con funzionalità APS in un progetto pilota con i vostri dati. In questo modo il foglio Excel ombra non viene sostituito da una nuova scatola nera, ma da una schedulazione di cui produzione, vendite e clienti possono fidarsi.
+
+## Ulteriori letture su m365.fm
+
+**Post**
+
+- [Oltre l'MRP: perché l'Enterprise Resource Planning fallisce nella schedulazione finita della produzione](https://www.m365.fm/community/u/mirko-p/blog/beyond-mrp-enterprise-resource-planning-finite-scheduling/)
+- [Dall'ERP allo shop floor: perché i piani di produzione necessitano di un gemello digitale](https://www.m365.fm/community/u/mirko-p/blog/erp-to-shop-floor-digital-twin/)
+- [Pianificazione della produzione per i fornitori aerospaziali: lead time e tracciabilità](https://www.m365.fm/community/u/mirko-p/blog/aerospace-production-planning-lead-time-traceability/)
+
+**Pagine delle entità**
+
+[Advanced Planning and Scheduling](https://www.m365.fm/entity/advanced-planning-and-scheduling/) · [Theory of Constraints](https://www.m365.fm/entity/theory-of-constraints/) · [Buffer Management](https://www.m365.fm/entity/buffer-management/) · [Constraint-based Scheduling](https://www.m365.fm/entity/constraint-based-scheduling/) · [Enterprise Resource Planning](https://www.m365.fm/entity/enterprise-resource-planning/) · [Heijunka](https://www.m365.fm/entity/heijunka/) · [Line Balancing](https://www.m365.fm/entity/line-balancing/) · [Batch Size](https://www.m365.fm/entity/batch-size/) · [Safety Stock](https://www.m365.fm/entity/safety-stock/) · [Lead Time](https://www.m365.fm/entity/lead-time/) · [Setup Time](https://www.m365.fm/entity/setup-time/) · [Takt Time](https://www.m365.fm/entity/takt-time/) · [Kanban](https://www.m365.fm/entity/kanban/) · [Pull System](https://www.m365.fm/entity/pull-system/) · [Polaris](https://www.m365.fm/entity/polaris/) · [Polaris Optimizer](https://www.m365.fm/entity/polaris-optimizer/) · [Polaris Operator](https://www.m365.fm/entity/polaris-operator/) · [iFAKT](https://www.m365.fm/entity/ifakt/)
+
+**Guide correlate**
+
+- [Digital Twin in Manufacturing](https://www.m365.fm/en/learn/digital-twin-manufacturing/)
+- [Value Stream Mapping](https://www.m365.fm/en/learn/value-stream-mapping/)
+- [Manufacturing KPIs](https://www.m365.fm/en/learn/manufacturing-kpis/)
+- [iFAKT Polaris](https://www.m365.fm/en/learn/ifakt-polaris/)
+- [Aerospace Production Planning](https://www.m365.fm/en/learn/aerospace-production-planning/)
+- [Azure for Manufacturing](https://www.m365.fm/en/learn/manufacturing-it-azure/)
+- [Lean Manufacturing](https://www.m365.fm/en/learn/lean-manufacturing/)
+- [Shop Floor Management](https://www.m365.fm/en/learn/shop-floor-management/)
+
+# Author box
+
+**[Mirko Peters](https://www.m365.fm/entity/mirko-peters/)** è il conduttore di m365.fm e lavora presso iFAKT GmbH. Su m365.fm scrive di pianificazione e programmazione della produzione, lean manufacturing e trasformazione digitale del settore manifatturiero. In [iFAKT GmbH](https://www.m365.fm/entity/ifakt/), sviluppatore di [iFAKT Polaris](https://www.m365.fm/entity/polaris/), lavora su come la pianificazione basata sui vincoli, i gemelli digitali e il feedback dal reparto produttivo si integrano per far sì che i programmi reggano in officina.
+
+**Nota: l'autore lavora presso iFAKT GmbH.**
+
+# Sources
+
+All online sources accessed November 20, 2026.
+
+1. Goldratt, Eliyahu M.; Cox, Jeff: The Goal. A Process of Ongoing Improvement. North River Press 1984 (3rd rev. ed. 2004, ISBN 978-0-88427-178-9).
+2. Goldratt, Eliyahu M.; Fox, Robert E.: The Race. North River Press 1986, 179 pp., ISBN 0-88427-062-9. Reference: https://buresund.nu/books/the-race
+3. Theory of Constraints Institute: Five Focusing Steps. https://www.tocinstitute.org/five-focusing-steps.html
+4. Cox, James F. III; Schleier, John G. (eds.): Theory of Constraints Handbook. McGraw-Hill, New York 2010, ISBN 978-0-07-166554-4; ch. 8: Srikanth, Mokshagundam L.: DBR, Buffer Management, and VATI Flow Classification; ch. 9: From DBR to Simplified-DBR for Make-to-Order. Chapter reference: https://www.toc-goldratt.com/en/product/dbr-buffer-management-and-vati-flow-classification-chapter-8-of-the-theory-of-constraints-handbook
+5. Mabin, Victoria J.; Balderstone, Steven J.: The performance of the theory of constraints methodology: Analysis and discussion of successful TOC applications. International Journal of Operations & Production Management 23 (2003) 6, pp. 568–595. DOI: 10.1108/01443570310476636
+6. Panizzolo, Roberto: Theory of Constraints (TOC) Production and Manufacturing Performance. International Journal of Industrial Engineering and Management 7 (2016) 1, pp. 15–23. https://www.research.unipd.it/retrieve/e14fb26b-f0bc-3de1-e053-1705fe0ac030/ijiem_vol7_no1_3.pdf
+7. Schuh, Günther; Stich, Volker (eds.): Produktionsplanung und -steuerung 1. Grundlagen der PPS [Production planning and control 1: Fundamentals]. 4th rev. ed., Springer Vieweg, Berlin/Heidelberg 2012, ISBN 978-3-642-25422-2. (German)
+8. Nyhuis, Peter; Wiendahl, Hans-Peter: Logistische Kennlinien. Grundlagen, Werkzeuge und Anwendungen. 3rd ed., Springer Vieweg, Berlin/Heidelberg 2012, ISBN 978-3-540-92838-6. DOI: 10.1007/978-3-540-92839-3 (German). English edition: Nyhuis, Peter; Wiendahl, Hans-Peter: Fundamentals of Production Logistics. Theory, Tools and Applications. Springer, Berlin/Heidelberg 2009 (published October 2008), ISBN 978-3-540-34210-6, DOI: 10.1007/978-3-540-34211-3
+9. Little, John D. C.: A Proof for the Queuing Formula: L = λW. Operations Research 9 (1961) 3, pp. 383–387. DOI: 10.1287/opre.9.3.383
+10. Hopp, Wallace J.; Spearman, Mark L.: Factory Physics. 3rd ed., Waveland Press, Long Grove (IL) 2008, ISBN 978-1-57766-739-1. Catalog record: https://search.worldcat.org/oclc/718450337
+11. Kingman, J. F. C.: The single server queue in heavy traffic. Mathematical Proceedings of the Cambridge Philosophical Society 57 (1961) 4, pp. 902–904. DOI: 10.1017/S0305004100036094
+12. Lödding, Hermann: Verfahren der Fertigungssteuerung. Grundlagen, Beschreibung, Konfiguration [Production control methods]. 3rd ed., Springer Vieweg, Berlin/Heidelberg 2016, ISBN 978-3-662-48458-6 (print), 978-3-662-48459-3 (e-book). (German)
+13. Fleischmann, Bernhard; Meyr, Herbert; Wagner, Michael: Advanced Planning. In: Stadtler, Hartmut; Kilger, Christoph; Meyr, Herbert (eds.): Supply Chain Management and Advanced Planning. Concepts, Models, Software, and Case Studies. 5th ed., Springer, Berlin/Heidelberg 2015, pp. 71–95. DOI: 10.1007/978-3-642-55309-7_4 (book: DOI 10.1007/978-3-642-55309-7)
+14. Garey, M. R.; Johnson, D. S.; Sethi, Ravi: The Complexity of Flowshop and Jobshop Scheduling. Mathematics of Operations Research 1 (1976) 2, pp. 117–129. DOI: 10.1287/moor.1.2.117
+15. VDI 5600 Part 1: Manufacturing Execution Systems (MES). Edition October 2016. https://www.din.de/en/wdc-beuth:din21:251310997 ; table of contents: https://www.vdi.de/fileadmin/pages/vdi_de/redakteure/richtlinien/inhaltsverzeichnisse/2436698.pdf (German guideline of the Association of German Engineers)
+16. VDI 3633 Part 1: Simulation of systems in materials handling, logistics and production – Fundamentals. Edition December 2014. https://din.de/de/wdc-beuth:din21:149034959 (German guideline)
+17. Harris, Ford W.: How Many Parts to Make at Once. Factory, The Magazine of Management 10 (1913) 2, pp. 135–136; and Erlenkotter, Donald: Ford Whitman Harris and the Economic Order Quantity Model. Operations Research 38 (1990) 6, pp. 937–946. DOI: 10.1287/opre.38.6.937
+18. Andler, Kurt: Rationalisierung der Fabrikation und optimale Losgröße. Oldenbourg, Munich/Berlin 1929 [unverified: bibliographic details and first name not verified online, original not consulted; formula and assumptions per University of Duisburg-Essen, exercise "Statische Losgröße – Andler-Modell": https://www.uni-due.de/imperia/md/content/tul/de_ss2013_lm01_uebung_statische_losgroesse_andler_modell.pdf].
+19. Silver, Edward A.; Pyke, David F.; Thomas, Douglas J.: Inventory and Production Management in Supply Chains. 4th ed., CRC Press, Boca Raton 2017, ISBN 978-1-4665-5861-8.
+20. Ohno, Taiichi: Toyota Production System. Beyond Large-Scale Production. Productivity Press, Cambridge (MA) 1988, ISBN 978-0-915299-14-0.
+21. Spearman, Mark L.; Woodruff, David L.; Hopp, Wallace J.: CONWIP: a pull alternative to kanban. International Journal of Production Research 28 (1990) 5, pp. 879–894. DOI: 10.1080/00207549008942761
+22. Boysen, Nils; Fliedner, Malte; Scholl, Armin: A classification of assembly line balancing problems. European Journal of Operational Research 183 (2007) 2, pp. 674–693. Reference: https://econpapers.repec.org/RePEc:eee:ejores:v:183:y:2007:i:2:p:674-693
+23. Thürer, Matthias; Fernandes, Nuno O.; Haeussler, Stefan; Stevenson, Mark: Dynamic planned lead times in production planning and control systems: does the lead time syndrome matter? International Journal of Production Research 61 (2023) 4, pp. 1268–1282. DOI: 10.1080/00207543.2022.2034193
+24. Orlicky, Joseph: Material Requirements Planning. The New Way of Life in Production and Inventory Management. McGraw-Hill, New York 1975.
+25. Logistik Heute: SCM-Studie: Mehr als ein Drittel der deutschen Unternehmen nutzt Excel als Rückgrat für die Lieferkettenplanung (IDC for Kinaxis), April 18, 2024. https://logistik-heute.de/news/scm-studie-mehr-als-ein-drittel-der-deutschen-unternehmen-nutzt-excel-als-rueckgrat-fuer-die-lieferkettenplanung-104313.html (German)
+26. iFAKT GmbH: Polaris Optimizer. https://www.ifakt.de/en/solutions/optimizer
+27. iFAKT GmbH: Polaris Operator. https://www.ifakt.de/en/solutions/operator
+28. iFAKT GmbH: Home page. https://www.ifakt.de/
+29. Pinedo, Michael L.: Scheduling. Theory, Algorithms, and Systems. 5th ed., Springer, Cham 2016. DOI: 10.1007/978-3-319-26580-3
+30. MPDV Mikrolab GmbH: APS-Systeme einfach erklärt (Smart Factory glossary, with VACOM customer example). https://www.mpdv.com/industrie-4-0/smart-factory-glossar/advanced-planning-and-scheduling-system-aps (German)
+31. ANSI/ISA-95.00.03-2013: Enterprise-Control System Integration – Part 3: Activity Models of Manufacturing Operations Management. International Society of Automation. Preview incl. clause 3.1 definition of finite capacity scheduling: https://www.isa.org/getmedia/506c4c83-c2d3-4807-83e7-682fd98c17f8/ISA-95-00-03-2013-preview.pdf
+32. Kinaxis Inc.: New Research Finds 83% of Supply Chains Can't Respond to Disruptions in 24 Hours (IDC research commissioned by Kinaxis, 1,800 respondents in nine countries incl. USA and Canada, fielded December 2023), press release, April 16, 2024. https://investors.kinaxis.com/news-releases/news-release-details/2024/New-Research-Finds-83-of-Supply-Chains-Cant-Respond-to-Disruptions-in-24-Hours
+33. ASCM (Association for Supply Chain Management): APICS Certified in Planning and Inventory Management (CPIM), 2026 certification brochure. https://www.ascm.org/globalassets/ascm_website_assets/docs/credentials/2026-certification_brochures_cpim.pdf
+34. Lean Enterprise Institute: Lean Lexicon, "Heijunka." https://www.lean.org/lexicon-terms/heijunka/
+35. National Institute of Standards and Technology (NIST): The NIST Cybersecurity Framework (CSF) 2.0. NIST CSWP 29, February 26, 2024. https://csrc.nist.gov/pubs/cswp/29/the-nist-cybersecurity-framework-csf-20/final
+36. U.S. Department of Defense: Defense Federal Acquisition Regulation Supplement: Assessing Contractor Implementation of Cybersecurity Requirements (DFARS Case 2019-D041), final rule. Federal Register 90 (2025) 173, September 10, 2025, effective November 10, 2025. https://www.govinfo.gov/content/pkg/FR-2025-09-10/html/2025-17359.htm

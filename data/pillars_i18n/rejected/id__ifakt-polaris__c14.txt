@@ -1,0 +1,52 @@
+<translation>
+### 12.5 Polaris Optimizer: Penjadwalan produksi dan perencanaan kapasitas
+
+**Tujuan:** Menurut vendor, [Polaris Optimizer](https://www.m365.fm/entity/polaris-optimizer/) menghasilkan jadwal produksi yang dioptimalkan di seluruh sumber daya terbatas [10].
+
+**Fungsi menurut halaman vendor** [10][13]:
+- pertimbangan sumber daya, shift, zona, keterampilan dan kapasitas; prioritas order ditetapkan oleh perencana
+- penjadwalan mesin, pekerja dan alat
+- tampilan order yang terlambat dan risiko pengiriman
+- penentuan ukuran lot per varian dan mesin, pengurutan berdasarkan waktu changeover antar varian
+- trade-off antara persediaan, biaya penyimpanan dan tingkat layanan
+- konfirmasi dari lantai produksi melalui Operator, optimasi ulang otomatis setelah gangguan dengan analisis dampak
+- sumber daya yang digunakan bersama lintas proyek
+- penjadwalan operasional jangka pendek dan gambaran kapasitas jangka panjang
+
+Menurut FAQ, Polaris menggunakan "algoritma optimasi berbasis batasan (constraint-based)" untuk menghasilkan jadwal yang memperhitungkan kapasitas mesin, keterampilan pekerja, shift, material dan tanggal jatuh tempo [3]. Halaman perencanaan dan eksekusi juga menyebutkan batasan multi-sumber daya, urutan changeover dan penjadwalan berbasis prioritas; untuk pengujian, data dapat diimpor melalui file, Excel atau ekspor ERP, dan dalam produksi terdapat sinkronisasi berkelanjutan dengan ERP, MES atau sistem lain [13].
+
+**Klaim vendor tanpa metodologi:** Halaman perencanaan mengutip lead time 50 persen lebih pendek, optimasi kapasitas 40 persen, dan upaya perencanaan manual hingga 80 persen lebih sedikit [13]; halaman Optimizer berbicara tentang lead time minimal dan efisiensi biaya maksimal dengan satu klik, serta pengurangan waktu changeover yang besar [10]. Baseline, sampel dan metode pengukuran tidak diberikan.
+
+**Batasan dan hal yang tidak didokumentasikan:** Optimizer digambarkan didukung AI (halaman perencanaan berjudul "AI-powered production planning and scheduling"), tanpa menyebutkan algoritma atau metode yang digunakan [10][13]. Halaman modul tidak memberikan rincian konkret tentang integrasi ERP; FAQ menyebutkan antarmuka standar ke SAP dan Microsoft Dynamics [3]. Perencanaan multi-pabrik atau perencanaan rantai pasok tidak dijelaskan. Konteks lebih lanjut ada di kompendium [Production Scheduling and APS](https://www.m365.fm/en/learn/production-scheduling-aps/).
+
+### 12.6 Polaris Operator: tugas untuk lantai produksi
+
+**Tujuan:** Menurut vendor, [Polaris Operator](https://www.m365.fm/entity/polaris-operator/) mengambil jadwal yang telah dioptimalkan langsung dari Optimizer dan menyajikannya pada tingkat tugas di lantai produksi [11].
+
+**Fungsi menurut halaman vendor** [11]:
+- tampilan tugas individual dan terkini per pekerja
+- tampilan jalur kritis untuk shift leader
+- instruksi kerja yang tertanam dalam tugas
+- menjeda atau memblokir tugas, atau menandainya dengan umpan balik terstruktur
+- konfirmasi real-time untuk kemajuan, keterlambatan, gangguan, staf aktual dan istirahat
+- gambaran langsung work in progress bagi perencana
+- data produksi dikembalikan ke penjadwalan
+
+**Penilaian:** Operator dirancang sebagai kanal umpan balik antara rencana dan eksekusi: sebuah jadwal hanya sebaik umpan balik tentang apakah jadwal itu terpenuhi di lantai produksi. Secara fungsional ia tumpang tindih dengan sebagian MES (antrean kerja, konfirmasi), tetapi tidak mendeskripsikan dirinya sebagai MES.
+
+**Batasan dan hal yang tidak didokumentasikan:** Halaman tersebut tidak menyebutkan perangkat yang didukung dan tidak ada metrik kinerja [11]. Hubungan dengan MES yang sudah ada (melengkapi, menggantikan, atau paralel) tidak dijelaskan; selesaikan hal ini sejak awal proyek untuk menghindari konfirmasi ganda. Lebih banyak tentang rutinitas harian di lantai produksi ada di kompendium [Shop Floor Management](https://www.m365.fm/en/learn/shop-floor-management/).
+
+### 12.7 Polaris Analyzer: dashboard KPI
+
+**Tujuan:** Menurut vendor, [Polaris Analyzer](https://www.m365.fm/entity/polaris-analyzer/) menghimpun metrik dari semua modul Polaris ke dalam dashboard [12].
+
+**Fungsi menurut halaman vendor** [12]:
+- metrik terpusat di seluruh modul Polaris
+- visualisasi lead time, utilisasi, bottleneck dan status proyek
+- perbandingan skenario, jadwal dan kinerja aktual
+- deteksi batas kapasitas dan potensi perbaikan
+
+**Batasan dan hal yang tidak didokumentasikan:** Halaman tersebut tidak menyebutkan sumber data di luar modul Polaris, tipe dashboard, maupun koneksi ke alat BI eksternal seperti Power BI [12]. Jika perusahaan Anda menjalankan sistem BI terpusat, jelaskan bagaimana metrik sampai ke sana. Definisi metrik dibahas dalam kompendium [Manufacturing KPIs](https://www.m365.fm/en/learn/manufacturing-kpis/).
+
+### 12.8 Ikhtisar: apa yang didokumentasikan per modul
+</translation>

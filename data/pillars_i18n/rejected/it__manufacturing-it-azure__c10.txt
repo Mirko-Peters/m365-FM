@@ -1,0 +1,31 @@
+<translation>
+| Funzione CSF 2.0 | Cosa significa per la piattaforma manifatturiera su Azure |
+|---|---|
+| Govern | Responsabili nominati per la piattaforma di stabilimento, accettazione del rischio per i servizi in anteprima, elenco dei fornitori (Microsoft, integratore, fornitori OT) |
+| Identify | Inventario degli asset OT riconciliato con Azure Device Registry; mappa dei flussi di dati per zona e conduit |
+| Protect | Ruoli Entra ID con privilegio minimo, PIM, certificati OPC UA, connettività solo in uscita, accesso in scrittura disabilitato per impostazione predefinita |
+| Detect | Monitoraggio della rete OT (soluzione di partner successiva a Defender for IoT), log centralizzati da edge e cloud in Sentinel o nel tuo SIEM |
+| Respond | Playbook di gestione degli incidenti che copre stabilimento e cloud, incluso chi può disconnettere un cluster durante la produzione |
+| Recover | Ridistribuzione testata del cluster edge (infrastructure as code), backup della configurazione del broker e degli asset |
+
+I produttori piccoli e medi non devono affrontare tutto questo da soli: la NIST Manufacturing Extension Partnership (MEP) National Network offre autovalutazioni basate su CSF, analisi dei gap, piani di azioni correttive, piani di risposta agli incidenti e assistenza sui requisiti DFARS [58].
+
+### CMMC per i fornitori della difesa
+
+Se produci componenti o fornisci servizi per il Dipartimento della Difesa statunitense, il **Cybersecurity Maturity Model Certification (CMMC)** si applica ai sistemi che elaborano, memorizzano o trasmettono Federal Contract Information (FCI) o Controlled Unclassified Information (CUI). La norma del programma (32 CFR Part 170) è entrata in vigore il 16 dicembre 2024 [53]. La norma DFARS che inserisce il CMMC nei contratti è entrata in vigore il 10 novembre 2025, con un'implementazione graduale: la fase 1 è iniziata in quella data, la fase 2 il 10 novembre 2026 e la fase 3 è prevista per il 10 novembre 2027 [54]. I livelli sono Livello 1 (autovalutazione, FCI), Livello 2 (autovalutazione o valutazione di terza parte C3PAO, basata su NIST SP 800-171) e Livello 3 (valutazione DIBCAC, che aggiunge le pratiche di NIST SP 800-172) [53], [54].
+
+Cosa significa per Azure:
+
+- **Definisci l'ambito in base ai dati, non al cloud.** Il CMMC si applica ai tuoi sistemi, non ad Azure come piattaforma; non esiste un certificato CMMC per Azure in sé [55]. La semplice telemetria delle macchine potrebbe non essere CUI, mentre disegni, specifiche e alcuni parametri di processo per componenti della difesa possono esserlo; decidono le marcature CUI e le condizioni contrattuali del cliente. Stabilisci quali dati nella UNS e in OneLake rientrano nell'ambito.
+- **Scegli consapevolmente l'ambiente cloud.** Microsoft dichiara che sia Azure commerciale sia Azure Government dispongono di autorizzazioni FedRAMP High che coprono NIST SP 800-171, e che è possibile ottenere la certificazione CMMC per le soluzioni in entrambi; Azure Government aggiunge le autorizzazioni DoD IL4/IL5 e impegni contrattuali sull'archiviazione dei dati negli Stati Uniti e sul personale statunitense sottoposto a screening, e Microsoft lo ritiene la scelta più adatta per la maggior parte dei contractor della difesa [55]. Nota che la pagina CMMC di Microsoft è stata aggiornata per l'ultima volta nell'aprile 2023, quindi verifica i dettagli con il tuo referente account Microsoft.
+- **Verifica la disponibilità delle funzionalità.** Non tutti i servizi di questa guida sono disponibili in Azure Government o nell'ambiente Microsoft 365 GCC High. Verifica la disponibilità di Azure IoT Operations, Fabric e Copilot per il cloud di destinazione prima di progettarci sopra [non verificato per i singoli servizi; consulta le pagine di Microsoft sulla disponibilità delle funzionalità per il governo statunitense].
+
+### Notifica SEC e segnalazione degli incidenti CIRCIA
+
+Due regimi di segnalazione statunitensi incidono su come progettare la registrazione e la gestione degli incidenti per la piattaforma di stabilimento:
+
+- **Società quotate:** In base alle norme SEC adottate il 26 luglio 2023, i registranti devono comunicare un incidente di cybersicurezza rilevante tramite il Form 8-K (Item 1.05) entro quattro giorni lavorativi dalla determinazione della sua rilevanza, e descrivere la gestione del rischio cyber, la strategia e la governance nel Form 10-K annuale [56]. Un attacco ransomware che blocca uno stabilimento è un caso tipico per una valutazione di rilevanza, quindi il tuo playbook OT per gli incidenti deve prevedere un percorso rapido verso il comitato per la comunicazione.
+- **Infrastrutture critiche (CIRCIA):** Il Cyber Incident Reporting for Critical Infrastructure Act impone ai soggetti interessati di segnalare alla CISA gli incidenti informatici rilevanti entro 72 ore e i pagamenti di riscatti entro 24 ore, ma solo quando entrerà in vigore la norma definitiva della CISA. A ottobre 2026 la CISA aveva inviato la norma definitiva alla Casa Bianca per la revisione, e questa non era ancora stata pubblicata [57]. Monitora la norma definitiva, che definirà quali produttori rientrano nel suo ambito.
+
+### NIS2 e Cyber Resilience Act per le operazioni nell'UE
+</translation>

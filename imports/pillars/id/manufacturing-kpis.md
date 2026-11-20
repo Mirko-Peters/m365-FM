@@ -1,0 +1,954 @@
+# SEO metadata
+
+| Field | Value |
+|---|---|
+| Meta title | KPI Manufaktur: Rumus, Contoh & Panduan Power BI |
+| Meta description | KPI manufaktur dengan rumus dan contoh perhitungan: takt time, cycle time, lead time, OEE, scrap, FPY, OTIF, MTBF, TRIR, serta dashboard Power BI. |
+| Slug | `manufacturing-kpis` |
+
+# KPI Manufaktur: Panduan Lengkap Metrik Produksi, Rumus, Contoh Perhitungan, dan Dashboard Power BI
+
+> **Jawaban singkat:** KPI manufaktur adalah ukuran yang menyatakan kecepatan, kualitas, pengiriman, biaya dan keselamatan operasi produksi dalam bentuk angka. Yang paling penting adalah takt time, cycle time, manufacturing lead time, OEE, scrap rate, first pass yield, on-time in-full delivery (OTIF), days of supply, MTBF/MTTR, cost per unit, dan rasio keselamatan seperti TRIR. KPI hanya efektif jika setiap KPI memiliki satu definisi yang disepakati, data yang andal, dan rutinitas rapat tetap di mana penyimpangan diubah menjadi tindakan.
+
+> **Poin-poin utama**
+> - **Tentukan definisinya sebelum membangun dashboard:** ISO 22400-2:2014 menjelaskan 34 KPI untuk manajemen operasi manufaktur, masing-masing dengan rumus, satuan dan waktu pengukuran [1][38]. ISA-95 menempatkan KPI ini di Level 3, di antara lapisan kendali dan ERP [40]. Di Jerman, pedoman VDMA 66412-1 menambahkan definisi KPI MES [4].
+> - **Takt time bukan waktu mesin:** takt adalah waktu tersedia dibagi permintaan pelanggan [9]. Cycle time diukur; lead time juga mencakup seluruh waktu antrean dan tunggu [10].
+> - **OEE = Availability × Performance × Quality.** Target populer "kelas dunia" sebesar 85 % ditelusuri ke Nakajima, tetapi bukan tolok ukur universal [6][8].
+> - **Hukum Little** menghubungkan persediaan, throughput dan lead time: jika WIP tidak dikurangi, lead time tidak akan memendek dalam jangka panjang [13].
+> - **Keselamatan didahulukan dan memiliki rumus standar AS:** tingkat insiden OSHA adalah kasus × 200.000 ÷ jam kerja [42]. Pada 2025, industri swasta AS mencatat 2,3 kasus yang dapat dicatat per 100 pekerja setara penuh waktu [43].
+> - **Lebih sedikit lebih baik (rekomendasi):** lima sampai delapan KPI per level, diurutkan berdasarkan Safety, Quality, Cost, Delivery dan People (SQCDP), sudah cukup untuk menjalankan operasi.
+> - **KPI yang dijadikan target kehilangan nilainya** ketika diberi imbalan alih-alih dipahami (hukum Goodhart) [23][24].
+> - **Power BI** cocok untuk dashboard KPI jika model datanya berbentuk star schema dan OEE dihitung dari jumlah waktu, bukan dari rata-rata persentase [27].
+
+## Daftar isi
+
+1. Apa itu KPI manufaktur?
+2. Lembar contekan KPI manufaktur: semua rumus sekilas
+3. Contoh kerja "Lini 3": data masukan
+4. Metrik waktu: takt time, cycle time, lead time, processing time, flow factor
+5. Takt time vs. cycle time vs. lead time
+6. Waktu changeover, SMED dan micro-stop
+7. OEE: cara menghitung overall equipment effectiveness
+8. KPI kualitas: scrap rate, first pass yield, rework rate, PPM
+9. KPI pengiriman dan persediaan: OTIF, schedule adherence, WIP, days of supply
+10. Kapasitas dan produktivitas: utilisasi, efisiensi utilisasi, produktivitas tenaga kerja
+11. KPI pemeliharaan: MTBF, MTTR dan inherent availability
+12. Energi, keselamatan (TRIR, DART, LTIFR) dan cost per unit
+13. Sistem KPI: hierarki, indikator leading dan lagging, SQCDP
+14. Pengumpulan data dan kualitas data
+15. Visualisasi: papan lantai produksi dan dashboard Power BI
+16. Cara menetapkan target KPI
+17. Kesalahan umum dan cara menghindarinya
+18. Peta jalan: menerapkan KPI manufaktur dalam 90 hari
+19. KPI dari pemodelan value stream: iFAKT Polaris
+20. Glosarium
+21. FAQ: KPI manufaktur
+22. Kesimpulan
+
+## 1. Apa itu KPI manufaktur?
+
+KPI manufaktur (juga disebut metrik manufaktur, KPI produksi, atau indikator kinerja utama dalam manufaktur) adalah angka ringkas yang membuat satu aspek produksi dapat diukur. Seberapa cepat sebuah pesanan mengalir melalui pabrik? Berapa persen dari waktu yang direncanakan benar-benar digunakan mesin untuk membuat part yang baik? Berapa banyak pengiriman yang sampai ke pelanggan tepat waktu dan lengkap? Setiap KPI terdiri dari empat elemen: **definisi** (apa yang tepatnya dihitung), **rumus**, **satuan**, dan **periode waktu**. Jika salah satunya tidak ada, hasilnya adalah rapat yang sudah familiar, di mana dua departemen menggunakan nama yang sama untuk dua angka yang berbeda.
+
+Tidak setiap metrik adalah [key performance indicator (KPI)](https://www.m365.fm/entity/key-performance-indicator/). KPI adalah metrik yang terkait langsung dengan sebuah tujuan dan secara rutin menggerakkan keputusan. Jumlah part yang diproduksi adalah metrik. Pengiriman tepat waktu ke pelanggan adalah KPI bagi kebanyakan pabrik, karena pendapatan dan retensi pelanggan bergantung padanya.
+
+### Standar di balik rumus: ISO 22400, ISA-95, SEMI, dan VDMA 66412
+
+Anda tidak perlu menciptakan sendiri definisi KPI Anda. Standar internasional **ISO 22400-2:2014** "Automation systems and integration – Key performance indicators (KPIs) for manufacturing operations management – Part 2: Definitions and descriptions" mendefinisikan sejumlah KPI umum beserta rumus, waktu, satuan, kelompok pengguna, dan metodologi produksi yang diterapkannya [1]. Sumber sekunder menghitung 34 KPI [38][3]. ISO mencantumkan standar ini sebagai "akan direvisi"; Amandemen 1 menambahkan sekumpulan KPI energi pada tahun 2017 [1].
+
+Standar ini menggunakan model waktu yang presisi. Kang dkk., dalam sebuah makalah yang diterbitkan melalui US National Institute of Standards and Technology (NIST), memberikan rumus inti sebagai: ketersediaan = waktu produksi aktual (APT) ÷ waktu sibuk yang direncanakan (PBT), dan efektivitas = waktu operasi yang direncanakan per item (PRI) × kuantitas yang diproduksi (PQ) ÷ APT [3]. Jadi standar menyebut "efektivitas" di tempat literatur TPM menyebut "performance".
+
+Bagi pembaca di AS, **ISA-95** (ANSI/ISA-95, secara internasional IEC 62264) menyediakan arsitektur di sekitar KPI ini. Berdasarkan model referensi Purdue, standar ini mendefinisikan lima level mulai dari proses fisik (Level 0) melalui sensing, supervisory control, dan **Level 3, manajemen operasi manufaktur (MOM), tempat MES dan SCADA berada**, hingga perencanaan bisnis dan logistik di ERP (Level 4) [40]. KPI ISO 22400, sesuai namanya, adalah KPI untuk manajemen operasi manufaktur, sehingga dihitung pada Level 3 ISA-95 dan dilaporkan ke atas. Di fab semikonduktor, SEMI E10 (keandalan, ketersediaan, kemudahan pemeliharaan, dan utilisasi peralatan) dan SEMI E79 (produktivitas peralatan, termasuk OEE) adalah referensi khusus industri [41].
+
+Di Jerman, sebuah kelompok kerja VDMA (asosiasi industri teknik mesin Jerman) menerbitkan pedoman **VDMA 66412-1 "Manufacturing Execution Systems (MES) – KPIs"** (edisi 2009-10, 36 halaman, diamandemen oleh A1:2010-05) [4]. Pedoman ini mendefinisikan KPI standar dan cara menghitungnya dari status mesin [5]. Pesan bagi Anda sebagai praktisi sama di setiap negara: adopsi istilah standar sebisa mungkin dan dokumentasikan setiap penyimpangan. Itu membuat perbandingan antarpabrik dan integrasi MES jauh lebih mudah.
+
+### Untuk apa KPI manufaktur
+
+KPI memiliki tiga fungsi. KPI **membuat terlihat** apa yang hilang dalam bisnis sehari-hari, misalnya bahwa sebuah mesin beroperasi terus-menerus tetapi hanya menghasilkan dua pertiga dari output yang mungkin. KPI **memfokuskan perhatian** pada tuas terbesar, karena memecah kerugian ke dalam kategori. Dan KPI **menguji tindakan perbaikan**: apakah metode changeover yang baru benar-benar memangkas waktu changeover, atau kerugiannya hanya berpindah ke fase ramp-up? Tanpa angka, pertanyaan itu tetap menjadi soal opini.
+
+Fungsi keempat sering terlupakan: KPI adalah **alat komunikasi**. Dalam [shop floor management](https://www.m365.fm/entity/shop-floor-management/), KPI menjadi bahasa bersama antara operator, supervisor shift, dan pimpinan pabrik. KPI hanya melayani tujuan itu jika setiap orang mengetahui definisinya dan melihat angka yang sama.
+
+## 2. Lembar contekan KPI manufaktur: semua rumus sekilas pandang
+
+Tabel ini merangkum semua KPI yang dibahas dalam panduan ini. "Level" menunjukkan tingkat manajemen yang umum (M = mesin/stasiun kerja, L = lini/area, P = pabrik). Rumus mengikuti sumber yang disebutkan di setiap bagian.
+
+| KPI | Rumus (bentuk singkat) | Satuan | Arah | Level |
+|---|---|---|---|---|
+| Takt time | waktu produksi tersedia ÷ permintaan pelanggan | s/unit | ditetapkan, bukan yang dioptimalkan | L |
+| Cycle time | waktu terukur antara dua unit jadi | s/unit | ≤ takt | M, L |
+| Manufacturing lead time | selesai − mulai (pesanan atau part); rata-rata WIP ÷ throughput | jam, hari | ↓ | L, P |
+| Processing time | jumlah waktu part benar-benar dikerjakan | s, menit | ↓ (tanpa kehilangan kualitas) | M, L |
+| Flow factor (Wiendahl) | lead time ÷ waktu operasi | rasio (≥ 1) | ↓ | L |
+| Value-added ratio (VSM) | processing time ÷ lead time × 100 | % | ↑ | L, P |
+| Changeover time | produk baik terakhir dari run lama sampai produk baik pertama dari run baru | menit | ↓ | M |
+| Changeover share | changeover time ÷ waktu produksi terencana × 100 | % | ↓ | M, L |
+| Micro-stops | jumlah atau durasi henti singkat di bawah ambang yang ditetapkan | jumlah, menit | ↓ | M |
+| Availability (OEE) | waktu operasi ÷ waktu produksi terencana | % | ↑ | M |
+| Performance (OEE) | ideal cycle time × total hitungan ÷ waktu operasi | % | ↑ | M |
+| Quality rate (OEE) | hitungan baik ÷ total hitungan | % | ↑ | M |
+| OEE | availability × performance × quality | % | ↑ | M, L |
+| TEEP | OEE × loading (waktu terencana ÷ waktu kalender) | % | ↑ | M, P |
+| Scrap rate | jumlah scrap ÷ total hitungan × 100 | % | ↓ | M, L, P |
+| First pass yield (FPY) | unit baik pada percobaan pertama ÷ total hitungan × 100 | % | ↑ | M, L |
+| Rework rate | jumlah rework ÷ total hitungan × 100 | % | ↓ | M, L |
+| PPM | part cacat ÷ part yang diperiksa atau dikirim × 1.000.000 | ppm | ↓ | P |
+| OTIF | baris yang dikirim tepat waktu dan lengkap ÷ semua baris jatuh tempo × 100 | % | ↑ | P |
+| Schedule adherence (produksi) | pesanan selesai sesuai jadwal ÷ semua pesanan jatuh tempo × 100 | % | ↑ | L, P |
+| WIP | kuantitas atau nilai barang dalam proses | unit, $ | ↓ (sampai batas minimum yang dibutuhkan) | L |
+| Days of supply | persediaan ÷ pemakaian harian rata-rata | hari | ↓ (sampai level pengaman) | L, P |
+| Capacity utilization | beban ÷ kapasitas tersedia × 100 | % | rentang target, bukan maksimum | L, P |
+| Utilization efficiency (ISO) | waktu produksi aktual ÷ waktu sibuk unit aktual | % | ↑ | M |
+| Labor productivity | hitungan baik ÷ jam kerja | unit/jam | ↑ | L, P |
+| MTBF | waktu operasi ÷ jumlah kegagalan | jam, menit | ↑ | M |
+| MTTR | total waktu perbaikan ÷ jumlah kegagalan | menit | ↓ | M |
+| Energy per unit | energi yang dikonsumsi ÷ hitungan baik | kWh/unit | ↓ | M, P |
+| TRIR (OSHA) | kasus yang dapat dicatat × 200.000 ÷ jam kerja | per 100 FTE | ↓ | P |
+| DART rate (OSHA) | kasus DART × 200.000 ÷ jam kerja | per 100 FTE | ↓ | P |
+| LTIFR | cedera yang menyebabkan hilang waktu kerja ÷ jam kerja × 1.000.000 | per 1 juta jam | ↓ | P |
+| Cost per unit | biaya periode ÷ hitungan baik | $/unit | ↓ | L, P |
+
+## 3. Contoh kerja "Line 3": data masukan
+
+Untuk menjaga rumus tetap konkret, panduan ini menghitung setiap KPI pada satu lini perakitan fiktif. Angka-angkanya dipilih agar saling memverifikasi: jika OEE benar, angka itu harus cocok dengan jumlah barang baik, dan jika lead time benar, angka itu harus cocok dengan WIP dan throughput.
+
+| Masukan | Nilai |
+|---|---|
+| Pola shift | 2 shift masing-masing 8 jam (480 menit), 5 hari per minggu |
+| Istirahat per shift | 30 menit (bukan waktu produksi terencana) |
+| Waktu produksi terencana per shift | 450 menit |
+| Permintaan pelanggan | 900 unit per hari, yaitu 450 unit per shift |
+| Ideal cycle time (stasiun bottleneck) | 50 s/unit |
+| Kerusakan mesin per shift | 25 menit |
+| Changeover per shift | 2 changeover masing-masing 10 menit = 20 menit |
+| Total hitungan per shift | 432 unit |
+| dari jumlah itu, baik pada percobaan pertama | 410 unit |
+| dari jumlah itu, dikerjakan ulang lalu baik | 12 unit |
+| dari jumlah itu, scrap | 10 unit |
+| Staf | 6 operator per shift |
+
+Masukan-masukan ini muncul kembali di setiap bagian. Setiap perhitungan telah diperiksa ulang; pembulatan hanya dilakukan pada hasil akhir. Biaya di Bagian 12 ditampilkan dalam dolar AS; angkanya bersifat ilustratif, sama seperti lini itu sendiri.
+
+## 4. Metrik waktu: takt time, cycle time, lead time, processing time, flow factor
+
+Metrik waktu adalah KPI manufaktur yang paling sering tertukar. Istilahnya terdengar mirip, dan perusahaan menggunakannya secara berbeda dalam praktik. Tuliskan definisi untuk pabrik Anda sekali saja, lalu tautkan definisi itu di setiap papan informasi.
+
+### Cara menghitung takt time
+
+[Takt time](https://www.m365.fm/entity/takt-time/) menunjukkan seberapa sering unit jadi harus meninggalkan lini untuk memenuhi permintaan pelanggan. Lean Enterprise Institute (LEI) mendefinisikannya sebagai waktu produksi yang tersedia dibagi permintaan pelanggan [9]. Rother dan Shook mencantumkan "Produksi sesuai takt time Anda" sebagai pedoman pertama untuk value stream yang ramping dan menggambarkan takt sebagai pengganti permintaan pelanggan [2][12].
+
+> **Takt time = waktu produksi yang tersedia per periode ÷ permintaan pelanggan per periode**
+
+Kata ini berasal dari bahasa Jerman ("Takt" berarti ketukan atau meter). Menurut LEI, takt pertama kali digunakan sebagai alat manajemen produksi di industri pesawat terbang Jerman pada tahun 1930-an [9].
+
+**Contoh Line 3:** waktu tersedia per shift 450 menit = 27.000 s; permintaan per shift 450 unit.
+Takt time = 27.000 s ÷ 450 unit = **60 s/unit**.
+
+Sebagai pemeriksaan silang, contoh LEI: 480 menit per hari dan permintaan 240 unit menghasilkan takt time 2 menit [9].
+
+**Kesalahan umum:**
+- **Tidak mengurangi waktu istirahat.** Menggunakan 480 menit alih-alih 450 menit menghasilkan takt 64 s. Di atas kertas, lini akan dirancang terlalu lambat.
+- **Mengurangi downtime yang tidak terencana.** Kerusakan mesin tidak termasuk dalam waktu tersedia untuk takt. Itu adalah kerugian yang harus diserap lini melalui cadangan kapasitasnya. Mengurangkannya menyembunyikan masalah di dalam takt.
+- **Menganggap takt sebagai sesuatu yang harus dioptimalkan.** Pelangganlah yang menetapkan takt, bukan produksi. Yang dioptimalkan adalah cycle time, agar secara andal memenuhi takt.
+- **Mengacaukan takt dengan laju.** Takt adalah waktu per unit, bukan unit per waktu. Kebalikannya (1 unit setiap 60 s = 60 unit per jam) adalah laju output yang dibutuhkan.
+
+### Cycle time
+
+Menurut LEI, [cycle time](https://www.m365.fm/entity/cycle-time/) adalah "waktu yang dibutuhkan untuk memproduksi sebuah part atau menyelesaikan sebuah proses, sebagaimana diukur melalui pengukuran aktual" [10]. Dalam value stream mapping, ini menggambarkan seberapa sering suatu proses menyelesaikan satu part. Kata kuncinya adalah "diukur": cycle time adalah nilai aktual. **Ideal cycle time** (juga disebut standard, design, atau nameplate cycle time) adalah waktu terbaik yang secara teknis mungkin dicapai dan menjadi dasar performa OEE.
+
+> **Rata-rata actual cycle time = run time ÷ unit yang diproduksi**
+
+**Contoh Line 3:** run time 405 menit (450 menit dikurangi 25 menit kerusakan dikurangi 20 menit changeover) = 24.300 s; 432 unit diproduksi.
+Actual cycle time = 24.300 s ÷ 432 = **56,25 s/unit**.
+Ideal cycle time adalah 50 s. Selisih 6,25 s per unit berasal dari micro-stop dan penurunan kecepatan, yaitu dari performance loss (Bagian 7).
+
+Untuk mesin, LEI juga mendefinisikan **effective machine cycle time**: machine cycle time ditambah waktu loading dan unloading ditambah waktu changeover, dibagi jumlah pieces yang dibuat di antara changeover [10]. Ini menunjukkan apakah sebuah mesin dapat mempertahankan takt sama sekali, mengingat seberapa sering mesin itu diubah konfigurasinya.
+
+**Kesalahan umum:** menyamakan waktu siklus dengan takt time. Keduanya diukur dalam detik per unit, tetapi takt adalah angka permintaan sedangkan waktu siklus adalah angka proses. Setidaknya satu halaman berbahasa Inggris yang peringkatnya tinggi menulis rumus waktu siklus secara terbalik (bagian ÷ waktu proses); itu adalah laju, bukan waktu siklus.
+
+### Cara menghitung lead time manufaktur
+
+[Lead time](https://www.m365.fm/entity/lead-time/) (lead time produksi, disebut juga throughput time) adalah "waktu yang dibutuhkan suatu produk untuk bergerak melalui seluruh proses atau value stream dari awal hingga akhir" [10]. Selain pemrosesan, waktu ini mencakup semua waktu transportasi, antrean, dan tunggu. Rekayasa produksi Jerman membagi lead time menjadi waktu operasi (setup dan pemrosesan), waktu transisi (antrean dan transportasi), dan waktu tunggu antaroperasi [15]. Hans-Peter Wiendahl menjadikan lead time sebagai konsep sentral pengendalian produksi dengan model corong (funnel model)-nya [15][14].
+
+Ada dua cara untuk menentukannya:
+
+**1. Secara langsung, per pesanan atau per part:**
+
+> **Lead time = cap waktu penyelesaian − cap waktu mulai (atau pelepasan pesanan)**
+
+Tentukan apakah Anda menghitung hari kalender, hari kerja (hari kalender kerja pabrik), atau jam, dan di mana penghitungan waktu dimulai (entri pesanan, pelepasan, operasi pertama). Titik awal yang berbeda adalah penyebab paling umum mengapa penjualan dan produksi berselisih tentang "the" lead time.
+
+**2. Secara tidak langsung, dengan Hukum Little:**
+
+Pada 1961, John D. C. Little membuktikan bahwa dalam sistem yang stabil, rata-rata jumlah item dalam sistem sama dengan laju kedatangan dikalikan rata-rata waktu di dalam sistem (L = λW) [13]. Diterapkan pada manufaktur:
+
+> **Rata-rata lead time = rata-rata WIP ÷ rata-rata throughput**
+
+**Contoh Lini 3:** rata-rata 2.700 part berada di dalam lini dan buffer-nya; lini mengirim rata-rata 900 part per hari kerja.
+Lead time = 2.700 ÷ 900 = **3 hari kerja**.
+
+Hukum Little berlaku untuk rata-rata dalam periode yang cukup panjang ketika WIP tidak terus bertambah maupun terus berkurang. WIP dan throughput harus menggunakan satuan yang sama (potong atau dolar, jangan dicampur). Nilai praktis utamanya: pada throughput yang konstan, lead time yang lebih pendek hanya mungkin dicapai dengan WIP yang lebih sedikit. Mesin yang lebih cepat saja tidak banyak membantu selama part masih menunggu di depannya.
+
+### Processing time dan standard time (REFA)
+
+**Processing time** adalah waktu ketika produk benar-benar sedang dikerjakan [10]; biasanya ini hanya sebagian kecil dari lead time. Untuk perencanaan dan penentuan biaya, pabrik-pabrik di Jerman menggunakan kategori waktu dari REFA, asosiasi Jerman untuk perancangan kerja dan rekayasa industri (perannya sebanding dengan konvensi standard time dalam rekayasa industri AS). REFA membagi order time menjadi setup time dan run time, masing-masing terdiri dari komponen dasar, istirahat, dan kelonggaran; padanan di sisi mesin disebut equipment occupancy time [16][17]:
+
+> **Order time T = setup time t_r + run time t_a**, dengan **t_a = kuantitas pesanan m × waktu per unit t_e**
+
+**Contoh:** pesanan 400 unit dijalankan di stasiun bottleneck: setup 20 menit, waktu per unit 50 detik.
+T = 20 menit + 400 × 50 detik ÷ 60 = 20 + 333,3 = **353,3 menit** (sekitar 5,9 jam).
+
+Nyhuis dan Wiendahl menurunkan **waktu operasi** dari suatu langkah kerja dari order time dan menyatakannya dalam hari kalender kerja pabrik dengan mengaitkan order time dengan kapasitas harian work system [14]. [unverified: notasi rumus pasti dalam Nyhuis/Wiendahl, Bagian 2.1.1, hanya diverifikasi melalui daftar isi dan daftar singkatan] Agar contoh-contoh tetap sebanding, panduan ini menyederhanakan dan menghitung dalam menit waktu operasi; untuk satu mesin, waktu operasi kemudian sama dengan order time.
+
+### Flow factor dan rasio nilai tambah
+
+Dua KPI yang berbeda beredar dengan nama yang mirip, dan Anda tidak boleh mencampuradukkannya.
+
+**Flow factor menurut Wiendahl (sudut pandang logistik):** rasio lead time terhadap waktu operasi dari suatu langkah kerja atau pesanan [14][15]. Nilai 1 berarti pesanan diproses tanpa menunggu; nilai 6 berarti pesanan menghabiskan waktu enam kali lebih lama di dalam sistem daripada yang dibutuhkan untuk setup dan pemrosesan.
+
+> **Flow factor = lead time ÷ waktu operasi**
+
+**Contoh:** pesanan dari contoh REFA memiliki waktu operasi 353,3 menit. Pesanan itu menunggu dua hari kerja sebelum operasi (2 × 900 menit = 1.800 menit waktu operasi).
+Lead time operasi = 1.800 + 353,3 = 2.153,3 menit. Flow factor = 2.153,3 ÷ 353,3 = **6,09**.
+
+**Rasio nilai tambah (sudut pandang aliran nilai):** dalam [value stream mapping](https://www.m365.fm/entity/value-stream-mapping/) sering dipakai sudut pandang sebaliknya: porsi waktu proses dalam lead time, dinyatakan dalam persen. (Istilah LEI yang lebih sempit, "value-creating time", hanya menghitung elemen kerja yang bersedia dibayar oleh pelanggan [10].) Wikipedia Jerman menyebut rasio ini "Fließgrad", kebalikannya "Flussgrad", dan menempatkan porsi aktivitas bernilai tambah di industri Jerman pada 5 sampai 15 persen [15]. [unverified: sumber primer untuk rentang ini belum terdokumentasi dengan jelas di Wikipedia] Beberapa buku ajar aliran nilai juga menyebut persentase ini sebagai flow factor. Karena itu, selalu periksa apakah yang dimaksud adalah nilai di atas 1 atau di bawah 100 %.
+
+> **Rasio nilai tambah = waktu proses ÷ lead time × 100 %**
+
+**Contoh Line 3:** waktu proses keempat stasiun berjumlah 190 detik. Lead time adalah 3 hari kerja dengan waktu operasi 900 menit per hari = 162.000 detik.
+Rasio nilai tambah = 190 ÷ 162.000 × 100 % = **0,117 %**.
+
+Nilai di bawah satu persen itu normal pada operasi dengan buffer dan batch. Yang penting adalah tren dan dasar waktunya: dalam waktu kalender, nilainya turun lebih jauh. Metode ini dijelaskan secara rinci dalam panduan [Value Stream Mapping](https://www.m365.fm/en/learn/value-stream-mapping/).
+
+## 5. Takt time vs. cycle time vs. lead time
+
+"Apa perbedaan antara takt time dan cycle time?" adalah salah satu pertanyaan paling umum seputar KPI manufaktur. Tabel berikut menempatkan ketiganya berdampingan. LEI merangkum urutannya seperti ini: "Biasanya, value-creating time lebih kecil daripada cycle time, yang lebih kecil daripada production lead time" [10].
+
+| Atribut | Takt time | Cycle time | Lead time |
+|---|---|---|---|
+| Pertanyaan | Seberapa sering sebuah part **harus** selesai? | Seberapa sering sebuah part **benar-benar** selesai? | Berapa lama sebuah part **menjalani** sistem? |
+| Sumber | permintaan pelanggan dan waktu kerja | pengukuran pada proses | cap waktu atau Hukum Little |
+| Rumus | waktu tersedia ÷ permintaan | waktu jalan ÷ unit (terukur) | selesai − mulai, atau WIP ÷ throughput |
+| Satuan umum | s/unit | s/unit | jam, hari |
+| Line 3 | 60 s | 56,25 s (ideal 50 s) | 3 hari kerja |
+| Siapa yang memengaruhi? | penjualan, pelanggan, pola shift | engineering, metode, maintenance | penjadwalan, WIP, ukuran batch |
+| Arah yang masuk akal | tidak ada; ini sudah ditetapkan | ≤ takt dengan cadangan | sependek mungkin |
+| Kesalahan umum | istirahat tidak dikurangkan | memakai nilai ideal, bukan nilai aktual | titik awal tidak ditentukan |
+
+**Wawasan kunci dari contoh:** cycle time aktual 56,25 detik berada di bawah takt 60 detik. Namun Line 3 tetap tidak memenuhi permintaan, seperti ditunjukkan bagian berikutnya, karena cycle time hanya berlaku selama waktu jalan. Gangguan mesin, changeover, dan scrap tidak tercakup dalam pandangan itu. Untuk desain lini, yang penting adalah **effective cycle time per part baik**, yaitu waktu produksi terencana dibagi jumlah part baik.
+
+## 6. Waktu changeover, SMED dan micro-stop
+
+### Waktu changeover dan porsi changeover
+
+[Waktu changeover](https://www.m365.fm/entity/setup-time/) (waktu setup) adalah waktu yang dibutuhkan untuk mengganti mesin atau lini dari satu produk ke produk lain. Dalam praktik, pengukuran paling efektif dilakukan dari part baik terakhir pada proses lama hingga part baik pertama pada proses baru, karena mencakup penyesuaian dan ramp-up. [unverified: konvensi ini lazim dalam praktik tetapi tidak dinyatakan secara eksplisit dalam sumber yang diperiksa di sini.] Dalam sistem REFA, waktu setup merupakan bagian dari waktu order [16].
+
+> **Porsi changeover = waktu changeover ÷ waktu produksi terencana × 100 %**
+
+**Contoh Lini 3:** 20 menit changeover ÷ 450 menit = **4,44 %**.
+
+### SMED: changeover dalam hitungan menit tunggal
+
+[SMED](https://www.m365.fm/entity/smed/) (Single-Minute Exchange of Die) adalah metode untuk membuat changeover sesingkat mungkin; sasarannya adalah waktu changeover dalam satu digit menit, yaitu di bawah sepuluh menit [11]. Shigeo Shingo mengembangkan gagasan inti pada tahun 1950-an dan 1960-an: ia memisahkan internal setup, yang hanya dapat dilakukan saat mesin berhenti, dari external setup, yang dapat dilakukan saat mesin berjalan, lalu memindahkan sebanyak mungkin pekerjaan ke external [11].
+
+**Contoh Lini 3:** jika kedua changeover turun dari 10 menjadi 6 menit, lini memperoleh tambahan 8 menit waktu jalan per shift. Dengan performa tetap 88,9 %, itu berarti 8 × 60 ÷ 50 × 0,889 = **sekitar 8,5 part tambahan** per shift. Alternatifnya, lini dapat mempertahankan total waktu changeover yang sama, melakukan changeover lebih sering dan menjalankan batch yang lebih kecil, sehingga WIP dan lead time berkurang.
+
+**Kesalahan umum:** memperlakukan waktu changeover semata-mata sebagai kerugian. Changeover yang lebih singkat terutama merupakan pengungkit untuk batch yang lebih kecil. Jika seluruh waktu yang dihemat digunakan untuk batch yang lebih besar, manfaat logistiknya justru hilang.
+
+### Micro-stop
+
+[Micro-stop](https://www.m365.fm/entity/micro-stops/) (henti kecil) adalah interupsi singkat, misalnya part yang macet atau sensor yang tersandung, yang hampir tidak tercatat satu per satu. Dalam kerangka TPM Nakajima, micro-stop termasuk dalam enam kerugian besar sebagai "kerugian idling dan henti kecil" dan mengurangi performa, bukan availability [7]. Setiap perusahaan menetapkan ambangnya sendiri antara micro-stop dan breakdown; ambang beberapa menit umumnya digunakan. [unverified: tidak ditemukan standar dengan ambang yang mengikat.] Muchiri dan Pintelon menunjukkan bahwa pencatatan manual sering melewatkan henti kecil [7].
+
+**Contoh Lini 3:** kehilangan performa total adalah waktu jalan dikurangi waktu ideal untuk unit yang dihasilkan: 405 menit − 432 × 50 detik ÷ 60 = 405 − 360 = **45 menit**. Controller mesin mencatat 120 micro-stop masing-masing 15 detik = 30 menit. Sisa 15 menit adalah penurunan kecepatan. Tanpa penangkapan data otomatis, 30 menit micro-stop tersebut kemungkinan besar akan dicatat di laporan shift sebagai "lini berjalan".
+
+## 7. OEE: cara menghitung overall equipment effectiveness
+
+Overall equipment effectiveness (OEE) adalah KPI manufaktur yang paling dikenal. Istilah ini berasal dari Seiichi Nakajima dan menjadi elemen inti dari [Total Productive Maintenance (TPM)](https://www.m365.fm/entity/total-productive-maintenance/) [8][6]. Glosarium ASQ menggambarkan OEE sebagai ukuran seberapa baik sebuah unit manufaktur bekerja dibandingkan dengan kapasitas rancangannya selama periode ketika unit tersebut dijadwalkan beroperasi, dengan menggabungkan uptime, kecepatan, dan proporsi output yang baik [36]. OEE menjawab satu pertanyaan: berapa persen dari waktu produksi yang direncanakan digunakan untuk membuat part yang baik pada kecepatan ideal?
+
+### Tiga faktor
+
+> **OEE = Availability × Performance × Quality**
+
+| Faktor | Rumus | Kerugian yang ditangkap |
+|---|---|---|
+| Availability | waktu operasi ÷ waktu produksi yang direncanakan | kerusakan, setup dan penyesuaian |
+| Performance (ISO: effectiveness) | ideal cycle time × total count ÷ waktu operasi | micro-stop, penurunan kecepatan |
+| Quality | good count ÷ total count | scrap, rework, kerugian saat startup |
+
+Muchiri dan Pintelon mendefinisikan availability sebagai waktu operasi sebagai persentase dari loading time, performance sebagai theoretical cycle time dikali output aktual dibagi waktu operasi, dan quality rate sebagai total output dikurangi defect dibagi total output [7]. ISO 22400-2 menggunakan logika yang sama dengan istilah waktunya sendiri [3].
+
+### Enam kerugian besar
+
+Nakajima mengelompokkan kerugian ke dalam enam kategori [7]:
+
+1. **Kerusakan** (breakdown losses) → availability
+2. **Setup dan penyesuaian** → availability
+3. **Idling dan penghentian kecil** → performance
+4. **Penurunan kecepatan** → performance
+5. **Cacat kualitas dan rework** → quality
+6. **Penurunan yield saat startup** → quality
+
+Pemetaan ini adalah nilai nyata dari OEE. Angka total saja sedikit memberi informasi; hanya rincian kerugian yang menunjukkan apakah maintenance, tim changeover, atau quality memiliki peluang perbaikan terbesar.
+
+### Cara menghitung OEE: contoh Line 3
+
+**Langkah 1, availability:** waktu produksi yang direncanakan 450 menit; kerusakan 25 menit, changeover 20 menit; waktu operasi 405 menit.
+Availability = 405 ÷ 450 = **90,0 %**.
+
+**Langkah 2, performance:** 432 unit × 50 s = 21.600 s waktu ideal; waktu operasi 405 menit = 24.300 s.
+Performance = 21.600 ÷ 24.300 = **88,9 %**.
+
+**Langkah 3, quality:** 410 part baik pada pemeriksaan pertama dari 432 unit.
+Quality = 410 ÷ 432 = **94,9 %**.
+
+**Langkah 4, OEE:** 0,900 × 0,8889 × 0,9491 = **75,9 %**.
+
+**Pemeriksaan silang berdasarkan waktu:** good count dikali ideal cycle time dibagi waktu produksi yang direncanakan = 410 × 50 s ÷ 27.000 s = 20.500 ÷ 27.000 = **75,9 %**. Kedua cara harus memberikan hasil yang sama; jika tidak, data input salah.
+
+**Arti OEE bagi takt:** effective cycle time per part baik adalah 50 s ÷ 0,759 = 65,9 s, yang berada di atas takt 60 s. Dalam 27.000 s, line menghasilkan 410 part baik pada pemeriksaan pertama, atau 422 termasuk 12 part hasil rework. Permintaan 450 unit per shift meleset 28 unit. Untuk memenuhinya hanya dengan part baik pada pemeriksaan pertama, Line 3 memerlukan OEE sebesar 450 × 50 ÷ 27.000 = 83,3 %.
+
+### Rework: baik atau buruk?
+
+Dalam logika TPM, rework adalah kerugian kualitas [7]; itulah sebabnya contoh ini hanya menghitung 410 part yang baik pada pemeriksaan pertama. Kang dkk. menggunakan quality rate yang menghitung part hasil rework sebagai part baik [3]. Dengan 422 alih-alih 410 part, quality akan naik menjadi 97,7 % dan OEE menjadi 78,1 %. Kedua varian ini dapat dipertanggungjawabkan, tetapi Anda harus memilih salah satu dan tidak boleh membandingkan plant yang menggunakan definisi berbeda.
+
+### TEEP: OEE terhadap waktu kalender
+
+Total effective equipment performance (TEEP) menghubungkan OEE dengan total waktu kalender, bukan hanya waktu yang direncanakan [8]:
+
+> **TEEP = OEE × loading**, dengan **loading = waktu produksi yang direncanakan ÷ waktu kalender**
+
+**Contoh Line 3:** 10 shift × 450 menit = 4.500 menit waktu yang direncanakan per minggu; waktu kalender 7 × 24 × 60 = 10.080 menit.
+Loading = 4.500 ÷ 10.080 = 44,6 %. TEEP = 75,9 % × 44,6 % = **33,9 %**.
+
+TEEP adalah KPI yang tepat untuk keputusan investasi: sebelum Anda membeli mesin kedua, KPI ini menunjukkan berapa banyak waktu kalender yang belum terpakai oleh mesin yang ada. Perlu dicatat bahwa beberapa halaman berbahasa Inggris memberikan rumus yang sama untuk OEE, OOE, dan TEEP; itu keliru, karena ketiganya berbeda dalam dasar waktunya.
+
+### Berapa nilai OEE yang baik? Asal-usul benchmark 85 % dan mengapa diperdebatkan
+
+Angka 85 % sebagai "OEE kelas dunia" sering dikaitkan dengan Nakajima dalam artikel-artikel perdagangan, biasanya dihitung dari ketersediaan 90 %, kinerja 95 %, dan kualitas 99,9 % (0,90 × 0,95 × 0,999 = 85,4 %) [37]. Dalam sumber primer dan sumber ulasan yang diperiksa untuk artikel ini, pembagian komponen tersebut tidak dapat ditemukan secara harfiah. [unverified: passage asli dalam Nakajima 1988] Wikipedia bahasa Inggris secara eksplisit menyatakan bahwa 85 % bukan target yang tepat dalam banyak kasus, misalnya ketika tidak semua kerugian tercatat atau ketika persyaratan kualitas industri lebih tinggi [8].
+
+Poin kritik lainnya [8]:
+
+- OEE berperilaku seperti rata-rata geometris dan memberi penalti pada faktor yang tidak seimbang: 20 % × 80 % = 16 %, 50 % × 50 % = 25 %.
+- Definisi berbeda antarperusahaan, sehingga OEE kurang cocok untuk membandingkan antarpabrik atau antarjenis mesin.
+- OEE bukan ukuran kinerja karyawan individu.
+
+Gunakan OEE sebagai KPI perbaikan untuk aset yang sama dari waktu ke waktu, bukan sebagai tabel peringkat. Pabrik proses kontinu yang beroperasi 24/7 dan job shop dengan banyak changeover memiliki nilai yang secara struktural berbeda.
+
+### Menggabungkan OEE lintas mesin dengan benar
+
+Kesalahan pelaporan yang umum adalah merata-ratakan persentase OEE. Contoh: mesin A memiliki OEE 80 % dengan waktu terencana 450 menit, mesin B 50 % dengan 150 menit.
+
+- Salah (rata-rata tanpa pembobotan): (80 % + 50 %) ÷ 2 = 65,0 %
+- Benar (berbobot waktu): (0,80 × 450 + 0,50 × 150) ÷ (450 + 150) = (360 + 75) ÷ 600 = **72,5 %**
+
+Pendekatan yang paling bersih adalah menghitung ulang OEE di setiap level dari jumlah waktu: jumlah waktu bernilai tambah (jumlah good × ideal cycle time) dibagi jumlah waktu terencana. Bagian 15 menunjukkan rumus DAX yang sesuai.
+
+## 8. KPI Kualitas: scrap rate, first pass yield, rework rate, PPM
+
+KPI kualitas menjawab dua pertanyaan berbeda: seberapa banyak material dan waktu yang hilang di dalam pabrik (internal), dan berapa banyak cacat yang sampai ke pelanggan (eksternal)? Setiap sudut pandang membutuhkan KPI-nya sendiri. ISO 22400-2 antara lain mencakup quality ratio, scrap ratio, rework ratio, dan first pass yield [3]; rasio scrap dan rework juga muncul dalam daftar 34 KPI ISO dari Fabrico [38].
+
+### Rumus scrap rate
+
+[Scrap rate](https://www.m365.fm/entity/scrap-rate/) mengukur porsi part yang tidak lagi dapat digunakan dan dibuang atau didaur ulang. Dalam presentasi Kang dkk., rumus ISO-nya adalah jumlah scrap dibagi jumlah produksi [3].
+
+> **Scrap rate = jumlah scrap ÷ total jumlah × 100 %**
+
+**Contoh Line 3:** 10 part scrap ÷ 432 part × 100 % = **2,31 %**.
+
+**Kesalahan umum:**
+- **Mengubah basis.** Kadang yang digunakan total jumlah, kadang jumlah good (10 ÷ 422 = 2,37 %). Pada tingkat yang rendah selisihnya kecil; pada tingkat yang tinggi selisihnya berarti.
+- **Scrap saat startup terlewat.** Part yang dibuang saat penyetelan setelah changeover sering tidak dihitung. Padahal bagian ini menunjukkan apakah changeover terkendali.
+- **Hanya jumlah, tanpa nilai.** Part yang di-scrap di akhir value stream berbiaya berkali-kali lipat dibanding raw part. Tambahkan biaya scrap ke tingkat scrap berbasis jumlah.
+
+### First pass yield (FPY)
+
+First pass yield (juga first time through atau right first time) mengukur porsi unit yang lolos suatu proses pada percobaan pertama tanpa rework dan tanpa scrap. ASQ menjelaskan FPY, yang juga disebut quality rate, sebagai persentase unit yang menyelesaikan suatu proses dan memenuhi pedoman kualitas tanpa di-scrap, dijalankan ulang, diuji ulang, dikembalikan, atau dialihkan ke area perbaikan offline [36]. Kang dkk. memberikan rumusnya sebagai jumlah good pada percobaan pertama dibagi jumlah produksi [3].
+
+> **FPY = unit good pada percobaan pertama ÷ total jumlah × 100 %**
+
+**Contoh Line 3:** 410 ÷ 432 × 100 % = **94,9 %**.
+
+Untuk beberapa langkah proses, kalikan nilai FPY masing-masing langkah untuk mendapatkan **rolled throughput yield (RTY)**. Tiga stasiun dengan FPY masing-masing 98 % memberikan 0,98 × 0,98 × 0,98 = 94,1 %. RTY menunjukkan berapa banyak part yang lolos seluruh rangkaian tanpa koreksi apa pun. [unverified: RTY lazim dalam literatur Six Sigma tetapi belum diperiksa terhadap sumber primer untuk artikel ini.]
+
+**Kualitas OEE vs. FPY:** jika rework diperlakukan sebagai kerugian, FPY dan quality rate OEE identik (keduanya 94,9 % dalam contoh). Jika rework dihitung sebagai good, kualitas OEE sama dengan final yield: (410 + 12) ÷ 432 = 97,7 %.
+
+### Rework rate
+
+> **Rework rate = jumlah rework ÷ total jumlah × 100 %**
+
+**Contoh Line 3:** 12 ÷ 432 × 100 % = **2,78 %**.
+
+Pemeriksaannya: FPY + rework rate + scrap rate = 94,91 % + 2,78 % + 2,31 % = 100 %. Pemeriksaan jumlah ini harus berjalan otomatis di setiap dashboard; jika tidak cocok, berarti ada transaksi yang hilang.
+
+Pengerjaan ulang (rework) sering diremehkan karena produk akhirnya baik. Namun, pengerjaan ulang menyita tenaga kerja, menciptakan WIP, dan memperpanjang lead time. Catat waktu pengerjaan ulang sekaligus jumlah pengerjaan ulang.
+
+### PPM (parts per million)
+
+ASQ mendefinisikan PPM sebagai metrik yang melaporkan jumlah cacat yang dinormalisasi ke populasi satu juta, agar mudah dibandingkan [36]. Metrik ini terutama digunakan untuk keluhan pelanggan dan penilaian pemasok.
+
+> **PPM = jumlah part cacat ÷ jumlah part yang dikirim (atau diperiksa) × 1.000.000**
+
+**Contoh:** dalam satu kuartal, pabrik mengirim 250.000 part; pelanggan menolak 18 part. PPM = 18 ÷ 250.000 × 1.000.000 = **72 ppm**.
+
+Sepakati dengan pelanggan apakah yang dihitung adalah part yang ditolak, pengiriman yang ditolak, atau keluhan yang diterima. Menyatakan scrap internal dalam PPM (Line 3: 10 ÷ 432 × 1.000.000 = 23.148 ppm) memungkinkan, tetapi kurang intuitif; untuk kasus itu persentase lebih tepat.
+
+## 9. KPI pengiriman dan persediaan: OTIF, kepatuhan jadwal, WIP, hari persediaan
+
+### Ketepatan waktu pengiriman dan OTIF
+
+Kinerja pengiriman mengukur seberapa andal pabrik memenuhi janjinya kepada pelanggan. Bentuk yang paling umum adalah **OTIF** (on time in full): pengiriman hanya dihitung jika tepat waktu **dan** lengkap.
+
+> **OTIF = baris pesanan yang dikirim tepat waktu dan lengkap ÷ seluruh baris pesanan yang jatuh tempo × 100 %**
+
+Tidak ada definisi standar yang mengikat. McKinsey mencatat pada 2019 bahwa tanpa definisi standar, OTIF diinterpretasikan sangat berbeda; dalam survei terhadap 24 peritel dan produsen barang konsumsi besar di Amerika Utara, 79 % lebih menyukai satu metrik OTIF gabungan dibandingkan pengukuran terpisah, dan tidak ada kesepakatan mengenai lebar jendela pengiriman [18].
+
+**Contoh:** dalam satu bulan, 200 baris pesanan jatuh tempo. 184 dikirim tepat waktu, 190 dikirim lengkap, 178 dikirim tepat waktu dan lengkap.
+- Tepat waktu = 184 ÷ 200 = 92,0 %
+- Lengkap = 190 ÷ 200 = 95,0 %
+- OTIF = 178 ÷ 200 = **89,0 %**
+
+Perhatikan bahwa OTIF bukan hasil kali kedua rasio (0,92 × 0,95 = 87,4 %); OTIF dihitung dari baris yang memenuhi kedua syarat pada saat yang sama.
+
+**Anda perlu menentukan:** tanggal acuan (tanggal yang diminta atau dikonfirmasi), jendela toleransi (misalnya ±1 hari), level (pesanan, baris, kuantitas), dan apakah pengiriman lebih awal dihitung tepat waktu. Pelanggan besar sering kali menetapkan aturannya sendiri: Walmart, misalnya, pada 2019 mewajibkan pemasok mengirim truk penuh dalam jendela dua hari sebanyak 87 % dari waktu dan mengenakan denda sebesar 3 % dari harga pokok penjualan untuk setiap pelanggaran [47]. Program semacam itu berubah, jadi periksa definisi terkini setiap pelanggan sebelum membandingkan.
+
+### Kepatuhan jadwal dalam produksi
+
+Kepatuhan jadwal (penyelesaian produksi tepat waktu) mengukur apakah order produksi selesai pada tanggal yang direncanakan. Ini adalah KPI internal dan indikator awal untuk OTIF pelanggan.
+
+> **Kepatuhan jadwal = order produksi yang selesai sesuai jadwal ÷ seluruh order produksi yang jatuh tempo × 100 %**
+
+**Contoh:** 102 dari 120 order yang jatuh tempo diselesaikan sesuai jadwal: **85,0 %**.
+
+Nyhuis dan Wiendahl membenarkan model kurva operasi logistik mereka sebagian dengan pencapaian target logistik yang tidak memuaskan di banyak perusahaan [14]. [unverified: abstrak terpotong pada versi yang diambil setelah bagian kalimat ini] Tambahkan rata-rata deviasi jadwal dalam hari ke dalam rasio; kepatuhan 85 % dengan keterlambatan satu hari berbeda dengan 85 % dengan keterlambatan dua minggu.
+
+### WIP (work in process)
+
+Work in process mencakup seluruh barang belum jadi antara pelepasan material dan penyelesaian. Dilaporkan dalam potong (untuk pengendalian) atau dolar (untuk keuangan). Hukum Little menghubungkan WIP langsung dengan lead time [13]: Line 3 memiliki WIP 2.700 part dengan throughput harian 900 part, sehingga lead time 3 hari. Jika tim memangkas WIP menjadi 1.800 part dengan throughput yang sama, lead time turun menjadi 2 hari.
+
+### Hari persediaan (inventory coverage)
+
+> **Hari persediaan = persediaan ÷ rata-rata pemakaian harian (atau permintaan)**
+
+**Contoh:** persediaan barang jadi 2.250 unit, permintaan 900 unit per hari. Hari persediaan = 2.250 ÷ 900 = **2,5 hari**.
+
+Secara matematis, hari persediaan adalah Hukum Little yang diterapkan pada satu titik persediaan. Gunakan permintaan prospektif apabila permintaan sangat fluktuatif; jika tidak, cakupan berdasarkan data historis bisa tampak tinggi atau rendah secara menyesatkan.
+
+## 10. Kapasitas dan produktivitas: pemanfaatan, efisiensi pemanfaatan, produktivitas tenaga kerja
+
+### Pemanfaatan kapasitas
+
+Pemanfaatan membandingkan beban (kapasitas yang dibutuhkan menurut waktu standar) dengan kapasitas yang tersedia.
+
+> **Pemanfaatan kapasitas = beban ÷ kapasitas tersedia × 100 %**
+
+**Contoh:** pesanan dengan waktu standar 4.050 menit dijadwalkan pada stasiun bottleneck untuk minggu ini; kapasitas yang tersedia adalah 4.500 menit. Pemanfaatan = 4.050 ÷ 4.500 = **90,0 %**.
+
+**Mengapa 100 % bukan target:** kurva operasi logistik dari Nyhuis dan Wiendahl menggambarkan hubungan antara WIP, output, dan lead time suatu sistem kerja [14]. Ketika pemanfaatan mendekati batas kapasitas, antrean dan lead time tumbuh secara tidak proporsional, karena setiap gangguan dan setiap fluktuasi tidak lagi dapat diserap. Bottleneck sebaiknya dimanfaatkan secara tinggi; stasiun non-bottleneck membutuhkan cadangan. Tetapkan pita target, bukan batas maksimum.
+
+### Pemanfaatan bukan efisiensi pemanfaatan
+
+Istilah-istilah ini sering tercampur. **Pemanfaatan kapasitas** adalah angka perencanaan (seberapa banyak pekerjaan dibebankan pada kapasitas?). **Efisiensi pemanfaatan** (ISO 22400) adalah angka eksekusi: rasio antara actual production time (APT) dan actual unit busy time (AUBT) [3]. Sebuah mesin dapat terbebani 95 % dan tetap memiliki efisiensi pemanfaatan yang buruk jika banyak waktu yang terpakai hilang akibat kerusakan dan menunggu. Untuk Line 3, rasio waktu operasi terhadap waktu terpakai adalah 405 ÷ 450 = 90 %, yang dalam kasus sederhana ini sama dengan ketersediaan OEE; di pabrik yang mencatat waktu setup dan waktu pemakaian secara terpisah, nilainya berbeda.
+
+### Produktivitas
+
+Produktivitas adalah rasio antara output dan input. Dalam manufaktur, biasanya diukur **produktivitas parsial**, karena faktor input tidak dapat dijumlahkan secara bermakna.
+
+> **Produktivitas tenaga kerja = jumlah produk baik ÷ jam kerja tenaga kerja**
+
+**Contoh Line 3:** 422 part baik (termasuk yang direworked) ÷ (6 operator × 8 jam) = 422 ÷ 48 = **8,79 unit per jam kerja**.
+
+**Kesalahan umum:** mencampuradukkan produktivitas dengan rasio kinerja (output aktual vs. standar adalah rasio kinerja atau efisiensi, bukan produktivitas), menghitung output total alih-alih output baik, dan membandingkan produktivitas antarproduk dengan kandungan kerja yang berbeda. Untuk pabrik dengan campuran produk yang tinggi, jam standar yang diperoleh per jam hadir lebih tepat sebagai ukuran.
+
+## 11. KPI Pemeliharaan: MTBF, MTTR dan ketersediaan inheren
+
+ISO 22400 mencantumkan MTBF dan MTTR sebagai KPI pemeliharaan [38][3]. Keduanya memecah kehilangan ketersediaan akibat kerusakan menjadi dua pertanyaan: seberapa sering mesin mengalami kegagalan, dan berapa lama sampai mesin beroperasi kembali?
+
+> **MTBF (mean time between failures) = waktu operasi ÷ jumlah kegagalan**
+> **MTTR (mean time to repair) = total waktu perbaikan ÷ jumlah kegagalan**
+
+**Contoh Lini 3, satu bulan:** 40 shift masing-masing 405 menit waktu operasi = 16.200 menit; 40 kegagalan dengan total 1.000 menit.
+- MTBF = 16.200 ÷ 40 = **405 menit** (6,75 jam)
+- MTTR = 1.000 ÷ 40 = **25 menit**
+
+Dari sini Anda dapat menurunkan **ketersediaan inheren (teknis)**, yang hanya memperhitungkan kerusakan:
+
+> **Ketersediaan inheren = MTBF ÷ (MTBF + MTTR)**
+
+405 ÷ (405 + 25) = 405 ÷ 430 = **94,2 %**. Ketersediaan OEE sebesar 90 % lebih rendah karena juga memasukkan waktu changeover.
+
+**Kesalahan umum:** MTTR mungkin hanya mengukur perbaikan, bukan waktu respons hingga teknisi tiba; tentukan waktu mana yang dimaksud dan ukur respons serta perbaikan secara terpisah. Rata-rata dari beberapa kejadian juga sangat acak; MTBF baru menjadi andal setelah beberapa bulan. Dan jangan mencampuradukkan MTBF dengan MTTF (mean time to failure), yang berlaku untuk item yang tidak dapat diperbaiki; sejumlah halaman berbahasa Inggris berperingkat tinggi mengaburkan keduanya.
+
+## 12. Energi, keselamatan (TRIR, DART, LTIFR) dan biaya per unit
+
+### Energi per unit
+
+Di banyak pabrik, energi telah menjadi blok biaya yang layak memiliki KPI tersendiri. ISO 22400-2 diperluas dengan KPI energi pada 2017 [1]; untuk manajemen energi, ISO 50006:2023 (edisi kedua, menggantikan versi 2014) menjelaskan cara menyusun indikator kinerja energi (EnPI) dan baseline energi [22][34].
+
+> **Konsumsi energi spesifik = energi yang dikonsumsi dalam periode ÷ jumlah good**
+
+**Contoh Lini 3:** 1.520 kWh per shift ÷ 422 part good = **3,60 kWh per unit**.
+
+Perhatikan beban dasar: lini yang tetap menjalankan udara terkompresi dan pemanas saat berhenti akan tampak jauh lebih buruk per unit pada output rendah. Garis regresi sederhana dengan komponen beban dasar dan komponen yang bergantung pada volume memberi informasi lebih banyak dibandingkan rasio biasa.
+
+### KPI keselamatan: TRIR dan DART rate OSHA
+
+Dalam sistem KPI SQCDP, keselamatan menempati urutan pertama. Di AS, acuannya adalah aturan pencatatan OSHA (29 CFR Part 1904). OSHA menghitung tingkat insiden dengan satu rumus [42]:
+
+> **Tingkat insiden = jumlah cedera dan penyakit × 200.000 ÷ jam kerja karyawan**
+
+Angka 200.000 adalah jumlah jam yang dikerjakan 100 karyawan dengan 40 jam per minggu selama 50 minggu per tahun [42], sehingga hasilnya dibaca sebagai "kasus per 100 pekerja setara penuh waktu". Dua varian yang lazim digunakan:
+
+- **TRIR** (total recordable incident rate, juga disebut total case incident rate): semua kasus yang wajib dicatat. Kasus yang wajib dicatat adalah cedera dan penyakit akibat kerja yang berujung kematian, hilang kesadaran, hari tidak masuk kerja, pembatasan kerja atau pemindahan tugas, atau perawatan medis di luar pertolongan pertama, antara lain [46].
+- **DART rate:** hanya kasus dengan hari tidak masuk kerja, pembatasan aktivitas kerja, atau pemindahan tugas [46].
+
+**Contoh:** 5 kasus yang wajib dicatat, 3 di antaranya kasus DART, di pabrik dengan 420.000 jam kerja per tahun.
+TRIR = 5 × 200.000 ÷ 420.000 = **2,38**. DART rate = 3 × 200.000 ÷ 420.000 = **1,43**.
+
+Sebagai konteks: menurut Bureau of Labor Statistics, industri swasta AS mencatat total recordable case rate sebesar 2,3 kasus per 100 pekerja setara penuh waktu pada 2025 (dirilis 18 November 2026) [43]. Grafik BLS untuk 2025 menunjukkan 2,5 kasus per 100 pekerja penuh waktu untuk manufaktur, dengan 304.200 kasus [44][43]. Ini adalah rata-rata nasional, bukan tolok ukur untuk pabrik Anda; bandingkan dengan industri NAICS Anda sendiri.
+
+Terpisah dari tingkat-tingkat tersebut, OSHA mewajibkan pemberi kerja melaporkan kematian akibat kerja dalam 8 jam serta rawat inap, amputasi, atau kehilangan mata dalam 24 jam (29 CFR 1904.39) [45].
+
+### LTIFR dan tingkat 1.000 pekerja Jerman
+
+Grup multinasional juga sering menggunakan **LTIFR** (lost time injury frequency rate), yang menggunakan basis satu juta jam, bukan 200.000 jam:
+
+> **LTIFR = jumlah cedera yang menyebabkan kehilangan waktu kerja ÷ jam kerja × 1.000.000**
+
+Safe Work Australia mendefinisikan LTIFR sebagai jumlah cedera yang menyebabkan kehilangan waktu kerja per satu juta jam kerja; cedera yang menyebabkan kehilangan waktu kerja adalah cedera yang mengakibatkan tidak masuk kerja setidaknya satu hari penuh atau satu shift penuh [21].
+
+**Contoh:** 3 kecelakaan dengan hilangnya waktu kerja dengan 420.000 jam kerja per tahun: 3 ÷ 420.000 × 1.000.000 = **7,14**. Perlu dicatat bahwa ini adalah pabrik yang sama seperti di atas: angka DART sebesar 1,43 dan LTIFR sebesar 7,14 menggambarkan tiga kasus yang sama (1,43 × 5 = 7,14) jika ketiga kasus DART tersebut melibatkan hari tidak masuk kerja. DART juga menghitung kasus pekerjaan terbatas dan kasus pemindahan pekerjaan, yang sebagian besar definisi LTI tidak masukkan. Selalu nyatakan basisnya saat Anda membandingkan lokasi.
+
+Pabrik di Jerman melaporkan "tingkat 1.000 pekerja": kecelakaan yang wajib dilaporkan per 1.000 setara penuh waktu (full-time equivalent). Sebuah kecelakaan wajib dilaporkan di Jerman jika peserta asuransi meninggal atau tidak mampu bekerja lebih dari tiga hari (Pasal 193 (1) Kitab Undang-Undang Jaminan Sosial Jerman, Buku VII) [20]. Asosiasi asuransi kecelakaan kerja Jerman DGUV melaporkan 19,9 kecelakaan kerja yang wajib dilaporkan per 1.000 setara penuh waktu untuk tahun 2025, 3,2 % lebih rendah dibandingkan tahun sebelumnya [19]. **Contoh:** 4 kecelakaan yang wajib dilaporkan dengan 250 setara penuh waktu menghasilkan 4 ÷ 250 × 1.000 = **16,0**. Karena ambang batas pelaporannya berbeda, angka ini tidak dapat dibandingkan secara langsung dengan angka OSHA.
+
+Lengkapi indikator tertinggal ini dengan indikator utama seperti jumlah near miss yang dilaporkan dan tindakan keselamatan yang telah diselesaikan. Jumlah near miss yang dilaporkan menurun dapat menjadi tanda peringatan jika hal itu mencerminkan budaya pelaporan yang melemah.
+
+### Biaya per unit
+
+> **Biaya per unit = biaya periode ÷ jumlah produk baik**
+
+**Contoh Lini 3, satu shift (angka ilustratif dalam dolar AS):**
+- Tenaga kerja: 6 × 8 jam × $45/jam = $2.160
+- Mesin (depresiasi, pemeliharaan, ruang lantai): 8 jam × $60/jam = $480
+- Material: 432 part × $4,00 = $1.728 (scrap juga mengonsumsi material)
+- Total: $4.368
+
+Biaya per unit = $4.368 ÷ 422 part baik = **$10,35 per unit**.
+
+Perhitungan ini menunjukkan keterkaitannya dengan OEE: jika ke-432 part semuanya baik pada percobaan pertama, biaya per unit akan turun menjadi $4.368 ÷ 432 = $10,11 tanpa ada angka rate yang berubah. Dengan biaya tetap, volume output memegang peran utama, sehingga biaya per unit sulit ditafsirkan tanpa data volume. Untuk keputusan make-or-buy atau penetapan harga, Anda juga memerlukan biaya tetap dan biaya variabel secara terpisah. Cara mengubah perbaikan menjadi business case yang kuat dibahas dalam artikel [The Business Case for Operational Excellence: How to Prove ROI](https://www.m365.fm/community/u/mirko-p/blog/operational-excellence-roi-business-case/).
+
+## 13. Sistem KPI: hierarki, indikator leading dan lagging, SQCDP
+
+KPI individual adalah pengukuran. **Sistem KPI** menyusun pengukuran tersebut sehingga setiap level melihat angka yang dapat mereka pengaruhi, dan angka dari level yang lebih rendah terakumulasi secara logis ke dalam angka level yang lebih tinggi.
+
+### Hierarki: pabrik, area, lini, stasiun kerja
+
+| Level | KPI tipikal | Frekuensi | Forum |
+|---|---|---|---|
+| Pabrik | OTIF, biaya per unit, PPM pelanggan, TRIR, hari persediaan | mingguan, bulanan | rapat pimpinan pabrik |
+| Area | kepatuhan jadwal, lead time, OEE bottleneck, biaya scrap, produktivitas | harian, mingguan | rapat area (Tier 3) |
+| Lini | rencana vs. aktual unit per jam, OEE, FPY, alasan downtime teratas, tindakan terbuka | per shift | rapat lini (Tier 2) |
+| Stasiun kerja/mesin | unit per jam vs. takt, kerusakan, micro-stop, deviasi kualitas | per jam, per shift | huddle tim (Tier 1) |
+
+Level-level tersebut dihubungkan oleh rantai sebab-akibat: OTIF pabrik yang menurun dapat ditelusuri melalui kepatuhan jadwal di area hingga ke OEE dan alasan downtime pada satu mesin. Itulah rantai yang digunakan [rapat tier](https://www.m365.fm/entity/tier-meeting/): setiap level meninjau angkanya, meneruskan hal yang tidak dapat mereka selesaikan sendiri dan menerima umpan balik dari atasan. Panduan [Shop Floor Management](https://www.m365.fm/en/learn/shop-floor-management/) menjelaskan rutinitas ini secara rinci.
+
+### Indikator leading dan lagging
+
+**Indikator lagging** mengukur hasil yang sudah terjadi: OTIF, biaya per unit, tingkat scrap bulan ini, TRIR. Indikator ini penting untuk pencapaian tujuan tetapi datang terlambat untuk tindakan korektif.
+
+**Indikator leading** mengukur faktor pendorong yang memprediksi hasil: kepatuhan jadwal proses hulu, WIP di depan bottleneck, waktu changeover, kepatuhan perawatan preventif, near miss, unit per jam terhadap takt. Fabrico dengan tepat menekankan bahwa KPI harus memicu tindakan [35]; indikator leading melakukannya selagi masih ada waktu untuk bertindak.
+
+Aturan praktis: indikator leading mendominasi di level bawah, indikator lagging di level pabrik. Setiap KPI lagging di level pabrik sebaiknya memiliki setidaknya satu indikator leading yang ditetapkan di level lini.
+
+### SQCDP: struktur untuk papan dan rapat
+
+Banyak pabrik mengelompokkan KPI mereka berdasarkan **SQCDP**: Safety, Quality, Cost, Delivery dan People. Urutannya disengaja: keselamatan sebelum kualitas sebelum biaya. [unverified: SQCDP adalah konvensi praktik, bukan standar; asal-usulnya tidak dapat didokumentasikan dengan jelas.] Pabrik juga menggunakan varian dengan urutan berbeda atau tanpa People (misalnya SQDC).
+
+| Kategori | Lini 3, contoh KPI |
+|---|---|
+| S | cedera dan near miss pada shift, tindakan keselamatan terbuka |
+| Q | FPY 94,9 %, tingkat scrap 2,31 %, keluhan pelanggan |
+| C | biaya per unit $10,35, energi 3,60 kWh/unit |
+| D | rencana 450 / aktual 422 part baik, OEE 75,9 %, kepatuhan jadwal |
+| P | kehadiran, matriks keterampilan, ide perbaikan yang diimplementasikan |
+
+Kategori-kategori ini mencegah fiksasi sepihak pada output. Jika hanya output yang diukur, yang didapat adalah output dengan mengorbankan kualitas dan keselamatan.
+
+## 14. Pengumpulan data dan kualitas data
+
+Rumus terbaik pun tidak berguna jika data masukannya salah. Dalam praktik, proyek KPI lebih sering gagal karena datanya, bukan karena metodenya.
+
+### Perbandingan metode pengumpulan data
+
+| Metode | Deskripsi | Kelebihan | Kekurangan |
+|---|---|---|---|
+| Manual (lembar hitung, log shift, Excel) | operator mencatat jumlah dan henti produksi | cepat dimulai, membangun kesadaran, tidak perlu IT | micro-stop terlewat, pembulatan, pencatatan setelah kejadian, usaha tinggi |
+| Terminal data produksi | terminal untuk mulai/henti order, jumlah, alasan downtime | alasan terstruktur, konteks order | bergantung pada disiplin pencatatan |
+| Pengumpulan data mesin | sinyal dari kontroler (run, stop, penghitung) | waktu lengkap, henti singkat ikut tercatat | alasan tidak ada tanpa masukan operator |
+| MES | mengintegrasikan data produksi dan mesin, pengendalian mutu dan order; KPI menurut ISO 22400, ISA-95 Level 3 (VDMA 66412-1 di Jerman) | definisi konsisten, real time | usaha implementasi, pemeliharaan master data |
+| Retrofit IoT | sensor dan gateway pada mesin yang ada, data di platform cloud | berfungsi untuk mesin lama, dapat diskalakan | konteks (order, produk) harus ditambahkan |
+
+Jalur yang pragmatis adalah kombinasi: sinyal mesin memberikan waktu dan jumlah, sementara operator menambahkan alasan henti dan keputusan mutu di terminal. Muchiri dan Pintelon menyebut akurasi pengumpulan data sebagai salah satu tantangan terbesar dalam pengukuran OEE [7]. Cara menghubungkan mesin, MES, dan cloud secara teknis dibahas dalam panduan [Manufacturing IT with Azure](https://www.m365.fm/en/learn/manufacturing-it-azure/).
+
+### Lima aturan untuk KPI yang andal
+
+1. **Satu model waktu untuk semua.** Tentukan waktu mana yang termasuk waktu produksi terencana (istirahat? perawatan? uji coba? tidak ada order?). ISO 22400-2 dan VDMA 66412-1 menyediakan templat [1][4].
+2. **Satu katalog alasan downtime dengan paling banyak dua tingkat.** Terlalu banyak alasan membuat semuanya masuk "lainnya", terlalu sedikit membuat Pareto tidak berarti. Petakan setiap alasan dengan jelas ke satu kategori kerugian OEE.
+3. **Pelihara ideal cycle time.** Performa OEE sepenuhnya bergantung pada master data ini. Standar yang terlalu longgar menghasilkan performa di atas 100 % atau menyembunyikan kerugian.
+4. **Otomatisasi pemeriksaan kewajaran.** FPY + rework + scrap = 100 %; run time ≤ waktu terencana; performa ≤ 100 %; jumlah henti ≤ panjang shift.
+5. **Buat definisi terlihat.** Setiap KPI memiliki lembar definisi KPI dengan tujuan, rumus, sumber data, penanggung jawab, frekuensi, dan target.
+
+### Lembar definisi KPI
+
+| Kolom | Contoh: OEE Line 3 |
+|---|---|
+| Tujuan | membuat kerugian mesin bottleneck terlihat dan menentukan prioritasnya |
+| Rumus | ketersediaan × performa × kualitas; validasi silang jumlah baik × ideal cycle time ÷ waktu terencana |
+| Sumber data | data mesin (run/stop, penghitung), terminal (alasan downtime, scrap, rework) |
+| Definisi | waktu terencana = shift dikurangi istirahat; changeover dihitung sebagai kehilangan ketersediaan; rework dihitung sebagai kehilangan kualitas |
+| Penanggung jawab | supervisor shift Line 3 |
+| Frekuensi | per shift, tren mingguan |
+| Target | 80 % pada akhir Q2 (baseline 75,9 %, lihat Bagian 16) |
+| Eskalasi | dua shift berturut-turut di bawah 70 % → rapat Tier 2 |
+
+## 15. Visualisasi: papan lantai produksi dan dasbor Power BI
+
+### Papan lantai produksi
+
+Di stasiun kerja, keterbacaan dalam beberapa detik lebih penting daripada kelengkapan. [Manajemen visual](https://www.m365.fm/entity/visual-management/) di sini berarti: rencana dan aktual per jam, warna merah/hijau yang jelas terhadap target, tiga alasan downtime teratas, dan daftar tindakan dengan penanggung jawab serta tenggat waktu. Papan per jam berfungsi baik: tim memasukkan jumlah rencana dan aktual untuk setiap jam (Lini 3: 60 part pada setiap jam produksi penuh dengan takt 60 detik, lebih sedikit pada jam dengan istirahat) dan langsung memberikan alasan singkat untuk setiap penyimpangan. Cara menyatukan aliran dan papan dijelaskan dalam artikel [Shop Floor Optimization: Ways to Improve Flow](https://www.m365.fm/community/u/mirko-p/blog/shop-floor-optimization-improve-flow-ways/).
+
+Papan digital tidak otomatis menggantikan papan tulis. Papan digital memberi manfaat ketika data sudah dikumpulkan secara otomatis, ketika beberapa shift atau lokasi memerlukan tampilan yang sama, dan ketika tindakan harus dilacak. Diskusi tim tetap sama.
+
+### Dasbor Power BI: struktur
+
+Untuk tingkat area dan pabrik, Power BI adalah alat yang jelas jika perusahaan sudah menggunakan Microsoft 365. Struktur tiga halaman yang terbukti efektif:
+
+1. **Ikhtisar (pabrik):** kartu SQCDP dengan aktual, target, dan tren; lampu lalu lintas hanya jika target telah ditetapkan.
+2. **Lini:** OEE sebagai diagram waterfall dari waktu terencana melalui enam kategori kerugian hingga waktu bernilai tambah; diagram Pareto alasan downtime; FPY dan scrap dari waktu ke waktu.
+3. **Detail dan tindakan:** tabel shift dan order dengan drill-through, terhubung dengan daftar tindakan.
+
+Untuk sasaran, pemeriksaan, dan penanggung jawab, Power BI juga menyediakan scorecard dengan sasaran. Menurut Microsoft, membuat dan membagikan scorecard merupakan fitur Pro; melihatnya dimungkinkan dengan lisensi Pro atau sebagai pengguna gratis di workspace pada kapasitas Premium atau Fabric F64 atau yang lebih besar [29].
+
+### Model data: skema bintang
+
+Microsoft merekomendasikan skema bintang untuk Power BI: tabel dimensi menggambarkan entitas bisnis dan digunakan untuk pemfilteran serta pengelompokan, tabel fakta menyimpan peristiwa dan digunakan untuk agregasi [27]. Untuk KPI manufaktur, ini berarti:
+
+| Tabel | Jenis | Isi (contoh kolom) |
+|---|---|---|
+| FactProduction | fakta | Date, ShiftID, LineID, ProductID, PlannedMin, BreakdownMin, ChangeoverMin, TotalQty, GoodFirstPass, Rework, Scrap, IdealCycleSec |
+| FactDowntime | fakta | Start, End, DurationMin, LineID, ReasonID |
+| DimDate | dimensi | Date, Week, Month, WorkingDay ya/tidak |
+| DimShift | dimensi | ShiftID, Name, Start, End |
+| DimLine | dimensi | LineID, Line, Area, Plant |
+| DimProduct | dimensi | ProductID, Product, ProductFamily |
+| DimDowntimeReason | dimensi | ReasonID, Reason, LossCategory (breakdown, changeover, micro-stop …) |
+
+Kolom LossCategory pada dimensi alasan adalah kunci untuk kaskade kerugian: kolom ini memetakan setiap alasan downtime ke salah satu dari enam big losses.
+
+### Contoh DAX: agregasi OEE yang benar
+
+Ukuran berikut menghitung OEE sehingga dapat diagregasi dengan benar di setiap tingkat (shift, lini, minggu, pabrik), karena dibangun dari jumlah waktu, bukan rata-rata. `DIVIDE` mengembalikan BLANK alih-alih error ketika penyebutnya nol [25]; Microsoft merekomendasikan fungsi ini ketika penyebut dapat bernilai nol atau kosong, dan operator `/` ketika penyebut berupa konstanta [26].
+
+```dax
+Planned Min =
+SUM ( FactProduction[PlannedMin] )
+
+Run Min =
+[Planned Min]
+    - SUM ( FactProduction[BreakdownMin] )
+    - SUM ( FactProduction[ChangeoverMin] )
+
+Ideal Min =
+SUMX (
+    FactProduction,
+    FactProduction[TotalQty] * FactProduction[IdealCycleSec] / 60
+)
+
+Value Adding Min =
+SUMX (
+    FactProduction,
+    FactProduction[GoodFirstPass] * FactProduction[IdealCycleSec] / 60
+)
+
+Availability =
+DIVIDE ( [Run Min], [Planned Min] )
+
+Performance =
+DIVIDE ( [Ideal Min], [Run Min] )
+
+Quality (time-weighted) =
+DIVIDE ( [Value Adding Min], [Ideal Min] )
+
+OEE =
+DIVIDE ( [Value Adding Min], [Planned Min] )
+```
+
+**Mengapa kualitas dihitung berbobot waktu di sini:** untuk satu produk, `Value Adding Min ÷ Ideal Min` identik dengan jumlah baik ÷ jumlah total. Dengan beberapa produk yang memiliki waktu ideal berbeda, bentuk ini memberi bobot pada setiap part sesuai waktu idealnya. Hanya dengan cara inilah availability × performance × quality = OEE berlaku persis di setiap tingkat agregasi, karena waktu run dan waktu ideal saling meniadakan. Tingkat kualitas berbasis jumlah potong berguna sebagai ukuran tambahan tetapi sebaiknya tidak dimasukkan ke dalam perkalian OEE.
+
+**Cek dengan Line 3:** waktu rencana 450, waktu operasi 405, waktu ideal 432 × 50 ÷ 60 = 360, waktu bernilai tambah 410 × 50 ÷ 60 = 341,67 menit. Availability 90,0 %, performance 88,9 %, quality 94,9 %, OEE 341,67 ÷ 450 = 75,9 %. Ukuran-ukuran ini mereproduksi perhitungan manual dari Bagian 7.
+
+Satu ukuran tambahan untuk pemeriksaan takt:
+
+```dax
+Effective Cycle Time per Good Part Sec =
+DIVIDE (
+    [Planned Min] * 60,
+    SUM ( FactProduction[GoodFirstPass] )
+)
+```
+
+Untuk Line 3, hasilnya 27.000 ÷ 410 = 65,9 detik, di atas takt 60 detik.
+
+KPI kualitas dari Bagian 8 mengikuti pola yang sama:
+
+```dax
+FPY =
+DIVIDE (
+    SUM ( FactProduction[GoodFirstPass] ),
+    SUM ( FactProduction[TotalQty] )
+)
+
+Scrap Rate =
+DIVIDE (
+    SUM ( FactProduction[Scrap] ),
+    SUM ( FactProduction[TotalQty] )
+)
+
+Rework Rate =
+DIVIDE (
+    SUM ( FactProduction[Rework] ),
+    SUM ( FactProduction[TotalQty] )
+)
+
+Quality Sum Check =
+[FPY] + [Scrap Rate] + [Rework Rate]
+```
+
+`Quality Sum Check` harus sama dengan 100 %; pemformatan bersyarat yang menandai penyimpangan dengan warna merah membuat transaksi yang hilang langsung terlihat.
+
+**Dua jebakan bagi pengembang Power BI:**
+- **Penghitungan ganda waktu henti.** Jika menit kerusakan dan pergantian produk disimpan di `FactProduction` maupun `FactDowntime`, hitung waktu operasi hanya dari salah satu tabel. Pendekatan yang paling andal adalah menyimpan `FactProduction` pada granularitas shift, line, dan produk, lalu mengagregasi menit waktu henti di sana dari `FactDowntime` di Power Query.
+- **Granularitas waktu rencana.** Jika lebih dari satu produk dijalankan dalam satu shift, waktu rencana harus dibagi di antara produk-produk tersebut (misalnya berdasarkan waktu mulai dan selesai order). Jika seluruh waktu shift berada di setiap baris produk, waktu itu terhitung beberapa kali saat dijumlahkan.
+
+### Catatan lisensi
+
+Menurut Microsoft Learn (halaman diperbarui 24 Agustus 2026): pengguna dengan lisensi gratis dapat membuat laporan untuk keperluan sendiri tetapi tidak dapat membagikannya. Publikasi dan berbagi memerlukan Power BI Pro. Pengguna gratis hanya dapat melihat konten yang dibagikan jika konten tersebut berada di workspace pada kapasitas Power BI Premium atau kapasitas Fabric F64 atau lebih besar. Dengan Premium Per User (PPU), konten hanya dapat dibagikan kepada sesama pengguna PPU kecuali berada di kapasitas Premium [28]. Untuk dashboard lantai produksi yang sebagian besar supervisor hanya membacanya, lisensi karena itu merupakan keputusan arsitektur. Periksa harga dan ketentuan terkini dengan Microsoft; keduanya sengaja tidak dikutip di sini.
+
+## 16. Cara menetapkan target KPI
+
+Target adalah bagian di mana KPI paling sering menimbulkan kerugian. Tiga prinsip berikut membantu.
+
+**1. Mulai dari baseline Anda sendiri, bukan dari benchmark.** Lakukan pengukuran yang bersih selama minimal empat hingga delapan minggu sebelum menetapkan target. Lini 3 dengan OEE 75,9 % hampir tidak terbantu oleh target kelas dunia sebesar 85 % selama tidak ada yang tahu kerugian mana yang harus ditangani lebih dulu.
+
+**2. Turunkan target dari permintaan.** Dalam contoh, target mengikuti langsung dari pelanggan: untuk 450 part baik per shift, Lini 3 membutuhkan OEE sebesar 83,3 % jika hanya part baik lulus pertama yang dihitung (Bagian 7). Target sementara yang masuk akal adalah 80 %; itu berjarak 4,1 poin persentase. Secara matematis, nilainya sama dengan (0,800 − 0,759) × 450 menit = sekitar 18,3 menit waktu bernilai tambah per shift, misalnya melalui berkurangnya micro-stop (potensi 30 menit) atau changeover yang lebih singkat (potensi 8 menit melalui SMED).
+
+**3. Gunakan pita target alih-alih nilai titik untuk KPI yang memiliki trade-off.** Utilisasi, WIP dan days of supply tidak mengikuti prinsip "semakin tinggi semakin baik". Sebuah pita (misalnya days of supply 2 hingga 3 hari) mencegah tim memangkas persediaan sedemikian rupa sehingga pengiriman terganggu. Drees dan Sack menggambarkan tepat ketegangan ini antara pengurangan persediaan, output sumber daya, kemampuan pengiriman dan pengurangan lead time untuk KPI value stream [32].
+
+**Tentang benchmark eksternal:** nilai industri untuk OEE, scrap atau MTTR yang dikutip di banyak halaman vendor biasanya berasal dari data pelanggan mereka sendiri tanpa metode yang diungkapkan [37]. Gunakan nilai tersebut paling jauh sebagai orientasi kasar, jangan pernah sebagai target. Pengecualiannya adalah statistik resmi dengan metode yang dipublikasikan, seperti tingkat cedera BLS menurut industri NAICS [43].
+
+## 17. Kesalahan umum dan cara menghindarinya
+
+| Kesalahan | Akibat | Tindakan pencegahan |
+|---|---|---|
+| Kelebihan KPI: 30 KPI di papan | tidak ada yang tahu apa yang penting; rapat berubah menjadi ceramah | 5 hingga 8 KPI per level, diurutkan menurut SQCDP |
+| KPI tanpa definisi | setiap departemen menghitung secara berbeda; perbandingan tidak berarti | lembar definisi, istilah sesuai ISO 22400 (VDMA 66412-1 di Jerman) |
+| Merata-ratakan persentase | OEE pabrik menjadi terdistorsi | hitung ulang KPI di setiap level dari jumlah |
+| KPI sebagai penilaian kinerja individu | manipulasi data, gangguan tersembunyi | KPI untuk proses, bukan untuk orang |
+| Target tanpa jalan | frustrasi, polesan angka | setiap target didukung oleh analisis kerugian dan rencana tindakan |
+| Hanya indikator tertinggal | tindakan korektif datang terlambat | tetapkan indikator pendahulu untuk setiap indikator tertinggal |
+| Waktu standar yang terlalu longgar | kinerja di atas 100 % atau kerugian tersembunyi | justifikasi waktu ideal secara teknis dan tinjau setiap tahun |
+| Data tanpa rutinitas | dashboard berhenti dibuka setelah tiga bulan | jadwal rapat tetap dengan KPI sebagai agenda |
+| Membandingkan tingkat keselamatan dengan dasar yang berbeda | TRIR, DART, LTIFR dan tingkat Jerman tercampur | selalu nyatakan rumus dan dasarnya (200.000 jam, 1 juta jam, 1.000 FTE) |
+
+### Hukum Goodhart
+
+Pada 1975, ekonom Inggris Charles Goodhart mengamati bahwa setiap keteraturan statistik yang teramati cenderung runtuh begitu ia diberi tekanan untuk tujuan pengendalian [24]. Antropolog Marilyn Strathern pada 1997 meringkasnya dalam kalimat terkenal "Ketika sebuah ukuran menjadi target, ia berhenti menjadi ukuran yang baik" [23]. Di lantai produksi hal ini tampak seperti ini: jika OEE dikaitkan dengan bonus, changeover akan dihindari (batch lebih besar, persediaan lebih banyak), stop dicatat ulang sebagai "terencana", atau waktu standar diperpanjang. KPI naik; pabrik tidak menjadi lebih baik.
+
+Tiga penawarnya: selalu lihat KPI bersama counter-KPI (OEE dengan persediaan dan OTIF), kelola definisi secara terpusat dan catat setiap perubahan, serta gunakan KPI dalam rapat sebagai alasan untuk mengajukan pertanyaan, bukan sebagai vonis.
+
+## 18. Roadmap: Penerapan KPI manufaktur dalam 90 hari
+
+Roadmap berikut berfungsi sebagai kerangka kerja untuk satu lini atau satu area. Roadmap ini tidak memerlukan perangkat lunak; perangkat lunak mempercepat fase 2 dan 3.
+
+**Fase 1, minggu 1 hingga 3: tujuan dan definisi**
+- Perjelas tujuan area (apa yang diinginkan pelanggan? di mana kerugian terbesar?).
+- Pilih 5 hingga 8 KPI, dengan minimal satu untuk setiap kategori SQCDP.
+- Tentukan model waktu, katalog alasan downtime, dan lembar definisi; periksa waktu siklus ideal.
+
+**Fase 2, minggu 4 hingga 8: mengukur dan belajar**
+- Mulai pengumpulan data, secara manual atau semi-otomatis pada awalnya jika diperlukan.
+- Periksa kewajaran data setiap hari; pertajam definisi apabila muncul pertanyaan.
+- Tetapkan baseline selama minimal empat minggu.
+
+**Fase 3, minggu 9 hingga 12: mengelola**
+- Turunkan target dari permintaan dan baseline.
+- Bangun papan kendali dan, bila berguna, laporan Power BI.
+- Tetapkan rutin tier: Tier 1 per shift, Tier 2 harian, Tier 3 mingguan.
+- Pilih topik perbaikan pertama dari Pareto kerugian dan kerjakan dengan PDCA.
+
+**Setelah itu:** periksa setiap kuartal apakah setiap KPI masih mendorong keputusan. KPI yang tidak digunakan siapa pun dihentikan. Penyematan KPI dalam sistem perbaikan yang lebih luas dibahas dalam panduan [Lean Manufacturing](https://www.m365.fm/en/learn/lean-manufacturing/) dan [Operational Excellence](https://www.m365.fm/en/learn/operational-excellence/). Target untuk bottleneck juga langsung masuk ke penjadwalan, lihat [Production Scheduling and APS](https://www.m365.fm/en/learn/production-scheduling-aps/).
+
+## 19. KPI dari pemodelan value stream: iFAKT Polaris
+
+> **Catatan: Penulis bekerja di iFAKT GmbH.**
+
+[iFAKT GmbH](https://www.m365.fm/entity/ifakt/), berkantor pusat di Stuttgart, Jerman, mengembangkan perangkat lunak untuk perencanaan dan optimalisasi proses logistik dan produksi berbasis teknologi Microsoft [33]. Perusahaan ini telah lama mengerjakan KPI: pada 2011, Jörg Drees dan Christoph Sack menunjukkan dalam jurnal Jerman ZWF (Zeitschrift für wirtschaftlichen Fabrikbetrieb) bahwa KPI value stream dengan mudah berbenturan antara pengurangan persediaan, output sumber daya, kemampuan pengiriman, dan pengurangan lead time, dan bahwa sekumpulan KPI yang dipilih secara sengaja, dikombinasikan dengan metode lean, memungkinkan loop kendali yang berkelanjutan [32].
+
+Menurut vendor, keluarga perangkat lunak [iFAKT Polaris](https://www.m365.fm/entity/polaris/) mencakup Value Stream Mapping, Business Swim Lane Mapping, Designer, Simulator, Optimizer, Operator, dan Analyzer [31]. Dua di antaranya relevan untuk KPI manufaktur:
+
+- **[Polaris Analyzer](https://www.m365.fm/entity/polaris-analyzer/)**, menurut ifakt.de, menghimpun KPI dari semua modul Polaris ke dalam dasbor terstruktur, memvisualisasikan lead time, utilisasi, bottleneck, dan status proyek, menampilkan batas kapasitas dan potensi perbaikan, serta membandingkan skenario, rencana, dan kinerja aktual [30]. Halaman vendor tidak memberikan informasi tentang integrasi, model penerapan, atau harga.
+- **Polaris VSM**, menurut vendor, menghitung KPI lean seperti lead time, cycle time, WIP, rasio nilai tambah, dan flow factor secara otomatis dari model value stream, menawarkan dasbor untuk lead time, WIP, rasio nilai tambah, dan OEE, serta membandingkan KPI skenario secara berdampingan [31].
+
+**Penilaian:** alat seperti ini tidak menggantikan definisi yang bersih maupun rutinitas rapat. Nilainya terletak pada penghitungan KPI yang konsisten dari satu model dan perbandingan skenario sebelum implementasi, misalnya dampak pembatasan WIP terhadap lead time dan OTIF. Apakah alat ini cocok untuk pabrik Anda sebaiknya diperiksa seperti solusi lain: terhadap data Anda, lanskap TI Anda, dan keputusan yang ingin didukung oleh KPI tersebut. Informasi lebih lanjut tentang keluarga produk ini ada dalam panduan [iFAKT Polaris](https://www.m365.fm/en/learn/ifakt-polaris/).
+
+## 20. Glosarium
+
+| Istilah | Penjelasan |
+|---|---|
+| Availability (OEE) | waktu operasi ÷ waktu produksi yang direncanakan [7] |
+| Cycle time | waktu terukur untuk menyelesaikan satu unit di suatu proses [10] |
+| DART rate | rasio kasus OSHA dengan hari absen, pekerjaan terbatas, atau pemindahan kerja per 100 FTE [42][46] |
+| Days of supply | persediaan ÷ pemakaian harian rata-rata |
+| Effectiveness (ISO 22400) | sesuai dengan performa OEE: waktu operasi yang direncanakan per item × jumlah ÷ waktu produksi aktual [3] |
+| Flow factor | lead time ÷ waktu operasi (Wiendahl) [14][15] |
+| FPY | first pass yield, bagian unit yang baik tanpa pengerjaan ulang atau scrap [36] |
+| ISA-95 | ANSI/ISA-95 (IEC 62264); Level 3 = manajemen operasi manufaktur [40] |
+| Lagging indicator | KPI yang mengukur hasil yang sudah terjadi |
+| Lead time | waktu dari awal hingga akhir suatu pesanan, termasuk semua waktu tunggu, antrean, dan transportasi [10][15] |
+| Leading indicator | KPI yang memprediksi hasil di masa depan |
+| Little's Law | L = λW: WIP rata-rata = throughput × lead time rata-rata [13] |
+| Loading | waktu produksi yang direncanakan ÷ waktu kalender; faktor dari TEEP [8] |
+| MES | manufacturing execution system; ISA-95 Level 3 [40]; panduan KPI VDMA 66412-1 di Jerman [4] |
+| MTBF / MTTR | rata-rata waktu operasi antar kegagalan / rata-rata waktu perbaikan |
+| OEE | availability × performance × quality [7] |
+| Operation time | waktu setup ditambah waktu proses suatu langkah kerja (Wiendahl) [14][15] |
+| Order time (REFA) | waktu setup ditambah waktu jalan (jumlah × waktu per unit) [16][17] |
+| OTIF | on time in full; tidak ada definisi standar [18] |
+| PPM | parts per million, cacat dinormalisasi ke satu juta [36] |
+| SMED | metode pergantian produksi dengan target di bawah sepuluh menit [11] |
+| SQCDP | Safety, Quality, Cost, Delivery, People: skema urutan untuk KPI |
+| Takt time | waktu tersedia ÷ permintaan pelanggan [9] |
+| TEEP | OEE × loading [8] |
+| TRIR | OSHA total recordable incident rate: kasus yang dapat dicatat × 200.000 ÷ jam kerja [42] |
+| WIP | work in process (barang dalam proses) |
+
+## 21. FAQ: KPI manufaktur
+
+**Apa itu KPI manufaktur?**
+KPI manufaktur adalah ukuran yang mengkuantifikasi waktu, output, kualitas, pengiriman, biaya, dan keselamatan suatu operasi produksi, misalnya takt time, OEE, rasio scrap, atau OTIF. Setiap KPI memerlukan definisi, rumus, satuan, dan periode waktu.
+
+**Apa perbedaan antara KPI dan metrik?**
+Setiap KPI adalah metrik, tetapi tidak setiap metrik adalah KPI. KPI terkait langsung dengan suatu tujuan dan secara rutin mendorong keputusan, misalnya OTIF atau OEE bottleneck. Jumlah part yang diproduksi adalah metrik; dengan sendirinya jarang memicu tindakan.
+
+**Apa saja KPI paling penting dalam manufaktur?**
+Bagi sebagian besar pabrik, satu set awal sudah cukup: OEE bottleneck, FPY atau rasio scrap, OTIF, lead time atau WIP, biaya per unit, dan rasio keselamatan seperti TRIR. KPI mana yang "paling penting" bergantung pada di mana kerugian terbesar Anda berada.
+
+**Apa 5 indikator kinerja utama dalam manufaktur?**
+Tidak ada lima besar yang resmi. Satu set praktis mencakup satu KPI per kategori SQCDP: TRIR (keselamatan), first pass yield (kualitas), biaya per unit (biaya), OTIF (pengiriman), dan metrik people seperti ide perbaikan yang diterapkan, ditambah OEE untuk bottleneck.
+
+**Bagaimana cara menghitung takt time?**
+Takt time = waktu produksi tersedia ÷ permintaan pelanggan. Contoh: 450 menit (27.000 detik) waktu tersedia per shift dan permintaan 450 unit menghasilkan 60 detik per unit. Kurangi waktu istirahat, tetapi bukan downtime tak terencana.
+
+**Apa perbedaan antara takt time dan cycle time?**
+Takt time berasal dari permintaan pelanggan dan menunjukkan seberapa sering sebuah part harus selesai. Cycle time diukur pada proses dan menunjukkan seberapa sering sebuah part benar-benar selesai. Cycle time sebaiknya berada di bawah takt dengan cadangan.
+
+**Bagaimana cara menghitung lead time manufaktur?**
+Secara langsung sebagai timestamp selesai dikurangi timestamp mulai per pesanan, atau secara tidak langsung dengan Little's Law: WIP rata-rata ÷ throughput rata-rata. WIP 2.700 part pada throughput harian 900 part menghasilkan 3 hari kerja.
+
+**Bagaimana cara menghitung OEE?**
+OEE = availability × performance × quality. Dengan availability 90 %, performance 88,9 %, dan quality 94,9 %, OEE adalah 75,9 %. Pemeriksaan silang: jumlah good × ideal cycle time ÷ waktu produksi yang direncanakan.
+
+**Berapa skor OEE yang baik?**
+85 % sering disebut "world-class" dan ditelusuri ke Nakajima, tetapi angka ini diperdebatkan dan bergantung pada industri [8]. Target yang lebih baik adalah target yang diturunkan dari baseline Anda sendiri dan permintaan pelanggan.
+
+**Bagaimana cara menghitung scrap rate?**
+Scrap rate = jumlah scrap ÷ jumlah total × 100 %. 10 part scrap dari 432 part yang diproduksi menghasilkan 2,31 %.
+
+**Apa perbedaan antara scrap rate dan first pass yield?**
+Scrap rate hanya menghitung part yang akhirnya dibuang. FPY hanya menghitung part yang sudah baik tanpa koreksi apa pun, jadi juga tanpa rework. FPY, rework rate, dan scrap rate totalnya 100 %.
+
+**Apa arti OTIF?**
+On time in full: proporsi pengiriman atau baris pesanan yang sampai ke pelanggan tepat waktu dan lengkap. Tidak ada definisi standar; Anda harus menetapkan tanggal acuan, toleransi, dan tingkat [18].
+
+**Bagaimana cara menghitung TRIR?**
+TRIR = jumlah kasus yang dapat dicatat OSHA × 200.000 ÷ total jam kerja [42]. 5 kasus yang dapat dicatat dengan 420.000 jam kerja menghasilkan 2,38. Angka 200.000 mewakili 100 karyawan penuh waktu yang bekerja 40 jam seminggu selama 50 minggu.
+
+**Apa perbedaan antara utilisasi kapasitas dan efisiensi utilisasi?**
+Utilisasi kapasitas adalah angka perencanaan (beban relatif terhadap kapasitas). Efisiensi utilisasi mengukur selama eksekusi berapa banyak waktu yang terpakai yang benar-benar produktif. Utilisasi yang tinggi bukan tujuan itu sendiri, karena lead time naik tajam mendekati batas kapasitas.
+
+**Berapa banyak KPI yang harus dipantau sebuah pabrik?**
+Lima sampai delapan KPI per tingkat manajemen, diurutkan berdasarkan SQCDP, dengan setiap lagging indicator dipetakan ke leading indicator. Lebih banyak KPI meningkatkan upaya pengumpulan data tanpa meningkatkan kendali.
+
+**Standar apa yang mendefinisikan KPI manufaktur?**
+ISO 22400-2:2014 mendefinisikan KPI untuk manajemen operasi manufaktur dengan rumus, satuan, dan waktu [1]. ISA-95 mendefinisikan konteks Level 3 tempat KPI tersebut dihitung [40]; di Jerman, pedoman VDMA 66412-1 tentang KPI MES juga banyak digunakan [4].
+
+**Bisakah saya membuat KPI manufaktur di Power BI?**
+Bisa. Yang penting adalah skema bintang dengan tabel fakta dan tabel dimensi [27] serta measure yang menghitung KPI dari waktu yang dijumlahkan. Untuk berbagi diperlukan Power BI Pro; pemirsa tanpa lisensi Pro memerlukan konten di kapasitas Premium atau Fabric F64 atau yang lebih besar [28].
+
+**Apa itu MTBF dan MTTR?**
+MTBF adalah rata-rata waktu operasi antara dua kerusakan, MTTR adalah rata-rata waktu untuk memulihkan mesin. Waktu operasi 16.200 menit dan 40 kerusakan dengan total durasi 1.000 menit menghasilkan MTBF 405 menit dan MTTR 25 menit.
+
+## 22. Kesimpulan
+
+KPI manufaktur bukan tujuan akhir. Nilainya berasal dari tiga hal: definisi yang tidak ambigu berdasarkan ISO 22400-2 (dan ISA-95 untuk konteks sistem), basis data yang andal dari sinyal mesin dan masukan operator, serta rutinitas di mana penyimpangan memicu pertanyaan dan tindakan. Contoh Line 3 menunjukkan betapa erat keterkaitan KPI: waktu siklus di bawah takt time tidak menjamin pengiriman selama kerusakan, changeover, dan kehilangan kualitas menurunkan OEE hingga 75,9 %; 28 part yang hilang per shift dapat ditelusuri ke setiap kategori kerugian dan menit. Mulailah dengan sedikit KPI, hitung di setiap level dari jumlah, tetapkan target dari permintaan pelanggan, utamakan keselamatan dengan rasio yang didasarkan dengan benar, dan perlakukan setiap KPI sebagai alasan untuk berdiskusi di gemba.
+
+### Bacaan lanjutan di m365.fm
+
+- Panduan: [Shop Floor Management](https://www.m365.fm/en/learn/shop-floor-management/) · [Operational Excellence](https://www.m365.fm/en/learn/operational-excellence/) · [Value Stream Mapping](https://www.m365.fm/en/learn/value-stream-mapping/) · [Manufacturing IT with Azure](https://www.m365.fm/en/learn/manufacturing-it-azure/) · [Lean Manufacturing](https://www.m365.fm/en/learn/lean-manufacturing/) · [Production Scheduling and APS](https://www.m365.fm/en/learn/production-scheduling-aps/) · [iFAKT Polaris](https://www.m365.fm/en/learn/ifakt-polaris/)
+- Blog: [Shop Floor Optimization: Ways to Improve Flow](https://www.m365.fm/community/u/mirko-p/blog/shop-floor-optimization-improve-flow-ways/) · [The Business Case for Operational Excellence: How to Prove ROI](https://www.m365.fm/community/u/mirko-p/blog/operational-excellence-roi-business-case/)
+- Istilah: [Takt Time](https://www.m365.fm/entity/takt-time/) · [Cycle Time](https://www.m365.fm/entity/cycle-time/) · [Lead Time](https://www.m365.fm/entity/lead-time/) · [Setup Time](https://www.m365.fm/entity/setup-time/) · [Micro Stops](https://www.m365.fm/entity/micro-stops/) · [Scrap Rate](https://www.m365.fm/entity/scrap-rate/) · [Key Performance Indicator](https://www.m365.fm/entity/key-performance-indicator/) · [Total Productive Maintenance](https://www.m365.fm/entity/total-productive-maintenance/) · [SMED](https://www.m365.fm/entity/smed/) · [Shop Floor Management](https://www.m365.fm/entity/shop-floor-management/) · [Visual Management](https://www.m365.fm/entity/visual-management/) · [Tier Meeting](https://www.m365.fm/entity/tier-meeting/) · [Value Stream Mapping](https://www.m365.fm/entity/value-stream-mapping/) · [Polaris Analyzer](https://www.m365.fm/entity/polaris-analyzer/)
+
+# Author box
+
+**[Mirko Peters](https://www.m365.fm/entity/mirko-peters/)** adalah host m365.fm dan bekerja di [iFAKT GmbH](https://www.m365.fm/entity/ifakt/) di Stuttgart, Jerman. Di m365.fm ia menulis tentang lean manufacturing, KPI manufaktur, metode value stream, dan digitalisasi manufaktur dengan Microsoft 365, Power BI, dan Azure. Fokusnya adalah bagaimana mendefinisikan dan memvisualisasikan KPI agar menghasilkan keputusan di lantai produksi.
+
+**Catatan: Penulis bekerja di iFAKT GmbH.**
+
+# Sources
+
+All sources accessed November 20, 2026. Sources [1] to [39] keep the German numbering; [35], [36] and [38] now point to English sources, and [40] to [47] were added for the US version. All new or replaced sources were verified online.
+
+1. ISO 22400-2:2014 Automation systems and integration – Key performance indicators (KPIs) for manufacturing operations management – Part 2: Definitions and descriptions. Edition 1, 2014-01; status "to be revised"; Amendment 1:2017 "Key performance indicators for energy management". https://www.iso.org/standard/54497.html
+2. Rother, M.; Shook, J.: 6 Guidelines for Moving Toward a Lean Value Stream. Lean Enterprise Institute, The Lean Post, October 19, 2022. https://www.lean.org/the-lean-post/articles/6-guidelines-for-moving-toward-a-lean-value-stream/
+3. Kang, N.; Zhao, C.; Li, J.; Horst, J. A.: A Hierarchical structure of key performance indicators for operation management and continuous improvement in production systems. International Journal of Production Research 54 (21), 2016, pp. 6333–6350. NIST version: https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=919754
+4. VDMA 66412-1:2009-10 Manufacturing Execution Systems (MES) – Kennzahlen (KPIs). 36 pages; amended by VDMA 66412-1/A1:2010-05. DIN Media: https://6sku3uaup9f9.din.de/en/technical-rule/vdma-66412-1/122410632
+5. Schließmann, A.; Strahlberger, M.: Kennzahlen und Prozessgrößen wohl definiert. MES-Kennzahlen basierend auf Maschinenzuständen (well-defined KPIs: MES KPIs based on machine states). ZWF 109 (7–8), 2014, pp. 549–551. DOI: 10.3139/104.111180. https://www.degruyterbrill.com/document/doi/10.3139/104.111180/html
+6. Nakajima, S.: Introduction to TPM: Total Productive Maintenance. Productivity Press, Cambridge (MA) 1988, ISBN 978-0-915299-23-2 (bibliographic data per [8]).
+7. Muchiri, P.; Pintelon, L.: Performance measurement using overall equipment effectiveness (OEE): literature review and practical application discussion. International Journal of Production Research 46 (13), 2008, pp. 3517–3535. DOI: 10.1080/00207540601142645. https://scispace.com/pdf/performance-measurement-using-overall-equipment-3udssbfefm.pdf
+8. Overall equipment effectiveness. Wikipedia (English), with references to Nakajima 1982/1988/1989 and Hartmann 1992 (TEEP). https://en.wikipedia.org/wiki/Overall_equipment_effectiveness
+9. Takt Time (lexicon term). Lean Enterprise Institute. https://www.lean.org/lexicon-terms/takt-time/
+10. Cycle Time (lexicon term, with lead time, processing time, value-creating time, effective machine cycle time). Lean Enterprise Institute. https://www.lean.org/lexicon-terms/cycle-time/
+11. Single Minute Exchange of Die (lexicon term). Lean Enterprise Institute, referring to Shingo, S.: A Revolution in Manufacturing: The SMED System. Productivity Press, 1985. https://www.lean.org/lexicon-terms/single-minute-exchange-of-die/
+12. Rother, M.; Shook, J.: Learning to See: Value Stream Mapping to Create Value and Eliminate Muda. Lean Enterprise Institute, Brookline (MA) 1998 (Shingo Research Prize 1999); current edition LEI 2018. https://www.lean.org/store/workbooks/learning-to-see/
+13. Little, J. D. C.: A Proof for the Queuing Formula: L = λW. Operations Research 9 (3), 1961, pp. 383–387. DOI: 10.1287/opre.9.3.383. https://ideas.repec.org/a/inm/oropre/v9y1961i3p383-387.html
+14. Nyhuis, P.; Wiendahl, H.-P.: Logistische Kennlinien. Grundlagen, Werkzeuge und Anwendungen. 3rd ed., Springer, Berlin/Heidelberg 2012 (VDI-Buch), ISBN 978-3-540-92838-6 (English edition: Fundamentals of Production Logistics: Theory, Tools and Applications, Springer, Berlin/Heidelberg 2009, ISBN 978-3-540-34210-6). Sample (table of contents and abbreviations): https://lesejury.de/media/samples/393/9783540928393_leseprobe.pdf · Chapter "Zusammenfassung und Ausblick": https://rd.springer.com/content/pdf/10.1007%2F978-3-540-92839-3_10.pdf
+15. Durchlaufzeit. Wikipedia (German), referring to Wiendahl, H.-P.: Fertigungsregelung. Hanser, Munich 1997, ISBN 3-446-19084-8. https://de.wikipedia.org/wiki/Durchlaufzeit
+16. REFA (ed.): Lexikon der Betriebsorganisation. Carl Hanser, Munich 1993, ISBN 3-446-17523-7, p. 195 (bibliographic data per [17]).
+17. Auftragszeit. Wikipedia (German). https://de.wikipedia.org/wiki/Auftragszeit
+18. Davies, A.; Lal, S.; Perez, F.; Potdar, S.: Defining 'on-time, in-full' in the consumer sector. McKinsey & Company, June 13, 2019. https://www.mckinsey.com/capabilities/operations/our-insights/defining-on-time-in-full-in-the-consumer-sector
+19. DGUV: Unfallrisiko bei der Arbeit 2025 erneut gesunken (workplace accident risk fell again in 2025). Press release, September 22, 2026. https://dguv.de/de/mediencenter/pm/pressearchiv/2026/quartal_3/details_3_713348.jsp
+20. Section 193 SGB VII (German Social Code, Book VII): employer's duty to report an insured event. https://www.gesetze-im-internet.de/sgb_7/__193.html
+21. Lost time injury frequency rates (LTIFR). Safe Work Australia. https://data.safeworkaustralia.gov.au/node/33
+22. ISO 50006:2023 Energy management systems – Evaluating energy performance using energy performance indicators and energy baselines. https://www.iso.org/standard/79367.html
+23. Strathern, M.: 'Improving ratings': audit in the British University system. European Review 5 (3), 1997, pp. 305–321. DOI: 10.1002/(SICI)1234-981X(199707)5:3<305::AID-EURO184>3.0.CO;2-4
+24. Goodhart, C.: Problems of Monetary Management: The UK Experience. Papers in Monetary Economics, Vol. 1, Reserve Bank of Australia, Sydney 1975 (bibliographic data per https://en.wikipedia.org/wiki/Goodhart%27s_law).
+25. DIVIDE function (DAX). Microsoft Learn. https://learn.microsoft.com/en-us/dax/divide-function-dax
+26. DIVIDE function vs. divide operator (/) in DAX. Microsoft Learn. https://learn.microsoft.com/en-us/dax/best-practices/dax-divide-function-operator
+27. Understand star schema and the importance for Power BI. Microsoft Learn (updated December 30, 2024). https://learn.microsoft.com/en-us/power-bi/guidance/star-schema
+28. Power BI service per-user and capacity-based licenses. Microsoft Learn (updated August 24, 2026; re-checked November 20, 2026). https://learn.microsoft.com/en-us/power-bi/service-features-license-type
+29. Get started with goals and scorecards in Power BI. Microsoft Learn (updated March 5, 2026). https://learn.microsoft.com/power-bi/create-reports/service-goals-introduction
+30. Polaris Analyzer (vendor page). iFAKT GmbH. https://www.ifakt.de/en/solutions/analyzer
+31. Polaris VSM (vendor page, with overview of the Polaris suite). iFAKT GmbH. https://www.ifakt.de/en/software/vsm/
+32. Drees, J.; Sack, C. (iFAKT GmbH): Produktionsoptimierung durch Kennzahlen der Wertstrom-Modellierung (production optimization through value stream modeling KPIs). ZWF 106 (6), 2011, pp. 466–470. DOI: 10.3139/104.110589. https://www.degruyterbrill.com/document/doi/10.3139/104.110589/html
+33. About iFAKT (company page). iFAKT GmbH. https://www.ifakt.de/en/company/
+34. ISO 50006:2023, preview pages (second edition 2023-05, replaces ISO 50006:2014). ANSI Webstore. https://webstore.ansi.org/preview-pages/ISO/preview_ISO+50006-2023.pdf
+35. Manufacturing KPIs: The Metrics That Actually Drive the Floor. Fabrico (vendor blog), published June 29, 2026, updated October 26, 2026. https://www.fabrico.io/blog/manufacturing-kpis/
+36. Quality Glossary of Terms, Acronyms & Definitions (entries "first pass yield", "overall equipment effectiveness", "parts per million"). ASQ. https://asq.org/quality-resources/quality-glossary
+37. World-Class OEE: What Is It and How Close Are You Actually? TEEPTRAK (vendor page, benchmarks from own data). https://teeptrak.com/en/world-class-oee-benchmark/
+38. ISO 22400 KPI Selection Guide. Fabrico (secondary source for the count of 34 KPIs and the categories). https://www.fabrico.io/blog/iso-22400-kpi-selection-guide/
+39. Competitor pages: https://netsuite.com/portal/resource/articles/erp/manufacturing-kpis-metrics.shtml · https://www.insightsoftware.com/blog/30-manufacturing-kpis-and-metric-examples/ · https://www.dataparc.com/blog/manufacturing-kpi-examples-10-formulas-for-measuring-success/ · https://machinemetrics.com/blog/manufacturing-kpis · https://tulip.co/blog/manufacturing/how-to-calculate-34-manufacturing-kpis/ · https://www.cascade.app/blog/manufacturing-kpis · https://scw.ai/blog/manufacturing-kpis/ · https://upkeep.com/learning/what-are-the-best-metrics-and-kpis-for-manufacturing-companies/ · https://safetyculture.com/topics/kpi/manufacturing-kpis/ (redirects to mitti.com) · https://www.vorne.com/learning-center/kpi.htm
+40. ISA-95 Standard: Enterprise-Control System Integration (ANSI/ISA-95, IEC 62264; Purdue-based Levels 0–4, Level 3 = manufacturing operations management). International Society of Automation. https://www.isa.org/standards-and-publications/isa-standards/isa-95-standard
+41. Equipment Performance Metrics (SEMI E10 RAM and utilization; SEMI E79 equipment productivity incl. OEE). SEMI. https://semi.org/en/products-services/standards/step/equipment-performance-metrics
+42. OSHA: Clarification on how the formula is used by OSHA to calculate incident rates. Standard interpretation letter, August 23, 2016. https://www.osha.gov/laws-regs/standardinterpretations/2016-08-23
+43. U.S. Bureau of Labor Statistics: Employer-Reported Workplace Injuries and Illnesses – 2025. News release, November 18, 2026. https://www.bls.gov/news.release/osh.nr0.htm
+44. U.S. Bureau of Labor Statistics: Number and rate of nonfatal work injuries and illnesses in private industries, 2025 (chart). https://www.bls.gov/charts/injuries-and-illnesses/number-and-rate-of-nonfatal-work-injuries-and-illnesses-by-industry.htm
+45. 29 CFR 1904.39 – Reporting fatalities, hospitalizations, amputations, and losses of an eye as a result of work-related incidents to OSHA. https://www.osha.gov/laws-regs/regulations/standardnumber/1904/1904.39
+46. U.S. Bureau of Labor Statistics: Occupational Safety and Health Definitions (recordable cases, DART, days away from work). https://www.bls.gov/iif/definitions/occupational-safety-and-health-definitions.htm
+47. Supply Chain Dive: news brief on Walmart's on-time, in-full requirement for suppliers (87 %, two-day window, 3 % fine). March 8, 2019. https://www.supplychaindive.com/news/walmart-on-time-in-full-87-suppliers/550083/

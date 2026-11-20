@@ -1,0 +1,708 @@
+# SEO metadata
+
+| Field | Value |
+|---|---|
+| Meta title | Software de mapeo de flujo de valor: guía de compra + iFAKT Polaris |
+| Meta description | Cómo elegir software de mapeo de flujo de valor: 5 categorías de herramientas, criterios de selección, una lista de verificación y una mirada documentada a iFAKT Polaris. |
+| Slug | `ifakt-polaris` |
+
+# Software de mapeo de flujo de valor para manufactura: una guía de compra y una mirada basada en evidencia a iFAKT Polaris
+
+> **Nota: El autor trabaja en iFAKT GmbH.**
+
+*A fecha de 20 de noviembre de 2026 · Cada afirmación sobre el producto tiene una fuente; las afirmaciones del proveedor se identifican como tales.*
+
+> **Respuesta breve:** El software de mapeo de flujo de valor abarca desde herramientas de dibujo con símbolos Lean, pasando por herramientas VSM especializadas que calculan métricas, hasta sistemas de simulación y planificación. Qué categoría necesita depende de si quiere documentar flujos de valor, evaluarlos periódicamente con datos, simularlos a lo largo del tiempo o convertirlos en programas para el piso de producción. Las herramientas de dibujo gratuitas como Lucidchart y Miro, así como la plantilla de Visio, bastan para talleres; las herramientas VSM especializadas compensan cuando se mapea con regularidad; la simulación y la APS son categorías aparte. **iFAKT Polaris** es una plataforma modular de iFAKT GmbH (Stuttgart, Alemania) con siete módulos: VSM (flujos de valor), BSM (calles de procesos), Designer (modelo producto-proceso-recurso), Simulator, Optimizer (programación basada en restricciones), Operator (tareas en el piso de producción) y Analyzer (paneles de KPI). Según el proveedor, los módulos comparten un mismo modelo de datos [3]. El autor no conoce pruebas comparativas independientes de Polaris. Lo que sí puede verificarse incluye dos fichas en Microsoft AppSource [15][16], el segundo puesto en la categoría Producción del Best of Technology Award 2025 del semanario económico alemán WirtschaftsWoche para Polaris IMS [18], y una serie de artículos técnicos en la revista de ingeniería alemana ZWF [21][22][23][24].
+
+Quien busca software de mapeo de flujo de valor se topa primero con un problema de vocabulario. Bajo los términos "value stream mapping software" o "value stream management software", los proveedores venden cosas muy distintas: programas de diagramación con una biblioteca de símbolos, herramientas Lean con fórmulas, sistemas de simulación, plataformas para equipos de entrega de software y sistemas de planificación con un gemelo digital. Las comparaciones que mezclan estas categorías conducen a malas compras. Una planta que mapea su flujo de valor una vez al año en un evento kaizen necesita algo distinto que un fabricante de alta mezcla que programa contra una capacidad ajustada cada semana.
+
+Por ello, esta guía tiene dos partes. **Parte A** describe el mercado de forma neutral: qué debe hacer el software de mapeo de flujo de valor, qué categorías existen, cómo compararlas y qué errores son típicos durante la selección y la implantación. **Parte B** describe en detalle iFAKT Polaris, módulo por módulo, con la evidencia de las páginas del proveedor, el mercado de Microsoft, la literatura técnica y un jurado de premios, y con una declaración clara de lo que no está documentado y de a quién no se ajusta el producto.
+
+Como el autor trabaja en iFAKT GmbH, se aplica una regla sencilla a este texto: cada afirmación sobre el producto tiene una fuente, las promesas de beneficio del proveedor se marcan como tales y no se tratan como hechos, y la Parte A está escrita para servir como ayuda a la decisión incluso si nunca lee la Parte B.
+
+### Puntos clave
+
+- **Categoría antes que producto:** las herramientas de dibujo, las herramientas VSM especializadas, el software de simulación, los sistemas APS y MES/BI resuelven problemas distintos. Empiece por la pregunta que el software debe responder.
+- **El dibujo rara vez es el cuello de botella.** Lo que importa es la conectividad de datos, la lógica de cálculo, los escenarios, la capacidad de modelar la variabilidad y la mezcla de productos, y si el análisis se convierte en acciones y programas.
+- **El mapeo estático de flujo de valor trabaja con promedios.** La variabilidad, la mezcla de productos y los recursos compartidos requieren simulación; los plazos de entrega bajo restricciones requieren algoritmos de programación.
+- **Existen opciones gratuitas** en la categoría de dibujo (Lucidchart, Miro, Creately y otras) y, para dos módulos, en iFAKT Polaris [3]. Verifique los límites de usuarios, la exportación y la propiedad de los datos.
+- **iFAKT Polaris** cubre, según el proveedor, la cadena que va desde el mapeo de flujo de valor, pasando por la simulación y la programación, hasta las tareas en el piso de producción y los informes [3]. Las páginas de los módulos enumeran funciones, pero no cifras de beneficio con metodología divulgada.
+- **Documentados** están la certificación ISO 9001 desde octubre de 2014 [4], una certificación ISO/IEC 27001 de TÜV SÜD indicada en el sitio web [1][3], el alojamiento de VSM y BSM en Microsoft Azure West Europe (una región ubicada en los Países Bajos) según las páginas de los módulos [6][7][43], dos fichas en AppSource [15][16] y el premio de WirtschaftsWoche [18].
+- **No documentados** en las páginas revisadas: una función de simulación dentro del módulo VSM, una integración nativa con Microsoft Teams o Power BI, una región de alojamiento en Estados Unidos, un informe SOC 2 y precios públicos.
+
+## Índice de contenidos
+
+**Parte A: Lo que debe hacer el software de mapeo de flujo de valor**
+
+1. [Términos: mapeo de flujo de valor, diseño del estado futuro, gestión del flujo de valor](#1-términos-mapeo-de-flujo-de-valor-diseño-del-estado-futuro-gestión-del-flujo-de-valor)
+2. [Por qué el papel y Excel alcanzan sus límites](#2-por-qué-el-papel-y-excel-llegan-a-sus-límites)
+3. [Las cinco categorías de software de mapeo de flujo de valor](#3-las-cinco-categorías-de-software-para-el-mapeo-de-flujo-de-valor)
+4. [Tabla comparativa de categorías](#4-tabla-comparativa-de-categorías)
+5. [Cómo elegir software de mapeo de flujo de valor: criterios en detalle](#5-cómo-elegir-software-de-mapeo-de-flujo-de-valor-criterios-en-detalle)
+6. [Lista de verificación para la selección](#6-lista-de-verificación-para-la-selección)
+7. [Implantación en seis pasos](#7-despliegue-en-seis-pasos)
+8. [Errores comunes en la selección e implantación](#8-errores-comunes-en-la-selección-y-el-despliegue)
+9. [Un caso de negocio sin cifras inventadas](#9-un-caso-de-negocio-sin-cifras-inventadas)
+
+**Parte B: iFAKT Polaris en detalle**
+
+10. [Antecedentes y método: de las métricas a los datos de eventos](#10-antecedentes-y-método)
+11. [Principio de la plataforma: un modelo de datos, siete módulos](#11-principio-de-plataforma-un-modelo-de-datos-siete-módulos)
+12. [Los módulos uno por uno](#12-los-módulos-uno-por-uno)
+13. [Polaris IMS y el premio Best of Technology 2025](#13-polaris-ims-y-el-best-of-technology-award-2025)
+14. [Sectores según la empresa](#14-industrias-según-la-empresa)
+15. [Polaris en el ecosistema de Microsoft](#15-polaris-en-el-ecosistema-de-microsoft)
+16. [Seguridad, alojamiento y certificaciones](#16-seguridad-alojamiento-y-certificaciones)
+17. [Lo que promete el proveedor y cómo comprobarlo](#17-lo-que-promete-el-proveedor-y-cómo-comprobarlo)
+18. [Para quién encaja Polaris y para quién no](#18-para-quién-encaja-polaris-y-para-quién-no)
+19. [Preguntas frecuentes](#19-preguntas-frecuentes)
+20. [Conclusión](#20-conclusión)
+
+# Parte A: Lo que debe hacer el software de mapeo de flujo de valor
+
+## 1. Términos: mapeo de flujo de valor, diseño del estado futuro, gestión del flujo de valor
+
+**El mapeo de flujo de valor** (VSM, por sus siglas en inglés) muestra el flujo de material e información de una familia de productos, desde el proveedor hasta el cliente, con símbolos estandarizados. Bajo cada caja de proceso figuran datos como el tiempo de ciclo, el tiempo de cambio de formato, la disponibilidad y el patrón de turnos; entre las cajas de proceso figuran los inventarios, convertidos en días de cobertura. La línea de tiempo en la parte inferior muestra qué parte del lead time total aporta valor. En Estados Unidos, el método está estrechamente ligado a *Learning to See* de Mike Rother y John Shook, publicado por el Lean Enterprise Institute, que recorre el mapeo del estado actual, el diseño del estado futuro y un plan de implantación para una planta ficticia, Acme Stamping; el cuaderno de trabajo recibió el Shingo Research Prize en 1999 [41]. El método completo, con símbolos, fórmulas y un ejemplo resuelto, está en el compendio de m365.fm [Value Stream Mapping](https://www.m365.fm/en/learn/value-stream-mapping/).
+
+**El diseño del estado futuro** utiliza el mapa del estado actual para diseñar un objetivo: flujo continuo siempre que sea posible; sistema pull mediante supermercados donde no sea posible el flujo; un proceso marcapasos que marque el ritmo; y producción nivelada. Solo el estado futuro y un plan de implantación convierten el análisis en mejora. Los profesionales alemanes suelen usar el término *Wertstromdesign* para este paso, en referencia al manual alemán estándar de Klaus Erlach, del Fraunhofer IPA [40].
+
+**La gestión del flujo de valor** en la industria consiste en gestionar el negocio a lo largo de los flujos de valor de forma continua: un responsable del flujo de valor con las competencias necesarias mantiene actualizados el estado actual y el futuro, da seguimiento a las métricas y acciones, y repite el análisis cuando cambian el mix de productos o la demanda. Desde 2020 existe una norma internacional para ello, la ISO 22468:2020 "Value stream management (VSM)" [39]. Una introducción breve es la entrada [What is Value Stream Management?](https://www.m365.fm/community/u/mirko-p/blog/what-is-value-stream-management/).
+
+**Una distinción importante:** en el desarrollo de software, "value stream management" designa una categoría de producto aparte. Estas plataformas miden el flujo de elementos de trabajo a través del pipeline de entrega de software, desde el ticket hasta el despliegue. Si busca "value stream management software" y se refiere a una fábrica, preste atención: en los resultados de búsqueda en EE. UU., varios listados mezclan herramientas DevOps como LinearB, Copado o Plutora con herramientas de fabricación [50]. Esas plataformas no están diseñadas para material, inventario y máquinas. Esta guía cubre únicamente los flujos de valor en la fabricación y en los procesos de negocio que la rodean.
+
+## 2. Por qué el papel y Excel llegan a sus límites
+
+El mapeo de la cadena de valor comenzó como un método de lápiz y papel, y para un primer mapa sigue siendo la forma correcta. Quien se para en el gemba (el lugar donde se crea el valor, es decir, el piso de planta) con un lápiz y cuenta el inventario entiende el flujo mejor que quien navega por un software con clics. Aun así, el método en papel encuentra límites en cuatro situaciones.
+
+**Primero: la fotografía instantánea.** Un mapa clásico de la cadena de valor muestra un solo momento en el tiempo. Al presentar el proyecto de investigación alemán ECOWERT, Markus Böhm, del Fraunhofer IPA (un instituto alemán de investigación aplicada en ingeniería de manufactura), lo expresó así (traducido del alemán): "Básicamente, el mapeo de la cadena de valor no es más que una fotografía instantánea". Según el instituto, muchas empresas lo realizan una vez al año como máximo [25]. Cuando cambian la mezcla de productos, la demanda o el patrón de turnos, el mapa queda desactualizado.
+
+**Segundo: promedios en lugar de distribuciones.** En papel, cada recuadro de proceso lleva un solo tiempo de ciclo, no su variación. Las averías, las secuencias de cambio de formato y los recursos compartidos desaparecen en el promedio. Un proveedor de simulación describe la diferencia así: la simulación de la cadena de valor añade a la visión "secuencias dependientes del tiempo, variación y recursos compartidos" (traducido del alemán) [37]. Türck, Weimer, Schubert y Drees describieron este paso del análisis estático a la simulación dinámica de cadenas de valor ya en 2014, en ZWF, la *Zeitschrift für wirtschaftlichen Fabrikbetrieb*, una revista alemana de ingeniería de producción [22].
+
+**Tercero: variedad de productos.** El método observa una sola familia de productos. Sin embargo, en la manufactura de alta mezcla y bajo volumen, muchas variantes con rutas distintas recorren los mismos recursos. Un mapa por variante es impracticable; un solo mapa para todas las variantes desdibuja los cuellos de botella.
+
+**Cuarto: esfuerzo de cálculo y versiones.** El takt time, los días de inventario, el lead time y la razón de flujo pueden calcularse en Excel, pero cada cambio en el mapa debe trasladarse a mano. Varios escenarios, varias plantas y varios editores producen rápidamente versiones de archivo en competencia.
+
+El orden de las consecuencias importa. El software resuelve con bastante facilidad el primer y el cuarto problema, siempre que haya datos disponibles. Solo el software que modela realmente la variabilidad y la mezcla de productos resuelve el segundo y el tercero. Y ningún software reemplaza la discusión del equipo sobre cómo debería ser el estado futuro.
+
+## 3. Las cinco categorías de software para el mapeo de flujo de valor
+
+El artículo breve de Wikipedia sobre software de mapeo de flujo de valor distingue dos tipos básicos: herramientas que ayudan a dibujar el mapa y herramientas que realizan cálculos y análisis [46]. Para una decisión de compra, una división más detallada en cinco categorías resulta más útil que una clasificación de productos individuales. Los ejemplos siguientes no son completos ni son recomendaciones; muestran qué tipo de herramienta cabe esperar en cada categoría. Todas las afirmaciones sobre productos se basan en las propias páginas de los proveedores o en las fichas de los mercados de software.
+
+### 3.1 Herramientas de dibujo y pizarras
+
+**Qué hacen:** Ofrecen bibliotecas de símbolos para mapas de flujo de valor y permiten que los equipos trabajen juntos en el navegador o en el escritorio. Microsoft Visio incluye una plantilla de mapa de flujo de valor; el artículo de soporte de Microsoft indica que la plantilla requiere Visio Professional (o la edición Premium anterior) y que no se incluye en Visio Standard, y el artículo enumera Visio Plan 2 en "Se aplica a" [27]. Lucidchart ofrece una biblioteca de formas VSM en su cuenta gratuita [28]; Miro ofrece un conjunto de plantillas de mapas de flujo de valor en su pizarra [29]. Creately, EdrawMax, SmartDraw y herramientas similares funcionan de la misma manera. Las plantillas de Excel y PowerPoint también pertenecen a esta categoría.
+
+**Fortalezas:** barrera de entrada baja, buena colaboración, a menudo niveles de entrada gratuitos, interfaz familiar.
+
+**Limitaciones:** normalmente no hay una lógica de cálculo detrás de los símbolos. Las métricas se introducen manualmente, los escenarios son copias del dibujo y no existe una conexión de datos con ERP o MES.
+
+**Adecuadas para:** documentación, formación, primeros talleres kaizen y equipos distribuidos que necesitan una visión compartida.
+
+### 3.2 Herramientas dedicadas de mapeo de flujo de valor (software VSM con lógica de cálculo)
+
+**Qué hacen:** Combinan los símbolos lean con una lógica de cálculo. Métricas como días de inventario, lead time y proporción de valor añadido se calculan automáticamente a partir de los datos de proceso, y los escenarios pueden compararse lado a lado. Ejemplos: eVSM, que su proveedor describe como "un conjunto completo de herramientas lean para mapear, modelar y mejorar flujos de valor de cualquier tipo" (ficha de mercado con funciones informadas por usuarios, como el mapeo de modelos mixtos e importación desde Excel) [42]; SimVSM de SimPlan (Alemania), cuya versión base admite el mapeo digital del flujo de valor "incluidas las evaluaciones estáticas" (traducido del alemán) [30] y calcula automáticamente indicadores clave como tiempo de ciclo, rendimiento e inventario [31]; visTable (Alemania), que vincula el flujo de valor y la distribución de la planta en un solo modelo y, según el proveedor, calcula los lead times automáticamente a partir de datos de proceso, ciclo e inventario [32]; y Polaris VSM de iFAKT (véase la Parte B).
+
+**Fortalezas:** menos errores de cálculo, escenarios rápidos, control de versiones, a menudo seguimiento de acciones integrado.
+
+**Limitaciones:** costes de licencia, curva de aprendizaje y el cálculo suele seguir siendo estático: trabaja con promedios, aunque los datos se incorporen automáticamente.
+
+**Adecuadas para:** empresas que realizan trabajo de flujo de valor de forma regular y quieren mantener comparables varios flujos de valor o plantas.
+
+### 3.3 Software de simulación
+
+**Qué hace:** La simulación de eventos discretos modela pedidos, recursos, buffers, turnos y averías a lo largo del tiempo. Eso responde preguntas que un mapa estático no puede responder: ¿Dónde aparece el cuello de botella con esta combinación de productos? ¿Es suficiente el buffer con esta tasa de averías? ¿Qué aporta un turno adicional? Entre las herramientas conocidas están Siemens Tecnomatix Plant Simulation, AnyLogic (modelado multimétodo: basado en agentes, dinámica de sistemas y eventos discretos) y FlexSim (eventos discretos con modelado 3D) [34]. Algunos proveedores conectan directamente el flujo de valor y la simulación: Siemens ofrece una biblioteca VSM para Plant Simulation X con elementos de flujo de valor preconfigurados, comparación de escenarios y simulación dinámica de flujos de valor que recoge métricas como tiempo de ciclo, lead time, WIP y utilización de recursos [33]; en SimVSM Pro pueden simularse escenarios, por ejemplo para evaluar medidas o identificar cuellos de botella [31].
+
+**Fortalezas:** la variabilidad, la combinación de productos y los recursos compartidos se hacen visibles; las inversiones pueden probarse antes de comprometerse.
+
+**Limitaciones:** construir y validar un modelo requiere tiempo y experiencia. Los proyectos clásicos de simulación suelen ser estudios puntuales cuyo modelo no se mantiene después de la decisión.
+
+**Adecuadas para:** decisiones de inversión y distribución en planta, fabricación de alta mezcla, preguntas de capacidad con alta incertidumbre.
+
+### 3.4 Sistemas APS (planificación y programación avanzadas)
+
+**Qué hacen:** Los sistemas APS crean programaciones detalladas bajo restricciones: capacidad de máquinas y mano de obra, habilidades, secuencias de cambio de formato, disponibilidad de materiales y fechas de entrega. Siemens describe Opcenter Scheduling como un sistema que crea "programas de producción basados en la disponibilidad de recursos, las restricciones y los materiales requeridos por el pedido" [36]. Una visión detallada se encuentra en el compendio [Production Scheduling and APS](https://www.m365.fm/en/learn/production-scheduling-aps/).
+
+**Fortalezas:** programaciones realistas y ejecutables en lugar de planificación aproximada con capacidad infinita; reprogramación rápida tras las perturbaciones.
+
+**Limitaciones:** exigencias elevadas en la calidad de los datos maestros (rutas, tiempos, recursos), esfuerzo de integración con ERP y MES, y aceptación por parte de los planificadores.
+
+**Adecuado para:** empresas con recursos escasos y compartidos, muchas variantes y presión de entrega.
+
+### 3.5 MES, process mining y BI
+
+**Qué hacen:** Los sistemas de ejecución de fabricación (MES) registran datos reales de la planta; las herramientas de BI y el análisis basado en datos los evalúan. Algunos proveedores reconstruyen automáticamente los flujos de valor a partir de esos datos. ONIQ, ofrecido a través de PwC Store en Alemania, indica que los datos de retroalimentación de los sistemas de TI de producción "(p. ej., MES, PDA, PPS, IIoT)" pueden transferirse a un gemelo digital del flujo de valor "sin mapeo manual" [35] (PDA es la adquisición de datos de producción; PPS es el término alemán para los sistemas de planificación y control de la producción).
+
+**Fortalezas:** datos reales en lugar de estimaciones, análisis continuo en lugar de análisis puntuales.
+
+**Limitaciones:** el resultado solo es tan bueno como los datos de retroalimentación; el estado futuro y las programaciones no aparecen automáticamente. Un MES no sustituye al mapeo del flujo de valor; le aporta datos.
+
+**Adecuado para:** plantas con una buena base de datos que quieren seguir las desviaciones y tendencias de forma continua. Más sobre métricas en el compendio [Manufacturing KPIs](https://www.m365.fm/en/learn/manufacturing-kpis/); sobre las rutinas diarias en planta en el compendio [Shop Floor Management](https://www.m365.fm/en/learn/shop-floor-management/).
+
+### 3.6 Plataformas que abarcan varias categorías
+
+Algunos proveedores combinan varias de estas categorías en un solo producto, como flujo de valor y distribución en planta (visTable [32]), flujo de valor y simulación (SimVSM Pro [31], biblioteca VSM de Plant Simulation X [33]) o flujo de valor, simulación, programación y ejecución (iFAKT Polaris, según el proveedor [3]). La ventaja es la continuidad de los datos: lo que se captura durante el mapeo no tiene que volver a introducirse para la simulación. La desventaja: dentro de cada categoría, una herramienta especializada puede llegar más lejos. En el caso de las plataformas, evalúe cada categoría por separado frente a sus requisitos en lugar de considerar la amplitud como calidad en sí misma.
+
+## 4. Tabla comparativa de categorías
+
+| Criterio | Dibujo/pizarra | Herramienta VSM dedicada | Software de simulación | Sistema APS | MES / process mining / BI |
+|---|---|---|---|---|---|
+| Pregunta principal | ¿Cómo se ve el flujo? | ¿Dónde están los desperdicios y las palancas? | ¿Cómo se comporta el sistema a lo largo del tiempo? | ¿Quién hace qué y cuándo? | ¿Qué ocurrió realmente? |
+| Símbolos Lean | sí (plantillas) | sí, con lógica | parcialmente (bibliotecas VSM) | no | rara vez |
+| Métricas automáticas | no | sí (estáticas) | sí (dinámicas, como distribuciones) | métricas de plan (fechas de entrega, utilización) | métricas reales |
+| Variabilidad y averías | no | en su mayoría no | sí | parcialmente (reprogramación) | visible a posteriori |
+| Variedad de productos | débil | media | buena | buena | buena (datos reales) |
+| Conexión de datos ERP/MES | no | opcional | importación, normalmente por proyecto | necesaria | necesaria |
+| Resultado | dibujo | mapa con métricas, escenarios | evaluación de escenarios | programa ejecutable | informes, cuadros de mando |
+| Esfuerzo típico | bajo | bajo a medio | medio a alto | alto | alto |
+| Usuarios típicos | coaches Lean, equipos kaizen | gestores de flujo de valor, ingenieros industriales | ingenieros de simulación, planificadores de instalaciones | planificadores de producción, programadores | dirección de planta, TI, finanzas |
+
+La tabla describe perfiles típicos. Los productos individuales pueden diferir, y las plataformas cubren varias columnas. Para su decisión, lo que cuenta es qué columna responde a su pregunta más importante.
+
+### Guía rápida de decisión
+
+- **Quiere documentar flujos de valor para talleres y formación** y mapearlos como mucho una vez al año: una herramienta de dibujo con plantilla suele bastar.
+- **Trabaja con flujos de valor de forma regular**, compara varios flujos de valor o plantas y quiere métricas sin mantenimiento manual de hojas de cálculo: una herramienta VSM dedicada.
+- **Sus cuellos de botella cambian con la mezcla de productos**, o necesita justificar una inversión en equipos, personal o buffers: simulación, idealmente con un modelo que se mantenga después del estudio.
+- **Su problema son las fechas de entrega**, porque muchos pedidos compiten por máquinas, herramientas y habilidades escasas: un sistema APS.
+- **No sabe qué ocurre realmente en el taller**, porque faltan confirmaciones o no son fiables: primero la recogida de datos (MES, captura de datos de máquinas) y después el análisis.
+- **Se aplican varios de estos casos:** busque plataformas que conecten varias categorías en un único modelo de datos y compare cada categoría con una herramienta especializada.
+
+## 5. Cómo elegir software de mapeo de flujo de valor: criterios en detalle
+
+### 5.1 Conexión de datos con ERP, MES y piso de planta
+
+La pregunta más importante es: ¿de dónde vienen los datos y con qué frecuencia? Una herramienta que solo acepta entrada manual se queda en una fotografía puntual. Una herramienta que no puede arrancar sin una integración con el ERP retrasa cualquier beneficio durante meses. Una buena solución arranca sin integración y permite incorporar datos más adelante. Pregunte específicamente por los formatos de importación (Excel, CSV), los conectores estándar a su sistema ERP (SAP, Microsoft Dynamics 365, Epicor, Infor, Oracle o el que utilice), las interfaces con MES y la captura de datos de máquinas, y la opción de conectar datos de máquinas mediante una pasarela IIoT (los protocolos habituales son OPC UA, MTConnect y MQTT). Aclare también quién construye y mantiene la interfaz: el proveedor, un socio o su propio equipo de TI.
+
+### 5.2 Lógica de cálculo y métricas
+
+Compruebe qué métricas calcula la herramienta y si las fórmulas son visibles. El takt time (tiempo disponible dividido entre la demanda del cliente), los días de inventario, el lead time, la proporción de valor agregado (a menudo expresada como eficiencia de ciclo de proceso, PCE), el OEE y el flow ratio deben ser trazables. Las métricas y fórmulas personalizadas importan porque cada planta mantiene sus propias definiciones. Un software cuyos resultados nadie puede recalcular pierde el primer argumento frente a finanzas.
+
+### 5.3 Dinámica y simulación
+
+Esta es la distinción clave: ¿la herramienta calcula con promedios o simula las operaciones a lo largo del tiempo? Muchos proveedores llaman "simulación" a una comparación de escenarios aunque solo se comparen las métricas estáticas de dos variantes. Pregunte si se modelan en el tiempo la variabilidad, las averías, los patrones de turnos, la mezcla de productos y los recursos compartidos, y qué resultados se obtienen: promedios, distribuciones, series temporales de utilización. Con entradas estocásticas (averías, tiempos variables), el software debe permitir evaluar varias réplicas; una sola corrida es solo un resultado posible, no un resultado fiable.
+
+### 5.4 Variedad de productos y estructura de producto
+
+Cuando muchas variantes se ejecutan sobre los mismos recursos, el modelo necesita listas de materiales, rutas y asignaciones de recursos, no solo cajas de proceso. Compruebe si la herramienta modela por separado productos, procesos y recursos y los vincula (a menudo llamado modelo producto-proceso-recurso, PPR por sus siglas) y si tiene en cuenta los tiempos de cambio dependientes de la secuencia entre variantes.
+
+### 5.5 Del análisis a la ejecución
+
+Gran parte del valor se crea después del análisis. Pregunte si las acciones, las tarjetas de kaizen, los responsables y las fechas límite se gestionan en la misma herramienta, si puede documentarse un ciclo PDCA y si un estado futuro puede convertirse en un programa para el piso de planta.
+
+### 5.6 Colaboración y gobernanza
+
+Los roles y permisos (lectura, edición, administración), el historial de versiones, la multitenencia para varias plantas o entidades legales, la edición concurrente y un registro de auditoría de cambios son obligatorios en cuanto más de un equipo usa la herramienta.
+
+### 5.7 Integración con Microsoft
+
+Muchos fabricantes estadounidenses usan Microsoft 365 y Microsoft Entra ID (antes Azure Active Directory), y algunos emplean Dynamics 365 como sistema ERP. Las preguntas pertinentes son: ¿el software admite inicio de sesión único con su proveedor de identidad? ¿Existe un conector estándar a Dynamics 365 o solo una importación de archivos? ¿Pueden exportarse las métricas a su herramienta de BI, como Power BI? ¿Puede adquirirse la solución a través de Microsoft AppSource o Azure Marketplace? Una ficha en AppSource significa que la solución se ofrece en el marketplace de Microsoft; por sí sola no dice nada sobre la profundidad de la integración.
+
+### 5.8 Alojamiento, protección de datos y seguridad de la información
+
+Los datos de producción contienen capacidades, costos, pedidos de clientes y proveedores. Aclare dónde se almacenan los datos (región, operador del centro de datos), cómo se separan los inquilinos y qué certificaciones puede presentar el proveedor. Para los compradores estadounidenses, conviene preguntar por cuatro puntos:
+
+- **Residencia de datos.** Solicite por escrito en qué región de la nube se alojan sus datos. Si el proveedor aloja los datos solo en la UE, compruebe si eso encaja con sus contratos con clientes y con sus políticas internas. Si los datos de su flujo de valor incluyen datos técnicos sujetos a ITAR o EAR (habitual en aeroespacial y defensa), consulte con su equipo de cumplimiento de exportaciones antes de introducir esos datos en cualquier servicio en la nube.
+- **Certificaciones y auditorías.** Muchos equipos de seguridad en EE. UU. piden un informe SOC 2, una auditoría conforme a los criterios del AICPA para los controles relevantes de seguridad, disponibilidad, integridad del procesamiento, confidencialidad o privacidad [45]. La alternativa internacional es una certificación ISO/IEC 27001, que acredita un sistema de gestión de la seguridad de la información auditado. Cualquiera de las dos puede ser aceptable; solicite el certificado con el alcance y la fecha de caducidad, o el propio informe. Lo que importa es si el desarrollo y la operación del software están dentro del alcance.
+- **Su propio marco de riesgos.** El Marco de Ciberseguridad 2.0 del NIST, publicado el 26 de febrero de 2024, está pensado para organizaciones de cualquier tamaño y sector y añadió una función "Govern" a Identify, Protect, Detect, Respond y Recover [44]. Puede usarlo para estructurar sus propias evaluaciones de proveedores.
+- **Legislación europea de protección de datos.** Con un proveedor europeo verá a menudo referencias al RGPD, el Reglamento General de Protección de Datos de la UE, y a un acuerdo de tratamiento de datos (DPA). Un DPA conforme al RGPD es un contrato sobre cómo el proveedor trata datos personales por cuenta suya; en herramientas de producción se trata sobre todo de cuentas de usuario y nombres. No es una certificación de seguridad.
+
+### 5.9 Coste, prueba y soporte
+
+Pregunte por el modelo de licencia (por usuario, por planta, por módulo), por una versión gratuita o una prueba, por el esfuerzo de formación e implantación, y por la consultoría del proveedor o de un socio. Para compradores estadounidenses de un proveedor extranjero, pregunte también por el horario de soporte en sus zonas horarias y por si existen socios de implantación con presencia en EE. UU. Muchos proveedores de este mercado no publican precios; es habitual, pero dificulta la comparación. Solicite una oferta por escrito del coste total a tres años, incluida la integración.
+
+## 6. Lista de verificación para la selección
+
+**Pregunta y alcance**
+- [ ] La pregunta principal está documentada (documentar, evaluar, simular, programar o monitorizar).
+- [ ] Se ha elegido la categoría correspondiente de la sección 3.
+- [ ] Se ha designado un área piloto con una familia de productos y un objetivo medible.
+
+**Datos**
+- [ ] Puede empezar sin integración de sistemas.
+- [ ] La importación de Excel/CSV se ha probado con sus propios datos.
+- [ ] Está descrita la conexión con su ERP y su MES (conector estándar o proyecto).
+- [ ] La responsabilidad sobre la operación de las interfaces está definida.
+
+**Funcionalidad**
+- [ ] Las métricas y las fórmulas son visibles y se pueden adaptar.
+- [ ] Los escenarios se pueden versionar y comparar.
+- [ ] Se modelan las dinámicas (variabilidad, averías, mezcla de productos), si las necesita.
+- [ ] Se pueden modelar variantes, listas de materiales y secuencias de cambio, si las necesita.
+- [ ] Las acciones y el PDCA se gestionan en la herramienta.
+
+**Operación y seguridad**
+- [ ] La región de alojamiento y el operador del centro de datos están confirmados por escrito.
+- [ ] Hay disponible un informe SOC 2 o un certificado ISO/IEC 27001 con su alcance.
+- [ ] Hay disponible un acuerdo de tratamiento de datos, cuando intervienen datos personales.
+- [ ] Las cuestiones de control de exportaciones (ITAR/EAR) están resueltas, si procede.
+- [ ] El inicio de sesión único y el modelo de roles encajan con su área de TI.
+
+**Economía**
+- [ ] Se conoce el coste total a tres años, incluidas la integración y la formación.
+- [ ] Las hipótesis de beneficio se respaldan con sus propios valores de referencia (véase la sección 9).
+- [ ] Ha hablado con un cliente de referencia de su sector.
+
+## 7. Despliegue en seis pasos
+
+**Paso 1: Definir el objetivo y el área piloto.** Elija una familia de productos con un problema notable, como un plazo de entrega largo o una entrega a tiempo deficiente, y un objetivo medible. Un piloto en todas las plantas a la vez normalmente fracasa por falta de coordinación.
+
+**Paso 2: Mapear el estado actual en el gemba.** Vaya al piso de planta, cuente el inventario y pregunte por los tiempos. El software sirve para capturar los datos, no para sustituir la observación directa.
+
+**Paso 3: Enriquecer los datos.** Añada datos de ERP, MES o de la recolección de datos de máquinas al recorrido, primero en forma de archivo. Las diferencias entre lo que observó y lo que dicen los sistemas son un resultado en sí mismo: muestran dónde los datos maestros son incorrectos.
+
+**Paso 4: Desarrollar el estado futuro y los escenarios.** Defina un estado futuro en equipo y compare variantes. Si la variabilidad o la mezcla de productos son relevantes, pruebe las variantes con una simulación.
+
+**Paso 5: Implementar y dar seguimiento a las acciones.** Convierta el estado futuro en acciones con responsables y fechas límite. Si la solución cubre la programación y la ejecución, compruebe en el área piloto si las programaciones se sostienen en el piso de planta.
+
+**Paso 6: Sostener y desplegar.** Decida quién mantiene la cadena de valor, con qué frecuencia se revisan los indicadores y cuándo se repite el análisis. Solo entonces tiene sentido extender el despliegue a más cadenas de valor.
+
+## 8. Errores comunes en la selección y el despliegue
+
+- **La herramienta antes que el método:** Si su equipo no ha dominado el mapeo de la cadena de valor, el software solo le ayuda a dibujar mapas incorrectos más rápido. Primero capacite en el método.
+- **Confundir categorías:** Se compra una herramienta de dibujo cuando lo que está en juego son preguntas de programación, o un sistema APS cuando nadie conoce aún la cadena de valor.
+- **Tomar la comparación de escenarios por simulación:** Dos mapas estáticos uno junto al otro no muestran los cuellos de botella que solo aparecen por la variabilidad.
+- **Subestimar la calidad de los datos:** Las rutas con tiempos desactualizados producen resultados poco realistas en cualquier software. Planifique tiempo para la depuración de los datos maestros.
+- **Forzar la integración demasiado pronto:** Un proyecto de interfaces de meses de duración antes del primer resultado cuesta apoyo. Empiece con importación de archivos.
+- **Adoptar las cifras de beneficio del proveedor:** Porcentajes como "hasta 50 por ciento menos de plazo de entrega" describen casos individuales en condiciones desconocidas. Estas cifras son comunes en todo el mercado, desde las suites APS hasta las herramientas VSM (la Sección 17 incluye ejemplos). Calcule con sus propios valores de referencia.
+- **Nadie es responsable de la cadena de valor:** Sin un gestor de la cadena de valor, el mejor mapa digital caduca igual que el papel marrón.
+- **Dejar fuera al piso de planta:** Las programaciones y tareas que los operarios no entienden o no pueden confirmar se quedan en la teoría.
+
+## 9. Un caso de negocio sin cifras inventadas
+
+Un caso de negocio creíble para el software de mapeo de flujo de valor se basa en tus propios valores de referencia, no en porcentajes tomados de folletos comerciales. La lógica puede dividirse en cinco palancas y tres bloques de costes.
+
+**Palanca 1: inventario y tiempo de entrega.** Según la Ley de Little, en estado estacionario: trabajo en proceso = rendimiento × tiempo de entrega. Si reduces el tiempo de entrega manteniendo constante el rendimiento, reduces el inventario inmovilizado en la misma proporción. Calcula con tu WIP actual, tu coste de capital y una hipótesis de objetivo que el equipo del proyecto pueda defender.
+
+**Palanca 2: entrega a tiempo.** Las entregas tardías generan penalizaciones contractuales, fletes urgentes, pedidos de última hora y pérdida de confianza del cliente. Registra la entrega a tiempo actual y el coste directamente atribuible a los pedidos retrasados durante el último año.
+
+**Palanca 3: capacidad y gasto de capital evitado.** Si una simulación muestra que un supuesto cuello de botella puede resolverse mediante secuenciación o colchones, una inversión deja de ser necesaria. Esta palanca suele ser la más grande, pero es única y solo cuenta si la inversión estaba realmente planificada.
+
+**Palanca 4: esfuerzo de planificación y análisis.** Cuenta las horas que hoy se dedican a recorridos de flujo de valor, mantenimiento de hojas de cálculo y programación manual. Valora los ahorros con prudencia: el tiempo liberado solo es un beneficio si se utiliza en otra tarea.
+
+**Palanca 5: calidad de las decisiones.** Difícil de cuantificar, pero real: malas inversiones que no se realizan y decisiones sobre la mezcla de productos que se prueban de antemano. Describe esta palanca de forma cualitativa en lugar de rellenarla con cifras inventadas.
+
+**Costes:** (1) licencias o suscripciones durante el plazo previsto, (2) implantación, incluida la preparación de datos, las interfaces, la formación y la consultoría, (3) tiempo interno para el piloto, el mantenimiento de los datos maestros y la responsabilidad continua sobre el flujo de valor.
+
+**Cómo proceder:** Para cada palanca, establece una hipótesis de referencia, una hipótesis de objetivo conservadora y otra esperada, y calcula ambos escenarios frente a los costes. El piloto existe para contrastar las hipótesis con datos reales. Un proveedor dispuesto a acordar un piloto con criterios medibles es más fiable que uno que presenta cifras de beneficio sin metodología.
+
+# Parte B: iFAKT Polaris en detalle
+
+> **Nota: El autor trabaja en iFAKT GmbH.**
+
+Las siguientes secciones describen [iFAKT Polaris](https://www.m365.fm/entity/polaris/) a partir de las páginas de producto de [iFAKT GmbH](https://www.m365.fm/entity/ifakt/) (en inglés y alemán, consultadas el 20 de noviembre de 2026), las fichas de Microsoft AppSource, una publicación de la Microsoft Tech Community, las páginas de premios de WirtschaftsWoche y la bibliografía técnica. Cuando una afirmación procede únicamente del fabricante, el texto lo indica. El autor no conoce pruebas comparativas independientes ni evaluaciones de analistas sobre Polaris.
+
+## 10. Antecedentes y método
+
+iFAKT GmbH tiene su sede en Curiestrasse 2, 70563 Stuttgart, Alemania (registro mercantil: Juzgado de Stuttgart, HRB 22661) [5]. Su página de empresa en inglés indica que las oficinas están cerca del aeropuerto de Stuttgart [4]. Según la empresa, lleva más de 25 años trabajando en la optimización de procesos productivos y empresariales [3]. La página de la empresa enumera como sectores la automoción, la aeronáutica, la ingeniería mecánica y la tecnología médica [4].
+
+Para valorar Polaris, la historia de la empresa importa menos que el pensamiento metodológico que hay detrás del software. Aquí existe un rastro verificable: Jörg Drees, citado con la afiliación iFAKT GmbH en el artículo de ZWF de 2023 [24], publicó varios artículos con coautores en ZWF entre 2011 y 2023, el más reciente junto con Fraunhofer IPA. ZWF (*Zeitschrift für wirtschaftlichen Fabrikbetrieb*) es una revista técnica de ingeniería en alemán cuyo archivo aloja ahora De Gruyter Brill; los títulos siguientes están traducidos, y los títulos originales en alemán figuran en las fuentes. Los artículos trazan un recorrido que se refleja en la estructura modular de Polaris.
+
+| Año | Artículo (título traducido) | Autores | Referencia | Vínculo con Polaris |
+|---|---|---|---|---|
+| 2011 | Optimización de la producción mediante métricas de modelado del flujo de valor | Jörg Drees, Christoph Sack | ZWF 106 (6), pp. 466–470, DOI 10.3139/104.110589 [21] | cálculo de métricas en el flujo de valor (VSM) |
+| 2014 | Simulación dinámica de flujos de valor | Stefan Türck, Andreas Weimer, Lars Schubert, Jörg Drees | ZWF 109 (11), pp. 839–842, DOI 10.3139/104.111242 [22] | paso del análisis estático a la simulación |
+| 2018 | Nuevas perspectivas para el método de flujo de valor: Value Stream Management 4.0, Next Generation | Jörg Drees | ZWF 113 (9), pp. 605–609, DOI 10.3139/104.111974 [23] | método de flujo de valor y software para producción conectada (Industria 4.0, IIoT) |
+| 2023 | Una interfaz de datos universal para servicios digitales de flujo de valor | Markus Böhm, Jörg Drees, Brandon Sai, Klaus Erlach, Steffi Stambera, Tim Teriete | ZWF 118 (5), pp. 293–297, DOI 10.1515/zwf-2023-1062 [24] | datos de eventos de las máquinas como base de datos común para los servicios de flujo de valor |
+
+**2011: métricas.** Drees y Sack describen cómo las métricas del modelado del flujo de valor pueden usarse para optimizar la producción [21]. Ese es el núcleo de una herramienta VSM dedicada: símbolos con una lógica de cálculo detrás.
+
+**2014: dinámica.** Según su resumen, el artículo de Türck, Weimer, [Lars Schubert](https://www.m365.fm/entity/lars-schubert/) y [Jörg Drees](https://www.m365.fm/entity/jorg-drees/) parte de la idea de que el modelado del flujo de valor está pasando de una mirada estática a los flujos de valor y sus métricas hacia la simulación dinámica, y se pregunta qué nuevas opciones abre el tiempo para la optimización de la producción [22]. Esta idea perdura en el módulo Simulator, que, sin embargo, trabaja con el modelo producto-proceso-recurso de Designer y no con el mapa de flujo de valor (Sección 12).
+
+**2018: conectividad.** Drees se pregunta cómo deben evolucionar el método de flujo de valor y su software ahora que la Industria 4.0 y el IIoT conectan la información en toda la planta [23].
+
+**2021 a 2023: datos en tiempo real con Fraunhofer IPA.** En el proyecto de investigación ECOWERT (acrónimo alemán de "análisis del flujo de valor en tiempo real para la optimización sostenible de la producción"), Fraunhofer IPA trabajó con iFAKT GmbH en un software que consulta y muestra datos de producción de sistemas ERP y otras fuentes de forma automática y casi en tiempo real. El land alemán de Baden-Württemberg financió el proyecto de un año, que se extendió hasta el 31 de agosto de 2022, con unos 300 000 EUR de su programa Invest BW; ESB Business School de la Universidad de Reutlingen colaboró en la construcción de un demostrador [25]. Un artículo de prensa especializada de Drees, Stambera y Böhm describe el camino técnico: datos de máquina en formato JSON a través de una pasarela IIoT (menciona OPC UA, MTConnect, IO-Link y MQTT; el proyecto usó MQTT con Sparkplug), una base de datos de series temporales y el enlace con la aplicación de flujo de valor Polaris VSM, que calcula métricas mediante un árbol de KPI para periodos y familias de productos seleccionados [26]. El artículo de ZWF de 2023 generaliza este enfoque en una interfaz de datos universal; según los autores, dentro de ECOWERT se conectó un servicio de flujo de valor para el cálculo y la visualización de métricas [24]. Entre los autores figura Klaus Erlach, de Fraunhofer IPA, autor del libro de texto alemán estándar sobre diseño de flujos de valor [40].
+
+**Lo que demuestra esta trayectoria y lo que no:** Las publicaciones muestran que los autores llevan mucho tiempo trabajando en métricas, simulación y conectividad de datos para flujos de valor, y que un instituto de investigación colaboró con iFAKT. No demuestran que el software actual sea mejor que otros. Fraunhofer IPA tampoco califica ningún producto en su comunicado de prensa; describe un proyecto de investigación y, según el instituto, las aplicaciones de entonces todavía no hacían "ninguna sugerencia" (traducido del alemán) [25].
+
+El mapeo del flujo de valor con datos en vivo y un modelo de datos continuo también es el tema del episodio de podcast [Value Stream Mapping with live data and a data model](https://www.m365.fm/show/episodes/value-stream-mapping-live-data-model/) en m365.fm.
+
+## 11. Principio de plataforma: un modelo de datos, siete módulos
+
+Según las preguntas frecuentes del proveedor, Polaris es una plataforma de software modular para fábricas inteligentes que cubre la optimización de la producción, desde el mapeo del flujo de valor, pasando por la simulación y la programación asistida por IA, hasta la ejecución en planta y los informes [3]. El sitio web nombra siete módulos: VSM, BSM, Designer, Simulator, Optimizer, Operator y Analyzer. Según el proveedor, todos los módulos trabajan con el mismo modelo de datos, de modo que la simulación o la programación pueden añadirse más adelante sin volver a recopilar los datos [3]. El proveedor describe el flujo como un bucle: "Map → Simulate → Optimize → Execute → Analyze" [3].
+
+En su página de inicio en inglés, iFAKT resume la oferta así: "Polaris combines ERP data with a manufacturing digital twin to optimize schedules" [1]. Entre las funciones principales se enumeran "Constraint-based scheduling (resources, skills, shifts, buffers)", "What-if simulation for disruptions and mix changes" y "KPI cockpit: lead time, WIP, utilization, OTD" [1]. La página destaca tres principios: conectar datos de ERP, Excel o planta, o empezar con un modelo ligero ("plug and play"); una sola plataforma para mapeo, simulación, programación y ejecución sin cambiar de herramienta; y modelar la complejidad, como la mezcla de productos, los cambios de formato, las habilidades, los turnos, las secuencias de operaciones, los buffers y las perturbaciones [1][2].
+
+Para empezar, las preguntas frecuentes indican dos caminos: los módulos VSM y BSM están disponibles en un nivel gratuito sin tarjeta de crédito; para Simulator, Optimizer y Operator, el proveedor ofrece una demostración personalizada y una prueba [3]. No es necesario adoptar todos los módulos; según el proveedor, muchas empresas empiezan con VSM porque no requiere integración con sistemas [3]. Para la simulación y la programación, las preguntas frecuentes indican un tiempo típico de puesta en marcha de dos a cuatro semanas, que incluye la integración de datos, la configuración del modelo y la formación [3]. Esa duración es una afirmación del proveedor; en la práctica depende en gran medida de la calidad de los datos maestros y de las interfaces.
+
+Para entender la arquitectura, conviene relacionar los módulos con las categorías de la Parte A:
+
+| Módulo | Categoría de la Parte A | Base de datos según el proveedor | Resultado |
+|---|---|---|---|
+| VSM | herramienta VSM dedicada | captura manual, opcionalmente ERP, MES, recopilación de datos de máquinas, data warehouse [6] | mapa del flujo de valor con métricas y escenarios |
+| BSM | modelado de procesos (swimlanes) | modelado manual [7] | mapa de procesos con línea de tiempo y métricas |
+| Designer | modelado (grafo PPR) | datos de ERP, listas de materiales, tiempos de proceso, recursos [8] | modelo producto-proceso-recurso, diagrama de red |
+| Simulator | simulación | modelo PPR del Designer [9] | utilización, cuellos de botella, escenarios en el tiempo |
+| Optimizer | APS | modelo PPR, datos de ERP, disponibilidad de recursos [10] | plan de producción ejecutable |
+| Operator | ejecución en planta | plan del Optimizer [11] | tareas por operario, confirmaciones |
+| Analyzer | BI / métricas | métricas de todos los módulos [12] | paneles, plan vs. real |
+
+Para una clasificación como aplicación de negocio en la taxonomía de m365.fm, consulte la página de entidad [Business Application](https://www.m365.fm/entity/business-application/).
+
+## 12. Los módulos uno por uno
+
+### 12.1 Polaris VSM: mapeo digital de la cadena de valor
+
+**Finalidad:** [Polaris VSM](https://www.m365.fm/entity/polaris-vsm/) es el módulo para el mapeo de la cadena de valor. La publicación de Microsoft sobre el listado en AppSource lo describe como una "herramienta digital de gestión Lean" que los fabricantes utilizan para mapear cadenas de suministro y cadenas de valor; un sistema de fórmulas y tableros Kanban y Kaizen están pensados para calcular, verificar y mostrar KPI, y los equipos pueden colaborar a distancia [17].
+
+**Funciones según la página del proveedor** [6][14]:
+- importación desde ERP, MES, sistemas de recopilación de datos de máquinas y almacenes de datos mediante el Polaris IIoT Gateway, combinable con observaciones manuales en planta
+- cálculo automático de "más de 25 KPI estándar de VSM", incluidos el lead time, la proporción de valor añadido, el inventario, la OEE y el takt frente al cycle time; son posibles métricas y fórmulas personalizadas
+- "más de 50 símbolos Lean predefinidos" con editor y codificación por colores
+- tres niveles jerárquicos: cadena de valor de extremo a extremo (Nivel 1), subprocesos (Nivel 2) y operaciones detalladas (Nivel 3)
+- "creación de escenarios ilimitada (A, B, C, D…)", análisis de sensibilidad y comparación de métricas lado a lado; las cadenas de valor pueden duplicarse para probar cambios sin tocar la producción
+- roles de Administrador, Editor y Visor en una arquitectura multiinquilino, edición simultánea, historial de versiones, seguimiento de cambios y documentación PDCA de las acciones
+- "exportación en múltiples formatos (JPEG, Excel, SVG)" más exportación cifrada para archivo
+- soporte etiquetado como "AI-Support" en el área de informes y paneles, sin más descripción
+
+**Evidencias fuera del sitio del proveedor:** listado en AppSource [15][17]; uso como aplicación de cadena de valor vinculada a una base de datos de series temporales en el artículo especializado sobre datos de cadena de valor capturados automáticamente [26].
+
+**Afirmaciones del proveedor sin metodología:** "VSM completo en 2-4 horas (frente a 2-3 días con papel y Excel)", "100 % de precisión de datos (sin errores manuales de Excel)" y una "reducción del 30-40 % del riesgo de implantación" [6]. La página del producto también habla de completar proyectos de cadena de valor en un tercio del tiempo [14]. Ninguna de estas afirmaciones va acompañada de una metodología. "100 % de precisión de datos" solo puede referirse razonablemente a la eliminación de errores de transcripción, no a la calidad de los datos de entrada.
+
+**Límites y lo que no está documentado:** La página de VSM describe escenarios y análisis de sensibilidad, pero **no una simulación dinámica** en el sentido de la sección 5.3 [6]. Si desea estudiar la variabilidad, las averías o la combinación de productos a lo largo del tiempo, necesita el Simulator u otra herramienta de simulación. La página no menciona la integración con Microsoft Teams ni con Power BI. Los precios no se publican; según las preguntas frecuentes, VSM está disponible en un nivel gratuito [3], cuyo alcance la página del módulo no describe.
+
+**Lectura adicional:** compendio [Value Stream Mapping](https://www.m365.fm/en/learn/value-stream-mapping/) · artículo [Value Stream Management Software for Manufacturing](https://www.m365.fm/community/u/mirko-p/blog/value-stream-management-software-manufacturing/)
+
+### 12.2 Polaris BSM: procesos de negocio como swimlanes
+
+**Finalidad:** [Polaris BSM](https://www.m365.fm/entity/polaris-bsm/) (Business Swimlane Modeling) aplica la visión de la cadena de valor a los procesos de negocio, como la elaboración de ofertas, la ingeniería, la ingeniería de fabricación o la gestión de pedidos (los profesionales Lean en EE. UU. suelen llamar a esto mapeo de cadena de valor de oficina o transaccional). El listado en AppSource lo describe como una "herramienta digital de modelado de procesos de negocio para el análisis de procesos de negocio en la gestión Lean digital" [16].
+
+**Funciones según la página del proveedor** [7]:
+- pools como contenedores organizativos, carriles para roles, habilidades o departamentos, que pueden mostrarse u ocultarse
+- modelado de objetos de datos, almacenes de datos y sistemas de TI; las rupturas de medio entre papel y digital o entre sistemas se hacen visibles
+- una línea de tiempo con las duraciones de las actividades en la ruta crítica, además de tiempos de espera y de solapamiento
+- un gráfico de equilibrio de operarios (barras apiladas de las proporciones de tiempo de ciclo) para detectar desequilibrios
+- cálculo automático de la ruta crítica, el lead time, el cycle time y la proporción de valor añadido; según la página, "más de 10" métricas estándar de proceso y métricas personalizadas
+- clasificación en actividades que añaden valor o que no lo añaden, y cuantificación de los costes del desperdicio
+- escenarios ilimitados (actual, futuro, alternativas) con análisis de impacto
+- tarjetas Kaizen creadas durante el modelado y vinculadas a las actividades, organizadas en ciclos PDCA o DMAIC
+
+**Planes según AppSource** [16]: P0 "Read Only" (leer todo el contenido), P1 "Basic" (grabaciones BPMN, plantillas de calles de nado, fórmulas básicas, lead time, gráfico de equilibrio, vista de edición rápida), P2 "Excellence" (todas las funciones de P0 y P1) y P3 "Integrate & Customize" (sin descripción). El listado no indica precios.
+
+**Límites y lo que no está documentado:** La página del módulo no menciona ningún estándar de notación; solo el listado de AppSource menciona grabaciones BPMN en el plan P1 [7][16]. No está documentado si los modelos BSM pueden importarse o exportarse en formato conforme a BPMN. La página de BSM no nombra formatos de exportación. Si busca una suite BPM completa con ejecución de procesos (un motor de flujos de trabajo), BSM es, según su descripción, una herramienta de análisis y mejora, no de automatización de procesos.
+
+### 12.3 Polaris Designer: el modelo producto-proceso-recurso
+
+**Propósito:** Según el proveedor, [Polaris Designer](https://www.m365.fm/entity/polaris-designer/) convierte los datos de entrada en un grafo de conocimiento estructurado producto-proceso-recurso (grafo de conocimiento PPR) que sirve como base común para la simulación y la optimización [8]. Es el vínculo entre la vista de flujo de valor y los módulos de simulación y programación.
+
+**Funciones según la página del proveedor** [8]:
+- modelado PPR: producto como lista de materiales de fabricación o de ingeniería (MBOM/EBOM), proceso con tiempos de preparación, de máquina y de manipulación, recursos como estaciones, equipos y zonas
+- datos de entrada: datos del ERP, listas de materiales de fabricación, tiempos de proceso, estructuras de recursos y restricciones
+- generación automática de un diagrama de red a partir de la lógica de producción, cálculo de la ruta crítica
+- escenarios what-if y comparación del lead time actual y optimizado
+- zonas por producto que agrupan los procesos por familia de productos y permiten equilibrar la capacidad
+
+**Evaluación:** Para el problema de variantes descrito en la Sección 5.4, un modelo PPR suele ser más adecuado que un mapa de flujo de valor, porque las variantes se representan mediante sus listas de materiales y rutas, en lugar de cajas de proceso individuales. La página de inicio utiliza el término "gemelo digital" para este modelo [1]; para los distintos significados de "gemelo digital", véase el compendio [Digital Twin in Manufacturing](https://www.m365.fm/en/learn/digital-twin-manufacturing/).
+
+**Límites y lo que no está documentado:** La página no indica formatos ni mecanismos de importación, ni resultados cuantitativos, ni una configuración explícita de variantes (como conjuntos de reglas para productos configurables) [8]. Queda abierto cómo se modelan las restricciones en el grafo.
+
+### 12.4 Polaris Simulator: escenarios en el tiempo
+
+**Propósito:** Según el proveedor, [Polaris Simulator](https://www.m365.fm/entity/polaris-simulator/) ejecuta los diagramas de red del Designer mediante modelos configurables de estación, línea y nave (nivel de edificio), para una o varias líneas [9].
+
+**Funciones según la página del proveedor** [9]:
+- simulación basada en la lógica de proceso real del modelo PPR
+- escenarios de capacidad, dotación de personal y buffers
+- análisis de mezclas de productos dinámicas sobre recursos compartidos
+- detección de cuellos de botella y desequilibrios de utilización a lo largo del tiempo
+- utilización de personas y recursos técnicos en función del tiempo, sobreutilización y subutilización
+- transparencia de capacidad entre turnos y escenarios
+- configuración flexible de estaciones y rutas de producción
+
+**Evaluación:** El módulo cubre, por tanto, las preguntas que la Parte A asigna a la categoría de simulación, especialmente la mezcla de productos y los recursos compartidos. Una cita de cliente en la página de inicio (Everllance) dice: "The Polaris simulation helped us identify problems in our planning data" [1]; se trata de una única cita en el sitio del proveedor, no de un estudio.
+
+**Límites y lo que no está documentado:** La página no indica explícitamente el tipo de simulación (por ejemplo, de eventos discretos), no define en detalle las métricas de salida como throughput o WIP, y no ofrece información sobre entradas estocásticas, como distribuciones de averías [9]. No se describe si los resultados se presentan como distribuciones o como valores únicos. Para sistemas de transportadores, robótica o puesta en marcha virtual, las herramientas especializadas de la Sección 3.3 son la opción prevista; Polaris no se describe a sí mismo como simulador 3D de flujo de material.
+
+### 12.5 Polaris Optimizer: programación bajo restricciones
+
+**Propósito:** Según el proveedor, [Polaris Optimizer](https://www.m365.fm/entity/polaris-optimizer/) convierte el grafo PPR en un programa de producción optimizado y ejecutable, basado en datos del ERP y en la disponibilidad de recursos [10]. Corresponde a la categoría APS.
+
+**Funciones según la página del proveedor** [10][13]:
+- consideración de recursos, turnos, zonas, habilidades y capacidades; prioridades de pedidos establecidas por los planificadores
+- programación de máquinas, trabajadores y herramientas
+- visualización de pedidos atrasados y riesgos de entrega
+- dimensionamiento de lotes por variante y máquina, secuenciación según los tiempos de cambio entre variantes
+- compromiso entre inventario, costo de almacenamiento y nivel de servicio
+- confirmaciones desde planta a través del Operator, reoptimización automática tras perturbaciones con análisis de impacto
+- recursos compartidos entre proyectos
+- programación operativa a corto plazo y perspectiva de capacidad a largo plazo
+
+Según las preguntas frecuentes, Polaris utiliza "algoritmos de optimización basados en restricciones" para generar programaciones que tienen en cuenta la capacidad de las máquinas, las habilidades de los trabajadores, los turnos, los materiales y las fechas de entrega [3]. La página de planificación y ejecución también menciona restricciones de múltiples recursos, secuencias de cambio y programación basada en prioridades; para pruebas, los datos pueden importarse mediante archivo, Excel o exportación desde ERP, y en producción existe una sincronización continua con ERP, MES u otros sistemas [13].
+
+**Afirmaciones del proveedor sin metodología:** La página de planificación cita una reducción del 50 por ciento en el plazo de entrega, una optimización de la capacidad del 40 por ciento y hasta un 80 por ciento menos de esfuerzo de planificación manual [13]; la página del Optimizer habla de un plazo de entrega mínimo y una máxima eficiencia de costos con un solo clic, y de una reducción considerable del tiempo de cambio [10]. No se indican la línea base, la muestra ni el método de medición.
+
+**Límites y lo que no está documentado:** El Optimizer se describe como compatible con IA (la página de planificación se titula "Planificación y programación de producción impulsadas por IA"), sin nombrar algoritmos ni métodos [10][13]. La página del módulo no ofrece detalles concretos sobre la integración con ERP; las preguntas frecuentes mencionan interfaces estándar con SAP y Microsoft Dynamics [3]. No se describe la planificación multiplanta ni de la cadena de suministro. Más contexto en el compendio [Production Scheduling and APS](https://www.m365.fm/en/learn/production-scheduling-aps/).
+
+### 12.6 Polaris Operator: tareas para la planta
+
+**Finalidad:** Según el proveedor, el [Polaris Operator](https://www.m365.fm/entity/polaris-operator/) toma la programación optimizada directamente del Optimizer y la presenta a nivel de tarea en la planta [11].
+
+**Funciones según la página del proveedor** [11]:
+- una vista individual y actual de tareas para cada trabajador
+- una vista de ruta crítica para los jefes de turno
+- instrucciones de trabajo integradas en las tareas
+- pausa o bloqueo de tareas, o marcado de las mismas con retroalimentación estructurada
+- confirmaciones en tiempo real de avance, retrasos, incidencias, dotación real y pausas
+- una visión general en vivo del trabajo en curso para los planificadores
+- datos de producción devueltos a la programación
+
+**Evaluación:** El Operator está diseñado como el canal de retorno entre plan y ejecución: una programación solo es tan buena como la retroalimentación sobre si se cumplió en planta. Funcionalmente se solapa con partes de un MES (cola de trabajo, confirmaciones), pero no se presenta como un MES.
+
+**Límites y lo que no está documentado:** La página no nombra dispositivos compatibles ni métricas de rendimiento [11]. No se describe la relación con un MES existente (complementaria, sustitutiva o en paralelo); conviene aclararlo al inicio de un proyecto para evitar confirmaciones duplicadas. Más sobre las rutinas diarias en planta en el compendio [Shop Floor Management](https://www.m365.fm/en/learn/shop-floor-management/).
+
+### 12.7 Polaris Analyzer: paneles de KPI
+
+**Finalidad:** Según el proveedor, el [Polaris Analyzer](https://www.m365.fm/entity/polaris-analyzer/) reúne en paneles las métricas de todos los módulos de Polaris [12].
+
+**Funciones según la página del proveedor** [12]:
+- métricas centralizadas de todos los módulos de Polaris
+- visualización de plazos de entrega, utilización, cuellos de botella y estado de proyectos
+- comparación de escenarios, programaciones y rendimiento real
+- detección de límites de capacidad y potencial de mejora
+
+**Límites y lo que no está documentado:** La página no nombra fuentes de datos fuera de los módulos de Polaris, tipos de paneles ni conexión con herramientas externas de BI como Power BI [12]. Si su empresa cuenta con un sistema central de BI, aclare cómo llegan allí las métricas. Las definiciones de métricas se tratan en el compendio [Manufacturing KPIs](https://www.m365.fm/en/learn/manufacturing-kpis/).
+
+### 12.8 Resumen: lo documentado por módulo
+
+| Módulo | Descripción de la función en ifakt.de | Evidencia externa | Cifras de beneficio con metodología | Pregunta abierta más importante |
+|---|---|---|---|---|
+| VSM | detallada [6][14] | AppSource [15], Tech Community [17], artículo especializado [26] | no | alcance del nivel gratuito |
+| BSM | detallada [7] | AppSource con planes [16] | no | notación, exportación |
+| Designer | media [8] | artículos de revistas sobre el enfoque [22][24] (indirecta) | no | formatos de importación, lógica de variantes |
+| Simulator | media [9] | Premio WirtschaftsWoche para Polaris IMS [18] (indirecta) | no | tipo de simulación, estocástica |
+| Optimizer | detallada [10][13] | Premio WirtschaftsWoche para Polaris IMS [18] (indirecta) | no (cifras sin metodología) | algoritmos, integración con ERP |
+| Operator | media [11] | Premio WirtschaftsWoche para Polaris IMS [18] (indirecta) | no | dispositivos, límite con MES |
+| Analyzer | breve [12] | ninguna | no | conexión con BI externo |
+
+## 13. Polaris IMS y el Best of Technology Award 2025
+
+Además de los siete nombres de módulo, encontrará el nombre **Polaris IMS**. Con este nombre, iFAKT GmbH participó en el Best of Technology Award 2025 de WirtschaftsWoche, una revista semanal alemana de negocios. En la página de ganadores de WirtschaftsWoche, iFAKT con Polaris IMS (descrito allí como sistema de planificación de producción) aparece en **segundo lugar en la categoría Producción**, por detrás de Skeleton Technologies y por delante de OMRON Electronics [18]. Otros finalistas de la categoría fueron remberg y UNWARE [19].
+
+La descripción del jurado (en alemán) califica a Polaris IMS como un sistema inteligente que construye un gemelo digital de la producción y planifica automáticamente el uso eficiente de los recursos; el plan se ejecuta en planta y se supervisa con datos en tiempo real, y cuando se producen alteraciones, la IA propone mejoras [18][19]. En opinión del autor, esto corresponde funcionalmente a la interacción de Designer, Simulator, Optimizer y Operator. Una cita de cliente en la página de inicio (Silhouette) también utiliza el nombre: "The use of Polaris IMS was the next step towards the Smart Factory for our organization" [1]. En la página de patrocinadores del evento Lean Around The Clock 2025, iFAKT se describe con una "POLARIS suite" compuesta por los módulos IMS, BSM y VSM [20].
+
+**Interpretación:** Según estas fuentes, IMS es el nombre de la parte de la plataforma que va más allá del modelado de cadenas de valor y procesos, es decir, modelado, simulación, programación y ejecución. El sitio web actual divide esta parte en módulos individuales y utiliza el nombre IMS solo en la cita del cliente [1]. El proveedor no ha publicado una correspondencia oficial de IMS con los nombres actuales de los módulos; la correspondencia es interpretación del autor.
+
+**Lo que dice el premio:** El Best of Technology Award es un premio del jurado de una publicación de negocios. Muestra que un jurado valoró muy positivamente el concepto entre las candidaturas de la categoría Producción. No es una prueba funcional ni de rendimiento y no sustituye una prueba con datos propios. Para los lectores de EE. UU.: es un premio de una publicación alemana que evaluó sus candidaturas, por lo que debe tomarse como un dato más, no como un respaldo del mercado.
+
+## 14. Industrias según la empresa
+
+La siguiente información proviene del sitio web de iFAKT GmbH. Es declarada por la propia empresa; el alcance y la duración de cada relación con los clientes no se indican.
+
+| Industria según ifakt.de | Descripción en el sitio web | Empresas citadas (logotipos, referencias, citas) |
+|---|---|---|
+| Aeroespacial y aviación | alta precisión para la industria aeroespacial [2] | Airbus [1] |
+| Automoción y movilidad | producción just-in-time y just-in-sequence desde la fabricación de componentes hasta el montaje final [2] | Magna, Vitesco, ZF, Junghans [1] |
+| Ingeniería mecánica y automatización | engineer-to-order hasta lotes pequeños, BOM y fabricación de variantes [2] | Karl Dungs, Pfannenberg, Weidmüller, GRASS [1] |
+| Energía e infraestructura | planificación de la producción para infraestructuras críticas [2] | MAN Energy, Siemens Energy, Liebherr [1] |
+
+La barra de logotipos de la página de inicio en inglés muestra además FFG, Fraunhofer, Helbling, Jumo, Liebherr, Pfannenberg, Silhouette, Airbus, Dungs y Eismann [1]. Las citas proceden de Silhouette, Airbus y Everllance [1], y en la página del producto VSM también de Siemens Energy sobre el coaching de iFAKT [14]. La página de la empresa incluye además la tecnología médica como industria [4]. La sección de preguntas frecuentes indica que Polaris está "diseñado para empresas manufactureras en los sectores aeroespacial, automoción, ingeniería mecánica y energía", y nombra como usuarios previstos a los directores de producción, consultores de lean y equipos de operaciones [3].
+
+**Lo que se puede inferir:** El enfoque está en la fabricación discreta y el montaje con alta variedad y productos complejos. En las industrias de proceso (química, farmacia, alimentación con recetas y lotes), el proveedor no nombra referencias. Los clientes citados son en su mayoría empresas europeas o plantas europeas de grupos internacionales; las páginas revisadas no citan plantas en EE. UU. como referencias.
+
+## 15. Polaris en el ecosistema de Microsoft
+
+Para las empresas que dependen en gran medida de Microsoft, se documentan los siguientes puntos:
+
+- **Fichas en AppSource:** Polaris VSM ("Polaris VSM - Digital Value Stream Mapping") y Polaris BSM ("Polaris BSM - Business Swimlane Modeling") aparecen listadas como soluciones de iFAKT GmbH en Microsoft AppSource [15][16].
+- **Microsoft Tech Community:** El 11 de julio de 2024, el blog de Marketplace de Tech Community publicó una entrada sobre Polaris VSM bajo "ISV Success for Business Applications". Según Microsoft, el programa ofrece "plataformas, recursos y soporte diseñados para ayudar a los socios a desarrollar, publicar y comercializar aplicaciones empresariales" [17].
+- **Alojamiento:** Las páginas de los módulos VSM y BSM indican "Hosted on Microsoft Azure West Europe" [6][7]. La lista de regiones de Microsoft sitúa West Europe en los Países Bajos [43]. Las preguntas frecuentes hablan de forma más general de "infraestructura en la nube europea segura" [3].
+- **Integración con ERP:** Según las preguntas frecuentes, Polaris puede conectarse con SAP, Microsoft Dynamics y otras plataformas ERP mediante interfaces estándar, y puede importar datos desde hojas de cálculo y archivos CSV [3].
+- **Estatus de socio:** La página de la empresa menciona el estatus de Microsoft Gold Partner (alcanzado en 2019) y la competencia "Gold Application Development" por décimo año consecutivo [4]. Según Microsoft, las competencias Gold y Silver solo podían renovarse hasta el 30 de septiembre de 2022; desde el 3 de octubre de 2022, Microsoft concede en su lugar las designaciones de Solutions Partner [38]. Por tanto, la afirmación describe un estatus histórico.
+
+**No documentado:** En las páginas revisadas no se mencionan la integración nativa con Microsoft Teams, un conector de Power BI, el inicio de sesión único con Microsoft Entra ID ni la disponibilidad como extensión de Dynamics 365. Una ficha en AppSource significa que se puede comprar a través del marketplace de Microsoft, no necesariamente una integración profunda. Si estos puntos son importantes para usted, solicite que se confirmen por escrito durante la selección. Más información de contexto sobre IT de fabricación en Azure está en el compendio [Azure for Manufacturing](https://www.m365.fm/en/learn/manufacturing-it-azure/).
+
+## 16. Seguridad, alojamiento y certificaciones
+
+| Aspecto | Declaración | Fuente | Estado |
+|---|---|---|---|
+| ISO 9001 | certificado según DIN EN ISO 9001, vigente desde octubre de 2014 | página de la empresa [4] | declaración del proveedor, documentada en el sitio web |
+| ISO/IEC 27001 | "TÜV SÜD – ISO 9001 & ISO/IEC 27001 Certified" (distintivo); FAQ: certificado según ISO 27001 e ISO 9001, auditado por TÜV SÜD | página principal, FAQ [1][2][3] | declaración del proveedor; certificado con alcance no consultado públicamente |
+| Alojamiento | Microsoft Azure West Europe, ubicado en los Países Bajos (VSM, BSM); "infraestructura cloud europea segura" (FAQ) | páginas de módulos, FAQ, lista de regiones de Microsoft [3][6][7][43] | declaración del proveedor |
+| Cifrado, roles, auditorías | cifrado, control de acceso basado en roles y auditorías de seguridad periódicas | FAQ [3] | declaración del proveedor |
+| Aislamiento de tenants, autenticación | entornos de tenant aislados, OAuth 2.0 | página de BSM [7] | declaración del proveedor |
+| RGPD | "100 % conforme al RGPD" | páginas de VSM y BSM [6][7] | declaración del proveedor; el cumplimiento no es una certificación |
+| SOC 2 | no mencionado en las páginas revisadas | n/a | consultar al proveedor |
+| Región de alojamiento en EE. UU. | no mencionada en las páginas revisadas | n/a | consultar al proveedor |
+
+**Cómo leer esto:** Una certificación ISO/IEC 27001 cubre el sistema de gestión de una organización dentro de un alcance definido. Durante la selección, pida ver el certificado y compruebe si el desarrollo y la operación de Polaris están incluidos en el alcance y cuánto tiempo es válido. TÜV SÜD es un organismo alemán de ensayo y certificación. "Conforme al RGPD" es una autoevaluación; lo que cuenta es el contrato de tratamiento de datos, la lista de subencargados y las medidas técnicas y organizativas. Si su equipo de seguridad exige un informe SOC 2 (sección 5.8), pregúntelo pronto; las páginas revisadas mencionan solo certificaciones ISO. Si necesita una instalación en su propio centro de datos: una opción local (on-premises) no se menciona en las páginas revisadas; la FAQ solo menciona la operación en infraestructura cloud europea [3]. Para empresas estadounidenses, esto también significa que, según las páginas revisadas, los datos se alojan fuera de EE. UU.; verifíquelo frente a los contratos con clientes y, en aeroespacial y defensa, frente a las normas de control de exportaciones.
+
+## 17. Lo que promete el proveedor y cómo comprobarlo
+
+La página principal muestra como resultados una reducción del "Up To 50%" del plazo de entrega (descrita como "Average decrease in production cycle time"), una optimización de la capacidad de "Up To 40%" ("Improvement in machine utilization rates") y una mejora de la calidad de "Up To 25%" ("Reduction in schedule deviations and missed deadlines") [1]. La página de planificación también cita hasta un 80 por ciento menos de esfuerzo de planificación manual [13]. Para ninguna de estas cifras se publican la línea base, el número de proyectos ni el método de medición. Observe la redacción de la página principal: "Up To 50%" junto a "Average decrease" mezcla un máximo con un promedio, lo que es una razón más para preguntar cómo se calculó la cifra.
+
+Este tipo de afirmaciones es habitual en este mercado. Siemens, por ejemplo, cita hasta un 50 por ciento menos de inventario y hasta un 50 por ciento más de entregas a tiempo para Opcenter APS [36]. Lea cifras como estas como un límite superior derivado de casos individuales, no como un valor esperado, sea cual sea el proveedor que las publique.
+
+Cómo convertir las promesas en afirmaciones comprobables:
+
+1. **Pida el cálculo:** ¿Qué valores de línea base y objetivo, durante qué periodo, en qué cliente, con qué definición de plazo de entrega?
+2. **Solicite una llamada de referencia** con un usuario de su sector y tipo de fabricación, idealmente en un centro de EE. UU. si eso le importa.
+3. **Acuerde un piloto con criterios de salida:** una cadena de valor, sus propios datos, y métricas y objetivos definidos de antemano.
+4. **Compare plan y real** en el piloto: ¿se cumplen en planta los programas del Optimizer? ¿Con qué frecuencia hay que reprogramar?
+5. **Evalúe el esfuerzo con honestidad:** ¿cuánto tiempo costó la depuración de los datos maestros y cuánto la interfaz?
+
+Estos pasos de prueba se aplican por igual a todos los proveedores de la parte A.
+
+## 18. ¿Para quién encaja Polaris y para quién no?
+
+**Según su descripción funcional, Polaris merece consideración si**
+- usted dirige fabricación discreta o montaje con muchas variantes, listas de materiales (BOM) y recursos compartidos,
+- quiere conectar el mapeo de flujo de valor, la simulación y la programación sobre un modelo de datos común, en lugar de trasladar datos entre herramientas,
+- quiere empezar con el mapeo del flujo de valor sin integración de sistemas y añadir la programación y la ejecución más adelante,
+- quiere revisar procesos de negocio fuera de la producción (cotizaciones, ingeniería, tramitación de pedidos) con la misma lógica lean (BSM),
+- una solución en la nube alojada en la UE encaja con sus políticas de TI.
+
+**Polaris es probablemente un encaje más débil si**
+- solo documenta mapas de flujo de valor de forma ocasional; entonces una herramienta de dibujo con plantilla suele bastar (sección 3.1),
+- necesita una simulación detallada 3D del flujo de materiales con transportadores, robótica o puesta en marcha virtual; para eso existen herramientas especializadas de simulación (sección 3.3),
+- trabaja en industrias de procesos con recetas y lotes, para las que el proveedor no nombra referencias,
+- exige una instalación en su propio centro de datos o en una región de alojamiento en EE. UU., ninguna de las cuales se describe en las páginas revisadas,
+- necesita como requisito previo un informe SOC 2, que las páginas revisadas no mencionan,
+- busca planificación completa de la cadena de suministro o de múltiples plantas, que las páginas de los módulos no describen,
+- ya dispone de un APS y un MES que responden a sus preguntas de programación; en ese caso, sopese por separado el valor añadido frente a una herramienta VSM pura,
+- requiere precios públicos o valoraciones independientes de analistas antes de elaborar una lista corta.
+
+**Alternativas por categoría:** para la documentación pura, Visio, Lucidchart o Miro [27][28][29]; para flujos de valor con métricas y simulación opcional, eVSM [42], SimVSM [30][31] o visTable con contexto de distribución en planta [32]; para flujos de valor con simulación, Plant Simulation X con la biblioteca VSM [33]; para la reconstrucción de flujos de valor basada en datos, ONIQ [35]; para APS, por ejemplo Opcenter APS [36]. Es una selección para orientación, no un ranking.
+
+## 19. Preguntas frecuentes
+
+### ¿Qué es el software de mapeo de flujo de valor?
+El software de mapeo de flujo de valor da soporte digital al mapeo del flujo de valor y al diseño del estado futuro. La oferta va desde herramientas de dibujo con símbolos lean, pasando por herramientas dedicadas con cálculo automático de métricas y escenarios, hasta plataformas que incluyen simulación y programación de la producción (sección 3).
+
+### ¿Cuál es el mejor software de mapeo de flujo de valor?
+No existe una herramienta única como la mejor, porque cada categoría responde a preguntas distintas. Para talleres y documentación, una herramienta de dibujo con plantilla VSM suele ser suficiente. Para el trabajo regular de flujo de valor con métricas, encaja una herramienta VSM dedicada. Para la variabilidad y la mezcla de productos necesita simulación, y para fechas de entrega sujetas a restricciones, un sistema APS. Utilice la guía de decisión de la sección 4 y la lista de verificación de la sección 6, y tenga cuidado con los rankings escritos o financiados por los propios proveedores; las dos páginas de ranking estadounidenses más extensas para esta palabra clave son una de cada tipo [47][48].
+
+### ¿Existe software gratuito de mapeo de flujo de valor?
+Sí, en varias categorías. Las herramientas de dibujo y de pizarra como Lucidchart y Miro ofrecen niveles gratuitos de entrada con formas o plantillas VSM [28][29]. En iFAKT Polaris, los módulos VSM y BSM están disponibles en un nivel gratuito sin tarjeta de crédito, según la preguntas frecuentes [3]; el proveedor no describe en detalle el alcance de ese nivel. Con cualquier oferta gratuita, compruebe los límites de usuarios, las opciones de exportación y el almacenamiento de datos.
+
+### ¿Puedo hacer mapeo de flujo de valor en Excel o Visio?
+Sí. Las plantillas de Excel sirven para mapas pequeños y cálculos sencillos, pero cada cambio debe trasladarse a mano y las versiones se multiplican rápidamente (sección 2). Microsoft Visio tiene una plantilla de mapa de flujo de valor; según Microsoft, requiere Visio Professional (o la antigua edición Premium) y no está incluida en Visio Standard [27]. Ni Excel ni Visio simulan la variabilidad.
+
+### ¿Cuál es la diferencia entre el software de mapeo de flujo de valor y el software de simulación?
+El software de mapeo de flujo de valor normalmente calcula de forma estática con promedios: días de inventario, lead time, proporción de valor añadido. El software de simulación modela las operaciones a lo largo del tiempo, incluyendo variabilidad, averías, mezcla de productos y recursos compartidos [22][33][37]. Una comparación lado a lado de dos mapas no es una simulación.
+
+### ¿Cuál es la diferencia entre el mapeo de flujo de valor y el mapeo de procesos?
+Un mapa de flujo de valor sigue una familia de productos a lo largo de todo el flujo, desde el proveedor hasta el cliente, y muestra el flujo de materiales, el flujo de información, el inventario y una línea de tiempo de entrega (lead time). Un mapa de procesos (como un diagrama de calles o un modelo BPMN) muestra con detalle los pasos, roles y decisiones de un proceso concreto. Ambos pueden combinarse: en Polaris, VSM cubre los flujos de valor y BSM cubre los mapas de procesos en forma de calles (swimlane) [6][7].
+
+### ¿Es lo mismo el "software de gestión de flujo de valor"?
+No siempre. En manufactura, la gestión del flujo de valor significa una gestión continua a lo largo de los flujos de valor (ISO 22468 [39]). En el desarrollo de software, las plataformas de "gestión de flujo de valor" miden el flujo de elementos de trabajo desde el ticket hasta el despliegue. Varios artículos de listas en EE. UU. mezclan ambos conceptos [50]. Compruebe si una herramienta gestiona materiales, inventario y máquinas antes de incluirla en su lista corta.
+
+### ¿Qué es iFAKT Polaris?
+Una plataforma de software modular de iFAKT GmbH (Stuttgart, Alemania) para la optimización de la producción, desde el mapeo del flujo de valor, pasando por la simulación y la programación, hasta la ejecución en planta y los informes. Según el proveedor, consta de siete módulos con un modelo de datos compartido: VSM, BSM, Designer, Simulator, Optimizer, Operator y Analyzer [3].
+
+### ¿Qué es Polaris IMS?
+Con el nombre Polaris IMS, iFAKT ocupó el segundo lugar en la categoría Producción del Best of Technology Award 2025 del semanario empresarial alemán WirtschaftsWoche [18]. La descripción del jurado menciona un gemelo digital de la producción, planificación automatizada de recursos, ejecución en planta con monitorización en tiempo real y propuestas de IA cuando se producen perturbaciones [18][19]. En el sitio web actual, este alcance se reparte entre los módulos Designer, Simulator, Optimizer y Operator (Sección 13; la correspondencia es interpretación del autor).
+
+### ¿Puede Polaris VSM simular?
+La página del módulo Polaris VSM describe escenarios, análisis de sensibilidad y comparación de métricas, pero no simulación dinámica [6]. La simulación la ofrece el módulo independiente Simulator, que trabaja sobre el modelo producto-proceso-recurso del Designer [9].
+
+### ¿Qué datos necesita Polaris y tengo que conectar mi ERP?
+No para VSM y BSM: según el proveedor, no se necesita integración con sistemas para empezar [3]. La simulación y la programación necesitan datos de productos, listas de materiales (BOM), tiempos de proceso y recursos; para pruebas, mediante archivo, Excel o exportación desde el ERP, y en producción mediante sincronización continua con ERP, MES u otros sistemas [13]. Según las preguntas frecuentes, existen interfaces estándar con SAP y Microsoft Dynamics [3].
+
+### ¿Está Polaris integrado con Microsoft 365 o Teams?
+Están documentadas las fichas en AppSource de Polaris VSM y BSM [15][16], una publicación en Microsoft Tech Community [17] y el alojamiento de VSM y BSM en Microsoft Azure Europa Occidental según las páginas de los módulos [6][7]. En las páginas revisadas no se menciona la integración con Teams ni con Power BI.
+
+### ¿Dónde se aloja Polaris y tiene iFAKT SOC 2?
+Las páginas de VSM y BSM citan Microsoft Azure Europa Occidental [6][7], una región situada en los Países Bajos [43]; las preguntas frecuentes hablan de infraestructura en la nube europea [3]. El sitio web indica la certificación ISO 9001 (desde octubre de 2014) y la certificación ISO/IEC 27001 otorgada por TÜV SÜD [1][3][4]. En las páginas revisadas no se mencionan un informe SOC 2 ni una región de alojamiento en EE. UU. Solicite certificados con su alcance y pregunte directamente por SOC 2 si su equipo de seguridad lo exige.
+
+### ¿Cuánto tarda la implantación?
+Según el proveedor, VSM y BSM no requieren configuración; para simulación y programación, las preguntas frecuentes indican un tiempo típico de incorporación de dos a cuatro semanas, que incluye integración de datos, configuración del modelo y formación [3]. La duración real depende sobre todo de la calidad de los datos maestros y de las interfaces.
+
+### ¿Cuánto cuesta Polaris?
+El proveedor no publica precios. La ficha de BSM en AppSource menciona planes desde "Read Only" hasta "Integrate & Customize" sin precios [16]; para Simulator, Optimizer y Operator, las preguntas frecuentes ofrecen una demostración con prueba [3].
+
+### ¿Cuáles son las alternativas a Polaris?
+Depende de la categoría: herramientas de dibujo como Visio, Lucidchart o Miro para documentación [27][28][29]; herramientas especializadas como eVSM, SimVSM o visTable [42][30][32]; simulación con Plant Simulation, AnyLogic o FlexSim [33][34]; enfoques basados en datos como ONIQ [35]; y sistemas APS como Opcenter APS [36]. La Sección 4 compara las categorías.
+
+## 20. Conclusión
+
+Si está eligiendo software de mapeo de flujo de valor, no empiece por los nombres de los productos; empiece por la pregunta que el software tiene que responder. La documentación, la evaluación periódica con métricas, la simulación dinámica, la programación bajo restricciones y el análisis continuo de datos reales son trabajos distintos, que realizan categorías de software diferentes. La lista de verificación de selección de la Sección 6 y la lógica del caso de negocio de la Sección 9 le ayudan a que las ofertas sean comparables sin depender de cifras de folleto. Para compradores en EE. UU., añada desde el principio a la lista la región de alojamiento, el alcance de SOC 2 o ISO/IEC 27001 y, si procede, el control de exportaciones.
+
+iFAKT Polaris es una de las plataformas que conectan varias categorías sobre un modelo de datos compartido: análisis de flujo de valor y de procesos (VSM, BSM), modelado producto-proceso-recurso (Designer), simulación, programación basada en restricciones (Optimizer), gestión de tareas en planta (Operator) e informes (Analyzer). Lo que puede verificarse: las descripciones de funciones en las páginas del proveedor, dos fichas en AppSource, una publicación en Microsoft Tech Community, el segundo puesto en la categoría Production del Best of Technology Award 2025, la colaboración investigadora ECOWERT con Fraunhofer IPA y una serie de artículos en la revista ZWF que abarca doce años. No documentado: cifras de beneficios con metodología divulgada, simulación en el módulo VSM, integración con Teams o Power BI, una región de alojamiento en EE. UU., un informe SOC 2 ni precios públicos.
+
+Para fabricantes discretos con muchas variantes que quieran pasar del flujo de valor a la programación, Polaris es, según su descripción funcional, un candidato para un piloto. Para la documentación pura, la simulación 3D de flujo de material o las industrias de proceso, otras categorías se ajustan mejor. En todo caso: decida sobre la base de un piloto con sus propios datos y métricas definidas de antemano, no sobre la base de este ni de ningún otro texto.
+
+## Más lecturas en m365.fm
+
+**Entidades**
+- [iFAKT Polaris](https://www.m365.fm/entity/polaris/) · [iFAKT GmbH](https://www.m365.fm/entity/ifakt/) · [Business Application](https://www.m365.fm/entity/business-application/)
+- Módulos: [Polaris VSM](https://www.m365.fm/entity/polaris-vsm/) · [Polaris BSM](https://www.m365.fm/entity/polaris-bsm/) · [Polaris Designer](https://www.m365.fm/entity/polaris-designer/) · [Polaris Simulator](https://www.m365.fm/entity/polaris-simulator/) · [Polaris Optimizer](https://www.m365.fm/entity/polaris-optimizer/) · [Polaris Operator](https://www.m365.fm/entity/polaris-operator/) · [Polaris Analyzer](https://www.m365.fm/entity/polaris-analyzer/)
+- Personas: [Jörg Drees](https://www.m365.fm/entity/jorg-drees/) · [Lars Schubert](https://www.m365.fm/entity/lars-schubert/) · [Philip Schubert](https://www.m365.fm/entity/philip-schubert/) · [Mirko Peters](https://www.m365.fm/entity/mirko-peters/)
+
+**Publicaciones y episodios**
+- [Value Stream Management Software for Manufacturing](https://www.m365.fm/community/u/mirko-p/blog/value-stream-management-software-manufacturing/)
+- [What is Value Stream Management?](https://www.m365.fm/community/u/mirko-p/blog/what-is-value-stream-management/)
+- Podcast: [Value Stream Mapping with live data and a data model](https://www.m365.fm/show/episodes/value-stream-mapping-live-data-model/)
+
+**Compendios**
+- [Value Stream Mapping](https://www.m365.fm/en/learn/value-stream-mapping/)
+- [Digital Twin in Manufacturing](https://www.m365.fm/en/learn/digital-twin-manufacturing/)
+- [Production Scheduling and APS](https://www.m365.fm/en/learn/production-scheduling-aps/)
+- [Manufacturing KPIs](https://www.m365.fm/en/learn/manufacturing-kpis/)
+- [Shop Floor Management](https://www.m365.fm/en/learn/shop-floor-management/)
+- [Azure for Manufacturing](https://www.m365.fm/en/learn/manufacturing-it-azure/)
+- [Lean Manufacturing](https://www.m365.fm/en/learn/lean-manufacturing/)
+- [Operational Excellence](https://www.m365.fm/en/learn/operational-excellence/)
+- [Aerospace Production Planning](https://www.m365.fm/en/learn/aerospace-production-planning/)
+
+# Author box
+
+**[Mirko Peters](https://www.m365.fm/entity/mirko-peters/)** es el anfitrión de m365.fm y trabaja en iFAKT GmbH. En m365.fm escribe sobre gestión del flujo de valor, programación de producción y la transformación digital de la manufactura en el ecosistema de Microsoft.
+
+> **Nota: El autor trabaja en iFAKT GmbH.**
+
+*iFAKT GmbH ([página de entidad](https://www.m365.fm/entity/ifakt/)) es el proveedor de iFAKT Polaris.*
+
+# Sources
+
+All online sources retrieved on November 20, 2026. Titles of German-language sources are given in the original, with a translation in parentheses where helpful.
+
+1. iFAKT GmbH: Polaris (home page, English). https://www.ifakt.de/en
+2. iFAKT GmbH: Polaris (home page, German). https://www.ifakt.de/de
+3. iFAKT GmbH: FAQ. https://www.ifakt.de/en/faq
+4. iFAKT GmbH: About iFAKT (company page). https://www.ifakt.de/en/company/
+5. iFAKT GmbH: Impressum (legal notice): iFAKT GmbH, Curiestr. 2, 70563 Stuttgart; Amtsgericht Stuttgart, HRB 22661. https://www.ifakt.de/de/imprint
+6. iFAKT GmbH: Polaris VSM, Value Stream Mapping Software (module page, English and German). https://www.ifakt.de/en/solutions/value-stream-mapping-software · https://www.ifakt.de/de/solutions/value-stream-mapping-software
+7. iFAKT GmbH: Polaris BSM, Business Swim Lane Modelling (module page). https://www.ifakt.de/en/solutions/business-swimlane-modelling
+8. iFAKT GmbH: Polaris Designer (module page). https://www.ifakt.de/en/solutions/designer
+9. iFAKT GmbH: Polaris Simulator (module page). https://www.ifakt.de/en/solutions/simulator
+10. iFAKT GmbH: Polaris Optimizer (module page). https://www.ifakt.de/en/solutions/optimizer
+11. iFAKT GmbH: Polaris Operator (module page). https://www.ifakt.de/en/solutions/operator
+12. iFAKT GmbH: Polaris Analyzer (module page). https://www.ifakt.de/en/solutions/analyzer
+13. iFAKT GmbH: Planning & Execution, AI-powered production planning and scheduling (application page). https://www.ifakt.de/en/software/ims/
+14. iFAKT GmbH: Polaris VSM, Digital Value Stream Tool in Lean Management (product page). https://www.ifakt.de/en/software/vsm/
+15. Microsoft AppSource: Polaris VSM - Digital Value Stream Mapping (iFAKT GmbH). https://appsource.microsoft.com/en-us/product/web-apps/ifaktgmbh.ifakt_vsm_1?tab=Overview
+16. Microsoft AppSource: Polaris BSM - Business Swimlane Modeling (iFAKT GmbH). https://appsource.microsoft.com/bg-bg/product/saas/ifaktgmbh.ifakt_bsm_1
+17. Microsoft Tech Community, Marketplace Blog: Learn about iFAKT GmbH's ISV Success for Business Applications solution in Microsoft AppSource, July 11, 2024. https://techcommunity.microsoft.com/t5/marketplace-blog/learn-about-ifakt-gmbh-s-isv-success-for-business-applications/ba-p/4182536
+18. WirtschaftsWoche: Best of Technology Award, Gewinner 2025 (winners 2025), category Produktion (Production). https://award.wiwo.de/bot/gewinner-2025/
+19. WirtschaftsWoche: Best of Technology Award, Finalisten 2025 (finalists 2025). https://award.wiwo.de/bot/finalisten-2025/
+20. LeanBase: Lean Around The Clock 2025, sponsor iFAKT GmbH. https://leanbase.de/latc/sponsors/2025-ifakt
+21. Drees, J.; Sack, C.: Produktionsoptimierung durch Kennzahlen der Wertstrom-Modellierung. Zeitschrift für wirtschaftlichen Fabrikbetrieb (ZWF) 106 (6), 2011, pp. 466–470. DOI: 10.3139/104.110589. https://www.degruyterbrill.com/document/doi/10.3139/104.110589/html
+22. Türck, S.; Weimer, A.; Schubert, L.; Drees, J.: Dynamische Simulation von Wertströmen. ZWF 109 (11), 2014, pp. 839–842. DOI: 10.3139/104.111242. https://www.degruyterbrill.com/document/doi/10.3139/104.111242/html
+23. Drees, J.: Neue Perspektiven für die Wertstrom-Methode: Wertstrom Management 4.0 – Next Generation. ZWF 113 (9), 2018, pp. 605–609. DOI: 10.3139/104.111974. https://www.degruyterbrill.com/document/doi/10.3139/104.111974/html
+24. Böhm, M.; Drees, J.; Sai, B.; Erlach, K.; Stambera, S.; Teriete, T. (Fraunhofer IPA, iFAKT GmbH): Universelle Datenschnittstelle für digitale Wertstromdienste. Eventbasierte Wertstromanalyse als einheitliche Datenbasis für individuelle Dienste zur Produktionsoptimierung. ZWF 118 (5), 2023, pp. 293–297. DOI: 10.1515/zwf-2023-1062. https://www.degruyterbrill.com/document/doi/10.1515/zwf-2023-1062/html
+25. Fraunhofer IPA: Die Wertstromanalyse wird ins digitale Zeitalter übertragen (value stream analysis is moving into the digital age), press release, July 5, 2022. https://www.ipa.fraunhofer.de/de/presse/presseinformationen/die-wertstromanalyse-wird-ins-digitale-zeitalter-uebertragen.html (an AI-translated English republication exists at reinraum.de: https://www.reinraum.de/en/news/the-value-stream-analysis-is-being-transferred-into-the-digital-age.html)
+26. Drees, J.; Stambera, S.; Böhm, M.: Daten für Wertstromanalysen automatisch erfassen (capturing value stream data automatically). IT&Production, January 12, 2023. https://www.it-production.com/industrie-4-0-iot/wertstromanalyse-mit-iiot-anbindung/
+27. Microsoft Support: Create a value stream map (Visio). https://support.microsoft.com/en-us/visio/create-a-value-stream-map
+28. Lucid Software: Value stream mapping symbols and icons (Lucidchart VSM shape library). https://lucid.co/diagram/vsm/value-stream-mapping-symbols
+29. Miro: Value stream mapping templates. https://miro.com/templates/value-stream-map
+30. SimPlan AG: SimVSM, Wertstromanalyse und Simulation in einer App (German product page). https://www.simplan.de/software/simvsm/
+31. SimPlan AG: Digital value stream mapping and analysis as the key to informed decisions (English). https://www.simplan.de/en/from-paper-to-digital-value-stream/
+32. visTable GmbH: Wertstromanalyse Software (German product page). https://www.vistable.com/de/solutions/wertstromanalyse-software/
+33. Siemens: Plant Simulation X value stream mapping (VSM library). https://www.siemens.com/en-us/products/tecnomatix/offerings/plant-simulation-x-value-stream-mapping/
+34. Wikipedia: List of discrete event simulation software (entries AnyLogic, FlexSim, Plant Simulation). https://en.wikipedia.org/wiki/List_of_discrete_event_simulation_software
+35. PwC Store: ONIQ value stream analysis (English). https://store.pwc.de/en/products/oniq-value-stream-analysis
+36. Siemens: Opcenter Advanced Planning and Scheduling (APS). https://www.siemens.com/en-us/products/opcenter/advanced-planning-scheduling-aps/
+37. ATS Pro / Simio: Wertstromanalyse und Simulation im Vergleich (value stream mapping vs. simulation, German). https://simio-simulation.de/simulation-vs-wertstromanalyse-vsm
+38. Microsoft Tech Community (News from Microsoft Norway): Silver and Gold competency partners, guidance on renewal, April 28, 2023. https://techcommunity.microsoft.com/blog/newsfrommicrosoftnorway/silver-and-gold-competency-partners---guidance-on-renewal/3808345
+39. ISO 22468:2020 Value stream management (VSM). International Organization for Standardization. https://committee.iso.org/standard/73292.html?browse=ics
+40. Erlach, K.: Wertstromdesign. Der Weg zur schlanken Fabrik. 3rd ed., Springer Vieweg, Berlin/Heidelberg 2020, ISBN 978-3-662-58906-9 (bibliographic data taken from the m365.fm Value Stream Mapping compendium).
+41. Lean Enterprise Institute: Learning to See, by Mike Rother and John Shook (book page). https://www.lean.org/store/book/learning-to-see/
+42. G2: eVSM product listing and reviews (vendor description "a complete lean toolkit to map, model and improve value streams of every type"). https://www.g2.com/products/evsm/reviews
+43. Microsoft Learn: List of Azure regions (West Europe: Netherlands). https://learn.microsoft.com/azure/reliability/regions-list
+44. NIST: NIST Releases Version 2.0 of Landmark Cybersecurity Framework, February 26, 2024. https://www.nist.gov/news-events/news/2024/02/nist-releases-version-20-landmark-cybersecurity-framework
+45. AICPA & CIMA: SOC 2 Reporting on an Examination of Controls at a Service Organization Relevant to Security, Availability, Processing Integrity, Confidentiality, or Privacy (guide). https://www.aicpa-cima.com/cpe-learning/publication/soc-2-reporting-on-an-examination-of-controls-at-a-service-organization-relevant-to-security-availability-processing-integrity-confidentiality-or-privacy
+46. Wikipedia: Value-stream-mapping software. https://en.wikipedia.org/wiki/Value-stream-mapping_software
+47. Lean Transition Solutions (Data Point): 7 Best Value Stream Mapping software for Manufacturing & Operations Teams (2026) (competitor, vendor-written). https://leandatapoint.com/blog/best-value-stream-mapping-software-for-manufacturing
+48. Gitnux: Top 10 Best Value Stream Mapping Software of 2026 (competitor, labeled commissioned research). https://gitnux.org/best/value-stream-mapping-software/
+49. ClickUp: 10 Value Stream Mapping Software to Improve Processes in 2026 (competitor, vendor-written). https://clickup.com/blog/value-stream-mapping-software/
+50. Project-Management.com: Top Value Stream Mapping Tools & Software (competitor). https://project-management.com/value-stream-mapping-tools-software/
+51. Lucidchart: Value stream mapping software (competitor, product page). https://www.lucidchart.com/pages/landing/value_stream_mapping
