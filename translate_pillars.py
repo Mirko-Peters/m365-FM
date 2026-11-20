@@ -30,7 +30,7 @@ NAMES = {"fr": "French", "es": "Spanish", "it": "Italian", "nl": "Dutch", "pt": 
 MODEL = os.environ.get("TRANSLATE_MODEL", "claude-haiku-5-5")
 PRICE_IN, PRICE_OUT = float(os.environ.get("PRICE_IN", "0.05")), float(os.environ.get("PRICE_OUT", "0.25"))   # Haiku 5.5, Message Batch: $ je 1 Mio. Tokens
 CHUNK = int(os.environ.get("PILLARS_CHUNK", "4500"))   # Zeichen je Anfrage (Quelltext)
-TRIES = 3
+TRIES = int(os.environ.get("PILLARS_TRIES") or 3)   # Versuche je Abschnitt
 RUN_EUR = float(os.environ.get("PILLARS_RUN_EUR") or 3)
 OUT_FACTOR = {"ja": 1.2, "ko": 1.3, "zh": 1.2, "ar": 1.6, "he": 1.5, "ru": 1.6, "uk": 1.6, "pl": 1.3, "pt": 1.3, "es": 1.3, "fr": 1.35, "it": 1.3, "nl": 1.3, "id": 1.3}   # Token je Quelltoken, grob
 

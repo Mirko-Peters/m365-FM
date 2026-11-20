@@ -99,8 +99,10 @@ class Qa(unittest.TestCase):
             self.assertIn(needle, sp)
 
     def test_chunk_requests_are_wrapped(self):
-        items, _ = T.plan_items(["fr"], {"lean-manufacturing"})
+        with tempfile.TemporaryDirectory() as d, mock.patch.object(T, "OUT", Path(d)):
+            items, _ = T.plan_items(["fr"], {"lean-manufacturing"})
         c = [x for x in items if x[2] == "chunk"]
+        self.assertTrue(c)
         self.assertTrue(all(x[4]["params"]["messages"][0]["content"].startswith("<text>\n") for x in c))
         self.assertLessEqual(max(len(x[4]["params"]["messages"][0]["content"]) for x in c), T.CHUNK * 1.8)
 
@@ -134,7 +136,8 @@ class Anchors(unittest.TestCase):
 
 class Plan(unittest.TestCase):
     def test_plan_counts_and_estimate(self):
-        items, stale = T.plan_items(["fr"], {"lean-manufacturing"})
+        with tempfile.TemporaryDirectory() as d, mock.patch.object(T, "OUT", Path(d)):
+            items, stale = T.plan_items(["fr"], {"lean-manufacturing"})
         kinds = [x[2] for x in items]
         self.assertGreater(kinds.count("chunk"), 5)
         self.assertEqual(kinds.count("meta"), 1)
@@ -177,8 +180,14 @@ class Plan(unittest.TestCase):
 class Translated(unittest.TestCase):
     """site_pillars baut uebersetzte Sprachen nur mit Texten und Datei; vorher noindex, ohne hreflang und ohne Sitemap."""
     def test_inactive_without_overlay(self):
-        PIL.overlay.cache_clear()
-        self.assertEqual(PIL.active(), PIL.LANGS)
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d); (root / "imports" / "pillars").mkdir(parents=True)
+            with mock.patch.object(PIL, "ROOT", root), mock.patch.object(PIL, "DIR", root / "imports" / "pillars"):
+                PIL.overlay.cache_clear()
+                try:
+                    self.assertEqual(PIL.active(), PIL.LANGS)
+                finally:
+                    PIL.overlay.cache_clear()
 
     def test_overlay_texts_and_prefix(self):
         with tempfile.TemporaryDirectory() as d:
