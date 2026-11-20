@@ -1,0 +1,1186 @@
+WEBVTT
+
+00:00:00.340 --> 00:00:06.920
+Preparado para 12 dias de Microsoft 365, Copilot EA, Azure e as pessoas que estão moldando o futuro do trabalho.
+
+00:00:07.800 --> 00:00:11.940
+Em janeiro, o M3C65com está de volta e vamos fazer algo ainda maior.
+
+00:00:12.900 --> 00:00:18.160
+Junte-se a nós para sessões ao vivo, demonstrações reais e conhecimento prático de MVPs e especialistas do setor em todo o mundo.
+
+00:00:18.900 --> 00:00:21.120
+Nada de slides genéricos ou jargões intermináveis.
+
+00:00:21.900 --> 00:00:23.180
+Estamos lidando com os desafios reais.
+
+00:00:23.800 --> 00:00:28.560
+Copilot Studio, agente EA, fábrica, segurança, governança e automação.
+
+00:00:28.560 --> 00:00:34.280
+Seja você um profissional de TI, desenvolvedor ou líder de negócios, há sessões criadas para você.
+
+00:00:35.580 --> 00:00:39.800
+Com 10 dias inteiros, você pode explorar várias tecnologias e se conectar com uma comunidade global.
+
+00:00:40.880 --> 00:00:44.080
+Assista ao vivo e leve insights práticos de volta para a sua organização.
+
+00:00:45.160 --> 00:00:48.800
+Janeiro de 2027, 10 dias, uma comunidade Microsoft.
+
+00:00:49.480 --> 00:00:50.500
+As inscrições já estão abertas.
+
+00:00:51.860 --> 00:00:55.520
+Acesse m3c5com.net e garanta sua vaga hoje mesmo.
+
+00:00:55.520 --> 00:00:58.500
+É m3c5com.net
+
+00:00:58.500 --> 00:01:04.500
+Inscreva-se agora em m3c5com.net e nos vemos ao vivo em janeiro.
+
+00:01:04.500 --> 00:01:07.260
+As notificações da sua equipe são ruim, eu disse.
+
+00:01:07.700 --> 00:01:10.860
+Elas bombardeiam lembretes que ninguém lê e parecem ter sido projetadas em 2003.
+
+00:01:12.060 --> 00:01:12.660
+Aqui está a sessão.
+
+00:01:12.900 --> 00:01:14.140
+Vamos percorrer três partes.
+
+00:01:14.840 --> 00:01:19.740
+Truturar dados do Microsoft Lists, projetar um cartão adaptável e conectar tudo com o Power Automate.
+
+00:01:20.920 --> 00:01:24.900
+Assine a newsletter em m3c5.show se quiser o checklist completo passo a passo.
+
+00:01:24.900 --> 00:01:30.360
+Ao conectar essas peças, os alertas chatos se transformam em mini aplicativos elegantes e clicáveis no Teams.
+
+00:01:31.040 --> 00:01:35.880
+Ao final você criará um cartão de tarefa simples para provar ou adiar-se em que os usuários precisem sair do chat.
+
+00:01:36.640 --> 00:01:40.560
+Parece bom, mas primeiro vamos ver por que as notificações de padrão do Teams são tão inúteis em primeiro lugar.
+
+00:01:41.980 --> 00:01:43.240
+Por que as notificações do Teams falham?
+
+00:01:43.860 --> 00:01:47.360
+Já notou como somos rápidos em marcar um alerta do Teams como lido sem nem olhar para ele?
+
+00:01:48.320 --> 00:01:49.100
+Acontece o tempo todo.
+
+00:01:49.420 --> 00:01:52.360
+A verdade nua e crua é que a maioria das notificações não vale o clique.
+
+00:01:52.360 --> 00:01:54.700
+Elas não pedem que você realmente faça nada.
+
+00:01:55.360 --> 00:02:00.460
+Elas apenas se acumulam, pequenos blocos de texto estático que tecnicamente te alertam, mas não convidam a interação.
+
+00:02:00.740 --> 00:02:08.260
+O Teams deveria facilitar a colaboração, mas esses alertas funcionam mais como um sistema de alto-falantes antigo, barulhento, unidirecional e geralmente ignorado, geralmente ignorado.
+
+00:02:08.400 --> 00:02:09.180
+Aqui está o passo processo.
+
+00:02:09.660 --> 00:02:13.480
+Alguém configura um fluxo, digamos, uma solicitação de aprovação ou um lembrete para verificar uma tarefa.
+
+00:02:13.560 --> 00:02:15.200
+O Teams envia o sinal, mas esse sinal é vazio.
+
+00:02:15.700 --> 00:02:17.560
+São apenas palavras em uma caixa sem nenhuma interatividade.
+
+00:02:18.560 --> 00:02:20.740
+O destinatário dá de ombros, limpa a notificação e esquece.
+
+00:02:20.740 --> 00:02:25.520
+Enquanto isso, a solicitação fica intocada, esperando como um chamado abandonado na fila.
+
+00:02:26.380 --> 00:02:28.460
+Multiplique isso por dezenas de alertas por semana.
+
+00:02:28.700 --> 00:02:33.580
+E parabéns, você criou um ruído de fundo digital equivalente a ficar parado entre uma britadeira e um motor a jato.
+
+00:02:34.380 --> 00:02:35.480
+As consequências aparecem rápido.
+
+00:02:35.900 --> 00:02:40.660
+Um gerente precisa de uma aprovação, mas o pedido fica no limbo, então ele acaba perseguindo a pessoa pelo chat.
+
+00:02:41.320 --> 00:02:41.840
+E aí você viu aquilo.
+
+00:02:41.840 --> 00:02:48.780
+Essa mensagem logo é enterrada por avisos sobre almoços, pesquisas futuras ou comunicados de falhas que ninguém pode resolver de qualquer forma.
+
+00:02:49.840 --> 00:02:51.400
+Em pouco tempo, a memória muscular assume o controle.
+
+00:02:51.880 --> 00:02:52.940
+Deslizar de ar de pensar.
+
+00:02:53.820 --> 00:02:55.120
+O resultado não é que o time seja quebrado.
+
+00:02:55.540 --> 00:02:58.620
+O problema é que as notificações que passam por ele nunca foram feitas para a interação.
+
+00:02:59.240 --> 00:03:01.540
+Pense no sistema atual como uma máquina de fax em 2024.
+
+00:03:01.540 --> 00:03:07.380
+Sim, o papel sai do outro lado e, tecnicamente, a informação foi transferida, mas ninguém se orgulha de usar isso.
+
+00:03:07.900 --> 00:03:11.060
+O mesmo vale para os alertas do Teams, tecnicamente funcionais, mas dolorosamente obsoleto.
+
+00:03:11.760 --> 00:03:14.040
+O trabalho real continua vazando para outros canais.
+
+00:03:14.200 --> 00:03:16.840
+Trilhas infinitas de e-mail, cobranças no chat e planilhas manuais.
+
+00:03:17.880 --> 00:03:21.120
+O time se torna um corredor coberto de panfletos digitais pelos quais todos passam sem notar.
+
+00:03:21.700 --> 00:03:26.400
+Pelo que vimos em implementações reais e casos de suporte, notificações que não permitem ação são ignoradas.
+
+00:03:26.960 --> 00:03:31.440
+Na prática, quando os usuários são bombardeados com esses avisos estáticos, as taxas de resposta caem drasticamente.
+
+00:03:31.800 --> 00:03:33.440
+Continuamos vendo o mesmo padrão em todos os temas.
+
+00:03:34.040 --> 00:03:36.540
+Quanto mais vazios os alertas, menos alguém se importa em agir sobre ele.
+
+00:03:37.360 --> 00:03:41.320
+E com isso, a produtividade despenca, aprovações são perdidas, tarefas atrasam e processos são interrompidos.
+
+00:03:42.220 --> 00:03:46.080
+Tudo vira uma bola de neve, de desculpas como desculpe, não vi isso, e o ciclo se repete.
+
+00:03:46.700 --> 00:03:47.880
+O tempo é onde isso não te dói.
+
+00:03:48.420 --> 00:03:54.020
+Cada aviso inútil gera e-mails de acompanhamento, escalonamentos, controle manual e uma dúzia de passos extras que nunca precisaram existir.
+
+00:03:54.100 --> 00:03:59.020
+E as do Teams se enchem de posts e de bots que ninguém lê, e alertas reais de alta prioridade afundam sem serem vistos.
+
+00:03:59.020 --> 00:04:05.320
+A maneira mais rápida de destruir o engajamento dos usuários com seus processos é inundá-los com alertas que não permitem resolver nada na hora.
+
+00:04:05.860 --> 00:04:07.500
+A história de um cliente confirmou isso perfeitamente.
+
+00:04:08.000 --> 00:04:14.680
+Eles tinham um processo de aprovação de pedidos de compra conectado ao Teams, mas as mensagens eram genéricas, com um link sem graça para ver o pedido.
+
+00:04:14.680 --> 00:04:19.320
+Clicar levava você a um site sem contexto, sem instruções, apenas uma caixa em branco aguardando dados.
+
+00:04:20.000 --> 00:04:24.320
+Uma aprovação acabou ficando parada por três semanas, travando o setor de compras até que o fornecedor desistiu.
+
+00:04:25.380 --> 00:04:26.300
+A lição foi óbvia.
+
+00:04:26.760 --> 00:04:29.960
+Contexto e a ação precisam estar integrados à própria notificação ou ela falha completamente.
+
+00:04:30.620 --> 00:04:32.320
+O ponto principal é que nada desse sofrimento é necessário.
+
+00:04:32.780 --> 00:04:36.180
+Notificações não precisam ser tratadas como papéis deixados debaixo de uma porta digital.
+
+00:04:36.520 --> 00:04:37.780
+Elas podem solicitar uma ação diretamente.
+
+00:04:38.140 --> 00:04:41.280
+Elas podem conter botões, campos e contextos para que os usuários respondam instantaneamente.
+
+00:04:41.280 --> 00:04:43.880
+É exatamente aí que os cartões adaptáveis mudam o jogo.
+
+00:04:44.700 --> 00:04:48.320
+Em vez de gritar informações esperando que alguém reaja, o próprio cartão diz aqui está a escolha.
+
+00:04:49.100 --> 00:04:49.520
+Clique agora.
+
+00:04:49.960 --> 00:04:51.440
+Aviso se transforma em tarefas concluídas.
+
+00:04:52.000 --> 00:04:54.640
+Em resumo, as notificações do Teams falham porque são estáticas.
+
+00:04:55.320 --> 00:04:58.600
+Elas despejam informações sem contexto e deixam o usuário procurando em outro lugar.
+
+00:04:59.680 --> 00:05:01.560
+Os Adaptive Cards funcionam porque eliminam essa busca.
+
+00:05:02.300 --> 00:05:05.760
+Eles trazem a ação necessária para provar, atualizar e fechar direto para a janela do chat.
+
+00:05:06.480 --> 00:05:09.080
+Essa é a diferença entre um ruído irritante e um fluxo de trabalho útil.
+
+00:05:09.080 --> 00:05:13.180
+Então, a grande questão é, como fazer esses cards funcionarem do jeito que você quer?
+
+00:05:13.660 --> 00:05:15.860
+O truque é que cards inteligentes dependem de dados inteligentes.
+
+00:05:16.160 --> 00:05:20.640
+Se seus dados estiverem bagunçados ou sem estrutura, os cards parecerão tão desajeitados quanto os alertas estáticos.
+
+00:05:21.260 --> 00:05:24.780
+A seguir, vamos explorar a ferramenta que a maioria subestima, mas que é a base de tudo.
+
+00:05:24.880 --> 00:05:25.980
+O Microsoft Lists.
+
+00:05:27.360 --> 00:05:28.940
+Que é um aviso quando cada parte for lançada.
+
+00:05:29.420 --> 00:05:31.860
+Inscreva-se em M3M105 um show para não perder nada.
+
+00:05:33.120 --> 00:05:34.500
+Arrama secreta, Microsoft Lists.
+
+00:05:34.500 --> 00:05:38.160
+Então, vamos falar sobre a verdadeira base de toda essa estrutura, o Microsoft Lists.
+
+00:05:38.700 --> 00:05:42.200
+A maioria das pessoas olha e diz, ótimo, outro aspirante a Excel vivendo no SharePoint.
+
+00:05:43.260 --> 00:05:46.320
+Então jogam notas aleatórias, preenchem colunas pela metade e dão um dia para o encerrado.
+
+00:05:47.320 --> 00:05:48.180
+Mas aqui está a livre a volta.
+
+00:05:48.660 --> 00:05:49.720
+O Lists não é um coadjuvante.
+
+00:05:50.240 --> 00:05:52.260
+Ele é um motor que faz seus Adaptive Cards funcionarem de verdade.
+
+00:05:52.800 --> 00:05:54.920
+Se os dados de origem são lixo, seus cards serão lixo.
+
+00:05:55.480 --> 00:05:55.900
+Simples assim.
+
+00:05:56.440 --> 00:05:59.560
+Adaptive Cards, por mais elegantes que pareçam, são tão úteis quanto os dados por trás deles.
+
+00:05:59.560 --> 00:06:04.780
+Se sua lista está cheia de textos inconsistentes, campos em branco e suposições aleatórias, o card virou um absurdo.
+
+00:06:05.080 --> 00:06:10.740
+Em vez de uma chamada clara para a ação, você tem lembretes que confundem e botões vinculados a respostas vagas.
+
+00:06:11.460 --> 00:06:12.940
+Isso não é um fluxo de trabalho, é papel de parede.
+
+00:06:13.560 --> 00:06:15.400
+Dados estruturados são o que fazem esses cards funcionarem.
+
+00:06:15.800 --> 00:06:17.520
+Sem eles, até o design mais sofisticado falha.
+
+00:06:18.000 --> 00:06:18.800
+A dor aparece rápido.
+
+00:06:19.240 --> 00:06:23.820
+Já vi listas onde a coluna de proprietário estava cheia de apelidos, nomes próprios e um que dizia literalmente Pergunte ao John.
+
+00:06:24.740 --> 00:06:26.700
+Ótimo, agora seu card notifica a pessoa errada a ninguém.
+
+00:06:26.700 --> 00:06:32.320
+Ou campos de status onde uma entrada diz em andamento, outra IA e outra apenas quase pronto.
+
+00:06:32.840 --> 00:06:33.740
+A gente automatiza isso.
+
+00:06:34.220 --> 00:06:39.780
+O card acaba puxando tarefa quase pronta para um botão e os usuários vão ignorá-lo ou rir antes de ignorar.
+
+00:06:40.800 --> 00:06:42.480
+Aqui está uma forma mais clara de pensar sobre isso.
+
+00:06:42.960 --> 00:06:44.840
+Trate o Microsoft List como sua dispensa de cozinha.
+
+00:06:45.380 --> 00:06:47.940
+Os Adaptive Cards são apenas receitas pegando ingredientes dessa brasileira.
+
+00:06:48.620 --> 00:06:51.960
+Se a dispensa estiver cheia de latas vencidas e sacos misteriosos, seu jantar será arruinado.
+
+00:06:51.960 --> 00:06:56.960
+Mas se tudo estiver etiquetado e consistente, farinha, açúcar, arroz, a receita, sai perfeita...
+
+00:06:57.720 --> 00:06:58.600
+Veja um vale aqui.
+
+00:06:58.980 --> 00:07:01.980
+Uma lista organizada torna os cartões adaptáveis, claros, acionáveis e rápidos.
+
+00:07:02.300 --> 00:07:03.500
+Vamos basear isso em exemplos práticos.
+
+00:07:04.020 --> 00:07:06.620
+Digamos que você crie um rastreador de tarefas simples para enviar lembretes no Teams.
+
+00:07:07.080 --> 00:07:08.320
+Crie uma lista com quatro campos.
+
+00:07:08.940 --> 00:07:13.740
+Primeiro, nome da tarefa, uma linha de texto, depois, data de vencimento, data, em seguida, proprietário, pessoa.
+
+00:07:14.200 --> 00:07:17.200
+Por fim, sinalizador de lembrete, escolha ou sim, barra não.
+
+00:07:17.740 --> 00:07:18.200
+É só isso.
+
+00:07:18.540 --> 00:07:20.800
+Quatro colunas limpas que você pode conectar diretamente a um cartão.
+
+00:07:20.800 --> 00:07:25.060
+O cartão então mostra a tarefa, avisa o responsável quando vence e oferece dois botões.
+
+00:07:25.200 --> 00:07:26.760
+Marcar como concluído ou adiar.
+
+00:07:27.680 --> 00:07:29.620
+Sem adivinhações, sem buscas, é só clicar e pronto.
+
+00:07:30.180 --> 00:07:32.820
+Agora compare isso com a mesma lista onde o proprietário diz apenas eu.
+
+00:07:32.920 --> 00:07:36.740
+A data de vencimento fica em branco metade do tempo e o sinalizador de lembrete é escrito apenas como sim.
+
+00:07:38.060 --> 00:07:40.220
+Esse cartão é confuso e a confusão acaba com o engajamento.
+
+00:07:40.800 --> 00:07:42.160
+Os tipos de coluna não são apenas enfeite.
+
+00:07:42.720 --> 00:07:44.780
+Eles são a diferença entre um cartão funcional e um inútil.
+
+00:07:46.000 --> 00:07:49.720
+Colunas de escolha oferecem opções previsíveis que se traduzem perfeitamente em botões no cartão.
+
+00:07:49.720 --> 00:07:52.760
+Colunas de data e hora permitem esparar uma lógica que o Leandro Brecht precisa.
+
+00:07:53.640 --> 00:07:56.080
+Use colunas de pessoa para apresentar informações do proprietário,
+
+00:07:56.160 --> 00:08:00.820
+assim as pessoas no Teams podem reconhecer o responsável rapidamente pelo nome e, muitas vezes, pelo avatar.
+
+00:08:01.680 --> 00:08:04.140
+Isso é muito mais confiável do que inserir um campo de texto livre adatório.
+
+00:08:04.880 --> 00:08:07.500
+E aqui está a armadilha que vejo repetidamente a temida coluna de nota.
+
+00:08:08.260 --> 00:08:10.180
+Um enorme bloco de texto que tenta capturar tudo.
+
+00:08:10.580 --> 00:08:11.100
+Não faça isso.
+
+00:08:11.500 --> 00:08:13.900
+Evite despejar todo o seu processo em notas de formato livre.
+
+00:08:13.900 --> 00:08:17.960
+Use tipos de coluna reais para que o cartão possa exibir elementos limpos e clicáveis,
+
+00:08:18.060 --> 00:08:19.120
+em vez de apenas soltar texto.
+
+00:08:19.580 --> 00:08:21.220
+Assim que você muda sua mentalidade, tudo faz sentido.
+
+00:08:21.660 --> 00:08:22.920
+Listas não são apenas amenazamento passivo.
+
+00:08:23.420 --> 00:08:26.000
+Elas são um esquema, a definição do que seu fluxo de trabalho realmente significa.
+
+00:08:26.740 --> 00:08:27.900
+Cada coluna estabelece uma regra.
+
+00:08:28.320 --> 00:08:29.200
+Cada campo tem uma estrutura.
+
+00:08:29.880 --> 00:08:32.800
+Essa estrutura alimenta o design do cartão, que então alimenta o Power Automate.
+
+00:08:32.880 --> 00:08:33.780
+Quando você conecta tudo,
+
+00:08:34.860 --> 00:08:37.080
+acerte o esquema e você não estará apenas criando um cartão.
+
+00:08:37.900 --> 00:08:41.640
+Você estará criando um mini aplicativo que parece limpo e funciona exatamente como as pessoas esperam.
+
+00:08:41.640 --> 00:08:43.120
+O ponto principal é este.
+
+00:08:43.760 --> 00:08:46.000
+O Microsoft Lists não é um trabalho burocrático e entediante.
+
+00:08:46.420 --> 00:08:49.420
+Ele é a camada oculta que transforma suas notificações em algo mais do que apenas ruído.
+
+00:08:50.380 --> 00:08:53.440
+Mantenha-se estruturados e seus cartões adaptáveis deixarão de parecer espanho estático
+
+00:08:53.440 --> 00:08:55.260
+e passarão a ser ferramentas que as pessoas realmente usam.
+
+00:08:55.720 --> 00:08:56.240
+Deve ser bastecido.
+
+00:08:56.660 --> 00:08:58.800
+A seguir projetaremos a receita, o cartão adaptável.
+
+00:08:59.680 --> 00:09:00.900
+Projetando seu primeiro cartão adaptável.
+
+00:09:01.420 --> 00:09:03.980
+Projetar seu primeiro cartão adaptável pode parecer abrir uma caixa da IKEA,
+
+00:09:03.980 --> 00:09:06.660
+onde as instituições mostram quatro parafusos, mas o saco contém quinze.
+
+00:09:07.700 --> 00:09:10.640
+Em suma, um pouco confuso e você começa a se perguntar se essa coisa vai desmoronar
+
+00:09:10.640 --> 00:09:12.040
+na primeira vez que alguém se apoiar nela.
+
+00:09:12.640 --> 00:09:13.900
+Esse é o ponto que a maioria das pessoas trava.
+
+00:09:14.760 --> 00:09:18.640
+Abre o editor, encara um JSON bruto e opções aleatórias e de repente o entusiasmo vai embora.
+
+00:09:19.300 --> 00:09:19.820
+Mas aqui é o seu som.
+
+00:09:20.340 --> 00:09:21.720
+Você não precisa se tornar um especialista em office.
+
+00:09:22.540 --> 00:09:24.940
+A Microsoft nos deu uma ferramenta que te salva desse sofrimento.
+
+00:09:25.460 --> 00:09:26.640
+Chama-se Adaptive Card Designer.
+
+00:09:27.000 --> 00:09:28.620
+Pense nele como um ambiente de teste sem risco.
+
+00:09:28.980 --> 00:09:32.980
+Você pode arrastar elementos, testar layouts e visualizar exatamente como ficarão no Teams
+
+00:09:32.980 --> 00:09:34.680
+antes de submeter alguém ao experimento.
+
+00:09:34.680 --> 00:09:38.120
+Você pode carregar dados de exemplo e verificar o design com valores reais,
+
+00:09:38.700 --> 00:09:42.360
+o que te poupa o trabalho de mexer diretamente no JSON como se fosse um hobby obscuro.
+
+00:09:43.820 --> 00:09:48.060
+O designer não construirá o seu processo, mas oferece uma maneira segura de acertar o cartão em si.
+
+00:09:48.700 --> 00:09:49.940
+Muita gente ainda tropeça aqui no então.
+
+00:09:50.440 --> 00:09:51.400
+A tentação é exagerar.
+
+00:09:52.000 --> 00:09:54.560
+Eles veem todos os controles brilhantes e pensam, ótimo, hora de pressionar.
+
+00:09:54.560 --> 00:09:59.000
+De repente, o cartão tem seis botões, um menu suspenso, um texto que parece um manual de diretrizes.
+
+00:09:59.780 --> 00:10:00.760
+Então ninguém clica nele.
+
+00:10:01.140 --> 00:10:06.740
+Uma vez, vi um cartão com opções como aprovar, rejeitar, adiar, escalar, atribuir e...
+
+00:10:06.740 --> 00:10:07.740
+Não estou inventando.
+
+00:10:07.940 --> 00:10:08.380
+Não sei.
+
+00:10:08.820 --> 00:10:09.240
+Não sei.
+
+00:10:09.940 --> 00:10:11.120
+Resultado, todo mundo ignorou.
+
+00:10:11.740 --> 00:10:13.800
+Menos opções sempre significam cliques mais decisivos.
+
+00:10:14.720 --> 00:10:18.160
+Seu cartão força as pessoas a pararem e analisarem dez opções, você já as perdeu.
+
+00:10:18.740 --> 00:10:19.580
+Aqui está um contraste simples.
+
+00:10:19.980 --> 00:10:22.540
+Primeiro rascunho, parece que o SharePoint vomitou parágrafos na página.
+
+00:10:23.420 --> 00:10:24.500
+Longos blocos de texto.
+
+00:10:24.640 --> 00:10:26.240
+Um link genérico e zero contexto.
+
+00:10:26.780 --> 00:10:30.060
+O segundo rascunho mostra o nome da tarefa, a data de entrega, o responsável mais um botão
+
+00:10:30.060 --> 00:10:30.640
+aprovar.
+
+00:10:31.620 --> 00:10:32.060
+Fim da história.
+
+00:10:32.600 --> 00:10:34.920
+Você não precisa de uma métrica para adivinhar a conversão de TV Responde.
+
+00:10:35.380 --> 00:10:38.160
+A regra de ouro é curto e direto, projetado para a decisão.
+
+00:10:38.760 --> 00:10:41.840
+Dez palavras mostram o responsável, a data de entrega e adicione um ou dois botões.
+
+00:10:42.220 --> 00:10:42.840
+É só isso.
+
+00:10:43.260 --> 00:10:44.460
+Então quais são os blocos de construção reais?
+
+00:10:44.900 --> 00:10:46.360
+Todo cartão é fita de três partes principais.
+
+00:10:46.780 --> 00:10:47.600
+Primeiro, blocos de texto.
+
+00:10:47.900 --> 00:10:49.260
+Apenas rótulos e inscrições.
+
+00:10:49.900 --> 00:10:52.800
+Como você diz tarefa vence na sexta ou solicitação de reembolso pendente.
+
+00:10:52.800 --> 00:10:53.840
+Entradas.
+
+00:10:54.380 --> 00:10:56.000
+São as listas suspensas e as caixas de comentário.
+
+00:10:56.260 --> 00:10:58.520
+É onde os usuários podem selecionar a opção ou escrever uma observação.
+
+00:10:59.380 --> 00:11:00.000
+Terceiro, ação.
+
+00:11:00.220 --> 00:11:00.500
+Enviar.
+
+00:11:00.620 --> 00:11:01.360
+Basicamente o botão.
+
+00:11:02.020 --> 00:11:04.080
+Clique nele e o cartão envia os dados para o seu fluxo.
+
+00:11:05.200 --> 00:11:05.700
+Fácil de lembrar.
+
+00:11:05.900 --> 00:11:08.200
+Texto para informação, entrada para escolha, enviar para a ação.
+
+00:11:08.800 --> 00:11:09.980
+Apenas tome cuidado com a nomeação.
+
+00:11:10.400 --> 00:11:13.120
+A ação enviar retorna os nomes das propriedades exatamente como você os define.
+
+00:11:13.860 --> 00:11:16.980
+Planeje esses nomes para que correspondam ao que seu fluxo espera, ou você terá que
+
+00:11:16.980 --> 00:11:18.340
+depurar entradas que não se alinham.
+
+00:11:18.880 --> 00:11:20.180
+E aqui está a melhor prática fundamental.
+
+00:11:21.000 --> 00:11:24.020
+Cada elemento do seu cartão deve estar diretamente vinculado à sua lista.
+
+00:11:25.120 --> 00:11:28.420
+Extraia o nome da tarefa, mapeia a data de vencimento e envia as escolhas dos botões
+
+00:11:28.420 --> 00:11:29.600
+para o status de aprovação.
+
+00:11:30.300 --> 00:11:31.180
+Agora tudo está conectado.
+
+00:11:31.180 --> 00:11:35.140
+Se você esquecer, o cartão vira um acessório estético e parece bom, mas não gera ação.
+
+00:11:35.880 --> 00:11:36.580
+Uma dica prática.
+
+00:11:36.740 --> 00:11:39.880
+Nomeie os campos do cartão para corresponder às colunas da lista ou pelo menos documente
+
+00:11:39.880 --> 00:11:41.180
+o mapeamento de criar o fluxo.
+
+00:11:41.740 --> 00:11:44.740
+Isso economiza horas de confusão mais tarde quando o cartão parece certo, mas não atualiza
+
+00:11:44.740 --> 00:11:45.020
+nada.
+
+00:11:45.460 --> 00:11:47.920
+É isso que realmente separa cartões de demonstração legais dos úteis.
+
+00:11:48.740 --> 00:11:51.380
+Um bom cartão traz exatamente o contexto que o usuário precisa e nada mais.
+
+00:11:52.060 --> 00:11:52.760
+Pense sem atrito.
+
+00:11:53.300 --> 00:11:56.100
+Eles vêm e aprovam instantaneamente e tomam a decisão com um clique.
+
+00:11:56.820 --> 00:11:59.200
+Sem rolar a tela, sem dúvidas, sem formulários complexos.
+
+00:11:59.200 --> 00:12:03.300
+Mas mesmo que você acerte o design no editor, lembre-se ainda é apenas um rascunho na
+
+00:12:03.300 --> 00:12:03.720
+parede.
+
+00:12:04.120 --> 00:12:04.540
+Na parede.
+
+00:12:04.900 --> 00:12:07.520
+Ele não faz nada de fato até que você o mova para um fluxo de trabalho ativo.
+
+00:12:08.120 --> 00:12:09.600
+Antes de chegar lá, porém, teste com inteligência.
+
+00:12:10.520 --> 00:12:13.680
+Use a visualização do editor no Teams para ver como ele renderiza, depois teste com
+
+00:12:13.680 --> 00:12:16.800
+um grupo pequeno para confirmar o layout e o mapeamento antes de lançar para toda a
+
+00:12:16.800 --> 00:12:17.280
+organização.
+
+00:12:18.020 --> 00:12:21.320
+Nada mata mais a adoção do que um cartão com erro enviado para centenas de usuários
+
+00:12:21.320 --> 00:12:21.780
+de uma vez.
+
+00:12:22.580 --> 00:12:24.080
+Isso nos leva à próxima parte do desafio.
+
+00:12:24.520 --> 00:12:25.760
+O cartão por si só é estático.
+
+00:12:25.760 --> 00:12:29.460
+Para aparecer no momento certo, para as pessoas certas, no chat do Teams, você precisa de
+
+00:12:29.460 --> 00:12:30.880
+algo que cuide da entrega.
+
+00:12:31.180 --> 00:12:34.640
+Sem isso, seu design perfeito é apenas uma imagem bonita presa em um ambiente de teste.
+
+00:12:36.180 --> 00:12:37.720
+Power Automate conectando tudo.
+
+00:12:38.700 --> 00:12:41.340
+Power Automate é onde tudo que você construiu realmente começa a funcionar.
+
+00:12:41.860 --> 00:12:45.040
+Pense nele menos, como a parte chamativa do projeto e mais como a fiação escondida
+
+00:12:45.040 --> 00:12:45.560
+nas paredes.
+
+00:12:46.280 --> 00:12:49.780
+Os cartões adaptáveis podem parecer elegantes, mas sem um fluxo por trás são apenas pôsteres
+
+00:12:49.780 --> 00:12:50.180
+decorativo.
+
+00:12:50.680 --> 00:12:54.000
+Power Automate é o sistema que garante que os cartões apareçam no Teams na hora certa
+
+00:12:54.000 --> 00:12:55.880
+para as pessoas certas.
+
+00:12:55.880 --> 00:12:57.100
+O segredo para fazer isso funcionar é o tempo.
+
+00:12:57.560 --> 00:13:00.520
+Se os cartões chegarem com muita frequência, você será silenciado mais rápido que aquele
+
+00:13:00.520 --> 00:13:01.900
+colega e compartilha memes no canal geral.
+
+00:13:02.300 --> 00:13:04.680
+Se aparecerem raramente, os usuários esquecerão que o processo existe.
+
+00:13:05.300 --> 00:13:09.100
+Se enviá-los atrasados, depois que o prazo já passou, você perde toda a credibilidade.
+
+00:13:09.840 --> 00:13:13.660
+Nesse ponto, o seu lembrete parece um e-mail automático de garantia expirada.
+
+00:13:14.360 --> 00:13:16.480
+O fluxo de trabalho só é bom se o tempo estiver correto.
+
+00:13:16.980 --> 00:13:18.920
+É por isso que você precisa pensar cuidadosamente sobre os gatilhos.
+
+00:13:19.740 --> 00:13:23.140
+Use o gatilho certo para que o cartão chegue no momento certo, não em todos os momentos
+
+00:13:23.140 --> 00:13:23.660
+possíveis.
+
+00:13:24.440 --> 00:13:25.760
+Gatilhos comuns e eficazes são
+
+00:13:25.760 --> 00:13:29.720
+Item criado, data de vencimento próximo ou alteração no valor de uma coluna específica.
+
+00:13:30.200 --> 00:13:32.780
+Eles refletem momentos reais em que alguém precisa ver o cartão.
+
+00:13:33.300 --> 00:13:35.960
+Não são os únicos gatilhos disponíveis, mas são pontos de partida de seguro.
+
+00:13:36.460 --> 00:13:37.340
+E aqui vai o aviso de ouro.
+
+00:13:37.860 --> 00:13:38.880
+Não use gatilhos para qualquer outra.
+
+00:13:39.280 --> 00:13:40.480
+Você vai enviar spam para os usuários.
+
+00:13:41.480 --> 00:13:44.260
+Alguém corrigindo um simples erro de digitação não deveria iluminar o feed do time
+
+00:13:44.260 --> 00:13:44.480
+se tu.
+
+00:13:44.840 --> 00:13:45.740
+Aqui está uma aparação agora.
+
+00:13:46.220 --> 00:13:46.900
+Fluxo preguiçoso.
+
+00:13:47.460 --> 00:13:51.400
+Quando um item é modificado, ele é acionado todas as vezes, não importa o que mudou.
+
+00:13:51.400 --> 00:13:53.620
+Adicione uma vírgula, pronto, novo cartão.
+
+00:13:54.360 --> 00:13:56.480
+Corre a geografia de amanhã, pronto, outro cartão.
+
+00:13:57.220 --> 00:14:00.900
+Isso gera ruído, ensina as pessoas a ignorar os alertas e eventualmente elas silenciam seu
+
+00:14:00.900 --> 00:14:01.580
+fluxo completamente.
+
+00:14:02.900 --> 00:14:03.480
+Fluxo dirigente.
+
+00:14:04.080 --> 00:14:07.120
+Envie um cartão quando um novo registro for criado para que os responsáveis saibam
+
+00:14:07.120 --> 00:14:07.760
+instantaneamente.
+
+00:14:07.900 --> 00:14:10.600
+E talvez adicione outro gatilho para dois dias antes do vencimento para que ninguém
+
+00:14:10.600 --> 00:14:11.120
+pegue o prazo.
+
+00:14:12.000 --> 00:14:13.200
+Menos sinais, mais relevância.
+
+00:14:13.200 --> 00:14:15.860
+Um conquista a confiança do usuário, outro a destrói.
+
+00:14:16.600 --> 00:14:18.720
+Montar tudo não é complicado quando você para de complicar.
+
+00:14:18.720 --> 00:14:20.800
+Passo 1, escolha o gatilho.
+
+00:14:21.500 --> 00:14:24.260
+Normalmente quando um item é criado ou modificado com os filtros corretos.
+
+00:14:25.020 --> 00:14:26.580
+Passo 2, substitua pelo seu payload JSON.
+
+00:14:27.320 --> 00:14:31.360
+O Adaptive Car Designer fornece o modelo JSON e você simplesmente substitui o texto reservado
+
+00:14:31.360 --> 00:14:32.140
+pelos tokens da lista.
+
+00:14:33.140 --> 00:14:37.100
+Passo 3, conecte ao Teams usando a ação de publicar cartão adaptável, um chat ou canal.
+
+00:14:38.100 --> 00:14:40.160
+Esse é o ciclo básico, gatilho, payload e postagem.
+
+00:14:40.720 --> 00:14:41.880
+Simples, previsível e eficaz.
+
+00:14:42.320 --> 00:14:45.100
+Para uma das maneiras mais fáceis de passar vergonha na frente da sua equipe.
+
+00:14:45.100 --> 00:14:49.000
+Executa o fluxo histórico de que foi bem sucedido, você sorri pela fluidez e ninguém
+
+00:14:49.000 --> 00:14:52.600
+vê o cartão no Teams, que você não verificou o conector.
+
+00:14:53.100 --> 00:14:56.640
+Antes de testar, confirme se seu conector do Teams está autenticado com uma conta que
+
+00:14:56.640 --> 00:14:58.780
+tem a permissão para postar no canal ou chat de destino.
+
+00:14:59.780 --> 00:15:01.740
+Caso contrário, o fluxo relata sucesso, mas nada chega.
+
+00:15:02.820 --> 00:15:03.740
+Evite passar por esse congimento.
+
+00:15:04.360 --> 00:15:07.120
+É o equivalente na automação a tentar imprimir sem papel na bandeja.
+
+00:15:07.600 --> 00:15:10.500
+Como você faz corretamente, o Power Automate é o que torna os Adaptive Cards reais.
+
+00:15:11.060 --> 00:15:13.520
+Ele pega designs abstratos e os injeta no fluxo de trabalho das pessoas.
+
+00:15:13.520 --> 00:15:17.220
+Você saberá que funciona a primeira vez que um responsável por tarefa clicar em
+
+00:15:17.220 --> 00:15:19.380
+Aprovar no chat sem precisar abrir outro aplicativo.
+
+00:15:19.840 --> 00:15:22.720
+É aí que isso deixa de ser apenas um experimento interessante e começa a economizar tempo de
+
+00:15:22.720 --> 00:15:22.960
+verdade.
+
+00:15:23.560 --> 00:15:24.240
+Mas não se empolgue demais.
+
+00:15:24.760 --> 00:15:26.800
+O erro número 1 é disponibilizar para todos no primeiro dia.
+
+00:15:27.840 --> 00:15:31.040
+Fluxos que não são testados adequadamente podem inundar as pessoas com duplicatas ou
+
+00:15:31.040 --> 00:15:32.200
+enviar informações inúteis de escala.
+
+00:15:33.020 --> 00:15:34.120
+Teste com o usuário piloto.
+
+00:15:34.420 --> 00:15:38.040
+Inclua deduplicação ou verificações de segurança para evitar envios duplicados e assim
+
+00:15:38.040 --> 00:15:40.520
+você evita seu administrador que transformou o Teams em uma máquina de spam.
+
+00:15:41.180 --> 00:15:42.880
+E que está uma pequena lista de verificação antes de prosseguir.
+
+00:15:43.520 --> 00:15:46.300
+Primeiro, escolha um gatilho inteligente que reflita quando uma ação é necessária.
+
+00:15:47.120 --> 00:15:50.160
+Segundo, substitua o JSON de exemplo pelos tokens das colunas da sua lista.
+
+00:15:50.620 --> 00:15:54.040
+Por fim, teste suas conexões e execute um grupo piloto antes da implementação.
+
+00:15:54.720 --> 00:15:57.500
+Se essas três peças se alinharam, você não está mais na fase de demonstração simples.
+
+00:15:58.000 --> 00:15:59.900
+Você tem notificações funcionando e fluindo pelo Teams.
+
+00:16:00.800 --> 00:16:04.280
+O próximo desafio, e é o maior, é garantir que as pessoas realmente ajam quando virem esses
+
+00:16:04.280 --> 00:16:04.700
+cartões.
+
+00:16:04.700 --> 00:16:07.300
+É aí que muitos desses projetos são péssimos.
+
+00:16:08.180 --> 00:16:09.180
+Fazer as pessoas realmente clicar.
+
+00:16:09.800 --> 00:16:11.680
+Aqui está o segredo sobre os Adaptive Cards.
+
+00:16:12.280 --> 00:16:14.580
+Criar um não garante que as pessoas realmente clicarão nele.
+
+00:16:15.120 --> 00:16:18.840
+Você pode polir o JSON, mapear cada campo e fazer a coisa parecer uma demonstração brilhante,
+
+00:16:18.920 --> 00:16:21.320
+mas ainda corre o risco de ser ignorado como qualquer outro aviso do Teams.
+
+00:16:21.920 --> 00:16:23.840
+Isso não é uma lacuna tecnológica, é uma lacuna humana.
+
+00:16:24.220 --> 00:16:25.340
+Os usuários já se afogam em elétrica.
+
+00:16:25.340 --> 00:16:29.120
+Se o seu cartão parece apenas mais um aviso estático, ele vai direto para o lixo digital
+
+00:16:29.120 --> 00:16:30.100
+sem pensar duas vezes.
+
+00:16:30.740 --> 00:16:32.400
+O objetivo não é apenas a entrega, é a ação.
+
+00:16:33.480 --> 00:16:36.800
+Nas implementações que vimos, cartões passivos tornam-se opcionais no fluxo de trabalho
+
+00:16:36.800 --> 00:16:39.720
+das pessoas, e opcional em um contexto de escritório basicamente significa nunca.
+
+00:16:40.740 --> 00:16:44.780
+Se nada no cartão comunica urgência ou um próximo passo claro, ele é descartado.
+
+00:16:45.620 --> 00:16:48.080
+Os que realmente funcionam são enxutos, precisos e acionáveis.
+
+00:16:49.000 --> 00:16:52.360
+Eles mostram ao usuário por que isso importa agora, que decisão é necessária e quão rápido
+
+00:16:52.360 --> 00:16:53.160
+pode ser resolvido.
+
+00:16:53.160 --> 00:16:56.860
+Se faltar qualquer um desses três ingredientes, o cartão poderia muito bem ter ficado no
+
+00:16:56.860 --> 00:16:57.020
+zé.
+
+00:16:57.740 --> 00:16:59.160
+Não faltam histórias de advertência.
+
+00:16:59.700 --> 00:17:02.080
+O RH uma vez tentou usar um cartão para aprovações de férias.
+
+00:17:02.780 --> 00:17:03.640
+Parece uma jogada certeira.
+
+00:17:04.100 --> 00:17:05.880
+O gerente vê a solicitação, toque um botão e pronto.
+
+00:17:06.900 --> 00:17:08.380
+Em vez disso, eles adicionaram uma lista em opções.
+
+00:17:08.920 --> 00:17:12.580
+Quando os usuários terminavam de analisar as escolhas, a confusão se instalava e ninguém
+
+00:17:12.580 --> 00:17:12.980
+agia.
+
+00:17:13.560 --> 00:17:15.720
+O processo estagnou até que desistiram e voltaram primeiro.
+
+00:17:16.380 --> 00:17:17.080
+Esse é um sinal clássico.
+
+00:17:17.640 --> 00:17:19.900
+Se os gerentes travam, você colocou opções demais no cartão.
+
+00:17:20.620 --> 00:17:21.860
+O limite é uma ou duas ações no máximo.
+
+00:17:22.300 --> 00:17:22.920
+Então aqui está a regra.
+
+00:17:23.420 --> 00:17:24.300
+Aprovar ou recusar.
+
+00:17:24.540 --> 00:17:25.280
+Adiar ou concluir.
+
+00:17:25.620 --> 00:17:28.020
+Talvez incluir um lembrar-me mais tarde para casos específicos.
+
+00:17:28.460 --> 00:17:28.740
+É isso.
+
+00:17:29.300 --> 00:17:30.100
+No máximo, dois botões.
+
+00:17:30.520 --> 00:17:33.040
+Quanto mais opções você colocar, menos provável que alguém siga em frente.
+
+00:17:33.480 --> 00:17:36.720
+O cartão deve parecer quase sem esforço, como fechar um pop-up, exceto que em vez de
+
+00:17:36.720 --> 00:17:38.820
+dispensá-lo, o usuário avança no fluxo de trabalho.
+
+00:17:39.640 --> 00:17:40.100
+Simples e equilíbrio.
+
+00:17:40.640 --> 00:17:42.760
+O contexto é outra parte que a maioria dos administradores ignora.
+
+00:17:43.160 --> 00:17:45.840
+Um cartão com boa aparência, mas sem o contexto adequado, é funcionalmente inútil.
+
+00:17:46.380 --> 00:17:48.960
+Adicione a data de vencimento diretamente no cartão para que os usuários saibam o
+
+00:17:48.960 --> 00:17:49.600
+server de...
+
+00:17:49.600 --> 00:17:51.480
+Mostre quem é o responsável pela tarefa para que o pessoal.
+
+00:17:51.920 --> 00:17:54.980
+E, se possível, exiba o status atual da tarefa para que ninguém presuma que outra
+
+00:17:54.980 --> 00:17:55.720
+pessoa já resolveu.
+
+00:17:56.300 --> 00:17:59.740
+Esses detalhes parecem cosméticos, mas decidem se a pessoa clica no cartão ou descarta.
+
+00:18:00.460 --> 00:18:03.480
+Em nossa experiência, os três itens que as pessoas analisam em primeiro prazo, nome
+
+00:18:03.480 --> 00:18:06.080
+e status fazem a diferença entre uma ação tomada e algo ignorado.
+
+00:18:06.080 --> 00:18:11.220
+Aqui está o erro doloroso, um cartão de aprovação sem data de vencimento, interpretado pelo usuário
+
+00:18:11.220 --> 00:18:15.000
+como faça quando der e o como faça quando der, e o converte silenciosamente em não hoje.
+
+00:18:16.400 --> 00:18:20.620
+Logo, os gerentes ficam cobrando aprovações pelo chat, enviando lembretes em massa e recriando
+
+00:18:20.620 --> 00:18:22.420
+acidentalmente o ruído que você tentava resolver.
+
+00:18:23.080 --> 00:18:25.300
+Você não automatizou a produtividade, você automatizou a cobrança.
+
+00:18:25.880 --> 00:18:28.340
+Os melhores cartões evitam isso completamente, sendo livres de fricção.
+
+00:18:28.840 --> 00:18:31.160
+Eles apresentam uma ação clara com retorno imediato.
+
+00:18:31.460 --> 00:18:34.760
+Sem cliques extras, sem redirecionamento para outro app, sem processo de dez etapas.
+
+00:18:34.760 --> 00:18:38.580
+O fluxo de trabalho acontece literalmente na mesma mensagem da equipe que anunciou a tarefa.
+
+00:18:39.340 --> 00:18:43.060
+Essa velocidade transforma o cinismo em adoção, pois os usuários percebem que a maneira mais
+
+00:18:43.060 --> 00:18:45.140
+rápida de terminar é apenas clicar na opção à sua frente.
+
+00:18:45.660 --> 00:18:48.820
+Dá uma verificação prática para parar de complicar as coisas o teste de três segundos.
+
+00:18:50.280 --> 00:18:51.780
+Mostre seu cartão a alguém que nunca ouviu antes.
+
+00:18:52.260 --> 00:18:54.760
+Se a pessoa não souber o que fazer em menos de três segundos, simplifique.
+
+00:18:55.280 --> 00:18:57.160
+Corte palavras, reduza botões, adicione clareira.
+
+00:18:57.540 --> 00:19:00.420
+Essa regra evita que você lance suposições disfarçadas de automação.
+
+00:19:00.760 --> 00:19:03.960
+É simples, repetível e brutal o suficiente para manter seus designs honestos.
+
+00:19:03.960 --> 00:19:07.340
+No fim das contas, cartões adaptáveis não são feitos para apresentações de administradores
+
+00:19:07.340 --> 00:19:08.180
+ou demonstrações técnicas.

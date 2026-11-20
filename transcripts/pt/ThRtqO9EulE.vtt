@@ -1,0 +1,1285 @@
+WEBVTT
+
+00:00:00.430 --> 00:00:06.790
+Preparado para 12 dias de Microsoft 375, Copilot, IA, Azure e as pessoas que estão moldando o futuro do trabalho?
+
+00:00:07.830 --> 00:00:11.890
+Em janeiro, o M3CGMS em Cucon está de volta e vamos fazer algo ainda maior.
+
+00:00:12.870 --> 00:00:18.250
+Junte-se a nós para as sessões ao vivo, demonstrações reais e conhecimento prático de MVPs e especialistas do setor em todo o mundo.
+
+00:00:18.930 --> 00:00:21.110
+Nada de slides genéricos ou palavras da moda sem fim.
+
+00:00:21.950 --> 00:00:23.210
+Estamos lidando com os desafios reais.
+
+00:00:23.890 --> 00:00:28.750
+Copilot Studio, agentes de IA, fábrica, segurança, governança e automação.
+
+00:00:28.750 --> 00:00:34.230
+Seja você um profissional de TI, desenvolvedor ou líder de negócios, há sessões feitas para você.
+
+00:00:35.650 --> 00:00:39.830
+Com 10 dias completos, você pode explorar várias tecnologias e se conectar com uma comunidade global.
+
+00:00:40.910 --> 00:00:44.090
+Assista ao vivo e leve insights práticos de volta para a sua organização.
+
+00:00:45.170 --> 00:00:48.790
+Janeiro de 2027, 10 dias, uma comunidade Microsoft.
+
+00:00:49.490 --> 00:00:50.490
+As inscrições já estão abertas.
+
+00:00:51.850 --> 00:00:55.490
+Acesse m3mc.com.net e garanta sua vaga hoje mesmo.
+
+00:00:55.490 --> 00:00:58.890
+É m3mc.com.net e...
+
+00:00:58.890 --> 00:01:03.210
+Inscreva-se agora em m3mc.com.net e nos vemos ao vivo.
+
+00:01:03.590 --> 00:01:04.710
+Em janeiro, em janeiro.
+
+00:01:05.390 --> 00:01:06.970
+Aqui está o detalhe que a Microsoft não destaca.
+
+00:01:07.450 --> 00:01:10.270
+O histórico de execução do Power Automate é limitado por tempo, por padrão.
+
+00:01:10.630 --> 00:01:12.990
+A retenção depende do seu plano e licença, e não é pra sempre.
+
+00:01:13.910 --> 00:01:15.950
+Assim que expira, desaparece como se nunca tivesse acontecido.
+
+00:01:15.950 --> 00:01:19.150
+Ótimo para os servidores da Microsoft, terrível para sua trilha de auditoria.
+
+00:01:19.850 --> 00:01:22.850
+Criar fluxos sem registros é como deletar as câmaras de segurança antes da polícia chegar.
+
+00:01:23.550 --> 00:01:26.090
+Você pode achar que está tudo bem até que alguém realmente precise das filmagens.
+
+00:01:26.990 --> 00:01:30.910
+Hoje vamos mostrar como registrar aprovações permanentemente, reiniciar fluxos de uma etapa,
+
+00:01:31.010 --> 00:01:33.910
+usar aprovadores dinâmicos e criar escalonamentos e lembretes sensatos.
+
+00:01:35.250 --> 00:01:39.650
+Assine a newsletter em m365.show se você quer soluções diretas, não materiais de marketing,
+
+00:01:39.650 --> 00:01:41.870
+porque esta é a pergunta que você precisa encarar.
+
+00:01:42.650 --> 00:01:44.010
+Acha que sua trilha de fluxos trabalha permanente?
+
+00:01:44.010 --> 00:01:47.570
+Ela desaparece mais rápido do que donuts grátis na copa.
+
+00:01:48.770 --> 00:01:50.430
+Por que o seu histórico de fluxo desaparece?
+
+00:01:51.070 --> 00:01:54.430
+Então vamos entender por que o seu histórico de fluxo desaparece silenciosamente logo de início.
+
+00:01:55.130 --> 00:01:57.530
+Você salva um fluxo, verifica a guia de histórico de execução e pensa,
+
+00:01:57.610 --> 00:01:59.450
+perfeito, aí está meu registro, problema resolvido.
+
+00:02:00.650 --> 00:02:02.230
+Só que esse registro não foi feito para durar.
+
+00:02:02.670 --> 00:02:04.230
+É mais como um post-it na geladeira ou escritor.
+
+00:02:04.710 --> 00:02:07.150
+Parece útil por um tempo, mas eventualmente acaba na lixeira.
+
+00:02:07.550 --> 00:02:08.110
+Aqui está.
+
+00:02:08.550 --> 00:02:10.310
+Power Automate não está te dando um arquivo permanente.
+
+00:02:10.930 --> 00:02:12.410
+Ele está te dando um armazenamento temporário,
+
+00:02:12.410 --> 00:02:15.470
+projetado para os servidores da Microsoft, não para o seu oficial de conformidade.
+
+00:02:16.730 --> 00:02:19.510
+Quanto tempo suas execuções ficam visíveis e varia de acordo com o plano e a licença.
+
+00:02:19.930 --> 00:02:23.650
+Se quiser detalhes, verifique as configurações do seu tenant ou a própria documentação da Microsoft.
+
+00:02:24.310 --> 00:02:26.250
+Deixe o link da orientação oficial de retenção nas notas.
+
+00:02:26.710 --> 00:02:29.530
+Verifique sua configuração, pois o que você vê depende totalmente da sua licença.
+
+00:02:29.530 --> 00:02:32.830
+A maioria das equipes de TI assume que nuvem é igual para sempre.
+
+00:02:33.410 --> 00:02:35.590
+Microsoft assume que para sempre é igual a um pesadelo de armazenamento.
+
+00:02:35.910 --> 00:02:37.050
+Eles limpam a casa silenciosamente.
+
+00:02:37.510 --> 00:02:38.770
+Essa é a expectativa embutida no sistema.
+
+00:02:39.150 --> 00:02:41.750
+Os logs expiram, os dados são descartados e seu histórico evapora.
+
+00:02:42.070 --> 00:02:42.890
+Eles estão fazendo uma limpeza.
+
+00:02:43.390 --> 00:02:45.750
+Você é quem fica sem comprovantes quando os auditores aparecem.
+
+00:02:46.270 --> 00:02:47.170
+Vamos trazer isso para a vida real.
+
+00:02:47.630 --> 00:02:50.630
+Imagine que o RH peça uma prova de aprovação de promoção do ano passado.
+
+00:02:51.490 --> 00:02:53.250
+Há 14 meses, seu diretor clicou em aprovar.
+
+00:02:53.770 --> 00:02:54.530
+Todos comemoraram.
+
+00:02:54.630 --> 00:02:57.990
+O processo seguiu em frente, avançando o tempo à conformidade que há registros.
+
+00:02:57.990 --> 00:03:01.370
+Abre o Power Automate, verifica as execuções e não há nada.
+
+00:03:01.870 --> 00:03:04.510
+Aquele rastro organizado de aprovações em que você confiava foi apagado.
+
+00:03:04.890 --> 00:03:06.110
+Não é a Microsoft deixando de te avisar.
+
+00:03:06.630 --> 00:03:07.590
+Está tudo lá na documentação.
+
+00:03:07.990 --> 00:03:10.830
+Você só não vê a menos que analise as letras miúdas do licenciamento.
+
+00:03:11.550 --> 00:03:13.050
+Eles não são seu arquivo de conformidade.
+
+00:03:13.450 --> 00:03:13.930
+Esse é o trabalho.
+
+00:03:14.270 --> 00:03:17.630
+Se você entrar em uma auditoria com lacunas nos seus dados, a reunião não será nada agradável.
+
+00:03:17.830 --> 00:03:18.430
+Agora imagine isso.
+
+00:03:18.630 --> 00:03:21.030
+É como se a Netflix apagasse seu histórico de exibição toda segunda-feira.
+
+00:03:21.030 --> 00:03:23.250
+Em uma semana você sabe exatamente onde pausou no meio da temporada.
+
+00:03:23.630 --> 00:03:24.570
+Na semana seguinte você desaparece.
+
+00:03:24.890 --> 00:03:26.770
+O sistema finge que você nunca assistiu uma série sequer.
+
+00:03:26.770 --> 00:03:31.730
+É assim que parece absurdo quando um auditor pede registro de aprovação e sua guia de histórico de execução está vazia.
+
+00:03:32.170 --> 00:03:33.350
+O ponto crítico são as consequências.
+
+00:03:33.790 --> 00:03:35.690
+Perder registros não é apenas um leve inconveniente.
+
+00:03:36.590 --> 00:03:40.990
+Não apresentar documentação pode desencadear revisões de conformidade de consequências que variam conforme a regulamentação.
+
+00:03:41.570 --> 00:03:44.470
+E se você estiver em um setor regulamentado, isso pode sair caro muito rapidamente.
+
+00:03:45.150 --> 00:03:47.650
+E mesmo que os reguladores não estejam envolvidos, a liderança notará.
+
+00:03:48.110 --> 00:03:49.430
+Receba confiança para tomar essa aprovação.
+
+00:03:49.430 --> 00:03:53.010
+Se você não consegue provar que aprovações passadas existiram, parabéns.
+
+00:03:53.590 --> 00:03:54.810
+Você agora é o elo fraco da corrente.
+
+00:03:55.390 --> 00:03:56.550
+Não, capturas de tela não te salvam.
+
+00:03:57.130 --> 00:03:58.550
+Capturas de tela são como fotos do seu jantar.
+
+00:03:59.170 --> 00:04:01.830
+Você pode mostrar que algo aconteceu, mas não pode provar que não foi encenado.
+
+00:04:02.570 --> 00:04:08.070
+Auditores querem dados estruturados, datas, horários, nomes, decisões, todos os detalhes que capturas de tela não oferecem.
+
+00:04:08.070 --> 00:04:11.230
+E isso não vive no histórico de execução temporária.
+
+00:04:11.790 --> 00:04:13.770
+Toma rápida a verificação de realidade que você pode fazer agora mesmo.
+
+00:04:14.290 --> 00:04:19.710
+Pause este vídeo, vá ao Power Automate, clique em meus fluxos, abra o histórico de execução de um dos seus fluxos e procure a execução mais antiga disponível.
+
+00:04:20.370 --> 00:04:21.330
+Essa é a sua janela de retenção.
+
+00:04:21.950 --> 00:04:25.410
+Se faltam aprovações que você achava que eram permanentes, você já sentiu o problema na pele?
+
+00:04:26.350 --> 00:04:28.970
+Quer saber a maneira de um clique para confirmar exatamente o que seu tema mantém?
+
+00:04:29.330 --> 00:04:29.810
+Fique por aqui.
+
+00:04:30.170 --> 00:04:31.210
+Vou te mostrar na lista de verificação.
+
+00:04:31.610 --> 00:04:32.390
+Então onde isso te deixa?
+
+00:04:33.450 --> 00:04:37.110
+Se você não incluir logs nos seus fluxos de trabalho, você não terá histórico de aprovação algum.
+
+00:04:37.110 --> 00:04:41.270
+Acreditar que os padrões são suficientes é como confiar em um adolescente quando ele diz que limpou o quarto.
+
+00:04:41.910 --> 00:04:45.490
+Na segunda-feira a bagunça reaparecerá e nada importante terá sobrevivido.
+
+00:04:46.090 --> 00:04:50.030
+A principal lição, o histórico de execução do Power Automate serve para depuração, não para registro.
+
+00:04:50.770 --> 00:04:53.230
+Ele é descartável por design não permanente ou pronto para auditoria.
+
+00:04:53.950 --> 00:04:58.330
+Se você quer registros utilizáveis, precisa criar seus próprios logs estruturados fora daquele buffer temporário.
+
+00:04:58.830 --> 00:05:00.170
+E não se trata apenas de salvo histórico.
+
+00:05:00.870 --> 00:05:05.490
+Logs fracos significam fluxos de trabalho frágeis que colapsam ao serem testados além do básico,
+
+00:05:05.490 --> 00:05:06.750
+o que leva ao próximo problema.
+
+00:05:07.110 --> 00:05:09.650
+Criar fluxos de aprovação que não falem sob pressão real.
+
+00:05:11.170 --> 00:05:12.990
+Criando fluxos de aprovação que não colapsam.
+
+00:05:13.650 --> 00:05:17.070
+A dura verdade é que a maioria dos fluxos de aprovação implode por serem simplores demais.
+
+00:05:17.810 --> 00:05:20.430
+O design de etapa única parece rápido e inteligente, mas é frágil.
+
+00:05:21.030 --> 00:05:24.210
+Parece bom no papel ter que as pessoas tentem executar processos reais nele.
+
+00:05:24.770 --> 00:05:25.790
+Uma pessoa aprova, fácil.
+
+00:05:25.790 --> 00:05:29.870
+Mas assim que outro departamento pede uma regra alternativa ou um ponto de verificação extra,
+
+00:05:29.990 --> 00:05:31.390
+essa vitória rápida começa a rachar.
+
+00:05:31.870 --> 00:05:34.890
+Você fica preso remendando correções mal feitas sobre etapas de codificação desse fixamento.
+
+00:05:35.210 --> 00:05:37.430
+Por isso que administradores entram em apuros três meses depois.
+
+00:05:38.230 --> 00:05:40.430
+Você criou a demo, mostrou seu gerente e parecia um herói.
+
+00:05:41.230 --> 00:05:43.210
+Então o setor de compras aparece com regras de cinco etapas.
+
+00:05:43.670 --> 00:05:46.670
+O RH que é um aprovador único e o jurídico exige dois mais conformidade.
+
+00:05:46.670 --> 00:05:52.190
+De repente seu fluxo é um monstro de Frankenstein costurado com fita adesiva e condições que ninguém entende.
+
+00:05:52.770 --> 00:05:54.610
+Claro, ele funciona, mas está apenas esperando para travar.
+
+00:05:55.010 --> 00:05:56.370
+Pior hábito, codificar meses fixa a mim.
+
+00:05:56.830 --> 00:05:58.350
+Isso é a sentença de morte da reutilização.
+
+00:05:58.750 --> 00:06:00.670
+Você conecta o fluxo diretamente ao Bob do financeiro.
+
+00:06:00.950 --> 00:06:01.510
+Bob, vai embora.
+
+00:06:01.910 --> 00:06:04.970
+Agora, toda aprovação desse processo falha ou desaparece em um buraco negro.
+
+00:06:05.970 --> 00:06:09.710
+Provações críticas morrem em silêncio, porque o endereço de uma pessoa estava embutido na lógica.
+
+00:06:10.610 --> 00:06:11.830
+Armazene o vínculo à função dos e-mails.
+
+00:06:12.210 --> 00:06:14.650
+Use a ID de objeto quando possível para que mudanças não quebrem o fluxo.
+
+00:06:15.030 --> 00:06:15.650
+Aqui está, seria melhor.
+
+00:06:15.650 --> 00:06:18.650
+Em vez de codificar endereços, busque aprovadores dinamicamente.
+
+00:06:20.070 --> 00:06:21.050
+Use uma consulta de função.
+
+00:06:21.350 --> 00:06:24.430
+Em um grupo do Azure e a ID, uma lista do SharePoint ou Dataverse, você usa.
+
+00:06:25.450 --> 00:06:28.510
+Cada opção oferece um local central para trocar responsáveis quando a pessoa sai.
+
+00:06:29.090 --> 00:06:29.650
+É sustentável.
+
+00:06:29.950 --> 00:06:31.990
+Por exemplo, você define aprovadores financeiros no AD.
+
+00:06:32.790 --> 00:06:36.650
+Se Bob sair, remova-o do grupo ou adicione seu substituto e o fluxo continua sem interrupções.
+
+00:06:37.730 --> 00:06:42.550
+Se o e-mail do Joe está fixo e ele sai, as aprovações falham ou somem no nada.
+
+00:06:43.070 --> 00:06:43.730
+Evite esse absurdo.
+
+00:06:43.910 --> 00:06:45.590
+Sempre mapeie uma função por regi de pessoa.
+
+00:06:46.010 --> 00:06:47.890
+Nunca vincule a lógica de negócio em uma única caixa de correio.
+
+00:06:48.430 --> 00:06:49.890
+Problema da rigidez, não para nos e-mails.
+
+00:06:50.370 --> 00:06:53.770
+Já vi administradores encadearem aprovações personalizadas para cada departamento,
+
+00:06:53.850 --> 00:06:56.270
+sem roteamento dinâmico, sem lógica de fallback, sem rastreamento de estado.
+
+00:06:56.670 --> 00:06:59.330
+Parece ótimo em uma demonstração porque todos estão em suas mesas clicando.
+
+00:06:59.710 --> 00:07:02.750
+Não era certa, mas as primeiras férias, licença médica ou lembrete perdido, o sistema trava.
+
+00:07:03.290 --> 00:07:05.110
+Se os fluxos realmente precisam, é de reconhecimento de estado.
+
+00:07:05.110 --> 00:07:09.130
+Isso significa um campo de estágio persistente ao armazenamento durável que registra em qual
+
+00:07:09.130 --> 00:07:10.170
+etapa a solicitação está.
+
+00:07:10.170 --> 00:07:13.190
+Projete seu fluxo de trabalho para ler e gravar estágio.
+
+00:07:13.930 --> 00:07:18.330
+Então, se o fluxo travar, você pode reiniciá-lo no estágio correto, sem adivinhar ou reenviar
+
+00:07:18.330 --> 00:07:19.090
+todo o processo.
+
+00:07:19.090 --> 00:07:22.990
+É um botão de reinicialização integrado ao design que evita que você tenha que apagar
+
+00:07:22.990 --> 00:07:24.410
+incêndios com reexecuções confusas.
+
+00:07:24.990 --> 00:07:25.890
+Agora vamos ao que é prático.
+
+00:07:26.170 --> 00:07:27.930
+Pode exigir aprovações duplas para compras?
+
+00:07:28.750 --> 00:07:30.530
+O RH pode precisar apenas de uma assinatura rápida.
+
+00:07:30.890 --> 00:07:33.350
+Eles podem se preocupar com atrasos e por isso exigem uma lógica de escalão.
+
+00:07:33.790 --> 00:07:37.430
+Se você tentar forçar todos os três departamentos em um fluxo rígido, você diluirá as regras
+
+00:07:37.430 --> 00:07:39.070
+deles ou enviará spam para as pessoas erradas.
+
+00:07:39.690 --> 00:07:43.330
+Fluxos modulares e baseados em estágios resolvem isso ao se adaptarem a cada necessidade sem
+
+00:07:43.330 --> 00:07:43.810
+criar caos.
+
+00:07:45.130 --> 00:07:48.470
+Dica profissional, sempre teste seu design de múltiplos estágios com o departamento primeiro.
+
+00:07:48.470 --> 00:07:50.490
+Não implemente em todo o ambiente no primeiro dia?
+
+00:07:50.870 --> 00:07:54.470
+Você encontrará os casos extremos mais rapidamente e não lhe dará uma montanha de dívida técnica
+
+00:07:54.470 --> 00:07:55.590
+antes de conhecer os pontos fracos.
+
+00:07:55.830 --> 00:07:56.610
+O ponto principal é simples.
+
+00:07:57.030 --> 00:07:59.910
+Fluxos de aprovação frágeis colapsam porque assumem que nada muda.
+
+00:08:00.410 --> 00:08:04.450
+Mesma equipe, mesmo processo, mesmas condições perfeitas, mas na realidade as pessoas saem,
+
+00:08:04.530 --> 00:08:06.890
+as regras mudam e as sessões surgem constantemente.
+
+00:08:07.870 --> 00:08:10.390
+Torne seus fluxos modulares conscientes do estágio e orientados por funções.
+
+00:08:10.810 --> 00:08:12.030
+Armazene funções em vez de meios.
+
+00:08:12.470 --> 00:08:13.830
+Rastreie o estado para que você possa recuperar fácil.
+
+00:08:14.210 --> 00:08:18.030
+Cada atalho que você pula agora vira retrabalho depois, mas mesmo com design limpo existe
+
+00:08:18.030 --> 00:08:18.910
+outro problema fatal.
+
+00:08:19.710 --> 00:08:22.790
+As aprovações travam quando as pessoas não as processam e os administradores tentam
+
+00:08:22.790 --> 00:08:24.570
+consertar isso com ondas de meios de lembrete.
+
+00:08:25.330 --> 00:08:27.630
+É assim que você cria um problema totalmente novo esperando para explodir.
+
+00:08:28.810 --> 00:08:29.570
+Escalonamentos e lembrete.
+
+00:08:30.530 --> 00:08:34.550
+Sem a tempestade de spam, nada diz design de fluxo ruim, mais alto do que uma pilha de
+
+00:08:34.550 --> 00:08:37.730
+45 e meios de lembrete não lidos no topo da caixa de entrada de alguém na segunda-feira
+
+00:08:37.730 --> 00:08:38.030
+de manhã.
+
+00:08:38.850 --> 00:08:41.950
+Se sua automação parece menos um fluxo de trabalho, mais um canhão de spam, você não
+
+00:08:41.950 --> 00:08:42.710
+construiu um processo.
+
+00:08:43.270 --> 00:08:45.130
+Você construiu uma sede no local de trabalho com uma linha de aço.
+
+00:08:45.130 --> 00:08:47.430
+E sejamos claros, lembretes não são os inimigos.
+
+00:08:47.890 --> 00:08:48.670
+Escalonamentos não são um problema.
+
+00:08:49.190 --> 00:08:51.950
+É quando dá um empurrãozinho e é confundido com um bombardeio implacável na caixa de
+
+00:08:51.950 --> 00:08:52.250
+entrada.
+
+00:08:53.250 --> 00:08:55.490
+O que você realmente quer é persistência, não tortura digital.
+
+00:08:56.490 --> 00:08:59.670
+Lembretes existem porque as pessoas se distraem e saem de licença ou presumem que outra
+
+00:08:59.670 --> 00:09:00.610
+pessoa cuidará da tarefa.
+
+00:09:01.370 --> 00:09:04.410
+Escalonamentos existem porque ninguém quer aprovações deixadas no limbo até três
+
+00:09:04.410 --> 00:09:06.350
+semanas depois, quando alguém finalmente reclama.
+
+00:09:07.190 --> 00:09:08.890
+Então sempre você precisa deles, mas precisa que seja inteligente.
+
+00:09:09.570 --> 00:09:12.410
+Ninguém fica feliz em entrar em uma chamada só para dizer, obrigado pelo décimo
+
+00:09:12.410 --> 00:09:14.710
+no lembrete de hoje, finalmente clique em aprovar.
+
+00:09:15.870 --> 00:09:18.430
+É assim que você leva os usuários de um leve incômodo a uma revolta aberta.
+
+00:09:19.050 --> 00:09:20.630
+Aqui está a armadilha em que a maioria dos administradores estão.
+
+00:09:21.210 --> 00:09:23.550
+Eles acreditam que mais lembretes equivalem a resultados mais rápidos.
+
+00:09:23.890 --> 00:09:25.230
+Se um funciona, então os cinco devem ser melhores.
+
+00:09:25.750 --> 00:09:28.710
+Nessa lógica serve se você estiver oferecendo cupons de pizza não lidando com a aprovação
+
+00:09:28.710 --> 00:09:29.170
+de despesa.
+
+00:09:29.970 --> 00:09:31.710
+Um bom lembrete é contextual e oportuno.
+
+00:09:32.710 --> 00:09:32.990
+Lembrete.
+
+00:09:33.050 --> 00:09:35.590
+A solicitação de compra da sua equipe é guarda a aprovação até sexta-feira.
+
+00:09:36.390 --> 00:09:36.890
+Isso funciona.
+
+00:09:36.890 --> 00:09:40.750
+Por outro lado, uma enxurrada de assuntos idênticos de você ter uma tarefa e chegando
+
+00:09:40.750 --> 00:09:43.630
+às nove horas da manhã treina os usuários a clicar em excluir mais rápido do que as
+
+00:09:43.630 --> 00:09:45.590
+regras do Outlook conseguem filtrar o lixo eletrônico.
+
+00:09:46.270 --> 00:09:47.490
+As regras de design de lembrete são sim.
+
+00:09:47.810 --> 00:09:49.310
+Seja específico, seja pontual, seja condicional.
+
+00:09:49.750 --> 00:09:50.650
+Deixe-me dar um exemplo que já vi.
+
+00:09:51.070 --> 00:09:52.790
+Uma CFL tinha cinco relatórias de despendente.
+
+00:09:53.170 --> 00:09:56.430
+Alguém achou que a cada duas horas, até concluir, era uma cadência de lembrete brilhante.
+
+00:09:57.130 --> 00:09:58.590
+No final do dia, ela tinha trinta e-mails.
+
+00:09:59.330 --> 00:10:00.630
+Nenhuma das aprovações foi finalizada.
+
+00:10:00.630 --> 00:10:04.730
+A TI recebeu três mensagens irritadas no Slack e um convite de reunião no Teams intitulado
+
+00:10:04.730 --> 00:10:07.810
+consertem essa bagunça e uma equipe financeira que agora associa a automação a spam.
+
+00:10:08.330 --> 00:10:09.110
+O fluxo é mais rápido.
+
+00:10:09.670 --> 00:10:10.990
+Só criou mais ruído e mal-estar.
+
+00:10:11.850 --> 00:10:14.890
+Conte-me nos comentários qual é a frequência de lembrete mais ridícula que o seu tenente
+
+00:10:14.890 --> 00:10:15.450
+já produziu.
+
+00:10:16.210 --> 00:10:17.290
+Ninguém provavelmente já passou dos 30.
+
+00:10:17.510 --> 00:10:18.210
+Então qual é a solução?
+
+00:10:18.530 --> 00:10:21.810
+Power Automate te entrega as ferramentas, mas você precisa usá-las com responsabilidade.
+
+00:10:22.790 --> 00:10:26.270
+Use ações de atraso e verificações condicionais para enviar um lembrete apenas se a tarefa
+
+00:10:26.270 --> 00:10:27.150
+ainda estiver pendente.
+
+00:10:27.750 --> 00:10:30.550
+Essa simples salvaguarda por se só interrompe a maioria das tempestades.
+
+00:10:31.110 --> 00:10:33.010
+Depois adicione regras de escalonamento com um instrutor.
+
+00:10:33.650 --> 00:10:34.590
+Primeiro, o único lembrete.
+
+00:10:35.190 --> 00:10:37.490
+Se ignorado após um período definido, escale para o gerente.
+
+00:10:38.310 --> 00:10:41.110
+Se ainda assim for ignorado, encamei para uma caixa de entrada compartilhada ou fila de
+
+00:10:41.110 --> 00:10:41.250
+trabalho.
+
+00:10:42.410 --> 00:10:45.530
+Isso cria uma cadeia clara de responsabilidade sem afogar a caixa de entrada de uma só pessoa.
+
+00:10:46.390 --> 00:10:48.210
+Escolha suas janelas de tempo que ele terá seus testes.
+
+00:10:48.770 --> 00:10:50.010
+Um chute para depois liberar o caos.
+
+00:10:50.930 --> 00:10:51.550
+Pense dessa maneira.
+
+00:10:52.010 --> 00:10:54.570
+Quando um empurrãozinho não funciona, não aumente o volume, mude o canal.
+
+00:10:55.290 --> 00:10:55.750
+Mude o canal.
+
+00:10:56.610 --> 00:10:58.850
+Escale para outra pessoa com autoridade para fazer o processo avançar.
+
+00:10:59.530 --> 00:11:03.390
+Essa abordagem mantém o processo fluindo, demonstra responsabilidade e poupa os usuários da
+
+00:11:03.390 --> 00:11:04.410
+fadiga de caixa de entrada.
+
+00:11:05.010 --> 00:11:07.410
+Encher de lembretes funciona como tocar o mesmo alarme de carro de ato.
+
+00:11:08.110 --> 00:11:09.270
+Na primeira vez, as pessoas verificam.
+
+00:11:09.610 --> 00:11:12.450
+Depois da décima, todos ignoram, mesmo que o carro esteja sendo roubado.
+
+00:11:13.070 --> 00:11:14.250
+O ruído destrói a confiança.
+
+00:11:14.590 --> 00:11:17.750
+Um lembrete preciso e relevante com uma data de entrega clara conquista mais respeito
+
+00:11:17.750 --> 00:11:19.070
+do que 50 vezes os jamais conquistados.
+
+00:11:19.070 --> 00:11:22.270
+O segredo é fazer com que os lembretes pareçam eventos de calendário, não sirenes.
+
+00:11:23.010 --> 00:11:24.410
+Um e-mail no dia anterior ao prazo.
+
+00:11:24.550 --> 00:11:24.810
+Útil.
+
+00:11:25.510 --> 00:11:27.190
+Um resumo de aprovações pendentes às segundas.
+
+00:11:27.290 --> 00:11:27.550
+Prático.
+
+00:11:28.490 --> 00:11:30.750
+Um escalonamento que reatribui se for ignorado por uma semana.
+
+00:11:30.870 --> 00:11:31.290
+É eficaz.
+
+00:11:31.690 --> 00:11:34.210
+Você está criando um sistema de lembretes, não um exercício de emergência geral.
+
+00:11:34.790 --> 00:11:35.630
+E aqui está o ponto crucial.
+
+00:11:36.210 --> 00:11:38.930
+Lembretes e escalonamentos só importam se você puder provar que foram disparados.
+
+00:11:38.930 --> 00:11:40.890
+Durante uma auditoria, dizer
+
+00:11:40.890 --> 00:11:42.270
+Enviamos três e-mails no Google.
+
+00:11:42.570 --> 00:11:44.410
+O que conta é um registro no seu próprio log que diga
+
+00:11:44.410 --> 00:11:47.130
+Lembrete enviado, escalonamento acionado, resultado gravado.
+
+00:11:48.230 --> 00:11:51.570
+Se você não puder mostrar esse racho de dados, todos os seus lembretes inteligentes viram boatos.
+
+00:11:51.970 --> 00:11:54.990
+Então sim, configure lembretes para manter o fluxo e crie caminhos de escalonamento
+
+00:11:54.990 --> 00:11:56.870
+para que tarefas não morram no Outlook de alguém.
+
+00:11:57.910 --> 00:11:58.890
+Mas não se esqueça da base.
+
+00:11:59.470 --> 00:12:03.090
+Registre cada lembrete, cada escalonamento em um sistema duradouro que você controle.
+
+00:12:03.770 --> 00:12:06.070
+Porque quando alguém perguntar como seu processo realmente funcionou,
+
+00:12:06.350 --> 00:12:07.910
+prints e histórias vagas não vão te salvar?
+
+00:12:07.910 --> 00:12:09.890
+Somente registro com os correntes.
+
+00:12:10.290 --> 00:12:13.370
+E, ironicamente, o lugar que a maioria dos administradores acha que fornece esses registros
+
+00:12:13.370 --> 00:12:14.410
+está prestes a decepcionar.
+
+00:12:15.650 --> 00:12:16.750
+A mentira sobre logs acredita.
+
+00:12:17.250 --> 00:12:19.450
+Vamos abordar um dos mitos mais caros do Power Automate.
+
+00:12:19.950 --> 00:12:21.290
+Mentira sobre logs e todos acreditam.
+
+00:12:21.830 --> 00:12:24.470
+Todos presumem que a aba de histórico de execuções é seu registro de conformidade.
+
+00:12:25.090 --> 00:12:28.990
+Parece oficial, mostra aprovações em linhas organizadas e faz você pensar perfeito e estamos protegidos.
+
+00:12:29.410 --> 00:12:30.690
+Mas essa aba não é um arquivo.
+
+00:12:31.150 --> 00:12:35.450
+É um buffer de diagnóstico de curto prazo, útil para depuração, não para guarda de registros a longo prazo.
+
+00:12:35.450 --> 00:12:39.910
+Tratá-lo como log permanente é como tratar pochites na geladeira, como seu sistema de arquivos cooperativo.
+
+00:12:40.370 --> 00:12:42.010
+Parece bom até a equipe de limpeza pagar tudo.
+
+00:12:42.830 --> 00:12:44.350
+Administradores caem nessa armadilha constantemente.
+
+00:12:44.710 --> 00:12:46.790
+Eles demonstram fluxo, abrem o histórico e dizem a liderança.
+
+00:12:46.870 --> 00:12:47.910
+Veja, temos tudo salvo aqui.
+
+00:12:47.910 --> 00:12:53.130
+O que eles não mencionam ou não percebem é que os registros nessa aba tem data para desaparecer.
+
+00:12:53.990 --> 00:12:55.590
+Foi criado para a solução de problemas, não para a conformidade.
+
+00:12:56.310 --> 00:12:58.570
+A Microsoft nunca comercializou isso como um cofre eterno.
+
+00:12:59.010 --> 00:13:02.050
+Eles projetaram como uma ferramenta para ajudar você a corrigir execuções com...
+
+00:13:02.050 --> 00:13:07.250
+Confiar nesse buffer para guardar evidências legais é tão inteligente quanto usar seu histórico do navegador como sistema contábil.
+
+00:13:07.770 --> 00:13:08.850
+Agora imagine isso na vida real.
+
+00:13:09.310 --> 00:13:11.950
+Um auditor pergunta, quem aprovou este orçamento em 2021?
+
+00:13:12.850 --> 00:13:13.470
+Recebido era fácil.
+
+00:13:13.470 --> 00:13:16.830
+Você abre o Power Automate, clica no histórico de execuções e nada.
+
+00:13:17.530 --> 00:13:19.290
+Talvez eu veja algumas semanas, talvez alguns meses.
+
+00:13:19.850 --> 00:13:20.650
+Além disso, vazio.
+
+00:13:21.170 --> 00:13:23.530
+A equipe de auditoria não se importa que você consiga ver os dados do último trimestre.
+
+00:13:23.910 --> 00:13:24.910
+Eles querem comprovar antes de entrar.
+
+00:13:25.350 --> 00:13:28.190
+Se tudo que você tem é uma página vazia, a conversa termina mal.
+
+00:13:28.610 --> 00:13:31.010
+Deixe que uma promessa e demonstração se torne seu problema jurídico mais tarde.
+
+00:13:31.390 --> 00:13:32.010
+Eu já vi isso acontecer.
+
+00:13:32.710 --> 00:13:36.630
+O RH precisava apresentar a prova de uma aprovação para uma ação disciplinar ligada a um processo judicial.
+
+00:13:37.410 --> 00:13:39.330
+Teio foi ao histórico de execução e não encontrou no investidor.
+
+00:13:39.630 --> 00:13:40.790
+Os logs já tinham sido apagados.
+
+00:13:40.790 --> 00:13:45.450
+A confiança que tinha um ano antes transformou-se em um momento extremamente constrangedor diante dos advogados.
+
+00:13:45.790 --> 00:13:48.030
+Esse é o custo exato de acreditar que o histórico de execução é confiável.
+
+00:13:48.370 --> 00:13:49.390
+Então qual é a solução definitiva?
+
+00:13:49.710 --> 00:13:51.370
+Você precisa de um registro persistente fora desse buff.
+
+00:13:51.910 --> 00:13:54.430
+O Dataverse funciona se você quiser armazenamento relacional e escalabilidade.
+
+00:13:55.010 --> 00:13:57.270
+As listas do SharePoint são baratas, rápidas e fáceis de consumo.
+
+00:13:57.790 --> 00:14:02.070
+O SQL oferece controle total se sua organização já utiliza banco de dados, embora envolva custos operacionais.
+
+00:14:02.810 --> 00:14:03.530
+As escolhas são simples.
+
+00:14:03.910 --> 00:14:05.290
+SharePoint é fácil, mas limitado.
+
+00:14:05.750 --> 00:14:07.290
+O Dataverse escala e gerencia relacionamentos.
+
+00:14:07.630 --> 00:14:10.430
+O SQL é poderoso, mas exige operações de banco de dados reais.
+
+00:14:11.210 --> 00:14:14.990
+Escolha o que condiz com suas habilidades e o que seu ambiente suporta, mas escolha algo,
+
+00:14:15.250 --> 00:14:17.350
+pois o histórico é nosso log, não é um plano.
+
+00:14:18.030 --> 00:14:19.670
+Aqui está um esquema prático que qualquer um pode mandar.
+
+00:14:20.170 --> 00:14:22.470
+Em cada aprovação armazene estes campos mínimos e duráveis.
+
+00:14:22.830 --> 00:14:24.970
+A ID da solicitação para correlacionar registros.
+
+00:14:25.130 --> 00:14:25.690
+Nome da etapa.
+
+00:14:25.950 --> 00:14:27.170
+Ação aprovada ou rejeitada.
+
+00:14:27.530 --> 00:14:28.290
+A ID do aprovador.
+
+00:14:28.570 --> 00:14:29.690
+A ID do objeto do usuário.
+
+00:14:29.830 --> 00:14:30.470
+Não apenas o e-mail.
+
+00:14:30.670 --> 00:14:31.090
+Timestamp.
+
+00:14:31.210 --> 00:14:32.170
+E comentários opcionais.
+
+00:14:32.170 --> 00:14:36.050
+Isso é o suficiente para se posicionar diante de um auditor e dizer exatamente o que aconteceu
+
+00:14:36.050 --> 00:14:36.630
+por quem e quando.
+
+00:14:37.390 --> 00:14:39.970
+Sem esses campos gravados em algum lugar permanente, você não tem um log.
+
+00:14:40.410 --> 00:14:41.350
+Você tem apenas esperança.
+
+00:14:41.870 --> 00:14:45.330
+E sendo franco, o histórico de execução é basicamente o Snapchat dos dados de fluxo
+
+00:14:45.330 --> 00:14:45.690
+de trabalho.
+
+00:14:45.690 --> 00:14:48.490
+Divertido momento, mas desaparece quando você realmente precisa.
+
+00:14:48.970 --> 00:14:50.110
+Microsoft não esconde esse fato.
+
+00:14:50.630 --> 00:14:53.790
+Eles projetam esses logs para expirar, porque o armazenamento de longo prazo é responsabilidade
+
+00:14:53.790 --> 00:14:54.050
+sua.
+
+00:14:54.650 --> 00:14:56.410
+O perigo não é apenas perder um rastro de aprovação.
+
+00:14:57.130 --> 00:15:00.450
+É a falsa sensação de segurança que impede os administradores de criar sistemas de
+
+00:15:00.450 --> 00:15:01.390
+log reais desde o início.
+
+00:15:02.050 --> 00:15:04.490
+Todos presumem que os registros existem, quando na verdade não existem.
+
+00:15:04.850 --> 00:15:05.690
+Então, aqui está a conclusão.
+
+00:15:05.930 --> 00:15:06.810
+O registro inlog não é opção.
+
+00:15:07.230 --> 00:15:09.370
+Se você não capturar dados duráveis, não terá nada para apresentar.
+
+00:15:09.710 --> 00:15:10.270
+Captura de tela.
+
+00:15:10.690 --> 00:15:11.090
+Não vale nada.
+
+00:15:11.490 --> 00:15:11.830
+Estou aí.
+
+00:15:12.190 --> 00:15:12.650
+Não vale nada.
+
+00:15:12.650 --> 00:15:16.030
+O que funciona são logs estruturados, que você pode consultar com confiança.
+
+00:15:16.510 --> 00:15:18.770
+Se esta análise está evitando uma dor de cabeça, clique em curtir.
+
+00:15:19.230 --> 00:15:21.490
+Isso ajuda outros administradores a encontrar este guide sobreviver.
+
+00:15:21.870 --> 00:15:22.810
+A melhor prática é simples.
+
+00:15:23.530 --> 00:15:26.870
+Toda ação de aprovação precisa terminar registrando quem aprovou a etapa do processo,
+
+00:15:26.950 --> 00:15:30.510
+a ação tomada, seu ID, o timestamp e quaisquer comentários.
+
+00:15:31.430 --> 00:15:31.830
+É só isso.
+
+00:15:32.330 --> 00:15:35.110
+Crie esse hábito agora ou você estará escrevendo e-mails de desculpas para a conformidade
+
+00:15:35.110 --> 00:15:35.410
+depois.
+
+00:15:36.010 --> 00:15:39.990
+A verdadeira questão, no entanto, não é se deve registrar, mas onde e como armazenar
+
+00:15:39.990 --> 00:15:43.770
+esse log para que dure 3, 5 ou até 10 anos, sem virar um pesadelo de migração de TI.
+
+00:15:44.770 --> 00:15:46.010
+E é aí que as coisas ficam interessantes.
+
+00:15:46.970 --> 00:15:49.390
+Preparar para o futuro, deixando suas aprovações prontas para a auditoria.
+
+00:15:49.910 --> 00:15:52.650
+Preparar suas aprovações para o futuro não é sobre parecer inteligente em uma demonstração.
+
+00:15:53.450 --> 00:15:57.470
+É garantir que, daqui a 5 anos, você ainda consiga gerar um log limpo e confiável quando
+
+00:15:57.470 --> 00:15:59.130
+alguém perguntar quem aprovou o que e quando.
+
+00:15:59.130 --> 00:16:01.810
+Esse é o verdadeiro teste de estar pronto para uma auditoria.
+
+00:16:02.190 --> 00:16:03.190
+Logos de curta duração são ainda.
+
+00:16:03.590 --> 00:16:05.510
+Listas aleatórias do SharePoint são apenas um pouco maiores.
+
+00:16:05.830 --> 00:16:07.710
+Sua empresa não pede provas da última terça-feira.
+
+00:16:08.150 --> 00:16:10.790
+Eles pedem durante uma revisão de conformidade que analisa os últimos 5 anos.
+
+00:16:11.390 --> 00:16:13.870
+Auditores não se importam com a aparência da sua visualização no SharePoint.
+
+00:16:14.410 --> 00:16:18.250
+Eles se importam se os registros sobreviveram a migrações de sistema, troca de administradores
+
+00:16:18.250 --> 00:16:21.170
+e aquela pasta de vamos consertar depois que ninguém nunca consertou.
+
+00:16:22.010 --> 00:16:26.550
+A parte difícil é descobrir como manter registros por 3, 5 ou até 10 anos sem criar um pântano
+
+00:16:26.550 --> 00:16:27.050
+de dados.
+
+00:16:27.810 --> 00:16:32.090
+Cemitérios de TI estão cheios de exportações CSV, PDFs obsoletos e arquivos Excel com nomes
+
+00:16:32.090 --> 00:16:34.650
+como o importante, underfinal, underft.ciss e se erres.
+
+00:16:35.170 --> 00:16:36.050
+Nada disso é sustentável.
+
+00:16:36.510 --> 00:16:39.810
+Eles desaparecem, corrompem e definitivamente não passam pelo crivo de comitês de auditoria.
+
+00:16:40.730 --> 00:16:43.010
+Você não pode basear sua estratégia de conformidade em bagunça digital.
+
+00:16:43.950 --> 00:16:44.750
+Imagine o pior cenário.
+
+00:16:45.250 --> 00:16:47.770
+Os auditores chegam, você respira aliviado porque salvamos os logs.
+
+00:16:48.710 --> 00:16:52.050
+Então, você descobre que metade deles são CSVs corrompidos no OneDrive de alguém e o restante
+
+00:16:52.050 --> 00:16:53.890
+está bloqueado em um formato contratado que ninguém lembra.
+
+00:16:54.450 --> 00:16:55.450
+Essa reunião não terminará bem.
+
+00:16:55.450 --> 00:16:58.710
+Preparar para o futuro significa construir algo estruturado desde...
+
+00:16:58.710 --> 00:17:01.410
+O objetivo é um registro centralizado, estruturado e durável.
+
+00:17:02.210 --> 00:17:04.450
+Cole uma plataforma que tenha persistência como sua função principal.
+
+00:17:05.210 --> 00:17:08.710
+Dataverse é um forte candidato para ambientes Microsoft, pois lida com dados relacionais
+
+00:17:08.710 --> 00:17:11.730
+e segurança baseada em funções e escala muito melhor do que uma lista simples.
+
+00:17:12.730 --> 00:17:15.390
+SQL é igualmente válido se o seu ambiente já o suporta.
+
+00:17:16.050 --> 00:17:18.730
+E sim, listas do SharePoint podem ser um ponto de partida se você precisa de algo rápido.
+
+00:17:19.110 --> 00:17:22.290
+O ponto não é perseguir tecnologias da moda, é garantir que sua estrutura não quebre
+
+00:17:22.290 --> 00:17:25.550
+quando alguém solicitar logs de 2017.
+
+00:17:25.550 --> 00:17:40.230
+Se você armazena tudo com uma grande nota de texto, auditores e relatórios falham, você
+
+00:17:40.230 --> 00:17:42.710
+acabará lendo a entrada de diário em vez de executar consultas limpas.
+
+00:17:42.710 --> 00:17:47.530
+Campos estruturados permitem que você mostre todas as aprovações de JNDO entre abril
+
+00:17:47.530 --> 00:17:48.270
+e junho em segundos.
+
+00:17:49.390 --> 00:17:51.930
+Quando você armazena aprovações corretamente, geral relatórios tornam-se em dom.
+
+00:17:52.510 --> 00:17:55.170
+Passa de conformidade e passa do modo pânico para uma tarefa de 5 minutos.
+
+00:17:55.870 --> 00:17:58.890
+Em vez de montar salas de crise, você executa uma consulta, exporta e entrega.
+
+00:17:59.610 --> 00:18:03.710
+É a diferença entre ser visto como o profissional tranquilo que tem as provas, em vez do administrador
+
+00:18:03.710 --> 00:18:05.530
+reverendo caixas de entrada de 4 anos atrás.
+
+00:18:06.450 --> 00:18:07.770
+E os benefícios não param na auditoria.
+
+00:18:07.770 --> 00:18:12.310
+Centralize aprovações no Dataverse ou SQL e, de repente, você tem painéis no Power BI
+
+00:18:12.310 --> 00:18:15.470
+ou tabelas dinâmicas no Excel que permitem gestão ver quem está aprovando, quanto tempo
+
+00:18:15.470 --> 00:18:17.410
+as coisas levam e onde estão os gargalos.
+
+00:18:18.150 --> 00:18:20.170
+Dados de conformidade também servem como inteligência de processo.
+
+00:18:20.650 --> 00:18:22.850
+Isso significa que você para de apagar incêndios e começa a mostrar valor.
+
+00:18:23.350 --> 00:18:26.030
+Se isso parece trabalhoso, é, mas é um trabalho feito apenas uma vez.
+
+00:18:26.650 --> 00:18:29.530
+Os jeitinhos baratos vão te deixar limpando a bagunça toda vez que os auditores bateriam a
+
+00:18:29.530 --> 00:18:29.590
+pôr.
+
+00:18:30.130 --> 00:18:32.770
+Listas do SharePoint sem o plano crescem rápido demais e acabam colapsando.
+
+00:18:33.550 --> 00:18:35.190
+Importações aleatórias são garantia de perda de dados.
+
+00:18:35.190 --> 00:18:38.450
+Configurar um armazenamento durável logo cedo evita a dor de cabeça de 3 anos mais
+
+00:18:38.450 --> 00:18:38.630
+tarde.
+
+00:18:39.230 --> 00:18:40.070
+Quer começar com pouca fricção?
+
+00:18:40.490 --> 00:18:42.310
+Escreva logs mínimos em uma lista do SharePoint agora.
+
+00:18:42.830 --> 00:18:48.030
+Capture o essencial, ID da solicitação, etapa, ação, ID do aprovador, carimbo de data
+
+00:18:48.030 --> 00:18:51.090
+barra hora e link de correlação, em cada aprovação ou escalonamento.
+
+00:18:52.030 --> 00:18:54.610
+Mais tarde, se precisar de escala, migre para o Dataverse ou SQL.
+
+00:18:55.410 --> 00:18:59.150
+É melhor capturar capturado hoje do que esperar até que a liderança exija um rastro de 5
+
+00:18:59.150 --> 00:18:59.750
+anos amanhã.
+
+00:19:00.470 --> 00:19:02.230
+Aqui está uma lista rápida do pior ou melhor cenário.
+
+00:19:02.230 --> 00:19:06.910
+Primeiro, escolha um armazenamento persistente, Dataverse, SQL ou SharePoint com backup adequado.
+
+00:19:07.610 --> 00:19:11.450
+Segundo, defina um esquema mínimo, ID da solicitação, etapa, ação, ID do aprovador,
+
+00:19:11.610 --> 00:19:13.130
+carimbo de data barra hora e link de correlação.
+
+00:19:14.250 --> 00:19:16.510
+Em seguida, escreva logs a cada aprovação ou escalonamento.
+
+00:19:17.250 --> 00:19:20.450
+Por último, crie pequenos relatórios no Power BI ou Excel para que os auditores tenham
+
+00:19:20.450 --> 00:19:21.170
+clareza em segundos.
+
+00:19:21.830 --> 00:19:23.170
+E se preparar-se para o futuro, um só passo.
+
+00:19:23.510 --> 00:19:25.450
+Sem rolação, apenas passos que você pode realmente executar.
+
+00:19:25.830 --> 00:19:28.210
+Então, não arrisque sua carreira com CSVs escondidos em área de trabalho.
+
+00:19:28.210 --> 00:19:30.650
+Armazene as aprovações onde elas...
+
+00:19:30.650 --> 00:19:32.350
+Mantenha os dados estruturados e consultar.
+
+00:19:32.670 --> 00:19:34.310
+Crie pequenos relatórios agora para ter confiança.

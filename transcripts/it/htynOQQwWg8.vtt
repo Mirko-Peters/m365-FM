@@ -1,0 +1,1633 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:07.520
+Pronti per 12 giorni di Microsoft 365, Copilot, IA Azure e le persone che plasmano il futuro del lavoro e le persone che plasmano il futuro del lavoro.
+
+00:00:07.940 --> 00:00:11.860
+Questo gennaio M365 contorna ed è ancora più grande.
+
+00:00:12.940 --> 00:00:18.000
+Unitevi a noi per sessioni dal vivo, demo reali e conoscenze pratiche da MVP ed esperti del settore in tutto il mondo.
+
+00:00:18.900 --> 00:00:21.200
+Niente slide generiche, niente gergo infinito.
+
+00:00:21.980 --> 00:00:23.120
+Affronteremo le sfide reali.
+
+00:00:23.800 --> 00:00:28.560
+Copilot Studio, agenti IA, Fabric, Sicurezza, Governance e Automazione.
+
+00:00:28.560 --> 00:00:34.260
+Che siate professionisti IT, sviluppatori o leader aziendali, ci sono sessioni pensate per voi?
+
+00:00:35.560 --> 00:00:40.000
+Con 10 giorni interi potrete esplorare varie tecnologie e connettervi con una community globale.
+
+00:00:40.900 --> 00:00:44.180
+Seguite dal vivo e portate intuizioni pratiche nella vostra organizzazione.
+
+00:00:45.140 --> 00:00:49.020
+Gennaio 2027, 10 giorni, un'unica community Microsoft.
+
+00:00:49.580 --> 00:00:50.540
+Le iscrizioni sono aperte.
+
+00:00:51.740 --> 00:00:55.780
+Andate su m365con.net e assicuratevi il posto oggi stesso.
+
+00:00:55.780 --> 00:00:58.380
+m365con.net
+
+00:00:58.380 --> 00:01:04.780
+Iscrivetevi ora su m365con.net e ci vediamo dal vivo a gennaio.
+
+00:01:05.280 --> 00:01:06.520
+Le notifiche del vostro team sono stupi.
+
+00:01:07.820 --> 00:01:10.960
+Spammano promemoria che nessuno legge e sembrano progettate nel 2003.
+
+00:01:12.140 --> 00:01:12.740
+Ecco la soluzione.
+
+00:01:13.100 --> 00:01:14.040
+Esamineremo tre parti.
+
+00:01:14.940 --> 00:01:16.420
+Strutturare i dati in Microsoft Lists,
+
+00:01:16.680 --> 00:01:19.680
+progettare una scheda adattiva e collegare il tutto con Power Automate.
+
+00:01:19.680 --> 00:01:25.140
+Iscrivetevi alla newsletter su m365.show se volete la checklist completa passo dopo passo.
+
+00:01:26.200 --> 00:01:30.320
+Una volta collegati i pezzi, i noiosi avvisi diventano mini-app eleganti e cliccabili in Teams.
+
+00:01:31.060 --> 00:01:35.920
+Alla fine creerete una semplice scheda attività per approvare o posticipare senza che l'utente lasci mai la chat.
+
+00:01:36.860 --> 00:01:40.540
+Ottimo, ma prima vediamo perché le notifiche predefinite di Teams sono così inutili.
+
+00:01:41.640 --> 00:01:43.240
+Perché le notifiche di Teams falliscono?
+
+00:01:43.740 --> 00:01:47.700
+Avete notato quanto siamo veloci a cliccare su segna come letto su un avviso di Teams senza nemmeno guardarlo?
+
+00:01:47.700 --> 00:01:49.080
+Succede continuamente.
+
+00:01:49.420 --> 00:01:52.460
+La brutta verità è che la maggior parte delle notifiche non meritano nemmeno il clic.
+
+00:01:52.880 --> 00:01:54.700
+Non vi chiedono di fare effettivamente nulla.
+
+00:01:55.560 --> 00:02:00.700
+Si accumulano semplicemente piccoli blocchi di testo statico che tecnicamente vi avvisano ma non invitano all'azione.
+
+00:02:00.940 --> 00:02:02.860
+Teams doveva rendere la collaborazione più facile,
+
+00:02:03.100 --> 00:02:07.620
+eppure quegli avvisi funzionano come un vecchio sistema di altoparlanti rumorosi, unidirezionali, solitamente ignorati.
+
+00:02:08.340 --> 00:02:09.300
+Ecco come funziona il dettaglio.
+
+00:02:09.620 --> 00:02:13.320
+Qualcuno imposta un flusso, ad esempio una richiesta di approvazione o un promemoria per controllare una Teams.
+
+00:02:13.320 --> 00:02:15.280
+Teams invia il segnale, ma quel segnale è vuoto.
+
+00:02:15.280 --> 00:02:17.780
+Sono solo parole in una casella, senza alcuna interattività.
+
+00:02:18.540 --> 00:02:20.760
+Il destinatario alza le spalle, cancella e se ne dimentica.
+
+00:02:21.960 --> 00:02:25.660
+Nel frattempo quella richiesta rimane intatta, inattesa come un ticket abbandonato in coda.
+
+00:02:26.360 --> 00:02:28.380
+Moltiplicate questo per decine di avvisi a settimana,
+
+00:02:28.640 --> 00:02:33.620
+e con gratulazioni avete creato un rumore di fondo digitale paragonabile allo stare tra un martello pneumatico e un motore a reazione.
+
+00:02:34.380 --> 00:02:35.520
+Le conseguenze si vedono in fretta.
+
+00:02:35.900 --> 00:02:38.700
+Un manager ha bisogno di un'approvazione, ma la richiesta resta in sospeso,
+
+00:02:38.700 --> 00:02:40.860
+così finisce per inseguire la persona in chat.
+
+00:02:41.320 --> 00:02:41.860
+E hai visto quello?
+
+00:02:43.320 --> 00:02:47.260
+Quel messaggio viene subito sepolto dal rumore di incontri informali, sondaggi o avvisi di interruzione,
+
+00:02:47.340 --> 00:02:48.660
+su cui nessuno può agire.
+
+00:02:49.820 --> 00:02:51.240
+In poco tempo subentra la muscolare.
+
+00:02:51.960 --> 00:02:52.940
+Scorri, posticipa, chiudi.
+
+00:02:54.060 --> 00:02:54.980
+Il risultato non è che Team Siarò.
+
+00:02:55.440 --> 00:02:58.740
+Il problema è che le notifiche che vi transitano non sono mai state pensate per l'interazione.
+
+00:02:59.360 --> 00:03:01.640
+Considerate il sistema attuale come un fax nel 2024.
+
+00:03:01.640 --> 00:03:07.160
+Sì, il foglio esce dall'altra parte, tecnicamente l'informazione è passata, ma nessuno si vanta di usarlo.
+
+00:03:07.940 --> 00:03:11.160
+Stesso vale per gli avvisi di Teams, tecnicamente funzionali, ma dolorosamente obsoleti.
+
+00:03:12.080 --> 00:03:16.820
+Il lavoro vero finisce su altri canali, tra infiniti mail, solleciti in chat e fogli di calcolo manuali.
+
+00:03:17.940 --> 00:03:21.000
+Teams diventa un corridoio pieno di volantini digitali che tutti ingerano passando.
+
+00:03:21.660 --> 00:03:24.480
+Da ciò che abbiamo visto in implementazioni reali e casi di supporto,
+
+00:03:24.800 --> 00:03:26.660
+le notifiche non azionabili vengono ignorate.
+
+00:03:26.980 --> 00:03:31.300
+In pratica, quando gli utenti vengono sommersi da questi avvisi statici, i tassi di risposta crollano drasticamente.
+
+00:03:31.740 --> 00:03:33.400
+Continuiamo a vedere lo stesso schema su tutti i tema.
+
+00:03:34.020 --> 00:03:36.480
+Più gli avvisi sono vuoti, meno ci si preoccupa di agire.
+
+00:03:37.380 --> 00:03:41.580
+E con questo la produttività crolla, approvazioni mancate, attività in ritardo, passaggi di consegni interrotti.
+
+00:03:42.580 --> 00:03:46.000
+Tutto si trasforma in scuse del tipo scusa, non l'avevo visto, e il ciclo si ripete.
+
+00:03:46.680 --> 00:03:47.900
+Il tempo è dove fa davvero male.
+
+00:03:48.520 --> 00:03:53.600
+Ogni avviso inutile genera email di follow-up, escalation, monitoraggi manuali e una dozzina di passaggi extra inutili.
+
+00:03:54.300 --> 00:03:56.720
+Canali Teams si riempiono di post di bot che nessuno legge,
+
+00:03:56.880 --> 00:03:59.700
+mentre gli avvisi prioritari reali affondano senza essere visti.
+
+00:03:59.700 --> 00:04:05.340
+Il modo più veloce per affondare il coinvolgimento degli utenti è inondarli di avvisi che non permettono di risolvere nulla sul posto.
+
+00:04:05.880 --> 00:04:07.520
+La storia di un cliente ha confermato tutto ciò.
+
+00:04:07.980 --> 00:04:14.380
+Avevano un processo di approvazione e ordini collegato a Teams, ma i messaggi erano generici, con un banale link di visualizzazione.
+
+00:04:14.380 --> 00:04:19.320
+Cliccando si finiva su un sito senza contesto né istruzioni, solo una casella vuota in attesa di input.
+
+00:04:20.020 --> 00:04:24.520
+Un'approvazione è rimasta ferma per tre settimane, bloccando l'acquisto finché il fornitore non ha rinunciato.
+
+00:04:25.640 --> 00:04:26.400
+La lezione era ovvia.
+
+00:04:26.680 --> 00:04:30.120
+Contesto e azione devono essere integrati alla notifica stessa, altrimenti il sistema fallisce completamente.
+
+00:04:30.620 --> 00:04:32.380
+La cosa assurda è che tutto questo dolore è necessario.
+
+00:04:32.740 --> 00:04:36.140
+Le notifiche non devono essere trattate come fogli di carta infilati sotto una porta digitale.
+
+00:04:36.560 --> 00:04:37.700
+Possono richiedere un'azione direttamente.
+
+00:04:38.100 --> 00:04:41.380
+Possono contenere pulsanti, campi e contesto affinché gli utenti possano rispondere istantaneamente.
+
+00:04:41.380 --> 00:04:44.000
+E' proprio qui che le schede adattive cambiano le regole del giorno.
+
+00:04:44.620 --> 00:04:47.400
+Invece di urlare informazioni sperando in una reazione, la scheda stessa dice
+
+00:04:47.400 --> 00:04:48.180
+Ecco la scelta.
+
+00:04:49.060 --> 00:04:49.560
+Clicca la web.
+
+00:04:49.980 --> 00:04:51.440
+Da sapere diventano fatti in un solo clip.
+
+00:04:52.020 --> 00:04:54.820
+In sintesi, le notifiche dei team falliscono perché sono statiche.
+
+00:04:55.400 --> 00:04:58.640
+Sversano informazioni prive di contesto, costringendo l'utente a cercare altrove.
+
+00:04:59.560 --> 00:05:01.940
+Le schede adattive funzionano perché eliminano questa caccia al tesoro.
+
+00:05:02.320 --> 00:05:03.360
+Portano l'azione necessaria.
+
+00:05:03.460 --> 00:05:05.740
+Prova, aggiorna, chiudi direttamente nella chat.
+
+00:05:06.480 --> 00:05:09.120
+Questa è la differenza tra rumore fastidioso e flusso di lavoro utile.
+
+00:05:09.120 --> 00:05:13.060
+Quindi la domanda è, come far funzionare queste schede come vuoi tu?
+
+00:05:13.640 --> 00:05:16.200
+Il segreto è che le schede intelligenti si basano su dati intelligenti.
+
+00:05:16.440 --> 00:05:20.240
+Se i tuoi dati sono disordinati o destrutturati, le schede sembreranno avvisi statici.
+
+00:05:21.940 --> 00:05:26.180
+Ora vedremo lo strumento sottovalutato che è il cuore di tutto, Microsoft Lists.
+
+00:05:27.340 --> 00:05:28.860
+Vuoi un avviso quando esci in una papara?
+
+00:05:29.340 --> 00:05:31.820
+Iscriviti su m365.show per non perdertela.
+
+00:05:32.820 --> 00:05:34.500
+L'arma segreta, Microsoft Lists.
+
+00:05:34.500 --> 00:05:38.060
+Parliamo dunque della vera base di tutto questo sistema, Microsoft Lists.
+
+00:05:38.820 --> 00:05:41.900
+Molti lo guardano e dicono, fantastico, un altro aspirante Excel in SharePoint.
+
+00:05:43.120 --> 00:05:46.220
+Poi ci buttano note a caso, colonna a metà e finiscono lì.
+
+00:05:47.400 --> 00:05:48.040
+Ecco il colpo di share.
+
+00:05:48.620 --> 00:05:49.860
+Lists non è un assistente secondario.
+
+00:05:50.240 --> 00:05:52.300
+È il motore che fa funzionare davvero le tue schede adattive.
+
+00:05:52.780 --> 00:05:55.040
+Se i dati sorgenti sono spazzature, le schede saranno spazzature.
+
+00:05:55.520 --> 00:05:55.880
+Semplice.
+
+00:05:55.880 --> 00:05:59.600
+Le schede adattive, per quanto belle, sono utili solo quanto i dati dietro di esse.
+
+00:06:00.440 --> 00:06:03.860
+Se la lista è piena di testi incoerenti e campi vuoti, la scheda non ha senso.
+
+00:06:05.440 --> 00:06:10.380
+Invece di una chiamata all'azione chiara, hai promemoria, confusi e pulsanti vaghi.
+
+00:06:11.440 --> 00:06:13.100
+Non è un flusso di lavoro, è carta parata digitale.
+
+00:06:13.700 --> 00:06:15.420
+I dati strutturati sono ciò che fa funzionare queste schede.
+
+00:06:15.780 --> 00:06:17.660
+Senza di essi anche il design migliore fallisce.
+
+00:06:18.100 --> 00:06:18.800
+Il problema emerge subito.
+
+00:06:18.800 --> 00:06:23.580
+Ho visto liste con colonne proprietario, piene di soprannomi o scritte come chiedi a John.
+
+00:06:24.680 --> 00:06:27.020
+Ottimo, ora la tua scheda contatterà la persona sbagliata o nessuno.
+
+00:06:27.780 --> 00:06:32.400
+Ho stati dove una voce dice in corso, un'altra IP e un'altra più o meno.
+
+00:06:32.920 --> 00:06:33.860
+Provo ad automatizzare questa.
+
+00:06:34.160 --> 00:06:34.540
+Buona fortuna.
+
+00:06:34.880 --> 00:06:37.040
+La scheda mostrerà più o meno su un pulsante.
+
+00:06:37.960 --> 00:06:39.380
+Gli utenti lo ignoreranno ridendo.
+
+00:06:40.640 --> 00:06:42.200
+Ecco un modo più pulito di vederla.
+
+00:06:43.040 --> 00:06:44.740
+Tratta Microsoft Lists come lato di Spencer.
+
+00:06:45.100 --> 00:06:47.880
+Le schede adattive sono ricette che pescano da quegli scaffali.
+
+00:06:48.800 --> 00:06:51.540
+Se la dispensa è piena di roba scaduta, la cena è rovinata.
+
+00:06:52.540 --> 00:06:56.260
+Ma se tutto è etichettato e coerente, la ricetta viene perfetta.
+
+00:06:57.880 --> 00:06:58.720
+Funziona nel stesso modo.
+
+00:06:59.000 --> 00:07:01.720
+Un elenco pulito rende le schede adattive chiare, azionabili e veloci.
+
+00:07:02.240 --> 00:07:03.560
+Basiamoci su un esempio pratico.
+
+00:07:04.000 --> 00:07:06.720
+Diciamo che vuoi un semplice tracker di attività per gestire i promemoria in Teams.
+
+00:07:07.140 --> 00:07:08.280
+Crea un elenco con quattro campo.
+
+00:07:09.020 --> 00:07:11.460
+Primo, nome, attività, righe di testo singola.
+
+00:07:11.920 --> 00:07:13.180
+Poi data di scadenza, data.
+
+00:07:13.420 --> 00:07:14.800
+Poi proprietario, persona.
+
+00:07:15.300 --> 00:07:17.400
+Infine flag, promemoria, scelta o simar, no.
+
+00:07:17.760 --> 00:07:18.180
+Tutto qui.
+
+00:07:18.500 --> 00:07:20.860
+Quattro colonne pulite che puoi collegare direttamente a una scheda.
+
+00:07:21.420 --> 00:07:25.320
+La scheda mostra quindi l'attività, comunica al proprietario la scadenza e offre due pulsanti.
+
+00:07:25.460 --> 00:07:26.640
+Signa come fatto, posticipa.
+
+00:07:27.620 --> 00:07:29.520
+Nessuna ipotesi, nessuna ricerca, clic, fatto.
+
+00:07:30.140 --> 00:07:33.580
+Ora confrontalo con lo stesso elenco in cui il proprietario dice solo me la data di scadenza
+
+00:07:33.580 --> 00:07:36.700
+e vuota metà delle volte e il flag promemoria è scritto come sì.
+
+00:07:37.900 --> 00:07:40.440
+Quella scheda crea confusione e la confusione uccide coinvolgimento.
+
+00:07:40.440 --> 00:07:42.300
+I tipi di colonna non sono solo un abbellimento.
+
+00:07:42.760 --> 00:07:45.000
+Sono la differenza tra una scheda funzionante e una inutile.
+
+00:07:45.000 --> 00:07:49.800
+Le colonne di scelta offrono opzioni prevedibili che si traducono perfettamente in pulsanti sulla scheda.
+
+00:07:50.600 --> 00:07:52.860
+Le colonne data bar ora consentono di attivare una logica precisa.
+
+00:07:53.740 --> 00:07:56.660
+Usa colonne di tipo persona per mostrare informazioni del proprietario.
+
+00:07:56.780 --> 00:08:00.900
+In Teams gli utenti possono riconoscere la persona a colpo d'occhio, con nome e spesso avatar.
+
+00:08:01.660 --> 00:08:04.140
+È molto più affidabile che inserire un campo di testo libero casuale.
+
+00:08:04.840 --> 00:08:07.460
+Ed ecco l'insidia che vedo continuamente la temuta colonna delle nuove.
+
+00:08:07.460 --> 00:08:10.240
+Un'enorme blocco di testo che cerca di catturare tu.
+
+00:08:10.640 --> 00:08:11.000
+Un faro.
+
+00:08:11.440 --> 00:08:13.860
+Evita di riversare tutto il tuo processo in nota a formato libero.
+
+00:08:14.540 --> 00:08:19.060
+Usa i tipi di colonna reali affinché la scheda possa visualizzare elementi puliti e cliccabili invece di generare solo testo.
+
+00:08:19.620 --> 00:08:21.200
+Una volta cambiato il tuo approccio tutto avrà senso.
+
+00:08:21.600 --> 00:08:22.780
+Gli elenchi non sono archivi passivi.
+
+00:08:23.440 --> 00:08:26.100
+Sono lo schema la definizione di ciò che il tuo flusso di lavoro significa realmente.
+
+00:08:26.740 --> 00:08:27.800
+Ogni colonna stabilisce un'area.
+
+00:08:28.300 --> 00:08:29.220
+Ogni campo impone una struttura.
+
+00:08:29.220 --> 00:08:33.900
+Quella struttura alimenta il design della scheda che poi alimenta Power Automate quando la colleghi.
+
+00:08:34.820 --> 00:08:37.240
+Ti imposti bene lo schema, non stai solo costruendo una scheda.
+
+00:08:38.180 --> 00:08:41.500
+Stai creando una mini-app che ha un aspetto pulito e funziona esattamente come gli utenti si aspettano.
+
+00:08:42.420 --> 00:08:43.080
+Il succo è questo.
+
+00:08:43.740 --> 00:08:46.060
+Microsoft Lists non è un noioso lavoro burocratico.
+
+00:08:46.480 --> 00:08:49.400
+È il livello nascosto che trasforma le tue notifiche in qualcosa di più che semplice rumore.
+
+00:08:50.220 --> 00:08:55.200
+Mantieni le strutturate e le tue schede adattive smetteranno di sembrare spam statico e inizieranno a sembrare strumenti utili.
+
+00:08:55.660 --> 00:08:56.300
+Dispensa e riforni.
+
+00:08:56.680 --> 00:08:58.680
+Ora progettiamo la ricetta, ovvero la scheda adattiva.
+
+00:08:59.680 --> 00:09:06.880
+Progettare la tua prima scheda adattiva può sembrare di aprire una scatola Ikea dove le istruzioni mostrano quattro viti, ma il sacchetto ne contiene quindi.
+
+00:09:07.780 --> 00:09:11.940
+In breve, un po' confuso, inizia a chiederti se questa cosa crollerà la prima volta che qualcuno si appoggia.
+
+00:09:12.560 --> 00:09:14.160
+È il punto in cui la maggior parte delle persone si blocca.
+
+00:09:14.620 --> 00:09:18.800
+Apri l'editor, fissi codice JSON grezzo opzioni casuali e improvvisamente l'entusiasmo svanisce.
+
+00:09:19.320 --> 00:09:19.920
+Ecco la soluzione.
+
+00:09:20.300 --> 00:09:22.000
+Non devi diventare un esperto informatico di offro.
+
+00:09:22.660 --> 00:09:25.180
+Microsoft ci ha fornito uno strumento che ti risparmia questo tormento.
+
+00:09:25.500 --> 00:09:26.640
+Si chiama Adaptive Card Designer.
+
+00:09:26.980 --> 00:09:28.480
+Pensalo come una sandbox senza rischi.
+
+00:09:28.480 --> 00:09:34.420
+Puoi trascinare gli elementi, testare layout e vedere in anteprima come appariranno i Teams prima di sottoporre chiunque altro all'esperimento.
+
+00:09:35.220 --> 00:09:42.460
+Puoi caricare dati di esempio e verificare il design con valori reali, evitandoti la fatica di modificare direttamente il JSON come se fosse un oscuro passatempo.
+
+00:09:42.460 --> 00:09:48.040
+Il designer non creerà il tuo processo al posto tuo, ma ti offre un modo sicuro per realizzare la scheda nel modo giusto.
+
+00:09:48.700 --> 00:09:49.920
+Molti però inciampano ancora qui.
+
+00:09:50.380 --> 00:09:51.520
+La tentazione è di esagerare.
+
+00:09:52.020 --> 00:09:54.660
+Vedono tutti quei controlli luccicanti e pensano, ottimo, è il momento di stupire.
+
+00:09:55.460 --> 00:09:59.160
+All'improvviso la loro scheda ha sei pulsanti, un menu a tendina e un testo che sembra un manuale di procedura.
+
+00:09:59.160 --> 00:10:00.740
+E poi nessuno ci clicca.
+
+00:10:01.260 --> 00:10:11.200
+Una volta ho visto una scheda con opzioni come prova, rifiuta, rimanda, scala, assegna e, non sto inventando, non so, risultato, tutti l'hanno ignorata.
+
+00:10:11.680 --> 00:10:13.680
+Meno scelte significano sempre clic più decisi.
+
+00:10:14.760 --> 00:10:18.120
+E la tua scheda costringe le persone a fermarsi e valutare dieci opzioni e hai già persi.
+
+00:10:18.740 --> 00:10:19.700
+Ecco un semplice confronto.
+
+00:10:20.000 --> 00:10:22.680
+La prima bozza sembra che SharePoint abbia sputato paragrafi sulla pagina.
+
+00:10:23.500 --> 00:10:26.320
+Lunghi blocchi di testo, un link generico e zero contesto.
+
+00:10:26.320 --> 00:10:30.780
+La seconda bozza mostra il nome dell'attività, la scadenza e il responsabile è un solo pulsante, approvo.
+
+00:10:31.660 --> 00:10:32.320
+Fine della storia.
+
+00:10:32.560 --> 00:10:35.100
+Non serve una metrica per indovinare quale versione ha ricevuto risposta.
+
+00:10:35.460 --> 00:10:37.980
+La regola generale è breve ed efficace, progettata per decidere.
+
+00:10:38.720 --> 00:10:42.100
+Dieci parole, mostra responsabile, mostra data di scadenza, aggiunge uno o due pulsanti che ha.
+
+00:10:42.480 --> 00:10:42.880
+Tutto qui.
+
+00:10:43.200 --> 00:10:44.540
+Quindi quali sono i veramente costitutivi?
+
+00:10:44.920 --> 00:10:46.540
+Ogni scheda è composta da tre elementi fondamentali.
+
+00:10:46.880 --> 00:10:47.860
+Primo, i blocchi di testo.
+
+00:10:48.340 --> 00:10:49.380
+Semplice etichetta e descrizioni.
+
+00:10:49.880 --> 00:10:52.940
+Servono per dire attività in scadenza venerdì o richiesta di rimborso in attesa.
+
+00:10:53.440 --> 00:10:54.040
+Secondo, gli input.
+
+00:10:54.040 --> 00:10:55.820
+Si tratta di mena tendine, casa dico me.
+
+00:10:56.220 --> 00:10:58.480
+E' qui che gli utenti possono selezionare un'opzione o scrivere una no.
+
+00:10:59.380 --> 00:11:01.500
+Terzo, l'azione submit, ovvero il pulsante.
+
+00:11:02.080 --> 00:11:04.080
+Cliccalo e la scheda invierà i dati al tuo flusso.
+
+00:11:05.140 --> 00:11:05.860
+Facile da ricordare.
+
+00:11:06.040 --> 00:11:08.500
+Testo per le informazioni, input per le scelte, invio per l'azione.
+
+00:11:08.920 --> 00:11:09.880
+Fai solo attenzione ai nomi.
+
+00:11:10.320 --> 00:11:13.160
+L'azione submit restituisce i nomi delle proprietà esattamente come impostate.
+
+00:11:13.860 --> 00:11:16.520
+Pianifica quei nomi in modo che corrispondano a ciò che il tuo flusso si aspetta,
+
+00:11:16.600 --> 00:11:18.460
+altrimenti dovrai correggere input che non coincidono.
+
+00:11:18.960 --> 00:11:20.300
+Ed ecco la best practice fondamentale.
+
+00:11:20.300 --> 00:11:24.100
+Ogni elemento della tua card dovrebbe essere collegato direttamente alla tua lista.
+
+00:11:24.820 --> 00:11:28.340
+Prendi il nome dell'attività della nuova attività, mappa la data di scadenza dalla data di scadenza,
+
+00:11:28.440 --> 00:11:30.120
+invia le scelte dei pulsanti allo stato di approvazione.
+
+00:11:30.380 --> 00:11:31.160
+Ora tutto è collegato.
+
+00:11:31.500 --> 00:11:35.100
+Te te ne dimentichi, la card diventa un elemento estetico che sembra carino ma non serve a nulla.
+
+00:11:35.760 --> 00:11:36.700
+Un consiglio pratico.
+
+00:11:36.700 --> 00:11:39.520
+Nomina i campi della card in modo che corrispondano ai nomi delle colonne della lista
+
+00:11:39.520 --> 00:11:41.360
+o almeno documenta la mappatura prima di creare il flusso.
+
+00:11:41.780 --> 00:11:45.120
+Ti risparmierà ore di grattacapi quando la card sembrerà corretta ma non aggiornerà nulla.
+
+00:11:45.440 --> 00:11:47.860
+È questo che distingue davvero le card demonstrative da quelle utili.
+
+00:11:48.720 --> 00:11:51.480
+Una buona card contiene esattamente il contesto che serve all'utente e nulla più.
+
+00:11:51.940 --> 00:11:52.820
+Pensa in termini di essenziali.
+
+00:11:53.220 --> 00:11:56.100
+La vedono, la capiscono all'istante e prendono una decisione con un click.
+
+00:11:56.720 --> 00:11:59.240
+Niente scorrimento, niente grattacapi, niente moduli complicati.
+
+00:11:59.240 --> 00:12:03.560
+Ma anche se azzecchi il design e il designer ricorda è solo uno schizzo attaccato al muro.
+
+00:12:04.880 --> 00:12:07.160
+Non fa nulla finché non lo inserisci in un flusso di lavoro attivo.
+
+00:12:07.940 --> 00:12:09.840
+Prima di arrivarci però testa in modo intelligente.
+
+00:12:10.380 --> 00:12:13.020
+Usa l'anteprima del designer per Teams per vedere come viene visualizzata,
+
+00:12:13.120 --> 00:12:15.720
+poi fai una prova con un piccolo gruppo per confermare layout e mappatura
+
+00:12:15.720 --> 00:12:17.480
+prima di distribuirla a tutta l'organizzazione.
+
+00:12:17.920 --> 00:12:20.200
+Nulla uccide l'adozione più velocemente di una card difettosa
+
+00:12:20.200 --> 00:12:21.880
+inviata a centinaia di utenti in una volta solo.
+
+00:12:22.520 --> 00:12:24.140
+Questo ci porta alla parte successiva della sfida.
+
+00:12:24.520 --> 00:12:25.580
+Una card di per sé è statica.
+
+00:12:26.040 --> 00:12:28.080
+Per farla apparire al momento giusto alle persone giuste
+
+00:12:28.080 --> 00:12:30.940
+e nella chat di Teams corretta serve qualcos'altro che gestisca la distribuzione.
+
+00:12:31.160 --> 00:12:34.680
+Tensa a quello, il tuo design perfetto è solo una bella immagine bloccata in una sandbox.
+
+00:12:36.080 --> 00:12:37.860
+Power Automate, il collegamento di tutto quanto.
+
+00:12:38.600 --> 00:12:41.420
+Power Automate è dove tutto ciò che hai costruito inizia a muoversi davvero.
+
+00:12:41.900 --> 00:12:44.040
+Pensa almeno come la parte appariscente del tuo progetto
+
+00:12:44.040 --> 00:12:45.740
+e più come il cablaggio nascosto nelle pareti.
+
+00:12:46.320 --> 00:12:48.040
+Le adaptive card possono sembrare rifinite,
+
+00:12:48.120 --> 00:12:50.160
+ma senza un flusso dietro sono solo poster decorativi.
+
+00:12:50.720 --> 00:12:53.360
+Power Automate è il sistema che assicura che le card appaiano in Teams
+
+00:12:53.360 --> 00:12:54.900
+al momento giusto per le persone giuste.
+
+00:12:55.660 --> 00:12:57.120
+Il trucco per farlo funzionare è la tempistica.
+
+00:12:57.120 --> 00:12:58.920
+Se le card arrivano troppo spesso
+
+00:12:58.920 --> 00:13:00.580
+verrai silenziato più velocemente del collega
+
+00:13:00.580 --> 00:13:01.900
+che condivide meme nel canale generale.
+
+00:13:02.360 --> 00:13:03.340
+Se arrivano troppo raramente
+
+00:13:03.340 --> 00:13:04.800
+e gli utenti dimenticano che il processo esiste,
+
+00:13:05.200 --> 00:13:06.020
+te li invii in ritardo,
+
+00:13:06.140 --> 00:13:08.760
+magari dopo la scadenza perderai completamente di credibilità.
+
+00:13:09.800 --> 00:13:10.960
+A quel punto il tuo promemoria
+
+00:13:10.960 --> 00:13:12.620
+sembrerà una di quelle mail automatiche
+
+00:13:12.620 --> 00:13:14.160
+sulla scadenza della garanzia dell'auto.
+
+00:13:14.640 --> 00:13:16.520
+Il flusso di lavoro è valido solo quanto la sua tempistica.
+
+00:13:17.020 --> 00:13:18.720
+Ecco perché devi riflettere attentamente sui trigger.
+
+00:13:19.720 --> 00:13:20.640
+Usa il trigger corretto
+
+00:13:20.640 --> 00:13:22.280
+affinché la scheda appaia al momento giusto,
+
+00:13:22.460 --> 00:13:23.840
+non in ogni istante possibile.
+
+00:13:24.440 --> 00:13:25.660
+Trigger efficaci comuni sono
+
+00:13:25.660 --> 00:13:26.900
+l'elemento creato,
+
+00:13:26.960 --> 00:13:28.020
+una data di scadenza vicina
+
+00:13:28.020 --> 00:13:29.680
+o la variazione di un valore specifico.
+
+00:13:30.160 --> 00:13:31.400
+Questi riflettono momenti reali
+
+00:13:31.400 --> 00:13:33.000
+in cui qualcuno ha bisogno di vedere la scheda.
+
+00:13:33.420 --> 00:13:34.740
+Non sono gli unici trigger disponibili,
+
+00:13:34.820 --> 00:13:36.120
+ma sono un punto di partenza sicuro.
+
+00:13:36.420 --> 00:13:37.360
+Ed ecco l'avvertimento d'oro.
+
+00:13:37.860 --> 00:13:39.060
+Non attivare il trigger per ogni modifica.
+
+00:13:39.460 --> 00:13:40.080
+Gli utenti li spanno.
+
+00:13:41.500 --> 00:13:42.660
+Chi correggia un semplice refuso
+
+00:13:42.660 --> 00:13:44.420
+non dovrebbe far illuminare il feed di Teams di tu.
+
+00:13:44.880 --> 00:13:45.880
+Ecco un confronto diretto.
+
+00:13:46.300 --> 00:13:46.820
+Flusso pigro.
+
+00:13:47.580 --> 00:13:48.820
+Quando un elemento viene modificato,
+
+00:13:48.900 --> 00:13:50.100
+si attiva ogni singola volta
+
+00:13:50.100 --> 00:13:51.520
+indipendentemente da cosa sia cambiato.
+
+00:13:51.520 --> 00:13:53.080
+Aggiungi una virgola, boom.
+
+00:13:53.360 --> 00:13:53.780
+Nuova scheda.
+
+00:13:54.300 --> 00:13:56.020
+Correggi l'ottografia di domani, boom.
+
+00:13:56.340 --> 00:13:56.620
+Un'altra.
+
+00:13:57.260 --> 00:13:57.940
+Questo crea rumore,
+
+00:13:58.040 --> 00:13:59.580
+insegna alle persone a ignorare gli avvisi
+
+00:13:59.580 --> 00:14:01.700
+e alla fine si denzieranno del tutto tutto flusso.
+
+00:14:02.900 --> 00:14:03.540
+Flusso intelligente.
+
+00:14:04.380 --> 00:14:05.100
+Invia una scheda
+
+00:14:05.100 --> 00:14:06.500
+quando un nuovo record viene creato così
+
+00:14:06.500 --> 00:14:07.660
+i proprietari lo sanno subito.
+
+00:14:08.120 --> 00:14:09.160
+E magari aggiungi un trigger
+
+00:14:09.160 --> 00:14:10.700
+due giorni prima della scadenza.
+
+00:14:11.960 --> 00:14:13.160
+Meno segnali, più rilevanza.
+
+00:14:14.100 --> 00:14:15.360
+Uno conquista la fiducia dell'utente,
+
+00:14:15.440 --> 00:14:15.860
+l'altro visto.
+
+00:14:16.520 --> 00:14:17.920
+Mettere tutto insieme non è complicato
+
+00:14:17.920 --> 00:14:19.240
+una volta che smetti di pensarci troppo.
+
+00:14:19.740 --> 00:14:20.800
+Primo passo, scegli il trigger.
+
+00:14:21.460 --> 00:14:21.880
+Di solito,
+
+00:14:21.980 --> 00:14:23.180
+quando un elemento viene creato
+
+00:14:23.180 --> 00:14:24.480
+o modificato con i filtri giusti.
+
+00:14:25.000 --> 00:14:25.460
+Secondo passo,
+
+00:14:25.540 --> 00:14:26.580
+inserisci il tuo payload JSON.
+
+00:14:27.280 --> 00:14:28.300
+L'adaptive card designer
+
+00:14:28.300 --> 00:14:29.440
+ti fornisce il modello JSON
+
+00:14:29.440 --> 00:14:30.720
+e tu devi solo sostituire
+
+00:14:30.720 --> 00:14:31.460
+il testo segnaposto
+
+00:14:31.460 --> 00:14:32.320
+con il token dell'elenco.
+
+00:14:33.040 --> 00:14:33.740
+Terzo passo,
+
+00:14:33.920 --> 00:14:34.720
+connettiti a Teams
+
+00:14:34.720 --> 00:14:35.780
+usando l'azione pubblica
+
+00:14:35.780 --> 00:14:36.440
+Adaptive card
+
+00:14:36.440 --> 00:14:37.380
+in una chat o canale.
+
+00:14:38.160 --> 00:14:38.860
+Questo è il ciclo base.
+
+00:14:38.960 --> 00:14:40.140
+Trigger, payload, invio.
+
+00:14:40.860 --> 00:14:42.000
+Semplice, prevedibile ed efficace.
+
+00:14:42.360 --> 00:14:43.620
+Ora, uno dei modi più semplici
+
+00:14:43.620 --> 00:14:44.400
+per fare brutta figura
+
+00:14:44.400 --> 00:14:45.120
+davanti al tuo team.
+
+00:14:45.120 --> 00:14:46.560
+Esegui il flusso,
+
+00:14:46.620 --> 00:14:47.600
+la cronologia dice riuscito,
+
+00:14:47.700 --> 00:14:48.940
+sorridi per quanto sembra fluido,
+
+00:14:49.000 --> 00:14:50.600
+ma nessuno vede la scheda su Teams
+
+00:14:50.600 --> 00:14:52.840
+perché non hai controllato il connettore.
+
+00:14:53.180 --> 00:14:53.840
+Prima di testare,
+
+00:14:53.920 --> 00:14:55.280
+conferma che il tuo connettore Teams
+
+00:14:55.280 --> 00:14:56.540
+sia autenticato con un account
+
+00:14:56.540 --> 00:14:57.660
+che ha i diritti di pubblicazione
+
+00:14:57.660 --> 00:14:58.760
+nel canale o nella chat.
+
+00:14:59.880 --> 00:15:00.240
+Altrimenti,
+
+00:15:00.300 --> 00:15:01.260
+il flusso segnale il successo
+
+00:15:01.260 --> 00:15:01.920
+ma non arriva a nulla.
+
+00:15:02.940 --> 00:15:03.840
+Risparmiati l'imbarazzo.
+
+00:15:04.260 --> 00:15:05.320
+È l'equivalente nell'automazione
+
+00:15:05.320 --> 00:15:06.180
+del cercare di stampare
+
+00:15:06.180 --> 00:15:07.180
+senza carta nel vassoio.
+
+00:15:07.640 --> 00:15:08.280
+Quando lavori bene,
+
+00:15:08.380 --> 00:15:09.060
+Power Automate
+
+00:15:09.060 --> 00:15:10.660
+è ciò che rende le Adaptive cards reali.
+
+00:15:11.060 --> 00:15:11.880
+Prende design astratti
+
+00:15:11.880 --> 00:15:13.500
+e li inserisce nel flusso di lavoro delle persone.
+
+00:15:14.480 --> 00:15:15.900
+Capirai che funziona la prima volta
+
+00:15:15.900 --> 00:15:16.620
+che un responsabile
+
+00:15:16.620 --> 00:15:17.960
+clicca su Approva nel feed chat
+
+00:15:17.960 --> 00:15:19.360
+senza dover aprire un'altra app.
+
+00:15:19.860 --> 00:15:21.360
+È allora che smette di sembrare un esperimento
+
+00:15:21.360 --> 00:15:22.800
+e inizia davvero a far risparmiare tempo.
+
+00:15:23.500 --> 00:15:24.400
+Ma non montarti la testa.
+
+00:15:24.800 --> 00:15:25.460
+L'errore numero uno
+
+00:15:25.460 --> 00:15:26.940
+è distribuire tutto a tutti il primo giorno.
+
+00:15:28.000 --> 00:15:29.220
+Flussi non testati correttamente
+
+00:15:29.220 --> 00:15:30.720
+possono inondare le persone i duplicati
+
+00:15:30.720 --> 00:15:31.980
+e inviare sciocchezze su larga scala.
+
+00:15:33.040 --> 00:15:34.260
+Testa con un utente pilota
+
+00:15:34.260 --> 00:15:36.000
+e includi controlli di deduplicazione
+
+00:15:36.000 --> 00:15:36.920
+per evitare i bidoppi
+
+00:15:36.920 --> 00:15:38.480
+così eviterai di essere l'amministratore
+
+00:15:38.480 --> 00:15:39.340
+che ha trasformato Teams
+
+00:15:39.340 --> 00:15:40.360
+in una macchina da spam.
+
+00:15:41.240 --> 00:15:41.980
+Ecco una mini checklist
+
+00:15:41.980 --> 00:15:42.760
+prima di procedere.
+
+00:15:43.600 --> 00:15:43.840
+Primo,
+
+00:15:44.080 --> 00:15:45.040
+scegli un trigger intelligente
+
+00:15:45.040 --> 00:15:46.360
+che rifletta quando è necessaria un'azione.
+
+00:15:47.120 --> 00:15:47.800
+Controlla il conteggio
+
+00:15:47.800 --> 00:15:48.980
+e sostituisci JSON di esempio
+
+00:15:48.980 --> 00:15:50.140
+con i token del tuoran e del tuoran.
+
+00:15:50.640 --> 00:15:51.000
+Infine,
+
+00:15:51.360 --> 00:15:52.240
+testa le tue connessioni
+
+00:15:52.240 --> 00:15:53.260
+ed esegui un gruppo pilota
+
+00:15:53.260 --> 00:15:53.960
+prima del lancio.
+
+00:15:54.820 --> 00:15:56.180
+Se questi tre elementi coincidono,
+
+00:15:56.320 --> 00:15:57.500
+non sei più in una fase di semplice demo.
+
+00:15:57.980 --> 00:15:58.840
+Hai notifiche funzionanti
+
+00:15:58.840 --> 00:15:59.940
+che fluiscono attraverso Teams.
+
+00:16:00.740 --> 00:16:01.540
+La sfida successiva
+
+00:16:01.540 --> 00:16:02.240
+è ancora più grande
+
+00:16:04.260 --> 00:16:05.120
+quando vedono quelle schede.
+
+00:16:05.900 --> 00:16:07.280
+È qui che molti di questi progetti in ciama.
+
+00:16:08.100 --> 00:16:09.220
+Far sì che le persone clicchino davvero.
+
+00:16:09.840 --> 00:16:10.560
+Ecco il piccolo segreto
+
+00:16:10.560 --> 00:16:11.840
+imbarazzante sugli Adaptive Cards.
+
+00:16:12.300 --> 00:16:13.300
+Crearne una non garantisce
+
+00:16:13.300 --> 00:16:14.600
+che le persone ci cliccheranno sopra.
+
+00:16:15.200 --> 00:16:16.080
+Puoi rifinire il JSON,
+
+00:16:16.580 --> 00:16:17.280
+mappare ogni campo
+
+00:16:17.280 --> 00:16:18.700
+e rendere tutta una demo brillante,
+
+00:16:18.840 --> 00:16:20.040
+ma rischia comunque di essere ignorata
+
+00:16:20.040 --> 00:16:21.220
+come ogni altro ping di Teams.
+
+00:16:21.920 --> 00:16:23.160
+Questo non è un divario tecnologico,
+
+00:16:23.220 --> 00:16:23.800
+è un divario umano.
+
+00:16:24.160 --> 00:16:25.480
+Gli utenti sono già sommersi dagli ebook.
+
+00:16:25.840 --> 00:16:26.320
+Se la tua scheda
+
+00:16:26.320 --> 00:16:27.900
+sembra solo un'altra comunicazione statica,
+
+00:16:28.000 --> 00:16:29.360
+finisce dritta nel cestino digitale
+
+00:16:29.360 --> 00:16:30.180
+senza pensarci.
+
+00:16:30.700 --> 00:16:31.980
+L'obiettivo non è solo la consegna,
+
+00:16:31.980 --> 00:16:32.480
+è l'azione.
+
+00:16:33.420 --> 00:16:34.740
+Dalle implementazioni che abbiamo visto,
+
+00:16:34.820 --> 00:16:36.340
+le schede passive diventano opzionali
+
+00:16:36.340 --> 00:16:37.100
+nel flusso di lavoro
+
+00:16:37.100 --> 00:16:38.320
+e opzionale in ufficio
+
+00:16:38.320 --> 00:16:39.700
+significa praticamente mai.
+
+00:16:40.760 --> 00:16:42.500
+Se nulla nella scheda comunica urgenza
+
+00:16:42.500 --> 00:16:43.860
+o un chiaro passo successivo,
+
+00:16:44.260 --> 00:16:44.880
+viene ignorata.
+
+00:16:45.600 --> 00:16:46.480
+Quelle che funzionano davvero
+
+00:16:46.480 --> 00:16:47.940
+sono snelle, nitide e azionabili.
+
+00:16:49.020 --> 00:16:50.540
+Mostrano all'utente perché è importante ora
+
+00:16:50.540 --> 00:16:51.400
+quale decisione serve
+
+00:16:51.400 --> 00:16:53.000
+e quanto velocemente si può risolvere.
+
+00:16:54.080 --> 00:16:55.420
+Se mancano di questi tre ingredienti,
+
+00:16:55.480 --> 00:16:57.220
+quella scheda poteva benissimo restare nel zen.
+
+00:16:57.720 --> 00:16:59.180
+Non mancano certo le storie esemplari.
+
+00:16:59.600 --> 00:17:00.440
+Le risorse umane una volta
+
+00:17:00.440 --> 00:17:01.460
+hanno provato a usare una scheda
+
+00:17:01.460 --> 00:17:02.360
+per l'approvazione delle ferie.
+
+00:17:02.740 --> 00:17:03.580
+Sembrava un successo a Sewell.
+
+00:17:04.020 --> 00:17:04.980
+Il manager vede la richiesta,
+
+00:17:05.120 --> 00:17:05.900
+tocca a un pulsante, fatto.
+
+00:17:06.760 --> 00:17:07.440
+Invece hanno aggiunto
+
+00:17:07.440 --> 00:17:08.480
+una lista infinita di opzioni.
+
+00:17:08.980 --> 00:17:10.720
+Quando gli utenti finivano di leggere le scelte,
+
+00:17:10.820 --> 00:17:11.820
+subentrava la confusione
+
+00:17:11.820 --> 00:17:12.660
+e nessuno agiva.
+
+00:17:13.220 --> 00:17:14.460
+Il processo si è bloccato
+
+00:17:14.460 --> 00:17:15.340
+finché non hanno rinunciato
+
+00:17:15.340 --> 00:17:15.900
+tornando a reme.
+
+00:17:16.380 --> 00:17:17.220
+Questo è un segnale classico.
+
+00:17:17.680 --> 00:17:18.540
+Se i manager si bloccano,
+
+00:17:18.620 --> 00:17:19.860
+ha messo troppe scelte sulla scheda.
+
+00:17:20.640 --> 00:17:21.840
+Limitati a una o due azioni al massimo.
+
+00:17:22.340 --> 00:17:22.960
+Quindi ecco la regola.
+
+00:17:23.360 --> 00:17:24.240
+Approva o rifiuta?
+
+00:17:24.520 --> 00:17:25.340
+Rimanda o completa?
+
+00:17:25.880 --> 00:17:27.220
+Magari aggiungi un ricordamelo dopo
+
+00:17:27.220 --> 00:17:28.220
+o per casi eccezionali?
+
+00:17:28.640 --> 00:17:28.920
+Tutto qui.
+
+00:17:29.240 --> 00:17:30.000
+A massimo 2%.
+
+00:17:30.000 --> 00:17:31.180
+Più opzioni inserisci,
+
+00:17:31.260 --> 00:17:32.160
+meno probabilità ci sono
+
+00:17:32.160 --> 00:17:32.880
+che alcuno prosegua.
+
+00:17:33.460 --> 00:17:34.280
+La scheda dovrebbe sembrare
+
+00:17:34.280 --> 00:17:35.140
+quasi senza sforzo,
+
+00:17:35.220 --> 00:17:35.960
+come chiudere un pop-up,
+
+00:17:36.080 --> 00:17:37.000
+solo che invece di scartarlo,
+
+00:17:37.080 --> 00:17:38.280
+l'utente fa avanzare il flusso.
+
+00:17:39.640 --> 00:17:40.440
+Semplicità equivale a clean.
+
+00:17:40.720 --> 00:17:41.520
+Il contesto è l'altro aspetto
+
+00:17:41.520 --> 00:17:42.840
+che va già per degli amministratori trascurati.
+
+00:17:43.120 --> 00:17:44.100
+La scheda ha l'aspetto curato,
+
+00:17:44.160 --> 00:17:45.160
+ma priva del contesto adeguato
+
+00:17:45.160 --> 00:17:45.900
+e funzionamenti inutili.
+
+00:17:46.440 --> 00:17:47.440
+Aggiungi la data di scadenza
+
+00:17:47.440 --> 00:17:48.300
+direttamente sulla scheda
+
+00:17:48.300 --> 00:17:49.340
+così gli utenti sapranno sorgere.
+
+00:17:49.660 --> 00:17:50.500
+Mostra chi è responsabile
+
+00:17:50.500 --> 00:17:50.900
+dell'attività
+
+00:17:50.900 --> 00:17:51.560
+per renderla più personale.
+
+00:17:51.840 --> 00:17:52.380
+E se possibile,
+
+00:17:52.520 --> 00:17:53.380
+visualizza lo stato attuale
+
+00:17:53.380 --> 00:17:53.800
+dell'attività
+
+00:17:53.800 --> 00:17:54.640
+finché nessuno pensi
+
+00:17:54.640 --> 00:17:55.440
+che se ne sia già occupato
+
+00:17:55.440 --> 00:17:55.960
+qualcun altro.
+
+00:17:56.200 --> 00:17:56.720
+Questi dettagli
+
+00:17:56.720 --> 00:17:57.540
+sembrano estetici,
+
+00:17:57.580 --> 00:17:58.540
+ma sono quelli che determinano
+
+00:17:58.540 --> 00:17:59.000
+se una persona
+
+00:17:59.000 --> 00:18:00.000
+clicca sulla scheda o la scarta.
+
+00:18:00.460 --> 00:18:01.520
+In base alla nostra esperienza,
+
+00:18:01.600 --> 00:18:02.400
+elementi che le persone
+
+00:18:02.400 --> 00:18:03.260
+osservano per primi,
+
+00:18:03.320 --> 00:18:04.140
+scadenza, nome e stato,
+
+00:18:04.220 --> 00:18:04.860
+fanno la differenza
+
+00:18:04.860 --> 00:18:05.680
+tra un'azione compiuta
+
+00:18:05.680 --> 00:18:06.220
+e un'ignorata.
+
+00:18:06.900 --> 00:18:08.000
+Ecco l'errore più fastidioso.
+
+00:18:08.220 --> 00:18:09.060
+Una scheda di approvazione
+
+00:18:09.060 --> 00:18:09.900
+senza scadenza
+
+00:18:09.900 --> 00:18:11.640
+viene interpretata dall'utente
+
+00:18:11.640 --> 00:18:12.600
+come fallo quando vuoi
+
+00:18:12.600 --> 00:18:13.480
+e quel quando vuoi
+
+00:18:13.480 --> 00:18:14.600
+si trasforma silenziosamente
+
+00:18:14.600 --> 00:18:15.220
+in non oggi.
+
+00:18:16.320 --> 00:18:16.820
+Presto i manager
+
+00:18:16.820 --> 00:18:17.760
+si ritrovano a sollecitare
+
+00:18:17.760 --> 00:18:18.640
+approvazioni in chat,
+
+00:18:18.840 --> 00:18:19.980
+inviando promemoria raffica
+
+00:18:19.980 --> 00:18:20.980
+e ricreando involontariamente
+
+00:18:20.980 --> 00:18:21.640
+proprio il caos
+
+00:18:21.640 --> 00:18:22.560
+che cercavi di risolvere.
+
+00:18:23.060 --> 00:18:23.780
+Non hai automatizzato
+
+00:18:23.780 --> 00:18:24.360
+la produttività,
+
+00:18:24.440 --> 00:18:25.460
+hai automatizzato le scocciature.
+
+00:18:25.900 --> 00:18:26.500
+Le schede migliori
+
+00:18:26.500 --> 00:18:27.220
+evitano tutto questo
+
+00:18:27.220 --> 00:18:27.900
+offrendo un'esperienza
+
+00:18:27.900 --> 00:18:28.380
+senza triti.
+
+00:18:28.780 --> 00:18:30.040
+Presentano un'unica azione chiara
+
+00:18:30.040 --> 00:18:31.180
+con un risultato immediato.
+
+00:18:31.660 --> 00:18:32.320
+Nessun clic extra,
+
+00:18:32.460 --> 00:18:33.180
+nessun indirizzamento
+
+00:18:33.180 --> 00:18:33.680
+ad altre app,
+
+00:18:33.780 --> 00:18:34.320
+nessuna procedura
+
+00:18:34.320 --> 00:18:34.840
+in dei passaggi.
+
+00:18:35.340 --> 00:18:35.920
+Il flusso di lavoro
+
+00:18:35.920 --> 00:18:36.680
+avviene letteralmente
+
+00:18:36.680 --> 00:18:37.660
+nello stesso messaggio del team
+
+00:18:37.660 --> 00:18:38.480
+che ha annunciato l'attività.
+
+00:18:39.200 --> 00:18:39.780
+Questa velocità
+
+00:18:39.780 --> 00:18:40.820
+trasforma lo scetticismo
+
+00:18:40.820 --> 00:18:41.720
+in adozione
+
+00:18:41.720 --> 00:18:42.280
+perché gli utenti
+
+00:18:42.280 --> 00:18:43.380
+capiscono che il modo più rapido
+
+00:18:43.380 --> 00:18:43.780
+per finire
+
+00:18:43.780 --> 00:18:44.600
+è semplicemente cliccare
+
+00:18:44.600 --> 00:18:45.420
+sull'opzione davanti a loro.
+
+00:18:45.700 --> 00:18:46.800
+Ecco il metodo di verifica immediato
+
+00:18:46.800 --> 00:18:48.140
+per smettere di complicare le cose,
+
+00:18:48.240 --> 00:18:49.160
+il test dei tre secondi.
+
+00:18:50.280 --> 00:18:50.940
+Mostra la tua scheda
+
+00:18:50.940 --> 00:18:51.980
+a qualcuno che non l'ha mai vista prima.
+
+00:18:52.320 --> 00:18:53.240
+Se non capisce cosa fare
+
+00:18:53.240 --> 00:18:54.180
+in meno di tre secondi
+
+00:18:54.180 --> 00:18:54.860
+semplifica la,
+
+00:18:55.260 --> 00:18:55.840
+taglia le parole,
+
+00:18:55.980 --> 00:18:56.600
+riduci i pulsanti
+
+00:18:56.600 --> 00:18:57.200
+e aggiungi chiarezza.
+
+00:18:57.560 --> 00:18:58.360
+Questo criterio ti evita
+
+00:18:58.360 --> 00:18:59.600
+di proporre soluzioni approssimative
+
+00:18:59.600 --> 00:19:00.500
+camuffate ad automazione.
+
+00:19:01.000 --> 00:19:01.460
+È semplice,
+
+00:19:01.460 --> 00:19:01.960
+ripetibile
+
+00:19:01.960 --> 00:19:02.780
+e abbastanza spietato
+
+00:19:02.780 --> 00:19:03.480
+da mantenere onesti
+
+00:19:03.480 --> 00:19:03.980
+i tuoi progetti.
+
+00:19:04.360 --> 00:19:04.840
+In fin dei conti
+
+00:19:04.840 --> 00:19:05.460
+le schede adattive
+
+00:19:05.460 --> 00:19:05.960
+non sono fatte
+
+00:19:05.960 --> 00:19:06.980
+per le slide autocelebrative
+
+00:19:06.980 --> 00:19:07.740
+degli amministratori
+
+00:19:07.740 --> 00:19:08.280
+o per i demotelli.

@@ -1,0 +1,1162 @@
+WEBVTT
+
+00:00:00.400 --> 00:00:06.920
+Pronti per 12 giorni di Microsoft 365, Pilot, Intelligenza Artificiale, Azzur e le persone che stanno plasmando il futuro del lavoro?
+
+00:00:07.760 --> 00:00:12.280
+A gennaio torna M365 con e ci stiamo espandendo, e ci stiamo espandendo.
+
+00:00:12.960 --> 00:00:18.200
+Partecipate alle sessioni live, alle dimostrazioni pratiche e alle conoscenze pratiche di MVP ed esperti del settore di tutto il mondo.
+
+00:00:18.880 --> 00:00:21.200
+Niente slide generiche, niente parole d'ordine infinite.
+
+00:00:22.000 --> 00:00:23.160
+Stiamo affrontando le vere sfide.
+
+00:00:24.020 --> 00:00:28.640
+Copilot Studio, agenti di Intelligenza Artificiale, Fabric, Sicurezza, Governance e Automazione.
+
+00:00:28.640 --> 00:00:33.900
+Che siate professionisti IT, sviluppatori o leader aziendali, ci sono sessioni pensate per voi.
+
+00:00:35.100 --> 00:00:39.920
+Con 10 giorni interi potrete esplorare più tecnologie e connettervi con una community globale.
+
+00:00:40.980 --> 00:00:44.100
+Guardate la diretta e portate spunti pratici alla vostra organizzazione.
+
+00:00:45.200 --> 00:00:48.880
+Gennaio 2027, 10 giorni, una community Microsoft.
+
+00:00:49.540 --> 00:00:50.580
+Le registrazioni sono aperte ora.
+
+00:00:51.840 --> 00:00:55.440
+Visitate m365con.net e prenotate subito il vostro posto.
+
+00:00:55.440 --> 00:00:58.620
+Questo è m365con.net
+
+00:00:58.620 --> 00:01:04.620
+Partecipate ora su m365con.net e ci vediamo in diretta a gennaio.
+
+00:01:05.000 --> 00:01:06.840
+Ecco il trucco che Microsoft non evidenzia.
+
+00:01:07.340 --> 00:01:10.660
+La cronologia di esecuzione di Power Automate è limitata nel tempo per impostazione e predefine.
+
+00:01:10.820 --> 00:01:13.180
+La conservazione dipende dal piano e dalla licenza e non è per sempre.
+
+00:01:13.940 --> 00:01:16.120
+Una volta terminata scompare come se non fosse mai stata eseguita.
+
+00:01:16.580 --> 00:01:19.160
+Ottima per i server Microsoft, pessima per la cronologia di controllo.
+
+00:01:19.160 --> 00:01:23.240
+Progettare senza registrazione è come eliminare la telecamera di sorveglianza prima che arrivi la polizia.
+
+00:01:23.600 --> 00:01:26.320
+Dovresti pensare di essere a posto finché qualcuno non ha effettivamente bisogno di filmare.
+
+00:01:26.880 --> 00:01:29.900
+Oggi ti mostreremo come registrare le approvazioni in modo permanente,
+
+00:01:29.980 --> 00:01:33.980
+riavviare i flussi da una fase, utilizzare approvatori dinamici, creare escalation e promemoria sensati.
+
+00:01:35.440 --> 00:01:38.600
+Iscriviti alla newsletter su m365.show se desideri soluzioni dirette,
+
+00:01:38.680 --> 00:01:41.320
+non presentazioni di marketing perché questa è la domanda che devi porti.
+
+00:01:41.320 --> 00:01:44.220
+Quindi, pensi che la cronologia del tuo flusso di lavoro sia per me?
+
+00:01:45.040 --> 00:01:47.760
+Spoiler, scompare più velocemente delle ciambelle gratuite nella sala vela.
+
+00:01:48.580 --> 00:01:50.360
+Perché la cronologia dei tuoi flussi scompare?
+
+00:01:51.160 --> 00:01:54.380
+Quindi vediamo perché la cronologia dei tuoi flussi scompare silenziosamente in primo luogo.
+
+00:01:55.180 --> 00:01:59.560
+Premi salva su un flusso, controlli la scheda cronologia e esecuzioni, pensi perfetto, ecco il mio record, problema risolto.
+
+00:02:00.620 --> 00:02:02.260
+Tranne che l'Italog non è fatto per durare.
+
+00:02:02.700 --> 00:02:04.340
+È più simile a un post-it sul frigorifero dell'UF.
+
+00:02:04.640 --> 00:02:07.460
+Sembra utile per un po', ma alla fine finisce nel cestino della raccolta differenziata.
+
+00:02:07.780 --> 00:02:08.280
+Ecco la verità.
+
+00:02:08.280 --> 00:02:10.440
+Power Automate non ti fornisce un archivio permanente.
+
+00:02:10.940 --> 00:02:15.820
+Ti fornisce uno spazio di archiviazione temporaneo progettato pensando ai server Microsoft o non il tuo responsabile della conformità.
+
+00:02:16.660 --> 00:02:19.520
+La durata della visibilità delle tue esecuzioni varia in base al piano a licenza.
+
+00:02:20.020 --> 00:02:23.720
+Se vuoi dettagli, controlla le impostazioni del tuo tenant o la documentazione di Microsoft.
+
+00:02:24.200 --> 00:02:26.340
+Nelle note inserirò il link alle linee ubi d'ufficiali sulla conservazione.
+
+00:02:26.720 --> 00:02:29.580
+Verifica la configurazione perché ciò che vedi dipende interamente dalla tua licenza.
+
+00:02:30.540 --> 00:02:33.020
+La maggior parte dei team IT presuppone che il cloud sia sinonimo di vero.
+
+00:02:33.280 --> 00:02:35.740
+Microsoft presuppone che per sempre sia sinonimo di un incubo di archiviazione.
+
+00:02:35.740 --> 00:02:37.120
+Quindi fanno pulizia e silenziosamente.
+
+00:02:37.120 --> 00:02:38.720
+Questa è l'aspettativa intrinseca.
+
+00:02:39.120 --> 00:02:41.740
+I registri scadono, i dati vengono eliminati, la cronologia evapora.
+
+00:02:42.140 --> 00:02:42.940
+Stanno facendo pulizia.
+
+00:02:43.420 --> 00:02:45.680
+Sei tu quello che rimane senza ricevute quando arrivano i revisori.
+
+00:02:46.300 --> 00:02:47.300
+Portiamolo nella vita reale.
+
+00:02:47.660 --> 00:02:50.640
+Immagina che le risorse umane chiedano la prova dell'approvazione di una promozione all'anno scorso.
+
+00:02:51.440 --> 00:02:53.340
+14 mesi fa il tuo direttore ha cliccato su approva.
+
+00:02:53.780 --> 00:02:55.620
+Tutti hanno festeggiato e il processo è andato avanti.
+
+00:02:56.260 --> 00:02:57.900
+Avanti veloce la conformità vuole ai registri.
+
+00:02:58.780 --> 00:03:01.540
+Apri Power Automate, analizzi le esecuzioni e non rimane nulla.
+
+00:03:01.540 --> 00:03:04.700
+Quel percorso di approvazione ordinato di cui ti fidavi è già stato cancellato.
+
+00:03:05.000 --> 00:03:06.120
+Non è Microsoft che non te lo dice.
+
+00:03:06.720 --> 00:03:07.600
+Proprio lì nei documenti.
+
+00:03:08.140 --> 00:03:10.980
+Semplicemente non lo vedi a meno che non strizzi gli occhi sulle clausole in piccolo delle licenze.
+
+00:03:11.800 --> 00:03:13.020
+Non sono il tuo archivio di conformità.
+
+00:03:13.500 --> 00:03:14.000
+Quello è il tuo lavoro.
+
+00:03:14.240 --> 00:03:17.600
+E se ti presenti un controllo con dei buchi nei dati, l'incontro non sarà piacevole.
+
+00:03:17.840 --> 00:03:18.440
+Ora immagina questo.
+
+00:03:18.660 --> 00:03:20.980
+È come se Netflix cancellasse la cronologia di utilizzazione in unico.
+
+00:03:21.200 --> 00:03:23.380
+Una settimana sei esattamente dove hai messo in pausa a metà stagione.
+
+00:03:23.700 --> 00:03:24.700
+La settimana successiva è sparita.
+
+00:03:24.700 --> 00:03:26.940
+Il sistema finge che tu non abbia mai guardato una singola serie.
+
+00:03:27.320 --> 00:03:31.800
+Ecco quanto sembra assurdo quando un revisore chiede i registri di approvazione nella scheda della cronologia e delle esecuzioni vuote.
+
+00:03:32.280 --> 00:03:33.280
+Il problema sono le conseguenze.
+
+00:03:33.740 --> 00:03:35.820
+I registri mancanti non sono solo un piccolo inconveniente.
+
+00:03:36.520 --> 00:03:41.160
+La mancata presentazione della documentazione può innescare revisioni di conformità e conseguenze che variano in base alla normativa.
+
+00:03:41.580 --> 00:03:44.640
+E se lavori in un settore regolamentato, questo può diventare costoso molto rapidamente.
+
+00:03:45.080 --> 00:03:47.720
+E anche se gli enti regolatori non sono coinvolti, la detrigenza se ne accorgerà.
+
+00:03:48.080 --> 00:03:49.780
+Ti è stato affidato il compito di automatizzare il prodotto.
+
+00:03:50.320 --> 00:03:53.120
+Se non riesce a dimostrare l'esistenza di approvazioni passate, con gratulazioni.
+
+00:03:53.120 --> 00:03:54.840
+Ora sei l'anello debole della catena.
+
+00:03:55.380 --> 00:03:56.520
+E no, gli screenshot non ti salvano.
+
+00:03:57.060 --> 00:03:58.440
+Gli screenshot sono come le foto del tuo C.
+
+00:03:59.080 --> 00:04:01.840
+Puoi mostrare che qualcosa è successo, ma non puoi dimostrare che non è stato organizzato.
+
+00:04:02.440 --> 00:04:03.800
+I revisori vogliono dati strutturati.
+
+00:04:04.040 --> 00:04:05.620
+Date, orari, nomi, decisioni.
+
+00:04:05.720 --> 00:04:08.220
+Tutti i dettagli che gli screenshot non possono fornire.
+
+00:04:09.260 --> 00:04:11.440
+E tutto questo non è contenuto nella cronologia di esecuzioni temporali.
+
+00:04:11.860 --> 00:04:13.680
+Ecco un rapido controllo della realtà che puoi fare subito.
+
+00:04:14.240 --> 00:04:19.960
+Metti in pausa questo video, vai su Power Automate, fai clic sui miei flussi, apri la cronologia delle esecuzioni su uno dei tuoi flussi e cerca l'esecuzione più vecchia disponibile.
+
+00:04:19.960 --> 00:04:21.420
+Questa è la tua finestra di conservazione.
+
+00:04:21.900 --> 00:04:25.680
+Se mancano delle approvazioni che pensavi fossero permanenti, hai già riscontrato il problema in prima persona.
+
+00:04:26.380 --> 00:04:29.120
+Puoi sapere come fare con un click per confermare esattamente cosa detiene il tuo tempo.
+
+00:04:29.440 --> 00:04:31.240
+Restano i parali, te lo mostrerò nella checklist.
+
+00:04:31.560 --> 00:04:32.340
+Cosa succede quindi?
+
+00:04:33.500 --> 00:04:37.120
+Se non si integra la registrazione e i flussi di lavoro, non si dispone affatto di una cronologia delle approvazioni.
+
+00:04:37.440 --> 00:04:41.980
+Fingire che le impostazioni predefinite siano sufficienti come fidarsi di un adolescente quando riscende adolescente quando dice di aver pulito la sua stanza,
+
+00:04:42.140 --> 00:04:45.600
+entro lunedì il disordine tornerà a emergere e non sarà sopravvissuto nulla di importante.
+
+00:04:45.600 --> 00:04:50.080
+Il punto chiave è che la cronologia dell'esecuzione di Power Automate è uno strumento di debug, non archivi di data.
+
+00:04:50.720 --> 00:04:53.340
+È progettata per essere usa e getta, non permanente o pronta per la verifica.
+
+00:04:53.980 --> 00:04:58.380
+Se si desiderano dati utilizzabili, è necessario creare registri strutturati al di fuori di quel buffer temporaneo.
+
+00:04:58.780 --> 00:05:00.140
+E non si tratta solo di salvare la cronologia.
+
+00:05:00.520 --> 00:05:04.400
+Una registrazione debole comporta flussi di lavoro fragili che collassano la prima volta che vengono spinti oltre le basi,
+
+00:05:04.460 --> 00:05:06.600
+il che vengono spinti oltre le basi, il che porta al problema successivo,
+
+00:05:06.600 --> 00:05:10.780
+ovvero progettare il problema successivo, ovvero progettare i flussi di approvazione che non crollino sotto la pressione del mondo reale.
+
+00:05:11.420 --> 00:05:13.100
+Progettare flussi di approvazione che non crollino.
+
+00:05:13.640 --> 00:05:17.160
+La dura verità è che la maggior parte dei flussi di approvazione implodono perché sono troppo sottili.
+
+00:05:17.760 --> 00:05:20.500
+Una progettazione a fase singola sembra rapida, intelligente, ma è fragile.
+
+00:05:20.960 --> 00:05:24.600
+Sulla carta sembra tutto opposto finché le persone non provano effettivamente a eseguire dei processi reali.
+
+00:05:24.840 --> 00:05:25.940
+È una persona firma, facile.
+
+00:05:26.680 --> 00:05:29.160
+Ma nel momento in cui un altro reparto chiede una regola alternativa,
+
+00:05:29.220 --> 00:05:31.520
+un checkpoint extra con la vittoria rapida è iniziata dai suoi flutti.
+
+00:05:31.520 --> 00:05:34.720
+Ti ritrovi bloccato a dover applicare delle patch a metà su passaggi codificati.
+
+00:05:35.160 --> 00:05:37.380
+Ecco perché gli amministratori finiscono nei guai tre mesi dopo.
+
+00:05:38.100 --> 00:05:40.700
+Hai creato la demo e hai mostrato al tuo responsabile se hai sembrato un eroe.
+
+00:05:41.300 --> 00:05:43.360
+Poi arriva la tua richiesta di approvvigionamento con regole in cinque fasi.
+
+00:05:43.640 --> 00:05:47.140
+Le risorse umane vogliono un unico approvatore, il reparto legale ne richiede due più la conformità.
+
+00:05:47.820 --> 00:05:52.320
+Improvvisamente il tuo flusso è un mostro di Frankenstein cucito insieme con nastro adesivo e condizioni che nessuno capisce.
+
+00:05:52.820 --> 00:05:54.460
+Certo funziona ma aspetta solo di bloccarsi.
+
+00:05:54.900 --> 00:05:56.480
+La peggiore abitudine è codificare in modo origine.
+
+00:05:56.820 --> 00:05:58.460
+Questa è la condanna a morte della riutilizzabilità.
+
+00:05:58.460 --> 00:06:00.820
+Collega il flusso direttamente a Bob nel reparto finanziario.
+
+00:06:01.060 --> 00:06:01.560
+Bob se ne va.
+
+00:06:01.880 --> 00:06:04.800
+Ora ogni approvazione per quel processo fallisce o svanisce in un buco nero.
+
+00:06:05.560 --> 00:06:09.780
+Le approvazioni critiche muoiono nel silenzio o perché l'indirizzo di una persona è stato incorporato nella logica.
+
+00:06:10.540 --> 00:06:12.000
+Memorizza l'appartenenza al ruolo, non emi.
+
+00:06:12.280 --> 00:06:14.980
+Usa gli edi oggetto quando possibile in modo che le modifiche non interrompano il flusso.
+
+00:06:15.120 --> 00:06:15.840
+Ecco la mossa migliore.
+
+00:06:16.380 --> 00:06:19.480
+Invece di codificare gli indirizzi, recupera gli approvatori in modo dinamico.
+
+00:06:20.140 --> 00:06:21.020
+Usa una ricerca di ruoli.
+
+00:06:21.420 --> 00:06:24.380
+È un gruppo di Azure AD, un elenco di SharePoint o Dataverse se lo usi.
+
+00:06:24.380 --> 00:06:28.740
+Ogni opzione ti offre un punto centrale in cui sostituire i proprietari quando le persone se ne vanno.
+
+00:06:29.180 --> 00:06:29.600
+È sostenibile.
+
+00:06:29.980 --> 00:06:32.200
+Ad esempio, definisci gli approvatori finanziari in addio.
+
+00:06:32.860 --> 00:06:33.660
+The Bob si dimette.
+
+00:06:34.140 --> 00:06:34.980
+Rimuovilo dal gruppo.
+
+00:06:35.320 --> 00:06:37.320
+Aggiunge il sostituto e il flusso non salta mai un colpo.
+
+00:06:37.740 --> 00:06:38.220
+Si diretta.
+
+00:06:38.480 --> 00:06:42.740
+Se l'email di Joe è codificata e Joe si dimette, le approvazioni falliscono o scompaiono nel nulla.
+
+00:06:43.080 --> 00:06:43.880
+Evita questa assurdità.
+
+00:06:44.220 --> 00:06:45.680
+Associa sempre un ruolo a un record di persona.
+
+00:06:46.020 --> 00:06:48.120
+Non associare mai la logica aziendale a una singola casella di posto.
+
+00:06:48.340 --> 00:06:49.840
+Il problema della rigidità non si limita.
+
+00:06:49.840 --> 00:06:56.680
+Ho visto amministratori concatenare una approvazione dopo l'altra, personalizzata per ogni reparto, senza rutin dinamico, senza logica di fallback, senza logica di fallback, senza tracciamento dello stato.
+
+00:06:56.900 --> 00:07:02.920
+Sembra fantastico in una demo perché tutti sono a cliccare sul tempo, ma il primo giorno di vacanza, di malattia o pro memoria perso è morto.
+
+00:07:03.340 --> 00:07:05.240
+Ciò di cui i tuoi flussi hanno realmente bisogno è la consapevolezza.
+
+00:07:05.600 --> 00:07:09.880
+Ciò significa un campo di fase persistente, un archivio durevole che registri in quale fase si trova la richiesta.
+
+00:07:11.020 --> 00:07:13.520
+Progetta il tuo flusso di lavoro per leggere e scrivere quel valore di fatto.
+
+00:07:13.760 --> 00:07:19.280
+Quindi se il flusso si blocca puoi riavviarlo nella fase giusta senza indovinare o inviare nuovamente l'intero processo.
+
+00:07:19.840 --> 00:07:24.060
+È un pulsante di ripristino integrato nel design e ti evita di dover spegnere incendi con ripetizioni disordinate.
+
+00:07:24.960 --> 00:07:25.920
+Ora diventiamo pratici.
+
+00:07:26.180 --> 00:07:28.320
+L'eparto finanziario potrebbe richiedere doppie approvazioni per gli acquisti.
+
+00:07:28.640 --> 00:07:30.660
+Delle sorse umane potrebbero bisogno solo di una rapida approvazione.
+
+00:07:30.940 --> 00:07:33.520
+Potrebbero temere che le persone si blocchino, quindi richiedono una logica di escalation.
+
+00:07:34.000 --> 00:07:38.780
+Se provi a stipare tutti e tre i reparti in un flusso codificato, anacqui le loro regole o invi spam alle persone sbagliate.
+
+00:07:39.300 --> 00:07:43.820
+I flussi modulari basati sulle fasi risolvono questo problema adattandosi a ciascuna esigenza senza creare caos.
+
+00:07:44.860 --> 00:07:48.420
+Un consiglio da professionista avvia sempre il tuo progetto multifase prima con un reparto.
+
+00:07:48.420 --> 00:07:52.320
+Non implementarlo in tutti i tenanti al primo giorno, rileverai più rapidamente i casi limite
+
+00:07:52.320 --> 00:07:55.320
+e non erediterai una montagna di abito tecnico prima di conoscere i punti deboli.
+
+00:07:55.740 --> 00:07:56.660
+La conclusione è semplice.
+
+00:07:57.020 --> 00:07:59.840
+Flussi di approvazione fragili crollano perché presumono che nulla cambi.
+
+00:08:00.420 --> 00:08:02.960
+Stesso personale, stesso processo, stesse condizioni perfette,
+
+00:08:03.340 --> 00:08:07.120
+ma in realtà le persone se ne vanno, le regole cambiano e le eccezioni saltano fuori di continuo.
+
+00:08:07.860 --> 00:08:10.360
+Rendito i flussi modulari, consapevoli delle fasi basate sui ruoli.
+
+00:08:10.720 --> 00:08:11.920
+Archivi e ruoli anziché le email.
+
+00:08:12.300 --> 00:08:14.520
+Tieni tracce dello stato in modo da poterti riprendere senza prezzo.
+
+00:08:14.520 --> 00:08:17.400
+Ogni scorciato ex alti ora si trasforma in una riladolazione in seguito.
+
+00:08:17.540 --> 00:08:19.040
+Anche con un design pulito c'è un altro killer.
+
+00:08:19.680 --> 00:08:21.520
+L'approvazione si blocca quando le persone si fermano
+
+00:08:21.520 --> 00:08:24.720
+e gli amministratori cercano di risolvere il problema con ondate su ondate di email di promemoria.
+
+00:08:25.420 --> 00:08:27.660
+È così che crea un problema completamente nuovo pronto a esplodere.
+
+00:08:28.660 --> 00:08:29.580
+Escalation e promemoria.
+
+00:08:29.580 --> 00:08:34.280
+Senza la tempesta di spam, niente indica una cattiva progettazione del flusso più forte
+
+00:08:34.280 --> 00:08:38.340
+di una pila di 45 email di promemoria non letta in cima alla casella di posto di qualcuno il lunedì mattino.
+
+00:08:38.740 --> 00:08:41.800
+Se la tua automazione assomiglia meno a un flusso di lavoro e più a un cannone anti-spam,
+
+00:08:42.200 --> 00:08:43.020
+non hai creato un processo.
+
+00:08:43.320 --> 00:08:45.420
+Hai creato molestie sul posto di lavoro con una riga dell'oggetto.
+
+00:08:45.740 --> 00:08:47.520
+E diciamolo chiaramente, i promemoria non sono nemici.
+
+00:08:47.780 --> 00:08:48.680
+L'escalation non è il problema.
+
+00:08:49.140 --> 00:08:52.540
+Il problema è quando il nudging viene confuso con un martellamento implacabile nella posta in arrivo.
+
+00:08:52.960 --> 00:08:55.840
+Ciò che in realtà si desidera è perseveranza, non tortura digitale con l'acqua.
+
+00:08:55.840 --> 00:09:00.780
+Promemoria esistono perché le persone si distraggono, vanno in ferie o danno per scontato che qualcun altro gestirà un'attività.
+
+00:09:01.200 --> 00:09:05.000
+Le escalation esistono perché nessuno vuole che le approvazioni rimangano in sospeso fino a tre settimane dopo
+
+00:09:05.000 --> 00:09:06.460
+quando qualcuno finalmente si lamenta.
+
+00:09:07.100 --> 00:09:08.940
+Quindi sì, ne hai bisogno, ma devi usarle in modo intelligente.
+
+00:09:09.540 --> 00:09:11.740
+Nessuno è entusiasta di partecipare a una chiamata solo per dire
+
+00:09:11.740 --> 00:09:13.740
+«Ehi, grazie per il diciannovesimo promemoria di oggi».
+
+00:09:13.740 --> 00:09:14.660
+Finalmente cliccato su Apple.
+
+00:09:15.940 --> 00:09:18.400
+È così che si spinge agli utenti dal leggero fastidio alla rivolta per.
+
+00:09:18.940 --> 00:09:20.560
+Ecco la trappola in cui cadono le giocate del metro.
+
+00:09:21.200 --> 00:09:23.460
+Credono che più promemoria equivalgano a risultati più rapidi.
+
+00:09:23.460 --> 00:09:25.280
+Uno funziona, quindi cinque devono essere me.
+
+00:09:25.640 --> 00:09:29.140
+Questa logica va bene se stai spingendo buoni sconto per la pizza, non gestendo le approvazioni delle spese.
+
+00:09:29.880 --> 00:09:31.760
+Un buon promemoria basato sul contesto e tempestivo.
+
+00:09:32.680 --> 00:09:35.780
+Promemoria, la richiesta di acquisto del tuo team è in attesa di approvazione entro venerdì.
+
+00:09:36.400 --> 00:09:36.940
+Questo funziona.
+
+00:09:37.460 --> 00:09:41.140
+D'altro canto, un flusso di righe dell'oggetto di un'attività identica arriva alle nove del mattino
+
+00:09:41.140 --> 00:09:45.900
+e insegna gli utenti a cliccare su Elimina più velocemente di quanto le regole di Outlook possono ordinare la posta indesiderata.
+
+00:09:46.260 --> 00:09:47.540
+Le regole di progettazione di promemoria.
+
+00:09:47.840 --> 00:09:49.400
+Si specifico, cronometrato o condizionato.
+
+00:09:49.400 --> 00:09:50.740
+Lascia che ti faccio un esempio che ho visto.
+
+00:09:51.000 --> 00:09:52.880
+Un direttore finanziario aveva cinque note spese in attesa.
+
+00:09:53.220 --> 00:09:56.480
+Qualcuno pensava che ogni due ore fino a quando non fosse terminato fosse una cadenza di promemoria.
+
+00:09:56.920 --> 00:09:58.620
+Alla fine della giornata aveva 30 email.
+
+00:09:59.300 --> 00:10:00.680
+Nessuna delle approvazioni era stata completata.
+
+00:10:01.080 --> 00:10:04.200
+L'IT aveva tre ping arrabbiati su Slack, un invito del team intitolato
+
+00:10:04.200 --> 00:10:07.760
+risolvi questo pasticcio e un team finanziario che ora associa l'automazione allo spam.
+
+00:10:08.200 --> 00:10:09.340
+Plus non siamo assi più velocemente.
+
+00:10:09.660 --> 00:10:11.200
+Ha solo creato più rumore e rancore.
+
+00:10:11.780 --> 00:10:15.500
+Raccontami nei commenti qual è la frequenza di promemoria più assurda che il tuo inquilino abbia mai prodotto.
+
+00:10:15.500 --> 00:10:18.220
+Probabilmente qualcuno è nella top 30, quindi qual è la soluzione?
+
+00:10:18.520 --> 00:10:22.320
+Power Automate in realtà ti fornisce gli elementi costitutivi ma devi usarli come un adulto.
+
+00:10:22.760 --> 00:10:27.240
+Ritarda le azioni, controlli condizionali, quando da inviare un promemoria solo se l'attività è ancora in sospeso.
+
+00:10:28.020 --> 00:10:30.760
+Questa semplice misura di sicurezza blocca da solo la maggior parte delle tempeste di spazio.
+
+00:10:31.260 --> 00:10:32.840
+Quindi aggiungi regole di escalation o c'è razzuto.
+
+00:10:33.740 --> 00:10:34.700
+Innanzitutto un singolo promemoria.
+
+00:10:35.160 --> 00:10:37.580
+Se ignorato dopo un periodo definito è inoltre la responsabile.
+
+00:10:38.300 --> 00:10:41.340
+Se continua a essere ignorato, indirizzano una casella di posta condivisa o una coda di rotazione.
+
+00:10:41.340 --> 00:10:45.560
+Questa è una catena di responsabilità pulita senza inondare la casella di posta di una persona.
+
+00:10:46.280 --> 00:10:48.540
+Scegli le tue finestre temporali in modo sensato durante i test.
+
+00:10:48.780 --> 00:10:50.380
+Non limitarti a indovinare per poi scatenare il capo.
+
+00:10:50.920 --> 00:10:51.580
+Pensala in questo modo.
+
+00:10:52.180 --> 00:10:55.480
+Quando un forte suggerimento non funziona, non alzare il volume, cambia canale.
+
+00:10:56.700 --> 00:10:58.780
+Invia l'escalation a qualcun altro con l'autorità di procedere.
+
+00:10:59.540 --> 00:11:04.580
+Questo approccio mantiene il processo fluido, dimostra responsabilità ed evita agli utenti la stanchezza della casella di posta.
+
+00:11:04.980 --> 00:11:07.540
+Inondare di promemoria è come suonare lo stesso allarme dell'auto tutto il giorno.
+
+00:11:07.540 --> 00:11:09.280
+La prima volta che le persone incontrano.
+
+00:11:09.600 --> 00:11:12.340
+Dopo la decima tutti lo ignorano, anche se l'auto viene effettivamente rubata.
+
+00:11:13.080 --> 00:11:14.160
+Il rumore uccide la fiducia.
+
+00:11:14.660 --> 00:11:18.960
+Un promemoria chiaro e pertinente con una data di scadenza chiara ottiene più rispetto di 50 segnali acusti.
+
+00:11:19.260 --> 00:11:22.340
+Il punto ottimale è far sì che i promemori sembrino eventi del calendario, non sirene.
+
+00:11:23.100 --> 00:11:24.740
+Un email giorno prima della scadenza è utile.
+
+00:11:25.520 --> 00:11:27.780
+Un riepilogo delle approvazioni in sospeso lunedì, è pratico.
+
+00:11:28.520 --> 00:11:31.220
+Un'escalation che riassegna si ignorata per una settimana è efficace.
+
+00:11:31.460 --> 00:11:34.540
+Stai creando un sistema di solleciti, non esercitazione antincendio con tutti i dipendenti.
+
+00:11:34.980 --> 00:11:35.580
+Ed ecco il punto.
+
+00:11:35.580 --> 00:11:39.000
+Il promemoria e l'escalation sono importanti solo se puoi dimostrare che sono stati attivati.
+
+00:11:39.700 --> 00:11:42.200
+Durante un controllo abbiamo inviato l'oremail tre volte, il che non conta.
+
+00:11:42.500 --> 00:11:45.700
+Ciò che conta è una registrazione nella tua registrazione che indichi promemoria inviato,
+
+00:11:45.760 --> 00:11:47.520
+escalation attivata, risultato registrato.
+
+00:11:48.220 --> 00:11:51.880
+Se non riesci a dimostrare quella traccia di dati, tutti i tuoi promemori intelligenti si riducono a segnale.
+
+00:11:51.940 --> 00:11:55.120
+Quindi si imposta promemoria per far andare avanti le cose e crea percorsi di escalation
+
+00:11:55.120 --> 00:11:57.140
+in modo che le attività non muoiano nell'outlook di qualcuno.
+
+00:11:57.960 --> 00:11:58.980
+Ma non dimenticare le basi.
+
+00:11:59.500 --> 00:12:03.020
+Registra ogni promemoria, ogni escalation, in un sistema durevole che controlli.
+
+00:12:03.020 --> 00:12:06.180
+Perché quando qualcuno chiede come funzionava davvero il tuo processo,
+
+00:12:06.320 --> 00:12:08.000
+screenshot e storie vaghe non ti salvano.
+
+00:12:08.900 --> 00:12:09.940
+Solo i registri concreti lo fanno.
+
+00:12:10.260 --> 00:12:11.260
+E' cosa abbastanza divertente.
+
+00:12:11.340 --> 00:12:14.740
+Il posto in cui la maggior parte degli amministratori presume che fornisca quei registri sta per deludere il greco.
+
+00:12:15.520 --> 00:12:16.920
+La bugia della registrazione a cui tutti credono.
+
+00:12:17.280 --> 00:12:19.540
+Frontiamo uno dei miti più costosi di Power Automate.
+
+00:12:19.900 --> 00:12:21.380
+La bugia della registrazione a cui tutti credono.
+
+00:12:21.760 --> 00:12:24.720
+Tuoi danno per scontato che la scheda della cronologia di esecuzione sia il loro registro confuso.
+
+00:12:25.240 --> 00:12:27.840
+Sembra ufficiale, mostra le approvazioni in righe ordinate e ti fa pensare
+
+00:12:27.840 --> 00:12:28.900
+perfetto, siamo a posto.
+
+00:12:28.900 --> 00:12:30.740
+Ma quella scheda non è un archivia.
+
+00:12:31.160 --> 00:12:35.420
+E' un buffer diagnostico a breve termine, utile per il debug, non per la conservazione dei registri a lungo termine.
+
+00:12:36.260 --> 00:12:39.920
+Trattarlo come un registro permanente è come trattare i posti su un frigorifero come il file sistema aziendale.
+
+00:12:40.400 --> 00:12:42.220
+Sembra a posto finché la squadra delle pulizie non li cancella tu.
+
+00:12:42.700 --> 00:12:44.320
+Gli amministratori calano costantemente in questa trap.
+
+00:12:44.660 --> 00:12:47.020
+Dimostrano un flusso, richiamano la cronologia e dicono alla dirigenza
+
+00:12:47.020 --> 00:12:48.180
+guarda abbiamo salvato tutto qui.
+
+00:12:49.020 --> 00:12:53.040
+Ciò che non menzionano, non capiscono è che i registri in quella scheda sono programmati per scomparire.
+
+00:12:53.040 --> 00:12:55.700
+E' stato creato per la risoluzione dei problemi non provvoli.
+
+00:12:56.320 --> 00:12:58.660
+Microsoft non l'ha mai commercializzato come un volto eterno.
+
+00:12:58.980 --> 00:13:01.640
+L'ha progettato come uno strumento per aiutarti a risolvere l'esecuzione interna.
+
+00:13:02.180 --> 00:13:07.340
+Fidarsi a quel buffer per conservare le prove legali è intelligente quanto usare la cronologia del browser come sistema di contabilità.
+
+00:13:07.740 --> 00:13:08.680
+Però immagina questa situazione.
+
+00:13:09.000 --> 00:13:12.120
+Un revisore dei conti chiede chi ha approvato questo budget nel 2021.
+
+00:13:12.860 --> 00:13:13.520
+Pensi che sia una faccia?
+
+00:13:14.180 --> 00:13:16.960
+Apri Power Automate, fai clic sulla cronologia delle esecuzioni e niente.
+
+00:13:17.560 --> 00:13:19.400
+Forse vedi qualche settimana, forse un paio di mesi.
+
+00:13:19.820 --> 00:13:20.600
+Oltre a questo niente.
+
+00:13:20.600 --> 00:13:23.760
+Al team di revisione non importa che tu possa visualizzare i dati dell'ultimo trimestre.
+
+00:13:23.900 --> 00:13:25.120
+Vogliono le ricevute degli anni precedenti.
+
+00:13:25.460 --> 00:13:28.160
+Se tutto ciò che hai è una pagina vuota, la conversazione finisce male.
+
+00:13:28.520 --> 00:13:31.060
+Non lasciare che una promessa a livello dimostrativo diventi un problema legalizzato.
+
+00:13:31.440 --> 00:13:32.140
+L'ho visto in mia persona.
+
+00:13:32.740 --> 00:13:36.700
+Le risorse umane dovevano produrre la prova di un'approvazione per un'azione disciplinare legata a una causa legale.
+
+00:13:37.320 --> 00:13:39.260
+Hai esaminato la cronologia dell'esecuzione e non trova tutta.
+
+00:13:39.560 --> 00:13:40.880
+I registri erano già stati eliminati.
+
+00:13:41.280 --> 00:13:45.320
+La sicurezza che avevano un anno prima si è trasformata in un momento estremamente imbarazzante di fronte agli avvocati.
+
+00:13:45.320 --> 00:13:48.080
+Questo è il prezzo esatto da pagare per credere che la cronologia è dell'esecuzione.
+
+00:13:48.280 --> 00:13:49.600
+Quindi qual è la soluzione per gli adulti?
+
+00:13:49.740 --> 00:13:51.600
+Hai bisogno di una registrazione persistente a default buffer.
+
+00:13:52.020 --> 00:13:54.500
+Dataverse funziona se vuoi archiviazione relazionale e scalabilità.
+
+00:13:55.060 --> 00:13:57.480
+Gli elenchi di SharePoint sono economici, rapidi e facili da interrogare.
+
+00:13:57.820 --> 00:14:02.080
+SQL ti offre il controllo completo se la tua organizzazione esegue già database anche se comporta un sovraccarico.
+
+00:14:02.780 --> 00:14:03.600
+Le promesse sono semplici.
+
+00:14:03.980 --> 00:14:05.320
+SharePoint è semplice ma limitato.
+
+00:14:05.740 --> 00:14:07.420
+Dataverse è scalabile e gestisce le relazioni.
+
+00:14:08.080 --> 00:14:10.060
+È potente ma richiede operazioni di database effettive.
+
+00:14:10.060 --> 00:14:17.460
+Scegli ciò che corrisponde alle tue competenze e a ciò che il tuo ambiente può gestire ma scegli qualcosa perché la cronologia e il nostro registro non è un piano.
+
+00:14:18.040 --> 00:14:19.760
+Ecco uno schema pratico che chiunque può implementare.
+
+00:14:20.180 --> 00:14:22.300
+A ogni approvazione archivia questi campi minimi durevoli.
+
+00:14:23.340 --> 00:14:25.440
+ID richiesta in modo da poter correlare record.
+
+00:14:25.620 --> 00:14:27.440
+Nome fase, azione approvata o rifiutata.
+
+00:14:27.640 --> 00:14:31.060
+ID approvatore, ID oggetto utente, non solo email, timestamp e commenti facoltativi.
+
+00:14:31.060 --> 00:14:36.760
+E' sufficiente per presentarsi di fronte al revisore e dire ecco esattamente cosa è successo da chi e quando.
+
+00:14:37.420 --> 00:14:40.160
+Senza questi campi iscritti in modo permanente non è un registro.
+
+00:14:40.520 --> 00:14:41.420
+Hai solo un più desiderio.
+
+00:14:41.880 --> 00:14:45.740
+E diciamolo chiaramente, la cronologia delle esecuzioni è fondamente lo Snapchat dei dati del flusso di lavoro.
+
+00:14:46.440 --> 00:14:48.580
+Divertimento sul momento sparisce quando non è effettivamente bisogno.
+
+00:14:48.960 --> 00:14:50.240
+Microsoft non nasconde questo fatto.
+
+00:14:50.620 --> 00:14:54.200
+Progettano questi registri in modo che scadano perché l'archiviazione a lungo termine è una tua responsabilità.
+
+00:14:54.680 --> 00:14:56.440
+Pericolo non è solo per una traccia di approvazione.
+
+00:14:56.440 --> 00:15:01.580
+E' il falso senso di sicurezza che impedisce agli amministratori di creare veri e propri sistemi di registrazione in primo luogo.
+
+00:15:02.100 --> 00:15:04.760
+Ti danno per scontato che esistono dei registri quando non è assolutamente così.
+
+00:15:05.040 --> 00:15:05.600
+Ecco il punto.
+
+00:15:06.060 --> 00:15:06.720
+Le facoltà ti valono.
+
+00:15:07.080 --> 00:15:09.160
+Se non acquisisci dati durevoli non avrai nulla da mostrare.
+
+00:15:09.900 --> 00:15:11.020
+Gli screenshot non valgono nulla.
+
+00:15:11.660 --> 00:15:12.700
+Le storie non valgono nulla.
+
+00:15:13.520 --> 00:15:16.200
+Ciò che funziona sono registri strutturati che puoi interrogare con sicurezza.
+
+00:15:16.460 --> 00:15:18.980
+Se questa suddivisione ti sta risparmiando mal di testa, clicca mi piace.
+
+00:15:19.340 --> 00:15:21.440
+Aiuta gli altri amministratori a trovare la guida della sopravvivenza.
+
+00:15:21.840 --> 00:15:22.840
+La best practice è semplice.
+
+00:15:22.840 --> 00:15:27.060
+Ogni azione di approvazione deve concludersi scrivendo chi ha approvato la fase del processo,
+
+00:15:27.440 --> 00:15:31.000
+l'azione intrapresa, il suo ID, il timestamp ed eventuali commenti.
+
+00:15:31.580 --> 00:15:31.980
+Tutto qui.
+
+00:15:32.280 --> 00:15:35.600
+Tirpo subito la memoria muscolare, altrimenti in seguito deve scrivere delle mie discusse per la conformità.
+
+00:15:36.240 --> 00:15:39.860
+La vera domanda però non è se registrare, ma dove e come archiviare tale registrazione
+
+00:15:39.860 --> 00:15:44.100
+in modo che duri 3, 5 o persino 10 anni senza trasformarsi in un altro incubo di migrazione IT.
+
+00:15:44.840 --> 00:15:46.160
+E' qui che le cose si fanno interessanti.
+
+00:15:46.940 --> 00:15:49.380
+A prova di futuro, rendendo le tue approvazioni pronte per la verifica.
+
+00:15:49.900 --> 00:15:52.820
+A prova di futuro le tue approvazioni non hanno a che fare con l'aspetto intelligente di una demo.
+
+00:15:53.120 --> 00:15:57.260
+Si tratta di assicurarti che tra 5 anni sarai ancora in grado di produrre un registro pulito e affidabile
+
+00:15:57.260 --> 00:15:59.360
+quando qualcuno ti chiederà chi ha approvato cosa e quando.
+
+00:16:00.080 --> 00:16:01.720
+Questa è la vera prova per essere pronti per la verifica.
+
+00:16:02.120 --> 00:16:03.320
+I registri di breve durata sono i miei.
+
+00:16:03.620 --> 00:16:05.560
+I lenchi casuali di SharePoint sono solo leggermente meno.
+
+00:16:05.860 --> 00:16:07.840
+La tua azienda non chiede una prova di martedì scorso.
+
+00:16:08.200 --> 00:16:10.680
+La chiede durante una revisione di conformità che esamina 5 anni fa.
+
+00:16:11.380 --> 00:16:13.960
+Ai revisori non interessa quanto fosse bella la tua visualizzazione di SharePoint.
+
+00:16:14.420 --> 00:16:17.120
+A loro interessa se i record sono sopravvissuti alle migrazioni di sistema,
+
+00:16:17.120 --> 00:16:21.240
+al cambio di amministrazione e se in seguito risolveremo questa cartella che nessuno ha mai risolto.
+
+00:16:21.240 --> 00:16:26.900
+La parte difficile è capire come conservare i registri per 3, 5 o anche 10 anni senza creare una palude.
+
+00:16:27.900 --> 00:16:34.360
+I cemiteri IT sono pieni di esportazioni CSV, PDF generazionali e file Excel con nomi come Important Final, VTX, LSX.
+
+00:16:35.200 --> 00:16:36.080
+Nessuno di questi sostenivo.
+
+00:16:36.080 --> 00:16:39.800
+Scompaiono, si corrompono e sicuramente non reggono di fronte ai comitati di revisione.
+
+00:16:40.660 --> 00:16:43.160
+Non puoi basare la tua strategia di conformità sul disordine digitale.
+
+00:16:43.920 --> 00:16:44.880
+Immagina lo scenario negativo.
+
+00:16:45.300 --> 00:16:48.040
+I revisori si presentano e tiri un sospiro di sollievo perché abbiamo salvato il diritto.
+
+00:16:48.740 --> 00:16:54.080
+Poi ne trovi in metà come file CSV danneggiati nel one drive di qualcuno e il resto bloccato in un formato di un appaltatore che nessuno ricorda.
+
+00:16:54.460 --> 00:16:55.500
+Quella riunione non finirà bene.
+
+00:16:55.960 --> 00:16:58.740
+La protezione futura significa creare qualcosa di strutturato fin dall'inizio.
+
+00:16:58.740 --> 00:17:01.560
+L'obiettivo è una registrazione centralizzata, strutturata e durevole.
+
+00:17:02.220 --> 00:17:04.580
+Scegli una piattaforma che gestisca la persistenza come attività principale.
+
+00:17:05.180 --> 00:17:11.820
+Dataverse è un candidato valido per gli uffici Microsoft perché gestisce dati relazionali, sicurezza basata sui ruoli e scalabilità, molto meglio di un semplice elenco.
+
+00:17:12.800 --> 00:17:15.340
+SQL è altrettanto valido se il tuo ambiente lo supporta già.
+
+00:17:16.040 --> 00:17:19.040
+E sì, gli elenchi di SharePoint possono essere un punto di partenza se hai bisogno di qualcosa di rapido.
+
+00:17:19.080 --> 00:17:24.900
+Il punto non è inseguire la tecnologia più brillante, ma garantire che la tua struttura portante non si rompa quando qualcuno richiede i registri del 2017.
+
+00:17:25.040 --> 00:17:26.160
+La scelta è la piattaforma on-spend.
+
+00:17:26.160 --> 00:17:27.660
+Quello più importante è la forma dei tuoi dati.
+
+00:17:27.980 --> 00:17:31.660
+Non limitarti a scaricare un mucchio di noti in un campo di testo, questa è spazzatura di rapporto.
+
+00:17:31.920 --> 00:17:35.920
+Cattura campi discreti, fasi di approvazione, identità dell'approvatore, timestamp dell'azione e risultato.
+
+00:17:36.620 --> 00:17:42.660
+Se archivi tutto come una grande nota di testo, i revisori e i report si interrompono, finirei per scorrere le voci del diario invece di eseguire quei ripuliti.
+
+00:17:43.820 --> 00:17:45.060
+Campi strutturati che estrai?
+
+00:17:45.560 --> 00:17:48.560
+Mostrami tutte le approvazioni di Jane Doe tra aprile e giugno in pochi secondi.
+
+00:17:49.540 --> 00:17:51.980
+Quando archivi correttamente le approvazioni, il report in the reporting of the road,
+
+00:17:52.540 --> 00:17:55.260
+la richiesta di conformità passa dalla modalità panico a un'attività di 5 minuti.
+
+00:17:55.260 --> 00:17:58.880
+Invece di assemblare sale di controllo, esegui una query, esporti e la consegni.
+
+00:17:59.960 --> 00:18:02.760
+È la differenza tra essere visto come professionista calmo con le ricevute
+
+00:18:02.760 --> 00:18:05.600
+e l'amministratore che fruga nelle cassette postali di 4 anni fa?
+
+00:18:06.460 --> 00:18:07.840
+E i vantaggi non si fermano alla verifica.
+
+00:18:08.680 --> 00:18:12.640
+Centralizza le approvazioni in data verso SQL e all'improvviso avrai dashboard in Power BI
+
+00:18:12.640 --> 00:18:16.640
+o tabelle pivot in Excel che consentono alla dirigenza di vedere chi sta approvando quanto tempo ci vuole,
+
+00:18:16.800 --> 00:18:17.720
+dove si trovano i colli di tutti.
+
+00:18:18.120 --> 00:18:20.600
+I dati di conformità raddoppiano come informazioni di procede.
+
+00:18:20.600 --> 00:18:22.980
+Ciò significa che smetti di fare i pompieri e inizi a mostrare valore.
+
+00:18:23.360 --> 00:18:24.560
+Se questo sembra un lavoro, lo è.
+
+00:18:25.260 --> 00:18:25.940
+Ma lo è una volta.
+
+00:18:26.580 --> 00:18:29.660
+I trucchi economici ti lasceranno a dover fare pulizia ogni volta che i revisori bussano dopo.
+
+00:18:30.180 --> 00:18:32.980
+Gli elenchi di SharePoint senza un piano aumentano rapidamente e alla fine crono.
+
+00:18:33.520 --> 00:18:35.260
+Le esportazioni casuali sono una perda di dati garantiti.
+
+00:18:35.680 --> 00:18:38.420
+Configurare in anticipo un archivio durevole evita mal di testa dopo 3 anni.
+
+00:18:39.240 --> 00:18:40.020
+Vuoi iniziare con una tritomi?
+
+00:18:40.480 --> 00:18:42.440
+Scrivi subito registri minimi in un elenco di SharePoint.
+
+00:18:42.440 --> 00:18:49.980
+Acquisisci gli elementi essenziali, ID, richiesta, fase, azione, ID, approvatore, timestamp, collegamento di correlazione.
+
+00:18:50.040 --> 00:18:51.200
+Ogni approvazione è escalation.
+
+00:18:51.880 --> 00:18:54.760
+In seguito, se hai bisogno di scalabilità esegui la migrazione verso l'alto in Dataverse.
+
+00:18:55.020 --> 00:18:59.880
+È meglio acquisire qualcosa di strutturato oggi piuttosto che aspettare che la dirigenza richieda una prova di 5 anni domani.
+
+00:19:00.540 --> 00:19:02.020
+Ecco una rapida checklist al caso migliore.
+
+00:19:02.900 --> 00:19:07.000
+Innanzitutto, scegli un archivio persistente, Dataverse, SQL o SharePoint con un backup appropriato.
+
+00:19:07.600 --> 00:19:13.200
+In secondo luogo, definisci uno schema minimo, un ID, richiesta, una fase, un'azione, un ID, approvatore, un timestamp e un collegamento.
+
+00:19:14.100 --> 00:19:16.460
+Quindi, scrivi registri a ogni approvazione o escalation.
+
+00:19:17.180 --> 00:19:21.200
+Infine, crea piccoli report in Power BI o Excel in modo che i revisori possano vedere tutto in pochi secondi.
+
+00:19:21.840 --> 00:19:23.060
+Questo è la prova di futuro in un colpo solo.
+
+00:19:23.500 --> 00:19:25.480
+Niente fronzoli, solo passaggi su cui puoi effettivamente agire.
+
+00:19:25.780 --> 00:19:28.500
+Quindi non mettere a repentaglio la tua carriera con file CSV nascosti nel desktop.
+
+00:19:29.160 --> 00:19:30.340
+Archivi alle approvazioni dove durano.
+
+00:19:30.340 --> 00:19:32.220
+Mantieni la forno strutturata e interrogabile.
+
+00:19:32.720 --> 00:19:34.380
+Crea piccoli report ora in modo da essere sicuro.

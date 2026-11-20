@@ -1,0 +1,1075 @@
+WEBVTT
+
+00:00:00.210 --> 00:00:07.370
+Gotowi na 12 dni z Microsoft 365, Kopilotem iAzure i ludźmi kształtującymi przyszłość pracy?
+
+00:00:07.630 --> 00:00:12.530
+W styczniu powraca M365Con i tym razem działamy z jeszcze większym rozmachem.
+
+00:00:13.070 --> 00:00:18.330
+Dołącz do nas na sesję na żywo, praktyczne dema i wiedzę od ekspertów MVP z całego świata.
+
+00:00:18.970 --> 00:00:21.390
+Zero ogólnych slajdów, żadnego lania wody.
+
+00:00:21.790 --> 00:00:23.690
+Skupiamy się na prawdziwych wyzwaniach.
+
+00:00:23.690 --> 00:00:28.830
+Kopilot Studio Agenci AI Fabrik, bezpieczeństwo, ład i automatyzacja.
+
+00:00:28.830 --> 00:00:34.950
+Niezależnie od tego, czy jesteś informatykiem, programistą czy liderem biznesu, mamy sesję dla Ciebie.
+
+00:00:35.310 --> 00:00:40.530
+Podczas 10 pełnych dni zgłębisz wiele technologii i nawiążesz kontakty z globalną społecznością.
+
+00:00:40.790 --> 00:00:44.590
+Oglądaj na żywo i zabierz praktyczne wskazówki do swojej organizacji.
+
+00:00:44.910 --> 00:00:49.150
+Styczeń 2027 roku, 10 dni, jedna społeczność Microsoft.
+
+00:00:49.510 --> 00:00:51.130
+Rejestracja jest już otwarta.
+
+00:00:51.130 --> 00:00:56.010
+Wejdź na m365con.net i zarezerwuj miejsce już dziś.
+
+00:00:56.010 --> 00:00:58.830
+To m365con.net.
+
+00:01:00.110 --> 00:01:04.610
+Dołącz na m365con.net i widzimy się na żywo w styczniu.
+
+00:01:04.770 --> 00:01:07.110
+Oto haczyk, o którym Microsoft nie wspomina.
+
+00:01:07.350 --> 00:01:10.530
+Historia uruchomień w Power Automate jest domyślnie ograniczona czasowo.
+
+00:01:10.770 --> 00:01:13.370
+Retencja zależy od planu i licencji i nie trwa wiecznie.
+
+00:01:13.610 --> 00:01:16.430
+Gdy czas minie, historia znika, jakby przepływ nigdy nie wystąpił.
+
+00:01:16.430 --> 00:01:19.590
+Świetne dla serwerów Microsoftu, tragiczne dla Twojej ścieżki audytu.
+
+00:01:19.710 --> 00:01:23.310
+Projektowanie bez logowania to jak usunięcie nagrań z monitoringu przed przyjazdem policji.
+
+00:01:23.530 --> 00:01:27.090
+Możesz myśleć, że wszystko jest w porządku, dopóki ktoś nie będzie potrzebował dowodów.
+
+00:01:27.290 --> 00:01:34.630
+Dziś pokażemy, jak trwale zapisywać zatwierdzenia, wznawiać przepływy, używać dynamicznych osób zatwierdzających oraz budować rozsądne eskalacje.
+
+00:01:34.890 --> 00:01:42.070
+Zapisz się na newsletter na M365 Show, jeśli wolisz konkretne rozwiązania niż marketingowy bełkot, bo musisz zmierzyć się z pytaniem.
+
+00:01:42.070 --> 00:01:48.070
+Myślisz, że ścieżka Twojego przepływu pracy jest trwała? Spoiler! Znika szybciej niż darmowe pączki w kuchni.
+
+00:01:48.810 --> 00:01:54.590
+Dlaczego historia przepływów znika? Zatem wyjaśnijmy, dlaczego historia Twoich przepływów po cichu znika.
+
+00:01:54.850 --> 00:01:59.890
+Zapisujesz przepływ, sprawdzasz kartę historii uruchomień i myślisz, świetnie, mam rekord, problem rozwiązany.
+
+00:02:00.070 --> 00:02:02.310
+Tyle, że ten log nie jest stworzony, by przetrwać.
+
+00:02:02.470 --> 00:02:04.830
+To bardziej jak karteczka samoprzylepna na biurowej lodówce.
+
+00:02:05.070 --> 00:02:07.710
+Wygląda na przydatną przez chwilę, ale w końcu ląduje w koszu.
+
+00:02:07.710 --> 00:02:10.890
+Oto prawda. Power Automate nie daje Ci trwałego archiwum.
+
+00:02:10.890 --> 00:02:16.150
+Daje Ci tymczasowe miejsce stworzone z myślą o serwerach Microsoftu, a nie o Twoim inspektorze zgodności.
+
+00:02:16.370 --> 00:02:19.690
+To, jak długo uruchomienia są widoczne, zależy od planu i licencji.
+
+00:02:19.950 --> 00:02:23.730
+Jeśli chcesz poznać szczegóły, sprawdź ustawienia dzierżawy lub dokumentację Microsoftu.
+
+00:02:23.890 --> 00:02:26.570
+W notatkach zamieszczę link do oficjalnych wytycznych dotyczących retencji.
+
+00:02:26.790 --> 00:02:30.190
+Zweryfikuj swoje ustawienia, ponieważ to, co widzisz, zależy wyłącznie od Twojej licencji.
+
+00:02:30.410 --> 00:02:32.890
+Większość zespołów IT zakłada, że chmura oznacza wieczność.
+
+00:02:33.110 --> 00:02:36.110
+Microsoft zakłada, że wieczność oznacza koszmar związany z przechowywaniem danych.
+
+00:02:36.110 --> 00:02:42.110
+Więc po cichu sprzątają. To wbudowane oczekiwanie. Dzienniki wygasają, dane znikają, a Twoja historia paruje.
+
+00:02:42.350 --> 00:02:45.750
+Robią porządki. Zostajesz bez dowodów, gdy pukają audytorzy.
+
+00:02:45.950 --> 00:02:47.530
+Przenieśmy to na grunt rzeczywisty.
+
+00:02:47.790 --> 00:02:50.950
+Wyobraź sobie, że HR prosi o dowód zatwierdzenia awansu sprzed roku.
+
+00:02:51.170 --> 00:02:53.810
+14 miesięcy temu Twój dyrektor kliknął – zatwierdź.
+
+00:02:53.970 --> 00:02:55.890
+Wszyscy świętowali, a proces ruszył dalej.
+
+00:02:56.130 --> 00:02:58.490
+Przenieśmy się w czasie – compliance żąda dokumentacji.
+
+00:02:58.730 --> 00:03:01.510
+Otwierasz powerautomatę, sprawdzasz uruchomienia i nie ma nic.
+
+00:03:01.650 --> 00:03:04.530
+Ten schludny ślad zatwierdzeń, któremu ufałeś, został już odkurzony.
+
+00:03:04.690 --> 00:03:06.470
+To nie wina Microsoftu, że Ci nie powiedział.
+
+00:03:06.690 --> 00:03:07.950
+Wszystko jest w dokumentacji.
+
+00:03:08.150 --> 00:03:10.790
+Po prostu tego nie widzisz, dopóki nie wczytasz się w drobny druk licencji.
+
+00:03:11.010 --> 00:03:13.330
+Jest jasne. To nie jest Twoje archiwum zgodności.
+
+00:03:13.530 --> 00:03:14.330
+To Twoje zadanie.
+
+00:03:14.490 --> 00:03:17.370
+A jeśli pójdziesz na audyt z dziurami w danych, spotkanie nie będzie przyjemne.
+
+00:03:17.490 --> 00:03:18.610
+A teraz wyobraź sobie to.
+
+00:03:18.730 --> 00:03:21.170
+To jak Netflix usuwający historię oglądania w każdy poniedziałek.
+
+00:03:21.290 --> 00:03:23.630
+W jednym tygodniu wiesz dokładnie, gdzie przerwałeś w środku sezonu.
+
+00:03:23.630 --> 00:03:24.650
+W następnym znika.
+
+00:03:24.910 --> 00:03:27.430
+System udaje, że nigdy nie obejrzałeś ani jednego odcinka.
+
+00:03:27.630 --> 00:03:32.070
+Tak absurdalnie to wygląda, gdy audytor prosi o zapisy zatwierdzeń, a karta historii uruchomień jest pusta.
+
+00:03:32.310 --> 00:03:33.670
+Najgorsze są konsekwencje.
+
+00:03:33.930 --> 00:03:36.370
+Brakujące rekordy to nie tylko drobna niedogodność.
+
+00:03:36.630 --> 00:03:41.170
+Brak dokumentacji może wywołać kontrolę zgodności i konsekwencje zależne od regulacji.
+
+00:03:41.370 --> 00:03:44.610
+A jeśli działasz w branży regulowanej, może to być bardzo kosztowne.
+
+00:03:44.830 --> 00:03:47.890
+Nawet jeśli regulatorzy nie są zaangażowani, kierownictwo zauważy.
+
+00:03:48.070 --> 00:03:49.870
+Powierzono Ci automatyzację zatwierdzeń.
+
+00:03:49.870 --> 00:03:53.130
+Jeśli nie potrafisz udowodnić, że dawne zatwierdzenia istniały, gratulacje.
+
+00:03:53.130 --> 00:03:55.250
+Jesteś teraz najsłabszym ogniwem w łańcuchu.
+
+00:03:55.350 --> 00:03:56.890
+I nie, zrzuty ekranu Cię nie uratują.
+
+00:03:57.130 --> 00:03:59.170
+Zrzuty ekranu są jak zdjęcia Twojego obiadu.
+
+00:03:59.350 --> 00:04:02.690
+Możesz pokazać, że coś się wydarzyło, ale nie udowodnisz, że nie było to wyreżyserowane.
+
+00:04:02.950 --> 00:04:08.590
+Audytorzy chcą ustrukturyzowanych danych, dat, godzin, nazwisk, decyzji wszystkiego, czego zrzuty nie zapewnią.
+
+00:04:08.830 --> 00:04:11.370
+A to nie znajduje się w tymczasowej historii uruchomień.
+
+00:04:11.510 --> 00:04:14.170
+Oto szybki test rzeczywistości, który możesz zrobić teraz.
+
+00:04:14.170 --> 00:04:20.190
+Zatrzymaj wideo, wejdź w Power Automate, kliknij Moje przepływy, otwórz historię uruchomień jednego z nich i znajdź najstarsze dostępne.
+
+00:04:20.310 --> 00:04:21.530
+To Twoje okno retencji.
+
+00:04:21.830 --> 00:04:25.850
+Jeśli brakuje w nim zatwierdzeń, które uważałeś za trwałe, poczułeś ten problem na własnej skórze.
+
+00:04:26.070 --> 00:04:29.010
+Chcesz poznać sposób na potwierdzenie zawartości tenanta jednym kliknięciem?
+
+00:04:29.190 --> 00:04:29.890
+Zostań ze mną.
+
+00:04:30.110 --> 00:04:31.590
+Pokażę Ci to na liście kontrolnej.
+
+00:04:31.790 --> 00:04:33.050
+Więc co to oznacza dla Ciebie?
+
+00:04:33.230 --> 00:04:33.670
+Proste.
+
+00:04:33.890 --> 00:04:37.690
+Jeśli nie zbudujesz logowania w swoich przepływach, nie masz żadnej historii zatwierdzeń.
+
+00:04:37.690 --> 00:04:42.070
+Ufanie domyślnym ustawieniom jest jak wierzenie nastolatkowi, że posprzątał swój pokój.
+
+00:04:42.290 --> 00:04:45.330
+Do poniedziałku bałagan wróci, a nic ważnego nie przetrwa.
+
+00:04:45.610 --> 00:04:50.130
+Kluczowy wniosek, historia uruchomień Power Automate to pomoc w debakowaniu, a nie archiwum.
+
+00:04:50.350 --> 00:04:53.810
+Z założenia jest nietrwała, nie nadaje się do stałego przechowywania ani audytu.
+
+00:04:54.010 --> 00:04:58.610
+Jeśli potrzebujesz użytecznych danych, musisz tworzyć własne, strukturalne logi poza tym tymczasowym buforem.
+
+00:04:58.730 --> 00:05:00.730
+I nie chodzi tu tylko o zapisywanie historii.
+
+00:05:00.970 --> 00:05:05.230
+Słabe logowanie oznacza kruche przepływy, które załamują się przy pierwszej próbie wyjścia poza podstawy,
+
+00:05:05.230 --> 00:05:10.530
+co prowadzi do kolejnego problemu, projektowania obiegów zatwierdzania, które nie rozpadają się pod wpływem rzeczywistych warunków.
+
+00:05:10.670 --> 00:05:13.390
+Projektowanie obiegów zatwierdzania, które nie ulegają awarii.
+
+00:05:13.550 --> 00:05:17.510
+Gorzka prawda jest taka, że większość obiegów zatwierdzania zawodzi, bo są zbyt płytko zaprojektowane.
+
+00:05:17.770 --> 00:05:20.730
+Jednoetapowy projekt wydaje się szybki i sprytny, ale jest nietrwały.
+
+00:05:20.910 --> 00:05:24.710
+Na papierze wygląda dobrze, dopóki ludzie nie spróbują przeprowadzić przez niego rzeczywistych procesów.
+
+00:05:24.890 --> 00:05:26.470
+Jedna osoba zatwierdza, łatwizna.
+
+00:05:26.670 --> 00:05:31.730
+Ale gdy tylko inny dział prosi o alternatywną regułę lub dodatkowy punkt kontrolny, to szybkie zwycięstwo zaczyna pękać.
+
+00:05:31.730 --> 00:05:34.970
+Utykasz, nakładając niedopracowane poprawki na sztywno zakodowane kroki.
+
+00:05:35.190 --> 00:05:37.910
+Dlatego administratorzy wpadają w kłopoty po trzech miesiącach.
+
+00:05:38.070 --> 00:05:40.930
+Zbudowałeś demo, pokazałeś menedżerowi i wyglądałeś jak bohater.
+
+00:05:41.070 --> 00:05:43.530
+Potem przychodzi dział zakupów z pięcioetapowymi regułami.
+
+00:05:43.730 --> 00:05:47.550
+HR chce jednego zatwierdzającego, a dział prawny wymaga dwóch plus zgodności z przepisami.
+
+00:05:47.770 --> 00:05:52.270
+Nagle twój przepływ staje się potworem Frankensteina z szytym taśmą i warunkami, których nikt nie rozumie.
+
+00:05:52.450 --> 00:05:54.390
+Oczywiście działa, ale tylko czeka na awarię.
+
+00:05:54.590 --> 00:05:56.670
+Najgorszy nawyk? Wpisywanie adresów e-mail na sztywno.
+
+00:05:56.670 --> 00:05:58.830
+To wyrok śmierci dla możliwości ponownego wykorzystania.
+
+00:05:58.990 --> 00:06:01.050
+Łączysz przepływ bezpośrednio z Bobem z finansów.
+
+00:06:01.250 --> 00:06:01.850
+Bob odchodzi.
+
+00:06:02.070 --> 00:06:05.590
+Teraz każde zatwierdzenie w tym procesie albo zawodzi, albo znika w czarnej dziurze.
+
+00:06:05.750 --> 00:06:09.810
+Kluczowe zatwierdzenia umierają w ciszy, bo adres jednej osoby został wklejony w logikę.
+
+00:06:09.970 --> 00:06:12.050
+Przechowuj przynależność do roli, a nie adresy e-mail.
+
+00:06:12.230 --> 00:06:15.170
+Używaj identyfikatorów obiektów ID, gdy to możliwe, aby zmiany nie psuły przepływów.
+
+00:06:15.310 --> 00:06:16.390
+Oto lepsze rozwiązanie.
+
+00:06:16.610 --> 00:06:19.910
+Zamiast kodować adresy na sztywno, pobieraj zatwierdzających dynamicznie.
+
+00:06:19.910 --> 00:06:24.770
+Użyj wyszukiwania ról i grupy Azure Ad, listy SharePoint lub Dataverse, jeśli z niego korzystasz.
+
+00:06:24.910 --> 00:06:28.410
+Każda z tych opcji daje centralne miejsce do zmiany właścicieli, gdy ludzie odchodzą.
+
+00:06:28.590 --> 00:06:29.970
+To jest zrównoważone podejście.
+
+00:06:30.230 --> 00:06:33.030
+Na przykład definiujesz zatwierdzających z finansów w usłudze adjunct.
+
+00:06:33.170 --> 00:06:37.350
+Jeśli Bob odchodzi, usuwasz go z grupy, dodajesz następcę, a przepływ działa bez zakłóceń.
+
+00:06:37.550 --> 00:06:38.270
+Mówiąc wprost.
+
+00:06:38.470 --> 00:06:42.710
+Jeśli e-mail Joe'ego jest zakodowany na sztywno, a Joe odchodzi, zatwierdzenia zawodzą lub znikają w nicości.
+
+00:06:42.870 --> 00:06:43.990
+Unikaj tego nonsensu.
+
+00:06:44.190 --> 00:06:45.710
+Zawsze przypisuj rolę do rekordu osoby.
+
+00:06:45.710 --> 00:06:48.390
+Nigdy nie wiąż logiki biznesowej z pojedynczą skrzynką mailową.
+
+00:06:48.570 --> 00:06:50.510
+Problem sztywności nie kończy się na e-mailach.
+
+00:06:50.690 --> 00:06:53.910
+Widziałem administratorów łączących zatwierdzenia jedno po drugim, dostosowane do każdego działu,
+
+00:06:53.990 --> 00:06:56.650
+bez dynamicznego routingu, bez logiki zapasowej i bez śledzenia stanu.
+
+00:06:56.810 --> 00:06:59.710
+Wersja demo wygląda świetnie, bo wszyscy są przy biurkach i klikają na czas,
+
+00:06:59.830 --> 00:07:02.930
+ale pierwszy urlop, chorobowe lub przeoczone przypomnienie i wszystko stoi w miejscu.
+
+00:07:03.110 --> 00:07:05.710
+Twoje przepływy pracy naprawdę potrzebują świadomości stanu.
+
+00:07:05.870 --> 00:07:10.470
+Oznacza to stałe pole etapu trwały magazyn danych, który rejestruje, na jakim kroku jest wniosek.
+
+00:07:10.470 --> 00:07:13.970
+Zaprojektuj przepływ pracy tak, aby odczytywał i zapisywał wartość tego etapu.
+
+00:07:14.150 --> 00:07:19.710
+Wtedy, jeśli przepływ się zatnie, możesz go wznowić od właściwego momentu bez zgadywania i ponownego wysyłania całego procesu.
+
+00:07:19.810 --> 00:07:24.470
+To przycisk resetowania wbudowany w projekt, który oszczędza Ci gaszenia pożarów przy bałaganiarskich powtórkach.
+
+00:07:24.670 --> 00:07:25.790
+Przejdźmy do konkretów.
+
+00:07:25.950 --> 00:07:28.510
+Dział finansów może wymagać podwójnej akceptacji dla zakupów.
+
+00:07:28.650 --> 00:07:30.810
+HR może potrzebować tylko jednego szybkiego podpisu.
+
+00:07:31.070 --> 00:07:33.970
+Mogą się martwić, że ludzie będą zwlekać, więc żądają logiki eskalacji.
+
+00:07:33.970 --> 00:07:39.570
+Jeśli spróbujesz wcisnąć wszystkie trzy działy w jeden sztywny przepływ, albo rozmyjesz ich zasady, albo zaśmiecisz skrzynki niewłaściwych osób.
+
+00:07:39.770 --> 00:07:44.630
+Modułowe przepływy oparte na etapach rozwiązują to, dostosowując się do każdej potrzeby bez tworzenia chaosu.
+
+00:07:44.830 --> 00:07:48.350
+Dobra rada, zawsze najpierw przetestuj swój wieloetapowy projekt w jednym dziale.
+
+00:07:48.590 --> 00:07:50.990
+Nie wdrażaj go od razu dla całej organizacji pierwszego dnia.
+
+00:07:51.250 --> 00:07:55.530
+Szybciej wyłapiesz przypadki brzegowe i nie narobisz sobie długu technicznego, zanim poznasz słabe punkty.
+
+00:07:55.750 --> 00:07:56.810
+Wniosek jest prosty.
+
+00:07:56.990 --> 00:08:00.350
+Kruche procesy zatwierdzania zawodzą, ponieważ zakładają, że nic się nie zmienia.
+
+00:08:00.350 --> 00:08:07.270
+Ten sam personel, ten sam proces, te same idealne warunki, ale w rzeczywistości ludzie odchodzą, zasady się zmieniają, a wyjątki pojawiają się stale.
+
+00:08:07.470 --> 00:08:10.410
+Niech Twoje przepływy będą modułowe, świadome stanu i oparte na rolach.
+
+00:08:10.590 --> 00:08:12.310
+Przechowuj rolę zamiast adresów e-mail.
+
+00:08:12.530 --> 00:08:14.550
+Śledź stan, aby móc płynnie odzyskać działanie.
+
+00:08:14.750 --> 00:08:19.490
+Każdy skrót, który wybierzesz teraz, zamieni się w dodatkową pracę później, ale nawet przy czystym projekcie jest inny zabójca.
+
+00:08:19.730 --> 00:08:25.030
+Zatwierdzenia utykają, gdy ludzie z nimi zwlekają, a administratorzy próbują to naprawić falą za falą przypomnień e-mail.
+
+00:08:25.030 --> 00:08:28.450
+W ten sposób tworzysz zupełnie nowy problem, który tylko czeka na wybuch.
+
+00:08:28.450 --> 00:08:30.010
+Eskalacje i przypomnienia
+
+00:08:30.010 --> 00:08:38.090
+Jeśli nie liczyć burzy spamu, nic nie świadczy o złym projekcie przepływu pracy tak bardzo, jak 100 z 45 nieprzeczytanych przypomnień w czyjejś skrzynce w poniedziałek rano.
+
+00:08:38.290 --> 00:08:42.930
+Jeśli Twoja automatyzacja wygląda mniej jak przepływ pracy, a bardziej jak działo do spamu, nie zbudowałeś procesu.
+
+00:08:43.110 --> 00:08:45.410
+Stworzyłeś nękanie w miejscu pracy z tematem wiadomości.
+
+00:08:45.570 --> 00:08:47.630
+I żeby było jasne, przypomnienia nie są wrogiem.
+
+00:08:47.850 --> 00:08:49.110
+Eskalacje nie są problemem.
+
+00:08:49.270 --> 00:08:53.070
+Problemem jest sytuacja, gdy delikatne przypominanie mylone jest z nieustannym bombardowaniem skrzynki odbiorczej.
+
+00:08:53.070 --> 00:08:56.190
+To, czego naprawdę potrzebujesz, to wytrwałość, a nie cyfrowe tortury wodne.
+
+00:08:56.390 --> 00:09:01.110
+Przypomnienia istnieją, bo ludzie bywają rozkojarzeni, idą na urlop lub zakładają, że ktoś inny zajmie się zadaniem.
+
+00:09:01.310 --> 00:09:06.630
+Eskalacje istnieją, bo nikt nie chce, by zatwierdzenia wisiały w próżni przez 3 tygodnie, aż ktoś w końcu złoży skargę.
+
+00:09:06.790 --> 00:09:09.290
+Więc tak, potrzebujesz ich, ale muszą być inteligentne.
+
+00:09:09.470 --> 00:09:13.690
+Nikt nie jest zachwycony, dołączając do rozmowy tylko po to, by powiedzieć, hej, dzięki za 19 przypomnienie dzisiaj.
+
+00:09:13.890 --> 00:09:15.370
+W końcu kliknąłem, zatwierdź.
+
+00:09:15.550 --> 00:09:18.550
+Właśnie tak zamieniasz łagodne poirytowanie użytkowników w otwarty bunt.
+
+00:09:18.550 --> 00:09:21.170
+Oto pułapka, w którą wpada większość administratorów.
+
+00:09:21.170 --> 00:09:23.670
+Wierzą, że więcej przypomnień oznacza szybsze rezultaty.
+
+00:09:23.910 --> 00:09:25.810
+Skoro jedno działa, to 5 musi być lepsze.
+
+00:09:25.970 --> 00:09:29.430
+Ta logika sprawdza się przy kuponach na pizce, ale nie przy zatwierdzaniu wydatków.
+
+00:09:29.670 --> 00:09:32.430
+Dobre przypomnienie jest kontekstowe i wysłane w odpowiednim czasie.
+
+00:09:32.690 --> 00:09:36.170
+Przypomnienie, wniosek zakupowy Twojego zespołu czeka na podpis do piątku.
+
+00:09:36.330 --> 00:09:37.290
+To trafia do celu.
+
+00:09:37.490 --> 00:09:39.630
+Z drugiej strony, zalew identycznych tematów.
+
+00:09:39.630 --> 00:09:45.370
+Masz zadanie o 9 rano uczy użytkowników usuwać wiadomości szybciej, niż reguły Outlooka segregują spam.
+
+00:09:45.590 --> 00:09:47.450
+Zasady projektowania przypomnień są proste.
+
+00:09:47.650 --> 00:09:49.610
+Bądź konkretny, trzymaj się czasu i stosuj warunki.
+
+00:09:49.610 --> 00:09:50.970
+Podam przykład, który widziałem.
+
+00:09:51.170 --> 00:09:53.430
+Dyrektor finansowy miał 5 raportów wydatków do sprawdzenia.
+
+00:09:53.650 --> 00:09:57.070
+Ktoś uznał, że przypominanie co 2 godziny, aż do skutku, to genialny rytm.
+
+00:09:57.090 --> 00:09:58.930
+Pod koniec dnia miała 30 e-maili.
+
+00:09:59.150 --> 00:10:00.970
+Żadne z zatwierdzeń nie zostało ukończone.
+
+00:10:01.210 --> 00:10:03.190
+Dział IT dostał 3 wściekłe wiadomości na Slacku.
+
+00:10:03.290 --> 00:10:04.270
+Zaproszenie na Teams z tytułem
+
+00:10:04.270 --> 00:10:07.850
+Naprawcie ten bałagan i zespół finansowy, który teraz kojarzy automatyzację ze spamem.
+
+00:10:07.990 --> 00:10:09.470
+Proces wcale nie przyspieszył.
+
+00:10:09.650 --> 00:10:11.530
+Wytworzyło to tylko więcej szumu i złej krwi.
+
+00:10:11.530 --> 00:10:15.810
+Dajcie znać w komentarzach, jaka jest najbardziej niedorzeczna częstotliwość przypomnień, jaką kiedykolwiek wygenerował Wasz system.
+
+00:10:15.970 --> 00:10:18.890
+Ktoś pewnie przebije 30, więc jakie jest rozwiązanie?
+
+00:10:19.050 --> 00:10:22.350
+Power Automate daje Ci narzędzia, ale musisz używać ich jak dorosły.
+
+00:10:22.570 --> 00:10:27.590
+Stosuj opóźnienia i sprawdzenia warunkowe, aby wysyłać przypomnienie tylko wtedy, gdy zadanie jest nadal w toku.
+
+00:10:27.810 --> 00:10:30.770
+Już to proste zabezpieczenie powstrzymuje większość burz spamowych.
+
+00:10:31.010 --> 00:10:33.410
+Następnie dodaj ustrukturyzowane reguły eskalacji.
+
+00:10:33.410 --> 00:10:34.870
+Najpierw jedno przypomnienie.
+
+00:10:35.090 --> 00:10:38.190
+Jeśli po określonym czasie nie ma reakcji, przekaż sprawę do menedżera.
+
+00:10:38.410 --> 00:10:42.050
+Jeśli nadal brak odzewu, skieruj to do współdzielonej skrzynki lub kolejki zadań.
+
+00:10:42.150 --> 00:10:45.750
+To przejrzysty łańcuch odpowiedzialności, który nie zapycha skrzynki jednej osoby.
+
+00:10:46.030 --> 00:10:48.550
+Wybierz swoje okna czasowe rozsądnie podczas testów.
+
+00:10:48.730 --> 00:10:50.610
+Nie zgaduj, a potem nie wywołuj chaosu.
+
+00:10:50.770 --> 00:10:51.990
+Pomyśl o tym w ten sposób.
+
+00:10:52.270 --> 00:10:56.070
+Kiedy jedno konkretne przypomnienie nie działa, nie zwiększaj głośności, zmień kanał.
+
+00:10:56.230 --> 00:10:59.250
+Eskaluj do kogoś innego, kto ma uprawnienia, by ruszyć sprawę dalej.
+
+00:10:59.250 --> 00:11:04.510
+Takie podejście utrzymuje proces w ruchu, pokazuje odpowiedzialność i oszczędza użytkownikom zmęczenia skrzynki odbiorczej.
+
+00:11:04.650 --> 00:11:07.830
+Zalewanie przypomnieniami działa jak wycie tego samego alarmu samochodowego przez cały dzień.
+
+00:11:08.030 --> 00:11:09.490
+Za pierwszym razem ludzie sprawdzają.
+
+00:11:09.690 --> 00:11:12.910
+Po dziesiątym wszyscy to ignorują, nawet jeśli samochód jest naprawdę kradziony.
+
+00:11:13.070 --> 00:11:14.490
+Ten hałas niszczy zaufanie.
+
+00:11:14.730 --> 00:11:18.970
+Jedno konkretne, trafne przypomnienie z jasną datą końcową budzi większy szacunek niż 50 powiadomień.
+
+00:11:19.170 --> 00:11:22.950
+Złoty środek to sprawienie, by przypomnienia przypominały wydarzenia w kalendarzu, a nie syreny alarmowe.
+
+00:11:23.170 --> 00:11:25.090
+Jeden e-mail dzień przed terminem przydatne.
+
+00:11:25.090 --> 00:11:27.910
+Poniedziałkowe podsumowanie oczekujących zatwierdzeń praktyczne.
+
+00:11:28.090 --> 00:11:31.570
+Eskalacja, która przekazuje zadanie dalej, jeśli nikt nie zareagował przez tydzień skuteczne.
+
+00:11:31.790 --> 00:11:34.670
+Budujesz system przypomnień, a nie alarm pożarowy dla całej firmy.
+
+00:11:34.810 --> 00:11:35.910
+A oto sedno sprawy.
+
+00:11:36.050 --> 00:11:39.550
+Przypomnienia i eskalacje mają znaczenie tylko wtedy, gdy możesz udowodnić, że zadziałały.
+
+00:11:39.710 --> 00:11:42.630
+Podczas audytu stwierdzenie pisaliśmy do nich trzy razy, się nie liczy.
+
+00:11:42.830 --> 00:11:47.590
+Liczy się zapis w Twoim własnym rejestrze, przypomnienie wysłane, eskalacja uruchomiona, wynik odnotowany.
+
+00:11:47.590 --> 00:11:51.910
+Jeśli nie potrafisz pokazać tego śladu danych, wszystkie Twoje sprytne przypomnienia stają się tylko plotką.
+
+00:11:51.910 --> 00:11:57.570
+Więc tak ustawiaj przypomnienia, by sprawy posuwały się naprzód, buduj ścieżki eskalacji, by zadania nie ginęły w czyimś outlooku.
+
+00:11:57.710 --> 00:11:59.310
+Ale nie zapominaj o fundamentach.
+
+00:11:59.490 --> 00:12:03.610
+Loguj każde przypomnienie i każdą eskalację w trwałym systemie, który kontrolujesz.
+
+00:12:03.790 --> 00:12:08.630
+Bo kiedy ktoś zapyta, jak Twój proces naprawdę działał, zrzuty ekranu i mgliste opowieści Cię nie uratują.
+
+00:12:08.850 --> 00:12:09.870
+Tylko twarde dowody.
+
+00:12:10.070 --> 00:12:14.810
+I co zabawne, miejsce, w którym większość administratorów spodziewa się znaleźć te dowody, zaraz ich mocno zawiedzie.
+
+00:12:14.970 --> 00:12:16.910
+Kłamstwo o logowaniu, w które wszyscy wierzą.
+
+00:12:17.090 --> 00:12:19.730
+Rozprawmy się z jednym z najbardziej kosztownych mitów w Power Automate.
+
+00:12:19.730 --> 00:12:21.710
+Kłamstwo o logowaniu, w które wszyscy wierzą.
+
+00:12:21.910 --> 00:12:25.030
+Wszyscy zakładają, że karta historii uruchomień to ich zgodny z prawem rejestr.
+
+00:12:25.210 --> 00:12:29.490
+Wygląda oficjalnie, pokazuje zatwierdzenia w równych rzędach i sprawia, że myślisz idealnie, jesteśmy zabezpieczeni.
+
+00:12:29.650 --> 00:12:31.150
+Ale ta karta nie jest archiwum.
+
+00:12:31.290 --> 00:12:35.610
+To krótkoterminowy bufor diagnostyczny, przydatny do debugowania, a nie do przechowywania dokumentacji.
+
+00:12:35.790 --> 00:12:39.850
+Traktowanie tego jak stałego logu jest jak traktowanie karteczek samoprzylepnych na lodówce jako systemu plików firmy.
+
+00:12:40.070 --> 00:12:42.510
+Wygląda dobrze, dopóki ekipa sprzątająca wszystkiego nie usunie.
+
+00:12:42.890 --> 00:12:44.730
+Administratorzy wpadają w tę pułapkę nieustannie.
+
+00:12:44.730 --> 00:12:48.870
+Prezentują przepływ, otwierają historię i mówią kierownictwu, patrzcie, wszystko mamy tutaj zapisane.
+
+00:12:49.050 --> 00:12:53.150
+Nie wspominają lub nie zdają sobie sprawy, że rekordy na tej karcie mają wyznaczony czas wygaśnięcia.
+
+00:12:53.410 --> 00:12:56.230
+Służy to do rozwiązywania problemów, a nie do zapewnienia zgodności z przepisami.
+
+00:12:56.430 --> 00:12:58.810
+Microsoft nigdy nie reklamował tego jako wiecznego sejfu.
+
+00:12:59.110 --> 00:13:02.090
+Zaprojektowali to jako narzędzie pomagające naprawiać błędy w działaniu procesów.
+
+00:13:02.210 --> 00:13:07.250
+Ufanie, że ten bufor przechowa dowody prawne jest tak samo rozsądne jak używanie historii przeglądarki jako systemu księgowego.
+
+00:13:07.430 --> 00:13:09.250
+A teraz wyobraź to sobie w rzeczywistości.
+
+00:13:09.250 --> 00:13:12.650
+Audytor pyta, kto zatwierdził ten budżet w 2021 roku?
+
+00:13:12.850 --> 00:13:13.850
+Myślisz, łatwizna.
+
+00:13:14.030 --> 00:13:17.290
+Otwierasz Power Automatę, klikasz w historię uruchomień i kropka nic.
+
+00:13:17.530 --> 00:13:19.670
+Może widzisz kilka tygodni, może parę miesięcy.
+
+00:13:19.910 --> 00:13:20.650
+Poza tym pusto.
+
+00:13:20.930 --> 00:13:23.930
+Zespół audytowy nie przejmuje się tym, że widzisz dane z ostatniego kwartału.
+
+00:13:24.110 --> 00:13:25.350
+Oni chcą dowodów sprzed lat.
+
+00:13:25.550 --> 00:13:27.990
+Jeśli masz tylko pustą stronę, rozmowa kończy się źle.
+
+00:13:28.170 --> 00:13:31.290
+Nie pozwól, by obietnica z poziomu prezentacji stała się twoim problemem prawnym w przyszłości.
+
+00:13:31.530 --> 00:13:32.670
+Widziałem to na własne oczy.
+
+00:13:32.930 --> 00:13:36.750
+Dział HR musiał przedstawić dowód zatwierdzenia kary dyscyplinarnej w związku z pozwem sądowym.
+
+00:13:36.750 --> 00:13:39.650
+Dział IT sprawdził historię uruchomień i nie znalazł żadnego śladu.
+
+00:13:39.810 --> 00:13:41.290
+Dzienniki zostały już usunięte.
+
+00:13:41.470 --> 00:13:45.350
+Pewność siebie, którą mieli rok wcześniej, zamieniła się w niezwykle niezręczną chwilę przed prawnikami.
+
+00:13:45.510 --> 00:13:47.990
+To jest dokładnie koszt wierzenia w kłamstwa historii uruchomień.
+
+00:13:48.170 --> 00:13:49.750
+Jakie jest więc profesjonalne rozwiązanie?
+
+00:13:49.890 --> 00:13:51.910
+Potrzebujesz trwałego logowania poza tym buforem.
+
+00:13:52.070 --> 00:13:54.890
+Dataverse sprawdzi się, jeśli chcesz relacyjnego przechowywania i skalowalności.
+
+00:13:55.150 --> 00:13:57.610
+Listy SharePoint są tanie, szybkie i łatwe w przeszukiwaniu.
+
+00:13:57.810 --> 00:14:02.430
+SQL daje pełną kontrolę, jeśli twoja organizacja już prowadzi bazy danych, choć wymaga to nakładów pracy.
+
+00:14:02.650 --> 00:14:03.530
+Wybór jest prosty.
+
+00:14:03.530 --> 00:14:05.590
+SharePoint jest łatwy, ale ograniczony.
+
+00:14:05.790 --> 00:14:07.830
+Dataverse skaluje się i obsługuje relacje.
+
+00:14:08.030 --> 00:14:11.250
+SQL jest potężny, ale wymaga faktycznej obsługi baz danych.
+
+00:14:11.450 --> 00:14:17.490
+Wybierz to, co pasuje do twoich umiejętności i możliwości środowiska, ale wybierz coś, bo historia to nasz log, to nie jest plan.
+
+00:14:17.670 --> 00:14:20.070
+Oto praktyczny schemat, który każdy może wdrożyć.
+
+00:14:20.230 --> 00:14:22.950
+Przy każdym zatwierdzeniu przechowuj te minimalne, trwałe pola.
+
+00:14:23.090 --> 00:14:27.030
+ID żądania, aby powiązać rekordy, nazwa etapu, akcja zatwierdzenia lub odrzucenia,
+
+00:14:27.130 --> 00:14:32.550
+ID zatwierdzającego, identyfikator obiektu użytkownika, a nie tylko e-mail, znacznik czasu i opcjonalne komentarze.
+
+00:14:32.550 --> 00:14:37.150
+To wystarczy, aby stanąć przed audytorem i powiedzieć oto dokładnie, co się stało, przez kogo i kiedy.
+
+00:14:37.410 --> 00:14:40.170
+Bez zapisania tych pól w trwałym miejscu nie masz logów.
+
+00:14:40.370 --> 00:14:41.630
+Masz tylko pobożne życzenia.
+
+00:14:41.910 --> 00:14:45.790
+Powiedzmy wprost, historia uruchomień to w zasadzie Snapchat dla danych przepływu pracy.
+
+00:14:46.070 --> 00:14:48.690
+Fajne w danej chwili znikają, gdy naprawdę ich potrzebujesz.
+
+00:14:48.910 --> 00:14:50.490
+Microsoft nie ukrywa tego faktu.
+
+00:14:50.650 --> 00:14:54.370
+Projektują te logi tak, aby wygasały, ponieważ długoterminowe przechowywanie jest twoim obowiązkiem.
+
+00:14:54.830 --> 00:14:57.070
+Niebezpieczeństwem nie jest tylko brak jednego śladu zatwierdzenia.
+
+00:14:57.250 --> 00:15:01.410
+To fałszywe poczucie bezpieczeństwa powstrzymuje administratorów przed budowaniem prawdziwych systemów logowania.
+
+00:15:01.410 --> 00:15:04.430
+Wszyscy zakładają, że rekordy istnieją, podczas gdy wcale tak nie jest.
+
+00:15:04.570 --> 00:15:05.710
+Oto najważniejsza kwestia.
+
+00:15:05.910 --> 00:15:07.210
+Logowanie nie jest opcjonalne.
+
+00:15:07.370 --> 00:15:09.670
+Jeśli nie rejestrujesz trwałych danych, nie będziesz miał czego pokazać.
+
+00:15:09.830 --> 00:15:10.550
+Zrzuty ekranu?
+
+00:15:10.710 --> 00:15:11.450
+Bez wartości.
+
+00:15:11.750 --> 00:15:12.190
+Opowieści?
+
+00:15:12.430 --> 00:15:13.170
+Bez wartości.
+
+00:15:13.370 --> 00:15:16.350
+To, co działa, to ustrukturyzowane logi, które można z pewnością przeszukiwać.
+
+00:15:16.550 --> 00:15:19.050
+Jeśli ta analiza oszczędza ci bólu głowy, kliknij lubię to.
+
+00:15:19.210 --> 00:15:21.890
+Pomoże to innym administratorom znaleźć ten poradnik przetrwania.
+
+00:15:22.130 --> 00:15:23.470
+Najlepsza praktyka jest prosta.
+
+00:15:23.470 --> 00:15:31.190
+Każde zatwierdzenie musi kończyć się zapisem, kto zatwierdził etap procesu, jaką akcję podjął, jego ID, znacznikiem czasu i ewentualnymi komentarzami.
+
+00:15:31.350 --> 00:15:31.870
+To wszystko.
+
+00:15:32.170 --> 00:15:36.210
+Wypracuj ten nawyk już teraz, albo później będziesz pisać maile z przeprosinami do działu Compliance.
+
+00:15:36.390 --> 00:15:44.610
+Prawdziwe pytanie nie brzmi jednak, czy logować, ale gdzie i jak przechowywać te logi, aby przetrwały 3, 5, a nawet 10 lat, nie zamieniając się w kolejny koszmar migracji IT.
+
+00:15:44.750 --> 00:15:46.390
+I właśnie wtedy robi się ciekawie.
+
+00:15:46.390 --> 00:15:49.610
+Zabezpieczanie przyszłości, przygotowanie zatwierdzeń do audytu.
+
+00:15:49.850 --> 00:15:53.170
+Zabezpieczanie przyszłości zatwierdzeń nie polega na popisywaniu się w prezentacji.
+
+00:15:53.410 --> 00:15:59.570
+Chodzi o to, by za 5 lat móc przedstawić przejrzysty i wiarygodny rejestr, gdy ktoś zapyta, kto, co i kiedy zatwierdził.
+
+00:15:59.690 --> 00:16:01.630
+To prawdziwy sprawdzian gotowości na audyt.
+
+00:16:01.930 --> 00:16:03.550
+Krótkożyjące logi są bezużyteczne.
+
+00:16:03.770 --> 00:16:05.850
+Przypadkowe listy SharePoint są tylko nieco lepsze.
+
+00:16:06.090 --> 00:16:08.050
+Firma nie pyta o dowody z minionego wtorku.
+
+00:16:08.050 --> 00:16:11.330
+Pyta podczas kontroli zgodności, która sięga nawet pół dekady wstecz.
+
+00:16:11.490 --> 00:16:14.330
+Audytorów nie obchodzi, jak ładny był Twój widok w SharePoint.
+
+00:16:14.330 --> 00:16:21.470
+Obchodzi ich, czy rekordy przetrwały migrację systemów, zmiany administratorów i folder do poprawki później, którego nikt nigdy nie poprawił.
+
+00:16:21.670 --> 00:16:27.550
+Trudność polega na tym, jak przechowywać logi przez 3, 5, a nawet 10 lat, nie tworząc przy tym cyfrowego chaosu.
+
+00:16:27.730 --> 00:16:34.550
+Cmentarzyska IT są pełne eksportów CSV, starych plików PDF i arkuszy Excel o nazwach typu, ważne podkreślenie, ostateczne podkreślenie V7.
+
+00:16:34.550 --> 00:16:36.550
+Żadne z tych rozwiązań nie jest trwałe.
+
+00:16:36.790 --> 00:16:40.370
+Znikają, psują się i z pewnością nie obronią się przed komisjami audytowymi.
+
+00:16:40.550 --> 00:16:43.330
+Nie można opierać strategii zgodności na cyfrowym bałaganie.
+
+00:16:43.330 --> 00:16:45.190
+Wyobraź sobie czarny scenariusz.
+
+00:16:45.350 --> 00:16:48.350
+Pojawiają się audytorzy, oddychasz z ulgą, bo przecież zapisałeś logi.
+
+00:16:48.510 --> 00:16:54.130
+Wtedy okazuje się, że połowa to uszkodzone pliki CSV w czyimś ondrive, a reszta jest zamknięta w formacie wykonawcy, o którym nikt nie pamięta.
+
+00:16:54.250 --> 00:16:55.630
+To spotkanie nie skończy się dobrze.
+
+00:16:55.930 --> 00:16:58.870
+Zabezpieczenie przyszłości oznacza budowanie czegoś strukturalnego od samego początku.
+
+00:16:59.150 --> 00:17:01.910
+Celem jest zcentralizowane, ustrukturyzowane i trwałe logowanie danych.
+
+00:17:01.910 --> 00:17:05.110
+Wybierz platformę, której głównym zadaniem jest zapewnienie trwałości danych.
+
+00:17:05.290 --> 00:17:08.870
+Dataverse to świetny kandydat dla środowisk Microsoft, ponieważ obsługuje relacyjne dane.
+
+00:17:08.990 --> 00:17:12.090
+Zabezpieczenia oparte na rolach i skalowalność znacznie lepiej niż prosta lista.
+
+00:17:12.310 --> 00:17:15.650
+SQL jest równie dobrym rozwiązaniem, jeśli Twoje środowisko już je wspiera.
+
+00:17:15.850 --> 00:17:19.170
+I tak listy SharePoint mogą być punktem wyjścia, jeśli potrzebujesz czegoś na szybko.
+
+00:17:19.350 --> 00:17:24.170
+Nie chodzi o gonitwę za nowinkami, ale o to, by Twój system nie padł, gdy ktoś poprosi o logi z 2017 roku.
+
+00:17:24.430 --> 00:17:26.090
+Wybór platformy to tylko jeden element.
+
+00:17:26.350 --> 00:17:28.090
+Ważniejszym jest struktura Twoich danych.
+
+00:17:28.310 --> 00:17:30.410
+Nie wrzucaj wszystkiego do jednego pola tekstowego.
+
+00:17:30.630 --> 00:17:31.710
+To śmieci raportowe.
+
+00:17:31.710 --> 00:17:36.550
+Zapisuj wydzielone pola, etap zatwierdzenia, tożsamość osoby zatwierdzającej, sygnaturę czasową i wynik.
+
+00:17:36.690 --> 00:17:43.370
+Jeśli przechowujesz wszystko jako długą notatkę, audyty i raporty zawiodą, a Ty skończysz przeglądając wpisy w dzienniku zamiast wykonywać czyste zapytania.
+
+00:17:43.630 --> 00:17:48.870
+Ustrukturyzowane pola pozwolą Ci w sekundy wyświetlić wszystkie zatwierdzenia użytkownika Jane Doł między kwietniem a czerwcem.
+
+00:17:49.090 --> 00:17:52.150
+Gdy przechowujesz zatwierdzenia poprawnie, raportowanie staje się bezproblemowe.
+
+00:17:52.350 --> 00:17:55.670
+Żądanie dotyczące zgodności przestaje wywoływać panikę i staje się pięćminutowym zadaniem.
+
+00:17:55.670 --> 00:17:59.750
+Zamiast zwoływać sztab kryzysowy, po prostu uruchamiasz zapytanie, eksportujesz dane i przekazujesz je dalej.
+
+00:17:59.910 --> 00:18:06.230
+To różnica między postrzeganiem Cię jako spokojnego profesjonalistę z dowodami, a administratorem przekopującym skrzynki sprzed czterech lat.
+
+00:18:06.430 --> 00:18:08.130
+Korzyści nie kończą się na audycie.
+
+00:18:08.550 --> 00:18:13.610
+Scentralizuj zatwierdzenia w Dataverse lub SQL, a zyskasz pulpity w Power BI lub tabele przestawne w Excelu,
+
+00:18:13.690 --> 00:18:17.610
+dzięki którym zarząd sprawdzi, kto zatwierdza, jak długo to trwa i gdzie są wąskie gardła.
+
+00:18:17.850 --> 00:18:20.290
+Dane zgodności pełnią też rolę analizy procesów.
+
+00:18:20.450 --> 00:18:23.230
+Oznacza to koniec gaszenia pożarów i początek pokazywania wartości.
+
+00:18:23.230 --> 00:18:26.350
+Jeśli brzmi to jak praca, to nią jest, ale wykonujesz ją tylko raz.
+
+00:18:26.490 --> 00:18:30.010
+Tanie sztuczki sprawią, że będziesz sprzątać za każdym razem, gdy zapukają audytorzy.
+
+00:18:30.230 --> 00:18:33.030
+Listy SharePoint bez planu szybko puchną i ostatecznie padają.
+
+00:18:33.250 --> 00:18:35.450
+Losowy eksport danych to gwarantowana ich utrata.
+
+00:18:35.670 --> 00:18:38.930
+Wczesne wdrożenie trwałej pamięci pozwala uniknąć trzyletniego bólu głowy później.
+
+00:18:39.190 --> 00:18:43.010
+Chcesz zacząć bez oporu? Zapisuj minimalne logi na liście SharePoint już teraz.
+
+00:18:43.250 --> 00:18:48.390
+Rejestruj najważniejsze dane ID wniosku, etap akcje ID zatwierdzającego, sygnaturę czasową
+
+00:18:48.390 --> 00:18:51.350
+i link korelacyjny przy każdym zatwierdzeniu lub eskalacji.
+
+00:18:51.350 --> 00:18:54.910
+Później, jeśli potrzebujesz skali, przenieś się do Dataverse lub SQL.
+
+00:18:55.250 --> 00:18:59.890
+Lepiej zbierać coś ustrukturyzowanego dzisiaj niż czekać, aż kierownictwo zażąda pięcioletniej historii jutro.
+
+00:19:00.070 --> 00:19:02.810
+Oto szybka lista kontrolna od najgorszego do najlepszego scenariusza.
+
+00:19:02.950 --> 00:19:07.470
+Po pierwsze, wybierz trwały magazyn Dataverse, SQL lub SharePoint z odpowiednią kopią zapasową.
+
+00:19:07.670 --> 00:19:13.770
+Po drugie, określ minimalny schemat ID wniosku, etap akcje ID zatwierdzającego, sygnaturę czasową i link korelacyjny.
+
+00:19:13.990 --> 00:19:16.850
+Następnie zapisuj logi przy każdym zatwierdzeniu lub eskalacji.
+
+00:19:16.850 --> 00:19:21.210
+Na koniec stwórz proste raporty w Power BI lub Excelu, aby audytorzy widzieli wszystko w kilka sekund.
+
+00:19:21.330 --> 00:19:23.330
+To zabezpieczenie na przyszłość za jednym zamachem.
+
+00:19:23.510 --> 00:19:28.570
+Bez lania wody same konkretne kroki, które możesz podjąć, więc nie ryzykuj kariery trzymając pliki CSV ukryte na pulpitach.
+
+00:19:28.730 --> 00:19:30.430
+Przechowuj zatwierdzenia tam, gdzie przetrwają.
+
+00:19:30.650 --> 00:19:32.610
+Dbaj o strukturę i możliwość łatwego wyszukiwania danych.
+
+00:19:32.810 --> 00:19:34.610
+Buduj małe raporty już teraz, aby być pewnym swego.
+
+00:19:34.610 --> 00:19:36.610
+Dziękuje tak, co!
