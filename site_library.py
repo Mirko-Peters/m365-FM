@@ -41,9 +41,16 @@ CSS = ('<style>.bl-vote{font:inherit;cursor:pointer;border:1px solid var(--bd);b
 def is_indexable(p):
     """Index ja/nein eines Eintrags: ab 10 Upvotes (bisherige Regel) oder - 13.11.2026 - mit >= 2500 Zeichen Text in der Sprache der Seite (site_index_rule). Jeder Eintrag hat
     nur eine Seite, in der Sprache des Eintrags (lang). Zaehlt nur Text-Arten (Prompt, Anweisung, Skill ...): der Code einer KQL-/DAX-/PowerShell-/JSON-Vorlage ist kein Text
-    der Seitensprache, bei ihnen zaehlt nur die Beschreibung."""
+    der Seitensprache, bei ihnen zaehlt nur die Beschreibung. Dritter Weg (20.11.2026): das Kennzeichen reviewed (nur der Import setzt es, nie ein Mitglied)."""
+    if p.get("reviewed"): return True   # "von der Redaktion geprueft" (Migration 0054, worker importLibrarySeed): ein Pruefer hat den Eintrag durchgesehen, auch Code-Arten
     code = bool(KINDS.get(p.get("kind"), KINDS["other"])[2])
     return IR.index_or_long(p.get("votes", 0) >= INDEX_VOTES, p.get("summary"), None if code else p.get("body"))
+
+
+def reviewed_badge(lang, p):
+    """Kennzeichen "von der Redaktion geprueft" (nur bei reviewed=1)."""
+    if not p.get("reviewed"): return ""
+    return f' · <span class="mut" title="{esc(T(lang, "Checked by an independent reviewer before publication; test it in your own tenant before you rely on it.", "Vor der Veröffentlichung von einem unabhängigen Prüfer durchgesehen; teste es vor dem Einsatz im eigenen Tenant."))}">✓ {esc(T(lang, "Reviewed by the editorial team", "Von der Redaktion geprüft"))}</span>'
 
 
 def open_link(lang, p):
@@ -71,7 +78,9 @@ def build(g, items, people, api):
             write(f"{pfx2(lang)}community/library/index.html", page(lang, f"{t0} – M365.FM", intro, ru, b, None, None, og_type="website", extra_head=LCSS, noindex=True))
             continue
         links = {i: f"{BASE}{pfx(lang) if lang == 'de' else ''}/entity/{i}/" for i in ENTS}
-        _n_long = sum(1 for p in mine if p.get("votes", 0) < INDEX_VOTES and is_indexable(p))
+        _n_long = sum(1 for p in mine if p.get("votes", 0) < INDEX_VOTES and not p.get("reviewed") and is_indexable(p))
+        _n_rev = sum(1 for p in mine if p.get("reviewed") and p.get("votes", 0) < INDEX_VOTES)
+        if _n_rev: print(f"Bibliothek {lang}: {_n_rev} Eintraege von der Redaktion geprueft auf index (sonst zu wenig Stimmen)")
         if _n_long: print(f"Bibliothek {lang}: {_n_long} Eintraege ab {IR.MIN_CHARS} Zeichen Text auf index (sonst zu wenig Stimmen)")
         for p in mine:
             a = pb[p["handle"]]; au = f"{BASE}/community/u/{a['handle']}/"; u = f"{croot}library/{p['handle']}-{p['slug']}/"
@@ -79,7 +88,7 @@ def build(g, items, people, api):
             tl = "".join(EN.list_link(links[t], ENTS[t], lang, cls="mb-tag") + " " for t in topics)   # Paket 6: Themen-Chips mit Zusatz
             vote = f'<button type="button" class="bl-vote" data-i="{p["id"]}" aria-pressed="false" aria-label="Upvote">▲ <span class="n">{p.get("votes", 0)}</span></button>'
             b = shell(lang, f'{CSS}<p class="mut"><a href="{ru}">{esc(t0)}</a> · {esc(kl(lang, p["kind"]))}</p><article><h1>{esc(p["title"])}</h1>'
-                            f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{p["handle"]}/">{esc(a["name"])}</a> · {iso(p["published"])} · {esc(T(lang, "Version", "Version"))} {p.get("version", 1)}</p>'
+                            f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{p["handle"]}/">{esc(a["name"])}</a> · {iso(p["published"])} · {esc(T(lang, "Version", "Version"))} {p.get("version", 1)}{reviewed_badge(lang, p)}</p>'
                             f'{("<p>" + esc(p["summary"]) + "</p>") if p.get("summary") else ""}{open_link(lang, p)}<pre class="lib-code" id="lib-code">{esc(p["body"])}</pre></article>'
                             f'<p><button type="button" class="btn main" id="lib-copy" data-ok="{esc(T(lang, "Copied", "Kopiert"))}">{esc(T(lang, "Copy", "Kopieren"))}</button> {vote}</p>{(LC.intro(lang, "lib.topics") + "<p>" + tl + "</p>") if tl else ""}<section id="c-comments"></section>'
                             f'<script>{JS.replace("%API%", api)}</script>' + (ctags(lang, "lib%d" % p["id"]) if ctags else ""))

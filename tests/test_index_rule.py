@@ -258,6 +258,17 @@ class LibraryTests(unittest.TestCase):
         self.assertTrue(LIB.is_indexable(self.item(kind="kql", body="x", summary=words(2500))))
         self.assertTrue(LIB.is_indexable(self.item(kind="kql", body="x", votes=10)))
 
+    def test_reviewed_flag_indexes_even_code_kinds(self):
+        for kind in ("kql", "dax", "powershell", "flow", "plugin", "prompt"):
+            it = self.item(kind=kind, body="kurz", summary="kurz"); it["reviewed"] = 1
+            self.assertTrue(LIB.is_indexable(it), kind)
+            it["reviewed"] = 0
+            self.assertFalse(LIB.is_indexable(it), kind)
+        self.assertIn("Von der Redaktion geprüft", LIB.reviewed_badge("de", {"reviewed": 1}))
+        self.assertIn("Reviewed by the editorial team", LIB.reviewed_badge("en", {"reviewed": 1}))
+        self.assertEqual(LIB.reviewed_badge("de", {"reviewed": 0}), "")
+        self.assertEqual(LIB.reviewed_badge("de", {}), "")
+
     def test_pages_sitemap_and_directory(self):
         files, pages, sitemap = {}, {}, []
 

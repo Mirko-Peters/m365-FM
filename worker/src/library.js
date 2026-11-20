@@ -15,6 +15,7 @@ let linkOk = false;
 async function ensureLink(db) {
   if (linkOk) return;
   try { await db.prepare("SELECT link FROM lib_items LIMIT 1").first(); } catch { try { await db.prepare("ALTER TABLE lib_items ADD COLUMN link TEXT NOT NULL DEFAULT ''").run(); } catch {} }
+  try { await db.prepare("SELECT reviewed FROM lib_items LIMIT 1").first(); } catch { try { await db.prepare("ALTER TABLE lib_items ADD COLUMN reviewed INTEGER NOT NULL DEFAULT 0").run(); } catch {} }   // Migration 0054
   linkOk = true;
 }
 const BAD_HOST = /(^|\.)(bit\.ly|t\.co|tinyurl\.com|goo\.gl|is\.gd|ow\.ly|buff\.ly|cutt\.ly|rebrand\.ly|shorturl\.at)$/i;
@@ -25,12 +26,47 @@ export async function deleteUserLibrary(db, uid) {
   await db.batch([db.prepare("DELETE FROM lib_votes WHERE item_id IN (SELECT id FROM lib_items WHERE user_id=?) OR user_id=?").bind(uid, uid), db.prepare("DELETE FROM lib_items WHERE user_id=?").bind(uid)]);
 }
 
+// ---------- Start-Eintraege (data/library_seed*/ -> worker/src/library_seed.json, tools/build_library_seed.py) ----------
+// Einmaliger, wiederholbarer Import unter dem Profil LIB_SEED_HANDLE: ohne Tageslimit (Mitglieder: 20 neue Eintraege je 24 h), mit denselben Pruefungen wie
+// /api/library/save (Art, Titel, Text 20 bis 20000 Zeichen, Link, Themen muessen Entitaeten sein). Idempotent ueber (Nutzer, Slug): unveraenderte Eintraege
+// bleiben unberuehrt, geaenderte werden aktualisiert (Version +1 bei neuem Text), nichts wird geloescht. Je Lauf hoechstens `cap` Schreibvorgaenge (Cron alle 15 Minuten).
+export async function importLibrarySeed(env, seed, { cap = 40 } = {}) {
+  const db = env.DB; await ensureLink(db);
+  const handle = String(env.LIB_SEED_HANDLE || "").trim().toLowerCase();
+  if (!handle) return { skipped: "LIB_SEED_HANDLE fehlt" };
+  const pr = await db.prepare("SELECT p.user_id FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.handle=? AND p.public=1").bind(handle).first();
+  if (!pr) return { skipped: "Profil nicht oeffentlich oder Kennung unbekannt", handle };
+  const uid = pr.user_id, known = await baseIds(env), t = now();
+  const have = new Map(((await db.prepare("SELECT id,slug,kind,title,summary,body,link,lang,topics,reviewed FROM lib_items WHERE user_id=?").bind(uid).all()).results || []).map((r) => [r.slug, r]));
+  const out = { total: seed.length, created: 0, updated: 0, same: 0, rejected: [], pending: 0 }, seen = new Set();
+  for (const raw of seed) {
+    const title = txt(raw.title || "", 140), summary = txt(raw.summary || "", 300), kind = String(raw.kind || ""), lang = String(raw.lang || "en");
+    const link = cleanLink(raw.link), body = String(raw.body || "").replace(/\r\n/g, "\n").replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, "").trim().slice(0, 20000);
+    const topics = [...new Set((Array.isArray(raw.topics) ? raw.topics : []).map(String))].slice(0, 10), slug = slugify(title);
+    const why = title.length < 5 || !slug ? "title" : !LIB_KINDS.includes(kind) ? "bad_kind" : !okLang(lang) ? "bad_lang" : link === null ? "bad_link" : LINK_REQUIRED.includes(kind) && !link ? "need_link"
+      : body.length < 20 ? "too_short" : !topics.length || topics.some((x) => !known.has(x)) ? "bad_topic" : "";
+    if (why || seen.has(slug)) { out.rejected.push({ title: title.slice(0, 60), why: why || "dup_slug" }); continue; }
+    seen.add(slug);
+    const rev = raw.reviewed ? 1 : 0, cur = have.get(slug), tj = JSON.stringify(topics);
+    if (cur && cur.kind === kind && cur.title === title && cur.summary === summary && cur.body === body && (cur.link || "") === (link || "") && cur.lang === lang && cur.topics === tj && cur.reviewed === rev) { out.same++; continue; }
+    if (out.created + out.updated >= cap) { out.pending++; continue; }
+    if (cur) {
+      await db.prepare("UPDATE lib_items SET kind=?,title=?,summary=?,body=?,link=?,lang=?,topics=?,reviewed=?,version=version+?,updated=? WHERE id=?").bind(kind, title, summary, body, link || "", lang, tj, rev, cur.body !== body ? 1 : 0, t, cur.id).run();
+      out.updated++;
+    } else {
+      await db.prepare("INSERT INTO lib_items(user_id,slug,kind,title,summary,body,link,lang,topics,reviewed,version,status,created,updated,published) VALUES(?,?,?,?,?,?,?,?,?,?,1,'live',?,?,?)").bind(uid, slug, kind, title, summary, body, link || "", lang, tj, rev, t, t, t).run();
+      out.created++;
+    }
+  }
+  return out;
+}
+
 export async function handleLibrary(env, request, url, path, user, J) {
   const db = env.DB, method = request.method; await ensureLink(db);
 
   if (path === "/api/library/export" && method === "GET") {
     const rows = (await db.prepare(
-      `SELECT b.id,b.slug,b.kind,b.title,b.summary,b.body,b.link,b.lang,b.topics,b.version,b.created,b.published,b.updated,p.handle,u.name,(SELECT COUNT(*) FROM lib_votes v WHERE v.item_id=b.id) votes
+      `SELECT b.id,b.slug,b.kind,b.title,b.summary,b.body,b.link,b.lang,b.topics,b.version,b.reviewed,b.created,b.published,b.updated,p.handle,u.name,(SELECT COUNT(*) FROM lib_votes v WHERE v.item_id=b.id) votes
        FROM lib_items b JOIN profiles p ON p.user_id=b.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=b.user_id AND u.banned=0
        WHERE b.status='live' ORDER BY b.published DESC LIMIT 1000`).all()).results || [];
     return J({ items: rows.map((r) => ({ ...r, topics: parse(r.topics, []) })) }, 200, { "cache-control": "public, max-age=300" });
