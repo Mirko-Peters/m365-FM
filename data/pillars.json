@@ -1,5 +1,5 @@
 {
- "_": "Pillar-Kompendien und Lernpfad (site_pillars.py). slug.en/slug.de = Dateiname in imports/pillars/<sprache>/ und Adresse /learn/<slug>/ bzw. /de/learn/<slug>/. topics (Entitaets-IDs, 'x*' = Praefix) und re (Slug-Muster) ordnen Blogbeitraege dem Pillar zu.",
+ "_": "Pillar-Kompendien und Lernpfad (site_pillars.py). slug.en/slug.de = Dateiname in imports/pillars/<sprache>/ und Adresse /learn/<slug>/ bzw. /de/learn/<slug>/. topics (Entitaets-IDs, 'x*' = Praefix) und re (Slug-Muster) ordnen Blogbeitraege dem Pillar zu (re wird an Wortgrenzen auf Slug und Titel angewendet, Woerter mit Leerzeichen statt Bindestrich); pins = Slugs, die fest zugeordnet werden.",
  "path": {
   "id": "manufacturing-excellence",
   "title": {
@@ -96,7 +96,7 @@
     "lean-management",
     "eight-wastes"
    ],
-   "re": "lean|kaizen|5s-|waste|six-sigma|kanban"
+   "re": "lean|kaizen|5s|wastes?|six sigma|kanban|standard work|poka yoke|smed|continuous improvement"
   },
   {
    "id": "operational-excellence",
@@ -111,7 +111,7 @@
    "topics": [
     "operational-excellence"
    ],
-   "re": "operational-excellence"
+   "re": "operational excellence|opex"
   },
   {
    "id": "shop-floor-management",
@@ -127,7 +127,7 @@
     "gemba-walk",
     "shop-floor-management"
    ],
-   "re": "gemba|shop-floor|shopfloor|tier-meeting|andon"
+   "re": "gemba|shop ?floor|tier(?:ed)? meetings?|andon|daily management"
   },
   {
    "id": "value-stream-mapping",
@@ -143,7 +143,7 @@
     "value-stream-mapping",
     "value-stream-manager"
    ],
-   "re": "value-stream|vsm"
+   "re": "value stream|vsm"
   },
   {
    "id": "manufacturing-kpis",
@@ -160,7 +160,7 @@
     "takt-time",
     "total-productive-maintenance"
    ],
-   "re": "oee|kpi|takt|cycle-time|lead-time"
+   "re": "oee|kpis?|takt|cycle times?|lead times?|ppm|fpy|otif|teep|performance indicators?"
   },
   {
    "id": "production-scheduling-aps",
@@ -181,7 +181,7 @@
     "production-routing",
     "bottleneck"
    ],
-   "re": "scheduling|aps-|planning-and-scheduling|bottleneck|capacity-planning"
+   "re": "scheduling|aps|planning and scheduling|bottlenecks?|capacity planning|mrp|theory of constraints"
   },
   {
    "id": "digital-twin-manufacturing",
@@ -198,7 +198,7 @@
     "factory-simulation",
     "azure-digital-twins"
    ],
-   "re": "digital-twin|simulation"
+   "re": "digital twins?|factory simulation|production simulation|virtual commissioning"
   },
   {
    "id": "aerospace-production-planning",
@@ -214,7 +214,7 @@
     "aerospace",
     "traceability"
    ],
-   "re": "aerospace|aviation|traceab"
+   "re": "aerospace|aviation|as9100|mro|traceability"
   },
   {
    "id": "manufacturing-it-azure",
@@ -231,7 +231,7 @@
     "enterprise-resource-planning",
     "dynamics-365-supply-chain-management"
    ],
-   "re": "mes-|erp|azure-iot|shop-floor-it|iot"
+   "re": "mes|manufacturing it|azure iot|iot hub|iot|factory it|plant it|opc ua"
   },
   {
    "id": "ifakt-polaris",
@@ -244,10 +244,14 @@
     "de": "iFAKT Polaris"
    },
    "topics": [
-    "ifakt",
-    "polaris*"
+    "polaris"
    ],
-   "re": "polaris|ifakt"
+   "re": "polaris|ifakt",
+   "pins": [
+    "modular-production-planning-software-modules",
+    "value-stream-management-software-manufacturing",
+    "manufacturing-optimization-aerospace-what-first"
+   ]
   }
  ]
 }

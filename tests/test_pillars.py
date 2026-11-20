@@ -116,9 +116,6 @@ class Cluster(unittest.TestCase):
         self.assertIn('href="#src-2"', h); self.assertNotIn("#src-99", h); self.assertNotIn("(planned)", h); self.assertIn("pl-unv", h)
 
 
-if __name__ == "__main__":
-    unittest.main()
-
 
 class AuthorBox(unittest.TestCase):
     def test_site_box_plus_disclosure(self):
@@ -128,3 +125,103 @@ class AuthorBox(unittest.TestCase):
             self.assertTrue(h.startswith('<section class="author-box">BOX</section>'), f"{lang}/{p['id']}")
             self.assertRegex(h, r"(?i)ifakt", f"{lang}/{p['id']} ohne iFAKT-Hinweis")
             self.assertNotRegex(h, r"(?i)\[Editor|\[Redaktion")
+
+
+FORBIDDEN = re.compile(r"\((?:planned|geplant)[,;)]|Sister guides \(|check links before go-live|Links vor Livegang|activate link|aktivieren\)|NEURONwriter|Competitor pages|Wettbewerberseiten|\(competitor|\(Wettbewerber"
+                       r"|\[unverified:|\[ungeprüft:|Reading time|Lesezeit:|German version:|English version:|Deutsche Fassung:|Englische Fassung:|founded in 2001 by|von Jörg Drees gegründet"
+                       r"|planned (?:m365|[\w ]{0,40}(?:guide|compendium))|geplante[n]? Pillar|ist geplant|\(not yet published|, not yet published|noch nicht veröffentlicht\)|\(in Vorbereitung|\(in preparation", re.I)
+
+
+class Rendered(unittest.TestCase):
+    def test_no_internal_or_planned_notes_on_pages(self):
+        for lang, p in ALL:
+            d, body, src, heads = S._article(p, lang, BASE, ctx())
+            txt = re.sub(r"<[^>]+>", " ", body + " " + src)
+            m = FORBIDDEN.search(txt)
+            self.assertIsNone(m, f"{lang}/{p['id']}: {m and txt[max(0, m.start() - 60):m.end() + 60]}")
+            self.assertNotRegex(body, r"`/learn/", f"{lang}/{p['id']} Adresse in Backticks")
+
+    def test_unverified_reason_in_tooltip(self):
+        h = S.finish("<p>x [unverified: practitioner estimate] y [ungeprüft]</p>", 0, "en")
+        self.assertEqual(h.count("pl-unv"), 2); self.assertIn("Practitioner estimate.", h); self.assertNotIn("[unverified", h)
+
+    def test_blockquote_keeps_lists(self):
+        h, _ = S.render("> **Key takeaways**\n> - eins [1]\n> - zwei\n>\n> Schluss", "en", None)
+        self.assertEqual(h.count("<li>"), 2); self.assertIn("<blockquote>", h); self.assertIn("<strong>Key takeaways</strong>", h); self.assertNotIn("- eins", h)
+
+    def test_tables_accessible(self):
+        h, _ = S.render("| A | B |\n|---|---|\n| 1 | 2 |", "de", None)
+        self.assertIn('<th scope="col">A</th>', h); self.assertIn('tabindex="0"', h); self.assertIn('aria-label="Tabelle"', h)
+
+    def test_sources_drop_internal_and_keep_numbers(self):
+        md = ("Alles Mögliche, intern.\n1. Fraunhofer IPA: Titel. https://example.org/a\n2. NEURONwriter: analysis \"x\" (internal analysis)\n"
+              "3. Competitor pages: https://a.example · https://b.example\n4. Gitnux: Top 10 (competitor, vendor-written). https://gitnux.org/x\n5. Jodoo (Wettbewerber). https://j.example")
+        h, valid, dropped = S.sources_html(md, "en", ctx())
+        self.assertEqual(valid, {1, 4, 5}); self.assertEqual(dropped, {2, 3})
+        self.assertNotRegex(h, r"(?i)neuron|competitor|wettbewerber|intern"); self.assertIn('id="src-4"', h); self.assertIn('<a href="https://example.org/a"', h)
+        self.assertIn("(vendor-written)", h); self.assertIn("November 20, 2026", h)
+        t = S.finish("<p>Text [1] [2] [4] [9]</p>", valid, "en", dropped)
+        self.assertIn("#src-1", t); self.assertIn("#src-4", t); self.assertNotIn("[2]", t); self.assertIn("[9]", t)
+
+    def test_scrub_planned_and_language_lines(self):
+        md = ("*Updated: November 2026 · Reading time: about 55 minutes*\n\nText with planned maintenance and (planned time ÷ calendar time) stays; see the planned shop floor management guide.\n\n"
+              "**Sister guides (planned)**\n- [A](https://www.m365.fm/en/learn/lean-manufacturing/) (planned, activate link after publication)\n\n**German version:** [x](https://www.m365.fm/learn/lean-management/) (de-DE)\n")
+        o = S.scrub(md)
+        self.assertNotIn("Reading time", o); self.assertNotIn("German version", o); self.assertNotIn("activate link", o)
+        self.assertIn("planned maintenance", o); self.assertIn("(planned time ÷ calendar time)", o); self.assertIn("the shop floor management guide", o); self.assertIn("**Related guides**", o)
+        d = S.scrub("Die [iFAKT GmbH](https://www.m365.fm/entity/ifakt/) aus Stuttgart wurde 2001 von Jörg Drees gegründet [18].\n\nEine eigene Pillar-Page zum digitalen Zwilling ist geplant (siehe Ende).\n\n- `/learn/digital-twin/`: Digitaler Zwilling (geplant)\n")
+        self.assertNotIn("Drees", d); self.assertIn("nach Unternehmensangaben 2001 gegründet", d); self.assertNotIn("ist geplant", d)
+        self.assertIn("[Digitaler Zwilling (geplant)]", d.replace("[Digitaler Zwilling]", "[Digitaler Zwilling (geplant)]")) if False else self.assertIn("(https://www.m365.fm/learn/digital-twin/)", d)
+
+
+class Build(unittest.TestCase):
+    def setUp(self):
+        import json
+        self.files, self.sm = {}, []
+        g = dict(BASE=BASE, write=lambda rel, html: self.files.__setitem__(rel, html), sitemap=self.sm, author_box=None, LANGS=("en", "de"),
+                 page=lambda lang, title, desc, canon, body, alts, ld, **kw: json.dumps({"ld": ld, "alts": alts, "canon": canon}, ensure_ascii=False) + "\n" + body,
+                 header=lambda l, x: "", footer=lambda l: "", footer_en=lambda: "")
+        posts = [{"handle": "mirko-p", "slug": "what-is-a-gemba-walk", "title": "What is a gemba walk", "topics": ["gemba-walk"], "published": 5, "lang": "en"},
+                 {"handle": "mirko-p", "slug": "what-is-a-gemba-walk", "title": "Was ist ein Gemba Walk", "topics": ["gemba-walk"], "lang": "de", "tr_of": 1}]
+        import contextlib, io
+        with contextlib.redirect_stdout(io.StringIO()): S.build(g, posts, {"kaizen", "digital-twin"})
+        self.json = json
+
+    def test_pages_schema_and_language_links(self):
+        self.assertEqual(len(self.files), 22)
+        for rel, html in self.files.items():
+            ld = self.json.loads(html.split("\n", 1)[0])["ld"]
+            for n in ld:
+                if n.get("@type") == "Course":
+                    self.assertTrue(n["hasPart"] and all(x["@type"] == "WebPage" for x in n["hasPart"]), rel)
+                    self.assertEqual(n["provider"], {"@id": f"{BASE}/#org"})
+                if n.get("@type") == "Article": self.assertEqual(n["publisher"], {"@id": f"{BASE}/#org"}, rel)
+        en = self.files["learn/lean-manufacturing/index.html"]; de = self.files["de/learn/lean-management/index.html"]
+        self.assertIn('href="https://www.m365.fm/de/learn/lean-management/" hreflang="de"', en); self.assertIn('href="https://www.m365.fm/learn/lean-manufacturing/" hreflang="en"', de)
+        h1s = [len(re.findall(r"<h1[ >]", h)) for h in self.files.values()]
+        self.assertEqual(set(h1s), {1})
+
+    def test_german_pages_show_german_titles(self):
+        de = self.files["de/learn/shop-floor-management/index.html"]
+        self.assertIn("Was ist ein Gemba Walk", de); self.assertNotIn("What is a gemba walk", de)
+        self.assertIn("What is a gemba walk", self.files["learn/shop-floor-management/index.html"])
+
+
+class AssignPrecision(unittest.TestCase):
+    def test_word_boundaries_and_modules(self):
+        posts = [{"handle": "h", "slug": "world-maps-overview", "title": "World maps", "topics": [], "published": 1, "lang": "en"},
+                 {"handle": "h", "slug": "interpreting-survey-data", "title": "Interpreting survey data", "topics": [], "published": 1, "lang": "en"},
+                 {"handle": "h", "slug": "heijunka-production-leveling", "title": "Heijunka", "topics": ["polaris-optimizer", "ifakt", "polaris-simulator"], "published": 1, "lang": "en"},
+                 {"handle": "h", "slug": "oee-explained", "title": "OEE explained", "topics": [], "published": 1, "lang": "en"}]
+        S.assign(posts)
+        self.assertNotIn(("h", "world-maps-overview"), S.ASSIGN); self.assertNotIn(("h", "interpreting-survey-data"), S.ASSIGN)
+        self.assertNotIn("ifakt-polaris", S.ASSIGN.get(("h", "heijunka-production-leveling"), []))
+        self.assertEqual(S.ASSIGN[("h", "oee-explained")], ["manufacturing-kpis"])
+
+    def test_pins(self):
+        S.assign([{"handle": "h", "slug": "modular-production-planning-software-modules", "title": "Modules", "topics": ["advanced-planning-and-scheduling", "finite-capacity-scheduling", "polaris"], "published": 1, "lang": "en"}])
+        self.assertIn("ifakt-polaris", S.ASSIGN[("h", "modular-production-planning-software-modules")])
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -28,6 +28,8 @@ UI = {
     "start": ("Start the learning path", "Lernpfad starten"), "all": ("All guides in this path", "Alle Leitfäden in diesem Pfad"), "guides": ("Guides", "Leitfäden"),
     "paths": ("Learning paths", "Lernpfade"), "part": ("Part of the learning path", "Teil des Lernpfads"), "read": ("Read the guide", "Zum Leitfaden"),
     "overview": ("View the whole path", "Ganzen Pfad ansehen"), "disc": ("Note: The author works at iFAKT GmbH.", "Offenlegung: Der Autor arbeitet bei der iFAKT GmbH."), "articles": ("articles", "Artikel"), "toc": ("Contents", "Inhalt"),
+    "src_lead": ("All online sources were retrieved on November 20, 2026.", "Alle Online-Quellen wurden am 20.11.2026 abgerufen."),
+    "other": ("Deutsche Fassung", "English version"), "tbl": ("Table", "Tabelle"),
 }
 
 
@@ -110,14 +112,38 @@ _PLACEHOLDER = re.compile(r"[ \t]*\*?\[(?:Editor|Redaktion)[^\]]*\]\*?", re.I)
 _INTERNAL = re.compile(r"\s*\([^()]*(?:review log|editorial notes|review-protokoll|prüfhinweise|competitive analysis|wettbewerbsanalyse)[^()]*\)", re.I)
 
 
+_PLAN_PAREN = re.compile(r"\s*\((?:(?:planned|geplant)(?=[,;)])|in preparation|in Vorbereitung|links go live|Links werden)[^()]*\)", re.I)
+_PLAN_TAIL = re.compile(r"\s*,\s*planned\)")
+
+
 def scrub(md):
-    """Entfernt Platzhalter für die Redaktion ([Editor: ...], [Redaktion: ...]) und Klammerverweise auf interne Prüfhinweise und Review-Protokolle."""
+    """Entfernt alles, was nur für die Redaktion gedacht ist: Platzhalter ([Editor: ...]), Klammerverweise auf Prüfhinweise und Review-Protokolle,
+    Zeile mit Stand und Lesezeit, Verweiszeile auf die andere Sprachfassung (die Seite setzt hreflang und einen Link selbst), Vermerke "geplant/planned"
+    (alle Leitfäden des Pfads sind veröffentlicht), die nicht belegte Gründer-Aussage zu iFAKT."""
     md = _INTERNAL.sub("", _PLACEHOLDER.sub("", md))
-    # Die Leitfäden gibt es jetzt: Hinweise "geplant" in den Sätzen entfallen (die Marker "(planned)" hinter Links entfernt finish)
-    for a, b in ((r"\b([Tt]he|[Ss]ee the|[Ii]n the) planned (compendium|compendiums|guide|guides)\b", r"\1 \2"), (r"\bplanned (guides|compendiums)\b", r"\1"),
+    md = re.sub(r"\A\s*\*(?:Updated|Stand)\b[^\n]*\*[ \t]*\n", "", md)
+    md = re.sub(r"(?m)^\**(?:German version|English version|Deutsche Fassung|Englische Fassung)\b:?\**.*\n?", "", md)
+    md = _PLAN_TAIL.sub(")", _PLAN_PAREN.sub("", md))
+    # Bezeichnungen der Verweislisten: Leitfäden sind veröffentlicht
+    md = re.sub(r"(?m)^(\*\*|#{2,4} )(?:Sister guides|Related guides|Sister compendiums|m365\.fm compendiums in English)[^*\n]*(\*\*)?[ \t]*$", lambda m: f"{m.group(1)}Related guides{m.group(2) or ''}", md)
+    md = re.sub(r"(?m)^(\*\*|#{2,4} )(?:Geplante )?(?:Schwester-(?:Pillars|Kompendien)|Pillar-Pages|Kompendien)[^*\n]*(\*\*)?[ \t]*$", lambda m: f"{m.group(1)}Weiterführende Leitfäden{m.group(2) or ''}", md)
+    for a, b in ((r"\b([Tt]he|[Ss]ee the|[Ii]n the) planned (?=(?:m365\.fm |\[)?[\w .&/-]{0,60}?(?:guide|guides|compendium|compendiums)\b)", r"\1 "),
+                 (r"\bplanned (?=(?:m365\.fm |\[)?[\w .&/-]{0,60}?(?:guide|guides|compendium|compendiums)\b)", ""),
+                 (r"\bis planned in the\b", "is given in the"),
                  (r"a separate guide is planned at", "a separate guide is at"), (r"A full guide is planned:", "A full guide:"),
-                 (r"geplanten Pillar-(Seite|Page)", r"Pillar-\1"), (r"geplante Pillar-(Seiten|Pages)", r"Pillar-\1")):
+                 (r"\s*[;,] eine (?:eigene )?Pillar-(?:Page|Seite)[^.;]*? ist geplant(?: \([^)]*\))?", ""),
+                 (r"(?<=[.!?] )Eine (?:eigene )?Pillar-(?:Page|Seite)[^.]*? ist geplant(?: \([^)]*\))?\.[ \t]*", ""),
+                 (r"\bEine (?:eigene )?Pillar-(?:Page|Seite)[^.]*? ist geplant(?: \([^)]*\))?\.[ \t]*", ""),
+                 (r"geplante[n]? Pillar-(Seiten|Seite|Pages|Page)", r"Pillar-\1"),
+                 (r"German version cited in the German article; English version:", "German page; English page:"),
+                 (r"Die NEURONwriter-Analyse zeigt, dass Suchende bei „Wertstromanalyse Software“ vor allem wissen wollen,", "Bei der Suche nach Wertstromanalyse-Software wollen die meisten vor allem wissen,"),
+                 (r"\bUS competitor pages typically", "Many US pages typically"), (r"viele Wettbewerberseiten datieren", "viele Webseiten datieren"),
+                 (r"was founded in 2001 by Jörg Drees", "was, according to the company, founded in 2001"),
+                 (r"wurde 2001 von Jörg Drees gegründet", "wurde nach Unternehmensangaben 2001 gegründet")):
         md = re.sub(a, b, md)
+    # Adressen in Backticks (/learn/<slug>/) werden zu Links auf den Pillar
+    md = re.sub(r"(?m)^(\s*[-*]\s+)`(/(?:en/)?learn/[a-z0-9-]+/)`:\s*(.+?)\s*$", lambda m: f"{m.group(1)}[{m.group(3)}](https://www.m365.fm{m.group(2)})", md)
+    md = re.sub(r"(?m)^(\s*[-*]\s+)([^:\n`\[]+?):\s*`(/(?:en/)?learn/[a-z0-9-]+/)`.*$", lambda m: f"{m.group(1)}[{m.group(2).strip()}](https://www.m365.fm{m.group(3)})", md)
     return md
 
 
@@ -203,6 +229,13 @@ class Ctx:
 
 def inline(s, lang, cx):
     s = esc(s)
+
+    def _learn(m):   # `/learn/<slug>/` im Text: Link auf den Pillar, sonst Code
+        p = next((q for q in pillars() if m.group(1) in (q["slug"]["en"], q["slug"]["de"])), None)
+        if not p or not cx: return m.group(0)
+        n = cx.link(f"https://www.m365.fm/learn/{m.group(1)}/", lang)
+        return f'<a href="{esc(n)}">{esc(p["label"][lang])}</a>' if n else esc(p["label"][lang])
+    s = re.sub(r"`/(?:en/)?learn/([a-z0-9-]+)/?`", _learn, s)
     s = re.sub(r"`([^`]+)`", r"<code>\1</code>", s)
     s = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", s)
     s = re.sub(r"(?<!\*)\*(?!\*)([^*\n]+?)\*(?!\*)", r"<em>\1</em>", s)
@@ -251,18 +284,13 @@ def render(md, lang, cx, ids=True, demote=0):   # demote=1: "# Teil" wird h2, "#
             j = i + 2
             while j < len(lines) and _TROW.match(lines[j]): j += 1
             head, body = _cells(ln), [_cells(r) for r in lines[i + 2:j]]
-            th = "".join(f"<th>{inline(c, lang, cx)}</th>" for c in head)
+            th = "".join(f'<th scope="col">{inline(c, lang, cx)}</th>' for c in head)
             tb = "".join("<tr>" + "".join(f"<td>{inline(c, lang, cx)}</td>" for c in (r + [""] * len(head))[:max(len(head), len(r))]) + "</tr>" for r in body)
-            out.append(f'<div class="pl-tbl"><table><thead><tr>{th}</tr></thead><tbody>{tb}</tbody></table></div>'); i = j; continue
+            out.append(f'<div class="pl-tbl" role="region" tabindex="0" aria-label="{esc(tx(lang, "tbl"))}"><table><thead><tr>{th}</tr></thead><tbody>{tb}</tbody></table></div>'); i = j; continue
         if ln.startswith(">"):
             j, buf = i, []
-            while j < len(lines) and lines[j].startswith(">"): buf.append(lines[j][1:].strip()); j += 1
-            ps, cur = [], []
-            for b in buf:
-                if b: cur.append(b)
-                elif cur: ps.append(para(cur)); cur = []
-            if cur: ps.append(para(cur))
-            out.append("<blockquote>" + "".join(ps) + "</blockquote>"); i = j; continue
+            while j < len(lines) and lines[j].startswith(">"): buf.append(re.sub(r"^>\s?", "", lines[j])); j += 1
+            out.append("<blockquote>" + render("\n".join(buf), lang, cx, ids=False)[0] + "</blockquote>"); i = j; continue
         m = _LI.match(ln)
         if m:
             kind = "ol" if m.group(2)[0].isdigit() else "ul"; items, j = [], i
@@ -296,26 +324,47 @@ def fix_anchors(h, heads, cx):
     return re.sub(r'href="#([^"]+)"', fix, h)
 
 
-def finish(h, n_sources, lang):
+def finish(h, n_sources, lang, dropped=()):
     """Nachbearbeitung: [12] -> Sprung zur Quelle, Marker [unverified]/[ungeprüft] -> kleiner Hinweis, "(planned)"/"(geplant)" entfällt."""
     h = re.sub(r"\s*\((?:planned|geplant)\)", "", h)
-    unv = f'<sup class="pl-unv" title="{esc(tx(lang, "unv_t"))}">{esc(tx(lang, "unv"))}</sup>'
-    h = re.sub(r"\[(?:unverified|ungeprüft|ungepruft)\]", unv, h, flags=re.I)
+    def unv(m):   # [unverified] oder [unverified: Grund] -> kleines Etikett, der Grund steht im Tooltip
+        why = re.sub(r"<[^>]+>", "", m.group(1) or "").strip().rstrip(".").replace('"', "&quot;")
+        title = f"{tx(lang, 'unv_t')} {why[:1].upper() + why[1:]}." if why else esc(tx(lang, "unv_t"))
+        return f'<sup class="pl-unv" title="{title}">{esc(tx(lang, "unv"))}</sup>'
+    h = re.sub(r"\[(?:unverified|ungeprüft|ungepruft)(?::\s*([^\]]*))?\]", unv, h, flags=re.I)
+
+    valid = n_sources if isinstance(n_sources, (set, frozenset)) else set(range(1, n_sources + 1))
 
     def cites(seg):
-        return re.sub(r"\[(\d{1,3})\]", lambda m: f'<a class="pl-cite" href="#src-{m.group(1)}">[{m.group(1)}]</a>' if 1 <= int(m.group(1)) <= n_sources else m.group(0), seg)
+        def one(m):
+            n = int(m.group(2))
+            if n in valid: return f'{m.group(1)}<a class="pl-cite" href="#src-{n}">[{n}]</a>'
+            return "" if n in dropped else m.group(0)   # Verweis auf eine entfallene interne Quelle verschwindet samt Leerzeichen davor
+        return re.sub(r"(\s?)\[(\d{1,3})\]", one, seg)
     return re.sub(r">([^<]+)<", lambda m: ">" + cites(m.group(1)) + "<", h)
 
 
+_DROP_SRC = re.compile(r"^(?:NEURONwriter\b|Competitor pages\b|Wettbewerberseiten\b)", re.I)
+_URL = re.compile(r"(?<![\](\"'=])\bhttps?://[^\s<>)\]]+[^\s<>)\].,;:]")
+
+
 def sources_html(md, lang, cx):
+    """Quellenliste: Nummern bleiben erhalten (Verweise [n] im Text), interne Quellen (NEURONwriter-Analysen, Wettbewerberseiten) entfallen, Wettbewerber-Marken in
+    Klammern ebenfalls; blosse Adressen werden zu Links; der Einleitungssatz ist ein Standardsatz. -> (html, Nummern der veröffentlichten Quellen, Nummern der entfallenen)."""
     items = []
     for ln in md.split("\n"):
         m = re.match(r"^\s*(\d{1,3})[.)]\s+(.*)$", ln)
         if m: items.append([int(m.group(1)), m.group(2)])
         elif items and ln.strip() and not ln.startswith(("#", ">")): items[-1][1] += " " + ln.strip()
-    lead = [ln for ln in md.split("\n") if ln.strip() and not re.match(r"^\s*\d{1,3}[.)]\s", ln)][:1] if items else []
-    lis = "".join(f'<li id="src-{n}" value="{n}">{inline(t, lang, cx)}</li>' for n, t in items)
-    return (f"<p>{inline(lead[0], lang, cx)}</p>" if lead and items and md.lstrip()[:1] != "1" else "") + f'<ol class="pl-src">{lis}</ol>', len(items)
+    keep, dropped = [], set()
+    for n, t in items:
+        if _DROP_SRC.match(t.strip()): dropped.add(n); continue
+        t = re.sub(r"\s*\((?:competitor|Wettbewerber)\)", "", t, flags=re.I)
+        t = re.sub(r"\((?:competitor|Wettbewerber), ", "(", t, flags=re.I)
+        keep.append((n, _URL.sub(lambda u: f"[{u.group(0)}]({u.group(0)})", t)))
+    lis = "".join(f'<li id="src-{n}" value="{n}">{inline(t, lang, cx)}</li>' for n, t in keep)
+    lead = f"<p>{esc(tx(lang, 'src_lead'))}</p>" if keep else ""
+    return lead + f'<ol class="pl-src">{lis}</ol>', {n for n, _ in keep}, dropped
 
 
 def faq_of(md):
@@ -333,7 +382,7 @@ def faq_of(md):
             q, a = m.group(1).strip(), []
         elif q and ln.strip(): a.append(ln.strip())
     if q and a: out.append((q, " ".join(a)))
-    clean = lambda s: re.sub(r"\s+", " ", re.sub(r"\[(\d{1,3})\]|\[(?:unverified|ungeprüft)\]", "", re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", re.sub(r"[*`>]", "", s)))).strip()
+    clean = lambda s: re.sub(r"\s+", " ", re.sub(r"\[(\d{1,3})\]|\[(?:unverified|ungeprüft)[^\]]*\]", "", re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", re.sub(r"[*`>]", "", s)))).strip()
     return [(clean(q), clean(a)[:1200]) for q, a in out if q and a][:12]
 
 
@@ -342,15 +391,24 @@ ASSIGN = {}   # (handle, slug) -> [pillar-ids nach Güte]
 CLUSTER = {}  # pillar-id -> [post, ...] nach Güte
 
 
+def _norm(x):
+    return re.sub(r"[^a-z0-9]+", " ", (x or "").lower()).strip()
+
+
 def _match(p, post):
+    """Güte der Zuordnung: Entitäts-Thema 2 Punkte; Slug-Muster (an Wortgrenzen) 2 Punkte, nur Titel 1 Punkt."""
     topics = set(post.get("topics") or [])
     hit = 0
     for t in p.get("topics", []):
         if t.endswith("*"): hit += sum(1 for x in topics if x.startswith(t[:-1]))
         elif t in topics: hit += 1
-    rx = p.get("re")
-    txt = f'{post.get("slug", "")} {post.get("title", "")}'
-    return 2 * hit + (1 if rx and re.search(rx, txt, re.I) else 0)
+    rx, rr = p.get("re"), 0
+    if rx:
+        pat = f"(?<![a-z0-9])(?:{rx})(?![a-z0-9])"
+        if re.search(pat, _norm(post.get("slug"))): rr = 2
+        elif re.search(pat, _norm(post.get("title"))): rr = 1
+    sc = 2 * hit + rr
+    return max(sc, 4) if post.get("slug") in (p.get("pins") or ()) else sc   # fest zugeordnete Beiträge (pins) zählen mindestens als deutlicher Treffer
 
 
 def assign(posts):
@@ -360,7 +418,9 @@ def assign(posts):
     for p in pillars(): CLUSTER[p["id"]] = []
     for post in pool:
         sc = sorted(((_match(p, post), -i, p["id"]) for i, p in enumerate(pillars())), reverse=True)
-        keep = [(s, pid) for s, _, pid in sc if s >= 1][:2]
+        keep = []
+        for k, (s, _, pid) in enumerate(sc[:2]):   # erster Pillar ab 2 Punkten, zweiter nur bei deutlichem Treffer (ab 4)
+            if s >= (2 if k == 0 else 4): keep.append((s, pid))
         if keep: ASSIGN[(post["handle"], post["slug"])] = [pid for _, pid in keep]
         for s, pid in keep: CLUSTER[pid].append((s, post.get("published") or 0, post))
     for pid in CLUSTER: CLUSTER[pid] = [x[2] for x in sorted(CLUSTER[pid], key=lambda y: (-y[0], -y[1]))]
@@ -378,8 +438,9 @@ def article_box(post, lang, BASE):
     if not ids: return ""
     p = by_id(ids[0])
     if not p or not (ROOT / "imports" / "pillars" / lang / f'{slug_of(p, lang)}.md').exists(): return ""
-    return (f'<aside class="pl-box" aria-label="{esc(tx(lang, "part"))}"><p class="mut">{esc(tx(lang, "part"))}: <a href="{path_url(BASE, lang)}">{esc(registry()["path"]["title"][lang])}</a></p>'
-            f'<p><b>{esc(p["label"][lang])}</b> · <a href="{url(BASE, p, lang)}">{esc(tx(lang, "read"))}</a></p></aside>')
+    st = "margin:1.5em 0;padding:.8em 1em;border:1px solid var(--bd,#ccd);border-left:4px solid var(--ac,#0a6);border-radius:.4em"   # inline: Blogseiten laden das CSS der Pillar-Seiten nicht
+    return (f'<aside class="pl-box" style="{st}" aria-label="{esc(tx(lang, "part"))}"><p class="mut" style="margin:.3em 0">{esc(tx(lang, "part"))}: <a href="{path_url(BASE, lang)}">{esc(registry()["path"]["title"][lang])}</a></p>'
+            f'<p style="margin:.3em 0"><a href="{url(BASE, p, lang)}"><b>{esc(p["label"][lang])}</b></a> · {esc(tx(lang, "read"))}</p></aside>')
 
 
 # ---------- Seiten ----------
@@ -395,6 +456,8 @@ CSS = """<style>
 .pl-art pre{overflow-x:auto;padding:.8em;background:rgba(120,140,150,.12);border-radius:.4em}
 .pl-unv{font-size:.7em;color:#b45;border:1px solid currentColor;border-radius:.6em;padding:0 .4em;margin-left:.15em;white-space:nowrap}
 .pl-cite{text-decoration:none;font-size:.85em}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .pl-unv{color:#f4a3b6}}
+:root[data-theme="dark"] .pl-unv{color:#f4a3b6}
 .pl-src li{margin:.35em 0;overflow-wrap:anywhere}
 .pl-step{display:flex;gap:1em;flex-wrap:wrap;margin:2em 0}.pl-step a{flex:1 1 14em;display:block;padding:.8em 1em;border:1px solid var(--bd,#ccd);border-radius:.5em;text-decoration:none}
 .pl-step small{display:block;color:var(--mut,#667)}
@@ -421,10 +484,10 @@ def _article(p, lang, BASE, cx):
     f = ROOT / "imports" / "pillars" / lang / f"{slug_of(p, lang)}.md"
     d = parse_file(f)
     if not d or not d["h1"] or not d["article"]: return None
-    src_html, n_src = sources_html(d["sources"], lang, cx) if d["sources"] else ("", 0)
-    body, heads = render(d["article"], lang, cx, demote=1 if d["multi"] else 0)
+    src_html, n_src, dropped = sources_html(d["sources"], lang, cx) if d["sources"] else ("", set(), set())
+    body, heads = render(d["article"], lang, cx)   # weitere Teile ("# Teil") werden gleichrangige h2, kein Sprung in der Hierarchie
     body = fix_anchors(body, heads, cx)
-    body = finish(body, n_src, lang)
+    body = finish(body, n_src, lang, dropped)
     return d, body, src_html, heads
 
 
@@ -455,7 +518,9 @@ def build(g, posts, ents, written=None):
     BASE, write, page, sitemap = g["BASE"], g["write"], g["page"], g["sitemap"]
     reg = registry(); pa = reg["path"]
     en_posts = {x["slug"] for x in posts if (x.get("lang") or "en") == "en" and not x.get("tr_of")}
-    de_posts = {x["slug"] for x in posts if x.get("lang") == "de"}
+    de_by_slug = {x["slug"]: x for x in posts if x.get("lang") == "de"}
+    de_posts = set(de_by_slug)
+    ttl = lambda x, lang: (de_by_slug.get(x["slug"]) or x)["title"] if lang == "de" else x["title"]   # deutsche Seiten zeigen den deutschen Titel der Übersetzung
     cx = Ctx(BASE, ents, en_posts, de_posts, g.get("episode_slugs"))
     counts = assign(posts)
     ordered = order(); n_pillars = len(ordered)
@@ -476,14 +541,16 @@ def build(g, posts, ents, written=None):
             step = "".join(f'<a href="{url(BASE, q, lang)}"{" rel=" + chr(34) + rel + chr(34)}><small>{esc(tx(lang, key))}</small><b>{esc(q["label"][lang])}</b></a>' for q, key, rel in ((pv, "prev", "prev"), (nx, "next", "next")) if q)
             rel_posts = CLUSTER.get(p["id"], [])
             if lang == "de": rel_posts = [x for x in rel_posts if x["slug"] in de_posts]
+            ol = "de" if lang == "en" else "en"
+            other = f' · <a href="{alts[ol]}" hreflang="{ol}" lang="{ol}">{esc(tx(lang, "other"))}</a>' if ol in alts else ""
             deeper = ""
             if rel_posts:
-                deeper = f'<section class="pl-deeper"><h2>{esc(tx(lang, "deeper"))}</h2><ul>' + "".join(f'<li><a href="{_post_url(BASE, x, lang)}">{esc(x["title"])}</a></li>' for x in rel_posts[:12]) + "</ul></section>"
+                deeper = f'<section class="pl-deeper"><h2>{esc(tx(lang, "deeper"))}</h2><ul>' + "".join(f'<li><a href="{_post_url(BASE, x, lang)}">{esc(ttl(x, lang))}</a></li>' for x in rel_posts[:12]) + "</ul></section>"
             auth = _author_html(d["author"], lang, cx, g.get("author_box")) if d["author"] else ""
             crumbs = [(tx(lang, "learn"), f"{BASE}{'/de' if lang == 'de' else ''}/learn/"), (pa["title"][lang], path_url(BASE, lang)), (p["label"][lang], u)]
             nav = '<nav aria-label="breadcrumb">' + " › ".join(f'<a href="{x}">{esc(n)}</a>' for n, x in crumbs[:-1]) + f" › {esc(crumbs[-1][0])}</nav>"
             b = _shell(g, lang, f'{CSS}{nav}<article class="pl-art"><h1>{esc(d["h1"])}</h1><p class="pl-meta">{esc(tx(lang, "guide"))} · {esc(tx(lang, "step", n=idx + 1, m=n_pillars))} · '
-                       f'{mins} {esc(tx(lang, "min"))} · {esc(tx(lang, "updated"))} <time datetime="{UPDATED}">{UPDATED}</time> · <a href="{path_url(BASE, lang)}">{esc(tx(lang, "overview"))}</a></p>'
+                       f'{mins} {esc(tx(lang, "min"))} · {esc(tx(lang, "updated"))} <time datetime="{UPDATED}">{UPDATED}</time> · <a href="{path_url(BASE, lang)}">{esc(tx(lang, "overview"))}</a>{other}</p>'
                        f'{body}</article>{deeper}<nav class="pl-step" aria-label="{esc(tx(lang, "path"))}">{step}</nav>'
                        + (f'<section class="pl-author">{"" if g.get("author_box") else "<h2>" + esc(tx(lang, "author")) + "</h2>"}{auth}</section>' if auth else "")
                        + (f'<section class="pl-sources" id="sources"><h2>{esc(tx(lang, "sources"))}</h2>{src_html}</section>' if src_html else ""))
@@ -491,7 +558,7 @@ def build(g, posts, ents, written=None):
             art = {"@context": "https://schema.org", "@type": "Article", "@id": u + "#article", "headline": d["h1"][:110], "description": desc, "inLanguage": lang,
                    "url": u, "mainEntityOfPage": u, "datePublished": UPDATED, "dateModified": UPDATED, "wordCount": words,
                    "author": {"@type": "Person", "@id": author_id, "name": "Mirko Peters", "url": f"{BASE}/community/u/{AUTHOR}/"},
-                   "publisher": {"@type": "Organization", "name": "M365.FM", "url": f"{BASE}/"},
+                   "publisher": {"@id": f"{BASE}/#org"},
                    "isPartOf": {"@type": "Course", "@id": path_url(BASE, lang) + "#course", "name": pa["title"][lang], "url": path_url(BASE, lang)}}
             ld = [art, _crumb_ld(BASE, crumbs)]
             faq = faq_of(d["article"])
@@ -514,7 +581,7 @@ def build(g, posts, ents, written=None):
                 n += 1; desc, mins = cards[(lang, pid)]
                 rel = CLUSTER.get(pid, [])
                 if lang == "de": rel = [x for x in rel if x["slug"] in de_posts]
-                lst = ("<ul>" + "".join(f'<li><a href="{_post_url(BASE, x, lang)}">{esc(x["title"])}</a></li>' for x in rel[:5]) + "</ul>") if rel else ""
+                lst = ("<ul>" + "".join(f'<li><a href="{_post_url(BASE, x, lang)}">{esc(ttl(x, lang))}</a></li>' for x in rel[:5]) + "</ul>") if rel else ""
                 blk += (f'<div class="pl-card"><h3><span class="pl-step-n">{n}</span><a href="{url(BASE, p, lang)}">{esc(p["label"][lang])}</a></h3><p>{esc(desc)}</p>'
                         f'<p class="mut">{mins} {esc(tx(lang, "min"))}</p>{lst}</div>')
                 items.append((n, p))
@@ -527,8 +594,8 @@ def build(g, posts, ents, written=None):
                    f'<p>{esc(pa["intro"][lang])}</p><p><a class="btn main" href="{first}">{esc(tx(lang, "start"))}</a></p>{stages}')
         alts = {l: path_url(BASE, l) for l in LANGS}
         ld = [{"@context": "https://schema.org", "@type": "Course", "@id": pu + "#course", "name": pa["title"][lang], "description": pa["short"][lang], "inLanguage": lang, "url": pu,
-               "provider": {"@type": "Organization", "name": "M365.FM", "url": f"{BASE}/"}, "isAccessibleForFree": True,
-               "hasPart": [{"@type": "Article", "name": q["label"][lang], "url": url(BASE, q, lang)} for _, q in items]},
+               "provider": {"@id": f"{BASE}/#org"}, "isAccessibleForFree": True,
+               "hasPart": [{"@type": "WebPage", "name": q["label"][lang], "url": url(BASE, q, lang)} for _, q in items]},
               {"@context": "https://schema.org", "@type": "ItemList", "name": pa["title"][lang], "itemListElement": [{"@type": "ListItem", "position": i, "url": url(BASE, q, lang), "name": q["label"][lang]} for i, q in items]},
               _crumb_ld(BASE, crumbs)]
         write(f"{'de/' if lang == 'de' else ''}learn/path/{pa['id']}/index.html", page(lang, pa["seo_title"][lang], pa["short"][lang], pu, b, alts, ld, xdefault=alts["en"], og_type="website"))
