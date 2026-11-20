@@ -1,5 +1,6 @@
 """Prueft die Start-Eintraege der Bibliothek (data/library_seed/<art>.json) gegen die Regeln des Worker-Endpunkts /api/library/save.
-Aufruf: python tools/check_library_seed.py [--per-kind 10] [--min-chars 2500]. Exit 1 bei Verstoessen."""
+Aufruf: python tools/check_library_seed.py [--per-kind 10] [--min-chars 2500] [--dir data/library_seed] [--also data/library_seed].
+--per-kind 0 = beliebige Anzahl je Art (Dateien duerfen fehlen), --also = weitere Ordner nur fuer die Eindeutigkeit von Titeln/Slugs. Exit 1 bei Verstoessen."""
 import argparse, json, re, sys
 from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
@@ -11,15 +12,23 @@ PLACEHOLDER = re.compile(r"lorem ipsum|\bTODO\b|\bTBD\b|<your[ -]|\[insert|\bx{5
 
 
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument("--per-kind", type=int, default=10); ap.add_argument("--min-chars", type=int, default=2500); a = ap.parse_args()
+    ap = argparse.ArgumentParser(); ap.add_argument("--per-kind", type=int, default=10); ap.add_argument("--min-chars", type=int, default=2500); ap.add_argument("--dir", default="data/library_seed"); ap.add_argument("--also", action="append", default=[]); a = ap.parse_args()
     ents = {e["id"] for e in json.load(open(ROOT / "data/entities.json", encoding="utf-8"))}
     bad, titles, seen_slug = [], {}, set()
+    for d in a.also:
+        for k in KINDS:
+            g = ROOT / d / f"{k}.json"
+            if g.exists():
+                for it in json.load(open(g, encoding="utf-8")):
+                    titles[it["title"].lower()] = f"{d}/{k}"; seen_slug.add(SLUG(it["title"]))
     for k in KINDS:
-        f = ROOT / "data/library_seed" / f"{k}.json"
-        if not f.exists(): bad.append(f"{k}: Datei fehlt"); continue
+        f = ROOT / a.dir / f"{k}.json"
+        if not f.exists():
+            if a.per_kind: bad.append(f"{k}: Datei fehlt")
+            continue
         try: items = json.load(open(f, encoding="utf-8"))
         except Exception as e: bad.append(f"{k}: kein gueltiges JSON ({e})"); continue
-        if len(items) != a.per_kind: bad.append(f"{k}: {len(items)} Eintraege statt {a.per_kind}")
+        if a.per_kind and len(items) != a.per_kind: bad.append(f"{k}: {len(items)} Eintraege statt {a.per_kind}")
         for i, it in enumerate(items, 1):
             w = f"{k}#{i}"
             if it.get("kind") != k: bad.append(f"{w}: kind {it.get('kind')!r}")
@@ -45,7 +54,7 @@ def main():
             sl = SLUG(t)
             if sl in seen_slug: bad.append(f"{w}: Slug {sl} doppelt")
             seen_slug.add(sl)
-    n = sum(len(json.load(open(ROOT / 'data/library_seed' / f'{k}.json', encoding='utf-8'))) for k in KINDS if (ROOT / 'data/library_seed' / f'{k}.json').exists())
+    n = sum(len(json.load(open(ROOT / a.dir / f'{k}.json', encoding='utf-8'))) for k in KINDS if (ROOT / a.dir / f'{k}.json').exists())
     print(f"{n} Eintraege geprueft, {len(bad)} Verstoesse")
     for x in bad[:200]: print(" -", x)
     sys.exit(1 if bad else 0)
