@@ -27,7 +27,7 @@ UI = {
     "sources": ("Sources", "Quellen"), "unv": ("unverified", "ungeprüft"), "unv_t": ("Not independently verified yet; see the sources.", "Noch nicht unabhängig belegt, siehe Quellen."),
     "start": ("Start the learning path", "Lernpfad starten"), "all": ("All guides in this path", "Alle Leitfäden in diesem Pfad"), "guides": ("Guides", "Leitfäden"),
     "paths": ("Learning paths", "Lernpfade"), "part": ("Part of the learning path", "Teil des Lernpfads"), "read": ("Read the guide", "Zum Leitfaden"),
-    "overview": ("View the whole path", "Ganzen Pfad ansehen"), "articles": ("articles", "Artikel"), "toc": ("Contents", "Inhalt"),
+    "overview": ("View the whole path", "Ganzen Pfad ansehen"), "disc": ("Note: The author works at iFAKT GmbH.", "Offenlegung: Der Autor arbeitet bei der iFAKT GmbH."), "articles": ("articles", "Artikel"), "toc": ("Contents", "Inhalt"),
 }
 
 
@@ -404,8 +404,16 @@ CSS = """<style>
 </style>"""
 
 
-def _author_html(md, lang, cx):
+_DISC = re.compile(r"Note:|Offenlegung|Disclosure|vendor of iFAKT|Anbieter von iFAKT", re.I)
+
+
+def _author_html(md, lang, cx, box=None):
+    """Autorenbox der Seite: der vorhandene Kasten des Profils mirko-p (Foto, Kurzvita, Expertise; generate_site.author_box) plus der iFAKT-Hinweis aus der Datei.
+    Ohne Kasten (z. B. im Test) der Text der Datei."""
     md = re.sub(r"^\*\[(?:Editor|Redaktion)[^\n]*\]\*\s*$", "", md, flags=re.M)   # Platzhalter für die Redaktion nie veröffentlichen
+    if box:
+        disc = [p for p in re.split(r"\n\s*\n", md) if _DISC.search(p)]
+        return box(lang) + (render("\n\n".join(disc), lang, cx, ids=False)[0] if disc else f"<p><strong>{esc(tx(lang, 'disc'))}</strong></p>")   # Pflichthinweis zu iFAKT auf jeder Seite
     return render(md, lang, cx, ids=False)[0]
 
 
@@ -471,13 +479,13 @@ def build(g, posts, ents, written=None):
             deeper = ""
             if rel_posts:
                 deeper = f'<section class="pl-deeper"><h2>{esc(tx(lang, "deeper"))}</h2><ul>' + "".join(f'<li><a href="{_post_url(BASE, x, lang)}">{esc(x["title"])}</a></li>' for x in rel_posts[:12]) + "</ul></section>"
-            auth = _author_html(d["author"], lang, cx) if d["author"] else ""
+            auth = _author_html(d["author"], lang, cx, g.get("author_box")) if d["author"] else ""
             crumbs = [(tx(lang, "learn"), f"{BASE}{'/de' if lang == 'de' else ''}/learn/"), (pa["title"][lang], path_url(BASE, lang)), (p["label"][lang], u)]
             nav = '<nav aria-label="breadcrumb">' + " › ".join(f'<a href="{x}">{esc(n)}</a>' for n, x in crumbs[:-1]) + f" › {esc(crumbs[-1][0])}</nav>"
             b = _shell(g, lang, f'{CSS}{nav}<article class="pl-art"><h1>{esc(d["h1"])}</h1><p class="pl-meta">{esc(tx(lang, "guide"))} · {esc(tx(lang, "step", n=idx + 1, m=n_pillars))} · '
                        f'{mins} {esc(tx(lang, "min"))} · {esc(tx(lang, "updated"))} <time datetime="{UPDATED}">{UPDATED}</time> · <a href="{path_url(BASE, lang)}">{esc(tx(lang, "overview"))}</a></p>'
                        f'{body}</article>{deeper}<nav class="pl-step" aria-label="{esc(tx(lang, "path"))}">{step}</nav>'
-                       + (f'<section class="pl-author"><h2>{esc(tx(lang, "author"))}</h2>{auth}</section>' if auth else "")
+                       + (f'<section class="pl-author">{"" if g.get("author_box") else "<h2>" + esc(tx(lang, "author")) + "</h2>"}{auth}</section>' if auth else "")
                        + (f'<section class="pl-sources" id="sources"><h2>{esc(tx(lang, "sources"))}</h2>{src_html}</section>' if src_html else ""))
             author_id = f"{BASE}/community/u/{AUTHOR}/#person"
             art = {"@context": "https://schema.org", "@type": "Article", "@id": u + "#article", "headline": d["h1"][:110], "description": desc, "inLanguage": lang,

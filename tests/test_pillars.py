@@ -118,3 +118,13 @@ class Cluster(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class AuthorBox(unittest.TestCase):
+    def test_site_box_plus_disclosure(self):
+        for lang, p in ALL:
+            d = S.parse_file(ROOT / "imports" / "pillars" / lang / f"{S.slug_of(p, lang)}.md")
+            h = S._author_html(d["author"], lang, ctx(), lambda l: '<section class="author-box">BOX</section>')
+            self.assertTrue(h.startswith('<section class="author-box">BOX</section>'), f"{lang}/{p['id']}")
+            self.assertRegex(h, r"(?i)ifakt", f"{lang}/{p['id']} ohne iFAKT-Hinweis")
+            self.assertNotRegex(h, r"(?i)\[Editor|\[Redaktion")
