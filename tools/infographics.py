@@ -30,6 +30,7 @@ SIZES = {"flow": (1920, 1080), "compare": (1200, 1040), "ladder": (1200, 1800), 
 FIG_TEMPLATES = ("flow", "compare", "ladder", "hub")   # bigfact ist dem Kopfbild vorbehalten
 FIGS = {"pillar": (6, 10)}   # Infografiken je Inhalt nach Art (ohne Kopfbild): Leitfaeden sind lang und bekommen insgesamt 10 Bilder; sonst 2-3
 FIGS_DEFAULT = (2, 3)
+LANG_FACTOR_BIG = 1.6   # Leitfaeden: Uebersetzungen duerfen laenger werden (Deutsch hielt bei 30-Zeichen-Chips 42 nicht ein); das Rendern prueft das Layout
 EN_SLACK_BIG = 1.3   # Leitfaeden: laengere englische Texte (die KI haelt 30-Zeichen-Grenzen oft nicht); ob es passt, entscheidet das Rendern (Layoutpruefung)
 MAX_SAME = 4         # bei Leitfaeden duerfen sich Vorlagen wiederholen, aber hoechstens so oft
 PILLAR_TEXT = 90000  # Zeichen des Leitfadens, die an die KI gehen (ganze Leitfaeden sind 70-95 Tsd.)
@@ -193,12 +194,12 @@ def strings(spec):
     return out
 
 
-def check_spec(spec, lang="en", template=None, slack=None):
+def check_spec(spec, lang="en", template=None, slack=None, tr_factor=None):
     """None = in Ordnung, sonst Grund. Pruefung von Form, Anzahl, Laengen und Schrift."""
     if not isinstance(spec, dict): return "kein Objekt"
     t = spec.get("template")
     if t not in LIMITS or (template and t != template): return f"Vorlage {t!r}"
-    f = (slack or EN_SLACK) if lang == "en" else LANG_FACTOR
+    f = (slack or EN_SLACK) if lang == "en" else (tr_factor or LANG_FACTOR)
     for k, lim in LIMITS[t].items():
         v = _get(spec, k)
         if isinstance(lim, tuple):
@@ -257,7 +258,7 @@ def check_set(st, lang="en", en=None, source=None, kind=None):
         if any(seen.count(s) > MAX_SAME for s in set(seen)): return "Vorlagen: zu oft dieselbe"
     elif len(set(seen)) != len(seen): return "Vorlagen"
     for i, s in enumerate([st["header"]] + st["figs"]):
-        r = check_spec(s, lang, None, EN_SLACK_BIG if kind in FIGS else None)
+        r = check_spec(s, lang, None, EN_SLACK_BIG if kind in FIGS else None, LANG_FACTOR_BIG if kind in FIGS else None)
         if r: return f"Bild {i}: {r}"
     for f in st["figs"]:   # die grosse Zahl ist genau die Zahl der Elemente (sonst steht im Bild eine falsche Zahl)
         if f["template"] == "flow" and f["hero"]["value"] != str(len(f["steps"])): return "flow: Zahl passt nicht zu den Schritten"

@@ -44,6 +44,13 @@ class PillarKind(unittest.TestCase):
         self.assertIn("Anzahl Infografiken", IGT.check_set(pillar_set(9), "en", None, None, "blog") or "")   # andere Arten bleiben bei 2-3
         self.assertEqual(IGT.check_set({"header": HEADER, "figs": [FLOW, FLOW]}, "en", None, None, "blog"), "Vorlagen")
 
+    def test_translations_of_guides_may_be_longer(self):
+        en = pillar_set(10); de = copy.deepcopy(en)
+        de["header"]["chips"][0]["n"] = "x" * 46                 # 30 x 1,4 = 42 waere zu lang, 30 x 1,6 = 48 nicht
+        self.assertIsNone(IGT.check_set(de, "de", en, None, "pillar"))
+        d2 = de_set(); d2["header"]["chips"][0]["n"] = "x" * 46
+        self.assertIn("chips.n", IGT.check_set(d2, "de", SET, None, "blog") or "")   # andere Arten bleiben bei 1,4
+
     def test_translation_keeps_structure_for_pillars(self):
         en = pillar_set(10); de = copy.deepcopy(en)
         self.assertIsNone(IGT.check_set(de, "de", en, None, "pillar"))
