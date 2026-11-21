@@ -1,159 +1,5 @@
 [
  {
-  "slug": "supercharging-zero-trust-with-continuous-access-evaluation-cae",
-  "seg": "77",
-  "fehler": "unuebersetzt",
-  "src": "MSGraph PowerShell: <code>Invoke-MgGraphRequest -Method POST -Uri &quot;/users/$id/revokeSignInSessions&quot;</code>",
-  "out": "MSGraph PowerShell: <code>Invoke-MgGraphRequest -Method POST -Uri &quot;/users/$id/revokeSignInSessions&quot;</code>"
- },
- {
-  "slug": "supercharging-zero-trust-with-continuous-access-evaluation-cae",
-  "seg": "81",
-  "fehler": "unuebersetzt",
-  "src": "<code>SigninLogs<br> | where TimeGenerated &gt;= ago(24h)<br> | extend ATIssue = parse_json(AuthenticationDetails)[0].Succeeded<br> | extend CAResult = tostring",
-  "out": "<code>SigninLogs<br> | where TimeGenerated &gt;= ago(24h)<br> | extend ATIssue = parse_json(AuthenticationDetails)[0].Succeeded<br> | extend CAResult = tostring"
- },
- {
-  "slug": "supercharging-zero-trust-with-continuous-access-evaluation-cae",
-  "seg": "83",
-  "fehler": "unuebersetzt",
-  "src": "<code>SigninLogs<br> | where AuthenticationRequirement == &quot;singleFactorAuthentication&quot;<br> | where TokenIssuerType == &quot;AzureAD&quot; and ResultTy",
-  "out": "<code>SigninLogs<br> | where AuthenticationRequirement == &quot;singleFactorAuthentication&quot;<br> | where TokenIssuerType == &quot;AzureAD&quot; and ResultTy"
- },
- {
-  "slug": "elevate-your-skills-with-these-power-platform-reads",
-  "seg": "568",
-  "fehler": "unuebersetzt",
-  "src": "<a href=\"https://www.amazon.com/Microsoft-Platform-Solutions-Architects-Handbook/dp/1835089267?tag=datasciencesh-20\" rel=\"noopener\" target=\"_blank\">Microsoft Po",
-  "out": "<a href=\"https://www.amazon.com/Microsoft-Platform-Solutions-Architects-Handbook/dp/1835089267?tag=datasciencesh-20\" rel=\"noopener\" target=\"_blank\">Microsoft Po"
- },
- {
-  "slug": "elevate-your-skills-with-these-power-platform-reads",
-  "seg": "616",
-  "fehler": "unuebersetzt",
-  "src": "<a href=\"https://www.amazon.com/MICROSOFT-POWER-PLATFORM-FUNDAMENTALS-QUESTION/dp/B0FHFYDNG9?tag=datasciencesh-20\" rel=\"noopener\" target=\"_blank\">MICROSOFT POWE",
-  "out": "<a href=\"https://www.amazon.com/MICROSOFT-POWER-PLATFORM-FUNDAMENTALS-QUESTION/dp/B0FHFYDNG9?tag=datasciencesh-20\" rel=\"noopener\" target=\"_blank\">MICROSOFT POWE"
- },
- {
-  "slug": "elevate-your-skills-with-these-power-platform-reads",
-  "seg": "624",
-  "fehler": "unuebersetzt",
-  "src": "<a href=\"https://www.amazon.com/Microsoft-Platform-Solution-Architects-Handbook-ebook/dp/B0B18H37X1?tag=datasciencesh-20\" rel=\"noopener\" target=\"_blank\">Microso",
-  "out": "<a href=\"https://www.amazon.com/Microsoft-Platform-Solution-Architects-Handbook-ebook/dp/B0B18H37X1?tag=datasciencesh-20\" rel=\"noopener\" target=\"_blank\">Microso"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "25",
-  "fehler": "unuebersetzt",
-  "src": "<code>// Sentinel: SigninLogs + OfficeActivity let risky_signins = SigninLogs | where TimeGenerated &gt; ago(24h) | where RiskState in (&quot;atRisk&quot;, &quo",
-  "out": "<code>// Sentinel: SigninLogs + OfficeActivity let risky_signins = SigninLogs | where TimeGenerated &gt; ago(24h) | where RiskState in (&quot;atRisk&quot;, &quo"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "28",
-  "fehler": "unuebersetzt",
-  "src": "<code>let failed = SigninLogs | where TimeGenerated &gt; ago(24h) | where ResultType !in (&quot;0&quot;, &quot;50125&quot;, &quot;50140&quot;) // non-success (t",
-  "out": "<code>let failed = SigninLogs | where TimeGenerated &gt; ago(24h) | where ResultType !in (&quot;0&quot;, &quot;50125&quot;, &quot;50140&quot;) // non-success (t"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "30",
-  "fehler": "unuebersetzt",
-  "src": "<code>// &quot;Logged in&quot; but no Meetings/Channel activity in 14d let logins = SigninLogs | where TimeGenerated &gt; ago(14d) and AppDisplayName has &quot;",
-  "out": "<code>// &quot;Logged in&quot; but no Meetings/Channel activity in 14d let logins = SigninLogs | where TimeGenerated &gt; ago(14d) and AppDisplayName has &quot;"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "33",
-  "fehler": "unuebersetzt",
-  "src": "<code>let licensed = externaldata(UserPrincipalName:string, Sku:string)[@&quot;https://&lt;yourstorage&gt;/licensed.csv&quot;] with (format=&quot;csv&quot;, has",
-  "out": "<code>let licensed = externaldata(UserPrincipalName:string, Sku:string)[@&quot;https://&lt;yourstorage&gt;/licensed.csv&quot;] with (format=&quot;csv&quot;, has"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "35",
-  "fehler": "unuebersetzt",
-  "src": "<code>let email_threads = EmailEvents // Defender AH | where Timestamp &gt; ago(7d) | summarize emailCount=count() by SenderFromAddress, bin(Timestamp, 1d); let",
-  "out": "<code>let email_threads = EmailEvents // Defender AH | where Timestamp &gt; ago(7d) | summarize emailCount=count() by SenderFromAddress, bin(Timestamp, 1d); let"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "38",
-  "fehler": "unuebersetzt",
-  "src": "<code># Exchange Online PowerShell Connect-ExchangeOnline $start = (Get-Date).AddDays(-7) $end = Get-Date Search-UnifiedAuditLog -StartDate $start -EndDate $end",
-  "out": "<code># Exchange Online PowerShell Connect-ExchangeOnline $start = (Get-Date).AddDays(-7) $end = Get-Date Search-UnifiedAuditLog -StartDate $start -EndDate $end"
- },
- {
-  "slug": "getting-started-with-powershell-automation-a-beginners-guide",
-  "seg": "385",
-  "fehler": "unuebersetzt",
-  "src": "<a href=\"https://www.m365.fm/using-powershell-to-automate-all-things-azure-and-microsoft-365-with-matthew-dowst-mvp\" rel=\"noopener\" target=\"_blank\">PowerShell A",
-  "out": "<a href=\"https://www.m365.fm/using-powershell-to-automate-all-things-azure-and-microsoft-365-with-matthew-dowst-mvp\" rel=\"noopener\" target=\"_blank\">PowerShell A"
- },
- {
-  "slug": "mastering-the-microsoft-graph-validation-handshake",
-  "seg": "14",
-  "fehler": "unuebersetzt",
-  "src": "<code>Request: GET /webhook?validationToken=abc123<br>Response: 200 OK<br>Body: abc123<br>Content-Type: text/plain</code>",
-  "out": "<code>Request: GET /webhook?validationToken=abc123<br>Response: 200 OK<br>Body: abc123<br>Content-Type: text/plain</code>"
- },
- {
-  "slug": "demystifying-microsoft-dataverse-your-go-to-guide-for-centralized-data",
-  "seg": "161",
-  "fehler": "unuebersetzt",
-  "src": "<a href=\"https://www.m365.fm/how-to-master-dataverse-business-skills-for-scale\" rel=\"noopener\" target=\"_blank\">Dataverse Business Skills for Scalable Power Plat",
-  "out": "<a href=\"https://www.m365.fm/how-to-master-dataverse-business-skills-for-scale\" rel=\"noopener\" target=\"_blank\">Dataverse Business Skills for Scalable Power Plat"
- },
- {
-  "slug": "demystifying-microsoft-dataverse-your-go-to-guide-for-centralized-data",
-  "seg": "162",
-  "fehler": "unuebersetzt",
-  "src": "<a href=\"https://www.m365.fm/copilot-studio-dataverse-mcp-the-future-of-agentic-ai-in-microsoft-365-with-nathan-rose-mvp\" rel=\"noopener\" target=\"_blank\">Agentic",
-  "out": "<a href=\"https://www.m365.fm/copilot-studio-dataverse-mcp-the-future-of-agentic-ai-in-microsoft-365-with-nathan-rose-mvp\" rel=\"noopener\" target=\"_blank\">Agentic"
- },
- {
-  "slug": "demystifying-microsoft-dataverse-your-go-to-guide-for-centralized-data",
-  "seg": "163",
-  "fehler": "unuebersetzt",
-  "src": "<a href=\"https://www.m365.fm/breaking-the-scale-barrier-building-multi-tenant-saas-on-power-pages\" rel=\"noopener\" target=\"_blank\">Building Multi-Tenant SaaS wit",
-  "out": "<a href=\"https://www.m365.fm/breaking-the-scale-barrier-building-multi-tenant-saas-on-power-pages\" rel=\"noopener\" target=\"_blank\">Building Multi-Tenant SaaS wit"
- },
- {
-  "slug": "your-roadmap-to-an-ai-driven-future-essential-skills-and-certifications",
-  "seg": "125",
-  "fehler": "unuebersetzt",
-  "src": "Microsoft Certified: Azure AI Engineer Associate (Exam AI-102)",
-  "out": "Microsoft Certified: Azure AI Engineer Associate (Exam AI-102)"
- },
- {
-  "slug": "your-roadmap-to-an-ai-driven-future-essential-skills-and-certifications",
-  "seg": "127",
-  "fehler": "unuebersetzt",
-  "src": "Microsoft Certified: Azure Data Scientist Associate (Exam DP-100)",
-  "out": "Microsoft Certified: Azure Data Scientist Associate (Exam DP-100)"
- },
- {
-  "slug": "your-roadmap-to-an-ai-driven-future-essential-skills-and-certifications",
-  "seg": "129",
-  "fehler": "unuebersetzt",
-  "src": "Microsoft Certified: Fabric Analytics Engineer Associate (Exam DP-600)",
-  "out": "Microsoft Certified: Fabric Analytics Engineer Associate (Exam DP-600)"
- },
- {
-  "slug": "mastering-data-sovereignty-with-private-lora-in-enterprise-ai-1",
-  "seg": "171",
-  "fehler": "unuebersetzt",
-  "src": "<a href=\"https://www.m365.fm/from-data-to-intelligent-agents-building-trusted-enterprise-ai-with-microsoft-ai-foundry-with-shubh\" rel=\"noopener\" target=\"_blank\"",
-  "out": "<a href=\"https://www.m365.fm/from-data-to-intelligent-agents-building-trusted-enterprise-ai-with-microsoft-ai-foundry-with-shubh\" rel=\"noopener\" target=\"_blank\""
- },
- {
-  "slug": "mastering-data-sovereignty-with-private-lora-in-enterprise-ai-1",
-  "seg": "173",
-  "fehler": "unuebersetzt",
-  "src": "<a href=\"https://www.m365.fm/how-to-share-business-data-with-users-outside-of-your-organization-with-nicholas-hayduk-mvp\" rel=\"noopener\" target=\"_blank\">Secure ",
-  "out": "<a href=\"https://www.m365.fm/how-to-share-business-data-with-users-outside-of-your-organization-with-nicholas-hayduk-mvp\" rel=\"noopener\" target=\"_blank\">Secure "
- },
- {
   "slug": "mastering-data-sovereignty-with-private-lora-in-enterprise-ai-1",
   "seg": "174",
   "fehler": "unuebersetzt",
@@ -3492,5 +3338,159 @@
   "fehler": "html-tags",
   "src": "Use Specific people sharing links for single items, and remember that links need review too.",
   "out": "Gunakan tautan berbagi <em>Specific people</em> untuk item tunggal, dan ingat bahwa tautan juga perlu ditinjau."
+ },
+ {
+  "slug": "content/azure-caf-vs-waf-cloud-adoption-vs-well-architected",
+  "seg": "53",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/overview\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: What is the Cloud Adoption F",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/overview\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: What is the Cloud Adoption F"
+ },
+ {
+  "slug": "content/azure-caf-vs-waf-cloud-adoption-vs-well-architected",
+  "seg": "54",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/well-architected/what-is-well-architected-framework\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: What is th",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/well-architected/what-is-well-architected-framework\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: What is th"
+ },
+ {
+  "slug": "content/aadsts53003-blocked-by-conditional-access-how-to-fix",
+  "seg": "45",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/entra/identity/conditional-access/troubleshoot-conditional-access\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Tr",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/entra/identity/conditional-access/troubleshoot-conditional-access\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Tr"
+ },
+ {
+  "slug": "content/aadsts53003-blocked-by-conditional-access-how-to-fix",
+  "seg": "46",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/entra/identity-platform/reference-error-codes\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Microsoft Entra authen",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/entra/identity-platform/reference-error-codes\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Microsoft Entra authen"
+ },
+ {
+  "slug": "content/copilot-excel-freezes-or-hangs-what-to-check",
+  "seg": "56",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/5933657/microsoft-365-copilot-chat-word-copilot-does-not-g\" rel=\"noopener\" target=\"_blank\">Microsof",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/5933657/microsoft-365-copilot-chat-word-copilot-does-not-g\" rel=\"noopener\" target=\"_blank\">Microsof"
+ },
+ {
+  "slug": "content/copilot-excel-freezes-or-hangs-what-to-check",
+  "seg": "57",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://techcommunity.microsoft.com/discussions/bingchatenterprise/copilot-excel-error-failed-to-fetch-document-context---cannot-use-paid-service/45203",
+  "out": "<a href=\"https://techcommunity.microsoft.com/discussions/bingchatenterprise/copilot-excel-error-failed-to-fetch-document-context---cannot-use-paid-service/45203"
+ },
+ {
+  "slug": "content/copilot-excel-freezes-or-hangs-what-to-check",
+  "seg": "58",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://techcommunity.microsoft.com/discussions/microsoft365copilot/has-anyone-seen-excel-workbooks-become-corrupt-after-using-m365-copilot-to-summa/45",
+  "out": "<a href=\"https://techcommunity.microsoft.com/discussions/microsoft365copilot/has-anyone-seen-excel-workbooks-become-corrupt-after-using-m365-copilot-to-summa/45"
+ },
+ {
+  "slug": "content/copilot-error-messages-explained-and-what-to-check",
+  "seg": "56",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/previous-versions/troubleshoot/microsoft-365/microsoft-365-apps/copilot/copilot-missing-disabled-not-work-correctly\" ",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/previous-versions/troubleshoot/microsoft-365/microsoft-365-apps/copilot/copilot-missing-disabled-not-work-correctly\" "
+ },
+ {
+  "slug": "content/copilot-error-messages-explained-and-what-to-check",
+  "seg": "58",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/copilot/plan/add-copilot-endpoints-allowlist\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Add Copilot endpoints t",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/copilot/plan/add-copilot-endpoints-allowlist\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Add Copilot endpoints t"
+ },
+ {
+  "slug": "content/copilot-error-messages-explained-and-what-to-check",
+  "seg": "59",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://support.microsoft.com/office/7a13758f-d61e-4a56-8440-f2c9a07802ec\" rel=\"noopener\" target=\"_blank\">Microsoft Support: Frequently asked questions",
+  "out": "<a href=\"https://support.microsoft.com/office/7a13758f-d61e-4a56-8440-f2c9a07802ec\" rel=\"noopener\" target=\"_blank\">Microsoft Support: Frequently asked questions"
+ },
+ {
+  "slug": "content/copilot-error-messages-explained-and-what-to-check",
+  "seg": "60",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/5920683/copilot-chat-throws-error-or-does-not-generate-res\" rel=\"noopener\" target=\"_blank\">Microsof",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/5920683/copilot-chat-throws-error-or-does-not-generate-res\" rel=\"noopener\" target=\"_blank\">Microsof"
+ },
+ {
+  "slug": "content/copilot-error-messages-explained-and-what-to-check",
+  "seg": "61",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/5933657/microsoft-365-copilot-chat-word-copilot-does-not-g\" rel=\"noopener\" target=\"_blank\">Microsof",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/5933657/microsoft-365-copilot-chat-word-copilot-does-not-g\" rel=\"noopener\" target=\"_blank\">Microsof"
+ },
+ {
+  "slug": "content/copilot-error-messages-explained-and-what-to-check",
+  "seg": "62",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/5921177/copilot-returning-error-something-went-wrong\" rel=\"noopener\" target=\"_blank\">Microsoft Q&am",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/5921177/copilot-returning-error-something-went-wrong\" rel=\"noopener\" target=\"_blank\">Microsoft Q&am"
+ },
+ {
+  "slug": "content/copilot-error-messages-explained-and-what-to-check",
+  "seg": "64",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://techcommunity.microsoft.com/discussions/bingchatenterprise/copilot-excel-error-failed-to-fetch-document-context---cannot-use-paid-service/45203",
+  "out": "<a href=\"https://techcommunity.microsoft.com/discussions/bingchatenterprise/copilot-excel-error-failed-to-fetch-document-context---cannot-use-paid-service/45203"
+ },
+ {
+  "slug": "content/adaptive-cards-in-teams-designer-and-examples",
+  "seg": "51",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/microsoftteams/platform/task-modules-and-cards/cards/cards-reference\" rel=\"noopener\" target=\"_blank\">Microsoft Learn:",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/microsoftteams/platform/task-modules-and-cards/cards/cards-reference\" rel=\"noopener\" target=\"_blank\">Microsoft Learn:"
+ },
+ {
+  "slug": "content/adaptive-cards-in-teams-designer-and-examples",
+  "seg": "52",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/microsoftteams/platform/task-modules-and-cards/cards/design-effective-cards\" rel=\"noopener\" target=\"_blank\">Microsoft",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/microsoftteams/platform/task-modules-and-cards/cards/design-effective-cards\" rel=\"noopener\" target=\"_blank\">Microsoft"
+ },
+ {
+  "slug": "content/how-to-use-drain-mode-for-patching-and-maintenance-of-session-hosts",
+  "seg": "10",
+  "fehler": "html-tags",
+  "src": "<strong>Roles.</strong> Learn says turning drain mode on or off requires the Desktop Virtualization Session Host Operator role. Its description on the RBAC page",
+  "out": "<strong>Peran.</strong> Learn menyatakan bahwa mengaktifkan atau menonaktifkan drain mode memerlukan peran Desktop Virtualization Session Host Operator. Deskrip"
+ },
+ {
+  "slug": "content/start-vm-on-connect-in-azure-virtual-desktop-how-it-saves-cost",
+  "seg": "74",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-machines/states-billing\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: States and billing status of A",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-machines/states-billing\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: States and billing status of A"
+ },
+ {
+  "slug": "content/start-vm-on-connect-in-azure-virtual-desktop-how-it-saves-cost",
+  "seg": "75",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/understand-estimate-costs\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Understand and estim",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/understand-estimate-costs\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Understand and estim"
+ },
+ {
+  "slug": "content/how-to-configure-start-vm-on-connect-for-personal-and-pooled-host-pools",
+  "seg": "75",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: What&#x27;s new in Azure Virtual Des",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: What&#x27;s new in Azure Virtual Des"
+ },
+ {
+  "slug": "content/what-shapes-microsoft-copilot-answers-and-accuracy",
+  "seg": "61",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://support.microsoft.com/en-us/Microsoft-365-Copilot/validate-copilot-output\" rel=\"noopener\" target=\"_blank\">Validate Copilot output before you ac",
+  "out": "<a href=\"https://support.microsoft.com/en-us/Microsoft-365-Copilot/validate-copilot-output\" rel=\"noopener\" target=\"_blank\">Validate Copilot output before you ac"
+ },
+ {
+  "slug": "content/sharepoint-site-collection-vs-site-vs-hub-site",
+  "seg": "46",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/sharepoint/sites/sites-and-site-collections-overview\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Overview of sit",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/sharepoint/sites/sites-and-site-collections-overview\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Overview of sit"
  }
 ]
