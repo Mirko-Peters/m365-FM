@@ -1,10 +1,10 @@
 ---
 title: "What is an Azure Virtual Desktop session host? Roles, sizing and lifecycle"
 summary: "A session host is a virtual machine registered to Azure Virtual Desktop where users' desktop and app sessions run. This article covers what makes a VM a session host, how Microsoft sizes multi-session and single-session hosts, and the stages of a host's life from creation to retirement."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-22
 render: v2
 topics: [avd-session-host, azure-virtual-desktop]
 keypoints:

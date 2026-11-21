@@ -1,10 +1,10 @@
 ---
 title: "MFA for Azure Virtual Desktop users: what prompts when"
 summary: "Users see Microsoft Entra MFA prompts in Azure Virtual Desktop when a new access token is needed: at subscribe or feed refresh, at connection through the gateway, and at session host sign-in with SSO."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-22
 render: v2
 topics: [azure-virtual-desktop, avd-single-sign-on]
 keypoints:

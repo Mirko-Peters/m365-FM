@@ -1,10 +1,10 @@
 ---
 title: "Teams Tags: How to Create and Use Tags to Reach Groups of People"
 summary: "How Microsoft Teams tags work: create a custom tag, @mention it in a channel or chat, who is allowed to manage tags, the documented limits, and the admin settings behind them."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-27
+date: 2026-11-22
 topics: [teams, teams-admin-center]
 keypoints:
   - "Tags let you reach a subset of a team with one @mention, for example everyone with a role, project or location."

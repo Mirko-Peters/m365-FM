@@ -1,10 +1,10 @@
 ---
 title: "Windows Update strategies for AVD session hosts"
 summary: "How to patch an Azure Virtual Desktop session host depends on its OS and on patching versus replacing. Learn's September 2026 guidance: Windows Update or Autopatch for single-session, session host update for multi-session."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-22
 render: v2
 topics: [azure-virtual-desktop, avd-session-host]
 keypoints:

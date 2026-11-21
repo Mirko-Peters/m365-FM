@@ -1,10 +1,10 @@
 ---
 title: "How to Create a Dashboard With Copilot in Excel and Track Copilot Adoption"
 summary: "Build dashboard pieces with Copilot in Excel using charts and PivotTables, then track Copilot adoption with the Microsoft 365 admin center usage report and the Copilot Dashboard in Viva Insights."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-28
+date: 2026-11-22
 topics: [copilot, copilot-analytics, excel]
 keypoints:
   - "Copilot in Excel can create charts and PivotTables from prompts. Microsoft's page does not describe building a complete dashboard, so assemble the final layout yourself and review every result."

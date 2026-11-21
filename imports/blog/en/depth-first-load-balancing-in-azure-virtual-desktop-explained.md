@@ -1,10 +1,10 @@
 ---
 title: "Depth-first load balancing in Azure Virtual Desktop explained"
 summary: "Depth-first load balancing sends each new session to the available session host with the most sessions until it reaches its maximum session limit. This article explains the rule step by step and its limits."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-22
 render: v2
 topics: [avd-depth-first-load-balancing, avd-host-pool]
 keypoints:

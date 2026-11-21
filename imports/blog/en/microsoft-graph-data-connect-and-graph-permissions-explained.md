@@ -1,10 +1,10 @@
 ---
 title: "Graph Data Connect and Microsoft Graph Permissions Explained: Setup, Consent, Least Privilege"
 summary: "What Microsoft Graph Data Connect does, how it differs from the Graph API, the setup and approval steps, and how Graph permissions (delegated, application, consent) work."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-27
+date: 2026-11-22
 topics: [microsoft-graph-data-connect, microsoft-graph-permissions, graph]
 keypoints:
   - "Graph Data Connect extracts Microsoft 365 data in bulk to Azure storage for analytics. The Graph API suits small amounts of data from selected users and groups."

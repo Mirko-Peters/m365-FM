@@ -1,10 +1,10 @@
 ---
 title: "Service Principals in Entra ID: Best Practices and Common Problems"
 summary: "What a service principal is, how it differs from an app registration, and the security practices Microsoft documents: managed identities, certificates, least privilege, owners, plus known pitfalls."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-26
+date: 2026-11-22
 topics: [service-principal, entra-id, app-registration, managed-identity]
 keypoints:
   - "The application object is the global blueprint in the home tenant. The service principal is the local instance in each tenant that defines what the app can do there."

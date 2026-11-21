@@ -1,10 +1,10 @@
 ---
 title: "How to use the exclusion tag for maintenance windows and special session hosts"
 summary: "To patch an Azure Virtual Desktop session host without autoscale interfering, set the scaling plan's exclusion tag, turn on drain mode, wait for sessions to end, do the work and undo both."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-22
 render: v2
 topics: [avd-scaling-plan-exclusion-tag, avd-scaling-plan]
 keypoints:

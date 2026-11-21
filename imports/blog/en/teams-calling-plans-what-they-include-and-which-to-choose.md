@@ -1,10 +1,10 @@
 ---
 title: "Teams Calling Plans: What the Plans Include and Which One to Choose"
 summary: "Compare the Domestic, International and Pay-As-You-Go Calling Plans for Microsoft Teams Phone, learn how minute pooling and licensing work, and see when other PSTN options fit better."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-27
+date: 2026-11-22
 topics: [teams-phone, microsoft-365-admin-center, teams-admin-center]
 keypoints:
   - "A Calling Plan provides PSTN connectivity for Teams Phone, so users can place and receive external phone calls. A Teams Phone license is required first."

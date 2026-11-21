@@ -1,10 +1,10 @@
 ---
 title: "Teams Shared Channels: How They Work and When to Use Them"
 summary: "What shared channels are, how they differ from standard and private channels, who can join (including B2B direct connect), how to create one, the documented limits, and what is not supported."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-26
+date: 2026-11-22
 topics: [shared-channels, teams-channels, private-channels]
 keypoints:
   - "A shared channel lets people join without being added to the team, including people in other organizations through B2B direct connect. Guests cannot be added."

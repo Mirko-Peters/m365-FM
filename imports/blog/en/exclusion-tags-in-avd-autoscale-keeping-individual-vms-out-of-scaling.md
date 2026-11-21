@@ -1,10 +1,10 @@
 ---
 title: "Exclusion tags in AVD autoscale: keeping individual VMs out of scaling"
 summary: "The exclusion tag is a tag name set on an Azure Virtual Desktop scaling plan. Autoscale does not turn on, turn off or change the drain mode of any VM that carries a tag with that name, in every phase of the schedule."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-22
 render: v2
 topics: [avd-scaling-plan-exclusion-tag, avd-scaling-plan]
 keypoints:

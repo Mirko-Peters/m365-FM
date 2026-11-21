@@ -1,10 +1,10 @@
 ---
 title: "Depth-first load balancing and autoscale: how the schedule overrides the host pool setting"
 summary: "When a scaling plan is assigned to a pooled host pool and enabled, the load balancing algorithm in each schedule phase overrides the host pool setting, says Learn. This guide shows where to set depth-first and how to check it."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-22
 render: v2
 topics: [avd-depth-first-load-balancing, avd-host-pool]
 keypoints:

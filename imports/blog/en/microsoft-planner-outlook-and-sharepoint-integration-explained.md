@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Planner, Outlook and SharePoint Integration: How They Fit Together"
 summary: "How Planner connects to Outlook, SharePoint and Teams: where plan data is stored, calendar sync with iCalendar links, the Planner web part on SharePoint sites, and admin controls."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-27
+date: 2026-11-22
 topics: [microsoft-planner, outlook, sharepoint, teams]
 keypoints:
   - "Planner stores basic plans in Azure and manages them in the Planner service. Attachments go to the SharePoint location for the group, and comments are kept in Exchange."

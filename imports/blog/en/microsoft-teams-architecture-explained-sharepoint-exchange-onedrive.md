@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Teams Architecture Explained: Where Teams Uses SharePoint, Exchange and OneDrive"
 summary: "How Teams is built on Microsoft 365 groups, and where chats, channel files, private files and meeting recordings are stored across SharePoint, Exchange and OneDrive, with the admin consequences."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-27
+date: 2026-11-22
 topics: [teams, sharepoint, exchange-online, onedrive]
 keypoints:
   - "Teams is built on Microsoft 365 groups and Microsoft Graph, and uses identities in Microsoft Entra ID."

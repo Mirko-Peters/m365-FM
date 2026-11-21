@@ -1,10 +1,10 @@
 ---
 title: "PowerPoint Live in Teams: What It Is and How to Present With It"
 summary: "PowerPoint Live shows your slides in a Teams meeting with notes and audience controls, using less bandwidth than screen sharing. How to start, what attendees can do, limits and what happens to the file."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-26
+date: 2026-11-22
 topics: [teams, powerpoint]
 keypoints:
   - "PowerPoint Live presents slides inside a Teams meeting with a presenter view, and uses less network bandwidth than typical screen sharing."

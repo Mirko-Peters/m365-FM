@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Teams Templates: Create, Use and Manage Them"
 summary: "How team templates work in Teams: the 15 prebuilt ones, limits, creating custom templates in the admin center, hiding templates with policies, and where the documentation disagrees or is silent."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-26
+date: 2026-11-22
 topics: [teams-templates, teams, teams-admin-center]
 keypoints:
   - "A team template predefines a team's structure: settings, channels, apps and tabs. Membership, team picture, files and channel settings are not carried by templates."

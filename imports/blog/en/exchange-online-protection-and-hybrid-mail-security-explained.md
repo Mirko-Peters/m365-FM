@@ -1,10 +1,10 @@
 ---
 title: "Hybrid Mail Security Explained: Exchange Online Protection with On-Premises Mailboxes"
 summary: "How Exchange Online Protection (EOP) protects mail in a hybrid Exchange setup: filtering layers, MX record choices, centralized mail transport, Enhanced Filtering and the on-premises add-on."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-27
+date: 2026-11-22
 topics: [exchange-online-protection, exchange-online, defender-for-office-365]
 keypoints:
   - "Microsoft Learn now calls EOP the built-in security features for cloud mailboxes. They are included with every Exchange Online cloud mailbox and cannot be switched off."

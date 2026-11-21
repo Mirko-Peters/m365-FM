@@ -1,10 +1,10 @@
 ---
 title: "Breadth-first vs depth-first: which load balancing algorithm should a host pool use"
 summary: "Use breadth-first when user experience comes first and depth-first when you want sessions packed onto as few session hosts as possible so the rest can be switched off. This guide gives the decision criteria, a worked example for both algorithms and the steps to change the setting."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-22
 render: v2
 topics: [avd-breadth-first-load-balancing, avd-depth-first-load-balancing, avd-host-pool]
 keypoints:

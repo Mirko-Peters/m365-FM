@@ -1,10 +1,10 @@
 ---
 title: "Microsoft SharePoint Permissions Management: Best Practices from Microsoft Learn"
 summary: "How to manage SharePoint permissions the way Microsoft documents it: pick the right model per site type, use groups, limit unique permissions, control sharing links and review access."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-27
+date: 2026-11-22
 topics: [sharepoint, microsoft-365-groups, teams]
 keypoints:
   - "Team sites are best managed through the Microsoft 365 group or the Teams team. Communication sites use the Owners, Members and Visitors groups."

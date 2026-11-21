@@ -1,10 +1,10 @@
 ---
 title: "Dynamic Groups in Entra ID: Membership Rules Explained with Examples"
 summary: "How dynamic membership groups work in Microsoft Entra ID: license and role requirements, rule syntax and operators, user and device rules, limits and common mistakes, with steps."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-27
+date: 2026-11-22
 topics: [entra-id, microsoft-365-groups]
 keypoints:
   - "A dynamic group fills its membership from a rule on user or device attributes. Members cannot be added or removed manually."

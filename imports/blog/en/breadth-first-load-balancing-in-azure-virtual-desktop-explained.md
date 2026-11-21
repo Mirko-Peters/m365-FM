@@ -1,10 +1,10 @@
 ---
 title: "Breadth-first load balancing in Azure Virtual Desktop explained"
 summary: "Breadth-first load balancing sends each new session to a randomly chosen host among the half of available session hosts that have the fewest sessions. It needs no maximum session limit, but autoscale needs a custom one."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-22
 render: v2
 topics: [avd-breadth-first-load-balancing, avd-host-pool]
 keypoints:

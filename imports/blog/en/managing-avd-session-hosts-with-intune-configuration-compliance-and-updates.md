@@ -1,10 +1,10 @@
 ---
 title: "Managing AVD session hosts with Intune: configuration, compliance and updates"
 summary: "Microsoft Intune manages Azure Virtual Desktop session hosts as Windows Enterprise devices once enrolled, but personal single-session and pooled multi-session hosts follow different rules. Compared with documented limits."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-22
 render: v2
 topics: [azure-virtual-desktop, intune]
 keypoints:

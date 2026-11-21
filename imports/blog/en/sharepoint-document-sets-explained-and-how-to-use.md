@@ -1,10 +1,10 @@
 ---
 title: "SharePoint Document Sets: What They Are and How to Use Them"
 summary: "Document sets group related files into one managed unit with shared metadata, default content and versioning. How they work, how to set them up, and why Microsoft's own sources are thin for Microsoft 365."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-26
+date: 2026-11-22
 topics: [sharepoint, sharepoint-content-types, sharepoint-document-libraries]
 keypoints:
   - "A document set is a special kind of folder, built on a content type, that manages one work product made of several files as a single unit."

@@ -1,10 +1,10 @@
 ---
 title: "Viva Connections in Teams: Setup and Best Practices (Now the SharePoint App in Teams)"
 summary: "Viva Connections is now called the SharePoint app in Teams. What changed, the licenses, how to set up a home site, pin the app, build the dashboard and plan content, with notes on pages that may be outdated."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-26
+date: 2026-11-22
 topics: [viva-connections, teams, sharepoint-home-site]
 keypoints:
   - "Microsoft Learn now calls Viva Connections the SharePoint app in Teams. Existing configurations, custom app names and logos keep working."
