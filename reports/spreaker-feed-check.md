@@ -1,4 +1,4 @@
-# Spreaker-Feed gegen geschriebene Shownotes (2026-11-21T06:35Z)
+# Spreaker-Feed gegen geschriebene Shownotes (2026-11-21T08:29Z)
 
 Geschrieben: 643 · im Feed: 611 · Text gleich: 611 · alle m365-Links im Feed: 611
 
