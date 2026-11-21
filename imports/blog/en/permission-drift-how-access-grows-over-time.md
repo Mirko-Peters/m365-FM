@@ -1,8 +1,8 @@
 ---
 title: "Permission drift: how access grows over time"
 summary: "Permission drift is how access slowly diverges from business reality through role changes, leftover groups and forgotten exceptions. Learn why it happens, how to spot it and how least privilege helps."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-21
 topics: [permission-drift, permission-creep-index, least-privilege]
