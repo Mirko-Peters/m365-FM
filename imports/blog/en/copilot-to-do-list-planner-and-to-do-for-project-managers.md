@@ -1,10 +1,10 @@
 ---
 title: "Copilot To Do List for Project Managers: Planner Agent, Tasks and Status Reports"
 summary: "How project managers can build a to-do list with Microsoft Copilot: the Planner Agent, Planner tasks in Copilot chat, Add to To Do for files, OneNote lists, status reports, licenses and admin controls."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-29
+date: 2026-11-23
 topics: [copilot, microsoft-planner, microsoft-to-do]
 keypoints:
   - "Planner capabilities in Copilot chat let you ask about tasks, edit task fields, and create private tasks, shared basic plan tasks and plans, including from an Office file."

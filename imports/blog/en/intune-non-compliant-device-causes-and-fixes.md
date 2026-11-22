@@ -1,10 +1,10 @@
 ---
 title: "Intune Non-Compliant Device: Find the Cause, Fix Conflicts and Force a Re-Check"
 summary: "How to fix an Intune non-compliant device: read the compliance status, find the failing setting, check enrollment and check-in, resolve policy conflicts and handle the Secure Boot and TPM case."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-28
+date: 2026-11-23
 topics: [intune, device-compliance, conditional-access]
 keypoints:
   - "Start at Devices > Compliance > Monitor, open the policy and use Per-setting status to see which setting fails. The Policy device status report lists the devices."

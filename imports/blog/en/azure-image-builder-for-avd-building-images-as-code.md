@@ -1,10 +1,10 @@
 ---
 title: "Azure Image Builder for AVD: building images as code"
 summary: "Azure Image Builder turns a JSON template into a finished, generalized VM image and distributes it to Azure Compute Gallery or a managed image. This article explains how the template works, how AVD custom image templates relate to it, and which prerequisites, limits and costs apply."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-23
 render: v2
 topics: [azure-image-builder, azure-virtual-desktop]
 keypoints:

@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Copilot vs ChatGPT Enterprise: How to Compare Them for Workplace Productivity"
 summary: "A decision guide for comparing Microsoft Copilot and ChatGPT Enterprise: data grounding, licensing tiers, permissions, data protection and admin controls. The Copilot side is sourced from Microsoft Learn, the ChatGPT side from two OpenAI pages."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-29
+date: 2026-11-23
 topics: [copilot, chatgpt, copilot-governance]
 keypoints:
   - "Microsoft Copilot grounds answers in Microsoft Graph and Work IQ data and honors each user's existing permissions. Copilot Chat (Basic) uses mostly web data unless you supply the content."

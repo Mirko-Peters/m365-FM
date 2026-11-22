@@ -1,10 +1,10 @@
 ---
 title: "Copilot Data Retention, Residency and Storage: Where Prompts and Responses Are Kept"
 summary: "Where Microsoft Copilot stores prompts and responses, how Purview retention policies apply, how residency and the EU Data Boundary work, and how users and admins delete Copilot history."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-28
+date: 2026-11-23
 topics: [copilot, purview, data-residency, retention-policies]
 keypoints:
   - "Copilot stores the user's prompt, the response and citations. Prompts and responses sit in a hidden folder in the user's Exchange Online mailbox."

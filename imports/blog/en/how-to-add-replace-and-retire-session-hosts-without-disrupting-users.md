@@ -1,10 +1,10 @@
 ---
 title: "How to add, replace and retire session hosts without disrupting users"
 summary: "Adding a session host depends on management: standard pools register hosts you build, session host configuration pools create them. Replacing and retiring follow from that, with drain mode and cleanup."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-23
 render: v2
 topics: [avd-session-host, azure-virtual-desktop]
 keypoints:

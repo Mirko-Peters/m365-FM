@@ -1,10 +1,10 @@
 ---
 title: "Personal host pools in Azure Virtual Desktop: when one desktop per user makes sense"
 summary: "A personal host pool assigns each session host VM to one user, so the desktop keeps its own state on the VM's OS disk. This article sets out when that model fits and which cost controls apply."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-23
 render: v2
 topics: [avd-personal-host-pool, avd-host-pool]
 keypoints:

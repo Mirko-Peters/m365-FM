@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Intune Explained Simply: What It Does and How It Works"
 summary: "Microsoft Intune explained in plain terms: what it manages, the difference between device and app management, how it works with Entra ID and Conditional Access, compliance policies, licensing and how to start."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-29
+date: 2026-11-23
 topics: [intune, device-compliance, conditional-access]
 keypoints:
   - "Intune is a cloud-based endpoint management service that enrolls, configures, secures and updates devices and protects apps. It runs entirely in the cloud."

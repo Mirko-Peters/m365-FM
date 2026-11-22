@@ -1,10 +1,10 @@
 ---
 title: "Pooled host pools in Azure Virtual Desktop: shared multi-session desktops explained"
 summary: "A pooled host pool lets user sessions be load balanced to any session host, with several users on one VM at the same time. This article explains how sessions, load balancing, profiles, updates and power management work in a pooled pool."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-23
 render: v2
 topics: [avd-pooled-host-pool, avd-host-pool]
 keypoints:

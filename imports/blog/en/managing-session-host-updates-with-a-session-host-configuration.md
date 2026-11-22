@@ -1,10 +1,10 @@
 ---
 title: "Managing session host updates with a session host configuration"
 summary: "With a session host configuration you change the configuration first, then schedule a session host update that replaces hosts in batches. This guide covers the preparation, the portal steps, the controls while it runs, and what to do when an update fails."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-23
 render: v2
 topics: [avd-session-host-configuration, avd-host-pool]
 keypoints:

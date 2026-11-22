@@ -1,10 +1,10 @@
 ---
 title: "Azure Compute Gallery for AVD images: versions and replication"
 summary: "Azure Compute Gallery stores image definitions and numbered image versions and copies them to the regions where you deploy session hosts. This article explains the structure, version rules, replication settings, sharing and limits that matter for Azure Virtual Desktop."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-23
 render: v2
 topics: [azure-compute-gallery, azure-virtual-desktop]
 keypoints:

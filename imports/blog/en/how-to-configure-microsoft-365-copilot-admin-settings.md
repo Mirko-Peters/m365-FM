@@ -1,10 +1,10 @@
 ---
 title: "How to Configure Microsoft 365 Copilot: Admin Settings and a Safe Rollout Order"
 summary: "How to configure Microsoft 365 Copilot as an admin: licenses, prerequisites, the Copilot settings in the admin center, the web search policy, data foundation work and how to review usage."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-28
+date: 2026-11-23
 topics: [copilot, microsoft-365-admin-center, copilot-governance]
 keypoints:
   - "Microsoft publishes no single ideal configuration. Its setup path has five steps: prepare, choose a license, ready apps and network, assign licenses, then welcome users."

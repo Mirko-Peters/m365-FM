@@ -1,10 +1,10 @@
 ---
 title: "The golden image lifecycle: build, test, release, retire"
 summary: "A golden image for Azure Virtual Desktop goes through build, test on a production-like pool, release as a versioned gallery image, and retirement. Each stage has documented traps, from sysprep to end of life dates."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-23
 render: v2
 topics: [golden-image, avd-custom-image-templates]
 keypoints:

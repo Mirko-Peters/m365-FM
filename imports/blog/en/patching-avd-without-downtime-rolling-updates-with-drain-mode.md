@@ -1,10 +1,10 @@
 ---
 title: "Patching AVD without downtime: rolling updates with drain mode"
 summary: "To patch Azure Virtual Desktop session hosts without downtime, update them in small waves: tag, drain, empty, patch, restart and return each wave. It fits mainly pooled Windows Server hosts."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-23
 render: v2
 topics: [avd-drain-mode, avd-session-host]
 keypoints:

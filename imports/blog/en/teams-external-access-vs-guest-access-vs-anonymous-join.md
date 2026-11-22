@@ -1,10 +1,10 @@
 ---
 title: "Teams External Access vs Guest Access vs Anonymous Join: What Each One Allows"
 summary: "Compare Microsoft Teams external access, guest access and anonymous meeting join: who each applies to, what people can do, where admins set them, and which one fits chat, files or one-off meetings."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-29
+date: 2026-11-23
 topics: [teams, guest-access, teams-admin-center]
 keypoints:
   - "External access is for chat, calls and meetings with Microsoft identities. Guest access adds a person to a team as an Entra B2B guest. Anonymous join covers unverified people."

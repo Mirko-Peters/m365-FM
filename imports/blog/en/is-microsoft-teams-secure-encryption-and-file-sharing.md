@@ -1,10 +1,10 @@
 ---
 title: "Is Microsoft Teams Secure? Encryption, End-to-End Limits and Safe File Sharing"
 summary: "What Microsoft documents about Teams security: encryption in transit and at rest, end-to-end encryption limits, where data lives, shared channels, guest access and the admin controls for safe sharing."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-28
+date: 2026-11-23
 topics: [teams, purview, conditional-access]
 keypoints:
   - "Teams encrypts data in transit and at rest by default. Microsoft names TLS 1.2 or later with AES-256 for transit, and BitLocker plus per-file encryption at rest."

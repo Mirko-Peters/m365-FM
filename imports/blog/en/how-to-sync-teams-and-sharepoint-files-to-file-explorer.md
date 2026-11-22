@@ -1,10 +1,10 @@
 ---
 title: "How to Sync Teams and SharePoint Files to File Explorer (Sync or OneDrive Shortcut)"
 summary: "Step-by-step: sync a Teams or SharePoint library to File Explorer with the Sync button, choose folders or stop syncing, and learn when a OneDrive shortcut is the better option. Includes limits and admin controls."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-29
+date: 2026-11-23
 topics: [onedrive, sharepoint, teams]
 keypoints:
   - "Open the site from the Microsoft 365 app launcher, go to Documents or a subfolder and select Sync. This is needed once per computer."

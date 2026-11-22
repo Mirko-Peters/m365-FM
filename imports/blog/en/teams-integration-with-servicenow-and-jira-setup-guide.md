@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Teams Integration with ServiceNow and Jira: Setup Guide for Admins"
 summary: "How to connect Microsoft Teams with ServiceNow and Jira Cloud: what each app does, what must be in place, the install steps, and the Teams admin center settings that decide whether the app is available."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-29
+date: 2026-11-23
 topics: [teams, servicenow, teams-admin-center]
 keypoints:
   - "ServiceNow connects to Teams through the Conversational Integration with Microsoft Teams app (sn_va_teams) and Now Virtual Agent. Jira connects through the Jira Cloud app from the Teams app store."

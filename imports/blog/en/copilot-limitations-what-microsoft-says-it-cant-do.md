@@ -1,10 +1,10 @@
 ---
 title: "Why Copilot Feels Useless: Documented Limits and What Microsoft Says It Can't Do"
 summary: "Why Microsoft Copilot disappoints: the limits Microsoft documents, from accuracy and ungrounded answers to licensing, language gaps, Excel restrictions and setup problems you can fix."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-28
+date: 2026-11-23
 topics: [copilot, copilot-governance, copilot-adoption]
 keypoints:
   - "Microsoft says Copilot can produce ungrounded results, so answers must be reviewed. Its Word, Excel and PowerPoint agents are not meant for financial, legal or medical conclusions."

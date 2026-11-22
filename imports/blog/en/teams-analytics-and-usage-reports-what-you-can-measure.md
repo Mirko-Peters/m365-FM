@@ -1,10 +1,10 @@
 ---
 title: "Teams Analytics and Usage Reports: Where to Find Them and What Each Measures"
 summary: "Teams analytics explained: the usage and user activity reports in the Microsoft 365 admin center, the 21 reports in the Teams admin center, roles needed, date ranges, latency and metric definitions."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-28
+date: 2026-11-23
 topics: [teams, teams-admin-center, microsoft-365-admin-center]
 keypoints:
   - "Teams reports live in two places: Reports > Usage in the Microsoft 365 admin center, and Analytics & reports in the Teams admin center. They are separate."

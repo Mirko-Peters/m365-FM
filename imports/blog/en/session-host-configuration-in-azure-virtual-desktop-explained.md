@@ -1,10 +1,10 @@
 ---
 title: "Session host configuration in Azure Virtual Desktop explained"
 summary: "A session host configuration stores what a pooled host pool's session hosts should look like: image, size, disk, domain join, network and more. The service builds and updates hosts from it; the choice is permanent."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-23
 render: v2
 topics: [avd-session-host-configuration, avd-host-pool]
 keypoints:

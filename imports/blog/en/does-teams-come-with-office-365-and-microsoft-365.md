@@ -1,10 +1,10 @@
 ---
 title: "Does Teams Come With Office 365 and Microsoft 365? What Is Included Today"
 summary: "Is Microsoft Teams included in Office 365 or Microsoft 365? It depends on the plan and purchase date. Learn how the no-Teams enterprise suites, business suites and Teams Essentials work, and how admins manage the Teams license."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-29
+date: 2026-11-23
 topics: [teams, microsoft-365, microsoft-365-admin-center]
 keypoints:
   - "Teams can be licensed as part of qualifying Microsoft 365 offerings or as a standalone SKU. Whether your plan has it depends on the plan and when you bought it."

@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Lists Tips: Views, Formatting, Rules and Limits That Matter"
 summary: "Practical Microsoft Lists tips based on Microsoft documentation: view formatting, rules for notifications, form layout, Power Automate, and the 5,000 item threshold with other list limits."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-28
+date: 2026-11-23
 topics: [microsoft-lists, sharepoint, sharepoint-list-view-threshold]
 keypoints:
   - "Use Format current view for row colors and conditional rules. Anyone who can create and manage views can use it, and it changes only how the list looks."

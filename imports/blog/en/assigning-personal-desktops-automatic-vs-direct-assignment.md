@@ -1,10 +1,10 @@
 ---
 title: "Assigning personal desktops: automatic vs direct assignment"
 summary: "Personal host pools use automatic assignment, where a user gets a desktop on first connection, or direct assignment to a named session host. This guide covers the portal, PowerShell and Azure CLI routes and the errors to expect."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-23
 render: v2
 topics: [avd-personal-host-pool, avd-host-pool]
 keypoints:

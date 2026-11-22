@@ -1,10 +1,10 @@
 ---
 title: "SharePoint Storage Licensing: How Much You Get, Limits and What Extra Costs"
 summary: "How SharePoint storage is calculated in Microsoft 365: 1 TB base plus 10 GB per license, the 25 TB site limit, OneDrive quotas, read-only mode and the ways to add storage."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-28
+date: 2026-11-23
 topics: [sharepoint, microsoft-365-admin-center, onedrive]
 keypoints:
   - "Tenant SharePoint storage starts at 1 TB and grows by 10 GB for each eligible license purchased. F1 and F3 plans are listed with 1 TB and no per-license increment."
