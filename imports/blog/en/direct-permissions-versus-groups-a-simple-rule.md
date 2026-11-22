@@ -1,8 +1,8 @@
 ---
 title: "Direct permissions versus groups: a simple rule"
 summary: "A simple rule for SharePoint access: use groups for people who need access to a whole site, and use direct permissions or sharing links only for real exceptions that you can explain and review later."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-22
 topics: [sharepoint-permissions, least-privilege, permission-inheritance]
