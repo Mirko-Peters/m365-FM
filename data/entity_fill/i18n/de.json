@@ -1,4 +1,15 @@
 {
+ "5s": {
+  "desc": "Eine Methode zur Arbeitsplatzorganisation mit fünf Schritten (Sortieren, Ordnung halten, Sauberkeit, Standardisieren, Aufrechterhalten), die Werkzeuge und Materialien an ihrem Platz hält, Probleme sichtbar macht und sicheres, effizientes Arbeiten unterstützt.",
+  "h": "3e3fc28f1ced526a",
+  "long": "5S ist eine Methode zur Organisation des Arbeitsplatzes, damit Arbeit sicher, effizient und leicht überprüfbar ist. Die fünf Schritte stammen aus japanischen Begriffen, die meist mit Sortieren, Ordnung halten, Sauberkeit, Standardisieren und Aufrechterhalten übersetzt werden. Teams entfernen zunächst, was nicht benötigt wird, geben dann jedem Werkzeug und jedem Material einen festen Platz, reinigen und suchen dabei nach Schmutzquellen, vereinbaren Regeln und halten sich durch Audits und Gewohnheiten daran.\n\nDie ersten drei Schritte verändern den Arbeitsplatz, die letzten beiden sichern das Ergebnis. Viele Standorte ergänzen ein sechstes S für Sicherheit. 5S macht Probleme sichtbar, denn ein fehlendes Werkzeug oder eine Leckage fällt in einem geordneten Bereich leicht auf. Die Methode ist eine Grundlage für visuelles Management und Standardarbeit.",
+  "m": "autotr",
+  "sh": {
+   "desc": "c4085d6f",
+   "long": "75f950a7"
+  },
+  "ts": "2026-11-22"
+ },
  "a2a-protocol": {
   "desc": "A2A (Agent2Agent) ist ein offenes Protokoll, das von der Linux Foundation gehostet wird und es KI-Agenten, die auf unterschiedlichen Plattformen entwickelt wurden, ermöglicht, einander zu finden und Aufgaben zu delegieren. Dabei werden Standard-Webtechnologien wie HTTP und JSON-RPC verwendet. Es ergänzt MCP, das einen Agenten mit Werkzeugen und Daten verbindet.",
   "faq": [
@@ -2212,6 +2223,15 @@
    "desc": "c6c891fc"
   },
   "ts": "2026-11-18"
+ },
+ "api-plugins": {
+  "desc": "Erweiterungsmodell, bei dem Copilot zur Laufzeit eine externe API in Echtzeit aufruft, typischerweise um Aktionen wie das Erstellen eines Tickets oder das Aktualisieren eines Datensatzes auszuführen; die Daten werden dabei nicht in Microsoft 365 indexiert.",
+  "h": "75f6eb6368af1eb4",
+  "m": "autotr",
+  "sh": {
+   "desc": "0ecb8abc"
+  },
+  "ts": "2026-11-22"
  },
  "app-registration": {
   "desc": "Eine Anwendungsregistrierung in Microsoft Entra ID ist die globale Definition einer App. Sie beschreibt Name, Umleitungs-URIs, Token-Einstellungen und die angeforderten Berechtigungen; mit ihr werden Dienstprinzipale in Mandanten erstellt.",
@@ -20496,6 +20516,15 @@
   },
   "ts": "2026-11-18"
  },
+ "mechanical-engineering": {
+  "desc": "Die Branche, die Maschinen, Anlagen und mechanische Komponenten für andere Industrien entwirft und baut.",
+  "h": "7e5a657f5a844d8b",
+  "m": "autotr",
+  "sh": {
+   "desc": "5062de13"
+  },
+  "ts": "2026-11-22"
+ },
  "medallion-architecture": {
   "desc": "Ein Datenentwurfsmuster, das Daten eines Lakehouse in Bronze- (roh), Silber- (bereinigt) und Gold-Schichten (verbrauchsfertig) organisiert.",
   "faq": [
@@ -30835,6 +30864,15 @@
   },
   "ts": "2026-11-18"
  },
+ "sharepoint-architect": {
+  "desc": "Entwirft die Struktur, Governance und Integration von SharePoint sowie verwandten Microsoft-365-Inhalts- und Zusammenarbeitslösungen.",
+  "h": "6b0fafd213c3a5e8",
+  "m": "autotr",
+  "sh": {
+   "desc": "c145936f"
+  },
+  "ts": "2026-11-22"
+ },
  "sharepoint-autofill-columns": {
   "desc": "Autofill-Spalten sind eine SharePoint-Funktion mit nutzungsabhängiger Abrechnung (Pay-as-you-go), die Teil von Microsoft Syntex bzw. SharePoint Premium zur Dokumentenverarbeitung ist. Sie verwendet Prompts in natürlicher Sprache, um Metadaten aus Dateien zu extrahieren oder zu generieren und Bibliotheksspalten automatisch zu befüllen.",
   "h": "51bc502505410ec8",
@@ -30843,6 +30881,17 @@
    "desc": "08c745d8"
   },
   "ts": "2026-11-18"
+ },
+ "sharepoint-broken-links": {
+  "desc": "Links in SharePoint-Dokumenten, Seiten, Webparts und Metadaten, die nicht mehr zu ihrem Ziel führen, zum Beispiel nach einer Änderung der Websiteadresse, einem Verschieben oder einer gelöschten Weiterleitung.",
+  "h": "a96bbe91c61860e8",
+  "long": "Ein defekter Link verweist auf eine Adresse, die nicht mehr funktioniert. In SharePoint passiert das häufig, wenn sich eine Adresse ändert. Microsoft Learn beschreibt, was dann mit Links geschieht:\n\nWenn die Adresse einer Website geändert wird, erstellt SharePoint an der bisherigen Adresse eine Weiterleitung. Personen, die die Website als Favorit gespeichert haben oder einen Link zur Website auswählen, werden zur neuen Adresse weitergeleitet, und Freigabelinks werden automatisch umgeleitet. Eingebettete Adressen werden jedoch nicht aktualisiert: \"Any embedded URLs in any SharePoint web parts (News, List, etc.) won't be updated and may break.\" Benutzerdefinierte Lösungen behalten ihre Abhängigkeiten von der alten Adresse, Power Apps-Benutzerdefinierte Formulare müssen neu erstellt werden, SharePoint 2013-Workflows müssen erneut veröffentlicht werden, und eine Website muss erneut mit ihrer Hubsite verbunden werden.\n\nEine Weiterleitung bleibt bestehen, bis sie jemand löscht. Nach dem Löschen werden Anfragen an die alte Adresse nicht mehr weitergeleitet, und Lesezeichen, Links sowie Verweise unter \"Für mich freigegeben\" funktionieren nicht mehr. Eine Website, die eine Hubsite ist, kann auf diese Weise nicht umbenannt werden.\n\nDie für diesen Eintrag geprüften Microsoft Learn-Seiten beschreiben, wie sich Adressen ändern und wann Links brechen. Sie beschreiben kein allgemeines Werkzeug zum Finden defekter Links in SharePoint Online; Anbieter wie Cognillo bieten dafür eigene Tools an.\n\nQuellen (Microsoft Learn, geprüft im November 2026): https://learn.microsoft.com/en-us/sharepoint/change-site-address , https://learn.microsoft.com/en-us/sharepoint/manage-site-redirects",
+  "m": "autotr",
+  "sh": {
+   "desc": "b9c269b6",
+   "long": "4e310ce5"
+  },
+  "ts": "2026-11-22"
  },
  "sharepoint-content-types": {
   "desc": "Wiederverwendbare SharePoint-Definitionen, die Websitespalten und Einstellungen für eine Kategorie von Dokumenten oder Elementen bündeln, etwa für eine Richtlinie oder einen Vertrag, damit die Metadaten über Bibliotheken und Websites hinweg konsistent bleiben.",
@@ -30913,6 +30962,17 @@
    "desc": "bdf587b2"
   },
   "ts": "2026-11-18"
+ },
+ "sharepoint-governance": {
+  "desc": "Die Richtlinien, Rollen, Verantwortlichkeiten und Prozesse, die festlegen, wie eine Organisation SharePoint nutzt: wer Websites besitzt, wie Websites erstellt und freigegeben werden und wie Inhalte überprüft werden.",
+  "h": "20d8b76ea7311c92",
+  "long": "Microsoft definiert Governance allgemein als \"die Gesamtheit der Richtlinien, Rollen, Verantwortlichkeiten und Prozesse, die steuern, wie die Geschäftsbereiche und IT-Teams einer Organisation zusammenarbeiten, um ihre Ziele zu erreichen\". Dieser Satz stammt von der Seite zu SharePoint Server, die besagt, dass sie SharePoint in Microsoft 365 nicht abdeckt.\n\nFür SharePoint in Microsoft 365 heißt es im Microsoft-Learn-Leitfaden zur Intranet-Governance: Die Planung der Governance sollte früh beginnen und regelmäßig überprüft werden. Ein Governance-Team sollte Fachbereich und IT umfassen und auch nach dem Start bestehen bleiben. Verantwortlich ist der Fachbereich, nicht allein die IT. Richtlinien sind verbindliche Vorgaben, Leitlinien sind Empfehlungen. Genannte Themen sind externe Freigabe, Standardfreigabelinks und Metadaten. Die Eigentümerschaft von Websites sollte festgelegt werden, etwa mit einem primären und einem sekundären Ansprechpartner pro Website. Websites können auf Anfrage oder im Selbstbedienungsverfahren erstellt werden. Richtlinien funktionieren am besten, wenn Websiteeigentümer nicht an sie denken müssen, etwa durch Websitevorlagen (Site Designs). Ein Überprüfungszyklus lässt sich automatisieren, zum Beispiel mit Power Automate.\n\nMit SharePoint Advanced Management bietet Microsoft Werkzeuge in drei Bereichen: Inhaltswildwuchs, Lebenszyklus von Inhalten und übermäßige Freigabe.\n\nQuellen (Microsoft Learn, geprüft im November 2026): https://learn.microsoft.com/en-us/sharepoint/intranet-governance , https://learn.microsoft.com/en-us/sharepoint/governance/what-is-governance-in-sharepoint , https://learn.microsoft.com/en-us/sharepoint/advanced-management",
+  "m": "autotr",
+  "sh": {
+   "desc": "6c4e3242",
+   "long": "438f3e6a"
+  },
+  "ts": "2026-11-22"
  },
  "sharepoint-home-site": {
   "desc": "Eine SharePoint-Startseite ist die Website, die als Startseite der Organisation festgelegt ist; sie ist die Grundlage, aus der Viva Connections seine Neuigkeiten, sein Dashboard und seine Ressourcen bezieht.",
@@ -31010,6 +31070,17 @@
   },
   "ts": "2026-11-18"
  },
+ "sharepoint-migration": {
+  "desc": "Verschieben von Inhalten aus Dateifreigaben, anderen Cloud-Diensten oder älteren SharePoint Server-Versionen nach SharePoint und OneDrive in Microsoft 365. Die Inhalte werden kopiert; die Quelldateien werden nicht gelöscht.",
+  "h": "cbf696ffc14d2ada",
+  "long": "Microsoft Learn beschreibt die SharePoint-Migration als Verschieben von Inhalten nach Microsoft 365, also nach SharePoint und OneDrive. Dabei wird betont, dass die Migration die Dateien kopiert: \"Your source files are not deleted.\" (Die Quelldateien werden nicht gelöscht.)\n\nVon Microsoft genannte Tools: der Migration Manager im SharePoint Admin Center für Quellen wie Box, Dropbox, Google Workspace, Egnyte und Dateifreigaben sowie das SharePoint Migration Tool (SPMT) für SharePoint Server 2010, 2013 und 2016, einschließlich klassischer Workflows und klassischer Seiten. Die Seite erwähnt, dass das Mover-Tool für administrativ gesteuerte Migrationen eingestellt ist. Für große Datenmengen über eine begrenzte Netzwerkverbindung nennt Microsoft Azure Data Box. Klassische SharePoint Server-Workflows sollten als Power Automate-Flows neu aufgebaut werden. Eine Rolle namens Migration Administrator ermöglicht es einem Migrationsteam, ohne vollständigen SharePoint-Administratorzugriff zu arbeiten. Zum Zeitpunkt der Prüfung war das Verschieben von OneDrive-Inhalten zwischen Mandanten mit PowerShell möglich, und eine mandantenübergreifende SharePoint-Lösung befand sich in der privaten Vorschau.\n\nEs gibt außerdem Drittanbieter-Tools, zum Beispiel ShareGate. Das Verschieben zwischen zwei Microsoft 365-Mandanten ist ein eigenes Thema, siehe Mandant-zu-Mandant-Migration.\n\nQuellen (Microsoft Learn, geprüft im November 2026): https://learn.microsoft.com/en-us/sharepointmigration/migrate-to-sharepoint-online",
+  "m": "autotr",
+  "sh": {
+   "desc": "2bc495ce",
+   "long": "8abbb149"
+  },
+  "ts": "2026-11-22"
+ },
  "sharepoint-premium": {
   "desc": "Zusatzfunktionen für SharePoint, etwa Dokumentverarbeitung, Content-KI, eSignature und erweiterte Verwaltung, die zuvor als Microsoft Syntex vermarktet wurden.",
   "faq": [
@@ -31045,6 +31116,17 @@
   },
   "ts": "2026-11-18"
  },
+ "sharepoint-reporting": {
+  "desc": "Berichtet über SharePoint-Berechtigungen, Freigaben und Inhalte: Berichte zur Datenzugriffssteuerung im SharePoint-Verwaltungscenter für die gesamte Organisation sowie ein CSV-Bericht zur Datei- und Ordnerfreigabe für eine einzelne Website.",
+  "h": "d00f2c1348691ec9",
+  "long": "Microsoft Learn beschreibt zwei Arten integrierter Berichte für Berechtigungen und Freigaben.\n\nBerichte zur Datenzugriffssteuerung (SharePoint-Verwaltungscenter, Berichte, Datenzugriffssteuerung) erfordern SharePoint Advanced Management und die Rolle des SharePoint-Administrators. Momentaufnahmeberichte zeigen Daten zum Stand des Erstellungstags; die Seite nennt Websiteberechtigungen in der gesamten Organisation und auf Dateien angewendete Vertraulichkeitsbezeichnungen. Aktivitätsberichte decken die letzten 28 Tage ab; die Seite nennt Freigabelinks und Inhalte, die für \"Jeder außer externe Benutzer\" freigegeben wurden. Microsoft empfiehlt Momentaufnahmeberichte vierteljährlich und Aktivitätsberichte monatlich. Die Datenerfassung wird angehalten, wenn drei Monate lang kein Bericht erstellt wurde.\n\nEin Bericht für eine einzelne Website: Ein Websiteadministrator kann eine CSV-Datei mit jeder eindeutigen Datei, jedem Benutzer, jeder Berechtigung und jedem Link einer SharePoint-Website oder von OneDrive erstellen. Die Datei wird auf der Website gespeichert. Sie enthält keine Links für \"Jeder\" und keine per E-Mail versendeten Links, die nicht angeklickt wurden; SharePoint-Gruppen werden angezeigt, die einzelnen Personen innerhalb der Gruppen jedoch nicht. Microsoft empfiehlt, die Datei in einem Ordner zu speichern, auf den nur Websitebesitzer zugreifen können. Für umfassendere Analysen verweist die Seite auf Microsoft Graph Data Connect.\n\nQuellen (Microsoft Learn, Stand November 2026): https://learn.microsoft.com/en-us/sharepoint/data-access-governance-reports , https://learn.microsoft.com/en-us/sharepoint/sharing-reports",
+  "m": "autotr",
+  "sh": {
+   "desc": "c63cda06",
+   "long": "5b94a7ad"
+  },
+  "ts": "2026-11-22"
+ },
  "sharepoint-sharing-links": {
   "desc": "Links, die über die Option „Freigeben“ in SharePoint und OneDrive erstellt werden und Zugriff auf eine Datei oder einen Ordner gewähren, mit Bereichen wie Jeder, Personen in der Organisation, Personen mit vorhandenem Zugriff oder bestimmte Personen.",
   "h": "469006781c8483da",
@@ -31053,6 +31135,28 @@
    "desc": "224c2562"
   },
   "ts": "2026-11-18"
+ },
+ "sharepoint-site-lifecycle": {
+  "desc": "Richtlinien in SharePoint Advanced Management, die dafür sorgen, dass Websites genutzt, verantwortet und regelmäßig überprüft werden: eine Richtlinie zur Websiteverantwortung, eine Richtlinie für inaktive Websites und eine Richtlinie zur Websitebestätigung. Sie löschen Websites nicht direkt.",
+  "h": "8a356ce6b2241690",
+  "long": "Microsoft Learn beschreibt das Lebenszyklusmanagement von Websites als Richtlinien in SharePoint Advanced Management, die Governance automatisieren, damit Websites aktiv bleiben, ordnungsgemäß verantwortet und regelmäßig überprüft werden. Es werden drei Richtlinientypen genannt:\n\nEine Richtlinie zur Websiteverantwortung stellt sicher, dass eine Website eine Mindestanzahl an Besitzern oder Administratoren hat, zum Beispiel mindestens zwei. Eine Richtlinie für inaktive Websites erkennt Websites ohne nennenswerte Aktivität in SharePoint und verbundenen Workloads wie Teams, Exchange und Viva Engage. Eine Richtlinie zur Websitebestätigung fordert in regelmäßigen Abständen eine ausdrückliche Bestätigung an, dass die Website weiterhin benötigt wird.\n\nSo funktioniert es: Im Simulationsmodus läuft eine Richtlinie einmal und erstellt einen Bericht. Im aktiven Modus läuft sie regelmäßig, erstellt Berichte und sendet Benachrichtigungen. Empfänger können direkt aus der E-Mail antworten, etwa indem sie bestätigen, dass die Website noch genutzt wird. Wenn nach mehreren Hinweisen niemand reagiert, kann die Richtlinie keine Aktion ausführen, die Website auf schreibgeschützt setzen oder sie nach einem konfigurierbaren Zeitraum im Schreibschutz mit Microsoft 365 Archive archivieren. Microsoft erklärt: \"Richtlinien für das Lebenszyklusmanagement von Websites löschen SharePoint-Websites nicht direkt.\" Das Deaktivieren oder Löschen einer Richtlinie beendet künftige Aktionen, macht jedoch bereits ausgeführte Aktionen nicht rückgängig.\n\nQuellen (Microsoft Learn, geprüft im November 2026): https://learn.microsoft.com/en-us/sharepoint/site-lifecycle-management , https://learn.microsoft.com/en-us/sharepoint/advanced-management",
+  "m": "autotr",
+  "sh": {
+   "desc": "ee9b1861",
+   "long": "741780c3"
+  },
+  "ts": "2026-11-22"
+ },
+ "sharepoint-site-owner": {
+  "desc": "Eine Person, die eine SharePoint-Website verwaltet: Mitglieder der Gruppe Besitzer haben Vollzugriff und können Websiteberechtigungen, Einstellungen und das Erscheinungsbild verwalten. Auf einer Teamwebsite sind die Besitzer der verbundenen Microsoft 365-Gruppe die Websitebesitzer.",
+  "h": "0569f254f72c7cc9",
+  "long": "Auf einer SharePoint-Teamwebsite hat die Gruppe Besitzer die Berechtigungsstufe Vollzugriff. Microsoft Learn beschreibt ihre Mitglieder als \"Personen, die Websiteberechtigungen, Einstellungen und das Erscheinungsbild verwalten können müssen\". Auf einer Teamwebsite, die mit einer Microsoft 365-Gruppe verbunden ist, werden die Gruppenbesitzer zu Websitebesitzern.\n\nEin Websiteadministrator ist eine separate Rolle: Websiteadministratoren haben vollen Zugriff auf den Websitestamm und alle Unterwebsites und können sämtliche Websiteinhalte überprüfen. Eine Website kann mehrere Websiteadministratoren haben, aber nur einen primären Administrator.\n\nDer Governance-Leitfaden für Intranets von Microsoft weist darauf hin, dass die Verwaltung einer Website oft nur einen kleinen Teil der Aufgaben eines Websitebesitzers ausmacht und dass die Schulung von Websitebesitzern die Richtlinien und Leitlinien der Organisation umfassen sollte. Mit SharePoint Advanced Management bietet Microsoft eine Richtlinie für die Websitebesitzerschaft, die festlegt, wer für jede Website verantwortlich ist, Mindestanzahlen an Besitzern oder Administratoren vorgibt und Benachrichtigungen automatisiert. Außerdem gibt es die Websiteattestierung, eine regelmäßige Überprüfung durch die Websitebesitzer, ob die Website benötigt wird, wer ihre Besitzer und Mitglieder sind sowie welche Berechtigungs- und Freigabeeinstellungen gelten. Mit Überprüfungen des Websitezugriffs können Administratoren Berichte über übermäßig freigegebene Websites an die Websitebesitzer zur Prüfung übergeben.\n\nQuellen (Microsoft Learn, geprüft im November 2026): https://learn.microsoft.com/en-us/sharepoint/default-sharepoint-groups , https://learn.microsoft.com/en-us/sharepoint/intranet-governance , https://learn.microsoft.com/en-us/sharepoint/advanced-management",
+  "m": "autotr",
+  "sh": {
+   "desc": "4bf67a28",
+   "long": "317ad74e"
+  },
+  "ts": "2026-11-22"
  },
  "sharepoint-site-provisioning": {
   "desc": "Der gesteuerte Prozess zur Erstellung von SharePoint-Sites und Teams-Arbeitsbereichen über einen Antrags- und Genehmigungsschritt sowie Standardvorlagen, damit Besitz, Benennung, Vertraulichkeit und Lebenszykluseinstellungen von Beginn an angewendet werden.",
@@ -33769,6 +33873,17 @@
    "desc": "672b75d5"
   },
   "ts": "2026-11-18"
+ },
+ "user-offboarding": {
+  "desc": "Schritte, wenn jemand eine Organisation verlässt: Dateien und Zugriffe finden und übergeben, anschließend das Konto entfernen. In Microsoft 365 können gelöschte Konten standardmäßig 30 Tage lang wiederhergestellt werden; OneDrive-Daten werden nur für eine begrenzte Zeit aufbewahrt.",
+  "h": "db6633a06f597efe",
+  "long": "Offboarding bedeutet, beim Ausscheiden eines Benutzers dessen Daten und Zugriffe zu regeln. Microsoft Learn beschreibt dafür für Microsoft 365 folgende Punkte:\n\nWird nur die Lizenz entfernt und das Konto nicht gelöscht, kann ein Administrator direkt auf die OneDrive-Dateien des Benutzers zugreifen. Wird das Konto gelöscht, kann es 30 Tage lang wiederhergestellt werden; danach werden die Daten endgültig gelöscht. Für OneDrive beträgt die Standardaufbewahrung gelöschter Benutzer 30 Tage. Danach wird das OneDrive in den Papierkorb der Websitesammlung verschoben, in dem es 93 Tage lang aufbewahrt wird (beschrieben auf der Seite zum Löschen eines Benutzers). Während dieser Zeit ist von diesem OneDrive geteilter Inhalt für andere Personen nicht zugänglich. Die Aufbewahrungsdauer kann verlängert werden.\n\nUm einer anderen Person Zugriff zu geben, kann ein Administrator diese Person als Websitesammlungsadministrator des OneDrive der ehemaligen Mitarbeiterin bzw. des ehemaligen Mitarbeiters hinzufügen oder einen Link zu den Dateien erstellen und die Dateien herunterladen oder verschieben. Werden Dokumente mit Versionsverlauf auf diese Weise verschoben oder kopiert, wird nur die neueste Version übertragen. SharePoint-Dateien müssen nicht verschoben werden, da sie bei den Websites verbleiben. Dateien, die auf den Computer der Person synchronisiert wurden, bleiben dort; ein Administrator kann sie nicht löschen. Das Löschen des Kontos beendet die Lizenzkosten nicht; Lizenzen werden separat reduziert. Konten mit E-Mail-Weiterleitung oder einem umgewandelten freigegebenen Postfach sollten nicht gelöscht werden.\n\nQuellen (Microsoft Learn, geprüft im November 2026): https://learn.microsoft.com/en-us/microsoft-365/admin/add-users/remove-former-employee-step-5 , https://learn.microsoft.com/en-us/microsoft-365/admin/add-users/delete-a-user",
+  "m": "autotr",
+  "sh": {
+   "desc": "2f88aae8",
+   "long": "6cf905a5"
+  },
+  "ts": "2026-11-22"
  },
  "uzejnovic-ahmed": {
   "desc": "Ich bin Ahmed Uzejnovic, IT-Automatisierungs- und Infrastrukturspezialist aus Salzburg. Meine Begeisterung für Automatisierung begann schon in der Schulzeit, als mir klar wurde, wie viel sich mit kleinen Skripten vereinfachen lässt. Im Laufe der Jahre hat sich diese Neugier zu einem echten beruflichen Schwerpunkt entwickelt. Heute arbeite ich vor allem mit PowerShell, Microsoft Graph API, Azure Automation, System Center Orchestrator und hybriden Microsoft-Umgebungen. Für mich geht es nicht nur um die Technologie selbst, sondern darum, Prozesse aufzubauen, die im Arbeitsalltag wirklich helfen, Zeit sparen und zuverlässig laufen. Neben meiner täglichen Arbeit teile ich mein Wissen gerne in Blogartikeln, Community-Sessions und Konferenzvorträgen. Dabei spreche ich am liebsten über echte Projekterfahrungen, vermeidbare Fehler und Lösungen, die sich in der Praxis bewährt haben.",
