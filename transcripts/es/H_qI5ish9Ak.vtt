@@ -1,0 +1,6157 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.200
+La mayoría de los equipos siguen tratando aplicación de parches Windows.
+
+00:00:02.480 --> 00:00:05.600
+Una vez al mes, alguien la ejecuta, alguien la supervisa y alguien la supervisa.
+
+00:00:05.880 --> 00:00:08.280
+Pero en realidad, ya no sé si cómo funcionan las actualizaciones de Windows.
+
+00:00:08.580 --> 00:00:10.000
+Las actualizaciones son un sistema continuo.
+
+00:00:10.280 --> 00:00:13.600
+Se ejecutan según reglas, anillos y consecuencias, tanto si alguien las está observando como sí.
+
+00:00:13.740 --> 00:00:16.820
+En este video, hablamos de autopatch, anillos de actualización, actualizaciones de funciones,
+
+00:00:16.960 --> 00:00:18.560
+parches acelerados, controladores, informes y errores.
+
+00:00:18.840 --> 00:00:21.360
+Si quieres estar al tanto del próximo ciclo de lanzamiento, suscríbete ahora.
+
+00:00:21.580 --> 00:00:23.140
+Pero primero, el modelo que está fallando es silencioso.
+
+00:00:23.980 --> 00:00:26.120
+Tecmento patrocinado, Stella Migrator for Exchange.
+
+00:00:26.640 --> 00:00:27.600
+Nota rápida antes de empezar.
+
+00:00:27.600 --> 00:00:30.820
+Las actualizaciones son menos problemáticas cuando el entorno subyacente está limpio.
+
+00:00:31.040 --> 00:00:34.560
+Los dispositivos obsoletos, las migraciones a medio terminar y las configuraciones antiguas
+
+00:00:34.560 --> 00:00:37.400
+aparecen más tarde como instalaciones fallidas y conflictos de políticas extrañas.
+
+00:00:37.660 --> 00:00:40.560
+Las migraciones y la aplicación de parches comparten un problema en los cambios administradores.
+
+00:00:40.960 --> 00:00:43.600
+Alguien mueve un buzón sin un plan y recibes tickets de soporte.
+
+00:00:44.180 --> 00:00:47.020
+Alguien deja un dispositivo fuera de un anillo y obtienes una ventana de exposición.
+
+00:00:47.380 --> 00:00:50.460
+Si estás ejecutando una migración de Exchange ahora mismo, hay una herramienta que vale la pena conocer.
+
+00:00:51.060 --> 00:00:52.280
+Stella Migrator para Exchange.
+
+00:00:52.440 --> 00:00:56.080
+Está diseñado para mover buzones de correo entre entornos de Exchange y Microsoft 365
+
+00:00:56.080 --> 00:00:59.420
+y ayuda a mantener ese cambio controlado en lugar de improvisado o en lugar de improvisado.
+
+00:00:59.860 --> 00:01:02.560
+Es un hecho sobre la herramienta, no una promesa sobre tu proyecto.
+
+00:01:03.080 --> 00:01:06.300
+Comprueba los detalles de tu propia configuración porque los estados limpios no ocurren por accidente.
+
+00:01:06.360 --> 00:01:07.740
+Lo que nos lleva de vuelta a la pregunta principal.
+
+00:01:08.180 --> 00:01:10.120
+¿Quién es realmente el propietario del cambio de un dispositivo?
+
+00:01:10.700 --> 00:01:12.260
+El modelo antiguo de la aplicación de evento.
+
+00:01:12.880 --> 00:01:13.740
+Empecemos por cómo funcionar.
+
+00:01:13.740 --> 00:01:17.200
+En la era de WCUC, la aplicación de parches tenía cuatro pasos.
+
+00:01:17.300 --> 00:01:19.180
+Aprobar, esperar, implementar y tener esperanza.
+
+00:01:20.080 --> 00:01:21.160
+Microsoft publicaba actualización.
+
+00:01:21.620 --> 00:01:22.340
+Llegaban a tu servidor.
+
+00:01:22.900 --> 00:01:25.220
+Un administrador iniciaba sesión y elegía cuáles aprobar.
+
+00:01:25.540 --> 00:01:26.760
+Luego elegía qué equipos las recibían.
+
+00:01:27.100 --> 00:01:27.520
+Luego esperaba.
+
+00:01:27.920 --> 00:01:30.000
+Los dispositivos se registraban al servidor según su propio cromo.
+
+00:01:30.300 --> 00:01:32.040
+Algunos instalaban actualizaciones a la misma noche.
+
+00:01:32.180 --> 00:01:32.940
+Otros tardaban una semana.
+
+00:01:33.040 --> 00:01:33.880
+Algunos no respondían ni siquiera.
+
+00:01:34.020 --> 00:01:34.760
+Entonces esperaba.
+
+00:01:34.840 --> 00:01:37.300
+Esperabas que la actualización me interrumpiera la aplicación de finanzas.
+
+00:01:37.620 --> 00:01:39.400
+Esperabas que los portátiles se reiniciaran de verdad.
+
+00:01:39.740 --> 00:01:42.520
+Esperabas que el informe que trajiste el viernes significara lo que creías que significa.
+
+00:01:42.520 --> 00:01:43.200
+Ese es el ciclo.
+
+00:01:43.260 --> 00:01:44.840
+Aprobar, esperar, implementar, tener esperanza.
+
+00:01:45.180 --> 00:01:45.980
+Luego está el martes de parches.
+
+00:01:46.400 --> 00:01:48.720
+En la mayoría de las organizaciones, el martes de parches se convirtió en una fecha.
+
+00:01:49.220 --> 00:01:52.380
+Llegaba el segundo martes del mes y todo el equipo lo trataba como una fecha de implementación.
+
+00:01:52.860 --> 00:01:53.800
+Alguien despejaba su agenda.
+
+00:01:54.340 --> 00:01:55.460
+Alguien escribía una solicitud de cambio.
+
+00:01:55.820 --> 00:01:58.160
+Alguien enviaba el correo electrónico que decía que se aplicarían los parches.
+
+00:01:58.620 --> 00:02:00.860
+Pero el martes de parches nunca tuvo la intención de ser una fecha límite.
+
+00:02:01.400 --> 00:02:02.040
+Era una señal.
+
+00:02:02.520 --> 00:02:06.220
+Microsoft estaba diciendo que había nuevas actualizaciones disponibles y que el tiempo había empezado.
+
+00:02:06.960 --> 00:02:09.340
+La fecha límite la establecías tú en función de tu grado de exposición.
+
+00:02:09.340 --> 00:02:13.380
+Con el tiempo, la señal se convirtió en un ritual y el ritual ocultaba la verdadera pregunta.
+
+00:02:13.500 --> 00:02:14.900
+¿Cuánto tiempo podemos permanecer expuestos?
+
+00:02:15.140 --> 00:02:16.800
+Debajo de todo esto se escondía una suposición.
+
+00:02:17.460 --> 00:02:19.180
+¿Departamento de TI controla el tiempo contra el servidor?
+
+00:02:19.580 --> 00:02:21.780
+Si eras el propietario del servidor de OBSU, serás el problema.
+
+00:02:22.160 --> 00:02:23.740
+No se instalaba nada a menos que lo probara.
+
+00:02:24.240 --> 00:02:26.380
+Nada llegaba a un dispositivo a menos que el servidor lo permitiera.
+
+00:02:26.740 --> 00:02:29.200
+El control residía en un solo lugar y ese lugar te pertenecía.
+
+00:02:29.900 --> 00:02:31.340
+Ahora bien, esa suposición no era escabellada.
+
+00:02:32.100 --> 00:02:33.840
+Se mantuvo durante mucho tiempo y por una razón.
+
+00:02:34.160 --> 00:02:35.480
+Los dispositivos residían en la red corporativa.
+
+00:02:35.480 --> 00:02:37.280
+Su ordenador de sobremesa estaban debajo del sitio.
+
+00:02:37.500 --> 00:02:39.280
+Las computadoras portátiles regresaban a la oficina tal vez.
+
+00:02:39.600 --> 00:02:43.160
+Todo apuntaba al mismo servidor interno porque no había ningún otro lugar al que apuntar.
+
+00:02:43.660 --> 00:02:45.780
+La red era el límite y el servidor se encontraba dentro de él.
+
+00:02:46.040 --> 00:02:47.000
+Por lo tanto, el control era la red.
+
+00:02:47.340 --> 00:02:50.400
+Probabas una actualización y en uno o dos días todo el sistema podía acceder a él.
+
+00:02:50.600 --> 00:02:51.680
+Podías ver qué máquinas se registra.
+
+00:02:52.140 --> 00:02:53.200
+Podías perseguir a las que no lo hacían.
+
+00:02:53.940 --> 00:02:55.840
+El modelo se adaptaba al entorno, por lo que funcionaba.
+
+00:02:56.420 --> 00:02:57.220
+Por eso duraba tanto.
+
+00:02:57.660 --> 00:02:59.900
+Pero un modelo solo funciona mientras sus suposiciones sean ciertas.
+
+00:02:59.900 --> 00:03:02.160
+Y la suposición aquí no era sobre doble de sube.
+
+00:03:02.500 --> 00:03:05.400
+Era sobre dónde residen los dispositivos, con quién se comunican y quién marca el ritmo.
+
+00:03:06.020 --> 00:03:07.480
+Ese mundo terminó y el modelo no se dio cuenta.
+
+00:03:08.480 --> 00:03:09.860
+¿Por qué el modelo antiguo deja de funcionar?
+
+00:03:10.080 --> 00:03:11.860
+Mira dónde están tus dispositivos ahora mismo.
+
+00:03:12.020 --> 00:03:14.660
+No dónde dice la lista de activos que están, sino dónde están realmente.
+
+00:03:15.120 --> 00:03:19.080
+Una mesa de cocina, el vestíbulo de un hotel, un tren, la red wifi para invitados de un cliente,
+
+00:03:19.240 --> 00:03:21.660
+una oficina en casa con un enrotador que no ha actualizado desde 2019.
+
+00:03:21.980 --> 00:03:24.180
+Las computadoras portátiles ya no regresan a la oficina todas las noches.
+
+00:03:24.820 --> 00:03:25.680
+Algunas regresan dos veces.
+
+00:03:26.160 --> 00:03:27.140
+Algunos nunca regresan.
+
+00:03:27.140 --> 00:03:30.140
+Y la VPN, lo único que solía traerlos hacia tu servidor interno,
+
+00:03:30.200 --> 00:03:32.940
+es algo que la gente solo abre cuando tiene que acceder a un recurso compartido de archivos.
+
+00:03:33.480 --> 00:03:36.960
+Si que piensan lo que eso significa para un servidor doble de CIUS dentro de la red.
+
+00:03:37.360 --> 00:03:39.540
+Un dispositivo que nunca toca la red, nunca se registra.
+
+00:03:39.980 --> 00:03:43.020
+Y un dispositivo que nunca se registra no existe en lo que respecta a ese servidor.
+
+00:03:43.520 --> 00:03:44.340
+Aprobaste la actualización.
+
+00:03:44.580 --> 00:03:45.380
+El servidor está listo.
+
+00:03:45.540 --> 00:03:47.760
+El portátil está en una cafetería y los dos nunca se encontrarán.
+
+00:03:47.980 --> 00:03:48.720
+Esa es la primera ruptura.
+
+00:03:48.980 --> 00:03:51.220
+Servidor controla un lugar y los dispositivos dejan de vivir ahí.
+
+00:03:51.380 --> 00:03:52.480
+Ahora la segunda ruptura, el volumen.
+
+00:03:52.480 --> 00:03:57.880
+Bajo el modelo antiguo, un humano aprobó actualizaciones que funcionaban cuando había un puñado de productos y un ritmo tranquilo.
+
+00:03:58.520 --> 00:03:59.280
+Pero mira lo que llega hoy.
+
+00:03:59.280 --> 00:04:02.880
+Actualizaciones de calidad mensuales, actualizaciones de funciones cada año,
+
+00:04:03.000 --> 00:04:05.700
+actualizaciones de controladores que llegan de docenas de proveedores de hardware,
+
+00:04:05.840 --> 00:04:07.040
+actualizaciones de definiciones diarias,
+
+00:04:07.160 --> 00:04:09.800
+correcciones fuera de banda cada vez que algo se explota antes de lo previsto.
+
+00:04:10.520 --> 00:04:13.160
+Nadie puede leer todo eso, probarlo todo y aprobarlo todo a mano.
+
+00:04:13.360 --> 00:04:14.440
+Al menos no a un buen ritmo.
+
+00:04:15.100 --> 00:04:19.620
+Por lo tanto, lo que suele ocurrir es que el paso de aprobación se convierte en un cuello de botella o en un sello de goma.
+
+00:04:20.120 --> 00:04:23.400
+O bien alguien se queda esperando actualizaciones durante tres semanas porque no hay tiempo para revisarlas.
+
+00:04:23.440 --> 00:04:26.240
+O bien alguien hace clic en aprobar todo porque no hay tiempo para revisarlas.
+
+00:04:27.040 --> 00:04:28.300
+Ambos resultados son el mismo fallo.
+
+00:04:28.300 --> 00:04:31.320
+Un paso humano se quedó en el proceso después de dejar de ser útil.
+
+00:04:31.940 --> 00:04:34.040
+Y la tercera interrupción es la que cuesta dinero, de verdad.
+
+00:04:34.620 --> 00:04:36.440
+Las ventanas de exposición solían medirse en semana.
+
+00:04:36.760 --> 00:04:41.120
+Se encontraba una vulnerabilidad, se enviaba un parche y los atacantes necesitaban tiempo para convertirlo en algo utilizado.
+
+00:04:41.280 --> 00:04:42.360
+Y a margen, pero ese margen se ha ido.
+
+00:04:42.880 --> 00:04:46.060
+Una vez que se envió un parche, se puede comparar con el código que ha sustituido.
+
+00:04:46.540 --> 00:04:48.300
+Esa comparación muestra exactamente que ha fallado.
+
+00:04:48.700 --> 00:04:50.940
+Los atacantes hacen esto de forma rutinaria y lo hacen rápido.
+
+00:04:51.820 --> 00:04:55.760
+El lapso entre el lanzamiento de la actualización y la aparición del exploit ahora es de días, a veces menos.
+
+00:04:55.760 --> 00:05:02.760
+Por lo tanto, cada día que tu actualización permanece en una cola aprobación, es un día en el que estás ejecutando un software que todo el mundo sabe cómo atacar.
+
+00:05:03.940 --> 00:05:05.940
+En eso se ha convertido silenciosamente el antiguo modelo.
+
+00:05:06.060 --> 00:05:07.900
+No un proceso de parche, sino un proceso de exposición.
+
+00:05:08.160 --> 00:05:09.200
+Ahora bien, quiero ser justo.
+
+00:05:09.460 --> 00:05:10.800
+Hay un argumento real del otro lado.
+
+00:05:11.060 --> 00:05:12.200
+Las actualizaciones pueden romper cosas.
+
+00:05:12.200 --> 00:05:19.100
+Todos en este campo tienen historias sobre un parche que eliminó una aplicación de línea de negocio o un controlador que oscureció las pantallas de un modelo específico de computadora portátil.
+
+00:05:20.140 --> 00:05:22.500
+La interrupción es real y afecta a personas que tienen plazos de entrega.
+
+00:05:22.840 --> 00:05:27.640
+Por lo tanto, el viejo instinto de esperar y observar no es estúpido, es proteger algo, pero asigna un precio incorrecto a los dos riesgos.
+
+00:05:28.140 --> 00:05:29.220
+El costo de la interrupción no es visible.
+
+00:05:29.780 --> 00:05:32.360
+Si abre un ticket, alguien se queja, un gerente pregunta qué sucedió.
+
+00:05:32.840 --> 00:05:33.920
+El costo del retratado es invisible.
+
+00:05:34.460 --> 00:05:35.580
+No pasa nada hasta que suceda.
+
+00:05:36.080 --> 00:05:37.980
+Y cuando sucede, no es un ticket, es un incidente.
+
+00:05:37.980 --> 00:05:41.880
+Por lo tanto, los equipos se desvían hacia el riesgo que pueden ver y se alejan del que es mayor.
+
+00:05:42.420 --> 00:05:43.320
+Ese es el verdadero defecto.
+
+00:05:43.440 --> 00:05:51.280
+No es que doble C sea antiguo, es que el modelo asume que alguien puede estar en medio de todo esto, leer cada actualización y decidir dispositivo por dispositivo cuándo debe llegar cada una.
+
+00:05:51.980 --> 00:05:52.860
+Nadie puede hacerlo y ya no.
+
+00:05:53.620 --> 00:05:54.920
+Lo que significa que la pregunta tiene que cambiar.
+
+00:05:55.800 --> 00:06:01.040
+Nunca se trató realmente de cómo controlamos las actualizaciones, sino de qué resultado estamos dispuestos a aceptar y quién decide.
+
+00:06:01.840 --> 00:06:02.560
+Y es de que cambian las cosas.
+
+00:06:03.580 --> 00:06:05.760
+El nuevo modelo está deseado, no implementación.
+
+00:06:06.260 --> 00:06:07.060
+Entonces, ¿qué lo reemplaza?
+
+00:06:07.060 --> 00:06:12.040
+Ni un mejor servidor, ni un proceso de aprobación más rápido, sino una pregunta diferente, respondida en un lugar diferente.
+
+00:06:12.400 --> 00:06:16.560
+El modelo anterior te obligaba a mirar actualizaciones, elegir la actualización, elegir el dispositivo, elegir el dispositivo, elegir el ley.
+
+00:06:16.820 --> 00:06:20.940
+Cada decisión era una decisión de implementación y cada implementación necesitaba una persona que la respaldara.
+
+00:06:21.360 --> 00:06:23.600
+En cambio, el nuevo modelo te pide que describas un resultado.
+
+00:06:24.140 --> 00:06:25.520
+Escribes lo que parece aceptable.
+
+00:06:26.380 --> 00:06:28.480
+Actualizaciones de calidad instaladas en un plazo de 7 días.
+
+00:06:28.700 --> 00:06:31.060
+Desde lanzamiento, actualizaciones de funciones y la versión que elegiste.
+
+00:06:31.400 --> 00:06:32.800
+Reinizos forzados después de una fecha límite.
+
+00:06:33.140 --> 00:06:33.460
+Eso es todo.
+
+00:06:33.780 --> 00:06:34.460
+Eso es todo a la política.
+
+00:06:34.960 --> 00:06:35.860
+Y luego algo más es el trabajo.
+
+00:06:35.860 --> 00:06:38.000
+Esto es lo que realmente significa el estado deseado.
+
+00:06:38.440 --> 00:06:40.080
+La política declara dónde debe terminar un dispositivo.
+
+00:06:40.360 --> 00:06:41.720
+El servicio averigua cómo llevarlo allí.
+
+00:06:42.220 --> 00:06:44.800
+Dejas de programar el viaje y empiezas a definir el destino.
+
+00:06:45.260 --> 00:06:47.880
+Ahora bien, eso suena a marketing hasta que ves dónde ocurre realmente el trabajo.
+
+00:06:48.540 --> 00:06:50.040
+El motor aquí es Windows Update para empresas.
+
+00:06:50.540 --> 00:06:52.800
+No es un servidor que instalas ni una consola en la que inicias sesión.
+
+00:06:53.240 --> 00:06:57.300
+Es un conjunto de capacidades integradas en el propio Windows, respaldadas por la nube de Microsoft.
+
+00:06:57.300 --> 00:07:01.360
+El dispositivo se comunica directamente con Windows Update a través de Internet, esté donde esté.
+
+00:07:01.600 --> 00:07:02.740
+Y evalúa tus reglas por sí solo.
+
+00:07:02.960 --> 00:07:04.620
+Lo que resuelve el primer problema anterior.
+
+00:07:05.440 --> 00:07:07.820
+El portátil de la cafetería no necesita encontrar tu red.
+
+00:07:08.480 --> 00:07:09.740
+Ya sabe cómo encontrar a Microsoft.
+
+00:07:10.320 --> 00:07:12.360
+Las reglas viajan con el dispositivo, no con el edificio.
+
+00:07:12.840 --> 00:07:14.020
+Pero las reglas necesitan un lugar.
+
+00:07:14.460 --> 00:07:15.340
+Ahí es donde entra Intune.
+
+00:07:15.760 --> 00:07:16.940
+Intune es el plano de las políticas.
+
+00:07:17.300 --> 00:07:20.720
+Es donde escribes las reglas, agrupas los dispositivos y asignas uno a otro.
+
+00:07:21.560 --> 00:07:22.320
+No lleva la actualización.
+
+00:07:22.920 --> 00:07:24.460
+No descarga nada en nombre del portátil.
+
+00:07:25.000 --> 00:07:26.220
+Dice al dispositivo lo que está permitido.
+
+00:07:26.420 --> 00:07:27.500
+Con qué rápida y para cuándo.
+
+00:07:27.920 --> 00:07:29.240
+Windows Update es el plan de entrega.
+
+00:07:29.780 --> 00:07:33.160
+Lleva los bits, decide lo que se ofrece, gestiona la descarga y ejecuta la instalación.
+
+00:07:33.580 --> 00:07:34.720
+Dos planos, dos trabajos.
+
+00:07:35.020 --> 00:07:36.520
+Y esta división importa más de lo que parece.
+
+00:07:36.760 --> 00:07:38.860
+En el modelo antiguo, una caja lo hacía todo.
+
+00:07:39.300 --> 00:07:42.140
+Almacenaba las actualizaciones, las aprobadoras distribuía e informaba sobre ella.
+
+00:07:42.140 --> 00:07:46.900
+El control y la entrega estaban entrelazados, por lo que cada cambio no implicaba trabajo en el otro.
+
+00:07:47.360 --> 00:07:48.000
+Ahora su independiente.
+
+00:07:48.260 --> 00:07:51.400
+Cambias una política en Intune y a la parte de la entrega no le importa cómo llegaste allí.
+
+00:07:51.840 --> 00:07:54.900
+Microsoft cambia la forma en que se empaquetan las actualizaciones y a tu política tampoco limpia.
+
+00:07:55.240 --> 00:07:56.920
+Cada parte puede moverse sin afectar al otro.
+
+00:07:57.340 --> 00:07:58.840
+Esa es una ganancia estructural, no una característica.
+
+00:07:59.240 --> 00:08:01.120
+Esto es lo que cambia para la persona que es dueña del resultado.
+
+00:08:01.500 --> 00:08:04.300
+Dejas de administrar parches y empiezas a administrar la tolerancia al riesgo.
+
+00:08:04.780 --> 00:08:07.040
+Piensa en cómo suena esa conversación en la reunión de liderazgo.
+
+00:08:07.620 --> 00:08:10.800
+Bajo el modo antiguo, la pregunta era, implementamos las actualizaciones de este mes.
+
+00:08:10.800 --> 00:08:12.440
+¿Un sí o un no sobre una actividad?
+
+00:08:13.000 --> 00:08:13.840
+¿Alguien hizo algo o no?
+
+00:08:14.740 --> 00:08:18.520
+Bajo el nuevo modelo, la pregunta es, ¿cuánto tiempo estamos dispuestos a estar expuestos para qué dispositivos?
+
+00:08:21.090 --> 00:08:22.670
+Esa es una pregunta empresarial.
+
+00:08:23.430 --> 00:08:26.830
+Un portátil de finanzas y una pantalla de sala de conferencias no conllevan el mismo riesgo
+
+00:08:26.830 --> 00:08:28.310
+y no deberían tener el mismo plazo.
+
+00:08:28.870 --> 00:08:29.970
+Grupo piloto puede moverse en dosis.
+
+00:08:30.610 --> 00:08:33.850
+Una estación de trabajo clínica podría necesitar dos semanas y una explicación de crédito.
+
+00:08:34.090 --> 00:08:36.110
+Por lo tanto, el trabajo real se traslada a la fase inicial.
+
+00:08:36.730 --> 00:08:40.170
+Va a hacer clic en una prueba, sino a decir una vez a propósito que debe tolerar cada grupo de dispositivos.
+
+00:08:40.610 --> 00:08:41.610
+Luego, el sistema te obliga a cumplir.
+
+00:08:41.750 --> 00:08:42.550
+Ese es el cambio.
+
+00:08:42.850 --> 00:08:45.190
+Menos decisiones por mes, mejores decisiones por año.
+
+00:08:45.710 --> 00:08:47.750
+Pero solo se mantiene si comprendes lo que hay debajo,
+
+00:08:47.850 --> 00:08:51.650
+porque la política declara que el servicio se entrega en una oración clara y las oraciones claras.
+
+00:08:51.970 --> 00:08:53.270
+Ocultan las partes que fallan.
+
+00:08:53.950 --> 00:08:55.550
+Algo tiene que notar que existe una actualización.
+
+00:08:56.190 --> 00:08:58.770
+Algo tiene que decidir qué significa esa actualización para cada dispositivo.
+
+00:08:59.190 --> 00:09:01.510
+Y algo tiene que llevarla a cabo, vigilarla y detenerla si sale mal.
+
+00:09:01.970 --> 00:09:03.070
+Tres tareas, tres capas.
+
+00:09:03.230 --> 00:09:06.930
+Y una vez que veas cómo se conectan, sabrás exactamente dónde buscar cuando una actualización no llegue.
+
+00:09:06.930 --> 00:09:08.890
+La arquitectura y el audio.
+
+00:09:09.030 --> 00:09:10.510
+El evento, el razonamiento, la orquestación.
+
+00:09:10.830 --> 00:09:12.030
+Aquí tienes todo el sistema en tres parámetros.
+
+00:09:12.530 --> 00:09:14.190
+¿Evento, razonamiento, orquestación?
+
+00:09:14.790 --> 00:09:17.270
+Cada actualización que gestiones pasa por los tres.
+
+00:09:17.890 --> 00:09:20.590
+Si te saltas una en tu cabeza, buscarás el problema en el lugar equivocado.
+
+00:09:21.110 --> 00:09:21.710
+¿Qué es por el evento?
+
+00:09:21.710 --> 00:09:24.030
+Un evento es cuando Microsoft lanza algo.
+
+00:09:24.290 --> 00:09:25.770
+Una actualización de calidad mensual.
+
+00:09:25.890 --> 00:09:28.070
+Una actualización de funciones para una nueva versión de Windows.
+
+00:09:28.330 --> 00:09:29.690
+Un controlador de un proveedor de hardware.
+
+00:09:30.130 --> 00:09:33.570
+O una corrección acelerada que se saca de circulación porque alguien ya está atacando a la planta que cierra.
+
+00:09:34.090 --> 00:09:35.030
+O sea, lo que ocurre con un evento.
+
+00:09:35.750 --> 00:09:37.030
+No sabe que existe tu patrimonio.
+
+00:09:37.330 --> 00:09:41.070
+Es un lanzamiento que se encuentra en la nube de Microsoft y está disponible para cualquiera que lo solicite.
+
+00:09:41.530 --> 00:09:44.090
+No conlleva ninguna opinión sobre tu equipo financiero ni tu planta de producción.
+
+00:09:44.430 --> 00:09:45.250
+Simplemente está disponible.
+
+00:09:45.610 --> 00:09:46.210
+Eso es todo lo que hace.
+
+00:09:46.510 --> 00:09:47.690
+Dice que esto ya existe.
+
+00:09:48.370 --> 00:09:49.230
+Luego viene el razonamiento.
+
+00:09:49.230 --> 00:09:52.990
+Aquí es donde reside tu política y es donde cada dispositivo responde una pregunta.
+
+00:09:53.430 --> 00:09:54.830
+¿Debería realizar esta actualización y cuándo?
+
+00:09:55.230 --> 00:09:56.650
+La respuesta depende de las reglas que hayas.
+
+00:09:56.870 --> 00:09:58.350
+¿En qué anillo está este dispositivo?
+
+00:09:58.630 --> 00:10:01.190
+¿Cuántos días tiene permitido ese anillo aplazar una actualización de calidad?
+
+00:10:01.630 --> 00:10:03.710
+¿Existe una política de actuación de funciones que fije la versión?
+
+00:10:04.130 --> 00:10:05.070
+¿Cuál es la fecha límite?
+
+00:10:05.250 --> 00:10:06.850
+¿Y cuánto dura el periodo de gracia posterior?
+
+00:10:07.350 --> 00:10:08.350
+Observa lo que está pasando aquí.
+
+00:10:08.530 --> 00:10:09.990
+Nadie está decidiendo nada en este momento.
+
+00:10:10.450 --> 00:10:11.570
+La decisión se tomó hace semanas.
+
+00:10:11.690 --> 00:10:16.010
+Cuando creaste las reglas, el dispositivo simplemente los lee, los compara con el evento y elabora su propia respuesta.
+
+00:10:16.470 --> 00:10:18.150
+Dos ordenadores portátiles, misma actualización.
+
+00:10:18.150 --> 00:10:21.390
+A uno se le indica que se instale esta noche, al otro se le indica que espere nueve días.
+
+00:10:21.810 --> 00:10:22.650
+Ninguna respuesta a la to.
+
+00:10:22.990 --> 00:10:25.090
+Cada uno es el resultado de la capa de razonamiento.
+
+00:10:25.310 --> 00:10:26.070
+Y luego la orquestación.
+
+00:10:26.310 --> 00:10:27.130
+Esta es la ruta que actúa.
+
+00:10:27.670 --> 00:10:32.030
+Algo tiene que entregar la actualización, activar la instalación, gestionar el reinicio y observar qué ocurre.
+
+00:10:32.690 --> 00:10:36.290
+Algo tiene que detectar cuando un anillo empieza a fallar y detener la implementación antes de que se propague.
+
+00:10:36.950 --> 00:10:39.590
+Ese algo está en sintonía ejecutando las políticas que usted mismo escribió.
+
+00:10:39.710 --> 00:10:43.450
+O Autopatch, un servicio gestionado que crea y ejecuta esa maquinaria por ustedes.
+
+00:10:44.310 --> 00:10:45.930
+No trabajo, distinto propietario.
+
+00:10:45.930 --> 00:10:48.990
+La orquestación se ejecuta, supervisa y cuando es necesario se detiene.
+
+00:10:49.570 --> 00:10:51.770
+Ahora repasemos una actualización de las tres lentamente.
+
+00:10:52.270 --> 00:10:53.270
+Es el segundo martes de mes.
+
+00:10:53.910 --> 00:10:55.870
+Microsoft lanza una actualización de calidad cumulativa.
+
+00:10:56.270 --> 00:10:56.670
+Este es el evento.
+
+00:10:57.130 --> 00:10:58.550
+Todavía no ha pasado nada con su dispositivo.
+
+00:10:58.870 --> 00:10:59.770
+La actualización es simple que existe.
+
+00:11:00.270 --> 00:11:03.290
+A continuación, un ordenador portátil en su anillo piloto se activa y comproba con él.
+
+00:11:03.550 --> 00:11:04.870
+Esta es una comprobación del lado de frente.
+
+00:11:04.970 --> 00:11:06.590
+El dispositivo se comunica según su propio cronograma.
+
+00:11:06.870 --> 00:11:08.830
+Windows Update dice que hay una nueva actualización disponible.
+
+00:11:08.830 --> 00:11:11.530
+Ahora comienza el razonamiento y se ejecuta en el propio portátil.
+
+00:11:11.890 --> 00:11:13.010
+El dispositivo lee su política.
+
+00:11:13.450 --> 00:11:15.030
+Está en un aplazamiento de calidad de dos días.
+
+00:11:15.370 --> 00:11:16.410
+La actualización se ha publicado.
+
+00:11:16.910 --> 00:11:18.750
+Así que la respuesta por ahora es todavía no.
+
+00:11:19.090 --> 00:11:19.530
+Pasan dos días.
+
+00:11:19.930 --> 00:11:20.810
+El portátil vuelve a comprobar.
+
+00:11:21.270 --> 00:11:23.970
+El aplazamiento ha caducado, por lo que ahora se ofrece la actualización a este dispositivo.
+
+00:11:24.790 --> 00:11:25.570
+El portátil le descarga.
+
+00:11:25.870 --> 00:11:28.070
+Se instala en segundo plano, fuera de las horas de actividad.
+
+00:11:28.430 --> 00:11:29.230
+Luego se reinicia.
+
+00:11:29.290 --> 00:11:30.790
+La política también tiene una opinión al respecto.
+
+00:11:31.250 --> 00:11:34.490
+La fecha límite le da al usuario un número determinado de días para reiniciar por su cuenta.
+
+00:11:34.730 --> 00:11:35.770
+Después de eso, Windows lo fuerza.
+
+00:11:36.190 --> 00:11:37.370
+Y es donde interviene la orquestación.
+
+00:11:37.710 --> 00:11:39.650
+Mientras todo se ejecuta, el servicio recopila resultados.
+
+00:11:40.110 --> 00:11:41.790
+¿Cuántos dispositivos pilotos se instalan correctamente?
+
+00:11:42.110 --> 00:11:43.230
+¿Cuántos errores notificado?
+
+00:11:43.730 --> 00:11:47.370
+Si la tasa de errores de instalación supera el umbral, la orquestación no espera que un humano se dé cuenta.
+
+00:11:47.950 --> 00:11:50.870
+Pausa la implementación y el anillo amplio nunca recibe la actualización.
+
+00:11:51.390 --> 00:11:54.290
+Si el piloto parece estar en buen estado, el aplazamiento del siguiente anillo es espiras, espiras.
+
+00:11:54.890 --> 00:11:57.250
+El mismo evento, el mismo razonamiento, un reloj diferente.
+
+00:11:57.750 --> 00:11:59.850
+Así que observa lo que realmente hizo cada capa.
+
+00:12:00.310 --> 00:12:01.330
+El evento creó la posibilidad.
+
+00:12:01.790 --> 00:12:03.510
+El razonamiento decidió quién y cuándo.
+
+00:12:03.830 --> 00:12:05.570
+La orquestación lo llevó a cabo y se mantuvo vigilante.
+
+00:12:05.890 --> 00:12:07.630
+Y esta es la razón por la que esto es importante cuando algo se roma.
+
+00:12:07.990 --> 00:12:10.930
+Si un dispositivo nunca recibe una actualización, es probable que el evento no sea el problema.
+
+00:12:11.490 --> 00:12:12.250
+Microsoft lo publicó.
+
+00:12:12.950 --> 00:12:18.190
+La pregunta es si el razonamiento le dijo al dispositivo que esperara eternamente o si la orquestación no lo hizo.
+
+00:12:18.830 --> 00:12:20.410
+Esas son dos soluciones completamente diferentes.
+
+00:12:20.550 --> 00:12:21.890
+Los equipos pierden horas mezclándolas.
+
+00:12:22.470 --> 00:12:23.710
+Ahora bien, ¿qué capa compruebas primero?
+
+00:12:24.230 --> 00:12:25.250
+La capa de razonamiento.
+
+00:12:25.250 --> 00:12:28.990
+Porque el evento está fuera de tus manos y la orquestación solo hace lo que le dicen las reglas.
+
+00:12:29.730 --> 00:12:31.890
+Todo lo que sigue depende de si las reglas son correctas.
+
+00:12:31.890 --> 00:12:33.370
+Así que ahí es donde empezamos.
+
+00:12:33.490 --> 00:12:35.990
+Con el motor que evalúa esas reglas en cada dispositivo.
+
+00:12:36.970 --> 00:12:38.090
+Windows Update para empresas.
+
+00:12:38.390 --> 00:12:39.350
+El motor que suele hacer todo.
+
+00:12:39.870 --> 00:12:41.210
+Seamos exactos sobre lo que es esto.
+
+00:12:41.990 --> 00:12:44.110
+Windows Update para empresas no es un producto que compren.
+
+00:12:44.430 --> 00:12:44.970
+Es un servidor.
+
+00:12:44.970 --> 00:12:47.750
+Es un conjunto de controles de políticas integrados en Windows.
+
+00:12:48.090 --> 00:12:51.190
+Conectados al mismo servicio Windows Update con el que ya se comunican todos los PC.
+
+00:12:51.870 --> 00:12:52.430
+Esa es la idea.
+
+00:12:52.870 --> 00:12:54.570
+La maquinaria ya existe en todos los dispositivos.
+
+00:12:55.050 --> 00:12:57.610
+Windows Update para empresas solo te permite establecer las reglas que sí.
+
+00:12:57.870 --> 00:12:58.570
+¿Qué hace realmente?
+
+00:12:58.910 --> 00:12:59.430
+Tres cosas.
+
+00:12:59.610 --> 00:13:02.070
+Te permite retrasar cuando se ofrecen actualizaciones a un dispositivo.
+
+00:13:02.410 --> 00:13:03.830
+Te permite establecer una fecha límite.
+
+00:13:03.890 --> 00:13:05.630
+Un punto en el que la actualización deja de ser opcional.
+
+00:13:05.810 --> 00:13:07.670
+Y te permite controlar cómo y cuándo se produce el remit.
+
+00:13:08.150 --> 00:13:09.490
+Aplazamiento, fecha límite, reinicio.
+
+00:13:10.190 --> 00:13:12.710
+Todo lo demás que configurarás en este video es una variación de esos tres.
+
+00:13:13.210 --> 00:13:13.850
+Ahora bien, ¿qué no hace?
+
+00:13:13.850 --> 00:13:18.870
+No hay una cola de aprobación que revisar ni una lista de parches esperando un clic.
+
+00:13:19.430 --> 00:13:20.110
+No crea tus anillos.
+
+00:13:20.650 --> 00:13:22.970
+No supervisa la implementación y la detiene cuando las cosas pintan mal.
+
+00:13:23.330 --> 00:13:24.950
+Y no te proporciona un buen informe por sí solo.
+
+00:13:25.270 --> 00:13:26.550
+Es un motor, no un panel de control.
+
+00:13:26.830 --> 00:13:27.330
+Un controlador.
+
+00:13:27.670 --> 00:13:29.130
+Esa distinción aclara mucha confusión.
+
+00:13:29.710 --> 00:13:31.970
+Cuando la gente dice que Windows Update para empresas no funciona,
+
+00:13:32.130 --> 00:13:34.070
+normalmente se refieren a que la capa superior no funciona.
+
+00:13:34.350 --> 00:13:35.930
+El motor está haciendo exactamente lo que se le dijo.
+
+00:13:36.390 --> 00:13:37.290
+Así que veamos cómo se le dice.
+
+00:13:37.790 --> 00:13:38.650
+Empecemos por el aplazamiento.
+
+00:13:38.970 --> 00:13:41.290
+Un aplazamiento es un número de días que, según se dice,
+
+00:13:41.290 --> 00:13:44.170
+las actualizaciones de calidad esperan 7 días después del lanzamiento antes del dispositivo.
+
+00:13:44.470 --> 00:13:47.290
+Las actualizaciones de funciones esperan un número diferente de 10 que se establece por
+
+00:13:47.290 --> 00:13:47.550
+separado.
+
+00:13:47.670 --> 00:13:49.130
+No se instala nada durante ese modo de espera.
+
+00:13:49.410 --> 00:13:52.290
+El dispositivo sabe que la actualización existe y la ignora a propósito.
+
+00:13:52.750 --> 00:13:53.370
+Luego está la fecha límite.
+
+00:13:53.590 --> 00:13:55.370
+Este es el número que hace que la política sea real.
+
+00:13:55.630 --> 00:13:58.450
+Después de que se ofrece una actualización, la fecha límite establece cuántos días tiene
+
+00:13:58.450 --> 00:14:00.310
+el usuario antes de que Windows la instale de todos modos.
+
+00:14:00.430 --> 00:14:02.350
+Sin una fecha límite, un aplazamiento es solo una sugerencia.
+
+00:14:02.670 --> 00:14:03.770
+O no tiene un límite estricto.
+
+00:14:04.010 --> 00:14:04.630
+El negocio reinicia.
+
+00:14:04.630 --> 00:14:08.170
+Windows puede esperar un buen momento fuera de las horas de actividad y avisar al usuario
+
+00:14:08.170 --> 00:14:09.170
+con notificaciones.
+
+00:14:09.950 --> 00:14:12.810
+Pero la política también puede decir que, después de esta cantidad de días, se reinicie
+
+00:14:12.810 --> 00:14:14.290
+le guste o no al usuario, el usuario.
+
+00:14:14.830 --> 00:14:17.970
+Esos tres controles en diferentes números te dan un comportamiento muy diferente para
+
+00:14:17.970 --> 00:14:21.310
+diferentes grupos de personas y nadie tiene que tocar una sola actualización a mano.
+
+00:14:21.810 --> 00:14:23.250
+Ahora bien, aquí viene la parte que sorprende a la gente.
+
+00:14:23.590 --> 00:14:24.890
+¿Dónde se toma realmente la decisión?
+
+00:14:25.110 --> 00:14:25.690
+En el dispositivo.
+
+00:14:26.030 --> 00:14:28.290
+Un portátil no espera una señal de la consola de administración.
+
+00:14:28.710 --> 00:14:31.830
+Según su propio cronograma, se comunica con Windows Update a través de internet y pregunta
+
+00:14:31.830 --> 00:14:32.810
+¿qué hay disponible para mí?
+
+00:14:33.590 --> 00:14:35.210
+Windows Update responde con lo que hay.
+
+00:14:35.770 --> 00:14:37.490
+Luego, el dispositivo recurre a su propia política.
+
+00:14:37.910 --> 00:14:40.310
+Lea la configuración de aplazamiento que Intune entregó anteriormente.
+
+00:14:40.750 --> 00:14:41.770
+Comprueba la fecha de lanzamiento.
+
+00:14:42.150 --> 00:14:43.010
+Hace los cálculos en el mil.
+
+00:14:43.310 --> 00:14:45.410
+¿Esta actualización es lo suficientemente antigua como para ofrecer?
+
+00:14:45.510 --> 00:14:46.330
+¿Ha superado la fecha en el mil?
+
+00:14:46.770 --> 00:14:47.790
+¿Está dentro del horario de actividad?
+
+00:14:48.170 --> 00:14:49.490
+Todo eso se evalúa localmente.
+
+00:14:49.850 --> 00:14:50.930
+Por lo tanto, la política no es un comando.
+
+00:14:51.290 --> 00:14:54.750
+Es un conjunto de instrucciones que el dispositivo lleva consigo y las consulta cada vez que busca
+
+00:14:54.750 --> 00:14:55.330
+actualizaciones.
+
+00:14:55.970 --> 00:14:57.590
+Su herramienta de administración escribió las reglas 1.
+
+00:14:58.110 --> 00:15:00.250
+Dispositivo las aplica una y otra vez donde quiera que esté.
+
+00:15:00.250 --> 00:15:02.090
+Por eso funciona el portátil de la cafetería.
+
+00:15:02.550 --> 00:15:05.870
+No necesita su red, su consola, ni una conexión a nada que usted posea.
+
+00:15:06.910 --> 00:15:07.630
+Necesita dos cosas.
+
+00:15:07.710 --> 00:15:09.590
+La política que ya tiene y una ruta a Microsoft.
+
+00:15:10.350 --> 00:15:13.050
+Este es el punto estructural que separa el nuevo modelo del antiguo.
+
+00:15:13.410 --> 00:15:14.970
+Este es un sistema de decisión del lado del cliente.
+
+00:15:15.070 --> 00:15:18.670
+En un sistema de envío, un punto central decide y luego envía.
+
+00:15:19.330 --> 00:15:21.830
+Si no se puede acceder al dispositivo, la decisión nunca llega.
+
+00:15:22.570 --> 00:15:25.090
+El control es tan bueno como tu capacidad para acceder a la máquina.
+
+00:15:25.970 --> 00:15:28.330
+En un sistema del lado del cliente, la decisión ya está en la máquina.
+
+00:15:28.330 --> 00:15:30.270
+El control no depende de acceder a él.
+
+00:15:31.090 --> 00:15:33.350
+Depende si la política llegó y si la política es correcta.
+
+00:15:33.390 --> 00:15:35.350
+Lo que te dice algo importante es sobre el error.
+
+00:15:36.350 --> 00:15:39.670
+Si un dispositivo se comporta de forma extraña, no te preguntas si tu servidor pudo acceder a él.
+
+00:15:40.010 --> 00:15:42.370
+Te preguntas qué política tiene y quién le dijo esa política que hiciera.
+
+00:15:43.030 --> 00:15:44.210
+Ahora has visto los tres controles.
+
+00:15:44.990 --> 00:15:46.230
+Aplazamiento, fecha límite y reinicio.
+
+00:15:46.730 --> 00:15:47.750
+La pregunta los establece.
+
+00:15:48.290 --> 00:15:50.790
+Para la mayoría de los equipos, la respuesta es lo primero que abre en Intune.
+
+00:15:51.270 --> 00:15:54.150
+La superficie de control a la que todos recurren antes de entender lo que hay debajo.
+
+00:15:54.970 --> 00:15:55.250
+Anilización.
+
+00:15:56.150 --> 00:15:58.310
+Los anillos de actualización explican lo que realmente controlan.
+
+00:15:58.670 --> 00:15:59.130
+Abre en Intune.
+
+00:15:59.670 --> 00:16:02.030
+Ve a dispositivos, luego a Windows y luego a anillos de actualización.
+
+00:16:02.730 --> 00:16:05.590
+Verás un tipo de política denominada anillos de actualización para Windows 10 y versión expuesta.
+
+00:16:06.150 --> 00:16:07.410
+Ese nombre es un poco engañoso.
+
+00:16:07.910 --> 00:16:11.850
+Un anillo no es un grupo de dispositivos, es una política, un conjunto de ajustes que asignas a un grupo.
+
+00:16:12.470 --> 00:16:14.950
+Por lo tanto, cuando la gente dice anillo, se refiere a dos cosas a la vez.
+
+00:16:15.210 --> 00:16:16.810
+Los ajustes y las personas que los reciben.
+
+00:16:17.530 --> 00:16:18.430
+Mantiene esas cosas, se parece.
+
+00:16:18.430 --> 00:16:19.950
+Los ajustes están en un lugar.
+
+00:16:20.370 --> 00:16:21.290
+La membresía está en otro.
+
+00:16:22.070 --> 00:16:24.950
+Ahora bien, los ajustes que importan, los dos primeros, son los que todo el mundo encuentra rápidamente.
+
+00:16:25.730 --> 00:16:27.050
+Periodo de aplazamiento de actualización de calidad.
+
+00:16:27.290 --> 00:16:28.510
+Periodo de aplazamiento de actualización de función.
+
+00:16:28.910 --> 00:16:29.590
+Pueden dar parecidos.
+
+00:16:29.810 --> 00:16:30.630
+Se comportan muy diferente.
+
+00:16:31.210 --> 00:16:33.330
+La actualización de calidad es el parche acumulativo mensual.
+
+00:16:33.870 --> 00:16:35.810
+Correcciones de seguridad, correcciones de errores, pequeños cambios.
+
+00:16:36.090 --> 00:16:37.770
+El aplazamiento aquí va de 0 a 30 días.
+
+00:16:38.590 --> 00:16:42.030
+Configura 7 y el dispositivo espera 7 días después del lanzamiento, antes de que se le ofrezca la actualización.
+
+00:16:42.670 --> 00:16:44.470
+Una actualización de funciones es una nueva versión de Windows.
+
+00:16:44.870 --> 00:16:46.890
+Tamaño diferente, riesgo diferente, calendario diferente.
+
+00:16:46.890 --> 00:16:49.250
+El aplazamiento puede durar hasta 365 días.
+
+00:16:49.490 --> 00:16:50.850
+La misma idea, con un margen mucho mayor.
+
+00:16:51.270 --> 00:16:52.410
+Y esta es la razón por la que están separados.
+
+00:16:52.670 --> 00:16:56.870
+Un límite máximo de 30 días para las actualizaciones de calidad es un límite estricto, y es corto por una razón.
+
+00:16:57.530 --> 00:16:59.870
+Esos parches cierran agujeros que los atacantes ya están estudiando.
+
+00:17:00.370 --> 00:17:03.810
+Un año de retraso en la actualización de funciones está bien, porque la versión que tienes todavía es compatible.
+
+00:17:04.390 --> 00:17:06.090
+Esperar un año para un parche de seguridad no lo es.
+
+00:17:06.330 --> 00:17:07.990
+Por lo tanto, las dos cifras responden a preguntas diferentes.
+
+00:17:08.410 --> 00:17:10.570
+Una pregunta, ¿cuánto tiempo esperamos para ver si un parche es seguro?
+
+00:17:11.270 --> 00:17:13.730
+La otra pregunta, ¿cuánto tiempo permanecemos en esta versión de Windows?
+
+00:17:14.490 --> 00:17:15.530
+A continuación, los plazos.
+
+00:17:15.530 --> 00:17:21.570
+Dentro de la misma política, encontrarás el plazo para las actualizaciones de calidad, el plazo para las actualizaciones de funciones, y el periodo de gracia.
+
+00:17:21.870 --> 00:17:23.110
+Y que haremos tiempo real a eso más adelante.
+
+00:17:23.450 --> 00:17:26.390
+Por ahora, solo debes saber que se encuentran en la misma pantalla junto a los aplazamientos.
+
+00:17:26.690 --> 00:17:27.910
+Luego está el bloque de experiencia del usuario.
+
+00:17:28.250 --> 00:17:29.530
+Aquí es donde la política se encuentra personas.
+
+00:17:30.130 --> 00:17:30.590
+Horas activas.
+
+00:17:30.850 --> 00:17:34.270
+Estableces un inicio y una detención, y Windows no reiniciará el dispositivo dentro de esa venta.
+
+00:17:34.330 --> 00:17:35.510
+El rango máximo es de 18 horas.
+
+00:17:35.890 --> 00:17:41.250
+También hay una configuración que permite a Windows ajustar las horas activas automáticamente en función de cómo la persona usa realmente el equipo.
+
+00:17:41.810 --> 00:17:43.710
+Útil para portátiles que no sigan en programación.
+
+00:17:44.190 --> 00:17:45.110
+Luego, comportamiento horino.
+
+00:17:45.550 --> 00:17:48.410
+Dejas que el usuario lo programe, lo fuerza después de la fecha límite.
+
+00:17:49.150 --> 00:17:50.530
+¿Cuántos días de recordatorio reciben?
+
+00:17:50.650 --> 00:17:52.110
+¿Cuándo se convierte en una cuenta atrás?
+
+00:17:52.630 --> 00:17:53.370
+Y luego silenciosos.
+
+00:17:54.030 --> 00:17:55.750
+Si los usuarios pueden pausar las actualizaciones.
+
+00:17:55.950 --> 00:17:58.270
+Ellos mismos, si pueden consultar Windows Update a petición.
+
+00:17:58.410 --> 00:18:00.950
+Si la notificación de actualización aparece o permanece en silencio.
+
+00:18:01.710 --> 00:18:02.890
+Estas parecen pequeñas preferencias.
+
+00:18:03.350 --> 00:18:03.650
+No lo son.
+
+00:18:03.910 --> 00:18:07.010
+Cada una decide si el usuario tiene algo que ver con la política o solo una visión de ella.
+
+00:18:07.370 --> 00:18:09.430
+Permites que los usuarios pausen las actualizaciones, algunos lo harán.
+
+00:18:09.430 --> 00:18:12.790
+Y un dispositivo pausado es un dispositivo que tus cálculos de aplazamiento ya no describen.
+
+00:18:12.790 --> 00:18:14.890
+Ahora, dos configuraciones que son fáciles de omitir.
+
+00:18:15.450 --> 00:18:16.030
+Canal de servicio.
+
+00:18:16.470 --> 00:18:20.970
+Para la mayoría de las organizaciones, la respuesta es el canal de disponibilidad general y la versión normal que todos reciben.
+
+00:18:21.210 --> 00:18:22.270
+Es el predeterminado bonarzo.
+
+00:18:22.770 --> 00:18:23.930
+Es lo que Microsoft admite ampliamente.
+
+00:18:24.510 --> 00:18:25.610
+Luego, opciones de prelanzamiento.
+
+00:18:25.610 --> 00:18:32.930
+Intune puede inscribir dispositivos en los canales de Windows Insider, beta o vista previa de la versión para que un pequeño grupo vea los cambios antes de que lleguen a todos.
+
+00:18:33.510 --> 00:18:35.230
+Eso puede ser un anillo de advertencia temprana e inteligente.
+
+00:18:35.650 --> 00:18:41.570
+La vista previa de la versión en particular te permite probar la siguiente actualización de calidad antes de que se publique, pero no es un lugar para dispositivos de los que me depen.
+
+00:18:41.770 --> 00:18:43.190
+Las versiones previas al lanzamiento, CoinFile.
+
+00:18:43.390 --> 00:18:43.930
+Para eso están.
+
+00:18:44.350 --> 00:18:45.430
+Sí que esa es toda la superficie.
+
+00:18:45.530 --> 00:18:46.190
+Dos aplazamientos.
+
+00:18:46.470 --> 00:18:47.370
+Fecha, límite y gracia.
+
+00:18:47.570 --> 00:18:48.490
+Horas activas y reinicios.
+
+00:18:48.790 --> 00:18:49.450
+Controles de usuario.
+
+00:18:49.810 --> 00:18:50.150
+Un canal.
+
+00:18:50.150 --> 00:18:51.250
+Y honestamente, nada de esto es difícil.
+
+00:18:51.570 --> 00:18:52.910
+Cada configuración tiene un número de un interruptor.
+
+00:18:52.910 --> 00:18:55.570
+Puede ir a la política completa en unos minutos y entender lo que hace.
+
+00:18:55.930 --> 00:18:57.150
+No hay ningún misterio en la configuración.
+
+00:18:57.510 --> 00:18:59.850
+Pero esa es exactamente la razón por la que los equipos tienen una frasez en el problema.
+
+00:19:00.010 --> 00:19:03.670
+Crean una política, eligen números razonables, se los asignan a todos y lo dan por terminado.
+
+00:19:04.130 --> 00:19:05.010
+Un anillo, un reloj.
+
+00:19:05.210 --> 00:19:07.330
+Una apuesta realizada en todos los dispositivos al mismo tiempo.
+
+00:19:07.730 --> 00:19:08.570
+La configuración es fácil.
+
+00:19:09.070 --> 00:19:10.550
+Diseño del anillo es donde los equipos fallan.
+
+00:19:11.450 --> 00:19:12.130
+Diseñar anillos.
+
+00:19:12.330 --> 00:19:12.590
+Prueba.
+
+00:19:13.010 --> 00:19:13.350
+Piloto.
+
+00:19:13.510 --> 00:19:13.770
+Amplio.
+
+00:19:13.870 --> 00:19:14.150
+Crítico.
+
+00:19:14.570 --> 00:19:15.330
+Un anillo es una apuesta.
+
+00:19:15.650 --> 00:19:19.670
+Cada anillo realiza la misma apuesta en un grupo diferente de dispositivos en un momento diferente.
+
+00:19:20.070 --> 00:19:21.810
+El primer anillo te dice si la actualización es segura.
+
+00:19:21.810 --> 00:19:24.810
+El último anillo es donde menos puedes permitirte descubrir que no lo es.
+
+00:19:25.470 --> 00:19:27.830
+El diseño del anillo se reduce a tres preguntas en cada etapa.
+
+00:19:28.330 --> 00:19:29.170
+¿Cuántos dispositivos hay?
+
+00:19:29.510 --> 00:19:30.650
+¿Cuánto daño pueden soportar?
+
+00:19:31.110 --> 00:19:32.510
+¿Y qué tan buena es la señal que recibes?
+
+00:19:32.870 --> 00:19:34.710
+Tamaño, riesgo y calidad de la señal.
+
+00:19:35.170 --> 00:19:35.910
+Así es como se compensa.
+
+00:19:36.350 --> 00:19:37.550
+Un anillo pequeño es fácil de romper.
+
+00:19:37.810 --> 00:19:40.230
+Si fallan diez dispositivos, diez personas tienen una mala tarde.
+
+00:19:40.550 --> 00:19:42.190
+Pero diez dispositivos también son una muestra pequeña.
+
+00:19:42.470 --> 00:19:46.510
+Si la actualización solo rompe un modelo de computadora portátil y ninguno de tus días tiene ese modelo,
+
+00:19:46.850 --> 00:19:49.770
+la señal dice que todo está bien mientras el problema se encuentra a dos anillos de distancia.
+
+00:19:49.770 --> 00:19:51.610
+Un anillo grande te da lo contrario.
+
+00:19:51.750 --> 00:19:54.490
+Una señal excelente porque cubre todos los modelos y todas las combinaciones de aplicaciones,
+
+00:19:54.610 --> 00:19:56.050
+pero cuando se rompe, se rompe, se rompe totalmente.
+
+00:19:56.570 --> 00:19:57.270
+Así que no eliges uno.
+
+00:19:57.670 --> 00:19:57.950
+Los apil.
+
+00:19:58.450 --> 00:20:01.830
+Cada anillo es más grande que el anterior y cada uno se gana la confianza del siguiente anillo.
+
+00:20:02.270 --> 00:20:04.790
+La estructura en la que aterriza la mayoría de los equipos tiene cuatro etapas.
+
+00:20:04.870 --> 00:20:06.390
+Prueba, piloto, amplia y crítica.
+
+00:20:07.470 --> 00:20:08.110
+La prueba es pequeña.
+
+00:20:08.250 --> 00:20:09.590
+Tal vez el 1 al 2% del patrimonio.
+
+00:20:09.590 --> 00:20:11.710
+Su trabajo es responder a una pregunta.
+
+00:20:12.010 --> 00:20:12.770
+¿Esto se instala?
+
+00:20:13.130 --> 00:20:16.470
+Un breve aplazamiento, a veces de cero días, para que vea la actualización en el momento en que se lanza.
+
+00:20:16.810 --> 00:20:19.750
+El piloto es más grande, digamos un 5 o un 10%, unos días por detrás de la prueba.
+
+00:20:20.070 --> 00:20:20.830
+Su trabajo es diferente.
+
+00:20:21.350 --> 00:20:25.970
+Responde si el trabajo real sigue funcionando, si los periféricos reales, los hábitos reales, el ancho es el grueso.
+
+00:20:26.190 --> 00:20:28.110
+La mayoría de tus dispositivos son débiles o están más atrasados.
+
+00:20:28.170 --> 00:20:31.530
+Para cuando una actualización llega al ancho, hay dos anillos de evidencia detrás.
+
+00:20:31.830 --> 00:20:33.330
+Y el crítico es el último a propósito.
+
+00:20:33.810 --> 00:20:34.730
+Ya hablaremos de Kimballi.
+
+00:20:35.230 --> 00:20:36.090
+Ahora bien, ¿por qué cuatro y uno?
+
+00:20:36.090 --> 00:20:39.390
+Porque dos anillos te dan un punto de decisión, grupo inicial, todos los demás.
+
+00:20:39.930 --> 00:20:42.270
+Si el grupo inicial está limpio, todos reciben la actualización a la vez.
+
+00:20:42.670 --> 00:20:44.310
+Todo tu patrimonio se convierte en la segunda punta.
+
+00:20:44.730 --> 00:20:45.510
+Ese no es un modelo de anillo.
+
+00:20:45.790 --> 00:20:46.850
+Es un retraso con paso adicional.
+
+00:20:47.270 --> 00:20:48.750
+Dos anillos también obligan mal compromiso.
+
+00:20:49.170 --> 00:20:52.050
+El grupo inicial tiene que ser lo suficientemente pequeño para ser seguro de lo suficientativo.
+
+00:20:52.630 --> 00:20:55.050
+Sus objetivos se contraponen entre sí, por lo que fallas en uno de ellos.
+
+00:20:55.610 --> 00:20:57.450
+Cuatro anillos permiten que cada etapa haga un trabajo.
+
+00:20:57.930 --> 00:20:58.770
+Prueba verifica la instalación.
+
+00:20:58.890 --> 00:20:59.690
+Piloto verifica el trabajo.
+
+00:20:59.890 --> 00:21:00.530
+Amplia es el despliegue.
+
+00:21:00.710 --> 00:21:03.350
+Crítico es el grupo protegido que obtiene la mayor cantidad de evidencia de todos.
+
+00:21:03.950 --> 00:21:04.710
+¿No sé quién pertenece a dónde?
+
+00:21:06.090 --> 00:21:10.350
+Las personas que entienden un código de error no se asustan al reiniciar y te dirán exactamente qué sucedió.
+
+00:21:10.850 --> 00:21:11.950
+Esa es una lección de calidad semi.
+
+00:21:12.390 --> 00:21:14.350
+Una queja vaga de un vendedor ocupado es ruido.
+
+00:21:14.990 --> 00:21:18.510
+Una captura de pantalla y un registro de un ingeniero son datos, pero TI por sí solo no es suficiente.
+
+00:21:18.890 --> 00:21:19.690
+Ocho dispositivos son.
+
+00:21:20.310 --> 00:21:24.930
+Ejecutan pocas aplicaciones y tienen pocas peculiaridades, por lo que el anillo piloto necesita usuarios avanzados,
+
+00:21:25.050 --> 00:21:28.730
+personas que viven en los rincones extraños de su software, el analista con el libre de trabajo con muchas macros,
+
+00:21:28.810 --> 00:21:30.590
+el diseñador con tres monitores y una estación de acoplamiento.
+
+00:21:31.070 --> 00:21:34.410
+Rompen cosas que las máquinas limpias nunca tocan y el hardware importa tanto como las personas.
+
+00:21:34.410 --> 00:21:39.630
+Elija dispositivos piloto para que cada modelo importante de su propiedad tenga al menos algún representante.
+
+00:21:39.910 --> 00:21:44.110
+Lo mismo para los conductores, lo mismo para los agentes de seguridad, lo mismo para ese cliente VPN del que nadie quiere hablar.
+
+00:21:45.030 --> 00:21:47.290
+Un anillo piloto que se salta a una familia de hardware no lo ve.
+
+00:21:47.790 --> 00:21:48.590
+Ahora parte difícil.
+
+00:21:48.850 --> 00:21:50.370
+Las personas que piden estar en otro lugar.
+
+00:21:50.370 --> 00:21:51.790
+Ejecutivos.
+
+00:21:51.970 --> 00:21:54.810
+El instinto es ponerlos en el último anillo para protegerlos de interrupciones.
+
+00:21:55.270 --> 00:21:57.610
+Eso suena razonable hasta que recuerdas las matemáticas de exposición.
+
+00:21:58.130 --> 00:22:01.390
+Los ejecutivos tienen los datos más confidenciales y son el objetivo favorito de los atacantes.
+
+00:22:02.050 --> 00:22:04.390
+Retrasar sus parches durante más tiempo es exactamente al revés.
+
+00:22:04.770 --> 00:22:07.630
+Una mejor respuesta es ponernos en un lugar amplio, ni al principio ni al final.
+
+00:22:08.010 --> 00:22:10.610
+Cerca del resto del equipo con un contacto designado si algo sale mal.
+
+00:22:10.950 --> 00:22:11.090
+Mal.
+
+00:22:11.590 --> 00:22:16.070
+Es fundamental para los dispositivos en los que reiniciar en el momento equivocado cuesta dinero real o peor.
+
+00:22:16.510 --> 00:22:16.870
+Kioscos.
+
+00:22:17.190 --> 00:22:18.270
+Terminales de punto de venta.
+
+00:22:18.550 --> 00:22:20.390
+Máquinas de fábrica conectadas a una línea de producción.
+
+00:22:20.670 --> 00:22:22.170
+Estaciones de trabajo clínicas en un hospital.
+
+00:22:22.490 --> 00:22:25.230
+Estos dispositivos necesitan la evidencia y la mayor planificación.
+
+00:22:25.790 --> 00:22:29.190
+Un aplazamiento más largo les da eso, pero un aplazamiento más largo no significa que no haya fecha límite.
+
+00:22:29.690 --> 00:22:33.890
+Significa una ventana deliberada, establecida con las personas que dirigen la línea en la sala, escrita y respetada.
+
+00:22:34.350 --> 00:22:34.830
+Es el diseño.
+
+00:22:35.350 --> 00:22:35.890
+Cuatro anillos.
+
+00:22:36.150 --> 00:22:38.090
+Diferentes tamaños, diferentes trabajos, diferentes riesgos.
+
+00:22:38.270 --> 00:22:39.690
+Pero un anillo es solo un retraso en el papel.
+
+00:22:40.190 --> 00:22:42.150
+Solo funciona si la fecha límite cae detrás del reto.
+
+00:22:42.390 --> 00:22:44.530
+Plazos, periodos de gracia y comportamiento de reinicio.
+
+00:22:45.090 --> 00:22:46.590
+Un aplazamiento indica cuándo se ofrece una fecha.
+
+00:22:47.090 --> 00:22:48.630
+Una fecha límite indica cuándo cada oferta.
+
+00:22:49.170 --> 00:22:51.170
+Esa es la diferencia entre una sugerencia y una regla.
+
+00:22:51.890 --> 00:22:56.090
+Sin una fecha límite, un usuario puede ignorar la actualización para siempre y la matemática del anillo no describen nada.
+
+00:22:56.530 --> 00:22:59.070
+Con uno hay una fecha en el calendario en la que Windows deja de preguntar.
+
+00:22:59.590 --> 00:23:02.610
+Las actualizaciones de calidad y las actualizaciones de funciones tienen su propia fecha límite.
+
+00:23:02.690 --> 00:23:04.110
+Las establece por separado en una política.
+
+00:23:04.950 --> 00:23:08.550
+Para las actualizaciones de calidad, la fecha límite es una cantidad de días del 0 al 30.
+
+00:23:08.850 --> 00:23:12.430
+Cuenta desde el momento en que se ofrece la actualización al dispositivo, no desde la fecha de lanzamiento.
+
+00:23:13.110 --> 00:23:16.410
+Por lo tanto, un anillo con un aplazamiento de 7 días y una fecha límite de 2 días significa esto.
+
+00:23:16.730 --> 00:23:20.230
+La actualización se ofrece el día 7 y Windows fuerza la instalación para el día 9.
+
+00:23:20.530 --> 00:23:24.050
+Las actualizaciones de funciones funcionan de la misma manera con el mismo rango, pero el riesgo es diferente.
+
+00:23:24.370 --> 00:23:26.770
+Una actualización de calidad tarda minutos y un solo reinicio.
+
+00:23:27.150 --> 00:23:30.170
+Una actualización de funciones puede tardar mucho más y los ciclos de reinicio son más pesados.
+
+00:23:30.530 --> 00:23:35.830
+Por lo tanto, la mayoría de los equipos dan las actualizaciones de funciones a una fecha límite más larga y la combinan con un mensaje claro a los usuarios con mucha anticipación.
+
+00:23:35.950 --> 00:23:36.930
+Luego está el periodo de gracia.
+
+00:23:37.250 --> 00:23:40.690
+El periodo de gracia es un tiempo adicional después de la fecha límite antes de que Windows fuerce el reinicio.
+
+00:23:41.010 --> 00:23:41.870
+Va de 0 a 7 días.
+
+00:23:42.490 --> 00:23:48.170
+Piense en ello como un margen que solo importa en una situación cuando un dispositivo vuelve a estar en línea después de haber estado ausente.
+
+00:23:48.230 --> 00:23:48.910
+Así es como se ve.
+
+00:23:49.350 --> 00:23:51.030
+Un portátil permanece en una bolsa durante 2 meses.
+
+00:23:51.390 --> 00:23:52.890
+La fecha límite vence mientras se apaga.
+
+00:23:53.230 --> 00:23:54.990
+El usuario abre la tapa el lunes por la mañana.
+
+00:23:54.990 --> 00:24:00.170
+Sin un periodo de gracia, Windows puede reiniciar esa máquina a los pocos minutos de arrancar en medio de la preparación de una presentación.
+
+00:24:00.770 --> 00:24:05.350
+Con un periodo de gracia, la persona tiene unos días para reiniciar según sus propios términos y aquí es donde se gana o se pierde la confianza.
+
+00:24:06.010 --> 00:24:07.950
+Los usuarios aprenden rápidamente cómo se siente su público.
+
+00:24:08.390 --> 00:24:11.370
+Si alguna vez se produce un reinicio forzado durante una llamada con un cliente, lo recuerda.
+
+00:24:12.010 --> 00:24:17.690
+La próxima vez, buscarán el botón de pausa o dejarán de reiniciar porque han decidido que no se puede confiar en que la máquina elija su momento.
+
+00:24:18.510 --> 00:24:20.850
+Un mal reinicio enseña a 10 personas a resistirse al siguiente.
+
+00:24:21.530 --> 00:24:23.210
+Un periodo de gracia es un seguro barato contra él.
+
+00:24:23.210 --> 00:24:26.750
+Le cuesta unos días de exposición en dispositivos que de todos modos estaban desconectados.
+
+00:24:27.250 --> 00:24:27.950
+Ahora, ¿el reinicio en sí?
+
+00:24:28.570 --> 00:24:29.890
+Windows intenta ser educado primero.
+
+00:24:30.230 --> 00:24:32.630
+Instala actualización en segundo plano y luego espera que se reinicie.
+
+00:24:33.130 --> 00:24:35.070
+¿Fuera de las horas de actividad puede reiniciarse por sí solo?
+
+00:24:35.470 --> 00:24:36.770
+Dentro de las horas de actividad se detiene.
+
+00:24:37.270 --> 00:24:38.730
+Hay otra protección que la gente olvida.
+
+00:24:39.210 --> 00:24:39.790
+Horas de actividad.
+
+00:24:40.190 --> 00:24:45.950
+Windows puede detectar que alguien está trabajando activamente en una reunión o compartiendo su pantalla y retrasa el reinicio incluso fuera de las horas de actividad establecidas.
+
+00:24:46.250 --> 00:24:52.530
+La configuración que encontrarás en la política te permite definir la ventana de actividad y el dispositivo la respeta hasta que la fecha límite obligue a la emisión de problema.
+
+00:24:53.210 --> 00:24:55.230
+Las notificaciones importan más de lo que la gente espera.
+
+00:24:55.770 --> 00:24:57.470
+Puedes configurar recordatorios para el reinicio.
+
+00:24:57.790 --> 00:25:01.950
+Cuántos días de advertencia, cuántas horas antes de que aparezca la cuenta atrás en la pantalla y si el usuario puede posponer.
+
+00:25:02.590 --> 00:25:05.690
+Un reinicio forzado que llega con tres días de antelación parece una regla.
+
+00:25:06.130 --> 00:25:08.250
+Un reinicio forzado sin previo aviso parece un emboscado.
+
+00:25:08.690 --> 00:25:11.170
+También puedes decirle a Windows que se salte por completo la fase de educación.
+
+00:25:11.550 --> 00:25:13.430
+Reinicio automático en la fecha límite con una breve advertencia.
+
+00:25:13.650 --> 00:25:14.890
+Esa es la decisión correcta para un QA.
+
+00:25:15.290 --> 00:25:16.390
+Es una decisión dura por un mandado.
+
+00:25:17.070 --> 00:25:18.330
+Está la tensión subyacente a todo esto.
+
+00:25:18.730 --> 00:25:20.010
+Seguridad quiere que el plazo sea corto.
+
+00:25:20.370 --> 00:25:22.130
+Cada día adicional es un día sin aplicar el parche.
+
+00:25:22.690 --> 00:25:23.910
+Productividad quiere que el plazo sea largo.
+
+00:25:24.570 --> 00:25:28.050
+Cada reinicio forzado le cuesta a alguien su flujo y a veces su trabajo no guardado.
+
+00:25:28.470 --> 00:25:29.210
+Vas partes sin razón.
+
+00:25:29.590 --> 00:25:31.090
+El error es tratar esto como un día al global.
+
+00:25:31.750 --> 00:25:35.630
+Si lo ajustas en todas partes, creas una revuelta silenciosa entre las personas que menos pueden permitirse interrupciones.
+
+00:25:35.790 --> 00:25:39.630
+Si lo sueltas en todas partes, habrás creado una forma muy educada de permanecer expuesto.
+
+00:25:39.950 --> 00:25:41.290
+La mejor estrategia es la que hemos descrito.
+
+00:25:41.990 --> 00:25:46.970
+Vincula los números al anillo, pero obtiene un plazo corto y ningún plazo de gracia porque sus usuarios son de TI y lo esperan.
+
+00:25:47.410 --> 00:25:50.590
+Amplio obtiene un plazo moderado, un periodo de gracia y notificaciones generosas.
+
+00:25:50.950 --> 00:25:53.550
+Crítico obtiene una ventana negociada con las personas que dirigen la línea.
+
+00:25:54.130 --> 00:25:55.710
+Diferentes grupos, diferente tolerancia.
+
+00:25:56.030 --> 00:25:59.230
+Escrita, defendida, revisada y que gestiona las actualizaciones de calidad.
+
+00:25:59.670 --> 00:26:02.810
+Pero los anillos y los plazos solo controlan la cadencia mensual de parches de forma limpia.
+
+00:26:03.150 --> 00:26:04.470
+Las actualizaciones son algo diferente.
+
+00:26:05.070 --> 00:26:09.670
+Una nueva versión de Windows es más grande, más arriesgada y está vinculada a un calendario de soporte, por lo que necesita su propio control.
+
+00:26:09.670 --> 00:26:11.570
+Políticas de actualización de funciones
+
+00:26:11.570 --> 00:26:12.370
+Fijación de la versión
+
+00:26:12.370 --> 00:26:15.670
+Los anillos de actualización pueden aplazar una actualización de funciones, pero no pueden elegir.
+
+00:26:15.930 --> 00:26:16.430
+Esa es la diferencia.
+
+00:26:16.870 --> 00:26:20.590
+Un anillo dice que esperes esta cantidad de días y luego aceptas lo que Microsoft ofrezca.
+
+00:26:21.170 --> 00:26:24.690
+Si se lanza una nueva versión de Windows durante ese tiempo, al anillo no le importa qué versión sea.
+
+00:26:25.050 --> 00:26:25.770
+Solo cuenta los días.
+
+00:26:26.010 --> 00:26:27.290
+Las políticas de actualización de funciones
+
+00:26:27.290 --> 00:26:30.870
+Las encontrarás en Intune, en dispositivos, Windows y luego actualizaciones de funciones.
+
+00:26:31.250 --> 00:26:32.930
+Una política de actualización de funciones es una función.
+
+00:26:33.230 --> 00:26:37.910
+Nombra una versión, Windows 11, 24, H2, por ejemplo, y se lo dice a todos los dispositivos del grupo asignado.
+
+00:26:37.910 --> 00:26:39.570
+No, aquí es donde te detienes.
+
+00:26:40.270 --> 00:26:45.070
+Ni la última, ni la que esté disponible después de 90 días, una versión específica elegida a propósito.
+
+00:26:45.610 --> 00:26:46.530
+Esa es la razón por la que es importante.
+
+00:26:46.830 --> 00:26:48.470
+Sin un pin, el objetivo se mueve debajo de ti.
+
+00:26:48.910 --> 00:26:50.610
+Microsoft lanza una nueva versión una vez al año.
+
+00:26:51.230 --> 00:26:54.650
+Un dispositivo que finaliza su aplazamiento podría tener una versión con la que tus aplicaciones encuentran.
+
+00:26:54.930 --> 00:26:55.590
+Nadie decidió eso.
+
+00:26:55.970 --> 00:26:56.470
+No hizo el calendario.
+
+00:26:56.930 --> 00:26:57.930
+Con un pin, la decisión es tuya.
+
+00:26:58.710 --> 00:27:00.570
+Dispositivo se actualiza, esa versión y luego se queda ahí.
+
+00:27:01.050 --> 00:27:02.530
+Si sale una versión más nueva, no pasa nada.
+
+00:27:03.110 --> 00:27:07.450
+Sus dispositivos siguen ejecutando la versión que usted eligió y reciben actualizaciones mensuales de calidad adicionales.
+
+00:27:07.770 --> 00:27:09.710
+Por lo tanto, la política es realmente una declaración sobre la.
+
+00:27:09.970 --> 00:27:10.830
+Esta versión está aprobada.
+
+00:27:11.230 --> 00:27:13.270
+Cualquier versión más reciente no lo está hasta que alguien lo diga.
+
+00:27:13.950 --> 00:27:17.890
+Ahora bien, ¿qué ocurre cuando un anillo y una política de actualización de funciones se aplican en el mismo dispositivo?
+
+00:27:18.150 --> 00:27:19.330
+¿La política de actualización de funciones?
+
+00:27:19.690 --> 00:27:24.170
+Cuando asigno a una, el aplazamiento de la actualización de funciones en el anillo deja de ser importante para ese dispositivo.
+
+00:27:24.510 --> 00:27:28.250
+Intune toma la configuración del aplazamiento de la actualización de funciones en el anillo y la deja de lado.
+
+00:27:28.250 --> 00:27:30.510
+¿La política controla qué versión se ofrece y cuándo?
+
+00:27:31.210 --> 00:27:32.690
+El anillo sigue gestionando todo lo demás.
+
+00:27:33.350 --> 00:27:37.090
+Aplazamientos de calidad, plazos, reinicios, horas activas, esa división es realmente clara.
+
+00:27:37.550 --> 00:27:38.790
+¿El anillo rige el ritmo mensual?
+
+00:27:39.090 --> 00:27:42.990
+¿La política de actualización de funciones rige la decisión en dos controles, dos tareas sin su proposición?
+
+00:27:43.250 --> 00:27:44.030
+Pero la gente no lo ve.
+
+00:27:44.450 --> 00:27:49.650
+Establecen un aplazamiento de funciones de 180 días en el anillo y luego asignan a una política de actualización de funciones con la fecha de incidente.
+
+00:27:49.850 --> 00:27:51.790
+Luego se preguntan por qué asignaron los 180 días.
+
+00:27:52.170 --> 00:27:52.630
+No es un error.
+
+00:27:53.050 --> 00:27:54.050
+La política lo reemplazó.
+
+00:27:54.330 --> 00:27:57.570
+Si quieres un retraso, incluye la configuración de implementación de la política, no en el anillo.
+
+00:27:57.570 --> 00:27:59.310
+Y eso abre las opciones de implementación.
+
+00:27:59.890 --> 00:28:00.990
+Primero, la fecha de inicio.
+
+00:28:01.490 --> 00:28:04.030
+Le indicas a la política cuándo estará disponible la versión por el grupo.
+
+00:28:04.390 --> 00:28:05.650
+Antes de esa fecha no se ofrece nada.
+
+00:28:06.250 --> 00:28:09.370
+En esa fecha los dispositivos se vuelven elegibles y luego los registros normales los recono.
+
+00:28:09.550 --> 00:28:14.550
+Según mi implementación gradual, en lugar de hacer que todos los dispositivos sean elegibles el mismo día, puedes distribuirlos.
+
+00:28:15.190 --> 00:28:17.790
+Eliges una fecha de finalización y un intervalo de días entre grupos.
+
+00:28:17.910 --> 00:28:20.230
+Enjun escalona la elegibilidad a lo largo del periodo.
+
+00:28:20.750 --> 00:28:23.630
+Mil dispositivos no descargan varios gigabytes el mismo martes.
+
+00:28:24.590 --> 00:28:27.090
+Tu red y tu servicio de asistencia notarán la diferencia.
+
+00:28:28.130 --> 00:28:29.170
+Tercero, la adversidad single.
+
+00:28:29.470 --> 00:28:34.190
+En lugar de una gran asignación, creas políticas independientes para grupos independientes, cada uno con su propia fecha de inicio.
+
+00:28:34.650 --> 00:28:35.850
+De ahí obtiene la versión primero.
+
+00:28:35.950 --> 00:28:37.110
+El piloto sigue dos semanas después.
+
+00:28:37.230 --> 00:28:38.270
+El amplio sigue un mes después.
+
+00:28:38.930 --> 00:28:43.070
+Esa es la misma lógica de anillo que creamos antes, aplicada a la decisión anual en lugar de la mensual.
+
+00:28:43.570 --> 00:28:45.070
+Los mismos grupos me ordenan cada tiempo mañana.
+
+00:28:45.430 --> 00:28:49.030
+Funciona porque el PIN mantiene a cada grupo en un objetivo conocido mientras los demás se ponen al día.
+
+00:28:49.430 --> 00:28:51.830
+Hay una cosa más que decir sobre cómo se comporta un dispositivo anclado.
+
+00:28:51.830 --> 00:28:56.010
+Si un dispositivo tiene una versión anterior a la que indica la política, ¿pasa la anclada?
+
+00:28:56.530 --> 00:28:58.630
+Si ya tiene la versión anclada, no cambia nada.
+
+00:28:59.430 --> 00:29:02.190
+Si tiene una versión más reciente que la del PIN, el dispositivo no se revierte.
+
+00:29:02.590 --> 00:29:04.090
+La política puede mantener un dispositivo en su sitio.
+
+00:29:04.090 --> 00:29:06.130
+No puede deshacer una actualización de funciones que quiere realizar.
+
+00:29:06.570 --> 00:29:07.370
+Por eso el orden importa.
+
+00:29:07.950 --> 00:29:10.410
+Asigne la política antes de que llegue la actualización, no después.
+
+00:29:10.790 --> 00:29:11.710
+Ahora, un PIN parece seguridad.
+
+00:29:12.150 --> 00:29:12.810
+Te eligió la versión.
+
+00:29:13.270 --> 00:29:15.370
+Nada le sorprendrá, pero un PIN es una decisión.
+
+00:29:15.670 --> 00:29:17.190
+Y cada decisión tiene una fecha de caducidad.
+
+00:29:17.410 --> 00:29:18.670
+Las versiones de Windows no son eterna.
+
+00:29:19.070 --> 00:29:21.550
+Microsoft deja de dar servicio a cada una de ellas según un cronograma.
+
+00:29:21.590 --> 00:29:23.950
+La versión que ancla hoy tiene un último día de correcciones de seguridad.
+
+00:29:24.250 --> 00:29:25.990
+Y ese día ya está marcado en algún lugar del calendario.
+
+00:29:26.350 --> 00:29:27.730
+Ancla una versión y olvídate de ella.
+
+00:29:27.870 --> 00:29:31.270
+Y habrás creado un dispositivo perfectamente controlado que poco a poco va perdiendo protección.
+
+00:29:31.270 --> 00:29:35.330
+Lo que significa que la verdadera pregunta no es cómo anclar, sino cuánto tiempo se permite que se mantenga el PIN.
+
+00:29:36.590 --> 00:29:38.590
+Ciclo de vida de Windows y calendario de soporte.
+
+00:29:39.130 --> 00:29:41.510
+Cada versión de Windows tiene una fecha de nacimiento y una fecha de muerte.
+
+00:29:41.910 --> 00:29:43.090
+La segunda es la que la gente olvida.
+
+00:29:43.670 --> 00:29:44.630
+Empieza con Windows 11.
+
+00:29:44.910 --> 00:29:47.010
+Microsoft envía una actualización de funciones al año.
+
+00:29:47.650 --> 00:29:50.970
+En la segunda mitad del año natural, cada versión tiene su propio reloj de servicio.
+
+00:29:51.630 --> 00:29:53.690
+Ese reloj es de donde proviene tu PIN y donde caduca.
+
+00:29:54.390 --> 00:29:55.130
+Windows 10 es diferente.
+
+00:29:55.470 --> 00:29:57.170
+Es el modelo más antiguo y está a punto de desaparecer.
+
+00:29:57.170 --> 00:30:04.750
+La última versión de funciones, la versión 22H2, tiene una fecha de finalización fija para las actualizaciones de seguridad gratuitas y después de seguridad gratuitas y después de esa fecha toda la diversa.
+
+00:30:05.130 --> 00:30:10.810
+Cualquier cosa que siga ejecutando Windows 10 después de esa fecha se está ejecutando sin un área de seguridad, a menos que pagues por actualizaciones de seguridad extendidas.
+
+00:30:11.290 --> 00:30:14.190
+Por lo tanto, cuando anclas una versión, también estás eligiendo una fecha límite para ti.
+
+00:30:14.490 --> 00:30:16.470
+Nada bien cuánto dura realmente cada versión.
+
+00:30:17.310 --> 00:30:17.970
+Depende de la edición.
+
+00:30:17.970 --> 00:30:22.090
+Las ediciones Enterprise y Education obtienen 36 meses de servicio para la versión de otoño.
+
+00:30:22.570 --> 00:30:23.290
+36 meses.
+
+00:30:23.470 --> 00:30:25.330
+3 años completos de colección de seguridad mensual.
+
+00:30:25.770 --> 00:30:27.310
+Home y Pro obtienen 24 meses.
+
+00:30:27.670 --> 00:30:29.730
+Y las versiones de primavera, cuando existen, obtienen menos.
+
+00:30:30.110 --> 00:30:35.110
+La edición decide el calendario, así que comprueba cuál ejecutan realmente tus dispositivos antes de confiar en la fecha que recuerdas.
+
+00:30:35.470 --> 00:30:36.570
+Esa brecha importa más de lo que pasa.
+
+00:30:37.150 --> 00:30:37.950
+Un estado mixto.
+
+00:30:38.030 --> 00:30:40.310
+Algunos Enterprise y algunos Pro no comparten una fecha de caducidad.
+
+00:30:40.890 --> 00:30:43.410
+Los dispositivos Pro, la misma versión, agotan el año completo antes.
+
+00:30:43.870 --> 00:30:44.650
+Me mueve en diferente cantidad.
+
+00:30:45.070 --> 00:30:45.950
+Entonces, ¿qué ocurre en la cantidad?
+
+00:30:46.150 --> 00:30:46.870
+Nada grave.
+
+00:30:47.210 --> 00:30:47.730
+Ese es el problema.
+
+00:30:48.150 --> 00:30:48.930
+Dispositivo sigue arranca.
+
+00:30:49.170 --> 00:30:50.090
+Las aplicaciones siguen abriendo.
+
+00:30:50.370 --> 00:30:51.230
+El usuario no nota nada.
+
+00:30:51.630 --> 00:30:54.430
+Pero las actualizaciones de calidad mensuales dejan de llegar para esa versión.
+
+00:30:54.810 --> 00:30:57.630
+Y cada piso que se encuentre después permanece abierto para siempre.
+
+00:30:58.130 --> 00:31:01.390
+El equipo se convierte en un objetivo que envejece lentamente, pero que aún parece saludable en pan.
+
+00:31:01.930 --> 00:31:03.810
+Y Windows tampoco dejará en paso un dispositivo.
+
+00:31:04.270 --> 00:31:08.070
+Una vez que una versión llega al final del servicio, Windows Update puede cambiar el dispositivo a la más nueva,
+
+00:31:08.170 --> 00:31:10.690
+incluso en contra de tus deseos, a menos que una política lo mantenga vigente.
+
+00:31:11.490 --> 00:31:14.010
+Un pin no puede mantener una versión más allá de su propia fecha de caducidad.
+
+00:31:14.230 --> 00:31:16.510
+En ese momento habrás perdido la discusión con el calendario
+
+00:31:16.510 --> 00:31:19.270
+y estarás actualizando según tu cronograma o según el de Microsoft.
+
+00:31:20.050 --> 00:31:22.130
+Por eso las actualizaciones de funciones no pueden ser un proyecto.
+
+00:31:22.490 --> 00:31:24.470
+Un proyecto tiene un inicio, un presupuesto y un final.
+
+00:31:24.870 --> 00:31:27.370
+Alguien lo pone en marcha, un equipo lo ejecuta durante seis meses y luego finaliza.
+
+00:31:28.010 --> 00:31:30.150
+Luego, doce meses después, llega la siguiente versión.
+
+00:31:30.150 --> 00:31:32.150
+Y nadie recuerda cómo fue la última.
+
+00:31:32.850 --> 00:31:33.850
+Ciclo de vida no funciona así.
+
+00:31:34.250 --> 00:31:34.850
+Es un ritmo anual.
+
+00:31:35.310 --> 00:31:36.250
+Sale una versión cada año.
+
+00:31:36.350 --> 00:31:37.870
+Una versión caduca cada año.
+
+00:31:38.370 --> 00:31:40.730
+Siempre hay una versión que abandonas y una versión a la que te diriges.
+
+00:31:41.050 --> 00:31:42.150
+Por lo tanto, la planificación bucle.
+
+00:31:42.570 --> 00:31:46.790
+Cuando se hace una nueva versión, las pruebas se realizan antes utilizando esa ventana de vista previa de la versión de la quebramos.
+
+00:31:46.890 --> 00:31:48.110
+La versión piloto sigue un par de meses.
+
+00:31:48.550 --> 00:31:49.850
+La versión general se mueve en las siguientes meses.
+
+00:31:49.850 --> 00:31:54.710
+Y cuando la versión en la que estás trabajando esté a 18 meses de su final, la siguiente ya debería estar probada.
+
+00:31:55.610 --> 00:31:56.730
+Ese tipo te da margen de maniobra.
+
+00:31:57.090 --> 00:32:00.610
+La que es lo que te salva cuando un proveedor de aplicaciones se retrasa con una corrección de compatibilidad.
+
+00:32:00.770 --> 00:32:02.050
+O un modelo de hardware necesitan controlado.
+
+00:32:02.130 --> 00:32:02.710
+Hardware necesitan.
+
+00:32:03.030 --> 00:32:04.930
+Los equipos que lo tratan como un proyecto obtienen lo contrario.
+
+00:32:05.230 --> 00:32:07.450
+Descubren la fecha de finalización cuando faltan seis semanas.
+
+00:32:07.650 --> 00:32:09.830
+Envían una actualización de funciones a todo el equipo en pánico.
+
+00:32:10.090 --> 00:32:11.110
+Sin un piloto ni pruebas.
+
+00:32:11.610 --> 00:32:14.510
+La misma decisión que se toma una vez con calma un año antes o bajo presión.
+
+00:32:15.250 --> 00:32:16.330
+Ahora observa lo que hemos creado hasta ahora.
+
+00:32:16.970 --> 00:32:19.010
+Anillos, plazos, políticas de funciones, un calendario.
+
+00:32:19.390 --> 00:32:20.030
+Cada pieza funciona.
+
+00:32:20.490 --> 00:32:23.870
+Cada pieza es algo que diseñas, ajustes, revisas y lo vuelves a hacer cada mes y cada año.
+
+00:32:24.710 --> 00:32:27.330
+Algunas organizaciones quieren ese control, otras quieren que alguien más lo lleve a cabo.
+
+00:32:27.710 --> 00:32:29.410
+Ahí es donde aparece la respuesta de Microsoft.
+
+00:32:30.330 --> 00:32:34.150
+Es un servicio administrado creado sobre todo lo que acabas de aprender y se llama AutoPatch.
+
+00:32:34.850 --> 00:32:36.470
+¿Qué es realmente Windows AutoPatch?
+
+00:32:37.170 --> 00:32:38.650
+AutoPatch no es un nuevo motor de actualización.
+
+00:32:39.050 --> 00:32:40.110
+Eso es lo primero que hay que dejar claro.
+
+00:32:40.630 --> 00:32:41.790
+No hay un segundo sistema oculto detrás.
+
+00:32:43.010 --> 00:32:45.690
+AutoPatch es un servicio administrado que se basa en dos cosas que ya conoces.
+
+00:32:45.830 --> 00:32:48.690
+Intune para las políticas y Windows Update for Business para la entrega.
+
+00:32:49.010 --> 00:32:52.230
+Los mismos aviones, el mismo motor, una persona diferente a cargo.
+
+00:32:52.930 --> 00:32:54.690
+Piensa en lo que has creado hasta ahora en este video.
+
+00:32:55.070 --> 00:32:57.990
+Anillos, aplazamiento, fechas límite, una política de actualización de funciones, un calendario.
+
+00:32:58.690 --> 00:33:03.430
+Cada uno de ellos es una decisión y todos necesitan a alguien que lo cree, lo revise y lo mantenga actualizado.
+
+00:33:04.350 --> 00:33:07.190
+AutoPatch asume una gran parte de ese trabajo y se lo transfiere a Microsoft.
+
+00:33:07.530 --> 00:33:08.870
+Entonces, ¿de qué se encarga Microsoft exactamente?
+
+00:33:09.450 --> 00:33:10.390
+Empieza por la creación de anillo.
+
+00:33:10.390 --> 00:33:13.890
+Cuando un dispositivo se une al servicio, AutoPatch no te pide que diseñes las etapas.
+
+00:33:14.410 --> 00:33:14.890
+La construye.
+
+00:33:15.350 --> 00:33:18.290
+Crea los grupos, escribe las políticas de anillos de actualización y las asigna.
+
+00:33:18.770 --> 00:33:20.970
+No abres la página de anillos de actualización y empiezas desde una pandemia.
+
+00:33:21.450 --> 00:33:23.510
+Los anillos ya están ahí con los números que eligió Microsoft.
+
+00:33:24.050 --> 00:33:25.070
+A continuación, la supervisión.
+
+00:33:25.450 --> 00:33:26.970
+Esta es la parte que más importa discretamente.
+
+00:33:27.690 --> 00:33:30.870
+AutoPatch observa cómo se comporta cada actualización a medida que avanza por las etapas.
+
+00:33:30.930 --> 00:33:33.910
+Las instalaciones que se realizan correctamente las instalizan correctamente las instalaciones de forma.
+
+00:33:33.910 --> 00:33:38.770
+Lea esa señal en tu nombre las 24 horas del día en lugar de esperar a que alguien abra un panel el jueves.
+
+00:33:39.730 --> 00:33:40.490
+Y luego la corrección.
+
+00:33:40.890 --> 00:33:42.650
+Cuando algo sale mal, el servicio no solo nota.
+
+00:33:43.090 --> 00:33:43.410
+Actúa.
+
+00:33:43.750 --> 00:33:46.150
+Puede pausar una implementación antes de que la siguiente etapa reciba la excepción.
+
+00:33:46.870 --> 00:33:50.090
+Puede marcar los dispositivos que están bloqueados y en algunos casos los empuja hacia una solución.
+
+00:33:50.690 --> 00:33:51.990
+Profundizaremos en esa maquinaria más adelante.
+
+00:33:52.290 --> 00:33:53.990
+Creación de anillos, supervisión, corrección.
+
+00:33:54.250 --> 00:33:54.910
+Ese es el traspaso.
+
+00:33:55.290 --> 00:34:00.230
+Microsoft ejecuta el bucle que en una configuración autogestionada pertenece a una persona con un espacio libre en el calendario.
+
+00:34:00.690 --> 00:34:02.070
+Pero aquí es donde los equipos se equivocan.
+
+00:34:02.470 --> 00:34:03.630
+AutoPatch no toma las decisiones.
+
+00:34:04.290 --> 00:34:05.710
+Se encarga de la ejecución de las decisiones.
+
+00:34:06.190 --> 00:34:07.950
+Lo que se queda contigo es la parte que siempre fue tuya.
+
+00:34:08.490 --> 00:34:09.310
+¿Qué dispositiva en el servicio?
+
+00:34:10.210 --> 00:34:11.250
+¿Cuáles retires y por qué?
+
+00:34:12.130 --> 00:34:14.350
+¿Cuánto riesgo asumirá el negocio para un grupo determinado?
+
+00:34:14.710 --> 00:34:17.990
+¿Qué ocurre cuando una actualización interrumpe una aplicación de línea de negocio un martes por la tarde?
+
+00:34:18.290 --> 00:34:19.990
+Las decisiones sobre política se quedan contigo.
+
+00:34:20.270 --> 00:34:21.390
+Las exclusiones se quedan contigo.
+
+00:34:21.390 --> 00:34:22.850
+Y la responsabilidad se queda contigo.
+
+00:34:23.190 --> 00:34:24.570
+Vale la pena pensar en esto último segundo.
+
+00:34:25.330 --> 00:34:28.650
+Si un parche llega tarde al portátil de un ejecutivo y ese equipo sufre una vulneración,
+
+00:34:28.770 --> 00:34:30.970
+nadie dirá que el servicio de Microsoft debía encargarse de ello.
+
+00:34:32.050 --> 00:34:33.590
+El registro de auditoría termina en tu organización.
+
+00:34:34.070 --> 00:34:35.590
+AutoPatch es un delegado, no un propietario.
+
+00:34:36.050 --> 00:34:36.670
+Entrégase el trabajo.
+
+00:34:37.090 --> 00:34:38.110
+No le entregas la responsabilidad.
+
+00:34:38.590 --> 00:34:40.910
+Por lo tanto, el modelo mental correcto es un contrato con una división clara.
+
+00:34:41.330 --> 00:34:42.170
+Aquí es el propietario de la mecánica.
+
+00:34:42.590 --> 00:34:43.590
+Tú eres el propietario de los usuarios.
+
+00:34:43.590 --> 00:34:46.630
+Ahora, unas palabras sobre lo que se necesita para utilizarlo brevemente
+
+00:34:46.630 --> 00:34:50.470
+porque los detalles de la licencia cambian y siempre desconfirmarlos con la documentación actual de Microsoft.
+
+00:34:50.470 --> 00:34:54.450
+A grandes rasgos, AutoPatch está incluido con ciertas licencias de Windows,
+
+00:34:54.830 --> 00:34:57.830
+los planes de nivel empresarial como Windows Enterprise E3 y E5
+
+00:34:57.830 --> 00:35:01.170
+y los paquetes de Microsoft 365 que los contienen.
+
+00:35:02.170 --> 00:35:04.310
+No es un producto independiente que compres además de sus planes.
+
+00:35:04.870 --> 00:35:07.250
+Desde entonces, también se han añadido algunos planes de nivel empresarial,
+
+00:35:07.330 --> 00:35:09.610
+por lo que vale la pena comprobar la lista exacta antes de planificar en torno.
+
+00:35:09.610 --> 00:35:11.810
+Los requisitos previos se encuentran un nivel por debajo de la lista.
+
+00:35:12.290 --> 00:35:13.910
+Necesitas Intune como plataforma de gestión.
+
+00:35:14.490 --> 00:35:17.810
+Necesitas dispositivos unidos a Microsoft en Trading, ya sea directamente o como unión híbrida.
+
+00:35:18.470 --> 00:35:22.250
+Necesitas versiones de Windows compatibles y la configuración correcta de la directiva de actualización de Windows
+
+00:35:22.250 --> 00:35:23.930
+que AutoPatch necesite en lugar de establecer la mano.
+
+00:35:24.050 --> 00:35:24.770
+Así es como funciona.
+
+00:35:24.910 --> 00:35:28.110
+Una licencia que incluye el servicio, una plataforma de administración que pueda alojarlo
+
+00:35:28.110 --> 00:35:29.770
+y dispositivos que en Trading reconoce.
+
+00:35:30.150 --> 00:35:31.150
+Sin embargo, observa el patrón.
+
+00:35:31.430 --> 00:35:34.070
+Todo lo que aparece en esa lista tiene que ver con el dispositivo, no con el servicio.
+
+00:35:34.570 --> 00:35:36.230
+Microsoft está listo en el momento en que lo activa.
+
+00:35:36.690 --> 00:35:38.290
+Si tu patrimonio está listo es otra cuestión.
+
+00:35:38.290 --> 00:35:42.450
+Y es la parte que nadie puede saltarse porque AutoPatch no puede administrar un dispositivo que no acepta.
+
+00:35:42.890 --> 00:35:45.790
+Antes de que una sola actualización fluya a través de esos anillos administrados,
+
+00:35:45.890 --> 00:35:49.310
+cada máquina debe superar una comprobación y muchas de ellas no la superan por razones que nadie no.
+
+00:35:49.490 --> 00:35:52.190
+Por lo tanto, la verdadera pregunta no es qué hace AutoPatch una vez que se está ejecutando,
+
+00:35:52.290 --> 00:35:54.550
+sino que Aspecto debe tener un dispositivo antes que se le miden un dispositivo.
+
+00:35:56.150 --> 00:35:58.090
+Requisitos previos de AutoPatch y registro de dispositivos.
+
+00:35:58.670 --> 00:36:00.490
+AutoPatch ejecuta una comprobación de preparación.
+
+00:36:00.790 --> 00:36:03.810
+Antes de aceptar cualquier cosa no es una formalidad, es una puerta real con fallos reales.
+
+00:36:04.510 --> 00:36:06.110
+Se encuentra en el centro de administración de Intune,
+
+00:36:06.110 --> 00:36:08.430
+en administración de inquilinos y a continuación en Windows AutoPatch.
+
+00:36:08.970 --> 00:36:10.650
+Antes de registrar un solo dispositivo,
+
+00:36:10.870 --> 00:36:13.630
+el servicio analiza a tu inquilino y te hace una breve lista de preguntas.
+
+00:36:14.310 --> 00:36:17.630
+Y luego hace las mismas preguntas sobre cada dispositivo, pese a una administración.
+
+00:36:17.950 --> 00:36:19.510
+El dispositivo debe estar inscrito en Intune.
+
+00:36:19.830 --> 00:36:21.890
+No planificado para la inscripción, inscrito o registrado,
+
+00:36:22.050 --> 00:36:23.630
+con política de retención y por último identidad.
+
+00:36:24.070 --> 00:36:25.790
+El dispositivo debe estar unido a Microsoft Entry.
+
+00:36:26.270 --> 00:36:28.610
+La unión directa funciona, la unión híbrida también funciona
+
+00:36:28.610 --> 00:36:31.490
+si la máquina también está vinculada a tu directorio local y registrada en la nube.
+
+00:36:31.490 --> 00:36:34.610
+Un dispositivo que solo conoce el dominio antiguo sin identidad entra,
+
+00:36:34.730 --> 00:36:36.270
+no existe en lo que respecta al servicio.
+
+00:36:37.110 --> 00:36:37.930
+Pruebo la versión de Windows.
+
+00:36:38.430 --> 00:36:42.250
+AutoPatch solo administra las versiones que aún son compatibles y solo en ediciones compatibles.
+
+00:36:42.910 --> 00:36:45.850
+Una máquina bloqueada en una versión retirada realiza esta comprobación en el acto,
+
+00:36:45.910 --> 00:36:46.510
+lo que te dice algo.
+
+00:36:47.190 --> 00:36:50.430
+El servicio no pretenderá proteger un dispositivo que Microsoft ha dejado de parchear.
+
+00:36:51.350 --> 00:36:53.530
+Tres comprobaciones, administración, identidad y versión.
+
+00:36:54.410 --> 00:36:56.970
+Pero bien, hay un problema para los estados que todavía usan Configuration Manage.
+
+00:36:56.970 --> 00:36:59.230
+La cohesión es donde muchos equipos se topan con un muro.
+
+00:36:59.690 --> 00:37:00.850
+En un dispositivo coadministrado,
+
+00:37:00.990 --> 00:37:03.410
+tanto Configuration Manager como Intune se comunican con la misma máquina.
+
+00:37:03.710 --> 00:37:05.730
+Y cada uno puede reclamar la propiedad de diferentes trabajos,
+
+00:37:05.790 --> 00:37:07.190
+a los que Microsoft llama cargas de trabajo.
+
+00:37:07.710 --> 00:37:10.970
+Para AutoPatch, una carga de trabajo es la más importante de las directivas de Windows Update.
+
+00:37:11.310 --> 00:37:12.650
+Esa carga de trabajo debe apuntar a Int.
+
+00:37:13.190 --> 00:37:14.850
+Si Configuration Manager aún la retiene,
+
+00:37:14.950 --> 00:37:16.570
+el cliente toma sus reglas de actualización de allí
+
+00:37:16.570 --> 00:37:18.210
+y AutoPatch no tiene forma de aplicar nada.
+
+00:37:18.770 --> 00:37:19.810
+El control deslizante demuga.
+
+00:37:20.250 --> 00:37:23.770
+Junto con él, las cargas de trabajo de Office Hacer Click, Ejecutar y Configuración de dispositivo
+
+00:37:23.770 --> 00:37:27.290
+también deben estar en el lado de Intune o el servicio marcará el dispositivo como no listo.
+
+00:37:27.550 --> 00:37:28.810
+Esta es una decisión o una alternancia.
+
+00:37:29.170 --> 00:37:32.750
+Mover esa carga de trabajo significa que cada regla de actualización de esas máquinas a máquinas ahora provienen.
+
+00:37:32.970 --> 00:37:34.890
+Sus reglas de implementación existentes dejan de aplicarse.
+
+00:37:35.270 --> 00:37:37.690
+Planifique el traslado, pruébelo en un grupo pequeño y luego amplíelo.
+
+00:37:38.030 --> 00:37:39.390
+Bien, el dispositivo pasa a las comprobaciones.
+
+00:37:39.870 --> 00:37:40.590
+¿Cómo entra realmente?
+
+00:37:40.990 --> 00:37:41.890
+A través de un grupo de registro.
+
+00:37:42.450 --> 00:37:43.370
+Cuando configura el servicio,
+
+00:37:43.650 --> 00:37:45.830
+AutoPatch, que es un grupo de Microsoft, entra para el registro.
+
+00:37:46.230 --> 00:37:46.950
+Su trabajo es simple.
+
+00:37:47.410 --> 00:37:49.790
+Cualquier dispositivo que llegue a ese grupo es recogido por el servicio.
+
+00:37:50.350 --> 00:37:51.510
+El servicio lee la membresía.
+
+00:37:51.510 --> 00:37:53.950
+Valida cada dispositivo con las verificaciones que acabamos de ver.
+
+00:37:54.410 --> 00:37:55.630
+Y luego registra los que pasan.
+
+00:37:56.010 --> 00:37:57.650
+Eso significa que la entrada es una operación de grupo.
+
+00:37:58.090 --> 00:38:00.170
+No registras máquinas de una señora en un asistente.
+
+00:38:00.830 --> 00:38:01.670
+Las agregas al grupo.
+
+00:38:01.810 --> 00:38:04.030
+Esperas a que el servicio haga un barrido y observas los resultados.
+
+00:38:04.270 --> 00:38:05.630
+Y controles la membresía como quieras.
+
+00:38:05.930 --> 00:38:08.830
+Una regla dinámica que capture todos los dispositivos Windows corporativos.
+
+00:38:09.170 --> 00:38:11.330
+O una lista estática para un primer lote pequeño funcionan.
+
+00:38:11.770 --> 00:38:15.330
+Empezar poco a poco es más inteligente porque el primer barrido te enseñará cosas sobre tu patrimonio
+
+00:38:15.330 --> 00:38:17.410
+que no sabías, lo que no sabías, lo que nos lleva a los buquedores.
+
+00:38:17.710 --> 00:38:19.170
+La mayoría de los fallos provienen de dos lugares.
+
+00:38:19.170 --> 00:38:20.910
+El primero es una política en conflicto.
+
+00:38:20.910 --> 00:38:24.270
+Un dispositivo ya tiene una política de anillo de actualización que creaste tú mismo.
+
+00:38:24.370 --> 00:38:25.830
+O una configuración de política de grupo.
+
+00:38:25.970 --> 00:38:28.730
+O un valor de registro que apunta al cliente a una fuente de actualización diferente.
+
+00:38:29.250 --> 00:38:31.270
+Autopatch quiere ser la única voz en el comportamiento de actualización.
+
+00:38:32.110 --> 00:38:35.810
+Cuando dos voces no están de acuerdo, el servicio marca el dispositivo como en conflicto y permanece.
+
+00:38:36.210 --> 00:38:38.030
+Fuera hasta que alguien borre la configuración anterior.
+
+00:38:38.790 --> 00:38:40.510
+La segunda es una configuración no compatible.
+
+00:38:40.670 --> 00:38:42.610
+Un dispositivo con una edición que el servicio no cubre.
+
+00:38:42.730 --> 00:38:45.430
+Una máquina que no se ha registrado con Intune en semanas y parece inactiva.
+
+00:38:45.430 --> 00:38:49.130
+Un dispositivo con una identidad faltante o no coincidente, por lo que el registro de Entra
+
+00:38:49.130 --> 00:38:50.790
+y el registro de Intune no coincide en cuanto a quién es.
+
+00:38:51.170 --> 00:38:52.270
+Esto es lo que hace que su eduloso.
+
+00:38:52.530 --> 00:38:53.010
+Tiene silencio.
+
+00:38:53.330 --> 00:38:55.190
+Nadie recibe una alerta que indique que se omitió una computadora a porta.
+
+00:38:55.650 --> 00:38:59.070
+El dispositivo simplemente permanece allí fuera del servicio y parece estar bien en todos
+
+00:38:59.070 --> 00:38:59.790
+los demás paneles.
+
+00:39:00.550 --> 00:39:02.530
+Solo lo encuentras y baile los resultados del registro.
+
+00:39:02.650 --> 00:39:04.330
+Así que, léalos cada vez que agregue un lote.
+
+00:39:04.930 --> 00:39:06.330
+Los dispositivos que pasan no esperan.
+
+00:39:06.910 --> 00:39:10.150
+Se clasifican en los anillos de parches automáticos diseñados por usted y usted no dibujó
+
+00:39:10.150 --> 00:39:10.850
+uno en un solo de ellos.
+
+00:39:11.730 --> 00:39:12.970
+Anillos para determinados de parches automáticos.
+
+00:39:13.590 --> 00:39:14.810
+Prueba primero, rápida y amplia.
+
+00:39:15.690 --> 00:39:16.950
+Parche automático le ofrece cuatro grupos.
+
+00:39:17.870 --> 00:39:19.010
+Prueba primero, rápida y amplia.
+
+00:39:19.830 --> 00:39:23.050
+La misma idea por etapas que creamos a mano antes, pero con los nombres y los números
+
+00:39:23.050 --> 00:39:23.610
+de Microsoft.
+
+00:39:24.270 --> 00:39:25.050
+La prueba es la más pequeña.
+
+00:39:25.050 --> 00:39:29.610
+Está pensada para TI y su trabajo es detectar la interrupción obvia antes de que alguien
+
+00:39:29.610 --> 00:39:30.410
+más vea la actualización.
+
+00:39:30.750 --> 00:39:32.010
+Primero, una pequeña porción de usuario de red.
+
+00:39:32.530 --> 00:39:35.250
+Fast es una porción más grande donde la actualización cubre la mayoría de tu combinación
+
+00:39:35.250 --> 00:39:38.330
+de hardware y aplicaciones y broad es el resto, la mayor parte del patrimonio, el último
+
+00:39:38.330 --> 00:39:40.690
+en la fila patrimonial, el último en la fila con la mayor cantidad de evidencia detrás.
+
+00:39:40.890 --> 00:39:41.510
+Observa lo que ve.
+
+00:39:41.830 --> 00:39:43.910
+No hay ningún grupo para kioscos o máquinas de fábrica.
+
+00:39:44.030 --> 00:39:46.490
+Ningún grupo para dispositivos que necesiten una ventana negociada.
+
+00:39:47.150 --> 00:39:49.890
+El servicio te ofrece cuatro etapas y cada dispositivo aterriza en una de ellas.
+
+00:39:50.150 --> 00:39:51.210
+Entonces, ¿cómo aterriza un dispositivo?
+
+00:39:51.770 --> 00:39:52.330
+Autopatch de sí.
+
+00:39:52.710 --> 00:39:56.590
+Cuando el barrio del registro acepta una máquina, el servicio le asigna a un grupo propio.
+
+00:39:57.070 --> 00:39:59.470
+Puedes agarrar dispositivos para probarlos manualmente si quieres que haya una persona
+
+00:39:59.470 --> 00:39:59.850
+específica.
+
+00:40:00.070 --> 00:40:03.410
+El servicio coloca todo lo demás y los coloca por porcentaje.
+
+00:40:03.410 --> 00:40:05.750
+Cada grupo tiene una cuarta objetiva del patrimonio.
+
+00:40:05.830 --> 00:40:08.470
+Test es pequeño, unos pocos dispositivos o alrededor del 1%.
+
+00:40:08.470 --> 00:40:11.950
+First es alrededor del 10%, Fast es alrededor del 20% y Broad se encarga del resto.
+
+00:40:12.290 --> 00:40:13.710
+Esos objetivos importan más de lo que pueden.
+
+00:40:14.150 --> 00:40:18.030
+Establecen el tamaño de cada etapa y el tamaño decide la calidad de la señal, lo cual ya sabemos.
+
+00:40:19.110 --> 00:40:22.490
+Un primer grupo demasiado reducido puede pasar por alto un problema que suave es en un modelo
+
+00:40:22.490 --> 00:40:22.790
+de portable.
+
+00:40:23.650 --> 00:40:24.730
+Esta es la parte que pilla de su equipos.
+
+00:40:25.250 --> 00:40:27.890
+El servicio mantiene equilibrados esos recursos compartidos a medida que los dispositivos
+
+00:40:27.890 --> 00:40:28.330
+se entrenizan.
+
+00:40:28.630 --> 00:40:32.910
+Registra unos cientos de máquinas nuevas y algunas caminarán de grupo para restablecer las proporciones
+
+00:40:32.910 --> 00:40:36.590
+Un dispositivo que creías que estaba en Broad puede acabar en Fast el siguiente barrido.
+
+00:40:37.250 --> 00:40:40.850
+Si alguien de tu equipo necesita saber exactamente dónde se encuentra una máquina, comproba la
+
+00:40:40.850 --> 00:40:41.570
+pertenencia al grupo.
+
+00:40:41.930 --> 00:40:42.350
+No lo recuerde.
+
+00:40:42.670 --> 00:40:44.890
+Ahora bien, ¿qué hacen realmente estos grupos de forma diferente?
+
+00:40:45.810 --> 00:40:46.670
+La diferencia es el tiempo.
+
+00:40:47.110 --> 00:40:50.250
+Cada grupo tiene su propio aplazamiento y fecha límite y ambos crecen a medida que se
+
+00:40:50.250 --> 00:40:50.670
+avanzan en la línea.
+
+00:40:50.930 --> 00:40:52.450
+Test realiza la actualización sin aplazamiento.
+
+00:40:52.910 --> 00:40:55.950
+Detecta actualizaciones de calidad en el momento en que se ofrecen con un plazo muy corto
+
+00:40:55.950 --> 00:40:57.470
+y el reinicio se fuerza de forma rápida.
+
+00:40:58.090 --> 00:40:58.750
+Eso es intencionado.
+
+00:40:59.010 --> 00:41:00.250
+Test existe para interrumpir primero.
+
+00:41:00.250 --> 00:41:01.430
+First espera unos días.
+
+00:41:01.430 --> 00:41:02.630
+First espera unos cuantos más.
+
+00:41:02.870 --> 00:41:06.090
+Broad espera más tiempo, cerca de una semana, y obtiene un plazo más largo más un periodo
+
+00:41:06.090 --> 00:41:08.650
+de gracia para que los usuarios tengan margen para iniciarse en sus propios términos.
+
+00:41:08.910 --> 00:41:12.110
+No te daré cifras exactas para cada configuración porque Microsoft las ajusta con el tiempo.
+
+00:41:13.150 --> 00:41:16.330
+Consulta la documentación actual antes de dar una cifra a tu equipo de seguridad, pero
+
+00:41:16.330 --> 00:41:19.770
+la forma se mantiene estable, corta y precisa al principio, paciente y suave al final.
+
+00:41:20.850 --> 00:41:23.850
+Las actualizaciones de funciones siguen en el mismo escalonamiento, solo que a lo largo
+
+00:41:23.850 --> 00:41:26.910
+de semanas en lugar de días y el servicio gestiona la versión del tiempo para cada grupo.
+
+00:41:27.470 --> 00:41:28.470
+Entonces, ¿dónde encaja este modelo?
+
+00:41:28.470 --> 00:41:32.430
+Se adapta a una organización que tiene un parque de oficinas típico, un equipo de TI pequeño
+
+00:41:32.430 --> 00:41:35.030
+y ninguna predisposición a crear una lógica de anillo desde cero.
+
+00:41:35.530 --> 00:41:38.250
+Para esos equipos, los valores predeterminados son mejores que los que habían dibujado ellos.
+
+00:41:39.130 --> 00:41:42.410
+Etapas sensatas, retrasos sensatos, ninguna página en blanco y también se adapta a la
+
+00:41:42.410 --> 00:41:42.910
+segunda tarea.
+
+00:41:43.350 --> 00:41:45.750
+Un equipo que nunca ha realizado implementaciones, pero etapas obtienen el primer DIP.
+
+00:41:46.110 --> 00:41:49.330
+Eso por sí solo cierra una brecha real, pero los valores predeterminados frustran a las
+
+00:41:49.330 --> 00:41:50.410
+personas en algunos aspectos plenos.
+
+00:41:50.850 --> 00:41:52.010
+Uno es el control sobre la membresía.
+
+00:41:52.470 --> 00:41:55.710
+No puedes decir que estas 200 estaciones de trabajo clínica siempre deben ser las últimas.
+
+00:41:55.710 --> 00:41:59.190
+Servicio equilibra los porcentajes y tus excepciones contradicen esa lógica.
+
+00:41:59.830 --> 00:42:00.550
+Otro es la velocidad.
+
+00:42:00.950 --> 00:42:04.790
+Algunos equipos de seguridad observan el plazo general y ven una semana de exposición que
+
+00:42:04.790 --> 00:42:05.330
+nunca probaron.
+
+00:42:05.930 --> 00:42:06.530
+Eligieron ese número.
+
+00:42:07.010 --> 00:42:08.430
+Microsoft lo hizo en tercero de la confianza.
+
+00:42:09.090 --> 00:42:12.250
+Los administradores a quienes les gusta saber exactamente por qué se actualiza un dispositivo
+
+00:42:12.250 --> 00:42:14.850
+cuando lo hizo a veces sienten que están un paso alejados de su propio patrimonio.
+
+00:42:15.230 --> 00:42:16.410
+La capa de razonamiento sigue existiendo.
+
+00:42:16.950 --> 00:42:18.450
+Simplemente reside en políticas que no escribiste.
+
+00:42:18.830 --> 00:42:20.270
+Nada de eso hace que el modelo sea incorrecto.
+
+00:42:20.490 --> 00:42:22.090
+Lo convierte en un valor predeterminado y no son muros.
+
+00:42:22.090 --> 00:42:26.190
+AutoPatch te permite ajustar gran parte de este comportamiento, desde aplazamientos hasta
+
+00:42:26.190 --> 00:42:30.130
+anillos adicionales con exclusión de dispositivos específicos, pero solo dentro de las barandillas
+
+00:42:30.130 --> 00:42:31.650
+de protección que el servicio establece para sí.
+
+00:42:32.710 --> 00:42:33.910
+Personalizar AutoPatch sin romper.
+
+00:42:34.670 --> 00:42:35.690
+O sea, ¿qué puedes cambiar realmente?
+
+00:42:36.070 --> 00:42:37.950
+Más de lo que la gente espera, menos de lo que la gente quiere.
+
+00:42:38.330 --> 00:42:39.950
+La palanca principal es el anillo de actualización.
+
+00:42:40.350 --> 00:42:43.170
+Dentro de la configuración de la versión de AutoPatch creas tus propios anillos junto
+
+00:42:43.170 --> 00:42:44.370
+a los cuatro valores predeterminados.
+
+00:42:44.850 --> 00:42:48.170
+Eliges el aplazamiento, la fecha límite, el periodo de gracia y qué dispositivo pertenecen
+
+00:42:48.170 --> 00:42:48.310
+a él.
+
+00:42:48.310 --> 00:42:51.730
+Un anillo para las estaciones de trabajo clínica es un anillo para la planta de producción.
+
+00:42:51.910 --> 00:42:54.330
+Un anillo que siempre es el último, sin importar lo que digan los porcentajes.
+
+00:42:54.930 --> 00:42:56.950
+Eso soluciona la mayor frustración de la última sección.
+
+00:42:57.450 --> 00:43:00.990
+El servicio deja de equilibrar esos dispositivos, pues los has sacado de los grupos administrados
+
+00:43:00.990 --> 00:43:02.350
+y los has llevado a uno que controlas.
+
+00:43:03.030 --> 00:43:05.030
+También puedes ajustar el comportamiento de los valores predeterminados.
+
+00:43:05.350 --> 00:43:08.490
+Los aplazamientos, las fechas límite y los ajustes de reinicio de los grupos estándar
+
+00:43:08.490 --> 00:43:09.690
+se pueden ajustar en donde no es límite.
+
+00:43:10.230 --> 00:43:11.770
+Algunos valores tienen mínimo o máximo.
+
+00:43:12.250 --> 00:43:15.410
+Algunos ajustes no pueden modificarlos en absoluto porque el servicio los necesita para revisar
+
+00:43:15.410 --> 00:43:15.970
+su supervisión.
+
+00:43:15.970 --> 00:43:16.810
+Y esa es la cuestión.
+
+00:43:17.290 --> 00:43:18.510
+AutoPatch te permite cambiar los tiempos.
+
+00:43:18.950 --> 00:43:20.910
+No te permite eliminar las partes que hacen que el servicio unice.
+
+00:43:21.670 --> 00:43:24.670
+La lógica de pausa, las señales de estado, la estructura de grupos subyacente, todo eso
+
+00:43:24.670 --> 00:43:25.130
+permanece.
+
+00:43:25.630 --> 00:43:26.770
+Ahora bien, ¿el problema empieza en otro lugar?
+
+00:43:27.190 --> 00:43:28.410
+¿Empieza con las políticas que ya tienes?
+
+00:43:28.990 --> 00:43:31.870
+En la mayoría de los estados, Intune no está vacío cuando llega a AutoPatch.
+
+00:43:32.290 --> 00:43:34.450
+Hay un anillo de actualización que él creó hace dos años.
+
+00:43:34.790 --> 00:43:36.190
+Una política de actualización de funciones.
+
+00:43:36.330 --> 00:43:38.690
+Tal vez un objeto de política de grupo y sigue estableciendo la fuente de actualización.
+
+00:43:39.110 --> 00:43:40.810
+Cada uno es una voz que le dice a Windows qué hacer.
+
+00:43:41.350 --> 00:43:42.550
+AutoPatch aporta su propia voz.
+
+00:43:42.550 --> 00:43:46.190
+Cuando dos políticas establecen el mismo valor en el mismo dispositivo, Intune no puede
+
+00:43:46.190 --> 00:43:46.770
+elegir un ganador.
+
+00:43:47.210 --> 00:43:48.090
+Informe de un conflicto.
+
+00:43:48.470 --> 00:43:51.450
+En el dispositivo, un conflicto no significa que hagan la política más estricta.
+
+00:43:51.730 --> 00:43:53.770
+Significa que la configuración a menudo no se aplica en absoluto.
+
+00:43:53.950 --> 00:43:55.770
+La máquina recurre a algo que nunca elegiste.
+
+00:43:56.270 --> 00:43:57.530
+Lo que suele ocurrir es que todo está en silencio.
+
+00:43:57.850 --> 00:43:59.970
+Se registra un dispositivo, se queda de modo rápido y todo el mundo suele.
+
+00:43:59.970 --> 00:44:01.430
+Se están ejecutando las reglas rápidas.
+
+00:44:01.950 --> 00:44:05.070
+Pero tu antiguo anillo sigue asignado al mismo grupo y el número de aplazamiento en el
+
+00:44:05.070 --> 00:44:06.070
+portátil es el antiguo.
+
+00:44:06.510 --> 00:44:07.490
+El panel indica rápido.
+
+00:44:07.770 --> 00:44:08.830
+El comportamiento indica otra cosa.
+
+00:44:09.290 --> 00:44:10.490
+Así que buscas en el lugar correcto.
+
+00:44:10.670 --> 00:44:13.690
+En Intune, abre el dispositivo y lee su estado de configuración.
+
+00:44:14.310 --> 00:44:16.670
+Busca estados de conflicto y error en la configuración de actualización.
+
+00:44:17.010 --> 00:44:18.250
+Y ahí es donde aparece la segunda voz.
+
+00:44:18.650 --> 00:44:21.830
+Luego lo solucionas eliminando una de las voces, casi nunca añadiendo una tercera.
+
+00:44:22.370 --> 00:44:24.890
+Ahora bien, a veces la decisión correcta es eliminar el propio dispositivo.
+
+00:44:25.430 --> 00:44:27.290
+AutoPatch te permite excluir un dispositivo del servicio.
+
+00:44:27.290 --> 00:44:29.070
+El dispositivo permanece en...
+
+00:44:29.070 --> 00:44:31.070
+Conserva sus aplicaciones y sus reglas de implementación.
+
+00:44:31.390 --> 00:44:34.150
+Simplemente deja de recibir las políticas de actualización de AutoPatch y deja de
+
+00:44:34.150 --> 00:44:35.190
+contabilizarse en sus informes.
+
+00:44:35.450 --> 00:44:36.230
+¿Cuándo tiene sentido?
+
+00:44:36.710 --> 00:44:38.750
+Cuando una máquina realmente no puede seguir el modelo.
+
+00:44:38.910 --> 00:44:42.050
+Un APC de laboratorio, anclada a una versión antigua para un banco de pruebas.
+
+00:44:42.110 --> 00:44:44.770
+Un dispositivo que ejecuta software que falla con cada actualización de funciones.
+
+00:44:44.890 --> 00:44:47.350
+Un sistema con un contrato con un proveedor que dicte el cronograma de parches.
+
+00:44:47.710 --> 00:44:49.550
+Pero la exclusión tiene un costo y los equipos lo olvidan.
+
+00:44:49.950 --> 00:44:51.730
+Un dispositivo excluido es un riesgo no gestionado.
+
+00:44:52.090 --> 00:44:52.650
+Nadie lo vigila.
+
+00:44:53.130 --> 00:44:54.370
+Nadie pausa mi implementación por él.
+
+00:44:54.970 --> 00:44:55.890
+Necesita un propietario.
+
+00:44:55.890 --> 00:44:57.770
+Una razón escrita y una fecha de revisión.
+
+00:44:57.770 --> 00:45:00.390
+O se convierte en la máquina que nunca se parcheaba porque todos dieron por hecho que
+
+00:45:00.390 --> 00:45:01.150
+alguien más lo tenía.
+
+00:45:01.930 --> 00:45:04.110
+Trate cada exclusión como un préstamo, no como un regalo.
+
+00:45:04.250 --> 00:45:06.150
+Lo que lleva a la única regla que lo mantiene todo unido.
+
+00:45:06.470 --> 00:45:07.650
+Un propietario por configuración.
+
+00:45:08.370 --> 00:45:11.070
+Para cada configuración de actualización de un dispositivo, solo un sistema puede
+
+00:45:11.070 --> 00:45:11.490
+definirla.
+
+00:45:11.950 --> 00:45:13.470
+AutoPatch es propietario de los anillos que creen.
+
+00:45:13.730 --> 00:45:15.830
+Sus propias políticas son propietarias de los anillos que creen.
+
+00:45:15.950 --> 00:45:18.190
+La directiva del grupo no es propietaria de nada una vez que se ha mirado ahora.
+
+00:45:18.450 --> 00:45:21.050
+Si no puede decir qué sistema es propietario de una configuración determinada,
+
+00:45:21.050 --> 00:45:22.170
+ya tiene un conflicto.
+
+00:45:22.790 --> 00:45:23.530
+Simplemente no ha visto todavía.
+
+00:45:24.030 --> 00:45:24.810
+Anota esa propiedad.
+
+00:45:25.650 --> 00:45:26.550
+Una tabla siempre lo hace.
+
+00:45:27.490 --> 00:45:29.970
+Tarda una hora y finaliza la mayoría de los argumentos antes de que empiece.
+
+00:45:30.430 --> 00:45:33.150
+Una vez que la configuración tiene propietarios, el aspecto de la entrega es predecible.
+
+00:45:33.450 --> 00:45:35.750
+Y ahí es cuando puedes ver para qué sirve realmente AutoPatch.
+
+00:45:36.150 --> 00:45:36.510
+No son ellos.
+
+00:45:36.790 --> 00:45:37.710
+Podrías crear anillos tú mismo.
+
+00:45:38.210 --> 00:45:39.530
+Producto real es la observación.
+
+00:45:39.750 --> 00:45:42.530
+Lo que hace el servicio mientras una actualización avanza por esas etapas.
+
+00:45:42.870 --> 00:45:44.270
+Y lo que hace cuando la señal se vuelve mala.
+
+00:45:45.230 --> 00:45:46.110
+Gestión de versiones.
+
+00:45:46.450 --> 00:45:48.330
+Pausas, reanudaciones y salvaguardas.
+
+00:45:48.990 --> 00:45:51.050
+Esto es lo que hace realmente el servicio mientras duermo.
+
+00:45:51.050 --> 00:45:53.810
+Cada actualización que avanza por los anillos produce datos.
+
+00:45:54.230 --> 00:45:55.190
+Instalaciones que finalizan.
+
+00:45:55.710 --> 00:45:56.590
+Instalaciones que fallan.
+
+00:45:56.970 --> 00:45:59.050
+Dispositivos que se reinician y vuelven a funcionar correctamente.
+
+00:45:59.490 --> 00:46:01.410
+Y dispositivos que se reinician y nunca vuelven a registrar.
+
+00:46:02.230 --> 00:46:05.590
+AutoPatch lee todo anillo por anillo y lo compara con lo que espera ver.
+
+00:46:06.370 --> 00:46:07.730
+Cuando los números se vuelven mal, los actúa.
+
+00:46:08.110 --> 00:46:11.150
+Pausa la actualización para ese anillo y para cualquier anillo que aún no lo haya recibido.
+
+00:46:11.770 --> 00:46:13.830
+Los dispositivos que ya están en esta etapa conservan lo que tienen.
+
+00:46:14.190 --> 00:46:15.290
+Todo lo que están detrás de IOCP.
+
+00:46:15.650 --> 00:46:18.150
+Ese es el truco para que la entrega por etapas finalmente haga su trabajo.
+
+00:46:18.870 --> 00:46:19.730
+Primero se rompen las pruebas.
+
+00:46:19.730 --> 00:46:23.990
+La señal llega al servicio y la actualización se detiene antes de que alcance el ancho.
+
+00:46:24.650 --> 00:46:26.510
+El anillo que no dibujaste se convirtió en el anillo que te sale.
+
+00:46:26.730 --> 00:46:27.790
+Ahora bien, ¿qué desencadena una pausa?
+
+00:46:28.010 --> 00:46:32.290
+Microsoft no publica un umbral limpio y ajusta la lógica con el tiempo, pero las entradas son conocidas.
+
+00:46:32.950 --> 00:46:34.170
+Tazas de errores en la instalación.
+
+00:46:34.390 --> 00:46:35.810
+Dispositivos bloqueados en un estado pendiente.
+
+00:46:35.950 --> 00:46:38.350
+Informes generalizados del mismo problema en todo el ecosistema de Windows.
+
+00:46:38.570 --> 00:46:39.310
+No solo en tu inquilino.
+
+00:46:39.310 --> 00:46:44.850
+Una mala actualización es detectada por muchas personas a la vez y el servicio escucha esa señal más amplia, así como la tuya.
+
+00:46:44.930 --> 00:46:46.730
+Y una pausa no es una reversión.
+
+00:46:47.230 --> 00:46:47.890
+No se elimina nada.
+
+00:46:48.210 --> 00:46:52.030
+El servicio simplemente deja de ofrecer la actualización al siguiente grupo hasta que alguien decida que es seguro de nuevo.
+
+00:46:52.530 --> 00:46:55.750
+Hay un segundo tipo de detención y ocurre antes de que Autopatch intervenga.
+
+00:46:56.270 --> 00:46:59.930
+El propio Windows puede negarse a instalar una actualización en un dispositivo específico.
+
+00:47:00.010 --> 00:47:01.210
+Estas se eliminan las tensiones de Protex.
+
+00:47:01.590 --> 00:47:06.730
+Microsoft descubre que un determinado controlador, una determinada aplicación o una determinada combinación de hardware se rompen en la nueva actualización.
+
+00:47:07.110 --> 00:47:10.710
+Por lo tanto, marca esa combinación y cualquier dispositivo que coincida simplemente no recibe la actualización.
+
+00:47:11.030 --> 00:47:12.730
+El dispositivo no muestra ningún error ni fallo.
+
+00:47:13.290 --> 00:47:15.730
+Simplemente se queda en la compilación anterior y la actualización nunca llega.
+
+00:47:16.070 --> 00:47:17.690
+Eso es un bloqueo de compatibilidad y es algo bueno.
+
+00:47:18.390 --> 00:47:22.070
+La retención protege la máquina de un programa conocido, pero crea una trampa en sus informes.
+
+00:47:22.470 --> 00:47:24.510
+Un dispositivo retenido parece un dispositivo que está trazado.
+
+00:47:24.510 --> 00:47:27.430
+Y un administrador que no sepa sobre las retenciones asumirá que la política falló.
+
+00:47:28.530 --> 00:47:30.670
+Windows tomó una decisión en nombre del dispositivo.
+
+00:47:31.150 --> 00:47:36.010
+Por lo tanto, cuando un puñado de máquinas rechazan una actualización mientras el resto del anillo la acepta del anillo la acepta verificar la política,
+
+00:47:36.550 --> 00:47:38.350
+mire primero el hardware y los controladores del dispositivo.
+
+00:47:39.210 --> 00:47:42.830
+La retención generalmente se levanta por sí sola una vez que Microsoft o el proveedor envían una solución.
+
+00:47:43.250 --> 00:47:43.850
+Quiere una advertencia.
+
+00:47:44.390 --> 00:47:47.790
+Algunos equipos encuentran una forma de ludir las retenciones de protección a través de los deshabilitados.
+
+00:47:48.090 --> 00:47:48.390
+No lo hagan.
+
+00:47:48.650 --> 00:47:50.010
+Esa configuración existe para máquinas de prueba.
+
+00:47:50.250 --> 00:47:52.790
+En un dispositivo de producción convierte una protección en una apuesta.
+
+00:47:52.790 --> 00:47:55.350
+Ahora bien, el servicio no es el único que puede suponer el servicio.
+
+00:47:56.110 --> 00:47:56.770
+Este también puede hacer.
+
+00:47:56.990 --> 00:48:00.630
+En la configuración de la versión de AutoPatch, un administrador puede pausar un anillo de actualización manualmente.
+
+00:48:01.030 --> 00:48:03.250
+Elige el anillo, elige el tipo de actualización, elige cuánto tiempo.
+
+00:48:04.230 --> 00:48:07.290
+La pausa se mantiene durante un número fijo de días y luego expira menos que la extiendas.
+
+00:48:08.070 --> 00:48:10.790
+La reanudación funciona al revés siempre que decidas que la evidencia parece limpia.
+
+00:48:11.490 --> 00:48:12.690
+¿Por qué harías esto si la está observando?
+
+00:48:13.230 --> 00:48:14.970
+Porque tu señal no es la señal de Microsoft.
+
+00:48:14.970 --> 00:48:19.890
+Quizá una aplicación de línea de negocio falló en tres máquinas piloto y nada de eso aparece en la telemetría global.
+
+00:48:20.530 --> 00:48:23.110
+Quizás tu equipo de seguridad quiera congelarla antes de un lanzamiento importante.
+
+00:48:23.570 --> 00:48:25.970
+Quizás un proveedor te acaba de advertir sobre un problema de compatibilidad.
+
+00:48:26.530 --> 00:48:30.670
+Servicio de patrones, tú ves tu negocio y esa brecha es la razón por la que existe el control manual.
+
+00:48:30.670 --> 00:48:33.630
+Utilízalo cuando el motivo sea específico y anótalo.
+
+00:48:34.270 --> 00:48:38.210
+Una pausa sin una nota adjunta se convierte en un misterio seis semanas después cuando alguien pregunta
+
+00:48:38.210 --> 00:48:39.370
+¿Por qué Broad no se ha movido?
+
+00:48:39.630 --> 00:48:41.770
+Lo que plantea la pregunta que nadie se hace hasta la auditoría.
+
+00:48:42.690 --> 00:48:44.350
+Que afecte a una pausa en tu cifra de cumplimiento.
+
+00:48:44.810 --> 00:48:45.490
+Así que parecen peores.
+
+00:48:46.090 --> 00:48:50.070
+Los dispositivos en un anillo de pausa no reciben la actualización, por lo que se quedan por detrás de la versión de destino.
+
+00:48:50.530 --> 00:48:56.270
+Los informes los muestran como no actualizados o aún no ofrecidos y el porcentaje de parches baja mientras la pausa está activa.
+
+00:48:56.670 --> 00:48:57.830
+Es honesto, pero necesita contexto.
+
+00:48:58.250 --> 00:49:00.650
+Una pausa es una decisión, por lo que pertenece a la historia que cuentas.
+
+00:49:01.230 --> 00:49:05.790
+Si alguien pregunta por qué el 80% del patrimonio está atrasado, el anillo se detiene por un problema conocido.
+
+00:49:06.210 --> 00:49:09.330
+Aprobado, en esta fecha, que caduca en esa fecha, es una respuesta defendible.
+
+00:49:10.250 --> 00:49:12.190
+No lo sabemos y el panel no te lo explicará.
+
+00:49:12.670 --> 00:49:15.370
+Alguien tiene que hacerlo, pero una pausa solo cubre un tipo de problema.
+
+00:49:15.830 --> 00:49:17.690
+Gestiona la actualización que es demasiado arriesgada para enviar.
+
+00:49:18.070 --> 00:49:19.290
+Pero no las actualizaciones son todo loco.
+
+00:49:19.610 --> 00:49:20.810
+Son demasiado peligrosas, por esperar.
+
+00:49:21.810 --> 00:49:23.430
+Actualizaciones de calidad aceleradas para amenaza cero.
+
+00:49:23.870 --> 00:49:27.250
+La entrega normal del anillo se realiza según una programación y la actualización acelerada le igno.
+
+00:49:27.430 --> 00:49:28.190
+Piensa en lo que hace un anillo.
+
+00:49:28.750 --> 00:49:32.690
+Espera 7 días de aplazamiento, un par de días de fecha límite, un periodo de gracia adicional.
+
+00:49:33.370 --> 00:49:35.190
+Esa paciencia es el objetivo de la preparación.
+
+00:49:35.410 --> 00:49:37.310
+Pero la paciencia asume que la amenaza también es paciente.
+
+00:49:37.650 --> 00:49:38.270
+Y a veces no lo es.
+
+00:49:39.150 --> 00:49:40.930
+Ya se está utilizando el límite mínimo en el mundo real.
+
+00:49:41.330 --> 00:49:43.570
+Y Microsoft envía una solución fuera del ciclo habitual.
+
+00:49:43.570 --> 00:49:47.690
+Esperar a que Uber out llegue a su turno es una opción para permanecer expuesto durante 12.
+
+00:49:47.890 --> 00:49:48.950
+Por eso, Intune ofrece una segunda vida.
+
+00:49:49.470 --> 00:49:50.830
+Se llama actualización de calidad acelerada.
+
+00:49:51.250 --> 00:49:51.870
+Y te explica mención.
+
+00:49:52.310 --> 00:49:58.470
+Una actualización normal espera que el dispositivo se registre, evalúe su llamada, respete el aplazamiento y, a continuación, ofrezca la actualización cuando llegue a su turno.
+
+00:49:59.110 --> 00:50:00.670
+Una actualización acelerada se salta en la mayor parte.
+
+00:50:01.030 --> 00:50:02.310
+Eliges una actualización específica.
+
+00:50:02.370 --> 00:50:04.350
+Intune les indica a los dispositivos que vayan a obtener la hora.
+
+00:50:04.670 --> 00:50:05.510
+El aplazamiento no se aplica.
+
+00:50:05.870 --> 00:50:07.710
+La lógica habitual de la fecha límite tampoco se aplica.
+
+00:50:07.930 --> 00:50:09.210
+También es más limitada de lo que la gente cree.
+
+00:50:09.210 --> 00:50:10.890
+No estás impulsando un ciclo de parche general.
+
+00:50:11.230 --> 00:50:14.610
+Estás nombrando una actualización de calidad por su fecha de lanzamiento y la política solo se dirige a esa.
+
+00:50:15.050 --> 00:50:16.250
+Y aún así se extrae y no se envía.
+
+00:50:16.850 --> 00:50:20.050
+El dispositivo tiene que enterarse de las instrucciones por lo que debe estar en línea y llegar a Intune.
+
+00:50:20.550 --> 00:50:21.970
+Ya vamos a hablar de ese modelo del cliente anterior.
+
+00:50:22.450 --> 00:50:23.370
+Una actualización acelerada.
+
+00:50:23.810 --> 00:50:25.970
+Cambia la urgencia con la que el cliente actúa sobre lo que oye.
+
+00:50:26.550 --> 00:50:27.330
+Ahora bien, ¿cómo se crea?
+
+00:50:27.670 --> 00:50:31.310
+En el centro de administración de Intune, ve a dispositivos, luego a Windows y luego a actualizaciones de calidad.
+
+00:50:31.890 --> 00:50:32.970
+Crea una nueva política de agilización.
+
+00:50:33.470 --> 00:50:36.450
+Asígnale un nombre y luego elige la actualización de calidad que deseas agilizar.
+
+00:50:36.450 --> 00:50:40.250
+Intune muestra las versiones recientes para que elijas la que incluye la corrección.
+
+00:50:40.910 --> 00:50:42.970
+Luego viene la configuración más importante, el reinicio.
+
+00:50:43.330 --> 00:50:45.270
+Elige cuántos días faltan para que se fuese el reinicio.
+
+00:50:45.710 --> 00:50:49.510
+Cero significa que el dispositivo se reinicia tan pronto como se completa la instalación con muy poca advertencia.
+
+00:50:49.790 --> 00:50:53.170
+Un número mayor les da tiempo a los usuarios para guardar su trabajo y reiniciar por su cuenta primera.
+
+00:50:53.710 --> 00:50:55.370
+Después de eso, se produce el reinicio forzado.
+
+00:50:55.770 --> 00:50:58.070
+Luego asignas la política a un grupo y esa es toda la política.
+
+00:50:58.530 --> 00:51:00.270
+Una actualización, una regla de reinicio, un objetivo.
+
+00:51:00.710 --> 00:51:04.550
+Un detalle atrapa a las personas y la política de agilización debe ser un objeto temporal.
+
+00:51:04.550 --> 00:51:07.670
+Una vez que la corrección se ha implementado en todas partes, la eliminas o dejas que caduque.
+
+00:51:08.010 --> 00:51:12.410
+Deja asignadas las antiguas políticas de agilización y habrás dejado una instrucción permanente que nadie recuerda.
+
+00:51:12.610 --> 00:51:14.930
+Lo que nos lleva al reinicio porque ahí es donde la empresa lo siente.
+
+00:51:15.290 --> 00:51:16.890
+Un reinicio forzado es el costo de la obesidad.
+
+00:51:17.370 --> 00:51:19.630
+La actualización se puede instalar silenciosamente en segundo plano,
+
+00:51:19.770 --> 00:51:21.630
+pero el parche no se activa hasta que se reinicie la máquina,
+
+00:51:21.790 --> 00:51:24.830
+por lo que la política tiene que elegir un momento y el usuario no tiene derecho a voto.
+
+00:51:25.170 --> 00:51:28.690
+Para la mayoría de los portátiles se supone una interrupción, una interrupción, una interrupción, un documento sin guardar.
+
+00:51:28.930 --> 00:51:30.010
+Una llamada interrumpida, una presentación.
+
+00:51:30.010 --> 00:51:37.870
+Un reinicio en un terminal de punto de venta durante el horario comercial supone una pérdida de ingresos.
+
+00:51:38.110 --> 00:51:40.710
+Un reinicio en una máquina que controla una de producción puede detener la línea.
+
+00:51:41.050 --> 00:51:45.130
+Un reinicio en una estación de trabajo clínica puede quitarle la pantalla de la enfermera en un momento equivocado.
+
+00:51:45.470 --> 00:51:46.790
+Por eso la aceleración es una herramienta poco.
+
+00:51:47.350 --> 00:51:49.990
+Adquiere protección gastando la confianza del usuario y la gasta rápidamente.
+
+00:51:50.510 --> 00:51:51.250
+No sé cuándo se utiliza.
+
+00:51:51.730 --> 00:51:53.590
+Utilícela cuando los hechos indiquen que el riesgo ya es real.
+
+00:51:54.190 --> 00:51:55.390
+Explotación activa confirmada.
+
+00:51:56.010 --> 00:51:58.870
+Una planta a la que se puede acceder desde internet o que no requiere ninguna acción de uso.
+
+00:51:59.230 --> 00:52:01.270
+Una debilidad en algo que realmente gestiona su patrimonio.
+
+00:52:01.790 --> 00:52:04.290
+En esos casos el coste del retraso es mayor que el coste de la interrupción.
+
+00:52:04.950 --> 00:52:06.870
+Acepta el programa normal cuando los hechos indiquen lo contrario.
+
+00:52:07.530 --> 00:52:09.330
+Una vulnerabilidad que requiere acceso físico.
+
+00:52:09.830 --> 00:52:12.110
+Un piso sin vulnerabilidad conocida en la función que es desactivado.
+
+00:52:12.510 --> 00:52:13.810
+Un parche que es importante pero no urgente.
+
+00:52:14.190 --> 00:52:15.910
+Tus anillos se creen exactamente para esto.
+
+00:52:15.910 --> 00:52:18.670
+Y la prueba piloto te dirá algo útil antes de que Broad lo vea.
+
+00:52:18.970 --> 00:52:20.010
+También hay un camino intermedio.
+
+00:52:20.010 --> 00:52:24.250
+Puedes agilizar solo los primeros anillos, acelerar la evidencia y dejar que el resto siga su ritmo normal.
+
+00:52:25.110 --> 00:52:26.390
+Pero observa de qué depende la elección.
+
+00:52:26.970 --> 00:52:27.690
+No es una habilidad técnica.
+
+00:52:28.230 --> 00:52:32.190
+Es un juicio sobre la gravedad, la exposición y la tolerancia empresarial realizado con información incompleta.
+
+00:52:32.290 --> 00:52:33.370
+Y ese juicio debe ser rápido.
+
+00:52:33.910 --> 00:52:35.290
+La actualización puede llegar a un dispositivo normal.
+
+00:52:35.710 --> 00:52:39.450
+Si la decisión de enviarla requiere una semana de reuniones, la velocidad de la herramienta no significa nada.
+
+00:52:39.870 --> 00:52:44.110
+Por lo tanto la verdadera cuestión de diseño no es la política sino quién decide y con qué rapidez puede hacer.
+
+00:52:44.550 --> 00:52:46.230
+Un manual de respuesta fuera de banda.
+
+00:52:46.570 --> 00:52:48.110
+El manual comienza antes de que la haga alerta.
+
+00:52:48.110 --> 00:52:51.710
+Cuando llegue la siguiente solución fuera de banda, nadie debería inventar el proceso.
+
+00:52:52.310 --> 00:52:52.930
+Harían ejecutarlo.
+
+00:52:53.310 --> 00:52:54.090
+Así es como se ve en orden.
+
+00:52:54.810 --> 00:52:55.910
+Primera pregunta, ¿qué tan grave es?
+
+00:52:56.310 --> 00:52:57.910
+La gravedad se desprende del propio aviso.
+
+00:52:58.430 --> 00:53:05.950
+Microsoft publica una clasificación y una puntuación para cada nivel, pero la puntuación es solo un punto de partida porque describe el nivel en general, no tu patrimonio.
+
+00:53:06.370 --> 00:53:06.850
+Lee los detalles.
+
+00:53:07.450 --> 00:53:08.790
+¿Necesita que un usuario haga clic en algo?
+
+00:53:09.290 --> 00:53:10.110
+¿Necesitas a la misma red?
+
+00:53:10.550 --> 00:53:13.050
+¿O puede un atacante acceder a él desde internet sin ayuda alguna?
+
+00:53:13.310 --> 00:53:14.530
+Segunda pregunta, ¿alguien lo está utilizando?
+
+00:53:15.070 --> 00:53:17.310
+La explotabilidad es la línea entre lo importante y lo actual.
+
+00:53:18.190 --> 00:53:21.390
+El aviso indica si el nivel es de conocimiento público y si se han detectado ataques.
+
+00:53:22.050 --> 00:53:23.670
+La explotación activa cambia el reloj.
+
+00:53:24.230 --> 00:53:25.650
+Todo lo anterior es el punto de planificación.
+
+00:53:26.130 --> 00:53:27.130
+Todo lo posterior es respuesta.
+
+00:53:27.650 --> 00:53:29.810
+Tercera pregunta, ¿quién en tu patrimonio está expuesto?
+
+00:53:30.170 --> 00:53:32.590
+Este es solo tuyo y es el que el equipo se salta.
+
+00:53:33.010 --> 00:53:34.830
+Un nivel en una función que has desactivado no te afecta.
+
+00:53:35.330 --> 00:53:38.090
+Un nivel en un servicio que solo se ejecuta en servicio no afecta a los ordenadores portales.
+
+00:53:38.450 --> 00:53:43.950
+Así que, comprueba qué dispositivos se ejecutan en componente afectado, cuáles dan internet, cuáles contienen algo que un atacante querría.
+
+00:53:45.150 --> 00:53:46.990
+Gravedad, explotabilidad, exposición.
+
+00:53:47.550 --> 00:53:51.050
+Tres preguntas y la respuesta decide si se trata de un anillo rápido o normal.
+
+00:53:51.390 --> 00:53:52.770
+Ahora viene la parte que realmente cuesta tiempo.
+
+00:53:53.170 --> 00:53:53.690
+¿Quién dice que sí?
+
+00:53:53.910 --> 00:53:55.430
+En la mayoría de las organizaciones nadie lo sabe.
+
+00:53:55.430 --> 00:53:56.610
+El equipo de seguridad lo quiere.
+
+00:53:56.610 --> 00:53:59.890
+El equipo de Empuentes es el propietario de la agra, la empresa de la propietaria de interrupción.
+
+00:54:00.450 --> 00:54:04.050
+Por lo tanto, una decisión que debería llevar una hora se convierte en un hilo con nueve personas involucradas.
+
+00:54:04.350 --> 00:54:05.170
+Arreglalo por escrito.
+
+00:54:05.670 --> 00:54:08.150
+Nombrar a una persona que pueda aprobar un anillo rápido y a otra de respaldo.
+
+00:54:08.650 --> 00:54:10.570
+Darles autoridad para actuar primero e informar después.
+
+00:54:10.870 --> 00:54:14.110
+Para un piso activamente explotado o confirmado, la aprobación debería llevar minutos, no días.
+
+00:54:14.610 --> 00:54:15.230
+Luego aguarda el hilo.
+
+00:54:15.610 --> 00:54:17.470
+Quizás una decisión dentro de las dos horas posteriores.
+
+00:54:17.710 --> 00:54:19.330
+La confirmación y la política activa dentro del acuerdo.
+
+00:54:19.510 --> 00:54:21.530
+Sean cuáles sean los números al índice que responsabilizarse de él.
+
+00:54:21.530 --> 00:54:24.330
+Una herramienta rápida con una aprobación lenta es simplemente una herramienta lenta.
+
+00:54:24.630 --> 00:54:25.210
+Luego, el objetivo.
+
+00:54:26.610 --> 00:54:28.870
+Dirigir el anillo rápido a uno o a todos.
+
+00:54:29.350 --> 00:54:30.770
+Dirigir el anillo rápido es el camino a cota.
+
+00:54:31.730 --> 00:54:34.790
+Vía lo primero a prueba y a piloto y deja que los datos de instalación confirmen que no rompe nada.
+
+00:54:35.470 --> 00:54:36.810
+Eso puede costarte un día y harés el menos.
+
+00:54:37.430 --> 00:54:41.570
+Si el problema es grave, pero aún no se está utilizando en tu contra, ese día es un precio justo por las pruebas.
+
+00:54:42.230 --> 00:54:43.990
+Juntar a todo el patrimonio es el camino más directo.
+
+00:54:44.250 --> 00:54:48.810
+Lo tomas cuando se confirma la explotación y cuando los dispositivos expuestos se encuentran en cada anillo.
+
+00:54:49.130 --> 00:54:51.950
+Ahora, esperar pruebas cuesta más que el riesgo de un parche defectuoso.
+
+00:54:52.330 --> 00:54:53.370
+¿Existe un híbrido o es correcto?
+
+00:54:53.750 --> 00:54:55.830
+Agiliza los dispositivos de mayor exposición de inmediato.
+
+00:54:55.830 --> 00:54:57.270
+Máquinas con acceso a internet.
+
+00:54:57.490 --> 00:54:58.990
+Estaciones de trabajo de administración privilegiadas.
+
+00:54:59.090 --> 00:54:59.790
+Cualquier cosa la que se pueda.
+
+00:55:00.090 --> 00:55:01.610
+Deja que el resto siga un cronograma masculino.
+
+00:55:01.990 --> 00:55:03.490
+Elijas lo que elijas, desajústalo deliberadamente.
+
+00:55:03.990 --> 00:55:07.110
+Asigna la política a un grupo que hayas elegido a propósito, no a uno que hayas heredado.
+
+00:55:07.590 --> 00:55:10.410
+Y luego viene el paso que decide cómo se sienten las personas con respecto a todo esto.
+
+00:55:10.650 --> 00:55:14.350
+Diles que un reinicio forzado es una regla solo si llega con advertencia.
+
+00:55:14.350 --> 00:55:21.630
+Por lo tanto, antes de que la política entre en vigencia, envíe un mensaje breve, claro y específico sobre lo que está sucediendo, por qué no puede esperar y cuándo se puede esperar y cuándo se puede esperar el reinicio.
+
+00:55:21.750 --> 00:55:22.550
+Diles que guarden su trabajo.
+
+00:55:23.170 --> 00:55:24.690
+Diles a quién llamar si algo sale mal.
+
+00:55:25.030 --> 00:55:25.830
+Usa más de un canal.
+
+00:55:26.290 --> 00:55:27.130
+El correo electrónico signo.
+
+00:55:27.130 --> 00:55:31.010
+Añade una publicación de Teams y una nota de asistencia técnica para que no se sorprendan con las llamadas.
+
+00:55:31.730 --> 00:55:34.290
+Y establece el retraso de reinicio en la política para que coincida con lo que promete.
+
+00:55:34.810 --> 00:55:36.890
+Si dijiste que se haría en un día, no configure cero.
+
+00:55:37.610 --> 00:55:39.630
+Hazle una emergencia y se sentirá como un evento gestionado.
+
+00:55:40.110 --> 00:55:42.830
+Si lo omites, cada parte urgente enseñará a la gente a desconfiar del siguiente.
+
+00:55:43.290 --> 00:55:44.350
+Eso abarca el sistema operativo.
+
+00:55:44.730 --> 00:55:48.210
+Lo único que ejecuta cada dispositivo y el primer lugar donde suele llegar una solución, no nos sucede.
+
+00:55:48.530 --> 00:55:50.930
+Pero hay una capa subyacente que no sigue las mismas reglas.
+
+00:55:50.930 --> 00:55:53.130
+Un software que se comunica directamente con el hardware.
+
+00:55:53.430 --> 00:55:55.630
+Un código que se actualiza por su cuenta con sus propios riesgos.
+
+00:55:55.630 --> 00:55:58.450
+Controladores, actualizaciones de controladores y firmware.
+
+00:55:58.870 --> 00:56:00.010
+Los controladores no sean solos.
+
+00:56:00.470 --> 00:56:02.750
+Una actualización de calidad tiene un nombre, una fecha y una nota de lanzamiento.
+
+00:56:03.150 --> 00:56:08.130
+Una actualización de controlador aparece dentro de Windows Update adjunta a un ID de hardware y la mayoría de las personas nunca la ven.
+
+00:56:08.610 --> 00:56:09.790
+Un panel táctil de funcionar.
+
+00:56:10.090 --> 00:56:11.270
+La conexión UFSK de PCS.
+
+00:56:11.510 --> 00:56:14.410
+Una estación de acoplamiento que funcionaba bien el lunes se confunde el miércoles.
+
+00:56:14.650 --> 00:56:17.410
+Y nadie la conecta a una actualización porque nadie recuerda ninguna, porque ninguna.
+
+00:56:18.070 --> 00:56:19.370
+Así es como los controladores llegan a un disco.
+
+00:56:19.830 --> 00:56:21.050
+Windows Update 2 transporta.
+
+00:56:21.050 --> 00:56:23.270
+Los proveedores de hardware publican controladores para Microsoft.
+
+00:56:23.270 --> 00:56:27.270
+Microsoft los aloja y los dispositivos los comprueban de la misma manera que comprueban todo lo demás.
+
+00:56:27.730 --> 00:56:30.110
+Sigue aplicándose el mismo modelo del lado siguiente que vimos antes.
+
+00:56:30.430 --> 00:56:32.010
+El dispositivo solicita, evalúa e instala.
+
+00:56:32.550 --> 00:56:34.730
+Pero los controladores no siguen la actualización de forma predeterminada.
+
+00:56:35.130 --> 00:56:39.170
+Un anillo de actualización tiene una configuración que decide si las actualizaciones de controladores vienen con Panetical.
+
+00:56:39.350 --> 00:56:42.050
+Si lo deja activado, los controladores llegarán según el cronograma que decida Windows.
+
+00:56:42.210 --> 00:56:44.170
+Si lo desactiva, Windows Update dejará de ofrecerlo.
+
+00:56:44.390 --> 00:56:45.050
+Es una elección continua.
+
+00:56:45.490 --> 00:56:46.630
+O todo fluye, no le hace nada.
+
+00:56:47.370 --> 00:56:48.430
+Intune añade un mejor control.
+
+00:56:48.430 --> 00:56:53.890
+Se llama Política de actualización de controladores y la encontrarás en dispositivos Windows y, a continuación, actualizaciones de controlador.
+
+00:56:54.350 --> 00:57:00.430
+En lugar de un interruptor de activación o desactivación, te ofrece un catálogo de controladores que Windows Update ha encontrado para tus dispositivos y una decisión para cada uno.
+
+00:57:01.030 --> 00:57:02.330
+Las decisiones se presentan de tres formas.
+
+00:57:02.670 --> 00:57:03.570
+Probar, revisar y pausar.
+
+00:57:04.090 --> 00:57:05.390
+Aprobar significa que el controlador sea.
+
+00:57:05.770 --> 00:57:08.370
+Eliges una fecha y los dispositivos aptos del grupo asignado lo obtienen.
+
+00:57:08.910 --> 00:57:11.130
+Revisar significa que el controlador permanece en estado de espera.
+
+00:57:11.490 --> 00:57:13.910
+Si ha encontrado, se aplica a tu patrimonio, pero nadie ha dicho que sí.
+
+00:57:13.910 --> 00:57:17.310
+La pausa significa que un controlador que fue aprobado se retiene porque algo se le ama.
+
+00:57:17.910 --> 00:57:19.330
+Este estado intermedio importa más que los dos.
+
+00:57:19.870 --> 00:57:23.790
+Convierte las actualizaciones de controladores de algo que te sucede a ti en algo que puedes consultar primero.
+
+00:57:24.090 --> 00:57:27.110
+A bien, la política en sí tiene dos modos, y aquí es donde reside la verdadera decisión.
+
+00:57:28.310 --> 00:57:30.310
+En el modo manual no se aprueba nada hasta que una persona lo aprueba.
+
+00:57:31.070 --> 00:57:32.770
+Cada nuevo controlador llega a la lista de revisión.
+
+00:57:33.090 --> 00:57:35.910
+Lo lees, compruebas el hardware al que se aplica y eliges una fecha.
+
+00:57:36.270 --> 00:57:36.970
+Es lento y seguro.
+
+00:57:37.530 --> 00:57:40.550
+Un controlador incorrecto nunca llega a un dispositivo a menos que alguien lo deje pasar.
+
+00:57:40.550 --> 00:57:45.370
+En el modo automático, intuña a probar los controladores recomendados por sí solo después de un aplazamiento que establezcas.
+
+00:57:45.990 --> 00:57:48.690
+Podrías decir que esperes 10 días después de que se aplique el controlador y luego lo implementes.
+
+00:57:49.030 --> 00:57:49.610
+Nadie lee cada uno.
+
+00:57:50.010 --> 00:57:50.790
+La política se ejecuta.
+
+00:57:51.150 --> 00:57:52.030
+Cada modo tiene un coste.
+
+00:57:52.410 --> 00:57:53.750
+La aprobación manual cuesta atención.
+
+00:57:54.150 --> 00:57:56.850
+Un patrimonio con mucho trabajo ve docenas de actualizaciones de controladores al mes,
+
+00:57:56.970 --> 00:57:58.110
+y alguien tiene que revisar cada uno.
+
+00:57:58.390 --> 00:57:59.030
+Ese alguien se cansa.
+
+00:57:59.590 --> 00:58:02.730
+Luego, la lista de revisión crece, los controladores permanecen sin aprobar durante meses,
+
+00:58:02.810 --> 00:58:05.130
+y los dispositivos se retrasan en las correcciones que le podrán enviar por bono.
+
+00:58:05.330 --> 00:58:06.590
+La lentitud puede volverse usual.
+
+00:58:06.930 --> 00:58:08.090
+Control de coste de operación automática.
+
+00:58:08.090 --> 00:58:10.430
+Un controlador con un piso llega al grupo a tiempo,
+
+00:58:10.570 --> 00:58:14.010
+y la única protección es el aplazamiento que elegiste y el botón de pausa que recuerdas presionar.
+
+00:58:14.810 --> 00:58:16.830
+El riesgo no es que lo automático sea imprudente,
+
+00:58:16.930 --> 00:58:19.170
+sino que el error se vuelve invisible hasta que llegue un ticket.
+
+00:58:19.670 --> 00:58:23.450
+Por lo tanto, la mayoría de los equipos terminan automático para los primeros anillos con un breve aplazamiento,
+
+00:58:23.590 --> 00:58:25.170
+por lo que el grupo de prueba actúa como canario.
+
+00:58:26.150 --> 00:58:27.950
+Manual para dispositivos amplios y críticos,
+
+00:58:28.210 --> 00:58:31.370
+donde un controlador deficiente es costoso y unas pocas semanas de retraso son aceptables.
+
+00:58:31.370 --> 00:58:35.390
+La misma lógica de anillo que ya crea está aplicada a un tipo de actualización más silencioso,
+
+00:58:35.770 --> 00:58:36.670
+y un hábito más ayuda.
+
+00:58:37.290 --> 00:58:40.330
+Trata un controlador que corriga un problema conocido de manera diferente a un rutinario.
+
+00:58:40.770 --> 00:58:43.850
+Si un controlador de un proveedor cierra un piso de seguridad, revísalo rápido.
+
+00:58:44.190 --> 00:58:45.490
+Si agrega una función menor, déjalo esperar.
+
+00:58:45.850 --> 00:58:46.210
+Ahora firmware.
+
+00:58:46.710 --> 00:58:49.030
+El firmware es el código que reside por debajo del sistema operativo.
+
+00:58:49.150 --> 00:58:51.830
+La BIOS o la UEF en un portátil y el controlador dentro de una base en microcódigo,
+
+00:58:51.890 --> 00:58:53.550
+una base en microcódigo, un dispositivo de almacenamiento.
+
+00:58:53.550 --> 00:58:56.230
+Parte de él llega a través de Windows Update como un paquete de controladores,
+
+00:58:56.450 --> 00:58:57.930
+y algunos proveedores lo publican de esta manera.
+
+00:58:58.670 --> 00:59:01.530
+Cuando lo hace, lo gestionan las mismas políticas de controladores, pero gran parte no.
+
+00:59:01.870 --> 00:59:04.350
+Muchos fabricantes se vean el firmware a través de sus propias herramientas.
+
+00:59:04.430 --> 00:59:06.650
+La utilidad de actualización de un proveedor, una consola de gestión,
+
+00:59:06.910 --> 00:59:08.750
+un paquete que implementas tú mismo a través de Intune.
+
+00:59:09.350 --> 00:59:11.250
+Esa es una ruta independiente con un tiempo independiente,
+
+00:59:11.390 --> 00:59:13.130
+pruebas independientes y un propietario independiente.
+
+00:59:13.670 --> 00:59:16.670
+Windows Update no tiene ni idea de que existe y tus anillos de actualización no lo afectan.
+
+00:59:16.950 --> 00:59:18.990
+Esa separación provoca una brecha en la mayoría de los estados.
+
+00:59:18.990 --> 00:59:21.510
+El sistema operativo se partiza según un cronograma claro,
+
+00:59:21.510 --> 00:59:25.310
+y el firmware subyacente envejece silenciosamente porque recae entre dos equipos.
+
+00:59:25.630 --> 00:59:26.610
+Punto final es dueño de Windows.
+
+00:59:27.090 --> 00:59:27.850
+Nadie es dueño del BIOS.
+
+00:59:28.330 --> 00:59:30.050
+Crece la pena repararlo y vale la pena decidir quién no tiene.
+
+00:59:30.330 --> 00:59:32.250
+Pero el firmware y los controladores comparten una característica.
+
+00:59:32.530 --> 00:59:34.330
+Cuando fallan, no fallan estrepitosamente.
+
+00:59:34.750 --> 00:59:36.930
+Un controlador que se comporta mal no produce un error claro.
+
+00:59:37.650 --> 00:59:39.410
+Produce un portátil que va un poco más lento,
+
+00:59:39.630 --> 00:59:42.230
+una cámara que falla un poco, un reinicio que no termina de terminar.
+
+00:59:42.770 --> 00:59:43.930
+Esos son los fallos silenciosos,
+
+00:59:44.070 --> 00:59:46.430
+y los que más tiempo hacen perder porque nadie sabe dónde buscar.
+
+00:59:46.710 --> 00:59:48.330
+Pero eso es hora de analizar los fallos directamente.
+
+00:59:48.330 --> 00:59:51.610
+¿Dónde fallan las actualizaciones, la taxonomía de los fallos?
+
+00:59:51.810 --> 00:59:53.170
+Las actualizaciones no fallan de una sola manera.
+
+00:59:53.410 --> 00:59:56.070
+Fallan en etapas, y cada etapa tiene una causa diferente,
+
+00:59:56.150 --> 00:59:57.990
+un síntoma diferente y un propietario diferente.
+
+00:59:58.510 --> 00:59:59.550
+Empieza con el mapa más simple.
+
+00:59:59.930 --> 01:00:02.070
+Una actualización tiene que descargarse, luego tiene que instalarse,
+
+01:00:02.150 --> 01:00:03.330
+luego el dispositivo tiene que reiniciarse.
+
+01:00:03.650 --> 01:00:04.130
+Tres pasos.
+
+01:00:04.230 --> 01:00:05.990
+Un dispositivo puede dejar de funcionar en cualquiera de ellas.
+
+01:00:06.270 --> 01:00:07.510
+Los fallos de descarga son lo primero.
+
+01:00:07.870 --> 01:00:09.370
+El dispositivo sabe que existe una actualización,
+
+01:00:09.550 --> 01:00:10.450
+pero los bytes nunca llegan.
+
+01:00:10.830 --> 01:00:12.430
+Puede que la red se caiga a mitad de la transferencia.
+
+01:00:12.490 --> 01:00:14.570
+Puede que un proxy bloquee los puntos de conexión de Microsoft.
+
+01:00:14.910 --> 01:00:16.730
+Puede que el dispositivo entre en suspensión de que finalice el archivo.
+
+01:00:16.730 --> 01:00:19.510
+El resultado parece un portátil que simplemente va atrasado,
+
+01:00:19.790 --> 01:00:21.030
+sin ningún error que nadie note.
+
+01:00:21.430 --> 01:00:22.650
+Los fallos de instalación son más honor.
+
+01:00:23.190 --> 01:00:25.770
+Los archivos llegan, Windows empieza a aplicarlos y algo se niega.
+
+01:00:26.270 --> 01:00:28.430
+O tienes un código de error, una reversión y una máquina
+
+01:00:28.430 --> 01:00:31.210
+que silenciosamente vuelve a donde comenzó, donde comenzó.
+
+01:00:31.570 --> 01:00:33.410
+La actualización lo intentó, el dispositivo la deshizo
+
+01:00:33.410 --> 01:00:34.330
+y luego reinicia los fallos.
+
+01:00:34.570 --> 01:00:35.230
+Son nomás que ganemos.
+
+01:00:35.610 --> 01:00:37.650
+La instalación finalizó, pero el parche no está activo
+
+01:00:37.650 --> 01:00:38.590
+hasta que la máquina se reinicie.
+
+01:00:38.790 --> 01:00:40.230
+Un usuario lo pospone durante dos semanas.
+
+01:00:40.550 --> 01:00:42.230
+El dispositivo nunca permanece inactivo tiempo suficiente.
+
+01:00:42.450 --> 01:00:43.510
+Un kiosco nunca se apaga.
+
+01:00:44.210 --> 01:00:46.130
+La actualización está ahí, completamente instalada,
+
+01:00:46.130 --> 01:00:46.750
+sin hacer nada.
+
+01:00:47.370 --> 01:00:48.630
+Descarga, instala, reinicia.
+
+01:00:49.290 --> 01:00:51.810
+Ahora profundiza un nivel más porque la mayoría de los fallos de instalación
+
+01:00:51.810 --> 01:00:54.150
+provienen del propio dispositivo, no de la actualización.
+
+01:00:54.670 --> 01:00:56.130
+El espacio en disco es el campeón aburrido.
+
+01:00:56.630 --> 01:00:59.130
+Una actualización de funciones necesita muchos gigabytes de espacio libre
+
+01:00:59.130 --> 01:01:00.810
+para no cenar archivos y mantener una copia de reversión.
+
+01:01:01.290 --> 01:01:03.470
+Un portátil con un disco duro casi lleno falla siempre
+
+01:01:03.470 --> 01:01:04.770
+y falla siempre de la misma manera.
+
+01:01:05.250 --> 01:01:07.050
+Ninguna política lo soluciona, solo el espacio va.
+
+01:01:07.410 --> 01:01:08.530
+A continuación, la pila de servicio.
+
+01:01:09.010 --> 01:01:10.690
+Esta es la parte de Windows que instala la desactualización.
+
+01:01:11.090 --> 01:01:12.350
+Si está desactualizado o roto,
+
+01:01:12.390 --> 01:01:13.990
+no puede aplicar la actualización que lo repararía.
+
+01:01:13.990 --> 01:01:16.450
+Un dispositivo puede quedarse atascado en ese bucle,
+
+01:01:16.550 --> 01:01:18.450
+durante meses intentando y fallando con el mismo parche mensual.
+
+01:01:18.790 --> 01:01:19.970
+Y luego el almacén de componentes.
+
+01:01:20.050 --> 01:01:21.870
+Windows mantiene un almacén de archivos del sistema
+
+01:01:21.870 --> 01:01:23.090
+que utiliza para crear actualización.
+
+01:01:23.570 --> 01:01:24.870
+Cuando ese almacén está dañado,
+
+01:01:24.930 --> 01:01:27.050
+las instalaciones fallan con errores que no llevan a ninguna parte.
+
+01:01:27.170 --> 01:01:28.630
+La máquina parece estar en buen estado.
+
+01:01:28.730 --> 01:01:30.330
+Las habitaciones se ejecutan, pero no puede aceptar un par.
+
+01:01:30.670 --> 01:01:31.730
+Esos tres comparten una característica.
+
+01:01:32.170 --> 01:01:34.190
+Son locales y específicos de una máquina.
+
+01:01:34.830 --> 01:01:36.950
+Se encuentras mirando ese dispositivo, no tu política.
+
+01:01:37.690 --> 01:01:38.950
+Ahora bien, el otro tipo de fallo,
+
+01:01:39.050 --> 01:01:39.810
+el que no tiene ningún error,
+
+01:01:39.810 --> 01:01:42.210
+los conflictos de política bloquean las actualizaciones de forma silenciosa.
+
+01:01:42.650 --> 01:01:44.570
+Ya hemos hablado de esto con Autopatch, pero es más amplio.
+
+01:01:45.790 --> 01:01:46.870
+Una antigua política de grupo,
+
+01:01:47.050 --> 01:01:48.590
+dirige al cliente de un servidor que ya no existe.
+
+01:01:49.130 --> 01:01:51.070
+Un valor de registro fija una versión que nadie recuerda.
+
+01:01:51.650 --> 01:01:53.850
+Dos políticas de Intune establecen diferentes aplazamientos
+
+01:01:53.850 --> 01:01:55.130
+y el dispositivo no se instala en ninguno.
+
+01:01:55.530 --> 01:01:57.410
+La actualización nunca falla porque ni siquiera se inicia.
+
+01:01:58.110 --> 01:01:59.450
+Esta es la peor categoría, por una razón.
+
+01:01:59.890 --> 01:02:00.450
+No se romperá.
+
+01:02:00.870 --> 01:02:02.570
+Un dispositivo que no se instala muestra un fallo.
+
+01:02:03.230 --> 01:02:05.710
+Un dispositivo al que nunca se le indicó que se instalara no muestra nada.
+
+01:02:05.710 --> 01:02:09.330
+Y permanece rezagado durante meses mientras todos los paneles indican que aún no se ha ofrecido.
+
+01:02:10.010 --> 01:02:11.430
+Es la mejor manera de resolver todo esto.
+
+01:02:11.810 --> 01:02:12.630
+Pregunta, recibe el fallo.
+
+01:02:13.030 --> 01:02:14.690
+Algunos fallos residen en la capa de razonamiento.
+
+01:02:14.930 --> 01:02:17.950
+Esa es la capa donde la política, los anillos, los aplazamientos y los plazos
+
+01:02:17.950 --> 01:02:19.370
+deciden lo que debe hacer un dispositivo.
+
+01:02:20.130 --> 01:02:22.910
+Cuando el razonamiento falla, el dispositivo nunca recibe la instrucción correcta.
+
+01:02:23.370 --> 01:02:26.390
+Un conflicto, una asignación incorrecta, un grupo que falta, un plazo fijado demasiado lejano.
+
+01:02:27.190 --> 01:02:28.070
+El dispositivo no está variado.
+
+01:02:28.410 --> 01:02:30.190
+La decisión fue incorrecta o nunca se alcanzó.
+
+01:02:30.530 --> 01:02:32.310
+Otros fallos residen en la capa de entrega.
+
+01:02:32.830 --> 01:02:34.370
+El dispositivo sabe exactamente qué hacer.
+
+01:02:34.370 --> 01:02:38.370
+Disco lleno, pila de servicio rota, red bloqueada, reinicio pospuesto.
+
+01:02:38.990 --> 01:02:41.190
+La instrucción era perfecta y la máquina no pudo llevarla a cabo.
+
+01:02:41.830 --> 01:02:42.910
+Esa división cambia aquí en la regla.
+
+01:02:43.570 --> 01:02:45.770
+Los fallos de razonamiento pertenecen a quien posee la política.
+
+01:02:46.430 --> 01:02:49.190
+Los arreglas una vez en un lugar y se solucionan en cientos de dispositivos.
+
+01:02:49.610 --> 01:02:51.750
+Los fallos de entrega pertenecen a quien posee el punto final.
+
+01:02:52.250 --> 01:02:54.510
+Los arreglas máquina por máquina o automatiza la reparación.
+
+01:02:55.210 --> 01:02:56.230
+Mézclalos y pierde la semana.
+
+01:02:56.710 --> 01:02:58.810
+Un equipo ve 100 dispositivos atrasados.
+
+01:02:58.990 --> 01:03:01.350
+Asume que todos están rotos y comienza a tocar computadoras portátiles.
+
+01:03:01.350 --> 01:03:05.750
+Mientras tanto, una mala asignación fue la causa real y un solo cambio habría eliminado toda la lista.
+
+01:03:06.350 --> 01:03:08.670
+Por lo tanto, antes de cualquier corrección, debes saber en qué capa está.
+
+01:03:09.250 --> 01:03:10.210
+Y no puedes saberlo adivinando.
+
+01:03:10.750 --> 01:03:15.070
+No puedes saberlo a partir de una queja de un usuario, una corazonada o un ticket que diga que mi actualización no funcionó.
+
+01:03:15.890 --> 01:03:16.310
+Debes ver.
+
+01:03:17.190 --> 01:03:20.230
+¿Y dispositivos fallaron en qué paso, con qué error, en qué anillo?
+
+01:03:20.710 --> 01:03:22.130
+Eso significa que los informes son lo primero.
+
+01:03:22.890 --> 01:03:24.070
+Informes en Intune y AutoPatch.
+
+01:03:24.790 --> 01:03:25.770
+Intune ya tiene los informes.
+
+01:03:26.390 --> 01:03:27.830
+La mayoría de los equipos nunca habrían el correcto.
+
+01:03:28.350 --> 01:03:29.590
+Empieza con actualizaciones de calidad de Windows.
+
+01:03:29.990 --> 01:03:32.750
+En el centro de administración de Intune, vea informes y luego actualizaciones de Windows.
+
+01:03:33.290 --> 01:03:36.190
+Encontrarás una pestaña para actualizaciones de calidad y otra para actualizaciones de función.
+
+01:03:36.550 --> 01:03:37.550
+Pondan a diferentes preguntas.
+
+01:03:37.930 --> 01:03:41.270
+El informe de calidad muestra la posición de cada dispositivo en comparación con la última versión mensual.
+
+01:03:41.810 --> 01:03:42.710
+El dispositivo lo aceptaron.
+
+01:03:43.070 --> 01:03:43.910
+¿Cuáles siguen funcionando?
+
+01:03:44.150 --> 01:03:45.610
+¿Cuáles fallaron y con qué código de error?
+
+01:03:46.090 --> 01:03:48.530
+Puedes filtrar por anillo, por grupo o por versión del sistema web.
+
+01:03:49.250 --> 01:03:53.590
+Ese filtro es el que más usarás porque un número para todo el conjunto oculta todo lo útil.
+
+01:03:54.170 --> 01:03:57.230
+El informe de actualización de funciones funciona de la misma manera, pero la unidad es la versión.
+
+01:03:57.590 --> 01:03:59.470
+¿Cuántos dispositivos ejecutan la versión que seleccionan?
+
+01:03:59.790 --> 01:04:00.750
+¿Cuántos siguen el antiguo?
+
+01:04:01.050 --> 01:04:02.590
+¿Cuántos están retenidos por una protección?
+
+01:04:02.950 --> 01:04:06.790
+Si creaste una política de actualización de funciones, aquí es donde verificas si el PIN realmente se mantiene.
+
+01:04:07.150 --> 01:04:08.730
+Ambos informes también muestran detalles por eso.
+
+01:04:08.970 --> 01:04:13.550
+Haz clic en una máquina y verás el estado de la actualización, la última comprobación y el error si lo hay.
+
+01:04:13.550 --> 01:04:16.930
+Esa vista detallada es donde los informes se convierten en resolución de problemas.
+
+01:04:17.410 --> 01:04:18.630
+Lo usaremos correctamente en una sección.
+
+01:04:18.950 --> 01:04:19.650
+Ahora, el lado de Autopatch.
+
+01:04:20.130 --> 01:04:22.390
+Autopatch tiene su propio conjunto de informes en informes.
+
+01:04:22.610 --> 01:04:23.530
+Luego un Windows Autopatch.
+
+01:04:24.070 --> 01:04:25.270
+No son una copia de los de Intu.
+
+01:04:25.630 --> 01:04:26.910
+Están organizados en torno al servicio.
+
+01:04:27.270 --> 01:04:28.150
+¿Qué dispositivos se registran?
+
+01:04:28.590 --> 01:04:29.330
+¿Cuál es esta lista?
+
+01:04:29.730 --> 01:04:31.450
+¿Cómo le está yendo a cada anillo con la actualización?
+
+01:04:31.990 --> 01:04:35.810
+El informe del dispositivo responde primero a la pregunta de entrada de todo lo que intentaste registrar,
+
+01:04:35.950 --> 01:04:36.890
+qué entró y qué no.
+
+01:04:37.510 --> 01:04:38.850
+Los registros fallidos muestran un motivo.
+
+01:04:39.370 --> 01:04:41.850
+Esa es la lista que lees después de cada lote, como dijimos antes.
+
+01:04:41.850 --> 01:04:44.130
+La vista de anillo es la que importa durante el lanzamiento.
+
+01:04:44.710 --> 01:04:47.870
+Muestra cada prueba del grupo de forma amplia con su propio progreso en la actualización actual.
+
+01:04:48.450 --> 01:04:51.870
+Puedes ver la prueba finalizada hace días primero al 90% de rapidez y recién comenzando.
+
+01:04:52.590 --> 01:04:54.130
+Esa es la implementación por etapa acceso visible.
+
+01:04:54.710 --> 01:04:57.770
+Y si el servicio pausó un anillo, aparece aquí con el motivo adjunto.
+
+01:04:58.230 --> 01:04:59.370
+¿Es qué significan realmente los estados?
+
+01:04:59.790 --> 01:05:01.290
+Cuatro categorías hacen la mayor parte del trabajo.
+
+01:05:01.750 --> 01:05:03.230
+Actualizado en progreso no listo, tiene problemas.
+
+01:05:03.910 --> 01:05:04.710
+Actualizado es más fácil.
+
+01:05:05.190 --> 01:05:07.950
+El dispositivo ejecuta la última versión de su anillo y no hay nada pendiente.
+
+01:05:07.950 --> 01:05:12.190
+En progreso significa que la actualización está en camino, descargándose, instalándose, esperando un reinicio.
+
+01:05:12.590 --> 01:05:15.570
+Todos los dispositivos pasan por este estado, por lo que algunos de ellos siempre están aquí.
+
+01:05:16.090 --> 01:05:16.630
+La pregunta tío.
+
+01:05:17.270 --> 01:05:18.050
+No listo es el confuso.
+
+01:05:18.610 --> 01:05:21.910
+No significa roto, significa que el servicio no puede administrar el dispositivo en este momento.
+
+01:05:22.310 --> 01:05:26.210
+Una comprobación de preparación fallida, un conflicto de políticas, un requisito previo o faltante,
+
+01:05:26.270 --> 01:05:28.570
+esos son los bloqueadores silenciosos que surgieron anteriormente como un estado.
+
+01:05:28.910 --> 01:05:31.670
+Trate cada uno como un problema de la capa de razonamiento hasta que se demuestre.
+
+01:05:32.150 --> 01:05:34.110
+Tiene problemas, significa que algo salió mal en el dispositivo.
+
+01:05:34.670 --> 01:05:37.550
+Un error de instalación, un reinicio bloqueado, no se registró durante demasiado tiempo.
+
+01:05:37.690 --> 01:05:38.750
+Esa es su lista de la capa de entrega.
+
+01:05:39.090 --> 01:05:41.310
+Cuatro depósitos y cada uno apunta a un propietario diferente.
+
+01:05:41.610 --> 01:05:43.150
+Ahora bien, ¿cómo se ve un panel de control emolio?
+
+01:05:43.930 --> 01:05:48.430
+Mayormente verde, prueba y primero casi completamente actualizado, rápido y amplio en ascenso según lo programado.
+
+01:05:48.550 --> 01:05:52.590
+Una pequeña cola de dispositivos en progreso y una lista corta de POV tiene problemas que se hace más corta cada semana.
+
+01:05:53.550 --> 01:05:59.590
+Los errores de registro son casi cero, pero mire más de cerca porque un panel de control en buen estado oculta cosas que ocultan dispositivos que no están en el informe en absoluto.
+
+01:05:59.590 --> 01:06:04.070
+Cualquier cosa fuera del servicio excluido, nunca registrado, no cuenta para su porcentaje.
+
+01:06:04.550 --> 01:06:07.350
+El número se ve bien porque las máquinas con problemas dejaron el denominador.
+
+01:06:07.830 --> 01:06:08.910
+Oculta la antigüedad de los datos.
+
+01:06:09.430 --> 01:06:12.610
+Un dispositivo que no se registró durante un mes aún puede tener su último estado conocido.
+
+01:06:13.370 --> 01:06:16.490
+Realizado según un portátil que ha estado en un cajón y oculta pausas.
+
+01:06:17.170 --> 01:06:19.550
+Un timbre en espera puede parecer tranquilo porque no falla nada.
+
+01:06:20.030 --> 01:06:20.850
+Tampoco se mueve nada.
+
+01:06:21.290 --> 01:06:22.510
+Los porcentajes también ocultan la esperanza.
+
+01:06:23.110 --> 01:06:29.050
+Un 95% por cierto parece correcto hasta que el 5% que falta son todos ejecutivos, todos servidores o todas las máquinas más importantes.
+
+01:06:29.050 --> 01:06:32.290
+Por lo tanto, el panel es preciso y sigue estando incompleto.
+
+01:06:32.750 --> 01:06:37.750
+Te indica el estado de los dispositivos, pero la persona que te pregunta sobre la aplicación de parches no está preguntando por los dispositivos.
+
+01:06:37.950 --> 01:06:40.730
+Está preguntando si el negocio está expuesto y durante cuánto tiempo.
+
+01:06:41.150 --> 01:06:43.030
+Esa es una pregunta diferente. Necesita una cifra diferente.
+
+01:06:44.110 --> 01:06:48.790
+Al medir el cumplimiento de los parches como una métrica empresarial, el porcentaje de parches aplicados es la cifra que todos mencionan.
+
+01:06:49.050 --> 01:06:49.770
+94%.
+
+01:06:49.770 --> 01:06:55.050
+Suena como una calificación y es una instantánea, un único momento congelado que indica cuántos dispositivos están listos,
+
+01:06:55.110 --> 01:06:56.870
+no cuánto tiempo estuvieron expuestos los demás ataques.
+
+01:06:56.870 --> 01:07:00.070
+Hay una segunda cifra que cuenta mejor la historia para aplicar parches.
+
+01:07:00.330 --> 01:07:04.950
+El tiempo para aplicar parches es el lapso entre el día en que Microsoft lanza una actualización y el día en que un dispositivo realmente ejecuta.
+
+01:07:05.070 --> 01:07:05.810
+Un dispositivo a un lado.
+
+01:07:06.150 --> 01:07:09.010
+Súmelos en todo el estado y obtendrá una distribución en lugar de una puntuación.
+
+01:07:09.290 --> 01:07:11.310
+La mediana, el 10% más lento, el peor de los casos.
+
+01:07:11.850 --> 01:07:12.790
+Esta es la razón por la que es importante.
+
+01:07:13.090 --> 01:07:15.150
+Dos estados pueden mostrar un 94% en la actualidad.
+
+01:07:15.470 --> 01:07:17.710
+En el primero, la mayoría de los dispositivos se parcheron en tres días.
+
+01:07:18.070 --> 01:07:19.090
+En la pequeña cola está atascada.
+
+01:07:19.090 --> 01:07:23.650
+En el segundo, todo tardó tres semanas y los últimos rezagados cruzaron la línea esta mañana.
+
+01:07:24.030 --> 01:07:25.670
+Un mismo porcentaje, el riesgo completamente diferente.
+
+01:07:26.110 --> 01:07:27.150
+El porcentaje no parece diferente.
+
+01:07:27.510 --> 01:07:27.910
+Tiempo sí.
+
+01:07:28.270 --> 01:07:31.410
+Por lo tanto, cuando alguien de arriba pregunte por la aplicación de parches, no le cuento de dispositivos.
+
+01:07:31.530 --> 01:07:33.250
+No piensa en dispositivos, piensa en la exposición.
+
+01:07:33.590 --> 01:07:34.990
+La ventana de exposición es el mejor marco.
+
+01:07:35.190 --> 01:07:39.430
+¿Cuántos días después de que existiera una corrección, un grupo determinado de máquinas seguía siendo vulnerable?
+
+01:07:39.630 --> 01:07:40.730
+Eso es lo que le importa a un atacante.
+
+01:07:41.090 --> 01:07:42.490
+Eso es lo que finalmente pregunta a un auditor.
+
+01:07:42.730 --> 01:07:44.950
+Y es algo que un miembro de la junta directiva entiende sin un glosario.
+
+01:07:44.950 --> 01:07:46.210
+Dígalo en su idioma.
+
+01:07:46.630 --> 01:07:49.890
+Para la versión de marzo, nuestros portátiles corporativos estuvieron expuestos durante un promedio de seis días.
+
+01:07:50.310 --> 01:07:51.430
+Sistemas críticos, nueve.
+
+01:07:51.630 --> 01:07:53.910
+Esa es una frase con la que un líder puede actuar.
+
+01:07:54.670 --> 01:07:56.670
+Compárala con estamos al 94%.
+
+01:07:56.670 --> 01:07:57.850
+¿Qué haces con eso?
+
+01:07:58.830 --> 01:07:59.590
+Invita a encogerse de uno.
+
+01:08:00.190 --> 01:08:01.910
+¿Se puede discutir sobre un plazo de tiempo de forma útil?
+
+01:08:02.250 --> 01:08:08.010
+Si seis días parecen demasiado largos, la conversación pasa a los aplazamientos, los plazos y las reglas de reinicio que creamos antes.
+
+01:08:08.590 --> 01:08:10.610
+El número apunta directamente a la palanca que lo mueve.
+
+01:08:11.130 --> 01:08:12.110
+Ahora necesitas objetivos.
+
+01:08:12.290 --> 01:08:14.070
+Y un objetivo para todos tiene la forma incorrecta.
+
+01:08:14.070 --> 01:08:15.970
+Establecelos por anillo y por grupo de arriba.
+
+01:08:16.550 --> 01:08:19.510
+Las pruebas deberían alcanzar la cobertura completa en uno o dos días porque para eso están la prueba.
+
+01:08:20.090 --> 01:08:21.210
+Haz una prueba piloto unos días después.
+
+01:08:21.770 --> 01:08:24.970
+Broad puede tener un plazo de tiempo más largo porque Broad tiene la mayor cantidad de evidencia que los respetan.
+
+01:08:25.210 --> 01:08:30.010
+Un solo número, unos cuatro, castigaría a los primeros anillos por llegar temprano y excusaría a los tardíos por llegar tarde.
+
+01:08:30.610 --> 01:08:31.990
+No agregar riesgos a la parte superior.
+
+01:08:32.250 --> 01:08:33.330
+Máquinas con acceso a internet.
+
+01:08:33.590 --> 01:08:35.330
+Estaciones de trabajo de administración privilegiadas.
+
+01:08:35.450 --> 01:08:36.910
+Dispositivos que contienen datos confidenciales.
+
+01:08:37.170 --> 01:08:41.030
+Esos grupos merecen un plazo de tiempo más ajustado que el de un portátil promedio, incluso si se encuentran en el mismo anillo.
+
+01:08:41.030 --> 01:08:44.330
+Y los dispositivos con una buena razón para esperar con los sistemas clínicos o de fábrica.
+
+01:08:44.430 --> 01:08:47.850
+Obtienen su propio objetivo o objetivo acurado por escrito para que el retrato sea una decisión y no una sorpresa.
+
+01:08:48.230 --> 01:08:50.290
+Mantenga la lista corta de tres o cuatro objetivos que realmente puede recorrer.
+
+01:08:50.790 --> 01:08:51.750
+Supera los 12 que nadie compró.
+
+01:08:52.090 --> 01:08:52.950
+Y haga un seguimiento de lo fallo.
+
+01:08:53.610 --> 01:08:56.290
+Un dispositivo que supera su objetivo no es un fallo del informe.
+
+01:08:56.810 --> 01:08:58.190
+Es el comienzo de una pregunta que responderemos.
+
+01:08:58.730 --> 01:09:00.250
+Ahora bien, ¿de dónde provienen los datos de tendencia?
+
+01:09:00.250 --> 01:09:02.190
+Los informes integrados de Intune muestran el precio.
+
+01:09:02.550 --> 01:09:04.290
+Son buenos para indicarle cómo están las cosas de esta semana.
+
+01:09:04.770 --> 01:09:06.310
+Ir hacia atrás a lo largo de mes y de más tiempo.
+
+01:09:06.570 --> 01:09:07.890
+Ahí es donde entra en juego el análisis de registro.
+
+01:09:08.210 --> 01:09:13.390
+Los informes de Windows Update para empresas pueden enviar datos de actualización a un espacio de trabajo de análisis de registros que los almacenaron a lo largo de tiempo.
+
+01:09:13.450 --> 01:09:18.950
+El espacio de trabajo mantiene registros de qué dispositivos estaban, qué compilación, qué actualizaciones se les ofrecieron y cómo finalizó cada implementación.
+
+01:09:19.210 --> 01:09:20.050
+Luego puede consultar.
+
+01:09:20.430 --> 01:09:22.530
+Con ese historial puede trazar la línea en lugar del punto.
+
+01:09:23.090 --> 01:09:24.790
+Tiempo medio para aplicar parches mes a mes.
+
+01:09:24.790 --> 01:09:30.090
+Si los dispositivos más lentos se están volviendo más rápidos o empeorando, ¿qué anillo incumple sistemáticamente su objetivo?
+
+01:09:30.670 --> 01:09:36.790
+Si el último trimestre cambió la fecha límite general, en realidad acortó la ventana o simplemente movió las quejas, todo último es lo que realmente va.
+
+01:09:37.270 --> 01:09:38.850
+Un cambio que no se puede medir es una opinión.
+
+01:09:39.270 --> 01:09:42.810
+Un cambio que se puede medir es una evidencia y la evidencia sobrevive a la próxima reunión de presupuesto.
+
+01:09:43.130 --> 01:09:43.670
+Una advertencia.
+
+01:09:43.730 --> 01:09:47.010
+El espacio de trabajo cuesta dinero para ejecutarse y la recopilación de datos requiere confluido.
+
+01:09:47.270 --> 01:09:50.350
+Empieza con un conjunto limitado de preguntas que realmente planeas hacer y desarrollas afuera.
+
+01:09:50.750 --> 01:09:53.610
+Un panel que nadie lee es lo mismo que ningún panel, así que ahora tienes los números correctos.
+
+01:09:53.610 --> 01:09:57.650
+Ventanas de exposición, objetivos por anillo y riesgo, una tendencia que puedes defender.
+
+01:09:57.930 --> 01:10:01.770
+Y ahí es exactamente cuando comienza la parte incómoda, porque una buena medición no soluciona nada.
+
+01:10:02.490 --> 01:10:04.410
+Solo te muestra claramente qué dispositivo va con retraso.
+
+01:10:05.170 --> 01:10:07.210
+Manual de resolución de problemas, el del informe está la causa de E.
+
+01:10:07.710 --> 01:10:11.330
+Empieza con el dispositivo, no con la política ni con el anillo, es la única máquina que va con retraso.
+
+01:10:11.810 --> 01:10:13.370
+Cada actualización fallida deja un número.
+
+01:10:14.070 --> 01:10:16.890
+Un código de error, normalmente un valor, es el decimal que comienza con 0 por 8.
+
+01:10:17.610 --> 01:10:18.550
+Parece ruido, pero no lo es.
+
+01:10:19.150 --> 01:10:21.510
+Si buscas en el código, a menudo te toparás con una única.
+
+01:10:21.670 --> 01:10:22.970
+No hay suficiente espacio en disco.
+
+01:10:22.970 --> 01:10:23.930
+Una descarga dañada.
+
+01:10:24.270 --> 01:10:25.890
+Una pila de servicio que no puede aplicar el parche.
+
+01:10:26.290 --> 01:10:29.130
+El código te indica qué etapa falló y en qué capa te encuentras.
+
+01:10:29.570 --> 01:10:30.250
+¿Dónde lo encuentras?
+
+01:10:30.590 --> 01:10:33.050
+En Intune abre el dispositivo y mira el estado de la actualización.
+
+01:10:33.430 --> 01:10:35.630
+El informe de actualización de calidad incluye el error de esa máquina.
+
+01:10:36.070 --> 01:10:39.530
+En el propio dispositivo abre configuración, luego Windows Update y luego historial de actualizaciones.
+
+01:10:39.910 --> 01:10:43.770
+Las instalaciones fallidas aparecen allí con el mismo código, más el nombre de la actualización que se rechazó.
+
+01:10:44.170 --> 01:10:46.010
+Lee el historial como un patrón, no como una sola línea.
+
+01:10:46.250 --> 01:10:47.070
+Un error es un evento.
+
+01:10:47.070 --> 01:10:50.530
+El mismo error en la misma actualización durante tres meses seguidos es un diagnóstico.
+
+01:10:51.030 --> 01:10:54.570
+Un dispositivo que falla en un parche específico y acepta a todos los demás apuntar a ese parche.
+
+01:10:55.250 --> 01:10:57.230
+Un dispositivo que falla en toda apunta a la máquina.
+
+01:10:57.850 --> 01:10:58.570
+Ahora amplía la vista.
+
+01:10:59.030 --> 01:11:02.450
+Intune mantiene una cronología del dispositivo y es la parte que la mayoría de los administradores asalta.
+
+01:11:02.850 --> 01:11:03.570
+Abre el dispositivo.
+
+01:11:03.890 --> 01:11:05.910
+Busca la cronología y verás lo que ha ocurrido en orden.
+
+01:11:06.590 --> 01:11:10.070
+Política recibida, actualización ofrecida, descarga iniciada, reinicio pendiente.
+
+01:11:10.630 --> 01:11:12.010
+Cada evento tiene una hora al lado.
+
+01:11:12.470 --> 01:11:14.650
+Ese orden es importante porque el espacio te indica dónde buscar.
+
+01:11:15.030 --> 01:11:18.670
+Si la política llegó pero la actualización nunca se ofreció, el problema está en la capa de razonamiento.
+
+01:11:19.150 --> 01:11:21.850
+Si se ofreció y la descarga nunca terminó, es la red o el disco.
+
+01:11:22.290 --> 01:11:27.150
+Si todo terminó y el reinicio nunca se produjo, es un usuario o un dispositivo que nunca permanece inactivo.
+
+01:11:27.530 --> 01:11:29.090
+Cuando se agote el plazo, ve los registros.
+
+01:11:29.370 --> 01:11:32.310
+Windows mantiene un registro detallado de actualizaciones de Windows, pero no pone fácil.
+
+01:11:32.310 --> 01:11:37.070
+Los archivos sin procesar están en un formato que solo unas pocas personas pueden leer, por lo que le pides a Windows que los deduzca.
+
+01:11:37.310 --> 01:11:42.130
+Un comando de PowerShell llamado getWindowsUpdateLog fusiona los archivos de seguimiento en un archivo de texto elegido.
+
+01:11:42.410 --> 01:11:43.710
+Tarda un minuto y el resultado es largo.
+
+01:11:44.310 --> 01:11:45.210
+No lo leas arriba o abajo.
+
+01:11:45.770 --> 01:11:47.630
+Busca el código de error que ya tienes y leas a su alrededor.
+
+01:11:48.070 --> 01:11:49.790
+Estás buscando la línea justo antes del error.
+
+01:11:50.390 --> 01:11:51.650
+Esa línea suele nombrar la causa.
+
+01:11:52.010 --> 01:11:55.570
+Un archivo que no pudo encontrar, una fuente a la que no pudo acceder, un valor de política que no esperaba.
+
+01:11:55.730 --> 01:11:58.710
+Lo que te lleva a los fallos más silenciosos, los que no tienen ningún error.
+
+01:11:59.390 --> 01:12:02.150
+Si el dispositivo o la instrucción, necesitas ver lo que realmente se le dijo.
+
+01:12:02.750 --> 01:12:03.890
+Esa es la vista de política resultante.
+
+01:12:04.290 --> 01:12:07.790
+En Intune, abre el dispositivo y comprueba el estado de configuración de los ajustes de actualización.
+
+01:12:08.230 --> 01:12:09.370
+Busca estados de conflicto y error.
+
+01:12:09.810 --> 01:12:12.190
+Cada uno nombra el ajuste y las políticas que compiten por él.
+
+01:12:12.710 --> 01:12:14.770
+En la máquina, una herramienta diferente muestra la misma verdad.
+
+01:12:15.170 --> 01:12:17.070
+La directiva de grupo tiene su propio informe resultante,
+
+01:12:17.170 --> 01:12:19.890
+y el registro contiene los valores de la política de actualización que el cliente se hace en cliente.
+
+01:12:20.310 --> 01:12:21.810
+Compara los con lo que pretendías implementar.
+
+01:12:22.270 --> 01:12:24.710
+Cuando los números no coinciden, has encontrado la segunda voz.
+
+01:12:24.710 --> 01:12:28.710
+Una directiva de grupo antigua, un valor de registro sobrante, un anillo que olvidaste que estaba asignado.
+
+01:12:29.930 --> 01:12:31.970
+Soluciona eso eliminando una voz como dijimos antes.
+
+01:12:32.790 --> 01:12:34.870
+Luego sincroniza el dispositivo y observa cómo cambia el ajuste.
+
+01:12:35.190 --> 01:12:37.910
+Ahora, supongamos que la política está limpia y el dispositivo sigue sin poder actualizar.
+
+01:12:38.190 --> 01:12:41.650
+En el local, tienes una lista corta de reparaciones que van de ligeras a pesada.
+
+01:12:42.290 --> 01:12:43.770
+Primero, restablece los componentes de actualización.
+
+01:12:43.990 --> 01:12:46.130
+Windows Update mantiene una caché de archivos descargados.
+
+01:12:46.590 --> 01:12:49.250
+Cuando esa caché está dañada, las instalaciones fallan de formas extrañas.
+
+01:12:49.710 --> 01:12:54.470
+Detén los servicios de actualización, borra carpeta de caché, reinicia los servicios y deja que el cliente descargue copias nuevas.
+
+01:12:54.950 --> 01:12:56.290
+Repara más máquinas de las que deberían.
+
+01:12:56.910 --> 01:12:58.310
+Segundo, repara la capa de servicio.
+
+01:12:58.750 --> 01:12:59.930
+Dos herramientas integradas se encargan.
+
+01:13:00.350 --> 01:13:04.690
+Dicen, comprueba y repara el almacén de componentes y el grupo de archivos del sistema desde el que Windows crea actualización.
+
+01:13:04.950 --> 01:13:07.970
+Luego, el comprobador de archivos del sistema verifica los archivos en el disco inicial más.
+
+01:13:08.510 --> 01:13:10.470
+Ejecútalos en ese orden porque el segundo depende del primer.
+
+01:13:11.170 --> 01:13:12.770
+Tercero, la opción pesada, reinstalar.
+
+01:13:13.210 --> 01:13:19.130
+Para una actualización de funciones que sigue fallando, una instalación de reparación en el lugar vuelve a aplicar Windows sobre sí mismo, sobre sí misma y conserva las aplicaciones y las demás.
+
+01:13:19.510 --> 01:13:22.230
+Tarda una hora y borra casi todo, excepto el hardware defectuoso.
+
+01:13:22.750 --> 01:13:28.310
+Si incluso eso falla, el dispositivo necesita un reinicio o una nueva imagen y, en ese momento, el propio equipo es el hallazgo.
+
+01:13:28.310 --> 01:13:30.570
+De ligeras a pesadas, detente en la primera que funcione.
+
+01:13:30.790 --> 01:13:31.630
+Pero mira lo que acabas de hacer.
+
+01:13:31.910 --> 01:13:34.930
+Un portátil, un error, una hora de lectura, registros y ejecución de reparación.
+
+01:13:35.310 --> 01:13:36.410
+Eso está bien para una sola máquina.
+
+01:13:36.410 --> 01:13:38.010
+Es un desastre para 50.
+
+01:13:38.190 --> 01:13:39.610
+Cada paso de ese manual es repetible.
+
+01:13:40.050 --> 01:13:43.770
+Mi memoria, establecimiento de caché, los mismos comandos de reparación, la misma comprobación, el mismo servicio bloqueado.
+
+01:13:44.250 --> 01:13:46.650
+Una solución que puedes describir en una lista es una solución que puedes programar.
+
+01:13:47.170 --> 01:13:49.070
+Por lo tanto, el siguiente paso no es acelerar la reparación.
+
+01:13:49.470 --> 01:13:51.030
+Es acelerar que las repetidas se solucionen solas.
+
+01:13:52.110 --> 01:13:53.990
+Automatizar la reparación y gestionar los problemas de salón.
+
+01:13:54.470 --> 01:13:56.090
+Intune una función creada exactamente para esto.
+
+01:13:56.590 --> 01:13:59.990
+Se llama reparaciones y se encuentran dispositivos, luego un script y reparaciones.
+
+01:14:00.850 --> 01:14:01.790
+Cada uno es un par de scripts.
+
+01:14:02.310 --> 01:14:03.430
+El primero es un script de detección.
+
+01:14:03.910 --> 01:14:06.030
+Se ejecuta en el dispositivo y responde una pregunta de sí o no.
+
+01:14:06.410 --> 01:14:07.350
+¿Esta máquina está mal en estado?
+
+01:14:08.130 --> 01:14:09.530
+El segundo es el script de reparación.
+
+01:14:09.990 --> 01:14:12.510
+Solo se ejecuta cuando la detección dice que sí y realiza la reparación.
+
+01:14:12.710 --> 01:14:13.470
+Esa estructura es importante.
+
+01:14:13.890 --> 01:14:16.490
+El script de detección es barato y se ejecuta a menudo a diario si lo desea.
+
+01:14:16.750 --> 01:14:18.590
+La reparación solo se activa en las máquinas que la necesitan.
+
+01:14:19.010 --> 01:14:19.990
+Nadie toca los que están mal en estado.
+
+01:14:20.390 --> 01:14:21.150
+Entonces, ¿qué detectas?
+
+01:14:21.150 --> 01:14:23.590
+Empieza con la lista de reparación que acabas de ejecutar a menudo.
+
+01:14:23.990 --> 01:14:25.530
+¿Está deshabilitado el servicio de Windows Update?
+
+01:14:25.910 --> 01:14:27.530
+La cacheta de actualización está sobrecargada ya.
+
+01:14:27.990 --> 01:14:30.610
+Hay espacio libre en disco por debajo de la línea que necesita una actualización de función.
+
+01:14:31.110 --> 01:14:33.190
+El dispositivo lleva más de una semana pendiente de reinicio.
+
+01:14:33.830 --> 01:14:36.970
+Cada una de estas comprobaciones de una línea y cada una tiene una solución conocida.
+
+01:14:37.490 --> 01:14:38.330
+Luego las conectas.
+
+01:14:38.830 --> 01:14:39.990
+Disco por debajo de 20 gigas.
+
+01:14:40.210 --> 01:14:41.650
+Borra los archivos temporales y la que transanía.
+
+01:14:42.210 --> 01:14:43.310
+Servicio de actualización detenido.
+
+01:14:43.430 --> 01:14:44.730
+Configúralo para que se inicie ejecuta.
+
+01:14:44.970 --> 01:14:46.130
+Almacén de componentes dañado.
+
+01:14:46.230 --> 01:14:48.030
+Ejecuta los comandos de reparación y registra el resultado.
+
+01:14:48.330 --> 01:14:51.170
+La máquina se repara sola durante la noche y el ticket nunca se escribe.
+
+01:14:51.730 --> 01:14:52.350
+Una advertencia.
+
+01:14:52.730 --> 01:14:56.730
+Una corrección se ejecuta con potencia real, así que pruébala primero en tus pruebas como cualquier otro campo.
+
+01:14:57.330 --> 01:15:00.250
+Un script que borra la carpeta en correcta escala es un incidente en sí mismo.
+
+01:15:01.090 --> 01:15:02.710
+Ahora bien, algunos dispositivos no responden a nada.
+
+01:15:02.910 --> 01:15:04.610
+No cumplen con el plazo mes tras mes.
+
+01:15:05.030 --> 01:15:05.870
+No los trates como ruido.
+
+01:15:06.250 --> 01:15:07.070
+Trátalos como una lista.
+
+01:15:07.450 --> 01:15:10.590
+Extrae los dispositivos que no cumplieron con el plazo de entrega en cada uno de esos tres ciclos.
+
+01:15:10.590 --> 01:15:14.210
+En el análisis de registro se trata de una consulta sencilla sobre la historia del kit de recopil.
+
+01:15:14.450 --> 01:15:16.350
+Los infractores reincidentes se clasificarán de varias formas.
+
+01:15:16.930 --> 01:15:19.750
+Un modelo con un problema de controlador, un departamento que nunca se reinicia,
+
+01:15:19.830 --> 01:15:24.250
+un puñado de máquinas con discos llenos, un único sitio detrás de un proxy que bloquea los puntos finales de actualización.
+
+01:15:25.310 --> 01:15:28.130
+Una vez que veas la forma, tendrás un grupo y un grupo es algo a lo que puedes dirigir.
+
+01:15:28.550 --> 01:15:31.830
+Asigna esos dispositivos por su cuenta, con una fecha límite más ajustada,
+
+01:15:32.110 --> 01:15:34.490
+una regla de reinicio más estricta o una solución específica.
+
+01:15:35.050 --> 01:15:37.550
+Soluciona la causa del grupo y toda la lista se reducirá de inmediato.
+
+01:15:37.550 --> 01:15:39.510
+Pero algunos dispositivos se retrasan más sencillo.
+
+01:15:39.970 --> 01:15:40.410
+No están allí.
+
+01:15:40.790 --> 01:15:42.470
+Un portátil en un cajón no puede instalar nada.
+
+01:15:42.890 --> 01:15:45.570
+Un mendedor que se conecta dos veces al mes le da dos oportunidades al servicio.
+
+01:15:46.090 --> 01:15:49.770
+Un dispositivo de campo con una conexión celular débil descarga unos pocos megabytes y pierde la sesión.
+
+01:15:50.730 --> 01:15:53.710
+Para estos, la política es correcta y la entrega no tiene margen de ejecución.
+
+01:15:54.050 --> 01:15:55.030
+Primero debe saber quiénes son.
+
+01:15:55.370 --> 01:15:57.630
+Consulta la última fecha de registro en Intune y ordena por ella.
+
+01:15:58.050 --> 01:16:00.990
+Cualquier cosa silenciosa durante 30 días es una categoría diferente
+
+01:16:00.990 --> 01:16:04.230
+y no debería estar en tu denominador de cumplimiento simulándose en un dispositivo normal.
+
+01:16:04.830 --> 01:16:06.750
+Trátalo según su propio camino y luego baja la barrera.
+
+01:16:06.750 --> 01:16:10.510
+La optimización de la entrega permite que los dispositivos compartan contenido de actualización con sus pares,
+
+01:16:10.570 --> 01:16:11.650
+lo que ayudan con sus pares escasos.
+
+01:16:11.810 --> 01:16:14.950
+Los plazos más cortos y breves para dispositivos que se conectan con poca frecuencia
+
+01:16:14.950 --> 01:16:19.090
+implican que la actualización llegue en el momento en que aparecen o van a esperar a que esperar a que esperar a que esperar a que los que no entran a perfecta.
+
+01:16:19.090 --> 01:16:23.870
+Además, una regla de dispositivo conectado puede bloquear el acceso a los recursos de la empresa hasta que el dispositivo se ponga al día,
+
+01:16:24.010 --> 01:16:26.910
+lo que convierte un retraso silencioso en lo visible, lo que lleva a la última pieza.
+
+01:16:27.370 --> 01:16:28.410
+¿Qué ocurre cuando nada funciona?
+
+01:16:28.970 --> 01:16:30.030
+El usuario no puede ser la respuesta.
+
+01:16:30.550 --> 01:16:32.610
+Decirle a alguien que ejecute Windows Update y reinicie.
+
+01:16:32.830 --> 01:16:34.730
+Es una instrucción y las instrucciones se ignoran.
+
+01:16:34.950 --> 01:16:36.930
+Un dispositivo atascado necesita una ruta que se ejecute sin nieve.
+
+01:16:37.310 --> 01:16:38.650
+Primero se activa la corrección.
+
+01:16:39.150 --> 01:16:41.370
+Si el dispositivo sigue después de una cantidad determinada de días,
+
+01:16:41.490 --> 01:16:44.930
+se abre un ticket automáticamente con el error y el historial adjuntos.
+
+01:16:44.930 --> 01:16:51.750
+Si sigue después de eso, el dispositivo pierde el acceso o pasa una cola de reimagen o llega un propietario designado.
+
+01:16:52.370 --> 01:16:53.490
+Cada paso tiene un reloj y una persona.
+
+01:16:54.090 --> 01:16:54.950
+Anote sus pasos una vez.
+
+01:16:55.510 --> 01:16:56.810
+Después de eso, un rezagado no es una sola.
+
+01:16:57.150 --> 01:17:01.390
+Es un proceso, pero puedes tener la mejor automatización del mundo y aún así luchar contra un enemigo invisible.
+
+01:17:01.850 --> 01:17:03.390
+El último riesgo es el que creas tú mismo.
+
+01:17:03.970 --> 01:17:07.990
+Un segundo sistema, una política olvidada, dos controles que le dicen dos cosas diferentes al mismo dispositivo.
+
+01:17:08.350 --> 01:17:08.710
+Un positivo.
+
+01:17:09.510 --> 01:17:11.130
+Propiedades mixtas y errores de diseño común.
+
+01:17:11.490 --> 01:17:13.310
+La mayoría de las propiedades no están superpuestas.
+
+01:17:13.310 --> 01:17:15.510
+Entonces, alguien creó una directiva de grupo en 2014.
+
+01:17:16.130 --> 01:17:19.390
+Alguien más agregó Configuration Manager, luego llegó Intune y nadie se activó nada.
+
+01:17:19.810 --> 01:17:22.030
+Entonces, ahora tres sistemas tienen opiniones sobre el mismo dispositivo.
+
+01:17:22.490 --> 01:17:24.010
+La directiva de grupo establece la actualización.
+
+01:17:24.550 --> 01:17:27.230
+Configuration Manager tiene sus propias implementaciones de actualizaciones de software.
+
+01:17:27.830 --> 01:17:31.110
+Intune envía un anillo de actualización y el portátil tiene que seguir los tres a la vez.
+
+01:17:32.170 --> 01:17:36.990
+Sigue el valor que llega en último lugar o en el que el cliente confía más y ese orden no lo eliges tú.
+
+01:17:37.550 --> 01:17:40.570
+Resultado, es un dispositivo que se comporta de manera diferente a cada directiva que escribe.
+
+01:17:40.570 --> 01:17:45.090
+A veces llega directamente a Microsoft, a veces pregunta a un servidor que se retiró la primavera pasada.
+
+01:17:46.110 --> 01:17:49.010
+Y el informe no dice nada porque ningún sistema individual ve el panorama completo.
+
+01:17:49.490 --> 01:17:50.950
+Si recuerdas algo aquí, recuerda esto.
+
+01:17:51.550 --> 01:17:55.030
+Un objeto de directiva de grupo sobrante es el bloqueador silencioso más común que conozco.
+
+01:17:55.450 --> 01:17:57.950
+No arroja un error, simplemente sigue dirigiendo al cliente a otro lugar.
+
+01:17:58.390 --> 01:18:00.310
+Ahora bien, la administración conjunta es donde esto se vuelve formado.
+
+01:18:00.310 --> 01:18:05.170
+Cuando un dispositivo es administrado tanto por Configuration Manager como por Intune, obtienes controles deslizantes de carga de trabajo.
+
+01:18:05.490 --> 01:18:07.790
+Un control deslizante por área incluidas las directivas de Windows.
+
+01:18:08.170 --> 01:18:10.710
+Muévelo a Intune e Intune se encargará del comportamiento de actualización.
+
+01:18:11.430 --> 01:18:14.150
+Déjalo en Configuration Manager, se encargará en SDR.
+
+01:18:14.550 --> 01:18:17.430
+Control deslizante decide quién gana, pero la gente lo trata con una sugerencia.
+
+01:18:17.850 --> 01:18:20.090
+Mueven el control deslizante para un grupo piloto, luego lo olvidan.
+
+01:18:20.210 --> 01:18:22.830
+Y la mitad del patrimonio sigue un sistema, mientras que la otra mitad sigue otro.
+
+01:18:23.570 --> 01:18:27.050
+O lo mueven, pero las implementaciones antiguas de Configuration Manager permanecen asignadas.
+
+01:18:27.050 --> 01:18:28.990
+Siguen ahí, siguen esperando una razón para importarlo.
+
+01:18:29.570 --> 01:18:35.110
+Y Autopatch agrega un requisito adicional para que el servicio administre un dispositivo en el que la carga de trabajo de Windows Update debe estar con Intune.
+
+01:18:35.830 --> 01:18:36.870
+No compartiendo parcialmente.
+
+01:18:37.370 --> 01:18:40.710
+Si no lo hace, el dispositivo no supera la comprobación de preparación y preparación de preparados.
+
+01:18:41.210 --> 01:18:43.470
+Por lo tanto, trata el control deslizante como una migración común.
+
+01:18:43.810 --> 01:18:48.630
+Muévalo por grupo, confirme que las implementaciones antiguas no estén asignadas, compruebe el comportamiento real del dispositivo.
+
+01:18:48.830 --> 01:18:51.170
+Y a continuación, al siguiente grupo que valga las herramientas que compiten.
+
+01:18:51.330 --> 01:18:53.150
+El siguiente problema es el diseño que ha puesto encima de él.
+
+01:18:53.710 --> 01:18:55.010
+Aparecen tres errores una y otra vez.
+
+01:18:55.010 --> 01:18:56.350
+El primero es que es muy poco sanito.
+
+01:18:56.350 --> 01:18:59.390
+Igualmente, dos anillos, un pequeño grupo de pruebas, luego todos los demás.
+
+01:18:59.750 --> 01:19:00.210
+Parecen sí.
+
+01:19:00.870 --> 01:19:05.830
+Pero el salto de unas pocas docenas de dispositivos a toda la empresa es un precipicio y una mala actualización cae directamente desde él.
+
+01:19:06.470 --> 01:19:10.790
+No hay una etapa intermedia para detectar el problema, por lo que la primera señal real llega de 10 en máquinas a la vez.
+
+01:19:11.370 --> 01:19:12.910
+El segundo son los plazos demasiado largos.
+
+01:19:13.370 --> 01:19:15.970
+Un plazo de 14 días en cada anillo porque nadie quería quejas.
+
+01:19:16.790 --> 01:19:20.990
+Entonces la ventana de exposición es de dos semanas de ancho por diseño y ha creado un sistema que es lento a propósito.
+
+01:19:21.330 --> 01:19:22.290
+Hablamos de medir eso antes.
+
+01:19:22.710 --> 01:19:24.570
+El número que establezca aquí se come lo que notifica.
+
+01:19:24.570 --> 01:19:26.310
+La tercera es que no vea ningún anillo piloto.
+
+01:19:26.550 --> 01:19:29.810
+Las actualizaciones van directamente a las propias computadoras portadoras de TI al lanzamiento general.
+
+01:19:29.970 --> 01:19:31.590
+Sus máquinas son las más limpias del edificio.
+
+01:19:32.050 --> 01:19:33.510
+Versiones nuevas, sin software extraño.
+
+01:19:33.670 --> 01:19:35.910
+Nadie ejecutando una herramienta financiera de 20 años de antigüedad.
+
+01:19:36.410 --> 01:19:40.370
+Un piloto necesita personas que se parezcan a las reales o no podrá advertirte de nada.
+
+01:19:41.370 --> 01:19:42.450
+Observa lo que estás conmigo.
+
+01:19:42.790 --> 01:19:43.890
+Ninguna de ellas es un fallo técnico.
+
+01:19:44.470 --> 01:19:49.030
+Cada una es una decisión que alguien tomó para evitar fricciones y cada una traslada el riesgo a un lugar donde no puedes verlo.
+
+01:19:49.030 --> 01:19:52.990
+Y luego está el error que parece un éxito a tratar a Autopatch como algo que se configura y se olvida.
+
+01:19:53.710 --> 01:19:54.490
+El servicio funciona bien.
+
+01:19:54.870 --> 01:19:55.250
+Es el problema.
+
+01:19:55.730 --> 01:19:56.430
+Crea los anillos.
+
+01:19:56.670 --> 01:19:57.610
+Observa la implementación.
+
+01:19:58.090 --> 01:20:00.590
+Se detiene ante malas señales y durante unos meses no pasa nada.
+
+01:20:01.630 --> 01:20:02.710
+Así que la atención se desvía.
+
+01:20:02.970 --> 01:20:04.030
+Nadie lee los errores de registro.
+
+01:20:04.150 --> 01:20:05.490
+Nadie revisa la lista de no listos.
+
+01:20:06.390 --> 01:20:08.330
+Las exclusiones se acumulan sin fecha de revisión.
+
+01:20:08.450 --> 01:20:11.610
+Y la lista de exclusiones se convierte silenciosamente en un segundo estado que nadie perdió.
+
+01:20:12.110 --> 01:20:13.050
+Autopatch gestiona el proceso.
+
+01:20:13.470 --> 01:20:14.190
+No es dueño al resultado.
+
+01:20:14.190 --> 01:20:19.010
+Las decisiones de política, las excepciones de rendición de cuentas, todo eso se quedó contigo y se quedará contigo.
+
+01:20:19.150 --> 01:20:20.830
+Tanto si alguien está mirando como si no.
+
+01:20:21.390 --> 01:20:22.650
+Por lo tanto, no necesitas más herramientas.
+
+01:20:23.010 --> 01:20:26.150
+Necesitas a alguien que revise un cronograma con autoridad para actuar, que es un plan.
+
+01:20:26.570 --> 01:20:29.510
+Y un plan necesita roles, ritmos y decisiones por escrito.
+
+01:20:30.690 --> 01:20:31.810
+Un modelo operativo que puedas ejecutar.
+
+01:20:32.370 --> 01:20:33.530
+Empieza con nombres, no equipos.
+
+01:20:33.870 --> 01:20:34.110
+Nombre.
+
+01:20:35.150 --> 01:20:38.450
+Tres trabajos necesitan un propietario y cada uno necesita una sola persona que responda por él.
+
+01:20:39.070 --> 01:20:39.830
+La política es la primera.
+
+01:20:40.430 --> 01:20:43.510
+Alguien es dueño de los anillos, los aplazamientos, los plazos, las reglas del inicio.
+
+01:20:44.190 --> 01:20:46.290
+Cuando cambia una configuración, esa persona la aprueba.
+
+01:20:46.770 --> 01:20:49.070
+Cuando dos contrarios chocan, esa persona decide cuál se queda.
+
+01:20:49.990 --> 01:20:52.890
+Si nadie ocupa este puesto, cada administrador edita un poco la política.
+
+01:20:53.190 --> 01:20:55.850
+Y en seis meses nadie puede explicar por qué Broad tiene un plazo de nueve días.
+
+01:20:56.330 --> 01:20:56.950
+Los pilotos son la segunda.
+
+01:20:57.510 --> 01:20:59.010
+Alguien tiene que mantener activos los primeros anillos.
+
+01:20:59.470 --> 01:21:02.770
+Eso significa usuarios reales, algo real y una forma de que digan que algo se rompió.
+
+01:21:03.530 --> 01:21:06.470
+Un anillo piloto sin propietario se llena lentamente de personas que abandonan la empresa.
+
+01:21:07.110 --> 01:21:11.670
+El propietario comprobará la membresía cada trimestre y se asegura de que el grupo siga apareciendo el estado del que se supone que debe advertirte.
+
+01:21:11.670 --> 01:21:14.610
+Las excepciones son la tercera y es la que se omite.
+
+01:21:15.150 --> 01:21:17.610
+Cada estado tiene dispositivos que no pueden seguir la ruta normal.
+
+01:21:17.730 --> 01:21:21.970
+El controlador de fábrica, la estación de trabajo clínica, el ejecutivo que se niega a reiniciar.
+
+01:21:22.770 --> 01:21:26.190
+Cada excepción necesita un nombre al lado, una razón escrita y una fecha de revisión.
+
+01:21:26.530 --> 01:21:31.550
+Sin una fecha, una excepción se vuelve permanente y la lista se convierte silenciosamente en el segundo estado del que hablamos antes.
+
+01:21:32.190 --> 01:21:34.190
+Política, pilotos, excepciones, tres propietarios.
+
+01:21:34.450 --> 01:21:35.510
+Un respaldo para cada uno.
+
+01:21:35.510 --> 01:21:36.870
+Ahora, el ritmo.
+
+01:21:37.210 --> 01:21:39.110
+¿Por qué la propiedad sin un calendario es solo un título?
+
+01:21:39.650 --> 01:21:42.790
+La cadencia mensual comienza con el martes de parches, pero no el martes de parches.
+
+01:21:43.230 --> 01:21:44.150
+El diencio para la lectura.
+
+01:21:44.950 --> 01:21:48.510
+Lo que se marcó como explotado es lo que Microsoft dice sobre los problemas conocidos.
+
+01:21:48.730 --> 01:21:51.270
+Esa es una breve comprobación del propietario de la política y responde la pregunta.
+
+01:21:51.690 --> 01:21:52.650
+¿Es este un mes normal?
+
+01:21:52.990 --> 01:21:54.250
+¿O algo necesita la ruta acelerada?
+
+01:21:54.590 --> 01:21:55.230
+Luego el cortománico.
+
+01:21:55.670 --> 01:21:56.610
+La prueba obtiene la actualización.
+
+01:21:57.050 --> 01:22:02.770
+Unos días después, el propietario del piloto revisa la señal de los fallos, las llamadas al servicio de asistencia técnica y cualquier cosa extraña de los primeros usuarios.
+
+01:22:02.950 --> 01:22:05.870
+Esa revisión finaliza con una decisión escrita que se pasa al siguiente anillo.
+
+01:22:06.170 --> 01:22:06.750
+Espera o pausa.
+
+01:22:06.950 --> 01:22:07.410
+Luego rápido.
+
+01:22:07.710 --> 01:22:08.190
+Luego amplio.
+
+01:22:08.410 --> 01:22:10.050
+Cada paso con su propia comprobación.
+
+01:22:10.530 --> 01:22:14.570
+Al final del ciclo, el informe que creamos anteriormente muestra el tiempo para aplicar parches durante el mes.
+
+01:22:14.570 --> 01:22:16.010
+Y alguien lo compara con los objetivos.
+
+01:22:16.450 --> 01:22:17.170
+Observa de que se vea.
+
+01:22:17.330 --> 01:22:17.870
+No es un proyecto.
+
+01:22:18.190 --> 01:22:21.950
+Es un bucle que se ejecuta cada 30 días con las mismas pocas personas y las mismas pocas preguntas.
+
+01:22:22.250 --> 01:22:24.610
+La cadencia anual es más lenta y es igual de importante.
+
+01:22:25.830 --> 01:22:27.590
+Una vez al año, llega la actualización de funciones.
+
+01:22:28.070 --> 01:22:33.970
+El propietario de la política abre el calendario del ciclo de vida, comprueba qué versión llega al final del servicio y elige el objetivo.
+
+01:22:34.730 --> 01:22:37.170
+El anillo piloto avanza primero, muy por delante de todos los demás.
+
+01:22:37.710 --> 01:22:38.270
+Meses antes.
+
+01:22:38.690 --> 01:22:42.610
+Luego las oleadas de implementación siguen la misma lógica del anillo, solo que se extienden durante semanas en lugar de día.
+
+01:22:42.710 --> 01:22:45.530
+Esa misma revisión es cuando lees la lista de excepciones línea por número.
+
+01:22:45.950 --> 01:22:47.030
+Sigue siendo válida la razón.
+
+01:22:47.390 --> 01:22:48.810
+El proveedor finalmente admitió la nueva versión.
+
+01:22:49.390 --> 01:22:50.610
+¿Puede ese dispositivo unirse a la ruta no?
+
+01:22:51.090 --> 01:22:52.850
+Algunas excepciones mueren aquí y así debería ser.
+
+01:22:53.190 --> 01:22:54.650
+Planifican en el calendario con una antelación.
+
+01:22:54.650 --> 01:22:57.850
+Una actualización de funciones que llega por sorpresa se convierte en un rey.
+
+01:22:58.210 --> 01:23:00.130
+Una que llega a tiempo es solo el siguiente paso.
+
+01:23:00.630 --> 01:23:01.550
+Última parte de la reunión.
+
+01:23:02.290 --> 01:23:04.830
+Necesitas una revisión y de producir decisiones, no diapositivas.
+
+01:23:05.690 --> 01:23:06.690
+Mensual 30 minutos.
+
+01:23:06.690 --> 01:23:08.050
+Trimestral un poco más.
+
+01:23:08.890 --> 01:23:10.210
+La revisión mensual tiene una agenda corta.
+
+01:23:10.530 --> 01:23:12.430
+Cumplimos con nuestro tiempo para parchear los objetivos por anillo.
+
+01:23:12.770 --> 01:23:13.590
+¿Qué dispositivos fallan?
+
+01:23:14.070 --> 01:23:15.550
+¿Hay algo en pausa y cuándo caduca?
+
+01:23:16.030 --> 01:23:16.930
+¿A vencer alguna excepción?
+
+01:23:17.430 --> 01:23:20.890
+Cada pregunta termina con una acción de un propietario o con un simple sin cambios.
+
+01:23:21.430 --> 01:23:22.750
+La revisión trimestral mira más allá.
+
+01:23:23.170 --> 01:23:24.430
+Los anillos siguen siendo de comida adecuada.
+
+01:23:24.830 --> 01:23:25.770
+¿Piloto sigue siendo representativo?
+
+01:23:26.230 --> 01:23:27.070
+¿Cambio una fecha límite?
+
+01:23:27.490 --> 01:23:29.050
+¿Se movió el número que se suponía que debía moverse?
+
+01:23:29.410 --> 01:23:30.890
+Esta última es la prueba de todo el sistema.
+
+01:23:31.630 --> 01:23:33.770
+Si un cambio no se puede ver en los datos, no funcán.
+
+01:23:34.250 --> 01:23:37.370
+Si una reunión termina sin una decisión, cancela la siguiente y corrige la agenda.
+
+01:23:37.750 --> 01:23:38.970
+Úntalo todo y algo cambia.
+
+01:23:39.650 --> 01:23:40.870
+Ya no estás ejecutando actualizaciones.
+
+01:23:41.250 --> 01:23:43.410
+Estás ejecutando un bucle con propietarios, un reloj y pruebas.
+
+01:23:43.790 --> 01:23:45.710
+Y eso cambia la pregunta que te haces en primer lugar.
+
+01:23:46.430 --> 01:23:48.750
+El cambio de aplicar parches a dispositivos a controlar el cambio.
+
+01:23:49.570 --> 01:23:51.130
+La pregunta nunca fue, ¿aplicamos los parches?
+
+01:23:51.870 --> 01:23:53.630
+¿Era quién decidió y qué sabían cuando lo hicieron?
+
+01:23:55.310 --> 01:23:56.010
+Esto empezó.
+
+01:23:56.490 --> 01:23:57.250
+Llega una actualización.
+
+01:23:57.530 --> 01:23:58.650
+Alguien la aprueba, alguien la implementa.
+
+01:23:58.710 --> 01:23:59.230
+Todos esperan.
+
+01:23:59.650 --> 01:24:00.250
+Todos esperan.
+
+01:24:00.690 --> 01:24:01.490
+Ese era el modelo antiguo.
+
+01:24:01.910 --> 01:24:06.330
+La aplicación de parches como un evento, una tarea con un inicio y un final propiedad de quien la ejecutó ese mes.
+
+01:24:07.010 --> 01:24:07.890
+Lo que la reemplaza es un sistema.
+
+01:24:07.890 --> 01:24:09.210
+¿Declaras el resultado?
+
+01:24:09.470 --> 01:24:10.290
+¿El servicio se encarga?
+
+01:24:10.830 --> 01:24:12.790
+Windows Update for Business ejecuta en el dispositivo.
+
+01:24:13.170 --> 01:24:14.070
+Intuniva la política.
+
+01:24:14.510 --> 01:24:17.190
+AutoPatch supervisa la implementación y la pausa cuando la señal falla.
+
+01:24:17.550 --> 01:24:18.630
+¿Tu trabajo subió de nivel?
+
+01:24:18.890 --> 01:24:22.710
+¿Dejaste de mover actualizaciones y comenzaste a establecer cuánto riesgo acepta la empresa y con qué rapidez?
+
+01:24:23.030 --> 01:24:24.330
+Entonces, ¿qué decisión importa más?
+
+01:24:24.510 --> 01:24:25.170
+No la fecha límite.
+
+01:24:25.530 --> 01:24:26.530
+Una fecha límite es un número.
+
+01:24:26.610 --> 01:24:27.770
+Los números son fáciles de cambiar.
+
+01:24:28.110 --> 01:24:30.270
+Ni siquiera el diseño del anillo, aunque un mal diseño perjudica.
+
+01:24:30.510 --> 01:24:33.550
+La estructura del anillo es algo que puedes arreglar en una tarde una vez que ves que está mal.
+
+01:24:34.330 --> 01:24:35.190
+La propiedad es difícil.
+
+01:24:35.670 --> 01:24:37.470
+Cada fallo que atravesamos tiene la misma raíz.
+
+01:24:37.890 --> 01:24:39.030
+Un conflicto que nadie poseía.
+
+01:24:39.290 --> 01:24:40.550
+Un anillo piloto que nadie mantenía.
+
+01:24:40.750 --> 01:24:41.810
+Una excepción sin nombre ni fecha.
+
+01:24:41.850 --> 01:24:44.050
+Una herramienta rápida que se encontraba tras una aprobación lenta.
+
+01:24:44.650 --> 01:24:45.370
+Los ajustes estaban bien.
+
+01:24:45.790 --> 01:24:46.830
+Nadie se hacía responsable de ello.
+
+01:24:47.170 --> 01:24:50.550
+Si se aprueba la propiedad correctamente, el resto se corrige con el tiempo porque alguien está mirando.
+
+01:24:50.850 --> 01:24:53.950
+Si se hace mal, los anillos perfectos se deterioran hasta adquirir una forma de explicar.
+
+01:24:54.450 --> 01:24:55.530
+Dice que son los próximos 30 años.
+
+01:24:55.770 --> 01:24:56.730
+Un paso, no 10.
+
+01:24:57.030 --> 01:24:57.750
+Anote tres nombres.
+
+01:24:58.150 --> 01:24:59.130
+¿Quién es el propietario de la propiedad?
+
+01:24:59.130 --> 01:25:01.270
+¿Quién es el propietario de la excepción?
+
+01:25:01.350 --> 01:25:05.970
+Luego asigne a cada uno una copia de seguridad y establezca una revisión mensual en el calendario de 30 minutos con una regla.
+
+01:25:05.970 --> 01:25:07.790
+Termina en decisiones o se cancela.
+
+01:25:08.450 --> 01:25:08.830
+Eso es todo.
+
+01:25:09.250 --> 01:25:13.070
+Antes de tocar un solo ajuste, porque la primera vez que ejecute esa revisión sucederá algo.
+
+01:25:13.390 --> 01:25:16.790
+Abrirá la lista de excepciones y encontrará dispositivos que nadie recuerda haber aprobado.
+
+01:25:17.270 --> 01:25:19.410
+Mirará el grupo piloto y encontrará personajes que se fueron el año pasado.
+
+01:25:19.930 --> 01:25:23.130
+Revisará la lista de no listos y verá las mismas máquinas que estaban allí desde la primavera.
+
+01:25:23.430 --> 01:25:24.390
+Nada de eso es una herramienta nueva.
+
+01:25:24.890 --> 01:25:26.070
+Necesita a una persona cuyo trabajo cero.
+
+01:25:26.370 --> 01:25:30.970
+Ahora volvamos a la suposición inicial, con la que empezamos que la aplicación de Parche es un evento mensual que alguien organiza.
+
+01:25:30.970 --> 01:25:36.450
+Se mantuvo durante mucho tiempo, porque los dispositivos estaban en una red que tú controlabas, y el tiempo pertenecía a quien controlaba el servidor.
+
+01:25:36.790 --> 01:25:37.470
+Ese mundo ya no existe.
+
+01:25:37.930 --> 01:25:42.730
+Los dispositivos ya ambulan, las actualizaciones nunca se detienen, y el lapso de tiempo entre una corrección y un ataque se mide en días.
+
+01:25:43.190 --> 01:25:45.670
+Lo que reemplazó la suposición es una idea más pequeña y más difícil.
+
+01:25:46.290 --> 01:25:48.910
+El cambio es continuo, por lo que la gobernanza también debe ser continua.
+
+01:25:49.350 --> 01:25:50.690
+Un esfuerzo heroico una vez al mes.
+
+01:25:50.950 --> 01:25:52.890
+Un bucle con propietarios, un reloj y pruebas.
+
+01:25:53.550 --> 01:25:55.510
+Haz eso y el martes de Parche es dejar de ser una fecha libre.
+
+01:25:55.510 --> 01:25:57.630
+Se convirtió en el señal que ya sabes cómo leer.
+
+01:25:58.330 --> 01:25:58.870
+Es el modelo.
+
+01:25:59.510 --> 01:25:59.830
+Otro.
+
+01:26:00.250 --> 01:26:02.770
+Si esto cambió tu forma de pensar sobre la aplicación de Parche de Oners,
+
+01:26:02.970 --> 01:26:06.110
+ayuda a otros administradores a encontrar un modelo mejor que aprobar, esperar y tener esperanza.
+
+01:26:07.070 --> 01:26:09.830
+Sígueme a Mirko Peters en LinkedIn y dime qué tema quieres tratar a continuación.
+
+01:26:10.330 --> 01:26:12.490
+En sintonía, piloto automático, defensor, tú decides.
+
+01:26:13.130 --> 01:26:15.730
+Y comparte esto con el equipo que está lidiando con actualizaciones fallidas ahora mismo.
+
+01:26:16.090 --> 01:26:19.110
+Hoy, no el mes que viene, el próximo Patch Tuesday ya está en el calendario.
+
+01:26:19.610 --> 01:26:20.810
+Asegúrate que alguien tenga un nombre al lado.

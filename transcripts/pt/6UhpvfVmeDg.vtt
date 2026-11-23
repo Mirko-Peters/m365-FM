@@ -1,0 +1,841 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:05.640
+Bem-vindo ao podcast M3105FM, onde exploramos as pessoas, ideias e tecnologias que moldam o futuro do trabalho.
+
+00:00:06.660 --> 00:00:08.760
+O que é o Azure Data Lake Storage, na verdade?
+
+00:00:09.680 --> 00:00:13.220
+O Azure Data Lake Storage parece um produto totalmente novo para aprender, mas não é.
+
+00:00:13.680 --> 00:00:16.540
+É o mesmo armazenamento barato do Azure que você provavelmente já conhece,
+
+00:00:16.780 --> 00:00:18.760
+com uma configuração ativada que oferece pastas reais.
+
+00:00:19.320 --> 00:00:22.580
+Essa configuração altera a rapidez com que grandes tarefas de análise são concluídas,
+
+00:00:22.660 --> 00:00:25.580
+o que é importante, porque o processamento dessas tarefas consome a maior parte do seu orçamento.
+
+00:00:25.940 --> 00:00:29.240
+Também é um caminho sem volta, pois uma vez ativada, você não pode desativá-la.
+
+00:00:29.240 --> 00:00:33.820
+Portanto, aqui está o que ele realmente é, como as equipes utilizam e os erros que silenciosamente aumentam a fatura.
+
+00:00:34.280 --> 00:00:37.420
+A maioria dos iniciantes presume que precisa aprender um serviço inteiramente novo,
+
+00:00:37.560 --> 00:00:39.560
+e essa é a suposição do desperdício às semanas de seu tempo.
+
+00:00:40.200 --> 00:00:42.800
+O Azure Data Lake Storage não é um produto separado que você compra,
+
+00:00:42.980 --> 00:00:44.620
+nenhum tipo de conta especial criada do zero.
+
+00:00:45.560 --> 00:00:49.020
+A Microsoft o criou como um conjunto de recursos dentro do armazenamento de blobs comum,
+
+00:00:49.200 --> 00:00:50.840
+o armazenamento básico que o Azure oferece a ano.
+
+00:00:51.640 --> 00:00:54.760
+Desbloqueia esses recursos ativando uma única opção no momento da criação da conta.
+
+00:00:55.180 --> 00:00:58.620
+Essa opção fica em uma lista curta de configurações na tela onde você cria uma nova conta de armazenamento.
+
+00:00:58.620 --> 00:01:01.880
+É fácil passar direto por ela, se você não souber o que está procurando.
+
+00:01:02.220 --> 00:01:07.440
+Nada naquela página avisa que essa pequena chave é a diferença entre um balde de arquivos e um verdadeiro Data Lake.
+
+00:01:08.020 --> 00:01:10.780
+Você descobre depois, ou porque suas tarefas rodam rápido e barato,
+
+00:01:11.020 --> 00:01:13.020
+ou porque elas se arrastam e sua conta continua subindo.
+
+00:01:13.700 --> 00:01:15.340
+Para entender por que essa opção é tão importante,
+
+00:01:15.460 --> 00:01:18.840
+você precisa primeiro ter uma ideia clara do que um Data Lake realmente é, e por que um.
+
+00:01:19.200 --> 00:01:21.360
+Data Lake não é apenas uma pasta cheia de arquivos.
+
+00:01:22.440 --> 00:01:25.560
+Um Data Lake é um local central onde você mantém todos os seus dados.
+
+00:01:26.240 --> 00:01:28.000
+A palavra todos tem um peso enorme nessa frase.
+
+00:01:28.000 --> 00:01:31.280
+Ele armazena dados estruturados, as linhas e colunas organizadas
+
+00:01:31.280 --> 00:01:33.220
+que você encontraria em uma planilha ou tabela de banco de dados.
+
+00:01:33.380 --> 00:01:37.400
+Ele armazena dados não estruturados também, como imagens, PDFs, logs e arquivos de texto bruto.
+
+00:01:38.100 --> 00:01:39.960
+Em vez de forçar tudo a um formato organizado,
+
+00:01:40.260 --> 00:01:42.480
+um Lake permite que os dados cheguem da forma como eles são.
+
+00:01:43.320 --> 00:01:45.760
+Essa flexibilidade é o ponto principal e vale a pena entender por que ela importa.
+
+00:01:46.520 --> 00:01:48.020
+Imagine uma pequena empresa que vende online.
+
+00:01:48.860 --> 00:01:51.620
+Exportações de vendas vende um sistema, tickets de suporte de outro
+
+00:01:51.620 --> 00:01:53.340
+e fotos de produtos ficam no laptop de alguém.
+
+00:01:53.340 --> 00:01:57.580
+Um banco de dados tradicional exigiria que cada fonte fosse formatada em tabelas rígidas
+
+00:01:57.580 --> 00:01:58.840
+antes de aceitar um único registro.
+
+00:01:59.440 --> 00:02:02.260
+Um Data Lake aceita tudo lado a lado e deixa a formatação para depois
+
+00:02:02.260 --> 00:02:04.080
+quando alguém realmente precisar de uma resposta.
+
+00:02:04.760 --> 00:02:06.120
+O nome vem justamente desse contrato.
+
+00:02:06.600 --> 00:02:08.980
+Um armazém armazena dados que já foram limpos,
+
+00:02:09.080 --> 00:02:11.400
+rotulados e organizados, como mercadorias em prateleiras.
+
+00:02:11.720 --> 00:02:13.620
+Um lago é mais parecido com um reservatório,
+
+00:02:13.740 --> 00:02:17.080
+amplo e majoritariamente bruto, pronto para ser filtrado assim que surgir uma dúvida específica.
+
+00:02:17.480 --> 00:02:19.560
+Compromisso é real e é a razão pela qual os lagos existem.
+
+00:02:19.560 --> 00:02:23.720
+Quando você mantém dados brutos, pode responder a perguntas futuras que ninguém pensou em fazer hoje.
+
+00:02:24.420 --> 00:02:26.880
+Um armazém força você a decidir o que importa antes de armazenar,
+
+00:02:27.080 --> 00:02:28.840
+e tudo que foi descartado desaparece para sempre.
+
+00:02:29.280 --> 00:02:33.640
+Um lago aposta que manter o original bagunçado vale mais do que a organização que você obteria limpando o primeiro.
+
+00:02:34.180 --> 00:02:36.600
+Nada disso significa que um lago seja uma gaveta de bagunça,
+
+00:02:36.660 --> 00:02:39.160
+pois ele ainda precisa de um formato, são as pastas que você conhecerá em breve.
+
+00:02:39.540 --> 00:02:41.900
+O que um lago se recusa a fazer é descartar o original,
+
+00:02:42.360 --> 00:02:45.300
+já que ele é frequentemente o único registro de algo que realmente aconteceu.
+
+00:02:46.260 --> 00:02:48.000
+Um detalhe importa mais do que todos os outros no livro.
+
+00:02:48.000 --> 00:02:50.160
+Um lago ainda precisa viver em algum lugar,
+
+00:02:50.360 --> 00:02:53.360
+e no Azure esse lugar é uma conta de armazenamento com uma opção ativada.
+
+00:02:54.140 --> 00:02:55.820
+Essa opção é onde a verdadeira história começa,
+
+00:02:56.120 --> 00:02:58.300
+e é também onde a primeira decisão permanente é tomada.
+
+00:02:59.620 --> 00:03:02.000
+A configuração que transforma o armazenamento de blob em um data lake.
+
+00:03:02.540 --> 00:03:05.260
+O armazenamento de blob do Azure é o componente central por trás de tudo isso.
+
+00:03:05.800 --> 00:03:09.320
+É um armazenamento de objetos barato que é uma forma simples de dizer que você insere e retira arquivos,
+
+00:03:09.780 --> 00:03:11.000
+e não se importa muito com o que há dentro dele.
+
+00:03:11.500 --> 00:03:12.880
+O que ele nunca teve foram pastas reais,
+
+00:03:12.880 --> 00:03:15.660
+e essa lacuna é a razão pela qual o Azure Data Lake Storage existe.
+
+00:03:15.660 --> 00:03:18.660
+Em uma conta de blob normal, um caminho como vendas,
+
+00:03:18.700 --> 00:03:21.580
+2026 MAMARÇO, não é uma pasta contendo um arquivo.
+
+00:03:22.200 --> 00:03:24.180
+É um nome de arquivo longo com barras inseridas no meio,
+
+00:03:24.260 --> 00:03:26.160
+e o sistema trata exatamente dessa forma.
+
+00:03:26.840 --> 00:03:28.740
+O armazenamento parece organizado para seus olhos,
+
+00:03:28.820 --> 00:03:31.760
+porque as barras enganam você ao ver uma estrutura que não existe de verdade.
+
+00:03:32.600 --> 00:03:35.320
+O armazenamento de objetos foi construído assim de propósito,
+
+00:03:35.420 --> 00:03:38.600
+já que uma lista plana de nomes é simples de espalhar por um grande número de máquinas.
+
+00:03:39.120 --> 00:03:42.700
+Esse truque causa problemas silenciosos no momento em que você tenta fazer algo no nível da pasta.
+
+00:03:42.700 --> 00:03:45.080
+Se essas barras não são pastas reais,
+
+00:03:45.680 --> 00:03:48.960
+renomear uma pasta significa encontrar cada arquivo que começa com o mesmo caminho.
+
+00:03:49.920 --> 00:03:52.400
+Em um conjunto de dados grandes, significa milhões de arquivos.
+
+00:03:52.480 --> 00:03:54.800
+Se uma tarefa que deveria levar segundos pode se estender por horas,
+
+00:03:55.360 --> 00:03:57.660
+ativar o namespace hierárquico muda exatamente isso.
+
+00:03:58.500 --> 00:04:00.280
+Ele dá a conta diretórios e subdiretórios reais,
+
+00:04:00.380 --> 00:04:02.120
+a mesma estrutura que seu computador usa desde sempre.
+
+00:04:03.200 --> 00:04:06.940
+Uma pasta se torna um item próprio e não apenas um texto embutido no nome de um arquivo.
+
+00:04:06.940 --> 00:04:11.740
+Uma caixa de seleção é marcada e o armazenamento começa a se comportar como um sistema de arquivos adequado
+
+00:04:11.740 --> 00:04:12.980
+e veja apenas um bucket que era bonita.
+
+00:04:13.480 --> 00:04:17.280
+Você também verá o nome Data Lake Storage Gen 2 em postagens editoriais mais antigos.
+
+00:04:17.860 --> 00:04:19.780
+Essa é apenas a segunda versão da mesma ideia,
+
+00:04:19.960 --> 00:04:22.780
+e o nome atual remove o número, então trate ambos como a mesma coisa.
+
+00:04:23.880 --> 00:04:25.860
+Escolhe essa opção ao criar a conta de armazenamento,
+
+00:04:26.000 --> 00:04:27.960
+e também pode atualizar uma conta que já contém dados.
+
+00:04:28.920 --> 00:04:31.740
+Microsoft cuida da mudança para você, mas o caminho é de mão única.
+
+00:04:32.320 --> 00:04:34.520
+Você pode mudar de plano para hierárquico, mas não pode voltar.
+
+00:04:34.520 --> 00:04:38.300
+Ah, existe uma peculiaridade na nomenclatura que vale a pena conhecer para a documentação não confundir você.
+
+00:04:39.240 --> 00:04:41.840
+Nos guias da própria Microsoft, a palavra blob significa arquivo,
+
+00:04:41.940 --> 00:04:43.700
+e a palavra container significa sistema de arquivo.
+
+00:04:44.200 --> 00:04:47.540
+São as mesmas duas coisas com etiquetas diferentes, dependendo de qual página você está lendo.
+
+00:04:48.220 --> 00:04:50.520
+O ponto importante a reter é que essa caixa de seleção é permanente.
+
+00:04:51.040 --> 00:04:54.120
+Uma vez ativada, não há como reverter a conta para o estilo plano que ela tinha antes,
+
+00:04:55.080 --> 00:04:56.760
+porque passas reais mudam a velocidade e a fatura.
+
+00:04:57.360 --> 00:04:59.940
+O motivo pelo qual a Microsoft criou passas reais na organização é a velocidade.
+
+00:05:00.380 --> 00:05:02.700
+Quando os diretórios são reais, renomear ou excluir um deles
+
+00:05:02.700 --> 00:05:05.360
+se torna uma alteração única e rápida na entrada desse diretório.
+
+00:05:05.940 --> 00:05:07.760
+Não há uma lista de um milhão de arquivos para percorrer,
+
+00:05:07.840 --> 00:05:10.040
+porque o sistema atualiza uma única coisa e o trabalho é concluído.
+
+00:05:10.620 --> 00:05:12.260
+O mesmo atalho se aplica ao excluir, então.
+
+00:05:12.520 --> 00:05:14.860
+Tem par dados antigos, deixa de ser um projeto de um dia inteiro.
+
+00:05:15.380 --> 00:05:18.420
+O exemplo que torna isso claro é como as ferramentas de análise se comportam na prática.
+
+00:05:19.140 --> 00:05:21.220
+Spark e Hive, dois dos mecanismos mais usados,
+
+00:05:21.340 --> 00:05:23.340
+costumam gravar sua saída em um local temporário.
+
+00:05:23.980 --> 00:05:25.640
+Quando o trabalho termina, eles renomeiam esse local.
+
+00:05:26.460 --> 00:05:27.980
+Em um armazenamento sem pastas reais,
+
+00:05:27.980 --> 00:05:30.400
+esse renomeamento final pode levar mais tempo do que a própria análise.
+
+00:05:30.400 --> 00:05:33.520
+E acaba observando um trabalho que já terminou seu processamento
+
+00:05:33.520 --> 00:05:35.140
+e agora está apenas organizando nomes.
+
+00:05:35.620 --> 00:05:37.620
+Esse atraso não é apenas irritante, é caro.
+
+00:05:37.960 --> 00:05:39.320
+E o motivo merece atenção.
+
+00:05:40.280 --> 00:05:41.760
+Em muitas cargas de trabalho de análise,
+
+00:05:41.820 --> 00:05:44.140
+a computação representa mais de 85% do custo total.
+
+00:05:44.660 --> 00:05:47.460
+As máquinas que realizam o trabalho custam muito mais do que os dados parados.
+
+00:05:48.080 --> 00:05:50.680
+Se um renomeamento lento mantém essas máquinas funcionando por uma hora extra,
+
+00:05:50.760 --> 00:05:51.580
+você paga por essa hora.
+
+00:05:52.100 --> 00:05:54.160
+Acelere o armazenamento e o processamento termina mais cedo,
+
+00:05:54.160 --> 00:05:56.540
+então a fatura cai, mesmo que o preço do armazenamento quase não tenha mudado.
+
+00:05:57.100 --> 00:05:58.840
+O recurso também escala de forma limpa,
+
+00:05:58.900 --> 00:05:59.860
+que é a parte que eu chamava de ser difícil.
+
+00:06:00.680 --> 00:06:03.460
+Sistemas mais antigos trocavam a estrutura de pastas por escala
+
+00:06:03.460 --> 00:06:05.760
+porque diretórios reais eram caros de rastrear em grande volume.
+
+00:06:06.320 --> 00:06:08.460
+Um namespace hierárquico que cresce em linha reta.
+
+00:06:09.500 --> 00:06:11.780
+Portanto, adicionar mais dados não torna os diretórios lentos,
+
+00:06:11.940 --> 00:06:13.080
+o que nos leva à questão prática.
+
+00:06:13.840 --> 00:06:16.240
+Como os dados realmente entram e saem de uma dessas contas?
+
+00:06:17.520 --> 00:06:18.860
+Como os dados realmente entram e saem?
+
+00:06:19.360 --> 00:06:21.080
+O funcionamento é mais amigável do que parece,
+
+00:06:21.080 --> 00:06:23.340
+e é aqui que a teoria se torna algo que você realmente toca.
+
+00:06:24.100 --> 00:06:26.880
+Ferramentas de análise acessam o Lake por meio de um driver chamado ABFS,
+
+00:06:27.040 --> 00:06:28.440
+abreviação de Azure Blob File System.
+
+00:06:28.440 --> 00:06:32.320
+O endereço do serviço sempre termina em dfs.core.windows.net.
+
+00:06:33.100 --> 00:06:34.440
+Você raramente digita esse endereço,
+
+00:06:34.540 --> 00:06:36.380
+mas é a conexão que suas ferramentas usam nos bastidores.
+
+00:06:37.060 --> 00:06:39.900
+Próprias ferramentas são nomes que você encontrará repetidamente se permanece em um.
+
+00:06:40.500 --> 00:06:42.660
+Quanto o Data Factory copia dados de outros sistemas,
+
+00:06:42.960 --> 00:06:45.140
+o Databricks e o Synapse os processam e analisam,
+
+00:06:45.400 --> 00:06:47.300
+e o Power BI lê os resultados para criar relatórios.
+
+00:06:47.300 --> 00:06:49.320
+Se preferir mover arquivos manualmente,
+
+00:06:49.560 --> 00:06:52.380
+o Azure Storage Explorer oferece uma janela para clicar e arrastar,
+
+00:06:52.460 --> 00:06:55.500
+e uma ferramenta de linha de comando chamada ASCOP lida com transferências em massa.
+
+00:06:56.300 --> 00:06:58.100
+Você não precisa de nenhuma dessas ferramentas apenas para começar.
+
+00:06:58.600 --> 00:07:02.360
+O portal do Azure, o PowerShell e a linha de comando podem acessar o mesmo armazenamento.
+
+00:07:03.100 --> 00:07:05.900
+Você pode fazer o upload de um primeiro arquivo e vê-lo aparecer dentro de uma pasta
+
+00:07:05.900 --> 00:07:07.300
+antes mesmo de escrever uma única linha de comando.
+
+00:07:07.300 --> 00:07:10.160
+A maioria das pessoas começa com uma pasta e alguns arquivos,
+
+00:07:10.240 --> 00:07:13.480
+e o Lake cresce a partir daí, conforme mais sistemas são conectados a ele.
+
+00:07:14.320 --> 00:07:16.520
+Permissões funcionam de forma mais detalhada aqui do que no armazenamento.
+
+00:07:16.960 --> 00:07:20.160
+Você pode usar o sistema de funções, o mesmo que rege tudo mais no Azure.
+
+00:07:20.860 --> 00:07:23.500
+Você também pode definir listas de controle de acesso estilo POSIX,
+
+00:07:23.580 --> 00:07:25.480
+que restringe uma única pasta ou até mesmo um único arquivo.
+
+00:07:25.800 --> 00:07:26.820
+Vou deixar os detalhes por aqui,
+
+00:07:26.980 --> 00:07:29.400
+porque o ponto principal é que um Lake pode ser amplamente compartilhado
+
+00:07:29.400 --> 00:07:30.740
+sem precisar entregar chaves a todos.
+
+00:07:31.320 --> 00:07:33.660
+Quando os dados chegam, eles chegam como um blob em um container,
+
+00:07:33.660 --> 00:07:36.940
+que é a ideia de arquivo em um sistema de arquivos, usando novamente esses dois nomes.
+
+00:07:37.300 --> 00:07:40.240
+A partir daí, uma política de ciclo de vida pode mover arquivos mais antigos
+
+00:07:40.240 --> 00:07:42.360
+para uma camada mais barata ou excluí-los após um período de fim.
+
+00:07:42.680 --> 00:07:45.720
+O Lake se organiza sozinho, em vez de esperar que alguém organize as pastas manualmente.
+
+00:07:46.200 --> 00:07:47.660
+A escala é o último ponto e é generosa.
+
+00:07:48.200 --> 00:07:51.320
+A Microsoft não impõe limites ao tamanho da conta ou de qualquer arquivo individual.
+
+00:07:52.280 --> 00:07:55.000
+Um arquivo pode variar de alguns kilobytes a centenas de terabytes,
+
+00:07:55.320 --> 00:07:58.620
+e as solicitações retornam em um ritmo constante, não importa o quanto você tenha acumulado.
+
+00:07:59.180 --> 00:08:02.520
+Com o funcionamento claro, ajuda a ver como é uma configuração real na prática.
+
+00:08:02.520 --> 00:08:07.860
+No mundo real, as equipes raramente despejam tudo em uma pilha gigante,
+
+00:08:08.140 --> 00:08:10.620
+e o padrão que elas utilizam é chamado de medalhão.
+
+00:08:11.320 --> 00:08:12.500
+É mais simples do que o nome sugere.
+
+00:08:13.040 --> 00:08:15.580
+Dados brutos chegam primeiro na camada que as pessoas chamam de bronze.
+
+00:08:16.080 --> 00:08:18.080
+Dados limpos e corrigidos movem-se para silver,
+
+00:08:18.280 --> 00:08:20.840
+e os dados refinados em que um relatório pode confiar terminam na gold.
+
+00:08:21.300 --> 00:08:24.200
+Cada camada é apenas uma pasta e os dados viajam à frente à medida que melhora.
+
+00:08:24.800 --> 00:08:26.920
+A camada gold é a que um relatório realmente lê,
+
+00:08:26.920 --> 00:08:31.140
+pois é apenas uma pasta de arquivos bem formatados que qualquer ferramenta pode acessar
+
+00:08:31.140 --> 00:08:32.820
+sem saber como os dados brutos chegaram.
+
+00:08:33.560 --> 00:08:36.860
+O layout da pasta tem um peso real, e há dois padrões que vale a pena copiar.
+
+00:08:37.580 --> 00:08:39.600
+Para dados vindos de dispositivos ou sensores,
+
+00:08:39.980 --> 00:08:44.800
+um layout comum segue a região, depois o assunto ano, mês, dia e hora.
+
+00:08:45.360 --> 00:08:47.700
+As leituras do motor de uma aeronave podem ficar sob o Reino Unido,
+
+00:08:47.920 --> 00:08:51.120
+depois aviões, depois aviões, depois aeronave específica, então uma data e hora.
+
+00:08:51.700 --> 00:08:53.340
+Para tarefas em lote que rodam em arquivos,
+
+00:08:53.400 --> 00:08:55.860
+as equipes usam uma pasta impro, trabalho esperando para ser processado.
+
+00:08:55.860 --> 00:08:59.540
+Elas usam uma pasta auto para resultados finalizados e uma pasta bad para qualquer coisa que falhe.
+
+00:08:59.800 --> 00:09:01.240
+A ordem dessas pastas não é arbitrária.
+
+00:09:02.000 --> 00:09:06.800
+Colocar região e assunto no topo torna fácil definir que essas pessoas podem ver dados do Reino Unido e nada mais.
+
+00:09:07.500 --> 00:09:10.960
+Você define essa permissão uma vez na pasta e tudo que está abaixo a herda.
+
+00:09:11.720 --> 00:09:13.520
+Se você inverter a ordem e começar pela data,
+
+00:09:13.660 --> 00:09:16.620
+acabará definindo permissões repetidamente em inúmeras pastas pequenas.
+
+00:09:17.740 --> 00:09:20.740
+O formato de arquivo é a última escolha do mundo real e ele decide silenciosamente a sua conta.
+
+00:09:21.120 --> 00:09:23.620
+Use um formato colunar como parquet para dados que você lê muito,
+
+00:09:23.620 --> 00:09:26.580
+porque uma consulta pode extrair apenas as colunas necessárias e ignorar o resto.
+
+00:09:26.920 --> 00:09:30.040
+Esses arquivos são compactados e cada um carrega a sua própria descrição do que há dentro.
+
+00:09:31.080 --> 00:09:34.620
+Use um formato baseado em linhas como o Avro quando estiver gravando dados em um fluxo contínuo,
+
+00:09:34.860 --> 00:09:36.280
+como eventos vindos de um aplicativo.
+
+00:09:36.680 --> 00:09:38.700
+Um bom layout e o formato certo economizam dinheiro,
+
+00:09:38.800 --> 00:09:41.160
+mas alguns hábitos comuns fazem silenciosamente o oposto
+
+00:09:41.160 --> 00:09:43.600
+e aparecem em quase todos os primeiros lagos de dados genciantes.
+
+00:09:43.600 --> 00:09:47.720
+Os erros que silenciosamente custam caro.
+
+00:09:47.720 --> 00:09:52.020
+E aquilo que você verá em toda parte é deixar seus dados como uma montanha de arquivos minúsculos.
+
+00:09:53.060 --> 00:09:55.940
+Motores de análise gastam tempo real em cada arquivo apenas listando,
+
+00:09:56.020 --> 00:09:57.480
+verificando permissões e abrindo-o.
+
+00:09:57.980 --> 00:10:00.620
+Mil arquivos pequenos custam muito mais atenção do que um único arquivo grande.
+
+00:10:01.080 --> 00:10:06.340
+A própria orientação da Microsoft é buscar arquivos entre 256 MB e 100 GB e 100 GB.
+
+00:10:06.840 --> 00:10:09.460
+Varra arquivos pequenos para dentro de arquivos maiores, antes que qualquer coisa tente ler.
+
+00:10:09.460 --> 00:10:12.120
+Esse é um hábito que vale a pena criar desde o primeiro dia,
+
+00:10:12.200 --> 00:10:14.340
+porque arquivos pequenos se acumulam mais rápido do que se espera.
+
+00:10:15.240 --> 00:10:18.300
+Existe um detalhe de faturamento que pega quase todo mundo e é fácil de não notar.
+
+00:10:18.940 --> 00:10:21.560
+As operações de leitura e gravação são cobradas em blocos de 4 MB.
+
+00:10:22.060 --> 00:10:25.320
+Um arquivo que contém apenas uns kilobytes ainda é cobrado como se tivesse 4 MB.
+
+00:10:26.760 --> 00:10:29.240
+Quando seus dados estão espalhados por milhões de arquivos pequenos,
+
+00:10:29.320 --> 00:10:31.540
+você paga o preço total por um espaço quase vazio repetidamente.
+
+00:10:32.360 --> 00:10:35.120
+Se os dados brutos chegam como um fluxo de eventos minúsculos,
+
+00:10:35.120 --> 00:10:38.760
+a solução usual é coletá-los com uma ferramenta de streaming e gravá-los em lotes maiores.
+
+00:10:40.060 --> 00:10:43.700
+A segunda armadilha é ativar o namespace hierárquico quando você não precisa dele.
+
+00:10:44.220 --> 00:10:45.340
+Lembre-se de que é um caminho sem volta.
+
+00:10:45.800 --> 00:10:48.500
+Portanto, uma vez ativado, você não pode retornar a conta para um namespace simples.
+
+00:10:48.800 --> 00:10:51.360
+Se você o habilitar para um arquivo de backup ou uma pasta de imagens,
+
+00:10:51.500 --> 00:10:53.720
+terá feito uma alteração permanente que não traz benefício algum.
+
+00:10:54.240 --> 00:10:56.940
+Backups e bibliotecas de fotos não precisam de renomeação rápida de pastas,
+
+00:10:57.000 --> 00:10:58.320
+porque os dados não estão sendo analisados.
+
+00:10:58.780 --> 00:11:00.400
+A terceira é ignorar as camadas de armazenamento.
+
+00:11:00.860 --> 00:11:04.500
+O Azure permite que você armazene dados nas camadas quente, fria, muito fria ou de arquivo,
+
+00:11:04.500 --> 00:11:06.200
+dependendo da frequência com que você os acessa.
+
+00:11:06.200 --> 00:11:09.460
+Dados antigos deixados na camada quente representam dinheiro gasto sem motivo.
+
+00:11:10.140 --> 00:11:12.500
+Combine a camada com a frequência real de acesso aos dados,
+
+00:11:12.640 --> 00:11:14.600
+e os mesmos arquivos podem custar uma fração do valor.
+
+00:11:15.120 --> 00:11:18.120
+A camada de arquivo é o local mais barato para dados que você quase nunca abre,
+
+00:11:18.180 --> 00:11:20.760
+mas não é instantânea, pois o arquivo precisa ser reidratado antes da leitura.
+
+00:11:21.400 --> 00:11:23.080
+Uma limitação honesta vale a pena ter em mente.
+
+00:11:23.700 --> 00:11:24.980
+Mesmo com a configuração ativada,
+
+00:11:25.200 --> 00:11:27.800
+alguns recursos de blob ainda estão sendo atualizados dentro dessas contas.
+
+00:11:27.800 --> 00:11:29.620
+Se você depende de um recurso específico,
+
+00:11:29.700 --> 00:11:31.460
+verifique o suporte atual antes de se comprometer.
+
+00:11:32.060 --> 00:11:33.640
+Isso cobre a parte que você controla sozinho.
+
+00:11:34.060 --> 00:11:36.740
+Para muitos de vocês, no entanto, um Data Lake não será algo construído sozinho.
+
+00:11:37.020 --> 00:11:39.380
+A próxima pergunta é onde ele se encaixa no panorama geral da Microsoft.
+
+00:11:39.960 --> 00:11:42.740
+Onde isso se encaixa com o Fabric, Power BI e Microsoft 365?
+
+00:11:43.620 --> 00:11:46.940
+Se você passou algum tempo com o Microsoft Fabric e já conheceu um Data Lake sem saber,
+
+00:11:48.060 --> 00:11:50.440
+o Unlake, camada de armazenamento no coração do Fabric,
+
+00:11:50.560 --> 00:11:52.080
+é construído sobre o Azure Data Lake Store.
+
+00:11:52.800 --> 00:11:56.260
+Ele mantém tabelas em formatos abertos chamados Delta, Parque e Iceberg,
+
+00:11:56.260 --> 00:11:57.040
+qualquer ferramenta pode.
+
+00:11:57.460 --> 00:12:01.100
+O mesmo mecanismo que executa um Data Lake no Azure é o que roda sobre o Fabric o tempo todo.
+
+00:12:01.620 --> 00:12:04.580
+Se sua equipe já vive no Fabric, o Unlake é o Lake que você conhecerá primeiro.
+
+00:12:04.720 --> 00:12:06.500
+Tudo que você acabou de aprender ainda se aplica a ele.
+
+00:12:07.020 --> 00:12:08.840
+O Unlake também aproveita a estrutura que você já conhece.
+
+00:12:09.240 --> 00:12:12.460
+Cada atena do Fabric recebe exatamente um Unlake, você não pode criar um segundo.
+
+00:12:13.060 --> 00:12:15.940
+Toda organização compartilha um único Lake em vez de um conjunto disperso dele.
+
+00:12:16.740 --> 00:12:18.620
+Dentro dele, um workspace aparece como um container.
+
+00:12:19.060 --> 00:12:20.840
+E os itens dentro dele aparecem como pastas.
+
+00:12:21.480 --> 00:12:24.660
+É o mesmo emparelhamento de blob e container de antes, apenas vestindo as roupas do Fabric.
+
+00:12:24.660 --> 00:12:27.900
+A parte inteligente é como o Unlake alcança dados que vivem em outro lugar.
+
+00:12:28.300 --> 00:12:32.600
+Um recurso chamado Atalios permite apontar para arquivos localizados em uma conta do Azure Data Lake Storage,
+
+00:12:32.700 --> 00:12:35.400
+um bucket do Amazon S3, uma tabela do Dataverse ou até um sistema local.
+
+00:12:35.940 --> 00:12:37.640
+Ele usa ler no próprio local sem precisar fazer uma cópia.
+
+00:12:38.120 --> 00:12:42.400
+As equipes continuam trabalhando em seus próprios espaços e compartilham via Atalios em vez de duplicar gigabytes de dados.
+
+00:12:42.840 --> 00:12:44.760
+Essa ideia de uma cópia única aparece novamente no Power BI.
+
+00:12:45.220 --> 00:12:49.300
+Um modo chamado Direct Lake lê diretamente do Unlake sem importar ou copiar os dados primeiro.
+
+00:12:49.900 --> 00:12:53.260
+Por isso que o Fabric sempre menciona uma cópia única que todas as ferramentas podem compartilhar.
+
+00:12:53.260 --> 00:12:56.280
+O Unlake também mantém arquivos excluídos por sete dias,
+
+00:12:56.400 --> 00:12:59.800
+então uma exclusão acidental não é o desastre que seria uma pasta sem rede de segurança.
+
+00:13:00.440 --> 00:13:02.020
+Existe uma troca real entre os dois caminhos.
+
+00:13:02.540 --> 00:13:04.800
+O Unlake é gerenciado para você e voltado aos vários do Fabric.
+
+00:13:05.220 --> 00:13:10.000
+Uma conta comum do Azure Data Lake Storage lhe dá controle direto e funciona em todo o conjunto de ferramentas do Azure.
+
+00:13:10.700 --> 00:13:13.920
+Eles usam a mesma API, então a escolha se resume à conveniência versus controle.
+
+00:13:14.920 --> 00:13:16.900
+Aqui lembrar sobre o Azure Data Lake Storage.
+
+00:13:17.600 --> 00:13:18.680
+Então aqui está a versão curta.
+
+00:13:18.680 --> 00:13:22.260
+O Azure Data Lake Storage é um armazenamento de blob com uma configuração ativada,
+
+00:13:22.380 --> 00:13:23.720
+e essa configuração lhe dá pastas reais.
+
+00:13:24.340 --> 00:13:26.940
+Essas pastas fazem grandes tarefas de análise terminarem mais rápido,
+
+00:13:27.060 --> 00:13:29.660
+o que pode reduzir a conta onde o processamento representa a maior parte do gasto.
+
+00:13:29.900 --> 00:13:33.600
+É permanente após ativado, e uma pilha de arquivos minúsculos custará mais do que você espera.
+
+00:13:34.120 --> 00:13:38.040
+Lembre-se dessas poucas coisas, e o serviço de aparência usadora se torna algo que você consegue compreender.
+
+00:13:38.560 --> 00:13:39.440
+Aqui está minha pergunta para você.
+
+00:13:39.780 --> 00:13:43.240
+Se você está planejando seu primeiro Data Lake, qual é a parte que você tem menos certeza no momento?
+
+00:13:43.240 --> 00:13:46.660
+O layout de pastas, o custo, ou onde ele se encaixa com o fábrica.
+
+00:13:47.140 --> 00:13:49.120
+Se isso fez o tópico parecer menos intimidador,
+
+00:13:49.520 --> 00:13:54.000
+inscreva-se no M365FM para dominar as ferramentas e a mentalidade que molda o futuro do trabalho.

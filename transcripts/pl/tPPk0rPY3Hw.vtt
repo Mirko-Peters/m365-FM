@@ -1,0 +1,5029 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:12.600
+Nikt nie pyta, gdzie znajdują się treści do współpracy ani pierwszego dnia, ani na początku, tylko później, gdy ktoś odchodzi, dzwoni audytor albo klient widzi stronę, której nigdy nie powinien widzieć, a potem pytanie pojawia się za późno.
+
+00:00:12.600 --> 00:00:21.680
+Oto sedno całego odcinka. Pytanie nie brzmi, które narzędzie, ale jaki model przechowywania i uprawnień za nim stoi. Jeśli jesteś tu nowy, zasubskrybuj podcast M365FM.
+
+00:00:21.680 --> 00:00:28.600
+Zajmiemy się szczegółowo zarządzaniem stronami Loop i Copilot. Omówimy kontenery etykiety cyklu życia, a następnie wskazówki, którymi ludzie będą się kierować.
+
+00:00:28.600 --> 00:00:36.120
+Ale najpierw założenie, które się złamało. Segment sponsora Stella Migrator for Exchange. Kilka słów od sponsora, a to nawiązuje do tego tematu.
+
+00:00:36.300 --> 00:00:42.860
+Projekty migracji to miejsca, w których błędy w rozmieszczaniu wychodzą na jaw. Przenosisz skrzynki pocztowe, przenosisz dzierżawce i nagle znajdujesz treści, których nikt nie potrafi wyjaśnić.
+
+00:00:42.960 --> 00:00:49.140
+Kto jest ich właścicielem? Kto może je zobaczyć? Gdzie miały się znajdować? Stella Migrator for Exchange to narzędzie stworzone do takich przeprowadzek.
+
+00:00:49.140 --> 00:00:55.860
+Obsługuje migrację skrzynek pocztowych i obejmuje również przenoszenie między najemcami. To prosty opis. Przenosi dane wymiany z jednego miejsca do drugiego.
+
+00:00:56.080 --> 00:01:02.700
+Oto dlaczego ma to znaczenie dla stron Loop i Copilot. Treści do współpracy są powiązane z osobami. Komponent Loop znajduje się w pliku zapasowym.
+
+00:01:02.980 --> 00:01:12.480
+Strona Copilot rozpoczyna się w kontekście osobistym danej osoby. Obie zależą od właściciela, a kiedy migracja przenosi osoby, ale nie przenosi danych o własności, sprawy cichną, a następnie stają się osieroconymi.
+
+00:01:12.480 --> 00:01:19.000
+Strony bez wyraźnego właściciela, komponenty udostępniane grupie, która już nie istnieje, linki prowadzące do strony, która nigdy nie została odbudowana.
+
+00:01:19.260 --> 00:01:25.520
+Nikt tego nie zauważa w dniu migracji. Zauważają to 6 miesięcy później, gdy ktoś pyta, kto jest odpowiedzialny za stronę, z której korzysta 12 osób.
+
+00:01:25.700 --> 00:01:29.580
+Więc jeśli planujesz przeniesienie skrzynki pocztowej lub najemcy, potraktuj własność jako część inwentarza.
+
+00:01:29.760 --> 00:01:32.320
+Zapisz, kto jest właścicielem czego, zanim cokolwiek zostanie przeniesione.
+
+00:01:32.480 --> 00:01:34.440
+To mały krok, który zapobiega wielu porządkom.
+
+00:01:34.600 --> 00:01:36.280
+A teraz wróćmy do prawdziwego problemu.
+
+00:01:36.280 --> 00:01:37.940
+Gdzie tak naprawdę zaczyna się treść?
+
+00:01:38.200 --> 00:01:39.500
+Założenie, które się rozpadło.
+
+00:01:39.740 --> 00:01:41.080
+Stary model działa w ten sposób.
+
+00:01:41.320 --> 00:01:43.040
+Wybierasz narzędzie na podstawie jego funkcji.
+
+00:01:43.220 --> 00:01:43.960
+To ma ładne tabele?
+
+00:01:44.100 --> 00:01:46.800
+Tamto ma dobrą wyszukiwarkę, inne ma czystą aplikację mobilną.
+
+00:01:47.100 --> 00:01:48.700
+Wybierasz, wdrażasz i dryfujesz.
+
+00:01:48.900 --> 00:01:50.440
+Nikt nie decyduje, co gdzie się znajdzie.
+
+00:01:50.660 --> 00:01:52.380
+Ludzie po prostu używają tego, co jest otwarte.
+
+00:01:52.580 --> 00:01:53.840
+Przez lata to przeważnie działało.
+
+00:01:54.020 --> 00:01:55.560
+Treść zaczynała się w danym miejscu.
+
+00:01:55.760 --> 00:01:57.600
+Otwierałeś dokument, notatnik lub stronę.
+
+00:01:57.780 --> 00:01:59.000
+Celowo tam przechodziłeś.
+
+00:01:59.140 --> 00:02:00.280
+Tak się to nie zaczyna dzisiaj.
+
+00:02:00.400 --> 00:02:01.840
+Praca nie zaczyna się w narzędziu.
+
+00:02:01.840 --> 00:02:03.140
+Zaczyna się w kontekście.
+
+00:02:03.400 --> 00:02:04.140
+Jesteś na czacie.
+
+00:02:04.340 --> 00:02:07.240
+Ktoś zadaje pytanie, a ty wpisujesz odpowiedź, którą warto zachować.
+
+00:02:07.460 --> 00:02:08.360
+Jesteś na spotkaniu.
+
+00:02:08.560 --> 00:02:10.560
+Podejmowane są decyzje i pojawiają się notatki.
+
+00:02:10.800 --> 00:02:14.560
+Rozmawiasz z kopilotem, a on podaje ci odpowiedź lepszą niż szkic, który planowałeś napisać.
+
+00:02:14.680 --> 00:02:15.740
+Treść pojawia się pierwsza.
+
+00:02:15.880 --> 00:02:17.740
+Strona główna pojawia się później, jeśli w ogóle.
+
+00:02:17.940 --> 00:02:20.280
+Tak więc w większości organizacji dzieje się tak zazwyczaj.
+
+00:02:20.440 --> 00:02:22.280
+Pięć miejsc przechowuję teraz notatki.
+
+00:02:22.500 --> 00:02:23.920
+Niektóre znajdują się w czacie Teams.
+
+00:02:24.160 --> 00:02:26.180
+Niektóre są w komponencie lub wklejonym do tego czatu.
+
+00:02:26.180 --> 00:02:28.660
+Niektóre są na stronie kopilot, której nikt nie udostępnił.
+
+00:02:28.800 --> 00:02:33.060
+Niektóre znajdują się w notesie OneNote sprzed trzech lat, a niektóre, te nieliczne, są w SharePoint.
+
+00:02:33.240 --> 00:02:36.620
+Zapytaj dziesięć osób, gdzie jest najnowsza wersja, a otrzymasz pięć odpowiedzi i dwa wzruszenia ramion.
+
+00:02:36.800 --> 00:02:38.400
+Łatwą reakcją jest obwinianie narzędzi.
+
+00:02:38.600 --> 00:02:39.340
+Zbyt wiele ich.
+
+00:02:39.540 --> 00:02:40.520
+Zbyt dużo nakładania się.
+
+00:02:40.740 --> 00:02:43.120
+Microsoft ciągle dodaje kolejne, ale to nie jest podstawa.
+
+00:02:43.340 --> 00:02:44.760
+Każde z tych narzędzi robi coś realnego.
+
+00:02:45.000 --> 00:02:46.120
+Każde ma swój powód istnienia.
+
+00:02:46.340 --> 00:02:48.520
+Podstawą jest to, że umiejscowienie nigdy nie było decyzją.
+
+00:02:48.760 --> 00:02:49.440
+Było dodatkiem.
+
+00:02:49.440 --> 00:02:52.200
+Treść jest tworzona tam, gdzie akurat stoi dana osoba.
+
+00:02:52.360 --> 00:02:57.740
+Uprawnienia, przechowywanie, własność, wszystko to jest ustalane przypadkowo przez kontener, który akurat przechwycił treść.
+
+00:02:57.880 --> 00:02:59.780
+To jest model stojący za tym bałaganem.
+
+00:02:59.980 --> 00:03:01.820
+Niezłe narzędzia to brakujące decyzje.
+
+00:03:02.020 --> 00:03:06.180
+Nie da się naprawić brakującej decyzji, dodając kolejne narzędzie, inną zasadę lub kolejny film instruktażowy.
+
+00:03:06.400 --> 00:03:10.540
+Naprawisz to, rozumiejąc, czym tak naprawdę jest każde miejsce i jak wpływa na zawartość, którą tam umieścisz.
+
+00:03:10.680 --> 00:03:13.100
+Ponieważ dom to nie tylko lokalizacja, to zestaw reguł.
+
+00:03:13.100 --> 00:03:18.100
+Zanim więc zdecydujemy, gdzie umieścić treść, musimy przyjrzeć się temu, co tak naprawdę kryje w sobie każdy dom.
+
+00:03:18.260 --> 00:03:20.320
+Pięć powierzchni, pięć różnych zadań.
+
+00:03:20.540 --> 00:03:24.220
+Nazwijmy je pętla, strony kopilota, SharePoint, OneNote, Teams.
+
+00:03:24.400 --> 00:03:25.080
+Pięć nazw.
+
+00:03:25.220 --> 00:03:27.340
+I dla większości użytkowników wszystkie robią to samo.
+
+00:03:27.520 --> 00:03:29.200
+Wpisujesz tekst, inni ludzie go widzą.
+
+00:03:29.420 --> 00:03:32.120
+Gotowe, ale każdy z nich został stworzony, aby pomieścić coś innego.
+
+00:03:32.340 --> 00:03:34.920
+Gdy zobaczysz, jak nakładanie się przestaje wyglądać, zacznij od Teams.
+
+00:03:35.140 --> 00:03:37.980
+Został stworzony do konwersacji, czatów, kanałów, spotkań, połączeń.
+
+00:03:38.140 --> 00:03:39.560
+Jednostką pracy jest wiadomość.
+
+00:03:39.760 --> 00:03:41.060
+Wiadomości szybko się poruszają.
+
+00:03:43.100 --> 00:03:44.280
+Następnie pętla.
+
+00:03:44.420 --> 00:03:47.760
+Pętla została stworzona do płynnej zawartości, którą więcej niż jedna osoba edytuje razem.
+
+00:03:47.960 --> 00:03:50.040
+Lista zadań, tabela, krótki zestaw notatek.
+
+00:03:50.160 --> 00:03:54.900
+Jednostka pracy jest komponentem, a pomysł polega na tym, aby ta sama żywa zawartość mogła pojawiać się w kilku miejscach jednocześnie.
+
+00:03:55.160 --> 00:03:56.860
+Strony kopilota znajdują się obok tego.
+
+00:03:57.120 --> 00:04:00.400
+Strona została stworzona, aby przechwycić odpowiedź, a i umożliwić jej edycję.
+
+00:04:00.560 --> 00:04:05.780
+Pytasz, kopilot odpowiada, a ty wyciągasz tę odpowiedź z czatu, aby mogła przetrwać i aby inni mogli nad nią pracować.
+
+00:04:06.020 --> 00:04:09.180
+Jednostką pracy jest pojedyncza strona, która zaczęła się jako odpowiedź.
+
+00:04:09.180 --> 00:04:14.100
+Jedna notatka jest starsza i została stworzona do czegoś innego, notatnika, sekcji, stron w sekcjach.
+
+00:04:14.240 --> 00:04:18.560
+To ustrukturyzowane miejsce, w którym jedna osoba lub grupa może przemyśleć coś na przestrzeni dłuższego czasu.
+
+00:04:18.840 --> 00:04:21.180
+Jednostką pracy jest notatnik i program SharePoint.
+
+00:04:21.380 --> 00:04:30.500
+Program SharePoint został stworzony do przechowywania treści, którymi organizacja musi zarządzać witryn, bibliotek, folderów, elementów z metadanymi, z historią wersji i dołączonymi regułami przechowywania.
+
+00:04:30.500 --> 00:04:35.460
+Jednostką pracy jest dokument, a dokument znajduje się w strukturze zaprojektowanej przez kogoś.
+
+00:04:35.560 --> 00:04:37.440
+Ułóż je w szeregu, a otrzymasz wzór.
+
+00:04:37.640 --> 00:04:40.420
+Zespoły to rozmowa, pętla i strony to płynność.
+
+00:04:40.680 --> 00:04:42.520
+Jedna notatka to osobista struktura.
+
+00:04:42.760 --> 00:04:44.400
+SharePoint to zarządzana struktura.
+
+00:04:44.640 --> 00:04:46.640
+Zwróć uwagę, co różni się w każdym z nich.
+
+00:04:46.840 --> 00:04:49.440
+Nie chodzi o doświadczenie edycji, nie o kolory, nie o ikony.
+
+00:04:49.660 --> 00:04:55.460
+Różnicą jest oczekiwany czas życia treści, liczba osób, które mają ją dotknąć i poziom kontroli, jaką ktoś chce nad nią mieć.
+
+00:04:55.620 --> 00:04:57.120
+W tym miejscu następuje awaria.
+
+00:04:57.380 --> 00:04:58.800
+Użytkownicy niczego takiego nie widzą.
+
+00:04:59.040 --> 00:05:00.820
+Widzą pustą stronę i przycisk udostępniania.
+
+00:05:00.960 --> 00:05:03.260
+Tabela w loop wygląda bardzo podobnie do tabeli w pliku Word.
+
+00:05:03.480 --> 00:05:05.840
+Strona Copilot wygląda bardzo podobnie do strony OneNote.
+
+00:05:06.040 --> 00:05:09.640
+Plik opublikowany na kanale wygląda jak plik w bibliotece, ponieważ cóż, jest nim w pewnym sensie.
+
+00:05:09.840 --> 00:05:10.560
+Do tego dojdziemy.
+
+00:05:10.760 --> 00:05:12.600
+Ludzie traktują więc te narzędzia jako wymienne.
+
+00:05:12.840 --> 00:05:14.240
+Na pierwszy rzut oka to ma sens.
+
+00:05:14.440 --> 00:05:15.180
+Czemu mieliby nie?
+
+00:05:15.180 --> 00:05:16.920
+Ale architektura mówi co innego.
+
+00:05:16.920 --> 00:05:24.640
+Pod każdym z nich kryje się inna lokalizacja pamięci masowej, inny model uprawnień, inna odpowiedź na pytanie, kto jest właścicielem, kto może go zobaczyć i co się dzieje, gdy ktoś odejdzie.
+
+00:05:24.840 --> 00:05:28.860
+Dwa elementy treści mogą wyglądać identycznie na ekranie, a rok później zachowywać się zupełnie inaczej.
+
+00:05:29.040 --> 00:05:31.060
+To jest ta część, której nikt nie widzi pierwszego dnia.
+
+00:05:31.240 --> 00:05:35.700
+Potrzebujemy więc sposobu, aby spojrzeć poza powierzchowność w soczewki, którą możemy wziąć pod uwagę na dowolną z tych pięciu i uzyskać prostą odpowiedź.
+
+00:05:35.760 --> 00:05:36.500
+Cztery części.
+
+00:05:37.020 --> 00:05:37.340
+Pojemnik.
+
+00:05:37.580 --> 00:05:41.420
+Gdzie ta treść fizycznie się znajduje i jakie zasady obowiązują w tym miejscu?
+
+00:05:41.920 --> 00:05:42.280
+Właściciel.
+
+00:05:42.280 --> 00:05:45.340
+Kto jest za nią odpowiedzialny i czy jest to osoba czy zespół?
+
+00:05:45.760 --> 00:05:46.160
+Dożywotni.
+
+00:05:46.340 --> 00:05:48.580
+Jak długo to powinno istnieć i co się kończy?
+
+00:05:48.960 --> 00:05:49.360
+Etykieta.
+
+00:05:49.560 --> 00:05:52.140
+Jaki poziom wrażliwości niesie i czy on się z nim przenosi?
+
+00:05:52.320 --> 00:05:52.920
+Cztery pytania.
+
+00:05:53.040 --> 00:05:54.440
+Te same cztery dla każdego narzędzia.
+
+00:05:54.620 --> 00:05:57.020
+Jeśli potrafisz na nie odpowiedzieć, umiejscowienie przestaje być zgadywaniem.
+
+00:05:57.200 --> 00:05:59.560
+Jeśli nie potrafisz, znalazłeś ryzyko, zanim ono znalazło ciebie.
+
+00:05:59.760 --> 00:06:03.440
+Kolejność ma tu znaczenie, ponieważ na trzy z tych czterech pytań odpowiada jedna rzecz, to
+
+00:06:03.440 --> 00:06:05.300
+to decyduje, kto może zobaczyć treść.
+
+00:06:05.460 --> 00:06:07.200
+To decyduje, jak długo treść pozostanie.
+
+00:06:07.380 --> 00:06:09.700
+To decyduje, kto może ją oczyścić, gdy autor nie żyje.
+
+00:06:09.860 --> 00:06:10.980
+Więc od tego zaczynamy.
+
+00:06:11.100 --> 00:06:12.700
+I czym właściwie jest kontener?
+
+00:06:12.880 --> 00:06:15.200
+Pomyśl o tym, co robisz, gdy tworzysz coś nowego.
+
+00:06:15.380 --> 00:06:18.280
+Piszesz, formatujesz, klikasz, zapisz albo to się zapisze.
+
+00:06:18.420 --> 00:06:22.300
+I w żadnym momencie nikt nie zadaje ci trzech pytań, które są ważniejsze niż to, co właśnie napisałeś.
+
+00:06:22.300 --> 00:06:23.400
+Kto może to otworzyć?
+
+00:06:23.580 --> 00:06:24.620
+Jak długo to pozostanie?
+
+00:06:24.800 --> 00:06:26.640
+Kto jest za to odpowiedzialny, gdy ciebie nie będzie?
+
+00:06:26.840 --> 00:06:29.040
+Na te pytania nadal otrzymasz odpowiedź, tylko nie ty.
+
+00:06:29.220 --> 00:06:30.900
+Odpowiedzi na nie otrzymasz od kontenera.
+
+00:06:31.100 --> 00:06:37.720
+Kontener to coś, co przechowuje treść, witrynę, zespół, notatnik, obszar roboczy, skrzynkę pocztową, cokolwiek zawiera treść.
+
+00:06:37.840 --> 00:06:38.760
+To jest kontener.
+
+00:06:39.440 --> 00:06:43.420
+I niesie ze sobą trzy rzeczy uprawnienia, reguły przechowywania i własność.
+
+00:06:43.620 --> 00:06:46.900
+Więc kiedy treść trafia do kontenera, nie przybywa z pustymi rękami.
+
+00:06:47.140 --> 00:06:48.460
+Przejmuje zestaw zachowań.
+
+00:06:48.460 --> 00:06:50.240
+Kto ma dostęp? Pochodzi z kontenera.
+
+00:06:50.420 --> 00:06:52.600
+Jak długo treść jest przechowywana? Pochodzi z kontenera.
+
+00:06:52.760 --> 00:06:55.260
+Kto może ją odzyskać, przenieść lub usunąć? Pochodzi z kontenera.
+
+00:06:55.260 --> 00:06:56.760
+Autor niczego z tego nie ustala.
+
+00:06:56.960 --> 00:06:58.340
+Autor po prostu napisał słowa.
+
+00:06:58.500 --> 00:07:00.900
+Trudno się tego trzymać, ponieważ wydaje się to przestarzałe.
+
+00:07:01.020 --> 00:07:02.540
+Ty to stworzyłeś. To twoje.
+
+00:07:02.700 --> 00:07:04.480
+Ale system nie traktuje tego w ten sposób.
+
+00:07:04.760 --> 00:07:08.440
+System traktuje twoją treść jak gościa w domu z zasadami już wypisanymi na ścianach.
+
+00:07:08.560 --> 00:07:11.580
+I dlatego doświadczenie edycji ma mniejsze znaczenie niż to, jak wygląda.
+
+00:07:11.800 --> 00:07:16.800
+Kiedy ludzie porównują narzędzia, mówią o edytorze, formatowaniu, płynności pisania, jak dobrze zachowuje się tabela.
+
+00:07:16.960 --> 00:07:19.380
+To ta część, którą widać, więc przyciąga całą uwagę.
+
+00:07:19.600 --> 00:07:21.960
+Ale edytor jest najmniej trwałą częścią decyzji.
+
+00:07:21.960 --> 00:07:23.400
+Zapomnisz o niej w miesiąc.
+
+00:07:23.520 --> 00:07:24.160
+Czego nie zapomnisz?
+
+00:07:24.240 --> 00:07:27.080
+To dzień, w którym ktoś zapyta, dlaczego cała firma może to otworzyć.
+
+00:07:27.260 --> 00:07:28.820
+Albo dlaczego to zostało usunięte?
+
+00:07:28.980 --> 00:07:31.040
+Albo dlaczego nie możemy znaleźć właściciela?
+
+00:07:31.200 --> 00:07:33.000
+Odpowiedzi na te pytania nie ma w edytorze.
+
+00:07:33.240 --> 00:07:34.120
+Są w kontenerze.
+
+00:07:34.320 --> 00:07:35.460
+Ujmijmy to konkretnie.
+
+00:07:35.680 --> 00:07:36.700
+Weźmy jeden akapit.
+
+00:07:36.860 --> 00:07:39.360
+Załóżmy, że to krótkie podsumowanie decyzji cenowej klienta.
+
+00:07:39.520 --> 00:07:40.740
+Cztery zdania, te same słowa.
+
+00:07:40.840 --> 00:07:41.680
+To samo formatowanie.
+
+00:07:41.880 --> 00:07:44.320
+Umieśćmy go w prywatnym kanale w zespole z ośmioma członkami.
+
+00:07:44.520 --> 00:07:46.300
+Teraz dziedziczy on dostęp tego zespołu.
+
+00:07:46.300 --> 00:07:47.880
+Osiem osób może go otworzyć.
+
+00:07:48.100 --> 00:07:50.540
+Zespół ma właścicieli, więc ma osoby odpowiedzialne za niego.
+
+00:07:50.720 --> 00:07:54.560
+I niezależnie od tego, jaka polityka przechowywania dotyczy tej witryny zespołu, dotyczy ona również akapitu.
+
+00:07:54.740 --> 00:07:59.920
+Teraz umieść dokładnie ten sam akapit na stronie, którą sam stworzyłeś w swojej własnej przestrzeni, zanim ktokolwiek inny się zaangażuje.
+
+00:08:00.080 --> 00:08:01.500
+Teraz dziedziczy on twój dostęp.
+
+00:08:01.720 --> 00:08:02.180
+Tylko ty.
+
+00:08:02.580 --> 00:08:04.060
+Właścicielem jesteś ty i tylko ty.
+
+00:08:04.220 --> 00:08:09.840
+A kiedy twoje konto zniknie, zasady przechowywania i usuwania powiązane z twoim kątem zdecydują, co stanie się dalej.
+
+00:08:09.840 --> 00:08:14.120
+Te same cztery zdania, inna grupa docelowa, inny właściciel, inny los.
+
+00:08:14.280 --> 00:08:15.400
+A oto cicha część.
+
+00:08:15.660 --> 00:08:17.940
+Nic w tekście nie mówi, na który z nich patrzysz.
+
+00:08:18.160 --> 00:08:20.840
+Możesz dać wydruk obu koledze, a on nie zauważy różnicy.
+
+00:08:21.100 --> 00:08:22.340
+Różnica nie tkwi w treści.
+
+00:08:22.600 --> 00:08:23.340
+Nigdy jej nie było.
+
+00:08:23.580 --> 00:08:24.880
+Dlatego tak łatwo ją przeoczyć.
+
+00:08:25.100 --> 00:08:27.020
+Ludzie oceniają treść na podstawie tego, co mówi.
+
+00:08:27.260 --> 00:08:29.520
+System ocenia treść na podstawie tego, gdzie się znajduje.
+
+00:08:29.680 --> 00:08:32.480
+Więc kiedy pytamy, gdzie to powinno się znaleźć, nie pytamy o wygodę.
+
+00:08:32.620 --> 00:08:34.900
+Pytamy, jaki zestaw reguł chcemy do tego przypisać.
+
+00:08:35.020 --> 00:08:37.240
+Którzy ludzie, jaki okres ważności, który właściciel.
+
+00:08:37.240 --> 00:08:39.320
+Wybierz kontener, a wybierzesz wszystkie trzy.
+
+00:08:39.500 --> 00:08:42.600
+I tutaj loop staje się interesujący, ponieważ loop łamie prosty obraz.
+
+00:08:42.780 --> 00:08:44.880
+Jego zawartość nie znajduje się w jednym miejscu.
+
+00:08:45.060 --> 00:08:47.660
+Pojawia się w kilku miejscach, jednocześnie będąc w jednym.
+
+00:08:47.860 --> 00:08:49.120
+I to rodzi trudniejsze pytanie.
+
+00:08:49.420 --> 00:08:53.300
+Jeśli ta sama zawartość pojawia się wszędzie, który kontener jest tak naprawdę odpowiedzialny,
+
+00:08:53.440 --> 00:08:55.380
+komponenty loop są przenośne z założenia.
+
+00:08:55.660 --> 00:08:57.360
+Oto część, która zaskakuje ludzi.
+
+00:08:57.580 --> 00:09:00.100
+Komponent loop nie znajduje się w czacie, w którym go widzisz.
+
+00:09:00.320 --> 00:09:02.220
+Wpisujesz listę zadań do wiadomości Teams.
+
+00:09:02.480 --> 00:09:04.300
+Wygląda na to, że to część tej wiadomości.
+
+00:09:04.460 --> 00:09:06.900
+Znajduje się ona w wątku z nazwą i znacznikiem czasu.
+
+00:09:06.900 --> 00:09:08.800
+Zakładasz więc, że czat ją przechowuje.
+
+00:09:08.980 --> 00:09:09.640
+Tak nie jest.
+
+00:09:09.820 --> 00:09:13.880
+Komponent znajduje się w pliku zapasowym, prawdziwym pliku w prawdziwej lokalizacji pamięci masowej
+
+00:09:13.880 --> 00:09:15.880
+z własnymi uprawnieniami i własnym właścicielem.
+
+00:09:16.060 --> 00:09:18.560
+To, co widzisz w czacie, to okno na żywo do tego pliku.
+
+00:09:18.900 --> 00:09:20.420
+Wiadomość po prostu na niego wskazuje.
+
+00:09:20.700 --> 00:09:21.500
+Taki jest projekt.
+
+00:09:21.700 --> 00:09:25.200
+I jest to sprytne rozwiązanie, ponieważ gdy treść znajduje się w pliku, a czat tylko ją wyświetla,
+
+00:09:25.260 --> 00:09:27.260
+ta sama treść może być wyświetlana w dowolnym miejscu.
+
+00:09:27.420 --> 00:09:29.980
+Wklej tę listę zadań do czatów Teams, a inni ją tam zobaczą.
+
+00:09:29.980 --> 00:09:32.880
+Upuść ją do wiadomości e-mail w Outlooku, a odbiorca ją tam zobaczy.
+
+00:09:33.100 --> 00:09:36.000
+Dodaj ją do strony w obszarze roboczym lub, a pojawi się również na tej stronie
+
+00:09:36.000 --> 00:09:39.340
+trzy miejsca, jeden element treści, a gdy ktoś ją edytuje w Outlooku,
+
+00:09:39.420 --> 00:09:40.460
+zmiana jest widoczna w Teams.
+
+00:09:40.660 --> 00:09:43.300
+Gdy ktoś zaznaczy pole w obszarze roboczym lub wiadomość e-mail zostanie zaktualizowana,
+
+00:09:43.520 --> 00:09:45.980
+nic nie zostanie skopiowane, nic nie straci synchronizacji,
+
+00:09:46.200 --> 00:09:48.020
+jest jeden plik, a wszystko inne jest widokiem.
+
+00:09:48.140 --> 00:09:49.520
+To właśnie oznacza tutaj przenośność.
+
+00:09:49.740 --> 00:09:51.860
+Zawartość nie jest uwięziona w aplikacji, w której się zaczęła.
+
+00:09:52.140 --> 00:09:52.500
+Podróżuję.
+
+00:09:52.680 --> 00:09:54.560
+Teraz, jeśli jest plik, jest lokalizacja.
+
+00:09:54.720 --> 00:09:56.920
+I tutaj ludzie zatrzymują się i zadają właściwe pytanie.
+
+00:09:57.160 --> 00:09:58.040
+Gdzie jest ten plik?
+
+00:09:58.240 --> 00:09:59.240
+Szczera odpowiedź brzmi.
+
+00:09:59.360 --> 00:09:59.800
+To zależy.
+
+00:10:00.000 --> 00:10:03.240
+To zależy od tego, kto utworzył komponent i gdzie był, kiedy go utworzył.
+
+00:10:03.400 --> 00:10:05.360
+Utwórz komponent na czacie lub w wiadomości e-mail,
+
+00:10:05.480 --> 00:10:07.860
+a plik kopii zapasowej zazwyczaj trafia do pamięci twórcy,
+
+00:10:07.960 --> 00:10:10.760
+twojej przestrzeni, a nie do zespołów, nie do czatów, tylko do twojej.
+
+00:10:10.860 --> 00:10:13.480
+Osoby, z którymi się nim podzieliłeś, uzyskują dostęp do pliku,
+
+00:10:13.580 --> 00:10:14.720
+ale plik znajduje się u ciebie.
+
+00:10:14.880 --> 00:10:17.680
+Utwórz komponent w obszarze roboczym lub, a historia się zmieni.
+
+00:10:17.860 --> 00:10:20.240
+Teraz plik znajduje się w pamięci obszaru roboczego.
+
+00:10:20.520 --> 00:10:23.000
+Należy do obszaru roboczego, a nie do żadnej konkretnej osoby w nim.
+
+00:10:23.140 --> 00:10:25.320
+Tak więc dwa komponenty mogą wyglądać dokładnie tak samo na ekranie.
+
+00:10:25.420 --> 00:10:28.280
+Mieć ten sam układ, to samo zachowanie na żywo, ten sam mały awatar edytującego.
+
+00:10:28.440 --> 00:10:31.440
+Jeden znajduje się w lokalizacji osobistej, a drugi w udostępnionej.
+
+00:10:31.500 --> 00:10:34.360
+A czynnikiem, który decyduje o tym, nie jest wybrane przez ciebie ustawienie,
+
+00:10:34.360 --> 00:10:38.340
+ale miejsce, w którym akurat stałeś, gdy kliknąłeś utwórz, co prowadzi nas z powrotem do kontenera.
+
+00:10:38.500 --> 00:10:41.260
+Komponent dziedziczy wszystko, co niesie jego plik zapasowy, home.
+
+00:10:41.480 --> 00:10:43.800
+Kto jest jego właścicielem? Kto może go odzyskać?
+
+00:10:43.880 --> 00:10:45.240
+Co się stanie, gdy ta osoba odejdzie?
+
+00:10:45.440 --> 00:10:47.280
+Porozmawiajmy teraz o tym, co tak naprawdę daje przenośność.
+
+00:10:47.480 --> 00:10:48.960
+Jako funkcja jest ona naprawdę dobra.
+
+00:10:49.180 --> 00:10:52.000
+Ludzie nienawidzą wklejania nieaktualnych kopii tabeli w sześć różnych miejsc.
+
+00:10:52.220 --> 00:10:53.960
+Nienawidzą pytać, czy to najnowsza wersja?
+
+00:10:54.160 --> 00:10:57.400
+Treści na żywo, które podążają za rozmową, rozwiązują prawdziwy problem.
+
+00:10:57.800 --> 00:11:00.080
+Udostępniasz je raz, a wszyscy widzą ich aktualny stan.
+
+00:11:00.240 --> 00:11:02.100
+To mniej dryfu i mniej duplikatów plików.
+
+00:11:02.240 --> 00:11:04.200
+Ale spójrz na to z pozycji osoby zarządzającej.
+
+00:11:04.200 --> 00:11:07.560
+Ta sama właściwość, która ułatwia rozprzestrzenianie, utrudnia jego ograniczenie.
+
+00:11:07.760 --> 00:11:10.960
+Jeden komponent udostępniony na czacie pięciu osób można przesłać do innego czatu,
+
+00:11:11.060 --> 00:11:13.460
+wkleić do wiadomości e-mail, a następnie umieścić na stronie.
+
+00:11:13.640 --> 00:11:15.660
+Każdy z tych ruchów może poszerzyć grono odbiorców.
+
+00:11:15.820 --> 00:11:18.820
+A plik zapasowy cały czas znajduje się w jednym miejscu, dyskretnie obsługując wszystkich.
+
+00:11:19.020 --> 00:11:20.640
+Kto więc decydował o tej grupie odbiorców?
+
+00:11:20.820 --> 00:11:22.200
+Nikt. Nagromadziły się.
+
+00:11:22.380 --> 00:11:23.400
+I jest drugi problem.
+
+00:11:23.640 --> 00:11:28.260
+Komponent niesie ze sobą uprawnienia, ale osoba go przeglądająca często nie wie, skąd pochodzi.
+
+00:11:28.520 --> 00:11:30.420
+Na czacie wygląda jak część rozmowy.
+
+00:11:30.420 --> 00:11:35.260
+Nic nie wskazuje na to, że jest to plik w czyjejś osobistej pamięci masowej, udostępnionej tym osobom za pośrednictwem linku.
+
+00:11:35.440 --> 00:11:37.420
+Ryzyko nie polega więc na tym, że przenośność jest zła.
+
+00:11:37.620 --> 00:11:39.500
+Ryzyko polega na tym, że plik zostanie ukryty.
+
+00:11:39.740 --> 00:11:42.640
+Zawartość łatwo się przenosi, a strona główna pozostaje niewidoczna.
+
+00:11:42.820 --> 00:11:46.120
+Komponent, który zaczął się jako krótka notatka między dwoma współpracownikami,
+
+00:11:46.260 --> 00:11:50.120
+może stać się dokumentem roboczym dla całego projektu, bez możliwości wyboru jego miejsca.
+
+00:11:50.320 --> 00:11:51.480
+To rodzi praktyczne pytanie.
+
+00:11:51.760 --> 00:11:53.860
+Jeśli strona główna pozostaje ukryta przed użytkownikiem,
+
+00:11:53.860 --> 00:11:57.680
+musimy wiedzieć, gdzie tak naprawdę trafiają te pliki zapasowe i czym tak naprawdę jest ta pamięć masowa.
+
+00:11:57.880 --> 00:11:59.860
+Przestrzenie robocze lub i ich rzeczywistość przechowywania.
+
+00:12:00.640 --> 00:12:02.440
+Gdzie więc tak naprawdę trafiają te pliki?
+
+00:12:02.640 --> 00:12:06.660
+Przede wszystkim należy wiedzieć, że istnieją trzy różne punkty początkowe i ludzie łączą je razem.
+
+00:12:06.880 --> 00:12:08.960
+Przestrzeń robocza lub to przestrzeń współdzielona.
+
+00:12:09.160 --> 00:12:13.700
+Tworzysz ją, nadajesz jej nazwę, zapraszasz osoby, a strony i komponenty w niej zawarte należą do tej grupy.
+
+00:12:13.900 --> 00:12:15.920
+Następnie jest twoja osobista przestrzeń robocza.
+
+00:12:16.120 --> 00:12:19.300
+Każdy użytkownik otrzymuje jeden i jest on tylko twój, dopóki czegoś z niego nie udostępnisz.
+
+00:12:19.300 --> 00:12:24.820
+Są też komponenty utworzone w innych aplikacjach, czacie w Teams lub wiadomościach e-mail w Outlooku, które w ogóle nie mają kontaktu z obszarem roboczym.
+
+00:12:24.960 --> 00:12:26.540
+Trzy źródła, trzy różne lokalizacje.
+
+00:12:26.740 --> 00:12:28.600
+Teraz kwestia przechowywania danych jest jasno określona.
+
+00:12:28.760 --> 00:12:31.200
+Komponenty utworzone w czatach i wiadomościach e-mail zazwyczaj trafiają do OnDrive.
+
+00:12:31.340 --> 00:12:33.500
+To jest osobiste miejsce do przechowywania danych, które większość z Was już zna.
+
+00:12:33.660 --> 00:12:37.620
+Jest powiązane z kontem użytkownika, przestrzega zasad tego konta i ma przypisane imię i nazwisko osoby.
+
+00:12:37.780 --> 00:12:39.120
+Obszary robocze działają inaczej.
+
+00:12:39.360 --> 00:12:41.400
+Znajdują się w osadzonych kontenerach programu SharePoint.
+
+00:12:41.400 --> 00:12:48.200
+To model przechowywania danych opracowany przez firmę Microsoft, dzięki któremu aplikacje mogą przechowywać zawartość w zarządzanym kontenerze bez tworzenia pełnej witryny programu SharePoint.
+
+00:12:48.360 --> 00:12:49.780
+To wciąż technologia SharePoint.
+
+00:12:50.040 --> 00:12:54.060
+Nadal ma uprawnienia, retencję i zgodność, ale nie jest witryną i nie zachowuje się jak witryna.
+
+00:12:54.260 --> 00:12:59.440
+Zatem z jednej strony masz OnDrive powiązany z użytkownikiem, a z drugiej osadzony kontener powiązany z obszarem roboczym.
+
+00:12:59.640 --> 00:13:01.980
+Ten sam interfejs pętli, dwa światy przechowywania danych.
+
+00:13:02.160 --> 00:13:04.020
+I tutaj administratorzy napotykają na ścianę.
+
+00:13:04.140 --> 00:13:06.220
+Z normalną biblioteką dokumentów można przeglądać.
+
+00:13:06.220 --> 00:13:10.940
+Otwierasz centrum administracyjne programu SharePoint, znajdujesz witrynę, przeglądasz bibliotekę, przeglądasz pliki, sprawdzasz kto ma dostęp.
+
+00:13:11.080 --> 00:13:12.260
+To żmudne, ale widoczne.
+
+00:13:12.460 --> 00:13:14.480
+Osadzone kontenery nie wyświetlają się w ten sposób.
+
+00:13:14.720 --> 00:13:16.460
+Nie pojawiają się na liście aktywnych witryn.
+
+00:13:16.660 --> 00:13:19.140
+Nie można ich otworzyć i przewijać plików jak biblioteki.
+
+00:13:19.320 --> 00:13:24.480
+Praca administracyjna odbywa się za pośrednictwem innych ścieżek, programu PowerShell, uprawnień, ustawień administratora pętli.
+
+00:13:24.640 --> 00:13:30.340
+Te narzędzia mogą zarządzać kontenerami, stosować zasady, uruchamiać wyszukiwania i blokady, ale nawyk przeglądania nie jest przenoszony.
+
+00:13:30.340 --> 00:13:33.620
+To ważne, ponieważ większość nawyków zarządzania zaczyna się od przeglądania.
+
+00:13:33.780 --> 00:13:35.840
+Patrzysz, zauważasz coś dziwnego, działasz.
+
+00:13:36.040 --> 00:13:40.220
+Kiedy coś jest trudniejsze do zobaczenia, nawyk zanika, a problemy pozostają ukryte na dłużej.
+
+00:13:40.420 --> 00:13:41.500
+Więc pytanie się zmienia.
+
+00:13:41.760 --> 00:13:43.260
+Nie chodzi już o to, co tam jest.
+
+00:13:43.500 --> 00:13:45.340
+Chodzi o to, które zasady tam docierają.
+
+00:13:45.520 --> 00:13:49.020
+I to jest pytanie, na które musisz celowo odpowiedzieć, zanim zawartość się spiętrzy.
+
+00:13:49.200 --> 00:13:51.460
+Teraz własność i to pytanie sprawia ludziom trudność.
+
+00:13:51.620 --> 00:13:53.100
+Przestrzeń robocza ma właścicieli.
+
+00:13:53.280 --> 00:13:55.380
+To osoby odpowiedzialne za samą przestrzeń.
+
+00:13:55.520 --> 00:13:58.840
+Kontrolują członkostwo, decydują, kto może zapraszać innych i odpowiadają.
+
+00:13:58.840 --> 00:14:02.820
+Gdy przestrzeń staje się nieaktualna, ale strona w tej przestrzeni roboczej ma autora.
+
+00:14:03.040 --> 00:14:03.940
+Ktoś ją wpisał.
+
+00:14:04.060 --> 00:14:06.100
+Czyjeś imię i nazwisko widnieje w historii edycji.
+
+00:14:06.280 --> 00:14:07.120
+To dwie różne rzeczy.
+
+00:14:07.360 --> 00:14:08.420
+Autor napisał stronę.
+
+00:14:08.600 --> 00:14:11.000
+Właściciel przestrzeni roboczej odpowiada za to, gdzie ona się znajduje.
+
+00:14:11.180 --> 00:14:14.100
+Kiedy autor odchodzi, strona pozostaje, ponieważ kontener ją przechowuje.
+
+00:14:14.320 --> 00:14:16.800
+Kiedy ostatni właściciel odchodzi, pojawia się inny problem.
+
+00:14:17.000 --> 00:14:19.500
+Przestrzeń pełna treści, za którą nikt nie odpowiada.
+
+00:14:19.760 --> 00:14:21.540
+Zespoły po cichu pogarszają sytuację.
+
+00:14:21.800 --> 00:14:23.780
+Ludzie zakładają, że autor jest właścicielem.
+
+00:14:23.920 --> 00:14:25.540
+To strona Sary, zapytaj Sary.
+
+00:14:25.540 --> 00:14:27.260
+Ale Sara ją tylko napisała.
+
+00:14:27.420 --> 00:14:31.980
+Sara nie może zmienić retencji, nie może naprawić udostępniania i może nawet nie mieć praw do jej usuwania.
+
+00:14:32.420 --> 00:14:34.700
+Odpowiedzialność spoczywa więc na kontenerze, autorstwo na treści,
+
+00:14:34.800 --> 00:14:38.000
+a mieszanie ich to sposób na uzyskanie przestrzeni roboczych, z których wszyscy korzystają,
+
+00:14:38.100 --> 00:14:39.300
+a nikt nie jest ich właścicielem.
+
+00:14:39.440 --> 00:14:43.260
+Pamiętaj o tym podziale, ponieważ za chwilę spotkamy treść, w której podział staje się jeszcze bardziej niejasny.
+
+00:14:43.460 --> 00:14:45.520
+Strony drugiego pilota mają inną historię pochodzenia.
+
+00:14:45.760 --> 00:14:48.280
+Zaczynają się od monitu, a nie od osoby wpisującej coś na pustej stronie.
+
+00:14:48.460 --> 00:14:51.400
+I pojawia się pytanie, kto jest właścicielem tego, co pomogła napisać sztuczna inteligencja.
+
+00:14:55.540 --> 00:14:58.500
+Zadaj kopilotowi pytanie na czacie, a otrzymasz odpowiedź.
+
+00:14:58.600 --> 00:14:59.980
+Czasami to dobra odpowiedź.
+
+00:15:00.120 --> 00:15:04.080
+Podsumowanie długiego wątku, szkic planu, tabela porównawcza, na którą nie miałeś czasu.
+
+00:15:04.360 --> 00:15:07.980
+Następnie przewijasz, a ona przesuwa się w górę ekranu, przykryta następnymi 10 wiadomościami.
+
+00:15:08.100 --> 00:15:08.800
+To jest problem.
+
+00:15:09.080 --> 00:15:11.040
+Strony zostały stworzone, aby rozwiązywać problemy.
+
+00:15:11.220 --> 00:15:13.880
+Strona kopilot to trwała, edytowalna forma odpowiedzi kopilota.
+
+00:15:14.100 --> 00:15:16.200
+Wyjmujesz odpowiedź z czatu i umieszczasz ją na stronie.
+
+00:15:16.400 --> 00:15:18.000
+Teraz pozostaje na swoim miejscu.
+
+00:15:18.000 --> 00:15:23.360
+Możesz do niej pisać, reorganizować ją, dodawać własne notatki pod tekstem, a i prosić kopilota, aby nadal ją uzupełniał.
+
+00:15:23.600 --> 00:15:27.140
+Odpowiedź przestaje być wiadomością, a staje się dokumentem, nad którym pracujesz.
+
+00:15:27.260 --> 00:15:28.240
+I tak to się zaczyna.
+
+00:15:28.420 --> 00:15:30.000
+Tworzysz strony z samego czatu.
+
+00:15:30.260 --> 00:15:32.740
+Jedno kliknięcie na odpowiedź otwiera się obok rozmowy.
+
+00:15:32.940 --> 00:15:35.980
+Nie wybrałeś witryny, nie wybrałeś biblioteki, nie nazwałeś zespołu.
+
+00:15:36.200 --> 00:15:38.200
+Byłeś na czacie, a treść została przeniesiona.
+
+00:15:38.460 --> 00:15:39.340
+Gdzie więc ona trafia?
+
+00:15:39.560 --> 00:15:40.880
+Najpierw do twojego kontekstu.
+
+00:15:41.060 --> 00:15:44.020
+Nowa strona jest przechowywana z tobą w twojej własnej przestrzeni powiązanej z twoim kątem.
+
+00:15:44.020 --> 00:15:45.560
+Nikt inny nie może jej otworzyć.
+
+00:15:45.760 --> 00:15:47.120
+Nikt nawet nie wie o jej istnieniu.
+
+00:15:47.260 --> 00:15:49.840
+To osobisty artefakt i podlega zasadom osobistego domu.
+
+00:15:50.080 --> 00:15:52.160
+Jedna osoba, jedno konto, jeden właściciel.
+
+00:15:52.320 --> 00:15:53.740
+I na tym etapie to w porządku.
+
+00:15:53.980 --> 00:15:54.900
+Właśnie tego chcesz.
+
+00:15:55.040 --> 00:15:58.840
+Myślenie na szybko, niedokończone szkice, odpowiedź, a i której jeszcze nie jesteś pewien, czy ufasz.
+
+00:15:58.980 --> 00:16:04.400
+Te rzeczy powinny znajdować się w prywatnym miejscu, ale strony mają przycisk udostępniania, a przycisk udostępniania zmienia istotę rzeczy.
+
+00:16:04.620 --> 00:16:07.280
+W momencie udostępnienia strony przestaje ona być tylko twoja.
+
+00:16:07.280 --> 00:16:11.960
+Wysyłasz link lub dodajesz osoby po imieniu, a teraz trzech współpracowników edytuje tę samą stronę.
+
+00:16:12.160 --> 00:16:16.720
+Dodają wiersze do tabeli, poprawiają akapit, zadają kopilotowi własne pytania uzupełniające.
+
+00:16:16.880 --> 00:16:20.700
+Prywatny notatnik przekształcił udostępniony dokument roboczy w około 4 sekundy.
+
+00:16:20.920 --> 00:16:22.240
+Nic na stronie się nie zmieniło.
+
+00:16:22.400 --> 00:16:26.440
+Ta sama treść, ta sama lokalizacja, ten sam autor, ale zmieniła się publiczność, a wraz z nią stawka.
+
+00:16:26.580 --> 00:16:28.600
+To jest ta część, nad którą warto popracować.
+
+00:16:28.600 --> 00:16:31.080
+Udostępnianie nie tworzy nowego obiektu z nowymi zasadami.
+
+00:16:31.280 --> 00:16:33.080
+Rozciąga stary obiekt na więcej osób.
+
+00:16:33.320 --> 00:16:37.300
+Strona, która zaczęła się w przestrzeni jednej osoby, teraz obsługuje grupę i nadal znajduje się tam, gdzie zaczęła.
+
+00:16:37.440 --> 00:16:39.220
+Teraz pomyśl, co stało się z samą treścią.
+
+00:16:39.420 --> 00:16:40.880
+Odpowiedź na czacie jest jednorazowa.
+
+00:16:41.100 --> 00:16:41.820
+Wszyscy to wiedzą.
+
+00:16:42.020 --> 00:16:43.560
+Czytasz ją, korzystasz z niej i idziesz dalej.
+
+00:16:43.780 --> 00:16:45.260
+Jeśli była błędna, nikt jej nie pamięta.
+
+00:16:45.440 --> 00:16:47.080
+Jeśli była w połowie poprawna, nikt jej nie zachowuje.
+
+00:16:47.300 --> 00:16:48.100
+Strona jest inna.
+
+00:16:48.300 --> 00:16:49.040
+Jest zasobem.
+
+00:16:49.240 --> 00:16:49.740
+Ma tytuł.
+
+00:16:49.960 --> 00:16:50.540
+Ma edycję.
+
+00:16:50.540 --> 00:16:53.460
+Ma link, który możesz wysłać komuś, kto nie brał udziału w rozmowie.
+
+00:16:53.640 --> 00:16:56.880
+Ludzie traktują ją jak rzecz, która istnieje, a rzecz, która istnieje, jest zaufana.
+
+00:16:57.080 --> 00:16:58.620
+Jest wklejana do raportu o stanie.
+
+00:16:58.920 --> 00:17:00.160
+Jest cytowana na spotkaniu.
+
+00:17:00.400 --> 00:17:03.360
+Staje się wersją, na którą ludzie wskazują, gdy mówią, że tak zdecydowaliśmy.
+
+00:17:03.580 --> 00:17:06.260
+Tak więc odpowiedź stała się zasobem, a ryzyko przeniosło się wraz z nią.
+
+00:17:06.440 --> 00:17:07.760
+Oto, jak wygląda to ryzyko.
+
+00:17:07.920 --> 00:17:11.140
+Podsumowanie wygenerowane przez sztuczną inteligencję może być błędne w drobnych, pewnych kwestiach.
+
+00:17:11.300 --> 00:17:12.760
+Liczba zaokrąglona w złym kierunku.
+
+00:17:13.040 --> 00:17:14.800
+Decyzja przypisana niewłaściwej osobie.
+
+00:17:15.020 --> 00:17:16.840
+Zdanie, które brzmi dobrze, ale nie jest.
+
+00:17:17.020 --> 00:17:19.120
+Na czacie ten błąd znika wraz z przewijaniem.
+
+00:17:19.320 --> 00:17:24.960
+Na udostępnionej stronie pozostaje tam, edytowany przez innych, którzy zakładają, że tekst bazowy został sprawdzony i powoli staje się faktem.
+
+00:17:25.120 --> 00:17:26.620
+Istnieje również drugi rodzaj ryzyka.
+
+00:17:26.900 --> 00:17:30.000
+Strony mogą korzystać z tego, do czego użytkownik ma dostęp e-maili, plików, spotkań.
+
+00:17:30.100 --> 00:17:35.180
+Tak więc strona może zawierać podsumowanie czegoś wrażliwego, znajdujące się w miejscu, które nie ma nic wspólnego z miejscem, w którym znajdowało się źródło.
+
+00:17:35.420 --> 00:17:37.300
+Oryginalny plik może być ściśle zabezpieczony.
+
+00:17:37.480 --> 00:17:40.620
+Podsumowanie znajduje się w przestrzeni osobistej z dołączonym linkiem do udostępniania.
+
+00:17:40.740 --> 00:17:44.540
+To treść, która zyskała nowe życie w nowym kontenerze z nowymi zasadami i nikt jej nie wybrał.
+
+00:17:44.740 --> 00:17:49.160
+Strony nie stanowią zatem ryzyka, ponieważ sztuczna inteligencja jest zawodna lub ponieważ udostępnianie jest niebezpieczne.
+
+00:17:49.380 --> 00:17:53.960
+Stanowią ryzyko, ponieważ przekształcają coś tymczasowego w coś trwałego, bez podejmowania przez kogokolwiek takiej decyzji.
+
+00:17:54.080 --> 00:17:57.440
+A gdy coś jest trwałe i udostępnione, nie można już uniknąć jednego pytania.
+
+00:17:57.640 --> 00:18:00.820
+Kto właściwie jest właścicielem strony, którą pomogła napisać sztuczna inteligencja?
+
+00:18:01.180 --> 00:18:01.580
+Własność.
+
+00:18:01.580 --> 00:18:04.500
+Kiedy sztuczna inteligencja pisze pierwsza, zacznij od prostego podziału.
+
+00:18:04.640 --> 00:18:07.280
+Jest osoba, która napisała polecenie i jest to, co wróciło.
+
+00:18:07.420 --> 00:18:08.540
+Te dwie rzeczy nie pasują.
+
+00:18:08.760 --> 00:18:10.800
+Wpisałeś 12 słów, kopilot wygenerował 400.
+
+00:18:11.180 --> 00:18:13.900
+Polecenie było twoje, ale strona nie jest kopią niczego, co napisałeś.
+
+00:18:14.020 --> 00:18:18.440
+To nowy artefakt złożony z plików, e-maili i spotkań, które inni ludzie utworzyli i które inni ludzie posiadają.
+
+00:18:18.640 --> 00:18:19.980
+Więc kto jest jego właścicielem?
+
+00:18:20.160 --> 00:18:21.540
+Na papierze odpowiedź jest prosta.
+
+00:18:21.780 --> 00:18:24.100
+Strona znajduje się w twojej przestrzeni powiązanej z twoim kontem.
+
+00:18:24.280 --> 00:18:25.180
+Jesteś właścicielem.
+
+00:18:25.180 --> 00:18:29.120
+System tak mówi, ale własność w systemie i własność w praktyce to dwie różne rzeczy.
+
+00:18:29.380 --> 00:18:31.320
+System wie, czyja pamięć przechowuje plik.
+
+00:18:31.320 --> 00:18:33.640
+Nie wie, kto jest odpowiedzialny za to, co plik mówi.
+
+00:18:33.800 --> 00:18:37.660
+A na stronie zbudowanej z kilkunastu źródeł, które w najlepszym razie przejrzałeś pobieżnie, to uczciwe pytanie.
+
+00:18:37.900 --> 00:18:38.760
+Czy to sprawdziłeś?
+
+00:18:38.840 --> 00:18:39.760
+Czy to zatwierdziłeś?
+
+00:18:39.880 --> 00:18:41.220
+Czy kliknąłeś raz i przeszedłeś dalej?
+
+00:18:41.400 --> 00:18:43.100
+Teraz zobacz, co się stanie, gdy twórca odejdzie.
+
+00:18:43.240 --> 00:18:44.320
+Konto zostanie zamknięte.
+
+00:18:44.500 --> 00:18:45.640
+Skrzynka pocztowa obsługiwana.
+
+00:18:45.800 --> 00:18:46.800
+OnDrive obsługiwany.
+
+00:18:47.020 --> 00:18:48.680
+Manager otrzymuje dostęp na 30 dni.
+
+00:18:49.020 --> 00:18:49.780
+Standardowe wyjście.
+
+00:18:49.780 --> 00:18:54.000
+A gdzieś w tej przestrzeni osobistej znajduje się strona, którą trzech współpracowników edytowało przez dwa miesiące.
+
+00:18:54.140 --> 00:18:54.920
+Co się z nią dzieje?
+
+00:18:55.060 --> 00:18:57.980
+To zależy od tego, gdzie się znajduje i co mówią twoje reguły przechowywania.
+
+00:18:58.200 --> 00:19:00.360
+W wielu konfiguracjach strona podąża za kontem.
+
+00:19:00.540 --> 00:19:05.480
+Po usunięciu konta zawartość przechodzi przez tę samą ścieżkę usuwania, co wszystko inne powiązane z tą osobą.
+
+00:19:05.700 --> 00:19:09.960
+Jeśli nikt jej nie skopiował, jeśli nikt jej nie przeniósł gdzieś, gdzie ma właściciela, może po prostu zniknąć.
+
+00:19:10.080 --> 00:19:14.480
+Albo ma status usuniętego konta, do którego dostęp ma tylko administrator i tylko wtedy, gdy ktoś wie, że może zapytać.
+
+00:19:14.480 --> 00:19:17.380
+Tak czy inaczej, osoby korzystające z tej strony dowiadują się o tym w najgorszy sposób.
+
+00:19:17.600 --> 00:19:18.640
+Link przestaje działać.
+
+00:19:18.780 --> 00:19:20.100
+Nikt nie wie, do kogo zadzwonić.
+
+00:19:20.240 --> 00:19:21.620
+I tu pojawia się ta cicha część.
+
+00:19:21.860 --> 00:19:24.160
+Nikt nie podejmuje decyzji zespołowej na stronie osobistej.
+
+00:19:24.240 --> 00:19:25.420
+To nie dzieje się na spotkaniu.
+
+00:19:25.580 --> 00:19:26.520
+To dzieje się w dryfie.
+
+00:19:26.720 --> 00:19:28.920
+Ktoś tworzy stronę o nazwie moje notatki drugiego pilota.
+
+00:19:29.100 --> 00:19:30.780
+Prywatna, szorstka, po prostu w myślach.
+
+00:19:30.900 --> 00:19:33.660
+Tydzień później udostępnia ją jednemu współpracownikowi, aby uzyskać drugą opinię.
+
+00:19:34.040 --> 00:19:35.180
+Współpracownik dodaje tabelę.
+
+00:19:35.360 --> 00:19:36.600
+Ktoś inny otrzymuje link.
+
+00:19:36.600 --> 00:19:39.320
+Menedżer to czyta i mówi, dobrze, wybieramy opcję drugą.
+
+00:19:39.520 --> 00:19:48.540
+Nikt niczego nie ogłosił, ale ta strona teraz zawiera decyzję, która znajduje się w przestrzeni osobistej pod osobistym tytułem, z imieniem i nazwiskiem jednej osoby jako właścicielem, a tytuł nigdy się nie zmienia.
+
+00:19:48.760 --> 00:19:50.520
+Nadal widnieje tam napis moje notatki.
+
+00:19:50.700 --> 00:19:51.860
+To jest ta dziwna część.
+
+00:19:52.080 --> 00:19:56.460
+Etykieta na stronie informuje, że jest prywatna, podczas gdy sama strona wykonuje pracę rekordu zespołu.
+
+00:19:56.640 --> 00:19:59.740
+Nie da się tego naprawić lepszym edytorem ani inteligentniejszym komunikatem.
+
+00:20:00.080 --> 00:20:04.540
+Rozwiązaniem musi być krok, celowo nazwany krok, w którym osobisty artefakt staje się współdzielony.
+
+00:20:04.780 --> 00:20:05.880
+Nazwijmy to promocją.
+
+00:20:06.120 --> 00:20:15.920
+Ktoś patrzy na strony i pyta, czy to zasługuje na miejsce u właściciela, czy to nadal myślenie, czy już działająca treść, a jeśli to działająca treść, przenosi się do kontenera należącego do zespołu, a nie do osoby.
+
+00:20:16.140 --> 00:20:17.720
+Ten krok nie może być automatyczny.
+
+00:20:17.960 --> 00:20:22.680
+System nie potrafi odróżnić wersji roboczej, którą ktoś porzucił, od wersji roboczej, która po cichu stała się polityką.
+
+00:20:22.920 --> 00:20:30.840
+Osoba musi podjąć tę decyzję i musi wiedzieć, że ona istnieje, ponieważ bez niej decyzja jest podejmowana domyślnie, a domyślne ustawienie mówi, że ten, kto kliknął pierwszy, jest właścicielem.
+
+00:20:30.840 --> 00:20:32.360
+To nie jest model zarządzania.
+
+00:20:34.540 --> 00:20:43.320
+Potrzebujemy jasnego momentu, w którym własność przechodzi z osoby na zespół, ale aby zaprojektować ten moment musimy zrozumieć, kto może faktycznie widzieć i edytować te rzeczy we wszystkich pięciu miejscach.
+
+00:20:43.480 --> 00:20:45.800
+Uprawnienia to miejsce, w którym staje się to praktyczne.
+
+00:20:46.060 --> 00:20:51.280
+Model uprawnień we wszystkich pięciu miejscach, pięć narzędzi, pięć sposobów odpowiedzi na jedno pytanie, kto się do niego dostaje.
+
+00:20:51.540 --> 00:20:54.040
+Zacznij od zespołów, ponieważ najlepiej ukrywają odpowiedź.
+
+00:20:54.220 --> 00:20:59.060
+Zespół wygląda jak osobna rzecz, kanały, czaty, karta plików, ale pliki nie znajdują się w zespołach.
+
+00:20:59.060 --> 00:21:04.040
+Każdy zespół znajduje się nad grupą Microsoft 365, a za tą grupą znajduje się witryna programu SharePoint.
+
+00:21:04.040 --> 00:21:08.260
+Członkostwo w zespole to członkostwo w grupie, a członkostwo w grupie otwiera witrynę.
+
+00:21:08.480 --> 00:21:11.280
+Dodając kogoś do zespołu, nie ustawiasz uprawnień do czatu.
+
+00:21:11.480 --> 00:21:12.540
+Ustawiasz je w witrynie.
+
+00:21:12.780 --> 00:21:14.240
+Właściciele mają pełną kontrolę.
+
+00:21:14.360 --> 00:21:15.660
+Członkowie mają prawa do edycji.
+
+00:21:15.840 --> 00:21:16.540
+To cały model.
+
+00:21:16.740 --> 00:21:20.260
+Pliki udostępniane w kanale trafiają do biblioteki tej witryny i dziedziczą ten dostęp.
+
+00:21:20.500 --> 00:21:24.680
+Kanały prywatne i współdzielone znajdują się w swoich własnych witrynach z własnymi listami członków, gdzie robi się bałagan.
+
+00:21:24.680 --> 00:21:26.020
+Ale zasada obowiązuje.
+
+00:21:26.200 --> 00:21:27.440
+Teams niczego nie przechowuje.
+
+00:21:27.680 --> 00:21:29.940
+Wskazuje na pamięć masową, a pamięć masowa decyduje.
+
+00:21:30.160 --> 00:21:34.860
+Sam SharePoint to najstarszy model w zestawie i szczerze mówiąc najbardziej przejrzysty element folderu biblioteki witryny.
+
+00:21:34.980 --> 00:21:35.520
+Cztery poziomy.
+
+00:21:35.700 --> 00:21:37.060
+Uprawnienia spływają z góry.
+
+00:21:37.280 --> 00:21:39.220
+Właściciel witryny może otworzyć wszystko poniżej.
+
+00:21:39.440 --> 00:21:41.520
+Biblioteka może się odłączyć i uzyskać własną listę.
+
+00:21:41.700 --> 00:21:43.060
+Folder może się odłączyć ponownie.
+
+00:21:43.280 --> 00:21:45.440
+Nawet pojedynczy plik może zawierać unikalną grupę osób.
+
+00:21:45.600 --> 00:21:46.160
+To drzewo.
+
+00:21:46.160 --> 00:21:47.720
+Możesz je narysować na tablicy.
+
+00:21:47.860 --> 00:21:52.340
+A ponieważ jest to drzewo, możesz odpowiedzieć na trudne pytanie jednym kliknięciem, kto może otworzyć ten plik i dlaczego.
+
+00:21:52.600 --> 00:21:55.900
+Odpowiedź zawsze tam jest odziedziczona z witryny lub celowo ustawiona niżej.
+
+00:21:56.080 --> 00:21:57.540
+Ta przejrzystość ma swoją cenę.
+
+00:21:57.720 --> 00:22:00.980
+Za każdym razem, gdy ktoś narusza zasady dziedziczenia, drzewo staje się trudniejsze do odczytania.
+
+00:22:01.140 --> 00:22:04.420
+50 unikalnych uprawnień do 50 plików i nikt nie wie, jaka była reguła.
+
+00:22:04.560 --> 00:22:06.000
+Ale sam model jest uczciwy.
+
+00:22:06.300 --> 00:22:07.480
+Podpowiada, gdzie szukać.
+
+00:22:07.620 --> 00:22:10.100
+OneNote działa inaczej i zależy od twojej pozycji.
+
+00:22:10.340 --> 00:22:11.980
+Notatnik to coś, co udostępniasz.
+
+00:22:11.980 --> 00:22:14.120
+Podajesz komuś notatnik, a on go otrzymuje.
+
+00:22:14.280 --> 00:22:17.160
+Prawa do edycji, prawa do przeglądania to jest poziom, na którym jest zbudowany.
+
+00:22:17.380 --> 00:22:20.140
+Wewnątrz niego sekcje i strony w większości podążają za notatnikiem.
+
+00:22:20.340 --> 00:22:27.480
+Istnieje stara funkcja hasła sekcji, która nadal pojawia się w sieci, co oznacza, że niektóre treści w notatniku mogą być zablokowane przed osobami, które w przeciwnym razie miałyby pełny dostęp.
+
+00:22:27.720 --> 00:22:29.220
+Nikt nie pamięta, żeby to ustawić.
+
+00:22:29.320 --> 00:22:31.660
+To przyłapuje ludzi, a potem jest jeszcze lokalizacja.
+
+00:22:31.860 --> 00:22:33.000
+Notatnik OneNote to plik.
+
+00:22:33.200 --> 00:22:36.200
+Znajduje się w usłudze OnDrive w bibliotece programu SharePoint lub w obszarze plików zespołu.
+
+00:22:36.200 --> 00:22:37.520
+Który z nich decyduje o wszystkim?
+
+00:22:37.740 --> 00:22:40.160
+Notatnik w usłudze OnDrive kogoś podąża za tą osobą.
+
+00:22:40.300 --> 00:22:42.360
+Notatnik w witrynie zespołu podąża za zespołem.
+
+00:22:42.520 --> 00:22:47.000
+Ten sam notatnik, te same sekcje, zupełnie inna historia dostępu w zależności od folderu, w którym został zapisany.
+
+00:22:47.180 --> 00:22:49.140
+OneNote nie ma więc własnego modelu uprawnień.
+
+00:22:49.280 --> 00:22:51.460
+Pożycza jeden z dowolnego miejsca, w którym się znajduje.
+
+00:22:51.580 --> 00:22:53.320
+To prowadzi nas do stron lub i kopilot.
+
+00:22:53.500 --> 00:22:55.220
+I tutaj dwie rzeczy działają jednocześnie.
+
+00:22:55.400 --> 00:22:57.140
+Po pierwsze, członkostwo w kontenerze.
+
+00:22:57.340 --> 00:23:01.380
+Jeśli obszar roboczy lub jest domem osoby w tym obszarze roboczym, mają dostęp do jego zawartości.
+
+00:23:01.620 --> 00:23:03.220
+Dodaj członka, a zobaczy on strony.
+
+00:23:03.220 --> 00:23:06.060
+Usunięcie go spowoduje, że strony znikną z jego widoku.
+
+00:23:06.220 --> 00:23:07.860
+Po drugie, udostępnianie linków.
+
+00:23:07.980 --> 00:23:10.880
+Pojedynczy komponent lub pojedyncza strona mogą być udostępniane osobno.
+
+00:23:11.040 --> 00:23:16.720
+Ktoś wysyła link, a osoba po drugiej stronie może otworzyć ten jeden element, nie będąc w ogóle w obszarze roboczym lub nie wiedząc o jego istnieniu.
+
+00:23:16.920 --> 00:23:18.480
+Dwoje drzwi do tego samego pomieszczenia.
+
+00:23:18.740 --> 00:23:20.340
+Jedne to członkostwo, drugie to link.
+
+00:23:20.480 --> 00:23:23.860
+A w przypadku strony kopilot w czyjejś przestrzeni osobistej nie ma w ogóle obszaru roboczego.
+
+00:23:24.100 --> 00:23:25.260
+Link jest jedynymi drzwiami.
+
+00:23:25.440 --> 00:23:27.620
+To, z kim się udostępniasz, stanowi cały model uprawnień.
+
+00:23:27.780 --> 00:23:28.380
+Połączmy to.
+
+00:23:28.380 --> 00:23:30.160
+Teams uzyskuje dostęp z grupy.
+
+00:23:30.320 --> 00:23:31.820
+SharePoint uzyskuje go z drzewa.
+
+00:23:31.980 --> 00:23:33.480
+OneNote pożycza to z folderu.
+
+00:23:33.600 --> 00:23:35.700
+Pętla i strony mieszają kontener z linkami.
+
+00:23:35.900 --> 00:23:36.500
+Cztery modele.
+
+00:23:36.640 --> 00:23:42.260
+Jeden z nich po cichu zastępuje inne, ponieważ członkostwo to coś, co ustawiasz raz celowo i co jakiś czas przeglądasz.
+
+00:23:42.480 --> 00:23:45.560
+Link to coś, co tworzysz dwoma kliknięciami, myśląc o czymś innym.
+
+00:23:45.740 --> 00:23:49.280
+I właśnie tamto, co miałeś na myśli i to, co się faktycznie wydarzyło, zaczynają się rozchodzić.
+
+00:23:49.400 --> 00:23:50.560
+Linki do udostępniania.
+
+00:23:50.760 --> 00:23:52.600
+Gdzie intencja oddziela się od rzeczywistości.
+
+00:23:52.800 --> 00:23:55.200
+Każdy link do udostępniania występuje w jednym z kilku typów.
+
+00:23:55.200 --> 00:23:57.160
+Pierwszym są osoby w Twojej organizacji.
+
+00:23:57.360 --> 00:23:59.600
+Każdy w dzierżawie, który otrzyma link, może go otworzyć.
+
+00:23:59.780 --> 00:24:00.600
+Nie jest wymagana nazwa.
+
+00:24:00.720 --> 00:24:02.300
+Nie jest wymagane członkostwo w obszarze roboczym.
+
+00:24:02.520 --> 00:24:04.780
+Jeśli mają adres URL i konto służbowe, są włączeni.
+
+00:24:05.020 --> 00:24:06.220
+Drugim są określone osoby.
+
+00:24:06.560 --> 00:24:07.320
+Wpisujesz nazwy.
+
+00:24:07.540 --> 00:24:08.960
+Tylko te konta mogą go otworzyć.
+
+00:24:09.120 --> 00:24:11.220
+Przekaż link komuś innemu, a nie zadziała on dla nich.
+
+00:24:11.360 --> 00:24:13.940
+To najbardziej rygorystyczna opcja i to z niej ludzie korzystają najrzadziej.
+
+00:24:14.140 --> 00:24:15.020
+Trzecim jest każdy.
+
+00:24:15.280 --> 00:24:17.000
+Bez logowania, bez sprawdzania konta.
+
+00:24:17.140 --> 00:24:18.840
+Ktokolwiek posiada link, posiada dostęp.
+
+00:24:18.840 --> 00:24:21.680
+Dotyczy to również osób spoza Twojej firmy, które nigdy nie miały licencji.
+
+00:24:21.840 --> 00:24:23.480
+Trzy typy, trzy bardzo różne obietnice.
+
+00:24:23.720 --> 00:24:25.380
+Który z nich otrzymuje użytkownik domyślnie?
+
+00:24:25.500 --> 00:24:27.340
+To zależy od dwóch czynników połączonych ze sobą.
+
+00:24:27.500 --> 00:24:29.660
+Pierwszy to domyślny typ łącza ustawiony przez dzierżawcę.
+
+00:24:29.880 --> 00:24:33.000
+Drugi to to, co użytkownik wybierze w oknie dialogowym udostępniania, o ile w ogóle wybierze.
+
+00:24:33.120 --> 00:24:35.520
+I oto część, która jest ważna większość osób nie wybiera.
+
+00:24:35.700 --> 00:24:38.400
+Klikają udostępni, kopiują link i wklejają go gdzieś indziej.
+
+00:24:38.660 --> 00:24:40.380
+Wysyłają to, co było wstępnie wybrane.
+
+00:24:40.380 --> 00:24:43.840
+Zatem domyślna polityka to polityka, a nie polityka pisemna, ta prawdziwa.
+
+00:24:44.000 --> 00:24:46.680
+Jeśli domyślnym typem łącza dzierżawcy są osoby w organizacji,
+
+00:24:46.780 --> 00:24:50.000
+to każde szybkie udostępnianie w firmie stało się szersze niż ktokolwiek planował.
+
+00:24:50.200 --> 00:24:53.440
+Jeśli dotyczy to konkretnych osób, tarcia rosną, a użytkownicy się irytują.
+
+00:24:53.660 --> 00:24:55.720
+Ustawienia dzierżawcy mogą ograniczać to, co jest dozwolone,
+
+00:24:55.780 --> 00:24:59.100
+a administrator może całkowicie wyłączyć łącza dla wszystkich lub ograniczyć je do określonych witryn.
+
+00:24:59.240 --> 00:25:01.400
+Ale limit zapobiega tylko najgorszym przypadkom.
+
+00:25:01.600 --> 00:25:04.980
+Nie zapobiega on codziennym spięciom między nami trzema, a każdym w budynku.
+
+00:25:05.140 --> 00:25:06.240
+Oto jak to się dzieje.
+
+00:25:06.240 --> 00:25:10.460
+Administrator tworzy czystą konfigurację pętlę obszaru roboczego dla projektu ośmiu nazwanych członków,
+
+00:25:10.560 --> 00:25:13.880
+przypisanych właścicieli etykietę poufności, która blokuje udostępnianie poza nim.
+
+00:25:14.040 --> 00:25:15.800
+Na drzewie uprawnień wygląda to na ścisłe.
+
+00:25:16.020 --> 00:25:19.360
+Następnie kierownik projektu potrzebuje współpracownika z innego działu, aby zobaczyć jedną stronę.
+
+00:25:19.520 --> 00:25:21.120
+Nie chce ich dodawać do obszaru roboczego.
+
+00:25:21.320 --> 00:25:22.400
+To wydaje się zbyt wiele.
+
+00:25:22.620 --> 00:25:26.280
+Klikka więc udostępnij na pojedynczej stronie, bierze domyślny link i umieszcza go w czacie.
+
+00:25:26.520 --> 00:25:26.920
+Gotowe.
+
+00:25:27.080 --> 00:25:27.660
+5 sekund.
+
+00:25:27.660 --> 00:25:31.680
+Ten jeden link właśnie utworzył drugie drzwi i całkowicie ignoruje listę ośmiu członków.
+
+00:25:31.880 --> 00:25:34.820
+Każdy w firmie, kto znajdzie ten adres URL, może otworzyć stronę.
+
+00:25:35.000 --> 00:25:36.900
+Ktoś przekazuje go do zespołu 40 osób.
+
+00:25:37.120 --> 00:25:38.760
+Ktoś wkleja go do dokumentu planowania.
+
+00:25:39.020 --> 00:25:42.460
+Starannie zbudowane drzewo nadal tam jest, nadal poprawne, nadal wskazuje 8 osób.
+
+00:25:42.620 --> 00:25:44.500
+A prawdziwa publiczność jest o wiele większa.
+
+00:25:44.700 --> 00:25:45.660
+Nikt nie złamał zasady.
+
+00:25:45.860 --> 00:25:47.740
+Członkostwo w obszarze roboczym nigdy się nie zmieniło.
+
+00:25:47.740 --> 00:25:50.800
+Link po prostu działa obok niego, dlatego tak trudno to zauważyć.
+
+00:25:51.000 --> 00:25:52.120
+Członkostwo jest widoczne.
+
+00:25:52.340 --> 00:25:53.960
+Możesz otworzyć listę członków i policzyć.
+
+00:25:54.180 --> 00:25:55.940
+Link jest niewidoczny, dopóki się nie obejrzysz.
+
+00:25:56.140 --> 00:25:57.660
+Nawet wtedy trzeba wiedzieć, gdzie szukać.
+
+00:25:57.760 --> 00:25:59.640
+Co więc administrator może faktycznie zobaczyć?
+
+00:25:59.760 --> 00:26:01.940
+W przypadku plików w SharePoint i OnDrive całkiem sporo.
+
+00:26:02.180 --> 00:26:05.500
+Można otworzyć witrynę, sprawdzić udostępnianie, zobaczyć, które elementy mają linki i jakiego typu są.
+
+00:26:05.680 --> 00:26:09.340
+Istnieją raporty narzędzia wyszukiwania i narzędzia do wyszukiwania, które umożliwiają znajdowanie udostępnianej zawartości.
+
+00:26:09.540 --> 00:26:11.760
+W przypadku Loop i Pages obraz jest bardziej ograniczony.
+
+00:26:11.760 --> 00:26:15.160
+Można zarządzać kontenerami, stosować zasady i uruchamiać wyszukiwania,
+
+00:26:15.160 --> 00:26:20.460
+ale trudniej jest uzyskać codzienny widok tego, kto komu udostępnił dany komponent za pośrednictwem, którego łącza.
+
+00:26:20.620 --> 00:26:25.360
+Komponenty znajdujące się w osobistej pamięci masowej podążają za historią udostępniania OnDrive tej osoby.
+
+00:26:25.580 --> 00:26:31.060
+Komponenty w obszarze roboczym podążają za kontenerem, a strony w czyjejś przestrzeni pojawiają się głównie jako elementy w tej przestrzeni.
+
+00:26:31.200 --> 00:26:35.060
+Tak więc szczera odpowiedź brzmi, można zobaczyć więcej niż nic i mniej niż by się chciało.
+
+00:26:35.220 --> 00:26:39.400
+Ta luka jest powodem, aby zweryfikować raporty własnej dzierżawy, zanim komukolwiek o tym powiesz,
+
+00:26:39.500 --> 00:26:43.160
+ponieważ łącze nie tylko udostępnia zawartość, ale także udostępnia jej przyszłość.
+
+00:26:43.160 --> 00:26:48.360
+Cokolwiek stanie się dalej, czy rozrośnie się, zostanie edytowane, skopiowane lub zestarzeje się, dzieje się z tą grupą odbiorców,
+
+00:26:48.460 --> 00:26:54.160
+co prowadzi do pytania, na które większość zespołów nigdy nie odpowiada, a mianowicie jak udostępniane są treści, jak długo powinny istnieć.
+
+00:26:54.380 --> 00:26:57.180
+Cykl życia zaczyna się od utworzenia, a nie od czyszczenia.
+
+00:26:57.420 --> 00:27:03.040
+Każda treść ma swoje życie. Zaczyna się gdzieś. Jest używana przez jakiś czas i w pewnym momencie powinna się zatrzymać.
+
+00:27:03.160 --> 00:27:05.000
+To narodziny, życie zawodowe i koniec.
+
+00:27:05.160 --> 00:27:09.220
+Trzy fazy. Większość organizacji planuje dokładnie jedną z nich, zazwyczaj ostatnią.
+
+00:27:09.220 --> 00:27:14.860
+Harmonogramy przechowywania, zasady usuwania, zasady archiwizacji, wszystko to jest zapisane na moment, w którym treść powinna zniknąć.
+
+00:27:14.960 --> 00:27:18.600
+Ale nikt nie zapisuje pierwszej fazy. Nikt nie decyduje, jak wygląda początek.
+
+00:27:18.760 --> 00:27:21.120
+Zróbmy to więc. Zacznijmy od prostej obserwacji.
+
+00:27:21.300 --> 00:27:24.300
+Nie wszystkie treści są takie same, nawet jeśli znajdują się w tym samym narzędziu.
+
+00:27:24.460 --> 00:27:28.380
+Szorstka lista pomysłów, którą wpisałeś w dwie minuty, nie jest tym samym, co zatwierdzony plan projektu.
+
+00:27:28.560 --> 00:27:33.100
+Obie mogą być stroną. Obie mogą mieć przycisk udostępniania, ale jedna jest od podstaw, a druga rekordowa.
+
+00:27:33.100 --> 00:27:35.540
+Te dwie rzeczy nie mogą dzielić domu. Oto dlaczego.
+
+00:27:35.860 --> 00:27:43.840
+Dokument potrzebuje zasad. Potrzebuje znanego właściciela określonego okresu przechowywania etykiety odpowiadającej jego wrażliwości i miejsca, w którym ktoś będzie mógł go znaleźć w ciągu trzech lat.
+
+00:27:44.040 --> 00:27:48.220
+Scratch nie potrzebuje niczego takiego. Scratch musi być szybki, tani i łatwy do wyrzucenia.
+
+00:27:48.400 --> 00:27:52.460
+Umieść Scratch w miejscu przeznaczonym do przechowywania dokumentów, a zakopujesz prawdziwe dokumenty pod szumem.
+
+00:27:52.620 --> 00:27:54.800
+Wyszukiwanie zapełnia się niedokończonymi wersjami roboczymi.
+
+00:27:55.000 --> 00:27:56.580
+Ludzie przestają ufać temu, co znajdą.
+
+00:27:56.580 --> 00:27:59.700
+Umieść dokumenty w miejscu przeznaczonym do przechowywania dokumentów, a stanie się odwrotnie.
+
+00:27:59.840 --> 00:28:04.260
+Coś, co firma musi przechowywać, znajduje się w przestrzeni osobistej, bez właściciela czekającego na zamknięcie konta.
+
+00:28:04.380 --> 00:28:05.940
+Oba błędy mają to samo źródło.
+
+00:28:06.140 --> 00:28:09.460
+Treść została umieszczona gdzieś, zanim ktokolwiek zapytał, jaki to rodzaj treści.
+
+00:28:09.720 --> 00:28:11.000
+Nadajmy jej więc kształt.
+
+00:28:11.080 --> 00:28:11.680
+Trzy stany.
+
+00:28:11.880 --> 00:28:13.080
+Pierwszy to myślenie robocze.
+
+00:28:13.200 --> 00:28:15.020
+Jedna osoba, szorstkie, niesprawdzone.
+
+00:28:15.180 --> 00:28:20.300
+To jest odpowiedź drugiego pilota, której nie przeczytałeś dwa razy, lub konspekt, który wpisałeś do komponentu pętli, aby zobaczyć, jak wygląda.
+
+00:28:20.300 --> 00:28:33.640
+Jest z natury prywatny, może być błędny, jego dom jest osobisty, jego życie jest krótkie, drugim jest wspólna praca, mała grupa buduje teraz coś razem, treść jest aktywna, ludzie ją edytują, rzeczy zmieniają się codziennie, nie jest już tylko twoja.
+
+00:28:33.820 --> 00:28:38.760
+Potrzebuje czegoś, co należy do grupy z nazwanymi właścicielami, aby przetrwało, gdy jedna osoba odejdzie, ale nie jest to ostateczne.
+
+00:28:38.960 --> 00:28:40.800
+Nikt nie powinien traktować tego jako odpowiedzi.
+
+00:28:40.980 --> 00:28:42.420
+Pierwszym jest uzgodniony zapis.
+
+00:28:42.580 --> 00:28:43.420
+Ktoś zdecydował.
+
+00:28:43.620 --> 00:28:45.400
+Treść mówi, co oznacza organizacja.
+
+00:28:45.640 --> 00:28:46.960
+Inni będą na niej polegać.
+
+00:28:46.960 --> 00:28:52.340
+To jest stan, który potrzebuje kontrolowanego domu etykiety, reguły przechowywania i właściciela, który jest rolą, a nie tylko nazwą.
+
+00:28:52.540 --> 00:28:54.920
+Szkic myślenia, wspólna praca, uzgodniony zapis.
+
+00:28:55.140 --> 00:28:56.220
+Zauważ, co je dzieli.
+
+00:28:56.400 --> 00:28:57.160
+To nie narzędzie.
+
+00:28:57.360 --> 00:28:58.020
+To nie format.
+
+00:28:58.220 --> 00:29:01.520
+To odbiorcy i poziom zaufania, jaki odbiorcy mogą dać treści.
+
+00:29:01.720 --> 00:29:03.380
+I tutaj zazwyczaj zawodzi zarządzanie.
+
+00:29:03.620 --> 00:29:05.780
+Większość programów wkłada swoją energię w trzeci stan.
+
+00:29:05.940 --> 00:29:06.540
+To ma sens.
+
+00:29:06.740 --> 00:29:08.020
+To tam mieszka zespół do spraw.
+
+00:29:08.300 --> 00:29:08.740
+Zgodności.
+
+00:29:08.940 --> 00:29:10.140
+To tam sprawdzają audytorzy.
+
+00:29:10.280 --> 00:29:11.920
+To tam zły wynik kosztuje prawdziwe pieniądze.
+
+00:29:11.920 --> 00:29:13.820
+Zatem etykiety są projektowane dla dokumentacji.
+
+00:29:13.820 --> 00:29:16.060
+Harmonogramy przechowywania są tworzone dla dokumentacji.
+
+00:29:16.260 --> 00:29:18.780
+Szkolenie wyjaśnia, jak prawidłowo archiwizować dokumentację.
+
+00:29:18.980 --> 00:29:21.460
+Tymczasem dwa pierwsze stany wymykają się spod kontroli.
+
+00:29:21.600 --> 00:29:23.780
+Pomyśl, gdzie tak naprawdę kumuluje się ryzyko.
+
+00:29:23.940 --> 00:29:26.580
+Tysiące wersji roboczych tworzonych codziennie w przestrzeniach osobistych,
+
+00:29:26.720 --> 00:29:30.140
+setki współdzielonych stron roboczych edytowanych przez grupy bez właściciela na papierze.
+
+00:29:30.320 --> 00:29:31.400
+Nic z tego nie jest liczone.
+
+00:29:31.560 --> 00:29:32.520
+Nic nie jest sprawdzane.
+
+00:29:32.680 --> 00:29:37.900
+A część, której nikt nie śledzi, po cichu przekształca się w prawdziwy dokument, nigdy nie będąc jako taki archiwizowanym.
+
+00:29:37.900 --> 00:29:38.920
+Taki jest schemat.
+
+00:29:39.160 --> 00:29:40.620
+Stan końcowy przyciąga uwagę.
+
+00:29:40.620 --> 00:29:42.420
+Pierwsze dwa stany stwarzają problem.
+
+00:29:42.660 --> 00:29:45.860
+Tak więc plan cyklu życia, który zaczyna się od czyszczenia, zaczyna się za późno.
+
+00:29:46.060 --> 00:29:49.600
+Do tego czasu treść już dryfuje, jest udostępniana, cytowana i zaufana.
+
+00:29:49.880 --> 00:29:52.200
+Jedynym uczciwym miejscem do rozpoczęcia jest tworzenie.
+
+00:29:52.400 --> 00:29:53.220
+W jakim jest stanie?
+
+00:29:53.500 --> 00:29:54.440
+Gdzie ten stan należy?
+
+00:29:54.640 --> 00:29:56.480
+A trudniejsze pytanie pojawia się tuż za nim.
+
+00:29:56.660 --> 00:29:58.120
+Treść nie pozostaje w jednym stanie.
+
+00:29:58.400 --> 00:30:00.040
+Wersja robocza staje się pracą współdzieloną.
+
+00:30:00.200 --> 00:30:01.820
+Praca współdzielona staje się dokumentem.
+
+00:30:02.000 --> 00:30:03.400
+Każde z tych przesunięć to ruch.
+
+00:30:03.400 --> 00:30:06.880
+Osoba lub proces musi przenieść treść z jednego domu do drugiego.
+
+00:30:07.100 --> 00:30:08.800
+Jak więc właściwie przebiega ten ruch?
+
+00:30:08.800 --> 00:30:10.940
+Ścieżka awansu od myślenia do zapisu.
+
+00:30:11.140 --> 00:30:12.740
+Treść porusza się w trzech krokach.
+
+00:30:12.900 --> 00:30:14.360
+Każdy krok ma swoje własne miejsce.
+
+00:30:14.720 --> 00:30:15.880
+Zacznij od szkicu myślenia.
+
+00:30:16.000 --> 00:30:18.720
+To właśnie tam strony kopilota i komponenty pętli pasują najlepiej.
+
+00:30:18.900 --> 00:30:22.500
+Prosisz kopilota o podsumowanie wątku, wyciągasz odpowiedź na stronę i zaczynasz ją poprawiać,
+
+00:30:22.580 --> 00:30:25.420
+albo wrzucasz szybką tabelę do komponentu pętli, aby przetestować pomysł.
+
+00:30:25.660 --> 00:30:27.360
+Znajduje się on w twojej własnej przestrzeni.
+
+00:30:27.600 --> 00:30:28.560
+Nikt inny go nie widzi.
+
+00:30:28.720 --> 00:30:29.260
+O to chodzi.
+
+00:30:29.260 --> 00:30:32.320
+Możesz się tu pomylić i możesz to usunąć jutro, a nic się nie zepsuje.
+
+00:30:32.540 --> 00:30:34.060
+Wtedy treść zyskuje drugi dom.
+
+00:30:34.280 --> 00:30:37.100
+Współdzielona praca powinna znajdować się w miejscu, które należy do grupy.
+
+00:30:37.260 --> 00:30:39.260
+Przestrzeń robocza pętli sprawdza się w tym przypadku dobrze,
+
+00:30:39.380 --> 00:30:41.820
+podobnie jak kanał Teams z plikiem znajdującym się w witrynie kanału.
+
+00:30:42.020 --> 00:30:44.600
+Ważne jest, aby kontener miał nazwanych właścicieli i listę członków,
+
+00:30:44.720 --> 00:30:46.840
+a nie konto jednej osoby, które wszystko trzyma w całości.
+
+00:30:47.060 --> 00:30:50.340
+Teraz, gdy ktoś idzie na urlop lub odchodzi z firmy, praca pozostaje dostępna.
+
+00:30:50.340 --> 00:30:53.200
+Grupa może ją edytować, kłócić się o nią i zmieniać codziennie.
+
+00:30:53.320 --> 00:30:56.760
+To jeszcze nie jest finalne, ale nie jest już prywatne i nie udaje, że jest.
+
+00:30:56.760 --> 00:30:58.020
+Na końcu jest rekord.
+
+00:30:58.220 --> 00:31:01.220
+Rekord powinien być w SharePoint, witrynie, bibliotece wybranej celowo,
+
+00:31:01.360 --> 00:31:04.500
+metadanych określających, czym jest dokument oraz etykiety poufności,
+
+00:31:04.680 --> 00:31:06.020
+która odpowiada jego zawartości.
+
+00:31:06.200 --> 00:31:08.400
+To tutaj obowiązują czyste zasady przechowywania.
+
+00:31:08.580 --> 00:31:10.760
+To tutaj wyszukiwanie działa latami, a nie tygodniami,
+
+00:31:10.860 --> 00:31:13.240
+a właściciel pełni rolę podobną do kierownika do spraw.
+
+00:31:13.660 --> 00:31:16.200
+Zaopatrzenia, a nie osobę, która może zniknąć wiosną.
+
+00:31:16.400 --> 00:31:18.840
+Ścieżka wygląda więc tak, szkic w przestrzeni osobistej,
+
+00:31:18.920 --> 00:31:21.920
+praca we współdzielonym kontenerze, rekord w zarządzanej bibliotece.
+
+00:31:22.100 --> 00:31:23.020
+Proste na papierze.
+
+00:31:23.020 --> 00:31:25.060
+Trudność polega na tym, żeby wiedzieć, kiedy przenieść,
+
+00:31:25.140 --> 00:31:26.620
+ponieważ nic w narzędziach tego nie podpowiada,
+
+00:31:26.780 --> 00:31:29.300
+żadna strona nie żółknie, żaden baner nie mówi, że to teraz ważne.
+
+00:31:29.500 --> 00:31:32.060
+Treść po prostu tam leży i z każdym dniem zyskuje na wiarygodności,
+
+00:31:32.180 --> 00:31:34.360
+a przeniesienie następuje tylko wtedy, gdy ktoś to zauważy.
+
+00:31:34.520 --> 00:31:36.580
+Potrzebujemy więc wyzwalaczy prawdziwych zdarzeń,
+
+00:31:36.700 --> 00:31:37.960
+które wskazują czas na promocję.
+
+00:31:38.140 --> 00:31:39.680
+Pierwszym wyzwalaczem jest decyzja.
+
+00:31:39.880 --> 00:31:41.760
+Ktoś mówi, tak opcja druga, zaczynamy.
+
+00:31:41.900 --> 00:31:44.400
+W momencie wypowiedzenia tego zdania, treść, która się za nim kryje,
+
+00:31:44.520 --> 00:31:45.320
+przestaje być szkicem.
+
+00:31:45.520 --> 00:31:46.900
+Teraz to jest powód czegoś.
+
+00:31:46.900 --> 00:31:48.380
+Jeśli pozostaje na stronie osobistej,
+
+00:31:48.460 --> 00:31:50.840
+decyzja jest przechowywana w miejscu, którego nikt inny nie znajdzie.
+
+00:31:51.040 --> 00:31:52.520
+Zatem sama decyzja jest sygnałem.
+
+00:31:52.760 --> 00:31:54.400
+Decyzja podjęta, treść się przenosi.
+
+00:31:54.640 --> 00:31:56.520
+Drugim czynnikiem wyzwalającym jest przekazanie.
+
+00:31:56.660 --> 00:31:57.660
+Projekt zmienia właściciela.
+
+00:31:57.760 --> 00:31:58.740
+Rola zyskuje nową osobę.
+
+00:31:58.860 --> 00:31:59.740
+Zespół się reorganizuje.
+
+00:31:59.880 --> 00:32:02.280
+Niezależnie od przyczyny, treść wkrótce straci jedyną osobę,
+
+00:32:02.380 --> 00:32:03.520
+która rozumiała, gdzie się znajduje.
+
+00:32:03.700 --> 00:32:05.660
+Zanim ta osoba odejdzie, treść potrzebuje domu,
+
+00:32:05.820 --> 00:32:06.960
+który nie będzie od niej zależny.
+
+00:32:07.120 --> 00:32:09.240
+Przekazanie to ostateczny termin i jest jednym z niewielu,
+
+00:32:09.320 --> 00:32:10.180
+których można się spodziewać.
+
+00:32:10.180 --> 00:32:12.560
+Trzecim czynnikiem wyzwalającym jest grupa odbiorców zewnętrznych,
+
+00:32:12.660 --> 00:32:14.440
+klient, partner, audytor, organ regulacyjny.
+
+00:32:14.580 --> 00:32:16.600
+Druga treść trafia do kogoś spoza firmy.
+
+00:32:16.840 --> 00:32:17.840
+Stawki się zmieniają.
+
+00:32:18.120 --> 00:32:21.160
+Udostępnianie linków, etykiet i przeglądy dostępu mają większe znaczenie.
+
+00:32:21.380 --> 00:32:23.500
+Treść, która była dobra dla pięcioosobowego zespołu,
+
+00:32:23.560 --> 00:32:25.620
+nie jest dobra w dniu, w którym klient mają otworzyć.
+
+00:32:25.820 --> 00:32:27.660
+Decyzja, przekazanie, grupa odbiorców zewnętrznych,
+
+00:32:27.740 --> 00:32:29.840
+wszystko jedno wystarczy, a jeśli czekasz na wszystkie trzy,
+
+00:32:29.940 --> 00:32:30.460
+czekasz za długo.
+
+00:32:30.620 --> 00:32:33.200
+Teraz możesz zauważyć pewien schemat w tych czynnikach wyzwalających.
+
+00:32:33.200 --> 00:32:34.680
+Żaden z nich nie dotyczy czasu.
+
+00:32:34.880 --> 00:32:37.200
+Treść nie jest promowana, ponieważ ma 30 dni.
+
+00:32:37.440 --> 00:32:39.400
+Jest promowana, ponieważ coś się z nią stało.
+
+00:32:39.520 --> 00:32:42.240
+To przydatny sposób myślenia o tym, ponieważ daje ludziom coś konkretnego,
+
+00:32:42.320 --> 00:32:43.280
+na co mogą zwrócić uwagę.
+
+00:32:43.540 --> 00:32:45.680
+Nie muszą oceniać, jak poważna wydaje się treść.
+
+00:32:45.920 --> 00:32:48.100
+Wystarczy, że zapytają, czy właśnie coś postanowiliśmy?
+
+00:32:48.300 --> 00:32:49.020
+Czy ktoś odchodzi?
+
+00:32:49.220 --> 00:32:50.300
+Czy to wychodzi na zewnątrz?
+
+00:32:50.460 --> 00:32:52.820
+Trzy pytania, łatwe do zapamiętania, łatwe do nauczenia.
+
+00:32:53.000 --> 00:32:54.140
+Ale tutaj ludzie się wahają.
+
+00:32:54.400 --> 00:32:56.100
+Wiedzą, że treść powinna zostać przeniesiona.
+
+00:32:56.280 --> 00:32:58.560
+Po prostu nie chcą jej przenosić i mają ku temu uzasadniony powód.
+
+00:32:58.740 --> 00:33:00.240
+Przenoszenie treści nie jest darmowe.
+
+00:33:00.240 --> 00:33:01.320
+Coś ginie po drodze.
+
+00:33:01.500 --> 00:33:05.180
+Historia wersji, komentarze, aktywne połączenia, linki, które inni już zapisali.
+
+00:33:05.400 --> 00:33:07.400
+Zanim więc poprosimy ludzi o promowanie czegokolwiek,
+
+00:33:07.520 --> 00:33:09.660
+musimy szczerze powiedzieć, ile kosztuje takie przeniesienie.
+
+00:33:09.840 --> 00:33:11.880
+Co się psuje, gdy treść zostaje przeniesiona?
+
+00:33:12.140 --> 00:33:15.120
+Zacznij od komponentu pętli, ponieważ ma on dwa sposoby podróżowania.
+
+00:33:15.400 --> 00:33:16.980
+Możesz go skopiować lub połączyć.
+
+00:33:17.180 --> 00:33:21.220
+Kopia usuwa treść z pliku kopii zapasowej i upuszcza statyczną wersję gdzie indziej.
+
+00:33:21.420 --> 00:33:25.620
+Wklej tekst do dokumentu Word, wyeksportuj tabelę do Excela, a otrzymasz migawkę.
+
+00:33:25.880 --> 00:33:29.160
+Wygląda dobrze od pierwszego dnia i przestaje nasłuchiwać w momencie dotarcia.
+
+00:33:29.160 --> 00:33:30.680
+Link utrzymuje połączenie.
+
+00:33:30.880 --> 00:33:33.660
+Nowa lokalizacja pokazuje podgląd na żywo tego samego pliku kopii zapasowej,
+
+00:33:33.740 --> 00:33:35.840
+tej samej zawartości, tych samych edycji, bez przesunięć,
+
+00:33:35.920 --> 00:33:37.640
+ale plik nadal znajduje się tam, gdzie był na początku.
+
+00:33:37.920 --> 00:33:39.200
+Linkowanie niczego nie zmienia.
+
+00:33:39.440 --> 00:33:43.060
+Dodaję kolejne miejsce do oglądania tego samego elementu z tym samym starym miejscem pod spodem.
+
+00:33:43.180 --> 00:33:44.020
+To pierwsza wymiana.
+
+00:33:44.260 --> 00:33:47.120
+Skopiuj go, a zyskasz nowy kontener, ale stracisz aktywną zawartość.
+
+00:33:47.240 --> 00:33:49.980
+Połącz go, a zachowasz aktywną zawartość, ale niczego nie promujesz.
+
+00:33:50.160 --> 00:33:51.280
+Tylko na niego wskazałeś.
+
+00:33:51.480 --> 00:33:53.360
+Większość ludzi nie wie, że dokonuje wyboru.
+
+00:33:53.360 --> 00:33:55.500
+Wklejają i cokolwiek się stanie, to się stanie.
+
+00:33:55.680 --> 00:33:58.720
+Teraz drugi koszt, co przenosi się wraz z zawartością, a co zostaje.
+
+00:33:58.940 --> 00:34:00.420
+Historia wersji należy do pliku.
+
+00:34:00.640 --> 00:34:02.880
+Kiedy kopiujesz zawartość, historia się nie pojawia.
+
+00:34:03.100 --> 00:34:06.420
+Nowy element zaczyna się od wersji pierwszej, z tobą jako autorem i dzisiejszą datą.
+
+00:34:06.600 --> 00:34:09.360
+Trzy tygodnie edycji, kto zmienił który wiersz, kto przepisał podsumowanie.
+
+00:34:10.140 --> 00:34:11.780
+Wszystko to pozostaje w starym pliku.
+
+00:34:12.020 --> 00:34:14.500
+Jeśli ktoś zapyta później, kiedy ta liczba się zmieniła,
+
+00:34:14.660 --> 00:34:17.480
+odpowiedź znajduje się w miejscu, do którego rekord już nie wskazuje.
+
+00:34:17.820 --> 00:34:18.980
+Komentarze są takie same.
+
+00:34:19.220 --> 00:34:20.480
+Są dołączone do oryginału.
+
+00:34:20.680 --> 00:34:23.600
+Wątek, w którym dwie osoby spierały się o liczbę, a następnie doszły do porozumienia,
+
+00:34:23.720 --> 00:34:26.180
+często jest najlepszym dowodem na to, dlaczego podjęto daną decyzję.
+
+00:34:26.320 --> 00:34:29.380
+Przenieś treść bez niej, a zachowasz wniosek, ale stracisz uzasadnienie.
+
+00:34:29.540 --> 00:34:31.520
+A synchronizacja na żywo zmienia zachowanie.
+
+00:34:31.780 --> 00:34:34.020
+Wewnątrz pętli wszyscy widzą zmiany na bieżąco.
+
+00:34:34.220 --> 00:34:37.000
+Gdy kopia trafi do biblioteki dokumentów, proces się zatrzymuje.
+
+00:34:37.240 --> 00:34:40.400
+Ludzie edytują starą i nową wersję równolegle i żadne z nich nie wie.
+
+00:34:40.660 --> 00:34:42.640
+Dwa pliki, ten sam tytuł, różne liczby.
+
+00:34:42.640 --> 00:34:43.940
+Tak rodzą się duplikaty.
+
+00:34:44.140 --> 00:34:47.280
+Nie przez nieuwagę, przez przeniesienie, które wyglądało na ukończone, a takie nie było.
+
+00:34:47.480 --> 00:34:49.180
+Potem są ciche, szkody, linki.
+
+00:34:49.360 --> 00:34:52.180
+Każdy, kto dotykał wersji roboczej, zapisał adres starej strony.
+
+00:34:52.440 --> 00:34:54.580
+Jest w wątkach czatu, w notatkach ze spotkań.
+
+00:34:54.760 --> 00:34:56.300
+Jest w e-mailu wysłanym w marcu.
+
+00:34:56.560 --> 00:34:59.600
+Jest w planie projektu, zakładce i wiadomości przypiętej do kanału.
+
+00:34:59.740 --> 00:35:03.060
+Promuj zawartość, a każda z nich nadal będzie kierować do starego miejsca.
+
+00:35:03.280 --> 00:35:04.900
+Teraz dzieje się jedna z dwóch rzeczy.
+
+00:35:05.160 --> 00:35:08.800
+Jeśli stara zawartość pozostanie, ludzie będą ją otwierać, edytować i ufać jej.
+
+00:35:08.800 --> 00:35:14.880
+Będą pracować nad wersją roboczą, podczas gdy rekord będzie nieprzeczytany w programie SharePoint, albo stara zawartość zostanie usunięta, a linki po prostu przestaną działać.
+
+00:35:14.980 --> 00:35:19.080
+Martwa strona, brak możliwości znalezienia wiadomości i ktoś pinguje osobę, która ją przeniosła.
+
+00:35:19.280 --> 00:35:21.340
+Żadna z tych sytuacji nie jest awarią techniczną.
+
+00:35:21.560 --> 00:35:24.520
+Obie są wynikiem przeniesienia bez planu dotyczącego tego, co pozostało.
+
+00:35:24.820 --> 00:35:27.760
+Rozwiązaniem nie jest zatem unikanie przenoszenia, lecz celowe działanie.
+
+00:35:28.000 --> 00:35:30.180
+Przemyślane promowanie ma kilka prostych skutków.
+
+00:35:30.400 --> 00:35:34.680
+Ktoś decyduje się na promowanie, celowo wybiera miejsce docelowe, znając już właściciela i etykietę.
+
+00:35:34.680 --> 00:35:40.160
+Przenosi to, co ważne, kluczowe komentarze, decyzje, notatkę o tym, gdzie znajduje się historia i zajmuje się starym miejscem.
+
+00:35:40.220 --> 00:35:46.380
+Albo zostaje ono oznaczone jako zastąpione ze wskaźnikiem do nowej lokalizacji, albo zostaje usunięte, a osoby, które posiadały stare łącze otrzymują o tym powiadomienie.
+
+00:35:46.520 --> 00:35:49.840
+To 5 minut pracy i dzieje się tak tylko wtedy, gdy ktoś jest właścicielem kroku.
+
+00:35:50.060 --> 00:35:52.380
+Bez tego zawartość przesuwa się przypadkowo lub wcale.
+
+00:35:52.600 --> 00:35:56.260
+Oba pozostawiają rekord, któremu nikt nie może zaufać i wersje robocze, których nikt nie może znaleźć.
+
+00:35:56.340 --> 00:35:58.700
+Ale nawet czysta promocja rozwiązuje tylko połowę problemu.
+
+00:35:58.700 --> 00:36:01.980
+Gdy zawartość znajdzie się we właściwym miejscu, zaczyna tykać inny zegar.
+
+00:36:02.100 --> 00:36:08.660
+Ponieważ wszystko, o czym do tej pory mówiliśmy, miejsca docelowe, linki, kopie zależy od jeszcze jednej rzeczy, jak długo cokolwiek z tego może przetrwać.
+
+00:36:08.860 --> 00:36:11.000
+Zachowania związane z przechowywaniem i usuwaniem.
+
+00:36:11.200 --> 00:36:15.700
+Przechowywanie to kwestia zasad, a zasady działają tylko wtedy, gdy docierają do miejsca, w którym znajduje się zawartość.
+
+00:36:15.880 --> 00:36:16.800
+Zacznij więc od tego.
+
+00:36:17.060 --> 00:36:22.960
+Zasady przechowywania w ramach Microsoft dotyczą lokalizacji skrzynek pocztowych Exchange, witryn SharePoint i kąt OnDrive.
+
+00:36:23.200 --> 00:36:27.840
+Zawartość pętli trafia do tych samych lokalizacji w zależności od miejsca, w którym znajduje się plik kopii zapasowej.
+
+00:36:27.840 --> 00:36:34.340
+Komponent utworzony w czacie lub wiadomości e-mail znajduje się w usłudze OnDrive twórcy, więc podlega zasadom, które zostały ustawione dla usługi OnDrive.
+
+00:36:34.500 --> 00:36:38.560
+Obszar roboczy znajduje się w osadzonym kontenerze, a ten kontener ma własny zakres zasad.
+
+00:36:38.780 --> 00:36:45.020
+Firma Microsoft dodała obsługę tej funkcji w ramach usługi Perview, ale szczegóły uległy zmianie z czasem, dlatego należy sprawdzić aktualną dokumentację dzierżawy.
+
+00:36:45.260 --> 00:36:47.800
+Strony kopilot i przestrzeń osobista działają w ten sam sposób.
+
+00:36:48.040 --> 00:36:51.500
+Są one przechowywane u użytkownika, więc zasady przechowywania danych użytkownika do niego docierają.
+
+00:36:51.660 --> 00:36:52.980
+Oto błąd, który się pojawia.
+
+00:36:52.980 --> 00:36:58.140
+Zespół tworzy jedną zasadę przechowywania dla witryn programu SharePoint i jedną dla usługi OnDrive i zakłada, że lub jest domyślnie objęty.
+
+00:36:58.320 --> 00:36:59.160
+Być może tak jest.
+
+00:36:59.380 --> 00:37:01.520
+Być może wybrany zakres pomija osadzone kontenery.
+
+00:37:01.760 --> 00:37:04.120
+Nikt tego nie sprawdza, ponieważ nic nie wygląda na nieprawidłowo.
+
+00:37:04.360 --> 00:37:08.760
+Strony po prostu pozostają poza regułami aż do dnia, w którym ktoś będzie ich potrzebował usunąć lub zachować.
+
+00:37:08.960 --> 00:37:15.000
+Przetestuj to, utwórz komponent, utwórz stronę i uruchom wyszukiwanie w ramach usługi Perview, aby sprawdzić, czy zasady i blokady ich dotyczą.
+
+00:37:15.000 --> 00:37:16.220
+Teraz przejrzyj konto.
+
+00:37:16.420 --> 00:37:20.600
+Użytkownik odchodzi, jego konto zostaje usunięte, a wszystko, co jest z nim powiązane, jest rejestrowane.
+
+00:37:20.800 --> 00:37:26.900
+Zawartość usługi OnDrive podlega okresowi przechowywania ustawionemu przez dzierżawę dla usuniętych użytkowników domyślnie 30 dni i można go przedłużyć.
+
+00:37:27.060 --> 00:37:32.240
+Po tym czasie pamięć osobista jest umieszczana w kolejce do usunięcia, chyba że zasady przechowywania lub blokada ją utrzymają.
+
+00:37:32.480 --> 00:37:36.700
+Dotyczy to tego, co znajduje się w środku komponentu z czatu strony Copilot, której nikt nie przeniósł.
+
+00:37:36.700 --> 00:37:42.180
+Jeśli znajdowała się w przestrzeni tej osoby, przechodzi przez tę ścieżkę i przetrwa tylko wtedy, gdy ktoś zareagował przed upływem czasu.
+
+00:37:42.460 --> 00:37:44.820
+Zawartość w kontenerze obszaru roboczego jest inna.
+
+00:37:45.020 --> 00:37:45.940
+Nie należy do konta.
+
+00:37:46.080 --> 00:37:50.500
+Pozostaje, ponieważ kontener pozostaje, ale jeśli ostatni właściciel zniknie, pozostaje bez nikogo, kto by nią zarządzał.
+
+00:37:50.620 --> 00:37:54.640
+Teraz siatka bezpieczeństwa i będę tutaj ostrożny, ponieważ ludzie polegają na niej bardziej niż powinni.
+
+00:37:54.820 --> 00:37:55.460
+Jest kosz.
+
+00:37:55.620 --> 00:37:59.700
+Gdy ktoś usunie plik w programie SharePoint lub OnDrive, trafia on do kosza pierwszego etapu.
+
+00:37:59.980 --> 00:38:01.600
+Użytkownicy mogą go sami przywrócić.
+
+00:38:01.600 --> 00:38:05.660
+Po upływie określonego czasu przenosi się do kosza drugiego etapu, do którego dostęp mają administratorzy.
+
+00:38:05.900 --> 00:38:09.600
+Standardowe okno wynosi 90 dni w obu etapach, liczone od pierwotnego usunięcia.
+
+00:38:10.320 --> 00:38:11.760
+Po tym czasie znika na stałe.
+
+00:38:12.000 --> 00:38:15.680
+Zawartość lub znajduje się na tej samej maszynie, ponieważ pliki kopii zapasowych są plikami,
+
+00:38:15.820 --> 00:38:19.940
+ale to, jak wygląda usuwanie z poziomu lub i jak można przywrócić usuniętą stronę lub obszar roboczy,
+
+00:38:20.100 --> 00:38:22.800
+zależy od wersji produktu i dostępnych narzędzi administracyjnych.
+
+00:38:22.960 --> 00:38:26.980
+Dlatego nie obiecuj kierownictwu czystego cofania, obiecaj okno i powiedz ludziom, że jest krótkie.
+
+00:38:27.180 --> 00:38:29.100
+Zasady przechowywania zmieniają ten obraz.
+
+00:38:29.100 --> 00:38:32.980
+Jeśli zasady mówią, zachowaj usunięty element, jest przechowywany w ukrytym obszarze przechowywania
+
+00:38:32.980 --> 00:38:35.020
+nawet po opróżnieniu wszystkich koszy przez użytkownika.
+
+00:38:35.260 --> 00:38:36.700
+Użytkownik myśli, że zniknął.
+
+00:38:37.020 --> 00:38:38.000
+Organizacja nadal go ma.
+
+00:38:38.200 --> 00:38:41.440
+Taki jest projekt, ale działa on tylko w lokalizacjach, które zasady faktycznie obejmują.
+
+00:38:41.680 --> 00:38:43.720
+Są też zespoły, w których ludzie mylą dwie rzeczy.
+
+00:38:43.960 --> 00:38:46.960
+Wiadomości czatu to jedno, a pliki, do których odwołuje się czat, to drugie.
+
+00:38:47.140 --> 00:38:50.800
+Przechowywanie czatu w Teams jest ustawione za pomocą własnych zasad dla czatów i wiadomości kanałowych.
+
+00:38:51.020 --> 00:38:53.820
+Może usunąć wiadomości po roku lub trzech latach lub zachować je na zawsze,
+
+00:38:53.820 --> 00:38:56.340
+ale plik udostępniony na czacie nie jest częścią wiadomości.
+
+00:38:56.580 --> 00:39:00.700
+Znajduje się on w usłudze OnDrive w przestrzeni nadawcy lub w witrynie SharePoint zespołu dla kanału.
+
+00:39:00.900 --> 00:39:03.280
+Możesz więc mieć politykę czatu, która usuwa wiadomość po roku,
+
+00:39:03.420 --> 00:39:07.140
+podczas gdy plik, do którego wskazywała, jest nadal aktywny lub odwrotnie politykę plików,
+
+00:39:07.260 --> 00:39:10.680
+która usuwa dokument, podczas gdy wiadomość z martwym linkiem pozostaje w wątku przez lata.
+
+00:39:10.920 --> 00:39:14.140
+Dwa zegary, dwie lokalizacje, rzadko ustawiane przez tę samą osobę.
+
+00:39:14.260 --> 00:39:16.420
+I zauważ, czego brakuje w każdej z tych reguł.
+
+00:39:16.640 --> 00:39:17.600
+Mówią Ci, jak długo.
+
+00:39:17.600 --> 00:39:20.640
+Nie mówią Ci, kto, kto otrzymuje połączenie, gdy wstrzymanie wymaga przeglądu,
+
+00:39:20.720 --> 00:39:23.300
+kto decyduje się na przedłużenie, kto zauważa, że kontener ucichł.
+
+00:39:23.380 --> 00:39:25.200
+Ta część retencji nie jest ustawieniem.
+
+00:39:25.460 --> 00:39:27.200
+Własność to ukryta połowa retencji.
+
+00:39:27.440 --> 00:39:29.380
+Osierocona treść i odchodzący właściciel.
+
+00:39:29.580 --> 00:39:32.380
+Pomyśl o tym, jak faktycznie jest wykorzystywana jedna część treści.
+
+00:39:32.640 --> 00:39:35.640
+Jedna osoba ją tworzy, strona drugiego pilota, komponent pętli, tabela,
+
+00:39:35.780 --> 00:39:37.140
+która zaczęła się jako szybki pomysł.
+
+00:39:37.400 --> 00:39:38.060
+Dzielą się nią.
+
+00:39:38.280 --> 00:39:41.520
+W ciągu miesiąca 11 osób ją otworzyło, 6 ją edytowało,
+
+00:39:41.520 --> 00:39:44.220
+a dwie wkleiły link do własnych dokumentów planistycznych.
+
+00:39:44.420 --> 00:39:47.600
+Jeden właściciel, wielu czytelników i ta luka stanowi cały problem.
+
+00:39:47.820 --> 00:39:50.460
+Każdy, kto jest zależny od treści, ma z nią relację.
+
+00:39:50.720 --> 00:39:53.100
+Tylko jedna osoba ma relację z magazynem pod nią.
+
+00:39:53.300 --> 00:39:56.380
+Kiedy ta osoba odchodzi, pozostałe 11 osób niczego nie zauważa.
+
+00:39:56.540 --> 00:39:57.020
+Jeszcze nie.
+
+00:39:57.260 --> 00:39:58.100
+Link nadal działa.
+
+00:39:58.380 --> 00:39:59.420
+Strona nadal się ładuje.
+
+00:39:59.660 --> 00:40:02.140
+Nic w interfejsie nie mówi, że właściciel właśnie wyszedł.
+
+00:40:02.260 --> 00:40:04.160
+Teraz spójrz, co robi proces odejścia.
+
+00:40:04.380 --> 00:40:06.420
+W większości organizacji to lista kontrolna.
+
+00:40:06.640 --> 00:40:09.880
+Wyłącz logowanie, zmień skrzynkę pocztową na współdzieloną lub zarchiwizuj ją,
+
+00:40:09.880 --> 00:40:12.320
+przyznaj menedżerowi dostęp do on-drive na określony czas,
+
+00:40:12.440 --> 00:40:14.100
+usuń licencję, może odbierz laptopa.
+
+00:40:14.200 --> 00:40:16.520
+Każdy element na tej liście został napisany lata temu.
+
+00:40:16.740 --> 00:40:19.120
+W świecie, w którym praca danej osoby znajdowała się w trzech miejscach,
+
+00:40:19.200 --> 00:40:21.160
+jej skrzynce pocztowej, jej plikach i jej kalendarzu.
+
+00:40:21.320 --> 00:40:22.700
+Pętla i strony na niej nie są.
+
+00:40:22.940 --> 00:40:24.060
+Nikt celowo nie zapomniał.
+
+00:40:24.300 --> 00:40:26.980
+Lista kontrolna została stworzona dla treści, które ludzie mogli nazwać.
+
+00:40:27.200 --> 00:40:29.220
+Menedżer uzyskuje dostęp do on-drive i myśli,
+
+00:40:29.380 --> 00:40:30.420
+dobrze, widzę jego pliki.
+
+00:40:30.600 --> 00:40:33.140
+Ale strona pilota znajdująca się w tej osobistej przestrzeni
+
+00:40:33.140 --> 00:40:34.500
+nie wygląda dla nikogo jak plik.
+
+00:40:34.500 --> 00:40:35.440
+Nie ma folderu.
+
+00:40:35.440 --> 00:40:38.060
+Nie pojawia się na liście, którą menedżer by przeskanował.
+
+00:40:38.220 --> 00:40:41.060
+A komponent utworzony na czacie to plik zapasowy o dziwnej nazwie
+
+00:40:41.060 --> 00:40:42.700
+zakopany gdzieś w pamięci konta.
+
+00:40:42.860 --> 00:40:44.960
+W ten sposób menedżer uzyskuje dostęp do stosu treści,
+
+00:40:45.120 --> 00:40:46.400
+których nie może odczytać jako system.
+
+00:40:46.580 --> 00:40:48.940
+30 dni później czas się kończy i cokolwiek nikt nie przeniósł.
+
+00:40:49.040 --> 00:40:49.820
+Znika wraz z kontem.
+
+00:40:50.020 --> 00:40:52.380
+Rozwiązanie nie polega na lepszym uporządkowaniu, jest wcześniejsze.
+
+00:40:52.800 --> 00:40:54.460
+Zaprojektowano do przeniesienia przed odejściem.
+
+00:40:54.600 --> 00:40:57.180
+Oznacza to, że pytanie zostaje zadane, gdy dana osoba nadal tu jest,
+
+00:40:57.280 --> 00:40:58.060
+a nie w ostatnim dniu.
+
+00:40:58.060 --> 00:40:59.720
+Jakie udostępnione treści posiadasz?
+
+00:40:59.840 --> 00:41:01.940
+Które strony są edytowane przez innych użytkowników?
+
+00:41:02.080 --> 00:41:04.700
+Które komponenty są kopią roboczą czegoś, na czym polega zespół?
+
+00:41:04.880 --> 00:41:07.580
+Krótki przegląd wbudowany w okres wypowiedzenia zajmuje godzinę.
+
+00:41:07.700 --> 00:41:09.660
+Odzyskanie tych samych treści po usunięciu konta
+
+00:41:09.660 --> 00:41:12.040
+wymaga zgłoszenia, administratora i mnóstwa nadziei.
+
+00:41:12.260 --> 00:41:14.220
+Lepiej jeszcze sprawić, by pytanie było zbędne.
+
+00:41:14.400 --> 00:41:16.720
+Jeśli współdzielona praca zawsze znajduje się tylko w kontenerach
+
+00:41:16.720 --> 00:41:18.860
+należących do grupy, to odchodząca osoba zabiera ze sobą
+
+00:41:18.860 --> 00:41:19.920
+tylko własne wersje robocze.
+
+00:41:20.060 --> 00:41:22.460
+To właśnie zapewnia Ci wcześniejsza ścieżka awansu.
+
+00:41:22.600 --> 00:41:23.720
+To nie tylko porządek.
+
+00:41:28.060 --> 00:41:31.660
+Wszystko, co jest współdzielone, ma właściciela zespołu, a nie osobę.
+
+00:41:31.840 --> 00:41:34.740
+Rolę lub grupę z co najmniej dwiema osobami za nią stojącymi.
+
+00:41:34.940 --> 00:41:36.660
+Lider projektu jest lepszy niż Sara.
+
+00:41:36.960 --> 00:41:37.780
+Zespół do spraw.
+
+00:41:38.000 --> 00:41:39.920
+Operacji finansowych jest lepszy niż obaj.
+
+00:41:40.080 --> 00:41:41.840
+Podczas tworzenia obszaru roboczego lista właścicieli
+
+00:41:41.840 --> 00:41:43.420
+powinna zawierać więcej niż jedno nazwisko,
+
+00:41:43.520 --> 00:41:45.580
+a co najmniej jedno z tych nazwisk powinno należeć do osoby,
+
+00:41:45.700 --> 00:41:48.180
+której stanowisko jest kontynuowane po odejściu dowolnego pracownika.
+
+00:41:48.360 --> 00:41:50.000
+Podczas promowania strony współdzielonej
+
+00:41:50.000 --> 00:41:52.260
+nowy dom powinien rejestrować, kto za nią odpowiada.
+
+00:41:52.440 --> 00:41:53.200
+To brzmi mało.
+
+00:41:53.200 --> 00:41:55.220
+Zmienia to, co dzieje się przy wyjściu.
+
+00:41:55.300 --> 00:41:57.920
+Pytanie nie brzmi już, kto wie, gdzie znajdują się strony Sara,
+
+00:41:58.060 --> 00:42:00.820
+ale kto jest jej właścicielem, a odpowiedź jest już zapisana.
+
+00:42:01.040 --> 00:42:02.240
+Jest jeszcze jeden element.
+
+00:42:02.540 --> 00:42:04.920
+Właściciele muszą być sprawdzań, a nie tylko przypisywani.
+
+00:42:05.140 --> 00:42:06.720
+Ludzie zmieniają rolę, zespoły się kurczą,
+
+00:42:06.800 --> 00:42:08.300
+a obszar roboczy z dwoma właścicielami
+
+00:42:08.300 --> 00:42:09.960
+może po cichu spaść do zera w ciągu roku.
+
+00:42:10.180 --> 00:42:12.460
+Kwartalna kontrola kontenerów bez właściciela jest tania
+
+00:42:12.460 --> 00:42:14.940
+i pozwala wykryć problem, gdy jest on jeszcze nazwą na liście,
+
+00:42:14.940 --> 00:42:16.080
+a nie utraconym rekordem.
+
+00:42:16.220 --> 00:42:18.820
+Zatem retencja decyduje o tym, jak długo treść będzie dostępna.
+
+00:42:19.020 --> 00:42:21.180
+Własność decyduje o tym, czy ktoś będzie się nią przejmował.
+
+00:42:21.360 --> 00:42:22.780
+Umieszczenie obu elementów na miejscu sprawi,
+
+00:42:22.880 --> 00:42:24.580
+że treść przetrwa dzięki osobom, które ją stworzyły.
+
+00:42:24.700 --> 00:42:26.760
+Ale przetrwanie to nie to samo, co bezpieczeństwo.
+
+00:42:26.900 --> 00:42:29.660
+Treść może mieć czysty dom, dobrego właściciela i rozsądne życie,
+
+00:42:29.800 --> 00:42:32.080
+a mimo to być wystawiona na niewłaściwą grupę odbiorców.
+
+00:42:32.240 --> 00:42:35.340
+To inny rodzaj kontroli, który jest związany z samą treścią.
+
+00:42:35.680 --> 00:42:36.800
+Etykiety poufności.
+
+00:42:37.040 --> 00:42:39.020
+Etykiety poufności to, co chronią.
+
+00:42:39.240 --> 00:42:41.820
+Etykieta poufności to etykieta z konsekwencjami.
+
+00:42:42.060 --> 00:42:44.040
+Wybierasz jedną, a system coś robi.
+
+00:42:44.040 --> 00:42:47.120
+Czasami szyfruje, czasami umieszcza nagłówek na każdej stronie,
+
+00:42:47.240 --> 00:42:49.480
+a czasami blokuje, kto może zostać zaproszony.
+
+00:42:49.680 --> 00:42:51.740
+Etykieta to to samo słowo, powiedzmy poufne,
+
+00:42:51.880 --> 00:42:54.700
+ale to, co faktycznie robi, zależy od tego, do czego ją przykleisz.
+
+00:42:54.860 --> 00:42:56.800
+A są trzy rzeczy, do których możesz ją przykleić.
+
+00:42:56.900 --> 00:42:58.280
+Pliki, kontenery, spotkania.
+
+00:42:58.440 --> 00:42:59.980
+Każda z nich wykonuje inną pracę.
+
+00:43:00.160 --> 00:43:03.220
+Mieszanie ich to obszar, w którym większość programów do etykietowania idzie na łatwiznę.
+
+00:43:03.400 --> 00:43:05.520
+Zacznij od kontenerów, ponieważ są najmniej widoczne.
+
+00:43:05.680 --> 00:43:09.400
+Kontener to grupa Microsoft 365, zespół lub witryna programu SharePoint.
+
+00:43:09.400 --> 00:43:12.280
+Etykietując kontener, nie zmieniasz żadnego dokumentu w nim zawartego.
+
+00:43:12.480 --> 00:43:14.680
+Ustawiasz zasady pokoju, więc jakie zasady?
+
+00:43:14.880 --> 00:43:15.820
+Najpierw prywatność.
+
+00:43:15.980 --> 00:43:17.640
+Etykieta może zmusić zespół do zachowania prywatności,
+
+00:43:17.740 --> 00:43:20.100
+aby nikt nie mógł zmienić jej na publiczną i udostępnić jej całej firmie.
+
+00:43:20.280 --> 00:43:21.700
+Następnie udostępnianie zewnętrzne.
+
+00:43:21.900 --> 00:43:23.940
+Etykieta może określać, że goście mogą tu przebywać lub nie,
+
+00:43:24.040 --> 00:43:25.740
+albo że tylko określone domeny mają do nich dostęp.
+
+00:43:25.920 --> 00:43:26.980
+I dostęp do urządzeń.
+
+00:43:27.160 --> 00:43:31.060
+Etykieta może informować witrynę, że urządzenia niezarządzane mają dostęp tylko do przeglądania w przeglądarce
+
+00:43:31.060 --> 00:43:33.840
+lub nie mają do niego dostępu lub tylko do odczytu z zablokowanymi pobieraniem.
+
+00:43:33.960 --> 00:43:34.460
+To wszystko.
+
+00:43:34.800 --> 00:43:37.420
+Prywatność, udostępnianie zewnętrzne i zasady dotyczące urządzeń.
+
+00:43:37.580 --> 00:43:40.380
+Etykieta kontenera kontroluje, kto może wejść i na jakich warunkach.
+
+00:43:40.580 --> 00:43:42.620
+Nie mówi nic o tym, co jest napisane na stronach.
+
+00:43:42.760 --> 00:43:44.340
+Etykiety plików działają odwrotnie.
+
+00:43:44.540 --> 00:43:47.280
+Etykieta pliku jest umieszczana na samym dokumencie i podróżuje z nim.
+
+00:43:47.460 --> 00:43:51.000
+Pobierz plik, wyślij go e-mailem, upuść na pamięć USB, a etykieta nadal będzie w pliku.
+
+00:43:51.000 --> 00:43:52.740
+To tam znajdują się ciężkie narzędzia.
+
+00:43:52.920 --> 00:43:56.420
+Szyfrowanie, więc tylko nazwane osoby lub grupy mogą go otworzyć, nawet poza twoją dzierżawą.
+
+00:43:56.580 --> 00:44:00.400
+Oznaczenia, więc nagłówek, stopka lub znak wodny informuje każdego czytelnika, co trzyma.
+
+00:44:00.540 --> 00:44:05.160
+I prawa użytkowania, dzięki którym możesz zezwolić na odczyt, ale zablokować drukowanie, kopiowanie lub przekazywanie.
+
+00:44:05.340 --> 00:44:06.960
+Etykieta kontenera chroni miejsce.
+
+00:44:07.240 --> 00:44:08.640
+Etykieta pliku chroni rzecz.
+
+00:44:08.840 --> 00:44:10.280
+Różne zadania, oba przydatne.
+
+00:44:10.500 --> 00:44:11.860
+Żaden nie zastępuje drugiego.
+
+00:44:12.100 --> 00:44:13.080
+Następnie spotkania.
+
+00:44:13.080 --> 00:44:21.940
+Etykieta na spotkaniu może określać takie rzeczy, jak to, kto ma dostęp do poczekalni, czy nagrywanie jest dozwolone, czy czat może być kopiowany i czy treść spotkania może być szyfrowana od początku do końca.
+
+00:44:22.080 --> 00:44:26.860
+To mniejszy zestaw elementów sterujących i obejmuje samą rozmowę, zanim cokolwiek zamieni się w plik.
+
+00:44:27.020 --> 00:44:30.880
+Etykieta spotkania dotyczy więc tego, co dzieje się na żywo w pokoju, gdy ludzie jeszcze rozmawiają.
+
+00:44:31.020 --> 00:44:32.760
+Trzy cele, trzy zestawy uprawnień.
+
+00:44:32.760 --> 00:44:36.940
+Teraz oto część, która zaskakuje zespoły i ma większe znaczenie niż same nazwy etykiet.
+
+00:44:37.100 --> 00:44:38.400
+Zakres jest najważniejszy.
+
+00:44:38.400 --> 00:44:43.900
+Kiedy tworzysz etykietę, decydujesz, gdzie może być używana pliki i e-maile, grupy i witryny, spotkania lub dowolna kombinacja.
+
+00:44:44.080 --> 00:44:47.480
+Ten wybór nazywa się zakresem etykiety i po cichu decyduje o wszystkim dalej.
+
+00:44:47.740 --> 00:44:50.740
+Etykiety o zakresie obejmującym tylko pliki nie można umieścić w zespole.
+
+00:44:50.980 --> 00:44:54.140
+Etykieta ograniczona tylko do grup i witryn nie może być umieszczona w dokumencie.
+
+00:44:54.140 --> 00:45:00.040
+Jeśli chcesz, aby poufność działała w obu miejscach, musisz ją określić dla obu, a następnie skonfigurować odpowiednie mechanizmy kontroli dla każdej ze stron.
+
+00:45:00.200 --> 00:45:02.040
+Większość organizacji robi to odwrotnie.
+
+00:45:02.040 --> 00:45:06.420
+Spędzają trzy miesiące kłócąc się o nazwy publiczna, wewnętrzna, poufna, wysoce poufna.
+
+00:45:06.600 --> 00:45:13.620
+Uzgadniają kolory, piszą definicje dla każdego poziomu, a potem ktoś otwiera ustawienia etykiety i zdaje sobie sprawę, że etykieta obejmuje tylko pliki, a kontenery nie mają niczego.
+
+00:45:13.820 --> 00:45:17.120
+W rezultacie połowa zasobów nie jest w ogóle chroniona, a wszyscy zakładali, że tak.
+
+00:45:17.120 --> 00:45:22.160
+Kolejność jest więc prosta. Najpierw zdecyduj, co chronisz kontenery, pliki, spotkania, czy wszystkie trzy.
+
+00:45:22.380 --> 00:45:24.940
+Następnie zdecyduj, co każda etykieta robi w każdym z nich.
+
+00:45:25.120 --> 00:45:26.400
+Dopiero potem wybierz nazwy.
+
+00:45:26.640 --> 00:45:34.020
+W ten sposób osoba, która widzi poufne w zespole i poufne w dokumencie wie, że oba oznaczają coś realnego, mimo że mechanizmy pod spodem są różne.
+
+00:45:34.240 --> 00:45:36.720
+I to jest czysta wersja dla witryn i dokumentów.
+
+00:45:36.940 --> 00:45:40.440
+Strony Loop i Copilot nie pasują idealnie do żadnej z tych trzech kategorii.
+
+00:45:40.440 --> 00:45:45.400
+Tworzą kopie zapasowe plików w dziwnych miejscach, siedząc w kontenerach, których większość administratorów nie może przeglądać.
+
+00:45:45.400 --> 00:45:51.080
+Pytanie nie brzmi więc, co etykiety mogą zrobić teoretycznie, ale co faktycznie robią, gdy zawartość jest komponentem lub stroną.
+
+00:45:51.260 --> 00:45:52.960
+Etykiety na stronach Loop i Copilot.
+
+00:45:53.120 --> 00:45:55.820
+Co się więc dzieje, gdy zawartość jest komponentem lub lub stroną?
+
+00:45:56.060 --> 00:45:57.480
+Zacznij od tego, co jest stałe.
+
+00:45:57.720 --> 00:45:59.580
+Zawartość Loop jest przechowywana w plikach.
+
+00:45:59.720 --> 00:46:04.640
+Te pliki znajdują się w usłudze OnDrive lub w kontenerze Loop, a te miejsca są objęte znanym już mechanizmem etykiet.
+
+00:46:04.800 --> 00:46:06.720
+Historia etykiet dla Loop nie jest więc pusta.
+
+00:46:06.940 --> 00:46:07.660
+Jest nierówna.
+
+00:46:07.660 --> 00:46:10.440
+Firma Microsoft stopniowo dodaje obsługę etykiet dla Loop.
+
+00:46:10.560 --> 00:46:15.380
+Etykiety kontenerów w grupie lub witrynie Microsoft 365 za zespołem działają tak, jak zawsze.
+
+00:46:15.640 --> 00:46:20.680
+Etykiety na poziomie plików w zawartości Loop są wdrażane wolniej, a ich zachowanie zależy od powierzchni.
+
+00:46:20.840 --> 00:46:27.540
+Komponent w czacie zespołu, strona w obszarze roboczym i strona Copilot w przestrzeni osobistej nie wszystkie są traktowane tak samo tego samego dnia.
+
+00:46:27.740 --> 00:46:29.940
+To właśnie oznacza ciągłe dojrzewanie w praktyce.
+
+00:46:30.160 --> 00:46:33.660
+Niektóre elementy sterujące działają, inne działają w jednej aplikacji, a nie w innej.
+
+00:46:33.760 --> 00:46:38.100
+Niektóre są wymienione zgodnie z planem, a dokumentacja zmienia się szybciej niż większość programów zarządzania.
+
+00:46:38.280 --> 00:46:41.900
+Dlatego traktuj każdą funkcję etykiety w Loop jako coś, co weryfikujesz, a nie coś, co zakładasz.
+
+00:46:41.900 --> 00:46:44.920
+Teraz dziedziczenie, które jest częścią, która ludzie mają nadzieję, że ich uratuje.
+
+00:46:45.060 --> 00:46:46.120
+Pomysł jest prosty.
+
+00:46:46.320 --> 00:46:48.860
+Etykietujesz kontener, a to, co się w nim znajduje, następuje.
+
+00:46:49.060 --> 00:46:53.640
+Witryna oznaczona jako zakaz udostępniania zewnętrznego nie pozwala nikomu zaprosić gościa do pliku w tej witrynie.
+
+00:46:53.820 --> 00:46:58.040
+Kontener obszaru roboczego z etykietą przejmuje zasady prywatności i udostępniania tej etykiety.
+
+00:46:58.300 --> 00:47:01.400
+Zawartość nie potrzebowała własnego tagu, aby podlegać zasadom pokoju.
+
+00:47:01.540 --> 00:47:03.720
+Ta część jest prawdziwa i warto z niej korzystać.
+
+00:47:03.820 --> 00:47:09.360
+Etykieta kontenera to jedyne zabezpieczenie, które działa nawet wtedy, gdy nikt w zespole nie pamięta o zrobieniu czegokolwiek, ale dziedziczenie ma swoje ograniczenia.
+
+00:47:09.540 --> 00:47:11.920
+Etykiety kontenera regulują dostęp i udostępnianie.
+
+00:47:12.100 --> 00:47:16.480
+Nie szyfrują automatycznie każdego pliku w środku i nie umieszczają widocznego oznaczenia na stronie.
+
+00:47:16.720 --> 00:47:20.540
+Zatem strona może znajdować się w dobrze oznaczonym kontenerze i nadal nie mieć własnej etykiety.
+
+00:47:20.540 --> 00:47:25.900
+To, czy etykieta pliku zostanie zastosowana domyślnie, zgodnie z zasadami, czy tylko ręcznie, zależy od sposobu jej konfiguracji.
+
+00:47:26.060 --> 00:47:30.460
+Ta sama nazwa etykiety, dwie różne warstwy, a użytkownik przeglądający stronę może zobaczyć tylko jedną z nich.
+
+00:47:30.640 --> 00:47:33.940
+Teraz wprowadź kopilot, ponieważ to właśnie tutaj etykiety zarabiają na swoje utrzymanie.
+
+00:47:34.080 --> 00:47:35.680
+Kopilot nie ma własnego dostępu.
+
+00:47:35.900 --> 00:47:36.540
+Działa jako użytkownik.
+
+00:47:37.320 --> 00:47:41.960
+Kiedy zadajesz mu pytanie, przeszukuje to, co możesz już otworzyć i na tej podstawie buduje odpowiedź.
+
+00:47:42.120 --> 00:47:44.900
+Etykiety poufności z szyfrowaniem dodają kolejną regułę.
+
+00:47:44.900 --> 00:47:50.780
+Jeśli prawa użytkowania etykiety nie pozwalają na wyodrębnienie zawartości, kopilot nie może użyć tej zawartości w odpowiedzi.
+
+00:47:50.960 --> 00:47:55.060
+Jeśli możesz tylko wyświetlić plik, ale nie możesz go skopiować, odpowiedź nie wyciągnie z niego tekstu.
+
+00:47:55.220 --> 00:47:57.220
+Etykiety wyznaczają więc granice dla kopilot.
+
+00:47:57.420 --> 00:48:03.520
+Zaszyfrowana zawartość z odpowiednimi ograniczeniami pozostaje poza podsumowaniem, a gdy kopilot używa zawartości z etykietą, etykieta powinna zostać przeniesiona.
+
+00:48:03.760 --> 00:48:09.840
+Wygenerowany wynik może przejąć etykietę źródła, a gdy źródła mają różne etykiety, odpowiedź przyjmuje tę najbardziej restrykcyjną.
+
+00:48:09.840 --> 00:48:16.100
+Taki jest projekt. To dobre rozwiązanie, ale działa tylko wtedy, gdy etykiety istnieją i zostały zastosowane, co prowadzi nas do luk.
+
+00:48:16.260 --> 00:48:21.560
+Zanim obiecasz komuś z kierownictwa, że treści oznaczone etykietami są objęte, sprawdź cztery rzeczy w swoim dzierżawcy.
+
+00:48:21.740 --> 00:48:28.600
+Po pierwsze, czy Twoje zasady dotyczące etykiet faktycznie docierają do lokalizacji, w których trafiają treści pętli, zarówno w on-drive, jak i kontenerach pętli?
+
+00:48:28.720 --> 00:48:33.560
+Po drugie, kiedy tworzysz komponent i stronę, jaką etykietę otrzymują domyślnie, jeśli w ogóle?
+
+00:48:33.560 --> 00:48:38.900
+Po trzecie, czy strona utworzona z materiału źródłowego oznaczonego etykietą wyświetla etykietę na wyjściu i jaką?
+
+00:48:39.120 --> 00:48:43.860
+I po czwarte, co pokazują dzienniki audytu i narzędzia wyszukiwania w zakresie tej treści podczas wyszukiwania?
+
+00:48:44.020 --> 00:48:47.120
+Uruchom je jako test z rzeczywistą treścią, używając konta testowego.
+
+00:48:47.380 --> 00:48:53.800
+Zapisz, co widzisz, a nie to, co dokumentacja mówi o tym, co zrobił dzierżawca, ponieważ najgorszym sposobem na dowiedzenie się o luce w etykiecie jest przegląd incydentu.
+
+00:48:53.980 --> 00:48:56.820
+Nawet idealna konfiguracja etykiet pozostawia jedną rzecz niezmienioną.
+
+00:48:56.980 --> 00:48:58.780
+Kopilot nie tworzy nowych uprawnień dostępu.
+
+00:48:58.780 --> 00:49:00.740
+Wykorzystuje tylko te, które już istnieją.
+
+00:49:00.880 --> 00:49:03.740
+Tak więc kopilot odczyta wszystko, co użytkownicy mogą odczytać na podstawie twoich uprawnień.
+
+00:49:03.840 --> 00:49:05.900
+Kopilot odczyta to, co użytkownicy mogą odczytać.
+
+00:49:06.080 --> 00:49:08.320
+Uprawnienia kopilota i nadmierne udostępnianie.
+
+00:49:08.460 --> 00:49:09.920
+Kopilot nie ma własnych drzwi.
+
+00:49:10.140 --> 00:49:11.200
+Przechodzi przez twoje.
+
+00:49:11.460 --> 00:49:12.400
+Zadajesz mu pytanie.
+
+00:49:12.700 --> 00:49:21.620
+Przeszukuje to, co twoje konto może już otworzyć, twoje pliki, czaty, spotkania, witryny, do których należysz, strony, które ktoś udostępnił ci wiosną, a ty o nich zapomniałeś.
+
+00:49:21.840 --> 00:49:25.680
+Wyciąga z tego wszystkiego, buduje odpowiedź i oddaje ją w czystym akapicie.
+
+00:49:25.680 --> 00:49:32.560
+Pytanie brzmi więc nie, co widzi kopilot, ale co widzi ta osoba, ponieważ odpowiedź na pierwsze pytanie zawsze jest odpowiedzią na drugie.
+
+00:49:32.780 --> 00:49:35.280
+Brzmi to uspokajająco i w pewnym sensie tak jest.
+
+00:49:35.440 --> 00:49:36.820
+Kopilot nie włamuje się do niczego.
+
+00:49:37.040 --> 00:49:40.060
+Nie pomija sprawdzania uprawnień ani nie wymyśla dostępu, którego nikt nie udzielił.
+
+00:49:40.240 --> 00:49:42.680
+Model respektuje te same zasady, co reszta dzierżawcy.
+
+00:49:42.880 --> 00:49:44.520
+Ale spójrz, co to naprawdę oznacza.
+
+00:49:44.760 --> 00:49:49.420
+Jeśli pracownik ma dostęp do arkusza kalkulacyjnego z wynagrodzeniami, którego nigdy nie powinien otwierać, kopilot może z niego korzystać.
+
+00:49:49.420 --> 00:49:54.020
+Jeśli folder projektu został przypadkowo udostępniony całej firmie dwa lata temu, kopilot może z niego korzystać.
+
+00:49:54.020 --> 00:49:55.460
+Narzędzie nie jest przeciekiem.
+
+00:49:55.620 --> 00:49:58.460
+To bardzo szybki czytnik, który korzysta z tego, na co już zezwoliłeś.
+
+00:49:58.580 --> 00:50:00.360
+I to jest ta część, nad którą pracujemy.
+
+00:50:00.620 --> 00:50:02.320
+Nadmierne udostępnianie zawsze istniało.
+
+00:50:02.540 --> 00:50:06.100
+Było obecne na stronach, na których wszyscy oprócz użytkowników zewnętrznych byli na liście członków.
+
+00:50:06.320 --> 00:50:10.180
+Było obecne w linkach ustawionych do osób w organizacji, wklejanych do czatów i zapominanych.
+
+00:50:10.440 --> 00:50:16.080
+Było obecne na starych stronach zespołów, których nikt nie archiwizował, z plikami, których nikt nie pamiętał, otwartych dla każdego, kto wiedział, gdzie kliknąć.
+
+00:50:16.080 --> 00:50:18.060
+Nikt tego nie znalazł, bo nikt nie szukał.
+
+00:50:18.060 --> 00:50:19.700
+Znalezienie tego wymagało wysiłku.
+
+00:50:19.920 --> 00:50:23.340
+Trzeba było odgadnąć właściwą nazwę strony, przejrzeć odpowiednią bibliotekę i otworzyć odpowiedni folder.
+
+00:50:23.700 --> 00:50:28.180
+Prawdopodobieństwo, że obcy przypadkowo trafi na niewłaściwy dokument było niskie, więc ryzyko pozostało teoretyczne.
+
+00:50:28.440 --> 00:50:31.100
+Drugi pilot zmienia szansę nieuprawnienia, ale szansę.
+
+00:50:31.300 --> 00:50:32.800
+Teraz wyszukiwanie jest zdaniem.
+
+00:50:32.980 --> 00:50:35.500
+Co kierownictwo zdecydowało w sprawie reorganizacji?
+
+00:50:35.720 --> 00:50:37.300
+Podsumuj przegląd wynagrodzeń.
+
+00:50:37.460 --> 00:50:39.320
+Pokaż mi cokolwiek na temat przejęcia.
+
+00:50:39.380 --> 00:50:41.860
+Osoba nie musi wiedzieć, gdzie znajduje się treść.
+
+00:50:42.080 --> 00:50:45.820
+Wystarczy, że zapyta, a system znajdzie ją wszędzie, gdzie będzie mogła dotrzeć.
+
+00:50:45.820 --> 00:50:48.060
+Więc zasięg nie wzrósł, tylko się ujawnił.
+
+00:50:48.220 --> 00:50:50.660
+Oto jak to wygląda z narzędziami, o których mówiliśmy.
+
+00:50:50.880 --> 00:50:53.660
+Tworzony jest obszar roboczy pętli do delikatnego planowania.
+
+00:50:53.920 --> 00:51:00.120
+Właściciel zaprasza 12 osób, ale po kilku tygodniach wygodny link zostaje wklejony do szerokiego kanału ustawionego dla osób w organizacji.
+
+00:51:00.340 --> 00:51:02.920
+Teraz strony są otwarte dla wszystkich z kontem służbowym.
+
+00:51:03.140 --> 00:51:04.620
+Nikt nie zmienił listy członków.
+
+00:51:04.840 --> 00:51:06.340
+Nikt nie uważa jej za publiczną.
+
+00:51:06.580 --> 00:51:10.920
+Następnie ktoś spoza projektu prosi kopilota o podsumowanie nadchodzących planów restrukturyzacji,
+
+00:51:11.020 --> 00:51:13.220
+a odpowiedź zawiera akapit z tego obszaru roboczego.
+
+00:51:13.220 --> 00:51:16.280
+Źródło i daleko od 12 osób, dla których była przeznaczona.
+
+00:51:16.500 --> 00:51:17.520
+Historia w SharePoint.
+
+00:51:17.720 --> 00:51:21.280
+Witryna utworzona lata temu dla jednego działu pozostawiona została w szerokim dostępie, ponieważ było łatwiej.
+
+00:51:21.500 --> 00:51:23.280
+Setki dokumentów nigdy nie zostały przejrzane.
+
+00:51:23.500 --> 00:51:25.140
+Przez długi czas nikogo to nie obchodziło.
+
+00:51:25.320 --> 00:51:28.620
+Teraz wszystkie są częścią każdej odpowiedzi dla każdego w dowolnym dziale, dowolnego dnia.
+
+00:51:28.860 --> 00:51:31.480
+Luźne uprawnienia kiedyś oznaczały, że ktoś mógł coś znaleźć.
+
+00:51:31.640 --> 00:51:33.380
+Teraz oznaczają, że ktoś coś otrzyma.
+
+00:51:33.560 --> 00:51:34.460
+Co więc z tym zrobić?
+
+00:51:34.700 --> 00:51:36.460
+Naprawiasz dostęp, zanim rozszerzysz narzędzie.
+
+00:51:36.460 --> 00:51:39.280
+W tej kolejności kuszące jest pójście w drugą stronę.
+
+00:51:39.440 --> 00:51:42.280
+Najpierw wdroż go pilota, zobacz co ludziom się podoba, a potem posprzątaj.
+
+00:51:42.400 --> 00:51:43.660
+Ale to później tkwi problem.
+
+00:51:43.940 --> 00:51:50.240
+Gdy pracownik po raz pierwszy otrzymuje odpowiedź zbudowaną na podstawie dokumentu, którego nie powinien był widzieć, rozmowa zmienia się z przyjęcia na kontrolę szkód.
+
+00:51:50.380 --> 00:51:53.360
+A wtedy szybko naprawiasz uprawnienia, a kierownictwo się temu przygląda.
+
+00:51:53.620 --> 00:51:55.280
+Samo sprzątanie nie jest tajemnicą.
+
+00:51:55.540 --> 00:51:57.760
+Znajdź witryny i obszary robocze otwarte dla wszystkich.
+
+00:51:58.040 --> 00:52:00.220
+Znajdź najstarsze linki z najszerszym gronem odbiorców.
+
+00:52:00.460 --> 00:52:03.120
+Sprawdź, kto jest właścicielem, czego i czy ci właściciele nadal działają.
+
+00:52:03.360 --> 00:52:06.960
+Następnie zawęż dostęp, oznacz to, co jest poufne i zarchiwizuj to, czego nikt nie używa.
+
+00:52:07.160 --> 00:52:08.460
+Nic z tego nie jest efektowne.
+
+00:52:08.660 --> 00:52:10.580
+Wszystko jest tańsze przed wdrożeniem niż po.
+
+00:52:10.720 --> 00:52:13.340
+A gdy uprawnienia będą uczciwe, pojawia się kolejne pytanie.
+
+00:52:13.340 --> 00:52:19.440
+Jeśli ludzie mogą teraz dotrzeć tylko do tego, do czego powinni, gdzie w ogóle powinny trafić nowe treści, to jest sama decyzja o umieszczeniu.
+
+00:52:19.680 --> 00:52:21.060
+Ramy decyzji o umieszczeniu.
+
+00:52:21.280 --> 00:52:21.980
+Cztery pytania.
+
+00:52:22.180 --> 00:52:22.880
+To całe ramy.
+
+00:52:23.100 --> 00:52:23.980
+Kto tego potrzebuje?
+
+00:52:24.160 --> 00:52:24.640
+Jak długo?
+
+00:52:24.860 --> 00:52:25.460
+Jak poufne?
+
+00:52:25.620 --> 00:52:26.620
+Kto jest właścicielem?
+
+00:52:26.620 --> 00:52:32.600
+Możesz je zadać w około 30 sekund, zanim wpiszesz jedno słowo na nowej stronie, a odpowiedzi prawie za każdym razem wskazują na dom.
+
+00:52:32.800 --> 00:52:33.560
+Weźmy pierwszą.
+
+00:52:33.740 --> 00:52:34.580
+Kto tego potrzebuje?
+
+00:52:34.760 --> 00:52:36.000
+Nie, kto może tego chcieć kiedyś.
+
+00:52:36.120 --> 00:52:37.140
+Kto tego potrzebuje teraz?
+
+00:52:37.300 --> 00:52:37.740
+Tylko ty.
+
+00:52:37.940 --> 00:52:39.440
+Trzy osoby pracujące nad projektem?
+
+00:52:39.600 --> 00:52:39.840
+Dział.
+
+00:52:40.020 --> 00:52:41.060
+Klient spoza firmy.
+
+00:52:41.300 --> 00:52:47.820
+Publiczność to najszybszy filtr, jaki masz, ponieważ decyduje, czy potrzebujesz przestrzeni osobistej, współdzielonego kontenera, czy zarządzanej biblioteki.
+
+00:52:48.000 --> 00:52:49.580
+Po drugie, jak długo musi żyć?
+
+00:52:49.780 --> 00:52:50.080
+Dzień.
+
+00:52:50.260 --> 00:52:50.740
+Kwartał.
+
+00:52:50.980 --> 00:52:51.520
+Siedem lat.
+
+00:52:51.520 --> 00:52:54.180
+Krótkotrwałe treści mogą leżeć w jakimś jasnym miejscu.
+
+00:52:54.360 --> 00:52:58.000
+Długotrwałe treści potrzebują miejsca z regułami przechowywania, które ktoś celowo wybrał.
+
+00:52:58.120 --> 00:52:59.600
+Po trzecie, jak wrażliwe to jest?
+
+00:52:59.780 --> 00:53:00.560
+Nie w abstrakcji.
+
+00:53:00.780 --> 00:53:03.100
+Zapytaj, co się stanie, jeśli jutro przeczyta to niewłaściwa osoba.
+
+00:53:03.480 --> 00:53:03.920
+Irytujące?
+
+00:53:04.340 --> 00:53:04.740
+Żenujące?
+
+00:53:04.900 --> 00:53:05.660
+Problem prawny?
+
+00:53:05.780 --> 00:53:09.080
+To odpowiedź ci, czy potrzebujesz etykiety i który kontener może ją wyegzekwować.
+
+00:53:09.240 --> 00:53:10.960
+I po czwarte, kto jest jej właścicielem?
+
+00:53:11.080 --> 00:53:13.760
+To jest ten, który ludzie pomijają i to on gryzie przy wyjściu.
+
+00:53:13.760 --> 00:53:17.820
+Jeśli szczera odpowiedź brzmi, ja i inni będą na niej polegać, to już znalazłeś problem.
+
+00:53:21.520 --> 00:53:22.960
+Kilka dni, niska wrażliwość.
+
+00:53:23.200 --> 00:53:27.400
+Załóżmy, że zbierasz punkty do dyskusji na czwartkowe spotkanie lub testujesz, jak powinna wyglądać tabela.
+
+00:53:27.560 --> 00:53:30.600
+To właśnie tutaj komponent pętli lub strona pilotażowa zdobywa swoje miejsce.
+
+00:53:30.880 --> 00:53:31.500
+Jest szybka.
+
+00:53:31.720 --> 00:53:34.480
+Znajduje się w twojej własnej przestrzeni lub na czacie, na którym ją utworzyłeś.
+
+00:53:34.660 --> 00:53:37.340
+Nikt nie musi niczego zatwierdzać i nic nie musi być archiwizowane.
+
+00:53:37.560 --> 00:53:41.540
+Jeśli treść zniknie w ciągu dwóch tygodni, nic nie zostało utracone, ponieważ nic nie miało trwać wiecznie.
+
+00:53:41.820 --> 00:53:43.280
+Jedynym warunkiem jest szczerość.
+
+00:53:43.280 --> 00:53:47.940
+Jeśli grupa się rozrasta lub czas jej istnienia się wydłuża, odpowiedzi ulegają zmianie i dom powinien się wraz z nimi zmieniać.
+
+00:53:48.100 --> 00:53:49.760
+Następnie przestrzeń robocza zespołu.
+
+00:53:49.940 --> 00:53:52.120
+Grupa buduje coś razem przez tygodnie lub miesiące.
+
+00:53:52.300 --> 00:53:53.360
+Treść jest aktywna.
+
+00:53:53.600 --> 00:53:56.820
+Ludzie edytują ją codziennie i musi przetrwać odejście każdej osoby.
+
+00:53:57.060 --> 00:53:59.600
+Tutaj odpowiedzią jest kontener, którym dysponuje grupa.
+
+00:53:59.740 --> 00:54:02.660
+Przestrzeń robocza pętli, jeśli praca jest oparta na stronach i płynna.
+
+00:54:02.800 --> 00:54:05.620
+Kanał zespołu, jeśli praca znajduje się obok konwersacji i plików.
+
+00:54:05.620 --> 00:54:10.700
+W obu przypadkach potrzebujesz nazwanych właścicieli i listy członków, którą ktoś może odczytać i co najmniej dwóch osób, które za nią odpowiadają.
+
+00:54:10.900 --> 00:54:12.740
+Zwróć uwagę, co oba te elementy współdzielą.
+
+00:54:12.980 --> 00:54:14.940
+Zawartość jest współdzielona, ale nie ostateczna.
+
+00:54:15.120 --> 00:54:19.320
+Dlatego kontener musi być zaufany pod względem dostępu i nie musi być zaufany jako trwały archiwum.
+
+00:54:19.600 --> 00:54:22.720
+Następnie trzeci kontener, trwały rekord lub kontrolowana zawartość.
+
+00:54:22.900 --> 00:54:30.440
+Wszystko, co firma musi przechowywać, wszystko, o co może poprosić audytor, wszystko, co mówi o tym, co organizacja zdecydowała, obiecała lub na co się zgodziła oraz wszystko na tyle wrażliwe,
+
+00:54:30.440 --> 00:54:37.200
+że błąd kosztuje realne pieniądze, co trafia do biblioteki programu SharePoint w wybranej dla tego celu bibliotece z etykietą poufności, która odpowiada za wartości.
+
+00:54:37.360 --> 00:54:43.280
+To właśnie tam retencja, zarządzanie rekordami i wyszukiwanie działają przez lata, a właścicielem może być rola zamiast nazwy.
+
+00:54:43.520 --> 00:54:45.800
+Zatem kształt jest krótki, mały i zwięzły.
+
+00:54:45.980 --> 00:54:50.300
+Komponent pętli lub strona współdzielony i działający obszar roboczy pętli lub kanał zespołu.
+
+00:54:50.460 --> 00:54:52.760
+Trwały lub kontrolowany SharePoint z etykietą.
+
+00:54:52.940 --> 00:54:54.940
+Teraz kilka szczerych uwag na temat korzystania z tego.
+
+00:54:55.120 --> 00:54:56.780
+Pytania nie wymagają idealnych odpowiedzi.
+
+00:54:56.980 --> 00:54:58.600
+Mniej więcej poprawna odpowiedź jest w porządku.
+
+00:54:58.600 --> 00:55:00.920
+Jeśli nie masz pewności co do poufności, przejdź o krok wyżej.
+
+00:55:01.080 --> 00:55:04.060
+Jeśli nie masz pewności co do żywotności, załóż, że jest dłuższa niż myślisz.
+
+00:55:04.180 --> 00:55:09.460
+Treść prawie nigdy nie żyje krócej niż oczekiwał jej autor, a gdy odpowiedzi są sprzeczne, wygrywa ta bardziej rygorystyczna.
+
+00:55:09.640 --> 00:55:12.720
+Mała grupa z krótkim żywotem, ale bardzo wrażliwa, to nie jest strona.
+
+00:55:12.980 --> 00:55:16.820
+Wrażliwość przyciągnęła ją do kontrolowanego domu bez względu na to, jak mała jest publiczność.
+
+00:55:16.980 --> 00:55:20.080
+Co więcej, framework nie przejmuje się tym, które narzędzie otworzyłeś jako pierwsze.
+
+00:55:20.360 --> 00:55:22.720
+Możesz zacząć od kopilota, ponieważ tam pojawił się pomysł.
+
+00:55:22.720 --> 00:55:25.480
+W porządku, zaczynanie od czegoś nie jest błędem.
+
+00:55:25.720 --> 00:55:27.760
+Pozostawanie tam po zmianie odpowiedzi już tak.
+
+00:55:27.960 --> 00:55:31.980
+Następnym krokiem jest więc zastosowanie tych czterech pytań do każdego narzędzia, jedno po drugim.
+
+00:55:32.100 --> 00:55:35.920
+A najłatwiejszym miejscem do rozpoczęcia jest to, które ludziom najtrudniej umieścić.
+
+00:55:36.000 --> 00:55:38.500
+Notatnik, który leży na biurku każdego od 10 lat.
+
+00:55:38.700 --> 00:55:40.800
+OneNote, do którego OneNote nadal należy.
+
+00:55:41.060 --> 00:55:42.640
+OneNote nie jest tutaj problemem.
+
+00:55:42.860 --> 00:55:44.540
+Spełnia swoje zadanie od ponad dekady.
+
+00:55:44.720 --> 00:55:47.900
+To, co robi dobrze, to podtrzymywanie myśli jednej osoby przez długi okres czasu.
+
+00:55:48.120 --> 00:55:49.760
+Notatnik ma sekcje, sekcje mają strony.
+
+00:55:49.760 --> 00:55:52.360
+Strony mogą być tak długie i chaotyczne, jak tylko chcesz.
+
+00:55:52.500 --> 00:55:57.380
+Możesz wyciąć artykuł z internetu, wrzucić zdjęcie tablicy, nagrać dźwięk i narysować diagram długopisem.
+
+00:55:57.580 --> 00:55:58.940
+Nikt inny nie musi śledzić.
+
+00:55:59.100 --> 00:56:00.740
+To jest robienie długich notatek.
+
+00:56:00.900 --> 00:56:04.960
+Badania do oferty, notatki z rocznych rozmów z klientami, bieżący dziennik projektu, który prowadzisz,
+
+00:56:05.080 --> 00:56:07.120
+spisany dla Ciebie w wybranej przez Ciebie kolejności.
+
+00:56:07.420 --> 00:56:09.600
+Struktura należy do Ciebie i to jest jej wartość.
+
+00:56:09.760 --> 00:56:13.640
+Pomyśl o notatniku jako o miejscu na Twój sposób myślenia, a nie na to, co zdecydowała firma.
+
+00:56:13.640 --> 00:56:16.580
+Teraz wersje współdzielone, notatniki klasowe i zespołowe.
+
+00:56:16.780 --> 00:56:20.620
+Notatnik klasowy daje każdemu uczniowi prywatną sekcję, dodaje wspólną bibliotekę na materiały
+
+00:56:20.620 --> 00:56:23.160
+i pozwala nauczycielowi zobaczyć wszystko bez poganiania kogokolwiek.
+
+00:56:23.300 --> 00:56:24.340
+To jasne dopasowanie.
+
+00:56:24.640 --> 00:56:28.580
+Struktura jest stała, odbiorcy są znani, a czas życia pokrywa się z semestrem szkolnym.
+
+00:56:28.780 --> 00:56:30.860
+Notatnik zespołowy działa w ten sam sposób w mniejszej skali.
+
+00:56:30.940 --> 00:56:33.240
+To wspólny zestaw notatek ze spotkań dla sześcioosobowej grupy,
+
+00:56:33.360 --> 00:56:35.560
+wspólny punkt odniesienia z tymi samymi zakładkami dla wszystkich,
+
+00:56:35.720 --> 00:56:38.280
+takimi jak kroki wdrażania lub bieżąca lista kontaktów do dostawców.
+
+00:56:38.280 --> 00:56:42.480
+Oba rozwiązania działają, gdy grupa jest stabilna, sekcje są uzgodnione, a ktoś dba o porządek.
+
+00:56:42.580 --> 00:56:43.700
+Ale tu pojawia się problem.
+
+00:56:43.980 --> 00:56:44.860
+Notatnik to plik.
+
+00:56:45.080 --> 00:56:47.280
+Znajduje się w usłudze onDrive lub w witrynie programu SharePoint,
+
+00:56:47.400 --> 00:56:49.680
+a dostęp do niego zależy od miejsca, w którym plik się znajduje.
+
+00:56:49.860 --> 00:56:52.280
+Notatnik w osobistej usłudze onDrive śledzi osobę.
+
+00:56:52.460 --> 00:56:54.520
+Notatnik w witrynie zespołu śledzi zespół.
+
+00:56:54.760 --> 00:56:57.500
+Sekcje mogą być chronione hasłem, ale jest to blokada sekcji,
+
+00:56:57.620 --> 00:57:01.400
+a nie etykieta zawartości i nie będzie miało znaczenia, jakiego wymaga proces ewidencji.
+
+00:57:01.620 --> 00:57:04.900
+Nie pozwól więc, aby notatnik przechowywał decyzje, które firma musi zachować.
+
+00:57:04.900 --> 00:57:08.120
+Strona notatnika nie daje realnego sygnału, że jest to ostateczna decyzja.
+
+00:57:08.280 --> 00:57:10.720
+Nie ma etapu zatwierdzania, nie ma czystej wersji, na którą można wskazać,
+
+00:57:10.780 --> 00:57:13.260
+ani metadanych, które informowałyby system ewidencji, co jest analizowane.
+
+00:57:13.500 --> 00:57:15.420
+Wyszukiwanie w notatnikach jest fragmentaryczne.
+
+00:57:15.660 --> 00:57:18.660
+Przechowywanie dotyczy całego pliku, a nie jednej strony, która ma znaczenie.
+
+00:57:18.860 --> 00:57:21.700
+Więc gdy ktoś zapyta za dwa lata, gdzie uzgodniliśmy tę cenę,
+
+00:57:21.860 --> 00:57:25.160
+odpowiedź jest ukryta na stronie 40 notatnika nazwanego imieniem osoby.
+
+00:57:25.420 --> 00:57:29.100
+Decyzje potrzebują miejsca, w którym znajdzie się właściciel, etykieta i miejsce, które znajdzie obcy.
+
+00:57:29.220 --> 00:57:33.200
+Zgodnie z cyklem życia, który omówiliśmy, to stan rekordu, a notatnik nigdy nie został do tego stworzony.
+
+00:57:33.360 --> 00:57:34.580
+Teraz nakładanie się z loop.
+
+00:57:34.740 --> 00:57:39.400
+To właśnie tutaj ludzie się gubią, ponieważ na pierwszy rzut oka strona loop i strona OneNote wyglądają podobnie.
+
+00:57:39.600 --> 00:57:43.140
+Obie są elastyczne, obie obsługują tekst, tabele i listy, obie umożliwiają udostępnianie.
+
+00:57:43.340 --> 00:57:46.740
+Gdzie więc jest granica? Nakreśl ją, patrząc na to, jak zachowuje się zawartość.
+
+00:57:46.900 --> 00:57:49.240
+Notatnik OneNote to osobisty lub grupowy segregator.
+
+00:57:49.520 --> 00:57:53.480
+Organizujesz go tematycznie, wracasz do niego w czasie i zmienia się głównie pod wpływem jednego autora.
+
+00:57:53.740 --> 00:57:55.840
+Strona loop jest żywa i umożliwia współpracę.
+
+00:57:55.840 --> 00:58:00.360
+Ludzie edytują w tym samym momencie, a jej fragmenty wędrują jako komponenty do czatów i wiadomości e-mail.
+
+00:58:00.500 --> 00:58:05.300
+Używaj OneNote, gdy myślenie należy do ciebie lub do stałej grupy, a treść pozostaje tam, gdzie została zapisana.
+
+00:58:05.480 --> 00:58:10.380
+Używaj loop, gdy treść musi zostać przeniesiona, zaktualizowana w kilku miejscach i tworzona przez kilka osób jednocześnie.
+
+00:58:10.540 --> 00:58:12.900
+Te same słowa na ekranie, różne zadania pod spodem.
+
+00:58:13.020 --> 00:58:15.400
+A jeśli nadal masz wątpliwości, wróć do czterech pytań.
+
+00:58:15.480 --> 00:58:19.180
+Kto tego potrzebuje? Jak długo? Jak wrażliwy? Kto jest jego właścicielem?
+
+00:58:19.180 --> 00:58:22.480
+Segregatorem dla jednej osoby o długim okresie użytkowania i niskiej wrażliwości jest OneNote.
+
+00:58:22.640 --> 00:58:24.620
+Wszystko, co jest udostępniane i dostępne na żywo, nie.
+
+00:58:24.760 --> 00:58:25.960
+To pokrywa się z notatnikiem.
+
+00:58:26.160 --> 00:58:30.460
+Ale jest jeszcze jedno nakładanie się i to powoduje więcej problemów niż jakiekolwiek inne, ponieważ to tam większość ludzi spędza dzień.
+
+00:58:30.640 --> 00:58:33.520
+Miejsce, w którym wszystko jest powiedziane, a prawie nic nie jest przechowywane.
+
+00:58:33.900 --> 00:58:36.480
+Zespoły. Zespoły. Rozmowa nie jest przechowywaniem.
+
+00:58:36.700 --> 00:58:38.400
+Zespoły to miejsce, w którym rozmawia się o pracy.
+
+00:58:38.560 --> 00:58:39.460
+To jest jego zadanie.
+
+00:58:39.620 --> 00:58:41.620
+Czat to szybka wymiana zdań między kilkoma osobami.
+
+00:58:41.780 --> 00:58:43.580
+Kanał to trwająca dyskusja na jakiś temat.
+
+00:58:43.580 --> 00:58:46.980
+Oba są dobre w jednej rzeczy, czyli w skłonieniu ludzi do reakcji w ciągu tej samej godziny.
+
+00:58:47.160 --> 00:58:49.780
+Ktoś zadaje pytanie, ktoś odpowiada, a wątek idzie dalej.
+
+00:58:49.960 --> 00:58:55.200
+I tu zaczyna się problem, ponieważ miejsce, które jest dobre do rozmów, zaczyna sprawiać wrażenie miejsca, które jest dobre do przechowywania rzeczy.
+
+00:58:55.440 --> 00:58:59.540
+Ma pole wyszukiwania, ma historię, ma zakładkę z plikami, więc ludzie traktują je jak system plików.
+
+00:58:59.720 --> 00:59:00.720
+Niczym takim nie jest.
+
+00:59:00.860 --> 00:59:01.540
+To strumień.
+
+00:59:01.680 --> 00:59:03.140
+Oto, co strumień robi z treścią.
+
+00:59:03.380 --> 00:59:07.000
+Cokolwiek opublikujesz, trafia na dół, a wszystko powyżej przesuwa się w górę i znika z pola widzenia.
+
+00:59:07.180 --> 00:59:09.060
+W ciągu tygodnia wiadomość jest przewijana.
+
+00:59:09.060 --> 00:59:11.100
+W ciągu miesiąca szukasz jej z pamięci.
+
+00:59:11.260 --> 00:59:11.940
+Kto to powiedział?
+
+00:59:12.160 --> 00:59:14.100
+Czy to było na kanale projektu, czy na czacie bocznym?
+
+00:59:14.260 --> 00:59:15.260
+Treść nie zniknęła.
+
+00:59:15.460 --> 00:59:17.220
+Jest po prostu zakopana pod nowszymi rozmowami.
+
+00:59:17.380 --> 00:59:18.300
+Teraz weźmy pliki.
+
+00:59:18.520 --> 00:59:21.080
+Kiedy ktoś przeciąga dokument do czatu, gdzie on właściwie trafia?
+
+00:59:21.300 --> 00:59:21.920
+Nie do Teams.
+
+00:59:22.100 --> 00:59:23.520
+Teams nie przechowuje plików.
+
+00:59:23.680 --> 00:59:29.680
+W czacie jeden na jeden lub grupowym plik trafia do ondrive nadawcy, a osoby w czacie uzyskują do niego dostęp za pośrednictwem linku do udostępniania.
+
+00:59:29.860 --> 00:59:34.900
+W kanale plik trafia do biblioteki dokumentów witryny SharePoint za tym zespołem w folderze o nazwie kanału.
+
+00:59:35.120 --> 00:59:36.940
+Zawsze więc jest prawdziwy dom pod spodem.
+
+00:59:36.940 --> 00:59:40.420
+Jest to tylko taki, którego użytkownik nigdy nie wybrał, co ma kilka konsekwencji.
+
+00:59:40.600 --> 00:59:44.860
+Plik udostępniony na czacie jest własnością nadawcy, więc niesie ze sobą problem wyjścia, który omówiliśmy wcześniej.
+
+00:59:45.080 --> 00:59:52.840
+Plik na kanale znajduje się na stronie zespołu, co jest lepsze, ale ląduje w folderze utworzonym przez kanał bez metadanych i etykiety, chyba że ktoś ją doda.
+
+00:59:53.380 --> 00:59:56.400
+Dostęp zależy od linku lub członkostwa, a nie od rozmowy.
+
+00:59:56.600 --> 00:59:59.120
+Usuń kogoś z czatu, a link może nadal działać.
+
+00:59:59.320 --> 01:00:02.360
+Dodaj kogoś do czatu później, a ten może w ogóle nie zobaczyć pliku.
+
+01:00:02.360 --> 01:00:06.840
+Plik jest więc w jednym miejscu, rozmowa w innym i nic ich nie łączy poza miniaturą.
+
+01:00:07.000 --> 01:00:09.760
+Potem są decyzje i to właśnie wtedy to naprawdę boli.
+
+01:00:09.900 --> 01:00:12.040
+Pomyśl o tym, jak decyzja zapada na czacie.
+
+01:00:12.260 --> 01:00:15.300
+Ktoś proponuje zmianę, kilka osób reaguje, dając kciuk w górę.
+
+01:00:15.440 --> 01:00:18.940
+Ktoś pisze, brzmi dobrze, wybieramy opcję numer dwa i wszyscy idą dalej.
+
+01:00:19.140 --> 01:00:22.500
+W tej chwili wydaje się to przesądzone, ale gdzie teraz jest ta decyzja?
+
+01:00:22.680 --> 01:00:27.080
+To jedna linijka w środku wątku między pytaniem o lunch, a linkiem do wersji roboczej.
+
+01:00:27.320 --> 01:00:30.440
+Nie ma tytułu, właściciela ani daty, której szukałby obcy.
+
+01:00:30.440 --> 01:00:36.200
+Sześć miesięcy później ktoś pyta, dlaczego wybraliśmy opcję numer dwa, a odpowiedzią jest pół zapamiętana rozmowa.
+
+01:00:36.200 --> 01:00:38.440
+Wiadomości na czacie trudno znaleźć po znaczeniu.
+
+01:00:38.680 --> 01:00:40.500
+Wyszukiwanie dopasowuje słowa, a nie wyniki.
+
+01:00:40.760 --> 01:00:42.780
+Jeśli nie pamiętasz dokładnej frazy, przewijasz.
+
+01:00:42.980 --> 01:00:45.940
+Jeśli osoby, które były w wątku, odeszły, kontekst pozostał z nimi.
+
+01:00:46.120 --> 01:00:50.780
+A w zależności od twojej polityki przechowywania, sama wiadomość może zostać usunięta na długo, zanim ktokolwiek jej będzie potrzebował.
+
+01:00:51.020 --> 01:00:52.760
+Decyzja została podjęta, jej zapis nie.
+
+01:00:52.960 --> 01:00:54.760
+Więc rozwiązaniem nie jest zaprzestanie czatu.
+
+01:00:54.900 --> 01:00:55.780
+Czat jest w porządku.
+
+01:00:55.780 --> 01:00:58.780
+Rozwiązaniem jest zaprzestanie nadawania czatowi ciężaru, którego nie jest w stanie udźwignąć.
+
+01:00:58.980 --> 01:01:00.280
+Skieruj rozmowę na początek.
+
+01:01:00.440 --> 01:01:01.580
+Nie zakopuj w nim treści.
+
+01:01:01.800 --> 01:01:03.200
+W praktyce to drobny nawyk.
+
+01:01:03.380 --> 01:01:08.580
+Kiedy decyzja zostanie podjęta, ktoś zapisuje ją tam, gdzie jej miejsce, a następnie umieszcza link z powrotem w wątku.
+
+01:01:08.820 --> 01:01:10.040
+Decyzja zapisana tutaj.
+
+01:01:10.280 --> 01:01:11.700
+Jedna linijka, jeden link.
+
+01:01:11.700 --> 01:01:16.040
+Czat pozostaje tym, czym jest miejscem do rozmowy, a właściwa treść znajduje się w kontenerze z właścicielem.
+
+01:01:16.180 --> 01:01:17.540
+To samo dotyczy dokumentów.
+
+01:01:17.700 --> 01:01:19.420
+Nie wklejaj całego planu do wiadomości.
+
+01:01:19.660 --> 01:01:23.360
+Udostępnij link do miejsca, w którym znajduje się plan i pozwól, aby rozmowa krążyła wokół niego.
+
+01:01:23.600 --> 01:01:26.120
+W ten sposób strumień może przewijać się tak szybko, jak chce.
+
+01:01:26.380 --> 01:01:31.420
+Ludzie potrzebują miejsca, które się nie zmienia, a dla większości organizacji takie miejsce już istnieje.
+
+01:01:31.660 --> 01:01:35.320
+Jest tam od lat zbudowane z witryn bibliotek, metadanych i reguł cyklu życia.
+
+01:01:35.320 --> 01:01:38.900
+To jedyne miejsce w tym całym obrazie, które zostało zaprojektowane do przechowywania rzeczy.
+
+01:01:39.160 --> 01:01:39.680
+SharePoint.
+
+01:01:39.880 --> 01:01:41.360
+SharePoint jako zapis prawdy.
+
+01:01:41.360 --> 01:01:45.600
+SharePoint został stworzony do przechowywania rzeczy, nie do rozmów, nie do burzy mózgów, do przechowywania.
+
+01:01:45.780 --> 01:01:47.000
+I widać to w strukturze.
+
+01:01:47.220 --> 01:01:48.220
+Zaczyna się od witryny.
+
+01:01:48.420 --> 01:01:51.340
+Witryna jest kontenerem i zawiera właścicieli, członków i reguły.
+
+01:01:51.560 --> 01:01:53.260
+Wewnątrz witryny znajdują się biblioteki.
+
+01:01:53.460 --> 01:01:56.260
+Wewnątrz biblioteki znajdują się foldery, jeśli ich potrzebujesz, i elementy.
+
+01:01:56.420 --> 01:01:58.200
+Witryna, biblioteka, folder, element.
+
+01:01:58.400 --> 01:02:00.920
+Cztery poziomy, a każdy z nich może mieć własne uprawnienia.
+
+01:02:01.100 --> 01:02:04.260
+To najstarszy model w całej tej rozmowie i nadal jest najjaśniejszy.
+
+01:02:04.260 --> 01:02:07.940
+Możesz wskazać dokument i dokładnie określić, kto może go otworzyć i dlaczego.
+
+01:02:07.940 --> 01:02:11.100
+Potem przychodzi część, której nie mają inne narzędzia, metadane.
+
+01:02:11.360 --> 01:02:19.120
+Biblioteka może zawierać kolumny, typ dokumentu, właściciela, status, datę zakończenia umowy, klienta, wszystko, co twoja firma musi wiedzieć o pliku, możesz przechowywać obok pliku.
+
+01:02:19.360 --> 01:02:20.180
+Brzmi to skromnie.
+
+01:02:20.400 --> 01:02:25.280
+Nie jest, ponieważ metadane to sposób, w jaki obcy człowiek znajduje odpowiedni dokument w ciągu trzech lat, nie wiedząc, kto go napisał.
+
+01:02:25.420 --> 01:02:27.160
+Foldery zależą od czyjejś pamięci.
+
+01:02:27.360 --> 01:02:30.280
+Kolumny nie, a cykl życia jest zarządzany, a nie oczekiwany.
+
+01:02:30.520 --> 01:02:33.400
+Biblioteka może mieć włączoną wersjonowanie z wybranymi przez ciebie limitami.
+
+01:02:33.620 --> 01:02:35.540
+Może wymagać zatwierdzenia przed opublikowaniem.
+
+01:02:35.800 --> 01:02:39.340
+Może zastosować etykietę retencji z informacją przechowuj przez 7 lat, a następnie przejrzyj.
+
+01:02:39.460 --> 01:02:41.360
+Treść nie jest tutaj pozostawiana bez nadzoru.
+
+01:02:41.580 --> 01:02:44.280
+Ktoś zdecydował, jak długo będzie przechowywana, a system to egzekwuje.
+
+01:02:44.500 --> 01:02:46.040
+Dlatego zgodność działa tutaj najlepiej.
+
+01:02:46.280 --> 01:02:48.400
+Zarządzanie rekordami wymaga kilku rzeczy, aby działać.
+
+01:02:48.400 --> 01:02:52.980
+Znanej lokalizacji znanego właściciela etykiety, która określa, czym jest element, oraz reguły, która uruchamia się we właściwym momencie.
+
+01:02:53.220 --> 01:02:55.480
+SharePoint zapewnia wszystkie te cztery rzeczy w jednym miejscu.
+
+01:02:55.480 --> 01:03:00.100
+Możesz zadeklarować element, rekord, zablokować go przed edycją i zachować przejrzysty dziennik audytu, pokazujący, kto go modyfikował.
+
+01:03:00.300 --> 01:03:02.080
+Spróbuj zrobić to samo z wiadomością czatu.
+
+01:03:02.340 --> 01:03:03.520
+Wyszukiwanie działa tak samo.
+
+01:03:03.760 --> 01:03:06.820
+Wyszukiwarka Microsoft indeksuje SharePoint dogłębnie, wliczając w to kolumny.
+
+01:03:07.040 --> 01:03:09.720
+Możesz więc filtrować według typu dokumentu, właściciela i daty.
+
+01:03:09.920 --> 01:03:12.780
+Wyniki pojawiają się w kontekście, a nie tylko z pasującą frazą.
+
+01:03:12.780 --> 01:03:14.640
+Przez lata, przez tysiące plików.
+
+01:03:14.740 --> 01:03:18.840
+To jest różnica między znalezieniem podpisanej umowy, a znalezieniem wątku, który o niej wspomina.
+
+01:03:19.060 --> 01:03:20.100
+Oto więc sytuacja.
+
+01:03:20.100 --> 01:03:22.260
+Pętla i strony powinny zasilać SharePoint.
+
+01:03:22.480 --> 01:03:23.680
+Nie powinny go zastępować.
+
+01:03:23.920 --> 01:03:25.280
+Są dobre na początku procesu.
+
+01:03:25.460 --> 01:03:29.760
+Szybkie przechwytywanie, współdzielone tworzenie szkiców, aktualizacje na żywo między osobami, które wciąż nad tym pracują.
+
+01:03:29.960 --> 01:03:34.600
+To prawdziwa wartość i nikt nie powinien się z nią spierać, ale zostały zaprojektowane do płynnej pracy, a nie do długiego ogona.
+
+01:03:34.600 --> 01:03:38.860
+Nie mają struktury bibliotecznej, kolumn, ani kontrolek rekordów, których potrzebuje trwały element.
+
+01:03:39.040 --> 01:03:45.820
+Jeśli pozwolisz im domyślnie stać się archiwum, otrzymasz rekord, który jest trudny do przeszukiwania, trudny do etykietowania i powiązany z kontenerami, których nikt nie może przeglądać.
+
+01:03:45.820 --> 01:03:49.720
+Więc przepływ jest jednokierunkowy. Pomysły zaczynają się na stronach i komponentach.
+
+01:03:49.860 --> 01:03:53.960
+Praca jest współdzielona w przestrzeni roboczej, a to, co firma musi zachować, celowo trafia do biblioteki.
+
+01:03:54.120 --> 01:03:57.580
+Teraz pojawia się oczywiste pytanie, kiedy strona pętli faktycznie zasługuje na przeniesienie?
+
+01:03:57.720 --> 01:03:59.400
+Użyj wyzwalaczy z wcześniejszej części.
+
+01:03:59.400 --> 01:04:01.960
+Jeśli strona przechwyciła decyzję, trafia do rekordu.
+
+01:04:02.160 --> 01:04:05.240
+Jeśli ma zostać przeniesiona poza firmę, potrzebuje kontrolowanej lokalizacji.
+
+01:04:05.480 --> 01:04:09.000
+Jeśli jest to coś, co projekt przekazuje, potrzebuje właściciela, który nie jest osobą.
+
+01:04:09.180 --> 01:04:11.400
+Następnie wybierz odpowiedni formularz do przeniesienia.
+
+01:04:11.400 --> 01:04:16.520
+Jeśli treść przypomina dokument, plan, propozycję, politykę lub raport, zmieni ją w taki dokument.
+
+01:04:16.700 --> 01:04:20.240
+Flick Word w bibliotece z wypełnionymi kolumnami i przypisaną etykietą.
+
+01:04:20.460 --> 01:04:22.560
+Ma tytuł, wersję i jasny stan końcowy.
+
+01:04:22.560 --> 01:04:29.820
+Jeśli treść ma być czytana i znajdowana przez wiele osób, np. wskazówki, proces lub ogłoszenie, strona witryny SharePoint będzie lepszym rozwiązaniem.
+
+01:04:30.040 --> 01:04:34.720
+Jest stworzona dla czytelników, pojawia się w wyszukiwarce i znajduje się w witrynie z widocznym właścicielem.
+
+01:04:34.720 --> 01:04:42.040
+A jeśli to wciąż żywa powierzchnia robocza, która potrzebuje tylko bardziej stabilnego kontenera, zostaw ją w przestrzeni roboczej, ale upewnij się, że właściciele są nazwani, a etykieta ustawiona.
+
+01:04:42.220 --> 01:04:44.020
+Tak czy inaczej, ktoś celowo to robi.
+
+01:04:44.240 --> 01:04:45.080
+Taki jest schemat.
+
+01:04:45.320 --> 01:04:47.080
+Ale zauważ, od czego to wszystko zależy.
+
+01:04:47.320 --> 01:04:52.360
+Biblioteki potrzebują właścicieli, etykiety potrzebują znaczenia, domyślne wartości muszą być ustawione, zanim ktokolwiek cokolwiek stworzy.
+
+01:04:52.520 --> 01:04:57.120
+Nic z tego nie dzieje się samo z siebie i nic z tego nie ma znaczenia, jeśli istnieje tylko w głowie jednego administratora.
+
+01:04:57.120 --> 01:04:58.280
+Trzeba to zapisać.
+
+01:04:58.540 --> 01:05:00.160
+Zarządzanie bez zabijania adopcji.
+
+01:05:00.380 --> 01:05:02.080
+Oto jak zazwyczaj umiera zarządzanie.
+
+01:05:02.280 --> 01:05:07.360
+Ktoś pisze reguły 40 stron, konwencje nazewnictwa, łańcuchy zatwierdzania, formularz dla każdego żądania.
+
+01:05:07.600 --> 01:05:10.500
+Jest to dokładne, ale też nieczytelne, więc nikt tego nie czyta.
+
+01:05:10.640 --> 01:05:14.820
+A nieliczne osoby, które decydują się na najbezpieczniejsze posunięcie, to unikanie narzędzi, których dotyczy.
+
+01:05:14.980 --> 01:05:21.520
+I nie przestają pracować, po prostu wracają do poczty e-mail, gdzie nic nie wymaga zatwierdzenia, do osobistego notatnika, gdzie nikt nie zadaje pytań.
+
+01:05:21.520 --> 01:05:24.020
+Do pliku na pulpicie o nazwie Final V3.
+
+01:05:24.240 --> 01:05:25.660
+Reguły nie zmniejszyły ryzyka.
+
+01:05:25.900 --> 01:05:29.340
+Przenieśli zawartość gdzieś bez kontenera, bez etykiety i bez żadnego właściciela.
+
+01:05:29.460 --> 01:05:30.280
+To jest podstawa.
+
+01:05:30.520 --> 01:05:32.640
+Zarządzanie, w którym ludzie się grzebią, to nie zarządzanie.
+
+01:05:32.780 --> 01:05:34.400
+To dokument, więc odwróć to.
+
+01:05:34.620 --> 01:05:38.220
+Mniej reguł określonych wprost i egzekwowanych przez system, a nie z pamięci.
+
+01:05:38.440 --> 01:05:41.520
+Reguła, która zależy od pamiętania ludzi, zawiedzie w ruchliwy wtorek.
+
+01:05:41.680 --> 01:05:46.380
+Reguła wbudowana w ustawienia domyślne obowiązuje w każdy wtorek, również w te, w które nikt o niej nie myśli.
+
+01:05:46.380 --> 01:05:51.700
+Jeśli domyślny link do udostępniania jest ograniczony do konkretnych osób, większość linków będzie ograniczona do konkretnych osób.
+
+01:05:51.900 --> 01:05:56.380
+Jeśli nowy obszar roboczy wymaga dwóch właścicieli przed utworzeniem, większość obszarów roboczych będzie miała dwóch właścicieli.
+
+01:05:56.580 --> 01:05:57.740
+Nikt nie musiał być szkolony.
+
+01:05:57.920 --> 01:06:00.820
+Po prostu podążali ścieżką najmniejszego wysiłku, a ścieżka była właściwa.
+
+01:06:01.020 --> 01:06:02.800
+Gdzie więc znajdują się te ustawienia domyślne?
+
+01:06:02.980 --> 01:06:04.620
+Zacznij od tego, kto może tworzyć rzeczy.
+
+01:06:04.820 --> 01:06:09.360
+W ustawieniach administratora lub decydujesz, czy każdy może tworzyć obszary robocze, czy tylko zdefiniowana grupa.
+
+01:06:09.360 --> 01:06:15.080
+Szeroko otwarty wydaje się przyjazny i na początku jest w porządku, ale to także sposób, w jaki kończysz z 400 obszarami roboczymi i bez mapy.
+
+01:06:15.260 --> 01:06:17.680
+Ścieżka pośrednia sprawdza się w przypadku większości dzierżawców.
+
+01:06:17.860 --> 01:06:25.460
+Pozwól użytkownikom swobodnie tworzyć w swojej własnej przestrzeni i ogranicz współdzielone przestrzenie robocze do osób, które przeszły krótkie szkolenie lub do prośby, która zajmuje 2 minuty, a nie 2 tygodnie.
+
+01:06:25.680 --> 01:06:27.380
+Następnie domyślne udostępnianie.
+
+01:06:27.520 --> 01:06:29.300
+To ustawienie ma największy zasięg.
+
+01:06:29.380 --> 01:06:31.960
+Jaki typ łącza otrzymuje użytkownik po kliknięciu Udostępnij?
+
+01:06:31.960 --> 01:06:38.300
+W programach SharePoint i OnDrive możesz ustawić domyślne udostępnianie dla konkretnych osób zamiast dla wszystkich w organizacji, a także ograniczyć zakres łącza.
+
+01:06:38.440 --> 01:06:42.400
+Ta jedna zmiana znacznie zmniejsza liczbę udostępnianych treści, zanim ktokolwiek podejmie decyzję.
+
+01:06:42.600 --> 01:06:49.640
+Zawartość pętli korzysta z tego samego mechanizmu udostępniania, więc sprawdź, jak ustawienia dzierżawy są przenoszone na komponenty i strony i przetestuj to, ponieważ zachowanie może się różnić w zależności od platformy.
+
+01:06:49.780 --> 01:06:51.260
+Następnie zasady dotyczące etykiet.
+
+01:06:51.420 --> 01:06:52.780
+Które etykiety widzą użytkownicy?
+
+01:06:52.980 --> 01:06:54.520
+Która z nich jest stosowana domyślnie?
+
+01:06:54.520 --> 01:06:57.640
+Czy etykieta jest wymagana przed zapisaniem dokumentu, czy tylko sugerowana?
+
+01:06:57.880 --> 01:07:00.980
+Domyślna etykieta dla nowej zawartości to ciche, skuteczne narzędzie.
+
+01:07:01.180 --> 01:07:06.080
+Oznacza to, że plik zaczyna życie z pewną ochroną, a użytkownik musi ją zmienić tylko wtedy, gdy zawartość się zmieni.
+
+01:07:06.280 --> 01:07:09.960
+Wymaganie etykiety jest bardziej rygorystyczne i sprawdza się w przypadku zespołów zajmujących się wrażliwymi zagadnieniami.
+
+01:07:10.180 --> 01:07:14.600
+Stosowanie tego wszędzie i do każdego to sposób na uzyskanie etykiety, której nikt nie rozumie, do czego jeszcze wrócimy.
+
+01:07:14.780 --> 01:07:17.860
+Trzy elementy sterujące, kto tworzy, jak jest udostępniane i jak jest oznaczane.
+
+01:07:17.860 --> 01:07:21.520
+Jeśli je dobrze ustawisz, większość codziennego ryzyka zostanie wyeliminowana, zanim ktokolwiek napisze stronę.
+
+01:07:21.620 --> 01:07:23.180
+Ale domyślne ustawienia się zmieniają.
+
+01:07:23.400 --> 01:07:25.500
+Ludzie otrzymują wyjątki, zespoły się rozrastają.
+
+01:07:25.720 --> 01:07:28.060
+Ustawienie, które było dobre w styczniu, jest złe jesienią.
+
+01:07:28.280 --> 01:07:30.700
+Dlatego wpisz przegląd do kalendarza, a nie projekt, a nawyk.
+
+01:07:30.880 --> 01:07:34.260
+Raz w miesiącu lub raz na kwartał ktoś przegląda raporty dotyczące tworzenia i udostępniania.
+
+01:07:34.420 --> 01:07:36.040
+Ile nowych obszarów roboczych pojawiło się?
+
+01:07:36.200 --> 01:07:36.960
+Kto je utworzył?
+
+01:07:37.120 --> 01:07:38.860
+Które z nich mają jednego właściciela, a które żadnego?
+
+01:07:38.860 --> 01:07:40.760
+Które witryny wykazują najszersze udostępnianie?
+
+01:07:40.880 --> 01:07:42.360
+Co się zmieniło od ostatniego razu?
+
+01:07:42.540 --> 01:07:44.280
+Nie szukasz winnych, szukasz kształtu.
+
+01:07:44.500 --> 01:07:48.940
+Skok liczby obszarów roboczych z jednego działu oznacza, że potrzebują lepszego miejsca lub lepszego wsparcia.
+
+01:07:49.200 --> 01:07:52.520
+Stos szerokich linków w jednej witrynie oznacza, że witryna potrzebuje rozmowy.
+
+01:07:52.660 --> 01:07:56.120
+A obszar roboczy bez aktywności i bez właściciela jest kandydatem do archiwizacji.
+
+01:07:56.300 --> 01:07:57.480
+Ten przegląd zajmuje godzinę.
+
+01:07:57.600 --> 01:07:59.720
+Jeśli raporty są skonfigurowane, wymaga kryzysu.
+
+01:07:59.800 --> 01:08:00.320
+Jeśli nie są.
+
+01:08:00.320 --> 01:08:05.080
+I zauważ, co ci to daje krótki zestaw reguł, garść domyślnych ustawień i regularne spojrzenie na to, co się dzieje.
+
+01:08:05.180 --> 01:08:07.140
+To jest zarządzanie, z którym ludzie mogą żyć.
+
+01:08:07.300 --> 01:08:09.940
+Nie wymaga od nich myślenia o tym, wymaga tylko, aby nie walczyli z nurtem.
+
+01:08:10.100 --> 01:08:12.200
+Ale domyślne ustawienia wykonują tylko część pracy.
+
+01:08:12.460 --> 01:08:13.960
+Mogą skierować osobę w stronę domu.
+
+01:08:14.160 --> 01:08:15.440
+Nie potrafią wyjaśnić dlaczego.
+
+01:08:15.660 --> 01:08:20.640
+A kiedy ktoś wpatruje się w pustą stronę, zastanawiając się, gdzie ona należy, ustawienia w centrum administracyjnym mu nie pomagają.
+
+01:08:20.840 --> 01:08:22.700
+To wymaga słów, które faktycznie przeczyta.
+
+01:08:22.900 --> 01:08:25.240
+Wskazówki dla użytkownika, które faktycznie są przestrzegane.
+
+01:08:25.240 --> 01:08:27.380
+Większość wskazówek zawodzi z powodu długości.
+
+01:08:27.580 --> 01:08:33.080
+12-stronicowa polityka jest przeglądana pobieżnie i dodawana do zakładek, a następnie trafia do folderu tuż obok ostatniej 12-stronicowej polityki.
+
+01:08:33.260 --> 01:08:34.280
+Nikt tu nie jest leniwy.
+
+01:08:34.520 --> 01:08:37.180
+Ludzie po prostu mają pracę do skończenia i pustą stronę wpatrującą się w nich.
+
+01:08:37.340 --> 01:08:39.900
+Nie otwierają instrukcji, aby zdecydować, gdzie należy umieścić dokument.
+
+01:08:40.100 --> 01:08:40.940
+Więc ją skróć.
+
+01:08:41.080 --> 01:08:43.480
+Jedna strona, jedno drzewo decyzyjne, proste słowa.
+
+01:08:43.720 --> 01:08:45.600
+Strona otwiera się pojedynczym pytaniem.
+
+01:08:45.780 --> 01:08:46.980
+Co robisz z tą treścią?
+
+01:08:47.260 --> 01:08:48.900
+Wszystko inne od tego się zaczyna.
+
+01:08:48.900 --> 01:08:52.020
+Czy myślisz o tym sam, pracując nad tym z kilkoma osobami?
+
+01:08:52.140 --> 01:08:53.420
+Czy firma musi to zachować?
+
+01:08:53.560 --> 01:08:55.020
+Trzy odpowiedzi, trzy domy.
+
+01:08:55.200 --> 01:08:57.660
+Ktoś może to przeczytać w 10 sekund i to jest test.
+
+01:08:57.860 --> 01:09:00.840
+Jeśli wskazówki nie przetrwają 10 sekund, to nie są wskazówki.
+
+01:09:00.980 --> 01:09:03.700
+To dokumentacja, a słowa liczą się bardziej niż układ.
+
+01:09:03.880 --> 01:09:06.880
+Pomiń ulotne, wspólne artefakty i archiwa ocen.
+
+01:09:07.040 --> 01:09:08.640
+Ale nikt nie mówi o tym na głos.
+
+01:09:08.860 --> 01:09:11.940
+Powiedz to tak, jak powiedziałbyś to współpracownikowi przy sąsiednim biurku.
+
+01:09:12.160 --> 01:09:14.560
+Myślenie tutaj, udostępnianie tutaj, zachowywanie tutaj.
+
+01:09:14.680 --> 01:09:16.160
+To cały model w sześciu słowach.
+
+01:09:16.160 --> 01:09:19.840
+Myślenie odbywa się na stronie drugiego pilota lub komponencie pętli w Twojej własnej przestrzeni.
+
+01:09:20.040 --> 01:09:23.620
+Udostępnianie odbywa się w obszarze roboczym pętli lub kanale Teams z nazwanymi właścicielami.
+
+01:09:23.880 --> 01:09:26.340
+Zachowywanie odbywa się w programie SharePoint z etykietą.
+
+01:09:26.560 --> 01:09:30.160
+Umieść te trzy linijki na górze, a następnie jedno krótkie zdanie pod każdą.
+
+01:09:30.400 --> 01:09:33.580
+Myślenie tutaj, szkice, pomysły, wszystko, czego potrzebujesz.
+
+01:09:34.900 --> 01:09:37.140
+Dzielenie się tutaj, praca w toku z zespołem.
+
+01:09:37.400 --> 01:09:41.080
+Przechowywanie tutaj decyzji ustaleń wszystkiego, co musimy znaleźć w ciągu roku.
+
+01:09:41.360 --> 01:09:43.320
+Dodaj jeszcze jedną linijkę na chwilę zwątpienia.
+
+01:09:43.320 --> 01:09:45.520
+Jeśli nie jesteś pewien, zapytaj, kto jest właścicielem.
+
+01:09:45.700 --> 01:09:47.560
+Brak właściciela nie jest to gotowe do udostępnienia.
+
+01:09:47.780 --> 01:09:48.580
+Gdzie to teraz trafi?
+
+01:09:48.760 --> 01:09:50.640
+Nie w bibliotece dokumentów, której nikt nie odwiedza.
+
+01:09:50.820 --> 01:09:52.900
+Umieść to tam, gdzie ludzie już są, gdy pojawi się pytanie.
+
+01:09:53.140 --> 01:09:55.780
+Przypnij to jako kartę w kanałach Teams, gdy rozpocznie się nowa praca.
+
+01:09:55.980 --> 01:09:59.780
+Połącz to ze stroną główną w internecie pod dowolną nazwą, której ludzie faktycznie szukają, na przykład.
+
+01:10:00.060 --> 01:10:00.720
+Gdzie to trafić?
+
+01:10:00.920 --> 01:10:02.660
+Umieść to również w onboardingu Copilot.
+
+01:10:02.860 --> 01:10:07.000
+To moment, w którym nowy użytkownik ma zamiar utworzyć swoją pierwszą stronę, a nawyk jeszcze się nie wykształcił.
+
+01:10:07.000 --> 01:10:10.120
+Jeden link na tym etapie robi więcej niż sesja szkoleniowa miesiąc później.
+
+01:10:10.400 --> 01:10:13.440
+Następnie przekaż ludziom stronę w miejscach, w których kształtuje się decyzja.
+
+01:10:13.580 --> 01:10:19.560
+Krótka notatka w przepływie tworzenia obszaru roboczego lub linijka w opisie etykiety, przypięta wiadomość w kanale dla każdego nowego projektu.
+
+01:10:19.720 --> 01:10:23.580
+Wszędzie te same słowa, aby sformułowanie się przyjęło, ale sama strona tego nie udźwignie.
+
+01:10:23.800 --> 01:10:25.000
+Ludzie podążają za ludźmi.
+
+01:10:25.200 --> 01:10:28.040
+Wybierz więc mistrzów jednego lub dwóch w każdym dziale, nie z id.
+
+01:10:28.040 --> 01:10:31.980
+Kogoś, kto jest dobrze znany, trochę ciekawski i już pomaga kolegom w drobnych sprawach.
+
+01:10:32.160 --> 01:10:35.800
+Daj im stronę, 15-minutowy briefing i możliwość zadawania pytań z góry.
+
+01:10:36.020 --> 01:10:37.100
+Niczego nie narzucają.
+
+01:10:37.500 --> 01:10:39.220
+Odpowiadają, gdzie mam to umieścić?
+
+01:10:39.340 --> 01:10:43.760
+W danej chwili głosem, któremu koledzy ufają i uzbrajają ich w przykłady krótkie.
+
+01:10:44.000 --> 01:10:50.860
+Zespół sprzedaży pisze wersję roboczą oferty najpierw w strona Copilot Obszar Roboczy lub, podczas gdy trzy osoby edytują SharePoint, gdy klient to otrzyma.
+
+01:10:51.080 --> 01:10:53.200
+Menedżer rejestrujący decyzję o zatrudnieniu.
+
+01:10:53.420 --> 01:10:54.780
+Nigdy nie pozostaje to w czacie.
+
+01:10:54.780 --> 01:10:58.280
+Trafia do biblioteki HR z etykietą, a następnie link wraca do wątku.
+
+01:10:58.440 --> 01:11:01.140
+Cztery linijki w każdym, prawdziwe zadania, prawdziwe wyniki.
+
+01:11:01.400 --> 01:11:05.700
+Jeden dobry przykład uczy więcej niż akapit zasad, ponieważ ludzie rozpoznają w nim swój własny wtorek.
+
+01:11:05.860 --> 01:11:11.500
+Następnie utrzymuj go przy życiu, przeglądaj stronę dwa razy w roku, usuń wszystko, czego nikt nie używa, dodaj pytanie, które ludzie zadają mistrzom.
+
+01:11:11.660 --> 01:11:14.800
+Jeśli pojawi się nowa funkcja, zmień jedną linijkę, a nie całą stronę.
+
+01:11:14.800 --> 01:11:22.140
+To wskazówki, którymi kierują się ludzie krótkie, wypowiedziane, umieszczone tam, gdzie zapada decyzja, powtórzone przez kogoś, komu ufają, co pozostawia pytanie, na które strona nie potrafi odpowiedzieć.
+
+01:11:22.340 --> 01:11:23.760
+Kto decyduje, co się w tym znajdzie?
+
+01:11:23.940 --> 01:11:25.120
+Kto finansuje porządkowanie?
+
+01:11:25.320 --> 01:11:26.780
+I kto odpowiada, gdy się nie powiedzie?
+
+01:11:26.920 --> 01:11:28.460
+To nie są decyzje użytkowników.
+
+01:11:28.580 --> 01:11:29.920
+To decyzje wyższego szczebla.
+
+01:11:30.140 --> 01:11:31.900
+Jakie decyzje musi podjąć kierownictwo?
+
+01:11:32.100 --> 01:11:34.960
+Niektórych z nich nie może rozstrzygnąć administrator ze stroną ustawień.
+
+01:11:35.100 --> 01:11:37.880
+Potrzeba kogoś z uprawnieniami, by powiedzieć tak, nie lub jeszcze nie.
+
+01:11:37.880 --> 01:11:41.880
+I są cztery decyzje, które ciągle lądują na niewłaściwym biurku lub wcale na żadnym.
+
+01:11:42.040 --> 01:11:43.600
+Pierwsza to apetyt na ryzyko.
+
+01:11:43.820 --> 01:11:48.100
+Jak dużo niekontrolowanego, współdzielonego wyniku, a i jest gotowa zaakceptować organizacja?
+
+01:11:48.260 --> 01:11:50.680
+To prawdziwe pytanie i ma szeroki wachlarz odpowiedzi.
+
+01:11:50.900 --> 01:11:54.540
+Startup programistyczny może powiedzieć, pozwólcie ludziom swobodnie tworzyć, posprzątamy później.
+
+01:11:54.820 --> 01:11:58.140
+Bank może powiedzieć, nic nie jest udostępniane bez etykiety i wskazanego właściciela.
+
+01:11:58.280 --> 01:11:59.320
+Obaj mogą mieć rację.
+
+01:11:59.520 --> 01:12:03.320
+Problemem jest brak odpowiedzi, ponieważ gdy kierownictwo milczy, domyślne ustawienie staje się odpowiedzią.
+
+01:12:03.320 --> 01:12:07.360
+A domyślne ustawienie to to, na co narzędzia pozwalają od pierwszego dnia, co zazwyczaj jest najbardziej luźnym ustawieniem.
+
+01:12:07.500 --> 01:12:12.600
+Ujmując to wprost, jeśli strona pilotażowa zostanie udostępniona 200 osobom i nigdy nie zostanie zweryfikowana, czy jest to akceptowalne?
+
+01:12:12.720 --> 01:12:15.020
+Jeśli zawiera decyzję cenową, czy jest to akceptowalne?
+
+01:12:15.160 --> 01:12:16.740
+Uzyskaj liczbę lub granicę na piśmie.
+
+01:12:16.940 --> 01:12:19.300
+Wszystko, co nastąpi później, jest łatwiejsze do argumentowania.
+
+01:12:19.520 --> 01:12:22.580
+Drugą decyzją jest to, kto jest właścicielem modelu rozmieszczania, a nie narzędzia.
+
+01:12:22.700 --> 01:12:26.580
+Model, zasady dotyczące tego, co gdzie trafia, kto to weryfikuje i co się dzieje, gdy coś się zepsuje.
+
+01:12:26.580 --> 01:12:28.920
+Obecnie trzy grupy są właścicielami poszczególnych części.
+
+01:12:29.160 --> 01:12:30.800
+Każda zarządza dzierżawcą i ustawieniami.
+
+01:12:31.040 --> 01:12:36.220
+Dział zarządzania dokumentami jest odpowiedzialny za przechowywanie i etykiety, a jednostki biznesowe są właścicielami faktycznej treści i nawyków z nią związanych.
+
+01:12:36.400 --> 01:12:38.600
+Każda grupa zakłada, że posiada ją jedna z pozostałych.
+
+01:12:38.840 --> 01:12:41.640
+Mówi, że zbudowaliśmy platformę, ale nie wiemy, co oznacza ta treść.
+
+01:12:41.860 --> 01:12:44.840
+Dział zarządzania dokumentami mówi, że ustawiliśmy zasady, ale nie widzimy lub.
+
+01:12:45.060 --> 01:12:47.160
+Firma mówi, że musimy po prostu wykonać pracę.
+
+01:12:47.380 --> 01:12:50.560
+Model nie ma więc właściciela, a model bez właściciela to po prostu zbiór ustawień.
+
+01:12:50.560 --> 01:12:52.520
+Wybierz jednego odpowiedzialnego właściciela.
+
+01:12:52.680 --> 01:12:56.780
+Może to być dowolny z trzech, ale musi to być jedna nazwa, a pozostałe dwie muszą być nazwanymi partnerami.
+
+01:12:56.980 --> 01:12:59.760
+W większości organizacji najlepiej sprawdza się model współdzielony.
+
+01:12:59.980 --> 01:13:05.660
+Dział IT jest właścicielem kontroli, dział dokumentacji jest właścicielem etykiet i przechowywania, a jednostki biznesowe są właścicielami wskazówek i przykładów.
+
+01:13:05.800 --> 01:13:06.600
+Ktoś się tym dzieli.
+
+01:13:06.820 --> 01:13:08.560
+Ktoś odpowiada, gdy coś się nie powiedzie.
+
+01:13:08.740 --> 01:13:09.800
+Po trzecie, pieniądze.
+
+01:13:10.000 --> 01:13:13.700
+Czyszczenie kosztuje i wymaga budżetu, zanim ktokolwiek rozszerzy zakres współużytkowania.
+
+01:13:13.700 --> 01:13:20.860
+Zawężanie starego udostępniania, archiwizacja nieaktywnych witryn, przypisywanie właścicieli, sprawdzanie etykiet, testowanie działania lub e-pages we własnym tenancie.
+
+01:13:21.020 --> 01:13:24.660
+To godziny prawdziwej pracy, która konkuruje z projektami z widocznymi terminami.
+
+01:13:24.860 --> 01:13:33.840
+Kierownictwo musi więc wybrać najpierw sfinansować czyszczenie i rozszerzyć je na czystą bazę, czy najpierw rozszerzyć zakres i zapłacić za to później w ramach reagowania na incydenty, co zawsze kosztuje więcej i pojawia się w gorszym momencie.
+
+01:13:34.120 --> 01:13:36.580
+Żadna z opcji nie jest wolna, tylko jedna z nich jest zaplanowana.
+
+01:13:36.780 --> 01:13:39.160
+I po czwarte, skąd będziesz wiedzieć, że cokolwiek zadziałało.
+
+01:13:39.160 --> 01:13:42.260
+Pomin niejasne cele, lepszej współpracy nie da się zmierzyć.
+
+01:13:42.460 --> 01:13:45.000
+Wybierz trzy rzeczy, które możesz policzyć, mniej duplikatów.
+
+01:13:45.160 --> 01:13:48.740
+Ile kopii tego samego planu istnieje na stronach, obszarach roboczych i załącznikach czatu?
+
+01:13:48.900 --> 01:13:50.160
+Ta liczba powinna spaść.
+
+01:13:50.360 --> 01:13:51.320
+Szybsze wyszukiwanie.
+
+01:13:51.560 --> 01:13:55.100
+Wybierz kilka pytań, które ludzie ciągle zadają, np. gdzie jest podpisana umowa?
+
+01:13:55.280 --> 01:13:57.180
+I zmierz, ile czasu zajmuje odpowiedź.
+
+01:13:57.240 --> 01:13:59.100
+To powinno skrócić i ułatwić wyjścia.
+
+01:13:59.280 --> 01:14:01.800
+Kiedy ktoś odchodzi, ile współdzielonych treści potrzebuje ratunku?
+
+01:14:02.000 --> 01:14:03.600
+Policz zgłoszenia, policz godziny.
+
+01:14:03.800 --> 01:14:05.680
+W zdrowym modelu ta liczba spada do zera.
+
+01:14:05.680 --> 01:14:08.500
+Trzy liczby przeglądane zgodnie z harmonogramem, raportołejn w górę.
+
+01:14:08.600 --> 01:14:10.920
+Po ustaleniu tych czterech, praca przestaje być teorią.
+
+01:14:11.140 --> 01:14:13.740
+Ma granice właściciela, budżet i tablicę wyników.
+
+01:14:13.920 --> 01:14:20.100
+Pozostaje kolejność, ponieważ robienie właściwych rzeczy w niewłaściwej kolejności może zniweczyć większość wartości, a kolejność nie jest oczywista.
+
+01:14:20.340 --> 01:14:21.840
+Sekwencja wdrażania, która działa.
+
+01:14:22.060 --> 01:14:23.960
+Kolejność liczy się tu bardziej niż szybkość.
+
+01:14:24.120 --> 01:14:26.600
+Większość zespołów robi wszystko dobrze, ale kolejność jest zła.
+
+01:14:26.800 --> 01:14:29.860
+Publikują strony z wytycznymi w pierwszym tygodniu, ponieważ wydaje się to postępem.
+
+01:14:29.860 --> 01:14:33.060
+Potem odkrywają, że domyślne ustawienia pod spodem nadal wskazują w innym kierunku.
+
+01:14:33.280 --> 01:14:35.560
+Ludzie śledzą stronę, a ustawienia po cichu to cofają.
+
+01:14:35.800 --> 01:14:38.780
+Zacznij więc od dołu, najpierw od uprawnień i domyślnych ustawień udostępniania.
+
+01:14:38.900 --> 01:14:41.000
+To jest warstwa, na której opiera się wszystko inne.
+
+01:14:41.220 --> 01:14:45.040
+Zanim ktokolwiek napisze nazwę etykiety lub drzewo decyzyjne, ustal, kto do czego może dotrzeć.
+
+01:14:45.200 --> 01:14:49.760
+Zawieź najstarsze, szerokie linki, znajdź witryny otwarte dla całej firmy, które nigdy nie powinny były istnieć.
+
+01:14:49.900 --> 01:14:51.800
+Ustaw domyślne łącze do konkretnych osób.
+
+01:14:51.800 --> 01:14:58.500
+Zdecyduj, kto może tworzyć współdzielone przestrzenie robocze i sprawdź, kto jest właścicielem każdej z nich, ponieważ przestrzeń robocza bez właściciela to problem, który można przewidzieć.
+
+01:14:58.620 --> 01:14:59.420
+To nudna praca.
+
+01:14:59.620 --> 01:15:04.200
+To również praca, która najbardziej zmniejsza ryzyko w przeliczeniu na godzinę i ma efekt uboczny, który ma znaczenie później.
+
+01:15:04.440 --> 01:15:08.100
+Kiedy dotrzesz do kopilota, odpowiedzi, które generuje, pochodzą z bardziej przejrzystego dostępu.
+
+01:15:08.260 --> 01:15:12.040
+Etykiety i zasady dotyczące kontenerów są następne i to dopiero po warstwie dostępu.
+
+01:15:12.040 --> 01:15:16.720
+Tutaj decydujesz, co każda etykieta robi w kontenerze i pliku oraz która z nich jest stosowana domyślnie.
+
+01:15:16.720 --> 01:15:18.860
+Pamiętaj o punkcie zakresu z wcześniejszej części.
+
+01:15:19.100 --> 01:15:24.440
+Ustaw kontrolki dla witryn i grup, następnie dla dokumentów, a następnie sprawdź, jak obie zachowują się w pętli i na stronach we własnym tenancie.
+
+01:15:24.580 --> 01:15:25.680
+Ustaw mały zestaw.
+
+01:15:25.860 --> 01:15:28.180
+Cztery etykiety rozumieją ludzie, a dziewięć nie.
+
+01:15:28.440 --> 01:15:32.600
+Następnie dołącz reguły dotyczące kontenerów, prywatność, udostępnianie zewnętrzne, dostęp do urządzeń.
+
+01:15:32.600 --> 01:15:38.780
+A jeśli spróbujesz tego, zanim uprawnienia będą uczciwe, skończysz na etykietowaniu treści, które nadal są otwarte dla wszystkich, co niczego nie chroni.
+
+01:15:38.940 --> 01:15:40.440
+Dopiero teraz publikujesz wytyczne.
+
+01:15:40.440 --> 01:15:43.920
+To jest krok, który ludzie chcą wykonać jako pierwszy i to on powinien poczekać.
+
+01:15:44.080 --> 01:15:45.380
+Wytyczne opisują ścieżkę.
+
+01:15:45.600 --> 01:15:47.480
+Ścieżka musi istnieć, zanim na nią wskażesz.
+
+01:15:47.680 --> 01:15:52.640
+Gdy ustawienia domyślne są stabilne, a etykiety coś znaczą, myślenie tutaj, dzielenie się tutaj, zachowanie tutaj jest prawdziwym zdaniem.
+
+01:15:52.840 --> 01:15:54.060
+Wcześniej to tylko nadzieja.
+
+01:15:54.220 --> 01:15:59.140
+Opublikuj je zbyt wcześnie, a pierwsza osoba, która je zastosuje i wybierze niewłaściwą domyślną wartość, straci zaufanie do całej strony.
+
+01:15:59.140 --> 01:16:06.080
+Poczekaj więc, aż ustawienia będą obowiązywać przez kilka tygodni, a następnie umieść stronę w zespołach w intranecie i w systemie onboardingu drugiego pilota, używając wszędzie tych samych słów.
+
+01:16:06.160 --> 01:16:07.900
+I nie udostępniaj jej wszystkim naraz.
+
+01:16:08.100 --> 01:16:13.420
+Wybierz jeden dział, taki, w którym panuje prawdziwa współpraca, kilku liderów i lidera, który udzieli Ci szczerej informacji zwrotnej.
+
+01:16:13.620 --> 01:16:16.820
+Dział prawny może się sprawdzić, podobnie jak zespół operacyjny skupiony na projektach.
+
+01:16:16.980 --> 01:16:19.680
+Unikaj najgłośniejszego zespołu i takiego, który nie ma nic do stracenia.
+
+01:16:19.900 --> 01:16:22.480
+Działaj przez 4 do 6 tygodni, obserwuj, co faktycznie robią.
+
+01:16:22.480 --> 01:16:25.740
+Gdzie umieścili rzeczy? Jakie pytanie liderzy byli najczęściej zadawani?
+
+01:16:25.920 --> 01:16:27.500
+Które ustawienie stanęło im na drodze?
+
+01:16:27.640 --> 01:16:29.760
+Czy pojawił się jakiś obszar roboczy bez właściciela?
+
+01:16:29.900 --> 01:16:34.480
+Sprawdź raporty tworzenia i udostępniania na początku, w środku i na końcu, aby mieć obraz przed i po.
+
+01:16:34.640 --> 01:16:37.480
+To, co znajdziesz w pilotażu, zaskoczy Cię i o to właśnie chodzi.
+
+01:16:37.660 --> 01:16:43.360
+Prawdziwe nawyki jednego działu ujawnią lukę w wytycznych, etykietę, której nikt nie rozumiał, lub domyślne ustawienia, które były zbyt rygorystyczne.
+
+01:16:43.540 --> 01:16:45.680
+Naprawa tych błędów przy 40 osobach jest tania.
+
+01:16:45.920 --> 01:16:47.760
+Naprawa przy 4000 osobach to program.
+
+01:16:47.760 --> 01:16:51.140
+Następnie rozszerzaj uruchomienie falami, korzystając z tego, czego nauczyłeś się podczas pilotażu.
+
+01:16:51.240 --> 01:16:54.740
+Cztery kroki dostęp, następnie etykiety, następnie wskazówki, a następnie pilotaż.
+
+01:16:54.900 --> 01:16:57.200
+Każdy kolejny krok sprawia, że kolejny jest prawdziwy.
+
+01:16:57.320 --> 01:16:59.760
+A gdy wszystko działa, warto zrobić jeszcze jedną rzecz.
+
+01:16:59.940 --> 01:17:05.840
+Nie nową kontrolę, ale przyjrzeć się, jak to ma tendencję do zawodzić, ponieważ awarie powtarzają się i łatwo je wykryć, gdy znasz ich kształt.
+
+01:17:05.900 --> 01:17:07.460
+Wzorce błędów do obserwacji.
+
+01:17:07.680 --> 01:17:09.420
+Cztery wzorce pojawiają się wielokrotnie.
+
+01:17:09.420 --> 01:17:12.160
+Gdy znasz ich kształt, możesz je wykryć podczas jednego przeglądu.
+
+01:17:12.160 --> 01:17:14.360
+Pierwszy z nich to wszystko, co leży w czacie zespołowym.
+
+01:17:14.600 --> 01:17:16.960
+Zobaczysz to w dzierżawie, zanim ktokolwiek się do tego przyzna.
+
+01:17:17.120 --> 01:17:21.860
+Plany, wersje robocze i decyzje znajdują się w wątkach czatu, a pliki za nimi w ondrive jednej osoby.
+
+01:17:22.140 --> 01:17:25.340
+Zapytaj, gdzie jest najnowsza wersja, a trzy osoby udzielą trzech odpowiedzi.
+
+01:17:25.540 --> 01:17:28.460
+Znak jest prosty, dużo aktywności na czacie, cienkie biblioteki.
+
+01:17:28.820 --> 01:17:30.540
+Rozwiązaniem jest nawyk, który omówiliśmy.
+
+01:17:30.760 --> 01:17:33.680
+Ogranicz rozmowę do czatu, zachowaj zawartość w katalogu głównym i usuń link.
+
+01:17:33.680 --> 01:17:36.220
+Drugim problemem są pętle w obszarach roboczych, których nikt nie jest właścicielem.
+
+01:17:36.220 --> 01:17:37.920
+Ktoś utworzył je na potrzeby projektu.
+
+01:17:38.040 --> 01:17:42.220
+Projekt się zakończył, twórca przeniósł zespoły lub lista właścicieli, miała jedną nazwę i ta nazwa została usunięta.
+
+01:17:42.400 --> 01:17:45.220
+Obszar roboczy nadal tam jest, nadal współdzielony, nadal pełen stron.
+
+01:17:45.460 --> 01:17:48.560
+Nikt go nie sprawdza, nikt go nie archiwizuje i nikt nie czuje się odpowiedzialny.
+
+01:17:48.740 --> 01:17:53.140
+Nie wygląda to na problem, dopóki ktoś nie zada pytania kopilotowi, a nieaktualny plan nie okaże się faktem.
+
+01:17:53.320 --> 01:17:55.680
+Szukaj obszarów roboczych z zerowym lub jednym właścicielem.
+
+01:17:55.920 --> 01:17:56.640
+Zacznij od tego.
+
+01:17:56.640 --> 01:17:59.500
+Po trzecie, strony są szeroko udostępniane i nigdy nie sprawdzane.
+
+01:17:59.720 --> 01:18:05.580
+Strona kopilot zaczyna się jako szkic jednej osoby, potem otrzymuje link, następnie link jest przekazywany dalej, a następnie trafia do szerokiego kanału.
+
+01:18:05.720 --> 01:18:09.720
+Tygodnie później czytają ją osoby, których autor nawet nie przewidział, a nadal brzmi tak samo jak pierwszego dnia.
+
+01:18:09.940 --> 01:18:13.660
+Nikt nie sprawdził faktów, nikt nie zapytał, czy powinna zostać udostępniona aż tak daleko.
+
+01:18:13.900 --> 01:18:16.920
+Strona nie jest już szkicem, jest źródłem i nikt nie przeglądał jej w ten sposób.
+
+01:18:17.200 --> 01:18:20.640
+Sprawdź więc raporty udostępniania pod kątem stron z szerokimi linkami i bez ostatnich edycji.
+
+01:18:20.640 --> 01:18:22.300
+Ta kombinacja to ostrzeżenie.
+
+01:18:22.480 --> 01:18:25.200
+Po czwarte, etykiety nanoszone wszędzie bez jasnego znaczenia.
+
+01:18:25.400 --> 01:18:26.680
+To wydaje się sukcesem.
+
+01:18:29.500 --> 01:18:34.420
+Zapytaj użytkownika, co oznacza wewnętrzne lub co się zmienia, gdy wybierze poufne, a on wzruszy ramionami.
+
+01:18:34.640 --> 01:18:39.680
+Wybiera więc to, co jest domyślne, co wydaje się bezpieczne lub co powstrzymuje go przed nękaniem.
+
+01:18:39.920 --> 01:18:44.360
+Etykieta, która nic nie znaczy, niczego nie chroni i ukrywa te kilka plików, które naprawdę jej potrzebowały.
+
+01:18:44.520 --> 01:18:48.580
+Jeśli liczba etykiet jest wysoka, a przeglądy incydentów nadal ujawniają ujawnione treści, prawdopodobnie właśnie to jest przyczyną.
+
+01:18:48.580 --> 01:18:50.320
+Zwróć uwagę na to, co łączy wszystkie cztery.
+
+01:18:50.520 --> 01:18:51.740
+Żadna z nich nie jest błędem.
+
+01:18:51.880 --> 01:18:52.720
+Nic się nie zepsuło.
+
+01:18:52.720 --> 01:18:58.180
+Każda z tych decyzji to decyzja o umiejscowieniu, która nigdy nie została podjęta i domyślne ustawienie, które wypełniło lukę, co sprowadza nas z powrotem do punktu wyjścia.
+
+01:18:58.520 --> 01:19:00.360
+Podsumowując, kontekst potrzebuje miejsca.
+
+01:19:00.540 --> 01:19:03.300
+Praca zaczyna się w kontekście, czacie, spotkaniu, monicie.
+
+01:19:03.500 --> 01:19:05.780
+Ta część się nie zmienia, ale tu pojawia się problem.
+
+01:19:06.000 --> 01:19:10.220
+Treść potrzebuje kontenera, ponieważ kontener zawiera właściciela uprawnienia i zegar.
+
+01:19:10.420 --> 01:19:11.760
+Wszystko inne wynika z tego.
+
+01:19:11.760 --> 01:19:16.020
+Wybieraj więc kontener przed treścią za każdym razem, zanim napiszesz pierwszy wiersz.
+
+01:19:16.180 --> 01:19:19.600
+Jeśli to zmieniło twoje podejście do Loop i Pages, zostaw recenzję podcastu.
+
+01:19:19.720 --> 01:19:21.520
+To pomoże większej liczbie osób go znaleźć.
+
+01:19:21.620 --> 01:19:23.680
+I skontaktuj się ze mną, Mirko Petersem, na LinkedIn.
+
+01:19:23.940 --> 01:19:25.420
+Powiedz mi, co mam omówić dalej.

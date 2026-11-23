@@ -1,0 +1,622 @@
+WEBVTT
+
+00:00:00.120 --> 00:00:06.300
+Welkom bij de M365 FM podcast, waar we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:06.460 --> 00:00:09.800
+Twee manieren om te zoeken en waarom één ervan je vaak in de steek laat.
+
+00:00:10.000 --> 00:00:12.220
+Je zoekbouw doet al jaren maar de helft van het werk.
+
+00:00:12.420 --> 00:00:16.160
+Hij leest de exacte woorden die je typt, wat perfect is als je een beleidscode nodig hebt,
+
+00:00:16.340 --> 00:00:19.780
+maar nutteloos als je iets vraagt over verlof en er in het document, vakantie, staat.
+
+00:00:20.000 --> 00:00:26.380
+Azure Eye seerglost dat op door twee verschillende zoekopdrachten tegelijk uit te voeren en deze te combineren tot één gerangschikte lijst.
+
+00:00:26.380 --> 00:00:31.680
+Die combinatie heet Hybride Retrieval en is de basis voor de antwoorden die je al krijgt van de AI-tools van Microsoft.
+
+00:00:32.040 --> 00:00:37.120
+Aan het einde van deze aflevering weet je beide helften hoe ze aan elkaar worden gekoppeld en waar dit je dagelijkse werk subtiel beïnvloedt.
+
+00:00:37.260 --> 00:00:40.880
+Zoeken was nooit eenvaardigheid. Het zijn er twee en elk lost een ander probleem op.
+
+00:00:41.060 --> 00:00:44.360
+De ene matcht de exacte woorden die je hebt getypt en de andere matcht wat je daadwerkelijk bedoelde.
+
+00:00:44.500 --> 00:00:47.220
+De meeste tools die je hebt gebruikt deden slechts één van die taken goed.
+
+00:00:47.420 --> 00:00:49.300
+Dat verschil verklaart veel irritaties.
+
+00:00:49.500 --> 00:00:53.940
+Een zoekbouw kan een artikelnummer perfect vinden, maar een simpele vraag over je vakantieregeling missen.
+
+00:00:53.940 --> 00:01:00.980
+Iemand typt vrije tijd in en het systeem haalt zijn schouders op omdat de pagina die ze nodig hadden, vakantie, zegt en geen enkele letter gemeen heeft met de zoekopdracht.
+
+00:01:01.220 --> 00:01:07.980
+Wanneer een systeem beide taken tegelijk uitvoert en de antwoorden vergelijkt, voelt het resultaat niet langer aan als een simpele zoekopdracht, maar als een vorm van begrip.
+
+00:01:08.140 --> 00:01:13.680
+Dat verschil is belangrijker dan voorheen omdat AI-tools nu afhankelijk zijn van zoekresultaten als grondstof voor hun antwoorden.
+
+00:01:13.880 --> 00:01:17.500
+Als de zoekopdracht mislukt, is het antwoord fout, hoe slim het model ook is.
+
+00:01:17.700 --> 00:01:20.180
+De inzet wordt nog hoger zodra AI in beeld komt.
+
+00:01:20.180 --> 00:01:25.660
+Een taalmodel kent je bestanden niet, dus het antwoord op basis van de tekst die je hebt aangeleverd, en die tekst komt uit de zoekopdracht.
+
+00:01:25.820 --> 00:01:32.120
+Een zwakke zoekopdracht levert het model zwak materiaal op en geen enkele modelkwaliteit kan een pagina corrigeren die in de eerste plaats nooit is opgehaald.
+
+00:01:32.260 --> 00:01:34.040
+We zullen dit daarom in drie stappen behandelen.
+
+00:01:34.220 --> 00:01:37.700
+Ten eerste, het exacte woord, het deel dat je al kent, ook al heb je het nooit benoemd.
+
+00:01:37.860 --> 00:01:40.300
+Dan het deel met de betekenis, waar de verrassing schuilt.
+
+00:01:40.300 --> 00:01:46.340
+Vervolgens hoe Azure iSearch de twee combineert tot één gerangschikte lijst en waarom dit alles verschijnt in tools die je zochtend zal opent.
+
+00:01:46.520 --> 00:01:53.200
+Een van de meest voorkomende aannames over hybride zoeken blijkt ook onjuist te zijn, en als je weet waarom, kun je een veelgemaakte fout van veel teams voorkomen.
+
+00:01:53.420 --> 00:01:54.960
+Wat zoekwoordzoeken nu eigenlijk doet
+
+00:01:54.960 --> 00:01:57.920
+Zoeken op zoekwoorden begint met het opbouwen van een kaart van je content.
+
+00:01:58.160 --> 00:02:04.200
+Naarmate documenten binnenkomen, registreert het systeem welke woorden in welke documenten voorkomen, en die kaart wordt een omgekeerde index genoemd.
+
+00:02:04.200 --> 00:02:10.240
+Het klinkt misschien saai, maar het is de reden waarom zoeken binnen milliseconden resultaten kan opleveren over miljoenen pagina's, nog voordat de tekst wordt opgeschoond.
+
+00:02:10.360 --> 00:02:19.120
+Taal-analyse, programma's, splitsen zinnen in woorden, verwijderen overbodige woorden en vroege variaties zoals running en run, samen tot een gemeenschappelijke stam, zodat een zoekopdracht naar run beide vindt.
+
+00:02:19.200 --> 00:02:23.000
+Je hoeft hier zelf niets voor te doen, maar het verklaart wel waarom de resultaten zo snel binnenkomen.
+
+00:02:23.240 --> 00:02:26.880
+Zodra je een zoekopdracht typt, beoordeelt het systeem hoe goed elk document overeenkomt.
+
+00:02:27.040 --> 00:02:31.840
+Deze beoordelingsmethode heeft de naam BM25, en je kunt het begrijpen zonder de wiskunde te hoeven leren.
+
+00:02:31.840 --> 00:02:38.740
+BM25 geeft meer gewicht aan woorden die vaak in één document voorkomen en minder gewicht aan woorden die in bijna elk document voorkomen.
+
+00:02:38.980 --> 00:02:42.980
+Neem bijvoorbeeld het woord V, dat bijna overal voorkomt, dus dat zegt je bijna niets.
+
+00:02:43.160 --> 00:02:47.340
+Een zeldzame code zoals XC4471 verschijnt maar één keer, dus dat zegt al heel wat.
+
+00:02:47.820 --> 00:02:54.700
+BM25 pikt dat instinct automatisch op, waardoor zoekopdrachten op basis van trefwoorden sterk blijven op artikelnummers, exacte namen, datums en specialistische termen.
+
+00:02:54.820 --> 00:02:56.500
+Een klein voorbeeld laat zien hoe dat werkt.
+
+00:02:56.700 --> 00:03:01.520
+Stel, u zoekt naar factuurschabloon 4471 op een gedeelde schijf met 10.000 bestanden.
+
+00:03:01.520 --> 00:03:08.100
+Het woord factuur komt overal voor, dus dat levert nauwelijks resultaat op, maar 4471 is zeldzaam genoeg om het juiste bestand direct bovenaan te plaatsen.
+
+00:03:08.280 --> 00:03:11.240
+Dat is BM25 die op de achtergrond de berekeningen uitvoert.
+
+00:03:11.680 --> 00:03:13.280
+Microsoft's eigen tests bevestigen dit.
+
+00:03:13.520 --> 00:03:18.020
+Zoekopdrachten op basis van alleen trefwoorden scoorden veel beter dan zoekopdrachten op basis van betekenis.
+
+00:03:18.260 --> 00:03:22.400
+Wanneer u de exacte identificatiecode al weet, bindt precisie het altijd van slimheid.
+
+00:03:22.600 --> 00:03:24.340
+Die precisie heeft echter een blinde vlek.
+
+00:03:24.560 --> 00:03:27.600
+Zoeken op trefwoorden vindt alleen de woorden die u hebt ingevoerd en niets meer.
+
+00:03:27.600 --> 00:03:34.740
+Zoekt u naar een beleid voor werken op afstand, dan blijft een pagina met de titel Richtlijnen voor telewerken onzichtbaar omdat de twee zinnen geen letters gemeen hebben.
+
+00:03:34.940 --> 00:03:39.160
+Die ene verdieping is precies waar de andere helft van hybride zoekopdrachten voor ontworpen is.
+
+00:03:39.880 --> 00:03:41.520
+Wat doet vectorzoeken nu eigenlijk?
+
+00:03:41.820 --> 00:03:44.380
+Nu het deel dat als magie aanvoelt totdat je de truc ziet.
+
+00:03:44.780 --> 00:03:48.360
+Vectorzoeken zet tekst om in een lange lijst met getallen en die lijst noemen we een embedding.
+
+00:03:48.540 --> 00:03:50.060
+De getallen zijn niet willekeurig.
+
+00:03:50.220 --> 00:03:55.180
+Ze plaatsen de betekenis van de tekst ergens in een enorme ruimte waar vergelijkbare betekenissen dicht bij elkaar komen te liggen.
+
+00:03:55.180 --> 00:04:00.060
+Iets moet die embeddings creëren en dat is meestal een embedding model, zoals een van Azure Open AI.
+
+00:04:00.320 --> 00:04:05.700
+Dit is waar veel beginners in eerste instantie vastlopen omdat het model een aparte service is met eigen kosten en eigen limieten.
+
+00:04:05.880 --> 00:04:09.120
+De zoekmachine slaat de factoren op en vergelijkt ze en het model maakt ze.
+
+00:04:09.280 --> 00:04:14.660
+De grootte van een embedding wordt bepaald door het model en ligt meestal ergens tussen de honderden en een paar duizend getallen per passage.
+
+00:04:14.960 --> 00:04:18.100
+Die aantallen zijn ook de reden waarom zoeken op betekenis niet perfect is.
+
+00:04:18.280 --> 00:04:24.620
+Twee passages kunnen dicht bij elkaar in de ruimte liggen zonder een echte match te zijn en dat soort bijna matches zijn wat de latere rangschikkingstappen moeten opruimen.
+
+00:04:25.180 --> 00:04:27.720
+Wat de betekenis-coördinaten heeft verandert het matchen volledig.
+
+00:04:27.860 --> 00:04:34.180
+Het woord refund en de uitdrukking moneyback liggen dicht bij elkaar, waardoor een zoekopdracht het ene woord kan vinden met behulp van het andere, zelfs als ze geen woorden gemeen hebben.
+
+00:04:34.320 --> 00:04:37.140
+Het systeem vergelijkt niet langer letters, maar overeenkomsten.
+
+00:04:37.400 --> 00:04:41.820
+Dit ontwerp biedt twee voordelen omdat de betekenis in verschillende talen in dezelfde ruimte ligt.
+
+00:04:41.980 --> 00:04:46.020
+Een zoekopdracht in het Engels kan een Duits document opleveren zonder dat er een vertaalstap nodig is.
+
+00:04:46.260 --> 00:04:51.500
+Hetzelfde principe werkt voor verschillende soorten content, waardoor tekst en afbeeldingen in dezelfde ruimte kunnen worden vergeleken.
+
+00:04:51.500 --> 00:04:55.540
+Om de meest overeenkomende betekenissen te vinden, voert de zoekmachine een nearest neighbor zoekopdracht uit.
+
+00:04:55.700 --> 00:04:58.120
+Azure iServe biedt twee zoekmachines voor deze taak.
+
+00:04:58.280 --> 00:05:02.920
+De ene is een op grafieken gebaseerde methode genaamd HNSW, die snel is en goed overweg kan met grote indexen,
+
+00:05:03.060 --> 00:05:07.200
+en de andere is de uitputtende KNN-methode, die meer kandidaten controleert en snelheid inruilt voor grondigheid.
+
+00:05:07.420 --> 00:05:13.000
+Vector-scores variëren van ongeveer 0,333 tot 1 tot de macht 1 wanneer cosinusgelijkheid wordt gebruikt,
+
+00:05:13.220 --> 00:05:15.340
+dus een hoger getal betekent een betere overeenkomst.
+
+00:05:15.500 --> 00:05:19.180
+Dit bereik is totaal anders dan dat van de keyword-scores, die helemaal geen bovengrens hebben.
+
+00:05:19.180 --> 00:05:25.040
+Het is belangrijk om de twee gescheiden te houden, omdat de volgende stap twee lijsten moet samenvoegen die niet eens dezelfde numerieke taal spreken.
+
+00:05:25.220 --> 00:05:28.640
+Hybride zoeken voert beide zoekopdrachten tegelijk uit en combineert de resultaten.
+
+00:05:28.800 --> 00:05:32.860
+Hybride zoeken is één enkele aanvraag die zowel een tekstzoekopdracht als een vectorzoekopdracht bevat,
+
+00:05:33.020 --> 00:05:34.600
+en deze twee worden samen uitgevoerd.
+
+00:05:34.780 --> 00:05:37.160
+Er is geen apart derde algoritme dat het werk doet.
+
+00:05:37.340 --> 00:05:41.240
+U stuurt uw woorden en de betekenisversie van diezelfde woorden in één aanroep,
+
+00:05:41.320 --> 00:05:43.420
+en de engine voert beide taken parallel uit.
+
+00:05:43.620 --> 00:05:45.260
+Nu hebt u twee gerangschikte lijsten.
+
+00:05:45.260 --> 00:05:50.560
+De ene is gesorteerd op BM25, de andere op betekenis, en ze komen zelden overeen in de exacte volgorde.
+
+00:05:50.740 --> 00:05:55.560
+Azure iSearch combineert ze met een methode genaamd Reciprocal Rank Fusion, RRF,
+
+00:05:55.740 --> 00:05:58.240
+en het kernidee is eenvoudig genoeg om te onthouden.
+
+00:05:59.080 --> 00:06:03.880
+RRF geeft elk document een score van één gedeeld door de rangorde plus een kleine constante.
+
+00:06:04.160 --> 00:06:05.860
+In de praktijk is die constante 60,
+
+00:06:06.160 --> 00:06:09.980
+en het doel ervan is om te voorkomen dat de eerste plaats de resultaten volledig domineert.
+
+00:06:10.120 --> 00:06:14.080
+Een document dat hoogscoort op beide lijsten verzamelt twee goede scores en stijgt in de ranglijst,
+
+00:06:14.080 --> 00:06:17.340
+terwijl een document dat slechts op één lijst scoort, lager in de lijst terechtkomt.
+
+00:06:17.480 --> 00:06:22.100
+Stel je een beleidspagina voor waar zoekopdrachten op trefwoorden op de vijfde plaats staan en zoekopdrachten op betekenis op de tweede plaats.
+
+00:06:22.260 --> 00:06:26.740
+Het verzamelt een solide score van beide kanten en klimt boven een pagina uit die slechts door één methode werd opgemerkt.
+
+00:06:26.880 --> 00:06:28.220
+Die overeenstemming is de truc.
+
+00:06:28.460 --> 00:06:30.520
+Wanneer twee verschillende methoden naar dezelfde passage verwijzen,
+
+00:06:30.640 --> 00:06:32.800
+kun je er meer op vertrouwen dan op elk van beide methoden afzonderlijk.
+
+00:06:32.940 --> 00:06:35.940
+Hybride zoekopdrachten behouden ook de gebruikelijke zoekfuncties die je zou verwachten.
+
+00:06:36.180 --> 00:06:39.100
+Filters werken nog steeds, facetten werken nog steeds en sorteren werkt nog steeds,
+
+00:06:39.100 --> 00:06:41.960
+dus je verliest de praktische tools niet alleen omdat betekenis erbij is gekomen.
+
+00:06:42.100 --> 00:06:46.280
+Je kunt zelfs het gewicht van de vectorzijde verhogen of verlagen als je merkt dat je gebruikers een bepaalde voorkeur hebben.
+
+00:06:46.480 --> 00:06:50.240
+Stel dat je gebruikers vooral korten, onduidelijke zinnen typen in plaats van exacte identificatoren.
+
+00:06:50.440 --> 00:06:53.760
+Door dat gewicht te verhogen, geef je de zoekmachine het gevoel dat betekenis iets meer wordt vertrouwd.
+
+00:06:53.900 --> 00:06:58.240
+De standaardinstelling is niet eens gesplitst en je wijzigt deze alleen nadat je hebt gezien hoe echte zoekopdrachten er uitzien.
+
+00:06:58.480 --> 00:07:02.580
+Standaard retourneert een hybride zoekopdracht de vijftig beste resultaten uit de gecombineerde lijst
+
+00:07:02.580 --> 00:07:05.000
+en de tekstzijde stopt met zoeken naar duizend resultaten.
+
+00:07:09.100 --> 00:07:15.120
+Uit benchmarkresultaten van Microsoft blijkt dat de hybride methode beter presteert dan beide methoden afzonderlijk,
+
+00:07:15.300 --> 00:07:17.420
+zowel op basis van klantgegevens als openbare test sets.
+
+00:07:17.680 --> 00:07:21.180
+Daarom is het de standaard aanbeveling geworden voor het onderbouwen van AI-antwoorden.
+
+00:07:21.460 --> 00:07:24.880
+Niets is onderweg verloren gegaan en dat is belangrijker dan het lijkt.
+
+00:07:25.160 --> 00:07:27.020
+De tweede stap herschikt de shortlist.
+
+00:07:27.280 --> 00:07:28.260
+Nu wordt het interessant.
+
+00:07:28.500 --> 00:07:32.300
+Het samenvoegen van twee lijsten levert een betere shortlist op, maar niet per se een perfecte.
+
+00:07:32.500 --> 00:07:36.440
+Daarom voegt Azure Eye Seerge een tweede rangschikkingstap toe, genaamd semantische rangschikking.
+
+00:07:36.440 --> 00:07:40.280
+De naam doet vermoeden dat het hetzelfde is als de vectoranalyse, maar het doet iets anders.
+
+00:07:40.620 --> 00:07:45.840
+Semantische rangschikking neemt de vijftig beste resultaten uit de voorrige stap en leest elk resultaat samen met je zoekopdracht.
+
+00:07:46.040 --> 00:07:52.720
+Het gebruikt taalmodellen, aangepast van Bing, om te beoordelen hoe goed een tekst de vraag beantwoordt en geeft elke tekst een score van 0 tot 4.
+
+00:07:52.900 --> 00:07:56.860
+Een 4 betekent dat de tekst de vraag goed beantwoord en een 0 betekent dat deze irrelevant is.
+
+00:07:57.060 --> 00:07:59.720
+Twee belangrijke beperkingen bepalen wat deze stap kan doen.
+
+00:07:59.920 --> 00:08:05.600
+Het kijkt alleen naar de top 50 resultaten, dus het kan de shortlist herschikken, maar het kan geen document redden dat de eerste stap niet heeft gevonden.
+
+00:08:05.600 --> 00:08:06.940
+Het kan ook niets verzinnen.
+
+00:08:07.160 --> 00:08:12.100
+De bijschriften en antwoorden die het teruggeeft worden letterlijk overgenomen uit je eigen content en nooit helemaal opnieuw geschreven.
+
+00:08:12.300 --> 00:08:13.940
+Dit alles vervangt de eerste ronde niet.
+
+00:08:14.120 --> 00:08:16.460
+De ranker kan alleen de aangeleverde content herschikken.
+
+00:08:16.620 --> 00:08:19.320
+Alles wat de shortlist niet heeft gehaald, krijgt dus geen tweede kans.
+
+00:08:19.560 --> 00:08:22.900
+Goede retrieval vooraf zorgt ervoor dat de tweede ronde de moeite waard is om te verfijnen.
+
+00:08:23.100 --> 00:08:24.440
+Daar zijn ook kosten aan verbonden.
+
+00:08:24.720 --> 00:08:30.300
+Semantische ranking is een betaalde functie die is opgebouwd door gebruik met een gratis maandelijkse limiet die de meeste mensen tijdens het testen nooit volledig benutten.
+
+00:08:30.300 --> 00:08:35.740
+Dat is een eerlijke ruil voor scherpere resultaten en het is ook de reden waarom je het bewust inschakelt in plaats van overal tegelijk.
+
+00:08:35.920 --> 00:08:42.300
+Het herschikken van een shortlist is veel goedkoper dan het herschikken van een hele korpus en daarom bestaat de tweede ronde ook als tweede ronde.
+
+00:08:42.540 --> 00:08:51.960
+Uit tests van Microsoft bleek dat hybrid plus semantische ranking duidelijk beter presteerde dan hybrid alleen en het verschil was het grootst bij de rommelige, realistische vragen die mensen daadwerkelijk typen.
+
+00:08:51.960 --> 00:08:54.420
+De functies gaan hier iets verder dan alleen scoren.
+
+00:08:54.580 --> 00:09:00.840
+Semantische rangschikking kan een korte samenvatting geven van waarom een passage overeenkomt, wat handig is wanneer je resultaten aan iemand laat zien.
+
+00:09:01.000 --> 00:09:07.880
+Een nieuwere optie kan je zoekopdracht zelfs in verschillende varianten herschrijven om typfouten en ontbrekende synoniemen op te sporen voordat de zoekopdracht wordt uitgevoerd.
+
+00:09:08.080 --> 00:09:11.960
+Wat de tweede ronde daadwerkelijk leest, is belangrijk omdat deze alleen op tekst werkt.
+
+00:09:12.120 --> 00:09:17.560
+Een document dat voornamelijk uit cijfers bestaat of een afbeelding zonder beschrijving, biedt de rangschikker weinig aanknopingspunten.
+
+00:09:17.560 --> 00:09:23.680
+Tekstrijke content, zoals documentatie en kennisbanken, profiteert het meest en Microsoft bevestigt dit ook in zijn eigen richtlijnen.
+
+00:09:23.820 --> 00:09:27.440
+Dit alles voegt een beetje tijd toe aan elke zoekopdracht en die afweging is bewust.
+
+00:09:27.580 --> 00:09:34.140
+Je krijgt een scherpere sortering ten koste van een tragere reactie, wat meestal een redelijke deal is voor een chatassistent en een minder goede voor een tekstaanvullingsbox.
+
+00:09:34.300 --> 00:09:36.380
+De minder aantrekkelijke stap die alles bepaalt.
+
+00:09:36.640 --> 00:09:41.020
+Voordat al die slimme matching kan werken, moet je content worden voorbereid en de belangrijkste stap heet chunking.
+
+00:09:41.160 --> 00:09:45.880
+Chunking betekent dat je lange documenten opdeelt in kleinere passages, zodat elke passage afzonderlijk kan worden vergeleken.
+
+00:09:45.880 --> 00:09:50.520
+Een beleidshandboek is niet langer één grote, onoverzichtelijke massa, maar wordt opgedeeld in een paar honderd gerichte onderdelen.
+
+00:09:50.700 --> 00:09:51.880
+Daar is een goede reden voor.
+
+00:09:52.080 --> 00:09:58.720
+Een enkele vector moet de betekenis van een volledig document in één reeks getallen samenvatten en lange documenten behandelen meerdere onderwerpen tegelijk.
+
+00:09:58.920 --> 00:10:04.800
+Wanneer je dat allemaal samenvoegt tot één vector, vervagen de details en wordt het laatste deel van het document vaak volledig genegeerd.
+
+00:10:04.980 --> 00:10:06.340
+De cijfers spreken voor zich.
+
+00:10:06.520 --> 00:10:13.140
+In tests van Microsoft scoorde een vector die een volledig document representeerde 28,2 voor zoekopdrachten waarvan de antwoorden zich in een lang document bevonden.
+
+00:10:13.140 --> 00:10:19.860
+Door dezelfde documenten op te delen in kleinere stukken steeg de score naar 45,7 en voor antwoorden diep in een document zelfs naar 51,4.
+
+00:10:20.020 --> 00:10:23.260
+Grote en grenzen zijn net zo belangrijk als de keuze om te delen in kleinere stukken.
+
+00:10:23.420 --> 00:10:30.460
+Passages van ongeveer 512 tokens scoorden 42,4, terwijl passages van 4096 tokens daalden naar 36,4.
+
+00:10:30.640 --> 00:10:37.600
+Door stukken een kwart te laten overlappen en ze te laten eindigen bij zinsafbrekingen, steeg de score nog verder, omdat de context dan nooit in tweeën wordt gedeeld.
+
+00:10:37.600 --> 00:10:45.420
+Stel je een ouder handboek voor van 80 pagina's? Goed ingedeeld. Een vraag over ouderschapsverlof belandt dan in de vier alinea's die er daadwerkelijk over gaan.
+
+00:10:45.660 --> 00:10:51.220
+Slecht ingedeeld sleept dezelfde vraag een samenvatting van het hele beleid mee en begraaft het echte antwoord ergens in het midden.
+
+00:10:51.380 --> 00:10:52.980
+Je hoeft dit niet altijd handmatig te doen.
+
+00:10:53.240 --> 00:11:02.380
+Azure iSearch kan chunking en vectorisatie uitvoeren binnen een indexeringspipeline, waarbij gegevens worden opgehaald uit bronnen zoals blobopslag, Azure SQL of OneLake en de embeddings worden gegenereerd.
+
+00:11:02.380 --> 00:11:10.200
+Het werk wordt nog steeds gedaan. Het gebeurt alleen automatisch voor je. Dit is het onderdeel dat niemand op een slide laat zien en dat bepaalt hoe goed alles wat erna komt kan zijn.
+
+00:11:10.400 --> 00:11:14.280
+Als de chunking niet goed is, heeft zelfs een perfecte ranking geen bruikbare gegevens.
+
+00:11:14.560 --> 00:11:20.840
+Waar dit al van invloed is op je Microsoft 365 werk, is de retrieval engine die we zojuist hebben besproken Azure iSearch.
+
+00:11:21.060 --> 00:11:28.040
+Deze engine vormt ook de basis van Foundry IQ, Microsofts beheerde kennislaag die bedrijfscontent omzet in kennisbanken voor agents.
+
+00:11:28.040 --> 00:11:32.500
+Je komt het tegen in Copilot Studio, waar Azure iSearch als kennisbron fungeert.
+
+00:11:32.680 --> 00:11:40.780
+Agenten halen daar ook informatie uit SharePoint, dataverse, geüploadde documenten, openbare websites en connectors en al deze bronnen voeden dezelfde antwoordpipeline.
+
+00:11:41.000 --> 00:11:43.620
+Dan is er nog Microsoft 365 Copilot.
+
+00:11:43.820 --> 00:11:50.880
+Copilot connectors brengen externe en bedrijfsspecifieke content in de grafiek, zodat dezelfde zoekideeën verschijnen, zelfs als u zelf nooit een index aanraakt.
+
+00:11:51.000 --> 00:11:55.140
+Een vraag die in een chatvenster wordt getypt, kan worden beantwoord met een document waarvan u vergeten was dat het bestond.
+
+00:11:55.140 --> 00:11:58.020
+De beveiliging is zodanig geregeld dat u zich geen zorgen hoeft te maken.
+
+00:11:58.220 --> 00:12:04.160
+Antwoorden respecteren de machtigingen van elke persoon via Microsoft en traidee, zodat een gebruiker alleen content te zien krijgt die hij of zij mag inzien.
+
+00:12:04.300 --> 00:12:10.780
+Een financiële vraag van iemand buiten de financiële afdeling krijgt een ander antwoord dan dezelfde vraag van de financiële manager, wat het toegangsmodel zijn werk laat doen.
+
+00:12:10.940 --> 00:12:12.520
+Een voorbeeld hiervan ziet er als volgt uit.
+
+00:12:12.600 --> 00:12:15.800
+Een medewerker vraagt een interne agent hoeveel studiedagen hij of zij krijgt.
+
+00:12:15.960 --> 00:12:21.140
+De agent zoekt in de geïndexeerde SharePoint content, vindt de pagina met het huidige beleid en beantwoordt de vraag met een verwijzing.
+
+00:12:21.320 --> 00:12:23.160
+De hele uitwisseling verlaat de tenant niet.
+
+00:12:23.160 --> 00:12:26.480
+Er is een instelling in Copilot Studio die direct op dit idee is gebaseerd.
+
+00:12:26.620 --> 00:12:33.020
+De koppeling van tenant grafieken met semantisch zoeken maakt gebruik van de semantische index achter Microsoft 365 Copilot om de zoekresultaten te verbeteren.
+
+00:12:33.160 --> 00:12:35.680
+Microsoft merkt op dat dit vooral helpt bij SharePoint content.
+
+00:12:35.940 --> 00:12:36.960
+Dat is de echte winst.
+
+00:12:37.140 --> 00:12:45.720
+Een goed ontworpen assistent voelt alsof hij de juiste pagina heeft gelezen omdat zoeken op trefwoorden, oftewel zoekfusie en de tweede rangschikkingsronde, allemaal aansluiten op een chatvenster dat je al gebruikt.
+
+00:12:45.920 --> 00:12:48.620
+Geen enkel slim model kan dat werk dus in zijn eentje doen.
+
+00:12:48.620 --> 00:12:55.420
+De eerlijke beperkingen en de fouten die beginners maken. Laten we eerlijk zijn over waar het misgaat, want als je de grenzen kent, bespaar je tijd.
+
+00:12:55.620 --> 00:13:00.580
+Fout 1 is ervan uitgaan dat hybride automatisch in alles beter is. Dat is niet zo en dat verschil is belangrijk.
+
+00:13:00.900 --> 00:13:06.420
+Uit Microsofts eigen resultaten blijkt dat bij zoekopdrachten met alleen trefwoorden, zoeken op trefwoorden nog steeds de beste resultaten opleverde.
+
+00:13:06.560 --> 00:13:12.200
+Hybride is een sterke standaardoptie, geen universele winnaar en het juiste antwoord hangt af van de vragen die je gebruikers daadwerkelijk stellen.
+
+00:13:12.200 --> 00:13:22.240
+De tweede valkuil is het overslaan, opsplitsen of het invoeren van enorme tekstfragmenten. Als je tekstfragmenten te groot zijn, waardoor er onduidelijkheden ontstaan en het einde van elk fragment verloren gaat, is de oplossing saai maar effectief.
+
+00:13:22.380 --> 00:13:30.180
+Knip bij zinsgrenzen, houd passages kort en laat ze een beetje overlappen. Dan is er nog de gewoonte om overal semantische ranking in te schakelen zonder de meter in de gaten te houden.
+
+00:13:30.340 --> 00:13:34.800
+Het is gebaseerd op gebruik, dus een drukke app kan een kleine testgewoonte omzetten in een echte kostenpost.
+
+00:13:35.040 --> 00:13:37.560
+Begin met de gratis limiet en breed deze doelgericht uit.
+
+00:13:37.560 --> 00:13:45.580
+De harde limieten zijn de limieten waar je als eerste tegenaan loopt. Semantische ranking herrang schikt alleen de 50 beste resultaten, dus het kan een shortlist verfijnen, maar nooit uitbreiden.
+
+00:13:45.980 --> 00:13:53.720
+Vectoropslag wordt per partitie bijgehouden. De limiet verandert met je abonnement en de leeftijd van je service en het bereiken ervan stopt het indexeren in plaats van het te vertragen.
+
+00:13:53.920 --> 00:14:00.900
+Er zijn ook kleinere limieten. Een vectorveld heeft een maximum van 4096 dimensies en een enkele vectorquery kan maximaal 10 velden targeten.
+
+00:14:00.900 --> 00:14:07.640
+Het gratis abonnement is prima om te leren met 1 service en 50 megabytes aan opslagruimte, maar kan na lange periodes van inactiviteit worden verwijderd.
+
+00:14:07.860 --> 00:14:16.980
+Concurrency heeft ook een limiet. Semantische ranking werkt met een wachtrij en elke zoeken eenheid kan slechts een paar verzoeken tegelijk verwerken, met een korte wachtrij erachter voordat verzoeken worden afgewezen.
+
+00:14:17.160 --> 00:14:22.600
+In een drukke applicatie uit zich dat in herhaalde pogingen, waardoor capaciteitsplanning niet langer optioneel is zodra er daadwerkelijke gebruikers zijn.
+
+00:14:22.780 --> 00:14:25.420
+Een klein voordeel van de facturering is dat het gemakkelijk over het hoofd wordt gezien.
+
+00:14:25.420 --> 00:14:31.660
+Een lege querystring wordt niet in rekening gebracht voor semantische ranking, zelfs niet wanneer het querytype is ingesteld op semantisch, dus een filterverzoek brengt geen extra kosten met zich mee.
+
+00:14:31.800 --> 00:14:34.060
+Er zijn twee prijsmodellen en de keuze is belangrijk.
+
+00:14:34.260 --> 00:14:43.360
+Het dedicated model hanteert een vastuurtarief op basis van capaciteit, wat geschikt is voor stabiele workloads, terwijl het serverless model factureert op basis van verbruik en is gericht op pieken of onvoorspelbare workloads.
+
+00:14:43.540 --> 00:14:47.900
+Die serverless optie is nog in preview, dus het is niet aan te raden om daar iets op te draaien waar je van afhankelijk bent.
+
+00:14:48.080 --> 00:14:50.420
+Dit alles maakt hybride retrieval geen slechte keuze.
+
+00:14:50.420 --> 00:14:58.840
+Het maakt het een keuze met een bepaalde structuur. Elk extra punt relevantie dat je koopt, komt ergens vandaan, of dat nu kosten, capaciteit of de inspanning is die je in het voorbereiden van content steekt.
+
+00:14:59.060 --> 00:15:02.920
+Weten welke afweging je maakt, is het verschil tussen een demo en iets dat stand houdt.
+
+00:15:03.620 --> 00:15:06.360
+Kort gezegd, hybride retrieval beloont voorbereiding.
+
+00:15:06.600 --> 00:15:14.560
+Schone, getjunkte, goed beschreven content met verstandige toegangsregels haalt meer uit elke functie, terwijl rommelige content minder oplevert, ongeacht hoeveel instellingen je aanpast.
+
+00:15:14.700 --> 00:15:16.760
+Een korte samenvatting en één vraag voor jou.
+
+00:15:16.760 --> 00:15:21.320
+Het hele plaatje past in een paar regels. Zoeken op trefwoorden komt overeen met de exacte woorden die je typt.
+
+00:15:21.500 --> 00:15:23.140
+Vector zoeken komt overeen met de betekenis.
+
+00:15:23.300 --> 00:15:26.760
+En hybride retrieval voert beide tegelijk uit en combineert de resultaten op basis van ranking.
+
+00:15:27.040 --> 00:15:32.100
+Semantische ranking herschikt vervolgens de 50 beste resultaten en dit alles is gebaseerd op content die eerst goed getjunkt is.
+
+00:15:32.280 --> 00:15:35.000
+Mijn vraag aan jou is simpel en ik ben oprecht benieuwd naar het antwoord.
+
+00:15:35.200 --> 00:15:40.020
+Waar in jouw eigen werk zou een zoekopdracht die de betekenis begrijpt, en niet alleen de woorden, het meest veranderen?
+
+00:15:40.160 --> 00:15:44.580
+Laat het weten in de reacties, want de antwoorden onthullen meestal meer dan welke productpagina dan ook.
+
+00:15:44.580 --> 00:15:51.780
+Als dit onderwerp je minder intimiderend lijkt, abonneer je dan op M365FM om de tools en de mindset te beheersen die de toekomst van werk vormgeven.

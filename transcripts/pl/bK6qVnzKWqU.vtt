@@ -1,0 +1,1240 @@
+WEBVTT
+
+00:00:00.240 --> 00:00:12.340
+Gotowi na 12 dni z Microsoft 365, Copilot, iAzure oraz ludźmi kształtującymi przyszłość pracy, w styczniu M365Con wraca i robimy to z jeszcze większym rozmachem.
+
+00:00:12.960 --> 00:00:18.320
+Dołącz do nas na sesje na żywo, pokazy praktyczne i wiedzę od ekspertów MVP z całego świata.
+
+00:00:18.580 --> 00:00:21.720
+Żadnych ogólnych slajdów ani niekończących się modnych haseł.
+
+00:00:21.920 --> 00:00:23.720
+Zajmujemy się prawdziwymi wyzwaniami.
+
+00:00:24.000 --> 00:00:28.820
+Copilot Studio Agenci iFabrik, bezpieczeństwo, zarządzanie i automatyzacja.
+
+00:00:28.820 --> 00:00:34.960
+Niezależnie od tego, czy jesteś informatykiem, programistą czy liderem biznesu, mamy sesję dla Ciebie.
+
+00:00:35.400 --> 00:00:40.500
+Przez 10 pełnych dni możesz zgłębiać różne technologie i łączyć się z globalną społecznością.
+
+00:00:40.800 --> 00:00:44.540
+Oglądaj na żywo i zabierz praktyczne wnioski do swojej organizacji.
+
+00:00:44.920 --> 00:00:49.140
+Styczeń 2027 roku, 10 dni, jedna społeczność Microsoft.
+
+00:00:49.500 --> 00:00:51.120
+Rejestracja jest już otwarta.
+
+00:00:51.120 --> 00:00:56.120
+Wejdź na m365con.net i zarezerwuj swoje miejsce już dziś.
+
+00:00:56.120 --> 00:01:04.680
+Dołącz teraz na m365con.net i widzimy się na żywo w styczniu.
+
+00:01:04.840 --> 00:01:09.340
+Jaki jest ten jeden system w Twoim środowisku, którego przejęcie pozwoliłoby atakującemu na wszystko?
+
+00:01:09.560 --> 00:01:11.240
+Logowania, pliki, a nawet e-maile.
+
+00:01:11.420 --> 00:01:12.760
+Tak, to Active Directory.
+
+00:01:13.060 --> 00:01:16.180
+Zanim zaczniemy, zasubskrybuj, aby te sprawdzone praktyki trafiły do Twojego zespołu.
+
+00:01:16.180 --> 00:01:18.380
+Pytanie brzmi, jak bardzo narażone jest Twoje środowisko?
+
+00:01:18.560 --> 00:01:20.100
+Zapomnij na chwilę o zaporach sieciowych.
+
+00:01:20.320 --> 00:01:23.040
+Jeśli at jest słabym ogniwem, cała Twoja obrona to tylko prowizorka.
+
+00:01:23.220 --> 00:01:25.660
+Na końcu dowiesz się, jakie trzy konkretne obszary wymagają naprawy.
+
+00:01:25.820 --> 00:01:29.440
+Zasięg działań administratorów, PKI i szablony oraz higiena synchronizacji hybrydowej.
+
+00:01:29.620 --> 00:01:34.300
+Oznacza to, że będziesz wiedzieć, jak diagnozować luki tożsamości, naprawiać je i zatrzymać atakujących.
+
+00:01:34.500 --> 00:01:39.180
+Aby zrozumieć, dlaczego at to marzenie każdego hakera, zacznijmy od tego, czym naprawdę jest w infrastrukturze.
+
+00:01:39.960 --> 00:01:42.760
+Dlaczego atakujący traktują at jak skrzynię ze skarbami?
+
+00:01:46.180 --> 00:01:49.700
+Nieważne, czy to gabinet szefa, szafa serwerowa, czy automat z przekąskami.
+
+00:01:49.920 --> 00:01:51.220
+Daje dostęp do wszystkiego.
+
+00:01:51.440 --> 00:01:53.740
+Tak właśnie atakujący widzą Active Directory.
+
+00:01:53.960 --> 00:01:58.860
+To nie tylko katalog użytkowników, to jedyny system określający, kto wchodzi i co może dotknąć.
+
+00:01:59.060 --> 00:02:01.820
+Jeśli ktoś przejmie at, nie musi zakradać się do sieci.
+
+00:02:02.120 --> 00:02:03.960
+Staje się tym, który ustala zasady.
+
+00:02:04.200 --> 00:02:06.840
+At to kręgosłup większości codziennych operacji.
+
+00:02:07.100 --> 00:02:11.440
+Każde logowanie, każdy dysk sieciowy i każda skrzynka zależą od jego decyzji.
+
+00:02:11.440 --> 00:02:16.540
+Ta centralizacja miała uprościć zarządzanie tysiącami kont i systemów z jednego miejsca.
+
+00:02:16.720 --> 00:02:19.500
+Ale ten sam projekt tworzy pojedynczy punkt awarii.
+
+00:02:19.660 --> 00:02:24.300
+Przejmij najwyższy poziom at, a decyzje atakującego natychmiast wpłyną na całe środowisko.
+
+00:02:24.520 --> 00:02:28.780
+Uprawnienia do plików, polityki bezpieczeństwa, procesy uwierzytelniania, wszystko pod ich kontrolą.
+
+00:02:29.020 --> 00:02:32.640
+Model zaufania w at nie przewidywał zagrożeń, z jakimi mierzymy się dzisiaj.
+
+00:02:32.640 --> 00:02:42.140
+Stworzony w epoce, w której skupiano się na izolowaniu zewnętrznego zagrożenia i zakładano, że wnętrze jest godne zaufania, opierał się na domniemanym zaufaniu między systemami wewnętrznymi.
+
+00:02:42.420 --> 00:02:46.700
+Maszyny i konta wymieniają tokeny i bilety tak swobodnie, jakby każdy był już sprawdzony.
+
+00:02:46.900 --> 00:02:51.400
+Taka architektura miała wtedy sens, ale w nowoczesnych środowiskach daje przeciwnikom znaczną przewagę.
+
+00:02:51.620 --> 00:02:57.380
+Atakujący uwielbiają nadużywać tego zaufania, ponieważ gdy tylko zdobędą przyczółek, manipulacja tożsamością przebiega zdumiewająco szybko.
+
+00:02:57.580 --> 00:03:00.680
+Dlatego eskalacja uprawnień wewnątrz at jest najważniejszym celem.
+
+00:03:00.680 --> 00:03:06.360
+Konto startowe może być niepozorne, ale dzięki odpowiednim ruchom atakujący może wspiąć się aż do poziomu administratora domeny.
+
+00:03:06.560 --> 00:03:12.160
+W tym momencie zyskuje ogromną kontrolę, dostęp do polityk, magazynów poświadczeń, a nawet możliwość zatarcia własnych śladów.
+
+00:03:12.300 --> 00:03:13.380
+Nie trwa to miesiącami.
+
+00:03:13.620 --> 00:03:22.820
+W praktyce kompromitacja często przyspiesza, a atakujący przeskakują z jednej maszyny do pełnej dominacji w domenie, stosując ataki na tożsamość znane każdemu testerowi penetracyjnemu.
+
+00:03:22.980 --> 00:03:28.340
+Pass the Hush, Golden Tickets, a nawet sztuczki DC Sync, które podszywają się pod same kontrolery domeny.
+
+00:03:28.340 --> 00:03:31.580
+Pomyśl o tym, jak o końcowej skrzyni ze skarbami w lochu w grze RPG.
+
+00:03:31.860 --> 00:03:34.940
+Patrole, pułapki i łupy średniego szczebla to tylko przystanki na drodze.
+
+00:03:35.100 --> 00:03:37.540
+Prawdziwym celem jest skarb znajdujący się za bossem.
+
+00:03:37.700 --> 00:03:40.560
+Active Directory pełni te role w infrastrukturze przedsiębiorstwa.
+
+00:03:40.720 --> 00:03:45.940
+Pośrednio posiada klucze do każdej cennej usługi, udostępnionych plików, platform, współpracy, poczty, e-mail, czegokolwiek.
+
+00:03:46.120 --> 00:03:48.760
+Dlatego, gdy naruszenia eskalują, robią to bardzo szybko.
+
+00:03:49.060 --> 00:03:52.760
+Atakujący nie goni za okruchami danych, on przejmuje cały skarbiec zamkowy.
+
+00:03:52.760 --> 00:03:58.240
+I historie to potwierdzają. Raz po raz punkt zwrotny incydentu następuje w momencie włamania do adiunkt.
+
+00:03:58.440 --> 00:04:02.060
+To, co zaczyna się od jednej zainfekowanej stacji roboczej, staje się lawiną.
+
+00:04:02.200 --> 00:04:05.560
+Nagle ransomware nie blokuje tylko jednego urządzenia, ale każdą maszynę.
+
+00:04:05.720 --> 00:04:11.020
+Kopie zapasowe są sabotowane, zasady grupy obracane przeciwko firmie, a całe przedsiębiorstwa zostają sparaliżowane.
+
+00:04:11.260 --> 00:04:16.620
+Wszystkie dobrze dostrojone firewale i zabezpieczenia punktów końcowych nie pomogą, jeśli sama władza katalogowa należy do intruza.
+
+00:04:16.620 --> 00:04:19.960
+A jednak wielu administratorów traktuje ad jak narzędzie działające w tle.
+
+00:04:20.160 --> 00:04:27.020
+Dopieszczają brzegi sieci, bramy VPN, agentów końcowych i detekcje intruzów, ale pozostawiają ad z domyślnymi ustawieniami niemal nieuszczelnione.
+
+00:04:27.180 --> 00:04:31.580
+To tak, jakby zbudować pięć murów wokół królestwa, ale zostawić otwarte drzwi do skarbca.
+
+00:04:31.860 --> 00:04:34.080
+Atakujący nie muszą szturmować murów obronnych.
+
+00:04:34.260 --> 00:04:38.760
+Wślizgują się przez przeoczone kąta, zaniedbane zasady usług lub błędnie skonfigurowane zaufania.
+
+00:04:38.940 --> 00:04:41.820
+A gdy już są w środku, ad automatycznie daje im resztę kluczy.
+
+00:04:41.820 --> 00:04:48.180
+Smutna rzeczywistość jest taka, że atakujący rzadko potrzebują egzotycznych luk typu Zero Day, a kruszy się z powodów znacznie bardziej prozaicznych.
+
+00:04:48.380 --> 00:04:54.640
+Stare kąta wciąż posiadające szerokie uprawnienia, nigdy właściwie nierozdzielone przywileje lub przestarzałe konfiguracje, których nikt nie chciał dotykać.
+
+00:04:54.760 --> 00:05:00.220
+Te luki są tak powszechne, że doświadczeni testerzy penetracyjni spodziewają się je znaleźć i są one niezwykle skuteczne.
+
+00:05:00.420 --> 00:05:06.580
+Przy domyślnych strukturach atakujący przekazują bilety, zbierają zapisane poświadczenia i podnoszą swoje uprawnienia bez wywoływania alarmów.
+
+00:05:06.580 --> 00:05:10.460
+Panele bezpieczeństwa mogą wyglądać na spokojne, podczas gdy królestwo jest już plądrowane.
+
+00:05:10.620 --> 00:05:17.460
+Choć administratorzy często wyobrażają sobie, że słabym punktem musi być rzadka osobliwość protokołu lub tajemnicza sztuczka z uprawnieniami, prawda jest znacznie mniej efektowna.
+
+00:05:17.640 --> 00:05:19.740
+Szczeliny najczęściej znajdują się na widoku.
+
+00:05:19.980 --> 00:05:24.260
+Nadmiernie uprzywilejowane konta serwisowe, naruszenia warstw, niemonitorowane zaufania.
+
+00:05:24.520 --> 00:05:27.760
+Wystarczy jedno takie niedopatrzenie, by dać przeciwnikom to, czego chcą.
+
+00:05:28.000 --> 00:05:31.020
+Od tego momentu nie mierzysz się już z hakerem wewnątrz systemu.
+
+00:05:31.020 --> 00:05:34.680
+Oni stają się władzą systemu, ale tutaj sprawa staje się poważniejsza.
+
+00:05:34.680 --> 00:05:36.900
+Atakujący nie muszą kompromitować dziesiątek kont.
+
+00:05:37.040 --> 00:05:40.940
+Potrzebują tylko jednego otwarcia, jednej tożsamości użytkownika, którą mogą wykorzystać, by zacząć wspinaczkę.
+
+00:05:41.100 --> 00:05:45.540
+Jak zobaczysz, ta jedna rysa na zbroi może wywrócić całą grę, zanim w ogóle zorientujesz się, co się stało.
+
+00:05:45.680 --> 00:05:48.480
+Pierwsza rysa, jeden użytkownik, by nimi wszystkimi rządzić.
+
+00:05:48.640 --> 00:05:51.840
+Pierwszy słaby punkt prawie zawsze zaczyna się od jednego konta użytkownika.
+
+00:05:52.080 --> 00:05:55.940
+Nie od administratora, nie od skarbca sekretów, tylko od zwykłej nazwy użytkownika i hasła.
+
+00:05:55.940 --> 00:06:00.320
+To wszystko, czego potrzebuje atakujący, by zacząć przechadzać się po korytarzach twojej sieci, jakby posiadał własną przepustkę.
+
+00:06:00.480 --> 00:06:02.920
+Przyjrzyjmy się typowym sposobom na zdobycie tej przepustki.
+
+00:06:03.100 --> 00:06:05.160
+E-mail phishingowy trafia do niewłaściwej skrzynki.
+
+00:06:05.280 --> 00:06:12.300
+Hasło użyte ponownie ze starego konta streamingowego nadal odblokowuje login służbowy lub poświadczenia z wycieku zewnętrznego nigdy nie zostały zmienione w centrali.
+
+00:06:12.460 --> 00:06:15.240
+W każdym przypadku atakujący nie musi przebijać się przez zabezpieczenia.
+
+00:06:15.420 --> 00:06:17.460
+Po prostu loguje się tak, jakby to była codzienna praca.
+
+00:06:17.680 --> 00:06:19.700
+Oto część, którą wielu menedżerów id źle rozumie.
+
+00:06:19.700 --> 00:06:22.600
+Zakładają, że kompromitacja jednego konta użytkownika to tylko niedogodność, a nie katastrofa.
+
+00:06:22.740 --> 00:06:25.080
+W najgorszym przypadku myślą o skrzynce odbiorczej lub udziale działu.
+
+00:06:25.200 --> 00:06:26.000
+Prawda jest inna.
+
+00:06:26.200 --> 00:06:28.820
+W Active Directory to konto nie jest pionkiem, który można zignorować.
+
+00:06:28.980 --> 00:06:32.440
+To figura, która może zmienić stan całej gry, a zmiana ta następuje poprzez ruchy boczne.
+
+00:06:32.700 --> 00:06:34.820
+Atakujący nie zatrzymują się w jednej skrzynce pocztowej.
+
+00:06:35.020 --> 00:06:38.780
+Wyciągają zapisane poświadczenia, powtarzają tokeny i polują na ślady administratora na maszynach.
+
+00:06:38.780 --> 00:06:45.200
+Atakujący szukają zapisanych poświadczeń, wyodrębniają pamięć LS lub odtwarzają hasze to standardowe ruchy opisane w materiałach szkoleniowych.
+
+00:06:45.400 --> 00:06:48.240
+Past the hash oznacza, że nie potrzebują nawet samego hasła.
+
+00:06:48.440 --> 00:06:51.540
+Przetwarzają dane przechowywane w pamięci, dopóki nie otworzą większych drzwi.
+
+00:06:51.760 --> 00:06:54.900
+Narzędzia takie jak mimikat sprawiają, że jest to równie proste jak kopiuj-wklej.
+
+00:06:54.900 --> 00:06:57.120
+Co gorsza, te ruchy wyglądają bardzo naturalnie.
+
+00:06:57.360 --> 00:07:01.340
+Systemy monitorowania są przygotowane na czerwone flagi, takie jak Brute Force czy nieudane próby logowania.
+
+00:07:01.520 --> 00:07:03.860
+Ale ruch boczny to tylko seria poprawnych połączeń.
+
+00:07:03.860 --> 00:07:07.600
+Dla twojego systemu zarządzania to wygląda jak pracownik helpdesku wykonujący swoją pracę.
+
+00:07:07.800 --> 00:07:10.000
+Dla atakującego to skradanie się w stronę korony.
+
+00:07:10.200 --> 00:07:13.440
+Ta cicha wspinaczka jest powodem, dla którego ten etap jest niebezpieczny.
+
+00:07:13.620 --> 00:07:18.920
+Każde logowanie wtapia się w codzienny szum, ale z każdym krokiem atakujący zbliża się do kąt o wysokiej wartości.
+
+00:07:19.000 --> 00:07:24.840
+Narzędzia takie jak Bloodhound mapują nawet dokładne ścieżki ataku, pokazując, jak jeden użytkownik prowadzi prosto do administratora domeny.
+
+00:07:25.040 --> 00:07:28.420
+Jeśli przeciwnicy korzystają z tych wykresów, możesz być pewien, że obrońcy też powinni.
+
+00:07:28.580 --> 00:07:30.720
+Od tego początkowego kąta eskalacja przyspiesza.
+
+00:07:30.720 --> 00:07:34.220
+Jedna zainfekowana stacja robocza prowadzi do zapisanych poświadczeń kogoś innego.
+
+00:07:34.420 --> 00:07:37.580
+Wkrótce token administratora pojawia się na komputerze, na którym nie powinien.
+
+00:07:37.740 --> 00:07:42.560
+Ten token odblokowuje serwery, a z serwerami przychodzą kopie zapasowe, bazy danych i kontrola polityk.
+
+00:07:42.700 --> 00:07:46.900
+W ciągu kilku godzin hakowany login z HR staje się administratorem domeny w każdym systemie.
+
+00:07:47.120 --> 00:07:49.220
+Zauważ, że to nie jest żadna elitarna magia.
+
+00:07:49.360 --> 00:07:50.460
+To standardowa praktyka.
+
+00:07:50.700 --> 00:07:54.980
+Scenariusze są opublikowane, narzędzia darmowe, a nowoczesne zestawy ataków automatyzują wykrywanie i powtarzanie działań.
+
+00:07:55.060 --> 00:07:56.820
+To obniża poprzeczkę dla atakujących.
+
+00:07:56.820 --> 00:08:00.360
+To, co kiedyś wymagało umiejętności, teraz wymaga wytrwałości i weekendu z Google.
+
+00:08:00.760 --> 00:08:04.380
+Automatyzacja oznacza, że włamania postępują szybko, a obrona musi działać jeszcze szybciej.
+
+00:08:04.540 --> 00:08:07.800
+Inny problem pojawia się, gdy obrońcy tworzą skróty, nawet o tym nie wiedząc.
+
+00:08:07.880 --> 00:08:12.420
+To samo hasło lokalnego administratora na wszystkich maszynach, atakujący łamie jedno i rozprzestrzenia się wszędzie.
+
+00:08:12.820 --> 00:08:17.380
+Uprzywilejowane konta logujące się do stacji roboczych te tokeny czekają na komputerach, na których się ich nie spodziewasz.
+
+00:08:17.560 --> 00:08:19.880
+Atnie kwestionuje tych logowań, ono im ufa.
+
+00:08:19.880 --> 00:08:25.840
+To zaufanie staje się drabiną atakującego, a zanim ktoś się zorientuje, skala ataku już się zwielokrotniła.
+
+00:08:25.980 --> 00:08:27.920
+To już nie jest jedno przejęte konto.
+
+00:08:28.140 --> 00:08:33.020
+To dziesiątki kont w wielu systemach, połączonych w łańcuch, prowadzący do przejęcia całej sieci.
+
+00:08:33.240 --> 00:08:37.940
+Dlatego traktowanie pojedynczych skradzionych danych logowania jako zdarzenia o niskim wpływie jest krytycznym błędem.
+
+00:08:38.160 --> 00:08:41.880
+W kontekście Active Directory ten jeden login może stać się kluczem głównym.
+
+00:08:41.880 --> 00:08:49.760
+To, co wygląda jak codzienne zgłoszenie do helpdesku, kliknąłem link i teraz nie mogę się zalogować, może być początkiem sabotażysty przepisującego zasady w ukryciu.
+
+00:08:49.900 --> 00:08:53.800
+Co rodzi kolejne pytanie, jakie luki w ad sprawiają, że eskalacja jest tak łatwa?
+
+00:08:53.960 --> 00:08:59.300
+Ponieważ często to nie geniusz atakującego decyduje o wyniku, lecz błędne konfiguracje świecące jak latarnie.
+
+00:08:59.480 --> 00:09:05.100
+I jak zobaczymy, te błędy mogą sprawić, że Twoje środowisko będzie wyglądać, jakby reklamowało hakuj mnie neonowymi literami.
+
+00:09:05.280 --> 00:09:08.340
+Krytyczne błędy konfiguracyjne, które wręcz krzyczą hakuj mnie.
+
+00:09:08.340 --> 00:09:13.800
+Luki, które najbardziej liczą się w ad, często nie są krzykliwymi eksploitami, lecz nudnymi potknięciami w konfiguracji.
+
+00:09:13.980 --> 00:09:17.820
+A te potknięcia tworzą trzy wady strukturalne, które atakujący badają jako pierwsze.
+
+00:09:18.060 --> 00:09:24.580
+Nadmiernie uprzywilejowani administratorzy domeny, brak realnego podziału na poziomy uprawnień oraz konta serwisowe lub przestarzałe usługi pozostawione na autopilocie.
+
+00:09:24.720 --> 00:09:27.740
+Te trzy rzeczy same w sobie mogą doprowadzić do upadku całego modelu obrony.
+
+00:09:27.880 --> 00:09:30.380
+Pierwszym problemem jest nadmierna liczba administratorów domeny.
+
+00:09:30.620 --> 00:09:33.260
+Zbyt wiele kont posiada uprawnienia boga, nie mając ku temu potrzeby.
+
+00:09:33.480 --> 00:09:35.940
+Gdy atakujący przejmie choć jedno z nich, gra jest skończona.
+
+00:09:35.940 --> 00:09:39.620
+Można tworzyć nowe konta, nadpisywać zasady grupy i rozsyłać złośliwe oprogramowanie.
+
+00:09:39.820 --> 00:09:41.780
+Rozwiązaniem nie jest tylko redukcja personelu.
+
+00:09:42.020 --> 00:09:47.540
+Specjaliści do spraw bezpieczeństwa stale zalecają wdrażanie zasady najniższych przywilejów wraz z odpowiednim modelem warstwowym.
+
+00:09:47.800 --> 00:09:55.220
+Dzięki temu pracownicy helpdesku, administratorzy i architekci mają dostęp ograniczony do swoich ról, zamiast wszyscy nosić tę samą koronę.
+
+00:09:55.460 --> 00:09:57.940
+Drugim błędem jest całkowite pominięcie separacji warstwowej.
+
+00:09:58.680 --> 00:10:03.020
+Wciąż powszechne jest, że młodsi administratorzy dysponują taką samą kontrolą jak starsi architekci.
+
+00:10:03.020 --> 00:10:06.660
+Tworzy to ten sam zasięg rażenia, niezależnie od tego, czyje konto zostanie przejęte.
+
+00:10:06.840 --> 00:10:12.720
+Rzadko dajesz nieznajomemu klucz uniwersalny, więc nie pozwól, by każde uprzywilejowane konto w ad miało dostęp do wszystkiego.
+
+00:10:12.960 --> 00:10:19.840
+Warstwowy model uprawnień wyraźnie oddziela rolę administratora lokalnego, serwerowego i domnowego, ograniczając skutki przejęcia.
+
+00:10:20.060 --> 00:10:23.840
+Trzecią luką są zapomniane konta usługowe oraz przestarzałe protokoły.
+
+00:10:24.020 --> 00:10:28.100
+Konta usługowe mają za zadanie cicho uwierzytelniać aplikacje lub drukarki w tle.
+
+00:10:28.100 --> 00:10:32.240
+Zbyt często przyznaje się im uprawnienia w całej domenie, tak na wszelki wypadek.
+
+00:10:32.400 --> 00:10:39.400
+Dodaj do tego dane logowania zaszyte w skryptach i hasła, które nigdy nie wygasają, a otrzymasz ciche konta z większą mocą niż ludzie.
+
+00:10:39.640 --> 00:10:45.060
+Atakujący obierają je za cel, bo są przewidywalne, słabo monitorowane i często przechodzą audyty bez wykrycia.
+
+00:10:45.300 --> 00:10:50.540
+Dodatkowo stare protokoły, jak SMB czy nieaktualne punkty końcowe, RPC, mogą stać się otwartymi drzwiami.
+
+00:10:50.760 --> 00:10:52.500
+Nie wymagają one nawet kreatywności.
+
+00:10:52.500 --> 00:10:56.640
+Atakujący uruchamia znany eksploit i nagle zyskuje przyczółek tam, gdzie obrona jest najsłabsza.
+
+00:10:56.800 --> 00:11:00.400
+W praktyce rzeczywiste włamania rzadko ograniczają się do jednego z tych elementów.
+
+00:11:00.620 --> 00:11:06.940
+Zwykle to mieszanka konto z phishingu, niedbale uprzywilejowane konto usługowe i cicho włączony stary protokół SMB.
+
+00:11:07.120 --> 00:11:10.460
+Ten tercet prowadzi do przejęcia kontroli nad domeną z niepokojącą szybkością.
+
+00:11:10.720 --> 00:11:13.140
+Z punktu widzenia atakującego nic w tym nie wygląda na zaawansowane.
+
+00:11:13.400 --> 00:11:16.280
+Wygląda to jak darmowy dostęp fabrycznie zainstalowany przez administratorów.
+
+00:11:16.420 --> 00:11:18.080
+Powszechną wymówką jest brak czasu.
+
+00:11:18.080 --> 00:11:22.160
+Jednak atakujący nie potrzebują nowych luk typu Zero Day, gdy domyślne ustawienia działają wystarczająco dobrze.
+
+00:11:22.340 --> 00:11:29.560
+Ograniczenie liczby administratorów, wymuszenie dostępu warstwowego, usunięcie nieaktywnych usług i ograniczenie kont do niezbędnych uprawnień to żaden wielki wyczyn.
+
+00:11:29.680 --> 00:11:31.120
+To podstawowa higiena pracy.
+
+00:11:31.380 --> 00:11:34.940
+Zaniechanie tego jest równoznaczne z przyklejeniem zapasowego klucza pod wycieraczką.
+
+00:11:35.120 --> 00:11:39.300
+I choć prawa i przywileje wyznaczają oczywiste ścieżki wejścia, istnieją też te niewidzialne.
+
+00:11:39.460 --> 00:11:42.700
+Ukrywają się w mechanizmach zaufania, na których polegasz każdego dnia.
+
+00:11:42.700 --> 00:11:49.540
+Ponieważ jeśli certyfikaty tożsamości nie są odpowiednio zabezpieczone, przestają być znakiem pewności, a zaczynają działać jak uniwersalna przepustka.
+
+00:11:49.720 --> 00:11:54.780
+Przechodzimy do kolejnego słabego punktu, gdzie atakujący nie tylko pożyczają Twoje klucze, ale wyrabiają własne.
+
+00:11:54.920 --> 00:11:57.780
+PKI i certyfikaty – niewidzialny, uniwersalny klucz.
+
+00:11:57.920 --> 00:12:07.100
+Certyfikaty leżą u podstaw Twojego systemu tożsamości, a powiązane z Active Directory poprzez PKI mogą albo zabezpieczyć wszystko, albo po cichu otworzyć dostęp do całego systemu.
+
+00:12:07.100 --> 00:12:12.580
+Przy odpowiednim wdrożeniu dają kryptograficzne zaufanie, łatwiejsze logowanie i nowoczesne opcje, takie jak karty inteligentne.
+
+00:12:12.700 --> 00:12:16.960
+Przy słabym wdrożeniu stają się niewidzialnymi kluczami, których atakujący używają, by się uwiarygodnić.
+
+00:12:17.120 --> 00:12:19.060
+Zagrożenie nie leży w algorytmach szyfrowania.
+
+00:12:19.320 --> 00:12:20.240
+Są one solidne.
+
+00:12:20.440 --> 00:12:26.240
+Problem tkwi w sposobie konfiguracji szablonów certyfikatów, w tym kto może o nie wnioskować i jakie uprawnienia nadają te szablony.
+
+00:12:26.600 --> 00:12:29.860
+Infrastruktura klucza publicznego ma być systemem rejestrującym zaufanie.
+
+00:12:29.860 --> 00:12:38.500
+Pomyśl o certyfikatach jak o cyfrowych paszportach wydawanych przez Urząd Certyfikacji, sprawdzanych na bramkach przez serwery i uznawanych za ważne, dopóki są powiązane z tym urzędem.
+
+00:12:38.680 --> 00:12:43.640
+Użytkownicy je przedstawiają, maszyny uwierzytelniają się za ich pomocą, a całość wydaje się dobrze naoliwioną warstwą bezpieczeństwa.
+
+00:12:43.760 --> 00:12:46.920
+Teoretycznie integracja PKI z AD sprawia, że wszystko jest bezpieczniejsze.
+
+00:12:47.140 --> 00:12:50.100
+W rzeczywistości skróty ukryte w uprawnieniach szablonów otwierają bramy.
+
+00:12:50.280 --> 00:12:52.820
+To właśnie w tych szablonach sprawy zaczynają się komplikować.
+
+00:12:52.820 --> 00:12:58.540
+Szablon stworzony lata temu, aby ułatwić życie drukarce lub kontu serwisowemu, może mieć zbyt szerokie uprawnienia.
+
+00:12:58.800 --> 00:13:06.200
+Jeśli ten szablon pozwala na podniesione mapowanie, każdy ze zwykłym dostępem do domeny może zażądać certyfikatu i awansować do roli, której nigdy nie powinien pełnić.
+
+00:13:06.340 --> 00:13:08.920
+Nie muszą łamać haseł ani siłowo forsować logowań.
+
+00:13:09.080 --> 00:13:13.040
+Po prostu składają poprawny wniosek, a Urząd Certyfikacji zatwierdza go automatycznie.
+
+00:13:13.220 --> 00:13:17.660
+Od tego momentu Twoje systemy traktują ich jako zaufanych, często na poziomie administratora domeny.
+
+00:13:17.660 --> 00:13:23.600
+To jak rozdawanie identyfikatorów gościa, które pozwalają ludziom wejść do skarbca, bo nikt nie sprawdził, do jakich drzwi przypisano kartę.
+
+00:13:23.760 --> 00:13:30.020
+Firewale, segmenty sieci i alerty punktów końcowych nadal działają, ale żaden z nich nie kwestionuje certyfikatu, który wygląda na oficjalnie podpisany.
+
+00:13:30.160 --> 00:13:31.460
+To zaświadczenie wystarcza.
+
+00:13:31.700 --> 00:13:34.900
+Atakujący o tym wiedzą, dlatego polują na te szablony przy każdym ataku.
+
+00:13:35.140 --> 00:13:39.580
+Błędnie skonfigurowane zasady rejestracji, zwłaszcza starsze szablony serwisowe, często stają się główną nagrodą.
+
+00:13:39.820 --> 00:13:43.480
+Głębszym problemem jest to, jak dużą wagę przykładamy do certyfikatów, nigdy ich nie kwestionując.
+
+00:13:43.480 --> 00:13:46.200
+Jeśli nie uda się zalogować kilka razy, włączają się alarmy.
+
+00:13:46.380 --> 00:13:48.840
+Jeśli wyślesz zbyt wiele żądań MFA, ktoś to zauważy.
+
+00:13:49.020 --> 00:13:52.020
+Ale logowanie potwierdzone certyfikatem wygląda na całkowicie czyste.
+
+00:13:52.260 --> 00:13:54.540
+Domyślnie systemy nie uznają tego za podejrzane.
+
+00:13:54.740 --> 00:13:55.860
+Uznają to za sukces.
+
+00:13:56.060 --> 00:13:58.180
+Dlatego sfałszowane certyfikaty są tak skuteczne.
+
+00:13:58.420 --> 00:14:01.560
+Dla narzędzi bezpieczeństwa wyglądają one jak standardowa, zweryfikowana aktywność.
+
+00:14:01.700 --> 00:14:03.760
+Teraz sprostujmy jedno powszechne nieporozumienie.
+
+00:14:04.000 --> 00:14:07.920
+Czasami można usłyszeć, że nawet MFA załamuje się pod wpływem sfałszowanych certyfikatów.
+
+00:14:07.920 --> 00:14:09.460
+Prawda jest bardziej złożona.
+
+00:14:09.460 --> 00:14:14.360
+W zależności od przepływu uwierzytelniania, logowanie certyfikatem może wystarczyć do autoryzacji podstawowej
+
+00:14:14.360 --> 00:14:17.340
+i przy niewłaściwej konfiguracji pominąć dodatkowe monity MFA.
+
+00:14:17.580 --> 00:14:21.420
+Źle skonfigurowane szablony pozwalają atakującym skutecznie ominąć tę drugą warstwę.
+
+00:14:21.620 --> 00:14:25.240
+Nie oznacza to, że certyfikaty zawsze łamią MFA, ale mogą je unieważnić,
+
+00:14:25.300 --> 00:14:28.740
+jeśli projekt nie wiąże wyraźnie wymuszenia MFA z użyciem certyfikatu.
+
+00:14:28.920 --> 00:14:30.700
+Testerzy widzą te luki nieustannie.
+
+00:14:30.700 --> 00:14:34.960
+Szablony rejestracji mogą zezwalać na certyfikaty przypisane bezpośrednio do kontrolerów domen
+
+00:14:34.960 --> 00:14:37.080
+lub umożliwiać rejestrację w imieniu kogoś innego.
+
+00:14:37.080 --> 00:14:39.180
+Nic z tego nie wymaga łamania kryptografii.
+
+00:14:39.380 --> 00:14:42.020
+Chodzi o domyślne uprawnienia, których nikt nie audytował.
+
+00:14:42.260 --> 00:14:43.980
+Napastnik nie musi forsować bram.
+
+00:14:44.180 --> 00:14:47.940
+Grzecznie składa wniosek, odbiera podpisany certyfikat i swobodnie się porusza.
+
+00:14:48.160 --> 00:14:49.780
+Dlaczego ten problem wciąż istnieje?
+
+00:14:49.960 --> 00:14:52.180
+Usługi certyfikatów wydają się onieśmielające.
+
+00:14:52.540 --> 00:14:55.320
+Administratorzy boją się przerwania logowania lub zakłóceń w produkcji,
+
+00:14:55.420 --> 00:14:57.120
+więc zostawiają stare szablony w spokoju.
+
+00:14:57.120 --> 00:15:00.420
+Przez lata nieużywane lub zbyt uprzywilejowane szablony się gromadzą.
+
+00:15:00.660 --> 00:15:02.260
+Atakujący liczą na te inercje.
+
+00:15:02.500 --> 00:15:05.800
+Dzięki jednej z takich zapomnianych opcji tworzą wszystkie potrzebne poświadczenia,
+
+00:15:05.800 --> 00:15:07.320
+nie wzbudzając żadnego alarmu.
+
+00:15:07.500 --> 00:15:09.060
+Rozwiązanie nie wymaga geniuszu.
+
+00:15:09.280 --> 00:15:10.260
+Wymaga dyscypliny.
+
+00:15:10.520 --> 00:15:13.660
+Wzmocnij szablony certyfikatów, aby nadawały tylko odpowiednie prawa
+
+00:15:13.660 --> 00:15:16.980
+i usuń zbędne uprawnienia rejestracji skąd, które ich nie potrzebują.
+
+00:15:17.180 --> 00:15:19.900
+I nie zakładaj, że jeśli coś działa, to jest bezpieczne.
+
+00:15:20.140 --> 00:15:22.700
+Regularnie audytuj szablony i wydawanie certyfikatów.
+
+00:15:22.860 --> 00:15:24.640
+Praktyczne wzmacnianie wygląda tak.
+
+00:15:24.640 --> 00:15:27.380
+Audytuj urzędy certyfikacji w określonych odstępach czasu,
+
+00:15:27.500 --> 00:15:29.720
+odbierz szerokie prawa rejestracji nieistotnym grupom,
+
+00:15:29.820 --> 00:15:32.580
+wymuś uprzywilejowane ścieżki rejestracji dla krytycznych szablonów
+
+00:15:32.580 --> 00:15:34.260
+i loguj każde żądanie certyfikatu.
+
+00:15:34.460 --> 00:15:36.480
+Traktuj te logi z taką samą podejrzliwością,
+
+00:15:36.540 --> 00:15:39.120
+jak resetowanie haseł czy tworzenie kont administratorów.
+
+00:15:39.340 --> 00:15:41.660
+Ważne jest również, aby przestać myśleć o certyfikatach
+
+00:15:41.660 --> 00:15:43.020
+jako niewidocznych dla monitoringu.
+
+00:15:43.300 --> 00:15:45.660
+Mogą być logowain, powinny być audytowain.
+
+00:15:45.880 --> 00:15:48.280
+Aktywność CA powinna być pod taką samą lupą,
+
+00:15:48.400 --> 00:15:50.180
+jak zmiany GPO czy modyfikacje grup.
+
+00:15:50.180 --> 00:15:53.080
+Jeśli wydawany jest nowy, wysoce uprzywilejowany certyfikat,
+
+00:15:53.160 --> 00:15:55.000
+powinno to rozświetlić pulpit nawigacyjny,
+
+00:15:55.080 --> 00:15:56.200
+a nie przejść niezauważone,
+
+00:15:56.280 --> 00:15:58.420
+bo jeśli zostawisz niekontrolowany rozrost szablonów,
+
+00:15:58.420 --> 00:16:00.480
+budujesz tajną autostradę dla atakujących.
+
+00:16:00.680 --> 00:16:02.100
+Certyfikaty, które nigdy nie wygasają,
+
+00:16:02.200 --> 00:16:03.620
+szablony dające prawa na poziomie domeny
+
+00:16:03.620 --> 00:16:05.220
+i rejestracje, których nikt nie śledzi.
+
+00:16:05.380 --> 00:16:06.580
+Tworzą one uniwersalny klucz,
+
+00:16:06.700 --> 00:16:08.220
+który przemyka pod twoimi zabezpieczeniami.
+
+00:16:08.440 --> 00:16:09.780
+Raz użyty pozwala napastnikowi
+
+00:16:09.780 --> 00:16:11.340
+nie tylko na dostęp przez jedną sesję.
+
+00:16:11.580 --> 00:16:13.580
+Może on wielokrotnie uwierzytelniać się w środowisku,
+
+00:16:13.700 --> 00:16:14.680
+często w nieskończoność.
+
+00:16:14.680 --> 00:16:15.940
+Gorzka prawda jest taka,
+
+00:16:16.140 --> 00:16:18.360
+że dopóki PKI nie zostanie celowo wzmocnione,
+
+00:16:18.500 --> 00:16:19.800
+dobra higiena kont i usług
+
+00:16:19.800 --> 00:16:22.440
+może upaść przez jedną cichą, błędną konfigurację.
+
+00:16:22.680 --> 00:16:23.640
+Zapanuj nad szablonami,
+
+00:16:23.760 --> 00:16:24.900
+zastosuj realny audyt,
+
+00:16:25.000 --> 00:16:26.300
+a certyfikaty zrobią to,
+
+00:16:26.380 --> 00:16:28.000
+do czego służą, wymuszą zaufanie.
+
+00:16:28.240 --> 00:16:29.240
+Jeśli zrobisz to źle,
+
+00:16:29.360 --> 00:16:31.380
+dajesz intruzom tylną furtkę do wszystkiego.
+
+00:16:31.580 --> 00:16:33.320
+W ten sposób lokalny ad może zawieść,
+
+00:16:33.420 --> 00:16:35.120
+zanim jeszcze dotrą zagrożenia zewnętrzne.
+
+00:16:35.280 --> 00:16:36.220
+I tu tkwi haczyk.
+
+00:16:36.360 --> 00:16:38.300
+Kiedy przedsiębiorstwa rozszerzają swoje środowiska
+
+00:16:38.300 --> 00:16:39.160
+o katalogi w chmurze,
+
+00:16:39.300 --> 00:16:40.640
+słabe punkty nie tylko pozostają,
+
+00:16:40.740 --> 00:16:41.880
+ale przekształcają się w nowe,
+
+00:16:42.000 --> 00:16:42.940
+niezauważone ścieżki,
+
+00:16:43.020 --> 00:16:44.600
+a ta zmiana niesie ze sobą niespodzianki.
+
+00:16:44.860 --> 00:16:45.840
+Środowiska hybrydowe
+
+00:16:45.840 --> 00:16:47.460
+to dla atakujących mosty widma.
+
+00:16:47.460 --> 00:16:49.180
+Konfiguracje tożsamości hybrydowej
+
+00:16:49.180 --> 00:16:51.120
+łączą lokalną usługę Ad z Azure Ad
+
+00:16:51.120 --> 00:16:52.500
+lub Microsoft 365.
+
+00:16:53.060 --> 00:16:55.460
+Takie połączenia mogą przypominać kolejkę w sklepie,
+
+00:16:55.620 --> 00:16:57.960
+są szybkie, niewidoczne i często ignorowane.
+
+00:16:58.200 --> 00:17:00.560
+Jednak znacząco zwiększają one powierzchnię ataków w sposób,
+
+00:17:00.760 --> 00:17:02.400
+który wielu administratorów bagatelizuje.
+
+00:17:02.580 --> 00:17:05.100
+Połączenia hybrydowe nie oznaczają braku bezpieczeństwa,
+
+00:17:05.240 --> 00:17:06.760
+ale tworzą nowe ścieżki dostępu.
+
+00:17:06.880 --> 00:17:08.040
+Tak jak kontrolery domeny,
+
+00:17:08.160 --> 00:17:09.860
+połączenia te muszą być zabezpieczane
+
+00:17:09.860 --> 00:17:11.240
+z taką samą starannością.
+
+00:17:11.620 --> 00:17:12.920
+Oto wspomniane mosty widma,
+
+00:17:13.060 --> 00:17:14.080
+narzędzia synchronizacji,
+
+00:17:14.080 --> 00:17:15.360
+takie jak Azure Ad Connect,
+
+00:17:15.360 --> 00:17:16.960
+synchronizacja skrótów haseł,
+
+00:17:17.060 --> 00:17:18.300
+uwierzytelnianie przekazywane,
+
+00:17:18.420 --> 00:17:20.200
+SSO czy federacja z ADFS.
+
+00:17:21.040 --> 00:17:24.080
+To hydraulika zapewniająca płynność pracy hybrydowej,
+
+00:17:24.260 --> 00:17:26.680
+ale każdy element jest celem wysokiej wagi,
+
+00:17:26.880 --> 00:17:29.340
+bo po przejęciu zasobów lokalnych atakujący
+
+00:17:29.340 --> 00:17:30.160
+wchodzi do chmury,
+
+00:17:30.300 --> 00:17:33.020
+a po upadku chmury łatwo wraca do lokalnej sieci.
+
+00:17:33.640 --> 00:17:35.540
+Większość firm wybiera model hybrydowy,
+
+00:17:35.640 --> 00:17:37.880
+bo jest reklamowany jako nowoczesny i wydajny.
+
+00:17:38.100 --> 00:17:40.420
+Użytkownicy chcą jednego logowania do wszystkiego,
+
+00:17:40.540 --> 00:17:41.720
+więc łączysz Ad z Azure,
+
+00:17:41.720 --> 00:17:43.200
+wdrażasz Azure Ad Connect,
+
+00:17:43.200 --> 00:17:46.460
+włączasz synchronizację i uznajesz infrastrukturę za gotową.
+
+00:17:46.700 --> 00:17:49.360
+W rzeczywistości synchronizacja nie jest jednokierunkowa.
+
+00:17:49.540 --> 00:17:51.280
+Ten kanał współdzielonej tożsamości
+
+00:17:51.280 --> 00:17:52.960
+może przesyłać ataki równie łatwo,
+
+00:17:53.080 --> 00:17:53.880
+co dane logowania.
+
+00:17:54.100 --> 00:17:56.760
+Pomyśl o tym, jak o budowie podziemnego tunelu serwisowego
+
+00:17:56.760 --> 00:17:57.520
+między zamkami.
+
+00:17:57.780 --> 00:17:59.180
+Miało być to ułatwienie dostaw,
+
+00:17:59.320 --> 00:18:00.160
+nikt go nie pilnuje,
+
+00:18:00.300 --> 00:18:02.680
+podczas gdy strażnicy na murach zachowują czujność.
+
+00:18:02.880 --> 00:18:04.080
+Atakujący wykorzystują tunel,
+
+00:18:04.180 --> 00:18:05.020
+który sam zbudowałeś
+
+00:18:05.020 --> 00:18:06.000
+i na tym polega ryzyko.
+
+00:18:06.180 --> 00:18:07.760
+Atakujący nie niszczą zewnętrznego muru,
+
+00:18:07.760 --> 00:18:09.160
+oni wykorzystują synchronizację.
+
+00:18:09.160 --> 00:18:11.260
+Ten scenariusz rozgrywa się błyskawicznie.
+
+00:18:11.500 --> 00:18:13.440
+Zostają skradzione lokalne poświadczenia.
+
+00:18:13.720 --> 00:18:14.680
+Dzięki synchronizacji
+
+00:18:14.680 --> 00:18:17.240
+te same dane są ważne w Microsoft 365.
+
+00:18:18.040 --> 00:18:20.320
+Nagle atakujący ma dostęp do poczty Exchange,
+
+00:18:20.520 --> 00:18:22.420
+folderów OnDrive i konwersacji w Teams.
+
+00:18:22.620 --> 00:18:24.420
+Pełne zasoby firmy są wystawione na ryzyko
+
+00:18:24.420 --> 00:18:24.920
+tylko dlatego,
+
+00:18:25.100 --> 00:18:26.240
+że konta zostały zduplikowane
+
+00:18:26.240 --> 00:18:27.500
+bez odpowiednich zabezpieczeń.
+
+00:18:27.620 --> 00:18:29.180
+Federacja to kolejny czuły punkt.
+
+00:18:29.420 --> 00:18:30.500
+Konfigurując lokalne ad
+
+00:18:30.500 --> 00:18:31.840
+jako gwarant logowania w chmurze,
+
+00:18:31.960 --> 00:18:33.080
+tworzysz pieczęć zaufania.
+
+00:18:33.080 --> 00:18:34.580
+Jeśli jest ustawiona słabo,
+
+00:18:34.700 --> 00:18:37.000
+to tak, jakby zostawić podpisane czeki na wierzchu.
+
+00:18:37.000 --> 00:18:38.640
+Wystarczy przekazać tokeny,
+
+00:18:38.700 --> 00:18:40.080
+a chmura je zaakceptuje.
+
+00:18:40.340 --> 00:18:43.340
+Microsoft 365 wierzy autorytetowi
+
+00:18:43.340 --> 00:18:44.780
+przejętego kontrolera domeny
+
+00:18:44.780 --> 00:18:46.160
+bez głębszej weryfikacji.
+
+00:18:46.400 --> 00:18:47.640
+Reguły dostępu warunkowego
+
+00:18:47.640 --> 00:18:48.640
+to dodatkowa bariera
+
+00:18:48.640 --> 00:18:49.800
+ograniczająca logowanie
+
+00:18:49.800 --> 00:18:51.340
+w oparciu o zgodność urządzenia,
+
+00:18:51.500 --> 00:18:52.680
+MFA lub lokalizację.
+
+00:18:52.880 --> 00:18:53.740
+Jednak ich wartość
+
+00:18:53.740 --> 00:18:55.600
+zależy wyłącznie od poprawności projektu.
+
+00:18:55.780 --> 00:18:56.900
+Błędna konfiguracja pozwoli
+
+00:18:56.900 --> 00:18:58.420
+atakującym ominąć monity MFA
+
+00:18:58.420 --> 00:18:59.920
+lub przemknąć przez przeoczone luki.
+
+00:19:00.140 --> 00:19:01.820
+Nie potrzebują do tego specjalnego kodu.
+
+00:19:01.820 --> 00:19:03.680
+Po prostu kręcą się wokół niedbałych luk
+
+00:19:03.680 --> 00:19:05.040
+pozostawionych w administracji.
+
+00:19:05.040 --> 00:19:07.460
+Do tego dochodzi uwierzytelnianie przekazywane pass-through.
+
+00:19:07.620 --> 00:19:09.480
+Azure AdConnect odsyła żądanie uwierzytelnienia
+
+00:19:09.480 --> 00:19:10.580
+do twojego kontrolera domeny,
+
+00:19:10.700 --> 00:19:12.180
+pytając, czy to hasło jest poprawne?
+
+00:19:12.320 --> 00:19:14.460
+Jeśli atakujący ma dostęp do środowiska lokalnego,
+
+00:19:14.620 --> 00:19:15.720
+może użyć przejętych haseł
+
+00:19:15.720 --> 00:19:17.320
+w kanale uwierzytelniania przekazywanego.
+
+00:19:17.520 --> 00:19:19.220
+Chmura, widząc poprawną odpowiedź z ad,
+
+00:19:19.340 --> 00:19:20.920
+wzrusza ramionami i przyznaje dostęp.
+
+00:19:21.140 --> 00:19:23.320
+Jeśli MFA nie jest egzekwowany konsekwentnie
+
+00:19:23.320 --> 00:19:23.980
+w obu światach,
+
+00:19:24.080 --> 00:19:25.300
+zostaje skutecznie ominięte.
+
+00:19:25.480 --> 00:19:27.520
+Obrońcy często nie wyłapują tego na czas.
+
+00:19:27.720 --> 00:19:29.340
+Dane z poczty w chmurze wyciekają po cichu,
+
+00:19:29.340 --> 00:19:30.540
+pliki są masowo wykradane,
+
+00:19:30.660 --> 00:19:31.740
+a logowania administratorów
+
+00:19:31.740 --> 00:19:33.340
+wyglądają na poprawne po obu stronach.
+
+00:19:33.460 --> 00:19:35.280
+Wykrywanie kuleje, ponieważ każda ze stron zakłada,
+
+00:19:35.400 --> 00:19:37.260
+że ta druga przeprowadziła już dokładną weryfikację.
+
+00:19:37.460 --> 00:19:39.080
+W praktyce atakujący mogą przeskakiwać
+
+00:19:39.080 --> 00:19:40.340
+między środowiskami tygodniami,
+
+00:19:40.480 --> 00:19:41.520
+zanim ktoś połączy fakty.
+
+00:19:41.720 --> 00:19:43.720
+Audyty stale wskazują te same przyczyny.
+
+00:19:43.880 --> 00:19:45.060
+Azure AdConnect pozostawiony
+
+00:19:45.060 --> 00:19:46.680
+z domyślnymi uprawnieniami synchronizacji,
+
+00:19:46.800 --> 00:19:47.920
+zbyt szerokie reguły federacji,
+
+00:19:48.020 --> 00:19:49.520
+niesprawdzone zasady dostępu warunkowego
+
+00:19:49.520 --> 00:19:51.180
+i ignorowane przez lata logi konektorów.
+
+00:19:51.340 --> 00:19:53.120
+Atakujący nie wymyślają nowej broni.
+
+00:19:53.340 --> 00:19:54.140
+Wykorzystują drzwi,
+
+00:19:54.140 --> 00:19:55.920
+które uchyliliśmy dla własnej wygody.
+
+00:19:56.100 --> 00:19:58.100
+Mitygacja opiera się na prostym przepisie.
+
+00:19:58.300 --> 00:20:00.160
+Zaudytuj konfigurację Azure AdConnect,
+
+00:20:00.280 --> 00:20:02.080
+zminimalizuj uprawnienia synchronizacji
+
+00:20:02.080 --> 00:20:03.700
+i konsekwentnie egzekwuj MFA
+
+00:20:03.700 --> 00:20:04.940
+oraz dostęp warunkowy
+
+00:20:04.940 --> 00:20:06.480
+zarówno lokalnie, jak i w chmurze.
+
+00:20:06.700 --> 00:20:07.660
+Wzmocnij federację,
+
+00:20:07.820 --> 00:20:09.760
+aby tokeny nie mogły być łatwo użyte ponownie
+
+00:20:09.760 --> 00:20:11.720
+i monitoruj całą powierzchnię hybrydową.
+
+00:20:11.920 --> 00:20:12.580
+Koreluj logowania,
+
+00:20:12.740 --> 00:20:14.020
+obserwuj wydawanie certyfikatów
+
+00:20:14.020 --> 00:20:15.260
+i śledź aktywność konektorów,
+
+00:20:15.320 --> 00:20:17.300
+tak jakby to były logi zdarzeń kontrolera domeny.
+
+00:20:17.480 --> 00:20:18.620
+Traktuj logowanie w chmurze
+
+00:20:18.620 --> 00:20:20.300
+i lokalne jako jeden spójny system,
+
+00:20:20.300 --> 00:20:21.720
+a nie jako osobne silosy.
+
+00:20:21.840 --> 00:20:23.660
+Ochrona hybrydowego Ad nie jest efektowna,
+
+00:20:23.780 --> 00:20:25.020
+ale wymaga podwójnego wysiłku.
+
+00:20:25.240 --> 00:20:27.020
+Jeden proces wzmacniania dla lokalnej twierdzy
+
+00:20:27.020 --> 00:20:28.320
+i jeden dla dzierżawy w chmurze.
+
+00:20:28.460 --> 00:20:29.440
+Pomiń którykolwiek z nich,
+
+00:20:29.540 --> 00:20:30.960
+a pozostawisz most bez nadzoru.
+
+00:20:31.180 --> 00:20:33.100
+Napraw oba, a most przestanie być ścieżką duchów,
+
+00:20:33.200 --> 00:20:34.540
+przez którą przemykają napastnicy
+
+00:20:34.540 --> 00:20:36.380
+i stanie się strzeżonym, rejestrowanym tunelem.
+
+00:20:36.520 --> 00:20:37.520
+Co jest więc większym?

@@ -1,0 +1,985 @@
+WEBVTT
+
+00:00:00.190 --> 00:00:07.670
+Klaar voor 12 dagen vol Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven.
+
+00:00:07.930 --> 00:00:12.370
+Deze januari is M365, kom terug en pakken we het groter aan.
+
+00:00:12.730 --> 00:00:18.710
+Doe mee voor live sessies, praktijkdemo's en praktische kennis van MVP's en experts van over de hele wereld.
+
+00:00:18.990 --> 00:00:21.390
+Geen algemene slides, geen eindeloos jargon.
+
+00:00:21.770 --> 00:00:23.610
+We pakken de echte uitdagingen aan.
+
+00:00:23.810 --> 00:00:29.030
+Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.030 --> 00:00:34.930
+Of je nu een IT-professional, ontwikkelaar of zakelijk leider bent, er zijn sessies speciaal voor jou.
+
+00:00:35.250 --> 00:00:40.490
+Met 10 volledige dagen kun je talloze technologieën verkennen en in contact komen met een wereldwijde community.
+
+00:00:40.810 --> 00:00:44.550
+Kijk live mee en neem praktische inzichten mee terug naar jouw organisatie.
+
+00:00:44.950 --> 00:00:49.210
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.470 --> 00:00:51.210
+De registratie is nu geopend.
+
+00:00:51.890 --> 00:00:55.930
+Ga naar m365.com.net en verzeker je vandaag nog van een plek.
+
+00:00:56.230 --> 00:00:58.910
+Dat is m365.com.net.
+
+00:00:59.030 --> 00:01:04.550
+Meld je nu aan op m365.com.net en we zien je live in januari.
+
+00:01:04.710 --> 00:01:09.030
+Hallo iedereen en welkom bij een nieuwe aflevering van Microsoft Knowledge Nuggets hier op M365FM.
+
+00:01:09.750 --> 00:01:10.790
+Ik ben Mirko Peters.
+
+00:01:11.110 --> 00:01:13.690
+Stel je voor dat je één virtuele machine nodig hebt voor een kleine app.
+
+00:01:13.770 --> 00:01:16.950
+Je kiest een regio, kiest een VM-grote, bekijkt de prijs en maakt hem aan.
+
+00:01:17.150 --> 00:01:17.890
+Simpel, toch?
+
+00:01:18.090 --> 00:01:21.690
+Stel je nu voor dat diezelfde app plotseling 2000 VM's nodig heeft gedurende de nacht.
+
+00:01:21.930 --> 00:01:26.470
+Misschien draai je simulaties, verwerk je een enorme dataset of test je software met duizenden kortstondige workers.
+
+00:01:26.470 --> 00:01:29.690
+Ineens verandert die ene makkelijke VM-keuze in een flinke hoofdpijn.
+
+00:01:29.890 --> 00:01:32.650
+De grote die je koos heeft misschien niet genoeg capaciteit in jouw regio.
+
+00:01:32.830 --> 00:01:35.150
+Een andere grote zou kunnen werken, maar de prijs verandert.
+
+00:01:35.350 --> 00:01:38.510
+Spot VM's zijn veel goedkoper, maar Azure kan ze op elk moment terugvorderen.
+
+00:01:38.610 --> 00:01:44.470
+Je zou meerdere virtual machine scalesets kunnen bouwen en aangepaste scripts kunnen schrijven om capaciteit te zoeken, maar dat wordt al snel een beheernachtmerrie.
+
+00:01:44.470 --> 00:01:47.690
+Dit is de vraag waar Azure Compute Fleet het antwoord op is.
+
+00:01:47.930 --> 00:01:52.130
+Waarom zou één specifieke VM-grote ervoor moeten zorgen dat een grote implementatie helemaal niet kan starten?
+
+00:01:52.290 --> 00:01:58.370
+Aan het einde van deze aflevering weet je wat Compute Fleet precies doet, wat het niet doet en waar het past naast virtual machine skillsets.
+
+00:01:59.050 --> 00:02:05.650
+Compute Fleet is simpel gezegd een beheerde dienst van Azure die ontworpen is om je een grote po aan VM-rekenkracht te bieden.
+
+00:02:05.890 --> 00:02:08.670
+Merk op dat ik niet zei dat het één specifieke machine aanmaakt.
+
+00:02:08.670 --> 00:02:16.790
+Je vertelt Azure welk type capaciteit je kunt gebruiken, hoeveel je er nodig hebt, waar je deze wilt draaien en of je standaard-and-demand VM's, goedkopere spot VM's of beide wilt.
+
+00:02:17.110 --> 00:02:20.210
+Vervolgens scant Azure naar capaciteit binnen die acceptabele opties.
+
+00:02:20.470 --> 00:02:22.390
+Denk erover zoals een modern kantoorpand.
+
+00:02:22.570 --> 00:02:27.510
+Je komt niet binnen en eist bureau 27 op de achtste verdieping in exact die ene kamer met dat ene specifieke raam.
+
+00:02:27.670 --> 00:02:31.110
+In plaats daarvan zeg je tegen de gebouwbeheerder ik heb 500 bureaus nodig voor mijn team.
+
+00:02:31.330 --> 00:02:32.450
+Deze verdiepingen zijn prima.
+
+00:02:32.750 --> 00:02:34.170
+Deze kamerindelingen zijn in orde.
+
+00:02:34.410 --> 00:02:35.150
+Dit is ons budget.
+
+00:02:35.350 --> 00:02:37.750
+De beheerder kijkt wat er vrij is en zorgt dat iedereen een plek krijgt.
+
+00:02:37.750 --> 00:02:39.430
+Compute Fleet werkt op dezelfde manier.
+
+00:02:39.610 --> 00:02:41.570
+Je aanvraag kan zijn, ik heb duizend workers nodig.
+
+00:02:41.770 --> 00:02:43.490
+Ze hebben zoveel CPU en geheugen nodig.
+
+00:02:43.710 --> 00:02:45.370
+Deze VM-groottes zijn acceptabel.
+
+00:02:45.610 --> 00:02:47.430
+Deze beschikbaarheidszones zijn acceptabel.
+
+00:02:47.670 --> 00:02:50.490
+Gebruik and demand voor een deel van de workload en spot waar dat zinvol is.
+
+00:02:50.710 --> 00:02:53.730
+Dat bredere vangnet maakt het veel makkelijker om beschikbare capaciteit te vinden.
+
+00:02:53.930 --> 00:02:57.110
+Een VM-SKU is simpelweg een specifieke grote en type virtuele machine.
+
+00:02:57.330 --> 00:03:00.890
+Het beschrijft zaken als CPU, geheugen, lokale opslag en processorfamilie.
+
+00:03:01.030 --> 00:03:04.530
+Als je ons slechts één SKU vraagt, kan Azure alleen naar die ene exacte vorm zoeken.
+
+00:03:04.530 --> 00:03:07.930
+Als die capaciteit bezet is, moet je implementatie wachten of mislukt deze.
+
+00:03:08.130 --> 00:03:11.270
+Met Compute Fleet geef je meerdere acceptabele VM-groottes op.
+
+00:03:11.390 --> 00:03:16.410
+Azure kan vervolgens workers op de ene grote plaatsen en andere op een andere, zolang je workload op beide draait.
+
+00:03:16.610 --> 00:03:19.530
+Voor grote workloads is die flexibiliteit precies waar het om draait.
+
+00:03:19.690 --> 00:03:23.030
+Compute Fleet kan tot 10.000 VM's in één implementatie afhandelen.
+
+00:03:23.210 --> 00:03:28.270
+Je hoeft niet langer duizenden machines één voor één te maken of aparte scripts te bouwen voor elke acceptabele VM-grootte.
+
+00:03:28.450 --> 00:03:30.510
+In plaats daarvan maak je één fleet-aanvraag aan.
+
+00:03:30.510 --> 00:03:36.890
+Op de achtergrond controleert Azure de capaciteitskeuzes die je hebt toegestaan, vindt een werkbare mix en maakt de VM-groepen aan die de fleet vormen.
+
+00:03:37.010 --> 00:03:41.510
+Je moet nog steeds het VM-image, de netwerkconfiguratie en de software opgeven die elke worker moet draaien.
+
+00:03:41.710 --> 00:03:43.810
+Fleet begrijpt je bedrijfstoel niet uit zichzelf.
+
+00:03:44.010 --> 00:03:49.970
+Het weet niet of een worker financieel risico berekent, een videoframe rendert, software test of een genoommonster verwerkt.
+
+00:03:50.170 --> 00:03:54.850
+Het routeert ook geen webverkeer, vervangt geen load balancer en repareert geen code binnen een VM.
+
+00:03:55.070 --> 00:03:56.570
+De rol van Fleet is beperkter.
+
+00:03:56.570 --> 00:04:01.550
+Het helpt je bij het verkrijgen en beheren van een grote pool aan rekenkracht wanneer er meer dan één weg naar het doel leidt.
+
+00:04:01.690 --> 00:04:02.610
+Dat is de omslag.
+
+00:04:02.810 --> 00:04:09.570
+In plaats van Azure een starre boodschappenlijst te geven met ik heb duizend van deze exacte machine nodig, geef je een praktische aanvraag.
+
+00:04:09.750 --> 00:04:12.590
+Ik heb zoveel rekenkracht nodig en dit zijn de keuzes die werken.
+
+00:04:13.430 --> 00:04:18.610
+Het volgende deel is waar die aanvraag nuttig wordt, omdat je moet beslissen hoeveel vrijheid je Azure wilt geven.
+
+00:04:18.830 --> 00:04:21.390
+De drie keuzes die Azure de ruimte geven om te werken.
+
+00:04:21.590 --> 00:04:24.450
+De eerste keuze is de lijst met VM-groottes die je accepteert.
+
+00:04:24.450 --> 00:04:31.470
+De meeste mensen beginnen met een naam als D8S of F16 of een specifieke SKU die logisch is als je één server draait en precies weet wat deze nodig heeft.
+
+00:04:31.670 --> 00:04:35.290
+Maar op floatniveau is de betere vraag niet, welke processornaam wil ik hebben?
+
+00:04:35.610 --> 00:04:37.770
+Het is, wat heeft mijn werk daadwerkelijk nodig?
+
+00:04:38.050 --> 00:04:41.490
+Stel je een risicomodel voor dat duizenden afzonderlijke berekeningen uitvoert.
+
+00:04:41.690 --> 00:04:45.630
+Elke worker heeft voldoende CPU en geheugen nodig om één deel van de gegevens te verwerken.
+
+00:04:45.830 --> 00:04:50.930
+Het zou net zo goed kunnen draaien op verschillende rekenkrachtige VM-families, zelfs als de onderliggende processor anders is.
+
+00:04:51.110 --> 00:04:53.610
+De taak geeft erom dat berekeningen correct worden voltooid.
+
+00:04:53.610 --> 00:04:56.730
+Het maakt niet uit of elke worker hetzelfde label op de doos heeft staan.
+
+00:04:56.910 --> 00:05:01.430
+Dus in plaats van één VM-grootte toe te staan, kun je meerdere grottes toestaan die aan dezelfde praktische behoeften voldoen.
+
+00:05:01.610 --> 00:05:05.990
+Dat geeft Azure meer capaciteitsopties om te doorzoeken, terwijl je workers nog steeds de resources krijgen die ze nodig hebben.
+
+00:05:06.150 --> 00:05:07.610
+Er zit echter een grens aan deze flexibiliteit.
+
+00:05:08.390 --> 00:05:11.410
+Je software moet correct draaien op elk VM-type dat je toestaat.
+
+00:05:11.550 --> 00:05:17.490
+Als een familie een speciale driver, een ander processorontwerp of een specifieke lokale schijfconfiguratie nodig heeft, voegt deze dan niet toe enkel omdat het goedkoper lijkt.
+
+00:05:17.610 --> 00:05:20.850
+Een bredere lijst helpt alleen als elke optie die je toevoegt ook echt een optie is.
+
+00:05:20.850 --> 00:05:24.450
+De tweede keuze is wat je wilt dat Azure prioriteert wanneer het die opties vindt.
+
+00:05:24.530 --> 00:05:28.110
+Soms is het voltooien van het werk belangrijker dan het vinden van de laagst mogelijke prijs.
+
+00:05:28.330 --> 00:05:31.450
+Misschien moet een team een nachtelijke berekening voltooien voordat de markt opent.
+
+00:05:31.630 --> 00:05:34.170
+In dat geval neig je naar een op capaciteit gerichte keuze.
+
+00:05:34.350 --> 00:05:37.710
+Je vertelt Azure, zoek beschikbare rekenkracht die aan mijn regels voldoet.
+
+00:05:37.870 --> 00:05:38.890
+De taak moet starten.
+
+00:05:39.110 --> 00:05:42.210
+Dit betekent niet dat Azure zomaar capaciteit uit het niets creëert.
+
+00:05:42.210 --> 00:05:49.150
+Het betekent dat Azure de groottes, zones en aankoopopties die je hebt toegestaan kan doorzoeken en vervolgens de opties kiest met de grootste kans dat je workers gaan draaien.
+
+00:05:49.310 --> 00:05:51.290
+Andere taken kunnen een andere route volgen.
+
+00:05:51.510 --> 00:05:59.070
+Misschien creëer je testomgevingen, draai je een grote simulatie die later opnieuw kan worden geprobeerd of verwerk je een achterstand van bestanden zonder harde deadline.
+
+00:05:59.270 --> 00:06:01.790
+Kosten kunnen in die gevallen belangrijker zijn dan snelheid.
+
+00:06:01.970 --> 00:06:06.250
+Een prijsgerichte keuze vertelt Azure om in aanmerking komende capaciteit met lagere kosten te prioriteren.
+
+00:06:06.410 --> 00:06:10.330
+Dat kan je factuur voor rekenkracht verlagen, maar het kan ook betekenen dat je langer moet wachten op voldoende workers.
+
+00:06:10.330 --> 00:06:15.750
+De goedkoopste keuze is niet altijd beschikbaar wanneer je deze nodig hebt en het geeft je mogelijk niet direct de volledige hoeveelheid capaciteit.
+
+00:06:15.930 --> 00:06:17.890
+Je hebt dit waarschijnlijk buiten Azure ook wel gezien.
+
+00:06:18.050 --> 00:06:20.590
+Een goedkope vlucht is perfect als je schema flexibel is.
+
+00:06:20.770 --> 00:06:25.990
+Als je morgenochtend ergens moet zijn voor een belangrijke vergadering, is het laagste tarief waarschijnlijk niet de beslissing die je helpt.
+
+00:06:26.330 --> 00:06:28.330
+ComputeFleet laat je dezelfde afweging maken met rekenkracht.
+
+00:06:29.090 --> 00:06:30.490
+Dan is er nog de gulden middenweg.
+
+00:06:30.690 --> 00:06:36.610
+Veel teams willen niet de hoogste prijs voor elke worker betalen, maar ze kunnen ook geen float accepteren die nooit een bruikbare omvang bereikt.
+
+00:06:36.610 --> 00:06:40.790
+Een gebalanceerde aanpak geeft Azure de ruimte om rekening te houden met zowel prijs als beschikbare capaciteit.
+
+00:06:41.030 --> 00:06:42.910
+Jij stelt de grenzen in en Azure werkt daar binnen.
+
+00:06:43.150 --> 00:06:46.450
+Dat is een veel eerlijker ontwerp dan te doen alsof elke workload één simpel doen heeft.
+
+00:06:46.690 --> 00:06:47.930
+Sommige taken hebben een deadline.
+
+00:06:48.230 --> 00:06:49.470
+Sommige taken hebben een budget.
+
+00:06:49.710 --> 00:06:50.910
+De meeste hebben beide nodig.
+
+00:06:51.150 --> 00:06:53.390
+De derde keuze is hoe je de machine zelf beschrijft.
+
+00:06:53.570 --> 00:06:57.530
+Je kunt exacte SKU's opgeven, wat goed werkt als je al een kleine set formaten hebt getest.
+
+00:06:57.710 --> 00:07:03.470
+Maar Azure heeft ook een op kenmerken gebaseerde benadering, momenteel beschikbaar in preview, waarbij je de vorm van de compute beschrijft die je nodig hebt.
+
+00:07:03.470 --> 00:07:10.170
+Je kunt bijvoorbeeld een worker beschrijven die een bepaalde hoeveelheid CPU, geheugen, lokale opslag of een accelerator zoals een GPU nodig heeft.
+
+00:07:10.370 --> 00:07:13.170
+Azure kan dan VM-formaten vinden die aan die vereisten voldoen.
+
+00:07:13.390 --> 00:07:14.530
+Denk na over het verschil.
+
+00:07:14.730 --> 00:07:17.550
+Een SKU-lijst zegt, gebruik deze specifieke modellen.
+
+00:07:17.750 --> 00:07:21.150
+Een kenmerkverzoek zegt, zoek machines met deze fysieke behoeften.
+
+00:07:21.410 --> 00:07:27.050
+De tweede aanpak kan het werk voor het bijwerken van je floatdefinitie verminderen wanneer nieuwe VM-generaties beschikbaar komen,
+
+00:07:27.250 --> 00:07:30.790
+maar je moet nog steeds je image en software testen op de soorten machines die Azure kan kiezen.
+
+00:07:30.790 --> 00:07:34.010
+Verwar flexibiliteit niet met het uit handen geven van elke beslissing.
+
+00:07:34.210 --> 00:07:37.210
+Jij bepaalt de veilige grenzen en Azure selecteert daarbinnen.
+
+00:07:37.450 --> 00:07:44.610
+Dat zijn dus de drie keuzes, welke VM-formaten of vormen werken, of capaciteit of prijs voorop staat, en hoe breed je de benodigde compute beschrijft.
+
+00:07:44.910 --> 00:07:50.170
+Goedkopere capaciteit kan een float veel voordeliger maken, maar er is één regel waar elk team rekening mee moet houden.
+
+00:07:50.410 --> 00:07:52.110
+Soms kan Azure een worker weghalen.
+
+00:07:52.290 --> 00:07:55.190
+Spot en on-demand, goedkope plaatsen en gereserveerde plaatsen.
+
+00:07:55.370 --> 00:07:58.350
+Laten we het dus hebben over de twee manieren waarop je voor de VM's in een float kunt betalen.
+
+00:07:58.350 --> 00:08:03.270
+On-demand VM's zijn de stabiele optie. Je vraagt Azure om een VM, je betaalt het normale tarief terwijl deze draait,
+
+00:08:03.390 --> 00:08:06.330
+en Azure vordert deze niet terug omdat een andere klant die capaciteit nodig heeft.
+
+00:08:06.530 --> 00:08:10.070
+Voor werk dat moet blijven doorgaan, biedt on-demand capaciteit een betrouwbare basis.
+
+00:08:10.430 --> 00:08:14.090
+Zie het als het boeken van bevestigde zitplaatsen voor mensen die bij het evenement aanwezig moeten zijn.
+
+00:08:14.270 --> 00:08:17.350
+Je jobcontroller draait daar misschien, je wachtrijservice is er mogelijk afhankelijk van,
+
+00:08:17.510 --> 00:08:21.490
+of je hebt misschien een minimaal aantal workers nodig dat de hele nacht doordraait omdat de ochtend-deadline halen verplicht is.
+
+00:08:21.690 --> 00:08:23.030
+Spot VM's werken anders.
+
+00:08:23.030 --> 00:08:28.810
+Azure verkoopt ongebruikte compute capaciteit tegen een lagere prijs, soms veel lager dan het normale on-demand tarief.
+
+00:08:28.990 --> 00:08:34.410
+Dat maakt Spot nuttig wanneer je veel werk te verwerken hebt en onderbrekingen kunt opvangen, maar de lagere prijs komt met een voorwaarde.
+
+00:08:34.590 --> 00:08:37.710
+Azure kan een Spot VM terugvorderen wanneer ze die capaciteit weer nodig hebben.
+
+00:08:37.910 --> 00:08:39.950
+De VM kan verdwijnen terwijl deze aan het werk is.
+
+00:08:40.170 --> 00:08:42.510
+Dat betekent niet dat Spot onbetrouwbaar is in negatieve zin.
+
+00:08:42.650 --> 00:08:44.770
+Het betekent dat je het op een eerlijke manier moet gebruiken.
+
+00:08:44.930 --> 00:08:48.210
+Een Spot VM is niet de juiste plek voor de enige kopie van een belangrijke database,
+
+00:08:48.210 --> 00:08:51.810
+een server voor gebruikers of een taak waarbij urenwerk verloren gaan als één worker stopt.
+
+00:08:51.850 --> 00:08:53.910
+Je houdt er rekening mee dat de worker kan vertrekken.
+
+00:08:54.150 --> 00:08:56.150
+Daarom is een gemengde float vaak logisch.
+
+00:08:56.330 --> 00:09:01.570
+Je houdt voldoende on-demand VM's voor werk dat door moet gaan en voegt Spot VM's toe voor extra rekenkracht.
+
+00:09:01.810 --> 00:09:05.870
+Wanneer er Spot capaciteit beschikbaar is, kan de float veel meer werk verzetten voor minder geld.
+
+00:09:06.070 --> 00:09:10.070
+Als sommige Spot workers verdwijnen, blijven de on-demand basis workers gewoon doorgaan.
+
+00:09:10.250 --> 00:09:11.910
+Die opzet biedt een praktische balans.
+
+00:09:11.910 --> 00:09:19.150
+De stabiele workers waarborgen je minimale doorvoor, terwijl de Spot workers helpen om sneller klaar te zijn of meer werk te verzetten als Azure extra capaciteit heeft.
+
+00:09:19.510 --> 00:09:22.330
+ComputeFleet helpt bij het beheren van de capaciteitskant van die mix.
+
+00:09:22.530 --> 00:09:28.670
+Het kan de door jou gekozen toewijzingen gebruiken, zoeken naar geschikte Spot of van-demand opties en reageren wanneer Spot VM's worden verwijderd.
+
+00:09:28.770 --> 00:09:31.830
+Toch kan de float geen werk beschermen dat alleen binnen een VM bestaat.
+
+00:09:32.030 --> 00:09:33.870
+Dat moet je in het ontwerp van je workload regelen.
+
+00:09:34.110 --> 00:09:35.530
+Stel je een video-rendertaak voor.
+
+00:09:35.710 --> 00:09:39.170
+De ene worker rendert frame 1 tot en met 100, een andere verwerkt de volgende groep.
+
+00:09:39.170 --> 00:09:44.390
+Als een Spot worker halverwege een frame verdwijnt, moet het systeem dat frame als onvoltooid markeren en terugsturen naar de wachtrij.
+
+00:09:44.570 --> 00:09:46.210
+De volgende worker begint er weer aan.
+
+00:09:46.390 --> 00:09:48.210
+Geen probleem, geen verloren project.
+
+00:09:48.470 --> 00:09:57.750
+Datzelfde patroon werkt voor simulaties, data-extractie- en transformatietaken, software-builds, geautomatiseerde tests, ontwikkelomgevingen en genoomverwerking waarbij veel samples apart kunnen draaien.
+
+00:09:57.950 --> 00:10:01.130
+Deze taken werken goed omdat ze in kleinere stukjes kunnen worden opgesplitst.
+
+00:10:01.290 --> 00:10:06.170
+1 worker kan 1 bestand verwerken, 1 worker kan 1 scenario berekenen, 1 worker kan 1 beeld testen.
+
+00:10:06.170 --> 00:10:12.210
+Als de worker verdwijnt, kan een andere worker dat kleine stukje later oppakken, maar een enkele database-server is een heel andere taak.
+
+00:10:12.330 --> 00:10:18.470
+Als de database de enige kopie van de data op een Spot-VM opslaat, kan verwijdering de dienst onderbreken en herstel in gevaar brengen.
+
+00:10:18.670 --> 00:10:25.650
+Hetzelfde geldt voor stateful software die niet netjes kan herstarten of een klantgerichte applicatie die afhankelijk is van één VM die online blijft.
+
+00:10:25.890 --> 00:10:28.230
+Spot maakt van die ontwerpen geen veilige ontwerpen.
+
+00:10:28.230 --> 00:10:32.650
+Voor een Spot-vriendelijke workload bewaar je de voortgang ergens duurzaam buiten de worker-VM.
+
+00:10:32.850 --> 00:10:37.590
+Dat kan een storage-account, een database of een andere dienst zijn die bijhoudt wat er klaar is en waar nog aan gewerkt moet worden.
+
+00:10:37.810 --> 00:10:40.770
+Gebruik een duurzame wachtrij zodat workers taken één voor één ophalen.
+
+00:10:41.010 --> 00:10:42.970
+Sla checkpoints op tijdens langlopende taken.
+
+00:10:43.270 --> 00:10:48.590
+Zorg dat elke taak veilig opnieuw kan worden uitgevoerd, zodat het opnieuw draaien geen dubbele resultaten of corrupte data oplevert.
+
+00:10:48.790 --> 00:10:53.350
+Op die manier verlies je alleen het kleine stukje dat de VM aan het verwerken was wanneer Azure een Spot-VM terugvraagt.
+
+00:10:53.350 --> 00:10:54.170
+Niet de hele taak.
+
+00:10:54.290 --> 00:10:58.450
+Dit kan veel geld besparen, maar kosten alleen vertellen niet of Compute Fleet in uw ontwerp past.
+
+00:10:58.630 --> 00:11:04.030
+De volgende vraag is of u überhaupt een fleet nodig heeft, of dat een Virtual Machine Skillset beter bij de taak past.
+
+00:11:04.210 --> 00:11:06.350
+Compute Fleet versus Virtual Machine Skillsets.
+
+00:11:07.070 --> 00:11:11.230
+U vraagt zich misschien af, heeft Azure niet al een service die Virtual Machine Skillsets heet?
+
+00:11:11.410 --> 00:11:17.130
+Dat klopt en de twee zijn verwant omdat ze beide helpen bij het uitvoeren van groepen Azure VM's in plaats van ze elk met de hand te beheren.
+
+00:11:17.270 --> 00:11:20.810
+Maar het punt is dat ze verschillende problemen oplossen vanuit verschillende uitgangspunten.
+
+00:11:20.810 --> 00:11:25.070
+Een Virtual Machine Skillset, kortweg VM-SS, begint bij uw applicatie.
+
+00:11:25.270 --> 00:11:28.510
+Stel dat u een webapp, een API of een interne bedrijfsdienst heeft.
+
+00:11:28.690 --> 00:11:35.090
+U maakt een groep VM's aan met een vergelijkbare configuratie, plaatst ze achter een load balancer en laat de groep groeien of krimpen naarmate de vraag verandert.
+
+00:11:35.270 --> 00:11:38.270
+Het verkeer neemt toe, dus de skillset voegt meer applicatieservers toe.
+
+00:11:38.450 --> 00:11:42.390
+Het verkeer neemt af en de servers worden verwijderd, zodat u niet betaalt voor machines die u niet meer nodig heeft.
+
+00:11:42.590 --> 00:11:44.810
+Dat is een heel normaal patroon voor een langdurige applicatielaag.
+
+00:11:45.470 --> 00:11:50.110
+Uw VM's draaien meestal dezelfde image, dezelfde applicatie en een nauw verwante VM-configuratie.
+
+00:11:50.110 --> 00:11:58.030
+Azure kan healthchecks gebruiken om te zien of de app reageert en kan instanties toevoegen of verwijderen op basis van CPU-gebruik, een schema of een andere gekozen metrie.
+
+00:11:58.190 --> 00:12:01.330
+Zie een VM-scale set als een winkelmanager die een vast team plant.
+
+00:12:01.530 --> 00:12:05.670
+Elke ochtend heeft de manager kassamedewerkers, vakkenvullers en mensen bij de servicebalie nodig.
+
+00:12:05.910 --> 00:12:09.110
+Ze kennen de taken, de locatie en de basisgereedschappen die iedereen nodig heeft.
+
+00:12:09.350 --> 00:12:12.210
+Wanneer het druk wordt in de winkel, roepen ze meer mensen uit hetzelfde team op.
+
+00:12:12.370 --> 00:12:13.930
+Dat is ook wat VM-SS doet.
+
+00:12:13.930 --> 00:12:18.230
+Het voert een bekend applicatiepatroon uit en past het aantal werkers aan naarmate de vraag verandert.
+
+00:12:18.570 --> 00:12:20.170
+ComputeFleet begint ergens anders.
+
+00:12:20.410 --> 00:12:27.270
+In plaats van de vraag hoeveel webservers mijn app nu nodig heeft, stelt het de vraag hoe ik een zeer grote hoeveelheid acceptabele rekenkracht voor deze taak krijg.
+
+00:12:27.390 --> 00:12:30.050
+Dat onderscheid verandert de manier waarop u het verzoek ontwerpt.
+
+00:12:30.250 --> 00:12:34.810
+Bij een fleet kan de VM-grootte variëren tussen de werkers, zolang elke werker de taak maar kan uitvoeren.
+
+00:12:34.990 --> 00:12:41.470
+U kunt verschillende machinefamilies accepteren, verschillende aankoopopties gebruiken en Azure een werkbare mix laten kiezen op basis van uw regels.
+
+00:12:41.470 --> 00:12:45.650
+Zie ComputeFleet als een uitzendbureau dat probeert duizenden diensten te vullen voor een deadline.
+
+00:12:45.870 --> 00:12:49.070
+Het bureau maakt het niet uit of elke werker dezelfde schoenmaat heeft.
+
+00:12:49.290 --> 00:12:54.290
+Het gaat erom of iedereen het werk kan doen, of er genoeg mensen op tijd zijn en wat de volledige dienst kost.
+
+00:12:54.510 --> 00:13:02.130
+Dat is een veel betere keuze voor een taak die kan worden verdeeld over veel onafhankelijke workers, zoals een grote dataroen, een simulatie, een renderingproject of een grote set geautomatiseerde tests.
+
+00:13:02.350 --> 00:13:04.750
+Het verschil is niet dat de ene service beter is dan de andere.
+
+00:13:04.970 --> 00:13:06.550
+Ze lossen verschillende problemen op.
+
+00:13:06.550 --> 00:13:10.850
+Kies dus voor virtual machine skillsets wanneer je een stabiele applicatielaag draait die verkeer ontvangt.
+
+00:13:10.850 --> 00:13:17.650
+Dat kan een klantgerichte website zijn, een API, een bedrijfsapplicatie of een groep applicatieservers achter Azure Load Balancer of Application Gateway.
+
+00:13:17.870 --> 00:13:21.350
+In die gevallen gaat het meestal om de gezondheid van de applicatie en de verwerking van verkeer.
+
+00:13:21.510 --> 00:13:23.630
+Je hebt instanties nodig met een bekende configuratie.
+
+00:13:23.830 --> 00:13:27.370
+Je hebt een manier nodig om servers toe te voegen wanneer gebruikers komen en ze te verwijderen wanneer de vraag daalt.
+
+00:13:27.850 --> 00:13:29.110
+VMSS past bij dat model.
+
+00:13:29.350 --> 00:13:33.850
+Kies voor ComputeFleet wanneer de grootste uitdaging is om veel rekenkracht te krijgen voor werk dat kan worden verspreid.
+
+00:13:33.850 --> 00:13:40.810
+Het werk kan uren of dagen duren of slechts een korte beurst zijn, maar het hangt niet af van één identieke applicatieserver die verzoeken ontvangt.
+
+00:13:40.950 --> 00:13:45.510
+Vleet werkt goed wanneer een worker een taak kan aannemen, voltooien, het resultaat opslaan en doorgaan.
+
+00:13:45.690 --> 00:13:51.350
+Dat komt veel voor bij high-performance computing, batchverwerking, grote simulaties, dataverwerking en grote tijdelijke worker polls.
+
+00:13:51.550 --> 00:13:53.730
+Er is ook een praktisch punt waar mensen over struikelen.
+
+00:13:53.730 --> 00:13:56.130
+ComputeFleet vervangt niet je applicatieontwerp.
+
+00:13:56.270 --> 00:14:01.330
+Het vervangt niet de wachtrij die werk verdeelt, de checkpoints die voortgang opslaan of een load balancer voor een webapp.
+
+00:14:01.550 --> 00:14:04.650
+En het maakt van een enkele stateful server geen fouttolerant systeem.
+
+00:14:04.830 --> 00:14:09.450
+Azure kan helpen bij het verkrijgen van de VM's, maar je software moet nog steeds weten wat elke VM moet doen,
+
+00:14:09.590 --> 00:14:12.790
+waar de data staat en wat er moet gebeuren als een worker halverwege een taak stopt.
+
+00:14:12.970 --> 00:14:14.910
+Die gedeelde verantwoordelijkheid is belangrijk.
+
+00:14:15.070 --> 00:14:21.890
+Terwijl Azure de fysieke servers en de fleet capaciteitsregels beheert, ontwerp jij de workload zodat deze normale cloudgebeurtenissen kan overleven,
+
+00:14:21.890 --> 00:14:25.330
+inclusief een VM herstart, een mislukte taak of een onderbroken worker.
+
+00:14:25.550 --> 00:14:27.690
+Een eenvoudige beslissingsgid ziet er dus zo uit.
+
+00:14:27.850 --> 00:14:32.210
+Als je een applicatie schaalt vanwege wisselend gebruikersverkeer, begin dan met virtual machine skillsets.
+
+00:14:32.410 --> 00:14:37.130
+Als je een grote hoeveelheid flexibele rekenkracht verzamelt omdat een taak veel workers nodig heeft, kijk dan naar ComputeFleet.
+
+00:14:37.290 --> 00:14:40.650
+En als je architectuur beide behoeften bevat, kun je beide services gebruiken.
+
+00:14:40.650 --> 00:14:46.650
+Een VM skillset kan de klantgerichte applicatielaag draaien, terwijl ComputeFleet tijdelijke workers levert voor de zware achtergrondtaak.
+
+00:14:47.430 --> 00:14:51.810
+Stel je een team voor dat s'nacht duizenden workers nodig heeft om een berekening te voltooien voor de volgende werkdag.
+
+00:14:51.990 --> 00:14:55.510
+Dat is waar deze keuzes ophouden productnamen te zijn en het resultaat gaan veranderen.
+
+00:14:55.630 --> 00:14:59.510
+Een fleet voorbeeld, een grote taak voltooien zonder te wedden op 1 VM grote.
+
+00:14:59.770 --> 00:15:03.050
+Stel je een financieel team voordat elke nacht risicoberekeningen uitvoert.
+
+00:15:03.250 --> 00:15:09.570
+Ze moeten een enorme hoeveelheid marktgegevens verwerken, duizenden mogelijke uitkomsten testen en resultaten opleveren voordat mensen de volgende ochtend aankomen.
+
+00:15:09.570 --> 00:15:15.250
+Het team heeft één duidelijk doel, de berekeningen voor de ochtend voltooien zonder het normale andemaant tarief voor elke individuele worker te betalen.
+
+00:15:15.410 --> 00:15:17.250
+Hun eerste poging ziet er eenvoudig uit.
+
+00:15:17.450 --> 00:15:21.630
+Ze kiezen 1 VM grote gericht op rekenkracht, vragen een groot aantal workers aan en starten de taak.
+
+00:15:21.790 --> 00:15:24.630
+Vervolgens kan Azure niet genoeg van die exacte grootte in de regio vinden.
+
+00:15:24.830 --> 00:15:26.790
+Er is niets mis met de VM grote of de code.
+
+00:15:27.010 --> 00:15:31.050
+Er is simpelweg niet genoeg capaciteit voor die ene specifieke keuze op het moment dat het team deze nodig heeft.
+
+00:15:31.230 --> 00:15:34.230
+Als hun hele ontwerp afhangt van die ene SKU, begint de taak te laat.
+
+00:15:34.230 --> 00:15:38.230
+Een late start betekent minder resultaten tegen de ochtend of een haastige, dure overstap naar een andere configuratie.
+
+00:15:38.990 --> 00:15:40.450
+Dus past het team de aanvraag aan.
+
+00:15:40.630 --> 00:15:46.870
+In plaats van één VM grote te eisen, identificeren ze verschillende CPU-gerichte formaten die hun risicosoftware kan gebruiken.
+
+00:15:46.870 --> 00:15:51.970
+Elke optie heeft genoeg geheugen voor een taak, genoeg CPU voor een berekening en werkt met dezelfde VM-image.
+
+00:15:52.150 --> 00:15:55.790
+Ze staan ook meer dan één beschikbaarheidszone toe waar hun data en workload kunnen draaien.
+
+00:15:55.990 --> 00:15:58.170
+Dat geeft Azure meer plaatsen om workers te vinden.
+
+00:15:58.170 --> 00:16:01.970
+Vervolgens beslist het team hoeveel capaciteit er hoe dan ook beschikbaar moet blijven.
+
+00:16:02.190 --> 00:16:04.870
+Ze kiezen een groep and-demand VM's als hun betrouwbare basis.
+
+00:16:05.230 --> 00:16:08.490
+Die workers geven de taak de hele nacht door een minimale verwerkingssnelheid.
+
+00:16:08.770 --> 00:16:11.890
+Zelfs als goedkopere capaciteit schaars wordt, gaat het proces door.
+
+00:16:12.170 --> 00:16:14.070
+Boven die basis staan ze spot-VM's toe.
+
+00:16:14.250 --> 00:16:15.910
+Die spot-workers doen het extra werk.
+
+00:16:16.170 --> 00:16:22.010
+Wanneer Azure over reservecapaciteit beschikt, kan het team veel meer berekeningen verwerken zonder voor elke taak and-demand VM's te gebruiken.
+
+00:16:22.010 --> 00:16:23.870
+De aanvraag zegt nu ongeveer dit.
+
+00:16:24.030 --> 00:16:31.010
+Geef ons genoeg stabiele workers om een minimumresultaat te garanderen en voeg dan zoveel mogelijk goedkopere workers toe uit deze goedgekeurde lijst van VM-groottes.
+
+00:16:31.190 --> 00:16:32.510
+Dat verandert de situatie.
+
+00:16:32.710 --> 00:16:40.290
+Het team zet de hele nacht er niet in op één grote, één zone of één prijstype, maar er is nog een ander deel van het ontwerp dat net zo belangrijk is als de float-aanvraag.
+
+00:16:40.310 --> 00:16:43.630
+De risicoberekeningen kunnen niet alleen binnen de worker-VM's bestaan.
+
+00:16:43.870 --> 00:16:47.570
+Voordat de float start, breekt een taaksysteem de grote berekening op in kleine stukjes.
+
+00:16:47.770 --> 00:16:50.550
+Een taak berekent misschien de uitkomst voor één markt-scenario.
+
+00:16:50.550 --> 00:16:53.650
+Een andere verwerkt misschien een andere portefeuille of tijdsbestek.
+
+00:16:53.770 --> 00:16:55.430
+Elke taak komt in een wachtrij terecht.
+
+00:16:55.670 --> 00:17:01.190
+De worker neemt één taak, verwerkt deze, schrijft het resultaat naar duurzame opslag en vraagt dan om een volgende taak.
+
+00:17:01.350 --> 00:17:03.070
+De voortgang bevindt zich buiten de worker.
+
+00:17:03.350 --> 00:17:06.350
+Dat betekent dat een worker kan verdwijnen zonder de hele taak mee te nemen.
+
+00:17:06.590 --> 00:17:10.050
+Stel dat een spot-VM halverwege een berekening een uitzettingsbericht ontvangt.
+
+00:17:10.190 --> 00:17:11.270
+De VM stopt.
+
+00:17:11.390 --> 00:17:14.530
+De onvoltooide taak blijft in de wachtrij gemarkeerd als onvoltooid.
+
+00:17:14.690 --> 00:17:20.010
+Een andere worker, wellicht een nieuwe spot-VM of een anderman worker, kan die taak overnemen en opnieuw uitvoeren.
+
+00:17:20.010 --> 00:17:24.470
+Het team verliest een klein onderdeel van het werk, maar niet de hele berekening die s'nachts is uitgevoerd.
+
+00:17:24.630 --> 00:17:27.550
+En boom, dat is het werkelijke voordeel van een fleet-vriendelijk ontwerp.
+
+00:17:27.630 --> 00:17:30.010
+Azure regelt het vinden en beheren van de rekenkracht.
+
+00:17:30.190 --> 00:17:33.670
+Het taaksysteem van het team regelt het werk, de herhalingen en de opgeslagen resultaten.
+
+00:17:33.890 --> 00:17:36.070
+Geen van beide partijen kan het werk van de ander overnemen.
+
+00:17:36.370 --> 00:17:40.570
+ComputeFleet kan niet bepalen of het opnieuw uitvoeren van een berekening tot een foutief financieel resultaat leidt.
+
+00:17:40.670 --> 00:17:44.230
+Het team moet taken veilig opnieuw kunnen uitvoeren en dubbele verwerking voorkomen.
+
+00:17:44.570 --> 00:17:50.550
+Tegelijkertijd heeft het team geen aangepaste scripts nodig die elke goedgekeurde VM-grote doorzoeken en proberen workers per groep aan te maken.
+
+00:17:50.810 --> 00:17:54.450
+Zij definiëren de acceptabele keuzes en laten Azure binnen die regels werken.
+
+00:17:54.630 --> 00:17:58.570
+Tegen de ochtend kan het exacte aantal spot-workers gedurende de nacht zijn veranderd.
+
+00:17:58.730 --> 00:17:59.630
+Dat is te verwachten.
+
+00:17:59.830 --> 00:18:01.570
+De stabiele workers bleven verwerken.
+
+00:18:01.770 --> 00:18:04.770
+Extra spot-workers verhoogden de doorvoer toen er capaciteit beschikbaar was.
+
+00:18:05.130 --> 00:18:06.850
+Onderbroken werk keerde terug naar de wachtrij.
+
+00:18:07.030 --> 00:18:10.150
+De uiteindelijke kosten bleven beter onder controle dan bij een volledig on-demandran.
+
+00:18:10.150 --> 00:18:12.930
+Dit is geen garantie dat elke taak tegen de laagste prijs wordt voltooid.
+
+00:18:13.090 --> 00:18:16.570
+Het is een manier om te voorkomen dat de hele opdracht aan één beperkte capaciteitskeuze wordt gebonden.
+
+00:18:16.810 --> 00:18:18.950
+Hetzelfde patroon zien we in de levenswetenschappen.
+
+00:18:19.110 --> 00:18:22.110
+Een onderzoeksteam moet wellicht een grote set genoom monsters verwerken.
+
+00:18:22.310 --> 00:18:26.270
+Elk monster kan door dezelfde analysepijplijn gaan, maar elk monster staat los van het volgende.
+
+00:18:26.490 --> 00:18:29.910
+Het team slaat invoergegevens en resultaten op buiten de worker-VM's.
+
+00:18:30.050 --> 00:18:34.370
+Een worker verwerkt één monster of één fase van een monster, slaat de uitvoer op en gaat door.
+
+00:18:34.550 --> 00:18:38.130
+Als die worker stopt, hervat een andere worker vanaf het laatst opgeslagen punt.
+
+00:18:38.130 --> 00:18:44.930
+Compute Fleet kan de grote, flexibele pool van workers leveren, maar de pijplijn moet nog steeds bijhouden wat klaar is, wat is mislukt en wat opnieuw moet worden uitgevoerd.
+
+00:18:45.110 --> 00:18:50.610
+Voordat u een fleet in een echt ontwerp opneemt, zijn er echter enkele beslissingen die voorkomen dat u het kiest voor het verkeerde type workload.
+
+00:18:50.810 --> 00:18:53.210
+Wanneer u het moet gebruiken en wat u als eerste moet beslissen.
+
+00:18:53.410 --> 00:18:55.150
+Wat is precies een Compute Fleet workload?
+
+00:18:55.330 --> 00:18:57.950
+Het is werk dat over vele onafhankelijke workers kan worden verspreid.
+
+00:18:58.150 --> 00:18:59.230
+Dat is het uitgangspunt.
+
+00:18:59.390 --> 00:19:01.250
+Hier is de simpele vraag die u moet beantwoorden.
+
+00:19:01.450 --> 00:19:05.550
+Als één worker stopt, kan een andere worker het dan overnemen zonder dat u de taak handmatig hoeft te herstellen.
+
+00:19:05.550 --> 00:19:08.430
+Als het antwoord ja is, hebt u waarschijnlijk een goede fleet workload.
+
+00:19:08.630 --> 00:19:15.130
+Batch verwerking, test workers, analyse opdrachten en de verwerking van grote bestanden passen hier vaak goed bij, omdat het werk wordt opgesplitst in afzonderlijke eenheden die parallel draaien.
+
+00:19:15.310 --> 00:19:17.790
+Begin bij het gedrag van de workload, niet bij de VM-naam.
+
+00:19:18.030 --> 00:19:19.810
+Denk erover als een team van freelancers.
+
+00:19:20.010 --> 00:19:23.070
+Als er één afhaakt, neemt een ander de taak over zonder verlies van voortgang.
+
+00:19:23.230 --> 00:19:25.990
+Kan het werk draaien zonder de status binnen één VM te behouden?
+
+00:19:26.150 --> 00:19:29.690
+Als er status nodig is, kan het de voortgang dan duurzaam opslaan en vanaf daar herstarten.
+
+00:19:29.890 --> 00:19:32.550
+Kan dezelfde taak veilig opnieuw draaien als een worker nooit terugrapporteert?
+
+00:19:32.550 --> 00:19:36.550
+Die antwoorden vertellen je veel meer dan welke prijspagina dan ook.
+
+00:19:36.830 --> 00:19:39.990
+Bepaal nu de minimale capaciteit die beschikbaar moet blijven.
+
+00:19:40.230 --> 00:19:45.790
+Dit is het deel van de klus dat je niet kunt verliezen als goedkopere capaciteit onbeschikbaar wordt of wordt onderbroken.
+
+00:19:46.090 --> 00:19:51.830
+Gebruik aan de maand VM's voor die basislijn en bepaal dan hoeveel extra capaciteit je wilt toevoegen via spot VM's.
+
+00:19:52.050 --> 00:19:57.690
+Dat getal moet gebaseerd zijn op je deadline, je takenlijst en je budget, niet op de aanname dat spot altijd beschikbaar is.
+
+00:19:57.690 --> 00:20:00.330
+Defineer daarna zorgvuldig je VM-keuzes.
+
+00:20:00.330 --> 00:20:11.310
+Je kunt diverse verwante VM-families goedkeuren die je software al ondersteunt of als de preview-functie bij je ontwerp past, kun je de CPU, geheugen, opslag of acceleratorbehoeften beschrijven en Azure-passende machines laten kiezen.
+
+00:20:11.510 --> 00:20:12.610
+Hou de lijst praktisch.
+
+00:20:12.830 --> 00:20:20.190
+Een smalle lijst beperkt waar Azure kan zoeken en een te brede lijst kan je workload op machines plaatsen die anders werken dan de geteste exemplaren.
+
+00:20:20.430 --> 00:20:24.770
+Elke toegestaande keuze moet werken met je image, je netwerkconfiguratie en je software.
+
+00:20:24.770 --> 00:20:31.230
+Je hebt ook een duidelijk plafond nodig. Stel de doelcapaciteit voor de klus in en bepaal vervolgens een maximaal kostenrisico voordat je start.
+
+00:20:31.430 --> 00:20:38.110
+Grote computertaken kunnen snel groeien als een wachtrij meer werk bevat dan verwacht of als een deadline meer werk naar andemaancapaciteit dwingt.
+
+00:20:38.210 --> 00:20:41.690
+Een budget is niet alleen een financiële instelling, het is een ontwerpgrens.
+
+00:20:41.870 --> 00:20:45.870
+Waar je workload en regio het ondersteunen, verdeel je de float over beschikbaarheidszones.
+
+00:20:46.170 --> 00:20:51.430
+Dit geeft Azure meer plaatsingskeuzes en verkleint de kans dat één lokaal capaciteitsprobleem elke worker beïnvloedt.
+
+00:20:51.510 --> 00:20:54.010
+Hou de klus in de gaten, niet alleen het aantal VM's.
+
+00:20:54.010 --> 00:20:56.910
+Monitor de capaciteit die de float daadwerkelijk heeft verkregen.
+
+00:20:57.130 --> 00:21:02.350
+Let op de wachtrij, mislukte taken, het aantal pogingen, uitzettingsgebeurtenissen, voltooiingspercentage en kosten.
+
+00:21:02.550 --> 00:21:07.290
+Een float met veel gezonde VM's kan nog steeds zijn zakelijke doel missen als de wachtrij groeit of resultaten niet worden opgeslagen.
+
+00:21:07.530 --> 00:21:10.930
+Dit is de fout die de meeste mensen maken. Ze behandelen een compute float als automa.
+
+00:21:10.930 --> 00:21:12.510
+Dat is een groot droom.

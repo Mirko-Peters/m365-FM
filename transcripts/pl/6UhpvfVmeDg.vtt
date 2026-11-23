@@ -1,0 +1,565 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:06.400
+Witamy w podcaście M365FM, gdzie zgłębiamy ludzi, pomysły i technologie kształtujące przyszłość pracy.
+
+00:00:06.640 --> 00:00:08.940
+Czym naprawdę jest Azure Data Lake Storage?
+
+00:00:09.220 --> 00:00:13.660
+Azure Data Lake Storage brzmi jak zupełnie nowy produkt do nauki, ale w rzeczywistości tak nie jest.
+
+00:00:13.800 --> 00:00:19.160
+To ten sam tani magazyn Azure, o którym prawdopodobnie już słyszałeś, z włączonym jednym ustawieniem, które daje mu prawdziwe foldery.
+
+00:00:19.300 --> 00:00:25.560
+To jedno ustawienie zmienia szybkość wykonywania dużych zadań analitycznych, co jest ważne, ponieważ moc obliczeniowa uruchamiająca te zadania pochłania większość twoich pieniędzy.
+
+00:00:25.560 --> 00:00:29.880
+Jest to również droga jednokierunkowa, ponieważ gdy to ustawienie jest włączone, nie można go wyłączyć.
+
+00:00:30.000 --> 00:00:34.140
+Oto czym naprawdę jest, jak zespoły go używają i jakie błędy po cichu zawyżają rachunki.
+
+00:00:34.380 --> 00:00:39.620
+Większość początkujących zakłada, że musi nauczyć się zupełnie nowej usługi, a to założenie marnuje tygodnie ich czasu.
+
+00:00:39.860 --> 00:00:45.300
+Azure Data Lake Storage nie jest oddzielnym produktem, który kupujesz, ani specjalnym typem konta, które tworzysz od zera.
+
+00:00:45.520 --> 00:00:51.180
+Microsoft zbudował go jako zestaw możliwości wewnątrz zwykłego magazynu obiektowego Blob Storage, który Azure oferuje od lat.
+
+00:00:51.420 --> 00:00:55.080
+Odblokowujesz te możliwości, włączając jedną opcję podczas tworzenia konta.
+
+00:00:55.080 --> 00:00:59.200
+Opcja ta znajduje się na krótkiej liście ustawień na ekranie tworzenia nowego konta magazynu.
+
+00:00:59.200 --> 00:01:01.800
+Łatwo ją pominąć, jeśli nie wiesz, na co patrzysz.
+
+00:01:02.000 --> 00:01:07.820
+Nic na tej stronie nie informuje, że ten mały przełącznik to różnica między zbiorem plików, a prawdziwym jeziorem danych Data Lake.
+
+00:01:08.060 --> 00:01:13.620
+Dowiadujesz się o tym później, gdy Twoje zadania działają szybko i tanio, albo gdy działają wolno, a Twój rachunek ciągle rośnie.
+
+00:01:13.860 --> 00:01:21.920
+Aby zrozumieć, dlaczego ta opcja ma takie znaczenie, musisz najpierw mieć jasny obraz tego, czym jest Data Lake i dlaczego nie jest to tylko folder pełen plików.
+
+00:01:21.920 --> 00:01:25.700
+Data Lake to centralne miejsce, w którym przechowujesz wszystkie swoje dane.
+
+00:01:25.980 --> 00:01:28.380
+Słowo wszystkie odgrywa w tym zdaniu kluczową rolę.
+
+00:01:28.560 --> 00:01:33.280
+Przechowuje dane ustrukturyzowane, czyli uporządkowane wiersze i kolumny, które znajdziesz w arkuszu kalkulacyjnym lub tabeli bazy danych.
+
+00:01:33.460 --> 00:01:37.840
+Przechowuje również dane nieustrukturyzowane, takie jak obrazy, pliki PDF, logi i surowe pliki tekstowe.
+
+00:01:38.080 --> 00:01:42.740
+Zamiast wymuszać uporządkowaną formę jezioro danych, pozwala danym trafić tam w takiej postaci, w jakiej przebywają.
+
+00:01:42.920 --> 00:01:46.180
+Ta elastyczność jest sednem sprawy i warto zobaczyć, dlaczego ma ona znaczenie.
+
+00:01:46.180 --> 00:01:48.640
+Wyobraź sobie małą firmę, która sprzedaje online.
+
+00:01:48.820 --> 00:01:53.920
+Eksporty sprzedaży pochodzą z jednego systemu, zgłoszenia wsparcia z innego, a zdjęcia produktów znajdują się na czyimś laptopie.
+
+00:01:54.060 --> 00:01:59.120
+Tradycyjna baza danych wymagałaby przekształcenia każdego źródła w sztywne tabele, zanim zaakceptuje choćby jeden rekord.
+
+00:01:59.360 --> 00:02:04.420
+Data Lake przyjmuje to wszystko obok siebie i zostawia przekształcanie na później, kiedy ktoś faktycznie potrzebuje odpowiedzi.
+
+00:02:04.640 --> 00:02:06.620
+Nazwa wywodzi się właśnie z tego kontrastu.
+
+00:02:06.800 --> 00:02:11.640
+Magazyn przechowuje dane, które zostały już oczyszczone, oznaczone i uporządkowane niczym towary na półkach.
+
+00:02:11.640 --> 00:02:16.900
+Jezioro danych przypomina bardziej zbiornik, jest rozległe i przeważnie surowe, gotowe do przefiltrowania, gdy pojawi się konkretne pytanie.
+
+00:02:17.100 --> 00:02:20.240
+Ten kompromis jest rzeczywisty i stanowi powód, dla którego jeziora w ogóle istnieją.
+
+00:02:20.420 --> 00:02:24.260
+Przechowując surowe dane, możesz później odpowiedzieć na pytania, których nikt dzisiaj nie zadał.
+
+00:02:24.420 --> 00:02:28.920
+Magazyn zmusza do decyzji o tym, co jest ważne przed zapisem, a wszystko, co odrzuciłeś, przepada na zawsze.
+
+00:02:29.200 --> 00:02:33.960
+Jezioro zakłada, że zachowanie nieuporządkowanego oryginału jest cenniejsze niż schludność uzyskana po wcześniejszym czyszczeniu.
+
+00:02:33.960 --> 00:02:39.780
+To nie oznacza, że jezioro to szuflada na śmieci, bo nadal potrzebuje struktury, a tą strukturą są foldery, które zaraz poznasz.
+
+00:02:39.900 --> 00:02:45.700
+Jezioro z założenia nie wyrzuca oryginałów, ponieważ są one często jedynym zapisem tego, co faktycznie się wydarzyło.
+
+00:02:45.920 --> 00:02:48.540
+Jeden szczegół jest jednak ważniejszy od pozostałych.
+
+00:02:48.760 --> 00:02:53.760
+Jezioro musi gdzieś istnieć, a w Azure tym miejscem jest konto magazynu z włączoną jedną opcją.
+
+00:02:53.980 --> 00:02:58.960
+Od tej opcji zaczyna się właściwa historia i to właśnie tam podejmuje się pierwszą nieodwołalną decyzję.
+
+00:02:58.960 --> 00:03:02.120
+To ustawienie zmienia pamięć obiektową typu blob w jezioro danych.
+
+00:03:02.320 --> 00:03:05.560
+Usługa Azure Blob Storage jest koniem pociąkowym całego tego rozwiązania.
+
+00:03:05.740 --> 00:03:08.960
+To tania pamięć obiektowa, co w prostych słowach oznacza, że wrzucasz do niej pliki i je wyciągasz.
+
+00:03:09.560 --> 00:03:11.820
+Nieszczególnie ją interesuje, co znajduje się w ich środku.
+
+00:03:12.040 --> 00:03:16.240
+Nigdy nie miała ona prawdziwych folderów i ta luka jest powodem powstania Azure Data Lake Storage.
+
+00:03:16.500 --> 00:03:22.040
+W zwykłym koncie blob ścieżka typu sprzedaż 2026 marzec nie jest folderem zawierającym plik.
+
+00:03:22.140 --> 00:03:26.660
+To jedna długa nazwa pliku z ukośnikami w środku, a system traktuje ją dokładnie w ten sposób.
+
+00:03:26.660 --> 00:03:32.560
+Dla ciebie pamięć wygląda na uporządkowaną, bo ukośniki sugerują strukturę, która w rzeczywistości nie istnieje.
+
+00:03:32.920 --> 00:03:38.680
+Pamięć obiektową zbudowano tak celowo, gdyż płaską listę nazw łatwo rozproszyć na ogromną liczbę maszyn.
+
+00:03:38.840 --> 00:03:43.200
+Ta sztuczka powoduje ukryte problemy, gdy tylko spróbujesz zrobić cokolwiek na poziomie folderu.
+
+00:03:43.360 --> 00:03:49.600
+Jeśli te ukośniki nie są prawdziwymi folderami, zmiana nazwy folderu oznacza znalezienie każdego pliku zaczynającego się od tej samej ścieżki.
+
+00:03:49.840 --> 00:03:55.060
+W przypadku dużego zbioru liczącego miliony plików zadanie, które powinno zająć sekundy, może wydłużyć się do godzin.
+
+00:03:55.060 --> 00:03:58.060
+Włączenie hierarchicznej przestrzeni nazw zmienia właśnie to.
+
+00:03:58.280 --> 00:04:03.000
+Daje ona kontu prawdziwe katalogi i podkatalogi taką samą strukturę, jakiej twój komputer używa od zawsze.
+
+00:04:03.280 --> 00:04:07.280
+Folder staje się odrębnym obiektem, a nie tylko tekstem ukrytym w nazwie pliku.
+
+00:04:07.540 --> 00:04:13.460
+Wystarczy zaznaczyć jedno pole wyboru, a pamięć masowa zaczyna działać jak właściwy system plików, zamiast być tylko zbiorem ładnie nazwanych kontenerów.
+
+00:04:13.640 --> 00:04:17.580
+W starszych postach i samouczkach natkniesz się również na nazwę Data Lake Storage Gen 2.
+
+00:04:17.580 --> 00:04:23.360
+To po prostu druga wersja tego samego pomysłu, a obecna nazwa pomija numer, więc traktuj oba określenia jako jedno.
+
+00:04:23.520 --> 00:04:25.600
+Opcje te wybierasz przy tworzeniu konta magazynu.
+
+00:04:25.720 --> 00:04:28.320
+Możesz też zaktualizować konto, które już przechowuje dane.
+
+00:04:28.560 --> 00:04:31.900
+Microsoft zajmuje się tą zmianą za Ciebie, ale proces ten jest nieodwracalny.
+
+00:04:32.120 --> 00:04:35.280
+Możesz przejść z modelu płaskiego na hierarchiczny, ale nie możesz wrócić do poprzedniego stanu.
+
+00:04:35.480 --> 00:04:39.020
+Warto znać pewną zawiłość w nazewnictwie, aby dokumentacja przestała wprowadzać Cię w błąd.
+
+00:04:39.140 --> 00:04:43.700
+W przewodnikach Microsoftu słowo blob oznacza plik, a słowo kontener oznacza system plików.
+
+00:04:43.700 --> 00:04:47.700
+To te same dwie rzeczy, które noszą różne etykiety w zależności od tego, którą stronę akurat czytasz.
+
+00:04:47.900 --> 00:04:51.020
+Najważniejszą rzeczą do zapamiętania jest to, że to pole wyboru jest ustawieniem permanentnym.
+
+00:04:51.220 --> 00:04:54.380
+Gdy jest włączone, nie ma możliwości przywrócenia konta do płaskiego stylu, jaki miało wcześniej.
+
+00:04:54.660 --> 00:04:57.260
+Dlaczego prawdziwe foldery zmieniają szybkość działania i wysokość rachunków?
+
+00:04:57.420 --> 00:05:00.700
+Powodem, dla którego Microsoft stworzył prawdziwe foldery, nie jest porządek, lecz szybkość.
+
+00:05:00.880 --> 00:05:05.620
+Gdy katalogi są prawdziwe, zmiana ich nazwy lub usunięcie staje się pojedynczą, szybką zmianą wpisów katalogu.
+
+00:05:05.620 --> 00:05:10.400
+Nie trzeba przeszukiwać listy miliona plików, ponieważ system aktualizuje jeden element i praca jest wykonana.
+
+00:05:10.560 --> 00:05:15.020
+To samo uproszczenie dotyczy usuwania, więc czyszczenie starych danych przestaje być całodniowym zadaniem.
+
+00:05:15.220 --> 00:05:18.780
+Przykładem, który dobrze to ilustruje, jest działanie narzędzi analitycznych w praktyce.
+
+00:05:19.020 --> 00:05:23.660
+Spark i Heave, dwa najczęściej wykorzystywane silniki, często zapisują swoje wyniki w tymczasowej lokalizacji.
+
+00:05:23.840 --> 00:05:26.280
+Po zakończeniu zadania zmieniają nazwę tej lokalizacji.
+
+00:05:26.520 --> 00:05:30.960
+W pamięci masowej, bez prawdziwych folderów ta końcowa zmiana nazwy może trwać dłużej niż sama analiza.
+
+00:05:30.960 --> 00:05:35.400
+Oglądasz zadanie, które już zakończyło obliczenia, a teraz tylko zmienia nazwy plików.
+
+00:05:35.480 --> 00:05:39.820
+To opóźnienie jest nie tylko irytujące, ale i kosztowne, a nad powodem warto się zastanowić.
+
+00:05:40.000 --> 00:05:44.400
+W wielu zadaniach analitycznych koszty obliczeniowe stanowią ponad 85% całkowitych wydatków.
+
+00:05:44.620 --> 00:05:47.840
+Maszyny wykonujące pracę kosztują znacznie więcej niż dane, które po prostu leżą.
+
+00:05:48.040 --> 00:05:51.940
+Jeśli powolna zmiana nazwy sprawia, że maszyny działają dodatkową godzinę, płacisz za tę godzinę.
+
+00:05:51.940 --> 00:05:57.000
+Przyspiesz pamięć masową, a obliczenia zakończą się szybciej, więc rachunek spadnie, mimo że cena za pamięć prawie się nie zmieniła.
+
+00:05:57.000 --> 00:06:00.360
+Ta funkcja jest również dobrze skalowalna, co kiedyś było trudnym zadaniem.
+
+00:06:00.600 --> 00:06:06.280
+Starsze systemy rezygnowały ze struktury folderów na rzecz skalowalności, ponieważ prawdziwe katalogi były drogie w utrzymaniu przy dużej skali.
+
+00:06:06.540 --> 00:06:08.920
+Hierarchiczna przestrzeń nazw rośnie tutaj liniowo.
+
+00:06:09.240 --> 00:06:13.600
+Dzięki temu dodawanie kolejnych danych nie spowalnia katalogów, co prowadzi do praktycznego pytania.
+
+00:06:13.800 --> 00:06:16.860
+Jak właściwie dane przemieszczają się do i z jednego z takich kąt?
+
+00:06:16.860 --> 00:06:19.040
+Jak dane faktycznie wchodzą i wychodzą?
+
+00:06:19.220 --> 00:06:23.960
+Mechanizm jest bardziej przyjazny niż brzmi, i to tutaj teoria zmienia się w coś, czego można faktycznie dotknąć.
+
+00:06:23.960 --> 00:06:28.840
+Narzędzia analityczne docierają do jeziora poprzez sterownik o nazwie ABFS, czyli Azure Blob File System.
+
+00:06:29.060 --> 00:06:32.760
+Adres usługi zawsze kończy się na dfs.core.windows.net.
+
+00:06:32.960 --> 00:06:36.620
+Rzadko wpisujesz ten adres samodzielnie, ale to właśnie z niego korzystają narzędzia w tle.
+
+00:06:36.880 --> 00:06:40.600
+Same narzędzia to nazwy, z którymi będziesz się spotykać wielokrotnie, jeśli zostaniesz w tym świecie.
+
+00:06:40.600 --> 00:06:47.780
+Podczas gdy Data Factory kopiuje dane z innych systemów, Databricks i Synapse przetwarzają je i analizują, a Power BI odczytuje wyniki, aby tworzyć raporty.
+
+00:06:47.780 --> 00:06:55.600
+Jeśli wolisz przenosić pliki ręcznie, Azure Storage Explorer oferuje okno do klikania, a narzędzie wiersza poleceń a kopii obsługuje przesyłanie masowe.
+
+00:06:55.820 --> 00:06:58.540
+Nie potrzebujesz żadnego z tych narzędzi, aby po prostu zacząć.
+
+00:06:58.680 --> 00:07:02.940
+Portal Azure PowerShell i wiersz poleceń mogą uzyskać dostęp do tego samego magazynu.
+
+00:07:02.940 --> 00:07:07.740
+Możesz przesłać pierwszy plik i zobaczyć, jak pojawia się w folderze, zanim napiszesz choćby linię kodu.
+
+00:07:07.980 --> 00:07:13.700
+Większość ludzi zaczyna od jednego folderu i kilku plików, a jezioro rośnie wraz z podłączaniem kolejnych systemów.
+
+00:07:13.840 --> 00:07:16.920
+Uprawnienia działają tutaj z większą precyzją niż w zwykłym magazynie.
+
+00:07:16.920 --> 00:07:20.780
+Możesz użyć systemu Rul Azure, tego samego, który zarządza wszystkim innym w Azure.
+
+00:07:21.000 --> 00:07:25.840
+Możesz również ustawić listy kontroli dostępu w stylu POSIX, które zabezpieczą pojedynczy folder, a nawet pojedynczy plik.
+
+00:07:25.960 --> 00:07:31.080
+Pominę tutaj szczegóły, ponieważ chodzi po prostu o to, że jezioro można szeroko udostępniać, nie dając każdemu kluczy.
+
+00:07:31.320 --> 00:07:37.260
+Gdy dane trafiają na miejsce, stają się obiektem blob w kontenerze, co jest ideą plików w systemie plików pod tymi dwoma innymi nazwami.
+
+00:07:37.500 --> 00:07:42.220
+Stamtąd zasada cyklu życia może przenieść starsze pliki do tańszej warstwy lub usunąć je po określonym czasie.
+
+00:07:42.220 --> 00:07:45.740
+Jezioro sprząta się samo, zamiast czekać, aż ktoś ręcznie posortuje foldery.
+
+00:07:46.040 --> 00:07:48.380
+Skalowalność to ostatni element i jest ona bardzo hojna.
+
+00:07:48.560 --> 00:07:52.180
+Microsoft nie nakłada limitów na to, jak duże może być konto lub pojedynczy plik.
+
+00:07:52.380 --> 00:07:58.960
+Jeden plik może mieć od kilku kilobajtów do setek terabajtów, a zapytania wracają w stałym tempie, bez względu na to, ile danych zgromadzisz.
+
+00:07:59.200 --> 00:08:03.200
+Gdy mechanizm jest jasny, warto zobaczyć, jak wygląda rzeczywista konfiguracja.
+
+00:08:03.200 --> 00:08:10.200
+W świecie rzeczywistym zespoły rzadko wrzucają wszystko na jedną wielką kupę, a wzorzec, po który sięgają, nazywa się medalionem.
+
+00:08:10.940 --> 00:08:12.700
+Jest prostszy niż sugeruje nazwa.
+
+00:08:12.960 --> 00:08:16.000
+Surowe dane trafiają najpierw do warstwy nazywanej przez ludzi brązową.
+
+00:08:16.200 --> 00:08:21.180
+Oczyszczone i poprawione dane trafiają do warstwy srebrnej, a dopracowane dane, którym raport może zaufać, trafiają do złotej.
+
+00:08:21.300 --> 00:08:24.880
+Każda warstwa to po prostu folder, a dane wędrują dalej w miarę poprawy ich jakości.
+
+00:08:24.880 --> 00:08:33.140
+Warstwa złota jest tą, z której korzystają raporty, ponieważ zawiera uporządkowane pliki, z których każde narzędzie może korzystać, nie wiedząc, jak dane surowe dotarły na miejsce.
+
+00:08:33.460 --> 00:08:37.660
+Struktura folderów ma ogromne znaczenie i istnieją dwa wzorce, które warto stosować.
+
+00:08:37.860 --> 00:08:44.940
+W przypadku danych z urządzeń lub czujników, typowy układ obejmuje region, następnie obiekt, a potem rok, miesiąc, dzień i godzinę.
+
+00:08:45.100 --> 00:08:51.220
+Odczyty z silnika lotniczego mogą znajdować się w folderze UK, następnie w samolotach, potem konkretnym egzemplarzu, a na końcu w dacie i czasie.
+
+00:08:51.220 --> 00:08:55.840
+W przypadku zadań wsatowych operujących na plikach, zespoły używają folderu IN dla pracy oczekującej na przetworzenie.
+
+00:08:56.020 --> 00:08:59.720
+Używają folderu OUT dla gotowych wyników i folderu BAT dla wszystkiego, co zakończyło się błędem.
+
+00:08:59.860 --> 00:09:01.840
+Kolejność tych folderów nie jest przypadkowa.
+
+00:09:02.040 --> 00:09:07.080
+Umieszczenie regionu i obiektu na górze pozwala łatwo określić, że dana grupa ma dostęp tylko do danych z UK i niczego więcej.
+
+00:09:07.340 --> 00:09:11.600
+Uprawnienia ustawia się raz na folderze, a wszystko, co znajduje się wewnątrz, dziedziczy je automatycznie.
+
+00:09:11.800 --> 00:09:17.120
+Jeśli zmienisz kolejność i zaczniesz od daty, będziesz musiał ustawiać uprawnienia wielokrotnie dla niezliczonych małych folderów.
+
+00:09:17.120 --> 00:09:20.880
+Format pliku to ostatni praktyczny wybór, który po cichu decyduje o wysokości rachunku.
+
+00:09:21.100 --> 00:09:26.820
+Używaj formatu kolumnowego, takiego jak parkę, dla często odczytywanych danych, ponieważ zapytanie pobierze tylko potrzebne kolumny, pomijając resztę.
+
+00:09:26.940 --> 00:09:30.440
+Pliki te są compressowain i każdy z nich zawiera własny opis swojej zawartości.
+
+00:09:30.640 --> 00:09:34.900
+Używaj formatu wierszowego, takiego jak awro, gdy głównie zapisujesz dane w stałym strumieniu, na przykład.
+
+00:09:35.180 --> 00:09:36.820
+Zdarzenia napływające z aplikacji.
+
+00:09:36.820 --> 00:09:44.520
+Dobry układ i właściwy format pozwalają zaoszczędzić pieniądze, ale kilka powszechnych nawyków robi coś wręcz przeciwnego i pojawia się w niemal każdym pierwszym jeziorze danych upoczątkujących.
+
+00:09:45.300 --> 00:09:47.540
+Błędy, które po cichu kosztują Cię pieniądze.
+
+00:09:47.720 --> 00:09:52.520
+Pierwszym błędem spotykanym wszędzie jest pozostawianie danych w formie góry maleńkich plików.
+
+00:09:52.720 --> 00:09:57.640
+Silniki analityczne tracą cenny czas na każdy plik, na jego listowanie, sprawdzanie uprawnień i otwieranie.
+
+00:09:57.840 --> 00:10:00.920
+Tysiąc małych plików kosztuje znacznie więcej zasobów niż jeden duży.
+
+00:10:00.920 --> 00:10:06.420
+Własne wytyczne firmy Microsoft sugerują dążenie do plików o rozmiarze od 256 MB do 100 GB.
+
+00:10:06.740 --> 00:10:09.860
+Scalaj małe pliki w większe, zanim cokolwiek spróbuję je odczytać.
+
+00:10:10.000 --> 00:10:14.800
+To nawyk, który warto budować od pierwszego dnia, ponieważ małe pliki gromadzą się szybciej niż ktokolwiek się spodziewa.
+
+00:10:14.940 --> 00:10:18.760
+Istnieje szczegół dotyczący rozliczeń, który zaskakuje prawie każdego i łatwo go przeoczyć.
+
+00:10:18.960 --> 00:10:21.880
+Operacje odczytu i zapisu są rozliczane w blokach po 4 MB.
+
+00:10:22.300 --> 00:10:26.200
+Za plik zajmujący kilka kilobajtów płacisz tak, jakby zajmował 4 MB.
+
+00:10:26.200 --> 00:10:32.000
+Kiedy dane są rozproszone w milionach małych plików, wciąż płacisz pełną cenę za głównie puste miejsce.
+
+00:10:32.000 --> 00:10:39.460
+Jeśli surowe dane docierają jako strumień drobnych zdarzeń, zazwyczaj rozwiązaniem jest zbieranie ich za pomocą narzędzia strumieniowego i zapisywanie w większych partiach.
+
+00:10:39.660 --> 00:10:43.680
+Drugą pułapką jest włączanie hierarchicznej przestrzeni nazw, gdy nie jest ona potrzebna.
+
+00:10:43.680 --> 00:10:48.920
+Pamiętaj, że to droga jednokierunkowa, więc gdy ją włączysz, nie możesz przywrócić konta do płaskiej przestrzeni nazw.
+
+00:10:49.060 --> 00:10:53.920
+Jeśli włączysz ją dla archiwum kopii zapasowych lub folderu z obrazami, dokonujesz trwałej zmiany, która nic Ci nie daje.
+
+00:10:54.080 --> 00:10:58.540
+Kopie zapasowe i biblioteki zdjęć nie potrzebują szybkiego zmieniania nazw folderów, ponieważ dane nie są analizowane.
+
+00:10:58.760 --> 00:11:00.740
+Trzecią jest ignorowanie warstw przechowywania.
+
+00:11:00.740 --> 00:11:06.420
+Azure pozwala przechowywać dane w warstwach gorącej, chłodnej, zimnej lub archiwizacji, w zależności od tego, jak często je odczytujesz.
+
+00:11:06.620 --> 00:11:09.820
+Stare dane pozostawione w warstwie gorącej to pieniądze wydane bez powodu.
+
+00:11:09.820 --> 00:11:14.780
+Dopasuj warstwę do tego, jak często faktycznie korzystasz z danych, a te same pliki mogą kosztować ułamek ceny.
+
+00:11:14.920 --> 00:11:21.160
+Archiwum to najtańsze miejsce dla danych, których prawie nigdy nie otwierasz, ale dostęp nie jest natychmiastowy, ponieważ plik musi zostać przywrócony, zanim będzie można go odczytać.
+
+00:11:21.360 --> 00:11:23.400
+Warto pamiętać o jednym istotnym ograniczeniu.
+
+00:11:23.400 --> 00:11:27.820
+Nawet z włączonym ustawieniem, niektóre funkcje obiektów blob w tych kontach wciąż są w fazie rozwoju.
+
+00:11:28.000 --> 00:11:31.680
+Jeśli zależy Ci na konkretnej funkcji, sprawdź jej obecne wsparcie, zanim podejmiesz decyzję.
+
+00:11:31.820 --> 00:11:33.960
+To obejmuje część, którą kontrolujesz samodzielnie.
+
+00:11:33.960 --> 00:11:36.960
+Dla wielu z Was jednak jezioro danych nie będzie czymś, co zbudujecie w pojedynkę.
+
+00:11:37.100 --> 00:11:39.880
+Kolejne pytanie brzmi, gdzie pasuje to do szerszego obrazu Microsoftu?
+
+00:11:40.080 --> 00:11:43.000
+Gdzie wpisuje się to w Fabric, Power BI i Microsoft 365?
+
+00:11:43.560 --> 00:11:47.860
+Jeśli spędziłeś trochę czasu z Microsoft Fabric, poznałeś już jezioro danych, nawet o tym nie wiedząc.
+
+00:11:47.980 --> 00:11:52.600
+OneLake, warstwa przechowywania będąca sercem Fabric, jest zbudowana na Azure Data Lake Storage.
+
+00:11:52.780 --> 00:11:57.360
+Przechowuje tabelę w otwartych formatach o nazwach Delta, Parkę i Iceberg, które każde narzędzie może odczytać.
+
+00:11:57.520 --> 00:12:01.240
+Ten sam silnik, który napędza jezioro danych w Azure, działa cały czas pod spodem Fabric.
+
+00:12:01.240 --> 00:12:06.800
+Jeśli Twój zespół już korzysta z Fabric, OneLake to jezioro, które poznasz jako pierwsze, a wszystko, czego właśnie się nauczyłeś, nadal ma do niego zastosowanie.
+
+00:12:06.960 --> 00:12:09.260
+OneLake zapożycza również strukturę, którą już znasz.
+
+00:12:09.400 --> 00:12:12.900
+Każdy dzierżawca Fabric otrzymuje dokładnie jeden OneLake i nie można utworzyć drugiego.
+
+00:12:13.100 --> 00:12:16.560
+Cała organizacja współdzieli jedno jezioro zamiast rozproszonego zestawu wielu.
+
+00:12:16.840 --> 00:12:21.140
+Wewnątrz niego obszar roboczy wyświetla się jako kontener, a elementy w środku jako foldery.
+
+00:12:21.300 --> 00:12:24.740
+To ta sama para obiektu blob i kontenera, co wcześniej, tylko w szatach Fabric.
+
+00:12:24.920 --> 00:12:28.400
+Sprytną częścią jest to, w jaki sposób OneLake sięga po dane znajdujące się gdzie indziej.
+
+00:12:28.400 --> 00:12:35.480
+Funkcja o nazwie skróty pozwala wskazywać pliki znajdujące się na koncie Azure Data Lake Storage w zasobniku Amazon S3, tabeli Dataverse, a nawet w systemie lokalnym.
+
+00:12:35.660 --> 00:12:37.980
+Odczytuje je w miejscu, bez konieczności tworzenia kopii.
+
+00:12:38.180 --> 00:12:42.660
+Zespoły mogą pracować we własnych przestrzeniach i udostępniać dane przez skróty, zamiast powielać gigabajty informacji.
+
+00:12:42.840 --> 00:12:45.100
+Koncepcja jednej kopii pojawia się ponownie w Power BI.
+
+00:12:45.300 --> 00:12:49.740
+Tryb DirectLake odczytuje dane bezpośrednio z OneLake, bez ich wcześniejszego importowania czy kopiowania.
+
+00:12:50.000 --> 00:12:53.740
+Dlatego Fabric ciągle mówi o jednej kopii, którą mogą współdzielić wszystkie narzędzia.
+
+00:12:53.740 --> 00:12:59.920
+OneLake przechowuje również usunięte pliki przez 7 dni, więc przypadkowe usunięcie nie jest katastrofą, jaką byłoby w folderze bez zabezpieczeń.
+
+00:13:00.060 --> 00:13:02.360
+Istnieje realny kompromis między tymi dwiema ścieżkami.
+
+00:13:02.540 --> 00:13:05.400
+OneLake jest zarządzany za Ciebie i skierowane do użytkowników Fabric.
+
+00:13:05.580 --> 00:13:10.460
+Zwykłe konto Azure Data Lake Storage daje bezpośrednią kontrolę i działa w szerszym ekosystemie narzędzi Azure.
+
+00:13:10.680 --> 00:13:14.520
+Korzystają z tego samego API, więc wybór sprowadza się do wygody kontra kontroli.
+
+00:13:14.660 --> 00:13:17.460
+O czym warto pamiętać w przypadku Azure Data Lake Storage?
+
+00:13:17.460 --> 00:13:23.980
+Oto skrócona wersja Azure Data Lake Storage to magazyn obiektów Blob z włączonym jednym ustawieniem, które zapewnia prawdziwe foldery.
+
+00:13:24.140 --> 00:13:29.640
+Te foldery sprawiają, że duże zadania analityczne kończą się szybciej, co obniża rachunki tam, gdzie obliczenia generują największe koszty.
+
+00:13:29.860 --> 00:13:33.980
+Jest to nieodwracalne po włączeniu, a stos małych plików będzie kosztować więcej niż się spodziewasz.
+
+00:13:34.140 --> 00:13:38.420
+Pamiętaj o tych kilku rzeczach, a groźnie wyglądająca usługa stanie się czymś, co łatwo zrozumiesz.
+
+00:13:38.600 --> 00:13:39.500
+Mam do Ciebie pytanie.
+
+00:13:39.500 --> 00:13:43.680
+Jeśli planujesz swoje pierwsze jezioro danych, co budzi w Tobie teraz największe wątpliwości?
+
+00:13:43.980 --> 00:13:46.900
+Struktura folderów, koszty czy miejsce w rozwiązaniu fabrik?
+
+00:13:47.100 --> 00:13:54.680
+Jeśli dzięki temu temat stał się mniej przytłaczający, zasubskrybuj M365FM, aby opanować narzędzia i podejście kształtujące przyszłość pracy.

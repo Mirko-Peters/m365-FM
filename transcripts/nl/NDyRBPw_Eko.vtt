@@ -1,0 +1,1069 @@
+WEBVTT
+
+00:00:00.190 --> 00:00:07.470
+Klaar voor 13 dagen vol Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven.
+
+00:00:07.910 --> 00:00:12.290
+Deze januari is M365, kom terug en pakken we het groter aan.
+
+00:00:12.670 --> 00:00:18.770
+Doe mee voor live-sessies, praktijkdemo's en praktische kennis van MVP's en experts van over de hele wereld.
+
+00:00:18.990 --> 00:00:21.470
+Geen algemene slides, geen eindeloos jaargrond.
+
+00:00:21.750 --> 00:00:23.570
+We pakken de echte uitdagingen aan.
+
+00:00:23.770 --> 00:00:29.030
+Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.030 --> 00:00:34.870
+Of je nu IT-professional, ontwikkelaar of zakelijk leider bent, er zijn sessies speciaal voor jou.
+
+00:00:35.250 --> 00:00:40.470
+Met 10 volledige dagen kun je diverse technologieën verkennen en contact leggen met een wereldwijde community.
+
+00:00:40.850 --> 00:00:44.490
+Kijk live mee en neem praktische inzichten mee terug naar je organisatie.
+
+00:00:44.910 --> 00:00:49.150
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.690 --> 00:00:51.210
+Registratie is nu geopend.
+
+00:00:51.830 --> 00:00:55.890
+Ga naar m365com.net en verzeker je vandaag nog van een plek.
+
+00:00:56.650 --> 00:00:58.910
+Dat is m365com.net.
+
+00:00:59.030 --> 00:01:04.850
+Meld je nu aan op m365com.net en we zien je live in januari.
+
+00:01:05.250 --> 00:01:06.430
+Hier is een leuk weetje.
+
+00:01:06.950 --> 00:01:11.370
+Inloggegevens in je Azure-apps plaatsen is hetzelfde als huissleutels uitdelen bij een bushalte.
+
+00:01:11.370 --> 00:01:18.590
+Met Entra ID en beheerde identiteiten kun je elke deur op slot doen zonder met sleutelbossen te sjouwen of te hopen dat niemand het briefje onder je toetsenbord ziet.
+
+00:01:18.590 --> 00:01:22.270
+Het goede nieuws? Je hoeft geen cryptografie-expert te zijn om dit te doen.
+
+00:01:22.470 --> 00:01:26.430
+Ik laat je stap voor stap zien hoe je geheimen inruilt voor tokens en beter slaapt s'nachts.
+
+00:01:26.730 --> 00:01:28.710
+Het probleem van de sleutel onder de deurmat.
+
+00:01:28.950 --> 00:01:34.750
+Waarom stoppen zoveel Azure-apps nog steeds wachtwoorden in configuratiebestanden alsof we in 2003 nog VBScript schrijven?
+
+00:01:35.090 --> 00:01:36.610
+Serieus? Het is 2024.
+
+00:01:37.290 --> 00:01:44.750
+We hebben cloud-native beveiligingssystemen die op aanvraagtokens aanmaken en toch zet iemand ergens nog steeds een wachtwoord in een repo alsof het een ereteken is.
+
+00:01:44.890 --> 00:01:46.610
+En het excuus is altijd hetzelfde.
+
+00:01:46.790 --> 00:01:48.670
+We hebben het hardcoded om tijd te besparen.
+
+00:01:48.910 --> 00:01:52.450
+Bespaar vandaag tijd en besteed daarna weken aan het opruimen van de puinhoop als het lekt.
+
+00:01:52.690 --> 00:01:53.850
+Dat is geen kortere weg.
+
+00:01:54.090 --> 00:01:55.910
+Dat is uitstelgedrag met extra stappen.
+
+00:01:56.070 --> 00:01:57.710
+Het probleem is groter dan luiheid.
+
+00:01:58.010 --> 00:02:04.210
+Ontwikkelaars denken dat het neerzetten van gebruikersnamen en wachtwoorden in een configuratiebestand of app-instellingen JSON ongevaarlijk is omdat het intern blijft.
+
+00:02:04.210 --> 00:02:05.770
+Alleen blijft er niets ooit intern.
+
+00:02:06.010 --> 00:02:12.190
+Die configuratie wordt gekopieerd naar dev-test, staging, drie verschillende QA-branches, backups en een laptop die iemand in een vliegtuig liet liggen.
+
+00:02:12.370 --> 00:02:13.270
+Dat is geen geheim.
+
+00:02:13.530 --> 00:02:15.230
+Dat is een gedistribueerde uitzending.
+
+00:02:15.490 --> 00:02:23.010
+Voeg daar git aan toe waar een foutieve, push, meer wachtwoorden openbaar heeft gemaakt dan ik kan tellen en je hebt een incidentenwachtrij die zichzelf schrijft.
+
+00:02:23.070 --> 00:02:24.910
+Dit is het deel dat niemand graag toegeeft.
+
+00:02:25.170 --> 00:02:27.770
+Deze snelle oplossingen riskeren niet alleen blootstelling.
+
+00:02:28.010 --> 00:02:29.790
+Ze garanderen het na verloop van tijd.
+
+00:02:30.030 --> 00:02:31.230
+Geheimen zijn glibberig.
+
+00:02:31.230 --> 00:02:34.530
+Ze sluipen logbestanden in omdat je vergat een uitzondering te opschonen.
+
+00:02:34.690 --> 00:02:37.170
+Ze verbergen zich in screenshots die via Teams worden gedeeld.
+
+00:02:37.350 --> 00:02:41.690
+Ze worden ingepakt in backups die ongecodeerd in blobopslag staan omdat niemand voor de kluislaag heeft betaald.
+
+00:02:41.830 --> 00:02:45.850
+Het enige wat nodig is, is één verveelde aanvaller die publieke repos scant op voor de hand liggende reeksen.
+
+00:02:46.010 --> 00:02:50.270
+Password 123 is nog steeds een goudmijn en plotseling staat je hele app wagenwijd open.
+
+00:02:50.430 --> 00:02:51.470
+Een van mijn favorieten.
+
+00:02:51.730 --> 00:02:57.470
+Weet je nog dat er een paar jaar geleden duizenden inloggegevens op openbare GitHub verschenen omdat ontwikkelaars persoonlijke repos gebruikten om te testen?
+
+00:02:57.470 --> 00:02:59.170
+Aanvallers hoefden niet eens moeite te doen.
+
+00:02:59.410 --> 00:03:03.910
+Ze voerden trefwoordscans uit, vonden verbindingsreeksen en liepen zo naar binnen bij productiebronnen.
+
+00:03:04.110 --> 00:03:08.010
+Geen zero-day, geen Hollywood-hek montage, gewoon kopiëren, plakken, winst.
+
+00:03:08.190 --> 00:03:10.110
+Dat is wat hardcode het geheimen je opleveren.
+
+00:03:10.250 --> 00:03:12.770
+Een huis waar de inbreker niet eens een slot hoeft open te breken.
+
+00:03:12.770 --> 00:03:16.070
+De sleutel ligt onder de mat en je hebt met spuitbus op de veranda gezet.
+
+00:03:16.230 --> 00:03:18.050
+Sleutel zit in de React-app instellingen.
+
+00:03:18.190 --> 00:03:25.170
+Je zou je voordeur niet onvergrendeld laten met de garage deurcode op een briefje, maar dat is precies hoe verbindingsreeksen werken als ze inloggegevens bevatten.
+
+00:03:25.170 --> 00:03:30.170
+Natuurlijk werkt het totdat een buurman, waarmee ik een anoniem botnet bedoel, doorheeft waar je ze hebt geraakt.
+
+00:03:30.370 --> 00:03:32.630
+Microsoft is de laatste tijd heel duidelijk geweest.
+
+00:03:32.850 --> 00:03:36.930
+Hardcoded inloggegevens worden in hetzelfde bakje gegooid als Internet Explorer en Clippy.
+
+00:03:37.330 --> 00:03:37.810
+Verouderd.
+
+00:03:37.930 --> 00:03:42.210
+Je kunt ermee blijven aanmodderen, maar verwacht teleurstelling, defecten en een addedlogboek dat tegen je schreeuwt.
+
+00:03:42.350 --> 00:03:44.090
+Tel daarbij het probleem van verspreiding op.
+
+00:03:44.270 --> 00:03:46.250
+Elke omgeving heeft zijn eigen instellingen nodig.
+
+00:03:46.470 --> 00:03:52.070
+Dus nu heb je een wachtwoord voor de devbox, een adminreeks in staging, een andere in productie en niemand weet of ze ooit zijn vervangen.
+
+00:03:52.070 --> 00:03:54.830
+Verschillende teams verzamelen licht verouderde kopieën.
+
+00:03:54.950 --> 00:03:58.410
+Iemand zet een oude verbindingsreeks in het commentaar in plaats van hem te verwijderen.
+
+00:03:59.170 --> 00:03:59.490
+Gefeliciteerd.
+
+00:03:59.650 --> 00:04:02.030
+Je app is een digitale rommela vol lopersleutels.
+
+00:04:02.330 --> 00:04:04.390
+Aanvallers zijn er dol op, want het is een lopend buffet.
+
+00:04:04.650 --> 00:04:07.930
+En laten we het niet eens hebben over wat er gebeurt als aannemers leestoegang krijgen tot je repos.
+
+00:04:08.150 --> 00:04:09.630
+Denk je dat ze alleen de code meenemen?
+
+00:04:09.810 --> 00:04:10.790
+De lay hier is simpel.
+
+00:04:11.010 --> 00:04:13.090
+Het echte gevaar is niet alleen een wachtwoord dat lekt.
+
+00:04:13.290 --> 00:04:15.310
+Het is de manier waarop geheimen zich vermenigvuldigen.
+
+00:04:15.550 --> 00:04:20.110
+Zodra je ze in configuraties toelaat, repliceren ze zich over omgevingen, backups, scripts en documentatie.
+
+00:04:20.250 --> 00:04:21.730
+Je kunt die verspreiding niet beheren.
+
+00:04:21.890 --> 00:04:23.910
+Je kunt het niet inperken met slimme verhullingstrucs.
+
+00:04:24.090 --> 00:04:25.690
+Het is geen probleem dat je zomaar patcht.
+
+00:04:25.810 --> 00:04:27.250
+Het is een probleem dat je moet elimineren.
+
+00:04:27.470 --> 00:04:29.270
+Stop met nadenken over waar je de sleutel moet verbergen.
+
+00:04:29.470 --> 00:04:31.310
+Stop in plaats daarvan helemaal met het gebruik van sleutels.
+
+00:04:31.530 --> 00:04:32.490
+Daarom bestaan tokens.
+
+00:04:32.770 --> 00:04:34.170
+Ze gedragen zich niet als wachtwoorden.
+
+00:04:34.390 --> 00:04:35.390
+Ze zijn niet lang houdbaar.
+
+00:04:35.570 --> 00:04:39.430
+Ze zijn niet statisch en ze blijven niet jarenlang in bestanden staan, terwijl ze de verkeerde persoon uitdagen om ze te vinden.
+
+00:04:39.430 --> 00:04:42.530
+De remedie tegen verspreiding van wachtwoorden is niet om ze beter te verbergen.
+
+00:04:42.690 --> 00:04:46.010
+De oplossing is ze vervangen door iets dat zelfvernietigend werkt bij misbruik.
+
+00:04:46.130 --> 00:04:49.990
+Tokens laten je precies dat doen en Entra ID is het systeem dat ze uitgeeft.
+
+00:04:50.170 --> 00:04:55.590
+Oké, als we de sleutels onder de deurmat wegdoen, hoe voorkomen tokens dan dat ze voor ons beheerders nog grotere problemen worden?
+
+00:04:55.790 --> 00:04:59.130
+Laten we bespreken waarom ze het leven makkelijker maken in plaats van moeilijker.
+
+00:04:59.390 --> 00:05:01.410
+Waarom tokens altijd beter zijn dan wachtwoorden?
+
+00:05:01.610 --> 00:05:04.790
+Als wachtwoorden autosleutels zijn, dan zijn tokens geldige vervoersbewijzen.
+
+00:05:04.930 --> 00:05:07.910
+Je gebruikt ze voor één rit en ze zijn waardeloos zodra de reis voorbij is.
+
+00:05:07.910 --> 00:05:12.230
+Niemand maakt stiekem een kopie van een geldig ticket en als ze het proberen, valt het meteen op.
+
+00:05:12.350 --> 00:05:13.830
+Dat is het fundamentele verschil.
+
+00:05:14.170 --> 00:05:15.350
+Wachtwoorden zijn statisch.
+
+00:05:15.570 --> 00:05:20.990
+Tokens zijn tijdelijk en beperkt, wat betekent dat als ze lekken, de schade minimaal is en de klok al tikt tot ze verlopen.
+
+00:05:21.210 --> 00:05:22.550
+Dus wat is een token eigenlijk?
+
+00:05:22.750 --> 00:05:26.910
+In Azureland benadert je app Entra ID en vraagt, hé, mag ik toestemming krijgen om dit te doen?
+
+00:05:27.110 --> 00:05:32.490
+Entra ID controleert wie of wat het vraagt, doet zijn administratie en geeft dan een ondertekend pakketje terug, het toegangstoken.
+
+00:05:32.690 --> 00:05:33.930
+Dat token is kortstondig.
+
+00:05:34.090 --> 00:05:36.170
+Het is gekoppeld aan de identiteit van de gebruiker of de service.
+
+00:05:36.170 --> 00:05:38.170
+Het heeft limieten wat betreft wat het kan aanraken.
+
+00:05:38.330 --> 00:05:39.990
+En als het tijdvenster sluit, is het dood.
+
+00:05:40.170 --> 00:05:41.150
+Niemand hoeft het te resetten.
+
+00:05:41.350 --> 00:05:42.310
+Niemand hoeft het te roteren.
+
+00:05:42.490 --> 00:05:43.350
+Het verdwijnt gewoon.
+
+00:05:43.610 --> 00:05:46.190
+Natuurlijk, als je dit aan ontwikkelaars vertelt, is de eerste reactiepaniek.
+
+00:05:46.330 --> 00:05:48.530
+Oh nee, nu hebben we roterende tokens die overal rondvliegen.
+
+00:05:48.730 --> 00:05:52.310
+Moeten we ze cachen, opslaan, achterverversingscodes aanjagen, vervangingslogica bouwen?
+
+00:05:52.510 --> 00:05:54.490
+Wel nu, het antwoord is nee, maak je geen zorgen.
+
+00:05:54.650 --> 00:05:57.570
+De Microsoft identiteitsbibliotheken doen dat loodgieterswerk voor je.
+
+00:05:57.730 --> 00:06:02.150
+De SDK's pakken, verversen en verwijderen ze letterlijk als schoonmakers na een conferentie.
+
+00:06:02.150 --> 00:06:03.890
+Je hoeft Oh Out niet opnieuw uit te vinden.
+
+00:06:04.110 --> 00:06:06.850
+Je roept gewoon de functie aan en focust op je eigen app Logica.
+
+00:06:07.130 --> 00:06:08.690
+Vergelijk het met de ouderwetse manier.
+
+00:06:08.910 --> 00:06:12.090
+Een statisch wachtwoord is als iemand de loper van je hele gebouw geven.
+
+00:06:12.330 --> 00:06:14.110
+Ze komen niet alleen op hun eigen verdieping.
+
+00:06:14.330 --> 00:06:18.270
+Ze kunnen naar de directiekamer, de serverruimte, zelfs de snoepvoorraad van ouder.
+
+00:06:18.470 --> 00:06:19.390
+Neem nu een token.
+
+00:06:19.630 --> 00:06:23.690
+Het is een bezoekerspas die alleen werkt voor de derde verdieping en om vijf uur smiddags verloopt.
+
+00:06:23.870 --> 00:06:27.050
+Als iemand het na sluitingstijd probeert, wordt de toegang geweigerd.
+
+00:06:27.210 --> 00:06:28.470
+Geen gegop, geen gehang.
+
+00:06:28.470 --> 00:06:31.670
+De rijkwijdte is afgestemd op de functie, niet wagenwijd open.
+
+00:06:31.850 --> 00:06:33.790
+Tokens hebben ook intelligentie in zich.
+
+00:06:33.930 --> 00:06:36.990
+Als je een token opent, is het als het inspecteren van een boarding pass.
+
+00:06:37.230 --> 00:06:39.150
+Daar staat je vlucht, rij, gate en zone.
+
+00:06:39.390 --> 00:06:43.810
+Tokens slaan claims, rollen, scopes, tenant-idees en zelfs de basisgegevens van de gebruiker op.
+
+00:06:43.990 --> 00:06:47.310
+Dat betekent dat je API niet zomaar vertrouwt op de persoon die is ingelogd.
+
+00:06:47.390 --> 00:06:51.970
+Er wordt gecontroleerd of deze persoon bij finance werkt, de betalingsrol heeft en vandaag is goedgekeurd.
+
+00:06:52.150 --> 00:06:57.030
+Je kunt veel strengere regels direct in je app Logica bouwen zonder tien verschillende wachtwoordzets te beheren.
+
+00:06:57.030 --> 00:06:58.610
+Hier is een echte vergelijking.
+
+00:06:58.790 --> 00:07:03.390
+Een bedrijf waar ik werkte had een database die alleen beveiligd was met hardcoded SQL-inloggegevens.
+
+00:07:03.650 --> 00:07:05.390
+Dat account had systeembeheerdersrechten.
+
+00:07:05.650 --> 00:07:10.350
+Zoals verwacht kopieerde een aannemer ze naar een tool en bam, de hele database was hun speeltuin.
+
+00:07:10.570 --> 00:07:11.830
+Elke tabel lag open.
+
+00:07:12.090 --> 00:07:18.170
+Kijk nu naar een moderner systeem dat tokens gebruikt die beperkt zijn tot wat de app nodig heeft, zoals leestoegang tot één schema.
+
+00:07:18.510 --> 00:07:23.650
+Zelfs als iemand dat token zou stelen, konden ze alleen records selecteren en alleen totdat de token verliep.
+
+00:07:23.730 --> 00:07:26.150
+Het veranderde een nachtmerrie in een klein ongemak.
+
+00:07:26.150 --> 00:07:28.190
+Ik hoor sommige ontwikkelaars nu al zuchten.
+
+00:07:28.350 --> 00:07:31.130
+Tokens klinken leuk in theorie, maar ze verstoren mijn workflow.
+
+00:07:31.430 --> 00:07:34.250
+Ik heb geen tijd om vernieuwing of verloop tot in detail te beheren.
+
+00:07:34.450 --> 00:07:35.150
+Dat is de mythe.
+
+00:07:35.390 --> 00:07:37.450
+Niemand verwacht dat je ze handmatig ververst.
+
+00:07:37.610 --> 00:07:42.430
+De bibliotheken die je al gebruikt in .net of .noot pakken het ver verstoken, wisselen het onzichtbaar om en gaan door.
+
+00:07:42.590 --> 00:07:45.330
+Je merkt niet eens dat het is gebeurd, tenzij je pakketjes aan het onderscheppen bent.
+
+00:07:45.490 --> 00:07:46.390
+En dat is precies het punt.
+
+00:07:46.630 --> 00:07:48.130
+Stop met het oppassen op geheimen.
+
+00:07:48.310 --> 00:07:49.550
+Laat het systeem het afhandelen.
+
+00:07:49.810 --> 00:07:51.710
+Zie en tra idee als het paspoortkantoor.
+
+00:07:51.710 --> 00:07:56.690
+Je verschijnt, bewijst wie je bent, en zij stempelen een idee dat grenswachters, oftewel jouw apies, vertrouwen.
+
+00:07:56.850 --> 00:07:58.430
+Verlopen stempel, geen toegang.
+
+00:07:58.590 --> 00:08:00.030
+Verkeerde stempel, geweigerd.
+
+00:08:00.110 --> 00:08:02.250
+Het centraliseert de identiteitsvraag bij één autoriteit.
+
+00:08:02.430 --> 00:08:03.450
+Je apps discussiëren niet.
+
+00:08:03.610 --> 00:08:05.290
+Je apies hoeven niet op wachtwoorden te passen.
+
+00:08:05.450 --> 00:08:07.190
+Ze checken gewoon de stempel en laten je door.
+
+00:08:07.390 --> 00:08:11.630
+Dat is oneindig veel beter dan jong leren met een dozijn mysterieuze sleutels en je afvragen welke nog geldig zijn.
+
+00:08:11.830 --> 00:08:13.270
+Het beste deel voor ons IT-ers.
+
+00:08:13.410 --> 00:08:16.310
+Geen gedwongen wachtwoord, rotaties elke 90 dagen meer.
+
+00:08:16.490 --> 00:08:19.510
+Geen scripts die om drie uur s'nacht draaien om serviceaccounts te resetten.
+
+00:08:19.510 --> 00:08:24.710
+Geen discussies meer over of je geheimen in keyfold moet opslaan of onder een flinke dosis wishfold thinking.
+
+00:08:24.930 --> 00:08:27.530
+Tokens verlopen vanzelf en dat verloop is je vangnet.
+
+00:08:27.670 --> 00:08:30.030
+Als er iets lekt, is het gedoemd om te stoppen met werken.
+
+00:08:30.210 --> 00:08:31.410
+Je hebt niets gerepareerd.
+
+00:08:31.590 --> 00:08:34.370
+Je hebt gewoon een systeem gebouwd dat zichzelf herstelt door het ontwerp.
+
+00:08:34.470 --> 00:08:37.410
+Dus ja, tokens verwerken gebruikers inloggen veilig en netjes.
+
+00:08:37.830 --> 00:08:38.230
+Geweldig!
+
+00:08:38.390 --> 00:08:40.770
+Maar het gaat niet alleen om gebruikers die op inloggen klikken.
+
+00:08:40.950 --> 00:08:47.190
+De echte test is wanneer apps met andere apps moeten praten of services verzoeken afvuren om drie uur s'ochtend zonder mens in de buurt van een toetsenbord.
+
+00:08:47.190 --> 00:08:49.810
+Dat is waar de zaken verschuiven van wenselijk naar noodzakelijk.
+
+00:08:50.030 --> 00:08:53.390
+Maak kennis met beheerde identiteiten, service principles, maar dan minder dom.
+
+00:08:53.630 --> 00:09:00.210
+Stel je voor dat je app Azure Services kon benaderen zonder ooit een wachtwoord te typen, omdat hij al met zijn eigen gestempelde identiteit uit de fabriek kwam.
+
+00:09:00.410 --> 00:09:01.610
+Dat is geen science fiction.
+
+00:09:01.950 --> 00:09:03.350
+Zo werken managed identities.
+
+00:09:03.730 --> 00:09:10.490
+En zodra je ze gebruikt, voelt het gedoe met het rondschuiven van service principles en verlopende geheimen net zo ouderwets als een semafoon.
+
+00:09:10.730 --> 00:09:13.950
+Dit is de oude puinhoop waar we mee moesten werken, service principles.
+
+00:09:13.950 --> 00:09:23.390
+Je registreerde er een, genereerde een client secret of certificaat, stopte dat in Key Vault en gaf die identiteit aan je app zodat deze verbinding kon maken met SQL of storage.
+
+00:09:23.590 --> 00:09:24.890
+Op papier klonk het prima.
+
+00:09:25.310 --> 00:09:27.350
+Credentials stonden niet meer hardcoded in de code.
+
+00:09:27.590 --> 00:09:28.910
+Ze waren gecentraliseerd.
+
+00:09:29.070 --> 00:09:32.930
+In werkelijkheid was je bezig met het beheren van tijdbommen die elke 1 tot 2 jaar verliepen.
+
+00:09:33.090 --> 00:09:39.250
+Je zette een Outlook herinnering genaamd, laat Broad niet crashen, om het vervolgens alsnog te vergeten tot de storingsmelding op zondag kwam.
+
+00:09:39.250 --> 00:09:45.190
+En als je ooit secrets naar de verkeerde console logde, gefeliciteerd, dan heb je je vault op een reclameboord gespoten.
+
+00:09:45.430 --> 00:09:48.550
+Natuurlijk waren vaults beter dan config strings, maar je bleef jong leren.
+
+00:09:48.770 --> 00:09:51.750
+Je moest secrets handmatig roteren of dat automatiseren met scripts.
+
+00:09:51.990 --> 00:09:54.470
+Als die rotatie mislukte, stopte je app er stilletjes mee.
+
+00:09:54.630 --> 00:09:57.690
+En laten we niet doen alsof de meeste bedrijven rotaties ooit testen in staging.
+
+00:09:57.930 --> 00:10:00.330
+Ze wachten gewoon op de dag dat Broad weigerde op te starten.
+
+00:10:00.330 --> 00:10:06.650
+Hoeveel van ons zijn wakker gebeld door die kan niet verbinden met database melding om erachter te komen dat die mysterieuze string om middernacht was verlopen?
+
+00:10:06.830 --> 00:10:07.270
+Te veel.
+
+00:10:07.550 --> 00:10:09.690
+Dat is waar managed identities het roer om gooien.
+
+00:10:09.850 --> 00:10:14.310
+Je start een resource op, zoals een Azure App Service, een functie of een VM, en je zet een schakelaar om.
+
+00:10:14.510 --> 00:10:16.030
+Wijs managed identity toe aan.
+
+00:10:16.210 --> 00:10:16.530
+Klaar.
+
+00:10:16.750 --> 00:10:20.850
+Achter de schermen maakt Azure een identiteitsobject in Entra idee aan dat je resource kan gebruiken.
+
+00:10:21.070 --> 00:10:23.470
+Geen geheime strings, geen verlengdata voor vaults.
+
+00:10:23.610 --> 00:10:25.930
+Het is de app-versie van geboren worden met een rijbewijs.
+
+00:10:26.090 --> 00:10:28.330
+Je hoeft geen gelamineerde toegangspas mee te dragen.
+
+00:10:28.330 --> 00:10:32.330
+De cloud weet al wie je bent en staat voor je in wanneer je met een andere resource moet praten.
+
+00:10:32.570 --> 00:10:33.630
+Denk er eens zo over na.
+
+00:10:33.810 --> 00:10:36.230
+Elke app was vroeger een tiener die de auto van pa leende.
+
+00:10:36.490 --> 00:10:39.590
+Ze moesten de sleutels meeslepen en als ze die verloren, was het game over.
+
+00:10:39.790 --> 00:10:46.910
+Met managed identity liep de app naar het gemeentehuis zodra hij werd aangemaakt, kreeg zijn eigen rijbewijs en verzekering en hoeft nu niet meer om middernacht om toestemming te vragen.
+
+00:10:47.110 --> 00:10:49.150
+Geen reserve sleutels onder de bumper geplakt.
+
+00:10:49.370 --> 00:10:50.770
+Technisch gezien gebeurt er dit.
+
+00:10:50.950 --> 00:10:56.150
+Je app roept de metadata service van de instantie aan, die vreemde link die alleen bestaat binnen Azure VM's en services.
+
+00:10:56.150 --> 00:10:59.150
+Hij zegt, hé, ik heb een token nodig om met SQL te praten.
+
+00:10:59.350 --> 00:11:03.830
+De metadata service zegt, oké, ik ken je identiteit omdat je in een goedgekeurde resource draait.
+
+00:11:03.990 --> 00:11:07.210
+Hier is een ondertekend, kortstondig token rechtstreeks uit Entra ID.
+
+00:11:07.550 --> 00:11:10.850
+Boom, geen gedoe met inloggegevens, geen rotatie, geen kluis.
+
+00:11:11.030 --> 00:11:15.870
+Je krijgt gewoon een JWT die je naar SQL of Storage stuurt en het doel valideert dit via Entra ID.
+
+00:11:16.090 --> 00:11:17.070
+Tijd voor een voorbeeld.
+
+00:11:17.330 --> 00:11:20.050
+Stel, je hebt een webapp die een SQL database moet bevragen.
+
+00:11:20.270 --> 00:11:20.810
+Oude opzet.
+
+00:11:20.810 --> 00:11:25.070
+Je verbergt een SQL gebruikersnaam en wachtwoord in een keyfold en de app haalt dit tijdens runtime op.
+
+00:11:25.210 --> 00:11:32.390
+Je bent de halve dag bezig met de vraag of het wel correct geroteerd is, of de keyfold verwijzingen in staging werken en of de devs het juiste beleid hebben gepush.
+
+00:11:32.690 --> 00:11:33.490
+Nieuwe opzet.
+
+00:11:33.730 --> 00:11:35.690
+Schakel Managed Identity in voor de webapp.
+
+00:11:35.890 --> 00:11:39.790
+Voeg deze toe als database gebruiker in SQL met de juiste rol en je bent klaar.
+
+00:11:39.910 --> 00:11:41.650
+De app vraagt Azure om een token.
+
+00:11:41.990 --> 00:11:44.810
+Gebruik dit in de verbindingsreeks en ziet nooit een wachtwoord.
+
+00:11:44.970 --> 00:11:47.490
+Er valt niets te roteren en niets om te lekken inlangs.
+
+00:11:47.630 --> 00:11:49.350
+De voordelen stapelen zich snel op.
+
+00:11:49.350 --> 00:11:56.830
+Geheimen verdwijnen volledig uit repos en configs, dus de kans dat devs per ongeluk gevoelige strings uploaden gaat van bijna zeker naar nagenoeg nul.
+
+00:11:57.050 --> 00:11:58.650
+Rotatie gebeurt automatisch.
+
+00:11:58.850 --> 00:12:00.210
+Tokens verlopen vanzelf.
+
+00:12:00.490 --> 00:12:02.430
+Geen paniek en verlengingen midden in de nacht.
+
+00:12:02.630 --> 00:12:06.190
+En omdat identiteiten entra-ID objecten zijn, geef je ze de minste rechten.
+
+00:12:06.410 --> 00:12:09.370
+Je webapp heeft geen contributorrol nodig voor je hele abonnement.
+
+00:12:09.570 --> 00:12:12.490
+Het heeft alleen leestoegang nodig tot één opslagcontainer.
+
+00:12:12.650 --> 00:12:15.590
+Je maakt die toewijzing één keer en Azure dwingt het af.
+
+00:12:15.590 --> 00:12:21.510
+Kortom, managed identities veranderen servicecommunicatie van hopen dat je de sleutels niet lekt naar het werkt gewoon.
+
+00:12:21.750 --> 00:12:24.210
+Ze bieden veilige standaarden zonder het opruimwerk.
+
+00:12:24.430 --> 00:12:27.470
+Het is het dichtste bij magie wat we krijgen in Azure beveiliging.
+
+00:12:27.750 --> 00:12:31.430
+Natuurlijk is een idee alleen nuttig als de directory weet wat het is en wat het kan doen.
+
+00:12:31.630 --> 00:12:36.950
+En daar komen app-registraties om de hoek kijken, want papierwerk is zelfs voor cloud-identiteiten van belang.
+
+00:12:37.150 --> 00:12:39.450
+App-registraties zonder je verstand te verliezen.
+
+00:12:39.450 --> 00:12:42.390
+App-registraties zijn het RDW van entra-ID.
+
+00:12:42.830 --> 00:12:47.170
+Niemand wordt enthousiast wakker om ze te regelen, maar zonder papierwerk kom je nergens.
+
+00:12:47.410 --> 00:12:50.390
+Ze zijn saai, ze zijn kieskeurig en je moet ze absoluut doen.
+
+00:12:50.630 --> 00:12:51.890
+Dit is de blauwdruk stap.
+
+00:12:52.050 --> 00:12:58.490
+Het vertelt entra-ID hoe je applicatie zich identificeert, met welke apies het mag praten en hoe het toestemming vraagt.
+
+00:12:58.710 --> 00:13:05.030
+Als je dit overslaat of verkeerd aanpakt, bouw je een applicatie die technisch misschien werkt, maar elke beveiligingsregel negeert.
+
+00:13:05.190 --> 00:13:09.030
+En net als bij het overslaan van het RDW, wordt je uiteindelijk aan de kant gezet.
+
+00:13:09.030 --> 00:13:13.050
+In de kern is een app-registratie gewoon een identiteitskaart voor een applicatie.
+
+00:13:13.230 --> 00:13:18.990
+Het definieert hoe de app kan inloggen, of dat nu gebruikers zijn met accounts of de app zelf die optreedt als service-identiteit.
+
+00:13:19.150 --> 00:13:21.750
+Het bevat ook de bijbehorende rechten en eindpunten.
+
+00:13:21.990 --> 00:13:26.890
+Dat betekent scopes, rollen, redirect URI's en precies genoeg bureaucratie om je ogen bij te laten rollen.
+
+00:13:27.010 --> 00:13:29.390
+Maar die bureaucratie is de reden dat het hele systeem werkt.
+
+00:13:29.610 --> 00:13:32.790
+Zonder dat weet Azure niet wie het moet vertrouwen en weet een apies niet wanneer ze de deur moeten sluiten.
+
+00:13:32.990 --> 00:13:34.210
+Hier komt het leuke gedeelte.
+
+00:13:34.410 --> 00:13:36.410
+Het is niet ingewikkeld totdat je een fout maakt.
+
+00:13:36.410 --> 00:13:40.510
+Verputs en redirect URI en plotseling is je app open als een kermisattractie zonder gordels.
+
+00:13:40.710 --> 00:13:45.410
+Haal scopes en rollen door elkaar en je hebt zojuist privileges verleend die 12 niveaus hoger liggen dan de bedoeling was.
+
+00:13:45.630 --> 00:13:49.310
+Dat is hoe een webportaal dat alleen profielinfo hoefde te lezen, uiteindelijk agenda's wijzigt.
+
+00:13:49.510 --> 00:13:51.830
+Contactenwist en compliance officers de stuipen op het lijf jaagt.
+
+00:13:51.990 --> 00:13:54.450
+En Microsoft Graph is hierin de klassieke valstrik.
+
+00:13:54.630 --> 00:13:57.450
+Hoeveel apps zijn er niet gespot met volledige graph-lees- en schrijfrechten?
+
+00:13:57.650 --> 00:13:59.550
+Beveiligd door niets meer dan één luie registratie?
+
+00:13:59.770 --> 00:14:00.390
+Veel te veel.
+
+00:14:00.630 --> 00:14:01.710
+Ze hadden niet alles nodig.
+
+00:14:01.950 --> 00:14:03.550
+Ze hadden alleen profiel-leestoegang nodig.
+
+00:14:03.550 --> 00:14:07.290
+Maar omdat iemand niet even de tijd nam om te controleren, verleende ze de ontwikkelaarsversie van de godmodus.
+
+00:14:07.470 --> 00:14:09.410
+Laten we dus het jargon even aan de kant schuiven.
+
+00:14:09.630 --> 00:14:12.010
+Scopes zijn wat een app kan doen namens een gebruiker.
+
+00:14:12.710 --> 00:14:14.690
+Rollen zijn wat de app zelf mag uitvoeren.
+
+00:14:14.930 --> 00:14:15.790
+Zie het als een school.
+
+00:14:16.350 --> 00:14:17.510
+Scopes zijn de gangpassen.
+
+00:14:17.750 --> 00:14:20.190
+Emily mag de lever laten om naar de bibliotheek te gaan.
+
+00:14:20.450 --> 00:14:21.850
+Rollen zijn de functietitels.
+
+00:14:22.050 --> 00:14:25.050
+Emily is bibliothecaris, dus ze mag achter de balie komen.
+
+00:14:25.290 --> 00:14:27.550
+Als je die twee verwart, geef je elke leerling een personeelspaas.
+
+00:14:27.550 --> 00:14:33.170
+Niemand wil een gangvol tieners met toegang tot de serverruimte, maar dat is wat luie app registraties creëren.
+
+00:14:33.330 --> 00:14:34.950
+En dan is er nog het toestemmingsproces.
+
+00:14:35.310 --> 00:14:38.970
+Gebruikers en beheerders wordt gevraagd goed te keuren wat de applicatie aanvraagt bij het inloggen.
+
+00:14:39.170 --> 00:14:41.330
+Dit is het punt waarop de meeste mensen hun aandacht verliezen.
+
+00:14:41.530 --> 00:14:42.610
+Maar dit is de waarheid.
+
+00:14:42.810 --> 00:14:44.630
+Die toestemmingsvragen zijn je audit trail.
+
+00:14:44.870 --> 00:14:47.490
+Ze vertellen je waar de app om vraagt en wie het heeft goedgekeurd.
+
+00:14:47.690 --> 00:14:51.230
+Als je ze overslaat of gebruikers traint om blindelings op accepteren te klikken,
+
+00:14:51.230 --> 00:14:55.270
+hanteer je in feite een erecode bij de kluisdeur, wat betekent dat je geen kluis meer hebt.
+
+00:14:55.450 --> 00:14:57.090
+Je hebt een uitnodiging voor chaos.
+
+00:14:57.670 --> 00:14:59.830
+Er is een simpele zet die hoofdpijn bespaart.
+
+00:15:00.130 --> 00:15:03.230
+Combineer Easy Out met echte claimschecks binnen je apies.
+
+00:15:03.510 --> 00:15:06.610
+Easy Out laat je authenticatie koppelen met bijna geen code.
+
+00:15:06.930 --> 00:15:08.930
+Zet de schakelaar om en je voordeur werkt.
+
+00:15:09.130 --> 00:15:10.050
+Maar stop daar niet.
+
+00:15:10.290 --> 00:15:12.650
+Bouw claimschecks zodat je apies naar het token kijken,
+
+00:15:12.930 --> 00:15:16.030
+de ingesloten scopes of rollen inspecteren en dan regels afdwingen.
+
+00:15:16.030 --> 00:15:21.970
+Op die manier, zelfs als iemand een token doorstuurt, zorgt de API zelf ervoor dat alleen de juiste deuren openstaan.
+
+00:15:22.090 --> 00:15:26.690
+Een bedrijf waar ik meewerkte gebruikte Easy Out op een intern portaal, maar sloeg de claimschecks over.
+
+00:15:26.910 --> 00:15:31.470
+Het werkte prima totdat iemand het token van een gebruiker kopieerde en de apies direct aanriep.
+
+00:15:31.650 --> 00:15:35.590
+Niets in hun configuratie valideerde of de aanroeper die endpoints wel mocht benaderen.
+
+00:15:35.810 --> 00:15:39.210
+Tegen de tijd dat ze het ontdekten, was de helft van hun tenantgegevens al ingezien.
+
+00:15:39.390 --> 00:15:41.830
+Een simpele rolcontrole had dat direct kunnen voorkomen.
+
+00:15:42.170 --> 00:15:43.810
+Beveiliging draait niet altijd om meer tools.
+
+00:15:43.810 --> 00:15:46.450
+Het gaat erom dat je de tools die je al hebt, goed gebruikt.
+
+00:15:46.610 --> 00:15:50.410
+Wanneer je app registraties op de juiste manier configureert, gebeurt er iets magisch.
+
+00:15:50.790 --> 00:15:56.770
+Willekeurige API-clients komen er niet meer doorheen omdat de regels streng zijn, tokens niet liegen en toestemming goed wordt gelogd.
+
+00:15:57.010 --> 00:15:58.830
+Je apps praten alleen met wat ze mogen.
+
+00:15:59.110 --> 00:16:04.890
+Je gebruikers verlenen alleen wat strikt noodzakelijk is en je repo is niet langer een opslagplaats voor onbedoelde rechten.
+
+00:16:05.350 --> 00:16:10.590
+Dus nu loggen je gebruikers correct in, hebben services echte idees en staan apies niet wagenwijd open.
+
+00:16:10.590 --> 00:16:13.970
+De volgende vraag is wat er gebeurt als een app niet alleen voor zichzelf handelt.
+
+00:16:14.150 --> 00:16:17.190
+Hij moet een gebruiker imiteren of hun toegang doorgeven in de keten.
+
+00:16:17.430 --> 00:16:18.870
+Dat is waar het echte werk begint.
+
+00:16:19.110 --> 00:16:29.350
+Abonneer je op de nieuwsbrief via M365, show of volg onze 365 show LinkedIn pagina voor livestreams met MVP's die dit zelf hebben meegemaakt en de lessen hebben geleerd, zodat jij dat niet hoeft te doen.
+
+00:16:29.670 --> 00:16:31.990
+Tokens doorsturen zonder de keten te verbreken.
+
+00:16:31.990 --> 00:16:37.710
+Ooit geprobeerd een briefje in de klas door te geven dat drie of vier keer werd herschreven voordat het eindelijk bij de leraar aankwam.
+
+00:16:37.870 --> 00:16:42.810
+De helft van de boodschap is verloren, iemand heeft erin gekrabbeld en uiteindelijk slaat het nergens meer op.
+
+00:16:42.930 --> 00:16:46.750
+Dat is precies hoe het doorsturen van gebruikerstokens voelt als je het verkeerd instelt.
+
+00:16:46.950 --> 00:16:53.690
+Je denkt dat de identiteit van de gebruiker de lijn volgt, maar tegen de tijd dat het de laatste service bereikt, is het onherkenbaar of erger nog, volledig geweigerd.
+
+00:16:53.850 --> 00:16:55.890
+Dit is het scenario waar we echt mee te maken hebben.
+
+00:16:56.050 --> 00:16:58.270
+Een gebruiker logt in via een front-end app.
+
+00:16:58.470 --> 00:17:00.770
+Die front-end app doet niet al het zware werk zelf.
+
+00:17:00.770 --> 00:17:04.030
+Hij roept een andere back-end API aan om het eigenlijke werk te doen.
+
+00:17:04.210 --> 00:17:09.250
+Klinkt prima, maar de adder onder het gras is dat die oorspronkelijke gebruikersidentiteit met het verzoek mee moet reizen.
+
+00:17:09.490 --> 00:17:12.770
+Gebeurt dat niet, dan raadt de back-end API maar wie bij het verzoek hoort.
+
+00:17:12.970 --> 00:17:14.790
+Dus delegatie moet worden aangepast.
+
+00:17:14.990 --> 00:17:19.510
+De front-end bewijst wie de gebruiker is, geeft die context door en de back-end houdt die lijn intact.
+
+00:17:19.730 --> 00:17:23.470
+In theorie simpel, in werkelijkheid een mijneveld, want hier gaat het mis.
+
+00:17:23.670 --> 00:17:28.310
+Als je het originele toegangstoken direct doorstuurt, loop je tegen het double-hop probleem aan.
+
+00:17:28.310 --> 00:17:34.430
+Het token werd uitgegeven aan app A om resource X aan te roepen, maar app A probeert hetzelfde token te gebruiken om app B aan te roepen.
+
+00:17:34.550 --> 00:17:37.770
+App B ziet de mismatch en zegt, nee, token niet geldig voor mij.
+
+00:17:37.950 --> 00:17:45.430
+En plotseling valt je nette gebruikerservaring uit elkaar in extra prompts, kapotte claims of, erger nog, een nieuwe toestemmingspop-up voor dezelfde gebruiker die al was ingelogd.
+
+00:17:45.570 --> 00:17:50.230
+Niet schaadt het vertrouwen sneller dan een rij gebruikers die denken, heb ik dit gisteren niet al toegestaan.
+
+00:17:50.230 --> 00:17:58.550
+De juiste manier om dit op te lossen is niet met labmiddelen. Je moet de OAuth 2.0, on behalf of flow gebruiken, of Obo als je van kortere afkortingen houdt.
+
+00:17:58.630 --> 00:18:02.750
+Het idee is eenvoudig. Elke service stuurt niet zomaar het oorspronkelijke token door.
+
+00:18:02.950 --> 00:18:09.510
+Het neemt dat inkomende token, bewijst het bij entra-ID en ruilt het vervolgens in voor een nieuw, vers token dat geldig is voor de volgende API in de rij.
+
+00:18:09.710 --> 00:18:18.170
+Het is alsof de gebruiker de eerste service een gangpas geeft en in plaats van die door elke deur te proberen smokkelen, ruilt die service hem bij de balie in voor een juiste pas voor de volgende gang.
+
+00:18:18.170 --> 00:18:22.470
+Elke stap krijgt een token dat is afgestemd op zijn rol en de beveiliging blijft intact.
+
+00:18:22.670 --> 00:18:30.250
+Als je dit zelf hebt gebouwd, weet je dat het voelt als jongleren met messen, tokens doorgeven, verversingen en afhandelen en ze op het juiste moment omwisselen.
+
+00:18:30.450 --> 00:18:39.750
+Gelukkig maakt middleware zoals Easy Out dit draaglijk. Easy Out doet het saaie werk, het token opslaan, verversen en een hulpfunctie aanbieden om het op verzoek op te halen.
+
+00:18:40.090 --> 00:18:46.170
+In plaats van vreemde heksten bedenken die tokens door headers duwen en hopen dat er niets in laks lekt, laat je de middleware het nachtwerk doen.
+
+00:18:46.170 --> 00:18:53.210
+Je voorkomt dat je dev team behulpzaam een aangepaste oplossing bouwt die het token in platte tekst locht voor debugging en het vervolgens vergeet te verwijderen.
+
+00:18:53.390 --> 00:18:55.390
+Dat is een risico dat je niet kunt negeren.
+
+00:18:55.670 --> 00:19:00.630
+Ruwe tokens blindelings doorgeven is als je rijbewijs kopiëren en bij elke deur uitdelen.
+
+00:19:00.870 --> 00:19:07.310
+Te veel persoonlijke informatie belandt waar het niet hoort en plotseling heeft iedereen die het verzoek onderschept veel meer dan ze zouden moeten hebben.
+
+00:19:07.550 --> 00:19:12.570
+Dit riskeert niet alleen het lekken van identiteitsgegevens, het vlakt ook beveiligingsgrenzen af.
+
+00:19:12.570 --> 00:19:17.570
+APIs kunnen geen duidelijke lijnen meer trekken tussen wie een gebruiker is en wat aan de service kan worden toevertrouwd.
+
+00:19:18.270 --> 00:19:22.070
+Het resultaat is dat je ofwel te veel rechten verleent of legitieme aanroepen blokkeert.
+
+00:19:22.330 --> 00:19:23.410
+Beide zijn nachtmerries.
+
+00:19:23.650 --> 00:19:26.410
+De ene lekt gegevens, de andere verdrinkt je helpdesk in klachten.
+
+00:19:26.670 --> 00:19:28.210
+Laten we een helder voorbeeld doorlopen.
+
+00:19:28.390 --> 00:19:30.310
+Een gebruiker logt in op een front-end webapp.
+
+00:19:30.470 --> 00:19:36.530
+Die app roept een beveiligde API aan, maar in plaats van het ruwe toegangstoken door te sturen, gebruikt het Obo om een nieuw token te krijgen dat alleen geldig is voor die API.
+
+00:19:36.530 --> 00:19:38.950
+Nu wil de API wat gegevens uit SQL halen.
+
+00:19:39.150 --> 00:19:39.550
+Perfect.
+
+00:19:39.830 --> 00:19:43.330
+Dat is geen directe zorg van de gebruiker, dus de API stuurt niets door.
+
+00:19:43.530 --> 00:19:50.290
+Hij haalt een systeemtoken op via een beheerde identiteit, maakt verbinding met SQL, voert queries uit en stuurt alleen de benodigde resultaten terug.
+
+00:19:50.450 --> 00:19:53.030
+In elke fase is de identiteitscontext duidelijk.
+
+00:19:53.230 --> 00:19:56.530
+Gebruiker voor de app en API, systeemidentiteit voor de database.
+
+00:19:56.930 --> 00:19:59.810
+Elk token is gescopeerd, kortstondig en verifiëerbaar.
+
+00:20:00.010 --> 00:20:01.270
+De winst hiervan is enorm.
+
+00:20:01.530 --> 00:20:04.410
+Surfaces worden gekoppeld zonder het identiteitssignaal te verwarren.
+
+00:20:04.410 --> 00:20:07.310
+Gebruikers worden niet gespamd met extra toestemmingsverzoeken.
+
+00:20:07.490 --> 00:20:13.090
+Je API's dwingen de juiste claims af zonder verwarring en je voorkomt dat ruwe sleutels over de lijn gaan waar ze niet thuishoren.
+
+00:20:13.270 --> 00:20:19.470
+Obo gaat minder over extra werk en meer over het intact houden van de vertrouwensketen van front-end tot back-end, helemaal tot aan de database.

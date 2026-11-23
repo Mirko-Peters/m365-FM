@@ -1,0 +1,1303 @@
+WEBVTT
+
+00:00:00.370 --> 00:00:06.870
+Preparado para 13 dias de Microsoft 305, Copilot e Azure, as pessoas que estão moldando o futuro do trabalho.
+
+00:00:08.070 --> 00:00:11.530
+Em janeiro, a M36 MP5 com está de volta e ainda maior.
+
+00:00:12.930 --> 00:00:18.050
+Junte-se a nós para as sessões ao vivo, demonstrações reais e conhecimento prático com MVPs e especialistas do setor em todo o mundo.
+
+00:00:18.930 --> 00:00:21.010
+Nada de slides genéricos ou jargões intermináveis.
+
+00:00:21.890 --> 00:00:23.110
+Estamos abordando os desafios reais.
+
+00:00:23.790 --> 00:00:28.790
+Copilot Studio, agente de A, fábrica, segurança, governança e automação A.
+
+00:00:28.790 --> 00:00:34.270
+Seja você um profissional de TI, desenvolvedor ou líder de negócios, há sessões criadas para você.
+
+00:00:35.610 --> 00:00:39.990
+Com 10 dias completos, você pode explorar várias tecnologias e se conectar a uma comunidade global.
+
+00:00:40.890 --> 00:00:44.190
+Assista ao vivo e leve insights práticos de volta para a sua organização.
+
+00:00:45.150 --> 00:00:48.890
+Janeiro de 2027, 10 dias, a única comunidade Microsoft.
+
+00:00:49.510 --> 00:00:50.570
+As inscrições já estão abertos.
+
+00:00:51.890 --> 00:00:55.410
+Acesse m365.com.net e garanta sua vaga, hoje mesmo.
+
+00:00:55.410 --> 00:00:58.990
+É m365.com.net e...
+
+00:00:58.990 --> 00:01:04.770
+Inscreva-se agora em m365.net e nos vemos ao vivo em janeiro.
+
+00:01:05.370 --> 00:01:06.210
+Aqui vem um fato curioso.
+
+00:01:06.670 --> 00:01:11.190
+Embotir credenciais em seus aplicativos Azure é basicamente distribuir chaves de casa em um ponto de ônibus.
+
+00:01:12.030 --> 00:01:16.270
+O EntryD e as identidades gerenciadas permitem trancar todas as portas sem precisar lidar com molhos de chaves
+
+00:01:16.270 --> 00:01:18.530
+ou torcer para que ninguém veja o post-it embaixo do seu teclado.
+
+00:01:18.890 --> 00:01:19.330
+Boa notícia.
+
+00:01:19.710 --> 00:01:21.570
+Você não precisa ser um mestre em criptografia para fazer isso.
+
+00:01:21.570 --> 00:01:26.010
+Vou mostrar passo a passo como trocar segredos por tokens e dormir melhor à noite.
+
+00:01:27.210 --> 00:01:28.330
+Um problema da chave embaixo do tapete.
+
+00:01:28.790 --> 00:01:32.130
+Por que tantos aplicativos Azure ainda escondem senhas em arquivos de configuração,
+
+00:01:32.250 --> 00:01:34.570
+como se ainda estivéssemos escrevendo scripts VBA em 2003?
+
+00:01:35.190 --> 00:01:36.230
+Sério, estamos em 2024.
+
+00:01:36.930 --> 00:01:39.990
+Temos sistemas de segurança nativos da nuvem que criam tokens sob demanda,
+
+00:01:40.050 --> 00:01:44.090
+mas alguém em algum lugar ainda insiste em enviar uma senha literal para o repositório como se fosse um troféu.
+
+00:01:44.090 --> 00:01:46.390
+E a desculpa é sempre a mesma.
+
+00:01:46.830 --> 00:01:48.350
+Acho que hoje ficamos normalmente apentos para economizar.
+
+00:01:49.250 --> 00:01:52.150
+Economize tempo hoje e gaste semanas limpando a bagunça quando algo vazar.
+
+00:01:52.730 --> 00:01:53.450
+Isso não é um atalho.
+
+00:01:54.030 --> 00:01:55.490
+Isso é procrastinação com passos extras.
+
+00:01:55.950 --> 00:01:57.030
+O problema é maior do que a preguiça.
+
+00:01:58.250 --> 00:02:01.230
+Desenvolvedores acham que colocar nomes de usuários, senhas em um arquivo de configuração
+
+00:02:01.230 --> 00:02:03.530
+ou JSON de configurações é inofensivo porque fica interno.
+
+00:02:04.310 --> 00:02:05.610
+Exceto que nada fica interno para sempre.
+
+00:02:06.130 --> 00:02:08.870
+Essa configuração é copiada para ambiente de dev, teste, staging,
+
+00:02:08.970 --> 00:02:11.870
+três branches diferentes de QA e backups em um laptop que alguém esqueceu no avião.
+
+00:02:12.470 --> 00:02:13.070
+Isso não é um segredo.
+
+00:02:13.070 --> 00:02:14.450
+Isso é uma transmissão distribuída.
+
+00:02:15.390 --> 00:02:17.350
+Adicione o git, onde um ops, puxa errado,
+
+00:02:17.530 --> 00:02:19.850
+já tornou públicas mais senhas de produção do que eu gostaria de contar
+
+00:02:19.850 --> 00:02:22.170
+e você tem uma fila de incidentes que se cria sozinha.
+
+00:02:23.230 --> 00:02:24.570
+Aqui está a parte que ninguém gosta de admitir.
+
+00:02:25.510 --> 00:02:27.510
+Essas correções rápidas não apenas arriscam a exposição.
+
+00:02:28.410 --> 00:02:29.470
+Elas garantem que o passado tem.
+
+00:02:29.950 --> 00:02:30.910
+Segredos são escorregadios.
+
+00:02:31.350 --> 00:02:34.350
+Eles entram sorrateiramente em arquivos de log porque se esqueceu de higienizar uma exceção.
+
+00:02:34.970 --> 00:02:36.750
+Eles se escondem em capturas de tela compartilhadas pelo time.
+
+00:02:37.190 --> 00:02:40.150
+Eles são compactados em backups que ficam descriptografados no armazenamento de blobs
+
+00:02:40.150 --> 00:02:41.430
+que ninguém pagou pela camada de cofre.
+
+00:02:41.430 --> 00:02:45.290
+Basta um atacante entediado escaneando repositórios públicos em busca de strings óbvias.
+
+00:02:45.950 --> 00:02:50.030
+Password 123 ainda é uma mina de ouro e de repente seu aplicativo inteiro está escancarado.
+
+00:02:50.630 --> 00:02:51.250
+Os meus favoritos.
+
+00:02:51.510 --> 00:02:54.450
+Lembra quando milhares de credenciais apareceram no GitHub público há alguns anos
+
+00:02:54.450 --> 00:02:57.010
+porque desenvolvedores usavam repositórios pessoais apenas para teste?
+
+00:02:57.450 --> 00:02:58.830
+Os atacantes nem precisaram se esforçar.
+
+00:02:59.210 --> 00:03:02.210
+Eles rodaram varreduras de palavras-chave, encontraram strings de conexão
+
+00:03:02.210 --> 00:03:03.890
+e entraram direto nos recursos de produção.
+
+00:03:03.890 --> 00:03:06.310
+Sem 0D e sem montagem de hackeamento de Hollywood.
+
+00:03:06.450 --> 00:03:07.750
+Apenas copiar, colar e lucrar.
+
+00:03:08.210 --> 00:03:09.850
+É isso que hardcoding de segredos traz pra você.
+
+00:03:10.330 --> 00:03:11.990
+Uma casa onde o ladrão nem precisa abrir uma fechadura.
+
+00:03:12.910 --> 00:03:14.990
+As chaves estão debaixo do tapete e você pintou na varanda.
+
+00:03:15.090 --> 00:03:17.150
+A chave está nas configurações do App React.
+
+00:03:18.150 --> 00:03:21.790
+Você não deixaria sua porta da frente destrancada com o código da garagem escrito em um post-it,
+
+00:03:21.870 --> 00:03:24.810
+mas é exatamente assim que as strings de conexão se comportam quando incluem credenciais.
+
+00:03:25.530 --> 00:03:28.230
+Claro, funciona até que um vizinho melhor, uma botnet anônima,
+
+00:03:28.310 --> 00:03:30.370
+descubra onde você se descuidou, onde você se...
+
+00:03:30.370 --> 00:03:32.190
+A Microsoft tem sido muito clara ultimamente.
+
+00:03:32.830 --> 00:03:36.390
+Credenciais hidecoded estão sendo colocadas no mesmo grupo do Internet Explorer e do Clip.
+
+00:03:37.250 --> 00:03:37.650
+Obsoleta.
+
+00:03:38.150 --> 00:03:42.070
+Você pode continuar usando, mas espere decepções, falhas e um log de auditoria gritando com você.
+
+00:03:42.550 --> 00:03:43.810
+Adicione a isso o programa da proliferação.
+
+00:03:44.210 --> 00:03:45.690
+Cada ambiente precisa de seus próprios corações.
+
+00:03:46.210 --> 00:03:47.870
+Então agora você tem uma senha pra máquina de dev,
+
+00:03:47.930 --> 00:03:51.150
+uma string de admin stage e outra em produção e ninguém sabe se elas foram rotacionadas.
+
+00:03:52.130 --> 00:03:54.710
+Equipes diferentes acumulam cópias ligeiramente desatualizadas.
+
+00:03:55.410 --> 00:03:57.830
+Alguém comenta uma string de conexão antiga em vez de excluí-la.
+
+00:03:57.830 --> 00:04:02.130
+Parabéns, seu aplicativo é uma gaveta de bagunça digital cheia de chaves mestre.
+
+00:04:02.610 --> 00:04:04.070
+Os atacantes adoram porque é um banquete.
+
+00:04:04.570 --> 00:04:07.870
+Nem vamos mencionar o que acontece quando contratados ganham acesso de leitura ao seus repositórios.
+
+00:04:08.130 --> 00:04:09.050
+Você acha que eles só levam um código?
+
+00:04:09.690 --> 00:04:10.710
+A conclusão aqui é simples.
+
+00:04:11.310 --> 00:04:13.010
+O perigo real não é apenas o vazamento de uma string.
+
+00:04:13.470 --> 00:04:14.710
+É a forma como o segredo se multiplica.
+
+00:04:15.330 --> 00:04:17.130
+Uma vez que você os coloca em arquivos de configuração,
+
+00:04:17.210 --> 00:04:19.810
+eles se replicam por ambientes, backups, scripts e documentação.
+
+00:04:20.330 --> 00:04:21.570
+Você não consegue gerenciar essa proliferação.
+
+00:04:21.930 --> 00:04:24.070
+Você não consegue contê-la com truques inteligentes de ofuscação.
+
+00:04:24.430 --> 00:04:25.550
+É um problema que você corrige com patches.
+
+00:04:25.550 --> 00:04:26.810
+É um problema que você elimina.
+
+00:04:27.570 --> 00:04:29.010
+Pare de pensar em onde esconder a chave.
+
+00:04:29.630 --> 00:04:30.770
+Em vez disso, pare de usar a chave.
+
+00:04:31.290 --> 00:04:33.750
+É pra isso que os tokens não se comportam como senhas.
+
+00:04:34.150 --> 00:04:34.910
+Eles não têm longa duração.
+
+00:04:35.310 --> 00:04:37.430
+Eles não são estáticos e não ficam em arquivos por anos,
+
+00:04:37.730 --> 00:04:39.130
+desafiando a pessoa errada a encontrá-los.
+
+00:04:39.570 --> 00:04:41.910
+A cura para a proliferação de senhas não é escondê-las melhor.
+
+00:04:42.470 --> 00:04:45.290
+É substituí-las por algo que se autodestrói quando é mal utilizado.
+
+00:04:46.030 --> 00:04:47.830
+Tokens permitem que você faça exatamente isso.
+
+00:04:47.910 --> 00:04:49.670
+E o Entryd é o sistema que os distribui.
+
+00:04:49.670 --> 00:04:52.130
+Ok, se jogarmos as chaves do capacho fora,
+
+00:04:52.270 --> 00:04:55.230
+como os tokens evitam se tornar problemas ainda maiores pra nós, administradores?
+
+00:04:56.010 --> 00:04:58.830
+Vamos falar sobre por que eles realmente facilitam a vida em vez de dificultá-la.
+
+00:04:59.650 --> 00:05:01.290
+Por que os tokens superam a senha sempre?
+
+00:05:01.950 --> 00:05:04.330
+Se senhas são chaves de carro, tokens são bilhetes válidos.
+
+00:05:04.970 --> 00:05:07.450
+Eles usam pra uma única viagem e eles não valem nada assim que a viagem termina.
+
+00:05:08.150 --> 00:05:11.450
+Ninguém faz uma cópia secreta de um bilhete válido e se tentarem alguém percebe na hora.
+
+00:05:12.590 --> 00:05:13.530
+Essa é a diferença fundamental.
+
+00:05:14.030 --> 00:05:14.910
+Senhas são estáticas.
+
+00:05:14.910 --> 00:05:18.050
+Tokens são temporários e limitados, o que significa que se vazarem,
+
+00:05:18.270 --> 00:05:20.610
+o raio de alcance é pequeno e o tempo pra expirarem já tá correndo.
+
+00:05:21.470 --> 00:05:22.210
+Então, o que é um token?
+
+00:05:22.790 --> 00:05:24.710
+No mundo Azure, seu app contata o Entryd e diz
+
+00:05:24.710 --> 00:05:26.090
+aí, posso ter permissão pra fazer isso?
+
+00:05:27.490 --> 00:05:31.130
+O Entryd verifica quem é o que está pedindo, faz sua checagem e devolve um pacote assinado,
+
+00:05:31.210 --> 00:05:31.930
+o token de acesso.
+
+00:05:32.150 --> 00:05:32.770
+O token de acesso.
+
+00:05:33.110 --> 00:05:33.970
+Esse token é de vida curta.
+
+00:05:34.390 --> 00:05:36.050
+Ele é vinculado à identidade do usuário ou do serviço.
+
+00:05:36.410 --> 00:05:37.770
+Ele tem limite sobre o que pode acessar.
+
+00:05:38.370 --> 00:05:39.670
+E quando a jornada de tempo fecha, ele morre.
+
+00:05:40.270 --> 00:05:41.030
+Ninguém precisa ser definido.
+
+00:05:41.370 --> 00:05:42.070
+Ninguém precisa rotacionar.
+
+00:05:42.410 --> 00:05:42.770
+Vecimento só.
+
+00:05:42.770 --> 00:05:45.750
+Claro, quando você diz isso aos desenvolvedores, o primeiro instinto é o pânico.
+
+00:05:46.230 --> 00:05:47.950
+Ah não, agora temos tokens rotativos voando por aí.
+
+00:05:48.390 --> 00:05:51.570
+Precisamos fazer cache deles, armazenados, perseguir códigos de atualização, criar lógica
+
+00:05:51.570 --> 00:05:52.070
+de substituição.
+
+00:05:52.750 --> 00:05:54.070
+Bem, a resposta é não, pare de soar frio.
+
+00:05:54.510 --> 00:05:56.670
+As bibliotecas de identidade da Microsoft fazem esse trabalho abração.
+
+00:05:57.370 --> 00:06:01.970
+Os SDKs literalmente pegam, atualizam e descartam como faxineiros limpando após uma conferência.
+
+00:06:02.770 --> 00:06:03.710
+Você não precisa reinventar o álcool.
+
+00:06:04.150 --> 00:06:06.590
+Você só chama a função e foca na lógica real do seu aplicativo.
+
+00:06:07.050 --> 00:06:08.030
+Compare com o modo antigo.
+
+00:06:08.330 --> 00:06:11.790
+Uma senha estática é como entregar alguém a chave mestra de todo o seu prédio.
+
+00:06:11.790 --> 00:06:13.770
+Eles não entram apenas no andar dele.
+
+00:06:14.110 --> 00:06:17.730
+Podem acessar a suíte executiva, a sala dos servidores, até o estoque de doces do RH.
+
+00:06:18.510 --> 00:06:19.230
+Agora pegue um token.
+
+00:06:19.670 --> 00:06:23.650
+É um passe de visitante que só funciona para o terceiro andar e desliga as 17h do ar.
+
+00:06:24.030 --> 00:06:28.330
+Se alguém tentar usar fora do horário acesso negado, sem suposições, sem permanência.
+
+00:06:28.630 --> 00:06:31.290
+É um escopo correspondente à função, não uma solução paliativa aberta.
+
+00:06:31.970 --> 00:06:33.530
+Tokens também carregam inteligência dentro deles.
+
+00:06:33.970 --> 00:06:34.530
+Já abriu um token?
+
+00:06:34.530 --> 00:06:36.470
+É como inspecionar um cartão de embarque.
+
+00:06:37.030 --> 00:06:39.050
+Lá está o seu voo, fileira do assento, portão e zona.
+
+00:06:39.570 --> 00:06:43.690
+Tokens armazenam claims, funções, escopos, IDs de tenant e até informações básicas do uso.
+
+00:06:44.130 --> 00:06:46.650
+Isso significa que sua API não está apenas confiando na pessoa que fez login.
+
+00:06:47.470 --> 00:06:51.070
+Está verificando se essa pessoa é do financeiro, tem a função de pagamentos e foi aprovada hoje.
+
+00:06:52.230 --> 00:06:56.850
+Você pode criar regras bem mais rígidas diretamente na lógica do seu app, sem gerenciar 10 conjuntos de senhas diferentes.
+
+00:06:57.510 --> 00:06:58.410
+Aqui está uma comparação real.
+
+00:06:58.410 --> 00:07:03.090
+Uma empresa com a qual trabalhei tinha um banco de dados protegido apenas com credenciais SQL fixas em todo lugar.
+
+00:07:03.650 --> 00:07:04.910
+Aquela conta tinha privilégio de usar esse app.
+
+00:07:05.290 --> 00:07:10.130
+Como era de se esperar, um contratado copiou para uma ferramenta e pronto, o banco de dados inteiro virou o parque de diversões dele.
+
+00:07:10.510 --> 00:07:11.350
+Toda tabela exposta.
+
+00:07:12.210 --> 00:07:17.870
+Agora veja um sistema mais novo, usando tokens limitados apenas ao que o app precisava, acesso de leitura, em um único esquema.
+
+00:07:18.810 --> 00:07:23.450
+Mesmo que alguém roubasse aquele token, tudo o que poderia fazer era selecionar registros e apenas até o token expirar.
+
+00:07:24.030 --> 00:07:25.670
+Isso transformou um pesadelo em um incômodo menor.
+
+00:07:26.330 --> 00:07:27.830
+Agora consigo ouvir alguns roubadores reclamando.
+
+00:07:28.290 --> 00:07:30.750
+Tokens parecem legais na teoria, mas vão quebrar meu fluxo de trabalho.
+
+00:07:31.410 --> 00:07:33.770
+Não tenho tempo para microgerenciar renovação ou expiração.
+
+00:07:34.510 --> 00:07:34.970
+Isso é um mito.
+
+00:07:35.450 --> 00:07:37.070
+Ninguém espera que você os atualize manualmente.
+
+00:07:37.710 --> 00:07:42.030
+As bibliotecas que você já usa no DotaNation Node pegam um token de atualização, trocam invisivelmente e continuam rodando.
+
+00:07:42.710 --> 00:07:46.110
+Também sabe o que aconteceu, a menos que estivesse monitorando pacotes, que é o objetivo.
+
+00:07:46.790 --> 00:07:47.690
+Pare e babar segredos.
+
+00:07:48.290 --> 00:07:49.170
+Deixa o sistema cuidar disso.
+
+00:07:49.590 --> 00:07:51.210
+Pense no EntryD com um escritório de passaporte.
+
+00:07:51.730 --> 00:07:56.450
+Você aparece, prova quem é, e eles carimbam uma identidade que os guardas de fronteira suas APIs confiam.
+
+00:07:56.450 --> 00:07:58.390
+Carimbo expirado, nada de embarque.
+
+00:07:58.830 --> 00:07:59.830
+Carimbo errado, acesso negado.
+
+00:08:00.150 --> 00:08:02.010
+Isso centraliza a questão da identidade e motoridade.
+
+00:08:02.410 --> 00:08:03.170
+Seus apps não escutem.
+
+00:08:03.490 --> 00:08:04.890
+Suas APIs não ficam cuidando de senhas.
+
+00:08:05.210 --> 00:08:06.930
+Elas apenas verificam o carimbo e deixam você passar.
+
+00:08:07.190 --> 00:08:11.330
+Isso é infinitamente melhor do que fazer malabarismo com uma dúzia de chaves misteriosas e se perguntar quais ainda são válidas.
+
+00:08:11.330 --> 00:08:24.290
+A melhor parte pra nós da TI chega de rotações forçadas de 100 a cada 90 dias, chega de scripts rodando às 3 da manhã pra resetar contas de serviço, chega de debates sobre armazenar segredos no que volte ou na base da esperança.
+
+00:08:24.990 --> 00:08:27.390
+Tokens expiram sozinhos e essa inspiração é sua rede de segurança.
+
+00:08:28.090 --> 00:08:30.070
+Se algo vaza, já está condenado a parar de funcionar.
+
+00:08:30.510 --> 00:08:31.130
+Você não consertou nada.
+
+00:08:31.550 --> 00:08:33.370
+Você apenas construiu um sistema que se autocura por design.
+
+00:08:34.470 --> 00:08:37.070
+Então sim, tokens lidam com logins de usuários de forma segura e limpa.
+
+00:08:37.070 --> 00:08:40.150
+Mas não é apenas sobre usuários clicando em entrar.
+
+00:08:40.610 --> 00:08:47.470
+O teste real é quando apps precisam conversar com outros apps ou serviços e disparam solicitações às 3 da manhã sem nenhum humano perto de um teclado, perto de um teclado.
+
+00:08:47.630 --> 00:08:49.310
+É aí que as coisas sem uma necessidade passam a ser assim.
+
+00:08:50.210 --> 00:08:52.850
+Conheça as identidades gerenciadas e service principles, só que menos limitados.
+
+00:08:53.410 --> 00:08:59.410
+Imagine se seu app pudesse entrar nos serviços azuis sem nunca digitar uma senha porque já saiu de fábrica com sua própria identidade carimbada.
+
+00:09:00.410 --> 00:09:01.350
+Isso não é ficção científica.
+
+00:09:01.710 --> 00:09:03.250
+É assim que as identidades gerenciadas funcionam.
+
+00:09:03.250 --> 00:09:09.910
+E assim que você começa a usá-las, a ideia de gerenciar service principles com segredos que expiram parecerá tão ultrapassada quanto usar um pager.
+
+00:09:11.270 --> 00:09:13.570
+Aqui está a bagunça com a qual costumava-vos lidar, service principle.
+
+00:09:14.390 --> 00:09:22.670
+Você registrava um, gerava um client secret ou talvez um certificado e colocava no key vault, então entregava essa identidade ao seu app pra ele se conectar ao SQL ou acessar o storage.
+
+00:09:23.870 --> 00:09:24.990
+No papel parecia bom.
+
+00:09:25.630 --> 00:09:27.170
+As credenciais não eram mais codificadas diretamente.
+
+00:09:27.590 --> 00:09:28.270
+Ela estava cedrezada.
+
+00:09:28.590 --> 00:09:32.170
+Na realidade, você estava cuidando de batatas quentes que expiravam a cada um ou dois anos.
+
+00:09:33.250 --> 00:09:36.270
+Ou você configurava um lembrete no Outlook chamado Não Deixe a Produção Morrer.
+
+00:09:36.350 --> 00:09:38.630
+E ainda assim esquecia até que o alerta de falha chegasse no domínio.
+
+00:09:39.450 --> 00:09:44.710
+E se você registrasse segredos no console errado, parabéns, você espalhou sua chave em um outdoor.
+
+00:09:45.430 --> 00:09:48.510
+Claro, vaults eram melhores que strings de configuração, mas você ainda estava fazendo malabarismos.
+
+00:09:48.970 --> 00:09:51.510
+Você precisava rotacionar segredos manualmente ou automatizar com scripts.
+
+00:09:52.110 --> 00:09:54.250
+Se a rotação falhasse, seu aplicativo morria silenciosamente.
+
+00:09:54.250 --> 00:09:57.290
+E não vamos fingir que a maioria das empresas testava rotações em staging.
+
+00:09:57.750 --> 00:09:59.930
+Elas apenas esperavam pelo dia em que a produção se recusava nisso.
+
+00:10:00.350 --> 00:10:03.890
+Quantos de nós já fomos acordados por aquele chamado de falha de conexão ao banco de dados
+
+00:10:03.890 --> 00:10:06.370
+pra descobrir que a string misteriosa expirou à meia-noite?
+
+00:10:07.590 --> 00:10:09.110
+É aí que as identidades gerenciadas mudam, Ju.
+
+00:10:09.110 --> 00:10:13.770
+Você cria um recurso, como um Azure App Service, uma Function ou uma VM, e ativa uma opção.
+
+00:10:14.410 --> 00:10:15.650
+Atribui identidade gerenciada.
+
+00:10:16.110 --> 00:10:16.330
+Pronto.
+
+00:10:17.110 --> 00:10:20.630
+No traje das cortinas, o Azure cria um objeto de identidade no Entredi que seu recurso pode usar.
+
+00:10:21.090 --> 00:10:23.050
+Sem strings secretas, sem data de renovação de voo.
+
+00:10:23.610 --> 00:10:25.810
+É a versão pra aplicativos de nascer com uma carteira de motorista.
+
+00:10:26.170 --> 00:10:27.370
+Você não precisa carregar um cartão de acesso.
+
+00:10:28.070 --> 00:10:32.010
+A nuvem já sabe quem você é e garante sua autenticidade sempre que precisar falar com outro recurso.
+
+00:10:32.870 --> 00:10:33.570
+Pense desta forma.
+
+00:10:33.910 --> 00:10:36.230
+Cada aplicativo costumava ser um adolescente pegando o carro do Pemprestão.
+
+00:10:36.410 --> 00:10:38.970
+Eles precisavam carregar as chaves e se as perdessem o jogo acabava.
+
+00:10:39.670 --> 00:10:42.910
+Com a identidade gerenciada, o app foi ao Detran no momento em que foi criado,
+
+00:10:43.010 --> 00:10:46.430
+obteve sua própria licença e seguro, e agora não precisa pedir permissão à meia-noite.
+
+00:10:47.370 --> 00:10:48.990
+Sem chaves e reservas escondidas sobre o para-cho.
+
+00:10:49.410 --> 00:10:50.370
+Tecnicamente, é isso que acontece.
+
+00:10:50.870 --> 00:10:52.890
+Seu app chama o serviço de metadados da instância,
+
+00:10:52.990 --> 00:10:55.750
+aquele link estranho que só existe dentro de VMs e serviços do Azure.
+
+00:10:56.770 --> 00:10:58.350
+Ele dizia que precisa de um token pra falar com o SQL.
+
+00:10:59.290 --> 00:11:01.470
+O serviço de metadados responde, ok, conheço a identidade,
+
+00:11:01.470 --> 00:11:03.430
+porque você está rodando dentro de um recurso aprovado.
+
+00:11:04.370 --> 00:11:06.910
+E que tal um token assinado de curta duração direto do Entredi?
+
+00:11:06.910 --> 00:11:10.170
+Nada de gerenciar credenciais, nem rotação, nem cofre.
+
+00:11:10.930 --> 00:11:14.610
+Você apenas recebe um JWT que pode enviar ao SQL ou armazenamento
+
+00:11:14.610 --> 00:11:15.830
+e o destino valida no Entredi.
+
+00:11:16.350 --> 00:11:16.870
+Hora do exemplo.
+
+00:11:17.270 --> 00:11:19.250
+Tem um aplicativo web que precisa consultar um banco de dados SQL.
+
+00:11:19.930 --> 00:11:22.850
+Na configuração antiga, você esconde um usuário e senha do SQL no Key Vault,
+
+00:11:23.030 --> 00:11:24.430
+e o app os busca em tempo de execução.
+
+00:11:25.230 --> 00:11:27.950
+Você gasta metade da vida preocupado se foi rotacionado corretamente,
+
+00:11:27.950 --> 00:11:30.010
+se as referências do Key Vault funcionam no staging
+
+00:11:30.010 --> 00:11:31.570
+e se os devs aplicaram a política certa.
+
+00:11:32.890 --> 00:11:33.450
+Nova configuração.
+
+00:11:33.930 --> 00:11:35.650
+Ative a identidade gerenciada pro app web,
+
+00:11:35.850 --> 00:11:39.110
+adicione-a como usuário de banco de dados no SQL com a função necessária, e pronto.
+
+00:11:39.670 --> 00:11:41.110
+O app pede um token ao Azure,
+
+00:11:41.650 --> 00:11:44.230
+usa na string de conexão e nunca vê uma senha sequer.
+
+00:11:45.290 --> 00:11:47.070
+Não há nada pra rotacionar e nada pra vazar em logs.
+
+00:11:47.650 --> 00:11:48.830
+Os benefícios se acumulam rapidamente.
+
+00:11:49.470 --> 00:11:49.830
+Segredo.
+
+00:11:49.950 --> 00:11:52.010
+Desaparecem completamente em repositórios e configs,
+
+00:11:52.050 --> 00:11:53.870
+então a chance de devs enviarem strings sensíveis
+
+00:11:53.870 --> 00:11:56.270
+acidentalmente cai de quase certa pra praticamente zero.
+
+00:11:56.270 --> 00:11:58.390
+A rotação se torna automática.
+
+00:11:58.830 --> 00:12:00.010
+Tokens expiram por conta própria.
+
+00:12:00.510 --> 00:12:02.050
+Não há renovações de plênico à meia-noite.
+
+00:12:02.790 --> 00:12:04.330
+E como identidades são objetos do Entry-ID,
+
+00:12:04.410 --> 00:12:05.790
+você concede a elas o privilégio mínimo.
+
+00:12:06.470 --> 00:12:09.150
+Seu app web não precisa de acesso de contribuidor pra toda sua assinatura.
+
+00:12:09.610 --> 00:12:11.930
+Ele só precisa de acesso de leitura a um container de armazenamento.
+
+00:12:12.590 --> 00:12:15.190
+Você faz essa atribuição uma vez e o Azure impõe.
+
+00:12:16.030 --> 00:12:16.390
+Resumindo,
+
+00:12:16.770 --> 00:12:18.950
+identidades gerenciadas transformam a comunicação de serviços
+
+00:12:18.950 --> 00:12:21.330
+de espero que não tenha vazado as chaves pra simplesmente funcionar.
+
+00:12:21.770 --> 00:12:23.970
+Elas oferecem padrões seguros sem o trabalho de limpeza.
+
+00:12:23.970 --> 00:12:26.770
+É o mais próximo de mágica que temos na segurança do Azure.
+
+00:12:27.490 --> 00:12:27.810
+Claro,
+
+00:12:27.990 --> 00:12:30.910
+um ID só é útil se o diretor realmente souber sobre ele o que pode fazer.
+
+00:12:31.930 --> 00:12:33.270
+E aí que entram os registros de app,
+
+00:12:33.350 --> 00:12:35.970
+porque a burocracia ainda importa até pra identidades na nuvem.
+
+00:12:37.430 --> 00:12:38.950
+Registros de app sem perder a sanidade.
+
+00:12:39.810 --> 00:12:42.070
+Registros de app são como o Detran do Entry-ID.
+
+00:12:42.930 --> 00:12:44.390
+Ninguém acorda animado pra lidar com ele,
+
+00:12:44.470 --> 00:12:45.550
+mas sem a documentação,
+
+00:12:46.090 --> 00:12:46.870
+você não vai a lugar nenhum.
+
+00:12:47.710 --> 00:12:50.170
+São chatos, exigentes e você absolutamente precisa fazê-los.
+
+00:12:50.170 --> 00:12:51.510
+Esta é a etapa do projeto.
+
+00:12:52.310 --> 00:12:54.690
+É o que diz ao Entry-ID como sua aplicação se identifica,
+
+00:12:54.830 --> 00:12:57.590
+com quais APIs pode falar e como solicitar a permissão.
+
+00:12:58.890 --> 00:13:00.610
+Se você pular ou fizer de qualquer jeito,
+
+00:13:00.750 --> 00:13:02.930
+construirá uma aplicação que pode até rodar tecnicamente,
+
+00:13:03.050 --> 00:13:04.610
+mas ignora todas as regras de segurança.
+
+00:13:05.810 --> 00:13:07.190
+E, assim como evitar o Detran,
+
+00:13:07.410 --> 00:13:08.430
+eventualmente alguém te para.
+
+00:13:09.170 --> 00:13:12.490
+Em essência, um registro de app é apenas um cartão de identidade pra uma aplicação.
+
+00:13:13.390 --> 00:13:15.010
+Ele define como o app pode fazer login,
+
+00:13:15.310 --> 00:13:18.430
+seja com usuários usando contas ou o próprio app agindo como uma identidade de serviço.
+
+00:13:18.430 --> 00:13:21.650
+Ele também guarda as permissões e os endpoints envolvidos.
+
+00:13:22.130 --> 00:13:23.570
+Isso significa escopos, funções,
+
+00:13:23.950 --> 00:13:26.550
+origem e redirecionamento e toda a burocracia necessária pra você revirar os olhos.
+
+00:13:27.410 --> 00:13:29.130
+Mas essa burocracia é o motivo pelo qual tudo funciona.
+
+00:13:29.630 --> 00:13:31.050
+Sem ela, o Azul não sabe em quem confiar,
+
+00:13:31.110 --> 00:13:32.530
+e as zapis não sabem quando bater a pata na cara.
+
+00:13:33.210 --> 00:13:33.750
+Ah, que divertido.
+
+00:13:34.210 --> 00:13:35.710
+Não é complicado até você fazer errado.
+
+00:13:36.410 --> 00:13:37.630
+Errou uma origem e redirecionamento,
+
+00:13:37.710 --> 00:13:39.970
+seu app fica aberto como um brinquedo de parque sem cinto de segurança.
+
+00:13:40.830 --> 00:13:42.090
+Confundiu escopos com funções,
+
+00:13:42.190 --> 00:13:45.070
+você acaba de conceder privilégios 12 níveis acima do pretendido.
+
+00:13:45.070 --> 00:13:47.790
+É assim que um portal web feito pra ler perfis
+
+00:13:47.790 --> 00:13:48.970
+acaba escrevendo em calendários,
+
+00:13:49.070 --> 00:13:50.730
+apagando contatos e assustando auditores.
+
+00:13:52.250 --> 00:13:54.150
+E o Microsoft Graph é a mina terrestre clássica aqui.
+
+00:13:54.690 --> 00:13:57.090
+Quantos apps foram vistos com acesso total de leitura
+
+00:13:57.090 --> 00:13:59.510
+e escrita sem nada, além de um registro preguiçoso?
+
+00:14:00.030 --> 00:14:00.310
+Muitos.
+
+00:14:00.750 --> 00:14:01.510
+Eles não precisavam de tudo.
+
+00:14:01.810 --> 00:14:03.290
+Eles precisavam de leitura de perfil.
+
+00:14:03.690 --> 00:14:04.830
+Mas porque ninguém parou pra conferir,
+
+00:14:04.890 --> 00:14:06.750
+deram a versão desenvolvedor do modo Deus,
+
+00:14:07.370 --> 00:14:08.570
+então vamos direto ao ponto sem jaguar.
+
+00:14:08.930 --> 00:14:10.390
+Escopos são o que um app pode fazer,
+
+00:14:10.830 --> 00:14:11.650
+em nome de um usuário.
+
+00:14:12.590 --> 00:14:14.470
+Funções são o que o próprio app tem permissão pra executar.
+
+00:14:14.470 --> 00:14:15.590
+Pense nisso como uma escola.
+
+00:14:16.390 --> 00:14:17.810
+Escopos são as autorizações de circulação.
+
+00:14:18.170 --> 00:14:19.630
+A Emily pode sair da aula pra biblioteca.
+
+00:14:20.610 --> 00:14:21.450
+Funções são os cargos.
+
+00:14:22.090 --> 00:14:22.930
+A Emily é bibliotecária,
+
+00:14:23.010 --> 00:14:24.610
+então ela pode entrar atrás do balcão de atendimento.
+
+00:14:25.510 --> 00:14:26.230
+Se você misturar isso,
+
+00:14:26.290 --> 00:14:27.810
+tem um crachá de funcionário pra cada aluno.
+
+00:14:28.450 --> 00:14:30.130
+Ninguém quer um corredor cheio de adolescentes
+
+00:14:30.130 --> 00:14:31.410
+com acesso à sala de servidores,
+
+00:14:31.530 --> 00:14:33.190
+mas é isso que registra os preguiçosos crimes.
+
+00:14:33.530 --> 00:14:34.650
+E ainda tem um fluxo de consentimento.
+
+00:14:35.250 --> 00:14:36.470
+Usuários e administradores são solicitados
+
+00:14:36.990 --> 00:14:38.870
+a aprovar o que a aplicação pede no momento do login.
+
+00:14:39.330 --> 00:14:40.830
+É aqui que a maioria das pessoas perde interesse.
+
+00:14:41.430 --> 00:14:42.090
+Mas aqui está a verdade.
+
+00:14:42.090 --> 00:14:44.470
+Esses prompt com sentimento são só trilha de auditor.
+
+00:14:44.950 --> 00:14:46.910
+Eles te dizem o que o app está pedindo e quem aprovou.
+
+00:14:47.730 --> 00:14:49.190
+Se você os ignora ou treina usuários
+
+00:14:49.190 --> 00:14:50.510
+pra clicar em aceitar cegamente,
+
+00:14:50.590 --> 00:14:52.910
+você está operando na base da confiança na porta do cofre,
+
+00:14:52.990 --> 00:14:54.790
+que significa que você não tem mais um cofre.
+
+00:14:55.330 --> 00:14:56.510
+Você tem um convite ao caos.
+
+00:14:57.850 --> 00:14:59.610
+Existe uma medida simples que evita dor de cabeça.
+
+00:14:59.730 --> 00:15:01.670
+Combinar o Easy Auth com verificações reais de claims
+
+00:15:01.670 --> 00:15:02.570
+dentro das suas APIs.
+
+00:15:03.470 --> 00:15:06.350
+O Easy Auth permite configurar a autenticação quase sem código.
+
+00:15:07.070 --> 00:15:08.430
+Vire a chave e sua porta de entrada funciona.
+
+00:15:08.430 --> 00:15:09.810
+Mas não pare por aí.
+
+00:15:10.330 --> 00:15:12.790
+Cria verificações de claims para que suas APIs analisem o token,
+
+00:15:12.930 --> 00:15:15.530
+inspecionem os escopos ou funções embutidos e apliquem regras.
+
+00:15:16.210 --> 00:15:18.070
+Assim, mesmo que alguém passe um token adiante,
+
+00:15:18.430 --> 00:15:21.370
+a própria API garante que apenas as portas corretas estejam abertas.
+
+00:15:22.190 --> 00:15:24.850
+Uma empresa com a qual trabalhei usou o Easy Auth em um portal interno,
+
+00:15:24.910 --> 00:15:26.130
+mas ignorou as verificações de claims.
+
+00:15:27.250 --> 00:15:29.410
+Funcionava bem até alguém copiar o token de um usuário
+
+00:15:29.410 --> 00:15:30.910
+e chamar as APIs diretamente.
+
+00:15:31.690 --> 00:15:34.210
+Nada na configuração deles validava se quem chamava tinha permissão
+
+00:15:34.210 --> 00:15:35.330
+para acessar aqueles endpoints.
+
+00:15:35.330 --> 00:15:38.910
+Quando perceberam, metade dos dados do termo já tinham sido acessados.
+
+00:15:39.590 --> 00:15:41.810
+Uma simples verificação de função teria bloqueado isso instantaneamente.
+
+00:15:42.210 --> 00:15:43.670
+Segurança nem sempre é sobre ter mais ferramentas.
+
+00:15:43.970 --> 00:15:45.750
+É sobre usar corretamente as que você já tem.
+
+00:15:46.710 --> 00:15:48.890
+Quando você configura os registros de aplicativo da forma certa,
+
+00:15:48.970 --> 00:15:49.610
+algo mágico acontece.
+
+00:15:50.290 --> 00:15:52.670
+Clientes de API aleatórios param de entrar sorrateiramente
+
+00:15:52.670 --> 00:15:54.630
+porque as regras são rígidas, os tokens não mentem
+
+00:15:54.630 --> 00:15:56.230
+e o consentimento é registrado corretamente.
+
+00:15:56.970 --> 00:15:58.750
+Seus aplicativos só se comunicam com quem tem permissão.
+
+00:15:59.270 --> 00:16:01.570
+Seus usuários só concedem o que é absolutamente necessário.
+
+00:16:01.570 --> 00:16:04.370
+Seu repositório deixa de ser um depósito de privilégios acidentais.
+
+00:16:04.370 --> 00:16:07.410
+Então, agora você tem usuários fazendo login corretamente,
+
+00:16:07.510 --> 00:16:10.610
+serviços com IDs reais e APIs que não estão totalmente expostas.
+
+00:16:11.170 --> 00:16:13.930
+Próxima pergunta é o que acontece quando um aplicativo não age apenas por si mesmo.
+
+00:16:14.270 --> 00:16:16.850
+Ele precisa representar um usuário ou repassar seu acesso pela cadeia.
+
+00:16:17.270 --> 00:16:18.590
+É aí que a verdadeira diversão comércola.
+
+00:16:19.150 --> 00:16:21.470
+Inscreva-se na newsletter em M365 Show
+
+00:16:21.470 --> 00:16:23.670
+ou siga a nossa página do M365 Show no LinkedIn
+
+00:16:23.670 --> 00:16:26.350
+para transmissões ao vivo com MVPs que já passaram por esse problema
+
+00:16:26.350 --> 00:16:28.410
+e aprenderam as lições difíceis para que você não precise.
+
+00:16:29.930 --> 00:16:31.750
+Encaminhando tokens sem quebrar a cadeia.
+
+00:16:31.750 --> 00:16:37.070
+Já tentou passar um bilhete na aula e ele ser reescrito 3 ou 4 vezes antes de chegar ao professor?
+
+00:16:38.210 --> 00:16:42.050
+Metade da mensagem é perdida, alguém rabisca nas margens e no final mal faz sentido.
+
+00:16:43.230 --> 00:16:46.370
+É exatamente essa a sensação de encaminhar tokens de usuário quando você configura errado.
+
+00:16:46.970 --> 00:16:49.130
+Você acha que a identidade do usuário está seguindo pela linha,
+
+00:16:49.290 --> 00:16:53.070
+mas quando chega ao último serviço está irreconhecível ou pior, é totalmente rejeitada.
+
+00:16:53.930 --> 00:16:55.510
+Aqui está o cenário com o qual estamos realmente lidando.
+
+00:16:55.830 --> 00:16:57.850
+Você tem um usuário fazendo login por meio de um aplicativo front-end.
+
+00:16:57.850 --> 00:17:00.970
+Esse aplicativo front-end não faz todo o trabalho pesado sozinho.
+
+00:17:01.370 --> 00:17:03.570
+Ele chama outra API back-end para fazer o trabalho real.
+
+00:17:04.130 --> 00:17:08.750
+Parece simples, mas o detalhe é que a identidade original do usuário ainda precisa viajar com a requisição.
+
+00:17:09.410 --> 00:17:12.570
+Se não viajar, a API back-end apenas adivinha a quem a requisição pertence.
+
+00:17:13.190 --> 00:17:14.270
+A delegação precisa se alterar.
+
+00:17:14.690 --> 00:17:19.170
+O front-end prova quem é o usuário, passa esse contexto adiante e o back-end mantém essa linha intacta.
+
+00:17:20.030 --> 00:17:23.050
+Simples na teoria, mas na realidade é um campo minado, porque é aqui que as coisas explodem.
+
+00:17:23.050 --> 00:17:27.870
+Se você apenas encaminhar o token de acesso original diretamente, você esbarra no problema do salto duplo.
+
+00:17:28.550 --> 00:17:33.490
+O token foi emitido para o app A chamar o recurso X, mas o app A tenta usar o mesmo token para chamar o app B.
+
+00:17:33.950 --> 00:17:35.430
+O app B vê a incompatibilidade disso.
+
+00:17:35.530 --> 00:17:36.850
+Não, o token não é válido para mim.
+
+00:17:38.270 --> 00:17:43.030
+E de repente sua experiência de usuário bem estruturada se desfaz em solicitações extras e em indicações quebradas ou pior.
+
+00:17:43.170 --> 00:17:44.990
+Outro pop-up de consentimento para o mesmo usuário que já fez.
+
+00:17:45.590 --> 00:17:48.270
+Nada destrói a confiança mais rápido do que usuários pensando.
+
+00:17:48.730 --> 00:17:49.890
+Eu já não permiti isso ontem.
+
+00:17:50.890 --> 00:17:52.470
+A maneira certa de consertar isso não é com improvisos.
+
+00:17:52.470 --> 00:17:58.050
+Você precisa usar o fluxo on behalf off em nome de do off 2.0 ou bus, preferir siglas curtas.
+
+00:17:58.690 --> 00:17:59.610
+A ideia é direta.
+
+00:18:00.250 --> 00:18:02.250
+Cada serviço não apenas encaminha o token original.
+
+00:18:03.030 --> 00:18:08.750
+Ele recebe o token de entrada, prova sua identidade e o troca por um token novo e atualizado, válido para a próxima API na linha.
+
+00:18:09.630 --> 00:18:11.850
+É como se o usuário desse ao primeiro serviço um passe livre.
+
+00:18:12.310 --> 00:18:17.350
+Em vez de tentar passar por todas as portas, esse serviço troca na secretaria por um passe adequado para o próximo corredor.
+
+00:18:18.430 --> 00:18:21.850
+Cada etapa recebe um token com escopo para sua função e a segurança permanece intacta.
+
+00:18:22.470 --> 00:18:26.310
+Agora, se você já construiu isso manualmente, sabe que pode parecer fazer malabarismo com facas.
+
+00:18:26.490 --> 00:18:29.450
+Passando tokens, gerenciando renovações e trocando-os no momento certo.
+
+00:18:29.450 --> 00:18:32.710
+Felizmente, middleware como EasyAuth tornam isso tolerável.
+
+00:18:33.590 --> 00:18:39.590
+EasyAuth faz as partes chatas, armazena o token, renova-o e oferece uma chamada auxiliar para obtê-lo sob demanda.
+
+00:18:40.510 --> 00:18:45.730
+Em vez de criar hacks estranhos que colocam tokens em cabeçalhos e rezar para que nada vaze nos logs, você deixa o medo do trabalho pesado.
+
+00:18:46.470 --> 00:18:52.930
+Você evita que sua equipe de desenvolvimento crie uma solução personalizada que registra o token em texto simples para depuração e depois esquece de removê-lo.
+
+00:18:52.930 --> 00:18:54.470
+Esse é um risco que você não pode ir lá.
+
+00:18:55.270 --> 00:19:00.490
+Passar tokens brutos cegamente é como copiar sua carteira de motorista e distribuí-la em cada porta.
+
+00:19:01.470 --> 00:19:06.430
+Informações pessoais demais acabam onde não deveriam e, de repente, qualquer um que intercepte a requisição tem muito mais do que deveria.
+
+00:19:07.290 --> 00:19:12.170
+Isso não apenas arrisca vazamentos de dados reais de identidade, mas também derruba fronteiras de segurança.
+
+00:19:13.010 --> 00:19:17.770
+As APIs deixam de conseguir traçar linhas claras entre quem é usuário e com o que o serviço deve ser confiável.
+
+00:19:17.770 --> 00:19:21.910
+O resultado é que você acaba concedendo permissões demais ou bloqueando chamadas legítimas.
+
+00:19:22.670 --> 00:19:23.290
+Não precisa ser um pesadelo.
+
+00:19:23.670 --> 00:19:26.230
+Um vaza dados e o outro afoga seu suporte técnico em reclamações.
+
+00:19:26.670 --> 00:19:27.430
+Vamos passar por um exemplo.
+
+00:19:27.790 --> 00:19:29.970
+Um usuário faz login em um aplicativo web front-end.
+
+00:19:30.370 --> 00:19:36.430
+Esse app chama uma API protegida, mas em vez de encaminhar o token de acesso bruto, ele usa o OBO para obter um novo token válido apenas para aquela API.
+
+00:19:36.990 --> 00:19:38.410
+Agora, a API que é alguns dados do SQL.
+
+00:19:38.890 --> 00:19:39.210
+Perfeito.
+
+00:19:39.670 --> 00:19:42.870
+Isso não é uma preocupação direta do usuário, então a API não encaminha nada.
+
+00:19:43.590 --> 00:19:46.110
+Ela obtém um token de sistema por meio de uma identidade gerenciada.
+
+00:19:46.110 --> 00:19:49.970
+Conecta-se ao SQL, executa suas consultas e envia apenas os resultados necessários.
+
+00:19:50.610 --> 00:19:52.590
+Em cada estágio, o contexto de identidade é claro.
+
+00:19:53.250 --> 00:19:56.270
+Usuário para o aplicativo e API identidade de sistema por banco de dados.
+
+00:19:56.890 --> 00:19:59.390
+Cada token é indelimitado, de curta duração e verificável.
+
+00:20:00.290 --> 00:20:01.090
+A recompensa é que é enorme.
+
+00:20:01.630 --> 00:20:03.950
+Serviços se encadeiam sem confundir o sinal de identidade.
+
+00:20:04.670 --> 00:20:06.810
+Os usuários não recebem solicitações de consentimento extra.
+
+00:20:07.250 --> 00:20:09.950
+Suas APIs aplicam as reivindicações corretas sem confusão.
+
+00:20:10.330 --> 00:20:12.690
+Você evita expor chaves brutas onde elas não pertencem.
+
+00:20:12.690 --> 00:20:16.830
+O meu é menos sobre trabalho extra e mais sobre manter a cadeia de confiança ininterrupta
+
+00:20:16.830 --> 00:20:18.690
+do front-end ao back-end até o banco de dados.

@@ -1,0 +1,628 @@
+WEBVTT
+
+00:00:00.350 --> 00:00:05.630
+Benvenuti al podcast M365FM, dove esploriamo le persone, le idee e le tecnologie che plasmano il futuro del lavoro.
+
+00:00:06.630 --> 00:00:08.670
+Che cosa è davvero Azure Data Lake Storage?
+
+00:00:09.530 --> 00:00:13.270
+Azure Data Lake Storage sembra un prodotto tutto nuovo da imparare, ma in realtà non lo è.
+
+00:00:13.670 --> 00:00:16.810
+È lo stesso economico storage di Azure, di cui avrete probabilmente già sentito parlare,
+
+00:00:16.890 --> 00:00:18.870
+con un'impostazione attivata che lo dota di cartelle vere.
+
+00:00:19.290 --> 00:00:22.190
+Quell'unica impostazione cambia la velocità con cui terminano i grandi lavori di analisi,
+
+00:00:22.310 --> 00:00:25.530
+che è importante perché la potenza di calcolo richiesta è dove finisce la maggior parte del vostro deno.
+
+00:00:25.850 --> 00:00:29.230
+È anche una strada a senso unico, perché una volta attivata non è più possibile disattivarla.
+
+00:00:29.230 --> 00:00:33.950
+Ecco quindi di cosa si tratta, come lo usano i team e gli errori che fanno levitare silenziosamente la fattura.
+
+00:00:34.250 --> 00:00:37.490
+La maggior parte dei principianti presume di dover imparare un servizio completamente nuovo,
+
+00:00:37.590 --> 00:00:39.370
+questo presupposto fa perdere la loro settimana di tempo.
+
+00:00:39.950 --> 00:00:42.530
+Azure Data Lake Storage non è un prodotto a parte che si acquista,
+
+00:00:42.710 --> 00:00:44.770
+né un tipo di account speciale da creare da zero.
+
+00:00:45.730 --> 00:00:48.990
+Microsoft l'ha costruito come un insieme di funzionalità all'interno del normale blob storage,
+
+00:00:49.090 --> 00:00:50.810
+lo storage semplice che Azure offre da anni.
+
+00:00:51.290 --> 00:00:54.870
+Si sbloccano queste funzionalità attivando una singola opzione al momento della creazione dell'account.
+
+00:00:54.870 --> 00:00:59.050
+Quell'opzione si trova in un breve elenco di impostazioni nella schermata in cui si crea un nuovo account di storage.
+
+00:00:59.050 --> 00:01:01.790
+È facile superarla senza notarla, se non si sa cosa si sta guardando.
+
+00:01:02.170 --> 00:01:07.070
+Nulla su quella pagina indica che questo piccolo interruttore fa la differenza tra un secchio di file e un vero Data Lake.
+
+00:01:08.010 --> 00:01:10.950
+Lo scoprite più tardi, o perché i vostri lavori sono veloci ed economici,
+
+00:01:11.010 --> 00:01:12.930
+o perché sono lenti e il conto continua a salire.
+
+00:01:12.930 --> 00:01:18.550
+Per capire perché quell'opzione conti così tanto, dovete prima avere un'idea chiara di cosa sia davvero un Data Lake
+
+00:01:18.550 --> 00:01:21.090
+e perché non sia solo una cartella piena di file.
+
+00:01:22.170 --> 00:01:25.610
+Un Data Lake è un luogo centrale in cui conservate tutti i vostri dati.
+
+00:01:26.110 --> 00:01:28.210
+La parola tutti svolge un ruolo molto importante in questa frase.
+
+00:01:28.510 --> 00:01:32.970
+Contiene dati strutturati, le ordinate righe e colonne che trovereste in un foglio di calcolo o in una tabella di database.
+
+00:01:33.370 --> 00:01:37.370
+Contiene anche dati non strutturati, come immagini, PDF, log, file di testo grezzi.
+
+00:01:37.370 --> 00:01:42.370
+Invece di forzare tutto in una forma ordinata, un Lake lascia che i dati arrivino nella forma in cui si presenta.
+
+00:01:43.250 --> 00:01:45.910
+Quella flessibilità è il punto cruciale e vale la pena capire perché è importante.
+
+00:01:46.550 --> 00:01:48.110
+Immaginate una piccola azienda che vende online.
+
+00:01:48.650 --> 00:01:51.710
+Le esportazioni delle vendite provengono dal sistema, etiche di supporto da un altro
+
+00:01:51.710 --> 00:01:53.610
+e le foto dei prodotti si trovano supportate da qualcuno.
+
+00:01:53.950 --> 00:01:58.710
+Un database tradizionale richiederebbe che ogni fonte venisse adattata in tabelle rigide prima di accettare un solo record.
+
+00:01:59.290 --> 00:02:02.450
+Un Data Lake li accetta affiancati e lascia la rielaborazione a un momento successivo
+
+00:02:02.450 --> 00:02:04.410
+quando qualcuno avrà effettivamente bisogno di una risposta.
+
+00:02:04.750 --> 00:02:06.190
+Il nome deriva proprio da questo contrasto.
+
+00:02:06.190 --> 00:02:11.250
+Un Data Warehouse archivia dati che sono già stati puliti, etichettati e organizzati come merci sugli scaffali.
+
+00:02:11.950 --> 00:02:17.130
+Un Data Lake è più simile a un serbatoio, ampio e per lo più grezzo, pronto per essere filtrato non appena sorge una domanda specifica.
+
+00:02:17.510 --> 00:02:19.590
+Compromesso e reale del motivo per cui esistono i Data Lake.
+
+00:02:20.030 --> 00:02:23.850
+Quando conservi i dati grezzi puoi rispondere in seguito a domande che oggi nessuno ha pensato di porre.
+
+00:02:24.430 --> 00:02:27.250
+Un Data Warehouse ti obbliga a decidere cosa è importante prima di archiviarlo
+
+00:02:27.250 --> 00:02:28.810
+e tutto ciò che è scartato è perso per sempre.
+
+00:02:29.230 --> 00:02:33.610
+Un Data Lake scommette sul fatto che mantenere l'originale disordinato valga più dell'ordine che otterresti ponendolo prima.
+
+00:02:33.610 --> 00:02:39.070
+Tutto ciò non significa che un Data Lake sia un cassetto disordinato perché ha comunque bisogno di una forma che dà dalle cartelle che tra un momento.
+
+00:02:39.570 --> 00:02:45.290
+Ciò che un Data Lake si rifiuta di fare è eliminare l'originale, poiché spesso è l'unica traccia di qualcosa che è realmente accaduto.
+
+00:02:45.290 --> 00:02:47.950
+Un dettaglio però conta più di tutti gli altri.
+
+00:02:48.750 --> 00:02:53.650
+Un Data Lake deve pur risiedere da qualche parte e in Azure col posto è un account di archiviazione con un'opzione attivata.
+
+00:02:54.030 --> 00:02:58.450
+Quell'opzione è dove inizia la vera storia ed è anche dove viene presa la prima decisione permanente.
+
+00:02:59.630 --> 00:03:01.990
+L'unica impostazione che trasforma il Blob Storage in un Data Lake.
+
+00:03:02.570 --> 00:03:05.250
+Azure Blob Storage è il motore che sta alla base di tutto questo.
+
+00:03:05.750 --> 00:03:09.290
+È un archivio oggetti economico il che significa semplicemente che inserisci file e li estrai.
+
+00:03:09.290 --> 00:03:10.910
+Non gli importa molto di cosa ci sia detto.
+
+00:03:11.450 --> 00:03:15.890
+Ciò che non ha mai avuto sono vere cartelle e questa lacuna è il motivo principale per cui esiste Azure Data Lake Storage.
+
+00:03:16.490 --> 00:03:21.470
+In un normale account Blob un percorso come Salesp2026 Marge non ha una cartella che contiene un file.
+
+00:03:22.110 --> 00:03:26.290
+È un unico lungo nome di file con barre incorporate nel mezzo e il sistema lo tratta esattamente in questo modo.
+
+00:03:26.730 --> 00:03:32.130
+L'archiviazione è sempre organizzata ai tuoi occhi perché le barre ti illudono di vedere una struttura che in realtà non c'è.
+
+00:03:32.870 --> 00:03:35.350
+L'archiviazione oggetti è stata costruita appositamente in questo modo,
+
+00:03:35.350 --> 00:03:38.650
+poiché un elenco piatto di nomi è facile da distribuire su un numero enorme di macchine.
+
+00:03:39.290 --> 00:03:42.870
+Questo trucco causa problemi silenziosi nel momento in cui provi a fare qualcosa a livello di cartella.
+
+00:03:43.390 --> 00:03:49.050
+Se quelle barre non sono vere cartelle, rinominarle non significa trovare ogni file che inizia con lo stesso percorso.
+
+00:03:49.890 --> 00:03:54.990
+Su un set di dati ampio parliamo di milioni di file e un'operazione che dovrebbe richiedere secondi può estendersi per ore.
+
+00:03:55.290 --> 00:03:57.690
+Attivare lo spazio di nome gerarchico cambia esattamente questo.
+
+00:03:58.450 --> 00:04:02.230
+Dà l'account veri directory e sotto directory, la stessa struttura che il tuo computer usa da sempre.
+
+00:04:02.750 --> 00:04:07.430
+Una cartella diventa un'entità a sé stante in un solo testo inserito all'inserito all'interno del nome di un file.
+
+00:04:07.430 --> 00:04:13.150
+Basta selezionare una casella e l'archiviazione inizia a comportarsi come un vero file system anziché un semplice contenitore con etichette cattivate.
+
+00:04:13.450 --> 00:04:17.370
+Troverai anche il nome, data lake storage gen 2, imposte e tutorial almeno recenti.
+
+00:04:17.770 --> 00:04:22.970
+È solo la seconda versione della stessa idea e il nome attuale omette il numero, quindi considera le due cose come una sola.
+
+00:04:23.750 --> 00:04:28.310
+Scegli questa opzione quando crei l'account di archiviazione e puoi anche aggiornare un account che contiene già dati.
+
+00:04:28.310 --> 00:04:31.750
+Microsoft gestisce il passaggio per te, ma la direzione è a senso unico.
+
+00:04:32.230 --> 00:04:34.750
+Puoi passare da una struttura piatta o una gerarchica, ma non puoi tornare indietro.
+
+00:04:35.130 --> 00:04:38.250
+C'è una particolarità nei nomi da conoscere, così la documentazione smetterà di confonderti.
+
+00:04:39.410 --> 00:04:43.350
+Nelle guide Microsoft il termine blob significa file e container significa file system.
+
+00:04:44.210 --> 00:04:47.430
+Sono le stesse due cose con etichette diverse a seconda della pagina che stai leggendo.
+
+00:04:48.070 --> 00:04:50.590
+Il punto fondamentale da ricordare è che questa casella è permanente.
+
+00:04:50.730 --> 00:04:54.310
+Una volta attivata, non è possibile riportare l'account allo stile piatto precedente.
+
+00:04:55.010 --> 00:04:56.850
+Perché le cartelle reali cambiano la velocità e il costo.
+
+00:04:56.850 --> 00:05:00.210
+Il motivo per cui Microsoft ha creato cartelle reali nell'ordine ma la velocità.
+
+00:05:00.390 --> 00:05:05.110
+Quando le directory sono reali, rinominarle o eliminarle diventa una rapida modifica alla voce della directory.
+
+00:05:05.950 --> 00:05:09.790
+Non c'è un elenco di un milione di file da scorrere perché il sistema aggiorna un solo elemento e il lavoro è fatto.
+
+00:05:10.570 --> 00:05:14.770
+La stessa scorciatoia si applica quando elimini, quindi cancellare vecchi dati non richiede più un'intera giornata.
+
+00:05:15.310 --> 00:05:18.370
+L'esempio che chiarisce il concetto e il comportamento pratico degli strumenti di analisi.
+
+00:05:19.170 --> 00:05:23.230
+Spark e Hive, due dei motori più utilizzati, scrivono spesso i risultati in una posizione temporanea.
+
+00:05:23.910 --> 00:05:25.710
+Quando il lavoro termina, rinomino quella posizione.
+
+00:05:25.710 --> 00:05:30.390
+Su un'archiviazione senza cartelle reali, quella rinamina finale può richiedere più tempo dell'analisi stessa.
+
+00:05:31.110 --> 00:05:35.090
+Ti ritrovi a guardare un lavoro che ha già finito di elaborare e ora sta solo spostando nomi.
+
+00:05:35.530 --> 00:05:39.530
+Quel ritardo non è solo fastidioso e costoso, è costoso e vale la pena capirne il motivo.
+
+00:05:40.170 --> 00:05:44.250
+In molti carichi di lavoro e di analisi, il calcolo rappresenta oltre l'80% del costo totale.
+
+00:05:44.670 --> 00:05:47.310
+Le macchine che eseguono il lavoro costano molto più dei dati archiviati.
+
+00:05:47.310 --> 00:05:51.450
+Se lo rinomina lento, mantiene quelle macchine in funzione, un'ora in più paghi per quell'ora.
+
+00:05:52.050 --> 00:05:56.570
+Velocizza l'archiviazione e il calcolo terminerà prima, riducendo il costo anche se il prezzo dell'archiviazione è quasi invariato.
+
+00:05:57.130 --> 00:05:59.810
+La funzionalità scala anche in modo pulito, che è l'aspetto che un tempo era difficile.
+
+00:06:00.610 --> 00:06:03.370
+Sistemi più vecchi sacrificavano la struttura delle cartelle per la scalabilità,
+
+00:06:03.470 --> 00:06:05.890
+perché le directory reali erano costose da tracciare su larga scala.
+
+00:06:05.890 --> 00:06:08.450
+Uno spazio di nomi gerarchico qui cresce in modo lineare.
+
+00:06:09.270 --> 00:06:12.970
+Quindi aggiungere più dati non rallenta le directory, il che solleva la questione pratica.
+
+00:06:13.750 --> 00:06:16.230
+In che modo i dati entrano ed escono effettivamente da uno di questi account?
+
+00:06:17.250 --> 00:06:18.770
+Come entrano ed escono i dati?
+
+00:06:19.350 --> 00:06:23.310
+Il sistema è più semplice di quanto sembri, ed è qui che la teoria diventa qualcosa di concreto.
+
+00:06:24.130 --> 00:06:28.350
+Gli strumenti di analisi raggiungono il lake tramite un driver chiamato ABFS, acronimo di Azure Blob File System.
+
+00:06:29.170 --> 00:06:32.370
+L'indirizzo del servizio termina sempre con dfs.cor.windows.net.
+
+00:06:32.370 --> 00:06:36.490
+Raramente digiterai quell'indirizzo personalmente, ma è la connessione che i tuoi strumenti usano dietro le quinte.
+
+00:06:36.970 --> 00:06:40.090
+Gli strumenti stessi sono nomi che incontrerai spesso se resterai in questo ambito.
+
+00:06:40.530 --> 00:06:42.790
+Mentre Data Factory copia i dati da altri sistemi,
+
+00:06:43.290 --> 00:06:47.430
+Databricks e Synapse li elaborano e analizzano, e Power BI legge i risultati per creare report.
+
+00:06:47.830 --> 00:06:51.770
+Se preferisci spostare i file manualmente, Azure Storage Explorer ti offre un'interfaccia grafica,
+
+00:06:51.850 --> 00:06:55.210
+mentre lo strumento a riga di comando adscopy gestisce i trasferimenti di massa.
+
+00:06:56.350 --> 00:06:58.010
+Non hai bisogno di questi strumenti per iniziare.
+
+00:06:58.010 --> 00:07:02.370
+Il portale Azure, PowerShell e la riga di comando possono accedere tutti allo stesso storage.
+
+00:07:03.070 --> 00:07:07.070
+Puoi caricare un primo file e vederlo apparire in una cartella prima ancora di scrivere una riga di codice.
+
+00:07:08.010 --> 00:07:13.450
+Molti iniziano con una cartella e pochi file, e il lake cresce man mano che altri sistemi vi confluiscono.
+
+00:07:14.190 --> 00:07:16.610
+Qui le autorizzazioni funzionano in modo più dettagliato rispetto a uno storage.
+
+00:07:16.830 --> 00:07:20.310
+Puoi utilizzare il sistema di ruoli di Azure lo stesso che gestisce tutto il resto in Azure.
+
+00:07:21.130 --> 00:07:25.510
+Puoi anche impostare liste di controllo accessi in stile POSIX che bloccano una singola cartella o persino un singolo file.
+
+00:07:25.510 --> 00:07:30.630
+Mi fermo qui con i dettagli perché il punto è semplicemente che un lake può essere condiviso ampiamente senza dover dare a tutti le chiavi.
+
+00:07:31.270 --> 00:07:37.010
+Quando i dati arrivano diventano un blob in un container che è il concetto di file in un file system usando di nuovo quei due nomi usando dei nomi.
+
+00:07:37.590 --> 00:07:42.170
+Da lì una policy di ciclo di vita può spostare i file più vecchi sul livello più economico o eliminarli dopo un certo tempo.
+
+00:07:42.630 --> 00:07:45.710
+Lake si ripulisce da solo invece di aspettare che qualcuno ordini le cartelle a mano.
+
+00:07:46.150 --> 00:07:47.790
+La scalabilità è l'ultimo tassello ed è generosa.
+
+00:07:48.250 --> 00:07:51.370
+Microsoft non pone limiti alla dimensione dell'account o di un singolo file.
+
+00:07:51.370 --> 00:07:58.870
+Un file può variare da pochi kilobyte fino a centinaia di terabyte le richieste e non gestite a velocità costante indipendentemente dalla quantità di dati accumulati.
+
+00:07:59.190 --> 00:08:02.370
+Chiarito il funzionamento è utile vedere come appare una configurazione reale.
+
+00:08:03.770 --> 00:08:07.770
+Nel mondo reale i team raramente accumulano tutto in un unico grande mucchio.
+
+00:08:08.190 --> 00:08:10.610
+Il modello che adottano è chiamato Medallion.
+
+00:08:11.270 --> 00:08:12.650
+Più semplice di quanto il nome suggerisce.
+
+00:08:12.970 --> 00:08:15.530
+I dati grezzi atterrano prima nel livello che le persone chiamano bronze.
+
+00:08:15.530 --> 00:08:18.130
+I dati puliti e corretti passano nel livello silver.
+
+00:08:18.330 --> 00:08:20.870
+I dati rifiniti di cui un report può fidarsi finiscono in quello gold.
+
+00:08:21.390 --> 00:08:24.170
+Ogni livello è solo una cartella e i dati avanzano man mano che migliorano.
+
+00:08:24.790 --> 00:08:26.990
+Il livello gold è quello che un report legge effettivamente.
+
+00:08:27.470 --> 00:08:32.710
+Perché è solo una cartella di file ben strutturati da cui qualsiasi strumento può attingere senza sapere come siano arrivati i dati grezzi.
+
+00:08:33.670 --> 00:08:35.670
+La disposizione delle cartelle ha un peso reale in seguito.
+
+00:08:35.850 --> 00:08:37.250
+Ci sono due modelli che vale la pena copiare.
+
+00:08:37.530 --> 00:08:41.510
+Per i dati provenienti da dispositivi o sensori, un layout comune prevede regione,
+
+00:08:41.510 --> 00:08:44.770
+poi soggetto quindi anno, mese, giorno e ora.
+
+00:08:44.770 --> 00:08:50.950
+Le letture del motore di un aereo potrebbero trovarsi sotto UK, poi aerei, poi lo specifico velivolo, infine data e ora.
+
+00:08:51.490 --> 00:08:56.070
+Per i processi batch che vengono eseguiti sui file, i team utilizzano una cartella in per il lavoro in attesa di essere elaborato.
+
+00:08:56.230 --> 00:08:59.550
+Usano una cartella out per i risultati finiti e una cartella bad per tutto ciò che fallisce.
+
+00:08:59.830 --> 00:09:01.330
+L'ordine di quelle cartelle non è arbitrato.
+
+00:09:01.970 --> 00:09:06.790
+Mettere regione soggetto in cima rende facile stabilire che queste persone possono vedere solo i dati UK e nient'altro.
+
+00:09:07.370 --> 00:09:10.950
+Imposti quel permesso una volta sulla cartella e tutto ciò che è vista sotto lo eredita.
+
+00:09:10.950 --> 00:09:16.590
+Se inverti l'ordine e inizi con la data, finirai per impostare i permessi più e più volte sui numerevoli cartelle minuscole.
+
+00:09:17.730 --> 00:09:20.670
+Formato dei file, l'ultima scelta concreta, determina silenziosamente il tuo comune.
+
+00:09:21.110 --> 00:09:26.570
+Usa un formato colonnare come parquet per i dati che leggi spesso, perché una query può estrarre solo le colonne necessarie e saltare il resto.
+
+00:09:26.890 --> 00:09:30.170
+Quei file sono compressi e ognuno porta con sé la propria descrizione di ciò che contiene.
+
+00:09:30.170 --> 00:09:36.310
+Usa un formato basato sulle righe come Avro quando scrivi principalmente dati in un flusso costante, come eventi provenienti da un'app.
+
+00:09:36.650 --> 00:09:43.450
+Un buon layout e il formato giusto ti fanno risparmiare, ma alcune abitudini comuni fanno silenziosamente l'opposto e appaiono nel primo data lake di quasi ogni principiante.
+
+00:09:45.190 --> 00:09:47.210
+Gli errori che ti costano denaro senza che te ne accogli.
+
+00:09:47.210 --> 00:09:52.130
+Il primo errore, che vedrai ovunque, è lasciare i tuoi dati come una montagna di file minuscoli.
+
+00:09:53.030 --> 00:09:57.470
+I motori di analisi perdono tempo reale su ogni file solo per elencarli, controllare i permessi e aprirli.
+
+00:09:57.950 --> 00:10:00.490
+Mille file piccoli che donano molta più attenzione di un unico file grande.
+
+00:10:01.230 --> 00:10:05.970
+La guida di Microsoft suggerisce di puntare a file di dimensioni comprese tra 200 GB e 100 GB.
+
+00:10:06.770 --> 00:10:09.410
+Accorpa i file piccoli in quelli più grandi prima che qualcuno provi a leggere.
+
+00:10:10.050 --> 00:10:14.470
+È un'abitudine da adottare fin dal primo giorno, perché i file piccoli si accumulano più velocemente di quanto si pensi.
+
+00:10:14.470 --> 00:10:18.430
+C'è un dettaglio di fatturazione che coglie quasi tutti di sorpresa ed è facile da ignorare.
+
+00:10:18.930 --> 00:10:21.510
+Le operazioni di lettura e scrittura vengono adebitate in blocchi da 4 MB.
+
+00:10:21.990 --> 00:10:23.170
+Un file che contiene pochi KB.
+
+00:10:23.730 --> 00:10:25.690
+Viene comunque adebitato come se ne contenesse 4 MB.
+
+00:10:26.410 --> 00:10:31.350
+Quando i tuoi dati sono sparsi in milioni di piccoli file, paghi il prezzo pieno per uno spazio per lo più vuoto ancora e ancora.
+
+00:10:31.670 --> 00:10:32.090
+E ancora.
+
+00:10:32.690 --> 00:10:38.630
+Se i dati grezzi arrivano come un flusso di piccoli eventi, la soluzione abituale è raccoglierli con uno strumento di streaming e scriverli in batch più grandi.
+
+00:10:39.870 --> 00:10:43.710
+La seconda trappola è attivare lo spazio di nomi gerarchico quando non ne hai bisogno.
+
+00:10:43.710 --> 00:10:48.390
+Ricorda che è una strada senso unico, quindi una volta attivato non puoi riportare l'account a uno spazio dei nomi piatti.
+
+00:10:48.750 --> 00:10:53.930
+Se lo abiliti per un archivio di backup o una cartella di immagini, hai fatto una modifica permanente che non ti porta alcun vantaggio.
+
+00:10:54.230 --> 00:10:58.450
+Hai backup e hai le librerie fotografiche e non interessa la denominazione rapida delle cartelle perché i dati non vengono nel...
+
+00:10:58.450 --> 00:11:00.290
+La terza è ignorare i livelli di archiviazione.
+
+00:11:00.890 --> 00:11:06.010
+Azure ti permette di parcheggiare i dati in livelli hot, cool, cold, cold o archive a seconda di quanto spesso li leggi.
+
+00:11:06.010 --> 00:11:09.330
+I vecchi dati lasciati nel livello hot sono denaro speso senza motivo.
+
+00:11:10.130 --> 00:11:14.510
+Abbina il livello alla frequenza con cui accedi effettivamente ai dati e gli stessi file possono costare una frazione.
+
+00:11:15.150 --> 00:11:20.650
+Archive è il posto più economico per i dati che non apri quasi mai ma non è istantaneo perché un file deve essere reidratato prima che qualcuno possa leggerlo.
+
+00:11:21.370 --> 00:11:22.790
+Un limite onesto da tenere a mente.
+
+00:11:23.630 --> 00:11:27.690
+Anche con l'impostazione attiva alcune funzionalità blob sono ancora in fase di aggiornamento all'interno di questi account.
+
+00:11:28.230 --> 00:11:31.670
+Se dipendi da una funzione specifica controlla il supporto attuale prima di procedere.
+
+00:11:31.670 --> 00:11:33.690
+Questo copre la parte che controlli personalmente.
+
+00:11:34.110 --> 00:11:36.650
+Per molti di voi però un data lake non sarà qualcosa che costruite da solo.
+
+00:11:36.990 --> 00:11:39.310
+La domanda successiva è dove si inserisce nel quadro più ampio di Microsoft.
+
+00:11:39.890 --> 00:11:42.870
+Dove si integra con Fabric, Power BI e Microsoft 365?
+
+00:11:43.630 --> 00:11:47.090
+Se hai passato del tempo con Microsoft Fabric e hai già incontrato un data lake senza saperlo.
+
+00:11:48.050 --> 00:11:52.230
+One Lake, il livello di archiviazione al centro di Fabric, è costruito su Azure Data Lake Store.
+
+00:11:53.170 --> 00:11:57.030
+Mantiene le tabelle in formati aperti chiamati Delta perché è Iceberg che lo stesso strumento volete.
+
+00:11:57.210 --> 00:12:01.030
+Lo stesso motore che esegua un data lake in Azure è quello che gira sotto Fabric fin dall'inizio.
+
+00:12:01.030 --> 00:12:06.390
+Se il tuo team lavora già in Fabric, One Lake è il lago che incontrai per primo e tutto ciò che hai appena imparato si applica ancora.
+
+00:12:06.990 --> 00:12:08.870
+One Lake prende in prestito anche la struttura che già conosci.
+
+00:12:09.350 --> 00:12:12.430
+Ogni tenant di Fabric ottiene esattamente un One Lake e non puoi creare un secondo.
+
+00:12:13.010 --> 00:12:16.050
+L'intera organizzazione condivide un unico lago invece di una serie sparsa di essi.
+
+00:12:16.650 --> 00:12:20.950
+Al suo interno un'area di lavoro appare come un contenitore e gli elementi al suo interno appaiono come cartelle.
+
+00:12:21.470 --> 00:12:24.650
+È lo stesso abbinamento di blob e contenitore di prima, solo con una veste diversa.
+
+00:12:24.970 --> 00:12:28.130
+La parte intelligente è come One Lake raggiunge i dati che risiedono altrui.
+
+00:12:28.130 --> 00:12:32.610
+Una funzionalità chiamata Scorciatoio consente di puntare a file presenti in un account Azure Data Lake Storage,
+
+00:12:32.710 --> 00:12:35.530
+un bucket Amazon S3, una tabella dataverso o persino un sistema on-premise.
+
+00:12:35.930 --> 00:12:37.690
+Li legge direttamente in posizione senza creare alcuna cosa.
+
+00:12:38.070 --> 00:12:42.590
+I team continuano a lavorare nei propri spazi e condividono tramite Scorciatoio invece di duplicare gigabyte di dati.
+
+00:12:42.850 --> 00:12:44.610
+Quell'idea di una sola copia ritorna anche in Power BI.
+
+00:12:45.150 --> 00:12:49.350
+Una modalità chiamata Direct Lake legge direttamente da One Lake senza importare o copiare prima i dati.
+
+00:12:49.910 --> 00:12:53.250
+È il motivo per cui Fabric insiste su una singola copia che ogni strumento può condividere.
+
+00:12:53.250 --> 00:12:59.930
+One Lake conserva anche i file eliminati per sette giorni, quindi una cancellazione accidentale non è il disastro che sarebbe in una cartella senza rete di sicurezza.
+
+00:13:00.410 --> 00:13:02.070
+Esiste un vero compromesso tra le due strade.
+
+00:13:02.510 --> 00:13:04.550
+One Lake è gestito per te e pensato per gli utenti Fabric.
+
+00:13:05.150 --> 00:13:09.710
+Un normale account Azure Data Lake Storage ti offre un controllo diretto e funziona con l'intera gamma di strumenti Azure.
+
+00:13:09.710 --> 00:13:13.850
+Usano la stessa API IP, quindi la scelta si riduce a comodità contro controllo.
+
+00:13:15.110 --> 00:13:16.890
+Cosa ricordare su Azure Data Lake Storage?
+
+00:13:17.590 --> 00:13:18.450
+Quindi la versione breve.
+
+00:13:18.970 --> 00:13:23.710
+Azure Data Lake Storage è uno storage blob con un'impostazione attivata e quell'impostazione gli conferisce cartelle reali.
+
+00:13:24.370 --> 00:13:29.450
+Quelle cartelle fanno terminare più velocemente i grandi lavori di analisi, riducendo i costi dove il calcolo pesa maggiormente.
+
+00:13:29.830 --> 00:13:33.610
+È permanente una volta abilitato e una mole di file minuscoli ti costerà più di quanto prevedo.
+
+00:13:34.050 --> 00:13:38.130
+Tieni a mente questi pochi punti e il servizio dall'aspetto complicato diventa qualcosa di comprensibile.
+
+00:13:38.130 --> 00:13:39.410
+Ecco la mia domanda per te.
+
+00:13:39.750 --> 00:13:43.290
+Se stai pianificando il tuo primo Data Lake, qual è l'aspetto di cui sei meno sicuro al momento?
+
+00:13:43.790 --> 00:13:46.410
+La struttura delle cartelle, i costi o come si integra con Fabric?
+
+00:13:46.770 --> 00:13:54.030
+Se questo ha reso l'argomento meno intimidatorio, iscriviti a M365FM per padroneggiare gli strumenti e la mentalità che plasmano il futuro del lavoro.

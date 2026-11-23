@@ -1,0 +1,982 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:06.040
+Selamat datang di podcast M365FM, tempat kami mengeksplorasi orang, ide, dan teknologi yang membentuk masa depan dunia kerja.
+
+00:00:06.400 --> 00:00:08.820
+Pengaturan Azure Anda tersimpan dalam ingatan, dan itu masalah.
+
+00:00:09.460 --> 00:00:13.420
+Anda pernah mengaturnya sekali pada layar yang tak akan ditemukan lagi dan tidak ada yang dicatat.
+
+00:00:13.820 --> 00:00:15.220
+Azure Bicep hadir untuk mengubah hal tersebut.
+
+00:00:15.740 --> 00:00:21.440
+Selamat datang di podcast M365FM, tempat kami mengeksplorasi orang, ide, dan teknologi yang membentuk masa depan dunia kerja.
+
+00:00:21.820 --> 00:00:26.020
+Bicep mengubah pengaturan Anda menjadi file yang bisa dibaca, disimpan, dan dibagikan tanpa perlu menjadi developer.
+
+00:00:26.020 --> 00:00:30.760
+Di akhir sesi ini, file tersebut tidak lagi tampak seperti kode, melainkan seperti resep.
+
+00:00:31.720 --> 00:00:32.420
+Apa sebenarnya Bicep itu?
+
+00:00:33.280 --> 00:00:37.340
+Azure Bicep adalah bahasa milik Microsoft untuk mencatat sumber daya Azure yang Anda inginkan.
+
+00:00:38.000 --> 00:00:40.560
+Bahasa ini lebih mirip instruksi singkat daripada kode mesin yang rumit.
+
+00:00:41.120 --> 00:00:43.260
+Anda mendeskripsikan apa yang harus ada dan Azure yang membangun.
+
+00:00:43.700 --> 00:00:48.280
+Ide tersebut disebut infrastruktur sebagai kode dan namanya terdengar lebih berat dari kenyataannya.
+
+00:00:48.720 --> 00:00:51.580
+Artinya hanyalah pengaturan Anda tersimpan dalam file, bukan tempukan klik.
+
+00:00:52.160 --> 00:00:53.880
+Pikirkan bagaimana kebanyakan dari kita memulai di Azure.
+
+00:00:53.880 --> 00:00:59.100
+Kita membuka portal, mengeklik selusin layar, lalu membuat akun penyimpanan atau menjalankan jaringan virtual.
+
+00:00:59.800 --> 00:01:01.360
+Itu berhasil yang terasa baik pada percobaan pertama.
+
+00:01:01.760 --> 00:01:06.820
+Masalah muncul saat Anda membutuhkannya lagi, karena Anda harus mengulangi serangkaian klik yang tidak pernah dicatat.
+
+00:01:07.360 --> 00:01:08.360
+Portal bukan masalahnya disini.
+
+00:01:08.680 --> 00:01:10.900
+Portal adalah tempat yang baik untuk melihat apa yang sudah Anda memikirkan.
+
+00:01:10.960 --> 00:01:14.780
+Namun, tempat yang buruk untuk menyimpan definisi aset Anda, karena definisi itu adalah ingatan.
+
+00:01:15.200 --> 00:01:16.120
+Dan ingatan bisa pudar.
+
+00:01:16.820 --> 00:01:21.260
+Bicep memindahkan definisi tersebut ke sesuatu yang bisa Anda buka, baca, dan berikan kepada rekan tim.
+
+00:01:21.720 --> 00:01:23.780
+Kata lain yang layak dipelajari adalah diklarati.
+
+00:01:24.220 --> 00:01:26.540
+Secara sederhana, Anda mendeskripsikan tujuannya, bukan rutenya.
+
+00:01:27.140 --> 00:01:31.480
+Anda tidak menyuruh Azure mengeklik ke sini, lalu ke sana, dan tidak perlu menebak urutan langkah yang benar.
+
+00:01:32.100 --> 00:01:35.840
+Anda cukup menuliskan kondisi akhir yang diinginkan, dan Azure akan menentukan urutan operasinya sendiri.
+
+00:01:36.560 --> 00:01:40.920
+Itulah janji utama Bicep dalam satu kalimat, dan sisanya hanyalah detail tambahan.
+
+00:01:41.660 --> 00:01:43.820
+Ada keuntungan praktis yang tersembunyi dalam ide tersebut.
+
+00:01:44.520 --> 00:01:48.860
+Setelah pengaturan menjadi file, Anda bisa menyimpannya dalam kontrol versi meninjau perubahan sebelum aktif,
+
+00:01:48.860 --> 00:01:50.740
+dan membatalkan kesalahan dengan satu perintah.
+
+00:01:50.740 --> 00:01:57.100
+Anda juga mendapatkan catatan mengenai siapa yang mengubah apa dan kapan sesuatu yang bisa menghemat waktu timbir jam-jam saat terjadi masalah di saat yang tidak terjadi.
+
+00:01:57.460 --> 00:01:59.520
+Mengapa tidak menggunakan ARM JSON atau portal saja?
+
+00:02:00.140 --> 00:02:04.300
+Azure memiliki cara untuk mendeskripsikan infrastruktur jauh sebelum Bicep hadir, dan itu disebut templat ARM.
+
+00:02:05.080 --> 00:02:08.540
+ARM adalah singkatan dari Azure Resource Manager, dan templat tersebut ditulis dalam format JSON.
+
+00:02:09.080 --> 00:02:11.740
+JSON adalah format data yang dirancang untuk dibaca komputer,
+
+00:02:11.740 --> 00:02:15.660
+jadi hal pertama yang Anda sadari saat membukanya adalah betapa tidak miripnya itu dengan sebuah kalimat.
+
+00:02:16.580 --> 00:02:19.420
+Templat ARM merinci setiap detail di dalam struktur yang kaku.
+
+00:02:19.940 --> 00:02:24.200
+Anda akan menemukan nama properti yang panjang, tanda kutip bertingkat, dan ekspresi dalam kurung yang terlihat seperti tegak-tegak.
+
+00:02:24.680 --> 00:02:28.760
+Satu koma yang hilang atau kurung yang salah tempat bisa menggagalkan penyebaran seluruh file,
+
+00:02:29.040 --> 00:02:31.380
+dan pesan kesalahannya seringkali mengarah ke tempat yang tidak membantu.
+
+00:02:32.100 --> 00:02:36.660
+Orang-orang akhirnya menghabiskan waktu mencari karakter yang salah daripada memikirkan infrastruktur yang sebenarnya ingin mereka bangun.
+
+00:02:36.660 --> 00:02:41.540
+Microsoft membangun Bichap untuk memperbaiki pengalaman penulisan tersebut, bukan untuk mengubah kemampuan Azure.
+
+00:02:42.040 --> 00:02:47.140
+Setiap jenis sumber daya, setiap pengaturan, dan setiap opsi yang bisa Anda gunakan di templat ARM tetap tersedia di Bichap.
+
+00:02:47.560 --> 00:02:48.800
+Perbedaannya terletak pada cara Anda menulisnya.
+
+00:02:49.280 --> 00:02:54.680
+Akun penyimpanan yang membutuhkan satu layar penuh JSON dan ARM yang bertingkat bisa diringkas menjadi beberapa baris yang mudah dibaca di Bichap.
+
+00:02:54.940 --> 00:02:56.440
+Anda bisa melihat retuk sumber daya tersebut dalam screen.
+
+00:02:57.200 --> 00:03:02.420
+Sejajarkan akun penyimpanan yang sama, satu dalam JSON ARM dan satu lagi dalam Bichap, maka perbedaannya akan terlihat dengan jelas.
+
+00:03:02.420 --> 00:03:09.260
+Versi ARM memiliki jumlah baris dua kali lipat lebih banyak dari versi Bichap untuk hasil yang sama persis, dengan tanda kurung dan tanda kutip sebagai penyebab utamanya.
+
+00:03:09.800 --> 00:03:14.440
+Versi Bichap terbaca seperti deskripsi dari apa yang Anda inginkan, sedangkan versi ARM terbaca seperti dokumen administrasi.
+
+00:03:14.740 --> 00:03:19.680
+Jadi jawaban jujur mengapa Anda tidak sebaiknya menggunakan JSON ARM saja adalah Anda bisa melakukannya dan Azure akan dengan senang hati menyebarkan.
+
+00:03:19.680 --> 00:03:25.720
+Anda hanya akan menulis instruksi yang sama dengan cara yang lebih panjang dan menghabiskan waktu untuk memperbaiki tanda baca alih-alih merancang konfigurasi Anda.
+
+00:03:26.280 --> 00:03:27.500
+Bagaimana cara kerja Bichap di balik layak?
+
+00:03:27.500 --> 00:03:32.120
+Bichap sama sekali tidak menggantikan ARM, dan detail itulah yang mengubah cara Anda memandangnya.
+
+00:03:32.580 --> 00:03:37.720
+Saat Anda melakukan deployment, alat bernama Bichap CLI akan menerjemahkan file Bichap Anda menjadi template JSON ARM,
+
+00:03:37.920 --> 00:03:40.740
+lalu Azure Resource Manager melakukan pekerjaan nyata dalam membangun sumber daya Anda.
+
+00:03:41.300 --> 00:03:43.860
+Bichap adalah bahasanya, dan ARM adalah mesin di bawahnya.
+
+00:03:44.020 --> 00:03:47.500
+Hal ini penting karena Anda tidak sedang memilih antara sesuatu yang baru dan sesuatu yang.
+
+00:03:47.720 --> 00:03:50.460
+Anda memilih cara yang lebih rapi untuk menulis instruksi yang sama persis,
+
+00:03:50.660 --> 00:03:53.940
+sehingga tidak ada perubahan pada deployment hanya karena file yang Anda ketik lebih mudah dibaca.
+
+00:03:53.940 --> 00:03:57.600
+File Bichap adalah lapisan transparan di atas template yang sudah dipahami Azure.
+
+00:03:58.380 --> 00:04:03.160
+Hal berikutnya yang perlu diketahui adalah penerapan bersifat idem potent, istilah keren untuk sesuatu yang dapat diulang.
+
+00:04:03.540 --> 00:04:08.120
+Anda dapat menerapkan file Bichap yang sama berulang kali, dan Anda akan mendapatkan sumber daya yang sama dalam status yang sama.
+
+00:04:08.340 --> 00:04:13.200
+Jika tidak ada yang berubah, tidak ada yang dibangun ulang, dan itu adalah perbedaan kecil namun sangat besar dibandingkan dengan cara klik.
+
+00:04:14.000 --> 00:04:17.080
+Menjalankan pengaturan yang sama dua kali dapat membuat duplikat yang tidak Anda inginkan.
+
+00:04:18.300 --> 00:04:20.480
+Azure Resource Manager juga menangani urutan untuk Anda.
+
+00:04:20.480 --> 00:04:27.720
+Jika satu sumber daya bergantung pada yang lain, Azure menentukan apa yang harus dibangun lebih dulu dan menjalankan bagian independen secara paralel jika memungkinkan,
+
+00:04:27.820 --> 00:04:30.440
+sehingga penerapan selesai lebih cepat daripada urutan baris demi baris.
+
+00:04:31.060 --> 00:04:34.020
+Satu hal lagi yang membedakan Bichap dari menjalankan serangkaian perintah secara manual.
+
+00:04:34.440 --> 00:04:38.580
+Anda menerapkan seluruh file sebagai satu operasi tunggal, dan Azure memperlakukannya sebagai satu perubahan terkod.
+
+00:04:38.820 --> 00:04:44.240
+Jika sebagian gagal, Anda mendapatkan catatan penerapannya yang jelas untuk diperiksa, bukan pengaturan setengah jadi yang harus Anda urai dari ingat.
+
+00:04:44.240 --> 00:04:46.080
+Juga tidak ada file status yang perlu diawasi.
+
+00:04:46.500 --> 00:04:51.460
+Beberapa alat infrastruktur menyimpan catatan sendiri tentang semua yang mereka buat, dan catatan itu bisa tidak sinkron dengan kenyataan.
+
+00:04:52.000 --> 00:04:57.360
+Bichap melewati masalah tersebut karena Azure sendiri adalah sumber kebenaran dan selalu memiliki gambaran terbaru tentang apa yang ada.
+
+00:04:58.100 --> 00:05:04.180
+Membaca file Bichap dalam kata-kata sederhana, ini adalah bagian di mana file tersebut berhenti terlihat seperti kode dan mulai terlihat seperti resep.
+
+00:05:04.560 --> 00:05:07.720
+File Bichap adalah kumpulan deklarasi singkat, dan urutannya sama sekali tidak masalah.
+
+00:05:08.160 --> 00:05:11.300
+Bichap membaca keseluruhan file dan mencari tahu bagaimana bagian tersebut terhubung dengan sendiri.
+
+00:05:11.300 --> 00:05:15.940
+Jenis deklarasi pertama adalah parameter, yang menampung nilai yang dapat berubah antar penerapan.
+
+00:05:16.840 --> 00:05:22.360
+Jika akun penyimpanan Anda memerlukan nama, Anda menjadikannya parameter, dan Anda dapat masukkan nama yang berbeda untuk pengujian dan produksi.
+
+00:05:23.340 --> 00:05:26.940
+Parameter juga dapat membawa nilai default, sehingga Anda tidak perlu mengisi semuanya setiap kali penerapan.
+
+00:05:27.620 --> 00:05:31.700
+Parameter juga mengenakan label kecil yang disebut dekorator, dan masing-masing menambahkan sedikit pengam.
+
+00:05:32.420 --> 00:05:36.340
+Satu dekorator melampirkan deskripsi sederhana agar orang berikutnya memahami tujuan suatu nilai.
+
+00:05:36.340 --> 00:05:42.680
+Dekorator lain membatasi parameter pada daftar pilihan singkat yang diizinkan, yang mencegah kesalahan ketik berubah menjadi kegagalan penerapan.
+
+00:05:43.600 --> 00:05:49.620
+Yang perlu diingat adalah dekorator aman yang memberitahu Azure untuk memperlakukan nilai sebagai rahasia dan menyimpannya dari riwayat penerapan dan log.
+
+00:05:50.480 --> 00:05:53.120
+Variable adalah jenis deklarasi kedua dan hanyalah singkatan.
+
+00:05:53.660 --> 00:05:58.920
+Jika Anda perlu membuat nama panjang dari beberapa bagian, Anda mengerjakannya sekali dalam variable dan menggunakannya kembali di mana saja.
+
+00:05:58.920 --> 00:06:02.480
+Ini menjaga file tetap rapi dan menghindarkan Anda dari mengulang ekspresi yang sama sebanyak lima.
+
+00:06:03.180 --> 00:06:05.220
+Selanjutnya adalah sumber daya yang merupakan bagian utama.
+
+00:06:05.520 --> 00:06:08.880
+Setiap sumber daya adalah satu hal yang Anda inginkan di Azure seperti akun penyimpanan atau jaring.
+
+00:06:09.140 --> 00:06:14.740
+Anda memberinya nama simbolis, yaitu label singkat untuk merujuknya nanti, lalu mengarahkannya ke jenis sumber daya dengan versinya.
+
+00:06:15.740 --> 00:06:18.560
+Segala sesuatu di bawah baris tersebut hanyalah pengaturan untuk satu sumber daya itu saja.
+
+00:06:18.980 --> 00:06:20.680
+Bayangkan file terkecil yang berguna yang bisa Anda tulis.
+
+00:06:20.920 --> 00:06:25.100
+File itu menamai satu akun penyimpanan, menentukan lokasinya, memiliki tingkat dasar, dan hanya itu saja.
+
+00:06:25.100 --> 00:06:29.380
+Anda akan memiliki deklarasi sumber daya, beberapa pengaturan, dan mungkin parameter untuk namanya.
+
+00:06:29.900 --> 00:06:34.040
+File kecil itu adalah bagian infrastruktur lengkap yang bisa diterapkan dan itu adalah titik awal yang wajar.
+
+00:06:34.560 --> 00:06:36.000
+Nama-nama simbolis itu melakukan lebih dari sekarang.
+
+00:06:36.580 --> 00:06:39.240
+Salah satu sumber daya menyebut sumber daya lain dengan nama simbolisnya.
+
+00:06:39.420 --> 00:06:41.180
+Bicep mendeteksi hubungan tersebut dan membangun.
+
+00:06:41.340 --> 00:06:42.280
+Dependensinya untuk Anda.
+
+00:06:43.000 --> 00:06:45.520
+Template lama maksa Anda menulis dependensi secara manual,
+
+00:06:45.720 --> 00:06:49.180
+dan kesalahan dalam melakukannya sering menyebabkan kegagalan yang paling membingungkan.
+
+00:06:49.660 --> 00:06:51.600
+Bicep sebagian besar meringankan beban kerja Anda tersebut.
+
+00:06:51.600 --> 00:06:53.180
+Dua bagian lagi melengkapi file tersebut.
+
+00:06:53.180 --> 00:06:57.660
+Output adalah nilai yang Anda berikan setelah penyebaran seperti alamat web dari sesuatu yang baru saja Anda buat
+
+00:06:57.660 --> 00:06:59.480
+agar bagian lain dari pengaturan Anda bisa menggunakan.
+
+00:06:59.980 --> 00:07:02.880
+Kondisi dan perulangan memungkinkan satu file melakukan lebih dari satu hal
+
+00:07:02.880 --> 00:07:06.240
+sehingga Anda bisa menentukan untuk hanya membangun ini di produksi atau membangun ini di produksi
+
+00:07:06.240 --> 00:07:07.360
+atau membangun 10 salin tempat.
+
+00:07:08.120 --> 00:07:09.700
+Modul bangunan Anda yang dapat digunakan kembar.
+
+00:07:10.340 --> 00:07:12.740
+Begitu pengaturan Anda berkembang, satu file akan menjadi padat.
+
+00:07:13.080 --> 00:07:13.820
+Dan disitulah peran mod.
+
+00:07:14.240 --> 00:07:16.680
+Modul hanyalah file bicep yang dipanggil oleh file bicep lain,
+
+00:07:16.680 --> 00:07:19.440
+sama seperti cara Anda membagi dokumen panjang menjadi bab-bab.
+
+00:07:19.440 --> 00:07:21.960
+Anda menulis jaringan Anda sekali sebagai modul,
+
+00:07:22.100 --> 00:07:25.560
+dan setiap proyek yang membutuhkan jaringan tinggal memanggilnya alih-alih menyusun ulang baris yang sama.
+
+00:07:26.320 --> 00:07:27.420
+Modul saling berkomunikasi malap.
+
+00:07:28.060 --> 00:07:31.560
+Saat satu modul selesai dan menghasilkan nilai seperti ID somnet file pemanggil,
+
+00:07:31.720 --> 00:07:33.740
+dapat meneruskan nilai tersebut ke modul berikutnya.
+
+00:07:34.440 --> 00:07:36.520
+Serah terima itu adalah kontrak antara bagian Anda,
+
+00:07:36.760 --> 00:07:40.420
+dan itu menjaga setiap modul tetap fokus pada satu tugas alih-alih mencoba melakukan segalanya.
+
+00:07:41.200 --> 00:07:43.800
+Bicep juga memungkinkan Anda memilih lokasi penderatan penyebar.
+
+00:07:43.800 --> 00:07:47.700
+Anda dapat menargetkan grup sumber daya, seluruh langganan, grup manajemen atau penyewa itu sendiri,
+
+00:07:47.800 --> 00:07:49.440
+dan setiap level memiliki perintahnya sendiri.
+
+00:07:50.240 --> 00:07:54.540
+Aturan yang perlu diingat adalah level yang tertulis di file Anda harus sesuai dengan perintah yang Anda jalankan,
+
+00:07:54.620 --> 00:07:56.480
+jika tidak sumber daya akan berakhir di tempat yang tidak Anda.
+
+00:07:56.800 --> 00:07:58.840
+Anda juga tidak perlu membangun setiap modul dari awal.
+
+00:07:59.880 --> 00:08:02.620
+Microsoft menerbitkan serangkaian modul resmi yang telah ditingjau,
+
+00:08:02.780 --> 00:08:07.540
+yang disebut Azure Verified Modules yang mencakup komponen dasar umum seperti jaringan, penyimpanan, dan pemantauan.
+
+00:08:07.540 --> 00:08:13.640
+Ini adalah titik awal terpercaya yang terus diperbarui dengan praktik yang disarankan sehingga modul pertama Anda tidak harus dimulai dari halaman kosong.
+
+00:08:13.860 --> 00:08:15.480
+Itulah nilai nyata bagi seseorang yang baru mulai.
+
+00:08:16.060 --> 00:08:18.140
+Anda tidak perlu menciptakan struktur yang sempurna pada hari pertama.
+
+00:08:18.740 --> 00:08:22.240
+Anda meminjam komponen dasar yang terbukti, mengubah beberapa pengaturan yang penting bagi Anda,
+
+00:08:22.580 --> 00:08:24.580
+lalu melanjutkan pekerjaan yang sebenarnya Anda pedulikan.
+
+00:08:25.140 --> 00:08:26.340
+Manfaat lainnya adalah konsistensi.
+
+00:08:26.740 --> 00:08:31.380
+Ketika 10 tim menggunakan modul yang sama, mereka semua mendapatkan tata letak jaringan, penamaan, dan batasan yang sama.
+
+00:08:31.680 --> 00:08:33.680
+Perbaiki masalah sekali di modul terapkan ulang,
+
+00:08:33.680 --> 00:08:37.540
+dan setiap proyek akan mendapatkan perbaikan tersebut alih-alih setiap tim harus menambah lesalinya mereka sendiri.
+
+00:08:38.260 --> 00:08:39.580
+Penerapan dan jaring pengaman What If
+
+00:08:39.580 --> 00:08:41.780
+Menulis file hanyalah setengah dari pekerjaan.
+
+00:08:42.180 --> 00:08:44.340
+Setengah lainnya adalah memasukkannya ke Azure dengan aman,
+
+00:08:44.440 --> 00:08:46.380
+dan Bicep memiliki langkah yang sangat meyakinkan untuk itu.
+
+00:08:46.680 --> 00:08:49.180
+Sebelum Anda menerapkan apapun, Anda dapat menjalankan perlainan yang tersebut.
+
+00:08:49.380 --> 00:08:52.200
+Perintah ini mengambil file Anda dan membandingkannya dengan apa yang sudah ada di Azure,
+
+00:08:52.360 --> 00:08:55.060
+lalu menunjukkan dengan tepat apa yang akan dibuat, diubah, atau dihapus.
+
+00:08:55.320 --> 00:08:57.640
+Detail yang penting adalah bahwa What If sama sekali tidak mengubah apa.
+
+00:08:57.640 --> 00:09:01.240
+Ini adalah perating jauh, dan memungkinkan Anda menangkap kejutan sebelum hal itu menjadi kenyataan.
+
+00:09:01.320 --> 00:09:03.660
+Perating jauh ini menggunakan simbol sederhana untuk memberitahu Anda apa yang ingat.
+
+00:09:04.200 --> 00:09:05.940
+Tanda plus berarti sumber daya baru akan dibuat.
+
+00:09:06.860 --> 00:09:09.440
+Tanda tilde berarti sumber daya yang ada akan dimodifikasi,
+
+00:09:09.780 --> 00:09:12.140
+dan output menunjukkan pengaturan spesifik yang berbeda.
+
+00:09:12.780 --> 00:09:14.640
+Tanda minus berarti sesuatu akan dihapus yang mana,
+
+00:09:14.860 --> 00:09:16.480
+merupakan hal yang selalu harus Anda baca dengan cermat.
+
+00:09:16.880 --> 00:09:19.040
+What If tidaklah sempurna, dan penting untuk mengetahui batasannya.
+
+00:09:19.620 --> 00:09:21.980
+Terkadang perintah ini melaporkan pengaturan sebagai dihapus,
+
+00:09:21.980 --> 00:09:24.120
+padahal layanan hanya mengisi nilai default selama penerapan
+
+00:09:24.120 --> 00:09:26.320
+yang merupakan draw tidak berbahaya alih-alih perubahan nyata.
+
+00:09:26.720 --> 00:09:29.260
+Perintah ini juga tidak dapat menyelesaikan nilai tertentu
+
+00:09:29.260 --> 00:09:31.620
+yang hanya ada pada saat penerapan seperti stempel waktu saat ini,
+
+00:09:31.760 --> 00:09:33.900
+jadi nilai tersebut muncul di output persis seperti yang Anda tulis.
+
+00:09:34.020 --> 00:09:35.260
+Keduanya tidak perlu menakuti Anda,
+
+00:09:35.440 --> 00:09:37.760
+dan hanya berarti Anda perlu membaca hasilnya dengan sedikit penilaian.
+
+00:09:38.280 --> 00:09:40.920
+Di sekitar perating jauh, alur kerja sehari-hari cukup singkat.
+
+00:09:41.360 --> 00:09:42.260
+Anda menulis file Anda,
+
+00:09:42.560 --> 00:09:43.460
+memeriksa dari kesalahan,
+
+00:09:43.780 --> 00:09:45.200
+menjalankan What If, lalu menerapkannya.
+
+00:09:45.740 --> 00:09:47.040
+Langkah-langkah yang sama berfungsi baik
+
+00:09:47.040 --> 00:09:48.260
+jika Anda mengetik perintah sendiri
+
+00:09:48.260 --> 00:09:50.780
+maupun membiarkan pipeline menjalankannya untuk Anda pada setiap perubahan.
+
+00:09:50.780 --> 00:09:53.120
+Menjalankan What If secara otomatis pada setiap perubahan
+
+00:09:53.120 --> 00:09:55.540
+adalah salah satu kebiasaan terbaik yang dapat Anda bangun sejak awal.
+
+00:09:55.620 --> 00:09:56.680
+Urutan yang lebih pendengarannya.
+
+00:09:57.340 --> 00:09:59.040
+Melihat perating jauh perubahan sebelum ditayangkan
+
+00:09:59.040 --> 00:10:01.220
+adalah pembeda antara peluncuran yang tenang dan yang panik,
+
+00:10:01.480 --> 00:10:02.760
+dan itu tidak memakan biaya apapun
+
+00:10:02.760 --> 00:10:04.280
+selain beberapa detik untuk membaca hasilnya.
+
+00:10:04.740 --> 00:10:05.720
+Jika Anda bekerja dalam tim,
+
+00:10:05.760 --> 00:10:07.020
+perating jauh menjadi jauh lebih berguna.
+
+00:10:07.600 --> 00:10:10.360
+Pipeline dapat menjalankan perintah What If pada setiap usulan perubahan
+
+00:10:10.360 --> 00:10:11.600
+memposting hasilnya untuk ditinjau
+
+00:10:11.600 --> 00:10:13.840
+dan menunggu persetujuan manusia sebelum apapun mencapai produksi.
+
+00:10:14.820 --> 00:10:16.300
+Hal itu mengubah penyebaran yang berisiko
+
+00:10:16.300 --> 00:10:17.840
+menjadi percakapan biasa tentang perbedaan kode.
+
+00:10:18.240 --> 00:10:19.660
+Dua kebiasaan kecil yang memberikan hasil instan.
+
+00:10:20.160 --> 00:10:21.280
+Beri label pada sumber daya Anda
+
+00:10:21.280 --> 00:10:22.920
+dengan informasi seperti lingkungan dan pemilik
+
+00:10:22.920 --> 00:10:24.360
+agar siapapun dan pemilik agar sebut nantinya.
+
+00:10:24.720 --> 00:10:26.900
+Dan gunakan dekorator aman untuk apapun yang bersifat rahasia
+
+00:10:26.900 --> 00:10:28.680
+agar kata sandi serta kunci tidak pernah tersimpan
+
+00:10:28.680 --> 00:10:30.400
+di doa penyebaran Anda di tempat yang tidak semestinya.
+
+00:10:30.720 --> 00:10:31.920
+Itu mencakup cara Anda mengirimkan file.
+
+00:10:32.280 --> 00:10:33.340
+Hal yang tidak terjawab adalah
+
+00:10:33.340 --> 00:10:35.680
+apakah bicep merupakan alat yang tepat untuk situasi Anda
+
+00:10:35.680 --> 00:10:37.860
+dan itu layak dipastikan sebelum Anda menghabiskan
+
+00:10:37.860 --> 00:10:38.820
+akhir pekan untuk mempelajari.
+
+00:10:39.940 --> 00:10:41.740
+Bicep versus arm versus terraform.
+
+00:10:41.740 --> 00:10:43.320
+Sekarang Anda mungkin sudah mendengar
+
+00:10:43.320 --> 00:10:45.360
+nama ketiga yang sering disebut bersamaan dengan bicep
+
+00:10:45.360 --> 00:10:45.960
+yaitu terraform.
+
+00:10:46.440 --> 00:10:47.740
+Wajar jika Anda bertanya-tanya
+
+00:10:47.740 --> 00:10:48.860
+mana yang harus Anda pelajari
+
+00:10:48.860 --> 00:10:50.900
+dan jawaban jujurnya bergantung pada situasi Anda.
+
+00:10:51.260 --> 00:10:52.680
+Templat arm adalah yang asli
+
+00:10:52.680 --> 00:10:54.240
+hanya untuk Azure ditulis dalam JSON
+
+00:10:54.240 --> 00:10:55.840
+dan masih didukung sepenuhnya hingga saat ini.
+
+00:10:56.380 --> 00:10:57.360
+Microsoft mempertahankannya
+
+00:10:57.360 --> 00:10:59.260
+karena merupakan kontrak asli yang dipahami Azure
+
+00:10:59.260 --> 00:11:01.260
+dan banyak tim masih menjalankannya dalam produksi.
+
+00:11:02.000 --> 00:11:04.220
+Jika Anda sudah memiliki pustaka templat arm yang berfungsi
+
+00:11:04.220 --> 00:11:05.880
+tidak ada keanan darurat dan tidak ada tenggat lo.
+
+00:11:06.380 --> 00:11:07.660
+Bicep adalah wajah yang lebih baru
+
+00:11:07.660 --> 00:11:09.240
+dan lebih ramah dari konsep yang semestinya.
+
+00:11:09.320 --> 00:11:10.460
+Alat ini juga hanya untuk Azure
+
+00:11:10.460 --> 00:11:11.960
+tetapi ringkas, mudah dibaca
+
+00:11:11.960 --> 00:11:14.340
+dan memiliki kurva pembelajaran paling ringan di antara ketiganya.
+
+00:11:14.880 --> 00:11:15.840
+Anda tidak perlu mengelola
+
+00:11:15.840 --> 00:11:18.580
+file status dan fitur Azure baru biasanya didukung di Bicep
+
+00:11:18.580 --> 00:11:19.320
+sejak hari pertama
+
+00:11:19.320 --> 00:11:21.940
+yang penting saat Anda ingin menggunakan sesuatu begitu tersedia.
+
+00:11:22.680 --> 00:11:24.200
+Satu poin lagi yang menguntungkan Bicep adalah
+
+00:11:24.200 --> 00:11:26.700
+betapa langsungnya dokumentasi Azure dipetakan ke dalamnya.
+
+00:11:27.120 --> 00:11:28.320
+Saat Anda mencari sumber daya
+
+00:11:28.320 --> 00:11:29.600
+pengaturan yang Anda lihat di dokumen
+
+00:11:29.600 --> 00:11:31.460
+ada pengaturan yang sama dengan yang Anda ketik ke dalam file Anda.
+
+00:11:31.760 --> 00:11:34.060
+Jadi mempelajari Bicep sekaligus mengajarkan Anda tentang Azure.
+
+00:11:34.920 --> 00:11:36.080
+Terraform berasal dari dunia yang berbeda.
+
+00:11:36.460 --> 00:11:37.600
+Alat ini tidak terikat pada Azure
+
+00:11:37.600 --> 00:11:38.540
+dan itulah tujuan utaf.
+
+00:11:38.540 --> 00:11:40.600
+Ia bekerja di banyak penyedia cloud
+
+00:11:40.600 --> 00:11:42.040
+dengan satu alur kerja yang konsisten
+
+00:11:42.040 --> 00:11:43.040
+yang justru Anda perlukan
+
+00:11:43.040 --> 00:11:44.960
+jika perusahaan Anda juga beroperasi di tempat lain.
+
+00:11:45.740 --> 00:11:46.680
+Sebagai konsekuensinya
+
+00:11:46.680 --> 00:11:48.400
+Terraform menyimpan file statusnya sendiri
+
+00:11:48.400 --> 00:11:51.440
+dan file tersebut harus disimpan, dibagikan, serta dilindungi.
+
+00:11:51.900 --> 00:11:52.520
+Sebagai imbalannya
+
+00:11:52.520 --> 00:11:53.860
+ia memberi Anda rencana yang jelas
+
+00:11:53.860 --> 00:11:55.860
+langkah-langkah dan deteksi penyimpangan yang kutu.
+
+00:11:55.860 --> 00:11:57.780
+Jadi keputusannya bukan tentang alat mana yang terbaik
+
+00:11:57.780 --> 00:11:59.060
+melainkan lebih pada situasi Anda.
+
+00:11:59.480 --> 00:12:00.720
+Jika dunia Anda adalah Azure
+
+00:12:00.720 --> 00:12:02.780
+dan Anda menginginkan cara termudah untuk memulainya, Bicep.
+
+00:12:03.100 --> 00:12:04.680
+Jika Anda menggunakan beberapa cloud sekaligus
+
+00:12:04.680 --> 00:12:06.040
+atau tim Anda sudah memahami Terraform
+
+00:12:06.040 --> 00:12:09.140
+dan jika Anda memiliki pustaka templat ARM
+
+00:12:09.140 --> 00:12:09.980
+yang masih berfungsi
+
+00:12:09.980 --> 00:12:11.560
+Anda bisa beralih ke Bicep secara bertahap
+
+00:12:11.560 --> 00:12:12.360
+tidak harus sekaligus.
+
+00:12:12.940 --> 00:12:13.740
+Jangan lupa bertahap itu nyata.
+
+00:12:14.400 --> 00:12:15.800
+Microsoft menyediakan perintah
+
+00:12:15.800 --> 00:12:16.860
+yang mengubah templat ARM
+
+00:12:16.860 --> 00:12:18.540
+yang ada menjadi Bicep secara otomatis
+
+00:12:18.540 --> 00:12:20.180
+meskipun hasilnya adalah titik awal
+
+00:12:20.180 --> 00:12:21.320
+yang perlu dirapikan
+
+00:12:21.320 --> 00:12:22.360
+bukan produk jadi.
+
+00:12:23.360 --> 00:12:24.960
+Saran umumnya cukup sederhana untuk diingat.
+
+00:12:25.660 --> 00:12:26.940
+Tulis semua hal baru dalam Bicep
+
+00:12:26.940 --> 00:12:28.220
+dan konversi file lama
+
+00:12:28.220 --> 00:12:30.040
+hanya saat Anda punya alasan untuk mengubahnya.
+
+00:12:31.160 --> 00:12:32.160
+Kesalahan yang dilakukan pemula.
+
+00:12:32.160 --> 00:12:33.940
+Apapun alat yang Anda pilih,
+
+00:12:34.020 --> 00:12:35.540
+pemula cenderung mengalami kendala yang sama
+
+00:12:35.540 --> 00:12:36.900
+dan mengetahui hal tersebut sebelumnya
+
+00:12:36.900 --> 00:12:37.980
+akan menghemat waktu Anda.
+
+00:12:38.520 --> 00:12:39.820
+Yang pertama adalah melakukan hardcoding nama.
+
+00:12:40.300 --> 00:12:42.320
+Jika Anda mengetik nama tetap untuk sumber daya,
+
+00:12:42.420 --> 00:12:43.760
+penyebaran kedua ke tempat berbeda
+
+00:12:43.760 --> 00:12:45.040
+bisa bertabrakan dengan yang pertama
+
+00:12:45.040 --> 00:12:46.880
+dan beberapa nama seperti akun penyimpanan
+
+00:12:46.880 --> 00:12:48.160
+harus unik di seluruh Azure.
+
+00:12:49.180 --> 00:12:50.360
+Solusinya adalah membuat nama
+
+00:12:50.360 --> 00:12:51.460
+dari ekspresi stabil singkat
+
+00:12:51.460 --> 00:12:52.660
+yang berubah mengikuti lingkungan
+
+00:12:52.660 --> 00:12:54.060
+sehingga tetap dapat diprediksi
+
+00:12:54.060 --> 00:12:54.980
+namun tidak pernah berulang.
+
+00:12:55.980 --> 00:12:57.560
+Yang kedua adalah terlalu mempercayai
+
+00:12:57.560 --> 00:12:58.360
+yang telah dikonversi.
+
+00:12:58.360 --> 00:13:00.260
+Alat Anda melakukan dekompilasi
+
+00:13:00.260 --> 00:13:01.340
+templat AR menjadi bicep,
+
+00:13:01.400 --> 00:13:02.800
+alat tersebut memang menyala strukturnya
+
+00:13:02.800 --> 00:13:03.980
+tetapi hasilnya jarang rapi.
+
+00:13:04.180 --> 00:13:04.980
+Anda perlu membacanya,
+
+00:13:05.180 --> 00:13:06.240
+menyederhanakan referensi,
+
+00:13:06.400 --> 00:13:07.460
+dan membaginya menjadi modul
+
+00:13:07.460 --> 00:13:08.680
+sebelum membangun apapun di atas.
+
+00:13:09.180 --> 00:13:10.120
+Yang ketiga adalah menjalankan
+
+00:13:10.120 --> 00:13:11.460
+perintah penyebaran yang salah untuk file Anda.
+
+00:13:12.300 --> 00:13:13.960
+Jika file Anda disiapkan untuk pelangganan
+
+00:13:13.960 --> 00:13:15.940
+tetapi Anda menjalankan perintah grup sumber daya,
+
+00:13:16.020 --> 00:13:17.560
+sumber daya akan berada di cakupan yang salah
+
+00:13:17.560 --> 00:13:18.560
+atau perintahnya gagal total.
+
+00:13:19.120 --> 00:13:20.300
+Mencocokkan keduanya hanya butuh
+
+00:13:20.300 --> 00:13:22.180
+pengecekan 2 detik dan menyelamatkan Anda di kebiasaan.
+
+00:13:22.640 --> 00:13:23.940
+Yang terakhir adalah terbiasa menggunakan
+
+00:13:28.360 --> 00:13:30.240
+bicep sudah mengetahui urutannya untuk Anda.
+
+00:13:30.820 --> 00:13:32.020
+Mengetik dependensi secara manual
+
+00:13:32.020 --> 00:13:33.620
+biasanya berarti Anda melewatkan referensi
+
+00:13:33.620 --> 00:13:34.260
+yang bisa digunakan
+
+00:13:34.260 --> 00:13:35.640
+dan itu menambahkan baris rapuh
+
+00:13:35.640 --> 00:13:37.020
+yang harus Anda kelola nanti.
+
+00:13:37.720 --> 00:13:38.680
+Ada kebiasaan yang lebih luas
+
+00:13:38.680 --> 00:13:39.500
+dibalik keempat poin ini
+
+00:13:39.500 --> 00:13:40.640
+dan layak untuk disebutkan.
+
+00:13:41.160 --> 00:13:42.440
+Anggap file infrastruktur Anda
+
+00:13:42.440 --> 00:13:43.460
+sebagai catatan yang penting,
+
+00:13:43.580 --> 00:13:44.400
+bukan skrip sekali pakai.
+
+00:13:44.920 --> 00:13:45.820
+Setelah Anda melakukannya,
+
+00:13:46.000 --> 00:13:47.480
+disipin kecil untuk membaca perubahan
+
+00:13:47.480 --> 00:13:49.240
+sebelum menerapkannya akan menjadi kebiasaan
+
+00:13:49.240 --> 00:13:50.300
+dan sebagian besar kesalahan ini
+
+00:13:50.300 --> 00:13:51.180
+tidak akan terjadi lagi.
+
+00:13:52.140 --> 00:13:52.960
+Ringkasan dan sotok Anda.
+
+00:13:53.660 --> 00:13:54.300
+Cara keseluruhan,
+
+00:13:54.520 --> 00:13:55.860
+bicep adalah cara yang lebih sederhana
+
+00:13:55.860 --> 00:13:57.340
+untuk mendeskripsikan infrastruktur Azure
+
+00:13:57.340 --> 00:13:57.940
+yang Anda inginkan.
+
+00:13:58.260 --> 00:13:59.700
+Dia tidak mengharuskan Anda menjadi pengembang
+
+00:13:59.700 --> 00:14:00.820
+dan memungkinkan Anda memulai
+
+00:14:00.820 --> 00:14:01.640
+dengan satu file kecil
+
+00:14:01.640 --> 00:14:02.780
+alih-alih seluruh kerangka jahat.
+
+00:14:03.040 --> 00:14:04.440
+Hadiah sebenarnya adalah berkas itu
+
+00:14:04.440 --> 00:14:05.940
+karena ia mengubah ingatan yang pudar
+
+00:14:05.940 --> 00:14:07.360
+menjadi sesuatu yang bisa Anda baca,
+
+00:14:07.500 --> 00:14:08.460
+bagikan, dan gunakan kembali.
+
+00:14:08.620 --> 00:14:09.740
+Ini pertanyaan yang saya tinggalkan kembali.
+
+00:14:10.140 --> 00:14:11.520
+Jika besok Anda harus membangun kembali
+
+00:14:11.520 --> 00:14:13.480
+lingkungan Azure yang Anda gunakan hari ini dari awal,
+
+00:14:13.560 --> 00:14:14.480
+seberapa banyak yang sebenarnya
+
+00:14:14.480 --> 00:14:15.600
+bisa Anda buat ulang dari ingatan?

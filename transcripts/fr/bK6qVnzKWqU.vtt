@@ -1,0 +1,2137 @@
+WEBVTT
+
+00:00:00.460 --> 00:00:07.040
+Paix pour 12 jours dédiés à Microsoft 365, Copilot, l'IA, Azure et aux acteurs qui façonnent l'avenir du travail.
+
+00:00:07.940 --> 00:00:11.840
+En janvier prochain, la M365Con revient et nous voyons les choses en grand.
+
+00:00:12.900 --> 00:00:18.100
+Rejoignez-nous pour des sessions en direct, des démos concrètes et des connaissances pratiques apportées par des MVP et des experts du monde entier.
+
+00:00:18.920 --> 00:00:21.200
+Fini les présentations génériques et les mots à la mode sans fin.
+
+00:00:21.940 --> 00:00:23.200
+Nous nous attaquons aux véritables défis.
+
+00:00:23.800 --> 00:00:28.500
+Copilot Studio, agent IA, fabrique, sécurité, gouvernance et automatisation.
+
+00:00:28.500 --> 00:00:34.360
+Que vous soyez professionnel de l'IT, développeur ou dirigeant d'entreprise, des sessions sont conçues pour vous.
+
+00:00:35.580 --> 00:00:40.040
+Avec 10 jours complets, vous pourrez explorer de nombreuses technologies et échanger avec une communauté mondiale.
+
+00:00:40.980 --> 00:00:44.100
+Suivez le direct et rapportez des idées pratiques à votre organisation.
+
+00:00:45.220 --> 00:00:48.900
+Janvier 2027, 10 jours, une seule communauté Microsoft.
+
+00:00:49.540 --> 00:00:50.620
+Les inscriptions sont désormais ouverts.
+
+00:00:51.860 --> 00:00:55.600
+Rendez-vous sur M365Con.net pour réserver votre place dès aujourd'hui.
+
+00:00:55.600 --> 00:00:58.400
+C'est M365Con.net.
+
+00:01:00.400 --> 00:01:03.200
+Inscrivez-vous sur M365Con.net et nous vous attendons.
+
+00:01:03.680 --> 00:01:04.580
+En direct en janvier.
+
+00:01:05.480 --> 00:01:09.880
+Quel est le système unique dans votre environnement qui, s'il est compromis, permettrait à un attaquant de tout contrôler ?
+
+00:01:09.880 --> 00:01:11.240
+Connexions, fichiers et même les emails.
+
+00:01:11.600 --> 00:01:12.360
+Il s'agit d'Active Directory.
+
+00:01:12.880 --> 00:01:15.820
+Avant de commencer, abonnez-vous pour que ces bonnes pratiques arrivent jusqu'à votre équipe.
+
+00:01:16.760 --> 00:01:18.580
+La question est à quel point le vôtre est-il exposé ?
+
+00:01:18.580 --> 00:01:19.500
+Oubliez les pare-feux un instant.
+
+00:01:20.000 --> 00:01:22.920
+Si l'AD est un maillon faible, toute votre défense ne sera qu'un assemblage de rustique.
+
+00:01:22.920 --> 00:01:25.000
+A la fin, vous aurez trois domaines concrets à corriger.
+
+00:01:25.560 --> 00:01:28.640
+Rayon d'action des administrateurs, PKI modèle et hygiène de synchronisation hybride.
+
+00:01:29.480 --> 00:01:33.800
+Cela signifie que vous saurez diagnostiquer les failles d'identité, les corriger et arrêter les attaquants avant qu'ils ne vident le coffre.
+
+00:01:34.280 --> 00:01:38.980
+Pour comprendre pourquoi l'AD est le prix rêvé de tout pirate, commençons par ce qu'il représente réellement dans votre infrastructure.
+
+00:01:40.460 --> 00:01:43.200
+Pourquoi les attaquants traitent l'AD comme un trésor ?
+
+00:01:43.200 --> 00:01:45.420
+Imaginez un trousseau de clé qui ouvre toutes les serrures du bâtiment.
+
+00:01:46.360 --> 00:01:49.140
+Peu importe qu'il s'agisse du bureau de direction, de la baie serveur ou du distributeur automatique.
+
+00:01:49.140 --> 00:01:51.060
+Il accorde un accès total partout.
+
+00:01:51.680 --> 00:01:53.200
+C'est ainsi que les attaquants perçoivent Active Directory.
+
+00:01:53.720 --> 00:01:58.160
+Ce n'est pas juste un répertoire d'utilisateurs, c'est le cadre unique qui détermine qui entre et ce qu'il peut toucher.
+
+00:01:59.020 --> 00:02:01.700
+Si quelqu'un détourne l'AD, il ne se contente pas de s'infiltrer sur votre réseau.
+
+00:02:02.120 --> 00:02:03.340
+Il devient celui qui dicte les règles.
+
+00:02:04.380 --> 00:02:06.800
+L'AD est la colonne vertébrale de la plupart des opérations quotidiennes.
+
+00:02:07.240 --> 00:02:10.220
+Chaque connexion, chaque lecteur partagé, chaque boîte mail dépend de son autorisation.
+
+00:02:10.220 --> 00:02:16.240
+Cette centralisation visait à simplifier la gestion, un point unique pour piloter des milliers de comptes et systèmes.
+
+00:02:16.980 --> 00:02:18.940
+Mais cette même conception crée un point de défaillance unique.
+
+00:02:20.060 --> 00:02:24.020
+Compromettez le niveau supérieur de l'AD et soudain, les décisions de l'attaquant se propagent dans tout l'environnement.
+
+00:02:24.800 --> 00:02:28.120
+Autorisation de fichiers, politique de sécurité, flux d'authentification, tout est sous leur contrôle.
+
+00:02:28.920 --> 00:02:32.220
+Le modèle de confiance derrière l'AD n'avait pas anticipé le genre de menace auxquelles nous faisons face aujourd'hui.
+
+00:02:32.220 --> 00:02:38.200
+Conçu à une époque où l'on cherchait à protéger l'extérieur, considéré comme dangereux, et à faire confiance à l'intérieur,
+
+00:02:38.500 --> 00:02:41.500
+il reposait largement sur une confiance implicite entre les systèmes.
+
+00:02:42.780 --> 00:02:46.180
+Les machines et les comptes échangent des jetons et des tickets librement, comme si tout le monde était déjà approuvé.
+
+00:02:47.180 --> 00:02:51.060
+Toute architecture était logique à l'époque, mais dans les environnements modernes, elle donne un avantage aux adversaires.
+
+00:02:51.740 --> 00:02:56.620
+Les attaquants adorent abuser de cette confiance, car une fois qu'ils ont pris pied, la manipulation des identités est étonnamment rapide.
+
+00:02:57.620 --> 00:03:00.340
+C'est pourquoi l'élévation de privilèges au sein d'AD est la récompense ultime.
+
+00:03:00.340 --> 00:03:03.360
+Un compte d'accès initial peut sembler mineur, mais avec les bonnes manœuvres,
+
+00:03:03.420 --> 00:03:05.980
+un attaquant peut grimper jusqu'à obtenir les droits d'administrateur du domaine.
+
+00:03:06.600 --> 00:03:09.780
+A ce stade, il obtient un contrôle étendu sur les politiques, les bases de données d'identifiant
+
+00:03:09.780 --> 00:03:11.600
+et même la capacité d'effacer ses propres traces.
+
+00:03:12.060 --> 00:03:13.000
+Cela ne s'étire pas sur des mois.
+
+00:03:14.300 --> 00:03:16.260
+En pratique, le compromis s'accélère souvent rapidement,
+
+00:03:16.400 --> 00:03:19.160
+des attaquants pivotant d'une machine à une domination totale du domaine,
+
+00:03:19.460 --> 00:03:21.760
+via des attaques d'identité bien connues des testeurs d'intrusion.
+
+00:03:22.980 --> 00:03:24.920
+Base de hache ? Golden Tickets ?
+
+00:03:24.920 --> 00:03:28.260
+Et même des astuces de synchronisation d'essais pour usurper l'identité des contrôleurs de domaine eux-mêmes.
+
+00:03:28.260 --> 00:03:31.440
+Imaginez cela comme le coffre final d'un raid dans un jeu de rôle.
+
+00:03:31.940 --> 00:03:34.500
+Les patrouilles, les pièges, le butin intermédiaire ne sont que des étapes sur le chemin.
+
+00:03:34.900 --> 00:03:37.080
+Le véritable objectif est le trésor qui se trouve derrière le boss.
+
+00:03:37.960 --> 00:03:40.180
+Active Directory joue ce rôle dans l'infrastructure des entreprises.
+
+00:03:40.600 --> 00:03:42.440
+Il détient indirectement les clés de chaque service précieux,
+
+00:03:42.500 --> 00:03:45.560
+des partages de fichiers aux plateformes collaboratives et en passant par les e-mails, et bien plus encore.
+
+00:03:46.060 --> 00:03:48.200
+C'est pourquoi, lorsque les violations s'intensifient, elles le font rapidement.
+
+00:03:48.980 --> 00:03:52.080
+L'attaquant ne cherche pas des bribes de données, il prend le contrôle de tout le coffre-fort du château.
+
+00:03:53.140 --> 00:03:54.020
+Et l'effet le prouve.
+
+00:03:54.020 --> 00:03:57.540
+À maintes reprises, le tournant d'un incident survient lorsque l'AD est compromis.
+
+00:03:58.820 --> 00:04:01.540
+Ce qui commence par une station de travail infectée, fait boule de neige, soudain.
+
+00:04:02.020 --> 00:04:05.080
+Le ransomware ne bloque pas seulement un appareil, mais verrouille chaque machine.
+
+00:04:05.920 --> 00:04:08.860
+Les sauvegardes sont sabotées, les stratégies de groupe sont détournées contre l'entreprise,
+
+00:04:09.020 --> 00:04:11.140
+et des activités entières sont paralysées et sont paralysées.
+
+00:04:11.380 --> 00:04:13.900
+Tous les pare-feux et protections d'endpoints bien réglés ne servent à rien
+
+00:04:13.900 --> 00:04:16.100
+si l'autorité de l'annuaire appartient à l'intrus.
+
+00:04:16.960 --> 00:04:19.480
+Pourtant, beaucoup d'administrateurs traitent l'AD comme un utilitaire en arrière-plan.
+
+00:04:20.000 --> 00:04:24.120
+Il soigne la périphérie, les passerelles VPN, les agents d'endpoints et la détection d'intrusion,
+
+00:04:24.380 --> 00:04:26.080
+mais laisse l'AD par défaut à peine sécurisé.
+
+00:04:27.160 --> 00:04:31.480
+C'est comme construire cinq murs autour de son royaume, tout en laissant la porte du trésor grande ouverte.
+
+00:04:32.140 --> 00:04:33.560
+Les attaquants n'ont pas besoin de prendre les remparts d'assaut.
+
+00:04:34.000 --> 00:04:36.980
+Ils se glissent à travers des comptes oubliés, des noms de principaux de services négligés
+
+00:04:36.980 --> 00:04:38.560
+ou des relations d'approbation mal configurées.
+
+00:04:39.200 --> 00:04:41.540
+Une fois à l'intérieur, l'AD leur donne automatiquement toutes les autres clés.
+
+00:04:42.480 --> 00:04:45.020
+La triste réalité est que les attaquants ont rarement besoin de failles zéro d'exotique.
+
+00:04:45.020 --> 00:04:47.520
+L'AD s'effondre pour des raisons bien plus banales.
+
+00:04:48.360 --> 00:04:51.780
+D'anciens comptes conservant de larges droits, des privilèges jamais correctement séparés
+
+00:04:51.780 --> 00:04:54.120
+ou des configurations obsolètes que personne n'a osé toucher.
+
+00:04:55.040 --> 00:04:57.900
+Ces failles sont si courantes que les testeurs d'intrusion expérimentés s'attendent à les trouver,
+
+00:04:58.180 --> 00:04:59.640
+et elles sont spectaculairement efficaces.
+
+00:05:00.460 --> 00:05:03.480
+Avec des structures par défaut toujours en place, les attaquants transmettent des tickets,
+
+00:05:03.620 --> 00:05:06.500
+récoltent des identifiés en cache et s'élèvent sans déclencher d'alerte et s'élèrent.
+
+00:05:07.040 --> 00:05:09.920
+Les tableaux de bord de sécurité peuvent sembler calmes alors que le royaume est déjà en train d'être pillé.
+
+00:05:10.480 --> 00:05:14.300
+Alors bien que les administrateurs imaginent souvent que le point faible doit être une bizarrerie de protocoles rares
+
+00:05:14.300 --> 00:05:16.660
+ou une astuce de privilège obscur, la vérité est bien moins glamour.
+
+00:05:17.760 --> 00:05:19.340
+Les fissures sont le plus souvent à la vue de tous.
+
+00:05:19.940 --> 00:05:23.920
+Comptes de services surprivilégiés, violations d'hierarchisation, relations d'approbation, non surveillés.
+
+00:05:24.640 --> 00:05:27.140
+Il suffit d'un seul oubli de ce type pour donner aux adversaires ce qu'ils veulent.
+
+00:05:28.200 --> 00:05:30.740
+A partir de là, vous n'êtes plus face à un pirate dans votre système.
+
+00:05:31.460 --> 00:05:32.480
+Ils sont l'autorité du système.
+
+00:05:33.360 --> 00:05:34.380
+Et c'est là que les choses deviennent plus tendres.
+
+00:05:34.660 --> 00:05:36.720
+Les attaquants n'ont pas besoin de compromettre des dizaines de comptes.
+
+00:05:37.060 --> 00:05:40.200
+Ils n'ont besoin que d'une ouverture, une identité utilisateur qu'ils peuvent exploiter pour commencer à grimper.
+
+00:05:40.200 --> 00:05:44.880
+Comme vous le verrez, cette unique brèche dont l'armure peut renverser tout le plateau de jeu avant même que vous ne sachiez que c'est arrivé.
+
+00:05:45.940 --> 00:05:47.800
+La première fissure, un utilisateur pour les gouverner tous.
+
+00:05:48.740 --> 00:05:51.520
+Le premier point faible commence presque toujours par un seul compte utilisateur.
+
+00:05:52.460 --> 00:05:55.760
+Pas un administrateur, pas un coffre-fort de secret, juste un nom d'utilisateur et un mot de passe quotidien.
+
+00:05:56.300 --> 00:05:59.820
+C'est tout ce qu'il faut à un attaquant pour commencer à parcourir les couloirs de votre réseau comme s'il possédait le badge.
+
+00:06:00.560 --> 00:06:02.220
+Regardez les façons courantes dont ce badge est récupéré.
+
+00:06:02.780 --> 00:06:05.160
+Un email de phishing atteint la mauvaise boîte de réception.
+
+00:06:05.300 --> 00:06:09.200
+Un mot de passe réutilisé depuis l'ancien compte de streaming de quelqu'un déverrouille toujours sa connexion au travail.
+
+00:06:09.200 --> 00:06:12.360
+Où des identifiants d'une violation tierce n'ont jamais été changés au siège.
+
+00:06:13.060 --> 00:06:14.980
+Dans chaque cas, l'attaquant n'a pas besoin de briser les défenses.
+
+00:06:15.780 --> 00:06:17.300
+Ils se connectent simplement comme si de rien n'était.
+
+00:06:17.740 --> 00:06:22.480
+Voici la partie que beaucoup de responsables informatiques supposent qu'un compte utilisateur compromis est une nuisance, pas un désastre.
+
+00:06:22.760 --> 00:06:24.740
+Au pire, une boîte de réception peut être un partage de département.
+
+00:06:25.080 --> 00:06:25.840
+La vérité est différente.
+
+00:06:26.140 --> 00:06:28.380
+Dans Active Directory, ce compte n'est pas un pion que vous pouvez ignorer.
+
+00:06:28.720 --> 00:06:31.040
+C'est la pièce qui peut changer tout l'état du plateau et...
+
+00:06:31.040 --> 00:06:32.520
+Le changement se produit par mouvement latéral.
+
+00:06:32.840 --> 00:06:34.320
+Les attaquants ne s'attardent pas dans une seule boîte mail.
+
+00:06:34.320 --> 00:06:38.100
+Ils extraient les identifiants en cache, rejouent les jetons et traquent les traces d'administration sur les machines.
+
+00:06:39.180 --> 00:06:42.720
+Les attaquants recherchent des identifiants en cache ou extraient la mémoire LS et rejouent les haches,
+
+00:06:42.840 --> 00:06:44.560
+des mouvements classiques listés dans le matériel de cours.
+
+00:06:45.600 --> 00:06:47.780
+Le pass de hache, ce qui signifie qu'ils n'ont même pas besoin du mot de passe lui-même.
+
+00:06:48.640 --> 00:06:51.180
+Ils recyclent les données stockées en mémoire jusqu'à ce qu'elles ouvrent une porte plus grande.
+
+00:06:52.040 --> 00:06:54.480
+Des outils comme Unikets rendent cela aussi simple qu'un copier-coller.
+
+00:06:55.080 --> 00:06:56.720
+Ce qui aggrave les choses, c'est à quel point ces mouvements semblent.
+
+00:06:56.720 --> 00:07:00.720
+Les systèmes de surveillance sont préparés pour des signaux d'alerte comme le bruit de force ou les échecs de connexion.
+
+00:07:01.680 --> 00:07:03.740
+Mais le mouvement latéral n'est qu'une série de connexions valides.
+
+00:07:04.300 --> 00:07:06.500
+Pour votre CM, on dirait un technicien du support en plein travail.
+
+00:07:07.560 --> 00:07:10.060
+Pour l'attaquant, c'est une ascension furtive vers le but ultime.
+
+00:07:10.600 --> 00:07:12.720
+Cette progression discrète est ce qui rend cette étape dangereuse.
+
+00:07:13.280 --> 00:07:15.040
+Chaque connexion se fond dans le bruit quotidien,
+
+00:07:15.400 --> 00:07:18.720
+mais à chaque saut, l'attaquant se rapproche de comptes à haute valeur.
+
+00:07:19.420 --> 00:07:21.700
+Des outils comme Bloodhound cartographient même les chemins d'attaque,
+
+00:07:21.700 --> 00:07:24.780
+montrant comment un simple utilisateur mène directement à l'admin du domaine.
+
+00:07:24.780 --> 00:07:28.080
+Si les adversaires utilisent ces graves, soyez certains que les défenseurs devraient faire de même.
+
+00:07:28.420 --> 00:07:30.380
+Depuis ce compte initial, l'escalade s'accélère.
+
+00:07:31.100 --> 00:07:33.620
+Une station de travail compromise mène aux identifiants mis en cage de quelqu'un d'autre.
+
+00:07:34.520 --> 00:07:37.160
+Bientôt, un jeton administrateur apparaît sur une machine où il ne devrait pas être.
+
+00:07:37.600 --> 00:07:38.760
+Ce jeton déverrouille les serveurs,
+
+00:07:39.060 --> 00:07:41.860
+et avec les serveurs viennent les sauvegardes, les bases de données et le contrôle des politiques.
+
+00:07:43.100 --> 00:07:46.920
+En quelques heures, ce compte RH piraté devient administrateur du domaine sur tous les systèmes.
+
+00:07:47.560 --> 00:07:48.920
+Remarquez qu'il ne s'agit pas de magie noire.
+
+00:07:49.400 --> 00:07:50.060
+C'est une pratique standard.
+
+00:07:50.420 --> 00:07:52.260
+Les playbooks sont publiés, les outils sont gratuits,
+
+00:07:52.260 --> 00:07:54.760
+et les kits d'attaque modernes automatisent la découverte et la relecture.
+
+00:07:55.100 --> 00:07:56.620
+Cela baisse le niveau d'exigence pour les attaquants.
+
+00:07:56.900 --> 00:08:00.000
+Ce qui demandait autrefois du savoir-faire nécessite désormais de la persévérance et un week-end de recherche.
+
+00:08:00.940 --> 00:08:03.860
+L'automatisation signifie que les compromissions vont vite et que la défense doit aller encore plus vite.
+
+00:08:04.580 --> 00:08:07.000
+Le problème survient lorsque les défenseurs créent des raccourcis sans s'en rendre compte.
+
+00:08:08.140 --> 00:08:10.300
+Même mot de passe administrateur local sur toutes les machines,
+
+00:08:10.440 --> 00:08:11.980
+l'attaquant en craque une et se propage partout.
+
+00:08:12.700 --> 00:08:14.300
+Des comptes privilégiés se connectant sur des postes,
+
+00:08:14.380 --> 00:08:16.360
+ces jetons attendent sur des machines où vous ne les attendiez pas.
+
+00:08:17.380 --> 00:08:19.620
+La dé ne remet pas en question ses connexions, il leur fait confiance.
+
+00:08:19.620 --> 00:08:22.140
+Cette confiance devient l'échelle de l'attaquant,
+
+00:08:22.240 --> 00:08:25.320
+et le temps que quelqu'un s'en aperçoive, l'ampleur a déjà démultiplié.
+
+00:08:26.080 --> 00:08:27.500
+Ce n'est plus un seul compte compromis.
+
+00:08:28.120 --> 00:08:30.020
+Ce sont des dizaines de comptes sur plusieurs systèmes,
+
+00:08:30.280 --> 00:08:32.900
+enchaînés en une prise de contrôle totale du réseau.
+
+00:08:33.860 --> 00:08:37.100
+C'est pourquoi considérer un identifiant volé comme étant un faible impact est une erreur critique.
+
+00:08:38.240 --> 00:08:41.500
+Dans un contexte actif directory, cette seule connexion peut devenir le passe-partout.
+
+00:08:42.180 --> 00:08:43.840
+Ce qui ressemble à un ticket de support classique,
+
+00:08:44.240 --> 00:08:46.480
+j'ai cliqué sur un lien et je ne peux plus me connecter Aigge,
+
+00:08:46.480 --> 00:08:49.300
+pourrait déjà être le début d'un saboteur réécrivant les règles en coulisses,
+
+00:08:49.700 --> 00:08:51.020
+ce qui soulève la question suivante.
+
+00:08:51.320 --> 00:08:54.060
+Quelles failles dans la dé rendent l'escalade si facile ?
+
+00:08:54.060 --> 00:08:56.340
+Car souvent, ce n'est pas le génie de l'attaquant qui décide de l'issue,
+
+00:08:56.420 --> 00:08:58.840
+ce sont les mauvaises configurations qui brillent, comme des balises.
+
+00:08:59.880 --> 00:09:01.680
+Et comme nous le verrons, ces erreurs peuvent donner l'impression
+
+00:09:01.680 --> 00:09:04.280
+que votre environnement affiche Piratez-moi en néon,
+
+00:09:05.560 --> 00:09:07.840
+des erreurs de configuration critique qui cri cri cri cri Piratez-moi.
+
+00:09:08.700 --> 00:09:11.580
+Les failles qui comptent le plus dans la dé ne sont souvent pas des exploits spectaculaires,
+
+00:09:11.680 --> 00:09:13.020
+mais de simples erreurs de configuration.
+
+00:09:14.020 --> 00:09:17.200
+Et ces erreurs créent les trois défauts structurels que les attaquants sont en priorité.
+
+00:09:17.200 --> 00:09:20.200
+Des administrateurs de domaines surprivilégiés,
+
+00:09:20.260 --> 00:09:21.840
+l'absence de séparation des niveaux de privilèges
+
+00:09:21.840 --> 00:09:24.100
+et des comptes de services obsolètes laissés en pilote automatique.
+
+00:09:25.180 --> 00:09:27.500
+Ces trois éléments seuls peuvent faire s'effondrer tout modèle de défense.
+
+00:09:28.080 --> 00:09:30.060
+Le premier problème est la prolifération des administrateurs de domaines.
+
+00:09:30.620 --> 00:09:32.780
+Trop de comptes possèdent des droits de superutilisateurs sans en avoir besoin.
+
+00:09:33.760 --> 00:09:35.760
+Dès qu'un attaquant en compromet un seul, la partie est terminée.
+
+00:09:36.040 --> 00:09:36.940
+De nouveaux comptes peuvent être créés,
+
+00:09:37.000 --> 00:09:39.560
+les stratégies de groupe réécrites et des logiciels malveillants déployés sur tout le parc.
+
+00:09:39.560 --> 00:09:41.780
+La solution ne consiste pas simplement à réduire le monde.
+
+00:09:42.100 --> 00:09:45.140
+Les experts en sécurité recommandent systématiquement d'appliquer le principe du moindre privilège
+
+00:09:45.140 --> 00:09:46.720
+ainsi qu'un modèle d'administration hiérarchisé.
+
+00:09:47.240 --> 00:09:50.460
+Ainsi, le personnel du support, les administrateurs systèmes et les architectes
+
+00:09:50.460 --> 00:09:52.400
+ont un accès limité à leur rôle réel,
+
+00:09:52.600 --> 00:09:54.820
+plutôt que de porter tous la même couronne.
+
+00:09:55.860 --> 00:09:58.280
+La deuxième erreur consiste à ignorer totalement la séparation hiérarchisée.
+
+00:09:58.940 --> 00:10:00.580
+Il est encore courant que des administrateurs juniors
+
+00:10:00.580 --> 00:10:02.660
+exercent le même niveau de contrôle que des architectes seniors.
+
+00:10:03.540 --> 00:10:05.900
+Cela crée le même rayon d'impact, quel que soit le compte compromis.
+
+00:10:05.900 --> 00:10:08.160
+Vous ne donneriez jamais un passe-partout à un inconnu,
+
+00:10:08.400 --> 00:10:09.660
+alors ne faites pas la même chose avec l'AD
+
+00:10:09.660 --> 00:10:12.040
+en laissant chaque compte privilégié accéder à tout, à tout.
+
+00:10:12.920 --> 00:10:15.420
+Un modèle de privilège hiérarchisé maintient les rôles d'administrateurs locaux,
+
+00:10:15.520 --> 00:10:16.880
+serveurs et entreprises clairement séparés,
+
+00:10:17.200 --> 00:10:19.580
+limitant ainsi l'étendue d'une compromission ou l'émission.
+
+00:10:20.480 --> 00:10:22.520
+La troisième faille provient à la fois des comptes de services oubliés
+
+00:10:22.520 --> 00:10:23.400
+et des protocoles obsolètes,
+
+00:10:24.220 --> 00:10:25.860
+où deux services sont censés authentifier les applications
+
+00:10:25.860 --> 00:10:27.180
+ou les imprimantes discrètement en arrière-plan.
+
+00:10:28.520 --> 00:10:30.340
+Trop souvent, on leur accorde des droits sur tout le domaine,
+
+00:10:30.460 --> 00:10:31.360
+car, au cas où est,
+
+00:10:32.400 --> 00:10:34.220
+ajoutez à cela des identifiants codés en dur
+
+00:10:34.220 --> 00:10:36.180
+dans des scripts et des mots de passe qui ne changent jamais
+
+00:10:36.180 --> 00:10:38.040
+et vous obtenez des comptes silencieux plus puissants
+
+00:10:38.040 --> 00:10:39.000
+que n'importe quel humain.
+
+00:10:40.060 --> 00:10:41.900
+Les attaquants les ciblent, car ils sont prévisibles,
+
+00:10:42.100 --> 00:10:44.580
+peu surveillés et passent souvent à travers les audits.
+
+00:10:45.620 --> 00:10:47.640
+Parallèlement, les protocoles hérités comme le vieux SMB
+
+00:10:47.640 --> 00:10:49.140
+ou des points de terminaison RPC obsolètes
+
+00:10:49.140 --> 00:10:50.480
+peuvent devenir des portes ouvertes.
+
+00:10:51.060 --> 00:10:52.140
+Ils ne demandent même pas d'inventivité.
+
+00:10:52.600 --> 00:10:53.780
+Un attaquant exécute une faille connue
+
+00:10:53.780 --> 00:10:54.900
+et obtient soudainement un point d'ancrage
+
+00:10:54.900 --> 00:10:55.920
+là où les défenses sont les plus faibles.
+
+00:10:56.860 --> 00:10:58.160
+En pratique, les violations réelles
+
+00:10:58.160 --> 00:10:59.540
+n'en choisissent rarement qu'un seul.
+
+00:11:00.060 --> 00:11:00.980
+C'est généralement un mélange,
+
+00:11:01.360 --> 00:11:02.660
+un compte de bas niveau issu du phishing,
+
+00:11:04.220 --> 00:11:07.100
+et un vieux service SMB discrètement activé.
+
+00:11:07.780 --> 00:11:09.300
+Ce trio permet d'obtenir le contrôle du domaine
+
+00:11:09.300 --> 00:11:10.520
+avec une rapidité déconcertante.
+
+00:11:11.080 --> 00:11:12.200
+Rien de tout cela ne semble avancer
+
+00:11:12.200 --> 00:11:13.020
+du point de vue d'un attaquant.
+
+00:11:13.360 --> 00:11:14.340
+Cela ressemble à un accès gratuit
+
+00:11:14.340 --> 00:11:15.500
+préinstallé par les administrateurs.
+
+00:11:15.940 --> 00:11:17.700
+L'excuse habituelle est le manque de temps.
+
+00:11:18.700 --> 00:11:19.560
+Mais les attaquants n'ont pas besoin
+
+00:11:19.560 --> 00:11:20.240
+de nouvelles failles érodées
+
+00:11:20.240 --> 00:11:21.660
+quand les configurations par défaut fonctionnent très bien.
+
+00:11:21.960 --> 00:11:23.600
+Réduire le nombre d'administrateurs de domaine,
+
+00:11:23.780 --> 00:11:24.940
+imposer un accès hiérarchisé,
+
+00:11:25.040 --> 00:11:26.060
+nettoyer les services dormants
+
+00:11:26.060 --> 00:11:27.260
+et restreindre les comptes de services
+
+00:11:27.260 --> 00:11:28.080
+à leurs besoins stricts
+
+00:11:28.080 --> 00:11:29.320
+n'est pas un projet impossible.
+
+00:11:29.980 --> 00:11:31.260
+C'est une hygiène de base ?
+
+00:11:31.260 --> 00:11:33.120
+Ne rien fait réquivaut à laisser une clé de secours
+
+00:11:33.120 --> 00:11:35.080
+sous votre paillasson ou...
+
+00:11:35.080 --> 00:11:35.980
+Et si les droits et privilèges
+
+00:11:35.980 --> 00:11:37.140
+définissent les chemins d'entrée évidents,
+
+00:11:37.460 --> 00:11:38.600
+il en existe aussi des invisibles.
+
+00:11:39.460 --> 00:11:40.940
+Ils se cachent dans les mécanismes de confiance
+
+00:11:40.940 --> 00:11:42.220
+sur lesquels vous comptez au quotidien.
+
+00:11:43.140 --> 00:11:44.820
+Car si les certificats d'identité eux-mêmes
+
+00:11:44.820 --> 00:11:46.120
+ne sont pas correctement sécurisés,
+
+00:11:46.240 --> 00:11:47.360
+ils cessent d'être un gage d'assurance
+
+00:11:47.360 --> 00:11:48.500
+pour devenir un passe-partout.
+
+00:11:49.840 --> 00:11:51.580
+Cela nous amène au point faible suivant,
+
+00:11:51.860 --> 00:11:53.200
+où les attaquants n'empruntent pas vos clés
+
+00:11:53.200 --> 00:11:54.100
+et ils fabriquent les leurs.
+
+00:11:55.040 --> 00:11:55.960
+L'infrastructure PKI
+
+00:11:55.960 --> 00:11:57.360
+et les certificats, le passe-partout invisible.
+
+00:11:57.360 --> 00:12:00.080
+Les certificats sont au cœur de votre système d'identité
+
+00:12:00.080 --> 00:12:02.580
+et lorsqu'ils sont liés à Active Directory via PKI,
+
+00:12:02.800 --> 00:12:04.140
+ils peuvent soit tout verrouiller,
+
+00:12:04.260 --> 00:12:06.180
+soit ouvrir grand les portes en toute discrétion.
+
+00:12:07.580 --> 00:12:08.380
+Correctement utilisé,
+
+00:12:08.460 --> 00:12:09.760
+ils vous offrent une confiance cryptographique,
+
+00:12:10.260 --> 00:12:11.060
+des connexions plus fluides
+
+00:12:11.060 --> 00:12:12.360
+et des options modernes comme les cartes à puces.
+
+00:12:13.060 --> 00:12:13.560
+Mal utilisé,
+
+00:12:13.740 --> 00:12:14.800
+ils deviennent des passe-partout invisibles
+
+00:12:14.800 --> 00:12:16.160
+que les attaquants utilisent pour se légitimer.
+
+00:12:17.300 --> 00:12:18.740
+Le danger ne vient pas des algorithmes de chiffrement.
+
+00:12:19.140 --> 00:12:19.360
+Ils sont robustes.
+
+00:12:19.360 --> 00:12:22.900
+Le problème réside dans la configuration des modèles de certificats,
+
+00:12:23.000 --> 00:12:24.240
+les personnes autorisées à les demander
+
+00:12:24.240 --> 00:12:25.800
+et les privilèges qu'ils octroient.
+
+00:12:26.540 --> 00:12:27.620
+L'infrastructure à clé publique
+
+00:12:27.620 --> 00:12:29.280
+est censée être le système de référence pour la confiance.
+
+00:12:30.040 --> 00:12:32.000
+Considérez les certificats comme des passeports numériques,
+
+00:12:32.560 --> 00:12:34.040
+délivrés par une autorité de certification,
+
+00:12:34.200 --> 00:12:35.640
+vérifiés à la frontière par les serveurs
+
+00:12:35.640 --> 00:12:37.800
+et jugez valides tant qu'ils sont liés à cette autorité.
+
+00:12:39.140 --> 00:12:40.260
+Les utilisateurs les présentent,
+
+00:12:40.340 --> 00:12:41.400
+les machines s'authentifient avec
+
+00:12:41.400 --> 00:12:43.540
+et tout semble constituer une couche de sécurité bien huilée.
+
+00:12:43.860 --> 00:12:44.240
+Sur le papier,
+
+00:12:44.320 --> 00:12:46.580
+l'intégration de la PKI avec Active Directory renforce la sécurité.
+
+00:12:46.580 --> 00:12:47.580
+En réalité,
+
+00:12:47.700 --> 00:12:50.020
+les raccourcis cachés dans les permissions des modèles ouvrent les portes.
+
+00:12:50.460 --> 00:12:52.120
+C'est avec ces modèles que les choses tournent mal.
+
+00:12:52.560 --> 00:12:53.660
+Un modèle créé il y a des années
+
+00:12:53.660 --> 00:12:55.940
+pour faciliter la vie d'une imprimante ou d'un compte de service
+
+00:12:55.940 --> 00:12:58.400
+peut accorder des droits bien trop étendus.
+
+00:12:59.160 --> 00:13:00.560
+Si ce modèle autorise un mappage élevé,
+
+00:13:01.100 --> 00:13:02.780
+n'importe qui ayant un accès courant au domaine
+
+00:13:02.780 --> 00:13:03.800
+peut demander un certificat
+
+00:13:03.800 --> 00:13:05.780
+et s'élever vers un rôle qu'il ne devrait jamais détenir.
+
+00:13:06.500 --> 00:13:07.760
+Ils n'ont pas besoin de casser des mots de passe
+
+00:13:07.760 --> 00:13:08.640
+ou de forcer des connexions.
+
+00:13:09.260 --> 00:13:10.480
+Ils déposent simplement une demande valide
+
+00:13:10.480 --> 00:13:12.500
+et l'autorité de certification l'approuve.
+
+00:13:13.220 --> 00:13:13.880
+A partir de ce moment,
+
+00:13:13.880 --> 00:13:15.540
+vos systèmes les considèrent comme dignes de confiance,
+
+00:13:15.740 --> 00:13:17.220
+souvent au niveau d'un administrateur de domaine.
+
+00:13:17.800 --> 00:13:18.960
+C'est comme distribuer des badges visiteurs
+
+00:13:18.960 --> 00:13:20.300
+qui permettent aux gens d'entrer dans le coffre-fort
+
+00:13:20.300 --> 00:13:21.620
+parce que personne n'a vérifié pour quelle porte
+
+00:13:21.620 --> 00:13:22.300
+le badge était codé.
+
+00:13:22.800 --> 00:13:23.240
+Euh, podé.
+
+00:13:23.920 --> 00:13:24.400
+Les pare-feux,
+
+00:13:24.760 --> 00:13:26.080
+les segments réseau et les alertes des terminaux
+
+00:13:26.080 --> 00:13:26.820
+sont toujours en place
+
+00:13:26.820 --> 00:13:28.620
+et aucun tour met en question un certificat
+
+00:13:28.620 --> 00:13:29.800
+qui semble officiellement signé.
+
+00:13:30.320 --> 00:13:31.180
+L'attestation suffit.
+
+00:13:31.660 --> 00:13:32.320
+Les attaquants le savent,
+
+00:13:32.400 --> 00:13:33.460
+c'est pourquoi ils traquent ces modèles
+
+00:13:33.460 --> 00:13:34.420
+à chaque intrusion.
+
+00:13:35.240 --> 00:13:36.680
+Les politiques d'inscription mal configurées,
+
+00:13:36.680 --> 00:13:37.800
+surtout les vieux modèles de service
+
+00:13:37.800 --> 00:13:39.180
+deviennent souvent le prix ultime.
+
+00:13:39.860 --> 00:13:40.680
+Le problème plus profond
+
+00:13:40.680 --> 00:13:42.200
+est l'importance que nous accordons aux certificats
+
+00:13:42.200 --> 00:13:43.220
+sans jamais les remettre en question.
+
+00:13:43.960 --> 00:13:44.900
+Échouer une connexion trop de fois,
+
+00:13:44.960 --> 00:13:45.740
+les alarmes se déclenchent.
+
+00:13:46.460 --> 00:13:47.400
+Envoyer trop de demandes MFA
+
+00:13:47.400 --> 00:13:48.260
+et quelqu'un finit par remarquer.
+
+00:13:49.060 --> 00:13:50.080
+Mais une connexion encapsulée
+
+00:13:50.080 --> 00:13:51.620
+dans un certificat semble parfaitement propre.
+
+00:13:52.240 --> 00:13:52.540
+Par défaut,
+
+00:13:52.600 --> 00:13:54.220
+les systèmes ne considèrent pas cela comme suspect.
+
+00:13:54.900 --> 00:13:55.660
+Ils le qualifient de succès.
+
+00:13:56.220 --> 00:13:57.440
+C'est pourquoi les certificats falsifiés
+
+00:13:57.440 --> 00:13:58.020
+sont si efficaces.
+
+00:13:58.300 --> 00:13:59.080
+Pour les outils de sécurité,
+
+00:13:59.240 --> 00:14:00.980
+ils apparaissent comme une activité vérifiée standard.
+
+00:14:01.500 --> 00:14:01.860
+À présent,
+
+00:14:02.120 --> 00:14:03.300
+corrigeons une idée reçue courante.
+
+00:14:03.600 --> 00:14:05.020
+On entend parfois dire que même
+
+00:14:05.020 --> 00:14:07.360
+le MFA s'effondre face aux certificats falsifiés.
+
+00:14:07.360 --> 00:14:09.040
+La réalité est plus nuancée.
+
+00:14:09.580 --> 00:14:10.860
+Selon votre flux d'authentification,
+
+00:14:11.020 --> 00:14:12.120
+la connexion par certificat
+
+00:14:12.120 --> 00:14:13.640
+peut valider l'authentification primaire
+
+00:14:13.640 --> 00:14:14.820
+et, si elle est mal configurée,
+
+00:14:15.000 --> 00:14:16.880
+contourner les demandes MFA supplémentaires.
+
+00:14:17.520 --> 00:14:18.680
+Des modèles mal configurés
+
+00:14:18.680 --> 00:14:19.360
+permettent aux attaquants
+
+00:14:19.360 --> 00:14:20.900
+de contourner efficacement cette seconde couche.
+
+00:14:21.340 --> 00:14:21.980
+Cela ne signifie pas
+
+00:14:21.980 --> 00:14:23.380
+que les certificats annulent le MFA,
+
+00:14:23.460 --> 00:14:24.220
+mais ils peuvent le neutraliser
+
+00:14:24.220 --> 00:14:25.900
+si votre conception n'impose pas explicitement le MFA
+
+00:14:25.900 --> 00:14:27.260
+lors de l'utilisation du certificat.
+
+00:14:27.680 --> 00:14:28.620
+Lors de l'utilisation du certificat.
+
+00:14:29.000 --> 00:14:30.540
+Les testeurs constatent ces lacunes en permanence.
+
+00:14:31.620 --> 00:14:32.400
+Les modèles d'inscription
+
+00:14:32.400 --> 00:14:33.580
+peuvent autoriser des certificats
+
+00:14:33.580 --> 00:14:35.000
+liés directement au contrôleur de domaine
+
+00:14:35.000 --> 00:14:35.900
+ou permettre une inscription
+
+00:14:35.900 --> 00:14:36.820
+pour le compte d'autrui.
+
+00:14:37.380 --> 00:14:38.160
+Rien de tout cela n'implique
+
+00:14:38.160 --> 00:14:39.040
+de casser la cryptographie.
+
+00:14:39.320 --> 00:14:40.440
+Il s'agit de permissions par défaut
+
+00:14:40.440 --> 00:14:41.260
+que personne n'a audité.
+
+00:14:42.160 --> 00:14:43.460
+Un adversaire ne force pas vos portes.
+
+00:14:44.340 --> 00:14:45.500
+Il soumet poliment une requête,
+
+00:14:45.860 --> 00:14:47.140
+récupère son certificat signé
+
+00:14:47.140 --> 00:14:48.120
+et circule librement.
+
+00:14:48.520 --> 00:14:49.900
+Pourquoi ce problème persiste-t-il ?
+
+00:14:49.900 --> 00:14:50.960
+Les services de certificat
+
+00:14:50.960 --> 00:14:51.640
+semblent intimidants.
+
+00:14:52.140 --> 00:14:52.960
+Les administrateurs craignent
+
+00:14:52.960 --> 00:14:53.840
+de remplir flux de connexion
+
+00:14:53.840 --> 00:14:54.820
+ou de perturber la production,
+
+00:14:55.000 --> 00:14:55.540
+alors ils laissent
+
+00:14:55.540 --> 00:14:56.460
+les anciens modèles en place.
+
+00:14:57.280 --> 00:14:57.860
+Au fil des ans,
+
+00:14:57.920 --> 00:14:58.860
+ces modèles inutilisés
+
+00:14:58.860 --> 00:15:00.020
+ou surprivilégiés s'accumulent.
+
+00:15:00.940 --> 00:15:01.440
+Les attaquants comptent
+
+00:15:01.440 --> 00:15:02.020
+sur cette inertie.
+
+00:15:02.020 --> 00:15:02.920
+En utilisant l'une
+
+00:15:02.920 --> 00:15:03.740
+de ces options oubliées,
+
+00:15:03.880 --> 00:15:04.880
+ils créent tous les identifiants
+
+00:15:04.880 --> 00:15:06.020
+nécessaires sans déclencher
+
+00:15:06.020 --> 00:15:07.080
+aucune alerte classique.
+
+00:15:07.540 --> 00:15:08.540
+La solution ne requiert pas Jenny.
+
+00:15:08.980 --> 00:15:09.740
+Elle exige de la discipline.
+
+00:15:10.620 --> 00:15:11.900
+Renforcer les modèles de certificat
+
+00:15:11.900 --> 00:15:12.480
+pour qu'ils n'accordent
+
+00:15:12.480 --> 00:15:13.280
+que les droits appropriés
+
+00:15:13.280 --> 00:15:14.580
+et supprimer les permissions
+
+00:15:14.580 --> 00:15:15.360
+d'inscription inutiles
+
+00:15:15.360 --> 00:15:16.360
+aux comptes qui n'en ont pas besoin.
+
+00:15:17.500 --> 00:15:18.120
+Et ne supposez pas
+
+00:15:18.120 --> 00:15:18.840
+que le bon fonctionnement
+
+00:15:18.840 --> 00:15:19.620
+équivaut à la sécurité.
+
+00:15:20.460 --> 00:15:21.140
+Auditer régulièrement
+
+00:15:21.140 --> 00:15:22.000
+les modèles et les émissions.
+
+00:15:22.880 --> 00:15:23.740
+Un renforcement opérationnel
+
+00:15:23.740 --> 00:15:24.200
+ressemble à ceci.
+
+00:15:24.600 --> 00:15:25.400
+Auditer les autorités
+
+00:15:25.400 --> 00:15:25.940
+de certification
+
+00:15:25.940 --> 00:15:26.760
+à intervalles réguliers,
+
+00:15:27.020 --> 00:15:27.600
+supprimer les droits
+
+00:15:27.600 --> 00:15:28.340
+d'inscription étendus
+
+00:15:28.340 --> 00:15:29.360
+des groupes non essentiels,
+
+00:15:29.560 --> 00:15:30.100
+imposer des flux
+
+00:15:30.100 --> 00:15:30.980
+d'inscription privilégiés
+
+00:15:30.980 --> 00:15:31.740
+pour les modèles critiques
+
+00:15:31.740 --> 00:15:32.720
+et journaliser chaque demande
+
+00:15:32.720 --> 00:15:34.360
+de certificat et journaliser certificat.
+
+00:15:34.640 --> 00:15:35.340
+Traiter ces journaux
+
+00:15:35.340 --> 00:15:36.160
+avec la même suspicion
+
+00:15:36.160 --> 00:15:36.940
+que les réinitialisations
+
+00:15:36.940 --> 00:15:37.400
+de mots de passe
+
+00:15:37.400 --> 00:15:37.960
+ou les créations
+
+00:15:37.960 --> 00:15:38.960
+de comptes administrateurs.
+
+00:15:39.700 --> 00:15:40.340
+Il est aussi important
+
+00:15:40.340 --> 00:15:41.120
+de ne plus considérer
+
+00:15:41.120 --> 00:15:41.680
+les certificats
+
+00:15:41.680 --> 00:15:42.260
+comme invisibles
+
+00:15:42.260 --> 00:15:42.900
+pour la surveillance.
+
+00:15:43.500 --> 00:15:44.000
+Vous êtes journalisé,
+
+00:15:44.380 --> 00:15:44.960
+vous êtes audité.
+
+00:15:45.400 --> 00:15:46.080
+L'activité de la Cé
+
+00:15:46.080 --> 00:15:46.600
+doit être placée
+
+00:15:46.600 --> 00:15:47.140
+sous la même loupe
+
+00:15:47.140 --> 00:15:48.040
+que les changements de GPO
+
+00:15:48.040 --> 00:15:48.760
+ou les modifications
+
+00:15:48.760 --> 00:15:49.800
+d'appartenance à des groupes.
+
+00:15:50.940 --> 00:15:51.960
+Si un nouveau certificat
+
+00:15:51.960 --> 00:15:52.720
+hautement privilégié
+
+00:15:52.720 --> 00:15:53.080
+a été mis,
+
+00:15:53.400 --> 00:15:54.020
+cela doit illuminer
+
+00:15:54.020 --> 00:15:54.620
+un tableau de bord
+
+00:15:54.620 --> 00:15:55.760
+plutôt que passer inaperçu
+
+00:15:55.760 --> 00:15:56.720
+car si vous laissez
+
+00:15:56.720 --> 00:15:57.640
+proliférer les modèles,
+
+00:15:57.860 --> 00:15:58.860
+vous offrez un accès rapide
+
+00:15:58.860 --> 00:16:00.040
+secret aux attaquants.
+
+00:16:01.060 --> 00:16:01.540
+Des certificats
+
+00:16:01.540 --> 00:16:02.180
+qui n'expirent jamais,
+
+00:16:02.300 --> 00:16:02.600
+des modèles
+
+00:16:02.600 --> 00:16:03.200
+qui accordent des droits
+
+00:16:03.200 --> 00:16:03.800
+au niveau du domaine
+
+00:16:03.800 --> 00:16:04.320
+et des inscriptions
+
+00:16:04.320 --> 00:16:05.180
+que pas personne ne surveille.
+
+00:16:05.660 --> 00:16:06.520
+Cela forme un passe-partout
+
+00:16:06.520 --> 00:16:07.640
+qui se glisse sous vos défenses.
+
+00:16:08.540 --> 00:16:09.160
+Une fois utilisé,
+
+00:16:09.300 --> 00:16:10.100
+l'acteur ne se contente pas
+
+00:16:10.100 --> 00:16:10.660
+d'entraîner l'accès
+
+00:16:10.660 --> 00:16:11.100
+pour une cession.
+
+00:16:11.440 --> 00:16:12.300
+Il peut se réauthentifier
+
+00:16:12.300 --> 00:16:12.980
+dans tout l'environnement
+
+00:16:12.980 --> 00:16:13.780
+souvent indéfiniment.
+
+00:16:14.620 --> 00:16:15.480
+La dure vérité est que,
+
+00:16:15.780 --> 00:16:16.460
+tant que l'infrastructure
+
+00:16:16.460 --> 00:16:17.560
+PKI n'est pas délibérément
+
+00:16:17.560 --> 00:16:18.100
+sécurisée,
+
+00:16:18.100 --> 00:16:18.840
+toute la bonne hygiène
+
+00:16:18.840 --> 00:16:19.740
+autour des comptes et services
+
+00:16:19.740 --> 00:16:20.560
+risque de s'effondrer
+
+00:16:20.560 --> 00:16:21.280
+à cause d'une simple
+
+00:16:21.280 --> 00:16:22.080
+erreur de configuration.
+
+00:16:22.820 --> 00:16:23.500
+Maîtriser le contrôle
+
+00:16:23.500 --> 00:16:23.880
+des modèles,
+
+00:16:23.980 --> 00:16:24.860
+appliquer un audit réel
+
+00:16:24.860 --> 00:16:25.540
+et les certificats
+
+00:16:25.540 --> 00:16:26.060
+feront ce pour quoi
+
+00:16:26.060 --> 00:16:26.540
+ils sont conçus.
+
+00:16:26.820 --> 00:16:27.620
+Renforcer la confiance.
+
+00:16:28.680 --> 00:16:29.220
+Si vous échouez,
+
+00:16:29.300 --> 00:16:30.160
+vous aurez offert aux intrus
+
+00:16:30.160 --> 00:16:30.720
+une porte dérobée
+
+00:16:30.720 --> 00:16:31.380
+vers tout votre système.
+
+00:16:31.780 --> 00:16:32.340
+C'est ainsi que l'aide
+
+00:16:32.340 --> 00:16:33.160
+et sur site peut faillir
+
+00:16:33.160 --> 00:16:33.780
+avant même d'atteindre
+
+00:16:33.780 --> 00:16:34.600
+les menaces externes.
+
+00:16:35.220 --> 00:16:35.820
+Et voici le piège.
+
+00:16:36.300 --> 00:16:36.960
+Lorsque les entreprises
+
+00:16:36.960 --> 00:16:37.860
+étendent leur infrastructure
+
+00:16:37.860 --> 00:16:38.800
+vers des annuaires cloud,
+
+00:16:39.000 --> 00:16:39.800
+ces faiblesses ne subsistent
+
+00:16:39.800 --> 00:16:40.240
+pas seulement,
+
+00:16:40.400 --> 00:16:40.940
+elles se transforment
+
+00:16:40.940 --> 00:16:41.840
+en nouvelles voies invisibles
+
+00:16:41.840 --> 00:16:43.120
+et ce changement apporte
+
+00:16:43.120 --> 00:16:43.920
+son lot de surprises.
+
+00:16:45.380 --> 00:16:46.060
+Les environnements hybrides
+
+00:16:46.060 --> 00:16:46.720
+sont des ponts fantômes
+
+00:16:46.720 --> 00:16:47.240
+pour les attaquants.
+
+00:16:47.780 --> 00:16:48.300
+Les configurations
+
+00:16:48.300 --> 00:16:49.180
+d'identité hybrides
+
+00:16:49.180 --> 00:16:50.100
+connectent votre AD local
+
+00:16:50.100 --> 00:16:50.680
+à Azure AD
+
+00:16:50.680 --> 00:16:51.940
+ou Microsoft 365.
+
+00:16:53.120 --> 00:16:53.800
+Ces liens peuvent sembler
+
+00:16:53.800 --> 00:16:54.320
+aussi anodins
+
+00:16:54.320 --> 00:16:55.020
+qu'une file d'attente
+
+00:16:55.020 --> 00:16:55.540
+de magasins,
+
+00:16:55.800 --> 00:16:57.060
+rapides, invisibles
+
+00:16:57.060 --> 00:16:57.960
+et souvent ignorés.
+
+00:16:58.820 --> 00:16:59.360
+Mais ils élargissent
+
+00:16:59.360 --> 00:17:00.200
+également la surface d'attaque
+
+00:17:00.200 --> 00:17:00.660
+d'une manière que
+
+00:17:00.660 --> 00:17:01.480
+beaucoup d'administrateurs
+
+00:17:01.480 --> 00:17:01.940
+sous-estiment.
+
+00:17:02.440 --> 00:17:03.220
+Les connexions hybrides
+
+00:17:03.220 --> 00:17:04.020
+ne garantissent pas
+
+00:17:04.020 --> 00:17:04.520
+l'insécurité
+
+00:17:04.520 --> 00:17:04.960
+mais elles créent
+
+00:17:04.960 --> 00:17:05.880
+de nouveaux chemins d'accès.
+
+00:17:06.980 --> 00:17:07.820
+Tout comme vos contrôleurs
+
+00:17:07.820 --> 00:17:08.240
+de domaine,
+
+00:17:08.560 --> 00:17:09.400
+ces connexions doivent être
+
+00:17:09.400 --> 00:17:10.700
+renforcées avec la même rigueur.
+
+00:17:12.060 --> 00:17:12.860
+Voici les ponts fantômes,
+
+00:17:13.120 --> 00:17:13.960
+les outils de synchronisation
+
+00:17:13.960 --> 00:17:15.060
+comme Azure AD Connect,
+
+00:17:15.180 --> 00:17:16.040
+la synchronisation de H
+
+00:17:16.040 --> 00:17:16.520
+de mot de passe,
+
+00:17:16.600 --> 00:17:17.500
+l'authentification directe,
+
+00:17:17.560 --> 00:17:18.240
+le SSO transparent
+
+00:17:18.240 --> 00:17:19.540
+et la fédération avec ADFS.
+
+00:17:20.620 --> 00:17:21.640
+Ils constituent la plomberie
+
+00:17:21.640 --> 00:17:22.280
+qui rend le travail
+
+00:17:22.280 --> 00:17:23.640
+hybride fluide
+
+00:17:23.640 --> 00:17:24.560
+mais chacun représente
+
+00:17:24.560 --> 00:17:25.320
+une cible de choix
+
+00:17:25.320 --> 00:17:26.120
+car si un attaquant
+
+00:17:26.120 --> 00:17:27.240
+compromet le côté local,
+
+00:17:27.720 --> 00:17:28.800
+il accède aux ressources cloud
+
+00:17:28.800 --> 00:17:30.080
+et si le tenant cloud tombe,
+
+00:17:30.400 --> 00:17:31.040
+il peut tout aussi
+
+00:17:31.040 --> 00:17:32.740
+facilement revenir en local.
+
+00:17:33.960 --> 00:17:35.060
+La plupart des entreprises
+
+00:17:35.060 --> 00:17:35.640
+déploient l'hybride
+
+00:17:35.640 --> 00:17:36.260
+car c'est présenté
+
+00:17:36.260 --> 00:17:37.160
+comme moderne et efficace.
+
+00:17:38.220 --> 00:17:38.860
+Les utilisateurs
+
+00:17:38.860 --> 00:17:39.480
+veulent une connexion
+
+00:17:39.480 --> 00:17:40.000
+unique pour tout
+
+00:17:40.000 --> 00:17:40.680
+alors vous connectez
+
+00:17:40.680 --> 00:17:41.380
+votre AD Azure,
+
+00:17:41.760 --> 00:17:42.880
+déployez Azure AD Connect,
+
+00:17:42.980 --> 00:17:43.780
+activez l'authentification
+
+00:17:43.780 --> 00:17:44.840
+directe ou la synchro de H
+
+00:17:44.840 --> 00:17:45.340
+et considérez
+
+00:17:45.340 --> 00:17:46.220
+que l'infrastructure est prête.
+
+00:17:46.960 --> 00:17:47.320
+En réalité,
+
+00:17:47.420 --> 00:17:47.960
+la synchronisation
+
+00:17:47.960 --> 00:17:48.600
+n'est pas à sens unis.
+
+00:17:49.840 --> 00:17:50.960
+Ce canal d'identité partagée
+
+00:17:50.960 --> 00:17:51.860
+peut transporter des attaques
+
+00:17:51.860 --> 00:17:52.560
+aussi facilement
+
+00:17:52.560 --> 00:17:53.540
+qu'il transporte des connexions.
+
+00:17:54.320 --> 00:17:54.680
+Voyez cela
+
+00:17:54.680 --> 00:17:55.380
+comme la création
+
+00:17:55.380 --> 00:17:56.260
+d'un tunnel souterrain
+
+00:17:56.260 --> 00:17:57.080
+entre deux châteaux.
+
+00:17:57.860 --> 00:17:58.680
+Destiné au ravitaillement,
+
+00:17:58.820 --> 00:18:00.240
+personne ne le surveille vraiment
+
+00:18:00.240 --> 00:18:01.140
+tandis que les gardes
+
+00:18:01.140 --> 00:18:02.020
+sur les remparts
+
+00:18:02.020 --> 00:18:02.740
+restent vigilants.
+
+00:18:03.340 --> 00:18:03.920
+Les attaquants utilisent
+
+00:18:03.920 --> 00:18:04.780
+le tunnel que vous avez construit
+
+00:18:04.780 --> 00:18:05.080
+vous-même.
+
+00:18:05.220 --> 00:18:05.900
+C'est là que réside le risque.
+
+00:18:06.280 --> 00:18:06.960
+Les attaquants ne brisent pas
+
+00:18:06.960 --> 00:18:07.540
+le rempart extérieur,
+
+00:18:07.640 --> 00:18:08.560
+ils empruntent la synchronisation.
+
+00:18:09.420 --> 00:18:10.460
+La séquence se déroule rapidement.
+
+00:18:11.000 --> 00:18:12.140
+Un jeu d'identifiants locaux
+
+00:18:12.140 --> 00:18:13.060
+est dérobé.
+
+00:18:13.940 --> 00:18:14.840
+Grâce à la synchronisation,
+
+00:18:14.960 --> 00:18:15.640
+ces mêmes identifiants
+
+00:18:15.640 --> 00:18:16.040
+sont valides
+
+00:18:16.040 --> 00:18:17.540
+dans Microsoft 365 et Cap.
+
+00:18:18.420 --> 00:18:18.700
+Soudain,
+
+00:18:18.740 --> 00:18:19.280
+l'attaquant est dans
+
+00:18:19.280 --> 00:18:19.980
+les mails Exchange,
+
+00:18:20.180 --> 00:18:20.940
+les dossiers OneDrive
+
+00:18:20.940 --> 00:18:21.980
+et les conversations Teams.
+
+00:18:22.820 --> 00:18:23.300
+C'est tout le cœur
+
+00:18:23.300 --> 00:18:23.740
+de l'activité
+
+00:18:23.740 --> 00:18:24.300
+qui est exposée
+
+00:18:24.300 --> 00:18:24.900
+simplement parce que
+
+00:18:24.900 --> 00:18:25.700
+les comptes ont été répliqués
+
+00:18:25.700 --> 00:18:26.840
+sans distinction plus stricte.
+
+00:18:27.680 --> 00:18:28.200
+La fédération
+
+00:18:28.200 --> 00:18:28.840
+est un autre point faible.
+
+00:18:29.140 --> 00:18:29.900
+Lorsque vous configurez
+
+00:18:29.900 --> 00:18:30.380
+l'AD local
+
+00:18:30.380 --> 00:18:31.460
+pour valider les connexions
+
+00:18:31.460 --> 00:18:31.900
+dans le cloud
+
+00:18:31.900 --> 00:18:32.860
+vous crée un saut de confiance.
+
+00:18:33.340 --> 00:18:34.400
+Si la configuration est fragile,
+
+00:18:34.500 --> 00:18:35.140
+c'est comme laisser traîner
+
+00:18:35.140 --> 00:18:35.740
+des chèques signés.
+
+00:18:37.300 --> 00:18:38.080
+Injectez des jetons
+
+00:18:38.080 --> 00:18:39.600
+et le cloud les accepte.
+
+00:18:40.680 --> 00:18:41.700
+Microsoft 365
+
+00:18:41.700 --> 00:18:42.740
+fait confiance à l'autorité
+
+00:18:42.740 --> 00:18:43.600
+d'un contrôleur de domaine
+
+00:18:43.600 --> 00:18:44.240
+à des compromis
+
+00:18:44.240 --> 00:18:45.500
+sans vérification approfondie.
+
+00:18:46.820 --> 00:18:47.860
+Les règles d'accès conditionnels
+
+00:18:47.860 --> 00:18:49.180
+ajoutent une barrière supplémentaire,
+
+00:18:49.480 --> 00:18:50.260
+restreignant la connexion
+
+00:18:50.260 --> 00:18:51.420
+selon la conformité de l'appareil,
+
+00:18:51.580 --> 00:18:52.600
+le MFA ou la géographie.
+
+00:18:53.160 --> 00:18:53.840
+Mais leur valeur dépend
+
+00:18:53.840 --> 00:18:55.140
+entièrement de la conception des règles.
+
+00:18:55.800 --> 00:18:56.480
+Une mauvaise configuration
+
+00:18:56.480 --> 00:18:57.200
+permet aux attaquants
+
+00:18:57.200 --> 00:18:58.280
+de contourner des invités MFA
+
+00:18:58.280 --> 00:18:58.880
+ou de s'infiltrer
+
+00:18:58.880 --> 00:18:59.940
+via des scénarios de négligés.
+
+00:19:00.360 --> 00:19:01.300
+Ils n'ont besoin d'aucun code spécial.
+
+00:19:01.920 --> 00:19:02.540
+Ils rôdent simplement
+
+00:19:02.540 --> 00:19:03.400
+autour des cas isolés,
+
+00:19:03.600 --> 00:19:04.580
+négligés par l'administration.
+
+00:19:05.580 --> 00:19:05.840
+Ensuite,
+
+00:19:05.920 --> 00:19:07.280
+il y a l'authentification directe.
+
+00:19:07.420 --> 00:19:08.060
+Azure AD Connect
+
+00:19:08.060 --> 00:19:09.300
+renvoie une demande d'authentification
+
+00:19:09.300 --> 00:19:10.300
+vers votre contrôleur de domaine
+
+00:19:10.300 --> 00:19:11.300
+pour vérifier si le mot de passe
+
+00:19:11.300 --> 00:19:11.640
+est correct.
+
+00:19:12.400 --> 00:19:13.120
+Si un attaquant
+
+00:19:13.120 --> 00:19:13.880
+a un pied à terre sur site,
+
+00:19:13.960 --> 00:19:14.320
+il peut rejouir
+
+00:19:14.320 --> 00:19:15.060
+ses mots de passe compromis
+
+00:19:15.060 --> 00:19:16.520
+via le canal d'authentification directe.
+
+00:19:17.600 --> 00:19:18.500
+Le cloud recevant
+
+00:19:18.500 --> 00:19:19.480
+une réponse valide de l'AD
+
+00:19:19.480 --> 00:19:20.640
+accepte et autorise l'accès.
+
+00:19:21.320 --> 00:19:22.340
+Si la MFA n'est pas appliquée
+
+00:19:22.340 --> 00:19:22.960
+de manière cohérente
+
+00:19:22.960 --> 00:19:23.440
+dans les deux mondes,
+
+00:19:23.440 --> 00:19:24.600
+elle est pratiquement contournée.
+
+00:19:25.440 --> 00:19:26.240
+Les défenseurs ne parviennent
+
+00:19:26.240 --> 00:19:27.200
+souvent pas à détecter cela tant.
+
+00:19:27.920 --> 00:19:28.540
+Les emails cloud
+
+00:19:28.540 --> 00:19:29.380
+sont pillés silencieusement,
+
+00:19:29.700 --> 00:19:30.660
+les fichiers sont exfiltrés
+
+00:19:30.660 --> 00:19:31.920
+et les connexions administrateurs
+
+00:19:31.920 --> 00:19:32.940
+semblent valides des deux côtés.
+
+00:19:33.740 --> 00:19:34.360
+La détection traîne
+
+00:19:34.360 --> 00:19:35.200
+car chaque partie suppose
+
+00:19:35.200 --> 00:19:36.000
+que l'autre a déjà effectué
+
+00:19:36.000 --> 00:19:36.940
+les vérifications nécessaires.
+
+00:19:37.260 --> 00:19:37.580
+En pratique,
+
+00:19:37.660 --> 00:19:38.600
+les attaquants peuvent pivoter
+
+00:19:38.600 --> 00:19:39.340
+d'un environnement à l'autre
+
+00:19:39.340 --> 00:19:39.860
+pendant des semaines
+
+00:19:39.860 --> 00:19:40.400
+avant que quelqu'un
+
+00:19:40.400 --> 00:19:41.120
+ne rassemble les indices.
+
+00:19:41.660 --> 00:19:42.300
+Les audits révèlent
+
+00:19:42.300 --> 00:19:43.460
+systématiquement les mêmes causes.
+
+00:19:44.060 --> 00:19:44.860
+Azure AD Connect
+
+00:19:44.860 --> 00:19:45.560
+laissé avec des droits
+
+00:19:45.560 --> 00:19:46.780
+de synchronisation par défaut,
+
+00:19:46.880 --> 00:19:47.700
+des règles de fédération
+
+00:19:47.700 --> 00:19:48.160
+trop larges,
+
+00:19:48.220 --> 00:19:49.440
+un accès conditionnel non testé
+
+00:19:53.440 --> 00:19:53.960
+utilise les portes
+
+00:19:53.960 --> 00:19:54.780
+que nous avons laissées ouvertes
+
+00:19:54.780 --> 00:19:55.320
+par commodité.
+
+00:19:56.000 --> 00:19:56.880
+L'atténuation suit
+
+00:19:56.880 --> 00:19:57.480
+une recette simple.
+
+00:19:58.240 --> 00:19:59.400
+Auditez votre configuration
+
+00:19:59.400 --> 00:20:00.300
+Azure AD Connect,
+
+00:20:00.640 --> 00:20:01.440
+minimisez les droits
+
+00:20:01.440 --> 00:20:02.080
+de synchronisation
+
+00:20:02.080 --> 00:20:03.120
+et appliquez la MFA
+
+00:20:03.120 --> 00:20:04.020
+et l'accès conditionnel
+
+00:20:04.020 --> 00:20:04.800
+de manière cohérente
+
+00:20:04.800 --> 00:20:05.940
+sur site et dans le cloud.
+
+00:20:06.840 --> 00:20:07.680
+Renforcez la fédération
+
+00:20:07.680 --> 00:20:08.220
+pour que les jetons
+
+00:20:08.220 --> 00:20:09.240
+ne puissent être facilement rejoués
+
+00:20:09.240 --> 00:20:09.940
+et surveillez
+
+00:20:09.940 --> 00:20:10.820
+toute la surface hybride.
+
+00:20:12.120 --> 00:20:12.900
+Corrélez les connexions,
+
+00:20:13.020 --> 00:20:14.080
+surveillez les missions de certificat
+
+00:20:14.080 --> 00:20:15.220
+et suivez l'activité des connecteurs
+
+00:20:15.220 --> 00:20:15.840
+comme s'il s'agissait
+
+00:20:15.840 --> 00:20:16.420
+de journaux d'événements
+
+00:20:16.420 --> 00:20:17.080
+de contrôleurs de domaine.
+
+00:20:17.380 --> 00:20:18.620
+Traitez la journalisation cloud
+
+00:20:18.620 --> 00:20:19.060
+et sur site
+
+00:20:19.060 --> 00:20:20.000
+comme un système continu
+
+00:20:20.000 --> 00:20:21.300
+et non comme des silos séparés.
+
+00:20:21.540 --> 00:20:23.260
+Et protéger un AD hybride
+
+00:20:23.260 --> 00:20:23.880
+n'est pas gratifiant
+
+00:20:23.880 --> 00:20:24.800
+mais c'est un double travail.
+
+00:20:25.240 --> 00:20:25.900
+Un balèche de renforcement
+
+00:20:25.900 --> 00:20:26.740
+pour la forteresse sur site
+
+00:20:26.740 --> 00:20:27.640
+et un autre pour le tenant cloud.
+
+00:20:28.400 --> 00:20:29.260
+Si vous en oubliez un,
+
+00:20:29.500 --> 00:20:30.200
+vous laissez votre pont
+
+00:20:30.200 --> 00:20:30.700
+sans surveillance.
+
+00:20:31.320 --> 00:20:31.900
+Corrigez les deux
+
+00:20:31.900 --> 00:20:32.600
+et le pont cesse
+
+00:20:32.600 --> 00:20:33.540
+d'être un chemin fantôme
+
+00:20:33.540 --> 00:20:34.140
+pour les attaquants
+
+00:20:34.140 --> 00:20:34.960
+pour devenir un tunnel
+
+00:20:34.960 --> 00:20:36.180
+sécurisé et surveillé.
+
+00:20:36.800 --> 00:20:37.760
+Alors quelle est la plus grande ?

@@ -1,0 +1,577 @@
+WEBVTT
+
+00:00:00.160 --> 00:00:06.620
+Welkom bij de M365FM podcast, waar we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:06.920 --> 00:00:09.080
+Wat Azure Data Lake Storage echt is.
+
+00:00:09.280 --> 00:00:13.540
+Azure Data Lake Storage klinkt als een gloednieuw product om te leren, maar dat is het echt niet.
+
+00:00:13.720 --> 00:00:19.160
+Het is dezelfde goedkope Azure-opslag waar je waarschijnlijk al van hebt gehoord, met één instelling ingeschakeld die het echte mappen geeft.
+
+00:00:19.360 --> 00:00:25.580
+Die ene instelling verandert hoe snel grote analyseopdrachten klaar zijn, wat belangrijk is omdat de rekenkracht voor die opdrachten het grootste deel van je geld kost.
+
+00:00:25.580 --> 00:00:29.860
+Het is ook een inrichtingsweg, want als die instelling eenmaal aanstaat, kun je deze niet meer uitschakelen.
+
+00:00:30.000 --> 00:00:34.280
+Dus hier is wat het werkelijk is, hoe teams het gebruiken en de fouten die stilletjes de rekening opdrijven.
+
+00:00:34.480 --> 00:00:39.660
+De meeste beginners gaan ervan uit dat ze een compleet nieuwe service moeten leren en die aanname kost hen weken tijd.
+
+00:00:39.900 --> 00:00:45.200
+Azure Data Lake Storage is geen apart product dat je koopt en het is geen speciaal accounttype dat je vanaf nul aanmaakt.
+
+00:00:45.440 --> 00:00:51.160
+Microsoft heeft het gebouwd als een set mogelijkheden binnen gewone blob-opslag, de standaardopslag die Azure al jaren aanbiedt.
+
+00:00:51.220 --> 00:00:55.120
+Je ontgrendelt die mogelijkheden door één optie in te schakelen wanneer het account wordt aangemaakt.
+
+00:00:55.120 --> 00:00:59.180
+Die optie staat in een korte lijst met instellingen op het scherm waar je een nieuw opslagaccount aanmaakt.
+
+00:00:59.180 --> 00:01:02.060
+Je klikt er makkelijk overheen als je niet weet waar je naar kijkt.
+
+00:01:02.280 --> 00:01:07.660
+Niets op die pagina geeft aan dat dit kleine knopje het verschil is tussen een emmer met bestanden en een echt data lake.
+
+00:01:07.880 --> 00:01:13.620
+Daar kom je later achter, doordat je opdrachten snel en goedkoop draaien of doordat ze tergentraag gaan en je rekening blijft oplopen.
+
+00:01:13.820 --> 00:01:22.000
+Om te begrijpen waarom die optie zo belangrijk is, moet je eerst een duidelijk beeld hebben van wat een data lake echt is en waarom een data lake niet zomaar een map vol bestanden is.
+
+00:01:22.000 --> 00:01:25.860
+Een data lake is één centrale plek waar je al je data bewaart.
+
+00:01:26.140 --> 00:01:28.040
+Het woord al doet veel werk in die zin.
+
+00:01:28.260 --> 00:01:32.960
+Het bevat gestructureerde data, de nette rijen en kolommen die je in een spreadsheet of database tabel zou vinden.
+
+00:01:33.160 --> 00:01:37.960
+Het bevat ook ongestructureerde data, zoals afbeeldingen, pdf's, logbestanden en onbewerkte tekstbestanden.
+
+00:01:37.960 --> 00:01:42.900
+In plaats van alles in een nette vorm te dwingen, laat een lake data binnenkomen in de vorm waarin het aankomt.
+
+00:01:42.940 --> 00:01:46.340
+Die flexibiliteit is het hele punt en het is de moeite waard om te zien waarom dat uitmaakt.
+
+00:01:46.560 --> 00:01:48.620
+Stel je een klein bedrijf voor dat online verkoopt.
+
+00:01:49.200 --> 00:01:53.800
+Verkoopexports komen uit het ene systeem, support tickets uit een ander en productfoto's staan op iemands laptop.
+
+00:01:53.960 --> 00:01:59.180
+Een traditionele database zou eisen dat elke bron wordt omgevormd naar strikte tabellen voordat het ook maar één record accepteert.
+
+00:01:59.340 --> 00:02:04.520
+Een data lake neemt alles naast elkaar op en laat het omvormen voor later, wanneer iemand daadwerkelijk een antwoord nodig heeft.
+
+00:02:04.520 --> 00:02:06.360
+De naam komt voor het uit dat contrast.
+
+00:02:06.360 --> 00:02:11.660
+Een warehouse slaat data op die al is opgeschoond, gelabeld en georganiseerd, zoals goederen in schappen.
+
+00:02:11.820 --> 00:02:17.080
+Een lake lijkt meer op een reserve waar, groot en grotendeels onbewerkt, klaar om te worden gefilterd zodra er een specifieke vraag opkomt.
+
+00:02:17.200 --> 00:02:20.100
+Die afweging is reëel en is precies de reden waarom leeks überhaupt bestaan.
+
+00:02:20.300 --> 00:02:24.320
+Wanneer je onbewerkte data bewaart, kun je later vragen beantwoorden waar vandaag nog niemand aan heeft gedacht.
+
+00:02:24.520 --> 00:02:29.020
+Een warehouse dwingt je te beslissen wat belangrijk is voordat je het opslaat en alles wat je weg doet is voorgoed verdwenen.
+
+00:02:29.020 --> 00:02:34.000
+Een lake gaat ervan uit dat het bewaren van het rommelige origineel waardevoller is dan de netheid die je krijgt door het eerst op te schonen.
+
+00:02:34.000 --> 00:02:39.460
+Dit betekent niet dat een lake een rommelade is, want het heeft nog steeds een vorm nodig en die vorm zijn de mappen die je zo direct zult zien.
+
+00:02:39.680 --> 00:02:45.960
+Wat een lake weigert te doen is het origineel weggooien, aangezien het origineel vaak het enige bewijs is van iets dat daadwerkelijk is gebeurd.
+
+00:02:46.160 --> 00:02:48.380
+Eén detail is echter belangrijker dan al het andere.
+
+00:02:48.600 --> 00:02:53.980
+Een lake moet ergens staan en in Azure is dat ergens, een storage account met één optie ingeschakeld.
+
+00:02:54.200 --> 00:02:58.880
+Die optie is waar het echte verhaal begint en daar wordt ook de eerste definitieve beslissing genomen.
+
+00:02:58.880 --> 00:03:02.240
+De instelling die Blob Storage verandert in een data lake.
+
+00:03:02.380 --> 00:03:05.260
+Azure Blob Storage is het werkpaard dat hier allemaal onder ligt.
+
+00:03:05.460 --> 00:03:09.720
+Het is goedkoper object storage, wat simpelweg betekent dat je bestanden erin stopt en er weer uithaalt.
+
+00:03:09.880 --> 00:03:11.440
+Het geeft niet veel om wat erin zit.
+
+00:03:11.640 --> 00:03:16.440
+Wat het nooit had waren echte mappen en dat gat is precies de reden waarom Azure Data Lake Storage bestaat.
+
+00:03:16.620 --> 00:03:21.740
+In een normaal Blob account is een pad als Sales 2026, maar het geen map die een bestand bevat.
+
+00:03:21.740 --> 00:03:26.700
+Het is één lange bestandsnaam met slashes ertussen en het systeem behandelt het precies op die manier.
+
+00:03:26.700 --> 00:03:32.500
+De opslag ziet er voor het oog georganiseerd uit omdat de slashes je laten geloven dat er een structuur is die er eigenlijk niet is.
+
+00:03:32.700 --> 00:03:38.860
+Object storage is opzettelijk zo gebouwd omdat een platte lijst met name eenvoudig te verdelen is over een enorm aantal machines.
+
+00:03:39.260 --> 00:03:43.160
+Die truc veroorzaakt stille problemen zodra je iets op mapniveau probeert te doen.
+
+00:03:43.380 --> 00:03:49.400
+Als die slashes geen echte mappen zijn, betekent het hernoemen van een map dat je elk bestand moet vinden dat met datzelfde pad begint.
+
+00:03:49.400 --> 00:03:54.920
+Bij een grote dataset gaat het om miljoenen bestanden en kan een taak die seconde zou moeten duren, uren in beslag nemen.
+
+00:03:54.920 --> 00:03:58.160
+Het inschakelen van de hiërarchische naamruimte verandert precies dat.
+
+00:03:58.320 --> 00:04:03.120
+Het geeft het account echte mappen en submappen, dezelfde structuur die je computer al sinds jaar en dag gebruikt.
+
+00:04:03.280 --> 00:04:07.560
+Een map wordt een entiteit op zichzelf en niet zomaar tekst die in een bestandsnaam is verwerkt.
+
+00:04:07.780 --> 00:04:12.960
+Een vinkje omzetten en de opslag gedraagt zich als een echt bestandssysteem in plaats van een bucket met mooie labels.
+
+00:04:13.220 --> 00:04:17.820
+Je zult ook de naam Data Lake Storage Gen 2 tegenkomen in oudere berichten en handleidingen.
+
+00:04:18.000 --> 00:04:23.300
+Dat is slechts de tweede versie van hetzelfde idee en de huidige naam laat het nummer weg, dus zie ze als één geheel.
+
+00:04:23.300 --> 00:04:28.480
+Je kiest deze optie wanneer je het opslagaccount aanmaakt en je kunt ook een account upgraden dat al data bevat.
+
+00:04:28.860 --> 00:04:32.080
+Microsoft regelt de omschakeling voor je, maar dit kan maar in één richting.
+
+00:04:32.240 --> 00:04:34.720
+Je kunt van plat naar hiërarchisch gaan, maar niet meer terug.
+
+00:04:34.900 --> 00:04:39.100
+Er is een NA-aangevingsvreemdheid die handig is om te weten, zodat de documentatie je niet langer in verwarring brengt.
+
+00:04:39.220 --> 00:04:43.740
+In de eigen handleidingen van Microsoft betekent het woord blob een bestand en container een bestandssysteem.
+
+00:04:43.900 --> 00:04:47.920
+Het zijn dezelfde twee dingen met andere labels, afhankelijk van welke pagina je toevallig leest.
+
+00:04:48.100 --> 00:04:50.760
+Het belangrijkste om te onthouden is dat dit vinkje permanent is.
+
+00:04:50.760 --> 00:04:54.660
+Zodra het is ingeschakeld, kun je het account niet meer terugzetten naar de platte stijl van voorheen.
+
+00:04:54.880 --> 00:04:57.080
+Waarom echte mappen de snelheid en de rekening veranderen?
+
+00:04:57.200 --> 00:05:00.700
+De reden dat Microsoft echte mappen heeft gebouwd is niet voor de netheid, maar voor de snelheid.
+
+00:05:00.920 --> 00:05:05.600
+Wanneer mappen echt zijn, wordt het hernoemen of verwijderen ervan een snelle wijziging aan de vermelding van die map.
+
+00:05:05.700 --> 00:05:10.540
+Er is geen lijst van een miljoen bestanden om door te lopen, want het systeem werkt één ding bij en het werk is klaar.
+
+00:05:10.540 --> 00:05:15.060
+Dezelfde afkorting geldt bij verwijderen, dus oude data wissen is niet langer een dagdaak.
+
+00:05:15.140 --> 00:05:18.680
+Het voorbeeld dat dit duidelijk maakt is hoe analyse tools zich in de praktijk gedragen.
+
+00:05:18.960 --> 00:05:23.720
+Spark en Hive, twee van de engines die het meest gebruikt worden, schrijven hun output vaak naar een tijdelijke locatie.
+
+00:05:23.960 --> 00:05:26.280
+Wanneer de taak klaar is, hernoemen ze die locatie.
+
+00:05:26.520 --> 00:05:30.860
+Bij opslag zonder echte mappen kan dat laatste hernoemen langer duren dan de werkelijke analyse zelf.
+
+00:05:30.860 --> 00:05:35.400
+Je zit te kijken naar een taak die al klaar is met rekenen en nu alleen nog namen aan het verschuiven is.
+
+00:05:35.400 --> 00:05:39.860
+Die vertraging is niet alleen vervelend, het is duur en de reden daarvan is het overdenken waard.
+
+00:05:40.040 --> 00:05:44.420
+Bij veel analyse workloads is rekenkracht meer dan 85% van de totale kosten.
+
+00:05:44.640 --> 00:05:47.820
+De machines die het werk doen kosten veel meer dan de data die stilstaan.
+
+00:05:47.960 --> 00:05:51.840
+Als een trage naamswijziging die machines een uur extra laat draaien, betaal je voor dat uur.
+
+00:05:52.000 --> 00:05:57.240
+Versnel de opslag en het rekenwerk is eerder klaar, waardoor de rekening daalt, ook al is de opslagprijs nauwelijks veranderd.
+
+00:05:57.360 --> 00:06:00.300
+De functie schaalt ook goed, wat voorheen het moeilijke gedeelte was.
+
+00:06:00.300 --> 00:06:06.100
+Oudere systemen ruil de mappenstructuur in voorschaalbaarheid omdat echte mappen duur waren om bij te houden op enorme schaal.
+
+00:06:06.280 --> 00:06:09.120
+Een hiërarchische naamruimte groeit hier in een rechte lijn.
+
+00:06:09.320 --> 00:06:13.540
+Dus meer data toevoegen vertraagt de mappen niet, wat ons bij de praktische vraag brengt.
+
+00:06:13.660 --> 00:06:16.780
+Hoe verplaatst data zich nu eigenlijk in en uit een van deze accounts?
+
+00:06:17.320 --> 00:06:19.140
+Hoe komt data er eigenlijk in en uit?
+
+00:06:19.320 --> 00:06:23.740
+Het leidingwerk is vriendelijker dan het klinkt en dit is waar theorie verandert in iets tastbaars.
+
+00:06:23.960 --> 00:06:28.720
+Analyse tools bereiken het leek via een driver genaamd ABFS, kort voor Azure Blobfiele System.
+
+00:06:28.720 --> 00:06:32.820
+Het serviceadres eindigt altijd op dfs.core.windows.net.
+
+00:06:32.960 --> 00:06:36.760
+Je typt dat adres zelden zelf, maar het is de verbinding die je tools op de achtergrond gebruiken.
+
+00:06:36.920 --> 00:06:40.400
+De tools zelf zijn namen die je telkens weer zult tegenkomen als je in deze wereld blijft.
+
+00:06:40.540 --> 00:06:47.820
+Terwijl je Data Factory gegevens uit andere systemen kopieert, verwerken en analyseren Databricks en Synapse deze en leest Power BI de resultaten om rapporten te bouwen.
+
+00:06:47.960 --> 00:06:55.740
+Als je bestanden liever handmatig verplaatst, biedt Azure Storage Explorer een venster om doorheen te klikken en een command line tool genaamd ASCAPI voor bulkoverdrachten.
+
+00:06:55.740 --> 00:06:58.360
+Je hebt geen van die tools nodig om gewoon te kunnen beginnen.
+
+00:06:58.560 --> 00:07:02.860
+De Azure Portal, PowerShell en de opdrachtregel kunnen allemaal dezelfde opslag bereiken.
+
+00:07:03.080 --> 00:07:07.780
+Je kunt een eerste bestand uploaden en zien verschijnen in een map nog voordat je één regelcode hebt geschreven.
+
+00:07:07.980 --> 00:07:13.740
+De meeste mensen beginnen met één map en een handvol bestanden en het leek groeit vanaf daar naarmate meer systemen erin voeden.
+
+00:07:14.000 --> 00:07:16.820
+Rechten werken hier op een fijnmaziger niveau dan bij standaardopslag.
+
+00:07:17.000 --> 00:07:20.860
+Je kunt het rollensysteem van Azure gebruiken, hetzelfde systeem dat alles in Azure beheert.
+
+00:07:20.860 --> 00:07:25.820
+Je kunt ook POSIX-stijl toegangscontrole lijsten instellen die een enkele map of zelfs een enkel bestand vergrendelen.
+
+00:07:25.980 --> 00:07:31.040
+Ik laat de details hierbij, want het punt is simpelweg dat een leek breedgedeeld kan worden zonder iedereen de sleutels te geven.
+
+00:07:31.300 --> 00:07:37.260
+Wanneer data binnenkomt, landt het als een blob in een container, wat neerkomt op het bestand in een bestandsysteem-ID, maar dan met die andere twee namen.
+
+00:07:37.420 --> 00:07:42.400
+Vanaf daar kan een levenscyclusbeleid oudere bestanden naar een goedkopere laag verplaatsen of ze na een bepaalde tijd verwijderen.
+
+00:07:42.520 --> 00:07:45.880
+Het leek ruimt zichzelf op in plaats van te wachten tot iemand handmatig mappen sorteert.
+
+00:07:45.880 --> 00:07:52.080
+Schaal is het laatste onderdeel en het is royaal. Microsoft stelt geen limiet aan hoe groot het account of een individueel bestand kan zijn.
+
+00:07:52.280 --> 00:07:59.040
+Een bestand kan variëren van enkele kilobytes tot honderden terabytes en aanvragen worden in een constant tempo verwerkt, ongeacht hoeveel je hebt opgeslagen.
+
+00:07:59.280 --> 00:08:03.160
+Nu het leidingwerk duidelijk is, helpt het om te zien hoe een echte opstelling eruit ziet.
+
+00:08:03.620 --> 00:08:10.720
+Hoe dit er in de echte wereld uitziet, teams gooien zelden alles op één grote hoop en het patroon waarvoor ze kiezen heet het medaillenmodel.
+
+00:08:10.720 --> 00:08:15.880
+Het is eenvoudiger dan de naam doet vermoeden. Ruwe data landt eerst in de laag die mensen de bronzen laag noemen.
+
+00:08:16.320 --> 00:08:21.240
+Schoongemaakte en gecorrigeerde data gaat naar zilver en de gepolijste data waar een rapport op kan vertrouwen eindigt in gold.
+
+00:08:21.440 --> 00:08:24.720
+Elke laag is slechts een map en data reist vooruit naarmate het beter wordt.
+
+00:08:24.920 --> 00:08:33.120
+De gold laag is degene die een rapport daadwerkelijk leest, omdat het gewone map is met goedgevormde bestanden waar elk hulpmiddel uit kan putten zonder te weten hoe de ruwe data is binnengekomen.
+
+00:08:33.360 --> 00:08:37.560
+De mappenstructuur weegt zwaar in de praktijk en er zijn twee patronen die het kopiëren waard zijn.
+
+00:08:37.560 --> 00:08:45.160
+Voor data die binnenkomt van apparaten of sensoren is een gebruikelijke indeling, regio, dan onderwerp, gevolgd door jaar, maand, dag en uur.
+
+00:08:45.320 --> 00:08:51.340
+De metingen van een vliegtuigmotor kunnen onder het vk vallen, dan vliegtuigen, dan het specifieke toestel en vervolgens datum en tijd.
+
+00:08:51.560 --> 00:08:55.820
+Voor batchdaken die op bestanden draaien gebruiken teams een in-map voor werk dat wacht om opgepakt te worden.
+
+00:08:56.020 --> 00:08:59.680
+Ze gebruiken een oud-map voor voltooide resultaten en een bad-map voor alles wat mislukt.
+
+00:08:59.820 --> 00:09:01.880
+De volgorde van die mappen is niet willekeurig.
+
+00:09:01.880 --> 00:09:07.460
+Door regio en onderwerp bovenaan te zetten, kun je gemakkelijk bepalen dat deze mensen alleen Britse data mogen zien en niets anders.
+
+00:09:07.660 --> 00:09:11.220
+Je stelt die machtiging één keer in op de map en alles daaronder neemt die over.
+
+00:09:11.460 --> 00:09:17.000
+Als je de volgorde omdraait en met de datum begint, moet je telkens opnieuw machtigingen instellen op talloze kleine mappen.
+
+00:09:17.560 --> 00:09:20.880
+Bestandsindeling is de laatste praktische keuze en deze bepaalt stilletjes je rekening.
+
+00:09:21.080 --> 00:09:26.880
+Gebruik een kolommengebaseerde indeling zoals parquet voor data die je veel leest, omdat een query alleen de nodige kolommen kan ophalen en de rest kan overslaan.
+
+00:09:26.880 --> 00:09:30.660
+Die bestanden zijn gecomprimeerd en elk bevat een eigen beschrijving van wat erin zit.
+
+00:09:30.820 --> 00:09:36.600
+Gebruik een rijgebaseerde indeling zoals Avro wanneer je vooral data schrijft in een gestagen stroom, zoals events die uit een app binnenkomen.
+
+00:09:36.760 --> 00:09:44.260
+Een goede indeling en het juiste formaat besparen je geld, maar een paar veel voorkomende gewoontes doen stilletjes het tegenovergestelde en ze duiken op in bijna elk eerste datameer van beginners.
+
+00:09:45.460 --> 00:09:47.340
+De fouten die je stilletjes geld kosten.
+
+00:09:47.580 --> 00:09:52.380
+De eerste fout, die je overal zult zien, is het achterlaten van je data als een berg kleine bestanden.
+
+00:09:52.380 --> 00:09:57.840
+Analytics engines besteden echt tijd aan elk bestand, alleen al met het vermelden, het controleren van machtigingen en het openen ervan.
+
+00:09:58.040 --> 00:10:01.040
+Duizend kleine bestanden kosten veel meer aandacht dan één groot bestand.
+
+00:10:01.220 --> 00:10:06.480
+De eigen richtlijn van Microsoft is om te streven naar bestanden tussen de 256 megabyte en 100 gigabyte.
+
+00:10:06.740 --> 00:10:09.880
+Voeg kleine bestanden samen tot grotere voordat er iets probeert ze te lezen.
+
+00:10:10.100 --> 00:10:14.740
+Dat is een gewoonte die vanaf de eerste dag de moeite waard is, want kleine bestanden hopen zich sneller op dan iemand verwacht.
+
+00:10:14.900 --> 00:10:18.700
+Er is een detail in de facturering dat bijna iedereen overkomt en makkelijk over het hoofd wordt gezien.
+
+00:10:18.700 --> 00:10:22.060
+Lees- en schrijfbewerkingen worden gefactureerd in blokken van 4 megabyte.
+
+00:10:22.060 --> 00:10:26.320
+Een bestand van enkele kilobytes wordt nog steeds aangerekend alsof het 4 megabyte bevat.
+
+00:10:26.520 --> 00:10:32.300
+Wanneer je data verspreidt is over miljoenen kleine bestanden, betaal je keer op keer de volle prijs voor grotendeels lege ruimte.
+
+00:10:32.460 --> 00:10:39.460
+Als de ruwe data binnenkomt als een stroom van kleine gebeurtenissen, is de gebruikelijke oplossing om deze te verzamelen met een streaming tool en in grotere badges weg te schrijven.
+
+00:10:39.620 --> 00:10:43.760
+De tweede valkuil is het inschakelen van de hiërarchische naamruimte wanneer je deze niet nodig hebt.
+
+00:10:43.940 --> 00:10:45.500
+Onthoud dat dit een inrichtingsdeur is.
+
+00:10:45.500 --> 00:10:48.980
+Dus als het eenmaal aanstaat, kun je het account niet meer terugzetten naar een platte naamruimte.
+
+00:10:48.980 --> 00:10:54.040
+Als je het inschakelt voor een backuparchief of een map met afbeeldingen, heb je een permanente wijziging doorgevoerd die je niets oplevert.
+
+00:10:54.260 --> 00:10:58.720
+Backups en fotobibliotheken geven niets om snelle mapnaamwijzigingen, omdat de data niet wordt geanalyseerd.
+
+00:10:58.920 --> 00:11:00.820
+De derde is het negeren van opslaglagen.
+
+00:11:01.060 --> 00:11:06.300
+Asher laat je data stallen in hot, cool, cold of archieflagen, afhankelijk van hoe vaak je ze leest.
+
+00:11:06.500 --> 00:11:09.520
+Oude data die in de hot laag blijft staan, is weggegooid geld.
+
+00:11:09.800 --> 00:11:12.440
+Stem de laag af op hoe vaak je de data daadwerkelijk raadpleegt.
+
+00:11:12.660 --> 00:11:14.760
+En dezelfde bestanden kunnen een fractie van de prijskosten.
+
+00:11:14.760 --> 00:11:21.000
+Archief is de goedkoopste plek voor data die je bijna nooit opent, maar het is niet direct beschikbaar omdat een bestand moet worden gehydrateerd voordat iets het kan lezen.
+
+00:11:21.160 --> 00:11:23.680
+Eén eerlijke beperking is belangrijk om in gedachten te houden.
+
+00:11:23.920 --> 00:11:27.640
+Zelfs met deze instelling aan, lopen sommige blobfuncties in deze accounts nog achter.
+
+00:11:27.860 --> 00:11:31.760
+Als je afhankelijk bent van een specifieke functie, controleer dan de huidige ondersteuning voordat je beslist.
+
+00:11:31.960 --> 00:11:33.960
+Dat beslaat het deel waar je zelf controle over hebt.
+
+00:11:34.180 --> 00:11:36.920
+Voor velen van jullie zal een leek echter niet iets zijn wat je alleen bouwt.
+
+00:11:37.040 --> 00:11:39.800
+De volgende vraag is hoe dit in het grotere plaatje van Microsoft past.
+
+00:11:39.800 --> 00:11:43.000
+Waar dit past bij Fabric, Power BI en Microsoft 365.
+
+00:11:43.540 --> 00:11:47.880
+Als je tijd hebt doorgebracht met Microsoft Fabric, heb je onbewust al een Data Lake ontmoet.
+
+00:11:48.080 --> 00:11:52.460
+One Lake, de opslaglaag in het hart van Fabric, is gebouwd op Azure Data Lake Storage.
+
+00:11:52.640 --> 00:11:57.340
+Het houdt tabellen in open formaten genaamd Delta, Parquet en Iceberg die door elk hulpmiddel gelezen kunnen worden.
+
+00:11:57.540 --> 00:12:01.380
+Dezelfde engine die een Data Lake in Azure aanstuurt, draait de hele tijd onder Fabric.
+
+00:12:01.560 --> 00:12:07.000
+Als je team al in Fabric werkt, is One Lake het leek dat je als eerste zult tegenkomen en alles wat je zojuist hebt geleerd, is nog steeds van toepassing.
+
+00:12:07.000 --> 00:12:09.000
+One Lake leent ook de vorm die je al kent.
+
+00:12:09.000 --> 00:12:12.760
+Elke Fabric tenant krijgt precies één One Lake en je kunt er geen tweede aanmaken.
+
+00:12:12.920 --> 00:12:16.760
+De hele organisatie deelt één enkel Lake in plaats van een verspreide verzameling ervan.
+
+00:12:17.000 --> 00:12:21.020
+Binnenin verschijnt een werkruimte als een container en de items daarin verschijnen als mappen.
+
+00:12:21.260 --> 00:12:25.040
+Dat is dezelfde blob en containerkoppeling van eerder, maar dan in een jasje van Fabric.
+
+00:12:25.160 --> 00:12:28.200
+Het slimme deel is hoe One Lake data bereikt die ergens anders staat.
+
+00:12:28.400 --> 00:12:32.060
+Een functie genaamd snelkoppelingen laat je verwijzen naar bestanden in een Azure Data Lake Storage account,
+
+00:12:32.260 --> 00:12:35.540
+een Amazon S3 Bucket, een dataverse tabel of zelfs een on-premises systeem.
+
+00:12:35.540 --> 00:12:37.860
+Het leest ze op hun locatie zonder een kopie te maken.
+
+00:12:37.860 --> 00:12:42.660
+Teams blijven werken in hun eigen omgeving en delen via snelkoppelingen in plaats van gigabytes aan data te dupliceren.
+
+00:12:42.860 --> 00:12:45.100
+Dat idee van één kopie komt ook terug in Power BI.
+
+00:12:45.260 --> 00:12:49.920
+Een modus genaamd Direct Lake leest rechtstreeks uit One Lake zonder de data eerst te importeren of te kopiëren.
+
+00:12:50.140 --> 00:12:53.780
+Daarom blijft Fabric spreken over een enkele kopie die elk hulpmiddel kan delen.
+
+00:12:53.940 --> 00:12:56.580
+One Lake bewaart verwijderde bestanden bovendien zeven dagen,
+
+00:12:56.840 --> 00:13:00.040
+dus per ongeluk verwijderen is niet de ramp die het zou zijn in een map zonder vangnet.
+
+00:13:00.200 --> 00:13:02.340
+Er is een echte afweging tussen de twee paden.
+
+00:13:02.500 --> 00:13:05.260
+One Lake wordt voor je beheerd en is gericht op Fabric gebruikers.
+
+00:13:05.260 --> 00:13:10.460
+Een standaard Azure Data Lake Storage account geeft je directe controle en werkt met de bredere Azure toolset.
+
+00:13:10.620 --> 00:13:14.560
+Ze gebruiken dezelfde API, dus de keuze komt neer op gemak versus controle.
+
+00:13:14.800 --> 00:13:17.320
+Wat je moet onthouden over Azure Data Lake Storage.
+
+00:13:17.580 --> 00:13:18.860
+Dus hier is de korte versie.
+
+00:13:19.020 --> 00:13:24.000
+Azure Data Lake Storage is blopopslag met één instelling ingeschakeld en die instelling geeft het echte mappen.
+
+00:13:24.240 --> 00:13:26.760
+Die mappen zorgen dat groot-analyse-klussen sneller klaar zijn,
+
+00:13:26.920 --> 00:13:29.640
+wat de rekening kan verlagen als rekenkracht de grootste kostenpost is.
+
+00:13:29.780 --> 00:13:33.980
+Het is permanent zodra het is ingeschakeld en een stapel kleine bestanden kost je meer dan je verwacht.
+
+00:13:33.980 --> 00:13:38.360
+Onthoud deze paar punten en de intimiderende dienst verandert in iets waar je logisch over na kunt denken.
+
+00:13:38.560 --> 00:13:39.720
+Dit is mijn vraag aan jou.
+
+00:13:39.940 --> 00:13:43.660
+Als je je eerste data lake plant, waar ben je op dit moment dan het minst zeker over?
+
+00:13:43.860 --> 00:13:46.760
+De mappenstructuur, de kosten of hoe het past bij Fabric?
+
+00:13:46.920 --> 00:13:48.960
+Als dit het onderwerp minder intimiderend maakte,
+
+00:13:49.200 --> 00:13:54.740
+abonneer je dan op M365FM om de tools en de mindset die de toekomst van werk vormen onder de knie te krijgen.
+
+00:13:54.740 --> 00:14:00.420
+De mappenstructuur, de mappenstructuur, voortgezienk.

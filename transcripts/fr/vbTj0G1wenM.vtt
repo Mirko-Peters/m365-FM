@@ -1,0 +1,799 @@
+WEBVTT
+
+00:00:00.400 --> 00:00:05.560
+Bienvenue sur le podcast M365FM où nous explorons les personnes, les idées et les technologies qui façonnent l'avenir du travail.
+
+00:00:06.720 --> 00:00:11.780
+Ce rapport qui mettait quelques secondes à s'ouvrir, votre rapport le plus lent, a une solution Azure Synapse.
+
+00:00:12.940 --> 00:00:17.000
+C'est le service Microsoft pour réunir l'entrepôt de données d'une entreprise et ses mégadonnées sous un même toit.
+
+00:00:17.680 --> 00:00:19.900
+Son nom donne l'impression que c'est une tâche réservée uniquement aux ingénieurs de données.
+
+00:00:20.720 --> 00:00:24.680
+En réalité, il s'agit d'un petit ensemble de tâches ou non simples avec un prix qui surprend souvent.
+
+00:00:25.600 --> 00:00:28.640
+Restez avec moi et à la fin vous saurez l'expliquer à votre patron de pièges tarifaires inclus.
+
+00:00:28.640 --> 00:00:30.900
+Ce rapport lent est en réalité le coupable.
+
+00:00:31.300 --> 00:00:35.560
+Ce qui se passe généralement, c'est que votre entreprise a grandi et vos données se sont multipliées dans une douzaine de systèmes.
+
+00:00:35.960 --> 00:00:38.160
+Les outils qui centralisent tout cela n'ont jamais été conçus pour supporter un tâche.
+
+00:00:38.500 --> 00:00:41.080
+Les feuilles de calcul ont été créées pour des centaines de lignes, pas pour des dizaines de mille.
+
+00:00:41.500 --> 00:00:44.600
+Une petite base de données a été conçue pour un service, pas pour toute l'entreprise.
+
+00:00:45.260 --> 00:00:47.240
+A un moment donné, des failles apparaissent de manière agaçante.
+
+00:00:47.860 --> 00:00:52.840
+La clôture mensuelle prend un jour de retard, car les chiffres sont éparpillés et personne ne sait lesquels sont corrects.
+
+00:00:53.540 --> 00:00:56.060
+Un tableau de bord que vous consultez chaque matin expire soudainement
+
+00:00:56.060 --> 00:00:58.900
+et le directeur commercial attend dix heures pour avoir les chiffres de la veille.
+
+00:00:59.700 --> 00:01:03.900
+Quelqu'un dans votre équipe exporte tout dans un fichier géant et fait les calculs à la main ?
+
+00:01:03.900 --> 00:01:06.280
+Cette personne devient la seule dans l'entreprise à vraiment comprendre la situation.
+
+00:01:07.120 --> 00:01:08.300
+La solution à tout cela a deux facettes.
+
+00:01:09.160 --> 00:01:13.760
+L'une rend vos rapports rapides à nouveau et l'autre réserve une surprise à votre budget si vous ne faites pas attention.
+
+00:01:14.880 --> 00:01:17.940
+Microsoft a observé ce désordre et a créé un service précisément pour ce moment.
+
+00:01:18.340 --> 00:01:22.060
+Le nom qu'ils lui ont donné semble plus lourd que le problème lui-même, Azure Synapse Analytics.
+
+00:01:22.060 --> 00:01:25.780
+L'idée derrière ce nom imposant est bien plus simple qu'il n'y paraît.
+
+00:01:26.500 --> 00:01:28.760
+Une fois que vous connaissez les composants, tout devient beaucoup moins intimidant.
+
+00:01:29.220 --> 00:01:32.740
+Il y a une raison pour laquelle cela arrive aux entreprises ordinaires, et pas seulement aux géants.
+
+00:01:33.520 --> 00:01:36.240
+Les données s'accumulent, une application et une feuille de calcul à la fois,
+
+00:01:36.620 --> 00:01:39.140
+jusqu'au jour où le volume dépasse enfin les outils sous-jacents.
+
+00:01:40.080 --> 00:01:42.780
+Pour comprendre ce qu'est Azure Synapse, commençons par la version simple.
+
+00:01:43.460 --> 00:01:48.800
+Azure Synapse Analytics est un service unique où une entreprise conserve son entrepôt de données et ses mégadonnées côte à côte.
+
+00:01:48.800 --> 00:01:52.400
+Il vit dans le cloud, donc vous le louez à l'heure, ou à la requête au lieu d'acheter un serveur.
+
+00:01:53.700 --> 00:01:58.740
+Imaginez un bâtiment unique qui abrite un entrepôt, un atelier et un quai de chargement sous un même toit, et une seule clé.
+
+00:01:59.640 --> 00:02:03.500
+Auparavant, ces tâches nécessitaient des outils distincts, des accès séparés et des factures multiples.
+
+00:02:04.140 --> 00:02:06.120
+Les maintenir synchronisé était un travail à plein temps pour quelqu'un.
+
+00:02:06.460 --> 00:02:08.940
+Deux termes sont souvent utilisés ici, alors définissons-les avant qu'il ne pose problème.
+
+00:02:09.660 --> 00:02:14.480
+Un Data Lake Agam est un stockage qui conserve les fichiers bruts tels qu'ils arrivent, en désordre et non organisé.
+
+00:02:14.480 --> 00:02:19.820
+Un Data Warehouse contient les mêmes informations une fois nettoyé et structuré en table fiable.
+
+00:02:20.760 --> 00:02:23.440
+Synapse permet aux deux de cohabiter, et c'est là tout l'intérêt.
+
+00:02:24.000 --> 00:02:29.860
+Microsoft décrit Synapse comme un service d'analyse d'entreprise qui accélère le délai entre la possession des données et l'obtention d'une réponse.
+
+00:02:30.380 --> 00:02:32.420
+Cette formulation ressemble à du marketing, alors voyez les choses ainsi.
+
+00:02:33.040 --> 00:02:36.600
+C'est l'endroit où vos données brutes arrivent, sont nettoyées et organisées.
+
+00:02:37.360 --> 00:02:39.760
+Ensuite, elles sont transmises à un outil de reporting qui génère les graphiques.
+
+00:02:40.260 --> 00:02:41.780
+Le nom raconte une histoire qui mérite d'être connue.
+
+00:02:41.780 --> 00:02:48.180
+Ce service s'appelait autrefois Azure SQL Data Warehouse, Microsoft l'a renommé et étendu pour en faire quelque chose de bien plus vaste.
+
+00:02:48.460 --> 00:02:52.680
+C'est pour cette raison historique qu'une grande partie repose encore sur le langage SQL et l'ancien concept d'entrepôt.
+
+00:02:53.320 --> 00:02:56.980
+Le mot de cas Synapse UQ a été ajouté pour signaler qu'il gère désormais bien plus que le simple stockage.
+
+00:02:57.460 --> 00:03:01.080
+L'idée d'un espace de travail unique est primordiale, car elle change le travail quotidien d'une équipe.
+
+00:03:01.800 --> 00:03:06.560
+Au lieu de trois outils se disputant les mêmes fichiers, vous avez une frontière de sécurité et une vue unique de tout ce qui tourne.
+
+00:03:06.560 --> 00:03:12.240
+Si un rapport échoue à 9h0 du matin, vous regardez à un seul endroit au lieu de deviner quel système est tombé en panne.
+
+00:03:12.920 --> 00:03:16.560
+C'est la structure globale et cela ne prend tout son sens qu'une fois que l'on découvre ses composants internes.
+
+00:03:17.820 --> 00:03:18.660
+Les moteurs sous un même-toi.
+
+00:03:19.200 --> 00:03:22.140
+Un même-toi game est une promesse audacieuse, il vaut donc la peine d'ouvrir pour voir ce qu'il y a vraiment d'autre.
+
+00:03:22.780 --> 00:03:26.220
+Synapse contient quatre moteurs et chacun n'est en fait qu'une fonction cachée derrière un nom technique.
+
+00:03:26.600 --> 00:03:31.320
+Le premier moteur est l'entrepôt qui parle SQL, le langage de requête que votre entreprise utilise probablement déjà.
+
+00:03:31.320 --> 00:03:36.140
+Synapse vous propose deux façons de l'exécuter et ce choix est plus important qu'à n'importe quel paramètre.
+
+00:03:36.840 --> 00:03:39.320
+Un pool dédié vous réserve une capacité de traitement fixe.
+
+00:03:40.300 --> 00:03:43.720
+C'est exactement ce qu'il vous faut lorsque de nombreuses personnes ouvrent le même tableau de bord au même moment.
+
+00:03:44.420 --> 00:03:49.700
+Un pool serverless inverse la logique vous permettant de pointer directement vers les fichiers et de ne payer que pour la requête exécutée.
+
+00:03:50.600 --> 00:03:55.600
+Le dédié pour un trafic soutenu est constant, le serverless pour les questions occasionnelles posées à une masse de fichiers.
+
+00:03:55.600 --> 00:04:01.520
+Le second moteur est Apache Spark, un outil open source conçu pour traiter d'énormes quantités de données désordonnées.
+
+00:04:03.180 --> 00:04:09.120
+C'est ici qu'un ingénieur de données nettoie les anomalies, corrige les dates erronées et met tout en forme pour l'entrepôt.
+
+00:04:10.860 --> 00:04:16.420
+Spark est aussi le point de départ de nombreux travaux de machine learning car il peut lire les données là où elles se trouvent au lieu d'imposer une copie préalable.
+
+00:04:17.560 --> 00:04:21.580
+Le troisième moteur est le pipeline, dont la seule fonction est de déplacer des données d'un endroit à un autre.
+
+00:04:21.580 --> 00:04:27.400
+C'est le même moteur qui alimente votre data factory et il peut se connecter à plus de 90 sources de données différentes.
+
+00:04:28.340 --> 00:04:31.040
+Il peut copier et planifier ce travail sans que vous ayez à écrire une seule ligne de code.
+
+00:04:31.860 --> 00:04:34.360
+Trois moteurs passés en revue et la plupart des gens s'arrêtent avant celui-ci.
+
+00:04:34.800 --> 00:04:39.200
+Le quatrième moteur gère les journaux, ce flux ininterrompu de message machine que les serveurs et les appareils produisent toute la journée.
+
+00:04:39.960 --> 00:04:43.840
+Il est encore marqué comme fonctionnalité en préversion, considérez-le donc comme le plus récent et le moins abouti des cadres.
+
+00:04:44.660 --> 00:04:46.280
+Synab Studio assure la cohérence de l'ensemble.
+
+00:04:46.280 --> 00:04:51.740
+C'est l'écran unique où vous importez vos données, les explorez, les préparez et gardez un œil sur les tâches en cours.
+
+00:04:52.520 --> 00:04:56.540
+Il vous offre un espace de travail unique, un ensemble de permissions et un point de contrôle unique en cas de problème.
+
+00:04:57.560 --> 00:04:59.560
+SQL et Spark partagent le même catalogue de tables.
+
+00:05:00.420 --> 00:05:04.440
+Une table créée dans un moteur apparaît dans l'autre, ce qui vous évite de la construire deux fois.
+
+00:05:06.240 --> 00:05:07.340
+Un petit exemple pour bien comprendre.
+
+00:05:08.020 --> 00:05:10.100
+Les noms sont une chose, mais c'est plus parlant avec une petite histoire.
+
+00:05:10.480 --> 00:05:11.860
+Imaginez une boutique qui vend des articles en ligne.
+
+00:05:12.660 --> 00:05:15.660
+Chaque jour, son système de vente dépose une pile de fichiers dans le stockage cloud.
+
+00:05:16.280 --> 00:05:20.100
+Ces fichiers sont bruts, avec des noms de colonnes étranges et des dates parfois mal formatées.
+
+00:05:20.700 --> 00:05:26.120
+Un pipeline s'active selon un planning et copie ces fichiers dans le lac de données, automatiquement et sans écriture de code.
+
+00:05:27.440 --> 00:05:31.560
+Sparklie ensuite ces fichiers désordonnés, corrige les dates erronées et génère des tables propres enfin exploitables.
+
+00:05:32.060 --> 00:05:36.500
+Le moteur d'entrepôt de données récupère ces tables et les serre rapidement pour qu'un rapport s'ouvre en une seconde au lieu de 40 minutes.
+
+00:05:37.140 --> 00:05:40.700
+Power BI, l'outil que votre manager connaît déjà, génère le tableau de bord par-dessus.
+
+00:05:41.260 --> 00:05:43.880
+Ce qui surprend les gens, c'est le manque de glamour d'une grande partie de ce travail.
+
+00:05:43.880 --> 00:05:47.860
+L'essentiel est de la tuyauterie, et c'est cette tuyauterie qui rend le beau tableau de bord possible.
+
+00:05:48.760 --> 00:05:53.540
+Rien de tout cela ne demande un diplôme en informatique, même si cela récompense ceux qui comprennent comment les données circulent.
+
+00:05:54.440 --> 00:05:58.820
+Si vous savez suivre une recette, vous pouvez gérer un pipeline de données, car ce ne sont que des étapes dans un ordre fixe.
+
+00:05:59.320 --> 00:06:01.880
+Dans une équipe réelle, cela se divise généralement en plusieurs rôles.
+
+00:06:02.400 --> 00:06:06.220
+Une personne maintient le pipeline, une autre façonne l'étable et une dernière construit le rapport final.
+
+00:06:06.220 --> 00:06:09.700
+Dans une petite entreprise, il peut s'agir d'une seule personne portant trois casquettes.
+
+00:06:09.920 --> 00:06:14.180
+Et Synapse, c'est dû en partie, car un seul outil couvre ses trois fonctions, couvre ses trois fonctions.
+
+00:06:14.420 --> 00:06:16.180
+Il y a là un avantage qui n'apparaît jamais dans une démo.
+
+00:06:16.840 --> 00:06:20.860
+Lorsque toutes ces données sont réunies, la réponse à une question simple ne dépend plus de votre interlocuteur,
+
+00:06:21.420 --> 00:06:22.840
+car tout le monde consulte les mêmes tables.
+
+00:06:23.300 --> 00:06:28.000
+Cela semble ennuyeux jusqu'à ce que vous assistiez à une réunion où deux personnes présentent deux chiffres d'affaires différents sans qu'aucune ne mentre.
+
+00:06:28.560 --> 00:06:30.560
+Pourquoi les équipes sont-elles réellement enthousiastes à ce sujet ?
+
+00:06:30.560 --> 00:06:34.720
+Une fois que l'on comprend le fonctionnement interne, l'intérêt devient évident et va bien au-delà d'un simple tableau de bord plus rapide.
+
+00:06:35.420 --> 00:06:38.040
+Vous configurez vos autorisations, une seule fois depuis un écran unique,
+
+00:06:38.380 --> 00:06:42.260
+au lieu de répéter les mêmes règles de sécurité dans trois outils différents, en espérant qu'elles correspondent.
+
+00:06:43.720 --> 00:06:48.380
+Pour quiconque a dû fouiller dans une douzaine de pages de paramètres pour savoir qui peut voir quoi, rien, que cela est un soulagement.
+
+00:06:49.100 --> 00:06:50.760
+Le lac de données partagées est tout aussi important.
+
+00:06:51.340 --> 00:06:54.060
+SQL et Spark peuvent lire les mêmes fichiers par K, CSV et JSON.
+
+00:06:54.060 --> 00:06:58.000
+Vous cessez ainsi de copier des données entre les mondes et de payer deux fois pour le même stockage.
+
+00:06:58.000 --> 00:07:02.100
+Cela élimine toute une catégorie de disputes au sein d'une équipe de données,
+
+00:07:02.320 --> 00:07:05.340
+celles où deux groupes jurent que leurs chiffres sont corrects sans pouvoir le prouver.
+
+00:07:05.980 --> 00:07:06.940
+Il y a aussi l'étendue des capacités.
+
+00:07:07.300 --> 00:07:09.440
+L'intégration de données natives se connecte à plus de 90 sources,
+
+00:07:09.520 --> 00:07:12.680
+ce qui signifie que ce système complexe que personne ne veut toucher est généralement pris en charge.
+
+00:07:13.560 --> 00:07:17.280
+Comme Power BI fait partie de la même famille, le dernier kilomètre jusqu'au tableau de bord est déjà résolu.
+
+00:07:17.540 --> 00:07:20.580
+La personne qui crée le rapport n'a rarement à se soucier de la machinerie sous-jacente.
+
+00:07:21.460 --> 00:07:24.060
+Globalement, Synapse occupe une place spécifique dans l'écosystème Microsoft.
+
+00:07:24.600 --> 00:07:26.420
+Azure fonctionne en dessous, Power BI se trouve au-dessus,
+
+00:07:26.420 --> 00:07:29.040
+et Microsoft 365 constitue l'espace de travail tout autour.
+
+00:07:29.580 --> 00:07:32.080
+Quand les gens disent que Synapse est puissant, c'est à cela qu'ils font référence,
+
+00:07:32.160 --> 00:07:33.720
+et c'est une raison légitime d'être enthousiaste.
+
+00:07:34.100 --> 00:07:36.160
+Il y a également un aspect financier, bien qu'il soit facile de le manquer.
+
+00:07:37.040 --> 00:07:40.020
+Consolider sur un seul service signifie souvent une seule facture et un seul budget à gérer,
+
+00:07:40.280 --> 00:07:43.220
+plutôt que de courir après 4 abonnements que personne ne gère vraiment.
+
+00:07:43.840 --> 00:07:45.860
+Cette clarté a une réelle valeur dans une grande entreprise,
+
+00:07:46.200 --> 00:07:47.620
+même si cela n'apparaît jamais dans une démo.
+
+00:07:48.720 --> 00:07:51.400
+Quant à sa place aux côtés de Power BI et Microsoft 365,
+
+00:07:52.020 --> 00:07:53.280
+presque tous les débutants les confondent,
+
+00:07:53.280 --> 00:07:56.600
+et il vaut donc mieux clarifier cela rapidement avant que la confusion n'entraîne une mauvaise décision.
+
+00:07:57.440 --> 00:07:59.740
+Power BI est la fenêtre, et Synapse est la salle des machines.
+
+00:08:00.280 --> 00:08:03.160
+Vous ne choisissez pas l'un plutôt que l'autre, car ils ont été conçus pour fonctionner en tournette.
+
+00:08:03.880 --> 00:08:05.060
+Synapse stock est prêt par les données,
+
+00:08:05.240 --> 00:08:08.480
+et Power BI les transforme en quelque chose qu'un humain peut lire d'un coup d'œil.
+
+00:08:09.020 --> 00:08:10.500
+Il y a de fortes chances que vous ayez déjà la partie vision.
+
+00:08:11.180 --> 00:08:13.780
+Power BI est inclus dans de nombreux plans Microsoft 365,
+
+00:08:14.320 --> 00:08:16.580
+et les données alimentant ces rapports proviennent souvent de Teams,
+
+00:08:16.680 --> 00:08:19.880
+de SharePoint ou d'un fichier Excel que quelqu'un considère comme la source de vérité.
+
+00:08:19.880 --> 00:08:24.360
+Synapse est la couche qui permet à tout cela de survivre à une mise à l'échelle réelle.
+
+00:08:24.960 --> 00:08:27.500
+Un moyen simple de les différencier, et de se demander ce qui casse en premier.
+
+00:08:27.960 --> 00:08:30.280
+Si votre rapport semble confus, c'est un problème lié à Power BI.
+
+00:08:30.840 --> 00:08:33.360
+Si votre rapport est lent, erroné, ou incapable de contenir toutes les lignes,
+
+00:08:33.420 --> 00:08:34.560
+c'est la salle des machines qui vous appelle.
+
+00:08:35.120 --> 00:08:37.300
+Vous devriez également connaître le nom de son petit frère plus récent,
+
+00:08:37.460 --> 00:08:38.300
+car vous l'entendrez constamment.
+
+00:08:39.300 --> 00:08:42.980
+Microsoft Fabric reprend les mêmes concepts, l'entrepôt, le lac, les pipelines et les rapports,
+
+00:08:42.980 --> 00:08:45.280
+pour les regrouper en un seul produit avec une facture unique.
+
+00:08:45.680 --> 00:08:47.640
+C'est la direction vers laquelle Microsoft pointe sans cesse,
+
+00:08:47.640 --> 00:08:50.760
+et c'est pourquoi la question suivante est de savoir si Synapse mérite toujours que vous y intéressez.
+
+00:08:51.260 --> 00:08:54.340
+Fabric modifie le modèle d'achat, ce qui mérite d'être compris même si vous ne l'utilisez jamais.
+
+00:08:55.100 --> 00:08:59.160
+Au lieu de 4 compteurs indépendants, Fabric fonctionne avec une capacité unique que vous ajustez,
+
+00:08:59.380 --> 00:09:00.920
+et tout ce qui se trouve à l'intérieur la partage.
+
+00:09:01.740 --> 00:09:05.320
+C'est plus facile à appréhender, et c'est une raison majeure pour laquelle Microsoft y oriente ses nouveaux projets.
+
+00:09:05.680 --> 00:09:08.140
+Cela ne signifie pas que vous avez perdu votre temps si vous avez appris Synapse en premier.
+
+00:09:08.400 --> 00:09:11.640
+Les deux partagent un tel vocabulaire que passer de l'un à l'autre ne donne pas l'impression de tout recommencer,
+
+00:09:11.640 --> 00:09:13.860
+mais plutôt de réorganiser les meubles dans une maison que vous connaissez déjà.
+
+00:09:13.860 --> 00:09:18.700
+Quant au coût réel, honnêtement c'est la partie dont je vous avais prévenu,
+
+00:09:18.820 --> 00:09:22.000
+et elle détermine si Synapse ressemble à une bonne affaire, ou à une erreur.
+
+00:09:22.300 --> 00:09:25.940
+Ah, il n'existe pas de prix simple par personne pour Synapse, car vous payez pour deux choses.
+
+00:09:26.420 --> 00:09:29.240
+La puissance de calcul utilisé et la quantité de données traitées.
+
+00:09:29.600 --> 00:09:31.500
+Ces frais sont répartis sur 4 compteurs distincts,
+
+00:09:31.560 --> 00:09:35.440
+un pour l'entrepôt serverless, un pour l'entrepôt dédié, un pour Spark, et un pour les pipelines.
+
+00:09:36.120 --> 00:09:37.600
+Quelques chiffres concrets rendent les choses plus rares.
+
+00:09:37.860 --> 00:09:42.080
+L'aspect serverless coûte environ 5 dollars par teraoctet de données scannées avec un montant.
+
+00:09:42.880 --> 00:09:45.000
+Minimum facturé même pour une requête très petite.
+
+00:09:45.980 --> 00:09:49.320
+Un entrepôt dédié à sa taille initiale coûte environ 1,01 dollars par heure,
+
+00:09:49.500 --> 00:09:53.080
+soit environ 1,0 mille dollars par mois si vous le laissez allumer en permanence.
+
+00:09:54.080 --> 00:09:55.740
+Cette dernière phrase cache l'erreur classique.
+
+00:09:56.580 --> 00:09:58.600
+Cet entrepôt continue d'être facturé tant qu'il tourne,
+
+00:09:58.660 --> 00:10:00.340
+même quand personne ne l'interroge de le laisser allumer la nuit,
+
+00:10:00.440 --> 00:10:03.440
+et le week-end est donc le moyen par lequel les gens gaspillent de l'argent sans s'en rendre compte.
+
+00:10:04.300 --> 00:10:05.400
+Le mettre en pause arrête le compteur,
+
+00:10:05.400 --> 00:10:07.440
+et se rappeler de le mettre en pause est la majeure partie du travail.
+
+00:10:08.260 --> 00:10:10.900
+Le côté serverless vous permet même de définir un plafond de dépense quotidien
+
+00:10:10.900 --> 00:10:13.520
+pour qu'une requête incontrôlée se heurte à un mur plutôt qu'à votre portefeuille.
+
+00:10:13.520 --> 00:10:20.920
+La fourchette réaliste pour une équipe de taille moyenne se situe quelque part entre 1,500 et...
+
+00:10:20.920 --> 00:10:22.180
+Il existe des moyens de réduire cela,
+
+00:10:22.340 --> 00:10:24.360
+comme acheter de la capacité à l'avance pour obtenir une remise,
+
+00:10:24.720 --> 00:10:27.180
+mais ces offres ne sont rentables qu'une fois que vous connaissez votre usage réel.
+
+00:10:27.680 --> 00:10:29.020
+Les critiques disent tous la même chose,
+
+00:10:29.140 --> 00:10:30.820
+la structure des coûts est difficile à prévoir.
+
+00:10:31.880 --> 00:10:33.220
+Ce n'est pas une raison pour éviter Synapse,
+
+00:10:33.620 --> 00:10:35.520
+mais c'est une raison pour surveiller la facture dès le premier jour.
+
+00:10:35.940 --> 00:10:38.000
+Il est utile de comprendre pourquoi la facture est si difficile à mettre.
+
+00:10:38.540 --> 00:10:41.420
+Avec la plupart des logiciels, vous achetez une licence et le prix ne bouge pratiquement pas.
+
+00:10:41.420 --> 00:10:44.480
+Avec Synapse, vous louez du temps de calcul et payez à l'octet,
+
+00:10:44.580 --> 00:10:46.520
+donc une requête lente écrite par un débutant imprudent
+
+00:10:46.520 --> 00:10:49.100
+peut coûter plus cher qu'une requête rapide écrite par un expert.
+
+00:10:50.620 --> 00:10:52.240
+Les erreurs qui coûtent le plus cher aux débutants.
+
+00:10:52.680 --> 00:10:55.440
+L'argent est un piège, et les habitudes liées à l'outil en sont un autre.
+
+00:10:56.000 --> 00:10:57.980
+L'habitude la plus coûteuse est de laisser un pool dédié actif,
+
+00:10:58.060 --> 00:11:01.100
+alors que personne n'en a besoin car le compteur ne se soucie pas de savoir si le bureau est vide.
+
+00:11:02.140 --> 00:11:05.040
+Prenez l'habitude de mettre en pause, et vous aurez déjà évité la facture la plus lourde.
+
+00:11:05.640 --> 00:11:08.020
+La deuxième erreur est de traiter Synapse comme un classeur géant
+
+00:11:08.020 --> 00:11:09.500
+pour tout ce que votre entreprise possède.
+
+00:11:09.500 --> 00:11:11.260
+Il est conçu pour traiter des données,
+
+00:11:11.720 --> 00:11:13.720
+pas pour être l'endroit où chaque fichier réside pour toujours.
+
+00:11:14.900 --> 00:11:16.620
+Le stockage est bon marché, à bon endroit ailleurs,
+
+00:11:16.960 --> 00:11:18.820
+et chargez l'entrepôt avec des choses que vous n'interrogez jamais,
+
+00:11:18.920 --> 00:11:20.140
+rend tout plus lent et plus coûteux.
+
+00:11:21.100 --> 00:11:24.120
+La troisième erreur est d'attendre de Synapse qui soit aussi conviviale que Power BI,
+
+00:11:24.460 --> 00:11:25.540
+car ce ne sera pas le cas.
+
+00:11:26.340 --> 00:11:28.240
+Power BI a été conçu pour les utilisateurs métiers,
+
+00:11:28.540 --> 00:11:30.840
+et Synapse a été conçu pour ceux qui maîtrisent l'architecture des données.
+
+00:11:31.640 --> 00:11:32.480
+Cet écart est bien réel,
+
+00:11:32.480 --> 00:11:35.540
+et c'est la raison pour laquelle un débutant doit comprendre les concepts avant de toucher au bouton.
+
+00:11:36.080 --> 00:11:37.120
+Quatrième piège est plus insidue.
+
+00:11:37.120 --> 00:11:39.100
+Certains tutoriels et guides de démarrage rapide,
+
+00:11:39.200 --> 00:11:40.920
+créer des ressources payantes en arrière-plan sans vous prévenir,
+
+00:11:41.080 --> 00:11:43.620
+et un après-midi de curiosité peut se transformer en facture surprise.
+
+00:11:44.500 --> 00:11:46.420
+Surveillez le tableau de bord des coûts pendant vos expérimentations,
+
+00:11:46.480 --> 00:11:48.080
+et supprimez les ressources une fois que vous avez terminé.
+
+00:11:48.400 --> 00:11:50.080
+Il y a une cinquième erreur qui n'a rien à voir avec l'argent,
+
+00:11:50.480 --> 00:11:51.740
+et celle-ci freine les carrières.
+
+00:11:52.420 --> 00:11:54.420
+De nombreux débutants essaient d'apprendre toutes les fonctionnalités à la fois,
+
+00:11:54.500 --> 00:11:56.480
+se sentent dépassées et abandonnent avant que tout ne devienne clair.
+
+00:11:56.840 --> 00:11:57.360
+Avant que tout ne devienne.
+
+00:11:57.360 --> 00:11:59.560
+Ceux qui réussissent choisissent une petite tâche,
+
+00:11:59.640 --> 00:12:01.700
+comme charger un seul fichier et faire un rapport,
+
+00:12:01.820 --> 00:12:04.760
+et laissent le reste de l'outil invisible jusqu'à ce qu'ils en aient besoin.
+
+00:12:05.500 --> 00:12:07.560
+L'outil récompense la patience et punit la précipitation,
+
+00:12:07.860 --> 00:12:09.640
+et presque personne ne l'apprend en un week-end.
+
+00:12:11.320 --> 00:12:13.760
+Vaut-il encore la peine de l'apprendre en 2026 ?
+
+00:12:13.760 --> 00:12:14.840
+C'est la question que tout le monde se pose,
+
+00:12:15.020 --> 00:12:16.160
+et elle mérite une réponse directe.
+
+00:12:16.580 --> 00:12:17.400
+Synapse n'est pas retiré.
+
+00:12:17.980 --> 00:12:19.580
+Microsoft n'a annoncé aucun plan pour le retirer,
+
+00:12:19.700 --> 00:12:21.760
+et toutes les charges de travail principales fonctionnent toujours aujourd'hui.
+
+00:12:21.760 --> 00:12:23.700
+L'outil est donc bien réel, il est pris en charge,
+
+00:12:23.780 --> 00:12:25.500
+et de nombreuses entreprises l'utilisent en production aujourd'hui.
+
+00:12:25.780 --> 00:12:28.000
+La nuance réside dans l'endroit où Microsoft investit son énergie.
+
+00:12:28.420 --> 00:12:30.360
+Les nouvelles fonctionnalités et idées arrivent dans Fabrique,
+
+00:12:30.480 --> 00:12:32.380
+et la documentation de Microsoft oriente désormais
+
+00:12:32.380 --> 00:12:34.960
+certaines capacités récentes vers Fabrique plutôt que Synapse.
+
+00:12:36.360 --> 00:12:39.080
+Les analystes décrivent Synapse comme un service qui fonctionne toujours,
+
+00:12:39.180 --> 00:12:41.060
+mais qui n'est plus au centre des nouveaux développements.
+
+00:12:41.860 --> 00:12:43.160
+C'est une orientation, pas une date limite,
+
+00:12:43.240 --> 00:12:44.260
+et ce sont deux choses très différentes.
+
+00:12:44.860 --> 00:12:46.680
+Pour votre carrière, la bonne nouvelle est que les concepts
+
+00:12:46.680 --> 00:12:48.180
+sont presque parfaitement transférables.
+
+00:12:48.920 --> 00:12:50.620
+Un data lake, un entrepôt, un pipeline,
+
+00:12:50.620 --> 00:12:52.740
+et une couche de reporting existe à la fois dans Synapse et Fabrique,
+
+00:12:52.860 --> 00:12:53.920
+sous des noms légèrement différents.
+
+00:12:54.880 --> 00:12:56.880
+Apprenez comment les données circulent dans un entrepôt Synapse,
+
+00:12:56.960 --> 00:12:59.400
+et vous comprendrez déjà l'essentiel de ce que fait Fabrique.
+
+00:13:00.020 --> 00:13:01.880
+Il y a une raison pratique de s'en soucier au-delà de l'avenir,
+
+00:13:01.980 --> 00:13:03.640
+c'est que le passé continue de tourner.
+
+00:13:04.620 --> 00:13:06.020
+Des milliers d'entreprises reposent sur Synapse,
+
+00:13:06.080 --> 00:13:07.760
+et quelqu'un doit maintenir ses systèmes en bon état.
+
+00:13:08.760 --> 00:13:10.120
+Maîtriser est une compétence réelle aujourd'hui,
+
+00:13:10.180 --> 00:13:10.940
+ce n'est pas une pièce de musée.
+
+00:13:11.540 --> 00:13:14.160
+La réponse honnête à la grande question est donc oui, avec une nuance.
+
+00:13:15.240 --> 00:13:17.140
+Apprenez les concepts car ils survivront aux produits,
+
+00:13:17.540 --> 00:13:19.340
+et voyez Synapse comme un bon moyen de les apprendre
+
+00:13:19.340 --> 00:13:20.960
+plutôt que comme le seul endroit qui comptera.
+
+00:13:22.420 --> 00:13:24.340
+Un cours récapitulatif et une question pour vous.
+
+00:13:24.840 --> 00:13:25.820
+Voici donc où nous en sommes arrivés.
+
+00:13:26.160 --> 00:13:27.660
+Synapse est un espace de travail unique
+
+00:13:27.660 --> 00:13:29.920
+qui réunit un entrepôt et un ensemble de moteurs de Big Data.
+
+00:13:30.460 --> 00:13:31.940
+Il se connecte directement à Power BI.
+
+00:13:32.400 --> 00:13:34.560
+Il récompense ceux qui pensent à interrompre le compteur,
+
+00:13:34.780 --> 00:13:36.060
+et sanctionne ceux qui oublient.
+
+00:13:37.340 --> 00:13:38.760
+Ces concepts se retrouvent directement dans Fabrique,
+
+00:13:38.940 --> 00:13:40.260
+vers lequel Microsoft se tourne désormais.
+
+00:13:41.080 --> 00:13:42.980
+Maintenant je veux vous entendre, et c'est une vraie question.
+
+00:13:43.840 --> 00:13:45.320
+Quelle est la source de données dans votre environnement
+
+00:13:45.320 --> 00:13:46.680
+qui réside encore dans une feuille de calcul
+
+00:13:46.680 --> 00:13:48.340
+que quelqu'un garde comme un secret ?
+
+00:13:48.340 --> 00:13:49.300
+Dites-le moi dans les commentaires,
+
+00:13:49.720 --> 00:13:51.280
+car ce fichier est généralement la raison exacte
+
+00:13:51.280 --> 00:13:52.780
+pour laquelle un outil comme celui-ci devient nécessaire.
+
+00:13:53.400 --> 00:13:54.920
+Si ce sujet vous semble moins intimidant,
+
+00:13:55.040 --> 00:13:56.600
+abonnez-vous à M365FM
+
+00:13:56.600 --> 00:13:58.000
+pour maîtriser les outils et l'état d'esprit
+
+00:13:58.000 --> 00:13:59.260
+qui façonnent le futur du travail.
+
+00:13:59.680 --> 00:14:00.000
+Euh...

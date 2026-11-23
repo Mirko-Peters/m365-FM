@@ -1,0 +1,1270 @@
+WEBVTT
+
+00:00:00.400 --> 00:00:06.800
+Pronto para 12 dias de Microsoft 365, Copilot, IA, Isuri e as pessoas que estão moldando o futuro do trabalho?
+
+00:00:07.820 --> 00:00:12.040
+Em janeiro, a M365com está de volta, e ainda maior.
+
+00:00:12.960 --> 00:00:18.180
+Junte-se a nós para sessões ao vivo, demonstrações reais e conhecimento prático de MVPs e especialistas do setor em todo o mundo.
+
+00:00:18.940 --> 00:00:21.160
+Nada de slides genéricos ou jargões intermináveis.
+
+00:00:21.940 --> 00:00:23.240
+Estamos abordando os desafios reais.
+
+00:00:23.960 --> 00:00:28.500
+Copilot Studio, agentes de IA, fábrica, segurança, governança e automação.
+
+00:00:28.500 --> 00:00:34.280
+Seja você um profissional de TI, desenvolvedor ou líder de negócios, há sessões criadas para você.
+
+00:00:35.620 --> 00:00:40.000
+Com 10 dias completos, você pode explorar várias tecnologias e se conectar com uma comunidade global.
+
+00:00:40.900 --> 00:00:44.140
+Assista ao vivo e leve insights práticos para a sua organização.
+
+00:00:45.160 --> 00:00:48.960
+Janeiro de 2027, 10 dias, uma única comunidade de Microsoft.
+
+00:00:49.520 --> 00:00:50.580
+As inscrições já estão abertas.
+
+00:00:51.900 --> 00:00:55.540
+Acesse m365com.net e garanta sua vaga hoje mesmo.
+
+00:00:55.540 --> 00:00:58.400
+É m365com.net
+
+00:00:58.400 --> 00:01:04.480
+Participe agora em m365com.net e nos vemos ao vivo em janeiro.
+
+00:01:05.200 --> 00:01:09.360
+Olá a todos e bem-vindos a mais um episódio de Microsoft Knowledge Nuggets aqui na M305FM.
+
+00:01:09.460 --> 00:01:10.680
+M, eu sou o Mídico Piro.
+
+00:01:10.960 --> 00:01:13.340
+Imagine que você precise de uma máquina virtual com um pequeno aplicativo.
+
+00:01:13.720 --> 00:01:16.460
+Você escolhe uma região, seleciona o tamanho da VM, vê o preço e a cria.
+
+00:01:17.140 --> 00:01:17.400
+Certo.
+
+00:01:18.040 --> 00:01:21.260
+Agora imagine que esse mesmo aplicativo precise de repente de 2 mil VMs da noite para o dia.
+
+00:01:21.260 --> 00:01:26.420
+Você pode estar executando simulações processando um grande conjunto de dados ou testando software com milhares de workers de curta duração.
+
+00:01:26.940 --> 00:01:29.660
+De repente, aquela escolha fácil de VM se transforma em uma verdadeira dor de cabeça.
+
+00:01:30.200 --> 00:01:32.340
+O tamanho que você escolheu pode não ter capacidade suficiente na sua região.
+
+00:01:32.840 --> 00:01:34.760
+Um tamanho diferente poderia funcionar, mas o preço muda.
+
+00:01:35.220 --> 00:01:37.880
+VMs spot custam bem menos, mas o Azure pode retomá-las a qualquer momento.
+
+00:01:38.220 --> 00:01:42.660
+Você poderia criar vários conjuntos de escala de máquinas virtuais e escrever scripts personalizados para buscar capacidade,
+
+00:01:42.780 --> 00:01:44.640
+mas isso rapidamente se torna um pesadelo de gerenciamento.
+
+00:01:44.640 --> 00:01:47.660
+Esta é a pergunta que o Azure Compute Fleet foi criado para responder.
+
+00:01:48.260 --> 00:01:51.380
+O que é um tamanho exato de VM deveria impedir o início de uma grande implantação?
+
+00:01:51.940 --> 00:01:57.960
+Ao final deste episódio, você saberá o que o Compute Fleet realmente faz, o que ele não faz e onde ele se encaixa ao lado dos conjuntos de escala de máquinas virtuais.
+
+00:01:58.900 --> 00:02:05.640
+O Azure Compute Fleet é um serviço gerenciado projetado para fornecer a você um grande pool de capacidade de computação em VMs.
+
+00:02:06.320 --> 00:02:08.320
+Note que eu não disse que ele criou uma máquina específica.
+
+00:02:08.320 --> 00:02:15.720
+Você informa ao Azure que tipo de capacidade pode usar, quanta precisa, onde deseja executá-la e se quer VMs sob demanda padrão, VMs spot de menor custo, o AMBAS.
+
+00:02:17.500 --> 00:02:20.100
+Então o Azure busca capacidade entre essas opções aceitáveis.
+
+00:02:20.520 --> 00:02:22.000
+Pense nisso como um prédio de escritores modernos.
+
+00:02:22.360 --> 00:02:27.260
+Você não entra exigindo a mesa 27 no oitavo andar, em uma sala exata, de frente para uma janela específica.
+
+00:02:28.140 --> 00:02:31.100
+Em vez disso, você diz ao gerente do prédio, preciso de 500 mesas para minha equipe.
+
+00:02:31.620 --> 00:02:33.760
+Estes andares funcionam. Estes layouts são bons.
+
+00:02:34.220 --> 00:02:34.700
+Aqui, Senado.
+
+00:02:35.540 --> 00:02:37.420
+O gerente verifica o que está livre e acomoda todos.
+
+00:02:37.420 --> 00:02:39.000
+Compidflit funciona da maneira.
+
+00:02:39.520 --> 00:02:41.360
+Sua solicitação pode dizer, preciso de mil trabalhadores.
+
+00:02:41.820 --> 00:02:43.460
+Eles precisam desta quantidade de CPU, meu irmão.
+
+00:02:43.680 --> 00:02:44.960
+Estes tamanhos de VMs são aceitáveis.
+
+00:02:45.400 --> 00:02:46.960
+Estas zonas de disponibilidade são aceitáveis.
+
+00:02:47.340 --> 00:02:50.240
+Use sob demanda para a parte da carga de trabalho, instâncias spot onde fizer sentido.
+
+00:02:50.920 --> 00:02:53.540
+A rede mais ampla torna muito mais fácil encontrar a capacidade disponível.
+
+00:02:54.020 --> 00:02:56.680
+Um SQL de VM é apenas um tamanho tipo específico de máquina virtual.
+
+00:02:57.280 --> 00:03:00.500
+Ele descreve itens como CPU, memória, armazenamento local e família de processão.
+
+00:03:00.960 --> 00:03:04.240
+Se você pedir apenas um, Skyu ou Azure só pode procurar por aquela forma exata.
+
+00:03:04.460 --> 00:03:07.340
+Se essa capacidade estiver ocupada, sua implantação espera ou falha.
+
+00:03:08.080 --> 00:03:10.700
+Com o Compidflit, você lista vários tamanhos de VM aceitáveis.
+
+00:03:11.520 --> 00:03:14.700
+O Azure pode, então, alocar alguns trabalhadores em um tamanho e outros em outro,
+
+00:03:14.780 --> 00:03:16.100
+desde que sua carga rode em ambos.
+
+00:03:16.820 --> 00:03:19.140
+Para grandes cargas de trabalho, essa flexibilidade é o objetivo principal.
+
+00:03:20.000 --> 00:03:22.620
+O Compidflit pode lidar com até 10 mil VMs em uma única implantação.
+
+00:03:23.200 --> 00:03:25.140
+Você não precisa mais criar milhares de máquinas uma uma,
+
+00:03:25.140 --> 00:03:27.980
+ou criar scripts separados para cada tamanho de VM aceitável.
+
+00:03:28.580 --> 00:03:30.020
+Em vez disso, você cria uma solicitação de fleet.
+
+00:03:30.020 --> 00:03:33.560
+Nos bastidores, o Azure verifica as opções de capacidade que você permitiu,
+
+00:03:33.640 --> 00:03:36.560
+encontra uma combinação viável, e cria os grupos de VM que compõem o fleet.
+
+00:03:37.100 --> 00:03:40.880
+E você ainda precisa fornecer a imagem da VM e configuração de rede e o software que cada trabalhador deve executar.
+
+00:03:41.520 --> 00:03:43.580
+O fleet não entende seu trabalho de negócio por conta própria.
+
+00:03:44.040 --> 00:03:46.280
+Ele não sabe se um trabalhador está calculando risco financeiro,
+
+00:03:46.640 --> 00:03:49.640
+renderizando um quadro de vídeo, testando software ou processando uma amostra de genoma.
+
+00:03:50.300 --> 00:03:54.240
+Ele também não roteia tráfego web e substitui um balanceador de carga ou corrige código dentro de uma VM.
+
+00:03:54.240 --> 00:03:56.400
+O papel do fleet é mais restrito.
+
+00:03:56.900 --> 00:03:59.600
+Ele ajuda você a adquirir e gerenciar um grande pool de capacidade computacional
+
+00:03:59.600 --> 00:04:01.020
+quando mais de um caminho pode levá-lo até lá.
+
+00:04:01.520 --> 00:04:02.060
+Essa é a mudança.
+
+00:04:02.460 --> 00:04:06.380
+Em vez de entregar ao Azure uma lista de compras rígida que diz preciso de mil desta máquina exata,
+
+00:04:06.460 --> 00:04:09.440
+você faz uma solicitação prática que diz preciso desta capacidade computacional
+
+00:04:09.440 --> 00:04:10.860
+e aqui estão as escolhas que funcionam.
+
+00:04:11.340 --> 00:04:12.620
+E aqui estão as escolhas que funcionam.
+
+00:04:13.520 --> 00:04:16.040
+A próxima parte é onde essa solicitação se torna útil
+
+00:04:16.040 --> 00:04:18.520
+porque você precisa decidir quanta liberdade está disposto a dar ao Azure.
+
+00:04:19.240 --> 00:04:21.040
+As três escolhas que dão ao Azure espaço para trabalhar.
+
+00:04:21.540 --> 00:04:24.080
+A primeira escolha é a lista de tamanhos de VM que você aceitar.
+
+00:04:24.520 --> 00:04:27.680
+A maioria das pessoas começa com um nome como D8, F16 ou alguma escolha exata
+
+00:04:27.680 --> 00:04:30.660
+que faz sentido quando você está executando um servidor e sabe exatamente do que ele precisa.
+
+00:04:31.620 --> 00:04:34.820
+Mas, em escala de frota, a pergunta não deveria ser qual nome de processador eu quero?
+
+00:04:35.960 --> 00:04:37.460
+E sim, do que meu trabalho realmente precisa?
+
+00:04:38.420 --> 00:04:41.100
+Imagine um modelo de risco que executa milhares de cálculos separados.
+
+00:04:41.880 --> 00:04:45.240
+Cada worker precisa de CPI e memórias suficientes para processar uma fatia dos dados.
+
+00:04:45.880 --> 00:04:48.660
+Ele pode rodar tão bem em várias famílias de VM focadas em computação,
+
+00:04:48.660 --> 00:04:50.520
+mesmo que o processador base seja diferente.
+
+00:04:51.200 --> 00:04:53.420
+O que importa para o trabalho é finalizar os cálculos corretamente.
+
+00:04:53.420 --> 00:04:56.180
+Não importa se cada worker tem o mesmo rótulo na caixa.
+
+00:04:56.820 --> 00:04:58.660
+Portanto, em vez de permitir apenas um tamanho de VM,
+
+00:04:58.760 --> 00:05:01.080
+você pode permitir vários que atendam a mesma necessidade prática.
+
+00:05:01.580 --> 00:05:03.720
+Isso dá ao Azure mais opções de capacidade para pesquisar,
+
+00:05:03.940 --> 00:05:05.900
+enquanto seus workers ainda obtêm os recursos que precisam.
+
+00:05:06.260 --> 00:05:07.720
+Há um limite para essa flexibilidade, no entanto.
+
+00:05:08.200 --> 00:05:11.040
+Seu software deve rodar corretamente em todos os tipos de VM permitidos.
+
+00:05:11.700 --> 00:05:14.320
+Uma família precisar de um drive especial, um design de processador diferente,
+
+00:05:14.320 --> 00:05:16.040
+ou uma configuração de disco local específica,
+
+00:05:16.040 --> 00:05:17.320
+não adicione só porque parece mais barato.
+
+00:05:17.320 --> 00:05:20.420
+Uma lista mais ampla só ajuda quando cada opção incluída é uma opção real.
+
+00:05:21.180 --> 00:05:23.860
+A segunda escolha é o que você quer que o Azure priorize ao encontrar essas opções.
+
+00:05:24.680 --> 00:05:27.540
+Às vezes terminar o trabalho é mais importante do que encontrar o menor preço possível.
+
+00:05:28.480 --> 00:05:31.060
+Talvez uma equipe precise concluir um cálculo noturno antes que o mercado abra.
+
+00:05:31.640 --> 00:05:33.860
+Nesse caso, você optaria por uma escolha focada em capacidade.
+
+00:05:34.580 --> 00:05:37.320
+Você está dizendo, o Azure encontra a computação disponível que atenda às minhas regras.
+
+00:05:37.720 --> 00:05:38.440
+O trabalho precisa começar.
+
+00:05:38.440 --> 00:05:41.700
+Isso não significa que o Azure cria a capacidade do nada.
+
+00:05:42.520 --> 00:05:45.980
+Significa que o Azure pode pesquisar entre os tamanhos, zonas e opções de compra permitidas,
+
+00:05:46.060 --> 00:05:48.380
+priorizando-os com maior chance de colocar seus workers em execução.
+
+00:05:49.400 --> 00:05:50.800
+Outros trabalhos podem seguir um caminho diferente.
+
+00:05:51.340 --> 00:05:53.120
+Talvez você esteja criando ambientes de teste,
+
+00:05:53.280 --> 00:05:55.760
+executando uma grande simulação que pode ser repetida mais tarde,
+
+00:05:56.080 --> 00:05:58.780
+ou processando um acúmulo de arquivos sem prazo definido, o Avon.
+
+00:05:59.740 --> 00:06:01.560
+Nesses casos, o custo pode ser mais importante do que velocidade.
+
+00:06:01.880 --> 00:06:06.020
+Uma escolha focada em preço diz ao Azure para priorizar a capacidade elegível de menor custo.
+
+00:06:06.380 --> 00:06:07.880
+Isso pode reduzir sua conta de computação,
+
+00:06:07.880 --> 00:06:10.080
+mas também pode significar esperar mais tempo até ter workers suficientes.
+
+00:06:10.500 --> 00:06:13.200
+A opção menos cara nem sempre está disponível quando você precisa,
+
+00:06:13.360 --> 00:06:15.700
+e pode não fornecer a capacidade total imediatamente.
+
+00:06:16.320 --> 00:06:17.460
+Você provavelmente já viu isso fora do Azure.
+
+00:06:17.900 --> 00:06:19.800
+Um voo barato é perfeito se sua agenda for flexível.
+
+00:06:20.840 --> 00:06:23.400
+Se você precisa estar em algum lugar para uma reunião importante amanhã de manhã,
+
+00:06:23.600 --> 00:06:25.680
+a tarifa mais baixa provavelmente não é a melhor decisão.
+
+00:06:26.380 --> 00:06:28.820
+O Compete Fleet permite que você faça o mesmo tipo de concessão com você.
+
+00:06:29.020 --> 00:06:30.300
+Então existe um meio termo.
+
+00:06:30.400 --> 00:06:33.020
+Muitas equipes não querem pagar o preço mais alto por cada worker,
+
+00:06:33.020 --> 00:06:36.560
+mas também não podem aceitar uma frota que nunca atinge um tamanho útil.
+
+00:06:36.560 --> 00:06:40.580
+Uma abordagem equilibrada dá ao Azure e margem para considerar tanto o preço quanto a capacidade disponível.
+
+00:06:41.000 --> 00:06:42.740
+Você define os limites e o Azure trabalha dentro deles.
+
+00:06:43.100 --> 00:06:46.560
+Esse é um design muito mais honesto do que fingir que toda carga de trabalho tem um objetivo simples.
+
+00:06:46.960 --> 00:06:47.880
+Uns trabalhos precisam de um prazo.
+
+00:06:48.220 --> 00:06:49.220
+Uns trabalhos precisam de um orçamento.
+
+00:06:49.520 --> 00:06:50.100
+A maioria precisa de ambos.
+
+00:06:51.100 --> 00:06:53.180
+A terceira escolha é como se descreve as próprias máquinas.
+
+00:06:53.580 --> 00:06:54.880
+Você pode listar as querias exatas,
+
+00:06:54.960 --> 00:06:57.080
+o que funciona bem quando você já testou um pequeno conjunto de tamanho.
+
+00:06:57.600 --> 00:06:59.720
+Mas o Azure também tem uma abordagem baseada em atributos,
+
+00:06:59.720 --> 00:07:01.200
+atualmente disponível em versão preliminar,
+
+00:07:01.300 --> 00:07:03.180
+onde você descreve o formato da computação de que precisa.
+
+00:07:03.180 --> 00:07:06.540
+Por exemplo, você pode escrever um worker que precisa de uma certa quantidade de CPU,
+
+00:07:06.720 --> 00:07:09.520
+memória, armazenamento local ou um acelerador, como uma GPU.
+
+00:07:10.540 --> 00:07:13.060
+O Azure pode então encontrar tamanhos de VM que correspondam a esse requisito.
+
+00:07:13.400 --> 00:07:14.040
+Pense na diferença.
+
+00:07:14.660 --> 00:07:16.880
+Uma lista de SKU diz, use isso em modelos nomeados.
+
+00:07:17.360 --> 00:07:20.940
+Uma solicitação por atributo, diz, encontre máquinas com essas necessidades físicas.
+
+00:07:21.740 --> 00:07:25.220
+A segunda abordagem pode reduzir o trabalho de atualizar a definição da sua frota
+
+00:07:25.220 --> 00:07:27.220
+quando novas gerações de VM estiverem disponíveis,
+
+00:07:27.320 --> 00:07:30.680
+mas você ainda precisa testar sua imagem e software nos tipos de máquinas que o Azure pode escolher.
+
+00:07:30.680 --> 00:07:33.460
+Não confunda flexibilidade com delegar todas as decisões.
+
+00:07:34.060 --> 00:07:36.900
+Você define os limites seguros, e o Azure seleciona dentro deles.
+
+00:07:37.400 --> 00:07:38.680
+Portanto, essas são as três escolhas.
+
+00:07:38.800 --> 00:07:42.100
+Quais tamanhos ou formas de VM funcionarão se a capacidade ou o preço vem primeiro,
+
+00:07:42.360 --> 00:07:44.380
+com amplamente você descreve a computação de que precisa.
+
+00:07:45.060 --> 00:07:47.580
+Capacidade de menor custo pode tornar uma frota muito mais barata,
+
+00:07:47.640 --> 00:07:49.780
+mas vem com uma regra para a qual toda a equipe precisa se planejar.
+
+00:07:50.460 --> 00:07:51.840
+Às vezes o Azure pode remover um worker.
+
+00:07:52.980 --> 00:07:53.800
+Spot sob demanda.
+
+00:07:53.880 --> 00:07:54.860
+Centros baratos e acessões reservados.
+
+00:07:55.460 --> 00:07:58.060
+Então, vamos falar sobre as duas maneiras de pagar pelas VMs em uma frota.
+
+00:07:58.380 --> 00:07:59.640
+As VMs sob demanda são opção está.
+
+00:07:59.640 --> 00:08:03.260
+Você solicita uma VM ao Azure e paga a taxa normal enquanto ela é executada,
+
+00:08:03.280 --> 00:08:05.800
+e o Azure não a retoma apenas porque outro cliente precisa dessa capacidade.
+
+00:08:06.420 --> 00:08:08.020
+Para trabalhos que precisam continuar em movimento,
+
+00:08:08.160 --> 00:08:10.160
+a capacidade sob demanda oferece uma base confiável.
+
+00:08:10.640 --> 00:08:13.700
+Pense nisso como reservar assentos confirmados para as pessoas que precisam estar no evento.
+
+00:08:14.180 --> 00:08:15.840
+Seu controlador de trabalho pode rodar nela,
+
+00:08:15.920 --> 00:08:17.560
+seu serviço de fila pode depender dela,
+
+00:08:17.600 --> 00:08:20.000
+ou talvez você precise de um número mínimo de workers rodando a noite toda
+
+00:08:20.000 --> 00:08:21.180
+porque perdeu o prazo da manhã é uma opção.
+
+00:08:21.620 --> 00:08:22.860
+As VMs podem funcionar de forma diferente.
+
+00:08:23.240 --> 00:08:26.120
+O Azure vende capacidade de computação, não utilizada a um preço menor,
+
+00:08:26.120 --> 00:08:28.360
+às vezes muito menor do que a taxa normal sob demanda.
+
+00:08:28.360 --> 00:08:31.900
+Isso torna as instâncias Spot úteis quando você tem muito trabalho para processar
+
+00:08:31.900 --> 00:08:34.360
+e pode lidar com interrupções, mas o preço mais baixo vem com uma condição.
+
+00:08:34.980 --> 00:08:37.820
+O Azure pode retomar uma VM Spot quando precisar dessa capacidade de volta.
+
+00:08:38.140 --> 00:08:39.620
+A VM pode desaparecer enquanto está trabalhando.
+
+00:08:40.080 --> 00:08:42.320
+Isso não significa que o Spot não seja confiável de uma maneira ruim.
+
+00:08:42.640 --> 00:08:44.180
+Significa que você precisa usá-lo de forma consíquida.
+
+00:08:44.460 --> 00:08:47.880
+Uma VM Spot não é o lugar para a única cópia de um banco de dados importante.
+
+00:08:47.980 --> 00:08:50.840
+O servidor único voltado ao usuário é um trabalho que perde horas de progresso
+
+00:08:50.840 --> 00:08:51.820
+quando um worker para.
+
+00:08:52.260 --> 00:08:53.660
+É dev planar já que o worker vai morrer.
+
+00:08:53.660 --> 00:08:55.480
+É por isso que uma frota mista geralmente faz sentido.
+
+00:08:56.080 --> 00:08:58.800
+Você mantém VMs sob demanda suficientes para o trabalho que precisa continuar
+
+00:08:58.800 --> 00:09:01.460
+e adiciona VMs Spot para obter poder de processamento extra.
+
+00:09:02.380 --> 00:09:05.020
+Quando a capacidade de Spot está disponível, a frota pode processar muito mais trabalho
+
+00:09:05.020 --> 00:09:05.560
+por menos dinheiro.
+
+00:09:06.120 --> 00:09:09.720
+Quando alguns workers Spot desaparecem, os workers sob demanda básicos continuam operando.
+
+00:09:10.080 --> 00:09:11.360
+Essa configuração oferece um equilíbrio.
+
+00:09:12.000 --> 00:09:14.100
+Os workers estáveis protegem seu rendimento mínimo,
+
+00:09:14.460 --> 00:09:17.260
+enquanto os workers Spot ajudam você a terminar mais cedo ou processar mais trabalho
+
+00:09:17.260 --> 00:09:18.580
+quando o Azure tem capacidade extra.
+
+00:09:18.580 --> 00:09:22.020
+Compete Fleet ajuda a gerenciar o lado da capacidade das remunerações.
+
+00:09:22.660 --> 00:09:24.460
+Ele pode usar as escolhas de locação que você definiu,
+
+00:09:24.540 --> 00:09:28.120
+buscar opções Spot ou sob demanda elegíveis e reagir quando as VMs Spot forem removidas.
+
+00:09:28.920 --> 00:09:32.020
+Ainda assim, a frota não pode proteger o trabalho que existe apenas dentro de uma VM.
+
+00:09:32.440 --> 00:09:33.700
+O design dos facares de trabalho precisa ser.
+
+00:09:33.940 --> 00:09:35.200
+Imagine um trabalho de renderização de vídeo.
+
+00:09:35.520 --> 00:09:37.040
+Um worker renderiza do quadro 1 ao 100,
+
+00:09:37.220 --> 00:09:38.640
+outro lida com o próximo grupo.
+
+00:09:39.140 --> 00:09:41.240
+Se um worker Spot desaparecer no meio de um quadro,
+
+00:09:41.300 --> 00:09:44.320
+o sistema deve marcar esse quadro como inacabado e enviá-lo de volta à fila.
+
+00:09:44.740 --> 00:09:45.760
+O próximo worker o reinicia.
+
+00:09:46.120 --> 00:09:47.680
+Sem drama, sem projeto perdido.
+
+00:09:47.680 --> 00:09:51.740
+Esse mesmo padrão funciona para simulações, trabalhos de extração e transformação de dados,
+
+00:09:51.880 --> 00:09:53.840
+compilações de software, testes automatizados,
+
+00:09:53.960 --> 00:09:56.040
+ambientes e vivimentos de desenvolvimento e processamento genômico
+
+00:09:56.040 --> 00:09:57.840
+onde muitas amostras podem ser executadas separadamente.
+
+00:09:58.320 --> 00:10:00.720
+Esses trabalhos funcionam bem porque podem ser divididos em partes menores.
+
+00:10:01.220 --> 00:10:02.520
+Um worker pode processar um arquivo,
+
+00:10:02.600 --> 00:10:03.960
+um worker pode calcular um cenário,
+
+00:10:04.020 --> 00:10:05.280
+um worker pode testar uma build.
+
+00:10:05.840 --> 00:10:09.000
+Se o worker desaparecer, outro pode retomar essa pequena parte mais tarde,
+
+00:10:09.120 --> 00:10:11.820
+mas um servidor de banco de dados único é um trabalho muito diferente.
+
+00:10:12.380 --> 00:10:15.300
+Se o banco de dados armazena sua única cópia dos dados em uma VM Spot,
+
+00:10:15.300 --> 00:10:17.920
+uma remoção pode interromper o serviço e colocar a recuperação em risco.
+
+00:10:18.480 --> 00:10:22.280
+O mesmo se aplica a softwares com estado que não consegue reiniciar de forma limpa
+
+00:10:22.280 --> 00:10:25.260
+ou um aplicativo voltado ao cliente que depende de uma VM específica online.
+
+00:10:26.000 --> 00:10:27.940
+O uso de Spot não torna esses designs seguros.
+
+00:10:28.720 --> 00:10:30.440
+Para uma carga de trabalho compatível com o Spot,
+
+00:10:30.560 --> 00:10:32.420
+mantenha o progresso de um local durável fora da VM.
+
+00:10:32.820 --> 00:10:34.540
+Isso pode significar uma conta de armazenamento,
+
+00:10:34.620 --> 00:10:37.540
+um banco de dados ou outro serviço que registre o que foi concluído e o que ainda precisa de trabalho.
+
+00:10:37.980 --> 00:10:40.500
+Use uma fila durável para que os workers estreiam tarefas uma de cada vez.
+
+00:10:40.500 --> 00:10:42.740
+Salve o ponto de verificação durante trabalhos de longa duração.
+
+00:10:43.080 --> 00:10:44.900
+Torne cada tarefa segura para a nova tentativa,
+
+00:10:45.220 --> 00:10:48.760
+de modo que executá-la novamente não crie resultados duplicados, duplicados ou dados corrompidos.
+
+00:10:48.920 --> 00:10:50.980
+Dessa forma, quando o Azure recupera uma VM Spot,
+
+00:10:51.080 --> 00:10:53.920
+você perde apenas a pequena parte que estava sendo processada, não o trabalho inteiro.
+
+00:10:54.300 --> 00:10:55.560
+Isso pode economizar muito dinheiro,
+
+00:10:55.640 --> 00:10:58.100
+mas o custo por si só não diz se o Compute Fleet se encaixa no seu projeto.
+
+00:10:58.600 --> 00:11:00.740
+A próxima pergunta é se você realmente precisa de um Fleet,
+
+00:11:00.900 --> 00:11:03.500
+ou se um conjunto de dimensionamento de máquinas virtuais é mais adequado.
+
+00:11:04.320 --> 00:11:06.720
+Compute Fleet versus Conjuntos de Dimensionamento de Máquinas Virtuais
+
+00:11:06.720 --> 00:11:11.020
+Vou estar se perguntando, o Azure já não tem um serviço chamado Conjuntos de Dimensionamento de Máquinas Virtuais?
+
+00:11:11.520 --> 00:11:15.140
+Tem, e os dois são relacionados porque ambos ajudam você a executar grupos de VMs do Azure,
+
+00:11:15.240 --> 00:11:16.760
+em vez de gerenciar cada uma manualmente.
+
+00:11:17.200 --> 00:11:20.440
+Mas o ponto é, eles resolvem problemas diferentes, começando por perguntas diferentes.
+
+00:11:21.100 --> 00:11:24.840
+O Conjunto de Dimensionamento de Máquinas Virtuais, o VMSS, para abreviar, começa com sua aplicação.
+
+00:11:25.140 --> 00:11:28.040
+Digamos que você tenha um aplicativo web, um API ou um serviço de negócio interno.
+
+00:11:28.700 --> 00:11:31.040
+Você cria um grupo de VMs com configuração similar,
+
+00:11:31.280 --> 00:11:34.920
+coloca-as atrás de um balanceador de carga e deixa o grupo crescer ou diminuir conforme a demanda.
+
+00:11:34.920 --> 00:11:38.220
+O tráfego aumenta, então o Conjunto de Dimensionamento adiciona mais servidores de aplicação.
+
+00:11:38.460 --> 00:11:41.940
+O tráfego cai e ele remove servidores porque você não pague por máquinas que não precisam mais.
+
+00:11:42.500 --> 00:11:44.940
+Esse é um padrão muito comum para uma camada de aplicação de longa duração.
+
+00:11:45.360 --> 00:11:49.740
+Suas VMs geralmente executam a mesma imagem, o mesmo aplicativo e uma configuração de VM intimamente relacionada.
+
+00:11:50.340 --> 00:11:53.220
+O Azure pode usar verificações de integridade para ver se o app está respondendo.
+
+00:11:53.340 --> 00:11:57.340
+Ele pode adicionar ou remover instâncias com base no uso da CPU, agendamento ou outra métrica.
+
+00:11:58.280 --> 00:12:01.380
+Pense em um conjunto de dimensionamento de VMs com um gerente de loja planejando uma equipe regular.
+
+00:12:01.380 --> 00:12:05.600
+Toda manhã o gerente precisa de caixas, repositores e pessoas no balcão de atendimento.
+
+00:12:06.080 --> 00:12:08.800
+Eles conhecem as funções do local e as ferramentas básicas que cada pessoa precisa.
+
+00:12:09.460 --> 00:12:11.860
+Quando a loja fica movimentada, eles chamam mais pessoas da mesma equipe.
+
+00:12:12.340 --> 00:12:13.460
+É isso que o VMSS também faz.
+
+00:12:13.880 --> 00:12:17.920
+Ele executa um padrão de aplicação conhecido e ajusta o número de trabalhadores conforme a demanda muda.
+
+00:12:18.500 --> 00:12:19.520
+Compute Fleet começa em outro lugar.
+
+00:12:20.200 --> 00:12:22.920
+Em vez de perguntar quantos servidores web meu app precisa agora,
+
+00:12:22.920 --> 00:12:26.840
+ele pergunta como obter uma grande capacidade de computação aceitável para essa tarefa.
+
+00:12:27.760 --> 00:12:29.640
+Essa distinção muda como você projeta sua estação.
+
+00:12:29.640 --> 00:12:34.320
+Com o Fleet, o tamanho da VM pode variar entre os trabalhadores contanto que cada um possa realizar a tarefa.
+
+00:12:35.020 --> 00:12:38.120
+Você pode aceitar várias famílias de máquinas, usar diferentes opções de compra,
+
+00:12:38.460 --> 00:12:41.100
+deixar o azul escolher uma combinação viável com base em suas regras.
+
+00:12:41.700 --> 00:12:45.340
+Pense no Compute Fleet como uma agência de empregos tentando preencher milhares de turnos antes de um prazo.
+
+00:12:45.980 --> 00:12:48.640
+A agência não importa se cada trabalhador calça o mesmo no de sapato.
+
+00:12:49.060 --> 00:12:54.080
+Ela se preocupa se cada pessoa consegue fazer o trabalho, se pessoas suficientes chegam a tempo e quanto custa o turno completo.
+
+00:12:54.760 --> 00:12:58.480
+Essa é uma opção muito melhor para um trabalho que pode ser dividido entre vários processadores independentes,
+
+00:12:58.480 --> 00:13:01.880
+uma execução de dados grande, uma simulação, um projeto de renderização, um projeto de renderização.
+
+00:13:02.660 --> 00:13:06.000
+A diferença não é que um serviço seja melhor que o outro, eles resolvem problemas diferentes.
+
+00:13:06.580 --> 00:13:10.320
+Portanto, escolha conjuntos de escala de máquinas virtuais quando você executar uma camada de aplicativos estável e tráfego.
+
+00:13:10.680 --> 00:13:14.040
+Isso pode ser um site voltado ao cliente, uma API, um aplicativo de linha de negócios,
+
+00:13:14.040 --> 00:13:17.480
+ou um grupo de servidores de aplicativos por trás do Azure Load Balancer ou do Application Gateway.
+
+00:13:18.200 --> 00:13:21.340
+Nesses casos, você geralmente se preocupa com a integridade do aplicativo e gerenciamento de tráfego.
+
+00:13:22.020 --> 00:13:23.140
+Você precisa de instâncias como a conhecida.
+
+00:13:23.140 --> 00:13:26.880
+Você precisa de uma maneira de adicionar servidores quando os usuários chegam e removê-los com a demanda.
+
+00:13:27.640 --> 00:13:28.440
+O VMSS modelo.
+
+00:13:29.100 --> 00:13:33.280
+Escolha o Compute Fleet quando o principal desafio for obter muita computação para um trabalho que pode ser distribuído.
+
+00:13:33.860 --> 00:13:36.500
+O trabalho pode durar horas, dias ou apenas um curto período,
+
+00:13:36.500 --> 00:13:40.100
+mas não depende de um servidor de aplicativo idêntico recebendo solicitações de usuários.
+
+00:13:41.360 --> 00:13:45.160
+O Fleet funciona bem quando um trabalhador pode pegar uma tarefa, completá-la, salvar o resultado e seguir em frente.
+
+00:13:45.640 --> 00:13:48.720
+Isso é comum em computação de alto desempenho, processamento em lote, grandes simulações,
+
+00:13:48.840 --> 00:13:51.220
+processamento de dados e grandes pulos de trabalhadores temporários.
+
+00:13:51.220 --> 00:13:53.360
+Há também um ponto prático que confunde as pessoas.
+
+00:13:53.720 --> 00:13:55.640
+Compute Fleet não substitui o design do seu aplicativo.
+
+00:13:56.060 --> 00:14:00.020
+Ele não substitui a fila que distribui o trabalho, os pontos de verificação que salvam o progresso
+
+00:14:00.020 --> 00:14:04.460
+ou um balanceador de carga para um aplicativo da web e não transforma um único servidor com estado em um sistema tolerante à fase.
+
+00:14:04.640 --> 00:14:09.080
+O Azure pode ajudar a adquirir as VMs, mas seu software ainda precisa saber o que cada VM deve fazer,
+
+00:14:09.140 --> 00:14:12.220
+onde seus dados residem e o que deve acontecer se um trabalhador parar uma de uma tarefa.
+
+00:14:13.120 --> 00:14:18.460
+Essa responsabilidade compartilhada é importante, pois o Azure gerencia os servidores físicos e as regras de capacidade do Fleet.
+
+00:14:18.460 --> 00:14:22.120
+E você projeta a carga de trabalho para que ela sobreviva aos eventos normais da computação em nuvem,
+
+00:14:22.240 --> 00:14:25.680
+incluindo a reinicialização de uma VM, uma tarefa com falha ou um trabalhador interrompido.
+
+00:14:25.980 --> 00:14:27.520
+Tanto um guia de decisão simples parece com isso.
+
+00:14:27.820 --> 00:14:32.040
+Se você estiver escalando um aplicativo porque o tráfego de usuários muda, comece com um conjunto de escala de máquinas virtuais.
+
+00:14:32.400 --> 00:14:36.100
+Se você estiver reunindo uma grande quantidade de computação flexível porque um trabalho precisa de muitos trabalhadores,
+
+00:14:36.220 --> 00:14:36.860
+considere o Compute Fleet.
+
+00:14:37.240 --> 00:14:39.980
+E se sua arquitetura inclui ambas as necessidades, você pode usar os dois.
+
+00:14:40.520 --> 00:14:44.300
+Um conjunto de escala de VM pode executar a camada de aplicativo voltada ao cliente,
+
+00:14:44.300 --> 00:14:47.280
+enquanto o Compute Fleet fornece trabalhadores temporários para um trabalho pesado em segundo.
+
+00:14:47.280 --> 00:14:51.800
+Imagine uma equipe que precisa de milhares de trabalhadores durante a noite para concluir um cálculo antes do próximo dia.
+
+00:14:52.080 --> 00:14:54.700
+É aí que essas escolhas deixam de ser nome de produtos e começam a mudar o resultado.
+
+00:14:55.720 --> 00:14:59.460
+Um exemplo de Fleet, concluindo um grande trabalho sem apostar em apenas um tamanho de VM.
+
+00:15:00.080 --> 00:15:02.640
+Imagine uma equipe financeira que realiza cálculos de risco todas as noites.
+
+00:15:03.100 --> 00:15:05.220
+Eles precisam processar uma enorme quantidade de dados de mercado,
+
+00:15:05.360 --> 00:15:09.080
+testar milhares de resultados possíveis e gerar relatórios antes da chegada dos funcionários na manhã seguinte.
+
+00:15:09.700 --> 00:15:15.060
+A equipe tem um objetivo claro, concluir os cálculos até de manhã sem pagar a tarifa normal sob demanda por cada trabalhador individual.
+
+00:15:15.760 --> 00:15:16.820
+Sua primeira tentativa para assistir.
+
+00:15:17.280 --> 00:15:21.460
+Eles escolhem um tamanho de VM focado em computação, solicitam um grande número de instâncias e iniciam o trabalho.
+
+00:15:21.880 --> 00:15:24.180
+Então o Azure não consegue encontrar o suficiente desse tamanho exato na região.
+
+00:15:24.660 --> 00:15:26.600
+Não há nada de errado com o tamanho da VM ou com o código.
+
+00:15:27.320 --> 00:15:30.560
+Simplesmente não há capacidade suficiente para aquela escolha exata quando a equipe precisa.
+
+00:15:31.180 --> 00:15:33.940
+Todo projeto depende daquele único escala ou o trabalho começa a atrasar.
+
+00:15:34.500 --> 00:15:38.620
+Um início tardio significa menos resultados pela manhã ou a pressa para uma migração cara para outra configuração.
+
+00:15:38.840 --> 00:15:39.940
+Então a equipe altera a solicitação.
+
+00:15:39.940 --> 00:15:46.100
+Em vez de exigir um único tamanho de VM, eles identificam vários tamanhos focados em CPU que o software de risco pode utilizar.
+
+00:15:47.060 --> 00:15:51.660
+Cada opção tem memória suficiente para a tarefa, CPU suficiente para o cálculo e funciona com a mesma imagem de VM.
+
+00:15:52.180 --> 00:15:55.760
+Eles também permitem mais de uma zona de disponibilidade onde seus dados e carga de trabalho podem ser executadas.
+
+00:15:56.080 --> 00:15:57.660
+Isso dá o Azure mais lugares para encontrar a instância.
+
+00:15:57.660 --> 00:16:01.740
+Em seguida, a equipe decide quanta capacidade deve permanecer disponível a todo custo.
+
+00:16:02.240 --> 00:16:04.560
+Eles escolhem um grupo de VM sob demanda como sua base confiável.
+
+00:16:05.280 --> 00:16:08.420
+Durante, atalhadores garantem à tarefa uma taxa mínima de processamento durante o notebook.
+
+00:16:08.920 --> 00:16:11.540
+Mesmo que a capacidade de baixo custo se torne escassa, a execução continua.
+
+00:16:12.180 --> 00:16:13.600
+Acima dessa base, eles permitem VM Spot.
+
+00:16:14.020 --> 00:16:15.680
+Esses trabalhadores de Spot realizam o trabalho.
+
+00:16:16.160 --> 00:16:21.060
+Quando o Azure tem capacidade excedente, a equipe pode processar muitos outros cálculos sem usar VM sob demanda para cada tarefa.
+
+00:16:22.140 --> 00:16:23.460
+A solicitação agora diz algo como isso.
+
+00:16:23.460 --> 00:16:30.640
+Forneça trabalhadores estáveis suficientes para garantir um resultado mínimo e, em seguida, adicione tantos trabalhadores de baixo custo quanto possível desta lista aprovada de tamanhos de V.
+
+00:16:31.280 --> 00:16:32.160
+Isso muda a situação.
+
+00:16:32.680 --> 00:16:36.160
+A equipe não está apostando toda a execução noturna no tamanho, uma zona ou um tipo de preço.
+
+00:16:36.480 --> 00:16:39.340
+Mas há outra parte do projeto que é tão importante quanto a solicitação da frota.
+
+00:16:39.980 --> 00:16:43.240
+Os cálculos de risco não podem viver apenas dentro das VMs de trabalho.
+
+00:16:44.040 --> 00:16:47.380
+Antes que a frota comece, um sistema de trabalho divide o grande cálculo em pequenas partes.
+
+00:16:47.760 --> 00:16:50.540
+Uma tarefa pode calcular o resultado para um cenário de mercado.
+
+00:16:51.060 --> 00:16:53.360
+Outra pode lidar com o portfólio em um intervalo de tempo diferente.
+
+00:16:53.760 --> 00:16:54.940
+Cada tarefa entra em uma fila.
+
+00:16:55.340 --> 00:17:01.040
+O trabalhador pega uma tarefa, processa, grava o resultado em um armazenamento durável e, em seguida, solicita outra tarefa.
+
+00:17:01.500 --> 00:17:02.860
+O progresso vive fora do trabalhador.
+
+00:17:03.380 --> 00:17:06.000
+Isso significa que um trabalhador pode desaparecer sem levar todo o trabalho consigo.
+
+00:17:06.780 --> 00:17:09.480
+Suponha que uma VM spot receba um aviso de despejo, um cálculo.
+
+00:17:10.180 --> 00:17:10.800
+A VM para.
+
+00:17:11.440 --> 00:17:13.860
+A tarefa inacabada permanece marcada como incompleta na fila.
+
+00:17:14.600 --> 00:17:19.520
+Outro worker, talvez uma nova VM spot ou um dos workers sob demanda, pode assumir essa tarefa e executá-la novamente.
+
+00:17:19.520 --> 00:17:24.380
+A equipe perde uma pequena parte do trabalho, mas não perde todo o cálculo feito durante a noite.
+
+00:17:24.820 --> 00:17:27.080
+E pronto, esse é o verdadeiro benefício de um design compatível com o fleet.
+
+00:17:27.580 --> 00:17:29.900
+O Azure cuida de encontrar e gerenciar a capacidade de computação.
+
+00:17:30.340 --> 00:17:33.780
+O sistema de tarefas da equipe gerencia o trabalho, as novas tentativas e os resultados são.
+
+00:17:34.120 --> 00:17:35.500
+Nenhum dos lados pode fazer o trabalho do outro.
+
+00:17:35.500 --> 00:17:39.760
+O compute fleet não pode decidir se reexecutar um cálculo ou criará um resultado financeiro incorreto.
+
+00:17:40.620 --> 00:17:44.100
+A equipe precisa tornar as tarefas seguras para novas tentativas e evitar o processamento do público.
+
+00:17:44.420 --> 00:17:48.540
+Ao mesmo tempo, a equipe não precisa de scripts personalizados que busquem por cada tamanho de VM aprovado
+
+00:17:48.540 --> 00:17:50.320
+e tentem criar workers um grupo de cada vez.
+
+00:17:50.960 --> 00:17:54.000
+Eles definem as opções aceitáveis e deixam o Azure trabalhar dentro dessas regras.
+
+00:17:54.720 --> 00:17:58.080
+Pela manhã, o número exato de workers spot pode ter mudado durante a noite.
+
+00:17:58.800 --> 00:17:59.240
+Se esperar.
+
+00:18:00.040 --> 00:18:01.600
+Os workers estáveis continuaram a processar.
+
+00:18:01.920 --> 00:18:04.740
+Workers spot extras aumentaram o throughput quando havia capacidade disponível.
+
+00:18:04.740 --> 00:18:06.600
+O trabalho interrompido retornou para a fila.
+
+00:18:07.040 --> 00:18:10.020
+O custo final permaneceu sob maior controle do que uma execução totalmente sobre o banco.
+
+00:18:10.360 --> 00:18:12.620
+Esta não é uma promessa de que cada tarefa terminará pelo menor plano.
+
+00:18:13.140 --> 00:18:15.940
+Uma maneira de evitar vincular todo o trabalho a uma única escolha restrita de capacidade.
+
+00:18:16.660 --> 00:18:18.520
+O mesmo padrão aparece nas ciências biológicas.
+
+00:18:19.140 --> 00:18:21.940
+Uma equipe de pesquisa pode precisar processar um grande conjunto de amostras já.
+
+00:18:22.480 --> 00:18:25.700
+Cada amostra pode passar pelo mesmo pipeline de análise, mas cada uma é separada à próxima.
+
+00:18:26.500 --> 00:18:29.380
+A equipe armazena os dados de entrada e os resultados fora das VMs de processamento.
+
+00:18:29.940 --> 00:18:33.720
+Um worker processa uma amostra ou uma etapa de uma amostra, salva o resultado e segue em frente.
+
+00:18:34.740 --> 00:18:37.960
+Se esse worker parar, outro worker retoma a partir do último ponto salvo.
+
+00:18:38.420 --> 00:18:41.100
+O Compute Fleet pode fornecer o pool de workers grande e flexível,
+
+00:18:41.180 --> 00:18:44.300
+mas o pipeline ainda precisa rastrear o que terminou, o que falhou e o que deve rodar novamente.
+
+00:18:45.120 --> 00:18:47.040
+Antes de colocar um fleet em um design real, no entanto,
+
+00:18:47.120 --> 00:18:50.200
+existem algumas decisões que evitam que você o escolha para o tipo errado de carga de trabalho.
+
+00:18:51.280 --> 00:18:52.840
+Quando usar e o que decidir primeiro?
+
+00:18:53.440 --> 00:18:55.140
+O que exatamente é uma carga de trabalho de Compute Fleet?
+
+00:18:55.560 --> 00:18:57.740
+É um trabalho que pode ser distribuído entre muitos workers independentes.
+
+00:18:58.040 --> 00:18:58.680
+Esse é o ponto de partida.
+
+00:18:58.680 --> 00:19:00.560
+Aqui está a pergunta simples que você responder.
+
+00:19:01.300 --> 00:19:05.280
+Se um worker parar, outro worker pode assumir sem que você precise corrigir o trabalho manualmente?
+
+00:19:05.740 --> 00:19:08.160
+Se a resposta for sim, você provavelmente tem uma boa carga de trabalho para...
+
+00:19:08.160 --> 00:19:12.140
+Processamento em lote, workers de teste, trabalhos de análise e processamento de arquivos grandes
+
+00:19:12.140 --> 00:19:15.100
+geralmente se encaixam porque o trabalho se divide em unidades separadas que rodam para ela.
+
+00:19:15.360 --> 00:19:17.660
+Comece pelo comportamento da carga de trabalho, não pelo nome da VM.
+
+00:19:18.200 --> 00:19:19.440
+Pense nela como uma equipe de freelancer.
+
+00:19:19.980 --> 00:19:22.520
+Se um sair, o outro assume a tarefa sem perder o progresso.
+
+00:19:22.520 --> 00:19:25.780
+O trabalho pode ser executado sem manter seu estado dentro de uma única venda.
+
+00:19:26.140 --> 00:19:29.500
+Se precisar de estado, pode salvar o progresso em um local durável e reiniciar a partir daí.
+
+00:19:29.900 --> 00:19:32.800
+A mesma tarefa pode ser executada novamente com segurança sem o executor não carretor.
+
+00:19:33.240 --> 00:19:35.940
+Essas respostas dizem muito mais do que qualquer página de preços dirá.
+
+00:19:36.900 --> 00:19:39.560
+Agora, decida a capacidade mínima que deve permanecer disponível.
+
+00:19:40.460 --> 00:19:44.340
+Essa é a parte do trabalho que você não pode perder se a capacidade de custo menor ficar indisponível
+
+00:19:44.340 --> 00:19:45.400
+ou for interrompida.
+
+00:19:46.360 --> 00:19:51.180
+Use VM sob demanda para essa base e depois decida quanta capacidade extra você deseja adicionar via VMs spot.
+
+00:19:51.180 --> 00:19:55.000
+Esse número deve vir do seu prazo, do seu backlog de tarefas, do seu orçamento,
+
+00:19:55.100 --> 00:19:56.940
+não de um palpite de que a esporte sempre estará lá.
+
+00:19:57.960 --> 00:19:59.980
+Depois disso, defina suas escolhas de VM com cuidado.
+
+00:20:00.560 --> 00:20:03.980
+Você pode aprovar várias famílias de VM relacionadas que seu software já suporta.
+
+00:20:04.320 --> 00:20:06.360
+Ou, se o recurso de visualização atender ao seu design,
+
+00:20:06.500 --> 00:20:09.320
+descreva as necessidades de CPU, memória, armazenamento ou acelerador
+
+00:20:09.320 --> 00:20:11.020
+e deixe o Azure escolher máquinas compatíveis.
+
+00:20:11.400 --> 00:20:12.180
+Mantenha a lista prática.
+
+00:20:12.760 --> 00:20:15.340
+Uma lista restrita limita os locais que o Azure pode pesquisar.
+
+00:20:15.620 --> 00:20:18.360
+E uma lista excessivamente ampla pode colocar sua carga de trabalho em máquinas
+
+00:20:18.360 --> 00:20:20.180
+que se comportam de maneira diferente das que você testou.
+
+00:20:20.180 --> 00:20:22.780
+Cada escolha permitida precisa funcionar com sua imagem,
+
+00:20:23.120 --> 00:20:25.000
+sua configuração de rede e seu software.
+
+00:20:25.480 --> 00:20:26.440
+Você também precisa de um limite claro.
+
+00:20:26.920 --> 00:20:28.340
+Defina a capacidade de algo para o trabalho
+
+00:20:28.340 --> 00:20:30.800
+e, em seguida, defina uma exposição máxima de custo antes de iniciar.
+
+00:20:31.200 --> 00:20:33.160
+Trabalhos de computação grandes podem crescer rápido
+
+00:20:33.160 --> 00:20:35.220
+quando uma fila contém mais trabalho do que o esperado
+
+00:20:35.220 --> 00:20:37.720
+ou quando um prazo exige mais trabalho na capacidade sob demanda.
+
+00:20:38.620 --> 00:20:40.500
+Um orçamento não é apenas uma configuração financeira,
+
+00:20:40.540 --> 00:20:41.200
+é um limite de design,
+
+00:20:41.900 --> 00:20:43.720
+onde sua carga de trabalho e região permitirem
+
+00:20:43.720 --> 00:20:45.660
+e distribua a frota entre zonas de disponibilidade.
+
+00:20:45.660 --> 00:20:47.980
+Isso dá ao Azure mais opções de posicionamento
+
+00:20:47.980 --> 00:20:49.900
+e reduz a chance de um problema de capacidade local
+
+00:20:49.900 --> 00:20:51.020
+afetar todos os executores.
+
+00:20:51.800 --> 00:20:53.760
+Fique de olho no trabalho, não apenas na contagem de VMs.
+
+00:20:54.440 --> 00:20:56.320
+Monitore a capacidade que a frota realmente adquiriu.
+
+00:20:57.000 --> 00:20:58.920
+Observe o backlog da fila, tarefas falhas,
+
+00:20:59.040 --> 00:21:01.000
+contagem de novas tentativas, eventos de despejo,
+
+00:21:01.140 --> 00:21:02.200
+taxa de conclusão e custo.
+
+00:21:02.600 --> 00:21:03.960
+Uma frota com muitas VMs saudáveis
+
+00:21:03.960 --> 00:21:05.680
+ainda pode estar falhando no objetivo de negócio
+
+00:21:05.680 --> 00:21:07.560
+se a fila estiver crescendo e os resultados não estiverem sendo salvos.
+
+00:21:07.800 --> 00:21:09.060
+Aqui está o eu que a maioria das pessoas contou.
+
+00:21:09.280 --> 00:21:10.860
+Elas tratam a frota de computação com algo automático.
+
+00:21:10.860 --> 00:21:11.860
+Obrigado.
+
+00:21:11.860 --> 00:21:12.860
+Obrigado.

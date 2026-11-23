@@ -1,0 +1,832 @@
+WEBVTT
+
+00:00:00.300 --> 00:00:05.660
+Bienvenidos al podcast M305FM, donde exploramos las personas, ideas y tecnologías que dan forma al futuro del trabajo.
+
+00:00:06.660 --> 00:00:09.240
+Dos formas de buscar y por qué una sola siempre te decepciona.
+
+00:00:09.700 --> 00:00:12.260
+Tu cuadro de búsqueda ha estado haciendo solo la mitad del trabajo durante años.
+
+00:00:12.720 --> 00:00:18.860
+Lee las palabras exactas que escribes, lo cual es perfecto para un código de política prenútil si preguntas por tiempo libre y el documento dice vacaciones.
+
+00:00:20.120 --> 00:00:25.960
+Azure AI Search soluciona esto ejecutando dos búsquedas diferentes al mismo tiempo y combinándolas en una lista clasificada.
+
+00:00:25.960 --> 00:00:31.720
+Esa mezcla se llama recuperación híbrida y es la base de las respuestas que ya obtienes de las herramientas de IA de Microsoft.
+
+00:00:32.480 --> 00:00:37.040
+Al final conocerás ambas mitades, cómo se unen y dónde esto afecta discretamente tu trabajo diario.
+
+00:00:37.480 --> 00:00:40.560
+La búsqueda nunca fue una sola habilidad. Son dos y cada una resuelve un problema distinto.
+
+00:00:40.940 --> 00:00:44.300
+Una coincide con las palabras exactas que escribiste y la otra coincide con lo que realmente quisiste decir.
+
+00:00:44.500 --> 00:00:47.200
+La mayoría de las herramientas que has usado solo hacían bien uno de sus trabajos.
+
+00:00:47.320 --> 00:00:48.540
+Es haber hecho muchos momentos molestos.
+
+00:00:49.200 --> 00:00:53.600
+Un cuadro de búsqueda puede encontrar un número de piezas y aún así fallar en una pregunta simple sobre tu política de vacaciones.
+
+00:00:53.600 --> 00:01:00.280
+Alguien escribe tiempo libre y el sistema no responde porque la página que necesitaba dice vacaciones y no comparte ni una letra con la consulta.
+
+00:01:01.380 --> 00:01:07.480
+Cuando un sistema realiza ambos trabajos a la vez y compara las respuestas, el resultado deja de parecer una consulta y empieza a parecer comprensión.
+
+00:01:07.860 --> 00:01:13.480
+Esa diferencia importa más que antes porque las herramientas de IA ahora dependen de los resultados de búsqueda como materia prima para sus respuestas.
+
+00:01:14.120 --> 00:01:17.240
+Si la búsqueda falla, la respuesta es incorrecta sin importar cuán inteligente sea el modelo.
+
+00:01:17.240 --> 00:01:19.880
+Lo que está en juego aumenta una vez que la IA entra en escena.
+
+00:01:20.500 --> 00:01:25.280
+Un modelo de lenguaje no conoce tus archivos por lo que responde con el texto que le diste y ese texto proviene de la búsqueda.
+
+00:01:25.780 --> 00:01:31.860
+Una búsqueda débil alimenta al modelo con material débil y ninguna calidad de modelo puede arreglar una página que nunca fue recuperada.
+
+00:01:32.580 --> 00:01:33.840
+Así que lo abordaremos en tres pasos.
+
+00:01:34.260 --> 00:01:37.200
+Primero, la mitad de la palabra exacta a la que ya conoces aunque nunca le hayas puesto nombre.
+
+00:01:37.680 --> 00:01:39.840
+Luego, la mitad del significado que es donde reside la sorpresa.
+
+00:01:40.460 --> 00:01:43.600
+Después, como Azure AI Search fusiona ambas en una sola lista clasificada.
+
+00:01:43.740 --> 00:01:45.800
+¿Por qué todo esto aparece en las herramientas que abres cada mañana?
+
+00:01:45.800 --> 00:01:50.000
+Una de las suposiciones más comunes sobre la búsqueda híbrida también resulta ser falsa.
+
+00:01:50.060 --> 00:01:52.260
+¿Y saber por qué te evitará un error que muchos equipos cometen?
+
+00:01:53.520 --> 00:01:54.640
+Lo que realmente es la búsqueda.
+
+00:01:55.220 --> 00:01:57.420
+La búsqueda por palabras clave comienza creando un mapa de tu computadora.
+
+00:01:58.060 --> 00:02:01.600
+A medida que llegan los documentos, el sistema registra cuáles aparecen en qué documentos.
+
+00:02:01.640 --> 00:02:03.840
+Y ese mapa se llama índice invertido.
+
+00:02:04.360 --> 00:02:09.580
+Suena aburrido y es la razón por la que una búsqueda puede responder milisegundos a través de millones de páginas antes de que se limpie el texto.
+
+00:02:10.380 --> 00:02:12.540
+Los analizadores del lenguaje dividen las frases en palabras,
+
+00:02:12.540 --> 00:02:16.520
+eliminan los rellenos y agrupan variaciones como corriendo y corrió en una raíz común,
+
+00:02:16.660 --> 00:02:18.440
+por lo que buscar correla se encuentra ambas.
+
+00:02:19.400 --> 00:02:22.900
+Nada de esto requiere tu atención para funcionar, pero explica por qué los resultados llegan tan rápido.
+
+00:02:23.540 --> 00:02:26.440
+Una vez que escribes una consulta, el sistema califica qué también coincide cada documento.
+
+00:02:26.900 --> 00:02:31.180
+Ese método de calificación tiene un nombre, BM25, y puedes entenderlo sin tocar las matemáticas.
+
+00:02:32.740 --> 00:02:35.460
+BM25 da más peso a las que aparecen a menudo dentro de un documento
+
+00:02:35.460 --> 00:02:37.840
+y menos peso a las que aparecen en casi todos los documentos.
+
+00:02:39.140 --> 00:02:43.000
+Toma la palabra ELVO por un segundo, que aparece en casi todas partes, así que no te dice casi nada.
+
+00:02:43.320 --> 00:02:46.860
+Un código poco común como XC4 es una vez, por lo que te dice mucho, por lo que te dice mucho.
+
+00:02:47.820 --> 00:02:49.700
+BM25 captura ese instinto automáticamente,
+
+00:02:50.080 --> 00:02:52.740
+por lo que la búsqueda por palabras clave sigue siendo sólida en números de piezas,
+
+00:02:52.840 --> 00:02:54.460
+nombres exactos, fechas y términos especializados.
+
+00:02:54.820 --> 00:02:56.080
+Pequeño ejemplo muestra cómo sucede.
+
+00:02:56.760 --> 00:03:01.360
+Supongamos que buscas la plantilla de factura 414-161 en una unidad compartida con 10.000 archivos.
+
+00:03:01.660 --> 00:03:04.240
+La palabra factura aparece en todas partes, por lo que apenas influye,
+
+00:03:04.360 --> 00:03:08.400
+pero 414-161 es lo suficientemente raro como para llevar el archivo correcto directamente a la cinta.
+
+00:03:08.500 --> 00:03:10.580
+Sus BM25 haciendo su aritmética en segundo plano.
+
+00:03:10.860 --> 00:03:14.300
+Las propias pruebas de Microsoft demuestran que, en consulta basada sólo en palabras clave,
+
+00:03:14.700 --> 00:03:18.260
+la búsqueda simple por palabras clave obtuvo una puntuación mucho más alta que la búsqueda basada sólo en significado.
+
+00:03:18.260 --> 00:03:22.240
+Cuando ya conoces el identificador exacto que necesitas, la precisión supera la inteligencia cada vez.
+
+00:03:22.820 --> 00:03:24.060
+Esa precisión tiene un punto ciego, ¿sí?
+
+00:03:24.060 --> 00:03:26.880
+La búsqueda por palabras clave sólo encuentra las palabras que le diste nada.
+
+00:03:27.900 --> 00:03:29.400
+Buscas una política de trabajo remoto,
+
+00:03:29.800 --> 00:03:33.920
+y una página titulada Pautas de teletrabajo permanece invisible porque las dos frases no comparten letras.
+
+00:03:35.100 --> 00:03:38.680
+Esa única falla es exactamente lo que la otra mitad de la recuperación híbrida fue creada para cubrir.
+
+00:03:39.620 --> 00:03:41.140
+¿Qué hace realmente la búsqueda vectorial?
+
+00:03:41.780 --> 00:03:44.140
+¿Ahora la mitad que se siente como magia hasta que ves el truco?
+
+00:03:44.580 --> 00:03:48.260
+La búsqueda vectorial convierte el texto en una larga lista de números, y esa lista se llama embed.
+
+00:03:48.660 --> 00:03:49.660
+Los números no son eléctricos.
+
+00:03:50.040 --> 00:03:52.600
+Ubica el significado del texto en algún lugar de un espacio enorme,
+
+00:03:52.600 --> 00:03:54.640
+donde los significados similares terminan cerca de un modelo.
+
+00:03:55.060 --> 00:03:59.800
+Algo tiene que crear esos embeddings, y generalmente es un modelo de embedding como uno de Azure OpenAI.
+
+00:04:00.660 --> 00:04:02.400
+Aquí es donde muchos principiantes se atascan primero,
+
+00:04:02.560 --> 00:04:05.560
+porque el modelo es un servicio separado con su propio costo y sus propios límites de tasa.
+
+00:04:05.920 --> 00:04:08.600
+El motor de búsqueda almacena y compara los vectores y el modelo los crea.
+
+00:04:09.400 --> 00:04:11.280
+El tamaño de un embedding es fijado por el modelo,
+
+00:04:11.520 --> 00:04:14.000
+y suele estar entre cientos o pocos miles de números por pasaje.
+
+00:04:15.380 --> 00:04:17.860
+Esos números también son la razón por la que la búsqueda semántica no es perfecta.
+
+00:04:17.860 --> 00:04:21.200
+Dos pasajes pueden estar cerca en el espacio sin ser una coincidencia real,
+
+00:04:21.320 --> 00:04:24.560
+y ese tipo de error cercano es lo que los pasos de clasificación posteriores deben corregir.
+
+00:04:25.080 --> 00:04:27.440
+Una vez que el significado tiene coordenadas, la coincidencia cambia por común.
+
+00:04:27.800 --> 00:04:30.380
+La palabra reembolso y la frase de devolución de dinero quedan cerca,
+
+00:04:30.480 --> 00:04:33.600
+por lo que una búsqueda puede encontrar una usando la otra incluso cuando no comparte ninguna palabra.
+
+00:04:34.320 --> 00:04:36.800
+El sistema ya no compara letras, sino cercanía.
+
+00:04:37.340 --> 00:04:38.800
+Dos ventajas surgen de este diseño.
+
+00:04:39.160 --> 00:04:41.500
+Porque el significado reside en el mismo espacio entre idiomas.
+
+00:04:42.140 --> 00:04:45.580
+Una búsqueda en inglés puede mostrar un documento en alemán sin ningún paso de traducción.
+
+00:04:45.580 --> 00:04:47.840
+La misma idea funciona entre tipos de contenido,
+
+00:04:48.400 --> 00:04:51.460
+por lo que texto e imágenes pueden compartir un espacio y compararse lado a lado.
+
+00:04:51.940 --> 00:04:54.960
+Para encontrar los significados más cercanos, el motor ejecuta en la búsqueda del vecino más cercano.
+
+00:04:55.500 --> 00:04:57.560
+Azure Research te ofrece dos motores para esa tarea.
+
+00:04:58.240 --> 00:05:02.380
+Uno es un método basado en grafos llamado HNSIW, que es rápido y maneja bien índices grandes,
+
+00:05:02.740 --> 00:05:06.660
+y el otro es KNN exhaustivo, que revisa más candidatos y sacrifica velocidad por exhaustividad.
+
+00:05:07.420 --> 00:05:12.600
+Las puntuaciones vectoriales van aproximadamente de 0.33 a 1 cuando se usa la similitud de coseno,
+
+00:05:12.600 --> 00:05:15.180
+por lo que un número mayor significa una coincidencia más cercana.
+
+00:05:15.580 --> 00:05:18.960
+Ese rango no se parece en nada a las puntuaciones de palabras clave que no tienen límite superior.
+
+00:05:19.240 --> 00:05:22.620
+Mantener ambos separados es importante porque al siguiente paso debe fusionar dos listas
+
+00:05:22.620 --> 00:05:24.560
+que ni siquiera hablan el mismo lenguaje numérico.
+
+00:05:25.580 --> 00:05:28.100
+La búsqueda híbrida ejecuta ambas al mismo tiempo y combina los resultados.
+
+00:05:28.720 --> 00:05:32.880
+La búsqueda híbrida es una única solicitud que lleva tanto una consulta de texto como una vectorial,
+
+00:05:33.300 --> 00:05:34.280
+y ambas se ejecutan juntas.
+
+00:05:34.860 --> 00:05:36.500
+No hay un tercer algoritmo separado haciendo el trabajo.
+
+00:05:37.200 --> 00:05:41.200
+Envías tus palabras y la versión de significado de esas mismas palabras en una sola llamada,
+
+00:05:41.200 --> 00:05:43.340
+y el motor ejecuta ambos trabajos en paralelo.
+
+00:05:44.020 --> 00:05:45.040
+Ahora tienes dos listas, Classroom.
+
+00:05:45.580 --> 00:05:49.520
+Una está ordenada por VM25, la otra por significado y rara vez coinciden en la ordenación.
+
+00:05:50.680 --> 00:05:55.000
+Azure AI Search las fusiona con un método llamado fusión de rango recíproco, o RF,
+
+00:05:55.200 --> 00:05:57.900
+y la idea central es lo suficientemente simple como para entenderla.
+
+00:05:59.080 --> 00:06:03.740
+RF le da a cada documento una puntuación de 1 dividida por su rango más una pequeña constante.
+
+00:06:03.740 --> 00:06:09.160
+La constante se senta en la práctica, y su trabajo es evitar que el primer puesto domine por completo el resultado.
+
+00:06:10.140 --> 00:06:13.500
+Un documento que ocupa un lugar alto en ambas listas obtiene dos buenas puntuaciones,
+
+00:06:14.000 --> 00:06:17.260
+y asciende mientras que uno que solo una lista prefirió, obtiene un lugar más abajo.
+
+00:06:17.740 --> 00:06:21.760
+Imagina una página de políticas que la búsqueda por palabras clave clasifica quinta y la búsqueda semántica según.
+
+00:06:22.200 --> 00:06:26.340
+Obtiene una puntuación sólida de cada lado, y sube por encima de una página que solo un método detectó.
+
+00:06:26.960 --> 00:06:28.080
+Ese acuerdo es todo el truco.
+
+00:06:28.460 --> 00:06:32.780
+Cuando dos métodos diferentes señalan el mismo pasaje, puedes confiar más en él que en cualquiera de los dos por separado.
+
+00:06:32.780 --> 00:06:35.620
+Las consultas civiles también mantienen las funciones de búsqueda comunes que esperan.
+
+00:06:35.940 --> 00:06:38.480
+Los filtros, las facetas y la clasificación siguen funcionando,
+
+00:06:38.820 --> 00:06:41.780
+así que no pierdes herramientas prácticas solo porque el significado se unirá a la fiesta.
+
+00:06:42.160 --> 00:06:46.080
+Incluso puedes ajustar el peso del lado vectorial hacia arriba o hacia abajo hacia abajo si notas que tus usuarios inclinan la nación.
+
+00:06:46.440 --> 00:06:50.220
+Digamos que tus usuarios escriben principalmente frases cortas y desordenadas en lugar de identificadores exactos.
+
+00:06:50.620 --> 00:06:53.460
+Aumentar ligeramente ese peso le indica al motor que confía un poco más en el significado.
+
+00:06:53.720 --> 00:06:57.680
+El valor predeterminado ni siquiera está dividido y solo lo cambias después de observar cómo son las consultas reales.
+
+00:06:58.040 --> 00:07:01.720
+Por defecto, una consulta hay una de las 50 mejores coincidencias de la lista fusionada,
+
+00:07:01.720 --> 00:07:05.140
+y el lado de texto deja de buscar, de buscar, de buscar, de buscar después de mi coincidencia.
+
+00:07:05.520 --> 00:07:07.120
+Esos valores predeterminados son generosos.
+
+00:07:07.260 --> 00:07:10.620
+Para una aplicación de chat solo un puñado de buenos pasajes para responder buenos pasajes para responder bien.
+
+00:07:10.780 --> 00:07:15.160
+Los resultados de referencia de Microsoft muestran que el sistema híbrido supera cualquiera de los métodos por separado
+
+00:07:15.160 --> 00:07:17.020
+en datos de clientes y conjuntos de pruebas públicos,
+
+00:07:17.140 --> 00:07:20.920
+por lo que se convirtió en la recomendación predeterminada para fundamentación predeterminada para fundamentar las puestas de X.
+
+00:07:21.460 --> 00:07:24.260
+Nada se descartó en el proceso y eso importa más de lo que parece.
+
+00:07:24.260 --> 00:07:26.940
+La segunda pasada que rodea una lista corta.
+
+00:07:27.340 --> 00:07:28.260
+Aquí es donde se pone interesante.
+
+00:07:29.020 --> 00:07:31.760
+Fusionar dos listas te da una mejor lista corta, no una perfecta.
+
+00:07:32.260 --> 00:07:36.340
+Por eso Azure AI Search añade una segunda pasada de clasificación, llamada clasificación semántica.
+
+00:07:36.760 --> 00:07:39.620
+El nombre hace que parezca que repite el trabajo vectorial, pero hace algo diferente.
+
+00:07:40.520 --> 00:07:45.480
+La clasificación semántica toma los 50 mejores resultados del paso anterior y lee cada uno junto a tu consulta.
+
+00:07:45.480 --> 00:07:50.380
+Utiliza modelos de lenguaje adaptados de Bing para juzgar qué tan bien responde un pasaje a la pregunta real
+
+00:07:50.380 --> 00:07:52.200
+y luego califica cada uno del cero al cuatro.
+
+00:07:53.080 --> 00:07:56.420
+Un cuatro significa que el pasaje responde bien a la pregunta y un cero significa que es irreleval.
+
+00:07:57.320 --> 00:07:59.480
+Dos límites honestos moldean lo que esta pasada puede hacer.
+
+00:07:59.880 --> 00:08:03.100
+Solo analiza esos 50 mejores resultados por lo que puede reorganizar esa lista corta,
+
+00:08:03.160 --> 00:08:05.420
+pero no puede rescatar un documento que la primera pasada nunca encontró.
+
+00:08:05.720 --> 00:08:06.700
+Tampoco puede inventar nada.
+
+00:08:07.220 --> 00:08:12.080
+Los subtítulos y respuestas que devuelves se extraen palabra por palabra de tu propio contenido nunca escrito desde cero.
+
+00:08:12.400 --> 00:08:13.660
+Nada de esto reemplaza la primera pasada.
+
+00:08:13.660 --> 00:08:16.080
+El clasificador solo puede reordenar lo que se le entregó.
+
+00:08:16.460 --> 00:08:19.260
+Así que todo lo que nunca llegó a la lista corta no recibe una segunda oportunidad.
+
+00:08:19.600 --> 00:08:22.820
+Una buena recuperación en la etapa inicial lo que le da a la segunda pasada algo que valga pena pulir.
+
+00:08:23.080 --> 00:08:24.060
+También tiene un costo asociado.
+
+00:08:24.460 --> 00:08:26.880
+La clasificación semántica es una función de pago basada en el uso,
+
+00:08:27.000 --> 00:08:29.700
+con una cuota mensual gratuita que la mayoría de las personas nunca agota al probar.
+
+00:08:30.400 --> 00:08:32.340
+Es un intercambio justo por resultados más precisos,
+
+00:08:32.340 --> 00:08:35.340
+y es también la razón por la que la activas deliberadamente en lugar de hacerlo en todas partes.
+
+00:08:36.180 --> 00:08:39.400
+Reclasificar una lista corta es mucho más barato que reclasificar todo un corpus,
+
+00:08:39.540 --> 00:08:41.780
+por eso la segunda pasada existe como una segunda pasada.
+
+00:08:41.780 --> 00:08:47.400
+Las pruebas de Microsoft mostraron que la clasificación semántica Hybrid Plus supera claramente al híbrido solo,
+
+00:08:47.620 --> 00:08:51.380
+y la brecha fue mayor en el tipo de preguntas reales y confusas que la gente realmente escribe.
+
+00:08:52.120 --> 00:08:54.020
+Las funciones aquí van un poco más allá de la puntuación.
+
+00:08:54.700 --> 00:08:58.500
+La clasificación semántica puede devolver un breve título que resuma por qué un pasaje coincidió,
+
+00:08:58.640 --> 00:09:00.360
+lo cual es útil al mostrar resultados a una persona.
+
+00:09:00.920 --> 00:09:03.960
+Una opción más nueva puede incluso reescribir su consulta en varias variaciones
+
+00:09:03.960 --> 00:09:07.340
+para detectar errores tipográficos y sinónimos faltantes antes de ejecutar la búsqueda.
+
+00:09:07.340 --> 00:09:11.520
+Lo que la segunda pasada realmente le importa porque funciona solo con texto,
+
+00:09:12.240 --> 00:09:15.180
+un documento que es mayormente números o una imagen sin descripción adjunta,
+
+00:09:15.520 --> 00:09:17.060
+le da al clasificador muy poco para juzgar.
+
+00:09:17.900 --> 00:09:21.440
+El contenido rico en prosa, como la documentación y las bases de conocimiento, es el que más gana,
+
+00:09:21.600 --> 00:09:23.340
+y Microsoft lo dice en su propia guía.
+
+00:09:24.040 --> 00:09:27.000
+Todo esto añade un poco de tiempo a cada consulta y el intercambio es deliberado,
+
+00:09:27.460 --> 00:09:30.020
+te ha comprado un orden más preciso a costa de una respuesta más lenta,
+
+00:09:30.100 --> 00:09:33.660
+lo que suele ser un trato justo para un asistente de chat y peor para un cuadro de escritura instantánea.
+
+00:09:33.660 --> 00:09:36.020
+Paso poco glamuroso que lo decide todo.
+
+00:09:36.480 --> 00:09:38.760
+Antes de que cualquiera de esas coincidencias inteligentes pueda funcionar,
+
+00:09:38.800 --> 00:09:41.080
+su contenido puede prepararse y el movimiento principal se llama segmentación.
+
+00:09:41.340 --> 00:09:44.160
+La segmentación significa cortar documentos largos en pasajes más pequeños
+
+00:09:44.160 --> 00:09:45.820
+para que cada pasaje pueda coincidir por separado.
+
+00:09:46.140 --> 00:09:49.780
+Un manual de políticas deja de ser un bloque gigante y se convierte en unos cientos de piezas enfocadas.
+
+00:09:50.400 --> 00:09:51.520
+Hay una buena razón para mostrarse.
+
+00:09:52.000 --> 00:09:55.940
+Un solo vector tiene que comprimir el significado de un documento completo en un conjunto de números.
+
+00:09:56.260 --> 00:09:58.120
+Los documentos largos contienen varios temas a la vez.
+
+00:09:58.120 --> 00:10:02.240
+Cuando aplana todo eso en un solo vector, el detalle se vuelve borroso
+
+00:10:02.240 --> 00:10:04.720
+y a menudo el final documento se ignora por completo.
+
+00:10:05.180 --> 00:10:06.120
+Cifras aquí son sorprendentes.
+
+00:10:06.400 --> 00:10:08.940
+En las pruebas de Microsoft representar un documento completo con un vector
+
+00:10:08.940 --> 00:10:12.940
+obtuvo una puntuación de 28.2 en consultas cuyas respuestas se encontraban dentro de un documento largo.
+
+00:10:13.300 --> 00:10:16.160
+Segmentar los mismos documentos se leó a 45.7 y para
+
+00:10:16.160 --> 00:10:19.720
+respuestas enterradas profundamente en un documento subió a 51.4.
+
+00:10:20.300 --> 00:10:22.740
+Tamaño y los límites importan tanto como la decisión de segmento.
+
+00:10:22.740 --> 00:10:26.680
+Los pasajes de aproximadamente 512 tokens obtuvieron 42.4,
+
+00:10:26.800 --> 00:10:29.940
+mientras que los pasajes de 496 tokens cayeron a 36.4.
+
+00:10:30.600 --> 00:10:34.040
+Permitir que los segmentos se superpongan en un cuarto y terminarlos en los altos de oración
+
+00:10:34.040 --> 00:10:36.820
+elevó a mala puntuación porque el contexto nunca se corta a la mitad.
+
+00:10:37.920 --> 00:10:40.700
+Imagina un manual de recursos humanos de 80 páginas bien segmentado.
+
+00:10:40.780 --> 00:10:43.220
+Una pregunta sobre la licencia de maternidad, maternidad, paternidad,
+
+00:10:43.340 --> 00:10:45.120
+aterriza en los cuatro párrafos que realmente la cubren.
+
+00:10:45.520 --> 00:10:48.600
+Mal segmentada, la misma pregunta arrastra un resumen de toda la política
+
+00:10:48.600 --> 00:10:50.860
+y entierra la respuesta real en algún lugar del medio.
+
+00:10:50.860 --> 00:10:52.800
+No siempre tiene que hacer esto manualmente.
+
+00:10:53.340 --> 00:10:56.020
+Azure AI Search puede ejecutar la fragmentación y vectorización
+
+00:10:56.020 --> 00:10:57.640
+dentro de una canalización de indexador
+
+00:10:57.640 --> 00:11:00.820
+extrayendo datos de fuentes como Blob Storage, Azure SQL o OneLake
+
+00:11:00.820 --> 00:11:02.320
+y generando los embeddings en el proceso.
+
+00:11:02.880 --> 00:11:04.720
+Trabajo sigue realizándose. Simplemente ocurre.
+
+00:11:05.200 --> 00:11:07.360
+Esta es la parte que nadie pone en una diapositiva
+
+00:11:07.360 --> 00:11:09.740
+y es la que determina qué tan bueno puede ser todo lo que sigue.
+
+00:11:10.260 --> 00:11:12.600
+Si la fragmentación sale mal, incluso una clasificación perfecta
+
+00:11:12.600 --> 00:11:13.800
+no tendrá nada decente con que trabajar.
+
+00:11:14.800 --> 00:11:17.260
+Donde esto ya afecta tu trabajo en Microsoft 365,
+
+00:11:17.260 --> 00:11:20.560
+el motor de recuperación que acabamos de ver es Azure AI Search.
+
+00:11:20.860 --> 00:11:24.380
+El cual también impulsa Foundry IQ, la capa de conocimiento gestionada de Microsoft
+
+00:11:24.380 --> 00:11:27.680
+que convierte el contenido empresarial en bases de conocimiento para agentes.
+
+00:11:28.400 --> 00:11:32.160
+Lo encontrarás en Copilot Studio, donde Azure AI Search se integra como fuente de conocimiento.
+
+00:11:33.020 --> 00:11:35.220
+Los agentes allí también obtienen información de SharePoint,
+
+00:11:35.340 --> 00:11:37.900
+Dataverse, documentos cargados, sitios web públicos y conectores.
+
+00:11:38.260 --> 00:11:40.600
+Cada una de esas fuentes alimenta la misma canalización de respuestas.
+
+00:11:41.400 --> 00:11:42.940
+Luego está Microsoft 365 Copilot.
+
+00:11:43.440 --> 00:11:46.940
+Los conectores de Copilot integran contenido externo y de líneas de negocio en el gráfico,
+
+00:11:46.940 --> 00:11:50.420
+por lo que las mismas ideas de recuperación aparecen incluso si nunca tocas un índice por tu cuenta.
+
+00:11:51.380 --> 00:11:55.160
+Una pregunta escrita en una ventana de chat puede responderse desde un documento cuya existencia había solvido.
+
+00:11:55.420 --> 00:11:57.420
+La seguridad se maneja de una manera que debería darte tranquilidad.
+
+00:11:58.220 --> 00:12:01.280
+La respuesta respeta los permisos de cada persona a través de Microsoft Entry ID,
+
+00:12:01.540 --> 00:12:03.660
+de modo que un usuario solo ve el contenido que tiene permitido.
+
+00:12:04.380 --> 00:12:06.540
+Una pregunta financiera de alguien ajeno en el departamento de finanzas
+
+00:12:06.540 --> 00:12:09.000
+obtiene una respuesta distinta a la misma pregunta hecha por el líder financiero,
+
+00:12:09.140 --> 00:12:10.380
+lo cual demuestra que el modelador financiero.
+
+00:12:10.920 --> 00:12:12.020
+Una versión de eso se ve así.
+
+00:12:12.020 --> 00:12:15.800
+Un empleado le pregunta a un agente interno cuántos días de licencia de estudio tiene.
+
+00:12:16.120 --> 00:12:18.040
+El agente busca en el contenido indexado de SharePoint,
+
+00:12:18.220 --> 00:12:20.600
+encuentra la página de política actual y responde con una cita,
+
+00:12:20.720 --> 00:12:22.660
+y todo el intercambio nunca abandona el tenant.
+
+00:12:23.340 --> 00:12:25.880
+Hay una configuración en Copilot Studio que se basa directamente en esta idea.
+
+00:12:26.760 --> 00:12:29.840
+El grounding del gráfico del tenant con búsqueda semántica utiliza el índice semántico
+
+00:12:29.840 --> 00:12:32.800
+detrás de Microsoft 365 Copilot para precisar la recuperación.
+
+00:12:33.040 --> 00:12:35.400
+Y Microsoft señala que ayuda especialmente con el contenido de SharePoint.
+
+00:12:35.700 --> 00:12:36.560
+Esa es la verdadera recompensa.
+
+00:12:36.780 --> 00:12:39.280
+Un asistente bien diseñado parece haber leído la página correcta,
+
+00:12:39.280 --> 00:12:42.260
+porque la búsqueda por palabras clave, la fusión de búsqueda de significado
+
+00:12:42.260 --> 00:12:45.280
+y la segunda pasada de clasificación se alinean bajo un cuadro de chat que ya utilizas.
+
+00:12:46.000 --> 00:12:48.260
+Por lo tanto, ningún modelo inteligente hace ese trabajo por sí solo.
+
+00:12:49.160 --> 00:12:51.240
+Las limitaciones son estas y los errores que cometen los principiantes.
+
+00:12:51.800 --> 00:12:55.240
+Seamos claros sobre dónde falla esto, porque conocer las barreras te ahorra tiempo.
+
+00:12:55.780 --> 00:12:58.560
+El primer error es asumir que lo híbrido es automáticamente mejor para todo.
+
+00:12:59.000 --> 00:13:00.320
+No lo es, y esa diferencia es importante.
+
+00:13:00.740 --> 00:13:04.160
+Los propios resultados de Microsoft muestran que en consultas hechas solo con palabras clave,
+
+00:13:04.340 --> 00:13:06.000
+la búsqueda por palabras clave sigue siendo superior.
+
+00:13:06.000 --> 00:13:09.140
+Lo híbrido es una opción predeterminada, sólida, no una solución universal,
+
+00:13:09.260 --> 00:13:11.960
+y la respuesta correcta depende de las preguntas que tus usuarios realmente hacen.
+
+00:13:12.480 --> 00:13:15.900
+Segunda trampa es omitir, fragmentar o alimentar el sistema con pasajes enormes.
+
+00:13:16.460 --> 00:13:20.480
+Si tus fragmentos son demasiado grandes, el significado se difumina y el final de cada pasaje se desperdicia.
+
+00:13:20.580 --> 00:13:21.780
+La solución es aburrida pero efectiva.
+
+00:13:22.220 --> 00:13:25.600
+Corta los límites de las oraciones, mantén los pasajes pequeños y deja que se superpongan un poco.
+
+00:13:26.160 --> 00:13:29.680
+Luego está el hábito de activar la clasificación semántica en todas partes sin vigilar el medidor.
+
+00:13:30.240 --> 00:13:34.600
+Se factura por uso, así que una aplicación activa puede convertir un pequeño hábito de prueba en una cifra real en la factura.
+
+00:13:34.600 --> 00:13:37.400
+Comienza con la cuota gratuita y expande con un propósito.
+
+00:13:37.920 --> 00:13:39.800
+Los límites estrictos son con los que te toparás primero.
+
+00:13:40.360 --> 00:13:45.420
+La clasificación semántica solo reclasifica los 50 mejores resultados, por lo que puede pulir una lista corta pero nunca ampliarla.
+
+00:13:45.820 --> 00:13:47.480
+El almacenamiento vectorial se mantiene por partición.
+
+00:13:47.840 --> 00:13:50.380
+El límite cambia según tu nivel y la antigüedad de tu servicio.
+
+00:13:50.760 --> 00:13:53.520
+Y alcanzarlo detiene la indexación en lugar de ralentizarla.
+
+00:13:54.000 --> 00:13:54.880
+Existen límites más pequeños.
+
+00:13:55.480 --> 00:14:00.660
+Un campo vectorial alcanza un máximo de 426 dimensiones y una única consulta vectorial puede apuntar a un máximo de 10 campos.
+
+00:14:00.660 --> 00:14:06.820
+El nivel gratuito está bien para aprender con un servicio de 50 megabytes de almacenamiento, pero puede eliminarse tras largos periodos de inactividad.
+
+00:14:07.680 --> 00:14:08.840
+La concurrencia también tiene un límite.
+
+00:14:09.260 --> 00:14:16.760
+La clasificación semántica funciona con una cola y cada unidad de búsqueda solo puede manejar un par de solicitudes a la vez con una cola corta detrás antes de que empiecen a rechazarse.
+
+00:14:17.420 --> 00:14:22.700
+En una aplicación ocupada eso se traduce en reintentos, por lo que la planificación de capacidad deja de ser opcional cuando llegan los usuarios reales.
+
+00:14:22.700 --> 00:14:24.960
+Una pequeña ventaja en la facturación es fácil de pasar por algo.
+
+00:14:25.080 --> 00:14:31.820
+Una cadena de consulta vacía no se cobra por clasificación semántica, incluso si el tipo de consulta está establecido como semántico, por lo que no solicito como semántico, por lo que no solicito solo filtra un año de costo.
+
+00:14:31.920 --> 00:14:33.860
+Los precios vienen en dos modalidades y la elección importa.
+
+00:14:34.220 --> 00:14:42.980
+El modelo dedicado cobra una tarifa fija por hora según la capacidad, lo que se adapta a cargas de trabajo constantes, mientras que el modelo sin servidor se factura por consumo y está dirigido a las variables o impredecibles.
+
+00:14:43.860 --> 00:14:47.740
+Esa opción sin servidor todavía está en vista previa, por lo que no es el lugar para ejecutar nada de lo que depende.
+
+00:14:48.120 --> 00:14:50.320
+Nada de eso hace que la recuperación híbrida sea una mala elección.
+
+00:14:50.320 --> 00:14:58.000
+La convierte en elección con una estructura. Cada punto de relevancia adicional que compras previene en algún lugar, ya sea del costo o la capacidad o del costo o la capacidad o el esfuerzo que pones en preparar el contenido.
+
+00:14:58.920 --> 00:15:02.480
+Saber qué compensación estás haciendo es la diferencia entre una demostración y algo que se sostiene.
+
+00:15:03.680 --> 00:15:06.240
+La versión corta es que la recuperación híbrida recompensa la preparación.
+
+00:15:06.720 --> 00:15:14.360
+El contenido, limpio, fragmentado y bien descrito con reglas de acceso sensatas, aprovecha mejor cada función, mientras que el contenido desordenado obtiene menos sin importar cuántos interruptores activos.
+
+00:15:15.180 --> 00:15:16.760
+Un breve resumen y una pregunta para ti.
+
+00:15:17.140 --> 00:15:18.660
+El panorama completo cabe en las pocas líneas.
+
+00:15:18.660 --> 00:15:21.120
+La búsqueda por palabras clave coincide con las palabras excegadas.
+
+00:15:21.400 --> 00:15:22.700
+La búsqueda vectoría con el significado.
+
+00:15:23.000 --> 00:15:26.100
+Y la recuperación híbrida ejecuta ambas a la vez y combina los resultados por rango.
+
+00:15:26.820 --> 00:15:31.800
+La clasificación semántica reordena luego los 50 mejores y todo depende de un contenido que se segmentó correctamente primero.
+
+00:15:32.360 --> 00:15:34.460
+Pregunta para ti es simple y realmente me gusta la respuesta.
+
+00:15:35.020 --> 00:15:39.560
+¿En qué parte de tu propio trabajo cambiaría más una búsqueda que entendiera el significado, no solo las palabras?
+
+00:15:39.560 --> 00:15:43.740
+Déjalo en los comentarios porque las respuestas suelen revelar más que cualquier página de producto.
+
+00:15:44.860 --> 00:15:51.420
+Si esto hizo que el tema pareciera menos intimidante, suscríbete a M365FM para dominar las herramientas y la mentalidad que dan forma al futuro del trabajo.

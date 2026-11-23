@@ -1,0 +1,1003 @@
+WEBVTT
+
+00:00:00.370 --> 00:00:06.910
+Siap untuk 12 hari Microsoft 365, Copilot, AI Azure, dan para tokoh pembentuk masa depan dunia kerja.
+
+00:00:07.630 --> 00:00:12.010
+Januari ini, M365 Con kembali hadir dan kami tampil lebih besar.
+
+00:00:12.810 --> 00:00:18.190
+Bergabunglah dalam sesi langsung, demo dunia nyata dan pengetahuan praktis dari para MVP serta pakar industri di seluruh dunia.
+
+00:00:18.830 --> 00:00:21.270
+Tanpa cer generik, tanpa jargon yang tiada habisnya.
+
+00:00:21.970 --> 00:00:23.090
+Kami menangani tantangan yang nyata.
+
+00:00:23.810 --> 00:00:28.490
+Copilot Studio, agen AI, pabrik keamanan, tata kelola, dan otomatisasi.
+
+00:00:28.490 --> 00:00:34.370
+Baik Anda seorang profesional TI, pengembang, atau pemimpin bisnis, ada sesi yang dirancang khusus untuk Anda.
+
+00:00:35.350 --> 00:00:39.890
+Dengan 10 hari penuh, Anda bisa menjelajahi berbagai teknologi dan terhubung dengan komunitas global.
+
+00:00:40.850 --> 00:00:44.190
+Tonton langsung, dan bawa wawasan praktis kembali ke organisasi Anda.
+
+00:00:45.230 --> 00:00:48.870
+Januari 2022, 10 hari, satu komunitas Microsoft.
+
+00:00:49.530 --> 00:00:50.530
+Pendaftaran sudah dibuka sekarang.
+
+00:00:51.870 --> 00:00:55.330
+Buka M365 Angcon.net dan amankan tempat Anda hari ini.
+
+00:00:55.330 --> 00:00:58.150
+Itu M365 Angcon.net
+
+00:00:58.150 --> 00:01:04.690
+Bergabunglah sekarang di M365 Angcon.net, dan sampai jumpa secara langsung di bulan Januari.
+
+00:01:05.330 --> 00:01:08.490
+Bayangkan melempar dadu di 20 setiap pagi hanya untuk melihat apakah bisnis sentral akan.
+
+00:01:08.770 --> 00:01:11.030
+Tanpa telemetri itu seperti melempar dadu dengan mata tertutup.
+
+00:01:11.390 --> 00:01:15.370
+Catatan singkat, tekan tombol subscribe jika Anda menginginkan panduan admin rutin yang lugah seperti ini.
+
+00:01:15.990 --> 00:01:17.430
+Ini mencegah Anda tersesat sendirian di dalam.
+
+00:01:17.430 --> 00:01:18.950
+Gini masalahnya.
+
+00:01:19.430 --> 00:01:23.070
+Saya akan menunjukkan cara menghubungkan aplikasi telemetri Power BI ke Azure Application Insights
+
+00:01:23.070 --> 00:01:27.530
+dan mengapa satu kolom Application ID lebih sering menjebak admin daripada pertarungan puas manapun.
+
+00:01:28.550 --> 00:01:33.130
+Untuk menjalankan laporan langsung yang lengkap, Anda memerlukan sumber daya Application Insights di Azure dan lisensi Power BI Pro.
+
+00:01:33.610 --> 00:01:37.530
+Telemetri hanya menangkap sinyal perilaku seperti sesi, error, dan performa bukan data faktur pelanggan.
+
+00:01:38.010 --> 00:01:41.170
+Ini privasi sejak dalam desain, ditujukan untuk kesehatan sistem bukan rasio bisnis.
+
+00:01:41.650 --> 00:01:43.030
+Tanpanya Anda seperti merabaram ke gelap.
+
+00:01:43.490 --> 00:01:45.750
+Tidak apa yang terjadi saat Anda mencoba menjalankannya tanpa visibilitas.
+
+00:01:45.750 --> 00:01:49.090
+Bayangkan tanpa petam ini tanpa penanda musuh dan tanpa jalan yang jelas untuk maju.
+
+00:01:49.990 --> 00:01:52.290
+Petam ini yang tersembunyi, mengapa telemetri itu penting?
+
+00:01:52.970 --> 00:01:56.050
+Disitulah peran telemetri, petam ini tersembunyi yang Anda tidak sadari telah hilang.
+
+00:01:56.790 --> 00:01:58.630
+Bisnis sentral sebenarnya sudah memancarkan sinyal tersebut.
+
+00:01:59.110 --> 00:01:59.870
+Anda hanya belum melangkap.
+
+00:02:00.930 --> 00:02:03.630
+Dengan mematikan telemetri, Anda tidak sekadar memiliki kenyamanan yang kurang.
+
+00:02:04.210 --> 00:02:06.530
+Anda kehilangan pandangan tentang bagaimana lingkungan Anda sebenarnya berperilang.
+
+00:02:07.050 --> 00:02:09.070
+Hanya mengandalkan tiket bantuan itu berarti mudah reaktif.
+
+00:02:09.190 --> 00:02:12.290
+Pengguna hanya melapor saat ada masalah dan saat itu terjadi sistem sudah gagal.
+
+00:02:12.710 --> 00:02:13.870
+Telemetri menjaga siklus tetap berat.
+
+00:02:13.870 --> 00:02:17.970
+Ini menunjukkan perubahan performa dan pola error saat mulai terjadi, bukan saat masalah sudah memuncak.
+
+00:02:18.510 --> 00:02:19.010
+Contoh deadlock.
+
+00:02:19.430 --> 00:02:20.990
+Dengan sendirinya, itu adalah kegagahan yang tidak bisa.
+
+00:02:21.450 --> 00:02:24.190
+Pengguna jarang menyadarinya sampai teruput meledak di bawah beban.
+
+00:02:25.050 --> 00:02:29.870
+Dalam satu kasus nyata, telemetri menyoroti deadlock yang terkait langsung dengan proses pembaruan penghitung replikasi,
+
+00:02:30.070 --> 00:02:33.450
+mengaktifkan tombol lewati pembaruan penghitung replikasi, langsung memperbaikinya.
+
+00:02:34.310 --> 00:02:37.150
+Tanpa telemetri, Anda tidak akan pernah bisa menghubungkan poin-poin tersebut.
+
+00:02:37.450 --> 00:02:39.510
+Anda hanya akan melihat penggajian terhenti total.
+
+00:02:39.510 --> 00:02:43.030
+Tetap, itulah kekuatan sesungguhnya mengubah tekanan kata terlihat menjadi pelanggan satman.
+
+00:02:43.610 --> 00:02:46.470
+Dashboard memungkinkan Anda melihat tanda-tanda masalah sebelum semuanya menjadi krisis.
+
+00:02:47.010 --> 00:02:51.430
+Ini adalah perbedaan antara menjadwalkan perbaikan di hari selasa sore dan melihat akhir pekan Anda habis untuk panggilan darurat.
+
+00:02:51.990 --> 00:02:52.950
+Dan telemetri bukan lantai deadlock.
+
+00:02:53.350 --> 00:02:56.070
+Telemetri tidak menangkap siapa yang mengetik baris faktor atau detail pelanggan.
+
+00:02:56.070 --> 00:03:02.870
+Yang ditangkapnya adalah sinyal perilaku, awal dan akhir sesi, sumber login durasi QR SQL, dan tampilan halaman.
+
+00:03:03.610 --> 00:03:09.550
+Pentingnya, ini mencakup sinyal lingkup-lingkungan dan pre-ekstensi, sehingga Anda tidak terjebak pada satu dimensi visibilitas saja.
+
+00:03:10.330 --> 00:03:11.930
+Ini adalah deteksi gerakan, bukan membaca buku air.
+
+00:03:12.450 --> 00:03:15.230
+Tentu saja, semua data tersebut masuk ke Azure Application Insights.
+
+00:03:15.230 --> 00:03:21.970
+Artinya, ada satu syarat, Anda memerlukan sumber daya Application Insights di langganan Azure Anda, serta izin yang tepat untuk membacanya.
+
+00:03:23.110 --> 00:03:28.850
+Jika tidak, laporan akan kosong dan Anda akan menghabiskan waktu memperbaiki sesuatu yang tidak rusak, hanya terkendala akses.
+
+00:03:29.570 --> 00:03:30.690
+Pandingkan itu dengan log salemba.
+
+00:03:31.210 --> 00:03:33.330
+Log tersebut bertelat-telan berupa tumpukan teks yang sulit dibuat.
+
+00:03:34.050 --> 00:03:36.670
+Telemetri meringkas kekacauan itu ke dalam dashboard yang menampilkan trend dengan jelas.
+
+00:03:37.210 --> 00:03:42.190
+Deadlock muncul di grafik, jeda SQL terlihat di bagian perbandingan dan ekstensi yang bermasalah langsung menonjol.
+
+00:03:42.190 --> 00:03:48.250
+Daripada meriksa 20 layar jejak tumpukan, Anda mendapatkan tampilan sederhana tentang apa yang salah dan kejelasan tersebut mengubah sikap Anda sebagai ad.
+
+00:03:48.650 --> 00:03:51.450
+Dengan hanya mengendalkan log, Anda bereaksi terhadap laporan kebuhan setelah masalah tersebut.
+
+00:03:51.950 --> 00:03:54.530
+Dengan dashboard telemetri, Anda memantau kesehatan sistem secara langsung.
+
+00:03:55.190 --> 00:03:57.470
+Anda dapat mendeteksi lonjakan beban sebelum menggagalkan penggajian.
+
+00:03:58.090 --> 00:04:02.330
+Anda dapat mengukur kelambatan menjadi metrik aktual yang terkait dengan query atau ekstensi yang bermasalah.
+
+00:04:04.150 --> 00:04:07.670
+Ini membekali tim IT dan dev dengan visibilitas yang tidak dapat dijelaskan sendiri oleh pengguna.
+
+00:04:08.670 --> 00:04:09.590
+Dan inilah poin utamanya.
+
+00:04:09.710 --> 00:04:11.490
+Microsoft sudah menyediakan aliran datanya.
+
+00:04:11.490 --> 00:04:15.010
+Business Central dapat mengirimkan telemetri ke Application Insights secara langsung.
+
+00:04:15.510 --> 00:04:18.730
+Dashboard di Power BI adalah yang mengubah aliran data tersebut menjadi sesuatu yang berguna.
+
+00:04:19.410 --> 00:04:20.970
+Secara default, Anda hanya melihat contoh demo.
+
+00:04:21.350 --> 00:04:25.790
+Namun setelah terhubung dengan kredensial yang tepat, petakan terisi dengan lingkungan asli Anda telah kuncinya.
+
+00:04:26.150 --> 00:04:30.310
+Ini memungkinkan Anda berhenti bekerja tanpa arah dan mulai bekerja dengan alih-alih bertanya mengapa ini gagal.
+
+00:04:30.430 --> 00:04:33.690
+Anda mulai bertanya tren apa yang perlu diselesaikan sebelum hal ini menjadi kegagalan.
+
+00:04:34.110 --> 00:04:37.430
+Sekarang pertanyaan berikutnya adalah alat mana yang digunakan untuk melihat aliran data.
+
+00:04:37.430 --> 00:04:39.510
+Microsoft memberikan dua aplikasi.
+
+00:04:39.810 --> 00:04:41.770
+Keduanya gratis, keduanya ada di toko AppSource Power BI.
+
+00:04:42.270 --> 00:04:43.310
+Keduanya tidak identik, padahal tidak.
+
+00:04:43.850 --> 00:04:46.530
+Memilih aplikasi yang salah berarti Anda tidak akan pernah melihat data yang Anda butuhkan.
+
+00:04:46.810 --> 00:04:48.870
+Anggap saja ini sebagai dua peti harta karun yang menunggu di lantai.
+
+00:04:49.590 --> 00:04:50.550
+Anda perlu tahu persis muka.
+
+00:04:51.830 --> 00:04:54.010
+Memilih perangkat kerja Anda, dua aplikasi Power BI.
+
+00:04:54.010 --> 00:04:58.050
+Saat ingin melihat telemetri di Power BI, Microsoft memberikan bukan hanya satu,
+
+00:04:58.230 --> 00:04:59.970
+mainkan dua aplikasi dan mengetahui perbedaannya.
+
+00:05:00.230 --> 00:05:00.970
+Sangatlah penting.
+
+00:05:01.670 --> 00:05:03.810
+Ini adalah aplikasi penggunaan dinamik sekiran 5 bisnis sentral
+
+00:05:03.810 --> 00:05:06.710
+dan aplikasi penggunaan aplikasi dinamik sekiran aplikasi dinamik sekiran sentral.
+
+00:05:07.350 --> 00:05:11.150
+Keduanya gratis dari AppSource, keduanya bersifat open source, dan keduanya dilengkapi dengan dashboard.
+
+00:05:11.810 --> 00:05:13.670
+Namun keduanya memiliki peran yang sangat berbeda,
+
+00:05:13.910 --> 00:05:16.190
+dan jika Anda menginstal aplikasi yang salah untuk pertanyaan Anda,
+
+00:05:16.190 --> 00:05:18.630
+Anda akan melihat grafik yang tidak sesuai dengan kenyataan.
+
+00:05:19.250 --> 00:05:20.850
+Sekilas keduanya terlihat hampir identik.
+
+00:05:21.410 --> 00:05:23.450
+Tata letak sama, laporan sama, warna sama.
+
+00:05:24.010 --> 00:05:26.890
+Itulah sebabnya banyak admin menjalankan aplikasi ini, mengekliknya,
+
+00:05:27.030 --> 00:05:29.470
+lalu bertanya-tanya mengapa mereka tidak melihat jawaban yang diharapkan.
+
+00:05:29.770 --> 00:05:31.110
+Perbedaannya sederhana setelah Anda mengetahui.
+
+00:05:31.410 --> 00:05:33.210
+Aplikasi penggunaan usage app adalah untuk telemetri link.
+
+00:05:34.050 --> 00:05:37.970
+Ini mencakup perilaku lintas lingkungan, login sesi jenis klien, dan kinerja di seluruh sistem.
+
+00:05:38.890 --> 00:05:41.430
+Bayangkan seperti memperkecil tampilan untuk melihat seluruh peta kota didang.
+
+00:05:41.910 --> 00:05:45.150
+Sebaliknya, aplikasi penggunaan aplikasi app usage app terikat pada telemetri ekstensi.
+
+00:05:45.150 --> 00:05:48.650
+Ini terhubung melalui JSON aplikasi dan berfokus pada satu ekstensi dalam satu waktu,
+
+00:05:48.810 --> 00:05:50.470
+seperti memeriksa pohon keterampilan satu karakter.
+
+00:05:50.470 --> 00:05:53.930
+Ingin mengukur aplikasi kustoman yang menyebabkan kebentuan deadlock atau memperlambat.
+
+00:05:54.310 --> 00:05:55.810
+Itulah kegunaan aplikasi-penggunaan aplikasi.
+
+00:05:56.210 --> 00:05:58.790
+Untuk mempermudah, Microsoft bahkan menyediakan tautan instalasi langsung.
+
+00:05:59.730 --> 00:06:03.410
+Untuk aplikasi telemetri lingkungan, gunakan aka.mf slash big telemetry bear report.
+
+00:06:03.830 --> 00:06:07.470
+Untuk aplikasi telemetri ekstensi, gunakan aka.mf slash telemetry tenisv app.
+
+00:06:07.890 --> 00:06:11.890
+Kedua tautan tersebut membawa Anda langsung ke app source tempat Anda dapat menginstallnya ke ruang kerja Power BI.
+
+00:06:12.270 --> 00:06:15.810
+Setelah diinstall, jangan terkejut saat pertama kali membuka aplikasi dan melihat data sampel.
+
+00:06:16.230 --> 00:06:17.370
+Itu memang disertakan dengan sengaja.
+
+00:06:17.370 --> 00:06:22.630
+Sebelum Anda menghubungkannya ke telemetri aktual, aplikasi memuat angka demo agar Anda dapat melihat pertinjauh tata letaknya.
+
+00:06:22.890 --> 00:06:26.610
+Aplikasi ini juga secara otomatis membuat ruang kerja Power BI dengan namanya yang sama dengan aplikasinya,
+
+00:06:26.750 --> 00:06:29.270
+jadi jangan panik jika tiba-tiba melihat ruang kerja baru di daftar Anda.
+
+00:06:29.650 --> 00:06:30.030
+Itu normal.
+
+00:06:30.550 --> 00:06:32.130
+Sekarang mari kita bicara tentang kemampuan,
+
+00:06:32.290 --> 00:06:34.730
+karena kedua aplikasi menampilkan empat jenis laporan yang sama,
+
+00:06:34.850 --> 00:06:36.830
+penggunaan, kesalahan, kinerja, dan administrasi.
+
+00:06:37.230 --> 00:06:41.210
+Penggunaan adalah buku besar sensus Anda yang mencatat jumlah login, waktu sesi, dan penggunaan klien.
+
+00:06:41.830 --> 00:06:45.290
+Salahan adalah daftar peristiwa kegagalan baik yang dipicu oleh pengguna maupun tingkat sistem.
+
+00:06:45.830 --> 00:06:50.910
+Kinerja adalah tempat Anda mendeteksi durasi SKL yang lama atau waktu penguatan halaman yang meningkat sebelum ada yang menganjukan tiket.
+
+00:06:51.730 --> 00:06:55.890
+Administrasi mencatat peristiwa lingkungan seperti penginstalan ekstensi, penyegaran sandbox, dan mulai ulang.
+
+00:06:56.590 --> 00:06:59.290
+Catatan pet system Anda semuanya diberi setempat waktu dan terorganisasi.
+
+00:06:59.630 --> 00:07:02.430
+Semua laporan tersebut tersedia di kedua aplikasi namun cakupannya berbeda.
+
+00:07:02.430 --> 00:07:07.350
+Dalam aplikasi penggunaan lingkungan, laporan tersebut menjelaskan pola di seluruh pengaturan bisnis sentral Anda.
+
+00:07:07.830 --> 00:07:11.810
+Anda akan melihat apakah klien tertentu lebih banyak digunakan, apakah jumlah sesi melojak di akhir bulan,
+
+00:07:11.930 --> 00:07:14.050
+atau di mana persaingan mebani sistem secara keseluruhan.
+
+00:07:14.730 --> 00:07:19.950
+Dalam aplikasi penggunaan ekstensi, laporan yang sama tersebut berfokus pada telemetri yang terikat secara ketat pada ekstensi tersebut.
+
+00:07:20.430 --> 00:07:25.230
+Alih-alih mempelajari setiap pemain di kota, Anda memantau kinerja kelas penyihir Anda saat mereka merapakan mantra.
+
+00:07:25.850 --> 00:07:29.850
+Fokus itulah yang memungkinkan Anda mengisolasi kustomisasi yang bermasalah tanpa tenggelam dalam statistik global.
+
+00:07:29.850 --> 00:07:31.610
+Namun ada batasan biaya di sini.
+
+00:07:32.010 --> 00:07:36.890
+Meskipun kedua aplikasi gratis untuk diunduh, Anda tidak dapat menggunakannya dengan telemetri langsung kecuali Anda memiliki lisensi Power BI.
+
+00:07:37.090 --> 00:07:39.670
+Tanpa lisensi tersebut, Anda terbatas pada dashboard contoh satu.
+
+00:07:40.050 --> 00:07:43.690
+Dengan lisensi tersebut, Anda mendapatkan query waktu nyata yang menarik dari sumber daya application insight Anda.
+
+00:07:44.270 --> 00:07:46.050
+Satu lisensi itu adalah biaya bagi sampah penjaga penginap.
+
+00:07:46.450 --> 00:07:49.390
+Itulah yang membuat Anda beralih dari melihat menaikkan kemelawan monster Anda yang sebenarnya.
+
+00:07:49.770 --> 00:07:51.890
+Ini juga alasan saya menandai CTA langganan sebelumnya.
+
+00:07:52.930 --> 00:07:55.190
+Jika Anda berencana untuk mengatur ini, memiliki prop power out.
+
+00:07:56.030 --> 00:07:58.190
+Jadi alur kerja praktisnya menjadi sangat mudah.
+
+00:07:58.190 --> 00:08:04.930
+Gunakan aplikasi penggunaan Dynamics 365 Business Central saat Anda memerlukan telemetri seluruh sistem, gambaran besar tentang bagaimana lingkungan Anda berperilaku.
+
+00:08:05.110 --> 00:08:11.310
+Gunakan aplikasi penggunaan aplikasi Dynamics 365 Business Central saat Anda ingin mengisolasi satu ekstensi dan menilai kandalan atau kinerjanya.
+
+00:08:11.630 --> 00:08:13.870
+Aplikasi-aplikasi ini tidak sering. Anda akan menginginkan penuh.
+
+00:08:14.350 --> 00:08:16.210
+Yang satu menunjukkan pola di seluruh kampanye.
+
+00:08:16.670 --> 00:08:19.450
+Yang lainnya mengungkapkan kelemahan atau kekuatan pada suatu anggota kelompok.
+
+00:08:20.010 --> 00:08:22.270
+Dengan perangkat yang terinstall tersebut, langkah selanjutnya sudah jatuh.
+
+00:08:22.270 --> 00:08:24.990
+Saat ini, dashboard berjalan pada kerangka contoh.
+
+00:08:25.810 --> 00:08:29.710
+Untuk menghidupkannya dengan lingkungan nyata Anda, Anda memerlukan kunci yang membuka data application inside.
+
+00:08:30.090 --> 00:08:32.110
+Dan kunci itu muncul dalam bentuk string kode tunggal.
+
+00:08:32.290 --> 00:08:36.470
+Sesuatu yang terkubur di Azure yang harus dicari oleh setiap admin sebelum grafik tersebut memiliki arti apapun.
+
+00:08:37.730 --> 00:08:39.910
+Teka-teki portal Azure menemukan ID aplikasi.
+
+00:08:40.350 --> 00:08:41.870
+Portal Azure pada dasarnya adalah sebuah lab.
+
+00:08:41.870 --> 00:08:49.070
+Anda mengharapkan lorong dan label yang rapi, tetapi yang Anda dapatkan adalah bilah, bagian, dan tab yang terasa seolah-olah dirancang untuk menjatuhkan Anda.
+
+00:08:49.710 --> 00:08:55.270
+Di suatu tempat dihemparan itu, terdapat satu hal yang Anda butuhkan, ID aplikasi 36 karakter di dalam application inside.
+
+00:08:56.090 --> 00:08:59.210
+Sampai Anda menariknya keluar, Power BI tidak akan berkomunikasi dengan telemetrian.
+
+00:08:59.570 --> 00:09:03.290
+Setelah Anda memilikinya, dashboard berhenti berpura-pura dan mulai melaporkan sistem nyata Anda.
+
+00:09:03.850 --> 00:09:04.510
+Inilah aturan berat.
+
+00:09:04.990 --> 00:09:09.250
+Anda tidak akan menemukan ID aplikasi tersebut di Business Central, dan Anda tidak akan menemukannya di Power BI.
+
+00:09:09.250 --> 00:09:15.730
+ID itu hanya ada di Azure, di dalam sumber daya application inside yang sejak awal Anda hubungkan ke telemetri Business Central.
+
+00:09:16.690 --> 00:09:18.570
+Power BI menganggapnya sebagai kartu akses keamanan.
+
+00:09:19.090 --> 00:09:21.670
+Jika ID tidak cocok dengan yang diharapkan Azure, Anda akan terkunci.
+
+00:09:22.090 --> 00:09:26.710
+Disitulah admin membuang waktu berjam-jam, menyalin hal yang salah, menempelnya tiga kali lagi, yakin bahwa itu seharusnya berhasil.
+
+00:09:27.150 --> 00:09:28.030
+Namun portal tetap diam.
+
+00:09:29.170 --> 00:09:31.950
+Jebakan paling umum adalah kunci instrumentasi versus ID aplikasi.
+
+00:09:32.410 --> 00:09:36.970
+Azure menampilkan keduanya secara berdampingan, dan keduanya terlihat cukup teknis untuk membingungkan bahkan para profesional berpengang.
+
+00:09:36.970 --> 00:09:40.970
+Kunci instrumentasi adalah warisan lama, digunakan untuk menulis telemetri ke dalam Insights.
+
+00:09:41.890 --> 00:09:45.730
+ID aplikasi adalah yang modern digunakan untuk membaca telemetri ke alat seperti Power BI.
+
+00:09:46.670 --> 00:09:48.690
+Salah menukarnya, dan Power BI tidak akan memberi peringatan.
+
+00:09:49.090 --> 00:09:50.450
+Ia hanya menolak untuk menampilkan hasil.
+
+00:09:51.030 --> 00:09:55.210
+Keheningan itu adalah jenis bug terburuk, karena membuat Anda berpikir ada masalah izin atau laporan yang rusak.
+
+00:09:55.690 --> 00:09:57.190
+Untuk menghindari kesalahan tersebut berikut adalah.
+
+00:09:57.190 --> 00:09:58.990
+Masuk ke portal Azure.
+
+00:09:59.950 --> 00:10:03.050
+Buka sumber daya application insights yang Anda buat untuk telemetri bisnis sentral.
+
+00:10:03.950 --> 00:10:05.770
+Di sebelah kiri, lihat bila navigasi.
+
+00:10:06.570 --> 00:10:08.070
+Gulir hingga Anda menemukan akses API.
+
+00:10:09.110 --> 00:10:12.050
+Itulah pintu yang Anda cari, bukan niktisar, bukan properti, bukan kunci.
+
+00:10:12.450 --> 00:10:15.370
+Klik akses API, dan Anda akan melihat ID aplikasi ditampilkan di sana.
+
+00:10:16.310 --> 00:10:19.850
+Tampilannya seperti panduan, 35 karakter dengan tanda hubung yang memisahkan bagian-bagian.
+
+00:10:20.370 --> 00:10:21.950
+Sor dengan cermat, salin ke papan klip Anda.
+
+00:10:22.690 --> 00:10:25.390
+String itulah yang akan Anda tempel ke Power BI saat mengatur aplikasi.
+
+00:10:25.710 --> 00:10:27.190
+Terdengar jelas, tetapi ketepatan sangat penting di sini.
+
+00:10:28.350 --> 00:10:31.190
+Satu karakter yang hilang atau spasi tambahan dan koneksi akan gagal.
+
+00:10:31.830 --> 00:10:34.470
+ID aplikasi ibarat kunci yang dibuat khusus untuk satu slot.
+
+00:10:35.090 --> 00:10:35.870
+Hampir menembusi tersal.
+
+00:10:36.690 --> 00:10:41.730
+Jika Anda pernah melihat seorang bersih keras bahwa aplikasinya rusak hanya untuk menyadari bahwa mereka menempelkan kunci instrumentasi,
+
+00:10:41.810 --> 00:10:43.610
+Anda tahu bahwa sebagian besar masalah adalah ulas sendiri.
+
+00:10:43.610 --> 00:10:45.450
+Ada satu langkah pengamaran tambahan untuk disebutkan.
+
+00:10:46.050 --> 00:10:48.370
+Saat Anda menghubungkan Power BI ke Application Insights,
+
+00:10:48.630 --> 00:10:50.870
+biarkan metode autentikasi diatur ke OAuth 2.
+
+00:10:51.650 --> 00:10:52.590
+Itulah jabat tangan yang didukung.
+
+00:10:53.010 --> 00:10:57.310
+Jika Anda melihat kesalahan seperti metode autentikasi OAuth tidak didukung untuk sumber data ini,
+
+00:10:57.590 --> 00:11:00.050
+jangan buang waktu setengah hari mengejar bayang-bayang.
+
+00:11:00.830 --> 00:11:02.850
+9 dari 10 kali Anda hanya menempelkan ID yang salah.
+
+00:11:03.870 --> 00:11:06.110
+Ganti dengan ID aplikasi yang tepat dan kesalahan tersebut hilang.
+
+00:11:06.590 --> 00:11:07.750
+Izin juga bisa menjepak Anda di sini.
+
+00:11:07.930 --> 00:11:13.430
+Bahkan dengan ID yang sempurna, Anda tidak akan mendapatkan data kecuali akun Anda memiliki akses baca ke sumber daya Application Insights.
+
+00:11:14.050 --> 00:11:18.790
+Dan karena semuanya berada di bawah penyewa Microsoft Entra, Anda harus berada di penyewa yang sama dengan Instance Insights.
+
+00:11:19.530 --> 00:11:22.250
+Jika Anda melintasi penyewa, Anda memerlukan alternatif kunci api.
+
+00:11:22.670 --> 00:11:26.130
+Sebelum Anda marah pada dashboard periksa kewarasan Anda, apakah saya berada di penyewa yang tepat?
+
+00:11:26.650 --> 00:11:27.530
+Apakah saya mendikakses baca?
+
+00:11:27.870 --> 00:11:30.530
+Selesaikan kedua hal tersebut dan sebagian besar kegagalan koneksi akan hilang.
+
+00:11:31.010 --> 00:11:35.630
+Satu lagi, hal yang sering membingungkan, yaitu tertukarnya pengaturan lookback di Power BI dengan Application ID.
+
+00:11:36.070 --> 00:11:36.950
+Keduanya benar-benar beda.
+
+00:11:37.450 --> 00:11:40.310
+Application ID menentukan berangkas terimetri mana yang Anda hubungkan.
+
+00:11:40.310 --> 00:11:43.810
+Lookback menentukan berapa hari data masa lalu yang ingin Anda tarik.
+
+00:11:44.590 --> 00:11:47.330
+Jika salah mengatur lookback, Anda hanya akan mendapatkan sebagian dari wet-up.
+
+00:11:47.590 --> 00:11:49.950
+Jika salah mengatur Application ID, Anda tidak akan mendapatkan apa-apa.
+
+00:11:50.330 --> 00:11:53.330
+Ingatlah perbedaan ini agar Anda tidak membuang waktu mecahkan masalah yang salah.
+
+00:11:54.190 --> 00:11:56.850
+Setelah Anda menyalin Application ID yang benar, teka-teki itu pun selesai.
+
+00:11:57.570 --> 00:12:00.870
+Alih-alih menebak pintu mana yang benar, Anda memegang kunci yang tepat untuk membuka kuncinya.
+
+00:12:00.870 --> 00:12:08.510
+Setelah dimasukkan ke Power BI, data contoh akan digantikan oleh telemetri nyata, kesalahan, penggunaan, dan tindakan admin yang semuanya terkait dengan admin yang semuanya terkait dengan lingkungan Anda sendiri.
+
+00:12:09.130 --> 00:12:11.030
+Hal itu membawa Anda langsung ke langkah berikutnya.
+
+00:12:11.130 --> 00:12:16.570
+Memasukkan ID ini ke aplikasi Power BI Anda sehingga dashboard tidak lagi berjalan dengan sampel tetapi dengan data langsung yang penting.
+
+00:12:17.950 --> 00:12:20.590
+Menyambungkan koneksi dari data sampel ke dashboard langsung.
+
+00:12:20.590 --> 00:12:26.530
+Tidak ada yang lebih mengecewakan daripada membuka aplikasi telemetri di Power BI dan menyadari bahwa datanya hanyalah data demo.
+
+00:12:27.630 --> 00:12:30.070
+Mengguna palsu, sesi palsu, caranya palsu.
+
+00:12:31.190 --> 00:12:32.670
+Terlihat hidup tetapi itu bukan dunia Anda.
+
+00:12:33.250 --> 00:12:39.090
+Untuk membuat dashboard menjadi milik Anda, Anda hanya memerlukan dua parameter wajib Application Insights, Application ID, dan Periode Lookback.
+
+00:12:39.870 --> 00:12:42.690
+Kedua kolom itulah yang mengubah aplikasi dari sekadar simulasi menjadi sinyal.
+
+00:12:43.470 --> 00:12:46.610
+Application ID yang sudah Anda ambil dari menu aksesor Bezor adalah kuncinya.
+
+00:12:46.610 --> 00:12:53.830
+Masukkan kode 36 karakter tersebut ke layar pengaturan Power BI, konfirmasi O-Out, dua dipilih, dan Anda telah membuka koneksinya.
+
+00:12:54.750 --> 00:12:57.150
+Tepat di bawahnya terdapat pengaturan lainnya, yaitu lookback.
+
+00:12:58.110 --> 00:13:01.410
+Pengaturan itu memberitahu Power BI berapa hari yang harus ditarik mundur untuk mengambil telemetri.
+
+00:13:02.090 --> 00:13:04.910
+Tiga hari sangat berguna untuk terlihat secepat jika Anda ingin menelusuri tiga yang baru.
+
+00:13:05.610 --> 00:13:09.830
+Dengan berikan gambaran yang lebih baik tentang adopsi dan perlambatan yang berulang, hati-hati dengan pengaturan yang sering.
+
+00:13:10.310 --> 00:13:12.530
+Jendela waktu yang terlalu lama akan membuat pembaruan menjadi sangat lama.
+
+00:13:13.230 --> 00:13:15.610
+Jendela waktu yang terlalu singkat membuat Anda tidak dapat melihat politik.
+
+00:13:15.610 --> 00:13:19.670
+Selain keduanya, aplikasi ini memberikan beberapa penyesuaian opsional-opsional yang lain.
+
+00:13:20.410 --> 00:13:25.830
+Jika Anda mengelola beberapa domain, petakan penyewa Microsoft enter Anda agar dashboard melambil data dengan benar di seluruh lingkungan.
+
+00:13:26.870 --> 00:13:30.330
+Suaikan zona waktu karena, Business Central memberikan semua telemetri dalam UTC.
+
+00:13:30.790 --> 00:13:35.050
+Sebelum diatur, lonjakan tengah malam Anda mungkin sebenarnya adalah pukul 5 sore waktu lokal dalam format UTC.
+
+00:13:35.450 --> 00:13:37.490
+Selanjutnya, tetapkan jadwal pemberbannya sesuai dengan kebutuhan.
+
+00:13:38.050 --> 00:13:40.210
+Secara default, aplikasi memperbarui data sampel setiap malam.
+
+00:13:40.390 --> 00:13:45.110
+Setelah terhubung ke telemetri langsung, Anda dapat melentukan seberapa sering set data diperbarui di layanan Power BI.
+
+00:13:46.090 --> 00:13:50.250
+Tidak beberapa jam jika Anda butuh info mendekati waktu nyata atau sekali sehari jika Anda ingin hemat sumber daya.
+
+00:13:50.770 --> 00:13:52.070
+Anggap satu poin ini sebagai kebenaran ini.
+
+00:13:52.530 --> 00:13:55.770
+Begitu Anda menghubungkan aplikasi ke sumber daya Application Insights, mode sampel akan hilang.
+
+00:13:56.590 --> 00:13:59.930
+Tidak ada tombol untuk kembali dan jika Anda ingin demo lagi, Anda harus menginstal ulang versi baru.
+
+00:14:00.630 --> 00:14:03.670
+Hal itu sering menjebak penguji yang ingin mencoba kedua lingkungan dalam satu aplikasi.
+
+00:14:04.190 --> 00:14:08.890
+Masalah lain, jika Anda menonaktifkan penyegaran terjadwal, beberapa konfigurasi bisa melupakan ID aplikasi.
+
+00:14:08.890 --> 00:14:12.070
+Itu berarti Anda terpaksa menempelkannya kembali agar aplikasi berfungsi lagi.
+
+00:14:12.750 --> 00:14:14.750
+Kedua kejanganlah ini tidak terlihat jelas jadi selalu ingat kedua.
+
+00:14:15.110 --> 00:14:19.850
+Akanalanya, jika dashboard tetap kosong, jalankan daftar periksa 4 bagian singkat sebelum menyerahkan Azure.
+
+00:14:20.490 --> 00:14:23.370
+Satu, pastikan Anda menggunakan ID aplikasi bukan kunci instrumentasi.
+
+00:14:24.050 --> 00:14:27.330
+Dua, konfirmasikan bahwa Anda memilih autentikasi sebagai metode autentikasi.
+
+00:14:27.330 --> 00:14:31.550
+Tiga, pastikan akun Anda memiliki akses baca ke sumber daya application insights
+
+00:14:31.550 --> 00:14:35.390
+dan Anda berada di penyewaan tepat atau Anda telah mengatur kunci API jika melintasi penyewa.
+
+00:14:36.530 --> 00:14:39.170
+Empat, picu penyegaran set data setelah mengubah pengaturan.
+
+00:14:39.770 --> 00:14:41.810
+Kebanyakan koneksi yang rusak disebabkan oleh salah satu detuk.
+
+00:14:42.470 --> 00:14:44.030
+Lakukan itu dan sistem akan langsung aktif.
+
+00:14:44.630 --> 00:14:50.510
+Data simulasi hilang, kesalahan nyata, lonjakan sesi, dan tindakan admin muncul di bagian yang kini berdinyut sesuai ritme lingkungan Anda.
+
+00:14:51.050 --> 00:14:52.890
+Kedisiplinan penyegaran melengkapi gambaran keseluruh.
+
+00:14:53.370 --> 00:14:56.710
+Tanpainya, masalah kemarin akan terus berulang sementara masalah hari ini tidak tercatat.
+
+00:14:57.330 --> 00:14:59.890
+Dengan disiplin, setiap sesi meninggalkan jejak yang bisa dilacak.
+
+00:15:00.170 --> 00:15:02.770
+Dan setiap kebuntuan menjadi pola untuk dipecahkan, bukan sekadar cerita hantu.
+
+00:15:03.550 --> 00:15:09.570
+Dengan koneksi yang stabil, semuanya siap, data nyata mengalir, dan Anda menatap dashboard yang menunggu untuk diinterpretasikan.
+
+00:15:10.650 --> 00:15:12.310
+Langkah berikutnya bukan lagi tentang koneksi,
+
+00:15:12.430 --> 00:15:15.850
+melainkan memahami apa yang ditampilkan setiap halaman dan masalah apa yang bisa diselesaikan
+
+00:15:15.850 --> 00:15:20.210
+oleh empat laporan penggunaan, kesalahan, kinerja, dan administrasi.
+
+00:15:20.850 --> 00:15:24.930
+Setelah koneksi selesai, wawasan nyata datang dari empat laporan PORBI,
+
+00:15:24.930 --> 00:15:28.970
+penggunaan, kesalahan, kinerja, dan administrasi.
+
+00:15:30.110 --> 00:15:33.070
+Masing-masing punya peran khusus, dan cara tercepat menggunakannya adalah
+
+00:15:33.070 --> 00:15:35.010
+dengan mengetahkan masalah langsung ke halaman yang terbaik.
+
+00:15:35.250 --> 00:15:36.010
+Lalu memiliki setingkat adopsi.
+
+00:15:36.350 --> 00:15:37.150
+Gunakan laporan penggunaan.
+
+00:15:37.390 --> 00:15:38.250
+Mencari kegagalan yang berulang.
+
+00:15:38.610 --> 00:15:39.410
+Gunakan laporan kesalahan.
+
+00:15:39.730 --> 00:15:40.650
+Lacak pelambatan dan hambatan.
+
+00:15:41.190 --> 00:15:41.790
+Gunakan laporan kinerja.
+
+00:15:42.150 --> 00:15:43.630
+Mencari tahu apa yang berubah sebelum sistem rusak.
+
+00:15:44.030 --> 00:15:44.890
+Gunakan laporan administrasi.
+
+00:15:44.890 --> 00:15:46.610
+Aturan sederhana, tidak ada pelik yang terbawa.
+
+00:15:46.950 --> 00:15:47.830
+Mulailah dengan penggunaan.
+
+00:15:48.010 --> 00:15:50.310
+Ini adalah buku besar sensus Anda sekaligus laporan bukti akibat.
+
+00:15:50.950 --> 00:15:53.350
+Anda akan melihat siapa yang masuk dari mana dan perangkat apa yang mereka gunakan.
+
+00:15:53.970 --> 00:15:56.710
+Lebih penting lagi, subhalaman tampilan halaman dan penggunaan fitur
+
+00:15:56.710 --> 00:15:59.110
+memberitahu Anda apakah peluncuran baru benar-benar diakses
+
+00:15:59.110 --> 00:16:02.170
+atau apakah UAT pengujian penerimaan pengguna hanya terpengkalai di antrean.
+
+00:16:02.850 --> 00:16:05.390
+Jika tugas Anda adalah memvalidasi adopsi, mengelola lisensi,
+
+00:16:05.390 --> 00:16:08.070
+atau memastikan bahwa kelompok pelatihan benar-benar menggunakan modul baru,
+
+00:16:08.970 --> 00:16:09.770
+disinilah Anda memastikannya.
+
+00:16:09.770 --> 00:16:12.630
+Beralihlah ke kesalahan error saat tiket bantuan nubu.
+
+00:16:12.970 --> 00:16:15.950
+Laporan kesalahan mengumpulkan kegagalan tingkat sistem dan kesalahan pengguna,
+
+00:16:16.130 --> 00:16:18.050
+namun mengaturnya dengan cara yang tidak bisa dilakukan oleh penunjuk.
+
+00:16:18.650 --> 00:16:20.450
+Mulailah teriasa dengan memeriksa halaman konkret.
+
+00:16:20.590 --> 00:16:21.150
+Kesalahan masuk.
+
+00:16:22.210 --> 00:16:23.350
+Jika orang kesulitan masuk,
+
+00:16:23.730 --> 00:16:26.450
+dialog kesalahan jika bisnis sentral menampilkan layar error,
+
+00:16:26.810 --> 00:16:29.770
+kesalahan izin jika peran keamanan memblokir navigasi penting,
+
+00:16:29.770 --> 00:16:33.010
+dan kebentuan basis data jika Anda merasa persaingan menghambat throughput.
+
+00:16:34.030 --> 00:16:36.610
+Kumpulkan kegagalan yang sama dalam jumlah cukup dan pelanya akan terlihat.
+
+00:16:36.610 --> 00:16:40.490
+Itulah yang menyelamatkan Anda dari memperlakukan 50 tiket dukungan sebagai 50 misteri terpisah.
+
+00:16:40.870 --> 00:16:42.950
+Performa adalah tempat sebagian besar admin membuktikan nilai ketiga.
+
+00:16:43.510 --> 00:16:45.810
+Bukan keluhan pengguna yang samar, hari ini terasa lambat.
+
+00:16:46.470 --> 00:16:48.970
+Di sini Anda dapat melihat pekerjaan sebenarnya yang gagal dalam uji kecepatan.
+
+00:16:49.150 --> 00:16:51.070
+Query SQL yang berjalan lama muncul dengan jelas.
+
+00:16:51.590 --> 00:16:55.830
+Apapun yang secara konsisten berjalan lebih dari 750 mili detik adalah tanda bahaya di dalam aplikasi.
+
+00:16:55.830 --> 00:16:57.930
+Anda juga akan melihat waktu buka perusahaan,
+
+00:16:58.110 --> 00:17:01.090
+jadi jika sesi terasa berat setiap kali seseorang membuka penyewa, Anda akan mengetahuinya.
+
+00:17:01.090 --> 00:17:05.790
+Batas waktu kunci basis data lebih dari 15 detik akan muncul segera untuk menunjukkan di mana persaingan menyebabkan.
+
+00:17:06.070 --> 00:17:10.370
+Dan Anda bahkan mendapatkan visibilitas ke dalam metode AL yang berjalan lama yang memakan waktu lebih dari 10 ribu.
+
+00:17:11.190 --> 00:17:14.090
+Setiap metrik adalah alat ukur yang mengubah firasat menjadi bukti.
+
+00:17:14.990 --> 00:17:19.610
+Jika sebuah laporan berjalan lambat, Anda akan melihat alasannya secara pasti dan apakah itu lonjakan satu kali atau perusahaan.
+
+00:17:20.310 --> 00:17:21.770
+Administrasi terkesan tenang dengan lonjakan penting.
+
+00:17:22.450 --> 00:17:25.810
+Halaman ini adalah buku besar Anda untuk segala hal yang bersifat struktural.
+
+00:17:25.970 --> 00:17:29.630
+Perubahan status, pemasangan ekstensi, penyegaran sandbox, mulai ulang, dan penambalan.
+
+00:17:29.630 --> 00:17:32.750
+Untuk analisis cepat, halaman semua perubahan seringkali menjadi titik awal.
+
+00:17:33.410 --> 00:17:39.010
+Jika penggajian tertunda pada hari Jumat setelah berjalan lancar pada hari Kamis, periksa log ekstensi yang diinstal atau patch yang diterapkan.
+
+00:17:39.870 --> 00:17:42.730
+Mampu menyelaraskan bahwa ini berubah di sini, performa turun setelahnya.
+
+00:17:43.150 --> 00:17:46.430
+Memutus lingkaran saling menyalahkan antara TI, pengembang, dan unit bisnis.
+
+00:17:47.310 --> 00:17:50.370
+Daripada saling menunjuk, Anda memiliki petas sebab dan akibat yang diberi stemplot.
+
+00:17:51.130 --> 00:17:53.530
+Menggunakan laporan-laporan ini secara bersamaan memberikan gambaran yang lain.
+
+00:17:53.590 --> 00:17:56.030
+Menggunakan menunjukkan apakah adopsi meningkat atau menurun.
+
+00:17:56.030 --> 00:18:01.330
+Salahan menunjukkan fungsi yang tidak dipahami pengguna atau jalur kode yang terus gagal secara diam-diam.
+
+00:18:02.070 --> 00:18:03.850
+Performa menyoroti di mana mesin mengalami hambatan.
+
+00:18:04.410 --> 00:18:06.630
+Administrasi mengaitkan hasil kembali ke perubahan spesifik.
+
+00:18:06.910 --> 00:18:09.250
+Tidak satupun dari hal ini secara sendirian menyelesaikan masalah produksi,
+
+00:18:09.390 --> 00:18:12.250
+tetapi jika digabungkan, hal-hal tersebut memberikan visibilitas yang diperlukan bagi admin,
+
+00:18:12.350 --> 00:18:14.730
+pengembang, dan pimpinan proyek untuk berali dari pemada aktif ke pemada mereaktif,
+
+00:18:14.790 --> 00:18:16.270
+ke pemeliharaan proaktif, ke pemeliharaan proaktif.
+
+00:18:16.470 --> 00:18:18.010
+Kasus-kasus yang didukung penelitian membuktikan nilai.
+
+00:18:18.010 --> 00:18:22.050
+Deadlock yang terhubung ke proses penghitung replikasi tidak terlihat jelas dalam laporan pengguna.
+
+00:18:22.670 --> 00:18:24.650
+Telemetri mengungkap masalah tersebut dengan sangat jelas
+
+00:18:24.650 --> 00:18:27.950
+dan mengaktifkan perbaruan penghitung replikasi lewati memperbaikinya tanpa melepaskan.
+
+00:18:28.290 --> 00:18:30.050
+Masalah sepertinya tidak menunggu saat proyek sedang senggang.
+
+00:18:30.170 --> 00:18:31.270
+Mereka muncul sebeban kerja tinggi.
+
+00:18:31.750 --> 00:18:33.630
+Dengan laporan kinerja dan kesalahan yang digabungkan,
+
+00:18:34.010 --> 00:18:37.510
+gambaran masalah terlihat dan dapat ditindak lanjuti jauh sebelum menggagalkan penggajian.
+
+00:18:37.870 --> 00:18:40.870
+Jika Anda pengguna tingkat lanjut dan menginginkan kontrol yang lebih meletail,
+
+00:18:40.970 --> 00:18:43.810
+ingatlah bahwa Anda dapat mengekspor KQL langsung dari Azure Locks ke Power BI.
+
+00:18:43.810 --> 00:18:48.770
+Dari layar lock di Azure, query KQL custom apapun yang Anda buat dapat diekspor sebagai query M
+
+00:18:48.770 --> 00:18:50.330
+dan digunakan kembali dalam Power BI.
+
+00:18:50.950 --> 00:18:54.070
+Opsi tersebut mengungkinkan Anda melampaui 4 laporan siap pakai dari Microsoft
+
+00:18:54.070 --> 00:18:56.890
+dan menyesuaikan dashboard dengan pertanyaan unik yang muncul dari lingkungan Anda.
+
+00:18:57.550 --> 00:19:00.470
+Ini opsional, tetapi pintunya terbuka jika Anda ingin menggagalkan lebih dalam nanti.
+
+00:19:01.030 --> 00:19:02.930
+Perlakukan laporan ini seperti perangkat kerja, bukan sedang.
+
+00:19:02.930 --> 00:19:03.610
+Masih-masih.

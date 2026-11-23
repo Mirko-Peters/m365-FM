@@ -1,0 +1,934 @@
+WEBVTT
+
+00:00:00.190 --> 00:00:07.570
+Klaar voor 12 dagen Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven.
+
+00:00:07.950 --> 00:00:12.350
+Deze januari is M365, kom terug en pakken we groter uit.
+
+00:00:12.790 --> 00:00:18.590
+Doe mee voor live sessies, praktijkdemos en praktische kennis van MVP's en experts uit de hele wereld.
+
+00:00:18.810 --> 00:00:21.550
+Geen algemene slides, geen eindeloze modewoorden.
+
+00:00:21.790 --> 00:00:23.610
+We pakken de echte uitdagingen aan.
+
+00:00:23.790 --> 00:00:29.030
+Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.030 --> 00:00:34.890
+Of je nu IT-professional, ontwikkelaar of bedrijfsleider bent, er zijn sessies speciaal voor jou.
+
+00:00:35.250 --> 00:00:40.530
+Met 10 volledige dagen kun je diverse technologieën verkennen en in contact komen met een wereldwijde community.
+
+00:00:40.850 --> 00:00:44.470
+Kijk live mee en neem praktische inzichten mee terug naar je organisatie.
+
+00:00:44.910 --> 00:00:49.150
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.690 --> 00:00:51.210
+Registratie is nu geopend.
+
+00:00:51.890 --> 00:00:55.790
+Ga naar m365.com.net en verzeker je plek vandaag nog.
+
+00:00:56.650 --> 00:00:58.910
+Dat is m365.com.net.
+
+00:00:59.030 --> 00:01:04.610
+Meld je nu aan op m365.com.net en we zien je live in januari.
+
+00:01:04.890 --> 00:01:08.910
+Stel je voor dat je elke ochtend met een D20 moet gooien om te zien of Business Central zich gedraagt.
+
+00:01:09.170 --> 00:01:11.270
+Zonder telemetrie is dat als gooien met een blinddoek om.
+
+00:01:11.470 --> 00:01:15.770
+Korte zijlijn, abonneer je als je regelmatig no-nonsense admin walkthroughs zoals deze wilt zien.
+
+00:01:15.950 --> 00:01:18.310
+Het voorkomt dat je alleen in de kerker rondwaalt.
+
+00:01:18.530 --> 00:01:19.150
+Dit is het plan.
+
+00:01:19.150 --> 00:01:27.910
+Ik laat je zien hoe je de Power BI telemetrie app koppelt aan Azure Application Insights en waarom een veld de application idee meer admins laat struikelen dan menig eindbaasgevecht.
+
+00:01:28.070 --> 00:01:33.250
+Om volledige live rapporten te draaien heb je een Application Insights resource in Azure en een Power BI Pro licentie nodig.
+
+00:01:33.470 --> 00:01:37.150
+Telemetrie legt alleen gedragssignalen vast zoals sessies, fouten en prestaties, geen klantfactuurgegevens.
+
+00:01:37.150 --> 00:01:41.150
+Het is privacy by design, bedoeld voor systeemgezondheid, niet voor bedrijfsgeheimen.
+
+00:01:41.930 --> 00:01:43.270
+Zonder dat tast je in het duister.
+
+00:01:43.510 --> 00:01:45.970
+Dus wat gebeurt er als je probeert te werken zonder dat zicht?
+
+00:01:46.230 --> 00:01:49.730
+Denk aan geen minimap, geen vijandelijke markers en geen duidelijk pad vooruit.
+
+00:01:49.910 --> 00:01:52.470
+De verborgen minimap, waarom telemetrie ertoe doet.
+
+00:01:52.710 --> 00:01:54.430
+Dat is waar telemetrie om de hoek komt kijken.
+
+00:01:54.710 --> 00:01:56.790
+De verborgen minimap waarvan je niet wist dat je hem miste.
+
+00:01:56.990 --> 00:01:58.990
+Business Central zendt de signalen al uit.
+
+00:01:59.170 --> 00:02:00.610
+Je hoeft ze alleen maar op te pikken.
+
+00:02:00.850 --> 00:02:03.710
+Met uitgeschakelde telemetrie kies je niet voor minder gemak.
+
+00:02:03.850 --> 00:02:06.470
+Je verliest het zicht op hoe je omgeving zich daadwerkelijk gedraagt.
+
+00:02:06.470 --> 00:02:09.270
+Alleen vertrouwen op helpdesk tickets is reactieve modus.
+
+00:02:09.430 --> 00:02:12.490
+Gebruikers trekken pas aan de bel als er iets misgaat en tegen die tijd is het al fout.
+
+00:02:12.770 --> 00:02:14.370
+Telemetrie houdt de cirkel sluitend.
+
+00:02:14.550 --> 00:02:18.490
+Het toont prestatieverschuivingen en foutpatronen terwijl ze ontstaan, niet pas als het dak instort.
+
+00:02:18.730 --> 00:02:19.450
+Neem deadlocks.
+
+00:02:19.650 --> 00:02:21.310
+Op zichzelf zijn het stille fouten.
+
+00:02:21.570 --> 00:02:24.890
+Gebruikers merken ze zelden op totdat de doorvoer onder belasting explodeert.
+
+00:02:25.070 --> 00:02:30.370
+In één echt geval wees telemetrie deadlocks aan die direct gekoppeld waren aan het proces voor het bijwerken van de replicatieteller.
+
+00:02:30.550 --> 00:02:33.050
+Het inschakelen van de Skip Replication Counter Update.
+
+00:02:33.270 --> 00:02:34.410
+Schakelaar loste het direct op.
+
+00:02:34.410 --> 00:02:37.230
+Zonder telemetrie had je die verbanden nooit op tijd kunnen leggen.
+
+00:02:37.330 --> 00:02:39.950
+Je ziet de salarisadministratie gewoon tot stilstand komen.
+
+00:02:40.190 --> 00:02:43.550
+Dat is de echte kracht, onzichtbare druk veranderen in zichtbare patronen.
+
+00:02:43.710 --> 00:02:46.690
+Met de dashboards zie je de problemen aankomen voordat het fout gaat.
+
+00:02:46.890 --> 00:02:51.570
+Het is het verschil tussen een reparatie inplannen op dinsdagmiddag of je weekend zien verdampen aan noodoproepen.
+
+00:02:51.690 --> 00:02:53.330
+En telemetrie is geen spionage.
+
+00:02:53.590 --> 00:02:56.870
+Het legt niet vast wie een factuurregel of klantgegevens heeft ingevoerd.
+
+00:02:56.870 --> 00:03:02.870
+Wat het wel vastlegt zijn gedragssignalen, het starten en eindigen van sessies, inlogbronnen, SQL-queryduur en paginaweergave.
+
+00:03:03.850 --> 00:03:09.790
+Belangrijk is dat het zowel signalen op omgevingsniveau als per extensie dekt, zodat je niet vastzit aan één perspectief.
+
+00:03:09.950 --> 00:03:12.330
+Het is bewegingsdetectie, geen dagboeken lezen.
+
+00:03:12.610 --> 00:03:15.630
+Natuurlijk gaan al die gegevens naar Azure Application Insights.
+
+00:03:15.630 --> 00:03:22.710
+Dat betekent één vereiste, je hebt een Application Insights resource nodig in je Azure-abonnement en de juiste rechten om die te lezen.
+
+00:03:22.890 --> 00:03:28.870
+Anders blijven de rapporten leeg en verspil je tijd aan het repareren van iets dat niet kapot is, maar alleen geblokkeerd door toegangsrechten.
+
+00:03:29.110 --> 00:03:31.270
+Vergelijk dat eens met onbewerkte foutlogboeken.
+
+00:03:31.530 --> 00:03:33.750
+Dat zijn ellenlange, onleesbare muren van tekst.
+
+00:03:33.930 --> 00:03:37.150
+Telemetrie condenseert die chaos naar dashboards waar trends direct opvallen.
+
+00:03:37.370 --> 00:03:42.410
+Deadlocks verschijnen op grafieken, SQL-vertragingen zijn zichtbaar in vergelijkingsdiagrammen en haperende extensies vallen op.
+
+00:03:42.410 --> 00:03:46.590
+In plaats van 20 schermen met stacktraces door te spitten, krijg je een simpel overzicht van wat er mis is en wanneer.
+
+00:03:46.750 --> 00:03:48.590
+Die helderheid verandert je houding als beheerder.
+
+00:03:48.810 --> 00:03:51.650
+Met alleen logboeken reageer je op klachten nadat ze zijn binnengekomen.
+
+00:03:51.850 --> 00:03:54.970
+Met telemetrie-dashboards hou je de gezondheid van het systeem live in de gaten.
+
+00:03:55.190 --> 00:03:58.010
+Je kunt pieken zien voordat ze de salarisadministratie platleggen.
+
+00:03:58.190 --> 00:04:03.190
+Je kunt vertragingen meten in concrete statistieken gekoppeld aan specifieke queries of extensies.
+
+00:04:03.950 --> 00:04:08.150
+Het geeft IT en dev teams inzichten die gebruikers zelf niet kunnen verwoorden.
+
+00:04:08.150 --> 00:04:09.810
+En dit is het mooie ervan.
+
+00:04:10.090 --> 00:04:11.670
+Microsoft levert de feed al.
+
+00:04:11.670 --> 00:04:15.650
+Business Central kan standaard telemetrie naar Application Insights sturen.
+
+00:04:15.870 --> 00:04:18.650
+De dashboards in Power BI maken die feed bruikbaar.
+
+00:04:18.890 --> 00:04:22.850
+Standaard zie je alleen demovoorbeelden, maar zodra je verbindt met de juiste inloggegevens,
+
+00:04:23.090 --> 00:04:24.930
+vult het overzicht zich met jouw echte omgeving.
+
+00:04:25.170 --> 00:04:26.150
+Dat is de doorbraak.
+
+00:04:26.290 --> 00:04:28.810
+Je hoeft niet langer blind te werken, maar kunt vooruitkijken.
+
+00:04:28.970 --> 00:04:33.970
+In plaats van te vragen waarom iets faalde, begin je te vragen welke trends we moeten aanpakken voordat het een probleem wordt.
+
+00:04:34.130 --> 00:04:37.710
+De volgende vraag is welk hulpmiddel je moet gebruiken om deze stroom te bekijken.
+
+00:04:37.710 --> 00:04:41.690
+Microsoft biedt twee gratis apps, beide te vinden in de Power BI App Source Store.
+
+00:04:41.910 --> 00:04:43.870
+Ze zien er identiek uit, maar dat zijn ze niet.
+
+00:04:44.030 --> 00:04:46.930
+De verkeerde kiezen betekent dat je de data die je nodig hebt nooit zult zien.
+
+00:04:47.150 --> 00:04:49.250
+Zie het als twee schatkisten die op de vloer staan.
+
+00:04:49.490 --> 00:04:51.510
+Je wilt precies weten welke je moet openen.
+
+00:04:51.970 --> 00:04:54.330
+Je toolkit kiezen, de twee Power BI apps.
+
+00:04:54.330 --> 00:05:01.330
+Als het gaat om het daadwerkelijk bekijken van telemetrie in Power BI, biedt Microsoft je niet één, maar twee apps en het is belangrijk het verschil te kennen.
+
+00:05:01.550 --> 00:05:07.390
+Dit zijn de Dynamics 365 Business Central Usage App en de Dynamics 365 Business Central App Usage App.
+
+00:05:07.590 --> 00:05:11.830
+Beiden zijn gratis via App Source, beide zijn open source en beide bevatten vooraf gebouwde dashboards.
+
+00:05:12.050 --> 00:05:13.670
+Maar ze vervullen zeer verschillende rollen.
+
+00:05:13.810 --> 00:05:18.650
+Als je de verkeerde installeert voor je vraag, sta je naar grafieken te kijken die niet overeen komen met de werkelijkheid.
+
+00:05:18.850 --> 00:05:21.130
+Op het eerste gezicht zien ze er bijna identiek uit.
+
+00:05:21.330 --> 00:05:23.970
+Dezelfde layout, dezelfde rapporten, dezelfde kleuren.
+
+00:05:23.970 --> 00:05:29.250
+Dat is waarom zoveel beheerders ze opstarten, wat rondklikken en zich dan afvragen waarom ze niet de antwoorden zien die ze verwachten.
+
+00:05:29.430 --> 00:05:31.430
+Het onderscheid is simpel als je het eenmaal weet.
+
+00:05:31.630 --> 00:05:33.810
+De Usage App is bedoeld voor omgevingstelemetrie.
+
+00:05:34.050 --> 00:05:38.870
+Deze beslaat gedrag in de hele omgeving, aanmodingen, sessies, clienttypes en prestaties van het hele systeem.
+
+00:05:39.050 --> 00:05:41.870
+Zie het als uitzoomen om de hele stadsplattegrond in je game te zien.
+
+00:05:42.090 --> 00:05:45.150
+De App Usage App daarentegen is gekoppeld aan extensietelemetrie.
+
+00:05:45.410 --> 00:05:50.930
+Deze maakt verbinding via App, JSON en richt zich op één extensie tegelijk als het bekijken van de vaardighedenboom van één personage.
+
+00:05:50.930 --> 00:05:54.130
+Wil je meten welke aangepaste app zorgt voor deadlocks of trage queries?
+
+00:05:54.430 --> 00:05:55.770
+Daar is de App Usage App voor.
+
+00:05:55.930 --> 00:05:59.230
+Om het makkelijker te maken, biedt Microsoft zelfs directe installatielinks.
+
+00:05:59.450 --> 00:06:03.710
+Gebruik voor de omgevingstelemetrie app aka.ms slash bc streepje telemetrie streepje rapport.
+
+00:06:03.970 --> 00:06:08.070
+Voor de extensietelemetrie app aka.ms slash telemetrie streepje is v streepje app.
+
+00:06:08.230 --> 00:06:12.230
+Beide links leiden je direct naar AppSource, waar je ze in je Power BI werkruimte kunt installeren.
+
+00:06:12.470 --> 00:06:16.150
+Wees na installatie niet verrast als je de app voor het eerst opent en voorbeeldgegevens ziet.
+
+00:06:16.150 --> 00:06:22.650
+Dat is met opzet ingebakken. Totdat je ze koppelt aan je eigen telemetrie, laden ze democijfers zodat je de layouts kunt bekijken.
+
+00:06:22.850 --> 00:06:26.410
+Ze maken ook automatisch een Power BI werkruimte aan met dezelfde naam als de app.
+
+00:06:26.570 --> 00:06:29.490
+Dus raak niet in paniek als je plotseling een nieuwe werkruimte in je lijst ziet.
+
+00:06:29.690 --> 00:06:34.710
+Dat is normaal. Laten we het nu over de mogelijkheden hebben, want beide apps tonen dezelfde vier rapporttypes.
+
+00:06:34.970 --> 00:06:36.930
+Gebruik, fouten, prestaties en beheer.
+
+00:06:37.150 --> 00:06:41.650
+Gebruik is je logboek voor tellingen, het vastleggen van inlogfrequenties, sessieduur en clientgebruik.
+
+00:06:41.650 --> 00:06:45.970
+Fouten is de lijst met gebeurtenissen van storingen, zowel door gebruikers veroorzaakt als op systeemniveau.
+
+00:06:46.150 --> 00:06:51.310
+Prestaties is waar je lange SQL-duraties of stijgende laadtijden van pagina's spot voordat iemand een ticket aanmaakt.
+
+00:06:51.510 --> 00:06:55.990
+Beheer logt omgevingsgebeurtenissen zoals extensie-installaties, sandbox-verversingen en herstarts.
+
+00:06:56.210 --> 00:06:59.650
+De patch-opmerkingen van je systeem, allemaal van tijdstempels voorzien en georganiseerd.
+
+00:06:59.810 --> 00:07:02.870
+Al die rapporten zijn in beide apps beschikbaar, maar de rijkwijte verandert.
+
+00:07:03.050 --> 00:07:07.810
+In de app voor omgevingsgebruik beschrijven de rapporten patronen in je volledige businesscentral configuratie.
+
+00:07:07.810 --> 00:07:14.530
+Je ziet of bepaalde clients zwaarder worden belast, of het aantal sessies aan het eind van de maand piekt, of waar de belasting het systeem als geheel raakt.
+
+00:07:14.530 --> 00:07:20.270
+In de app voor extensiegebruik focussen diezelfde rapporten zich uitsluitend op telemetrie die aan die extensie is gekoppeld.
+
+00:07:20.410 --> 00:07:25.470
+In plaats van elke speler in de stad te bestuderen, kijk je hoe je tovenaarsklasse presteert wanneer ze spreuken uitspreken.
+
+00:07:25.670 --> 00:07:30.270
+Die focus stelt je in staat om een slecht presterende aanpassing te isoleren zonder te verdrinken in algemene statistieken.
+
+00:07:30.430 --> 00:07:31.870
+Er is hier echter een kostenbarrière.
+
+00:07:32.130 --> 00:07:37.070
+Hoewel beide apps gratis te downloaden zijn, kun je ze niet met live telemetrie gebruiken tenzij je een Powerbit Pro licentie hebt.
+
+00:07:37.310 --> 00:07:39.990
+Zonder die licentie ben je beperkt tot de statische voorbeeld-dashboards.
+
+00:07:39.990 --> 00:07:43.910
+Met die licentie krijg je real-time queries die gegevens ophalen uit je Application Insights bron.
+
+00:07:44.090 --> 00:07:46.190
+Die ene licentie is de vergoeding voor de herbergier.
+
+00:07:46.350 --> 00:07:49.830
+Het is wat je helpt om van het kijken naar etalagepoppen over te stappen naar het bevechten van je echte monsters.
+
+00:07:50.070 --> 00:07:52.950
+Dit is ook de reden waarom ik de abonnementsoproep eerder heb benoemd.
+
+00:07:53.070 --> 00:07:55.910
+Als je dit wilt opzetten, is een Pro licentie niet optioneel.
+
+00:07:56.090 --> 00:07:58.450
+De praktische workflow is dus vrij eenvoudig.
+
+00:07:58.630 --> 00:08:04.950
+Gebruik de Dynamics 365 Business Central gebruiksapp wanneer je systeembrede telemetrie nodig hebt, het grote plaatje van hoe je omgeving zich gedraagt.
+
+00:08:04.950 --> 00:08:11.230
+Gebruik de Dynamics 365 Business Central app voor extensiegebruik wanneer je één extensie wilt isoleren en de betrouwbaarheid of prestaties ervan wilt beoordelen.
+
+00:08:11.390 --> 00:08:12.850
+Het zijn geen concurrerende apps.
+
+00:08:13.070 --> 00:08:14.370
+Je zult ze allebei willen hebben.
+
+00:08:14.590 --> 00:08:16.530
+De onttoont je patronen over de hele campagne.
+
+00:08:16.810 --> 00:08:19.730
+De ander onthult zwaktes of sterktes van één enkel groepslid.
+
+00:08:19.930 --> 00:08:22.690
+Nu die toolkit is geïnstalleerd, is de volgende stap duidelijk.
+
+00:08:22.870 --> 00:08:25.370
+Op dit moment draai je de dashboards op voorbeeld-schablonen.
+
+00:08:25.530 --> 00:08:30.190
+Om ze tot leven te wekken met je echte omgeving, heb je de sleutel nodig die de Application Insights gegevens ontgrendelt.
+
+00:08:30.190 --> 00:08:37.090
+En die sleutel komt in de vorm van een enkele codereeks, iets dat in Azure verborgen zit en dat elke beheerder moet opsporen voordat de grafieken ook maar iets betekenen.
+
+00:08:37.250 --> 00:08:40.090
+De Azure Portal puzzel, het vinden van de toepassingsidee.
+
+00:08:40.290 --> 00:08:42.530
+De Azure Portal is in feite een dolhof.
+
+00:08:42.690 --> 00:08:49.390
+Je verwacht nette gangen en labels, maar wat je krijgt zijn bladen, secties en tabbladen die aanvoelen, alsof ze ontworpen zijn om je te laten struikelen.
+
+00:08:49.590 --> 00:08:55.770
+Ergens in die weerwaar zit het enige dat je nodig hebt, de toepassingsidee van 36 tekens binnen Application Insights.
+
+00:08:56.050 --> 00:08:59.370
+Zolang je die er niet uithaalt, zal Power BI niet communiceren met je telemetrie.
+
+00:08:59.370 --> 00:09:03.790
+Zodra je die hebt, stoppen de dashboards met doen alsof en beginnen ze te rapporteren over je echte systeem.
+
+00:09:03.930 --> 00:09:05.030
+Dit is de eerste regel.
+
+00:09:05.270 --> 00:09:09.530
+Je zult die toepassingsidee niet vinden in Business Central en je zult hem niet vinden in Power BI.
+
+00:09:09.690 --> 00:09:16.390
+Hij bevindt zich alleen in Azure binnen de Application Insights bron die je in eerste instantie aan de telemetrie van Business Central hebt gekoppeld.
+
+00:09:16.550 --> 00:09:18.730
+Power BI behandelt het als een beveiligingspas.
+
+00:09:18.930 --> 00:09:22.070
+Als de idee niet overeenkomt met wat Azure verwacht, kom je er niet in.
+
+00:09:22.070 --> 00:09:27.030
+Daar verliezen beheerders uren mee door het verkeerde te kopiëren en drie keer te plakken, zwerend dat het zou moeten werken.
+
+00:09:27.030 --> 00:09:32.530
+Maar de portal blijft stil. De meest voorkomende valkuil is de instrumentatiesleutel versus de toepassingsidee.
+
+00:09:32.690 --> 00:09:36.930
+Azure toont ze beide naast elkaar en ze zien er technisch genoeg uit om zelfs ervaren proost te verwarren.
+
+00:09:37.070 --> 00:09:41.470
+De instrumentatiesleutel is verouderd en wordt gebruikt voor het schrijven van telemetrie naar insights.
+
+00:09:41.750 --> 00:09:46.130
+De toepassingsidee is modern en wordt gebruikt voor het lezen van telemetrie naar tools zoals Power BI.
+
+00:09:46.350 --> 00:09:48.730
+Verwissel ze per ongeluk en Power BI geeft geen krim.
+
+00:09:48.910 --> 00:09:51.090
+Het weigert simpelweg resultaten terug te geven.
+
+00:09:51.310 --> 00:09:55.370
+Die stilte is de ergste soort bak, omdat je denkt dat het een machtigingsfout of een kapotrapport is.
+
+00:09:55.370 --> 00:09:57.990
+Om die misstap te voorkomen is hier het exacte pad.
+
+00:09:58.190 --> 00:09:59.650
+Meld je aan bij de Azure portal.
+
+00:09:59.890 --> 00:10:03.850
+Open de Application Insights resource die je hebt gemaakt voor Business Central Telemetrie.
+
+00:10:04.010 --> 00:10:06.230
+Kijk aan de linkerkant naar de navigatiebladen.
+
+00:10:06.490 --> 00:10:08.570
+Scroll totdat je API toegang vindt.
+
+00:10:08.730 --> 00:10:09.790
+Dat is de deur die je moet hebben.
+
+00:10:10.050 --> 00:10:12.390
+Niet overzicht, niet eigenschappen, niet sleutels.
+
+00:10:12.570 --> 00:10:15.790
+Klik op API toegang en je ziet de toepassingsidee daar direct staan.
+
+00:10:15.990 --> 00:10:17.210
+Het ziet eruit als een boeit.
+
+00:10:17.370 --> 00:10:19.950
+36 tekens met koppeltekens die de secties scheiden.
+
+00:10:20.230 --> 00:10:22.630
+Selecteer deze zorgvuldig en kopieer naar je klembord.
+
+00:10:22.630 --> 00:10:25.330
+Die reeks plak je in PowerBee bij het instellen van de app.
+
+00:10:25.490 --> 00:10:28.070
+Het klinkt voor de hand liggend, maar precisie is hier van belang.
+
+00:10:28.250 --> 00:10:31.450
+Eén ontbrekend teken of een extra spatie en de verbinding faalt.
+
+00:10:31.650 --> 00:10:34.970
+De toepassingsidee is een loper die voor één specifiek slot is geslepen.
+
+00:10:35.210 --> 00:10:36.570
+Bijna goed is nog steeds fout.
+
+00:10:36.790 --> 00:10:38.710
+Als je ooit iemand hebt zien beweren dat de app kapot is,
+
+00:10:38.810 --> 00:10:41.530
+om er vervolgens achter te komen dat ze de instrumentatiesleutel hadden geplakt,
+
+00:10:41.650 --> 00:10:43.410
+weet je dat de meeste hoofdpijn zelf veroorzaakt is.
+
+00:10:43.550 --> 00:10:46.050
+Er is nog één extra veiligheidsmaatregel om te vermelden.
+
+00:10:46.270 --> 00:10:48.630
+Wanneer je PowerBee verbindt met Application Insights,
+
+00:10:48.910 --> 00:10:51.230
+laat de verificatiemethode dan op OAuth 2 staan.
+
+00:10:51.230 --> 00:10:53.030
+Dat is de ondersteunde handshake.
+
+00:10:53.190 --> 00:10:56.230
+Als je een foutmelding ziet in de trant van OAuth verificatiemethode
+
+00:10:56.230 --> 00:10:58.130
+wordt niet ondersteund voor deze gegevensbron,
+
+00:10:58.230 --> 00:11:00.390
+verspeel dan geen halve dag aan het najagen van spoken.
+
+00:11:00.650 --> 00:11:03.270
+Negen van de tien keer heb je gewoon de verkeerde idee geplakt.
+
+00:11:03.490 --> 00:11:06.350
+Vervang deze door de juiste toepassingsidee en de fout verdwijnt.
+
+00:11:06.590 --> 00:11:08.290
+Machtigingen kunnen je hier ook parten spelen.
+
+00:11:08.570 --> 00:11:10.850
+Zelfs met de perfecte idee krijg je geen gegevens
+
+00:11:10.850 --> 00:11:13.850
+tenzij je account leestoegang heeft tot de Application Insights Resource.
+
+00:11:14.090 --> 00:11:16.450
+En omdat alles onder Microsoft entra tenants valt,
+
+00:11:16.610 --> 00:11:19.030
+moet je in dezelfde tenant zitten als de Insights instantie.
+
+00:11:19.030 --> 00:11:22.610
+Als je tussen tenants werkt, heb je een alternatief met een API-sleutel nodig.
+
+00:11:22.770 --> 00:11:25.470
+Dus voordat je je boos maakt op de dashboard, doe een sanity check,
+
+00:11:25.630 --> 00:11:26.690
+zit ik in de juiste tenant.
+
+00:11:26.890 --> 00:11:27.750
+Heb ik leestoegang?
+
+00:11:27.990 --> 00:11:30.570
+Los die twee op en de meeste verbindingsfouten verdwijnen.
+
+00:11:30.790 --> 00:11:32.250
+Nog een punt van verwarring dat ik vaak zie,
+
+00:11:32.330 --> 00:11:33.750
+is het door elkaar halen van de Lookback,
+
+00:11:33.890 --> 00:11:35.750
+instelling in PowerBee met de applicatie-ID.
+
+00:11:36.070 --> 00:11:37.390
+Ze zijn totaal verschillend.
+
+00:11:37.570 --> 00:11:40.830
+De applicatie-ID bepaalt met welke telemetriekluis je verbinding maakt.
+
+00:11:41.010 --> 00:11:44.210
+De Lookback bepaalt hoeveel dagen aan historische gegevens je wilt ophalen.
+
+00:11:44.470 --> 00:11:47.430
+Stel de verkeerde Lookback in en je krijgt slechts een deel van je geschiedenis te zien.
+
+00:11:47.430 --> 00:11:50.270
+Stel de verkeerde applicatie-ID in en je krijgt helemaal niets.
+
+00:11:50.430 --> 00:11:54.030
+Hou dit onderscheid in gedachten en je verspilt geen tijd aan het oplossen van het verkeerde probleem.
+
+00:11:54.090 --> 00:11:57.430
+Zodra je de juiste applicatie-ID kopieert, is het mysterie opgelost.
+
+00:11:57.610 --> 00:11:59.510
+In plaats van willekeurige deuren te proberen,
+
+00:11:59.690 --> 00:12:01.370
+heb je nu de sleutel die echt op het slot past.
+
+00:12:01.610 --> 00:12:03.090
+Zodra je dit in PowerBee invoert,
+
+00:12:03.310 --> 00:12:05.550
+maken de tijdelijke aanduidingen plaats voor echte telemetrie,
+
+00:12:05.810 --> 00:12:08.850
+fouten, gebruik- en beheerdersacties die allemaal gekoppeld zijn aan jouw omgeving.
+
+00:12:09.030 --> 00:12:10.830
+En dat brengt je direct naar de volgende stap.
+
+00:12:10.970 --> 00:12:13.130
+Door deze ID in je PowerBee-app te verwerken,
+
+00:12:13.130 --> 00:12:17.370
+stoppen de dashboards met het draaien op voorbeelden en gaan ze draaien op de live feed die ertoe doet.
+
+00:12:17.870 --> 00:12:21.030
+De verbinding leggen van voorbeeldgegevens naar live dashboards.
+
+00:12:21.390 --> 00:12:27.010
+Niets is frustrerender dan de telemetrie-app in PowerBee openen en beseffen dat de data slechts een demo is.
+
+00:12:27.490 --> 00:12:30.410
+Nep gebruikers, nepsessies, nepactiviteiten.
+
+00:12:30.630 --> 00:12:33.050
+Het ziet er levendig uit, maar het is niet jouw wereld.
+
+00:12:33.210 --> 00:12:36.450
+Om de dashboards eigen te maken, heb je slechts twee vereiste parameters nodig.
+
+00:12:36.450 --> 00:12:39.530
+De Application Insights applicatie-ID en de Lookback-periode.
+
+00:12:39.730 --> 00:12:43.090
+Die twee velden veranderen de app van een etalagepop in een live-signaalbron.
+
+00:12:43.270 --> 00:12:47.610
+De applicatie-ID die je al uit het API-toegangsmenu van Azure hebt gehaald, is de sleutel.
+
+00:12:47.810 --> 00:12:51.230
+Voer die code van 36 tekens in op het PowerBee-instellingenscherm.
+
+00:12:51.450 --> 00:12:54.650
+Bevestig dat OAuth 2 is geselecteerd en je hebt de verbinding ontgrendeld.
+
+00:12:54.870 --> 00:12:57.570
+Direct daaronder bevindt zich de andere hendel, Lookback.
+
+00:12:57.770 --> 00:13:01.750
+Die instelling vertelt PowerBee hoeveel dagen terug het moet gaan om telemetrie op te halen.
+
+00:13:01.950 --> 00:13:05.270
+Drie dagen is handig voor snelle triage als je een vers ticket wilt onderzoeken.
+
+00:13:05.270 --> 00:13:08.630
+30 dagen geeft je een beter beeld van adoptie en herhaalde vertragingen.
+
+00:13:08.790 --> 00:13:10.210
+Wees voorzichtig met extremen.
+
+00:13:10.390 --> 00:13:13.030
+Een enorm tijdsvenster vertraagt het vernieuwen aanzienlijk.
+
+00:13:13.190 --> 00:13:16.110
+Een tekortvenster maakt je blind voor patronen op de lange termijn.
+
+00:13:16.330 --> 00:13:19.990
+Naast deze twee biedt de app nog een paar optionele aanpassingen die je aandacht waard zijn.
+
+00:13:20.190 --> 00:13:23.370
+Als je met meerdere domeinen werkt, koppel dan je Microsoft EntraTenant...
+
+00:13:23.370 --> 00:13:26.390
+...zodat de dashboards gegevens correct labelen in verschillende omgevingen.
+
+00:13:26.570 --> 00:13:30.490
+Pas de tijdzone aan, omdat Business Central alle telemetrie in UTC aanlevert.
+
+00:13:30.730 --> 00:13:35.050
+Zolang je dit niet instelt, kan je piek om middernacht zomaar 5 uur middags lokale tijd zijn, verkleed als UTC.
+
+00:13:35.270 --> 00:13:37.950
+Stel vervolgens een vernieuwingsschema in dat aan jouw behoefte voldoet.
+
+00:13:38.210 --> 00:13:40.510
+Standaard vernieuwt de app voorbeeldgegevens elke nacht.
+
+00:13:40.750 --> 00:13:45.730
+Zodra je bent verbonden met live telemetrie, bepaal je zelf hoe vaak de dataset wordt bijgewerkt in de Powerbyservice.
+
+00:13:45.970 --> 00:13:50.390
+Om de paar uur als je bijna real-time gegevens wilt, of één keer per dag als je resources wilt besparen.
+
+00:13:50.590 --> 00:13:52.290
+Beschouw één punt als absolute waarheid.
+
+00:13:52.530 --> 00:13:56.410
+Zodra je de app koppelt aan een Application Insights Resource, is de voorbeeldmodus verdwenen.
+
+00:13:56.550 --> 00:14:00.510
+Er is geen schakelaar om terug te gaan, dus als je de demo weer wilt, moet je een nieuwe kopie installeren.
+
+00:14:00.510 --> 00:14:03.970
+Dat brengt testers in de waar die met beide omgevingen in één app willen werken.
+
+00:14:04.130 --> 00:14:09.130
+Nog een aandachtspunt, als je geplande vernieuwing uitschakelt, kunnen sommige configuraties de toepassings-ID vergeten.
+
+00:14:09.310 --> 00:14:12.130
+Dat betekent dat je deze opnieuw moet invoeren voordat de app weer werkt.
+
+00:14:12.310 --> 00:14:15.150
+Geen van beide eigenaardigheden is logisch, dus onthou ze allebei goed.
+
+00:14:15.310 --> 00:14:16.050
+Nu de valkuilen.
+
+00:14:16.290 --> 00:14:20.450
+Als het dashboard leeg blijft, loopt dan een korte checklist van vier punten na voordat je Azure de schuld geeft.
+
+00:14:20.610 --> 00:14:24.170
+1. Controleer of je de toepassings-ID gebruikt, niet de instrumentatiesleutel.
+
+00:14:24.330 --> 00:14:27.950
+2. Bevestig dat je OAuth 2 hebt geselecteerd als verificatie-methode.
+
+00:14:30.510 --> 00:14:36.110
+Application Insights Resource en dat je in de juiste tenant zit, of dat je een API-sleutel hebt ingesteld als je tussen tenants werkt.
+
+00:14:36.290 --> 00:14:39.570
+4. Activeer een vernieuwing van de dataset na het wijzigen van instellingen.
+
+00:14:39.690 --> 00:14:42.390
+De meeste verbroken verbindingen liggen aan een van deze vier punten.
+
+00:14:42.650 --> 00:14:44.450
+Doe dat en de verandering is direct zichtbaar.
+
+00:14:44.630 --> 00:14:50.730
+De dummy-gegevens verdwijnen, echte fouten, sessiepieken en beheerdersacties verschijnen in grafieken die nu meebewegen met het ritme van je omgeving.
+
+00:14:50.890 --> 00:14:57.530
+Een goede verversingsdiscipline maakt het plaatje compleet, zonder dat blijven problemen uit het verleden zich herhalen, terwijl de incidenten van vandaag onopgemerkt blijven.
+
+00:14:57.530 --> 00:15:03.210
+Met die discipline laat elke sessie een spoor nadat je kunt volgen en wordt elke blokkade een patroon om op te lossen in plaats van een mysterie.
+
+00:15:03.370 --> 00:15:10.530
+Nu de verbinding stabiel is, is het podium eindelijk klaar, zijn de tijdelijke aanduidingen weg, stroomt de data en kijk je naar dashboards die wachten op interpretatie.
+
+00:15:10.710 --> 00:15:20.830
+De volgende stap is niet meer het koppelen, maar begrijpen wat elke pagina toont, welke vragen elk antwoord kan beantwoorden en de vier rapporten ontsluiten, gebruik, fouten, prestaties en beheer.
+
+00:15:20.830 --> 00:15:29.130
+Zodra de koppeling is voltooid, komen de echte inzichten uit de vier Power B-rapporten, gebruik, fouten, prestaties en beheer.
+
+00:15:29.430 --> 00:15:34.630
+Elk heeft een specifieke rol en de snelste manier om ze te gebruiken is door problemen direct aan de juiste pagina te koppelen.
+
+00:15:34.830 --> 00:15:37.110
+Moet je de adoptie controleren? Dat is gebruik.
+
+00:15:37.110 --> 00:15:42.390
+Op zoek naar een terugkerende fout? Dat is fouten, vertragingen en knelpunten opsporen? Dat is prestaties.
+
+00:15:42.570 --> 00:15:45.210
+Uitzoeken wat er veranderde voordat er iets kapot ging? Dat is beheer.
+
+00:15:45.410 --> 00:15:47.170
+Simpele regels? Geen verspeelde klikken.
+
+00:15:47.350 --> 00:15:50.870
+Begin bij gebruik? Dit is je volkstellingsregister, maar ook je bewijs van activiteitsrapport.
+
+00:15:51.050 --> 00:15:53.910
+Je ziet wie erin logt, vanaf waar en welke apparaten ze gebruiken.
+
+00:15:54.290 --> 00:16:02.550
+Belangrijker is dat de subpagina's voor pagina bezoeken en functiegebruik laten zien of een nieuwe uithol daadwerkelijk wordt gebruikt of dat de UAT, de gebruikerstest, nog in de wachtrij staat.
+
+00:16:02.550 --> 00:16:09.830
+Als het uw taak is om adoptie te valideren, licenties te beheren of te controleren of een trainingsgroep echt een nieuwe module heeft gebruikt, dan is dit de plek om dat te bevestigen.
+
+00:16:10.050 --> 00:16:12.910
+Schakel over naar fouten wanneer de helpdesk tickets zich opstapelen.
+
+00:16:13.090 --> 00:16:18.290
+Het foutenrapport verzamelt systeemfouten en gebruikersfouten, maar ordent ze op manieren die bij uitholrapporten niet mogelijk zijn.
+
+00:16:18.510 --> 00:16:22.010
+Begin de triage door concrete pagina's en inlogfouten te controleren.
+
+00:16:22.170 --> 00:16:26.650
+Als mensen moeite hebben met inloggen, bekijk dan foutmeldingen als Business Central zichtbaar vastloopt,
+
+00:16:26.650 --> 00:16:33.450
+permissiefouten als beveiligingsrollen essentiële navigatie blokkeren en database deadlocks als u denkt dat strijd om middelen de doorvoer belemmerd.
+
+00:16:33.630 --> 00:16:36.670
+Stapel genoeg van dezelfde fouten en het patroon springt er direct uit.
+
+00:16:36.890 --> 00:16:40.610
+Dat voorkomt dat u 50 support tickets als 50 afzonderlijke mysteries moet behandelen.
+
+00:16:40.810 --> 00:16:43.190
+Prestaties zijn waar de meeste beheerders hun waarde bewijzen.
+
+00:16:43.390 --> 00:16:46.230
+In plaats van vage gebruikersklachten zoals, het is vandaag traag.
+
+00:16:46.230 --> 00:16:49.090
+Hier kunt u zien welk daadwerkelijk werk de snelheidstest niet doorstaat.
+
+00:16:49.330 --> 00:16:51.690
+Langlopende SQL queries worden duidelijk weergegeven.
+
+00:16:51.870 --> 00:16:56.110
+Alles wat consistent langer duurt dan 750 milliseconden is een waarschuwingssignaal binnen de app.
+
+00:16:56.110 --> 00:17:01.270
+U ziet ook de tijden bij het openen van een bedrijf, dus als een sessie hapert elke keer dat iemand de tenant opent, weet u het meteen.
+
+00:17:01.410 --> 00:17:06.110
+Timeouts voor database logs van meer dan 15 seconden komen direct naar voren en tonen precies waar de opstopping zit.
+
+00:17:06.270 --> 00:17:10.970
+En u krijgt zelfs inzicht in langlopende AL-methoden die meer dan 10.000 milliseconden in beslag nemen.
+
+00:17:11.170 --> 00:17:14.690
+Elke metriek is een meetlat die onderbuikgevoelens omzet in bewijs.
+
+00:17:14.690 --> 00:17:19.990
+Als een rapport traag is, ziet u precies waarom en of het een eenmalige piek is of een groeiend patroon.
+
+00:17:20.250 --> 00:17:21.690
+Beheer is onopvallend, maar cruciaal.
+
+00:17:21.690 --> 00:17:29.590
+Cruciaal. Deze pagina is uw logboek van alles wat structureel is, statuswijzigingen, installaties van extensies, sandboxverversingen, herstarts en patches.
+
+00:17:29.890 --> 00:17:33.410
+Voor een snelle analyse is de pagina met alle wijzigingen vaak het beste startpunt.
+
+00:17:33.590 --> 00:17:39.710
+Als de loonadministratie vrijdag traag was terwijl het donderdag prima werkte, controleer dan het logboek met geïnstalleerde extensies of toegepaste patches.
+
+00:17:39.710 --> 00:17:46.750
+Het kunnen koppelen van, dit is hier gewijzigd, daarna daalden de prestaties, doorbreekten wel eens niet eens discussie tussen IT-ontwikkelaars en business units.
+
+00:17:46.990 --> 00:17:50.870
+In plaats van naar elkaar te wijzen, heeft u een tijdgebonden overzicht van oorzaak en gevolg.
+
+00:17:50.990 --> 00:17:53.970
+Het gezamenlijk gebruiken van deze rapporten schetst een compleet beeld.
+
+00:17:54.170 --> 00:17:56.470
+Gebruik laat zien of de adoptie stijgt of daalt.
+
+00:17:56.710 --> 00:18:01.710
+Fouten wijzen u op functies die gebruikers niet begrijpen of op codepaden die stilletjes blijven falen.
+
+00:18:02.050 --> 00:18:04.050
+Prestaties benadrukken waar de motor hapert.
+
+00:18:04.050 --> 00:18:06.990
+Beheer koppelt resultaten terug aan specifieke wijzigingen.
+
+00:18:07.190 --> 00:18:15.950
+Geen van deze rapporten lost op zichzelf productieproblemen op, maar gecombineerd geven ze beheerders, ontwikkelaars en projectleiders het nodige inzicht om van reactief brandjes blussen over te stappen naar proactief onderhoud.
+
+00:18:16.130 --> 00:18:18.290
+Onderzoek gebaseerde cases bewijzen de waarden.
+
+00:18:18.550 --> 00:18:22.550
+Deadlocks gekoppeld aan het replicatietellerproces waren niet duidelijk in gebruikersrapporten.
+
+00:18:22.690 --> 00:18:28.010
+Telemetrie onthulde het probleem haarscherp en het inschakelen van Skip Replication Counter Update verhielp het zonder giswerk.
+
+00:18:28.250 --> 00:18:31.570
+Problemen als deze wachten niet tot het uitkomt, ze slaan toe onder belasting.
+
+00:18:31.570 --> 00:18:38.150
+Door prestatie- en foutenrapporten te combineren, was de oorzaak zichtbaar en aanpakbaar lang voordat de salarisadministratie plet lag.
+
+00:18:38.330 --> 00:18:40.130
+Ben je gevorderd en wil je nog meer controle?
+
+00:18:40.330 --> 00:18:44.130
+Onthoud dan dat je KQL direct vanuit Azure Lux kunt exporteren naar Power BI.
+
+00:18:44.310 --> 00:18:50.810
+Vanuit het logboekscherm in Azure kan elke aangepaste KQL-query worden geëxporteerd als mQuery en worden hergebruikt in Power BI.
+
+00:18:51.030 --> 00:18:56.910
+Die optie laat je voorbij Microsoft's vier standaardrapporten gaan en dashboards afstemmen op de unieke vragen van jouw omgeving.
+
+00:18:57.110 --> 00:19:00.290
+Het is optioneel, maar de deur staat open als je later dieper wilt graven.
+
+00:19:00.290 --> 00:19:03.130
+Behandel deze rapporten als een gereedschapskist, niet als een monolithisch blok.
+
+00:19:03.270 --> 00:19:03.810
+Elke ervan.

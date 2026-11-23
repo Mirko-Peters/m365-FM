@@ -1,0 +1,901 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:07.520
+Klaar voor 10 dagen Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven?
+
+00:00:07.840 --> 00:00:12.400
+Deze januari is M365, kom terug en we pakken groter uit.
+
+00:00:12.640 --> 00:00:18.360
+Doe mee met live sessies, praktijkdemo's en praktische kennis van MVP's en experts van over de hele wereld.
+
+00:00:18.580 --> 00:00:21.680
+Geen algemene presentaties, geen eindeloos jargon.
+
+00:00:21.680 --> 00:00:29.020
+We pakken de echte uitdagingen aan Copilot Studio, AI Agents, Fabric, Beveiliging, Beheer en Automatisering.
+
+00:00:29.020 --> 00:00:34.880
+Of je nu IT-professional, ontwikkelaar of zakelijk leider bent, er zijn sessies speciaal voor jou.
+
+00:00:35.220 --> 00:00:40.500
+Met 10 volledige dagen kun je verschillende technologieën verkennen en contact leggen met een wereldwijde community.
+
+00:00:40.840 --> 00:00:44.580
+Kijk live mee en neem praktische inzichten mee terug naar jouw organisatie.
+
+00:00:44.880 --> 00:00:49.140
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.140 --> 00:00:51.180
+De registratie is nu geopend.
+
+00:00:52.780 --> 00:00:54.540
+Claim vandaag nog jouw plek.
+
+00:00:56.720 --> 00:00:58.980
+Dat is M365.com.net
+
+00:00:58.980 --> 00:01:04.700
+Meld je nu aan op M365.com.net en we zien je live in januari.
+
+00:01:04.900 --> 00:01:08.140
+Een formule in Excel kan binnen enkele seconden een kolom optellen.
+
+00:01:08.380 --> 00:01:12.280
+Stel je nu voor dat zo'n soort formule bepaalt of er een goedkeuringsknop verschijnt in een app,
+
+00:01:12.400 --> 00:01:17.220
+een onkostendeclaratie berekent of verandert wat een gebruiker ziet na het invullen van een formulier.
+
+00:01:17.220 --> 00:01:18.700
+Dat is PowerFX.
+
+00:01:18.960 --> 00:01:23.220
+Hallo iedereen en welkom bij een nieuwe aflevering van Microsoft Knowledge Nuggets hier op M365.
+
+00:01:24.040 --> 00:01:28.220
+Ik ben Mirko Peters en vandaag praten we over Microsoft PowerFX in begrijpelijke taal.
+
+00:01:28.220 --> 00:01:31.800
+Je hebt de naam misschien gehoord terwijl je naar PowerApps keek en dacht, is dit programmeren?
+
+00:01:31.900 --> 00:01:34.360
+Moet ik een hele programmeertaal leren voordat ik iets nuttigs kan bouwen?
+
+00:01:34.940 --> 00:01:36.340
+Aanhaling steken, niet echt.
+
+00:01:36.820 --> 00:01:39.760
+PowerFX is de formuletaal van Microsoft voor het Power Platform.
+
+00:01:40.080 --> 00:01:43.100
+Het brengt de vertrouwde manier van denken in spreadsheets naar het bouwen van apps,
+
+00:01:43.240 --> 00:01:47.400
+zodat je regels kunt maken voor schermen, formulieren, lijsten, knoppen en bedrijfsgegevens
+
+00:01:47.400 --> 00:01:49.540
+zonder te starten in de wereld van traditionele code.
+
+00:01:49.820 --> 00:01:51.380
+Zie PowerApps als een modern kantoorpand.
+
+00:01:51.380 --> 00:01:53.480
+De schermen zijn de kamers.
+
+00:01:53.660 --> 00:01:56.160
+Een formulier is een kamer waar iemand een verzoek indient.
+
+00:01:56.340 --> 00:01:59.040
+Een lijst is een kamer waar een manager die verzoeken beoordeelt.
+
+00:01:59.220 --> 00:02:01.800
+Een knop is de deur die iemand kan indrukken om verder te gaan.
+
+00:02:02.260 --> 00:02:04.680
+PowerFX is de set kleine regels achter de schermen.
+
+00:02:04.820 --> 00:02:08.800
+Het regelt wat een lichtschakelaar doet, wanneer een deur op slot moet blijven en welk bordje verschijnt
+
+00:02:08.800 --> 00:02:10.660
+wanneer een verzoek meer informatie nodig heeft.
+
+00:02:10.880 --> 00:02:12.980
+De meeste gebruikers merken die regels nooit op.
+
+00:02:13.100 --> 00:02:17.040
+Zij zien gewoon een app die op hen reageert en dat is belangrijk want bedrijfsapps zitten vol met regels.
+
+00:02:17.040 --> 00:02:20.340
+Iemand voert uren en een tarief in, waarna de app een totaal moet tonen.
+
+00:02:20.500 --> 00:02:23.940
+Iemand kiest een type verzoek, waarna de app mogelijk meer velden moet tonen.
+
+00:02:24.080 --> 00:02:27.740
+Een manager opent een lijst en wil alleen de verzoeken zien die wachten op goedkeuring.
+
+00:02:28.000 --> 00:02:31.400
+Zonder logica zijn dit slechts vakken, labels en knoppen op een scherm.
+
+00:02:31.860 --> 00:02:33.760
+PowerFX geeft die onderdelen een taak.
+
+00:02:33.920 --> 00:02:37.020
+In de komende minuten beginnen we met de Excel-denkwijze die je al kent
+
+00:02:37.020 --> 00:02:39.840
+en stappen we over van spreadsheet-cellen naar app-eigenschappen
+
+00:02:39.840 --> 00:02:43.520
+zodat je ziet waarom een formule tekstkleur, zichtbaarheid en meer kan aansturen.
+
+00:02:43.520 --> 00:02:48.940
+Daarna kijken we hoe formulesapps helpen om te reageren op gebruikers en te werken met bedrijfsinformatie.
+
+00:02:49.160 --> 00:02:51.480
+Maar laten we eerst beginnen met het vertrouwde deel,
+
+00:02:51.700 --> 00:02:56.340
+want als je begrijpt hoe een spreadsheet-formule werkt, heb je al een sterke basis voor PowerFX.
+
+00:02:57.740 --> 00:03:00.780
+Bouwsteen 1 van spreadsheet-cellen naar app-eigenschappen
+
+00:03:00.780 --> 00:03:03.520
+De meeste mensen worden zenuwachtig bij het woord code,
+
+00:03:03.820 --> 00:03:08.420
+maar als je ooit een formule in Excel hebt getypt, heb je al gewerkt met een eenvoudige vorm van logica.
+
+00:03:08.600 --> 00:03:13.280
+Je voerde ergens waarden in, schreef een formule die die waarde gebruikte en Excel gaf een antwoord terug.
+
+00:03:13.280 --> 00:03:17.000
+Misschien was het een totaal, een datum of een bericht zoals bovenbudget.
+
+00:03:17.420 --> 00:03:19.640
+PowerFX gebruikt hetzelfde basispatroon.
+
+00:03:19.820 --> 00:03:25.260
+Dit is de simpelste definitie, het is Microsoft's Excel-achtige formuletaal voor Power Platform Tools, met name Power Apps.
+
+00:03:25.500 --> 00:03:27.500
+Hiermee kun je een app vertellen wat iets moet tonen,
+
+00:03:27.740 --> 00:03:31.580
+wanneer iets moet verschijnen of hoe een waarde moet veranderen op basis van de informatie eromheen.
+
+00:03:31.760 --> 00:03:33.440
+In Excel staat een formule in een cel.
+
+00:03:33.640 --> 00:03:36.200
+Je typt misschien zoiets als is B2 sterretje C2.
+
+00:03:36.420 --> 00:03:39.320
+Als B2 het aantal uren bevat en C2 het uurtarief,
+
+00:03:39.560 --> 00:03:41.380
+toont de cel met de formule het totaalbedrag.
+
+00:03:41.380 --> 00:03:43.940
+Voor anderen van de getallen in Excel werkt het antwoord bij.
+
+00:03:44.140 --> 00:03:45.960
+Dat is het mentale model dat je moet vasthouden.
+
+00:03:46.100 --> 00:03:49.420
+Een Power Apps scherm heeft geen raster vol cellen, het heeft besturingselementen.
+
+00:03:49.540 --> 00:03:51.780
+Een besturingselement is simpelweg iets op het scherm.
+
+00:03:51.940 --> 00:03:56.200
+Een tekstvak waar iemand typt, een label dat informatie toont, een knop, een vervolgkeuzelijst,
+
+00:03:56.380 --> 00:03:58.800
+een afbeelding of een galerie die een lijst met records weergeeft.
+
+00:03:58.960 --> 00:04:00.740
+Elk besturingselement heeft eigenschappen.
+
+00:04:00.880 --> 00:04:04.320
+Een eigenschap is een instelling die beschrijft hoe dat besturingselement eruit ziet of zich gedraagt.
+
+00:04:04.460 --> 00:04:06.020
+Een label heeft een teksteigenschap.
+
+00:04:06.020 --> 00:04:09.260
+Een knop heeft ook een teksteigenschap, naast eigenschappen zoals zichtbaarheid en kleur.
+
+00:04:09.460 --> 00:04:11.540
+De eigenschap is waar Power FX in beeld komt.
+
+00:04:11.740 --> 00:04:15.540
+In plaats van een formule in cel D2 te plaatsen, zet je een formule in de teksteigenschap van een label.
+
+00:04:15.740 --> 00:04:18.140
+Stel je voor dat je een eenvoudige urenregistratie hebt bouwt.
+
+00:04:18.280 --> 00:04:21.080
+Je voegt één invoervak toe voor uren en een ander voor het uurtarief.
+
+00:04:21.400 --> 00:04:23.780
+Vervolgens voeg je een label toe genaamd totaalbedrag.
+
+00:04:23.960 --> 00:04:26.180
+In plaats van een vast getal in dat label te typen,
+
+00:04:26.460 --> 00:04:31.380
+geef je de teksteigenschap ervan een formule die de waarde uit de ureninvoer en de waarde uit de tariefinvoer gebruikt.
+
+00:04:31.380 --> 00:04:33.180
+Het label wordt je berekende cel.
+
+00:04:33.380 --> 00:04:36.240
+Iemand verandert de uren van 5 naar 8 en het totaal verandert.
+
+00:04:36.440 --> 00:04:38.680
+Ze veranderen het tarief en het totaal verandert opnieuw.
+
+00:04:38.880 --> 00:04:41.420
+Niemand hoeft op een berekenknop te drukken om het label te vernieuwen.
+
+00:04:41.560 --> 00:04:43.960
+De formule houdt het label gekoppeld aan de waarde waarvan het afhangt,
+
+00:04:44.060 --> 00:04:46.120
+net zoals Excel de ene cel gekoppeld houdt aan de andere.
+
+00:04:46.300 --> 00:04:49.520
+Die automatische reactie is een groot onderdeel van hoe Power FX aanvoelt.
+
+00:04:49.700 --> 00:04:53.940
+Je beschrijft het resultaat dat je wilt en Power Apps houdt het resultaat actueel terwijl de gebruiker de app gebruikt.
+
+00:04:54.080 --> 00:04:57.020
+Er is één verandering waar veel Excel-gebruikers in het begin over struikelen.
+
+00:04:57.020 --> 00:05:00.220
+In een spreadsheet verwijs je vaak naar een celadres zoals B2 of C2.
+
+00:05:00.400 --> 00:05:02.760
+In Power FX verwijs je meestal naar dingen bij naam.
+
+00:05:02.920 --> 00:05:07.300
+Een invoerbesturingselement en een van zijn eigenschappen, een record uit een lijst of een kolom in een tabel.
+
+00:05:07.500 --> 00:05:13.080
+De vraag verschuift dus van welke cel dit getal bevat naar welk besturingselement, record of kolom deze informatie bevat.
+
+00:05:13.260 --> 00:05:15.860
+Dat klinkt klein, maar het verandert hoe je naar het scherm kijkt.
+
+00:05:16.040 --> 00:05:20.200
+Je ziet een scherm niet langer als een plaatje dat uit losse stukjes bestaat, maar als een set verbonden waarde.
+
+00:05:20.420 --> 00:05:23.900
+De ureninvoer levert één waarde, de tariefinvoer levert een andere.
+
+00:05:23.900 --> 00:05:27.380
+Het label voor de totale betaling leest beide waarden en toont het resultaat.
+
+00:05:27.560 --> 00:05:32.840
+Later kan hetzelfde idee bepalen of er een waarschuwing verschijnt, welke kleur een bedrag heeft of welke tekst een persoon ziet.
+
+00:05:33.040 --> 00:05:34.040
+Hou het voor nu simpel.
+
+00:05:34.340 --> 00:05:36.940
+Begin met formules die beschrijven wat een scherm moet tonen.
+
+00:05:37.140 --> 00:05:41.640
+Kies één label, kies één waarde die een persoon kan invoeren en laat het label daarop reageren.
+
+00:05:41.820 --> 00:05:48.040
+Die eerste kleine verbinding is waar Power FX minder aanvoelt als coderen en meer als bouwen met formules die je al kent.
+
+00:05:48.480 --> 00:05:52.660
+Berekeningen zijn nuttig, maar een app moet ook reageren wanneer iemand ergens op klikt.
+
+00:05:52.660 --> 00:05:56.960
+Bouwsteen 2 eigenschappen veranderen formules in appgedrag.
+
+00:05:57.240 --> 00:05:57.960
+Dit is het punt.
+
+00:05:58.180 --> 00:06:02.920
+Een berekening vertelt je wat een waarde moet zijn, maar een app moet ook reageren wanneer een persoon iets doet.
+
+00:06:03.120 --> 00:06:05.720
+Een knop zonder logica is slechts een vorm met een label.
+
+00:06:05.940 --> 00:06:10.080
+Er kan aanvraag indienen, opstaan, maar totdat je er een regel aangeeft, gebeurt er niets als je erop drukt.
+
+00:06:10.320 --> 00:06:12.080
+Daar wordt een app eigenschappen interessanter.
+
+00:06:12.300 --> 00:06:15.380
+Elk besturingselement in Power Apps heeft instellingen waar Power FX mee kan werken.
+
+00:06:15.380 --> 00:06:19.380
+Sommigen beschrijven hoe het besturingselement er nu uitziet, terwijl anderen een actie uitvoeren nadat er iets gebeurt.
+
+00:06:19.520 --> 00:06:20.660
+Twee verschillende taken.
+
+00:06:20.660 --> 00:06:25.440
+De eerste taak is continu. Een formule blijft de huidige status van een besturingselement beschrijven.
+
+00:06:25.640 --> 00:06:30.400
+Neem een label dat een totaal toont. De teksteigenschap ervan blijft berekenen terwijl een gebruiker getallen wijzigt.
+
+00:06:30.560 --> 00:06:34.400
+Of neem een goedkeuringsknop. De eigenschap, visible, controleert de status van het verzoek.
+
+00:06:34.560 --> 00:06:37.640
+Als het gereed is, verschijnt de knop. Zo niet, dan blijft deze verborgen.
+
+00:06:37.820 --> 00:06:39.940
+Je vertelt de app niet om slechts eenmaal te controleren.
+
+00:06:40.100 --> 00:06:43.280
+Je geeft aan wat de zichtbaarheid van de knop moet zijn wanneer het scherm ververst.
+
+00:06:43.280 --> 00:06:49.420
+Een eenvoudige regel kan er bijvoorbeeld zo uitzien. Als verzoekstatus gelijk is aan klaar voor goedkeuring, waar, onwaar.
+
+00:06:49.560 --> 00:06:55.240
+In gewone taal betekent dit als de status klaar voor goedkeuring is, toon dan de knop. Verberg deze anders.
+
+00:06:55.480 --> 00:06:57.820
+Power FX kan ook de tekst op de knop wijzigen.
+
+00:06:58.060 --> 00:07:05.800
+Misschien geeft de teksteigenschap verstuur voor goedkeuring aan tijdens het opstellen, maar zodra het verstuurd is, kan dezelfde knop, verzoek ingediend, tonen of volledig verdwijnen.
+
+00:07:05.800 --> 00:07:12.480
+Kleur werkt op dezelfde manier. Een bedrag wordt rood als het een budget overschrijdt of een statuslabel verandert van kleur als een verzoek aandacht vereist.
+
+00:07:12.660 --> 00:07:16.660
+Het scherm reageert op de informatie in plaats van aan iedereen hetzelfde vaste ontwerp te tonen.
+
+00:07:16.740 --> 00:07:20.000
+Dat is één kant van Power FX, formules die een besturingselement actueel houden.
+
+00:07:20.180 --> 00:07:22.400
+De andere kant begint wanneer een persoon actie onderneemt.
+
+00:07:22.520 --> 00:07:25.240
+In Power Apps heeft een knop een eigenschap genaamd, unselect.
+
+00:07:25.420 --> 00:07:28.940
+Klinkt technisch, maar het betekent simpelweg wat er moet gebeuren als iemand op deze knop drukt.
+
+00:07:29.180 --> 00:07:31.040
+Stel dat je een eenvoudig aanvraagformulier hebt.
+
+00:07:31.040 --> 00:07:34.480
+Een gebruiker vult de details in en drukt op een knop genaamd, verzoek versturen.
+
+00:07:34.640 --> 00:07:38.360
+Je kunt de unselect eigenschap van die knop instellen op, notify verzoek verzonden.
+
+00:07:38.600 --> 00:07:42.720
+Wanneer er opgedrukt wordt, toont Power Apps een bericht op het scherm voor directe feedback aan de gebruiker.
+
+00:07:42.960 --> 00:07:44.260
+Geen gegokken of het gelukt is.
+
+00:07:44.440 --> 00:07:47.540
+Je kunt unselect ook gebruiken om iemand naar een ander scherm te verplaatsen.
+
+00:07:47.740 --> 00:07:50.460
+Stel je een onkosten app voor met een lijst van bestaande onkosten.
+
+00:07:50.740 --> 00:07:54.120
+Bovenaan gebruikt een knop voor nieuwe onkosten, navigate nieuw onkosten scherm.
+
+00:07:54.380 --> 00:07:57.820
+Druk erop en Power Apps opent het scherm voor het invoeren van een nieuwe onkost.
+
+00:07:57.820 --> 00:08:00.040
+Dat is appgedrag in een zeer directe vorm.
+
+00:08:00.040 --> 00:08:02.800
+Een gebruiker kiest een actie en Power Fx reageert.
+
+00:08:02.940 --> 00:08:04.660
+Het verschil is belangrijk om te onthouden.
+
+00:08:04.840 --> 00:08:10.400
+Een formule voor tekst, zichtbaarheid of kleur beschrijft wat iets moet zijn, terwijl een unselect formule wordt uitgevoerd omdat iemand klikt of tikt.
+
+00:08:10.640 --> 00:08:13.280
+Beide zitten in eigenschappen, maar ze lossen verschillende problemen op.
+
+00:08:13.380 --> 00:08:14.540
+Dit is waar beginners vastlopen.
+
+00:08:14.760 --> 00:08:17.720
+Ze leren een functie zoals IF of notify en vragen zich af waar ze deze moeten plaatsen.
+
+00:08:17.800 --> 00:08:19.820
+Begin bij het gewenste resultaat, niet bij de functienaam.
+
+00:08:20.000 --> 00:08:21.140
+Wil je dat een label verandert?
+
+00:08:21.420 --> 00:08:23.040
+Selecteer het label en werk met de tekst.
+
+00:08:23.240 --> 00:08:25.320
+Wil je dat een knop alleen in één situatie verschijnt?
+
+00:08:25.620 --> 00:08:27.240
+Selecteer de knop en werk met Visible.
+
+00:08:27.240 --> 00:08:30.720
+Wil je dat er iets gebeurt na een klik? Selecteer de knop en werk met unselect.
+
+00:08:30.860 --> 00:08:33.160
+Eén besturingselement, één eigenschap, één duidelijk resultaat.
+
+00:08:33.300 --> 00:08:35.000
+Dat is een veel eenvoudigere manier om te bouwen.
+
+00:08:35.200 --> 00:08:38.740
+Zodra een app begint te reageren op de keuzes van een persoon, is de volgende vraag logisch.
+
+00:08:38.960 --> 00:08:40.240
+Waar staat al die informatie?
+
+00:08:40.940 --> 00:08:43.240
+Bouwsteen 3. Power Fx werkt met bedrijfsgegevens.
+
+00:08:44.140 --> 00:08:48.680
+Een scherm kan een totaal berekenen, een bericht tonen en iemand naar een andere pagina leiden.
+
+00:08:48.860 --> 00:08:52.760
+Maar de meeste zakelijke apps moeten werken met informatie die verder gaat dan dat ene scherm.
+
+00:08:53.000 --> 00:08:54.220
+Denk aan een onkosten app.
+
+00:08:54.220 --> 00:08:56.860
+De onkosten moeten ergens worden opgeslagen na het indienen.
+
+00:08:56.980 --> 00:08:59.340
+Een manager opent de app morgen en ziet dezelfde aanvragen.
+
+00:08:59.560 --> 00:09:02.540
+Financiën beoordeelt het bedrag, de categorie, de datum en de naam van de werknemer.
+
+00:09:02.720 --> 00:09:04.160
+Dat is waar data om de hoek komt kijken.
+
+00:09:04.420 --> 00:09:06.200
+Zie je gegevensbron als een archiefkast?
+
+00:09:06.460 --> 00:09:07.960
+Binnenin zijn tabellen de lades.
+
+00:09:08.220 --> 00:09:11.580
+Een onkosten tabel is één lade, een werknemerstabel een andere.
+
+00:09:11.940 --> 00:09:15.620
+Elk record is een map in een lade en elke kolom is een label op die map.
+
+00:09:15.760 --> 00:09:21.060
+Een onkostenrecord kan de naam van de werknemer, datum, categorie, bedrag en goedkeuringstatus bevatten.
+
+00:09:21.060 --> 00:09:27.340
+Power Fx helpt je app om uit die archiefkast te lezen, de benodigde mappen te vinden en soms informatie toe te voegen of bij te werken.
+
+00:09:27.520 --> 00:09:30.480
+Voordat we naar formules kijken, moet je drie woorden goed onthouden.
+
+00:09:30.660 --> 00:09:32.680
+Een tabel is een groep gerelateerde records.
+
+00:09:32.900 --> 00:09:38.320
+Een record is één item in die tabel en een kolom is één type informatie dat voor elk record wordt opgeslagen.
+
+00:09:38.580 --> 00:09:44.480
+Dus in een onkosten tabel kan één record een treinkaartje zijn met bedrag 42,50, categorie, reizen en status ingediend.
+
+00:09:44.660 --> 00:09:46.920
+Een app hoeft niet altijd elke map in de lade te tonen.
+
+00:09:46.920 --> 00:09:55.720
+Stel je voor dat een werknemer de onkosten app opent en alleen zijn eigen declaraties wil zien, terwijl een manager alleen declaraties wil zien die wachten op goedkeuring en financiën alleen reiskosten wil zien.
+
+00:09:55.940 --> 00:09:57.100
+Dat is de taak van filter.
+
+00:09:57.320 --> 00:10:00.800
+Een filterformule vraagt om een kleinere set records die aan een regel voldoen.
+
+00:10:01.020 --> 00:10:09.540
+In begrijpelijke taal zeg je tegen de app, toon onkosten waar de naam van de werknemer overeenkomt met de huidige gebruiker, of toon alleen records waar de categorie gelijk is aan reizen.
+
+00:10:09.740 --> 00:10:11.500
+Het resultaat verschijnt in een galerie.
+
+00:10:11.700 --> 00:10:14.760
+Het power apps besturingselement voor de weergave van een herhalende lijst.
+
+00:10:14.760 --> 00:10:19.940
+In plaats van aparte schermen te bouwen voor elke categorie, geef je één galerie een formule die reageert op de keuze van de gebruiker.
+
+00:10:20.100 --> 00:10:22.040
+Kies reizen en de galerie toont reizen.
+
+00:10:22.240 --> 00:10:24.080
+Kies apparatuur en de lijst verandert.
+
+00:10:24.280 --> 00:10:26.360
+De records in de archiefkast zijn niet verdwenen.
+
+00:10:26.500 --> 00:10:29.520
+De app heeft simpelweg de mappen geselecteerd die de persoon op dit moment nodig heeft.
+
+00:10:29.720 --> 00:10:31.840
+Wat als de lijst klopt, maar in de verkeerde volgorde staat?
+
+00:10:32.080 --> 00:10:33.280
+Daar komt Sword bij kijken.
+
+00:10:33.480 --> 00:10:37.680
+Een drukke manager wil de nieuwste aanvragen bovenaan, terwijl financiën de hoogste bedragen als eerste wil zien.
+
+00:10:37.920 --> 00:10:40.520
+Sword stelt je in staat records te rangschikken voordat ze worden weergegeven.
+
+00:10:40.520 --> 00:10:41.680
+Filter beantwoord de vraag.
+
+00:10:41.840 --> 00:10:42.740
+Welke records moet ik zien?
+
+00:10:44.760 --> 00:10:46.240
+Vaak gebruik je beide samen.
+
+00:10:46.460 --> 00:10:50.380
+Filter bijvoorbeeld op openstaande goedkeuringsverzoeken en sorteer op datum zodat de nieuwste eerst verschijnen.
+
+00:10:50.520 --> 00:10:51.980
+Er is nog een veel voorkomende behoefte.
+
+00:10:52.180 --> 00:10:53.480
+Soms heb je geen hele lijst nodig.
+
+00:10:53.680 --> 00:10:55.160
+Je hebt één bijbehorend record nodig.
+
+00:10:55.380 --> 00:10:58.080
+Misschien moet een onkostenvergoeding de goedkeuringslimiet van een medewerker controleren.
+
+00:10:58.220 --> 00:11:01.380
+De app zoekt in een tabel met medewerkers, vindt het record van die persoon en leest de limiet.
+
+00:11:01.580 --> 00:11:02.900
+Dat is het patroon achter Lookup.
+
+00:11:03.080 --> 00:11:05.660
+Lookup vindt één record dat voldoet aan de regel die je opgeeft.
+
+00:11:05.820 --> 00:11:09.640
+Je kunt het zien als iemand bij een archiefkast vraagt, zoek alsjeblieft een map voor deze medewerker.
+
+00:11:09.800 --> 00:11:12.340
+Zodra je die map hebt, kun je de informatie erin lezen.
+
+00:11:12.880 --> 00:11:14.460
+Gegevenslezen is slechts de helft van het werk.
+
+00:11:14.620 --> 00:11:16.080
+Apps verzamelen ook informatie.
+
+00:11:16.260 --> 00:11:17.840
+Iemand voert een nieuwe onkostendeclaratie in.
+
+00:11:17.900 --> 00:11:19.420
+Een manager wijzigt de status naar goedgekeurd.
+
+00:11:19.580 --> 00:11:20.580
+Iemand corrigeert een categorie.
+
+00:11:20.740 --> 00:11:22.840
+Power Apps kan die records toevoegen of bijwerken.
+
+00:11:23.020 --> 00:11:24.800
+Toch moet je hier even pas op de plaats maken.
+
+00:11:25.000 --> 00:11:29.180
+De app toont misschien een knop, maar de gegevensbron bepaalt wie informatie kan lezen, toevoegen of wijzigen.
+
+00:11:29.340 --> 00:11:33.080
+Een onkostenapp mag niet elke gebruiker dezelfde toegang geven alleen omdat ze een scherm kunnen openen.
+
+00:11:33.200 --> 00:11:34.720
+Je gegevensmachtigingen zijn van belang.
+
+00:11:34.720 --> 00:11:38.240
+Power Apps kan verbinding maken met plekken waar veel bedrijven hun informatie al bewaren.
+
+00:11:38.360 --> 00:11:40.740
+SharePoint, Excel, SQL, Dataverse.
+
+00:11:41.000 --> 00:11:44.860
+Die bronnen werken niet allemaal hetzelfde en de juiste keuze hangt af van de behoefte van je app.
+
+00:11:44.960 --> 00:11:46.960
+Maar voor een beginner is het punt eenvoudiger.
+
+00:11:47.200 --> 00:11:49.760
+Je formules en je datastructuur horen bij elkaar.
+
+00:11:50.020 --> 00:11:53.860
+Als de tabel onduidelijke kolommen heeft, wordt de formule moeilijker om te schrijven.
+
+00:11:54.080 --> 00:11:57.860
+Als de formule onduidelijke vragen stelt, geeft de app verwarrende resultaten.
+
+00:11:57.860 --> 00:12:04.860
+Geef je kolommen duidelijke namen, weet welk record je nodig hebt en schrijf dan de formule die die informatie vindt, filtert, sorteert of bijwerkt.
+
+00:12:06.000 --> 00:12:12.740
+Records lezen en wijzigen verhelpt veel app werk, maar regels kunnen lastig worden als een antwoord op meer dan één plek moet verschijnen.
+
+00:12:13.700 --> 00:12:17.720
+Bouwsteen 4, variabelen, verzamelingen en herbruikbare regels.
+
+00:12:17.960 --> 00:12:22.220
+Zodra je app meer dan één scherm heeft, moet hij dingen kunnen onthouden terwijl iemand navigeert.
+
+00:12:22.220 --> 00:12:25.100
+Stel je voor dat iemand een onkostenpost uit een lijst selecteert.
+
+00:12:25.260 --> 00:12:30.660
+Ze openen een detailscherm, maar dat tweede scherm moet weten welke onkostenpost ze selecteerde, ook al staat de lijst op een ander scherm.
+
+00:12:30.900 --> 00:12:32.420
+Daar komt een variabele van pas.
+
+00:12:32.660 --> 00:12:34.900
+Zie een variabele als een doos met een label in de app.
+
+00:12:35.000 --> 00:12:39.520
+Je stopt er een waarde in, geeft die een duidelijke naam en gebruikt die waarde vervolgens ergens anders terwijl de app draait.
+
+00:12:39.680 --> 00:12:44.920
+De waarde kan een geselecteerde onkostenpost zijn, een gekozen categorie van een persoon of een lopend totaal voor items die aan een aanvraag zijn toegevoegd.
+
+00:12:45.040 --> 00:12:47.720
+Een gebruiker selecteert bijvoorbeeld een onkostenpost in een galerij.
+
+00:12:47.720 --> 00:12:50.840
+De app slaat dat record op in een variabele en gaat naar een detailscherm.
+
+00:12:51.020 --> 00:12:56.520
+Op dat volgende scherm lezen de labels de geselecteerde onkosten uit de variabele en tonen ze het bedrag, de datum, de categorie en de status.
+
+00:12:56.760 --> 00:13:00.440
+De gebruiker ervaart één soepele reis, maar achter de schermen heeft de app een keuze onthouden.
+
+00:13:00.780 --> 00:13:03.340
+Variabelen zijn handig, maar ze zijn geen permanente opslag.
+
+00:13:03.500 --> 00:13:08.860
+Als een onkostenoverzicht morgen beschikbaar moet zijn voor de financiële afdeling of een manager, hoort dit in je gekoppelde gegevensbron thuis.
+
+00:13:09.040 --> 00:13:12.620
+Een variabele helpt de app alleen om iets bij te houden terwijl de sessie actief is.
+
+00:13:12.800 --> 00:13:14.800
+Het verschil kennen bespaart veel verwarring.
+
+00:13:14.800 --> 00:13:18.940
+Eén vak bevat één waarde, maar soms moet je app een kleine lijst met waarden onthouden.
+
+00:13:19.160 --> 00:13:20.820
+Dat is waar verzamelingen van pas komen.
+
+00:13:21.000 --> 00:13:23.200
+Een verzameling is als een tijdelijke tabel binnen de app.
+
+00:13:23.360 --> 00:13:26.240
+Het kan verschillende records bevatten terwijl de gebruiker een taak uitvoert.
+
+00:13:26.400 --> 00:13:28.660
+Een eenvoudig winkelwagentje is een makkelijk voorbeeld.
+
+00:13:28.860 --> 00:13:33.000
+Iemand selecteert drie items uit een productlijst, de app voegt ze toe aan een verzameling...
+
+00:13:33.000 --> 00:13:38.720
+...en het winkelwagenscherm toont de gekozen items, berekent het totaal en laat de gebruiker een verwijderen voordat de bestelling wordt verzonden.
+
+00:13:38.920 --> 00:13:41.600
+Je kunt hetzelfde idee gebruiken voor een veiligheidschecklist.
+
+00:13:41.600 --> 00:13:47.180
+Een buitendienstmedewerker vinkt verschillende controles af en de app houdt die keuzes in een verzameling bij terwijl ze het formulier doorlopen.
+
+00:13:47.420 --> 00:13:50.940
+Wanneer ze klaar zijn, slaat de app het voltooide resultaat op in de juiste gegevensbron.
+
+00:13:51.300 --> 00:13:55.900
+Verzamelingen zijn nuttig voor kortstondig werk, maar ze zijn geen vervanging voor de bron waar je bedrijfsgegevens thuishoren.
+
+00:13:56.100 --> 00:13:58.620
+Dat is belangrijk als je iets bouwt waar mensen op zullen vertrouwen.
+
+00:13:58.820 --> 00:14:02.860
+Als een verzameling het enige exemplaar van een belangrijke aanvraag bevat, heb je een probleem gecreëerd.
+
+00:14:02.860 --> 00:14:07.600
+De gebruiker kan de app sluiten, de verbinding verliezen of later opnieuw beginnen en die tijdelijke lijst kan dan weg zijn.
+
+00:14:07.840 --> 00:14:13.280
+Gebruik dus verzamelingen wanneer de app een werklijst nodig heeft en gebruik je gegevensbron wanneer het bedrijf een blijvend record nodig heeft.
+
+00:14:13.460 --> 00:14:15.580
+Naarmate je app groeit, ontstaat er een nieuwe uitdaging.
+
+00:14:15.820 --> 00:14:18.560
+Dezelfde bedrijfsregels beginnen op meer dan één plek op te duiken.
+
+00:14:18.800 --> 00:14:23.760
+Misschien krijgt een bestelling alleen gratis bezorging als het totaal een bepaald bedrag bereikt en een kortingscode nog geldig is.
+
+00:14:23.920 --> 00:14:28.760
+Je hebt dat antwoord wellicht nodig op het afrekenscherm, het besteloverzichtscherm en later in een geautomatiseerd proces.
+
+00:14:28.760 --> 00:14:33.620
+Dezelfde lange formule op elke plek kopiëren voelt in het begin snel, maar dan verandert de bezorgregel.
+
+00:14:33.800 --> 00:14:38.980
+Iemand werkt één kopie bij en vergeet de andere twee, waardoor verschillende onderdelen van dezelfde oplossing nu andere antwoorden geven.
+
+00:14:39.300 --> 00:14:42.160
+Herbruikbare PowerFX functies helpen je die puinhoop te voorkomen.
+
+00:14:42.340 --> 00:14:46.140
+Je definieert een functie één keer, geeft de benodigde invoer op en hij geeft een antwoord terug.
+
+00:14:46.340 --> 00:14:51.600
+Voor het bezorgvoorbeeld ontvangt de functie een subtotaal van de bestelling en controleert of de kortingscode voldoet aan de datumregel.
+
+00:14:51.780 --> 00:14:53.440
+Het resultaat is waar of onwaar.
+
+00:14:53.640 --> 00:14:56.780
+Waar betekent dat gratis bezorging geldt, onwaar betekent van niet.
+
+00:14:56.780 --> 00:14:59.340
+De app hoeft de hele regel niet overal mee te slepen.
+
+00:14:59.540 --> 00:15:01.840
+Hij kan de gedeelde functie om het antwoord vragen.
+
+00:15:02.060 --> 00:15:05.700
+Dat maakt de regel makkelijker te controleren, aan te passen en consistent te houden.
+
+00:15:06.080 --> 00:15:10.640
+PowerFX is het meest zichtbaar in Canvas apps, waar je direct in de formulebalk met besturingselementen werkt.
+
+00:15:10.760 --> 00:15:14.200
+Maar dezelfde formules zie je ook in dataverse en andere Powerplatformomgevingen.
+
+00:15:14.320 --> 00:15:17.160
+Je hoeft niet elke plek waar het voorkomt te beheersen voordat je begint.
+
+00:15:17.360 --> 00:15:23.500
+Begrijp gewoon de richting die Microsoft opgaat, want dezelfde manier van bedrijfsregels schrijven kan verder rijken dan één scherm in één app.
+
+00:15:23.500 --> 00:15:25.300
+Voor jou is de praktische lees simpel.
+
+00:15:25.300 --> 00:15:31.060
+Wanneer een waarde alleen belangrijk is tijdens de doorloop van een persoon in de app, gebruik dan een variabele of collectie met een duidelijk doel.
+
+00:15:31.260 --> 00:15:36.900
+Wanneer dezelfde bedrijfsregel op meer dan één plek hetzelfde antwoord moet geven, hou die regel dan bij elkaar in plaats van deze te kopiëren.
+
+00:15:37.080 --> 00:15:43.020
+Al deze onderdelen kunnen losstaand klinken als je ze voor het eerst ziet, maar ze worden logischer als je ze ziet samenwerken in één kleine app.
+
+00:15:43.120 --> 00:15:45.440
+Hoe de onderdelen verbinden één formulesysteem.
+
+00:15:45.660 --> 00:15:48.800
+Laten we een eenvoudige app voor onkostegoedkeuring van begin tot eind doorlopen.
+
+00:15:48.800 --> 00:15:51.700
+Een werknemer opent de app en start een nieuwe onkostendeclaratie.
+
+00:15:51.880 --> 00:15:55.660
+Ze voeren een bedrag in, kiezen een categorie, voegen een datum toe en schrijven een korte beschrijving.
+
+00:15:55.820 --> 00:15:58.080
+Elk invoerbesturingselement bevat nu een waarde.
+
+00:15:58.260 --> 00:16:00.340
+Power Fx kan die waarde direct gebruiken.
+
+00:16:00.540 --> 00:16:08.140
+Een label kan een totaal berekenen, een formule kan controleren of het bedrag boven de normale limiet van de werknemer ligt en een andere formule kan een bericht tonen als de beschrijving leeg is.
+
+00:16:08.280 --> 00:16:10.960
+Het scherm verandert terwijl de werknemer het formulier invult.
+
+00:16:11.200 --> 00:16:12.440
+Dan drukken ze op verzenden.
+
+00:16:12.440 --> 00:16:16.520
+De actieformule van die knop slaat het verzoek op en brengt de persoon naar een bevestigingsscherm.
+
+00:16:16.700 --> 00:16:21.900
+De app slaat het zojuist geselecteerde record op in een variabele, zodat het bevestigingsscherm precies weet welke declaratie getoond moet worden.
+
+00:16:22.320 --> 00:16:25.760
+Tegelijkertijd schrijft de app de blijvende informatie naar de verbonden gegevensbron.
+
+00:16:25.980 --> 00:16:28.080
+Later opent een manager het goedkeuringsscherm.
+
+00:16:28.280 --> 00:16:31.200
+De galerie hoeft niet elke onkostendeclaratie in het bedrijf te tonen.
+
+00:16:31.320 --> 00:16:37.880
+Een formule kan alleen de records retourneren die op die manager wachten en een andere formule kan die records sorteren op datum of bedrag afhankelijk van wat het team nodig heeft.
+
+00:16:37.880 --> 00:16:43.700
+De manager selecteert één record, het detailscherm leest die keuze, toont het volledige verzoek en controleert de relevante goedkeuringsregel.
+
+00:16:43.840 --> 00:16:46.860
+Als het bedrag binnen de limiet valt, verschijnt de goedkeuringsactie.
+
+00:16:47.020 --> 00:16:52.700
+Als het verzoek meer details nodig heeft, toont de app een ander bericht of stuurt het de manager terug naar de werknemer voor meer informatie.
+
+00:16:52.900 --> 00:16:54.660
+Eén bedrijfsregel kan ook worden gedeeld.
+
+00:16:54.840 --> 00:17:00.540
+Een leveringsregel, bestedingsregel of kortingsregel kan in een herbruikbare functie worden geplaatst, zodat de app niet op elk scherm een nieuwe versie van het antwoord hoeft te maken.
+
+00:17:00.760 --> 00:17:02.960
+Dit is het onderdeel dat meestal voor het aha-moment zorgt.
+
+00:17:02.960 --> 00:17:08.140
+Power FX staat niet naast je app als een aparte stapelcode. Het past de regels toe in de app zelf.
+
+00:17:08.320 --> 00:17:16.380
+De besturingselementen gebruiken formules om de juiste informatie weer te geven, knoppen gebruiken formules om op mensen te reageren en dataformules selecteren en updaten de records die de app nodig heeft.
+
+00:17:16.620 --> 00:17:21.900
+Variabelen en verzamelingen bewaren context op korte termijn, terwijl gedeelde functies herhaalde regels consistent houden.
+
+00:17:22.060 --> 00:17:29.240
+Oudere app-projecten verdeelden deze taken vaak over aparte scripts, handmatig gebouwde pagina's en aangepaste logica die ver weg van het scherm waar gebruikers deze gebruiken was geschreven.
+
+00:17:29.240 --> 00:17:34.360
+Power FX houdt veel van de logica dicht bij het besturingselement, scherm of de datastap waarop het van invloed is.
+
+00:17:34.580 --> 00:17:38.800
+Dat kan een kleine bedrijfsapp leesbaarder maken, vooral wanneer je dingen duidelijk benoemt.
+
+00:17:38.940 --> 00:17:42.480
+Toch is Power FX geen belofte dat elk app-probleem eenvoudig blijft.
+
+00:17:42.680 --> 00:17:52.300
+Grote databehoeften, strikte beveiligingsregels, complexe database-wijzigingen en werk waarbij veel systemen worden gekoppeld, hebben mogelijk hulp nodig van ervaren ontwikkelaars, datateams of andere powerplatform tools.
+
+00:17:52.540 --> 00:17:55.720
+Dat is geen falen van low-code. Het is simpelweg het kiezen van de juiste.

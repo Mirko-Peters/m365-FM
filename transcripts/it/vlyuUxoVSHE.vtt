@@ -1,0 +1,646 @@
+WEBVTT
+
+00:00:00.360 --> 00:00:04.440
+Benvenuti al podcast M365FM dove esploriamo le persone, le idee e le
+
+00:00:04.440 --> 00:00:07.540
+tecnologie che plasmano il futuro del lavoro. La vostra configurazione azzurra
+
+00:00:07.540 --> 00:00:10.440
+vive solo un problema e questo è un problema. L'avete creata con dei click
+
+00:00:10.440 --> 00:00:13.240
+su schermate che non ritroverete mai più e non l'è stato messo per iscritto.
+
+00:00:13.820 --> 00:00:18.100
+Aggiore Bicep esiste per cambiare questa sessione. Benvenuti al podcast M365FM
+
+00:00:18.100 --> 00:00:21.300
+dove esploriamo le persone, le idee e le tecnologie che plasmano il futuro
+
+00:00:21.300 --> 00:00:24.040
+del lavoro. Bicep trasforma la vostra configurazione in un file che potete
+
+00:00:24.040 --> 00:00:26.780
+leggere, salvare e condividere senza richiedervi di essere programmato. Alla
+
+00:00:26.780 --> 00:00:30.160
+fine di questa puntata, quel file non sembrerà più codice ma piuttosto una
+
+00:00:30.160 --> 00:00:34.940
+ricetta. Cos'è veramente Bicep? Zurbicep è il linguaggio proprietario di
+
+00:00:34.940 --> 00:00:38.480
+Microsoft per definire le risorse azzurre di cui avete bisogno. Si legge più come
+
+00:00:38.480 --> 00:00:41.840
+una breve serie di istruzioni che come un denso codice macchina. Voi descrivete ciò
+
+00:00:41.840 --> 00:00:44.480
+che deve esistere e azzurre lo costruisce. Questa idea ha un nome,
+
+00:00:44.680 --> 00:00:48.000
+Infrastructure as Code, e il nome la fa sembrare più complessa di quanto sia in
+
+00:00:48.000 --> 00:00:50.980
+realtà. Significa semplicemente che la vostra configurazione vive in un file
+
+00:00:50.980 --> 00:00:53.640
+anziché in una serie di click. Pensate a come la maggior parte di noi inizia con
+
+00:00:53.640 --> 00:00:56.760
+Azzurre. Apriamo il portale, clicchiamo su una dozzina di schermate e
+
+00:00:56.760 --> 00:01:00.620
+creiamo un account di archiviazione o una rete virtuale. Funzione sembra tutto
+
+00:01:00.620 --> 00:01:03.440
+a posto la prima volta. Il problema sorge la seconda volta che vi serve la
+
+00:01:03.440 --> 00:01:06.280
+stessa cosa, perché ora dovete ripetere una serie di click che non avete mai
+
+00:01:06.280 --> 00:01:10.060
+notato. Il portale non è il problema qui, è un ottimo posto per vedere cosa
+
+00:01:10.060 --> 00:01:13.100
+avete già. È un pessimo posto per conservare la definizione di ciò che
+
+00:01:13.100 --> 00:01:17.140
+avete, perché quella definizione è un ricordo, e ricordi sbiadiscono. Bicep
+
+00:01:17.140 --> 00:01:21.060
+sposta quella definizione in qualcosa che potete aprire, leggere e passare a un
+
+00:01:21.060 --> 00:01:24.860
+collega. Un'altra parola che vale la pena imparare è dichiarativa. In parole povere
+
+00:01:24.860 --> 00:01:28.220
+descrivete la destinazione, non il percorso. Non dite ad Azzurre di cliccare
+
+00:01:28.220 --> 00:01:31.440
+qui, poi lì, poi altrove e non dovete indovinare l'ordine giusto dei passaggi.
+
+00:01:32.260 --> 00:01:35.180
+Scrivete lo stato finale che desiderate e Azzurre definisce autonomamente le
+
+00:01:35.180 --> 00:01:39.140
+operazioni. Questa è l'intera promessa di Bicep in una sola riga e tutto ciò che
+
+00:01:39.140 --> 00:01:42.720
+tratteremo in seguito sono solo dettagli aggiuntivi. C'è un vantaggio pratico che
+
+00:01:42.720 --> 00:01:46.280
+si cela in questa idea. Una volta che la configurazione è un file potete
+
+00:01:46.280 --> 00:01:48.960
+mantenere la sotto controllo di versione, revisionare le modifiche prima che vadano
+
+00:01:48.960 --> 00:01:52.720
+live e annullare gli errori con un semplice lever. Ottieni anche una cronologia di chi ha
+
+00:01:52.720 --> 00:01:55.420
+cambiato cose quando il genere di cose che fa risparmiare un timore di lavoro
+
+00:01:55.420 --> 00:01:58.600
+quando qualcosa si rompe nel momento sbagliato. Perché non usare semplicemente
+
+00:01:58.600 --> 00:02:02.340
+ARM e JSON? Azzurre aveva un modo per descrivere l'infrastruttura molto prima
+
+00:02:02.340 --> 00:02:06.860
+dell'arrivo di Bicep, chiamato modello ARM. ARM sta per Azure Resource Manager e
+
+00:02:06.860 --> 00:02:11.600
+quei modelli sono scritti in JSON. JSON è un formato di dati creato per essere letto
+
+00:02:11.600 --> 00:02:14.800
+dai computer, quindi la prima cosa che noti a prendone uno è quanto poco assomiglia
+
+00:02:14.800 --> 00:02:19.440
+una frase. Un modello ARM espone ogni dettaglio all'interno di una struttura rigida.
+
+00:02:19.440 --> 00:02:22.900
+Ottieni nomi di proprietà lunghi, virgolette annidate ed espressioni tra
+
+00:02:22.900 --> 00:02:26.140
+parentesi che sembrano un puzzle. Una singola virgola mancante o una
+
+00:02:26.140 --> 00:02:29.420
+parentesi fuori posto possono impedire al file di essere distribuito e il
+
+00:02:29.420 --> 00:02:32.680
+messaggio di errore spesso punta in una direzione inutile. Le persone finiscono
+
+00:02:32.680 --> 00:02:35.620
+per cercare un carattere fuori posto invece di pensare all'infrastruttura che
+
+00:02:35.620 --> 00:02:38.960
+vogliono realmente costruire. Microsoft ha creato Bicep per migliorare
+
+00:02:38.960 --> 00:02:42.460
+l'esperienza di scrittura, non per cambiare ciò che Azure può fare. Ogni tipo di
+
+00:02:42.460 --> 00:02:46.340
+risorsa, ogni impostazione e ogni opzione utilizzabile in un modello ARM è ancora
+
+00:02:46.340 --> 00:02:49.880
+disponibile in Bicep. La differenza sta nel modo in cui la scrivi. Un account di
+
+00:02:49.880 --> 00:02:53.360
+archiviazione che occupa una schermata di JSON annidato in ARM si riduce a poche
+
+00:02:53.360 --> 00:02:56.520
+righe leggibili in Bicep. Puoi vedere la forma della risorsa a colpo d'occhio.
+
+00:02:57.300 --> 00:03:00.240
+Metti lo stesso account di archiviazione fianco a fianco, una volta in JSON ARM e
+
+00:03:00.240 --> 00:03:03.840
+una volta in Bicep e il divario appare subito evidente. La versione ARM richiede
+
+00:03:03.840 --> 00:03:06.440
+più del doppio delle righe della versione Bicep per lo stesso identico
+
+00:03:06.440 --> 00:03:11.160
+risultato, con parentesi e virgolette a fare la parte del leone. La versione Bicep si legge
+
+00:03:11.160 --> 00:03:15.080
+come una descrizione di ciò che vuoi. La versione ARM sembra burocrazia. Quindi la
+
+00:03:15.080 --> 00:03:18.420
+risposta onesta sul perché non dovresti usare solo JSON ARM è che puoi farlo e Azure
+
+00:03:18.420 --> 00:03:21.240
+lo distribuirà volentieri. Staresti semplicemente scrivendo le stesse
+
+00:03:21.240 --> 00:03:24.040
+istruzioni in modo prolisso e passeresti il tempo a correggere la punteggiatura
+
+00:03:24.040 --> 00:03:28.880
+invece di progettare la tua configurazione. Come funziona Bicep? Bicep non sostituisce
+
+00:03:28.880 --> 00:03:32.740
+affatto ARM e questo è il dettaglio che cambia il modo in cui lo consideri. Quando
+
+00:03:32.740 --> 00:03:36.180
+esegui la distribuzione, uno strumento chiamato CLI di Bicep traduce il tuo file
+
+00:03:36.180 --> 00:03:39.980
+Bicep in un modello JSON ARM e poi Azure Resource Manager fa il vero lavoro di creazione
+
+00:03:39.980 --> 00:03:44.940
+delle tue risorse. Bicep è il linguaggio e ARM è il motore sottostante. È importante
+
+00:03:44.940 --> 00:03:47.940
+perché non stai scegliendo tra qualcosa di nuovo e qualcosa di vecchio. Stai
+
+00:03:47.940 --> 00:03:51.060
+scegliendo un modo più pulito per scrivere le stesse istruzioni quindi nulla cambia
+
+00:03:51.060 --> 00:03:53.860
+nella distribuzione solo perché il file che hai digitato era più facile da leggere.
+
+00:03:54.460 --> 00:03:57.700
+Il file Bicep è un livello trasparente sul modello che Azure comprendeva già.
+
+00:03:58.700 --> 00:04:01.740
+La prossima cosa da sapere è che le distribuzioni sono idempotenti, un termine
+
+00:04:01.740 --> 00:04:06.140
+elegante per dire ripetibili. Puoi distribuire lo stesso file Bicep più e più volte e otterrai
+
+00:04:06.140 --> 00:04:10.120
+le stesse risorse nello stesso stato. Se nulla è cambiato nulla viene ricostruito e questa
+
+00:04:10.120 --> 00:04:13.220
+è una differenza silenziosa ma enorme rispetto a fare click manualmente.
+
+00:04:13.220 --> 00:04:17.240
+eseguire la stessa configurazione due volte può creare duplicati che non intendevi generare.
+
+00:04:18.300 --> 00:04:22.340
+Azure Resource Manager gestisce anche l'ordine per te. Se una risorsa dipende da un'altra
+
+00:04:22.340 --> 00:04:26.100
+Azure capisce cosa costruire per primo ed esegue i pezzi indipendenti in parallelo
+
+00:04:26.100 --> 00:04:29.260
+dove possibile così la distribuzione finisce più velocemente di quanto farebbe una sequenza
+
+00:04:29.260 --> 00:04:33.640
+rigorosa riga per riga. Un'altra cosa distingue Bicep dall'eseguire una serie di comandi
+
+00:04:33.640 --> 00:04:37.600
+a mano. Distribuisce l'intero file come un'unica operazione e Azure la tratta come una
+
+00:04:37.600 --> 00:04:41.440
+modifica coordinata. Se una parte fallisce ottiene un registro di distribuzione chiaro
+
+00:04:41.440 --> 00:04:44.760
+da ispezionare invece di una configurazione a metà da dover districare memoria. Inoltre
+
+00:04:44.760 --> 00:04:47.940
+non c'è alcun file di stato da monitorare. Alcuni strumenti di infrastruttura tengono
+
+00:04:47.940 --> 00:04:50.620
+un proprio registro di tutto ciò che hanno creato e tale registro può non essere più
+
+00:04:50.620 --> 00:04:54.420
+sincronizzato con la realtà. Bicep evita il problema perché Azure stesso è la fonte di
+
+00:04:54.420 --> 00:04:57.000
+verità e ha sempre il quadro aggiornato di ciò che esiste.
+
+00:04:58.200 --> 00:05:02.100
+Leggere un file bicep in parole semplici questa è la parte in cui quel file smette di sembrare
+
+00:05:02.100 --> 00:05:06.320
+codice e inizia a sembrare una ricetta. Un file bicep è un breve insieme di dichiarazioni
+
+00:05:06.320 --> 00:05:10.260
+e l'ordine non ha alcuna importanza. Bicep legge tutto quanto e capisce da solo come i
+
+00:05:10.260 --> 00:05:14.480
+pezzi si collegano. Il primo tipo di dichiarazione è un parametro che contiene un valore che può
+
+00:05:14.480 --> 00:05:19.200
+cambiare tra le distribuzioni. Se il tuo account di archiviazione ha bisogno di un nome rendi
+
+00:05:19.200 --> 00:05:23.940
+il nome un parametro e puoi passarne uno diverso per i test e per la produzione. I parametri possono
+
+00:05:23.940 --> 00:05:27.100
+anche avere valori predefiniti quindi non devi compilare tutto ogni volta che distribuisci.
+
+00:05:27.620 --> 00:05:31.300
+Parametri portano anche piccole etichette chiamate decorator ognuna delle quali aggiunge un po' di
+
+00:05:31.300 --> 00:05:35.820
+protezione. Un decorator aggiunge una descrizione semplice affinché la persona successiva capisca a cosa
+
+00:05:35.820 --> 00:05:39.920
+serve un valore. Un altro limita un parametro a un breve elenco di scelte consentite impedendo
+
+00:05:39.920 --> 00:05:43.960
+che un errore di battitura si trasformi in una distribuzione fallita. Quello che vale la pena
+
+00:05:43.960 --> 00:05:47.860
+ricordare è il decorator secure che dice ad Azure di trattare un valore come un segreto e di tenerlo
+
+00:05:47.860 --> 00:05:52.220
+lontano dalla cronologia di distribuzione e dai log. Le variabili sono il secondo tipo di dichiarazione
+
+00:05:52.220 --> 00:05:56.600
+e sono solo delle abbreviazioni. Se devi costruire un nome lungo partendo da diversi pezzi lo definisci
+
+00:05:56.600 --> 00:06:01.160
+una volta in una variabile e lo riutilizzi ovù. Mantiene il file pulito e ti evita di ripetere la stessa
+
+00:06:01.160 --> 00:06:06.280
+espressione cinque volte. Poi arrivano le risorse che sono l'elemento principale. Ogni risorsa è un
+
+00:06:06.280 --> 00:06:09.700
+componente che desideri in Azure come un account archiviazione a una rete. Le assegni un nome
+
+00:06:09.700 --> 00:06:14.060
+simbolico, una breve etichetta che userai per riferirti ad esso in seguito e la punti a un tipo
+
+00:06:14.060 --> 00:06:18.080
+di risorsa con una versione. Tutto ciò che si trova sotto quella riga riguarda solo le impostazioni per
+
+00:06:18.080 --> 00:06:21.740
+quella specifica risorsa. Immagina il file utile più piccolo che potresti scrivere. Nomina un account
+
+00:06:21.740 --> 00:06:26.580
+archiviazione e imposta la posizione. Scegli un livello base e questo è quanto. Avresti una dichiarazione
+
+00:06:26.580 --> 00:06:30.880
+di risorsa, un paio di impostazioni e forse un parametro per il nome. Quel piccolo file è un
+
+00:06:30.880 --> 00:06:35.160
+elemento di infrastruttura completo e distribuibile, un ottimo punto di partenza. Quei nomi simbolici
+
+00:06:35.160 --> 00:06:38.840
+fanno molto più che etiquetare le cose. Quando una risorsa ne menziona un'altra tramite il suo nome
+
+00:06:38.840 --> 00:06:43.880
+simbolico, Bishop nota la connessione e crea la dipendenza per te. I modelli più vecchi ti
+
+00:06:43.880 --> 00:06:48.180
+costringevano a scrivere le dipendenze a mano e sbagliare causava alcuni dei fallimenti più confusi
+
+00:06:48.180 --> 00:06:52.520
+in cui ci si potesse imbattere. Bishop ti toglie in gran parte questo compito. Altri due elementi
+
+00:06:52.520 --> 00:06:56.540
+completano il file. Gli output sono valori che ottieni dopo una distribuzione come l'indirizzo web di
+
+00:06:56.540 --> 00:07:00.740
+qualcosa appena creato affinché un'altra parte della configurazione possa usarlo. Condizioni e
+
+00:07:00.740 --> 00:07:04.240
+cicli permettono a un file di fare più cose così puoi decidere di creare qualcosa solo in
+
+00:07:04.240 --> 00:07:09.300
+produzione o crearne 10 da un elenco senza fare copia e incolla. I moduli tuoi blocchi predefiniti
+
+00:07:09.300 --> 00:07:13.120
+utilizzabili. Quando la tua configurazione cresce un singolo file diventa affollato ed è qui che
+
+00:07:13.120 --> 00:07:17.000
+entrano in gioco i moduli. Un modulo è semplicemente un file by check che un altro file by check richiama,
+
+00:07:17.460 --> 00:07:21.920
+proprio come divideresti un lungo documento in capitoli. Crivi la tua rete una volta come modulo e ogni
+
+00:07:21.920 --> 00:07:26.520
+progetto che ne ha bisogno la richiama semplicemente invece di ricostruire le stesse righe. I moduli
+
+00:07:26.520 --> 00:07:30.620
+comunicano tra loro attraverso via. Quando un modulo termina e produce un valore come l'id di
+
+00:07:30.620 --> 00:07:35.080
+una sottorete il file chiamante può passare quel valore al modulo successivo. Quel passaggio è il
+
+00:07:35.080 --> 00:07:39.200
+contratto tra i tuoi componenti e mantiene ogni modulo concentrato su un unico compito invece di
+
+00:07:39.200 --> 00:07:43.320
+cercare di fare tutto invece di fare tutto. B-CAP ti consente anche di scegliere dove destinare una
+
+00:07:43.320 --> 00:07:46.920
+distribuzione. Puoi puntare a un gruppo di risorse, un'intera sottoscrizione, un gruppo di gestione,
+
+00:07:46.980 --> 00:07:52.220
+un'alternance stesso e ogni livello ha il suo comando. La regola da ricordare è che il livello scritto nel tuo
+
+00:07:52.220 --> 00:07:55.740
+file deve corrispondere al comando che esegui altrimenti le risorse finiranno dove non ti
+
+00:07:55.740 --> 00:08:01.300
+aspettavi. Non devi nemmeno costruire ogni modulo partendo da zero. Microsoft pubblica una serie di
+
+00:08:01.300 --> 00:08:05.920
+moduli ufficiali revisionati chiamati Azure Verified Modules che coprono elementi comuni come reti,
+
+00:08:06.100 --> 00:08:10.900
+archiviazione e monitoraggio. Sono un punto di partenza affidabile aggiornato secondo le migliori
+
+00:08:10.900 --> 00:08:14.760
+pratiche così il tuo primo modulo non deve iniziare da una pagina bianca. Questo è il vero valore per
+
+00:08:14.760 --> 00:08:19.540
+chi è agli inizi. Non c'è bisogno di inventare una struttura perfetta fino al giorno. Prendi un componente
+
+00:08:19.540 --> 00:08:24.100
+collaudato, modifichi le poche impostazioni che ti interessano e prosegui con il lavoro che ti sta davvero
+
+00:08:24.100 --> 00:08:28.880
+a cuore. L'altro vantaggio è la coerenza. Quando dieci team utilizzano lo stesso modulo ottengono
+
+00:08:28.880 --> 00:08:32.420
+tutti la stessa struttura di rete, la stessa nomenclatura di sicurezza. Risolvi un problema
+
+00:08:32.420 --> 00:08:36.340
+una volta nel modulo, ridistribuisci ogni progetto e riceve la correzione invece di far sì che ogni team
+
+00:08:36.340 --> 00:08:41.460
+appacciare la propria copia. Distribuzione la rete di sicurezza vuole. Scrivere il file è solo metà del
+
+00:08:41.460 --> 00:08:45.300
+lavoro. L'altra metà consiste nel portarlo in Azure in sicurezza e Bicep ha un passaggio davvero
+
+00:08:45.300 --> 00:08:49.040
+rassicurante per questo. Prima di distribuire qualsiasi cosa puoi eseguire un comando chiamato
+
+00:08:49.040 --> 00:08:52.940
+U. Prendi il tuo file o confronta con ciò che è già presente in Azure e ti mostra esattamente cosa
+
+00:08:52.940 --> 00:08:58.020
+avrebbe creato, modificato o rimosso. Il dettaglio importante è che what if non modifica nulla. È
+
+00:08:58.020 --> 00:09:00.980
+un'anteprima che ti permette di individuare eventuali sorprese prima che diventino realtà.
+
+00:09:01.300 --> 00:09:05.560
+L'anteprima utilizza simboli semplici per indicarti cosa accadrà. Un segno più indica che verrà creata
+
+00:09:05.560 --> 00:09:10.180
+una nuova risorsa. Matilde indica che una risorsa esistente verrà modificata e l'output mostra le
+
+00:09:10.180 --> 00:09:15.260
+impostazioni specifiche che differiscono. Un meno significa che qualcosa verrebbe eliminato ed è quello che
+
+00:09:15.260 --> 00:09:20.280
+dovresti sempre leggere con attenzione. What if non è perfetto ed è utile conoscerne i limiti. A volte segnala
+
+00:09:20.280 --> 00:09:23.780
+un'impostazione come eliminata quando il servizio inserisce semplicemente un valore predefinito
+
+00:09:23.780 --> 00:09:27.940
+durante la distribuzione. È un rumore innocuo in una modifica reale. Inoltre non può risolvere
+
+00:09:27.940 --> 00:09:31.660
+certi valori che esistono solo al momento della distribuzione come il timestamp corrente quindi
+
+00:09:31.660 --> 00:09:35.340
+appaiono nell'output esattamente come le scritte. Nessuna di queste cose deve spaventarti,
+
+00:09:35.480 --> 00:09:39.500
+significano solo che devi leggere il risultato con un po' di discevimento. Al di l'anteprima il flusso
+
+00:09:39.500 --> 00:09:44.380
+di lavoro quotidiano è breve. Escrivi il file, controlli che non ci siano errori, esegui what if e poi
+
+00:09:44.380 --> 00:09:49.080
+distribuisci. Gli stessi passaggi funzionano sia che tu digiti i comandi personalmente, sia che lasci una
+
+00:09:49.080 --> 00:09:53.140
+pipeline di esegua per te a ogni modifica. Eseguire what if automaticamente a ogni modifica è una
+
+00:09:53.140 --> 00:09:56.760
+delle abitudini migliori che puoi acquisire fin da subito. L'ordine conta più di quanto sembri.
+
+00:09:57.480 --> 00:10:00.760
+Visualizzare in anteprima una modifica prima che vada online è ciò che distingue. Rilascio
+
+00:10:00.760 --> 00:10:04.300
+tranquillo, danno frenetico e non ti costa nulla se non i pochi secondi necessari per leggere l'output.
+
+00:10:04.760 --> 00:10:08.800
+Se lavori in un team l'anteprima diventa ancora più utile. Una pipeline può eseguire un'analisi
+
+00:10:08.800 --> 00:10:12.360
+what if su ogni modifica proposta, pubblicare i risultati per la revisione e attendere l'approvazione
+
+00:10:12.360 --> 00:10:16.320
+umana prima che qualsiasi cosa arrivi in produzione. Questo trasforma un deployment rischioso
+
+00:10:16.320 --> 00:10:20.660
+in una normale conversazione su un D. Due piccole abitudini danno subito il roof. Etichetta le
+
+00:10:20.660 --> 00:10:23.460
+tue risorse con informazioni come ambiente proprietario così chiunque potrà capire in
+
+00:10:23.460 --> 00:10:27.040
+seguito a cosa servono le risorse. Usa il decorator secure per qualsiasi elemento segreto in modo
+
+00:10:27.040 --> 00:10:30.100
+che password e chiavi non finiscano mai nella cronologia del deployment dove non dovrebbero
+
+00:10:30.100 --> 00:10:34.260
+stare. Questo copre come distribuire un file. Ciò che non risponde è se Bicep sia davvero lo
+
+00:10:34.260 --> 00:10:38.120
+strumento giusto per la tua situazione ed è bene stabilirlo prima di investire un weekend per
+
+00:10:38.120 --> 00:10:44.320
+impararlo. Bicep contro arm contro terraform. Ormai avrai probabilmente sentito un terzo nome insieme
+
+00:10:44.320 --> 00:10:48.740
+a Bicep e quel nome è terraform. È lecito chiedersi quale dovresti imparare davvero e la
+
+00:10:48.740 --> 00:10:53.180
+risposta onesta dipende dalla tua situazione. I template arm sono gli originali, sono solo per
+
+00:10:53.180 --> 00:10:57.700
+Azure, sono scritti in JSON e sono ancora pienamente supportati oggi. Microsoft li mantiene perché sono
+
+00:10:57.700 --> 00:11:02.360
+il contratto nativo che Azure comprende e molti team li utilizzano ancora in produzione. Se hai già
+
+00:11:02.360 --> 00:11:07.560
+una libreria funzionante di template arm non c'è emergenza né scadenza. Bicep è il volto più nuovo
+
+00:11:07.560 --> 00:11:12.940
+amichevole della stessa idea. È anch'esso solo per Azure ma è conciso, leggibile e ha la curva di
+
+00:11:12.940 --> 00:11:17.360
+apprendimento più dolce dei tre. Non gestisce un file di stato e le nuove funzionalità di Azure
+
+00:11:17.360 --> 00:11:20.940
+tendono a essere supportate in Bicep fin dal primo giorno il che conta quando vuoi usare qualcosa al
+
+00:11:20.940 --> 00:11:24.900
+momento in cui diventa disponibile. Un altro punto a favore di Bicep è quanto direttamente la
+
+00:11:24.900 --> 00:11:29.180
+documentazione stessa di Azure si mappi su di esso. Quando cerchi una risorsa le impostazioni che vedi
+
+00:11:29.180 --> 00:11:33.620
+nei documenti sono le stesse che digiti nel tuo file. Quindi imparare Bicep insegna a Azure allo stesso
+
+00:11:33.620 --> 00:11:38.420
+tempo. Terraform proviene da un mondo diverso. Non è legato ad Azure, questo è il suo intero scopo.
+
+00:11:39.220 --> 00:11:42.860
+Funziona su multi provider cloud con un flusso di lavoro coerente che è esattamente ciò che vuoi
+
+00:11:42.860 --> 00:11:47.620
+se la tua azienda opera anche altrove. Il compromesso è che Terraform mantiene il
+
+00:11:47.620 --> 00:11:52.480
+proprio file di stato e quel file deve essere archiviato, condiviso e protetto. In cambio ti
+
+00:11:52.480 --> 00:11:56.540
+offre un piano chiaro, passaggi definiti e una solida rilevazione del drift. Quindi la decisione
+
+00:11:56.540 --> 00:12:00.200
+riguarda meno quale sia lo strumento migliore più la tua situazione specifica. Se il tuo mondo è
+
+00:12:00.200 --> 00:12:04.600
+Azure cerchi la via più semplice Bicep è la scelta naturale. Se gestisci più cloud o il tuo team
+
+00:12:04.600 --> 00:12:09.040
+conosce già Terraform quella è la strada più intelligente. E se hai una libreria di modelli ARM ancora
+
+00:12:09.040 --> 00:12:13.300
+funzionanti puoi passare a Bicep gradualmente anziché tutto in una volta. Questo è un percorso
+
+00:12:13.300 --> 00:12:18.020
+graduale. Microsoft fornisce un comando che converte automaticamente un modello ARM esistente
+
+00:12:18.020 --> 00:12:22.320
+in Bicep anche se il risultato è un punto di partenza da rifinire e non un prodotto finito.
+
+00:12:23.280 --> 00:12:27.460
+Il consiglio comune è abbastanza semplice da ricordare. Screeni tutto il nuovo codice in Bicep e
+
+00:12:27.460 --> 00:12:32.180
+converti i vecchi file solo quando hai motivo di modificarli. Gli errori che commettono i principianti.
+
+00:12:32.660 --> 00:12:35.880
+Qualunque strumento tu scegli e i principianti tendono a inciampare le stesse cose a conoscerli
+
+00:12:35.880 --> 00:12:40.480
+in anticipo ti farà risparmiare un fine settimana di lavoro. Primo è scrivere nomi cablati. Se
+
+00:12:40.480 --> 00:12:44.580
+inserisci un nome fisso per una risorsa il secondo deployment in un luogo diverso potrebbe scontrarsi
+
+00:12:44.580 --> 00:12:48.120
+con il primo e alcuni nomi come gli account di archiviazione devono essere unici in tutto
+
+00:12:48.120 --> 00:12:52.700
+Azure. La soluzione è creare il nome da una breve espressione stabile che cambi con l'ambiente così
+
+00:12:52.700 --> 00:12:59.420
+rimane prevedibile ma non si ripete mai. Secondo è fidarsi troppo di un file convertito. Quando
+
+00:12:59.420 --> 00:13:03.240
+decompili un modello ARM in Bicep lo strumento le riporta alla struttura ma l'output è raramente
+
+00:13:03.240 --> 00:13:07.800
+pulito. Dovrai leggerlo, semplificare i riferimenti e dividerlo in moduli prima di costruire qualsiasi
+
+00:13:07.800 --> 00:13:12.680
+cosa sopra di esso. Il terzo è eseguire il comando di deployment errato per il tuo file. Se il tuo
+
+00:13:12.680 --> 00:13:16.460
+file è impostato per una sottoscrizione ma esegui il comando per il gruppo di risorse e le risorse
+
+00:13:16.460 --> 00:13:20.580
+finiscono in ambito sbagliato il comando fallisce del tutto. Farle corrispondere richiede un controllo
+
+00:13:20.580 --> 00:13:24.420
+di due secondi e ti risparmia un pomeriggio di cuore. L'ultimo è ricorrere a dipendenze manuali
+
+00:13:24.420 --> 00:13:29.740
+per abitudine. Se punti un'altra risorsa tramite il suo nome simbolico Bicep conosce già l'ordine
+
+00:13:29.740 --> 00:13:34.260
+per te. Digitare la dipendenza a mano solitamente significa aver perso un riferimento che avresti
+
+00:13:34.260 --> 00:13:38.120
+potuto usare aggiungendo una riga fragile che dovrai mantenere in futuro. C'è un'abitudine
+
+00:13:38.120 --> 00:13:41.740
+più ampia alla base di tutti e quattro questi punti vale la pena nominare. Tratta il tuo file
+
+00:13:41.740 --> 00:13:45.660
+di infrastruttura come il documento che contano come uno script usa e getta. Una volta fatto la
+
+00:13:45.660 --> 00:13:48.960
+piccola disciplina di leggere ciò che hai modificato prima di distribuirlo diventerà
+
+00:13:48.960 --> 00:13:53.200
+naturale e la maggior parte di questi errori smetterà di verificarsi. Riepilogo una domanda per te.
+
+00:13:53.740 --> 00:13:57.740
+Tirando le somme Bicep è un modo più semplice per descrivere l'infrastruttura aggior di cui hai bisogno.
+
+00:13:57.740 --> 00:14:01.360
+Non ti chiede di essere uno sviluppatore e ti permette di iniziare con un piccolo file
+
+00:14:01.360 --> 00:14:05.600
+anziché con un intero framework. Vero premio è quel file perché trasforma un ricordo sbiadito
+
+00:14:05.600 --> 00:14:09.280
+in qualcosa che puoi leggere, condividere e distribuire di nuovo. Ecco la domanda che
+
+00:14:09.280 --> 00:14:13.280
+vi lascio. Se dovessi ricostruire da zero domani l'ambiente azzurro in cui lavori oggi
+
+00:14:13.280 --> 00:14:15.300
+quanto riusciresti a ricreare realmente a memoria?
