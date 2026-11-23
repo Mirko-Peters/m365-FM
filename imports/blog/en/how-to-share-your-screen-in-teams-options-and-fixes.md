@@ -1,10 +1,10 @@
 ---
 title: "How to Share Your Screen in Teams: Options, Tips and Fixes"
 summary: "How to share a screen or window in a Teams meeting, which admin policies can switch sharing off, and a troubleshooting order for a missing Share button or a black or white shared window. Sources are community-heavy."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-30
+date: 2026-11-24
 topics: [teams, teams-admin-center, teams-premium]
 keypoints:
   - "In a meeting, select Share, then present your entire screen or a window, or live share a PowerPoint file, an Excel file or Whiteboard."

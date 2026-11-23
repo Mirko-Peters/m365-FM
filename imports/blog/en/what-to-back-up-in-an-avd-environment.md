@@ -1,10 +1,10 @@
 ---
 title: "What to back up in an AVD environment"
 summary: "In an Azure Virtual Desktop environment the data worth backing up is mostly outside the session hosts: FSLogix profiles, personal host pool VMs and, if not rebuildable, MSIX package storage. Includes Azure Files backup limits."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-24
 render: v2
 topics: [azure-virtual-desktop, fslogix-profile-container]
 keypoints:

@@ -1,10 +1,10 @@
 ---
 title: "OneDrive vs Dropbox vs Google Drive for Work"
 summary: "How to compare OneDrive with Dropbox and Google Drive for business, based on what Microsoft documents: storage, limits, shared space, and migration from both. Dropbox and Google limits were not verified."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-30
+date: 2026-11-24
 topics: [onedrive, sharepoint, sharepoint-migration]
 keypoints:
   - "OneDrive is personal work storage. For team-owned files in Microsoft 365, Microsoft's guidance points to SharePoint sites and libraries."

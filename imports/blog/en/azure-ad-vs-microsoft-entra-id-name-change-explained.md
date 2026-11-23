@@ -1,10 +1,10 @@
 ---
 title: "Azure AD vs Microsoft Entra ID: The Name Change Explained"
 summary: "Azure Active Directory is now Microsoft Entra ID. See what was renamed, the key dates in 2023, what stayed the same, and which older terms were deliberately not renamed or are deprecated."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-30
+date: 2026-11-24
 topics: [entra-id, microsoft-entra, azure-ad-b2c]
 keypoints:
   - "Azure Active Directory, Azure AD and AAD are now called Microsoft Entra ID. It is a rename, not a new product."

@@ -1,10 +1,10 @@
 ---
 title: "Teams Live Captions: Turn On, Languages and Who Can Use Them"
 summary: "How live captions work in Teams meetings, which admin policy controls them, what translated captions need, how captions differ from transcription and what the available Microsoft pages leave open."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-30
+date: 2026-11-24
 topics: [teams, teams-meeting-transcription, teams-premium, teams-admin-center]
 keypoints:
   - "Live captions show real-time subtitles with speaker attribution during a meeting. Teams does not save them with the recording."

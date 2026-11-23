@@ -1,10 +1,10 @@
 ---
 title: "Designing a multi-region Azure Virtual Desktop deployment"
 summary: "A multi-region Azure Virtual Desktop design starts with the region choice: where users are, which regions hold regional metadata, and whether the second region serves resilience or proximity."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-24
 render: v2
 topics: [azure-virtual-desktop, avd-regional-host-pools]
 keypoints:

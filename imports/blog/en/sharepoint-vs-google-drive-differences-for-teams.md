@@ -1,10 +1,10 @@
 ---
 title: "SharePoint vs Google Drive: Differences for Teams"
 summary: "How SharePoint and OneDrive map to Google Drive's My Drive and shared drives, what Microsoft documents about limits and migration, and how to decide. Google-side limits were not verified from Google's own pages."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-30
+date: 2026-11-24
 topics: [sharepoint, onedrive, sharepoint-migration]
 keypoints:
   - "Microsoft's switch guide moves personal drives to OneDrive and shared drives to SharePoint team sites. It does not name Google's My Drive."

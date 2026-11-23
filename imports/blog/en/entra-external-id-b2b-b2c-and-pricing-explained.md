@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Entra External ID: B2B, B2C and Pricing Explained"
 summary: "Entra External ID covers business guests (B2B) and customer sign-in (external tenants). Learn how it relates to Azure AD B2C, how monthly active user billing works and what Microsoft does not state publicly."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-30
+date: 2026-11-24
 topics: [entra-external-id, azure-ad-b2c, b2b-collaboration]
 keypoints:
   - "Entra External ID has two tenant configurations: workforce tenants for B2B collaboration with business guests and external tenants for consumer and customer apps."

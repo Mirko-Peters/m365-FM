@@ -1,10 +1,10 @@
 ---
 title: "Teams Rooms and Meeting Room Hardware: What You Need"
 summary: "What a Microsoft Teams Rooms system consists of, how Windows and Android systems differ, when Teams panels make sense and how Basic and Pro licensing works, based on Microsoft Learn documentation."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-30
+date: 2026-11-24
 topics: [teams-rooms, teams-certified-devices, teams-admin-center]
 keypoints:
   - "A Teams Rooms system consists of a touchscreen console, a compute module, the Teams Rooms app, peripherals (camera, microphone, speaker) and up to two front-of-room screens."

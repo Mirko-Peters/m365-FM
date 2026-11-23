@@ -1,10 +1,10 @@
 ---
 title: "Copilot Studio Updates, Database Connections and Getting Started"
 summary: "How to start in Copilot Studio, what Microsoft's What's new page lists for 2026, and which options connect an agent to database data: Dataverse tables, Azure SQL and real-time connectors."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-30
+date: 2026-11-24
 topics: [copilot-studio, dataverse, azure-sql-database]
 keypoints:
   - "Copilot Studio is a low-code studio at copilotstudio.microsoft.com for building agents and workflows and publishing them to Teams, Microsoft Copilot, websites and mobile apps."

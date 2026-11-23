@@ -1,10 +1,10 @@
 ---
 title: "Publishing RemoteApps with application groups: a practical walkthrough"
 summary: "To publish a RemoteApp you create a RemoteApp application group on a pooled host pool, add applications from App Attach, the Start menu or a file path, assign users, and register the group with a workspace. This walkthrough gives the portal steps and the pitfalls Microsoft Learn documents."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-24
 render: v2
 topics: [avd-application-group, azure-virtual-desktop]
 keypoints:

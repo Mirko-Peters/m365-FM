@@ -1,10 +1,10 @@
 ---
 title: "Regional host pools in Azure Virtual Desktop: where host pool metadata is stored"
 summary: "A regional host pool stores its metadata in a database inside the Azure region you choose, while a geographical host pool stores it in a database shared across the geography. This article explains the control plane behind that choice, how to create a regional host pool, and which limits apply."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-24
 render: v2
 topics: [avd-regional-host-pools, avd-host-pool]
 keypoints:

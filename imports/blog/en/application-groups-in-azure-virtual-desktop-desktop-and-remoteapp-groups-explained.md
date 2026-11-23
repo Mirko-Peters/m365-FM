@@ -1,10 +1,10 @@
 ---
 title: "Application groups in Azure Virtual Desktop: desktop and RemoteApp groups explained"
 summary: "An application group controls which desktop or which set of applications in one host pool a user can open. Desktop groups publish the full desktop, RemoteApp groups publish individual apps on pooled host pools, and a workspace makes both visible to users."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-24
 render: v2
 topics: [avd-application-group, azure-virtual-desktop]
 keypoints:

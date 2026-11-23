@@ -1,10 +1,10 @@
 ---
 title: "The Azure Virtual Desktop workspace: how users find their desktops and apps"
 summary: "A workspace is the logical grouping of application groups that forms the list of desktops and apps a user sees in the client. A resource appears for a user only when they are assigned to its application group and that group is registered with a workspace."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-24
 render: v2
 topics: [avd-workspace, azure-virtual-desktop]
 keypoints:

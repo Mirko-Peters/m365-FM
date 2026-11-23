@@ -1,10 +1,10 @@
 ---
 title: "Disaster recovery for Azure Virtual Desktop: options and trade-offs"
 summary: "Azure Virtual Desktop has no native disaster recovery feature. Microsoft's guidance offers three patterns: active-active or active-passive pooled host pools with FSLogix Cloud Cache, and Azure Site Recovery for personal host pools, each with different recovery time, cost and effort."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-24
 render: v2
 topics: [azure-virtual-desktop, fslogix-cloud-cache]
 keypoints:

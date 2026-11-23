@@ -1,10 +1,10 @@
 ---
 title: "Automate Project Management Tasks in Microsoft 365 with Planner, Power Automate and Copilot"
 summary: "Four documented ways to automate project tasks in Microsoft 365: Power Automate flows on Planner, the Planner Agent, Teams Workflows and the Copilot Workflows agent, with the plan-type limits Microsoft lists."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-01
+date: 2026-11-24
 topics: [microsoft-planner, power-automate, teams, workflows-agent]
 keypoints:
   - "The Planner connector for Power Automate is a standard connector with three triggers: task created, task assigned to me and task completed."

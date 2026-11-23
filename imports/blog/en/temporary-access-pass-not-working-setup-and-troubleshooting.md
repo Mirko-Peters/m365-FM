@@ -1,10 +1,10 @@
 ---
 title: "Temporary Access Pass (TAP) Not Working? Setup and Troubleshooting in Microsoft Entra ID"
 summary: "Temporary Access Pass not offered or rejected at sign-in? Check policy scope, one-time use, start time, guest type, registration policies and the 10-minute rule, in the order Microsoft Learn describes."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-29
+date: 2026-11-24
 topics: [temporary-access-pass, microsoft-entra, entra-id]
 keypoints:
   - "A TAP can be created for any user, but only users included in the Temporary Access Pass authentication methods policy can sign in with it."

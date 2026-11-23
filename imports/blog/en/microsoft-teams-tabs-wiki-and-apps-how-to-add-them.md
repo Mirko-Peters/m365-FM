@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Teams Tabs, Wiki and Apps: How to Add and Use Them"
 summary: "What Teams tabs are, where they appear, how to add one when the plus icon is missing, and what happened to the Wiki tab. Microsoft's end-user pages could not be read, so this article flags where sources are thin."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-30
+date: 2026-11-24
 topics: [teams, teams-channels, teams-personal-tabs, onenote]
 keypoints:
   - "A tab is a full-screen web experience inside Teams. Microsoft's developer documentation says tabs can be added in chats, channels and meetings."

@@ -1,10 +1,10 @@
 ---
 title: "Connect Microsoft 365 Copilot to Power BI Data with a Fabric Data Agent"
 summary: "How to make governed Power BI and Fabric data answer questions in Microsoft 365 Copilot: create a data agent, publish it to the Agent Store, and know when built-in Power BI data answering is enough."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-01
+date: 2026-11-24
 topics: [fabric-data-agents, copilot, power-bi, fabric]
 keypoints:
   - "Two routes exist: built-in Power BI data answering in Copilot Chat, and a Fabric data agent that you publish to the Agent Store."

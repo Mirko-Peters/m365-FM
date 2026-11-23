@@ -1,10 +1,10 @@
 ---
 title: "What Is Power BI in Teams? Embed Reports in Channels and Chats"
 summary: "Power BI in Teams lets you add reports to channels and chats, preview links, get notifications and chat from Power BI. Learn what you can embed, what permissions viewers need, and the known limits."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-29
+date: 2026-11-24
 topics: [power-bi, teams, power-bi-service]
 keypoints:
   - "Power BI in Teams means the Power BI app, a Power BI tab for channels and chats, link previews, chat from the Power BI service and activity feed notifications."

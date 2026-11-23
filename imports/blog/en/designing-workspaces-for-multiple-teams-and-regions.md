@@ -1,10 +1,10 @@
 ---
 title: "Designing workspaces for multiple teams and regions"
 summary: "In Azure Virtual Desktop a workspace makes application groups visible to users, and Learn requires a workspace and its application groups to be in the same region. This article sets out the rules that constrain the design and three layouts for several teams and regions."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-24
 render: v2
 topics: [avd-workspace, azure-virtual-desktop]
 keypoints:

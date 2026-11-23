@@ -1,10 +1,10 @@
 ---
 title: "What regional host pools mean for data residency and resilience"
 summary: "Regional deployment scope stores host pool metadata in one Azure region and limits a metadata database problem to it, with documented exceptions. It does not move session hosts, profile storage or identity."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-24
 render: v2
 topics: [avd-regional-host-pools, avd-host-pool]
 keypoints:

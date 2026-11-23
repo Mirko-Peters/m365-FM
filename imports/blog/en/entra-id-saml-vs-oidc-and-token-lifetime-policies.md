@@ -1,10 +1,10 @@
 ---
 title: "Entra ID SAML vs OIDC and Token Lifetime Policies"
 summary: "When to choose SAML or OpenID Connect with Microsoft Entra ID, according to Microsoft's decision guide, and how default token lifetimes and the configurable access token lifetime policy work."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-30
+date: 2026-11-24
 topics: [entra-id, saml, openid-connect, access-token]
 keypoints:
   - "Microsoft Entra ID fully supports both SAML 2.0 and OpenID Connect, and Microsoft says both are secure. The choice is about fit."

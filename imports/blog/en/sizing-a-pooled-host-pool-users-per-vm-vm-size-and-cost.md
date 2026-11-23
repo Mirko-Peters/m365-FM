@@ -1,10 +1,10 @@
 ---
 title: "Sizing a pooled host pool: users per VM, VM size and cost"
 summary: "Size a pooled host pool by choosing a workload type, using Microsoft's maximum users per vCPU as an upper bound, picking a VM size, and dividing your peak concurrent sessions by the sessions per VM. Cost then follows from the number of hosts, their running hours and their size."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-24
 render: v2
 topics: [avd-pooled-host-pool, avd-host-pool]
 keypoints:

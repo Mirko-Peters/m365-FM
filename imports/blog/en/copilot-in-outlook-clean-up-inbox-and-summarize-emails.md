@@ -1,10 +1,10 @@
 ---
 title: "Copilot in Outlook: Clean Up Your Inbox and Summarize Emails"
 summary: "What Copilot in Outlook can do for inbox cleanup and email summaries: summarize threads, create inbox rules, triage with Copilot Chat, and why Prioritize my inbox is being withdrawn. Sources are thin in places."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-30
+date: 2026-11-24
 topics: [copilot, outlook, copilot-chat]
 keypoints:
   - "Microsoft Learn teaches three Outlook email tasks with Copilot Chat: summarize email threads, draft replies and create inbox rules."
