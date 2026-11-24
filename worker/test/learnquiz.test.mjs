@@ -5,7 +5,7 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import worker from "../src/index.js";
 import { makeSession } from "../src/util.js";
-import { issuePendingCerts, deleteUserLearn, linkedinUrl, scoreText, dateText, threshold, quizLang } from "../src/learnquiz.js";
+import { issuePendingCerts, deleteUserLearn, linkedinUrl, scoreText, dateText, threshold, quizLang, pageFilter } from "../src/learnquiz.js";
 
 const PATH = "manufacturing-excellence";
 const PILLARS = ["lean-manufacturing", "kaizen", "six-sigma", "tpm", "kanban", "smed", "oee", "mes", "aps", "digital-twin"];
@@ -323,4 +323,91 @@ test("Statistik nur fuer Admins: je Herkunft und Woche; Konto loeschen entfernt 
   await deleteUserLearn(env.DB, 1);
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM learn_attempts WHERE user_id=1").get().n, 0);
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM learn_certs").get().n, 0);
+});
+
+test("pageFilter: Seite darf fehlende (neue) Leitfaeden und Fragen ausblenden, aber keine Auswahl treffen", () => {
+  const g = new Map([["pa", ["pa-1", "pa-2", "pa-3", "pa-4", "pa-5", "pa-6"]], ["pb", ["pb-1", "pb-2", "pb-3", "pb-4", "pb-5"]], ["pc", ["pc-1", "pc-2", "pc-3", "pc-4", "pc-5"]],
+    ["pd", ["pd-1", "pd-2", "pd-3", "pd-4", "pd-5"]], ["pe", ["pe-1", "pe-2", "pe-3", "pe-4", "pe-5"]]]);
+  const all = [...g.values()].flat();
+  assert.equal(pageFilter(g, undefined), g, "ohne have: ganzer Pool");
+  assert.equal(pageFilter(g, "pa-1"), g);
+  assert.equal(pageFilter(g, []), g, "leere Liste: ganzer Pool");
+  const newE = pageFilter(g, all.filter((q) => !q.startsWith("pe-")));
+  assert.deepEqual([...newE.keys()], ["pa", "pb", "pc", "pd"], "ein neuer Leitfaden (1 von 5) faellt weg");
+  assert.equal(pageFilter(g, all.filter((q) => !/^p[de]-/.test(q))), g, "zwei von fuenf fehlen: zu viel -> ganzer Pool");
+  const grown = pageFilter(g, all.filter((q) => q !== "pa-6"));
+  assert.deepEqual(grown.get("pa"), ["pa-1", "pa-2", "pa-3", "pa-4", "pa-5"], "neue Frage a-6 kennt die Seite noch nicht");
+  const picky = pageFilter(g, all.filter((q) => !/^pa-[4-6]$/.test(q)));
+  assert.deepEqual(picky.get("pa"), g.get("pa"), "nur 3 von 6 bekannt (unter HAVE_MIN): ganzer Pool des Leitfadens");
+  const capped = pageFilter(g, [...Array(600).fill("px-1"), ...all]);
+  assert.equal(capped, g, "nur die ersten HAVE_MAX Eintraege zaehlen");
+});
+
+test("Start zieht nur Fragen, die die Seite kennt (have); ohne have oder bei manipulierter Liste der ganze Pool", async () => {
+  const { env, raw, s } = await setup();
+  await seed(env);
+  // neuer Leitfaden und gewachsener Pool nur im Worker, Seite noch alt
+  const fresh = [...[1, 2, 3, 4, 5].map((n) => ({ qid: `new-guide-${n}`, pillar: "new-guide", answer: 0 })), { qid: "kaizen-6", pillar: "kaizen", answer: 0 }];
+  assert.equal((await call(env, "/api/internal/learn-quiz", { method: "POST", body: { path: PATH, keys: fresh }, headers: { "x-cron-key": "cron-test" } })).status, 200);
+  const page = keys().map((k) => k.qid);
+  const reset = () => { raw.prepare("DELETE FROM learn_attempts").run(); raw.prepare("DELETE FROM ratelimit").run(); };
+  const st = await start(env, s.ada, { have: [...page, "Bad Id!", 42] });
+  assert.equal(st.status, 200);
+  assert.equal(st.data.total, 30, "der neue Leitfaden fehlt auf der Seite: 10 x 3 statt 11 x 3");
+  assert.ok(st.data.qids.every((q) => page.includes(q)), st.data.qids.join(","));
+  reset();
+  assert.equal((await start(env, s.ada)).data.total, 33, "ohne have (aeltere Seite im Cache): ganzer Pool wie bisher");
+  reset();
+  assert.equal((await start(env, s.ada, { have: ["kaizen-1"] })).data.total, 33, "nur eine Frage: manipuliert -> ganzer Pool");
+  reset();
+  const drop = (k) => page.filter((q) => !PILLARS.slice(0, k).some((p) => q.startsWith(p + "-")));
+  assert.equal((await start(env, s.ada, { have: drop(1) })).data.total, 27, "zwei von elf Leitfaeden fehlen (neu): erlaubt");
+  reset();
+  assert.equal((await start(env, s.ada, { have: drop(3) })).data.total, 33, "vier von elf fehlen: ganzer Pool");
+});
+
+test("Konten zusammenfuehren: Versuche und Zertifikat wandern mit, kein zweites Zertifikat", async () => {
+  const { mergeStatements } = await import("../src/identities.js");
+  const { env, raw, s } = await setup({ CERTOPUS_ON: "1", CERTOPUS_API_KEY: KEY });
+  await seed(env);
+  const attempt = await passedAttempt(env, s.ada);
+  let m = mockCertopus();
+  try { assert.equal((await call(env, "/api/learn/cert", { method: "POST", cookie: s.ada, body: certBody(attempt) })).status, 200); } finally { m.restore(); }
+  // Bob (Zielkonto) hat eine wartende Zeile - das schon ausgestellte Zertifikat von Ada gilt
+  const t = Math.floor(Date.now() / 1000);
+  raw.prepare("INSERT INTO learn_certs(user_id,path,attempt_id,name,email,lang,status,created,updated) VALUES (2,?,?,?,?,?,'pending',?,?)").run(PATH, "x", "Bob", "bob@example.com", "en", t, t);
+  await env.DB.batch(await mergeStatements(env.DB, 1, 2));
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM learn_attempts WHERE user_id=1").get().n, 0);
+  const st = await call(env, "/api/learn/cert?path=" + PATH, { cookie: s.bob });
+  assert.equal(st.status, 200); assert.equal(st.data.passed, true);
+  assert.equal(st.data.cert.status, "ok"); assert.equal(st.data.cert.id, "CERT-42");
+  m = mockCertopus();
+  try {
+    const again = await call(env, "/api/learn/cert", { method: "POST", cookie: s.bob, body: certBody(attempt) });
+    assert.equal(again.status, 200); assert.equal(again.data.existing, true);
+    assert.equal(m.calls.length, 0, "kein zweiter Certopus-Aufruf");
+  } finally { m.restore(); }
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM learn_certs WHERE user_id=2").get().n, 1);
+});
+
+test("Cron: wartende Zeilen eines nicht eingerichteten Pfads blockieren nicht; haengengebliebene (issuing) werden aufgenommen", async () => {
+  const { env, raw, s } = await setup();
+  await seed(env);
+  const attempt = await passedAttempt(env, s.ada);
+  assert.equal((await call(env, "/api/learn/cert", { method: "POST", cookie: s.ada, body: certBody(attempt) })).status, 503);   // pending (aus)
+  const t = Math.floor(Date.now() / 1000);
+  const ins = raw.prepare("INSERT INTO learn_certs(user_id,path,attempt_id,name,email,lang,status,created,updated) VALUES (?,?,?,?,?,?,'pending',?,?)");
+  for (let i = 0; i < 6; i++) ins.run(100 + i, "other-path", "x", "N" + i, `n${i}@example.com`, "en", t - 1000 + i, t - 1000 + i);   // aelter als die von Ada
+  env.CERTOPUS_ON = "1"; env.CERTOPUS_API_KEY = KEY;
+  const m = mockCertopus();
+  try {
+    assert.deepEqual(await issuePendingCerts(env), { ok: 1, error: 0, skipped: 0 });
+    assert.equal(raw.prepare("SELECT status FROM learn_certs WHERE user_id=1").get().status, "ok");
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM learn_certs WHERE path='other-path' AND status='pending'").get().n, 6, "anderer Pfad bleibt unberuehrt");
+    raw.prepare("UPDATE learn_certs SET status='issuing',updated=? WHERE user_id=1").run(t);   // laeuft gerade: nicht anfassen
+    assert.deepEqual(await issuePendingCerts(env), { ok: 0, error: 0, skipped: 0 });
+    raw.prepare("UPDATE learn_certs SET status='issuing',updated=? WHERE user_id=1").run(t - 600);   // haengengeblieben
+    assert.deepEqual(await issuePendingCerts(env), { ok: 1, error: 0, skipped: 0 });
+    assert.deepEqual(await issuePendingCerts({ ...env, CERTOPUS_PATHS: "{}" }), { skipped: "keine_pfade" });
+  } finally { m.restore(); }
 });

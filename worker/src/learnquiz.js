@@ -1,7 +1,7 @@
 // Lernpfad-Abschlusstest + Zertifikat ueber Certopus (Spezifikation Teil B, Mirko 24.11.2026).
 // Die Fragen (ohne Antworten) stehen oeffentlich in data/pillar_quiz.json (Seitenbau); die Antwortschluessel nur hier in D1 (learn_quiz_keys),
 // eingespielt von tools/pillar_quiz.py push ueber POST /api/internal/learn-quiz (CRON_KEY). Antworten verlassen den Worker nur nach einer Abgabe.
-//   POST /api/learn/quiz/start   {path, lang, src}        Login; 3 Fragen je Leitfaden, hoechstens 3 Versuche je 24 h (Nutzer und Pfad), ein Versuch gilt 24 h
+//   POST /api/learn/quiz/start   {path, lang, src, have}  Login; 3 Fragen je Leitfaden (nur Fragen, die die Seite kennt: pageFilter), hoechstens 3 Versuche je 24 h (Nutzer und Pfad), ein Versuch gilt 24 h
 //   POST /api/learn/quiz/submit  {attempt, answers}        Login; zaehlen, speichern, Ergebnis mit Erklaerungen (Sprache des Versuchs)
 //   GET  /api/learn/cert?path=                            Login; Stand (bestanden, bester Versuch, Zertifikat) und Vorschlag fuer Name/E-Mail
 //   POST /api/learn/cert         {path, attempt, name, email, consent, lang}   Zertifikat ueber Certopus (nur mit CERTOPUS_ON=1, Schluessel und IDs)
@@ -160,13 +160,18 @@ const certOut = (c, cfg) => (c.status === "ok"
   : { status: c.status === "issuing" ? "pending" : c.status });
 
 // Cron (*/30, nur mit CERTOPUS_ON=1): wartende Zertifikate nachtraeglich ausstellen. Fehler bleiben bis zum naechsten Klick des Nutzers stehen.
+// Nur Pfade mit vollstaendiger Certopus-Konfiguration: wartende Zeilen eines noch nicht eingerichteten Pfads belegen sonst dauerhaft die ersten Plaetze.
+// Haengengebliebene Zeilen (status issuing seit ueber 2 Minuten, Worker waehrend des Certopus-Aufrufs beendet) nimmt der Cron wieder auf.
 export async function issuePendingCerts(env, limit = 5) {
   if (env.CERTOPUS_ON !== "1" || !String(env.CERTOPUS_API_KEY || "").trim()) return { skipped: "aus" };
-  const rows = (await env.DB.prepare("SELECT * FROM learn_certs WHERE status='pending' ORDER BY created LIMIT ?").bind(limit).all()).results || [];
+  const all = parse(env.CERTOPUS_PATHS || "{}", {});
+  const ready = (all && typeof all === "object" && !Array.isArray(all) ? Object.keys(all) : []).filter((p) => PATH_RX.test(p) && certReady(env, certConfig(env, p))).slice(0, 50);
+  if (!ready.length) return { skipped: "keine_pfade" };
+  const rows = (await env.DB.prepare(`SELECT * FROM learn_certs WHERE path IN (${ready.map(() => "?").join(",")}) AND (status='pending' OR (status='issuing' AND updated<?)) ORDER BY created LIMIT ?`)
+    .bind(...ready, now() - 120, limit).all()).results || [];
   const out = { ok: 0, error: 0, skipped: 0 };
   for (const c of rows) {
     const cfg = certConfig(env, c.path);
-    if (!certReady(env, cfg)) { out.skipped++; continue; }
     const r = await issueRow(env, c, cfg);
     if (r.status === "ok") out.ok++; else if (r.status === "error") out.error++; else out.skipped++;
   }
@@ -197,6 +202,24 @@ async function internalUpsert(env, request, J) {
   return J({ ok: true, upserted: stmts.length, total: n?.n || 0, pillars: n?.p || 0 });
 }
 
+// Nur Fragen ziehen, die die Seite zeigen kann: have = IDs aus dem eingebetteten data/pillar_quiz.json der Testseite. Schluessel kommen teils vor dem
+// naechsten Seitenbau in D1 (neuer Leitfaden, gewachsener Pool); solche Fragen waeren auf der Seite nicht beantwortbar und zaehlten als falsch.
+// Die Liste kommt vom Browser, darf den Test also nicht beliebig verkleinern: Ein Leitfaden faellt nur weg, wenn die Seite keine seiner Fragen kennt,
+// und hoechstens ein Fuenftel der Leitfaeden darf so fehlen. Innerhalb eines Leitfadens gilt die Auswahl der Seite nur, wenn sie mindestens
+// HAVE_MIN (bzw. alle) seiner Fragen kennt - sonst der ganze Pool. Fehlt have (aeltere Seite im Cache), gilt der ganze Pool wie bisher.
+export const HAVE_MAX = 500, HAVE_MIN = PER_PILLAR + 1, HAVE_PILLAR_PCT = 80;
+export function pageFilter(groups, have) {
+  if (!Array.isArray(have)) return groups;
+  const hv = new Set(have.slice(0, HAVE_MAX).map((q) => String(q)).filter((q) => q.length <= 90 && QID_RX.test(q)));
+  const out = new Map();
+  for (const [p, l] of groups) {
+    const x = l.filter((q) => hv.has(q));
+    if (!x.length) continue;   // Leitfaden kennt die Seite (noch) nicht
+    out.set(p, x.length >= Math.min(l.length, HAVE_MIN) ? x : l);
+  }
+  return out.size && out.size >= Math.ceil((groups.size * HAVE_PILLAR_PCT) / 100) ? out : groups;   // zu viel fehlt: veraltete oder manipulierte Liste -> ganzer Pool
+}
+
 async function start(env, request, user, J) {
   const db = env.DB, b = await request.json().catch(() => ({}));
   const path = String(b.path || ""), lang = quizLang(b.lang);
@@ -210,11 +233,12 @@ async function start(env, request, user, J) {
     return J({ attempt: open.id, qids, expires: open.started + ATTEMPT_TTL, total: qids.length, threshold: threshold(qids.length), resumed: true, attempts_left: await attemptsLeft(db, user.id, path) });
   }
   const keys = (await db.prepare("SELECT qid,pillar FROM learn_quiz_keys WHERE path=? ORDER BY pillar,qid").bind(path).all()).results || [];
-  if (!keys.length) return J({ error: "no_quiz" }, 404);
-  if (!(await rateLimit(db, rlKey(user.id, path), MAX_ATTEMPTS, ATTEMPT_TTL))) return J({ error: "rate_limit", attempts_left: 0 }, 429);
   const by = new Map();
   for (const k of keys) by.set(k.pillar, [...(by.get(k.pillar) || []), k.qid]);
-  const qids = [...by.values()].flatMap((l) => pick(l, PER_PILLAR));
+  const groups = pageFilter(by, b.have);
+  if (!groups.size) return J({ error: "no_quiz" }, 404);
+  if (!(await rateLimit(db, rlKey(user.id, path), MAX_ATTEMPTS, ATTEMPT_TTL))) return J({ error: "rate_limit", attempts_left: 0 }, 429);
+  const qids = [...groups.values()].flatMap((l) => pick(l, PER_PILLAR));
   const id = randomToken(16);
   const src = String(b.src || "").toLowerCase().replace(/[^a-z0-9._:/-]/g, "").slice(0, 40);
   await db.prepare("INSERT INTO learn_attempts(id,user_id,path,lang,qids,started,src) VALUES(?,?,?,?,?,?,?)").bind(id, user.id, path, lang, JSON.stringify(qids), t, src).run();

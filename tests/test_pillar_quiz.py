@@ -54,11 +54,30 @@ class Rules(unittest.TestCase):
             self.assertIsNone(PQ.check_translation(src, b)[0], b)
 
     def test_rebalance_keeps_answer_text(self):
+        sec = PQ.order_secret("k")
         for i in range(8):
-            c = PQ.check_item(cand(i))[0]; r = PQ.rebalance("value-stream-mapping", i, c)
+            c = PQ.check_item(cand(i))[0]; r = PQ.rebalance("value-stream-mapping", i, c, sec)
             self.assertEqual(r["opts"][r["a"]], c["opts"][c["a"]]); self.assertEqual(sorted(r["opts"]), sorted(c["opts"]))
-        pos = {PQ.rebalance("x", i, PQ.check_item(cand(0))[0])["a"] for i in range(4)}
+            self.assertEqual(r, PQ.rebalance("value-stream-mapping", i, c, sec), "wiederholbar (collect)")
+        pos = {PQ.rebalance("x", i, PQ.check_item(cand(i))[0], sec)["a"] for i in range(40)}
         self.assertEqual(pos, {0, 1, 2, 3})
+
+    def test_rebalance_position_is_secret(self):
+        """Die Position haengt am geheimen Schluessel, nicht an (oeffentlicher Konstante + Index) % 4 wie frueher (sha1 der Leitfaden-ID)."""
+        pid, cs = "lean-manufacturing", [PQ.check_item(cand(i))[0] for i in range(24)]
+        a = [PQ.rebalance(pid, i, c, PQ.order_secret("key-a"))["a"] for i, c in enumerate(cs)]
+        b = [PQ.rebalance(pid, i, c, PQ.order_secret("key-b"))["a"] for i, c in enumerate(cs)]
+        self.assertNotEqual(a, b)
+        for seq in (a, b):
+            self.assertFalse(any(all(seq[i] == (c0 + i) % 4 for i in range(len(seq))) for c0 in range(4)), seq)
+        with patch.dict(os.environ, {"CRON_KEY": "key-a", "ANTHROPIC_API_KEY": "x"}): self.assertEqual(PQ.order_secret(), PQ.order_secret("key-a"))
+        with patch.dict(os.environ, {"CRON_KEY": "", "ANTHROPIC_API_KEY": ""}), self.assertRaises(SystemExit): PQ.order_secret()
+
+    def test_perm4_is_permutation(self):
+        sec, seen = PQ.order_secret("k"), set()
+        for i in range(60):
+            p = PQ.perm4(sec, f"kaizen-{i}", f"q{i}"); self.assertEqual(sorted(p), [0, 1, 2, 3]); seen.add(tuple(p))
+        self.assertGreater(len(seen), 10)
 
     def test_parse_json(self):
         self.assertEqual(PQ.parse_json('```json\n[{"q": 1}]\n```'), [{"q": 1}])
@@ -124,7 +143,8 @@ class FullRun(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory(); d = Path(self.tmp.name)
         self.p = [patch.object(PQ, "PUBLIC", d / "pillar_quiz.json"), patch.object(PQ, "KEYS", d / "keys.enc"), patch.object(PQ, "OPEN", d / "open.json"),
-                  patch.dict(os.environ, {"CRON_KEY": "k", "ANTHROPIC_API_KEY": "x", "PILLAR_QUIZ_CHECK_DIR": str(d / "check"), "COMMUNITY_API": ""}),
+                  patch.dict(os.environ, {"CRON_KEY": "k", "ANTHROPIC_API_KEY": "x", "PILLAR_QUIZ_CHECK_DIR": str(d / "check"), "COMMUNITY_API": "",
+                                              "GITHUB_REF_NAME": ""}),
                   patch("ai_gateway.check_budget", lambda *a, **k: True), patch("ai_gateway.report_usage", lambda *a, **k: None)]
         for x in self.p: x.start()
         self.batches = {}
@@ -189,7 +209,7 @@ class FullRun(unittest.TestCase):
         for k in keys:
             self.assertEqual(en[k["qid"]]["opts"][k["answer"]].split()[-1], "abcd"[int(en[k["qid"]]["q"].split()[2]) % 4])
             self.assertTrue(k["why_de"].startswith("DE ")); self.assertEqual(k["path"], "manufacturing-excellence")
-        self.assertFalse(PQ.OPEN.exists()); self.assertEqual(self.pushed, [True])
+        self.assertFalse(PQ.OPEN.exists()); self.assertEqual(self.pushed, [], "nicht main: kein Push an den Live-Worker")
         chk = Path(os.environ["PILLAR_QUIZ_CHECK_DIR"])
         self.assertTrue((chk / "check.enc").exists()); self.assertFalse((chk / "check.json").exists())
         self.assertNotIn('"answer"', (chk / "review.md").read_text())
@@ -209,6 +229,44 @@ class FullRun(unittest.TestCase):
         self.assertEqual([k["qid"] for k in keys], ids)
         log = self.run_tool(["run", "--pillars", "lean-manufacturing"])   # mindestens MIN: nichts zu tun, kein Batch
         self.assertIn("nichts zu tun", log); self.assertEqual(len(self.batches), 4)
+
+    def test_auto_push_only_on_main(self):
+        with patch.dict(os.environ, {"GITHUB_REF_NAME": "main"}):
+            self.run_tool(["run", "--pillars", "lean-manufacturing"])
+        self.assertEqual(self.pushed, [True])
+        with patch.dict(os.environ, {"GITHUB_REF_NAME": "claude/lernpfad-quiz-fragen"}), patch.object(PQ, "do_push", lambda s: self.fail("Push auf Arbeitszweig")):
+            buf = io.StringIO()
+            with redirect_stdout(buf): self.assertFalse(PQ.auto_push())
+            self.assertIn("worker.yml", buf.getvalue())
+
+    def test_reshuffle_once_keeps_ids_and_answers(self):
+        """Altbestand (ohne Marke "order"): Optionen in en und de gleich neu ordnen, Loesung zeigt weiter auf dieselbe Option, IDs bleiben, nur einmal."""
+        self.run_tool(["run", "--pillars", "lean-manufacturing,value-stream-mapping"])
+        f = PQ.fernet("k"); doc = PQ.decrypt_keys(PQ.KEYS.read_bytes().strip(), f); doc.pop("order")
+        PQ.KEYS.write_bytes(PQ.encrypt_keys(doc, f) + b"\n")
+        before = json.loads(PQ.PUBLIC.read_text()); right = {}
+        for k in doc["keys"]:
+            v = before["pillars"][k["pillar"]]
+            right[k["qid"]] = tuple(next(x for x in v[l] if x["id"] == k["qid"])["opts"][k["answer"]] for l in PQ.LANGS)
+        buf = io.StringIO()
+        with redirect_stdout(buf): self.assertEqual(PQ.main(["reshuffle"]), None)
+        self.assertNotIn('"answer"', buf.getvalue())
+        after = json.loads(PQ.PUBLIC.read_text()); doc2 = PQ.decrypt_keys(PQ.KEYS.read_bytes().strip(), f)
+        self.assertEqual(doc2["order"], PQ.ORDER)
+        self.assertEqual([k["qid"] for k in doc2["keys"]], [k["qid"] for k in doc["keys"]])
+        for pid in before["pillars"]:
+            for l in PQ.LANGS: self.assertEqual([x["id"] for x in after["pillars"][pid][l]], [x["id"] for x in before["pillars"][pid][l]])
+        moved = 0
+        for k in doc2["keys"]:
+            v = after["pillars"][k["pillar"]]
+            xs = [next(x for x in v[l] if x["id"] == k["qid"]) for l in PQ.LANGS]
+            self.assertEqual(tuple(x["opts"][k["answer"]] for x in xs), right[k["qid"]])
+            ob = next(x for x in before["pillars"][k["pillar"]]["en"] if x["id"] == k["qid"])["opts"]
+            self.assertEqual(sorted(xs[0]["opts"]), sorted(ob)); moved += xs[0]["opts"] != ob
+        self.assertGreater(moved, len(doc2["keys"]) // 2)
+        snap = PQ.PUBLIC.read_text()
+        with redirect_stdout(io.StringIO()): PQ.main(["reshuffle"])
+        self.assertEqual(PQ.PUBLIC.read_text(), snap, "zweiter Aufruf: nichts zu tun")
 
     def test_requests_shape(self):
         items = [it for it in PQ.plan(()) if it[0]["id"] == "manufacturing-kpis"]

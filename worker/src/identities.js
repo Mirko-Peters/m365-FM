@@ -196,6 +196,11 @@ export async function mergeStatements(db, S, T) {
   // Rezensionen: je Show eine; die von S wird ausgeblendet, nicht geloescht
   keepT("show_reviews"); st.push(q("UPDATE show_reviews SET status='merged' WHERE user_id=?", S));
   keepT("expert_request_replies");
+  // Lernpfad-Abschlusstest (0055): Versuche wandern mit. Zertifikat je Nutzer und Pfad (PK user_id, path): die Zeile von T gilt - ausser S hat schon ein
+  // ausgestelltes (ok) und T nicht; dann gilt das von S, sonst stellte Certopus derselben Person ein zweites aus. Der Rest bleibt am stillgelegten S.
+  simple("learn_attempts");
+  st.push(q("DELETE FROM learn_certs WHERE user_id=? AND status<>'ok' AND path IN (SELECT path FROM learn_certs WHERE user_id=? AND status='ok')", T, S));
+  keepT("learn_certs");
   // Nachrichten: Gespraech zwischen S und T entfaellt; Gespraeche mit derselben Person werden zusammengelegt
   st.push(q("DELETE FROM msg_messages WHERE thread_id IN (SELECT id FROM msg_threads WHERE (a_id=? AND b_id=?) OR (a_id=? AND b_id=?))", S, T, T, S));
   st.push(q("DELETE FROM msg_threads WHERE (a_id=? AND b_id=?) OR (a_id=? AND b_id=?)", S, T, T, S));

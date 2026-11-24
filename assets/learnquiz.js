@@ -99,7 +99,7 @@
   }
   function start() {
     say("");
-    api("/api/learn/quiz/start", { method: "POST", body: { path: C.path, lang: C.qlang, src: src() } }).then(function (r) {
+    api("/api/learn/quiz/start", { method: "POST", body: { path: C.path, lang: C.qlang, src: src(), have: Object.keys(Q) } }).then(function (r) {
       if (r.s === 401) return login();
       if (r.s === 429) { if (ST) ST.attempts_left = 0; return show([h("h2", { text: t("q_start") }), leftLine(0)]); }
       if (r.s === 404 && r.j.error === "no_quiz") return show([h("h2", { text: t("q_soon") })]);

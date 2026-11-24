@@ -51,8 +51,12 @@ Antwortschlüssel stehen nie im Klartext im Repo (es ist öffentlich): `data/pil
 **Antwortschlüssel im Worker.** Der Test startet erst, wenn der Worker die Schlüssel kennt (sonst zeigt die Seite „Test folgt in Kürze“).
 Sie kommen aus `data/pillar_quiz_keys.enc`: `tools/pillar_quiz.py push` entschlüsselt die Datei mit `CRON_KEY` und schickt
 `{path, keys:[{qid, pillar, answer, why_en, why_de}]}` an `POST https://api-dub.m365.fm/api/internal/learn-quiz` (Header `x-cron-key`; Upsert,
-ein ungültiger Eintrag lässt den ganzen Push mit 400 scheitern). Das passiert automatisch am Ende von `pillar-quiz.yml` (mode=run) und nach jedem
+ein ungültiger Eintrag lässt den ganzen Push mit 400 scheitern). Das passiert automatisch am Ende von `pillar-quiz.yml` (mode=run, nur auf main) und nach jedem
 Worker-Deploy in `worker.yml` (Schritt „Lernpfad-Schluessel an den Worker“); von Hand: Workflow `pillar-quiz.yml` mit mode=push.
+Kommen Schlüssel vor dem nächsten Seitenbau an (neuer Leitfaden), zieht der Worker nur Fragen, die die Testseite kennt (die Seite schickt ihre Fragen-IDs mit).
+Die Position der richtigen Option ist geheim (HMAC mit einem aus `CRON_KEY` abgeleiteten Schlüssel). Fragen aus der Zeit davor ordnet
+`tools/pillar_quiz.py reshuffle` einmalig neu (Workflow `pillar-quiz.yml`, mode=reshuffle; läuft automatisch bei einem Push auf `claude/lernpfad-zertifikat`).
+Seite und Schlüssel müssen danach gemeinsam live gehen: reshuffle sendet nichts an den Worker.
 Die Lösungen lokal ansehen (nie in Actions, Logs sind öffentlich): `CRON_KEY=… python3 tools/pillar_quiz.py show`.
 
 Datenschutz: Name und E-Mail gehen nur mit Häkchen (Einwilligung) an Certopus (DevSquirrel Technologies, Indien); der Abschnitt steht in der

@@ -5,7 +5,9 @@ Ablauf je Leitfaden (data/pillars.json, Reihenfolge des Pfads):
   1. Sonnet (claude-sonnet-5-5, Message Batch) liest den ganzen veroeffentlichten englischen Text (site_pillars.parse_file, ohne Link-Adressen) und schreibt
      CANDIDATES Kandidaten als JSON [{q, opts[4], a, why, ref}] (ref = Ueberschrift des Abschnitts, der die Antwort belegt).
      Formpruefung wie generate_articles.quiz_for: 4 nicht leere, verschiedene Optionen, 0 <= a < 4, Laengengrenzen, keine "all/none of the above".
-     Danach wird die richtige Option deterministisch auf wechselnde Positionen getauscht (das Modell setzt sie sonst gern an dieselbe Stelle).
+     Danach wird die richtige Option auf eine geheime, aber wiederholbare Position getauscht (HMAC mit einem aus CRON_KEY abgeleiteten Schluessel,
+     ohne CRON_KEY aus ANTHROPIC_API_KEY): das Modell setzt sie sonst gern an dieselbe Stelle, und eine aus oeffentlichen Werten (Leitfaden-ID, Nummer)
+     berechnete Position liesse sich aus dem oeffentlichen Repo nachrechnen.
   2. Haiku (claude-haiku-5-5, EIN Batch fuer beides):
      - Pruefung: beantwortet die Kandidaten nur mit dem Leitfadentext (ohne Loesung); weicht die Antwort ab oder ist sie unklar (-1) -> verworfen.
      - Uebersetzung ins Deutsche: q/opts/why; Optionsreihenfolge und Loesung bleiben gleich; Pruefung: gleiche Zahl Optionen, keine leeren, keine doppelten.
@@ -26,15 +28,20 @@ Dateien:
 
 Modi (python tools/pillar_quiz.py MODE [--pillars a,b]):
   plan     Zaehlung und Kosten-Obergrenze, ohne Schluessel und ohne Netz
-  run      Batches senden, warten, abholen, pruefen, Dateien schreiben; am Ende push (wenn CRON_KEY da), sonst Hinweis. Liegt ein offener Batch vor, macht run dort weiter.
+  run      Batches senden, warten, abholen, pruefen, Dateien schreiben; am Ende push (nur auf main mit CRON_KEY - sonst haette der Live-Worker Fragen,
+           die die Live-Seite noch nicht zeigt; nach dem Merge sendet worker.yml), sonst Hinweis. Liegt ein offener Batch vor, macht run dort weiter.
   collect  nur offene Batches abholen (wie run, sendet aber keinen neuen Erzeugungs-Batch)
   push     Schluessel entschluesseln und an POST {COMMUNITY_API}/api/internal/learn-quiz senden (Header x-cron-key)
+  reshuffle  einmalig: Optionen aller bestehenden Fragen geheim neu ordnen (gleiche Permutation in en/de, Loesung im Schluessel mit), IDs bleiben.
+           Fuer Fragen aus der Zeit vor der geheimen Position (Marke "order" im Schluessel fehlt); danach nichts mehr zu tun. Sendet nichts an den Worker:
+           Seite und Schluessel muessen gemeinsam live gehen (vor dem Merge auf dem Arbeitszweig, oder danach Seitenbau und erst dann mode=push).
   show     (lokal, mit CRON_KEY) Fragen mit Loesungen als Text ausgeben - nie in Actions verwenden (Logs sind oeffentlich)
 Budget: Obergrenze PILLAR_QUIZ_RUN_EUR (Standard 2 EUR) je Lauf fuer Sonnet + Haiku zusammen (gerechnet mit max_tokens); Haiku zusaetzlich ueber das
 Haiku-Tagesbudget des Workers (ai_gateway.check_budget/report_usage, Job pillar_quiz). Logs nennen nie eine Loesung."""
 import base64
 import datetime as dt
 import hashlib
+import hmac
 import json
 import os
 import re
@@ -62,6 +69,7 @@ RUN_EUR = float(os.environ.get("PILLAR_QUIZ_RUN_EUR") or 2)
 GEN_MAX, VERIFY_MAX, TR_MAX = 8000, 12000, 8000   # max_tokens je Anfrage (Haiku-Pruefung mit adaptivem Denken)
 JOB = "pillar_quiz"
 HKDF_SALT, HKDF_INFO = b"m365fm", b"pillar-quiz"
+ORDER = "hmac-v1"   # Marke im Schluessel: Optionsreihenfolge geheim (rebalance/reshuffle mit order_secret)
 LANGS = ("en", "de")
 Q_MAX, OPT_MAX, WHY_MAX = 300, 140, 400
 _BANNED = re.compile(r"\b(all|none|both|neither) of (the )?(above|these|them)\b|^(all|none) (of )?the above|\balle (oben|genannten)\b|\bkeine der\b", re.I)
@@ -123,9 +131,22 @@ def check_translation(src, tr):
     return {"q": q.strip(), "opts": opts, "why": why.strip()}, ""
 
 
-def rebalance(pid, i, item):
-    """Tauscht die richtige Option auf eine von Leitfaden und Position abhaengige Stelle (deterministisch, damit collect dasselbe Ergebnis liefert)."""
-    t = (int(hashlib.sha1(pid.encode()).hexdigest()[:4], 16) + i) % 4
+def order_secret(cron_key=None):
+    """Geheimer Schluessel fuer die Position der richtigen Option. Aus CRON_KEY (wie die Verschluesselung), sonst aus ANTHROPIC_API_KEY (lokal ohne
+    CRON_KEY) - nie aus oeffentlichen Werten. Wiederholbar, damit collect nach einem Abbruch dieselbe Reihenfolge erhaelt wie die Pruefung."""
+    k = (cron_key if cron_key is not None else (os.environ.get("CRON_KEY", "").strip() or os.environ.get("ANTHROPIC_API_KEY", ""))).strip()
+    if not k: raise SystemExit("Weder CRON_KEY noch ANTHROPIC_API_KEY: keine geheime Optionsreihenfolge moeglich")
+    return hmac.new(k.encode("utf-8"), b"m365fm|pillar-quiz-order", hashlib.sha256).digest()
+
+
+def _h(secret, *parts):
+    return hmac.new(secret, "\n".join(str(p) for p in parts).encode("utf-8"), hashlib.sha256).digest()
+
+
+def rebalance(pid, i, item, secret=None):
+    """Tauscht die richtige Option auf eine geheime Stelle (HMAC ueber Leitfaden, Position und Fragetext; deterministisch fuer collect)."""
+    secret = secret or order_secret()
+    t = int.from_bytes(_h(secret, "pos", pid, i, item["q"])[:4], "big") % 4
     o = list(item["opts"]); a = item["a"]
     o[a], o[t] = o[t], o[a]
     return {**item, "opts": o, "a": t}
@@ -238,7 +259,7 @@ def decrypt_keys(blob, f):
 
 
 def load_keys(f):
-    if not KEYS.exists(): return {"path": path_id(), "keys": []}
+    if not KEYS.exists(): return {"path": path_id(), "keys": [], "order": ORDER}
     if f is None: return None
     return decrypt_keys(KEYS.read_bytes(), f)
 
@@ -375,7 +396,7 @@ class Usage:
 # ---------- Auswertung ----------
 def parse_gen(res_lines, usage):
     """Ergebnisse des Erzeugungs-Batches -> ({pid: [kandidat]}, {pid: {grund: n}})."""
-    cands, why = {}, {}
+    cands, why, secret = {}, {}, order_secret()
     for r in res_lines:
         pid = r["custom_id"].split("__", 1)[1]; res = r["result"]; w = why.setdefault(pid, {})
         if res["type"] != "succeeded": w[res["type"]] = w.get(res["type"], 0) + 1; continue
@@ -388,7 +409,7 @@ def parse_gen(res_lines, usage):
             if not c: w[reason] = w.get(reason, 0) + 1; continue
             if _norm(c["q"]) in seen: w["doppelte Frage"] = w.get("doppelte Frage", 0) + 1; continue
             seen.add(_norm(c["q"])); ok.append(c)
-        cands[pid] = [rebalance(pid, i, c) for i, c in enumerate(ok[:CANDIDATES])]
+        cands[pid] = [rebalance(pid, i, c, secret) for i, c in enumerate(ok[:CANDIDATES])]
     return cands, why
 
 
@@ -571,7 +592,7 @@ def run(mode, pids_filter):
     from ai_gateway import report_usage
     hk = usage.t.get(CHECK_MODEL)
     if hk: report_usage(JOB, CHECK_MODEL, hk[0], hk[1], "batch", batch=True)
-    pub = load_public(); keys_doc = load_keys(f) or {"path": path_id(), "keys": []}
+    pub = load_public(); keys_doc = load_keys(f) or {"path": path_id(), "keys": [], "order": ORDER}
     added = merge(pub, keys_doc, passed, items)
     version = dt.date.today().isoformat()
     stats = {"candidates": {pid: len(v) for pid, v in cands.items()}, "passed": {pid: len(v) for pid, v in passed.items()}, "added": added,
@@ -593,7 +614,53 @@ def run(mode, pids_filter):
         if n < MIN: print(f"::warning::{pid}: nur {n} Fragen (Ziel mindestens {MIN}) - naechster Lauf erzeugt weitere")
     summary(pub_out, stats, usage)
     print(f"Pruefdateien: {d}")
-    if added and f: do_push(False)
+    if added and f: auto_push()
+
+
+def auto_push():
+    """Schluessel nur von main aus sofort an den Live-Worker. Auf Arbeitszweigen haette der Worker sonst Fragen, die die Live-Seite noch nicht zeigt;
+    dort sendet worker.yml die Schluessel nach dem Merge (Pfad data/pillar_quiz_keys.enc)."""
+    if os.environ.get("GITHUB_REF_NAME") == "main": return do_push(False)
+    print("::notice::Schluessel nicht gesendet (nicht main): nach dem Merge sendet worker.yml sie, sonst Workflow pillar-quiz mit mode=push")
+    return False
+
+
+def perm4(secret, qid, q):
+    """Geheime Permutation der 4 Optionen einer bestehenden Frage (Fisher-Yates mit HMAC-Bytes); neue Position j zeigt auf alte Option p[j]."""
+    d, p = _h(secret, "reorder", qid, q), [0, 1, 2, 3]
+    for j in range(3, 0, -1):
+        k = int.from_bytes(d[4 * j:4 * j + 4], "big") % (j + 1); p[j], p[k] = p[k], p[j]
+    return p
+
+
+def reorder(pub, keys_doc, secret):
+    """Optionen aller Fragen mit Schluessel geheim neu ordnen (en und de gleich, Loesung im Schluessel mit) -> Zahl der Fragen. IDs bleiben."""
+    n = 0
+    for k in keys_doc.get("keys") or []:
+        d = pub["pillars"].get(k.get("pillar")) or {}
+        xs = [next((x for x in d.get(lang) or [] if x["id"] == k["qid"]), None) for lang in LANGS]
+        if any(x is None or len(x["opts"]) != 4 for x in xs): continue
+        p = perm4(secret, k["qid"], xs[0]["q"])
+        for x in xs: x["opts"] = [x["opts"][p[j]] for j in range(4)]
+        k["answer"] = p.index(int(k["answer"])); n += 1
+    keys_doc["order"] = ORDER
+    return n
+
+
+def reshuffle():
+    f = fernet()
+    if not f: raise SystemExit("CRON_KEY fehlt")
+    if not KEYS.exists(): print("Kein data/pillar_quiz_keys.enc - nichts neu zu ordnen"); return 0
+    keys_doc = load_keys(f)
+    if keys_doc.get("order") == ORDER: print("Optionsreihenfolge ist schon geheim - nichts zu tun"); return 0
+    pub = load_public()
+    n = reorder(pub, keys_doc, order_secret())
+    version = dt.date.today().isoformat()
+    PUBLIC.write_text(json.dumps(public_doc(pub, version), ensure_ascii=False, indent=1) + "\n", "utf-8")
+    keys_doc["version"] = version; KEYS.write_bytes(encrypt_keys(keys_doc, f) + b"\n")
+    print(f"Optionen von {n} Fragen geheim neu geordnet (IDs unveraendert). Nicht an den Worker gesendet: erst Seite und Schluessel gemeinsam ausrollen "
+          "(Merge -> Seitenbau + worker.yml), auf main danach Seitenbau und mode=push.")
+    return n
 
 
 def show():
@@ -623,8 +690,9 @@ def main(argv=None):
         if st: print(f"Offener Lauf: Erzeugung {st.get('gen')}, Pruefung {st.get('check') or '-'} (mode=collect holt ab)")
     elif mode in ("run", "collect"): run(mode, pids)
     elif mode == "push": do_push(True)
+    elif mode == "reshuffle": reshuffle()
     elif mode == "show": show()
-    else: raise SystemExit(f"Unbekannter Modus {mode!r} (plan|run|collect|push|show)")
+    else: raise SystemExit(f"Unbekannter Modus {mode!r} (plan|run|collect|push|reshuffle|show)")
 
 
 if __name__ == "__main__":
