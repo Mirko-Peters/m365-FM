@@ -287,5 +287,11 @@ LinkedIn-Knopf hat, ist nicht belegt; die E-Mail verweist deshalb auf die Testse
 
 Der Kasten auf der Pfadseite und die Testseite nutzen `site_pillars.UI` (`q_*`); übersetzte Sprachen (fr, es, it, nl, pt, pl, id, ru, uk, ar, he, ja, ko) lesen
 `data/pillars_i18n.json` und fallen sonst auf Englisch zurück. Die Fragen selbst gibt es nur auf Englisch und Deutsch (`qlang`).
-`translate-pillars.yml` läuft nur von Hand (kein Trigger beim Merge). Für PR #606 lief er einmalig auf dem Branch per Push-Trigger (danach entfernt)
-mit `--ui-only`: neue `q_*`-Schlüssel für 11 Sprachen einzeln, pl und id ganz neu (dort stand die Oberfläche samt Pfadtitel auf Deutsch).
+`translate-pillars.yml` läuft nur von Hand (kein Trigger beim Merge; nach künftigen Textänderungen `mode=run`, `ui_only=true`). Für PR #606 lief er
+einmalig auf dem Branch per Push-Trigger mit `--ui-only` (Trigger danach entfernt), Haiku-Batch, zusammen rund 0,013 $:
+- Lauf [45408778441](https://github.com/Mirko-Peters/m365-FM/actions/runs/45408778441) (Commit `1d178652`): 11 Sprachen (fr, es, it, nl, pt, ru, uk, ar, he, ja, ko)
+  bekamen die fehlenden 79 UI-Schlüssel einzeln (`uix`); **id** wurde ganz neu übersetzt (Oberfläche, Pfadtitel, Stufen, Leitfaden-Namen waren deutsch).
+- **pl bleibt offen:** Haiku lieferte für Polnisch in drei Läufen (45408778441, 45410648057, 45412567793) wieder Deutsch; die neue Prüfung hat das jedes Mal
+  abgelehnt (`data/pillars_i18n/rejected/pl___ui.txt`), `data/pillars_i18n.json` blieb für pl unverändert. Folge: Die polnische Oberfläche ist weiter deutsch,
+  die `q_*`-Texte fallen dort auf Englisch zurück. pl ist nicht freigegeben (nicht in `index`, noindex). Nächster Versuch z. B. mit `TRANSLATE_MODEL` (Sonnet) für
+  `--langs pl --ui-only`, oder die pl-Texte von Hand.
