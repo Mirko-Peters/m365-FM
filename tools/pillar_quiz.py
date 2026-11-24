@@ -523,9 +523,10 @@ def load_open():
 
 
 def summary(pub, stats, usage):
-    print("\n| Leitfaden | en | de | neu |\n|---|---|---|---|")
+    print("\n| Leitfaden | Kandidaten (Form ok) | bestanden (Pruefung + Uebersetzung) | neu | en | de |\n|---|---|---|---|---|---|")
     for pid, v in pub["pillars"].items():
-        print(f"| {pid} | {len(v.get('en') or [])} | {len(v.get('de') or [])} | {stats.get('added', {}).get(pid, 0)} |")
+        c, p = stats.get("candidates", {}).get(pid, "-"), stats.get("passed", {}).get(pid, "-")
+        print(f"| {pid} | {c} | {p} | {stats.get('added', {}).get(pid, 0)} | {len(v.get('en') or [])} | {len(v.get('de') or [])} |")
     if usage: print(f"\nKosten: {usage.line()}")
 
 
