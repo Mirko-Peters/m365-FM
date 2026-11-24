@@ -91,7 +91,7 @@ In the Q&A thread, a Microsoft moderator recommended a support request in the Mi
 
 ## What the sources do not say
 
-The pages read here do not give a fixed waiting time for new licenses, do not describe a service-health check as a step, and do not define a "High traffic" message for Microsoft 365 Copilot. If a source elsewhere states an exact number or message text, check it against Microsoft Learn before relying on it.
+Microsoft's setup page says users may wait up to 24 hours for Copilot to appear in some apps after a license is assigned. The pages read here do not describe a service-health check as a step and do not define a "High traffic" message for Microsoft 365 Copilot. If a source elsewhere states an exact number or message text, check it against Microsoft Learn before relying on it.
 
 ## Related
 

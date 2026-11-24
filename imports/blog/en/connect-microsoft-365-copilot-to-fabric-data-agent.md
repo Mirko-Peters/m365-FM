@@ -81,7 +81,7 @@ From the concept page:
 
 - The agent is read-only. It generates read queries only and cannot change data.
 - It works with structured data. Unstructured files such as PDF or Word are not supported unless ingested as tables.
-- Responses are capped at 25 rows and 25 columns, and English gives the best results.
+- Responses are capped at 25 rows and 25 columns, and Learn says non-English languages are not currently supported, so write questions, instructions and examples in English.
 - Queries fail if the data source's capacity and the agent's capacity are in different regions.
 - Purview policies can block queries or produce incomplete answers.
 
