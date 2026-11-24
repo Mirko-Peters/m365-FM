@@ -70,6 +70,25 @@ class Consistency(unittest.TestCase):
             for lang in ("en", "de"):
                 for q in v[lang]: self.assertEqual(set(q), {"id", "q", "opts"}, q["id"])
 
+    def test_ids_complete_unique_and_never_reused(self):
+        """Echtdaten: jeder Leitfaden des Pfads hat mindestens PQ.MIN Fragen (en und de), IDs sind pfadweit eindeutig, keine aktive ID steht
+        unter retired, und neue IDs liegen ueber der hoechsten stillgelegten (der Worker blendet nur hoehere Nummern als die bekannten aus)."""
+        num = lambda pid, qid: int(re.fullmatch(re.escape(pid) + r"-(\d+)", qid).group(1))
+        order = [p["id"] for p in S.order()]
+        self.assertEqual(list(QUIZ["pillars"]), order, "Reihenfolge wie site_pillars.order()")
+        retired, seen = QUIZ.get("retired") or {}, []
+        for pid in order:
+            v = QUIZ["pillars"][pid]
+            for lang in ("en", "de"): self.assertGreaterEqual(len(v[lang]), PQ.MIN, f"{pid} {lang}")
+            ids = [q["id"] for q in v["en"]]
+            self.assertTrue(all(num(pid, q) > 0 for q in ids), pid)   # Form <pillar>-<n>
+            old = set(retired.get(pid) or [])
+            self.assertFalse(set(ids) & old, f"{pid}: aktive ID unter retired")
+            if old: self.assertGreater(min(num(pid, q) for q in ids), max(num(pid, q) for q in old), f"{pid}: ID unter der hoechsten stillgelegten (wiederverwendet?)")
+            seen += ids + sorted(old)
+        self.assertEqual(len(seen), len(set(seen)), "IDs pfadweit eindeutig")
+        self.assertFalse(set(retired) - set(order), "retired nur fuer Leitfaeden des Pfads")
+
     def test_keys_file_is_encrypted(self):
         blob = (ROOT / "data" / "pillar_quiz_keys.enc").read_bytes().strip()
         self.assertTrue(blob.startswith(b"gAAAAA"), "kein Fernet-Token")

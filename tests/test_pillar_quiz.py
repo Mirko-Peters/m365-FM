@@ -402,5 +402,25 @@ class FullRun(unittest.TestCase):
         self.assertLess(PQ.eur(g + h), 2.0)
 
 
+
+class PushLog(unittest.TestCase):
+    def run_push(self, res, n=60):
+        doc = {"path": "p", "keys": [{"qid": f"g-{i}", "pillar": "g", "answer": 0} for i in range(n)]}
+        buf = io.StringIO()
+        with patch.object(PQ, "fernet", lambda: object()), patch.object(PQ, "load_keys", lambda f: doc), patch.object(PQ, "push", lambda d: res), redirect_stdout(buf):
+            self.assertTrue(PQ.do_push(True))
+        return buf.getvalue()
+
+    def test_log_shows_deactivated_total_pillars(self):
+        out = self.run_push({"ok": True, "upserted": 60, "deactivated": 0, "total": 60, "pillars": 10})
+        for k in ("'upserted': 60", "'deactivated': 0", "'total': 60", "'pillars': 10"): self.assertIn(k, out)
+        self.assertNotIn("::warning::", out)
+
+    def test_warns_when_questions_retired(self):
+        out = self.run_push({"ok": True, "upserted": 60, "deactivated": 60, "total": 60, "pillars": 10})
+        self.assertIn("::warning::Schluessel-Push: 60 Fragen stillgelegt", out)
+        self.assertIn("::warning::", self.run_push({"ok": True, "upserted": 60, "deactivated": 0, "total": 66, "pillars": 10}))
+
+
 if __name__ == "__main__":
     unittest.main()

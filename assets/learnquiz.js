@@ -1,5 +1,5 @@
 // Abschlusstest eines Lernpfads (site_pillars.quiz_page): Anmeldung, 30 Fragen, Ergebnis mit Erklaerungen, Zertifikat ueber Certopus.
-// Fragen ohne Loesung stehen als JSON in #lq-data; Antworten und Erklaerungen kommen erst nach der Abgabe vom Worker (worker/src/learnquiz.js).
+// Fragen ohne Loesung stehen als JSON in #lq-data; Ergebnis, Loesungen und Erklaerungen kommen erst nach der Abgabe vom Worker (worker/src/learnquiz.js, Regel "shown").
 // Konfiguration: window.M365LQ = {api, lang, qlang, path, privacy, pathUrl, max, t:{Texte}}. Kein Framework.
 (function () {
   "use strict";
@@ -8,6 +8,14 @@
   var D;
   try { D = JSON.parse(dataEl.textContent); } catch (e) { return; }
   var T = C.t || {}, Q = {}, G = {}, ST = null, first = true;
+  // wie NAME_TLD / NAME_URL_RX / certName im Worker (worker/test/learnquiz.test.mjs prueft den Gleichlauf)
+  var NAME_TLD = "com|net|org|info|biz|io|co|me|ly|gg|ai|app|dev|xyz|top|site|online|shop|store|club|live|pro|link|click|page|blog|news|tech|space|website|email|cloud|one|fm|tv|cc|to|sh|so|ws|tk|ml|ga|cf|gq|ru|cn|uk|us|eu|de|at|ch|nl|fr|es|it|pl|be|se|dk|fi|br|in|jp|kr|au|ca|mx|tr|ua|vn|id|ph|ng|za|ae";
+  var NAME_URL_RX = new RegExp("https?:|www\\.|xn--|[@/\\\\]|[\\[(]\\s*\\.\\s*[\\])]|\\.[a-z]{2,}(\\/|$)|[a-z0-9-]\\.(?:" + NAME_TLD + ")(?![a-z0-9])", "i");
+  function certName(v) {
+    var x = String(v || "");
+    try { x = x.normalize("NFKC").replace(new RegExp("\\p{Cf}", "gu"), ""); } catch (e) { }
+    return x.replace(/[\u3002\uff61]/g, ".").replace(/\s+/g, " ").replace(/[<>]/g, "").trim();
+  }
   (D.groups || []).forEach(function (g) { G[g.id] = g; (g.qs || []).forEach(function (q) { Q[q.id] = { q: q.q, opts: q.opts, g: g }; }); });
 
   function t(k, v) {
@@ -103,6 +111,7 @@
       if (r.s === 401) return login();
       if (r.s === 429) { if (ST) ST.attempts_left = 0; return show([h("h2", { text: t("q_start") }), leftLine(0)]); }
       if (r.s === 404 && r.j.error === "no_quiz") return show([h("h2", { text: t("q_soon") })]);
+      if (r.s === 409 && r.j.error === "page_outdated") return show([h("h2", { text: t("q_outdated") })]);   // Seite kennt den neuen Fragensatz noch nicht
       if (r.s !== 200 || !Array.isArray(r.j.qids)) { home(); return fail(r); }
       quiz(r.j);
     });
@@ -194,10 +203,11 @@
       ol.appendChild(h("li", {}, [
         h("p", {}, [h("b", { text: q ? q.q : x.qid })]),
         h("p", {}, [h("span", { class: x.ok ? "lq-ok" : "lq-no", text: (x.ok ? t("q_right") : t("q_wrong")) + " · " }), t("q_yours") + ": " + opt(x.chosen !== undefined ? x.chosen : ans[x.qid])]),
-        x.ok ? null : h("p", { text: t("q_correct") + ": " + opt(x.correct) }),
+        x.ok || x.correct === undefined ? null : h("p", { text: t("q_correct") + ": " + opt(x.correct) }),
         x.why ? h("p", { class: "mut", text: x.why }) : null]));
     });
-    out.push(h("details", { class: "lq-rev", open: !res.passed }, [h("summary", { text: t("q_review") }), ol]));
+    var note = res.shown === "none" ? h("p", { class: "mut", text: t("q_hidden") }) : res.shown === "answered" ? h("p", { class: "mut", text: t("q_hidden_noans") }) : null;
+    out.push(h("details", { class: "lq-rev", open: !res.passed }, [h("summary", { text: t("q_review") }), note, ol]));
     show(out);
   }
 
@@ -226,9 +236,9 @@
     }
     box.addEventListener("submit", function (e) {
       e.preventDefault();
-      var nv = name.value.replace(/\s+/g, " ").trim(), mv = mail.value.trim();
+      var nv = certName(name.value), mv = mail.value.trim();
       if (nv.length < 2 || nv.length > 80) return bad(name, t("q_err_name"));
-      if (/https?:|www\.|[@\/]|\.[a-z]{2,}(\/|$)/i.test(nv)) return bad(name, t("q_err_name_url"));   // wie NAME_URL_RX im Worker
+      if (NAME_URL_RX.test(nv)) return bad(name, t("q_err_name_url"));
       if (!/^[^\s@<>"']+@[^\s@<>"']+\.[a-z]{2,}$/i.test(mv)) return bad(mail, t("q_err_email"));
       if (!ok.checked) return bad(ok, t("q_err_consent"));
       bad(null, ""); btn.disabled = true;

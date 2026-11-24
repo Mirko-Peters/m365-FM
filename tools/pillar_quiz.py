@@ -767,7 +767,10 @@ def do_push(strict):
     except (urllib.error.URLError, TimeoutError) as e:
         if strict: raise SystemExit(f"Schluessel-Push fehlgeschlagen: {e}") from None
         print(f"::warning::Schluessel-Push fehlgeschlagen ({e}). Spaeter: mode=push."); return False
-    print(f"Schluessel an den Worker gesendet: {len(doc['keys'])} ({ {k: v for k, v in (res or {}).items() if k in ('ok', 'upserted', 'count')} })")
+    res = res or {}
+    print(f"Schluessel an den Worker gesendet: {len(doc['keys'])} ({ {k: v for k, v in res.items() if k in ('ok', 'upserted', 'deactivated', 'total', 'pillars')} })")
+    if res.get("deactivated") or ("total" in res and res["total"] != len(doc["keys"])):   # der Push ist je Pfad massgeblich: Stilllegen soll im Lauf auffallen
+        print(f"::warning::Schluessel-Push: {res.get('deactivated', 0)} Fragen stillgelegt, {res.get('total')} aktiv (gesendet {len(doc['keys'])})")
     return True
 
 

@@ -47,8 +47,8 @@ UI = {
     "q_crumb": ("Final test", "Abschlusstest"),
     "q_seo": ("Final test and certificate: {path}", "Abschlusstest und Zertifikat: {path}"),
     "q_desc": ("Free final test for the learning path {path}: {n} questions, certificate by email.", "Kostenloser Abschlusstest zum Lernpfad {path}: {n} Fragen, Zertifikat per E-Mail."),
-    "q_intro": ("The questions come from the guides of this path. You can open a guide at any time; after you submit, you see your result for each guide with the explanations.",
-                "Die Fragen stammen aus den Leitfäden dieses Pfads. Sie können jederzeit nachlesen; nach der Abgabe sehen Sie Ihr Ergebnis je Leitfaden mit den Erklärungen."),
+    "q_intro": ("The questions come from the guides of this path. You can open a guide at any time; after you submit, you see your result for each guide. Correct answers and explanations follow once you pass or have used all attempts.",
+                "Die Fragen stammen aus den Leitfäden dieses Pfads. Sie können jederzeit nachlesen; nach der Abgabe sehen Sie Ihr Ergebnis je Leitfaden. Richtige Antworten und Erklärungen folgen nach dem Bestehen oder wenn alle Versuche aufgebraucht sind."),
     "q_back": ("Back to the learning path", "Zurück zum Lernpfad"),
     "q_nojs": ("The test needs JavaScript.", "Der Test braucht JavaScript."),
     "q_loading": ("Loading …", "Wird geladen …"),
@@ -72,6 +72,10 @@ UI = {
     "q_by_guide": ("Result by guide", "Ergebnis je Leitfaden"),
     "q_reread": ("Read the guide again", "Leitfaden nachlesen"),
     "q_review": ("Answers and explanations", "Antworten und Erklärungen"),
+    "q_hidden": ("Correct answers and explanations for the questions you got wrong are shown once you pass or have used all attempts. Each guide's result shows what to read again.",
+                 "Die richtigen Antworten und Erklärungen zu falsch beantworteten Fragen sehen Sie nach dem Bestehen oder wenn alle Versuche aufgebraucht sind. Das Ergebnis je Leitfaden zeigt, was Sie nachlesen sollten."),
+    "q_hidden_noans": ("Correct answers are shown for the questions you answered.", "Richtige Antworten sehen Sie zu den Fragen, die Sie beantwortet haben."),
+    "q_outdated": ("The test is being updated. Please reload this page later.", "Der Test wird gerade aktualisiert. Bitte laden Sie die Seite später neu."),
     "q_right": ("Correct", "Richtig"), "q_wrong": ("Wrong", "Falsch"),
     "q_yours": ("Your answer", "Ihre Antwort"), "q_correct": ("Correct answer", "Richtige Antwort"), "q_noans": ("no answer", "keine Antwort"),
     "q_retry": ("Try again", "Erneut versuchen"),
@@ -629,7 +633,7 @@ JS_KEYS = ("q_loading", "q_login_h", "q_result_h", "q_login","q_signin", "q_star
            "q_result", "q_passed", "q_failed", "q_by_guide", "q_reread", "q_review", "q_right", "q_wrong", "q_yours", "q_correct", "q_noans", "q_retry", "q_expired",
            "q_passed_before", "q_cert_h", "q_cert_lead", "q_name", "q_email", "q_consent", "q_privacy", "q_cert_btn", "q_cert_ok", "q_cert_view", "q_cert_pdf", "q_linkedin",
            "q_cert_off", "q_cert_err", "q_err_name", "q_err_email", "q_err_consent", "q_err_rate", "q_err", "q_soon",
-           "q_err_name_url", "q_email_verified", "q_err_email_unverified", "q_err_email_limit")
+           "q_err_name_url", "q_email_verified", "q_err_email_unverified", "q_err_email_limit", "q_hidden", "q_hidden_noans", "q_outdated")
 
 QUIZ_CSS = """<style>
 .lq-facts{margin:.6em 0 1.2em;padding-left:1.2em}.lq-facts li{margin:.2em 0}

@@ -5,7 +5,7 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import worker from "../src/index.js";
 import { makeSession } from "../src/util.js";
-import { issuePendingCerts, deleteUserLearn, linkedinUrl, scoreText, dateText, threshold, quizLang, pageFilter } from "../src/learnquiz.js";
+import { issuePendingCerts, deleteUserLearn, linkedinUrl, scoreText, dateText, threshold, quizLang, pageFilter, NAME_URL_RX, NAME_TLD, certName, HAVE_GRACE } from "../src/learnquiz.js";
 
 const PATH = "manufacturing-excellence";
 const PILLARS = ["lean-manufacturing", "kaizen", "six-sigma", "tpm", "kanban", "smed", "oee", "mes", "aps", "digital-twin"];
@@ -199,8 +199,38 @@ test("Abgabe: Zaehlung, Bestehen ab 24/30, Erklaerungen in der Sprache des Versu
   const st2 = await start(env, s.bob);
   const ans = answersFor(st2.data.qids, 6); delete ans[st2.data.qids[29]];
   const sb2 = await submit(env, s.bob, st2.data.attempt, ans);
-  assert.equal(sb2.data.score, 23); assert.equal(sb2.data.passed, false); assert.match(sb2.data.results[0].why, /^Because /);
+  assert.equal(sb2.data.score, 23); assert.equal(sb2.data.passed, false);
   assert.equal(sb2.data.results[29].chosen, null);
+  // nicht bestanden, Versuche uebrig: Loesung und Erklaerung nur bei richtig beantworteten Fragen (sonst liesse sich der Schluessel abfragen)
+  assert.equal(sb2.data.shown, "none");
+  for (const x of sb2.data.results) {
+    if (x.ok) { assert.equal(x.correct, x.chosen); assert.match(x.why, /^Because /); }
+    else { assert.equal(x.correct, undefined, x.qid); assert.equal(x.why, undefined, x.qid); }
+  }
+  assert.doesNotMatch(JSON.stringify(sb2.data.results.filter((x) => !x.ok)), /correct|why/);
+});
+
+test("Abgabe: leere Abgaben verraten keine Loesungen; ohne verbleibende Versuche nur die der beantworteten Fragen", async () => {
+  const { env, s } = await setup();
+  await seed(env);
+  const known = new Set();
+  for (let i = 0; i < 2; i++) {
+    const st = await start(env, s.ada);
+    const sb = await submit(env, s.ada, st.data.attempt, {});
+    assert.equal(sb.data.score, 0); assert.equal(sb.data.shown, "none"); assert.equal(sb.data.attempts_left, 2 - i);
+    for (const x of sb.data.results) { assert.equal(x.correct, undefined); if (x.correct !== undefined) known.add(x.qid); }
+  }
+  assert.equal(known.size, 0, "zwei leere Abgaben: keine einzige Loesung");
+  // letzter Versuch: 10 beantwortet (alle falsch), 20 leer -> Loesungen nur fuer die 10 beantworteten
+  const st = await start(env, s.ada);
+  const ans = Object.fromEntries(st.data.qids.slice(0, 10).map((q) => [q, (ANSWER(+q.split("-").pop()) + 1) % 4]));
+  const sb = await submit(env, s.ada, st.data.attempt, ans);
+  assert.equal(sb.data.attempts_left, 0); assert.equal(sb.data.shown, "answered");
+  assert.equal(sb.data.results.filter((x) => x.correct !== undefined).length, 10);
+  for (const x of sb.data.results) assert.equal(x.correct !== undefined, x.chosen !== null, x.qid);
+  // bestanden: alle Loesungen
+  const pass = await passedAttempt(env, s.bob);
+  assert.ok(pass);
 });
 
 test("Abgabe: fremder Versuch 403, doppelte Abgabe 409, abgelaufen 410, unbekannt 404", async () => {
@@ -260,14 +290,16 @@ test("Zertifikat: Name ohne Link/Domain, E-Mail nur die bestaetigte bzw. hoechst
     const r = await post({ name });
     assert.equal(r.status, 400, name); assert.equal(r.data.error, "name_url", name);
   }
+  for (const name of ["Visit evil.com today", "t.me x", "evil\uff0ecom", "evil[.]com", "evil.c\u2060om"]) assert.equal((await post({ name })).data.error, "name_url", name);
   for (const name of ["Dr. Ada Lovelace", "J.R.R. Tolkien", "Ada Lovelace-Byron", "St. Clair, M.Sc."]) assert.equal((await post({ name })).status, 503, name + " ist erlaubt");
   // Ada hat eine bestaetigte Adresse: nur diese (Gross/Klein egal)
   const st = await call(env, "/api/learn/cert?path=" + PATH, { cookie: s.ada });
   assert.equal(st.data.email, "ada@example.com"); assert.equal(st.data.email_verified, true);
   const other = await post({ email: "jemand@example.org" });
   assert.equal(other.status, 400); assert.equal(other.data.error, "email_unverified");
-  assert.equal((await post({ email: " ADA@Example.COM " })).status, 503);
+  assert.equal((await post({ email: " ADA@Example.COM ", name: "Ada\u2060 Love\u00adlace\ufeff" })).status, 503);
   assert.equal(raw.prepare("SELECT email FROM learn_certs WHERE user_id=1").get().email, "ada@example.com");
+  assert.equal(raw.prepare("SELECT name FROM learn_certs WHERE user_id=1").get().name, "Ada Lovelace", "gespeichert wird der normalisierte Name");
   // Bob ohne bestaetigte Adresse: frei, aber hoechstens 2 verschiedene je Pfad
   const bobAttempt = await passedAttempt(env, s.bob);
   const bobState = await call(env, "/api/learn/cert?path=" + PATH, { cookie: s.bob });
@@ -402,30 +434,43 @@ test("Statistik nur fuer Admins: je Herkunft und Woche; Konto loeschen entfernt 
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM learn_certs").get().n, 0);
 });
 
-test("pageFilter: Seite darf fehlende (neue) Leitfaeden und Fragen ausblenden, aber keine Auswahl treffen", () => {
+test("pageFilter: Seite darf nur junge Fragen ausblenden, die sie nicht kennen kann - keine Auswahl", () => {
   const g = new Map([["pa", ["pa-1", "pa-2", "pa-3", "pa-4", "pa-5", "pa-6"]], ["pb", ["pb-1", "pb-2", "pb-3", "pb-4", "pb-5"]], ["pc", ["pc-1", "pc-2", "pc-3", "pc-4", "pc-5"]],
     ["pd", ["pd-1", "pd-2", "pd-3", "pd-4", "pd-5"]], ["pe", ["pe-1", "pe-2", "pe-3", "pe-4", "pe-5"]]]);
-  const all = [...g.values()].flat();
-  assert.equal(pageFilter(g, undefined), g, "ohne have: ganzer Pool");
-  assert.equal(pageFilter(g, "pa-1"), g);
-  assert.equal(pageFilter(g, []), g, "leere Liste: ganzer Pool");
-  const newE = pageFilter(g, all.filter((q) => !q.startsWith("pe-")));
+  const all = [...g.values()].flat(), FRESH = new Set(all), OLD = new Set();
+  assert.equal(pageFilter(g, undefined, FRESH), g, "ohne have: ganzer Pool");
+  assert.equal(pageFilter(g, "pa-1", FRESH), g);
+  assert.equal(pageFilter(g, [], FRESH), g, "leere Liste: ganzer Pool");
+  assert.equal(pageFilter(g, ["Bad Id!", 42], FRESH), g, "nur ungueltige Eintraege: wie ohne have");
+  assert.equal(pageFilter(g, ["px-1", "px-2"], FRESH), null, "gueltige Liste ohne jede aktive Frage: Seite veraltet");
+  // junge Fragen (erster Push < HAVE_GRACE): neuer Leitfaden und hoehere Nummern darf die Seite ausblenden
+  const newE = pageFilter(g, all.filter((q) => !q.startsWith("pe-")), FRESH);
   assert.deepEqual([...newE.keys()], ["pa", "pb", "pc", "pd"], "ein neuer Leitfaden (1 von 5) faellt weg");
-  assert.equal(pageFilter(g, all.filter((q) => !/^p[de]-/.test(q))), g, "zwei von fuenf fehlen: zu viel -> ganzer Pool");
-  const grown = pageFilter(g, all.filter((q) => q !== "pa-6"));
-  assert.deepEqual(grown.get("pa"), ["pa-1", "pa-2", "pa-3", "pa-4", "pa-5"], "neue Frage a-6 kennt die Seite noch nicht");
-  const picky = pageFilter(g, all.filter((q) => !/^pa-[4-6]$/.test(q)));
-  assert.deepEqual(picky.get("pa"), g.get("pa"), "nur 3 von 6 bekannt (unter HAVE_MIN): ganzer Pool des Leitfadens");
-  const capped = pageFilter(g, [...Array(600).fill("px-1"), ...all]);
-  assert.equal(capped, g, "nur die ersten HAVE_MAX Eintraege zaehlen");
+  assert.equal(pageFilter(g, all.filter((q) => !/^p[de]-/.test(q)), FRESH), g, "zwei von fuenf fehlen: zu viel -> ganzer Pool");
+  const grown = pageFilter(g, all.filter((q) => q !== "pa-6"), new Set(["pa-6"]));
+  assert.deepEqual(grown.get("pa"), ["pa-1", "pa-2", "pa-3", "pa-4", "pa-5"], "neue Frage pa-6 kennt die Seite noch nicht");
+  const gaps = pageFilter(g, all.filter((q) => !/^pa-[12]$/.test(q)), FRESH);
+  assert.deepEqual(gaps.get("pa"), g.get("pa"), "Luecken unterhalb der hoechsten bekannten Nummer: keine Auswahl, alle bleiben");
+  const picky = pageFilter(g, all.filter((q) => !/^pa-[4-6]$/.test(q)), FRESH);
+  assert.deepEqual(picky.get("pa"), g.get("pa"), "nur 3 von 6 bleiben (unter HAVE_MIN): ganzer Pool des Leitfadens");
+  // aeltere Fragen gehoeren immer zum Pool
+  const four = all.filter((q) => !/^p[a-e]-[56]$/.test(q));   // je Leitfaden nur 1-4
+  assert.deepEqual(pageFilter(g, four, OLD), g, "4 von 5/6 je Leitfaden bei alten Fragen: Pool bleibt ganz");
+  assert.deepEqual(pageFilter(g, all.filter((q) => !q.startsWith("pe-")), OLD), g, "alter Leitfaden laesst sich nicht weglassen");
+  const mixed = pageFilter(g, all.filter((q) => !/^pa-[56]$/.test(q)), new Set(["pa-6"]));
+  assert.deepEqual(mixed.get("pa"), ["pa-1", "pa-2", "pa-3", "pa-4", "pa-5"], "nur die junge pa-6 faellt weg, die alte pa-5 bleibt");
+  const capped = pageFilter(g, [...Array(600).fill("px-1"), ...all], FRESH);
+  assert.equal(capped, null, "nur die ersten HAVE_MAX Eintraege zaehlen");
 });
 
-test("Start zieht nur Fragen, die die Seite kennt (have); ohne have oder bei manipulierter Liste der ganze Pool", async () => {
+test("Start zieht nur Fragen, die die Seite kennt (have); alte Fragen und Leitfaeden lassen sich nicht weglassen", async () => {
   const { env, raw, s } = await setup();
   await seed(env);
+  raw.prepare("UPDATE learn_quiz_keys SET created=created-?").run(HAVE_GRACE + 60);   // Grundsatz liegt laenger zurueck
   // neuer Leitfaden und gewachsener Pool nur im Worker, Seite noch alt
   const fresh = [...[1, 2, 3, 4, 5].map((n) => ({ qid: `new-guide-${n}`, pillar: "new-guide", answer: 0 })), { qid: "kaizen-6", pillar: "kaizen", answer: 0 }];
   assert.equal((await call(env, "/api/internal/learn-quiz", { method: "POST", body: { path: PATH, keys: [...keys(), ...fresh] }, headers: { "x-cron-key": "cron-test" } })).status, 200);
+  assert.ok(raw.prepare("SELECT created FROM learn_quiz_keys WHERE qid='kaizen-1'").get().created < Date.now() / 1000 - HAVE_GRACE, "erneuter Push setzt created nicht neu");
   const page = keys().map((k) => k.qid);
   const reset = () => { raw.prepare("DELETE FROM learn_attempts").run(); raw.prepare("DELETE FROM ratelimit").run(); };
   const st = await start(env, s.ada, { have: [...page, "Bad Id!", 42] });
@@ -435,12 +480,64 @@ test("Start zieht nur Fragen, die die Seite kennt (have); ohne have oder bei man
   reset();
   assert.equal((await start(env, s.ada)).data.total, 33, "ohne have (aeltere Seite im Cache): ganzer Pool wie bisher");
   reset();
-  assert.equal((await start(env, s.ada, { have: ["kaizen-1"] })).data.total, 33, "nur eine Frage: manipuliert -> ganzer Pool");
+  assert.equal((await start(env, s.ada, { have: ["kaizen-1"] })).data.total, 30, "nur eine Frage: alte Leitfaeden bleiben, nur der junge faellt weg");
   reset();
   const drop = (k) => page.filter((q) => !PILLARS.slice(0, k).some((p) => q.startsWith(p + "-")));
-  assert.equal((await start(env, s.ada, { have: drop(1) })).data.total, 27, "zwei von elf Leitfaeden fehlen (neu): erlaubt");
+  assert.equal((await start(env, s.ada, { have: drop(1) })).data.total, 30, "ein alter Leitfaden fehlt in have: bleibt trotzdem im Test");
   reset();
-  assert.equal((await start(env, s.ada, { have: drop(3) })).data.total, 33, "vier von elf fehlen: ganzer Pool");
+  // 4 von 5 bekannten Fragen je Leitfaden schicken: Pool wird nicht kleiner (Auswahl bekannter Loesungen geht nicht)
+  const four = page.filter((q) => !q.endsWith("-3"));
+  const seen = new Set();
+  for (let i = 0; i < 12; i++) { reset(); for (const q of (await start(env, s.ada, { have: four })).data.qids) seen.add(q); }
+  assert.ok([...seen].some((q) => q.endsWith("-3")), "ausgelassene alte Fragen werden weiter gezogen");
+  reset();
+  // ganz neuer Fragensatz (alle alten stillgelegt), Seite noch alt: 409 statt nicht beantwortbarer Fragen; kein Versuch verbraucht
+  const next = PILLARS.flatMap((p) => [6, 7, 8, 9, 10].map((n) => ({ qid: `${p}-${n}`, pillar: p, answer: ANSWER(n) })));
+  assert.equal((await call(env, "/api/internal/learn-quiz", { method: "POST", body: { path: PATH, keys: next }, headers: { "x-cron-key": "cron-test" } })).status, 200);
+  const old = await start(env, s.ada, { have: page.filter((q) => !q.startsWith("kaizen-")) });
+  assert.equal(old.status, 409); assert.equal(old.data.error, "page_outdated");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM ratelimit").get().n, 0);
+});
+
+test("Fortsetzen: kennt die neue Seite stillgelegte Fragen des offenen Versuchs nicht mehr, wird er verworfen und zurueckgegeben", async () => {
+  const { env, raw, s } = await setup();
+  await seed(env);
+  const page = keys().map((k) => k.qid);
+  const st = await start(env, s.ada, { have: page });
+  assert.equal(st.data.attempts_left, 2);
+  // gleiche Seite: Fortsetzen wie bisher
+  const same = await start(env, s.ada, { have: page });
+  assert.equal(same.data.attempt, st.data.attempt); assert.equal(same.data.resumed, true);
+  // neuer Fragensatz (regen): alte IDs stillgelegt, neue Seite kennt nur die neuen
+  const next = PILLARS.flatMap((p) => [6, 7, 8, 9, 10].map((n) => ({ qid: `${p}-${n}`, pillar: p, answer: ANSWER(n) })));
+  await call(env, "/api/internal/learn-quiz", { method: "POST", body: { path: PATH, keys: next }, headers: { "x-cron-key": "cron-test" } });
+  // alte Seite (kennt die alten IDs): Versuch bleibt und wird weiter gewertet
+  const oldPage = await start(env, s.ada, { have: page });
+  assert.equal(oldPage.data.attempt, st.data.attempt); assert.equal(oldPage.data.resumed, true);
+  const fresh = await start(env, s.ada, { have: next.map((k) => k.qid) });
+  assert.equal(fresh.status, 200); assert.notEqual(fresh.data.attempt, st.data.attempt); assert.equal(fresh.data.resumed, undefined);
+  assert.ok(fresh.data.qids.every((q) => /-([6-9]|10)$/.test(q)), fresh.data.qids.join(","));
+  assert.equal(fresh.data.attempts_left, 2, "der verworfene Versuch wurde zurueckgegeben");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM learn_attempts WHERE id=?").get(st.data.attempt).n, 0);
+  // ohne have (aeltere Seite im Cache) bleibt ein offener Versuch unberuehrt
+  const keep = await start(env, s.ada);
+  assert.equal(keep.data.attempt, fresh.data.attempt);
+});
+
+test("Name auf dem Zertifikat: Domains auch mitten im Text und mit Ersatzzeichen; Seite und Worker pruefen gleich", () => {
+  const bad = ["Visit evil.com today", "evil.com now", "evil.com.", "evil.com!", "t.me x", "bit.ly x", "evil．com", "evil。com", "evil｡com", "evil[.]com", "evil(.)com",
+    "evil.c⁠om", "evil.c­om", "evil.c﻿om", "Ada ＠lovelace", "Ada ﹫lovelace", "xn--80ak6aa92e", "Ada\\Lovelace", "ada.example.de/x", "https：//x"];
+  const good = ["Dr. Max Mustermann", "J. R. Smith", "J.R.R. Tolkien", "St. Clair, M.Sc.", "Dr.-Ing. Anna Schmidt", "Prof. Dr. h.c. Anna", "Ada Lovelace-Byron", "José Núñez", "O'Brien", "Jr. Co Smith"];
+  for (const n of bad) assert.ok(NAME_URL_RX.test(certName(n)), "muss abgelehnt werden: " + JSON.stringify(n));
+  for (const n of good) assert.ok(!NAME_URL_RX.test(certName(n)), "muss erlaubt sein: " + n);
+  assert.equal(certName("Ada⁠ Love­lace﻿"), "Ada Lovelace", "Formatzeichen fallen weg (gespeichert wird der normalisierte Name)");
+  // assets/learnquiz.js: gleiche Liste, gleiche Regel, gleiche Normalisierung
+  const src = readFileSync(new URL("../../assets/learnquiz.js", import.meta.url), "utf-8");
+  const m = src.match(/var NAME_TLD = [^;]+;\n\s*var NAME_URL_RX = [^;]+;\n\s*function certName[\s\S]*?\n  \}/);
+  assert.ok(m, "Block NAME_TLD/NAME_URL_RX/certName in assets/learnquiz.js");
+  const page = new Function(m[0] + "; return { NAME_TLD, NAME_URL_RX, certName };")();
+  assert.equal(page.NAME_TLD, NAME_TLD); assert.equal(page.NAME_URL_RX.source, NAME_URL_RX.source); assert.equal(page.NAME_URL_RX.flags, NAME_URL_RX.flags);
+  for (const n of [...bad, ...good]) assert.equal(page.NAME_URL_RX.test(page.certName(n)), NAME_URL_RX.test(certName(n)), n);
 });
 
 test("Konten zusammenfuehren: Versuche und Zertifikat wandern mit, kein zweites Zertifikat", async () => {

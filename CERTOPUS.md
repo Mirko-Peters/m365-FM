@@ -60,7 +60,8 @@ Reihenfolge, wenn PR #606 auf main ist:
 
 1. **Automatisch: Worker.** Der Push auf main ändert `worker/` und `data/pillar_quiz_keys.enc`, also startet `worker.yml`: Deploy, Migration 0055
    (`d1 migrations apply`, legt `learn_quiz_keys`, `learn_attempts`, `learn_certs` an), danach der Schritt „Lernpfad-Schluessel an den Worker“
-   (`tools/pillar_quiz.py push`). Im Log muss die Antwort `"upserted": 60` stehen (10 Leitfäden × 6 Fragen), `"deactivated": 0` (0055 war nie live, alte IDs gibt es dort nicht).
+   (`tools/pillar_quiz.py push`). Im Log muss die Antwort `'upserted': 60`, `'deactivated': 0`, `'total': 60`, `'pillars': 10` stehen (10 Leitfäden × 6 Fragen;
+   0055 war nie live, alte IDs gibt es dort nicht) und keine `::warning::Schluessel-Push` (sie erscheint, sobald ein Push Fragen stilllegt).
 2. **Automatisch: Seitenbau.** Der Merge ändert `site_*.py` und `assets/`, also startet auch `site.yml` (sonst der nächtliche Bau). Er bringt den Kasten
    „Abschlusstest & Zertifikat“ auf der Pfadseite und die Testseiten `/learn/path/manufacturing-excellence/test/` und
    `/de/learn/path/manufacturing-excellence/test/` mit den Fragen-IDs -7 bis -12. Vorher gibt es die Testseite live nicht; der Worker zieht ohnehin nur
@@ -74,9 +75,21 @@ Reihenfolge, wenn PR #606 auf main ist:
 7. **Testabschluss:** mit einem eigenen Konto bestehen, Zertifikat anfordern; E-Mail, Zertifikatsseite, PDF und LinkedIn-Knopf der Testseite prüfen
    (Schritt 7 oben), Zahlen unter `/api/learn/stats`.
 
+**Offene Punkte (blockieren den Merge nicht):**
+- *Übersetzte Pfadseiten:* Der Kasten „Abschlusstest & Zertifikat“ bleibt auf fr, es, id, pt usw. englisch. `data/pillars_i18n.json` hat keine `q_*`-Schlüssel,
+  und `translate_pillars.py` fordert UI-Texte nur für Sprachen ohne `ui` an. Später: dort fehlende UI-Schlüssel je Sprache nachfordern (Folge-PR).
+- *Merge-Reihenfolge mit PR #527:* #527 nutzt ebenfalls die Nummer `0055` (`0055_orphan_handles.sql`, dazu `0054_person_entity.sql` neben main-`0054`) und ändert
+  `worker/src/identities.js`. Wird #606 zuerst gemergt, muss #527 vor seinem Merge auf `0056`/`0057` umnummerieren und `identities.js` mit dem Block zu
+  `learn_attempts`/`learn_certs` abgleichen.
+- *Ausblenden in den ersten 3 Tagen:* Direkt nach dem ersten Push sind alle Fragen „neu“; in dieser Zeit kann eine manipulierte Seite je Leitfaden nur die
+  höchsten Nummern weglassen (mindestens 4 bleiben) und höchstens 2 von 10 Leitfäden. Weil Lösungen erst nach dem Bestehen bzw. dem letzten Versuch
+  kommen, lässt sich daraus keine planbare Auswahl bekannter Fragen bauen.
+
 **Anrede:** Seite, E-Mail und Zertifikat siezen („Sie“), passend zu den Leitfäden (Entscheidung 24.11.2026).
 
 **Name und Empfänger** (`POST /api/learn/cert`): Der Name darf keine Webadresse, Domain, `@` oder `/` enthalten (er steht öffentlich auf dem Zertifikat).
+Geprüft und gespeichert wird er normalisiert (NFKC, ohne Formatzeichen), damit Vollbreiten-Punkte, `[.]` oder unsichtbare Zeichen die Regel nicht umgehen;
+Domains werden auch mitten im Text erkannt („evil.com today“), Namen wie „Dr. Max“, „J. R. Smith“ oder „M.Sc.“ bleiben erlaubt.
 Hat das Konto eine bestätigte E-Mail-Adresse (`mail_addr`, verified=1), geht das Zertifikat nur an diese; die Testseite füllt sie vor. Ohne bestätigte Adresse
 ist die Eingabe frei, aber höchstens 2 verschiedene Adressen je Nutzer und Pfad.
 
@@ -84,9 +97,15 @@ ist die Eingabe frei, aber höchstens 2 verschiedene Adressen je Nutzer und Pfad
 Sie kommen aus `data/pillar_quiz_keys.enc`: `tools/pillar_quiz.py push` entschlüsselt die Datei mit `CRON_KEY` und schickt
 `{path, keys:[{qid, pillar, answer, why_en, why_de}]}` an `POST https://api-dub.m365.fm/api/internal/learn-quiz` (Header `x-cron-key`; Upsert,
 ein ungültiger Eintrag lässt den ganzen Push mit 400 scheitern). Der Push ist je Pfad maßgeblich: nicht mehr gesendete Fragen legt der Worker still
-(`active=0`, nicht gelöscht – offene Versuche werden weiter gewertet); die Antwort nennt `upserted` und `deactivated`. Das passiert automatisch am Ende von `pillar-quiz.yml` (mode=run, nur auf main) und nach jedem
+(`active=0`, nicht gelöscht – offene Versuche bleiben wertbar; kennt die neue Testseite die Fragen eines offenen Versuchs nicht mehr, verwirft der Start
+ihn und gibt den Versuch zurück); die Antwort nennt `upserted`, `deactivated`, `total` und `pillars`, das Log zeigt alle vier. Das passiert automatisch am Ende von `pillar-quiz.yml` (mode=run, nur auf main) und nach jedem
 Worker-Deploy in `worker.yml` (Schritt „Lernpfad-Schluessel an den Worker“); von Hand: Workflow `pillar-quiz.yml` mit mode=push.
 Kommen Schlüssel vor dem nächsten Seitenbau an (neuer Leitfaden), zieht der Worker nur Fragen, die die Testseite kennt (die Seite schickt ihre Fragen-IDs mit).
+Ausblenden darf die Seite dabei nur Fragen, die erst vor weniger als 3 Tagen zum ersten Mal gepusht wurden (`learn_quiz_keys.created`) und die sie nicht
+kennen kann (höhere Nummer als ihre höchste des Leitfadens, oder der ganze Leitfaden fehlt); ältere Fragen bleiben immer im Pool. Kennt die Seite gar keine
+aktive Frage (neuer Fragensatz, Seitenbau steht aus), antwortet der Worker 409 `page_outdated`, die Seite bittet um späteres Neuladen.
+**Lösungen nach der Abgabe:** Richtige Option und Erklärung gibt es für richtig beantwortete Fragen, nach dem Bestehen für alle, ohne verbleibende Versuche für
+alle beantworteten – sonst ließe sich der Schlüssel mit leeren Abgaben abfragen (60 Fragen im Pool). Davor sehen Nutzer richtig/falsch je Frage und das Ergebnis je Leitfaden.
 Die Position der richtigen Option ist geheim (HMAC mit einem aus `CRON_KEY` abgeleiteten Schlüssel). Weil die alte, nachrechenbare Reihenfolge der ersten
 60 Fragen in der Git-Historie steht, hat `tools/pillar_quiz.py regen` (Workflow `pillar-quiz.yml`, mode=regen, einmalig; Marke `regen` im Schlüssel) alle Fragen
 neu erzeugt. Die alten IDs stehen in `data/pillar_quiz.json` unter `retired` und werden nie wieder vergeben. Der Workflow läuft nur noch von Hand.

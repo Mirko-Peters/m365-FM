@@ -2,14 +2,18 @@
 // Die Fragen (ohne Antworten) stehen oeffentlich in data/pillar_quiz.json (Seitenbau); die Antwortschluessel nur hier in D1 (learn_quiz_keys),
 // eingespielt von tools/pillar_quiz.py push ueber POST /api/internal/learn-quiz (CRON_KEY). Antworten verlassen den Worker nur nach einer Abgabe.
 //   POST /api/learn/quiz/start   {path, lang, src, have}  Login; 3 Fragen je Leitfaden (nur Fragen, die die Seite kennt: pageFilter), hoechstens 3 Versuche je 24 h (Nutzer und Pfad), ein Versuch gilt 24 h
-//   POST /api/learn/quiz/submit  {attempt, answers}        Login; zaehlen, speichern, Ergebnis mit Erklaerungen (Sprache des Versuchs)
+//                                                         409 page_outdated: die Seite kennt keine aktive Frage (Seitenbau nach neuem Fragensatz steht aus)
+//   POST /api/learn/quiz/submit  {attempt, answers}        Login; zaehlen, speichern, Ergebnis je Frage und Leitfaden (Sprache des Versuchs). Richtige Option und
+//                                                         Erklaerung nur fuer richtig beantwortete Fragen, nach dem Bestehen fuer alle, ohne verbleibende Versuche
+//                                                         fuer alle beantworteten (shown: all|answered|none) - sonst liesse sich der Schluessel mit leeren Abgaben abfragen
 //   GET  /api/learn/cert?path=                            Login; Stand (bestanden, bester Versuch, Zertifikat) und Vorschlag fuer Name/E-Mail
 //   POST /api/learn/cert         {path, attempt, name, email, consent, lang}   Zertifikat ueber Certopus (nur mit CERTOPUS_ON=1, Schluessel und IDs)
 //                                Name 2-80 Zeichen ohne Link, Domain, @ oder /; E-Mail: mit bestaetigter Adresse (mail_addr) nur diese (400 email_unverified),
 //                                sonst frei, hoechstens 2 verschiedene je Nutzer und Pfad (400 email_limit)
 //   GET  /api/learn/stats?path=                           nur Admin: gestartet/abgegeben/bestanden/Zertifikate je Herkunft (src) und Woche
 //   POST /api/internal/learn-quiz {path, keys:[...]}       CRON_KEY: je Pfad massgeblich - uebermittelte Schluessel upserten (active=1), alle anderen
-//                                                         Fragen des Pfads stilllegen (active=0, keine Loeschung: offene Versuche bleiben wertbar, IDs bleiben vergeben)
+//                                                         Fragen des Pfads stilllegen (active=0, keine Loeschung: offene Versuche bleiben wertbar, IDs bleiben vergeben;
+//                                                         kennt die Testseite stillgelegte Fragen eines offenen Versuchs nicht mehr, verwirft start ihn und gibt den Versuch zurueck)
 // Certopus-Konfiguration je Pfad in der Var CERTOPUS_PATHS (JSON {pfad: {org, event, category, course:{en,de}}}), Secret CERTOPUS_API_KEY,
 // Notschalter CERTOPUS_ON ("1" = an). Ohne all das: Test laeuft, das Zertifikat bleibt "pending" (503 cert_off) und wird spaeter ausgestellt
 // (erneuter Klick oder Cron issuePendingCerts, sobald CERTOPUS_ON=1).
@@ -29,8 +33,13 @@ export const COURSE = {
 const PATH_RX = /^[a-z0-9][a-z0-9-]{1,60}$/;
 const QID_RX = /^[a-z0-9][a-z0-9-]{1,80}-[0-9]{1,3}$/;
 const EMAIL_RX = /^[^\s@<>"']{1,64}@[^\s@<>"']{1,190}\.[a-z]{2,}$/i;
-// Name auf dem Zertifikat: keine Links, Domains oder Adressen (Certopus druckt ihn, das Zertifikat ist oeffentlich)
-export const NAME_URL_RX = /https?:|www\.|[@/]|\.[a-z]{2,}(\/|$)/i;
+// Name auf dem Zertifikat: keine Links, Domains oder Adressen (Certopus druckt ihn, das Zertifikat ist oeffentlich). Geprueft wird der mit certName
+// normalisierte Name (NFKC: Vollbreiten-Punkt und -@ werden ASCII; Formatzeichen wie Word Joiner, weiches Trennzeichen, BOM fallen weg; 。 wird .).
+// Domains auch mitten im Text ("evil.com today", "t.me x", "evil[.]com"); Namen mit Punkt ("Dr. Max", "J. R. Smith", "M.Sc.", "St.Pierre") bleiben erlaubt.
+// assets/learnquiz.js baut dieselbe Regel aus NAME_TLD (tests: worker/test/learnquiz.test.mjs prueft den Gleichlauf).
+export const NAME_TLD = "com|net|org|info|biz|io|co|me|ly|gg|ai|app|dev|xyz|top|site|online|shop|store|club|live|pro|link|click|page|blog|news|tech|space|website|email|cloud|one|fm|tv|cc|to|sh|so|ws|tk|ml|ga|cf|gq|ru|cn|uk|us|eu|de|at|ch|nl|fr|es|it|pl|be|se|dk|fi|br|in|jp|kr|au|ca|mx|tr|ua|vn|id|ph|ng|za|ae";
+export const NAME_URL_RX = new RegExp(String.raw`https?:|www\.|xn--|[@/\\]|[\[(]\s*\.\s*[\])]|\.[a-z]{2,}(\/|$)|[a-z0-9-]\.(?:${NAME_TLD})(?![a-z0-9])`, "i");
+export const certName = (s) => cleanText(String(s ?? "").normalize("NFKC").replace(/\p{Cf}/gu, "").replace(/[\u3002\uff61]/g, "."), 200).replace(/\s+/g, " ").replace(/[<>]/g, "").trim();
 export const MAX_FREE_EMAILS = 2;   // ohne bestaetigte Adresse: hoechstens so viele verschiedene Empfaenger je Nutzer und Pfad
 const now = () => Math.floor(Date.now() / 1000);
 export const quizLang = (l) => (String(l || "").toLowerCase() === "de" ? "de" : "en");   // Test gibt es auf en und de, alles andere faellt auf en zurueck
@@ -199,8 +208,9 @@ async function internalUpsert(env, request, J) {
   for (const k of b.keys) {
     const qid = String(k?.qid || ""), pillar = String(k?.pillar || ""), answer = k?.answer;
     if (!QID_RX.test(qid) || !PATH_RX.test(pillar) || !qid.startsWith(pillar + "-") || !Number.isInteger(answer) || answer < 0 || answer > 3) { bad.push(qid.slice(0, 90)); continue; }
-    stmts.push(env.DB.prepare("INSERT INTO learn_quiz_keys(qid,path,pillar,answer,why_en,why_de,updated,active) VALUES(?,?,?,?,?,?,?,1) ON CONFLICT(qid) DO UPDATE SET path=excluded.path,pillar=excluded.pillar,answer=excluded.answer,why_en=excluded.why_en,why_de=excluded.why_de,updated=excluded.updated,active=1")
-      .bind(qid, path, pillar, answer, cleanText(k.why_en, 1200), cleanText(k.why_de, 1200), t));
+    // created nur beim ersten Push (nicht in DO UPDATE): Grundlage dafuer, welche Fragen die Testseite noch nicht kennen kann (pageFilter)
+    stmts.push(env.DB.prepare("INSERT INTO learn_quiz_keys(qid,path,pillar,answer,why_en,why_de,updated,active,created) VALUES(?,?,?,?,?,?,?,1,?) ON CONFLICT(qid) DO UPDATE SET path=excluded.path,pillar=excluded.pillar,answer=excluded.answer,why_en=excluded.why_en,why_de=excluded.why_de,updated=excluded.updated,active=1")
+      .bind(qid, path, pillar, answer, cleanText(k.why_en, 1200), cleanText(k.why_de, 1200), t, t));
   }
   if (bad.length) return J({ error: "bad_keys", bad: bad.slice(0, 20), count: bad.length }, 400);   // alles oder nichts: ein halber Schluessel waere schlimmer
   const qids = JSON.stringify(b.keys.map((k) => String(k.qid)));   // ein Parameter statt einer IN-Liste (D1: hoechstens 100 Parameter je Anweisung)
@@ -213,20 +223,34 @@ async function internalUpsert(env, request, J) {
 
 // Nur Fragen ziehen, die die Seite zeigen kann: have = IDs aus dem eingebetteten data/pillar_quiz.json der Testseite. Schluessel kommen teils vor dem
 // naechsten Seitenbau in D1 (neuer Leitfaden, gewachsener Pool); solche Fragen waeren auf der Seite nicht beantwortbar und zaehlten als falsch.
-// Die Liste kommt vom Browser, darf den Test also nicht beliebig verkleinern: Ein Leitfaden faellt nur weg, wenn die Seite keine seiner Fragen kennt,
-// und hoechstens ein Fuenftel der Leitfaeden darf so fehlen. Innerhalb eines Leitfadens gilt die Auswahl der Seite nur, wenn sie mindestens
-// HAVE_MIN (bzw. alle) seiner Fragen kennt - sonst der ganze Pool. Fehlt have (aeltere Seite im Cache), gilt der ganze Pool wie bisher.
-export const HAVE_MAX = 500, HAVE_MIN = PER_PILLAR + 1, HAVE_PILLAR_PCT = 80;
-export function pageFilter(groups, have) {
-  if (!Array.isArray(have)) return groups;
+// Die Liste kommt vom Browser und darf den Pool nicht auswaehlen: Ausgeblendet wird eine fehlende Frage nur, wenn sie juenger als HAVE_GRACE ist
+// (fresh: erster Push vor weniger als 3 Tagen, Zeit bis zum Seitenbau) UND die Seite sie nicht kennen kann - IDs zaehlen je Leitfaden hoch
+// (tools/pillar_quiz.py next_n), also nur Nummern ueber der hoechsten bekannten des Leitfadens, oder der ganze Leitfaden fehlt auf der Seite.
+// Aeltere Fragen gehoeren immer zum Pool. Bleiben in einem Leitfaden weniger als HAVE_MIN, gilt sein ganzer Pool; fehlen mehr als ein Fuenftel der
+// Leitfaeden, der ganze Pool. Fehlt have (aeltere Seite im Cache), gilt der ganze Pool wie bisher.
+// -> Map Leitfaden -> qids, oder null: have ist eine gueltige Liste ohne jede aktive Frage (Seite veraltet, z. B. nach neuem Fragensatz) -> 409 page_outdated
+export const HAVE_MAX = 500, HAVE_MIN = PER_PILLAR + 1, HAVE_PILLAR_PCT = 80, HAVE_GRACE = 3 * 86400;
+const qnum = (q) => Number(q.slice(q.lastIndexOf("-") + 1));
+export function haveSet(have) {
+  if (!Array.isArray(have)) return null;
   const hv = new Set(have.slice(0, HAVE_MAX).map((q) => String(q)).filter((q) => q.length <= 90 && QID_RX.test(q)));
+  return hv.size ? hv : null;
+}
+export function pageFilter(groups, have, fresh = new Set()) {
+  const hv = haveSet(have);
+  if (!hv) return groups;
   const out = new Map();
+  let seen = 0;
   for (const [p, l] of groups) {
-    const x = l.filter((q) => hv.has(q));
-    if (!x.length) continue;   // Leitfaden kennt die Seite (noch) nicht
+    const known = l.filter((q) => hv.has(q));
+    seen += known.length;
+    const top = known.length ? Math.max(...known.map(qnum)) : -1;
+    const x = l.filter((q) => hv.has(q) || !fresh.has(q) || (top >= 0 && qnum(q) <= top));
+    if (!x.length) continue;   // neuer Leitfaden, den die Seite (noch) nicht kennt
     out.set(p, x.length >= Math.min(l.length, HAVE_MIN) ? x : l);
   }
-  return out.size && out.size >= Math.ceil((groups.size * HAVE_PILLAR_PCT) / 100) ? out : groups;   // zu viel fehlt: veraltete oder manipulierte Liste -> ganzer Pool
+  if (!seen) return null;
+  return out.size >= Math.ceil((groups.size * HAVE_PILLAR_PCT) / 100) ? out : groups;   // zu viel fehlt: veraltete oder manipulierte Liste -> ganzer Pool
 }
 
 async function start(env, request, user, J) {
@@ -237,15 +261,24 @@ async function start(env, request, user, J) {
   // Offener, noch gueltiger Versuch: denselben zurueckgeben (Neuladen der Seite kostet keinen Versuch)
   const open = await db.prepare("SELECT id,qids,started FROM learn_attempts WHERE user_id=? AND path=? AND finished=0 AND started>? ORDER BY started DESC LIMIT 1").bind(user.id, path, t - ATTEMPT_TTL).first();
   if (open) {
-    if (b.lang) await db.prepare("UPDATE learn_attempts SET lang=? WHERE id=?").bind(lang, open.id).run();
-    const qids = parse(open.qids, []);
-    return J({ attempt: open.id, qids, expires: open.started + ATTEMPT_TTL, total: qids.length, threshold: threshold(qids.length), resumed: true, attempts_left: await attemptsLeft(db, user.id, path) });
+    const qids = parse(open.qids, []), hv = haveSet(b.have);
+    // Kennt die (neue) Seite stillgelegte Fragen des Versuchs nicht mehr, waeren sie nicht beantwortbar und zaehlten als falsch:
+    // Versuch verwerfen, den Zaehler zurueckgeben und neu ziehen. Nur stillgelegte - eine aktive, der Seite unbekannte Frage aendert nichts.
+    const gone = hv ? qids.filter((q) => !hv.has(q)) : [];
+    const retired = gone.length ? (await db.prepare("SELECT COUNT(*) n FROM learn_quiz_keys WHERE active=0 AND qid IN (SELECT value FROM json_each(?))").bind(JSON.stringify(gone)).first())?.n || 0 : 0;
+    if (!retired) {
+      if (b.lang) await db.prepare("UPDATE learn_attempts SET lang=? WHERE id=?").bind(lang, open.id).run();
+      return J({ attempt: open.id, qids, expires: open.started + ATTEMPT_TTL, total: qids.length, threshold: threshold(qids.length), resumed: true, attempts_left: await attemptsLeft(db, user.id, path) });
+    }
+    const del = await db.prepare("DELETE FROM learn_attempts WHERE id=? AND finished=0").bind(open.id).run();
+    if (del?.meta?.changes) await db.prepare("UPDATE ratelimit SET n=MAX(n-1,0) WHERE k=? AND win>?").bind(rlKey(user.id, path), t - ATTEMPT_TTL).run();
   }
-  const keys = (await db.prepare("SELECT qid,pillar FROM learn_quiz_keys WHERE path=? AND active=1 ORDER BY pillar,qid").bind(path).all()).results || [];
-  const by = new Map();
-  for (const k of keys) by.set(k.pillar, [...(by.get(k.pillar) || []), k.qid]);
-  const groups = pageFilter(by, b.have);
-  if (!groups.size) return J({ error: "no_quiz" }, 404);
+  const keys = (await db.prepare("SELECT qid,pillar,created FROM learn_quiz_keys WHERE path=? AND active=1 ORDER BY pillar,qid").bind(path).all()).results || [];
+  const by = new Map(), fresh = new Set();
+  for (const k of keys) { by.set(k.pillar, [...(by.get(k.pillar) || []), k.qid]); if (k.created > t - HAVE_GRACE) fresh.add(k.qid); }
+  if (!by.size) return J({ error: "no_quiz" }, 404);
+  const groups = pageFilter(by, b.have, fresh);
+  if (!groups) return J({ error: "page_outdated" }, 409);
   if (!(await rateLimit(db, rlKey(user.id, path), MAX_ATTEMPTS, ATTEMPT_TTL))) return J({ error: "rate_limit", attempts_left: 0 }, 429);
   const qids = [...groups.values()].flatMap((l) => pick(l, PER_PILLAR));
   const id = randomToken(16);
@@ -268,7 +301,7 @@ async function submit(env, request, user, J) {
   const ph = qids.map(() => "?").join(",");
   const keyRows = qids.length ? (await db.prepare(`SELECT qid,pillar,answer,why_en,why_de FROM learn_quiz_keys WHERE qid IN (${ph})`).bind(...qids).all()).results || [] : [];
   const keys = new Map(keyRows.map((k) => [k.qid, k]));
-  const lang = quizLang(a.lang), perPillar = {}, results = [], chosen = {};
+  const lang = quizLang(a.lang), perPillar = {}, chosen = {}, rows = [];
   let score = 0, total = 0;
   for (const qid of qids) {
     const k = keys.get(qid);
@@ -278,13 +311,18 @@ async function submit(env, request, user, J) {
     chosen[qid] = pickd;
     const pp = perPillar[k.pillar] || (perPillar[k.pillar] = { ok: 0, n: 0 });
     pp.n++; if (ok) pp.ok++;
-    results.push({ qid, pillar: k.pillar, ok, chosen: pickd, correct: k.answer, why: (lang === "de" ? k.why_de : k.why_en) || k.why_en || "" });
+    rows.push({ k, qid, ok, pickd });
   }
   const need = threshold(total), passed = total > 0 && score >= need ? 1 : 0, t = now();
+  // Loesungen nur, wo sie nichts verraten bzw. der Test vorbei ist (siehe Kopf): richtig beantwortet, bestanden, oder keine Versuche mehr (dann nur beantwortete)
+  const left = await attemptsLeft(db, user.id, a.path), shown = passed ? "all" : left > 0 ? "none" : "answered";
+  const results = rows.map(({ k, qid, ok, pickd }) => (ok || shown === "all" || (shown === "answered" && pickd !== null)
+    ? { qid, pillar: k.pillar, ok, chosen: pickd, correct: k.answer, why: (lang === "de" ? k.why_de : k.why_en) || k.why_en || "" }
+    : { qid, pillar: k.pillar, ok, chosen: pickd }));
   const r = await db.prepare("UPDATE learn_attempts SET finished=?,score=?,total=?,passed=?,detail=? WHERE id=? AND user_id=? AND finished=0")
     .bind(t, score, total, passed, JSON.stringify({ answers: chosen, per_pillar: perPillar }), id, user.id).run();
   if (!r?.meta?.changes) return J({ error: "already_submitted" }, 409);   // gleichzeitige zweite Abgabe
-  return J({ attempt: id, score, total, passed: !!passed, threshold: need, threshold_pct: PASS_PCT, per_pillar: perPillar, results, attempts_left: await attemptsLeft(db, user.id, a.path) });
+  return J({ attempt: id, score, total, passed: !!passed, threshold: need, threshold_pct: PASS_PCT, per_pillar: perPillar, results, shown, attempts_left: left });
 }
 
 async function certStatus(env, url, user, J) {
@@ -326,7 +364,7 @@ async function certRequest(env, request, user, J) {
   if (a.user_id !== user.id) return J({ error: "forbidden" }, 403);
   if (a.path !== path || !a.passed) return J({ error: "not_passed" }, 409);
   if (b.consent !== true) return J({ error: "consent" }, 400);
-  const name = cleanText(b.name, 200).replace(/\s+/g, " ").replace(/[<>]/g, "").trim();
+  const name = certName(b.name);   // normalisiert gespeichert (so prueft und druckt es dasselbe)
   if (name.length < 2 || name.length > 80) return J({ error: "name" }, 400);
   if (NAME_URL_RX.test(name)) return J({ error: "name_url" }, 400);
   const email = String(b.email || "").trim().toLowerCase();
