@@ -1,10 +1,10 @@
 ---
 title: "How to configure hibernate with autoscale for personal host pools"
 summary: "Enable hibernation on the session hosts first, then give Azure Virtual Desktop the Power On Off Contributor role and create a personal scaling plan using the Hibernate action. Verify one host by hand first."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-25
 render: v2
 topics: [avd-hibernation, avd-personal-host-pool]
 keypoints:

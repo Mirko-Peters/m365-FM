@@ -1,10 +1,10 @@
 ---
 title: "Copilot Notebooks for Every Project: How to Create One and Add References"
 summary: "How to open Microsoft 365 Copilot Notebooks, create a notebook for a project, add references, and what the limits are, including conflicting Microsoft guidance about emails, meetings and chats as references."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-01
+date: 2026-11-25
 topics: [copilot-notebooks, copilot, copilot-pages, microsoft-loop]
 keypoints:
   - "A Copilot notebook is a scoped workspace. Copilot answers only from the references you add, not from the rest of your account."

@@ -1,10 +1,10 @@
 ---
 title: "Moving from the service principal to a managed identity for AVD features"
 summary: "To move an Azure Virtual Desktop host pool from the service principal to a managed identity, assign the identity, grant each feature's role, check the feature, then remove the service principal's role."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-25
 render: v2
 topics: [avd-managed-identity, azure-virtual-desktop]
 keypoints:

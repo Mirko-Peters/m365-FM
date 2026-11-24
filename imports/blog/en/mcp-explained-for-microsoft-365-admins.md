@@ -1,10 +1,10 @@
 ---
 title: "MCP Explained for Microsoft 365 Admins: What It Is and Where Microsoft Uses It"
 summary: "Model Context Protocol (MCP) in plain terms for Microsoft 365 admins: what an MCP server is, how Copilot Studio, Work IQ and Agent 365 use it, and where to find and block tools in the admin center."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-02
+date: 2026-11-25
 topics: [mcp, copilot-studio, agent-365, microsoft-365-admin-center]
 keypoints:
   - "Microsoft describes MCP servers as standardized servers that expose tools and resources an agent can dynamically discover and use."

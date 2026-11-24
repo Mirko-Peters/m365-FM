@@ -1,10 +1,10 @@
 ---
 title: "How to Build a Knowledge Base in SharePoint: Sites, Pages, Templates and Metadata"
 summary: "Microsoft has no single knowledge base wizard for SharePoint. This guide assembles the documented building blocks: one site per topic, modern pages and templates, columns and content types, search, and optional Copilot in SharePoint."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-01
+date: 2026-11-25
 topics: [sharepoint, sharepoint-hub-sites, sharepoint-managed-metadata, sharepoint-content-types]
 keypoints:
   - "Microsoft documents no one-click knowledge base. You assemble one from sites, pages, page templates, metadata and search."

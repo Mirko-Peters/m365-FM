@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Workflows in Teams and Microsoft 365: What They Are and How to Automate Work"
 summary: "Microsoft uses the name Workflows for two things: the Workflows app in Teams, built on Power Automate, and the Workflows agent in Microsoft Copilot. Learn how each is opened, what it can do and where the limits are."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-01
+date: 2026-11-25
 topics: [teams, power-automate, workflows-agent, copilot]
 keypoints:
   - "The Workflows app in Teams creates Power Automate flows from templates, from a description in the workflow builder, or from scratch."

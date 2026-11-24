@@ -1,10 +1,10 @@
 ---
 title: "Managed identity in Azure Virtual Desktop: autoscale, Start VM on Connect and session host configuration"
 summary: "A managed identity on an Azure Virtual Desktop host pool lets autoscale, session host update, Start VM on Connect and AVD for Azure Local act without the service principal. GA since September 2026."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-25
 render: v2
 topics: [avd-managed-identity, azure-virtual-desktop]
 keypoints:

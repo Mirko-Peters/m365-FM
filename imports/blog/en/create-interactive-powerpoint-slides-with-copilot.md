@@ -1,10 +1,10 @@
 ---
 title: "Create Interactive PowerPoint Slides with Copilot: What Microsoft Documents"
 summary: "Copilot in PowerPoint can create interactive slides such as dashboards, timelines, process flows and comparisons. This guide covers how to start, the platforms, licensing and rollout status, and what Microsoft has not documented yet."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-01
+date: 2026-11-25
 topics: [powerpoint, copilot]
 keypoints:
   - "Interactive slides are created with the Create interactive slide skill in Copilot, or with the Interactive Slide button on the PowerPoint ribbon."

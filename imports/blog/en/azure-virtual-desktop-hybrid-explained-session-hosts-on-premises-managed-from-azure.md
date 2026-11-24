@@ -1,10 +1,10 @@
 ---
 title: "Azure Virtual Desktop Hybrid explained: session hosts on-premises, managed from Azure"
 summary: "Azure Virtual Desktop Hybrid keeps the service in Azure and puts session hosts on your own on-premises hardware, connected through Azure Arc. You give up Azure-side features such as autoscale, so check the limits first."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-25
 render: v2
 topics: [avd-hybrid, azure-virtual-desktop]
 keypoints:

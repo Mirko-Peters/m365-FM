@@ -1,10 +1,10 @@
 ---
 title: "Passkeys in Microsoft 365: Admin Setup Guide for Microsoft Entra ID"
 summary: "How admins enable passkeys (FIDO2) in Microsoft Entra ID for Microsoft 365: roles, passkey profiles, attestation, key restrictions, Authenticator, Conditional Access and the documented limits."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-02
+date: 2026-11-25
 topics: [passkey, entra-id, microsoft-authenticator, conditional-access]
 keypoints:
   - "Passkeys (FIDO2) are included in all Microsoft Entra ID editions, including Free. The Authentication Policy Administrator role is enough to configure them."

@@ -1,10 +1,10 @@
 ---
 title: "Azure Virtual Desktop for Azure Local: when to keep session hosts close to the data"
 summary: "Azure Virtual Desktop for Azure Local runs session hosts on your own Azure Local hardware while host pools, workspaces and application groups stay in Azure. This article sets out the cases Microsoft names for it, the constraints that come with it and a short decision procedure."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-25
 render: v2
 topics: [avd-for-azure-local, azure-virtual-desktop]
 keypoints:

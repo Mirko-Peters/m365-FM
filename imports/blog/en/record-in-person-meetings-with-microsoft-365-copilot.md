@@ -1,10 +1,10 @@
 ---
 title: "Record In-Person Meetings with Microsoft 365 Copilot: Facilitator Notes on Teams Mobile"
 summary: "Copilot does not record a room by itself. Microsoft documents Facilitator in Teams on mobile and in Teams Rooms for in-person notes and transcripts. Steps, licensing, speaker limits and the difference between recording and transcription."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-01
+date: 2026-11-25
 topics: [facilitator-agent, copilot, teams-meeting-transcription, teams-rooms]
 keypoints:
   - "In person, use Facilitator: on Teams mobile go to Calendar, tap Meeting, then Take notes with Facilitator."

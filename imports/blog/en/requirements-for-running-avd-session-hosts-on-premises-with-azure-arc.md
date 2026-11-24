@@ -1,10 +1,10 @@
 ---
 title: "Requirements for running AVD session hosts on-premises with Azure Arc"
 summary: "Before you register on-premises session hosts with Azure Virtual Desktop Hybrid, you need an Azure side (providers, roles, a host pool with a managed identity), a host side (supported OS, Arc agent, domain join) and outbound network access. This checklist lists each requirement with its source."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-25
 render: v2
 topics: [avd-hybrid, azure-virtual-desktop]
 keypoints:

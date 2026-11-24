@@ -1,10 +1,10 @@
 ---
 title: "Copilot Agent Builder: Build Your First Agent Step by Step"
 summary: "Step-by-step guide to building a declarative agent with Agent Builder in Microsoft 365 Copilot: open it, describe or configure the agent, add knowledge, test with Try it, and share it, including documented limits."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-01
+date: 2026-11-25
 topics: [copilot-agent-builder, copilot, declarative-agent, copilot-studio]
 keypoints:
   - "Select New agent in Microsoft 365 Copilot, then describe the agent in natural language, skip to Configure, or start from a template."

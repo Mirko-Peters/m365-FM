@@ -1,10 +1,10 @@
 ---
 title: "SharePoint HTML Pages: What They Are, How to Create Them, and What the Limits Are"
 summary: "SharePoint HTML pages are .html files stored in Site Pages that you can create with Copilot or upload, edit, publish and share. This guide covers the steps, licensing, the sandbox and file limits."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-02
+date: 2026-11-25
 topics: [sharepoint-html-pages, sharepoint, copilot]
 keypoints:
   - "HTML pages are .html files stored in the Site Pages library. They can be edited, published and shared like other site pages."

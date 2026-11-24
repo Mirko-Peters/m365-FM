@@ -1,10 +1,10 @@
 ---
 title: "Group Policy vs Microsoft Intune: When to Move and What to Check First"
 summary: "How Group Policy and Intune differ, what Microsoft says to check before moving, how Group Policy analytics and the Settings catalog work, and how conflicts are resolved when both manage the same device."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-02
+date: 2026-11-25
 topics: [group-policy, intune, hybrid-entra-join, security-baselines]
 keypoints:
   - "Microsoft's planning guide says not to move Group Policy to Intune until you know what each policy does. Build new policies from requirements with the Settings catalog."

@@ -1,10 +1,10 @@
 ---
 title: "Key metrics and alerts for Azure Virtual Desktop"
 summary: "In our grouping, Azure Virtual Desktop monitoring rests on connection and error diagnostics, session host performance counters and autoscale evaluations. Learn names no alert thresholds, so you set those yourself."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-25
 render: v2
 topics: [avd-insights, azure-virtual-desktop]
 keypoints:

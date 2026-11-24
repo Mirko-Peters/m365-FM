@@ -1,10 +1,10 @@
 ---
 title: "Useful KQL queries for Azure Virtual Desktop diagnostics"
 summary: "These KQL queries come word for word from Microsoft Learn and answer four admin questions: failed connections, shared errors, failing autoscale evaluations and network behaviour. Each names its table and limits."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-25
 render: v2
 topics: [avd-insights, kql]
 keypoints:

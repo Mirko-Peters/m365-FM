@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Defender and Intune: Common Misconfigurations to Check"
 summary: "A checklist of Defender and Intune misconfigurations that Microsoft documents: overlapping policies, mixed management sources, onboarding policy conflicts, security management errors and tenant mismatches."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-02
+date: 2026-11-25
 topics: [intune, microsoft-defender-for-endpoint, security-baselines, group-policy]
 keypoints:
   - "In Intune all policy types have equal precedence. Different values for the same setting in several policies can cause a conflict and the setting may fail to apply."

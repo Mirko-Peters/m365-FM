@@ -1,10 +1,10 @@
 ---
 title: "Troubleshooting Azure Virtual Desktop connection failures: a checklist"
 summary: "When a user cannot connect to Azure Virtual Desktop, first find the stage that fails: sign-in, feed, launch or transport. This checklist follows those stages from the client and network side, with the Learn-documented fixes for each and the diagnostics queries that show where a connection stopped."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-25
 render: v2
 topics: [azure-virtual-desktop, avd-agent]
 keypoints:

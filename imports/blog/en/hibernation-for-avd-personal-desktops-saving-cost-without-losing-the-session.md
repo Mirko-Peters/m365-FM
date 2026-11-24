@@ -1,10 +1,10 @@
 ---
 title: "Hibernation for AVD personal desktops: saving cost without losing the session"
 summary: "Hibernation writes a personal desktop's memory to its OS disk and deallocates the VM, so compute billing stops while open apps come back on the next start. It saves the same compute as deallocation, so the case for it is user state, weighed against a larger disk and some operational limits."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-11-18
+date: 2026-11-25
 render: v2
 topics: [avd-hibernation, avd-personal-host-pool]
 keypoints:

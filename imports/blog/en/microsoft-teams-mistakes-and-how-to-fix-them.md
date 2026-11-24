@@ -1,10 +1,10 @@
 ---
 title: "Microsoft Teams Mistakes Most People Make (and How to Fix Them)"
 summary: "Common Microsoft Teams mistakes with fixes, each tied to Microsoft documentation: chat versus channels, where files are stored, notifications, team owners, channel names and lifecycle."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-02
+date: 2026-11-25
 topics: [teams, teams-channels, onedrive, sharepoint]
 keypoints:
   - "Use channels for topics that the whole team should see. Microsoft describes chats as private conversations that are not relevant to the members of a team or channel."

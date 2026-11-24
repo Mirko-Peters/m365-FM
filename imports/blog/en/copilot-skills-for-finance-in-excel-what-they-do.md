@@ -1,10 +1,10 @@
 ---
 title: "Copilot Skills for Finance in Microsoft 365: What They Do and How to Start in Excel"
 summary: "What finance and accounting skills in Copilot in Excel are, which ones Microsoft lists, how to call them with @, how to create custom skills with SKILL.md, and what the documentation leaves open."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-02
+date: 2026-11-25
 topics: [copilot, excel, agent-skill]
 keypoints:
   - "A skill gives Copilot in Excel instructions for a repeatable task. Call one by typing @ and the skill name, or via Add > Choose plugins and skills."

@@ -1,10 +1,10 @@
 ---
 title: "What Is Microsoft Fabric? A Plain-Language Guide for Microsoft 365 Teams"
 summary: "Microsoft Fabric is a SaaS analytics platform where Power BI, data engineering, warehousing and real-time analytics share one storage layer, OneLake. Here is what it contains, what it costs to start and why Microsoft 365 teams meet it."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-01
+date: 2026-11-25
 topics: [fabric, onelake, power-bi, fabric-capacity]
 keypoints:
   - "Microsoft Fabric is a software-as-a-service analytics platform for ingestion, transformation, real-time processing, analytics and reporting."

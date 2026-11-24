@@ -1,10 +1,10 @@
 ---
 title: "Excel Canvas with Copilot: Turn Workbook Data into an Interactive Report"
 summary: "What Excel canvas (interactive canvas) is, how Copilot builds it from workbook data, where it is available, and why Microsoft's pages do not use the name Dashboard mode. Includes conflicting rollout statements."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
-date: 2026-12-02
+date: 2026-11-25
 topics: [excel, copilot, agent-skill]
 keypoints:
   - "Excel canvas turns workbook data into a report with visualizations, metrics and insights in one view. It updates as the data changes."
