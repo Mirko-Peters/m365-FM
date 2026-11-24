@@ -1,0 +1,1126 @@
+WEBVTT
+
+00:00:00.020 --> 00:00:10.680
+O serviço Azure OpenAI não é o chat de PT com o logotipo da Microsoft, ele executa os mesmos modelos, mas a Microsoft os hospeda dentro do seu próprio espaço no Azure, com suas próprias chaves, seus próprios limites e suas próprias regras de privacidade.
+
+00:00:10.900 --> 00:00:15.920
+Essa diferença é o motivo pelo qual um banco pode desenvolver soluções sobre ele, enquanto muitas ferramentas de ar pública são barradas na porta.
+
+00:00:16.100 --> 00:00:22.080
+Bem-vindos ao podcast M305FM, onde exploramos as pessoas, ideias e tecnologias que estão moldando o futuro do trabalho.
+
+00:00:22.580 --> 00:00:28.580
+Ao final deste episódio, você será capaz de explicar a outra pessoa, em termos simples, o que é o serviço Azure OpenAI.
+
+00:00:28.580 --> 00:00:31.660
+Vamos começar com a versão simples, porque o nome esconde muita coisa.
+
+00:00:32.120 --> 00:00:37.680
+O serviço Azure OpenAI é a forma como a Microsoft permite que você use os modelos de A da OpenAI dentro do Azure, que é a própria nuvem da Microsoft.
+
+00:00:39.080 --> 00:00:42.880
+A Microsoft hospeda esses modelos em seu próprio ambiente, e um detalhe importa mais do que o restante.
+
+00:00:43.260 --> 00:00:50.280
+Quando você os usa dessa forma, eles não tocam no serviço da própria OpenAI, então nada passa pelo chat de PT ou pela API pública da OpenAI em seu nome.
+
+00:00:50.640 --> 00:00:52.880
+É aí que a ideia do chat de PT com o logotipo perde o sentido.
+
+00:00:53.560 --> 00:00:57.160
+Os modelos são os mesmos, mas tudo ao redor deles é construído e governado pela Microsoft.
+
+00:00:57.160 --> 00:01:02.880
+A Microsoft e a OpenAI projetaram essas APIs juntas para que seu código permaneça compatível com ambas,
+
+00:01:03.020 --> 00:01:08.080
+e a Microsoft resume dizendo que você obtém a segurança do Azure enquanto executa os mesmos modelos da OpenAI.
+
+00:01:09.060 --> 00:01:12.700
+Nome importante aqui, porque o objetivo principal é que este seja, antes de tudo, um serviço do Azure.
+
+00:01:13.140 --> 00:01:17.420
+Ele vive dentro da sua assinatura Azure, segue as regras do Azure e aparece na sua fatura do Azure.
+
+00:01:18.040 --> 00:01:18.720
+Imagine dessa forma.
+
+00:01:19.180 --> 00:01:23.260
+O modelo atua com o motor, e o Azure é o carro, o cinto de segurança e a garagem onde ele repousa.
+
+00:01:23.260 --> 00:01:27.940
+O motor importa, mas para uma empresa, é o carro ao redor dele que decide se eles têm permissão para dirigir.
+
+00:01:28.260 --> 00:01:30.980
+Você verá esse serviço dentro de algo chamado Microsoft Foundry,
+
+00:01:31.180 --> 00:01:34.080
+que é o lugar no Azure onde você cria, implanta e gerencia esses modelos.
+
+00:01:34.620 --> 00:01:37.780
+Se eu não precisar memorizar esse nome, apenas sabe que existe uma oficina e os modelos vivem nela.
+
+00:01:38.200 --> 00:01:39.040
+Então essa é a ideia central.
+
+00:01:39.700 --> 00:01:43.380
+São os mesmos cérebros em uma casa diferente, e a casa é o que torna tudo utilizável para organizações reais.
+
+00:01:44.280 --> 00:01:46.700
+A boa notícia é que o restante se resume a um punhado de peças,
+
+00:01:46.800 --> 00:01:49.200
+e uma vez que você possa nomeá-las, nada disso parecerá mais mágico.
+
+00:01:49.200 --> 00:01:51.320
+Os modelos por 3G.
+
+00:01:51.700 --> 00:01:55.140
+Um modelo é o cérebro de A treinado que lê o que você envia e escreve algo de volta.
+
+00:01:55.680 --> 00:01:59.600
+Essa é a ideia completa, e tudo o resto neste episódio é sobre como você coloca esse cérebro para trabalhar.
+
+00:02:00.240 --> 00:02:03.340
+Não existe apenas um modelo, mas uma família. Cada um deles é bom em coisas diferentes.
+
+00:02:03.780 --> 00:02:05.900
+Modelos de chat são aqueles com os quais você conversa,
+
+00:02:05.920 --> 00:02:09.700
+e os modelos de raciocínio vão além, pois processam um problema em etapas antes de responder,
+
+00:02:09.900 --> 00:02:11.760
+o que ajuda em matemática, lógica e planejamento.
+
+00:02:12.420 --> 00:02:14.100
+Modelos de embedding não escrevem frases de forma alguma.
+
+00:02:14.100 --> 00:02:17.600
+Eles transformam o texto em números para que o software possa comparar significados,
+
+00:02:17.660 --> 00:02:20.340
+e é assim que a busca encontra a correspondência mais próxima em vez da palavra exata.
+
+00:02:20.900 --> 00:02:22.280
+Depois há modelos para outros sentidos.
+
+00:02:22.880 --> 00:02:25.380
+Modelos de geração de imagem criam figuras a partir de uma descrição,
+
+00:02:25.640 --> 00:02:27.220
+modelos de vídeo criam cenas curtas,
+
+00:02:27.280 --> 00:02:30.940
+e modelos de áudio lidam com fala para texto, tradução e texto para fala.
+
+00:02:32.160 --> 00:02:34.200
+Alguns modelos de chat também são multimodais,
+
+00:02:34.300 --> 00:02:36.600
+o que significa que podem processar uma imagem junto com seu texto,
+
+00:02:36.680 --> 00:02:39.440
+permitindo que você mostre uma foto de um recibo e peça para extrair o total.
+
+00:02:39.940 --> 00:02:41.280
+Há uma compensação que vale a pena lembrar.
+
+00:02:41.280 --> 00:02:43.880
+Modelos maiores e mais inteligentes custam mais e demoram mais,
+
+00:02:43.960 --> 00:02:45.400
+enquanto os menores são mais baratos e rápidos.
+
+00:02:45.860 --> 00:02:48.300
+Tanto uma equipe escolhe um modelo da mesma forma que você escolhe um veículo para uma equipe.
+
+00:02:48.740 --> 00:02:50.460
+Você não pega um caminhão de mudança para comprar leite,
+
+00:02:50.540 --> 00:02:51.940
+não usa um patinete para mover um sofá.
+
+00:02:52.440 --> 00:02:54.040
+E o modelo certo é apenas metade do trabalho,
+
+00:02:54.120 --> 00:02:56.400
+no entanto, e a outra metade onde a maioria dos iniciantes se perde.
+
+00:02:57.360 --> 00:02:58.620
+Implantação é sua própria cópia de um modelo.
+
+00:02:59.320 --> 00:03:01.800
+Essa outra metade é chamada de implantação e é mais simples do que parece.
+
+00:03:02.320 --> 00:03:04.340
+Uma implantação é sua própria cópia nomeada de um modelo,
+
+00:03:04.460 --> 00:03:05.860
+residindo dentro do seu recurso Azure.
+
+00:03:06.300 --> 00:03:08.240
+Você escolhe um modelo, dá um nome à implantação,
+
+00:03:08.320 --> 00:03:11.040
+e seu aplicativo chama esse nome sempre que precisa de uma resposta.
+
+00:03:11.740 --> 00:03:14.200
+Imagine uma prateleira de modelos e um espaço vazio com seu nome nele.
+
+00:03:14.620 --> 00:03:16.080
+O modelo permanece na prateleira para tudo.
+
+00:03:16.420 --> 00:03:18.680
+A implantação é aquela que você realmente conectou e pode usar.
+
+00:03:19.560 --> 00:03:21.220
+As escolhas aqui se resumem a três coisas,
+
+00:03:21.300 --> 00:03:25.040
+onde seus dados são processados, como você paga e com estável a velocidade permanece.
+
+00:03:26.120 --> 00:03:29.120
+O Azure oferece alguns padrões, e o padrão é chamado de Global Standards.
+
+00:03:30.620 --> 00:03:33.060
+A recomendação da própria Microsoft é começar por aí,
+
+00:03:33.120 --> 00:03:35.180
+porque tem o menor preço, a maior escolha de regiões
+
+00:03:35.180 --> 00:03:37.140
+e os limites iniciais mais generosos,
+
+00:03:37.580 --> 00:03:40.400
+o que o torna a escolha certa para a maioria que está ouvindo sobre isso pela primeira vez.
+
+00:03:41.280 --> 00:03:42.720
+Existem duas variações para regras de dados.
+
+00:03:43.380 --> 00:03:46.460
+O Data Zone Standard mantém o processamento dentro de uma área escolhida,
+
+00:03:46.560 --> 00:03:47.480
+como Estados Unidos ou Europa.
+
+00:03:47.920 --> 00:03:49.940
+E o Standard o mantém dentro da sua geografia Azure,
+
+00:03:50.020 --> 00:03:52.280
+o que importa quando uma empresa precisa provar para onde seus dados vão.
+
+00:03:52.860 --> 00:03:56.000
+Depois, há o Provisioned, onde você reserva a capacidade com antecedência
+
+00:03:56.000 --> 00:03:58.220
+para que a velocidade permaneça estável mesmo quando o tráfego aumenta.
+
+00:03:58.260 --> 00:04:01.020
+Isso custa mais caro, então você usa quando um aplicativo não pode se dar ao luxo e ficar bem.
+
+00:04:01.500 --> 00:04:04.120
+Por fim, lote para grandes pilhas de tarefas que podem esperar,
+
+00:04:04.260 --> 00:04:05.620
+custando cerca de metade do preço,
+
+00:04:05.620 --> 00:04:07.900
+porque rodam em segundo plano com prazo de 24 horas.
+
+00:04:07.900 --> 00:04:11.340
+Portanto, há um padrão para iniciantes e um ajuste para especialistas.
+
+00:04:12.000 --> 00:04:13.200
+Esse é o objetivo principal de ter opções.
+
+00:04:15.100 --> 00:04:16.960
+Endpoints e chaves, como os aplicativos se conectam.
+
+00:04:17.520 --> 00:04:18.760
+Uma vez que o modelo é implantado,
+
+00:04:18.880 --> 00:04:20.880
+seu aplicativo precisa de um endereço para alcançá-lo,
+
+00:04:20.920 --> 00:04:22.060
+e esse endereço é chamado de endpoint.
+
+00:04:22.660 --> 00:04:24.760
+É a porta de entrada do seu recurso do Azure OpenAI,
+
+00:04:25.200 --> 00:04:27.820
+e o local onde seu software bate toda vez que precisa de uma resposta.
+
+00:04:28.660 --> 00:04:31.360
+Uma chave à senha que comprova que o aplicativo tem permissão para passar o passaporte.
+
+00:04:31.720 --> 00:04:33.520
+Funciona como cartão de acesso de um prédio,
+
+00:04:33.560 --> 00:04:34.680
+e a mesma regra se aplica.
+
+00:04:34.780 --> 00:04:36.820
+Nunca deixe em locais onde alguém possa copiá-la.
+
+00:04:36.820 --> 00:04:39.340
+Há uma opção mais limpa para configurações profissionais.
+
+00:04:39.720 --> 00:04:40.900
+Em vez de uma chave compartilhada,
+
+00:04:40.940 --> 00:04:42.780
+um aplicativo pode se autenticar usando o Microsoft,
+
+00:04:42.920 --> 00:04:44.580
+entre a ID e o sistema de identidade da Microsoft.
+
+00:04:45.040 --> 00:04:47.920
+Em termos simples, o aplicativo prova quem é sem precisar de uma senha,
+
+00:04:48.000 --> 00:04:50.420
+um arquivo, e essa é a abordagem que a maioria das empresas preferem.
+
+00:04:51.320 --> 00:04:54.140
+A API é simplesmente o idioma combinado que seu aplicativo e serviço usam para combinar.
+
+00:04:54.700 --> 00:04:57.480
+A Microsoft e a OpenAI desenvolveram essas APIs lado a lado,
+
+00:04:57.920 --> 00:05:01.480
+então a maioria dos códigos de tutoriais da OpenAI funciona aqui com poucas alterações.
+
+00:05:02.620 --> 00:05:05.620
+Desenvolvedores apontam a biblioteca padrão da OpenAI para o endpoint do Azure,
+
+00:05:05.620 --> 00:05:07.960
+e a Microsoft oferece suporte à versão atual dessa biblioteca.
+
+00:05:08.460 --> 00:05:10.080
+Isso é genuinamente tudo o que precisa saber a estrutura.
+
+00:05:10.680 --> 00:05:12.640
+O restante são detalhes para quem escreve o código.
+
+00:05:13.900 --> 00:05:16.400
+Tokens é a unidade em que tudo é medido.
+
+00:05:17.040 --> 00:05:18.580
+Cada vez que você bate a porta há um custo,
+
+00:05:18.680 --> 00:05:20.600
+e a unidade medida desse custo é o token.
+
+00:05:20.900 --> 00:05:22.100
+Um token é um pedaço de texto,
+
+00:05:22.400 --> 00:05:23.260
+e é menor do que uma palavra.
+
+00:05:23.720 --> 00:05:25.140
+Palavras curtas geralmente são token,
+
+00:05:25.240 --> 00:05:27.160
+enquanto palavras mais longas são divididas em alguns pedaços.
+
+00:05:27.620 --> 00:05:28.900
+Ambas as partes da conversa conta.
+
+00:05:28.900 --> 00:05:31.120
+O que você envia é contabilizado,
+
+00:05:31.160 --> 00:05:32.320
+e o que o modelo envia de volta também,
+
+00:05:32.420 --> 00:05:34.880
+por isso uma conversa longa vai ficando mais cara conforme avança.
+
+00:05:35.720 --> 00:05:36.740
+O modelo não cobra por minuto,
+
+00:05:36.820 --> 00:05:38.760
+ele cobra pela quantidade de texto que é processada.
+
+00:05:39.820 --> 00:05:42.280
+O modelo também tem um limite do quanto consegue processar de uma vez,
+
+00:05:42.360 --> 00:05:44.020
+e esse limite é chamado de janela de contexto.
+
+00:05:44.860 --> 00:05:46.700
+Imagine uma mesa que só pode conter um certo número de papel.
+
+00:05:47.800 --> 00:05:49.700
+Tudo precisa caber na mesa ao mesmo tempo,
+
+00:05:49.900 --> 00:05:51.680
+incluindo sua entrada, a saída do modelo,
+
+00:05:51.780 --> 00:05:54.120
+e quaisquer passos de raciocínio interno que ele execute.
+
+00:05:54.120 --> 00:05:57.080
+Um detalhe surpreende a maioria das pessoas.
+
+00:05:57.420 --> 00:05:59.000
+Essas três coisas compartilham um único orçamento,
+
+00:05:59.120 --> 00:06:00.120
+portanto, quanto mais você envia,
+
+00:06:00.200 --> 00:06:01.640
+menos espaço sobra para a resposta que retorna.
+
+00:06:01.900 --> 00:06:03.120
+Se você colar um documento enorme,
+
+00:06:03.240 --> 00:06:04.640
+deixará menos espaço para a resposta,
+
+00:06:04.800 --> 00:06:06.100
+e o modelo pode parar antes do esperado,
+
+00:06:06.180 --> 00:06:07.100
+mesmo que tenha pedido mais.
+
+00:06:07.700 --> 00:06:09.780
+Mais uma observação sobre a configuração de saída máxima,
+
+00:06:09.820 --> 00:06:10.860
+ela é um teto, não uma promessa.
+
+00:06:11.480 --> 00:06:13.520
+Definir um número alto não força o modelo a usá-lo,
+
+00:06:13.740 --> 00:06:15.020
+e o modelo pode terminar mais cedo,
+
+00:06:15.120 --> 00:06:16.600
+sempre que decidir que a resposta está completa.
+
+00:06:17.140 --> 00:06:19.200
+Os tokens são o medidor que gera a sua fatura,
+
+00:06:19.340 --> 00:06:20.360
+e o que aciona seus limites,
+
+00:06:20.460 --> 00:06:22.640
+portanto, esse é o conceito que transforma o restante do serviço
+
+00:06:22.640 --> 00:06:24.040
+de um mistério em matemática simples.
+
+00:06:24.120 --> 00:06:27.840
+Cotas e limites de taxa, o motivo pelo qual você atinge o limite.
+
+00:06:28.560 --> 00:06:29.680
+Se os tokens são o medidor,
+
+00:06:29.820 --> 00:06:31.400
+a cota é a parede em que você esbarra,
+
+00:06:31.620 --> 00:06:32.560
+e ela vem em duas partes.
+
+00:06:32.940 --> 00:06:34.880
+Uma cota é a quantidade de trabalho que você tem permissão para realizar.
+
+00:06:35.080 --> 00:06:36.820
+O limite de taxa é o que você deve com o que você tem permissão.
+
+00:06:37.600 --> 00:06:39.960
+Simplificando, tudo se resume a quanto e quão rápido o serviço
+
+00:06:39.960 --> 00:06:41.240
+mede ambos ao mesmo tempo.
+
+00:06:41.760 --> 00:06:43.460
+Tokens por minuto rastreiam o volume de texto,
+
+00:06:43.580 --> 00:06:45.240
+e solicitações por minuto rastreiam a frequência
+
+00:06:45.240 --> 00:06:46.400
+com que seu aplicativo faz chamadas.
+
+00:06:46.840 --> 00:06:49.140
+Sua cota é definida no nível da sua assinatura do Azure,
+
+00:06:49.140 --> 00:06:51.040
+que é a conta que mantém todos os seus serviços Azure,
+
+00:06:51.160 --> 00:06:52.640
+e sim, os limites são compartilhados
+
+00:06:52.640 --> 00:06:54.140
+entre as implantações nessa conta,
+
+00:06:54.220 --> 00:06:56.020
+em vez de distribuídos individualmente.
+
+00:06:57.240 --> 00:06:59.020
+A Microsoft organiza esses limites em níveis.
+
+00:06:59.680 --> 00:07:00.500
+Existe um nível gratuito,
+
+00:07:00.580 --> 00:07:01.600
+e em seguida os níveis de 1 a 6,
+
+00:07:01.700 --> 00:07:03.120
+sendo que os níveis mais altos oferecem mais espaço.
+
+00:07:03.600 --> 00:07:05.760
+Seu nível inicial depende de quanto você usa o serviço
+
+00:07:05.760 --> 00:07:07.020
+e do seu relacionamento com a Microsoft,
+
+00:07:07.240 --> 00:07:08.940
+por isso, empresas com contrato empresarial
+
+00:07:08.940 --> 00:07:10.900
+tendem a começar em níveis mais altos.
+
+00:07:11.740 --> 00:07:14.060
+A parte tranquilizadora é que sua cota aumenta automaticamente
+
+00:07:14.060 --> 00:07:15.160
+conforme seu uso cresce.
+
+00:07:15.160 --> 00:07:17.920
+Então você não precisa solicitar manualmente cada pequeno aumento.
+
+00:07:17.920 --> 00:07:21.340
+Se você realmente precisar de mais, pode solicitar por meio de um formulário.
+
+00:07:21.540 --> 00:07:23.840
+E a Microsoft analisa essas solicitações na ordem que chega.
+
+00:07:24.300 --> 00:07:26.680
+Saber o que acontece quando você ultrapassa o limite é importante,
+
+00:07:26.780 --> 00:07:27.360
+pois você anota ela.
+
+00:07:27.680 --> 00:07:30.180
+O serviço envia um código de erro indicando excesso de solicitações,
+
+00:07:30.500 --> 00:07:32.260
+e seus tempos de resposta podem aumentar, às vezes,
+
+00:07:32.540 --> 00:07:34.260
+para mais do que o dobro da velocidade habitual.
+
+00:07:35.300 --> 00:07:37.240
+Para um aplicativo que precisa de desempenho estável,
+
+00:07:37.300 --> 00:07:38.520
+a solução é a capacidade reservada,
+
+00:07:38.600 --> 00:07:40.400
+chamada Unidades de Taxa de Transferência Provisionada,
+
+00:07:40.440 --> 00:07:42.040
+onde você paga antecipadamente com a cidade garantida.
+
+00:07:42.040 --> 00:07:44.860
+É a diferença entre esperar na fila e ter sua própria mesa,
+
+00:07:46.240 --> 00:07:47.940
+filtragem de conteúdo, as proteções integradas,
+
+00:07:48.500 --> 00:07:50.280
+e os limites controlam o quanto você pode enviar,
+
+00:07:50.380 --> 00:07:52.500
+e os filtros de conteúdo controlam o que tem permissão para retornar.
+
+00:07:53.260 --> 00:07:56.200
+Cada prompt e cada resposta passam por esse sistema de filtragem
+
+00:07:56.200 --> 00:07:57.160
+antes de serem usados,
+
+00:07:57.880 --> 00:07:59.660
+e ele é ativado por padrão para todos os modelos,
+
+00:07:59.760 --> 00:08:02.580
+o que significa que a camada de segurança já está lá antes mesmo de você pedir.
+
+00:08:03.780 --> 00:08:05.860
+O sistema é alimentado por uma ferramenta da Microsoft
+
+00:08:05.860 --> 00:08:07.640
+chamada Azure AI Content Safety,
+
+00:08:07.860 --> 00:08:09.320
+e funciona processando tanto seu prompt,
+
+00:08:09.320 --> 00:08:10.180
+quanto a resposta do modelo,
+
+00:08:10.180 --> 00:08:12.660
+através de modelos de classificação que buscam por conteúdos prejudiciais.
+
+00:08:13.440 --> 00:08:14.860
+Quatro categorias são importantes aqui,
+
+00:08:14.920 --> 00:08:15.500
+discurso de ódio,
+
+00:08:15.600 --> 00:08:16.140
+conteúdo sexual,
+
+00:08:16.240 --> 00:08:17.280
+violência e automutilação.
+
+00:08:17.740 --> 00:08:19.320
+Cada uma apresenta níveis de severidade,
+
+00:08:19.400 --> 00:08:20.420
+que vão de seguro até alto,
+
+00:08:20.860 --> 00:08:22.420
+e o conteúdo marcado como seguro é rotulado,
+
+00:08:22.500 --> 00:08:23.260
+mas nunca bloqueado.
+
+00:08:23.880 --> 00:08:25.420
+O resultado prático é fácil de visualizar.
+
+00:08:26.380 --> 00:08:27.640
+Se o seu prompt ultrapassar o limite,
+
+00:08:27.740 --> 00:08:29.200
+você recebe um erro em vez de uma resposta.
+
+00:08:29.800 --> 00:08:31.440
+Se a resposta do modelo ultrapassar o limite,
+
+00:08:31.540 --> 00:08:33.700
+ela é marcada como filtrada em vez de ser entregue a você.
+
+00:08:34.600 --> 00:08:36.160
+Você geralmente não verá o texto prejudicial,
+
+00:08:36.420 --> 00:08:37.600
+apenas verá que ele foi interrompido.
+
+00:08:37.880 --> 00:08:39.160
+Esses limites são ajustáveis,
+
+00:08:39.160 --> 00:08:41.880
+então uma equipe pode tornar o filtro mais rigoroso ou mais flexível,
+
+00:08:42.160 --> 00:08:43.060
+dependendo do que estão criando.
+
+00:08:43.740 --> 00:08:44.980
+Existem também camadas opcionais,
+
+00:08:45.060 --> 00:08:46.020
+cada uma com uma função simples.
+
+00:08:46.840 --> 00:08:48.960
+Escutos de prompt detectam tentativas de enganar o modelo,
+
+00:08:49.020 --> 00:08:50.200
+para que ele ignore suas próprias...
+
+00:08:50.200 --> 00:08:52.860
+A detecção de material protegido monitora textos e códigos conhecidos.
+
+00:08:53.220 --> 00:08:55.320
+A detecção de fundamentação verifica se uma resposta
+
+00:08:55.320 --> 00:08:56.420
+veio das fontes que você forneceu.
+
+00:08:56.980 --> 00:08:59.300
+Um filtro final busca por informações pessoais na saída,
+
+00:08:59.400 --> 00:09:01.160
+para que nomes e números não vazem por acidente.
+
+00:09:01.740 --> 00:09:02.880
+Existe uma ressalva honesta aqui.
+
+00:09:03.440 --> 00:09:04.660
+Desativar os filtros completamente,
+
+00:09:04.800 --> 00:09:05.840
+não é um botão que você mesmo assinou.
+
+00:09:05.840 --> 00:09:07.340
+Isso requer a aprovação da Microsoft,
+
+00:09:07.480 --> 00:09:09.520
+que é exatamente o motivo pelo qual o ambiente de trabalho cauteloso
+
+00:09:09.520 --> 00:09:10.220
+pode confiar no padrão.
+
+00:09:10.420 --> 00:09:12.160
+Os filtros respondem sobre o que é permitido passar,
+
+00:09:12.320 --> 00:09:14.100
+mas a próxima pergunta que um chefe faz é maior,
+
+00:09:14.220 --> 00:09:15.880
+e ela decide se o serviço será usado ou não.
+
+00:09:17.160 --> 00:09:18.760
+Privacidade de dados à parte que realmente convence.
+
+00:09:19.500 --> 00:09:21.180
+Essa pergunta maior é sobre privacidade,
+
+00:09:21.280 --> 00:09:22.560
+e é a primeira que sua equipe de segurança fará.
+
+00:09:22.560 --> 00:09:25.300
+Os de compromisso da Microsoft aqui são declarados claramente,
+
+00:09:25.400 --> 00:09:26.520
+vale a pena repeti-los com atenção.
+
+00:09:27.320 --> 00:09:29.220
+Seus prompts, suas respostas, seus embeddings,
+
+00:09:29.260 --> 00:09:31.080
+e quaisquer dados de treinamento que você fornecer
+
+00:09:31.080 --> 00:09:32.560
+não estão disponíveis para outros clientes,
+
+00:09:32.980 --> 00:09:35.840
+nem para OpenAI ou qualquer outro provedor desses modelos.
+
+00:09:36.520 --> 00:09:38.980
+Esses dados não são usados para melhorar os modelos desses provedores,
+
+00:09:39.140 --> 00:09:41.000
+e não são usados para treinar nenhum modelo de base,
+
+00:09:41.080 --> 00:09:42.360
+sem sua permissão ou instrução.
+
+00:09:42.920 --> 00:09:44.080
+Uma promessa faz o trabalho mais importante.
+
+00:09:44.480 --> 00:09:45.480
+Os modelos são stateless,
+
+00:09:45.640 --> 00:09:48.260
+o que significa que nada que você digita é armazenado dentro do próprio modelo,
+
+00:09:48.560 --> 00:09:50.900
+e nada que você digita é usado para retreinar os modelos base.
+
+00:09:50.900 --> 00:09:54.360
+Simplificando, o modelo não se lembra de você após o término da solicitação.
+
+00:09:54.880 --> 00:09:56.960
+Se um aplicativo parece lembrar da sua última mensagem,
+
+00:09:57.040 --> 00:09:58.660
+é o aplicativo que está armazenando, não o modelo.
+
+00:09:59.280 --> 00:10:01.720
+Os dados armazenados em repouso são criptografados por padrão,
+
+00:10:01.980 --> 00:10:04.420
+e uma empresa pode optar por trazer sua própria chave de criptografia
+
+00:10:04.420 --> 00:10:06.300
+e excluir seus dados armazenados a qualquer momento.
+
+00:10:07.360 --> 00:10:08.600
+Há também a opção de rede privada
+
+00:10:08.600 --> 00:10:11.360
+para que o tráfego possa circular sem nunca tocar a internet pública.
+
+00:10:12.380 --> 00:10:13.960
+A Microsoft monitora o uso indevido,
+
+00:10:14.300 --> 00:10:15.260
+e é transparente quanto a isso.
+
+00:10:15.640 --> 00:10:17.720
+Ela pode analisar uma amostra de prompts e respostas,
+
+00:10:17.800 --> 00:10:19.580
+geralmente por meio de ferramentas automatizadas,
+
+00:10:19.580 --> 00:10:21.300
+e por uma pessoa apenas quando algo parece errado.
+
+00:10:21.860 --> 00:10:24.360
+Clientes qualificados podem solicitar uma configuração modificada
+
+00:10:24.360 --> 00:10:26.360
+que desativa esse armazenamento e análise humana.
+
+00:10:26.540 --> 00:10:28.560
+E essa configuração aprovada é o que as pessoas querem dizer
+
+00:10:28.560 --> 00:10:29.900
+quando falam em retenção zero de dados.
+
+00:10:30.560 --> 00:10:32.340
+É uma configuração que você solicita, não é um padrão,
+
+00:10:32.420 --> 00:10:33.540
+por isso vale a pena deixar isso claro.
+
+00:10:34.380 --> 00:10:36.740
+Essa promessa é o que permite que um banco ou hospital diga sim,
+
+00:10:37.180 --> 00:10:38.740
+e é a base silenciosa de tudo o resto.
+
+00:10:38.740 --> 00:10:41.220
+Como ele difere da OpenAI?
+
+00:10:42.020 --> 00:10:43.540
+Agora que você confiou a última pergunta,
+
+00:10:43.660 --> 00:10:46.040
+como ele se compara ao uso direto da API da OpenAI?
+
+00:10:46.720 --> 00:10:47.480
+Comece pelo que é igual.
+
+00:10:48.120 --> 00:10:49.620
+Você trabalha com os mesmos modelos,
+
+00:10:49.700 --> 00:10:52.060
+e as APIs são criadas juntas para permanecerem compatíveis,
+
+00:10:52.180 --> 00:10:54.340
+o que significa que aprender uma ajuda é genuinamente com a outra.
+
+00:10:55.020 --> 00:10:57.000
+A diferença é quem opera e sob quais regras.
+
+00:10:57.660 --> 00:10:59.620
+A API da OpenAI é o serviço da própria OpenAI
+
+00:10:59.620 --> 00:11:01.980
+voltado para desenvolvedores e produtos criados para o público.
+
+00:11:02.880 --> 00:11:05.340
+O Azure OpenAI é a Microsoft operando esses mesmos modelos
+
+00:11:05.340 --> 00:11:06.580
+dentro do Azure para organizações,
+
+00:11:06.580 --> 00:11:08.720
+e essa única mudança traz todo um conjunto de coisas
+
+00:11:08.720 --> 00:11:09.720
+que uma empresa precisa.
+
+00:11:10.840 --> 00:11:12.480
+O login muda para o Microsoft e entra a ID.
+
+00:11:13.120 --> 00:11:14.260
+O acesso é controlado por funções,
+
+00:11:14.360 --> 00:11:15.540
+então você decide quem pode fazer o quê.
+
+00:11:16.140 --> 00:11:17.700
+Redes virtuais e endpoints privados
+
+00:11:17.700 --> 00:11:19.220
+mantêm o tráfego fora da internet pública
+
+00:11:19.220 --> 00:11:21.380
+e os dados podem ser mantidos dentro de uma região escolhida.
+
+00:11:21.820 --> 00:11:24.200
+Além disso, você obtém os acordos de nível de serviço do Azure,
+
+00:11:24.320 --> 00:11:25.700
+que são as promessas formais da Microsoft
+
+00:11:25.700 --> 00:11:26.980
+sobre tempo de atividade e desempenho.
+
+00:11:27.340 --> 00:11:28.560
+O faturamento também muda,
+
+00:11:28.600 --> 00:11:30.300
+pois passa a integrar sua fatura atual do Azure
+
+00:11:30.300 --> 00:11:31.360
+em vez de uma conta separada.
+
+00:11:31.860 --> 00:11:33.740
+E os compromissos de privacidade que acabamos de abordar
+
+00:11:33.740 --> 00:11:34.360
+acompanham o serviço.
+
+00:11:34.360 --> 00:11:36.640
+Há uma compensação real e é justo mencioná-la.
+
+00:11:36.720 --> 00:11:38.780
+Como é feito para organizações, exige mais configuração.
+
+00:11:39.440 --> 00:11:41.700
+Você cria um recurso, implanta um modelo e gerencia o acesso.
+
+00:11:42.200 --> 00:11:43.620
+A API da OpenAI é mais rápida para começar
+
+00:11:43.620 --> 00:11:44.800
+se você estiver experimentando ou já não.
+
+00:11:45.520 --> 00:11:47.000
+Portanto, a forma honesta de colocar é
+
+00:11:47.000 --> 00:11:48.500
+se você é um entusiasta testando uma ideia,
+
+00:11:48.700 --> 00:11:50.120
+a API direta é a via de entrada mais fácil.
+
+00:11:51.240 --> 00:11:52.620
+Se é uma organização que precisa responder
+
+00:11:52.620 --> 00:11:53.340
+a uma equipe de segurança,
+
+00:11:53.460 --> 00:11:55.680
+o Azure OpenAI foi criado exatamente para essa conversa.
+
+00:11:56.960 --> 00:11:58.060
+O que as pessoas criam com ele?
+
+00:11:58.440 --> 00:11:59.840
+Uma vez a execução, as pessoas o colocam
+
+00:11:59.840 --> 00:12:01.000
+para trabalhar de algumas maneiras comuns.
+
+00:12:01.000 --> 00:12:02.520
+A tarefa mais comum é o resumo,
+
+00:12:02.760 --> 00:12:04.300
+onde um documento longo se torna curto
+
+00:12:04.300 --> 00:12:06.240
+para que uma pessoa não precise ler todas as páginas.
+
+00:12:06.640 --> 00:12:08.580
+O próximo passo é transformar textos confusos
+
+00:12:08.580 --> 00:12:09.260
+em algo organizado.
+
+00:12:09.780 --> 00:12:11.440
+Extrair nomes, datas e totais de e-mails
+
+00:12:11.440 --> 00:12:12.960
+ou formulários para organizá-los em uma lista
+
+00:12:12.960 --> 00:12:14.940
+é um exemplo e as pessoas geralmente chamam isso de extração.
+
+00:12:15.740 --> 00:12:17.000
+Depois, há os assistentes de chat
+
+00:12:17.000 --> 00:12:19.140
+que respondem a perguntas baseadas nos documentos de uma empresa.
+
+00:12:19.520 --> 00:12:20.940
+É isso que as pessoas se referem como grounding
+
+00:12:20.940 --> 00:12:22.040
+ou a expressão em seus próprios dados.
+
+00:12:22.880 --> 00:12:24.200
+Em vez de adivinhar com base na memória,
+
+00:12:24.340 --> 00:12:25.780
+o assistente consulta seus arquivos
+
+00:12:25.780 --> 00:12:26.740
+e responde a partir deles.
+
+00:12:27.500 --> 00:12:28.360
+A busca é outro exemplo
+
+00:12:28.360 --> 00:12:29.800
+e é aqui que os embeds mostram seu valor.
+
+00:12:30.580 --> 00:12:32.640
+Em vez de buscar as palavras exatas que você digitou,
+
+00:12:32.740 --> 00:12:34.320
+o sistema encontra o significado mais próximo.
+
+00:12:34.960 --> 00:12:36.000
+Assim, uma busca por folga
+
+00:12:36.000 --> 00:12:37.900
+ainda pode encontrar uma página intitulada
+
+00:12:37.900 --> 00:12:38.660
+Política de Férias.
+
+00:12:39.680 --> 00:12:41.580
+Além disso, as equipes criam conteúdo em volume,
+
+00:12:41.760 --> 00:12:42.860
+como descrições de produtos
+
+00:12:42.860 --> 00:12:44.600
+ou rascunhos de respostas para o suporte
+
+00:12:44.600 --> 00:12:46.240
+e executam grandes tarefas em lote,
+
+00:12:46.760 --> 00:12:48.020
+como ler um ano inteiro de feedback
+
+00:12:48.020 --> 00:12:49.160
+de clientes durante a noite
+
+00:12:49.160 --> 00:12:50.440
+pela metade do custo.
+
+00:12:51.540 --> 00:12:53.080
+Desenvolvedores usam para ajuda na programação
+
+00:12:53.080 --> 00:12:54.780
+e analistas contam com modelos de raciocínio
+
+00:12:54.780 --> 00:12:56.720
+para problemas que exigem mais do que uma resposta rápida.
+
+00:12:56.720 --> 00:12:58.640
+Há uma precaução que se deve lá em conta.
+
+00:12:59.080 --> 00:13:00.340
+Um modelo que parece confiante
+
+00:13:00.340 --> 00:13:02.120
+não é o mesmo que o modelo que está correto.
+
+00:13:02.540 --> 00:13:03.900
+Portanto, um ano precisa verificar o trabalho.
+
+00:13:04.460 --> 00:13:05.660
+Nada disso é uma falha no serviço,
+
+00:13:05.720 --> 00:13:07.940
+é simplesmente a forma como a ferramenta deve ser usada.
+
+00:13:09.840 --> 00:13:11.260
+Uma recapitulação rápida, mas para um tempo.
+
+00:13:11.680 --> 00:13:12.420
+Então, vamos resumir.
+
+00:13:13.000 --> 00:13:14.060
+O serviço Edge de OpenAI
+
+00:13:14.060 --> 00:13:15.320
+executa os modelos da OpenAI
+
+00:13:15.320 --> 00:13:16.440
+dentro da nuvem da Microsoft
+
+00:13:16.440 --> 00:13:18.280
+com chaves, limites e regras de privacidade
+
+00:13:18.280 --> 00:13:19.160
+que pertencem a você
+
+00:13:19.160 --> 00:13:20.960
+e ele se divide em um conjunto de peças
+
+00:13:20.960 --> 00:13:22.120
+que agora você pode identificar.
+
+00:13:22.820 --> 00:13:23.460
+O modelo cérebro,
+
+00:13:23.540 --> 00:13:24.040
+sua implantação,
+
+00:13:24.100 --> 00:13:25.040
+uma cópia privada dele
+
+00:13:25.040 --> 00:13:26.240
+e um endpoint com uma chave
+
+00:13:26.240 --> 00:13:27.360
+são a forma como seu aplicativo
+
+00:13:27.360 --> 00:13:28.180
+acessa o sistema.
+
+00:13:29.220 --> 00:13:31.060
+Token são a forma como o uso é medido.
+
+00:13:31.280 --> 00:13:32.300
+Cotas são os limites.
+
+00:13:32.820 --> 00:13:34.380
+Filtros de conteúdo são as proteções.
+
+00:13:34.700 --> 00:13:35.780
+E a promessa de privacidade
+
+00:13:35.780 --> 00:13:36.880
+é a base de tudo isso.
+
+00:13:38.180 --> 00:13:39.560
+A diferença para a API da OpenAI
+
+00:13:39.560 --> 00:13:40.540
+resume-se a quem a opera
+
+00:13:40.540 --> 00:13:42.000
+e quais regras protegem você.
+
+00:13:42.000 --> 00:13:44.800
+Inscreva-se no M365FM
+
+00:13:44.800 --> 00:13:45.920
+para dominar as ferramentas
+
+00:13:45.920 --> 00:13:46.860
+e a mentalidade que molda
+
+00:13:46.860 --> 00:13:47.680
+o futuro do trabalho.
+
+00:13:48.280 --> 00:13:49.020
+E aqui está uma pergunta
+
+00:13:49.020 --> 00:13:49.640
+para você, Fletcher.
+
+00:13:50.280 --> 00:13:51.280
+Se o seu local de trabalho
+
+00:13:51.280 --> 00:13:52.480
+pudesse executar esses modelos
+
+00:13:52.480 --> 00:13:53.400
+dentro de suas próprias paredes
+
+00:13:53.400 --> 00:13:54.180
+com suas próprias regras
+
+00:13:54.180 --> 00:13:55.020
+que você construiria primeiro?
