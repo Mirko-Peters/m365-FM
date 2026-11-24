@@ -1,5 +1,7 @@
 -- Lernpfad-Abschlusstest + Zertifikat ueber Certopus (learnquiz.js, Nummer 0055: 0054 = library_reviewed).
 -- learn_quiz_keys: Antwortschluessel (nur hier, nie im oeffentlichen Repo; kommt per POST /api/internal/learn-quiz mit CRON_KEY aus tools/pillar_quiz.py push).
+-- active: 1 = wird gezogen. Der Push ist je Pfad massgeblich: nicht mehr uebermittelte Fragen werden stillgelegt (active=0), nie geloescht -
+-- offene Versuche mit solchen Fragen werden weiter korrekt gewertet, und eine stillgelegte ID wird nie neu vergeben.
 CREATE TABLE IF NOT EXISTS learn_quiz_keys (
   qid TEXT PRIMARY KEY,                  -- <pillar-id>-<n>, in allen Sprachen gleich
   path TEXT NOT NULL,                    -- Lernpfad, z. B. manufacturing-excellence
@@ -7,9 +9,10 @@ CREATE TABLE IF NOT EXISTS learn_quiz_keys (
   answer INTEGER NOT NULL,               -- richtige Option 0-3
   why_en TEXT NOT NULL DEFAULT '',
   why_de TEXT NOT NULL DEFAULT '',
-  updated INTEGER NOT NULL
+  updated INTEGER NOT NULL,
+  active INTEGER NOT NULL DEFAULT 1      -- 0 = stillgelegt (nicht mehr gezogen, aber noch wertbar)
 );
-CREATE INDEX IF NOT EXISTS idx_learn_quiz_keys_path ON learn_quiz_keys(path, pillar);
+CREATE INDEX IF NOT EXISTS idx_learn_quiz_keys_path ON learn_quiz_keys(path, active, pillar);
 
 -- learn_attempts: ein Versuch je Start (gilt 24 h), Ergebnis nach der Abgabe. src = Herkunft der Testseite (utm_source/ref, max 40 Zeichen) fuer den Trichter.
 CREATE TABLE IF NOT EXISTS learn_attempts (

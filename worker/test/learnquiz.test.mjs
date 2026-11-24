@@ -90,12 +90,53 @@ test("interner Upsert nur mit CRON_KEY, alles oder nichts, Antworten nie in der 
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM learn_quiz_keys").get().n, 0, "ungueltiger Eintrag: nichts geschrieben");
   const ok = await seed(env);   // ohne x-requested-with (Actions), nur CRON_KEY
   assert.equal(ok.status, 200);
-  assert.deepEqual({ upserted: ok.data.upserted, total: ok.data.total, pillars: ok.data.pillars }, { upserted: 50, total: 50, pillars: 10 });
+  assert.deepEqual({ upserted: ok.data.upserted, deactivated: ok.data.deactivated, total: ok.data.total, pillars: ok.data.pillars }, { upserted: 50, deactivated: 0, total: 50, pillars: 10 });
   assert.doesNotMatch(ok.text, /answer|Because/);
   // erneuter Lauf mit geaenderter Antwort und neuer Frage: aktualisiert, nichts geloescht
-  const again = await call(env, "/api/internal/learn-quiz", { method: "POST", body: { path: PATH, keys: [{ qid: "kaizen-1", pillar: "kaizen", answer: 3, why_en: "x", why_de: "y" }, { qid: "kaizen-6", pillar: "kaizen", answer: 0 }] }, headers: { "x-cron-key": "cron-test" } });
-  assert.equal(again.data.total, 51);
+  const again = await call(env, "/api/internal/learn-quiz", { method: "POST", body: { path: PATH, keys: [...keys().filter((k) => k.qid !== "kaizen-1"), { qid: "kaizen-1", pillar: "kaizen", answer: 3, why_en: "x", why_de: "y" }, { qid: "kaizen-6", pillar: "kaizen", answer: 0 }] }, headers: { "x-cron-key": "cron-test" } });
+  assert.deepEqual({ upserted: again.data.upserted, deactivated: again.data.deactivated, total: again.data.total }, { upserted: 51, deactivated: 0, total: 51 });
   assert.equal(raw.prepare("SELECT answer FROM learn_quiz_keys WHERE qid='kaizen-1'").get().answer, 3);
+});
+
+test("Push ist je Pfad massgeblich: fehlende Fragen werden stillgelegt (nicht geloescht), nicht mehr gezogen, offene Versuche weiter gewertet", async () => {
+  const { env, raw, s } = await setup();
+  await seed(env);
+  // anderer Pfad bleibt unberuehrt
+  await call(env, "/api/internal/learn-quiz", { method: "POST", body: { path: "other-path", keys: [{ qid: "x-guide-1", pillar: "x-guide", answer: 1 }] }, headers: { "x-cron-key": "cron-test" } });
+  const st = await start(env, s.ada);   // offener Versuch mit alten Fragen
+  assert.equal(st.data.total, 30);
+  // neue Fragen <pillar>-6..8 ersetzen die alten 1..5
+  const fresh = PILLARS.flatMap((p) => [6, 7, 8].map((n) => ({ qid: `${p}-${n}`, pillar: p, answer: ANSWER(n), why_en: `New ${p} ${n}.`, why_de: `Neu ${p} ${n}.` })));
+  const r = await call(env, "/api/internal/learn-quiz", { method: "POST", body: { path: PATH, keys: fresh }, headers: { "x-cron-key": "cron-test" } });
+  assert.equal(r.status, 200, r.text);
+  assert.deepEqual({ upserted: r.data.upserted, deactivated: r.data.deactivated, total: r.data.total, pillars: r.data.pillars }, { upserted: 30, deactivated: 50, total: 30, pillars: 10 });
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM learn_quiz_keys WHERE path=?").get(PATH).n, 80, "nichts geloescht");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM learn_quiz_keys WHERE path=? AND active=0").get(PATH).n, 50);
+  assert.equal(raw.prepare("SELECT active FROM learn_quiz_keys WHERE qid='x-guide-1'").get().active, 1, "anderer Pfad bleibt aktiv");
+  // offener Versuch mit stillgelegten Fragen: Abgabe wertet weiter mit den gespeicherten Schluesseln
+  const sb = await submit(env, s.ada, st.data.attempt, answersFor(st.data.qids, 2));
+  assert.equal(sb.status, 200, sb.text);
+  assert.deepEqual({ score: sb.data.score, total: sb.data.total, passed: sb.data.passed }, { score: 28, total: 30, passed: true });
+  assert.ok(sb.data.results.every((x) => x.why.startsWith("Because ")), "Erklaerungen der alten Fragen");
+  // neuer Versuch zieht nur aktive Fragen
+  raw.prepare("DELETE FROM ratelimit").run();
+  const st2 = await start(env, s.bob);
+  assert.equal(st2.data.total, 30);
+  assert.ok(st2.data.qids.every((q) => /-[678]$/.test(q)), st2.data.qids.join(","));
+  assert.equal((await call(env, "/api/learn/cert?path=" + PATH, { cookie: s.bob })).data.quiz_ready, true);
+  // Reaktivieren: eine stillgelegte ID kommt wieder mit (z. B. Ruecknahme) -> active=1, die anderen bleiben aus
+  const back = await call(env, "/api/internal/learn-quiz", { method: "POST", body: { path: PATH, keys: [...fresh, keys()[0]] }, headers: { "x-cron-key": "cron-test" } });
+  assert.deepEqual({ upserted: back.data.upserted, deactivated: back.data.deactivated, total: back.data.total }, { upserted: 31, deactivated: 0, total: 31 });
+  assert.equal(raw.prepare("SELECT active FROM learn_quiz_keys WHERE qid=?").get(keys()[0].qid).active, 1);
+  // gleicher Push noch einmal: idempotent
+  const same = await call(env, "/api/internal/learn-quiz", { method: "POST", body: { path: PATH, keys: fresh }, headers: { "x-cron-key": "cron-test" } });
+  assert.deepEqual({ deactivated: same.data.deactivated, total: same.data.total }, { deactivated: 1, total: 30 });
+  const again = await call(env, "/api/internal/learn-quiz", { method: "POST", body: { path: PATH, keys: fresh }, headers: { "x-cron-key": "cron-test" } });
+  assert.deepEqual({ deactivated: again.data.deactivated, total: again.data.total }, { deactivated: 0, total: 30 });
+  // alle Fragen stillgelegt (Pfad ohne aktive Fragen) -> kein Test
+  raw.prepare("UPDATE learn_quiz_keys SET active=0").run();
+  raw.prepare("DELETE FROM learn_attempts").run(); raw.prepare("DELETE FROM ratelimit").run();
+  assert.equal((await start(env, s.bob)).data.error, "no_quiz");
 });
 
 test("Start: ohne Login 401, ohne CSRF-Kopf 400, ohne Fragen 404, 3 Fragen je Leitfaden, Neuladen kostet keinen Versuch", async () => {
@@ -348,7 +389,7 @@ test("Start zieht nur Fragen, die die Seite kennt (have); ohne have oder bei man
   await seed(env);
   // neuer Leitfaden und gewachsener Pool nur im Worker, Seite noch alt
   const fresh = [...[1, 2, 3, 4, 5].map((n) => ({ qid: `new-guide-${n}`, pillar: "new-guide", answer: 0 })), { qid: "kaizen-6", pillar: "kaizen", answer: 0 }];
-  assert.equal((await call(env, "/api/internal/learn-quiz", { method: "POST", body: { path: PATH, keys: fresh }, headers: { "x-cron-key": "cron-test" } })).status, 200);
+  assert.equal((await call(env, "/api/internal/learn-quiz", { method: "POST", body: { path: PATH, keys: [...keys(), ...fresh] }, headers: { "x-cron-key": "cron-test" } })).status, 200);
   const page = keys().map((k) => k.qid);
   const reset = () => { raw.prepare("DELETE FROM learn_attempts").run(); raw.prepare("DELETE FROM ratelimit").run(); };
   const st = await start(env, s.ada, { have: [...page, "Bad Id!", 42] });

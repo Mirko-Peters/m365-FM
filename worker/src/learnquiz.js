@@ -6,7 +6,8 @@
 //   GET  /api/learn/cert?path=                            Login; Stand (bestanden, bester Versuch, Zertifikat) und Vorschlag fuer Name/E-Mail
 //   POST /api/learn/cert         {path, attempt, name, email, consent, lang}   Zertifikat ueber Certopus (nur mit CERTOPUS_ON=1, Schluessel und IDs)
 //   GET  /api/learn/stats?path=                           nur Admin: gestartet/abgegeben/bestanden/Zertifikate je Herkunft (src) und Woche
-//   POST /api/internal/learn-quiz {path, keys:[...]}       CRON_KEY: Antwortschluessel upserten (keine Loeschung, IDs bleiben)
+//   POST /api/internal/learn-quiz {path, keys:[...]}       CRON_KEY: je Pfad massgeblich - uebermittelte Schluessel upserten (active=1), alle anderen
+//                                                         Fragen des Pfads stilllegen (active=0, keine Loeschung: offene Versuche bleiben wertbar, IDs bleiben vergeben)
 // Certopus-Konfiguration je Pfad in der Var CERTOPUS_PATHS (JSON {pfad: {org, event, category, course:{en,de}}}), Secret CERTOPUS_API_KEY,
 // Notschalter CERTOPUS_ON ("1" = an). Ohne all das: Test laeuft, das Zertifikat bleibt "pending" (503 cert_off) und wird spaeter ausgestellt
 // (erneuter Klick oder Cron issuePendingCerts, sobald CERTOPUS_ON=1).
@@ -193,13 +194,16 @@ async function internalUpsert(env, request, J) {
   for (const k of b.keys) {
     const qid = String(k?.qid || ""), pillar = String(k?.pillar || ""), answer = k?.answer;
     if (!QID_RX.test(qid) || !PATH_RX.test(pillar) || !qid.startsWith(pillar + "-") || !Number.isInteger(answer) || answer < 0 || answer > 3) { bad.push(qid.slice(0, 90)); continue; }
-    stmts.push(env.DB.prepare("INSERT INTO learn_quiz_keys(qid,path,pillar,answer,why_en,why_de,updated) VALUES(?,?,?,?,?,?,?) ON CONFLICT(qid) DO UPDATE SET path=excluded.path,pillar=excluded.pillar,answer=excluded.answer,why_en=excluded.why_en,why_de=excluded.why_de,updated=excluded.updated")
+    stmts.push(env.DB.prepare("INSERT INTO learn_quiz_keys(qid,path,pillar,answer,why_en,why_de,updated,active) VALUES(?,?,?,?,?,?,?,1) ON CONFLICT(qid) DO UPDATE SET path=excluded.path,pillar=excluded.pillar,answer=excluded.answer,why_en=excluded.why_en,why_de=excluded.why_de,updated=excluded.updated,active=1")
       .bind(qid, path, pillar, answer, cleanText(k.why_en, 1200), cleanText(k.why_de, 1200), t));
   }
   if (bad.length) return J({ error: "bad_keys", bad: bad.slice(0, 20), count: bad.length }, 400);   // alles oder nichts: ein halber Schluessel waere schlimmer
-  for (let i = 0; i < stmts.length; i += 50) await env.DB.batch(stmts.slice(i, i + 50));
-  const n = await env.DB.prepare("SELECT COUNT(*) n, COUNT(DISTINCT pillar) p FROM learn_quiz_keys WHERE path=?").bind(path).first();
-  return J({ ok: true, upserted: stmts.length, total: n?.n || 0, pillars: n?.p || 0 });
+  const qids = JSON.stringify(b.keys.map((k) => String(k.qid)));   // ein Parameter statt einer IN-Liste (D1: hoechstens 100 Parameter je Anweisung)
+  const off = await env.DB.prepare("SELECT COUNT(*) n FROM learn_quiz_keys WHERE path=? AND active=1 AND qid NOT IN (SELECT value FROM json_each(?))").bind(path, qids).first();
+  stmts.push(env.DB.prepare("UPDATE learn_quiz_keys SET active=0, updated=? WHERE path=? AND active=1 AND qid NOT IN (SELECT value FROM json_each(?))").bind(t, path, qids));
+  for (let i = 0; i < stmts.length; i += 50) await env.DB.batch(stmts.slice(i, i + 50));   // Stilllegen zuletzt: bricht vorher etwas ab, bleibt der alte Satz aktiv
+  const n = await env.DB.prepare("SELECT COUNT(*) n, COUNT(DISTINCT pillar) p FROM learn_quiz_keys WHERE path=? AND active=1").bind(path).first();
+  return J({ ok: true, upserted: stmts.length - 1, deactivated: off?.n || 0, total: n?.n || 0, pillars: n?.p || 0 });
 }
 
 // Nur Fragen ziehen, die die Seite zeigen kann: have = IDs aus dem eingebetteten data/pillar_quiz.json der Testseite. Schluessel kommen teils vor dem
@@ -232,7 +236,7 @@ async function start(env, request, user, J) {
     const qids = parse(open.qids, []);
     return J({ attempt: open.id, qids, expires: open.started + ATTEMPT_TTL, total: qids.length, threshold: threshold(qids.length), resumed: true, attempts_left: await attemptsLeft(db, user.id, path) });
   }
-  const keys = (await db.prepare("SELECT qid,pillar FROM learn_quiz_keys WHERE path=? ORDER BY pillar,qid").bind(path).all()).results || [];
+  const keys = (await db.prepare("SELECT qid,pillar FROM learn_quiz_keys WHERE path=? AND active=1 ORDER BY pillar,qid").bind(path).all()).results || [];
   const by = new Map();
   for (const k of keys) by.set(k.pillar, [...(by.get(k.pillar) || []), k.qid]);
   const groups = pageFilter(by, b.have);
@@ -263,7 +267,7 @@ async function submit(env, request, user, J) {
   let score = 0, total = 0;
   for (const qid of qids) {
     const k = keys.get(qid);
-    if (!k) continue;   // Schluessel inzwischen weg: zaehlt nicht
+    if (!k) continue;   // Schluessel fehlt (nie eingespielt): zaehlt nicht. Stillgelegte Fragen (active=0) haben ihren Schluessel noch und werden gewertet.
     const v = answers[qid], pickd = Number.isInteger(v) && v >= 0 && v <= 3 ? v : null, ok = pickd === k.answer;
     total++; if (ok) score++;
     chosen[qid] = pickd;
@@ -287,7 +291,7 @@ async function certStatus(env, url, user, J) {
   const cert = await db.prepare("SELECT * FROM learn_certs WHERE user_id=? AND path=?").bind(user.id, path).first();
   const pref = await db.prepare("SELECT real_name FROM user_prefs WHERE user_id=?").bind(user.id).first().catch(() => null);
   const mail = await db.prepare("SELECT email FROM mail_addr WHERE user_id=? AND verified=1").bind(user.id).first().catch(() => null);
-  const keys = await db.prepare("SELECT COUNT(*) n FROM learn_quiz_keys WHERE path=?").bind(path).first();
+  const keys = await db.prepare("SELECT COUNT(*) n FROM learn_quiz_keys WHERE path=? AND active=1").bind(path).first();
   return J({
     path, quiz_ready: (keys?.n || 0) > 0, passed: !!best?.passed,
     best: best ? { attempt: best.id, score: best.score, total: best.total, passed: !!best.passed, finished: best.finished } : null,

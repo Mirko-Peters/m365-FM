@@ -4,9 +4,10 @@ name: Lernpfad-Abschlusstest - Fragen erzeugen (Sonnet + Haiku, Batch)
 # Die Loesungen erscheinen nie im Klartext im Repo, im Log oder im Artefakt (Artefakte oeffentlicher Repos kann jeder angemeldete GitHub-Nutzer laden).
 # Kosten: hoechstens PILLAR_QUIZ_RUN_EUR (Standard 2 EUR) je Lauf, Haiku zusaetzlich im Haiku-Tagesbudget des Workers. Ein Leitfaden mit 5+ Fragen wird nicht neu erzeugt.
 # Ausloeser: von Hand (main) und Push auf den Arbeitszweig claude/lernpfad-quiz-fragen (mode=run, Commit auf genau diesen Zweig).
-# Push auf claude/lernpfad-zertifikat (Sammelzweig vor dem Merge): mode=reshuffle - ordnet die Optionen der bestehenden Fragen einmalig geheim neu
-# (die alte Position liess sich aus oeffentlichen Werten nachrechnen), committet Fragen + Schluessel gemeinsam auf diesen Zweig, sendet nichts an den Worker.
-# Danach (Marke "order" im Schluessel) tut der Modus nichts mehr; der Ausloeser kann nach dem Merge entfallen.
+# Push auf claude/lernpfad-zertifikat (Sammelzweig vor dem Merge): mode=regen - erzeugt alle Fragen einmalig neu (die alte Antwortreihenfolge stand
+# nachrechenbar in der Git-Historie), legt die alten IDs still ("retired" in data/pillar_quiz.json), committet Fragen + Schluessel auf diesen Zweig und sendet
+# nichts an den Worker (nur main). Vorher plan --regen: Kostenschaetzung ins Log, harte Grenze PILLAR_QUIZ_REGEN_USD (2 USD).
+# Danach (Marke "regen" im Schluessel) tut der Modus nichts mehr; der Ausloeser entfaellt vor dem Merge.
 on:
   push:
     branches: [claude/lernpfad-quiz-fragen, claude/lernpfad-zertifikat]
@@ -14,9 +15,9 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "plan = Zaehlung/Kosten, run = erzeugen, pruefen, speichern (Schluessel an den Worker nur auf main), collect = offene Batches abholen, push = nur Schluessel an den Worker senden, reshuffle = einmalig Optionen geheim neu ordnen (sendet nichts; danach Seitenbau, dann push)"
+        description: "plan = Zaehlung/Kosten, run = erzeugen, pruefen, speichern (Schluessel an den Worker nur auf main), collect = offene Batches abholen, push = nur Schluessel an den Worker senden, reshuffle = einmalig Optionen geheim neu ordnen (sendet nichts; danach Seitenbau, dann push), regen = einmalig alle Fragen neu erzeugen, alte IDs stilllegen"
         type: choice
-        options: [plan, run, collect, push, reshuffle]
+        options: [plan, run, collect, push, reshuffle, regen]
         default: plan
       pillars: { description: "Nur diese Leitfaeden (IDs, kommagetrennt); leer = alle mit weniger als 5 Fragen", required: false, default: "" }
 permissions:
@@ -36,7 +37,8 @@ jobs:
       HAIKU_USD_PER_MTOK_OUT: ${{ vars.HAIKU_USD_PER_MTOK_OUT || '0.50' }}
       USD_PER_EUR: ${{ vars.USD_PER_EUR || '1.08' }}
       PILLAR_QUIZ_RUN_EUR: ${{ vars.PILLAR_QUIZ_RUN_EUR || '2' }}
-      MODE: ${{ github.event_name == 'push' && (github.ref_name == 'claude/lernpfad-zertifikat' && 'reshuffle' || 'run') || inputs.mode }}
+      PILLAR_QUIZ_REGEN_USD: '2'
+      MODE: ${{ github.event_name == 'push' && (github.ref_name == 'claude/lernpfad-zertifikat' && 'regen' || 'run') || inputs.mode }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -54,10 +56,11 @@ jobs:
           ARGS=""
           [ -n "$PILLARS_IN" ] && ARGS="--pillars $PILLARS_IN"
           if [ -z "$CRON_KEY" ] && [ "$MODE" != "plan" ]; then echo "::error::Secret CRON_KEY fehlt (Schluessel fuer data/pillar_quiz_keys.enc und den Worker)"; exit 1; fi
+          if [ "$MODE" = "regen" ]; then echo "Plan (Kosten vor dem Senden):"; python tools/pillar_quiz.py plan --regen | tee -a "$GITHUB_STEP_SUMMARY"; fi
           echo "Aufruf: tools/pillar_quiz.py $MODE $ARGS"
           python tools/pillar_quiz.py "$MODE" $ARGS | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Pruefdateien als Artefakt (Fragen ohne Loesungen + verschluesselte Pruefdatei)
-        if: always() && (env.MODE == 'run' || env.MODE == 'collect')
+        if: always() && (env.MODE == 'run' || env.MODE == 'collect' || env.MODE == 'regen')
         uses: actions/upload-artifact@v7
         with:
           name: pillar-quiz-pruefung
@@ -65,7 +68,7 @@ jobs:
           if-no-files-found: ignore
           retention-days: 30
       - name: Ergebnis committen (auf den ausloesenden Zweig)
-        if: always() && (env.MODE == 'run' || env.MODE == 'collect' || env.MODE == 'reshuffle')
+        if: always() && (env.MODE == 'run' || env.MODE == 'collect' || env.MODE == 'reshuffle' || env.MODE == 'regen')
         env:
           BRANCH: ${{ github.ref_name }}
         run: |

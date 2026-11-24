@@ -179,9 +179,49 @@ class FullRun(unittest.TestCase):
         return [patch.object(PQ, "submit", submit), patch.object(PQ, "wait", lambda bid: {"id": bid}), patch.object(PQ, "results", results),
                 patch.object(PQ, "do_push", lambda strict: self.pushed.append(True))]
 
-    def run_tool(self, args, verify_wrong=()):
+    def fake_regen(self, verify_wrong=()):
+        """Attrappe fuer regen: neue, voneinander verschiedene Fragen; dazu gezielt Dubletten (Takt-Zeit in zwei Leitfaeden), eine Frage wie eine alte
+        (Text) und eine mit zwei alten Optionen. self.truth: Fragetext -> richtige Option (fuer die Pruef-Attrappe)."""
+        import hashlib
+        old = json.loads(PQ.PUBLIC.read_text())["pillars"]
+        self.truth = {}
+
+        def submit(reqs):
+            bid = f"b{len(self.batches)}"; self.batches[bid] = reqs; return bid
+
+        def gen(pid):
+            out = []
+            for i in range(PQ.REGEN_CANDIDATES):
+                h = hashlib.sha256(f"{pid}|{i}".encode()).hexdigest()
+                q = f"Which {h[:24]} claim about {h[24:40]} holds?"; opts = [f"{h[40:48]} {x}" for x in "wxyz"]
+                c = {"q": q, "opts": opts, "a": i % 4, "why": f"Section {h[:6]}.", "ref": f"S{i % 4}", "topic": f"topic {h[:8]}"}
+                if pid == "lean-manufacturing" and i == 0: c["topic"] = "takt time"
+                if pid == "manufacturing-kpis" and i == 0: c["topic"] = "The Takt times"
+                if pid == "manufacturing-kpis" and i == 1: c["q"] = old[pid]["en"][2]["q"]
+                if pid == "shop-floor-management" and i == 1: c["opts"] = old[pid]["en"][0]["opts"][:2] + opts[2:]
+                self.truth[c["q"]] = c["opts"][c["a"]]; out.append(c)
+            return out
+
+        def results(b):
+            out = []
+            for r in self.batches[b["id"]]:
+                cid = r["custom_id"]; kind, pid = cid.split("__", 1); u = {"input_tokens": 1000, "output_tokens": 100}
+                if kind == "gen":
+                    text = json.dumps(gen(pid))
+                elif kind == "ver":
+                    qs = json.loads(r["params"]["messages"][0]["content"].split("Questions:\n", 1)[1])
+                    text = json.dumps({"answers": [{"n": q["n"], "a": (q["opts"].index(self.truth[q["q"]]) + (1 if q["n"] - 1 in verify_wrong else 0)) % 4} for q in qs]})
+                else:
+                    qs = json.loads(r["params"]["messages"][0]["content"])
+                    text = json.dumps([{"n": q["n"], "q": "DE " + q["q"], "opts": ["DE " + o for o in q["opts"]], "why": "DE " + q["why"]} for q in qs])
+                out.append({"custom_id": cid, "result": {"type": "succeeded", "message": {"content": [{"type": "text", "text": text}], "usage": u, "stop_reason": "end_turn"}}})
+            return out
+        return [patch.object(PQ, "submit", submit), patch.object(PQ, "wait", lambda bid: {"id": bid}), patch.object(PQ, "results", results),
+                patch.object(PQ, "do_push", lambda strict: self.pushed.append(True))]
+
+    def run_tool(self, args, verify_wrong=(), regen=False):
         self.pushed = []
-        ps = self.fake_api(verify_wrong)
+        ps = self.fake_regen(verify_wrong) if regen else self.fake_api(verify_wrong)
         for x in ps: x.start()
         try:
             buf = io.StringIO()
@@ -267,6 +307,82 @@ class FullRun(unittest.TestCase):
         snap = PQ.PUBLIC.read_text()
         with redirect_stdout(io.StringIO()): PQ.main(["reshuffle"])
         self.assertEqual(PQ.PUBLIC.read_text(), snap, "zweiter Aufruf: nichts zu tun")
+
+    def test_regen_replaces_all_questions_and_retires_ids(self):
+        self.run_tool(["run"])   # Altbestand: 10 Leitfaeden x 6 Fragen, IDs 1-6
+        old = json.loads(PQ.PUBLIC.read_text()); f = PQ.fernet("k")
+        old_qs = {x["q"] for v in old["pillars"].values() for x in v["en"]}
+        n0 = len(self.batches)
+        log = self.run_tool(["regen"], regen=True, verify_wrong={3})
+        self.assertIn("Kosten-Schaetzung", log); self.assertIn("harte Grenze", log)
+        self.assertEqual(len(self.batches), n0 + 2, "ein Erzeugungs- und ein Pruef-Batch")
+        gen = self.batches[f"b{n0}"]
+        self.assertEqual(len(gen), len(PIL.order()))
+        u = next(r for r in gen if r["custom_id"] == "gen__manufacturing-kpis")["params"]["messages"][0]["content"]
+        self.assertIn("retired", u); self.assertIn(old["pillars"]["manufacturing-kpis"]["en"][0]["q"], u)   # alte Fragen als "nicht wiederholen"
+        self.assertIn("Lean manufacturing", u); self.assertIn("takt time must be tested in only one guide", u)   # Themen der anderen Leitfaeden
+        pub = json.loads(PQ.PUBLIC.read_text()); raw = PQ.PUBLIC.read_text()
+        self.assertEqual([p["id"] for p in PIL.order()], list(pub["pillars"]))
+        for pid, v in pub["pillars"].items():
+            self.assertEqual([x["id"] for x in v["en"]], [f"{pid}-{n}" for n in range(7, 7 + PQ.KEEP)], "neue IDs nach der hoechsten alten")
+            self.assertEqual([x["id"] for x in v["en"]], [x["id"] for x in v["de"]])
+            self.assertEqual(pub["retired"][pid], [f"{pid}-{n}" for n in range(1, 7)])
+            self.assertFalse({x["q"] for x in v["en"]} & old_qs)
+        self.assertNotIn('"a":', raw); self.assertNotIn("why", raw); self.assertNotIn("topic", raw)
+        doc = PQ.decrypt_keys(PQ.KEYS.read_bytes().strip(), f)
+        self.assertEqual(doc["regen"], PQ.REGEN); self.assertEqual(doc["order"], PQ.ORDER)
+        self.assertEqual(len(doc["keys"]), 10 * PQ.KEEP)
+        en = {x["id"]: x for v in pub["pillars"].values() for x in v["en"]}
+        for k in doc["keys"]: self.assertEqual(en[k["qid"]]["opts"][k["answer"]], self.truth[en[k["qid"]]["q"]])
+        topics = [PQ.topic_key(k["topic"]) for k in doc["keys"]]
+        self.assertEqual(topics.count("takt time"), 1, "Takt-Zeit nur einmal im Pfad")
+        self.assertEqual(next(k["pillar"] for k in doc["keys"] if PQ.topic_key(k["topic"]) == "takt time"), "lean-manufacturing")
+        for pid, v in old["pillars"].items():   # keine neue Frage mit zwei alten Optionen
+            for x in pub["pillars"][pid]["en"]:
+                for o in v["en"]: self.assertLess(len(set(x["opts"]) & set(o["opts"])), 2)
+        self.assertEqual(self.pushed, [], "nicht main: kein Push"); self.assertFalse(PQ.OPEN.exists())
+        self.assertNotIn('"answer"', log); self.assertNotIn("why_en", log)
+        # zweiter Aufruf: nichts zu tun, kein Batch; run hat ebenfalls nichts zu tun; plan --regen meldet erledigt
+        snap = PQ.PUBLIC.read_text()
+        log2 = self.run_tool(["regen"], regen=True)
+        self.assertIn("nichts zu tun", log2); self.assertEqual(len(self.batches), n0 + 2); self.assertEqual(PQ.PUBLIC.read_text(), snap)
+        self.assertIn("nichts zu tun", self.run_tool(["run"]))
+        self.assertIn("erledigt", self.run_tool(["plan", "--regen"]))
+        # run danach vergibt keine stillgelegte ID neu
+        self.assertEqual(PQ.next_n("lean-manufacturing", PQ.used_ids(PQ.load_public(), doc, "lean-manufacturing")), 13)
+        self.assertEqual(PQ.public_doc(PQ.load_public(), "x")["retired"], pub["retired"])
+
+    def test_regen_respects_hard_cost_cap_and_needs_cron_key(self):
+        self.run_tool(["run", "--pillars", "lean-manufacturing"])
+        n0 = len(self.batches)
+        with patch.object(PQ, "REGEN_USD", 0.01), self.assertRaises(SystemExit):
+            self.run_tool(["regen"], regen=True)
+        self.assertEqual(len(self.batches), n0, "ueber der Grenze: nichts gesendet")
+        with patch.dict(os.environ, {"CRON_KEY": ""}), self.assertRaises(SystemExit): PQ.main(["regen"])
+
+    def test_regen_too_few_writes_nothing(self):
+        self.run_tool(["run"])
+        snap, ksnap = PQ.PUBLIC.read_text(), PQ.KEYS.read_bytes()
+        with self.assertRaises(SystemExit):
+            self.run_tool(["regen"], regen=True, verify_wrong=set(range(PQ.REGEN_CANDIDATES - 4)))   # nur 4 bestehen die Pruefung
+        self.assertEqual(PQ.PUBLIC.read_text(), snap); self.assertEqual(PQ.KEYS.read_bytes(), ksnap); self.assertFalse(PQ.OPEN.exists())
+
+    def test_regen_plan_estimate_under_target(self):
+        g, h, est = PQ.regen_estimate(PQ.regen_items(PQ.load_public()))
+        self.assertLess(g + h, PQ.REGEN_USD); self.assertLess(est, PQ.REGEN_TARGET_USD)
+
+    def test_select_path_dedup(self):
+        c = lambda q, t, ref="R": {"q": q, "topic": t, "ref": ref, "opts": list("abcd")}
+        passed = {"a": [c("What is takt time used for in a lean plant?", "takt time"), c("Explain muda in two words please?", "muda")],
+                  "b": [c("How do you compute the takt time from demand?", "takt time calculation"), c("Which board shows hourly output?", "hour board"),
+                        c("Why does lean focus on the waste muda?", "lean"), c("Which entirely unrelated thing about digital twins is right?", "digital twin")]}
+        why = {}
+        out = PQ.select_path(passed, ["a", "b"], 6, why, {"a": "Lean", "b": "Shop floor", "c": "Digital twin in manufacturing"})
+        self.assertEqual([x["topic"] for x in out["a"]], ["takt time", "muda"])
+        self.assertEqual([x["topic"] for x in out["b"]], ["hour board", "lean"], "takt time (mehrwortig enthalten) und Titel eines anderen Leitfadens fallen weg")
+        self.assertEqual(why["b"]["Dublette im Pfad"], 2)
+        self.assertEqual(PQ.topic_clash(c("x?", "lean"), [c("y?", "lean thinking")]), 4)
+        self.assertEqual(PQ.topic_clash(c("How is takt time set?", "pacemaker"), [c("y?", "takt time")]), 3)
 
     def test_requests_shape(self):
         items = [it for it in PQ.plan(()) if it[0]["id"] == "manufacturing-kpis"]
