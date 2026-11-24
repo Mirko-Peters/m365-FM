@@ -1,0 +1,571 @@
+WEBVTT
+
+00:00:00.160 --> 00:00:06.300
+Welkom bij de M365FM podcast, waar we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:06.500 --> 00:00:09.060
+Waarom draait niets wat je online gebruikt op slechts één computer?
+
+00:00:09.240 --> 00:00:11.200
+Je e-mail belandt nooit op slechts één computer.
+
+00:00:11.440 --> 00:00:14.500
+Het komt terecht bij een hele groep en je ziet nooit welke er antwoord geeft.
+
+00:00:14.700 --> 00:00:19.100
+Dat is loadbalancing en het is de reden waarom Teams niet plat ligt wanneer de helft van je bedrijf om 9 uur ochtends inlogt.
+
+00:00:19.220 --> 00:00:23.840
+Je denkt misschien dat dit diepgaande netwerktechniek voor beheerders is, maar het is een simpel concept dat je al dagelijks gebruikt.
+
+00:00:24.000 --> 00:00:28.440
+Aan het einde hiervan zul je begrijpen hoe het werkt en waar het verborgen zit in Microsoft 365 en Azure.
+
+00:00:28.440 --> 00:00:31.700
+Stel je nu de cloud voor zoals de meeste van ons die in eerste instantie zien.
+
+00:00:31.840 --> 00:00:35.780
+Eén gigantische computer in een koude kamer die ergens stilletjes alles draaiende houdt.
+
+00:00:35.900 --> 00:00:39.920
+Dat beeld is onjuist en het is op zo'n manier fout dat dit hele onderwerp makkelijker te begrijpen is.
+
+00:00:40.080 --> 00:00:41.460
+Er is geen enkele computer.
+
+00:00:41.720 --> 00:00:46.740
+Er zijn duizenden gewone computers die elk een klein deel van het werk doen en iets moet beslissen wie wat doet.
+
+00:00:47.000 --> 00:00:52.980
+Welkom bij de M365FM podcast, waar we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:52.980 --> 00:00:57.740
+De komende 20 minuten zal de term loadbalancing niet meer klinken als iets waar je een certificaat voor nodig hebt.
+
+00:00:57.740 --> 00:00:59.560
+Denk aan een winkel met één kassiëren.
+
+00:00:59.780 --> 00:01:04.460
+Zodra er drie mensen tegelijk komen, vormt zich een rij en tegen de tijd dat de tiende persoon arriveert, loopt de hele boel vast.
+
+00:01:04.640 --> 00:01:08.000
+Open nu twaalf kassa's en diezelfde groep loopt door zonder dat iemand lang hoeft te wachten.
+
+00:01:08.220 --> 00:01:11.740
+Computers hebben precies hetzelfde probleem en loadbalancing zijn de twaalf kassa's.
+
+00:01:11.920 --> 00:01:15.540
+Dit is van belang zodra meer dan een paar mensen tegelijkertijd dezelfde app gebruiken.
+
+00:01:15.720 --> 00:01:19.300
+Eén machine begint te smoren onder het gewicht en ieder persoon voelt dat.
+
+00:01:19.300 --> 00:01:23.740
+Dat ene probleem is wat loadbalancing moest oplossen en het is al tientallen jaren het antwoord.
+
+00:01:23.900 --> 00:01:27.040
+Je gebruikt het al je hele online leven zonder ooit een naam te hebben gezien.
+
+00:01:27.040 --> 00:01:32.720
+Elke video die je streamt, elke bestelling die je plaatst en elk bericht dat je verstuurt, wordt doorgegeven aan één van de vele machines.
+
+00:01:32.980 --> 00:01:36.900
+Die keuze gebeurt in een fractie van een seconde en dat gebeurt duizenden keren per dag voor jou.
+
+00:01:37.100 --> 00:01:41.020
+We zullen ook kijken naar de eerlijke grenzen, de delen die veel uitleg achterwege laat.
+
+00:01:41.220 --> 00:01:42.660
+Wat doet een loadbalancer eigenlijk?
+
+00:01:42.900 --> 00:01:47.600
+Een loadbalancer is een verkeersregelaar die voor een groep computers staat, genaamd surfers.
+
+00:01:47.980 --> 00:01:53.320
+Elk verzoek bereikt eerst de loadbalancer en de loadbalancer geeft dat verzoek dooraan één server in de groep.
+
+00:01:53.320 --> 00:01:58.500
+Voor jou ziet het eruit als één adres en één voordeur en je weet nooit of het maakt je niet uit welke machine het werk deed.
+
+00:01:58.740 --> 00:02:00.200
+Denk aan de gastheer in een restaurant.
+
+00:02:00.520 --> 00:02:02.800
+Je loopt niet zomaar naar binnen om zelf een tafel te pakken.
+
+00:02:02.960 --> 00:02:07.060
+De gastheer kijkt wat vrij is en brengt je naar een plek, zodat niet één ober de hele zaak hoeft te bedienen.
+
+00:02:07.300 --> 00:02:08.940
+Volg één verzoek van begin tot eind.
+
+00:02:09.140 --> 00:02:12.200
+Je tikt op een link en je apparaat verstuurt een verzoek naar de loadbalancer.
+
+00:02:12.440 --> 00:02:15.940
+De loadbalancer kiest een gezonde server en die server stuurt het antwoord terug.
+
+00:02:16.120 --> 00:02:20.540
+De hele beslissing duurt een fractie van een seconde en daarna gebeurt het opnieuw voor het volgende verzoek en dat daarna.
+
+00:02:20.540 --> 00:02:22.700
+Wat je hier echt uithaalt, zijn twee dingen.
+
+00:02:22.840 --> 00:02:26.340
+Je krijgt snelheid omdat het werk wordt verspreid in plaats van dat het op één machine terechtkomt.
+
+00:02:26.420 --> 00:02:30.940
+Je krijgt ook uithoudingsvermogen, want als een server overbelast of dood is, gaat het verkeer gewoon ergens anders heen.
+
+00:02:31.060 --> 00:02:34.580
+De loadbalancer is ook de reden waarom een website kan worden bijgewerkt zonder offline te gaan.
+
+00:02:34.760 --> 00:02:39.240
+Je haalt één server eruit, update hem, zet hem terug en de rest blijft mensen bedienen terwijl jij werkt.
+
+00:02:39.420 --> 00:02:40.740
+Niemand buiten merkt er iets van.
+
+00:02:40.940 --> 00:02:42.860
+Het woord load betekent hier gewoon werk.
+
+00:02:43.040 --> 00:02:48.640
+Het balanceren van de load betekent zorgen dat geen enkele machine meer doet dan zijn eerlijke deel, wat de hele taak is in één zin.
+
+00:02:48.640 --> 00:02:54.220
+De loadbalancer is het enige waar de buitenwereld ooit mee praat en dat is wat de pol erachter onzichtbaar houdt.
+
+00:02:54.380 --> 00:03:00.120
+Gebruikers zien één naam en één deur, terwijl achter die deur het aantal machines kan groeien of krimpen zonder dat iemand buiten het weet.
+
+00:03:00.280 --> 00:03:05.800
+Het deel waarvan mensen aannemen dat het ingewikkeld is, is hoe de loadbalancer een server kiest en dat is precies waar we nu naartoe gaan.
+
+00:03:05.960 --> 00:03:08.680
+De simpele regels die bepalen waar het verkeer naartoe gaat.
+
+00:03:08.920 --> 00:03:14.340
+Wanneer een verzoek binnenkomt, moet de loadbalancer een server kiezen en dat doet hij via een regel genaamd een algoritme.
+
+00:03:14.340 --> 00:03:18.980
+Een algoritme klinkt intimiderend, maar het betekent gewoon een set stappen om een beslissing te nemen.
+
+00:03:19.140 --> 00:03:22.980
+Een recept is een algoritme en de manier waarop je telefoon een route om files heen kiest ook.
+
+00:03:23.100 --> 00:03:24.840
+De simpelste regel heet Round Robin.
+
+00:03:25.060 --> 00:03:26.920
+De loadbalancer werkt op basis van beurten.
+
+00:03:27.060 --> 00:03:32.220
+Hij stuurt het eerste verzoek naar server 1, het tweede naar server 2, het derde naar server 3 en keert dan terug naar het begin.
+
+00:03:32.400 --> 00:03:36.600
+Het is als kaarten uitdelen aan een tafel en het werkt goed wanneer alle servers ongeveer hetzelfde zijn.
+
+00:03:36.780 --> 00:03:38.720
+De volgende regel is Leased Connections.
+
+00:03:38.720 --> 00:03:44.240
+In plaats van beurten af te wisselen, stuurt de loadbalancer elk nieuw verzoek naar de server met de minste actieve verbindingen.
+
+00:03:44.360 --> 00:03:48.640
+Dat is hetzelfde instinct dat je in de supermarkt gebruikt, waarbij je de kortste rij kiest in plaats van de dichtstbijzijnde.
+
+00:03:48.860 --> 00:03:51.380
+Sommige opstellingen gebruiken gewogen versies van deze regels.
+
+00:03:51.580 --> 00:03:55.680
+Als één server meer geheugen of een snellere processor heeft, geef je hem een groter deel van het verkeer.
+
+00:03:55.820 --> 00:03:58.540
+Het is als een grotere kassa die meer klanten per uur afhandelt.
+
+00:03:58.700 --> 00:04:01.860
+Er is nog één regel de moeite waard om te kennen en die heet de kortste responstijd.
+
+00:04:02.040 --> 00:04:07.620
+In plaats van verbindingen te tellen, kijkt de loadbalancer hoe snel elke server reageert en stuurt het volgende verzoek naar de snelste.
+
+00:04:08.720 --> 00:04:11.520
+Altijd weet welke kassa echt opschiet, niet alleen de kortste rij.
+
+00:04:11.780 --> 00:04:15.180
+Deze regels vallen uit één in twee families en dat onderscheid is belangrijk.
+
+00:04:15.540 --> 00:04:19.660
+De ene familie volgt een vast plan en kijkt nooit naar hoe druk de servers echt zijn.
+
+00:04:19.660 --> 00:04:22.920
+Dat is makkelijk in te stellen, maar gaat mis bij ongelijke belasting.
+
+00:04:23.160 --> 00:04:27.800
+De andere familie kijkt naar de huidige belasting en status van elke server en past zich aan.
+
+00:04:28.020 --> 00:04:30.600
+Wat beter werkt in de praktijk, maar meer afstelling vereist.
+
+00:04:30.860 --> 00:04:34.020
+Stel je een website van een klein bedrijf voor op drie identieke servers.
+
+00:04:34.400 --> 00:04:37.820
+Roundrobin is daar ruim voldoende en alles wat ingewikkelder is, is verspeelde moeite.
+
+00:04:37.820 --> 00:04:41.980
+Stel je nu een video-app voor waar het ene verzoek een oogwenk duurt en het volgende tien seconden.
+
+00:04:42.160 --> 00:04:47.260
+Least Connections voorkomt dat een server vastloopt door alle trage verzoeken vast te houden terwijl een andere server niets doet.
+
+00:04:47.480 --> 00:04:53.700
+Dit alles werkt alleen als de loadbalancer weet welke servers daadwerkelijk in de lucht zijn en die vraag is interessanter dan het lijkt.
+
+00:04:54.280 --> 00:04:55.900
+Hoe weet hij of een server ziek is?
+
+00:04:56.100 --> 00:05:01.480
+Een regel voor serverkeuze is nutteloos als sommige servers stuk zijn, dus voert de loadbalancer gezondheidschecks uit.
+
+00:05:01.480 --> 00:05:07.300
+Een gezondheidscheck is een kleine, periodieke test voor elke server als kloppen op de deur om te vragen of er iemand thuis is.
+
+00:05:07.480 --> 00:05:13.760
+Als de server antwoordt zoals het hoort, blijft hij in de rotatie, zo niet, dan stuurt de loadbalancer er geen nieuw verkeer meer naartoe.
+
+00:05:13.920 --> 00:05:18.560
+Het verplaatsen van verkeer van een defecte server naar een gezonde server heet veel over.
+
+00:05:18.820 --> 00:05:25.700
+Het is het onderdeel van loadbalancing dat voorkomt dat een klein defect een grote storing wordt, want één kapotte server mag nooit de hele app platleggen.
+
+00:05:25.700 --> 00:05:32.620
+Denk terug aan de winkel met vier kassa's. Een cachère loopt weg, de rij sluit en er komt een bordje te staan zodat niemand meer aansluit.
+
+00:05:32.780 --> 00:05:36.920
+Klanten gaan naar de open kassa's en voor hen aan de andere kant van de balie is er niets veranderd.
+
+00:05:37.060 --> 00:05:44.240
+In de details schuilt een reële afweging. Als de loadbalancer te zelden controleert, blijft een zieke server nog een tijdje verkeer ontvangen voordat iemand het merkt.
+
+00:05:44.420 --> 00:05:50.820
+Als hij te agressief controleert, wordt een server die slechts een beetje traag is uit de rotatie gehaald, wat het probleem erger kan maken in plaats van beter.
+
+00:05:50.820 --> 00:06:01.260
+Azure laat zien hoe dit in de praktijk werkt. De loadbalancer controleert elke backend met een vast interval, standaard vijf seconden in de portal en er is een aantal op involgende fouten nodig voordat een server als ongezond wordt gemarkeerd.
+
+00:06:01.480 --> 00:06:07.720
+Wanneer dat gebeurt, gaan nieuwe verbindingen elders heen terwijl bestaande vaak doorlopen, zodat mensen die met een taak bezig zijn niet worden afgesloten.
+
+00:06:07.900 --> 00:06:12.220
+Er is hier een reële grens. Een gezondheidscontrole weet alleen wat jij hem opdraagt om te testen.
+
+00:06:12.360 --> 00:06:18.800
+Als de verkeerde poort of een oppervlakkig signaal wordt gecontroleerd, kan een server ziek zijn en er toch perfect gezond uitzien, waardoor hij verkeer blijft ontvangen dat hij niet aan kan.
+
+00:06:18.800 --> 00:06:23.620
+Hoe beter je gezondheidscontrole weergeeft wat je gebruikers daadwerkelijk ervaren, hoe beter het hele systeem presteert.
+
+00:06:23.800 --> 00:06:27.100
+Krijgt dat ene detail goed en talloze andere problemen verdwijnen geruisloos.
+
+00:06:27.240 --> 00:06:32.000
+Tot nu toe hebben we elke loadbalancer behandeld als hetzelfde soort gereedschap en dat is het volgende dat we gaan aanpakken.
+
+00:06:32.140 --> 00:06:34.240
+Twee smaken en waarom het verschil ertoe doet.
+
+00:06:34.480 --> 00:06:39.840
+Niet elke loadbalancer werkt op dezelfde manier en het verschil zit in hoeveel van je verzoek hij de moeite neemt om te bekijken.
+
+00:06:40.100 --> 00:06:44.940
+Sommigen kijken alleen naar de buitenkant van de envelop en sommigen maken hem open en lezen de brief binnenin.
+
+00:06:44.940 --> 00:06:54.300
+Het eerste type werkt op wat laag 4 wordt genoemd. Het kijkt alleen naar het adres en de poort, net zoals een postsorteermachine een postcode leest, en stuurt het verzoek door zonder te geven om wat erin zit.
+
+00:06:54.460 --> 00:06:57.760
+Het is snel, het is simpel en voor veel taken is het alles wat je nodig hebt.
+
+00:06:57.940 --> 00:07:01.060
+Het tweede type werkt op laag 7 en deze leest het verzoek daadwerkelijk.
+
+00:07:01.240 --> 00:07:07.060
+Hij kan zien dat het ene verzoek om een afbeelding vraagt terwijl een ander probeert af te rekenen en hij kan ze elk naar een ander team van servers sturen.
+
+00:07:07.280 --> 00:07:11.560
+Dat is hoe een enkel webadres je stilletjes naar de juiste plek kan leiden op basis van waar je om vraagt.
+
+00:07:11.560 --> 00:07:19.980
+Een concreet voorbeeld maakt dit duidelijk. Een verzoek voor afbeeldingen van je site gaat naar de fotosurvers en een verzoek voor de afrekenpagina gaat naar de betalingsurvers, allemaal achter hetzelfde webadres.
+
+00:07:20.180 --> 00:07:24.160
+Niemand die dat adres typt, heeft enig idee dat twee verschillende teams hen zojuist hebben afgehandeld.
+
+00:07:24.380 --> 00:07:27.500
+Laag 7 ontsluit ook een paar zaken die in de echte wereld van belang zijn.
+
+00:07:27.680 --> 00:07:35.860
+Het kan je beveiligingscertificaten op één plek afhandelen in plaats van op elke server, en het kan inkomende verzoeken inspecteren en de kwaadaardige blokkeren voordat ze ooit je app bereiken.
+
+00:07:35.860 --> 00:07:43.760
+De afweging ligt hier. Laag 4 is de snelle, goedkope, no-nonsense optie, en laag 7 is de slimmere die bij elk verzoek wat meer werk kost.
+
+00:07:44.000 --> 00:07:49.980
+Geen van beiden wint in elk geval, en de keuze tussen beiden hangt echt af van hoe erg je wilt dat de balancer begrijpt waar je om vraagt.
+
+00:07:50.120 --> 00:07:53.020
+In de praktijk gebruiken veel echte systemen beide tegelijk.
+
+00:07:53.180 --> 00:08:01.720
+Een Layer 7 balancer maakt de slimme roteringskeuze aan de voorkant, en een Layer 4 balancer verdeelt het ruwe verkeer over de machines erachter, waarbij elk doet waar hij het beste in is.
+
+00:08:01.720 --> 00:08:08.380
+Nu die twee varianten duidelijk zijn, kunnen we eindelijk de tools benoemen die je in Azure tegenkomt, want Azure geeft je er niet zomaar één, maar een hele familie.
+
+00:08:08.540 --> 00:08:15.240
+Waar dit in Azure naar voren komt, is dat Azure niet één load balancer heeft. Het heeft een kleine familie daarvan, en elk is gebouwd voor een andere taak.
+
+00:08:15.380 --> 00:08:21.960
+De juiste kiezen hangt af van twee simpele zaken, of je verkeer webverkeer is en of je app in één regio leeft of verspreid is over de wereld.
+
+00:08:22.120 --> 00:08:27.820
+De eerste heet simpelweg Azure Load Balancer. Het is het snelle lid van de familie. Hij werkt op Layer 4.
+
+00:08:27.820 --> 00:08:32.820
+Hij verdeelt netwerkverkeer over virtuele machines en is gebouwd voor enorme volumes met zeer weinig vertraging.
+
+00:08:32.980 --> 00:08:39.180
+Hij verdeelt ook over beschikbaarheidszones, dit zijn afzonderlijke fysieke locaties binnen een regio, zodat het uitvallen van één zone niet het hele systeem platlegt.
+
+00:08:39.380 --> 00:08:42.620
+De volgende is Azure Application Gateway, de slimme regionale variant.
+
+00:08:42.880 --> 00:08:49.740
+Hij werkt op Layer 7, dus hij kan je URL's lezen, routeren op pad, je beveiligingscertificaten beheren en een webapplication firewall toevoegen.
+
+00:08:49.940 --> 00:08:54.580
+Kies hiervoor wanneer je app in één regio leeft, maar je een beslissing moet nemen over elk binnenkomend verzoek.
+
+00:08:54.580 --> 00:09:01.860
+Dan is er Azure Frontdoor, de wereldwijde variant. Hij stuurt elke gebruiker naar het dichtstbijzijnde gezonde toegangspunt op het netwerk van Microsoft,
+
+00:09:02.200 --> 00:09:05.760
+regelt beveiliging aan de Edge en kacht content, zodat herhaalbezoeken snel laden.
+
+00:09:05.940 --> 00:09:12.240
+Microsoft zegt dat het op meer dan 118 Edge locaties draait, verspreid over ongeveer 100 metropogebieden wereldwijd.
+
+00:09:12.460 --> 00:09:16.020
+De laatste is Azure Traffic Manager en deze werkt anders dan alle anderen.
+
+00:09:16.240 --> 00:09:17.960
+Hij verwerkt je verkeer helemaal niet.
+
+00:09:17.960 --> 00:09:22.760
+Hij beantwoordt enkel de vraag waar je app zich bevindt door je apparaat het adres van een gezonde locatie te geven,
+
+00:09:22.980 --> 00:09:27.220
+waarna je apparaat direct verbinding maakt met die server zonder dat Traffic Manager het verkeer ooit ziet.
+
+00:09:27.440 --> 00:09:31.380
+Dat verschil is belangrijker dan het lijkt, want Traffic Manager wijst alleen de weg.
+
+00:09:31.600 --> 00:09:35.460
+Het verkeer loopt rechtstreeks van de gebruiker naar de server, wat het snel houdt,
+
+00:09:35.540 --> 00:09:40.180
+maar het betekent ook dat veel over afhangt van hoe snel apparaten hun geheugen van dat adres verversen.
+
+00:09:40.340 --> 00:09:43.960
+Hoe verschillend ze ook klinken, alle vier beantwoorden ze dezelfde basisvraag.
+
+00:09:43.960 --> 00:09:49.400
+Ze beslissen welke gezonde machine het volgende verzoek moet krijgen en ze controleren of deze nog gezond is voordat ze er iemand naartoe sturen.
+
+00:09:49.580 --> 00:09:53.960
+Het detail dat de moeite waard is om te onthouden, is dat een echte workload er vaak meer dan één tegelijk gebruikt.
+
+00:09:54.160 --> 00:09:56.880
+Stel je een bedrijf voor dat een website rijdt voor klanten wereldwijd.
+
+00:09:57.100 --> 00:09:59.380
+Frontdoor brengt elke bezoeker naar de dichtstbijzijnde regio,
+
+00:09:59.540 --> 00:10:02.700
+Application Gateway stuurt ze binnen die regio door op basis van de URL,
+
+00:10:02.920 --> 00:10:05.600
+en een load balancer verdeelt het werk over de virtuele machines erachter.
+
+00:10:05.780 --> 00:10:09.360
+Drie tools, drie taken, één soepele ervaring voor degene die klikt.
+
+00:10:09.360 --> 00:10:13.300
+En het goede nieuws is dat we dit zelf nooit hoeven te bouwen om ervan te profiteren.
+
+00:10:13.300 --> 00:10:16.500
+Hoe doet Microsoft 365 dit stilletjes voor jou?
+
+00:10:16.680 --> 00:10:21.600
+Je zult waarschijnlijk nooit in je leven een load balancer configureren, terwijl je er al van duizenden afhankelijk bent.
+
+00:10:21.820 --> 00:10:26.000
+Elke keer dat je Outlook opent, deelneemt aan een teamsgesprek of een bestand in SharePoint opent,
+
+00:10:26.240 --> 00:10:28.860
+leun je op dit exacte mechanisme en dat gebeurt allemaal buiten het zicht.
+
+00:10:29.100 --> 00:10:33.460
+Microsoft 365 draait zijn diensten in een zogeheten actief inactief ontwerp,
+
+00:10:33.580 --> 00:10:38.180
+wat betekent dat er altijd meerdere kopieën van een dienst tegelijk draaien in datacenters verspreid over de wereld.
+
+00:10:38.180 --> 00:10:42.020
+Wanneer je verbinding maakt, komt je verkeer binnen via de front door servers van Microsoft
+
+00:10:42.020 --> 00:10:45.300
+en wordt het om eventuele storingen heen naar de best werkende kopie geleid.
+
+00:10:45.300 --> 00:10:48.840
+Die routering is hetzelfde concept waar we de hele aflevering over hebben gesproken,
+
+00:10:49.040 --> 00:10:50.940
+maar dan op een schaal die de meesten van ons nooit zien.
+
+00:10:51.180 --> 00:10:53.740
+Jij kiest geen datacenter en je weet niet welke er antwoorden.
+
+00:10:54.100 --> 00:10:58.940
+Microsoft systemen maken die keuze duizenden keren per seconde voor jou en je merkt het pas als het niet meer werkt.
+
+00:10:59.120 --> 00:11:01.840
+Niemand krijgt een vaste server toegewezen die hij zijn eigen kan noemen.
+
+00:11:02.060 --> 00:11:05.240
+Elk verzoek wordt telkens opnieuw geplaatst door systemen die gebouwd zijn om door te gaan,
+
+00:11:05.240 --> 00:11:07.140
+zelfs als een heel datacenter een slechte dag heeft.
+
+00:11:07.300 --> 00:11:10.400
+Er is een tweede zorgvuldigheidslaag in de manier waarop updates worden uitgebracht.
+
+00:11:10.740 --> 00:11:14.520
+Microsoft rolt wijzigingen uit in ringen, beginnend bij een kleine groep binnen het bedrijf,
+
+00:11:14.640 --> 00:11:19.180
+dan alle 140.000 Microsoft medewerkers, dan early adapters en uiteindelijk iedereen.
+
+00:11:19.400 --> 00:11:24.540
+Als er iets kapot gaat, gebeurt dat eerst bij een kleine groep waar het kan worden opgevangen voordat het ooit jouw inbox bereikt.
+
+00:11:24.720 --> 00:11:27.240
+De onderdelen worden ook bewust van elkaar gescheiden gehouden.
+
+00:11:27.400 --> 00:11:32.420
+Een probleem met Exchange verstoort de kern van Teams niet en een zoekprobleem in SharePoint weerhoud je er niet van om een bestand te uploaden.
+
+00:11:32.420 --> 00:11:36.240
+Die scheiding betekent dat één defect onderdeel de rest van de dienst niet mee naar beneden kan trekken.
+
+00:11:36.380 --> 00:11:38.600
+Het werkt als een hotel dat nooit kamers tekort komt.
+
+00:11:38.760 --> 00:11:42.600
+Je vraagt er een, je krijgt er een en je komt er nooit achter op welke verdieping de andere gasten terechtkwamen.
+
+00:11:42.780 --> 00:11:46.780
+Dus de volgende keer dat Teams gewoon werkt op een drukke dinsdagochtend, weet je een beetje wat er aan de achterkant gebeurt.
+
+00:11:46.920 --> 00:11:49.940
+Er vindt veel stille verkeerssturing plaats zodat het nooit druk aanvoelt.
+
+00:11:50.160 --> 00:11:51.580
+Dat is het voordeel en het is echt.
+
+00:11:51.820 --> 00:11:55.220
+Nu het eerlijke deel, want loadbalancing is geen wondermiddel voor alles.
+
+00:11:55.480 --> 00:11:57.160
+Wat kan loadbalancing niet oplossen?
+
+00:11:57.160 --> 00:12:03.300
+Het lost één probleem heel goed op en het is de moeite waard om de grenzen daarvan te kennen, zodat je niet meer verwacht dan het kan bieden.
+
+00:12:03.500 --> 00:12:04.900
+Begin bij de balancer zelf.
+
+00:12:05.140 --> 00:12:12.040
+Het kan een single point of failure zijn als je er slechts één gebruikt en deze uitvalt, is alles erachter onbereikbaar, hoe gezond de servers ook zijn.
+
+00:12:12.340 --> 00:12:19.320
+Serieuze opstellingen gebruiken balansbaren of managed services die redundant zijn ontworpen, wat een van de redenen is dat cloud providers deze zorg uit handen nemen.
+
+00:12:19.520 --> 00:12:22.080
+Meer servers betekent ook niet automatisch meer snelheid.
+
+00:12:22.080 --> 00:12:27.640
+Als je appdata slecht deelt of je database de echte flessenhals is, verspreid je met extra machines alleen maar hetzelfde probleem.
+
+00:12:27.780 --> 00:12:31.680
+Je kunt twintig servers hebben en nog steeds traag zijn, omdat de wachtrij zich niet bij de voordeur bevindt.
+
+00:12:31.800 --> 00:12:35.760
+Health checks hebben ook een zwakke plek, aangezien ze slecht zo slim zijn als de tests die je ze geeft.
+
+00:12:36.000 --> 00:12:39.500
+Stel een check-in op het verkeerde onderdeel en een defecte server blijft in de rij staan.
+
+00:12:39.740 --> 00:12:43.580
+Dat is een configuratiefout in plaats van een defect in het idee, maar wel een veelvoorkomende.
+
+00:12:43.760 --> 00:12:45.420
+Timing is het laatste punt om te kennen.
+
+00:12:45.420 --> 00:12:53.180
+Wanneer het balanceren via DNS verloopt, het adresboek dat een websitenaam omzet in een locatie onthoudt je apparaat dat antwoordt een tijdje door caching.
+
+00:12:53.480 --> 00:12:58.380
+Dat geheugen betekent dat het omleiden bij een storing langer kan duren dan met een proxy direct voor je app.
+
+00:12:58.480 --> 00:13:04.240
+De beginnersfout die ik je vooral wil laten vermijden, is aannemen dat het toevoegen van een load balancer je automatisch high availability geeft.
+
+00:13:04.240 --> 00:13:10.100
+Het is een belangrijk puzzelstuk, niet de volledige garantie, de rest van het plaatje is je app, je data en hoe je alles hebt ingericht.
+
+00:13:10.320 --> 00:13:12.980
+Geen van deze beperkingen maakt load balancing een slecht idee.
+
+00:13:12.980 --> 00:13:18.560
+Het betekent alleen dat het een instrument met een taak is, en zoals elk instrument werkt het het best als je precies weet wat die taak is.
+
+00:13:18.720 --> 00:13:20.740
+De samenvatting en één vraag voor jou.
+
+00:13:21.100 --> 00:13:26.160
+Kortom, load balancing is het verdelen van werk over verschillende computers zodat er niet één bezwijkt.
+
+00:13:26.380 --> 00:13:32.220
+Een load balancer is de verkeersregelaar die een server kiest, controleert of deze gezond is en omleidt wanneer dat niet zo is.
+
+00:13:32.400 --> 00:13:38.320
+In Azure is dat een kleine familie van tools load balancer, application gateway, front door en traffic manager.
+
+00:13:38.580 --> 00:13:42.740
+Microsoft 365 draait hier al op, dus daar hoef je niet over na te denken.
+
+00:13:42.740 --> 00:13:44.280
+Nu heb ik één vraag voor jou.
+
+00:13:44.520 --> 00:13:48.480
+Welke tool die je dagelijks gebruikt, bleek stiekem te vertrouwen op load balancing zonder dat je het wist.
+
+00:13:48.720 --> 00:13:50.280
+Denk erover na en laat het me weten.
+
+00:13:50.520 --> 00:13:57.720
+Als dit het onderwerp minder intimiderend maakte, abonneer je dan op M365FM om de tools en de mindset te beheersen die de toekomst van werk vormgeven.

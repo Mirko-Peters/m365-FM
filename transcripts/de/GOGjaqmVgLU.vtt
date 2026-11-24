@@ -1,0 +1,754 @@
+WEBVTT
+
+00:00:00.160 --> 00:00:03.880
+Willkommen beim M3565FM-Podcast, wo wir Menschen, Ideen und Technologien erkunden,
+
+00:00:03.940 --> 00:00:06.280
+die die Zukunft der Arbeit gestalten, die die Zukunft der Arbeit gestalten.
+
+00:00:06.720 --> 00:00:08.660
+Warum läuft nichts, dass Sie online nutzen auf nur einem Computer?
+
+00:00:09.400 --> 00:00:10.960
+Ihre E-Mail landet niemals auf nur einzigen Rechner.
+
+00:00:11.360 --> 00:00:14.260
+Sie landet bei einer ganzen Schar von Ihnen und Sie sehen nie, welche davon geantwortet hat.
+
+00:00:14.620 --> 00:00:17.260
+Das ist Lastverteilung und das ist der Grund, warum Teams nicht zusammenbricht,
+
+00:00:17.340 --> 00:00:18.920
+wenn sich die halbe Firma um 9 Uhr anmeldet.
+
+00:00:19.340 --> 00:00:21.800
+Sie denken vielleicht, das sei tiefgreifender Netzwerktechnik für Admins,
+
+00:00:21.860 --> 00:00:23.580
+aber es ist eine simple Idee, die Sie täglich nutzen.
+
+00:00:23.980 --> 00:00:25.980
+Am Ende dieser Folge werden Sie verstehen, wie das funktioniert
+
+00:00:25.980 --> 00:00:28.660
+und wo es sich in Microsoft 365 und Azure verbirgt.
+
+00:00:28.660 --> 00:00:31.140
+Stellen Sie sich jetzt die Cloud so vor, wie die meisten von uns, die sich anfangs vorstellen.
+
+00:00:31.800 --> 00:00:35.200
+Ein riesiger Computer sitzt in einem kalten Raum irgendwo und hält im Stillen alles zusammen.
+
+00:00:35.860 --> 00:00:39.640
+Dieses Bild ist falsch und zwar auf eine Weise, die dieses ganze Thema leichter verständlich macht.
+
+00:00:40.040 --> 00:00:40.820
+Gehen einzeln Computer.
+
+00:00:41.500 --> 00:00:44.960
+Es gibt tausende gewöhnliche Rechner, von denen jeder einen kleinen Teil der Arbeit erledigt
+
+00:00:44.960 --> 00:00:46.460
+und etwas muss entscheiden, wer was tut.
+
+00:00:47.460 --> 00:00:51.220
+Willkommen beim M3565FM-Podcast, wo wir Menschen, Ideen und Technologien erkunden,
+
+00:00:51.300 --> 00:00:52.500
+die die Zukunft der Arbeit gestalten.
+
+00:00:52.940 --> 00:00:55.860
+In den nächsten 20 Minuten wird der Begriff Lastverteilung nicht mehr klingen,
+
+00:00:55.960 --> 00:00:57.480
+als bräuchte man dafür eine Zertifizierung.
+
+00:00:57.480 --> 00:00:59.260
+Denken Sie an ein Geschäft mit nur einer Kasse.
+
+00:00:59.660 --> 00:01:02.040
+Sobald drei Leute gleichzeitig auftauchen, bildet sich eine Schlange
+
+00:01:02.040 --> 00:01:04.120
+und wenn Person 10 eintrifft, steckt der ganze Laden fest.
+
+00:01:04.420 --> 00:01:07.740
+Öffnen Sie nun zwölf Kassen und dieselbe Menge bewegt sich durch, ohne dass jemand lange warten.
+
+00:01:08.180 --> 00:01:11.180
+Computer haben genau dasselbe Problem und Lastverteilung sind die zwölf Kassen.
+
+00:01:11.960 --> 00:01:14.680
+Das spielt eine Rolle, sobald mehr als ein paar Leute dieselbe App gleichzeitig nutzen.
+
+00:01:15.440 --> 00:01:18.900
+Eine Maschine beginnt unter der Last zu ersticken und jeder Einzelne spürt es.
+
+00:01:19.480 --> 00:01:23.520
+Genau dieses Problem sollte mit Lastverteilung gelöst werden und es ist seit Jahrzehnten die Antwort darauf.
+
+00:01:23.520 --> 00:01:26.660
+Sie nutzen sie ihr ganzes Online-Leben lang, ohne jemals ihren Namen zu sehen.
+
+00:01:27.440 --> 00:01:31.080
+Jedes Video, das sie streamen, jede Bestellung, die sie tätigen und jede Nachricht, die sie senden,
+
+00:01:31.120 --> 00:01:32.360
+wird an eine Maschine von vielen übergeben.
+
+00:01:32.940 --> 00:01:36.380
+Diese Wahl geschieht in einem Bruchteil einer Sekunde und passiert für sie tausende Male am Tag.
+
+00:01:37.240 --> 00:01:40.240
+Wir werden auch die ehrlichen Grenzen ansprechen, die Teile, die viele Erklärungen auslassen.
+
+00:01:41.140 --> 00:01:42.260
+Was macht ein Loadbalancer eigentlich?
+
+00:01:42.980 --> 00:01:47.040
+Ein Loadbalancer ist ein Verkehrsleiter, der vor einer Gruppe von Computern steht, die Server genannt werden.
+
+00:01:47.900 --> 00:01:53.200
+Jede Anfrage trifft zuerst beim Loadbalancer ein und der Loadbalancer leitet diese Anfrage an einen Server in der Gruppe weiter.
+
+00:01:53.800 --> 00:01:58.500
+Für sie sieht es aus wie eine Adresse und eine Eingangstür und sie wissen nie, oder es ist ihnen egal, welche Maschine die Arbeit erledigt hat.
+
+00:01:58.760 --> 00:02:00.120
+Denken sie an den Empfangschiff in einem Restaurant.
+
+00:02:00.500 --> 00:02:02.420
+Sie spazieren nicht einfach hinein und suchen sich selbst enthält.
+
+00:02:02.680 --> 00:02:07.060
+Der Gastgeber schaut, was frei ist und weist dir einen Platz zu, damit kein einzelner Kellner den ganzen Raum allein bedienen muss.
+
+00:02:07.420 --> 00:02:08.420
+Verfolgen wir den Anfang bis Ende.
+
+00:02:08.840 --> 00:02:11.760
+Du tippst auf einen Link und dein Gerät sendet eine Anfrage an den Loadbalancer.
+
+00:02:12.340 --> 00:02:15.640
+Der Loadbalancer wählt einen funktionierenden Server aus und dieser Server sendet die Antwort zurück.
+
+00:02:15.640 --> 00:02:20.340
+Die gesamte Entscheidung dauert einen Bruchteil einer Sekunde und passiert dann erneut für die nächste Anfrage und die danach.
+
+00:02:20.900 --> 00:02:22.340
+Was du dadurch bekommst, sind eigentlich zwei Dinge.
+
+00:02:22.800 --> 00:02:25.900
+Du bekommst Geschwindigkeit, dass sich die Arbeit verteilt, statt sich auf einer Maschine anzustarren.
+
+00:02:26.280 --> 00:02:30.480
+Du bekommst auch Ausdauer, denn wenn ein Server überlastet oder ausgefallen ist, geht der Datenverkehr einfach woanders hin.
+
+00:02:31.080 --> 00:02:34.340
+Der Loadbalancer ist auch der Grund, warum eine Webseite aktualisiert werden kann, ohne offline zu gehen.
+
+00:02:34.400 --> 00:02:39.040
+Du nimmst einen Server heraus, aktualisierst ihn, setzt ihn zurück und die anderen bedienen weiter die Nutzer, während du arbeitest.
+
+00:02:39.400 --> 00:02:40.660
+Niemand draußen bemerkt etwas davon.
+
+00:02:41.140 --> 00:02:42.320
+Das Wort Last bedeutet ja einfach Arbeit.
+
+00:02:42.320 --> 00:02:46.600
+Die Last zu verteilen bedeutet sicherzustellen, dass keine einzelne Maschine mehr als ihren fairen Anteil trägt.
+
+00:02:46.680 --> 00:02:48.040
+Das ist die gesamte Aufgabe in einem Satz.
+
+00:02:48.420 --> 00:02:51.340
+Der Loadbalancer ist das einzige, mit dem die Außenwelt jemals kommuniziert.
+
+00:02:51.620 --> 00:02:53.840
+Und das hält den Pool dahinter unsichtbar, unsichtbar.
+
+00:02:54.600 --> 00:02:59.720
+Nutzer sehen einen Namen und eine Tür, während dahinter die Anzahl der Maschinen wachsen oder schrumpfen kann, ohne dass es jemand draußen merkt.
+
+00:03:00.400 --> 00:03:03.840
+Der Teil, den die Leute für kompliziert halten, ist die Wahl des Servers durch den Loadbalancer.
+
+00:03:04.040 --> 00:03:05.200
+Genau darum geht es als nächstes.
+
+00:03:06.120 --> 00:03:08.180
+Die einfachen Regeln, die entscheiden, wohin der Datenverkehr geht.
+
+00:03:08.180 --> 00:03:14.020
+Wenn eine Anfrage eintrifft, muss der Loadbalancer einen Server wählen und das tut er mithilfe einer Regel, die Algorithmus genannt wird.
+
+00:03:14.780 --> 00:03:18.760
+Ein Algorithmus klingt einschüchternd, bedeutet aber nur eine Reihe von Schritten zur Entscheidungsfindung.
+
+00:03:19.320 --> 00:03:22.580
+Ein Rezept ist ein Algorithmus, genau wie die Art, wie dein Telefon eine Route um den Stau rumwählt.
+
+00:03:23.180 --> 00:03:24.600
+Die einfachste Regel heißt Round Rubber.
+
+00:03:25.120 --> 00:03:26.480
+Der Loadbalancer lässt die Server abwechselnd ran.
+
+00:03:26.480 --> 00:03:31.860
+Er sendet die erste Anfrage an Server 1, die zweite an Server 2, die dritte an Server 3 und beginnt dann wieder von vorn.
+
+00:03:32.280 --> 00:03:36.240
+Es ist wie das Austeilen von Karten an einem Tisch und funktioniert gut, wenn alle Server ungefähr gleich sind.
+
+00:03:36.880 --> 00:03:38.360
+Die nächste Regel ist Least Connections mit diesem.
+
+00:03:38.640 --> 00:03:43.940
+Anstatt sich abzuwechseln, sendet der Loadbalancer jede neue Anfrage an den Server, der die wenigsten aktiven Verbindungen hat, der
+
+00:03:43.940 --> 00:03:48.520
+Das ist derselbe Instinkt, den du im Supermarkt benutzt, wenn du die kürzeste Schlange wählst, statt die, die am nächsten ist.
+
+00:03:49.000 --> 00:03:50.700
+Manche Setups verwenden gewichtete Versionen dieser Regel.
+
+00:03:50.940 --> 00:03:55.400
+Wenn ein Server mehr Arbeitsspeicher oder einen schnelleren Prozessor hat, weißt du ihm einen größeren Anteil des Datenverkehrs.
+
+00:03:55.400 --> 00:03:58.280
+Es ist wie eine größere Kasse, die pro Stunde mehr Einkäufe abwickelt.
+
+00:03:58.820 --> 00:04:01.320
+Eine weitere Regel ist erwähnenswert, die kürzeste Antwortzeit.
+
+00:04:01.760 --> 00:04:07.080
+Anstatt Verbindungen zu zählen, beobachtet der Loadbalancer, wie schnell jeder Server antwortet und leitet die nächste Anfrage an den schnellsten weiter.
+
+00:04:07.640 --> 00:04:11.480
+Das ist wie der Freund, der immer weiß, welche Kassenschlange tatsächlich vorwärts geht und nicht nur die kürzeste wählt.
+
+00:04:11.720 --> 00:04:14.880
+Diese Regeln lassen sich in zwei Gruppen unterteilen und dieser Unterschied ist wichtig.
+
+00:04:15.280 --> 00:04:19.320
+Die eine Gruppe folgt einem festen Plan, ohne die tatsächliche Auslastung der Server zu prüfen.
+
+00:04:19.480 --> 00:04:22.520
+Das ist einfach einzurichten, kann aber bei ungleicher Last zu Problemen führen.
+
+00:04:22.520 --> 00:04:27.160
+Die andere Gruppe überwacht die aktuelle Last und den Status der Server und passt sich dynamisch an.
+
+00:04:27.340 --> 00:04:30.060
+Was in der Praxis besser funktioniert, aber mehr Feineinstellungen erfordern.
+
+00:04:31.240 --> 00:04:34.020
+Stellen Sie sich eine Website für ein kleines Unternehmen auf drei identischen Servern vor.
+
+00:04:34.500 --> 00:04:37.300
+Round Robin reicht hier völlig aus, alles andere wäre überflüssiger Aufwand.
+
+00:04:37.940 --> 00:04:41.920
+Stellen Sie sich nun eine Video-App vor, bei der eine Anfrage in Sekundenbruchteilen erledigt ist, während die nächsten 10 Sekunden dauern.
+
+00:04:42.200 --> 00:04:46.380
+Least Connections verhindert, dass ein Server alle langsam Anfragen hängen hat, während ein anderer untätig bleibt.
+
+00:04:46.380 --> 00:04:50.740
+All das funktioniert nur, wenn der Loadbalancer weiß, welche Server tatsächlich laufen.
+
+00:04:50.840 --> 00:04:52.920
+Eine Frage, die interessanter ist, als sie klingt.
+
+00:04:54.560 --> 00:04:55.800
+Woher weiß er, ob ein Server krank ist?
+
+00:04:56.260 --> 00:05:00.960
+Eine Auswahlregel ist nutzlos, wenn einige Server defekt sind, deshalb führt der Loadbalancer Gesundheitsprüfungen durch.
+
+00:05:01.820 --> 00:05:06.800
+Eine Gesundheitsprüfung ist ein kleiner, regelmäßiger Test an jeden Server, wie ein Klopfen an der Tür, um zu fragen, ob jemand da ist.
+
+00:05:06.800 --> 00:05:13.020
+Antwortet der Server wie erwartet, bleibt er aktiv, antwortet er nicht, leitet der Loadbalancer keinen neuen Datenverkehr mehr an ihn weiter.
+
+00:05:13.760 --> 00:05:18.360
+Dieses Umleiten des Datenverkehrs von einem ausgefallenen Server auf einen gesunden, nennt man Failover.
+
+00:05:19.100 --> 00:05:25.220
+Dies ist der Teil des Loadbalancings, der verhindert, dass ein kleiner Defekt zu einem großen Ausfall wird, denn ein einzelner Server sollte nie die ganze App lahmlegen.
+
+00:05:26.100 --> 00:05:27.420
+Denken Sie zurück an den Laden mit den vier Kassen.
+
+00:05:28.060 --> 00:05:32.020
+Ein Kassierer geht weg, die Kasse schließt und ein Schild weist darauf hin, damit sich dort niemand anstellt.
+
+00:05:32.700 --> 00:05:36.660
+Die Kunden verteilen sich auf die offenen Kassen und aus ihrer Sicht hat sich gar nichts geändert.
+
+00:05:37.240 --> 00:05:38.780
+In den Details verbirgt sich ein echter Kompromiss.
+
+00:05:39.060 --> 00:05:43.160
+Prüft der Loadbalancer zu selten, erhält ein kranker Server noch eine Weile Datenverkehr, bevor jemand den Fehler bemerkt.
+
+00:05:44.420 --> 00:05:50.120
+Prüft er zu aggressiv, wird ein nur leicht langsamer Server aus dem Verkehr gezogen, was alles eher verschlimmert als verbessert.
+
+00:05:51.100 --> 00:05:52.500
+Azure zeigt, wie das in der Praxis funktioniert.
+
+00:05:53.160 --> 00:05:58.780
+Der Loadbalancer prüft jedes Backend in einem festen Intervall standardmäßig fünf Sekunden im Portal und benötigt eine bestimmte Anzahl an Fehlern in Folge,
+
+00:05:58.780 --> 00:06:01.000
+bevor er einen Server als Fehler in Folge, bevor er einen Server markiert.
+
+00:06:01.480 --> 00:06:05.020
+Wenn das passiert, gehen neue Verbindungen woanders hin, während Bestehende oft weiterlaufen,
+
+00:06:05.020 --> 00:06:07.440
+sodass Nutzer bei ihrer Arbeit nicht unterbrochen werden.
+
+00:06:08.080 --> 00:06:09.080
+Hier gibt es eine klare Grenze.
+
+00:06:09.540 --> 00:06:11.540
+Ein Healthcheck weiß nur das, was man ihm zu prüfen gibt.
+
+00:06:12.120 --> 00:06:15.980
+Prüft er den falschen Port oder nur oberflächlich, kann ein Server krank sein und trotzdem gesund aussehen,
+
+00:06:16.060 --> 00:06:18.340
+wodurch er weiter Datenverkehr erhält, den er nicht bewältigen kann.
+
+00:06:19.120 --> 00:06:21.560
+Je besser ihr Healthcheck die tatsächliche Nutzererfahrung widerspiegelt,
+
+00:06:21.620 --> 00:06:23.300
+desto besser verhält sich das gesamte System.
+
+00:06:23.860 --> 00:06:26.400
+Wenn dieses eine Detail stimmt, verschwinden viele andere Probleme von selbst.
+
+00:06:26.400 --> 00:06:31.160
+Bisher haben wir jeden Loadbalancer als das gleiche Werkzeug betrachtet und das müssen wir als nächstes ändern.
+
+00:06:32.260 --> 00:06:34.120
+Zwei Varianten und warum der Unterschied wichtig ist.
+
+00:06:34.560 --> 00:06:38.580
+Nicht jeder Loadbalancer arbeitet gleich und der Unterschied liegt darin, wie viel er von ihrer Anfrage prüft.
+
+00:06:40.160 --> 00:06:43.880
+Manche schauen nur auf den Umschlag, andere öffnen ihn und lesen den Brief darin.
+
+00:06:44.320 --> 00:06:44.600
+Tsss.
+
+00:06:45.140 --> 00:06:46.880
+Die erste Art arbeitet auf der sogenannten Lea 4.
+
+00:06:46.880 --> 00:06:50.940
+Sie schaut nur auf die Adresse und den Port, wie eine Postsortieranlage auf die Postleitzahl
+
+00:06:50.940 --> 00:06:53.580
+und leitet die Anfrage weiter, ohne sich für den Inhalt zu interessieren.
+
+00:06:54.000 --> 00:06:57.500
+Ah, es ist schnell, einfach und für viele Aufgaben völlig ausreichend.
+
+00:06:57.980 --> 00:07:00.500
+Die zweite Art arbeitet auf Lea 7 und liest die Anfrage tatsächlich mit.
+
+00:07:00.920 --> 00:07:04.020
+Sie erkennt, ob eine Anfrage ein Bild abruft oder einen Kauf abschließen will
+
+00:07:04.020 --> 00:07:06.540
+und kann beides an unterschiedliche Servergruppen senden.
+
+00:07:07.020 --> 00:07:11.140
+So kann eine einzige Webadresse sie je nach Wunsch unbemerkt an die richtige Stelle weiterleiten.
+
+00:07:11.680 --> 00:07:13.000
+Ein konkretes Beispiel verdeutlicht das.
+
+00:07:13.580 --> 00:07:15.920
+Eine Anfrage für Bilder geht an die Bildserver,
+
+00:07:15.920 --> 00:07:17.960
+eine Anfrage für die Kasse an die Zahlungsserver,
+
+00:07:18.060 --> 00:07:19.540
+alles unter derselben Webadresse.
+
+00:07:20.220 --> 00:07:23.660
+Niemand, der die Adresse eingibt, ahnt, dass zwei verschiedene Teams gerade ihre Anfrage bearbeitet haben.
+
+00:07:24.480 --> 00:07:27.020
+Lea 7 ermöglicht zudem einige Dinge, die in der Praxis wichtig sind.
+
+00:07:27.400 --> 00:07:30.540
+Er verwaltet Sicherheitszertifikate zentral statt auf jedem Server
+
+00:07:30.540 --> 00:07:33.040
+und kann Anfragen prüfen und Schädliche blockieren,
+
+00:07:33.200 --> 00:07:35.640
+bevor sie die App erreichen, bevor sie die App erreichen.
+
+00:07:36.160 --> 00:07:36.820
+Hier liegt der Kompromiss.
+
+00:07:37.580 --> 00:07:39.560
+Lea 4 ist die schnelle, günstige Basisoption.
+
+00:07:40.020 --> 00:07:43.040
+Lea 7 ist die intelligentere, erfordert aber etwas mehr Aufwand bei jeder Anfrage.
+
+00:07:43.040 --> 00:07:49.300
+Keiner gewinnt immer die Wahl, hängt davon ab, wie sehr der Balancer verstehen muss, was sie anfordern.
+
+00:07:50.240 --> 00:07:52.360
+In der Praxis nutzen viele echte Systeme beides gleichzeitig.
+
+00:07:53.140 --> 00:07:56.340
+Ein Lea 7 Load Balancer trifft die intelligenten Routing-Entscheidungen an der Front,
+
+00:07:56.460 --> 00:07:59.300
+während ein Lea 4 Balancer den Datenverkehr auf die dahinterliegenden Maschinen verteilt.
+
+00:07:59.380 --> 00:08:01.360
+Jeder übernimmt dabei die Aufgabe, die er am besten beherrscht.
+
+00:08:01.360 --> 00:08:06.020
+Da diese beiden Varianten nun geklärt sind, können wir die konkreten Tools nennen, die Sie in Azure antreffen werden,
+
+00:08:06.080 --> 00:08:08.320
+denn Azure bietet Ihnen nicht nur eines, sondern eine ganze Familie davon.
+
+00:08:08.820 --> 00:08:11.080
+In Azure gibt es nicht nur einen einzigen Load Balancer.
+
+00:08:11.800 --> 00:08:14.640
+Es gibt eine ganze Familie davon und jeder Einzelne wurde für eine andere Aufgabe entwickelt.
+
+00:08:15.020 --> 00:08:17.360
+Die Wahl des Richtigen hängt von zwei einfachen Faktoren ab,
+
+00:08:17.440 --> 00:08:21.460
+ob es sich um Web-Traffic handelt und ob Ihre Anwendung in einer Region oder weltweit verteilt läuft.
+
+00:08:22.140 --> 00:08:24.240
+Der erste heißt ganz einfach Azure Load Balancer.
+
+00:08:24.820 --> 00:08:27.500
+Er ist das schnelle Basismitglied der Familie, arbeitet auf Lea 4.
+
+00:08:27.500 --> 00:08:32.320
+Er verteilt Netzwerktraffic auf virtuelle Maschinen und ist für riesige Datenmengen bei minimaler Verzögerung ausgelegt.
+
+00:08:33.080 --> 00:08:37.020
+Er erstreckt sich zudem über Verfügbarkeitszonen, also physisch getrennte Standorte, innerhalb einer Region,
+
+00:08:37.120 --> 00:08:39.200
+damit der Ausfall einer Zone nicht das gesamte System lahmlegt.
+
+00:08:39.560 --> 00:08:42.080
+Als nächstes folgt das Application Gateway der Intelligente Generalität.
+
+00:08:42.760 --> 00:08:46.040
+Es arbeitet auf Layer 7, kann also Ihre URLs lesen, nach Pfadenrouten,
+
+00:08:46.260 --> 00:08:49.200
+sich Artifikate verwalten und eine Web-Application-Firewall hinzufügen.
+
+00:08:49.880 --> 00:08:52.020
+Wählen Sie diesen Dienst, wenn Ihre Anwendung in einer Region läuft,
+
+00:08:52.100 --> 00:08:54.420
+Sie aber für jede eingehende Anfrage eine individuelle Entscheidung haben.
+
+00:08:54.880 --> 00:08:56.620
+Dann gibt es noch Azure Front Door, die globale Lösung.
+
+00:08:56.620 --> 00:09:00.940
+Sie leitet jeden Benutzer zum nächstgelegenen fehlerfreien Einstiegspunkt in Microsofts Netzwerk,
+
+00:09:01.140 --> 00:09:05.220
+kümmert sich um Sicherheit am Edge und speichert Inhalte zwischen, damit wiederholte Aufrufe schnell laden.
+
+00:09:05.820 --> 00:09:12.040
+Laut Microsoft läuft der Dienst über mehr als 118 Edge-Standorte in etwa 100 Metropolregionen weltweit weit.
+
+00:09:12.740 --> 00:09:15.720
+Zuletzt gibt es noch den Azure Traffic Manager, der anders funktioniert als alle anderen.
+
+00:09:16.140 --> 00:09:17.460
+Er überträgt Ihren Datenverkehr überhaupt nicht.
+
+00:09:18.100 --> 00:09:22.520
+Er beantwortet lediglich die Frage, wo Ihre App lebt, indem er Ihrem Gerät die Adresse eines fehlerfreien Standorts nennt.
+
+00:09:22.520 --> 00:09:26.460
+Ihr Gerät verbindet sich dann direkt mit diesem Server, ohne dass der Traffic Manager den Datenverkehr jemals sieht.
+
+00:09:27.160 --> 00:09:31.040
+Dieser Unterschied ist bedeutender, als es klingt, denn der Traffic Manager zeigt nur den Weg.
+
+00:09:31.800 --> 00:09:34.900
+Der Datenverkehr läuft direkt vom Benutzer zum Server, was für Geschwindigkeit sorgt,
+
+00:09:35.340 --> 00:09:39.220
+aber auch bedeutet, dass das Failover davon abhängt, wie schnell Geräte Ihren Adressspeicher aktualisieren.
+
+00:09:40.760 --> 00:09:43.640
+So unterschiedlich Sie auch klingen, alle vier beantworten dieselbe grundlegende Frage.
+
+00:09:44.000 --> 00:09:46.920
+Sie entscheiden, welche fehlerfreie Maschine die nächste Anfrage erhalten soll
+
+00:09:46.920 --> 00:09:49.320
+und prüfen vor der Weiterleitung, ob sie noch einsatzbereit ist.
+
+00:09:49.320 --> 00:09:53.540
+Ein wichtiges Detail, in der Praxis werden oft mehrere dieser Lösungen gleichzeitig eingesetzt.
+
+00:09:53.960 --> 00:09:56.500
+Stellen Sie sich ein Unternehmen vor, das eine Website für Kunden weltweit betreibt.
+
+00:09:56.980 --> 00:10:01.980
+Frontdoor bringt jeden Besucher zur nächstgelegenen Region, Application Gateway leitet Sie innerhalb dieser Region per URL weiter
+
+00:10:01.980 --> 00:10:05.000
+und der Loadbalancer verteilt die Arbeit auf die dahinterliegenden virtuellen Maschinen.
+
+00:10:05.760 --> 00:10:08.780
+Drei Werkzeuge, drei Aufgaben, eine reibungslose Erfahrung für den Nutzer.
+
+00:10:09.580 --> 00:10:12.520
+Die gute Nachricht ist, wir müssen das alles nicht selbst aufbauen, um davon zu profitieren.
+
+00:10:12.520 --> 00:10:16.260
+Wie Microsoft 365 ist im Hintergrund für Sie erlebt.
+
+00:10:16.720 --> 00:10:19.280
+Sie werden wahrscheinlich nie in Ihrem Leben einen Loadbalancer konfigurieren,
+
+00:10:19.460 --> 00:10:21.060
+obwohl Sie bereits von Tausenden abhängig sind.
+
+00:10:21.940 --> 00:10:25.640
+Jedes Mal, wenn Sie Outlook öffnen, an einem Teams-Anruf teilnehmen oder eine Datei in SharePoint aufrufen,
+
+00:10:25.700 --> 00:10:28.260
+nutzen Sie genau diese Maschinerie und das alles passiert völlig unbemerkt.
+
+00:10:29.080 --> 00:10:33.120
+Microsoft 365 betreibt seine Dienste in einem sogenannten Active-in-Active-Design,
+
+00:10:33.120 --> 00:10:37.480
+was bedeutet, dass immer mehrere Kopien eines Dienstes gleichzeitig in weltweit verteilten Rechenzentren laufen.
+
+00:10:38.380 --> 00:10:41.780
+Wenn Sie eine Verbindung herstellen, kommt der Datenverkehr über den Microsoft Frontdoor-Dienst herein
+
+00:10:41.780 --> 00:10:44.900
+und wird unter Umgehung etwaiger Ausfälle zur am besten funktionierenden Kopie geleitet.
+
+00:10:45.660 --> 00:10:48.600
+Dieses Routing folgt demselben Prinzip, über das wir die ganze Folge gesprochen haben,
+
+00:10:48.880 --> 00:10:50.720
+nur in einem Maßstab, den die meisten von uns nie zu sehen bekommen.
+
+00:10:51.120 --> 00:10:53.460
+Sie wählen kein Rechenzentrum aus und wissen nicht, welches geantwortet hat.
+
+00:10:53.860 --> 00:10:57.120
+Die Systeme von Microsoft treffen diese Entscheidung tausendfach pro Sekunde für Sie
+
+00:10:57.120 --> 00:10:58.780
+und Sie bemerken es erst, wenn es nicht mehr funktioniert.
+
+00:10:59.280 --> 00:11:01.420
+Niemandem wird ein fester Server zugewiesen, den er sein eigen nennen kann.
+
+00:11:02.000 --> 00:11:04.240
+Jede Anfrage wird jedes Mal neu von Systemen platziert,
+
+00:11:04.340 --> 00:11:06.960
+die darauf ausgelegt sind, selbst dann weiterzulaufen, wenn ein ganzes Rechenzentrum ausfällt.
+
+00:11:07.380 --> 00:11:09.600
+Es gibt eine zweite Sicherheitsebene bei der Veröffentlichung von Updates.
+
+00:11:09.600 --> 00:11:14.180
+Microsoft rollt Änderungen in Ringen aus, zuerst bei einer kleinen internen Gruppe,
+
+00:11:14.500 --> 00:11:18.640
+dann bei allen 140.000 Microsoft-Mitarbeitern, dann bei Early Adoptern und schließlich bei allen.
+
+00:11:19.500 --> 00:11:21.620
+Wenn etwas kaputt geht, dann zuerst für eine kleine Gruppe,
+
+00:11:21.900 --> 00:11:24.320
+wo es erkannt werden kann, bevor es jemals ihren Posteingang erreicht.
+
+00:11:24.960 --> 00:11:26.840
+Die einzelnen Komponenten werden zudem bewusst voneinander getreten.
+
+00:11:27.220 --> 00:11:29.780
+Ein Problem mit Exchange schlägt nicht die Kernfunktionen von Teams lahm
+
+00:11:29.780 --> 00:11:32.320
+und ein Suchproblem in SharePoint hindert Sie nicht daran, eine Datei hochzuladen.
+
+00:11:32.320 --> 00:11:36.140
+Diese Trennung bedeutet, dass ein defekter Teil nicht den Rest des Dienstes mit in den Abgrund reißen kann.
+
+00:11:36.140 --> 00:11:38.260
+Es funktioniert wie ein Hotel, in dem nie die Zimmer ausgehen.
+
+00:11:38.680 --> 00:11:42.440
+Sie fragen nach einem, sie bekommen eines und sie erfahren nie, auf welcher Etage die anderen Gäste gelandet sind.
+
+00:11:42.720 --> 00:11:45.160
+Wenn Teams also das nächste Mal an einem geschäftigen Dienstagmorgen auffunktioniert,
+
+00:11:45.220 --> 00:11:46.540
+wissen sie ein wenig darüber, was im Hintergrund abläuft.
+
+00:11:46.840 --> 00:11:49.780
+Viel unauffällige Verkehrssteuerung sorgt dafür, dass sich nie etwas überlastet anfühlt.
+
+00:11:50.080 --> 00:11:51.160
+Das ist der Vorteil und er ist real.
+
+00:11:51.620 --> 00:11:54.520
+Nun zum ehrlichen Teil, denn Loadbalancing ist keine magische Lösung für alles.
+
+00:11:55.560 --> 00:11:56.860
+Was kann Loadbalancing nicht beheben?
+
+00:11:57.260 --> 00:12:00.500
+Es löst dein Problem wirklich gut und es lohnt sich, die Grenzen davon zu kennen,
+
+00:12:01.260 --> 00:12:02.980
+damit du nicht mehr erwartest, als er leisten kann.
+
+00:12:02.980 --> 00:12:04.560
+Fangen wir beim Balancer selbst an.
+
+00:12:05.440 --> 00:12:06.760
+Er kann ein Single-Point-of-Failure sein.
+
+00:12:06.920 --> 00:12:11.000
+Wenn du nur einen betreibst und er ausfällt, ist alles dahinter unerreichbar, egal wie gesund die Server sind.
+
+00:12:12.620 --> 00:12:16.380
+Echte Setups nutzen Loadbalancer-Paare oder verwaltete Dienste, die redundant ausgelegt sind,
+
+00:12:16.440 --> 00:12:18.580
+ein Grund, warum Cloud-Anbieter dir diese Sorge abnehmen.
+
+00:12:19.740 --> 00:12:21.800
+Mehr Server bedeuten auch nicht automatisch mehr Geschwindigkeit.
+
+00:12:22.360 --> 00:12:25.100
+Wenn deine App-Daten schlecht verteilt oder die Datenbank der Flaschenhals ist,
+
+00:12:25.420 --> 00:12:27.280
+verbreitest du das Problem durch mehr Rechner nur weiter.
+
+00:12:27.880 --> 00:12:31.120
+Du kannst 20 Server haben und trotzdem langsam sein, weil die Warteschlange nicht vor der Tür steht.
+
+00:12:31.120 --> 00:12:35.600
+Healthchecks haben ebenfalls eine Schwachstelle, da sie nur so schlau sind wie das, was sie laut deiner Anweisung prüfen sollen.
+
+00:12:36.000 --> 00:12:39.020
+Prüfst du das Falsche, behält ein defekter Server seinen Platz in der Reihe.
+
+00:12:39.680 --> 00:12:42.860
+Das ist eher ein Konfigurationsfehler als ein konzeptioneller Mangel, aber ein häufiger.
+
+00:12:43.640 --> 00:12:44.960
+Als letztes ist das Timing wichtig.
+
+00:12:45.540 --> 00:12:50.000
+Wenn das Balancing über DNS erfolgt, das Adressbuch, das einen Websitenamen in einen Ort übersetzt,
+
+00:12:50.240 --> 00:12:52.540
+merkt sich dein Gerät diese Antwort dank Caching eine Weile.
+
+00:12:53.380 --> 00:12:55.860
+Dieser Speicher sorgt dafür, dass die Umleitung beim Ausfall länger dauern kann,
+
+00:12:55.920 --> 00:12:58.260
+als bei einem Proxy, der direkt vor deiner App sitzt, der direkt vor deinen Apps.
+
+00:12:58.260 --> 00:13:01.240
+Der Anfängerfehler, den du unbedingt vermeiden solltest, ist die Annahme,
+
+00:13:01.400 --> 00:13:03.600
+ein Loadbalancer macht dich automatisch hochverfügbar.
+
+00:13:04.340 --> 00:13:06.600
+Er ist ein wichtiges Teil des Puzzles, nicht die ganze Garantie.
+
+00:13:06.700 --> 00:13:09.300
+Der Rest sind deine App, deine Daten und wie du alles eingerichtet hast.
+
+00:13:10.540 --> 00:13:12.760
+Keine dieser Grenzen macht Loadbalancing zu einer schlechten Idee.
+
+00:13:13.020 --> 00:13:15.140
+Sie bedeuten nur, dass es ein Werkzeug mit einer Aufgabe ist
+
+00:13:15.140 --> 00:13:17.800
+und wie jedes Werkzeug funktioniert es am besten, wenn man diese Aufgabe genau kennt.
+
+00:13:18.640 --> 00:13:20.200
+Die Zusammenfassung und eine Frage an dich.
+
+00:13:21.200 --> 00:13:22.140
+Zusammenfassend lässt sich sagen,
+
+00:13:22.400 --> 00:13:25.680
+Loadbalancing verteilt die Arbeit auf mehrere Computer, damit kein einzelner zusammenbricht.
+
+00:13:25.680 --> 00:13:29.220
+Ein Loadbalancer ist der Verkehrsleiter, der einen Server auswählt,
+
+00:13:29.320 --> 00:13:31.620
+dessen Status prüft und bei Problemen den Verkehr umleitet.
+
+00:13:32.300 --> 00:13:34.160
+In Azure gibt es dafür eine kleine Toolfamilie.
+
+00:13:34.620 --> 00:13:37.980
+Loadbalancer, Application Gateway, Frontdoor und Traffic Manager.
+
+00:13:38.840 --> 00:13:42.460
+Microsoft 365 nutzt das alles bereits, also musst du dir keine Gedanken machen.
+
+00:13:43.000 --> 00:13:43.980
+Nun habe ich eine Frage an dich.
+
+00:13:44.660 --> 00:13:47.100
+Welches Tool, das du täglich nutzt, verwendet deiner Meinung nach Loadbalancing,
+
+00:13:47.200 --> 00:13:48.220
+ohne dass du es bisher bemerkt hast?
+
+00:13:48.640 --> 00:13:49.780
+Denk mal darüber nach und lass es mich wissen.
+
+00:13:49.780 --> 00:13:54.100
+Wenn das Thema nun weniger einschüchternd wirkt, abonniere M3355FM,
+
+00:13:54.200 --> 00:13:56.940
+um die Tools und Denkweisen zu meistern, die die Zukunft der Arbeit prägen.

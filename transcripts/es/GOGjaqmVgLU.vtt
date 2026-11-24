@@ -1,0 +1,592 @@
+WEBVTT
+
+00:00:00.480 --> 00:00:04.880
+Bienvenidos al podcast M365FM, donde exploramos a las personas, ideas y tecnologías que dan
+
+00:00:04.880 --> 00:00:08.440
+forma al futuro del trabajo. ¿Por qué nada de lo que usas en línea funciona en una sola
+
+00:00:08.440 --> 00:00:11.880
+computadora? Tu correo electrónico nunca llega a una sola computadora. Llega a todo
+
+00:00:11.880 --> 00:00:16.160
+un grupo de ellas y nunca ves cuál respondió. Eso es el balanceo de carga y es la razón
+
+00:00:16.160 --> 00:00:19.800
+por la que Teams no se cae cuando la mitad de tu empresa inicia sesión a las 9. Podrías
+
+00:00:19.800 --> 00:00:22.900
+pensar que esto es redes avanzadas reservadas para administradores, pero es una idea simple
+
+00:00:22.900 --> 00:00:26.280
+que ya usas todos los días. Al final de esto entenderás cómo funciona y dónde se esconde
+
+00:00:26.280 --> 00:00:30.380
+dentro de Microsoft 365 y Azure. Ahora imagina la nube de la forma en que la mayor de nosotros
+
+00:00:30.380 --> 00:00:34.580
+la visualizamos. Una computadora gigante sentada en una habitación fría en algún lugar manteniendo
+
+00:00:34.580 --> 00:00:38.160
+todo en funcionamiento en silencio. Esa imagen es incorrecta y lo es de una manera que hace
+
+00:00:38.160 --> 00:00:42.040
+que todo este tema sea más fácil de entender. No existe una sola computadora. Hay miles de
+
+00:00:42.040 --> 00:00:45.680
+ellas comunes cada una, haciendo una pequeña parte del trabajo y algo tiene que decidir
+
+00:00:45.680 --> 00:00:51.600
+quién hace qué. Bienvenidos al podcast M365FM, donde exploramos a las personas, ideas y tecnologías
+
+00:00:51.600 --> 00:00:55.640
+que dan forma al futuro del trabajo. Durante los próximos 20 minutos la frase balanceo de carga
+
+00:00:55.640 --> 00:00:58.720
+dejará de sonar como algo para lo que necesites una certificación. Piense en una tienda con
+
+00:00:58.720 --> 00:01:02.180
+un solo cajero. En el momento en que 3 personas llegan a la vez se forma una fila y para cuando
+
+00:01:02.180 --> 00:01:05.980
+llega la décima persona todo el lugar está atascado. Ahora abre 12 carriles y esa misma
+
+00:01:05.980 --> 00:01:09.620
+multitud avanza sin que nadie espere mucho. Las computadoras tienen exactamente el mismo
+
+00:01:09.620 --> 00:01:13.020
+problema y el balanceo de cargas son esos 12 carriles. Esto importa en el momento en que
+
+00:01:13.020 --> 00:01:16.700
+más de unas pocas personas usan la misma aplicación al mismo tiempo. Una máquina comienza a
+
+00:01:16.700 --> 00:01:21.160
+bajo el peso y cada persona lo siente. Ese problema es lo que el balanceo de cargas
+
+00:01:21.160 --> 00:01:25.400
+inventó para resolver y ha sido la respuesta durante décadas. Lo has estado usando toda tu vida
+
+00:01:25.400 --> 00:01:29.640
+en línea sin siquiera ver su nombre. Cada video que transmites, cada pedido que haces
+
+00:01:29.640 --> 00:01:33.820
+y cada mensaje que envías se entrega a una máquina entre muchas. Esa elección ocurre
+
+00:01:33.820 --> 00:01:37.780
+en una fracción de segundo y sucede para ti miles de veces al día. También llegaremos
+
+00:01:37.780 --> 00:01:40.360
+a los límites honestos, las partes que muchas explicaciones omiten.
+
+00:01:41.180 --> 00:01:44.860
+¿Qué hace realmente un balanceador de carga? Un balanceador de carga es un director de tráfico
+
+00:01:44.860 --> 00:01:49.700
+que se coloca frente a un grupo de computadoras llamadas servidores. Cada solicitud llega primero
+
+00:01:49.700 --> 00:01:54.440
+al balanceador de carga y éste entrega la solicitud a un servidor del grupo. Para ti parece
+
+00:01:54.440 --> 00:01:58.260
+una sola dirección y una sola puerta de entrada y nunca sabes ni te importa qué máquina hizo el
+
+00:01:58.260 --> 00:02:02.220
+trabajo. Piensa en el anfitrión de un restaurante. No entras caminando y tomas una mesa por tu
+
+00:02:02.220 --> 00:02:06.060
+cuenta. El anfitrión ve que está libre, te lleva un sitio para que ningún mesero termine cargando
+
+00:02:06.060 --> 00:02:10.320
+con todo el salón. Sigamos una solicitud hasta el final. Tocas un enlace y tu dispositivo envía
+
+00:02:10.320 --> 00:02:14.640
+una solicitud al equilibrador de carga. El equilibrador elige un servidor disponible y ese
+
+00:02:14.640 --> 00:02:18.740
+servidor envía la respuesta. Toda la decisión toma una fracción de segundo y luego ocurre lo mismo
+
+00:02:18.740 --> 00:02:22.500
+para la siguiente solicitud y la posterior. Lo que obtienes de esto son realmente dos cosas.
+
+00:02:22.500 --> 00:02:26.000
+Obtienes velocidad porque el trabajo se reparte en lugar de acumularse en una sola máquina.
+
+00:02:26.380 --> 00:02:29.700
+También obtienes resistencia porque si un servidor está saturado o caído, el tráfico
+
+00:02:29.700 --> 00:02:33.200
+simplemente va a otro lado. El equilibrador de carga es también la razón por la que un sitio
+
+00:02:33.200 --> 00:02:36.840
+web puede actualizar sin desconectar. Retiras un servidor, lo actualizas, lo vuelves a colocar
+
+00:02:36.840 --> 00:02:41.340
+y los demás siguen atendiendo a la gente mientras trabajas. Nadie afuera nota nada. La palabra
+
+00:02:41.340 --> 00:02:45.020
+carga aquí simplemente significa. Equilibrar la carga significa asegurar que ninguna máquina
+
+00:02:45.020 --> 00:02:49.500
+cargue con más de lo que le corresponde. Ese es todo el trabajo en una frase. El equilibrador
+
+00:02:49.500 --> 00:02:53.360
+de carga es lo único con lo que el mundo exterior habla y eso mantiene al grupo detrás invisible.
+
+00:02:54.360 --> 00:02:58.080
+Los usuarios ven un nombre y una puerta, mientras que detrás de ella la cantidad de máquinas puede
+
+00:02:58.080 --> 00:03:02.140
+crecer o reducirse sin que nadie se entere. La parte que la gente supone complicada es cómo
+
+00:03:02.140 --> 00:03:07.320
+el equilibrador elige un servidor y es justo donde vamos ahora. La regla simple es que deciden
+
+00:03:07.320 --> 00:03:12.300
+a dónde va el tráfico. Cuando llega una solicitud, el equilibrador debe elegir un servidor y lo hace
+
+00:03:12.300 --> 00:03:17.460
+usando una regla llamada algoritmo. Algoritmo suena intimidante pero solo significa una serie de pasos
+
+00:03:17.460 --> 00:03:21.800
+para tomar una decisión. Una receta es un algoritmo, al igual que la forma en que tu teléfono elige
+
+00:03:21.800 --> 00:03:26.140
+una ruta para evitar el tráfico. La regla más simple se llama Round Robin. El equilibrador de carga
+
+00:03:26.140 --> 00:03:30.880
+toma todo. Envía la primera solicitud al servidor 1, la segunda al servidor 2, la tercera al 3 y luego
+
+00:03:30.880 --> 00:03:35.720
+vuelve al inicio. Es como repartir cartas en una mesa y funciona bien cuando todos los servidores son
+
+00:03:35.720 --> 00:03:40.920
+similares. La siguiente regla es la de menores conexión. En lugar de tomar turnos, el equilibrador envía cada
+
+00:03:40.920 --> 00:03:45.820
+nueva solicitud al servidor con menos personas conectadas. Conectadas. Es el mismo instinto que usas en el
+
+00:03:45.820 --> 00:03:49.740
+supermercado donde eliges la fila más corta en lugar de la más cercana. Algunas configuraciones
+
+00:03:49.740 --> 00:03:54.480
+usan versiones ponderadas. Si un servidor tiene más memoria o un procesador más rápido, le das una
+
+00:03:54.480 --> 00:03:59.280
+mayor parte de tráfico. Es como una caja más grande que procesa más carritos por hora. Vale la pena
+
+00:03:59.280 --> 00:04:03.740
+conocer una regla más. Se llama tiempo de respuesta mínimo. En lugar de contar conexiones, el balanceador
+
+00:04:03.740 --> 00:04:08.360
+observa qué tan rápido responde cada servidor y envía la siguiente petición al más veloz. Es como ese amigo
+
+00:04:08.360 --> 00:04:13.100
+que siempre sabe qué fila de la caja avanza realmente, no solo cuál es la más corta. Pero bien, estas reglas se dividen en
+
+00:04:13.100 --> 00:04:17.720
+dos familias. Esa división es importante. Una familia sigue un plan fijo sin ver qué tan ocupados
+
+00:04:17.720 --> 00:04:23.940
+están los servidores, lo que facilita la configuración pero falla si la carga es desigual. La otra familia
+
+00:04:23.940 --> 00:04:28.320
+monitorea la carga y salud de cada servidor y se ajusta al instante. Maneja mejor la realidad,
+
+00:04:28.580 --> 00:04:33.600
+pero requiere más ajustes. Imaginen el sitio web de un pequeño negocio que corren tres servidores
+
+00:04:33.600 --> 00:04:37.340
+idénticos. El método round robin es suficiente ahí. Cualquier cosa más compleja es un esfuerzo de
+
+00:04:37.340 --> 00:04:40.760
+desperdicio. Pero imaginen una aplicación de video donde una petición es instantánea y la siguiente
+
+00:04:40.760 --> 00:04:44.880
+tarda 10 segundos. La regla de menos conexiones evita que un servidor se sature con todas las
+
+00:04:44.880 --> 00:04:49.180
+tareas lentas mientras otro permanece inactivo. Todo esto solo funciona si el balanceador sabe
+
+00:04:49.180 --> 00:04:53.020
+qué servidores están vivos y esa pregunta resulta ser más interesante de lo que parece.
+
+00:04:54.380 --> 00:04:58.240
+¿Cómo sabe si un servidor está enfermo? Una regla de selección es inútil si los servidores
+
+00:04:58.240 --> 00:05:03.160
+están dañados. Por eso el balanceador ejecuta pruebas de salud. Una prueba de salud es un test breve
+
+00:05:03.160 --> 00:05:07.760
+y regular enviado a cada servidor como tocar a la puerta para ver si hay alguien en casa. Si el
+
+00:05:07.760 --> 00:05:12.240
+servidor responde como debería, permanece en rotación. Si no, el balanceador deja de enviarle
+
+00:05:12.240 --> 00:05:17.220
+tráfico nuevo. Ese cambio que desvía el tráfico de un servidor fallido a uno sano se llama failover
+
+00:05:17.220 --> 00:05:21.840
+o conmutación por error. Es la parte del balanceo que evita que un fallo pequeño se convierta en una
+
+00:05:21.840 --> 00:05:26.840
+caída grande. ¿Por qué un servidor muerto no debería tumbar toda la aplicación? Piensen de nuevo en la
+
+00:05:26.840 --> 00:05:31.840
+tienda con cuatro filas. Un cajero se retira, la fila cierra y ponen un letrero para que nadie se forme
+
+00:05:31.840 --> 00:05:37.040
+ahí. Los clientes fluyen hacia las filas abiertas y, desde su punto de vista, nada ha cambiado en absoluto.
+
+00:05:37.040 --> 00:05:40.880
+Hay un compromiso real conmigo en detalle. Si el balanceador verifica muy poco, un servidor
+
+00:05:40.880 --> 00:05:45.940
+enfermo seguirá recibiendo tráfico un tiempo antes de que alguien lo note. Si verifica de forma muy
+
+00:05:45.940 --> 00:05:49.840
+agresiva, un servidor apenas lento podría ser sacado de rotación, empeorando las cosas en lugar
+
+00:05:49.840 --> 00:05:55.100
+de mejorarlas. Azure muestra cómo funciona esto en el Pride. Su balanceador revisa cada baquea en
+
+00:05:55.100 --> 00:05:58.960
+intervalos 5 segundos por defecto en el portal y requiere cierto número de fallos consecutivos
+
+00:05:58.960 --> 00:06:03.980
+antes de marcarlo como no saludable. Cuando sucede, las nuevas conexiones van a otra parte mientras
+
+00:06:03.980 --> 00:06:07.220
+que las existentes suelen seguir funcionando, así que la gente que está en medio de una tarea no
+
+00:06:07.220 --> 00:06:12.140
+se corta. Aquí hay un límite honesto. Una prueba de salud solo sabe lo que le dices que pruebe. Si
+
+00:06:12.140 --> 00:06:15.940
+revisa el puerto incorrecto o una señal superficial, un servidor puede estar enfermo y parecer
+
+00:06:15.940 --> 00:06:19.420
+perfectamente sano, lo que significa que sigue recibiendo tráfico que no puede manejar. Cuanto
+
+00:06:19.420 --> 00:06:23.260
+mejor refleje tu prueba de salud lo que experimentan tus usuarios, mejor se comportará todo el sistema.
+
+00:06:23.900 --> 00:06:26.720
+Consigue que ese detalle sea correcto y muchos otros problemas desaparecerán silenciosamente.
+
+00:06:27.180 --> 00:06:30.560
+Hasta ahora hemos tratado a cada balanceador de carga como el mismo tipo de herramienta y eso es lo
+
+00:06:30.560 --> 00:06:35.540
+siguiente a corregir. Dos tipos y por qué la diferencia importa. No todos los balanceadores
+
+00:06:35.540 --> 00:06:39.200
+de carga funcionan igual y la diferencia está en cuanto a tu solicitud se molesta en mirar.
+
+00:06:40.560 --> 00:06:45.720
+Algunos solo miran el exterior del sobre y algunos lo abren y leen la carta de adentro. El primer tipo
+
+00:06:45.720 --> 00:06:49.940
+trabaja en lo que se llama capa 4. Solo mira la dirección y el puerto de la misma forma que un
+
+00:06:49.940 --> 00:06:54.060
+clasificador de correo lea un código postal y reenvía la solicitud sin importarle lo que hay dentro.
+
+00:06:54.800 --> 00:06:59.020
+Es rápido, simple y para muchos trabajos es todo lo que necesitas. Segundo tipo trabaja en la
+
+00:06:59.020 --> 00:07:03.340
+capa 7 realmente lee la solicitud. Puede ver que una solicitud pide una imagen mientras otra intenta
+
+00:07:03.340 --> 00:07:08.080
+finalizar una compra y puede enviar cada un equipo diferente de servidores. Así es como una única
+
+00:07:08.080 --> 00:07:12.040
+dirección web puede redirigirte silenciosamente al lugar correcto según lo que pidas. Un ejemplo
+
+00:07:12.040 --> 00:07:15.820
+concreto hace que esto quede claro. Una solicitud para las imágenes de tu sitio va a los servidores
+
+00:07:15.820 --> 00:07:19.180
+de imágenes y una solicitud para la página de pago va a los servidores de pagos, todo detrás de la
+
+00:07:19.180 --> 00:07:23.360
+misma dirección web. Nadie que escribe esa dirección tiene idea de que dos equipos diferentes los acaban
+
+00:07:23.360 --> 00:07:28.620
+de atender. La capa 7 también desbloquea algunas cosas que importan en el mundo real. Puede manejar tus certificados
+
+00:07:28.620 --> 00:07:32.760
+de seguridad en un solo lugar en lugar de en cada servidor. Puede inspeccionar solicitudes entrantes,
+
+00:07:33.200 --> 00:07:37.000
+bloquear las maliciosas antes de que lleguen a tu aplicación y radica la compensación.
+
+00:07:37.540 --> 00:07:42.020
+La capa 4 es la opción rápida, barata y sin adornos. Y la capa 7 es la más inteligente que cuesta un
+
+00:07:42.020 --> 00:07:46.600
+poco más de trabajo en cada solicitud. Ninguna gana en todos los casos y elegir entre ellas depende
+
+00:07:46.600 --> 00:07:51.080
+realmente de cuánto necesites que el balanceador entienda lo que estás pidiendo. En la práctica muchos
+
+00:07:51.080 --> 00:07:56.140
+sistemas reales usan el uso. Un balanceador de capa 7 toma la decisión de enrutamiento inteligente al
+
+00:07:56.140 --> 00:07:59.620
+frente y un balanceador de capa 4 distribuye el tráfico bruto entre las máquinas detrás,
+
+00:08:00.040 --> 00:08:04.280
+cada uno haciendo lo que mejor sabe hacer. Con esos dos tipos claros, finalmente podemos nombrar
+
+00:08:04.280 --> 00:08:08.260
+las herramientas reales que encontrará en Azure porque Azure no le da una, le da toda una familia.
+
+00:08:08.820 --> 00:08:12.680
+Donde esto aparece en Azure, Azure no tiene un solo balanceador de carga, tiene una pequeña familia
+
+00:08:12.680 --> 00:08:16.260
+de ellos y cada uno está construido para un trabajo diferente. Elegir el correcto se reduce a dos
+
+00:08:16.260 --> 00:08:20.620
+cosas simples. Si su tráfico es tráfico web y si su aplicación vive en una región o está distribuida
+
+00:08:20.620 --> 00:08:25.720
+por todo el mundo. El primero se llama simplemente Azure Load Balancer. Es el miembro de plano rápido
+
+00:08:25.720 --> 00:08:30.040
+de la familia. Funciona en la capa 4. Distribuye el tráfico de red entre máquinas virtuales y está
+
+00:08:30.040 --> 00:08:34.540
+construido para un volumen enorme con muy poca demora. También se distribuye entre zonas de
+
+00:08:34.540 --> 00:08:37.400
+disponibilidad que son ubicaciones físicas separadas dentro de una región por lo que si
+
+00:08:37.400 --> 00:08:41.280
+una zona falla no se cae todo el sistema. El siguiente es Azure Application Gateway,
+
+00:08:41.420 --> 00:08:46.180
+el inteligente regional. Funciona en la capa 7 por lo que puede leer su suelo, enrutar por ruta,
+
+00:08:46.520 --> 00:08:50.840
+manejar su certificado de seguridad y agregar un firewall de aplicaciones web. Recurra a esto cuando su
+
+00:08:50.840 --> 00:08:55.360
+aplicación vive en una región pero necesite tomar una decisión sobre cada solicitud que llegue. Luego está
+
+00:08:55.360 --> 00:08:59.980
+Azure Front Door, el global. Envía a cada usuario al punto de entrada saludable más cercano a la red
+
+00:08:59.980 --> 00:09:04.000
+de Microsoft. Maneja la seguridad en el borde y almacena contenido en caché para que las visitas
+
+00:09:04.000 --> 00:09:09.780
+repetidas sean rápidas. Microsoft dice que funciona en más de 118 ubicaciones perimetrales distribuidas
+
+00:09:09.780 --> 00:09:14.680
+en unas 100 áreas metropolitanas alrededor del mundo. El último es Azure Traffic Manager y funciona
+
+00:09:14.680 --> 00:09:18.960
+de manera diferente a todos los demás. No transporta su tráfico en absoluto. Solo responde a la pregunta
+
+00:09:18.960 --> 00:09:22.940
+de dónde vive su aplicación entregando a su dispositivo la dirección de una ubicación saludable y luego
+
+00:09:22.940 --> 00:09:26.120
+su dispositivo se conecta directamente a ese servidor sin que Traffic Manager y el servidor
+
+00:09:26.120 --> 00:09:30.980
+sin que Traffic Manager. Esa diferencia importa más de lo que parece, porque Traffic Manager solo señala
+
+00:09:30.980 --> 00:09:34.840
+el camino. El tráfico corre directamente del usuario al servidor, lo que lo mantiene rápido,
+
+00:09:34.940 --> 00:09:38.380
+pero también significa que la conmutación por error depende de qué tan rápido los dispositivos
+
+00:09:38.380 --> 00:09:42.780
+refresquen su memoria de esa dirección. Por diferentes que suenen, los cuatro responden a
+
+00:09:42.780 --> 00:09:46.900
+la misma pregunta básica. Deciden qué máquina saludable debe recibir la siguiente solicitud y
+
+00:09:46.900 --> 00:09:50.940
+verifican que siga estando saludable antes de enviar a alguien a ella. El detalle que vale la pena recordar
+
+00:09:50.940 --> 00:09:54.620
+es que una carga de trabajo real a menudo utiliza más de uno de estos a la vez. Imagina una empresa
+
+00:09:54.620 --> 00:09:58.520
+que ejecuta un sitio web para clientes de todo el mundo. Front Door lleva a cada visitante de la
+
+00:09:58.520 --> 00:10:02.080
+región más cercana, la puerta de enlace de aplicaciones los dirige por URL dentro de esa
+
+00:10:02.080 --> 00:10:05.460
+región y el equilibrador de carga reparte el trabajo entre las máquinas virtuales detrás de él.
+
+00:10:05.820 --> 00:10:10.340
+Tres herramientas, tres tareas, una experiencia fluida para quien hace clic. Y la buena noticia es que
+
+00:10:10.340 --> 00:10:12.860
+nunca tendremos que construir nada de esto para beneficiarnos de ello.
+
+00:10:14.000 --> 00:10:18.960
+¿Cómo lo hace Microsoft 365 silenciosamente por ti? Probablemente nunca configures un equilibrador de carga
+
+00:10:18.960 --> 00:10:23.780
+en tu vida y ya dependes de miles de ellos. Cada vez que abres Outlook, te unes a una llamada de
+
+00:10:23.780 --> 00:10:27.440
+Teams o accedes a un archivo en SharePoint. Te apoyas en esta misma maquinaria y todo sucede
+
+00:10:27.440 --> 00:10:32.240
+fuera de tu vista. Microsoft 365 ejecuta sus servicios en lo que se llama un diseño activo
+
+00:10:32.240 --> 00:10:36.480
+inactivo, lo que significa que varias copias de un servicio siempre están funcionando a la vez en
+
+00:10:36.480 --> 00:10:40.680
+centros de datos repartidos por todo el mundo. Cuando te conectas, tu tráfico entra a través del
+
+00:10:40.680 --> 00:10:44.700
+servicio Front Door de Microsoft y es dirigido a la mejor copia que funciona, evitando cualquier fallo en el
+
+00:10:44.700 --> 00:10:48.480
+camino. Ese enrutamiento es la misma idea de la que hemos estado hablando todo el episodio,
+
+00:10:48.480 --> 00:10:52.920
+solo que a una escala que la mayoría nunca vemos. Tú no eliges un centro de datos y no sabes cuál fue
+
+00:10:52.920 --> 00:10:57.360
+el que respondió. Los sistemas de Microsoft toman esa lección por ti miles de veces por segundo y
+
+00:10:57.360 --> 00:11:02.300
+solo notas cuando deja de funcionar. A nadie se le asigna un servidor fijo como propio. Cada
+
+00:11:02.300 --> 00:11:05.780
+solicitud es procesada desde cero cada vez por sistemas creados para seguir funcionando incluso
+
+00:11:05.780 --> 00:11:09.080
+cuando un centro de datos completó en un maldía. Hay un segundo nivel de cuidado en cómo se lanzan las
+
+00:11:09.080 --> 00:11:13.580
+actualizaciones. Microsoft implementa los cambios en anillos, comenzando con un pequeño grupo dentro de
+
+00:11:13.580 --> 00:11:17.920
+la empresa, luego los 140.000 empleados de Microsoft, después los usuarios pioneros y finalmente,
+
+00:11:17.920 --> 00:11:23.520
+todos. Si algo se rompe, se rompe primero para un grupo pequeño, donde puede detectarse antes de
+
+00:11:23.520 --> 00:11:26.840
+que llegue a tu bandeja de entrada. Las piezas también se mantienen separadas a propósito.
+
+00:11:27.340 --> 00:11:30.620
+Un problema con Exchange no rompe las funciones principales de Teams y un error de búsqueda en
+
+00:11:30.620 --> 00:11:34.500
+SharePoint no te impide subir un archivo. Esa separación significa que una parte afectada no
+
+00:11:34.500 --> 00:11:38.020
+puede arrastrar el resto del servicio consigo. Funciona como un hotel al que nunca se le acaban
+
+00:11:38.020 --> 00:11:41.920
+las habitaciones. Pides una, recibes una y nunca te enteras en qué piso se alojaron los demás
+
+00:11:41.920 --> 00:11:45.880
+huéspedes. Así que la próxima vez que Teams simplemente funciona un martes por la mañana, sabrás un poco de lo que está
+
+00:11:45.880 --> 00:11:49.140
+ocurriendo por debajo. Se está llevando a cabo una gran cantidad de dirección de tráfico silenciosa
+
+00:11:49.140 --> 00:11:53.300
+para que no lo salude. Esa es la ventaja y es real. Ahora vamos con la parte honesta, porque el equilibrio
+
+00:11:53.300 --> 00:11:57.120
+de carga no es una solución mágica para ti. ¿Qué es lo que el equilibrio de carga no puede arreglar?
+
+00:11:57.600 --> 00:12:03.080
+Resuelve un problema muy bien y vale la pena conocer sus límites para que no esperes más de lo que pueda.
+
+00:12:03.600 --> 00:12:07.720
+Empieza con un balanceador mismo. Puede ser un punto único de falla y si solo ejecutas uno y se cae,
+
+00:12:07.840 --> 00:12:11.280
+todo lo que hay detrás se vuelve inalcanzable sin importar qué tan sanos estén los servidores.
+
+00:12:11.280 --> 00:12:16.180
+Las configuraciones reales usan pares balanceados o servicios administrados ya diseñados para ser
+
+00:12:16.180 --> 00:12:19.120
+redundante, lo cual es una razón por la que los proveedores de nube eliminan esta preocupación.
+
+00:12:19.800 --> 00:12:23.560
+Más servidores tampoco significa automáticamente más velocidad. Si tu aplicación comparte malos
+
+00:12:23.560 --> 00:12:27.160
+datos o tu base de datos es el verdadero cuello de botella, añadir máquinas solo puede propagar
+
+00:12:27.160 --> 00:12:30.800
+el mismo problema. Puedes tener 20 servidores y aún así ser lento porque la fila no está en la
+
+00:12:30.800 --> 00:12:34.780
+puerta de entrada. Las pruebas de estado también tienen su punto débil, ya que solo son tan inteligentes
+
+00:12:34.780 --> 00:12:38.860
+como lo que les digas que prueben. Si apuntas una prueba a lo incorrecto, un servidor roto mantendrá su lugar
+
+00:12:38.860 --> 00:12:43.000
+en la fila. Eso es un error de configuración más que un fallo en la idea, pero es uno común.
+
+00:12:43.780 --> 00:12:47.060
+El tiempo es lo último que debes saber. Cuando el balanceo ocurre mediante DNS,
+
+00:12:47.300 --> 00:12:50.140
+la libreta de direcciones que convierte el nombre de un sitio web en una ubicación,
+
+00:12:50.240 --> 00:12:53.020
+tu dispositivo recuerda esa respuesta por un tiempo debido a un almacenamiento en cacho.
+
+00:12:53.480 --> 00:12:57.000
+Esa memoria significa que una falla puede tardar más en ser sorteada que lo que tardaría con un
+
+00:12:57.000 --> 00:13:01.180
+proxy frente a tu aplicación. El error de principiante que más quisiera que evites es asumir que añadir un
+
+00:13:01.180 --> 00:13:05.780
+balanceador de carga te hace automáticamente altamente disponible. Es una pieza importante del panorama,
+
+00:13:05.780 --> 00:13:09.820
+no la garantía completa y el resto del panorama es tu aplicación, tus datos y cómo configuras todo.
+
+00:13:10.700 --> 00:13:13.860
+Ninguna de estas limitaciones hace que el balanceo de carga sea una manera. Solo significan que es
+
+00:13:13.860 --> 00:13:17.200
+una herramienta con una función y como cualquier herramienta funciona mejor cuando sabes exactamente
+
+00:13:17.200 --> 00:13:22.520
+cuál es esa función. El resumen y una pregunta para ti. Entonces resumiendo, el balanceo de carga
+
+00:13:22.520 --> 00:13:27.760
+es compartir el trabajo entre varias computadoras para que ninguna falle sola. Un balanceador de carga es
+
+00:13:27.760 --> 00:13:31.640
+el director de tráfico que elige un servidor, verifica que esté sano, lo redirige cuando no lo está.
+
+00:13:31.640 --> 00:13:37.000
+En Azure es una pequeña familia de herramientas, Load Balancer, Application Gateway, Front Door y
+
+00:13:37.000 --> 00:13:42.060
+Traffic Manager y Microsoft 365 ya funciona con todo esto, así que no tienes que preocuparte.
+
+00:13:43.100 --> 00:13:47.260
+Ahora tengo una pregunta para ti. ¿Qué herramienta que usas a diario no sabes que dependía silenciosamente
+
+00:13:47.260 --> 00:13:52.180
+del balanceo de carga? Piénsalo saber. Si esto hizo que el tema se sintiera menos intimidante,
+
+00:13:52.560 --> 00:13:56.980
+suscríbete a M365FM para dominar las herramientas y la mentalidad que dan forma al futuro del trabajo.

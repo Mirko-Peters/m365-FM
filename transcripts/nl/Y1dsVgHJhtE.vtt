@@ -1,0 +1,544 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.280
+Azure op rollen gebaseerde toegangscontrole is eigenlijk gewoon een toegangspas, geen lichtschakelaar.
+
+00:00:04.400 --> 00:00:09.780
+Een lichtschakelaar staat aan of uit voor een hele kamer, terwijl een toegangspas specifieke deuren opent voor een specifiek persoon.
+
+00:00:09.980 --> 00:00:15.580
+De meeste van ons leerden machtigingen via de lichtschakelaarmethode, waardoor de toegang vaak ruimer is dan iemand had geplant.
+
+00:00:15.840 --> 00:00:22.160
+Welkom bij de M365 FM podcast, waar we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:22.380 --> 00:00:27.500
+Vandaag leggen we uit hoe toegang in Azure werkt en het komt neer op drie bewegende delen die je kunt onthouden.
+
+00:00:27.500 --> 00:00:34.460
+Aan het eind kun je iemands toegang in je abonnement bekijken en precies weten waarom die bestaat en wat er BAC eigenlijk doet.
+
+00:00:34.680 --> 00:00:41.020
+Op rollen gebaseerde toegangscontrole beantwoordt drie vragen over elke resource die je bezit en stelt ze opnieuw bij elk verzoek.
+
+00:00:41.220 --> 00:00:46.620
+Die vragen zijn, wie mag er naar binnen, wat mogen ze doen als ze eenmaal binnen zijn en hoe ver rijkt hun toegang.
+
+00:00:46.880 --> 00:00:49.100
+Dat klinkt als een hoopgedoe, maar dat is het niet.
+
+00:00:49.360 --> 00:00:56.440
+Microsoft omschrijft het als een autorisatiesysteem gebouwd op Azure Resource Manager, de dienst die een verzoek ontvangt en beslist of het wordt uitgevoerd.
+
+00:00:56.440 --> 00:01:00.720
+Autorisatie is simpelweg de beslissing over wat iemand die al is aangemeld mag doen.
+
+00:01:00.940 --> 00:01:04.240
+Stel je een gebouw voor met één gedeelde voordeur en veel afgesloten kamers.
+
+00:01:04.460 --> 00:01:10.600
+Iedereen komt via dezelfde ingang binnen, aangezien aanmelden bewijst wie ze zijn en daarna draagt iedereen een toegangspas voor de kamers die ze nodig hebben.
+
+00:01:10.820 --> 00:01:14.220
+Sommige passen openen één op bergkast en anderen openen een hele verdieping.
+
+00:01:14.480 --> 00:01:16.140
+Niets in Azure staat standaard open.
+
+00:01:16.340 --> 00:01:20.880
+Toegang bestaat omdat iemand een roltoewijzing heeft gemaakt en het verdwijnt wanneer iemand die toewijzing verwijdert.
+
+00:01:20.880 --> 00:01:25.180
+Geen schakelaar wordt omgezet voor een persoon en geen machtiging schakelt zichzelf in terwijl je niet kijkt.
+
+00:01:25.340 --> 00:01:30.360
+Dus wanneer een teamgenoot plotseling een resource kan zien die ze nooit hebben aangeraakt, is de uitleg bijna altijd hetzelfde.
+
+00:01:30.540 --> 00:01:34.440
+Ergens in de hiërarchie bestaat een toewijzing en die vinden vertelt je het hele verhaal.
+
+00:01:34.580 --> 00:01:38.700
+Eén ding is het waard om vroeg op te helderen, dit is geen betaalde extra of premium functie.
+
+00:01:38.940 --> 00:01:42.900
+Microsoft stelt dat Azure RBAC gratis is en is inbegrepen bij je abonnement.
+
+00:01:42.900 --> 00:01:48.760
+Je vindt het in de portal op een pagina genaamd Access Control, waar het IAM label op elk niveau van de hiërarchie verschijnt.
+
+00:01:48.920 --> 00:01:53.580
+Het voordeel is dat je iemand precies de toegang kunt geven die zijn werk vereist en niets meer.
+
+00:01:53.820 --> 00:02:00.700
+De een beheert virtuele machines, de ander zorgt voor de netwerken en een database team beheert de databases, allemaal zonder elkaar in de weg te zitten.
+
+00:02:00.880 --> 00:02:04.020
+Die drie onderdelen zorgen daarvoor, dus laten we ze eens nader bekijken.
+
+00:02:04.200 --> 00:02:06.200
+De drie onderdelen van elke roltoewijzing.
+
+00:02:06.420 --> 00:02:12.480
+Elke toewijzing in Azure is opgebouwd uit dezelfde drie onderdelen en Microsoft beschouwt die structuur als de kern van hoe rechten worden afgedwongen.
+
+00:02:12.480 --> 00:02:15.400
+Mis één onderdeel en de toewijzing verliest zijn betekenis.
+
+00:02:15.580 --> 00:02:21.180
+De portal loodst je door alle drie wanneer je een toewijzing toevoegt door om een lid een rol in een bereik te vragen voordat deze wordt opgeslagen.
+
+00:02:21.420 --> 00:02:25.560
+Eerst komt het beveiligingsprincipe, de formele naam voor alles wat de toegang ontvangt.
+
+00:02:25.720 --> 00:02:32.020
+Dat kan een gebruiker, een groep, een applicatieidentiteit of een beheerde identiteit zijn die Azure namens jou aanmaakt en roteert.
+
+00:02:32.200 --> 00:02:35.960
+Ten tweede komt de roldefinitie, het pakket aan acties dat een rol toestaat.
+
+00:02:36.100 --> 00:02:40.340
+De lijst varieert van lezen en schrijven tot verwijderen, met honderden variaties op die drie.
+
+00:02:40.340 --> 00:02:45.720
+Rollen zijn er in alle soorten, van de enorme eigenaarsrol tot iets specifieks zoals een laser voor virtuele machines.
+
+00:02:45.980 --> 00:02:49.480
+Ten derde komt het bereik, de set resources waarop de rol van toepassing is.
+
+00:02:49.680 --> 00:02:55.480
+Het bereik bepaalt hoeveel van je omgeving door één fout geraakt kan worden, dus vereist dit de meeste zorg bij het instellen.
+
+00:02:55.720 --> 00:02:59.460
+Alleen de combinatie heeft betekenis en dat is wat beginners vaak missen.
+
+00:02:59.680 --> 00:03:04.200
+De rol in zender op één resource groep laat iemand alles binnen die map beheren en niets daar buiten.
+
+00:03:04.200 --> 00:03:11.340
+De rol in zender op een volledig abonnement laat diezelfde persoon elke resource die je bezit beheren, wat een totaal ander resultaat is voor hetzelfde woord.
+
+00:03:11.520 --> 00:03:15.160
+Twee items op die lijst klinken vreemd als je nog nooit een cloudomgeving hebt beheerd.
+
+00:03:15.340 --> 00:03:21.980
+Een service principle is een gebruikersnaam en wachtwoord voor een applicatie, zodat software kan inloggen en zijn werk kan doen zonder dat er een mens bij zit.
+
+00:03:22.160 --> 00:03:29.100
+Een beheerde identiteit werkt hetzelfde maar dan zonder wachtwoord, omdat Azure de inloggegevens beheert en er nooit een geheim in een configuratiebestand belandt.
+
+00:03:29.100 --> 00:03:35.360
+De eerste twee onderdelen zijn de makkelijke. Je hebt de juiste persoon gekozen of niet en je hebt de juiste rol gekozen of niet.
+
+00:03:35.480 --> 00:03:40.800
+Beide beslissingen worden meestal snel duidelijk. Het bereik is waar de echte problemen schuilen, dus daar gaan we nu naar kijken.
+
+00:03:41.020 --> 00:03:47.220
+De vier groottes van het bereik. Bereik bestaat uit precies vier formaten en Microsoft rangschikt ze van breed naar smal.
+
+00:03:47.460 --> 00:03:51.100
+Dit zijn de beheergroep, het abonnement, de resource groep en de resource.
+
+00:03:51.100 --> 00:03:58.680
+Een beheergroep is een container boven abonnementen en is bedoeld voor grote organisaties om veel abonnementen in één boomstructuur te ordenen.
+
+00:03:59.100 --> 00:04:05.800
+De meeste beginners komen er nooit aan, maar je moet weten dat het bestaat omdat toegang op dat niveau elk abonnement daaronder bereikt.
+
+00:04:06.200 --> 00:04:10.340
+Daarna in de hiërarchie komt het abonnement, wat meestal de eerste grens is die je tegenkomt.
+
+00:04:10.460 --> 00:04:14.420
+Het bevat je facturering, je service limieten en een set resources die bij elkaar horen.
+
+00:04:14.600 --> 00:04:17.400
+En voor de meeste mensen is dit de enige grens waar ze ooit aan denken.
+
+00:04:17.580 --> 00:04:25.060
+Daaronder bevindt zich de resource groep, een map binnen een abonnement die gerelateerde resources bevat, dus teams organiseren deze meestal per project, omgeving of afdeling.
+
+00:04:25.060 --> 00:04:28.740
+De kleinste eenheid van allemaal is een enkele resource en dat betekent één ding.
+
+00:04:28.960 --> 00:04:32.140
+Dit kan één opslagaccount, één virtuele machine of één database zijn.
+
+00:04:32.320 --> 00:04:37.940
+De portal toont dit als een vervolgkeuzelijst en het niveau dat je daar kiest, bepaalt welk deel van de boomstructuur een enkele toewijzing beslaat.
+
+00:04:38.120 --> 00:04:42.080
+Overerving is de regel die deze hiërarchie belangrijk maakt en het werkt slechts in één richting.
+
+00:04:42.240 --> 00:04:45.640
+Toegang verleend op een bovenliggend niveau vloeit door naar alles wat eronder valt.
+
+00:04:45.880 --> 00:04:51.760
+Wijst de rol van lezer toe op het niveau van de beheergroep en die persoon kan elke resource in elk abonnement binnen die beheergroep lezen.
+
+00:04:51.760 --> 00:04:56.200
+Het omgekeerde gebeurt nooit omdat toegang die diep in de boomstructuur is verleend niet terug naar boven klimt.
+
+00:04:56.360 --> 00:04:58.320
+De additieve regel verrast nog meer mensen.
+
+00:04:58.540 --> 00:05:04.460
+Omdat Azure je effectieve rechten berekent door alle toewijzingen die je hebt op te tellen, heeft een brede toewijzing een beperkte op.
+
+00:05:04.580 --> 00:05:09.220
+Neem iemand die de rol van lezer heeft op abonnementsniveau en medewerker op een enkele resource groep.
+
+00:05:09.280 --> 00:05:16.440
+Hun effectieve toegang voor dat abonnement is medewerker, omdat de som van de twee rollen medewerker is en de lezer toewijzing verandert helemaal niets.
+
+00:05:16.680 --> 00:05:20.220
+Dat is waarom het toevoegen van een kleine rol om een groot probleem op te lossen zo zelden werkt.
+
+00:05:20.220 --> 00:05:24.320
+Groepslidmaatschap voegt nog een laag toe, aangezien toewijzingen aan groepen transitief zijn.
+
+00:05:24.480 --> 00:05:30.780
+Als jij in een groep zit en die groep zit in een andere groep met een toewijzing, dan erf je die rechten, of het nu de bedoeling was of niet.
+
+00:05:31.020 --> 00:05:37.020
+Zodra je kunt zien hoe ver het bereik reikt, is de volgende vraag degene waarvoor je hier kwam, namelijk welke rol je erop moet toepassen.
+
+00:05:37.180 --> 00:05:39.200
+De rollen die je daadwerkelijk zult tegenkomen.
+
+00:05:39.520 --> 00:05:45.100
+Microsoft levert meer dan 100 ingebouwde rollen voor Azure en vijf daarvan vormen het fundament van het hele systeem.
+
+00:05:45.100 --> 00:05:48.640
+Je zult de rest één voor één tegenkomen naarmate je werk je erheen leidt.
+
+00:05:48.740 --> 00:05:50.400
+Eigenaar is de grootste van de vijf.
+
+00:05:50.520 --> 00:05:55.480
+Het verleent volledige controle over elke resource binnen het bereik en het geeft ook de mogelijkheid om toegang uit te delen aan anderen.
+
+00:05:55.680 --> 00:05:58.620
+Die tweede bevoegdheid is het onderdeel dat verandert hoe je het zou moeten gebruiken.
+
+00:05:58.860 --> 00:06:02.920
+Medewerker verleent dezelfde volledige controle over resources met één belangrijk verschil.
+
+00:06:03.080 --> 00:06:08.800
+Een medewerker kan aan niemand rollen toewijzen, dus ze kunnen dingen bouwen en verwijderen, maar ze kunnen geen deuren openen voor anderen.
+
+00:06:09.100 --> 00:06:10.720
+Laser is precies wat het klinkt.
+
+00:06:10.720 --> 00:06:16.300
+Iemand met de rol van laser kan resources bekijken en kan niets veranderen, wat het het veiligste startpunt maakt voor elk project.
+
+00:06:16.500 --> 00:06:22.720
+De laatste twee zijn de toegangsbeheerders, de gebruikers toegangsbeheerder en de beheerder voor op rollen gebaseerd toegangsbeheer regelen beide wie wat kan bereiken.
+
+00:06:22.980 --> 00:06:28.820
+Microsoft groepeert ze samen met eigenaar als bevoorrechte rollen, omdat beide de eigenaarsrol aan zichzelf of aan iemand anders kunnen toekennen.
+
+00:06:29.040 --> 00:06:34.060
+Naast die vijf is er een lange lijst met functiegerelateerde rollen, elk gericht op één service of één soort taak.
+
+00:06:34.060 --> 00:06:39.580
+Met de rol van bijdrager voor virtuele machines kan iemand virtuele machines maken en beheren zonder toegang tot uw netwerk of uw data.
+
+00:06:39.580 --> 00:06:44.920
+Met de rol van lezer voor opslagblopdata kan iemand bestanden in één opslagaccount lezen, zonder enige schrijftoegang.
+
+00:06:45.080 --> 00:06:50.520
+Er is één nuance in die functiegerelateerde rollen waar mensen in het begin tegenaan lopen, en het is goed dit te begrijpen voordat u iets toewijst.
+
+00:06:50.660 --> 00:06:54.580
+Het beheren van een resource en het lezen van de data daarin zijn twee afzonderlijke machtigingen in Azure.
+
+00:06:54.800 --> 00:07:00.140
+Als bijdrager voor een opslagaccount kan iemand dat account maken en configureren, maar het geeft ze geen toegang om één enkel bestand daarin te lezen.
+
+00:07:00.140 --> 00:07:03.820
+Voor het lezen van data is een aparte rol nodig die specifiek op de data zelf is gericht.
+
+00:07:03.980 --> 00:07:08.420
+Wanneer u zoekt naar de juiste rol, begin dan bij de service-categorie in plaats van bovenaan de lijst.
+
+00:07:09.580 --> 00:07:16.060
+De gebouwde rollen van Microsoft is ingedeeld per service, dus zoeken op een woord als blob of virtuele machine beperkt honderden opties tot een handvol.
+
+00:07:16.220 --> 00:07:20.100
+Het advies van Microsoft voor het maken van een keuze tussen deze rollen is verfrissend eenvoudig.
+
+00:07:20.300 --> 00:07:26.260
+Begin met de meest beperkende rol waarmee de persoon zijn werk nog steeds kan doen en stap alleen over naar een ruimere rol als het werk anders niet kan worden uitgevoerd.
+
+00:07:26.260 --> 00:07:31.700
+Als iemand blobs moet lezen, volstaat de lezersrol en geeft de bijdragersrol hen veel meer dan ze hebben gevraagd.
+
+00:07:31.780 --> 00:07:34.520
+Het principe van de kleinste bevoegdheid is waar het allemaal om draait.
+
+00:07:34.700 --> 00:07:39.560
+De kleinste bevoegdheid is de naam voor die gewoonte, en het betekent dat u iemand de kleinst mogelijke rol geeft op het kleinst mogelijke rol.
+
+00:07:39.580 --> 00:07:42.320
+Voor de kortst mogelijke tijd, waarmee ze hun werk kunnen doen.
+
+00:07:42.480 --> 00:07:45.420
+De reden waarom dit belangrijk is, heeft niets te maken met netheid of papierwerk.
+
+00:07:45.580 --> 00:07:49.740
+Het beperken van de rol en het bereik beperkt wat een aanvaller kan bereiken als dat account ooit gecompromitteerd raakt.
+
+00:07:49.940 --> 00:07:52.540
+Dus een kleine toewijzing betekent een kleine impact radius bij een incident.
+
+00:07:52.800 --> 00:07:55.200
+De eigen richtlijnen van Microsoft verwoorden het duidelijk.
+
+00:07:55.360 --> 00:08:02.460
+Vermijd het toewijzen van ruimere rollen op bredere bereiken, zelfs als de ruimere optie op dat moment handiger is, want gemak van vandaag wordt de impact radius van morgen.
+
+00:08:02.680 --> 00:08:05.860
+Een cijfer uit de documentatie van Microsoft is het onthouden waard.
+
+00:08:05.860 --> 00:08:12.720
+Microsoft adviseert een maximum van drie abonnements eigenaren, omdat elke extra eigenaar een nieuw pad toevoegt waar langs een gecompromitteerd account zich kan verspreiden.
+
+00:08:12.880 --> 00:08:17.700
+De kleinste bevoegdheid is geen project dat u inplant, het is een gewoonte die u toepast op het moment dat u een toewijzing maakt.
+
+00:08:17.900 --> 00:08:22.480
+Iemand die toegang nodig heeft voor een migratie van twee weken, krijgt een rol voor twee weken, niet voor altijd.
+
+00:08:22.680 --> 00:08:26.100
+Het achteraf weer intrekken is een simpele verwijdering, geen zoektocht in een spreadsheet.
+
+00:08:26.400 --> 00:08:30.340
+De andere reden waarom teams zich hier aanhouden, is dat kleine toewijzingen eenvoudig uit te leggen zijn.
+
+00:08:30.340 --> 00:08:35.520
+Wanneer een manager vraagt wie toegang heeft tot het financiële abonnement, is een handvol groepstoewijzingen zo uitgelegd.
+
+00:08:35.640 --> 00:08:38.820
+400 individuele toewijzingen kosten een middag aan uitzoekwerk.
+
+00:08:39.060 --> 00:08:41.400
+Voor bevoorrechte rollen wordt het patroon nog strenger.
+
+00:08:41.600 --> 00:08:45.860
+Gebruik het kleinst mogelijke bereik, zoals een enkele resource groep in plaats van het hele abonnement.
+
+00:08:46.080 --> 00:08:53.140
+Schakel vervolgens just-in-time activering in via Microsoft Entra Privileged Identity Management, zodat het recht tijdelijk bestaat in plaats van voor altijd.
+
+00:08:53.320 --> 00:08:59.080
+Die laatste optie vereist een betaald Entra ID-abonnement, dus zie het als iets om naartoe te groeien in plaats van iets dat je standaard misloopt.
+
+00:08:59.080 --> 00:09:06.420
+En als de ingebouwde rollen echt niet bij je situatie passen, is dat het enige geval waarin zelf een rol maken logisch is en dat is precies waar we naartoe gaan.
+
+00:09:06.720 --> 00:09:07.960
+Ingebouwd of zelf maken
+
+00:09:07.960 --> 00:09:12.980
+Ingebouwde rollen zijn kant en klaar en worden door Microsoft onderhouden, wat de belangrijkste reden is om daar te beginnen.
+
+00:09:13.340 --> 00:09:19.960
+Aangepaste rollen vullen het gat waar geen enkele ingebouwde rol voldoet aan de behoefte van een team en ze kunnen worden gedeeld over abonnementen die dezelfde tenant vertrouwen.
+
+00:09:20.240 --> 00:09:26.560
+Microsoft houdt de ingebouwde lijst actueel naarmate services veranderen en dat onderhoud is precies wat je overneemt zodra je er zelf een bouwt.
+
+00:09:26.560 --> 00:09:32.320
+Een rol is slechts een geschreven lijst van toegestane acties, dus een aangepaste rol betekent dat jouw team vanaf dat moment die lijst beheert.
+
+00:09:32.480 --> 00:09:34.940
+Het proces zelf is minder eng dan de naam doet vermoeden.
+
+00:09:35.140 --> 00:09:40.180
+Je begint meestal door de meest geschikte ingebouwde rol te kopiëren en de overbodige machtigingen te verwijderen.
+
+00:09:40.360 --> 00:09:44.560
+Daarna geef je de rol een set toewijsbare bereiken, zodat Azure weet waar deze kan worden gebruikt.
+
+00:09:44.560 --> 00:09:47.700
+Vervolgens test je de rol met een echte taak voordat je deze aan iemand geeft.
+
+00:09:47.900 --> 00:09:49.480
+De keerzijde is het eigenaarschap.
+
+00:09:49.680 --> 00:09:52.660
+Zodra je een aangepaste rol maakt, wordt het iets dat jouw team moet onderhouden.
+
+00:09:52.860 --> 00:09:57.520
+Services voegen in de loop van de tijd nieuwe machtigingen toe, dus een rol die vandaag perfect past, kan na verloop van tijd ongeschikt worden.
+
+00:09:57.760 --> 00:10:01.060
+Microsoft heeft een specifieke waarschuwing over hoe mensen aangepaste rollen schrijven.
+
+00:10:01.060 --> 00:10:09.240
+Het gebruik van een asterisk in plaats van het benoemen van de acties betekent dat de rol ook machtigingen overneemt die Microsoft later toevoegt, en dat is toegang die niemand heeft gekozen of gecontroleerd.
+
+00:10:09.240 --> 00:10:18.140
+De limieten houden het model ook betrouwbaar. Je kunt tot 5000 aangepaste rollen in een tenant hebben, en een aangepaste rol met data-acties kan niet op beheergroepniveau worden toegewezen.
+
+00:10:18.440 --> 00:10:26.960
+Voor beginners is het praktische advies kort. Kies eerst voor een ingebouwde rol en beschouw een aangepaste rol als de uitzondering die je kunt verantwoorden, niet als de standaardoptie.
+
+00:10:27.380 --> 00:10:33.060
+Azure-rollen zijn geen entra-rollen. Er is nog een bron van verwarring, en die heeft niets te maken met aangepaste rollen.
+
+00:10:33.220 --> 00:10:38.360
+Het woord rol komt op twee plekken voor in de wereld van Microsoft, en het zijn aparte systemen met aparte toewijzingen.
+
+00:10:38.360 --> 00:10:43.960
+Azure-rollen beheren de toegang tot Azure resources, oftewel virtuele machines, opslag, netwerken en databases.
+
+00:10:44.420 --> 00:10:50.740
+Microsoft entra-rollen beheren de toegang tot directory resources, oftewel gebruikers, groepen, domeinen en licenties.
+
+00:10:50.940 --> 00:10:57.700
+De scopes komen ook niet overeen. Een Azure-roll kan worden toegewezen op het niveau van een beheergroep, abonnement, resourcegroep of individuele resource.
+
+00:10:57.920 --> 00:11:03.800
+Een entra-roll wordt toegewezen op tenantniveau, op een administratieve eenheid of op een enkel object, zoals één applicatie.
+
+00:11:03.800 --> 00:11:07.720
+Als je ooit twijfelt in welk systeem je zit, vraag dan wat de persoon moet aanpassen.
+
+00:11:07.900 --> 00:11:15.080
+Het wijzigen van personen, groepen of licenties plaatst je in Microsoft entra, en het wijzigen van virtuele machines, opslag of netwerken plaatst je in Azure.
+
+00:11:15.320 --> 00:11:20.920
+Veel mensen hebben rollen in beide systemen tegelijkertijd. Dan volgt het gevolg dat mensen het vaakst over het hoofd zien.
+
+00:11:21.100 --> 00:11:27.360
+Een globale beheerder krijgt niet automatisch toegang tot Azure resources, omdat die status je directory beheert en niet je abonnementen.
+
+00:11:27.360 --> 00:11:31.700
+Die persoon kan de situatie veranderen, en het mechanisme daarachter is nuttig om te kennen.
+
+00:11:31.860 --> 00:11:38.120
+Een globale beheerder kan in de portal een schakelaar omzetten die hen de rol van gebruikers toegangsbeheerder geeft voor elk abonnement in de tenant.
+
+00:11:38.360 --> 00:11:43.900
+Het is een bewuste actie in plaats van een standaardinstelling, en veel organisaties merken het pas op bij een audit naar wie welke rechten heeft.
+
+00:11:44.080 --> 00:11:46.240
+Er zit nog een stukje geschiedenis achter dit alles.
+
+00:11:46.440 --> 00:11:49.740
+De oude klassieke abonnementsbeheerdersrollen zijn volledig uitgefaseerd.
+
+00:11:49.940 --> 00:11:53.220
+Degene genaamd accountbeheerder, servicebeheerder en medebeheerder.
+
+00:11:53.220 --> 00:11:57.980
+Dat betekent dat elke toegangsbeslissing in Azure tegenwoordig verloopt via op rollen gebaseerd toegangsbeheer.
+
+00:11:58.140 --> 00:12:03.260
+Wanneer je die twee systemen kunt onderscheiden, worden de gewoonten die problemen veroorzaken veel makkelijker op te sporen.
+
+00:12:04.140 --> 00:12:05.540
+De fouten die iedereen maakt.
+
+00:12:05.780 --> 00:12:12.620
+De meeste problemen in echte abonnementen komen voort uit een kort lijstje gewoonten, en elk daarvan is makkelijk te verhelpen als je weet waar je op moet letten.
+
+00:12:12.820 --> 00:12:18.120
+Dit klinkt als advies voor grote bedrijven, maar het geldt net zo goed voor een abonnement met slechts drie resources.
+
+00:12:18.520 --> 00:12:21.140
+Begin met de gewoonte die bijna iedereen als eerste aanleert.
+
+00:12:21.140 --> 00:12:24.660
+Eigenaar staat bovenaan de rollenlijst, dus het wordt de standaard keuze.
+
+00:12:24.840 --> 00:12:31.120
+Omdat een eigenaar toegang kan verlenen, verandert één eigenaarsaccount in een manier om meer eigenaarsaccounts aan te maken zonder dat iemand het merkt.
+
+00:12:31.340 --> 00:12:34.760
+Dan is er nog de gewoonte om rollen toe te wijzen aan personen in plaats van aan groepen.
+
+00:12:35.240 --> 00:12:38.240
+Groepstoewijzingen brengen tientallen individuele toewijzingen terug naar één.
+
+00:12:38.340 --> 00:12:43.300
+En wanneer Microsoft uitlegt hoe je een abonnement met een limietprobleem oplost, is dit de eerste aanbevolen stap.
+
+00:12:43.420 --> 00:12:46.900
+Een andere fout is makkelijk te missen, omdat het geen fout is die je bewust maakt.
+
+00:12:46.900 --> 00:12:54.860
+Rechten worden overgeërfd en opgeteld, zo krijgt iemand toegang tot een bron die niemand ooit heeft toegewezen, vaak omdat de toewijzing hoger in de boomstructuur staat dan iemand heeft gecontroleerd.
+
+00:12:55.000 --> 00:12:59.120
+De aanname die mensen een middag kost, is dat een kantoorbrede beheerdersrol ook toegang geeft tot Azure.
+
+00:12:59.340 --> 00:13:00.640
+Dat is niet zo, niet standaard.
+
+00:13:00.840 --> 00:13:05.480
+En beheerders staren regelmatig naar een toegang geweigerd, melding bij een abonnement waarvan ze dachten dat ze het beheerden.
+
+00:13:05.600 --> 00:13:12.940
+Een weigeringsregel schrijven klinkt als de logische oplossing, maar Microsoft stelt dat je niet direct je eigen weigeringstoewijzingen kunt maken, omdat Azure die zelf beheert.
+
+00:13:12.940 --> 00:13:17.320
+Toegang verdwijnt wanneer je de toewijzing verwijdert die deze verleende, niet wanneer je een blokkade instelt.
+
+00:13:17.540 --> 00:13:19.680
+Sommige teams bereiken de limiet op de harde manier.
+
+00:13:19.900 --> 00:13:25.480
+Azure staat 5000 holtoewijzingen per abonnement en 500 per beheergroep toe en beide limieten zijn vastgesteld.
+
+00:13:25.680 --> 00:13:30.560
+De gebruikelijke oorzaak van het bereiken van die limiet zijn duizenden individuele toewijzingen aan individuele personen.
+
+00:13:30.720 --> 00:13:33.900
+Geneste groepen dragen rechten verder doordat de meeste mensen verwachten.
+
+00:13:34.120 --> 00:13:40.840
+Iemand zit in een groep, die groep hoort bij een grotere groep, en de toewijzingen aan die grotere groep gelden automatisch voor die persoon zonder dat iemand het merkt.
+
+00:13:40.840 --> 00:13:44.140
+Het laatste punt wordt eerder zichtbaar in automatisering dan in de portal.
+
+00:13:44.500 --> 00:13:48.400
+Microsoft raadt aan om de unieke idee van een rol te gebruiken in plaats van de weergave naam.
+
+00:13:48.580 --> 00:13:54.780
+Namen veranderen, voorbeeldrollen krijgen een andere naam bij de release, en alles wat geautomatiseerd is op de oude naam breekt zonder waarschuwing.
+
+00:13:54.980 --> 00:13:57.860
+Elk van deze problemen komt voort uit dezelfde kleine beslissing.
+
+00:13:58.060 --> 00:14:04.200
+Kies de kleinste rol die het werk doet, wijs deze toe aan een groep in plaats van een persoon, en hou de scope zo laag mogelijk in de boomstructuur.
+
+00:14:04.440 --> 00:14:08.160
+Doe dit consequent en de meeste van deze problemen krijgen nooit de kans om te ontstaan.
+
+00:14:08.160 --> 00:14:12.020
+Samenvatting en een open vraag. Laten we dus verzamelen wat we hebben besproken.
+
+00:14:12.220 --> 00:14:17.600
+Elke rol toewijzing in Azure is een wat en een hoe ver, en niets wordt verleend totdat iemand er een aanmaakt.
+
+00:14:17.820 --> 00:14:22.800
+Rechten vloeien naar beneden. Ze tellen op en verdwijnen wanneer je de toewijzing verwijdert in plaats van deze te blokkeren.
+
+00:14:23.020 --> 00:14:25.100
+Hou deze gewoonte aan en de rest blijft eenvoudig.
+
+00:14:25.280 --> 00:14:28.440
+De regel is, de kleinste rol op de kleinste scope toegewezen aan een groep.
+
+00:14:28.440 --> 00:14:35.700
+Als Azure hierdoor iets minder intimiderend voelt, abonneer je dan op M365FM, want we behandelen één onderdeel van de stack tegelijk en leggen het uit in begrijpelijke taal.
+
+00:14:35.880 --> 00:14:38.520
+Voordat je gaat, laat ik je achter met één vraag om over na te denken.
+
+00:14:38.760 --> 00:14:44.240
+Als je vandaag je abonnement opent en elke toewijzing doorloopt, zou je dan voor elk kunnen uitleggen waarom deze er is.

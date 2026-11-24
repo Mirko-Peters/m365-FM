@@ -1,0 +1,571 @@
+WEBVTT
+
+00:00:00.120 --> 00:00:06.000
+Witamy w podcaście M365FM, gdzie zgłębiamy ludzi, pomysły i technologie kształtujące przyszłość pracy.
+
+00:00:06.240 --> 00:00:09.060
+Dlaczego nic, czego używasz w sieci, nie działa na jednym komputerze?
+
+00:00:09.200 --> 00:00:11.340
+Twój e-mail nigdy nie trafia na tylko jeden komputer.
+
+00:00:11.560 --> 00:00:14.600
+Trafia na całe ich mnóstwo, a ty nigdy nie widzisz, który z nich odpowiedział.
+
+00:00:14.720 --> 00:00:18.920
+To właśnie równoważenie obciążenia i dzięki niemu Teams nie pada, gdy połowa firmy loguje się o 9 rano.
+
+00:00:19.160 --> 00:00:23.840
+Możesz myśleć, że to zaawansowana sieć zarezerwowana dla administratorów, ale to prosta idea, z której korzystasz codziennie.
+
+00:00:24.000 --> 00:00:28.440
+Pod koniec tego odcinka zrozumiesz, jak to działa i gdzie ukrywa się wewnątrz Microsoft 365 i Azure.
+
+00:00:28.440 --> 00:00:31.640
+Wyobraź sobie teraz chmurę tak, jak większość z nas ją sobie początkowo wyobraża.
+
+00:00:31.860 --> 00:00:35.540
+Jeden gigantyczny komputer siedzi gdzieś w chłodnym pomieszczeniu i po cichu utrzymuje wszystko razem.
+
+00:00:35.720 --> 00:00:39.820
+Ten obraz jest błędny, a jest błędny w sposób, który czyni cały ten temat łatwiejszym do zrozumienia.
+
+00:00:40.040 --> 00:00:41.660
+Nie ma żadnego pojedynczego komputera.
+
+00:00:41.900 --> 00:00:46.980
+Są tysiące zwykłych maszyn, z których każda wykonuje małą część pracy, a coś musi decydować, kto robi co.
+
+00:00:47.160 --> 00:00:52.800
+Witamy w podcaście M365FM, gdzie zgłębiamy ludzi, pomysły i technologie kształtujące przyszłość pracy.
+
+00:00:52.800 --> 00:00:57.800
+Przez następne 20 minut określenie równoważenie obciążenia przestanie brzmieć jak coś, do czego potrzebujesz certyfikatu.
+
+00:00:57.960 --> 00:00:59.500
+Pomyśl o sklepie z jednym kasjerem.
+
+00:00:59.760 --> 00:01:04.440
+W momencie, gdy pojawiają się trzy osoby naraz, tworzy się kolejka, a gdy przychodzi dziesiąta osoba, całe miejsce jest zablokowane.
+
+00:01:04.620 --> 00:01:07.860
+Otwórz teraz 12 kas, a ten sam tłum przechodzi bez długiego czekania.
+
+00:01:08.040 --> 00:01:11.620
+Komputery mają dokładnie ten sam problem, a równoważenie obciążenia to te 12 kas.
+
+00:01:11.800 --> 00:01:15.540
+Ma to znaczenie w momencie, gdy więcej niż kilka osób korzysta z tej samej aplikacji w tym samym czasie.
+
+00:01:15.800 --> 00:01:19.140
+Jedna maszyna zaczyna się dławić pod ciężarem i każda osoba to odczuwa.
+
+00:01:19.140 --> 00:01:23.960
+Ten jeden problem jest tym, do czego rozwiązanie wynaleziono równoważenie obciążenia i jest ono odpowiedzią od dekad.
+
+00:01:24.120 --> 00:01:27.260
+Używasz tego przez całe swoje życie online, nigdy nie widząc tej nazwy.
+
+00:01:27.500 --> 00:01:32.800
+Każde wideo, które streamujesz, każde zamówienie i każda wiadomość, którą wysyłasz, trafiają do jednej z wielu maszyn.
+
+00:01:32.940 --> 00:01:36.720
+Ten wybór następuje w ułamku sekundy i zdarza się dla ciebie tysiące razy dziennie.
+
+00:01:36.920 --> 00:01:40.700
+Przejdziemy też do uczciwych ograniczeń, czyli części, które wiele wyjaśnień pomija.
+
+00:01:40.900 --> 00:01:42.960
+Co tak naprawdę robi równoważnik obciążenia?
+
+00:01:43.320 --> 00:01:47.820
+Równoważnik obciążenia to kierownik ruchu, który stoi przed grupą komputerów zwanych serwerami.
+
+00:01:47.820 --> 00:01:53.200
+Każde żądanie trafia najpierw do równoważnika obciążenia, a on przekazuje je do jednego serwera w grupie.
+
+00:01:53.420 --> 00:01:58.620
+Dla ciebie wygląda to jak jeden adres i jedne drzwi wejściowe, a ty nigdy nie wiesz ani nie dbasz o to, która maszyna wykonała pracę.
+
+00:01:58.740 --> 00:02:00.400
+Pomyśl o gospodarzu w restauracji.
+
+00:02:00.640 --> 00:02:02.500
+Nie wchodzisz i nie zajmujesz stolika samemu.
+
+00:02:02.740 --> 00:02:06.900
+Gospodarz sprawdza wolne miejsca i prowadzi cię do stolika, żeby jeden kelner nie musiał obsługiwać całej sali.
+
+00:02:07.080 --> 00:02:09.120
+Śledźmy drogę jednego żądania od początku do końca.
+
+00:02:09.320 --> 00:02:12.540
+Klikasz link, a twoje urządzenie wysyła żądanie do równoważyciela obciążenia.
+
+00:02:12.540 --> 00:02:15.900
+Równoważyciel wybiera sprawny serwer, a ten odsyła odpowiedź.
+
+00:02:16.020 --> 00:02:20.580
+Cała decyzja zajmuje ułamek sekundy, a potem powtarza się przy kolejnym żądaniu i następnych.
+
+00:02:20.760 --> 00:02:22.700
+Dzięki temu zyskujesz właściwie dwie rzeczy.
+
+00:02:22.960 --> 00:02:26.240
+Zyskujesz prędkość, bo praca rozkłada się zamiast spiętrzać na jednej maszynie.
+
+00:02:26.460 --> 00:02:30.800
+Zyskujesz też niezawodność, bo jeśli serwer jest przeciążony lub padł, ruch po prostu trafia gdzie indziej.
+
+00:02:31.060 --> 00:02:34.580
+Równoważyciel obciążenia sprawia też, że witrynę można aktualizować bez wyłączania jej.
+
+00:02:34.800 --> 00:02:39.020
+Wyłączasz jeden serwer, aktualizujesz go i włączasz z powrotem, a reszta dalej obsługuje użytkowników.
+
+00:02:39.200 --> 00:02:40.860
+Nikt na zewnątrz niczego nie zauważa.
+
+00:02:41.080 --> 00:02:43.140
+Słowo obciążenie oznacza tu po prostu pracę.
+
+00:02:43.340 --> 00:02:47.020
+Równoważenie obciążenia oznacza dbanie, by żadna maszyna nie brała na siebie zbyt wiele.
+
+00:02:47.140 --> 00:02:48.360
+To cała rola w jednym zdaniu.
+
+00:02:48.740 --> 00:02:54.200
+Równoważyciel to jedyny element, z którym kontaktuje się świat zewnętrzny, co czyni infrastrukturę za nim niewidoczną.
+
+00:02:54.440 --> 00:03:00.160
+Użytkownicy widzą jedną nazwę i jedne drzwi, podczas gdy za nimi liczba maszyn może się zmieniać bez wiedzy nikogo z zewnątrz.
+
+00:03:00.340 --> 00:03:05.980
+Część, którą ludzie uważają za skomplikowaną, to sposób wyboru serwera przez równoważyciel i właśnie tym się zajmiemy.
+
+00:03:06.140 --> 00:03:08.720
+Proste zasady, które decydują o kierunku ruchu.
+
+00:03:09.160 --> 00:03:14.120
+Gdy nadchodzi żądanie, równoważyciel musi wybrać serwer używając reguły zwanej algorytmem.
+
+00:03:14.560 --> 00:03:18.720
+Algorytm brzmi groźnie, ale to po prostu zestaw kroków prowadzących do decyzji.
+
+00:03:18.920 --> 00:03:22.980
+Przepis to algorytm, podobnie jak sposób, w jaki telefon wyznacza trasę omijającą korki.
+
+00:03:22.980 --> 00:03:25.220
+Najprostsza reguła nazywa się round robin.
+
+00:03:25.520 --> 00:03:26.840
+Równoważyciel działa na zmianę.
+
+00:03:27.040 --> 00:03:31.900
+Wysyła pierwsze żądanie do serwera pierwszego, drugie do drugiego, trzecie do trzeciego, a potem wraca do początku.
+
+00:03:32.180 --> 00:03:36.600
+To jak rozdawanie kart przy stole sprawdza się dobrze, gdy wszystkie serwery są mniej więcej takie same.
+
+00:03:36.800 --> 00:03:38.760
+Kolejna reguła to najmniej połączeń.
+
+00:03:38.940 --> 00:03:44.340
+Zamiast działać na zmianę, równoważyciel wysyła żądanie do serwera, który ma aktualnie najmniej podłączonych użytkowników.
+
+00:03:44.340 --> 00:03:48.680
+To ten sam instynkt, co w supermarkecie, gdzie wybierasz najkrótszą kolejkę zamiast tej najbliższej.
+
+00:03:48.880 --> 00:03:51.300
+Niektóre konfiguracje używają waszonych wersji tych reguł.
+
+00:03:51.300 --> 00:03:55.640
+Jeśli jeden serwer ma więcej pamięci lub szybszy procesor, kierujesz do niego większą część ruchu.
+
+00:03:55.740 --> 00:03:58.620
+To jak większa kasa, która obsługuje więcej klientów na godzinę.
+
+00:03:58.800 --> 00:04:01.860
+Warto poznać jeszcze jedną regułę, nazywaną najkrótszym czasem odpowiedzi.
+
+00:04:02.060 --> 00:04:07.400
+Zamiast liczyć połączenia, Load Balancer obserwuje, jak szybko odpowiada każdy serwer i kieruje następne żądanie do tego najszybszego.
+
+00:04:07.580 --> 00:04:12.000
+To jak ten znajomy, który zawsze wie, która kolejka do kasy faktycznie się porusza, a nie tylko, która jest najkrótsza.
+
+00:04:12.160 --> 00:04:15.040
+Te reguły dzielą się na dwie rodziny i ten podział ma znaczenie.
+
+00:04:15.040 --> 00:04:22.940
+Jedna rodzina stosuje stały plan i nie patrzy, jak bardzo obciążone są serwery, co ułatwia konfigurację, ale łatwo obłąd przy nierównym obciążeniu.
+
+00:04:23.140 --> 00:04:30.620
+Druga rodzina monitoruje bieżące obciążenie i stan każdego serwera, dostosowując się na bieżąco, co lepiej radzi sobie w rzeczywistości, ale wymaga więcej strojenia.
+
+00:04:30.840 --> 00:04:34.040
+Wyobraź sobie stronę małej firmy działającą na trzech identycznych serwerach.
+
+00:04:34.240 --> 00:04:37.920
+Metoda Round Robin w zupełności tam wystarczy, a bardziej skomplikowane rozwiązania to tylko strata wysiłku.
+
+00:04:37.920 --> 00:04:41.980
+Teraz wyobraź sobie aplikację wideo, gdzie jedno żądanie trwa mgnienie oka, a kolejne 10 sekund.
+
+00:04:42.140 --> 00:04:47.380
+Reguła najmniejszej liczby połączeń zapobiega sytuacji, w której jeden serwer utyka z obsługą samych wolnych zadań, podczas gdy inny pozostaje bezczynny.
+
+00:04:47.560 --> 00:04:53.740
+Wszystko to działa tylko wtedy, gdy Load Balancer wie, które serwery naprawdę żyją, a to pytanie okazuje się ciekawsze niż się wydaje.
+
+00:04:54.160 --> 00:04:55.920
+Skąd wie, że serwer jest chory?
+
+00:04:56.160 --> 00:05:01.540
+Reguła wyboru serwerów jest bezużyteczna, jeśli niektóre z nich są zepsute, więc Load Balancer uruchamia testy sprawności.
+
+00:05:01.540 --> 00:05:07.340
+Test sprawności to małe, regularne sprawdzenie wysyłane do każdego serwera, jak pukanie do drzwi z pytaniem, czy ktoś jest w domu.
+
+00:05:07.580 --> 00:05:13.680
+Jeśli serwer odpowiada poprawnie, pozostaje w rotacji, a jeśli nie Load Balancer przestaje wysyłać do niego nowy ruch,
+
+00:05:14.260 --> 00:05:17.540
+to przełączenie ruchu z uszkodzonego serwera na sprawny nazywamy failaverem.
+
+00:05:18.440 --> 00:05:25.700
+To część Load Balancingu, która sprawia, że mała awaria nie staje się wielką przerwą w działaniu, bo jeden martwy serwer nigdy nie powinien położyć całej aplikacji.
+
+00:05:25.940 --> 00:05:27.960
+Wróćmy myślami do sklepu z czterema kasami.
+
+00:05:27.960 --> 00:05:32.800
+Jeden kasier odchodzi, kasa zostaje zamknięta i pojawia się znak, żeby nikt się tam nie ustawiał.
+
+00:05:32.980 --> 00:05:36.940
+Klienci kierują się do otwartych kas i z ich perspektywy nic się nie zmieniło.
+
+00:05:37.120 --> 00:05:38.940
+W szczegółach kryje się pewien kompromis.
+
+00:05:39.140 --> 00:05:44.220
+Jeśli Load Balancer sprawdza serwery zbyt rzadko, chory serwer przez jakiś czas otrzymuje ruch, zanim ktokolwiek to zauważy.
+
+00:05:44.400 --> 00:05:50.820
+Jeśli sprawdza zbyt agresywnie, serwer, który jest tylko nieco wolniejszy, zostaje wyrzucony z rotacji, co może pogorszyć sprawę zamiast ją naprawić.
+
+00:05:50.980 --> 00:05:53.040
+Azure pokazuje, jak to działa w praktyce.
+
+00:05:53.040 --> 00:06:01.140
+Jego Load Balancer sprawdza każdy backend w określonych odstępach czasu, domyślnie co 5 sekund w portalu i potrzebuje określonej liczby błędów z rzędu, by uznać serwer za niesprawny.
+
+00:06:01.260 --> 00:06:07.480
+Kiedy tak się dzieje, nowe połączenia kierowane są gdzie indziej, podczas gdy istniejące często trwają nadal, więc użytkownicy w trakcie wykonywania zadań nie zostają rozłączeni.
+
+00:06:07.680 --> 00:06:09.440
+Istnieje tutaj pewne uczciwe ograniczenie.
+
+00:06:09.640 --> 00:06:12.300
+Test sprawdzający stan serwera wie tylko to, co każesz mu przetestować.
+
+00:06:12.300 --> 00:06:18.900
+Jeśli sprawdza niewłaściwy port lub powierzchowny sygnał, serwer może być niesprawny, a mimo to wyglądać na zdrowy, co oznacza, że nadal otrzymuje ruch, z którym nie może sobie poradzić.
+
+00:06:19.080 --> 00:06:23.660
+Im lepiej test stanu serwera odzwierciedla to, czego faktycznie doświadczają użytkownicy, tym lepiej działa cały system.
+
+00:06:23.900 --> 00:06:27.020
+Gdy dopracujesz ten jeden szczegół, wiele innych problemów cicho zniknie.
+
+00:06:27.220 --> 00:06:31.880
+Do tej pory traktowaliśmy każdy balansator obciążenia jako to samo narzędzie, a to kolejna rzecz do naprawienia.
+
+00:06:32.140 --> 00:06:34.280
+Dwa warianty i dlaczego różnica ma znaczenie.
+
+00:06:34.280 --> 00:06:39.860
+Nie każdy balansator obciążenia działa tak samo, a różnica polega na tym, jak dużą część twojego zapytania sprawdza.
+
+00:06:40.100 --> 00:06:44.880
+Niektóre patrzą tylko na zewnętrzną stronę koperty, inne otwierają ją i czytają list w środku.
+
+00:06:45.060 --> 00:06:47.560
+Pierwszy rodzaj działa na tak zwanej warstwie czwartej.
+
+00:06:47.760 --> 00:06:54.360
+Sprawdza tylko adres i port, tak jak pracownik poczty odczytuje kod pocztowy i przesyła zapytanie dalej, nie przejmując się tym, co jest w środku.
+
+00:06:54.580 --> 00:06:57.280
+Jest szybki, prosty i w wielu zadaniach to wszystko, czego potrzebujesz.
+
+00:06:58.020 --> 00:07:00.920
+Drugi rodzaj działa na warstwie siódmej i faktycznie odczytuje zapytanie.
+
+00:07:00.920 --> 00:07:06.960
+Widzi, że jedno zapytanie prosi o obraz, podczas gdy inne próbuje dokonać płatności i może wysłać każde z nich do innego zespołu serwerów.
+
+00:07:07.120 --> 00:07:11.620
+W ten sposób jeden adres internetowy może dyskretnie przekierować cię w odpowiednie miejsce, zależnie od tego, o co prosisz.
+
+00:07:11.800 --> 00:07:13.600
+Konkretny przykład pozwala to zrozumieć.
+
+00:07:13.760 --> 00:07:20.100
+Żądanie obrazów twojej witryny trafia do serwerów z grafiką, a żądanie strony płatności do serwerów płatności wszystko pod tym samym adresem internetowym.
+
+00:07:20.320 --> 00:07:23.880
+Nikt wpisujący ten adres nie ma pojęcia, że obsłużyły go dwa różne zespoły.
+
+00:07:24.100 --> 00:07:27.660
+Warstwa siódma odblokowuje również kilka rzeczy, które mają znaczenie w świecie rzeczywistym.
+
+00:07:27.660 --> 00:07:35.820
+Potrafi obsługiwać twoje certyfikaty bezpieczeństwa w jednym miejscu zamiast na każdym serwerze oraz sprawdzać przechodzące żądania i blokować te niebezpieczne, zanim dotrą do aplikacji.
+
+00:07:35.980 --> 00:07:36.660
+Tu pojawia się kompromis.
+
+00:07:37.400 --> 00:07:43.780
+Warstwa czwarta to szybka, tania i podstawowa opcja, a warstwa siódma to ta inteligentniejsza, która wymaga nieco więcej pracy przy każdym zapytaniu.
+
+00:07:44.020 --> 00:07:50.000
+Żadna z nich nie wygrywa w każdym przypadku, a wybór między nimi zależy od tego, jak bardzo potrzebujesz, by balansator rozumiał, o co prosisz.
+
+00:07:50.000 --> 00:07:52.980
+W praktyce wiele rzeczywistych systemów używa obu jednocześnie.
+
+00:07:53.220 --> 00:08:01.780
+Balanser warstwy siódmej podejmuje inteligentne decyzje o trasowaniu na froncie, a balanser warstwy czwartej rozdziela surowy ruch między maszyny za nim, każdy wykonując zadanie, w którym jest najlepszy.
+
+00:08:01.980 --> 00:08:08.720
+Mając wyjaśnione te dwa rodzaje, możemy w końcu nazwać rzeczywiste narzędzia, które spotkasz w Azure, ponieważ Azure nie daje ci jednego, lecz całą ich rodzinę.
+
+00:08:08.900 --> 00:08:11.500
+Jeśli chodzi o Azure, nie ma on jednego load balansera.
+
+00:08:11.720 --> 00:08:15.000
+Ma małą rodzinę takich rozwiązań, a każde z nich stworzono do innego zadania.
+
+00:08:15.000 --> 00:08:21.980
+Wybór właściwego sprowadza się do dwóch prostych kwestii, czy twój ruch to ruch sieciowy oraz czy twoja aplikacja działa w jednym regionie, czy jest rozproszona na cały świat.
+
+00:08:22.140 --> 00:08:24.700
+Pierwszy z nich nazywa się po prostu Azure Load Balancer.
+
+00:08:24.900 --> 00:08:26.420
+To najszybszy członek tej rodziny.
+
+00:08:26.680 --> 00:08:27.860
+Działa w warstwie czwartej.
+
+00:08:28.060 --> 00:08:32.860
+Rozdziela ruch sieciowy między maszyny wirtualne i jest stworzony do obsługi ogromnych wolumenów z bardzo małymi opóźnieniami.
+
+00:08:33.080 --> 00:08:39.220
+Rozprasza się również między strefami dostępności, które są oddzielnymi lokalizacjami fizycznymi wewnątrz regionu, więc awaria jednej strefy nie powoduje przestoju całości.
+
+00:08:39.460 --> 00:08:42.600
+Następny jest Azure Application Gateway, ten inteligentny i regionalny.
+
+00:08:42.600 --> 00:08:49.700
+Działa w warstwie siódmej, więc potrafi odczytywać adresy URL, trasować według ścieżki, obsługiwać certyfikaty bezpieczeństwa i dodawać zapory aplikacji internetowych WAF.
+
+00:08:49.860 --> 00:08:54.760
+Wybierz go, gdy twoja aplikacja działa w jednym regionie, ale musisz podejmować decyzje dotyczące każdego przychodzącego żądania.
+
+00:08:54.940 --> 00:08:57.180
+Potem jest Azure Front Door, ten globalny.
+
+00:08:57.340 --> 00:09:05.520
+Kieruje każdego użytkownika do najbliższego sprawnego punktu wejścia w sieci Microsoftu, zarządza bezpieczeństwem na krawędzi i buforuje treści, aby ponowne wizyty były szybsze.
+
+00:09:05.520 --> 00:09:12.300
+Microsoft podaje, że działa on w ponad 118 lokalizacjach brzegowych, rozmieszczonych w około 100 obszarach metropolitalnych na całym świecie.
+
+00:09:12.520 --> 00:09:16.160
+Ostatni jest Azure Traffic Manager i działa inaczej niż wszystkie pozostałe.
+
+00:09:16.380 --> 00:09:17.920
+W ogóle nie przesyła twojego ruchu.
+
+00:09:18.100 --> 00:09:22.580
+Odpowiada jedynie na pytanie, gdzie znajduje się twoja aplikacja, podając urządzeniu adres sprawnej lokalizacji,
+
+00:09:22.680 --> 00:09:27.020
+a następnie urządzenie łączy się bezpośrednio z tym serwerem bez udziału Traffic Managera w przesyłaniu danych.
+
+00:09:27.160 --> 00:09:31.640
+Ta różnica ma większe znaczenie niż się wydaje, ponieważ Traffic Manager jedynie wskazuje drogę.
+
+00:09:31.640 --> 00:09:40.180
+Ruch biegnie bezpośrednio od użytkownika do serwera, co zapewnia szybkość, ale oznacza też, że przełączenie awaryjne zależy od tego, jak szybko urządzenia odświeżą w pamięci ten adres.
+
+00:09:40.380 --> 00:09:43.860
+Choć brzmią odmiennie, wszystkie cztery odpowiadają na to samo podstawowe pytanie.
+
+00:09:44.160 --> 00:09:49.400
+Decydują, która sprawna maszyna powinna otrzymać kolejne żądanie i sprawdzają, czy nadal jest sprawna, zanim skierują do niej kogokolwiek.
+
+00:09:49.620 --> 00:09:53.780
+Warto zapamiętać szczegół, że rzeczywiste obciążenia często korzystają z więcej niż jednego z tych rozwiązań jednocześnie.
+
+00:09:54.000 --> 00:09:57.100
+Wyobraź sobie firmę prowadzącą stronę internetową dla klientów na całym świecie.
+
+00:09:57.100 --> 00:10:05.360
+Front Door kieruje każdego użytkownika do najbliższego regionu, brama aplikacji przesyła go na odpowiedni adres URL w tym regionie, a równoważenie obciążenia rozdziela pracę między maszyny wirtualne w tle.
+
+00:10:05.520 --> 00:10:09.300
+Trzy narzędzia, trzy zadania, jedno płynne doświadczenie dla klikającego użytkownika.
+
+00:10:09.580 --> 00:10:13.540
+Dobra wiadomość jest taka, że nigdy nie będziemy musieli tego budować, aby z tego korzystać.
+
+00:10:13.660 --> 00:10:16.680
+Jak Microsoft 365 robi to po cichu dla Ciebie?
+
+00:10:16.680 --> 00:10:21.540
+Prawdopodobnie nigdy w życiu nie skonfigurujesz równoważnika obciążenia, a już polegasz na tysiącach z nich.
+
+00:10:21.740 --> 00:10:28.920
+Za każdym razem, gdy otwierasz Outlooka, dołączasz do rozmowy w Teams lub otwierasz plik w SharePoint, korzystasz z tego właśnie mechanizmu, a wszystko dzieje się poza Twoim wzrokiem.
+
+00:10:29.160 --> 00:10:38.060
+Microsoft 365 uruchamia swoje usługi w architekturze typu Active-Inactive, co oznacza, że kilka kopii usługi działa jednocześnie w centrach danych na całym świecie.
+
+00:10:38.060 --> 00:10:45.220
+Kiedy się łączysz, Twój ruch trafia przez usługę front-door Microsoftu i jest kierowany do najlepiej działającej kopii, omijając wszelkie awarie po drodze.
+
+00:10:45.380 --> 00:10:50.880
+To trasowanie opiera się na tej samej idei, o której mówiliśmy w całym odcinku, tylko na skalę, której większość z nas nigdy nie widzi.
+
+00:10:51.040 --> 00:10:53.740
+Nie wybierasz centrum danych i nie wiesz, które z nich odpowiedziało.
+
+00:10:53.960 --> 00:10:59.100
+Systemy Microsoftu dokonują tego wyboru za Ciebie tysiące razy na sekundę, a Ty zauważasz to tylko wtedy, gdy przestaje działać.
+
+00:10:59.280 --> 00:11:01.900
+Nikt nie otrzymuje na stałe przypisanego serwera na wyłączność.
+
+00:11:01.900 --> 00:11:07.220
+Każde żądanie jest kierowane na nowo przez systemy stworzone tak, aby działały nawet wtedy, gdy całe centrum danych ma gorszy dzień.
+
+00:11:08.060 --> 00:11:10.320
+Warstwa dbałości w sposobie wdrażania aktualizacji.
+
+00:11:10.540 --> 00:11:19.120
+Microsoft wprowadza zmiany w kręgach, zaczynając od małej grupy wewnątrz firmy, potem wszystkich 140 tysięcy pracowników, następnie wczesnych użytkowników i na końcu wszystkich pozostałych.
+
+00:11:19.300 --> 00:11:24.760
+Jeśli coś się zepsuje, dotyczy to najpierw małej grupy, gdzie usterka może zostać wykryta, zanim dotrze do Twojej skrzynki odbiorczej.
+
+00:11:24.880 --> 00:11:27.200
+Poszczególne elementy są również celowo odseparowane.
+
+00:11:27.200 --> 00:11:32.300
+Problem z Exchange nie psuje działania Teams, a kłopoty z wyszukiwarką w SharePoint nie blokują możliwości przesłania pliku.
+
+00:11:32.300 --> 00:11:36.180
+Ta separacja oznacza, że jedna niesprawna część nie może pociągnąć za sobą reszty usługi.
+
+00:11:36.420 --> 00:11:38.780
+Działa to jak hotel, w którym nigdy nie kończą się wolne pokoje.
+
+00:11:38.940 --> 00:11:42.420
+Prosisz o jeden, dostajesz go i nigdy nie dowiadujesz się, na którym piętrze wylądowali inni goście.
+
+00:11:42.620 --> 00:11:46.660
+Więc następnym razem, gdy Teams zadziała bez zarzutów pracowity wtorkowy poranek, będziesz wiedzieć nieco więcej o tym, co dzieje się pod spodem.
+
+00:11:46.800 --> 00:11:49.780
+Odbywa się mnóstwo cichego kierowania ruchem, dzięki czemu nic nie wydaje się przeciążone.
+
+00:11:49.920 --> 00:11:51.620
+To jest ta zaleta i jest ona prawdziwa.
+
+00:11:51.780 --> 00:11:55.360
+A teraz czas na szczerość, bo równoważenie obciążenia nie jest magicznym rozwiązaniem na wszystko.
+
+00:11:55.360 --> 00:11:57.460
+Czego równoważenie obciążenia nie naprawi?
+
+00:11:57.700 --> 00:12:01.060
+Rozwiązuje jeden problem bardzo dobrze i warto znać jego ograniczenia.
+
+00:12:01.300 --> 00:12:03.360
+Żebyś nie oczekiwał więcej niż może dać.
+
+00:12:03.560 --> 00:12:05.120
+Zacznijmy od samego balansera.
+
+00:12:05.380 --> 00:12:12.060
+Może on stać się pojedynczym punktem awarii, jeśli używasz tylko jednego i padnie, wszystko za nim staje się niedostępne, niezależnie od kondycji serwerów.
+
+00:12:12.240 --> 00:12:19.200
+Profesjonalne konfiguracje używają par balanserów lub usług zarządzanych, które są z natury redandentne, co jest jednym z powodów, dla których chmura zdejmuje ten ciężar z Twojej głowy.
+
+00:12:19.420 --> 00:12:22.220
+Więcej serwerów nie zawsze oznacza automatycznie większą prędkość.
+
+00:12:22.220 --> 00:12:27.640
+Jeśli Twoja aplikacja źle współdzieli dane lub baza jest wąskim gardłem, dodawanie maszyn tylko rozprzestrzeni ten sam problem.
+
+00:12:27.900 --> 00:12:31.520
+Możesz mieć 20 serwerów, a i tak działać wolno, bo kolejka nie znajduje się przy wejściu.
+
+00:12:31.700 --> 00:12:35.800
+Sprawdzanie stanu również ma słabe punkty, bo jest tylko tak inteligentne jak to, co każesz mu testować.
+
+00:12:36.020 --> 00:12:39.720
+Skieruj test na niewłaściwy element, a uszkodzony serwer utrzyma swoje miejsce w kolejce.
+
+00:12:39.900 --> 00:12:43.200
+To błąd konfiguracji, a nie wada samej idei, ale zdarza się często.
+
+00:12:43.440 --> 00:12:45.560
+Czas to ostatnia rzecz, o której warto wiedzieć.
+
+00:12:45.560 --> 00:12:53.040
+Gdy balansowanie odbywa się przez DNS, czyli książkę adresową zamieniającą nazwę strony na lokalizację, Twoje urządzenie zapamiętuje wynik przez cache.
+
+00:12:53.200 --> 00:12:58.360
+Ta pamięć sprawia, że ominięcie awarii trwa dłużej niż w przypadku proxy umieszczonego bezpośrednio przed aplikacją.
+
+00:12:58.620 --> 00:13:04.320
+Błędem początkujących, którego chciałbym, abyś unikał, jest zakładanie, że dodanie load balancera automatycznie zapewnia wysoką dostępność.
+
+00:13:04.460 --> 00:13:09.960
+To ważny element układanki, ale niepełna gwarancja, resztą jest Twoja aplikacja, dane i sposób konfiguracji całości.
+
+00:13:09.960 --> 00:13:13.140
+Żadne z tych ograniczeń nie sprawia, że load balancing to zły pomysł.
+
+00:13:13.300 --> 00:13:18.580
+Oznacza to tylko, że jest to narzędzie do konkretnego zadania i jak każde inne, działa najlepiej, gdy wiesz, do czego służy.
+
+00:13:18.940 --> 00:13:20.720
+Podsumowanie i jedno pytanie do Ciebie.
+
+00:13:21.200 --> 00:13:26.220
+Podsumowując, load balancing to rozdzielanie pracy na kilka komputerów, aby żaden z nich nie padł.
+
+00:13:26.420 --> 00:13:32.340
+Load balancer to kierownik ruchu, który wybiera serwer, sprawdza jego stan i przekierowuje ruch, gdy serwer przestaje działać.
+
+00:13:32.340 --> 00:13:42.680
+W Azure to mała rodzina narzędzi, load balancer, application gateway, front door i traffic manager, Microsoft 365 działa na nich wszystkich, więc nie musisz się tym martwić.
+
+00:13:42.800 --> 00:13:44.260
+Teraz mam do Ciebie jedno pytanie.
+
+00:13:44.540 --> 00:13:48.720
+Z którego narzędzia używanego na co dzień korzystasz, nie wiedząc, że po cichu polega ono na load balancingu?
+
+00:13:48.840 --> 00:13:50.200
+Pomyśl o tym i daj mi znać.
+
+00:13:50.380 --> 00:13:57.740
+Jeśli dzięki temu temat stał się mniej przerażający, zasubskrybuj M365FM, aby opanować narzędzia i sposób myślenia kształtujący przyszłość pracy.

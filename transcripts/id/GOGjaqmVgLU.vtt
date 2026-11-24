@@ -1,0 +1,1543 @@
+WEBVTT
+
+00:00:00.200 --> 00:00:05.860
+Selamat datang di podcast N365FM, tempat kami mengeksplorasi orang-orang, ide, dan teknologi yang membentuk masa depan pekerjaan.
+
+00:00:06.720 --> 00:00:08.820
+Mengapa tidak ada yang Anda gunakan secara daring berjalan di satu komputer?
+
+00:00:09.300 --> 00:00:10.920
+Email Anda tidak pernah sampai di satu komputer saja.
+
+00:00:11.340 --> 00:00:14.460
+Email Anda akan sampai di banyak komputer, dan Anda tidak akan pernah tahu komputer mana yang menjauh.
+
+00:00:14.700 --> 00:00:19.020
+Itulah penyeimbangan beban dan alasan tim tidak kewalahan saat separuh perusahaan Anda masuk pada pukul 9 pagi.
+
+00:00:19.240 --> 00:00:24.020
+Anda mungkin mengira ini adalah jaringan mendalam yang diperuntukkan bagi admin, tetapi ini adalah ide sederhana yang sudah Anda gunakan setiap hari.
+
+00:00:24.060 --> 00:00:27.940
+Di akhir ini, Anda akan memahami cara kerjanya dan di mana ia bersembunyi dalam Microsoft 3 dan Azure.
+
+00:00:27.940 --> 00:00:30.940
+Sekarang bayangkan cloud seperti yang kebanyakan dari kita bayangkan.
+
+00:00:31.820 --> 00:00:35.280
+Satu komputer raksasa berada di ruangan dingin di suatu tempat yang dengan tenang menyatukan semua.
+
+00:00:35.820 --> 00:00:39.560
+Gambaran itu salah, dan salah dalam hal yang membuat seluruh topik ini lebih mudah dipahami.
+
+00:00:40.080 --> 00:00:40.980
+Tidak ada satu komputer pun.
+
+00:00:41.480 --> 00:00:46.500
+Ada ribuan komputer biasa yang masing-masing melakukan, sebagian kecil pekerjaan dan sesuatu harus memutuskan siapa yang melakukan apa.
+
+00:00:47.400 --> 00:00:52.820
+Selamat datang di podcast N365FM, tempat kami mengeksplorasi orang-orang, ide, dan teknologi yang membentuk masa depan pekerjaan.
+
+00:00:52.940 --> 00:00:57.620
+Selama 20 menit ke depan, frasa penyeimbangan beban tidak akan lagi terdengar seperti sesuatu yang merupakan sertifikasi.
+
+00:00:58.160 --> 00:00:59.060
+Bayangkan sebuah tokasir.
+
+00:00:59.660 --> 00:01:04.020
+Saat tiga orang muncul sekaligus, antrean terbentuk dan saat orang ke sepuluh tiba, seluruh tempat itu macet.
+
+00:01:04.440 --> 00:01:07.680
+Sekarang buka 12 jalur, dan kerungan yang sama bergerak tanpa ada yang menunggu lama.
+
+00:01:08.080 --> 00:01:11.360
+Komputer memiliki masalah yang sama persis dan penyeimbangan beban adalah 12 jalur.
+
+00:01:11.960 --> 00:01:14.820
+Ini penting saat lebih dari beberapa orang menggunakan aplikasi yang sama pada waktu yang sama.
+
+00:01:15.500 --> 00:01:18.780
+Satu mesin mulai tersedak karena beban, dan setiap orang merasakannya.
+
+00:01:19.600 --> 00:01:23.780
+Satu masalah itulah yang menjadi tujuan penyeimbangan beban diciptakan dan telah menjadi jawabannya selama beberapa dekade.
+
+00:01:24.040 --> 00:01:26.840
+Anda telah menggunakannya sepanjang kehidupan daring Anda tanpa pernah melihat namanya.
+
+00:01:27.940 --> 00:01:32.280
+Setiap pesan yang Anda buat dan setiap pesan yang Anda kirim diserahkan ke satu mesin dari banyak mesin.
+
+00:01:33.000 --> 00:01:36.320
+Pilihan itu terjadi dalam super scan detik, dan itu terjadi pada Anda ribuan kali sehari.
+
+00:01:37.240 --> 00:01:40.420
+Kita juga akan membahas batasan yang sebenarnya, bagian yang sering diabaikan dalam banyak penjelasan.
+
+00:01:41.160 --> 00:01:42.360
+Apa sebenarnya fungsi load balancer?
+
+00:01:43.180 --> 00:01:47.000
+Load balancer adalah traffic director yang berdiri di depan sekelompok komputer yang disebut server.
+
+00:01:47.940 --> 00:01:50.160
+Setiap permintaan akan masuk ke load balancer terlebih dahulu,
+
+00:01:50.480 --> 00:01:53.480
+dan load balancer akan meneruskan permintaan tersebut ke satu server dalam kelompok tersebut.
+
+00:01:53.480 --> 00:01:56.360
+Bagi Anda, permintaan tersebut tampak seperti satu alamat dan satu pintu depan,
+
+00:01:56.360 --> 00:01:58.820
+dan Anda tidak akan pelatau atau peduli mesin mana yang melakukan peduli mesin.
+
+00:01:58.920 --> 00:02:02.320
+Bayangkan tuan rumah di sebuah restoran, Anda tidak akan masuk dan mengambil meja sendiri.
+
+00:02:02.620 --> 00:02:05.320
+Tuan rumah akan melihat apa yang kosong dan akan mengantar Anda ke suatu tempat
+
+00:02:05.320 --> 00:02:07.140
+sehingga tidak ada satupun pelayan yang akan membawa seluruh.
+
+00:02:07.340 --> 00:02:08.500
+Ikuti satu permintaan hingga selesai.
+
+00:02:08.960 --> 00:02:12.020
+Anda mengetuk tautan dan perangkat Anda akan mengirimkan permintaan ke load balancer.
+
+00:02:12.480 --> 00:02:15.780
+Load balancer akan memilih server yang sehat, dan server tersebut akan mengirimkan jawabannya kembar.
+
+00:02:16.200 --> 00:02:18.600
+Seluruh keputusan tersebut hanya membutuhkan waktu sepersekian detik,
+
+00:02:18.660 --> 00:02:20.660
+dan kemudian hal itu terjadi lagi untuk permintaan berikutnya.
+
+00:02:20.660 --> 00:02:22.460
+Yang Anda dapatkan dari hal ini adalah dua hal.
+
+00:02:22.880 --> 00:02:26.020
+Anda mendapatkan kecepatan karena pekerjaan akan tersebar bukan menumpuk di satu mesin.
+
+00:02:26.300 --> 00:02:30.580
+Anda juga mendapatkan daya tahan karena jika server macet atau mati lalu lintas akan langsung menuju ke tempat lain.
+
+00:02:31.240 --> 00:02:34.340
+Load balancer juga menjadi alasan mengapa situs web dapat diperbarui tanpa harus offline.
+
+00:02:34.620 --> 00:02:37.260
+Anda mencabut satu server, menambahnya, memasangnya kembali,
+
+00:02:37.360 --> 00:02:39.300
+dan sisanya tetap melayani orang-orang saat Anda bekerja.
+
+00:02:39.340 --> 00:02:40.700
+Tidak ada seorang pun di luar yang memperhatikan dapat.
+
+00:02:41.100 --> 00:02:42.320
+Kata load di sini berarti pekerjaan.
+
+00:02:42.660 --> 00:02:46.140
+Menyeimbangkan beban berarti memastikan tidak ada satu mesin pun yang membawa lebih dari jatahnya,
+
+00:02:46.140 --> 00:02:48.100
+yang merupakan keseluruhan pekerjaan dalam satu kelimat.
+
+00:02:48.460 --> 00:02:51.540
+Load balancer adalah satu-satunya hal yang dapat diajak bicara oleh dunia luar,
+
+00:02:51.720 --> 00:02:53.960
+dan itulah yang membuat kumpulan di belakangnya tidak terlihat.
+
+00:02:54.520 --> 00:02:55.980
+Pengguna melihat satu nama dan satu pintu,
+
+00:02:56.040 --> 00:02:59.960
+sementara di balik pintu itu jumlah mesin dapat bertambah atau berkurang tanpa seorang pun di luar yang mengetahuinya.
+
+00:03:00.340 --> 00:03:03.300
+Bagian yang dianggap rumit oleh orang-orang adalah bagaimana load balancer memilih server,
+
+00:03:03.700 --> 00:03:05.440
+dan kesanalah tepatnya kita akan menuju seranjutnya.
+
+00:03:06.300 --> 00:03:08.220
+Aturan sederhana yang menentukan kemana lalu lintas kami.
+
+00:03:08.880 --> 00:03:11.520
+Ketika permintaan tiba, load balancer harus memilih server,
+
+00:03:11.520 --> 00:03:13.960
+dan melakukannya menggunakan aturan yang disebut algoritma.
+
+00:03:14.840 --> 00:03:18.600
+Algoritma terdengar menakutkan, tetapi itu berarti serangkaian langkah untuk membuat keputusan.
+
+00:03:19.300 --> 00:03:20.320
+Resep adalah algoritma.
+
+00:03:20.560 --> 00:03:22.720
+Begitu pula cara ponsel Anda memilih rutin di antara lalu lintas.
+
+00:03:23.320 --> 00:03:24.700
+Aturan paling sederhana disebut RONORDO.
+
+00:03:25.180 --> 00:03:26.320
+Load balancer bekerja secara berganti.
+
+00:03:26.780 --> 00:03:28.560
+Ia mengirimkan permintaan pertama ke server 1,
+
+00:03:28.740 --> 00:03:29.780
+permintaan kedua ke server 2,
+
+00:03:30.020 --> 00:03:31.080
+permintaan ketiga ke server 3,
+
+00:03:31.220 --> 00:03:31.960
+lalu kembali ke awal.
+
+00:03:32.300 --> 00:03:34.860
+Ini seperti membagikan kartu di meja dan berfungsi dengan bayi
+
+00:03:34.860 --> 00:03:36.400
+jika semua server memiliki jumlah yang sama.
+
+00:03:36.880 --> 00:03:38.300
+Aturan berikutnya adalah koneksi paling sedikit.
+
+00:03:38.300 --> 00:03:39.520
+Alih-alih bergiliran,
+
+00:03:39.760 --> 00:03:42.220
+load balancer mengirimkan setiap permintaan baru ke server manapun
+
+00:03:42.220 --> 00:03:44.340
+yang memiliki orang paling sedikit yang sudah terhubung.
+
+00:03:44.580 --> 00:03:46.720
+Itu adalah naluri yang sama yang Anda gunakan di supermarket
+
+00:03:46.720 --> 00:03:48.860
+di mana Anda memilih jalur terpendek alih-alih jalur terpendek.
+
+00:03:49.120 --> 00:03:50.740
+Beberapa pengaturan menggunakan versi aturan itu.
+
+00:03:51.220 --> 00:03:54.020
+Jika satu server memiliki lebih banyak memori atau prosesor yang lebih cepat,
+
+00:03:54.100 --> 00:03:55.520
+Anda memberinya bagian lalu lintas yang lebih besar.
+
+00:03:55.820 --> 00:03:58.460
+Ini seperti jalur pembayaran yang lebih besar yang menangani lebih banyak kartu.
+
+00:03:58.840 --> 00:04:01.380
+Satu aturan lagi yang perlu diketahui adalah waktu respons paling sedikit.
+
+00:04:01.900 --> 00:04:02.780
+Alih-alih menghitung koneksi,
+
+00:04:02.780 --> 00:04:05.280
+load balancer memantau seberapa cepat setiap server menjawab
+
+00:04:05.280 --> 00:04:07.120
+dan mengirimkan permintaan berikutnya ke yang tercepat.
+
+00:04:07.780 --> 00:04:09.620
+Itulah teman yang selalu tahu jalur pembayaran mana
+
+00:04:09.620 --> 00:04:11.180
+yang benar-benar bergerak bukan hanya yang terpendek.
+
+00:04:11.800 --> 00:04:13.680
+Sekarang aturan ini terbagi menjadi dua kelompok
+
+00:04:13.680 --> 00:04:14.620
+dan pembagian itu penting.
+
+00:04:15.280 --> 00:04:16.740
+Satu kelompok mengikuti rencana tetap
+
+00:04:16.740 --> 00:04:18.840
+dan tidak pernah melihat seberapa sibuk server sebenarnya
+
+00:04:18.840 --> 00:04:20.880
+yang mudah diatur tetapi mudah diatur
+
+00:04:20.880 --> 00:04:22.700
+tetapi mudah salah ketika bebannya tidak merata.
+
+00:04:23.140 --> 00:04:24.860
+Kelompok lainnya mengawasi beban dan kesehatan
+
+00:04:24.860 --> 00:04:26.680
+setiap server saat ini dan menyesuaikan dengan cepat
+
+00:04:26.680 --> 00:04:28.840
+yang menangani kehidupan nyata yang berantakan dengan lebih baik
+
+00:04:28.840 --> 00:04:30.880
+tetapi membutuhkan lebih baik tetapi membutuhkan lebih banyak benar.
+
+00:04:30.880 --> 00:04:33.960
+Bayangkan situs web bisnis kecil yang berjalan di tiga server yang identik.
+
+00:04:34.520 --> 00:04:35.620
+Ron Robbins sudah cukup di sana
+
+00:04:35.620 --> 00:04:37.480
+dan apapun yang lebih canggih adalah usaha yang sia-sia.
+
+00:04:37.880 --> 00:04:39.100
+Sekarang bayangkan aplikasi video
+
+00:04:39.100 --> 00:04:40.220
+di mana satu permintaan berikutnya
+
+00:04:40.220 --> 00:04:41.940
+membutuhkan waktu sekejap dan permintaan berikutnya.
+
+00:04:42.180 --> 00:04:44.440
+Koneksi paling sedikit menjaga server agar tidak macet
+
+00:04:44.440 --> 00:04:46.480
+menahan semua yang lambat sementara yang lain menganggur.
+
+00:04:47.280 --> 00:04:49.000
+Semua ini hanya berfungsi jika penyeimbang beban
+
+00:04:49.000 --> 00:04:50.580
+mengetahui server mana yang benar-benar aktif
+
+00:04:50.580 --> 00:04:53.160
+dan pertanyaan itu ternyata lebih menarik daripada kedengarannya.
+
+00:04:54.640 --> 00:04:55.720
+Bagaimana ya itu server senangit?
+
+00:04:56.180 --> 00:04:57.800
+Aturan untuk memilih server tidak berguna
+
+00:04:57.800 --> 00:04:59.200
+jika beberapa server tersebut rusak
+
+00:04:59.200 --> 00:05:01.200
+jadi penyeimbang beban menjalankan pemeriksaan kesehatan.
+
+00:05:01.880 --> 00:05:03.300
+Pemeriksaan kesehatan adalah tes kecil
+
+00:05:03.300 --> 00:05:04.820
+yang rutin dikirimkan ke setiap server
+
+00:05:04.820 --> 00:05:06.860
+seperti mengetuk pintu dan menanyakan apakah ada orang di rumah.
+
+00:05:07.400 --> 00:05:08.860
+Jika server menjawab sebagaimana mestinya
+
+00:05:08.860 --> 00:05:10.280
+server akan tetap dalam rotasi
+
+00:05:10.280 --> 00:05:11.020
+dan jika tidak
+
+00:05:11.020 --> 00:05:13.060
+load balancer akan berhenti mengirimkan lalu lintas baru.
+
+00:05:13.960 --> 00:05:15.680
+Peralihan yang memindahkan lalu lintas
+
+00:05:15.680 --> 00:05:17.440
+dari server yang gagal ke server yang sehat
+
+00:05:17.440 --> 00:05:18.260
+disebut failover.
+
+00:05:19.000 --> 00:05:20.540
+Ini adalah bagian dari penyeimbangan beban
+
+00:05:20.540 --> 00:05:22.400
+yang mencegah gagalan kecil menjadi pemandaman besar
+
+00:05:22.400 --> 00:05:23.760
+karena satu server yang mati
+
+00:05:23.760 --> 00:05:25.460
+tidak akan pernah dapat melumpuhkan seluruh aplikasi.
+
+00:05:25.460 --> 00:05:27.560
+Pikirkan kembali toko dengan empat jalur.
+
+00:05:28.120 --> 00:05:29.540
+Lato kasir menjauh, jalur ditutup
+
+00:05:29.540 --> 00:05:30.620
+dan sebuah tanda dipasang
+
+00:05:30.620 --> 00:05:32.120
+sehingga tidak ada yang mengantri di sana.
+
+00:05:33.080 --> 00:05:34.600
+Pelanggan malah mengalir ke jalur terbuka
+
+00:05:34.600 --> 00:05:35.840
+dan dari sisi counter mereka
+
+00:05:35.840 --> 00:05:36.920
+tidak ada yang berubah sama sekali.
+
+00:05:37.360 --> 00:05:38.700
+Ada pengorban nyata yang tersebut dalam mirip.
+
+00:05:39.040 --> 00:05:40.400
+Jikalah balancer terlalu jarang memeriksa
+
+00:05:40.400 --> 00:05:42.160
+server yang sakit akan terus mendapatkan lalu lintas
+
+00:05:42.160 --> 00:05:43.640
+untuk sementara waktu sebelum ada yang menyadari.
+
+00:05:44.380 --> 00:05:46.200
+Jika memeriksa terlalu agresif
+
+00:05:46.200 --> 00:05:48.320
+server yang sedikit lambat akan dikeluarkan dari rotasi
+
+00:05:48.320 --> 00:05:49.540
+yang dapat memperburu keadaan
+
+00:05:49.540 --> 00:05:50.280
+bukan memperbaikinya.
+
+00:05:51.160 --> 00:05:52.600
+Azure menunjukkan cara kerjanya dalam praktik.
+
+00:05:52.600 --> 00:05:54.740
+Load balancernya memeriksa setiap back-end
+
+00:05:54.740 --> 00:05:55.860
+pada interval yang ditetapkan.
+
+00:05:56.040 --> 00:05:57.260
+5 detik secara default di portal
+
+00:05:57.260 --> 00:05:59.360
+dan memerlukan sejumlah kegagalan berturut-turut
+
+00:05:59.360 --> 00:06:00.600
+sebelum landai server tidak sehat.
+
+00:06:01.380 --> 00:06:02.220
+Ketika itu terjadi,
+
+00:06:02.380 --> 00:06:03.600
+koneksi baru pergi ke tempat lain
+
+00:06:03.600 --> 00:06:05.400
+sementara yang sudah ada seringkali tetap berjalan
+
+00:06:05.400 --> 00:06:07.120
+sehingga orang-orang yang sedang mengerjakan tugas
+
+00:06:07.120 --> 00:06:07.720
+tidak terputus.
+
+00:06:08.160 --> 00:06:09.120
+Ada batasan yang jujur di sini.
+
+00:06:09.480 --> 00:06:10.660
+Pemeriksaan kesehatan hanya mengetahui
+
+00:06:10.660 --> 00:06:11.700
+apa yang Anda perintahkan untuk ini.
+
+00:06:12.040 --> 00:06:13.140
+Jika memeriksa port yang salah
+
+00:06:13.140 --> 00:06:14.020
+atau sinyal yang lemah,
+
+00:06:14.360 --> 00:06:15.240
+server bisa saja sakit
+
+00:06:15.240 --> 00:06:16.040
+dan tetap terlihat sehat
+
+00:06:16.040 --> 00:06:17.700
+yang berarti server terus menerima lalu lintas
+
+00:06:22.600 --> 00:06:23.660
+baik keseluruhan sistem berperilaki.
+
+00:06:23.900 --> 00:06:24.960
+Lakukan sesuatu detail dengan benar
+
+00:06:24.960 --> 00:06:26.580
+dan banyak mas sendirinya akan hilang diri.
+
+00:06:27.020 --> 00:06:27.460
+Sejauh ini,
+
+00:06:27.660 --> 00:06:29.000
+kami telah memperlakukan setiap port balancer
+
+00:06:29.000 --> 00:06:30.020
+sebagai jenis alat yang sama
+
+00:06:30.020 --> 00:06:31.500
+dan itulah hal berikutnya yang harus diperbaiki.
+
+00:06:32.260 --> 00:06:33.900
+Dua jenis dan mengapa perbedaannya penting.
+
+00:06:34.560 --> 00:06:36.420
+Tidak semua lot balancer bekerja dengan cara yang sama
+
+00:06:36.420 --> 00:06:38.380
+dan perbedaannya terletak pada seberapa banyak permintaan
+
+00:06:38.380 --> 00:06:39.220
+Anda yang perlu diperiksa.
+
+00:06:40.240 --> 00:06:42.320
+Beberapa orang hanya melihat sekilas bagian luar amplop
+
+00:06:42.320 --> 00:06:43.520
+dan beberapa membukanya
+
+00:06:43.520 --> 00:06:44.760
+dan membaca surat di dalamnya.
+
+00:06:45.440 --> 00:06:46.920
+Jenis pertama bekerja perapisan empat.
+
+00:06:47.920 --> 00:06:49.340
+Ia hanya melihat alamat dan port
+
+00:06:49.340 --> 00:06:51.120
+sama seperti pemilah surat membaca kode pos
+
+00:06:51.120 --> 00:06:52.120
+dan meneruskan permintaan
+
+00:06:52.120 --> 00:06:53.780
+tanpa peduli apa yang ada di dalamnya.
+
+00:06:54.900 --> 00:06:56.800
+Cepat, sederhana, dan untuk banyak pekerjaan
+
+00:06:56.800 --> 00:06:57.700
+hanya itu yang Anda butuh.
+
+00:06:58.100 --> 00:06:59.520
+Jenis kedua bekerja pada lapisan tujuh
+
+00:06:59.520 --> 00:07:00.720
+dan ia benar-benar membaca permintaan.
+
+00:07:00.940 --> 00:07:02.460
+Ia dapat melihat bahwa satu permintaan
+
+00:07:02.460 --> 00:07:04.560
+meminta gambar sementara yang lain mencoba untuk membayar
+
+00:07:04.560 --> 00:07:05.960
+dan ia dapat mengirim masing-masing
+
+00:07:05.960 --> 00:07:06.920
+ke tim server yang berbeda.
+
+00:07:07.320 --> 00:07:08.460
+Begitulah cara satu alamat web
+
+00:07:08.460 --> 00:07:10.360
+dapat dengan tenang mengarahkan Anda ke tempat yang tepat
+
+00:07:10.360 --> 00:07:11.280
+berdasarkan apa yang Anda minta.
+
+00:07:11.820 --> 00:07:13.180
+Contoh konkretnya adalah seperti ini.
+
+00:07:13.520 --> 00:07:14.680
+Permintaan gambar situs,
+
+00:07:14.960 --> 00:07:16.140
+Anda masuk ke server gambar,
+
+00:07:16.140 --> 00:07:17.440
+dan permintaan halaman pembayaran
+
+00:07:17.440 --> 00:07:18.440
+masuk ke server pembayaran.
+
+00:07:18.580 --> 00:07:19.820
+Semuanya di bari alamat web yang sama.
+
+00:07:20.240 --> 00:07:21.740
+Tidak seorang pun yang mengetik alamat itu
+
+00:07:21.740 --> 00:07:23.720
+tahu bahwa dua tim yang berbeda baru saja menanganinya.
+
+00:07:24.460 --> 00:07:25.560
+Lapisan tujuh juga mengungkap
+
+00:07:25.560 --> 00:07:27.040
+beberapa hal yang penting di dunia nyata.
+
+00:07:27.460 --> 00:07:29.240
+Ia dapat menangani sertifikat keamanan Anda
+
+00:07:29.240 --> 00:07:30.760
+di satu tempat, bukan di setiap server,
+
+00:07:31.080 --> 00:07:32.560
+dan dapat memeriksa permintaan yang masuk
+
+00:07:32.560 --> 00:07:34.380
+serta memblokir permintaan yang tidak diinginkan
+
+00:07:34.380 --> 00:07:35.420
+sebelum mencapai aplikasi Anda.
+
+00:07:36.080 --> 00:07:36.880
+Di sini letak kompromit.
+
+00:07:37.160 --> 00:07:39.020
+Lapisan keempat adalah opsi yang cepat, murah,
+
+00:07:39.200 --> 00:07:39.980
+dan tanpa embel-embel.
+
+00:07:40.080 --> 00:07:41.760
+Sedangkan lapisan ketujuh adalah opsi yang lebih cerdas
+
+00:07:41.760 --> 00:07:43.100
+yang memerlukan sedikit lebih banyak pekerjaan
+
+00:07:43.100 --> 00:07:43.900
+pada setiap permintaan.
+
+00:07:44.060 --> 00:07:45.440
+Tidak ada yang menang dalam setiap kasus.
+
+00:07:45.660 --> 00:07:47.520
+Dan memilih di antara keduanya benar-benar bergantung
+
+00:07:47.520 --> 00:07:49.120
+pada seberapa besar Anda membutuhkan penyeimbang
+
+00:07:49.120 --> 00:07:50.120
+untuk memahami apa yang Anda miliki.
+
+00:07:50.260 --> 00:07:51.600
+Dalam prakteknya, banyak sistem nyata
+
+00:07:51.600 --> 00:07:52.300
+menggunakan keduanya.
+
+00:07:52.980 --> 00:07:54.600
+Penyeimbang lapisan ketujuh membuat pangkiran
+
+00:07:54.600 --> 00:07:56.040
+perutian cerdas di bagian depan.
+
+00:07:56.140 --> 00:07:57.580
+Dan penyeimbang lapisan keempat menyebarkan
+
+00:07:57.580 --> 00:07:59.480
+lalu lintas mentah ke seluruh mesin di belakangnya.
+
+00:07:59.820 --> 00:08:01.480
+Masih-masih melakukan tugasnya dengan sebaik-baiknya.
+
+00:08:02.180 --> 00:08:03.620
+Dengan kedua jenis penyeimbang tersebut,
+
+00:08:03.620 --> 00:08:04.940
+akhirnya kita dapat menyebutkan alat
+
+00:08:04.940 --> 00:08:06.260
+yang sebenarnya akan Anda temui di Azure
+
+00:08:06.260 --> 00:08:07.480
+karena Azure tidak memberi Anda satu,
+
+00:08:07.580 --> 00:08:08.360
+tetapi satu keluarga.
+
+00:08:08.820 --> 00:08:11.360
+Di Azure, Azure tidak memiliki satu penyeimbang beban.
+
+00:08:11.800 --> 00:08:13.340
+Ia memiliki keluarga kecil penyeimbang beban
+
+00:08:13.340 --> 00:08:14.960
+dan masing-masing dibuat untuk tugas yang berbeda.
+
+00:08:15.040 --> 00:08:16.980
+Memilih yang tepat bergantung pada dua hal sederhana.
+
+00:08:17.300 --> 00:08:19.120
+Apakah lalu lintas Anda adalah lalu lintas web
+
+00:08:19.120 --> 00:08:20.860
+dan apakah aplikasi Anda berada di satu wilayah
+
+00:08:20.860 --> 00:08:21.940
+atau tersebar di seluruh dunia.
+
+00:08:22.140 --> 00:08:24.080
+Yang pertama disebut Azure Load Balancer.
+
+00:08:24.800 --> 00:08:26.040
+Ini adalah anggota keluarga Fastplan.
+
+00:08:26.700 --> 00:08:27.920
+Ia bekerja pada lapisan keempat.
+
+00:08:27.920 --> 00:08:29.940
+Ia menyebarkan lalu lintas jaringan di seluruh mesin virtual
+
+00:08:29.940 --> 00:08:31.540
+dan dibuat untuk volume yang sangat besar
+
+00:08:31.540 --> 00:08:32.580
+dengan penundaan yang sangat sedikit.
+
+00:08:33.160 --> 00:08:34.920
+Ia juga menyebar di seluruh zona ketersediaan
+
+00:08:34.920 --> 00:08:37.060
+yang merupakan lokasi fisik terpisah di dalam suatu wilayah
+
+00:08:37.060 --> 00:08:39.080
+jadi jika satu zona gagal, semuanya tidak akan berhenti.
+
+00:08:39.520 --> 00:08:41.100
+Berikutnya adalah Azure Application Gateway
+
+00:08:41.100 --> 00:08:42.280
+yang merupakan regional yang cerdas.
+
+00:08:42.700 --> 00:08:43.940
+Ia bekerja pada lapisan ke-7
+
+00:08:43.940 --> 00:08:45.280
+sehingga dapat membaca URL Anda
+
+00:08:45.280 --> 00:08:46.440
+merutakan berdasarkan jalur,
+
+00:08:46.600 --> 00:08:47.860
+menangani sertifikat keamanan Anda
+
+00:08:47.860 --> 00:08:49.400
+dan menambahkan firewall aplikasi web.
+
+00:08:49.880 --> 00:08:51.920
+Gunakan ini jika aplikasi Anda berada di satu wilayah
+
+00:08:51.920 --> 00:08:53.240
+tetapi Anda perlu membuat keputusan
+
+00:08:53.240 --> 00:08:54.460
+tentang setiap permintaan yang masuk.
+
+00:08:54.920 --> 00:08:56.600
+Lalu ada Azure Front Door yang bersifat global.
+
+00:08:56.600 --> 00:08:59.340
+Ia mengirim setiap pengguna ke titik masuk sehat terdekat
+
+00:08:59.340 --> 00:09:00.280
+di jaringan Microsoft
+
+00:09:00.280 --> 00:09:01.600
+menangani keamanan di tepi
+
+00:09:01.600 --> 00:09:03.180
+dan menyimpan konten dalam CC
+
+00:09:03.180 --> 00:09:05.080
+sehingga kunjungan berulang kembali dengan cepat.
+
+00:09:05.820 --> 00:09:06.980
+Microsoft mengatakan bahwa
+
+00:09:06.980 --> 00:09:09.560
+ia berjalan di lebih dari 118 lokasi Edge
+
+00:09:09.560 --> 00:09:12.200
+yang tersebar di sekitar 100 wilayah metro di seluruh dunia.
+
+00:09:12.860 --> 00:09:14.280
+Terakhir adalah Azure Traffic Manager
+
+00:09:14.280 --> 00:09:15.680
+dan cara kerjanya berbeda dari yang lain.
+
+00:09:16.200 --> 00:09:17.380
+Ia sama sekali tidak membawa lintasan.
+
+00:09:18.100 --> 00:09:19.340
+Ia hanya menjawab pertanyaan tentang
+
+00:09:19.340 --> 00:09:20.680
+di mana aplikasi Anda berada
+
+00:09:20.680 --> 00:09:22.600
+dengan memberikan perangkat Anda alamat lokasi yang sehat
+
+00:09:22.600 --> 00:09:24.420
+lalu perangkat Anda terhubung langsung ke server tersebut
+
+00:09:24.420 --> 00:09:26.520
+tanpa Traffic Manager pernah melihat lalu lintas tersebut.
+
+00:09:27.140 --> 00:09:29.040
+Perbedaan itu lebih penting daripada kedenyarannya
+
+00:09:29.040 --> 00:09:31.200
+karena Traffic Manager hanya menunjukkan jalan
+
+00:09:31.200 --> 00:09:33.900
+lalu lintas berjalan langsung dari pengguna ke server
+
+00:09:33.900 --> 00:09:35.200
+yang membuatnya tetap cepat
+
+00:09:35.200 --> 00:09:36.720
+tetapi itu juga berarti failover
+
+00:09:36.720 --> 00:09:38.520
+bergantung pada seberapa cepat perangkat
+
+00:09:38.520 --> 00:09:39.780
+menyegarkan memori alamat tersebut.
+
+00:09:40.840 --> 00:09:41.860
+Meski terdengar berbeda
+
+00:09:41.860 --> 00:09:43.560
+keempatnya menjawab pertanyaan dasar yang sama.
+
+00:09:43.980 --> 00:09:45.280
+Mereka memutuskan mesin sehat mana
+
+00:09:45.280 --> 00:09:46.920
+yang harus mendapatkan permintaan berikutnya
+
+00:09:46.920 --> 00:09:48.480
+dan mereka memeriksa apakah mesin tersebut
+
+00:09:48.480 --> 00:09:49.520
+masih sehat sebelum mereka mencari.
+
+00:09:49.720 --> 00:09:50.840
+Detail yang perlu diingat adalah
+
+00:09:50.840 --> 00:09:52.320
+bahwa beban kerja nyata seringkali
+
+00:09:52.320 --> 00:09:53.620
+menggunakan lebih dari satu sekaligus.
+
+00:09:53.620 --> 00:09:54.840
+Bayangkan sebuah perusahaan
+
+00:09:54.840 --> 00:09:55.760
+yang menjalankan situs web
+
+00:09:55.760 --> 00:09:56.480
+untuk pelanggan di seluruh.
+
+00:09:56.940 --> 00:09:58.380
+Front Door mengarahkan setiap pengunjung
+
+00:09:58.380 --> 00:09:59.100
+ke wilayah terdekat
+
+00:09:59.100 --> 00:10:00.540
+application gateway merutekan mereka
+
+00:10:00.540 --> 00:10:02.020
+melalui URL di dalam wilayah tersebut
+
+00:10:02.020 --> 00:10:03.800
+dan Load Balancer menyebarkan pekerjaan
+
+00:10:03.800 --> 00:10:05.160
+ke seluruh mesin virtual di belakangnya.
+
+00:10:05.740 --> 00:10:06.900
+Tiga alat, tiga pekerjaan
+
+00:10:06.900 --> 00:10:08.040
+satu pengalaman yang lancar
+
+00:10:08.040 --> 00:10:08.940
+bagi orang yang mengeklik.
+
+00:10:09.460 --> 00:10:10.440
+Dan kabar baiknya di sini adalah
+
+00:10:10.440 --> 00:10:11.660
+kita tidak perlu membangun semua ini
+
+00:10:11.660 --> 00:10:12.780
+untuk mendapatkan manfaat dari.
+
+00:10:13.780 --> 00:10:15.560
+Bagaimana Microsoft 365 melakukan ini
+
+00:10:15.560 --> 00:10:16.360
+secara diam-diam untuk Anda?
+
+00:10:16.700 --> 00:10:17.660
+Anda mungkin tidak akan pernah
+
+00:10:17.660 --> 00:10:19.580
+mengonfigurasi penyeimbang beban sumur hidup Anda
+
+00:10:19.580 --> 00:10:20.420
+dan Anda sudah bergantung pada
+
+00:10:20.420 --> 00:10:21.360
+ribuan penyeimbang beban sumur.
+
+00:10:21.820 --> 00:10:22.940
+Tiap kali Anda membuka Outlook,
+
+00:10:23.180 --> 00:10:24.240
+bergabung dengan panggilan Teams
+
+00:10:24.240 --> 00:10:25.120
+atau membuka file,
+
+00:10:25.580 --> 00:10:26.980
+di SharePoint Anda bergantung pada mesin ini
+
+00:10:26.980 --> 00:10:28.360
+dan semuanya terjadi tanpa terlihat.
+
+00:10:29.060 --> 00:10:31.180
+Microsoft 365 menjalankan layanannya
+
+00:10:31.180 --> 00:10:32.080
+dalam apa yang disebut
+
+00:10:32.080 --> 00:10:33.160
+desain aktif tidak aktif
+
+00:10:33.160 --> 00:10:34.760
+yang berarti beberapa salinan layanan
+
+00:10:34.760 --> 00:10:35.780
+selalu berjalan sekaligus
+
+00:10:35.780 --> 00:10:36.800
+di pusat data yang tersebar
+
+00:10:36.800 --> 00:10:37.600
+di seluruh dunia.
+
+00:10:38.420 --> 00:10:39.200
+Saat Anda terhubung,
+
+00:10:39.440 --> 00:10:40.260
+lalu lintas Anda masuk
+
+00:10:40.260 --> 00:10:41.700
+melalui layanan pintu depan Microsoft
+
+00:10:41.700 --> 00:10:43.140
+dan dilutekan kesalinan kerja terbaik
+
+00:10:43.140 --> 00:10:44.140
+untuk menghindari kegagalan
+
+00:10:44.140 --> 00:10:45.120
+apapun di sepanjang jalan.
+
+00:10:45.120 --> 00:10:46.260
+Perhubungan tersebut
+
+00:10:46.260 --> 00:10:47.240
+adalah ide yang sama
+
+00:10:47.240 --> 00:10:47.960
+yang telah kita bicarakan
+
+00:10:47.960 --> 00:10:48.540
+di semua episode,
+
+00:10:48.820 --> 00:10:49.600
+hanya saja dalam sekalian
+
+00:10:49.600 --> 00:10:50.240
+sebuah yang besar dari kita
+
+00:10:50.240 --> 00:10:50.780
+tidak pernah lihat.
+
+00:10:51.140 --> 00:10:52.220
+Anda tidak memilih pusat data
+
+00:10:52.220 --> 00:10:53.060
+dan Anda tidak tahu
+
+00:10:53.060 --> 00:10:53.560
+yang mana yang menjap.
+
+00:10:53.900 --> 00:10:54.720
+Sistem Microsoft membuat
+
+00:10:54.720 --> 00:10:55.700
+pilihan itu untuk Anda
+
+00:10:55.700 --> 00:10:56.660
+ribuan kali per detik
+
+00:10:56.660 --> 00:10:57.660
+dan Anda hanya menyadarinya
+
+00:10:57.660 --> 00:10:58.320
+saat layanan tersebut
+
+00:10:58.320 --> 00:10:58.980
+berhenti berfungsi.
+
+00:10:59.460 --> 00:11:00.180
+Tidak ada yang diberi server
+
+00:11:00.180 --> 00:11:01.400
+tetap untuk mereka gunakan sendiri.
+
+00:11:02.200 --> 00:11:02.720
+Setiap permintaan
+
+00:11:02.720 --> 00:11:03.440
+diajukan setiap saat
+
+00:11:03.440 --> 00:11:04.220
+oleh sistem yang dibuat
+
+00:11:04.220 --> 00:11:05.040
+agar terus berjalan
+
+00:11:05.040 --> 00:11:06.200
+bahkan ketika seluruh pusat data
+
+00:11:06.200 --> 00:11:07.100
+mengalami hari yang buruk
+
+00:11:07.100 --> 00:11:08.520
+adalah lapisan perawatan kedua
+
+00:11:08.520 --> 00:11:09.620
+dalam cara pembaruan dirilis.
+
+00:11:10.380 --> 00:11:11.260
+Microsoft meluncurkan
+
+00:11:11.260 --> 00:11:12.740
+perubahan secara bertahap
+
+00:11:12.740 --> 00:11:13.240
+dimulai dengan
+
+00:11:13.240 --> 00:11:13.840
+sekelompok kecil
+
+00:11:13.840 --> 00:11:14.600
+di dalam perusahaan
+
+00:11:14.600 --> 00:11:15.860
+kemudian ke 140 ribu
+
+00:11:15.860 --> 00:11:16.520
+karyawan Microsoft
+
+00:11:16.520 --> 00:11:17.460
+kemudian pengguna awal
+
+00:11:17.460 --> 00:11:18.740
+dan terakhir semua orang.
+
+00:11:19.560 --> 00:11:20.280
+Jika ada yang rusak
+
+00:11:20.280 --> 00:11:21.060
+rusakan tersebut
+
+00:11:21.060 --> 00:11:21.720
+akan terjadi pada
+
+00:11:21.720 --> 00:11:22.460
+sekelompok kecil orang
+
+00:11:22.460 --> 00:11:22.960
+terlebih dahulu
+
+00:11:22.960 --> 00:11:23.720
+sehingga dapat ditangani
+
+00:11:23.720 --> 00:11:24.400
+sebelum mencapai kotak.
+
+00:11:24.880 --> 00:11:25.780
+Bagian-bagian tersebut
+
+00:11:25.780 --> 00:11:26.600
+juga sengaja dipisahkan.
+
+00:11:27.420 --> 00:11:28.160
+Masalah dengan actions
+
+00:11:28.160 --> 00:11:29.200
+tidak merusak tim seinti
+
+00:11:29.200 --> 00:11:30.620
+dan masalah pencarian di SharePoint
+
+00:11:30.620 --> 00:11:31.480
+tidak menghentikan Anda
+
+00:11:31.480 --> 00:11:32.100
+mengunggah file.
+
+00:11:32.580 --> 00:11:33.280
+Pemisahan itu berarti
+
+00:11:33.280 --> 00:11:34.220
+satu bagian yang rusak
+
+00:11:34.220 --> 00:11:35.000
+tidak dapat menyeret
+
+00:11:35.000 --> 00:11:35.920
+lainan-lainnya bersamanya.
+
+00:11:36.600 --> 00:11:37.360
+Ia bekerja seperti hotel
+
+00:11:37.360 --> 00:11:38.280
+yang tidak pernah kehabisan kamar.
+
+00:11:38.740 --> 00:11:39.420
+Anda meminta satu
+
+00:11:39.420 --> 00:11:40.240
+Anda mendapatkan satu
+
+00:11:40.240 --> 00:11:40.960
+dan Anda tidak pernah tahu
+
+00:11:40.960 --> 00:11:42.380
+di lantai mana tamu lainnya menginap.
+
+00:11:42.740 --> 00:11:43.640
+Lain kali tim sebekerja
+
+00:11:43.640 --> 00:11:44.520
+pada serasa bagian sibuk
+
+00:11:44.520 --> 00:11:45.220
+Anda akan tahu sedikit
+
+00:11:45.220 --> 00:11:46.440
+tentang apa yang terjadi di bawahnya.
+
+00:11:46.780 --> 00:11:47.380
+Banyak pengalihan
+
+00:11:47.380 --> 00:11:48.360
+lalu lintas yang tenang terjadi
+
+00:11:48.360 --> 00:11:48.880
+sehingga tidak ada
+
+00:11:48.880 --> 00:11:49.720
+yang terasa sibuk sama sekali.
+
+00:11:50.140 --> 00:11:51.000
+Sisi bagiannya itu nyata.
+
+00:11:51.560 --> 00:11:52.660
+Sekarang untuk bagian yang jujur
+
+00:11:52.660 --> 00:11:53.520
+karena penyeimbangan beban
+
+00:11:53.520 --> 00:11:54.700
+bukanlah perbaikan aja untuk semua.
+
+00:11:55.420 --> 00:11:56.000
+Apa yang tidak dapat
+
+00:11:56.000 --> 00:11:57.080
+diperbaiki oleh penyeimbangan lho?
+
+00:11:57.480 --> 00:11:58.200
+Penyeimbangan beban
+
+00:11:58.200 --> 00:11:59.180
+memecahkan satu masalah
+
+00:11:59.180 --> 00:11:59.860
+dengan sangat baik
+
+00:11:59.860 --> 00:12:01.180
+dan sisinya patut diketahui.
+
+00:12:01.380 --> 00:12:02.260
+Jadi Anda tidak mengharapkan
+
+00:12:02.260 --> 00:12:03.120
+lebih dari yang dapat diberikan.
+
+00:12:03.640 --> 00:12:04.680
+Mulai dengan penyeimbang itu sendiri.
+
+00:12:05.020 --> 00:12:06.000
+Penyeimbang itu bisa menjadi
+
+00:12:06.000 --> 00:12:06.880
+satu titik kegagalan
+
+00:12:06.880 --> 00:12:08.000
+dan jika Anda hanya menjalankan
+
+00:12:08.000 --> 00:12:08.620
+satu dan mati
+
+00:12:08.620 --> 00:12:09.520
+semua yang ada di belakangnya
+
+00:12:09.520 --> 00:12:10.520
+menjadi tidak dapat dijangkau
+
+00:12:10.520 --> 00:12:11.740
+tidak perlu seberapa sehat servernya.
+
+00:12:12.320 --> 00:12:12.880
+Pengaturan nyata
+
+00:12:12.880 --> 00:12:14.140
+menjalankan penyeimbangan berpasangan
+
+00:12:14.140 --> 00:12:15.300
+atau menggunakan layanan terkelola
+
+00:12:15.300 --> 00:12:16.440
+yang telah dibuat agar redundan
+
+00:12:16.440 --> 00:12:17.420
+yang merupakan salah satu alasan
+
+00:12:17.420 --> 00:12:18.240
+penyeimbangan menghilangkan
+
+00:12:18.240 --> 00:12:19.200
+kekhawatiran ini dari Anda.
+
+00:12:19.760 --> 00:12:20.800
+Lebih banyak server juga tidak
+
+00:12:20.800 --> 00:12:22.020
+secara otomatis berarti lebih cepat.
+
+00:12:22.020 --> 00:12:23.540
+Jika aplikasi Anda berbagi data
+
+00:12:23.540 --> 00:12:23.940
+dengan buruk
+
+00:12:23.940 --> 00:12:24.980
+atau basis data Anda adalah
+
+00:12:24.980 --> 00:12:25.740
+hambatan sebenarnya
+
+00:12:25.740 --> 00:12:26.660
+menambahkan mesin dapat
+
+00:12:26.660 --> 00:12:27.680
+menyebarkan masalah yang sama.
+
+00:12:28.000 --> 00:12:29.220
+Anda dapat memiliki 20 server
+
+00:12:29.220 --> 00:12:29.820
+dan tutup lambat
+
+00:12:29.820 --> 00:12:30.800
+karena antrennya tidak berada
+
+00:12:30.800 --> 00:12:31.360
+di pintu depan.
+
+00:12:31.660 --> 00:12:32.580
+Pemeriksaan kesehatan juga
+
+00:12:32.580 --> 00:12:33.420
+memiliki titik lemah
+
+00:12:33.420 --> 00:12:34.360
+karena mereka hanya sepintar
+
+00:12:34.360 --> 00:12:35.160
+apa yang Anda perintahkan
+
+00:12:35.160 --> 00:12:35.580
+untuk diuji.
+
+00:12:35.960 --> 00:12:36.860
+Tunjuk titik yang salah
+
+00:12:36.860 --> 00:12:37.660
+dan server yang rusak
+
+00:12:37.660 --> 00:12:39.000
+akan tetap berada di tempatnya.
+
+00:12:39.660 --> 00:12:40.780
+Itu adalah kesalahan konfigurasi
+
+00:12:40.780 --> 00:12:41.960
+bukan cacat pada ide tersebut
+
+00:12:41.960 --> 00:12:43.040
+tetapi itu adalah kesalahan yang umum.
+
+00:12:43.680 --> 00:12:44.500
+Waktu adalah hal terakhir
+
+00:12:44.500 --> 00:12:45.060
+yang perlu diketahui.
+
+00:12:45.520 --> 00:12:46.560
+Ketika penyeimbangan terjadi
+
+00:12:46.560 --> 00:12:47.320
+melalui DNS
+
+00:12:47.320 --> 00:12:48.040
+buku alamat
+
+00:12:48.040 --> 00:12:49.120
+yang mengubah nama situs web
+
+00:12:49.120 --> 00:12:49.840
+menjadi lokasi
+
+00:12:49.840 --> 00:12:50.800
+perangkat Anda mengingat
+
+00:12:50.800 --> 00:12:51.780
+jawaban itu untuk sementara
+
+00:12:51.780 --> 00:12:52.580
+waktu karena cacing.
+
+00:12:53.320 --> 00:12:53.820
+Nomor itu berarti
+
+00:12:53.820 --> 00:12:54.880
+kegagalan dapat memakan
+
+00:12:54.880 --> 00:12:55.540
+waktu lebih lama
+
+00:12:55.540 --> 00:12:56.400
+untuk diatasi daripada
+
+00:12:56.400 --> 00:12:57.280
+jika menggunakan proksi
+
+00:12:57.280 --> 00:12:58.500
+yang berada tepat di depan aplikasi Anda.
+
+00:12:58.740 --> 00:12:59.420
+Kesalahan pemulaan
+
+00:12:59.420 --> 00:13:00.080
+yang paling ingin saya hindari
+
+00:13:00.080 --> 00:13:01.000
+adalah berasumsi bahwa
+
+00:13:01.000 --> 00:13:02.060
+menambahkan penyeimbangan beban
+
+00:13:02.060 --> 00:13:02.700
+secara otomatis
+
+00:13:02.700 --> 00:13:03.740
+membuat Anda sangat tersedia.
+
+00:13:04.320 --> 00:13:05.400
+Itu adalah satu bagian penting
+
+00:13:05.400 --> 00:13:06.120
+dari gambaran besar
+
+00:13:06.120 --> 00:13:07.160
+bukan jaminan keseluruhan
+
+00:13:07.160 --> 00:13:08.100
+dan gambaran lainnya adalah
+
+00:13:08.100 --> 00:13:09.220
+aplikasi Anda, data Anda
+
+00:13:09.220 --> 00:13:10.160
+dan cara Anda mengatur sepulit.
+
+00:13:10.160 --> 00:13:11.580
+Tidak satu pun dari batasan ini
+
+00:13:11.580 --> 00:13:12.680
+yang menyediakan penyeimbangan beban sebagai
+
+00:13:12.680 --> 00:13:13.620
+itu hanya berarti
+
+00:13:13.620 --> 00:13:14.740
+itu adalah alat dengan tugas
+
+00:13:14.740 --> 00:13:15.740
+dan seperti alat apapun
+
+00:13:15.740 --> 00:13:16.320
+penyeimbangan beban
+
+00:13:16.320 --> 00:13:16.900
+bekerja paling baik
+
+00:13:16.900 --> 00:13:18.140
+jika Anda tahu persis apa tugasnya.
+
+00:13:18.700 --> 00:13:19.820
+Rekab dan satu pertanyaan
+
+00:13:19.820 --> 00:13:20.280
+untuk Anda.
+
+00:13:20.940 --> 00:13:21.880
+Jadi untuk menyatukannya
+
+00:13:21.880 --> 00:13:22.720
+penyeimbangan beban
+
+00:13:22.720 --> 00:13:23.720
+adalah berbagi pekerjaan
+
+00:13:23.720 --> 00:13:24.440
+di beberapa komputer
+
+00:13:24.440 --> 00:13:25.060
+sehingga tidak ada
+
+00:13:25.060 --> 00:13:25.760
+satu pun yang jatuh.
+
+00:13:26.740 --> 00:13:27.480
+Load Balancer adalah
+
+00:13:27.480 --> 00:13:28.460
+direktur lalu lintas
+
+00:13:28.460 --> 00:13:29.140
+yang memilih server
+
+00:13:29.140 --> 00:13:30.180
+memeriksa apakah server
+
+00:13:30.180 --> 00:13:30.880
+dalam kondisi baik
+
+00:13:30.880 --> 00:13:31.880
+dan mengalihkan rute jika tidak.
+
+00:13:32.520 --> 00:13:32.940
+Di Azure
+
+00:13:32.940 --> 00:13:34.320
+itu adalah keluarga kecil alat
+
+00:13:34.320 --> 00:13:35.100
+Load Balancer
+
+00:13:35.100 --> 00:13:36.060
+Application Gateway
+
+00:13:36.060 --> 00:13:36.600
+Front Door
+
+00:13:36.600 --> 00:13:37.700
+dan Traffic Manager
+
+00:13:37.700 --> 00:13:38.780
+dan Microsoft 365
+
+00:13:38.780 --> 00:13:39.900
+sudah berjalan di semuanya
+
+00:13:39.900 --> 00:13:41.180
+jadi Anda tidak perlu
+
+00:13:41.180 --> 00:13:42.060
+memikirkannya.
+
+00:13:42.900 --> 00:13:43.560
+Sekarang saya punya
+
+00:13:43.560 --> 00:13:44.320
+satu pertanyaan untuk Tuhan.
+
+00:13:44.740 --> 00:13:45.560
+Alat apa yang Anda gunakan
+
+00:13:45.560 --> 00:13:46.320
+setiap hari yang tidak Anda
+
+00:13:46.320 --> 00:13:47.220
+sedari diam-diam bergantung
+
+00:13:47.220 --> 00:13:48.200
+pada Load Balancing?
+
+00:13:48.760 --> 00:13:49.660
+Pikirkan dan beritahu saya.
+
+00:13:50.080 --> 00:13:50.520
+Jika ini
+
+00:13:50.520 --> 00:13:51.360
+membuat topik ini
+
+00:13:51.360 --> 00:13:52.320
+tidak terlalu menakutkan
+
+00:13:52.320 --> 00:13:53.900
+berlangganan M365 FM
+
+00:13:53.900 --> 00:13:54.820
+untuk menguasai alat
+
+00:13:54.820 --> 00:13:55.400
+dan pola pikir
+
+00:13:55.400 --> 00:13:56.840
+yang bentuk masa depan pekerjaan.

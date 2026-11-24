@@ -1,0 +1,949 @@
+WEBVTT
+
+00:00:00.440 --> 00:00:04.620
+Bienvenue dans le podcast M365FM, nous explorons les personnes, les idées et les technologies
+
+00:00:04.620 --> 00:00:05.740
+qui façonnent l'avenir du travail.
+
+00:00:06.680 --> 00:00:09.440
+Pourquoi rien de ce que vous utilisez en ligne ne fonctionne sur un seul ordinateur ?
+
+00:00:09.440 --> 00:00:11.100
+Vos emails n'atterrissent jamais sur un seul ordinateur.
+
+00:00:11.400 --> 00:00:14.300
+Ils atterrissent sur une multitude d'entre eux, et vous ne voyez jamais lequel a répondu.
+
+00:00:14.660 --> 00:00:16.940
+C'est l'équilibrage de charge, et c'est la raison pour laquelle les équipes ne tombent
+
+00:00:16.940 --> 00:00:19.080
+pas en panne lorsque la moitié de votre entreprise se connecte à 9h du matin.
+
+00:00:19.320 --> 00:00:21.900
+Vous pourriez penser qu'il s'agit d'un réseau profond réservé aux administrateurs,
+
+00:00:21.960 --> 00:00:23.760
+mais c'est une idée simple que vous utilisez déjà tous les jours.
+
+00:00:24.040 --> 00:00:26.660
+A la fin de cet article, vous comprendrez comment cela fonctionne et où il se cache
+
+00:00:26.660 --> 00:00:30.440
+dans Microsoft 365 et Azure. Maintenant, imaginez le cloud tel que la plupart d'entre nous,
+
+00:00:30.500 --> 00:00:30.940
+l'imagine au premier.
+
+00:00:31.660 --> 00:00:34.880
+Un ordinateur géant se trouve dans une pièce froide quelque part, gardant tout ensemble
+
+00:00:34.880 --> 00:00:38.580
+en silence. Cette image est fausse, et elle l'est d'une manière qui rend tout ce sujet
+
+00:00:38.580 --> 00:00:41.040
+plus facile à comprendre. Il n'y a pas un seul ordinateur.
+
+00:00:41.560 --> 00:00:44.780
+Il y en a des milliers d'ordinateurs ordinaires, qui effectuent chacun une petite partie du travail,
+
+00:00:45.000 --> 00:00:46.380
+et quelque chose doit décider qui fait quoi.
+
+00:00:47.480 --> 00:00:51.580
+Bienvenue dans le podcast M365FM, où nous explorons les personnes, les idées et les technologies
+
+00:00:51.580 --> 00:00:52.660
+qui façonnent l'avenir du travail.
+
+00:00:53.300 --> 00:00:56.140
+Au cours des 20 prochaines minutes, l'expression équilibrage de charge et de access rate vous semble être
+
+00:00:56.140 --> 00:00:57.540
+une chose pour laquelle vous avez besoin d'une certification.
+
+00:00:58.040 --> 00:00:59.160
+Pensez à un magasin avec un seul caissier.
+
+00:00:59.740 --> 00:01:02.140
+Dès que trois personnes se présentent en même temps, une file d'attente se forme,
+
+00:01:02.200 --> 00:01:04.040
+et lorsque la dixième personne arrive, tout le magasin est bloqué.
+
+00:01:04.460 --> 00:01:07.760
+Maintenant, ouvrez douze voies, et cette même foule se déplace sans que personne n'attende longtemps.
+
+00:01:08.180 --> 00:01:11.280
+Les ordinateurs ont exactement le même problème, et l'équilibrage de charge représente les douze voies.
+
+00:01:12.040 --> 00:01:14.880
+Cela prend de l'importance lorsque plusieurs personnes utilisent la même application en même temps.
+
+00:01:15.480 --> 00:01:19.020
+Une machine commence à suffoquer sous le poids, et tout le monde le ressent.
+
+00:01:19.800 --> 00:01:22.280
+C'est pour résoudre ce problème que l'équilibrage de charge a été inventé,
+
+00:01:22.440 --> 00:01:23.920
+et c'est la solution depuis des décennies.
+
+00:01:23.920 --> 00:01:26.720
+Vous l'utilisez depuis toujours en ligne, sans jamais voir son nom.
+
+00:01:27.720 --> 00:01:29.720
+Chaque vidéo que vous diffusez, chaque commande que vous passez,
+
+00:01:29.800 --> 00:01:32.240
+chaque message que vous envoyez est transmis à une machine parmi tant d'autres.
+
+00:01:33.200 --> 00:01:36.240
+Ce choix se fait en une fraction de seconde, et vous le faites des milliers de fois par jour.
+
+00:01:37.240 --> 00:01:40.360
+Nous aborderons également les limites honnêtes, les parties que de nombreuses explications emmettent.
+
+00:01:41.140 --> 00:01:43.080
+Que fait réellement un équilibreur de charge ?
+
+00:01:43.080 --> 00:01:47.000
+Un équilibreur de charge est un directeur de trafic qui se trouve devant un groupe d'ordinateurs appelé serveurs.
+
+00:01:47.000 --> 00:01:52.880
+Chaque requête arrive d'abord à l'équilibreur de charge, qui la transmet à un serveur du groupe.
+
+00:01:53.800 --> 00:01:58.080
+Pour vous, cela ressemble à une adresse et à une porte d'entrée, et vous ne savez jamais quelle machine a fait le travail.
+
+00:01:58.900 --> 00:02:00.020
+Pensez à l'autre d'un restaurant.
+
+00:02:00.720 --> 00:02:02.260
+Vous n'entrez pas et ne prenez pas vous-même une taf.
+
+00:02:02.640 --> 00:02:04.940
+L'autre regarde ce qui est libre et vous accompagne jusqu'à une place,
+
+00:02:05.040 --> 00:02:06.900
+afin qu'aucun serveur ne finisse par porter toute la salle.
+
+00:02:07.520 --> 00:02:08.520
+Suivez une requête jusqu'au bout.
+
+00:02:08.920 --> 00:02:11.800
+Vous appuyez sur un lien, et votre appareil envoie une requête à l'équilibreur de charge.
+
+00:02:11.800 --> 00:02:15.480
+L'équilibreur de charge choisit un serveur sain, qui renvoie la réponse.
+
+00:02:16.240 --> 00:02:20.340
+La décision ne prend qu'une fraction de seconde, puis elle se répète pour la requête suivante, puis celle d'après.
+
+00:02:21.160 --> 00:02:22.360
+Vous obtenez deux choses.
+
+00:02:22.860 --> 00:02:25.820
+Vous gagnez en rapidité, car le travail est réparti au lieu de s'accumuler sur une seule machine.
+
+00:02:26.280 --> 00:02:30.620
+Vous bénéficiez également d'une autonomie prolongée, car si un serveur est débordé ou inactif, le trafic se dirige tout simplement ailleurs.
+
+00:02:31.140 --> 00:02:34.380
+L'équilibreur de charge est également la raison pour laquelle un site web peut être mis à jour sans être déconnecté.
+
+00:02:34.640 --> 00:02:36.660
+Vous retirez un serveur, le corrigez, le remettez en place,
+
+00:02:37.120 --> 00:02:39.280
+et le reste continue de servir les utilisateurs pendant que vous travaillez.
+
+00:02:39.280 --> 00:02:39.840
+Personne n'a qu'à l'accompagnement.
+
+00:02:41.800 --> 00:02:46.580
+S'ilibrer la charge signifie s'assurer qu'aucune machine ne supporte plus que c'est juste part.
+
+00:02:51.070 --> 00:02:54.150
+L'équilibreur de charge est la seule chose à laquelle le monde extérieur communique, et c'est ce qui rend le poil aimé.
+
+00:02:54.610 --> 00:02:56.990
+Les utilisateurs voient un nom et une porte, tandis que derrière cette porte,
+
+00:02:57.050 --> 00:02:59.890
+le nombre de machines peut augmenter ou diminuer sans que personne à l'extérieur ne le sache.
+
+00:03:00.490 --> 00:03:03.510
+Ce que les gens pensent être compliqué, c'est la façon dont l'équilibreur de charge choisit un serveur,
+
+00:03:03.670 --> 00:03:05.230
+et c'est exactement ce que nous allons faire ensuite.
+
+00:03:06.270 --> 00:03:08.150
+Les règles simples qui décident de la destination du trafic.
+
+00:03:08.910 --> 00:03:11.830
+Lorsqu'une requête arrive, l'équilibreur de charge doit choisir un serveur,
+
+00:03:11.830 --> 00:03:14.110
+et il le fait en utilisant une règle appelée algorithme.
+
+00:03:14.110 --> 00:03:18.870
+Un algorithme peut paraître intimidant, mais il s'agit simplement d'un ensemble d'étapes pour prendre une décision.
+
+00:03:19.310 --> 00:03:22.730
+Une recette est un algorithme, tout comme la manière dont votre téléphone choisit un itinéraire autour du trafic.
+
+00:03:23.330 --> 00:03:24.630
+La règle la plus simple est appelée rondement.
+
+00:03:25.350 --> 00:03:26.350
+L'équilibreur de charge se relaie.
+
+00:03:26.710 --> 00:03:31.530
+Il envoie la première requête au serveur 1, la deuxième au serveur 2, la troisième au serveur 3, puis revient au début.
+
+00:03:32.330 --> 00:03:36.370
+C'est comme distribuer des cartes autour d'une table, et cela fonctionne bien, lorsque tous les serveurs sont à peu près identiques.
+
+00:03:36.950 --> 00:03:38.350
+La règle suivante est celle du moins de connexion.
+
+00:03:38.350 --> 00:03:42.510
+Au lieu de se relayer, l'équilibreur de charge envoie chaque nouvelle requête au serveur, qui a le moins de personnes.
+
+00:03:43.090 --> 00:03:46.270
+Déjà connecté, c'est le même instinct que vous utilisez au supermarché,
+
+00:03:46.350 --> 00:03:48.530
+où vous choisissez la file d'attente la plus courte au lieu de la plus proche.
+
+00:03:49.090 --> 00:03:50.950
+Certaines configurations utilisent des versions pondérées de serveurs.
+
+00:03:51.430 --> 00:03:55.390
+Si un serveur a plus de mémoire ou un processeur plus rapide, vous lui accordez une plus grande part du trafic.
+
+00:03:55.990 --> 00:03:58.090
+C'est comme une caisse plus grande qui traite plus de cartes par heure.
+
+00:03:58.830 --> 00:04:01.470
+Une autre règle qui veut la peine d'être connue est celle du temps de réponse le plus court.
+
+00:04:01.930 --> 00:04:05.730
+Au lieu de compter les connexions, l'équilibreur de charge surveille la rapidité avec laquelle chaque serveur répond
+
+00:04:05.730 --> 00:04:07.130
+et envoie la requête suivante au plus rapide.
+
+00:04:07.970 --> 00:04:11.030
+C'est l'ami qui sait toujours quel fil d'attente est en train de bouger, pas seulement la plus courte.
+
+00:04:11.790 --> 00:04:14.750
+Ces règles se divisent désormais en deux familles, et cette division est importante.
+
+00:04:15.390 --> 00:04:18.670
+Une famille suit un plan fixe et ne regarde jamais l'occupation réelle des serveurs,
+
+00:04:18.770 --> 00:04:22.370
+ce qui la rend simple à configurer, mais facile à se tromper lorsque la charge est inégale.
+
+00:04:23.310 --> 00:04:26.430
+L'autre famille surveille la charge actuelle et l'état de santé de chaque serveur et s'adapte à la volée,
+
+00:04:26.530 --> 00:04:28.630
+ce qui permet de mieux gérer les situations difficiles de la vie réelle,
+
+00:04:28.630 --> 00:04:30.270
+mais nécessite plus de réglages pour être correctes.
+
+00:04:31.390 --> 00:04:33.970
+Imaginez un site web de petites entreprises fonctionnant sur trois serveurs identiques.
+
+00:04:33.970 --> 00:04:37.610
+Le système de répétition alterné est largement suffisant et tout ce qui est plus sophistiqué est une paire des noms.
+
+00:04:38.090 --> 00:04:41.570
+Imaginez maintenant une application vidéo, une requête prend un clin d'œil et la suivante prend 10 secondes.
+
+00:04:42.130 --> 00:04:44.430
+Le nombre minimal de connexions empêche un serveur de rester bloqué,
+
+00:04:44.530 --> 00:04:46.710
+en maintenant tous les serveurs lents pendant qu'un autre reste inactif.
+
+00:04:47.170 --> 00:04:50.590
+Tout cela ne fonctionne que si l'équilibre de charge sait quels serveurs sont réellement actifs,
+
+00:04:50.710 --> 00:04:52.970
+et cette question s'avère plus intéressante qu'il n'y paraît.
+
+00:04:53.270 --> 00:04:53.970
+Et...
+
+00:04:53.970 --> 00:04:56.310
+Comment sait-il qu'un serveur est malade ?
+
+00:04:56.310 --> 00:04:58.970
+Une règle de choix des serveurs est inutile si certains d'entre eux sont en panne.
+
+00:04:59.090 --> 00:05:00.910
+L'équilibre de charge effectue donc des contrôles d'état.
+
+00:05:00.910 --> 00:05:04.710
+Un contrôle de santé est un petit test régulier envoyé à chaque serveur,
+
+00:05:04.930 --> 00:05:06.770
+comme frapper à la porte pour demander si quelqu'un est à la maison.
+
+00:05:07.410 --> 00:05:10.050
+Si le serveur répond comme il est censé le faire, il reste dans la rotation,
+
+00:05:10.210 --> 00:05:13.050
+et s'il ne le fait pas, l'équilibreur de charge arrête de lui envoyer du nouveau trafic.
+
+00:05:13.630 --> 00:05:18.030
+Ce commutateur qui déplace le trafic d'un serveur défaillant vers un serveur sain est appelé basculement,
+
+00:05:18.190 --> 00:05:18.830
+est appelé basculon.
+
+00:05:19.090 --> 00:05:22.230
+C'est la partie de l'équilibrage de charge qui empêche une petite panne de se transformer en panne majeure,
+
+00:05:22.310 --> 00:05:25.330
+car un serveur mort ne devrait jamais pouvoir mettre toute l'application hors service.
+
+00:05:25.330 --> 00:05:27.630
+Repensez au magasin avec 4 files d'attente.
+
+00:05:28.070 --> 00:05:29.970
+Un caissier s'éloigne, la file d'attente se ferme,
+
+00:05:30.130 --> 00:05:32.090
+et un panneau s'affiche pour que personne ne fasse la queue.
+
+00:05:33.050 --> 00:05:35.050
+Les clients se dirigent plutôt vers les files d'attente libres,
+
+00:05:35.250 --> 00:05:37.030
+et de leur côté du comptoir, rien n'a changé,
+
+00:05:37.370 --> 00:05:38.850
+il y a un véritable compromis qui se cache dans les détails.
+
+00:05:39.110 --> 00:05:40.570
+Si l'équilibreur de charge vérifie trop rarement,
+
+00:05:40.630 --> 00:05:43.730
+un serveur malade continue de recevoir du trafic pendant un certain temps avant quiconque ne s'en aperçoive.
+
+00:05:44.450 --> 00:05:45.610
+S'il vérifie trop agressivement,
+
+00:05:45.890 --> 00:05:47.910
+un serveur qui est juste un peu lent est retiré de la rotation,
+
+00:05:48.050 --> 00:05:50.050
+ce qui peut empirer les choses au lieu de les améliorer.
+
+00:05:50.290 --> 00:05:51.090
+Ça va ?
+
+00:05:51.090 --> 00:05:52.610
+Azure montre comment cela fonctionne en pratique.
+
+00:05:53.350 --> 00:05:56.110
+Son équilibreur de charge vérifie chaque serveur principal à intervalles réguliers,
+
+00:05:56.210 --> 00:05:57.450
+5 secondes par défaut dans le portail,
+
+00:05:57.830 --> 00:06:00.930
+et il a besoin d'un certain nombre d'échecs consécutifs avant de signaler un serveur comme défectueux.
+
+00:06:01.470 --> 00:06:03.630
+Lorsqu'il le fait, les nouvelles connexions sont transférées ailleurs,
+
+00:06:03.730 --> 00:06:05.730
+tandis que les connexions existantes continuent souvent de fonctionner,
+
+00:06:05.770 --> 00:06:07.690
+de sorte que les personnes en plein milieu d'une tâche ne sont pas coupées.
+
+00:06:08.170 --> 00:06:09.010
+Il y a une limite honnête ici.
+
+00:06:09.610 --> 00:06:11.570
+Un contrôle d'intégrité ne sait que ce que vous lui demandez de tester.
+
+00:06:12.070 --> 00:06:14.050
+S'il vérifie le mauvais port ou un signal superficiel,
+
+00:06:14.470 --> 00:06:16.350
+un serveur peut être malade et avoir l'air en parfait état,
+
+00:06:16.490 --> 00:06:18.610
+ce qui signifie qu'il continue de recevoir du trafic qu'il ne peut pas gérer.
+
+00:06:19.230 --> 00:06:21.990
+Plus votre contrôle d'intégrité reflète l'expérience réelle de vos utilisateurs,
+
+00:06:22.230 --> 00:06:23.630
+meilleur est le comportement de l'ensemble du système.
+
+00:06:23.950 --> 00:06:26.270
+Corriger ce détail et de nombreux autres problèmes disparaissent tranquillement.
+
+00:06:27.230 --> 00:06:30.230
+Jusqu'à présent, nous avons traité tous les équilibreurs de charge comme le même type d'outil,
+
+00:06:30.350 --> 00:06:31.270
+et c'est la prochaine chose à corriger.
+
+00:06:32.190 --> 00:06:33.970
+Deux types et pourquoi la différence est importante.
+
+00:06:34.630 --> 00:06:36.390
+Tous les équilibreurs de charge ne fonctionnent pas de la même manière,
+
+00:06:36.390 --> 00:06:39.310
+et la différence réside dans la quantité de votre requête qu'ils prennent la peine d'examiner.
+
+00:06:40.370 --> 00:06:42.470
+Certains ne font que jeter un coup d'œil à l'extérieur de l'enveloppe,
+
+00:06:42.690 --> 00:06:44.310
+d'autres l'ouvrent et lisent le contenu de la lettre.
+
+00:06:45.230 --> 00:06:46.970
+Le premier type fonctionne au niveau de ce qu'on appelle la couche 4.
+
+00:06:47.750 --> 00:06:49.010
+Il ne regarde que l'adresse et le port,
+
+00:06:49.110 --> 00:06:51.210
+de la manière qu'un trieur de courrier lit un code postal,
+
+00:06:51.490 --> 00:06:53.810
+et il transmet la demande sans se soucier de ce qu'il y a à l'intérieur.
+
+00:06:54.810 --> 00:06:55.870
+C'est rapide, c'est simple et pour.
+
+00:06:56.170 --> 00:06:57.590
+De nombreux stages, c'est tout ce dont vous avez besoin.
+
+00:06:58.010 --> 00:07:00.510
+Le deuxième type fonctionne au niveau de la couche 7 et lit réellement la demande.
+
+00:07:00.910 --> 00:07:02.350
+Il peut voir qu'une demande porte sur une image,
+
+00:07:02.350 --> 00:07:06.350
+tandis qu'une autre tente de la payer, et il peut envoyer chacune d'elles à une équipe de serveurs différentes.
+
+00:07:07.210 --> 00:07:11.310
+C'est ainsi qu'une seule adresse web peut discrètement vous diriger vers le bon endroit en fonction de ce que vous demandez.
+
+00:07:11.750 --> 00:07:12.950
+Un exemple concret illustre ce phénom.
+
+00:07:13.630 --> 00:07:16.070
+Une demande d'image de votre site est envoyée au serveur d'image,
+
+00:07:16.290 --> 00:07:19.510
+et une demande de page de paiement est envoyée au serveur de paiement le tout derrière la même adresse web.
+
+00:07:20.310 --> 00:07:23.510
+Personne ne sait en tapant cette adresse que deux équipes différentes viennent de la traiter.
+
+00:07:24.430 --> 00:07:27.130
+La couche 7 déverrouille également quelques éléments importants dans le monde réel.
+
+00:07:27.530 --> 00:07:30.610
+Il peut gérer vos certificats de sécurité en un seul endroit plutôt que sur chaque serveur,
+
+00:07:30.610 --> 00:07:35.030
+et il peut inspecter les requêtes entrantes et bloquer les plumes malveillantes avant qu'elles n'atteignent votre application.
+
+00:07:35.910 --> 00:07:37.010
+Le compromis se situe ici.
+
+00:07:37.590 --> 00:07:40.170
+La couche 4 est l'option rapide, économique et sans fioriture,
+
+00:07:40.290 --> 00:07:43.250
+tandis que la couche 7 est la plus intelligente, qui demande un peu plus de travail à chaque requête.
+
+00:07:44.050 --> 00:07:45.410
+Aucune des deux n'est gagnante dans tous les cas,
+
+00:07:45.710 --> 00:07:49.630
+et le choix entre les deux dépend vraiment de la mesure dans laquelle vous avez besoin que l'équilibreur comprenne ce que vous demandez.
+
+00:07:50.330 --> 00:07:52.430
+En pratique, de nombreux systèmes réels utilisent les deux à la fois.
+
+00:07:53.190 --> 00:07:55.870
+Un équilibreur de couche 7 effectue l'appel de routage intelligent en amont,
+
+00:07:56.130 --> 00:07:59.470
+tandis qu'un équilibreur de couche 4 avait parti le trafic brut entre les machines situées derrière lui,
+
+00:07:59.470 --> 00:08:01.470
+chacune faisant le travail pour lequel elle est la meilleure.
+
+00:08:02.270 --> 00:08:06.050
+Ces deux types étant clairs, nous pouvons enfin nommer les outils réels que vous rencontrerez dans Azure,
+
+00:08:06.170 --> 00:08:08.230
+car Azure ne vous en donne pas un, mais toute une famille.
+
+00:08:09.950 --> 00:08:11.570
+Azure ne dispose pas d'un seul équilibreur de charge.
+
+00:08:11.990 --> 00:08:14.410
+Il en possède une petite famille et chacun est conçu pour une tâche différente.
+
+00:08:15.030 --> 00:08:17.150
+Choisir le bon équilibreur de charge se résume à deux choses simples.
+
+00:08:17.490 --> 00:08:19.090
+Votre trafic est-il du trafic web ?
+
+00:08:19.090 --> 00:08:22.090
+Votre application réside-t-elle dans une région ou est-elle répartie dans le monde entier ?
+
+00:08:22.090 --> 00:08:24.410
+Le premier équilibreur de charge s'appelle simplement Azure Load Balance.
+
+00:08:24.750 --> 00:08:26.230
+C'est le membre le plus rapide de la famille.
+
+00:08:26.770 --> 00:08:27.670
+Il fonctionne au niveau de la couche 4.
+
+00:08:27.670 --> 00:08:29.850
+Il répartit le trafic réseau sur les machines virtuelles
+
+00:08:29.850 --> 00:08:32.230
+et est conçu pour gérer un volume énorme avec très peu de retard.
+
+00:08:33.210 --> 00:08:34.850
+Il se répartit également sur les zones de disponibilité,
+
+00:08:35.070 --> 00:08:36.890
+qui sont des emplacements physiques distincts au sein d'une région.
+
+00:08:37.310 --> 00:08:39.130
+Ainsi, la défaillance d'une zone ne fait pas tout tomber en panne.
+
+00:08:39.690 --> 00:08:42.030
+Il y a ensuite Azure Application Gateway, le modèle régional intelligent.
+
+00:08:42.590 --> 00:08:43.450
+Il fonctionne au niveau de la couche 7.
+
+00:08:43.730 --> 00:08:45.990
+Il peut donc lire vos URL, acheminer par chemin,
+
+00:08:46.390 --> 00:08:49.310
+gérer vos certificats de sécurité et ajouter un pare-feu d'application web.
+
+00:08:50.050 --> 00:08:51.990
+Utilisez-le lorsque votre application réside dans une région,
+
+00:08:52.110 --> 00:08:54.270
+mais que vous devez prendre une décision concernant chaque requête qui arrive.
+
+00:08:54.670 --> 00:08:56.670
+Il y a ensuite Azure Front Door, le modèle mondial.
+
+00:08:56.670 --> 00:08:59.490
+Il envoie chaque utilisateur vers le point d'entrée sain le plus proche
+
+00:08:59.490 --> 00:09:02.090
+sur le réseau de Microsoft, gère la sécurité en périphérie
+
+00:09:02.090 --> 00:09:05.130
+et met en cache le contenu afin que les visites répétées reviennent rapidement.
+
+00:09:05.970 --> 00:09:09.010
+Microsoft affirme qu'il fonctionne sur plus de 118 emplacements périphériques
+
+00:09:09.010 --> 00:09:12.030
+répartis dans environ 100 zones métropolitaines à travers le monde.
+
+00:09:12.890 --> 00:09:15.670
+Le dernier est Azure Traffic Manager, qui fonctionne différemment de tous les autres.
+
+00:09:16.250 --> 00:09:17.410
+Il ne transporte pas du tout votre trafic.
+
+00:09:18.050 --> 00:09:20.230
+Il répond simplement à la question de savoir où se trouve votre application
+
+00:09:20.230 --> 00:09:22.230
+en transmettant à votre appareil l'adresse d'un emplacement sain,
+
+00:09:22.270 --> 00:09:24.090
+puis votre appareil se connecte directement à ce serveur
+
+00:09:24.090 --> 00:09:26.770
+sans que Traffic Manager ne voit jamais le trafic, sans que Traffic mène le trafic.
+
+00:09:27.190 --> 00:09:28.730
+Cette différence est plus importante qu'il n'y paraît,
+
+00:09:29.110 --> 00:09:31.150
+car Traffic Manager ne fait qu'indiquer le chemin.
+
+00:09:31.890 --> 00:09:33.810
+Le trafic passe directement de l'utilisateur au serveur,
+
+00:09:33.910 --> 00:09:35.610
+ce qui rend rapide, mais cela signifie également
+
+00:09:35.610 --> 00:09:37.170
+que le basculement dépend de la rapidité,
+
+00:09:37.510 --> 00:09:39.690
+avec laquelle les appareils actualisent leur mémoire de cette adresse.
+
+00:09:40.970 --> 00:09:41.870
+Si différents qu'ils puissent paraître,
+
+00:09:41.970 --> 00:09:43.650
+tous les quatre répondent à la même question fondamentale.
+
+00:09:44.210 --> 00:09:46.370
+Il décide quelle machine saine doit recevoir la prochaine requête
+
+00:09:46.370 --> 00:09:48.990
+et vérifie qu'elle l'est toujours avant de lui envoyer quelqu'un.
+
+00:09:48.990 --> 00:09:51.630
+Le détail à retenir est qu'une charge de travail réelle
+
+00:09:51.630 --> 00:09:53.570
+utilise souvent plusieurs de ces éléments à la fois.
+
+00:09:54.050 --> 00:09:56.450
+Imaginez une entreprise qui gère un site web pour des clients du monde entier.
+
+00:09:56.970 --> 00:09:59.450
+La porte d'entrée dirige chaque visiteur vers la région la plus proche,
+
+00:09:59.530 --> 00:10:01.970
+la passerelle d'application les achemine par URL à l'intérieur de cette région
+
+00:10:01.970 --> 00:10:05.130
+et l'équilibreur de charge répartit le travail entre les machines virtuelles qui se trouvent derrière.
+
+00:10:05.810 --> 00:10:06.910
+Trois outils, trois tâches,
+
+00:10:07.310 --> 00:10:08.930
+une expérience fluide pour la personne qui clique.
+
+00:10:09.770 --> 00:10:12.410
+Et la bonne nouvelle, c'est que nous n'aurons jamais à créer tout cela pour en bénéficier.
+
+00:10:12.410 --> 00:10:16.710
+Comment Microsoft 365 fait-il cela discrètement pour vous ?
+
+00:10:16.710 --> 00:10:19.290
+Vous ne configurez probablement jamais d'équilibreur de charge de votre vie
+
+00:10:19.290 --> 00:10:21.270
+et vous en dépendez déjà des milliers.
+
+00:10:21.890 --> 00:10:22.930
+Chaque fois que vous ouvrez Outlook,
+
+00:10:23.130 --> 00:10:25.070
+rejoignez un appel Teams, ouvrez un fichier dans SharePoint,
+
+00:10:25.530 --> 00:10:27.970
+vous appuyez sur cette même machine et tout se passe à l'abri des regards.
+
+00:10:28.910 --> 00:10:32.570
+Microsoft 365 exécute ces services selon ce qu'on appelle une conception active-inactive,
+
+00:10:32.570 --> 00:10:35.350
+ce qui signifie que plusieurs copies d'un service sont toujours exécutées en même temps
+
+00:10:35.350 --> 00:10:37.730
+dans des centres de données répartis dans le monde entier.
+
+00:10:38.570 --> 00:10:41.950
+Lorsque vous connectez, votre trafic arrive par le service de porte d'entrée de Microsoft
+
+00:10:41.950 --> 00:10:44.850
+et est acheminé vers la meilleure copie de travail en cas de défaillance.
+
+00:10:45.810 --> 00:10:48.550
+Ce routage est la même idée dont nous avons parlé tout au long de l'épisode,
+
+00:10:48.850 --> 00:10:50.630
+mais à une échelle que la plupart d'entre nous ne voient jamais.
+
+00:10:51.130 --> 00:10:53.470
+Vous ne choisissez pas un centre de données sans savoir lequel a répondu.
+
+00:10:54.070 --> 00:10:56.430
+Les systèmes Microsoft font ce choix pour vous des milliers de fois par seconde
+
+00:10:56.430 --> 00:10:58.610
+et vous ne le remarquez que lorsqu'il cesse de fonctionner,
+
+00:10:59.470 --> 00:11:01.330
+personne ne se voit attribuer un serveur fixe s'il lui soit propre.
+
+00:11:02.110 --> 00:11:04.130
+Chaque requête est renouvelée à chaque fois par des systèmes conçus
+
+00:11:04.130 --> 00:11:07.030
+pour continuer à fonctionner même lorsque tout un centre de données traverse une mauvaise journée.
+
+00:11:07.410 --> 00:11:09.770
+Il existe un deuxième niveau de soin dans la manière dont les mises à jour sont publiées.
+
+00:11:09.770 --> 00:11:14.070
+Microsoft déploie les changements parano, en commençant par un petit groupe au sein de l'entreprise,
+
+00:11:14.450 --> 00:11:18.830
+puis les 140 et 1000 employés de Microsoft, puis les premiers utilisateurs, et enfin tout le monde.
+
+00:11:19.590 --> 00:11:22.090
+Si quelque chose ne fonctionne pas, cela ne concerne d'abord qu'un petit groupe,
+
+00:11:22.190 --> 00:11:24.470
+ce qui permet de le détecter avant même qu'il n'atteigne votre boîte de réception.
+
+00:11:25.170 --> 00:11:26.690
+Les éléments sont également séparés à dessein.
+
+00:11:27.430 --> 00:11:29.070
+Un problème avec Exchange ne détruit pas Teams,
+
+00:11:29.170 --> 00:11:32.150
+et un problème de recherche dans SharePoint ne vous empêche pas de télécharger un fichier.
+
+00:11:32.570 --> 00:11:35.990
+Cette séparation signifie qu'un élément malade ne peut pas entraîner le reste du service dans sa chute.
+
+00:11:36.690 --> 00:11:38.410
+Cela fonctionne comme un hôtel qui ne manque jamais de chambre.
+
+00:11:38.410 --> 00:11:39.870
+Vous en demandez une, vous en obtenez une,
+
+00:11:40.230 --> 00:11:42.190
+et vous ne saurez jamais à quel étage les autres clients ont atterri.
+
+00:11:42.830 --> 00:11:44.990
+Ainsi, la prochaine fois que Teams fonctionnera un mardi matin chargé,
+
+00:11:45.150 --> 00:11:46.310
+vous saurez un peu ce qui se passe en dessous.
+
+00:11:46.830 --> 00:11:48.290
+Beaucoup de trafic est dirigé silencieusement,
+
+00:11:48.450 --> 00:11:49.690
+de sorte que rien ne semble jamais occupé.
+
+00:11:50.190 --> 00:11:51.150
+C'est l'avantage, et c'est réel.
+
+00:11:51.650 --> 00:11:52.410
+Maintenant, soyons honnêtes,
+
+00:11:52.770 --> 00:11:54.590
+car l'équilibrage de charge n'est pas une solution miracle à tout.
+
+00:11:55.550 --> 00:11:57.550
+Qu'est-ce que l'équilibrage de charge ne peut pas résoudre ?
+
+00:11:57.550 --> 00:11:58.530
+Il résout très bien un problème,
+
+00:11:58.710 --> 00:12:00.410
+et il vaut la peine d'en connaître les contours.
+
+00:12:01.390 --> 00:12:03.070
+N'attendez donc pas plus ce qu'il ne peut vous apporter.
+
+00:12:03.670 --> 00:12:04.610
+Commencez par l'équilibre lui-même.
+
+00:12:05.150 --> 00:12:06.690
+Il peut s'agir d'un point de défaillance unique,
+
+00:12:06.770 --> 00:12:08.350
+et si vous n'en exécutez qu'un et qu'il tombe en panne,
+
+00:12:08.450 --> 00:12:09.870
+tout ce qui saute derrière devient inaccessible,
+
+00:12:09.990 --> 00:12:11.290
+quelle que soit la santé des serveurs.
+
+00:12:12.510 --> 00:12:14.450
+Les configurations réelles exécutent des paires d'équilibrage
+
+00:12:14.450 --> 00:12:16.630
+ou utilisent des services gérés qui sont déjà conçus pour être redondants,
+
+00:12:16.710 --> 00:12:18.130
+ce qui est l'une des raisons pour lesquelles les fournisseurs de cloud
+
+00:12:18.130 --> 00:12:18.930
+vous déchargent de ce souci.
+
+00:12:19.730 --> 00:12:21.910
+De plus, plus de serveurs ne signifie pas automatiquement plus de vitesse.
+
+00:12:22.270 --> 00:12:23.770
+Si votre application partage mal les données,
+
+00:12:23.850 --> 00:12:25.890
+ou si votre base de données est le véritable goulot d'étranglement,
+
+00:12:26.090 --> 00:12:27.810
+l'ajout de machines peut simplement propager le même problème.
+
+00:12:27.810 --> 00:12:29.330
+Vous pouvez avoir 20 serveurs et être toujours lent
+
+00:12:29.330 --> 00:12:31.010
+car la file d'attente n'est pas à la porte d'entrée.
+
+00:12:31.670 --> 00:12:33.270
+Les contrôles de santé ont également un point faible
+
+00:12:33.270 --> 00:12:35.490
+car ils ne sont aussi intelligents que ce que vous leur demandez de tester.
+
+00:12:36.050 --> 00:12:37.370
+Pointez un contrôle sur le mauvais élément
+
+00:12:37.370 --> 00:12:39.030
+et un serveur défectueux restera en ligne.
+
+00:12:39.730 --> 00:12:41.930
+Il s'agit d'une erreur de configuration plutôt que d'un défaut dans l'idée,
+
+00:12:42.130 --> 00:12:43.730
+mais c'est une erreur courante ?
+
+00:12:43.730 --> 00:12:44.950
+Le timing est le dernier à être connu.
+
+00:12:45.530 --> 00:12:47.030
+Lorsque l'équilibrage se fait via DNS,
+
+00:12:47.030 --> 00:12:49.350
+le carnet d'adresse qui transforme un nom de site web en un emplacement,
+
+00:12:49.490 --> 00:12:51.750
+votre appareil mémorise cette réponse pendant un certain temps
+
+00:12:51.750 --> 00:12:52.710
+en raison de la mise en cache.
+
+00:12:53.350 --> 00:12:55.290
+Cette mémoire signifie qu'une défaillance peut prendre plus de temps
+
+00:12:55.290 --> 00:12:57.570
+à être acheminée qu'avec un proxy placé juste devant votre application,
+
+00:12:57.630 --> 00:12:58.470
+juste devant votre application.
+
+00:12:58.670 --> 00:13:00.430
+L'erreur de débutant que j'aimerais que vous évitiez le plus
+
+00:13:00.430 --> 00:13:02.070
+est de supposer que l'ajout d'un équilibreur de charge
+
+00:13:02.070 --> 00:13:03.770
+vous rend automatiquement hautement disponible.
+
+00:13:04.270 --> 00:13:06.190
+C'est un élément important du tableau, pas la garantie complète
+
+00:13:06.190 --> 00:13:07.830
+et le reste du tableau est votre application, vos données
+
+00:13:07.830 --> 00:13:09.390
+et la façon dont vous avez tout configuré.
+
+00:13:10.650 --> 00:13:12.790
+Aucune de ces limites ne fait de l'équilibrage de charge une mauvaise idée.
+
+00:13:13.030 --> 00:13:15.110
+Elle signifie simplement qu'il s'agit d'un outil avec une tâche
+
+00:13:15.110 --> 00:13:16.250
+et comme tout outil, il fonctionne mieux
+
+00:13:16.250 --> 00:13:17.890
+lorsque vous savez exactement en quoi consiste cette tâche.
+
+00:13:17.890 --> 00:13:20.450
+Le récapitulatif est une question pour vous.
+
+00:13:20.970 --> 00:13:23.450
+Donc pour résumer, l'équilibrage de charge consiste à partager le travail
+
+00:13:23.450 --> 00:13:25.810
+entre plusieurs ordinateurs afin qu'aucun d'entre eux ne tombe en panne.
+
+00:13:26.830 --> 00:13:28.490
+Un équilibreur de charge est le directeur du trafic
+
+00:13:28.490 --> 00:13:30.170
+qui choisit un serveur, vérifie qu'il est sain
+
+00:13:30.170 --> 00:13:31.650
+et le redirige lorsqu'il ne l'est pas.
+
+00:13:32.350 --> 00:13:33.890
+Dans Azure, il s'agit d'une petite famille d'outils,
+
+00:13:34.310 --> 00:13:36.210
+équilibreur de charge, passerelle d'application,
+
+00:13:36.390 --> 00:13:37.730
+porte d'entrée et gestionnaire de trafic.
+
+00:13:38.790 --> 00:13:41.150
+Microsoft 365 fonctionne déjà sur tous ces outils,
+
+00:13:41.490 --> 00:13:42.630
+vous n'avez donc pas à vous en soucier.
+
+00:13:43.170 --> 00:13:44.190
+Maintenant j'ai une question à vous poser.
+
+00:13:44.710 --> 00:13:46.230
+Quel outil utilisez-vous tous les jours sans savoir
+
+00:13:46.230 --> 00:13:48.690
+qu'il reposait discrètement sur l'équilibrage de charge ?
+
+00:13:48.690 --> 00:13:49.750
+Réfléchissez-y et dites-le moi.
+
+00:13:50.150 --> 00:13:51.830
+Si cela vous a rendu le sujet moins intimidant,
+
+00:13:51.910 --> 00:13:54.730
+abonnez-vous à M365FM pour maîtriser les outils
+
+00:13:54.730 --> 00:13:56.910
+et l'état d'esprit qui façonnent l'avenir du travail.
