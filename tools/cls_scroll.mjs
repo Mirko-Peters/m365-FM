@@ -6,6 +6,8 @@
 //   scroll_js   - laden, dann langsam mit window.scrollBy bis ganz unten (ohne Mausrad/Lenis), warten
 //   hash_qa     - mit #en-qa laden (entity.js laedt sofort, Browser springt zum Anker), 8 s warten
 //   neu_laden   - laden, halb nach unten scrollen, neu laden (Scroll-Wiederherstellung), 8 s warten
+//   textfrag_faq - mit #:~:text=<erste FAQ-Frage> laden (wie aus einem Google-Treffer; location.hash bleibt leer)
+//   ruhe_popup  - halb nach unten scrollen, 130 s nichts tun (attend.js-Popup nach 2 min)
 // Werbung (AdSense) bleibt standardmaessig AN, weil echte Nutzer sie auch sehen (CLS_BLOCK_ADS=1 blockiert sie).
 // Aufgezeichnet: jede layout-shift (value, hadRecentInput, startTime, scrollY, innerWidth, clientWidth) mit allen Quellen
 // (Knoten-Selektor, outerHTML 120 Zeichen, previousRect, currentRect), Aenderungen von class/style an html/body,
@@ -17,7 +19,7 @@ const BASE = (process.env.CLS_BASE || "https://www.m365.fm").replace(/\/$/, "");
 const PATHS = (process.env.CLS_PATHS || "/entity/windows-11/").split(/\s+/).filter(Boolean);
 const BLOCK_ADS = process.env.CLS_BLOCK_ADS === "1";
 const VIEWS = [{ n: "1528x860", vp: { width: 1528, height: 860 } }, { n: "1366x768", vp: { width: 1366, height: 768 } }];
-const SCEN = (process.env.CLS_SCEN || "laden scroll_rad scroll_js hash_qa textfrag_faq neu_laden").split(/\s+/).filter(Boolean);
+const SCEN = (process.env.CLS_SCEN || "laden scroll_rad scroll_js hash_qa textfrag_faq neu_laden ruhe_popup").split(/\s+/).filter(Boolean);
 const ADS = /(googlesyndication|googleads|doubleclick|adservice|fundingchoices|adtrafficquality|googletagservices)/i;
 const TRACK = /(clarity\.ms|google-analytics|googletagmanager)/i;   // Analyse blockiert (aendert kein Layout)
 
@@ -131,7 +133,12 @@ async function run(view, path, scen) {
   };
   try {
     await page.goto(url, { waitUntil: "load", timeout: 90000 });
-    if (scen === "laden" || scen === "hash_qa") { await page.waitForTimeout(8000); await grab("laden"); }
+    if (scen === "laden" || scen === "hash_qa" || scen === "textfrag_faq") { await page.waitForTimeout(8000); await grab("laden"); }
+    else if (scen === "ruhe_popup") {   // attend.js zeigt nach 2 min ohne Eingabe ein Popup: lesen bis zur Mitte, dann ruhen
+      await page.waitForTimeout(3000);
+      const half = await page.evaluate(() => Math.round(document.documentElement.scrollHeight / 2));
+      await jsToBottom(half); await page.waitForTimeout(130000); await grab("nach_popup");
+    }
     else if (scen === "scroll_rad") { await page.waitForTimeout(3000); await wheelToBottom(); await page.waitForTimeout(4000); await grab("scroll"); }
     else if (scen === "scroll_js") { await page.waitForTimeout(3000); await jsToBottom(); await page.waitForTimeout(4000); await grab("scroll"); }
     else if (scen === "neu_laden") {
