@@ -200,7 +200,10 @@ export async function mergeStatements(db, S, T) {
   // Lernpfad-Abschlusstest (0055): Versuche wandern mit. Zertifikat je Nutzer und Pfad (PK user_id, path): die Zeile von T gilt - ausser S hat schon ein
   // ausgestelltes (ok) und T nicht; dann gilt das von S, sonst stellte Certopus derselben Person ein zweites aus. Der Rest bleibt am stillgelegten S.
   simple("learn_attempts");
+  // Hat T dort nur einen Entwurf (draft: E-Mail aus dem Zusatzschritt, nichts angefordert), S aber eine Anforderung, gilt die von S (samt Empfaenger aus der Anmeldung von S,
+  // deren Identitaet oben zu T wandert).
   st.push(q("DELETE FROM learn_certs WHERE user_id=? AND status<>'ok' AND path IN (SELECT path FROM learn_certs WHERE user_id=? AND status='ok')", T, S));
+  st.push(q("DELETE FROM learn_certs WHERE user_id=? AND status='draft' AND path IN (SELECT path FROM learn_certs WHERE user_id=? AND status<>'draft')", T, S));
   keepT("learn_certs");
   // Versuchszaehler (ratelimit, Schluessel learnq:<uid>:<pfad>, Fenster 24 h): laufende Zaehler von S werden zu denen von T addiert, das Fenster
   // beginnt mit dem spaeteren Start - so bringt das Zusammenfuehren keine zusaetzlichen Versuche. Abgelaufene Fenster zaehlen nicht.

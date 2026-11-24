@@ -11,7 +11,11 @@ Der Artikel geht in Abschnitten von hoechstens CHUNK Zeichen (an Leerzeilen, nie
 Tabellenzeilen, [unverified]-Marker, Codeschnipsel muessen mit der Quelle uebereinstimmen), sonst bleibt der Abschnitt offen und kommt im naechsten Lauf wieder (hoechstens TRIES Versuche).
 Politik wie bei Blog und Show Notes: nur EINMAL uebersetzen. Ein geaendertes englisches Original ueberschreibt nichts, es wird in data/pillars_i18n/stale.json gemeldet;
 neu uebersetzt wird nur mit --redo (ganzer Leitfaden, alter Text bleibt, bis die neue Fassung die Pruefung besteht).
-Aufruf: python translate_pillars.py plan|run [--langs fr,ja] [--pillars lean-manufacturing,...] [--redo] [--limit N]
+Oberflaeche (site_pillars.UI): je Sprache einmal ganz (ui, Pfad, Leitfaden-Namen); spaeter neue oder im Englischen geaenderte Schluessel einzeln nach ("uix",
+Quell-Hash je Schluessel in data/pillars_i18n.json "ui_h"). Eine Sprache, deren Oberflaeche versehentlich auf Deutsch steht (ui_wrong: Pfadtitel oder
+die Haelfte der Texte gleich der deutschen Fassung, so bei pl und id bis 24.11.2026), wird ganz neu angefordert.
+Aufruf: python translate_pillars.py plan|run [--langs fr,ja] [--pillars lean-manufacturing,...] [--redo] [--limit N] [--ui-only]
+  --ui-only  nur Oberflaeche (ganz bzw. fehlende/geaenderte Schluessel), keine Leitfaeden, keine Dateien
   plan  Zustand und Kostenschaetzung, ohne Schluessel
   run   Anfragen als Batch senden, abwarten, pruefen, speichern, Dateien schreiben (Budget: PILLARS_RUN_EUR, Standard 3 EUR; zusaetzlich das Haiku-Tagesbudget des Workers)"""
 import hashlib, json, os, re, sys, time
@@ -149,8 +153,55 @@ def ui_source():
 
 def ui_prompt(lang):
     return (f"Translate every value of this JSON into {NAMES[lang]} and answer with exactly one JSON object of the same shape (same keys, same list lengths, no other text). "
-            "Keep placeholders like {n} and {m} unchanged. seo_title: at most 60 characters. Keep names such as iFAKT Polaris, m365.fm, Microsoft 365. "
+            "Keep placeholders like {n} and {m} unchanged. Address the reader in the polite, formal form where the language has one. seo_title: at most 60 characters. "
+            "Keep names such as iFAKT Polaris, m365.fm, Microsoft 365, Certopus, DevSquirrel Technologies Private Limited, LinkedIn, Google, GitHub. "
             "'ui.other' does not exist; 'ui.disc' keeps the exact disclosure sentence meaning (the author works at iFAKT GmbH).\n\n" + json.dumps(ui_source(), ensure_ascii=False))
+
+
+def ui_keys(): return {k: v[0] for k, v in PIL.UI.items() if k != "other"}
+
+
+def ui_wrong(lang, ov):
+    """Oberflaeche einer Sprache steht auf Deutsch (Fehler im ersten Lauf, pl und id): Pfadtitel = deutscher Titel oder mindestens die Haelfte der Texte
+    gleich der deutschen und nicht der englischen Fassung."""
+    ui, reg = (ov.get("ui") or {}).get(lang) or {}, (ov.get("reg") or {}).get(lang) or {}
+    if not ui: return False
+    if (reg.get("path") or {}).get("title") == PIL.registry()["path"]["title"]["de"]: return True
+    both = [k for k in ui if k in PIL.UI and k != "other" and PIL.UI[k][0] != PIL.UI[k][1]]
+    return bool(both) and sum(ui[k] == PIL.UI[k][1] for k in both) * 2 >= len(both)
+
+
+def ui_missing(lang, ov):
+    """Schluessel, die in der Sprache fehlen oder deren englische Quelle sich seit der Uebersetzung geaendert hat (Hash in "ui_h")."""
+    ui, hs = (ov.get("ui") or {}).get(lang) or {}, (ov.get("ui_h") or {}).get(lang) or {}
+    return sorted(k for k, en in ui_keys().items() if k not in ui or (k in hs and hs[k] != h8(en)))
+
+
+def uix_prompt(lang, keys):
+    src = ui_keys()
+    return (f"Translate every value of this JSON into {NAMES[lang]} and answer with exactly one JSON object with the same keys (no other text). "
+            "These are short interface texts of a free online test with a certificate. Keep placeholders like {n}, {email}, {p} and {link} unchanged. "
+            "Address the reader in the polite, formal form where the language has one. Keep names such as Certopus, DevSquirrel Technologies Private Limited, "
+            "LinkedIn, Microsoft, Google, GitHub, m365.fm unchanged.\n\n" + json.dumps({k: src[k] for k in keys}, ensure_ascii=False))
+
+
+def check_uix(keys, got):
+    """Pruefung der Nachforderung einzelner Schluessel -> dict oder Grund (str)."""
+    src = ui_keys()
+    if not isinstance(got, dict) or set(got) != set(keys) or not all(isinstance(v, str) and v.strip() for v in got.values()): return "Schluessel"
+    for k in keys:
+        if sorted(re.findall(r"\{\w+\}", src[k])) != sorted(re.findall(r"\{\w+\}", got[k])): return f"Platzhalter {k}"
+    if any(bad_text(v) for v in got.values()): return "encoding"
+    both = [k for k in keys if PIL.UI[k][0] != PIL.UI[k][1]]
+    if both and sum(got[k].strip() == PIL.UI[k][1] for k in both) * 2 >= len(both): return "Deutsch statt Zielsprache"
+    return {k: got[k].strip() for k in keys}
+
+
+def write_uix(lang, got):
+    ov = overlay(); ui = ov.setdefault("ui", {}).setdefault(lang, {}); hs = ov.setdefault("ui_h", {}).setdefault(lang, {}); src = ui_keys()
+    for k, v in got.items(): ui[k] = v; hs[k] = h8(src[k])
+    for k in [k for k in ui if k not in src]: ui.pop(k); hs.pop(k, None)   # Schluessel, die es nicht mehr gibt (z. B. q_email)
+    OVERLAY.write_text(json.dumps(ov, ensure_ascii=False, indent=1) + "\n", "utf-8")
 
 
 def wrap(part): return f"<text>\n{part}\n</text>"
@@ -191,10 +242,10 @@ def save_state(lang, pid, st):
 def done(st, n): return bool(st.get("meta")) and len(st.get("chunks") or []) == n and all(st["chunks"])
 
 
-def plan_items(langs, pids, redo=False):
-    """-> (items [(lang, pid, kind, index, request)], stale {lang: [pid]}). kind: chunk | meta | ui."""
+def plan_items(langs, pids, redo=False, ui_only=False):
+    """-> (items [(lang, pid, kind, index, request)], stale {lang: [pid]}). kind: chunk | meta | ui | uix."""
     items, stale = [], {}
-    for p in PIL.pillars():
+    for p in ([] if ui_only else PIL.pillars()):
         if pids and p["id"] not in pids: continue
         s = source(p)
         if not s: continue
@@ -213,8 +264,12 @@ def plan_items(langs, pids, redo=False):
                 items.append((lang, p["id"], "meta", 0, req(f"{lang}__{p['id']}__meta", "You are a professional translator. Answer only with the JSON object.", meta_prompt(lang, s), 3000)))
     ov = overlay()
     for lang in langs:
-        if not pids and not ((ov.get("ui") or {}).get(lang) and (ov.get("reg") or {}).get(lang)):
-            items.append((lang, "_ui", "ui", 0, req(f"{lang}___ui", "You are a professional translator. Answer only with the JSON object.", ui_prompt(lang), 8000)))
+        if pids: continue
+        if not ((ov.get("ui") or {}).get(lang) and (ov.get("reg") or {}).get(lang)) or ui_wrong(lang, ov):
+            items.append((lang, "_ui", "ui", 0, req(f"{lang}___ui", "You are a professional translator. Answer only with the JSON object.", ui_prompt(lang), 16000)))
+        elif ui_missing(lang, ov):
+            keys = ui_missing(lang, ov)
+            items.append((lang, "_ui", "uix", 0, req(f"{lang}___uix", "You are a professional translator. Answer only with the JSON object.", uix_prompt(lang, keys), 8000)))
     return items, stale
 
 
@@ -235,6 +290,7 @@ def est_eur(items):
 
 def write_overlay(lang, ui, path, pillars):
     ov = overlay(); ov.setdefault("ui", {})[lang] = ui; ov.setdefault("reg", {})[lang] = {"path": path, "pillars": {k: {"label": v} for k, v in pillars.items()}}
+    ov.setdefault("ui_h", {})[lang] = {k: h8(en) for k, en in ui_keys().items() if k in ui}
     ov.setdefault("index", [])
     OVERLAY.write_text(json.dumps(ov, ensure_ascii=False, indent=1) + "\n", "utf-8")
 
@@ -252,6 +308,7 @@ def check_ui(lang, got):
     if len(path["seo_title"]) > 66: return "seo_title zu lang"
     if not isinstance(pill, dict) or set(pill) != set(src["pillars"]) or not all(isinstance(v, str) and v.strip() for v in pill.values()): return "Leitfaeden"
     if any(bad_text(x) for x in list(ui.values()) + list(pill.values()) + [path["title"], path["short"], path["intro"]]): return "encoding"
+    if ui_wrong(lang, {"ui": {lang: ui}, "reg": {lang: {"path": path}}}): return "Deutsch statt Zielsprache"
     return ui, path, pill
 
 
@@ -310,26 +367,29 @@ def args():
     mode = a[0] if a and not a[0].startswith("--") else "plan"
     get = lambda k: [x for x in a[a.index(k) + 1].split(",") if x] if k in a else []
     langs = [l for l in get("--langs") if l in LANGS] or list(LANGS)
-    return mode, langs, set(get("--pillars")), "--redo" in a, int(a[a.index("--limit") + 1]) if "--limit" in a else 0
+    return mode, langs, set(get("--pillars")), "--redo" in a, int(a[a.index("--limit") + 1]) if "--limit" in a else 0, "--ui-only" in a
 
 
 def report(items, stale):
     by = {}
-    for lang, pid, kind, i, r in items: by.setdefault(lang, {"chunk": 0, "meta": 0, "ui": 0})[kind] += 1
+    for lang, pid, kind, i, r in items: by.setdefault(lang, {"chunk": 0, "meta": 0, "ui": 0, "uix": 0})[kind] += 1
     tin, tout, eur = est_eur(items)
-    print(f"{len(items)} Anfragen offen: " + ", ".join(f"{l} {v['chunk']}+{v['meta']}+{v['ui']}" for l, v in by.items()))
+    print(f"{len(items)} Anfragen offen (Abschnitte+Meta+Oberflaeche ganz+einzelne Schluessel): " + ", ".join(f"{l} {v['chunk']}+{v['meta']}+{v['ui']}+{v['uix']}" for l, v in by.items()))
     print(f"Schaetzung (Batch): {tin:,} Token ein, {tout:,} Token aus = {eur:.2f} EUR (Grenze je Lauf {RUN_EUR:.2f} EUR)")
     if stale: print("Original geaendert (nicht neu uebersetzt, --redo noetig):", {l: v for l, v in stale.items()})
     return eur
 
 
 def main():
-    mode, langs, pids, redo, limit = args()
-    items, stale = plan_items(langs, pids, redo)
+    mode, langs, pids, redo, limit, ui_only = args()
+    items, stale = plan_items(langs, pids, redo, ui_only)
     if limit: items = items[:limit]
     OUT.mkdir(parents=True, exist_ok=True)
-    (OUT / "stale.json").write_text(json.dumps(stale, ensure_ascii=False, indent=1) + "\n", "utf-8")
+    if not ui_only: (OUT / "stale.json").write_text(json.dumps(stale, ensure_ascii=False, indent=1) + "\n", "utf-8")
     eur = report(items, stale)
+    for lang in langs:
+        if ui_wrong(lang, overlay()): print(f"{lang}: Oberflaeche steht auf Deutsch - wird ganz neu angefordert")
+    if ui_only and (mode == "plan" or not items): return
     if mode == "plan" or not items:
         n = assemble_all(langs)
         if n: print(f"{n} Dateien geschrieben")
@@ -382,6 +442,11 @@ def main():
             got = parse_json(text); why_not = check_meta(got, srcs[pid])
             if why_not: fail("meta: " + why_not, text); continue
             st["meta"] = {k: got[k].strip() for k in ("h1", "meta_title", "meta_description", "author")}
+        elif kind == "uix":
+            keys = sorted(json.loads(key[r["custom_id"]][4]["params"]["messages"][0]["content"].rsplit("\n\n", 1)[1]))
+            got = check_uix(keys, parse_json(text))
+            if isinstance(got, str): fail("uix: " + got, text); continue
+            write_uix(lang, got)
         else:
             got = check_ui(lang, parse_json(text))
             if isinstance(got, str): fail("ui: " + got, text); continue

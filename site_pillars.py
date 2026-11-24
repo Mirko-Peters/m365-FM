@@ -41,7 +41,7 @@ UI = {
     "q_count": ("{n} questions, {k} from each guide", "{n} Fragen, je {k} aus jedem Leitfaden"),
     "q_pass": ("Pass mark {pct} % ({need} of {n} correct)", "Bestanden ab {pct} % ({need} von {n} richtig)"),
     "q_tries": ("Up to {m} attempts per 24 hours", "Bis zu {m} Versuche je 24 Stunden"),
-    "q_certmail": ("Certificate by email via Certopus, ready to add to LinkedIn", "Zertifikat per E-Mail über Certopus, mit Link für LinkedIn"),
+    "q_certmail": ("Certificate via Certopus to the email address of your sign-in, ready to add to LinkedIn", "Zertifikat über Certopus an die E-Mail-Adresse Ihrer Anmeldung, mit Link für LinkedIn"),
     "q_go": ("Take the final test", "Zum Abschlusstest"),
     "q_soon": ("Test coming soon.", "Test folgt in Kürze."),
     "q_crumb": ("Final test", "Abschlusstest"),
@@ -82,12 +82,11 @@ UI = {
     "q_expired": ("This attempt has expired. Please start a new one.", "Dieser Versuch ist abgelaufen. Bitte starten Sie einen neuen."),
     "q_passed_before": ("You have passed this test ({s} of {n}).", "Sie haben diesen Test bestanden ({s} von {n})."),
     "q_cert_h": ("Your certificate", "Ihr Zertifikat"),
-    "q_cert_lead": ("Certopus creates your certificate and sends it to this email address. The name appears on the certificate exactly as entered.",
-                    "Certopus erstellt Ihr Zertifikat und schickt es an diese E-Mail-Adresse. Der Name steht genau so auf dem Zertifikat."),
+    "q_cert_lead": ("Certopus creates your certificate and sends it to the email address of your sign-in. The name appears on the certificate exactly as entered.",
+                    "Certopus erstellt Ihr Zertifikat und schickt es an die E-Mail-Adresse Ihrer Anmeldung. Der Name steht genau so auf dem Zertifikat."),
     "q_name": ("Name on the certificate", "Name auf dem Zertifikat"),
-    "q_email": ("Email address", "E-Mail-Adresse"),
-    "q_consent": ("I agree that my name and email address are sent to Certopus (DevSquirrel Technologies Private Limited, India) to create and send the certificate. More in the {link}.",
-                  "Ich bin einverstanden, dass mein Name und meine E-Mail-Adresse an Certopus (DevSquirrel Technologies Private Limited, Indien) übermittelt werden, um das Zertifikat zu erstellen und zu versenden. Mehr in der {link}."),
+    "q_consent": ("I agree that my name and the email address of my sign-in are sent to Certopus (DevSquirrel Technologies Private Limited, India) to create and send the certificate. More in the {link}.",
+                  "Ich bin einverstanden, dass mein Name und die E-Mail-Adresse meiner Anmeldung an Certopus (DevSquirrel Technologies Private Limited, Indien) übermittelt werden, um das Zertifikat zu erstellen und zu versenden. Mehr in der {link}."),
     "q_privacy": ("privacy policy", "Datenschutzerklärung"),
     "q_cert_btn": ("Request certificate", "Zertifikat anfordern"),
     "q_cert_ok": ("Your certificate is ready. Certopus has also sent it to you by email.", "Ihr Zertifikat ist fertig. Certopus hat es Ihnen auch per E-Mail geschickt."),
@@ -97,13 +96,26 @@ UI = {
     "q_cert_off": ("Your certificate will follow soon – you will receive it by email.", "Ihr Zertifikat folgt in Kürze – Sie erhalten es per E-Mail."),
     "q_cert_err": ("The certificate could not be created right now. Please try again later.", "Das Zertifikat konnte gerade nicht erstellt werden. Bitte versuchen Sie es später erneut."),
     "q_err_name": ("Please enter a name with 2 to 80 characters.", "Bitte geben Sie einen Namen mit 2 bis 80 Zeichen ein."),
-    "q_err_email": ("Please enter a valid email address.", "Bitte geben Sie eine gültige E-Mail-Adresse ein."),
     "q_err_name_url": ("Please enter only your name – no web address, domain, @ or /.", "Bitte geben Sie nur Ihren Namen ein – ohne Webadresse, Domain, @ oder /."),
-    "q_email_verified": ("This is the confirmed email address of your account. The certificate can only be sent there.",
-                         "Das ist die bestätigte E-Mail-Adresse Ihres Kontos. Nur dorthin kann das Zertifikat gehen."),
-    "q_err_email_unverified": ("Please use the confirmed email address of your account.", "Bitte verwenden Sie die bestätigte E-Mail-Adresse Ihres Kontos."),
-    "q_err_email_limit": ("You have already used {m} different email addresses for this certificate. Please use one of them, or confirm an email address in your account settings.",
-                          "Sie haben für dieses Zertifikat schon {m} verschiedene E-Mail-Adressen verwendet. Bitte nehmen Sie eine davon oder bestätigen Sie eine E-Mail-Adresse in Ihren Kontoeinstellungen."),
+    # Empfaenger: E-Mail-Adresse der Anmeldung (Zusatzschritt beim Anbieter, worker/src/learnquiz.js certMailCallback), kein Eingabefeld
+    "q_mail_to": ("The certificate goes to the email address of your sign-in: {email} ({src}).", "Das Zertifikat geht an die E-Mail-Adresse Ihrer Anmeldung: {email} ({src})."),
+    "q_mail_src_account": ("confirmed address of your account", "bestätigte Adresse Ihres Kontos"),
+    "q_mail_need": ("The certificate goes to the email address of your sign-in. Please take it over from one of your sign-ins – we use it only for this certificate.",
+                    "Das Zertifikat geht an die E-Mail-Adresse Ihrer Anmeldung. Bitte übernehmen Sie sie aus einer Ihrer Anmeldungen – wir verwenden sie nur für dieses Zertifikat."),
+    "q_mail_none": ("Your account has no sign-in that can provide an email address. Please link a sign-in with LinkedIn, Microsoft, Google or GitHub in your profile settings.",
+                    "Ihr Konto hat keine Anmeldung, die eine E-Mail-Adresse liefern kann. Bitte verknüpfen Sie in Ihren Profileinstellungen eine Anmeldung bei LinkedIn, Microsoft, Google oder GitHub."),
+    "q_mail_btn": ("Use the email address from your {p} sign-in", "E-Mail aus Ihrer Anmeldung bei {p} übernehmen"),
+    "q_mail_other": ("To use a different address, choose another of your sign-ins:", "Für eine andere Adresse wählen Sie eine andere Ihrer Anmeldungen:"),
+    "q_mail_hint": ("You will be sent to the provider briefly and then come back here. Your sign-in and your result stay as they are.",
+                    "Sie werden kurz zum Anbieter weitergeleitet und kommen dann hierher zurück. Ihre Anmeldung und Ihr Ergebnis bleiben unverändert."),
+    "q_mail_ok": ("The email address of your sign-in has been taken over.", "Die E-Mail-Adresse Ihrer Anmeldung wurde übernommen."),
+    "q_mail_wrong": ("This sign-in does not belong to your m365.fm account. Please choose, at the provider, the account you use to sign in to m365.fm.",
+                     "Diese Anmeldung gehört nicht zu Ihrem m365.fm-Konto. Bitte wählen Sie beim Anbieter das Konto, mit dem Sie sich bei m365.fm anmelden."),
+    "q_mail_unverified": ("The provider has not confirmed this email address, so it cannot be used for the certificate (this is often the case with Microsoft work or school accounts). Please choose another sign-in.",
+                          "Der Anbieter hat diese E-Mail-Adresse nicht bestätigt, deshalb kann sie nicht für das Zertifikat verwendet werden (bei Microsoft-Arbeits- oder Schulkonten ist das oft so). Bitte wählen Sie eine andere Anmeldung."),
+    "q_mail_session": ("Your session has expired. Please try again.", "Ihre Sitzung ist abgelaufen. Bitte versuchen Sie es erneut."),
+    "q_mail_cancel": ("The step was cancelled. No email address was taken over.", "Der Schritt wurde abgebrochen. Es wurde keine E-Mail-Adresse übernommen."),
+    "q_err_need_email": ("Please first take over the email address of your sign-in.", "Bitte übernehmen Sie zuerst die E-Mail-Adresse Ihrer Anmeldung."),
     "q_err_consent": ("Please confirm that you agree.", "Bitte bestätigen Sie die Einwilligung."),
     "q_err_rate": ("Too many requests. Please try again later.", "Zu viele Anfragen. Bitte versuchen Sie es später erneut."),
     "q_err": ("Something went wrong. Please reload the page.", "Etwas ist schiefgelaufen. Bitte laden Sie die Seite neu."),
@@ -631,9 +643,10 @@ def quiz_box(lang, BASE, groups):
 
 JS_KEYS = ("q_loading", "q_login_h", "q_result_h", "q_login","q_signin", "q_start", "q_resume", "q_left", "q_none_left", "q_best", "q_of", "q_progress", "q_valid", "q_submit", "q_missing", "q_noq",
            "q_result", "q_passed", "q_failed", "q_by_guide", "q_reread", "q_review", "q_right", "q_wrong", "q_yours", "q_correct", "q_noans", "q_retry", "q_expired",
-           "q_passed_before", "q_cert_h", "q_cert_lead", "q_name", "q_email", "q_consent", "q_privacy", "q_cert_btn", "q_cert_ok", "q_cert_view", "q_cert_pdf", "q_linkedin",
-           "q_cert_off", "q_cert_err", "q_err_name", "q_err_email", "q_err_consent", "q_err_rate", "q_err", "q_soon",
-           "q_err_name_url", "q_email_verified", "q_err_email_unverified", "q_err_email_limit", "q_hidden", "q_hidden_noans", "q_outdated")
+           "q_passed_before", "q_cert_h", "q_cert_lead", "q_name", "q_consent", "q_privacy", "q_cert_btn", "q_cert_ok", "q_cert_view", "q_cert_pdf", "q_linkedin",
+           "q_cert_off", "q_cert_err", "q_err_name", "q_err_consent", "q_err_rate", "q_err", "q_soon", "q_err_name_url", "q_hidden", "q_hidden_noans", "q_outdated",
+           "q_mail_to", "q_mail_src_account", "q_mail_need", "q_mail_none", "q_mail_btn", "q_mail_other", "q_mail_hint", "q_mail_ok", "q_mail_wrong",
+           "q_mail_unverified", "q_mail_session", "q_mail_cancel", "q_err_need_email")
 
 QUIZ_CSS = """<style>
 .lq-facts{margin:.6em 0 1.2em;padding-left:1.2em}.lq-facts li{margin:.2em 0}
@@ -651,6 +664,7 @@ QUIZ_CSS = """<style>
 .lq-cert label{display:block;margin:.9em 0 .3em;font-weight:600}.lq-cert input:not([type=checkbox]){width:100%;max-width:28em}
 .lq-cert .lq-chk{display:flex;gap:.6em;align-items:flex-start;font-weight:400;line-height:1.45}.lq-chk input{margin-top:.25em;width:18px;height:18px;flex:none;accent-color:var(--ac)}
 .lq-err{color:var(--f-err,#b3261e);font-weight:600}
+.lq-mail{margin:.8em 0}.lq-mail p{margin:.4em 0}.lq-to{font-weight:600;overflow-wrap:anywhere}.lq-mail .btn{white-space:normal;text-align:center}
 </style>"""
 
 

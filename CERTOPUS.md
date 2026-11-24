@@ -4,6 +4,32 @@ Wer den kostenlosen Abschlusstest eines Lernpfads besteht (Testseite `/learn/pat
 Der Worker (`worker/src/learnquiz.js`) legt es über die Certopus-API an (`POST https://api.certopus.com/v1/certificates`, Header `x-api-key`), Certopus veröffentlicht es
 und schickt die E-Mail. Die Seite zeigt danach den Link zum Zertifikat, das PDF und „Zu LinkedIn hinzufügen“.
 
+**Empfänger = E-Mail-Adresse der Anmeldung** (Entscheidung Mirko 24.11.2026: „die mail aus der anmeldung nehmen“ – „oauth“). Es gibt kein E-Mail-Feld.
+Ablauf auf der Testseite nach dem Bestehen:
+1. Das Formular hat nur Name und Einwilligung. Darüber steht „Das Zertifikat geht an die E-Mail-Adresse Ihrer Anmeldung: m\*\*\*@example.com (Google)“
+   oder – wenn noch keine vorliegt – je verknüpftem Anbieter ein Knopf „E-Mail aus Ihrer Anmeldung bei <Anbieter> übernehmen“.
+2. Der Knopf startet einen **Zusatzschritt nur für das Zertifikat**: `GET https://api-dub.m365.fm/auth/login/<anbieter>?purpose=certmail&path=<pfad>&return=<testseite>`.
+   Nur mit gültiger Sitzung und nur für einen mit dem Konto verknüpften Anbieter. Zweck, Nutzer, Zeit, Sitzungs-Hash und Pfad stehen im signierten state-Cookie
+   (`m365o`, wie beim Verknüpfen), nicht nur in der URL. Scopes nur für diesen Schritt (`CERTMAIL_SCOPE`): Google und Microsoft `openid email`,
+   LinkedIn `openid profile email` (wie die Anmeldung), GitHub `read:user user:email`. Die normale Anmeldung behält ihre Scopes (Google/Microsoft `openid profile`,
+   GitHub `read:user`). Die Redirect-URI bleibt `/auth/callback/<anbieter>` – bei den Anbietern ist nichts neu einzutragen.
+3. Der Callback (`certMailCallback`) **meldet nie an, verknüpft nichts und legt kein Konto an**. Er prüft: Sitzung passt zum state, die zurückgegebene
+   Anbieter-Identität (Anbieter + `sub`/ID) gehört genau diesem Nutzer (`user_identities`, alte Konten `users.provider/sub`; nur lesend), der Test ist bestanden.
+   Übernommen wird nur eine **vom Anbieter bestätigte** Adresse:
+   - Google, LinkedIn: `email_verified === true` aus userinfo;
+   - GitHub: `GET https://api.github.com/user/emails`, nur die Adresse mit `primary` und `verified`;
+   - Microsoft: aus dem `id_token` (direkt vom Token-Endpunkt; `aud` = Client-ID, `sub` = userinfo-`sub`), nur private Microsoft-Konten
+     (`tid` `9188040d-6c67-4c5b-b112-36a304b66dad`) oder mit Claim `xms_edov === true`. Arbeits- und Schulkonten ohne diesen Beleg werden abgelehnt
+     (bekannte „nOAuth“-Schwäche: ein Tenant-Admin kann das Mail-Attribut frei setzen).
+   Gespeichert wird nur in `learn_certs` (Zeile `status='draft'` je Nutzer und Pfad, Spalten `email`, `email_src` = Anbieter, `email_at`) – nicht in `mail_addr`,
+   nicht im Konto; das Access-Token wird nicht gespeichert. Zurück geht es auf die Testseite mit `?certmail=ok|wrong_account|unverified|session|cancel|not_passed|issued|error`;
+   die Seite entfernt den Parameter, zeigt Ergebnis (aus `sessionStorage`) und Formular wieder und den passenden Hinweis.
+4. **Rückfall:** Ohne Adresse aus der Anmeldung gilt eine bereits bestätigte Adresse des Kontos (`mail_addr`, `verified=1`, `email_src` = `account`) – ebenfalls nie frei eingetippt.
+5. `POST /api/learn/cert {path, attempt, name, consent, lang}` nimmt die Adresse nur so; ohne beides `409 need_email`, ein mitgeschicktes abweichendes
+   `email`-Feld `400 email_fixed`. `GET /api/learn/cert` liefert nur `email_masked`, `email_src` und `providers` (verknüpft und im Worker eingerichtet), nie die Adresse.
+6. Konto löschen: `deleteUserLearn` entfernt alle Zeilen samt E-Mail und Herkunft. Zusammenführen: Hat das Zielkonto nur einen Entwurf, das Quellkonto aber eine
+   Anforderung, gilt die des Quellkontos (`mergeStatements` in `worker/src/identities.js`).
+
 Solange etwas fehlt (Secret, IDs, Vorlage, Schalter), läuft der Test trotzdem: bestandene Versuche werden gespeichert, die Seite zeigt
 „Ihr Zertifikat folgt in Kürze – Sie erhalten es per E-Mail“, und der Worker stellt wartende Zertifikate später aus (Cron alle 30 Minuten oder erneuter Klick),
 sobald `CERTOPUS_ON="1"` ist.
@@ -72,12 +98,25 @@ Reihenfolge, wenn PR #606 auf main ist:
 5. **Mirko: E-Mail-Text einfügen** (Schritt 5 oben, Texte unten unter „E-Mail“), Variable für den Zertifikatslink im Editor suchen, Testsendung.
 6. **Einschalten per PR:** in `worker/wrangler.toml` `CERTOPUS_ON = "1"` (eigener kleiner PR; nach dem Merge deployt `worker.yml`). Wartende Zertifikate
    stellt der Cron danach aus.
-7. **Testabschluss:** mit einem eigenen Konto bestehen, Zertifikat anfordern; E-Mail, Zertifikatsseite, PDF und LinkedIn-Knopf der Testseite prüfen
-   (Schritt 7 oben), Zahlen unter `/api/learn/stats`.
+7. **Testabschluss inkl. E-Mail-Schritt** mit je einem eigenen Konto pro Anbieter (das Konto muss die Anmeldung verknüpft haben):
+   - **Google:** bestehen, „E-Mail aus Ihrer Anmeldung bei Google übernehmen“ → Google fragt nach der E-Mail-Berechtigung → zurück auf der Testseite,
+     Hinweis „übernommen“, maskierte Adresse mit „(Google)“; bei Google ein anderes, nicht verknüpftes Google-Konto wählen → Hinweis „gehört nicht zu Ihrem
+     m365.fm-Konto“, die Sitzung bleibt dieselbe (weiter als dasselbe Konto angemeldet).
+   - **Microsoft privat** (outlook.com/hotmail.com): Adresse wird übernommen. **Microsoft Arbeitskonto:** erwartet „nicht bestätigt“, solange die Organisation
+     `xms_edov` nicht mitsendet (siehe offene Punkte). Wird auch ein privates Konto abgelehnt, im Worker-Log prüfen, ob `sub` im id_token und in userinfo gleich sind.
+   - **LinkedIn:** Adresse wird übernommen (LinkedIn liefert `email_verified`).
+   - **GitHub:** GitHub fragt nach `user:email`; übernommen wird die primäre, bestätigte Adresse.
+   - Danach Name + Häkchen → Zertifikat anfordern; E-Mail, Zertifikatsseite, PDF und LinkedIn-Knopf der Testseite prüfen (Schritt 7 oben), Zahlen unter `/api/learn/stats`.
+   - Normale Anmeldung danach mit allen vier Anbietern einmal prüfen (Scopes unverändert, kein E-Mail-Dialog).
 
 **Offene Punkte (blockieren den Merge nicht):**
-- *Übersetzte Pfadseiten:* Der Kasten „Abschlusstest & Zertifikat“ bleibt auf fr, es, id, pt usw. englisch. `data/pillars_i18n.json` hat keine `q_*`-Schlüssel,
-  und `translate_pillars.py` fordert UI-Texte nur für Sprachen ohne `ui` an. Später: dort fehlende UI-Schlüssel je Sprache nachfordern (Folge-PR).
+- *Microsoft-Arbeitskonten:* Ohne den optionalen Claim `xms_edov` lehnt der Worker deren E-Mail ab (Hinweis „nicht bestätigt“, andere Anmeldung wählen).
+  Soll das gehen, in Entra ID (App-Registrierung des Logins, Client-ID `MS_CLIENT_ID`) unter *Token configuration → Add optional claim → ID* die Claims
+  `email` und `xms_edov` hinzufügen. Private Microsoft-Konten brauchen das nicht. Nicht geprüft: ob `xms_edov` bei der `common`-Anmeldung für alle Tenants kommt.
+- *Übersetzte Pfadseiten:* `translate_pillars.py` fordert jetzt neue oder im Englischen geänderte UI-Schlüssel je Sprache einzeln nach (`uix`, Hash je Schlüssel in
+  `data/pillars_i18n.json` `ui_h`) und erkennt eine versehentlich deutsche Oberfläche (pl, id) und fordert sie ganz neu an. Das läuft **nicht automatisch**
+  beim Merge: Nach künftigen Textänderungen Workflow **„Pillar-Leitfaeden uebersetzen“** (`translate-pillars.yml`) mit `mode=run`, `ui_only=true` starten
+  (Haiku-Batch, wenige Cent). Für PR #606 lief das einmalig auf dem Branch (siehe unten „Übersetzung“).
 - *Merge-Reihenfolge mit PR #527:* #527 nutzt ebenfalls die Nummer `0055` (`0055_orphan_handles.sql`, dazu `0054_person_entity.sql` neben main-`0054`) und ändert
   `worker/src/identities.js`. Wird #606 zuerst gemergt, muss #527 vor seinem Merge auf `0056`/`0057` umnummerieren und `identities.js` mit dem Block zu
   `learn_attempts`/`learn_certs` abgleichen.
@@ -87,11 +126,10 @@ Reihenfolge, wenn PR #606 auf main ist:
 
 **Anrede:** Seite, E-Mail und Zertifikat siezen („Sie“), passend zu den Leitfäden (Entscheidung 24.11.2026).
 
-**Name und Empfänger** (`POST /api/learn/cert`): Der Name darf keine Webadresse, Domain, `@` oder `/` enthalten (er steht öffentlich auf dem Zertifikat).
+**Name** (`POST /api/learn/cert`): Der Name darf keine Webadresse, Domain, `@` oder `/` enthalten (er steht öffentlich auf dem Zertifikat).
 Geprüft und gespeichert wird er normalisiert (NFKC, ohne Formatzeichen), damit Vollbreiten-Punkte, `[.]` oder unsichtbare Zeichen die Regel nicht umgehen;
 Domains werden auch mitten im Text erkannt („evil.com today“), Namen wie „Dr. Max“, „J. R. Smith“ oder „M.Sc.“ bleiben erlaubt.
-Hat das Konto eine bestätigte E-Mail-Adresse (`mail_addr`, verified=1), geht das Zertifikat nur an diese; die Testseite füllt sie vor. Ohne bestätigte Adresse
-ist die Eingabe frei, aber höchstens 2 verschiedene Adressen je Nutzer und Pfad.
+Empfänger: siehe oben („Empfänger = E-Mail-Adresse der Anmeldung“).
 
 **Antwortschlüssel im Worker.** Der Test startet erst, wenn der Worker die Schlüssel kennt (sonst zeigt die Seite „Test folgt in Kürze“).
 Sie kommen aus `data/pillar_quiz_keys.enc`: `tools/pillar_quiz.py push` entschlüsselt die Datei mit `CRON_KEY` und schickt
@@ -112,7 +150,8 @@ neu erzeugt. Die alten IDs stehen in `data/pillar_quiz.json` unter `retired` und
 Die Lösungen lokal ansehen (nie in Actions, Logs sind öffentlich): `CRON_KEY=… python3 tools/pillar_quiz.py show`.
 
 Datenschutz: Name und E-Mail gehen nur mit Häkchen (Einwilligung) an Certopus; der Abschnitt steht in der
-Datenschutzerklärung (`/datenschutz/#lernpfad-zertifikat`, `/privacy/#learning-path-certificate`, `site_legal.py`).
+Datenschutzerklärung (`/datenschutz/#lernpfad-zertifikat`, `/privacy/#learning-path-certificate`, `site_legal.py`), samt Zusatzschritt E-Mail aus der Anmeldung
+(welche Daten vom Anbieter kommen, nur für das Zertifikat gespeichert, Token nicht gespeichert, Löschung mit dem Konto).
 Belegt (Microsoft-Connector-Doku `PowerPlatformConnectors/certified-connectors/Certopus`, Commit c5f24b6b): Betreiber DevSquirrel Technologies Private Limited,
 Kontakt support@certopus.com, Datenschutzerklärung https://certopus.com/privacy. Nicht belegt: Firmensitz aus einer Primärquelle (Indien nur aus Drittquellen),
 ein Auftragsverarbeitungsvertrag, Standardvertragsklauseln, Serverstandort – deshalb stützt sich die Übermittlung auf die Einwilligung (Art. 49 Abs. 1 lit. a DSGVO).
@@ -238,6 +277,15 @@ LinkedIn-Knopf hat, ist nicht belegt; die E-Mail verweist deshalb auf die Testse
 | Fragen ohne Lösung (öffentlich) | `data/pillar_quiz.json` (`tools/pillar_quiz.py`, Workflow `pillar-quiz.yml`) |
 | Antwortschlüssel (verschlüsselt) | `data/pillar_quiz_keys.enc` → Worker-D1 `learn_quiz_keys` |
 | API, Certopus-Aufruf, Zähler | `worker/src/learnquiz.js` (`/api/learn/quiz/start`, `/submit`, `/api/learn/cert`, `/api/learn/stats`) |
+| E-Mail aus der Anmeldung (Zusatzschritt) | `worker/src/index.js` (`/auth/login/<anbieter>?purpose=certmail`, Callback-Zweig `certmail`), `worker/src/learnquiz.js` (`certMailIntent`, `certMailCallback`, `providerEmail`) |
+| Übersetzung der Testtexte | `translate_pillars.py` (`uix`, `--ui-only`), Workflow `translate-pillars.yml` (`ui_only`) |
 | IDs auslesen | `tools/certopus_ids.py`, Workflow `certopus-ids.yml` |
 | Schlüssel an den Worker | `tools/pillar_quiz.py push` → `POST /api/internal/learn-quiz` (`pillar-quiz.yml`, `worker.yml`) |
-| Zusammenspiel geprüft | `tests/test_lernpfad_e2e.py`, `worker/test/learnquiz_e2e.test.mjs` |
+| Zusammenspiel geprüft | `tests/test_lernpfad_e2e.py`, `worker/test/learnquiz_e2e.test.mjs`, `worker/test/learnquiz_certmail.test.mjs` (OAuth-Schritt), `tests/test_learnquiz_browser.py` (Formular im Browser) |
+
+## Übersetzung
+
+Der Kasten auf der Pfadseite und die Testseite nutzen `site_pillars.UI` (`q_*`); übersetzte Sprachen (fr, es, it, nl, pt, pl, id, ru, uk, ar, he, ja, ko) lesen
+`data/pillars_i18n.json` und fallen sonst auf Englisch zurück. Die Fragen selbst gibt es nur auf Englisch und Deutsch (`qlang`).
+`translate-pillars.yml` läuft nur von Hand (kein Trigger beim Merge). Für PR #606 lief er einmalig auf dem Branch per Push-Trigger (danach entfernt)
+mit `--ui-only`: neue `q_*`-Schlüssel für 11 Sprachen einzeln, pl und id ganz neu (dort stand die Oberfläche samt Pfadtitel auf Deutsch).

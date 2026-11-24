@@ -6,10 +6,17 @@
 //   POST /api/learn/quiz/submit  {attempt, answers}        Login; zaehlen, speichern, Ergebnis je Frage und Leitfaden (Sprache des Versuchs). Richtige Option und
 //                                                         Erklaerung nur fuer richtig beantwortete Fragen, nach dem Bestehen fuer alle, ohne verbleibende Versuche
 //                                                         fuer alle beantworteten (shown: all|answered|none) - sonst liesse sich der Schluessel mit leeren Abgaben abfragen
-//   GET  /api/learn/cert?path=                            Login; Stand (bestanden, bester Versuch, Zertifikat) und Vorschlag fuer Name/E-Mail
-//   POST /api/learn/cert         {path, attempt, name, email, consent, lang}   Zertifikat ueber Certopus (nur mit CERTOPUS_ON=1, Schluessel und IDs)
-//                                Name 2-80 Zeichen ohne Link, Domain, @ oder /; E-Mail: mit bestaetigter Adresse (mail_addr) nur diese (400 email_unverified),
-//                                sonst frei, hoechstens 2 verschiedene je Nutzer und Pfad (400 email_limit)
+//   GET  /api/learn/cert?path=                            Login; Stand (bestanden, bester Versuch, Zertifikat), Namensvorschlag, Empfaenger maskiert
+//                                                         (email_masked, email_src) und die verknuepften Anbieter fuer den E-Mail-Schritt (providers)
+//   POST /api/learn/cert         {path, attempt, name, consent, lang}   Zertifikat ueber Certopus (nur mit CERTOPUS_ON=1, Schluessel und IDs)
+//                                Name 2-80 Zeichen ohne Link, Domain, @ oder /. Empfaenger nie frei eingetippt (Entscheidung Mirko 24.11.2026: "die mail aus
+//                                der anmeldung nehmen"): die vom Anmelde-Anbieter bestaetigte E-Mail aus dem Zusatzschritt (certMailCallback), sonst die
+//                                bestaetigte Adresse des Kontos (mail_addr verified=1); ohne beides 409 need_email. Ein mitgeschicktes email-Feld wird nicht
+//                                uebernommen (abweichend: 400 email_fixed).
+//   Zusatzschritt E-Mail: GET /auth/login/<anbieter>?purpose=certmail&path=<pfad>&return=<testseite> (index.js) fordert beim Anbieter zusaetzlich die E-Mail an
+//                                (CERTMAIL_SCOPE; die normale Anmeldung bleibt bei ihren Scopes). Der state ist an Nutzer, Sitzung, Zeit und Pfad gebunden.
+//                                Der Callback meldet nie an, verknuepft nichts und legt kein Konto an: Er speichert nur die bestaetigte E-Mail in learn_certs
+//                                (status draft) und leitet mit ?certmail=ok|wrong_account|unverified|session|not_passed|issued|error zur Testseite zurueck.
 //   GET  /api/learn/stats?path=                           nur Admin: gestartet/abgegeben/bestanden/Zertifikate je Herkunft (src) und Woche
 //   POST /api/internal/learn-quiz {path, keys:[...]}       CRON_KEY: je Pfad massgeblich - uebermittelte Schluessel upserten (active=1), alle anderen
 //                                                         Fragen des Pfads stilllegen (active=0, keine Loeschung: offene Versuche bleiben wertbar, IDs bleiben vergeben;
@@ -17,7 +24,7 @@
 // Certopus-Konfiguration je Pfad in der Var CERTOPUS_PATHS (JSON {pfad: {org, event, category, course:{en,de}}}), Secret CERTOPUS_API_KEY,
 // Notschalter CERTOPUS_ON ("1" = an). Ohne all das: Test laeuft, das Zertifikat bleibt "pending" (503 cert_off) und wird spaeter ausgestellt
 // (erneuter Klick oder Cron issuePendingCerts, sobald CERTOPUS_ON=1).
-import { cleanText, rateLimit, randomToken } from "./util.js";
+import { cleanText, rateLimit, randomToken, readSessionInfo, sha256hex, memberOf } from "./util.js";
 import { isStaging } from "./staging.js";
 
 export const PER_PILLAR = 3, PASS_PCT = 80, MAX_ATTEMPTS = 3, ATTEMPT_TTL = 86400;
@@ -33,6 +40,7 @@ export const COURSE = {
 const PATH_RX = /^[a-z0-9][a-z0-9-]{1,60}$/;
 const QID_RX = /^[a-z0-9][a-z0-9-]{1,80}-[0-9]{1,3}$/;
 const EMAIL_RX = /^[^\s@<>"']{1,64}@[^\s@<>"']{1,190}\.[a-z]{2,}$/i;
+export const cleanEmail = (s) => { const e = typeof s === "string" ? s.trim().toLowerCase() : ""; return e.length <= 254 && EMAIL_RX.test(e) ? e : ""; };
 // Name auf dem Zertifikat: keine Links, Domains oder Adressen (Certopus druckt ihn, das Zertifikat ist oeffentlich). Geprueft wird der mit certName
 // normalisierte Name (NFKC: Vollbreiten-Punkt und -@ werden ASCII; Formatzeichen wie Word Joiner, weiches Trennzeichen, BOM fallen weg; 。 wird .).
 // Domains auch mitten im Text ("evil.com today", "t.me x", "evil[.]com"); Namen mit Punkt ("Dr. Max", "J. R. Smith", "M.Sc.", "St.Pierre") bleiben erlaubt.
@@ -40,7 +48,15 @@ const EMAIL_RX = /^[^\s@<>"']{1,64}@[^\s@<>"']{1,190}\.[a-z]{2,}$/i;
 export const NAME_TLD = "com|net|org|info|biz|io|co|me|ly|gg|ai|app|dev|xyz|top|site|online|shop|store|club|live|pro|link|click|page|blog|news|tech|space|website|email|cloud|one|fm|tv|cc|to|sh|so|ws|tk|ml|ga|cf|gq|ru|cn|uk|us|eu|de|at|ch|nl|fr|es|it|pl|be|se|dk|fi|br|in|jp|kr|au|ca|mx|tr|ua|vn|id|ph|ng|za|ae";
 export const NAME_URL_RX = new RegExp(String.raw`https?:|www\.|xn--|[@/\\]|[\[(]\s*\.\s*[\])]|\.[a-z]{2,}(\/|$)|[a-z0-9-]\.(?:${NAME_TLD})(?![a-z0-9])`, "i");
 export const certName = (s) => cleanText(String(s ?? "").normalize("NFKC").replace(/\p{Cf}/gu, "").replace(/[\u3002\uff61]/g, "."), 200).replace(/\s+/g, " ").replace(/[<>]/g, "").trim();
-export const MAX_FREE_EMAILS = 2;   // ohne bestaetigte Adresse: hoechstens so viele verschiedene Empfaenger je Nutzer und Pfad
+// Zusatzschritt "E-Mail aus der Anmeldung": Scopes nur fuer diesen Schritt (normale Anmeldung: index.js PROVIDERS, ohne E-Mail ausser LinkedIn)
+export const CERTMAIL_SCOPE = { google: "openid email", microsoft: "openid email", linkedin: "openid profile email", github: "read:user user:email" };
+export const CERTMAIL_PROVIDERS = ["linkedin", "microsoft", "google", "github"];
+export const CERTMAIL_WINDOW = 600;   // Sekunden zwischen Start und Callback (wie das state-Cookie)
+// Microsoft: Tenant-ID privater Microsoft-Konten. Nur dort ist die E-Mail sicher von Microsoft bestaetigt; in Arbeitskonten (Entra ID) kann ein Tenant-Admin
+// das Mail-Attribut frei setzen ("nOAuth") - dort nur mit dem optionalen Claim xms_edov === true (Domain-Inhaber bestaetigt) im id_token.
+export const MS_PERSONAL_TID = "9188040d-6c67-4c5b-b112-36a304b66dad";
+const EMAIL_SRC = new Set(CERTMAIL_PROVIDERS);
+export const maskEmail = (e) => { const s = String(e || ""), at = s.lastIndexOf("@"); return at > 0 ? `${[...s.slice(0, at)][0]}***${s.slice(at)}` : ""; };
 const now = () => Math.floor(Date.now() / 1000);
 export const quizLang = (l) => (String(l || "").toLowerCase() === "de" ? "de" : "en");   // Test gibt es auf en und de, alles andere faellt auf en zurueck
 export const threshold = (total) => Math.ceil((total * PASS_PCT) / 100);
@@ -193,7 +209,7 @@ export async function issuePendingCerts(env, limit = 5) {
   return out;
 }
 
-export async function deleteUserLearn(db, uid) {   // Konto loeschen: Versuche und Zertifikat-Zeilen (Name, E-Mail). Bei Certopus ausgestellte Zertifikate bleiben dort.
+export async function deleteUserLearn(db, uid) {   // Konto loeschen: Versuche und Zertifikat-Zeilen (Name, E-Mail samt Herkunft aus dem Zusatzschritt). Bei Certopus ausgestellte Zertifikate bleiben dort.
   await db.prepare("DELETE FROM learn_attempts WHERE user_id=?").bind(uid).run().catch(() => 0);
   await db.prepare("DELETE FROM learn_certs WHERE user_id=?").bind(uid).run().catch(() => 0);
 }
@@ -325,7 +341,7 @@ async function submit(env, request, user, J) {
   return J({ attempt: id, score, total, passed: !!passed, threshold: need, threshold_pct: PASS_PCT, per_pillar: perPillar, results, shown, attempts_left: left });
 }
 
-async function certStatus(env, url, user, J) {
+async function certStatus(env, url, user, J, opts) {
   const db = env.DB, path = String(url.searchParams.get("path") || "");
   if (!PATH_RX.test(path)) return J({ error: "bad_path" }, 400);
   const cfg = certConfig(env, path), t = now();
@@ -333,15 +349,18 @@ async function certStatus(env, url, user, J) {
   const open = await db.prepare("SELECT id,qids,started FROM learn_attempts WHERE user_id=? AND path=? AND finished=0 AND started>? ORDER BY started DESC LIMIT 1").bind(user.id, path, t - ATTEMPT_TTL).first();
   const cert = await db.prepare("SELECT * FROM learn_certs WHERE user_id=? AND path=?").bind(user.id, path).first();
   const pref = await db.prepare("SELECT real_name FROM user_prefs WHERE user_id=?").bind(user.id).first().catch(() => null);
-  const verified = await verifiedEmails(db, user.id);
+  const rcpt = await certRecipient(db, user.id, cert);
   const keys = await db.prepare("SELECT COUNT(*) n FROM learn_quiz_keys WHERE path=? AND active=1").bind(path).first();
+  // Anbieter fuer den E-Mail-Schritt: mit dem Konto verknuepft und im Worker eingerichtet (opts.providers aus index.js)
+  const conf = Array.isArray(opts?.providers) ? opts.providers : CERTMAIL_PROVIDERS;
+  const providers = (await linkedProviders(db, user.id)).filter((p) => conf.includes(p));
   return J({
     path, quiz_ready: (keys?.n || 0) > 0, passed: !!best?.passed,
     best: best ? { attempt: best.id, score: best.score, total: best.total, passed: !!best.passed, finished: best.finished } : null,
     open: open ? { attempt: open.id, qids: parse(open.qids, []), expires: open.started + ATTEMPT_TTL } : null,
-    cert: cert ? certOut(cert, cfg) : null,
+    cert: cert && cert.status !== "draft" ? certOut(cert, cfg) : null,
     name: cert?.name || String(pref?.real_name || "").trim() || user.name || "",
-    email: (verified.length ? (verified.includes(cert?.email) ? cert.email : verified[0]) : cert?.email) || "", email_verified: verified.length > 0,
+    email_masked: rcpt ? maskEmail(rcpt.email) : "", email_src: rcpt?.src || "", providers,
     cert_on: certReady(env, cfg), attempts_left: await attemptsLeft(db, user.id, path), threshold_pct: PASS_PCT, max_attempts: MAX_ATTEMPTS,
   });
 }
@@ -349,7 +368,98 @@ async function certStatus(env, url, user, J) {
 // Bestaetigte Adressen des Kontos (mail_addr, verified=1; heute hoechstens eine je Konto), klein geschrieben
 async function verifiedEmails(db, uid) {
   const rows = (await db.prepare("SELECT email FROM mail_addr WHERE user_id=? AND verified=1").bind(uid).all().catch(() => null))?.results || [];
-  return [...new Set(rows.map((r) => String(r.email || "").trim().toLowerCase()).filter(Boolean))];
+  return [...new Set(rows.map((r) => cleanEmail(r.email)).filter(Boolean))];
+}
+
+// Empfaenger des Zertifikats: die E-Mail aus dem Zusatzschritt der Anmeldung (learn_certs.email, email_src = Anbieter), sonst die bestaetigte Adresse
+// des Kontos (mail_addr). -> {email, src} oder null (dann 409 need_email). Nie eine frei eingegebene Adresse.
+async function certRecipient(db, uid, row) {
+  if (row?.email && EMAIL_SRC.has(row.email_src)) return { email: row.email, src: row.email_src };
+  const v = await verifiedEmails(db, uid);
+  return v.length ? { email: v[0], src: "account" } : null;
+}
+
+// Mit dem Konto verknuepfte Anmelde-Anbieter (user_identities, alte Konten: users.provider), in fester Reihenfolge
+export async function linkedProviders(db, uid) {
+  const rows = (await db.prepare("SELECT provider FROM user_identities WHERE user_id=? UNION SELECT provider FROM users WHERE id=?").bind(uid, uid).all().catch(() => null))?.results || [];
+  const have = new Set(rows.map((r) => r.provider));
+  return CERTMAIL_PROVIDERS.filter((p) => have.has(p));
+}
+
+// Wem gehoert diese Anmeldung? Nur lesen (findUserByIdentity in identities.js traegt alte Konten nach - das waere hier schon ein Schreiben). -> Nutzer-ID oder 0
+export async function identityOwner(db, provider, sub) {
+  const r = await db.prepare("SELECT user_id FROM user_identities WHERE provider=? AND sub=?").bind(provider, String(sub)).first().catch(() => null);
+  if (r) return Number(r.user_id) || 0;
+  const u = await db.prepare("SELECT id FROM users WHERE provider=? AND sub=?").bind(provider, String(sub)).first().catch(() => null);
+  return u ? Number(u.id) || 0 : 0;
+}
+
+const jwtClaims = (t) => {
+  try {
+    const p = String(t || "").split(".")[1] || "", b = atob(p.replace(/-/g, "+").replace(/_/g, "/").padEnd(Math.ceil(p.length / 4) * 4, "="));
+    const j = JSON.parse(new TextDecoder().decode(Uint8Array.from(b, (c) => c.charCodeAt(0))));
+    return j && typeof j === "object" ? j : null;
+  } catch { return null; }
+};
+
+// Vom Anbieter bestaetigte E-Mail. -> {email} oder {error: unverified|error}
+//   google, linkedin: userinfo email_verified === true
+//   github: GET api.github.com/user/emails (Scope user:email), nur die primaere und bestaetigte Adresse
+//   microsoft: aus dem id_token (direkt vom Token-Endpunkt, TLS); nur private Microsoft-Konten (tid MS_PERSONAL_TID) oder xms_edov === true; sonst abgelehnt
+export async function providerEmail(provider, raw, tok, o = {}) {
+  if (provider === "google" || provider === "linkedin") {
+    const e = raw && raw.email_verified === true ? cleanEmail(raw.email) : "";
+    return e ? { email: e } : { error: "unverified" };
+  }
+  if (provider === "github") {
+    let list;
+    try {
+      const r = await fetch("https://api.github.com/user/emails", { headers: { ...(o.infoHeaders || {}), authorization: `Bearer ${tok.access_token}` } });
+      if (!r.ok) return { error: "error" };
+      list = await r.json();
+    } catch { return { error: "error" }; }
+    const hit = (Array.isArray(list) ? list : []).find((x) => x && x.primary === true && x.verified === true);
+    const e = hit ? cleanEmail(hit.email) : "";
+    return e ? { email: e } : { error: "unverified" };
+  }
+  if (provider === "microsoft") {
+    const c = jwtClaims(tok && tok.id_token);
+    if (!c || !o.clientId || c.aud !== o.clientId || String(c.sub || "") !== String(o.sub || "")) return { error: "unverified" };
+    if (c.tid !== MS_PERSONAL_TID && c.xms_edov !== true) return { error: "unverified" };
+    const e = cleanEmail(c.email);
+    return e ? { email: e } : { error: "unverified" };
+  }
+  return { error: "unverified" };
+}
+
+// Start des Zusatzschritts (index.js, /auth/login/<anbieter>?purpose=certmail): -> {intent} fuer den state oder {error} (Ruecksprung mit ?certmail=<error>).
+// Nur angemeldet und nur mit einem Anbieter, der mit dem Konto verknuepft ist. intent C<uid>.<zeit>.<sitzungs-hash>.<pfad> (wie L... beim Verknuepfen).
+export async function certMailIntent(env, request, provider, path) {
+  if (!EMAIL_SRC.has(provider) || !PATH_RX.test(String(path || ""))) return { error: "error" };
+  const sess = await readSessionInfo(env, request), user = sess ? await memberOf(env, sess.uid) : null;
+  if (!user) return { error: "session" };
+  if (!(await linkedProviders(env.DB, user.id)).includes(provider)) return { error: "wrong_account" };
+  if (!(await rateLimit(env.DB, `certmail:${user.id}`, 10, 3600))) return { error: "rate_limit" };
+  return { intent: `C${user.id}.${now()}.${(await sha256hex(sess.raw)).slice(0, 32)}.${path}` };
+}
+
+// Callback des Zusatzschritts. Meldet nie an, verknuepft nichts, legt kein Konto an. -> Status fuer ?certmail=
+//   session: Sitzung fehlt oder passt nicht zum state; wrong_account: die Anmeldung beim Anbieter gehoert nicht zu diesem Konto;
+//   unverified: Anbieter bestaetigt die E-Mail nicht; not_passed; issued: Zertifikat schon ausgestellt (Adresse bleibt); ok: gespeichert
+export async function certMailCallback(env, request, o) {
+  const db = env.DB, [lu, lt, lh, path] = String(o.intent || "").slice(1).split(".");
+  const sess = await readSessionInfo(env, request), t = now();
+  const fresh = !!sess && sess.uid === +lu && t - +lt <= CERTMAIL_WINDOW && +lt <= t + 60 && PATH_RX.test(path || "") && (await sha256hex(sess.raw)).slice(0, 32) === lh;
+  const user = fresh ? await memberOf(env, sess.uid) : null;
+  if (!user) return "session";
+  if (!EMAIL_SRC.has(o.provider) || !o.sub || (await identityOwner(db, o.provider, o.sub)) !== user.id) return "wrong_account";
+  const v = await providerEmail(o.provider, o.raw, o.tok, o);
+  if (!v.email) return v.error || "unverified";
+  if (!(await db.prepare("SELECT 1 x FROM learn_attempts WHERE user_id=? AND path=? AND passed=1 LIMIT 1").bind(user.id, path).first())) return "not_passed";
+  const r = await db.prepare("INSERT INTO learn_certs(user_id,path,email,email_src,email_at,status,created,updated) VALUES(?,?,?,?,?,'draft',?,?) " +
+    "ON CONFLICT(user_id,path) DO UPDATE SET email=excluded.email,email_src=excluded.email_src,email_at=excluded.email_at,updated=excluded.updated WHERE learn_certs.status IN ('draft','pending','error')")
+    .bind(user.id, path, v.email, o.provider, t, t, t).run();
+  return r?.meta?.changes ? "ok" : "issued";
 }
 
 async function certRequest(env, request, user, J) {
@@ -367,20 +477,18 @@ async function certRequest(env, request, user, J) {
   const name = certName(b.name);   // normalisiert gespeichert (so prueft und druckt es dasselbe)
   if (name.length < 2 || name.length > 80) return J({ error: "name" }, 400);
   if (NAME_URL_RX.test(name)) return J({ error: "name_url" }, 400);
-  const email = String(b.email || "").trim().toLowerCase();
-  if (email.length > 254 || !EMAIL_RX.test(email)) return J({ error: "email" }, 400);
-  // Empfaenger: Mit bestaetigter Adresse nur diese (sonst liesse sich das Zertifikat an Fremde schicken); ohne frei, aber hoechstens
-  // MAX_FREE_EMAILS verschiedene je Nutzer und Pfad (learn_certs.emails merkt sich die bisher genutzten)
-  const verified = await verifiedEmails(db, user.id);
-  if (verified.length && !verified.includes(email)) return J({ error: "email_unverified" }, 400);
-  const used = parse(have?.emails || "[]", []).filter((x) => typeof x === "string");
-  if (!verified.length && !used.includes(email) && used.length >= MAX_FREE_EMAILS) return J({ error: "email_limit", max: MAX_FREE_EMAILS }, 400);
-  const emails = JSON.stringify(used.includes(email) ? used : [...used, email]);
+  // Empfaenger nur aus der Anmeldung bzw. bestaetigt (certRecipient), nie aus der Anfrage
+  const rcpt = await certRecipient(db, user.id, have);
+  if (!rcpt) return J({ error: "need_email" }, 409);
+  const sent = b.email === undefined || b.email === null ? "" : String(b.email).trim().toLowerCase();
+  if (sent && sent !== rcpt.email) return J({ error: "email_fixed" }, 400);
   if (!(await rateLimit(db, `learncert:${user.id}`, 5, 3600))) return J({ error: "rate_limit" }, 429);
   const lang = quizLang(b.lang), t = now();
-  await db.prepare("INSERT INTO learn_certs(user_id,path,attempt_id,name,email,emails,lang,status,created,updated) VALUES(?,?,?,?,?,?,?,'pending',?,?) " +
-    "ON CONFLICT(user_id,path) DO UPDATE SET attempt_id=excluded.attempt_id,name=excluded.name,email=excluded.email,emails=excluded.emails,lang=excluded.lang,status='pending',error='',updated=excluded.updated WHERE learn_certs.status IN ('pending','error')")
-    .bind(user.id, path, a.id, name, email, emails, lang, t, t).run();
+  await db.prepare("INSERT INTO learn_certs(user_id,path,attempt_id,name,email,email_src,email_at,lang,status,created,updated) VALUES(?,?,?,?,?,?,?,?,'pending',?,?) " +
+    "ON CONFLICT(user_id,path) DO UPDATE SET attempt_id=excluded.attempt_id,name=excluded.name,email=excluded.email,email_src=excluded.email_src," +
+    "email_at=CASE WHEN learn_certs.email=excluded.email AND learn_certs.email_src=excluded.email_src THEN learn_certs.email_at ELSE excluded.email_at END," +
+    "lang=excluded.lang,status='pending',error='',updated=excluded.updated WHERE learn_certs.status IN ('draft','pending','error')")
+    .bind(user.id, path, a.id, name, rcpt.email, rcpt.src, t, lang, t, t).run();
   if (!certReady(env, cfg)) return J({ error: "cert_off", status: "pending" }, 503);
   const row = await db.prepare("SELECT * FROM learn_certs WHERE user_id=? AND path=?").bind(user.id, path).first();
   if (row?.status === "ok") return J({ ...certOut(row, cfg), existing: true });
@@ -404,7 +512,7 @@ async function stats(env, url, user, J) {
   return J({ path: path || null, rows: rows.map((r) => ({ ...r, submitted: r.submitted || 0, passed: r.passed || 0, certs: r.certs || 0 })), totals, cert_status: Object.fromEntries((pending.results || []).map((r) => [r.status, r.n])) });
 }
 
-export async function handleLearnQuiz(env, request, url, path, user, J) {
+export async function handleLearnQuiz(env, request, url, path, user, J, opts = {}) {
   if (path === "/api/internal/learn-quiz") return internalUpsert(env, request, J);
   const method = request.method;
   let allowed;   // Routen ausdruecklich als path === "..." (tools/mcp_routes.mjs liest sie so aus dem Quelltext)
@@ -417,5 +525,5 @@ export async function handleLearnQuiz(env, request, url, path, user, J) {
   if (path === "/api/learn/quiz/start") return start(env, request, user, J);
   if (path === "/api/learn/quiz/submit") return submit(env, request, user, J);
   if (path === "/api/learn/stats") return stats(env, url, user, J);
-  return method === "GET" ? certStatus(env, url, user, J) : certRequest(env, request, user, J);
+  return method === "GET" ? certStatus(env, url, user, J, opts) : certRequest(env, request, user, J);
 }

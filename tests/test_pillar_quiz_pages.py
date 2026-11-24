@@ -196,6 +196,19 @@ class Texts(unittest.TestCase):
         for i in (0, 1):
             self.assertIn("Certopus (DevSquirrel Technologies", S.UI["q_consent"][i])
             self.assertIn("{link}", S.UI["q_consent"][i])
+        self.assertIn("email address of my sign-in", S.UI["q_consent"][0]); self.assertIn("E-Mail-Adresse meiner Anmeldung", S.UI["q_consent"][1])
+
+    def test_mail_from_sign_in_texts(self):
+        """Entscheidung 24.11.2026: Zertifikat an die E-Mail der Anmeldung, kein Eingabefeld. Texte siezen, Platzhalter in en und de gleich."""
+        for k in ("q_email", "q_err_email", "q_email_verified", "q_err_email_unverified", "q_err_email_limit"):
+            self.assertNotIn(k, S.UI, "freie E-Mail-Eingabe gibt es nicht mehr: " + k)
+        self.assertEqual(S.UI["q_mail_btn"][1], "E-Mail aus Ihrer Anmeldung bei {p} übernehmen")
+        self.assertIn("{email}", S.UI["q_mail_to"][1]); self.assertIn("{src}", S.UI["q_mail_to"][1])
+        for k in [k for k in S.UI if k.startswith("q_mail") or k == "q_err_need_email"]:
+            en, de = S.UI[k]
+            self.assertEqual(sorted(re.findall(r"\{\w+\}", en)), sorted(re.findall(r"\{\w+\}", de)), k)
+            self.assertNotRegex(de, r"\b(du|dich|dein\w*)\b", k)
+            self.assertIn(k, S.JS_KEYS)
 
 
 class Script(unittest.TestCase):
@@ -209,6 +222,15 @@ class Script(unittest.TestCase):
         self.assertRegex(js, r'/\^\(GET\)\?\$/i\.test\(o\.method')   # Header nur bei schreibenden Anfragen (kein CORS-Preflight bei GET)
         self.assertNotIn("innerHTML", js, "Texte nur als textContent")
 
+    def test_no_email_field_and_certmail_step(self):
+        js = self.JS
+        self.assertNotIn('type: "email"', js, "kein E-Mail-Eingabefeld")
+        body = re.search(r'"/api/learn/cert", \{ method: "POST", body: (\{[^}]*\})', js)
+        self.assertIsNotNone(body); self.assertNotIn("email", body.group(1), "das Formular schickt keine E-Mail-Adresse")
+        for s in ('"?purpose=certmail&path="', '"&return="', 'searchParams.get("certmail")', 'history.replaceState', '"lqres:"', "ST.email_masked", "ST.providers",
+                  "wrong_account", "unverified", "need_email"):
+            self.assertIn(s, js)
+
     def test_no_answer_key_in_script(self):
         self.assertNotRegex(self.JS, r"answer\s*:\s*\d")
 
@@ -219,8 +241,16 @@ class Privacy(unittest.TestCase):
         self.assertIn('id="lernpfad-zertifikat"', de); self.assertIn('id="learning-path-certificate"', en)
         common = ("Certopus", "DevSquirrel Technologies Private Limited", "support@certopus.com", 'href="https://certopus.com/privacy"')
         for text, words in ((de, common + ("Indien", "Art. 49 Abs. 1 lit. a DSGVO", "Einwilligung", "3 je 24 Stunden", "bestätigte E-Mail-Adresse")),
-                            (en, common + ("India", "Art. 49(1)(a) GDPR", "consent", "3 per 24 hours", "confirmed email address"))):
+                            (en, common + ("India", "Art. 49(1)(a) GDPR", "consent", "3 per 24 hours", "email address confirmed with us"))):
             for w in words: self.assertIn(w, text)
+        # Zusatzschritt E-Mail aus der Anmeldung (OAuth): Anbieter, Daten, nur fuers Zertifikat, Token nicht gespeichert, Loeschung mit dem Konto
+        for w in ("E-Mail-Adresse Ihrer Anmeldung", "LinkedIn, Microsoft, Google oder GitHub", "primäre", "Microsoft-Arbeits- oder Schulkonten", "meldet Sie nicht neu an",
+                  "ausschließlich für das Zertifikat", "speichern es nicht", "einschließlich der übernommenen E-Mail-Adresse"):
+            self.assertIn(w, de)
+        for w in ("email address of your sign-in", "LinkedIn, Microsoft, Google or GitHub", "primary", "Microsoft work or school accounts", "does not sign you in again",
+                  "solely for the certificate", "do not store it", "including the email address taken over"):
+            self.assertIn(w, en)
+        self.assertNotIn("zwei angegebene Adressen", de); self.assertNotIn("two addresses you entered", en)
 
 
 if __name__ == "__main__":

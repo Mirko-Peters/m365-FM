@@ -121,7 +121,7 @@ test("Ende zu Ende: Push wie tools/pillar_quiz.py -> Start -> Abgabe -> Zertifik
   // 2) Stand vor dem Test (Felder, die learnquiz.js liest)
   const st0 = await call(env, `/api/learn/cert?path=${PATH}`, { cookie });
   assert.equal(st0.status, 200);
-  for (const k of ["quiz_ready", "passed", "best", "open", "cert", "name", "email", "cert_on", "attempts_left"]) assert.ok(k in st0.data, `GET cert: Feld ${k} fehlt`);
+  for (const k of ["quiz_ready", "passed", "best", "open", "cert", "name", "email_masked", "email_src", "providers", "cert_on", "attempts_left"]) assert.ok(k in st0.data, `GET cert: Feld ${k} fehlt`);
   assert.equal(st0.data.quiz_ready, true); assert.equal(st0.data.cert_on, true); assert.equal(st0.data.attempts_left, 3);
 
   // 3) Start: 3 Fragen je Leitfaden, alle IDs stehen auf der Testseite (deutsche Fragen)
@@ -156,8 +156,8 @@ test("Ende zu Ende: Push wie tools/pillar_quiz.py -> Start -> Abgabe -> Zertifik
   };
   try {
     const st1 = await call(env, `/api/learn/cert?path=${PATH}`, { cookie });
-    assert.equal(st1.data.passed, true); assert.equal(st1.data.best.attempt, s.data.attempt); assert.equal(st1.data.email, "ada@example.com");
-    const c = await call(env, "/api/learn/cert", { method: "POST", cookie, body: { path: PATH, attempt: st1.data.best.attempt, name: "Ada Lovelace", email: st1.data.email, consent: true, lang: "de" } });
+    assert.equal(st1.data.passed, true); assert.equal(st1.data.best.attempt, s.data.attempt); assert.equal(st1.data.email_masked, "a***@example.com"); assert.equal(st1.data.email_src, "account");
+    const c = await call(env, "/api/learn/cert", { method: "POST", cookie, body: { path: PATH, attempt: st1.data.best.attempt, name: "Ada Lovelace", consent: true, lang: "de" } });
     assert.equal(c.status, 200, c.text);
     assert.equal(c.data.status, "ok"); assert.equal(c.data.url, "https://certopus.com/c/E2E-1"); assert.equal(c.data.pdf, "https://certopus.com/c/E2E-1.pdf");
     assert.equal(new URL(c.data.linkedin).searchParams.get("name"), cfg.course.de);

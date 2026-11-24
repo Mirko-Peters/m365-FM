@@ -7,6 +7,11 @@ on:
       pillars: { description: "Nur diese Leitfaeden (IDs, kommagetrennt, z. B. lean-manufacturing); leer = alle", required: false, default: "" }
       limit: { description: "Hoechstens so viele Anfragen (Probelauf, z. B. 12); 0 = keine Grenze", required: false, default: "0" }
       redo: { description: "Ganze Leitfaeden neu uebersetzen (kostenpflichtig; alter Text bleibt, bis die neue Fassung die Pruefung besteht)", type: boolean, default: false }
+      ui_only: { description: "Nur Oberflaechentexte (neue/geaenderte Schluessel, z. B. q_* des Abschlusstests; deutsche Oberflaeche wird ganz neu angefordert)", type: boolean, default: false }
+  # EINMALIG (PR #606): neue q_*-Texte des Abschlusstests und die deutsche Oberflaeche von pl/id uebersetzen (Haiku, ca. 0,01 EUR). Nach dem Lauf wieder entfernen.
+  push:
+    branches: [claude/lernpfad-zertifikat]
+    paths: [.github/workflows/translate-pillars.yml]
 permissions:
   contents: write
 concurrency: { group: translate-pillars, cancel-in-progress: false }
@@ -35,9 +40,11 @@ jobs:
           PILLARS_IN: ${{ inputs.pillars }}
           LIMIT_IN: ${{ inputs.limit }}
           REDO_IN: ${{ inputs.redo }}
+          UI_ONLY_IN: ${{ github.event_name == 'push' && 'true' || inputs.ui_only }}
+          MODE_PUSH: ${{ github.event_name == 'push' && 'run' || '' }}
           PILLARS_TRIES: "5"
         run: |
-          MODE="${MODE_IN:-plan}"
+          MODE="${MODE_IN:-${MODE_PUSH:-plan}}"
           if [ -z "$ANTHROPIC_API_KEY" ] && [ "$MODE" = "run" ]; then
             echo "::warning::Kein API-Schluessel (Secret ANTHROPIC_API_KEY_SHOW) - nur Plan."; MODE=plan
           fi
@@ -46,6 +53,7 @@ jobs:
           [ -n "$PILLARS_IN" ] && ARGS="$ARGS --pillars $PILLARS_IN"
           [ -n "$LIMIT_IN" ] && [ "$LIMIT_IN" != "0" ] && ARGS="$ARGS --limit $LIMIT_IN"
           [ "$REDO_IN" = "true" ] && ARGS="$ARGS --redo"
+          [ "$UI_ONLY_IN" = "true" ] && ARGS="$ARGS --ui-only"
           echo "Aufruf: translate_pillars.py $MODE $ARGS"
           python translate_pillars.py "$MODE" $ARGS
       - name: Ergebnis committen

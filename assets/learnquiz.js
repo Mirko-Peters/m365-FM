@@ -1,6 +1,8 @@
 // Abschlusstest eines Lernpfads (site_pillars.quiz_page): Anmeldung, 30 Fragen, Ergebnis mit Erklaerungen, Zertifikat ueber Certopus.
 // Fragen ohne Loesung stehen als JSON in #lq-data; Ergebnis, Loesungen und Erklaerungen kommen erst nach der Abgabe vom Worker (worker/src/learnquiz.js, Regel "shown").
 // Konfiguration: window.M365LQ = {api, lang, qlang, path, privacy, pathUrl, max, t:{Texte}}. Kein Framework.
+// Empfaenger des Zertifikats: die E-Mail-Adresse der Anmeldung (kein Eingabefeld). Fehlt sie, holt der Knopf je verknuepftem Anbieter sie im Zusatzschritt
+// /auth/login/<anbieter>?purpose=certmail (Worker learnquiz.js); zurueck kommt die Seite mit ?certmail=<status>, zeigt Ergebnis und Formular wieder.
 (function () {
   "use strict";
   var C = window.M365LQ, root = document.getElementById("lq-app"), dataEl = document.getElementById("lq-data"), status = document.getElementById("lq-status");
@@ -8,6 +10,15 @@
   var D;
   try { D = JSON.parse(dataEl.textContent); } catch (e) { return; }
   var T = C.t || {}, Q = {}, G = {}, ST = null, first = true;
+  var NAMES = { linkedin: "LinkedIn", microsoft: "Microsoft", google: "Google", github: "GitHub" };
+  var RES_KEY = "lqres:" + C.path, NAME_KEY = "lqname:" + C.path;   // Ergebnis und Name ueberstehen den Zusatzschritt (sessionStorage)
+  var CM = (function () {   // Rueckkehr aus dem Zusatzschritt: Status lesen und aus der Adresse entfernen
+    var u = new URL(location.href), v = u.searchParams.get("certmail");
+    if (!v) return "";
+    u.searchParams.delete("certmail");
+    try { history.replaceState(null, "", u.pathname + u.search + u.hash); } catch (e) { }
+    return /^[a-z_]{2,20}$/.test(v) ? v : "error";
+  })();
   // wie NAME_TLD / NAME_URL_RX / certName im Worker (worker/test/learnquiz.test.mjs prueft den Gleichlauf)
   var NAME_TLD = "com|net|org|info|biz|io|co|me|ly|gg|ai|app|dev|xyz|top|site|online|shop|store|club|live|pro|link|click|page|blog|news|tech|space|website|email|cloud|one|fm|tv|cc|to|sh|so|ws|tk|ml|ga|cf|gq|ru|cn|uk|us|eu|de|at|ch|nl|fr|es|it|pl|be|se|dk|fi|br|in|jp|kr|au|ca|mx|tr|ua|vn|id|ph|ng|za|ae";
   var NAME_URL_RX = new RegExp("https?:|www\\.|xn--|[@/\\\\]|[\\[(]\\s*\\.\\s*[\\])]|\\.[a-z]{2,}(\\/|$)|[a-z0-9-]\\.(?:" + NAME_TLD + ")(?![a-z0-9])", "i");
@@ -70,7 +81,7 @@
   // ---------- Anmeldung ----------
   function login() {
     var ret = encodeURIComponent(location.href.split("#")[0]), btns = h("div", { class: "lq-btns" });
-    var names = { linkedin: "LinkedIn", microsoft: "Microsoft", google: "Google", github: "GitHub" };
+    var names = NAMES;
     show([h("h2", { text: t("q_login_h") }), h("p", { text: t("q_login") }), btns]);
     api("/api/providers").then(function (r) {
       var pv = (r.j && r.j.providers) || ["linkedin", "microsoft", "google"];
@@ -89,10 +100,15 @@
       if (r.s === 401) return login();
       if (r.s !== 200) return fail(r);
       ST = r.j;
-      if (ST.cert && ST.cert.status === "ok") return certDone(ST.cert, ST.best);
-      if (ST.passed && ST.best) return passedView();
+      if (ST.cert && ST.cert.status === "ok") { store(RES_KEY); store(NAME_KEY); return certDone(ST.cert, ST.best); }
+      if (ST.passed && ST.best) {
+        var saved = CM ? load(RES_KEY) : null;   // nach dem Zusatzschritt: Ergebnis wie vorher, Formular offen
+        if (saved && saved.res && saved.res.passed) return result(saved.res, saved.ans || {});
+        return passedView();
+      }
       if (!ST.quiz_ready) return show([h("h2", { text: t("q_soon") })]);
       intro();
+      if (CM) { say(t(CM_TEXT[CM] || "q_err")); CM = ""; }   // Zusatzschritt ohne bestandenen Test (not_passed) o. ae.
     });
   }
   function leftLine(n) {
@@ -192,7 +208,7 @@
         h("a", { href: g.u, text: t("q_reread") })]));
     });
     out.push(h("h3", { text: t("q_by_guide") }), ul);
-    if (res.passed) out.push(certForm(res.attempt));
+    if (res.passed) { store(RES_KEY, { res: res, ans: ans }); out.push(certForm(res.attempt)); }
     else {
       out.push(leftLine(res.attempts_left));
       if (res.attempts_left > 0) out.push(h("p", {}, [h("button", { type: "button", class: "btn main", text: t("q_retry"), onclick: function (e) { e.target.disabled = true; start(); } })]));
@@ -219,45 +235,65 @@
     show(out);
   }
   function certForm(attempt) {
-    var name = h("input", { id: "lq-name", name: "name", autocomplete: "name", required: true, minlength: "2", maxlength: "80", value: (ST && ST.name) || "" });
-    var mail = h("input", { id: "lq-mail", name: "email", type: "email", autocomplete: "email", required: true, maxlength: "254", value: (ST && ST.email) || "",
-      "aria-describedby": ST && ST.email_verified ? "lq-mail-hint" : null });   // bestaetigte Adresse des Kontos ist vorbefuellt (Worker nimmt nur diese)
-    var hint = ST && ST.email_verified ? h("p", { id: "lq-mail-hint", class: "mut", text: t("q_email_verified") }) : null;
+    var saved = load(NAME_KEY);
+    var name = h("input", { id: "lq-name", name: "name", autocomplete: "name", required: true, minlength: "2", maxlength: "80", value: (typeof saved === "string" && saved) || (ST && ST.name) || "" });
     var ok = h("input", { id: "lq-ok", type: "checkbox", required: true });
     var parts = t("q_consent").split("{link}"), err = h("p", { class: "lq-err", role: "alert" });
     var label = h("label", { class: "lq-chk", for: "lq-ok" }, [ok, h("span", {}, [parts[0], h("a", { href: C.privacy, target: "_blank", rel: "noopener", text: t("q_privacy") }), parts[1] || ""])]);
     var btn = h("button", { type: "submit", class: "btn main", text: t("q_cert_btn") });
-    var box = h("form", { class: "lq-cert", novalidate: true }, [h("h3", { text: t("q_cert_h") }), h("p", { class: "mut", text: t("q_cert_lead") }),
-      h("label", { for: "lq-name", text: t("q_name") }), name, h("label", { for: "lq-mail", text: t("q_email") }), mail, hint, label, err, h("p", {}, [btn])]);
+    var has = !!(ST && ST.email_masked), pv = (ST && Array.isArray(ST.providers) ? ST.providers : []).filter(function (p) { return NAMES[p]; });
+    // Empfaenger: maskierte Adresse der Anmeldung mit Quelle, sonst Knoepfe fuer den Zusatzschritt
+    var mail = h("div", { class: "lq-mail", id: "lq-mail" });
+    if (has) mail.appendChild(h("p", { class: "lq-to", text: t("q_mail_to", { email: ST.email_masked, src: NAMES[ST.email_src] || t("q_mail_src_account") }) }));
+    else mail.appendChild(h("p", { text: t(pv.length ? "q_mail_need" : "q_mail_none") }));
+    if (pv.length) {
+      var row = h("p", { class: "lq-btns" });
+      pv.forEach(function (p) {
+        row.appendChild(h("a", { class: "btn" + (!has && !row.children.length ? " main" : ""), rel: "nofollow", href: mailUrl(p), text: t("q_mail_btn", { p: NAMES[p] }),
+          onclick: function () { store(NAME_KEY, name.value); } }));   // Name ueberlebt den Weg zum Anbieter; die Antworten liegen schon in RES_KEY
+      });
+      if (has) mail.appendChild(h("p", { class: "mut", text: t("q_mail_other") }));
+      mail.appendChild(row);
+      mail.appendChild(h("p", { class: "mut", text: t("q_mail_hint") }));
+    }
+    var note = CM ? h("p", { class: CM === "ok" ? "lq-ok" : "lq-err", role: CM === "ok" ? "status" : "alert", text: t(CM_TEXT[CM] || "q_err") }) : null;
+    var box = h("form", { class: "lq-cert", novalidate: true }, [h("h3", { text: t("q_cert_h") }), h("p", { class: "mut", text: t("q_cert_lead") }), note, mail,
+      h("label", { for: "lq-name", text: t("q_name") }), name, label, err, h("p", {}, [btn])]);
+    if (CM) { CM = ""; setTimeout(function () { var x = box.querySelector("h3"); if (x) { x.setAttribute("tabindex", "-1"); x.focus(); } box.scrollIntoView({ block: "start" }); }, 0); }
     function bad(el, msg) {
-      [name, mail, ok].forEach(function (x) { x.removeAttribute("aria-invalid"); });
+      [name, ok].forEach(function (x) { x.removeAttribute("aria-invalid"); });
       if (el) { el.setAttribute("aria-invalid", "true"); el.focus(); }
       err.textContent = msg || "";
     }
     box.addEventListener("submit", function (e) {
       e.preventDefault();
-      var nv = certName(name.value), mv = mail.value.trim();
+      var nv = certName(name.value);
       if (nv.length < 2 || nv.length > 80) return bad(name, t("q_err_name"));
       if (NAME_URL_RX.test(nv)) return bad(name, t("q_err_name_url"));
-      if (!/^[^\s@<>"']+@[^\s@<>"']+\.[a-z]{2,}$/i.test(mv)) return bad(mail, t("q_err_email"));
+      if (!has) { bad(null, t("q_err_need_email")); var f = mail.querySelector("a"); if (f) f.focus(); return; }
       if (!ok.checked) return bad(ok, t("q_err_consent"));
       bad(null, ""); btn.disabled = true;
-      api("/api/learn/cert", { method: "POST", body: { path: C.path, attempt: attempt, name: nv, email: mv, consent: true, lang: C.qlang } }).then(function (r) {
+      api("/api/learn/cert", { method: "POST", body: { path: C.path, attempt: attempt, name: nv, consent: true, lang: C.qlang } }).then(function (r) {
         btn.disabled = false;
         if (r.s === 401) return login();
-        if (r.s === 200 && (r.j.status === "ok" || r.j.url)) return box.replaceWith(certLinks(r.j));   // Worker: 200 heisst immer status "ok" (url kann leer sein, wenn Certopus keine https-Adresse liefert)
-        if (r.s === 503 || (r.s === 409 && r.j.error === "busy")) return box.replaceWith(h("p", { class: "lq-big", role: "status", text: t("q_cert_off") }));
+        if (r.s === 200 && (r.j.status === "ok" || r.j.url)) { store(RES_KEY); store(NAME_KEY); return box.replaceWith(certLinks(r.j)); }   // Worker: 200 heisst immer status "ok" (url kann leer sein, wenn Certopus keine https-Adresse liefert)
+        if (r.s === 503 || (r.s === 409 && r.j.error === "busy")) { store(NAME_KEY); return box.replaceWith(h("p", { class: "lq-big", role: "status", text: t("q_cert_off") })); }
         if (r.j.error === "name") return bad(name, t("q_err_name"));
         if (r.j.error === "name_url") return bad(name, t("q_err_name_url"));
-        if (r.j.error === "email") return bad(mail, t("q_err_email"));
-        if (r.j.error === "email_unverified") return bad(mail, t("q_err_email_unverified"));
-        if (r.j.error === "email_limit") return bad(mail, t("q_err_email_limit", { m: r.j.max || 2 }));
+        if (r.j.error === "need_email" || r.j.error === "email_fixed") return bad(null, t("q_err_need_email"));
         if (r.j.error === "consent") return bad(ok, t("q_err_consent"));
         bad(null, r.s === 429 ? t("q_err_rate") : r.s === 502 ? t("q_cert_err") : t("q_err"));
       });
     });
     return box;
   }
+  // Zusatzschritt: zurueck auf diese Testseite (ohne #, ohne alten certmail-Status)
+  function mailUrl(p) {
+    var u = new URL(location.href); u.hash = ""; u.searchParams.delete("certmail");
+    return C.api + "/auth/login/" + p + "?purpose=certmail&path=" + encodeURIComponent(C.path) + "&return=" + encodeURIComponent(u.href);
+  }
+  var CM_TEXT = { ok: "q_mail_ok", wrong_account: "q_mail_wrong", unverified: "q_mail_unverified", session: "q_mail_session", cancel: "q_mail_cancel",
+    need_email: "q_err_need_email", rate_limit: "q_err_rate", issued: "q_cert_ok" };
   function certLinks(c) {
     var links = h("p", { class: "lq-btns" });
     if (safe(c.url)) links.appendChild(h("a", { class: "btn main", href: c.url, target: "_blank", rel: "noopener", text: t("q_cert_view") }));

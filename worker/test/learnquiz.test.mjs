@@ -48,7 +48,9 @@ async function passedAttempt(env, cookie) {
   assert.equal(sb.data.passed, true);
   return st.data.attempt;
 }
-const certBody = (attempt, o = {}) => ({ path: PATH, attempt, name: "Ada Lovelace", email: "ada@example.com", consent: true, lang: "de", ...o });
+const certBody = (attempt, o = {}) => ({ path: PATH, attempt, name: "Ada Lovelace", consent: true, lang: "de", ...o });   // ohne email: der Empfaenger kommt aus der Anmeldung
+// E-Mail aus dem Zusatzschritt der Anmeldung (wie certMailCallback sie speichert); den OAuth-Ablauf selbst prueft learnquiz_certmail.test.mjs
+const oauthMail = (raw, uid, email, src = "github") => { const t = Math.floor(Date.now() / 1000); raw.prepare("INSERT INTO learn_certs(user_id,path,email,email_src,email_at,status,created,updated) VALUES (?,?,?,?,?,'draft',?,?)").run(uid, PATH, email, src, t, t, t); };
 
 function mockCertopus({ fields = ["email", "{Name}", "{Course}"], fail = false } = {}) {
   const calls = [], old = globalThis.fetch;
@@ -255,17 +257,19 @@ test("Zertifikat aus (CERTOPUS_ON=0): Pruefungen, 503 cert_off, Zeile pending mi
   await seed(env);
   const before = await call(env, "/api/learn/cert?path=" + PATH, { cookie: s.ada });
   assert.equal(before.status, 200);
-  assert.equal(before.data.name, "Ada Lovelace", "real_name aus user_prefs"); assert.equal(before.data.email, "ada@example.com", "nur bestaetigte Adresse");
+  assert.equal(before.data.name, "Ada Lovelace", "real_name aus user_prefs");
+  assert.equal(before.data.email_masked, "a***@example.com", "Rueckfall: bestaetigte Adresse des Kontos, maskiert"); assert.equal(before.data.email_src, "account");
+  assert.ok(!("email" in before.data), "die Adresse selbst geht nicht an die Seite"); assert.deepEqual(before.data.providers, [], "GitHub ist im Worker nicht eingerichtet: kein Knopf");
   assert.equal(before.data.quiz_ready, true); assert.equal(before.data.cert, null); assert.equal(before.data.cert_on, false);
   const bobState = await call(env, "/api/learn/cert?path=" + PATH, { cookie: s.bob });
-  assert.equal(bobState.data.name, "Bob"); assert.equal(bobState.data.email, "", "unbestaetigte Adresse wird nicht vorgeschlagen");
+  assert.equal(bobState.data.name, "Bob"); assert.equal(bobState.data.email_masked, "", "unbestaetigte Adresse gilt nicht"); assert.equal(bobState.data.email_src, "");
   // nicht bestanden
   const st = await start(env, s.ada);
   await submit(env, s.ada, st.data.attempt, answersFor(st.data.qids, 10));
   assert.equal((await call(env, "/api/learn/cert", { method: "POST", cookie: s.ada, body: certBody(st.data.attempt) })).data.error, "not_passed");
   const attempt = await passedAttempt(env, s.ada);
   assert.equal((await call(env, "/api/learn/cert", { method: "POST", cookie: s.bob, body: certBody(attempt) })).status, 403, "fremder Versuch");
-  for (const [o, err] of [[{ consent: false }, "consent"], [{ consent: "true" }, "consent"], [{ name: "A" }, "name"], [{ name: "x".repeat(81) }, "name"], [{ email: "kein-mail" }, "email"], [{ email: "a@b" }, "email"]]) {
+  for (const [o, err] of [[{ consent: false }, "consent"], [{ consent: "true" }, "consent"], [{ name: "A" }, "name"], [{ name: "x".repeat(81) }, "name"], [{ email: "jemand@example.org" }, "email_fixed"]]) {
     const r = await call(env, "/api/learn/cert", { method: "POST", cookie: s.ada, body: certBody(attempt, o) });
     assert.equal(r.status, 400, JSON.stringify(o)); assert.equal(r.data.error, err);
   }
@@ -281,7 +285,7 @@ test("Zertifikat aus (CERTOPUS_ON=0): Pruefungen, 503 cert_off, Zeile pending mi
   assert.equal((await call(env, "/api/learn/cert", { method: "POST", cookie: s.ada, body: certBody(attempt) })).data.error, "cert_off");
 });
 
-test("Zertifikat: Name ohne Link/Domain, E-Mail nur die bestaetigte bzw. hoechstens 2 verschiedene ohne Bestaetigung", async () => {
+test("Zertifikat: Name ohne Link/Domain; Empfaenger nur aus der Anmeldung bzw. bestaetigt, nie aus dem Formular (need_email, email_fixed)", async () => {
   const { env, raw, s } = await setup();
   await seed(env);
   const attempt = await passedAttempt(env, s.ada);
@@ -292,31 +296,33 @@ test("Zertifikat: Name ohne Link/Domain, E-Mail nur die bestaetigte bzw. hoechst
   }
   for (const name of ["Visit evil.com today", "t.me x", "evil\uff0ecom", "evil[.]com", "evil.c\u2060om"]) assert.equal((await post({ name })).data.error, "name_url", name);
   for (const name of ["Dr. Ada Lovelace", "J.R.R. Tolkien", "Ada Lovelace-Byron", "St. Clair, M.Sc."]) assert.equal((await post({ name })).status, 503, name + " ist erlaubt");
-  // Ada hat eine bestaetigte Adresse: nur diese (Gross/Klein egal)
+  // Ada: keine E-Mail aus der Anmeldung, aber eine bestaetigte Adresse im Konto (Rueckfall). Ein email-Feld wird nie uebernommen.
   const st = await call(env, "/api/learn/cert?path=" + PATH, { cookie: s.ada });
-  assert.equal(st.data.email, "ada@example.com"); assert.equal(st.data.email_verified, true);
+  assert.equal(st.data.email_masked, "a***@example.com"); assert.equal(st.data.email_src, "account");
   const other = await post({ email: "jemand@example.org" });
-  assert.equal(other.status, 400); assert.equal(other.data.error, "email_unverified");
-  assert.equal((await post({ email: " ADA@Example.COM ", name: "Ada\u2060 Love\u00adlace\ufeff" })).status, 503);
-  assert.equal(raw.prepare("SELECT email FROM learn_certs WHERE user_id=1").get().email, "ada@example.com");
-  assert.equal(raw.prepare("SELECT name FROM learn_certs WHERE user_id=1").get().name, "Ada Lovelace", "gespeichert wird der normalisierte Name");
-  // Bob ohne bestaetigte Adresse: frei, aber hoechstens 2 verschiedene je Pfad
+  assert.equal(other.status, 400); assert.equal(other.data.error, "email_fixed");
+  assert.equal((await post({ email: " ADA@Example.COM ", name: "Ada\u2060 Love\u00adlace\ufeff" })).status, 503, "gleiche Adresse stoert nicht");
+  let row = raw.prepare("SELECT email, email_src, name FROM learn_certs WHERE user_id=1").get();
+  assert.deepEqual({ ...row }, { email: "ada@example.com", email_src: "account", name: "Ada Lovelace" }, "gespeichert wird der normalisierte Name");
+  // Bob: weder E-Mail aus der Anmeldung noch bestaetigte Adresse -> need_email, auch mit email-Feld (frei eingetippt geht nicht mehr)
   const bobAttempt = await passedAttempt(env, s.bob);
-  const bobState = await call(env, "/api/learn/cert?path=" + PATH, { cookie: s.bob });
-  assert.equal(bobState.data.email_verified, false); assert.equal(bobState.data.email, "");
-  assert.equal((await post({ email: "bob1@example.com" }, s.bob, bobAttempt)).status, 503);
-  assert.equal((await post({ email: "BOB2@example.com" }, s.bob, bobAttempt)).status, 503);
-  assert.equal((await post({ email: "bob1@example.com" }, s.bob, bobAttempt)).status, 503, "eine schon genutzte Adresse geht weiter");
-  const third = await post({ email: "bob3@example.com" }, s.bob, bobAttempt);
-  assert.equal(third.status, 400); assert.equal(third.data.error, "email_limit"); assert.equal(third.data.max, 2);
-  const row = raw.prepare("SELECT email, emails FROM learn_certs WHERE user_id=2").get();
-  assert.equal(row.email, "bob1@example.com"); assert.deepEqual(JSON.parse(row.emails), ["bob1@example.com", "bob2@example.com"]);
-  assert.equal((await call(env, "/api/learn/cert?path=" + PATH, { cookie: s.bob })).data.email, "bob1@example.com", "Vorschlag: zuletzt genutzte Adresse");
-  // bestaetigt Bob spaeter eine Adresse, gilt nur noch diese - auch die Obergrenze spielt dann keine Rolle
+  for (const o of [{}, { email: "bob1@example.com" }]) {
+    const r = await post(o, s.bob, bobAttempt);
+    assert.equal(r.status, 409, JSON.stringify(o)); assert.equal(r.data.error, "need_email");
+  }
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM learn_certs WHERE user_id=2").get().n, 0);
+  // nach dem Zusatzschritt (GitHub bestaetigt bob@github.example): nur diese Adresse, das email-Feld aendert nichts
+  oauthMail(raw, 2, "bob@github.example");
+  const bs = await call(env, "/api/learn/cert?path=" + PATH, { cookie: s.bob });
+  assert.equal(bs.data.email_masked, "b***@github.example"); assert.equal(bs.data.email_src, "github"); assert.equal(bs.data.cert, null, "Entwurf ist noch kein Zertifikat");
+  assert.equal((await post({ email: "bob1@example.com" }, s.bob, bobAttempt)).data.error, "email_fixed");
+  assert.equal((await post({}, s.bob, bobAttempt)).status, 503);
+  row = raw.prepare("SELECT email, email_src, status, attempt_id FROM learn_certs WHERE user_id=2").get();
+  assert.deepEqual({ ...row }, { email: "bob@github.example", email_src: "github", status: "pending", attempt_id: bobAttempt });
+  // bestaetigt Bob spaeter eine Adresse im Konto, bleibt die aus der Anmeldung massgeblich (Hauptweg)
   raw.prepare("UPDATE mail_addr SET email='bob3@example.com', verified=1 WHERE user_id=2").run();
-  assert.equal((await call(env, "/api/learn/cert?path=" + PATH, { cookie: s.bob })).data.email, "bob3@example.com");
-  assert.equal((await post({ email: "bob1@example.com" }, s.bob, bobAttempt)).data.error, "email_unverified");
-  assert.equal((await post({ email: "bob3@example.com" }, s.bob, bobAttempt)).status, 503);
+  assert.equal((await call(env, "/api/learn/cert?path=" + PATH, { cookie: s.bob })).data.email_src, "github");
+  assert.equal((await post({ email: "bob3@example.com" }, s.bob, bobAttempt)).data.error, "email_fixed");
 });
 
 test("Zertifikat mit Certopus (Mock): Kopf x-api-key, Felder laut Vorlage, gespeichert, zweiter Aufruf liefert das vorhandene", async () => {
@@ -365,12 +371,14 @@ test("Zertifikat: alle Standardfelder, wenn die Vorlage sie hat; CERTOPUS_FIELDS
   const b = await setup({ CERTOPUS_ON: "1", CERTOPUS_API_KEY: KEY, CERTOPUS_FIELDS: JSON.stringify({ name: "Teilnehmer", score: "Punkte" }) });
   await seed(b.env);
   const att = await passedAttempt(b.env, b.s.bob);
+  oauthMail(b.raw, 2, "bob@example.com", "linkedin");
   m = mockCertopus({ fields: [] });
   try {
-    const r = await call(b.env, "/api/learn/cert", { method: "POST", cookie: b.s.bob, body: certBody(att, { lang: "en", email: "bob@example.com", name: "Bob Builder" }) });
+    const r = await call(b.env, "/api/learn/cert", { method: "POST", cookie: b.s.bob, body: certBody(att, { lang: "en", name: "Bob Builder" }) });
     assert.equal(r.status, 200);
     assert.equal(m.calls.filter((c) => c.url.pathname === "/v1/recipient_fields").length, 0);
     assert.deepEqual(m.calls[0].body.recipients[0].data, { Teilnehmer: "Bob Builder", Punkte: "27/30 (90 %)" });
+    assert.equal(m.calls[0].body.recipients[0].email, "bob@example.com", "Empfaenger aus der Anmeldung");
   } finally { m.restore(); }
 });
 
