@@ -18,6 +18,9 @@ Antwortschlüssel stehen nie im Klartext im Repo (es ist öffentlich): `data/pil
    `worker.yml` reicht ihn beim nächsten Worker-Deploy an den Worker weiter (`worker/setup.mjs`).
 2. **IDs auslesen.** Actions → Workflow **„Certopus-IDs auslesen (nur lesen)“** (`certopus-ids.yml`) → *Run workflow*, bei Bedarf eine andere Event-ID eingeben.
    Das Protokoll zeigt Organisation, Event, Kategorien und die Felder der Vorlage (`recipient_fields`), nie den Schlüssel.
+   Dahinter steckt `tools/certopus_ids.py` (nur lesende Aufrufe `GET /organisations`, `/events/<org>`, `/categories`, `/recipient_fields`).
+   Lokal geht es auch: `CERTOPUS_API_KEY=… python3 tools/certopus_ids.py [event-id]` (ohne Event-ID gilt das Event des Lernpfads);
+   Rückgabe 0 = Event gefunden, 1 = nicht gefunden oder API-Fehler, 2 = Schlüssel fehlt.
    Stand 24.11.2026: Organisation `projectmanagementgroup` („M365 Show“), Event `1b364220-e7df-11f1-a542-95dd4baa2628`
    („Manufacturing Excellence: From Lean Basics to Digital Production Planning“), Kategorie `1b361b10-e7df-11f1-a542-95dd4baa2628` („Completion“;
    daneben „Achievement“ `1b361b11-…`). Felder der Vorlage heute: `email`, `{Name}`.
@@ -44,6 +47,13 @@ Antwortschlüssel stehen nie im Klartext im Repo (es ist öffentlich): `data/pil
    Notschalter: wieder `"0"` – dann sammelt der Worker Anfragen als „pending“ und stellt sie nach dem Wiedereinschalten aus.
 7. **Prüfen.** Mit einem eigenen Konto den Test machen (oder einen Testnutzer nehmen), Zertifikat anfordern, E-Mail, Zertifikatsseite, PDF und LinkedIn-Link ansehen.
    Admins sehen die Zahlen unter `GET https://api-dub.m365.fm/api/learn/stats?path=manufacturing-excellence` (gestartet, abgegeben, bestanden, Zertifikate je Herkunft und Woche).
+
+**Antwortschlüssel im Worker.** Der Test startet erst, wenn der Worker die Schlüssel kennt (sonst zeigt die Seite „Test folgt in Kürze“).
+Sie kommen aus `data/pillar_quiz_keys.enc`: `tools/pillar_quiz.py push` entschlüsselt die Datei mit `CRON_KEY` und schickt
+`{path, keys:[{qid, pillar, answer, why_en, why_de}]}` an `POST https://api-dub.m365.fm/api/internal/learn-quiz` (Header `x-cron-key`; Upsert,
+ein ungültiger Eintrag lässt den ganzen Push mit 400 scheitern). Das passiert automatisch am Ende von `pillar-quiz.yml` (mode=run) und nach jedem
+Worker-Deploy in `worker.yml` (Schritt „Lernpfad-Schluessel an den Worker“); von Hand: Workflow `pillar-quiz.yml` mit mode=push.
+Die Lösungen lokal ansehen (nie in Actions, Logs sind öffentlich): `CRON_KEY=… python3 tools/pillar_quiz.py show`.
 
 Datenschutz: Name und E-Mail gehen nur mit Häkchen (Einwilligung) an Certopus (DevSquirrel Technologies, Indien); der Abschnitt steht in der
 Datenschutzerklärung (`/datenschutz/#lernpfad-zertifikat`, `/privacy/#learning-path-certificate`, `site_legal.py`).
@@ -165,3 +175,5 @@ Die E-Mail nennt bewusst keine feste Zahl von Leitfäden (der Pfad wächst).
 | Antwortschlüssel (verschlüsselt) | `data/pillar_quiz_keys.enc` → Worker-D1 `learn_quiz_keys` |
 | API, Certopus-Aufruf, Zähler | `worker/src/learnquiz.js` (`/api/learn/quiz/start`, `/submit`, `/api/learn/cert`, `/api/learn/stats`) |
 | IDs auslesen | `tools/certopus_ids.py`, Workflow `certopus-ids.yml` |
+| Schlüssel an den Worker | `tools/pillar_quiz.py push` → `POST /api/internal/learn-quiz` (`pillar-quiz.yml`, `worker.yml`) |
+| Zusammenspiel geprüft | `tests/test_lernpfad_e2e.py`, `worker/test/learnquiz_e2e.test.mjs` |

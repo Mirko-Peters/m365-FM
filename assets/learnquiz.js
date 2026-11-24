@@ -232,7 +232,7 @@
       api("/api/learn/cert", { method: "POST", body: { path: C.path, attempt: attempt, name: nv, email: mv, consent: true, lang: C.qlang } }).then(function (r) {
         btn.disabled = false;
         if (r.s === 401) return login();
-        if (r.s === 200 && r.j.url) return box.replaceWith(certLinks(r.j));
+        if (r.s === 200 && (r.j.status === "ok" || r.j.url)) return box.replaceWith(certLinks(r.j));   // Worker: 200 heisst immer status "ok" (url kann leer sein, wenn Certopus keine https-Adresse liefert)
         if (r.s === 503 || (r.s === 409 && r.j.error === "busy")) return box.replaceWith(h("p", { class: "lq-big", role: "status", text: t("q_cert_off") }));
         if (r.j.error === "name") return bad(name, t("q_err_name"));
         if (r.j.error === "email") return bad(mail, t("q_err_email"));
