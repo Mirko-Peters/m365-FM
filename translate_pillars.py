@@ -153,6 +153,7 @@ def ui_source():
 
 def ui_prompt(lang):
     return (f"Translate every value of this JSON into {NAMES[lang]} and answer with exactly one JSON object of the same shape (same keys, same list lengths, no other text). "
+            f"The source is English. Every value must be in {NAMES[lang]} (language code {lang}) - never German, never English. "   # pl kam am 24.11.2026 zweimal auf Deutsch zurueck
             "Keep placeholders like {n} and {m} unchanged. Address the reader in the polite, formal form where the language has one. seo_title: at most 60 characters. "
             "Keep names such as iFAKT Polaris, m365.fm, Microsoft 365, Certopus, DevSquirrel Technologies Private Limited, LinkedIn, Google, GitHub. "
             "'ui.other' does not exist; 'ui.disc' keeps the exact disclosure sentence meaning (the author works at iFAKT GmbH).\n\n" + json.dumps(ui_source(), ensure_ascii=False))
@@ -180,6 +181,7 @@ def ui_missing(lang, ov):
 def uix_prompt(lang, keys):
     src = ui_keys()
     return (f"Translate every value of this JSON into {NAMES[lang]} and answer with exactly one JSON object with the same keys (no other text). "
+            f"The source is English. Every value must be in {NAMES[lang]} (language code {lang}) - never German, never English. "
             "These are short interface texts of a free online test with a certificate. Keep placeholders like {n}, {email}, {p} and {link} unchanged. "
             "Address the reader in the polite, formal form where the language has one. Keep names such as Certopus, DevSquirrel Technologies Private Limited, "
             "LinkedIn, Microsoft, Google, GitHub, m365.fm unchanged.\n\n" + json.dumps({k: src[k] for k in keys}, ensure_ascii=False))
