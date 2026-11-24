@@ -23,6 +23,7 @@ export const STAGING_STRIPPED = [
   "PAYPAL_CLIENT_ID", "PAYPAL_CLIENT_SECRET", "PAYPAL_WEBHOOK_ID",   // echte PayPal-Zugaenge (nur die Sandbox-Variante bleibt)
   "CF_API_TOKEN", "CF_ZONE_ID",                                // Blog auf eigener Domain: Custom Hostnames in der Live-Zone (byod_cf.js)
   "ADMIN_SUBS",                                                // kein Live-Admin in Staging
+  "CERTOPUS_API_KEY",                                          // Certopus: Zertifikate ausstellen (learnquiz.js)
 ];
 
 // Staging-Sicht auf env: Prototyp bleibt die echte env (Bindungen wie DB funktionieren), gesperrte Namen sind undefined, Zahlung/Werbung erzwungen.
@@ -45,6 +46,7 @@ export const BLOCKED_HOSTS = [
   "api-m.paypal.com",                                                     // echtes PayPal (api-m.sandbox.paypal.com bleibt erlaubt)
   "updates.push.services.mozilla.com", "web.push.apple.com", "*.notify.windows.com",   // Web-Push der Browser-Anbieter
   "api.cloudflare.com",                                                   // Cloudflare-API (byod_cf.js legt Custom Hostnames an/loescht sie)
+  "api.certopus.com",                                                     // Certopus: legt Zertifikate an und verschickt Mails (learnquiz.js)
   "api-dub.m365.fm",                                                      // Live-API: Staging redet nie mit Live
 ];
 

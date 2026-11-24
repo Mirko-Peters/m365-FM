@@ -46,6 +46,7 @@ import { handleWish, seedRoadmap } from "./wish.js";
 import { handleShows, syncShows } from "./shows.js";
 import { handleMediakit } from "./mediakit.js";
 import { handleHardware } from "./hardware.js";
+import { handleLearnQuiz, issuePendingCerts, deleteUserLearn } from "./learnquiz.js";
 import { handleMail, flushOutbox, notify } from "./mail.js";
 import { handleReviews } from "./reviews.js";
 import { handleEntityInvite, remindInvites } from "./entinvite.js";
@@ -259,6 +260,7 @@ async function deleteAccount(env, id) {
   ]);
   await deleteUserEvents(db, id);
   await deleteUserByod(env, id);   // Blog auf der eigenen Domain (0049): Domains des Kontos samt Hostname bei Cloudflare (nur mit Secrets)
+  await deleteUserLearn(db, id);   // Lernpfad-Test (0055): Versuche und Zertifikat-Zeilen mit Name/E-Mail
   await deleteUserBlogImport(db, id);   // Blog-Import (0050): Herkunftsnachweise der importierten Entwuerfe
   await deleteUserEditorial(db, id);   // Redaktion (Migration 0037): vor deleteUserBlog, weil der Verlauf an den Beitraegen des Kontos haengt
   await deleteUserEntityInvites(db, id);   // braucht mail_addr und die bestaetigten Claims: vor deleteUserData
@@ -280,13 +282,14 @@ function pubComment(c, mine, liked, badges, admin, roles) {
 async function api(env, request, url, path, asUser, ctx) {
   const method = request.method, J = (d, s = 200, x) => json(d, s, env, request, x);
   if (method === "OPTIONS") return new Response(null, { status: 204, headers: cors(env, request) });
-  if (asUser === undefined && method !== "GET" && !["/api/internal/ai-spend", "/api/internal/sponsor-metrics", "/api/email/unsub", "/api/mail/unsub", "/api/topics/email-unsub", "/api/entityinvite/decline"].includes(path) && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);   // interne Routen per CRON_KEY; Abmeldelinks (RFC 8058) senden keinen Zusatz-Header, alle per Token geschuetzt
+  if (asUser === undefined && method !== "GET" && !["/api/internal/ai-spend", "/api/internal/sponsor-metrics", "/api/internal/learn-quiz", "/api/email/unsub", "/api/mail/unsub", "/api/topics/email-unsub", "/api/entityinvite/decline"].includes(path) && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);   // interne Routen per CRON_KEY; Abmeldelinks (RFC 8058) senden keinen Zusatz-Header, alle per Token geschuetzt
   // asUser: vom MCP-Server (Token bereits geprueft) - dann keine Cookie-Sitzung noetig
   const uid = asUser === undefined ? await readSession(env, request) : null, user = asUser === undefined ? (uid ? await me(env, uid) : null) : asUser;
   const need = () => (user ? null : J({ error: "login" }, 401));
   const db = env.DB;
 
   if (path === "/api/internal/entity-fill") return handleEntFill(env, request, path, J);   // KI-Entwurf fuer Entitaeten (CRON_KEY), Details in entfill.js
+  if (path === "/api/internal/learn-quiz" || path.startsWith("/api/learn/")) { const q = await handleLearnQuiz(env, request, url, path, user, J); if (q) return q; }   // Lernpfad-Abschlusstest + Certopus-Zertifikat (learnquiz.js); Schluessel-Upsert per CRON_KEY
   if (path === "/api/internal/ai-spend") {
     if (method !== "POST") return J({ error: "method_not_allowed" }, 405);
     if (!env.CRON_KEY || request.headers.get("x-cron-key") !== env.CRON_KEY) return J({ error: "forbidden" }, 403);
@@ -673,6 +676,7 @@ const handlers = {
       T("purgeSearchStats", () => purgeSearchStats(env.DB));   // Suchbegriffe und Nachfrage: 12 Monate (#156)
     }
     if (event.cron === "*/30 * * * *") T("runDigest", () => runDigest(env, { at: scheduledAt }));
+    if (event.cron === "*/30 * * * *" && env.CERTOPUS_ON === "1") T("learnCerts", () => issuePendingCerts(env));   // wartende Lernpfad-Zertifikate bei Certopus ausstellen (learnquiz.js)
     if (event.cron === "*/30 * * * *") T("byodChecks", () => runByodChecks(env));   // Blog auf der eigenen Domain: DNS/Zertifikat offener und aktiver Domains (nur mit BYOD=1)
     T("refreshFeeds", () => refreshFeeds(env));
     T("refreshContributions", () => refreshContributions(env));
