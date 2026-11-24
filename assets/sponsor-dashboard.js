@@ -312,7 +312,7 @@
         if (records.length) figure = { metric: preferred[i], value: records.reduce(function (sum, metric) { return sum + Number(metric.value || 0); }, 0),
           source: commonSource(records, records[0].source), kind: records[0].kind, as_of: records.reduce(function (latest, metric) { return metric.day > latest ? metric.day : latest; }, "") };
       }
-      var manual = (item.manual || []).slice().sort(function (a, b) { return b.period.localeCompare(a.period); })[0];
+      var manual = (item.manual || []).toSorted(function (a, b) { return b.period.localeCompare(a.period); })[0];
       if (!figure && manual) figure = { metric: manual.metric, value: manual.value, source: manual.source, kind: "manual", as_of: manual.as_of };
       if (figure) value = metricValue(figure.value);
     }

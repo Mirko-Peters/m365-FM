@@ -36,7 +36,7 @@
     try { fetch(C.api + "/api/search?" + params(1, true), { credentials: "omit", keepalive: true }).catch(function () {}); } catch (e) { /* egal */ }
   }
   function run(more, settled) {
-    if (st.q.length < 2) { out.innerHTML = ""; fa.innerHTML = ""; return; }
+    if (st.q.length < 2) { out.replaceChildren(); fa.replaceChildren(); return; }
     st.page = more ? st.page + 1 : 1; if (!more) items = [];
     var p = params(st.page, settled);
     var my = ++seq;

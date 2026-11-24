@@ -287,7 +287,7 @@
       h("div", { style: "overflow-x:auto" }, [h("table", { class: "adm-tbl" }, [h("thead", {}, [h("tr", {}, COLS.map(function (c) { return h("th", { text: c }); }))]), body])]));
     api("/api/admin/mediakit").then(function (r) {
       if (r.s !== 200) { msg(msgEl, ERR[(r.j || {}).error] || "Fehler " + r.s, true); return; }
-      rows = (r.j.items || []).slice().sort(function (a, b) { return (b.created || 0) - (a.created || 0) || (b.id || 0) - (a.id || 0); }); view();
+      rows = (r.j.items || []).toSorted(function (a, b) { return (b.created || 0) - (a.created || 0) || (b.id || 0) - (a.id || 0); }); view();
     });
   }
 
@@ -332,7 +332,7 @@
       h("div", { style: "overflow-x:auto" }, [h("table", { class: "adm-tbl" }, [h("thead", {}, [h("tr", {}, COLS.map(function (c) { return h("th", { text: c }); }))]), body])]));
     api(HWU).then(function (r) {
       if (r.s !== 200) { msg(msgEl, ERR[(r.j || {}).error] || "Fehler " + r.s, true); return; }
-      rows = (r.j.items || []).slice().sort(function (a, b) { return (b.created || 0) - (a.created || 0) || (b.id || 0) - (a.id || 0); }); view();
+      rows = (r.j.items || []).toSorted(function (a, b) { return (b.created || 0) - (a.created || 0) || (b.id || 0) - (a.id || 0); }); view();
     });
   }
 
@@ -762,7 +762,7 @@
     var p = panes.li, m = h("p", { class: "adm-msg" }), LIERR = { not_connected: "LinkedIn-Seite ist noch nicht verbunden.", no_org_scope: "Die LinkedIn-App darf die Liste deiner Seiten nicht lesen (Berechtigung r_organization_admin fehlt). Trage die Seite unten von Hand ein.", bad_urn: "Das ist keine Adresse oder Nummer einer LinkedIn-Seite.", no_org: "Bitte zuerst die Seite auswählen.", past: "Das Event hat schon begonnen oder ist vorbei.", no_time: "Das Event hat keine Uhrzeit.", not_public: "Das m365.fm-Event ist nicht öffentlich oder noch nicht übernommen (Reiter Freigaben).", already_published: "Schon veröffentlicht.", cancelled: "Der LinkedIn-Event ist abgesagt.", not_published: "Zu diesem Event gibt es keinen LinkedIn-Event.", publish_pending: "Für dieses Event läuft schon eine Veröffentlichung oder ihr Ausgang ist offen: bitte in der Liste klären.", publish_running: "Die Veröffentlichung läuft noch, bitte zwei Minuten warten.", not_pending: "Hier ist nichts (mehr) zu klären.", store_failed: "LinkedIn hat den Event angelegt, er konnte hier aber nicht gespeichert werden.", bad_urn: "Das ist keine LinkedIn-Event-ID (die Zahl am Ende der Event-Adresse).", urn_taken: "Diese LinkedIn-Event-ID gehört schon zu einem anderen Event.", orphan: "Das m365.fm-Event gibt es nicht mehr.", db_error: "Datenbank nicht erreichbar, es wurde nichts an LinkedIn gesendet.", li_timeout: "LinkedIn hat nicht rechtzeitig geantwortet.", li_network: "LinkedIn ist nicht erreichbar.", li_no_urn: "LinkedIn hat keine Event-ID zurückgegeben.", li_gone: "LinkedIn kennt diesen Event nicht (mehr). Wurde er dort gelöscht, bitte hier über „Absagen“ austragen.", li_error: "Der LinkedIn-Aufruf ist fehlgeschlagen.", no_heysummit_key: "HEYSUMMIT_API_KEY fehlt im Worker.", expired: "LinkedIn-Zugang abgelaufen, bitte neu verbinden.", forbidden: "Nur für Admins." };
     function err(j) { var e = (j || {}).error || ""; return LIERR[e] || (/^li_\d/.test(e) ? "LinkedIn antwortet mit Fehler " + e.slice(3) + "." : /^hs_/.test(e) ? "HeySummit nicht lesbar (" + e.slice(3) + "): nur die Zusatzinfo fehlt, Vorschläge und Veröffentlichen gehen trotzdem." : "Fehler: " + (e || "unbekannt")); }
     p.textContent = ""; p.append(h("h2", { text: "LinkedIn-Events (Vorschläge)" }), m);
-    var q = /[?&]li=([a-z_]+)/.exec(location.search || ""); if (q) msg(m, q[1] === "ok" ? "LinkedIn verbunden." : "Verbindung fehlgeschlagen (" + q[1] + ").", q[1] !== "ok");
+    var q = (new URLSearchParams(location.search).get("li") || "").match(/^[a-z_]+$/); if (q) msg(m, q[0] === "ok" ? "LinkedIn verbunden." : "Verbindung fehlgeschlagen (" + q[0] + ").", q[0] !== "ok");
     if (note) msg(m, note, bad);
     api("/api/admin/linkedin/status").then(function (r) {
       if (r.s !== 200) { msg(m, err(r.j), true); return; }

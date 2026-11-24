@@ -38,7 +38,7 @@
     clearInterval(timer); root.textContent = "";
     var sec = h("section", { class: "ccard" }, [h("h2", { text: Q.h }), h("p", { class: "cmut", text: Q.intro })]); root.appendChild(sec);
     if (!me) { sec.appendChild(h("p", { text: Q.login })); return; }
-    var pe = (/[?&]msg_event=([a-z0-9-]+)/.exec(location.search) || [])[1], pt = (/[?&]msg=([a-z0-9-]+)/.exec(location.search) || [])[1];
+    var qs = new URLSearchParams(location.search), pe = (qs.get("msg_event") || "").match(/^[a-z0-9-]+$/), pt = (qs.get("msg") || "").match(/^[a-z0-9-]+$/); pe = pe && pe[0]; pt = pt && pt[0];
     var body = h("div"); function home() { history.replaceState(null, "", location.pathname + "#c-messages"); render(); }
     function render() { sec.textContent = ""; sec.appendChild(h("h2", { text: Q.h })); sec.appendChild(h("p", { class: "cmut", text: Q.intro })); sec.appendChild(body); body.textContent = "";
       api("/api/msg/prefs").then(function (r) { var p = r.j || {}; var cb = h("input", { type: "checkbox" }); cb.checked = p.open !== false; cb.addEventListener("change", function () { api("/api/msg/prefs", { method: "POST", body: { open: cb.checked } }); });
