@@ -3,7 +3,7 @@
 - data/pillar_quiz_keys.enc ist kein Klartext.
 - Konstanten (3 je Leitfaden, 80 %, 3 Versuche) und das Fragen-ID-Format sind in site_pillars.py und worker/src/learnquiz.js gleich.
 - Der Push-Body von tools/pillar_quiz.py besteht die Prüfung des Workers (qid beginnt mit "<pillar>-", answer 0-3).
-- Certopus-IDs in data/pillars.json (Doku) = CERTOPUS_PATHS in worker/wrangler.toml; Kursname im Worker-Rückfall = CERTOPUS_PATHS.
+- Certopus-IDs in data/pillars.json (Doku) = CERTOPUS_PATHS in worker/wrangler.toml; Kursname im Worker-Rückfall = CERTOPUS_PATHS = Titel des Lernpfads (en/de).
 Den Ablauf Start -> Abgabe -> Zertifikat gegen den echten Worker prüft worker/test/learnquiz_e2e.test.mjs."""
 import base64
 import json
@@ -106,6 +106,7 @@ class Consistency(unittest.TestCase):
             m = re.search(rf'"{re.escape(PID)}":\s*\{{\s*en:\s*"([^"]+)",\s*de:\s*"([^"]+)"', WORKER_JS)
             self.assertIsNotNone(m)
             self.assertEqual({"en": m.group(1), "de": m.group(2)}[lang], cp["course"][lang])
+            self.assertEqual(S.registry()["path"]["title"][lang], cp["course"][lang], f"Kursname = Titel des Lernpfads ({lang})")
         self.assertEqual(WRANGLER["vars"]["CERTOPUS_ON"], "0")
         self.assertEqual(S.registry()["path"]["id"], PID)
 
