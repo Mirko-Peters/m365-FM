@@ -467,6 +467,34 @@ test("Konten zusammenfuehren: Versuche und Zertifikat wandern mit, kein zweites 
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM learn_certs WHERE user_id=2").get().n, 1);
 });
 
+test("Konten zusammenfuehren: Versuchszaehler werden addiert (spaeteres Fenster), abgelaufene zaehlen nicht, andere Schluessel bleiben", async () => {
+  const { mergeStatements } = await import("../src/identities.js");
+  const { env, raw, s } = await setup();
+  await seed(env);
+  const t = Math.floor(Date.now() / 1000), rl = (k) => { const r = raw.prepare("SELECT n, win FROM ratelimit WHERE k=?").get(k); return r ? { ...r } : null; };
+  const ins = raw.prepare("INSERT INTO ratelimit(k,n,win) VALUES (?,?,?)");
+  ins.run(`learnq:1:${PATH}`, 2, t - 3600);          // Ada (S): 2 Versuche, Fenster laeuft
+  ins.run(`learnq:2:${PATH}`, 1, t - 7200);          // Bob (T): 1 Versuch, Fenster laeuft
+  ins.run("learnq:1:anderer-pfad", 1, t - 100);      // nur bei S: wandert
+  ins.run("learnq:1:alter-pfad", 3, t - 90000);      // abgelaufen: entfaellt
+  ins.run("learnq:2:alter-pfad", 1, t - 90000);      // bei T abgelaufen ...
+  ins.run("learnq:1:neu-pfad", 1, t - 60);           // ... S dagegen laeuft
+  ins.run("learnq:2:neu-pfad", 3, t - 90000);
+  ins.run("learnq:12:" + PATH, 3, t - 10);           // anderer Nutzer (12), dessen Schluessel mit "learnq:1" beginnt: unberuehrt
+  ins.run("learncert:1", 4, t - 10);                  // andere Zaehler: unberuehrt
+  await env.DB.batch(await mergeStatements(env.DB, 1, 2));
+  assert.deepEqual(rl(`learnq:2:${PATH}`), { n: 3, win: t - 3600 }, "2 + 1, spaeteres Fenster");
+  assert.deepEqual(rl("learnq:2:anderer-pfad"), { n: 1, win: t - 100 });
+  assert.deepEqual(rl("learnq:2:neu-pfad"), { n: 1, win: t - 60 }, "abgelaufener Zaehler von T zaehlt nicht");
+  assert.deepEqual(rl("learnq:2:alter-pfad"), { n: 1, win: t - 90000 }, "abgelaufener Zaehler von S aendert nichts");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM ratelimit WHERE k LIKE 'learnq:1:%'").get().n, 0);
+  assert.deepEqual(rl("learnq:12:" + PATH), { n: 3, win: t - 10 }); assert.deepEqual(rl("learncert:1"), { n: 4, win: t - 10 });
+  // Bob hat damit keine Versuche mehr in diesem Fenster
+  const st = await call(env, "/api/learn/cert?path=" + PATH, { cookie: s.bob });
+  assert.equal(st.data.attempts_left, 0);
+  assert.equal((await start(env, s.bob)).status, 429);
+});
+
 test("Cron: wartende Zeilen eines nicht eingerichteten Pfads blockieren nicht; haengengebliebene (issuing) werden aufgenommen", async () => {
   const { env, raw, s } = await setup();
   await seed(env);
