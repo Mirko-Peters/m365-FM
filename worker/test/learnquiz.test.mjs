@@ -240,15 +240,51 @@ test("Zertifikat aus (CERTOPUS_ON=0): Pruefungen, 503 cert_off, Zeile pending mi
     assert.equal(r.status, 400, JSON.stringify(o)); assert.equal(r.data.error, err);
   }
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM learn_certs").get().n, 0);
-  const off = await call(env, "/api/learn/cert", { method: "POST", cookie: s.ada, body: certBody(attempt, { name: "  Ada   <b>Lovelace</b> " }) });
+  const off = await call(env, "/api/learn/cert", { method: "POST", cookie: s.ada, body: certBody(attempt, { name: "  Ada   <Love>lace " }) });
   assert.equal(off.status, 503); assert.equal(off.data.error, "cert_off");
   const row = raw.prepare("SELECT * FROM learn_certs").get();
-  assert.equal(row.status, "pending"); assert.equal(row.name, "Ada bLovelace/b"); assert.equal(row.email, "ada@example.com"); assert.equal(row.attempt_id, attempt); assert.equal(row.lang, "de");
+  assert.equal(row.status, "pending"); assert.equal(row.name, "Ada Lovelace"); assert.equal(row.email, "ada@example.com"); assert.equal(row.attempt_id, attempt); assert.equal(row.lang, "de");
   const after = await call(env, "/api/learn/cert?path=" + PATH, { cookie: s.ada });
   assert.equal(after.data.passed, true); assert.equal(after.data.cert.status, "pending"); assert.equal(after.data.best.attempt, attempt);
   // Schalter an, aber ohne Schluessel: weiterhin aus
   env.CERTOPUS_ON = "1";
   assert.equal((await call(env, "/api/learn/cert", { method: "POST", cookie: s.ada, body: certBody(attempt) })).data.error, "cert_off");
+});
+
+test("Zertifikat: Name ohne Link/Domain, E-Mail nur die bestaetigte bzw. hoechstens 2 verschiedene ohne Bestaetigung", async () => {
+  const { env, raw, s } = await setup();
+  await seed(env);
+  const attempt = await passedAttempt(env, s.ada);
+  const post = (o, cookie = s.ada, att = attempt) => call(env, "/api/learn/cert", { method: "POST", cookie, body: certBody(att, o) });
+  for (const name of ["https://ada.dev", "Ada http:x", "www.ada", "Ada Lovelace.com", "ada.example.de/", "Ada @lovelace", "Ada / Lovelace", "AdA.DE"]) {
+    const r = await post({ name });
+    assert.equal(r.status, 400, name); assert.equal(r.data.error, "name_url", name);
+  }
+  for (const name of ["Dr. Ada Lovelace", "J.R.R. Tolkien", "Ada Lovelace-Byron", "St. Clair, M.Sc."]) assert.equal((await post({ name })).status, 503, name + " ist erlaubt");
+  // Ada hat eine bestaetigte Adresse: nur diese (Gross/Klein egal)
+  const st = await call(env, "/api/learn/cert?path=" + PATH, { cookie: s.ada });
+  assert.equal(st.data.email, "ada@example.com"); assert.equal(st.data.email_verified, true);
+  const other = await post({ email: "jemand@example.org" });
+  assert.equal(other.status, 400); assert.equal(other.data.error, "email_unverified");
+  assert.equal((await post({ email: " ADA@Example.COM " })).status, 503);
+  assert.equal(raw.prepare("SELECT email FROM learn_certs WHERE user_id=1").get().email, "ada@example.com");
+  // Bob ohne bestaetigte Adresse: frei, aber hoechstens 2 verschiedene je Pfad
+  const bobAttempt = await passedAttempt(env, s.bob);
+  const bobState = await call(env, "/api/learn/cert?path=" + PATH, { cookie: s.bob });
+  assert.equal(bobState.data.email_verified, false); assert.equal(bobState.data.email, "");
+  assert.equal((await post({ email: "bob1@example.com" }, s.bob, bobAttempt)).status, 503);
+  assert.equal((await post({ email: "BOB2@example.com" }, s.bob, bobAttempt)).status, 503);
+  assert.equal((await post({ email: "bob1@example.com" }, s.bob, bobAttempt)).status, 503, "eine schon genutzte Adresse geht weiter");
+  const third = await post({ email: "bob3@example.com" }, s.bob, bobAttempt);
+  assert.equal(third.status, 400); assert.equal(third.data.error, "email_limit"); assert.equal(third.data.max, 2);
+  const row = raw.prepare("SELECT email, emails FROM learn_certs WHERE user_id=2").get();
+  assert.equal(row.email, "bob1@example.com"); assert.deepEqual(JSON.parse(row.emails), ["bob1@example.com", "bob2@example.com"]);
+  assert.equal((await call(env, "/api/learn/cert?path=" + PATH, { cookie: s.bob })).data.email, "bob1@example.com", "Vorschlag: zuletzt genutzte Adresse");
+  // bestaetigt Bob spaeter eine Adresse, gilt nur noch diese - auch die Obergrenze spielt dann keine Rolle
+  raw.prepare("UPDATE mail_addr SET email='bob3@example.com', verified=1 WHERE user_id=2").run();
+  assert.equal((await call(env, "/api/learn/cert?path=" + PATH, { cookie: s.bob })).data.email, "bob3@example.com");
+  assert.equal((await post({ email: "bob1@example.com" }, s.bob, bobAttempt)).data.error, "email_unverified");
+  assert.equal((await post({ email: "bob3@example.com" }, s.bob, bobAttempt)).status, 503);
 });
 
 test("Zertifikat mit Certopus (Mock): Kopf x-api-key, Felder laut Vorlage, gespeichert, zweiter Aufruf liefert das vorhandene", async () => {

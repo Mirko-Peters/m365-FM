@@ -94,6 +94,12 @@ UI = {
     "q_cert_err": ("The certificate could not be created right now. Please try again later.", "Das Zertifikat konnte gerade nicht erstellt werden. Bitte versuchen Sie es später erneut."),
     "q_err_name": ("Please enter a name with 2 to 80 characters.", "Bitte geben Sie einen Namen mit 2 bis 80 Zeichen ein."),
     "q_err_email": ("Please enter a valid email address.", "Bitte geben Sie eine gültige E-Mail-Adresse ein."),
+    "q_err_name_url": ("Please enter only your name – no web address, domain, @ or /.", "Bitte geben Sie nur Ihren Namen ein – ohne Webadresse, Domain, @ oder /."),
+    "q_email_verified": ("This is the confirmed email address of your account. The certificate can only be sent there.",
+                         "Das ist die bestätigte E-Mail-Adresse Ihres Kontos. Nur dorthin kann das Zertifikat gehen."),
+    "q_err_email_unverified": ("Please use the confirmed email address of your account.", "Bitte verwenden Sie die bestätigte E-Mail-Adresse Ihres Kontos."),
+    "q_err_email_limit": ("You have already used {m} different email addresses for this certificate. Please use one of them, or confirm an email address in your account settings.",
+                          "Sie haben für dieses Zertifikat schon {m} verschiedene E-Mail-Adressen verwendet. Bitte nehmen Sie eine davon oder bestätigen Sie eine E-Mail-Adresse in Ihren Kontoeinstellungen."),
     "q_err_consent": ("Please confirm that you agree.", "Bitte bestätigen Sie die Einwilligung."),
     "q_err_rate": ("Too many requests. Please try again later.", "Zu viele Anfragen. Bitte versuchen Sie es später erneut."),
     "q_err": ("Something went wrong. Please reload the page.", "Etwas ist schiefgelaufen. Bitte laden Sie die Seite neu."),
@@ -622,7 +628,8 @@ def quiz_box(lang, BASE, groups):
 JS_KEYS = ("q_loading", "q_login_h", "q_result_h", "q_login","q_signin", "q_start", "q_resume", "q_left", "q_none_left", "q_best", "q_of", "q_progress", "q_valid", "q_submit", "q_missing", "q_noq",
            "q_result", "q_passed", "q_failed", "q_by_guide", "q_reread", "q_review", "q_right", "q_wrong", "q_yours", "q_correct", "q_noans", "q_retry", "q_expired",
            "q_passed_before", "q_cert_h", "q_cert_lead", "q_name", "q_email", "q_consent", "q_privacy", "q_cert_btn", "q_cert_ok", "q_cert_view", "q_cert_pdf", "q_linkedin",
-           "q_cert_off", "q_cert_err", "q_err_name", "q_err_email", "q_err_consent", "q_err_rate", "q_err", "q_soon")
+           "q_cert_off", "q_cert_err", "q_err_name", "q_err_email", "q_err_consent", "q_err_rate", "q_err", "q_soon",
+           "q_err_name_url", "q_email_verified", "q_err_email_unverified", "q_err_email_limit")
 
 QUIZ_CSS = """<style>
 .lq-facts{margin:.6em 0 1.2em;padding-left:1.2em}.lq-facts li{margin:.2em 0}

@@ -5,6 +5,8 @@
 //   POST /api/learn/quiz/submit  {attempt, answers}        Login; zaehlen, speichern, Ergebnis mit Erklaerungen (Sprache des Versuchs)
 //   GET  /api/learn/cert?path=                            Login; Stand (bestanden, bester Versuch, Zertifikat) und Vorschlag fuer Name/E-Mail
 //   POST /api/learn/cert         {path, attempt, name, email, consent, lang}   Zertifikat ueber Certopus (nur mit CERTOPUS_ON=1, Schluessel und IDs)
+//                                Name 2-80 Zeichen ohne Link, Domain, @ oder /; E-Mail: mit bestaetigter Adresse (mail_addr) nur diese (400 email_unverified),
+//                                sonst frei, hoechstens 2 verschiedene je Nutzer und Pfad (400 email_limit)
 //   GET  /api/learn/stats?path=                           nur Admin: gestartet/abgegeben/bestanden/Zertifikate je Herkunft (src) und Woche
 //   POST /api/internal/learn-quiz {path, keys:[...]}       CRON_KEY: je Pfad massgeblich - uebermittelte Schluessel upserten (active=1), alle anderen
 //                                                         Fragen des Pfads stilllegen (active=0, keine Loeschung: offene Versuche bleiben wertbar, IDs bleiben vergeben)
@@ -27,6 +29,9 @@ export const COURSE = {
 const PATH_RX = /^[a-z0-9][a-z0-9-]{1,60}$/;
 const QID_RX = /^[a-z0-9][a-z0-9-]{1,80}-[0-9]{1,3}$/;
 const EMAIL_RX = /^[^\s@<>"']{1,64}@[^\s@<>"']{1,190}\.[a-z]{2,}$/i;
+// Name auf dem Zertifikat: keine Links, Domains oder Adressen (Certopus druckt ihn, das Zertifikat ist oeffentlich)
+export const NAME_URL_RX = /https?:|www\.|[@/]|\.[a-z]{2,}(\/|$)/i;
+export const MAX_FREE_EMAILS = 2;   // ohne bestaetigte Adresse: hoechstens so viele verschiedene Empfaenger je Nutzer und Pfad
 const now = () => Math.floor(Date.now() / 1000);
 export const quizLang = (l) => (String(l || "").toLowerCase() === "de" ? "de" : "en");   // Test gibt es auf en und de, alles andere faellt auf en zurueck
 export const threshold = (total) => Math.ceil((total * PASS_PCT) / 100);
@@ -290,16 +295,23 @@ async function certStatus(env, url, user, J) {
   const open = await db.prepare("SELECT id,qids,started FROM learn_attempts WHERE user_id=? AND path=? AND finished=0 AND started>? ORDER BY started DESC LIMIT 1").bind(user.id, path, t - ATTEMPT_TTL).first();
   const cert = await db.prepare("SELECT * FROM learn_certs WHERE user_id=? AND path=?").bind(user.id, path).first();
   const pref = await db.prepare("SELECT real_name FROM user_prefs WHERE user_id=?").bind(user.id).first().catch(() => null);
-  const mail = await db.prepare("SELECT email FROM mail_addr WHERE user_id=? AND verified=1").bind(user.id).first().catch(() => null);
+  const verified = await verifiedEmails(db, user.id);
   const keys = await db.prepare("SELECT COUNT(*) n FROM learn_quiz_keys WHERE path=? AND active=1").bind(path).first();
   return J({
     path, quiz_ready: (keys?.n || 0) > 0, passed: !!best?.passed,
     best: best ? { attempt: best.id, score: best.score, total: best.total, passed: !!best.passed, finished: best.finished } : null,
     open: open ? { attempt: open.id, qids: parse(open.qids, []), expires: open.started + ATTEMPT_TTL } : null,
     cert: cert ? certOut(cert, cfg) : null,
-    name: cert?.name || String(pref?.real_name || "").trim() || user.name || "", email: cert?.email || mail?.email || "",
+    name: cert?.name || String(pref?.real_name || "").trim() || user.name || "",
+    email: (verified.length ? (verified.includes(cert?.email) ? cert.email : verified[0]) : cert?.email) || "", email_verified: verified.length > 0,
     cert_on: certReady(env, cfg), attempts_left: await attemptsLeft(db, user.id, path), threshold_pct: PASS_PCT, max_attempts: MAX_ATTEMPTS,
   });
+}
+
+// Bestaetigte Adressen des Kontos (mail_addr, verified=1; heute hoechstens eine je Konto), klein geschrieben
+async function verifiedEmails(db, uid) {
+  const rows = (await db.prepare("SELECT email FROM mail_addr WHERE user_id=? AND verified=1").bind(uid).all().catch(() => null))?.results || [];
+  return [...new Set(rows.map((r) => String(r.email || "").trim().toLowerCase()).filter(Boolean))];
 }
 
 async function certRequest(env, request, user, J) {
@@ -316,13 +328,21 @@ async function certRequest(env, request, user, J) {
   if (b.consent !== true) return J({ error: "consent" }, 400);
   const name = cleanText(b.name, 200).replace(/\s+/g, " ").replace(/[<>]/g, "").trim();
   if (name.length < 2 || name.length > 80) return J({ error: "name" }, 400);
+  if (NAME_URL_RX.test(name)) return J({ error: "name_url" }, 400);
   const email = String(b.email || "").trim().toLowerCase();
   if (email.length > 254 || !EMAIL_RX.test(email)) return J({ error: "email" }, 400);
+  // Empfaenger: Mit bestaetigter Adresse nur diese (sonst liesse sich das Zertifikat an Fremde schicken); ohne frei, aber hoechstens
+  // MAX_FREE_EMAILS verschiedene je Nutzer und Pfad (learn_certs.emails merkt sich die bisher genutzten)
+  const verified = await verifiedEmails(db, user.id);
+  if (verified.length && !verified.includes(email)) return J({ error: "email_unverified" }, 400);
+  const used = parse(have?.emails || "[]", []).filter((x) => typeof x === "string");
+  if (!verified.length && !used.includes(email) && used.length >= MAX_FREE_EMAILS) return J({ error: "email_limit", max: MAX_FREE_EMAILS }, 400);
+  const emails = JSON.stringify(used.includes(email) ? used : [...used, email]);
   if (!(await rateLimit(db, `learncert:${user.id}`, 5, 3600))) return J({ error: "rate_limit" }, 429);
   const lang = quizLang(b.lang), t = now();
-  await db.prepare("INSERT INTO learn_certs(user_id,path,attempt_id,name,email,lang,status,created,updated) VALUES(?,?,?,?,?,?,'pending',?,?) " +
-    "ON CONFLICT(user_id,path) DO UPDATE SET attempt_id=excluded.attempt_id,name=excluded.name,email=excluded.email,lang=excluded.lang,status='pending',error='',updated=excluded.updated WHERE learn_certs.status IN ('pending','error')")
-    .bind(user.id, path, a.id, name, email, lang, t, t).run();
+  await db.prepare("INSERT INTO learn_certs(user_id,path,attempt_id,name,email,emails,lang,status,created,updated) VALUES(?,?,?,?,?,?,?,'pending',?,?) " +
+    "ON CONFLICT(user_id,path) DO UPDATE SET attempt_id=excluded.attempt_id,name=excluded.name,email=excluded.email,emails=excluded.emails,lang=excluded.lang,status='pending',error='',updated=excluded.updated WHERE learn_certs.status IN ('pending','error')")
+    .bind(user.id, path, a.id, name, email, emails, lang, t, t).run();
   if (!certReady(env, cfg)) return J({ error: "cert_off", status: "pending" }, 503);
   const row = await db.prepare("SELECT * FROM learn_certs WHERE user_id=? AND path=?").bind(user.id, path).first();
   if (row?.status === "ok") return J({ ...certOut(row, cfg), existing: true });

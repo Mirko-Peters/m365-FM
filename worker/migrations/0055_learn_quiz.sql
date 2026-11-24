@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS learn_certs (
   attempt_id TEXT NOT NULL,
   name TEXT NOT NULL,
   email TEXT NOT NULL,
+  emails TEXT NOT NULL DEFAULT '[]',     -- JSON: bisher genutzte Empfaenger (ohne bestaetigte Adresse hoechstens 2 verschiedene)
   lang TEXT NOT NULL DEFAULT 'en',
   certopus_id TEXT NOT NULL DEFAULT '',
   cert_url TEXT NOT NULL DEFAULT '',

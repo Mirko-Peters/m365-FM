@@ -210,13 +210,15 @@
   }
   function certForm(attempt) {
     var name = h("input", { id: "lq-name", name: "name", autocomplete: "name", required: true, minlength: "2", maxlength: "80", value: (ST && ST.name) || "" });
-    var mail = h("input", { id: "lq-mail", name: "email", type: "email", autocomplete: "email", required: true, maxlength: "254", value: (ST && ST.email) || "" });
+    var mail = h("input", { id: "lq-mail", name: "email", type: "email", autocomplete: "email", required: true, maxlength: "254", value: (ST && ST.email) || "",
+      "aria-describedby": ST && ST.email_verified ? "lq-mail-hint" : null });   // bestaetigte Adresse des Kontos ist vorbefuellt (Worker nimmt nur diese)
+    var hint = ST && ST.email_verified ? h("p", { id: "lq-mail-hint", class: "mut", text: t("q_email_verified") }) : null;
     var ok = h("input", { id: "lq-ok", type: "checkbox", required: true });
     var parts = t("q_consent").split("{link}"), err = h("p", { class: "lq-err", role: "alert" });
     var label = h("label", { class: "lq-chk", for: "lq-ok" }, [ok, h("span", {}, [parts[0], h("a", { href: C.privacy, target: "_blank", rel: "noopener", text: t("q_privacy") }), parts[1] || ""])]);
     var btn = h("button", { type: "submit", class: "btn main", text: t("q_cert_btn") });
     var box = h("form", { class: "lq-cert", novalidate: true }, [h("h3", { text: t("q_cert_h") }), h("p", { class: "mut", text: t("q_cert_lead") }),
-      h("label", { for: "lq-name", text: t("q_name") }), name, h("label", { for: "lq-mail", text: t("q_email") }), mail, label, err, h("p", {}, [btn])]);
+      h("label", { for: "lq-name", text: t("q_name") }), name, h("label", { for: "lq-mail", text: t("q_email") }), mail, hint, label, err, h("p", {}, [btn])]);
     function bad(el, msg) {
       [name, mail, ok].forEach(function (x) { x.removeAttribute("aria-invalid"); });
       if (el) { el.setAttribute("aria-invalid", "true"); el.focus(); }
@@ -226,6 +228,7 @@
       e.preventDefault();
       var nv = name.value.replace(/\s+/g, " ").trim(), mv = mail.value.trim();
       if (nv.length < 2 || nv.length > 80) return bad(name, t("q_err_name"));
+      if (/https?:|www\.|[@\/]|\.[a-z]{2,}(\/|$)/i.test(nv)) return bad(name, t("q_err_name_url"));   // wie NAME_URL_RX im Worker
       if (!/^[^\s@<>"']+@[^\s@<>"']+\.[a-z]{2,}$/i.test(mv)) return bad(mail, t("q_err_email"));
       if (!ok.checked) return bad(ok, t("q_err_consent"));
       bad(null, ""); btn.disabled = true;
@@ -235,7 +238,10 @@
         if (r.s === 200 && (r.j.status === "ok" || r.j.url)) return box.replaceWith(certLinks(r.j));   // Worker: 200 heisst immer status "ok" (url kann leer sein, wenn Certopus keine https-Adresse liefert)
         if (r.s === 503 || (r.s === 409 && r.j.error === "busy")) return box.replaceWith(h("p", { class: "lq-big", role: "status", text: t("q_cert_off") }));
         if (r.j.error === "name") return bad(name, t("q_err_name"));
+        if (r.j.error === "name_url") return bad(name, t("q_err_name_url"));
         if (r.j.error === "email") return bad(mail, t("q_err_email"));
+        if (r.j.error === "email_unverified") return bad(mail, t("q_err_email_unverified"));
+        if (r.j.error === "email_limit") return bad(mail, t("q_err_email_limit", { m: r.j.max || 2 }));
         if (r.j.error === "consent") return bad(ok, t("q_err_consent"));
         bad(null, r.s === 429 ? t("q_err_rate") : r.s === 502 ? t("q_cert_err") : t("q_err"));
       });
