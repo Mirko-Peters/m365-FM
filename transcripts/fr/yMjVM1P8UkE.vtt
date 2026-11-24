@@ -1,0 +1,1888 @@
+WEBVTT
+
+00:00:00.310 --> 00:00:06.510
+Bienvenue sur le podcast M365FM, où nous explorons les personnes, les idées et les technologies qui façonnent le futur du travail.
+
+00:00:07.150 --> 00:00:10.130
+Azure Migrate est gratuit, et il vous dira ce que vos propres serveurs vous coûtent réellement.
+
+00:00:11.470 --> 00:00:17.070
+Cela semble simple, mais la partie difficile d'une migration survient généralement avant même d'ouvrir le portail cloud car personne n'a cartographié les connexions.
+
+00:00:18.010 --> 00:00:23.310
+C'est le service Microsoft qui découvre vos charges de travail, vérifie si elles sont prêtes, estime leurs coûts, puis exécute le transfert.
+
+00:00:23.310 --> 00:00:30.750
+Bienvenue sur le podcast M365FM, où nous explorons les personnes, les idées et les technologies qui façonnent le futur du travail.
+
+00:00:31.670 --> 00:00:33.670
+Et vous ne faites pas tout en une seule fois, car cela fonctionne par vagues.
+
+00:00:34.930 --> 00:00:40.430
+Ce qu'est réellement Azure Migrate, commençons par la version simple, car le nom laisse penser qu'il suffit d'appuyer sur un bouton.
+
+00:00:41.110 --> 00:00:46.170
+Azure Migrate est un service gratuit de Microsoft qui vous aide à décider, planifier et exécuter un transfert vers Azure.
+
+00:00:46.770 --> 00:00:49.730
+Il examine ce que vous exécutez aujourd'hui et vous indique si tout cela est prêt pour le clair.
+
+00:00:49.730 --> 00:00:55.170
+Il calcule approximativement le coût du transfert, puis vous aide à le réaliser, avec un minimum de risque et de temps d'arrêt.
+
+00:00:55.830 --> 00:00:57.110
+Ce dernier point est plus important qu'il n'y paraît.
+
+00:00:57.830 --> 00:01:01.950
+Une migration est bien plus qu'une simple copie, car ce que vous déplacez continue de servir de vrais personnes pendant l'opération.
+
+00:01:02.510 --> 00:01:04.850
+La gamme de choses qu'il prend en charge est donc plus large que vous ne pourriez l'imaginer.
+
+00:01:05.610 --> 00:01:09.850
+Microsoft l'a conçu pour les serveurs, les bases de données, les applications web, les bureaux virtuels, les transferts massifs de données en ligne.
+
+00:01:10.370 --> 00:01:12.750
+Il gère les plus importants d'entre eux avec un produit appelé Azure Databox.
+
+00:01:13.530 --> 00:01:15.750
+Ici, un serveur désigne simplement l'ordinateur qui exécute quelque chose.
+
+00:01:15.750 --> 00:01:21.090
+Sur-Sidehack signifie simplement les machines situées dans vos propres locaux ou votre espace loué plutôt que dans un centre de données Microsoft.
+
+00:01:21.970 --> 00:01:24.110
+Le service Azure Migrate, lui-même, est gratuit.
+
+00:01:24.730 --> 00:01:28.290
+Vous payez toujours pour les ressources Azure que vous finissez par utiliser, car vous louez des ordinateurs dans le cloud.
+
+00:01:29.150 --> 00:01:31.570
+Quelques outils tiers qui s'y connectent facturent leurs propres frais.
+
+00:01:32.590 --> 00:01:37.350
+Mais la découverte, l'évaluation et la planification, ce qui vous empêche réellement de faire une erreur coûteuse, ne coûte rien.
+
+00:01:38.910 --> 00:01:43.150
+Il est utile de préciser à qui cela s'adresse, car le nom peut laisser penser qu'il s'agit d'un logiciel réservé aux gérants.
+
+00:01:43.150 --> 00:01:49.090
+Le même service qu'il y a d'une grande entreprise à planifier le départ d'un centre de données aide aussi une petite équipe à déplacer quelques serveurs.
+
+00:01:49.770 --> 00:01:52.390
+Le travail consistant à déterminer ce que vous possédez ne change pas vraiment avec la taille.
+
+00:01:53.050 --> 00:01:56.750
+Tout se passe au même endroit, ce que Microsoft appelle le hub Azure Migrate.
+
+00:01:57.370 --> 00:02:01.070
+Considérez-le comme une porte d'entrée unique pour ne pas avoir à jongler avec 5 outils différents pour accomplir une seule tâche.
+
+00:02:01.390 --> 00:02:02.950
+L'ensemble du voyage se divise en 3 phases.
+
+00:02:03.350 --> 00:02:04.790
+Décidez, planifiez et exécutiez.
+
+00:02:04.790 --> 00:02:06.870
+Vous décidez en découvrant ce que vous avez.
+
+00:02:07.150 --> 00:02:11.630
+Vous planifiez en évaluant l'état de préparation, la taille et le coût, puis vous exécutez ce qui correspond au transfert proprement dit.
+
+00:02:12.730 --> 00:02:13.790
+Comment fonctionne la découverte ?
+
+00:02:14.570 --> 00:02:17.170
+Le voyage commence par une question qui prend presque tout le monde au dépourvu.
+
+00:02:17.310 --> 00:02:19.230
+Que possédez-vous réellement ?
+
+00:02:19.230 --> 00:02:21.010
+La plupart des équipes pensent connaître leur propre environnement.
+
+00:02:21.310 --> 00:02:23.610
+Puis elles effectuent une découverte et trouvent des serveurs que personne ne peut nommer,
+
+00:02:23.910 --> 00:02:25.710
+exécutant des choses que personne ne se souvient avoir créées.
+
+00:02:25.790 --> 00:02:28.850
+Ce n'est pas un échec de l'équipe car les environnements se développent discrètement au fil des ans,
+
+00:02:28.970 --> 00:02:30.750
+et les personnes qui les ont mis en place sont souvent parties.
+
+00:02:30.750 --> 00:02:34.350
+La découverte est simplement l'étape qui remplace la mémoire par des données réelles
+
+00:02:34.350 --> 00:02:36.530
+afin que vous planifiez à partir de faits plutôt que de suppositions.
+
+00:02:37.350 --> 00:02:40.170
+La méthode recommandée par Microsoft consiste à utiliser l'appliance Azure Migré.
+
+00:02:40.550 --> 00:02:43.430
+Une appliance semble technique, mais il s'agit simplement d'une petite machine virtuelle
+
+00:02:43.430 --> 00:02:45.330
+que vous démarrez dans votre propre centre de données.
+
+00:02:46.090 --> 00:02:50.130
+Elle collecte deux choses, la configuration de chaque serveur et la charge de travail de chaque serveur.
+
+00:02:50.790 --> 00:02:53.790
+Elle envoie ces informations à Azure par elle-même et continue de se mettre à jour
+
+00:02:53.790 --> 00:02:55.710
+pour que votre vue reste à jour au gré des changements.
+
+00:02:56.230 --> 00:02:57.770
+Vous n'êtes pas obligé d'utiliser l'appliance pour tout.
+
+00:02:57.910 --> 00:03:00.450
+Si votre réseau est verrouillé et ne peut pas accéder à Internet,
+
+00:03:00.450 --> 00:03:04.950
+il existe le collecteur Azure Migrate qui prend un instantané rapide au lieu d'un flux continu.
+
+00:03:05.670 --> 00:03:07.310
+Si vous tenez déjà une liste propre de vos machines,
+
+00:03:07.430 --> 00:03:10.630
+vous pouvez simplement importer cette liste à partir d'une feuille de calcul et ignorer totalement l'analyse.
+
+00:03:10.990 --> 00:03:12.730
+L'échelle est également plus grande que vous ne pourriez l'imaginer.
+
+00:03:13.070 --> 00:03:16.670
+Une seule appliance peut découvrir jusqu'à 10 000 serveurs sur 10 serveurs vCenter
+
+00:03:16.670 --> 00:03:21.530
+ou 5 000 serveurs sur 300 autres Hyper-V ou un 0 000 serveur physique.
+
+00:03:22.410 --> 00:03:24.650
+Ces noms décrivent différentes façons d'exécuter des machines virtuelles,
+
+00:03:24.790 --> 00:03:25.730
+vous n'avez pas besoin de les maîtriser.
+
+00:03:26.190 --> 00:03:29.390
+L'idée est simple, car un seul petit assistant peut inventorier tout un centre de données.
+
+00:03:29.390 --> 00:03:32.310
+En coulisses, cette appliance effectue un travail de patience.
+
+00:03:32.870 --> 00:03:36.070
+Elle enregistre la composition de chaque machine, c'est-à-dire son processeur, sa mémoire et ses disques.
+
+00:03:36.670 --> 00:03:38.770
+Elle surveille également la charge de ses composants au fil du temps,
+
+00:03:39.110 --> 00:03:41.750
+de sorte que l'enregistrement couvre ce que vous possédez et son niveau d'utilisation.
+
+00:03:42.130 --> 00:03:44.950
+Chaque appliance s'enregistre auprès d'un projet unique, ce qui maintient les rapports ordonnés,
+
+00:03:45.030 --> 00:03:48.610
+et un projet peut en contenir plusieurs, donc un parc étendu ne pose aucun problème.
+
+00:03:49.450 --> 00:03:52.090
+L'évaluation, préparation, dimensionnement, coût.
+
+00:03:52.630 --> 00:03:53.570
+Une fois que vous savez ce que vous avez,
+
+00:03:53.570 --> 00:03:56.310
+la question suivante est celle qui empêche les équipes financières de dormir.
+
+00:03:56.750 --> 00:03:59.970
+Est-ce que tout cela est prêt pour le cloud, et combien cela coûtera-t-il ?
+
+00:03:59.970 --> 00:04:01.250
+C'est ce à quoi répond une évaluation,
+
+00:04:01.610 --> 00:04:03.510
+et elle traite trois questions dans un ordre strict.
+
+00:04:04.150 --> 00:04:06.450
+D'abord, il détermine si la charge de travail est prête pour azur.
+
+00:04:06.930 --> 00:04:08.370
+Ensuite, il définit quelle doit être sa taille.
+
+00:04:08.970 --> 00:04:10.690
+Enfin, il estime son coût mensuel.
+
+00:04:11.210 --> 00:04:14.050
+L'ordre est important, car si un élément échoue au test de préparation,
+
+00:04:14.410 --> 00:04:17.110
+il est marqué comme inadapté et ne reçoit ni taille, ni prix.
+
+00:04:17.490 --> 00:04:19.770
+Il est inutile d'estimer le coût d'une machine qui peut encore être déplacée.
+
+00:04:20.170 --> 00:04:22.530
+Ces évaluations existent sous plusieurs formes selon ce que vous déplacez.
+
+00:04:23.510 --> 00:04:24.550
+Il y en a une pour les serveurs classiques,
+
+00:04:24.670 --> 00:04:25.370
+une pour les bases SQL,
+
+00:04:25.610 --> 00:04:26.490
+une pour les applications web,
+
+00:04:26.630 --> 00:04:28.030
+et une pour les équipes sur une voie VMware.
+
+00:04:29.250 --> 00:04:30.110
+Inutile de les mémoriser,
+
+00:04:30.250 --> 00:04:32.190
+car l'outil choisit le bon type une fois qu'il sait ce que vous avez.
+
+00:04:32.730 --> 00:04:33.970
+Ce qui compte, c'est l'habitude d'encourager,
+
+00:04:34.210 --> 00:04:36.670
+évaluer d'abord, déplacer, ensuite...
+
+00:04:36.670 --> 00:04:38.490
+Le dimensionnement est là où beaucoup de débutants se font piéger,
+
+00:04:38.590 --> 00:04:39.530
+car il existe deux façons de faire.
+
+00:04:39.910 --> 00:04:41.290
+La première est le dimensionnement à l'identique
+
+00:04:41.290 --> 00:04:42.870
+qui copie votre configuration actuelle telle qu'elle.
+
+00:04:43.190 --> 00:04:45.170
+Cela semble sûr, mais cela copie aussi vos gaspillages.
+
+00:04:45.510 --> 00:04:48.390
+Ainsi, si votre serveur fonctionne à une fraction de sa capacité depuis des années,
+
+00:04:48.530 --> 00:04:50.070
+vous continuez à payer pour la totalité.
+
+00:04:50.070 --> 00:04:52.870
+La deuxième est le dimensionnement basé sur les performances
+
+00:04:52.870 --> 00:04:54.530
+qui examinent l'utilisation réelle de la machine.
+
+00:04:55.230 --> 00:04:56.410
+Microsoft recommande cette option,
+
+00:04:56.870 --> 00:04:59.370
+car elle vous évite de payer pour une capacité que vous n'utiliserez jamais.
+
+00:04:59.890 --> 00:05:01.710
+Le fonctionnement est plus méticuleux que vous ne pourriez l'imaginer.
+
+00:05:02.050 --> 00:05:04.670
+L'appareil échantillonne les performances de chaque serveur à intervalles rapprochés.
+
+00:05:05.830 --> 00:05:07.030
+Il vérifie toutes les 20 secondes sur VMware,
+
+00:05:07.170 --> 00:05:08.210
+toutes les 30 secondes sur Hyper-V,
+
+00:05:08.390 --> 00:05:09.910
+et toutes les 5 minutes sur les serveurs physiques.
+
+00:05:11.010 --> 00:05:12.430
+Il agrège ses échantillons en points de données,
+
+00:05:12.670 --> 00:05:13.930
+en conserve un mois, puis les trie,
+
+00:05:14.110 --> 00:05:15.830
+et choisit une valeur pour le dimensionnement.
+
+00:05:15.830 --> 00:05:19.390
+Choisissez le 95ème percentile et vous ignorez les pics occasionnels.
+
+00:05:19.870 --> 00:05:21.430
+Choisissez le 99ème et vous les conservez.
+
+00:05:21.790 --> 00:05:23.850
+S'ajoute à cela ce qu'on appelle le facteur de confort,
+
+00:05:24.210 --> 00:05:25.710
+qui n'est qu'une marge pour le monde réel.
+
+00:05:26.450 --> 00:05:27.610
+Supposons qu'un serveur ait 10 coeurs,
+
+00:05:27.690 --> 00:05:28.930
+mais n'en utilise jamais que 20%.
+
+00:05:28.930 --> 00:05:30.850
+Sur le papier, 2 coeurs feraient l'affaire.
+
+00:05:31.230 --> 00:05:32.450
+Ajoutez un facteur de confort de 2,
+
+00:05:32.730 --> 00:05:33.790
+et vous obtenez 4 coeurs,
+
+00:05:33.850 --> 00:05:35.130
+ce qui laisse de la place pour un mois chargé,
+
+00:05:35.210 --> 00:05:35.990
+ou une croissance future.
+
+00:05:36.990 --> 00:05:39.050
+Ce chiffre est souvent la limite entre une facture cloud
+
+00:05:39.050 --> 00:05:40.690
+que vous pouvez justifier et une que vous ne pouvez pas.
+
+00:05:41.130 --> 00:05:41.770
+Vient ensuite le coût.
+
+00:05:41.770 --> 00:05:43.610
+L'évaluation vous permet d'indiquer
+
+00:05:43.610 --> 00:05:45.110
+si vous payez des tarifs standards à l'usage
+
+00:05:45.110 --> 00:05:46.670
+ou selon un accord négocié.
+
+00:05:47.510 --> 00:05:49.510
+Elle intègre des éléments tels que les réservations
+
+00:05:49.510 --> 00:05:50.230
+sur un ou trois ans,
+
+00:05:50.510 --> 00:05:52.730
+et un programme appelé Azure Hybrid Benefit
+
+00:05:52.730 --> 00:05:54.570
+qui vous permet de réutiliser vos licences existantes
+
+00:05:54.570 --> 00:05:55.230
+au lieu de les racheter.
+
+00:05:56.210 --> 00:05:58.010
+Il existe également une vue plus globale appelée Business Care.
+
+00:05:58.650 --> 00:06:00.630
+Il compare le coût total de fonctionnement sur site
+
+00:06:00.630 --> 00:06:03.570
+par rapport à une exécution dans Azure année après année,
+
+00:06:04.030 --> 00:06:06.130
+et montre comment passer d'un paiement matériel initial
+
+00:06:06.130 --> 00:06:08.270
+à un paiement mensuel à l'usage.
+
+00:06:08.830 --> 00:06:10.650
+Un dernier point concernant les évaluations, facile à oublier.
+
+00:06:10.650 --> 00:06:13.050
+Une évaluation est une image, un instant T,
+
+00:06:13.510 --> 00:06:15.050
+et elle peut devenir obsolète presque immédiatement.
+
+00:06:15.970 --> 00:06:17.270
+C'est pourquoi vous devez la relancer régulièrement
+
+00:06:17.270 --> 00:06:18.650
+plutôt que de conserver le premier rapport
+
+00:06:18.650 --> 00:06:19.930
+comme s'il s'agissait d'une vérité absolue.
+
+00:06:20.770 --> 00:06:21.730
+Connaître le prix de chaque serveur
+
+00:06:21.730 --> 00:06:23.110
+ne représente cependant que la moitié du travail.
+
+00:06:23.750 --> 00:06:24.690
+Les serveurs sont rarement isolés,
+
+00:06:25.030 --> 00:06:26.230
+et ce simple fait est la cause
+
+00:06:26.230 --> 00:06:27.710
+de plus d'échecs de migration qu'ailleurs.
+
+00:06:28.670 --> 00:06:29.490
+Analyse des dépendances
+
+00:06:29.490 --> 00:06:31.630
+Dimensionner un seul serveur est simple.
+
+00:06:32.190 --> 00:06:33.130
+Le piège est que les serveurs
+
+00:06:33.130 --> 00:06:34.530
+ne sont presque jamais vraiment seuls.
+
+00:06:35.230 --> 00:06:36.030
+Imaginez un serveur web
+
+00:06:36.030 --> 00:06:37.530
+qui gère les connexions de tout un département.
+
+00:06:37.530 --> 00:06:39.090
+Vous l'évaluez, il est prêt,
+
+00:06:39.210 --> 00:06:40.450
+sa taille est correcte, son prix convient.
+
+00:06:40.750 --> 00:06:42.670
+Vous pouvez le déplacer vers Azure pendant le week-end.
+
+00:06:43.650 --> 00:06:45.090
+Lundi matin, personne ne peut se connecter
+
+00:06:45.090 --> 00:06:46.210
+car ce serveur web dépendait
+
+00:06:46.210 --> 00:06:48.110
+d'un serveur d'authentification resté sur site.
+
+00:06:49.010 --> 00:06:50.110
+Rien n'était techniquement en panne
+
+00:06:50.110 --> 00:06:51.250
+car vous aviez simplement déplacé
+
+00:06:51.250 --> 00:06:52.070
+une moitié d'un duo.
+
+00:06:52.070 --> 00:06:55.070
+L'analyse des dépendances sert précisément
+
+00:06:55.070 --> 00:06:55.650
+à éviter cela.
+
+00:06:56.170 --> 00:06:57.070
+Elle observe quels serveurs
+
+00:06:57.070 --> 00:06:57.870
+communiquent entre eux.
+
+00:06:58.450 --> 00:06:59.170
+Cela vous permet de voir
+
+00:06:59.170 --> 00:07:00.830
+lesquels sont liés pour les déplacer en groupe
+
+00:07:00.830 --> 00:07:02.730
+au lieu de les séparer par accident.
+
+00:07:03.690 --> 00:07:04.990
+La version recommandée par Microsoft
+
+00:07:04.990 --> 00:07:06.530
+est l'analyse des dépendances sans agent,
+
+00:07:06.830 --> 00:07:08.330
+un nom complexe pour une idée simple.
+
+00:07:09.090 --> 00:07:10.650
+Elle ne nécessite absolument aucun logiciel
+
+00:07:10.650 --> 00:07:11.470
+installé sur les serveurs.
+
+00:07:11.990 --> 00:07:12.750
+Elle observe simplement
+
+00:07:12.750 --> 00:07:14.470
+les connexions réseau entrantes et sortantes
+
+00:07:14.470 --> 00:07:15.450
+toutes les 5 minutes environ
+
+00:07:15.450 --> 00:07:16.910
+pour créer une carte.
+
+00:07:17.470 --> 00:07:18.350
+Ces connexions sont ensuite
+
+00:07:18.350 --> 00:07:19.190
+regroupées par application.
+
+00:07:19.790 --> 00:07:20.690
+Au lieu d'une liste interminable
+
+00:07:20.690 --> 00:07:21.410
+de nom de machine, vous voyez
+
+00:07:21.410 --> 00:07:22.410
+comment vos systèmes interagissent
+
+00:07:22.410 --> 00:07:23.170
+les uns avec les autres.
+
+00:07:23.990 --> 00:07:24.950
+Vous obtenez ainsi une carte
+
+00:07:24.950 --> 00:07:25.610
+de votre environnement
+
+00:07:25.610 --> 00:07:26.570
+tel qu'il fonctionne réellement
+
+00:07:26.570 --> 00:07:27.690
+avec des serveurs regroupés
+
+00:07:27.690 --> 00:07:28.170
+par application
+
+00:07:28.170 --> 00:07:29.450
+et les éléments interdépendants
+
+00:07:29.450 --> 00:07:30.270
+clairement identifiés.
+
+00:07:31.970 --> 00:07:33.070
+Le bénéfice n'apparaît
+
+00:07:33.070 --> 00:07:33.970
+sur aucun graphique
+
+00:07:33.970 --> 00:07:34.770
+mais il est immense
+
+00:07:34.770 --> 00:07:35.430
+car vous évitez
+
+00:07:35.430 --> 00:07:36.790
+les pannes surprises imprévues
+
+00:07:36.790 --> 00:07:38.250
+et vous ne découvrez pas
+
+00:07:38.250 --> 00:07:39.130
+une connexion cachée
+
+00:07:39.130 --> 00:07:40.150
+à vos dépens au pire moment
+
+00:07:40.150 --> 00:07:41.210
+sous les yeux de tous.
+
+00:07:43.050 --> 00:07:43.950
+Sans agent ou avec agent,
+
+00:07:44.530 --> 00:07:45.330
+à ce stade vous connaissez
+
+00:07:45.330 --> 00:07:46.310
+le contenu de votre environnement,
+
+00:07:46.430 --> 00:07:47.050
+son coût et ce qui doit
+
+00:07:47.050 --> 00:07:47.850
+être déplacé ensemble.
+
+00:07:48.390 --> 00:07:49.430
+La décision suivante concerne
+
+00:07:49.430 --> 00:07:50.450
+la manière de copier un serveur.
+
+00:07:50.690 --> 00:07:51.250
+Et là encore,
+
+00:07:51.330 --> 00:07:51.990
+il existe deux options.
+
+00:07:52.650 --> 00:07:53.430
+La première est sans agent.
+
+00:07:53.770 --> 00:07:54.550
+Sans agent que signifie
+
+00:07:54.550 --> 00:07:55.610
+qu'aucun logiciel n'est installé
+
+00:07:55.610 --> 00:07:56.290
+à l'intérieur du serveur
+
+00:07:56.290 --> 00:07:56.690
+que vous migrez.
+
+00:07:57.270 --> 00:07:57.690
+Pour VMware,
+
+00:07:57.910 --> 00:07:59.210
+l'outil utilisé pour la découverte
+
+00:07:59.210 --> 00:08:00.150
+gère également la copie.
+
+00:08:00.910 --> 00:08:01.630
+Il utilise ce qu'on appelle
+
+00:08:01.630 --> 00:08:02.250
+un instantané,
+
+00:08:02.410 --> 00:08:04.130
+c'est-à-dire une image fixe rapide
+
+00:08:04.130 --> 00:08:04.830
+de la machine couplée
+
+00:08:04.830 --> 00:08:05.750
+à un suivi des modifications
+
+00:08:05.750 --> 00:08:06.390
+qui ne copient que
+
+00:08:06.390 --> 00:08:07.210
+les éléments ayant changés.
+
+00:08:07.930 --> 00:08:08.410
+Pour Hyper-V,
+
+00:08:08.810 --> 00:08:09.950
+l'opération se déroule sur l'autre,
+
+00:08:10.090 --> 00:08:11.230
+c'est-à-dire la machine physique
+
+00:08:11.230 --> 00:08:12.870
+qui exécute vos machines virtuelles.
+
+00:08:13.710 --> 00:08:14.510
+C'est la méthode recommandée
+
+00:08:14.510 --> 00:08:15.010
+par Microsoft
+
+00:08:15.010 --> 00:08:15.790
+pour la plupart des cas
+
+00:08:15.790 --> 00:08:16.710
+VMware et Hyper-V.
+
+00:08:17.050 --> 00:08:18.110
+Précisément parce qu'il n'est pas nécessaire
+
+00:08:18.110 --> 00:08:19.370
+d'intervenir sur les serveurs eux-mêmes.
+
+00:08:20.010 --> 00:08:20.490
+La deuxième voie
+
+00:08:20.490 --> 00:08:21.290
+est celle basée sur un agent.
+
+00:08:21.730 --> 00:08:22.010
+Ici,
+
+00:08:22.190 --> 00:08:23.390
+un petit logiciel appelé agent
+
+00:08:23.390 --> 00:08:24.750
+est installé une fois
+
+00:08:24.750 --> 00:08:25.450
+sur chaque serveur,
+
+00:08:25.570 --> 00:08:26.650
+parallèlement à une appliance
+
+00:08:26.650 --> 00:08:27.690
+de réplication distincte
+
+00:08:27.690 --> 00:08:28.790
+qui gère le transfert.
+
+00:08:29.570 --> 00:08:30.530
+Cela demande un peu plus de travail
+
+00:08:30.530 --> 00:08:31.150
+mais permet d'atteindre
+
+00:08:31.150 --> 00:08:32.290
+des endroits inaccessibles sans agent.
+
+00:08:32.570 --> 00:08:33.350
+Pourquoi on la retrouve si souvent
+
+00:08:33.350 --> 00:08:34.190
+dans les environnements mixtes
+
+00:08:34.190 --> 00:08:35.150
+ou d'anciens serveurs physiques
+
+00:08:35.150 --> 00:08:36.190
+côtoient des serveurs virtuels
+
+00:08:36.190 --> 00:08:37.530
+plus récents ?
+
+00:08:37.530 --> 00:08:38.190
+Il existe quatre cas
+
+00:08:38.190 --> 00:08:39.030
+où vous devez y avoir recours.
+
+00:08:39.770 --> 00:08:40.390
+Le premier est lorsque
+
+00:08:40.390 --> 00:08:41.110
+les prérequis de l'option
+
+00:08:41.110 --> 00:08:42.110
+sans agent ne sont pas remplies,
+
+00:08:42.230 --> 00:08:43.290
+ce qui signifie que les instantanés
+
+00:08:43.290 --> 00:08:44.350
+ou le suivi des modifications
+
+00:08:44.350 --> 00:08:45.090
+ne sont pas disponibles
+
+00:08:45.090 --> 00:08:46.010
+ou que l'accès est restreint.
+
+00:08:47.090 --> 00:08:47.850
+Le deuxième est lorsque
+
+00:08:47.850 --> 00:08:48.490
+le serveur exécute
+
+00:08:48.490 --> 00:08:49.190
+un système d'exploitation
+
+00:08:49.190 --> 00:08:49.850
+que l'option sans agent
+
+00:08:49.850 --> 00:08:50.830
+ne peut pas préparer pour le cloud.
+
+00:08:51.470 --> 00:08:52.510
+Le troisième est lorsqu'il présente
+
+00:08:52.510 --> 00:08:53.430
+une configuration de disque
+
+00:08:53.430 --> 00:08:54.210
+ou de démarrage inhabituel.
+
+00:08:55.230 --> 00:08:56.770
+Le quatrième et le plus simple
+
+00:08:56.770 --> 00:08:57.610
+est lorsque le serveur
+
+00:08:57.610 --> 00:08:58.470
+ne fonctionne pas du tout
+
+00:08:58.470 --> 00:08:59.470
+sous VMware ou Hyper-V
+
+00:08:59.470 --> 00:09:00.830
+ce qui inclut les machines physiques
+
+00:09:00.830 --> 00:09:01.770
+et les serveurs hébergés
+
+00:09:01.770 --> 00:09:02.730
+chez d'autres fournisseurs cloud.
+
+00:09:04.210 --> 00:09:05.330
+Voici comment envisager le compromis.
+
+00:09:06.030 --> 00:09:06.790
+L'option sans agent
+
+00:09:06.790 --> 00:09:08.050
+est la plus simple et automatisée
+
+00:09:08.050 --> 00:09:09.130
+et elle convient au cas général.
+
+00:09:09.130 --> 00:09:10.470
+L'option avec agent
+
+00:09:10.470 --> 00:09:11.030
+est celle qui permet
+
+00:09:11.030 --> 00:09:11.710
+d'atteindre tout le reste.
+
+00:09:12.530 --> 00:09:13.410
+Elle vous offre un contrôle
+
+00:09:13.410 --> 00:09:14.570
+plus fin par machine
+
+00:09:14.570 --> 00:09:15.270
+au prix de l'installation
+
+00:09:15.270 --> 00:09:15.750
+et de la maintenance
+
+00:09:15.750 --> 00:09:16.770
+d'un agent sur chaque serveur
+
+00:09:16.770 --> 00:09:17.550
+que vous déplacez.
+
+00:09:18.490 --> 00:09:19.330
+Aucune des deux réponses
+
+00:09:19.330 --> 00:09:19.770
+n'est mauvaise
+
+00:09:19.770 --> 00:09:20.390
+et le choix dépend
+
+00:09:20.390 --> 00:09:21.850
+de ce que vous exécutez réellement.
+
+00:09:22.650 --> 00:09:23.290
+Déplacement par vague.
+
+00:09:23.670 --> 00:09:24.330
+Nous arrivons maintenant
+
+00:09:24.330 --> 00:09:25.290
+à la partie qui transforme
+
+00:09:25.290 --> 00:09:26.250
+un projet intimidant
+
+00:09:26.250 --> 00:09:27.130
+en un projet gérable,
+
+00:09:27.290 --> 00:09:27.630
+la vague.
+
+00:09:28.090 --> 00:09:28.870
+Une vague n'est rien d'autre
+
+00:09:28.870 --> 00:09:29.770
+qu'un groupe d'applications
+
+00:09:29.770 --> 00:09:30.430
+et de charges de travail
+
+00:09:30.430 --> 00:09:31.090
+que vous migrez ensemble.
+
+00:09:31.610 --> 00:09:32.710
+Au lieu d'essayer de tout déplacer
+
+00:09:32.710 --> 00:09:33.690
+en un week-end sous tension,
+
+00:09:33.810 --> 00:09:35.190
+vous divisez votre parc informatique
+
+00:09:35.190 --> 00:09:35.470
+en lot.
+
+00:09:36.050 --> 00:09:36.790
+Vous déplacez un lot,
+
+00:09:37.150 --> 00:09:37.910
+vous en tirez des leçons
+
+00:09:37.910 --> 00:09:39.110
+et vous les appliquez au suivant.
+
+00:09:39.790 --> 00:09:40.590
+Les conseils de Microsoft
+
+00:09:40.590 --> 00:09:41.110
+sont clairs,
+
+00:09:41.210 --> 00:09:41.750
+migrer par vague
+
+00:09:41.750 --> 00:09:42.310
+est préférable
+
+00:09:42.310 --> 00:09:43.170
+à essayer de tout planifier
+
+00:09:43.170 --> 00:09:43.950
+parfaitement à l'avance.
+
+00:09:44.530 --> 00:09:45.170
+Chaque vague vous apprend
+
+00:09:45.170 --> 00:09:45.550
+quelque chose
+
+00:09:45.550 --> 00:09:46.450
+qu'aucun plan n'aurait pu prévoir.
+
+00:09:46.810 --> 00:09:47.530
+Prenez une première vague
+
+00:09:47.530 --> 00:09:48.230
+qui n'est qu'un environnement
+
+00:09:48.230 --> 00:09:49.130
+de test et une seconde
+
+00:09:49.130 --> 00:09:49.890
+qui est l'application interne
+
+00:09:49.890 --> 00:09:50.390
+d'un service.
+
+00:09:51.150 --> 00:09:51.710
+Aucune des deux
+
+00:09:51.710 --> 00:09:52.990
+ne peut paralyser l'activité
+
+00:09:52.990 --> 00:09:53.550
+en cas de problème,
+
+00:09:53.810 --> 00:09:54.870
+ce sont donc des endroits sûrs
+
+00:09:54.870 --> 00:09:55.730
+pour faire vos erreurs tôt
+
+00:09:55.730 --> 00:09:56.830
+quand elles coûtent encore peu.
+
+00:09:58.250 --> 00:09:58.930
+Planifier une vague
+
+00:09:58.930 --> 00:09:59.870
+se résume à trois étapes.
+
+00:09:59.870 --> 00:10:00.430
+D'abord,
+
+00:10:00.510 --> 00:10:01.190
+vous regroupez les éléments
+
+00:10:01.190 --> 00:10:02.050
+qui partagent des dépendances
+
+00:10:02.050 --> 00:10:02.650
+ou des besoins métiers
+
+00:10:02.650 --> 00:10:03.330
+afin que les parties liées
+
+00:10:03.330 --> 00:10:03.870
+voyagent ensemble.
+
+00:10:04.770 --> 00:10:05.030
+Ensuite,
+
+00:10:05.110 --> 00:10:05.870
+vous séquencez les vagues,
+
+00:10:06.010 --> 00:10:06.970
+ce qui consiste à décider
+
+00:10:06.970 --> 00:10:07.990
+ce qui doit être déplacé
+
+00:10:07.990 --> 00:10:08.590
+tôt ou tard.
+
+00:10:09.390 --> 00:10:10.050
+Cela dépend du niveau
+
+00:10:10.050 --> 00:10:11.190
+de criticité de chaque élément
+
+00:10:11.190 --> 00:10:12.410
+et le...
+
+00:10:12.410 --> 00:10:13.170
+Troisièmement,
+
+00:10:13.390 --> 00:10:14.530
+exécutez des vagues indépendantes
+
+00:10:14.530 --> 00:10:15.670
+en parallèle lorsque c'est possible
+
+00:10:15.670 --> 00:10:16.890
+pour accélérer le programme
+
+00:10:16.890 --> 00:10:17.910
+sans augmenter les risques.
+
+00:10:18.670 --> 00:10:19.650
+Ce conseil sur le séquençage
+
+00:10:19.650 --> 00:10:20.650
+est plus important qu'il n'y paraît
+
+00:10:20.650 --> 00:10:21.670
+car il fait la différence
+
+00:10:21.670 --> 00:10:22.630
+entre une migration sereine
+
+00:10:22.630 --> 00:10:23.730
+et une migration chaotique.
+
+00:10:24.250 --> 00:10:25.090
+Si vous vous trompez dans l'ordre,
+
+00:10:25.090 --> 00:10:26.390
+l'erreur se répercutera
+
+00:10:26.390 --> 00:10:27.330
+en production sur un système
+
+00:10:27.330 --> 00:10:28.550
+dont dépendent de vrais utilisateurs.
+
+00:10:29.230 --> 00:10:29.950
+Commencez par les charges
+
+00:10:29.950 --> 00:10:30.590
+de travail simples
+
+00:10:30.590 --> 00:10:31.150
+et à faible risque
+
+00:10:31.150 --> 00:10:31.830
+afin que votre équipe
+
+00:10:31.830 --> 00:10:32.370
+prenne confiance
+
+00:10:32.370 --> 00:10:33.450
+avant que des éléments critiques
+
+00:10:33.450 --> 00:10:34.030
+ne soient en jeu.
+
+00:10:34.790 --> 00:10:35.550
+Migrez vos environnements
+
+00:10:35.550 --> 00:10:36.350
+de développement et de test
+
+00:10:36.350 --> 00:10:36.970
+avant la production
+
+00:10:36.970 --> 00:10:37.950
+car ils constituent
+
+00:10:37.950 --> 00:10:38.510
+un espace sûr
+
+00:10:38.510 --> 00:10:39.770
+pour répéter les opérations réelles.
+
+00:10:40.230 --> 00:10:40.870
+Planifiez vos systèmes
+
+00:10:40.870 --> 00:10:41.890
+les plus critiques pour plus tard
+
+00:10:41.890 --> 00:10:42.450
+une fois que vous aurez
+
+00:10:42.450 --> 00:10:43.350
+validé le processus.
+
+00:10:43.990 --> 00:10:44.810
+Intégrez une ou deux charges
+
+00:10:44.810 --> 00:10:45.710
+de travail plus complexes
+
+00:10:45.710 --> 00:10:46.410
+dans les premières vagues
+
+00:10:46.410 --> 00:10:47.130
+afin de faire émerger
+
+00:10:47.130 --> 00:10:47.910
+les problèmes difficiles
+
+00:10:47.910 --> 00:10:48.390
+quand les enjeux
+
+00:10:48.390 --> 00:10:49.130
+sont encore faibles.
+
+00:10:49.950 --> 00:10:50.470
+Si vous préférez
+
+00:10:50.470 --> 00:10:51.030
+ne pas établir
+
+00:10:51.030 --> 00:10:51.690
+le plan manuellement
+
+00:10:51.690 --> 00:10:52.550
+Azure Migrate
+
+00:10:52.550 --> 00:10:53.330
+peut suggérer les vagues
+
+00:10:53.330 --> 00:10:53.710
+pour vous.
+
+00:10:54.330 --> 00:10:55.430
+Il regroupe votre inventaire
+
+00:10:55.430 --> 00:10:56.090
+vos dépendances
+
+00:10:56.090 --> 00:10:56.970
+et vos données d'évaluation
+
+00:10:56.970 --> 00:10:57.570
+puis attribue
+
+00:10:57.570 --> 00:10:58.550
+à chaque charge de travail
+
+00:10:58.550 --> 00:10:59.490
+un score de priorité
+
+00:10:59.490 --> 00:11:00.870
+de migration de 0 à 100.
+
+00:11:01.810 --> 00:11:02.570
+Vous obtenez une séquence
+
+00:11:02.570 --> 00:11:03.030
+recommandée
+
+00:11:03.030 --> 00:11:03.750
+accompagnée d'un niveau
+
+00:11:03.750 --> 00:11:04.130
+de confiance
+
+00:11:04.130 --> 00:11:04.970
+et d'une note sur les risques.
+
+00:11:05.550 --> 00:11:06.310
+Vous gardez le dernier mot
+
+00:11:06.310 --> 00:11:06.970
+mais vous ne partez pas
+
+00:11:06.970 --> 00:11:07.810
+d'une page blanche.
+
+00:11:09.150 --> 00:11:09.890
+Le hub et ses outils
+
+00:11:09.890 --> 00:11:11.110
+sont tous centralisés
+
+00:11:11.110 --> 00:11:11.590
+au même endroit
+
+00:11:11.590 --> 00:11:12.990
+et c'est ce qu'il faut retenir.
+
+00:11:13.830 --> 00:11:14.630
+Le hub Azure Migrate
+
+00:11:14.630 --> 00:11:15.330
+est un portail unique
+
+00:11:15.330 --> 00:11:16.050
+où vous pouvez démarrer,
+
+00:11:16.230 --> 00:11:16.850
+exécuter et suivre
+
+00:11:16.850 --> 00:11:17.910
+l'intégralité du parcours
+
+00:11:17.910 --> 00:11:18.670
+du premier scan
+
+00:11:18.670 --> 00:11:19.230
+de découverte
+
+00:11:19.230 --> 00:11:19.890
+au transfert final.
+
+00:11:21.210 --> 00:11:21.570
+En dessous,
+
+00:11:21.630 --> 00:11:22.370
+un petit ensemble d'outils
+
+00:11:22.370 --> 00:11:23.430
+effectue les tâches spécifiques
+
+00:11:23.430 --> 00:11:25.410
+découvertes, évaluations
+
+00:11:25.410 --> 00:11:25.930
+et rapports
+
+00:11:25.930 --> 00:11:27.030
+dont vous venez d'entendre parler.
+
+00:11:28.050 --> 00:11:28.930
+Migration et modernisation
+
+00:11:28.930 --> 00:11:29.610
+effectuent la copie
+
+00:11:29.610 --> 00:11:30.430
+proprement dite des serveurs.
+
+00:11:30.950 --> 00:11:31.630
+Pour les bases de données,
+
+00:11:31.750 --> 00:11:32.450
+il existe l'assistant
+
+00:11:32.450 --> 00:11:33.090
+de migration de données
+
+00:11:33.090 --> 00:11:34.030
+et le service de migration
+
+00:11:34.030 --> 00:11:34.890
+de bases de données Azure.
+
+00:11:35.690 --> 00:11:36.550
+Pour les applications web,
+
+00:11:36.630 --> 00:11:37.010
+il y a l'assistant
+
+00:11:37.010 --> 00:11:37.890
+de migration App Service
+
+00:11:37.890 --> 00:11:39.110
+et pour les transferts
+
+00:11:39.110 --> 00:11:39.870
+de données très volumineux.
+
+00:11:39.990 --> 00:11:40.750
+L'internet serait trop lent,
+
+00:11:40.970 --> 00:11:41.550
+votre data box
+
+00:11:41.550 --> 00:11:42.630
+expédie vos données physiquement.
+
+00:11:43.570 --> 00:11:44.190
+Les outils s'alignent
+
+00:11:44.190 --> 00:11:44.610
+parfaitement
+
+00:11:44.610 --> 00:11:45.030
+avec les phases
+
+00:11:45.030 --> 00:11:45.810
+que vous avez déjà rencontrées.
+
+00:11:46.950 --> 00:11:47.910
+La découverte et l'évaluation
+
+00:11:47.910 --> 00:11:48.630
+couvrent les étapes
+
+00:11:48.630 --> 00:11:49.730
+de décision et de planification
+
+00:11:49.730 --> 00:11:50.250
+et la migration
+
+00:11:50.250 --> 00:11:50.970
+et la modernisation
+
+00:11:50.970 --> 00:11:51.810
+couvrent l'exécution,
+
+00:11:51.910 --> 00:11:52.430
+ce qui donne l'impression
+
+00:11:52.430 --> 00:11:53.050
+d'un chemin guidé
+
+00:11:53.050 --> 00:11:53.850
+plutôt qu'une boîte à outils
+
+00:11:53.850 --> 00:11:54.250
+encombrée.
+
+00:11:55.470 --> 00:11:56.390
+Vous n'êtes pas non plus limité
+
+00:11:56.390 --> 00:11:57.310
+aux seuls outils Microsoft.
+
+00:11:58.150 --> 00:11:59.070
+Un ensemble d'outils partenaires
+
+00:11:59.070 --> 00:11:59.730
+provenant d'entreprises
+
+00:11:59.730 --> 00:12:00.370
+comme Carbonite,
+
+00:12:00.450 --> 00:12:00.850
+Cloudamise,
+
+00:12:00.950 --> 00:12:01.490
+Coran et Zerto
+
+00:12:01.490 --> 00:12:02.810
+s'intègrent au même hub
+
+00:12:02.810 --> 00:12:03.710
+vous permettant de combiner
+
+00:12:03.710 --> 00:12:04.230
+ce qui convient
+
+00:12:04.230 --> 00:12:05.050
+à votre situation.
+
+00:12:05.590 --> 00:12:06.090
+L'idée centrale
+
+00:12:06.090 --> 00:12:06.870
+est d'avoir un point d'entrée unique.
+
+00:12:07.450 --> 00:12:07.870
+Une migration
+
+00:12:07.870 --> 00:12:08.770
+est déjà assez difficile
+
+00:12:08.770 --> 00:12:09.470
+sans avoir à apprendre
+
+00:12:09.470 --> 00:12:10.170
+en plus 5 produits
+
+00:12:10.170 --> 00:12:11.210
+sans rapport pour y parvenir.
+
+00:12:11.850 --> 00:12:12.090
+Ainsi,
+
+00:12:12.190 --> 00:12:13.010
+lorsque vous ouvrez le hub
+
+00:12:13.010 --> 00:12:13.710
+pour la première fois,
+
+00:12:13.830 --> 00:12:14.350
+vous avez une vue
+
+00:12:14.350 --> 00:12:15.330
+d'ensemble de toute la migration
+
+00:12:15.330 --> 00:12:16.010
+sur un seul écran
+
+00:12:16.010 --> 00:12:16.690
+et non un labyrinthe.
+
+00:12:17.830 --> 00:12:18.570
+Les pièges à éviter
+
+00:12:18.570 --> 00:12:20.270
+Maintenant que vous avez vu
+
+00:12:20.270 --> 00:12:20.750
+comment le parcours
+
+00:12:20.750 --> 00:12:21.370
+est censé se dérouler,
+
+00:12:21.670 --> 00:12:22.390
+il est utile d'identifier
+
+00:12:22.390 --> 00:12:22.770
+les étapes
+
+00:12:22.770 --> 00:12:23.750
+où cela échoue généralement,
+
+00:12:23.970 --> 00:12:24.970
+car une migration réussie
+
+00:12:24.970 --> 00:12:25.470
+ou douloureuse
+
+00:12:25.470 --> 00:12:26.170
+se résume souvent
+
+00:12:26.170 --> 00:12:27.310
+à une courte liste d'erreurs.
+
+00:12:28.990 --> 00:12:29.750
+Commençons par la migration
+
+00:12:29.750 --> 00:12:30.150
+à l'aveugle
+
+00:12:30.150 --> 00:12:30.890
+qui consiste à ignorer
+
+00:12:30.890 --> 00:12:31.730
+la découverte et l'évaluation
+
+00:12:31.730 --> 00:12:32.510
+pour passer directement
+
+00:12:32.510 --> 00:12:33.330
+au déplacement des ressources.
+
+00:12:34.230 --> 00:12:34.750
+C'est tentant
+
+00:12:34.750 --> 00:12:35.450
+car la planification
+
+00:12:35.450 --> 00:12:36.110
+semble lente,
+
+00:12:36.310 --> 00:12:36.930
+mais c'est aussi ainsi
+
+00:12:36.930 --> 00:12:37.470
+que vous êtes surpris
+
+00:12:37.470 --> 00:12:38.190
+par des coûts et des pannes
+
+00:12:38.190 --> 00:12:39.230
+que vous auriez pu anticiper.
+
+00:12:39.950 --> 00:12:40.710
+Tout l'intérêt du service
+
+00:12:40.710 --> 00:12:41.610
+est de regarder avant de sauter.
+
+00:12:42.650 --> 00:12:42.990
+Vient ensuite
+
+00:12:42.990 --> 00:12:43.910
+le dimensionnement tel quel
+
+00:12:43.910 --> 00:12:44.410
+qui vous fait payer
+
+00:12:44.410 --> 00:12:45.050
+pour une capacité
+
+00:12:45.050 --> 00:12:45.710
+que vous n'utilisez jamais.
+
+00:12:46.290 --> 00:12:46.910
+Si votre service
+
+00:12:46.910 --> 00:12:47.770
+a été surdimensionné
+
+00:12:47.770 --> 00:12:48.270
+pendant des années,
+
+00:12:48.370 --> 00:12:48.930
+le copier tel quel
+
+00:12:48.930 --> 00:12:49.450
+revient à copier
+
+00:12:49.450 --> 00:12:50.170
+est aussi le surcoût.
+
+00:12:50.550 --> 00:12:51.210
+Le dimensionnement basé
+
+00:12:51.210 --> 00:12:51.710
+sur les performances
+
+00:12:51.710 --> 00:12:52.170
+est la solution
+
+00:12:52.170 --> 00:12:53.450
+et cela ne prend que quelques clics,
+
+00:12:53.570 --> 00:12:54.130
+pas un projet complet.
+
+00:12:54.770 --> 00:12:55.570
+Les dépendances manquantes
+
+00:12:55.570 --> 00:12:56.570
+sont une autre erreur courante.
+
+00:12:56.750 --> 00:12:57.370
+C'est ainsi que vous déplacez
+
+00:12:57.370 --> 00:12:58.190
+la moitié d'une application
+
+00:12:58.190 --> 00:12:59.130
+et casser l'autre moitié.
+
+00:12:59.930 --> 00:13:00.750
+L'analyse des dépendances
+
+00:13:00.750 --> 00:13:01.330
+résout ce problème
+
+00:13:01.330 --> 00:13:02.310
+et c'est l'étape
+
+00:13:02.310 --> 00:13:03.010
+la plus sous-estimée
+
+00:13:03.010 --> 00:13:03.450
+pour quiconque
+
+00:13:03.450 --> 00:13:03.990
+effectue cela
+
+00:13:03.990 --> 00:13:04.750
+pour la première fois.
+
+00:13:05.710 --> 00:13:06.270
+Supposer que le mode
+
+00:13:06.270 --> 00:13:07.170
+sans agent fonctionne toujours
+
+00:13:07.170 --> 00:13:08.090
+est un autre piège fréquent.
+
+00:13:08.590 --> 00:13:09.730
+Cela dépend de la disponibilité
+
+00:13:09.730 --> 00:13:10.350
+des instantanés
+
+00:13:10.350 --> 00:13:11.290
+et du suivi des modifications
+
+00:13:11.290 --> 00:13:12.350
+sur un système d'exploitation
+
+00:13:12.350 --> 00:13:13.090
+invité que le service
+
+00:13:13.090 --> 00:13:13.570
+peut préparer
+
+00:13:13.570 --> 00:13:14.530
+ainsi que d'un accès non verrouillé.
+
+00:13:14.950 --> 00:13:15.730
+Lorsque l'une de ces conditions
+
+00:13:15.730 --> 00:13:16.170
+n'est pas remplie,
+
+00:13:16.230 --> 00:13:17.050
+l'approche basée sur un agent
+
+00:13:17.050 --> 00:13:17.670
+n'est pas une régression,
+
+00:13:17.790 --> 00:13:18.710
+c'est simplement l'outil approprié.
+
+00:13:19.850 --> 00:13:20.590
+Traiter une évaluation
+
+00:13:20.590 --> 00:13:21.710
+comme une réponse définitive
+
+00:13:21.710 --> 00:13:22.510
+est une erreur subtile.
+
+00:13:22.950 --> 00:13:23.710
+Une évaluation ne vous dit
+
+00:13:23.710 --> 00:13:24.570
+la vérité que pour le moment
+
+00:13:24.570 --> 00:13:25.250
+où elle a été créée,
+
+00:13:25.610 --> 00:13:27.190
+elle évolue avec votre environnement
+
+00:13:27.190 --> 00:13:27.850
+et à mesure que
+
+00:13:27.850 --> 00:13:28.690
+de nouvelles données
+
+00:13:28.690 --> 00:13:29.550
+de performance arrivent,
+
+00:13:30.150 --> 00:13:31.230
+actualisez-la au fur et à mesure
+
+00:13:31.230 --> 00:13:32.250
+plutôt que de considérer
+
+00:13:32.250 --> 00:13:32.910
+le rapport du mois dernier
+
+00:13:32.910 --> 00:13:33.530
+comme définitif.
+
+00:13:34.210 --> 00:13:34.610
+Essayer de tout faire
+
+00:13:34.610 --> 00:13:34.930
+en même temps
+
+00:13:34.930 --> 00:13:35.650
+est une erreur majeure.
+
+00:13:36.110 --> 00:13:36.950
+L'émigration Big Bang
+
+00:13:36.950 --> 00:13:37.770
+augmente les risques
+
+00:13:37.770 --> 00:13:38.970
+et gâche l'apprentissage
+
+00:13:38.970 --> 00:13:39.770
+que l'émigration par vague
+
+00:13:39.770 --> 00:13:40.450
+vous offre gratuitement.
+
+00:13:40.670 --> 00:13:41.250
+Cet apprentissage
+
+00:13:41.250 --> 00:13:42.030
+est le filet de sécurité
+
+00:13:42.030 --> 00:13:43.130
+qui rend toute l'approche efficace.
+
+00:13:43.670 --> 00:13:44.670
+Ignorer le modèle financier
+
+00:13:44.670 --> 00:13:45.690
+sous-jacent est un autre problème.
+
+00:13:45.890 --> 00:13:46.710
+Cela implique de passer
+
+00:13:46.710 --> 00:13:47.270
+de la possession
+
+00:13:47.270 --> 00:13:48.090
+de votre matériel
+
+00:13:48.090 --> 00:13:48.930
+à la location
+
+00:13:48.930 --> 00:13:49.810
+de ce que vous utilisez
+
+00:13:49.810 --> 00:13:51.170
+ainsi que les économies réalisables
+
+00:13:51.170 --> 00:13:52.070
+via la réutilisation
+
+00:13:52.070 --> 00:13:53.070
+de licences et les réservations.
+
+00:13:54.290 --> 00:13:54.830
+Le dernier piège
+
+00:13:54.830 --> 00:13:55.330
+est de supposer
+
+00:13:55.330 --> 00:13:56.070
+que l'outil réfléchit
+
+00:13:56.070 --> 00:13:56.590
+à votre place.
+
+00:13:57.230 --> 00:13:58.070
+Azure Migrate vous fournit
+
+00:13:58.070 --> 00:13:58.490
+des chiffres,
+
+00:13:58.590 --> 00:13:59.550
+des cartes et des recommandations
+
+00:13:59.550 --> 00:14:00.990
+mais les décisions critiques
+
+00:14:00.990 --> 00:14:01.910
+comme quoi déplacer en premier
+
+00:14:01.910 --> 00:14:02.730
+et quoi laisser sur place
+
+00:14:02.730 --> 00:14:03.290
+appartiennent toujours
+
+00:14:03.290 --> 00:14:03.850
+à votre équipe.
+
+00:14:04.550 --> 00:14:05.530
+Service affine la décision
+
+00:14:05.530 --> 00:14:06.730
+mais ne la prend pas pour vous.
+
+00:14:07.270 --> 00:14:07.770
+Rien de tout cela
+
+00:14:07.770 --> 00:14:08.250
+n'est inhabituel.
+
+00:14:08.590 --> 00:14:09.450
+Ce sont des façons ordinaires
+
+00:14:09.450 --> 00:14:10.310
+dont les migrations achopent
+
+00:14:10.310 --> 00:14:11.490
+et chacune a une solution simple
+
+00:14:11.490 --> 00:14:12.770
+que le service vous propose déjà.
+
+00:14:14.350 --> 00:14:15.050
+Alors faisons le point.
+
+00:14:16.190 --> 00:14:16.730
+Azure Migrate
+
+00:14:16.730 --> 00:14:17.930
+est le service gratuit de Microsoft
+
+00:14:17.930 --> 00:14:18.750
+qui vous guide à travers
+
+00:14:18.750 --> 00:14:19.730
+une migration en trois phases.
+
+00:14:20.490 --> 00:14:20.890
+Il découvre
+
+00:14:20.890 --> 00:14:21.950
+ce que vous possédez réellement,
+
+00:14:22.270 --> 00:14:22.910
+évalue ce qui est prêt
+
+00:14:22.910 --> 00:14:23.690
+et le coût associé,
+
+00:14:24.030 --> 00:14:25.110
+cartographie les dépendances
+
+00:14:25.110 --> 00:14:25.610
+pour décider
+
+00:14:25.610 --> 00:14:26.890
+ce qui doit être déplacé ensemble,
+
+00:14:27.050 --> 00:14:27.750
+vous permet de choisir
+
+00:14:27.750 --> 00:14:29.210
+entre une copie avec ou sans agent
+
+00:14:29.210 --> 00:14:29.750
+puis vous aide
+
+00:14:29.750 --> 00:14:30.770
+à tout transférer par vague
+
+00:14:30.770 --> 00:14:32.130
+plutôt qu'en une seule nuit risquée.
+
+00:14:33.410 --> 00:14:34.270
+Qu'il faut retenir de tout cela
+
+00:14:34.270 --> 00:14:34.870
+c'est qu'une migration
+
+00:14:34.870 --> 00:14:35.350
+est un plan
+
+00:14:35.350 --> 00:14:35.850
+et que ce plan
+
+00:14:35.850 --> 00:14:36.750
+commence bien
+
+00:14:36.750 --> 00:14:38.250
+avant le déplacement lui-même.
+
+00:14:38.810 --> 00:14:39.910
+C'est pourquoi la partie gratuite,
+
+00:14:40.170 --> 00:14:41.090
+la découverte et l'évaluation
+
+00:14:41.090 --> 00:14:42.690
+est celle que vous ne devriez pas ignorer.
+
+00:14:42.970 --> 00:14:43.530
+Avant de partir,
+
+00:14:43.530 --> 00:14:44.370
+posez-vous une seule question.
+
+00:14:44.910 --> 00:14:45.550
+Si vous examinez
+
+00:14:45.550 --> 00:14:46.590
+votre propre environnement de main,
+
+00:14:46.930 --> 00:14:47.510
+quelle proportion
+
+00:14:47.510 --> 00:14:48.530
+pourriez-vous honnêtement dire
+
+00:14:48.530 --> 00:14:50.530
+connaître sur le bout des doigts ?
+
+00:14:50.530 --> 00:15:20.510
+Sous-titrage ST' 501
