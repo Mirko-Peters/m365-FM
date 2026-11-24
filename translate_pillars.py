@@ -31,6 +31,7 @@ TARGETS = ROOT / "imports" / "pillars"
 LANGS = PIL.TR_LANGS
 NAMES = {"fr": "French", "es": "Spanish", "it": "Italian", "nl": "Dutch", "pt": "Brazilian Portuguese", "pl": "Polish", "id": "Indonesian", "ru": "Russian",
          "uk": "Ukrainian", "ar": "Arabic", "he": "Hebrew", "ja": "Japanese", "ko": "Korean"}
+NATIVE = {"pl": "język polski", "id": "Bahasa Indonesia"}   # Eigenname der Sprache im Systemprompt der Oberflaeche (pl kam zweimal auf Deutsch zurueck)
 MODEL = os.environ.get("TRANSLATE_MODEL", "claude-haiku-5-5")
 PRICE_IN, PRICE_OUT = float(os.environ.get("PRICE_IN", "0.05")), float(os.environ.get("PRICE_OUT", "0.25"))   # Haiku 5.5, Message Batch: $ je 1 Mio. Tokens
 CHUNK = int(os.environ.get("PILLARS_CHUNK", "4500"))   # Zeichen je Anfrage (Quelltext)
@@ -153,7 +154,7 @@ def ui_source():
 
 def ui_prompt(lang):
     return (f"Translate every value of this JSON into {NAMES[lang]} and answer with exactly one JSON object of the same shape (same keys, same list lengths, no other text). "
-            f"The source is English. Every value must be in {NAMES[lang]} (language code {lang}) - never German, never English. "   # pl kam am 24.11.2026 zweimal auf Deutsch zurueck
+            f"The source is English. Every value must be in {NAMES[lang]} ({NATIVE.get(lang, NAMES[lang])}, language code {lang}) - never German, never English. "   # pl kam am 24.11.2026 zweimal auf Deutsch zurueck
             "Keep placeholders like {n} and {m} unchanged. Address the reader in the polite, formal form where the language has one. seo_title: at most 60 characters. "
             "Keep names such as iFAKT Polaris, m365.fm, Microsoft 365, Certopus, DevSquirrel Technologies Private Limited, LinkedIn, Google, GitHub. "
             "'ui.other' does not exist; 'ui.disc' keeps the exact disclosure sentence meaning (the author works at iFAKT GmbH).\n\n" + json.dumps(ui_source(), ensure_ascii=False))
@@ -268,10 +269,10 @@ def plan_items(langs, pids, redo=False, ui_only=False):
     for lang in langs:
         if pids: continue
         if not ((ov.get("ui") or {}).get(lang) and (ov.get("reg") or {}).get(lang)) or ui_wrong(lang, ov):
-            items.append((lang, "_ui", "ui", 0, req(f"{lang}___ui", "You are a professional translator. Answer only with the JSON object.", ui_prompt(lang), 16000)))
+            items.append((lang, "_ui", "ui", 0, req(f"{lang}___ui", f"You are a professional translator from English into {NAMES[lang]} ({NATIVE.get(lang, NAMES[lang])}). Answer only with the JSON object.", ui_prompt(lang), 16000)))
         elif ui_missing(lang, ov):
             keys = ui_missing(lang, ov)
-            items.append((lang, "_ui", "uix", 0, req(f"{lang}___uix", "You are a professional translator. Answer only with the JSON object.", uix_prompt(lang, keys), 8000)))
+            items.append((lang, "_ui", "uix", 0, req(f"{lang}___uix", f"You are a professional translator from English into {NAMES[lang]} ({NATIVE.get(lang, NAMES[lang])}). Answer only with the JSON object.", uix_prompt(lang, keys), 8000)))
     return items, stale
 
 

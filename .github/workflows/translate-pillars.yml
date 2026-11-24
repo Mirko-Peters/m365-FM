@@ -10,6 +10,7 @@ on:
       ui_only: { description: "Nur Oberflaechentexte (neue/geaenderte Schluessel, z. B. q_* des Abschlusstests; deutsche Oberflaeche wird ganz neu angefordert)", type: boolean, default: false }
   # EINMALIG (PR #606): neue q_*-Texte des Abschlusstests und die deutsche Oberflaeche von pl/id uebersetzen (Haiku, ca. 0,01 EUR). Nach dem Lauf wieder entfernen.
   # Lauf 2: pl erneut (Lauf 45408778441 lieferte fuer pl wieder Deutsch, von der Pruefung abgelehnt).
+  # Lauf 3: pl mit Eigenname der Sprache im Systemprompt (Lauf 45410648057: pl wieder Deutsch).
   push:
     branches: [claude/lernpfad-zertifikat]
     paths: [.github/workflows/translate-pillars.yml]
