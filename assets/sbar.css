@@ -48,28 +48,24 @@
 @keyframes attf{from{opacity:0}}@keyframes attu{from{transform:translateY(24px) scale(.96);opacity:0}}
 @media(prefers-reduced-motion:reduce){.att-ov,.att-box{animation:none}.sb-con img{transition:none}}
 
-/* Google preferred source – animated card */
-@property --gang{syntax:"<angle>";inherits:false;initial-value:0deg}
+/* Google preferred source – Karte mit stehendem Farbrahmen (keine Endlos-Animation, nur der Glanz laeuft einmal) */
 .sb-card.sb-g{position:relative;isolation:isolate;text-align:center;padding:1.1rem 1rem 1rem;border:0;overflow:hidden;color:#e9e6e1;
 background:radial-gradient(120% 90% at 15% 0%,#2a3550 0%,transparent 55%),radial-gradient(100% 80% at 100% 100%,#3b2a33 0%,transparent 60%),#15171c}
 .sb-g::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;z-index:-1;
-background:conic-gradient(from var(--gang),#4285f4,#34a853,#fbbc05,#ea4335,#4285f4);
--webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:gspin 6s linear infinite}
-.sb-g::after{content:"";position:absolute;width:140px;height:140px;inset-inline-start:-40px;top:-50px;border-radius:50%;background:#4285f4;filter:blur(55px);opacity:.28;z-index:-1;animation:gglow 7s ease-in-out infinite alternate}
-.sb-g a.gb{display:block;position:relative;border-radius:16px;overflow:hidden;animation:gfloat 4.5s ease-in-out infinite;box-shadow:0 14px 28px -12px rgba(0,0,0,.7)}
+background:conic-gradient(#4285f4,#34a853,#fbbc05,#ea4335,#4285f4);
+-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.sb-g::after{content:"";position:absolute;width:140px;height:140px;inset-inline-start:-40px;top:-50px;border-radius:50%;background:#4285f4;filter:blur(55px);opacity:.28;z-index:-1}
+.sb-g a.gb{display:block;position:relative;border-radius:16px;overflow:hidden;box-shadow:0 14px 28px -12px rgba(0,0,0,.7)}
 .sb-g a.gb img{display:block;width:100%;height:auto;border-radius:16px}
-.sb-g a.gb::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.65) 50%,transparent 65%);transform:translateX(-120%);animation:gshine 5s ease-in-out 1.5s infinite}
+.sb-g a.gb::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.65) 50%,transparent 65%);transform:translateX(-120%);animation:gshine 5s ease-in-out 1.5s}
 .sb-g a.gb:hover{animation-play-state:paused;transform:scale(1.03)}
 .sb-g p{margin:.8rem 0 0;font-size:.82rem;color:#b9b4ac}
 .sb-g p b{color:#fff;font-weight:600}
-@keyframes gspin{to{--gang:360deg}}
-@keyframes gfloat{50%{transform:translateY(-3px)}}
 @keyframes gshine{0%,60%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
-@keyframes gglow{to{transform:translate(70px,40px);opacity:.4}}
-@media(prefers-reduced-motion:reduce){.sb-g::before,.sb-g::after,.sb-g a.gb,.sb-g a.gb::after{animation:none}}
-/* Handy/Tablet und Touch: keine Endlos-Animationen (Copilot-Entwurf #184). Der drehende Rahmen animiert eine CSS-Eigenschaft (--gang) und
-   malt die Karte bei jedem Bild neu (nicht vom Compositor beschleunigt); Rahmenverlauf bleibt stehend sichtbar, der Glanz laeuft einmal. */
-@media (max-width:62rem),(pointer:coarse){.sb-g::before,.sb-g::after,.sb-g a.gb{animation:none}.sb-g a.gb::after{animation-iteration-count:1}}
+@media(prefers-reduced-motion:reduce){.sb-g a.gb::after{animation:none}}
+/* Keine Endlos-Animationen mehr, auch nicht auf dem Desktop (Mirko 24.11.2026, INP): drehender Rahmen (gspin, animierte CSS-Eigenschaft --gang,
+   malte die Karte bei jedem Bild neu), wandernder Weichzeichner-Schein (gglow), Schweben (gfloat) und Dauer-Glanz sind weg. Vorher galt das nur
+   unter 62rem und bei Touch (Copilot-Entwurf #184). Der Farbrahmen steht, der Glanz laeuft einmal. */
 .sbar::-webkit-scrollbar{display:none;width:0;height:0}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]) .sb-ghost{color:#f6f1ea!important;border-color:#f6f1ea99}:root:not([data-theme=light]) .sb-ghost:hover{background:#f6f1ea;color:#141210!important}}
 :root[data-theme=dark] .sb-ghost{color:#f6f1ea!important;border-color:#f6f1ea99}:root[data-theme=dark] .sb-ghost:hover{background:#f6f1ea;color:#141210!important}

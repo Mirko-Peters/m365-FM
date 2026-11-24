@@ -158,8 +158,7 @@ class LoadRules(unittest.TestCase):
         fx = (ROOT / "assets" / "fx.js").read_text("utf-8")
         self.assertIn("max-width:700px", fx.replace(" ", ""))
         sbar = (ROOT / "assets" / "sbar.css").read_text("utf-8")
-        m = re.search(r"@media\s*\(max-width:62rem\),\(pointer:coarse\)\{([^@]*)\}", sbar.replace(" ", ""))
-        self.assertTrue(m and "animation:none" in m.group(1))
+        self.assertNotIn("infinite", sbar)   # Google-Karte: seit 24.11.2026 auf allen Bildschirmen ohne Endlos-Animation (tests/test_inp_smooth_google.py)
         a11y = (ROOT / "assets" / "a11y.css").read_text("utf-8").replace(" ", "")
         self.assertIn("@media(prefers-reduced-motion:reduce)", a11y)
 
