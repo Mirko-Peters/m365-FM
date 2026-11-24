@@ -1,6 +1,6 @@
 name: CLS beim Scrollen (nur lesen)
 # Misst Layout-Spruenge auf der Live-Seite beim Laden, Scrollen (Mausrad und JS), mit #en-qa und nach Neuladen,
-# einmal mit und einmal ohne AdSense (Vergleich). Aendert nichts.
+# einmal mit sichtbarer Bildlaufleiste (wie Chrome unter Windows) und einmal ohne (wie Lighthouse/headless). Aendert nichts.
 on:
   workflow_dispatch:
     inputs:
@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        block_ads: ["0", "1"]
+        scrollbars: ["1", "0"]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -29,7 +29,7 @@ jobs:
       - name: Messen
         env:
           CLS_PATHS: ${{ github.event.inputs.paths || '/entity/windows-11/' }}
-          CLS_BLOCK_ADS: ${{ matrix.block_ads }}
+          CLS_SCROLLBARS: ${{ matrix.scrollbars }}
           CLS_JSON: /tmp/cls_scroll.json
         run: |
           node tools/cls_scroll.mjs | tee /tmp/cls.md
@@ -37,6 +37,6 @@ jobs:
       - uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: cls-scroll-ads-blockiert-${{ matrix.block_ads }}
+          name: cls-scroll-leiste-${{ matrix.scrollbars }}
           path: /tmp/cls_scroll.json
           if-no-files-found: ignore
