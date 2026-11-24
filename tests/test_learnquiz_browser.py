@@ -118,6 +118,28 @@ class CertFormBrowser(unittest.TestCase):
         self.assertEqual(posts[0], {"path": PATH, "attempt": "att-1", "name": "Ada Byron", "consent": True, "lang": "de"}, "keine E-Mail im Formular")
         ctx.close()
 
+    def test_saved_result_of_other_user_is_dropped(self):
+        """Geteiltes Geraet, selber Tab: das gespeicherte Ergebnis (und der Name) von A erscheint nach dem Zusatzschritt von B nicht."""
+        state = {"path": PATH, "quiz_ready": True, "passed": True, "best": {"attempt": "att-bob", "score": 2, "total": 2, "passed": True, "finished": 1}, "open": None,
+                 "cert": None, "name": "Bob", "email_masked": "b***@example.org", "email_src": "google", "providers": ["google"], "cert_on": False, "attempts_left": 2}
+        ctx, posts = self.open(state)
+        p = ctx.new_page()
+        p.goto(PAGE)
+        p.wait_for_selector("form.lq-cert")
+        p.evaluate("([k, v, n]) => { sessionStorage.setItem(k, v); sessionStorage.setItem(n, JSON.stringify('Ada Byron')); }",
+                   ["lqres:" + PATH, json.dumps({"res": RES, "ans": {}}), "lqname:" + PATH])
+        p.goto(PAGE + "?certmail=ok")
+        p.wait_for_selector("form.lq-cert")
+        self.assertEqual(p.locator("h2").first.inner_text(), S.tx("de", "q_passed_before").replace("{s}", "2").replace("{n}", "2"), "kein fremdes Ergebnis")
+        self.assertEqual(p.locator("details.lq-rev").count(), 0, "keine fremden Antworten/Erklaerungen")
+        self.assertEqual(p.locator("#lq-name").input_value(), "Bob", "kein fremder Name")
+        self.assertEqual(p.evaluate(f"[sessionStorage.getItem('lqres:{PATH}'), sessionStorage.getItem('lqname:{PATH}')]"), [None, None])
+        p.locator("#lq-ok").check()
+        p.get_by_role("button", name="Zertifikat anfordern").click()
+        p.wait_for_selector("text=" + S.UI["q_cert_off"][1])
+        self.assertEqual(posts[0]["attempt"], "att-bob")
+        ctx.close()
+
     def test_errors_from_mail_step(self):
         for code, key in (("wrong_account", "q_mail_wrong"), ("unverified", "q_mail_unverified"), ("cancel", "q_mail_cancel")):
             state = {"path": PATH, "quiz_ready": True, "passed": True, "best": {"attempt": "att-1", "score": 2, "total": 2, "passed": True, "finished": 1}, "open": None,

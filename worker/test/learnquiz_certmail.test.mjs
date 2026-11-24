@@ -157,6 +157,10 @@ test("Sitzung muss zum state passen; Abbruch beim Anbieter; Zertifikat schon aus
   raw.prepare("INSERT INTO learn_certs(user_id,path,attempt_id,name,email,email_src,email_at,status,created,updated) VALUES (1,?,'att-ada-1','Ada','alt@example.org','linkedin',?, 'ok',?,?)").run(PATH, t, t, t);
   const f = await flow(env, s.ada, "google", info);
   assert.equal(f.status, "issued"); assert.equal(row(raw).email, "alt@example.org");
+  // wird gerade ausgestellt (issuing): kein "fertig", sondern busy; Adresse bleibt
+  raw.prepare("UPDATE learn_certs SET status='issuing' WHERE user_id=1").run();
+  const b = await flow(env, s.ada, "google", info);
+  assert.equal(b.status, "busy"); assert.equal(row(raw).email, "alt@example.org");
 });
 
 test("Nur bestaetigte E-Mails: Google/LinkedIn email_verified === true", async () => {

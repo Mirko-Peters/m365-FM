@@ -171,6 +171,19 @@ async function issueRow(env, cert, cfg) {
   const claim = await db.prepare("UPDATE learn_certs SET status='issuing',updated=? WHERE user_id=? AND path=? AND (status IN ('pending','error') OR (status='issuing' AND updated<?))")
     .bind(t, cert.user_id, cert.path, t - 120).run();
   if (!claim?.meta?.changes) return { status: "busy" };
+  // Adresse des Kontos (email_src account) gilt so, wie sie beim Ausstellen ist - wie in GET /api/learn/cert angezeigt (certRecipient). Sonst ginge eine
+  // wartende Zeile nach einer Adressaenderung oder dem Zusammenfuehren (mail_addr von S geloescht) an eine alte Adresse.
+  if (cert.email_src === "account") {
+    const v = (await verifiedEmails(db, cert.user_id))[0];
+    if (!v) {
+      await db.prepare("UPDATE learn_certs SET status='error',error='need_email',updated=? WHERE user_id=? AND path=?").bind(now(), cert.user_id, cert.path).run();
+      return { status: "error", error: "need_email" };
+    }
+    if (v !== cert.email) {
+      await db.prepare("UPDATE learn_certs SET email=?,email_at=? WHERE user_id=? AND path=?").bind(v, t, cert.user_id, cert.path).run();
+      cert = { ...cert, email: v };
+    }
+  }
   const a = await db.prepare("SELECT score,total,finished FROM learn_attempts WHERE id=?").bind(cert.attempt_id).first();
   const lang = quizLang(cert.lang), course = courseName(cfg, cert.path, lang);
   const data = await recipientData(env, cfg, { name: cert.name, course, score: scoreText(a?.score || 0, a?.total || 0), date: dateText(a?.finished || t, lang) });
@@ -445,7 +458,8 @@ export async function certMailIntent(env, request, provider, path) {
 
 // Callback des Zusatzschritts. Meldet nie an, verknuepft nichts, legt kein Konto an. -> Status fuer ?certmail=
 //   session: Sitzung fehlt oder passt nicht zum state; wrong_account: die Anmeldung beim Anbieter gehoert nicht zu diesem Konto;
-//   unverified: Anbieter bestaetigt die E-Mail nicht; not_passed; issued: Zertifikat schon ausgestellt (Adresse bleibt); ok: gespeichert
+//   unverified: Anbieter bestaetigt die E-Mail nicht; not_passed; issued: Zertifikat schon ausgestellt (Adresse bleibt); busy: wird gerade ausgestellt
+//   (Adresse bleibt); ok: gespeichert
 export async function certMailCallback(env, request, o) {
   const db = env.DB, [lu, lt, lh, path] = String(o.intent || "").slice(1).split(".");
   const sess = await readSessionInfo(env, request), t = now();
@@ -459,7 +473,10 @@ export async function certMailCallback(env, request, o) {
   const r = await db.prepare("INSERT INTO learn_certs(user_id,path,email,email_src,email_at,status,created,updated) VALUES(?,?,?,?,?,'draft',?,?) " +
     "ON CONFLICT(user_id,path) DO UPDATE SET email=excluded.email,email_src=excluded.email_src,email_at=excluded.email_at,updated=excluded.updated WHERE learn_certs.status IN ('draft','pending','error')")
     .bind(user.id, path, v.email, o.provider, t, t, t).run();
-  return r?.meta?.changes ? "ok" : "issued";
+  if (r?.meta?.changes) return "ok";
+  // nicht geaendert: Zertifikat schon ausgestellt (ok) oder wird gerade ausgestellt (issuing -> busy, die Seite zeigt "folgt in Kuerze")
+  const cur = await db.prepare("SELECT status FROM learn_certs WHERE user_id=? AND path=?").bind(user.id, path).first();
+  return cur?.status === "ok" ? "issued" : "busy";
 }
 
 async function certRequest(env, request, user, J) {

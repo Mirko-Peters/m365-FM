@@ -22,9 +22,11 @@ Ablauf auf der Testseite nach dem Bestehen:
      (`tid` `9188040d-6c67-4c5b-b112-36a304b66dad`) oder mit Claim `xms_edov === true`. Arbeits- und Schulkonten ohne diesen Beleg werden abgelehnt
      (bekannte „nOAuth“-Schwäche: ein Tenant-Admin kann das Mail-Attribut frei setzen).
    Gespeichert wird nur in `learn_certs` (Zeile `status='draft'` je Nutzer und Pfad, Spalten `email`, `email_src` = Anbieter, `email_at`) – nicht in `mail_addr`,
-   nicht im Konto; das Access-Token wird nicht gespeichert. Zurück geht es auf die Testseite mit `?certmail=ok|wrong_account|unverified|session|cancel|not_passed|issued|error`;
+   nicht im Konto; das Access-Token wird nicht gespeichert. Zurück geht es auf die Testseite mit `?certmail=ok|wrong_account|unverified|session|cancel|not_passed|issued|busy|error`;
    die Seite entfernt den Parameter, zeigt Ergebnis (aus `sessionStorage`) und Formular wieder und den passenden Hinweis.
 4. **Rückfall:** Ohne Adresse aus der Anmeldung gilt eine bereits bestätigte Adresse des Kontos (`mail_addr`, `verified=1`, `email_src` = `account`) – ebenfalls nie frei eingetippt.
+   Bei wartenden Zeilen mit `account` nimmt das Ausstellen (Anfrage oder Cron) die dann bestätigte Adresse (wie `GET` sie anzeigt); gibt es keine mehr, wird nichts
+   gesendet (`status='error'`, `error='need_email'`).
 5. `POST /api/learn/cert {path, attempt, name, consent, lang}` nimmt die Adresse nur so; ohne beides `409 need_email`, ein mitgeschicktes abweichendes
    `email`-Feld `400 email_fixed`. `GET /api/learn/cert` liefert nur `email_masked`, `email_src` und `providers` (verknüpft und im Worker eingerichtet), nie die Adresse.
 6. Konto löschen: `deleteUserLearn` entfernt alle Zeilen samt E-Mail und Herkunft. Zusammenführen: Hat das Zielkonto nur einen Entwurf, das Quellkonto aber eine
@@ -112,7 +114,11 @@ Reihenfolge, wenn PR #606 auf main ist:
 **Offene Punkte (blockieren den Merge nicht):**
 - *Microsoft-Arbeitskonten:* Ohne den optionalen Claim `xms_edov` lehnt der Worker deren E-Mail ab (Hinweis „nicht bestätigt“, andere Anmeldung wählen).
   Soll das gehen, in Entra ID (App-Registrierung des Logins, Client-ID `MS_CLIENT_ID`) unter *Token configuration → Add optional claim → ID* die Claims
-  `email` und `xms_edov` hinzufügen. Private Microsoft-Konten brauchen das nicht. Nicht geprüft: ob `xms_edov` bei der `common`-Anmeldung für alle Tenants kommt.
+  `email` und `xms_edov` hinzufügen (fehlt `xms_edov` in der Liste: im Manifest unter `optionalClaims.idToken` eintragen). Private Microsoft-Konten brauchen das nicht.
+  **Empfehlung: vor dem Einschalten (`CERTOPUS_ON=1`) erledigen**, sonst bekommen Mitglieder, die nur mit dem M365-Arbeitskonto angemeldet sind und keine bestätigte
+  Adresse im Konto haben, kein Zertifikat (`409 need_email`). Danach Schritt 7 mit einem echten Arbeitskonto prüfen. Nicht geprüft: ob `xms_edov` bei der
+  `common`-Anmeldung für alle Tenants kommt. Bei den anderen Anbietern ist in der Konsole nichts zu tun (gleiche Redirect-URI, LinkedIn mit den Login-Scopes,
+  GitHub als OAuth App mit dynamischen Scopes).
 - *Übersetzte Pfadseiten:* `translate_pillars.py` fordert jetzt neue oder im Englischen geänderte UI-Schlüssel je Sprache einzeln nach (`uix`, Hash je Schlüssel in
   `data/pillars_i18n.json` `ui_h`) und erkennt eine versehentlich deutsche Oberfläche (pl, id) und fordert sie ganz neu an. Das läuft **nicht automatisch**
   beim Merge: Nach künftigen Textänderungen Workflow **„Pillar-Leitfaeden uebersetzen“** (`translate-pillars.yml`) mit `mode=run`, `ui_only=true` starten

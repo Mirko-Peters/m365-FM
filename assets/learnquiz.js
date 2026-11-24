@@ -103,7 +103,9 @@
       if (ST.cert && ST.cert.status === "ok") { store(RES_KEY); store(NAME_KEY); return certDone(ST.cert, ST.best); }
       if (ST.passed && ST.best) {
         var saved = CM ? load(RES_KEY) : null;   // nach dem Zusatzschritt: Ergebnis wie vorher, Formular offen
-        if (saved && saved.res && saved.res.passed) return result(saved.res, saved.ans || {});
+        // nur das eigene Ergebnis (geteiltes Geraet, anderer Nutzer im selben Tab): sonst verwerfen, auch den gemerkten Namen
+        if (saved && saved.res && saved.res.passed && saved.res.attempt === ST.best.attempt) return result(saved.res, saved.ans || {});
+        if (saved) { store(RES_KEY); store(NAME_KEY); }
         return passedView();
       }
       if (!ST.quiz_ready) return show([h("h2", { text: t("q_soon") })]);
@@ -293,7 +295,7 @@
     return C.api + "/auth/login/" + p + "?purpose=certmail&path=" + encodeURIComponent(C.path) + "&return=" + encodeURIComponent(u.href);
   }
   var CM_TEXT = { ok: "q_mail_ok", wrong_account: "q_mail_wrong", unverified: "q_mail_unverified", session: "q_mail_session", cancel: "q_mail_cancel",
-    need_email: "q_err_need_email", rate_limit: "q_err_rate", issued: "q_cert_ok" };
+    need_email: "q_err_need_email", rate_limit: "q_err_rate", issued: "q_cert_ok", busy: "q_cert_off" };
   function certLinks(c) {
     var links = h("p", { class: "lq-btns" });
     if (safe(c.url)) links.appendChild(h("a", { class: "btn main", href: c.url, target: "_blank", rel: "noopener", text: t("q_cert_view") }));

@@ -419,6 +419,38 @@ test("Cron: wartende Zertifikate werden nach dem Einschalten ausgestellt, laufen
   } finally { m.restore(); }
 });
 
+test("Cron: wartende Zeile mit der Adresse des Kontos geht an die Adresse, die die Seite anzeigt (nach Aenderung); ohne bestaetigte Adresse kein Versand", async () => {
+  const { env, raw, s } = await setup();
+  await seed(env);
+  const attempt = await passedAttempt(env, s.ada);
+  assert.equal((await call(env, "/api/learn/cert", { method: "POST", cookie: s.ada, body: certBody(attempt) })).status, 503);   // pending mit ada@example.com (account)
+  raw.prepare("UPDATE mail_addr SET email='neu@example.org' WHERE user_id=1").run();
+  const st = await call(env, "/api/learn/cert?path=" + PATH, { cookie: s.ada });
+  assert.equal(st.data.email_masked, "n***@example.org"); assert.equal(st.data.email_src, "account");
+  env.CERTOPUS_ON = "1"; env.CERTOPUS_API_KEY = KEY;
+  let m = mockCertopus();
+  try {
+    assert.deepEqual(await issuePendingCerts(env), { ok: 1, error: 0, skipped: 0 });
+    assert.equal(m.calls.find((c) => c.url.pathname === "/v1/certificates").body.recipients[0].email, "neu@example.org", "Empfaenger = angezeigte Adresse");
+    assert.equal(raw.prepare("SELECT email FROM learn_certs WHERE user_id=1").get().email, "neu@example.org");
+  } finally { m.restore(); }
+  // Bob: pending mit Kontoadresse, danach Adresse entfernt (z. B. Zusammenfuehren) -> kein Certopus-Aufruf, Status error, erneuter Klick meldet need_email
+  raw.prepare("UPDATE mail_addr SET verified=1 WHERE user_id=2").run();
+  const bobAttempt = await passedAttempt(env, s.bob);
+  env.CERTOPUS_ON = "0";
+  assert.equal((await call(env, "/api/learn/cert", { method: "POST", cookie: s.bob, body: certBody(bobAttempt, { name: "Bob Builder" }) })).status, 503);
+  raw.prepare("DELETE FROM mail_addr WHERE user_id=2").run();
+  env.CERTOPUS_ON = "1";
+  m = mockCertopus();
+  try {
+    assert.deepEqual(await issuePendingCerts(env), { ok: 0, error: 1, skipped: 0 });
+    assert.equal(m.calls.filter((c) => c.url.pathname === "/v1/certificates").length, 0, "nie an die alte Adresse");
+    assert.deepEqual({ ...raw.prepare("SELECT status, error FROM learn_certs WHERE user_id=2").get() }, { status: "error", error: "need_email" });
+    const again = await call(env, "/api/learn/cert", { method: "POST", cookie: s.bob, body: certBody(bobAttempt, { name: "Bob Builder" }) });
+    assert.equal(again.status, 409); assert.equal(again.data.error, "need_email");
+  } finally { m.restore(); }
+});
+
 test("Statistik nur fuer Admins: je Herkunft und Woche; Konto loeschen entfernt Versuche und Zertifikat-Zeilen", async () => {
   const { env, raw, s } = await setup();
   await seed(env);
