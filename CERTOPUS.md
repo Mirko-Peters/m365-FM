@@ -13,10 +13,12 @@ Antwortschlüssel stehen nie im Klartext im Repo (es ist öffentlich): `data/pil
 
 ## Einrichtung Schritt für Schritt
 
-1. **API-Schlüssel als GitHub-Secret anlegen.** In Certopus: Einstellungen → API → Schlüssel kopieren. In GitHub: Repository → Settings → Secrets and variables →
+Stand 24.11.2026: Schritte 1–3 sind erledigt. Offen sind die Schritte unter „Nach dem Merge“ (unten) – die Schritte 4–7 hier beschreiben sie im Detail.
+
+1. **Erledigt (24.11.2026). API-Schlüssel als GitHub-Secret anlegen.** In Certopus: Einstellungen → API → Schlüssel kopieren. In GitHub: Repository → Settings → Secrets and variables →
    Actions → *New repository secret*, Name `CERTOPUS_API_KEY`, Wert einfügen. Den Schlüssel nie in Code, Chat, Issues oder Commits schreiben.
    `worker.yml` reicht ihn beim nächsten Worker-Deploy an den Worker weiter (`worker/setup.mjs`).
-2. **IDs auslesen.** Actions → Workflow **„Certopus-IDs auslesen (nur lesen)“** (`certopus-ids.yml`) → *Run workflow*, bei Bedarf eine andere Event-ID eingeben.
+2. **Erledigt (24.11.2026). IDs auslesen.** Actions → Workflow **„Certopus-IDs auslesen (nur lesen)“** (`certopus-ids.yml`) → *Run workflow*, bei Bedarf eine andere Event-ID eingeben.
    Das Protokoll zeigt Organisation, Event, Kategorien und die Felder der Vorlage (`recipient_fields`), nie den Schlüssel.
    Dahinter steckt `tools/certopus_ids.py` (nur lesende Aufrufe `GET /organisations`, `/events/<org>`, `/categories`, `/recipient_fields`).
    Lokal geht es auch: `CERTOPUS_API_KEY=… python3 tools/certopus_ids.py [event-id]` (ohne Event-ID gilt das Event des Lernpfads);
@@ -24,7 +26,7 @@ Antwortschlüssel stehen nie im Klartext im Repo (es ist öffentlich): `data/pil
    Stand 24.11.2026: Organisation `projectmanagementgroup` („M365 Show“), Event `1b364220-e7df-11f1-a542-95dd4baa2628`
    („Manufacturing Excellence: From Lean Basics to Digital Production Planning“), Kategorie `1b361b10-e7df-11f1-a542-95dd4baa2628` („Completion“;
    daneben „Achievement“ `1b361b11-…`). Felder der Vorlage heute: `email`, `{Name}`.
-3. **IDs eintragen.** In `worker/wrangler.toml` unter `[vars]` die Var `CERTOPUS_PATHS` (JSON, ein Eintrag je Lernpfad):
+3. **Erledigt (24.11.2026). IDs eintragen.** In `worker/wrangler.toml` unter `[vars]` die Var `CERTOPUS_PATHS` (JSON, ein Eintrag je Lernpfad):
    ```toml
    CERTOPUS_PATHS = '{"manufacturing-excellence":{"org":"projectmanagementgroup","event":"1b364220-e7df-11f1-a542-95dd4baa2628","category":"1b361b10-e7df-11f1-a542-95dd4baa2628","course":{"en":"Manufacturing Excellence: From Lean Basics to Digital Production Planning","de":"Manufacturing Excellence: von den Lean-Grundlagen zur digitalen Produktionsplanung"}}}'
    ```
@@ -39,14 +41,44 @@ Antwortschlüssel stehen nie im Klartext im Repo (es ist öffentlich): `data/pil
      6 Stunden); fest vorgeben lässt sich die Zuordnung mit der Var `CERTOPUS_FIELDS`
      (Standard `{"name":"{Name}","course":"{Course}","score":"{Score}","date":"{Date}"}`).
    - Solange die Vorlage nur `{Name}` hat, kommt der Kursname aus dem Event-Titel bzw. aus festem Text in der Vorlage.
-5. **E-Mail-Vorlage einfügen** (Event → E-Mail-Einstellungen): Betreff und Text aus dem Abschnitt „E-Mail“ unten übernehmen. Den Platzhalter
-   `<ZERTIFIKATSLINK>` durch die Variable bzw. den Knopf ersetzen, den der Certopus-E-Mail-Editor für den Link zum Zertifikat anbietet
-   (der genaue Name der Variablen ist hier nicht bekannt – im Editor nachsehen). Absendername „M365.FM“, Antwortadresse mirko.peters@m365.fm.
-   Mit einer Testsendung an die eigene Adresse prüfen.
+5. **E-Mail-Vorlage einfügen** (Event → E-Mail-Einstellungen; die E-Mail-Vorlage hängt laut Certopus-Hilfe am Event): Betreff und Text aus dem
+   Abschnitt „E-Mail“ unten übernehmen. Absendername „M365.FM“, Antwortadresse mirko.peters@m365.fm.
+   **Offen: die Variable für den Zertifikatslink.** Ihr genauer Name ist nicht belegt (die Certopus-Doku war aus der Recherche-Umgebung nicht erreichbar;
+   auch Drittquellen nennen ihn nicht). So findet Mirko sie: im E-Mail-Editor des Events die Liste der Variablen bzw. Platzhalter öffnen (Einfügen-Menü
+   oder Hilfe neben dem Textfeld) und die für den Link zum Zertifikat wählen; damit `<ZERTIFIKATSLINK>` ersetzen, ebenso `{Name}`/`{Course}`,
+   falls der Editor dafür eine andere Schreibweise erwartet. Bietet der Editor nur einen festen Knopf „Zertifikat ansehen“, diesen an die Stelle setzen.
+   Dann eine Testsendung an die eigene Adresse schicken und prüfen, dass Link, Name und Kursname ersetzt sind. Findet sich nichts: support@certopus.com fragen.
+   Den gefundenen Namen hier eintragen.
 6. **Einschalten.** In `worker/wrangler.toml` `CERTOPUS_ON = "1"` setzen und den Worker deployen (Push auf main mit Änderung unter `worker/` startet `worker.yml`).
    Notschalter: wieder `"0"` – dann sammelt der Worker Anfragen als „pending“ und stellt sie nach dem Wiedereinschalten aus.
 7. **Prüfen.** Mit einem eigenen Konto den Test machen (oder einen Testnutzer nehmen), Zertifikat anfordern, E-Mail, Zertifikatsseite, PDF und LinkedIn-Link ansehen.
    Admins sehen die Zahlen unter `GET https://api-dub.m365.fm/api/learn/stats?path=manufacturing-excellence` (gestartet, abgegeben, bestanden, Zertifikate je Herkunft und Woche).
+
+## Nach dem Merge
+
+Reihenfolge, wenn PR #606 auf main ist:
+
+1. **Automatisch: Worker.** Der Push auf main ändert `worker/` und `data/pillar_quiz_keys.enc`, also startet `worker.yml`: Deploy, Migration 0055
+   (`d1 migrations apply`, legt `learn_quiz_keys`, `learn_attempts`, `learn_certs` an), danach der Schritt „Lernpfad-Schluessel an den Worker“
+   (`tools/pillar_quiz.py push`). Im Log muss die Antwort `"upserted": 60` stehen (10 Leitfäden × 6 Fragen), `"deactivated": 0` (0055 war nie live, alte IDs gibt es dort nicht).
+2. **Automatisch: Seitenbau.** Der Merge ändert `site_*.py` und `assets/`, also startet auch `site.yml` (sonst der nächtliche Bau). Er bringt den Kasten
+   „Abschlusstest & Zertifikat“ auf der Pfadseite und die Testseiten `/learn/path/manufacturing-excellence/test/` und
+   `/de/learn/path/manufacturing-excellence/test/` mit den Fragen-IDs -7 bis -12. Vorher gibt es die Testseite live nicht; der Worker zieht ohnehin nur
+   Fragen, die die Seite kennt (`have`).
+3. **Prüfen:** Testseite öffnen, anmelden, Test starten – es kommen 30 Fragen. `CERTOPUS_ON` ist noch `"0"`, ein bestandener Test zeigt „Ihr Zertifikat folgt in Kürze“.
+4. **Mirko: Zertifikatsvorlage** (Schritt 4 oben): Platzhalter `{Name}`, `{Course}`, `{Score}`, `{Date}`; Aussteller **M365.FM**; den festen Text „of completion“
+   durch `{Course}` (Kursname) ersetzen. Danach `certopus-ids.yml` starten und prüfen, dass `recipient_fields` die vier Felder zeigt.
+5. **Mirko: E-Mail-Text einfügen** (Schritt 5 oben, Texte unten unter „E-Mail“), Variable für den Zertifikatslink im Editor suchen, Testsendung.
+6. **Einschalten per PR:** in `worker/wrangler.toml` `CERTOPUS_ON = "1"` (eigener kleiner PR; nach dem Merge deployt `worker.yml`). Wartende Zertifikate
+   stellt der Cron danach aus.
+7. **Testabschluss:** mit einem eigenen Konto bestehen, Zertifikat anfordern; E-Mail, Zertifikatsseite, PDF und LinkedIn-Knopf der Testseite prüfen
+   (Schritt 7 oben), Zahlen unter `/api/learn/stats`.
+
+**Anrede:** Seite, E-Mail und Zertifikat siezen („Sie“), passend zu den Leitfäden (Entscheidung 24.11.2026).
+
+**Name und Empfänger** (`POST /api/learn/cert`): Der Name darf keine Webadresse, Domain, `@` oder `/` enthalten (er steht öffentlich auf dem Zertifikat).
+Hat das Konto eine bestätigte E-Mail-Adresse (`mail_addr`, verified=1), geht das Zertifikat nur an diese; die Testseite füllt sie vor. Ohne bestätigte Adresse
+ist die Eingabe frei, aber höchstens 2 verschiedene Adressen je Nutzer und Pfad.
 
 **Antwortschlüssel im Worker.** Der Test startet erst, wenn der Worker die Schlüssel kennt (sonst zeigt die Seite „Test folgt in Kürze“).
 Sie kommen aus `data/pillar_quiz_keys.enc`: `tools/pillar_quiz.py push` entschlüsselt die Datei mit `CRON_KEY` und schickt
@@ -101,8 +133,10 @@ Die deutsche Fassung ist für eine spätere eigene Kategorie/Vorlage gedacht (da
 
 ## E-Mail
 
-Platzhalter wie in der Vorlage: `{Name}`, `{Course}`; `<ZERTIFIKATSLINK>` = Variable des Certopus-E-Mail-Editors für den Zertifikatslink (siehe Schritt 5).
-Die E-Mail nennt bewusst keine feste Zahl von Leitfäden (der Pfad wächst).
+Platzhalter wie in der Vorlage: `{Name}`, `{Course}`; `<ZERTIFIKATSLINK>` = Variable des Certopus-E-Mail-Editors für den Zertifikatslink – noch offen, siehe Schritt 5.
+Die E-Mail nennt bewusst keine feste Zahl von Leitfäden (der Pfad wächst). Den LinkedIn-Link baut die Testseite selbst (`linkedinUrl` in `worker/src/learnquiz.js`,
+`linkedin.com/profile/add` mit Kursname, Aussteller M365.FM, Monat/Jahr, Zertifikats-URL und -ID). Ob die Zertifikatsseite von Certopus selbst einen
+LinkedIn-Knopf hat, ist nicht belegt; die E-Mail verweist deshalb auf die Testseite. Hat sie einen, darf der Satz nach der Testsendung ergänzt werden.
 
 ### Englisch (Hauptfassung)
 
@@ -115,8 +149,9 @@ Die E-Mail nennt bewusst keine feste Zahl von Leitfäden (der Pfad wächst).
 > Your certificate is ready:
 > <ZERTIFIKATSLINK>
 >
-> **Show it on LinkedIn:** open the certificate and choose “Add to LinkedIn”, or add it under *Licenses & certifications* in your profile
-> (issuing organization: M365.FM). The final test page on m365.fm also has an “Add to LinkedIn” button.
+> **Show it on LinkedIn:** on the final test page, choose “Add to LinkedIn” – the certificate details are filled in for you:
+> https://www.m365.fm/learn/path/manufacturing-excellence/test/
+> Or add it yourself under *Licenses & certifications* in your profile (issuing organization: M365.FM, credential URL: the link above).
 >
 > **Keep learning:** all guides of the learning path stay free and are updated regularly:
 > https://www.m365.fm/learn/path/manufacturing-excellence/
@@ -148,8 +183,9 @@ Die E-Mail nennt bewusst keine feste Zahl von Leitfäden (der Pfad wächst).
 > Ihr Zertifikat ist fertig:
 > <ZERTIFIKATSLINK>
 >
-> **Auf LinkedIn zeigen:** Öffnen Sie das Zertifikat und wählen Sie „Zu LinkedIn hinzufügen“, oder tragen Sie es in Ihrem Profil unter
-> *Bescheinigungen und Zertifikate* ein (ausstellende Organisation: M365.FM). Auch die Testseite auf m365.fm hat den Knopf „Zu LinkedIn hinzufügen“.
+> **Auf LinkedIn zeigen:** Wählen Sie auf der Testseite „Zu LinkedIn hinzufügen“ – die Angaben zum Zertifikat sind dann schon ausgefüllt:
+> https://www.m365.fm/de/learn/path/manufacturing-excellence/test/
+> Oder tragen Sie es selbst in Ihrem Profil unter *Bescheinigungen und Zertifikate* ein (ausstellende Organisation: M365.FM, URL der Qualifikation: der Link oben).
 >
 > **Weiterlernen:** Alle Leitfäden des Lernpfads bleiben kostenlos und werden laufend aktualisiert:
 > https://www.m365.fm/de/learn/path/manufacturing-excellence/
