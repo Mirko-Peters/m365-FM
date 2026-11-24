@@ -1,0 +1,661 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.960
+De meeste loadbalancers lezen nooit het verzoek dat ze afleveren.
+
+00:00:03.080 --> 00:00:06.980
+Azure Application Gateway doet dat wel en die ene gewoonte bepaalt waar uw verkeer terechtkomt.
+
+00:00:07.080 --> 00:00:10.040
+Het kijkt naar het URL-pad en de websitenaam voordat het beslist,
+
+00:00:10.280 --> 00:00:14.720
+dus een verzoek voor afbeeldingen kan naar de ene server gaan terwijl een verzoek voor video naar een andere gaat.
+
+00:00:14.940 --> 00:00:19.620
+Dezelfde Gateway kan ook het versleutelingsslot beheren en verzoeken onderweg screenen op aanvallen.
+
+00:00:19.880 --> 00:00:26.520
+Welkom bij de M365FM podcast, waar we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:26.520 --> 00:00:31.060
+Aan het einde kunt u in begrijpelijke taal uitleggen waarom dat vakje in het midden van het diagram staat.
+
+00:00:31.260 --> 00:00:32.240
+Wat het eigenlijk is.
+
+00:00:32.500 --> 00:00:35.200
+Stel je een receptionist voor in de hal van een drukgebouw.
+
+00:00:35.260 --> 00:00:39.440
+Die persoon bepaalt waar elke bezoeker naartoe moet en de beslissing hangt af van wie er door de deur loopt.
+
+00:00:39.640 --> 00:00:42.720
+Vervang nu de bezoekers door webverzoeken en het gebouw door uw webapplicatie.
+
+00:00:42.960 --> 00:00:45.440
+Dat is het grove idee achter Azure Application Gateway.
+
+00:00:45.720 --> 00:00:47.500
+Het is een loadbalancer voor webverkeer.
+
+00:00:47.680 --> 00:00:50.440
+De naam klinkt zwaarder dan het werk, want het enige wat het echt doet,
+
+00:00:50.600 --> 00:00:53.180
+is voor uw app staan en beslissen waar elk inkomend verzoek moet landen.
+
+00:00:53.180 --> 00:00:57.340
+Het verschil tussen dit en een oudere loadbalancer komt neer op twee woorden, laag 7.
+
+00:00:57.560 --> 00:01:00.080
+Die term klinkt als een vraag uit een certificeringsexamen.
+
+00:01:00.280 --> 00:01:03.080
+Het gaat er eigenlijk om hoeveel van het verzoek uw loadbalancer kan zien.
+
+00:01:03.260 --> 00:01:05.700
+Een traditionele loadbalancer werkt lager in de stack.
+
+00:01:05.880 --> 00:01:07.480
+Hij ziet alleen een adres en een poort.
+
+00:01:07.720 --> 00:01:10.380
+Denk aan een postkamer medewerker die de envelop leest en nooit opent,
+
+00:01:10.500 --> 00:01:13.380
+omdat alles wat binnenkomt er voor die medewerker ongeveer hetzelfde uitziet.
+
+00:01:13.760 --> 00:01:16.220
+Application Gateway werkt op de applicatielaag,
+
+00:01:16.460 --> 00:01:19.680
+wat laag 7 is van het netwerkmodel waar iedereen naar verwijst.
+
+00:01:19.880 --> 00:01:22.440
+Op die laag leest de Gateway het werkelijke verzoek.
+
+00:01:22.440 --> 00:01:25.720
+Hij kan het pad in de URL en de opgevraagde websitenaam zien,
+
+00:01:25.980 --> 00:01:29.800
+dus beslist hij op basis van waar de bezoeker om vraagt in plaats van waar die vandaan komt.
+
+00:01:30.320 --> 00:01:33.000
+Microsoft's eigen documentatie gebruikt een duidelijk voorbeeld.
+
+00:01:33.220 --> 00:01:36.980
+Een verzoek met afbeeldingen in de URL kan naar servers gaan die zijn afgestemd op afbeeldingen.
+
+00:01:37.100 --> 00:01:40.300
+Een verzoek met video kan terechtkomen op servers die zijn gebouwd voor video.
+
+00:01:40.600 --> 00:01:43.820
+Dat is de hele truc en het verklaart waarom de dienst überhaupt bestaat.
+
+00:01:44.000 --> 00:01:48.440
+Het is een echte implementatie binnen uw netwerk en het leeft in zijn eigen toegewezen subnet.
+
+00:01:48.440 --> 00:01:52.960
+Dat betekent dat het een eigen deel van uw netwerkadresruimte krijgt in plaats van deze te delen met andere bronnen.
+
+00:01:53.100 --> 00:01:55.600
+Dit is belangrijk, zelfs als u slechts een kleine site draait.
+
+00:01:55.760 --> 00:01:59.780
+Op het moment dat u meer dan één server heeft, moet iemand beslissen welke server welk verzoek krijgt.
+
+00:02:00.080 --> 00:02:02.460
+Handmatig werk werkt niet meer zodra u echt verkeer heeft.
+
+00:02:02.660 --> 00:02:05.560
+De functies die het biedt vallen uit één in een paar eenvoudige groepen.
+
+00:02:05.560 --> 00:02:13.760
+Verkeersafhandeling omvat routering op basis van URL-pad, het hosten van meerdere sites op één gateway, omleidingen, herschrijven van headers en een manier om een bezoeker aan dezelfde server te binden.
+
+00:02:14.000 --> 00:02:17.100
+Beveiliging omvat versleuteling, end-to-end encryptie en de firewall.
+
+00:02:17.400 --> 00:02:21.680
+Veerkracht omvat automatisch schalen, zonneredendantie en een front-end adres dat nooit verandert.
+
+00:02:21.880 --> 00:02:25.000
+De huidige generatie heet V2 en deze komt in twee varianten.
+
+00:02:25.220 --> 00:02:27.560
+Standaard V2 regelt de routering en beveiliging.
+
+00:02:27.780 --> 00:02:30.520
+WAF V2 voegt de bescherming toe die aanvallen blokkeert.
+
+00:02:30.520 --> 00:02:37.560
+Als je een oudere handleiding volgt waarin een V1 gateway wordt genoemd, die generatie is verouderd, dus zie het als geschiedenis en niet als iets om vandaag nog te bouwen.
+
+00:02:37.700 --> 00:02:41.540
+De manier waarop een verzoek zijn bestemming vindt, is het stukje dat niemand in het diagram tekent.
+
+00:02:41.760 --> 00:02:43.960
+Laten we daarom één verzoek volgen van buiten naar binnen.
+
+00:02:44.280 --> 00:02:45.740
+Listeners en routeringsregels
+
+00:02:45.740 --> 00:02:48.760
+Een listener is de voordeur en het is eenvoudiger dan de naam doet vermoeden.
+
+00:02:48.940 --> 00:02:52.400
+Het is een stukje configuratie dat controleert op inkomende verbindingsverzoeken.
+
+00:02:52.620 --> 00:02:57.400
+Die controles worden uitgevoerd op vier punten, de poort, het protocol, de host en het IP-adres.
+
+00:02:57.400 --> 00:03:01.040
+Wanneer een verzoek binnenkomt, is de listener degene die het opmerkt en doorgeeft.
+
+00:03:01.200 --> 00:03:05.740
+Je kunt meerdere listeners tegelijk uitvoeren en de officiële documentatie toont dit patroon duidelijk.
+
+00:03:09.860 --> 00:03:12.920
+Stel je twee websites voor die een load balancer niet kan maken.
+
+00:03:17.180 --> 00:03:21.260
+Zodra een listener een verzoek opvangt, bepaalt een routeringsregel wat er daarna gebeurt.
+
+00:03:21.480 --> 00:03:24.740
+Die regel koppelt de listener aan de back-end poll die het verzoek moet ontvangen.
+
+00:03:24.960 --> 00:03:28.820
+Het koppelt ook de back-end instellingen die beschrijven hoe je met die servers communiceert.
+
+00:03:29.040 --> 00:03:32.840
+Wanneer je een gateway in de Azure portal maakt, bouwt deze een van deze regels voor je.
+
+00:03:32.840 --> 00:03:38.580
+Je krijgt een standaard listener en een standaard back-end poll, dus je hebt een werkend startpunt voordat je iets aanpast.
+
+00:03:38.780 --> 00:03:40.600
+Regels zijn er in een paar nuttige vormen.
+
+00:03:40.860 --> 00:03:46.740
+Patgebaseerde routering splitst verkeer op basis van wat er in de URL staat, waardoor advertentieafbeeldingen en video op verschillende plekken terechtkomen.
+
+00:03:46.940 --> 00:03:53.760
+Multi-site routering splitst verkeer op basis van de websitenaam in het verzoek, zo bedient één gateway stilletjes meerdere sites zonder dat iemand het merkt.
+
+00:03:53.920 --> 00:03:55.760
+Een regel kan ook een paar andere dingen doen.
+
+00:03:55.960 --> 00:03:59.080
+Het kan verkeer omleiden naar een andere poort of een compleet andere site.
+
+00:03:59.080 --> 00:04:02.960
+Het kan verzoek en antwoord headers en URL's herschrijven terwijl ze passeren.
+
+00:04:03.180 --> 00:04:06.360
+Stel je dus voor wat er gebeurt als iemand jouw adres in een browser typt.
+
+00:04:06.600 --> 00:04:14.200
+De browser zoekt eerst het adres van de gateway op via DNS en Azure beheert dat item omdat elke gateway zich in het Azure.com-domein bevindt.
+
+00:04:14.560 --> 00:04:21.940
+De gateway accepteert het verzoek op een listener, controleert het tegen de firewall indien ingeschakeld en geeft het vervolgens door aan de bijbehorende routeringsregel.
+
+00:04:21.940 --> 00:04:27.560
+Die regel kiest een back-end po en de gateway stuurt het verzoek door naar een van de gezonde servers met die round-hob in volgorde.
+
+00:04:27.780 --> 00:04:31.720
+Het opent een nieuwe verbinding met de back-end met behulp van de instellingen die je hebt geconfigureerd.
+
+00:04:31.920 --> 00:04:38.220
+Voordat het verzoek vertrekt, voegt de gateway een paar extra headers toe zodat je applicatie de echte client en het oorspronkelijke adres nog steeds kan zien.
+
+00:04:38.420 --> 00:04:42.880
+Een slecht geconfigureerde regel is een stille fout die niemand opmerkt totdat klanten gaan klagen.
+
+00:04:43.100 --> 00:04:46.260
+De gateway zal met alle plezier een echte klant naar de verkeerde plek sturen.
+
+00:04:46.500 --> 00:04:50.620
+Daarom is het de moeite waard om de configuratie te begrijpen, zelfs als je er zelf nooit aankomt.
+
+00:04:50.620 --> 00:04:55.100
+Zodra een regel een poll heeft gekozen, moet de gateway nog één lastige vraag beantwoorden.
+
+00:04:55.280 --> 00:04:57.440
+Wat gebeurt er als een server in die poll niet meer reageert?
+
+00:04:57.820 --> 00:04:59.500
+Back-end polls and health probes
+
+00:04:59.500 --> 00:05:02.780
+De back-end poll is de groep servers die daadwerkelijk je applicatie draaien.
+
+00:05:02.960 --> 00:05:05.280
+Het is de bestemming waarnaar de routeringsregel wijst.
+
+00:05:05.440 --> 00:05:11.940
+Een poll kan een specifieke virtuele machine, een virtual machine skillset, een IP-adres, een volledige domeinnaam of een app-service bevatten.
+
+00:05:12.100 --> 00:05:15.460
+Zodra een verzoek de poll bereikt, verdeelt de gateway het over de gezonde servers.
+
+00:05:15.460 --> 00:05:20.920
+Het gebruikt een round-robin benadering, wat simpelweg betekent dat het de lijst op volgorde afwerkt in plaats van één machine te overbelasten.
+
+00:05:21.120 --> 00:05:23.640
+Het onderdeel dat zijn waarde bewijst, is de helpt-probe.
+
+00:05:23.840 --> 00:05:27.740
+De gateway controleert zelfstandig de status van elke server in de poll zonder dat daarom gevraagd hoeft te worden.
+
+00:05:27.920 --> 00:05:31.360
+Het stopt stilletjes met het sturen van verkeer naar elke server die naar zijn mening ongezond is.
+
+00:05:31.540 --> 00:05:32.920
+De probe geeft bovendien niet op.
+
+00:05:33.120 --> 00:05:37.200
+Het blijft de zieke server controleren en begint er weer naartoe te routeren zodra deze weer naar behoren reageert.
+
+00:05:37.200 --> 00:05:43.320
+Elk exemplaar van de gateway voert deze controles afzonderlijk uit, dus een poll wordt vanaf meerdere plekken tegelijk bewaakt in plaats van door één enkel proces.
+
+00:05:43.500 --> 00:05:45.200
+De standaardcontrole is eenvoudig.
+
+00:05:45.360 --> 00:05:51.080
+Het verstuurt een normaal webverzoek naar de server op de poort die je back-end instellingen specificeren en beschouwt een zuiver antwoord als een teken van leven.
+
+00:05:51.240 --> 00:05:55.480
+De standaardprobe heeft instellingen die de moeite waard zijn om te kennen, omdat ze verklaren hoe snel dit alles gebeurt.
+
+00:05:55.660 --> 00:05:59.440
+Het controleert elke server elke 30 seconden en wacht tot 30 seconden op een antwoord.
+
+00:05:59.600 --> 00:06:02.700
+Het markeert een server als offline na drie opeenvolgende fouten.
+
+00:06:02.700 --> 00:06:12.080
+Alles wat reageert met een statuscode tussen 200 en 399 telt als gezond, wat in gewone taal betekent dat de server normaal antwoorden in plaats van een foutmelding te geven.
+
+00:06:12.280 --> 00:06:16.620
+Het praktische gevolg is dat een defecte server uit de roulatie wordt gehaald en vanzelf weer terugkeert.
+
+00:06:16.840 --> 00:06:19.640
+Niemand hoeft er om drie uur ochtends bij te zitten om het in de gaten te houden.
+
+00:06:19.800 --> 00:06:24.140
+Je kunt ook een aangepaste probe bouwen die een specifiek pad controleert of een bepaalde responscode accepteert.
+
+00:06:24.280 --> 00:06:30.680
+Je kunt hem zelfs laten zoeken naar een specifiek woord in de respons, wat handig is als een server een vriendelijke foutpagina toont in plaats van een echte foutmelding.
+
+00:06:30.680 --> 00:06:36.400
+Het is goed om te weten dat een onjuist probe pad de klassieke reden is waarom mensen 502 fouten zien en niet weten waarom.
+
+00:06:36.600 --> 00:06:39.340
+De gateway controleert ook nog iets anders bij elk verzoek.
+
+00:06:39.500 --> 00:06:45.520
+Het volgende punt heeft niets met verkeer te maken, maar alles met het hangslotje in je browser waar HTTPS wordt afgehandeld.
+
+00:06:45.740 --> 00:06:51.200
+Dat hangslotje is TLS, de versleuteling die voorkomt dat vreemden kunnen lezen wat er tussen een browser en een website wordt verstuurd.
+
+00:06:51.440 --> 00:06:54.940
+Wanneer je verkeerde gateway bereikt, kan de versleutelde verbinding daar direct eindigen.
+
+00:06:55.120 --> 00:06:57.020
+De term daarvoor is TLS Terminati.
+
+00:06:57.220 --> 00:06:59.940
+Je bekend servers ontvangen dan een normaal verzoek van de gateway.
+
+00:06:59.940 --> 00:07:02.640
+Zij hoeven niet zelf al het rekenwerk voor de versleuteling te doen.
+
+00:07:02.800 --> 00:07:05.920
+Het beëindigen van de versleuteling bij de gateway lost twee problemen tegelijk op.
+
+00:07:06.000 --> 00:07:09.880
+Je servers hoeven geen energie meer te steken in cryptografie en kunnen zich op je applicatie richten.
+
+00:07:10.020 --> 00:07:14.700
+Je beheert certificaten ook op één centrale plek in plaats van ze op elke machine in de pot te moeten bijhouden.
+
+00:07:14.900 --> 00:07:21.000
+Op die centrale plek verlopen ook je certificaatvernieuwingen, dus één verlopend certificaat is één ding om op te lossen in plaats van twaalf.
+
+00:07:21.140 --> 00:07:24.800
+Als je liever alles de hele weg versleuteld houdt, ondersteunt de gateway dat ook.
+
+00:07:24.960 --> 00:07:27.800
+Hij zal dan een nieuwe versleutelde verbinding openen naar de backend.
+
+00:07:27.800 --> 00:07:32.080
+Eén detail is belangrijk om te kennen, omdat het later veel verwarrend gedrag verklaart.
+
+00:07:32.280 --> 00:07:38.920
+De gateway voegt headers toe aan elk verzoek voordat hij ze doorstuurt en die headers bevatten het echte klantadres en de oorspronkelijke hostnaam.
+
+00:07:39.100 --> 00:07:43.680
+Je applicatie kan nog steeds zien wie het verzoek heeft gedaan, ook al komt de verbinding nu van de gateway.
+
+00:07:44.000 --> 00:07:48.580
+Daarom lijkt een verzoek dat bij je server aankomt alsof het van de gateway komt, ook al begon het ergens anders.
+
+00:07:48.820 --> 00:07:53.220
+De gateway kan ook zo worden ingesteld dat hij request- en response-headers toevoegt, verwijderd of bijwerkt.
+
+00:07:53.220 --> 00:07:57.640
+Dat is hoe teams zaken oplossen, zoals een bekend die erop staat een specifieke hostnaam te zien.
+
+00:07:57.820 --> 00:08:04.220
+De V2-generatie is voor dit werk gebouwd en Microsoft meldt dat hij TLS-offload veel sneller afhandelt dan de oudere versie die hij verving.
+
+00:08:04.380 --> 00:08:07.860
+Voor jou betekent dit vooral dat versleuteling niet de oorzaak is van een tragere site.
+
+00:08:08.180 --> 00:08:10.800
+Versleuteling zorgt ervoor dat buitenstaanders het verkeer niet kunnen lezen.
+
+00:08:10.960 --> 00:08:13.660
+Het doet niets tegen iemand die met opzet schadelijk verkeer naar je stuurt.
+
+00:08:13.860 --> 00:08:16.360
+Dat is een ander probleem en daar is een ander hulpmiddel voor nodig.
+
+00:08:16.560 --> 00:08:17.460
+Wat stopt te aanvallen?
+
+00:08:17.460 --> 00:08:21.200
+Dat hulpmiddel is de web-application firewall, meestal afgekort als WAF.
+
+00:08:21.400 --> 00:08:24.540
+Dat is de reden waarom de WAF-V2-versie van de gateway bestaat.
+
+00:08:24.700 --> 00:08:28.980
+Routing bepaalt waar een verzoek naartoe moet en de firewall bepaalt of het überhaupt mag worden toegelaten.
+
+00:08:29.180 --> 00:08:32.160
+Het inspecteert het volledige verzoek, inclusief de headers en de body.
+
+00:08:32.340 --> 00:08:35.260
+Het blokkeert de aanvallen die al jaren werken op onbeschermde sites.
+
+00:08:35.500 --> 00:08:38.940
+De twee die als eerste worden genoemd zijn SQL-injectie en cross-site scripting.
+
+00:08:39.100 --> 00:08:43.380
+SQL-injectie is wanneer een aanvaller probeert database-commando's in een formulierveld te smokkelen.
+
+00:08:43.380 --> 00:08:47.360
+Cross-site scripting is wanneer ze proberen hun eigen code in jouw pagina te plaatsen.
+
+00:08:47.520 --> 00:08:54.460
+De lijst gaat verder met command-injectie, request-smakkeling en een handvol andere trucs die aanvallers hergebruiken omdat ze blijven werken.
+
+00:08:54.720 --> 00:08:57.620
+De regels zijn afkomstig van de OWASP core ruleset.
+
+00:08:57.980 --> 00:09:01.540
+OWASP is een openbaar project dat een gedeelde lijst van veel voorkomende web-aanvallen bijhoudt.
+
+00:09:01.620 --> 00:09:04.500
+De firewall van Microsoft gebruikt die regels en houdt ze actueel.
+
+00:09:04.660 --> 00:09:08.720
+Je profiteert van jarenlange collectieve ervaring in plaats van zelf detectieregels te schrijven...
+
+00:09:08.720 --> 00:09:12.700
+...en je krijgt updates zodra nieuwe aanvalspatronen opduiken, in plaats van je eigen lijst te moeten patchen.
+
+00:09:12.700 --> 00:09:17.000
+De firewall draait in een van de twee modi en het verschil is belangrijker dan de namen doen vermoeden.
+
+00:09:17.000 --> 00:09:21.100
+De detectiemodus kijkt mee, locht en blokkeert niet, het is de instelling voor beginners.
+
+00:09:21.340 --> 00:09:25.820
+De preventiemodus blokkeert de aanval en de aanvaller krijgt een 403-antwoord en een afgesloten verbinding.
+
+00:09:26.080 --> 00:09:30.420
+Microsoft raadt aan om een nieuwe firewall korte tijd in detectiemodus te draaien in de productieomgeving.
+
+00:09:30.660 --> 00:09:34.400
+Zo kun je valse meldingen opsporen en wegfilteren voordat je echt verkeer gaat blokkeren.
+
+00:09:34.600 --> 00:09:38.020
+Op de achtergrond geeft de firewall elk verzoek een score op basis van ernst.
+
+00:09:38.220 --> 00:09:43.140
+Een kritieke regelmatch voegt vijf punten toe, een fout vier, een waarschuwing drie en een opmerking twee.
+
+00:09:43.140 --> 00:09:46.380
+Vijf punten zijn voldoende om het verzoek in preventiemodus te blokkeren.
+
+00:09:46.540 --> 00:09:50.200
+Eén serieuze match is op zichzelf voldoende, terwijl een enkele kleine waarschuwing dat niet is.
+
+00:09:50.360 --> 00:09:52.220
+Twee extra's zijn elk één regel waard.
+
+00:09:52.380 --> 00:09:55.860
+Je kunt verkeer filteren op geografie om hele landen toe te staan of te blokkeren.
+
+00:09:56.020 --> 00:10:01.200
+Er is ook een botmanagerregelset die geverifieerde zoekmachine crawlers scheidt van bots die liegen en overwiezen zijn.
+
+00:10:01.380 --> 00:10:04.360
+Eén gateway kan tot 400 websites achter dezelfde firewall plaatsen,
+
+00:10:04.520 --> 00:10:07.460
+wat de reden is dat deze beveiliging betaalbaar blijft naarmate je sites toevoegt.
+
+00:10:07.460 --> 00:10:11.880
+Al die bescherming is waardeloos als de gateway zelf bezwijkt zodra er een piek in het verkeer optreedt.
+
+00:10:11.940 --> 00:10:15.180
+Dat brengt ons bij het onderdeel waar mensen zelden aan denken totdat het ertoe doet.
+
+00:10:15.380 --> 00:10:16.840
+Schalen zonder erbij na te denken.
+
+00:10:17.160 --> 00:10:21.760
+Automatisch schalen betekent dat de gateway capaciteit toevoegt wanneer het verkeer stijgt en deze weer vrijgeeft wanneer het verkeer daalt.
+
+00:10:21.920 --> 00:10:24.040
+Je hoeft nooit van tevoren de juiste grootte te gokken.
+
+00:10:24.200 --> 00:10:27.120
+Je stelt een minimum aantal instanties in, ergens tussen 0 en 100.
+
+00:10:27.340 --> 00:10:30.760
+Je kunt ook een maximum instellen, als je dat niet doet, is de standaardwaarde 10.
+
+00:10:30.760 --> 00:10:37.600
+Elke instantie staat voor ongeveer 10 capaciteitseenheden, dus het aantal vertaalt zich vrij direct naar hoeveel werk de gateway aan kan.
+
+00:10:37.780 --> 00:10:46.820
+Aangezien je meet in capaciteitseenheden, dekt één eenheid ongeveer 2500 verbindingen, iets meer dan 2 megabits per seconde aan door voor een één rekeneenheid.
+
+00:10:47.060 --> 00:10:56.760
+Welke van die drie je ook als eerste verbruikt, bepaalt de kosten en daarom kunnen een site met veel kleine verzoeken en een site die grote bestanden stuunt verschillend betalen voor hetzelfde verkeersvolume.
+
+00:10:56.760 --> 00:11:01.040
+Zelfs bij 0 minimum instanties blijft de gateway zeer beschikbaar.
+
+00:11:01.220 --> 00:11:06.700
+De service wordt altijd als meer dan één instantie geïmplementeerd en Azure vervangt stilletjes een instantie die niet meer werkt.
+
+00:11:06.860 --> 00:11:09.020
+Twee eerlijke details maken dit minder magisch.
+
+00:11:09.220 --> 00:11:12.340
+Het online brengen van een nieuwe instantie kan ongeveer 3 tot 5 minuten duren.
+
+00:11:12.580 --> 00:11:19.240
+Wanneer de gateway terugschaalt, voert hij bestaande verbindingen gedurende 5 minuten af voordat hij een instantie verwijdert, zodat niemand midden in een verzoek wordt afgesneden.
+
+00:11:19.460 --> 00:11:24.380
+Dat is het verschil tussen een capaciteitsplan dat er op papier goed uitziet en een plan dat goed presteert wanneer het erop aankomt.
+
+00:11:24.380 --> 00:11:26.820
+Zone redundantie is de andere helft van in de lucht blijven.
+
+00:11:27.000 --> 00:11:30.380
+De gateway verspreidt zichzelf standaard over ten minste twee beschikbaarheidszones.
+
+00:11:30.600 --> 00:11:34.520
+Een beschikbaarheidszone is een fysiek gescheiden groep datacenters binnen dezelfde regio.
+
+00:11:34.720 --> 00:11:38.100
+Als een van die zones uitvalt, blijft de gateway serveren vanuit de andere.
+
+00:11:38.340 --> 00:11:43.940
+Dat is het soort veerkracht waarvoor vroeger twee aparte gateways en een traffic manager nodig waren om ze te beheren.
+
+00:11:44.080 --> 00:11:46.340
+Een kanttekening is het waard om duidelijk te vermelden.
+
+00:11:46.580 --> 00:11:51.160
+Zones bestaan alleen in sommige regio's, dus hoeveel veerkracht je krijgt hangt af van waar je implementeert.
+
+00:11:51.160 --> 00:11:53.280
+Een stiller voordeel staat naast dit alles.
+
+00:11:53.500 --> 00:11:58.300
+De V2 Gateway gebruikt een statisch adres dat hetzelfde blijft gedurende de levensduur van de implementatie.
+
+00:11:58.540 --> 00:12:02.180
+Zelfs na een herstart hoeven je DNS records nooit een bewegend doelwit te achtervolgen.
+
+00:12:02.340 --> 00:12:07.100
+Dus de gateway routeert, beschermt en schaalt zichzelf, wat de vraag oproept waar veel mensen meekomen.
+
+00:12:07.320 --> 00:12:10.320
+Die vraag is of de andere Azure Load Balancers hetzelfde doen.
+
+00:12:10.520 --> 00:12:16.940
+De drie Azure Load Balancers, drie services, drie namen en Microsoft's eigen documentatie plaatst ze allemaal in dezelfde familie.
+
+00:12:17.160 --> 00:12:19.260
+Dat is precies waarom beginners ze door elkaar halen.
+
+00:12:19.260 --> 00:12:25.780
+De duidelijkste manier om ze uit elkaar te houden is door op twee dingen te letten, hoe nauwkeurig ze het verkeer inspecteren en hoe ver weg je gebruikers zijn.
+
+00:12:25.960 --> 00:12:29.020
+De Azure Load Balancer bevindt zich op het laagste niveau en werkt op laag 4.
+
+00:12:29.120 --> 00:12:33.840
+Hij ziet alleen netwerkverkeer zoals TCP en UDP, dus hij leest nooit een URL of hostnaam.
+
+00:12:33.960 --> 00:12:38.160
+Hij verspreidt stromen eenvoudig over virtuele machines met vrijwel geen extra vertraging.
+
+00:12:38.340 --> 00:12:41.320
+Hij is gebouwd voor snelheid en kan miljoenen stromen tegelijk verwerken.
+
+00:12:41.500 --> 00:12:47.760
+Als je applicatie een ander protocol spreekt dan standaard webverkeer of als je het snelst mogelijke pad wilt, dan is dit degene die je kiest.
+
+00:12:47.760 --> 00:12:54.940
+Omdat je applicatie gateway een laag hoger zit en regionaal blijft, leest deze het verzoek, beëindigt de versleuteling en kan een firewall draaien.
+
+00:12:55.100 --> 00:12:57.600
+Het bevindt zich in je eigen netwerk waar je het kunt zien.
+
+00:12:57.860 --> 00:13:03.760
+Wanneer je gebruikers zich grotendeels in één regio bevinden en je app een normale webapplicatie is, is dit meestal de juiste middenweg.
+
+00:13:03.900 --> 00:13:09.300
+Omdat je voordeur nog hoger zit en wereldwijd gaat, is dat eigenlijk een content delivery network rondom een load balancer,
+
+00:13:09.600 --> 00:13:13.280
+zodat het je statische bestanden dicht bij je gebruikers kan cachen en hun verzoeken kan routeren.
+
+00:13:13.280 --> 00:13:19.540
+Het is gebouwd op het Edge-netwerk van Microsoft met meer dan 118 Edge-locaties verspreid over 100 metropoolgebieden.
+
+00:13:19.760 --> 00:13:24.560
+Microsoft zegt dat het de latentie tot drie keer kan verbeteren terwijl het zijn eigen firewall aan de rand van het netwerk draait.
+
+00:13:24.720 --> 00:13:30.520
+Als je gebruikers over de hele wereld verspreid zijn en elke milliseconde vertraging je iets kost, dan is dit de wereldwijde voordeur.
+
+00:13:30.720 --> 00:13:33.980
+Er is een vierde optie die het noemen waard is, zodat het plaatje compleet is.
+
+00:13:34.160 --> 00:13:38.660
+Azure Traffic Manager doet wereldwijde routering met alleen DNS, wat lichter is dan de andere drie.
+
+00:13:38.660 --> 00:13:45.080
+Het leest geen verzoeken of beëindigt geen versleuteling, dus het past wanneer je alleen een slim adres nodig hebt dat naar het dichtstbijzijnde gezonde eindpunt wijst.
+
+00:13:45.240 --> 00:13:47.860
+Wat mensen verbaast, is dat deze diensten geen rivalen zijn.
+
+00:13:48.060 --> 00:13:52.200
+De richtlijnen van Microsoft zeggen dat end-to-end scenario's vaak profiteren van het combineren ervan.
+
+00:13:52.360 --> 00:13:59.220
+Een veelvoorkomend patroon plaatst de voordeur voorop voor wereldwijde toegang, terwijl een applicatie Gateway er regionaal achter zit en het nauwkeurige werk dicht bij je applicatie uitvoert.
+
+00:13:59.380 --> 00:14:02.140
+Kosten verdienen een korte opmerking zodat niemand voor verrassingen komt te staan.
+
+00:14:02.420 --> 00:14:04.660
+Application Gateway V2 heeft geen opstartkosten.
+
+00:14:04.660 --> 00:14:10.880
+Je betaalt wel een vast uurbedrag, of er nu verkeer binnenkomt of niet, plus kosten op basis van de capaciteit die je daadwerkelijk verbruikt.
+
+00:14:11.040 --> 00:14:18.480
+Ter illustratie, de prijzenpagina van Microsoft vermeldt een vast tarief van ongeveer een kwart dollar per uur voor de standaardversie en iets meer voor de firewallversie.
+
+00:14:18.660 --> 00:14:22.960
+Die cijfers zijn voorbeelden die per regio verschillen, in plaats van prijzen om een budget op te baseren.
+
+00:14:23.260 --> 00:14:25.840
+Controleer dus de actuele prijzenpagina voordat je je vastlegt.
+
+00:14:26.040 --> 00:14:27.820
+Het hele plaatje past in een paar zinnen.
+
+00:14:28.060 --> 00:14:32.540
+Application Gateway is een Layer 7 Load Balancer, dus hij leest de verzoeken in plaats van alleen het adres,
+
+00:14:32.540 --> 00:14:35.260
+en daarom kan hij afbeeldingen de ene kant op sturen en video de andere.
+
+00:14:35.500 --> 00:14:39.740
+Listeners fungeren als de voordeur, terwijl roteringsregels die deur verbinden met de juiste back-end pole.
+
+00:14:39.920 --> 00:14:43.520
+Health Probes houden dode servers buiten de rotatie zonder dat er iemand hoeft te kijken.
+
+00:14:43.740 --> 00:14:49.360
+TLS Beëindiging neemt het werk van het slotje over van je servers en de webapplicatie Firewall Screen verzoeken op bekende aanvallen.
+
+00:14:49.760 --> 00:14:54.000
+Autoscaling met zonne-redendantie houdt het geheel in de lucht wanneer het verkeer piekt of een datacenter uitvalt.
+
+00:14:54.180 --> 00:14:56.180
+Hier is de vraag waar ik je over na wil laten denken.
+
+00:14:56.180 --> 00:15:02.800
+Als een load balancer het verzoek, de hostnaam en het URL-pad kan lezen, waar hoort de beslissing over wat een verzoek daadwerkelijk mag doen dan thuis?
+
+00:15:02.980 --> 00:15:06.920
+Hoort dit thuis in de gateway aan de voorkant of in de applicatie die de bedrijfsregels begrijpt?
+
+00:15:07.140 --> 00:15:11.080
+Denk daar eens rustig over na, want het verandert de manier waarop je alles achter de voordeur ontwerpt.
+
+00:15:11.260 --> 00:15:15.740
+Wil je meer afleveringen die Azure en Microsoft 365 minder als een muur van jargon laten voelen?
+
+00:15:15.960 --> 00:15:18.880
+Abonneer je dan op M365FM en we blijven ze voor je maken.

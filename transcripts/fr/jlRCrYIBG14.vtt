@@ -1,0 +1,958 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:03.900
+L'IA que tout le monde vous conseille d'apprendre se cache déjà dans les outils que vous ouvrez chaque matin.
+
+00:00:04.720 --> 00:00:09.300
+Il s'agit des iBuilder intégrés à PowerApps et PowerAutomate et outils low-code que vous utilisez probablement déjà.
+
+00:00:09.760 --> 00:00:12.540
+Vous n'avez pas besoin de coder ni d'une équipe de sciences des données pour le mettre en service.
+
+00:00:13.200 --> 00:00:17.580
+A la fin, vous saurez ce qu'est vraiment AIBuilder, ce qu'il peut faire avec vos documents et comment le financer.
+
+00:00:18.300 --> 00:00:24.400
+Bienvenue sur le podcast M365FM, où nous explorons les personnes, les idées et les technologies qui façonnent le futur du travail.
+
+00:00:24.400 --> 00:00:30.680
+Et une fois terminé, le jargon aura disparu et tout cela semblera beaucoup moins complexe qu'il n'y paraît, euh...
+
+00:00:30.680 --> 00:00:32.260
+Qu'est-ce qu'AIBuilder en réalité ?
+
+00:00:32.260 --> 00:00:34.580
+AIBuilder est une fonctionnalité de Microsoft Power Platform.
+
+00:00:35.320 --> 00:00:39.140
+Elle vous permet de créer et d'utiliser des modèles d'IA pour automatiser des tâches professionnelles faites manuellement.
+
+00:00:39.900 --> 00:00:43.180
+Le mot K-Model-Ecum est celui qui effraie les gens, il est donc utile de le ramener à sa juste mesure.
+
+00:00:43.560 --> 00:00:44.740
+Un modèle est un outil de détection de motifs.
+
+00:00:45.160 --> 00:00:47.420
+Vous lui montrez une série d'exemples et il apprend ce qui va généralement avec quoi.
+
+00:00:48.160 --> 00:00:50.720
+Ensuite, il applique cette leçon à quelque chose de nouveau et c'est tout le secret.
+
+00:00:51.140 --> 00:00:53.860
+La raison pour laquelle les débutants bloquent est rarement le modèle lui-même.
+
+00:00:54.400 --> 00:00:56.780
+C'est l'histoire qu'ils se racontent sur ce que l'utilisation de l'IA exige.
+
+00:00:57.340 --> 00:01:01.320
+Ils imaginent une équipe d'ingénieurs, un entrepôt de données et 6 mois de configuration avant que tout fonctionne.
+
+00:01:02.120 --> 00:01:04.160
+C'est cette image qui fait paraître l'IA inaccessible.
+
+00:01:05.380 --> 00:01:07.540
+AIBuilder est conçu pour sauter chacune de ces étapes.
+
+00:01:08.460 --> 00:01:10.020
+La recette de Microsoft se résume en 4 mouvements.
+
+00:01:10.820 --> 00:01:12.600
+Vous choisissez un type de modèle, connectez vos données.
+
+00:01:12.900 --> 00:01:15.100
+L'entraînement se fait tout seul, puis vous utilisez le résultat.
+
+00:01:15.480 --> 00:01:18.100
+Il n'y a pas de code, pas besoin de diplôme en sciences des données, ni de protocole secret.
+
+00:01:18.420 --> 00:01:20.960
+Vous n'avez pas non plus besoin de trouver un outil séparé pour l'utiliser.
+
+00:01:20.960 --> 00:01:27.060
+AIBuilder est intégré directement dans PowerApps et PowerAutomate, les plateformes low-code que vous apprenez probablement déjà.
+
+00:01:28.220 --> 00:01:32.020
+Cet emplacement compte plus qu'il n'y paraît, car l'IA apparaît là où le travail s'effectue déjà.
+
+00:01:32.900 --> 00:01:37.000
+Elle se trouve dans l'application que votre équipe utilise, ou dans le flux qui déplace vos fichiers la nuit.
+
+00:01:37.720 --> 00:01:41.340
+Vous ne commencez pas une seconde carrière, vous ajoutez une nouvelle capacité à ce que vous maîtrisez déjà.
+
+00:01:42.080 --> 00:01:43.580
+Une raison pour laquelle Microsoft l'a construit ainsi.
+
+00:01:43.580 --> 00:01:47.800
+La plupart des titres sur l'IA concernent des modèles géants qui répondent à des questions dans une fenêtre de chat.
+
+00:01:48.520 --> 00:01:51.220
+Ils sont impressionnants, mais difficiles à appliquer à une tâche métier spécifique.
+
+00:01:51.840 --> 00:01:54.760
+AIBuilder inverse la tendance, il part de la tâche plutôt que de la conversation.
+
+00:01:55.260 --> 00:01:58.060
+Vous commencez donc par un travail à accomplir, puis vous choisissez le modèle qu'il exécute.
+
+00:01:58.440 --> 00:02:01.200
+C'est pourquoi un débutant peut l'utiliser sans jamais entraîner un réseau manuellement.
+
+00:02:01.820 --> 00:02:02.720
+Gardez donc cette image en tête.
+
+00:02:03.400 --> 00:02:07.100
+AIBuilder est une IA que vous pouvez réellement utiliser, intégrer discrètement, dans des outils que vous connaissez déjà,
+
+00:02:07.420 --> 00:02:09.220
+et tout le reste de cette vidéo découle de cette idée.
+
+00:02:09.220 --> 00:02:12.100
+Modèles pré-à-l'emploi versus modèles que vous construisez
+
+00:02:12.100 --> 00:02:16.100
+Une fois que vous acceptez que c'est réel et accessible, la question suivante est de savoir quel type de modèle choisir.
+
+00:02:16.760 --> 00:02:20.280
+Microsoft vous propose deux voies, et la différence réside dans les données utilisées pour l'apprentissage.
+
+00:02:20.680 --> 00:02:22.200
+La première voie concerne les modèles pré-entraînés.
+
+00:02:22.540 --> 00:02:25.600
+Ce sont des modèles que Microsoft a déjà entraînés pour des problèmes courants dans presque toutes les entreprises
+
+00:02:25.600 --> 00:02:27.220
+vous permettant de les utiliser immédiatement.
+
+00:02:28.020 --> 00:02:30.200
+Pointez-en vers une facture et il en extrait les totaux et les dates.
+
+00:02:31.080 --> 00:02:33.320
+Pointez-en vers l'image d'un reçu et il en lit les articles.
+
+00:02:33.820 --> 00:02:36.260
+Il existe des modèles pré-entraînés pour lire du texte dans une image,
+
+00:02:36.260 --> 00:02:40.540
+juger si un retour est positif ou négatif et extraire des noms et des chiffres de texte complexes.
+
+00:02:41.780 --> 00:02:44.880
+D'autres lisent des documents d'identité, extraient les expressions clés d'un paragraphe,
+
+00:02:45.080 --> 00:02:47.840
+scannent une carte de visite ou détectent la langue d'un texte.
+
+00:02:48.340 --> 00:02:49.980
+Vous n'avez entraîné aucun d'entre eux et vous n'avez pas eu l'âme.
+
+00:02:50.640 --> 00:02:52.240
+La seconde voie concerne les modèles personnalisés,
+
+00:02:52.380 --> 00:02:54.000
+où ce sont vos propres données qui effectuent le travail.
+
+00:02:54.680 --> 00:02:58.120
+Ces modèles sont entraînés sur vos documents, vos textes, vos images et votre historique,
+
+00:02:58.120 --> 00:03:00.920
+ce qui les adapte parfaitement à votre réalité professionnelle.
+
+00:03:02.540 --> 00:03:05.500
+Cette liste inclut le traitement de documents qui lie vos formulaires spécifiques
+
+00:03:05.500 --> 00:03:08.900
+et la classification par catégorie qui trie le texte selon vos propres définitions.
+
+00:03:10.360 --> 00:03:13.900
+Elle inclut aussi l'extraction d'entités pour trouver les détails précis qui vous importent,
+
+00:03:13.980 --> 00:03:15.800
+la prédiction pour anticiper des résultats futurs
+
+00:03:15.800 --> 00:03:18.540
+et la détection d'objets pour repérer vos produits sur une photo.
+
+00:03:20.040 --> 00:03:23.160
+Il existe même un moyen d'importer votre propre modèle depuis Azure si vous en avez déjà construit.
+
+00:03:23.400 --> 00:03:24.320
+La règle d'or est donc simple.
+
+00:03:24.380 --> 00:03:25.860
+Si le problème est courant et générique,
+
+00:03:25.980 --> 00:03:27.800
+comme lire n'importe quel reçu arrivant dans votre boîte de réception,
+
+00:03:27.900 --> 00:03:30.320
+un modèle pré-entraîné vous couvre dès le premier jour.
+
+00:03:31.080 --> 00:03:34.400
+Lorsque le problème est spécifique, comme lire des factures d'un fournisseur particulier,
+
+00:03:34.400 --> 00:03:38.160
+vous entraînez un modèle personnalisé sur vos propres exemples pour qu'il apprenne vos spécificités.
+
+00:03:38.800 --> 00:03:40.460
+La différence est plus facile à saisir avec un exemple.
+
+00:03:41.060 --> 00:03:44.380
+Un modèle pré-entraîné peut lire le total d'une facture standard de presque n'importe quel fournisseur
+
+00:03:44.380 --> 00:03:46.160
+car Microsoft est entraîné sur des milliers d'entre elles.
+
+00:03:46.820 --> 00:03:49.700
+Mais si vos factures utilisent une mise en page unique avec un numéro de compte
+
+00:03:49.700 --> 00:03:53.220
+enfoui dans un tableau, ce modèle pré-entraîné passera à côté.
+
+00:03:53.940 --> 00:03:55.920
+C'est précisément le genre de tâche à confier à un modèle personnalisé.
+
+00:03:56.460 --> 00:03:58.940
+La plupart des débutants supposent que personnalisé signifie toujours meilleur.
+
+00:03:59.140 --> 00:04:00.020
+Et cette supposition est fausse.
+
+00:04:00.500 --> 00:04:01.860
+Personnalisé signifie plus spécifique.
+
+00:04:01.860 --> 00:04:04.500
+Et plus spécifique n'est mieux que si votre problème l'est aussi.
+
+00:04:04.960 --> 00:04:06.000
+Encore une chose avant de faire votre choix.
+
+00:04:06.460 --> 00:04:07.820
+Certains de ces modèles sont encore en préversion,
+
+00:04:07.920 --> 00:04:09.440
+ce qui signifie qu'ils ne sont pas destinés à la production.
+
+00:04:09.580 --> 00:04:11.460
+Et certains ne sont pas disponibles dans toutes les régions.
+
+00:04:12.200 --> 00:04:14.540
+Si vous cherchez un modèle et ne le trouvez pas, c'est généralement pour cette raison.
+
+00:04:15.120 --> 00:04:17.180
+Pourquoi ce n'est pas juste un chatbot de plus ?
+
+00:04:17.180 --> 00:04:18.980
+Avant d'aller plus loin, il y a une confusion à dissiper,
+
+00:04:19.140 --> 00:04:20.980
+car elle piège presque tous les débutants.
+
+00:04:21.900 --> 00:04:22.820
+Quand les gens entendent IA,
+
+00:04:23.020 --> 00:04:25.500
+ils pensent désormais à une fenêtre de discussion qui répond en question.
+
+00:04:25.740 --> 00:04:27.880
+Et supposent qu'IBuilder ait la même chose sous une bannière Microsoft.
+
+00:04:28.820 --> 00:04:29.680
+Cette supposition est fausse.
+
+00:04:29.680 --> 00:04:31.360
+Et la différence est précisément ce qui le rend utile.
+
+00:04:31.740 --> 00:04:32.720
+Un chatbot est généraliste.
+
+00:04:33.620 --> 00:04:35.140
+Il peut parler de tout ce qui est impressionnant,
+
+00:04:35.220 --> 00:04:38.020
+mais c'est aussi vague car il ne connaît rien de votre métier spécifique.
+
+00:04:39.260 --> 00:04:40.800
+Et iBuilder adopte l'approche opposée.
+
+00:04:41.180 --> 00:04:41.860
+Il part d'une tâche,
+
+00:04:42.140 --> 00:04:43.720
+comme lire une facture ou noter un enregistrement,
+
+00:04:44.160 --> 00:04:46.060
+et propose un modèle concentré uniquement sur cela.
+
+00:04:46.760 --> 00:04:48.340
+Vous ne lui demandez pas d'être intelligent sur tout.
+
+00:04:48.980 --> 00:04:51.060
+Vous lui demandez d'être fiable sur une seule chose, encore.
+
+00:04:51.200 --> 00:04:52.380
+Et encore, sans se lasser,
+
+00:04:52.380 --> 00:04:55.180
+c'est cette spécialisation qui rend les résultats plus dignes de confiance.
+
+00:04:55.760 --> 00:04:57.960
+Un modèle ciblé fait le même travail de la même manière à chaque fois,
+
+00:04:58.060 --> 00:05:00.360
+ce qui est nécessaire quand le résultat alimente un processus métier.
+
+00:05:01.220 --> 00:05:04.640
+C'est aussi pourquoi iBuilder s'intègre si naturellement dans PowerApps et PowerAutomate.
+
+00:05:05.420 --> 00:05:07.340
+Ces outils servent déjà à accomplir des tâches définies,
+
+00:05:07.480 --> 00:05:10.580
+donc un modèle qui fait bien une seule chose s'y insère parfaitement, s'y insère parfait.
+
+00:05:10.800 --> 00:05:12.140
+iBuilder inclut certes des invites,
+
+00:05:12.280 --> 00:05:14.240
+prompt qui relève du côté génératif et conversationnel,
+
+00:05:14.320 --> 00:05:15.720
+donc la frontière n'est pas parfaitement nette.
+
+00:05:16.580 --> 00:05:18.500
+Cependant, quand on parle d'iBuilder pour les débutants,
+
+00:05:18.640 --> 00:05:19.820
+on désigne généralement les modèles,
+
+00:05:19.980 --> 00:05:21.080
+ces détecteurs de motifs ciblés,
+
+00:05:21.440 --> 00:05:22.620
+là où la valeur apparaît le plus vite.
+
+00:05:24.280 --> 00:05:25.480
+Ce que fait vraiment le traitement de documents.
+
+00:05:26.000 --> 00:05:27.460
+Le traitement de documents est le sujet le plus demandé
+
+00:05:27.460 --> 00:05:29.880
+car il s'attaque à une tâche qui dévore discrètement des heures chaque semaine,
+
+00:05:30.160 --> 00:05:30.860
+des heures chaque semaine.
+
+00:05:31.920 --> 00:05:34.080
+En termes simples, il lit et enregistre des informations contenues
+
+00:05:34.080 --> 00:05:36.000
+dans des documents standards, les factures et formulaires fiscaux,
+
+00:05:36.120 --> 00:05:37.220
+en étant les exemples classiques.
+
+00:05:38.020 --> 00:05:39.360
+Au lieu qu'une personne ouvre un PDF,
+
+00:05:39.600 --> 00:05:41.980
+plisse les yeux devant un total et le ressaisisse dans un système.
+
+00:05:42.180 --> 00:05:43.780
+Le modèle effectue cette lecture pour vous.
+
+00:05:43.780 --> 00:05:46.780
+Le chemin pour y parvenir comporte trois étapes et aucune n'est effrayée.
+
+00:05:47.400 --> 00:05:48.400
+D'abord, vous entraînez le modèle,
+
+00:05:48.540 --> 00:05:50.180
+ce qui signifie simplement lui donner des exemples
+
+00:05:50.180 --> 00:05:51.960
+et lui montrer quelles informations vous les récupérez
+
+00:05:51.960 --> 00:05:54.460
+puis vous le publiez pour le rendre disponible dans vos applications et vos flux.
+
+00:05:55.300 --> 00:05:56.840
+Ensuite, vous l'utilisez et à partir de là,
+
+00:05:57.080 --> 00:05:59.960
+la lecture se fait automatiquement à chaque arrivée d'un nouveau document.
+
+00:06:00.840 --> 00:06:01.420
+Une fois publié,
+
+00:06:01.780 --> 00:06:04.240
+le modèle continue de faire ce même travail discrètement en arrière-plan.
+
+00:06:04.900 --> 00:06:06.880
+La partie qui surprend presque tout le monde arrive ensuite.
+
+00:06:07.820 --> 00:06:09.540
+Il ne vous faut que cinq documents pour commencer,
+
+00:06:09.540 --> 00:06:10.200
+pas cinq zéros,
+
+00:06:10.300 --> 00:06:12.440
+ni un jeu de données étiqueté dont la création nécessiterait
+
+00:06:12.440 --> 00:06:13.620
+d'embaucher quelqu'un.
+
+00:06:14.480 --> 00:06:16.600
+Microsoft a la conçue pour qu'un utilisateur professionnel
+
+00:06:16.600 --> 00:06:18.180
+puisse l'appliquer à quelques documents réels
+
+00:06:18.180 --> 00:06:21.040
+et obtenir des résultats précis adaptés à son propre contenu.
+
+00:06:21.880 --> 00:06:23.980
+Ce simple détail est généralement le moment où l'idée cesse
+
+00:06:23.980 --> 00:06:25.200
+de ressembler à un projet d'entreprise
+
+00:06:25.200 --> 00:06:27.520
+pour devenir quelque chose que vous pourriez essayer cet après-midi.
+
+00:06:28.500 --> 00:06:30.740
+Remarquez comment cela correspond au modèle de la section précédente.
+
+00:06:31.240 --> 00:06:32.920
+Le traitement de documents est un modèle personnalisé
+
+00:06:32.920 --> 00:06:35.100
+car il apprend spécifiquement la structure de vos documents.
+
+00:06:36.180 --> 00:06:37.220
+Un lecteur de factures génériques
+
+00:06:37.220 --> 00:06:39.940
+ne peut pas savoir que votre fournisseur cache la date d'échéance dans le pied de page.
+
+00:06:39.940 --> 00:06:41.520
+Le vaut que le peut car vous lui avez appris.
+
+00:06:41.980 --> 00:06:44.000
+Et c'est là toute la différence entre un outil qui fonctionne à peu près
+
+00:06:44.000 --> 00:06:44.980
+et un outil qui est réellement adapté.
+
+00:06:45.180 --> 00:06:46.560
+Le bénéfice ne se limite pas non plus à la vitesse.
+
+00:06:46.840 --> 00:06:47.880
+Lorsqu'une machine lit le document,
+
+00:06:48.120 --> 00:06:50.080
+les données arrivent dans votre système propre et cohérente,
+
+00:06:50.240 --> 00:06:50.940
+dans les bons champs,
+
+00:06:51.020 --> 00:06:52.020
+dès l'apparition du document,
+
+00:06:52.260 --> 00:06:53.020
+dès l'apparition du document.
+
+00:06:53.120 --> 00:06:55.780
+Les erreurs dues à la fatigue visuelle ou au copier-coller disparaissent.
+
+00:06:56.280 --> 00:06:58.760
+Et la personne qui effectuait cette lecture retrouve son après-midi.
+
+00:06:59.280 --> 00:07:01.060
+C'est le compromis que propose le traitement de documents.
+
+00:07:01.920 --> 00:07:02.940
+Comment fonctionne la prédiction ?
+
+00:07:03.280 --> 00:07:05.620
+Si le traitement de documents consiste à lire ce qui existe déjà,
+
+00:07:05.960 --> 00:07:07.620
+la prédiction consiste à deviner ce qui va suivre.
+
+00:07:07.620 --> 00:07:09.920
+Et elle fonctionne sous un angle totalement différent.
+
+00:07:10.680 --> 00:07:12.940
+Un modèle de prédiction étudie les tendances de vos données passées,
+
+00:07:13.040 --> 00:07:13.900
+comprend ce qui mène à quoi,
+
+00:07:14.000 --> 00:07:16.440
+puis l'applique aux nouveaux enregistrements à leur arrivée.
+
+00:07:16.940 --> 00:07:18.320
+Cette fois, vous ne lui fournissez pas des documents,
+
+00:07:18.520 --> 00:07:19.220
+mais un historique.
+
+00:07:19.960 --> 00:07:21.780
+Les réponses qu'il fournit se présentent sous trois formes,
+
+00:07:21.840 --> 00:07:22.920
+ce qui change la nature de vos questions.
+
+00:07:23.560 --> 00:07:24.840
+La première est un simple oui ou non,
+
+00:07:25.120 --> 00:07:26.760
+comme savoir si une transaction semble frauduleuse
+
+00:07:26.760 --> 00:07:28.740
+ou si un compte est susceptible de payer sa facture à temps.
+
+00:07:29.260 --> 00:07:30.780
+La deuxième est un choix entre plusieurs résultats,
+
+00:07:30.780 --> 00:07:32.660
+comme savoir si une expédition arrivera en avance à temps,
+
+00:07:32.740 --> 00:07:34.220
+en retard ou très en retard, retard ou très en retard.
+
+00:07:34.480 --> 00:07:35.400
+La troisième est un nombre,
+
+00:07:35.560 --> 00:07:37.040
+comme la quantité d'articles à garder en stock
+
+00:07:37.040 --> 00:07:38.720
+ou le nombre de jours nécessaires pour une livraison.
+
+00:07:39.180 --> 00:07:40.600
+Remarquez à quel point ces questions sont ordinées.
+
+00:07:40.940 --> 00:07:42.380
+Aucune ne nécessite de laboratoire de recherche,
+
+00:07:42.480 --> 00:07:44.580
+ce sont exactement les questions qu'un responsable pose déjà en réunion,
+
+00:07:44.720 --> 00:07:46.720
+et la prédiction apporte simplement une réponse basée sur des données
+
+00:07:46.720 --> 00:07:48.220
+plutôt que sur des données plutôt que sur intuition.
+
+00:07:48.600 --> 00:07:50.820
+Elle prend une supposition qui résidait autrefois dans l'esprit de quelqu'un
+
+00:07:50.820 --> 00:07:52.780
+et la transforme en quelque chose de visible et d'exploitable,
+
+00:07:52.880 --> 00:07:54.240
+et c'est pourquoi elle semble si utile.
+
+00:07:55.020 --> 00:07:56.440
+Gardez toutefois une mise en garde honnête à l'esprit,
+
+00:07:56.520 --> 00:07:57.120
+car elle est importante.
+
+00:07:57.540 --> 00:07:59.700
+La prédiction est une estimation de modèle, pas une boule de cristal.
+
+00:08:00.560 --> 00:08:02.380
+Elle ne vaut que ce que vous l'historique que vous lui fournissez
+
+00:08:02.380 --> 00:08:03.940
+si vos données passées sont désordonnées ou maigres,
+
+00:08:04.000 --> 00:08:05.100
+les prédictions le seront aussi.
+
+00:08:05.700 --> 00:08:06.940
+Alors avant de vous fier à une prédiction,
+
+00:08:07.360 --> 00:08:08.520
+examinez l'historique derrière elle,
+
+00:08:08.660 --> 00:08:10.120
+car c'est lui qui fait le plus gros du travail.
+
+00:08:10.660 --> 00:08:11.880
+Le modèle n'invente pas une nouvelle sagesse,
+
+00:08:12.220 --> 00:08:14.300
+il reflète ce qui s'est déjà produit et le projette vers l'avenir.
+
+00:08:14.700 --> 00:08:15.580
+Bien utilisé, c'est puissant.
+
+00:08:16.080 --> 00:08:18.100
+Utiliser sans précaution, cela ne fait qu'automatiser un ancien bien.
+
+00:08:18.920 --> 00:08:20.360
+Ou vous l'utiliseriez réellement ?
+
+00:08:20.360 --> 00:08:22.540
+Jusqu'ici, nous avons parlé de Sky High Builder et de ce qu'il fait,
+
+00:08:23.020 --> 00:08:24.680
+et il vaut maintenant la peine de poser la question pratique,
+
+00:08:24.840 --> 00:08:26.340
+où cela s'intègre-t-il vraiment ?
+
+00:08:26.340 --> 00:08:28.340
+La réponse réside dans les deux outils que vous utilisez déjà,
+
+00:08:28.600 --> 00:08:31.120
+et chacun vous offre une manière légèrement différente d'accéder au modèle.
+
+00:08:31.680 --> 00:08:34.140
+Dans Power Automate, vous ajoutez une action High Builder à un flux cloud.
+
+00:08:34.920 --> 00:08:37.100
+Flux est simplement un ensemble d'instructions qui s'exécute de l'une.
+
+00:08:37.440 --> 00:08:38.940
+Ainsi, une nouvelle facture arrive dans le dossier.
+
+00:08:39.320 --> 00:08:41.340
+Le flux la transmet au modèle de traitement de documents,
+
+00:08:41.560 --> 00:08:44.460
+et les détails extraits sont classés dans votre système sans intervention humaine.
+
+00:08:45.520 --> 00:08:46.640
+Vous ne construisez pas l'IA ici.
+
+00:08:47.160 --> 00:08:49.700
+Vous connectez un modèle déjà entraîné à un processus que vous avez configuré.
+
+00:08:50.460 --> 00:08:53.180
+Dans Power Apps, vous accédez au même modèle via Power FX,
+
+00:08:53.180 --> 00:08:56.180
+qui est le langage de formule, similaire à Excel derrière l'application.
+
+00:08:56.780 --> 00:08:58.420
+Cela signifie qu'un formulaire peut lire un document
+
+00:08:58.420 --> 00:09:01.140
+pendant que l'utilisateur travaille ou noter un enregistrement dès qu'il est enregistré.
+
+00:09:01.460 --> 00:09:03.220
+L'IA n'est pas un écran séparé vers lequel vous basculez.
+
+00:09:03.480 --> 00:09:04.860
+C'est une étape à l'intérieur de l'application,
+
+00:09:04.960 --> 00:09:07.400
+ce qui explique précisément pourquoi les débutants s'y mettent sans apprendre une nouvelle discipline.
+
+00:09:07.680 --> 00:09:10.080
+Il y a une mise en garde qui piège les gens, et il vaut la peine de la nommer clairement.
+
+00:09:10.900 --> 00:09:13.300
+L'ajout d'une action AI Builder transforme un flux en un flux premium,
+
+00:09:13.460 --> 00:09:16.460
+et si ce flux se trouve dans une application, il fait de l'application une application premium.
+
+00:09:17.640 --> 00:09:18.960
+Premium signifie une licence payante.
+
+00:09:19.080 --> 00:09:21.040
+Ce n'est donc pas un complément gratuit au forfait le moins cher.
+
+00:09:21.040 --> 00:09:24.320
+Il vaut mieux le savoir avant de construire, car la conversation sur les coûts commence
+
+00:09:24.320 --> 00:09:26.340
+dès qu'un modèle s'exécute dans quelque chose de réel.
+
+00:09:27.060 --> 00:09:29.060
+Cela mène directement à la question que tout le monde pose ensuite,
+
+00:09:29.180 --> 00:09:30.680
+combien cela coûte-t-il vraiment ?
+
+00:09:30.680 --> 00:09:31.440
+C'est là que les crédits en tronche.
+
+00:09:32.200 --> 00:09:33.480
+Ce que sont les crédits et pourquoi ils sont importants ?
+
+00:09:33.480 --> 00:09:37.480
+La partie rassurante arrive en premier, car c'est celle que les débutants n'entendent jamais.
+
+00:09:38.200 --> 00:09:40.720
+Construire, entraîner et tester des modèles dans AI Builder ne coûte rien.
+
+00:09:41.120 --> 00:09:43.980
+Vous pouvez concevoir un modèle, l'enseigner, l'exécuter sur des échantillons
+
+00:09:43.980 --> 00:09:46.080
+et confirmer qu'il fonctionne, le tout sans dépenser un centime.
+
+00:09:47.220 --> 00:09:50.600
+Seule l'exécution réelle d'un modèle dans une application ou un flux en direct entraîne des dépenses.
+
+00:09:51.020 --> 00:09:52.020
+Alors qu'est-ce qu'un crédit ?
+
+00:09:52.020 --> 00:09:55.020
+C'est une idée d'utilisation prépayée de l'IA que vous dépensez lorsqu'un modèle effectue un travail.
+
+00:09:55.820 --> 00:09:58.860
+Historiquement, Microsoft vend un module complémentaire d'environ un million de crédits
+
+00:09:58.860 --> 00:10:00.200
+pour environ 500 dollars par mois,
+
+00:10:00.480 --> 00:10:03.300
+et certaines licences premium incluent quelques milliers de crédits pour vous lancer.
+
+00:10:04.440 --> 00:10:07.160
+Considérez ces chiffres comme une estimation plutôt qu'un prix fixe, car
+
+00:10:07.160 --> 00:10:09.940
+les licences évoluent et les détails changent avec le temps.
+
+00:10:10.620 --> 00:10:13.520
+Il est également utile de regarder ce qui consomme des crédits, car l'écart est important.
+
+00:10:14.060 --> 00:10:16.640
+Lire une page avec une reconnaissance de texte de base coûte quelques crédits.
+
+00:10:17.120 --> 00:10:19.860
+Lire une page de reçu, de facture ou de pièce d'identité coûte un peu plus cher.
+
+00:10:20.280 --> 00:10:23.260
+Le traitement de documents personnalisés où le modèle est adapté à vos propres formulaires
+
+00:10:23.260 --> 00:10:25.060
+coûte le plus cher, environ 100 crédits par page.
+
+00:10:25.860 --> 00:10:29.380
+Quelques outils sont tout simplement gratuits, notamment la prédiction et le lecteur de cartes de visite.
+
+00:10:29.920 --> 00:10:32.360
+Ainsi, la même plateforme peut ne presque rien coûter ou être onéreuse
+
+00:10:32.360 --> 00:10:34.820
+selon le modèle que vous utilisez, sa fréquence d'exécution.
+
+00:10:35.640 --> 00:10:36.860
+Un autre changement mérite d'être mentionné.
+
+00:10:37.160 --> 00:10:38.080
+Car vous en entendrez parler.
+
+00:10:39.060 --> 00:10:42.680
+Microsoft fait passer AI Builder au crédit Copilot, la même monnaie qui finance ses autres outils DIA
+
+00:10:42.680 --> 00:10:46.860
+et une fonctionnalité utilisera d'abord vos crédits AI Builder avant de basculer sur les crédits Copilot.
+
+00:10:48.160 --> 00:10:52.000
+Le résultat pratique est que le concept reste le même, même si l'appellation de la monnaie change.
+
+00:10:52.600 --> 00:10:53.520
+Et voici de quoi vous rassurer.
+
+00:10:53.980 --> 00:10:55.300
+Pour ceux qui craignent une facture surprise,
+
+00:10:55.740 --> 00:10:58.740
+le dépassement de vos crédits mensuels est considéré comme une période de grâce et n'est pas facturé.
+
+00:10:59.320 --> 00:11:01.000
+Crédits inutilisés ne sont pas reportés au mois suivant.
+
+00:11:01.280 --> 00:11:03.280
+L'objectif est donc simplement d'acheter à peu près ce que vous consommez.
+
+00:11:03.280 --> 00:11:07.420
+Comme la consommation est réinitialisée chaque mois, votre fenêtre de planification reste courte,
+
+00:11:07.500 --> 00:11:09.920
+afin que vous puissiez ajuster vos achats au fur et à mesure que votre usage devient clair.
+
+00:11:10.540 --> 00:11:12.000
+Rien ici n'est conçu pour vous piéger.
+
+00:11:12.840 --> 00:11:14.580
+Où AI Builder s'intègre dans le travail réel.
+
+00:11:14.980 --> 00:11:16.080
+Il m'a maintenant tendre revenir à la réalité,
+
+00:11:16.460 --> 00:11:19.680
+car le concept ne devient concret que lorsque vous pouvez l'imaginer accomplir une tâche que vous reconnaissez.
+
+00:11:20.280 --> 00:11:21.900
+AI Builder n'est pas un outil unique effectuer une tâche unique.
+
+00:11:22.220 --> 00:11:23.140
+C'est un ensemble de modèles,
+
+00:11:23.260 --> 00:11:26.880
+et chacun correspond à une tâche qui figure probablement déjà sur la liste des choses à faire de quelqu'un.
+
+00:11:27.380 --> 00:11:28.180
+Pensez aux notes de frais.
+
+00:11:28.600 --> 00:11:30.140
+Le traitement des reçus l'île est justificatif,
+
+00:11:30.440 --> 00:11:31.520
+extrait les montants et les dates,
+
+00:11:31.620 --> 00:11:32.560
+et les insère dans un rapport,
+
+00:11:32.680 --> 00:11:34.660
+c'est le genre de corvée que personne ne regrette une fois automatisé.
+
+00:11:35.260 --> 00:11:35.960
+Pensez aux contrats.
+
+00:11:36.480 --> 00:11:38.600
+Le traitement des contrats extrait les clauses et les points de données clés,
+
+00:11:38.740 --> 00:11:41.020
+évitant ainsi à une équipe juridique de chercher une date dans 40 pages.
+
+00:11:41.840 --> 00:11:43.140
+Les retours clients sont un autre exemple simple.
+
+00:11:43.560 --> 00:11:45.580
+La classification par catégorie les trie par sujet,
+
+00:11:45.880 --> 00:11:48.280
+et l'analyse des sentiments vous indique si les gens sont satisfaits,
+
+00:11:48.320 --> 00:11:50.360
+vous évitant de lire chaque message pour identifier la tendance.
+
+00:11:50.700 --> 00:11:52.860
+Enfin, il y a le travail qui nécessitait autrefois un spécialiste.
+
+00:11:52.860 --> 00:11:55.380
+La prédiction permet de signaler des transactions frauduleuses
+
+00:11:55.380 --> 00:11:56.660
+ou des clients susceptibles de payer en retard,
+
+00:11:56.760 --> 00:11:58.220
+et la détection d'objets peut automatiser l'inventaire
+
+00:11:58.220 --> 00:11:59.540
+en repérant les produits sur une photo de rayon.
+
+00:12:00.520 --> 00:12:02.240
+Même une tâche aussi simple que prendre en photo du texte
+
+00:12:02.240 --> 00:12:04.680
+pour l'enregistrer dans une base de données est à portée de modèle.
+
+00:12:04.900 --> 00:12:06.340
+Et la reconnaissance de texte fait exactement cela.
+
+00:12:06.740 --> 00:12:07.980
+Chacune de ces tâches a la même structure.
+
+00:12:08.520 --> 00:12:09.680
+C'est répétitif, peu contraignant,
+
+00:12:09.960 --> 00:12:12.020
+et une personne peut le faire, mais préférerait ne pas le faire mille fois.
+
+00:12:12.920 --> 00:12:14.380
+C'est là qu'Ey Builder prend toute son importance.
+
+00:12:14.860 --> 00:12:16.240
+Ce modèle se répète au sein des équipes,
+
+00:12:16.240 --> 00:12:18.380
+c'est pourquoi les mêmes outils apparaissent dans la gestion des dépenses,
+
+00:12:18.380 --> 00:12:20.360
+le juridique, les ventes et le support.
+
+00:12:21.120 --> 00:12:22.100
+Il n'est pas là pour penser à votre truc.
+
+00:12:22.420 --> 00:12:24.740
+Il est là, pour vous décharger de la partie fastidieuse d'une tâche
+
+00:12:24.740 --> 00:12:27.540
+afin que vous puissiez vous concentrer sur ce qui nécessite réellement une intervention humaine.
+
+00:12:28.140 --> 00:12:29.080
+C'est vraiment là tout l'intérêt.
+
+00:12:29.660 --> 00:12:32.780
+AI Builder est le pont qui vous permet d'utiliser l'IA sans devenir un expert en IA.
+
+00:12:33.060 --> 00:12:33.280
+IA.
+
+00:12:33.800 --> 00:12:35.640
+Vous continuez à travailler avec les outils que vous connaissez déjà,
+
+00:12:35.760 --> 00:12:38.320
+tandis que l'intelligence apparaît comme une étape supplémentaire dans une application
+
+00:12:38.320 --> 00:12:39.780
+ou un flux que vous avez créé vous-même.
+
+00:12:40.880 --> 00:12:42.800
+En résumé, voici la version rapide.
+
+00:12:43.400 --> 00:12:45.920
+AI Builder intègre l'IA dans Power Apps et Power Automate
+
+00:12:45.920 --> 00:12:47.360
+pour vous permettre de l'ajouter sans écrire de code.
+
+00:12:47.360 --> 00:12:49.080
+Vous choisissez entre des modèles prêt à l'emploi
+
+00:12:49.080 --> 00:12:50.920
+et des modèles personnalisés entraînés sur vos propres données.
+
+00:12:51.900 --> 00:12:53.560
+Le traitement de documents en livre au papier,
+
+00:12:53.780 --> 00:12:55.240
+la prédiction anticipe les événements
+
+00:12:55.240 --> 00:12:58.200
+et les crédits servent à payer l'exécution réelle d'un modèle.
+
+00:12:58.880 --> 00:13:00.000
+Et voici la question que je vous laisse méditer.
+
+00:13:00.480 --> 00:13:02.980
+Si vous pouviez confier une seule tâche répétitive à un modèle ce mois-ci,
+
+00:13:03.020 --> 00:13:03.900
+laquelle choisiriez-vous ?
+
+00:13:03.900 --> 00:13:05.400
+Et un modèle prêt à l'emploi suffirait-il
+
+00:13:05.400 --> 00:13:07.880
+ou devriez-vous lui apprendre votre propre façon de travailler ?
+
+00:13:07.880 --> 00:13:09.360
+Lui apprendre votre propre façon de travailler.

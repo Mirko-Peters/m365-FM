@@ -1,0 +1,724 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.720
+La plupart des équilibreurs de charge ne lisent jamais les requêtes qu'ils transmettent.
+
+00:00:03.020 --> 00:00:06.300
+Azure Application Gateway est le fait et cette simple habitude change la destination de votre trafic.
+
+00:00:07.080 --> 00:00:10.000
+Il analyse le chemin de l'URL et le nom du site web avant toute décision
+
+00:00:10.000 --> 00:00:13.680
+permettant d'envoyer les requêtes d'images vers un serveur et celles de vidéo vers un autre.
+
+00:00:15.080 --> 00:00:19.340
+Cette même passerelle peut également gérer le chiffrement et filtrer les requêtes pour détecter l'éventuelle attaque.
+
+00:00:19.960 --> 00:00:26.160
+Bienvenue sur le podcast M365FM, où nous explorons les personnes, les idées et les technologies qui façonnent l'avenir du travail.
+
+00:00:26.160 --> 00:00:30.400
+A la fin, vous serez capable d'expliquer simplement pourquoi cette boîte se trouve au milieu du diagramme A.
+
+00:00:31.360 --> 00:00:32.060
+Ce que c'est réellement.
+
+00:00:32.580 --> 00:00:34.640
+Imaginez un réceptionniste à l'entrée d'un bâtiment très fréquenté.
+
+00:00:35.020 --> 00:00:39.580
+Cette personne décide où chaque visiteur doit aller en fonction de qui franchit la porte, qui franchit la porte.
+
+00:00:39.760 --> 00:00:42.840
+Remplacez maintenant les visiteurs par des requêtes web et le bâtiment par votre application web.
+
+00:00:43.160 --> 00:00:46.940
+C'est l'idée générale derrière Azure Application Gateway, c'est d'un équilibreur de charge pour le trafic web.
+
+00:00:47.620 --> 00:00:52.680
+Son nom semble plus complexe que sa fonction, car il se contente de se placer devant votre application pour décider où chaque requête entrante doit aboutir.
+
+00:00:52.680 --> 00:00:56.960
+La différence entre celui-ci et un équilibreur de charge classique tient en deux mots, couche 7.
+
+00:00:57.960 --> 00:00:59.900
+Cette expression ressemble à une question d'examen, de certification.
+
+00:01:00.280 --> 00:01:02.800
+Il s'agit en fait de la quantité d'informations de la requête que votre équilibreur peut voir.
+
+00:01:03.180 --> 00:01:05.420
+Un équilibreur de charge traditionnelle fonctionne plus bas dans la pédresse.
+
+00:01:05.820 --> 00:01:07.080
+Il ne voit qu'une adresse et un port.
+
+00:01:07.700 --> 00:01:12.340
+Pensez à un employé de salle de courrier qui lit l'enveloppe sans jamais l'ouvrir, car tout ce qui arrive lui semble identique.
+
+00:01:13.440 --> 00:01:18.820
+Application Gateway travaille sur la couche Application, qui est la septième couche du modèle réseau dont tout le monde parle.
+
+00:01:18.820 --> 00:01:21.980
+A ce niveau, la passerelle lit la requête réelle.
+
+00:01:22.760 --> 00:01:24.860
+Elle peut voir le chemin dans l'URL et le nom du site demandé.
+
+00:01:25.080 --> 00:01:29.160
+Elle décide donc en fonction de ce que demande le visiteur plutôt que de son origine.
+
+00:01:30.440 --> 00:01:32.660
+La documentation de Microsoft utilise un exemple très clair.
+
+00:01:33.420 --> 00:01:36.660
+Une requête contenant images que dans l'URL peut être dirigée vers des serveurs optimisés pour les images.
+
+00:01:37.040 --> 00:01:39.920
+Une requête contenant Vidéogum peut être dirigée vers des serveurs conçus pour la vie.
+
+00:01:40.620 --> 00:01:43.180
+C'est toute l'astuce et cela explique pourquoi ce service existe.
+
+00:01:43.180 --> 00:01:48.140
+Il s'agit d'un déploiement réel au sein de votre réseau, situé dans son propre sous-réseau dédié.
+
+00:01:48.760 --> 00:01:52.780
+Cela signifie qu'il dispose de sa propre portion d'espaces d'adressage réseau au lieu de la partager avec d'autres ressources.
+
+00:01:53.320 --> 00:01:55.120
+C'est important même si vous n'exploitez qu'un petit site.
+
+00:01:55.980 --> 00:01:58.700
+Dès que vous n'avez plus d'un serveur, quelqu'un doit décider quel serveur reçoit quelles requêtes.
+
+00:02:00.000 --> 00:02:02.340
+Le faire manuellement ne fonctionne plus dès que vous avez un trafic réel.
+
+00:02:02.600 --> 00:02:04.920
+Les fonctionnalités qu'il apporte se répartissent en quelques groupes simples.
+
+00:02:04.920 --> 00:02:13.340
+La gestion du trafic couvre le routage par chemin d'URL, l'hébergement de plusieurs sites sur une passerelle, les redirections, la réécriture d'entête et le maintien d'un visiteur sur le même serveur.
+
+00:02:14.220 --> 00:02:16.780
+La sécurité couvre le chiffrement, le chiffrement de bout en bout et le pare-feu.
+
+00:02:17.340 --> 00:02:21.140
+La résilience couvre la mise à l'échelle automatique, la redondance de zone et une adresse front-end immuable.
+
+00:02:22.000 --> 00:02:24.720
+La génération actuelle s'appelle V2 et elle se décline en deux versions.
+
+00:02:25.480 --> 00:02:27.260
+La version standard V2 gère le routage et la sécurité.
+
+00:02:27.600 --> 00:02:29.880
+La version de bois V2 ajoute la protection qui bloque les attaques.
+
+00:02:29.880 --> 00:02:36.820
+Si vous suivez un tutoriel ancien mentionnant une passerelle V1, cette génération est obsolète, considérez-la comme historique plutôt que comme une solution à construire aujourd'hui.
+
+00:02:37.940 --> 00:02:41.340
+La façon dont une requête trouve sa destination est l'élément que personne ne dessine dans les schémas.
+
+00:02:41.920 --> 00:02:43.500
+Suivons donc une requête, l'extérieur à l'intérieur.
+
+00:02:44.280 --> 00:02:45.440
+Les écouteurs et les règles de routage.
+
+00:02:45.920 --> 00:02:48.460
+Un écouteur est la porte d'entrée et c'est plus simple que son nom ne le suggère.
+
+00:02:48.900 --> 00:02:51.660
+Il s'agit d'un élément de configuration qui vérifie les demandes de connexion entrants.
+
+00:02:52.620 --> 00:02:54.180
+Ces vérifications portent sur quatre éléments.
+
+00:02:54.580 --> 00:02:57.220
+Le port, le protocole, l'hôte et l'adresse IP.
+
+00:02:57.220 --> 00:03:00.240
+Lorsqu'une requête arrive, c'est l'écouteur qui la détecte et la transmet.
+
+00:03:01.100 --> 00:03:04.560
+Vous pouvez exécuter plusieurs écouteurs simultanément et la documentation officielle illustre clairement ce modèle.
+
+00:03:05.460 --> 00:03:12.740
+Imaginez deux sites web qu'un équilibreur de charge ne pourrait pas gérer.
+
+00:03:14.200 --> 00:03:16.920
+Na-la-se ne pourrait pas gérer.
+
+00:03:17.880 --> 00:03:20.760
+Une fois qu'un écouteur intercepte une requête, une règle de routage décide de la suite.
+
+00:03:21.400 --> 00:03:24.400
+Cette règle relie l'écouteur au pool backend censé recevoir la requête.
+
+00:03:24.400 --> 00:03:28.320
+Elle intègre également les paramètres backend qui décrivent comment communiquer avec ses serveurs.
+
+00:03:29.100 --> 00:03:32.380
+Lorsque vous créez une passerelle dans le portail Azure, celui-ci crée automatiquement l'une de ces règles pour vous.
+
+00:03:32.740 --> 00:03:38.220
+Vous obtenez un écouteur par défaut et un pool backend par défaut, vous offrant ainsi une base fonctionnelle avant toute personnalisation.
+
+00:03:39.020 --> 00:03:40.420
+Les règles se présentent sous quelques formes utiles.
+
+00:03:40.860 --> 00:03:45.860
+Le routage basé sur le chemin divise le trafic selon l'URL, ce qui permet de diriger les images publicitaires et les vidéos vers des emplacements différents.
+
+00:03:45.860 --> 00:03:52.860
+Le routage multi-sites divise le trafic selon le nom du site web dans la requête permettant à une passerelle de servir plusieurs sites en toute transparence.
+
+00:03:54.100 --> 00:03:55.600
+Une règle peut également accomplir quelques autres.
+
+00:03:55.980 --> 00:03:58.500
+Elle peut rediriger le trafic vers un autre port ou vers un site entièrement différent.
+
+00:03:59.180 --> 00:04:02.380
+Elle peut réécrire les entêtes de requêtes et de réponses ainsi que les URL lors de leur passage.
+
+00:04:03.080 --> 00:04:05.740
+Imaginez donc ce qui se passe quand quelqu'un saisit votre adresse dans un navigateur.
+
+00:04:06.340 --> 00:04:08.920
+Le navigateur recherche d'abord l'adresse de la passerelle via DNS.
+
+00:04:08.920 --> 00:04:13.120
+et Azure contrôle cette entrée car chaque passerelle réside dans le domaine azur.com.
+
+00:04:13.640 --> 00:04:13.800
+Comme.
+
+00:04:14.960 --> 00:04:17.000
+La passerelle accepte la requête sur un écouteur,
+
+00:04:17.360 --> 00:04:19.140
+vérifie via le pare-feu si celui-ci est activé,
+
+00:04:19.220 --> 00:04:21.280
+puis la transmet à la règle de routage correspondante.
+
+00:04:22.020 --> 00:04:27.700
+Cette règle choisit un pool backend et la passerelle transfère la requête vers l'un des serveurs sains en utilisant cet ordre round-round-rubbing.
+
+00:04:28.060 --> 00:04:31.140
+Elle ouvre une nouvelle connexion vers le backend en utilisant les paramètres que vous avez configurés.
+
+00:04:31.680 --> 00:04:34.500
+Avant que la requête ne parte, la passerelle ajoute quelques entêtes supplémentaires
+
+00:04:34.500 --> 00:04:37.360
+pour que votre application puisse toujours voir le client réel et l'adresse d'origine.
+
+00:04:37.360 --> 00:04:42.360
+Une règle mal configurée est une défaillance silencieuse que personne ne remarque jusqu'à ce que les clients se plaignent.
+
+00:04:43.580 --> 00:04:45.900
+La passerelle enverra volontiers un client réel au mauvais endroit.
+
+00:04:46.700 --> 00:04:49.740
+C'est pourquoi il vaut la peine de comprendre le câblage, même si vous n'y touchez jamais vous-même.
+
+00:04:50.820 --> 00:04:54.120
+Une fois qu'une règle a choisi un pool, la passerelle doit encore répondre à une question délicate.
+
+00:04:54.200 --> 00:04:57.360
+Que se passe-t-il lorsqu'un serveur de ce pool cesse de répondre ?
+
+00:04:57.360 --> 00:04:59.380
+Pools backend et sonde d'intégrité
+
+00:04:59.380 --> 00:05:02.380
+Le pool backend est le groupe de serveurs qui exécute réellement votre application.
+
+00:05:02.920 --> 00:05:04.740
+C'est la destination vers laquelle pointe la règle de routage.
+
+00:05:04.740 --> 00:05:11.300
+Un pool peut contenir une machine virtuelle spécifique, un groupe de machines virtuelles, une adresse IP, un nom de domaine complet ou un service d'application.
+
+00:05:12.180 --> 00:05:15.200
+Une fois qu'une requête atteint le pool, la passerelle l'a répartie entre les serveurs sains.
+
+00:05:15.680 --> 00:05:20.720
+Elle utilise une approche turnaround-robanguée, ce qui signifie simplement qu'elle parcourt la liste dans l'ordre au lieu de surcharger une seule machine.
+
+00:05:21.380 --> 00:05:23.200
+La partie qui justifie son existence est la sonde d'intégrité.
+
+00:05:23.200 --> 00:05:27.640
+La passerelle vérifie l'état de santé de chaque serveur du pool d'elle-même, sans qu'on le lui demande, sans qu'on le lutte.
+
+00:05:28.120 --> 00:05:30.940
+Elle cesse discrètement d'envoyer du trafic vers tout serveur qu'elle considère comme non-saint.
+
+00:05:31.460 --> 00:05:32.620
+La sonde n'abandonne pas non plus.
+
+00:05:33.080 --> 00:05:36.380
+Elle continue de vérifier le serveur malade et recommence à le solliciter dès qu'il répond correctement.
+
+00:05:37.480 --> 00:05:39.720
+Chaque instance de la passerelle exécute ses vérifications séparément,
+
+00:05:39.900 --> 00:05:43.200
+ainsi un pool est surveillé depuis plusieurs endroits à la fois plutôt que par un processus isolé.
+
+00:05:43.840 --> 00:05:44.820
+La vérification par défaut est sainte.
+
+00:05:44.820 --> 00:05:48.620
+Elle envoie une requête web normale au serveur sur le port spécifié par vos paramètres back-end
+
+00:05:48.620 --> 00:05:50.720
+et considère une réponse propre comme un signe de vie.
+
+00:05:51.320 --> 00:05:53.180
+La sonde par défaut possède des paramètres qu'il est utile de connaître,
+
+00:05:53.260 --> 00:05:55.080
+car elle explique la rapidité avec laquelle tout cela se produit.
+
+00:05:55.800 --> 00:05:58.860
+Elle vérifie chaque serveur toutes les 30 secondes et attend jusqu'à 30 secondes pour une réponse.
+
+00:05:59.720 --> 00:06:01.880
+Elle marque un serveur comme en ligne après trois échecs consécutifs.
+
+00:06:02.820 --> 00:06:06.880
+Tout ce qui répond avec un code d'état compris entre 200 et 389 est considéré comme sain,
+
+00:06:07.100 --> 00:06:11.680
+ce qui signifie en termes simples que le serveur a répondu normalement au lieu d'afficher une erreur.
+
+00:06:11.680 --> 00:06:15.860
+L'effet pratique est qu'un serveur défaillant sort de la rotation et revient tout seul.
+
+00:06:17.080 --> 00:06:19.280
+Personne n'a besoin de rester assis à la survie à 3h du matin.
+
+00:06:19.760 --> 00:06:22.060
+Vous pouvez également créer une sonde personnalisée qui vérifie un chemin spécifique
+
+00:06:22.060 --> 00:06:23.520
+ou accepte un code de réponse particulier.
+
+00:06:24.120 --> 00:06:26.720
+Vous pouvez même lui demander de rechercher un mot spécifique dans le corps de la réponse,
+
+00:06:26.940 --> 00:06:30.480
+ce qui est utile lorsqu'un serveur envoie une page d'erreur conviviale au lieu d'un échec réel.
+
+00:06:30.820 --> 00:06:33.300
+Il est utile de savoir qu'un mauvais chemin de sonde est la raison classique
+
+00:06:33.300 --> 00:06:36.000
+pour laquelle les gens rencontrent des erreurs 502 sans comprendre pourquoi.
+
+00:06:36.480 --> 00:06:38.720
+La passerelle vérifie également autre chose à propos de chaque requête.
+
+00:06:38.720 --> 00:06:43.680
+Le point suivant n'a rien à voir avec le trafic mais concerne le petit cadenas de votre navigateur ou HTTPS.
+
+00:06:44.200 --> 00:06:44.580
+Et gérer.
+
+00:06:45.960 --> 00:06:50.840
+Ce cadenas c'est le TLS, le chiffrement qui empêche des étrangers de lire ce qui circule entre un navigateur et un site web.
+
+00:06:51.500 --> 00:06:54.700
+Lorsque votre trafic atteint la passerelle, la connexion chiffrée peut s'arrêter à ce niveau.
+
+00:06:55.240 --> 00:06:56.760
+C'est ce qu'on appelle la terminaison TLS.
+
+00:06:57.280 --> 00:06:59.860
+Vos serveurs back-end reçoivent alors une requête normale de la part de la passerelle.
+
+00:07:00.260 --> 00:07:02.280
+Ils n'ont pas besoin d'effectuer même tous les calculs de chiffrement.
+
+00:07:02.940 --> 00:07:05.300
+Terminer le chiffrement au niveau de la passerelle résout deux problèmes à la fois.
+
+00:07:05.300 --> 00:07:09.140
+Vos serveurs cessent de consacrer des ressources à la cryptographie et peuvent se concentrer sur votre application.
+
+00:07:10.240 --> 00:07:13.960
+Vous gérez également les certificats à un seul endroit au lieu de devoir les traquer sur chaque machine du pool.
+
+00:07:14.900 --> 00:07:17.460
+Cet endroit unique est aussi celui où s'effectuent vos renouvellements de certificats.
+
+00:07:17.620 --> 00:07:20.480
+Un certificat allévant à expiration devient donc une chose à corriger plutôt qu'une douzaine.
+
+00:07:21.260 --> 00:07:24.120
+Si vous préférez tout garder chiffré de bout en bout, la passerelle le permet également.
+
+00:07:25.060 --> 00:07:27.020
+Elle ouvrira une nouvelle connexion chiffrée vers le back-end.
+
+00:07:27.020 --> 00:07:31.660
+La détail mérite d'être connue, car elle explique bon nombre de comportements déroutants par la suite.
+
+00:07:32.280 --> 00:07:34.960
+La passerelle ajoute des entêtes à chaque requête avant de les transmettre.
+
+00:07:35.440 --> 00:07:38.240
+Et ces entêtes contiennent l'adresse réelle du client et le nom d'hôte original.
+
+00:07:39.220 --> 00:07:43.720
+Votre application peut toujours identifier qui a réellement effectué la requête, même si la connexion provient désormais de la passerelle.
+
+00:07:44.160 --> 00:07:48.080
+C'est pourquoi une requête arrivant sur votre serveur semble provenir de la passerelle même si elle a été initiée ailleurs.
+
+00:07:48.780 --> 00:07:52.720
+La passerelle peut également être configurée pour ajouter, supprimer ou mettre à jour des entêtes de requêtes et de réponses.
+
+00:07:53.280 --> 00:07:57.160
+C'est ainsi que les équipes résolvent des problèmes comme un back-end qui insiste pour voir un nom d'hôte particulier.
+
+00:07:57.980 --> 00:08:03.740
+La génération V2 est conçue pour cette tâche et Microsoft indique qu'elle gère le déchargement TLS bien plus rapidement que l'ancienne version qu'elle a remplacée.
+
+00:08:04.700 --> 00:08:07.700
+Pour vous, cela signifie surtout que le chiffrement n'est pas ce qui ralentit votre site.
+
+00:08:08.300 --> 00:08:10.380
+Le chiffrement empêche les personnes extérieures de lire le trafic.
+
+00:08:10.860 --> 00:08:13.560
+Il ne protège en rien contre quelqu'un qui vous envoie délibérément du trafic malveillant.
+
+00:08:13.980 --> 00:08:15.720
+C'est un problème différent qui nécessite un outil différent.
+
+00:08:16.120 --> 00:08:17.840
+Qu'est-ce qui stoppe les attaques ?
+
+00:08:17.840 --> 00:08:20.720
+Cet outil est le pare-feu d'applications web, généralement abrégé en double AF.
+
+00:08:21.380 --> 00:08:23.680
+C'est la raison pour laquelle la version d'OAV2 de la passerelle existe.
+
+00:08:24.400 --> 00:08:28.940
+Le routage décide où une requête doit aller et le pare-feu décide si elle doit être autorisée à passer.
+
+00:08:29.680 --> 00:08:31.860
+Il inspecte l'intégralité de la requête, y compris les entêtes d'accord.
+
+00:08:32.200 --> 00:08:34.940
+Il bloque les attaques qui fonctionnent sur les sites non protégés depuis des années.
+
+00:08:35.580 --> 00:08:38.180
+Les deux premières citées sont l'injection SQL et le cross-site scripting.
+
+00:08:38.780 --> 00:08:42.800
+L'injection SQL consiste pour un attaquant à glisser des commandes de base de données dans un champ de formulaire.
+
+00:08:43.660 --> 00:08:46.560
+Le cross-site scripting permet à l'attaquant d'insérer son propre code dans votre page.
+
+00:08:46.560 --> 00:08:50.360
+La liste se poursuit avec l'injection de commandes, le request smuggling
+
+00:08:50.360 --> 00:08:54.000
+et une poignée d'autres astuces que les attaquants réutilisent car elles restent payantes.
+
+00:08:55.540 --> 00:08:57.560
+Les règles proviennent du core rule set de l'OASP.
+
+00:08:57.940 --> 00:09:00.860
+L'OASP est un projet public qui tient à jour une liste partagée des attaques web courantes.
+
+00:09:01.400 --> 00:09:03.840
+Le pare-feu de Microsoft utilise ces règles et les maintient à jour.
+
+00:09:04.560 --> 00:09:08.800
+Vous bénéficiez d'années d'expérience collective au lieu d'écrire vos propres règles de détection et vous recevez des mises à jour.
+
+00:09:08.800 --> 00:09:12.340
+Dès l'apparition de nouveaux types d'attaques au lieu de corriger votre propre liste, propre liste.
+
+00:09:12.940 --> 00:09:16.780
+Le pare-feu fonctionne selon l'un des deux modes et la différence est plus importante que les noms ne le suggèrent.
+
+00:09:17.280 --> 00:09:20.780
+Le mode détection observe, enregistre mais ne bloque rien, c'est le paramètre d'apprentissage.
+
+00:09:21.540 --> 00:09:25.460
+Le mode prévention bloque l'attaque et l'attaquant reçoit une réponse 403 avec une connexion fermée.
+
+00:09:26.120 --> 00:09:29.880
+Microsoft recommande d'exécuter un nouveau pare-feu en mode détection pendant une courte période en production.
+
+00:09:30.720 --> 00:09:34.080
+Cela vous permet de repérer les fausses alertes et de les régler avant de bloquer le trafic réel.
+
+00:09:34.080 --> 00:09:37.180
+En arrière-plan, le pare-feu évalue chaque requête selon sa gravité.
+
+00:09:38.320 --> 00:09:42.880
+Une règle critique correspond à 5 points, une erreur à 4, un avertissement à 3 et une remarque à 2.
+
+00:09:43.700 --> 00:09:46.060
+5 points suffisent pour bloquer la requête en mode prévention.
+
+00:09:46.740 --> 00:09:50.020
+Une correspondance sérieuse suffit à elle seule alors qu'un seul avertissement mineur ne suffit pas.
+
+00:09:50.480 --> 00:09:51.700
+Deux options supplémentaires valent les chacune.
+
+00:09:52.100 --> 00:09:55.160
+Vous pouvez filtrer le trafic par zone géographique pour autoriser ou bloquer des pays entiers.
+
+00:09:55.840 --> 00:10:00.920
+Il existe également un ensemble de règles de gestion des bots qui séparent les robots des moteurs de recherche vérifiés des bots qui mentent sur leur identité.
+
+00:10:00.920 --> 00:10:06.880
+Une passerelle peut protéger jusqu'à 400 sites web derrière le même pare-feu, ce qui rend cette protection abordable même lorsque vous ajoutez des sites.
+
+00:10:07.780 --> 00:10:11.240
+Toute cette protection est inutile si la passerelle elle-même s'effondre lors d'un pic de trafic.
+
+00:10:12.060 --> 00:10:14.920
+Cela nous amène à une partie à laquelle on pense rarement avant qu'elle ne devienne cruciale.
+
+00:10:15.640 --> 00:10:16.720
+Le passage à l'échelle sans y penser.
+
+00:10:17.160 --> 00:10:21.520
+Le dimensionnement automatique signifie que la passerelle augmente sa capacité quand le trafic monte et la réduit quand il baisse.
+
+00:10:21.920 --> 00:10:23.840
+Vous n'avez jamais besoin de deviner la bonne taille à l'avance.
+
+00:10:24.300 --> 00:10:26.460
+Vous définissez un nombre minimal d'instances entre 0 et 100.
+
+00:10:26.820 --> 00:10:30.120
+Vous pouvez également définir un maximum qui est fixé par défaut à 10 si vous n'en spécifiez pas.
+
+00:10:30.920 --> 00:10:36.800
+Chaque instance représente environ 10 unités de capacité de sorte que le nombre traduit assez directement la charge de travail que la passerelle peut supporter.
+
+00:10:37.760 --> 00:10:46.320
+Comme vos mesures fonctionnent en unités de capacité, une seule unité couvre environ 2 500 connexions, un débit d'un peu plus de 2 Mbps et une unité de calcul.
+
+00:10:47.260 --> 00:10:50.260
+Celui de ces trois critères que vous épuisez en premier détermine le coût.
+
+00:10:50.480 --> 00:10:56.860
+C'est pourquoi un site avec beaucoup de petites requêtes et un site diffusant de gros fichiers peuvent payer différemment pour le même volume de trafic.
+
+00:10:56.860 --> 00:11:00.600
+Même avec un minimum de 0 instance, la passerelle reste hautement disponible.
+
+00:11:01.340 --> 00:11:06.420
+Le service est toujours déployé avec plus d'une instance et Azure remplace discrètement toute instance cessant de fonctionner.
+
+00:11:07.260 --> 00:11:08.860
+Deux détails concrets rendent cela moins magique.
+
+00:11:09.300 --> 00:11:11.600
+La mise en ligne d'une nouvelle instance peut prendre environ 3 à 5 minutes.
+
+00:11:12.240 --> 00:11:16.760
+Lorsque la passerelle réduit sa capacité, elle traite les connexions existantes pendant 5 minutes avant de supprimer une instance,
+
+00:11:16.900 --> 00:11:18.800
+afin que personne ne soit coupé en pleine requête.
+
+00:11:18.800 --> 00:11:23.600
+C'est la différence entre un plan de capacité qui semble bon sur le papier et celui qui fonctionne bien quand il le faut.
+
+00:11:24.480 --> 00:11:26.600
+La redondance de zone est l'autre pilier de la disponibilité.
+
+00:11:26.860 --> 00:11:29.780
+Par défaut, la passerelle se répartit sur au moins deux zones de disponibilité.
+
+00:11:30.320 --> 00:11:34.440
+Une zone de disponibilité est un groupe physiquement distinct de centres de données au sein d'une même région, au sein du même régime.
+
+00:11:34.940 --> 00:11:37.680
+Si l'une de ces zones tombe en panne, la passerelle continue de fonctionner via les autres.
+
+00:11:38.140 --> 00:11:42.820
+C'est le genre de résilience qui nécessitait auparavant l'exécution de deux passerelles distinctes et d'un gestionnaire de trafic pour les équilibrer.
+
+00:11:43.140 --> 00:11:43.760
+Pour les équilibrer.
+
+00:11:44.660 --> 00:11:46.000
+Une mise en garde mérite d'être énoncée clairement.
+
+00:11:46.000 --> 00:11:50.560
+Les zones n'existent que dans certaines régions, donc votre niveau de résilience dépend de l'endroit où vous déployez.
+
+00:11:51.300 --> 00:11:53.020
+Un avantage plus discret accompagne tout cela.
+
+00:11:53.780 --> 00:11:57.940
+La passerelle V2 utilise une adresse statique qui reste identique pendant toute la durée du déploiement.
+
+00:11:58.440 --> 00:12:01.660
+Même après un redémarrage, vos enregistrements DNS n'ont jamais besoin de courir après une cible mobile.
+
+00:12:02.320 --> 00:12:05.040
+Ainsi, la passerelle s'achemine, se protège et se met à l'échelle elle-même.
+
+00:12:05.140 --> 00:12:06.740
+Ce qui soulève la question que beaucoup se posent.
+
+00:12:07.160 --> 00:12:09.800
+Cette question est de savoir si les autres équilibreurs de charge Azure font la même chose.
+
+00:12:10.840 --> 00:12:12.380
+Il y a trois équilibreurs de charge Azure.
+
+00:12:12.380 --> 00:12:13.320
+Trois services, trois noms.
+
+00:12:13.500 --> 00:12:15.460
+Et la documentation de Microsoft les place tous.
+
+00:12:16.000 --> 00:12:16.780
+Dans la même famille.
+
+00:12:17.280 --> 00:12:19.020
+C'est précisément pourquoi les débutants les confondent.
+
+00:12:19.140 --> 00:12:21.500
+Le moyen le plus simple de les distinguer est d'observer deux choses.
+
+00:12:21.700 --> 00:12:25.100
+La précision avec laquelle chacun inspecte le trafic et l'éloignement de vos utilisateurs.
+
+00:12:25.980 --> 00:12:28.240
+L'équilibreur de charge Azure se situe au niveau le plus bas.
+
+00:12:28.440 --> 00:12:29.220
+Il travaille à la couche 4.
+
+00:12:29.320 --> 00:12:31.280
+Il ne voit que le trafic réseau comme TCP et UDP.
+
+00:12:31.500 --> 00:12:33.400
+Il ne lit donc jamais d'URL ou de nom d'hôte.
+
+00:12:34.200 --> 00:12:37.680
+Il répartit simplement les flux sur les machines virtuelles sans presque aucun délai ajouté.
+
+00:12:38.500 --> 00:12:40.640
+Il est conçu pour la vitesse et peut gérer des millions de flux simultanément.
+
+00:12:40.640 --> 00:12:47.380
+Si votre application utilise un protocole autre que le trafic web standard ou si vous voulez le chemin le plus rapide possible, c'est celui qu'il vous faut, c'est celui qu'il vous faut.
+
+00:12:48.220 --> 00:12:54.440
+Comme votre passerelle d'application se situe une couche au-dessus et reste régionale, elle lit la requête, termine le chiffrement et peut exécuter un pare-feu.
+
+00:12:55.180 --> 00:12:57.060
+Elle adhésite au sein de votre propre réseau, vous pouvez la surveiller.
+
+00:12:57.060 --> 00:13:03.260
+Lorsque vos utilisateurs sont principalement dans une région et que votre application est une application web standard, c'est généralement le juste milieu approprié.
+
+00:13:03.740 --> 00:13:12.840
+Comme votre porte d'entrée se situe encore plus haut et devient mondiale, il s'agit en réalité d'un réseau de diffusion de contenu enveloppant un équilibre de charge afin de mettre en cache vos fichiers statiques près de vos utilisateurs et d'acheminer leur requête.
+
+00:13:13.580 --> 00:13:19.220
+Elle est construite sur le réseau Edge de Microsoft, avec plus de 118 sites de périphérie répartis dans 100 zones métropolitaines et 1.
+
+00:13:20.020 --> 00:13:23.980
+Microsoft affirme pouvoir améliorer la latence jusqu'à 3 fois tout en exécutant son propre pare-feu à la périphérie.
+
+00:13:23.980 --> 00:13:30.440
+Si vos utilisateurs sont dispersés dans le monde entier et que chaque milliseconde de délai vous coûte quelque chose, c'est la porte d'entrée mondiale.
+
+00:13:30.980 --> 00:13:33.480
+Il existe une quatrième option qui mérite d'être mentionnée pour compléter le tableau.
+
+00:13:34.080 --> 00:13:38.180
+Azure Traffic Manager effectue un routage global en utilisant uniquement le DNS, qui est plus léger que les trois autres.
+
+00:13:38.920 --> 00:13:40.540
+Il ne lit pas les requêtes et ne termine pas le chiffrement.
+
+00:13:40.700 --> 00:13:44.780
+Il est donc adapté lorsque vous avez simplement besoin d'une adresse intelligente pointant vers le point de terminaison sain le plus proche.
+
+00:13:45.320 --> 00:13:47.500
+Ce qui surprend les gens, c'est que ces services ne sont pas des rivaux.
+
+00:13:48.360 --> 00:13:51.580
+Les conseils de Microsoft indiquent que les scénarios de bout en bout bénéficient souvent de leur combinaison.
+
+00:13:51.580 --> 00:13:59.100
+Un modèle courant place la porte d'entrée en première ligne pour l'accès mondial, tandis qu'une passerelle d'application se situe régionalement derrière, effectuant un travail minutieux près de votre application.
+
+00:13:59.860 --> 00:14:01.840
+Le coût mérite une brève mention pour que personne ne soit privadé.
+
+00:14:02.120 --> 00:14:03.900
+La passerelle d'application V2 n'a pas de frais initiaux.
+
+00:14:04.380 --> 00:14:10.120
+Vous payez un montant horaire fixe, qu'il y ait du trafic ou non, ainsi que des frais basés sur la capacité réellement consommée.
+
+00:14:10.120 --> 00:14:17.900
+A titre d'illustration, la page de tarification de Microsoft affiche un taux fixe d'environ un quart de dollar pour la version standard et un peu plus pour la version pare-feu.
+
+00:14:18.840 --> 00:14:22.760
+Ces chiffres sont des exemples qui varient selon les régions plutôt que des prix sur lesquels baser un budget.
+
+00:14:23.320 --> 00:14:25.460
+Vérifiez donc la page de tarification en temps réel avant de vous engager.
+
+00:14:25.940 --> 00:14:27.200
+L'ensemble du tableau tient en quelques mots.
+
+00:14:27.200 --> 00:14:34.660
+La passerelle d'application est un équilibreur de charge de couche 7, elle lit donc les requêtes au lieu de se limiter à l'adresse, ce qui lui permet d'envoyer les images d'un côté et les vidéos de l'autre.
+
+00:14:35.480 --> 00:14:39.060
+Les écouteurs servent de porte d'entrée, tandis que les règles de routage relient cette porte au bon pôle principal.
+
+00:14:39.960 --> 00:14:43.060
+Les cendres d'intégrité maintiennent les serveurs hors service en dehors de la rotation sans aucune intervention.
+
+00:14:43.620 --> 00:14:48.780
+La terminaison TLS, décharge vos serveurs du travail de chiffrement et le pare-feu d'application web, filtre les requêtes contre les attaques connues.
+
+00:14:48.780 --> 00:14:54.160
+La mise à l'échelle automatique avec redondance de zone permet de maintenir le taux opérationnel lors des pics de trafic de trafic ou en cas d'arrêt d'un centre-deux.
+
+00:14:54.280 --> 00:14:55.860
+Voici la question sur laquelle je voudrais que vous réfléchissiez.
+
+00:14:56.200 --> 00:15:02.580
+Si un équilibreur de charge peut lire la requête, le nom d'hôte et le chemin du RL, ou doit se prendre la décision sur ce qu'une requête est réellement autorisée à faire,
+
+00:15:03.160 --> 00:15:07.160
+doit-elle être prise dans la passerelle en amont ou dans l'application qui comprend la règle métier ?
+
+00:15:07.160 --> 00:15:10.460
+Réfléchissez-y un instant, car cela change la façon dont vous concevez tout ce qui se trouve derrière l'apportant.
+
+00:15:10.460 --> 00:15:18.080
+Si vous voulez plus d'épisodes qui rendent Azure et Microsoft 365 moins complexes et moins jargonneux, abonnez-vous à M365FM et nous continuerons à en produire.

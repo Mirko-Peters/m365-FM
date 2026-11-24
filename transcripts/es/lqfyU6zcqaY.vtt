@@ -1,0 +1,958 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.760
+La mayoría de los balanceadores de carga nunca leen la solicitud que entregan.
+
+00:00:03.040 --> 00:00:06.820
+Azure Application Gateway sí lo hace, y ese simple hábito cambia el destino de su tráfico.
+
+00:00:06.940 --> 00:00:10.280
+Analiza la ruta de la URL y el nombre del sitio web antes de decidir,
+
+00:00:10.440 --> 00:00:14.080
+nada así que una solicitud de imágenes puede ir a un servidor mientras que la de video va a otro.
+
+00:00:15.080 --> 00:00:19.380
+La misma puerta de enlace también puede gestionar el cifrado y filtrar solicitudes buscando ataques mientras pasan.
+
+00:00:20.100 --> 00:00:26.080
+Bienvenidos al podcast M365FM, donde exploramos las personas, ideas y tecnologías que dan forma al futuro del trabajo.
+
+00:00:26.080 --> 00:00:30.400
+Al final, podrá explicar en palabras sencillas por qué esa caja se encuentra en medio del diagrama.
+
+00:00:31.120 --> 00:00:31.940
+¿Qué es realmente?
+
+00:00:32.540 --> 00:00:34.700
+Imagina a un recepcionista al frente de un edificio muy concurrido.
+
+00:00:35.120 --> 00:00:39.260
+Esa persona decide a dónde debe ir cada visitante, y la decisión depende de quién atraviesa la puerta.
+
+00:00:39.660 --> 00:00:42.680
+Ahora, cambia los visitantes por solicitudes web y el edificio por su aplicación web.
+
+00:00:43.140 --> 00:00:45.220
+Esa es la idea básica detrás de Azure Application Gateway.
+
+00:00:45.560 --> 00:00:46.960
+Es un balanceador de carga de tráfico web.
+
+00:00:47.500 --> 00:00:50.900
+El nombre suena más complejo que su trabajo, porque realmente solo se sitúa frente a su aplicación
+
+00:00:50.900 --> 00:00:52.780
+y decide a dónde debe ir cada solicitud entrante.
+
+00:00:52.780 --> 00:00:56.920
+La diferencia entre esto y un balanceador de carga antiguo se reduce a dos palabras, capa 7.
+
+00:00:57.980 --> 00:00:59.960
+Esa frase suena a pregunta de examen de certificación.
+
+00:01:00.240 --> 00:01:02.800
+En realidad, se trata de cuánto de la solicitud puede ver su balanceador de carga.
+
+00:01:03.140 --> 00:01:05.480
+Un balanceador de carga tradicional trabaja en un nivel más bajo de aquí.
+
+00:01:05.900 --> 00:01:07.160
+Solo ve una dirección y un puerto.
+
+00:01:07.700 --> 00:01:10.100
+Piensa en un empleado de correo que lee el sobre, pero nunca lo abre,
+
+00:01:10.400 --> 00:01:12.420
+porque todo lo que llega le parece más o menos igual.
+
+00:01:13.800 --> 00:01:14.560
+Application Gateway.
+
+00:01:14.840 --> 00:01:18.640
+Trabaja en la capa de aplicación, que es la capa 7 del modelo de red que todos mencionan.
+
+00:01:18.640 --> 00:01:23.920
+En esa capa, la puerta de enlace de la solicitud real puede ver la ruta en la URL
+
+00:01:23.920 --> 00:01:27.900
+y el nombre del sitio web solicitado, así que decide basándose en lo que pide el visitante
+
+00:01:27.900 --> 00:01:29.180
+en lugar de dónde viene.
+
+00:01:30.120 --> 00:01:32.620
+La propia documentación de Microsoft usa un ejemplo claro.
+
+00:01:33.400 --> 00:01:36.660
+Una solicitud con imágenes en la URL puede ir a servidores optimizados para imágenes.
+
+00:01:37.140 --> 00:01:39.740
+Una solicitud con video puede llegar a servidores creados para video.
+
+00:01:40.640 --> 00:01:43.420
+Ese es todo el truco y explica por qué existe el servicio ETH.
+
+00:01:44.040 --> 00:01:47.920
+Es un despliegue real dentro de su red y reside en su propia subred dedicada.
+
+00:01:48.720 --> 00:01:51.660
+Eso significa que obtiene su propio segmento de su espacio de direcciones de red en lugar
+
+00:01:51.660 --> 00:01:52.780
+de compartirlo con otros recursos.
+
+00:01:53.220 --> 00:01:55.180
+Esto importa incluso si solo está ejecutando un sitio Pekin.
+
+00:01:55.700 --> 00:01:58.740
+En el momento en que tiene más de un servidor, alguien debe decidir qué servidor recibe cada
+
+00:01:58.740 --> 00:01:59.200
+solicitud.
+
+00:02:00.100 --> 00:02:02.380
+Hacerlo manualmente deja de funcionar el día que tiene tráfico real.
+
+00:02:02.700 --> 00:02:04.880
+Las funciones que ofrece se dividen en unos pocos grupos en sí.
+
+00:02:05.380 --> 00:02:09.480
+El manejo de tráfico abarca el enrutamiento por ruta URL, alojar varios sitios en una puerta
+
+00:02:09.480 --> 00:02:12.880
+de enlace, redirecciones, reescritura de encabezados y cómo mantener a un visitante conectado
+
+00:02:12.880 --> 00:02:13.460
+al mismo servidor.
+
+00:02:14.220 --> 00:02:16.740
+La seguridad abarca el cifrado, cifrado extremo a extremo y el firewall.
+
+00:02:16.740 --> 00:02:20.500
+La resiliencia abarca el escalado automático, la redundancia de zona y una dirección de
+
+00:02:20.500 --> 00:02:21.380
+front de que nunca cambia.
+
+00:02:22.020 --> 00:02:24.780
+La generación actual se llama V2 y viene en dos versiones.
+
+00:02:25.380 --> 00:02:27.340
+La versión estándar V2 maneja el enrutamiento y la seguridad.
+
+00:02:27.620 --> 00:02:29.900
+WAF V2 añade la protección que bloquea los ataques.
+
+00:02:30.460 --> 00:02:34.020
+Si sigues un tutorial antiguo y menciona una puerta de enlace V1, esa generación está
+
+00:02:34.020 --> 00:02:37.020
+retirada así que considera la historia en lugar de algo para construir hoy.
+
+00:02:37.820 --> 00:02:41.460
+La forma en que una solicitud encuentra su destino es lo que nadie dibuja en los diagramas.
+
+00:02:41.460 --> 00:02:43.620
+Así que sigamos una solicitud desde afuera hacia adelante.
+
+00:02:44.300 --> 00:02:45.380
+Ollentes y reales de enrutamiento.
+
+00:02:45.920 --> 00:02:48.500
+Un oyente es la puerta de entrada y es más simple de lo que sugiere su nombre.
+
+00:02:48.920 --> 00:02:51.720
+Es un elemento de configuración que verifica las solicitudes de conexión entrante.
+
+00:02:52.560 --> 00:02:54.720
+Esas verificaciones se ejecutan contra cuatro elementos.
+
+00:02:54.840 --> 00:02:57.260
+El puerto, el protocolo, el host y la dirección IP.
+
+00:02:57.820 --> 00:03:00.520
+Cuando llega una solicitud, el oyente es quien la detecta y la transfiere.
+
+00:03:01.220 --> 00:03:04.220
+Puedes ejecutar varios oyentes a la vez y la documentación oficial muestra el patrón
+
+00:03:04.220 --> 00:03:04.720
+claramente.
+
+00:03:05.400 --> 00:03:07.660
+Imagina dos sitios web.
+
+00:03:07.860 --> 00:03:16.940
+Algo que un balanceador de carga no puede hacer y no puede hacer Umari.
+
+00:03:17.500 --> 00:03:20.700
+Una vez que un oyente captura una solicitud, una regla de enrutamiento decide qué sucede
+
+00:03:20.700 --> 00:03:20.960
+después.
+
+00:03:21.340 --> 00:03:24.560
+Esa regla vincula al oyente con el grupo de backend que debería recibir la solicitud.
+
+00:03:24.980 --> 00:03:28.400
+También vincula la configuración de backend que describe cómo comunicarse con esos servidores.
+
+00:03:29.140 --> 00:03:32.100
+Cuando creas una puerta de enlace en el portal de Azure, éste crea una de estas reglas
+
+00:03:32.100 --> 00:03:36.460
+por ti. Obtienes un oyente y un grupo de backend predeterminados para que tengas un punto de
+
+00:03:36.460 --> 00:03:38.500
+partida funcional antes de personalizar nada.
+
+00:03:39.020 --> 00:03:40.380
+Las reglas vienen en un par de formas útiles.
+
+00:03:40.780 --> 00:03:43.940
+El enrutamiento basado en rutas divide el tráfico según el contenido de la URL, que
+
+00:03:43.940 --> 00:03:46.080
+es como las imágenes y los videos terminan en lugares diferentes.
+
+00:03:46.780 --> 00:03:50.620
+El enrutamiento multisitio divide el tráfico por el nombre del sitio web en la solicitud,
+
+00:03:50.740 --> 00:03:53.620
+permitiendo que una puerta de enlace sirva a varios sitios sin que nadie lo note.
+
+00:03:54.180 --> 00:03:55.700
+Una regla también puede ser algunas otras cosas.
+
+00:03:55.980 --> 00:03:58.520
+Puede redirigir el tráfico a otro puerto o a un sitio completamente diferente.
+
+00:03:59.320 --> 00:04:02.000
+Reescribir los encabezados de solicitud y respuestas y cómo las URLs
+
+00:04:02.000 --> 00:04:02.620
+mientras pasan.
+
+00:04:03.060 --> 00:04:05.780
+Entonces, imagina lo que sucede cuando alguien escribe tu dirección en un navegador.
+
+00:04:06.520 --> 00:04:10.220
+El navegador primero busca la dirección de la puerta de enlace mediante DNS y Azure
+
+00:04:10.220 --> 00:04:13.220
+controles a entrada porque cada puerta de enlace reside en el dominio de Azure.
+
+00:04:14.740 --> 00:04:18.240
+La puerta de enlace acepta la solicitud en un oyente, la verifica contra el firewall,
+
+00:04:18.500 --> 00:04:21.460
+si está activado y luego la entrega a la regla de enrutamiento correspondiente.
+
+00:04:22.020 --> 00:04:25.000
+Esa regla selecciona un grupo de backend y la puerta de enlace reenvía la solicitud
+
+00:04:25.000 --> 00:04:27.600
+a uno de los servidores en buen estado usando el orden de distribución RunRug.
+
+00:04:27.840 --> 00:04:31.180
+Abre una conexión nueva hacia el backend utilizando la configuración que usted estableció.
+
+00:04:31.180 --> 00:04:35.020
+Antes de que la solicitud salga, la puerta de enlace añade unos encabezados adicionales
+
+00:04:35.020 --> 00:04:37.500
+para que su aplicación pueda ver al cliente real y la dirección original.
+
+00:04:38.600 --> 00:04:42.340
+Una regla mal conectada es un fallo silencioso que nadie detecta hasta que los clientes se
+
+00:04:42.340 --> 00:04:42.660
+quejan.
+
+00:04:43.460 --> 00:04:46.080
+La puerta de enlace enviará alegremente a un cliente real en lugar equivocado.
+
+00:04:46.640 --> 00:04:49.660
+Por eso vale la pena entender la configuración aunque usted nunca la manipule personalmente.
+
+00:04:50.620 --> 00:04:53.400
+Una vez que una regla elige un grupo, la puerta de enlace aún debe responder a una
+
+00:04:53.400 --> 00:04:54.120
+pregunta incómoda.
+
+00:04:54.120 --> 00:04:56.640
+¿Qué sucede cuando un servidor en ese grupo deja de responder?
+
+00:04:56.640 --> 00:04:59.360
+Grupos de backend y sonda de estado.
+
+00:04:59.860 --> 00:05:02.520
+El grupo de backend es el conjunto de servidores que ejecutan su aplicación.
+
+00:05:02.900 --> 00:05:04.480
+Es el destino al que apunta la regla de enrutamiento.
+
+00:05:05.320 --> 00:05:08.500
+Un grupo puede contener una máquina virtual específica, un conjunto de escalada de máquinas
+
+00:05:08.500 --> 00:05:11.720
+virtuales, una dirección IP, un nombre de dominio completo o un servicio de aplicación.
+
+00:05:12.060 --> 00:05:14.760
+Una vez que una solicitud llega al grupo, la puerta de enlace la distribuye entre los
+
+00:05:14.760 --> 00:05:15.440
+servidores en buen estado.
+
+00:05:15.800 --> 00:05:19.920
+Utiliza un enfoque de round robin, lo que significa que recorre la lista en orden en lugar de saturar
+
+00:05:19.920 --> 00:05:20.640
+una sola máquina.
+
+00:05:20.640 --> 00:05:23.340
+La parte que justifica su existencia es el sondeo de estado.
+
+00:05:23.680 --> 00:05:26.820
+La puerta de enlace comprueba por sí misma el estado de cada servidor en el grupo sin
+
+00:05:26.820 --> 00:05:27.380
+que se lo pidan.
+
+00:05:28.160 --> 00:05:31.040
+Deja de enviar tráfico discretamente a cualquier servidor que considere que no esté molestando.
+
+00:05:31.560 --> 00:05:32.620
+El sondeo tampoco se rinde.
+
+00:05:33.080 --> 00:05:36.640
+Sigue verificando al servidor enfermo y vuelve a enviarle tráfico en cuanto responde correctamente.
+
+00:05:37.260 --> 00:05:40.740
+Cada instancia de la puerta de enlace ejecuta estas comprobaciones por separado, por lo que
+
+00:05:40.740 --> 00:05:43.420
+un grupo es vigilado desde varios lugares a la vez en lugar de por un solo proceso.
+
+00:05:43.660 --> 00:05:44.720
+La comprobación predeterminada.
+
+00:05:45.220 --> 00:05:48.920
+Envía una solicitud web normal al servidor en el puerto que especifica su configuración
+
+00:05:48.920 --> 00:05:51.020
+de backend y trata una respuesta limpia con una señal de vida.
+
+00:05:51.380 --> 00:05:54.240
+Sondeo predeterminado tiene ajustes que vale la pena conocer, ya que explican la rapidez
+
+00:05:54.240 --> 00:05:55.080
+con la que ocurre todo esto.
+
+00:05:55.720 --> 00:05:59.160
+Comprueba cada servidor cada 30 segundos y espera hasta 30 segundos por una respuesta.
+
+00:05:59.760 --> 00:06:01.840
+Marca un servidor como caído después de tres fallos consecutivos.
+
+00:06:02.600 --> 00:06:07.840
+Cualquier respuesta con un código de estado entre 200 y 399 se considera saludable, lo que
+
+00:06:07.840 --> 00:06:11.360
+en términos simples significa que el servidor respondió normalmente en lugar de arrojar
+
+00:06:11.360 --> 00:06:11.840
+un error.
+
+00:06:11.840 --> 00:06:16.420
+El efecto práctico es que un servidor inactivo sale de rotación y regresa por sí mismo.
+
+00:06:17.060 --> 00:06:19.160
+Nadie tiene que estar sentado ahí cuidándolo a las 3 de la mañana.
+
+00:06:19.720 --> 00:06:22.680
+También puede crear un sondeo personalizado que verifique una ruta específica o acepte
+
+00:06:22.680 --> 00:06:23.800
+un código de respuesta determinado.
+
+00:06:24.080 --> 00:06:27.020
+Incluso puedes hacer que busque una palabra específica en el cuerpo de la respuesta, lo
+
+00:06:27.020 --> 00:06:29.900
+cual ayuda cuando un servidor responde con un servidor responde con una página de
+
+00:06:29.900 --> 00:06:30.380
+error amigable.
+
+00:06:30.840 --> 00:06:34.080
+Vale la pena saber que una ruta de sondeo incorrecta es de la razón clásica por la que la gente
+
+00:06:34.080 --> 00:06:36.120
+de errores sin entre dudas y no logra entender por qué.
+
+00:06:36.500 --> 00:06:38.860
+La puerta de enlace también verifica algo más en cada solicitud.
+
+00:06:38.860 --> 00:06:42.440
+Esto siguiente no tiene nada que ver con el tráfico, sino con el pequeño candado en
+
+00:06:42.440 --> 00:06:44.640
+tu navegador donde se maneja la HTTPS.
+
+00:06:45.760 --> 00:06:50.180
+Ese candado es TLS, el cifrado que evita que extraños lean lo que viaja entre un navegador
+
+00:06:50.180 --> 00:06:50.980
+y un sitio web.
+
+00:06:51.440 --> 00:06:54.820
+Cuando tu tráfico llega a la puerta de enlace, la conexión cifrada puede terminar justo ahí.
+
+00:06:55.200 --> 00:06:56.680
+El nombre para eso es Terminación TLS.
+
+00:06:57.140 --> 00:07:00.240
+Tus servidores de backend reciben entonces una solicitud normal desde la puerta de enlace.
+
+00:07:00.240 --> 00:07:02.460
+No tienen que realizar todos los cálculos de cifrado ellos mismos.
+
+00:07:02.980 --> 00:07:05.320
+Terminar el cifrado en la puerta de enlace resuelve dos problemas a la vez.
+
+00:07:05.800 --> 00:07:08.980
+Tus servidores dejan de gastar esfuerzo en criptografía y pueden enfocarse en tu aplicación.
+
+00:07:10.140 --> 00:07:13.640
+También administras los certificados en un solo lugar en lugar de perseguirlos en cada
+
+00:07:13.640 --> 00:07:14.300
+máquina del grupo.
+
+00:07:14.820 --> 00:07:17.740
+Ese único lugar es también donde ocurren las renovaciones de certificados, por lo que
+
+00:07:17.740 --> 00:07:20.660
+un certificado que vence se convierte en una sola cosa que arreglar en lugar de una docena.
+
+00:07:21.220 --> 00:07:24.240
+Si prefieres mantener todo cifrado durante todo el camino, la puerta de enlace también
+
+00:07:24.240 --> 00:07:24.620
+lo admite.
+
+00:07:25.120 --> 00:07:27.140
+Abrirá una nueva conexión cifrada hacia el backend.
+
+00:07:28.120 --> 00:07:31.620
+Vale la pena conocer un detalle porque explica muchos comportamientos confusos más adelante.
+
+00:07:32.240 --> 00:07:36.260
+La puerta de enlace añade encabezados a cada solicitud antes de reenviarlas y esos encabezados
+
+00:07:36.260 --> 00:07:38.460
+llevan la dirección real del cliente y el nombre de host original.
+
+00:07:39.140 --> 00:07:42.600
+Tu aplicación aún puede identificar quién hizo realmente la solicitud aunque la conexión
+
+00:07:42.600 --> 00:07:43.680
+ahora provenía de la puerta de enlace.
+
+00:07:44.000 --> 00:07:46.960
+Es por eso que una solicitud que llega a tu servidor parece haber venido a la puerta de
+
+00:07:46.960 --> 00:07:48.800
+enlace incluso cuando comenzó en otro lugar completamente distinto.
+
+00:07:48.800 --> 00:07:52.200
+La puerta de enlace también puede configurarse para añadir, eliminar o actualizar encabezados
+
+00:07:52.200 --> 00:07:52.680
+de solicitud.
+
+00:07:52.680 --> 00:07:56.300
+Así es como los equipos solucionan cosas como un backend que insiste en ver un nombre
+
+00:07:56.300 --> 00:07:57.200
+de host en particular.
+
+00:07:57.940 --> 00:08:01.160
+La generación V2 está diseñada para este trabajo y Microsoft informa que maneja la
+
+00:08:01.160 --> 00:08:03.980
+descarga de TLS mucho más rápido que la versión anterior a la que reemplazó.
+
+00:08:04.680 --> 00:08:07.780
+Para ti eso significa principalmente que el cifrado no es lo que ralentiza tu sitio.
+
+00:08:08.380 --> 00:08:10.580
+Cifrado evita que personas externas lean el tráfico.
+
+00:08:10.940 --> 00:08:13.560
+No hace nada respecto a alguien que te envía tráfico malicioso a propósito.
+
+00:08:13.940 --> 00:08:15.820
+Ese es un problema diferente y necesita una herramienta diferente.
+
+00:08:16.400 --> 00:08:17.120
+¿Qué detiene los ataques?
+
+00:08:17.120 --> 00:08:20.860
+Esa herramienta es el firewall de aplicaciones web, generalmente abreviado como WAV.
+
+00:08:21.260 --> 00:08:23.620
+¿Es la razón por la que existe la versión WAV V2 de la puerta de enlace?
+
+00:08:24.260 --> 00:08:27.760
+El enrutamiento decide a dónde debe ir una solicitud y el firewall decide si se le
+
+00:08:27.760 --> 00:08:29.060
+debe permitir pasar en absoluto.
+
+00:08:29.540 --> 00:08:31.940
+Inspecciona toda la solicitud, incluyendo los encabezados y ocu.
+
+00:08:32.180 --> 00:08:35.020
+Bloquea los ataques que han funcionado en sitios sin protección durante años.
+
+00:08:35.540 --> 00:08:38.520
+Los dos que se mencionan primero son la inyección SQL y el cross-site scripting.
+
+00:08:38.740 --> 00:08:42.420
+La inyección SQL es cuando un atacante intenta colar comandos de base de datos en un campo
+
+00:08:42.420 --> 00:08:42.880
+de formulario.
+
+00:08:43.620 --> 00:08:46.680
+El cross-site scripting es donde intentan insertar su propio código dentro de tu página.
+
+00:08:47.340 --> 00:08:50.940
+La lista continúa a partir de ahí y cubre inyección de comandos, contrabando de solicitudes
+
+00:08:50.940 --> 00:08:53.960
+y otros trucos que los atacantes reutilizan porque siguen siendo efectivos.
+
+00:08:55.700 --> 00:08:57.600
+Las reglas provienen del conjunto de reglas principales.
+
+00:08:58.000 --> 00:09:00.860
+OWASP es un proyecto público que mantiene una lista compartida de ataques web.
+
+00:09:01.320 --> 00:09:03.940
+El firewall de Microsoft utiliza esas reglas y las mantiene actualizadas.
+
+00:09:04.200 --> 00:09:05.780
+He dos años de experiencia colectiva.
+
+00:09:05.960 --> 00:09:08.940
+En lugar de escribir tus propias reglas de detección desde cero, recibes actualizaciones
+
+00:09:08.940 --> 00:09:11.660
+conforme aparecen nuevos patrones de ataques sin tener que parchar tu propia lista,
+
+00:09:12.660 --> 00:09:16.420
+El firewall funciona en uno de dos modos y la diferencia importa más de lo que sugieren
+
+00:09:16.420 --> 00:09:16.860
+los nombres.
+
+00:09:17.320 --> 00:09:19.220
+El modo de detección observa, registra y no bloquea nada.
+
+00:09:19.320 --> 00:09:20.280
+Es el ajuste de entrenamiento.
+
+00:09:21.220 --> 00:09:23.400
+El modo de prevención bloquea el ataque del atacante.
+
+00:09:23.620 --> 00:09:25.620
+Recibe una respuesta a 403 y una conexión cerrada.
+
+00:09:26.040 --> 00:09:29.460
+Microsoft recomienda ejecutar un nuevo firewall en modo de detección durante un tiempo breve
+
+00:09:29.460 --> 00:09:29.920
+en producción.
+
+00:09:30.580 --> 00:09:33.840
+De esa forma puedes detectar falsas alarmas y ajustarlas antes de comenzar a bloquear
+
+00:09:33.840 --> 00:09:34.300
+tráfico real.
+
+00:09:34.740 --> 00:09:37.520
+Detrás de escena, el firewall califica cada solicitud según su gravedad.
+
+00:09:38.220 --> 00:09:41.400
+Una coincidencia de regla crítica añade cinco puntos, un error añade cuatro,
+
+00:09:41.400 --> 00:09:43.120
+una advertencia en día de tres y un aviso en día de dos.
+
+00:09:43.580 --> 00:09:46.260
+Cinco puntos son suficientes para bloquear la solicitud en modo de prevención.
+
+00:09:46.760 --> 00:09:49.800
+Una coincidencia grave es suficiente por sí misma, mientras que una advertencia menor
+
+00:09:49.800 --> 00:09:50.160
+no lo es.
+
+00:09:50.520 --> 00:09:51.700
+Dos extras valen un punto cada uno.
+
+00:09:52.040 --> 00:09:55.160
+Puedes filtrar el tráfico por geografía para permitir o bloquear países enteros.
+
+00:09:55.800 --> 00:09:58.900
+También hay un conjunto de reglas de gestión de bots que separa los rastreadores de motores
+
+00:09:58.900 --> 00:10:01.000
+de búsqueda verificados de los bots que mienten sobre quiénes son.
+
+00:10:01.580 --> 00:10:04.920
+Una puerta de enlace puede poner hasta 400 sitios web detrás del mismo firewall, por lo que
+
+00:10:04.920 --> 00:10:07.040
+esta protección sigue siendo asequible a medida que añade sitios.
+
+00:10:07.040 --> 00:10:10.920
+Toda esa protección no vale nada si la puerta de enlace cae en el momento en que el tráfico
+
+00:10:10.920 --> 00:10:11.280
+aumenta.
+
+00:10:12.060 --> 00:10:14.600
+Eso nos lleva a la parte en la que la gente rara vez piensa hasta que es importante.
+
+00:10:15.760 --> 00:10:16.600
+Escalado sin pensar.
+
+00:10:17.160 --> 00:10:20.140
+El escalado automático significa que la puerta de enlace añade capacidad cuando el tráfico
+
+00:10:20.140 --> 00:10:21.520
+aumenta y la libera cuando disminuye.
+
+00:10:21.940 --> 00:10:23.900
+Nunca tienes que adivinar el tamaño correcto por adelantar.
+
+00:10:24.280 --> 00:10:26.640
+Estableces un recuento mínimo de instancias desde cero hasta cien.
+
+00:10:27.020 --> 00:10:29.980
+También puedes establecer un máximo y si no especificas uno, el valor predeterminado
+
+00:10:29.980 --> 00:10:30.220
+es diez.
+
+00:10:30.860 --> 00:10:34.760
+Cada instancia equivale aproximadamente a diez unidades de capacidad, por lo que el número se traduce
+
+00:10:34.760 --> 00:10:37.140
+de forma bastante directa en cuánto trabajo puede asumir la puerta de enlace.
+
+00:10:37.760 --> 00:10:42.560
+Como hace un mide en unidades de capacidad, una sola unidad cubre unas 2.500 conexiones,
+
+00:10:42.720 --> 00:10:46.320
+poco más de 2 megabits por segundo de rendimiento y una unidad de cómputo.
+
+00:10:47.200 --> 00:10:50.680
+Cualquiera de esos tres que agotes primero es el que determina el costo, por eso un sitio
+
+00:10:50.680 --> 00:10:54.280
+con muchas solicitudes pequeñas y uno que transmite archivos grandes pueden terminar
+
+00:10:54.280 --> 00:10:56.760
+pagando diferente por el mismo volumen de tráfico.
+
+00:10:58.020 --> 00:11:00.920
+Incluso con un mínimo de cero instancias, la puerta de enlace se mantiene altamente disponible.
+
+00:11:00.920 --> 00:11:05.020
+El servicio siempre se implementa como más de una instancia y a su reemplaza discretamente
+
+00:11:05.020 --> 00:11:06.800
+la instancia que deja de funcionar.
+
+00:11:07.140 --> 00:11:08.900
+Dos detalles son estos, hacen que esto parezca menos mal.
+
+00:11:09.220 --> 00:11:11.720
+Poner en línea una nueva instancia puede tomar entre 3 y 5 minutos.
+
+00:11:12.140 --> 00:11:16.020
+Cuando la puerta de enlace reduce su escala, drena las conexiones existentes durante 5 minutos
+
+00:11:16.020 --> 00:11:18.960
+antes de eliminar una instancia para que nadie se quede a medias en una solicitud.
+
+00:11:19.540 --> 00:11:23.040
+Esa es la diferencia entre un plan de capacidad que se ve bien en papel y uno que funciona bien
+
+00:11:23.040 --> 00:11:24.060
+cuando realmente cuenta.
+
+00:11:24.740 --> 00:11:26.500
+La redundancia de eso no es la otra mitad de mantenerse.
+
+00:11:26.800 --> 00:11:30.000
+La puerta de enlace se distribuye por defecto en al menos dos zonas de disponibilidad.
+
+00:11:30.000 --> 00:11:33.560
+Una zona de disponibilidad es un grupo físicamente separado de centros de datos dentro de la
+
+00:11:33.560 --> 00:11:34.040
+misma región.
+
+00:11:34.860 --> 00:11:37.760
+Si una de esas zonas falla, la puerta de enlace sigue prestando servicio desde la zona.
+
+00:11:38.140 --> 00:11:41.380
+Ese es el tipo de resiliencia que antes requería ejecutar dos puertas de enlace separadas
+
+00:11:41.380 --> 00:11:43.300
+y un administrador de tráfico para gestionarlas.
+
+00:11:44.420 --> 00:11:46.040
+Una advertencia vale la pena decirle a Clara.
+
+00:11:46.480 --> 00:11:49.620
+Las zonas solo existen en algunas regiones, por lo que la resiliencia que obtienes depende
+
+00:11:49.620 --> 00:11:50.760
+de donde realices la implementación.
+
+00:11:51.220 --> 00:11:53.020
+Un beneficio más discreto acompaña todo esto.
+
+00:11:53.700 --> 00:11:57.460
+La puerta de enlace V2 utiliza una dirección estática que permanece igual durante toda la
+
+00:11:57.460 --> 00:11:58.140
+vida de la implementación.
+
+00:11:58.140 --> 00:12:01.540
+Incluso después de un reinicio, tus registros DMS nunca tienen que perseguir un objetivo
+
+00:12:01.540 --> 00:12:01.740
+común.
+
+00:12:02.240 --> 00:12:05.460
+Así que la puerta enlace en ruta, protege y escala por sí misma, lo que plantea la
+
+00:12:05.460 --> 00:12:06.840
+pregunta con la que llegan muchas personas.
+
+00:12:07.220 --> 00:12:09.740
+Se pregunta si los otros balanceadores de carga de Azure hacen lo mismo.
+
+00:12:10.920 --> 00:12:14.260
+Los tres balanceadores de carga de Azure, tres servicios, tres nombres y la documentación
+
+00:12:14.260 --> 00:12:16.700
+de Microsoft los agrupa a todos en la misma familia.
+
+00:12:17.280 --> 00:12:18.880
+Es claramente por eso que los principiantes los confunden.
+
+00:12:18.880 --> 00:12:21.520
+La forma más sencilla de distinguirlos es notar dos cosas.
+
+00:12:21.840 --> 00:12:25.200
+Qué tan de cerca inspecciona cada uno el tráfico y qué tan lejos están tus usuarios.
+
+00:12:25.200 --> 00:12:29.600
+El balanceador de carga de Azure se sitúa en el nivel más bajo y trabaja en la capa
+
+00:12:29.600 --> 00:12:33.320
+4, solo ve tráfico de red como TCP y UDP, por lo que nunca lee una URL o un nombre de
+
+00:12:33.320 --> 00:12:33.480
+host.
+
+00:12:34.340 --> 00:12:37.880
+Simplemente distribuye los flujos entre máquinas virtuales casi sin añadir retraso.
+
+00:12:38.540 --> 00:12:40.860
+Está diseñado para la velocidad y puede procesar millones de flujos a la vez.
+
+00:12:41.400 --> 00:12:44.820
+Si tu aplicación utiliza un protocolo distinto al tráfico web convencional o quieres la ruta
+
+00:12:44.820 --> 00:12:47.060
+más rápida posible, esta es la opción a elegir.
+
+00:12:47.060 --> 00:12:51.120
+Como su puerta de enlace de aplicaciones se sitúa un nivel más arriba y permanece regional,
+
+00:12:51.540 --> 00:12:54.660
+lee la solicitud, finaliza el cifrado y puede ejecutar un firewall.
+
+00:12:55.220 --> 00:12:57.060
+Vive dentro de su propia red donde usted puede verla.
+
+00:12:58.120 --> 00:13:01.060
+Cuando sus usuarios están principalmente en una región y su aplicación es una aplicación
+
+00:13:01.060 --> 00:13:03.360
+web normal, este suele ser el punto intermedio adecuado.
+
+00:13:03.700 --> 00:13:06.700
+Como su puerta de enlace frontal, Front Door se sitúa aún más arriba y es global.
+
+00:13:06.700 --> 00:13:10.080
+Es en realidad una red de entrega de contenido envuelta alrededor de un balanceador de carga,
+
+00:13:10.200 --> 00:13:13.160
+por lo que puede almacenar en caché sus archivos estáticos cerca de sus usuarios o sus usuarios.
+
+00:13:13.160 --> 00:13:17.720
+Está construida sobre la red Edge de Microsoft con más de 118 ubicaciones perimetrales
+
+00:13:17.720 --> 00:13:19.400
+distribuidas en 100 áreas metropolitanas.
+
+00:13:19.920 --> 00:13:23.160
+Microsoft dice que puede mejorar la latencia hasta tres veces mientras ejecuta su propio
+
+00:13:23.160 --> 00:13:24.080
+firewall en el perímetro.
+
+00:13:24.600 --> 00:13:28.060
+Si sus usuarios están dispersos por todo el mundo y cada milisegundo de retraso le
+
+00:13:28.060 --> 00:13:30.320
+cuesta algo, esta es la puerta de entrada mundial.
+
+00:13:30.980 --> 00:13:33.320
+Hay una cuarta opción que vale la pena mencionar para que la imagen esté completa.
+
+00:13:33.900 --> 00:13:37.760
+Azure Traffic Manager realiza enrutamiento global usando solo DNS, lo cual es más ligero
+
+00:13:37.760 --> 00:13:38.360
+que los otros tres.
+
+00:13:38.920 --> 00:13:42.460
+No lee solicitudes ni finaliza el cifrado, por lo que encaja cuando todo lo que necesite es
+
+00:13:42.460 --> 00:13:44.880
+una dirección inteligente y que apunte al punto final saludable más cercano.
+
+00:13:45.280 --> 00:13:47.540
+Lo que sorprende a la gente es que estos servicios no son rivales.
+
+00:13:48.300 --> 00:13:51.180
+La guía de Microsoft dice que los escenarios de extremo a extremo a menudo se benefician
+
+00:13:51.180 --> 00:13:51.740
+de combinarlos.
+
+00:13:52.320 --> 00:13:55.620
+Un patrón común coloca a Frondor al frente para el acceso global, mientras que una puerta
+
+00:13:55.620 --> 00:13:59.000
+de enlace de aplicaciones se sitúa regionalmente detrás realizando el trabajo detallado cerca
+
+00:13:59.000 --> 00:13:59.480
+de su aplicación.
+
+00:13:59.880 --> 00:14:01.840
+El costo merece una breve nota para que nadie sea tomado por solo.
+
+00:14:02.140 --> 00:14:03.940
+Una puerta de enlace de aplicaciones V2 no tiene cargo inicial.
+
+00:14:04.420 --> 00:14:09.080
+Usted paga una cantidad fija por hora, llegue o no tráfico, más un cargo basado en la capacidad
+
+00:14:09.080 --> 00:14:10.280
+que realmente consume.
+
+00:14:11.000 --> 00:14:14.220
+A modo de ilustración, la página de precios de Microsoft enumeran la tarifa fija de alrededor
+
+00:14:14.220 --> 00:14:17.180
+de un cuarto de dólar por hora para la versión estándar y un poco más para la versión
+
+00:14:17.180 --> 00:14:18.420
+estándar y un poco en firewall.
+
+00:14:18.960 --> 00:14:22.220
+Esas cifras son ejemplos que varían según la región, en lugar de precios para planificar
+
+00:14:22.220 --> 00:14:22.840
+un presupuesto.
+
+00:14:23.480 --> 00:14:25.460
+Así que consulta la página de precios en vivo antes de comprometer.
+
+00:14:25.800 --> 00:14:27.340
+El panorama completo cabe unas pocas paradas.
+
+00:14:27.820 --> 00:14:31.380
+La puerta de enlace de aplicaciones es un balanceador de carga de capa 7, por lo que lee las solicitudes
+
+00:14:31.380 --> 00:14:32.380
+en lugar de solo la dirección.
+
+00:14:32.560 --> 00:14:34.700
+Y es por eso que pueden ver imágenes por un camino y por un camino y por otro.
+
+00:14:34.700 --> 00:14:38.320
+Los oyentes son la puerta de entrada, mientras que las reglas de enrutamiento conectan esa
+
+00:14:38.320 --> 00:14:39.300
+por el debacle incorrecto.
+
+00:14:39.960 --> 00:14:43.040
+Los sondeos de estado mantienen a los servidores inactivos fuera de rotación sin que nadie
+
+00:14:43.040 --> 00:14:43.360
+los vije.
+
+00:14:43.560 --> 00:14:47.080
+La terminación TLS libera a sus servidores del trabajo descifrado y el firewall de
+
+00:14:47.080 --> 00:14:49.380
+aplicaciones web filtra las solicitudes en busca de ataques conocidos.
+
+00:14:49.640 --> 00:14:52.560
+El escalado automático con redundancia de zona mantiene todo en pie cuando el tráfico
+
+00:14:52.560 --> 00:14:53.920
+aumenta o un centro de datos deja de responder.
+
+00:14:54.160 --> 00:14:55.800
+Aquí está la pregunta sobre la que me gustaría que refleje.
+
+00:14:56.140 --> 00:14:59.460
+Si un equilibrador de carga puede la solicitud, el nombre de host y la ruta de la O.
+
+00:14:59.660 --> 00:15:02.660
+RL, ¿dónde debería tomarse la decisión sobre lo que una solicitud realmente puede
+
+00:15:02.660 --> 00:15:05.580
+hacer? ¿Debería ser en la puerta de enlace del principio o en la aplicación que entiende
+
+00:15:05.580 --> 00:15:06.420
+la regla del negocio?
+
+00:15:07.300 --> 00:15:09.920
+Reflexionen un minuto sobre eso, porque cambia la forma en que diseñan todo lo que está
+
+00:15:09.920 --> 00:15:10.580
+desde la puerta de entrada.
+
+00:15:11.200 --> 00:15:14.960
+Si quieren más episodios que hagan que Azure y Microsoft 365 parezcan menos, una pared
+
+00:15:14.960 --> 00:15:18.100
+de tecnicismo, suscríbanse a M365FM y seguiremos haciéndolos.
