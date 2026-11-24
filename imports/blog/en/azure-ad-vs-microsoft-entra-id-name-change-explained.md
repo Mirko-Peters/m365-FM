@@ -76,8 +76,8 @@ Some names with "Azure AD" or "Active Directory" in them were left alone, and so
 - **Active Directory:** Windows Server Active Directory, Active Directory Federation Services (AD FS), Active Directory Domain Services (AD DS) and related features keep their names.
 - **Azure Active Directory B2C:** not renamed. Microsoft Learn says it is still supported but stopped accepting new customers on May 1, 2025. Microsoft Entra External ID is the next-generation solution.
 - **Azure AD Authentication Library (ADAL):** deprecated. Existing apps still work, but Microsoft no longer releases security fixes. Migrate to MSAL.
-- **Azure AD Graph:** deprecated, with no new investment and no SLA beyond security fixes. Use Microsoft Graph.
-- **Azure AD PowerShell for Graph module:** the rename page lists it as planned for deprecation on March 30, 2024. Microsoft Graph PowerShell is the recommended module.
+- **Azure AD Graph:** deprecated, with no new investment and no SLA beyond security fixes. Its retirement began in September 2024, and Microsoft announced that apps still depending on it with extended access would lose access from early September 2025. Use Microsoft Graph.
+- **Azure AD PowerShell modules (AzureAD, AzureAD Preview, MSOnline):** deprecated as of March 30, 2024, with support limited to critical security fixes until March 30, 2025. MSOnline was retired on May 30, 2025. Use Microsoft Graph PowerShell or Microsoft Entra PowerShell.
 - **Azure AD Sync and DirSync:** not supported and no longer work. Upgrade to Microsoft Entra Connect.
 - **Account types and platform:** Microsoft account, work or school account and the Microsoft identity platform keep their names.
 

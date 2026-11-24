@@ -9,18 +9,18 @@ topics: [cloud-adoption-framework, azure-well-architected-framework, azure-landi
 keypoints:
   - "The Cloud Adoption Framework (CAF) is a structured roadmap that helps organizations adopt Azure and integrate it into their existing IT environments."
   - "The Well-Architected Framework (WAF) is a design framework that improves the quality of a single workload across five pillars."
-  - "CAF has seven phases in Microsoft's current overview: Strategy, Plan, Ready, Adopt, Govern, Secure and Manage. The first four are sequential, the last three cover operations."
+  - "CAF has seven phases in Microsoft's current overview: Strategy, Plan, Ready, Adopt, Govern, Secure and Manage. Each phase answers one key decision about Azure adoption."
   - "WAF pillars are Reliability, Security, Cost Optimization, Operational Excellence and Performance Efficiency."
   - "Microsoft points readers who want centralized controls for a portfolio of workloads to CAF rather than WAF."
 faq:
   - q: "What is the difference between CAF and WAF in Azure?"
     a: "According to Microsoft Learn, the Cloud Adoption Framework is a structured roadmap that helps organizations adopt Azure and integrate it into their existing IT environments. The Azure Well-Architected Framework is a design framework for improving the quality of a workload. In short, CAF covers the cloud journey of the organization and WAF covers the design quality of a workload."
   - q: "What are the CAF phases?"
-    a: "The Microsoft Learn overview lists seven core methodologies, also called phases: Strategy, Plan, Ready, Adopt, Govern, Secure and Manage. Strategy, Plan, Ready and Adopt are sequential, and Govern, Secure and Manage are the operational phases. Ready covers Azure purchasing, tenant setup, the platform landing zone and application landing zones. The page does not include an Organize phase."
+    a: "The Microsoft Learn overview lists seven core methodologies, also called phases: Strategy, Plan, Ready, Adopt, Govern, Secure and Manage. Each phase answers one key decision, from what Azure adoption should look like (Strategy) to how to operate and optimize Azure over time (Manage). Ready covers Azure purchasing, tenant setup, the platform landing zone and application landing zones. The page does not include an Organize phase."
   - q: "What are the five pillars of the Well-Architected Framework?"
     a: "Microsoft Learn names Reliability, Security, Cost Optimization, Operational Excellence and Performance Efficiency. It says design decisions must be balanced across all pillars, given the business requirements."
   - q: "Which framework should I use first?"
-    a: "The pages do not prescribe an order between the two. The CAF overview says the framework integrates with the Well-Architected Framework, and the WAF overview points readers who want centralized controls for a portfolio of workloads to CAF. Choose by the decision in front of you: the whole Azure environment points to CAF, a single workload points to WAF."
+    a: "The pages do not prescribe an order between the two. The WAF overview points readers who want centralized controls for a portfolio of workloads to CAF. Choose by the decision in front of you: the whole Azure environment points to CAF, a single workload points to WAF."
   - q: "Is the Well-Architected Review free?"
     a: "The Microsoft Learn overview says the Microsoft Azure Well-Architected Review is offered at no charge. It is a collection of questionnaires tied to the pillar checklists, and you can track your score through repeated runs."
 ---
@@ -31,11 +31,11 @@ Both come from Microsoft Learn and are meant to be used together. The sections b
 
 ## What CAF is
 
-Microsoft describes the Cloud Adoption Framework as a structured roadmap that helps organizations successfully adopt Azure and integrate it into their existing IT environments. It provides best practices and guidance to help organizations make the right decisions for their business throughout the cloud journey. The overview also says the framework integrates with the Well-Architected Framework and the Azure Architecture Center.
+Microsoft describes the Cloud Adoption Framework as guidance that helps decision makers make better decisions, faster. It provides a roadmap for cloud adoption and organizes guidance into building blocks that help decision makers establish an Azure foundation and the standards needed to support workloads over time. The outcome is an Azure landing zone and operational standards that support all Azure workloads.
 
 ### The seven phases
 
-The current overview organizes Azure guidance into seven core methodologies, which the page also labels phases. The foundational ones, Strategy, Plan, Ready and Adopt, are sequential. They help you define business outcomes, prepare your organization and environment, and deploy workloads to Azure. These phases are where most organizations start and are revisited as adoption matures. Once workloads run in Azure, the operational phases Govern, Secure and Manage define different aspects of cloud operations.
+The current overview lists seven Azure adoption phases and names a key decision for each: Strategy (what should our Azure adoption look like?), Plan (how will we prepare for Azure adoption?), Ready (how will we build our Azure landing zone?), Adopt (how will we migrate, modernize and build workloads?), Govern (how will we control our Azure environment?), Secure (how will we protect our Azure environment?) and Manage (how will we operate and optimize Azure over time?).
 
 | Phase | Outcome | How |
 |---|---|---|
@@ -51,11 +51,11 @@ The page lists these seven phases only, with no Organize phase, so use these nam
 
 ### Scenarios
 
-Besides the phases, the overview lists scenario guidance: Data, AI adoption, AI agents, Azure Virtual Desktop, Azure VMware Solution, Hybrid and multicloud, Oracle on Azure and SAP on Azure.
+Besides Azure adoption, the overview lists these scenarios: Unified data platform, AI adoption, AI agents, Sovereignty and Azure VMware Solution. Scenarios for Azure Virtual Desktop, SAP on Azure, Hybrid and multicloud and Oracle on Azure were deprecated in September 2026, with October 30, 2026 as the last available date. The November 2026 What's new entry lists the SAP, Oracle, Azure Arc and Azure Virtual Desktop articles as removed.
 
 ### Who it is for
 
-Microsoft states that CAF serves organizations of all industries and sizes pursuing Azure adoption. It adapts to your cloud maturity level and is designed for anyone responsible for technology adoption, whether that spans business strategy, technology governance, cloud integration or day-to-day operations. The page gives two examples: startups build cloud-native applications using best practices, and enterprises establish a governance foundation to control workloads at scale.
+Microsoft states that CAF is designed for decision makers responsible for Azure adoption. The overview names four groups: business leaders who align cloud investments to business outcomes, technology leaders who define cloud strategy and operating models, platform teams who establish an Azure landing zone and shared services, and security and governance teams who define standards, compliance requirements and risk management.
 
 ## What WAF is
 
@@ -95,7 +95,7 @@ The Azure Well-Architected Review is offered at no charge. It is a set of questi
 
 Microsoft's WAF overview contains a direct pointer. If you want guidance for improving a portfolio of workloads through centralized controls, that content might not fully apply, and Microsoft recommends the Cloud Adoption Framework. In other words, centralized controls across many workloads are CAF territory, while the quality of one workload is WAF territory.
 
-The CAF overview adds the other direction: it says the framework integrates with the Well-Architected Framework and the Azure Architecture Center. Neither page spells out how the two are meant to be sequenced. A reasonable reading is that CAF prepares the environment and governs it, and WAF is used on the workloads that run inside it. That reading is an interpretation, not a statement from the pages.
+The current CAF overview does not mention the Well-Architected Framework, and the WAF overview only points to CAF for portfolio-level controls. Neither page spells out how the two are meant to be sequenced. A reasonable reading is that CAF prepares the environment and governs it, and WAF is used on the workloads that run inside it. That reading is an interpretation, not a statement from the pages.
 
 ## Common mix-ups
 

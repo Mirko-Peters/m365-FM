@@ -75,7 +75,7 @@ The team classified deburring, inspection and packing as non-value-added for thi
 
 Now compare two improvement ideas:
 
-- **Remove deburring and inspection.** Suppose a better process makes both unnecessary. Processing time falls by 55 seconds, and lead time falls to 138,785 seconds. The ratio is still 0.1 percent, because 55 seconds is tiny next to 138,600 seconds of waiting.
+- **Shorten the processing time.** Suppose a better process makes the 55 seconds of deburring and inspection unnecessary, and the queues in front of the steps stay as they are. Processing time falls by 55 seconds, and lead time falls to 138,785 seconds. The ratio is still 0.1 percent, because 55 seconds is tiny next to 138,600 seconds of waiting.
 - **Halve the stock in front of every step.** Waiting time falls to 2.75 days, or 69,300 seconds. Lead time becomes 69,540 seconds, and the ratio becomes 135 ÷ 69,540 = about **0.19 percent**. The ratio has almost doubled, and the customer receives the product 2.75 days sooner.
 
 Both ideas are good for other reasons. But only the second one moves the ratio, which shows where the time sits: in the queues.

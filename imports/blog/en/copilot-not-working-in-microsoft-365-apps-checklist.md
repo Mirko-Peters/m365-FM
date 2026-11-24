@@ -45,7 +45,7 @@ Update Microsoft 365 apps to the latest build. An old build can lack the button 
 2. Select **Update License**.
 3. Close all Microsoft 365 apps and open them again.
 
-If an admin just assigned the license, wait a little and repeat. Microsoft Learn lists a newly assigned license as a cause, because assignment can take time to propagate. The pages I read don't give a fixed waiting time, so don't trust any exact number you find elsewhere.
+If an admin just assigned the license, Microsoft Learn lists that as a cause, because assignment can take time to propagate. Microsoft's setup page says that for some apps users might need to wait up to 24 hours for Copilot to appear after a license is assigned, and they might also need to restart or refresh the app.
 
 ## Step 3: Check your update channel
 

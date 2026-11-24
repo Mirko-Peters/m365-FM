@@ -11,14 +11,14 @@ keypoints:
   - "A team site connected to a Microsoft 365 group gives the team a shared calendar, OneNote, Planner and a Teams connection. Members added to either side are added to the other."
   - "Assign permissions to groups (Owners, Members, Visitors), not to individual people. Microsoft's defaults are Full Control, Contribute and Read."
   - "Co-authoring needs files in OneDrive or SharePoint in .docx, .pptx or .xlsx format, and every co-author needs edit access."
-  - "Classic SharePoint alerts were announced for retirement in July 2026. Use rules or Power Automate for change notifications."
+  - "Microsoft scheduled classic SharePoint alerts to be fully turned off from mid-July 2026. Use rules or Power Automate for change notifications."
 faq:
   - q: "Should I use a team site or a communication site for collaboration?"
     a: "Use a team site. Microsoft Support describes a team site as a place to store and co-author files, post announcements and track tasks, and it points you to a communication site if you need to broadcast information to others."
   - q: "Who can edit files in a SharePoint document library?"
     a: "Files inherit the permissions of their library. Microsoft Support explains that if everyone has read and write access to a team site library, anyone can co-author there. You can give specific people more access than the library default, but you cannot restrict them below it."
   - q: "Are SharePoint alerts still available?"
-    a: "A note on the Microsoft Support alert page says that starting July 2026 SharePoint alerts for SharePoint in Microsoft 365 will be fully retired and stop working. The page points to rules and Power Automate instead. A Microsoft Q&A answer from a moderator says rules work at list or library level and cannot target one file, while Power Automate can."
+    a: "A note on the Microsoft Support alert page said that starting July 2026 SharePoint alerts for SharePoint in Microsoft 365 would be fully retired and stop working. Microsoft's Message Center gives mid-July 2026 for the full shutdown, and the creation of new alerts has been gradually turned off for all tenants starting in January 2026. The page points to rules and Power Automate instead. A Microsoft Q&A answer from a moderator says rules work at list or library level and cannot target one file, while Power Automate can."
   - q: "Is it safe to share files with the Anyone link?"
     a: "Microsoft Support describes the Anyone link as giving access to anyone who receives it, whether you send it directly or someone forwards it, and recommends avoiding it unless absolutely necessary. Links for people in your organization or for specific people keep access narrower. If a sharing option is greyed out, your organization's admins may have restricted it."
 ---
@@ -84,7 +84,7 @@ These web parts are SharePoint features that improve collaboration because the t
 
 ## Notifications: alerts versus rules and Power Automate
 
-Many teams relied on "Alert me" for files. A note on Microsoft Support's alert page says that starting July 2026 SharePoint alerts for SharePoint in Microsoft 365 will be fully retired and stop working. The page points to rules and Power Automate. A Microsoft Q&A answer from a moderator explains the difference. Rules are created at list or library level and work on column conditions, so they cannot select one specific file. Use Power Automate when only one specific file matters: it can notify only when that file changes, for example with the trigger "When a file is created or modified (properties only)" plus a condition on the file.
+Many teams relied on "Alert me" for files. A note on Microsoft Support's alert page said that starting July 2026 SharePoint alerts for SharePoint in Microsoft 365 would be fully retired and stop working. Microsoft's Message Center post MC1072889 gives mid-July 2026 for the full shutdown, and the creation of new alerts has been gradually turned off for all tenants starting in January 2026. The page points to rules and Power Automate. A Microsoft Q&A answer from a moderator explains the difference. Rules are created at list or library level and work on column conditions, so they cannot select one specific file. Use Power Automate when only one specific file matters: it can notify only when that file changes, for example with the trigger "When a file is created or modified (properties only)" plus a condition on the file.
 
 ## Common mistakes
 
@@ -92,7 +92,7 @@ Many teams relied on "Alert me" for files. A note on Microsoft Support's alert p
 - Giving permissions to individuals instead of groups.
 - Using Anyone links by habit.
 - Splitting files between chat attachments and the library.
-- Relying on alerts that Microsoft has retired.
+- Relying on alerts that Microsoft is retiring.
 
 ## Related
 
