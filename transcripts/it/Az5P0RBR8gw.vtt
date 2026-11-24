@@ -1,0 +1,658 @@
+WEBVTT
+
+00:00:00.370 --> 00:00:06.270
+Benvenuti al podcast M305FM, dove esploriamo le persone, le idee e le tecnologie che plasmano il futuro del lavoro.
+
+00:00:07.110 --> 00:00:08.870
+Cos'è effettivamente Azure SQL Database?
+
+00:00:09.670 --> 00:00:12.530
+Iniziamo con la versione semplice, prima che entrino in gioco gli acronimi.
+
+00:00:13.150 --> 00:00:16.850
+Azure SQL Database è un database relazionale che Microsoft gestisce per voi nel suo cloud.
+
+00:00:17.510 --> 00:00:20.950
+Non dovete acquistare una macchina, non installate software e non dovete occuparvi degli aggiornamenti.
+
+00:00:21.590 --> 00:00:23.690
+Tutto questo ora ricade sotto la responsabilità di Microsoft.
+
+00:00:24.190 --> 00:00:27.650
+Create un database, collegate la vostra applicazione e il resto viene silenziosamente in background.
+
+00:00:27.650 --> 00:00:32.150
+Il motore sottostante è lo stesso SQL Server che alimenta i database aziendali da decenni.
+
+00:00:32.690 --> 00:00:37.130
+Il vostro TSQL funziona ancora, i vostri strumenti si connettono e le competenze che già possedete rimangono valide.
+
+00:00:37.630 --> 00:00:40.010
+Non si tratta affatto di una versione ridotta di SQL Server.
+
+00:00:40.650 --> 00:00:42.670
+È la stessa identica tecnologia che vive semplicemente in una vacata.
+
+00:00:42.930 --> 00:00:45.430
+Questa è l'idea fondamentale a base dell'espressione Database Service.
+
+00:00:45.810 --> 00:00:47.810
+Non state affittando un server per poi gestire tutto l'oroso.
+
+00:00:48.190 --> 00:00:50.610
+State affittando un risultato e qualcun altro si occupa del funzionamento.
+
+00:00:50.870 --> 00:00:52.630
+Microsoft escrive questo servizio come Evergreen.
+
+00:00:52.630 --> 00:00:57.630
+Questo termine significa che rimane automaticamente sull'ultima versione stabile così non raggiungerete mai il limite di fine supporto.
+
+00:00:58.550 --> 00:01:02.350
+Azure offre tre modi per eseguire quel motore e distinguere l'uno dall'altro chiarisce molta confusione.
+
+00:01:03.210 --> 00:01:06.390
+Azure SQL Database è l'opzione completamente gestita ed è quella di cui parliamo oggi.
+
+00:01:07.350 --> 00:01:13.350
+Azure SQL Manager Instance è la versione quasi completa creata per migrare le applicazioni SQL Server esistenti nel cloud senza quasi modifiche.
+
+00:01:14.530 --> 00:01:19.730
+SQL Server su una macchina virtuale Azure è l'opzione in cui gestite tutto autonomamente esattamente come un server nel vostro ufficio.
+
+00:01:19.730 --> 00:01:23.430
+All'interno di Azure SQL Database potete distribuire in due modalità.
+
+00:01:23.990 --> 00:01:26.750
+Un database singolo ha il proprio set dedicato di risorse.
+
+00:01:27.730 --> 00:01:30.450
+Vengono gestiti tramite quello che viene chiamato server logico,
+
+00:01:30.890 --> 00:01:35.170
+che è semplicemente una base amministrativa per i vostri database, accessi e regole firewall.
+
+00:01:36.730 --> 00:01:41.970
+Un pool elastico è un gruppo di database che condividono un unico set di risorse e torneremo presto sul perché sia così importante.
+
+00:01:42.370 --> 00:01:44.370
+Ciò che state acquistando veramente con tutto questo è la delega.
+
+00:01:45.050 --> 00:01:48.910
+Microsoft aggiorna il motore, esegue il backup, ne garantisce la disponibilità e lo mantiene aggiornato.
+
+00:01:48.910 --> 00:01:52.530
+Non ci sono macchine virtuali da monitorare, nei sistemi operativi da supervisionare.
+
+00:01:52.910 --> 00:01:54.790
+Per un principiante è proprio questo il fascino principale.
+
+00:01:54.970 --> 00:01:58.190
+Gli aspetti che solitamente si imparano a proprie spese diventano semplicemente il lavoro di qualcuno.
+
+00:01:58.450 --> 00:02:01.290
+Se questo compromesso si adatta a voi è una questione che risolveremo alla fine
+
+00:02:01.290 --> 00:02:04.510
+confrontandolo direttamente con l'esecuzione di SQL Server su una macchina virtuale.
+
+00:02:05.310 --> 00:02:08.730
+Microsoft presenta l'intera decisione con una scelta unica e vale la pena ribadirlo.
+
+00:02:09.490 --> 00:02:14.270
+Puoi gestire il database da solo applicando patch ed effettuando backup oppure puoi affidare questi compiti ad Azure.
+
+00:02:14.270 --> 00:02:17.350
+Se la risposta onesta è affidare ad altri sei nel posto giusto.
+
+00:02:18.250 --> 00:02:23.730
+E se ti preoccupa la spesa la documentazione Microsoft indica un punto di partenza di circa 5 dollari al mese col piano basic.
+
+00:02:24.890 --> 00:02:25.830
+I due modi per pagare.
+
+00:02:26.410 --> 00:02:29.530
+Ora che sai di cosa si tratta la prima vera decisione è come pagare.
+
+00:02:30.330 --> 00:02:35.590
+Azure SQL Database si propone con due modelli di acquisto e sceglierne uno determina tutto il resto.
+
+00:02:36.390 --> 00:02:38.390
+Il primo è il modello DTU ovvero il pacchetto tutto incluso.
+
+00:02:38.390 --> 00:02:42.530
+Calcolo, archiviazione e inputs belle e outputs sono raggruppati in un unico valore.
+
+00:02:43.590 --> 00:02:48.530
+Una DTU ha misura combinata di CPU, memoria, letture e scritture quindi non devi pensare a ciascuna singolarmente.
+
+00:02:48.930 --> 00:02:50.690
+Scegli una dimensione e quella definisce tutti i parametri.
+
+00:02:50.970 --> 00:02:54.190
+Se preferisci un pacchetto semplice con un costo mensile prevedibile questo è il meno fisso.
+
+00:02:54.650 --> 00:02:56.270
+I suoi livelli sono basic, standard e premium.
+
+00:02:56.890 --> 00:02:59.510
+La scalabilità è pressoché lineare il che la rende facile da comprendere.
+
+00:02:59.950 --> 00:03:03.550
+Raddoppiando le DTU raddoppia approssimativamente le risorse disponibili per quel database.
+
+00:03:03.850 --> 00:03:07.970
+Un grande database premium può avere una potenza di calcolo centinaia di volte superiore al più piccolo database.
+
+00:03:08.390 --> 00:03:10.670
+Il secondo è il modello V-Core ovvero il sistema componibile.
+
+00:03:11.570 --> 00:03:15.890
+Un V-Core è un processore logico e questo modello ti permette di scegliere calcolo e archiviazione separatamente.
+
+00:03:16.670 --> 00:03:20.750
+Scegli anche la generazione dell'hardware e adatti il prezzo al carico di lavoro invece di andare a tentativo.
+
+00:03:21.170 --> 00:03:25.390
+Microsoft raccomanda questo modello e i suoi livelli sono per scopi generici, business critical e hyperscale.
+
+00:03:26.050 --> 00:03:30.510
+Una differenza importante per il tuo portafoglio è che il modello V-Core aggiunge tre extra che il pacchetto DTU non ha.
+
+00:03:31.070 --> 00:03:35.070
+C'è l'Azure Hybrid Benefit che ti permette di riutilizzare le recenze SQL Server esistenti per uno sconto.
+
+00:03:35.070 --> 00:03:38.150
+C'è il serverless dove il database può sospendersi quando nessuno lo usa.
+
+00:03:38.390 --> 00:03:38.750
+Dosa.
+
+00:03:39.610 --> 00:03:41.750
+Hyperscale è il terzo livello ed è costruito per scalabilità.
+
+00:03:42.470 --> 00:03:44.890
+Questo divario è un motivo importante per cui i team tendono a iniziare con V.
+
+00:03:45.190 --> 00:03:46.670
+C'è un'altra cosa che dovrebbe tranquillizzarti.
+
+00:03:47.370 --> 00:03:51.890
+Non sei vincolato per sempre perché Microsoft ti permette di convertire un database da un modello all'altro online.
+
+00:03:52.410 --> 00:03:53.890
+La tua applicazione resta attiva per tutto te.
+
+00:03:54.290 --> 00:03:58.850
+Ciò rende il passaggio più simile a modificare un'impostazione che ricostruire tutto, quindi è una decisione, non una condanna vita.
+
+00:03:58.850 --> 00:04:04.050
+Se vuoi l'inizio più semplice possibile e un costo fisso, DTU è un punto di partenza ragionevole.
+
+00:04:04.570 --> 00:04:07.830
+Se cerchi controllo, risparmio o spazio per crescere, finirai per scegliere V-Core.
+
+00:04:08.250 --> 00:04:12.150
+E c'è un livello nascosto qui che può rendere un piccolo database tranquillo, quasi gratuito, quando è inattivo.
+
+00:04:12.530 --> 00:04:13.210
+Ci arriveremo tra un anno.
+
+00:04:13.210 --> 00:04:14.890
+Scegliere di servizio
+
+00:04:14.890 --> 00:04:17.790
+Scegliere un modello di acquisto ti porta nel negozio giusto.
+
+00:04:18.290 --> 00:04:21.050
+Scegliere un livello di servizio significa prendere il prodotto dallo scaffale.
+
+00:04:21.350 --> 00:04:25.250
+È qui che si trovano dimensioni infrastruttura ed è meno intimidatorio di quanto il nome suggerisca.
+
+00:04:25.530 --> 00:04:29.490
+Per quanto riguarda V-Core, il livello per utilizzo generico è l'impostazione predefinita e il punto di partenza.
+
+00:04:29.490 --> 00:04:32.610
+È economico e gestisce bene la maggior parte dei carichi di lavoro quotidiani.
+
+00:04:32.730 --> 00:04:40.230
+Con uno storage fino a 4TB, il livello Business Critical offre uno storage locale molto più veloce per applicazioni che richiedono risposte rapide su transazioni pesanti.
+
+00:04:40.230 --> 00:04:44.910
+Costa circa 2,7 volte di più del livello per utilizzo generico e il motivo è semplice.
+
+00:04:45.470 --> 00:04:49.550
+Mantiene 3 copie extra dei tuoi dati pronti all'uso, quindi un guasto rallenta malapena il tuo lavoro.
+
+00:04:50.830 --> 00:04:54.370
+Hyperscale è quello grande, con uno storage che arriva fino a 128TB.
+
+00:04:54.990 --> 00:04:58.490
+Microsoft ora lo definisce l'impostazione predefinita e raccomandata per ricarichi di lavoro nuovi a modello.
+
+00:04:58.970 --> 00:05:01.890
+Sul fronte DTU, i livelli vanno da Basic a Standard fino a Premium.
+
+00:05:02.610 --> 00:05:08.850
+Il livello PISIC è davvero piccolo, con 5DTU e 2GB di storage ed è perfetto per imparare o per un piccolo progetto secondario.
+
+00:05:08.850 --> 00:05:15.150
+Standard copre un'ampia fascia intermedia, mentre Premium aggiunge la velocità e le funzionalità in memoria necessarie per gestire i carichi più intensi.
+
+00:05:15.410 --> 00:05:20.170
+Una piccola cosa da sapere, le dimensioni DTU più piccole offrono meno potenza di calcolo di un singolo vCore,
+
+00:05:20.670 --> 00:05:24.130
+quindi se il tuo carico di lavoro gava molto sul processore vorrai passare a una dimensione superiore.
+
+00:05:24.710 --> 00:05:25.990
+Questo porta al livello che ti avevo promesso.
+
+00:05:26.690 --> 00:05:29.430
+All'interno del livello vCore per utilizzo generico puoi scegliere il modello Serverless.
+
+00:05:29.690 --> 00:05:31.890
+Un database Serverless scala le sue risorse di calcolo autonome.
+
+00:05:32.230 --> 00:05:36.390
+Per impostazione predefinita si sospende dopo un'ora di inattività, quindi paghi solo lo storage mentre è in pausa.
+
+00:05:36.390 --> 00:05:39.530
+Nel momento in cui qualcuno si connette, si reattiva e torna al lavoro.
+
+00:05:40.030 --> 00:05:44.630
+Questo lo rende ideale per progetti intermittenti, demo database che rimangono inattivi durante la maggior parte dei fine settimane.
+
+00:05:44.870 --> 00:05:46.990
+Non è la scelta giusta per un carico di lavoro che deve girare 24.
+
+00:05:46.990 --> 00:05:51.470
+Inoltre non è disponibile nel livello business critical, né in alcun modello DTU.
+
+00:05:52.110 --> 00:05:55.510
+La regola empirica che salva i principianti da molto stress è questa, inizia in piccolo.
+
+00:05:55.910 --> 00:05:57.330
+Monitora i numeri e cresci in seguito.
+
+00:05:57.930 --> 00:06:01.590
+Cambiare dimensione all'operazione online, quindi non sei bloccato con la scelta fatta il primo giorno.
+
+00:06:02.050 --> 00:06:05.610
+Inizia con poco, misura onestamente e lascia che siano le metriche a dirti quando passare a un livello superiore.
+
+00:06:06.610 --> 00:06:08.150
+I pull elastici e il trucco della multiproprietà.
+
+00:06:08.550 --> 00:06:10.470
+Finora abbiamo parlato di un solo database alla volta.
+
+00:06:10.870 --> 00:06:12.630
+Il problema economico si presenta quando ne decidi.
+
+00:06:12.630 --> 00:06:15.930
+Vale la pena capirlo, perché è qui che molti team spendono troppo silenziosamente.
+
+00:06:16.810 --> 00:06:20.990
+Immagina 20 piccoli database, ognuno occupato per pochi minuti al giorno e inattivo per il resto del tempo.
+
+00:06:21.490 --> 00:06:26.350
+Se assegni a ciascuno risorse dimensionate per il suo picco, paghi per una potenza che resta inutilizzata quasi tutto il giorno.
+
+00:06:27.030 --> 00:06:30.130
+Se invece le dimensioni per la media si bloccheranno, non appena arriverà un picco di carico.
+
+00:06:30.570 --> 00:06:34.490
+Nessuna delle due soluzioni ideale e l'elastic pull risolve il problema trasformandolo in una condivisione.
+
+00:06:35.230 --> 00:06:39.450
+Inserisci un gruppo di database, un server e questi condividono un pull fisso di risorse a un unico prezzo.
+
+00:06:39.450 --> 00:06:42.610
+Quelli occupati prendono in prestito risorse, mentre quelli inattivi le vengono.
+
+00:06:43.010 --> 00:06:48.870
+Le risorse condivise sono misurate in EDTU o V-Core, ma puoi immaginarle come un serbatoio di carburante da cui tutti attingono.
+
+00:06:49.630 --> 00:06:51.030
+Esempio stesso di Microsoft concreto.
+
+00:06:51.530 --> 00:06:56.410
+20 database che raggiungono picchi di 90 EDTU, ma hanno una media sotto i 5 e possono condividere 100 EDTU tra loro.
+
+00:06:56.490 --> 00:07:02.350
+Si tratta di una riduzione delle risorse di 20 volte e di circa 13 volte nel prezzo rispetto al dimensionamento separato.
+
+00:07:03.290 --> 00:07:08.050
+L'intuizione è che quei picchi non coincidono mai, quindi il pull raramente serve più di una frazione della domanda totale.
+
+00:07:08.050 --> 00:07:11.750
+Il modello che ne trae vantaggio è specifico ed è proprio questo l'aspetto che spesso viene frente.
+
+00:07:12.770 --> 00:07:17.410
+Pulls sono adatti a database con un utilizzo medio-basso e picchi brevi e rari che non avvengono tutti contemporaneamente.
+
+00:07:18.210 --> 00:07:23.110
+I risparmi possono apparire già con due soli database di livello standard e più ne aggiungi migliore è solitamente il calcolo.
+
+00:07:23.590 --> 00:07:26.810
+Ma se i tuoi database sono occupati tutto il giorno, ogni giorno non inseris in un pull.
+
+00:07:27.150 --> 00:07:30.590
+Si scontreranno per le stesse risorse e ti chiederai perché le prestazioni sono peggiorate.
+
+00:07:31.350 --> 00:07:33.050
+Ciò che ti riguarda viene gestito, così non devi farlo.
+
+00:07:33.470 --> 00:07:35.950
+Abbiamo riservato la parte che dovrebbe farti dormire sommi tranquilli.
+
+00:07:35.950 --> 00:07:38.510
+È qui che il servizio gestito dimostra davvero il suo valore.
+
+00:07:39.050 --> 00:07:42.010
+Backup vengono automaticamente e non è possibile disattivarle accidentalmente.
+
+00:07:42.730 --> 00:07:48.330
+Azure segue un backup completo ogni settimana, un backup differenziale ogni 12-24 ore e un backup del log ogni 10 minuti circa.
+
+00:07:48.890 --> 00:07:50.330
+Questo ti offre quasi di simile a un tasto NU.
+
+00:07:50.590 --> 00:07:54.770
+Il ripristino Point in Time ti permette di riportare un database a un momento specifico contro la finestra di conservazione.
+
+00:07:55.030 --> 00:07:58.490
+Tale finestra è di 7 giorni per impostazione predefinita ed è configurabile fino a 35.
+
+00:07:58.490 --> 00:08:03.870
+Quando qualcuno elimina una tabella a un venerdì pomeriggio, questa funzione fa la differenza tra una brutta giornata e un disastro.
+
+00:08:04.330 --> 00:08:06.150
+Se hai bisogno di più di questo esistono altri due livelli.
+
+00:08:06.630 --> 00:08:12.690
+Il ripristino geografico ti permette di ricostruire in una regione diversa, se quella principale ha problemi ed è attivo per impostazione predefinita.
+
+00:08:13.310 --> 00:08:18.090
+La conservazione a lungo termine mantiene i backup completi fino a 10 anni, proprio ciò che richiedono i team di conformità.
+
+00:08:18.530 --> 00:08:20.870
+Devi solo attivarlo perché non è attivo di default.
+
+00:08:20.870 --> 00:08:24.150
+C'è un piccolo intoppo in cui molti inciampano, quindi vale la pena dirlo chiaramente.
+
+00:08:24.730 --> 00:08:26.910
+Non puoi scaricare questi backup automatici come un semplice file.
+
+00:08:27.430 --> 00:08:31.010
+Risiedono nello storage gestito da Microsoft e servono per il ripristino, non per l'esportazione.
+
+00:08:31.430 --> 00:08:35.270
+Se ti serve davvero una copia dei tuoi dati fuori da Azure, devi esportare un pacchetto portabile.
+
+00:08:36.130 --> 00:08:39.530
+La cosa strana è che eliminare un database non rimuove subito i suoi backup.
+
+00:08:40.230 --> 00:08:42.670
+Eliminare e ricreare un database per risparmiare per costarti di più.
+
+00:08:43.970 --> 00:08:46.770
+L'alta disponibilità funziona allo stesso modo e solitamente rimane invisibile.
+
+00:08:47.090 --> 00:08:49.990
+Di default i tuoi dati sono copiati tre volte in un unico data center.
+
+00:08:49.990 --> 00:08:51.710
+I dati confermati non vanno mai persi.
+
+00:08:52.550 --> 00:08:56.490
+Se la macchina che esegue il tuo database si guasta, Azure ti sposta automaticamente su una nuova.
+
+00:08:57.110 --> 00:09:01.570
+Per una protezione maggiore abilita la ridondanza di zone, che distribuisce il database su due o tre zone di una regione.
+
+00:09:02.250 --> 00:09:04.610
+In questo modo se un'intera data center va offline tu non ne risentirai.
+
+00:09:05.070 --> 00:09:08.310
+Tieni presente che non è disponibile nei livelli basic o standard, ma lo è.
+
+00:09:08.610 --> 00:09:11.750
+In general purpose, business critical, hyperscale e premium.
+
+00:09:13.070 --> 00:09:15.290
+La garanzia di disponibilità aumenta di pari passo con tutto questo.
+
+00:09:15.290 --> 00:09:23.090
+L'accordo sul livello di servizio di Microsoft garantisce almeno 99,95 per center database, business critical e premium con ridondanza di zona.
+
+00:09:23.490 --> 00:09:25.070
+Con un bonus extra per i business critical.
+
+00:09:25.650 --> 00:09:31.570
+Offre una copia in sola lettura del database, così report e analisi possono girare lì senza intaccare il carico di lavoro principale.
+
+00:09:31.570 --> 00:09:33.670
+Sicurezza senza tecnicismo.
+
+00:09:33.970 --> 00:09:36.850
+Backup proteggono dagli incidenti, la sicurezza protegge dalle persone.
+
+00:09:37.290 --> 00:09:39.710
+È utile vederla come i livelli che vanno dall'esterno verso l'interno.
+
+00:09:40.310 --> 00:09:42.790
+Il livello esterno è la porta d'ingresso e, di default, è chiusa a chiama.
+
+00:09:43.390 --> 00:09:45.830
+Nulla raggiunge il server finché non lo autorizzi esplicitamente.
+
+00:09:46.830 --> 00:09:49.350
+Le regole del firewall ti permettono di consentire l'accesso tramite indirizzo.
+
+00:09:49.830 --> 00:09:52.930
+Puoi restringere tutta la tua rete virtuale così solo i tuoi sistemi possono collegarsi.
+
+00:09:53.690 --> 00:09:54.810
+Il livello successivo riguarda chi sia.
+
+00:09:54.810 --> 00:10:01.710
+Puoi accedere con Microsoft Entry ID, il sistema di identità precedentemente chiamato Azure Active Directory o con un classico nome utente Password SQL.
+
+00:10:02.790 --> 00:10:04.230
+Entra alla scelta migliore quando puoi usarlo.
+
+00:10:04.810 --> 00:10:07.590
+Offre l'autenticazione a più fattori, regole di accesso condizionale.
+
+00:10:07.930 --> 00:10:10.330
+È un modo per evitare di scrivere password nelle stringhe di connessione.
+
+00:10:11.170 --> 00:10:12.930
+Poi c'è ciò che ti è permesso fare una volta dentro.
+
+00:10:13.530 --> 00:10:18.230
+Il principio guida è il privilegio minimo, che significa dare alle persone solo l'accesso strettamente necessario per il loro lavoro.
+
+00:10:18.490 --> 00:10:21.790
+Devi andare oltre la sicurezza a livello di riga può nascondere singole righe.
+
+00:10:21.790 --> 00:10:26.650
+In questo modo l'utente vede solo i propri record, il che è utile quando molti clienti condividono lo stesso database.
+
+00:10:27.410 --> 00:10:31.090
+La criptografia interviene in tre punti e la buona notizia è che il più importante è già attivo.
+
+00:10:31.950 --> 00:10:33.990
+Dati in transito sono sempre criptografati con TLS.
+
+00:10:34.670 --> 00:10:39.470
+Dati inattivi sono protetti dalla criptografia trasparente, attiva per impostazione predefinita su ogni nuovo database.
+
+00:10:39.930 --> 00:10:45.970
+E per una colonna specifica e sensibile come un numero di carte di credito, la funzione Always Encrypted può impedire persino ai tuoi amministratori di database di leggerla.
+
+00:10:45.970 --> 00:10:47.510
+La chiave non raggiunge mai il servizio.
+
+00:10:47.930 --> 00:10:51.590
+Infine c'è il monitoraggio dei problemi, registrando nel tuo spazio di archiviazione chi ha fatto cosa?
+
+00:10:52.110 --> 00:10:56.070
+E Defender for Cloud segnala tentativi di SQL Injection ai modelli di accesso insoliti?
+
+00:10:56.650 --> 00:10:57.170
+Insoliti.
+
+00:10:57.950 --> 00:11:03.330
+Puoi anche classificare ed etichettare i dati sensibili nel tuo database, ottenendo una mappa di dove risiede effettivamente il rischio.
+
+00:11:03.870 --> 00:11:06.510
+Concetto fondamentale è che le impostazioni sicure sono quelle predefinite.
+
+00:11:06.930 --> 00:11:09.310
+Il tuo compito principale è decidere chi può accedere e cosa può modificare.
+
+00:11:09.990 --> 00:11:14.210
+Azure SQL Database o macchina virtuale fino alla tutto presuppone che tu voglia un database gestito.
+
+00:11:14.570 --> 00:11:17.370
+Ma c'è un vero bivio qui e vale la pena parlarne, chiaramente.
+
+00:11:18.310 --> 00:11:20.490
+Puoi consegnare le chiavi a Microsoft e ottenerle tu.
+
+00:11:20.490 --> 00:11:27.470
+Scegli il database Azure SQL gestito quando vuoi delegare patch, aggiornamenti, backup e alta disponibilità.
+
+00:11:28.550 --> 00:11:32.990
+Sceglilo quando desideri una garanzia di disponibilità superiore e quando stai creando qualcosa di nuovo e vuoi procedere in mente.
+
+00:11:33.310 --> 00:11:37.470
+È pensato per applicazioni cloud first e per team che preferiscono rilasciare prodotti piuttosto che gestire sistema.
+
+00:11:37.470 --> 00:11:43.690
+Consente inoltre a una sola persona di gestire molti più database di quanto farebbe manualmente, il che è fondamentale quando il progetto inizia a crescere.
+
+00:11:44.130 --> 00:11:50.030
+Scegli SQL Server su una macchina virtuale Azure quando ti serve l'accesso a livello di sistema operativo o il controllo totale sul motore.
+
+00:11:50.030 --> 00:11:56.730
+Sceglilo quando devi replicare esattamente una configurazione locale esistente o quando sposti un'applicazione dotata nel cloud senza modifiche al codice.
+
+00:11:57.070 --> 00:12:00.130
+Con la macchina virtuale dici di tu quando eseguire gli aggiornamenti e hai a disposizione ogni fuoco.
+
+00:12:00.710 --> 00:12:03.150
+Sei anche responsabile di patch, backup e piano di failover.
+
+00:12:03.150 --> 00:12:11.010
+Se la tua applicazione dipende dal sistema operativo o da processi pianificati all'interno di SQL Server, la macchina virtuale è spesso l'unica opzione senza intoppi.
+
+00:12:11.470 --> 00:12:12.910
+Esiste un'opzione intermedia che vale l'opera con.
+
+00:12:13.330 --> 00:12:20.690
+Azure SQL Managed Instance offre una compatibilità quasi totale con SQL Server mantenendo i vantaggi della gestione ed è consigliato da Microsoft per la maggior parte delle migrazioni.
+
+00:12:21.290 --> 00:12:25.490
+Quindi se stai spostando un sistema esistente e non è richiesto il controllo completo, questa è spesso la soluzione ideale.
+
+00:12:26.210 --> 00:12:27.310
+Compromesso in sintesi è questo.
+
+00:12:27.910 --> 00:12:30.950
+Gestito significa meno lavoro e maggiori garanzie ma meno parametri da regolare.
+
+00:12:30.950 --> 00:12:35.310
+Una macchina virtuale offre ogni parametro desiderabile con le relative responsabilità.
+
+00:12:36.530 --> 00:12:42.230
+Se sei nuovo in questo campo, l'approccio migliore è partire dal gestito e passare alla macchina virtuale solo per motivi specifici.
+
+00:12:43.570 --> 00:12:46.770
+Gli errori che commettono i principi è conoscere la scelta giusta e metà dell'opera.
+
+00:12:47.210 --> 00:12:50.450
+L'altra metà è non inciampare nelle solite questioni in cui cadono quasi tutti.
+
+00:12:51.010 --> 00:12:51.810
+Analizziamole insieme.
+
+00:12:52.510 --> 00:12:54.130
+Il primo è pagare per picchi mai usati.
+
+00:12:54.130 --> 00:12:57.790
+O l'opposto, affamare un database per risparmiare e poi chiedersi perché sia lento.
+
+00:12:57.790 --> 00:13:02.150
+Servo all'utilizzo reale per un paio di settimane e dimensione in base a quello, non a tentativi.
+
+00:13:02.250 --> 00:13:03.750
+Poi c'è raggruppamento errato dei database.
+
+00:13:04.290 --> 00:13:08.370
+Pool elastici servono per database con picchi e per lo più inattivi, non per carichi di lavoro costanti.
+
+00:13:09.190 --> 00:13:11.590
+Se metti quelli attivi in un pool, competeranno per le stesse risorse.
+
+00:13:12.130 --> 00:13:17.090
+Terzo errore è scegliere il serverless per un'applicazione sempre attiva, per poi irritarsi a causa dei ritardi di avvio.
+
+00:13:17.750 --> 00:13:19.490
+Il serverless è solo per un utilizzo intermittente.
+
+00:13:19.490 --> 00:13:22.910
+Un altro è dimenticare che la conservazione del backup è impostata ai defaults a sette giorni.
+
+00:13:23.170 --> 00:13:27.930
+Se devi conservare lo storico più a lungo o se le norme lo richiedono, devi attivare tu la conservazione a lungo termine.
+
+00:13:28.290 --> 00:13:30.290
+Un altro è ancora dare per scontato alla ridondanza di zona.
+
+00:13:30.830 --> 00:13:34.470
+Nei livelli basic e standard non esiste, quindi devi scegliere un livello che la supporti e attivarla.
+
+00:13:35.330 --> 00:13:37.710
+L'ultimo è considerare il firewall come un aspetto secondario.
+
+00:13:38.870 --> 00:13:40.230
+Nulla entra finché non lo decidi tu.
+
+00:13:40.230 --> 00:13:44.490
+L'abitudine più sicura è mantenerlo così, consentendo l'accesso solo a indirizzi e reti necessari.
+
+00:13:45.830 --> 00:13:49.590
+Non sono errori strani, sono solo quelli che costano silenziosamente soldi e sono alle persone.
+
+00:13:51.050 --> 00:13:52.230
+In sintesi cosa ricordare?
+
+00:13:53.010 --> 00:13:55.050
+Mettiamo tutto insieme in qualcosa di concreto.
+
+00:13:56.190 --> 00:14:00.370
+Azure SQL Database è il motore SQL Server eseguito come servizio gestito nel cloud di Microsoft.
+
+00:14:01.750 --> 00:14:06.470
+Scegli come pagare, col bundle DTU o col modello V-Core, poi selezioni livello e dimensioni.
+
+00:14:06.470 --> 00:14:12.970
+Puoi condividere risorse tra più database con un pull elastico o lasciare che un database inattivo si sospenda col serverless.
+
+00:14:13.670 --> 00:14:16.030
+Backup, alta affidabilità e criptografia sono già attivi.
+
+00:14:16.630 --> 00:14:19.430
+Usalo al posto di una macchina virtuale quando non vuoi gestire tu il server.
+
+00:14:20.030 --> 00:14:21.430
+Ti lascio con una domanda su cui riflette.
+
+00:14:22.370 --> 00:14:26.250
+Se domani Microsoft si occupasse di patch, backup e filover al posto tuo, come useresti quel tempo?

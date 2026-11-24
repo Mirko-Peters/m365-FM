@@ -1,0 +1,637 @@
+WEBVTT
+
+00:00:00.120 --> 00:00:06.840
+Welkom bij de M365FM podcast, waar we de mensen, ideeën en technologieën verkennen die de toekomst van werk vormgeven.
+
+00:00:07.040 --> 00:00:12.900
+Wat Azure SQL Database nu eigenlijk is, laten we beginnen met de eenvoudige versie, voordat we aan de afkortingen beginnen.
+
+00:00:13.140 --> 00:00:17.460
+Azure SQL Database is een relationele database die Microsoft voor je beheert in hun cloud.
+
+00:00:17.660 --> 00:00:21.320
+Je koopt geen machine, installeert geen software en houdt het niet zelf up-to-date.
+
+00:00:21.560 --> 00:00:23.480
+Dat alles ligt nu volledig bij Microsoft.
+
+00:00:23.860 --> 00:00:28.020
+Je maakt een database aan, koppelt je applicatie eraan en de rest gebeurt stilletjes op de achtergrond.
+
+00:00:28.020 --> 00:00:32.720
+De engine eronder is dezelfde SQL Server engine die al decennia lang zakelijke databases draait.
+
+00:00:32.900 --> 00:00:37.400
+Je TSQL werkt nog steeds, je tools maken verbinding en je bestaande vaardigheden zijn direct inzetbaar.
+
+00:00:37.560 --> 00:00:40.340
+Het is absoluut geen uitgeklede versie van SQL Server.
+
+00:00:40.580 --> 00:00:42.760
+Het is hetzelfde beestje, maar dan in een nieuw huis.
+
+00:00:43.000 --> 00:00:45.700
+Dat is het hele idee achter de term database as a-service.
+
+00:00:46.020 --> 00:00:47.840
+Je huurt geen server om het werk zelf te doen.
+
+00:00:48.040 --> 00:00:50.800
+Je huurt een resultaat en iemand anders zorgt dat alles blijft draaien.
+
+00:00:51.080 --> 00:00:53.100
+Microsoft omschrijft de dienst als Evergreen.
+
+00:00:53.100 --> 00:00:58.460
+Dat woord betekent dat het automatisch op de laatste stabiele versie blijft, zodat je nooit tegen een einde van ondersteuning aanloopt.
+
+00:00:58.620 --> 00:01:02.800
+Azure biedt drie manieren om die engine te draaien en weten welke wat is, ruimt veel verwarring op.
+
+00:01:02.900 --> 00:01:07.040
+Azure SQL Database is de volledig beheerde optie en dat is degene waar we het vandaag over hebben.
+
+00:01:07.220 --> 00:01:14.160
+Azure SQL Managed Instance is de bijna complete versie, gebouwd om bestaande SQL Server applicaties vrijwel ongewijzigd naar de cloud te brengen.
+
+00:01:14.320 --> 00:01:20.460
+SQL Server op een Azure virtuele machine is de variant waarbij je alles zelf beheert, precies zoals een server op eigen kantoor.
+
+00:01:20.460 --> 00:01:24.080
+Binnen een Azure SQL Database implementeer je in een van twee vormen.
+
+00:01:24.220 --> 00:01:27.220
+Een enkele database heeft zijn eigen toegewezen set resources.
+
+00:01:27.660 --> 00:01:35.720
+Deze worden beheerd via een zogenaamde logische server, wat in feite een administratieve thuisbasis is voor je databases, logins en firewall regels.
+
+00:01:36.380 --> 00:01:42.040
+Een Elastic Pool is een groep databases die één set resources deelt en we komen er later op terug waarom dat zo belangrijk is.
+
+00:01:42.240 --> 00:01:44.760
+Wat je met dit alles eigenlijk koopt, is delegatie.
+
+00:01:45.000 --> 00:01:49.000
+Microsoft patcht de engine, maakt backups, houdt het beschikbaar en houdt het actueel.
+
+00:01:49.000 --> 00:01:52.880
+Er zijn geen virtuele machines om in de gaten te houden en geen besturingssysteem om te onderhouden.
+
+00:01:53.020 --> 00:01:54.900
+Voor een beginner is dat de hele aantrekkingskracht.
+
+00:01:55.080 --> 00:01:58.680
+De zaken die je normaal gesproken op de harde manier moet leren, zijn simpelweg iemands anders taak.
+
+00:01:58.820 --> 00:02:04.700
+Of die ruil de juiste is voor jou, is een vraag die we aan het einde beantwoorden wanneer we het vergelijken met SQL Server op een virtuele machine.
+
+00:02:05.060 --> 00:02:09.420
+Microsoft presenteert de hele beslissing als één enkele keuze en het is de moeite waard om dat te herhalen.
+
+00:02:09.560 --> 00:02:14.340
+Je beheert de database zelf, inclusief updates en backups, of je besteedt die taken uit aan Azure.
+
+00:02:14.540 --> 00:02:18.020
+Als je eerlijke antwoord is dat je ze wilt uitbesteden, dan ben je hier aan het juiste adres.
+
+00:02:18.020 --> 00:02:24.340
+En als je je zorgen maakt over de kosten, de documentatie van Microsoft stelt het startpunt op ongeveer 5 dollar per maand voor de laagste laag.
+
+00:02:24.460 --> 00:02:26.400
+De twee manieren waarop je ervoor betaalt.
+
+00:02:26.620 --> 00:02:30.060
+Nu je weet wat het is, is de eerste echte beslissing hoe je ervoor gaat betalen.
+
+00:02:30.300 --> 00:02:36.060
+Azure SQL Database wordt aangeboden via twee inkoopmodellen en de keuze voor één daarvan bepaalt alles.
+
+00:02:36.320 --> 00:02:38.960
+De eerste is het DTU-model en dat is het pakket.
+
+00:02:38.960 --> 00:02:42.700
+Rekenkracht, opslag en in- en uitvoer zijn gebundeld in één getal.
+
+00:02:42.880 --> 00:02:48.460
+Een DTU is een gecombineerde maatstaf voor CPU, geheugen, lees- en schrijfacties, dus die hoef je niet apart te beheren.
+
+00:02:48.600 --> 00:02:51.000
+Je kiest een grote en die grote stelt alles in één keer in.
+
+00:02:51.140 --> 00:02:54.400
+Als je houdt van een simpel pakket met een voorspelbaar maandbedrag, dan is dit het menu.
+
+00:02:54.580 --> 00:02:56.600
+De niveaus zijn Basic, Standard en Premium.
+
+00:02:56.860 --> 00:02:59.940
+De schaling is grofweg lineair, wat het eenvoudig maakt om te begrijpen.
+
+00:03:00.180 --> 00:03:03.860
+Verdubbel de DTU's en je verdubbelt grofweg de beschikbare resources voor de database.
+
+00:03:03.860 --> 00:03:08.120
+Een grote premium database kan honderden keren meer rekenkracht hebben dan de kleinste Basic-versie.
+
+00:03:08.260 --> 00:03:11.660
+De tweede is het V-Core-model en dat is de Stel je eigen database samen, optie.
+
+00:03:11.840 --> 00:03:16.280
+Een V-Core is een logische processor en in dit model kun je rekenkracht en opslag apart kiezen.
+
+00:03:16.460 --> 00:03:20.940
+Je kiest ook de hardware-generatie, zodat je de prijs afstemt op de workload in plaats van te gokken.
+
+00:03:21.240 --> 00:03:25.760
+Microsoft raadt dit model aan en de niveaus zijn General Purpose, Business Critical en Hyperskill.
+
+00:03:25.980 --> 00:03:27.720
+Eén verschil is belangrijk voor je portemonnee.
+
+00:03:27.860 --> 00:03:30.920
+Het V-Core-model voegt drie extra's toe die het DTU-pakket niet heeft.
+
+00:03:30.920 --> 00:03:35.560
+Er is Azure Hybrid Benefit waarmee je bestaande SQL-server licenties hergebruikt voor korting
+
+00:03:35.560 --> 00:03:38.880
+en er is serverless, waarbij een database pauseert als niemand hem gebruikt.
+
+00:03:39.140 --> 00:03:42.200
+Hyperscale is de derde optie en die is gebouwd voor serieuze schaalbaarheid.
+
+00:03:42.380 --> 00:03:45.180
+Dat verschil is een grote reden waarom teams vaak voor V-Core kiezen.
+
+00:03:45.340 --> 00:03:47.040
+Er is nog één ding dat je gerust moet stellen.
+
+00:03:47.240 --> 00:03:51.820
+Je zit niet voor altijd vast, want Microsoft staat toe dat je online een database converteert van het ene naar het andere model.
+
+00:03:52.040 --> 00:03:54.460
+Je applicatie blijft gedurende het hele proces gewoon online.
+
+00:03:54.680 --> 00:03:59.560
+Dat maakt de overstap eerder een instelling aanpassen dan opnieuw opbouwen, dus dit is een beslissing, geen levenslange verbintenis.
+
+00:03:59.560 --> 00:04:04.080
+Als je de simpelst mogelijke start en een vast bedrag wilt, is DTU een redelijke plek om te beginnen.
+
+00:04:04.280 --> 00:04:08.100
+Als je controle, besparingen of groeiruimte wilt, zul je uiteindelijk bij V-Core uitkomen.
+
+00:04:08.260 --> 00:04:12.400
+En er is een niveau in verstopt dat een rustige, kleine database bijna gratis maakt terwijl deze inactief is.
+
+00:04:12.560 --> 00:04:13.820
+We komen daar zo op terug.
+
+00:04:14.000 --> 00:04:15.120
+Je service laag kiezen.
+
+00:04:15.320 --> 00:04:18.040
+Het kiezen van een aankoopmodel brengt je naar de juiste winkel.
+
+00:04:18.240 --> 00:04:21.220
+Het kiezen van een service laag is het pakken van het product uit het schap.
+
+00:04:21.340 --> 00:04:25.440
+Hier vind je de grootte en de infrastructuur en het is minder intimiderend dan de naam doet vermoeden.
+
+00:04:25.440 --> 00:04:29.640
+Aan de V-Core kant is General Purpose de standaard en het meest logische startpunt.
+
+00:04:29.800 --> 00:04:34.540
+Het is budgetvriendelijk en verwerkt de meeste dagelijkse werklasten prima met opslag tot 4 terabyte.
+
+00:04:34.680 --> 00:04:40.520
+Business Critical biedt veel snellere lokale opslag, gebouwd voor toepassingen die snelle reacties op zware transacties vereisen.
+
+00:04:40.720 --> 00:04:45.320
+Het kost ongeveer 2,7 keer zoveel als General Purpose en de reden is simpel.
+
+00:04:45.500 --> 00:04:50.420
+Het houdt drie extra kopieën van je gegevens warm en paraat, dus een storing vertraagt je nauwelijks.
+
+00:04:50.420 --> 00:04:54.740
+Hyperscale is de grote jongen met opslag die schaalt tot 128 terabyte.
+
+00:04:54.960 --> 00:04:58.520
+Microsoft noemt dit nu de aanbevolen standaard voor nieuwe en moderne werklasten.
+
+00:04:58.740 --> 00:05:02.600
+Aan de DTU-kant lopen de lagen van Basic via Standard naar Premium.
+
+00:05:02.880 --> 00:05:09.260
+Basic is oprecht klein met 5 DTU's en 2 gigabyte aan opslag en het is perfect om te leren of voor een kleinzijproject.
+
+00:05:09.520 --> 00:05:15.100
+Standard beslaat een breed middensegment en Premium voegt de snelheid en in-memory functies toe die je wilt voor drukkere zaken.
+
+00:05:15.100 --> 00:05:20.500
+Een klein ding is belangrijk om te weten, de kleinste DTU-groottes geven je minder dan één enkele VKOR aan rekenkracht.
+
+00:05:20.680 --> 00:05:24.360
+Dus als je werklast zwaar leunt op de processor, wil je een of twee maten groter kiezen.
+
+00:05:24.520 --> 00:05:26.400
+Dat brengt ons bij de laag die ik je had beloofd.
+
+00:05:26.560 --> 00:05:29.560
+Binnen de VKOR General Purpose laag kun je kiezen voor Serverless.
+
+00:05:29.740 --> 00:05:32.340
+Een serverloze database schaalt zijn rekenkracht automatisch.
+
+00:05:32.580 --> 00:05:36.800
+Standaard pauzeert hij na een uur van inactiviteit, dus je betaalt alleen voor opslag terwijl hij slaapt.
+
+00:05:36.960 --> 00:05:39.940
+Op het moment dat iemand verbinding maakt, wordt hij wakker en gaat hij weer aan het werk.
+
+00:05:39.940 --> 00:05:44.680
+Dat maakt het ideaal voor incidentele projecten, demo's of databases die de meeste weekenden inactief zijn.
+
+00:05:44.680 --> 00:05:47.620
+Het is niet de juiste keuze voor een werklast die de klok ronddraait.
+
+00:05:47.780 --> 00:05:51.940
+Het is ook niet beschikbaar in de business critical, laag of ergens in het DTU-model.
+
+00:05:52.140 --> 00:05:57.380
+De vuistregel die beginners veel stress bespaart, is dit begin klein, hou de cijfers in de gaten en groei later.
+
+00:05:57.600 --> 00:06:02.060
+Het wijzigen van de grote is een online operatie, dus je zit niet vast aan de keuze die je op dag één maakte.
+
+00:06:02.300 --> 00:06:06.020
+Begin goedkoop, meet eerlijk en laat de statistieken je vertellen wanneer je moet opschalen.
+
+00:06:06.200 --> 00:06:08.200
+Een lesstuk pols, de truc van tijd delen.
+
+00:06:08.300 --> 00:06:10.700
+Tot nu toe hebben we het gehad over één database tegelijk.
+
+00:06:10.820 --> 00:06:12.960
+Het geldprobleem ontstaat pas als je er tientallen hebt.
+
+00:06:12.960 --> 00:06:16.620
+Het is de moeite waard om dit te begrijpen, want dit is waar veel teams stilletjes te veel uitgeven.
+
+00:06:16.840 --> 00:06:21.240
+Stel je twintig kleine databases voor elk een paar minuten per dag bezig en de rest van de tijd inactief.
+
+00:06:21.380 --> 00:06:26.680
+Als je ze elk eigen resources geeft die zijn afgestemd op de piek, betaal je voor capaciteit die bijna de hele dag onbenut blijft.
+
+00:06:26.820 --> 00:06:30.740
+Als je ze daarentegen indeelt op het gemiddelde, zullen ze vastlopen zodra er een piek optreedt.
+
+00:06:30.800 --> 00:06:34.880
+Geen van beide is ideaal en een lesstuk pol lost dit op door er een timeshare model van te maken.
+
+00:06:35.080 --> 00:06:39.620
+Je plaatst een groep databases op één server en zij delen één vaste pol van resources voor één prijs.
+
+00:06:39.620 --> 00:06:43.220
+De actieve databases lenen capaciteit, terwijl de inactieven deze weer teruggeven.
+
+00:06:43.380 --> 00:06:49.220
+De gedeelde resources worden gemeten in EDTU's of V-chores, maar je kunt het zien als één brandstoftank waar iedereen uit putt.
+
+00:06:49.640 --> 00:06:51.440
+Microsoft's eigen voorbeeld maakt het concreet.
+
+00:06:51.600 --> 00:06:57.000
+Twintig databases die elk pieken tot negentig DTU's, maar gemiddeld onder de vijf zitten, kunnen honderd EDTU's met elkaar delen.
+
+00:06:57.140 --> 00:07:02.880
+Dat is een vermindering van twintig keer in resources en ongeveer dertien keer in kosten vergeleken met het apart schalen van elke database.
+
+00:07:02.880 --> 00:07:08.300
+Het idee is dat die pieken nooit samenvallen, waardoor de pol zelden meer dan een fractie van de totale vraag tegelijk hoeft te bedienen.
+
+00:07:08.480 --> 00:07:12.480
+Het patroon dat hiervan profiteert is specifiek en dit is het punt waar mensen de fout in gaan.
+
+00:07:12.660 --> 00:07:17.780
+Pols zijn geschikt voor databases met een laag gemiddeld gebruik en korte, zeldzame pieken die niet allemaal tegelijk plaatsvinden.
+
+00:07:18.140 --> 00:07:23.560
+Besparingen kunnen al optreden bij slechts twee databases in de standaardlaag en hoe meer je toevoegt, hoe gunstiger de berekening meestal uitvalt.
+
+00:07:23.740 --> 00:07:26.860
+Maar als je databases de hele dag, elke dag bezet zijn, groep eer ze dan niet.
+
+00:07:27.020 --> 00:07:30.920
+Ze zullen met elkaar concurreren voor dezelfde resources en je zult je afvragen waarom de prestaties verslechteren.
+
+00:07:30.920 --> 00:07:33.300
+Alles wordt voor je afgehandeld, zodat jij dat niet hoeft te doen.
+
+00:07:33.440 --> 00:07:36.400
+We hebben het onderdeel bewaard dat ervoor zorgt dat je s'nachts rustig kunt slapen.
+
+00:07:36.580 --> 00:07:38.960
+Dit is waar de beheerde service echt zijn waarde bewijst.
+
+00:07:39.160 --> 00:07:42.320
+Backups gebeuren automatisch en je kunt ze niet per ongeluk uitschakelen.
+
+00:07:42.520 --> 00:07:48.580
+Azure maakt elke week een volledige backup, elke 12 tot 24 uur een differentiële backup en ongeveer elke 10 minuten een log backup.
+
+00:07:48.780 --> 00:07:50.560
+Dat geeft je zoiets als een ongedaan knop.
+
+00:07:50.700 --> 00:07:54.980
+Met Point in Time Restore kun je een database terugzetten naar een specifiek moment binnen het retentievenster.
+
+00:07:55.200 --> 00:07:58.780
+Dat venster is standaard 7 dagen en configureerbaar tot 35 dagen.
+
+00:07:58.780 --> 00:08:03.900
+Wanneer iemand op vrijdagmiddag een tabel verwijderd, is deze functie het verschil tussen een slechte dag en een RAM.
+
+00:08:03.900 --> 00:08:06.680
+Als je meer nodig hebt dan dat, zijn er nog twee extra lagen.
+
+00:08:06.900 --> 00:08:11.660
+Geo Restore laat je herstellen in een compleet andere regio wanneer de primaire regio problemen heeft.
+
+00:08:11.840 --> 00:08:12.860
+En het staat standaard aan.
+
+00:08:13.080 --> 00:08:18.160
+Lange termijnretentie bewaart volledige backups tot wel 10 jaar, precies het soort zaken waar compliance teams om vragen.
+
+00:08:18.320 --> 00:08:21.180
+Je moet het gewoon aanzetten, want het staat niet standaard ingeschakeld.
+
+00:08:21.320 --> 00:08:24.660
+Er is een klein addertje onder het gras waar mensen over struikelen, dus het is goed om dat duidelijk te zeggen.
+
+00:08:24.660 --> 00:08:27.360
+Je kunt deze automatische backups niet als een bestand downloaden.
+
+00:08:27.480 --> 00:08:31.280
+Ze staan in door Microsoft beheerde opslag en zijn bedoeld om te herstellen, niet om te exporteren.
+
+00:08:31.400 --> 00:08:36.020
+Als je echt een kopie van je gegevens buiten Azure nodig hebt, exporteer je in plaats daarvan een draagbaar pakket.
+
+00:08:36.180 --> 00:08:39.880
+En het vreemde is dat het verwijderen van een database de backups niet direct verwijderd.
+
+00:08:40.000 --> 00:08:43.660
+Een database verwijderen en opnieuw aanmaken om geld te besparen kan je juist meer kosten.
+
+00:08:43.920 --> 00:08:47.160
+Hoge beschikbaarheid werkt op dezelfde manier en blijft meestal onzichtbaar.
+
+00:08:47.400 --> 00:08:52.300
+Standaard worden je gegevens drie keer gekopieerd binnen één datacenter en gaan vastgelegde gegevens nooit verloren.
+
+00:08:52.300 --> 00:08:56.660
+Als een machine waarop je database draait uitvalt, verplaatst Azure je automatisch naar een nieuwe.
+
+00:08:56.880 --> 00:09:01.940
+Voor iets sterker schakel je zonneredendantie in, die je database verspreidt over twee of drie zones in een regio.
+
+00:09:02.180 --> 00:09:05.200
+Zo neemt een volledig uitvalend datacenter jou niet mee in de val.
+
+00:09:05.420 --> 00:09:12.540
+Weet wel dat het helemaal niet beschikbaar is in de basic of standard tires, maar wel in general purpose, business critical, hyperscale en premium.
+
+00:09:12.780 --> 00:09:15.380
+De beschikbaarheidsgarantie stijgt mee met al die opties.
+
+00:09:15.380 --> 00:09:25.500
+Microsoft's gepubliceerde service level agreement garandeert voor zonneredendanten business critical en premium databases minimaal 99,995% en business critical bevat nog een mooie bonus.
+
+00:09:25.740 --> 00:09:31.960
+Het geeft je een gratis alleen lezen kopie van je database, zodat je rapporten en analyses daarop kunnen draaien zonder je hoofdwerklast te belasten.
+
+00:09:32.220 --> 00:09:33.560
+Beveiliging zonder het jargon.
+
+00:09:33.800 --> 00:09:37.220
+Backups beschermen je tegen ongelukken en beveiliging beschermt je tegen mensen.
+
+00:09:37.220 --> 00:09:40.080
+Het helpt om het te zien als lagen die van buiten naar binnen bewegen.
+
+00:09:40.320 --> 00:09:43.260
+De buitenste laag is de voordeur en die is standaard op slot.
+
+00:09:43.260 --> 00:09:46.160
+Niets bereikt je server totdat je het expliciet toestaat.
+
+00:09:46.280 --> 00:09:49.360
+Met firewall regels kun je toegang verlenen op basis van IP-adres.
+
+00:09:49.540 --> 00:09:53.580
+Je kunt alles beperken tot je eigen virtuele netwerk, zodat alleen je eigen systemen toegang hebben.
+
+00:09:53.720 --> 00:09:55.300
+De volgende laag gaat over wie je bent.
+
+00:09:55.500 --> 00:10:02.280
+Je kunt inloggen met Microsoft Entra ID, het identiteitssysteem dat voorheen Azure Active Directory heette, of met een gewone SQL gebruikersnaam en wachtwoord.
+
+00:10:02.440 --> 00:10:04.660
+Entra is de betere keuze als je die kunt gebruiken.
+
+00:10:04.840 --> 00:10:11.000
+Het biedt multifactor authenticatie, voorwaardelijke toegangsregels en een manier om te voorkomen dat wachtwoorden in verbindingsreeksen worden hardgecodeerd.
+
+00:10:11.000 --> 00:10:13.080
+Dan is er nog wat je mag doen zodra je binnen bent.
+
+00:10:13.260 --> 00:10:18.680
+Het leidende principe is least privilege, wat simpelweg betekent dat je mensen de kleinst mogelijke toegang geeft die ze nodig hebben voor hun werk.
+
+00:10:18.820 --> 00:10:22.240
+Als je verder moet gaan, kan beveiliging op rijniveau individuele rijen verbergen.
+
+00:10:22.420 --> 00:10:27.120
+Op die manier ziet een gebruiker alleen de eigen gegevens, wat handig is als veel klanten één database delen.
+
+00:10:27.120 --> 00:10:31.540
+Versleuteling komt op drie plaatsen voor, en het goede nieuws is dat de belangrijkste al is ingeschakeld.
+
+00:10:31.740 --> 00:10:34.380
+Gegevens in transit worden altijd versleuteld met TLS.
+
+00:10:34.660 --> 00:10:39.680
+Gegevens in rust worden beschermd door transparante gegevensversleuteling, die standaard is ingeschakeld bij elke nieuwe database.
+
+00:10:39.900 --> 00:10:45.940
+En voor een specifieke gevoelige kolom, zoals een creditcardnummer, kan Always Encrypted voorkomen dat zelfs uw eigen databasebeheerders deze kunnen lezen.
+
+00:10:46.100 --> 00:10:47.820
+De sleutel bereikt de service zelf nooit.
+
+00:10:47.820 --> 00:10:52.300
+Ten slotte is er toezicht op problemen, waarbij auditing vastlegt wie wat heeft gedaan in uw eigen opslag.
+
+00:10:52.440 --> 00:10:57.480
+En Defender for Cloud slaat alarm bij zaken als SQL-injectiepogingen en vreemde inlogpatronen.
+
+00:10:57.620 --> 00:11:03.440
+U kunt ook de gevoelige gegevens in uw database klassificeren en labelen, wat u een overzicht geeft van waar uw risico's werkelijk liggen.
+
+00:11:03.560 --> 00:11:06.700
+De belangrijkste conclusie is dat de veilige instellingen de standaardinstellingen zijn.
+
+00:11:06.880 --> 00:11:09.720
+Uw voornaamste taak is bepalen wie toegang krijgt en wat zij kunnen aanpassen.
+
+00:11:09.880 --> 00:11:14.500
+Azure SQL-database of een virtuele machine, alles tot nu toe gaat ervan uit dat u een beheerde database wilt.
+
+00:11:14.500 --> 00:11:18.220
+Maar hier is echt sprake van een keuze en het is de moeite waard om dat hardop uit te spreken.
+
+00:11:18.380 --> 00:11:21.280
+U kunt de sleutels aan Microsoft geven of u kunt ze zelf houden.
+
+00:11:21.480 --> 00:11:28.060
+Kies de beheerde Azure SQL-database wanneer u wilt dat patching, upgrades, backups en hoge beschikbaarheid uit handen worden genomen.
+
+00:11:28.300 --> 00:11:33.280
+Kies hiervoor wanneer u die hogere beschikbaarheidsgarantie wilt en wanneer u iets nieuws bouwt en snel wilt schakelen.
+
+00:11:33.460 --> 00:11:37.740
+Het is gebouwd voor cloud-first applicaties en voor teams die liever opleveren dan beheren.
+
+00:11:37.920 --> 00:11:43.940
+Het stelt één persoon ook in staat veel meer databases te beheren dan handmatig mogelijk zou zijn, wat belangrijk is zodra uw project begint te groeien.
+
+00:11:43.940 --> 00:11:50.360
+Kies SQL-server op een Azure virtuele machine wanneer u toegang op besturingssysteemniveau nodig heeft of volledige controle over de engine wilt.
+
+00:11:50.520 --> 00:11:56.740
+Kies hiervoor wanneer u een bestaande on-premises configuratie exact moet evenaren of wanneer u een oude applicatie naar de cloud verplaatst zonder codewijzigingen.
+
+00:11:56.900 --> 00:12:00.460
+Bij een virtuele machine bepaalt u zelf wanneer updates worden uitgevoerd en krijgt u alle functies.
+
+00:12:00.640 --> 00:12:03.820
+U bent zelf verantwoordelijk voor de patching, de backups en het failover plan.
+
+00:12:04.020 --> 00:12:11.240
+Als uw applicatie afhankelijk is van het besturingssysteem of van geplande taken binnen SQL-server zelf, is de virtuele machine vaak de enige optie die niet tegenwerkt.
+
+00:12:11.240 --> 00:12:13.300
+Er is een tussenoptie die het vermelden waard is.
+
+00:12:13.480 --> 00:12:20.900
+Azure SQL-managed instance biedt bijna volledige SQL-server compatibiliteit met behoud van de beheerde voordelen en Microsoft raadt dit aan voor de meeste migraties.
+
+00:12:21.080 --> 00:12:25.840
+Dus als u een bestaand systeem verplaatst en volledige controle niet strikt vereist is, is dat vaak de ideale oplossing.
+
+00:12:26.060 --> 00:12:27.660
+De afweging in één zin is deze.
+
+00:12:27.860 --> 00:12:31.640
+Beheerd betekent minder werk en een sterkere garantie, maar ook minder knoppen om aan te draaien.
+
+00:12:31.640 --> 00:12:36.060
+Een virtuele machine betekent elke knop die je maar wilt, met de verantwoordelijkheid die daarbij hoort.
+
+00:12:36.200 --> 00:12:43.040
+Als je nieuw bent in dit alles, is de eerlijke standaard keuze om beheerd te starten en alleen naar een virtuele machine te grijpen als je daar een specifieke reden voor hebt.
+
+00:12:43.260 --> 00:12:44.720
+De fouten die beginners maken.
+
+00:12:44.960 --> 00:12:46.880
+De juiste keuze kennen is het halve werk.
+
+00:12:47.060 --> 00:12:50.760
+De andere helft is niet struikelen over diezelfde handvol dingen waar bijna iedereen in trapt.
+
+00:12:50.960 --> 00:12:52.280
+Laten we ze dus even doornemen.
+
+00:12:52.500 --> 00:12:58.300
+De eerste is betalen voor een piek die je nooit gebruikt, of het tegenovergestelde, een database uithongeren om een paar dollar te besparen en je daarna afvragen waarom hij traag is.
+
+00:12:58.300 --> 00:13:01.900
+Bekijk je werkelijke verbruik een paar weken lang en baseer je grootte daarop, niet op een gok.
+
+00:13:02.040 --> 00:13:04.120
+Daarna volgt het groeperen van de verkeerde databases.
+
+00:13:04.400 --> 00:13:08.900
+Elastic polls zijn bedoeld voor databases met wisselende belasting die grotendeels inactief zijn, niet voor workloads die de hele dag op volle toeren draaien.
+
+00:13:09.080 --> 00:13:11.960
+Zet de drukke exemplaren in een po en ze zullen concurreren om dezelfde resources.
+
+00:13:12.260 --> 00:13:17.280
+De derde is kiezen voor serverless bij een altijd actieve applicatie en je vervolgens ergeren aan de vertraging bij het pauseren en opstarten.
+
+00:13:17.540 --> 00:13:19.920
+Serverless is bedoeld voor onregelmatig gebruik, punt uit.
+
+00:13:20.100 --> 00:13:23.300
+Een andere fout is vergeten dat de standaard retentieperiode voor backup 7 dagen is.
+
+00:13:23.300 --> 00:13:27.920
+Als je de historie langer wilt bewaren of als een compliance regel dit vereist, moet je zelf lange termijnretentie inschakelen.
+
+00:13:28.060 --> 00:13:30.860
+Nog een is ervan uitgaan dat zonder redundantie standaard is inbegrepen.
+
+00:13:31.080 --> 00:13:35.420
+Bij de basic en standard tires bestaat het helemaal niet, dus je moet een ondersteunde tier kiezen en het inschakelen.
+
+00:13:35.600 --> 00:13:38.020
+En de laatste is de firewall als bijzaak behandelen.
+
+00:13:38.180 --> 00:13:42.160
+Er komt niets binnen tenzij jij dat toestaat en de veiligste gewoonte is om dat zo te houden,
+
+00:13:42.380 --> 00:13:45.440
+waarbij je alleen toegang geeft tot de adressen en netwerken die dat echt nodig hebben.
+
+00:13:45.680 --> 00:13:50.320
+Dit zijn geen exotische fouten, het zijn gewoon de dingen die mensen stilletjes geld en nachtrust kosten.
+
+00:13:50.320 --> 00:13:55.440
+Ter afsluiting, wat moet je onthouden? Laten we dit samenvatten in iets waar je echt wat aan hebt.
+
+00:13:55.620 --> 00:14:00.820
+Azure SQL Database is de SQL Server Engine die als beheerde service in de cloud van Microsoft draait.
+
+00:14:01.020 --> 00:14:05.700
+Je kiest hoe je betaalt, hetzij via het DTU-pakket of het zelf samen te stellen V-Core-model,
+
+00:14:05.900 --> 00:14:07.400
+en daarna kies je een tier en een grote.
+
+00:14:07.620 --> 00:14:13.240
+Je kunt resources delen tussen veel databases met een elastic pool of een rustige database zichzelf laten pauzeren met serverless.
+
+00:14:13.460 --> 00:14:16.180
+Backups, hoge beschikbaarheid en encryptie staan allemaal standaard aan,
+
+00:14:16.180 --> 00:14:19.820
+en je kiest hiervoor in plaats van een virtuele machine wanneer je de server liever niet zelf beheert.
+
+00:14:19.820 --> 00:14:22.240
+Dus, ik laat je achter met één vraag om over na te denken.
+
+00:14:22.460 --> 00:14:25.880
+Als Microsoft morgen het patchen, backups maken en veel over van je overneemt,
+
+00:14:25.980 --> 00:14:27.840
+waar zou je die tijd dan daadwerkelijk aan besteden?
