@@ -13,6 +13,16 @@ import site_sidebar as SBR  # noqa: E402
 BASE = "https://www.m365.fm"
 
 
+def setUpModule():   # Tests sollen auch nach dem Event-Ende (22.01.2027) gelten: Karte als laufend annehmen
+    global _RUN
+    from unittest.mock import patch
+    _RUN = patch.object(ADS, "con_running", lambda today=None: True); _RUN.start()
+
+
+def tearDownModule():
+    _RUN.stop()
+
+
 def card(lang):
     h = SBR.render(SBR.Index(), BASE, lang, "Copilot", [], None, None)
     return h, re.search(r'<section class="sb-card sb-con">.*?</section>', h).group(0)
@@ -45,6 +55,13 @@ class TextBanner(unittest.TestCase):
             self.assertNotIn("<img", g, lang); self.assertNotIn("gsource", g, lang)
             self.assertIn(SBR.GSRC, g); self.assertIn(SBR.GADD[lang], g, lang)
         self.assertEqual(set(SBR.L10N) - set(SBR.GADD), set())
+
+    def test_card_disappears_after_event(self):
+        from unittest.mock import patch
+        with patch.object(ADS, "con_running", lambda today=None: False):
+            h = SBR.render(SBR.Index(), BASE, "en", "Copilot", [], None, None)
+        self.assertNotIn("sb-con", h); self.assertIn("sb-card sb-g", h)
+        self.assertEqual(ADS.CON_UNTIL, "2027-01-22")   # dasselbe Ende wie Haus-Banner (site_ads) und Kopfleiste (generate_site.M365CON_END)
 
     def test_css_for_text_banner(self):
         css = (ROOT / "assets" / "sbar.css").read_text("utf-8")

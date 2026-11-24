@@ -31,6 +31,18 @@ def cards(html):
     return out
 
 
+
+def setUpModule():   # Karte auch nach dem Event-Ende (22.01.2027) pruefbar
+    global _RUN
+    from unittest.mock import patch
+    import site_ads as ADS
+    _RUN = patch.object(ADS, "con_running", lambda today=None: True); _RUN.start()
+
+
+def tearDownModule():
+    _RUN.stop()
+
+
 class SidebarTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

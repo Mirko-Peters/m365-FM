@@ -183,6 +183,9 @@ def render(ix, BASE, lang, text="", items=(), url_of=None, title_of=None, all_ur
     new = f'<section class="sb-card"><h2>{esc(t["latest"])}</h2><ol class="sb-list">{late}</ol><a class="sb-more" href="{esc(all_url)}">{esc(t["all"])}</a></section>' if late else ""
     con = (f'<section class="sb-card sb-con">' + (con_text(lang) if CON_TEXT else f'<a href="{CON}" rel="noopener" aria-label="M365Con International 2027">{con_img(BASE)}</a>')
            + f'<a class="sb-btn" href="{CON}" rel="noopener">{esc(t["seat"])}</a></section>')
+    import site_ads as ADS
+    if not ADS.con_running():   # nach dem Event (CON_UNTIL 22.01.2027, gleiches Ende wie Haus-Banner und Kopfleiste) faellt die Karte weg; der taegliche Bau raeumt auf
+        con = ""
     goog = (f'<section class="sb-card sb-g">' + (google_text(lang) if CON_TEXT else f'<a class="gb" href="{GSRC}" rel="noopener" target="_blank"><img src="{BASE}/assets/gsource.webp" alt="Add M365.fm as a preferred source on Google" width="647" height="192" loading="lazy"></a>') + f'<p>{t["google"]}</p></section>')
     links = " ".join(f'<a href="{esc(shp[k])}" rel="noopener">{n}</a>' for k, n in LISTEN if shp.get(k))
     more = " ".join(x for x in ((f'<a href="{esc(listen_url)}">{esc(t["platforms"])}</a>' if listen_url else ""), (f'<a href="{esc(rss)}" rel="noopener">RSS</a>' if rss else "")) if x)
