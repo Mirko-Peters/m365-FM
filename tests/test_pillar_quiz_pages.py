@@ -217,8 +217,9 @@ class Privacy(unittest.TestCase):
     def test_certopus_section(self):
         de, en = SL.privacy_de(), SL.privacy_en()
         self.assertIn('id="lernpfad-zertifikat"', de); self.assertIn('id="learning-path-certificate"', en)
-        for text, words in ((de, ("Certopus", "DevSquirrel Technologies", "Indien", "Art. 49 Abs. 1 lit. a DSGVO", "Einwilligung", "3 je 24 Stunden")),
-                            (en, ("Certopus", "DevSquirrel Technologies", "India", "Art. 49(1)(a) GDPR", "consent", "3 per 24 hours"))):
+        common = ("Certopus", "DevSquirrel Technologies Private Limited", "support@certopus.com", 'href="https://certopus.com/privacy"')
+        for text, words in ((de, common + ("Indien", "Art. 49 Abs. 1 lit. a DSGVO", "Einwilligung", "3 je 24 Stunden", "bestätigte E-Mail-Adresse")),
+                            (en, common + ("India", "Art. 49(1)(a) GDPR", "consent", "3 per 24 hours", "confirmed email address"))):
             for w in words: self.assertIn(w, text)
 
 

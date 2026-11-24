@@ -92,8 +92,12 @@ Die Position der richtigen Option ist geheim (HMAC mit einem aus `CRON_KEY` abge
 neu erzeugt. Die alten IDs stehen in `data/pillar_quiz.json` unter `retired` und werden nie wieder vergeben. Der Workflow läuft nur noch von Hand.
 Die Lösungen lokal ansehen (nie in Actions, Logs sind öffentlich): `CRON_KEY=… python3 tools/pillar_quiz.py show`.
 
-Datenschutz: Name und E-Mail gehen nur mit Häkchen (Einwilligung) an Certopus (DevSquirrel Technologies, Indien); der Abschnitt steht in der
+Datenschutz: Name und E-Mail gehen nur mit Häkchen (Einwilligung) an Certopus; der Abschnitt steht in der
 Datenschutzerklärung (`/datenschutz/#lernpfad-zertifikat`, `/privacy/#learning-path-certificate`, `site_legal.py`).
+Belegt (Microsoft-Connector-Doku `PowerPlatformConnectors/certified-connectors/Certopus`, Commit c5f24b6b): Betreiber DevSquirrel Technologies Private Limited,
+Kontakt support@certopus.com, Datenschutzerklärung https://certopus.com/privacy. Nicht belegt: Firmensitz aus einer Primärquelle (Indien nur aus Drittquellen),
+ein Auftragsverarbeitungsvertrag, Standardvertragsklauseln, Serverstandort – deshalb stützt sich die Übermittlung auf die Einwilligung (Art. 49 Abs. 1 lit. a DSGVO).
+Die Seite enthält nur die belegten Angaben; eine juristische Prüfung steht aus.
 
 ## Zertifikat
 
