@@ -66,8 +66,8 @@ class SidebarTest(unittest.TestCase):
 
     def test_fixed_banner_dimensions(self):   # kein Layout-Sprung (CLS)
         h = side(self.ix, "en")
-        self.assertIn('width="675" height="563"', h)
-        self.assertIn('width="647" height="192"', h)
+        self.assertIn('class="sb-cont"', h)   # M365Con-Karte als Text-Banner (24.11.2026), kein Bild
+        self.assertIn('class="gb gbt"', h)   # Google-Karte als Text-Banner (24.11.2026), kein Bild
 
 
 class HeaderSourceTest(unittest.TestCase):
