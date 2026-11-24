@@ -5,6 +5,7 @@
 - Der Push-Body von tools/pillar_quiz.py besteht die Prüfung des Workers (qid beginnt mit "<pillar>-", answer 0-3).
 - Certopus-IDs in data/pillars.json (Doku) = CERTOPUS_PATHS in worker/wrangler.toml; Kursname im Worker-Rückfall = CERTOPUS_PATHS.
 Den Ablauf Start -> Abgabe -> Zertifikat gegen den echten Worker prüft worker/test/learnquiz_e2e.test.mjs."""
+import base64
 import json
 import re
 import sys
@@ -72,7 +73,10 @@ class Consistency(unittest.TestCase):
     def test_keys_file_is_encrypted(self):
         blob = (ROOT / "data" / "pillar_quiz_keys.enc").read_bytes().strip()
         self.assertTrue(blob.startswith(b"gAAAAA"), "kein Fernet-Token")
-        for bad in (b"answer", b"why_en", b"qid", b"lean-manufacturing"): self.assertNotIn(bad, blob)
+        self.assertRegex(blob, rb"^[A-Za-z0-9_=-]+$", "nur Base64url, kein Klartext")
+        # Klartext-Marken in Anfuehrungszeichen bzw. lang genug: kurze Woerter wie qid stehen zufaellig im Base64 (ca. 15 % je 40 KB)
+        for bad in (b'"answer"', b"why_en", b'"qid"', b"lean-manufacturing"): self.assertNotIn(bad, blob)
+        self.assertNotIn(b'"qid"', base64.urlsafe_b64decode(blob + b"=" * (-len(blob) % 4)))
 
     def test_constants_match_worker(self):
         self.assertEqual(S.PER_PILLAR, js_const("PER_PILLAR"))
