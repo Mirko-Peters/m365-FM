@@ -1,8 +1,8 @@
 ---
 title: "A weekly permissions report you will actually read"
 summary: "A permissions report only helps if someone reads it. Learn how to combine built-in SharePoint reports with a simple weekly routine, including a Power Automate reminder, so permission drift gets noticed early."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-24
 topics: [sharepoint-reporting, sharepoint-permissions, power-automate]
