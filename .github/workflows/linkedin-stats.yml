@@ -1,4 +1,4 @@
-name: LinkedIn-Follower in die Mediadaten (woechentlich + manuell)
+name: LinkedIn-Follower in die Mediadaten (manuell)
 # tools/linkedin_stats.py zaehlt die Follower der Unternehmensseite M365 Show ueber die Pages Data Portability API (nur lesen) und
 # traegt die Summe in data/stats/m365con_linkedin.json ein (page.page_followers). Es werden nur Summen gespeichert, nie Follower-Daten.
 # Einrichtung (einmalig, Schritt fuer Schritt in LINKEDIN.md):
@@ -6,11 +6,9 @@ name: LinkedIn-Follower in die Mediadaten (woechentlich + manuell)
 #   Optional zur automatischen Erneuerung: Secrets LINKEDIN_REFRESH_TOKEN, LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET (Refresh-Token 365 Tage)
 #   Variable oder Secret LINKEDIN_PAGE_ID  Zahl der Seite (Admin-URL linkedin.com/company/<ZAHL>/admin/)
 # Reihenfolge: erst Modus "probe" (prueft nur die Form der Antwort, speichert nichts), dann "fetch" mit dry_run, dann "fetch".
-# Zeitplan: sonntags 03:29 UTC liest der Lauf nur die aktuelle Follower-Zahl aus und speichert sie (fetch, ohne dry_run, ohne trust_total).
-# Solange Secret oder Seiten-ID fehlen, endet der geplante Lauf gruen mit Hinweis statt jede Woche rot.
+# Kein Zeitplan mehr (Mirko 24.11.2026): Die Pages Data Portability API liefert nur einen Teil der Follower (22.11.: 1.875 statt 102.022 laut
+# Seitenanalyse), der Schutz gegen Halbierung speichert dann nichts. Die Follower-Zahl wird weiter von Hand eingetragen; der Lauf bleibt fuer Proben.
 on:
-  schedule:
-    - cron: "29 3 * * 0"
   workflow_dispatch:
     inputs:
       mode:
