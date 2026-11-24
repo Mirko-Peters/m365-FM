@@ -261,6 +261,28 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
+ "account-reconciliation-agent": {
+  "d1h": "f748caefaefcbb66",
+  "desc": "The Account Reconciliation Agent is an AI agent in Dynamics 365 Finance that helps reconcile the general ledger against subledgers such as payables, receivables, tax and bank.",
+  "faq": [
+   {
+    "a": "It is an AI agent in Dynamics 365 Finance that helps reconcile the general ledger against subledgers such as accounts payable, accounts receivable, tax and bank.",
+    "q": "What is the Account Reconciliation Agent in Dynamics 365 Finance?"
+   },
+   {
+    "a": "It is part of Dynamics 365 Finance and Operations.",
+    "q": "Which product is the Account Reconciliation Agent part of?"
+   },
+   {
+    "a": "Microsoft provides a configuration article for the agent in the general ledger section of the Dynamics 365 Finance documentation on Microsoft Learn.",
+    "q": "Where can configuration information be found?"
+   }
+  ],
+  "h": "a7f6de8c9f98cfc1",
+  "long": "The Account Reconciliation Agent (Dynamics 365 Finance) is an AI agent in Dynamics 365 Finance that supports the reconciliation of the general ledger against subledgers. The subledgers named in its description include accounts payable, accounts receivable, tax and bank.\n\nIn finance operations, reconciliation compares balances and transactions recorded in the general ledger with the detail held in subledgers, so that differences can be identified and resolved. The Account Reconciliation Agent is intended to assist with this task within Dynamics 365 Finance rather than leaving the comparison entirely to manual work.\n\nThe agent is part of Dynamics 365 Finance and Operations. Microsoft documents how to set it up in a configuration article in the general ledger section of the Dynamics 365 Finance documentation on Microsoft Learn. That article is the reference point for configuration details, which are not described further here.\n\nNo M365.FM episodes are currently linked to this entity. Readers looking for specifics on setup, prerequisites or supported scenarios should consult the official Microsoft documentation.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
+ },
  "accounts-payable": {
   "d1h": "",
   "desc": "Accounts payable is the finance function and set of records that track what a company owes its vendors and prepare and process vendor payments.",
@@ -497,6 +519,28 @@
   "long": "Adaptive Cards are platform-agnostic UI snippets written in JSON. A host application, such as Microsoft Teams, Outlook or Copilot Studio, takes the JSON description and renders it as native user interface in its own look and feel. Because the card is described as data rather than as platform-specific code, the same card definition can be shown in different hosts. Microsoft documents the format in the Adaptive Cards section of Microsoft Learn.\n\nIn practice, Adaptive Cards are used to put small, focused pieces of interface into the places where people already work. Power Automate uses them for interactive approval and notification messages, so a flow can post a card into Teams or Outlook that asks someone to approve a request or acknowledge an alert. Cards can also be returned by bots and Teams extensions, which lets structured, interactive results appear directly in a chat or channel instead of a plain text reply.\n\nThe M365.FM episode \"Build Interactive Microsoft Teams Adaptive Cards\" describes the JSON essentials as body, actions and data binding. The episode says that cards can capture input, fire approvals, update themselves and even drive bots without users leaving Teams. It covers wiring Action.Submit and Action.Execute to Power Automate or to a bot, and it mentions personalization and conditional logic as ways to make cards more useful. Its framing is that cards should do something, rather than being pretty but pointless.\n\nThe episode \"Build Microsoft Teams Apps with Bots, Tabs, and Extensions\" places Adaptive Cards inside the wider Teams extensibility model. It distinguishes search extensions, which surface existing records on demand, action extensions, which collect input, trigger back-end workflows and return results via adaptive cards, and link unfurling, which turns pasted URLs into rich previews. The walkthrough builds an action-based extension with the Teams SDK and Bot Framework that queries external systems such as CRM or ticketing tools and posts structured, interactive results into the chat. The same episode lists rollout considerations such as OAuth and SSO, permissions, privacy scope and the app manifest.\n\nMeeting scenarios are covered in \"Build Microsoft Teams Meeting Apps and Bots\". There, Adaptive Cards are named alongside tab apps and bots as one of the app types for in-meeting experiences, providing rich and adaptive UI, while the meeting APIs and meeting SDK support things like polls, Q&A, whiteboards and live reactions.\n\nA service-management example appears in \"Integrate Jira Service Management with Microsoft Teams\". The episode notes that interactive Adaptive Cards in that integration let users transition issue status, assign owners or add comments from the chat card without opening Jira, and that card actions can trigger Jira automations as part of a larger workflow. The episode \"Build Actionable Teams Notifications with Adaptive Cards\" approaches the topic from the notification side, discussing how Teams notifications work and how to configure alerts so that they inform without constant interruption.\n\nTypical decisions around Adaptive Cards include where the card is produced, which action type handles the response, and which host will render it. A card sent from a Power Automate flow suits approvals and notifications, while a bot or extension suits conversational or lookup scenarios. Since rendering is left to the host, the card author describes content and intent in JSON and relies on the host to present it as native UI.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
+ },
+ "adaptive-protection": {
+  "d1h": "082873579b3169a2",
+  "desc": "Adaptive Protection is a Microsoft Purview Insider Risk Management capability that assigns user risk levels and applies data loss prevention and Conditional Access controls accordingly.",
+  "faq": [
+   {
+    "a": "Adaptive Protection is a capability of Microsoft Purview Insider Risk Management. It assigns users risk levels and dynamically applies data loss prevention and Conditional Access controls based on those levels.",
+    "q": "What is Adaptive Protection in Microsoft Purview?"
+   },
+   {
+    "a": "It applies data loss prevention and Conditional Access controls. The controls applied depend on the risk level assigned to each user.",
+    "q": "Which controls does Adaptive Protection apply?"
+   },
+   {
+    "a": "It is part of Microsoft Purview, specifically the Insider Risk Management capability.",
+    "q": "Which product is Adaptive Protection part of?"
+   }
+  ],
+  "h": "0b0a6a947b5f4a67",
+  "long": "Adaptive Protection is a capability of Microsoft Purview Insider Risk Management. It assigns risk levels to users and dynamically applies data loss prevention and Conditional Access controls based on those levels. It is part of Microsoft Purview.\n\nThe feature is used to link the assessment of insider risk to enforcement. Rather than applying the same policies to every user, controls can vary with the risk level a user has been assigned. Two kinds of controls are involved: data loss prevention, which governs how sensitive data may be handled, and Conditional Access, which governs access to resources.\n\nWithin the Microsoft ecosystem, Adaptive Protection connects the insider risk signals gathered in Microsoft Purview Insider Risk Management with protective measures that respond to them. The entity is listed under Microsoft Purview as its parent product.\n\nNo M365.FM episodes are currently linked to Adaptive Protection (Microsoft Purview).",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
  },
  "adaptive-scopes": {
   "d1h": "",
@@ -953,6 +997,28 @@
   "long": "Agent Registry is the unified inventory in Microsoft Agent 365 that lists every agent operating in an organization. It covers both Microsoft agents and non-Microsoft agents, which gives administrators a single place to see what is running in the environment. According to the short description of the product, admins use it to find agents and, where needed, to quarantine or block them. The registry is documented in connection with Microsoft Entra Agent ID under the topic of registry convergence.\n\nThe main purpose of an agent registry is visibility. As organizations build and adopt more AI agents, it becomes difficult to know which agents exist, who built them and which data they use. A central registry answers those questions in one location. The M365.FM episode \"Codify Business Logic into a Digital Twin for AI Agents\" describes a centralized agent registry that tracks every agent and shows who built it and what data it uses, and it pairs this with security policies, access controls, data classification and lifecycle governance that includes review, deployment and monitoring.\n\nThe registry also serves as an administrative control point. In the episode \"Microsoft Agent Builder — Simply Explained\", the steps for managing an agent begin with selecting that agent from the Agent Registry. From the agent details pane, an admin opens the Users tab and decides who gets the agent. The Installed option assigns users who will have the agent pre-installed, with choices such as just me, the entire organization, or specific users and groups. The Available option controls who can install and use the agent, ranging from no users in the organization to all users or specific users and groups. This shows the registry acting as the place where availability and assignment of an agent are managed.\n\nSeveral M365.FM episodes treat a central registry as a governance best practice rather than an optional extra. The episode \"Graph-Powered AI Agents: An Enterprise Architecture Guide\" lists maintaining an agent registry alongside defining clear decision rights and implementing centralized policy configuration. It recommends narrow permission bundles and short-lived credentials for agents, continuous authorization that evaluates risk and policy at each action, and guardrails that limit delegation and tool use to prevent impersonation and excessive privilege accumulation. The episode also mentions emergency controls such as kill switches, which fit with the ability to quarantine or block an agent that the registry supports.\n\nIn security operations, the episode \"Security Agent Fabric: Autonomous AI for Cyber Defense\" advises establishing a central agent registry to manage all agents effectively and to maintain visibility and compliance across the security environment. It combines this with a strong identity control plane that enforces zero trust principles, so that every agent's actions are verified and controlled, and with agent orchestration over secure communication protocols. The registry here is one component of a wider approach in which agents are identified, governed and monitored.\n\nThe episode \"Secure Microsoft Copilot with Entra ID and Zero Trust\" connects the registry to identity governance. It states that Microsoft Entra allows least privilege to be applied so that agents operate with only the permissions they need, and that ongoing governance through periodic recertification campaigns and a centralized agent registry strengthens the security posture. Its summary of best practices names a permissions audit, least privilege for users and AI agents, and ongoing governance with recertification and a centralized registry.\n\nTaken together, the sources describe Agent Registry as the inventory layer of agent governance: it establishes what agents exist, supports decisions about who can install or use them, and provides the means to quarantine or block an agent. Identity, permissions, policy and lifecycle controls then build on that inventory.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
+ },
+ "agent-run-steps": {
+  "d1h": "eb455b5632045f8d",
+  "desc": "Run steps in Azure AI Foundry Agent Service are step-by-step records of a run, such as tool calls and generated messages, used for debugging and auditing agent behaviour.",
+  "faq": [
+   {
+    "a": "Run steps are the step-by-step records of what happened during a run, such as tool calls and generated messages. They show the individual actions an agent took while the run was executing.",
+    "q": "What are run steps in Azure AI Foundry Agent Service?"
+   },
+   {
+    "a": "They are used for debugging and auditing agent behaviour. Reviewing the recorded steps helps explain how an agent produced its output and which tools it called.",
+    "q": "What are run steps used for?"
+   },
+   {
+    "a": "No. Run steps describe the progression of a run, including intermediate actions like tool calls and generated messages, rather than only the end result.",
+    "q": "Do run steps record only the final answer of an agent?"
+   }
+  ],
+  "h": "146cfd3f8fa57509",
+  "long": "Run steps (Azure AI Foundry Agent Service) are the step-by-step records of what happened during a run of an agent. Each record captures an individual action taken while the run was in progress, such as a tool call or a generated message.\n\nThe main purposes of run steps are debugging and auditing agent behaviour. By reviewing the sequence of steps, a developer or administrator can see how an agent arrived at its output, which tools it invoked, and which messages it produced along the way. This makes run steps a useful reference when an agent does not behave as expected or when its activity needs to be reviewed after the fact.\n\nRun steps belong to Azure AI Foundry Agent Service, the Azure service in which agents are executed as runs. They describe the internal progression of a single run rather than the final result alone.\n\nNo related topics, episodes or official links are listed for this term on M365.FM at this time. Further details, such as the specific fields available in each step or how steps are retrieved, are not covered here and should be checked in the official Azure AI Foundry documentation.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
  },
  "agent-skill": {
   "d1h": "",
@@ -2046,6 +2112,28 @@
   "long": "An applicant tracking system (ATS) is software that manages recruiting and hiring electronically. It collects and organizes job applications in one place and supports the search and screening of applicants, including filtering by keywords.\n\nIn practice, an ATS is used by recruiting and human resources teams to handle the flow of applications for open positions. Instead of reviewing each submission by hand, staff can search stored applications and narrow them down using keyword-based criteria, which supports a more structured hiring process.\n\nThis entry is a general concept page. No specific product, vendor, or related Microsoft topic is linked to it at this time, and no M365.FM episodes are currently associated with it. Further details, such as particular features, integrations, or implementation approaches, are not covered here.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-23"
+ },
+ "application-access-policies": {
+  "d1h": "41ee37a04b2bc009",
+  "desc": "Application access policies in Exchange Online limit an app with Microsoft Graph or EWS application permissions to a defined set of mailboxes, usually a mail-enabled security group.",
+  "faq": [
+   {
+    "a": "They restrict an app that holds Microsoft Graph or EWS application permissions to a defined set of mailboxes, typically a mail-enabled security group.",
+    "q": "What do application access policies in Exchange Online do?"
+   },
+   {
+    "a": "New-ApplicationAccessPolicy is used to create a policy, and Test-ApplicationAccessPolicy is used to test whether an app has access to a particular mailbox.",
+    "q": "Which cmdlets are used to manage application access policies?"
+   },
+   {
+    "a": "They apply to apps that hold Microsoft Graph or Exchange Web Services (EWS) application permissions.",
+    "q": "Which permission types do application access policies apply to?"
+   }
+  ],
+  "h": "f3bf641efd89cb2c",
+  "long": "Application access policies (Exchange Online) are policies that restrict which mailboxes an application can reach when it holds Microsoft Graph or Exchange Web Services (EWS) application permissions. Without such a restriction, application permissions can apply across the tenant. A policy narrows that scope to a defined set of mailboxes, typically represented by a mail-enabled security group.\n\nThe policies are managed with Exchange Online cmdlets. New-ApplicationAccessPolicy creates a policy, and Test-ApplicationAccessPolicy checks whether a given app is allowed or denied access to a specific mailbox. These tools let administrators define the boundary and verify the result.\n\nThe concept sits under Exchange Online, where the policies are configured and enforced for apps that access mailbox data through Microsoft Graph or EWS. It is used when an application needs mailbox access but should only operate on a limited group of users rather than every mailbox in the organization.\n\nNo M365.FM episodes are currently linked to this topic.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
  },
  "application-gateway-network-isolation": {
   "d1h": "b7a1961c3a574a2f",
@@ -5822,6 +5910,15 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-23"
  },
+ "bi-center-of-excellence": {
+  "d1h": "813ccfedfb25eceb",
+  "desc": "A BI Center of Excellence (CoE) is an internal team of technical and business experts that sets standards, mentors users and guides governance for self-service and enterprise BI.",
+  "faq": [],
+  "h": "cf8cac4a2927a27e",
+  "long": "A BI Center of Excellence (CoE), also called an analytics Center of Excellence, is an internal team made up of technical and business experts. Its purpose is to set standards, mentor users and guide governance for both self-service and enterprise business intelligence. The concept is described in the Microsoft Fabric adoption roadmap, where it appears as a dedicated area of guidance.\n\nIn practice, a BI CoE serves as a central point of coordination within an organization. It brings together people who understand the technology and people who understand the business, so that analytics work follows shared practices rather than being handled in isolation by individual teams. Typical responsibilities in this context include defining standards, supporting and mentoring users across the organization, and shaping how governance is applied to BI solutions.\n\nThe topic is relevant for organizations adopting Microsoft Fabric and Power BI, because the Fabric adoption roadmap treats the Center of Excellence as one of the elements that help an analytics program mature in a structured way. The Microsoft Learn guidance on this subject is the primary reference for how the concept is framed.\n\nNo M365.FM episodes are currently linked to this entity, and no related topics are listed in the available information. Readers who want detail on organizing and operating a BI CoE are best served by the official Microsoft documentation on the Fabric adoption roadmap.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
+ },
  "bicep-module": {
   "d1h": "c1ad22f9213b4b3b",
   "desc": "A Bicep module is a Bicep file called from another Bicep file as a reusable building block, exchanging values through parameters and outputs.",
@@ -7934,6 +8031,15 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-23"
  },
+ "conditional-access-report-only-mode": {
+  "d1h": "f21ea611d31f7515",
+  "desc": "Report-only mode is a Conditional Access policy state in Microsoft Entra ID that logs how a policy would apply at sign-in without enforcing it, helping assess impact first.",
+  "faq": [],
+  "h": "618f9e52db364b41",
+  "long": "Report-only mode (Conditional Access) is a policy state in Microsoft Entra ID. In this state, a Conditional Access policy is evaluated whenever a sign-in occurs and the result is recorded in the logs, but the policy's controls are not enforced. Users are not blocked or prompted for additional requirements because of a policy that is set to report-only.\n\nThe mode is used to assess the potential impact of a Conditional Access policy before turning it on. By reviewing the logged evaluation results, administrators can see how a policy would have applied to real sign-ins and decide whether its conditions and controls behave as intended. This allows a policy to be tested and adjusted before enforcement begins, rather than discovering unintended effects after users are affected.\n\nReport-only mode is one of the states a Conditional Access policy can be placed in, alongside enforced and disabled states. It is part of the broader Conditional Access capability in Microsoft Entra ID, which evaluates signals at sign-in to make access decisions.\n\nMicrosoft documents the feature in its Learn article on Conditional Access report-only mode. No M365.FM episodes are currently linked to this entity, and no related topics are recorded for it yet.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
+ },
  "conditional-formatting": {
   "d1h": "",
   "desc": "Conditional formatting automatically changes cell appearance based on value rules in Excel, and similar rule-based formatting appears in Power BI and Microsoft Lists.",
@@ -8749,6 +8855,28 @@
   "long": "Copilot Analytics is a set of tools in Microsoft 365 and Viva Insights that shows organizations how employees use Copilot and what impact it has. The goal is to support decisions about how to roll Copilot out, where to invest, and how to improve productivity. Rather than guessing whether an AI investment pays off, administrators, managers and leaders can look at usage and outcome data.\n\nAccording to Microsoft Learn, Copilot Analytics has six areas. The first is the set of readiness and adoption reports in the Microsoft 365 admin center. The second is the Microsoft Copilot Dashboard, aimed at leaders and managers. The third is an Agent Dashboard. The fourth is a Consumption Dashboard that tracks credit use against limits. The fifth is a group of ready-made Copilot Analytics reports. The sixth is Advanced Reporting, which offers Power BI templates and more than 100 Copilot metrics.\n\nMeasurement works through licensing. Every employee who holds a Copilot license is automatically given a Viva Insights service plan and becomes part of the measured population. Agents with Entra ID are not measured. The Copilot Dashboard requires a Microsoft 365 or Office 365 business or enterprise subscription with Exchange Online, and data typically appears within seven days of license assignment. The Agent Dashboard requires at least 50 Copilot licenses. Advanced Reporting is limited to users with the Insights Analyst role, and it supports uploading organizational or business outcome data so that usage can be related to results such as ticket resolution time or retention.\n\nTypical decisions around Copilot Analytics concern adoption and licensing. The episode \"Secure and Govern Microsoft 365 Copilot\" lists Viva Insights, Copilot Business Impact reports and Copilot Analytics reports among the tools for measuring adoption, tracking active users and analyzing license utilization, alongside the Microsoft 365 admin center and the Copilot Dashboard in the Viva Insights web app. The episode also describes regular audits that find inefficiencies in Copilot license usage, so that inactive licenses can be reclaimed and reallocated to employees who need them. It names business-oriented measures such as cost avoidance from automating manual processes, revenue impact tied to faster proposal and analysis cycles, and user satisfaction and retention improvements.\n\nThe episode \"Measure Microsoft 365 Copilot Productivity and Efficiency\" frames the same idea from the perspective of team performance. It says that metrics show whether an investment in AI pays off, help align a team's work with business goals and keep everyone accountable. According to the episode, tracking these numbers lets teams spot wins, share success stories and stay motivated, and it recommends using Copilot Analytics to monitor progress and make data-driven decisions. The episode's position is that the numbers, rather than assumptions, should show whether Microsoft 365 Copilot works for a team.\n\nIn practice, Copilot Analytics sits between licensing, governance and change management. Readiness and adoption reports help decide who should receive licenses and where enablement is needed, the dashboards give managers a view of usage, and Advanced Reporting lets analysts connect Copilot usage to business data. Because the measured population is defined by Copilot license assignment and certain features have prerequisites such as the 50-license minimum or the Insights Analyst role, planning for roles, licenses and data availability is part of using the tools effectively.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
+ },
+ "copilot-app-builder": {
+  "d1h": "9d81ae855555380e",
+  "desc": "App Builder is an agent in Microsoft 365 Copilot that creates small personal or team apps from natural-language prompts, with data stored in Microsoft Lists.",
+  "faq": [
+   {
+    "a": "App Builder is an agent in Microsoft 365 Copilot that generates small personal or team apps from natural-language prompts.",
+    "q": "What is App Builder in Microsoft 365 Copilot?"
+   },
+   {
+    "a": "Apps created with App Builder store their data in Microsoft Lists (SharePoint lists) rather than in Dataverse.",
+    "q": "Where does App Builder store app data?"
+   },
+   {
+    "a": "No. App Builder is part of Microsoft 365 Copilot and operates as one of its agents.",
+    "q": "Is App Builder a separate product from Microsoft 365 Copilot?"
+   }
+  ],
+  "h": "0c747a4e4925ec22",
+  "long": "App Builder (Microsoft 365 Copilot) is an agent within Microsoft 365 Copilot that generates small apps from prompts written in natural language. It is aimed at personal or team-level scenarios, where a user describes the app they need and the agent produces it.\n\nA defining characteristic of App Builder is where it keeps application data. Instead of using Dataverse, the apps it creates store their data in Microsoft Lists, which are SharePoint lists. This places the data in a familiar Microsoft 365 storage layer rather than in a separate data platform.\n\nApp Builder is part of Microsoft 365 Copilot and works as one of its agents. It relates to the broader topics of low-code app creation, Microsoft Lists and SharePoint, and Copilot-driven automation of everyday work.\n\nMicrosoft publishes responsible AI documentation for the product in the form of an FAQ for App Builder on Microsoft Learn. No M365.FM episodes are currently linked to this entity.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
  },
  "copilot-chat": {
   "d1h": "",
@@ -10029,6 +10157,24 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-23"
  },
+ "data-protection-baseline": {
+  "d1h": "843855e32c1ec0b0",
+  "desc": "Data Protection Baseline is the default assessment in Microsoft Purview Compliance Manager, built from controls of standards and regulations such as NIST, ISO, FedRAMP and GDPR.",
+  "faq": [],
+  "h": "da8df952f311f9d0",
+  "long": "Data Protection Baseline is the default assessment in Microsoft Purview Compliance Manager. It is available at every subscription level, which makes it the starting point for organizations that begin to track their compliance posture in Compliance Manager.\n\nThe baseline is assembled from controls drawn from common standards and regulations, including NIST, ISO, FedRAMP and GDPR. Rather than mapping to a single framework, it brings together controls that recur across several of them. This gives administrators a general view of data protection and compliance requirements without first selecting a specific regulatory template.\n\nWithin Microsoft Purview Compliance Manager, an assessment groups controls and tracks progress against them. The Data Protection Baseline serves as the default assessment of this kind, so it is typically the first assessment present in a tenant.\n\nNo M365.FM episodes are currently linked to this entry, and no further related topics are recorded for it.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
+ },
+ "data-protection-impact-assessment": {
+  "d1h": "9a9195c5122419b4",
+  "desc": "A data protection impact assessment (DPIA) is a GDPR-required assessment for processing likely to create a high risk to people's rights, documenting risks and mitigating measures.",
+  "faq": [],
+  "h": "8c9f718745866354",
+  "long": "A data protection impact assessment (DPIA) is an assessment required under the GDPR when a type of processing is likely to result in a high risk to people's rights. It is a structured way of examining a processing activity before and during its operation, rather than a one-off formality.\n\nA DPIA documents the processing itself, including what it involves and why it is carried out. It also assesses the necessity and proportionality of that processing, identifies the risks it creates for individuals, and records the measures intended to mitigate those risks. The result is a written record that shows how the risks were considered and addressed.\n\nIn the context of the Microsoft ecosystem, a DPIA is a concept that organizations may need to consider when evaluating processing that is likely to be high risk. The facts available for this entry do not link it to specific Microsoft products or services, and no M365.FM episodes are currently associated with the term.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
+ },
  "data-provenance": {
   "d1h": "",
   "desc": "Data provenance is the documented history of a data asset's origin, custody and transformations, used to validate and audit where data came from and how it changed.",
@@ -10741,6 +10887,28 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-23"
  },
+ "declarative-agent": {
+  "d1h": "9166eae4d4406040",
+  "desc": "A declarative agent customizes Microsoft 365 Copilot with instructions, knowledge sources and actions, running on Copilot's own orchestrator and models.",
+  "faq": [
+   {
+    "a": "A declarative agent customizes Microsoft 365 Copilot using instructions, knowledge sources and actions. It runs on Copilot's own orchestrator and models.",
+    "q": "What is a declarative agent in Microsoft 365 Copilot?"
+   },
+   {
+    "a": "A declarative agent inherits the security and compliance of Microsoft 365 Copilot, since it runs on Copilot's own orchestrator and models.",
+    "q": "How does a declarative agent handle security and compliance?"
+   },
+   {
+    "a": "It is a customization of Microsoft 365 Copilot and is classified under that broader topic. It extends Copilot through instructions, knowledge sources and actions.",
+    "q": "How does a declarative agent relate to Microsoft 365 Copilot?"
+   }
+  ],
+  "h": "b6b534854a3ae957",
+  "long": "A declarative agent is a way to customize Microsoft 365 Copilot. It is defined through instructions, knowledge sources and actions, and it runs on the same orchestrator and models that Microsoft 365 Copilot itself uses. Because of this, it inherits the security and compliance characteristics of Microsoft 365 Copilot rather than introducing a separate runtime.\n\nThe concept is used to narrow or specialize Copilot's behavior for a particular purpose. Instructions describe how the agent should respond, knowledge sources determine which content it can draw on, and actions let it perform tasks. In this way, the same underlying Copilot capabilities can be shaped for a specific scenario without building a custom model or orchestration layer.\n\nDeclarative agent (Microsoft 365 Copilot) sits under the broader topic of Microsoft 365 Copilot, and it is part of the extensibility options described for that product. Microsoft documents the topic in an overview of declarative agents within the Microsoft 365 Copilot extensibility documentation.\n\nNo M365.FM episodes are currently linked to this entity, so there are no episode-specific discussions to reference here.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
+ },
  "decorator-pattern": {
   "d1h": "882f2bb8562ad87c",
   "desc": "The Decorator pattern is a software design pattern that wraps an existing object or service to add behavior, such as logging or validation, without changing its core implementation.",
@@ -11259,6 +11427,28 @@
   "long": "Digital twin builder (Microsoft Fabric) is a preview item in Real-Time Intelligence within Microsoft Fabric. It is used to model real-world assets and the relationships between them as an ontology, working on a low-code semantic canvas.\n\nThe data behind the twin is stored in OneLake, the unified data lake that underpins Microsoft Fabric. The item belongs to the Microsoft Fabric platform and sits within its Real-Time Intelligence workload, which places it alongside other Fabric capabilities for working with data on that platform.\n\nBecause the feature is in preview, its scope and behavior may change before general availability. Microsoft's documentation for Real-Time Intelligence provides an overview of digital twin builder and is the reference for current capabilities and limitations.\n\nNo M365.FM episodes are currently linked to this topic.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-23"
+ },
+ "digital-twins-definition-language": {
+  "d1h": "16421b216b567bd1",
+  "desc": "Digital Twins Definition Language (DTDL) is a JSON-LD based language for modeling digital twins, used by Azure Digital Twins and IoT Plug and Play.",
+  "faq": [
+   {
+    "a": "DTDL is a JSON-LD based language for describing digital twin models. It defines elements such as properties, telemetry, components, commands and relationships.",
+    "q": "What is Digital Twins Definition Language (DTDL)?"
+   },
+   {
+    "a": "DTDL is used by Azure Digital Twins and by IoT Plug and Play to describe models of twins and devices.",
+    "q": "Where is DTDL used?"
+   },
+   {
+    "a": "A DTDL model can describe properties, telemetry, components, commands and relationships.",
+    "q": "Which elements can a DTDL model contain?"
+   }
+  ],
+  "h": "530d0ce69b9599d7",
+  "long": "Digital Twins Definition Language (DTDL) is a language for describing digital twin models. It is based on JSON-LD, so models are written as JSON documents that follow a defined structure. DTDL is used by Azure Digital Twins and by IoT Plug and Play.\n\nA DTDL model describes the shape of a twin or device through a set of building blocks. These include properties, telemetry, components, commands and relationships. Properties describe the state of an entity, telemetry covers data emitted by it, and commands represent operations that can be invoked. Components allow one model to be composed of others, while relationships describe how twins connect to each other. Together these elements let a model capture both the characteristics of a single entity and the links within a larger environment.\n\nIn practice, DTDL provides the vocabulary for defining the models that Azure Digital Twins uses to represent real-world environments, and the same language is applied to describe the capabilities of devices in IoT Plug and Play. Further details on how models are defined in Azure Digital Twins are available in the Microsoft Learn documentation on models.\n\nNo M365.FM episodes are currently linked to this topic.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
  },
  "direct-lake": {
   "d1h": "",
@@ -12384,6 +12574,28 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
+ "dynamics-365-omnichannel": {
+  "d1h": "3e4e4761fb65848c",
+  "desc": "Omnichannel for Customer Service is a Dynamics 365 capability that brings chat, voice, SMS and social messaging conversations into one agent workspace.",
+  "faq": [
+   {
+    "a": "It is a set of capabilities for Dynamics 365 Customer Service that brings chat, voice, SMS and social messaging conversations into one agent workspace. It also provides routing, customer history and supervisor dashboards.",
+    "q": "What is Omnichannel for Customer Service in Dynamics 365?"
+   },
+   {
+    "a": "According to the available description, it covers chat, voice, SMS and social messaging conversations.",
+    "q": "Which channels does Omnichannel for Customer Service cover?"
+   },
+   {
+    "a": "It is part of Dynamics 365 and provides the omnichannel capabilities of Dynamics 365 Customer Service.",
+    "q": "How does Omnichannel for Customer Service relate to Dynamics 365?"
+   }
+  ],
+  "h": "6d22d431f271f463",
+  "long": "Omnichannel for Customer Service (Dynamics 365) refers to the omnichannel capabilities of Dynamics 365 Customer Service. It combines chat, voice, SMS and social messaging conversations in a single agent workspace, so that service agents handle different communication channels from one place instead of switching between separate tools.\n\nThe capabilities include routing of incoming conversations, access to customer history, and supervisor dashboards. Routing directs conversations as they arrive, customer history gives agents context about the person they are talking to, and the dashboards give supervisors a view of ongoing service activity.\n\nOmnichannel for Customer Service is part of Dynamics 365, the Microsoft business applications family, and extends Dynamics 365 Customer Service with multichannel conversation handling. It is relevant for organizations that want customer interactions across voice, chat, SMS and social channels managed within the same service environment.\n\nNo M365.FM episodes are currently linked to this entity, and no further details beyond the capability description above are recorded here.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
+ },
  "dynamics-365-procurement-and-sourcing": {
   "d1h": "",
   "desc": "Dynamics 365 Procurement and Sourcing covers requisitions, RFQs, vendors, purchase orders, receipts, invoice matching and vendor payment in Dynamics 365 Supply Chain Management.",
@@ -12558,6 +12770,28 @@
   "long": "Dynamics 365 Transportation Management is the transportation planning capability inside Dynamics 365 Supply Chain Management. It connects the movement of physical goods with sales orders, purchase orders, warehouse operations, carriers, routes, rates, loads and freight costs. As part of Dynamics 365, it gives organizations a way to build a connected transportation plan in the same system that holds their orders and warehouse data.\n\nThe purpose of the capability is to replace fragmented ways of handling transport. The M365.FM episode \"Dynamics 365 Transportation Management - Simply Explained\" contrasts managing transportation through separate spreadsheets, emails, carrier rate sheets and phone calls with creating a connected plan directly inside Dynamics 365 Supply Chain Management. The episode, presented by Mirko Peters, walks through how Transportation Management works from the moment goods need to move, covering load planning, carrier selection, warehouse execution and delivery.\n\nAccording to the Microsoft Learn overview, transportation management lets a company use its own transportation operations and find carrier and route solutions for inbound and outbound orders. Examples include finding the fastest route or the cheapest rate for a shipment. The documentation describes several scenarios: using external logistics providers, running an own fleet and passing delivery costs on to customers, running an own fleet with transport included in product prices, and receiving logistics services from another legal entity of the same company, which is treated like an external carrier.\n\nPlanning can be based on orders or on shipments created from those orders, and shipments are not strictly required. Both inbound and outbound processes are covered, including planning transport and receiving an inbound load. Transfer orders belong to the outbound scenario and can be planned together with sales orders, which allows internal stock movements and customer deliveries to be considered in one planning effort.\n\nLoad building is a central part of the planning logic. By default, Transportation Management uses a volume-based strategy that relies on maximum height and weight values taken from the load template. Where this default does not fit a business's needs, custom load building strategies can be created by writing a new class in the application object tree. This makes load building a point where standard behavior and extension work meet.\n\nTypical decisions around the capability include whether to plan by order or by shipment, which carriers and routes to use for inbound versus outbound flows, how freight costs are charged to customers or included in product prices, and whether the default load building strategy is sufficient. Because Transportation Management sits inside Dynamics 365 Supply Chain Management, these decisions connect directly to warehouse execution and order processing rather than living in a separate tool.\n\nFor readers new to the topic, the episode \"Dynamics 365 Transportation Management - Simply Explained\" and the Microsoft Learn overview together outline the scope: orders and warehouse work on one side, carriers, routes, rates and loads on the other, with freight costs tying the plan to financial outcomes.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
+ },
+ "dynamics-365-warehouse-management": {
+  "d1h": "83dd7557faeb637c",
+  "desc": "Warehouse management (Dynamics 365) covers the Dynamics 365 capabilities that guide receiving, put-away, picking and loading, including mobile scanning, barcodes and license plates.",
+  "faq": [
+   {
+    "a": "It is the set of Dynamics 365 capabilities that guide physical warehouse work such as receiving, put-away, picking and loading. It is part of Dynamics 365.",
+    "q": "What is Warehouse management in Dynamics 365?"
+   },
+   {
+    "a": "The capabilities use mobile scanning, barcodes and license plates to guide and identify work in the warehouse.",
+    "q": "Which technologies support warehouse workers in Dynamics 365?"
+   },
+   {
+    "a": "Microsoft provides a warehouse management overview in the Supply Chain warehousing section of its Learn documentation.",
+    "q": "Where can the official documentation be found?"
+   }
+  ],
+  "h": "ece2f658bae27e70",
+  "long": "Warehouse management (Dynamics 365) is the set of warehouse capabilities within Dynamics 365 that guide the physical work carried out in a warehouse. It addresses tasks such as receiving goods, put-away, picking and loading, and it is part of the wider Dynamics 365 product family.\n\nThe capabilities support warehouse workers through mobile scanning, barcodes and license plates. These elements are used to identify goods and containers and to direct workers through the steps of each warehouse process, so that physical movements can be recorded as they happen.\n\nIn practice, organizations that operate warehouses or distribution centers use Warehouse management (Dynamics 365) to structure inbound and outbound work and to keep a consistent flow from the dock to storage locations and out to shipment. Because it is part of Dynamics 365, it sits alongside the other business applications in that ecosystem rather than operating as a standalone product.\n\nMicrosoft documents the feature set in its Learn documentation under the Supply Chain warehousing section, which includes a warehouse management overview. No episodes on M365.FM are currently linked to this topic.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
  },
  "easy-auth": {
   "d1h": "178305e9e161e200",
@@ -14055,6 +14289,28 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-23"
  },
+ "external-tenant": {
+  "d1h": "1bbd8e7d2f994ba8",
+  "desc": "An external tenant is a separate Microsoft Entra tenant, isolated from the workforce tenant, that stores customer identities for consumer-facing apps in Microsoft Entra External ID.",
+  "faq": [
+   {
+    "a": "An external tenant is a separate Microsoft Entra tenant, isolated from the workforce tenant, that holds customer identities for consumer-facing apps in Microsoft Entra External ID.",
+    "q": "What is an external tenant?"
+   },
+   {
+    "a": "The external tenant is isolated from the workforce tenant. It is used for customer identities, while the workforce tenant is separate from it.",
+    "q": "How does an external tenant differ from a workforce tenant?"
+   },
+   {
+    "a": "It belongs to Microsoft Entra External ID, where it holds customer identities for consumer-facing applications.",
+    "q": "Which product area does an external tenant belong to?"
+   }
+  ],
+  "h": "924c794e369e2bb8",
+  "long": "An external tenant is a separate Microsoft Entra tenant that is isolated from the workforce tenant. It is used to hold customer identities for consumer-facing applications and is part of Microsoft Entra External ID.\n\nThe separation from the workforce tenant means that customer accounts are kept apart from the identities of employees and other internal users. This keeps the organization's own directory distinct from the directory that serves the people who sign in to its public or customer-facing apps.\n\nIn practice, an external tenant is the place where an organization manages the identities of its customers within Microsoft Entra External ID, rather than adding those customers to the directory used for its workforce.\n\nThe External tenant concept has no linked episodes or related topics listed on M365.FM at this time. Further detail on configuration and capabilities is not covered here.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
+ },
  "fabric": {
   "d1h": "",
   "desc": "Microsoft Fabric is an all-in-one analytics platform from Microsoft that combines data engineering, warehousing, real-time analytics and Power BI on OneLake.",
@@ -14208,6 +14464,28 @@
   "long": "Fabric Data Pipelines is the orchestration feature of Microsoft Fabric. It chains activities such as copy data, dataflows and notebooks into a single workflow that runs on a schedule or is started by a trigger. The workflow includes handling for success, failure, retry and timeout conditions, so that a sequence of data tasks can run in a defined order without manual intervention.\n\nThe typical problem it addresses is a data landscape in which files and records arrive at different times and from different sources. The episode \"Fabric Data Pipelines - Simply Explained\" describes the situation: a sales file arrives at seven in the morning, customer records update at eight, and application data shows up whenever it is ready, while someone on the team opens spreadsheets, presses refresh, fixes columns and hopes the report matches the previous day's story. A pipeline replaces that manual coordination with a defined sequence. The episode frames the underlying question as one of control: the data is moving, but who is in control of how and when it moves. It also touches on ETL as the background concept for this kind of work.\n\nIn practice, a pipeline is built from activities. A copy data activity moves data from a source to a destination, a dataflow activity applies transformations, and a notebook activity runs code. Linking these activities and defining what should happen when one of them succeeds, fails, needs a retry or exceeds a time limit turns individual steps into a managed process. Scheduling and triggering determine when the process starts, which matters for decisions about whether data should be refreshed at fixed times or in response to an event.\n\nSecurity is one of the recurring themes in the M365.FM coverage. The episode \"Secure Microsoft Fabric Data Pipelines\" says that pipelines often feel secure by default, but that silent data exposure usually comes from misconfigured permissions, hardcoded secrets and overbroad workspace roles. As described in the episode, hardening an end-to-end pipeline involves using managed identities in place of passwords, centralizing and auditing secrets in Azure Key Vault, and applying precise role-based access control with least privilege at the workspace, pipeline and dataset layers. The episode also advises planning for disaster recovery and regularly testing backup procedures so that sensitive data can be restored quickly if needed.\n\nOperations are the second recurring theme. The episode \"Monitor Microsoft Fabric Data Pipelines\" argues for a proactive, system-level monitoring strategy instead of working without visibility. It breaks monitoring into four pillars: performance metrics, error logging, data lineage and automated recovery. According to the episode, these are wired together so that issues surface early, are routed to the right owners and, where possible, are resolved automatically. It offers concrete runbooks and alert patterns for this purpose. The episode \"Azure Monitor — Simply Explained\" lists the monitoring episode among related listening, which reflects how pipeline operations connect to broader monitoring practices in the Microsoft ecosystem.\n\nFabric Data Pipelines also appears as a related reference in other episodes. The episode \"Private LoRA for Secure AI on Proprietary Enterprise Data\" lists \"Secure Microsoft Fabric Data Pipelines\" among its related conversations and points listeners to Microsoft Fabric as a next step, which places pipelines within the wider Fabric platform and the data preparation that precedes enterprise AI work.\n\nFor teams evaluating the feature, the questions that follow from these sources are practical ones: which activities need to run in what order, what should happen on failure or timeout, who owns alerts, which identity each connection uses, and how secrets and workspace roles are governed. The M365.FM episodes treat security and monitoring as parts of pipeline design from the start rather than additions made afterward.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
+ },
+ "fabric-deployment-pipelines": {
+  "d1h": "725d30d5e755569f",
+  "desc": "Deployment pipelines in Microsoft Fabric and Power BI promote workspace content through development, test and production stages, with REST APIs for automation.",
+  "faq": [
+   {
+    "a": "They are a feature that promotes workspace content through stages such as development, test and production. They are available for both Fabric and Power BI content.",
+    "q": "What are deployment pipelines in Microsoft Fabric and Power BI?"
+   },
+   {
+    "a": "Yes. Deployment pipelines offer REST APIs, which allow promotion steps to be automated rather than run manually.",
+    "q": "Can deployment be automated?"
+   },
+   {
+    "a": "Not necessarily. The feature supports both full deployment and selective deployment, so either an entire stage or chosen items can be promoted.",
+    "q": "Does it move all content at once?"
+   }
+  ],
+  "h": "c8a51fd90c14b48d",
+  "long": "Deployment pipelines (Microsoft Fabric and Power BI) is a feature that moves workspace content through a series of stages, such as development, test and production. It gives teams a structured way to manage how content progresses from authoring to the environment where it is used.\n\nContent can be promoted in two ways: a full deployment, which moves everything in a stage forward, or a selective deployment, which moves only chosen items. This allows changes to be reviewed in an earlier stage before they reach later ones.\n\nDeployment pipelines also provide REST APIs, which make it possible to automate promotion steps instead of performing them manually in the interface. This supports repeatable release processes and fits into continuous integration and continuous delivery (CI/CD) practices for Fabric and Power BI content.\n\nThe feature is documented by Microsoft within the Fabric CI/CD section of Microsoft Learn. No M365.FM episodes are currently linked to this topic, and no related entities have been defined for it yet.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
  },
  "fabric-domains": {
   "d1h": "",
@@ -16660,6 +16938,15 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
+ "headless-commerce": {
+  "d1h": "a303ab5523e0124f",
+  "desc": "Headless commerce is an architecture that separates the selling engine and its business rules from customer-facing screens, with every channel calling the same engine through APIs.",
+  "faq": [],
+  "h": "79fa99e25bdd59c0",
+  "long": "Headless commerce is an approach to building commerce systems in which the selling engine and its business rules are kept separate from the customer-facing screens. The term \"headless\" refers to removing the fixed front end, the \"head,\" from the back-end commerce logic.\n\nIn this model, websites, apps, kiosks or store devices all call the same engine through APIs. The business rules live in one place, while each channel provides its own presentation layer. This allows different touchpoints to share the same underlying commerce capabilities instead of each channel carrying its own copy of the logic.\n\nHeadless commerce is relevant for teams that need to offer selling experiences across several channels or device types while keeping consistent rules behind them. The separation means that a change to a screen does not require a change to the selling engine, and the engine can serve new channels through the same API interface.\n\nNo related topics or M365.FM episodes are linked to this entry yet. The description here is limited to the core definition of the concept.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
+ },
  "health-probe": {
   "desc": "A health probe is a periodic TCP, HTTP or HTTPS check a load balancer sends to each backend instance to decide whether it should receive new traffic.",
   "faq": [
@@ -16797,6 +17084,28 @@
   "long": "Hire-to-retire is the end-to-end HR lifecycle of a worker. It starts with planning and recruiting, continues through hiring, onboarding, management and internal transfers, and ends with termination or retirement. The term is used in HR and finance operations to describe the full span of an employment relationship, and it is one of the standard end-to-end business processes that organizations map when they design or review their enterprise systems.\n\nMicrosoft Learn guidance for Dynamics 365 describes hire to retire as an end-to-end business process that covers the full employee lifecycle, from planning and recruiting a workforce through onboarding, management, compensation and offboarding. The guidance applies to Dynamics 365 Commerce, Finance, Human Resources, Project Operations and Supply Chain Management. It lists seven component process areas: plan and recruit, onboard and manage the employee lifecycle, occupational health and safety, performance and growth, time and attendance, travel and expenses, and benefits, compensation and payroll. In that description the flow is mostly sequential from recruiting to pay, with parallel branches after onboarding.\n\nThe same guidance places hire to retire among other end-to-end processes. Upstream inputs include forecast to plan, source to pay and project to profit. Downstream dependencies include record to report, order to cash and plan to produce. Examples given are expenses posting to the general ledger and production time feeding payroll. Featured Dynamics 365 Human Resources capabilities named there include audit trails, date effectivity, benefits management, self-service, skills tracking, leave management and payroll, applicant tracking and learning integrations. Date effectivity and audit trails matter in this context because employment facts change over time and often need to be reconstructed later.\n\nThe M365.FM episode \"Fix Hidden HR Configuration and Hire-to-Retire Architecture\" takes a more critical view of the term. It argues that hire-to-retire is often treated as a lifecycle, but that this is a story layered on top of fragmented systems. According to the episode, the model appears effective for managing employee lifecycles because it offers a structured path from recruitment onward, yet it presents the process as linear and straightforward. In practice, the episode says, this framing creates complexity that turns into architectural debt in HR systems, which complicates processes and hinders efficiency.\n\nIn the episode's framing, hire-to-retire behaves less like one linear process and more like a stream of facts, obligations and identity changes across many systems. A hire, a transfer or a termination is not a single event inside one application. Each produces facts that must be recorded and obligations that must be honored, and it changes how a person is represented in other systems. This is a different emphasis from the sequential diagram in the product guidance, which does not discuss whether the lifecycle behaves as a network rather than a line.\n\nFor teams working in the Microsoft ecosystem, the practical decision is how to model the lifecycle. A process-map view helps with scoping, ownership and the links to finance and operations processes. The episode's view points toward examining the hidden configuration and system boundaries beneath that map, because the cost of a linear model shows up in the places where systems disagree about who a worker is or what has changed. The episode encourages listeners to recognize and address this debt rather than rely on the lifecycle story alone.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
+ },
+ "honeytoken-accounts": {
+  "d1h": "dab7bc2093139a11",
+  "desc": "Honeytoken accounts are decoy user accounts with no legitimate use; in Microsoft Defender for Identity, any authentication attempt with one triggers an alert.",
+  "faq": [
+   {
+    "a": "A honeytoken account is a decoy user account with a tempting name that has no legitimate use. Any attempt to authenticate with it is considered suspicious.",
+    "q": "What is a honeytoken account?"
+   },
+   {
+    "a": "In Microsoft Defender for Identity, any authentication with a designated honeytoken account triggers an alert.",
+    "q": "How does Microsoft Defender for Identity use honeytoken accounts?"
+   },
+   {
+    "a": "The tempting names are meant to attract the attention of someone exploring accounts. Since the account has no legitimate use, any interaction with it stands out as an indicator of suspicious activity.",
+    "q": "Why do honeytoken accounts have tempting names?"
+   }
+  ],
+  "h": "076dc639aa2061a5",
+  "long": "Honeytoken accounts are decoy user accounts created with tempting, attractive-looking names. Because they have no legitimate business purpose, no genuine user or process should ever sign in with them. Any activity involving such an account is therefore treated as suspicious.\n\nIn Microsoft Defender for Identity, a honeytoken account can be designated so that any authentication with it triggers an alert. This turns the account into a simple tripwire: an attacker who discovers the account and tries to use it, for example while exploring a directory or attempting to move laterally, reveals their presence by doing so.\n\nThe concept is a form of deception-based detection. Rather than relying on patterns of normal behavior, it relies on the fact that the account should never be touched. This makes the signal easy to interpret, since legitimate activity involving the account is not expected at all.\n\nNo linked topics or episodes are currently associated with this entry on M365.FM, and no further details beyond the core definition are recorded here.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
  },
  "hosted-agent": {
   "d1h": "",
@@ -17263,6 +17572,28 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-23"
  },
+ "immutable-storage": {
+  "d1h": "e833d05825bc856b",
+  "desc": "Immutable storage (WORM) is a write once, read many storage behavior in Azure Blob Storage and ADLS Gen2 that prevents data from being modified or deleted.",
+  "faq": [
+   {
+    "a": "WORM stands for write once, read many. Data can be written and read repeatedly, but it cannot be modified or deleted while the protection applies.",
+    "q": "What does WORM mean in immutable storage?"
+   },
+   {
+    "a": "It is offered for Azure Blob Storage and ADLS Gen2.",
+    "q": "Where is immutable storage (WORM) offered?"
+   },
+   {
+    "a": "It is applied through time-based retention policies and legal holds, which prevent the data from being modified or deleted.",
+    "q": "How is immutability applied to stored data?"
+   }
+  ],
+  "h": "c814d58397b8a8f7",
+  "long": "Immutable storage (WORM) is a storage behavior in which data, once written, can be read many times but cannot be modified or deleted. WORM stands for write once, read many. In the Microsoft ecosystem, this behavior is offered for Azure Blob Storage and ADLS Gen2.\n\nThe protection is applied through time-based retention policies and legal holds. A time-based retention policy keeps data protected from change or deletion for a defined period, while a legal hold preserves data until the hold is explicitly removed. Both mechanisms are aimed at situations where the integrity and preservation of stored data must be ensured.\n\nThe concept is relevant wherever stored data has to remain unaltered, such as for records that must be preserved over time or data that must be kept available for review. Because the restriction applies to modification and deletion, it differs from ordinary storage behavior, where data can normally be overwritten or removed.\n\nNo episodes of M365.FM are currently linked to this entry, and no additional related topics have been recorded for it so far.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
+ },
  "impossible-travel": {
   "d1h": "",
   "desc": "Impossible travel is a risk detection that flags sign-ins by one user from locations too far apart to reach in the time between them, hinting at compromised credentials.",
@@ -17328,6 +17659,28 @@
   "long": "Improvement actions are the recommended tasks inside Microsoft Purview Compliance Manager. Each one describes a concrete step that helps an organization move closer to the requirements of a regulation or standard. An improvement action can be assigned to an owner, can hold evidence that the work was done, and can be tested either manually or automatically. When an action is completed and verified, it adds points to the compliance score, which is how Compliance Manager turns a broad compliance question into a number that can be tracked over time.\n\nIn practice, improvement actions sit at the center of the Compliance Manager workflow. Assessments are built from regulatory templates, including pre-built assessments for industry and regional standards as well as custom ones. Each assessment is broken down into controls, and the improvement actions are the recommended steps that address those controls. The episode \"Microsoft 365 as an Enterprise Operating System\" describes how regulatory templates and improvement actions centralize compliance activities, which makes it easier to track evidence and update status. It also notes the step-by-step guidance that Compliance Manager provides, with detailed recommendations for each improvement action, and the risk-based compliance score that measures progress and highlights areas for improvement.\n\nBecause improvement actions can be assigned, they also define who does what. A compliance lead can distribute actions to the teams that actually operate the relevant systems, and those owners can attach evidence and update the status as work proceeds. The episode \"Fix Microsoft 365 Compliance Drift Beyond Green Dashboards\" lists using Compliance Manager with pre-built templates to align with regulations and assigning improvement actions to teams as one of its recommended practices. The idea is that a green dashboard alone does not prove ongoing compliance, while assigned, evidenced and tested actions give a traceable record.\n\nThe ability to test actions manually or automatically matters for how the compliance score stays meaningful. Some actions can be verified by the system based on the configuration it can observe, while others depend on a person confirming that a procedure or control is in place and uploading supporting evidence. The episode \"Microsoft 365 Audit Readiness and Governance Debt\" explains the division of labor with Microsoft Purview: Purview provides the technical capabilities for audit, data governance and retention, while Compliance Manager offers risk assessments, control templates and improvement actions. According to the episode, Purview captures and stores audit logs and retention policies, while Compliance Manager maps controls, recommends changes and tracks evidence for audits.\n\nThe episode \"Microsoft Purview Compliance Manager - Simply Explained\" covers improvement actions as one of its named topics, alongside what Compliance Manager is, the compliance score, assessments, regulations and templates, who does what, and the workflow from start to finish. It presents improvement actions as the part of the tool where the compliance score actually moves, since the score reflects the actions that have been completed and verified.\n\nThe term also appears in a more general sense elsewhere. In the episode \"D365FO Integration Architecture with Anitha Eswaran [MVP-MCT]\", improvement actions refers to a simple table used to track continuous improvement of an integration, with columns for improvement area, action taken and next review date. That usage is separate from the Compliance Manager feature, but it shares the idea of recording a concrete action, an owner or outcome, and a follow-up point so that improvement becomes a routine rather than a one-time effort.\n\nTypical decisions around improvement actions include which assessments to enable, how to prioritize actions by their effect on the score, whom to assign each action to, and how to keep evidence current so that the status stays accurate. Used this way, improvement actions connect regulatory requirements to day-to-day operational work and to audit preparation.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
+ },
+ "inactive-site-policy": {
+  "d1h": "465091f8163974e9",
+  "desc": "Inactive site policy in SharePoint is a SharePoint Advanced Management lifecycle policy that detects sites with no activity and asks owners to confirm they are still needed.",
+  "faq": [
+   {
+    "a": "It detects SharePoint sites that have had no activity for a set period and notifies the owners so they can confirm whether the sites are still needed.",
+    "q": "What does the inactive site policy in SharePoint do?"
+   },
+   {
+    "a": "If the site is not claimed or confirmed by its owners, the policy can make it read-only or archive it.",
+    "q": "What happens to a site that no one claims?"
+   },
+   {
+    "a": "It is a site lifecycle policy in SharePoint Advanced Management, related to the broader SharePoint topic.",
+    "q": "Which product area does this policy belong to?"
+   }
+  ],
+  "h": "5e4127f622973d2c",
+  "long": "Inactive site policy (SharePoint) is a site lifecycle policy within SharePoint Advanced Management. It identifies SharePoint sites that have shown no activity for a defined period and starts a process to decide what should happen to them.\n\nWhen the policy detects an inactive site, it notifies the site owners and asks them to confirm whether the site is still needed. If the site is not claimed or confirmed, the policy can make it read-only or archive it. This gives administrators a structured way to reduce unused content in a SharePoint environment without having to review each site manually.\n\nThe policy is used for site lifecycle management and for keeping SharePoint tenants tidy over time. It relies on owner confirmation as part of the process, so responsibility for deciding the fate of a site stays with the people closest to its content. It belongs to the broader SharePoint topic and sits among the governance capabilities provided by SharePoint Advanced Management.\n\nNo M365.FM episodes are currently linked to this entity. Details on configuring the policy are available in the official Microsoft documentation for the inactive site policy.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
  },
  "incremental-refresh": {
   "d1h": "",
@@ -18491,6 +18844,15 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-23"
  },
+ "key-performance-indicator": {
+  "d1h": "7dab7a3c261b4725",
+  "desc": "A key performance indicator (KPI) is a measure used to judge how well an organization, process or activity is meeting its objectives.",
+  "faq": [],
+  "h": "d795ef3b7c58f576",
+  "long": "A key performance indicator (KPI) is a measure used to judge how well an organization, process or activity is meeting its objectives. It turns a goal into something that can be tracked, so that progress, drift or shortfall becomes visible rather than assumed.\n\nOne perspective discussed on M365.FM argues that a KPI should do more than report a number. In that view, a KPI works as a decision rule: it has a named owner, a defined trigger, and an action that was committed to in advance. The trigger describes the condition under which the measure calls for a response, and the pre-committed action describes what happens when that condition is met. Without these elements, a KPI risks becoming a figure on a dashboard that is observed but never acted on.\n\nThis framing is relevant to anyone who builds reports, scorecards or dashboards, because it shifts the question from \"what can be measured\" to \"what decision does this measure support\". Ownership makes responsibility explicit, the trigger removes ambiguity about when to act, and the agreed action reduces debate at the moment a threshold is crossed.\n\nThe concept appears on M365.FM as a perspective on how measurement should connect to decisions. No specific episodes, products or linked topics are listed for this entry at present.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
+ },
  "key-person-dependency": {
   "d1h": "",
   "desc": "Key person dependency is an operational risk in which critical knowledge or capability sits with one or a few people, creating a single point of failure.",
@@ -19164,6 +19526,28 @@
   "long": "Loop workspaces are shared spaces in Microsoft Loop that group the pages, components, tasks and files of a project or team in one place. They are meant to give a team a single location where project-related information lives, so that members can reach notes, documents and other working material without switching between different tools. A workspace can also be created as a tab in a Microsoft Teams channel, in which case membership follows the channel.\n\nWithin the Microsoft Loop model, workspaces sit above the other building blocks. The episode \"Microsoft To Do vs Planner vs Lists vs Loop\" describes three elements: Loop Components, which can be shared and edited in real time across Teams, Outlook and Word; Loop Pages, which organize Loop components and other content on flexible canvases for dynamic collaboration; and Loop Workspaces, described as shared spaces that bring together Loop Pages and components for cohesive project management. In that description, the workspace is the container, pages are the canvases inside it, and components are the smaller pieces of live content that can also travel into other Microsoft 365 applications.\n\nThe main purpose of a workspace is to keep a body of related work together. A project team, for example, can collect pages, tasks and files in one shared space instead of spreading them across separate places. The same episode notes that Loop helps teams stay connected and productive even when members work in different locations or time zones, which is the situation workspaces are designed for: everyone opens the same space and sees the same current content.\n\nThe Teams integration is a practical decision point. When a workspace is created as a tab in a Teams channel, membership follows the channel, so people who belong to the channel are the ones who belong to the workspace. This ties access to an existing team structure rather than requiring a separate list of members to be managed. Teams that already organize their work by channel can therefore place a workspace next to their conversations and files, while teams that prefer a standalone space can use a workspace without the channel connection.\n\nM365.FM covers the topic in the episode \"Microsoft Loop Workspaces - Simply Explained\". Its summary frames Loop workspaces as a space where a team can collaborate effortlessly, gathering all project-related information in one place so that teamwork is smoother and more efficient. The episode is presented with a practical focus on what the feature is, how it works, and the decisions that matter for architecture, adoption, security, governance and day-to-day operations. Those areas are worth considering when planning a rollout, since a workspace holds shared content and its membership determines who can see it.\n\nLoop workspaces are also mentioned in other M365.FM episodes as related listening. The episode \"OneNote vs Loop vs Copilot with Karinne Diamond Bessette [MVP]\" lists \"Microsoft Loop Workspaces - Simply Explained\" among related episodes, and \"Microsoft Teams Hidden Features with Josh Blalock [MVP]\" and \"Microsoft Mesh - Simply Explained\" both point to the Loop Workspaces episode as a relevant follow-up. Together these references place workspaces within wider conversations about collaboration tools in the Microsoft ecosystem, including how Loop compares with OneNote, Planner, Lists and Microsoft To Do.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
+ },
+ "lotus-1-2-3": {
+  "d1h": "db5ced84d8704b75",
+  "desc": "Lotus 1-2-3 was a spreadsheet program released by Lotus Development in 1983 that dominated the 1980s and was later overtaken by Microsoft Excel.",
+  "faq": [
+   {
+    "a": "Lotus 1-2-3 was a spreadsheet program released by Lotus Development in 1983. It was the dominant spreadsheet program of the 1980s.",
+    "q": "What was Lotus 1-2-3?"
+   },
+   {
+    "a": "Lotus 1-2-3 was later overtaken by Microsoft Excel, which took over as the leading spreadsheet application.",
+    "q": "What happened to Lotus 1-2-3's market position?"
+   },
+   {
+    "a": "Lotus 1-2-3 was released by Lotus Development in 1983.",
+    "q": "Who released Lotus 1-2-3?"
+   }
+  ],
+  "h": "6b557db9d4a84c26",
+  "long": "Lotus 1-2-3 is a spreadsheet program that was released by Lotus Development in 1983. It became the dominant spreadsheet application of the 1980s and is widely remembered as one of the defining business software products of that decade.\n\nSpreadsheet programs are used to organize data in rows and columns, perform calculations and keep numerical models. Lotus 1-2-3 served this purpose for business users during the period when personal computers were becoming common in offices.\n\nIn later years, Lotus 1-2-3 was overtaken by Microsoft Excel. This shift is part of the history of Microsoft's productivity software and helps explain how Excel came to occupy the position it holds in the Microsoft ecosystem today. For readers following Microsoft 365, Lotus 1-2-3 serves as historical context for the evolution of spreadsheet software.\n\nNo linked topics or M365.FM episodes are currently associated with this entry, and no official product site or documentation is listed for it.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
  },
  "low-code-tool": {
   "desc": "A low-code tool builds apps and automations with little or no programming; M365.FM episodes cover examples such as Copilot Studio, Power Pages and AI Builder.",
@@ -22689,6 +23073,15 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
+ "multi-repo": {
+  "d1h": "3ede1318e000e152",
+  "desc": "Multi-repo (polyrepo) is a repository strategy where services, libraries or products live in separate, independently versioned repositories coordinated through APIs and contracts.",
+  "faq": [],
+  "h": "d6777a37bbc9f3a7",
+  "long": "Multi-repo, also called polyrepo, is a repository strategy in which services, libraries or products are stored in separate repositories rather than in one shared codebase. Each repository is versioned independently, so a component can be changed, released and tracked on its own timeline.\n\nBecause the code is split across repositories, teams coordinate their work through explicit interfaces. APIs, contracts and versioning define how one component depends on another, and changes that cross repository boundaries are managed through those agreed interfaces instead of through a single combined change.\n\nThe approach is commonly discussed as a counterpart to keeping many projects in one repository. Choosing between the two is a question of how code is organized, owned and released, and it affects how teams share libraries, manage dependencies and handle changes that span several components.\n\nOn M365.FM, Multi-repo (polyrepo) is listed as a concept in the knowledge base. No specific episodes or related topics are linked to it at this time.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
+ },
  "multi-user-authorization": {
   "d1h": "c19e9b701ab29458",
   "desc": "Multi-user authorization (MUA) for Azure Backup requires a second approval from a separate Resource Guard owner before critical vault operations, such as disabling soft delete.",
@@ -23519,6 +23912,15 @@
   "long": "The on-premises data gateway, often called the Power BI gateway, is a Windows application installed inside a private network. It carries data between on-premises data sources and Microsoft cloud services such as Power BI, Power Apps, Power Automate and Microsoft Fabric. It does this using outbound connections only, so the cloud service does not need to open an inbound path into the corporate network. The gateway runs in one of two modes, standard or personal.\n\nThe main purpose of the gateway is to let cloud services use data that stays behind a firewall. In the Power BI context, the M365.FM episode \"Troubleshoot the Power BI On-Premises Data Gateway\" describes it as the component that brings secure, on-premises data into the cloud capabilities of Power BI without moving that data outside the firewall. Typical sources named there are local SQL servers and file shares, which the gateway connects to the Power BI service.\n\nThe same gateway concept appears across several Microsoft products, not only Power BI. The episode \"Secure Microsoft Fabric Data Pipelines\" explains that secure ingestion of on-premises data into Microsoft Fabric typically uses an on-premises data gateway or a virtual network data gateway to bridge on-premises sources and cloud services. The episode recommends combining gateways with firewall-enabled Azure Data Lake Storage, VNet integration and role-based secure access, so that data is encrypted in transit and at rest and leakage is limited during ETL and ingestion workflows.\n\nIn automation scenarios the gateway provides hybrid connectivity. The episode \"Power Automate vs Azure Logic Apps for Enterprise Integration\" states that Azure Logic Apps can reach legacy systems behind corporate firewalls through the on-premises data gateway, which supports automating processes and exchanging data securely. The episode \"Build Enterprise Automation with Azure Logic Apps\" adds that, together with Hybrid Connections, the gateway lets Logic Apps securely access legacy databases, file shares and APIs, so that business processes can span cloud and on-premises environments.\n\nThe gateway also matters for Power Apps and custom connectors. In \"Build Secure Custom Connectors for Power Apps\", the on-premises data gateway is listed as the option for reaching internal APIs from a custom connector. That episode places this advice alongside other practices, such as storing secrets in Azure Key Vault or environment variables, limiting who can create connections and applying data loss prevention policies to the connector.\n\nOperationally, the gateway is a component that needs attention, because it is installed and maintained on a machine inside the network. The troubleshooting episode points out that problems between the gateway and the Power BI service can cause subtle failures. It also notes that auto-updates are available but disabled by default in some environments, which can lead to unexpected \"gateway not working\" errors. Keeping the gateway current and checking its connection to the cloud service are therefore part of a stable setup.\n\nWhen choosing between the modes and related gateway types, the decision depends on who uses the connection and where the data lives. The standard mode is the shared gateway for multiple users and services, while the personal mode is intended for individual use. For sources inside an Azure virtual network, the Fabric episode mentions the virtual network data gateway as an alternative to the on-premises variant. Official Microsoft documentation describes the gateway in more detail.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
+ },
+ "one-stop-shop-vat": {
+  "d1h": "36c02692bc94b9d6",
+  "desc": "The EU VAT One Stop Shop (OSS) lets a business declare and pay VAT due in several EU member states through its home tax authority in one return.",
+  "faq": [],
+  "h": "7cf555577281652d",
+  "long": "The VAT One Stop Shop (OSS) is an EU mechanism that allows a business to declare and pay the VAT it owes in several member states through a single channel, namely its home tax authority. Instead of registering for VAT separately in each country where VAT is due, the business reports those amounts in one return.\n\nOne point stressed in the source material is that local input VAT cannot be deducted in the OSS return. VAT a business has paid on purchases in another member state therefore has to be handled outside the OSS return and cannot be offset there.\n\nThe topic is relevant to organisations that sell or invoice across EU borders and need to understand how VAT obligations in different member states are reported. This page is limited to the facts available about the concept and does not cover eligibility rules, thresholds, filing deadlines or specific invoicing requirements.\n\nNo M365.FM episodes are currently linked to this entry, and no related topics or official documentation links are listed.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
  },
  "onecopy": {
   "d1h": "",
@@ -24718,6 +25120,28 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
+ "persona": {
+  "d1h": "a70feac84bcc339b",
+  "desc": "A persona in user experience design represents the goals, responsibilities and working environment of a specific user group, and is used to guide product and agent design.",
+  "faq": [
+   {
+    "a": "A persona represents the goals, responsibilities and working environment of a specific user group. It gives designers a concrete reference for the people a product or agent is meant to serve.",
+    "q": "What is a persona in user experience?"
+   },
+   {
+    "a": "In the M365.FM discussion, personas such as a field engineer or finance analyst define what a Copilot Studio agent must know and do. The persona sets the scope of the agent's knowledge and tasks.",
+    "q": "How do personas relate to Copilot Studio agents?"
+   },
+   {
+    "a": "A field engineer and a finance analyst are given as examples. Each has different responsibilities and a different working environment, which leads to different agent requirements.",
+    "q": "Which example personas are mentioned?"
+   }
+  ],
+  "h": "d2c0eb0f885e12bd",
+  "long": "A persona (user experience) is a representation of a specific user group. It describes the goals, responsibilities and working environment of the people in that group, so that design decisions can be made with a concrete user in mind rather than an abstract audience.\n\nPersonas are used to define what a solution needs to support. In the context discussed on M365.FM, they help determine what a Copilot Studio agent must know and do. A persona such as a field engineer or a finance analyst sets out the tasks that user performs and the setting in which the work takes place, which in turn shapes the knowledge and actions an agent should cover.\n\nThe examples used to illustrate the concept are a field engineer and a finance analyst. These two roles differ in responsibilities and working environment, which shows why separate personas lead to different agent requirements. Defining the persona first gives a reference point for scoping an agent's capabilities and content.\n\nThe concept appears in an episode of the M365.FM podcast that covers building agents with Copilot Studio. No further related topics or official documentation links are listed for this entry.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
+ },
  "persona-driven-insights": {
   "d1h": "dba889e7f07156e4",
   "desc": "Persona-driven insights is an approach that starts analytics and AI work from defined personas, their decisions and business questions, before models, reports or agents are built.",
@@ -24893,6 +25317,15 @@
   "long": "Phishing-resistant MFA is a group of multifactor authentication methods, such as security keys and passkeys, that cannot be relayed through a fake login page. The reason is structural: no reusable secret is exchanged during sign-in, and the credential only signs for the genuine site. A user who is lured to a look-alike page therefore cannot hand over anything an attacker could replay on the real service. This distinguishes these methods from other forms of MFA, since not every MFA method protects against modern phishing.\n\nThe concept is used mainly in identity and access management for Microsoft cloud services. Within Microsoft Entra, the methods named in the M365.FM episodes include passkeys, FIDO2 security keys and Microsoft Entra ID Certificate-Based Authentication (CBA). Organizations adopt them to reduce the risk of credential theft and of attacks that capture or relay one-time codes and passwords. The episode \"Secure Microsoft Copilot with Entra ID and Zero Trust\" says that phishing-resistant MFA blocks credential stuffing and password theft, and that enforcing authentication for every access request helps protect sensitive data.\n\nIn practice, adoption is a rollout question as much as a technical one. The episode \"Phishing-Resistant MFA: Rolling Out Passkeys in Microsoft Entra\" describes the topics that shape such a project: authentication strengths, registration, conditional access and recovery. It states that passkeys change what is possible and what is required in rollout planning, and it covers how to sequence a rollout. These elements fit together as follows. Authentication strengths define which methods count as sufficient for a given sign-in. Registration is the step in which users enroll a passkey or security key. Conditional access applies the requirement to the relevant users and applications. Recovery addresses what happens when a user loses a device or key.\n\nThe episode \"Lock Down Microsoft Entra ID Before Phishing Hits\" places phishing-resistant MFA within a broader baseline. Its recommendations include enforcing MFA for all human identities, including employees and contractors, and adopting phishing-resistant methods such as Microsoft Entra ID Certificate-Based Authentication or FIDO2 security keys. Where phishing-resistant MFA cannot be enforced, the episode advises requiring an alternative MFA method for all users, so that no account relies on single-factor authentication. It also discusses passwordless authentication options as a secure and user-friendly alternative to passwords.\n\nTypical decisions around the topic include which user groups to move first, which phishing-resistant method suits each group, and what fallback to allow while the rollout is incomplete. A fallback method is weaker against phishing than the target state, which is why the episodes treat it as a temporary measure rather than an end point. Recovery planning matters because a strict requirement without a defined recovery path can lock users out.\n\nThe concept connects to several neighbouring topics covered on M365.FM: Microsoft Entra as the identity platform where the methods are configured, conditional access as the enforcement mechanism, passwordless sign-in as a related goal, and Zero Trust as the wider security approach in which every access request is verified. The episode \"Secure Microsoft Copilot with Entra ID and Zero Trust\" also notes that Microsoft has made MFA a default requirement for access to its services, and that passkeys further mitigate vulnerabilities associated with traditional passwords.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
+ },
+ "pkce": {
+  "d1h": "0cc4cdc93d80654f",
+  "desc": "Proof Key for Code Exchange (PKCE) is an OAuth extension defined in RFC 7636 that ties an authorization code to a one-time client secret to guard against code interception.",
+  "faq": [],
+  "h": "941acca7ce7cdd37",
+  "long": "Proof Key for Code Exchange (PKCE) is an extension to OAuth defined in RFC 7636. At the start of a sign-in, the client creates a one-time secret. When the client later redeems the authorization code, it must present that secret, which protects against interception of the code.\n\nThe purpose of PKCE is to ensure that only the client that began the authorization flow can complete it. If an authorization code is intercepted by another party, the code alone is not enough to obtain tokens, because the one-time secret created at the beginning of the sign-in is also required at redemption.\n\nPKCE is relevant to anyone working with OAuth-based sign-in flows, including developers and identity administrators who need to understand how authorization codes are protected. No specific Microsoft products, episodes or linked topics are associated with this entry on M365.FM at this time.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
  },
  "pl-200": {
   "d1h": "",
@@ -25135,6 +25568,15 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-23"
  },
+ "pnp-modern-search": {
+  "d1h": "ff2ab59381c8ae30",
+  "desc": "PnP Modern Search is an open-source set of SharePoint Framework web parts from the Microsoft 365 community (PnP) for building search-driven pages in SharePoint Online.",
+  "faq": [],
+  "h": "d3be1a7f75cc8807",
+  "long": "PnP Modern Search is an open-source collection of SharePoint Framework web parts developed within the Microsoft 365 community initiative known as PnP. It is designed for SharePoint Online and lets page authors assemble search-driven experiences directly on modern SharePoint pages.\n\nThe solution provides separate web parts for common search scenarios, including search boxes, search results, filters and verticals. By combining these components on a page, site owners and developers can create tailored search pages instead of relying only on the default search experience.\n\nBecause PnP Modern Search is built on the SharePoint Framework and published as open source, it follows the community-driven approach typical of PnP projects. The facts available here do not cover specific versions, licensing details, feature lists beyond the web part types named above, or installation steps, so those topics are not described on this page.\n\nNo M365.FM episodes are currently linked to this entry, and no related topics have been connected to it yet.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
+ },
  "pnp-powershell": {
   "d1h": "",
   "desc": "PnP PowerShell is a free, community-maintained PowerShell module for managing SharePoint, Teams and Microsoft 365 through Microsoft Graph and CSOM.",
@@ -25327,6 +25769,28 @@
   "long": "Post-quantum cryptography (PQC) refers to cryptographic algorithms designed to resist attacks by quantum computers. Among the algorithms standardized by NIST are the lattice-based ML-KEM and ML-DSA and the hash-based SLH-DSA. The concept is framed as preparation for the possibility that future quantum computers could break some of the public-key algorithms that security controls rely on today.\n\nA central reason for acting early is the \"harvest now, decrypt later\" risk. In this scenario, long-lived sensitive data is captured now and decrypted once a sufficiently capable quantum computer exists. Data that must stay confidential for many years is therefore exposed earlier than the date on which quantum attacks become practical. Cryptography underpins authentication, digital signatures, software integrity and secure communication such as TLS, so the affected scope is broad. It spans applications, identity systems, VPN and network equipment, storage, IoT and operational technology, and partner integrations.\n\nThe guidance in Microsoft Learn, \"Plan cryptographic agility and post-quantum readiness\", treats cryptographic agility as the foundation. Cryptographic agility means being able to change algorithms quickly and safely, without rebuilding every system that depends on them. Alongside agility, the page recommends an inventory of cryptographic use and trust chains, clear governance, and a review of vendor timelines. These steps make it possible to know where vulnerable algorithms are in use and which suppliers can support new ones.\n\nThe suggested approach runs in several stages: discovering where vulnerable algorithms are used, evaluating vendor support, planning phased migration waves with rollback options, and implementing changes with testing and evidence tracking. High-value assets, identity systems and long-lived data are prioritized. Migration is described as a multi-year program rather than a single project, and some systems will need new libraries, certificates or firmware, or even replacement hardware.\n\nThe M365.FM episode \"Cryptographic Agility for Post-Quantum Security\" (2026-06-12) looks at how cryptographic agility can be used to defend against quantum risks. According to the episode, the platform follows a phased approach to upgrading its security. The first phase integrates PQC algorithms into foundational components such as SymCrypt, so that cryptographic security stays consistent across platforms. The second phase updates core infrastructure services, such as authentication and key management, to provide quantum safety, with the most sensitive components prioritized. The third phase extends PQC to all Microsoft services and endpoints.\n\nIn practice, decisions around PQC concern sequencing and readiness rather than a single switch. Organizations weigh which assets hold long-lived data, which identity systems anchor trust, and which vendors have published support timelines. Because some algorithms may need replacing in systems that were not designed for change, the emphasis on agility, inventory and governance is meant to reduce the effort and risk of each later migration wave.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
+ },
+ "power-apps-barcode-scanner": {
+  "d1h": "f9c26cf7a8f39edf",
+  "desc": "The Power Apps barcode scanner control is a canvas app control that reads barcodes and QR codes through the device's native scanner; Microsoft has retired it.",
+  "faq": [
+   {
+    "a": "It is a canvas app control that opens the device's native scanner to read barcodes and QR codes, making the scanned result available to the app.",
+    "q": "What does the Power Apps barcode scanner control do?"
+   },
+   {
+    "a": "Microsoft has retired the control in favor of the barcode reader control. Makers should consult the Microsoft documentation for the current status.",
+    "q": "Is the Power Apps barcode scanner control still supported?"
+   },
+   {
+    "a": "It is part of Power Apps and is used in canvas apps.",
+    "q": "Which product does the barcode scanner control belong to?"
+   }
+  ],
+  "h": "c99ad447b71970c3",
+  "long": "The Power Apps barcode scanner control is a control for canvas apps in Power Apps. It opens the native scanner on a device so that an app can read barcodes and QR codes, and the scanned value can then be used inside the app.\n\nThe control is part of Power Apps and was used by makers who needed to capture codes, for example to look up or record items by scanning. Microsoft has since retired this control in favor of the barcode reader control, so new work is directed toward the replacement rather than the older scanner control.\n\nMicrosoft documents the control in its Power Apps documentation on canvas app controls. That reference page is the authoritative place to check the current status of the control and details of its properties.\n\nNo episodes on M365.FM are currently linked to this topic.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
  },
  "power-apps-containers": {
   "d1h": "b86cd18a5226eb2b",
@@ -25644,6 +26108,15 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
+ "power-bi-premium-per-user": {
+  "d1h": "3fe96fb0b75c114c",
+  "desc": "Power BI Premium Per User (PPU) is a per-user license for most Power BI Premium features that does not provision a Fabric capacity.",
+  "faq": [],
+  "h": "208068a5a8cac46e",
+  "long": "Power BI Premium Per User (PPU) is a per-user license that gives individual users access to most Power BI Premium features. It is part of Power BI Premium and is licensed per person rather than through a shared capacity.\n\nA PPU license does not provision a Fabric capacity. Content hosted in a PPU workspace is also subject to a licensing rule: users who consume that content need a PPU license as well. As a result, the license model applies to both the people who create content and the people who view it in those workspaces.\n\nPPU is relevant when evaluating how Power BI Premium features can be obtained per user instead of through capacity-based licensing. The official Microsoft documentation for Power BI Premium Per User is provided as an FAQ in the Microsoft Fabric enterprise documentation, which covers licensing questions in more detail.\n\nNo episodes on M365.FM are currently linked to this topic.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
+ },
  "power-bi-pro": {
   "d1h": "",
   "desc": "Power BI Pro is a per-user Power BI license for creating, publishing, sharing and collaborating on Power BI content, and part of the wider Power BI product.",
@@ -25730,6 +26203,28 @@
   "long": "Power BI report themes are JSON-based theme files used to define the look of a Power BI report. A theme specifies settings such as colors, fonts and visual formatting, and applies them across the report so that individual visuals share a consistent appearance instead of being formatted one by one.\n\nThe main purpose of a report theme is consistency. Because the formatting is stored in a single file, the same design settings can be reused across multiple reports. Report themes can also be distributed centrally as organizational themes, which allows a common visual standard to be maintained for reports created within an organization.\n\nPower BI report themes belong to the broader topic of Power BI, Microsoft's business analytics and reporting product. Within that area, they address report design and formatting rather than data modeling or data access. Because themes are defined in JSON, they are stored as a structured text file that can be created, edited and shared.\n\nOfficial Microsoft documentation on report themes in Power BI Desktop is available on Microsoft Learn. No M365.FM episodes are currently linked to this topic.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-23"
+ },
+ "power-bi-shape-map": {
+  "d1h": "8429df2707cb9935",
+  "desc": "The shape map visual in Power BI Desktop is a preview visual that colors predefined regions such as countries, states or custom TopoJSON boundaries by a measure.",
+  "faq": [
+   {
+    "a": "It colors predefined regions, such as countries, states or custom TopoJSON boundaries, according to a measure. It does not plot points on a map.",
+    "q": "What does the shape map visual in Power BI do?"
+   },
+   {
+    "a": "It is described as a Power BI Desktop preview visual, so it is not a fully released visual.",
+    "q": "Is the shape map visual a released or preview feature?"
+   },
+   {
+    "a": "Yes. Besides predefined regions such as countries and states, it can use custom TopoJSON boundaries.",
+    "q": "Can the shape map visual use custom regions?"
+   }
+  ],
+  "h": "c2fde088657cc534",
+  "long": "The shape map visual (Power BI) is a preview visual in Power BI Desktop that displays data by coloring predefined regions rather than plotting points on a map. Regions can be countries, states or boundaries supplied as custom TopoJSON, and each region is shaded according to the value of a measure.\n\nThis approach differs from point-based map visuals. Instead of placing markers at coordinates, the shape map fills whole areas, which makes it suited to comparing a measure across geographic or administrative regions. The use of custom TopoJSON boundaries allows regions beyond the built-in options to be defined and used in a report.\n\nThe shape map visual is part of Power BI and is available in Power BI Desktop. Because it is described as a preview feature, its availability and behavior may differ from fully released visuals. Further details are provided in Microsoft's official documentation for the visual.\n\nNo M365.FM episodes are currently linked to this entity.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
  },
  "power-bi-workspace-app": {
   "d1h": "ea1b555ca7c93e62",
@@ -26456,6 +26951,24 @@
   "long": "Private 5G is a dedicated cellular network that is operated for a single enterprise site, such as a factory, port or hospital. Instead of sharing capacity with public mobile users, the site runs its own 5G environment and controls who and what can connect to it. The approach relies on scheduled access to the radio resources, SIM-based device identity and network slicing, with the goal of delivering predictable latency for operational technology workloads.\n\nThe main purpose of a private 5G network is to give machines, sensors and other devices on a defined location a connection that behaves consistently. Operational technology workloads often depend on timing: a response that arrives too late can matter as much as one that does not arrive at all. Scheduled access helps keep latency predictable, SIM-based identity ties each device to a credential that the site operator manages, and network slicing allows different traffic types to be separated within the same network.\n\nIn the Microsoft ecosystem, one documented building block was Azure Private 5G Core. According to Microsoft Learn, it is an Azure cloud service for deploying and managing 5G core network functions on an Azure Stack Edge device, forming part of an on-premises private mobile network for an enterprise. A packet core instance at each site includes functions such as AMF, SMF, UPF, PCF, AUSF, UDM and UDR, with an optional 4G mode for private LTE. The service connects to standards-compliant 4G and 5G standalone radio access networks and aims at low-latency, secure connectivity for IoT devices and local data processing that does not depend on cloud connectivity.\n\nManagement of such a setup happens centrally through the Azure portal and ARM APIs. SIMs and eSIMs are provisioned through SIM partners, and the documentation lists integration with Azure Monitor, Resource Health, Event Hubs and Azure RBAC. A high-availability configuration uses two devices. Several parts are explicitly outside the service and come from the customer or partners: radio equipment, SIMs, Azure Arc-enabled Kubernetes and gateway routers. The named use cases include manufacturing analytics, warehouse automation, public safety, utilities and smart farming. The Microsoft Learn page is archived, because the service was announced for retirement, and migration to partner solutions is recommended. Anyone planning a private 5G project should check the current status of any product they consider.\n\nPrivate 5G is closely tied to edge computing. The M365.FM episode \"Cloud Latency and Edge Computing Strategy\" discusses how latency limits cloud-centric designs and how data volume sent to the cloud can be reduced. The episode says Azure Stack Edge helps handle AI workloads at the edge, filter out noise and send only what matters to the cloud, which keeps systems responsive and cost-effective. It also says the latency wall can be broken by combining private 5G networks with Multi-access Edge Computing (MEC). In this integration, data processing moves closer to where devices operate, often within the same building or campus, so that not every piece of data has to travel to a distant cloud.\n\nTypical decisions around private 5G therefore concern where processing should run, which workloads need local handling because of latency or connectivity requirements, and which components the organization sources itself versus from partners. Because the radio network, SIM provisioning and local compute are separate pieces, a deployment is usually an assembly of several parts rather than a single product. The concept itself, a site-specific cellular network with controlled access and predictable latency, remains the same regardless of which vendor supplies the individual components.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
+ },
+ "private-branch-exchange": {
+  "d1h": "cc923eee89d37e0a",
+  "desc": "A private branch exchange (PBX) is a private telephone system that connects internal extensions within an organization and links them to the public telephone network.",
+  "faq": [
+   {
+    "a": "A private branch exchange (PBX) is a private telephone system that connects internal extensions within an organization and links them to the public telephone network.",
+    "q": "What is a private branch exchange (PBX)?"
+   },
+   {
+    "a": "A PBX connects the internal extensions of an organization to each other and to the public telephone network.",
+    "q": "What does a PBX connect?"
+   }
+  ],
+  "h": "faa38669bfd53315",
+  "long": "A private branch exchange (PBX) is a private telephone system used within an organization. It connects internal extensions to one another and links them to the public telephone network, so that employees can call colleagues directly and place or receive calls outside the organization.\n\nThe term describes the role the system plays in an organization's telephony setup rather than a single product. Organizations use a PBX to manage internal extensions and to route calls between those extensions and external telephone lines.\n\nOn M365.FM, the PBX is covered as a concept within the Microsoft ecosystem knowledge base. No specific relations to other topics, products or episodes are recorded for this entry at this time.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
  },
  "private-channels": {
   "d1h": "",
@@ -27487,6 +28000,15 @@
   "long": "Q# is a high-level programming language from Microsoft designed for writing quantum programs. It is open source and is part of the Quantum Development Kit, the set of tools Microsoft provides for quantum development.\n\nQ# programs can be used with Azure Quantum, Microsoft's cloud service for quantum computing. In practice, the language serves as the way developers express quantum algorithms and operations, with the Quantum Development Kit supplying the surrounding tooling.\n\nMicrosoft documents the language through its official Azure Quantum overview of Q#, which is the primary reference for its design and usage.\n\nQ# is listed as a product entity in the M365.FM knowledge base. No M365.FM episodes or related topics are currently linked to this entry, so this page is limited to the confirmed description of the language, its open-source status, and its connection to the Quantum Development Kit and Azure Quantum.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-23"
+ },
+ "qaoa": {
+  "d1h": "c176973e1ccaede3",
+  "desc": "The Quantum Approximate Optimization Algorithm (QAOA) is a hybrid quantum-classical method for finding approximate solutions to combinatorial optimization problems.",
+  "faq": [],
+  "h": "751ce1e035af61dc",
+  "long": "The Quantum Approximate Optimization Algorithm (QAOA) is a hybrid quantum-classical algorithm designed to find approximate solutions to combinatorial optimization problems. It combines a quantum circuit with a classical optimization routine, so that each part handles the task it is suited for.\n\nThe quantum part of QAOA is built from layers. Each layer applies a cost operator, which encodes the optimization problem, followed by a mixer. Both operators are applied with tunable angles. A classical optimizer adjusts these angles in a loop, repeatedly updating them so that the output of the quantum circuit moves toward a better approximate solution.\n\nBecause the algorithm alternates between quantum circuit evaluation and classical parameter tuning, it is described as hybrid. It targets combinatorial optimization problems, where the goal is to select a good solution from a large set of discrete possibilities, and it aims for approximate rather than exact answers.\n\nNo related Microsoft products, documentation links or M365.FM episodes are currently linked to this entry. It is listed as a concept in the M365.FM knowledge base.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
  },
  "qdrant": {
   "d1h": "",
@@ -28522,6 +29044,28 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
  },
+ "runbook": {
+  "d1h": "6447c26cf540be2a",
+  "desc": "A runbook in Azure Automation is a script, typically PowerShell or Python or a graphical workflow, that the service runs on demand, on a schedule, from an alert or via a webhook.",
+  "faq": [
+   {
+    "a": "A runbook is a script, usually PowerShell or Python, or a graphical workflow that Azure Automation runs. It encapsulates an operational task so the service can execute it without manual steps.",
+    "q": "What is a runbook in Azure Automation?"
+   },
+   {
+    "a": "A runbook can be run on demand, on a schedule, from an alert, or via a webhook.",
+    "q": "How can a runbook be started?"
+   },
+   {
+    "a": "Runbooks are usually written in PowerShell or Python, and graphical workflows are also supported as a runbook type.",
+    "q": "Which scripting languages do runbooks use?"
+   }
+  ],
+  "h": "8c70a01e85898232",
+  "long": "A runbook (Azure Automation) is a unit of automation within the Azure Automation service. It is a script, usually written in PowerShell or Python, or a graphical workflow, that Azure Automation executes on behalf of the user. Runbooks are used to codify operational tasks so that they can be run repeatedly and without manual steps.\n\nAccording to the available facts, a runbook can be started in several ways: on demand, on a schedule, from an alert, or through a webhook. This allows the same script to serve manual administration tasks as well as event-driven or time-based automation scenarios.\n\nIn terms of topic structure, Runbook (Azure Automation) sits beneath the broader concept Azure Automation, which is the service that hosts and runs these scripts. Microsoft documents the different runbook types, such as script-based and graphical variants, in its Azure Automation documentation on runbook types.\n\nNo M365.FM episodes are currently linked to this entry. The term is covered here as a reference definition within the Microsoft ecosystem knowledge base.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
+ },
  "saas-fulfillment-apis": {
   "d1h": "e6fe15cb1da881c9",
   "desc": "SaaS fulfillment APIs are Microsoft commercial marketplace APIs that publishers use to manage the subscription lifecycle of transactable SaaS offers.",
@@ -28586,6 +29130,28 @@
   "long": "Safe Links is a feature of Microsoft Defender for Office 365 that rewrites URLs and checks them at the moment a user clicks. It applies to links in email, in Microsoft Teams and in Office apps. Because the check happens at click time rather than only when a message arrives, a link that was harmless on delivery but later points to a malicious destination can still be evaluated when someone tries to open it.\n\nWithin Defender for Office 365, Safe Links sits alongside several other protections. The M365.FM episode \"Microsoft Defender for Office 365 - Simply Explained\" describes Safe Links and Safe Attachments as features that scan URLs and files to ensure they are safe before a user accesses them. It places them in the context of real-time threat prevention, AI-based advanced threat detection, customizable security settings and regular reporting. In this framing, Safe Links is the part that deals with the link-based path of phishing and malware, while Safe Attachments deals with files.\n\nA recurring point in the episodes is that Safe Links does not deliver full value when left unmanaged. The episode \"Defender for Office 365: Tuning Anti-Phishing and Safe Links Policies\" states that anti-phishing and Safe Links policies only help if they are tuned to the organization rather than left at defaults. It covers tuning impersonation protection, preset policies, Safe Links, Safe Attachments and reporting, with the aim of reducing both missed threats and false positives. That wording frames policy tuning as a balance: settings that are too loose let threats through, and settings that are too aggressive create false positives that disrupt users.\n\nThe episode \"Tune Microsoft Defender for Office 365 Against Phishing\" makes a related argument. It says users can still click phishing links even when Defender for Microsoft 365 is described as fully enabled, and attributes this to misaligned layers rather than to the attackers alone. According to the episode, Safe Links, Safe Attachments, anti-phishing machine learning and mail flow rules can overlap, conflict or leave gaps. It treats Defender as a living system that needs ongoing tuning instead of a set-and-forget product, and it traces how a phishing email can slip through when these layers are not aligned. The excerpt also mentions steps such as working by risk group and enabling dynamic delivery.\n\nThe episode \"Hidden Microsoft 365 Tenant Security Risks\" lists email security misconfiguration as a common tenant risk. It says advanced protections such as Safe Links, Safe Attachments and anti-spoofing policies are often left incomplete or disabled, which reduces protection against phishing and business email compromise. In practice, this makes a review of whether Safe Links is actually configured and applied a routine part of a tenant security assessment, rather than an assumption that the feature is working because a license is present.\n\nThe episode \"Harden Microsoft 365 Security Without User Friction\" positions Defender for Office 365 as a key control against modern threats, naming anti-phishing policies, Safe Links, Safe Attachments, real-time alerts and analytics. It recommends pairing Defender for Office 365 with Defender for Endpoint and Conditional Access to build a layered security posture. It also notes that technical controls alone are not enough, so Safe Links is presented as one layer among identity, endpoint and user-awareness measures rather than a standalone safeguard.\n\nTypical decisions around Safe Links therefore concern scope and tuning: which users or risk groups a policy covers, how it fits with preset policies and anti-phishing settings, and how reporting is used to spot missed threats and false positives. The episodes treat these as ongoing administrative tasks rather than one-time setup.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
+ },
+ "saga-pattern": {
+  "d1h": "87917d05429c3f3f",
+  "desc": "The Saga pattern splits a distributed transaction into local steps across systems, each paired with a compensating action that undoes earlier steps if a later one fails.",
+  "faq": [
+   {
+    "a": "The Saga pattern is a way to handle distributed transactions by splitting a process into local steps across systems. Each step has a compensating action that undoes earlier steps if a later step fails.",
+    "q": "What is the Saga pattern?"
+   },
+   {
+    "a": "A compensating action is an operation paired with a saga step that reverses the effect of that step. It is run when a later step fails, so earlier completed steps are undone.",
+    "q": "What is a compensating action in a saga?"
+   },
+   {
+    "a": "The pattern is described in the Azure Architecture Center on Microsoft Learn as a cloud design pattern for distributed transactions.",
+    "q": "Where is the Saga pattern documented by Microsoft?"
+   }
+  ],
+  "h": "ae9b083dccb30153",
+  "long": "The Saga pattern is a design approach for managing distributed transactions. Instead of running one transaction across several systems, it divides a business process into a sequence of local steps. Each step is executed within a single system and commits on its own.\n\nEvery step in a saga has a compensating action. If a later step fails, the compensating actions for the steps that already completed are run to undo their effects. This keeps data consistent across the participating systems without relying on a single transaction that spans all of them.\n\nThe pattern is used when a process touches multiple services or data stores and a failure partway through must not leave the overall outcome in an inconsistent state. It is documented in the Azure Architecture Center as a cloud design pattern, where Microsoft describes it as a way to coordinate steps and handle failures through compensation.\n\nNo related topics or M365.FM episodes are currently linked to this entry, so the description here is limited to the definition of the pattern itself. Further detail on implementation choices is available in the official Microsoft Learn documentation for the Saga pattern.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
  },
  "salami-slicing-attack": {
   "d1h": "408e2001d263bd7d",
@@ -28690,6 +29256,24 @@
   "long": "Sandboxing is a security mechanism that runs programs in an isolated environment with restricted access, so that failures or compromised code cannot spread to the rest of a system. In the M365.FM episodes that mention it, the concept is applied to the OS-level isolation of AI agents and to the handling of untrusted instructions and code in enterprise AI setups.\n\nThe basic idea is containment. Code or an agent that runs inside a sandbox can only reach the resources it has been explicitly given. If the code behaves unexpectedly, is buggy, or has been manipulated by an attacker, the damage stays inside the boundary instead of reaching data, systems or other agents outside it. This makes sandboxing a common building block in layered security designs, where no single control is expected to stop every threat.\n\nThe episode \"Indirect Prompt Injection Security for Enterprise AI\" lists sandboxing among the controls against indirect prompt injection. The recommendation there is to isolate core instructions from outside data using sandboxing, alongside other measures: treating all documents as if they could contain executable code, never trusting external data until it has been checked, cleaning and validating inputs before they reach the AI, filtering outputs, requiring human review for high-risk actions, and using model-side defenses such as adversarial fine-tuning and security layers. The episode refers to the OpenClaw incident of March 2026, in which malicious instructions hidden in a normal file were processed by an AI and led to a leak of sensitive data without any user action. That kind of scenario illustrates why separating trusted instructions from untrusted content matters.\n\nIn \"MCP (Model Context Protocol) - Simply Explained\", isolation and sandboxing appear as one layer of control within MCP security. The episode's overview table describes the objective of this layer as preventing unvetted code from executing outside a controlled environment. It sits next to authentication and authorization, provenance tracking, inline policy enforcement and centralized governance, each addressing a different security objective.\n\n\"Agent-to-Agent (A2A) Communication - Simply Explained\" mentions sandboxing as part of a layered defense for agent communication channels. The episode names authentication, sandboxing and human oversight as combined measures, together with continuous monitoring to detect anomalies and potential security threats. The point is that agents exchanging information and tasks should not be able to act without limits.\n\nIn \"Agentic Operating Model for Enterprise AI and Copilot\", sandboxing is listed as an operating pattern in which high-risk actions run in safe environments before going live. It appears next to policy constraints, audit logs, escalation triggers, a centralized orchestrator, hierarchical orchestration, decentralized swarms and a governed context layer. In this framing, sandboxing works as a safe testing and containment step for risky agent actions rather than as a standalone safeguard.\n\nThe episode \"Secure MLOps in Microsoft Cloud with Martin Dimovski [MVP-MCT]\" places sandboxing in the context of integration risks in machine learning operations. Integrating diverse tools and data sources creates complex attack surfaces, and the episode says that patching policies, sandboxing and network segmentation should be enforced to reduce those risks. It also points to supply chain attacks on third-party components and to the need for strict separation between environments and monitoring for anomalous activity.\n\nAcross these episodes, sandboxing is presented as one control among several rather than a complete answer. Typical decisions around it include which actions count as high-risk and should run in isolation first, how strictly external data should be separated from core instructions, and how isolation is combined with authentication, monitoring, policy enforcement and human review.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
+ },
+ "sap": {
+  "d1h": "b9a96924cef1c9e6",
+  "desc": "SAP is a German enterprise software company known for its ERP systems, cited on M365.FM as a typical ERP source whose data is unified with CRM data via Fabric connectors.",
+  "faq": [
+   {
+    "a": "SAP is a German enterprise software company best known for its ERP systems.",
+    "q": "What is SAP?"
+   },
+   {
+    "a": "SAP is cited as a typical ERP source whose data is unified with CRM data through Fabric connectors.",
+    "q": "How does SAP relate to Fabric on M365.FM?"
+   }
+  ],
+  "h": "5fcae20e0136785e",
+  "long": "SAP is a German enterprise software company best known for its ERP (enterprise resource planning) systems. Organizations use ERP software of this kind to manage core business processes and the data that comes with them.\n\nOn M365.FM, SAP appears as an example of a typical ERP source. In the discussion, data from an ERP system such as SAP is brought together with CRM data through Fabric connectors, so that information from different business systems can be unified in one place.\n\nThe available facts about SAP on this site are limited to that role: an ERP data source in a scenario involving Fabric connectors and CRM data. No further product details, versions or integration specifics are covered here.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
  },
  "sap-ecc": {
   "d1h": "",
@@ -29772,6 +30356,28 @@
   "long": "A service catalog is a central record of the services an organization runs. In the software context described on M365.FM, it acts as a map of running software and shows, for each service, who owns it, where its documentation and source code live, what it depends on, what its operational status is, and where to find dashboards and support information. The term is also used more broadly in IT and business settings, where a service catalog is a curated collection of services kept in a digital registry that doubles as a knowledge management tool.\n\nThe main purpose is visibility. As organizations accumulate hundreds or thousands of applications and services, understanding what exists becomes increasingly difficult. A service catalog helps developers and operations teams answer basic questions quickly, such as which team owns a given service, how it connects to other services, and whom to contact when something goes wrong. In the broader IT service management sense, a catalog also centralizes services so that distributed parts of an organization use the same ones instead of duplicate local versions, and it can reveal gaps and redundancies.\n\nA typical catalog entry carries a defined set of attributes. According to general descriptions of the concept, an entry usually has a named accountable owner, a name or identifier, a description, a category, related request types and supporting services, information on who may request or view it, any costs, how it is requested and fulfilled, and escalation points and key contacts. Services in such a catalog are typically repeatable, with controlled inputs, outputs and procedures. Some implementations also track demand metrics such as the most and least used services, approval and delivery times, and spending.\n\nUsers usually search or browse the catalog by category, review the details of a service, submit a request and follow its status. Under ITIL, an IT service catalogue is the published part of the service portfolio, and cloud service catalogues often work as self-service portals with standardized definitions. These descriptions focus on business and IT services and requests; a developer-oriented catalog of software components is a related but distinct framing, and the two should not be assumed to be identical.\n\nThe M365.FM episode \"Internal Developer Platforms (IDPs) - Simply Explained\" presents the service catalog as one building block of an internal developer platform. It appears alongside golden paths, where developers supply only the information that matters, such as the service name, owner, environment, runtime and approved options, while the platform handles the underlying setup. In that context the catalog provides the central map of what is running, including ownership, documentation, dependencies, source code, operational status, dashboards and support information.\n\nThe episode \"High-Performance Azure Cloud Governance to Reduce Waste\" uses the term in a governance sense. It lists a cloud service catalog as one governance strategy, described as a list of approved services that standardizes consumption and mitigates risks. It appears next to a cloud governance framework, cloud service management, cloud security, cloud cost management and cloud compliance. Here the catalog functions less as a map of existing software and more as a controlled set of approved offerings that guides how cloud services are consumed.\n\nWhen deciding how to use a service catalog, the main considerations are which meaning applies and what the entries must contain. A catalog meant to document running software needs reliable ownership, dependency and status information, while a catalog meant to govern consumption needs a clear definition of approved services and who may request them. In both cases the value depends on entries having a named owner and staying current, since a record that is incomplete or outdated cannot answer the ownership and support questions it exists to address.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
+ },
+ "service-mesh": {
+  "d1h": "b8dabb5ea42d5c00",
+  "desc": "A service mesh is an infrastructure layer that manages service-to-service traffic, mTLS and policy enforcement in distributed applications, often using sidecar proxies.",
+  "faq": [
+   {
+    "a": "A service mesh is an infrastructure layer that manages service-to-service traffic, mTLS and policy enforcement in distributed applications. It is often based on sidecar proxies.",
+    "q": "What is a service mesh?"
+   },
+   {
+    "a": "Istio and Linkerd are named as examples of technologies on which a service mesh is often based, using sidecar proxies.",
+    "q": "Which technologies are associated with a service mesh?"
+   },
+   {
+    "a": "It manages traffic between services, mutual TLS (mTLS) and policy enforcement within distributed applications.",
+    "q": "What does a service mesh manage?"
+   }
+  ],
+  "h": "f00590413cc1204f",
+  "long": "A service mesh is an infrastructure layer that manages communication between services in a distributed application. It is often built on sidecar proxies, with Istio and Linkerd being commonly cited examples of such implementations.\n\nThe layer is used to handle service-to-service traffic, mutual TLS (mTLS) between services, and the enforcement of policies. By placing these responsibilities in the infrastructure rather than in each application, the approach separates networking and security concerns from application code.\n\nThe concept applies to distributed architectures in which many services communicate with one another, such as microservice-based systems. In these environments, traffic management, encryption between services and consistent policy enforcement are recurring requirements, and a service mesh is one way to address them.\n\nNo related topics or episodes are currently linked to this entry on M365.FM.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
  },
  "service-principal": {
   "desc": "A service principal is the identity an application uses to sign in within a Microsoft Entra tenant, and agent identities are built as a special kind of it.",
@@ -32033,6 +32639,15 @@
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-23"
  },
+ "teams-call-queues": {
+  "d1h": "50980abc1bd065ec",
+  "desc": "Teams call queues in Microsoft Teams route incoming callers to groups of people who can help with a specific issue and share the incoming call volume.",
+  "faq": [],
+  "h": "0a9c9e099df79f05",
+  "long": "Teams call queues is a feature of Microsoft Teams that routes incoming callers to a group of people in an organization who can help with a particular issue or question. Instead of a call ringing a single person, the call is directed to the group, so that the incoming call volume is shared among the people assigned to it.\n\nCall queues are used where several people handle the same type of request, such as a support or information line. Callers are directed to the people best placed to assist with the topic they are calling about, and the workload is spread across the group instead of resting on one individual.\n\nThe setup of a call queue is described in Microsoft's official documentation on creating a call queue. That documentation is the reference for the configuration steps and options, and administrators should consult it for current details, since this page only summarizes the general concept.\n\nNo related topics or M365.FM episodes are linked to this entry at the moment, so there is no additional episode coverage to point to here.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
+ },
  "teams-calling-plans": {
   "d1h": "0b96396e8d85a573",
   "desc": "Teams Calling Plans is Microsoft's PSTN offering for Teams Phone, in which Microsoft acts as the carrier and provides phone numbers and per-user minute bundles.",
@@ -32393,6 +33008,24 @@
   "long": "Tenant-to-tenant migration, also called T2T migration, tenant migration or Mandantenmigration, is the process of moving users, mailboxes, files, Teams and settings from one Microsoft 365 tenant to another. A tenant is the separate organizational container in which a company's Microsoft 365 accounts and data live. Because two tenants are independent of each other, content does not move between them by itself; it has to be transferred deliberately as part of a structured effort.\n\nThe usual trigger is a business event. In a merger, two separate Microsoft accounts have to become one. In a divestiture, a part of the organization is split off and needs its own environment, or is absorbed into the tenant of the acquiring company. In both cases the IT work follows a decision made at the business level, which is why the topic often arrives with tight timelines and many stakeholders.\n\nA tenant-to-tenant migration is a project rather than a simple file copy. It involves planning, mapping and cutover phases. Planning clarifies what exists in the source tenant and what the target tenant should look like. Mapping decides how users, mailboxes, sites, Teams and settings in the source correspond to objects in the target. Cutover is the point at which users switch from the old environment to the new one. The sources do not prescribe specific tools or a fixed sequence, so the details depend on the individual situation.\n\nThe topic touches several workloads within Microsoft 365, which is its broader parent topic. Mailboxes and calendars belong to Exchange Online. Sites and documents belong to SharePoint. Chats, channels and collaboration spaces belong to Microsoft Teams. Each of these areas has its own structure, and the migration has to account for how they depend on one another, for example when a Team is backed by a SharePoint site and a group mailbox.\n\nGovernance is the other closely related subject. Policies, permissions and ownership have to be decided deliberately for the target tenant instead of being copied blindly from the source. A merger or divestiture is also an opportunity to review who has access to what and which rules should apply going forward, rather than carrying over unexamined settings.\n\nThe M365.FM episode \"Microsoft 365 Tenant-to-Tenant Migration - Simply Explained\", part of the Simply Explained series, addresses a common misconception. According to the episode, most companies think a Microsoft 365 migration is just copying files from one account to another, and that assumption is exactly what sinks the project. The episode explains what a tenant really is and why nothing carries over on its own when two accounts have to become one after a merger or a sale of a division. It is the episode to start with for an overview of what has to be planned and why.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-18"
+ },
+ "tensorrt": {
+  "d1h": "b3212e0790145541",
+  "desc": "NVIDIA TensorRT is an NVIDIA product in the Microsoft-ecosystem knowledge base M365.FM; this page covers the name and its place in the catalog.",
+  "faq": [
+   {
+    "a": "NVIDIA TensorRT is a product by NVIDIA that is listed as an entity on M365.FM. No further description has been recorded in the available facts, so this page does not detail its functionality.",
+    "q": "What is NVIDIA TensorRT?"
+   },
+   {
+    "a": "No episodes are currently linked to NVIDIA TensorRT in the available data. Related episodes can be added to this page as they become available.",
+    "q": "Does M365.FM have episodes about NVIDIA TensorRT?"
+   }
+  ],
+  "h": "05b5bf08420d6294",
+  "long": "NVIDIA TensorRT is a product by NVIDIA, listed as a product entity in the M365.FM knowledge base, which covers the Microsoft ecosystem.\n\nThe information currently available for this entry is limited. No description, linked topics, official documentation or related episodes have been recorded for NVIDIA TensorRT, so this page does not make claims about its features, versions, supported platforms or typical use cases. To avoid inaccuracies, details are left out until they can be grounded in verified sources.\n\nOn M365.FM, entity pages like this one are meant to give a neutral reference point for a term that appears in discussions, episode notes or related topics. As relationships to other products, technologies or episodes are added, this page can be expanded to show how NVIDIA TensorRT connects to the wider Microsoft ecosystem.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
  },
  "terraform": {
   "d1h": "",
@@ -33830,6 +34463,28 @@
   "long": "Weak ties are looser relationships with people outside one's close working circle. Unlike the frequent, close contact found within a team, these connections are occasional and less intense. Their value comes from the way they connect different groups, which allows information, help and innovation to travel across an organization.\n\nIn an organizational setting, weak ties act as bridges between teams, departments or communities that would otherwise have little direct contact. Because the people involved belong to different groups, they often have access to different knowledge, perspectives and resources than those within a person's immediate circle. Weak ties can therefore be a route for ideas and assistance to move between parts of an organization that do not interact day to day.\n\nThe concept is relevant to discussions of collaboration, knowledge sharing and organizational networks, including in workplaces that use Microsoft tools to communicate across team boundaries. It is a descriptive idea about how relationships are structured rather than a product or feature.\n\nThis page is a short definition of the concept. No specific M365.FM episodes or related topics are linked to it at this time.",
   "m": "claude-sonnet-5-5",
   "ts": "2026-11-23"
+ },
+ "web-resources": {
+  "d1h": "19b53a8d2a423eb4",
+  "desc": "Web resources in model-driven apps are files such as JavaScript, HTML or CSS stored in Dataverse and used to extend model-driven app forms.",
+  "faq": [
+   {
+    "a": "Web resources are files such as JavaScript, HTML or CSS that are stored in Dataverse. They are used to extend model-driven app forms.",
+    "q": "What are web resources in model-driven apps?"
+   },
+   {
+    "a": "PCF code components are described as the more governed, modern alternative to web resources for extending model-driven apps.",
+    "q": "What is the modern alternative to web resources?"
+   },
+   {
+    "a": "Web resources are stored in Dataverse, which allows them to be used within model-driven apps.",
+    "q": "Where are web resource files stored?"
+   }
+  ],
+  "h": "206dccc55f7a288c",
+  "long": "Web resources (model-driven apps) are files stored in Dataverse that extend the behavior and appearance of model-driven apps. Typical file types include JavaScript, HTML and CSS. Because they are held in Dataverse, they can be referenced from the components of a model-driven app rather than hosted separately.\n\nIn practice, web resources are used to extend model-driven app forms, for example by adding custom client-side logic or embedding custom content. They represent one of the longer-standing extension points available to developers working with model-driven apps.\n\nPower Apps component framework (PCF) code components are described as the more governed, modern alternative to web resources. When planning customizations for a model-driven app, the choice between a web resource and a PCF code component is therefore a common design consideration.\n\nThe official Microsoft Learn documentation on web resources for model-driven apps covers the details of working with them. No M365.FM episodes are currently linked to this topic.",
+  "m": "claude-sonnet-5-5",
+  "ts": "2026-11-24"
  },
  "webauthn": {
   "desc": "WebAuthn is a W3C web standard that lets websites authenticate users with public-key credentials such as passkeys instead of passwords.",
