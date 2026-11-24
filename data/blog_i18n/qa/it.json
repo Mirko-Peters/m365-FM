@@ -1,187 +1,5 @@
 [
  {
-  "slug": "supercharging-zero-trust-with-continuous-access-evaluation-cae",
-  "seg": "83",
-  "fehler": "unuebersetzt",
-  "src": "<code>SigninLogs<br> | where AuthenticationRequirement == &quot;singleFactorAuthentication&quot;<br> | where TokenIssuerType == &quot;AzureAD&quot; and ResultTy",
-  "out": "<code>SigninLogs<br> | where AuthenticationRequirement == &quot;singleFactorAuthentication&quot;<br> | where TokenIssuerType == &quot;AzureAD&quot; and ResultTy"
- },
- {
-  "slug": "stop-reconciling-spreadsheets-building-a-unified-hr-lakehouse-with-microsoft-fabric",
-  "seg": "41",
-  "fehler": "unuebersetzt",
-  "src": "<code>FactHeadcountSnapshot</code>, <code>FactHire</code>, <code>FactTermination</code>, <code>FactOnboardingStep</code>,<br><code>FactLeaveBalance</code>, <cod",
-  "out": "<code>FactHeadcountSnapshot</code>, <code>FactHire</code>, <code>FactTermination</code>, <code>FactOnboardingStep</code>,<br><code>FactLeaveBalance</code>, <cod"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "25",
-  "fehler": "unuebersetzt",
-  "src": "<code>// Sentinel: SigninLogs + OfficeActivity let risky_signins = SigninLogs | where TimeGenerated &gt; ago(24h) | where RiskState in (&quot;atRisk&quot;, &quo",
-  "out": "<code>// Sentinel: SigninLogs + OfficeActivity let risky_signins = SigninLogs | where TimeGenerated &gt; ago(24h) | where RiskState in (&quot;atRisk&quot;, &quo"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "28",
-  "fehler": "unuebersetzt",
-  "src": "<code>let failed = SigninLogs | where TimeGenerated &gt; ago(24h) | where ResultType !in (&quot;0&quot;, &quot;50125&quot;, &quot;50140&quot;) // non-success (t",
-  "out": "<code>let failed = SigninLogs | where TimeGenerated &gt; ago(24h) | where ResultType !in (&quot;0&quot;, &quot;50125&quot;, &quot;50140&quot;) // non-success (t"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "30",
-  "fehler": "unuebersetzt",
-  "src": "<code>// &quot;Logged in&quot; but no Meetings/Channel activity in 14d let logins = SigninLogs | where TimeGenerated &gt; ago(14d) and AppDisplayName has &quot;",
-  "out": "<code>// &quot;Logged in&quot; but no Meetings/Channel activity in 14d let logins = SigninLogs | where TimeGenerated &gt; ago(14d) and AppDisplayName has &quot;"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "33",
-  "fehler": "unuebersetzt",
-  "src": "<code>let licensed = externaldata(UserPrincipalName:string, Sku:string)[@&quot;https://&lt;yourstorage&gt;/licensed.csv&quot;] with (format=&quot;csv&quot;, has",
-  "out": "<code>let licensed = externaldata(UserPrincipalName:string, Sku:string)[@&quot;https://&lt;yourstorage&gt;/licensed.csv&quot;] with (format=&quot;csv&quot;, has"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "35",
-  "fehler": "unuebersetzt",
-  "src": "<code>let email_threads = EmailEvents // Defender AH | where Timestamp &gt; ago(7d) | summarize emailCount=count() by SenderFromAddress, bin(Timestamp, 1d); let",
-  "out": "<code>let email_threads = EmailEvents // Defender AH | where Timestamp &gt; ago(7d) | summarize emailCount=count() by SenderFromAddress, bin(Timestamp, 1d); let"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "38",
-  "fehler": "unuebersetzt",
-  "src": "<code># Exchange Online PowerShell Connect-ExchangeOnline $start = (Get-Date).AddDays(-7) $end = Get-Date Search-UnifiedAuditLog -StartDate $start -EndDate $end",
-  "out": "<code># Exchange Online PowerShell Connect-ExchangeOnline $start = (Get-Date).AddDays(-7) $end = Get-Date Search-UnifiedAuditLog -StartDate $start -EndDate $end"
- },
- {
-  "slug": "getting-started-with-the-cross-platform-cli-for-microsoft-365",
-  "seg": "38",
-  "fehler": "unuebersetzt",
-  "src": "<code>m365 login --authType certificate --appId YOUR_APP_ID --thumbprint YOUR_CERT_THUMBPRINT --tenant YOUR_TENANT.onmicrosoft.com</code>",
-  "out": "<code>m365 login --authType certificate --appId YOUR_APP_ID --thumbprint YOUR_CERT_THUMBPRINT --tenant YOUR_TENANT.onmicrosoft.com</code>"
- },
- {
-  "slug": "the-hidden-dangers-of-legacy-powershell-in-enterprise-environments",
-  "seg": "201",
-  "fehler": "unuebersetzt",
-  "src": "<a href=\"https://www.m365.fm/using-powershell-to-automate-all-things-azure-and-microsoft-365-with-matthew-dowst-mvp\" rel=\"noopener\" target=\"_blank\">PowerShell A",
-  "out": "<a href=\"https://www.m365.fm/using-powershell-to-automate-all-things-azure-and-microsoft-365-with-matthew-dowst-mvp\" rel=\"noopener\" target=\"_blank\">PowerShell A"
- },
- {
-  "slug": "sharepoint-home-site-explained-your-guide-to-a-powerful-intranet-hub",
-  "seg": "41",
-  "fehler": "unuebersetzt",
-  "src": "Set-SPOHomeSite -HomeSiteUrl &quot;https://contoso.sharepoint.com/sites/yoursite&quot;",
-  "out": "Set-SPOHomeSite -HomeSiteUrl &quot;https://contoso.sharepoint.com/sites/yoursite&quot;"
- },
- {
-  "slug": "beyond-trust-falls-why-traditional-team-building-fails-and-what-to-do-instead",
-  "seg": "D",
-  "fehler": "html-tags",
-  "src": "Welcome back to another deep dive! If you have ever sat through a corporate retreat, dreading the moment a facilitator asks you to fall backward into the arms o",
-  "out": "Bentornato in un altro approfondimento! Se ti sei mai seduto a un ritiro aziendale, temendo il momento in cui il facilitatore ti chiede di lasciarti cadere all'"
- },
- {
-  "slug": "why-default-microsoft-365-deployments-spell-chaos-for-it",
-  "seg": "9",
-  "fehler": "unuebersetzt",
-  "src": "<code>&lt;Configuration&gt;<br> &lt;Add OfficeClientEdition=&quot;64&quot; Channel=&quot;MonthlyEnterprise&quot;&gt;<br> &lt;Product ID=&quot;O365ProPlusRetail&",
-  "out": "<code>&lt;Configuration&gt;<br> &lt;Add OfficeClientEdition=&quot;64&quot; Channel=&quot;MonthlyEnterprise&quot;&gt;<br> &lt;Product ID=&quot;O365ProPlusRetail&"
- },
- {
-  "slug": "why-default-microsoft-365-deployments-spell-chaos-for-it",
-  "seg": "11",
-  "fehler": "unuebersetzt",
-  "src": "<code>&lt;Configuration&gt;<br> &lt;Add OfficeClientEdition=&quot;64&quot; Channel=&quot;MonthlyEnterprise&quot; DownloadPath=&quot;\\\\dfs\\office\\cache&quot;&gt;",
-  "out": "<code>&lt;Configuration&gt;<br> &lt;Add OfficeClientEdition=&quot;64&quot; Channel=&quot;MonthlyEnterprise&quot; DownloadPath=&quot;\\\\dfs\\office\\cache&quot;&gt;"
- },
- {
-  "slug": "why-default-microsoft-365-deployments-spell-chaos-for-it",
-  "seg": "13",
-  "fehler": "unuebersetzt",
-  "src": "<code>&lt;Configuration&gt;<br> &lt;Add OfficeClientEdition=&quot;64&quot; Channel=&quot;SemiAnnualEnterprise&quot;&gt;<br> &lt;Product ID=&quot;O365ProPlusReta",
-  "out": "<code>&lt;Configuration&gt;<br> &lt;Add OfficeClientEdition=&quot;64&quot; Channel=&quot;SemiAnnualEnterprise&quot;&gt;<br> &lt;Product ID=&quot;O365ProPlusReta"
- },
- {
-  "slug": "why-default-microsoft-365-deployments-spell-chaos-for-it",
-  "seg": "15",
-  "fehler": "unuebersetzt",
-  "src": "<code>&lt;Property Name=&quot;InstallLocation&quot; Value=&quot;D:\\Apps\\MicrosoftOffice&quot;/&gt;</code>",
-  "out": "<code>&lt;Property Name=&quot;InstallLocation&quot; Value=&quot;D:\\Apps\\MicrosoftOffice&quot;/&gt;</code>"
- },
- {
-  "slug": "why-default-microsoft-365-deployments-spell-chaos-for-it",
-  "seg": "36",
-  "fehler": "unuebersetzt",
-  "src": "<code>&lt;Product ID=&quot;O365ProPlusRetail&quot;&gt;<br> &lt;Language ID=&quot;ja-jp&quot;/&gt;<br> &lt;Language ID=&quot;en-us&quot;/&gt;<br>&lt;/Product&gt;",
-  "out": "<code>&lt;Product ID=&quot;O365ProPlusRetail&quot;&gt;<br> &lt;Language ID=&quot;ja-jp&quot;/&gt;<br> &lt;Language ID=&quot;en-us&quot;/&gt;<br>&lt;/Product&gt;"
- },
- {
-  "slug": "why-its-time-to-abandon-folders-for-graph-based-architecture",
-  "seg": "D",
-  "fehler": "html-tags",
-  "src": "Welcome back, fellow tech enthusiasts and knowledge workers! If you have ever spent twenty minutes hunting for a misplaced spreadsheet, buried three sub-folders",
-  "out": "Bentornati, appassionati di tecnologia e knowledge worker! Se vi è mai capitato di passare venti minuti a cercare un foglio di calcolo smarrito, sepolto in tre "
- },
- {
-  "slug": "why-its-time-to-abandon-folders-for-graph-based-architecture",
-  "seg": "231",
-  "fehler": "unuebersetzt",
-  "src": "<a href=\"https://www.m365.fm/the-architects-guide-to-graph-powered-agents-moving-beyond-chat\" rel=\"noopener\" target=\"_blank\">Graph-Powered AI Agents: An Enterpr",
-  "out": "<a href=\"https://www.m365.fm/the-architects-guide-to-graph-powered-agents-moving-beyond-chat\" rel=\"noopener\" target=\"_blank\">Graph-Powered AI Agents: An Enterpr"
- },
- {
-  "slug": "how-to-fix-the-aadsts50126-invalid-username-or-password-error-in-microsoft-365",
-  "seg": "26",
-  "fehler": "unuebersetzt",
-  "src": "Update-MgUser -UserId &lt;username&gt; -PasswordProfile @{ Password = &#x27;NewStrongPass!123&#x27;; ForceChangePasswordNextSignIn = $true }",
-  "out": "Update-MgUser -UserId &lt;username&gt; -PasswordProfile @{ Password = &#x27;NewStrongPass!123&#x27;; ForceChangePasswordNextSignIn = $true }"
- },
- {
-  "slug": "demystifying-business-central-al-development-the-office-building-analogy",
-  "seg": "D",
-  "fehler": "laenge",
-  "src": "When running a modern business, your enterprise resource planning system sits at the very heart of your daily operations. Platforms like Dynamics 365 Business C",
-  "out": "Quando si gestisce un'azienda moderna, il sistema ERP si trova al centro delle attività quotidiane. Piattaforme come Dynamics 365 Business Central gestiscono di"
- },
- {
-  "slug": "unlocking-advanced-dynamics-365-data-with-production-custom-connectors",
-  "seg": "37",
-  "fehler": "unuebersetzt",
-  "src": "<code>GET .../api/data/v9.2/new_warrantyclaims?$select=...&amp;$filter=modifiedon ge {timestamp}</code>",
-  "out": "<code>GET .../api/data/v9.2/new_warrantyclaims?$select=...&amp;$filter=modifiedon ge {timestamp}</code>"
- },
- {
-  "slug": "windows-365-vs-azure-virtual-desktop-choosing-the-right-strategy",
-  "seg": "103",
-  "fehler": "unuebersetzt",
-  "src": "*.trouter.skype.com, *.edge.skype.com, *.remoteassistanceprodacs.communication.azure.com",
-  "out": "*.trouter.skype.com, *.edge.skype.com, *.remoteassistanceprodacs.communication.azure.com"
- },
- {
-  "slug": "turning-static-notifications-into-interactive-teams-workflows",
-  "seg": "18",
-  "fehler": "unuebersetzt",
-  "src": "<code>{ &quot;$schema&quot;: &quot;http://adaptivecards.io/schemas/adaptive-card.json&quot;, &quot;type&quot;: &quot;AdaptiveCard&quot;, &quot;version&quot;: &q",
-  "out": "<code>{ &quot;$schema&quot;: &quot;http://adaptivecards.io/schemas/adaptive-card.json&quot;, &quot;type&quot;: &quot;AdaptiveCard&quot;, &quot;version&quot;: &q"
- },
- {
-  "slug": "turning-static-notifications-into-interactive-teams-workflows",
-  "seg": "24",
-  "fehler": "unuebersetzt",
-  "src": "<code>{ &quot;kind&quot;: &quot;policy-feedback&quot;, &quot;policyFeedback&quot;: &quot;Please clarify WFH days.&quot;, &quot;sentiment&quot;: &quot;neutral&qu",
-  "out": "<code>{ &quot;kind&quot;: &quot;policy-feedback&quot;, &quot;policyFeedback&quot;: &quot;Please clarify WFH days.&quot;, &quot;sentiment&quot;: &quot;neutral&qu"
- },
- {
-  "slug": "turning-static-notifications-into-interactive-teams-workflows",
-  "seg": "26",
-  "fehler": "unuebersetzt",
-  "src": "<code>{ &quot;type&quot;: &quot;Action.Execute&quot;, &quot;title&quot;: &quot;Approve&quot;, &quot;verb&quot;: &quot;approveRequest&quot;, &quot;data&quot;: { ",
-  "out": "<code>{ &quot;type&quot;: &quot;Action.Execute&quot;, &quot;title&quot;: &quot;Approve&quot;, &quot;verb&quot;: &quot;approveRequest&quot;, &quot;data&quot;: { "
- },
- {
   "slug": "turning-static-notifications-into-interactive-teams-workflows",
   "seg": "29",
   "fehler": "unuebersetzt",
@@ -3486,5 +3304,187 @@
   "fehler": "html-tags",
   "src": "For organization-wide views, go to <strong>Reports</strong> &gt; <strong>Device compliance</strong> and select the <strong>Reports</strong> tab. Learn also name",
   "out": "Per le viste a livello di organizzazione, vai su <strong>Report</strong> &gt; <strong>Conformità dei dispositivi</strong> e seleziona la scheda <strong>Report</"
+ },
+ {
+  "slug": "content/microsoft-teams-tabs-wiki-and-apps-how-to-add-them",
+  "seg": "1",
+  "fehler": "html-tags",
+  "src": "A tab in Teams is a full-screen view of an app or web content shown at the top of a channel, chat or meeting. You add one from the add-a-tab option in the chann",
+  "out": "Una scheda in Teams è una visualizzazione a schermo intero di un'app o di contenuti web, mostrata in alto in un canale, in una chat o in una riunione. Puoi aggi"
+ },
+ {
+  "slug": "content/microsoft-teams-tabs-wiki-and-apps-how-to-add-them",
+  "seg": "19",
+  "fehler": "html-tags",
+  "src": "Microsoft Support says to select <strong>Add a tab</strong> (shown with an add icon), select the app, then select <strong>Add</strong>. For a file, first share ",
+  "out": "Il supporto Microsoft indica di selezionare « Aggiungi una scheda » (con l'icona +), selezionare l'app, quindi selezionare « Aggiungi ». Per un file, condividil"
+ },
+ {
+  "slug": "content/microsoft-teams-tabs-wiki-and-apps-how-to-add-them",
+  "seg": "20",
+  "fehler": "html-tags",
+  "src": "If you cannot see the plus icon, use the replacement described in a Microsoft Q&amp;A answer: open the channel, select the new icon at the top right of the chan",
+  "out": "Se non vedi l'icona +, usa la sostituzione descritta in una risposta di Microsoft Q&amp;A: apri il canale, seleziona la nuova icona in alto a destra del canale,"
+ },
+ {
+  "slug": "content/microsoft-teams-tabs-wiki-and-apps-how-to-add-them",
+  "seg": "21",
+  "fehler": "html-tags",
+  "src": "Choose the app or content type, complete the setup dialog and select <strong>Save</strong>.",
+  "out": "Scegli l'app o il tipo di contenuto, completa la finestra di configurazione e seleziona « Salva »."
+ },
+ {
+  "slug": "content/microsoft-teams-tabs-wiki-and-apps-how-to-add-them",
+  "seg": "22",
+  "fehler": "html-tags",
+  "src": "On mobile, the design page says to select the <strong>More</strong> button in the channel or chat where the app was added.",
+  "out": "Su dispositivi mobili, la pagina di progettazione indica di selezionare il pulsante « Altro » nel canale o nella chat in cui è stata aggiunta l'app."
+ },
+ {
+  "slug": "content/what-to-back-up-in-an-avd-environment",
+  "seg": "93",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/service-architecture-resilience\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Azure Virtual ",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/service-architecture-resilience\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Azure Virtual "
+ },
+ {
+  "slug": "content/what-to-back-up-in-an-avd-environment",
+  "seg": "94",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Data locations for Azure Virtua",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Data locations for Azure Virtua"
+ },
+ {
+  "slug": "content/what-to-back-up-in-an-avd-environment",
+  "seg": "96",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/fslogix/concepts-container-recovery-business-continuity\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Business con",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/fslogix/concepts-container-recovery-business-continuity\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Business con"
+ },
+ {
+  "slug": "content/azure-ad-vs-microsoft-entra-id-name-change-explained",
+  "seg": "56",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/entra/fundamentals/new-name\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: New name for Azure Active Directory</a>",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/entra/fundamentals/new-name\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: New name for Azure Active Directory</a>"
+ },
+ {
+  "slug": "content/copilot-in-outlook-clean-up-inbox-and-summarize-emails",
+  "seg": "23",
+  "fehler": "html-tags",
+  "src": "Select <strong>Summary by Copilot</strong> at the top of the thread. Some versions may show <strong>Summarize</strong> instead.",
+  "out": "Seleziona **Riepilogo di Copilot** in cima alla conversazione. Alcune versioni possono mostrare invece **Riepiloga**."
+ },
+ {
+  "slug": "content/teams-live-captions-turn-on-languages-and-policies",
+  "seg": "30",
+  "fehler": "html-tags",
+  "src": "The setting that enables them is the same <strong>Live captions</strong> policy: <strong>Not enabled, but users can enable</strong>.",
+  "out": "L'impostazione che li abilita è la stessa Live captions del criterio: <strong>Non abilitato, ma gli utenti possono abilitarlo</strong>."
+ },
+ {
+  "slug": "content/regional-host-pools-in-azure-virtual-desktop-where-host-pool-metadata-is-stored",
+  "seg": "68",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/now-generally-available-regional-resiliency-for-azure-virtual-desktop/4540458\" rel=\"no",
+  "out": "<a href=\"https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/now-generally-available-regional-resiliency-for-azure-virtual-desktop/4540458\" rel=\"no"
+ },
+ {
+  "slug": "content/regional-host-pools-in-azure-virtual-desktop-where-host-pool-metadata-is-stored",
+  "seg": "70",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/service-architecture-resilience\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Azure Virtual ",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/service-architecture-resilience\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Azure Virtual "
+ },
+ {
+  "slug": "content/regional-host-pools-in-azure-virtual-desktop-where-host-pool-metadata-is-stored",
+  "seg": "71",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Data locations for Azure Virtua",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Data locations for Azure Virtua"
+ },
+ {
+  "slug": "content/sizing-a-pooled-host-pool-users-per-vm-vm-size-and-cost",
+  "seg": "81",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://getnerdio.com/resources/how-to-right-size-shared-host-pools/\" rel=\"noopener\" target=\"_blank\">Nerdio: How to right-size shared host pools</a>",
+  "out": "<a href=\"https://getnerdio.com/resources/how-to-right-size-shared-host-pools/\" rel=\"noopener\" target=\"_blank\">Nerdio: How to right-size shared host pools</a>"
+ },
+ {
+  "slug": "content/sharepoint-vs-google-drive-differences-for-teams",
+  "seg": "59",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/5336292/company-shared-drive-onedrive\" rel=\"noopener\" target=\"_blank\">Microsoft Q&amp;A: Company Sh",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/5336292/company-shared-drive-onedrive\" rel=\"noopener\" target=\"_blank\">Microsoft Q&amp;A: Company Sh"
+ },
+ {
+  "slug": "content/connect-microsoft-365-copilot-to-fabric-data-agent",
+  "seg": "59",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/fabric/iq/connectors/microsoft-365-copilot-overview\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Fabric IQ in Mic",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/fabric/iq/connectors/microsoft-365-copilot-overview\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Fabric IQ in Mic"
+ },
+ {
+  "slug": "content/what-regional-host-pools-mean-for-data-residency-and-resilience",
+  "seg": "61",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/now-generally-available-regional-resiliency-for-azure-virtual-desktop/4540458\" rel=\"no",
+  "out": "<a href=\"https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/now-generally-available-regional-resiliency-for-azure-virtual-desktop/4540458\" rel=\"no"
+ },
+ {
+  "slug": "content/what-regional-host-pools-mean-for-data-residency-and-resilience",
+  "seg": "63",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Data locations for Azure Virtua",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Data locations for Azure Virtua"
+ },
+ {
+  "slug": "content/automate-project-management-tasks-in-microsoft-365",
+  "seg": "54",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://techcommunity.microsoft.com/blog/nonprofittechies/microsoft-planner--automate-the-perfect-duo/4375211\" rel=\"noopener\" target=\"_blank\">Microsoft",
+  "out": "<a href=\"https://techcommunity.microsoft.com/blog/nonprofittechies/microsoft-planner--automate-the-perfect-duo/4375211\" rel=\"noopener\" target=\"_blank\">Microsoft"
+ },
+ {
+  "slug": "content/automate-project-management-tasks-in-microsoft-365",
+  "seg": "55",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://support.microsoft.com/office/frequently-asked-questions-about-project-manager-agent-ab2bc39a-edec-4d4d-8e86-2cc927870096\" rel=\"noopener\" target",
+  "out": "<a href=\"https://support.microsoft.com/office/frequently-asked-questions-about-project-manager-agent-ab2bc39a-edec-4d4d-8e86-2cc927870096\" rel=\"noopener\" target"
+ },
+ {
+  "slug": "content/automate-project-management-tasks-in-microsoft-365",
+  "seg": "56",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://techcommunity.microsoft.com/t5/planner-blog/the-next-chapter-for-ai-powered-work-management-in-microsoft/ba-p/4469796\" rel=\"noopener\" target=\"_",
+  "out": "<a href=\"https://techcommunity.microsoft.com/t5/planner-blog/the-next-chapter-for-ai-powered-work-management-in-microsoft/ba-p/4469796\" rel=\"noopener\" target=\"_"
+ },
+ {
+  "slug": "content/automate-project-management-tasks-in-microsoft-365",
+  "seg": "57",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://techcommunity.microsoft.com/blog/plannerblog/bringing-ai-assistance-to-basic-plans-in-microsoft-planner/4500074\" rel=\"noopener\" target=\"_blank\"",
+  "out": "<a href=\"https://techcommunity.microsoft.com/blog/plannerblog/bringing-ai-assistance-to-basic-plans-in-microsoft-planner/4500074\" rel=\"noopener\" target=\"_blank\""
+ },
+ {
+  "slug": "content/onedrive-vs-dropbox-vs-google-drive-for-work",
+  "seg": "64",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/5336292/company-shared-drive-onedrive\" rel=\"noopener\" target=\"_blank\">Microsoft Q&amp;A: Company Sh",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/5336292/company-shared-drive-onedrive\" rel=\"noopener\" target=\"_blank\">Microsoft Q&amp;A: Company Sh"
+ },
+ {
+  "slug": "content/copilot-studio-updates-database-connections-getting-started",
+  "seg": "59",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/microsoft-copilot-studio/whats-new\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: What&#x27;s new in Copilot Studio",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/microsoft-copilot-studio/whats-new\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: What&#x27;s new in Copilot Studio"
+ },
+ {
+  "slug": "content/copilot-studio-updates-database-connections-getting-started",
+  "seg": "64",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/5655505/unable-to-connect-azure-sql-database-as-knowledge\" rel=\"noopener\" target=\"_blank\">Microsoft",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/5655505/unable-to-connect-azure-sql-database-as-knowledge\" rel=\"noopener\" target=\"_blank\">Microsoft"
  }
 ]

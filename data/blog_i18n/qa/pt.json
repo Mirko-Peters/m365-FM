@@ -1,134 +1,5 @@
 [
  {
-  "slug": "dataverse-test-isolation-how-to-prevent-flaky-tests-and-data-contamination",
-  "seg": "D",
-  "fehler": "html-tags",
-  "src": "Welcome back to the podcast blog! If you have ever stared at a failing CI/CD pipeline at 2:00 AM because a test record accidentally mutated shared state, you kn",
-  "out": "Bem-vindo de volta ao blog do podcast! Se você já passou das 2h da manhã olhando para um pipeline de CI/CD falhando porque um registro de teste alterou acidenta"
- },
- {
-  "slug": "microsoft-purview-vs-azure-information-protection-choosing-the-right-tool-for-your-data",
-  "seg": "D",
-  "fehler": "html-tags",
-  "src": "Welcome back to the podcast and our companion blog! If you have ever stared at your Microsoft 365 dashboard wondering how to properly lock down your sensitive d",
-  "out": "Bem-vindo de volta ao podcast e ao nosso blog complementar! Se você já ficou olhando para o painel do Microsoft 365 se perguntando como proteger adequadamente s"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "40",
-  "fehler": "unuebersetzt",
-  "src": "<code># Requires MSGraph PowerShell &amp; AuditLog.Read.All Connect-MgGraph -Scopes &quot;AuditLog.Read.All&quot;,&quot;Directory.Read.All&quot; Get-MgAuditLogS",
-  "out": "<code># Requires MSGraph PowerShell &amp; AuditLog.Read.All Connect-MgGraph -Scopes &quot;AuditLog.Read.All&quot;,&quot;Directory.Read.All&quot; Get-MgAuditLogS"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "42",
-  "fehler": "unuebersetzt",
-  "src": "<code>Connect-MgGraph -Scopes &quot;User.Read.All&quot; Get-MgUser -All -Property UserPrincipalName,AssignedLicenses | Select-Object UserPrincipalName, @{n=&#x2",
-  "out": "<code>Connect-MgGraph -Scopes &quot;User.Read.All&quot; Get-MgUser -All -Property UserPrincipalName,AssignedLicenses | Select-Object UserPrincipalName, @{n=&#x2"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "46",
-  "fehler": "unuebersetzt",
-  "src": "<code>OfficeActivity</code> (Time, Workload, Operation, UserId, SiteUrl, ItemType, Target)",
-  "out": "<code>OfficeActivity</code> (Time, Workload, Operation, UserId, SiteUrl, ItemType, Target)"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "54",
-  "fehler": "unuebersetzt",
-  "src": "<code>Risky Sign-ins = COUNTROWS(FILTER(Signins, Signins[Risk] &lt;&gt; &quot;none&quot;))</code>",
-  "out": "<code>Risky Sign-ins = COUNTROWS(FILTER(Signins, Signins[Risk] &lt;&gt; &quot;none&quot;))</code>"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "55",
-  "fehler": "unuebersetzt",
-  "src": "<code>SP/OD Downloads = COUNTROWS(FILTER(OfficeActivity, OfficeActivity[Workload] IN {&quot;SharePoint&quot;,&quot;OneDrive&quot;} &amp;&amp; OfficeActivity[Ope",
-  "out": "<code>SP/OD Downloads = COUNTROWS(FILTER(OfficeActivity, OfficeActivity[Workload] IN {&quot;SharePoint&quot;,&quot;OneDrive&quot;} &amp;&amp; OfficeActivity[Ope"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "56",
-  "fehler": "unuebersetzt",
-  "src": "<code>Teams Feature Use = COUNTROWS(FILTER(OfficeActivity, OfficeActivity[Workload]=&quot;MicrosoftTeams&quot; &amp;&amp; OfficeActivity[Operation] IN {&quot;Me",
-  "out": "<code>Teams Feature Use = COUNTROWS(FILTER(OfficeActivity, OfficeActivity[Workload]=&quot;MicrosoftTeams&quot; &amp;&amp; OfficeActivity[Operation] IN {&quot;Me"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "57",
-  "fehler": "unuebersetzt",
-  "src": "<code>Inactive Licensed Users = DISTINCTCOUNTX(FILTER(Licenses, CALCULATE(COUNTROWS(OfficeActivity), ALLEXCEPT(OfficeActivity, OfficeActivity[UserId]))=0), Lice",
-  "out": "<code>Inactive Licensed Users = DISTINCTCOUNTX(FILTER(Licenses, CALCULATE(COUNTROWS(OfficeActivity), ALLEXCEPT(OfficeActivity, OfficeActivity[UserId]))=0), Lice"
- },
- {
-  "slug": "beyond-the-portal-why-manual-microsoft-365-administration-is-costing-you-15-hours-a-week",
-  "seg": "213",
-  "fehler": "unuebersetzt",
-  "src": "GET <a href=\"https://graph.microsoft.com/beta/users/user@domain.com/authentication/requirements\" rel=\"noopener\" target=\"_blank\">https://graph.microsoft.com/beta",
-  "out": "GET <a href=\"https://graph.microsoft.com/beta/users/user@domain.com/authentication/requirements\" rel=\"noopener\" target=\"_blank\">https://graph.microsoft.com/beta"
- },
- {
-  "slug": "beyond-the-portal-why-manual-microsoft-365-administration-is-costing-you-15-hours-a-week",
-  "seg": "215",
-  "fehler": "unuebersetzt",
-  "src": "PATCH <a href=\"https://graph.microsoft.com/beta/users/user@domain.com/authentication/requirements\" rel=\"noopener\" target=\"_blank\">https://graph.microsoft.com/be",
-  "out": "PATCH <a href=\"https://graph.microsoft.com/beta/users/user@domain.com/authentication/requirements\" rel=\"noopener\" target=\"_blank\">https://graph.microsoft.com/be"
- },
- {
-  "slug": "beyond-the-portal-why-manual-microsoft-365-administration-is-costing-you-15-hours-a-week",
-  "seg": "217",
-  "fehler": "unuebersetzt",
-  "src": "GET <a href=\"https://graph.microsoft.com/v1.0/policies/authenticationMethodsPolicy/authenticationMethodConfigurations/microsoftAuthenticator\" rel=\"noopener\" tar",
-  "out": "GET <a href=\"https://graph.microsoft.com/v1.0/policies/authenticationMethodsPolicy/authenticationMethodConfigurations/microsoftAuthenticator\" rel=\"noopener\" tar"
- },
- {
-  "slug": "copilot-hallucination-risks-explained",
-  "seg": "271",
-  "fehler": "unuebersetzt",
-  "src": "<a href=\"https://www.m365.fm/governance-boards-the-last-defense-against-ai-mayhem/\" rel=\"noopener\" target=\"_blank\">Governance Boards: The Last Defense Against A",
-  "out": "<a href=\"https://www.m365.fm/governance-boards-the-last-defense-against-ai-mayhem/\" rel=\"noopener\" target=\"_blank\">Governance Boards: The Last Defense Against A"
- },
- {
-  "slug": "clearing-the-teams-cache-your-ultimate-fix-for-disappearing-channels",
-  "seg": "D",
-  "fehler": "html-tags",
-  "src": "Welcome back to the podcast blog! If you have ever opened your desktop application only to panic because half your workspace has seemingly vanished into thin ai",
-  "out": "Bem-vindo de volta ao blog do podcast! Se você já abriu o aplicativo de desktop e entrou em pânico porque metade do seu espaço de trabalho parecia ter desaparec"
- },
- {
-  "slug": "from-goblin-script-to-governance-refactoring-hundreds-of-power-bi-measures-with-pbip-tmdl-and-git",
-  "seg": "55",
-  "fehler": "unuebersetzt",
-  "src": "Sales_Total, Finance_Rev_Monthly, Ops_Headcount_YTD",
-  "out": "Sales_Total, Finance_Rev_Monthly, Ops_Headcount_YTD"
- },
- {
-  "slug": "resolving-the-aadsts900144-missing-parameter-error-in-azure-ad",
-  "seg": "7",
-  "fehler": "html-tags",
-  "src": "For anyone working with multi-tenant applications, be aware that mismatches in tenant context or service endpoints can create similar confusion, sometimes makin",
-  "out": "Para quem trabalha com aplicações multilocatário, fique atento: incompatibilidades no contexto de locatário ou nos endpoints de serviço podem causar confusão se"
- },
- {
-  "slug": "the-role-of-multi-tenant-organizations-in-streamlining-tenant-to-tenant-transitions",
-  "seg": "112",
-  "warn": "name-fehlt:Loop"
- },
- {
-  "slug": "demystifying-teams-collaboration-private-vs-shared-channels",
-  "seg": "D",
-  "fehler": "html-tags",
-  "src": "Welcome back to the blog! If you have ever stared at your Microsoft Teams application, sweating over whether you should build a new Team, add a private channel,",
-  "out": "Bem-vindo de volta ao blog! Se você já ficou olhando para o aplicativo Microsoft Teams, em dúvida sobre criar uma nova equipe, adicionar um canal privado ou con"
- },
- {
-  "slug": "unlocking-the-power-of-microsoft-365-copilot-extensibility",
-  "seg": "163",
-  "warn": "name-fehlt:Azure"
- },
- {
   "slug": "simplifying-microservices-azure-container-apps-vs-aks",
   "seg": "156",
   "fehler": "unuebersetzt",
@@ -3486,5 +3357,138 @@
   "fehler": "html-tags",
   "src": "For organization-wide views, go to <strong>Reports</strong> &gt; <strong>Device compliance</strong> and select the <strong>Reports</strong> tab. Learn also name",
   "out": "Para visões de toda a organização, acesse <strong>Relatórios</strong> &gt; <strong>Conformidade de dispositivos</strong> e selecione a guia <strong>Relatórios</"
+ },
+ {
+  "slug": "content/sizing-a-pooled-host-pool-users-per-vm-vm-size-and-cost",
+  "seg": "79",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits\" rel=\"noopener\" target=\"_blank\">Microsoft L",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits\" rel=\"noopener\" target=\"_blank\">Microsoft L"
+ },
+ {
+  "slug": "content/sizing-a-pooled-host-pool-users-per-vm-vm-size-and-cost",
+  "seg": "81",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://getnerdio.com/resources/how-to-right-size-shared-host-pools/\" rel=\"noopener\" target=\"_blank\">Nerdio: How to right-size shared host pools</a>",
+  "out": "<a href=\"https://getnerdio.com/resources/how-to-right-size-shared-host-pools/\" rel=\"noopener\" target=\"_blank\">Nerdio: How to right-size shared host pools</a>"
+ },
+ {
+  "slug": "content/regional-host-pools-in-azure-virtual-desktop-where-host-pool-metadata-is-stored",
+  "seg": "68",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/now-generally-available-regional-resiliency-for-azure-virtual-desktop/4540458\" rel=\"no",
+  "out": "<a href=\"https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/now-generally-available-regional-resiliency-for-azure-virtual-desktop/4540458\" rel=\"no"
+ },
+ {
+  "slug": "content/regional-host-pools-in-azure-virtual-desktop-where-host-pool-metadata-is-stored",
+  "seg": "70",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/service-architecture-resilience\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Azure Virtual ",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/service-architecture-resilience\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Azure Virtual "
+ },
+ {
+  "slug": "content/regional-host-pools-in-azure-virtual-desktop-where-host-pool-metadata-is-stored",
+  "seg": "71",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Data locations for Azure Virtua",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Data locations for Azure Virtua"
+ },
+ {
+  "slug": "content/what-to-back-up-in-an-avd-environment",
+  "seg": "93",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/service-architecture-resilience\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Azure Virtual ",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/service-architecture-resilience\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Azure Virtual "
+ },
+ {
+  "slug": "content/what-to-back-up-in-an-avd-environment",
+  "seg": "94",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Data locations for Azure Virtua",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/data-locations\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Data locations for Azure Virtua"
+ },
+ {
+  "slug": "content/what-to-back-up-in-an-avd-environment",
+  "seg": "96",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/fslogix/concepts-container-recovery-business-continuity\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Business con",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/fslogix/concepts-container-recovery-business-continuity\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Business con"
+ },
+ {
+  "slug": "content/copilot-studio-updates-database-connections-getting-started",
+  "seg": "59",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/microsoft-copilot-studio/whats-new\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: What&#x27;s new in Copilot Studio",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/microsoft-copilot-studio/whats-new\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: What&#x27;s new in Copilot Studio"
+ },
+ {
+  "slug": "content/copilot-studio-updates-database-connections-getting-started",
+  "seg": "64",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/5655505/unable-to-connect-azure-sql-database-as-knowledge\" rel=\"noopener\" target=\"_blank\">Microsoft",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/answers/questions/5655505/unable-to-connect-azure-sql-database-as-knowledge\" rel=\"noopener\" target=\"_blank\">Microsoft"
+ },
+ {
+  "slug": "content/designing-a-multi-region-azure-virtual-desktop-deployment",
+  "seg": "67",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/now-generally-available-regional-resiliency-for-azure-virtual-desktop/4540458\" rel=\"no",
+  "out": "<a href=\"https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/now-generally-available-regional-resiliency-for-azure-virtual-desktop/4540458\" rel=\"no"
+ },
+ {
+  "slug": "content/designing-a-multi-region-azure-virtual-desktop-deployment",
+  "seg": "70",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/service-architecture-resilience\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Azure Virtual ",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/service-architecture-resilience\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Azure Virtual "
+ },
+ {
+  "slug": "content/publishing-remoteapps-with-application-groups-a-practical-walkthrough",
+  "seg": "67",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/publish-applications-stream-remoteapp\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Publish ",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/publish-applications-stream-remoteapp\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Publish "
+ },
+ {
+  "slug": "content/publishing-remoteapps-with-application-groups-a-practical-walkthrough",
+  "seg": "70",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/app-attach-setup\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Add and manage App Attach app",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/app-attach-setup\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Add and manage App Attach app"
+ },
+ {
+  "slug": "content/publishing-remoteapps-with-application-groups-a-practical-walkthrough",
+  "seg": "74",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/preferred-application-group-type\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Preferred app",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/preferred-application-group-type\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Preferred app"
+ },
+ {
+  "slug": "content/publishing-remoteapps-with-application-groups-a-practical-walkthrough",
+  "seg": "75",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/set-preferred-application-group-type\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Set the p",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/set-preferred-application-group-type\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Set the p"
+ },
+ {
+  "slug": "content/publishing-remoteapps-with-application-groups-a-practical-walkthrough",
+  "seg": "76",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/customize-feed-for-virtual-desktop-users\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Custo",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/customize-feed-for-virtual-desktop-users\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Custo"
+ },
+ {
+  "slug": "content/publishing-remoteapps-with-application-groups-a-practical-walkthrough",
+  "seg": "78",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/cli-powershell\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Use Azure PowerShell and Azure ",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/cli-powershell\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Use Azure PowerShell and Azure "
+ },
+ {
+  "slug": "content/publishing-remoteapps-with-application-groups-a-practical-walkthrough",
+  "seg": "79",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/windows-app/get-started-connect-devices-desktops-apps\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Get started wi",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/windows-app/get-started-connect-devices-desktops-apps\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Get started wi"
  }
 ]
