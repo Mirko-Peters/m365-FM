@@ -4,7 +4,7 @@ Ziel: Die Follower-Zahl der Unternehmensseite **M365 Show** kommt automatisch au
 (`page.page_followers`). Daraus liest `tools/mediakit_con.py` (M365Con-Sponsordeck). Die API ist **nur lesend**: Damit kann nichts im Namen
 der Seite gepostet werden (siehe unten). Gespeichert wird nur die Summe, nie ein Follower-URN oder Name.
 
-Werkzeug: `tools/linkedin_stats.py` · Workflow: `.github/workflows/linkedin-stats.yml` (sonntags automatisch, sonst manuell) · Test: `tests/test_linkedin_stats.py`
+Werkzeug: `tools/linkedin_stats.py` · Workflow: `.github/workflows/linkedin-stats.yml` (nur manuell) · Test: `tests/test_linkedin_stats.py`
 
 ## Einrichtung (einmalig, Mirko)
 
@@ -25,10 +25,12 @@ Werkzeug: `tools/linkedin_stats.py` · Workflow: `.github/workflows/linkedin-sta
    und schreibt nur die *Form* der Antwort ins Protokoll (Feldnamen, `paging.total`), keine Personendaten, und speichert nichts.
 6. Danach Modus **fetch** mit `dry_run` an (zählt und zeigt die Zahl), zuletzt mit `dry_run` aus (speichert in die Datei).
 
-## Wöchentlicher Lauf
+## Kein Zeitplan (24.11.2026)
 
-Sonntags 03:29 UTC liest der Workflow nur die aktuelle Follower-Zahl aus und speichert sie (Modus `fetch`, ohne Probelauf, ohne `trust_total`,
-also vollständig gezählt). Solange Secret oder Seiten-ID fehlen, endet er grün mit einem Hinweis und fragt nichts ab. Der Schutz unten gilt auch hier.
+Vom 19. bis 22.11. lief der Workflow sonntags automatisch. Die API liefert aber nur einen Teil der Follower: am 22.11. und am 24.11. jeweils 1.875,
+laut Seitenanalyse sind es 102.022. Der Schutz unten hat deshalb nichts gespeichert. Mirko hat den Zeitplan am 24.11.2026 abgeschaltet; die Follower-Zahl
+wird weiter von Hand aus der Seitenanalyse eingetragen. Der Workflow bleibt für Proben von Hand. Außerdem scheiterte die Erneuerung per Refresh-Token
+mit HTTP 400 (der gespeicherte Access-Token lief noch).
 
 ## Wie gezählt wird
 
