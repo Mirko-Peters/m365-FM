@@ -86,13 +86,23 @@ export async function computeLevels(db, filter = null) {
   return { pairs: pairs.size, changed };
 }
 
-// Cron (alle 30 Minuten) und Verwaltung: Belege neu aufbauen, fruehere Selbstangaben einmalig als Beleg 'self' uebernehmen, Stufen berechnen
+// Cron (taeglich um 06:00, index.js) und Verwaltung: Belege abgleichen, fruehere Selbstangaben einmalig als Beleg 'self' uebernehmen, Stufen berechnen.
+// D1-Kosten: statt alle Belege zu loeschen und neu einzufuegen (jede Zeile samt Index in jedem Lauf) werden Soll (Quelltabellen) und Ist
+// (expertise_evidence) verglichen; geschrieben wird nur der Unterschied. created bleibt der Zeitpunkt der ersten Erfassung.
 export async function syncExpertise(env, entityMap) {
   const db = env.DB, t = Math.floor(Date.now() / 1000);
   const ev = await collectEvidence(env, entityMap);
-  await db.prepare("DELETE FROM expertise_evidence WHERE kind<>'self'").run();
-  await batch(db, ev.map((e) => db.prepare("INSERT OR IGNORE INTO expertise_evidence(owner_id,eid,kind,item_id,weight,created) VALUES(?,?,?,?,?,?)").bind(e.uid, e.eid, e.kind, e.item, e.w, t)));
+  const want = new Map(ev.map((e) => [`${e.uid}|${e.eid}|${e.kind}|${e.item}`, e]));
+  const ops = [], kept = new Set(); let added = 0, removed = 0, reweighted = 0;
+  for (const r of await rows(db, "SELECT owner_id,eid,kind,item_id,weight FROM expertise_evidence WHERE kind<>'self'")) {
+    const k = `${r.owner_id}|${r.eid}|${r.kind}|${r.item_id}`, e = want.get(k);
+    if (!e) { removed++; ops.push(db.prepare("DELETE FROM expertise_evidence WHERE owner_id=? AND eid=? AND kind=? AND item_id=?").bind(r.owner_id, r.eid, r.kind, r.item_id)); continue; }
+    kept.add(k);
+    if (+r.weight !== +e.w) { reweighted++; ops.push(db.prepare("UPDATE expertise_evidence SET weight=? WHERE owner_id=? AND eid=? AND kind=? AND item_id=?").bind(e.w, r.owner_id, r.eid, r.kind, r.item_id)); }
+  }
+  for (const [k, e] of want) if (!kept.has(k)) { added++; ops.push(db.prepare("INSERT OR IGNORE INTO expertise_evidence(owner_id,eid,kind,item_id,weight,created) VALUES(?,?,?,?,?,?)").bind(e.uid, e.eid, e.kind, e.item, e.w, t)); }
+  await batch(db, ops);
   const seeded = await seedSelf(db, t);
   const r = await computeLevels(db);
-  return { evidence: ev.length, seeded, ...r };
+  return { evidence: ev.length, added, removed, reweighted, seeded, ...r };
 }

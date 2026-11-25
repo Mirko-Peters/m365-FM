@@ -555,6 +555,14 @@ test("levels: syncExpertise baut Belege aus den Quelltabellen und setzt Stufen (
   assert.equal(sc.score, 17); assert.equal(sc.endorsed, 2);
   // zweiter Lauf: keine doppelte Uebernahme, nichts aendert sich; Bestaetigungen bis zur Stufe Evangelist werden nachgezogen
   const r2 = await syncExpertise({ DB: db }, async () => emap); assert.equal(r2.seeded, 0); assert.equal(r2.changed, 0);
+  assert.deepEqual([r2.added, r2.removed, r2.reweighted], [0, 0, 0], "D1-Kosten: unveraenderte Belege werden nicht neu geschrieben");
+  raw.exec("UPDATE expertise_evidence SET created=1 WHERE kind<>'self'");
+  raw.exec("UPDATE blog_posts SET status='draft' WHERE id=2");
+  const r3 = await syncExpertise({ DB: db }, async () => emap);
+  assert.deepEqual([r3.added, r3.removed, r3.reweighted], [0, 1, 0], "nur der entfallene Beleg wird geloescht");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM expertise_evidence WHERE kind<>'self' AND created<>1").get().n, 0, "created bleibt");
+  raw.exec("UPDATE blog_posts SET status='live' WHERE id=2");
+  assert.equal((await syncExpertise({ DB: db }, async () => emap)).added, 1);
   for (let i = 10; i < 110; i++) raw.exec(`INSERT INTO endorsements(owner_id,eid,by_id,created) VALUES(1,'power-bi',${i},${t})`);
   await computeLevels(db, { uid: 1, eid: "power-bi" });
   assert.equal(raw.prepare("SELECT level FROM expertise WHERE owner_id=1 AND eid='power-bi'").get().level, 4, "102 Bestaetigungen: Evangelist");
