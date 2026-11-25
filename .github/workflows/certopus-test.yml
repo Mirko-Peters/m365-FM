@@ -1,0 +1,36 @@
+name: Certopus-Testsendung (ein Zertifikat)
+# Legt fuer Mirkos Test EIN Zertifikat des Lernpfads Manufacturing Excellence bei Certopus an und laesst es per E-Mail schicken
+# (tools/certopus_test.py). Adresse wird sofort maskiert und nie ausgegeben. Beim Push auf den eigenen Branch nur Probelauf ohne Versand.
+on:
+  workflow_dispatch:
+    inputs:
+      email:
+        description: "Empfaenger-Adresse (wird im Log maskiert)"
+        required: true
+      name:
+        description: "Name auf dem Zertifikat"
+        required: false
+        default: "Mirko Peters"
+  push:
+    branches: [claude/certopus-testsendung]
+    paths: [".github/workflows/certopus-test.yml", "tools/certopus_test.py"]
+permissions:
+  contents: read
+jobs:
+  send:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with: { python-version: "3.12" }
+      - name: Adresse maskieren
+        run: |
+          E=$(jq -r '.inputs.email // ""' "$GITHUB_EVENT_PATH")
+          N=$(jq -r '.inputs.name // ""' "$GITHUB_EVENT_PATH")
+          if [ -n "$E" ]; then echo "::add-mask::$E"; fi
+          { echo "CERT_EMAIL=$E"; echo "CERT_NAME=$N"; } >> "$GITHUB_ENV"
+      - name: Zertifikat anlegen
+        env:
+          CERTOPUS_API_KEY: ${{ secrets.CERTOPUS_API_KEY }}
+        run: python tools/certopus_test.py
