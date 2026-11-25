@@ -119,6 +119,20 @@ def _renames():
 
 RENAMES = _renames()
 
+# Fruehere Blogbeitraege, deren Podpage-Slug mit "-" beginnt (Podpage hat den Titelteil vor ":" weggelassen). Alte Beitraege und ihre
+# Sprachfassungen verlinken sie unter dem Slug des vollen Titels, den es nie gab: Alias -> echter Slug. Die echten Slugs bleiben (bestehende
+# Adressen); site_legacy_blog.fix() schreibt die Links beim Bau direkt auf den Beitrag um, redirect_table() leitet die Alias-Adressen per 301 weiter.
+BLOG_ALIAS = {
+    "private-vs-shared-channels-in-microsoft-teams-a-practical-decision-guide": "-a-practical-decision-guide",
+    "a-practical-decision-guide": "-a-practical-decision-guide",
+    "ai-stewardship-at-microsoft-sustainable-innovation-with-responsible-ai": "-ai-stewardship-at-microsoft-sustainable-innovation-with-responsible-ai",
+}
+
+
+def blog_aliases(slugs):
+    """BLOG_ALIAS ohne Eintraege, deren Alias selbst ein Beitrag ist oder deren Ziel fehlt (slugs: Slugs der frueheren Beitraege)."""
+    return {a: s for a, s in BLOG_ALIAS.items() if s in slugs and a not in slugs}
+
 
 def rename_links(h):
     """T12: Links auf einen alten Folgen-Slug (frueher flach /<slug>/ auf Podpage, oder /show/episodes/<slug>/, auch mit Sprachpfad)
@@ -494,6 +508,8 @@ def redirect_table(eps, plist, guests, bposts, gmerge, baseids, LG, docs=None):
     for old, new in (("/episodes", "/show/episodes/"), ("/guests", "/show/guests/"), ("/hosts", "/show/hosts/"), ("/people", "/show/hosts/"), ("/sponsors", "/show/sponsors/"), ("/reviews", "/show/reviews/"), ("/podroll", "/show/listen/"), ("/videos", "/show/"), ("/blog", "/community/u/mirko-p/blog/" if bposts else "/show/")): rd.setdefault(old, new)
     for p in bposts: rd[f"/blog/{p['slug']}"] = f"/community/u/mirko-p/blog/{p['slug']}/"; rd[f"/show/blog/{p['slug']}"] = f"/community/u/mirko-p/blog/{p['slug']}/"
     if bposts: rd["/show/blog"] = "/community/u/mirko-p/blog/"
+    for a, s in blog_aliases({p["slug"] for p in bposts}).items():   # verlinkter Slug des vollen Titels -> Beitrag mit "-"-Slug (BLOG_ALIAS)
+        for pre in ("/blog/", "/show/blog/", "/community/u/mirko-p/blog/"): rd[pre + a] = f"/community/u/mirko-p/blog/{s}/"
     # T12: umbenannte Folgen (data/slug_renames.json): alte Folgenadresse in allen Sprachen per 301 auf die neue (der Site-Worker
     # fragt die Tabelle fuer /show/episodes/... erst, wenn die Seite fehlt); die fruehere Podpage-Adresse /mirko-peters zeigt auf die Person
     _ren = (json.loads((D / "slug_renames.json").read_text("utf-8")).get("episodes") or {}) if (D / "slug_renames.json").exists() else {}

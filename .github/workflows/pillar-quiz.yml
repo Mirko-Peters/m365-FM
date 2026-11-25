@@ -1,0 +1,84 @@
+name: Lernpfad-Abschlusstest - Fragen erzeugen (Sonnet + Haiku, Batch)
+# tools/pillar_quiz.py: Sonnet schreibt je Leitfaden 8 Kandidaten, Haiku prueft sie am Leitfadentext und uebersetzt sie ins Deutsche; bis 6 Fragen je Leitfaden bleiben.
+# Ergebnis: data/pillar_quiz.json (oeffentlich, ohne Loesungen) und data/pillar_quiz_keys.enc (Loesungen, verschluesselt mit einem aus CRON_KEY abgeleiteten Schluessel).
+# Die Loesungen erscheinen nie im Klartext im Repo, im Log oder im Artefakt (Artefakte oeffentlicher Repos kann jeder angemeldete GitHub-Nutzer laden).
+# Kosten: hoechstens PILLAR_QUIZ_RUN_EUR (Standard 2 EUR) je Lauf, Haiku zusaetzlich im Haiku-Tagesbudget des Workers. Ein Leitfaden mit 5+ Fragen wird nicht neu erzeugt.
+# Ausloeser: nur von Hand (workflow_dispatch). Die frueheren Push-Ausloeser der Arbeitszweige (claude/lernpfad-quiz-fragen: run,
+# claude/lernpfad-zertifikat: reshuffle/regen) sind entfernt; die Neuerzeugung (regen) ist erledigt (Marke "regen" im Schluessel, zweiter Lauf tut nichts).
+# Schluessel gehen nur von main an den Live-Worker (run auf main oder mode=push; nach dem Merge sendet worker.yml).
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "plan = Zaehlung/Kosten, run = erzeugen, pruefen, speichern (Schluessel an den Worker nur auf main), collect = offene Batches abholen, push = nur Schluessel an den Worker senden, reshuffle = einmalig Optionen geheim neu ordnen (sendet nichts; danach Seitenbau, dann push), regen = einmalig alle Fragen neu erzeugen, alte IDs stilllegen"
+        type: choice
+        options: [plan, run, collect, push, reshuffle, regen]
+        default: plan
+      pillars: { description: "Nur diese Leitfaeden (IDs, kommagetrennt); leer = alle mit weniger als 5 Fragen", required: false, default: "" }
+permissions:
+  contents: write
+concurrency: { group: pillar-quiz, cancel-in-progress: false }
+jobs:
+  quiz:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      AI_GATEWAY_ID: ${{ vars.AI_GATEWAY_ID || 'm365fm' }}
+      CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
+      COMMUNITY_API: https://api-dub.m365.fm
+      CRON_KEY: ${{ secrets.CRON_KEY }}
+      HAIKU_USD_PER_MTOK_IN: ${{ vars.HAIKU_USD_PER_MTOK_IN || '0.10' }}
+      HAIKU_USD_PER_MTOK_OUT: ${{ vars.HAIKU_USD_PER_MTOK_OUT || '0.50' }}
+      USD_PER_EUR: ${{ vars.USD_PER_EUR || '1.08' }}
+      PILLAR_QUIZ_RUN_EUR: ${{ vars.PILLAR_QUIZ_RUN_EUR || '2' }}
+      PILLAR_QUIZ_REGEN_USD: '2'
+      MODE: ${{ inputs.mode }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.ref }}   # neuester Stand des Zweigs (offene Batches, bestehende Fragen), nicht github.sha des Ausloesers
+      - uses: actions/setup-python@v7
+        with: { python-version: "3.12" }
+      - run: pip install -q cryptography
+      - name: Fragen erzeugen bzw. Schluessel senden
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
+          PILLARS_IN: ${{ inputs.pillars }}
+        run: |
+          set -o pipefail
+          export PILLAR_QUIZ_CHECK_DIR="$RUNNER_TEMP/pillar-quiz"
+          ARGS=""
+          [ -n "$PILLARS_IN" ] && ARGS="--pillars $PILLARS_IN"
+          if [ -z "$CRON_KEY" ] && [ "$MODE" != "plan" ]; then echo "::error::Secret CRON_KEY fehlt (Schluessel fuer data/pillar_quiz_keys.enc und den Worker)"; exit 1; fi
+          if [ "$MODE" = "regen" ]; then echo "Plan (Kosten vor dem Senden):"; python tools/pillar_quiz.py plan --regen | tee -a "$GITHUB_STEP_SUMMARY"; fi
+          echo "Aufruf: tools/pillar_quiz.py $MODE $ARGS"
+          python tools/pillar_quiz.py "$MODE" $ARGS | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Pruefdateien als Artefakt (Fragen ohne Loesungen + verschluesselte Pruefdatei)
+        if: always() && (env.MODE == 'run' || env.MODE == 'collect' || env.MODE == 'regen')
+        uses: actions/upload-artifact@v7
+        with:
+          name: pillar-quiz-pruefung
+          path: ${{ runner.temp }}/pillar-quiz
+          if-no-files-found: ignore
+          retention-days: 30
+      - name: Ergebnis committen (auf den ausloesenden Zweig)
+        if: always() && (env.MODE == 'run' || env.MODE == 'collect' || env.MODE == 'reshuffle' || env.MODE == 'regen')
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          for f in data/pillar_quiz.json data/pillar_quiz_keys.enc data/pillar_quiz_open.json; do
+            if [ -e "$f" ] || git ls-files --error-unmatch "$f" >/dev/null 2>&1; then git add -A -- "$f"; fi
+          done
+          if git diff --cached --quiet; then echo "Nichts Neues zu speichern" | tee -a "$GITHUB_STEP_SUMMARY"; exit 0; fi
+          git commit -q -m "Lernpfad-Abschlusstest: Fragen (oeffentlich) und verschluesselte Antwortschluessel"
+          for i in 1 2 3 4 5; do
+            if git pull --rebase -q origin "$BRANCH"; then
+              if git push -q origin "HEAD:$BRANCH"; then echo "Gespeichert auf $BRANCH" | tee -a "$GITHUB_STEP_SUMMARY"; exit 0; fi
+            else
+              git rebase --abort 2>/dev/null || true
+            fi
+            sleep $((i*7))
+          done
+          echo "::error::Push fehlgeschlagen: Fragen und Schluessel liegen NICHT auf $BRANCH (bezahlte Batches: data/pillar_quiz_open.json bzw. Log; mode=collect holt sie erneut ab)"; exit 1

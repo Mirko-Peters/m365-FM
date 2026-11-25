@@ -124,6 +124,7 @@ def items(BASE):
     eslug = {e["slug"] for e in P.load("episodes") if e.get("published") not in (False, "False") and e.get("hidden") not in (True, "True")}
     eps_by_slug = {e["slug"]: e for e in P.load("episodes") if e["slug"] in eslug}
     bslug = {p["slug"] for p in posts}
+    alias = P.blog_aliases(bslug)   # Slug des vollen Titels -> echter Slug mit "-" am Anfang (site_podpage.BLOG_ALIAS)
     ix = SBR.Index()
 
     def fix(h):
@@ -132,7 +133,9 @@ def items(BASE):
             if not path.startswith("/") or path.startswith("//"): return m.group(0)
             seg = path.strip("/").split("#")[0]; seg = P.RENAMES.get(seg, seg)   # T12: alte Podpage-Adresse einer umbenannten Folge
             if seg in eslug: return f'href="{BASE}/show/episodes/{seg}/"'
-            if seg.startswith("blog/") and seg[5:] in bslug: return f'href="{url_of(BASE, seg[5:])}"'
+            b = re.fullmatch(r"(?:show/|community/u/mirko-p/)?blog/([^/?#]+)", seg)   # /blog/<slug>, /show/blog/<slug>, /community/u/mirko-p/blog/<slug>
+            bs = (b.group(1) if b.group(1) in bslug else alias.get(b.group(1))) if b else None
+            if bs: return f'href="{url_of(BASE, bs)}"'
             if seg == "blog": return f'href="{BASE}/community/u/{HANDLE}/blog/"'
             return m.group(0)
         return R2.drop_dead(re.sub(r'href="([^"]+)"', rep, h))   # dauerhaft fehlende Bilder (data/r2_dead.json) gar nicht erst ausgeben: kein kaputtes <img>, nicht in "images" (JSON-LD), Titelbild greift

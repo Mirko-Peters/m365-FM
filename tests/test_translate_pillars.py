@@ -139,6 +139,54 @@ class Meta(unittest.TestCase):
         self.assertEqual(T.check_ui("fr", bad), "Leitfaeden")
 
 
+class UiDelta(unittest.TestCase):
+    """Neue oder geaenderte Oberflaechen-Schluessel (z. B. q_* des Abschlusstests) werden je Sprache einzeln nachgefordert; deutsche Oberflaeche wird erkannt."""
+    def ov(self, ui, title="Excellence manufacturière", hs=None):
+        return {"ui": {"fr": ui}, "reg": {"fr": {"path": {"title": title}}}, **({"ui_h": {"fr": hs}} if hs is not None else {})}
+
+    def test_missing_and_changed_keys(self):
+        src = T.ui_keys()
+        full = {k: "x" for k in src}
+        self.assertEqual(T.ui_missing("fr", self.ov(full)), [])
+        part = {k: v for k, v in full.items() if not k.startswith("q_")}
+        self.assertEqual(T.ui_missing("fr", self.ov(part)), sorted(k for k in src if k.startswith("q_")))
+        hs = {"q_cert_lead": "00000000", "q_name": T.h8(src["q_name"])}
+        self.assertEqual(T.ui_missing("fr", self.ov(full, hs=hs)), ["q_cert_lead"], "geaenderte englische Quelle")
+
+    def test_german_ui_is_detected(self):
+        de = {k: v[1] for k, v in PIL.UI.items() if k != "other"}
+        self.assertTrue(T.ui_wrong("fr", self.ov(de)))
+        self.assertTrue(T.ui_wrong("fr", self.ov({"learn": "Apprendre"}, title=PIL.registry()["path"]["title"]["de"])))
+        self.assertFalse(T.ui_wrong("fr", self.ov({"learn": "Apprendre", "path": "Parcours"})))
+        self.assertFalse(T.ui_wrong("fr", {}))
+
+    def test_plan_ui_only_and_check(self):
+        with tempfile.TemporaryDirectory() as d, mock.patch.object(T, "OUT", Path(d)), \
+                mock.patch.object(T, "overlay", lambda: {"ui": {"fr": {"learn": "Apprendre"}, "pl": {k: v[1] for k, v in PIL.UI.items()}},
+                                                         "reg": {"fr": {"path": {"title": "x"}}, "pl": {"path": {"title": "y"}}}}):
+            items, _ = T.plan_items(["fr", "pl", "ja"], set(), ui_only=True)
+        self.assertEqual([(x[0], x[2]) for x in items], [("fr", "uix"), ("pl", "ui"), ("ja", "ui")])
+        body = items[0][4]["params"]["messages"][0]["content"]
+        keys = sorted(json.loads(body.rsplit("\n\n", 1)[1]))
+        self.assertNotIn("learn", keys); self.assertIn("q_mail_btn", keys)
+        self.assertIn("formal form", body)
+        got = {k: T.ui_keys()[k] for k in keys}
+        self.assertEqual(T.check_uix(keys, got), got)
+        self.assertIn("Platzhalter", T.check_uix(keys, {**got, "q_mail_btn": "Utiliser l'adresse"}))
+        self.assertEqual(T.check_uix(keys, {k: PIL.UI[k][1] for k in keys}), "Deutsch statt Zielsprache")
+        self.assertEqual(T.check_uix(keys, {k: got[k] for k in keys[:-1]}), "Schluessel")
+
+    def test_write_uix_merges_and_prunes(self):
+        with tempfile.TemporaryDirectory() as d:
+            f = Path(d) / "o.json"
+            f.write_text(json.dumps({"ui": {"fr": {"learn": "Apprendre", "q_email": "E-mail"}}, "reg": {}, "index": ["fr"]}), "utf-8")
+            with mock.patch.object(T, "OVERLAY", f):
+                T.write_uix("fr", {"q_name": "Nom sur le certificat"})
+            o = json.loads(f.read_text("utf-8"))
+        self.assertEqual(o["ui"]["fr"], {"learn": "Apprendre", "q_name": "Nom sur le certificat"}, "q_email gibt es nicht mehr")
+        self.assertEqual(o["ui_h"]["fr"], {"q_name": T.h8(PIL.UI["q_name"][0])}); self.assertEqual(o["index"], ["fr"])
+
+
 class Anchors(unittest.TestCase):
     def test_toc_anchor_follows_translated_heading(self):
         en = "## Contents\n\n1. [What is lean?](#what-is-lean)\n\n## What is lean?\n\nText.\n"

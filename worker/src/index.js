@@ -47,6 +47,7 @@ import { handleWish, seedRoadmap } from "./wish.js";
 import { handleShows, syncShows } from "./shows.js";
 import { handleMediakit } from "./mediakit.js";
 import { handleHardware } from "./hardware.js";
+import { handleLearnQuiz, issuePendingCerts, deleteUserLearn, certMailIntent, certMailCallback, CERTMAIL_SCOPE } from "./learnquiz.js";
 import { handleMail, flushOutbox, notify } from "./mail.js";
 import { handleReviews } from "./reviews.js";
 import { handleEntityInvite, remindInvites } from "./entinvite.js";
@@ -137,12 +138,13 @@ async function upsertUser(env, provider, sub, name) {
   return u;
 }
 
-// OAuth-Start (Anmeldung oder Verknuepfung): signiertes state-Cookie m365o = state|Ruecksprung[|Verknuepfungsabsicht].
-// Die Redirect-URI bleibt fuer beide Faelle /auth/callback/<anbieter> (keine neuen URIs bei den Anbietern noetig).
-async function oauthStart(env, provider, ret, intent = "") {
+// OAuth-Start (Anmeldung, Verknuepfung oder E-Mail fuers Zertifikat): signiertes state-Cookie m365o = state|Ruecksprung[|Absicht].
+// Absicht L... = Verknuepfen (#279), C... = nur die bestaetigte E-Mail fuer das Lernpfad-Zertifikat holen (learnquiz.js, eigene Scopes CERTMAIL_SCOPE).
+// Die Redirect-URI bleibt fuer alle Faelle /auth/callback/<anbieter> (keine neuen URIs bei den Anbietern noetig).
+async function oauthStart(env, provider, ret, intent = "", scope = "") {
   const P = PROVIDERS[provider], state = randomToken(16);
   const val = `${state}|${b64u.enc(new TextEncoder().encode(ret))}${intent ? "|" + intent : ""}`;
-  const q = new URLSearchParams({ client_id: P.id(env), redirect_uri: `${env.API}/auth/callback/${provider}`, response_type: "code", scope: P.scope, state, ...(provider === "linkedin" || P.noPrompt ? {} : { prompt: "select_account" }) });
+  const q = new URLSearchParams({ client_id: P.id(env), redirect_uri: `${env.API}/auth/callback/${provider}`, response_type: "code", scope: scope || P.scope, state, ...(provider === "linkedin" || P.noPrompt ? {} : { prompt: "select_account" }) });
   return { location: `${P.auth}?${q}`, setCookie: cookie("m365o", `${val}.${await sign(env.SESSION_SECRET, val)}`, 600) };
 }
 
@@ -184,28 +186,44 @@ async function auth(env, request, url, path) {
   const P = PROVIDERS[m[2]];
   if (!P.id(env) || !P.secret(env)) return html("<p>Login not configured.</p>", 503);
   const redirect = `${env.API}/auth/callback/${m[2]}`;
+  // Zurueck zur Seite mit ?<k>=<status>, ohne Anmeldung (Zusatzschritt E-Mail fuers Zertifikat)
+  const back = (ret, k, v) => { const t = new URL(ret); t.searchParams.set(k, v); return new Response(null, { status: 302, headers: { location: t.href, "set-cookie": cookie("m365o", "", 0), "cache-control": "no-store" } }); };
   if (m[1] === "login") {
-    const o = await oauthStart(env, m[2], safeReturn(env, url.searchParams.get("return") || env.SITE));
+    const ret = safeReturn(env, url.searchParams.get("return") || env.SITE);
+    if (url.searchParams.get("purpose") === "certmail") {   // nur E-Mail holen, die normale Anmeldung (Scopes, Ablauf) bleibt unberuehrt
+      const ci = await certMailIntent(env, request, m[2], url.searchParams.get("path"));
+      if (ci.error) return back(ret, "certmail", ci.error);
+      const o = await oauthStart(env, m[2], ret, ci.intent, CERTMAIL_SCOPE[m[2]]);
+      return new Response(null, { status: 302, headers: { location: o.location, "set-cookie": o.setCookie, "cache-control": "no-store" } });
+    }
+    const o = await oauthStart(env, m[2], ret);
     return new Response(null, { status: 302, headers: { location: o.location, "set-cookie": o.setCookie } });
   }
   // callback
   const c = /(?:^|;\s*)m365o=([^;]+)/.exec(request.headers.get("cookie") || "");
   const code = url.searchParams.get("code"), st = url.searchParams.get("state");
-  if (!c || !code || !st) return html("<p>Login failed (missing data). Please try again.</p>", 400);
+  if (!c || !st) return html("<p>Login failed (missing data). Please try again.</p>", 400);
   const dot = c[1].lastIndexOf("."), val = c[1].slice(0, dot);
   if (!(await verify(env.SESSION_SECRET, val, c[1].slice(dot + 1))) || val.split("|")[0] !== st) return html("<p>Login failed (invalid state).</p>", 400);
   const ret = safeReturn(env, new TextDecoder().decode(b64u.dec(val.split("|")[1])));
+  const intent = val.split("|")[2] || "", certmail = intent[0] === "C";
+  // Zusatzschritt: jeder Fehler fuehrt zur Testseite zurueck (nie zu einer Anmeldung); abgebrochen beim Anbieter -> certmail=cancel
+  const bad = (msg) => (certmail ? back(ret, "certmail", code ? "error" : "cancel") : html(`<p>${msg}</p>`, 400));
+  if (!code) return bad("Login failed (missing data). Please try again.");
   const tr = await fetch(P.token, { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded", ...(P.tokenHeaders || {}) },
     body: new URLSearchParams({ code, client_id: P.id(env), client_secret: P.secret(env), redirect_uri: redirect, grant_type: "authorization_code" }) });
-  if (!tr.ok) return html("<p>Login failed (token).</p>", 400);
+  if (!tr.ok) return bad("Login failed (token).");
   const tok = await tr.json().catch(() => ({}));
-  if (!tok || !tok.access_token) return html("<p>Login failed (token).</p>", 400);   // GitHub meldet Fehler mit Status 200 und {error}
+  if (!tok || !tok.access_token) return bad("Login failed (token).");   // GitHub meldet Fehler mit Status 200 und {error}
   const ir = await fetch(P.info, { headers: { authorization: `Bearer ${tok.access_token}`, ...(P.infoHeaders || {}) } });
-  if (!ir.ok) return html("<p>Login failed (profile).</p>", 400);
+  if (!ir.ok) return bad("Login failed (profile).");
   const raw = await ir.json().catch(() => null);
   const info = P.profile ? P.profile(raw) : { sub: raw && raw.sub ? String(raw.sub) : "", name: raw && (raw.name || raw.given_name) };
-  if (!info.sub) return html("<p>Login failed.</p>", 400);
-  const intent = val.split("|")[2] || "";
+  if (!info.sub) return bad("Login failed.");
+  if (certmail) {   // nur die bestaetigte E-Mail fuers Zertifikat; kein Login-Wechsel, kein Verknuepfen, keine Kontoerstellung (learnquiz.js certMailCallback)
+    const r = await certMailCallback(env, request, { provider: m[2], sub: info.sub, raw, tok, intent, clientId: P.id(env), infoHeaders: P.infoHeaders });
+    return back(ret, "certmail", r);
+  }
   if (intent) {   // #279: weitere Anmeldung an das angemeldete Konto haengen; state ist an genau diese Sitzung gebunden (Hash), max. 10 Minuten
     const sess = await readSessionInfo(env, request), [lu, lt, lh] = intent.slice(1).split(".");
     const ok = intent[0] === "L" && sess && sess.uid === +lu && now() - +lt <= MERGE_WINDOW && (await sha256hex(sess.raw)).slice(0, 32) === lh;
@@ -260,6 +278,7 @@ async function deleteAccount(env, id) {
   ]);
   await deleteUserEvents(db, id);
   await deleteUserByod(env, id);   // Blog auf der eigenen Domain (0049): Domains des Kontos samt Hostname bei Cloudflare (nur mit Secrets)
+  await deleteUserLearn(db, id);   // Lernpfad-Test (0055): Versuche und Zertifikat-Zeilen mit Name/E-Mail
   await deleteUserBlogImport(db, id);   // Blog-Import (0050): Herkunftsnachweise der importierten Entwuerfe
   await deleteUserEditorial(db, id);   // Redaktion (Migration 0037): vor deleteUserBlog, weil der Verlauf an den Beitraegen des Kontos haengt
   await deleteUserEntityInvites(db, id);   // braucht mail_addr und die bestaetigten Claims: vor deleteUserData
@@ -281,13 +300,14 @@ function pubComment(c, mine, liked, badges, admin, roles) {
 async function api(env, request, url, path, asUser, ctx) {
   const method = request.method, J = (d, s = 200, x) => json(d, s, env, request, x);
   if (method === "OPTIONS") return new Response(null, { status: 204, headers: cors(env, request) });
-  if (asUser === undefined && method !== "GET" && !["/api/internal/ai-spend", "/api/internal/sponsor-metrics", "/api/email/unsub", "/api/mail/unsub", "/api/topics/email-unsub", "/api/entityinvite/decline"].includes(path) && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);   // interne Routen per CRON_KEY; Abmeldelinks (RFC 8058) senden keinen Zusatz-Header, alle per Token geschuetzt
+  if (asUser === undefined && method !== "GET" && !["/api/internal/ai-spend", "/api/internal/sponsor-metrics", "/api/internal/learn-quiz", "/api/email/unsub", "/api/mail/unsub", "/api/topics/email-unsub", "/api/entityinvite/decline"].includes(path) && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);   // interne Routen per CRON_KEY; Abmeldelinks (RFC 8058) senden keinen Zusatz-Header, alle per Token geschuetzt
   // asUser: vom MCP-Server (Token bereits geprueft) - dann keine Cookie-Sitzung noetig
   const uid = asUser === undefined ? await readSession(env, request) : null, user = asUser === undefined ? (uid ? await me(env, uid) : null) : asUser;
   const need = () => (user ? null : J({ error: "login" }, 401));
   const db = env.DB;
 
   if (path === "/api/internal/entity-fill") return handleEntFill(env, request, path, J);   // KI-Entwurf fuer Entitaeten (CRON_KEY), Details in entfill.js
+  if (path === "/api/internal/learn-quiz" || path.startsWith("/api/learn/")) { const q = await handleLearnQuiz(env, request, url, path, user, J, { providers: Object.keys(PROVIDERS).filter((k) => PROVIDERS[k].id(env) && PROVIDERS[k].secret(env)) }); if (q) return q; }   // Lernpfad-Abschlusstest + Certopus-Zertifikat (learnquiz.js); Schluessel-Upsert per CRON_KEY
   if (path === "/api/internal/ai-spend") {
     if (method !== "POST") return J({ error: "method_not_allowed" }, 405);
     if (!env.CRON_KEY || request.headers.get("x-cron-key") !== env.CRON_KEY) return J({ error: "forbidden" }, 403);
@@ -681,6 +701,7 @@ const handlers = {
       T("syncExpertise", (env) => syncExpertise(env, entityMap));
     }
     if (event.cron === "*/30 * * * *") T("runDigest", (env) => runDigest(env, { at: scheduledAt }));
+    if (event.cron === "*/30 * * * *" && env.CERTOPUS_ON === "1") T("learnCerts", (env) => issuePendingCerts(env));   // wartende Lernpfad-Zertifikate bei Certopus ausstellen (learnquiz.js)
     if (event.cron === "*/30 * * * *") T("byodChecks", (env) => runByodChecks(env));   // Blog auf der eigenen Domain: DNS/Zertifikat offener und aktiver Domains (nur mit BYOD=1)
     T("refreshFeeds", (env) => refreshFeeds(env));
     T("refreshContributions", (env) => refreshContributions(env));

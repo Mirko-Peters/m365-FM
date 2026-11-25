@@ -1,0 +1,685 @@
+WEBVTT
+
+00:00:00.380 --> 00:00:03.780
+Semantic Kernel ist die Ebene unter den KI-Tools von Microsoft, die fast niemand erklärt.
+
+00:00:04.500 --> 00:00:09.860
+Es handelt sich um ein kostenloses Open-Source-Kit, mit dem ihr eigener Code mit einem großen Sprachmodell kommunizieren und dieses Modell ihren Code zurückrufen kann.
+
+00:00:10.420 --> 00:00:14.140
+Sie erwarten vielleicht einen Chatbot-Generator, aber es handelt sich tatsächlich um Middleware, den ruhigen Teil in der Mitte.
+
+00:00:14.720 --> 00:00:19.880
+Sobald Sie die wenigen darin enthaltenen Teile gesehen haben, hört die Art und Weise, wie Microsoft Agenten entwickelt, auf ein Rätsel zu sein.
+
+00:00:20.320 --> 00:00:26.040
+Willkommen zum M365FM-Podcast, in dem wir den Menschen Ideen und Technologien kennenlernen, die die Zukunft der Arbeit gestalten.
+
+00:00:26.040 --> 00:00:30.120
+Heute analysieren wir Semantic Kernel Schritt für Schritt in einfachem Englisch.
+
+00:00:31.060 --> 00:00:32.360
+Was ist Semantic Kernel eigentlich?
+
+00:00:32.980 --> 00:00:36.520
+Beginne mit der einfachsten Version, denn der Name lässt vermuten, dass es umfangreicher klingt, als es tatsächlich.
+
+00:00:37.680 --> 00:00:45.000
+Semantic Kernel ist ein kostenloses Open-Source-Kit von Microsoft, das die von Ihnen bereits entwickelte Software mit einem KI-Modell verbindet und es dem Modell dann ermöglicht, ihren eigenen Code zurückzurufen.
+
+00:00:45.840 --> 00:00:47.140
+Microsoft bezeichnet es als Middleware.
+
+00:00:47.840 --> 00:00:53.480
+Das ist nur eine Bezeichnung für die mittlere Ebene, die Nachrichten zwischen zwei Dingen überträgt, die nicht dieselbe Sprache sprechen.
+
+00:00:54.440 --> 00:00:55.720
+Genauso wichtig ist, was es nicht ist.
+
+00:00:56.040 --> 00:01:00.900
+Es ist keine App, die man öffnet, kein Chatbot, in dem man etwas eingibt und kein Modell wie die, die hinter Co-Pilot stehen.
+
+00:01:01.340 --> 00:01:06.160
+Man installiert es in einem Projekt, an dem man bereits arbeitet und es übernimmt den unangenehmen Teil der Kommunikation mit einer KI.
+
+00:01:06.760 --> 00:01:10.600
+Das Kit erschien erstmals im März 2021 unter einer offenen Lizenz namens MIT.
+
+00:01:11.340 --> 00:01:14.840
+Diese Lizenz bedeutet, dass jeder es verwenden, den Code lesen und an die eigenen Bedürfnisse anpassen kann.
+
+00:01:15.280 --> 00:01:17.440
+Das ist ein wichtiger Grund dafür, dass es sich schnell unter Entwicklern verbreitet.
+
+00:01:17.920 --> 00:01:19.360
+Außerdem ist es egal, wo Ihre Software läuft.
+
+00:01:19.360 --> 00:01:24.980
+Das Kit funktioniert in Ihrer eigenen Anwendung, in der Microsoft Cloud, in einer anderen Cloud oder auf einem Rechner unter Ihrem Schreibtisch.
+
+00:01:25.520 --> 00:01:26.780
+Ist der gängigste Speicherort dafür?
+
+00:01:27.160 --> 00:01:29.480
+Aber Microsoft betont schnell, dass Azure nicht erforderlich ist.
+
+00:01:29.800 --> 00:01:31.280
+Es gibt einen klaren Grund für die Existenz, diese.
+
+00:01:31.660 --> 00:01:35.760
+Stellen Sie sich eine funktionierende App mit vielen echten Funktionen vor, wie etwa das Nachschlagen von Bestellungen oder Senden von Ihnen.
+
+00:01:36.260 --> 00:01:40.340
+Ein Sprachmodell ist zwar hervorragend darin, Anfragen zu verstehen, kann diese aber nicht selbst bearbeiten.
+
+00:01:40.340 --> 00:01:45.620
+Der semantische Kernel schließt diese Lücke, sodass das Modell auf Ihre App zugreifen kann und Ihre App wiederum auf das Modell zugreifen.
+
+00:01:45.840 --> 00:01:47.300
+Hier ist ein kleines Beispiel, um es zu verdeutlichen.
+
+00:01:47.920 --> 00:01:53.900
+Angenommen, ein Kunde gibt eine Frage zu einer Bestellung ein und Ihre App muss diese Bestellung nachschlagen, ihren Status überprüfen und in einfacher Sprache antworten.
+
+00:01:54.160 --> 00:01:56.880
+Ein Modell kann diese Antwort schreiben, aber es kann die Bestellung nicht selbst nachschlagen.
+
+00:01:57.600 --> 00:02:03.180
+Mit dem semantischen Kernel kann das Modell Ihre App auffordern, die Bestellung nachzuschlagen und die Antwort dann in seiner Antwort verwenden, alles in einem Ablauf.
+
+00:02:03.180 --> 00:02:11.460
+Laut Microsoft verwenden Fortune 500 Unternehmen dies bereits und als Grund dafür wird angegeben, dass es flexibel, modular und einfach zu beobachten ist, während es arbeitet, während es arbeitet.
+
+00:02:12.880 --> 00:02:13.800
+Der Kernel und der Name.
+
+00:02:14.320 --> 00:02:15.960
+Das erste Wort, das die Leute ins Stolpern bringen, ist Kernel.
+
+00:02:16.360 --> 00:02:17.260
+Nehmen wir den Namen uns um auseinander.
+
+00:02:17.820 --> 00:02:21.100
+Semantik verweist auf Bedeutung und natürliche Sprache, also auf Dinge, die Ihr Modell gut kann.
+
+00:02:21.860 --> 00:02:24.900
+Der Kernel zeigt in die Mitte, dass eine Objekt an das alles andere angeschlossen wird.
+
+00:02:25.300 --> 00:02:27.140
+Microsofts eigene Beschreibung ist erfrischend einfach.
+
+00:02:27.140 --> 00:02:33.360
+Im einfachsten Fall ist der Kernel ein Container, der alle Dienste und Plugins enthält, die Ihre KI-Anwendung zum Ausführen benötigt.
+
+00:02:33.820 --> 00:02:38.620
+Stellen Sie sich den Kernel als eine einzelne Box vor, in der jeder Teil Ihrer KI-App registriert wird, sodass die App immer weiß, wo sie zu finden ist.
+
+00:02:38.860 --> 00:02:40.140
+Sie übergeben dem Kernel zwei Dinge hin.
+
+00:02:40.440 --> 00:02:44.840
+Die erste sind Dienste, bei denen es sich um die KI-Modelle selbst sowie um alle Dienstprogramme wie die Protokollierung handelt.
+
+00:02:45.400 --> 00:02:48.560
+Die zweite sind Plugins, bei denen es sich um die Teile handelt, die die eigentliche Arbeit erledigen.
+
+00:02:49.060 --> 00:02:49.960
+Wir kommen gleich darauf zurück.
+
+00:02:50.260 --> 00:02:54.280
+Wenn Ihre App eine Anfrage sendet, führt der Kernel eine kurze Abfolge von Aufträgen aus.
+
+00:02:54.280 --> 00:03:01.680
+Er wählt den besten KI-Dienst für die Aufgabe aus, erstellt die Eingabeaufforderung anhand ihrer Vorlage, sendet sie ab, liest die Antwort und übergibt das Ergebnis an ihrer Anwendung zurück.
+
+00:03:02.120 --> 00:03:04.940
+Wenn sich das nach klemmenden Arbeiten anhört, die Sie schon mal gesehen haben, dann liegt das daran, dass Sie sich um erheben.
+
+00:03:05.260 --> 00:03:09.580
+Microsoft hat den Kernel nach einem gängigen Muster aus Docknet modelliert, das als Abhängigkeitsinjektion bezeichnet wird.
+
+00:03:09.900 --> 00:03:14.240
+Dabei stellt eine zentrale Stelle die Teile bereit, die andere Teile des Codes benötigen, sodass niemand sie fest verdrahten muss.
+
+00:03:14.380 --> 00:03:15.660
+Für Sie ist der praktische Aspekt einfach.
+
+00:03:16.000 --> 00:03:17.080
+Der Kernel ist der Kontrollraum.
+
+00:03:17.440 --> 00:03:19.160
+Alles andere ist ein Tool, das Sie dort registrieren.
+
+00:03:19.280 --> 00:03:22.140
+Und von diesem einen Ort aus können Sie das Ganze einrichten und überwachen.
+
+00:03:22.140 --> 00:03:25.000
+Es gibt noch ein Detail zum Kernel und dann machen wir weiter.
+
+00:03:25.740 --> 00:03:27.260
+Er schlankt, da im Grunde ein neuen Container ist.
+
+00:03:27.720 --> 00:03:31.260
+Daher empfiehlt Microsoft für jede Verwendung einen neuen zu erstellen, anstatt für immer an einem festzuhalten.
+
+00:03:31.820 --> 00:03:36.720
+Das klingt umständlich, verhindert aber, dass Ihre Plugins zwischen Anforderungen, Plugins und Funktionen Statusverluste aufweisen.
+
+00:03:37.200 --> 00:03:39.800
+Hier wird der semantische Kernel nützlich, also lassen Sie uns das Ganze etwas langsam an.
+
+00:03:40.260 --> 00:03:42.880
+Ein Plugin ist eine Gruppe von Funktionen, die Sie der KI zur Verfügung stellen.
+
+00:03:43.340 --> 00:03:49.520
+In anderen Tools werden diese Funktionen oft als Tools oder Aktionen bezeichnet und in der frühesten Version des semantischen Kernels wurden Plugins als Skills bezeichnet.
+
+00:03:49.520 --> 00:03:53.180
+Eine Funktion ist einfach ein Stück Ihres eigenen Codes mit einer einfachen Beschreibung.
+
+00:03:53.660 --> 00:03:57.460
+Die Beschreibung teilt der KI mit, was die Funktion macht, was in sie eingeht und was wieder herauskommt.
+
+00:03:58.620 --> 00:04:01.460
+Microsofts eigenes Beispiel ist ein Beleuchtungs-Plugin mit drei Funktionen.
+
+00:04:01.880 --> 00:04:06.560
+Eine, die alle Lichter auflistet, eine, die den Zustand eines einzelnen Lichts meldet und eine, die den Zustand eines Lichts ändert.
+
+00:04:07.120 --> 00:04:09.880
+Das Modell liest diese Beschreibung und wählt die richtige Funktion für die Anfrage aus.
+
+00:04:09.880 --> 00:04:11.780
+Anfänger übersehen hier meist ein Detail.
+
+00:04:12.240 --> 00:04:13.240
+Die Beschreibung ist keine Beigabe.
+
+00:04:13.720 --> 00:04:18.680
+Wenn sie vage ist, rät das Modell falsch oder überspringt die Funktion ganz und das Ganze fällt auseinander und das Ganze fällt aus.
+
+00:04:18.860 --> 00:04:23.080
+Verfassen Sie die Beschreibung so, wie Sie die Funktion einem neuen Kollegen erklären würden und das Modell wird Sie richtig verwenden.
+
+00:04:23.480 --> 00:04:24.700
+Plugins können aus drei Quellen stammen.
+
+00:04:25.120 --> 00:04:33.140
+Sie können sie in Ihrem eigenen Code schreiben aus einem gemeinsamen Webstandard namens OpenAPI, importieren oder von einem sogenannten MCP-Server beziehen, der Abkürzung vom Model Context Protocol.
+
+00:04:34.060 --> 00:04:37.580
+Letzteres ist wichtig, weil es einem Team ermöglicht, eine Funktion zu entwickeln und sie mit allen anderen zu teilen.
+
+00:04:38.000 --> 00:04:40.260
+Die gemeinsame Nutzung ist bei diesen letzten beiden Optionen der eigentliche Vorteil.
+
+00:04:40.940 --> 00:04:46.500
+Wenn Sie eine Funktion mit OpenAPI beschreiben oder in einen MCP-Server einbappen, kann ein anderes Team Sie ohne Neuprogrammierung übernehmen.
+
+00:04:46.880 --> 00:04:49.580
+Und sogar ein Maker in einem Low-Code-Tool kann dieselbe Funktion nutzen.
+
+00:04:50.220 --> 00:04:52.440
+So hilft eine gut aufgebaute Funktion am Ende dem gesamten Unternehmen.
+
+00:04:53.000 --> 00:04:56.080
+Plugins lassen sich auch gut mit der Art und Weise kombinieren, wie echte Teams Software entwickeln.
+
+00:04:56.500 --> 00:05:01.360
+Ein Plugin kann seine eigene Datenbankverbindung oder sein eigener Web-Client bereitstellen, sodass die KI niemals die sensiblen Details sieht.
+
+00:05:01.360 --> 00:05:03.740
+Sie sieht nur die reine Beschreibung und das Ergebnis.
+
+00:05:04.420 --> 00:05:06.900
+Es gibt eine praktische Warnung, bevor Sie eine riesige Toolbox erstellen.
+
+00:05:07.520 --> 00:05:12.260
+OpenAI empfiehlt, nicht mehr als 20 Tools in einer einzigen Anfrage zu verwenden und idealerweise nicht mehr als 10,
+
+00:05:12.560 --> 00:05:14.980
+da die Genauigkeit des Modells Modells mit zunehmender Liste abnimmt.
+
+00:05:15.840 --> 00:05:18.580
+Weniger, aber übersichtlicher Funktionen sind jedes Mal besser als ein riesiger Haufen davon.
+
+00:05:19.280 --> 00:05:20.280
+Planung und Funktionsaufrufe
+
+00:05:20.280 --> 00:05:27.160
+Wenn Sie über mehrere Funktionen verfügen und ein neues Problem auftritt, muss die KI entscheiden, welche Funktionen in welcher Reihenfolge verwendet werden sollen, um eine Anfrage zu beantworten.
+
+00:05:27.540 --> 00:05:29.060
+In Semantic Kerner wird diese Aufgabe Zeit.
+
+00:05:29.060 --> 00:05:35.320
+Die ursprüngliche Antwort war, Sie haben dem Kit eine Reihe von Funktionen übergeben und es hat eine Eingabeaufforderung geschrieben, in der Sie das Modell auffordernden Planung sehen.
+
+00:05:35.560 --> 00:05:38.640
+Das hat funktioniert, aber es war darauf angewiesen, dass das Modell seine Auswahl selbst errägt.
+
+00:05:39.200 --> 00:05:45.520
+Dann hat OpenAI Funktionsaufrufe direkt in seine Modelle integriert und andere Modellentwickler wie Gemini, Claude und Mistral sind der gleichen Idee gefolgt.
+
+00:05:46.520 --> 00:05:52.300
+Funktionsaufrufe bedeuten, dass das Modell einfach mit den richtigen Eingaben nach einer bestimmten Funktion mit Namen fragen kann, anstatt in einem Absatz zu beschreiben, was es möchte.
+
+00:05:52.300 --> 00:05:56.980
+Da sich dies als zuverlässiger erwiesen hat, hat Semantic Kernel es zur Hauptmethode für die Planung gemacht.
+
+00:05:57.540 --> 00:05:59.840
+Diese Änderung hat direkte Auswirkungen, die Sie kennen sollten.
+
+00:06:00.420 --> 00:06:04.380
+Die älteren Stepwise- und Handlebarsplaner wurden als veraltet markiert und aus dem Paket entfernt.
+
+00:06:05.020 --> 00:06:08.000
+Microsoft fordert Entwickler jetzt auf, stattdessen Funktionsaufrufe zu verwenden.
+
+00:06:08.460 --> 00:06:13.740
+In jeder vom Kit unterstützenden Sprache gibt es einen Grund, warum Microsoft sich von den alten Planern verabschiedet hat und es lohnt sich, dies klar und deutlich zu sagen.
+
+00:06:13.740 --> 00:06:17.960
+Ein Planer hat das Modell aufgefordert, einen Plan in Worten zu erfinden, der flexibel aber unvorhersehbar ist.
+
+00:06:18.920 --> 00:06:22.600
+Funktionsaufrufe sind enger gefasst und wiederholbarer, sodass es in der Produktion weniger Überraschungen gibt.
+
+00:06:22.680 --> 00:06:24.000
+Genau das braucht eine Business-App.
+
+00:06:24.820 --> 00:06:26.220
+Die Funktionsweise ist einfacher, als sie klingt.
+
+00:06:26.940 --> 00:06:28.180
+Das Modell fragt nach einer Funktion.
+
+00:06:28.280 --> 00:06:32.460
+Der semantische Kernel führt sie aus, übergibt das Ergebnis und das Modell entscheidet, was als nächstes zu tun ist.
+
+00:06:33.000 --> 00:06:34.680
+Diese Schleife wiederholt sich bis die Aufgabe ledigt.
+
+00:06:35.120 --> 00:06:39.880
+Es können sogar mehrere Funktionen gleichzeitig aufgerufen werden, so wie es beispielsweise mit einer Anforderung umgeht, alle Lichter in einem Raum auszuschalten.
+
+00:06:40.160 --> 00:06:43.640
+Sie können sich die Schleife als eine kurze Unterhaltung zwischen Ihrem Code und dem Modell vorstellen.
+
+00:06:44.200 --> 00:06:46.000
+Das Modell spricht, Ihr Code hört zu und handelt.
+
+00:06:46.200 --> 00:06:48.220
+Und dann spricht das Modell erneut mit dem, was es gelernt hat.
+
+00:06:49.160 --> 00:06:49.900
+Gedechnis und Speichel.
+
+00:06:50.300 --> 00:06:52.620
+Es gibt eine Einschränkung, die jeden beim ersten Mal überrascht.
+
+00:06:53.320 --> 00:06:54.980
+Ein Sprachmodell selbst hat kein Gedächtnis.
+
+00:06:55.760 --> 00:07:00.620
+Jede Anfrage beginnt neu, ohne Kenntnis Ihrer Dokumente, Ihrer Daten oder der Unterhaltung, die Sie vor fünf Minuten geführt haben.
+
+00:07:01.020 --> 00:07:03.340
+Die Lösung ist ein Muster namens Retrieval Augmented Generation.
+
+00:07:04.140 --> 00:07:06.120
+Einfach ausgedrückt, Sie suchen es zuerst und antworten dann.
+
+00:07:06.720 --> 00:07:11.640
+Anstatt darauf zu hoffen, dass sich das Modell an etwas erinnert, rufen Sie das relevante Material ab und übergeben es zusammen mit der Frage.
+
+00:07:11.640 --> 00:07:15.480
+Um zu verstehen, warum das wichtig ist, denkt Sie an das letzte Mal, als ein Chatbot selbstlos erfunden hat?
+
+00:07:15.800 --> 00:07:16.320
+Selbstlos erfunden.
+
+00:07:16.600 --> 00:07:18.380
+Das passiert, wenn das Modell keine reale Grundlage hat.
+
+00:07:18.920 --> 00:07:24.160
+Retrieval behebt das Problem, indem es das tatsächliche Dokument oder den Datensatz übergibt, sodass die Antwort auf etwas basiert, auf das man verweisen kann.
+
+00:07:24.440 --> 00:07:26.560
+Der semantische Kernel erstellt diesen Speicher auf Vektorspeicher.
+
+00:07:26.560 --> 00:07:33.520
+Ein Vektorspeicher ist eine Datenbank, die auf Bedeutung und nicht auf exakte Wörter abgestimmt ist und die Konnektoren des Kids bieten Ihnen eine gemeinsame Schnittstelle für viele von Ihnen.
+
+00:07:35.200 --> 00:07:40.320
+Azure AI Search ist die übliche Wahl und andere wie Postgres, Redis und Qtrent werden ebenfalls unterstützt.
+
+00:07:40.720 --> 00:07:43.700
+Das Wort Vektor verdient einen eigenen Satz, weil es weniger beängstigend ist, als es klingt.
+
+00:07:44.240 --> 00:07:52.240
+Das System wandelt Ihren Text in Zahlenlisten um, die als Einbettungen bezeichnet werden und die Bedeutung des Textes erfassen, sodass es Passagen finden kann, die in ihrer Bedeutung ähnlich sind, selbst wenn die Wörter nicht übereinstimmen.
+
+00:07:52.240 --> 00:08:02.120
+Hier gibt es ein nettes Detail für Anfänge. Die Vektorsuche kann dem Modell als Plugin zur Verfügung gestellt werden, was bedeutet, dass die KI bei Bedarf mithilfe des selben Funktionsaufrufs, den wir gerade behandelt haben, selbstständig nach Dingen suchen kann.
+
+00:08:03.080 --> 00:08:07.960
+Es gibt einen wichtigen Vorbehalt, den Sie beachten sollen. Die Vektorspeicherfunktion befindet sich noch in der Vorschauphase und kann sich da noch ändern.
+
+00:08:08.680 --> 00:08:12.180
+Die älteren Speicherkonnektoren wurden durch neuere Konneggabeaufforderungen ersetzt.
+
+00:08:13.220 --> 00:08:15.600
+Der Speicher ist eine Art von Stecker und das Kit verfügt über Reiter.
+
+00:08:15.880 --> 00:08:21.000
+Ein Konnektor ist ein Adapter, mit dem ein Block Ihres Codes über dieselbe Schnittstelle mit vielen verschiedenen Modellen kommunizieren kann.
+
+00:08:21.000 --> 00:08:29.640
+Die Liste ist länger als erwartet und umfasst Azure OpenAI, Plain OpenAI, Googles Gemini, Mistral und sogar Modelle, die über ein Tool namens Olama auf ihrem eigenen Rechner ausgeführt werden.
+
+00:08:30.360 --> 00:08:34.120
+Auch Amazons Bedrock ist dabei, zusammen mit allen Diensten, die dem OpenAI-Stil folgen.
+
+00:08:34.680 --> 00:08:36.360
+Der Vorteil zeigt sich, wenn ein neues Modell verfügbar ist.
+
+00:08:36.940 --> 00:08:40.140
+Anstatt Ihre Anwendung neu zu schreiben, tauschen Sie den Konnektor aus und behalten alles andere.
+
+00:08:41.140 --> 00:08:46.900
+Microsoft bezeichnet das Kit aus genau diesem Grund als zukunftssicher, da es Ihrem Code egal ist, welches Modell darunter liegt, welches Modell darunter.
+
+00:08:47.120 --> 00:08:49.120
+Der praktische Vorteil ist die Wahlfreiheit ohne Bindung.
+
+00:08:49.120 --> 00:08:52.420
+Wenn Ihr Unternehmen bereits für Azure OpenAI bezahlt, können Sie dort beginnen.
+
+00:08:52.980 --> 00:08:57.300
+Und wenn nächstes Jahr ein günstigeres oder besseres Modell erscheint, können Sie darauf umsteigen, ohne den Rest Ihrer App zu verändern.
+
+00:08:57.940 --> 00:09:00.840
+Diese Freiheit ist der stille Grund, warum Teams sich überhaupt für ein solches Kit entscheiden.
+
+00:09:01.400 --> 00:09:02.640
+Konnektoren decken übrigens mehr Zunschätze.
+
+00:09:03.220 --> 00:09:07.680
+Dieselbe Idee gilt auch für Einbettungen, Bilder und sogar Audio, sodass eine App verschiedene Arten von KI kombinieren kann.
+
+00:09:08.240 --> 00:09:12.560
+Ihre Sprache unterstützt einen etwas anderen Ausschnitt dieser Liste, was es sich lohnt zu überprüfen, bevor Sie sich festlegen.
+
+00:09:12.560 --> 00:09:14.020
+Dann gibt es noch Eingabeaufforderungen.
+
+00:09:14.420 --> 00:09:19.040
+Eine Vorlage vereint Ihre Anweisungen, die Eingaben des Benutzers und die Ausgabe einer Funktion in der einzigen Eingabeaufforderung.
+
+00:09:19.280 --> 00:09:24.900
+Sie können diese Vorlage als Datei speichern und für Ihr Team freigeben, sodass Sie die Erstellung von Eingabeaufforderungen nachverfolgen und überprüfen können.
+
+00:09:25.520 --> 00:09:27.000
+Der letzte Teil in diesem Abschnitt sind Filter.
+
+00:09:27.500 --> 00:09:30.600
+Mit einem Filter können Sie Ihre eigenen Prüfungen durchführen bevor, nachdem das Modell ergeht.
+
+00:09:31.060 --> 00:09:33.600
+Hier hinterlegen die Teams ihre Sicherheitsregeln.
+
+00:09:34.520 --> 00:09:37.620
+Microsoft bezeichnet Filter als den Ort für verantwortungsvolle KI-Arbeit.
+
+00:09:37.620 --> 00:09:40.160
+Es handelt sich um ein kleines Feature mit einer großen Aufgabe.
+
+00:09:41.340 --> 00:09:42.400
+Ein Kit, drei Sprachen.
+
+00:09:43.180 --> 00:09:45.840
+Sie fragen sich vielleicht, ob etwas davon zu der Sprache passt, die Sie bereits kennen.
+
+00:09:46.300 --> 00:09:47.960
+Die Antwort ist wahrscheinlich...
+
+00:09:47.960 --> 00:09:50.640
+Der semantische Kern ist für C-Sharp, Python und Java verfügt.
+
+00:09:51.160 --> 00:09:55.360
+Jede Version folgt bewusst den Gewohnheiten ihrer eigenen Sprache, sodass sie sich nativ und nicht aufgesetzt anfühlt.
+
+00:09:55.980 --> 00:10:00.340
+Damit geschriebener Python-Code liest sich immer noch wie Python und C-Sharp-Code liest sich immer noch wie C-Sharp.
+
+00:10:00.760 --> 00:10:04.580
+Microsoft hat das mit Absicht getan, denn ein Tool, das gegen deine Gewohnheiten kämpft, ist ein Tool, das du nicht mehr verwenden wirst.
+
+00:10:05.040 --> 00:10:06.220
+Der Einstieg ist bewusst kurz gehalten.
+
+00:10:06.220 --> 00:10:07.780
+In C-Sharp fügst du ein Paket hinzu.
+
+00:10:08.200 --> 00:10:12.500
+In Python führst du einen einzigen Installationsbefehl aus und in Java ziehst du es aus dem üblichen Repository.
+
+00:10:12.880 --> 00:10:16.020
+Es gibt keine riesigen Einrichtungsschritte zwischen dir und deinem ersten funktionierenden Beispiel.
+
+00:10:16.440 --> 00:10:17.640
+Das ist aus einem weiteren Grund wichtig.
+
+00:10:18.120 --> 00:10:21.420
+Es bedeutet, dass du keine neue Sprache lernen musst, um die Ideen in dieser Episode auszuprobieren.
+
+00:10:21.820 --> 00:10:27.440
+Wenn du bereits Python für ein Nebenprojekt schreibst, kannst du dem Python-Fad folgen und wenn dein Job auf Polarity läuft, kannst du dieses verwenden.
+
+00:10:28.120 --> 00:10:29.560
+Eines solltest du jedoch wissen, bevor du dich entscheiden.
+
+00:10:29.900 --> 00:10:31.180
+Sie sind nicht perfekt aufeinander abgestimmt.
+
+00:10:31.180 --> 00:10:36.320
+Einige Funktionen landen in C-Sharp und Python, bevor sie Java erreichen und die Vektorspeicherkonnektoren tendieren zu den ersten beiden.
+
+00:10:36.620 --> 00:10:40.140
+Es lohnt sie, einen kurzen Blick auf die Funktionsliste für deine Sprache zu werfen, bevor du etwas in diese Richtung.
+
+00:10:40.460 --> 00:10:42.160
+Noch ein Versprechen, das sich für Einsteiger lohnt.
+
+00:10:42.720 --> 00:10:46.360
+Version 1 und spätere Versionen beinhalten die Zusage, dass es keine bahnbrechenden Änderungen gibt.
+
+00:10:46.700 --> 00:10:50.180
+Das bedeutet, dass der Code, den sie heute lernen, beim nächsten Update nicht verworfen wird.
+
+00:10:50.180 --> 00:10:53.700
+Copilot Foundry und was kommt als nächstes?
+
+00:10:54.420 --> 00:10:57.500
+Nun zu der Frage, die die meisten Leute verwirrt, die aber eine klare Antwort verdienen.
+
+00:10:58.300 --> 00:11:02.420
+Semantic Kernel ist nicht Microsoft 365 Copilot und sie benötigen es nicht, um Copilot zu verwenden.
+
+00:11:03.020 --> 00:11:09.080
+Copilot ist ein fertiges Produkt, das sie öffnen und verwenden, während Semantic Kernel ein Baumaterial ist, mit dem Entwickler ihre eigenen KI-Features erstellen.
+
+00:11:09.740 --> 00:11:12.060
+Die eigentliche Verbindung besteht in einer gemeinsamen Beschreibungsmethode.
+
+00:11:12.060 --> 00:11:18.640
+Semantic Kernel verwendet denselben Webstandard, die OpenAPI mit der Microsoft 365 Copilot beschreibt, was eine Erweiterung leisten kann.
+
+00:11:19.280 --> 00:11:24.880
+Da beide Seiten dieselbe Sprache sprechen, können sie eine von ihnen erstellte Funktion mit anderen Entwicklern und sogar mit Entwicklern teilen, die keinen Code schreiben.
+
+00:11:25.460 --> 00:11:29.000
+Auch hier gibt es eine Brücke, um ihren eigenen Agenten in die Microsoft 365 Welt zu integrieren.
+
+00:11:29.700 --> 00:11:36.740
+Das Microsoft 365 Agents SDK ist für die Microsoft 365 Seite zuständig, während Semantic Kernel oder dessen Nachfolger für die KI-Seite zuständig ist.
+
+00:11:37.360 --> 00:11:39.940
+Gemeinsam ermöglichen sie es einem benutzerdefinierten Agenten und Agenten auf Copilot.
+
+00:11:39.940 --> 00:11:46.560
+Auf der Cloud-Seite liste das neuere Framework Microsoft Foundry als einen der Orte auf, an denen Modelle und Agents ausgeführt werden können.
+
+00:11:46.980 --> 00:11:49.140
+Es ist hilfreich, diese als Ebenen und nicht als Rivalen zu betrachten.
+
+00:11:49.700 --> 00:11:51.720
+Copilot ist die fertige Umgebung, die ihre Kollegen verwenden.
+
+00:11:52.100 --> 00:12:00.080
+In Copilot Studio erstellen Entwickler ihre eigenen Agents mit wenig oder gar keinem Code und Semantic Kernel ist das darunter liegende Entwickler-Kit, das eine Idee in funktionsfähigen Code umsetzt.
+
+00:12:00.880 --> 00:12:02.520
+Diese sollen zusammenpassen und nicht konkurrieren.
+
+00:12:02.940 --> 00:12:04.000
+Das bringt uns zum ehrlichen Teil.
+
+00:12:04.000 --> 00:12:10.640
+Microsoft hat ein neueres Framework, das Microsoft Agent Framework, entwickelt, in dem Semantic Kernel mit einem anderen Projekt namens Autogen kombiniert wurde.
+
+00:12:10.940 --> 00:12:13.880
+Seitdem hat es sich zum empfohlenen Ausgangspunkt für brandneue Agentenprojekte entwickelt.
+
+00:12:14.240 --> 00:12:16.480
+Das eigentliche Problem dabei ist einfach und Sie haben es wahrscheinlich schon gespürt.
+
+00:12:16.900 --> 00:12:19.820
+Sie möchten nicht Monate damit verbringen, etwas zu lernen, das Microsoft kurz davor ist zu setzen.
+
+00:12:20.180 --> 00:12:21.340
+Gehen wir diese Angst also direkt an.
+
+00:12:21.760 --> 00:12:23.200
+Hier erfahren Sie, was das bedeutet und was nicht.
+
+00:12:23.200 --> 00:12:28.520
+Die Arbeit an neuen Features wird nun in das neuere Framework integriert, aber Semantic Kernel ist nicht tot und wurde nicht aufgegeben.
+
+00:12:28.860 --> 00:12:31.300
+Microsoft unterstützt es weiterhin und veröffentlicht weiterhin Fehlerbehebungen.
+
+00:12:31.620 --> 00:12:37.880
+Laut Microsofts eigener Anleitung ist es völlig in Ordnung, bei Semantic Kernel zu bleiben, wenn es sich um ein bestehendes Projekt handelt oder wenn Sie schnell etwas veröffentlichen müssen.
+
+00:12:38.600 --> 00:12:40.520
+Für Sie als Lernenden lassen sich die Ideen direkt übernehmen.
+
+00:12:40.860 --> 00:12:44.340
+Aus einem Plug-in wird dort ein Tool und das mentale Modell, das Sie gerade erstellt haben, bleibt dasselbe.
+
+00:12:44.680 --> 00:12:48.200
+Wenn Sie Semantic Kernel lernen, lernen Sie im Grunde, wie Microsoft mit Agenten umgeht.
+
+00:12:49.180 --> 00:12:51.500
+Diese Denkweise überdauert jedes einzelne Tool.
+
+00:12:53.200 --> 00:12:54.420
+Dann sollte Semantic Kernel verwendet werden.
+
+00:12:54.760 --> 00:12:57.560
+Lassen Sie uns mit der praktischen Frage abschließen, wann Sie tatsächlich auf dieses Kit zurückgreifen.
+
+00:12:57.900 --> 00:13:00.140
+Beginnen Sie mit der Regel, die für fast jedes Tool gilt.
+
+00:13:00.580 --> 00:13:03.740
+Wenn Sie eine einfache Funktion schreiben können, um die Aufgabe zu erledigen, schreiben Sie die einfache Funktion.
+
+00:13:04.020 --> 00:13:10.880
+Microsoft sagt dies über Agenten und es ist ein guter Rat, denn wenn Sie auf KI zurückgreifen, wenn ein einfaches Stück Code ausreichen würde, verursacht das nur Kosten und Verwirrung.
+
+00:13:11.400 --> 00:13:18.000
+Greifen Sie also nicht auf Semantic Kernel zurück, wenn Sie als Entwickler KI zu einer bereits vorhandenen App hinzufügen und möchten, dass Ihr eigener Code vom Modell aufgerufen werden kann.
+
+00:13:18.280 --> 00:13:20.500
+Das ist der Kern des Problems und genau hier glänzt das Kit.
+
+00:13:20.500 --> 00:13:27.260
+Greifen Sie darauf zurück, wenn Sie eine Code-Basis für die Arbeit mit mehreren Modellen benötigen, damit Sie den Anbieter wechseln können, ohne etwas neu schreiben zu müssen.
+
+00:13:27.380 --> 00:13:34.080
+Und wenn Ihr Unternehmen mit dem Internet arbeitet und die Protokollierung, Sicherheit und Übersicht benötigt, die große IT-Teams vor der Genehmigung von irgendetwas fordern.
+
+00:13:34.560 --> 00:13:36.000
+Es gibt zwei Gründe, sich anderweitig umzusehen.
+
+00:13:36.000 --> 00:13:43.940
+Wenn Sie nie Code schreiben, ist das Kit nicht das Richtige für Sie, denn der entwicklerfreundliche Weg ist Co-Pilot Studio und Semantic Kernel befindet sich unterhalb dieser Welt und nicht im Vordergrund.
+
+00:13:45.000 --> 00:13:49.880
+Wenn Sie nur einen einfachen Chatbot auf einer Website benötigen, lösen Sie ein kleineres Problem als das, für das dieses Kit entwickelt wurde.
+
+00:13:50.460 --> 00:13:53.680
+Auch der Karriereaspekt spielt hier eine Rolle, da viele von Ihnen genau aus diesem Grund hierher gekommen sind.
+
+00:13:53.680 --> 00:14:01.960
+Die Ideen in diesem Kit, Plugins, Funktionsaufrufe, Speicher und Konnektoren, tauchen auch in anderen KI-Tools auf, einschließlich derer, die nicht von Microsoft stammen.
+
+00:14:02.520 --> 00:14:04.320
+Lernen Sie sie hier kennen und Sie werden sie überall wieder kennen.
+
+00:14:04.640 --> 00:14:06.240
+Es gibt noch einen letzten Tipp für alle, die neu anfangen.
+
+00:14:06.720 --> 00:14:10.900
+Wenn Sie etwas ganz Neues beginnen, lenkt Microsoft-Entwickler jetzt zunächst in Richtung des Nachfolgers.
+
+00:14:11.560 --> 00:14:15.700
+Lernen Sie also den Semantikkerne, um Ideen zu erhalten und greifen Sie zu Beginn auf das neue Framework zurück.
+
+00:14:16.580 --> 00:14:18.560
+Die Konzepte sind die gleichen und das ist der Teil, den es sich zu behalten.
+
+00:14:20.040 --> 00:14:21.460
+Die Zusammenfassung und eine Frage.
+
+00:14:21.460 --> 00:14:24.020
+Fassen wir die Einzelteile in ein paar kurzen Zeilen zusammen.
+
+00:14:24.620 --> 00:14:27.780
+Der Semantikkernel ist die Middleware, die Ebene, die Ihren Code mit einem KI-Modell verbindet.
+
+00:14:28.620 --> 00:14:30.260
+Der Kernel fasst alles an einem Ort zusammen.
+
+00:14:30.680 --> 00:14:32.380
+Plugins geben der KI ihre eigenen Funktionen.
+
+00:14:33.020 --> 00:14:34.840
+Funktionsaufrufe legen fest, wie sie entscheidet, was ausgeführt werden soll.
+
+00:14:35.160 --> 00:14:39.460
+Der Speicher ist die Art und Weise, wie Sie sich Ihre Daten merken und Konnektoren ermöglichen, es Ihnen später zwischen Modellen zu wechseln.
+
+00:14:40.240 --> 00:14:41.640
+Wenn Sie sich eines merken sollten, dann das.
+
+00:14:42.080 --> 00:14:45.160
+Das Modell ist der Teil, der sich mit dem technologischen Fortschritt immer wieder ändern wird.
+
+00:14:45.780 --> 00:14:49.000
+Die Verbindung zwischen Ihrem Code und dem Modell ist der Teil, den Sie tatsächlich steuern.
+
+00:14:49.100 --> 00:14:50.740
+Und diese Verbindung bietet Ihnen der Semantikkernel.
+
+00:14:50.740 --> 00:14:56.940
+Wenn Ihnen das geholfen hat, abonnieren Sie den M35565FM-Podcast, um die Tools und die Denkweise zu erlernen, die die Zukunft der Arbeit gestalten.
+
+00:14:57.200 --> 00:14:57.960
+Das ist meine Frage an Sie.
+
+00:14:58.420 --> 00:15:03.340
+Wenn Sie morgen eine Aufgabe aus Ihrem eigenen Arbeitsleben an eine KI abgeben könnten, welche Aufgabe würden Sie als erstes anvertrauen?
