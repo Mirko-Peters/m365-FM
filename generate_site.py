@@ -1691,6 +1691,15 @@ def build():
     import site_pillars as PIL   # Pillar-Kompendien und Lernpfad (imports/pillars, data/pillars.json): Zuordnung der Beitraege vor dem Blog (Kasten "Teil des Lernpfads")
     PIL.assign(_posts)
     BLG.build(_ctx, _posts, _people, COMMUNITY_API)
+    import site_pillar_videos as PVID   # Passende Sticky-Man-Videos je Leitfaden (data/pillar_videos.json): neue Videos pruefen, Treffer anhaengen, Karte auf den Leitfaden
+    _pvp = {}   # Video -> {Sprache: (Videoseite, Titel)}: Dub-Folgenseiten, englisch die Folge der Hauptshow zum selben Video
+    for (_v, _l), _it in items.items(): _pvp.setdefault(_v, {})[_l] = (url_of(_it), _it["e"]["title"])
+    _pbs = _PPs.episode_index(BASE)["by_slug"]
+    for _v, _sl in ORIG.items():
+        if _sl in _pbs: _pvp.setdefault(_v, {})["en"] = (_pbs[_sl]["url"], ORIG_T.get(_v) or _pbs[_sl]["e"]["title"])
+    _pvm = _EMX
+    _ctx["pillar_videos"] = PVID.prepare(PVID.load(), PIL.order(), _pvp, {_v: (videos.get(_v) or {}).get("date") for _v in _pvp}, TODAY,
+                                         ent_ids=lambda s: list(_pvm.ids(s, "en", set())), ld_urls={url_of(_it) for _it in items.values()}, r2map=R2.MAP, dims=R2._dims())
     PIL.build(_ctx, _posts, LRN.ENTS)
     import site_library as LIB
     LIB.build(_ctx, LIB.fetch_items(COMMUNITY_API), _people, COMMUNITY_API)

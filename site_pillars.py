@@ -15,6 +15,7 @@ from functools import lru_cache
 from pathlib import Path
 
 import site_infographics as IG   # Kopfbild und Infografiken der Leitfäden (nur mit Freigabe data/infographics_live.json)
+import site_pillar_videos as PV   # Karte "Passende Videos" (Sticky-Man-Videos je Leitfaden, data/pillar_videos.json)
 
 ROOT = Path(__file__).resolve().parent
 DIR = ROOT / "imports" / "pillars"
@@ -804,6 +805,8 @@ def build(g, posts, ents, written=None):
             deeper = ""
             if rel_posts:
                 deeper = f'<section class="pl-deeper"><h2>{esc(tx(lang, "deeper"))}</h2><ul>' + "".join(f'<li><a href="{_post_url(BASE, x, lang)}">{esc(ttl(x, lang))}</a></li>' for x in rel_posts[:12]) + "</ul></section>"
+            _pv = g.get("pillar_videos")   # Karte "Passende Videos" (site_pillar_videos.py, data/pillar_videos.json); ohne Zuordnung bleibt die Seite unveraendert
+            vids = PV.card(_pv["doc"], p["id"], lang, _pv["pages"], _pv["r2"], _pv["dims"]) if _pv else ""
             _ig = bool(IG.get("pillar", p["id"], lang))   # Kopfbild (Teilen-Bild) und 9-10 Infografiken im Text; ohne Freigabe in data/infographics_live.json bleibt die Seite unveraendert
             if _ig: body = IG.inject(body, "pillar", p["id"], lang)
             auth = _author_html(d["author"], lang, cx, g.get("author_box")) if d["author"] else ""
@@ -811,7 +814,7 @@ def build(g, posts, ents, written=None):
             nav = '<nav aria-label="breadcrumb">' + " › ".join(f'<a href="{x}">{esc(n)}</a>' for n, x in crumbs[:-1]) + f" › {esc(crumbs[-1][0])}</nav>"
             b = _shell(g, lang, f'{CSS}{nav}<article class="pl-art"><h1>{esc(d["h1"])}</h1><p class="pl-meta">{esc(tx(lang, "guide"))} · {esc(tx(lang, "step", n=idx + 1, m=n_pillars))} · '
                        f'{mins} {esc(tx(lang, "min"))} · {esc(tx(lang, "updated"))} <time datetime="{UPDATED}">{UPDATED}</time> · <a href="{path_url(BASE, lang)}">{esc(tx(lang, "overview"))}</a>{other}</p>'
-                       f'{IG.hero_figure("pillar", p["id"], lang) if _ig else ""}{body}</article>{deeper}<nav class="pl-step" aria-label="{esc(tx(lang, "path"))}">{step}</nav>'
+                       f'{IG.hero_figure("pillar", p["id"], lang) if _ig else ""}{body}</article>{vids}{deeper}<nav class="pl-step" aria-label="{esc(tx(lang, "path"))}">{step}</nav>'
                        + (f'<section class="pl-author">{"" if g.get("author_box") else "<h2>" + esc(tx(lang, "author")) + "</h2>"}{auth}</section>' if auth else "")
                        + (f'<section class="pl-sources" id="sources"><h2>{esc(tx(lang, "sources"))}</h2>{src_html}</section>' if src_html else ""))
             author_id = f"{BASE}/community/u/{AUTHOR}/#person"
@@ -820,6 +823,8 @@ def build(g, posts, ents, written=None):
                    "author": {"@type": "Person", "@id": author_id, "name": "Mirko Peters", "url": f"{BASE}/community/u/{AUTHOR}/"},
                    "publisher": {"@id": f"{BASE}/#org"},
                    "isPartOf": {"@type": "Course", "@id": path_url(BASE, lang) + "#course", "name": pa["title"][lang], "url": path_url(BASE, lang)}}
+            _vref = PV.ld_refs(_pv["doc"], p["id"], lang, _pv["pages"], lambda x: x in _pv["ld"]) if _pv else []
+            if _vref: art["video"] = _vref   # nur Verweise auf die VideoObject-Knoten der Videoseiten, keine zweite Beschreibung
             ld = [art, _crumb_ld(BASE, crumbs)] + (IG.image_ld(BASE, "pillar", p["id"], lang, u, title=d["h1"], date=UPDATED) if _ig else [])
             faq = faq_of(d["article"])
             if faq: ld.append({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]})
@@ -844,8 +849,10 @@ def build(g, posts, ents, written=None):
                 rel = CLUSTER.get(pid, [])
                 if lang != "en": rel = [x for x in rel if x["slug"] in by_lang.get(lang, {})]
                 lst = ("<ul>" + "".join(f'<li><a href="{_post_url(BASE, x, lang)}">{esc(ttl(x, lang))}</a></li>' for x in rel[:5]) + "</ul>") if rel else ""
+                _pv = g.get("pillar_videos")
+                vl = PV.path_line(_pv["doc"], pid, lang, _pv["pages"]) if _pv else ""   # passende Videos des Leitfadens als Links (ohne Bilder)
                 blk += (f'<div class="pl-card"><h3><span class="pl-step-n">{n}</span><a href="{url(BASE, p, lang)}">{esc(p["label"][lang])}</a></h3><p>{esc(desc)}</p>'
-                        f'<p class="mut">{mins} {esc(tx(lang, "min"))}</p>{lst}</div>')
+                        f'<p class="mut">{mins} {esc(tx(lang, "min"))}</p>{lst}{vl}</div>')
                 items.append((n, p))
             if blk: stages += f'<h2 class="pl-stage">{esc(st["title"][lang])}</h2><p class="mut">{esc(st["text"][lang])}</p>{blk}'
         if not items: continue

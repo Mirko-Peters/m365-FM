@@ -277,14 +277,15 @@ jobs:
           echo "Profilseiten: $n"
           if [ ! -f docs/community/u/mirko-p/index.html ]; then echo "::warning::Profilseite mirko-p fehlt (Profil-Export fehlgeschlagen oder Profil nicht oeffentlich), siehe Zeile 'Profil-Export' im Log oben"; fi
       - name: Money-Keywords und Profil-Export sichern
+        # data/pillar_videos.json: neue Treffer, die generate_site.py (site_pillar_videos.update) an die Leitfaeden des Lernpfads gehaengt hat
         continue-on-error: true
         run: |
-          if [ -n "$(git status --porcelain data/money_keywords.json data/members_export.json data/entity_mod.json data/episode_slugs.json)" ]; then
+          if [ -n "$(git status --porcelain data/money_keywords.json data/members_export.json data/entity_mod.json data/episode_slugs.json data/pillar_videos.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             (
-              for f in data/money_keywords.json data/members_export.json data/entity_mod.json data/episode_slugs.json; do [ -e "$f" ] && git add -A "$f"; done
+              for f in data/money_keywords.json data/members_export.json data/entity_mod.json data/episode_slugs.json data/pillar_videos.json; do [ -e "$f" ] && git add -A "$f"; done
               if git diff --cached --quiet; then echo "nichts zu sichern"; exit 0; fi
-              git commit -q -m "Money-Keywords, Profil-Export, Entitaets-Aenderungsdaten und Folgen-Slugs aktualisiert"
+              git commit -q -m "Money-Keywords, Profil-Export, Entitaets-Aenderungsdaten, Folgen-Slugs und passende Lernpfad-Videos aktualisiert"
               for i in 1 2 3 4 5; do
                 if git pull --rebase --autostash -q -X theirs origin main; then
                   git push -q origin HEAD:main && exit 0
