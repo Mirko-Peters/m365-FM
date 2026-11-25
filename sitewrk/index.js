@@ -98,6 +98,10 @@ async function checkBuild(env, url) {
 // weltweit) ist der Eintrag nach einer Ruhepause meist abgelaufen (ready=cold) - eine Senkung der TTFB ist damit NICHT belegt. Erst messen
 // (Server-Timing ready/src auf /entity/*). Bleibt ready=cold mit src=r2fallback haeufig, ist der naechste Hebel, im kalten Zustand Pfade, die es nur
 // im Bucket gibt (site_size.r2_only, Entitaeten nach site_entities.py), gleich ueber r2Page zu holen (derselbe Inhalt wie heute der 404-Rueckfall).
+// Umgesetzt 24.11.2026 (src=r2direct, R2_ONLY_PAGE): ohne gueltige Kennung (cold, oder "nicht bereit" waehrend des Spiegelns) holt der Worker solche
+// Seiten gleich ueber r2Page (Schluessel /__r2c<pfad>, den Schritt 1 von tools/purge_changed.py nach dem Deploy leert - nie /__r2f und nie eine
+// erfundene Bau-Kennung). Fehlt die Seite im Bucket, geht es wie bisher ueber GitHub Pages. Messung: je Seitenaufruf dieser Pfade eine JSON-Zeile
+// im Log (logR2Page, Workers Logs in sitewrk/wrangler.toml).
 // READY_TTL NICHT einfach verlaengern: nach einem Deploy gaelte die alte Kennung weiter, und r2First laese unter /__r2c/@<alter Bau>/ bis zu 4 h alte Seiten.
 const READY_KEY = "/__r2c/~ready", READY_WAIT = 50;
 async function sharedReady(url, wait = READY_WAIT) {
@@ -340,6 +344,18 @@ function redirect(request, origin, path, search, status = 301) {
 }
 const GONE_LANG = /^\/(pa|hi|ml|ta|te)(\/|$)/, MIRKO = /^(\/[a-z]{2})?\/community\/u\/mirko-peters(\/.*)?$/, EN_PREFIX = /^\/en(\/.*)?$/;
 const LANG_EP = /^\/(de|es|fr|it|pt|nl|pl|id|ru|uk|ar|he|ja|ko)\/show\/episodes\/([a-z0-9-]+)\/?$/;
+// Seiten, die es nur im R2-Bucket gibt (Nachbau von site_size.r2_only fuer HTML-Verzeichnisse): Entitaeten aller Sprachen (site_entities.py) und alle
+// Seiten der Sprachen ausser en/de (PAGES_LANGS) - nicht die Startseite /<l>/ selbst, die liegt in GitHub Pages. Sprachen wie LANG_EP ohne de.
+export const R2_ONLY_PAGE = /^\/(?:(?:[a-z]{2}\/)?entity\/[^/]+|(?:es|fr|it|pt|nl|pl|id|ru|uk|ar|he|ja|ko)\/.+)\/$/;
+// Messung (Workers Logs): eine JSON-Zeile je Seitenaufruf einer R2-only-Seite - Weg (src), Herkunft der Bau-Kennung (ready), Kanten-Cache des
+// R2-Wegs (cache = x-m365-cache), Dauern in ms, Rechenzentrum und Land. Keine Query, keine IP, kein User-Agent; kein zusaetzlicher Abruf.
+function logR2Page(request, p, src, ready, res, r2, origin) {
+  try {
+    const cf = request.cf || {};
+    console.log(JSON.stringify({ m: "r2page", p, src, ready, st: res.status, cache: res.headers.get("x-m365-cache") || "", edge: res.headers.get("cf-cache-status") || "",
+      r2: r2 ?? null, origin: origin ?? null, colo: cf.colo || "", country: cf.country || "" }));
+  } catch { /* Messung darf nie eine Antwort verhindern */ }
+}
 const INVITE = /^\/einladung\/([a-z0-9][a-z0-9-]{1,38})\/?$/;   // Profilkuerzel wie im Community-Worker (worker/src/inviter.js)
 // Eigene Seite eines Events, Profils oder einer Firma (site_events.py, site_members.py): entsteht erst mit dem naechsten Seitenbau. Listen zeigen nur
 // Eintraege mit Seite; ein Link von anderswo (Mail, Admin, Profil-Bereich) auf eine noch fehlende Seite fuehrt zur Liste der Sprache statt auf ein 404.
@@ -650,9 +666,10 @@ const site = {
       : { cacheEverything: true, cacheTtlByStatus: { "200-299": EDGE_HTML, "404": 60, "500-599": 0 } };   // HTML: 4 h am Rand, Purge nach jedem Deploy
     // T41: ohne Query zum Ursprung - GitHub Pages ist statisch, so landen ?utm_…/?fbclid=… im selben Cache-Eintrag (Zone steht auf Caching-Level "basic": mit Query sonst gar kein Cache)
     const page = !isImg && !isStatic && isHtmlPath(p), rq = request;   // Seiten: R2 zuerst auch bei Range-Anfragen (s. u.)
-    // Messung (Server-Timing, nur Seiten): src = r2 (R2 zuerst), pages (GitHub Pages), r2fallback (GitHub Pages 404, dann Bucket);
+    // Messung (Server-Timing, nur Seiten): src = r2 (R2 zuerst), r2direct (R2-only-Seite ohne gueltige Kennung gleich aus dem Bucket), pages (GitHub Pages), r2fallback (GitHub Pages 404, dann Bucket);
     // ready = mem/cache/cold (Herkunft der Bau-Kennung, s. r2Ready) oder off (R2 zuerst nicht moeglich: Notschalter, Methode, Pfad); Dauern in ms
-    let ready = "off", r2miss = false;   // r2miss: R2 zuerst mit gueltiger Bau-Kennung fand das Objekt nicht -> die R2-Rueckfaelle nach dem 404 lesen es nicht noch einmal
+    let ready = "off", r2miss = false, r2tried = false;   // r2miss: R2 zuerst mit gueltiger Bau-Kennung fand das Objekt nicht; r2tried: R2-only-Seite schon direkt gefragt -> die R2-Rueckfaelle nach dem 404 lesen es nicht noch einmal
+    const r2only = page && R2_ONLY_PAGE.test(p);   // nur im Bucket (s. R2_ONLY_PAGE): im kalten Zustand gleich aus R2, Messzeile im Log
     if (env.R2_PRIMARY === "1" && env.PAGES && !isImg && (request.method === "GET" || request.method === "HEAD") && !p.startsWith("/search/") && p !== "/r2-build.txt" && (page || !request.headers.has("range"))) {
       let dp = p; try { dp = decodeURIComponent(p); } catch { /* ungueltige Kodierung: wie angefragt */ }   // Schluessel im Bucket sind UTF-8 (z. B. /ru/tag/облако/)
       const key = r2Key(dp);
@@ -661,8 +678,15 @@ const site = {
         ready = rd.src;
         if (rd.v) {
           const t0 = Date.now(), st = {}, r2 = await r2First(rq, env, ctx, url, p, key, rd.v, st);
-          if (r2) { r2.headers.set("server-timing", `src;desc="r2", ready;desc="${ready}", r2;dur=${Date.now() - t0}`); return r2; }
+          const d = Date.now() - t0;
+          if (r2) { r2.headers.set("server-timing", `src;desc="r2", ready;desc="${ready}", r2;dur=${d}`); if (r2only) logR2Page(request, p, "r2", ready, r2, d); return r2; }
           r2miss = !!st.miss;   // der Bucket enthaelt genau den Bau von GitHub Pages: was dort fehlt, fehlt ueberall
+        } else if (r2only) {
+          // Keine gueltige Kennung (cold oder "nicht bereit"): R2-only-Seite gleich aus dem Bucket statt GitHub Pages (404) -> R2-Rueckfall.
+          // r2Page mit dem Schluessel /__r2c<pfad> wie der Rueckfall (geleert in Schritt 1 nach dem Deploy), nie /__r2f. null: weiter wie bisher.
+          const t0 = Date.now(), r2 = await r2Page(rq, env, ctx, url, p), d = Date.now() - t0;
+          r2tried = true;
+          if (r2) { r2.headers.set("server-timing", `src;desc="r2direct", ready;desc="${ready}", r2;dur=${d}`); logR2Page(request, p, "r2direct", ready, r2, d); return r2; }
         }
       }
     }
@@ -728,10 +752,12 @@ const site = {
       }
     }
     // Nur Seiten-Adressen (r2Page liest pages/<pfad>/index.html; fuer /x.php oder /a.json gibt es so ein Objekt nie) und nur, wenn R2 zuerst das Objekt
-    // nicht schon mit gueltiger Bau-Kennung vermisst hat (sonst zwei R2-Lesungen je echtem 404). Die Weiterleitung LANG_EP bleibt in beiden Faellen.
+    // nicht schon mit gueltiger Bau-Kennung vermisst hat bzw. die R2-only-Seite nicht schon direkt gefragt wurde (sonst zwei R2-Lesungen je echtem 404).
+    // Die Weiterleitung LANG_EP bleibt in allen Faellen.
     if (res.status === 404 && env.PAGES && !IMG.test(p) && isHtmlPath(p) && (request.method === "GET" || request.method === "HEAD")) {
-      const t1 = Date.now(), r2 = r2miss ? null : await r2Page(rq, env, ctx, url, p);
-      if (r2 && page) r2.headers.set("server-timing", `src;desc="r2fallback", ready;desc="${ready}", origin;dur=${tOrigin}, r2;dur=${Date.now() - t1}`);
+      const t1 = Date.now(), r2 = r2miss || r2tried ? null : await r2Page(rq, env, ctx, url, p), d = Date.now() - t1;
+      if (r2 && page) r2.headers.set("server-timing", `src;desc="r2fallback", ready;desc="${ready}", origin;dur=${tOrigin}, r2;dur=${d}`);
+      if (r2 && r2only) logR2Page(request, p, "r2fallback", ready, r2, d, tOrigin);
       if (r2 && !p.endsWith("/") && !/\.[a-z0-9]{1,8}$/i.test(p)) return new Response(null, { status: 301, headers: { ...SEC, location: url.origin + p + "/" + url.search, "cache-control": "public, max-age=600" } });   // wie GitHub Pages: Verzeichnis ohne "/" -> 301 auf "/"
       if (r2) return r2;
       const m = LANG_EP.exec(p);   // noch nicht hochgeladen: englisches Original statt 404 - umbenannt gleich auf den neuen Slug (ein Schritt)
@@ -749,7 +775,9 @@ const site = {
     const h = new Headers(res.headers);
     finishHeaders(h, p);
     if (page) h.append("server-timing", `src;desc="pages", ready;desc="${ready}", origin;dur=${tOrigin}`);
-    return new Response(request.method === "HEAD" ? null : res.body, { status: res.status, statusText: res.statusText, headers: h });
+    const out = new Response(request.method === "HEAD" ? null : res.body, { status: res.status, statusText: res.statusText, headers: h });
+    if (r2only) logR2Page(request, p, "pages", ready, out, null, tOrigin);
+    return out;
   },
 };
 export default worker;
