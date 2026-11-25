@@ -1,4 +1,4 @@
-/* Einziger Effekt neben dem weichen Scrollen (smooth.js): Lichtstreif auf der Hauptueberschrift. Der Text bleibt sofort sichtbar.
+/* Einziger Effekt neben dem weichen Anker-Springen (CSS scroll-behavior in a11y.css): Lichtstreif auf der Hauptueberschrift. Der Text bleibt sofort sichtbar.
    Aus bei reduzierter Bewegung, auf dem Handy und im Barrierefreiheits-Menue "Bewegung reduzieren". */
 (function () {
   try {
