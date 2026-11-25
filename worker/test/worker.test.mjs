@@ -1549,3 +1549,18 @@ test("search: 80.000 Dokumente ohne SQL-Vollscan und mit höchstens 150 ms Hybri
   assert.ok(plan.length > 0);
   assert.equal(plan.filter(({ detail }) => /(?:SCAN d\b|SEARCH d USING INDEX)/.test(detail)).length, 1);
 });
+
+test("d1 backup (D1-Kosten): Sicherung nur bei ausstehenden Migrationen, unklarer Stand sichert wie bisher; TOKEN_ONLY ohne Export und Deploy", async () => {
+  const { d1PendingMigrations } = await import("../src/d1_backup.js");
+  assert.equal(d1PendingMigrations(0, "✅ No migrations to apply!\n"), "none");
+  assert.equal(d1PendingMigrations(0, "Migrations to be applied:\n┌──────────────────────┐\n│ name                 │\n├──────────────────────┤\n│ 0057_cost.sql        │\n└──────────────────────┘\n"), "pending");
+  assert.equal(d1PendingMigrations(0, "Migrations to be applied:\n"), "pending");
+  assert.equal(d1PendingMigrations(1, "No migrations to apply!"), "unknown", "Fehler -> sichern");
+  assert.equal(d1PendingMigrations(0, "irgendwas"), "unknown");
+  assert.equal(d1PendingMigrations(0, "", "✅ No migrations to apply!"), "none");
+  const src = readFileSync(new URL("../setup.mjs", import.meta.url), "utf8");
+  const gate = src.indexOf('if (pending !== "none")'), exp = src.indexOf("run(d1BackupExportArgs(tables))"), apply = src.indexOf('run(["d1", "migrations", "apply"');
+  assert.ok(gate > 0 && gate < exp && exp < apply, "Export und apply nur im Zweig mit ausstehenden (oder unklaren) Migrationen, Sicherung vor apply");
+  assert.ok(src.indexOf('if (tokenOnly)') < src.indexOf('run(["d1", "migrations", "list"') && src.indexOf('run(["deploy"])') > src.indexOf("else {"), "TOKEN_ONLY: weder Liste noch Export noch Deploy");
+  assert.match(src, /process\.env\.TOKEN_ONLY === "1"/);
+});
