@@ -5,7 +5,7 @@ import site_media as MED
 import site_ename as EN   # Namen der Entitaeten in der Sprache der Seite (Linktexte Paket 4)
 import ontology as ONT   # Oberbegriffe per Regel (Klammer/Praefix) fuer alle Entitaeten beim Laden
 import site_meta_entities as MM   # SEO-Titel und Meta-Descriptions nach Suchabsicht
-import site_assets as SA   # wiki.js und wk-<sprache>.js mit Inhalts-Hash im Namen (Site-Worker: immutable)
+import site_assets as SA   # wiki.js mit Inhalts-Hash im Namen (Site-Worker: immutable); wk-<sprache>.js bewusst nicht (s. wiki_block)
 from pathlib import Path
 
 ROOT = Path(__file__).parent
@@ -252,10 +252,12 @@ def wiki_block(lang, term_id, api, base, static, links=None):
     w = WT.get(lang, WT["en"])
     links = links or {}
     # Texte und die Liste aller verlinkbaren Begriffe (ca. 52 KB) liegen je Sprache in assets/wk-<sprache>.js (write_wk_js), nicht in jeder Seite.
+    # Ohne Hash im Namen (Gegenpruefung 25.11.2026): die Liste aendert sich mit jeder neuen oder umbenannten Entitaet, also fast jede Nacht. Mit Hash
+    # aenderten sich dadurch alle ~4.900 Entitaetsseiten (Upload, Purge, kalter Kanten-Cache); so bleibt es bei 1 h Browser-Cache fuer diese eine Datei.
     cfg = json.dumps({"api": api, "term": term_id, "lang": lang}, ensure_ascii=False).replace("</", "<\\/")
     st = f'<div class="wk-static wk-body">{wiki_render(static["body"], links, w)[0]}</div>' if static else ""
     return (f'{WCSS}<section aria-labelledby="wk-h"><h2 id="wk-h">{esc(w["h"])}</h2><p class="mut">{esc(w["intro"])}</p><div id="c-wiki">{st}</div></section>'
-            f'<script defer src="{base}{SA.path(f"wk-{lang}.js")}"></script><script>window.M365W={cfg}</script><script defer src="{base}{SA.path("wiki.js")}"></script>')
+            f'<script defer src="{base}/assets/wk-{lang}.js"></script><script>window.M365W={cfg}</script><script defer src="{base}{SA.path("wiki.js")}"></script>')
 
 
 def write_wk_js(write, lang, links):
@@ -263,8 +265,7 @@ def write_wk_js(write, lang, links):
     w = WT.get(lang, WT["en"])
     c = ("window.M365WT=" + json.dumps(w, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
          + ";window.M365WL=" + json.dumps(links, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/") + ";")
-    write(f"assets/wk-{lang}.js", c)   # ungehashter Name bleibt (alte Seiten)
-    SA.put(f"wk-{lang}.js", c)   # wk-<sprache>.<hash>.js in docs/ und r2out/: wiki_block verweist darauf (Site-Worker: immutable)
+    write(f"assets/wk-{lang}.js", c)   # ungehashter Name: wiki_block verweist darauf (s. dort)
 
 
 def build_learn(ctx):

@@ -4,7 +4,9 @@
 import { test } from "node:test"; import assert from "node:assert/strict";
 const store = new Map(); const origins = [];
 globalThis.caches = { default: { match: async (r) => { const x = store.get(r.url); return x ? x.clone() : undefined; }, put: async (r, res) => { store.set(r.url, res.clone()); } } };
-globalThis.fetch = async (req) => {
+const cfs = [];
+globalThis.fetch = async (req, init = {}) => {
+  cfs.push([new URL(typeof req === "string" ? req : req.url).pathname, init.cf]);
   const r = typeof req === "string" ? new Request(req) : req, u = new URL(r.url);
   if (u.pathname === "/show/redirects.json") return new Response("{}", { headers: { "content-type": "application/json" } });
   origins.push(u.pathname);
@@ -39,7 +41,16 @@ test("Gehashte Datei fehlt bei GitHub Pages: aus dem Bucket (immutable, Typ, ETa
   assert.deepEqual(origins, ["/assets/wk-de.abcdef0123.js"], "erst GitHub Pages");
   assert.ok(store.has("https://www.m365.fm/__r2f/assets/wk-de.abcdef0123.js"));
   const b = await run("/assets/wk-de.abcdef0123.js"); assert.equal(await b.text(), "r2()"); assert.equal(b.headers.get("x-m365-cache"), "HIT"); assert.equal(gets.length, 1);
-  assert.equal((await run("/assets/old.abcdef0123.js")).status, 404, "als entfernt markiert");
-  assert.equal((await run("/assets/none.abcdef0123.js")).status, 404, "fehlt");
+  for (const [p, why] of [["/assets/old.abcdef0123.js", "als entfernt markiert"], ["/assets/none.abcdef0123.js", "fehlt"], ["/assets/site.0123abcd45.css", "fehlt (css)"]]) {
+    const r = await run(p);
+    assert.equal(r.status, 404, why);
+    assert.equal(r.headers.get("cache-control"), "public, max-age=60", why + ": 404 nie immutable (sonst ein Jahr im Browser, auch nach dem Deploy)");
+  }
   assert.equal((await run("/assets/none.js")).status, 404); assert.ok(!gets.includes("pages/assets/none.js"), "ungehasht: kein Bucket-Rueckfall");
+});
+
+test("GitHub-Pages-Abruf gehashter Namen: 404 nur 60 s im Kanten-Cache (danach ist die Datei nach dem Deploy da), 200 einen Tag", async () => {
+  cfs.length = 0; await run("/assets/none.abcdef0123.js"); await run("/assets/page.js");
+  assert.deepEqual(cfs.find(([p]) => p === "/assets/none.abcdef0123.js")[1], { cacheEverything: true, cacheTtlByStatus: { "200-299": 86400, "404": 60, "500-599": 0 } });
+  assert.deepEqual(cfs.find(([p]) => p === "/assets/page.js")[1], { cacheEverything: true, cacheTtl: 86400 }, "ungehasht wie bisher");
 });

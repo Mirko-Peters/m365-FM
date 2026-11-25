@@ -8,7 +8,7 @@ const store = new Map();
 globalThis.caches = { default: { match: async (r) => { const x = store.get(r.url); return x ? x.clone() : undefined; }, put: async (r, res) => { store.set(r.url, res.clone()); } } };
 const HTML = { "content-type": "text/html; charset=utf-8" };
 const zoneCalls = [], origins = [];
-let zoneMode = "ok";   // ok | 404 | 500 | throw | hang | guard | gone-cc | gone-amz
+let zoneMode = "ok";   // ok | 404 | 500 | 403 | 429 | throw | hang | guard | gone-cc | gone-amz | cc-ttl | cc-none
 const ZONE = {   // Objekte der oeffentlichen R2-Domain (Inhalt, Content-Type, Cache-Control wie im Bucket gespeichert)
   "https://img.m365.fm/pages/entity/copilot/index.html": ["<html>zone entity</html>", "text/html; charset=utf-8"],
   "https://img.m365.fm/pages/ru/tag/%D0%BE%D0%B1%D0%BB%D0%B0%D0%BA%D0%BE/index.html": ["<html>zone ru</html>", "text/html; charset=utf-8"],
@@ -22,12 +22,15 @@ globalThis.fetch = async (req, init = {}) => {
     if (zoneMode === "throw") throw new Error("connect");
     if (zoneMode === "hang") return new Promise(() => {});
     if (zoneMode === "500") return new Response("err", { status: 522 });
+    if (zoneMode === "403" || zoneMode === "429") return new Response("challenge", { status: Number(zoneMode), headers: HTML });   // WAF-/Bot-Regel bzw. Ratenlimit
     if (zoneMode === "guard") return new Response("Not found", { status: 404, headers: { "x-m365-guard": "1" } });
     const o = ZONE[r.url];
     if (!o || zoneMode === "404") return new Response("<Error>NoSuchKey</Error>", { status: 404 });
     const h = { "content-type": o[1], etag: '"zone-etag"', "last-modified": "Mon, 16 Nov 2026 08:00:00 GMT", "cache-control": "public, max-age=600", "cf-cache-status": "HIT" };
     if (zoneMode === "gone-cc") h["cache-control"] = "public, max-age=600, m365-gone";
     if (zoneMode === "gone-amz") h["x-amz-meta-gone"] = "1";
+    if (zoneMode === "cc-ttl") h["cache-control"] = "max-age=14400";   // Zonen-Regel (Browser Cache TTL) hat den Wert ersetzt
+    if (zoneMode === "cc-none") delete h["cache-control"];
     return new Response(o[0], { headers: h });
   }
   if (u.pathname === "/show/redirects.json") return new Response("{}", { headers: { "content-type": "application/json" } });
@@ -134,6 +137,21 @@ test("Entfernt-Marker (Cache-Control m365-gone oder x-amz-meta-gone): heutiger W
   }
 });
 
+test("Fail-closed: Cache-Control nicht wie vom Upload (ersetzt oder fehlt) -> heutiger Weg mit gone-Pruefung der Bindung, keine Pause", async () => {
+  for (const mode of ["cc-ttl", "cc-none"]) {
+    fresh(mode); goneInBucket = true;
+    const a = await run(req("/entity/copilot/"));
+    assert.equal(a.status, 404, mode + ": als entfernt markiert, trotz Zonen-200 nicht ausgeliefert"); assert.match(st(a), /src;desc="pages"/, mode);
+    assert.deepEqual(pageGets(), ["pages/entity/copilot/index.html"], mode + ": Bindung entscheidet");
+    fresh(mode);
+    const b = await run(req("/entity/copilot/")); assert.equal(await b.text(), "<html>bind entity</html>", mode); assert.match(st(b), /zc;desc="cc"/, mode);
+    await run(req("/entity/copilot/")); assert.equal(zoneCalls.length, 2, mode + ": keine Pause (Einstellung, kein Ausfall)");
+  }
+  const { zoneCcOk } = await import("../index.js");
+  for (const v of ["public, max-age=600", "Public,max-age=600", " no-store "]) assert.ok(zoneCcOk(new Headers({ "cache-control": v })), v);
+  for (const v of ["public, max-age=600, m365-gone", "max-age=600", "public, max-age=31536000, immutable", ""]) assert.ok(!zoneCcOk(new Headers({ "cache-control": v })), v);
+});
+
 test("404 der Zone: heutiger Weg (Bindung entscheidet) - findet die Bindung das Objekt, kommt es von dort", async () => {
   fresh("404");
   const a = await run(req("/entity/copilot/")); assert.equal(await a.text(), "<html>bind entity</html>"); assert.match(st(a), /zc;desc="404"/);
@@ -142,12 +160,12 @@ test("404 der Zone: heutiger Weg (Bindung entscheidet) - findet die Bindung das 
 });
 
 test("Fehler, 5xx, Zeitlimit, Worker statt R2: dieselbe Anfrage nimmt den heutigen Weg; danach Pause je Isolat", async () => {
-  for (const mode of ["throw", "500", "guard", "hang"]) {
+  for (const mode of ["throw", "500", "403", "429", "guard", "hang"]) {
     fresh(mode); __resetZone(mode === "hang" ? 50 : 3000);
     const t0 = Date.now();
     const a = await run(req("/entity/copilot/"));
     assert.equal(await a.text(), "<html>bind entity</html>", mode); assert.equal(a.headers.get("x-m365-cache"), "MISS", mode);
-    assert.match(st(a), new RegExp(`zc;desc="${{ throw: "error", 500: "522", guard: "worker", hang: "timeout" }[mode]}"`), mode);
+    assert.match(st(a), new RegExp(`zc;desc="${{ throw: "error", 500: "522", 403: "403", 429: "429", guard: "worker", hang: "timeout" }[mode]}"`), mode);
     assert.ok(Date.now() - t0 < 1000, mode + ": kein langes Warten");
     const b = await run(req("/entity/copilot/"));
     assert.equal(await b.text(), "<html>bind entity</html>", mode); assert.equal(zoneCalls.length, 1, mode + ": Pause, kein zweiter Zonen-Abruf"); assert.match(st(b), /zc;desc="paused"/, mode);

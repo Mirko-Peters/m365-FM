@@ -187,6 +187,11 @@ export function zoneUrl(host, key) {
   if (!host || !key.startsWith("pages/") || key.split("/").some((s) => s === "." || s === "..")) return "";
   return host + "/" + encodeURIComponent(key).replace(/%(2F|24|26|2B|2C|3B|3D|3A|40)/g, (_m, x) => String.fromCharCode(parseInt(x, 16)));
 }
+// Fail-closed (Gegenpruefung 25.11.2026): ein Zonen-Treffer gilt nur, wenn Cache-Control genau so ankommt, wie die Uploads es setzen (r2_common.upload
+// "public, max-age=600", Staging tools/staging_upload.py "no-store"). Ersetzt eine Zonen-Regel (Browser Cache TTL, Cache Rule) den Wert, ginge der Marker
+// m365-gone unbemerkt verloren - dann lieber der heutige Weg (Bindung mit customMetadata.gone). Server-Timing zc="cc" zeigt das.
+export const ZONE_CC = new Set(["public, max-age=600", "no-store"]);
+export const zoneCcOk = (h) => ZONE_CC.has(String(h.get("cache-control") || "").trim().toLowerCase().replace(/\s*,\s*/g, ", "));
 export const goneMarked = (h) => /(?:^|,)\s*m365-gone\s*(?:,|$)/i.test(h.get("cache-control") || "") || h.get("x-amz-meta-gone") === "1";
 // -> Response (200, Koerper ungelesen) oder null (heutiger Weg). st.zc: Ergebnis fuer Server-Timing (cf-cache-status bzw. Grund des Rueckfalls).
 export async function zoneGet(env, key, ttl, st = {}) {
@@ -204,8 +209,9 @@ export async function zoneGet(env, key, ttl, st = {}) {
   finally { clearTimeout(timer); }
   const drop = (why, pause) => { if (pause) ZONE_DOWN = Date.now() + ZONE_PAUSE; st.zc = why; try { res.body && res.body.cancel(); } catch { /* egal */ } return null; };
   if (res.headers.get("x-m365-guard") || res.headers.get("x-m365-environment")) return drop("worker", true);   // lief in einen Worker statt nach R2
-  if (res.status !== 200) return drop(String(res.status), res.status >= 500);
-  if (goneMarked(res.headers)) return drop("gone", false);
+  if (res.status !== 200) return drop(String(res.status), res.status !== 404);   // 404: Objekt fehlt; alles andere (5xx, 403/429 von WAF/Bot-Regeln ...) pausiert
+  if (!zoneCcOk(res.headers)) return drop(goneMarked(res.headers) ? "gone" : "cc", false);   // Fail-closed: Cache-Control nicht wie vom Upload gesetzt
+  if (goneMarked(res.headers)) return drop("gone", false);   // x-amz-meta-gone (falls R2 Metadaten mitschickt)
   st.zc = (res.headers.get("cf-cache-status") || "none").toUpperCase();
   return res;
 }
@@ -338,11 +344,13 @@ async function byodServe(request, env, url, host) {
 }
 
 // Header fuer Antworten von GitHub Pages und aus R2 (gleiche Regeln, egal woher die Datei kommt)
-function finishHeaders(h, p) {
-  const isImg = IMG.test(p), isStatic = STATIC.test(p) || FONT.test(p);
+// status: Status der Antwort (Standard 200). immutable nur bei 200/304 (Gegenpruefung 25.11.2026): ein 404 auf einen gehashten Namen (Datei beim
+// r2out-Upload gescheitert, noch nicht deployt) bliebe sonst ein Jahr im Browser, auch nachdem die Datei da ist; Fehler unter solchen Namen 60 s.
+function finishHeaders(h, p, status = 200) {
+  const isImg = IMG.test(p), isStatic = STATIC.test(p) || FONT.test(p), imm = HASHED.test(p) || FONT.test(p);
   for (const [k, v] of Object.entries(SEC)) h.set(k, v);
   // T41: Schriften aendern sich unter gleichem Namen nicht (1 Jahr), Bilder 1 Tag, Skripte/Stile 1 h und danach im Hintergrund pruefen
-  h.set("cache-control", HASHED.test(p) || FONT.test(p) ? "public, max-age=31536000, immutable" : isImg ? "public, max-age=86400, stale-while-revalidate=604800"
+  h.set("cache-control", imm && status !== 200 && status !== 304 ? "public, max-age=60" : imm ? "public, max-age=31536000, immutable" : isImg ? "public, max-age=86400, stale-while-revalidate=604800"
     : isStatic ? "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400" : HTML_CC);
   if (noindexPath(p)) h.set("x-robots-tag", "noindex");
   const tm = TRANSCRIPT.exec(p);
@@ -439,6 +447,20 @@ async function r2File(request, env, p) {
   if (notModified(request, h.get("etag"), h.get("last-modified"))) return new Response(null, { status: 304, headers: h });
   if (!tr && request.method === "HEAD" && Number.isFinite(obj.size)) h.set("content-length", String(obj.size));   // wie GitHub Pages: Groesse auch per HEAD (GET: Laenge des R2-Datenstroms)
   return new Response(request.method === "HEAD" ? null : obj.body, { headers: h });
+}
+// T37: Suchindex im R2-Bucket (pages/search/...). Kanten-Cache 600 s (wie s-maxage) unter /__r2f<pfad> (Kostenanalyse 25.11.2026: vorher jede Anfrage eine
+// R2-Lesung). Den Schluessel leert der Deploy wie jede geaenderte r2out-Datei (tools/purge_changed.py --r2, Liste aus r2-changed.json). Nur Treffer werden gemerkt.
+// Vor dem 27.11.2026 erst nach dem 404 von GitHub Pages; Inhalt, Header und Cache-Schluessel unveraendert. null: nicht im Bucket.
+export const SEARCH_R2 = /^\/search\/(manifest|part-\d{1,4})\.json$/;
+async function searchIndex(request, env, ctx, url, p) {
+  const sh = { "content-type": "application/json; charset=utf-8", "cache-control": "public, max-age=300, s-maxage=600", "x-robots-tag": "noindex", "access-control-allow-origin": "*" };
+  const sk = new Request(url.origin + "/__r2f" + p), c = await caches.default.match(sk).catch(() => null);
+  if (c) return new Response(request.method === "HEAD" ? null : c.body, { headers: { ...sh, "x-m365-cache": "HIT" } });
+  const obj = await env.PAGES.get("pages" + p).catch(() => null);
+  let buf = null; if (obj) { try { buf = await obj.arrayBuffer(); } catch { buf = null; } }
+  if (!buf) return null;
+  ctx.waitUntil(caches.default.put(sk, new Response(buf.slice(0), { headers: { "content-type": sh["content-type"], "cache-control": "public, max-age=600" } })).catch(() => {}));
+  return new Response(request.method === "HEAD" ? null : buf, { headers: { ...sh, "x-m365-cache": "MISS" } });
 }
 // Messung (Workers Logs): eine JSON-Zeile je Seitenaufruf einer R2-only-Seite - Weg (src), Herkunft der Bau-Kennung (ready), Kanten-Cache des
 // R2-Wegs (cache = x-m365-cache), Dauern in ms, Rechenzentrum und Land. Keine Query, keine IP, kein User-Agent; kein zusaetzlicher Abruf.
@@ -737,15 +759,21 @@ function tagAttrs(tag) {
   return a;
 }
 const HDR_OK = /^[\x20-\x7e]+$/;   // Header-Werte: nur druckbares ASCII
-function ownUrl(u) {   // relativ ("/...", nicht "//") oder https auf einem eigenen Host; sonst ""
+// Hosts, deren Adressen ein Preload-Header nennen darf: die Website selbst und die Bild-Domain (nicht jede *.m365.fm-Subdomain wie admin, api-dub, partner:
+// ein Link-Header loest bei jedem Besucher einen GET mit Cookies aus, bei Early Hints schon vor dem HTML)
+const PRELOAD_HOSTS = new Set(["www.m365.fm", "m365.fm", "dub.m365.fm", "staging.m365.fm", "img.m365.fm"]);
+function ownUrl(u) {   // relativ ("/...", nicht "//") oder https auf PRELOAD_HOSTS; sonst ""
   if (!u || !HDR_OK.test(u) || /[<>"\s]/.test(u)) return "";
   if (u.startsWith("/") && !u.startsWith("//")) return u;
-  try { const x = new URL(u); return x.protocol === "https:" && OWN_HOST.test(x.hostname) ? u : ""; } catch { return ""; }
+  try { const x = new URL(u); return x.protocol === "https:" && !x.port && !x.username && PRELOAD_HOSTS.has(x.hostname) ? u : ""; } catch { return ""; }
 }
+// Kopf ohne Inhalte, in denen "<link" nur Text ist: <script> (JSON-LD mit Nutzertexten, z. B. Profil-Headline), <style>, <template>, <noscript>, Kommentare.
+// Unvollstaendiger Block am Ende (Kopf bei PRELOAD_HEAD abgeschnitten): bis zum Ende weg. Erst Bloecke, dann Kommentare (Nutzertext kann so nichts zusammenfuegen).
+const headTags = (head) => String(head || "").replace(/<(script|style|template|noscript)\b[^>]*>[\s\S]*?(?:<\/\1\s*>|$)/gi, "").replace(/<!--[\s\S]*?(?:-->|$)/g, "");
 const linkParam = (k, v) => (v && HDR_OK.test(v) && !v.includes('"') ? `; ${k}="${v}"` : "");
 export function preloadLinks(head) {
   const out = [];
-  for (const tag of String(head || "").match(/<link\b[^>]*>/gi) || []) {
+  for (const tag of headTags(head).match(/<link\b[^>]*>/gi) || []) {
     if (out.length >= PRELOAD_MAX) break;
     const a = tagAttrs(tag), rel = (a.rel || "").toLowerCase().split(/\s+/);
     if (rel.includes("stylesheet") && "data-sbar" in a) {
@@ -842,6 +870,7 @@ const site = {
     if (p === SPEC_PATH && WWW_HOSTS.has(url.hostname) && (request.method === "GET" || request.method === "HEAD")) return speculationRules(request);   // Regeln fuer den Vorabruf (s. withSpeculation)
     if (p === "/") { const hl = homeLang(request); if (hl) return langRedirect(url.origin, hl, url.search); }   // vor jedem Cache: eine englische Startseite aus dem Cache erreicht nie einen deutschen Browser
     const cf = isImg ? { cacheEverything: true, cacheTtl: 604800, polish: "lossy", mirage: true }
+      : HASHED.test(p) ? { cacheEverything: true, cacheTtlByStatus: { "200-299": 86400, "404": 60, "500-599": 0 } }   // gehasht: 404 (noch nicht deployt) nur kurz
       : isStatic ? { cacheEverything: true, cacheTtl: 86400 }
       : { cacheEverything: true, cacheTtlByStatus: { "200-299": EDGE_HTML, "404": 60, "500-599": 0 } };   // HTML: 4 h am Rand, Purge nach jedem Deploy
     // T41: ohne Query zum Ursprung - GitHub Pages ist statisch, so landen ?utm_…/?fbclid=… im selben Cache-Eintrag (Zone steht auf Caching-Level "basic": mit Query sonst gar kein Cache)
@@ -878,6 +907,10 @@ const site = {
         }
       }
     }
+    // Suchindex (/search/manifest.json, /search/part-<n>.json) liegt nur im R2-Bucket (r2out/): in jedem Zustand erst dort, ohne vorher GitHub Pages (404)
+    // zu fragen (Ladezeit 27.11.2026, Gegenpruefung). Fehlt er dort (noch nicht geladen), wie bisher GitHub Pages - ohne den Bucket danach erneut zu lesen.
+    const searchR2 = !!env.PAGES && (request.method === "GET" || request.method === "HEAD") && SEARCH_R2.test(p);
+    if (searchR2) { const r = await searchIndex(request, env, ctx, url, p); if (r) return r; }
     const t0 = Date.now(), res = await fetch(url.search ? new Request(url.origin + p, rq) : rq, { cf }), tOrigin = Date.now() - t0;
     // Weiterleitung des Ursprungs (z. B. GitHub Pages /callback -> /callback/) bekam keine Query, weil wir ohne Query abrufen (T41).
     // Query wieder anhaengen, sonst verliert die OAuth-Rueckleitung den Code (?code=…) - so geschehen am 4.11. beim YouTube-Verbinden.
@@ -897,19 +930,6 @@ const site = {
     if (res.status === 404 && env.MIGRATED === "1" && /^(\/[a-z]{2})?\/show\/episodes\/[a-z0-9-]+\/?$/.test(p)) {   // T12: umbenannte Folge (show/redirects.json), vor dem R2-Rueckfall mit der alten Seite
       const to = (await redirectMap())[p.replace(/\/+$/, "")];
       if (to) return redirect(request, url.origin, (await finalTarget(to, migrated)) || to, url.search);
-    }
-    if (res.status === 404 && env.PAGES && /^\/search\/(manifest|part-\d{1,4})\.json$/.test(p)) {   // T37: Suchindex liegt im R2-Bucket (pages/search/...)
-      // Kanten-Cache 600 s (wie s-maxage) unter /__r2f<pfad> (Kostenanalyse 25.11.2026: vorher jede Anfrage eine R2-Lesung). Den Schluessel leert der
-      // Deploy wie jede geaenderte r2out-Datei (tools/purge_changed.py --r2, Liste aus r2-changed.json). Nur Treffer werden gemerkt.
-      const sh = { "content-type": "application/json; charset=utf-8", "cache-control": "public, max-age=300, s-maxage=600", "x-robots-tag": "noindex", "access-control-allow-origin": "*" };
-      const sk = new Request(url.origin + "/__r2f" + p), c = await caches.default.match(sk).catch(() => null);
-      if (c) return new Response(request.method === "HEAD" ? null : c.body, { headers: { ...sh, "x-m365-cache": "HIT" } });
-      const obj = await env.PAGES.get("pages" + p).catch(() => null);
-      let buf = null; if (obj) { try { buf = await obj.arrayBuffer(); } catch { buf = null; } }
-      if (buf) {
-        ctx.waitUntil(caches.default.put(sk, new Response(buf.slice(0), { headers: { "content-type": sh["content-type"], "cache-control": "public, max-age=600" } })).catch(() => {}));
-        return new Response(request.method === "HEAD" ? null : buf, { headers: { ...sh, "x-m365-cache": "MISS" } });
-      }
     }
     // Sitemap, Datenexport oder Transkript aus dem R2-Bucket (pages/<datei>, s. r2File) - nicht, wenn R2 zuerst das Objekt mit gueltiger Kennung schon
     // vermisst hat oder es im kalten Zustand schon direkt gefragt wurde (r2tried)
@@ -946,7 +966,7 @@ const site = {
     }
     if (res.status === 404 && FEED_ITEM.test(p) && (request.method === "GET" || request.method === "HEAD")) return feedGone(request, p);
     const h = new Headers(res.headers);
-    finishHeaders(h, p);
+    finishHeaders(h, p, res.status);
     if (page) h.append("server-timing", `src;desc="pages", ready;desc="${ready}", origin;dur=${tOrigin}`);
     const out = new Response(request.method === "HEAD" ? null : res.body, { status: res.status, statusText: res.statusText, headers: h });
     if (r2only) logR2Page(request, p, "pages", ready, out, null, tOrigin);
