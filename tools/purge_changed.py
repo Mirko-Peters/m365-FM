@@ -2,8 +2,9 @@
 Bei mehr als MAX_URLS Adressen (z. B. neues Stylesheet in jeder Seite) wird einmal alles geleert. Aufruf: python tools/purge_changed.py alt.json neu.json [r2-changed.json ...]
 Umgebung: CLOUDFLARE_API_TOKEN, CF_ZONE_ID (optional, sonst Zonensuche), BASE (https://www.m365.fm), INDEXNOW_KEY, R2_KEYS, R2_PENDING
 
-Kanten-Cache ueber Deploys erhalten (17.11.2026): Die Hashes sind Purge-Hashes (tools/page_hashes.py, ohne die Liste "neueste Folgen" der Seitenleiste):
-kommt nur eine neue Folge dazu, bleiben alle anderen Seiten im Cache. Der Site-Worker haelt Seiten und Dateien aus R2 (R2_PRIMARY=1) unter einem
+Kanten-Cache ueber Deploys erhalten (17.11.2026): Die Hashes sind Purge-Hashes (tools/page_hashes.py; bis 25.11.2026 ohne die Liste "neueste Folgen"
+der Seitenleiste, seitdem ueber die ganze Seite, weil es die Liste nicht mehr gibt): kommt nur eine neue Folge dazu, bleiben alle anderen Seiten im Cache.
+Weil damit jede Byte-Aenderung geleert wird, lebt ein /__r2f-Eintrag seit 25.11.2026 R2_EDGE_TTL (1 Tag, sitewrk/wrangler.toml) statt 4 h. Der Site-Worker haelt Seiten und Dateien aus R2 (R2_PRIMARY=1) unter einem
 Schluessel ohne Bau-Kennung (/__r2f<adresse>, sitewrk/index.js r2CacheKey), sie ueberleben also einen Deploy - und muessen deshalb bei jeder Aenderung
 geleert werden, und zwar erst, wenn der Bucket vollstaendig neu ist (nach dem Spiegel): bis dahin kann ein Isolat mit einer alten Kennung (bis 30 s
 gemerkt, nach Leerlauf auch laenger) noch alte Objekte lesen und neu cachen. Und vor der neuen Kennung, sonst kaeme kurz der alte Stand aus dem Cache.
