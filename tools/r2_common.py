@@ -11,6 +11,11 @@ CT = {".html": "text/html; charset=utf-8", ".json": "application/json; charset=u
 IMG = re.compile(r"\.(png|jpe?g|gif|webp|avif|svg|ico)$", re.I)   # wie im Site-Worker: Bilder kommen nie aus R2 zuerst, also auch nie unter /__r2c
 THREADS = max(1, int(os.environ.get("R2_THREADS") or 32))   # parallele Uploads (vorher fest 16; naechtlicher Bau: ~28.000 geaenderte Seiten in 18 min)
 GONE_KEY = "meta/gone.json"   # Liste der als entfernt markierten Schluessel (nur r2_site_sync.py schreibt sie)
+# Cache-Control eines als entfernt markierten Objekts: wie normale Uploads (public, max-age=600) plus die Erweiterungs-Direktive m365-gone. Der Site-Worker
+# sieht im Zonen-Cache (R2_ZONE_CACHE, sitewrk/index.js goneMarked) keine Custom-Metadaten, wohl aber Cache-Control - so erkennt er die Markierung ohne
+# Bucket-Lesung. Browser und Cloudflare ignorieren unbekannte Direktiven.
+GONE_MARK = "m365-gone"
+GONE_CC = "public, max-age=600, " + GONE_MARK
 
 
 def ctype(key):

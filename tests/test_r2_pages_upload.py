@@ -13,17 +13,17 @@ class NoSuchKey(Exception):
 class FakeS3:
     """Bucket im Speicher: Objekte mit Inhalt, Content-Type und Metadaten; Listen seitenweise wie S3."""
     def __init__(self):
-        self.obj, self.log, self.fail_put, self.fail_once = {}, [], set(), set()
+        self.obj, self.log, self.fail_put, self.fail_once, self.cc = {}, [], set(), set(), {}   # cc: Cache-Control je Schluessel
     def put_object(self, Bucket, Key, Body, ContentType, CacheControl, Metadata=None):
         if Key in self.fail_put: raise RuntimeError("boom")
         if Key in self.fail_once: self.fail_once.discard(Key); raise RuntimeError("SlowDown")
-        self.obj[Key] = {"body": Body, "ct": ContentType, "meta": dict(Metadata or {})}; self.log.append(("put", Key))
+        self.obj[Key] = {"body": Body, "ct": ContentType, "meta": dict(Metadata or {})}; self.cc[Key] = CacheControl; self.log.append(("put", Key))
     def copy_object(self, Bucket, Key, CopySource, MetadataDirective, ContentType, CacheControl, Metadata):
         assert CopySource == {"Bucket": Bucket, "Key": Key} and MetadataDirective == "REPLACE"
-        self.obj[Key] = {**self.obj[Key], "ct": ContentType, "meta": dict(Metadata)}; self.log.append(("copy", Key))
+        self.obj[Key] = {**self.obj[Key], "ct": ContentType, "meta": dict(Metadata)}; self.cc[Key] = CacheControl; self.log.append(("copy", Key))
     def head_object(self, Bucket, Key):
         if Key not in self.obj: raise NoSuchKey(Key)
-        return {"Metadata": self.obj[Key]["meta"]}
+        return {"Metadata": self.obj[Key]["meta"], "ContentType": self.obj[Key].get("ct"), "CacheControl": self.cc.get(Key)}
     def get_object(self, Bucket, Key):
         if Key not in self.obj: raise NoSuchKey(Key)
         return {"Body": io.BytesIO(self.obj[Key]["body"])}
@@ -45,6 +45,7 @@ def run(mod, argv, env, s3):
         for m in ("r2_common", mod): sys.modules.pop(m, None)
         m = importlib.import_module(mod)
         if mod == "r2_site_sync":
+            if argv[0] == "--remark-gone": return m.remark_gone()
             return m.marker(Path(argv[1])) if argv[0] == "--marker" else m.main(Path(argv[0]))
         return m.main()
     finally:
@@ -105,6 +106,30 @@ class SyncTest(Base):
         self.assertEqual(self.sync(), 0)
         self.assertFalse(self.s3.gone("pages/p3/index.html"), "wieder erzeugt -> neu geladen, Markierung weg")
         self.assertNotIn("pages/p3/index.html", json.loads(self.s3.obj["meta/gone.json"]["body"]))
+
+    def test_gone_marker_in_cache_control_and_remark_old_marks(self):
+        """27.11.2026: Markierung setzt Cache-Control mit m365-gone (Zonen-Cache des Site-Workers sieht keine Custom-Metadaten); --remark-gone holt das fuer
+        alte Markierungen nach (gleiche Metadaten, gleicher Typ, Inhalt bleibt), laesst wieder geladene und schon markierte Objekte in Ruhe, loescht nichts."""
+        tree(self.docs, {f"p{i}/index.html": str(i) for i in range(10)})
+        self.keys.write_text(json.dumps(["pages/pl/x/index.html"]))
+        self.assertEqual(self.sync(), 0)
+        self.assertEqual(self.s3.cc["pages/p1/index.html"], "public, max-age=600", "normaler Upload ohne Marker")
+        (self.docs / "p3" / "index.html").unlink()
+        self.assertEqual(self.sync(), 0)
+        o = self.s3.obj["pages/p3/index.html"]; self.assertTrue(self.s3.gone("pages/p3/index.html")); self.assertEqual(self.s3.cc["pages/p3/index.html"], "public, max-age=600, m365-gone")
+        # Altbestand: Markierung von vor dem 27.11. (ohne Marker), ein inzwischen wieder geladenes Objekt (in der Liste, aber nicht mehr gone)
+        self.s3.obj["pages/alt/x.json"] = {"body": b"alt", "ct": "application/json; charset=utf-8", "meta": {"src": "docs", "gone": "1"}}; self.s3.cc["pages/alt/x.json"] = "public, max-age=600"
+        self.s3.obj["pages/zurueck/index.html"] = {"body": b"z", "ct": "text/html; charset=utf-8", "meta": {"src": "docs"}}; self.s3.cc["pages/zurueck/index.html"] = "public, max-age=600"
+        lst = json.loads(self.s3.obj["meta/gone.json"]["body"]) + ["pages/alt/x.json", "pages/zurueck/index.html"]
+        self.s3.obj["meta/gone.json"]["body"] = json.dumps(lst).encode()
+        n_before = len(self.s3.obj); self.s3.log.clear()
+        self.assertEqual(run("r2_site_sync", ["--remark-gone"], self.denv, self.s3), 0)
+        a = self.s3.obj["pages/alt/x.json"]
+        self.assertEqual((self.s3.cc["pages/alt/x.json"], a["ct"], a["meta"], a["body"]), ("public, max-age=600, m365-gone", "application/json; charset=utf-8", {"src": "docs", "gone": "1"}, b"alt"))
+        self.assertEqual(self.s3.cc["pages/zurueck/index.html"], "public, max-age=600", "wieder geladen: unberuehrt")
+        self.assertEqual([x for x in self.s3.log], [("copy", "pages/alt/x.json")], "nur das alte, nichts geloescht, nichts neu geladen")
+        self.assertEqual(len(self.s3.obj), n_before)
+        self.s3.log.clear(); self.assertEqual(run("r2_site_sync", ["--remark-gone"], self.denv, self.s3), 0); self.assertEqual(self.s3.log, [], "zweiter Lauf: nichts zu tun")
 
     def test_lost_manifest_still_marks_from_bucket_listing(self):
         tree(self.docs, {f"p{i}/index.html": str(i) for i in range(10)})

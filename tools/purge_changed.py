@@ -16,6 +16,10 @@ Darum zwei Schritte:
     Liste und leert sie erst nach vollstaendigem Erfolg. Scheitert er, bleibt die Liste fuer den naechsten Lauf, Ende 1 (der Deploy-Job setzt dann die
     Bau-Kennung nicht -> GitHub Pages).
 Zusaetzlich im Build-Job: python tools/purge_changed.py --r2-upload r2-changed.json direkt nach dem Upload von r2out/ (siehe main_r2_upload).
+Zonen-Cache (27.11.2026, sitewrk/index.js zoneGet): steht R2_ZONE_CACHE im Live-Teil von sitewrk/wrangler.toml auf "1" (oder Umgebung R2_ZONE_PURGE=1),
+leeren main_r2 und main_r2_upload zusaetzlich https://img.m365.fm/pages/<schluessel> (zone_url, gleiche Kodierung wie der Worker, Faelle in
+sitewrk/test/zone_cases.json). Bei "0" nicht: dann fuellt niemand diesen Cache (oeffentlich ist /pages/* 404, der Worker fragt ihn nicht), und die doppelte
+Liste kostete API-Aufrufe (Grenze 1200 je 5 Minuten). MAX_URLS gilt fuer die gemeinsame Liste.
 Scheitert ein Stapel auch nach Wiederholungen, wird einmal alles geleert (lieber kalt als veraltet)."""
 import hashlib, json, os, re, sys, time, urllib.error, urllib.parse, urllib.request
 
@@ -28,6 +32,33 @@ R2F = "/__r2f"   # Kanten-Cache des R2-Ursprungs im Site-Worker (Pfad-Schluessel
 IMG = re.compile(r"\.(png|jpe?g|gif|webp|avif|svg|ico)$", re.I)   # Bilder kommen nie aus R2 zuerst
 base = os.environ.get("BASE", "https://www.m365.fm").rstrip("/")
 q = lambda u: urllib.parse.quote(u, safe="/%:@!$&'()*+,;=-._~")   # Adressen wie im Browser (Prozent-Kodierung), sonst trifft der Purge Unicode-Pfade nicht
+ZONE = "https://img.m365.fm"   # R2_ZONE_HOST live (sitewrk/wrangler.toml); Staging leert nie die Live-Zone und braucht keinen Purge (R2_ZONE_TTL 300 s)
+WRANGLER = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "sitewrk", "wrangler.toml")
+
+
+def zone_url(u):
+    """Adresse (dekodiert, /a/ oder /x.json) -> URL des Eintrags im Zonen-Cache, "" ohne Zonen-Weg (Punkt-Segmente). Wie sitewrk/index.js zoneUrl(r2Key(u)):
+    anders als q() wird ein "%" im Pfad als %25 kodiert (der Worker kodiert den dekodierten Schluessel vollstaendig)."""
+    k = "pages" + (u + "index.html" if u.endswith("/") else u)
+    if any(s in (".", "..") for s in k.split("/")): return ""
+    return ZONE + "/" + urllib.parse.quote(k, safe="/!$&'()*+,;=:@-._~")
+
+
+def zone_on(path=WRANGLER):
+    """Zonen-Cache live an? Umgebung R2_ZONE_PURGE ("1"/"0") geht vor, sonst R2_ZONE_CACHE im Live-Teil von sitewrk/wrangler.toml (unlesbar: aus)."""
+    v = os.environ.get("R2_ZONE_PURGE", "")
+    if v in ("0", "1"): return v == "1"
+    try:
+        import tomllib
+        with open(path, "rb") as f: return str((tomllib.load(f).get("vars") or {}).get("R2_ZONE_CACHE", "")) == "1"
+    except Exception: return False
+
+
+def r2_urls(urls):
+    """Purge-Liste fuer die R2-Kanten-Caches: /__r2f<adresse> (Cache API) und, wenn der Zonen-Cache an ist, dessen URL."""
+    out = [base + R2F + q(u) for u in urls]
+    if zone_on(): out += [z for z in (zone_url(u) for u in urls) if z]
+    return out
 
 
 def cf(path, body=None):
@@ -113,7 +144,7 @@ def main_r2(p, new_f=""):
     if not os.environ.get("CLOUDFLARE_API_TOKEN"): print("::error::Kein Cloudflare-Token - R2-Kanten-Cache nicht geleert"); return 1
     zone = zone_id()
     if not zone: print("::error::Zone-ID nicht gefunden - R2-Kanten-Cache nicht geleert"); return 1
-    ok = everything(zone, "R2-Ursprung: Liste unbekannt") if all_ else purge(zone, [base + R2F + q(u) for u in sorted(urls)], "R2-Ursprung")
+    ok = everything(zone, "R2-Ursprung: Liste unbekannt") if all_ else purge(zone, r2_urls(sorted(urls)), "R2-Ursprung")
     if not ok: print("::error::R2-Kanten-Cache nicht vollstaendig geleert - die Adressen bleiben fuer den naechsten Lauf vorgemerkt"); return 1
     save_pending(p, False, (), digest(new_f) if new_f else hashes or ""); return 0
 
@@ -129,7 +160,7 @@ def main_r2_upload(changed_f):
     if not os.environ.get("CLOUDFLARE_API_TOKEN"): print("::warning::Kein Cloudflare-Token - /__r2f der hochgeladenen Seiten erst im Deploy-Job geleert"); return 0
     zone = zone_id()
     if not zone: print("::warning::Zone-ID nicht gefunden - /__r2f der hochgeladenen Seiten erst im Deploy-Job geleert"); return 0
-    if not purge(zone, [base + R2F + q(u) for u in urls], "R2-Upload (Build-Job)"): print("::warning::R2-Kanten-Cache der hochgeladenen Seiten nicht vollstaendig geleert")
+    if not purge(zone, r2_urls(urls), "R2-Upload (Build-Job)"): print("::warning::R2-Kanten-Cache der hochgeladenen Seiten nicht vollstaendig geleert")
     return 0
 
 

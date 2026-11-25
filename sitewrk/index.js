@@ -7,7 +7,10 @@ const SEC = {
   "x-frame-options": "SAMEORIGIN",
 };
 const IMG = /\.(png|jpe?g|gif|webp|avif|svg|ico)$/i, STATIC = /^\/(assets|covers|og)\//i, FONT = /\.(woff2?|ttf|otf)$/i;
-const HASHED = /^\/assets\/(site\.[0-9a-f]{8,}\.css|(page|a11y)\.[0-9a-f]{8,}\.js)$/i;   // Dateiname traegt den Inhalts-Hash: darf ein Jahr im Browser bleiben
+// Dateiname traegt den Inhalts-Hash (<name>.<hex8+>.css|js, Seitenbau site_assets.hashed bzw. css_link): darf ein Jahr im Browser bleiben (immutable).
+// Ladezeit 27.11.2026: vorher nur site.<hash>.css und page|a11y.<hash>.js, jetzt jedes gehashte Stylesheet oder Skript unter /assets/ (eine Ebene).
+// Ungehashte Namen (page.js, wk-de.js, cm-de.js?v=...) passen nie: dort fehlt der Punkt-Hex-Teil vor der Endung; sie behalten 1 h.
+export const HASHED = /^\/assets\/[a-z0-9][a-z0-9_-]*\.[0-9a-f]{8,}\.(?:css|js)$/i;
 // T41 Caching: HTML 4 h am Rand statt 10 Min (nach jedem Deploy leert tools/purge_changed.py genau die geaenderten Adressen),
 // Sprachseiten aus R2 ebenfalls 4 h im Kanten-Cache (Cache API, Schluessel /__r2c/<pfad>/ bzw. mit R2 als Ursprung /__r2f<pfad>, s. r2CacheKey; Purge nach
 // dem Upload bzw. vor der Bau-Kennung), Browser fragt bei HTML immer nach (304 per ETag/Last-Modified)
@@ -153,9 +156,76 @@ async function r2Ready(env, url, ctx) {
 // mit Bau-Kennung im Schluessel (/__r2c/@<kennung><pfad>), Eintraege eines frueheren Baus treffen nie.
 export const PATH_KEY = /-pfad$/;
 export const r2CacheKey = (origin, build, cp) => origin + (PATH_KEY.test(build) ? "/__r2f" + cp : "/__r2c/@" + build + cp);
+// ---------------------------------------------------------------- R2 ueber den Zonen-Cache (Schalter R2_ZONE_CACHE, Ladezeit 27.11.2026, Punkt 2)
+// Heute liest r2First ueber caches.default (Cache API): je Rechenzentrum, ohne Tiered Cache und ohne Request Collapsing. Mit R2_ZONE_CACHE="1" holt der
+// Worker dasselbe Objekt zuerst als normalen Zonen-Abruf von der oeffentlichen R2-Domain (live https://img.m365.fm, Staging https://img-staging.m365.fm,
+// R2_ZONE_HOST), Schluessel = die URL selbst (Host + /pages/<schluessel>): Live und Staging, Sprachen und Seiten sind dadurch getrennt; keine Query,
+// keine Client-Header (kein Cookie, kein Range, kein Accept-Language). Annahmen (Doku hier nicht abrufbar, auf Staging zu pruefen): Tiered Cache und
+// Request Collapsing greifen fuer solche Abrufe; ein Abruf des Workers in die eigene Zone loest keine Worker-Route aus (im Betrieb belegt: fetch an
+// www.m365.fm erreicht GitHub Pages). Laeuft der Abruf doch in einen Worker, erkennt zoneGet das an x-m365-guard bzw. x-m365-environment.
+// Oeffentlich bleibt /pages/* und /meta/* auf img.m365.fm 404 (Routen in wrangler.toml, der Worker antwortet vor dem Cache).
+// Nur Treffer (200) kommen aus diesem Weg. Alles andere - 404, als entfernt markiert (Cache-Control-Marker m365-gone aus tools/r2_site_sync.py bzw.
+// x-amz-meta-gone), 5xx, Fehler, Zeitueberschreitung, eigener Worker - nimmt in derselben Anfrage den heutigen Weg (Cache API + Bindung, dort die
+// Pruefung von customMetadata.gone). Nach einem Fehler pausiert der Weg je Isolat ZONE_PAUSE ms.
+// Live erst auf "1", wenn alle bestehenden Markierungen den Marker tragen (python tools/r2_site_sync.py --remark-gone): sonst kaeme eine als entfernt
+// markierte Seite ohne Marker aus der Zone. Purge: tools/purge_changed.py leert bei R2_ZONE_CACHE="1" (wrangler.toml) zusaetzlich zoneUrl(...).
+export const ZONE_HOSTS = { live: "https://img.m365.fm", staging: "https://img-staging.m365.fm" };
+const ZONE_PAUSE = 60000;
+let ZONE_DOWN = 0, ZONE_WAIT = 3000;
+export function __resetZone(wait = 3000) { ZONE_DOWN = 0; ZONE_WAIT = wait; }   // nur fuer Tests
+// Host des Zonen-Wegs oder "" (aus). Staging nur img-staging.m365.fm, live nur img.m365.fm - nie umgekehrt (Staging darf Live nie vergiften).
+export function zoneHost(env) {
+  if (!env || env.R2_ZONE_CACHE !== "1") return "";
+  const want = isStaging(env) ? ZONE_HOSTS.staging : ZONE_HOSTS.live;
+  return String(env.R2_ZONE_HOST || "").replace(/\/+$/, "") === want ? want : "";
+}
+// R2_ZONE_TTL (60 bis 604800 s) begrenzt die Kanten-Dauer im Zonen-Weg nach oben; sonst gilt die des heutigen Wegs
+export const zoneTtl = (env, ttl) => { const n = Number(env && env.R2_ZONE_TTL); return Number.isInteger(n) && n >= 60 && n <= 604800 ? Math.min(ttl, n) : ttl; };
+// Schluessel -> URL. Kodierung wie tools/purge_changed.py zone_url (urllib.parse.quote mit safe="/!$&'()*+,;=:@-._~"), gemeinsame Faelle in
+// sitewrk/test/zone_cases.json. "" bei Punkt-Segmenten ("." / ".."): die URL-Normalisierung koennte sonst aus pages/ heraus fuehren (z. B. meta/).
+export function zoneUrl(host, key) {
+  if (!host || !key.startsWith("pages/") || key.split("/").some((s) => s === "." || s === "..")) return "";
+  return host + "/" + encodeURIComponent(key).replace(/%(2F|24|26|2B|2C|3B|3D|3A|40)/g, (_m, x) => String.fromCharCode(parseInt(x, 16)));
+}
+export const goneMarked = (h) => /(?:^|,)\s*m365-gone\s*(?:,|$)/i.test(h.get("cache-control") || "") || h.get("x-amz-meta-gone") === "1";
+// -> Response (200, Koerper ungelesen) oder null (heutiger Weg). st.zc: Ergebnis fuer Server-Timing (cf-cache-status bzw. Grund des Rueckfalls).
+export async function zoneGet(env, key, ttl, st = {}) {
+  const host = zoneHost(env), u = host ? zoneUrl(host, key) : "";
+  if (!u) return null;
+  if (Date.now() < ZONE_DOWN) { st.zc = "paused"; return null; }
+  const ac = new AbortController(); let timer;
+  let res;
+  try {
+    // Zeitlimit nur bis zu den Headern: der Koerper (Exporte bis ~75 MB) darf danach so lange stroemen, wie der Browser braucht
+    res = await Promise.race([
+      fetch(new Request(u, { method: "GET", signal: ac.signal }), { cf: { cacheEverything: true, cacheTtlByStatus: { "200-299": ttl, "404": Math.min(R2_MISS_TTL, ttl), "500-599": 0 } } }),
+      new Promise((_r, rej) => { timer = setTimeout(() => { ac.abort(); rej(new Error("timeout")); }, ZONE_WAIT); })]);
+  } catch (e) { ZONE_DOWN = Date.now() + ZONE_PAUSE; st.zc = e && e.message === "timeout" ? "timeout" : "error"; return null; }
+  finally { clearTimeout(timer); }
+  const drop = (why, pause) => { if (pause) ZONE_DOWN = Date.now() + ZONE_PAUSE; st.zc = why; try { res.body && res.body.cancel(); } catch { /* egal */ } return null; };
+  if (res.headers.get("x-m365-guard") || res.headers.get("x-m365-environment")) return drop("worker", true);   // lief in einen Worker statt nach R2
+  if (res.status !== 200) return drop(String(res.status), res.status >= 500);
+  if (goneMarked(res.headers)) return drop("gone", false);
+  st.zc = (res.headers.get("cf-cache-status") || "none").toUpperCase();
+  return res;
+}
 async function r2First(request, env, ctx, url, p, key, build, st = {}) {   // st.miss = true: Objekt fehlt im Bucket oder ist als entfernt markiert (kein Lesefehler)
   const html = key.endsWith("/index.html"), ext = html ? "html" : extOf(key);
   const cp = html ? (p.endsWith("/index.html") ? p.slice(0, -"index.html".length) : r2Path(p)) : p;   // /a/index.html und /a/ teilen den Eintrag
+  const ttl = HASHED.test(p) ? 2592000 : FONT.test(p) ? 86400 : PATH_KEY.test(build) ? r2EdgeTtl(env) : R2_TTL;   // /__r2f: R2_EDGE_TTL (Purge je Adresse), /__r2c/@<bau>: 4 h
+  // Zonen-Cache (R2_ZONE_CACHE, s. zoneGet): nur mit Pfad-Kennung ("-pfad"), weil sein Schluessel keine Bau-Kennung traegt und nur so geleert wird
+  if (PATH_KEY.test(build) && zoneHost(env)) {
+    const z = await zoneGet(env, key, zoneTtl(env, ttl), st);
+    if (z) {
+      const zm = z.headers.get("content-type");
+      const h = new Headers({ "content-type": html ? CT.html : (zm && !/octet-stream/i.test(zm) ? zm : CT[ext] || "application/octet-stream"), "x-m365-cache": "Z-" + st.zc, "x-m365-src": "r2", "access-control-allow-origin": "*" });
+      for (const k of ["etag", "last-modified"]) { const v = z.headers.get(k); if (v) h.set(k, v); }
+      finishHeaders(h, p);
+      if (notModified(request, h.get("etag"), h.get("last-modified"))) { try { z.body && z.body.cancel(); } catch { /* egal */ } return new Response(null, { status: 304, headers: h }); }
+      if (request.method === "HEAD") { try { z.body && z.body.cancel(); } catch { /* egal */ } return new Response(null, { status: 200, headers: h }); }
+      return new Response(z.body, { status: 200, headers: h });
+    }
+  }
   const cache = caches.default, ck = new Request(r2CacheKey(url.origin, build, cp));
   let hit = await cache.match(ck).catch(() => null), state = "HIT";
   if (!hit) {
@@ -168,7 +238,6 @@ async function r2First(request, env, ctx, url, p, key, build, st = {}) {   // st
     let buf; try { buf = await obj.arrayBuffer(); } catch { return null; }   // Lesefehler: GitHub Pages statt Fehlerseite (und die R2-Rueckfaelle nach dem 404 versuchen es erneut)
     const meta = obj.httpMetadata && obj.httpMetadata.contentType;
     const ct = html ? CT.html : (meta && !/octet-stream/i.test(meta) ? meta : CT[ext] || "application/octet-stream");
-    const ttl = HASHED.test(p) ? 2592000 : FONT.test(p) ? 86400 : PATH_KEY.test(build) ? r2EdgeTtl(env) : R2_TTL;   // /__r2f: R2_EDGE_TTL (Purge je Adresse), /__r2c/@<bau>: 4 h
     hit = new Response(buf, { headers: { "content-type": ct, "etag": obj.httpEtag, "last-modified": obj.uploaded.toUTCString(), "cache-control": `public, max-age=${ttl}` } });
     ctx.waitUntil(cache.put(ck, hit.clone()).catch(() => {}));
   }
@@ -346,7 +415,31 @@ const GONE_LANG = /^\/(pa|hi|ml|ta|te)(\/|$)/, MIRKO = /^(\/[a-z]{2})?\/communit
 const LANG_EP = /^\/(de|es|fr|it|pt|nl|pl|id|ru|uk|ar|he|ja|ko)\/show\/episodes\/([a-z0-9-]+)\/?$/;
 // Seiten, die es nur im R2-Bucket gibt (Nachbau von site_size.r2_only fuer HTML-Verzeichnisse): Entitaeten aller Sprachen (site_entities.py) und alle
 // Seiten der Sprachen ausser en/de (PAGES_LANGS) - nicht die Startseite /<l>/ selbst, die liegt in GitHub Pages. Sprachen wie LANG_EP ohne de.
-export const R2_ONLY_PAGE = /^\/(?:(?:[a-z]{2}\/)?entity\/[^/]+|(?:es|fr|it|pt|nl|pl|id|ru|uk|ar|he|ja|ko)\/.+)\/$/;
+// Seit 27.11.2026 (Ladezeit, Luecken von #602) auch: deutsche Folgenseiten /de/show/episodes/<slug>/ (site_podpage.py, nur write_r2) und die
+// Glossar-Hinweisseiten /glossary/<id>/, /de/glossary/<id>/ (site_learn.py, nur write_r2) - nicht /glossary/ selbst. Gemischt und deshalb NICHT hier:
+// uebersetzte Blogbeitraege (/de)?/community/u/<h>/blog/<slug>/ (Originale in docs/, ein direkter Versuch kostete dort eine R2-Lesung vor GitHub Pages).
+// Faelle: sitewrk/test/r2only_cases.json (auch fuer tests/test_r2_only_paths.py).
+export const R2_ONLY_PAGE = /^\/(?:(?:[a-z]{2}\/)?entity\/[^/]+|(?:es|fr|it|pt|nl|pl|id|ru|uk|ar|he|ja|ko)\/.+|de\/show\/episodes\/[a-z0-9-]+|(?:de\/)?glossary\/[^/]+)\/$/;
+// Dateien nur im R2-Bucket (Sitemaps ausser en/de, Datenexporte, Transkripte): im kalten Zustand gleich ueber r2File statt erst GitHub Pages (404)
+export const r2OnlyFile = (p) => SITEMAP_R2.test(p) || R2_EXPORT.test(p) || TRANSCRIPT.test(p);
+// Rueckfall fuer diese Dateien aus pages/<pfad> (vorher drei Bloecke nach dem 404 von GitHub Pages, unveraendert zusammengefasst): Sitemaps indexierbar
+// als application/xml, Exporte als application/json mit noindex (noindexPath), Transkripte mit eigenem Typ (finishHeaders); SEC- und Cache-Header, CORS
+// wie GitHub Pages, ETag/304, HEAD. Sitemaps und Exporte: als entfernt markiert (gone=1) oder nur Spiegel von GitHub Pages (src=docs, dort 404 = wirklich
+// weg) -> null. Transkripte: nur gone=1 -> null (wie bisher). null: der Aufrufer liefert die Antwort von GitHub Pages (bzw. fragt sie erst dann).
+async function r2File(request, env, p) {
+  const sm = SITEMAP_R2.test(p), ex = !sm && R2_EXPORT.test(p), tr = !sm && !ex && TRANSCRIPT.test(p);
+  if (!sm && !ex && !tr) return null;
+  const obj = await env.PAGES.get("pages" + p).catch(() => null);
+  const cm = (obj && obj.customMetadata) || {};
+  if (!obj || cm.gone === "1" || (!tr && cm.src === "docs")) return null;
+  const h = tr ? new Headers() : new Headers({ "content-type": sm ? CT.xml : CT.json, "access-control-allow-origin": "*" });   // CORS wie GitHub Pages
+  if (obj.httpEtag) h.set("etag", obj.httpEtag);
+  if (obj.uploaded) h.set("last-modified", obj.uploaded.toUTCString());
+  finishHeaders(h, p);
+  if (notModified(request, h.get("etag"), h.get("last-modified"))) return new Response(null, { status: 304, headers: h });
+  if (!tr && request.method === "HEAD" && Number.isFinite(obj.size)) h.set("content-length", String(obj.size));   // wie GitHub Pages: Groesse auch per HEAD (GET: Laenge des R2-Datenstroms)
+  return new Response(request.method === "HEAD" ? null : obj.body, { headers: h });
+}
 // Messung (Workers Logs): eine JSON-Zeile je Seitenaufruf einer R2-only-Seite - Weg (src), Herkunft der Bau-Kennung (ready), Kanten-Cache des
 // R2-Wegs (cache = x-m365-cache), Dauern in ms, Rechenzentrum und Land. Keine Query, keine IP, kein User-Agent; kein zusaetzlicher Abruf.
 function logR2Page(request, p, src, ready, res, r2, origin) {
@@ -393,6 +486,8 @@ function stagingHeaders(extra = {}) {
 }
 export async function stagingFetch(request, env) {
   const url = new URL(request.url), p = url.pathname, head = request.method === "HEAD";
+  // img-staging.m365.fm (R2-Domain des Staging-Buckets, nur fuer den Zonen-Cache): oeffentlich immer 404, Route in wrangler.toml [env.staging]
+  if (url.hostname === new URL(ZONE_HOSTS.staging).hostname) return new Response(head ? null : "Not found", { status: 404, headers: stagingHeaders({ "content-type": "text/plain; charset=utf-8", "x-m365-guard": "1" }) });
   if (request.method !== "GET" && !head) return new Response("Method not allowed", { status: 405, headers: stagingHeaders({ allow: "GET, HEAD", "content-type": "text/plain; charset=utf-8" }) });
   if (p === "/robots.txt") return new Response(head ? null : STAGING_ROBOTS, { headers: stagingHeaders({ "content-type": "text/plain; charset=utf-8" }) });
   if (!env.PAGES) return new Response("Staging-Bucket nicht verbunden", { status: 503, headers: stagingHeaders({ "content-type": "text/plain; charset=utf-8" }) });
@@ -400,6 +495,15 @@ export async function stagingFetch(request, env) {
   if (dp.split("/").includes("..") || dp.includes("\0")) return new Response("Bad request", { status: 400, headers: stagingHeaders({ "content-type": "text/plain; charset=utf-8" }) });
   if (!dp.endsWith("/") && !extOf(dp)) return new Response(null, { status: 301, headers: stagingHeaders({ location: url.origin + p + "/" + url.search }) });   // wie GitHub Pages: Verzeichnis ohne "/" -> mit "/"
   const key = r2Key(dp);
+  // Zonen-Cache (R2_ZONE_CACHE="1" in [env.staging]): derselbe Weg wie live in r2First, Treffer direkt; sonst die Bindung wie bisher (inkl. gone-Pruefung)
+  const zst = {}, z = key && zoneHost(env) ? await zoneGet(env, key, zoneTtl(env, 300), zst) : null;
+  if (z) {
+    const zm = z.headers.get("content-type"), zext = key.endsWith("/index.html") ? "html" : extOf(key);
+    const h = stagingHeaders({ "content-type": zext === "html" ? CT.html : (zm && !/octet-stream/i.test(zm) ? zm : CT[zext] || "application/octet-stream"), "server-timing": `zc;desc="${zst.zc}"` });
+    const et = z.headers.get("etag"); if (et) h.set("etag", et);
+    if (head) { try { z.body && z.body.cancel(); } catch { /* egal */ } }
+    return new Response(head ? null : z.body, { status: 200, headers: h });
+  }
   const obj = key ? await env.PAGES.get(key).catch(() => null) : null;
   if (!obj || (obj.customMetadata && obj.customMetadata.gone === "1")) {
     const nf = await env.PAGES.get("pages/404.html").catch(() => null);
@@ -408,6 +512,7 @@ export async function stagingFetch(request, env) {
   }
   const ext = key.endsWith("/index.html") ? "html" : extOf(key), meta = obj.httpMetadata && obj.httpMetadata.contentType;
   const h = stagingHeaders({ "content-type": ext === "html" ? CT.html : (meta && !/octet-stream/i.test(meta) ? meta : CT[ext] || "application/octet-stream") });
+  if (zst.zc) h.set("server-timing", `zc;desc="fb-${zst.zc}"`);   // Zonen-Weg versucht, Rueckfall auf die Bindung (Grund)
   if (obj.httpEtag) h.set("etag", obj.httpEtag);
   return new Response(head ? null : obj.body, { status: 200, headers: h });
 }
@@ -614,9 +719,80 @@ export function withSpeculation(request, env, res) {
   return new Response(res.body, { status: res.status, statusText: res.statusText, headers: h });
 }
 
+// ---------------------------------------------------------------- Preload-Link-Header fuer Early Hints (Ladezeit 27.11.2026, Punkt 4, Schalter PRELOAD_LINK)
+// HTML-Seiten (GET, 200) der eigenen Website bzw. von staging.m365.fm bekommen einen Link-Header mit genau den Ressourcen, die der Kopf derselben Seite
+// schon frueh laedt: das Stylesheet mit data-sbar (generate_site.css_link) als as=style und jedes <link rel="preload" as="image" fetchpriority="high">
+// (LCP-Bild, z. B. site_sidebar.con_preload) mit denselben imagesrcset/imagesizes/media/type - so verwendet der Browser die Vorab-Anfrage und laedt
+// nichts doppelt. Kein crossorigin (der Kopf hat bei Stylesheet und Bild auch keins), keine Schriften (A/B-Test 3.11.: zusaetzliche Prioritaet kostete auf
+// 4G FCP), nur eigene Hosts (m365.fm, *.m365.fm, relativ). Annahme: Cloudflare bildet aus diesen Headern Early Hints (103) auch fuer Worker-Antworten
+// (Zonen-Einstellung Early Hints an; auf Staging mit curl --http2 pruefen). Ohne 103 bleibt ein Link-Header, den der Browser vor dem HTML-Parser sieht.
+// Gelesen wird der Datenstrom nur bis </head> (hoechstens PRELOAD_HEAD Bytes), der Rest stroemt unveraendert; der Koerper bleibt byte-gleich.
+// Auf "/" kommt der Wert hinter den vorhandenen api-catalog-Link. Kein Header bei HEAD, 304, Fehlern, Dateien, partner/admin/profile, img, BYOD.
+const PRELOAD_HEAD = 65536, PRELOAD_MAX = 4;
+const unent = (x) => x.replace(/&(amp|quot|#39|#x27|lt|gt);/gi, (_m, e) => ({ amp: "&", quot: '"', "#39": "'", "#x27": "'", lt: "<", gt: ">" }[e.toLowerCase()]));
+function tagAttrs(tag) {
+  const a = {}, rx = /([a-zA-Z_:][-a-zA-Z0-9_:.]*)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+)))?/g;
+  const body = tag.replace(/^<link\b/i, "").replace(/\/?>$/, "");
+  let m; while ((m = rx.exec(body))) { const k = m[1].toLowerCase(); if (!(k in a)) a[k] = unent(m[2] ?? m[3] ?? m[4] ?? ""); }
+  return a;
+}
+const HDR_OK = /^[\x20-\x7e]+$/;   // Header-Werte: nur druckbares ASCII
+function ownUrl(u) {   // relativ ("/...", nicht "//") oder https auf einem eigenen Host; sonst ""
+  if (!u || !HDR_OK.test(u) || /[<>"\s]/.test(u)) return "";
+  if (u.startsWith("/") && !u.startsWith("//")) return u;
+  try { const x = new URL(u); return x.protocol === "https:" && OWN_HOST.test(x.hostname) ? u : ""; } catch { return ""; }
+}
+const linkParam = (k, v) => (v && HDR_OK.test(v) && !v.includes('"') ? `; ${k}="${v}"` : "");
+export function preloadLinks(head) {
+  const out = [];
+  for (const tag of String(head || "").match(/<link\b[^>]*>/gi) || []) {
+    if (out.length >= PRELOAD_MAX) break;
+    const a = tagAttrs(tag), rel = (a.rel || "").toLowerCase().split(/\s+/);
+    if (rel.includes("stylesheet") && "data-sbar" in a) {
+      const u = ownUrl(a.href); if (u) out.push(`<${u}>; rel=preload; as=style`);
+    } else if (rel.includes("preload") && (a.as || "").toLowerCase() === "image" && (a.fetchpriority || "").toLowerCase() === "high") {
+      const set = (a.imagesrcset || "").trim(), cands = set ? set.split(",").map((c) => c.trim().split(/\s+/)[0]).filter(Boolean) : [];
+      if ("crossorigin" in a || (set && (!cands.length || cands.some((c) => !ownUrl(c))))) continue;   // nur eigene Hosts; crossorigin gibt es im Kopf nicht
+      if (set && !HDR_OK.test(set)) continue;
+      const u = ownUrl(a.href || cands[0]); if (!u) continue;
+      out.push(`<${u}>; rel=preload; as=image${linkParam("imagesrcset", set)}${linkParam("imagesizes", a.imagesizes)}${linkParam("media", a.media)}${linkParam("type", a.type)}; fetchpriority=high`);
+    }
+  }
+  return out;
+}
+export async function withPreload(request, env, res) {
+  if (!env || env.PRELOAD_LINK !== "1" || request.method !== "GET" || res.status !== 200 || !res.body) return res;
+  const url = new URL(request.url);
+  if (url.protocol !== "https:" || request.headers.has("x-partner-rewrite")) return res;
+  if (isStaging(env) ? url.hostname !== "staging.m365.fm" : !WWW_HOSTS.has(url.hostname)) return res;
+  if (!/^text\/html\b/i.test(res.headers.get("content-type") || "")) return res;
+  const reader = res.body.getReader(), chunks = [], dec = new TextDecoder();
+  let n = 0, text = "", end = -1, done = false;
+  try {
+    while (n < PRELOAD_HEAD) {
+      const r = await reader.read();
+      if (r.done) { done = true; break; }
+      chunks.push(r.value); n += r.value.byteLength; text += dec.decode(r.value, { stream: true });
+      end = text.search(/<\/head\s*>/i); if (end >= 0) break;
+    }
+  } catch (e) {   // Lesefehler des Ursprungs: wie ohne Header weitergeben (der Fehler zeigt sich im Datenstrom)
+    const body = new ReadableStream({ start(c) { for (const x of chunks) c.enqueue(x); c.error(e); } });
+    return new Response(body, { status: res.status, statusText: res.statusText, headers: res.headers });
+  }
+  const links = end >= 0 ? preloadLinks(text.slice(0, end)) : [];
+  const body = new ReadableStream({
+    start(c) { for (const x of chunks) c.enqueue(x); if (done) c.close(); },
+    async pull(c) { if (done) return; try { const r = await reader.read(); if (r.done) { done = true; c.close(); } else c.enqueue(r.value); } catch (e) { c.error(e); } },
+    cancel(why) { return reader.cancel(why); },
+  });
+  const h = new Headers(res.headers);
+  if (links.length) { const old = h.get("link"); h.set("link", (old ? old + ", " : "") + links.join(", ")); }
+  return new Response(body, { status: res.status, statusText: res.statusText, headers: h });
+}
+
 const worker = {
   async fetch(request, env, ctx) {
-    return withSpeculation(request, env, await site.fetch(request, env, ctx));
+    return withSpeculation(request, env, await withPreload(request, env, await site.fetch(request, env, ctx)));
   },
 };
 // Auslieferung ohne den Vorabruf-Header (partnerRequest ruft sie direkt auf: partner.m365.fm bekommt ihn nie)
@@ -629,7 +805,8 @@ const site = {
     if (fh) return byodServe(request, env, url, fh);
     // img.m365.fm ist die oeffentliche Adresse des R2-Buckets: Spiegel- und Sprachseiten (pages/) und Verwaltungsdateien (meta/) sind dort nicht
     // gedacht (doppelte Inhalte, als entfernt markierte Seiten). Nur diese Pfade sind hierher geroutet; Bilder (i/, og/) kommen weiter direkt aus R2.
-    if (url.hostname === "img.m365.fm") return new Response("Not found", { status: 404, headers: { "content-type": "text/plain; charset=utf-8", "x-robots-tag": "noindex", "cache-control": "public, max-age=3600" } });
+    // x-m365-guard: zoneGet erkennt daran, dass ein Zonen-Abruf hier statt in R2 gelandet ist (dann heutiger Weg, nie als "fehlt" gewertet)
+    if (url.hostname === "img.m365.fm") return new Response("Not found", { status: 404, headers: { "content-type": "text/plain; charset=utf-8", "x-robots-tag": "noindex", "cache-control": "public, max-age=3600", "x-m365-guard": "1" } });
     if (SCANNER.test(url.pathname)) return new Response(request.method === "HEAD" ? null : "Not found", { status: 404, headers: { ...SEC, "content-type": "text/plain; charset=utf-8", "x-robots-tag": "noindex", "cache-control": "public, max-age=86400" } });   // Scanner (s. SCANNER)
     // partner.m365.fm (PARTNER_HOST): Sponsor-Dashboard auf eigener Subdomain, noindex, nicht in der Sitemap
     const partnerHost = env.PARTNER_HOST || "";
@@ -670,6 +847,7 @@ const site = {
     // ready = mem/cache/cold (Herkunft der Bau-Kennung, s. r2Ready) oder off (R2 zuerst nicht moeglich: Notschalter, Methode, Pfad); Dauern in ms
     let ready = "off", r2miss = false, r2tried = false;   // r2miss: R2 zuerst mit gueltiger Bau-Kennung fand das Objekt nicht; r2tried: R2-only-Seite schon direkt gefragt -> die R2-Rueckfaelle nach dem 404 lesen es nicht noch einmal
     const r2only = page && R2_ONLY_PAGE.test(p);   // nur im Bucket (s. R2_ONLY_PAGE): im kalten Zustand gleich aus R2, Messzeile im Log
+    const r2file = !page && r2OnlyFile(p);   // Datei nur im Bucket (s. r2OnlyFile): im kalten Zustand gleich aus R2
     if (env.R2_PRIMARY === "1" && env.PAGES && !isImg && (request.method === "GET" || request.method === "HEAD") && !p.startsWith("/search/") && p !== "/r2-build.txt" && (page || !request.headers.has("range"))) {
       let dp = p; try { dp = decodeURIComponent(p); } catch { /* ungueltige Kodierung: wie angefragt */ }   // Schluessel im Bucket sind UTF-8 (z. B. /ru/tag/облако/)
       const key = r2Key(dp);
@@ -679,7 +857,8 @@ const site = {
         if (rd.v) {
           const t0 = Date.now(), st = {}, r2 = await r2First(rq, env, ctx, url, p, key, rd.v, st);
           const d = Date.now() - t0;
-          if (r2) { r2.headers.set("server-timing", `src;desc="r2", ready;desc="${ready}", r2;dur=${d}`); if (r2only) logR2Page(request, p, "r2", ready, r2, d); return r2; }
+          const zc = st.zc ? `, zc;desc="${st.zc}"` : "";   // Zonen-Cache (R2_ZONE_CACHE): cf-cache-status bzw. Grund des Rueckfalls
+          if (r2) { r2.headers.set("server-timing", `src;desc="r2", ready;desc="${ready}", r2;dur=${d}${zc}`); if (r2only) logR2Page(request, p, "r2", ready, r2, d); return r2; }
           r2miss = !!st.miss;   // der Bucket enthaelt genau den Bau von GitHub Pages: was dort fehlt, fehlt ueberall
         } else if (r2only) {
           // Keine gueltige Kennung (cold oder "nicht bereit"): R2-only-Seite gleich aus dem Bucket statt GitHub Pages (404) -> R2-Rueckfall.
@@ -687,6 +866,12 @@ const site = {
           const t0 = Date.now(), r2 = await r2Page(rq, env, ctx, url, p), d = Date.now() - t0;
           r2tried = true;
           if (r2) { r2.headers.set("server-timing", `src;desc="r2direct", ready;desc="${ready}", r2;dur=${d}`); logR2Page(request, p, "r2direct", ready, r2, d); return r2; }
+        } else if (r2file) {
+          // Ebenso Dateien nur im Bucket (Sitemaps ausser en/de, Exporte, Transkripte): gleich r2File (dieselbe gone/src-Pruefung wie der Rueckfall);
+          // null -> GitHub Pages wie bisher, ohne den Bucket nach dem 404 noch einmal zu lesen
+          const t0 = Date.now(), r2 = await r2File(rq, env, p), d = Date.now() - t0;
+          r2tried = true;
+          if (r2) { r2.headers.set("server-timing", `src;desc="r2direct", ready;desc="${ready}", r2;dur=${d}`); return r2; }
         }
       }
     }
@@ -723,33 +908,18 @@ const site = {
         return new Response(request.method === "HEAD" ? null : buf, { headers: { ...sh, "x-m365-cache": "MISS" } });
       }
     }
-    // Sitemap oder Datenexport aus dem R2-Bucket (pages/<datei>): Sitemaps indexierbar als application/xml, Exporte als application/json mit noindex
-    // (noindexPath, wie aus GitHub Pages); SEC- und HTML-Cache-Header (finishHeaders), CORS wie GitHub Pages, ETag/304, HEAD.
-    // Nur Objekte des r2out-Uploads: als entfernt markiert (gone=1) oder nur Spiegel von GitHub Pages (src=docs, dort 404 = wirklich weg) -> 404 wie bisher.
-    const sm = SITEMAP_R2.test(p);
-    if (res.status === 404 && env.PAGES && !r2miss && (sm || R2_EXPORT.test(p)) && (request.method === "GET" || request.method === "HEAD")) {
-      const obj = await env.PAGES.get("pages" + p).catch(() => null);
-      const cm = (obj && obj.customMetadata) || {};
-      if (obj && cm.gone !== "1" && cm.src !== "docs") {
-        const h = new Headers({ "content-type": sm ? CT.xml : CT.json, "access-control-allow-origin": "*" });   // CORS wie GitHub Pages
-        if (obj.httpEtag) h.set("etag", obj.httpEtag);
-        if (obj.uploaded) h.set("last-modified", obj.uploaded.toUTCString());
-        finishHeaders(h, p);
-        if (notModified(request, h.get("etag"), h.get("last-modified"))) return new Response(null, { status: 304, headers: h });
-        if (request.method === "HEAD" && Number.isFinite(obj.size)) h.set("content-length", String(obj.size));   // wie GitHub Pages: Groesse auch per HEAD (GET: Laenge des R2-Datenstroms)
-        return new Response(request.method === "HEAD" ? null : obj.body, { headers: h });
-      }
+    // Sitemap, Datenexport oder Transkript aus dem R2-Bucket (pages/<datei>, s. r2File) - nicht, wenn R2 zuerst das Objekt mit gueltiger Kennung schon
+    // vermisst hat oder es im kalten Zustand schon direkt gefragt wurde (r2tried)
+    if (res.status === 404 && env.PAGES && !r2miss && !r2tried && r2OnlyFile(p) && (request.method === "GET" || request.method === "HEAD")) {
+      const r2 = await r2File(rq, env, p);
+      if (r2) return r2;
     }
-    if (res.status === 404 && env.PAGES && !r2miss && TRANSCRIPT.test(p) && (request.method === "GET" || request.method === "HEAD")) {   // #266: Transkript aus dem R2-Bucket (pages/<pfad>)
-      const obj = await env.PAGES.get("pages" + p).catch(() => null);
-      if (obj && !(obj.customMetadata && obj.customMetadata.gone === "1")) {
-        const h = new Headers();
-        if (obj.httpEtag) h.set("etag", obj.httpEtag);
-        if (obj.uploaded) h.set("last-modified", obj.uploaded.toUTCString());
-        finishHeaders(h, p);
-        if (notModified(request, h.get("etag"), h.get("last-modified"))) return new Response(null, { status: 304, headers: h });
-        return new Response(request.method === "HEAD" ? null : obj.body, { headers: h });
-      }
+    // Gehashte Stylesheets und Skripte (HASHED): der Seitenbau legt sie auch in r2out/ ab. r2out-Seiten gehen im Build-Job vor dem Deploy live und
+    // verweisen schon auf den neuen Namen, den GitHub Pages erst nach dem Deploy hat - bis dahin (und bei R2 zuerst kalt/"nicht bereit") aus dem Bucket.
+    // r2First mit Pfad-Schluessel /__r2f (Inhalt unter dem Namen unveraenderlich), gone-Pruefung wie dort.
+    if (res.status === 404 && env.PAGES && !r2miss && HASHED.test(p) && (request.method === "GET" || request.method === "HEAD")) {
+      const r2 = await r2First(rq, env, ctx, url, p, "pages" + p, "asset-pfad");
+      if (r2) return r2;
     }
     // Nur Seiten-Adressen (r2Page liest pages/<pfad>/index.html; fuer /x.php oder /a.json gibt es so ein Objekt nie) und nur, wenn R2 zuerst das Objekt
     // nicht schon mit gueltiger Bau-Kennung vermisst hat bzw. die R2-only-Seite nicht schon direkt gefragt wurde (sonst zwei R2-Lesungen je echtem 404).

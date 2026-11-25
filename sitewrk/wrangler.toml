@@ -40,6 +40,17 @@ R2_PRIMARY = "1"
 # geaenderte Adresse leert der Deploy gezielt (tools/purge_changed.py --r2), seit die Liste "Neueste Folgen" weg ist, gibt es keine Aenderung ohne Purge mehr.
 # Notschalter: "14400" (4 h wie vorher). Erlaubt 600 bis 604800; sonst gilt 14400 (sitewrk/index.js r2EdgeTtl).
 R2_EDGE_TTL = "86400"
+# R2 ueber den Zonen-Cache statt Cache API (Ladezeit 27.11.2026, sitewrk/index.js zoneGet): "1" = r2First holt Seiten und Dateien zuerst als Zonen-Abruf von
+# R2_ZONE_HOST/pages/<schluessel> (Tiered Cache, Request Collapsing), nur Treffer; alles andere nimmt in derselben Anfrage den heutigen Weg.
+# Live bleibt "0", bis auf Staging belegt ist, dass es wirkt, UND alle bestehenden Entfernt-Markierungen den Marker tragen (python tools/r2_site_sync.py
+# --remark-gone): sonst kaeme eine als entfernt markierte Seite ohne Marker aus der Zone. Dann in einem eigenen kleinen PR auf "1".
+# Bei "1" leert tools/purge_changed.py (liest diesen Wert) zusaetzlich https://img.m365.fm/pages/... . R2_ZONE_HOST: live nur https://img.m365.fm.
+# R2_ZONE_TTL: Obergrenze der Kanten-Dauer im Zonen-Weg (60 bis 604800 s), zum Start 1 h.
+R2_ZONE_CACHE = "0"
+R2_ZONE_HOST = "https://img.m365.fm"
+R2_ZONE_TTL = "3600"
+# Preload-Link-Header (CSS mit data-sbar, LCP-Bild aus dem Kopf) auf HTML-Seiten, Grundlage fuer Early Hints (sitewrk/index.js withPreload). Notschalter: "0".
+PRELOAD_LINK = "1"
 # Blog auf der eigenen Domain (BLOG_OWN_DOMAIN.md): "1" = Anfragen fremder Hosts (CNAME-Domains der Mitglieder) fragen den Community-Worker; Standard "0" = aus.
 # Eigene Hosts (m365.fm, *.m365.fm) sind nie betroffen. Zusaetzlich noetig (Mirko): Zone fuer die Blog-Domains mit Worker-Route, siehe Dokument.
 BYOD = "0"
@@ -68,13 +79,20 @@ head_sampling_rate = 1
 [env.staging]
 name = "m365-dub-site-staging"
 workers_dev = false
-routes = [{ pattern = "staging.m365.fm", custom_domain = true, zone_name = "m365.fm" }]
+# img-staging.m365.fm: R2-Domain des Staging-Buckets nur fuer den Zonen-Cache (R2_ZONE_CACHE); oeffentlich antwortet dieser Worker dort immer 404.
+# Reihenfolge: erst diesen Worker mit der Route deployen, DANN die Domain am Bucket m365-fm-staging anlegen (sonst ist der Bucket kurz oeffentlich lesbar).
+routes = [{ pattern = "staging.m365.fm", custom_domain = true, zone_name = "m365.fm" }, { pattern = "img-staging.m365.fm/*", zone_name = "m365.fm" }]
 
 [env.staging.vars]
 ENVIRONMENT = "staging"
 ORIGIN = "https://staging.m365.fm"
 MIGRATED = "0"
 R2_PRIMARY = "0"
+# Zonen-Cache auf Staging an (eigene Domain, nie img.m365.fm; tools/check_staging_isolation.py prueft das), kurze TTL statt Purge
+R2_ZONE_CACHE = "1"
+R2_ZONE_HOST = "https://img-staging.m365.fm"
+R2_ZONE_TTL = "300"
+PRELOAD_LINK = "1"
 
 [[env.staging.r2_buckets]]
 binding = "PAGES"
