@@ -1,47 +1,5 @@
 [
  {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "28",
-  "fehler": "unuebersetzt",
-  "src": "<code>let failed = SigninLogs | where TimeGenerated &gt; ago(24h) | where ResultType !in (&quot;0&quot;, &quot;50125&quot;, &quot;50140&quot;) // non-success (t",
-  "out": "<code>let failed = SigninLogs | where TimeGenerated &gt; ago(24h) | where ResultType !in (&quot;0&quot;, &quot;50125&quot;, &quot;50140&quot;) // non-success (t"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "30",
-  "fehler": "unuebersetzt",
-  "src": "<code>// &quot;Logged in&quot; but no Meetings/Channel activity in 14d let logins = SigninLogs | where TimeGenerated &gt; ago(14d) and AppDisplayName has &quot;",
-  "out": "<code>// &quot;Logged in&quot; but no Meetings/Channel activity in 14d let logins = SigninLogs | where TimeGenerated &gt; ago(14d) and AppDisplayName has &quot;"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "33",
-  "fehler": "unuebersetzt",
-  "src": "<code>let licensed = externaldata(UserPrincipalName:string, Sku:string)[@&quot;https://&lt;yourstorage&gt;/licensed.csv&quot;] with (format=&quot;csv&quot;, has",
-  "out": "<code>let licensed = externaldata(UserPrincipalName:string, Sku:string)[@&quot;https://&lt;yourstorage&gt;/licensed.csv&quot;] with (format=&quot;csv&quot;, has"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "35",
-  "fehler": "unuebersetzt",
-  "src": "<code>let email_threads = EmailEvents // Defender AH | where Timestamp &gt; ago(7d) | summarize emailCount=count() by SenderFromAddress, bin(Timestamp, 1d); let",
-  "out": "<code>let email_threads = EmailEvents // Defender AH | where Timestamp &gt; ago(7d) | summarize emailCount=count() by SenderFromAddress, bin(Timestamp, 1d); let"
- },
- {
-  "slug": "stop-drowning-in-data-why-telemetry-triangulation-is-the-key-to-better-m365-insights",
-  "seg": "38",
-  "fehler": "unuebersetzt",
-  "src": "<code># Exchange Online PowerShell Connect-ExchangeOnline $start = (Get-Date).AddDays(-7) $end = Get-Date Search-UnifiedAuditLog -StartDate $start -EndDate $end",
-  "out": "<code># Exchange Online PowerShell Connect-ExchangeOnline $start = (Get-Date).AddDays(-7) $end = Get-Date Search-UnifiedAuditLog -StartDate $start -EndDate $end"
- },
- {
-  "slug": "mastering-agentic-ai-how-copilot-studio-and-dataverse-mcp-are-transforming-m365",
-  "seg": "133",
-  "fehler": "unuebersetzt",
-  "src": "Microsoft 365 Copilot, Power Automate, Power Apps, Azure Logic Apps",
-  "out": "Microsoft 365 Copilot, Power Automate, Power Apps, Azure Logic Apps"
- },
- {
   "slug": "the-death-of-custom-integration-why-modern-enterprises-are-moving-to-standardized-platforms",
   "seg": "106",
   "fehler": "unuebersetzt",
@@ -3452,5 +3410,47 @@
   "fehler": "unuebersetzt",
   "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/azure-local-overview\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Azure Virtual Desktop on ",
   "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/azure-local-overview\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Azure Virtual Desktop on "
+ },
+ {
+  "slug": "content/useful-kql-queries-for-azure-virtual-desktop-diagnostics",
+  "seg": "67",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-monitor-operations-insights\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Monitor ",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-monitor-operations-insights\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Monitor "
+ },
+ {
+  "slug": "content/useful-kql-queries-for-azure-virtual-desktop-diagnostics",
+  "seg": "68",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/connection-quality-monitoring\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Collect and quer",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/virtual-desktop/connection-quality-monitoring\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Collect and quer"
+ },
+ {
+  "slug": "content/useful-kql-queries-for-azure-virtual-desktop-diagnostics",
+  "seg": "71",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/azure-monitor/reference/queries/wvdconnections\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Example log tab",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/azure-monitor/reference/queries/wvdconnections\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Example log tab"
+ },
+ {
+  "slug": "content/useful-kql-queries-for-azure-virtual-desktop-diagnostics",
+  "seg": "72",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/azure-monitor/reference/queries/wvdcheckpoints\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Example log tab",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/azure-monitor/reference/queries/wvdcheckpoints\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Example log tab"
+ },
+ {
+  "slug": "content/useful-kql-queries-for-azure-virtual-desktop-diagnostics",
+  "seg": "73",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/en-us/azure/azure-monitor/reference/queries/wvdagenthealthstatus\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Example l",
+  "out": "<a href=\"https://learn.microsoft.com/en-us/azure/azure-monitor/reference/queries/wvdagenthealthstatus\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Example l"
+ },
+ {
+  "slug": "content/what-is-microsoft-fabric-plain-language-guide",
+  "seg": "56",
+  "fehler": "unuebersetzt",
+  "src": "<a href=\"https://learn.microsoft.com/fabric/data-science/data-agent-microsoft-365-copilot\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Consume a Fabric data",
+  "out": "<a href=\"https://learn.microsoft.com/fabric/data-science/data-agent-microsoft-365-copilot\" rel=\"noopener\" target=\"_blank\">Microsoft Learn: Consume a Fabric data"
  }
 ]
