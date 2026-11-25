@@ -79,7 +79,7 @@ test("Konfiguration passt zusammen: CERTOPUS_PATHS (wrangler.toml), data/pillars
   assert.equal(PILLARS_JSON.path.id, PATH);
   for (const k of ["org", "event", "category"]) { assert.ok(cfg[k]); assert.equal(doc[k], cfg[k], `data/pillars.json path.certopus.${k} != CERTOPUS_PATHS`); }
   assert.ok(cfg.course.en && cfg.course.de);
-  assert.match(TOML, /^CERTOPUS_ON\s*=\s*"0"\s*$/m, "Notschalter bleibt im Repo aus, bis die Vorlage fertig ist");
+  assert.match(TOML, /^CERTOPUS_ON\s*=\s*"1"\s*$/m, "Zertifikate eingeschaltet (Mirko 25.11.2026); Notschalter zurueck auf \"0\" schaltet sie ab");
   // Jeder Leitfaden des Pfads hat mindestens 3 Fragen, en/de mit gleichen IDs
   const pids = PILLARS_JSON.path.stages.flatMap((s) => s.pillars || s.items || []).map((x) => (typeof x === "string" ? x : x.id)).filter(Boolean);
   for (const pid of Object.keys(QUIZ.pillars)) {
