@@ -51,6 +51,7 @@ jobs:
         if: inputs.mode != 'push'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
+          ENTITY_EXPORT_FILE: ${{ runner.temp }}/entity-export.json   # D1-Kosten: der Export wird hier abgelegt und vom D1-Schritt wiederverwendet (nicht im Repo)
           ENTITY_BUDGET_USD: ${{ inputs.budget || vars.ENTITY_BUDGET_USD || '100' }}
           MODE_IN: ${{ inputs.mode || 'run' }}
           MINAGE_IN: ${{ github.event_name == 'schedule' && '1' || inputs.min_age_days }}
@@ -96,6 +97,8 @@ jobs:
           echo "::error::Entitaeten fuellen: Ergebnisse, offene Batches und Kostenbuch konnten nicht gespeichert werden (Push abgelehnt)"; exit 1
       - name: In die Datenbank schreiben (KI-Entwurf, nur wo kein Mensch bearbeitet hat)
         if: ${{ !cancelled() && inputs.mode != 'plan' && (github.event_name == 'schedule' || inputs.mode == 'push' || inputs.d1push) }}   # nach einem Abbruch nicht mehr starten (die Daten sind schon gesichert)
+        env:
+          ENTITY_EXPORT_FILE: ${{ runner.temp }}/entity-export.json   # Export des Schritts davor (hoechstens 6 h alt), sonst neu geholt; der Worker prueft Mensch/Hash selbst
         run: python fill_entities.py push | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Ergebnis committen (Stand nach D1)
         if: always() && inputs.mode != 'plan'

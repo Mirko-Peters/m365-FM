@@ -72,7 +72,7 @@ def build(es):
         lds = "".join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>' for x in (ld or []))
         return f'<!doctype html><html lang="{lang}"><head><title>{title}</title>{lds}</head><body>{body}{side}</body></html>'
 
-    def side(lang, text="", ids=None, exclude=(), home=False, topics_h=""):
+    def side(lang, text="", ids=None, exclude=(), home=False, topics_h="", key=""):
         return f'<aside class="sbar" data-h="{LC.html.escape(topics_h)}" data-ids="{",".join(ids or [])}"></aside>'
     g = dict(BASE=BASE, write=write, page=page, header=lambda l, x="": "<header></header>", footer=lambda l: "<footer></footer>", footer_en=lambda: "<footer></footer>",
              LANGS={"de": ("Deutsch", "de")}, sitemap=[], TODAY=TODAY, api="https://api.test", url_of=lambda x: x.get("url", ""), anchor_title=lambda t, *a: t,

@@ -440,10 +440,48 @@ export const M365CON_URL = "https://m365con.net/?utm_source=m365.fm&utm_medium=h
 export const HOUSE_CAMPAIGN = { m365con: "m365con2027", services: "m365fm_services", advertise: "m365fm_advertise", sponsor: "m365fm_sponsor" };
 const SLUG = /^[a-z0-9][a-z0-9-]{0,79}$/;
 
-async function countHouse(db, house, slot, pageType, lang, country, field) {
-  await db.prepare(`INSERT INTO ad_house_stats(day,house,slot,page_type,lang,country,${field}) VALUES(?,?,?,?,?,?,1)
-    ON CONFLICT(day,house,slot,page_type,lang,country) DO UPDATE SET ${field}=${field}+1`).bind(today(), house, slot, pageType, lang, country).run();
+async function countHouse(db, house, slot, pageType, lang, country, field, n = 1) {
+  await houseStmt(db, today(), house, slot, pageType, lang, country, field, n).run();
 }
+const houseStmt = (db, day, house, slot, pageType, lang, country, field, n) => db.prepare(`INSERT INTO ad_house_stats(day,house,slot,page_type,lang,country,${field}) VALUES(?,?,?,?,?,?,?)
+    ON CONFLICT(day,house,slot,page_type,lang,country) DO UPDATE SET ${field}=${field}+excluded.${field}`).bind(day, house, slot, pageType, lang, country, n);
+
+// D1-Kosten: Einblendungen der Hausanzeigen (bis zu 4 Plaetze je Seitenaufruf) sammelt jedes Isolat kurz und schreibt sie gebuendelt
+// (ein UPSERT mit +n je Platz/Seitentyp/Sprache/Land und Tag) per ctx.waitUntil nach HOUSE_FLUSH_MS. Ohne ctx (Tests, interne Aufrufe) wird
+// sofort gezaehlt. Geht ein Isolat vor dem Schreiben verloren, fehlen hoechstens die Einblendungen dieses Fensters - Klicks und bezahlte
+// Kampagnen (Verbrauch, Laufzeitende) zaehlen weiter sofort.
+const HOUSE_FLUSH_MS = 10_000;
+const houseBuf = new WeakMap();   // Datenbank -> {rows: Map(Schluessel -> {args, n}), timer}
+function bufferHouse(env, ctx, args) {
+  const db = env.DB;
+  let buf = houseBuf.get(db);
+  if (!buf) houseBuf.set(db, (buf = { rows: new Map(), timer: null }));
+  const key = args.join("|"), row = buf.rows.get(key);
+  if (row) row.n++; else buf.rows.set(key, { args, n: 1 });
+  if (buf.timer) return;
+  const wait = Number.isFinite(+env.AD_HOUSE_FLUSH_MS) ? +env.AD_HOUSE_FLUSH_MS : HOUSE_FLUSH_MS;
+  buf.timer = new Promise((r) => setTimeout(r, wait)).then(async () => {
+    const rows = [...buf.rows.values()]; buf.rows.clear(); buf.timer = null;
+    if (!rows.length) return;
+    try { await db.batch(rows.map(({ args: [day, house, slot, pageType, lang, country], n }) => houseStmt(db, day, house, slot, pageType, lang, country, "impressions", n))); }
+    catch (e) { console.warn("Hausanzeigen-Einblendungen nicht geschrieben:", String(e?.message || e)); }
+  });
+  ctx.waitUntil(buf.timer);
+}
+
+// ad_house: aktive Hausanzeigen je Platz und Tag, 60 s im Isolat (D1-Kosten: vorher eine Abfrage je Einblendung). Aenderungen in der Verwaltung
+// verwerfen den Merker dieses Isolats; andere Isolate sehen sie nach hoechstens 60 s.
+const HOUSE_TTL_MS = 60_000;
+const houseCache = new WeakMap();   // Datenbank -> Map("slot|tag" -> {at, rows})
+async function activeHouses(db, slot, d) {
+  let m = houseCache.get(db); if (!m) houseCache.set(db, (m = new Map()));
+  const k = `${slot}|${d}`, hit = m.get(k);
+  if (hit && Date.now() - hit.at < HOUSE_TTL_MS) return hit.rows;
+  const rows = (await db.prepare("SELECT id,title,body,cta,url,langs FROM ad_house WHERE active=1 AND slot=? AND (start IS NULL OR start<=?) AND (end IS NULL OR end>=?) ORDER BY id DESC LIMIT 20").bind(slot, d, d).all()).results || [];
+  m.set(k, { at: Date.now(), rows });
+  return rows;
+}
+const dropHouseCache = (db) => houseCache.delete(db);
 
 // Ziel einer Hausanzeige; nur feste Ziele bzw. Hausanzeigen aus dem Admin (kein offener Redirect).
 // UTM (Mirko, 5.11.2026): source m365.fm, medium house_ad, campaign je Hausanzeige, term = Haupt-Entitaet der Seite, content = Slug der Seite.
@@ -530,7 +568,7 @@ export async function pickCampaign(db, { slot, pageType, topics, day = today(), 
   return pool[pool.length - 1];
 }
 
-async function serve(env, request, url, J) {
+async function serve(env, request, url, J, ctx) {
   const db = env.DB;
   const slot = url.searchParams.get("slot"), pageType = url.searchParams.get("pt") || "other", lang = /^[a-z]{2}$/.test(url.searchParams.get("lang") || "") ? url.searchParams.get("lang") : "en";
   const topics = list(url.searchParams.get("topics"), 20).filter((t) => TOPIC.test(t));
@@ -553,10 +591,14 @@ async function serve(env, request, url, J) {
     return J({ ad }, 200, NS);
   }
   const d = today();
-  const houses = (await db.prepare("SELECT id,title,body,cta,url,langs FROM ad_house WHERE active=1 AND slot=? AND (start IS NULL OR start<=?) AND (end IS NULL OR end>=?) ORDER BY id DESC LIMIT 20").bind(slot === "mid2" ? "mid" : slot, d, d).all()).results || [];
+  const houses = await activeHouses(db, slot === "mid2" ? "mid" : slot, d);
   const h = houses.find((x) => !x.langs || x.langs.split(",").includes(lang));
   const counted = h ? `x${h.id}` : houseKey;   // Einblendung der angezeigten Hausanzeige (Admin-Hausanzeige oder die eingebaute der Seite)
-  if (counted && !bot) await countHouse(db, counted, slot, pageType, SITE_LANGS.has(lang) ? lang : "en", country, "impressions");
+  if (counted && !bot) {
+    const l = SITE_LANGS.has(lang) ? lang : "en";
+    if (ctx?.waitUntil) bufferHouse(env, ctx, [d, counted, slot, pageType, l, country]);
+    else await countHouse(db, counted, slot, pageType, l, country, "impressions");
+  }
   const ctxq = new URLSearchParams({ s: slot, pt: pageType, l: SITE_LANGS.has(lang) ? lang : "en" });
   if (topics[0]) ctxq.set("e", topics[0]);
   if (SLUG.test(url.searchParams.get("p") || "")) ctxq.set("p", url.searchParams.get("p"));
@@ -884,7 +926,7 @@ export async function handleAds(env, request, url, path, user, J, ctx) {
     const q = quote(await loadPricing(db), { ...body, plan: "free", billing: {} });
     return q.error ? E(q.error, { min: q.min }) : J({ quote: q }, 200, NS);
   }
-  if (path === "/api/ads/serve" && method === "GET") return serve(env, request, url, J);
+  if (path === "/api/ads/serve" && method === "GET") return serve(env, request, url, J, ctx);
   if (path === "/api/ads/sponsor-lead" && method === "GET") return sponsorLeadInfo(env, url, J);
   if (path === "/api/ads/lead" && method === "POST" && (await request.clone().json().catch(() => ({})))?.sponsor) return submitLead(env, request, J);   // Sponsor-Lead: kostenlos, ohne Buchung, unabhaengig vom Buchungsschalter
   if (OFF_ROUTES.has(path) && !bookingOn(env)) return J({ error: "not_available_yet", message: "Ad booking is not available yet. Please use the request form on https://www.m365.fm/sponsor/." }, 503, NS);
@@ -1012,6 +1054,7 @@ export async function handleAds(env, request, url, path, user, J, ctx) {
   }
   if (path === "/api/admin/ads/house" && method === "POST") {
     const body = await request.json().catch(() => ({})) || {};
+    dropHouseCache(db);
     if (body.delete) { await db.prepare("DELETE FROM ad_house WHERE id=?").bind(int(body.delete)).run(); return J({ ok: true }, 200, NS); }
     const target = httpsUrl(body.url), title = cleanText(body.title, 120), langs = list(body.langs, 15).filter((l) => /^[a-z]{2}$/.test(l)).join(",");
     if (!SLOTS.includes(body.slot) || !target || title.length < 3 || (body.start && !isDay(body.start)) || (body.end && !isDay(body.end))) return E("bad_request");

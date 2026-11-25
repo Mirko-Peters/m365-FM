@@ -2,8 +2,9 @@
 Bei mehr als MAX_URLS Adressen (z. B. neues Stylesheet in jeder Seite) wird einmal alles geleert. Aufruf: python tools/purge_changed.py alt.json neu.json [r2-changed.json ...]
 Umgebung: CLOUDFLARE_API_TOKEN, CF_ZONE_ID (optional, sonst Zonensuche), BASE (https://www.m365.fm), INDEXNOW_KEY, R2_KEYS, R2_PENDING
 
-Kanten-Cache ueber Deploys erhalten (17.11.2026): Die Hashes sind Purge-Hashes (tools/page_hashes.py, ohne die Liste "neueste Folgen" der Seitenleiste):
-kommt nur eine neue Folge dazu, bleiben alle anderen Seiten im Cache. Der Site-Worker haelt Seiten und Dateien aus R2 (R2_PRIMARY=1) unter einem
+Kanten-Cache ueber Deploys erhalten (17.11.2026): Die Hashes sind Purge-Hashes (tools/page_hashes.py; bis 25.11.2026 ohne die Liste "neueste Folgen"
+der Seitenleiste, seitdem ueber die ganze Seite, weil es die Liste nicht mehr gibt): kommt nur eine neue Folge dazu, bleiben alle anderen Seiten im Cache.
+Weil damit jede Byte-Aenderung geleert wird, lebt ein /__r2f-Eintrag seit 25.11.2026 R2_EDGE_TTL (1 Tag, sitewrk/wrangler.toml) statt 4 h. Der Site-Worker haelt Seiten und Dateien aus R2 (R2_PRIMARY=1) unter einem
 Schluessel ohne Bau-Kennung (/__r2f<adresse>, sitewrk/index.js r2CacheKey), sie ueberleben also einen Deploy - und muessen deshalb bei jeder Aenderung
 geleert werden, und zwar erst, wenn der Bucket vollstaendig neu ist (nach dem Spiegel): bis dahin kann ein Isolat mit einer alten Kennung (bis 30 s
 gemerkt, nach Leerlauf auch laenger) noch alte Objekte lesen und neu cachen. Und vor der neuen Kennung, sonst kaeme kurz der alte Stand aus dem Cache.
@@ -14,6 +15,7 @@ Darum zwei Schritte:
  2. python tools/purge_changed.py --r2 <R2_PENDING> [neu.json] (nach dem R2-Spiegel, vor "Bau-Kennung im Bucket setzen"): leert /__r2f<adresse> fuer die
     Liste und leert sie erst nach vollstaendigem Erfolg. Scheitert er, bleibt die Liste fuer den naechsten Lauf, Ende 1 (der Deploy-Job setzt dann die
     Bau-Kennung nicht -> GitHub Pages).
+Zusaetzlich im Build-Job: python tools/purge_changed.py --r2-upload r2-changed.json direkt nach dem Upload von r2out/ (siehe main_r2_upload).
 Scheitert ein Stapel auch nach Wiederholungen, wird einmal alles geleert (lieber kalt als veraltet)."""
 import hashlib, json, os, re, sys, time, urllib.error, urllib.parse, urllib.request
 
@@ -116,6 +118,21 @@ def main_r2(p, new_f=""):
     save_pending(p, False, (), digest(new_f) if new_f else hashes or ""); return 0
 
 
+def main_r2_upload(changed_f):
+    """Build-Job, direkt nach tools/r2_pages_upload.py (site.yml): die Seiten in r2out/ gibt es nur im Bucket, sie sind mit dem Upload sofort live (die alte
+    Bau-Kennung passt weiter). Ein schon gecachter /__r2f-Eintrag bliebe aber bis R2_EDGE_TTL (1 Tag) alt, wenn danach eine blockierende Pruefung den Bau
+    stoppt und der Deploy-Job (Schritt 2) nie laeuft. Darum die eben hochgeladenen Adressen gleich hier leeren; der Deploy-Job leert sie spaeter noch einmal
+    (harmlos). Nicht blockierend: Ende immer 0, Fehler als Warnung (dann gilt wie bisher der Purge im Deploy-Job)."""
+    try: urls = sorted({u for u in rj(changed_f) if isinstance(u, str) and u.startswith("/") and not IMG.search(u)})
+    except Exception as e: print("::warning::R2-Upload-Liste nicht lesbar:", type(e).__name__); return 0
+    if not urls: print("R2-Upload: nichts zu leeren"); return 0
+    if not os.environ.get("CLOUDFLARE_API_TOKEN"): print("::warning::Kein Cloudflare-Token - /__r2f der hochgeladenen Seiten erst im Deploy-Job geleert"); return 0
+    zone = zone_id()
+    if not zone: print("::warning::Zone-ID nicht gefunden - /__r2f der hochgeladenen Seiten erst im Deploy-Job geleert"); return 0
+    if not purge(zone, [base + R2F + q(u) for u in urls], "R2-Upload (Build-Job)"): print("::warning::R2-Kanten-Cache der hochgeladenen Seiten nicht vollstaendig geleert")
+    return 0
+
+
 def main(argv):
     old_f, new_f = argv[0], argv[1]
     old = rj(old_f) if os.path.exists(old_f) else {}
@@ -201,5 +218,6 @@ def main(argv):
 if __name__ == "__main__":
     a = sys.argv[1:]
     if a[:1] == ["--r2"] and len(a) in (2, 3): sys.exit(main_r2(*a[1:]))
+    if a[:1] == ["--r2-upload"] and len(a) == 2: sys.exit(main_r2_upload(a[1]))
     if len(a) < 2 or a[0].startswith("--"): print(__doc__); sys.exit(2)
     main(a)

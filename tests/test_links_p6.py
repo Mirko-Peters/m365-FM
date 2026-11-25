@@ -182,7 +182,7 @@ def build(es, langs=("en", "de", "ja", "ar"), eps=None, yt=None):
         return f'<!doctype html><html lang="{lang}"><head><title>{title}</title>{lds}</head><body>{body}{side}</body></html>'
     ix = SBR.Index(es)
 
-    def side(lang, text="", ids=None, exclude=(), home=False, topics_h=""):
+    def side(lang, text="", ids=None, exclude=(), home=False, topics_h="", key=""):
         return SBR.render(ix, BASE, lang, text, ids=ids, exclude=exclude, topics_h=topics_h, ent_prefix="" if lang == "en" else f"/{lang}")
     g = dict(BASE=BASE, write=write, page=page, header=lambda l, x="": "<header></header>", footer=lambda l: "<footer></footer>", footer_en=lambda: "<footer></footer>",
              LANGS={"de": ("Deutsch", "de")}, sitemap=[], TODAY=TN.TODAY, api="https://api.test", url_of=lambda x: x.get("url", ""), anchor_title=lambda t, *a: t,

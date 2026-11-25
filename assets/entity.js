@@ -71,13 +71,18 @@
       host.appendChild(sec);
     });
   }
+  /* Offene Aenderungen nur fuer Angemeldete laden (abstimmen koennen nur sie; D1-Kosten): sofort, wenn der Anmeldehinweis der Community-Seite
+     (localStorage m365_auth, community.js) gesetzt ist, sonst sobald /api/entity beim Oeffnen des Bearbeitens eine Anmeldung meldet. */
+  function authHint() { try { return localStorage.getItem("m365_auth") === "1"; } catch (e) { return false; } }
   function mount(host, entity, isNew) {
-    votes(host, entity);
+    var voted = false; function showVotes() { if (voted) return; voted = true; votes(host, entity); }
+    if (authHint()) showVotes();
     var det = h("details", { class: "wk-edit" }, [h("summary", { text: isNew ? X.create : X.edit })]); host.appendChild(det);
     det.addEventListener("toggle", function once() {
       if (!det.open || det._done) return; det._done = true;
       Promise.all([list(), api("/api/entity?id=" + encodeURIComponent(entity.id || "none"))]).then(function (a) {
         if (!a[1].j.loggedIn) { det.appendChild(login()); return; }
+        showVotes();
         var cur = a[1].j.mine ? a[1].j.mine.data : (a[1].j.live ? a[1].j.live.data : entity);
         var base = isNew ? {} : Object.assign({}, entity, cur, { id: entity.id });
         det.appendChild(form(base, isNew, a[0]));

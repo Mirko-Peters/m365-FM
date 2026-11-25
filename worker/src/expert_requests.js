@@ -1,3 +1,4 @@
+import { rawDb } from "./d1meter.js";
 import { audit, cleanText, isLang, rateLimit, sha256hex } from "./util.js";
 import { baseIds, entityMap } from "./entities.js";
 import { sendPush } from "./push.js";
@@ -208,7 +209,7 @@ export async function deleteUserExpertRequests(env, userId) {
 
 const columnsReady = new WeakSet();   // einmal je Isolate und DB (Migration 0018 legt die Spalten an)
 async function ensureExpertConnectColumns(db) {
-  if (columnsReady.has(db)) return;
+  if (columnsReady.has(rawDb(db))) return;
   for (const [table, column, definition] of [
     ["expert_requests", "hide_outlet", "INTEGER NOT NULL DEFAULT 0"],
     ["expert_requests", "reach", "TEXT NOT NULL DEFAULT ''"],
@@ -227,7 +228,7 @@ async function ensureExpertConnectColumns(db) {
       if (!(current.results || []).some((item) => item.name === column)) throw error;
     }
   }
-  columnsReady.add(db);
+  columnsReady.add(rawDb(db));
 }
 
 function requestVectorText(request) {
@@ -256,7 +257,8 @@ export async function syncExpertVectors(env, max = VECTOR_BATCH) {
     JOIN expert_settings es ON es.user_id=g.user_id AND es.opt_in=1 AND es.paused_until<=?
     WHERE g.kind='speaker' AND g.active=1 ORDER BY g.user_id`).bind(t).all()).results || [];
   const ids = new Set(activeRows.map((row) => row.user_id));
-  const old = (await db.prepare("SELECT user_id,vid FROM expert_vectors").all()).results || [];
+  // h mitlesen: ohne h galt jeder Experte als geaendert und wurde in jedem Lauf neu eingebettet (Workers AI) und geschrieben
+  const old = (await db.prepare("SELECT user_id,vid,h FROM expert_vectors").all()).results || [];
   const stale = old.filter((row) => !ids.has(row.user_id));
   if (stale.length) {
     try { await env.VEC.deleteByIds(stale.map((row) => row.vid)); }

@@ -69,9 +69,9 @@ LIB_SEED_HANDLE = "mirko-p"
 # Lernpfad-Abschlusstest + Zertifikat (learnquiz.js, CERTOPUS.md): Certopus-Zuordnung je Lernpfad (Organisation, Event, Kategorie, Kursname je Sprache).
 # Weitere Lernpfade: einfach einen Eintrag ergaenzen. Schluessel nur als Secret CERTOPUS_API_KEY (GitHub-Secret, setup.mjs), nie hier.
 CERTOPUS_PATHS = '{"manufacturing-excellence":{"org":"projectmanagementgroup","event":"1b364220-e7df-11f1-a542-95dd4baa2628","category":"1b361b10-e7df-11f1-a542-95dd4baa2628","course":{"en":"Manufacturing Excellence: From Lean Basics to Digital Production Planning","de":"Manufacturing Excellence: von den Lean-Grundlagen zur digitalen Produktionsplanung"}}}'
-# Notschalter Zertifikate: "0" = aus (Test laeuft, Zertifikat bleibt "pending", Seite zeigt "Zertifikat folgt"); erst "1", wenn Schluessel gesetzt und die Vorlage fertig ist.
-# Wartende Zertifikate stellt der Cron (*/30) danach selbst aus.
-CERTOPUS_ON = "0"
+# Notschalter Zertifikate: "1" = an (Mirko 25.11.2026), "0" = aus (Test laeuft, Zertifikat bleibt "pending", Seite zeigt "Zertifikat folgt").
+# Wartende Zertifikate stellt der Cron (*/30) selbst aus. Felder kommen nur, soweit die Vorlage sie laut recipient_fields kennt.
+CERTOPUS_ON = "1"
 # Platzhalter der Vorlage (optional, JSON): ohne Angabe gelten {Name},{Course},{Score},{Date}, soweit die Vorlage sie laut recipient_fields kennt.
 # CERTOPUS_FIELDS = '{"name":"{Name}","course":"{Course}","score":"{Score}","date":"{Date}"}'
 SPREAKER_SHOW_IDS = "6704921,7393187,7393248,7393223,7393231,7393243,7393222,7393242,7393230,7393247,7393254,7393221,7393227,7393228,7393232,7393236,7393238,7393244,7393250,7393253"
@@ -83,6 +83,14 @@ name = "EMAIL"
 [[r2_buckets]]
 binding = "PAGES"
 bucket_name = "m365-fm"
+
+# Ratenlimit der Suche ohne D1 (Workers Rate Limiting, 60 Anfragen je 60 s und IP-Hash; worker/src/search.js searchAllowed). Kein Schritt in der
+# Cloudflare-Konsole noetig: namespace_id ist eine frei gewaehlte Zahl je Konto. Die Zaehlung gilt je Standort und ist ungefaehr - fuer den
+# Missbrauchsschutz der Suche genuegt das. Ohne Bindung (Staging erbt sie nicht) gilt wie bisher die D1-Tabelle ratelimit.
+[[ratelimits]]
+name = "RL_SEARCH"
+namespace_id = "1001"
+simple = { limit = 60, period = 60 }
 
 [observability]
 enabled = true   # Workers Logs (Fehler je Request und Cron im Dashboard sichtbar)

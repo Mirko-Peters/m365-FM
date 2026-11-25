@@ -69,3 +69,39 @@ test("Liste je Status (klickbare Kacheln): Titel und abweichende Felder aus dem 
   await withFetch({ "/spreaker-urls.json": { items }, spreaker_urls_state: { episodes: { 1001: { s: "ok", u: items[1].url, h: 6704921, c: "2026-11-11T04:47:00Z" } } } }, () => importEpisodeUrls(env));
   const ok = await episodeUrlsList(env.DB, "ok", 0, "1001"); assert.deepEqual([ok.items[0].title, ok.items[0].fields], ["Copilot agents explained", []]);
 });
+
+test("D1-Kosten: unveraenderte Quellen -> zweiter Lauf ohne Schreibzugriff; geaenderte Zeile -> nur diese wird geschrieben", async () => {
+  const { env, raw } = await setup();
+  let writes = 0;
+  const base = env.DB, counting = { prepare(sql) { const st = base.prepare(sql), run = st.run; st.run = async () => { if (/^\s*(INSERT|UPDATE|DELETE)/i.test(sql) && !/INTO meta/.test(sql)) { const before = raw.prepare("SELECT total_changes() n").get().n; await run(); writes += raw.prepare("SELECT total_changes() n").get().n - before; } else await run(); return {}; }; return st; }, async batch(s) { for (const x of s) await x.run(); } };
+  const e = { ...env, DB: counting };
+  const st = { run: { at: "2026-11-10T04:47:00Z" }, episodes: { 1000: { s: "ok", u: items[0].url, h: 6704921, c: "2026-11-10T04:47:00Z", t: "Eins" } } };
+  await withFetch({ "/spreaker-urls.json": { items }, spreaker_urls_state: st }, () => importEpisodeUrls(e));
+  assert.ok(writes >= 120, "erster Lauf schreibt alle Zeilen");
+  writes = 0;
+  const again = await withFetch({ "/spreaker-urls.json": { items }, spreaker_urls_state: st }, () => importEpisodeUrls(e));
+  assert.equal(again.skipped, "unveraendert"); assert.equal(writes, 0, "gleiche Quellen: kein Schreibzugriff");
+  const moved = items.map((x, i) => (i === 5 ? { ...x, url: "https://www.m365.fm/show/episodes/anders/" } : x));
+  writes = 0;
+  await withFetch({ "/spreaker-urls.json": { items: moved }, spreaker_urls_state: st }, () => importEpisodeUrls(e));
+  assert.equal(writes, 1, "nur die geaenderte Zeile wird geschrieben");
+  assert.equal(raw.prepare("SELECT url FROM episode_urls WHERE spreaker_episode_id='1005'").get().url, "https://www.m365.fm/show/episodes/anders/");
+  assert.equal(raw.prepare("SELECT title FROM episode_urls WHERE spreaker_episode_id='1000'").get().title, "Eins");
+});
+
+test("D1-Kosten: scheitert der differs-Abgleich, bleibt der Fingerabdruck ungespeichert und der naechste Lauf rechnet neu", async () => {
+  const { env, raw } = await setup();
+  const st = { episodes: { 1000: { s: "ok", u: items[0].url, h: 6704921, c: "2026-11-10T04:47:00Z" } } };
+  await withFetch({ "/spreaker-urls.json": { items }, spreaker_urls_state: st }, () => importEpisodeUrls(env));
+  const moved = items.map((x, i) => (i === 0 ? { ...x, url: "https://www.m365.fm/show/episodes/neu/" } : x));
+  const base = env.DB;
+  const flaky = { prepare(sql) { const o = base.prepare(sql); if (/SET status='differs'/.test(sql)) o.run = async () => { throw new Error("D1_ERROR: overloaded"); }; return o; }, batch: base.batch };
+  const r = await withFetch({ "/spreaker-urls.json": { items: moved }, spreaker_urls_state: st }, () => importEpisodeUrls({ ...env, DB: flaky }));
+  assert.ok(r.retry, "Lauf meldet den fehlgeschlagenen Abgleich");
+  assert.equal(raw.prepare("SELECT status FROM episode_urls WHERE spreaker_episode_id='1000'").get().status, "ok");
+  const again = await withFetch({ "/spreaker-urls.json": { items: moved }, spreaker_urls_state: st }, () => importEpisodeUrls(env));
+  assert.equal(again.skipped, undefined, "kein 'unveraendert' nach fehlgeschlagenem Abgleich");
+  assert.equal(raw.prepare("SELECT status FROM episode_urls WHERE spreaker_episode_id='1000'").get().status, "differs");
+  const third = await withFetch({ "/spreaker-urls.json": { items: moved }, spreaker_urls_state: st }, () => importEpisodeUrls(env));
+  assert.equal(third.skipped, "unveraendert");
+});

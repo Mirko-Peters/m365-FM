@@ -433,18 +433,23 @@ export async function handleSponsor(env, request, url, path, J, user) {
     if ([...placementIds].some((id) => !validPlacements.has(id))) {
       return J({ error: "bad_placement" }, 400, { "cache-control": "no-store" });
     }
+    // D1-Kosten: sponsor_metrics.py schickt taeglich die letzten 4 Tage; unveraenderte Werte werden nicht neu geschrieben (fetched_at bleibt dann
+    // der Zeitpunkt der letzten Aenderung; der juengste Tag ist jeden Tag neu, der Stand je Quelle bleibt also aktuell).
     for (const { placementId, day, metric, dim, value, source, kind } of validated) {
       writes.push(db.prepare(`INSERT INTO sponsor_metrics_daily(placement_id,day,metric,dim,value,source,kind,fetched_at)
         SELECT ?,?,?,?,?,?,?,? WHERE EXISTS(SELECT 1 FROM sponsor_placements WHERE id=?)
         ON CONFLICT(placement_id,day,metric,dim,source) DO UPDATE SET value=excluded.value,
-        kind=excluded.kind,fetched_at=excluded.fetched_at`)
+        kind=excluded.kind,fetched_at=excluded.fetched_at
+        WHERE sponsor_metrics_daily.value IS NOT excluded.value OR sponsor_metrics_daily.kind IS NOT excluded.kind`)
         .bind(placementId, day, metric, dim, value, source, kind, fetchedAt, placementId));
     }
     for (const q of queryRows) {
       writes.push(db.prepare(`INSERT INTO sponsor_queries_daily(placement_id,day,query,page,clicks,impressions,position,source,kind,fetched_at)
         SELECT ?,?,?,?,?,?,?,'gsc',?,? WHERE EXISTS(SELECT 1 FROM sponsor_placements WHERE id=?)
         ON CONFLICT(placement_id,day,query,page,source) DO UPDATE SET clicks=excluded.clicks,impressions=excluded.impressions,
-        position=excluded.position,kind=excluded.kind,fetched_at=excluded.fetched_at`)
+        position=excluded.position,kind=excluded.kind,fetched_at=excluded.fetched_at
+        WHERE sponsor_queries_daily.clicks IS NOT excluded.clicks OR sponsor_queries_daily.impressions IS NOT excluded.impressions
+          OR sponsor_queries_daily.position IS NOT excluded.position OR sponsor_queries_daily.kind IS NOT excluded.kind`)
         .bind(q.placementId, q.day, q.query, q.page, q.clicks, q.impressions, q.position, q.kind, fetchedAt, q.placementId));
     }
     await db.batch(writes);

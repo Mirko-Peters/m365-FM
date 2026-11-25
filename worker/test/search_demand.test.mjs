@@ -200,7 +200,7 @@ test("Aufbewahrung: Suchbegriffe und Nachfrage aelter als 12 Monate werden geloe
   assert.deepEqual(await purgeSearchStats(env.DB, now), { cutoff: "2025-11-10", search_q: 1, tr_demand: 1 });
   assert.deepEqual(raw.prepare("SELECT q_norm FROM search_q ORDER BY q_norm").all().map((r) => r.q_norm), ["grenze", "neu"]);
   assert.match(readFileSync(new URL("../src/index.js", import.meta.url), "utf8"), /event\.cron === "0 6 \* \* \*"[\s\S]*?T\("purgeSearchStats"/, "taeglich im 06:00-Cron");
-  assert.match(readFileSync(new URL("../src/index.js", import.meta.url), "utf8"), /T\("searchDemand", async \(\) => \{[\s\S]*?classifySearches\(env\)[\s\S]*?aggregateDemand\(env\)[\s\S]*?runTrDemand\(env, entityMap\)/, "Einordnen, Fortschreiben und Uebersetzen im Cron");
+  assert.match(readFileSync(new URL("../src/index.js", import.meta.url), "utf8"), /T\("searchDemand", async \((?:env)?\) => \{[\s\S]*?classifySearches\(env\)[\s\S]*?aggregateDemand\(env\)[\s\S]*?runTrDemand\(env, entityMap\)/, "Einordnen, Fortschreiben und Uebersetzen im Cron");
   raw.close();
 });
 

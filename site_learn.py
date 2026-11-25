@@ -428,6 +428,7 @@ def _fetch_json(url, timeout=120):
     return SF.fetch(url, timeout=max(timeout, 60))
 
 
+ENTITY_EXPORT_OK = None   # load_entities: lag der D1-Export der Entitaeten vor (frisch oder aus data/cache)?
 SRC_ENTS = {}   # T30: Entitaeten aus data/*.json ohne D1-Ueberlagerung (der Worker gleicht sie mit D1 ab)
 
 
@@ -523,6 +524,8 @@ def load_entities(api):
             SRC_ENTS[old] = {"id": old, "outdated": True, "replaced_by": new}
     gone = set(moved)
     over = (_fetch_json(f"{api}/api/entity/export") or {}).get("items", [])
+    global ENTITY_EXPORT_OK
+    ENTITY_EXPORT_OK = bool(over)   # False: D1-Export nicht erreichbar und kein Zwischenspeicher -> nur die Repo-Entitaeten (site_related speichert dann nichts Neues)
     for it in over:
         d = it.get("data") or {}
         if it.get("id") in gone and it["id"] not in base:   # zusammengefuehrte Person (data/guest_merge.json): alte D1-Fassung keine eigene Seite, die Adresse leitet weiter
