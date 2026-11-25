@@ -1,0 +1,29 @@
+name: Ladezeit-Messung (nur lesen)
+# Misst Header und Zeiten von staging.m365.fm und www.m365.fm (tools/ladezeit_messung.sh). Aendert nichts ausser der Purge-Probe (nur der
+# Staging-Eintrag img-staging.m365.fm/pages/index.html, MODI enthaelt "purge"). Gibt keine Secrets aus.
+on:
+  push:
+    branches: [claude/ladezeit-messung]
+    paths: [.github/workflows/ladezeit-messung.yml, tools/ladezeit_messung.sh]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency: { group: ladezeit-messung, cancel-in-progress: false }
+jobs:
+  messen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: staging
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with: { node-version: 24 }
+      - name: Messen
+        env:
+          MODI: "live staging schutz"
+          STAGING_ACCESS_ID: ${{ secrets.STAGING_ACCESS_ID }}
+          STAGING_ACCESS_SECRET: ${{ secrets.STAGING_ACCESS_SECRET }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+        run: bash tools/ladezeit_messung.sh
