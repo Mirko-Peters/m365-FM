@@ -33,4 +33,8 @@ jobs:
       - name: Zertifikat anlegen
         env:
           CERTOPUS_API_KEY: ${{ secrets.CERTOPUS_API_KEY }}
-        run: python tools/certopus_test.py
+        run: |
+          rc=0; python tools/certopus_test.py || rc=$?
+          # Probelauf beim Push: ohne Adresse wird nichts gesendet (Rueckgabe 2), das ist kein Fehler
+          if [ "$GITHUB_EVENT_NAME" = push ] && [ "$rc" = 2 ]; then rc=0; fi
+          exit $rc
