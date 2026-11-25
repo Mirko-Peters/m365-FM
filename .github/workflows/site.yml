@@ -244,6 +244,33 @@ jobs:
           ADMIN_BASE: ${{ vars.ADMIN_BASE }}
           PROFILE_BASE: ${{ vars.PROFILE_BASE }}
           GOOGLE_MAPS_API_KEY: ${{ vars.GOOGLE_MAPS_API_KEY || secrets.GOOGLE_MAPS_API_KEY }}
+      # Eigener Schritt direkt nach dem Bau (nicht erst mit den Money-Keywords): die neuen Zuordnungen stehen ab dem R2-Upload auf den Sprachseiten und
+      # muessen auch dann gesichert sein, wenn danach eine blockierende Pruefung scheitert - sonst rechnet der naechste Bau sie neu ("einmalig" gilt nicht).
+      # Ohne -X theirs: hat Mirko die Datei waehrend des Baus von Hand geaendert und gibt es einen Konflikt, bleibt seine Fassung; die neuen Treffer
+      # verwirft der Bau dann, der naechste Bau rechnet sie auf seiner Fassung neu. Nur auf main (ein Bau auf einem Zweig schiebt nichts nach main).
+      - name: Passende Lernpfad-Videos sichern (data/pillar_videos.json, neue Treffer von site_pillar_videos.update)
+        if: always() && github.ref == 'refs/heads/main'
+        continue-on-error: true
+        run: |
+          if [ -z "$(git status --porcelain data/pillar_videos.json)" ]; then echo "keine neuen Zuordnungen"; exit 0; fi
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          git add data/pillar_videos.json
+          git commit -q -m "Passende Lernpfad-Videos: neue Zuordnungen aus dem Seitenbau"
+          for i in 1 2 3 4 5; do
+            if git pull --rebase --autostash -q origin main; then
+              git push -q origin HEAD:main && exit 0
+            else
+              if git diff --name-only --diff-filter=U | grep -qx 'data/pillar_videos.json'; then
+                git rebase --abort 2>/dev/null || true
+                git reset -q --soft HEAD~1 && git restore --staged --worktree data/pillar_videos.json   # eigener Commit weg, Datei wie vor dem Bau
+                echo "::warning::data/pillar_videos.json wurde waehrend des Baus geaendert (Konflikt) - die Hand-Fassung bleibt, neue Treffer folgen beim naechsten Bau"; exit 0
+              fi
+              git rebase --abort 2>/dev/null || true
+            fi
+            sleep $((i*5))
+          done
+          echo "::error::Passende Lernpfad-Videos konnten nicht gesichert werden"; exit 1
+
       # Direkt nach dem Bau und immer (auch wenn eine spaetere blockierende Pruefung scheitert): die r2out/-Seiten mit den neuen Eintraegen gehen gleich danach
       # in den Bucket und sind damit live. Muss im Git liegen (nicht nur im Actions-Cache), sonst rechnet ein Bau nach Cache-Verlust alles neu und aendert
       # alle Seiten. Daten-Commits loesen diesen Workflow nicht aus.

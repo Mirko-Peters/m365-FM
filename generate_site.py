@@ -593,7 +593,6 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 {a11y_tags(lang)}
 <script defer src="{BASE}{SA.path("page.js")}"></script>
 <script defer src="{BASE}{SA.path("attend.js")}"></script>
-<script>(function(){{if(!matchMedia("(pointer:fine)").matches||matchMedia("(prefers-reduced-motion: reduce)").matches)return;var d=0,ev=["wheel","keydown","pointerdown","touchstart"];function go(){{if(d)return;d=1;ev.forEach(function(e){{removeEventListener(e,go)}});var s=document.createElement("script");s.src="{BASE}/assets/smooth.js";document.body.appendChild(s)}}ev.forEach(function(e){{addEventListener(e,go,{{passive:true,once:true}})}})}})();</script>
 <script defer src="{BASE}{SA.path("fx.js")}"></script>
 {('<script defer src="' + BASE + SA.path("viz.js") + '"></script>') if 'class="viz"' in body else ""}
 </body></html>
@@ -1239,7 +1238,7 @@ def build():
         return top_block(l) + f'<h2>{esc(TOPICS.get(l, "Topics"))}</h2><div class="chips">{cs}</div>'
 
     # Englisches Original je Video (Podpage-Show unter /show/), Zuordnung ueber den englischen YouTube-Titel
-    ORIG = {}; ORIG_T = {}   # ORIG_T: Titel der englischen Folge (Linktext "Original (English): {Titel}")
+    ORIG = {}; ORIG_T = {}; _et = {}   # _et: englische Originaltitel je Video; ORIG_T: Titel der englischen Folge (Linktext "Original (English): {Titel}")
     try:
         import site_podpage as _PPm
         _et = site_text.fix_tree(json.load(open(ROOT / "data" / "en_titles.json", encoding="utf-8"))) if (ROOT / "data" / "en_titles.json").exists() else {}   # T5
@@ -1706,6 +1705,16 @@ def build():
     import site_pillars as PIL   # Pillar-Kompendien und Lernpfad (imports/pillars, data/pillars.json): Zuordnung der Beitraege vor dem Blog (Kasten "Teil des Lernpfads")
     PIL.assign(_posts)
     BLG.build(_ctx, _posts, _people, COMMUNITY_API)
+    try:   # Passende Sticky-Man-Videos je Leitfaden (data/pillar_videos.json): neue Videos pruefen, Treffer anhaengen, Karte auf den Leitfaden.
+        import site_pillar_videos as PVID   # Ein Fehler hier kostet nur die Karte, nicht den Bau (Hand-Eintraege in der Datei)
+        _pvp = PVID.pages_index([(_v, _l, url_of(_it), _it["e"]["title"]) for (_v, _l), _it in items.items()], ORIG, ORIG_T, _PPs.episode_index(BASE)["by_slug"], _et)
+        _pvm = _EMX
+        _pvx = PVID.prepare(PVID.load(), PIL.order(), _pvp, {_v: (videos.get(_v) or {}).get("date") for _v in _pvp}, TODAY,
+                            ent_ids=lambda s: list(_pvm.ids(s, "en", set())), ld_urls={url_of(_it) for _it in items.values()}, r2map=R2.MAP, dims=R2._dims())
+        if _pvx: _ctx["pillar_videos"] = _pvx
+    except Exception as _ex:
+        print(f"::warning::Passende Videos: {type(_ex).__name__}: {_ex} - Leitfaeden ohne Karte")
+        _ctx.pop("pillar_videos", None)
     PIL.build(_ctx, _posts, LRN.ENTS)
     import site_library as LIB
     LIB.build(_ctx, LIB.fetch_items(COMMUNITY_API), _people, COMMUNITY_API)

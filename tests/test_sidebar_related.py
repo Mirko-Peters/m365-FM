@@ -281,12 +281,13 @@ class CallersTest(unittest.TestCase):
         w = self.src(".github/workflows/site.yml")
         st = yaml.safe_load(w)["jobs"]["build"]["steps"]
         gen = next(i for i, s in enumerate(st) if s.get("run") == "python generate_site.py")
-        fetch, save = st[gen - 1], st[gen + 1]
+        fetch = st[gen - 1]
+        save = next(s for s in st[gen + 1:gen + 3] if "data/sidebar_related.json" in s.get("run", ""))   # direkt nach dem Bau (neben dem Sicherungsschritt der Lernpfad-Videos)
         self.assertIn("git checkout origin/main -- data/sidebar_related.json", fetch["run"], "neuester Stand von main vor dem Bau (wartender Bau hinter dem naechtlichen)")
         self.assertEqual(save["if"], "always() && hashFiles('data/sidebar_related.json') != ''", "sofort nach dem Bau und auch, wenn spaeter eine Pruefung scheitert")
         self.assertIn("git add data/sidebar_related.json", save["run"]); self.assertIn("git diff --quiet origin/main -- data/sidebar_related.json", save["run"])
         up = next(i for i, s in enumerate(st) if "r2_pages_upload.py" in s.get("run", ""))
-        self.assertLess(gen + 1, up, "vor dem R2-Upload")
+        self.assertLess(st.index(save), up, "vor dem R2-Upload")
         self.assertIn("SIDEBAR_RELATED: ${{ vars.SIDEBAR_RELATED }}", w)
         self.assertNotRegex(w, re.compile(r"^\s*paths:.*data/", re.M), "Daten-Commits loesen den Seitenbau nicht aus")
 

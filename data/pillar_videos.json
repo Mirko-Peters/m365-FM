@@ -1,0 +1,137 @@
+{
+ "_": "Passende Sticky-Man-Videos je Leitfaden des Lernpfads (site_pillar_videos.py). Eintraege bleiben stehen; der Seitenbau haengt neue Treffer nur an (hoechstens max je Leitfaden, ab min_score Punkten, jedes Video nur einmal). Von Hand: {\"id\": \"<YouTube-ID>\", \"manual\": true} in videos ergaenzen (steht immer), Video-ID in blocked des Leitfadens sperrt es dort (es darf dann zu einem anderen Leitfaden), blocked ganz oben sperrt es ueberall. rules: zusaetzliche Muster fuer Videos (englisch/deutsch) neben re und topics aus data/pillars.json - ein Video braucht mindestens einen Treffer aus rules oder ein Thema des Leitfadens; not: Titelmuster, das ausschliesst. context: Fertigungskonzepte (Konzept -> Muster, beide Sprachen in einem Muster); ein Video braucht 2 verschiedene Konzepte, eines davon im Titel, in der Kurzbeschreibung oder 3-mal im Transkript. Nicht waehrend eines laufenden Seitenbaus committen (bei Konflikt verwirft der Bau seine neuen Treffer).",
+ "max": 4,
+ "min_score": 6,
+ "context": {
+  "manufacturing": "manufactur\\w*|fertigung\\w*",
+  "factory-floor": "factory floors?|factories|plant floors?|shop ?floors?|shopfloor\\w*|fabrikhalle\\w*|werkshalle\\w*|werks-\\w+",
+  "industrial": "industrial|industry 4\\.0|industrielle\\w*|industrie 4\\.0",
+  "production": "production (?:lines?|planning|orders?|scheduling|control|plants?|floors?|machines?)|work centers?|assembly lines?|produktionsplanung\\w*|produktionslinie\\w*|produktionsentscheidung\\w*|produktionsauftr\\w*|produktionssteuerung",
+  "bill-of-materials": "bill of materials|stückliste\\w*",
+  "maintenance": "predictive maintenance|asset maintenance|instandhaltung\\w*|maschinenausfall\\w*",
+  "oee": "oee|anlageneffektivität",
+  "mes": "mes",
+  "ot": "ot (?:networks?|data|systems?)|scada|opc ua",
+  "shift-change": "schichtwechsel\\w*"
+ },
+ "rules": {
+  "lean-manufacturing": {
+   "en": "lean manufacturing|lean production|toyota production system|muda|heijunka|jidoka",
+   "de": "verschwendung\\w*|kontinuierliche\\w* verbesserung\\w*|schlanke\\w* produktion|toyota-produktionssystem"
+  },
+  "operational-excellence": {
+   "en": "continuous improvement culture",
+   "de": "operative\\w* exzellenz"
+  },
+  "shop-floor-management": {
+   "en": "gemba walks?|tier meetings?|shift handovers?",
+   "de": "shopfloor\\w*|fabrikhalle\\w*|werkshalle\\w*|schichtwechsel\\w*|schichtübergabe\\w*"
+  },
+  "value-stream-mapping": {
+   "en": "value streams?",
+   "de": "wertstrom\\w*"
+  },
+  "manufacturing-kpis": {
+   "en": "overall equipment effectiveness|first pass yield|mtbf|scrap rates?",
+   "de": "oee|gesamtanlageneffektivität|anlageneffektivität|taktzeit\\w*|durchlaufzeit\\w*|produktionskennzahl\\w*|rüstzeit\\w*"
+  },
+  "production-scheduling-aps": {
+   "en": "production planning|production scheduling|master planning|planning optimization|planned production orders?|material requirements planning|finite capacity",
+   "de": "produktionsplanung\\w*|feinplanung\\w*|kapazitätsplanung\\w*|bedarfsplanung\\w*|produktionsprogrammplanung|planungsoptimierung|fertigungsauftr\\w*|produktionsauftr\\w*|umplanung\\w*"
+  },
+  "digital-twin-manufacturing": {
+   "en": "azure digital twins",
+   "de": "digitale[nrms]? zwilling\\w*|fabriksimulation\\w*|virtuelle\\w* inbetriebnahme"
+  },
+  "aerospace-production-planning": {
+   "en": "aircraft|airlines?",
+   "de": "luftfahrt\\w*|luft- und raumfahrt|flugzeug\\w*|rückverfolgbarkeit"
+  },
+  "manufacturing-it-azure": {
+   "en": "industrial ai|industrial iot|iiot|iot central|iot operations|it/ot|ot boundary|supply chain management|asset management|predictive maintenance|manufacturing data",
+   "de": "fertigungs-it|industrielle\\w* ki|industrie-copilot|werks-copilot|instandhaltung\\w*|ot-grenze|anlagensystem\\w*",
+   "ignore_topics": [
+    "enterprise-resource-planning"
+   ],
+   "not": "load planning|warehouse management|warehousing|procurement|inventory management|transportation management|lagerverwaltung|ladeplanung|beschaffung"
+  },
+  "ifakt-polaris": {}
+ },
+ "blocked": [],
+ "pillars": {
+  "lean-manufacturing": {
+   "videos": [],
+   "blocked": []
+  },
+  "operational-excellence": {
+   "videos": [],
+   "blocked": []
+  },
+  "shop-floor-management": {
+   "videos": [],
+   "blocked": []
+  },
+  "value-stream-mapping": {
+   "videos": [],
+   "blocked": []
+  },
+  "manufacturing-kpis": {
+   "videos": [],
+   "blocked": [
+    "AXT4Qac8mQ8"
+   ]
+  },
+  "production-scheduling-aps": {
+   "videos": [
+    {
+     "id": "ZPjhQuq0wA0",
+     "score": 11,
+     "date": "2026-11-25",
+     "title": "Dynamics 365 Master Planning: The Ultimate Supply Chain Guide"
+    }
+   ],
+   "blocked": []
+  },
+  "digital-twin-manufacturing": {
+   "videos": [],
+   "blocked": []
+  },
+  "aerospace-production-planning": {
+   "videos": [],
+   "blocked": []
+  },
+  "manufacturing-it-azure": {
+   "videos": [
+    {
+     "id": "ZY12nBEY2qc",
+     "score": 12,
+     "date": "2026-11-25",
+     "title": "Copilot on the Shop Floor What Industrial AI Can and Cannot Do Today"
+    },
+    {
+     "id": "DfWvXDmheKY",
+     "score": 11,
+     "date": "2026-11-25",
+     "title": "Dynamics 365 Asset Management Explained: Maintenance Made Easy"
+    },
+    {
+     "id": "6d6FcLfYess",
+     "score": 10,
+     "date": "2026-11-25",
+     "title": "Dynamics 365 Supply Chain Management Simply Explained"
+    },
+    {
+     "id": "AXT4Qac8mQ8",
+     "manual": true,
+     "title": "Bessere Produktionsentscheidungen: Roadmap für Hersteller vom ersten Anwendungsfall zur Microsoft-Fabric-Datenplattform",
+     "note": "von Hand umgehaengt (vor dem ersten Deploy): Thema Fabric-Datenplattform passt zu Manufacturing IT, nicht zu den Kennzahlen"
+    }
+   ],
+   "blocked": []
+  },
+  "ifakt-polaris": {
+   "videos": [],
+   "blocked": []
+  }
+ }
+}
