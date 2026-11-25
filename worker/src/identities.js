@@ -5,6 +5,7 @@
 import { cookie, sign, verify, rateLimit, audit, readSessionInfo } from "./util.js";
 import { evalBadges } from "./badges.js";
 import { BIZ_MAX } from "./claimverify.js";
+import { ATTEMPT_TTL } from "./learnquiz.js";
 
 export const MERGE_WINDOW = 600;   // Sekunden: frische Anmeldung mit beiden Konten
 const now = () => Math.floor(Date.now() / 1000);
@@ -196,6 +197,21 @@ export async function mergeStatements(db, S, T) {
   // Rezensionen: je Show eine; die von S wird ausgeblendet, nicht geloescht
   keepT("show_reviews"); st.push(q("UPDATE show_reviews SET status='merged' WHERE user_id=?", S));
   keepT("expert_request_replies");
+  // Lernpfad-Abschlusstest (0055): Versuche wandern mit. Zertifikat je Nutzer und Pfad (PK user_id, path): die Zeile von T gilt - ausser S hat schon ein
+  // ausgestelltes (ok) und T nicht; dann gilt das von S, sonst stellte Certopus derselben Person ein zweites aus. Der Rest bleibt am stillgelegten S.
+  simple("learn_attempts");
+  // Hat T dort nur einen Entwurf (draft: E-Mail aus dem Zusatzschritt, nichts angefordert), S aber eine Anforderung, gilt die von S (samt Empfaenger aus der Anmeldung von S,
+  // deren Identitaet oben zu T wandert).
+  st.push(q("DELETE FROM learn_certs WHERE user_id=? AND status<>'ok' AND path IN (SELECT path FROM learn_certs WHERE user_id=? AND status='ok')", T, S));
+  st.push(q("DELETE FROM learn_certs WHERE user_id=? AND status='draft' AND path IN (SELECT path FROM learn_certs WHERE user_id=? AND status<>'draft')", T, S));
+  keepT("learn_certs");
+  // Versuchszaehler (ratelimit, Schluessel learnq:<uid>:<pfad>, Fenster 24 h): laufende Zaehler von S werden zu denen von T addiert, das Fenster
+  // beginnt mit dem spaeteren Start - so bringt das Zusammenfuehren keine zusaetzlichen Versuche. Abgelaufene Fenster zaehlen nicht.
+  const cut = now() - ATTEMPT_TTL, sk = `learnq:${S}:`;
+  st.push(q(`INSERT INTO ratelimit(k,n,win) SELECT ?||substr(k,?),n,win FROM ratelimit WHERE substr(k,1,?)=? AND win>?
+    ON CONFLICT(k) DO UPDATE SET n=CASE WHEN ratelimit.win>? THEN ratelimit.n+excluded.n ELSE excluded.n END,
+    win=CASE WHEN ratelimit.win>? THEN MAX(ratelimit.win,excluded.win) ELSE excluded.win END`, `learnq:${T}:`, sk.length + 1, sk.length, sk, cut, cut, cut));
+  st.push(q("DELETE FROM ratelimit WHERE substr(k,1,?)=?", sk.length, sk));
   // Nachrichten: Gespraech zwischen S und T entfaellt; Gespraeche mit derselben Person werden zusammengelegt
   st.push(q("DELETE FROM msg_messages WHERE thread_id IN (SELECT id FROM msg_threads WHERE (a_id=? AND b_id=?) OR (a_id=? AND b_id=?))", S, T, T, S));
   st.push(q("DELETE FROM msg_threads WHERE (a_id=? AND b_id=?) OR (a_id=? AND b_id=?)", S, T, T, S));

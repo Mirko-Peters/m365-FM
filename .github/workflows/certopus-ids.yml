@@ -1,0 +1,25 @@
+name: Certopus-IDs auslesen (nur lesen)
+# Liest mit dem Secret CERTOPUS_API_KEY Organisation, Event, Kategorien und Platzhalter der Zertifikatsvorlage aus (tools/certopus_ids.py).
+# Gibt nur IDs, Titel und Feldnamen aus, nie den Schluessel. Aendert nichts. Fuer den Abschlusstest des Lernpfads (Zertifikat ueber Certopus).
+on:
+  workflow_dispatch:
+    inputs:
+      event:
+        description: "Certopus-Event-ID"
+        required: false
+        default: "1b364220-e7df-11f1-a542-95dd4baa2628"
+permissions:
+  contents: read
+jobs:
+  ids:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with: { python-version: "3.12" }
+      - name: IDs auslesen
+        env:
+          CERTOPUS_API_KEY: ${{ secrets.CERTOPUS_API_KEY }}
+          EVENT_IN: ${{ github.event.inputs.event }}
+        run: python tools/certopus_ids.py "$EVENT_IN"

@@ -191,7 +191,7 @@ class Build(unittest.TestCase):
         self.json = json
 
     def test_pages_schema_and_language_links(self):
-        self.assertEqual(len(self.files), 22)
+        self.assertEqual(len(self.files), 24)   # 20 Leitfäden, 2 Pfadseiten, 2 Testseiten (Abschlusstest)
         for rel, html in self.files.items():
             ld = self.json.loads(html.split("\n", 1)[0])["ld"]
             for n in ld:
