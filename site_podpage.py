@@ -565,9 +565,10 @@ def build(g):
 
     sidebar = g["side"]   # die eine Sidebar aller Inhaltsseiten (generate_site.sidebar, site_sidebar.render)
 
-    def pub(rel, title, desc, body, ld=None, og="website", noindex=False, last=TODAY, alts=None, canon=None, seo=None, head="", ids=None, topics_h="", igkw=None):
+    def pub(rel, title, desc, body, ld=None, og="website", noindex=False, last=TODAY, alts=None, canon=None, seo=None, head="", ids=None, topics_h="", igkw=None, rkey=""):
         u = f"{root}{rel}"
-        side = sidebar("en", (title + " " + plain(body)[:8000]) if not noindex else "", ids=ids or None, topics_h=topics_h)   # ids: feste Themen der Seite (Folgen: about + im Text verlinkt); topics_h: Ueberschrift mit Beziehung
+        # rkey: Inhalts-Schluessel der festen "Aehnlichen Folgen" (site_related; Folge e:, Gast g:, Show-Seite p:); Uebersichten ohne rkey: keine Folgen-Karte
+        side = sidebar("en", (title + " " + plain(body)[:8000]) if not noindex else "", ids=ids or None, topics_h=topics_h, key=rkey)   # ids: feste Themen der Seite (Folgen: about + im Text verlinkt); topics_h: Ueberschrift mit Beziehung
         _st, _sd = seo if seo else ((title if title == NAME else f"{title} – {NAME}"), desc[:300])   # seo = (Titel mit Marke, Description) aus site_meta_podcast
         h = page("en", _st, _sd, u, shell(body, side), alts, ld, xdefault=u, og_type=og, noindex=noindex, extra_head=head, **(igkw or {}))
         if canon:   # T12: Seite bleibt erreichbar, die kanonische Adresse ist eine andere (z. B. Personen-Entitaet); nicht in die Sitemap
@@ -752,7 +753,7 @@ def build(g):
         _seo = MP.en_episode_meta(e["name"], e.get("meta_title"), _rwm, e.get("summary"), short_desc(e, nrec, 600), uniq=_MPU, has_transcript=len(tr) > 200 or bool(_trf))   # Thema zuerst, Format und Marke hinten; Schablonen-Felder (X Explained | M365 FM) fallen weg
         pub(f"episodes/{e['slug']}/", e.get("meta_title") or e["name"], _rwm or short_desc(e, nrec, 155), body, ([ld] + list(nld or []) + IG.image_ld(BASE, "episode", e["slug"], "en", ep_url(e), title=e["name"], date=day(e.get("update_time")))) if (nld or IG.image_ld(BASE, "episode", e["slug"], "en", ep_url(e), title=e["name"], date=day(e.get("update_time")))) else ld, "article", last=day(e.get("update_time")) or TODAY, alts=alts if len(alts) > 1 else None, seo=_seo,
             noindex=episode_noindex(e, nrec, bool(snx), _rw, (short_desc(e, nrec, 300), nkp, nnotes, nfaq, tr if len(tr) > 200 else "")), head=_pc, igkw=IG.page_kw("episode", e["slug"], "en"),
-            ids=list(dict.fromkeys(_about + [i for i in _ment if ENTS_ALL[i].get("type") != "category"]))[:12], topics_h=LC.plain("en", "side.episode"))
+            ids=list(dict.fromkeys(_about + [i for i in _ment if ENTS_ALL[i].get("type") != "category"]))[:12], topics_h=LC.plain("en", "side.episode"), rkey=f"e:{e['slug']}")
         # lokalisierte Fassungen dieser Folge
         for l in TRL:
             tt = TRL[l].get(e["slug"])
@@ -843,7 +844,7 @@ def build(g):
         ld = {"@context": "https://schema.org", "@type": "ProfilePage", "mainEntity": {"@type": "Person", "@id": f"{BASE}/entity/{eid}/#entity" if known else f"{root}guests/{gg['slug']}/#p", "name": gg["name"], "jobTitle": gg.get("title") or "",
               "sameAs": [gg[k] for k in ("linkedin_link", "twitter_link", "youtube_link", "website") if gg.get(k)]}}
         _canon = f"{BASE}/entity/{eid}/" if eid == "mirko-peters" else None   # T12: eine kanonische Mirko-Peters-Adresse (Personen-Entitaet)
-        pub(f"guests/{gg['slug']}/", f"{gg['name']} – guest", plain(gg.get("bio")) or f"{gg['name']} on the {NAME}", body, ld, "profile", canon=_canon, seo=MP.guest_meta(gg["name"], gg.get("title") or "", gg.get("bio") or "", len(mine)))
+        pub(f"guests/{gg['slug']}/", f"{gg['name']} – guest", plain(gg.get("bio")) or f"{gg['name']} on the {NAME}", body, ld, "profile", canon=_canon, seo=MP.guest_meta(gg["name"], gg.get("title") or "", gg.get("bio") or "", len(mine)), rkey=f"g:{gg['slug']}")
         gl += f'<li style="margin:.4em 0"><a href="{root}guests/{gg["slug"]}/">{esc(gg["name"])}</a> <span class="mut">{esc(gg.get("title") or "")[:90]}</span></li>'
     if guests: pub("guests/", "Guests", f"{len(guests)} guests of the {NAME}.", f'<h1>Guests</h1><ul style="list-style:none;padding:0">{gl}</ul>', seo=MP.guests_list_meta(len(guests)))
 
@@ -881,7 +882,7 @@ def build(g):
         if p["slug"] == "support": p = {**p, "slug": "support"}
         t = p.get("page_title") or p.get("nav_label") or p["slug"].replace("-", " ").title()
         body = f"<article><h1>{esc(t)}</h1>{san(c)}</article>"
-        pub(f"{p['slug']}/", p.get("meta_title") or t, p.get("meta_description") or plain(c)[:200], body, noindex=str(p.get("hide_from_search_engines")) == "True")
+        pub(f"{p['slug']}/", p.get("meta_title") or t, p.get("meta_description") or plain(c)[:200], body, noindex=str(p.get("hide_from_search_engines")) == "True", rkey=f"p:{p['slug']}")
         plist.append((p["slug"], t))
 
     # Hub

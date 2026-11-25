@@ -1147,7 +1147,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             ld = ld + IG.image_ld(BASE, "entity", e["id"], lang, u, title=e["name"])   # Urheber, Credit und Lizenz der Kopf- und Infografik-Bilder (nur mit Freigabe)
             _sids = [x for v in groups.values() for x in v] or _cooc   # Themen der Seitenleiste = verwandte Entitaeten, ohne Beziehungen die Themen aus gemeinsamen Folgen
             _sh = LC.plain(lang, "side.entity" if groups else "side.cooc" if _cmode == "often" else "side.cooc_some" if _sids else "side.named", s=_en)   # Ueberschrift mit Beziehung zur Seite; ohne Beziehungen: in Beschreibung/Langtext genannt
-            _side = g["side"](lang, f'{e["name"]} {_en} {d} {_lt[:1500]}', ids=_sids, exclude=(e["id"],), topics_h=_sh) if g.get("side") else ""   # Sidebar wie auf allen Inhaltsseiten
+            _side = g["side"](lang, f'{e["name"]} {_en} {d} {_lt[:1500]}', ids=_sids, exclude=(e["id"],), topics_h=_sh, key=f"ent:{e['id']}") if g.get("side") else ""   # Sidebar wie auf allen Inhaltsseiten
             _mt, _md = MM.entity_meta(lang, e, d, n_eps=len(eps), flags=_nf[e["id"]], type_label=tlab(lang, e["type"]))   # Suchabsicht: "Was ist X?" / "Wer ist X?" statt "X – Typ"
             _w(f"{rel}/{e['id']}/index.html", page(lang, _mt, _md, u, b, _alts if (_alts and lang in _alts) else None, ld, xdefault=(_alts or {}).get("en"), og_type="website", extra_head=LCSS + css + _fhead, noindex=_noidx, side=_side, **IG.page_kw("entity", e["id"], lang)))
             if not _noidx: sitemap.append((u, _mod, _alts))

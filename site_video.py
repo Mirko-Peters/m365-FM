@@ -66,7 +66,7 @@ def build(g, vids, people, api):
                    "publisher": {"@id": f"{BASE}/#org"}, "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics], **({"mentions": _ment} if _ment else {})}]
             _tbc = TC.breadcrumb(BASE, lang, topics, ENTS, v["title"], u)   # zweite Spur nach dem Hauptthema (nur JSON-LD)
             if _tbc: ld.append(_tbc)
-            write(f"{pfx2(lang)}community/video/{v['slug']}/index.html", page(lang, *MP.community_item_meta(lang, "video", v["title"], v["name"], v.get("description")), u, b, None, ld, og_type="video.other", extra_head=LCSS, noindex=v["title"].startswith("[Test]"), side=(g["side"](lang, v["title"] + " " + (v.get("description") or "")[:1500], ids=topics, topics_h=LC.plain(lang, "side.video") if topics else "") if g.get("side") else "")))
+            write(f"{pfx2(lang)}community/video/{v['slug']}/index.html", page(lang, *MP.community_item_meta(lang, "video", v["title"], v["name"], v.get("description")), u, b, None, ld, og_type="video.other", extra_head=LCSS, noindex=v["title"].startswith("[Test]"), side=(g["side"](lang, v["title"] + " " + (v.get("description") or "")[:1500], ids=topics, topics_h=LC.plain(lang, "side.video") if topics else "", key=f"vid:{v['slug']}") if g.get("side") else "")))
             if not v["title"].startswith("[Test]"): sitemap.append((u, iso(v["published"]), None))
         it = sorted(mine, key=lambda x: -x["published"]); ru = f"{croot}video/"
         lst = '<ul class="bl-list" style="padding:0;list-style:none">' + "".join(f'<li style="padding:.7em 0;border-bottom:1px solid var(--bd)"><a href="{croot}video/{v["slug"]}/"><b>{esc(v["title"])}</b></a> <span class="mut">· {esc(v["name"])} · {iso(v["published"])}</span></li>' for v in it) + "</ul>"

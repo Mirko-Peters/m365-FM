@@ -1124,18 +1124,42 @@ def build():
     def url_of(it): return episode_url(BASE, it["lang"], it["slug"])
     SBX = SBR.Index()
     _SHP = json.loads((ROOT / "data" / "platforms.json").read_text("utf-8")) if (ROOT / "data" / "platforms.json").exists() else {}
-    def sidebar(l, text="", ids=None, exclude=(), home=False, topics_h=""):
-        """Die eine Sidebar aller Inhaltsseiten (site_sidebar.render), gleich in allen Sprachen: Englisch mit den Folgen der Hauptshow (/show/),
-        die Dub-Sprachen mit den Folgen ihrer Sprache. ids: feste Themenliste der Seite (Entitaets-IDs), sonst Treffer im Text."""
-        if l in LANGS:
-            return SBR.render(SBX, BASE, l, text, by_lang.get(l, []), url_of, lambda x: anchor_title(x["e"]["title"]), f"{BASE}/{l}/podcast/", _SHP.get(l), "",
-                              f"https://www.spreaker.com/show/{LANGS[l][3]}/episodes/feed", pfx(l), f"{BASE}/{l}/community/", ids, exclude, home, topics_h)
+    import site_related as SRL   # feste "Aehnliche Folgen" je Inhalt (data/sidebar_related.json), statt "Neueste Folgen" (Mirko, 25.11.2026)
+    _SRS = SRL.Store(); _SRP = []
+    def _rel_picker():
+        """Einmal je Bau, erst beim ersten neuen Schluessel (site_related.build_picker): Punkte je Entitaet fuer die Folgen der Hauptshow
+        (site_podpage.ep_hits wie find_episodes) und fuer die Videos mit Dub-Fassung (englisches Original ueber ORIG, sonst _dub_hits)."""
+        if not _SRP:
+            import site_podpage as _PP
+            _ix = _PP.episode_index(BASE); _H = _PP.ep_hits(BASE)
+            _SRP.append((*SRL.build_picker(_H, _ix, by_vid, ORIG, _dub_hits, SX.episodes_for), _ix, _H))
+        return _SRP[0]
+    def related_for(l, key, text="", ids=None, exclude=()):
+        """[(url, titel)] der festen aehnlichen Folgen einer Inhaltsseite in ihrer Sprache; ohne key (Uebersichtsseiten) oder mit SIDEBAR_RELATED=0: None."""
+        if not key or not SRL.enabled(): return None
+        def _compute():
+            P, _yts, _ix, _H = _rel_picker()
+            _rid = SRL.ids_for(key, _H, SBX.by, lambda: [e["id"] for e in SBR.chips_for(SBX, text, ids, exclude, lang=l)], exclude)
+            _ss, _sv = SRL.self_of(key, lambda s: _yts.get(s, ()), lambda v: {ORIG[v]} if v in ORIG else ())
+            return P.pick(_rid, _ss, _sv)
+        ent = SRL.fixed(_SRS, key, _compute)   # einmal berechnet, danach nur gelesen (neue Folgen aendern die Seite nicht)
         import site_podpage as _PP
-        _en = _PP.episode_index(BASE)["items"]
-        return SBR.render(SBX, BASE, "en", text, _en, lambda x: x["url"], lambda x: x["e"]["title"], f"{BASE}/show/episodes/", _SHP.get("en"),
-                          f"{BASE}/show/listen/" if _SHP.get("en") else "", "https://www.spreaker.com/show/6704921/episodes/feed", "", f"{BASE}/community/", ids, exclude, home, topics_h)
-    def side_for(l, title, body_html, home=False, topics_h=""):   # Sidebar der Sprachseiten: Themen der Seite (Treffer im Text), neueste Folgen der Sprache, Community
-        return sidebar(l, strip_tags(title + " " + body_html.split("<main", 1)[-1])[:2500], home=home, topics_h=topics_h)
+        _bys = _PP.episode_index(BASE)["by_slug"]
+        en_link = lambda s: (_bys[s]["url"], _bys[s]["e"]["title"]) if s in _bys else None
+        dub_link = lambda v, lg: (url_of(by_vid[v][lg]), anchor_title(by_vid[v][lg]["e"]["title"])) if lg in by_vid.get(v, {}) else None
+        return SRL.links(ent, l, en_link, dub_link)
+    def sidebar(l, text="", ids=None, exclude=(), home=False, topics_h="", key=""):
+        """Die eine Sidebar aller Inhaltsseiten (site_sidebar.render), gleich in allen Sprachen. key: Inhalts-Schluessel (site_related) fuer die festen
+        "Aehnlichen Folgen"; ohne key (Uebersichten) keine Folgen-Karte. Linkziele: Englisch die Hauptshow (/show/), Dub-Sprachen die Folgen ihrer Sprache.
+        ids: feste Themenliste der Seite (Entitaets-IDs), sonst Treffer im Text."""
+        rel = related_for(l, key, text, ids, exclude)
+        if l in LANGS:
+            return SBR.render(SBX, BASE, l, text, (), None, None, f"{BASE}/{l}/podcast/", _SHP.get(l), "",
+                              f"https://www.spreaker.com/show/{LANGS[l][3]}/episodes/feed", pfx(l), f"{BASE}/{l}/community/", ids, exclude, home, topics_h, related=rel)
+        return SBR.render(SBX, BASE, "en", text, (), None, None, f"{BASE}/show/episodes/", _SHP.get("en"),
+                          f"{BASE}/show/listen/" if _SHP.get("en") else "", "https://www.spreaker.com/show/6704921/episodes/feed", "", f"{BASE}/community/", ids, exclude, home, topics_h, related=rel)
+    def side_for(l, title, body_html, home=False, topics_h="", key=""):   # Sidebar der Sprachseiten: Themen der Seite (Treffer im Text), Community; Folgen-Karte nur mit key (Inhaltsseite)
+        return sidebar(l, strip_tags(title + " " + body_html.split("<main", 1)[-1])[:2500], home=home, topics_h=topics_h, key=key)
 
     R2OUT = ROOT / "r2out"   # Seiten, die nicht in GitHub Pages liegen, sondern im R2-Bucket (tools/r2_pages_upload.py laedt sie hoch, der Site-Worker liefert sie aus)
     write, write_r2, _r2n = writers(OUT, R2OUT, R2.rewrite, LANGS)   # write: docs/, ausser was site_size.r2_only nach r2out/ legt (Seiten der Sprachen ausser en/de, Exporte); write_r2: immer r2out/
@@ -1407,7 +1431,7 @@ def build():
         OG_COVER[canonical] = art_svg(vid, LANGS[l][0], lang=l)
         _mt = MP.episode_title(l, VSEO.title(l, vid, e["title"]), uniq=MPU); _md = VSEO.meta(l, vid, None) or MP.episode_desc(l, intro, prefer_answer=True, has_video=True, has_transcript=bool(_trf or tr)) or short(intro)   # Thema zuerst, dann Format und Marke; Description = Kernaussage
         write(f'{l}/{it["slug"]}/index.html',
-              page(l, _mt, _md, canonical, body, alts, ld + _nld + _ig_ld, xdefault=alts.get("en"), side=side_for(l, e["title"], body, topics_h=LC.plain(l, "side.episode")), extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid]), **((IG.page_kw("episode", _igs, l) if _igs else {}) or ({"og_image": _ogv, "og_share": True} if (_ogv := R2.og_video(vid)) else {}))))   # Teilen-/Discover-Bild: Infografik-Kopfbild, sonst das YouTube-Vorschaubild aus dem eigenen Bucket (>= 1200 px), sonst wie bisher
+              page(l, _mt, _md, canonical, body, alts, ld + _nld + _ig_ld, xdefault=alts.get("en"), side=side_for(l, e["title"], body, topics_h=LC.plain(l, "side.episode"), key=(f"e:{ORIG[vid]}" if vid in ORIG else f"v:{vid}")), extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid]), **((IG.page_kw("episode", _igs, l) if _igs else {}) or ({"og_image": _ogv, "og_share": True} if (_ogv := R2.og_video(vid)) else {}))))   # Teilen-/Discover-Bild: Infografik-Kopfbild, sonst das YouTube-Vorschaubild aus dem eigenen Bucket (>= 1200 px), sonst wie bisher
         sitemap.append((canonical, it["date"], alts))
         if vid in ORIG: ORIG_ALTS.setdefault(ORIG[vid], {})[l] = (canonical, e["title"])
 
@@ -1711,6 +1735,7 @@ def build():
     phase("Englische Show (Podpage)")
     MCPS.build(_ctx)
     LIVE.build(_ctx)   # M365 Show: Livestream-Seite + Seite je Stream (data/live.json, sync_live.py)
+    _SRS.save()   # neue feste "Aehnliche Folgen" (alle Inhaltsseiten sind gebaut); site.yml sichert die Datei per Bot-Commit
     try:   # SEO-Check-Seite (noindex): Episoden + Community-Inhalte
         _urls = {f'{i["vid"]}:{l}': url_of(i) for l in active for i in by_lang[l] if i.get("vid")}
         SEOR.build(_ctx, _people, [p for p in _posts if not p.get("legacy") and not p.get("html")], PODS.fetch_eps(COMMUNITY_API), VIDS.fetch_videos(COMMUNITY_API), (LRN._fetch_json(f"{COMMUNITY_API}/api/feed/export") or {}).get("items", []), SEOR.author_info(AUTHOR), _urls)
