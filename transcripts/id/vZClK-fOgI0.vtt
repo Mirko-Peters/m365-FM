@@ -1,0 +1,1813 @@
+WEBVTT
+
+00:00:00.370 --> 00:00:07.150
+Siap untuk 12 hari bersama Microsoft 365, Copilot, AI, Azure, dan orang-orang yang membentuk masa depan pekerjaan.
+
+00:00:07.790 --> 00:00:11.830
+Januari ini, M365-Cion kembali hadir dan akan lebih besar, lagi.
+
+00:00:12.910 --> 00:00:18.330
+Bergabunglah dengan kami untuk sesi langsung demo dunia nyata dan pengetahuan praktis dari MVP dan pakar industri di seluruh dunia.
+
+00:00:18.910 --> 00:00:21.170
+Tidak ada slide umum, tidak ada kata kunci yang tak ada habisnya.
+
+00:00:22.090 --> 00:00:23.150
+Kami menangani tantangan nyata.
+
+00:00:23.890 --> 00:00:28.830
+Copilot Studio, agen AI, fabrik, keamanan, tata kelola, dan otomatisasi.
+
+00:00:28.830 --> 00:00:34.230
+Baik Anda seorang profesional TI, pengembang, atau pemimpin bisnis, ada sesi yang dirancang untuk Anda.
+
+00:00:35.330 --> 00:00:39.910
+Dengan 10 hari penuh, Anda dapat menjelajahi berbagai teknologi dan terhubung dengan komunitas global.
+
+00:00:40.970 --> 00:00:44.230
+Tonton langsung, dan bawa wasam praktis kembali ke organisasi Anda.
+
+00:00:45.230 --> 00:00:48.910
+Januari 2027, 10 hari, satu komunitas Microsoft.
+
+00:00:49.550 --> 00:00:50.530
+Pendaftaran sudah dibuka sekarang.
+
+00:00:51.950 --> 00:00:55.470
+Kunjungi mtk65ancon.net dan amankan tempat Anda hari ini.
+
+00:00:56.110 --> 00:00:58.630
+Itulah mtk65ancon.net.
+
+00:00:58.830 --> 00:01:04.750
+Bergabunglah sekarang di mtk65ancon.net dan kami akan melihat Anda secara langsung di bulan Januari.
+
+00:01:05.790 --> 00:01:11.730
+Pernahkah Anda menulis query linky yang berfungsi dengan sempurna di C, tetapi ketika Anda meriksa SQL yang dihasilkannya, Anda bertanya-tanya bagaimana bisa seperti itu?
+
+00:01:12.530 --> 00:01:14.950
+Dalam sesi ini, Anda akan mempelajari tiga hal khususnya.
+
+00:01:15.110 --> 00:01:17.170
+Bagaimana pohon ekspresi mengandalkan penerjemahan.
+
+00:01:17.330 --> 00:01:19.390
+Bagaimana cacing membentuk kinerja dan penggunaan memori.
+
+00:01:19.390 --> 00:01:22.830
+Dan apa yang harus diperhatikan ketika logika 0 tidak berfungsi seperti yang diharapkan.
+
+00:01:23.670 --> 00:01:28.330
+Jika Anda menduga ada keajaiban kotak hitam di dalam Entity Framework Core, kebenarannya lebih dekat ke arsitektur daripada keajaiban.
+
+00:01:29.090 --> 00:01:34.570
+F-Core menggunakan alur query berlapis yang menangani penerusan penderjemahan, penangkapan, dan materialisasi di balik layar.
+
+00:01:34.570 --> 00:01:42.010
+Pertama, kita akan melihat bagaimana linky core Anda menjadi pohon ekspresi, kemudian peran penyedia, cacing, semantik 0, dan terakhir SQL dan materialisasi.
+
+00:01:43.130 --> 00:01:44.230
+Dan semua yang dimulai tepat di awal.
+
+00:01:44.970 --> 00:01:47.150
+Apa yang sebenarnya terjadi saat Anda menjalankan query linky?
+
+00:01:48.630 --> 00:01:50.110
+Dari linky ke pohon ekspresi.
+
+00:01:50.670 --> 00:01:54.090
+Ketika Anda menulis query linky, kodenya tidak secara otomatis lancar dalam SQL.
+
+00:01:54.790 --> 00:01:57.810
+Linky hanyalah kekuatan C, ia tidak tahu apapun tentang basis data atau tabel.
+
+00:01:58.670 --> 00:02:03.750
+Jadi, saat Anda menambahkan sesuatu seperti A atau select, Anda sebenarnya memanggil metode DJI, bukan menggunakan perintah ke SQL.
+
+00:02:04.570 --> 00:02:11.310
+Tugas entity framework core adalah menangkap panggilan tersebut ke dalam bentuk yang dapat dianalisis sebelum membuat keputusan apapun tentang penerjemahan atau eksekusi.
+
+00:02:12.330 --> 00:02:13.890
+Penangkapan itu terjadi melalui pohon ekspresi.
+
+00:02:14.530 --> 00:02:19.490
+Alih-alih langsung mengenai basis data, F core mencatat query Anda sebagai pohon objek yang menjelaskan setiap bagian.
+
+00:02:20.350 --> 00:02:22.030
+Clause aware belum berarti baris filter.
+
+00:02:22.510 --> 00:02:28.070
+Clause ini menjadi simpul di pohon yang menyatakan, ini panggilan metode, ini properti yang dibandingkan, dan ini lay konstanta.
+
+00:02:29.350 --> 00:02:30.770
+Pada tahap ini tidak ada yang dieksekusi.
+
+00:02:30.770 --> 00:02:34.590
+EF hanya mendokumentasikan maksud dalam bentuk terstruktur yang nantinya dapat ditelusuri.
+
+00:02:35.430 --> 00:02:37.910
+Salah satu cara untuk memikirkannya adalah struktur sebelum makna.
+
+00:02:38.470 --> 00:02:41.770
+Sama seperti memecah kalimat menjadi subjek dan kata kerja sebelum mencoba penerjemahan,
+
+00:02:42.170 --> 00:02:46.430
+EF membangun pohon tempat gabungan filter, proyeksi, dan pengurutan diapresentasikan sebagai simpul.
+
+00:02:47.670 --> 00:02:50.190
+Hanya setelah struktur ini ada, penerjemahan SQL dapat dimulai.
+
+00:02:50.610 --> 00:02:55.490
+F core bergantung pada pohon ekspresi sebagai mekanisme utamanya untuk memeriksa query link sebelum memutuskan cara menanganinya.
+
+00:02:55.490 --> 00:03:01.110
+Setiap klausur yang Anda tulis, baik gabungan atau filter, menambahkan simpul baru ke model objek tersebut.
+
+00:03:02.010 --> 00:03:06.730
+Misalnya, kondisi seperti melihat kota Paris menjadi cabang dengan bagian kiri dan kanan, satu,
+
+00:03:07.230 --> 00:03:10.270
+menunjuk ke properti kota, dan satu menunjuk ke string konstan Paris.
+
+00:03:11.630 --> 00:03:16.210
+Dengan menelusuri struktur ini, EF dapat mengetahui bagian mana dari query Anda yang dipetakan ke SQL dan bagian mana yang tidak.
+
+00:03:17.010 --> 00:03:20.650
+Di balik layar, pohon-pohon ini bukanlah konsep abstrak, tetapi objek aktual dalam memori.
+
+00:03:20.650 --> 00:03:28.150
+Setiap simpul, mewakili panggilan metode, properti, atau nilai konstan bagian-bagian yang dapat diperiksa dan dikategorikan oleh EF.
+
+00:03:28.690 --> 00:03:32.610
+Desain ini memberi EF cara yang andal untuk meneruskan query Anda tanpa harus menjalankannya terlebih dahulu.
+
+00:03:33.590 --> 00:03:39.330
+Secara internal, EF memperlakukan pohon sebagai model, memutuskan konstruksi mana yang dapat dikirim ke SQL dan mana yang harus ditangani dalam memori.
+
+00:03:40.090 --> 00:03:44.350
+Perbedaan ini menjelaskan mengapa beberapa query berperilaku satu arah di link to objects, tetapi gadal di EF.
+
+00:03:44.870 --> 00:03:47.390
+Bayangkan Anda menjatuhkan fungsi pembentuk khusus di dalam filter lambda.
+
+00:03:47.390 --> 00:03:56.210
+Di memori, link Anda hanya menjalankannya, tetapi dengan EF, pohon ekspresi sekarang berisi simpul yang merujuk ke metode khusus Anda dan EF tidak memiliki padanan SQL untuk metode itu.
+
+00:03:56.770 --> 00:04:01.570
+Pada titik itu, Anda akan sering melihat kesalahan waktu proses, peringatan, atau SQL kembali ke evaluasi sisi klien.
+
+00:04:02.030 --> 00:04:04.990
+Itu biasanya menandakan bahwa ada sesuatu dalam query Anda yang tidak dapat diterjemahkan.
+
+00:04:05.710 --> 00:04:11.070
+Hal penting yang perlu dipahami adalah bahwa EF tidak menjalankan kode Anda saat Anda menulisnya, melainkan membuat diagramnya ke dalam pohon objek ini.
+
+00:04:11.070 --> 00:04:19.350
+Dan jika sebagian dari pohon itu tidak sesuai dengan pola SQL yang diketahui, EF akan berhenti atau memutuskan untuk memasukkan bagian pekerjaan itu ke dalam memori yang dapat merugikan.
+
+00:04:19.970 --> 00:04:21.030
+Masalah kinerja sering muncul di sini.
+
+00:04:21.930 --> 00:04:28.250
+Query yang tampaknya tidak berbahaya dalam CSAS tiba-tiba menyebabkan ribuan baris ditarik dari sisi klien karena EF tidak dapat menerjemahkan satu bagian kecil.
+
+00:04:29.010 --> 00:04:31.630
+Itulah mengapa pohon ekspresi penting bagi pengembang yang bekerja dengan EF.
+
+00:04:32.430 --> 00:04:37.270
+Pohon ekspresi bukan sekadar detail internal, tetapi juga peta jalan yang digunakan EF bahkan sebelum SQL mulai digunakan.
+
+00:04:37.270 --> 00:04:41.770
+Setiap query lenjuu pertama-tama diubah menjadi rencana struktural yang dipelajari EF dengan saksama.
+
+00:04:43.230 --> 00:04:46.510
+Keberhasilan, kegagalan, atau perlambatan query seringkali bergantung pada seperti apa rencana.
+
+00:04:47.010 --> 00:04:48.690
+Namun masih ada satu langkah lagi dalam prosesnya.
+
+00:04:49.150 --> 00:04:52.370
+Setelah EF memiliki pohon ekspresi tersebut, ia tidak bisa begitu saja mengirimkannya ke basis data.
+
+00:04:52.630 --> 00:04:53.490
+Ia membutuhkan penjaga gerbang.
+
+00:04:53.970 --> 00:04:58.830
+Sesuatu harus memutuskan apakah setiap bagian pohon tersebut legal untuk SQL atau sesuatu yang tidak boleh meninggalkan CSA.
+
+00:04:59.210 --> 00:05:00.330
+Dan disitulah tahap berikut yang muncul.
+
+00:05:01.430 --> 00:05:03.030
+Penjaga gerbang, penyedia query EF Core.
+
+00:05:03.370 --> 00:05:06.390
+Tidak setiap query yang Anda tulis dalam CS ditakdirkan untuk menjadi SQL.
+
+00:05:07.270 --> 00:05:11.550
+Pemeriksaan di tengah alur dan perannya adalah memutuskan apa yang bergerak maju dan apa yang diblokir.
+
+00:05:12.590 --> 00:05:16.150
+Titik pemeriksaan ini diimplementasikan oleh komponen penyedia query EF Core
+
+00:05:16.150 --> 00:05:21.190
+yang mengevaluasi apakah simpul pohon ekspresi dapat dipetakkan ke SQL atau perlu ditangani dalam memori.
+
+00:05:21.450 --> 00:05:23.690
+Anda dapat membayangkan penyedia seperti penjaga di kelak.
+
+00:05:24.330 --> 00:05:29.030
+Semua orang dapat muncul dalam antrean, tetapi hanya query yang berpakaian pola yang kompatibel dengan SQL yang benar-benar masuk.
+
+00:05:29.410 --> 00:05:32.070
+Sisanya ditolak atau diarahkan untuk penanganan sisi klien.
+
+00:05:32.590 --> 00:05:34.110
+Ini bukan tentang pilih-pilih atau suena-una.
+
+00:05:34.690 --> 00:05:36.590
+Penyedia menegakkan batasan penerjemahan.
+
+00:05:36.590 --> 00:05:40.470
+Linkue dapat mewakili jauh lebih banyak daripada yang pernah dipahami oleh basis data relation.
+
+00:05:41.250 --> 00:05:46.190
+EF Core harus menusuri pohon ekspresi dan menanyakan setiap node apakah ini sesuatu yang dapat ditangani SQL
+
+00:05:46.190 --> 00:05:47.890
+atau hanya dapat dicalankan oleh net.
+
+00:05:48.690 --> 00:05:51.370
+Panggilan tersebut dilakukan lebih awal sebelum pembuatan SQL dimulai.
+
+00:05:51.530 --> 00:05:55.030
+Itulah sebabnya Anda terkadang melihat kesalahan waktu proses di awal alih-alih hasil yang membingungkan nanti.
+
+00:05:55.950 --> 00:05:58.490
+Bagi pengembang, kejutan seringkali datang dari dukungan yang tidak merata.
+
+00:05:58.490 --> 00:06:03.150
+Banyak konstruksi yang dipetakan dengan rapi di mana select order bayi biasanya diterjemahkan tanpa masalah.
+
+00:06:04.310 --> 00:06:05.050
+Lainnya lebih rumit.
+
+00:06:05.870 --> 00:06:09.930
+Misalnya grup bayi bisa lebih sulit diterjemahkan dan bergantung pada penyedia dan skenarionya,
+
+00:06:10.150 --> 00:06:13.410
+hal ini dapat langsung gagal atau menghasilkan SQL yang tidak terlalu efisien.
+
+00:06:13.410 --> 00:06:17.870
+Pengembang cukup sering melihat hal ini sehingga menjadi titik peringatan yang diketahui
+
+00:06:17.870 --> 00:06:20.490
+meskipun perilaku pastinya bergantung pada aturan penerjemahan penyedia.
+
+00:06:21.290 --> 00:06:23.390
+Hal utama yang dilakukan penyedia di sini adalah pencocokan pola.
+
+00:06:23.510 --> 00:06:25.750
+Penyedia tidak menciptakan SQL dengan cepat dengan cara yang aja.
+
+00:06:26.250 --> 00:06:30.390
+Sebaliknya, penyedia membandingkan pohon ekspresi dengan pustaka pola penerjemahan yang dipahaminya.
+
+00:06:31.230 --> 00:06:33.470
+Bentuk yang dikenali di pohon dipetakan ke template SQL.
+
+00:06:34.370 --> 00:06:38.010
+Bentuk yang tidak dikenali akan ditangguhkan ke eksekusi sisi klien atau ditolak.
+
+00:06:38.550 --> 00:06:41.330
+Itulah sebabnya beberapa query kompleks berfungsi dengan baik
+
+00:06:41.330 --> 00:06:43.970
+sementara yang lain mengarah ke pesan tentang terjemahan yang tidak didukung.
+
+00:06:44.170 --> 00:06:46.950
+Pertua bersifat terministik, ini semua tentang apakah pola ya?
+
+00:06:47.290 --> 00:06:49.510
+Diberikan memiliki keluaran SQL yang valid dan diketahui.
+
+00:06:50.330 --> 00:06:52.570
+Ini juga merupakan tahap saat evaluasi sisi klien muncul.
+
+00:06:53.330 --> 00:06:55.370
+Jika sebagian query tidak dapat diubah menjadi SQL,
+
+00:06:55.470 --> 00:06:57.670
+F-Core mungkin masih menjalankannya di memori setelah mengambil data.
+
+00:06:58.150 --> 00:06:59.490
+Sekilas, itu tampak praktis.
+
+00:07:00.310 --> 00:07:01.310
+SQL memberi Anda data,
+
+00:07:01.510 --> 00:07:04.110
+.NET menyelesaikan pekerjaan tetapi biayanya bisa sangat besar
+
+00:07:04.110 --> 00:07:06.710
+jika basis data menyerahkan ribuan atau bahkan jutaan baris.
+
+00:07:07.310 --> 00:07:10.650
+Jadi, .NET dapat menfilternya setelahnya performa runtuh.
+
+00:07:10.650 --> 00:07:13.450
+Sesuatu yang tampak tidak berbahaya dalam basis data uji lokal
+
+00:07:13.450 --> 00:07:15.550
+dapat macet total dalam produksi saat volume data bertambah.
+
+00:07:16.230 --> 00:07:17.570
+Pengembang seringkali meremehkan perubahan.
+
+00:07:18.190 --> 00:07:19.650
+Bayangkan query yang tampak baik-baik saja
+
+00:07:19.650 --> 00:07:22.630
+saat dikembangkan terhadap kumpulan data yang terdiri dari beberapa ratus baris.
+
+00:07:23.110 --> 00:07:25.410
+Dalam produksi, query yang sama mengambil puluhan ribu rekaman
+
+00:07:25.410 --> 00:07:27.810
+dan menjalankan operasi yang lambat di server aplikasi.
+
+00:07:29.050 --> 00:07:31.510
+Saat itulah pengguna mulai mengeluh bahwa semuanya terasa macet.
+
+00:07:32.450 --> 00:07:33.630
+L pengaman penyedia penting di sini
+
+00:07:33.630 --> 00:07:37.070
+dan dalamnya kasus lebih aman untuk mendapatkan kesalahan daripada membiarkan efisien.
+
+00:07:38.010 --> 00:07:40.490
+Bagi siapapun yang membangun dengan EF, hal praktisnya sederhana.
+
+00:07:41.370 --> 00:07:43.850
+Selalu uji query terhadap data nyata atau representatif
+
+00:07:43.850 --> 00:07:46.950
+dan perhatikan apakah kinerja tiba-tiba anjlok dalam produksi.
+
+00:07:47.970 --> 00:07:50.250
+Jika terasa cepat secara lokal tetapi lambat saat dimuat,
+
+00:07:50.370 --> 00:07:52.330
+itu seringkali merupakan tanda bahwa penyedia telah mendorong
+
+00:07:52.330 --> 00:07:54.270
+sebagian logika Anda ke evaluasi sisi klien.
+
+00:07:54.810 --> 00:07:55.810
+Itu tidak otomatis salah,
+
+00:07:56.070 --> 00:07:58.150
+tetapi itu adalah sinyang perlu Anda perhatikan lebih saksama.
+
+00:07:58.690 --> 00:08:00.270
+Jadi meskipun penyedia adalah penjaga gerbang,
+
+00:08:00.390 --> 00:08:01.150
+ia tidak hanya berdikajakan.
+
+00:08:01.610 --> 00:08:03.030
+Ia melindungi kebenaran dan kinerja
+
+00:08:03.030 --> 00:08:05.530
+dengan memfilter apa yang dapat diterjemahkan ke dalam SQL
+
+00:08:05.530 --> 00:08:08.550
+dan mengendalikan kapan harus kembali ke eksekusi sisi klien.
+
+00:08:08.750 --> 00:08:10.550
+Ia menjaga alur Anda tetap dapat diprediksi.
+
+00:08:11.390 --> 00:08:12.210
+Pada saat yang sama,
+
+00:08:12.450 --> 00:08:14.770
+ia berada di bawah tekanan konstan untuk membuat keputusan ini
+
+00:08:14.770 --> 00:08:16.770
+dengan cepat tanpa menulis ulang struktur query Anda
+
+00:08:16.770 --> 00:08:17.510
+dari awal setiap saat.
+
+00:08:18.070 --> 00:08:20.310
+Dan disitulah bagian lain dari desain F-Core menjadi penting,
+
+00:08:20.450 --> 00:08:22.670
+sebuah sistem untuk mengingat dan menggunakan kembali keputusan
+
+00:08:22.670 --> 00:08:24.730
+daripada menggunakan kembali keputusan dari permintaan.
+
+00:08:24.730 --> 00:08:27.590
+Cacing, senjata rahasia kinerja AF.
+
+00:08:28.450 --> 00:08:30.190
+Disinilah performa berhenti menjadi hal yang teoretik.
+
+00:08:31.190 --> 00:08:32.610
+Entity framework core mengandalkan Cacing
+
+00:08:32.610 --> 00:08:34.350
+sebagai salah satu alat performa terbesarnya
+
+00:08:34.350 --> 00:08:36.910
+dan tanpanya penerjemahan query akan sangat tidak efisien.
+
+00:08:37.950 --> 00:08:38.390
+Setiap query,
+
+00:08:38.470 --> 00:08:40.250
+LinQ memulai hidupnya sebagai pohon ekspresi
+
+00:08:40.250 --> 00:08:42.950
+dan harus dianalisi dan dipersiapkan untuk penerjemahan SQL.
+
+00:08:43.510 --> 00:08:44.370
+Pekerjaan ditidak gratis.
+
+00:08:45.050 --> 00:08:47.610
+Jika AF harus mengulanginya dari awal pada setiap eksekusi,
+
+00:08:47.850 --> 00:08:50.170
+bahkan query sederhana akan macet jika diulang berkali-kali.
+
+00:08:50.910 --> 00:08:52.810
+Untuk membayangkan apa artinya itu dalam praktek,
+
+00:08:52.810 --> 00:08:55.070
+terbayangkan menjalankan query yang sama ribuan kali per detik
+
+00:08:55.070 --> 00:08:56.070
+dalam aplikasi produksi.
+
+00:08:56.570 --> 00:08:57.070
+Tanpa Cacing,
+
+00:08:57.190 --> 00:08:59.770
+AF Core akan melakukan pengurayan dan penerjemahan penuh pada setiap panggilan.
+
+00:09:00.870 --> 00:09:02.390
+Basis data tidak akan selalu menjadi masalah.
+
+00:09:02.770 --> 00:09:05.270
+CPI Anda akan melonjak hanya karena AF mengulang pekerjaan persiapan.
+
+00:09:05.810 --> 00:09:07.870
+Itulah sebabnya mengapa Cacing bukanlah pengopin malan opsional.
+
+00:09:08.210 --> 00:09:11.110
+Itu adalah fondasi yang membuat AF Core dapat digunakan pada skala dunia nyata.
+
+00:09:11.530 --> 00:09:12.510
+Jadi bagaimana hal itu benar-benar?
+
+00:09:12.970 --> 00:09:14.630
+AF Core menggunakan Cacing untuk mengenali
+
+00:09:14.630 --> 00:09:16.870
+kapan bentuk query yang telah di prosesnya muncul lagi.
+
+00:09:17.890 --> 00:09:19.990
+Daripada menganalisis ulang pohon ekspresi node-de-minut,
+
+00:09:19.990 --> 00:09:21.770
+AF dapat menggunakan kembali pekerjaan sebelumnya.
+
+00:09:22.330 --> 00:09:25.090
+Artinya, saat Anda mau filter berdasarkan sesuatu seperti ID pelanggan,
+
+00:09:25.230 --> 00:09:26.430
+proses pertama makan waktu lebih lama,
+
+00:09:26.530 --> 00:09:28.970
+sementara AF mencari cara untuk memetakkan filter tersebut ke dalam SKL.
+
+00:09:29.450 --> 00:09:31.890
+Setelah itu, eksekusi berikutnya dengan nilai parameter yang berbeda
+
+00:09:31.890 --> 00:09:34.250
+berlangsung cepat karena beban kerja yang berat telah disimpan.
+
+00:09:34.810 --> 00:09:36.570
+Singkatnya, proses pertama membangun rencana,
+
+00:09:36.710 --> 00:09:38.130
+proses selanjutnya menggunakannya kembali.
+
+00:09:38.750 --> 00:09:41.290
+Sekarang detail tentang bagaimana CC ini disusun bervariasi
+
+00:09:41.290 --> 00:09:42.750
+menurut versi dan penyedia AF Core,
+
+00:09:42.870 --> 00:09:44.890
+tetapi prinsip umumnya konsisten.
+
+00:09:45.690 --> 00:09:47.250
+CC melacak bentuk query yang berulang.
+
+00:09:47.250 --> 00:09:51.190
+Saat model berubah, misalnya Anda menambahkan properti ke suatu entitas,
+
+00:09:51.310 --> 00:09:53.290
+item yang di-cacet tidak lagi valid, dan AF menghapusnya.
+
+00:09:53.750 --> 00:09:56.010
+Hal ini menjaga SKL yang tidak cocok digunakan kembali.
+
+00:09:56.930 --> 00:09:58.010
+Spesifikasi implementasi,
+
+00:09:58.250 --> 00:10:00.330
+seperti beberapa lapisan caching atau aturan pengusiran,
+
+00:10:00.650 --> 00:10:02.330
+terkait dengan detail versi dan konfigurasi,
+
+00:10:02.450 --> 00:10:04.850
+dan harus diperiksa dalam dokumentasi resmi AF Core.
+
+00:10:06.170 --> 00:10:08.130
+Dari sudut pandang pengembang, hasilnya mudah dipaham.
+
+00:10:08.370 --> 00:10:10.930
+Query berjalan jauh lebih cepat setelah eksekusi pertama.
+
+00:10:11.530 --> 00:10:12.190
+Itulah cara di-cacet.
+
+00:10:12.670 --> 00:10:15.590
+Manfaatnya mudah diremehkan karena peningkatan kecepatan terasa tidak terlihat
+
+00:10:15.590 --> 00:10:18.110
+hingga Anda menonaktifkan caching atau menemukan pola
+
+00:10:18.110 --> 00:10:20.030
+yang tidak dapat digunakan kembali secara efisien.
+
+00:10:21.010 --> 00:10:22.470
+Setelah Anda menyadari apa yang dilakukannya,
+
+00:10:22.650 --> 00:10:25.090
+Anda mulai melihat mengapa AF dapat tetap responsif bahkan di bawah ban berat.
+
+00:10:25.370 --> 00:10:26.450
+Namun caching bukanlah hal yang gratis.
+
+00:10:26.870 --> 00:10:28.330
+Setiap entry caching membutuhkan memori,
+
+00:10:28.410 --> 00:10:30.290
+dan aplikasi dengan sejumlah besar bentuk query unik
+
+00:10:30.290 --> 00:10:31.890
+dapat mengalami peningkatan penggunaan memori.
+
+00:10:32.910 --> 00:10:35.490
+Jika Anda sangat bergantung pada query yang disusun secara dinamis,
+
+00:10:35.650 --> 00:10:36.650
+predikat pembuatan string,
+
+00:10:36.790 --> 00:10:38.170
+proyeksi yang dihasilkan waktu proses,
+
+00:10:38.330 --> 00:10:40.630
+atau kode yang menghasilkan bentuk yang sedikit berbeda setiap panggilan,
+
+00:10:40.630 --> 00:10:43.630
+dan Anda akan menghasilkan banyak entry caching yang tidak pernah digunakan kembali.
+
+00:10:44.710 --> 00:10:46.730
+Saat itulah caching menjadi beban alih-alih aset.
+
+00:10:47.170 --> 00:10:48.630
+Pengembangan harus memperhatikan pola tersebut.
+
+00:10:49.170 --> 00:10:50.570
+Untuk query yang lebih sedikit dan lebih konsisten,
+
+00:10:50.650 --> 00:10:52.930
+memanfaatkan caching sebaik-baiknya dan menghindari pemborosan memori.
+
+00:10:53.710 --> 00:10:56.410
+Trik bagi tim adalah mengenali bahwa query yang di-charge merupakan
+
+00:10:56.410 --> 00:10:58.390
+keuntungan kinerja dan potensi biaya memori.
+
+00:10:58.930 --> 00:11:01.310
+Anda ingin memanfaatkan caching pada pekerjaan berulang,
+
+00:11:01.410 --> 00:11:03.150
+query yang Anda tahu akan berjalan ribuan kali,
+
+00:11:03.150 --> 00:11:05.270
+tetapi waspada cara aplikasi Anda membangun query.
+
+00:11:06.250 --> 00:11:08.170
+Jika Anda menghasilkan terlalu banyak query unik,
+
+00:11:08.170 --> 00:11:10.810
+caching harus mempertahankan bentuk yang tidak mungkin terlihat lagi.
+
+00:11:11.570 --> 00:11:13.630
+Itu dapat menambah beban tak terduga pada sistem Anda,
+
+00:11:13.830 --> 00:11:14.790
+terutama dalam skala besar.
+
+00:11:15.470 --> 00:11:17.930
+Dalam praktiknya, saran terbaik adalah membiarkan EF Core
+
+00:11:17.930 --> 00:11:19.590
+menangani caching secara otomatis,
+
+00:11:19.770 --> 00:11:22.310
+tetapi berhati-hatilah dalam menulis query A.
+
+00:11:22.770 --> 00:11:24.690
+Jika Anda melihat tekanan memori dalam aplikasi Anda
+
+00:11:24.690 --> 00:11:26.370
+sementara beban basis data tampak normal,
+
+00:11:26.490 --> 00:11:28.370
+pertimbangan apakah masalah tersebut mungkin terkait dengan
+
+00:11:28.370 --> 00:11:29.390
+banyaknya bentuk query yang di-charge.
+
+00:11:29.570 --> 00:11:31.530
+Itu bukanlah tempat pertama yang dilihat pengembang,
+
+00:11:31.650 --> 00:11:32.850
+tetapi seringkali menjadi kontributor.
+
+00:11:33.770 --> 00:11:35.430
+Mengoptimalkan pola query bisa sama pentingnya
+
+00:11:35.430 --> 00:11:36.950
+dengan mengoptimalkan basis data itu sendiri.
+
+00:11:36.950 --> 00:11:39.870
+Caching seringkali menjelaskan mengapa query EF
+
+00:11:39.870 --> 00:11:41.310
+terasa cepat setelah penundaan awal tersebut.
+
+00:11:41.910 --> 00:11:43.050
+Ia melakukan perjalanan yang sama sekali,
+
+00:11:43.170 --> 00:11:44.410
+lalu melewatkan overhead pada pengulang.
+
+00:11:44.830 --> 00:11:45.690
+Sederhana tetapi hebat.
+
+00:11:46.310 --> 00:11:48.570
+Namun, bahkan ketika eksekusi query terasa lancar,
+
+00:11:48.770 --> 00:11:50.610
+sumber bug halus lainnya mengintai di tikungan
+
+00:11:50.610 --> 00:11:52.190
+saat menangani nilai 0.
+
+00:11:52.590 --> 00:11:53.910
+Disitulah EF Core harus menjembatani
+
+00:11:53.910 --> 00:11:55.570
+dua definisi yang sangat berbeda tentang ketiadaan.
+
+00:11:56.570 --> 00:11:58.210
+Dan itu adalah masalah yang selalu dihadapi pengumeng.
+
+00:11:59.370 --> 00:12:01.650
+Semantik 0 ketika ketiadaan memiliki arti yang berbeda.
+
+00:12:02.630 --> 00:12:04.250
+Dalam sebagian besar pengodean sehari-hari,
+
+00:12:04.250 --> 00:12:06.510
+pengembang dapat memperlakukan 0 sebagai konsep sederhana.
+
+00:12:06.790 --> 00:12:08.050
+Tetapi kenyatanya menjadi lebih rumit
+
+00:12:08.050 --> 00:12:10.330
+setelah EF Core berada di antara sys-tab dan basis data SQL.
+
+00:12:11.850 --> 00:12:14.130
+Disinilah masalah 0 menjadi pusat perhatian.
+
+00:12:14.810 --> 00:12:17.270
+Aturan yang Anda pikir Anda terapkan di internet tidak selalu
+
+00:12:17.270 --> 00:12:19.870
+berarti hal yang sama saat database mengevaluasinya.
+
+00:12:20.830 --> 00:12:22.030
+Di C, 0 itu mudah.
+
+00:12:22.610 --> 00:12:24.830
+Referensi objek yang hilang, string yang tidak ditetapkan,
+
+00:12:25.030 --> 00:12:26.050
+properti yang belum ditetapkan,
+
+00:12:26.170 --> 00:12:27.350
+semuanya menghasilkan hal yang sama.
+
+00:12:27.770 --> 00:12:29.110
+Namun, SQL beroperasi secara berbeda.
+
+00:12:29.470 --> 00:12:32.110
+SQL tidak menggunakan 0 dengan cara yang sejalan dengan internet.
+
+00:12:32.110 --> 00:12:35.170
+SQL memperlakukannya lebih seperti nilai yang tidak diketahui
+
+00:12:35.170 --> 00:12:36.670
+yang tidak diketahui yang mengaruhi cara perbedaan.
+
+00:12:37.050 --> 00:12:38.190
+Misalnya, dalam SQL,
+
+00:12:38.370 --> 00:12:39.930
+menulis kolom dalam 0 tidak akan berperlaku
+
+00:12:39.930 --> 00:12:40.870
+seperti uji benar-salah.
+
+00:12:41.590 --> 00:12:42.070
+Sebaliknya,
+
+00:12:42.230 --> 00:12:43.430
+ia menghasilkan penanganan khusus
+
+00:12:43.430 --> 00:12:44.490
+yang memerlukan pemeriksaan is 0.
+
+00:12:44.950 --> 00:12:46.010
+Ini adalah perbedaan penting
+
+00:12:46.010 --> 00:12:47.230
+yang perlu diingat oleh pengembang.
+
+00:12:47.850 --> 00:12:49.250
+Contoh cepat membuat perbedaannya jelas.
+
+00:12:50.410 --> 00:12:52.110
+Misalkan Anda menulis query di pelanggan,
+
+00:12:52.570 --> 00:12:54.310
+di mana C, E, C nama sama dengan 0.
+
+00:12:55.090 --> 00:12:56.390
+Jalankan query itu di memori
+
+00:12:56.390 --> 00:12:57.750
+terhadap daftar objek pelanggan
+
+00:12:57.750 --> 00:12:59.110
+dan Anda akan mendapatkan kembali
+
+00:12:59.110 --> 00:13:00.330
+yang namanya sebenarnya 0.
+
+00:13:00.330 --> 00:13:02.690
+Terjemahkan logika yang sama ke dalam SQL
+
+00:13:02.690 --> 00:13:03.350
+tanpa penyesuaian
+
+00:13:03.350 --> 00:13:04.430
+dan Anda akan berharap melihat
+
+00:13:04.430 --> 00:13:05.790
+di mana nama sama dengan 0.
+
+00:13:06.610 --> 00:13:07.230
+Dalam prakteknya,
+
+00:13:07.310 --> 00:13:08.610
+itu tidak akan mengembalikan bersama sekali.
+
+00:13:09.390 --> 00:13:10.550
+Bentuk SQL yang benar adalah
+
+00:13:10.550 --> 00:13:11.470
+di mana nama adalah 0.
+
+00:13:12.450 --> 00:13:13.450
+Nyadari perbedaan ini penting.
+
+00:13:13.930 --> 00:13:14.570
+Sebagai pengembang,
+
+00:13:14.710 --> 00:13:15.610
+memeriksa keluaran SQL
+
+00:13:15.610 --> 00:13:17.510
+saat linq Anda bergantung pada perbandingan 0
+
+00:13:17.510 --> 00:13:18.610
+merupakan kebiasaan yang baik
+
+00:13:18.610 --> 00:13:19.850
+terutama untuk menghindari kejutan
+
+00:13:19.850 --> 00:13:20.690
+saat berpindah-kejutan
+
+00:13:20.690 --> 00:13:21.790
+saat berpindah ke data produksi.
+
+00:13:21.990 --> 00:13:22.730
+Tidak cocokan ini
+
+00:13:22.730 --> 00:13:24.390
+merupakan akar dari mengapa query 0
+
+00:13:24.390 --> 00:13:26.590
+terkadang berperilaku aneh di EF Core.
+
+00:13:27.010 --> 00:13:27.810
+Jika tidak dikoreksi,
+
+00:13:27.810 --> 00:13:29.690
+sesuatu yang tampaknya dapat diprediksi di C+,
+
+00:13:29.690 --> 00:13:30.430
+dapat secara diam-diam
+
+00:13:30.430 --> 00:13:31.790
+tidak menghasilkan hasil apapun di data.
+
+00:13:32.030 --> 00:13:32.450
+Terkadang,
+
+00:13:32.590 --> 00:13:33.830
+hal itu bahkan dapat memberikan hasil
+
+00:13:33.830 --> 00:13:34.710
+yang tampak baik-baik saja
+
+00:13:34.710 --> 00:13:35.590
+dalam pengujian kecil
+
+00:13:35.590 --> 00:13:37.070
+tetapi gatal dalam skenario nyata tempat 0
+
+00:13:37.070 --> 00:13:37.510
+lebih sering muncul.
+
+00:13:37.750 --> 00:13:38.950
+Itu adalah cara mudah bagi bal halus
+
+00:13:38.950 --> 00:13:40.330
+untuk menyelinap masuk tanpa peringatan.
+
+00:13:40.830 --> 00:13:41.910
+Untuk mengurangi risiko ini,
+
+00:13:42.010 --> 00:13:43.130
+EF Core tidak sekadar meneruskan
+
+00:13:43.130 --> 00:13:44.010
+perbandingan 0 Anda.
+
+00:13:44.590 --> 00:13:45.030
+Sebaliknya,
+
+00:13:45.290 --> 00:13:46.030
+ia menerapkan aturan
+
+00:13:46.030 --> 00:13:48.090
+untuk menjaga perilaku in-Q dan SQL tetap selara.
+
+00:13:48.450 --> 00:13:49.770
+Untuk pemeriksaan kesetaraan,
+
+00:13:49.870 --> 00:13:51.130
+EF biasanya akan menyesuaikannya
+
+00:13:51.130 --> 00:13:52.090
+ke dalam kondisi is 0
+
+00:13:57.810 --> 00:13:59.850
+sehingga hasil database tetap sinkron
+
+00:13:59.850 --> 00:14:01.070
+dengan apa yang seharusnya dilakukan
+
+00:14:01.070 --> 00:14:02.110
+logika runtime internet.
+
+00:14:02.830 --> 00:14:04.710
+Internal yang tepat dari penyesuaian ini
+
+00:14:04.710 --> 00:14:06.230
+bergantung pada versi dan penyedia
+
+00:14:06.230 --> 00:14:07.710
+tetapi prinsip panduannya konsisten.
+
+00:14:08.670 --> 00:14:09.930
+Pertahankan ekspektasi developer
+
+00:14:09.930 --> 00:14:11.230
+dengan menormalkan logika 0.
+
+00:14:11.950 --> 00:14:12.470
+Akan tetapi,
+
+00:14:12.570 --> 00:14:13.590
+penyelarasan ini ada harganya.
+
+00:14:13.870 --> 00:14:15.330
+Transformasi yang saling mengimbangi tersebut
+
+00:14:15.330 --> 00:14:17.210
+dapat membuat query SQL menjadi lebih panjang
+
+00:14:17.210 --> 00:14:18.510
+dan lebih kompleks daripada yang Anda tulis.
+
+00:14:18.710 --> 00:14:20.090
+EF memprioritaskan kebenaran
+
+00:14:20.090 --> 00:14:21.130
+daripada kesederhanaan
+
+00:14:21.130 --> 00:14:22.810
+terkadang dengan mengorbankan efisiensi.
+
+00:14:23.250 --> 00:14:24.650
+Itulah mengapa Anda terkadang melihat
+
+00:14:24.650 --> 00:14:26.390
+SQL yang dihasilkan dengan kondisi tambahan
+
+00:14:26.390 --> 00:14:27.670
+yang tidak sesuai dengan pernyataan
+
+00:14:27.670 --> 00:14:28.490
+tautan bersih Anda.
+
+00:14:29.470 --> 00:14:30.930
+EF secara diam-diam memastikan Anda
+
+00:14:30.930 --> 00:14:31.710
+tidak akan mendapatkan hasil
+
+00:14:31.710 --> 00:14:32.610
+yang tidak konsisten nantinya.
+
+00:14:33.030 --> 00:14:33.110
+Ya.
+
+00:14:34.050 --> 00:14:35.830
+Kompleksitas query yang dihasilkan seringkali
+
+00:14:35.830 --> 00:14:37.290
+merupakan efek samping yang terlihat
+
+00:14:37.290 --> 00:14:38.190
+dari menjaga semantik 0
+
+00:14:38.190 --> 00:14:39.190
+tetap aman di dua sistem
+
+00:14:39.190 --> 00:14:40.750
+dengan definisi yang saling bertentangan.
+
+00:14:41.830 --> 00:14:43.290
+Yang paling penting bagi developer
+
+00:14:43.290 --> 00:14:44.570
+adalah mengenali potensi risiko
+
+00:14:44.570 --> 00:14:45.290
+dalam penanganan 0.
+
+00:14:46.310 --> 00:14:47.610
+Jika query tampak aneh, lambat,
+
+00:14:47.710 --> 00:14:48.390
+atau terlalu rumit,
+
+00:14:48.470 --> 00:14:49.030
+pemeriksaan 0
+
+00:14:49.030 --> 00:14:50.210
+adalah tempat yang baik
+
+00:14:50.210 --> 00:14:51.550
+untuk memulai pemecahan masalah.
+
+00:14:52.350 --> 00:14:53.670
+Kesimpulan singkatan mempraktis adalah ini.
+
+00:14:54.450 --> 00:14:55.550
+Jika query yang melibatkan 0
+
+00:14:55.550 --> 00:14:56.310
+berperilaku aneh,
+
+00:14:56.450 --> 00:14:57.590
+periksa perbedaan terjemahan
+
+00:14:57.590 --> 00:14:58.970
+atau penulisan ulang yang tersembunyi.
+
+00:14:59.610 --> 00:15:00.350
+Ini bukan kesalahan
+
+00:15:00.350 --> 00:15:01.330
+melainkan pagar pelindung
+
+00:15:01.330 --> 00:15:02.950
+yang telah dibangun di EF Core.
+
+00:15:04.110 --> 00:15:04.930
+Bahaya sebenarnya adalah
+
+00:15:04.930 --> 00:15:05.810
+menganggap pemeriksaan 0
+
+00:15:05.810 --> 00:15:06.890
+yang tidak berbahaya berperilaku
+
+00:15:06.890 --> 00:15:07.690
+sama di kedua lingkungan.
+
+00:15:08.170 --> 00:15:08.450
+Tidak.
+
+00:15:08.730 --> 00:15:09.890
+Dan itu dapat muncul sebagai bug
+
+00:15:09.890 --> 00:15:11.210
+yang hanya muncul dengan data produksi
+
+00:15:11.210 --> 00:15:12.870
+bukan dalam rangkaian pengujian yang rapi.
+
+00:15:13.430 --> 00:15:15.050
+Misalnya Anda mungkin mengira filter
+
+00:15:15.050 --> 00:15:15.770
+mengecualikan 0
+
+00:15:15.770 --> 00:15:17.290
+hingga Anda melihat rekaman tertentu
+
+00:15:17.290 --> 00:15:18.210
+hilang secara misterius.
+
+00:15:19.070 --> 00:15:20.370
+Ketidakcocokan senyap semacam itu
+
+00:15:20.370 --> 00:15:21.970
+dapat menjadi salah satu masalah tersulit
+
+00:15:21.970 --> 00:15:22.490
+untuk dilacak
+
+00:15:22.490 --> 00:15:23.730
+kecuali Anda telah memvalidasi
+
+00:15:23.730 --> 00:15:24.550
+sekel yang dihasilkan
+
+00:15:24.550 --> 00:15:25.890
+terhadap volume dan pola data nyata.
+
+00:15:26.850 --> 00:15:28.510
+Jadi, meskipun semantik 0 memusingkan,
+
+00:15:28.610 --> 00:15:29.210
+itu juga merupakan
+
+00:15:29.210 --> 00:15:30.930
+salah satu intervensi terpenting EF Core.
+
+00:15:32.350 --> 00:15:33.870
+Dengan mengompensasi ketidakcocokan,
+
+00:15:34.030 --> 00:15:35.310
+EF membantu memperhalus celah
+
+00:15:35.310 --> 00:15:36.090
+yang dapat menyebabkan
+
+00:15:36.090 --> 00:15:37.330
+kegagalan yang tidak terduga.
+
+00:15:38.470 --> 00:15:39.650
+Pengembang mungkin tidak menyukai
+
+00:15:39.650 --> 00:15:41.330
+sekel tambahan yang muncul dalam proses,
+
+00:15:41.490 --> 00:15:42.210
+tetapi tanpa itu
+
+00:15:42.210 --> 00:15:43.730
+hasilnya tidak akan dapat diandalkan.
+
+00:15:44.430 --> 00:15:45.050
+Setelah menangani 0,
+
+00:15:45.150 --> 00:15:46.030
+EF sekarang membawa query
+
+00:15:46.030 --> 00:15:46.770
+yang telah diteruskan,
+
+00:15:46.870 --> 00:15:47.870
+difilter melalui penyedia,
+
+00:15:48.030 --> 00:15:48.890
+dicaci, dan disesuaikan
+
+00:15:48.890 --> 00:15:50.330
+untuk menjaga logika tetap konsisten.
+
+00:15:51.130 --> 00:15:52.110
+Pertanyaan terakhir adalah
+
+00:15:52.110 --> 00:15:52.930
+apa yang terjadi selanjut?
+
+00:15:53.390 --> 00:15:54.650
+Bagaimana query yang disiapkan ini
+
+00:15:54.650 --> 00:15:55.550
+menjadi perintah SQL
+
+00:15:55.550 --> 00:15:56.390
+yang benar-benar dapat
+
+00:15:56.390 --> 00:15:57.270
+dieksekusi oleh database?
+
+00:15:57.750 --> 00:15:58.630
+Dan bagaimana data mentah
+
+00:15:58.630 --> 00:15:59.370
+diubah kembali menjadi
+
+00:15:59.370 --> 00:15:59.770
+yang dapat digunakan?
+
+00:16:01.070 --> 00:16:02.070
+Dan objek bersih untuk
+
+00:16:02.070 --> 00:16:03.570
+pembuatan dan materialisasi
+
+00:16:03.570 --> 00:16:04.270
+SQL ES.
+
+00:16:04.770 --> 00:16:06.010
+Tahap terakhir dari alur kerja
+
+00:16:06.010 --> 00:16:07.070
+adalah pembuatan SQL
+
+00:16:07.070 --> 00:16:07.930
+dan materialisasi,
+
+00:16:08.090 --> 00:16:09.390
+titik di mana semua persiapan itu
+
+00:16:09.390 --> 00:16:11.030
+membuahkan hasil atau gagal.
+
+00:16:11.970 --> 00:16:12.910
+Semua hal hingga saat ini
+
+00:16:12.910 --> 00:16:14.110
+adalah tentang membentuk maksud,
+
+00:16:14.350 --> 00:16:15.070
+memvalidasi pola,
+
+00:16:15.170 --> 00:16:16.210
+dan melindungi konsistensi.
+
+00:16:16.210 --> 00:16:18.230
+Namun, query hanya menjadi berguna
+
+00:16:18.230 --> 00:16:19.230
+ketika F dapat mengubah
+
+00:16:19.230 --> 00:16:19.990
+maksud tersebut menjadi
+
+00:16:19.990 --> 00:16:20.970
+perintah SQL yang dipahami
+
+00:16:20.970 --> 00:16:21.630
+basis data Anda,
+
+00:16:21.750 --> 00:16:22.870
+lalu membentuk ulang hasil
+
+00:16:22.870 --> 00:16:24.050
+yang datar menjadi objek yang kaya,
+
+00:16:24.250 --> 00:16:24.910
+yang benar-benar dapat
+
+00:16:24.910 --> 00:16:25.850
+digunakan oleh kode Anda.
+
+00:16:27.330 --> 00:16:28.170
+Dua bagian yang bergerak
+
+00:16:28.170 --> 00:16:29.410
+dalam sebagian besar pekerjaan ini,
+
+00:16:29.550 --> 00:16:30.850
+generator SQL dan materialisasi.
+
+00:16:31.550 --> 00:16:32.890
+Mereka memecahkan masalah yang berlawan,
+
+00:16:32.970 --> 00:16:33.810
+tetapi saling bergantung.
+
+00:16:34.390 --> 00:16:35.630
+Pembuatan SQL memperhatikan penyedia.
+
+00:16:36.110 --> 00:16:37.270
+Komponen penyedia memengaruhi
+
+00:16:37.270 --> 00:16:38.210
+cara query diekspresikan
+
+00:16:38.210 --> 00:16:39.530
+untuk dialek basis data tertentu.
+
+00:16:40.430 --> 00:16:41.290
+Materialisasi kemudian
+
+00:16:41.290 --> 00:16:42.410
+mengambil baris yang kembali
+
+00:16:42.410 --> 00:16:43.290
+dan membangun entitas
+
+00:16:43.290 --> 00:16:44.130
+serta proyeksi.
+
+00:16:45.090 --> 00:16:45.750
+Tidak ada sisi yang cukup
+
+00:16:45.750 --> 00:16:46.450
+jika dilakukan sendiri.
+
+00:16:46.810 --> 00:16:47.950
+Pembuatan SQL memastikan
+
+00:16:47.950 --> 00:16:49.090
+data dapat menjalankan query.
+
+00:16:49.970 --> 00:16:50.930
+Materialisasi memastikan
+
+00:16:50.930 --> 00:16:51.770
+hasilnya masuk akal
+
+00:16:51.770 --> 00:16:52.750
+untuk aplikasi Anda.
+
+00:16:53.830 --> 00:16:54.430
+Bolak-balik itulah
+
+00:16:54.430 --> 00:16:55.250
+mengapa tahap ini terasa
+
+00:16:55.250 --> 00:16:56.070
+seperti penerjemahan
+
+00:16:56.070 --> 00:16:56.730
+dalam dua arah.
+
+00:16:58.190 --> 00:16:58.890
+Filter tautan
+
+00:16:58.890 --> 00:17:00.130
+yang tampak tidak berbahaya
+
+00:17:00.130 --> 00:17:00.910
+dalam komponen C
+
+00:17:00.910 --> 00:17:01.910
+perlu ditulis sebagai SQL
+
+00:17:01.910 --> 00:17:02.870
+yang valid untuk postgres
+
+00:17:02.870 --> 00:17:03.410
+GL server
+
+00:17:03.410 --> 00:17:04.350
+atau penyedia manapun
+
+00:17:04.350 --> 00:17:05.010
+yang Anda gunakan.
+
+00:17:06.410 --> 00:17:07.550
+Ketika basis data membalas,
+
+00:17:07.830 --> 00:17:08.890
+EF tidak menerima apapun
+
+00:17:08.890 --> 00:17:09.690
+selain baris dan kolom
+
+00:17:09.690 --> 00:17:10.410
+yang tidak dapat diberikan
+
+00:17:10.410 --> 00:17:11.290
+begitu saja kepada Anda
+
+00:17:11.290 --> 00:17:11.890
+tanpa konteks.
+
+00:17:11.890 --> 00:17:13.250
+Harapan Anda adalah
+
+00:17:13.250 --> 00:17:14.390
+Anda akan menerima entitas
+
+00:17:14.390 --> 00:17:15.470
+dengan properti navigasi
+
+00:17:15.470 --> 00:17:16.010
+yang terhubung,
+
+00:17:16.150 --> 00:17:16.650
+nilai yang diketik
+
+00:17:16.650 --> 00:17:17.370
+di tempat yang tepat
+
+00:17:17.370 --> 00:17:18.370
+dan hubungan yang utuh.
+
+00:17:19.610 --> 00:17:20.550
+Jembatan di kesenjangan tersebut
+
+00:17:20.550 --> 00:17:21.750
+adalah tujuan dari langkah-langkah ini.
+
+00:17:22.050 --> 00:17:22.970
+Pikirkan dengan contoh seterah.
+
+00:17:23.530 --> 00:17:24.670
+Jika Anda telah menulis query
+
+00:17:24.670 --> 00:17:25.890
+yang menyertakan entitas terkait,
+
+00:17:26.010 --> 00:17:26.570
+misalnya pesanan
+
+00:17:26.570 --> 00:17:27.490
+dengan baris pesanannya,
+
+00:17:27.650 --> 00:17:28.470
+Anda tidak ingin melihat
+
+00:17:28.470 --> 00:17:29.610
+setengah lusin baris parsial
+
+00:17:29.610 --> 00:17:30.810
+dan menyatukannya secara manual.
+
+00:17:32.010 --> 00:17:32.810
+Anda berharap melihat
+
+00:17:32.810 --> 00:17:33.470
+objek pesanan
+
+00:17:33.470 --> 00:17:34.230
+yang berisi koleksi
+
+00:17:34.230 --> 00:17:35.310
+baris pesanan yang terisi.
+
+00:17:35.990 --> 00:17:36.730
+Itulah materialisasi
+
+00:17:36.730 --> 00:17:37.270
+dalam tindakan.
+
+00:17:38.390 --> 00:17:39.290
+EF merekonstruksi
+
+00:17:39.290 --> 00:17:40.210
+grafik objek lengkap
+
+00:17:40.210 --> 00:17:41.110
+dari kumpulan baris.
+
+00:17:41.470 --> 00:17:42.530
+Dan berikut petunjuk praktisnya.
+
+00:17:42.950 --> 00:17:43.790
+Jika Anda memperhatikan
+
+00:17:43.790 --> 00:17:44.870
+objek yang dilacak duplikat
+
+00:17:44.870 --> 00:17:46.010
+atau nilai navigasi yang hilang,
+
+00:17:46.130 --> 00:17:46.690
+seringkali hal itu
+
+00:17:46.690 --> 00:17:47.590
+bergantung pada bagaimana
+
+00:17:47.590 --> 00:17:48.530
+gabungan tersebut dibentuk
+
+00:17:48.530 --> 00:17:49.550
+dan bagaimana tersebut dibentuk
+
+00:17:49.550 --> 00:17:50.210
+dan bagaimana EF
+
+00:17:50.210 --> 00:17:50.950
+mewujudkan hasilnya.
+
+00:17:51.910 --> 00:17:52.850
+Pembuatan SQL itu sendiri
+
+00:17:52.850 --> 00:17:53.930
+menyeruti ketergantungan EF
+
+00:17:53.930 --> 00:17:54.490
+pada penyedia.
+
+00:17:55.050 --> 00:17:55.530
+Kerangka kerja
+
+00:17:55.530 --> 00:17:56.670
+tidak mencoba membuat kode keras
+
+00:17:56.670 --> 00:17:57.550
+setiap detail sintaksis.
+
+00:17:57.850 --> 00:17:58.370
+Sebaliknya,
+
+00:17:58.570 --> 00:17:59.610
+penyedia penjadakan logika
+
+00:17:59.610 --> 00:18:00.450
+untuk basis data mereka.
+
+00:18:01.270 --> 00:18:01.670
+Artinya,
+
+00:18:02.210 --> 00:18:03.030
+query yang sama mungkin
+
+00:18:03.030 --> 00:18:04.030
+akan menghasilkan SQL
+
+00:18:09.290 --> 00:18:10.370
+yang dikutip di PostgreSQL
+
+00:18:10.370 --> 00:18:11.390
+pemaksaan tipe yang berbeda
+
+00:18:11.390 --> 00:18:11.870
+di tempat lain.
+
+00:18:12.230 --> 00:18:12.910
+Variasi ini penting
+
+00:18:12.910 --> 00:18:13.570
+karena menentukan
+
+00:18:13.570 --> 00:18:14.510
+apakah query tersebut
+
+00:18:14.510 --> 00:18:15.150
+benar-benar valid
+
+00:18:15.150 --> 00:18:16.290
+untuk basis data target.
+
+00:18:17.570 --> 00:18:18.870
+Prinsip ini perlu dikonfirmasi
+
+00:18:18.870 --> 00:18:19.890
+terhadap dokumen EF Core
+
+00:18:19.890 --> 00:18:21.210
+untuk versi dan penyedia tertentu
+
+00:18:21.210 --> 00:18:21.930
+yang Anda gunakan
+
+00:18:21.930 --> 00:18:23.330
+karena kemampuan terus berkembang.
+
+00:18:24.170 --> 00:18:25.090
+Di sisi materialisasi,
+
+00:18:25.270 --> 00:18:26.150
+EF harus menangani
+
+00:18:26.150 --> 00:18:27.390
+lebih dari sekadar kementahan sederhana.
+
+00:18:28.150 --> 00:18:29.130
+Ia perlu menyelaraskan
+
+00:18:29.130 --> 00:18:30.030
+tipe kolom basis data
+
+00:18:30.030 --> 00:18:30.710
+dengan tipenya,
+
+00:18:30.910 --> 00:18:31.790
+menerapkan konversi
+
+00:18:31.790 --> 00:18:32.450
+saat dibutuhkan
+
+00:18:32.450 --> 00:18:33.610
+dan memperbaiki kunci asing
+
+00:18:33.610 --> 00:18:34.530
+sehingga hubungan berubah
+
+00:18:34.530 --> 00:18:35.770
+menjadi referensi objek nyata.
+
+00:18:39.290 --> 00:18:40.370
+Khusus atau tipe anonim
+
+00:18:40.370 --> 00:18:41.250
+harus disusun langsung
+
+00:18:41.250 --> 00:18:42.050
+dari kumpulan hasil
+
+00:18:42.050 --> 00:18:43.690
+tanpa pernah membuat entitas penuh.
+
+00:18:44.590 --> 00:18:45.410
+Fleksibilitas itulah
+
+00:18:45.410 --> 00:18:46.090
+yang membuat pengembang
+
+00:18:46.090 --> 00:18:47.030
+rasa EF beradaptasi
+
+00:18:47.030 --> 00:18:47.790
+dengan kebutuhan mereka
+
+00:18:47.790 --> 00:18:48.990
+tetapi hal itu menambahkan
+
+00:18:48.990 --> 00:18:49.650
+kompleksitas nyata
+
+00:18:49.650 --> 00:18:50.510
+pada mesin di bawahnya.
+
+00:18:51.210 --> 00:18:51.850
+Ada juga kasus
+
+00:18:51.850 --> 00:18:52.790
+di mana materialisasi
+
+00:18:52.790 --> 00:18:53.430
+melacak properti
+
+00:18:53.430 --> 00:18:54.350
+yang tidak Anda definisikan
+
+00:18:54.350 --> 00:18:55.230
+secara eksplisit.
+
+00:18:56.230 --> 00:18:57.430
+Fitur seperti properti bayangan
+
+00:18:57.430 --> 00:18:58.970
+atau kait pembuatan lambat cocok di sini
+
+00:18:58.970 --> 00:19:00.230
+tetapi ini bervariasi
+
+00:19:00.230 --> 00:19:01.710
+menurut versi dan penyedia EF Core
+
+00:19:01.710 --> 00:19:02.770
+jadi periksa dokumentasi
+
+00:19:02.770 --> 00:19:03.630
+lingkungan target Anda
+
+00:19:03.630 --> 00:19:04.770
+sebelum mengantar target Anda
+
+00:19:04.770 --> 00:19:05.470
+sebelum mengandalkan.
+
+00:19:05.470 --> 00:19:06.850
+Yang terpenting adalah
+
+00:19:06.850 --> 00:19:07.950
+materialisasi berhasil
+
+00:19:07.950 --> 00:19:09.250
+menyembunyikan seluruh proses ini.
+
+00:19:09.890 --> 00:19:10.590
+Pengembang melihat
+
+00:19:10.590 --> 00:19:11.570
+model objek yang bersih
+
+00:19:11.570 --> 00:19:12.950
+sementara EF telah menghabiskan
+
+00:19:12.950 --> 00:19:13.710
+banyak upaya untuk
+
+00:19:13.710 --> 00:19:14.510
+menyeimbangkan kinerja
+
+00:19:14.510 --> 00:19:15.050
+dengan kebenaran.
+
+00:19:15.630 --> 00:19:16.490
+Hubungan memberikan gambaran
+
+00:19:16.490 --> 00:19:16.990
+yang baik tentang
+
+00:19:16.990 --> 00:19:17.710
+pekerjaan tersebutnya.
+
+00:19:18.350 --> 00:19:19.570
+Alih-alih memberi Anda
+
+00:19:19.570 --> 00:19:20.470
+baris yang saling merujuk
+
+00:19:20.470 --> 00:19:21.450
+berdasarkan ID EF
+
+00:19:21.450 --> 00:19:22.750
+menyelesaikan referensi tersebut
+
+00:19:22.750 --> 00:19:23.890
+menjadi properti navigasi.
+
+00:19:24.590 --> 00:19:25.310
+Kiannya di sini sederhana.
+
+00:19:25.870 --> 00:19:26.790
+Jika properti navigasi
+
+00:19:26.790 --> 00:19:27.970
+kosong atau tidak konsisten
+
+00:19:27.970 --> 00:19:28.890
+meninjau kembali
+
+00:19:28.890 --> 00:19:29.950
+cara Anda membentuk query
+
+00:19:29.950 --> 00:19:31.590
+terutama dengan pilihan include
+
+00:19:31.590 --> 00:19:32.210
+atau projection
+
+00:19:32.210 --> 00:19:32.990
+seringkali dapat
+
+00:19:32.990 --> 00:19:33.670
+menyelesaikannya.
+
+00:19:34.450 --> 00:19:35.350
+Jadi dalam prakteknya
+
+00:19:35.350 --> 00:19:36.450
+pembuatan dan materialisasi
+
+00:19:36.450 --> 00:19:37.450
+SQL memberikan dampak
+
+00:19:37.450 --> 00:19:38.070
+yang paling terlihat
+
+00:19:38.070 --> 00:19:38.630
+pada EF.
+
+00:19:39.670 --> 00:19:40.410
+Ini adalah tahapan
+
+00:19:40.410 --> 00:19:41.170
+yang membuat perbedaan
+
+00:19:41.170 --> 00:19:41.970
+antara pengalamannya
+
+00:19:41.970 --> 00:19:42.770
+ramah pelembang
+
+00:19:42.770 --> 00:19:43.490
+dan pemimpinan data
+
+00:19:43.490 --> 00:19:44.350
+yang biasanya menghabiskan
+
+00:19:44.350 --> 00:19:44.890
+waktu berjam-jam
+
+00:19:44.890 --> 00:19:45.630
+untuk pembentahan manual.
+
+00:19:46.910 --> 00:19:47.910
+Saat Anda membuat query
+
+00:19:47.910 --> 00:19:48.490
+dengan EF
+
+00:19:48.490 --> 00:19:49.450
+Anda mendapatkan kembali
+
+00:19:49.450 --> 00:19:50.170
+sesuatu yang terasa
+
+00:19:50.170 --> 00:19:50.670
+alami di net.
+
+00:19:50.830 --> 00:19:51.590
+Bukan karena SQL
+
+00:19:51.590 --> 00:19:52.350
+memberi Anda objek
+
+00:19:52.350 --> 00:19:52.990
+tetapi karena EF
+
+00:19:52.990 --> 00:19:53.650
+membangunnya kembali
+
+00:19:53.650 --> 00:19:54.290
+dengan cara itu.
+
+00:19:54.750 --> 00:19:55.250
+Inilah sebabnya
+
+00:19:55.250 --> 00:19:55.870
+mengapa prosesnya
+
+00:19:55.870 --> 00:19:56.450
+seringkali terasa
+
+00:19:56.450 --> 00:19:56.830
+seberisual.
+
+00:19:56.830 --> 00:19:58.290
+Dua mesin yang berbeda
+
+00:19:58.290 --> 00:19:58.930
+satu fasi dalam
+
+00:19:58.930 --> 00:19:59.690
+dialik basis data
+
+00:19:59.690 --> 00:20:00.450
+yang lain fasi dalam serka.
+
+00:20:00.450 --> 00:20:30.430
+Terima kasih telah menonton!
