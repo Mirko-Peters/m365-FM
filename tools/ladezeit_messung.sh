@@ -82,6 +82,13 @@ if has purge; then
   sleep 5
   serie "nach Purge" "$STAGE" / 3 "${acc[@]}"
 fi
+if has blog; then
+  echo; echo "=================== Blogbild auf live (nur lesen)"
+  for p in /community/u/mirko-p/blog/stop-the-industrialization-of-chaos-why-automating-flawed-processes-fails/ /show/episodes/how-to-stop-power-automate-from-scaling-your-business-chaos/; do
+    echo "--- $p"; body "$LIVE$p" | grep -oE '<(img|meta)[^>]*5254f600109b589b2c2d[^>]*>|"(image|url)"[^"]{0,4}"[^"]*5254f600109b589b2c2d[^"]*"' | cut -c1-300 | sed 's/^/    /'
+  done
+  for u in https://img.m365.fm/i/5254f600109b589b2c2d.webp https://img.m365.fm/i/5254f600109b589b2c2d-r1200x675.webp; do one "Bild" "$u" -r 0-0; done
+fi
 if has domains; then
   echo; echo "=================== R2-Domains m365-fm-staging (nur lesen)"
   npx --yes wrangler@4 r2 bucket domain list m365-fm-staging 2>&1 | sed -E 's/[a-f0-9]{32}/[id]/g' | tail -20
