@@ -36,6 +36,10 @@ PROFILE_REDIRECT = "0"
 # "0" = wie bisher (GitHub Pages zuerst, R2 nur fuer Seiten, die es nur dort gibt). Notschalter: hier auf "0" setzen und mergen.
 # Seit 16.11.2026 "1" (Wunsch Mirko): Spiegel und Bau-Kennung liefen im Bau 684 vollstaendig durch.
 R2_PRIMARY = "1"
+# Kanten-Cache fuer Seiten und Dateien aus R2 (Schluessel /__r2f<pfad>) in Sekunden, seit 25.11.2026 1 Tag statt 4 h (Kostenanalyse D1/R2): jede
+# geaenderte Adresse leert der Deploy gezielt (tools/purge_changed.py --r2), seit die Liste "Neueste Folgen" weg ist, gibt es keine Aenderung ohne Purge mehr.
+# Notschalter: "14400" (4 h wie vorher). Erlaubt 600 bis 604800; sonst gilt 14400 (sitewrk/index.js r2EdgeTtl).
+R2_EDGE_TTL = "86400"
 # Blog auf der eigenen Domain (BLOG_OWN_DOMAIN.md): "1" = Anfragen fremder Hosts (CNAME-Domains der Mitglieder) fragen den Community-Worker; Standard "0" = aus.
 # Eigene Hosts (m365.fm, *.m365.fm) sind nie betroffen. Zusaetzlich noetig (Mirko): Zone fuer die Blog-Domains mit Worker-Route, siehe Dokument.
 BYOD = "0"
