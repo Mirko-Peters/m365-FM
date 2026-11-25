@@ -287,7 +287,7 @@
       h("div", { style: "overflow-x:auto" }, [h("table", { class: "adm-tbl" }, [h("thead", {}, [h("tr", {}, COLS.map(function (c) { return h("th", { text: c }); }))]), body])]));
     api("/api/admin/mediakit").then(function (r) {
       if (r.s !== 200) { msg(msgEl, ERR[(r.j || {}).error] || "Fehler " + r.s, true); return; }
-      rows = (r.j.items || []).slice().sort(function (a, b) { return (b.created || 0) - (a.created || 0) || (b.id || 0) - (a.id || 0); }); view();
+      rows = (r.j.items || []).toSorted(function (a, b) { return (b.created || 0) - (a.created || 0) || (b.id || 0) - (a.id || 0); }); view();
     });
   }
 
@@ -332,7 +332,7 @@
       h("div", { style: "overflow-x:auto" }, [h("table", { class: "adm-tbl" }, [h("thead", {}, [h("tr", {}, COLS.map(function (c) { return h("th", { text: c }); }))]), body])]));
     api(HWU).then(function (r) {
       if (r.s !== 200) { msg(msgEl, ERR[(r.j || {}).error] || "Fehler " + r.s, true); return; }
-      rows = (r.j.items || []).slice().sort(function (a, b) { return (b.created || 0) - (a.created || 0) || (b.id || 0) - (a.id || 0); }); view();
+      rows = (r.j.items || []).toSorted(function (a, b) { return (b.created || 0) - (a.created || 0) || (b.id || 0) - (a.id || 0); }); view();
     });
   }
 
