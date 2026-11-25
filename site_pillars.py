@@ -33,6 +33,92 @@ UI = {
     "overview": ("View the whole path", "Ganzen Pfad ansehen"), "disc": ("Note: The author works at iFAKT GmbH.", "Offenlegung: Der Autor arbeitet bei der iFAKT GmbH."), "articles": ("articles", "Artikel"), "toc": ("Contents", "Inhalt"),
     "src_lead": ("All online sources were retrieved on November 20, 2026.", "Alle Online-Quellen wurden am 20.11.2026 abgerufen."),
     "other": ("Deutsche Fassung", "English version"), "tbl": ("Table", "Tabelle"),
+    # Abschlusstest und Zertifikat (Kasten auf der Pfadseite, Testseite, assets/learnquiz.js); uebersetzte Sprachen fallen auf Englisch zurueck
+    "q_box": ("Final test & certificate", "Abschlusstest & Zertifikat"),
+    "q_box_lead": ("Check what you have learned in this path and get a certificate for your profile.", "Prüfen Sie, was Sie in diesem Pfad gelernt haben, und erhalten Sie ein Zertifikat für Ihr Profil."),
+    "q_free": ("Free of charge", "Kostenlos"),
+    "q_login_need": ("Sign-in with a free m365.fm account required", "Anmeldung mit einem kostenlosen m365.fm-Konto nötig"),
+    "q_count": ("{n} questions, {k} from each guide", "{n} Fragen, je {k} aus jedem Leitfaden"),
+    "q_pass": ("Pass mark {pct} % ({need} of {n} correct)", "Bestanden ab {pct} % ({need} von {n} richtig)"),
+    "q_tries": ("Up to {m} attempts per 24 hours", "Bis zu {m} Versuche je 24 Stunden"),
+    "q_certmail": ("Certificate via Certopus to the email address of your sign-in, ready to add to LinkedIn", "Zertifikat über Certopus an die E-Mail-Adresse Ihrer Anmeldung, mit Link für LinkedIn"),
+    "q_go": ("Take the final test", "Zum Abschlusstest"),
+    "q_soon": ("Test coming soon.", "Test folgt in Kürze."),
+    "q_crumb": ("Final test", "Abschlusstest"),
+    "q_seo": ("Final test and certificate: {path}", "Abschlusstest und Zertifikat: {path}"),
+    "q_desc": ("Free final test for the learning path {path}: {n} questions, certificate by email.", "Kostenloser Abschlusstest zum Lernpfad {path}: {n} Fragen, Zertifikat per E-Mail."),
+    "q_intro": ("The questions come from the guides of this path. You can open a guide at any time; after you submit, you see your result for each guide. Correct answers and explanations follow once you pass or have used all attempts.",
+                "Die Fragen stammen aus den Leitfäden dieses Pfads. Sie können jederzeit nachlesen; nach der Abgabe sehen Sie Ihr Ergebnis je Leitfaden. Richtige Antworten und Erklärungen folgen nach dem Bestehen oder wenn alle Versuche aufgebraucht sind."),
+    "q_back": ("Back to the learning path", "Zurück zum Lernpfad"),
+    "q_nojs": ("The test needs JavaScript.", "Der Test braucht JavaScript."),
+    "q_loading": ("Loading …", "Wird geladen …"),
+    "q_login_h": ("Sign in", "Anmelden"), "q_result_h": ("Your result", "Ihr Ergebnis"),
+    "q_login": ("Please sign in to take the test. Test and certificate are free.", "Bitte melden Sie sich an, um den Test zu machen. Test und Zertifikat sind kostenlos."),
+    "q_signin": ("Sign in with", "Anmelden mit"),
+    "q_start": ("Start the test", "Test starten"),
+    "q_resume": ("Continue the test", "Test fortsetzen"),
+    "q_left": ("Attempts left in the next 24 hours: {n} of {m}", "Verbleibende Versuche in den nächsten 24 Stunden: {n} von {m}"),
+    "q_none_left": ("No attempts left for now. Please try again in 24 hours.", "Im Moment keine Versuche mehr. Bitte versuchen Sie es in 24 Stunden erneut."),
+    "q_best": ("Your best result so far: {s} of {n}.", "Ihr bisher bestes Ergebnis: {s} von {n}."),
+    "q_of": ("Question {i} of {n}", "Frage {i} von {n}"),
+    "q_progress": ("{a} of {n} answered", "{a} von {n} beantwortet"),
+    "q_valid": ("This attempt is valid until {t}.", "Dieser Versuch gilt bis {t}."),
+    "q_submit": ("Submit answers", "Antworten abgeben"),
+    "q_missing": ("{n} questions are still unanswered. Select Submit again to submit anyway.", "Noch {n} Fragen sind unbeantwortet. Zum Abgeben trotzdem erneut auf „Antworten abgeben“ klicken."),
+    "q_noq": ("This question is not available on this page. Please reload the page.", "Diese Frage fehlt auf dieser Seite. Bitte laden Sie die Seite neu."),
+    "q_result": ("Your result: {s} of {n} ({pct} %)", "Ihr Ergebnis: {s} von {n} ({pct} %)"),
+    "q_passed": ("Passed – congratulations!", "Bestanden – herzlichen Glückwunsch!"),
+    "q_failed": ("Not passed yet: you need {need} of {n} correct answers.", "Noch nicht bestanden: Nötig sind {need} von {n} richtigen Antworten."),
+    "q_by_guide": ("Result by guide", "Ergebnis je Leitfaden"),
+    "q_reread": ("Read the guide again", "Leitfaden nachlesen"),
+    "q_review": ("Answers and explanations", "Antworten und Erklärungen"),
+    "q_hidden": ("Correct answers and explanations for the questions you got wrong are shown once you pass or have used all attempts. Each guide's result shows what to read again.",
+                 "Die richtigen Antworten und Erklärungen zu falsch beantworteten Fragen sehen Sie nach dem Bestehen oder wenn alle Versuche aufgebraucht sind. Das Ergebnis je Leitfaden zeigt, was Sie nachlesen sollten."),
+    "q_hidden_noans": ("Correct answers are shown for the questions you answered.", "Richtige Antworten sehen Sie zu den Fragen, die Sie beantwortet haben."),
+    "q_outdated": ("The test is being updated. Please reload this page later.", "Der Test wird gerade aktualisiert. Bitte laden Sie die Seite später neu."),
+    "q_right": ("Correct", "Richtig"), "q_wrong": ("Wrong", "Falsch"),
+    "q_yours": ("Your answer", "Ihre Antwort"), "q_correct": ("Correct answer", "Richtige Antwort"), "q_noans": ("no answer", "keine Antwort"),
+    "q_retry": ("Try again", "Erneut versuchen"),
+    "q_expired": ("This attempt has expired. Please start a new one.", "Dieser Versuch ist abgelaufen. Bitte starten Sie einen neuen."),
+    "q_passed_before": ("You have passed this test ({s} of {n}).", "Sie haben diesen Test bestanden ({s} von {n})."),
+    "q_cert_h": ("Your certificate", "Ihr Zertifikat"),
+    "q_cert_lead": ("Certopus creates your certificate and sends it to the email address of your sign-in. The name appears on the certificate exactly as entered.",
+                    "Certopus erstellt Ihr Zertifikat und schickt es an die E-Mail-Adresse Ihrer Anmeldung. Der Name steht genau so auf dem Zertifikat."),
+    "q_name": ("Name on the certificate", "Name auf dem Zertifikat"),
+    "q_consent": ("I agree that my name and the email address of my sign-in are sent to Certopus (DevSquirrel Technologies Private Limited, India) to create and send the certificate. More in the {link}.",
+                  "Ich bin einverstanden, dass mein Name und die E-Mail-Adresse meiner Anmeldung an Certopus (DevSquirrel Technologies Private Limited, Indien) übermittelt werden, um das Zertifikat zu erstellen und zu versenden. Mehr in der {link}."),
+    "q_privacy": ("privacy policy", "Datenschutzerklärung"),
+    "q_cert_btn": ("Request certificate", "Zertifikat anfordern"),
+    "q_cert_ok": ("Your certificate is ready. Certopus has also sent it to you by email.", "Ihr Zertifikat ist fertig. Certopus hat es Ihnen auch per E-Mail geschickt."),
+    "q_cert_view": ("View certificate", "Zertifikat ansehen"),
+    "q_cert_pdf": ("Download PDF", "PDF herunterladen"),
+    "q_linkedin": ("Add to LinkedIn", "Zu LinkedIn hinzufügen"),
+    "q_cert_off": ("Your certificate will follow soon – you will receive it by email.", "Ihr Zertifikat folgt in Kürze – Sie erhalten es per E-Mail."),
+    "q_cert_err": ("The certificate could not be created right now. Please try again later.", "Das Zertifikat konnte gerade nicht erstellt werden. Bitte versuchen Sie es später erneut."),
+    "q_err_name": ("Please enter a name with 2 to 80 characters.", "Bitte geben Sie einen Namen mit 2 bis 80 Zeichen ein."),
+    "q_err_name_url": ("Please enter only your name – no web address, domain, @ or /.", "Bitte geben Sie nur Ihren Namen ein – ohne Webadresse, Domain, @ oder /."),
+    # Empfaenger: E-Mail-Adresse der Anmeldung (Zusatzschritt beim Anbieter, worker/src/learnquiz.js certMailCallback), kein Eingabefeld
+    "q_mail_to": ("The certificate goes to the email address of your sign-in: {email} ({src}).", "Das Zertifikat geht an die E-Mail-Adresse Ihrer Anmeldung: {email} ({src})."),
+    "q_mail_src_account": ("confirmed address of your account", "bestätigte Adresse Ihres Kontos"),
+    "q_mail_need": ("The certificate goes to the email address of your sign-in. Please take it over from one of your sign-ins – we use it only for this certificate.",
+                    "Das Zertifikat geht an die E-Mail-Adresse Ihrer Anmeldung. Bitte übernehmen Sie sie aus einer Ihrer Anmeldungen – wir verwenden sie nur für dieses Zertifikat."),
+    "q_mail_none": ("Your account has no sign-in that can provide an email address. Please link a sign-in with LinkedIn, Microsoft, Google or GitHub in your profile settings.",
+                    "Ihr Konto hat keine Anmeldung, die eine E-Mail-Adresse liefern kann. Bitte verknüpfen Sie in Ihren Profileinstellungen eine Anmeldung bei LinkedIn, Microsoft, Google oder GitHub."),
+    "q_mail_btn": ("Use the email address from your {p} sign-in", "E-Mail aus Ihrer Anmeldung bei {p} übernehmen"),
+    "q_mail_other": ("To use a different address, choose another of your sign-ins:", "Für eine andere Adresse wählen Sie eine andere Ihrer Anmeldungen:"),
+    "q_mail_hint": ("You will be sent to the provider briefly and then come back here. Your sign-in and your result stay as they are.",
+                    "Sie werden kurz zum Anbieter weitergeleitet und kommen dann hierher zurück. Ihre Anmeldung und Ihr Ergebnis bleiben unverändert."),
+    "q_mail_ok": ("The email address of your sign-in has been taken over.", "Die E-Mail-Adresse Ihrer Anmeldung wurde übernommen."),
+    "q_mail_wrong": ("This sign-in does not belong to your m365.fm account. Please choose, at the provider, the account you use to sign in to m365.fm.",
+                     "Diese Anmeldung gehört nicht zu Ihrem m365.fm-Konto. Bitte wählen Sie beim Anbieter das Konto, mit dem Sie sich bei m365.fm anmelden."),
+    "q_mail_unverified": ("The provider has not confirmed this email address, so it cannot be used for the certificate (this is often the case with Microsoft work or school accounts). Please choose another sign-in.",
+                          "Der Anbieter hat diese E-Mail-Adresse nicht bestätigt, deshalb kann sie nicht für das Zertifikat verwendet werden (bei Microsoft-Arbeits- oder Schulkonten ist das oft so). Bitte wählen Sie eine andere Anmeldung."),
+    "q_mail_session": ("Your session has expired. Please try again.", "Ihre Sitzung ist abgelaufen. Bitte versuchen Sie es erneut."),
+    "q_mail_cancel": ("The step was cancelled. No email address was taken over.", "Der Schritt wurde abgebrochen. Es wurde keine E-Mail-Adresse übernommen."),
+    "q_err_need_email": ("Please first take over the email address of your sign-in.", "Bitte übernehmen Sie zuerst die E-Mail-Adresse Ihrer Anmeldung."),
+    "q_err_consent": ("Please confirm that you agree.", "Bitte bestätigen Sie die Einwilligung."),
+    "q_err_rate": ("Too many requests. Please try again later.", "Zu viele Anfragen. Bitte versuchen Sie es später erneut."),
+    "q_err": ("Something went wrong. Please reload the page.", "Etwas ist schiefgelaufen. Bitte laden Sie die Seite neu."),
 }
 
 
@@ -67,6 +153,15 @@ def tx(lang, key, **kw):
 
 def esc(s):
     return _html.escape(str(s or ""), quote=True)
+
+
+def qx(lang, key, **kw):
+    """Texte des Abschlusstests: Platzhalter {x} werden ersetzt, ohne str.format (eine Uebersetzung mit veraendertem Platzhalter bricht den Bau nicht,
+    dann gilt der englische Text)."""
+    s = tx(lang, key)
+    for k, v in kw.items(): s = s.replace("{" + k + "}", str(v))
+    if re.search(r"\{\w+\}", s) and lang != "en": return qx("en", key, **kw)
+    return s
 
 
 @lru_cache(maxsize=1)
@@ -482,6 +577,127 @@ def article_box(post, lang, BASE):
             f'<p style="margin:.3em 0"><a href="{url(BASE, p, lang)}"><b>{esc(p["label"][lang])}</b></a> · {esc(tx(lang, "read"))}</p></aside>')
 
 
+# ---------- Abschlusstest ----------
+# Fragen ohne Loesung: data/pillar_quiz.json (tools/pillar_quiz.py). Die Antworten liegen nur im Worker (D1, worker/src/learnquiz.js); die Seite bettet je
+# Sprache nur id, Frage und Optionen ein. Fehlt die Datei oder ist sie leer, zeigen Kasten und Testseite "Test folgt in Kürze".
+QUIZ_FILE = ROOT / "data" / "pillar_quiz.json"
+PER_PILLAR, PASS_PCT, MAX_TRIES = 3, 80, 3   # wie worker/src/learnquiz.js (PER_PILLAR, PASS_PCT, MAX_ATTEMPTS)
+QUIZ_KEYS = ("id", "q", "opts")   # nur diese Felder einer Frage erreichen die Seite
+
+
+def quiz_doc():
+    """Inhalt von data/pillar_quiz.json für den Pfad dieser Registry, sonst {} (Datei fehlt, kaputt oder für einen anderen Pfad)."""
+    try: d = json.loads(QUIZ_FILE.read_text("utf-8"))
+    except (OSError, ValueError): return {}
+    if not isinstance(d, dict) or not isinstance(d.get("pillars"), dict): return {}
+    return d if d.get("path", registry()["path"]["id"]) == registry()["path"]["id"] else {}
+
+
+def _clean_q(x):
+    if not isinstance(x, dict): return None
+    qid, q, opts = x.get("id"), x.get("q"), x.get("opts")
+    if not (isinstance(qid, str) and re.fullmatch(r"[a-z0-9][a-z0-9-]{1,80}-\d{1,3}", qid) and isinstance(q, str) and q.strip()): return None
+    if not (isinstance(opts, list) and 2 <= len(opts) <= 4 and all(isinstance(o, str) and o.strip() for o in opts)): return None
+    return {"id": qid, "q": q.strip(), "opts": [o.strip() for o in opts]}
+
+
+def quiz_groups(doc, lang, guide_url):
+    """Fragen der Seite je Leitfaden in Lernreihenfolge: [{id, t (Titel), u (Adresse), qs: [{id, q, opts}]}]. Sprache des Tests: de oder en (andere Sprachen: en);
+    fehlt einem Leitfaden die deutsche Fassung, gilt die englische."""
+    ql = "de" if lang == "de" else "en"
+    out = []
+    for p in order():
+        d = (doc.get("pillars") or {}).get(p["id"]) or {}
+        if not isinstance(d, dict): continue
+        qs = [c for c in (_clean_q(x) for x in (d.get(ql) or d.get("en") or [])) if c]
+        if qs: out.append({"id": p["id"], "t": p["label"][lang], "u": guide_url(p), "qs": qs})
+    return out
+
+
+def quiz_numbers(groups):
+    """-> (Fragen je Versuch, nötig zum Bestehen). Ohne Fragen: Annahme 3 je Leitfaden des Pfads."""
+    n = sum(min(PER_PILLAR, len(g["qs"])) for g in groups) if groups else PER_PILLAR * len(order())
+    return n, -(-n * PASS_PCT // 100)
+
+
+def quiz_url(BASE, lang):
+    return path_url(BASE, lang) + "test/"
+
+
+def _asset_v(name):
+    import hashlib
+    try: return hashlib.sha1((ROOT / "assets" / name).read_bytes()).hexdigest()[:8]
+    except OSError: return "0"
+
+
+def quiz_box(lang, BASE, groups):
+    """Kasten "Abschlusstest & Zertifikat" unter den Stufen der Pfadseite."""
+    n, need = quiz_numbers(groups)
+    facts = [qx(lang, "q_free"), qx(lang, "q_login_need"), qx(lang, "q_count", n=n, k=PER_PILLAR), qx(lang, "q_pass", pct=PASS_PCT, need=need, n=n),
+             qx(lang, "q_tries", m=MAX_TRIES), qx(lang, "q_certmail")]
+    act = (f'<p><a class="btn main" href="{quiz_url(BASE, lang)}">{esc(qx(lang, "q_go"))}</a></p>' if groups
+           else f'<p class="pl-soon"><strong>{esc(qx(lang, "q_soon"))}</strong></p>')
+    return (f'<section class="pl-box pl-quiz" aria-labelledby="pl-quiz-h"><h2 id="pl-quiz-h">{esc(qx(lang, "q_box"))}</h2><p>{esc(qx(lang, "q_box_lead"))}</p>'
+            f'<ul>{"".join(f"<li>{esc(x)}</li>" for x in facts)}</ul>{act}</section>')
+
+
+JS_KEYS = ("q_loading", "q_login_h", "q_result_h", "q_login","q_signin", "q_start", "q_resume", "q_left", "q_none_left", "q_best", "q_of", "q_progress", "q_valid", "q_submit", "q_missing", "q_noq",
+           "q_result", "q_passed", "q_failed", "q_by_guide", "q_reread", "q_review", "q_right", "q_wrong", "q_yours", "q_correct", "q_noans", "q_retry", "q_expired",
+           "q_passed_before", "q_cert_h", "q_cert_lead", "q_name", "q_consent", "q_privacy", "q_cert_btn", "q_cert_ok", "q_cert_view", "q_cert_pdf", "q_linkedin",
+           "q_cert_off", "q_cert_err", "q_err_name", "q_err_consent", "q_err_rate", "q_err", "q_soon", "q_err_name_url", "q_hidden", "q_hidden_noans", "q_outdated",
+           "q_mail_to", "q_mail_src_account", "q_mail_need", "q_mail_none", "q_mail_btn", "q_mail_other", "q_mail_hint", "q_mail_ok", "q_mail_wrong",
+           "q_mail_unverified", "q_mail_session", "q_mail_cancel", "q_err_need_email")
+
+QUIZ_CSS = """<style>
+.lq-facts{margin:.6em 0 1.2em;padding-left:1.2em}.lq-facts li{margin:.2em 0}
+#lq-app{margin:1.5em 0 2em}#lq-app h2{margin-top:1.2em}
+.lq-g{margin:2.2em 0 .2em;font-size:1.25rem}.lq-g a{font-size:.8rem;font-weight:500;margin-inline-start:.6em}
+.lq-form .qq{margin:1.2em 0 1.6em}html:has(.lq-form){scroll-padding-bottom:7em}
+.lq-bar{position:sticky;bottom:0;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:.6em 1em;margin:1.5em 0 0;padding:.7em 0;background:var(--bg);border-top:1px solid var(--bd)}
+.lq-bar progress{flex:1 1 8em;height:.55em;accent-color:var(--ac)}.lq-bar span{font-size:.92em;color:var(--mut)}
+.lq-btns{display:flex;flex-wrap:wrap;gap:.6em;margin:1em 0}
+.lq-big{font-size:1.25rem;font-weight:700;margin:.4em 0}
+.lq-ok{color:var(--f-ok,#1e7a4a)}.lq-no{color:var(--f-err,#b3261e)}
+.lq-pp{padding-left:1.2em}.lq-pp li{margin:.35em 0}
+.lq-rev ol{padding-left:1.2em}.lq-rev li{margin:1.1em 0}.lq-rev p{margin:.25em 0}.lq-rev summary{cursor:pointer;font-weight:700;padding:.4em 0}
+.lq-cert{margin:1.5em 0;padding:1em;border:1px solid var(--bd);border-radius:.5em;background:var(--card)}
+.lq-cert label{display:block;margin:.9em 0 .3em;font-weight:600}.lq-cert input:not([type=checkbox]){width:100%;max-width:28em}
+.lq-cert .lq-chk{display:flex;gap:.6em;align-items:flex-start;font-weight:400;line-height:1.45}.lq-chk input{margin-top:.25em;width:18px;height:18px;flex:none;accent-color:var(--ac)}
+.lq-err{color:var(--f-err,#b3261e);font-weight:600}
+.lq-mail{margin:.8em 0}.lq-mail p{margin:.4em 0}.lq-to{font-weight:600;overflow-wrap:anywhere}.lq-mail .btn{white-space:normal;text-align:center}
+</style>"""
+
+
+def quiz_page(g, lang, groups, pa, crumbs0, langs):
+    """Testseite (noindex, nicht in der Sitemap): Fragen der Sprache als JSON, Ablauf in assets/learnquiz.js."""
+    BASE, api = g["BASE"], g.get("api", "https://api-dub.m365.fm")
+    tu, pu = quiz_url(BASE, lang), path_url(BASE, lang)
+    title = pa["title"][lang]
+    n, need = quiz_numbers(groups)
+    facts = [qx(lang, "q_free"), qx(lang, "q_login_need"), qx(lang, "q_count", n=n, k=PER_PILLAR), qx(lang, "q_pass", pct=PASS_PCT, need=need, n=n),
+             qx(lang, "q_tries", m=MAX_TRIES), qx(lang, "q_certmail")]
+    crumbs = crumbs0 + [(qx(lang, "q_crumb"), tu)]
+    nav = '<nav aria-label="breadcrumb">' + " › ".join(f'<a href="{x}">{esc(t)}</a>' for t, x in crumbs[:-1]) + f" › {esc(crumbs[-1][0])}</nav>"
+    head = (f'{CSS}{QUIZ_CSS}{nav}<h1>{esc(qx(lang, "q_box"))}</h1><p class="pl-meta">{esc(tx(lang, "path"))}: <a href="{pu}">{esc(title)}</a></p>'
+            f'<ul class="lq-facts">{"".join(f"<li>{esc(x)}</li>" for x in facts)}</ul>')
+    if groups:
+        priv = f"{BASE}/datenschutz/#lernpfad-zertifikat" if lang == "de" else f"{BASE}/privacy/#learning-path-certificate"
+        cfg = {"api": api, "lang": lang, "qlang": "de" if lang == "de" else "en", "path": pa["id"], "privacy": priv, "pathUrl": pu, "max": MAX_TRIES,
+               "t": {k: tx(lang, k) for k in JS_KEYS}}
+        data = {"path": pa["id"], "lang": cfg["qlang"], "groups": groups}
+        js = lambda o: json.dumps(o, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+        app = (f'<p>{esc(qx(lang, "q_intro"))}</p><p id="lq-status" class="lq-err" role="alert"></p><div id="lq-app"><p class="mut">{esc(qx(lang, "q_loading"))}</p>'
+               f'<noscript><p><strong>{esc(qx(lang, "q_nojs"))}</strong></p></noscript></div>'
+               f'<script type="application/json" id="lq-data">{js(data)}</script><script>window.M365LQ={js(cfg)}</script>'
+               f'<script defer src="{BASE}/assets/learnquiz.js?v={_asset_v("learnquiz.js")}"></script>')
+    else:
+        app = f'<div class="pl-box"><p><strong>{esc(qx(lang, "q_soon"))}</strong></p></div>'
+    b = _shell(g, lang, head + app + f'<p><a href="{pu}">{esc(qx(lang, "q_back"))}</a></p>')
+    ld = [_crumb_ld(BASE, crumbs)]
+    switch = {l: quiz_url(BASE, l) for l in langs}
+    return g["page"](lang, qx(lang, "q_seo", path=title), qx(lang, "q_desc", path=title, n=n), tu, b, None, ld, og_type="website", noindex=True, switch=switch)
+
+
 # ---------- Seiten ----------
 CSS = """<style>
 .pl-meta{color:var(--mut,#667);font-size:.92em;margin:.2em 0 1em}
@@ -611,7 +827,9 @@ def build(g, posts, ents, written=None):
             if not noidx: sitemap.append((u, UPDATED, alts if len(alts) > 1 else None))
             made[lang] += 1
             cards[(lang, p["id"])] = (desc, mins)
-    # Pfadseiten
+    # Pfadseiten (mit Kasten "Abschlusstest & Zertifikat") und Testseiten
+    qdoc = quiz_doc()
+    path_langs = []
     for lang in langs:
         pu = path_url(BASE, lang)
         stages = ""
@@ -634,8 +852,9 @@ def build(g, posts, ents, written=None):
         first = url(BASE, items[0][1], lang)
         crumbs = [(tx(lang, "learn"), f"{BASE}{lp(lang)}/learn/"), (pa["title"][lang], pu)]
         nav = f'<nav aria-label="breadcrumb"><a href="{crumbs[0][1]}">{esc(crumbs[0][0])}</a> › {esc(crumbs[1][0])}</nav>'
+        groups = quiz_groups(qdoc, lang, lambda q, _l=lang: url(BASE, q, _l if (_l, q["id"]) in cards else "en"))   # Leitfaden ohne Fassung der Sprache: englische Seite
         b = _shell(g, lang, f'{CSS}{nav}<h1>{esc(pa["title"][lang])}</h1><p class="pl-meta">{esc(tx(lang, "path"))} · {len(items)} {esc(tx(lang, "guides"))}</p>'
-                   f'<p>{esc(pa["intro"][lang])}</p><p><a class="btn main" href="{first}">{esc(tx(lang, "start"))}</a></p>{stages}')
+                   f'<p>{esc(pa["intro"][lang])}</p><p><a class="btn main" href="{first}">{esc(tx(lang, "start"))}</a></p>{stages}{quiz_box(lang, BASE, groups)}')
         alts = {l: path_url(BASE, l) for l in langs if indexed(l)}
         noidx = not indexed(lang)
         ld = [{"@context": "https://schema.org", "@type": "Course", "@id": pu + "#course", "name": pa["title"][lang], "description": pa["short"][lang], "inLanguage": lang, "url": pu,
@@ -645,6 +864,9 @@ def build(g, posts, ents, written=None):
               _crumb_ld(BASE, crumbs)]
         write(f"{lp(lang)[1:] + '/' if lang != 'en' else ''}learn/path/{pa['id']}/index.html", page(lang, pa["seo_title"][lang], pa["short"][lang], pu, b, None if noidx else alts, ld, xdefault=alts["en"], og_type="website", noindex=noidx))
         if not noidx: sitemap.append((pu, UPDATED, alts))
+        path_langs.append((lang, groups, crumbs))
+    for lang, groups, crumbs in path_langs:   # Testseiten: noindex, nie in der Sitemap
+        write(f"{lp(lang)[1:] + '/' if lang != 'en' else ''}learn/path/{pa['id']}/test/index.html", quiz_page(g, lang, groups, pa, crumbs, [l for l, _, _ in path_langs]))
     if cx.warn:
         print(f"Pillars: {len(cx.warn)} Hinweise zu Links (Link entfällt, Text bleibt):")
         for w in sorted(set(cx.warn))[:40]: print("  ", w)

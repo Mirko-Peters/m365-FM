@@ -1,0 +1,760 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:07.520
+Klaar voor 12 dagen vol Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven.
+
+00:00:07.980 --> 00:00:12.260
+In januari is M365, kom terug en we pakken het groter aan.
+
+00:00:12.700 --> 00:00:18.700
+Doe mee aan live-sessies, praktijkdemonstraties en praktische kennis van MVP's en experts uit de hele wereld.
+
+00:00:18.880 --> 00:00:21.600
+Geen generieke slides, geen eindeloze modewoorden.
+
+00:00:21.840 --> 00:00:23.640
+We pakken de echte uitdagingen aan.
+
+00:00:23.860 --> 00:00:29.040
+Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.040 --> 00:00:35.000
+Of je nu een IT-professional, ontwikkelaar of bedrijfsleider bent, er zijn sessies speciaal voor jou.
+
+00:00:35.200 --> 00:00:40.580
+Gedurende 10 volle dagen kun je verschillende technologieën verkennen en in contact komen met een wereldwijde community.
+
+00:00:40.920 --> 00:00:44.500
+Kijk live mee en neem praktische inzichten mee terug naar je organisatie.
+
+00:00:44.920 --> 00:00:49.160
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.700 --> 00:00:51.200
+Registratie is nu geopend.
+
+00:00:51.980 --> 00:00:55.860
+Ga naar M365.com.net en verzeker je plek vandaag nog.
+
+00:00:56.640 --> 00:00:58.900
+Dat is M365.com.net.
+
+00:00:59.040 --> 00:01:04.860
+Meld je nu aan op M365.com.net en we zien je live in januari.
+
+00:01:05.100 --> 00:01:12.460
+Heb je ooit een link query geschreven die perfect werkte in C, maar toen je de gegenereerde SQL controleerde, je afvroeg hoe dat in vredesnaam mogelijk was.
+
+00:01:12.660 --> 00:01:16.780
+In deze sessie leer je drie dingen in het bijzonder, hoe expressiebomen de vertaling bepalen,
+
+00:01:17.000 --> 00:01:20.000
+hoe caching de prestaties en het geheugengebruik beïnvloedt,
+
+00:01:20.000 --> 00:01:22.940
+en waar je op moet letten als de NAL logica zich niet gedraagt zoals verwacht.
+
+00:01:23.100 --> 00:01:26.520
+Als je vermoedt dat er een soort blackbox magie schuilgaat in Entity Framework Core,
+
+00:01:26.700 --> 00:01:28.860
+dan ligt de waarheid dichter bij de architectuur dan bij magie.
+
+00:01:28.860 --> 00:01:35.040
+EF Core gebruikt een gelaagde query pipeline die het doorgeven, vertalen, opvangen en materialiseren achter de schermen afhandelt.
+
+00:01:35.180 --> 00:01:42.740
+Eerst kijken we naar hoe je link core een expressieboom wordt, vervolgens naar de rol van de provider, caching, NAL semantiek en tot slot naar SQL en materialisatie.
+
+00:01:42.940 --> 00:01:44.600
+En het begint allemaal bij het begin.
+
+00:01:44.840 --> 00:01:47.780
+Wat gebeurt er eigenlijk op het moment dat je een link query uitvoert?
+
+00:01:47.780 --> 00:01:50.180
+Van link naar expressiebomen.
+
+00:01:50.440 --> 00:01:54.200
+Wanneer je een link query schrijft, is de code niet automatisch vloeiend in SQL.
+
+00:01:54.600 --> 00:01:55.880
+Link is gewoon c-power.
+
+00:01:56.160 --> 00:01:57.920
+Het weet niets van databases of tabellen.
+
+00:01:58.120 --> 00:02:02.420
+Dus wanneer je iets toevoegt zoals een accentgraven kleiner dan A groter dan accentgraven of een accentgraven kleiner dan select groter dan accentgraven,
+
+00:02:02.500 --> 00:02:04.600
+roep je in feite methoden aan in CI en geef je geen opdrachten aan SQL.
+
+00:02:04.600 --> 00:02:11.800
+De taak van Entity Framework Core is om die aanroepen vast te leggen in een vorm die het kan analyseren voordat er beslissingen worden genomen over vertaling of uitvoering.
+
+00:02:12.020 --> 00:02:14.080
+Die vastlegging gebeurt via expressiebomen.
+
+00:02:14.080 --> 00:02:19.580
+In plaats van direct de database te benaderen, registreert EF Core je query als een boom van objecten die elk onderdeel beschrijven.
+
+00:02:19.740 --> 00:02:23.000
+Een accentgraven where accentgraven clausule betekent nog niet dat er rijen worden gefilterd.
+
+00:02:23.120 --> 00:02:28.920
+Het wordt een knooppunt in de boom die aangeeft, hier is een methode aanroep, hier is de eigenschap die wordt vergeleken en hier is de constante waarde.
+
+00:02:29.120 --> 00:02:31.020
+In dit stadium is er nog niets uitgevoerd.
+
+00:02:31.220 --> 00:02:35.560
+EF documenteert simpelweg de intentie in een gestructureerde vorm die het later kan doorlopen.
+
+00:02:35.740 --> 00:02:37.980
+Je kunt het zien als structuur voor betekenis.
+
+00:02:37.980 --> 00:02:47.020
+Net zoals je een zin opsplitst in onderwerp en werkwoord voordat je een vertaling probeert, bouwt EF een boom waarin joins, filters, projecties en sortering worden weergegeven als knooppunten.
+
+00:02:47.220 --> 00:02:50.360
+Pas als deze structuur bestaat, kan de SQL-vertaling beginnen.
+
+00:02:50.560 --> 00:02:56.760
+EF Core vertrouwt op expressiebomen als het belangrijkste mechanisme om linkqueries te inspecteren voordat er een beslissing wordt genomen over hoe ze moeten worden verwerkt.
+
+00:02:56.760 --> 00:03:01.680
+Elke clausule die je schrijft, of het nu een join of een filter is, voegt nieuwe knooppunten toe aan dat objectmodel.
+
+00:03:01.840 --> 00:03:11.040
+Een voorwaarde zoals ziet stad Parijs, wordt bijvoorbeeld een tak met een linker en een rechterdeel, waarvan het ene naar de eigenschap, stad, wijst en het andere naar de constante tekenreeks, Parijs.
+
+00:03:11.240 --> 00:03:16.640
+Door deze structuur te doorlopen, kan EF bepalen welke delen van je query naar SQL worden gemapt en welke niet.
+
+00:03:16.840 --> 00:03:21.220
+Achter de schermen zijn deze bomen geen abstracte concepten, maar daadwerkelijke objecten in het geheugen.
+
+00:03:21.220 --> 00:03:28.420
+Elk knooppunt vertegenwoordigt een methode aanhoop, een eigenschap of een constante waarde, onderdelen die EF kan inspecteren en categoriseren.
+
+00:03:28.640 --> 00:03:33.160
+Dit ontwerp geeft EF een betrouwbare manier om je query door te geven zonder deze nog uit te voeren.
+
+00:03:33.340 --> 00:03:39.540
+Intern behandelt EF de boom als een model en bepaalt welke constructies het naar SQL kan sturen en welke het in het geheugen moet verwerken.
+
+00:03:39.780 --> 00:03:44.660
+Dit verschil verklaart waarom sommige queries zich in link to objects op een bepaalde manier gedragen, maar in EF falen.
+
+00:03:44.860 --> 00:03:48.060
+Stel je voor dat je een aangepaste helperfunctie in een lambda filter plaatst.
+
+00:03:48.060 --> 00:03:56.520
+In het geheugen voert link de code gewoon uit, maar met EF bevat de expressieboom nu een knooppunt dat verwijst naar je aangepaste methode en EF heeft geen SQL equivalent voor die methode.
+
+00:03:56.700 --> 00:04:02.000
+Op dat moment zie je vaak een runtime fout, een waarschuwing of dat SQL terugvalt op client-side evaluatie.
+
+00:04:02.240 --> 00:04:05.280
+Dat is meestal een signaal dat iets in je query niet vertaalbaar is.
+
+00:04:05.500 --> 00:04:11.260
+Het is belangrijk om te begrijpen dat EF je code niet uitvoert wanneer je die schrijft, maar deze in een objectboom visualiseert.
+
+00:04:11.260 --> 00:04:19.400
+En als een deel van die boom niet overeenkomt met een bekend SQL-patroon, stopt EF of besluit het dat deel van het werk in het geheugen te laden, wat kostbaar kan zijn.
+
+00:04:20.260 --> 00:04:21.620
+Prestatieproblemen doen zich hier vaak voor.
+
+00:04:21.820 --> 00:04:28.580
+Queries die in C-hashtags als onschadelijk lijken, leiden plotseling tot het ophalen van duizenden rijen aan de client-zijde, omdat EF een klein onderdeel niet kon vertalen.
+
+00:04:28.840 --> 00:04:32.220
+Daarom zijn expressiebomen zo belangrijk voor ontwikkelaars die met EF werken.
+
+00:04:32.420 --> 00:04:37.760
+Ze zijn niet zomaar een intern detail, ze vormen de routekaart die EF gebruikt voordat SQL überhaupt in beeld komt.
+
+00:04:37.760 --> 00:04:41.760
+Elke link query wordt eerst omgezet in een structureel plan dat EF zorgvuldig bestudeert.
+
+00:04:42.420 --> 00:04:46.760
+Of een query slaagt, mislukt of vertraagt, hangt vaak af van hoe dat plan eruit ziet.
+
+00:04:46.940 --> 00:04:48.520
+Maar er is nog een stap in het proces.
+
+00:04:48.840 --> 00:04:52.460
+Zodra EF die expressieboom heeft, kan deze niet zomaar naar de database worden gestuurd.
+
+00:04:52.620 --> 00:04:53.940
+Er is een poortwachter nodig.
+
+00:04:54.180 --> 00:04:58.880
+Iets moet bepalen of elk onderdeel van de boom SQL-compatibel is of iets dat C-SAS nooit mag verlaten.
+
+00:04:59.080 --> 00:05:03.400
+En dat is waar de volgende fase in beeld komt, de poortwachter, de query provider van EF Core.
+
+00:05:03.400 --> 00:05:06.900
+Niet elke query die je in C-SAS schrijft, is voorbestemd om SQL te worden.
+
+00:05:06.900 --> 00:05:12.380
+Er is een controlepunt halverwege de pipeline en de rol daarvan is om te bepalen wat verder gaat en wat wordt geblokkeerd.
+
+00:05:12.560 --> 00:05:16.380
+Dit controlepunt wordt geïmplementeerd door de query provider component van EF Core,
+
+00:05:16.580 --> 00:05:21.460
+die evalueert of de knooppunten van de expressieboom naar SQL kunnen worden gemapt of in het geheugen moeten worden verwerkt.
+
+00:05:21.600 --> 00:05:24.220
+Je kunt de provider vergelijken met een uitsmijter bij een club.
+
+00:05:24.380 --> 00:05:28.960
+Iedereen kan in de rij staan, maar alleen de queries die voldoen aan SQL-compatibele patronen komen daadwerkelijk binnen.
+
+00:05:29.140 --> 00:05:32.540
+De rest wordt ofwel afgewezen ofwel doorgestuurd voor verwerking aan de clientzijde.
+
+00:05:32.680 --> 00:05:34.560
+Het gaat niet om kieskeurigheid of willekeur.
+
+00:05:34.560 --> 00:05:37.100
+De provider dwingt de grenzen van de vertaling af.
+
+00:05:37.280 --> 00:05:41.000
+Link kan veel meer representeren dan relationele databases ooit zullen begrijpen.
+
+00:05:41.160 --> 00:05:44.960
+EF Core moet de expressieboom doorlopen en bij elk knooppunt de vraag stellen,
+
+00:05:45.120 --> 00:05:48.220
+kan SQL dit verwerken of kan alleen.net dit uitvoeren?
+
+00:05:48.400 --> 00:05:51.520
+Die vraag wordt al vroeg gesteld voordat de SQL-generatie begint.
+
+00:05:51.780 --> 00:05:55.460
+Daarom zie je soms direct runtime fouten in plaats van verwarrende resultaten later.
+
+00:05:55.720 --> 00:05:58.540
+Voor de ontwikkelaar is de verrassing vaak de ongelijke ondersteuning.
+
+00:05:58.540 --> 00:06:03.540
+Veel constructies worden probleemloos vertaald, zoals accentgraven select accentgraven en accentgraven order by accentgraven.
+
+00:06:04.220 --> 00:06:05.400
+Anderen zijn complexer.
+
+00:06:05.760 --> 00:06:14.420
+Accentgraven group by accentgraven kan bijvoorbeeld lastiger te vertalen zijn en afhankelijk van de provider en het scenario kan het ofwel volledig mislukken ofwel SQL produceren die niet erg efficiënt is.
+
+00:06:14.620 --> 00:06:20.580
+Ontwikkelaars zien dit vaak genoeg, waardoor het een bekend aandachtspunt is, hoewel het exacte gedrag afhangt van de vertaalregels van de provider.
+
+00:06:20.780 --> 00:06:23.460
+De belangrijkste functie van de provider is patroonherkenning.
+
+00:06:23.640 --> 00:06:26.120
+Het genereert niet op magische wijze SQL ter plekke.
+
+00:06:26.320 --> 00:06:30.840
+In plaats daarvan vergelijkt het de expressieboom met een bibliotheek van vertaalpatronen die het begrijpt.
+
+00:06:31.020 --> 00:06:34.200
+Herkende vormen in de boom worden gekoppeld aan SQL-schablonen.
+
+00:06:34.400 --> 00:06:38.360
+Niet herkende vormen worden ofwel uitgesteld naar de clientzijde ofwel afgewezen.
+
+00:06:38.620 --> 00:06:43.840
+Daarom werken sommige complexe queries prima, terwijl anderen leiden tot berichten over niet ondersteunde vertalingen.
+
+00:06:43.840 --> 00:06:45.640
+De beslissing is deterministisch.
+
+00:06:45.800 --> 00:06:49.820
+Het draait erom of een bepaald patroon een bekende, geldige SQL-uitvoer heeft.
+
+00:06:50.020 --> 00:06:52.960
+Dit is ook het stadium waarin client-site-evaluatie in beeld komt.
+
+00:06:53.140 --> 00:06:58.200
+Als een deel van de query niet kan worden omgezet in SQL, kan EF-Core het alsnog in het geheugen uitvoeren nadat de gegevens zijn opgehaald.
+
+00:06:58.320 --> 00:07:00.100
+Op het eerste gezicht lijkt dat praktisch.
+
+00:07:00.320 --> 00:07:06.980
+SQL levert de gegevens, punt net doet de rest, maar de kosten kunnen enorm zijn als de database duizenden of zelfs miljoenen rijen levert.
+
+00:07:07.160 --> 00:07:09.480
+En dat terwijl punt net ze achteraf moet filteren.
+
+00:07:09.480 --> 00:07:10.960
+De prestaties storten in.
+
+00:07:10.960 --> 00:07:16.000
+Iets dat er onschuldig uitzag in een lokale testdatabase kan in productie ernstig vastlopen wanneer het datavolume groeit.
+
+00:07:16.260 --> 00:07:18.220
+Ontwikkelaars onderschatten deze verschuiving vaak.
+
+00:07:18.460 --> 00:07:22.840
+Denk aan een query die perfect lijkt te werken tijdens de ontwikkeling met een dataset van een paar honderd rijen.
+
+00:07:22.980 --> 00:07:28.340
+In een productieomgeving haalt dezelfde query tienduizenden records op en voert een trage bewerking uit op de applicatieserver.
+
+00:07:28.600 --> 00:07:31.680
+Dat is het moment waarop gebruikers beginnen te klagen dat alles vastloopt.
+
+00:07:31.880 --> 00:07:38.200
+De beveiligingsmechanismen van de provider zijn hier belangrijk en in veel gevallen is het veiliger om een foutmelding te krijgen dan EF iets inefficiënts te laten doen.
+
+00:07:38.200 --> 00:07:47.480
+Voor iedereen die met EF werkt is de praktische lees simpel, test queries altijd met echte of representatieve data en let op of de prestaties in productie plotseling kelderen.
+
+00:07:47.660 --> 00:07:54.620
+Als het lokaal snel aanvoelt maar onder belasting traag is, is dat vaak een teken dat de provider een deel van je logica naar de clientzijde heeft verplaatst.
+
+00:07:54.760 --> 00:07:58.220
+Het is niet per se fout, maar het is wel een signaal waar je beter op moet letten.
+
+00:07:58.400 --> 00:08:01.660
+De provider is dus weliswaar de poortwachter, maar hij staat niet alleen maar op wacht.
+
+00:08:01.660 --> 00:08:09.340
+Hij beschermt zowel de correctheid als de prestaties door te filteren wat naar SQL kan worden vertaald en te bepalen wanneer er moet worden teruggevallen op uitvoering aan de clientzijde.
+
+00:08:09.560 --> 00:08:10.660
+Zo blijft je pipeline voorspelbaar.
+
+00:08:11.660 --> 00:08:17.760
+Tegelijkertijd staat de provider constant onder druk om deze beslissingen snel te nemen zonder telkens je query structuur helemaal opnieuw te hoeven schrijven.
+
+00:08:17.920 --> 00:08:25.500
+En dat is waar een ander essentieel onderdeel van het EF Core ontwerp naar voren komt, een systeem om beslissingen te onthouden en te hergebruiken in plaats van bij elke aanvraag helemaal opnieuw te beginnen.
+
+00:08:25.500 --> 00:08:30.620
+Caching, het geheime prestatiewapen van EF. Hier houdt de prestatie op theoretisch te zijn.
+
+00:08:30.860 --> 00:08:37.460
+Entity Framework Core vertrouwt op caching als een van zijn belangrijkste prestatietools en zonder caching zou queryvertaling pijnlijk inefficiënt zijn.
+
+00:08:37.680 --> 00:08:43.220
+Elke link query begint als een expressieboom en moet worden geanalyseerd, gevalideerd en voorbereid voor SQL-vertaling.
+
+00:08:43.480 --> 00:08:44.720
+Dat werk is niet gratis.
+
+00:08:44.940 --> 00:08:50.640
+Als EF dit bij elke uitvoering helemaal opnieuw zou moeten doen, zouden zelfs eenvoudige queries vastlopen als ze vaak worden herhaald.
+
+00:08:50.640 --> 00:08:56.300
+Om je voor te stellen wat dat in de praktijk zou betekenen, denk aan het duizenden keren per seconde uitvoeren van dezelfde query in een productie-app.
+
+00:08:56.440 --> 00:09:00.440
+Zonder caching zou EF Core bij elke aanroep de volledige parsing en vertaling opnieuw moeten uitvoeren.
+
+00:09:00.600 --> 00:09:05.620
+De database zou niet per se het probleem zijn. Je CPU zou pieken alleen al doordat EF het voorbereidende werk opnieuw moet doen.
+
+00:09:05.800 --> 00:09:11.440
+Dit is waarom caching geen optionele optimalisatie is. Het is de basis die EF Core werkbaar maakt op een realistische schaal.
+
+00:09:11.640 --> 00:09:17.460
+Hoe helpt dit nu precies? EF Core gebruikt caching om te herkennen wanneer een query-vorm die al eerder is verwerkt, opnieuw verschijnt.
+
+00:09:17.460 --> 00:09:22.300
+In plaats van de expressieboom knooppunt voor knooppunt opnieuw te analyseren, kan EF het eerdere werk hergebruiken.
+
+00:09:22.520 --> 00:09:29.160
+Dat betekent dat wanneer je filtert op bijvoorbeeld een klant-idee, de eerste uitvoering langer duurt omdat EF moet uitzoeken hoe dat filter in SQL moet worden omgezet.
+
+00:09:29.380 --> 00:09:34.400
+Daarna zijn volgende uitvoeringen met andere parameterwaarden snel, omdat het zware werk al is opgeslagen.
+
+00:09:34.600 --> 00:09:38.700
+Kortom, de eerste keer wordt het uitvoeringsplan opgebouwd, latere keren wordt het hergebruikt.
+
+00:09:38.880 --> 00:09:45.480
+De details van hoe deze cache precies is gestructureerd, variëren per EF Core versie en provider, maar het algemene principe blijft hetzelfde.
+
+00:09:45.480 --> 00:09:47.600
+De cache houdt herhaalde query-vormen bij.
+
+00:09:47.800 --> 00:09:53.560
+Wanneer het model verandert, bijvoorbeeld wanneer je een eigenschap toevoegt aan een entiteit, zijn de items in de cache niet langer geldig en verwijdert EF ze.
+
+00:09:53.740 --> 00:09:56.520
+Dit voorkomt dat onjuiste SQL ooit opnieuw wordt gebruikt.
+
+00:09:56.700 --> 00:10:05.460
+De implementatiespecifieke details, zoals meerdere cachinglagen of verwijderingsregels, zijn gekoppeld aan versie- en configuratiegegevens en moeten worden geraadpleegd in de officiële EF Core documentatie.
+
+00:10:05.640 --> 00:10:08.460
+Vanuit het perspectief van een ontwikkelaar is het resultaat duidelijk.
+
+00:10:08.640 --> 00:10:11.280
+Queries worden merkbaar sneller uitgevoerd na de eerste keer.
+
+00:10:11.280 --> 00:10:20.540
+Dat is het effect van caching. Het voordeel is gemakkelijk te onderschatten, omdat de snelheidsverbetering onzichtbaar lijkt totdat je caching uitschakelt of een patroon tegenkomt dat niet efficiënt hergebruikt.
+
+00:10:20.760 --> 00:10:25.120
+Zodra je begrijpt wat het doet, zie je waarom EF zelfs onder zware belasting responsief kan blijven.
+
+00:10:25.280 --> 00:10:26.680
+Maar caching is niet gratis.
+
+00:10:26.860 --> 00:10:32.600
+Elke cache-item neemt geheugen in beslag en applicaties met een groot aantal unieke query-structuren kunnen een stijgend geheugenverbruik zien.
+
+00:10:32.600 --> 00:10:44.300
+Als je veel gebruik maakt van dynamisch samengestelde queries, predikaten voor het bouwen van strings, tijdens runtime gegenereerde projecties of code die bij elke aanroep iets andere structuren produceert, genereer je veel cache-items die nooit worden hergebruikt.
+
+00:10:44.540 --> 00:10:46.780
+Dan wordt de cache een last in plaats van een voordeel.
+
+00:10:47.140 --> 00:10:48.780
+Ontwikkelaars moeten op dit patroon letten.
+
+00:10:48.980 --> 00:10:53.440
+Minder, maar consistentere query-structuren halen het maximale uit caching en voorkomen verspilling van geheugen.
+
+00:10:53.620 --> 00:10:58.920
+De kunst voor teams is om te erkennen dat gecachede queries zowel een prestatievoordeel als een potentiële geheugen kost met zich meebrengen.
+
+00:10:58.920 --> 00:11:06.140
+Je wilt caching gebruiken voor repetitief werk, zoals queries waarvan je weet dat ze duizenden keren worden uitgevoerd, maar let wel op hoe je applicatie queries opbouwt.
+
+00:11:06.280 --> 00:11:11.240
+Als je te veel unieke queries genereert, moet de cache-structuren bewaren die waarschijnlijk niet meer nodig zijn.
+
+00:11:11.500 --> 00:11:15.040
+Dat kan je systeem onverwacht zwaar belasten, vooral op grote schaal.
+
+00:11:15.500 --> 00:11:22.280
+In de praktijk is het het beste om EF Core de caching automatisch te laten afhandelen, maar wel bewust te zijn van hoe je queries schrijft.
+
+00:11:22.280 --> 00:11:29.640
+Als je merkt dat je applicatie geheugenproblemen ondervindt terwijl de database belasting normaal lijkt, overweeg dan of het probleem te maken kan hebben met veel gecachede query-structuren.
+
+00:11:29.760 --> 00:11:33.200
+Het is niet het eerste waar ontwikkelaars naar kijken, maar het is vaak een stille oorzaak.
+
+00:11:33.380 --> 00:11:37.560
+Het optimaliseren van query-patronen kan net zo belangrijk zijn als het optimaliseren van de database zelf.
+
+00:11:37.760 --> 00:11:41.380
+Caching verklaart vaak waarom EF queries snel aanvoelen na die initiële vertraging.
+
+00:11:41.580 --> 00:11:44.900
+Het doet hetzelfde werk één keer en slaat vervolgens de overhead van herhalingen over.
+
+00:11:45.140 --> 00:11:46.140
+Simpel maar krachtig.
+
+00:11:46.140 --> 00:11:52.300
+Zelfs als de query-uitvoering soepel verloopt, kan er echter nog een andere bron van subtiele baks op de loer liggen, de afhandeling van NAL-waarde.
+
+00:11:52.540 --> 00:11:56.100
+Dat is waar EF Core twee heel verschillende definities van niets moet overbruggen.
+
+00:11:56.220 --> 00:11:58.940
+En dat is een probleem waar ontwikkelaars constant tegenaan lopen.
+
+00:11:59.180 --> 00:12:02.060
+NAL-semantiek, wanneer niets verschillende betekenissen heeft.
+
+00:12:02.260 --> 00:12:07.060
+In de meeste dagelijkse programmeerpraktijken kunnen ontwikkelaars NAL als een eenvoudig concept beschouwen,
+
+00:12:07.240 --> 00:12:11.660
+maar de realiteit is complexer zodra EF Core tussen c-hashtag en een SQL-database wordt geplaatst.
+
+00:12:11.880 --> 00:12:14.520
+Dit is waar het probleem met NAL centraal komt te staan.
+
+00:12:14.520 --> 00:12:20.240
+De regels die je denkt toe te passen in .NET betekenen niet altijd hetzelfde wanneer de database ze evalueert.
+
+00:12:20.400 --> 00:12:22.240
+In C is NAL recht toe recht aan.
+
+00:12:22.420 --> 00:12:27.800
+Een ontbrekende objectreferentie, een niet toegewezen tekenreeks, een eigenschap die niet is ingesteld, het komt allemaal op hetzelfde neer.
+
+00:12:27.940 --> 00:12:29.260
+Maar SQL werkt anders.
+
+00:12:29.480 --> 00:12:32.580
+Het gebruikt NAL niet op een manier die direct overeenkomt met .NET.
+
+00:12:32.760 --> 00:12:36.840
+SQL behandelt het meer als een onbekende waarde, wat van invloed is op hoe vergelijkingen zich gedragen.
+
+00:12:37.040 --> 00:12:41.060
+In SQL zal het schrijven van een kolom in NAL zich bijvoorbeeld niet gedragen als een waar, onwaart test.
+
+00:12:41.060 --> 00:12:44.740
+In plaats daarvan leidt het tot een speciale afhandeling die is NAL-controles vereist.
+
+00:12:44.920 --> 00:12:47.840
+Dit is een cruciaal onderscheid dat ontwikkelaars in gedachten moeten houden.
+
+00:12:47.980 --> 00:12:49.980
+Een kort voorbeeld maakt het verschil duidelijk.
+
+00:12:50.560 --> 00:12:54.520
+Stel dat u een query schrijft naar klanten waarbij cc namen gelijk is aan NAL.
+
+00:12:54.740 --> 00:13:00.740
+Voer die query in het geheugen uit op de lijst met klantobjecten en u krijgt betrouwbaar de resultaten terug waarvan de naam daadwerkelijk NAL is.
+
+00:13:00.940 --> 00:13:06.220
+Vertaal diezelfde logica zonder aanpassingen naar SQL en u zou verwachten dat u resultaten krijgt waarbij namen gelijk is aan NAL.
+
+00:13:06.220 --> 00:13:11.900
+In de praktijk levert dat echter helemaal geen resultaten op. De correcte SQL-vorm zou zijn waarbij namen NAL is.
+
+00:13:12.080 --> 00:13:13.980
+Het is belangrijk om dit verschil te begrijpen.
+
+00:13:14.180 --> 00:13:19.180
+Als ontwikkelaar is het een goede gewoonte om de SQL-output te controleren wanneer uw link afhankelijk is van NAL-vergelijkingen,
+
+00:13:19.400 --> 00:13:21.900
+vooral om verrassingen te voorkomen bij de overstap naar productiedata.
+
+00:13:22.140 --> 00:13:26.520
+Deze discrepantie ligt ten grondslag aan het vreemde gedrag van NAL-queries in EF-core.
+
+00:13:26.720 --> 00:13:31.660
+Als dit niet wordt gecorrigeerd, kan iets dat voorspelbaar lijkt in C++ stilletjes geen resultaten opleveren in de database.
+
+00:13:31.660 --> 00:13:37.460
+Soms kan het zelfs resultaten opleveren die er in kleine tests goed uitzien, maar in de praktijk, waar NAL-waarden vaker voorkomen, falen.
+
+00:13:37.620 --> 00:13:40.640
+Dat is een gemakkelijke manier voor subtiele bugs om ongemerkt binnen te sluipen.
+
+00:13:40.780 --> 00:13:44.440
+Om dit risico te verkleinen, laat EF-core uw NAL-vergelijkingen niet zomaar doorlopen.
+
+00:13:44.640 --> 00:13:48.440
+In plaats daarvan past het regels toe om het gedrag van link en SQL op elkaar af te stemmen.
+
+00:13:48.640 --> 00:13:53.760
+Voor gelijkheidscontroles zal EF deze meestal aanpassen naar is NAL of is not NAL-voorwaarden.
+
+00:13:53.760 --> 00:14:02.520
+Voor complexere predikaten voert de pipeline vaak compenserende transformaties uit, zodat de database resultaten synchroon blijven met wat de .NET Runtime logica zou hebben gedaan.
+
+00:14:02.740 --> 00:14:11.600
+De exacte interne werking van deze aanpassingen hangt af van de versie en provider, maar het leidende principe is consistent, behoudt de verwachtingen van ontwikkelaars door de NAL-logica te normaliseren.
+
+00:14:11.860 --> 00:14:13.640
+Deze afstemming heeft echter een prijs.
+
+00:14:13.880 --> 00:14:18.560
+Die compenserende transformaties kunnen SQL-queries langer en complexer maken dan u aanvankelijk dacht.
+
+00:14:18.720 --> 00:14:23.040
+EF geeft prioriteit aan correctheid boven eenvoud, soms ten koste van efficiëntie.
+
+00:14:23.040 --> 00:14:29.100
+Daarom ziet u soms gegenereerde resultaten met extra voorwaarden die niet overeenkomen met uw oorspronkelijke linkinstructie.
+
+00:14:29.260 --> 00:14:33.600
+EF zorgt er zo stilletjes voor dat u later niet voor inconsistente resultaten komt te staan.
+
+00:14:33.800 --> 00:14:41.500
+De complexiteit van de gegenereerde query is vaak een zichtbaar neveneffect van het veilig afhandelen van NAL-waarden in twee systemen met tegenstrijdige definities.
+
+00:14:41.760 --> 00:14:46.060
+Voor ontwikkelaars is het vooral belangrijk om het potentiële risico van NAL-afhandeling te herkennen.
+
+00:14:46.060 --> 00:14:52.200
+Als een query vreemd, traag of overdreven complex lijkt, zijn NAL-controles een goed startpunt voor het oplossen van problemen.
+
+00:14:52.200 --> 00:14:56.320
+Een korte maar praktische conclusie is als een query met NAL-waarden zich vreemd gedraagt.
+
+00:14:56.600 --> 00:14:59.220
+Controleer dan op vertaalverschillen of verborgen herschrijvingen.
+
+00:14:59.440 --> 00:15:03.380
+Dit zijn geen fouten, maar eerder ingebouwde beschermingsmechanismen van EF Core.
+
+00:15:03.580 --> 00:15:08.000
+Het echte gevaar schuilt in de aanname dat onschadelijke NAL-controles zich in beide omgevingen hetzelfde gedragen.
+
+00:15:08.260 --> 00:15:13.360
+Dat is niet het geval en dat kan leiden tot baks die alleen met productiedata aan het licht komen, niet in een nette testzet.
+
+00:15:13.360 --> 00:15:18.820
+Je zou bijvoorbeeld kunnen denken dat een filter NAL-waarden uitsluit, totdat je merkt dat bepaalde records op mysterieuze wijze ontbreken.
+
+00:15:19.040 --> 00:15:26.560
+Zo'n stille mismatch kan een van de moeilijkste traceren problemen zijn, tenzij je de gegenereerde query hebt gevalideerd aan de hand van echte datavolumes en patronen.
+
+00:15:26.720 --> 00:15:32.020
+Hoewel NAL-semantiek een hoofdpijn kan zijn, vertegenwoordigt het ook een van de belangrijkste interventies van EF Core.
+
+00:15:32.240 --> 00:15:37.940
+Door de mismatch te compenseren, helpt EF een kloof te dichten die anders tot onvoorspelbare fouten zou kunnen leiden.
+
+00:15:38.340 --> 00:15:44.000
+Ontwikkelaars vinden de extra SQL die in het proces verschijnt misschien niet prettig, maar zonder deze zouden de resultaten onbetrouwbaar zijn.
+
+00:15:44.200 --> 00:15:51.100
+Nadat NAL-waarden zijn afgehandeld, voert EF nu een query uit die is doorgegeven, gefilterd door de provider, in de cache is opgeslagen en is aangepast om de logica consistent te houden.
+
+00:15:51.220 --> 00:15:53.240
+De laatste vraag is, wat gebeurt er vervolgens?
+
+00:15:53.440 --> 00:15:57.460
+Hoe wordt deze voorbereide query een SQL-commando dat de database daadwerkelijk kan uitvoeren?
+
+00:15:57.600 --> 00:16:04.560
+En hoe worden de ruwe gegevens weer omgezet in bruikbare gegevens en in netwerkobjecten voor het genereren en materialiseren van SQLs?
+
+00:16:04.560 --> 00:16:11.640
+De laatste fase van de pipeline is het genereren en materialiseren van SQLs, het punt waarop al die voorbereiding zijn vruchten afwerpt of juist mislukt.
+
+00:16:11.740 --> 00:16:16.660
+Tot nu toe ging het erom de intentie vorm te geven, patronen te valideren en consistentie te waarborgen.
+
+00:16:16.860 --> 00:16:21.960
+Maar queries worden pas nuttig als EF die intentie kan omzetten in een SQL-commando dat je database begrijpt...
+
+00:16:21.960 --> 00:16:26.540
+...en vervolgens de platte resultaten kan omvormen tot rijke objecten waarmee je code daadwerkelijk kan werken.
+
+00:16:26.720 --> 00:16:30.840
+Twee belangrijke onderdelen van dit proces zijn de SQL-generator en de materialiser.
+
+00:16:30.840 --> 00:16:33.980
+Ze lossen tegen overgestelde problemen op, maar zijn van elkaar afhankelijk.
+
+00:16:34.220 --> 00:16:36.120
+SQL-generatie is providerbewust.
+
+00:16:36.280 --> 00:16:40.160
+Provider-componenten beïnvloeden hoe queries worden uitgedrukt voor een bepaald database-dialect.
+
+00:16:40.700 --> 00:16:44.580
+Materialisatie neemt vervolgens de rijen die terugkomen en bouwt entiteiten en projecties.
+
+00:16:44.820 --> 00:16:46.440
+Geen van beide is op zichzelf voldoende.
+
+00:16:46.720 --> 00:16:49.740
+SQL-generatie zorgt ervoor dat de database de query kan uitvoeren.
+
+00:16:50.280 --> 00:16:53.460
+Materialisatie zorgt ervoor dat de resultaten zinvol zijn voor je applicatie.
+
+00:16:53.660 --> 00:16:57.440
+Die wisselwerking verklaart waarom deze fase aanvoelt als een vertaling in twee richtingen.
+
+00:16:57.440 --> 00:17:05.920
+Een linkfilter dat er in C-code onschadelijk uitzag, moet worden geschreven als een geldige SQL voor PostgreSQL, SQL Server of welke provider je ook gebruikt.
+
+00:17:06.120 --> 00:17:12.260
+Wanneer de database antwoordt, ontvangt EF niets meer dan rijen en kolommen die het niet zomaar zonder context aan je kan doorgeven.
+
+00:17:12.440 --> 00:17:18.860
+Je verwacht dat je entiteiten ontvangt met gekoppelde navigatie-eigenschappen, getypte waarden op de juiste plaatsen en intacte relaties.
+
+00:17:19.060 --> 00:17:21.800
+Het overbruggen van die kloof is precies wat deze stappen beogen.
+
+00:17:21.800 --> 00:17:31.780
+Denk aan een eenvoudig voorbeeld. Als je een query hebt geschreven die gerelateerde entiteiten bevat, bijvoorbeeld een order met de bijbehorende orderregels, wil je niet een halfdozijn gedeeltelijke rijen zien die je handmatig aan elkaar moet plakken.
+
+00:17:31.900 --> 00:17:37.880
+Je verwacht een orderobject te zien dat een gevulde verzameling orderregels bevat. Dat is materialisatie in actie.
+
+00:17:38.060 --> 00:17:41.340
+EF reconstrueert een volledige object grafiek uit sets rijen.
+
+00:17:41.520 --> 00:17:42.900
+En hier is een praktische tip.
+
+00:17:43.100 --> 00:17:50.860
+Als je dubbele getrakte objecten of ontbrekende navigatiewaarden opmerkt, komt dat vaak neer op hoe die joins zijn gevormd en hoe EF de resultaten heeft gematerialiseerd.
+
+00:17:50.860 --> 00:17:54.760
+De generatie van SQL zelf benadrukt de afhankelijkheid van EF van providers.
+
+00:17:54.960 --> 00:17:57.880
+Het framework probeert niet elk syntax detail vast te leggen.
+
+00:17:58.020 --> 00:18:00.880
+In plaats daarvan leveren providers de logica voor hun database.
+
+00:18:01.280 --> 00:18:06.260
+Dat betekent dat dezelfde query in verschillende omgevingen een iets andere SQL kan opleveren.
+
+00:18:06.440 --> 00:18:12.020
+Haakjes kunnen voorkomen in SQL Server, aanhalingstekens in PostgreSQL en andere type conversies elders.
+
+00:18:12.360 --> 00:18:17.000
+Deze variaties zijn belangrijk omdat ze bepalen of de query daadwerkelijk geldig is voor de doeldatabase.
+
+00:18:17.000 --> 00:18:23.960
+Het is raadzaam dit principe te controleren aan de hand van de EF Core documentatie voor de specifieke versie en provider die u gebruikt, aangezien de mogelijkheden voortdurend veranderen.
+
+00:18:24.060 --> 00:18:27.760
+Wat betreft materialisatie moet EF meer afhandelen dan alleen eenvoudige mappings.
+
+00:18:28.000 --> 00:18:35.920
+Het moet database kolomtypen afstemmen op netwerktypen, conversie afdwingen wanneer nodig en foreign keys corrigeren zodat relaties daadwerkelijke objectreferenties worden.
+
+00:18:36.140 --> 00:18:38.360
+Projecties voegen daar nog een extra complicatie aan toe.
+
+00:18:38.500 --> 00:18:44.460
+Een query die een aangepaste DTO of een anoniem type opvraagt, moet rechtstreeks uit de resultaat set worden samengesteld zonder ooit een volledige entiteit te creëren.
+
+00:18:44.460 --> 00:18:50.980
+Die flexibiliteit is waar ontwikkelaars het gevoel hebben dat EF zich aanpast aan hun behoeften, maar het voegt wel degelijk complexiteit toe aan de onderliggende engine.
+
+00:18:51.160 --> 00:18:55.820
+Er zijn ook gevallen waarin de materialisereigenschappen bijhoudt die u niet expliciet hebt gedefinieerd.
+
+00:18:56.000 --> 00:19:05.840
+Functies zoals shadow properties of lazy loading hooks zijn hier van toepassing, maar deze variëren per EF Core versie en provider, dus raadpleeg de documentatie van uw doelomgeving voordat u erop vertrouwt.
+
+00:19:05.980 --> 00:19:09.460
+Het belangrijkste is dat materialisatie dit hele proces verbergt.
+
+00:19:09.460 --> 00:19:15.340
+Ontwikkelaars zien een overzichtelijk objectmodel, terwijl EF aanzienlijke inspanningen heeft geleverd om prestaties en correctheid in balans te brengen.
+
+00:19:15.520 --> 00:19:18.520
+Relaties geven een goed beeld van het verborgen werk dat hierbij komt kijken.
+
+00:19:18.740 --> 00:19:24.400
+In plaats van rijen te leveren die naar elkaar verwijzen via ID, zet EF die verwijzingen om in navigatie-eigenschappen.
+
+00:19:24.400 --> 00:19:33.960
+De tip is simpel, als navigatie-eigenschappen leeg of inconsistent zijn, kan het probleem vaak worden opgelost door de query opnieuw te formuleren, met name door de keuzes voor een clued of projection.
+
+00:19:33.960 --> 00:19:39.200
+In de praktijk hebben SQL-generatie en materialisatie dus de meest zichtbare impact van EF.
+
+00:19:39.420 --> 00:19:46.320
+Dit zijn de fasen die het verschil maken tussen een ontwikkelaarsvriendelijke ervaring en dataverwerking die anders urenhandmatig in beslag zou nemen.
+
+00:19:46.560 --> 00:19:54.740
+Wanneer je met EF queries uitvoert, krijg je iets terug dat natuurlijk aanvoelt in de .NET-wereld, niet omdat SQL je objecten heeft gegeven, maar omdat EF ze op die manier heeft herbouwd.
+
+00:19:54.980 --> 00:20:01.220
+Daarom voelt het proces vaak als magie. Twee verschillende engines, de ene vloeiend in database-dialecten, de andere vloeiend in SRK.

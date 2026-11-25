@@ -66,6 +66,14 @@ LIB_SEED_HANDLE = "mirko-p"
 # BYOD_CANONICAL = "platform"               # "platform" (Standard: Canonical auf m365.fm) oder "own" (Canonical auf die eigene Domain), Entscheidung Mirko
 # BYOD_INDEX_VOTES = "10"                   # Upvotes, ab denen ein Beitrag der eigenen Domain indexierbar ist (wie INDEX_VOTES der Plattform)
 # Worker-Secrets (nie hier): CF_API_TOKEN, CF_ZONE_ID (Cloudflare for SaaS, Custom Hostnames). Ohne sie ruft der Code Cloudflare nie auf.
+# Lernpfad-Abschlusstest + Zertifikat (learnquiz.js, CERTOPUS.md): Certopus-Zuordnung je Lernpfad (Organisation, Event, Kategorie, Kursname je Sprache).
+# Weitere Lernpfade: einfach einen Eintrag ergaenzen. Schluessel nur als Secret CERTOPUS_API_KEY (GitHub-Secret, setup.mjs), nie hier.
+CERTOPUS_PATHS = '{"manufacturing-excellence":{"org":"projectmanagementgroup","event":"1b364220-e7df-11f1-a542-95dd4baa2628","category":"1b361b10-e7df-11f1-a542-95dd4baa2628","course":{"en":"Manufacturing Excellence: From Lean Basics to Digital Production Planning","de":"Manufacturing Excellence: von den Lean-Grundlagen zur digitalen Produktionsplanung"}}}'
+# Notschalter Zertifikate: "0" = aus (Test laeuft, Zertifikat bleibt "pending", Seite zeigt "Zertifikat folgt"); erst "1", wenn Schluessel gesetzt und die Vorlage fertig ist.
+# Wartende Zertifikate stellt der Cron (*/30) danach selbst aus.
+CERTOPUS_ON = "0"
+# Platzhalter der Vorlage (optional, JSON): ohne Angabe gelten {Name},{Course},{Score},{Date}, soweit die Vorlage sie laut recipient_fields kennt.
+# CERTOPUS_FIELDS = '{"name":"{Name}","course":"{Course}","score":"{Score}","date":"{Date}"}'
 SPREAKER_SHOW_IDS = "6704921,7393187,7393248,7393223,7393231,7393243,7393222,7393242,7393230,7393247,7393254,7393221,7393227,7393228,7393232,7393236,7393238,7393244,7393250,7393253"
 
 [[send_email]]
